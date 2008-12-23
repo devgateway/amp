@@ -196,7 +196,7 @@ public class HelpActions extends DispatchAction {
 		 if(keywords != null){
 		 Collection<LabelValueBean> Searched = new ArrayList<LabelValueBean>();
 		 String instanceName=RequestUtils.getModuleInstance(request).getInstanceName();
-		 Hits hits =  LuceneUtil.helpSearch("title", helpForm.getKeywords());
+		 Hits hits =  LuceneUtil.helpSearch("title", helpForm.getKeywords(), request.getSession().getServletContext());
 		 String artikleTitle;
 		 
 		 HelpForm help = (HelpForm) form;
@@ -218,7 +218,7 @@ public class HelpActions extends DispatchAction {
 			   String titletrnKey = doc.get("titletrnKey");
 			   String art;
 			   Field field = doc.getField("article");
-			   Object artidcle = LuceneUtil.highlighter(field,title);
+			   Object artidcle = LuceneUtil.highlighter(field,title, request.getSession().getServletContext());
 			
                       if (!artidcle.equals("")) {
 
@@ -270,7 +270,7 @@ public class HelpActions extends DispatchAction {
             helpForm.setHelpErrors(null);
 			helpForm.setSearched(null);
 			helpForm.setFlag(true);
-			LuceneUtil.addUpdatehelp(true);
+			LuceneUtil.addUpdatehelp(true, request.getSession().getServletContext());
 	  
 		if(helpTopic.getParent()!=null){
 			helpForm.setParentId(helpTopic.getParent().getHelpTopicId());

@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -112,11 +113,10 @@ public class LuceneUtil implements Serializable {
     public final static String luceneStampExt = ".stamp";
     
     /**
-     * name of other index directory
+     * name of help index directory
      */
-    public final static String otherIndexSufix = "other";
-    public final static String otherIndexDirectory = luceneBaseDir +"/" + otherIndexSufix;
-    public String gigi;
+    public final static String helpIndexSufix = "help";
+    public final static String helpIndexDirectory = luceneBaseDir +"/" + helpIndexSufix;
     
     /**
      * name of the activity index directory
@@ -161,11 +161,11 @@ public class LuceneUtil implements Serializable {
     }
 
 
-    public static void checkIndex(){
+    public static void checkIndex(ServletContext sc){
     	logger.info("Lucene startup!");
 
-    	File idxStamp = new File(luceneBaseDir + "/" + activityIndexSufix + luceneStampExt);
-    	File idxDir = new File(activityIndexDirectory);
+    	File idxStamp = new File(sc.getRealPath("/") + "/" + luceneBaseDir + "/" + activityIndexSufix + luceneStampExt);
+    	File idxDir = new File(sc.getRealPath("/") + "/" + activityIndexDirectory);
     	boolean deleteIndex = false;
     	
     	checkStamp:{
@@ -609,14 +609,16 @@ public class LuceneUtil implements Serializable {
 	
     public static void addUpdateActivity(HttpServletRequest request, boolean update, Long id){
 		logger.info("Updating activity!");
+		
+		ServletContext sc = request.getSession().getServletContext();
+		
 		if (update){
-			deleteActivity(activityIndexDirectory, idField, String.valueOf(id));
+			deleteActivity(sc.getRealPath("/") + "/" + activityIndexDirectory, idField, String.valueOf(id));
 		}
-
 		
 		IndexWriter indexWriter = null;
 		try {
-			indexWriter = new IndexWriter(activityIndexDirectory, LuceneUtil.analyzer, false);
+			indexWriter = new IndexWriter(sc.getRealPath("/") + "/" + activityIndexDirectory, LuceneUtil.analyzer, false);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -720,13 +722,13 @@ public class LuceneUtil implements Serializable {
      * @throws org.digijava.kernel.exception.DgException
      * 
      */
-    public static void createHelp() throws  DgException{
+    public static void createHelp(ServletContext sc) throws  DgException{
             
-		boolean createDir = LuceneUtil.isDir();
+		boolean createDir = LuceneUtil.isDir(sc);
 	
 		if(!createDir){
 			logger.info("Building the help");
-				  LuceneUtil.addUpdatehelp(false);
+				  LuceneUtil.addUpdatehelp(false, sc);
 		}	
 	
     }
@@ -747,14 +749,14 @@ public class LuceneUtil implements Serializable {
      * 
      * @see org.digijava.module.help.helper.HelpSearchData
      */
-    public static void addUpdatehelp(boolean update) throws DgException {
+    public static void addUpdatehelp(boolean update, ServletContext sc) throws DgException {
 
     	HelpSearchData item = new HelpSearchData();
     	DateFormat formatter ; 
     	Date date ; 
 
-    	try{
-    		Long lastLucModDay = IndexReader.lastModified("lucene-index");
+    	try{ 
+    		Long lastLucModDay = IndexReader.lastModified(sc.getRealPath("/") + "/" + helpIndexDirectory);
 
     		formatter  = new SimpleDateFormat();
     		String leastUpDate = formatter.format(lastLucModDay);
@@ -774,11 +776,11 @@ public class LuceneUtil implements Serializable {
 
     			if(update){
     				if(item.getLastModDate().after(date)){
-    					deleteHelp("title",title);
-    					indexArticle(newCode, title,titTrnKey);
+    					deleteHelp("title",title, sc);
+    					indexArticle(newCode, title,titTrnKey, sc);
     				}
     			}else if(!update){
-    				indexArticle(newCode, title,titTrnKey);	
+    				indexArticle(newCode, title,titTrnKey, sc);	
     			}
     		}
     	} catch (Exception ex) {
@@ -800,7 +802,7 @@ public class LuceneUtil implements Serializable {
      * @param searchString
      * @return founded hits
      */
-    public static Hits helpSearch(String field, String searchString){
+    public static Hits helpSearch(String field, String searchString, ServletContext sc){
 		
 		QueryParser parser = new QueryParser(field, analyzer);
 		Query query = null;
@@ -810,7 +812,7 @@ public class LuceneUtil implements Serializable {
 		Searcher indexSearcher = null;
 		try {
 			if(searchString != null){
-			indexSearcher = new IndexSearcher(otherIndexDirectory);
+			indexSearcher = new IndexSearcher(sc.getRealPath("/") + "/" + helpIndexDirectory);
 			searchString = searchString.trim();
 			query = parser.parse("+"+searchString+"*");
 		
@@ -832,13 +834,13 @@ public class LuceneUtil implements Serializable {
      * @throws java.io.IOException
      * @throws org.apache.lucene.queryParser.ParseException
      */
-    public static Object highlighter(Field field,String searchString) throws IOException, ParseException{
+    public static Object highlighter(Field field,String searchString, ServletContext sc) throws IOException, ParseException{
 		Query query = null;
 		QueryParser parser = new QueryParser(field.getClass().getName(), analyzer);
 	
 		query = parser.parse(searchString);
 		
-		Object hA= highlight(field,query);
+		Object hA= highlight(field,query, sc);
 		return hA;
 	}
 
@@ -846,9 +848,9 @@ public class LuceneUtil implements Serializable {
      * Returns highlighted object
      * 
      */
-    private static Object highlight(Field field, Query query) throws IOException {
+    private static Object highlight(Field field, Query query, ServletContext sc) throws IOException {
 
-    	query.rewrite(IndexReader.open(otherIndexDirectory));
+    	query.rewrite(IndexReader.open(sc.getRealPath("/") + "/" + helpIndexDirectory));
     	QueryScorer scorer = new QueryScorer(query);
     	SimpleHTMLFormatter formatter =
     		new SimpleHTMLFormatter("<span class=\"highlight\">",
@@ -867,18 +869,17 @@ public class LuceneUtil implements Serializable {
 
     /**
      * Creates {@link Document} using {@link createDocument(String,String,String)}.
-     * Adds newly created document to lucene-index directory
+     * Adds newly created document to lucene help directory
      *  
      * @param article body of help topic
      * @param title title of help topic
      * @param titTrnKey translation key used to translate title
      * @throws java.lang.Exception
      */
-    public static void indexArticle(String article, String title,String titTrnKey)
+    public static void indexArticle(String article, String title,String titTrnKey, ServletContext sc)
     throws Exception {
-    	Document document = LuceneUtil.createDocument(article,title,titTrnKey);
-    	LuceneUtil.indexDocument(document);
-
+    	Document document = LuceneUtil.createHelpDocument(article,title,titTrnKey);
+    	LuceneUtil.indexHelpDocument(document, sc);
     }	
 
     /**
@@ -891,7 +892,7 @@ public class LuceneUtil implements Serializable {
      * @param titTrnKey translation key used to translate title
      * @return newly created document
      */
-    public static Document createDocument(String article, String title,String titTrnKey){
+    public static Document createHelpDocument(String article, String title,String titTrnKey){
 
     	Document document = new Document();
     	document.add(new Field("title",title,Field.Store.YES,Field.Index.TOKENIZED));
@@ -903,70 +904,62 @@ public class LuceneUtil implements Serializable {
 
 
     /**
-     * Shows whether lucene-index
+     * Shows whether lucene help
      * directory exists or no
      * 
      * @return true if lucene-index directory exists otherwise false
      */
-    public static boolean isDir(){
-    	boolean createDir = IndexReader.indexExists(otherIndexDirectory);
+    public static boolean isDir(ServletContext sc){
+    	boolean createDir = IndexReader.indexExists(sc.getRealPath("/") + "/" + helpIndexDirectory);
     	return createDir;
     }
 
 
     /**
-     * Creates lucene-index
+     * Creates lucene help
      * directory if it doesn't exist.
      * Adds document to it 
      * 
      * @param document
      * @throws java.io.IOException
      */
-    public static void indexDocument(Document document) throws IOException {
+    public static void indexHelpDocument(Document document, ServletContext sc) throws IOException {
     	try{
 
-    		boolean createDir = IndexReader.indexExists(otherIndexDirectory);
+    		boolean createDir = IndexReader.indexExists(sc.getRealPath("/") + "/" + helpIndexDirectory);
 
     		if(createDir == false){
-
     			createDir= true;
-
     		}else if (createDir == true){
-
     			createDir= false;
     		}
 
     		StandardAnalyzer analyzer  = new StandardAnalyzer();
-    		IndexWriter writer = new IndexWriter(otherIndexDirectory, analyzer, createDir);
+    		IndexWriter writer = new IndexWriter(sc.getRealPath("/") + "/" + helpIndexDirectory, analyzer, createDir);
     		writer.addDocument(document);
     		writer.optimize();
     		writer.close();
-
     	} catch (IOException e) {
     		logger.error(e);
     		throw e;
-
     	}
-
     }
     /**
      * 
      * @param field
      * @param search
      */
-    public static void deleteHelp(String field, String search){
+    public static void deleteHelp(String field, String search, ServletContext sc){
     	Term term = new Term(field,search);
     	Directory directory;
     	IndexReader indexReader;
 
     	try {
-    		indexReader = IndexReader.open(otherIndexDirectory);
+    		indexReader = IndexReader.open(sc.getRealPath("/") + "/" + helpIndexDirectory);
     		Integer deleted = indexReader.deleteDocuments(term);
     		indexReader.close();
     	} catch (Exception e) {
     		e.printStackTrace();
     	}
     }
-
-
 }

@@ -2319,7 +2319,7 @@ public class DbUtil {
         }
         return col;
     }
-    
+
     /**
      * This function gets all organizations whose names begin with namesFirstLetter 
      * and name or acronym contain keyword
@@ -2339,6 +2339,35 @@ public class DbUtil {
                 + "where ((lower(acronym) like '%" + keyword + "%' and lower(name) like '"+namesFirstLetter+"%') or lower(name) like '"+namesFirstLetter+ "%"
                 + keyword + "%')";
             Query qry = session.createQuery(queryString);
+            col = qry.list();
+        } catch (Exception ex) {
+            logger.debug("Unable to search " + ex);
+        }
+        return col;
+    }
+    
+
+    /**
+     * This function gets all organizations whose names begin with namesFirstLetter 
+     * and name or acronym contain keyword and organisation type is orgType
+     * @author Mouhamad
+     */
+    public static Collection searchForOrganisation(String namesFirstLetter, String keyword, Long orgType) {
+        Session session = null;
+        Collection col = null;
+        if(keyword.length()!=0){
+        	keyword=keyword.toLowerCase();
+        }
+        namesFirstLetter=namesFirstLetter.toLowerCase();
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select distinct org from " + AmpOrganisation.class.getName() + " org "
+                + "where org.orgTypeId=:orgType and ((lower(acronym) like '%" + keyword + 
+                "%' and lower(name) like '"+namesFirstLetter+"%') or lower(name) like '"+namesFirstLetter+ "%"
+                + keyword + "%')";
+            Query qry = session.createQuery(queryString);
+            qry.setParameter("orgType", orgType, Hibernate.LONG);
             col = qry.list();
         } catch (Exception ex) {
             logger.debug("Unable to search " + ex);

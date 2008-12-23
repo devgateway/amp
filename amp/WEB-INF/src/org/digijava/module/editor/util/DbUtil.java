@@ -197,27 +197,38 @@ public class DbUtil {
         EditorException {
 
         Session session = null;
-        Editor item;
+        Editor item = null;
         try {
             session = PersistenceManager.getRequestDBSession();
             Editor editorKeyObj = new Editor();
             editorKeyObj.setSiteId(siteId);
             editorKeyObj.setEditorKey(editorKey);
             editorKeyObj.setLanguage(language);
+
             try {
+                   System.out.println("try");
                 item = (Editor) session.load(Editor.class, editorKeyObj);
+                  System.out.println("Item:"+item);
             }
             catch (ObjectNotFoundException ex1) {
-                item = null;
+                logger.error("DbUtil:getEditor:Unable to get Editor item", ex1);
+                return item = null;
+
             }
         }
         catch (Exception ex) {
             logger.debug("Unable to get editor item from database ", ex);
-            throw new EditorException("Unable to get editor item from database",
-                                      ex);
+            item = null;
+
+
         }
         return item;
     }
+
+    
+
+
+
 
     public static Editor getEditor(String siteId, int orderIndex) throws
         EditorException {

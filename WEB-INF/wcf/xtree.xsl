@@ -165,13 +165,10 @@
 
 <xsl:template match="buttons">
   <tr>
-    <td align="right">
-      <div align="right">
-        <xsl:apply-templates/>
-      </div>
+    <td align="left">
+    	<xsl:apply-templates/>
     </td>
   </tr>
 </xsl:template>
-
 
 </xsl:stylesheet>

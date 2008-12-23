@@ -7,8 +7,8 @@
     <xsl:apply-templates select="cat-category"/>
     <!-- buttons -->
     <tr>
-      <td align="right">
-        <div align="right">
+      <td align="left">
+        <div align="left">
           <input type="submit" value="{@ok-title}" name="{@ok-id}"/>
           <xsl:text> </xsl:text>
           <input type="submit" value="{@cancel-title}" name="{@cancel-id}"/>

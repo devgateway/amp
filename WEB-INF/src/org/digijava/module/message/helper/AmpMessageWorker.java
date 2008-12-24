@@ -619,6 +619,7 @@ public class AmpMessageWorker {
 
     private static void createMsgState(AmpMessageState state, AmpMessage newMsg,boolean calendarSaveActionWasCalled) throws Exception {
         AmpMessageState newState = new AmpMessageState();
+        Class clazz=newMsg.getClass();
         newState.setMessage(newMsg);
         newState.setMemberId(state.getMemberId());
         newState.setRead(false);
@@ -626,7 +627,12 @@ public class AmpMessageWorker {
         	newState.setSender(((CalendarEvent)newMsg).getSenderEmail());
         }        
         //will this message be visible in user's mailbox
-        if (AmpMessageUtil.isInboxFull(newMsg.getClass(), state.getMemberId())) {
+        int maxStorage=-1;
+		AmpMessageSettings setting=AmpMessageUtil.getMessageSettings();
+		if(setting!=null && setting.getMsgStoragePerMsgType()!=null){
+			maxStorage=setting.getMsgStoragePerMsgType().intValue();
+		}
+        if (AmpMessageUtil.isInboxFull(newMsg.getClass(), state.getMemberId()) || AmpMessageUtil.getInboxMessagesCount(clazz, state.getMemberId(), false, false, maxStorage) >= maxStorage) {
             newState.setMessageHidden(true);
         } else {
             newState.setMessageHidden(false);

@@ -20,6 +20,7 @@ public class TranslatorManagerForm extends ActionForm {
 	String [] selectedImportedLanguages;
 	String [] overwriteTrn;
 	FormFile fileUploaded;
+	String[] keywords;
 
 	
 
@@ -56,7 +57,7 @@ public class TranslatorManagerForm extends ActionForm {
 		fileUploaded=null;
 		selectedImportedLanguages=null;
 		overwriteTrn=null;
-
+		keywords=null;
 	}
 
 	public String[] getSelectedImportedLanguages() {
@@ -81,6 +82,14 @@ public class TranslatorManagerForm extends ActionForm {
 
 	public void setOverwriteTrn(String[] overwriteTrn) {
 		this.overwriteTrn = overwriteTrn;
+	}
+
+	public String[] getKeywords() {
+		return keywords;
+	}
+
+	public void setKeywords(String[] keywords) {
+		this.keywords = keywords;
 	}
 	
 }

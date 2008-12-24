@@ -30,9 +30,8 @@
                                     document.aimIndicatorForm.action = "<%=addInd%>~forStep9=true";
                                     document.aimIndicatorForm.target = window.opener.name;
                                     document.aimIndicatorForm.submit();
-                                }
-                
-                                window.close();
+                                    window.close();
+                                }        
                             }
 
 

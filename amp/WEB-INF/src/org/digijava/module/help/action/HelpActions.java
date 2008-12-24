@@ -1,62 +1,42 @@
 package org.digijava.module.help.action;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.io.Reader;
-import java.io.StringReader;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.TreeSet;
 import java.util.Vector;
 
-
-
-import javax.jcr.Session;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-
-import org.apache.struts.action.ActionErrors;
+import org.apache.log4j.Logger;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.search.Hits;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
 import org.apache.struts.actions.DispatchAction;
 import org.apache.struts.upload.FormFile;
 import org.apache.struts.util.LabelValueBean;
-import org.digijava.module.help.jaxb.HelpType;
-import org.digijava.module.help.jaxb.Helps;
-import org.digijava.module.help.jaxb.HelpsType;
-import org.digijava.module.help.jaxb.ObjectFactory;
-import org.dgfoundation.amp.te.ampte.Translations;
 import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.action.TranslatorManager;
-import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.exception.AimException;
-import org.digijava.module.aim.form.AdvancedReportForm;
-import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.VisibilityManagerExportHelper;
+import org.digijava.module.aim.util.LuceneUtil;
+import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.help.dbentity.HelpTopic;
 import org.digijava.module.help.form.HelpForm;
-import org.digijava.module.help.helper.HelpSearchData;
+import org.digijava.module.help.jaxb.HelpType;
+import org.digijava.module.help.jaxb.Helps;
+import org.digijava.module.help.jaxb.ObjectFactory;
 import org.digijava.module.help.util.HelpUtil;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;

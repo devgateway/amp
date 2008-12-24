@@ -3,7 +3,7 @@
  *
  * 
  */
-package org.digijava.module.aim.action;
+package org.digijava.module.aim.helper;
 
 import java.util.ArrayList;
 

@@ -10,10 +10,77 @@
 
 <script langauage="JavaScript">
 	function enableChkBox(chkBox) {
-
 		alert(chkBox);
-
 	}
+
+	function addKeyword(keyword) {
+	    var list = document.getElementById('keywords');
+	    if (list == null || keyword == null || keyword.value == null || keyword.value == "") {
+	      return;
+	    }
+
+	    var flag=false;
+	    for(var i=0; i<list.length;i++){
+	      if(list.options[i].value==keyword.value &&list.options[i].text==keyword.value){
+	        flag=true;
+	        break;
+	      }
+	    }
+	    if(flag){
+	      return false;
+	    }
+
+		var keywordVal=keyword.value;
+		while(keywordVal.indexOf(";")!=-1){		
+			var optionValue=keywordVal.substring(0,keywordVal.indexOf(";"));		
+			addOption(list,optionValue,optionValue);				
+			keywordVal=keywordVal.substring(keywordVal.indexOf(";")+1);		
+		}
+		if(keywordVal.length>0){
+			addOption(list,keywordVal,keywordVal);
+		}	
+
+		keyword.value = "";
+	  }
+
+	  function addOption(list, text, value){
+		if (list == null) {
+		   return;
+		}
+		var option = document.createElement("OPTION");
+		option.value = value;
+		option.text = text;
+		list.options.add(option);
+		return false;
+	  }
+
+	  function removeKeyword() {
+		var list = document.getElementById('keywords');
+		if (list == null) {
+		    return;
+		}
+		var index = list.selectedIndex;
+		if (index != -1) {
+		   for(var i = list.length - 1; i >= 0; i--) {
+			   if (list.options[i].selected) {
+		          list.options[i] = null;
+		        }
+		   }
+		   if (list.length > 0) {
+		      list.selectedIndex = index == 0 ? 0 : index - 1;
+		   }
+		}
+	  }
+
+	  function markAllKeywords(){
+		  var list = document.getElementById('keywords');  
+		  if(list!=null){
+			for(var i = 0; i < list.length; i++) {
+				list.options[i].selected = true;
+			}
+		  }
+		  return true;
+	  }
 </script>
 
 
@@ -246,7 +313,7 @@ div.fakefile2 input{
 
 					</logic:empty>
 					<logic:notEmpty name="aimTranslatorManagerForm" property="importedLanguages">
-						<digi:form action="/translationManager.do" method="post" >
+						<digi:form action="/translationManager.do" method="post" >							
 							<tr>
 								<td colspan="2">
 									<digi:trn key="aim:translationManagerLangFoundImportMsg">
@@ -255,14 +322,12 @@ div.fakefile2 input{
 									<br/>
 								</td>
 							</tr>
-							<logic:iterate name="aimTranslatorManagerForm" property="importedLanguages" id="lang"
-																	type="java.lang.String">
+							<logic:iterate name="aimTranslatorManagerForm" property="importedLanguages" id="lang" type="java.lang.String">
 								<tr>
 									<td width="30%">
-
 										<html:hidden property="selectedImportedLanguages" value="<%=lang %>" />
 										<bean:write name="lang" />
-										</td>
+										</td>										
 										<td>
 										<select name='<%="LANG:"+lang%>' >
 											<option value="-1" selected>
@@ -289,15 +354,34 @@ div.fakefile2 input{
 	 								</td>
 		 						</tr>
 							 </logic:iterate>
-								 <tr>
-								 	<c:set var="translation">
-								 		<digi:trn key="btn:translationManagerImport">
-								 			Import
-								 		</digi:trn>
-								 	</c:set>
-								 	<td colspan="2"><br/><html:submit style="dr-menu" value="${translation}" property="importLang"/></td>
-								 </tr>
-								 <tr>
+							 <tr height="5px"><td colspan="2">&nbsp;</td></tr>
+							 <tr>
+							 	<td colspan="2">
+							 		<digi:trn>Please enter here keywords of the translations you want to be skipped during import</digi:trn> 
+							 	</td>
+							 </tr>
+							 <tr>
+							 	<td>&nbsp;</td>
+							 	<td>
+							 		<input id="keyword" type="text" style="width:250px;height: 20px" align="top">
+							 		<input type="button" style="width:100px;vertical-align: top;" onclick="addKeyword(document.getElementById('keyword'))" value="<digi:trn key="message:addUsBtn">Add >></digi:trn>">
+									<br>
+									<html:select multiple="multiple" styleId="keywords" name="aimTranslatorManagerForm" property="keywords" size="11" styleClass="inp-text" style="width: 250px;height: 50px;">
+									</html:select>
+									<input type="button" style="width:100px;font-family:tahoma;font-size:11px;vertical-align: top;" onclick="removeKeyword()" value="<<<digi:trn key="message:rmbtn">Remove</digi:trn>" >
+							 	</td>
+							 </tr>
+							 
+							 <tr height="5px"><td colspan="2">&nbsp;</td></tr>
+							 <tr>
+								<c:set var="translation">
+									<digi:trn key="btn:translationManagerImport">
+								 		Import
+								 	</digi:trn>
+								</c:set>
+								<td colspan="2"><br/><html:submit style="dr-menu" value="${translation}" property="importLang" onclick="return markAllKeywords()"/></td>
+							 </tr>
+							 <tr>
 								<td colspan="2">
 									<br/>
 									<digi:trn key="aim:translationManagerLangSelectImportMsg">

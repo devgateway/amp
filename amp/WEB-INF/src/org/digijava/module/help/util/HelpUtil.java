@@ -3,7 +3,6 @@ package org.digijava.module.help.util;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -11,44 +10,27 @@ import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-
 import org.apache.log4j.Logger;
-import org.digijava.module.help.jaxb.HelpType;
-import org.digijava.module.help.jaxb.Helps;
-import org.digijava.module.help.jaxb.ObjectFactory;
-import org.dgfoundation.amp.te.ampte.Trn;
 import org.digijava.kernel.entity.Message;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.collections.CollectionUtils;
 import org.digijava.kernel.util.collections.HierarchyDefinition;
 import org.digijava.kernel.util.collections.HierarchyMember;
 import org.digijava.kernel.util.collections.HierarchyMemberFactory;
-import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.dbentity.NpdSettings;
 import org.digijava.module.aim.exception.AimException;
-import org.digijava.module.aim.helper.TreeItem;
-import org.digijava.module.aim.util.ChartUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.help.dbentity.HelpTopic;
-import org.digijava.module.help.form.HelpForm;
 import org.digijava.module.help.helper.HelpSearchData;
 import org.digijava.module.help.helper.HelpTopicsTreeItem;
-import org.digijava.module.translation.util.DbUtil;
-import org.digijava.kernel.entity.Locale;
-
-import com.sun.mail.handlers.message_rfc822;
+import org.digijava.module.help.jaxb.HelpType;
+import org.digijava.module.help.jaxb.ObjectFactory;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class HelpUtil {
 	private static Logger logger = Logger.getLogger(HelpUtil.class);
@@ -357,15 +339,16 @@ public class HelpUtil {
 			List<Editor> Body = getbody(help.getBodyEditKey());
             System.out.println("bodyeditkey:"+help.getBodyEditKey());
             System.out.println("body:"+Body);
-            Iterator iter = Body.iterator();
+			Iterator iter = Body.iterator();
 			if(Body != null){
-            while (iter.hasNext()) {
+			while (iter.hasNext()) {
 				Editor item = (Editor) iter.next();
 				helpsearch.setBody(item.getBody());
 				helpsearch.setLastModDate(item.getLastModDate());
 			}
-            	helpTopics.add(helpsearch);	
-           }
+
+			helpTopics.add(helpsearch);	
+		}
         }
 		
 		

@@ -83,6 +83,7 @@
     <echo message="Compiling the schema..." />
     <mkdir dir="${gen-src}" />
     <xjc destdir="${gen-src}" schema="./doc/IDML2.0.xsd" package="org.digijava.module.dataExchange.jaxb"/>
+   	<xjc destdir="${gen-src}" schema="./doc/translations.xsd" package="org.dgfoundation.amp.te.ampte.jaxb"/>
   </target>
 
 

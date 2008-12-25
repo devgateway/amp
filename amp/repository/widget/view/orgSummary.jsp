@@ -15,22 +15,22 @@
         <td width="30%">Organization Name:</td><td>${organization.name}&nbsp;</td>
     </tr>
       <tr>
-        <td>Organization Acronym:</td><td>${organization.acronym}&nbsp;</td>
+        <td width="30%">Organization Acronym:</td><td>${organization.acronym}&nbsp;</td>
     </tr>
       <tr>
-        <td>Donor Group:</td><td>${organization.orgGrpId.orgGrpName}&nbsp;</td>
+        <td width="30%">Donor Group:</td><td>${organization.orgGrpId.orgGrpName}&nbsp;</td>
     </tr>
       <tr>
-        <td>Web Link:</td><td>${organization.orgUrl}&nbsp;</td>
+        <td width="30%">Web Link:</td><td>${organization.orgUrl}&nbsp;</td>
     </tr>
      <tr>
-        <td>Contact Name:</td><td>${organization.contactPersonName}&nbsp;</td>
+        <td width="30%">Contact Name:</td><td>${organization.contactPersonName}&nbsp;</td>
     </tr>
      <tr>
-        <td>Contact Phone:</td><td>${organization.phone}&nbsp;</td>
+        <td width="30%">Contact Phone:</td><td>${organization.phone}&nbsp;</td>
     </tr>
      <tr>
-        <td>Contact Email:</td><td>${organization.email}&nbsp;</td>
+        <td width="30%">Contact Email:</td><td>${organization.email}&nbsp;</td>
     </tr>
 	
 </table>

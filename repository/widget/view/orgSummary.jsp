@@ -9,7 +9,7 @@
 
    
 
-<table id="orgTable" border="1">
+<table id="orgTable" border="1" width="100%">
     <th colspan="2" class="tableHeaderCls">Summary</th>
     <tr>
         <td>Organization Name:</td><td>${organization.name}&nbsp;</td>

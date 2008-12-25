@@ -12,7 +12,7 @@
 <table id="orgTable" border="1" width="100%">
     <th colspan="2" class="tableHeaderCls">Summary</th>
     <tr>
-        <td>Organization Name:</td><td>${organization.name}&nbsp;</td>
+        <td width="30%">Organization Name:</td><td>${organization.name}&nbsp;</td>
     </tr>
       <tr>
         <td>Organization Acronym:</td><td>${organization.acronym}&nbsp;</td>

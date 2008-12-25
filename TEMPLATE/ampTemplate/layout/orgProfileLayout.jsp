@@ -57,7 +57,7 @@
                                     </TR>
                                     <TR>
                                         <TD>
-                                            <TABLE cellpadding="5" border="0" width="100%">
+                                            <TABLE cellpadding="5" border="0" width="80%">
                                                 <TR>
                                                     <TD WIDTH="50%">
                                                         <feature:display name="orgprof_chart_place1" module="Org Profile">

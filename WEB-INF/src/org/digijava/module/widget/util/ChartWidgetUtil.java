@@ -87,7 +87,7 @@ import org.jfree.ui.RectangleInsets;
 public class ChartWidgetUtil {
 
     private static Logger logger = Logger.getLogger(ChartWidgetUtil.class);
-    public final static int MILLION=100000;
+    public final static int MILLION=1000000;
 
     /**
      * Generates chart object from specified indicator and options.
@@ -218,15 +218,7 @@ public class ChartWidgetUtil {
 		return chart;
 	}
 
-    private static int applyThousands() {
-        String ammountInThousands = FeaturesUtil.getGlobalSettingValue("Amounts in Thousands");
-        boolean inThousands = Boolean.valueOf(ammountInThousands);
-        if (inThousands) {
-            return MILLION / 1000;
-        } else {
-            return MILLION;
-        }
-    }
+ 
       /**
      * Generates category dataset using  filters .
      * This chart then can be rendered as image or pdf or file.
@@ -239,7 +231,6 @@ public class ChartWidgetUtil {
     private static CategoryDataset getTypeOfAidDataset(FilterHelper filter) throws DgException {
         DefaultCategoryDataset result = new DefaultCategoryDataset();
         Long year = filter.getYear();
-        int thousands=applyThousands();
         if (year == null || year == -1) {
             year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
         }
@@ -256,7 +247,7 @@ public class ChartWidgetUtil {
                 Collection<AmpCategoryValue> typeOfAids = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
                 for (AmpCategoryValue aid : typeOfAids) {
                     DecimalWraper funding = getFunding(filter.getOrgId(), i, aid.getId(), currCode,filter.getTransactionType());
-                    result.addValue(funding.doubleValue()/thousands, aid.getValue(), new Long(i));
+                    result.addValue(funding.doubleValue()/MILLION, aid.getValue(), new Long(i));
                 }
 
             }
@@ -276,7 +267,6 @@ public class ChartWidgetUtil {
      private static CategoryDataset getODAProfileDataset(FilterHelper filter) throws DgException {
         DefaultCategoryDataset result = new DefaultCategoryDataset();
         Long year = filter.getYear();
-        int thousands=applyThousands();
         if (year == null || year == -1) {
             year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
         }
@@ -293,7 +283,7 @@ public class ChartWidgetUtil {
                 Collection<AmpCategoryValue> financingInstruments = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY);
                 for (AmpCategoryValue financingInstrument : financingInstruments) {
                     DecimalWraper funding = getFundingByFinancingInstrument(filter.getOrgId(), i, financingInstrument.getId(), currCode,filter.getTransactionType());
-                    result.addValue(funding.doubleValue()/thousands, financingInstrument.getValue(), new Long(i));
+                    result.addValue(funding.doubleValue()/MILLION, financingInstrument.getValue(), new Long(i));
                     }
 
             }
@@ -315,7 +305,6 @@ public class ChartWidgetUtil {
     private static CategoryDataset getPledgesCommDisbDataset(FilterHelper filter) throws DgException {
        DefaultCategoryDataset result = new DefaultCategoryDataset();
         Long year = filter.getYear();
-        int thousands=applyThousands();
         if (year == null || year == -1) {
             year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
         }
@@ -330,11 +319,11 @@ public class ChartWidgetUtil {
         if (filter.getOrgId() != null) {
             for (long i = year - 2; i <= year; i++) {
               Double fundingPledge = getPledgesFunding(filter.getOrgId(), i, currCode);
-              result.addValue(fundingPledge .doubleValue()/thousands, "Pledges", new Long(i));
+              result.addValue(fundingPledge .doubleValue()/MILLION, "Pledges", new Long(i));
               DecimalWraper funding = getFunding(filter.getOrgId(), i, currCode,true);  
-              result.addValue(funding.doubleValue()/thousands, "Actual commitments", new Long(i));
+              result.addValue(funding.doubleValue()/MILLION, "Actual commitments", new Long(i));
               funding = getFunding(filter.getOrgId(), i, currCode,false);
-              result.addValue(funding.doubleValue()/thousands, "Actual disbursements", new Long(i));
+              result.addValue(funding.doubleValue()/MILLION, "Actual disbursements", new Long(i));
 
             }
 
@@ -762,7 +751,6 @@ public class ChartWidgetUtil {
                 year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
             }
             year-=1; // previous fiscal year
-            int thousands=applyThousands();
             Long currId = filter.getCurrId();
             String currCode;
             if (currId == null) {
@@ -837,7 +825,7 @@ public class ChartWidgetUtil {
                 else{
                     total=cal.getTotActualDisb();
                 }
-                ds.setValue(region.getName(), total.doubleValue()/thousands);
+                ds.setValue(region.getName(), total.doubleValue()/MILLION);
             }
         } catch (Exception e) {
             logger.error(e);
@@ -859,7 +847,7 @@ public class ChartWidgetUtil {
 
     @SuppressWarnings("empty-statement")
 	public static DefaultPieDataset getDonorSectorDataSet(FilterHelper filter) throws DgException {
-        int thousands=applyThousands();
+     
 
         /* if user doesn't select year, currency we are
         taking this information from global settings value*/
@@ -920,14 +908,14 @@ public class ChartWidgetUtil {
                 double percent=total.doubleValue()/totAllSeqtors.doubleValue();
                 // the sectors which percent is less then 5% should be group in "Others"
                 if (percent > 0.05) {
-                    ds.setValue(sector.getName(), total.doubleValue() / thousands);
+                    ds.setValue(sector.getName(), total.doubleValue() / MILLION);
                 } else {
                     others+=total.doubleValue();
                 }
                 
             }
             if(others>0){
-                  ds.setValue("Others", others / thousands);
+                  ds.setValue("Others", others / MILLION);
             }
         } catch (Exception e) {
             logger.error(e);

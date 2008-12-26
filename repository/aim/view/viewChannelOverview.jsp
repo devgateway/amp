@@ -859,61 +859,61 @@ function commentWin(val) {
 																		</field:display>
 																		
 											<bean:define id="largeTextFeature" value="Identification" toScope="request"/>																		
-											<logic:notEmpty name="activity" property="projectImpact">			
+											<c:if test="${not empty activity.projectImpact}">			
 											<bean:define id="largeTextLabel" value="Project Impact" toScope="request"/>
 											<bean:define id="largeTextKey" toScope="request">
 												<c:out value="${activity.projectImpact}"/>
 											</bean:define>
 											<jsp:include page="largeTextPropertyPopup.jsp"/>
-											</logic:notEmpty>
+											</c:if>
 
-											<logic:notEmpty name="activity" property="activitySummary">			
+											<c:if test="${not empty activity.activitySummary}">			
 											<bean:define id="largeTextLabel" value="Activity Summary" toScope="request"/>
 											<bean:define id="largeTextKey" toScope="request">
 												<c:out value="${activity.activitySummary}"/>
 											</bean:define>
 											<jsp:include page="largeTextPropertyPopup.jsp"/>
-											</logic:notEmpty>
+											</c:if>
 
-											<logic:notEmpty name="activity" property="contractingArrangements">						
+											<c:if test="${not empty activity.contractingArrangements}">						
 											<bean:define id="largeTextLabel" value="Contracting Arrangements" toScope="request"/>
 											<bean:define id="largeTextKey" toScope="request">
 												<c:out value="${activity.contractingArrangements}"/>
 											</bean:define>
 											<jsp:include page="largeTextPropertyPopup.jsp"/>
-											</logic:notEmpty>
+											</c:if>
 
-											<logic:notEmpty name="activity" property="condSeq">									
+											<c:if test="${not empty activity.condSeq}">									
 											<bean:define id="largeTextLabel" value="Conditionality and Sequencing" toScope="request"/>
 											<bean:define id="largeTextKey" toScope="request">
 												<c:out value="${activity.condSeq}"/>
 											</bean:define>
 											<jsp:include page="largeTextPropertyPopup.jsp"/>
-											</logic:notEmpty>
+											</c:if>
 			
-											<logic:notEmpty name="activity" property="linkedActivities">												
+											<c:if test="${not empty activity.linkedActivities}">												
 											<bean:define id="largeTextLabel" value="Linked Activities" toScope="request"/>
 											<bean:define id="largeTextKey" toScope="request">
 												<c:out value="${activity.linkedActivities}"/>
 											</bean:define>
 											<jsp:include page="largeTextPropertyPopup.jsp"/>
-											</logic:notEmpty>
+											</c:if>
 			
-											<logic:notEmpty name="activity" property="conditionality">									
+											<c:if test="${not empty activity.conditionality}">									
 											<bean:define id="largeTextLabel" value="Conditionalities" toScope="request"/>
 											<bean:define id="largeTextKey" toScope="request">
 												<c:out value="${activity.conditionality}"/>
 											</bean:define>
 											<jsp:include page="largeTextPropertyPopup.jsp"/>
-											</logic:notEmpty>
+											</c:if>
 			
-											<logic:notEmpty name="activity" property="projectManagement">												
+											<c:if test="${not empty activity.projectManagement}">												
 											<bean:define id="largeTextLabel" value="Project Management" toScope="request"/>
 											<bean:define id="largeTextKey" toScope="request">
 												<c:out value="${activity.projectManagement}"/>
 											</bean:define>
 											<jsp:include page="largeTextPropertyPopup.jsp"/>
-											</logic:notEmpty>
+											</c:if>
 
 																		<field:display feature="Identification"
 																			name="Purpose">

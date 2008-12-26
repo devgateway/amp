@@ -2430,6 +2430,7 @@ public class DbUtil {
     public static List<Project> getOrganisationLargestProjects(FilterHelper filter) throws DgException {
         Session session = null;
         String queryString = null;
+        int million=1000000;
         List<Project> projects = new ArrayList<Project>();
         Long year = filter.getYear();
         if (year == null || year == -1) {
@@ -2481,7 +2482,7 @@ public class DbUtil {
                 project.setSectors(activity.getSectors());
                 FundingCalculationsHelper cal = new FundingCalculationsHelper();
                 cal.doCalculations(details, currCode);
-                project.setAmount(cal.getTotActualComm().doubleValue());
+                project.setAmount(cal.getTotActualComm().doubleValue()/million);//divide by 1 000 000 to show amount in million
                 project.setTitle(activity.getName());
                 project.setActivityId(activity.getAmpActivityId());
                 projects.add(project);
@@ -6846,8 +6847,8 @@ public class DbUtil {
 		}
 		return item;
 	}
-          /**
-     * 
+       /**
+     *
      * @param questionNumber 
      * @param indId
      * @param adjustmentType

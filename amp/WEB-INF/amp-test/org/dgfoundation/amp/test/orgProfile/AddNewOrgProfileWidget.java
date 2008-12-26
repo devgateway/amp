@@ -41,6 +41,7 @@ private static Logger logger	= Logger.getLogger(AddNewOrgProfileWidget.class);
 		orgProfForm = (OrgProfileWidgetForm) createActionForm(OrgProfileWidgetForm.class);
 		session = getActionMockObjectFactory().getMockSession();
 		request = getActionMockObjectFactory().getMockRequest();
+        getActionMockObjectFactory().getMockActionMapping().setParameter("actType");
 		setValidate(false);
 
 		clean();
@@ -56,6 +57,7 @@ private static Logger logger	= Logger.getLogger(AddNewOrgProfileWidget.class);
 
 	protected void setRelatedObjects() {
         // creating test widget
+        actionPerform(OrgProfileManager.class, orgProfForm);
         widget = new AmpWidgetOrgProfile();
         widget.setName("test");
         widget.setType(TEST_TYPE);
@@ -64,6 +66,7 @@ private static Logger logger	= Logger.getLogger(AddNewOrgProfileWidget.class);
         place.setModuleInstance("default");
         place.setName("orgprof_chart_test_place");
         place.setCode("orgprof_chart_test_place");
+        session.setAttribute("ampAdmin", "true");
 
 	}
 
@@ -94,5 +97,34 @@ private static Logger logger	= Logger.getLogger(AddNewOrgProfileWidget.class);
 
 		
 	}
+
+	/**
+	 * verifying action forwards...
+	 */
+	public void testForwards() {
+           
+            
+              //verify update
+            addRequestParameter("actType", "update");
+            verifyNoActionErrors();
+            verifyForward("forward");
+
+              //verify save
+            addRequestParameter("actType", "save");
+            verifyNoActionErrors();
+            verifyForward("forward");
+
+             //verify view all
+            addRequestParameter("actType", "viewAll");
+            verifyNoActionErrors();
+            verifyForward("forward");
+
+              //verify delete
+            addRequestParameter("actType", "delete");
+            verifyNoActionErrors();
+            verifyForward("forward");
+       
+    }
+
 }
 

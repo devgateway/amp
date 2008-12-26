@@ -1686,7 +1686,7 @@
 	</action>
     <action path="/aim/switchDevelopmentMode" type="org.digijava.module.admin.action.SwitchDevelopmentMode" />
 
-        <action name="quartzJobManagerForm" path="/aim/quartzJobManager" type="org.digijava.module.aim.action.QuartzJobManager" validate="false">
+     <action name="quartzJobManagerForm" scope="session" path="/aim/quartzJobManager" type="org.digijava.module.aim.action.QuartzJobManager" validate="false">
        <forward name="forward" path="/showLayout.do?layout=quartzJobManager" />
        <forward name="addJob" path="/showLayout.do?layout=addQuartzJob" />
      </action>

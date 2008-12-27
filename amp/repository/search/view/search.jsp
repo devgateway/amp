@@ -190,6 +190,12 @@ $(document).ready(function(){
                                         </tr>
                                     </table>
                                     </digi:form>
+
+<logic:notPresent name="resultList" scope="request">
+<c:if test="${param.reset != 'true'}">
+    &nbsp;&nbsp;&nbsp;&nbsp;<strong><digi:trn>Your search return no results. Please try another keyword.</digi:trn></strong>
+</c:if>
+</logic:notPresent>
 <logic:present name="resultList" scope="request">
 									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%">	
 										<tr>

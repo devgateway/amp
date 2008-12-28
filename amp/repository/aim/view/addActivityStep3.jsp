@@ -547,13 +547,13 @@ ${fn:replace(message,quote,escapedQuote)}
                                                             <field:display name="Delegated Cooperation" feature="Funding Information">
                                                             <td>
 
-                          									Delegated Cooperation<html:checkbox name="fundingOrganization" property="delegatedCooperation" indexed="true" onclick="delegatedCooperationClick(this.name);"/>
+                          									<digi:trn key="aim:DelegatedCooperation">Delegated Cooperation</digi:trn><html:checkbox name="fundingOrganization" property="delegatedCooperation" indexed="true" onclick="delegatedCooperationClick(this.name);"/>
                           									<html:hidden name="fundingOrganization" property="delegatedCooperationString" indexed="true"/>
                                                             </td>
                                                             </field:display>
                                                             <field:display name="Delegated Partner" feature="Funding Information">
                                                             <td>
-                          									Delegated Partner<html:checkbox property="delegatedPartner" indexed="true" name="fundingOrganization" onclick="indexedCheckboxClick(this.name);"/>
+                          									<digi:trn key="aim:DelegatedPartner">Delegated Partner</digi:trn><html:checkbox property="delegatedPartner" indexed="true" name="fundingOrganization" onclick="indexedCheckboxClick(this.name);"/>
                           									<html:hidden name="fundingOrganization" property="delegatedPartnerString" indexed="true"/>
                           							        </td>
                                                             </field:display>

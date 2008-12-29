@@ -479,7 +479,7 @@ public class GisUtil {
     }
 
     public CoordinateRect getMapRect(GisMap map) {
-        return getMapRect(map.getSegments());
+   		return getMapRect(map.getSegments());
     }
 
     public CoordinateRect getMapRect(List segments) {

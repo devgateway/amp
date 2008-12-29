@@ -10,7 +10,6 @@
 <script type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 
 <digi:instance property="gisSectorByDonorTeaserForm" />
-
 <script type="text/javascript">
 <!--
 
@@ -23,40 +22,6 @@
         }
 	<digi:context name="chartImageUrl" property="context/module/moduleinstance/showSectorByDonorChart.do" />
 	var chartURL = "<%=chartImageUrl%>";
-	function donorChanged(){
-		rechart();
-	}
-	function yearChanged(){
-		rechart()
-	}
-	function rechart(){
-		var chartImage=document.getElementById('sectorByDonorChartImage');
-		chartImage.src = '<digi:file src="images/amploading.gif"/>';
-		var y=document.getElementsByName('selectedYear')[0].value;
-		var d=document.getElementsByName('selectedDonor')[0].value;
-		var myUrl = chartURL+'~selectedYear='+y+'~selectedDonor='+d;
-		myUrl+=getLegendState();
-		myUrl+=getLabelState();
-		chartImage.src=myUrl;
-		//alert(myUrl);
-	}
-	function getLegendState(){
-		var chkLegend = document.getElementsByName('showLegends')[0];
-		if (chkLegend.checked){
-			return '~showLegend=true'
-		}else{
-			return '~showLegend=false'
-		}
-	}
-	function getLabelState(){
-		var chkLabel = document.getElementsByName('showLabels')[0];
-		if (chkLabel.checked){
-			return '~showLabel=true'
-		}else{
-			return '~showLabel=false'
-		}
-	}
-	
 //-->
 </script>
 
@@ -89,16 +54,18 @@
     </tr>
 	<tr>
 		<td>
-			<html:select name="gisSectorByDonorTeaserForm" property="selectedDonor"  style="width : 230px" onchange="donorChanged()">
+			<html:select name="gisSectorByDonorTeaserForm" property="selectedDonor"  style="width : 100%" onchange="donorChanged()">
 				<html:option value="-1"><digi:trn key="widget:piechart:allDonorsItem">All Donors</digi:trn></html:option>
 				<html:optionsCollection name="gisSectorByDonorTeaserForm" property="donors" label="name" value="ampOrgId"/>
 			</html:select>
 		</td>
-		<td>
+		<%-- 
+			<td>
 			<html:select name="gisSectorByDonorTeaserForm" property="selectedYear" onchange="yearChanged()">
 				<html:optionsCollection name="gisSectorByDonorTeaserForm" property="years" label="label" value="value"/>
 			</html:select>
 		</td>
+		--%>		
 		<td nowrap="nowrap">
 			<input type="checkbox" title="Show Labels" name="showLabels" onchange="rechart()" checked="checked">
 			&nbsp;

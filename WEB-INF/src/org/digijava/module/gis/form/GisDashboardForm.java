@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.util.LabelValueBean;
 
 /**
  * Form for GIS Dashboard actions.
@@ -16,6 +17,11 @@ public class GisDashboardForm extends ActionForm {
 
     private Collection sectorCollection;
     private List availYears;
+    //years dropdown fields
+    private String selectedFromYear;
+	private String selectedToYear;
+	private Collection<LabelValueBean> yearsFrom;
+	private Collection<LabelValueBean> yearsTo;
 
     public Collection getSectorCollection() {
         return sectorCollection;
@@ -32,4 +38,38 @@ public class GisDashboardForm extends ActionForm {
     public void setAvailYears(List availYears) {
         this.availYears = availYears;
     }
+
+	public String getSelectedFromYear() {
+		return selectedFromYear;
+	}
+
+	public void setSelectedFromYear(String selectedFromYear) {
+		this.selectedFromYear = selectedFromYear;
+	}
+
+	public String getSelectedToYear() {
+		return selectedToYear;
+	}
+
+	public void setSelectedToYear(String selectedToYear) {
+		this.selectedToYear = selectedToYear;
+	}
+
+	public Collection<LabelValueBean> getYearsFrom() {
+		return yearsFrom;
+	}
+
+	public void setYearsFrom(Collection<LabelValueBean> yearsFrom) {
+		this.yearsFrom = yearsFrom;
+	}
+
+	public Collection<LabelValueBean> getYearsTo() {
+		return yearsTo;
+	}
+
+	public void setYearsTo(Collection<LabelValueBean> yearsTo) {
+		this.yearsTo = yearsTo;
+	}
+
+	
 }

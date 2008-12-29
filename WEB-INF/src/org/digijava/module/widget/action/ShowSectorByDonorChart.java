@@ -26,30 +26,41 @@ public class ShowSectorByDonorChart extends Action {
 			throws Exception {
 		SectorByDonorTeaserForm cForm = (SectorByDonorTeaserForm)form;
         response.setContentType("image/png");
-        Integer year = null;
+        Integer fromYear = null;
+        Integer toYear = null;
         Long[] donorIDs = null;
         ChartOption opt=createChartOption(cForm,request);
-
-        if (cForm.getSelectedYear()!=null && !cForm.getSelectedYear().equals("-1")){
-        	year = new Integer(cForm.getSelectedYear());
+        //from year
+        if (cForm.getSelectedFromYear()!=null && !cForm.getSelectedFromYear().equals("-1")){
+        	fromYear = new Integer(cForm.getSelectedFromYear());
         }else{
         	GregorianCalendar cal = new GregorianCalendar();
-        	year = new Integer(cal.get(Calendar.YEAR));
+        	fromYear = new Integer(cal.get(Calendar.YEAR));
         }
+        //to year
+        if (cForm.getSelectedToYear()!=null && !cForm.getSelectedToYear().equals("-1")){
+        	toYear = new Integer(cForm.getSelectedToYear());
+        }else{
+        	GregorianCalendar cal = new GregorianCalendar();
+        	toYear = new Integer(cal.get(Calendar.YEAR));
+        }
+        //donors
         if(cForm.getSelectedDonor()!=null && cForm.getSelectedDonor().longValue()!=-1){
         	donorIDs = new Long[1];
         	donorIDs[0] = cForm.getSelectedDonor();
         }        
         
         //generate chart
-        JFreeChart chart = ChartWidgetUtil.getSectorByDonorChart(donorIDs, year, opt);
+        JFreeChart chart = ChartWidgetUtil.getSectorByDonorChart(donorIDs, fromYear,toYear, opt);
         ChartRenderingInfo info = new ChartRenderingInfo();
         
         //write image in response
 		ChartUtilities.writeChartAsPNG(response.getOutputStream(),chart,opt.getWidth().intValue(),opt.getHeight().intValue(), info);
 		
-		//fill years' drop-down
-		cForm.setYears(ChartWidgetUtil.getYears());
+		//fill from years' drop-down
+		cForm.setYearsFrom(ChartWidgetUtil.getYears(true));
+		//fill to years' drop-down
+		cForm.setYearsTo(ChartWidgetUtil.getYears(false));
 		return null;
 	}
 	

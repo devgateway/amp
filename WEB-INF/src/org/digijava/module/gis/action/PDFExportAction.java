@@ -5,12 +5,8 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -49,12 +45,10 @@ import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.helper.Indicator;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.SectorUtil;
-import org.digijava.module.gis.action.PDFExportAction;
 import org.digijava.module.gis.dbentity.GisMap;
 import org.digijava.module.gis.dbentity.GisMapSegment;
 import org.digijava.module.gis.util.ColorRGB;
@@ -78,30 +72,20 @@ import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 
-import com.lowagie.text.pdf.PdfPageEvent;
 import com.lowagie.text.BadElementException;
-import com.lowagie.text.Cell;
-import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
-import com.lowagie.text.DocumentException;
 import com.lowagie.text.Element;
-import com.lowagie.text.ExceptionConverter;
 import com.lowagie.text.Font;
 import com.lowagie.text.Image;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.Phrase;
 import com.lowagie.text.Rectangle;
-import com.lowagie.text.Table;
-import com.lowagie.text.pdf.BaseFont;
-import com.lowagie.text.pdf.GrayColor;
 import com.lowagie.text.pdf.PdfContentByte;
-import com.lowagie.text.pdf.PdfImage;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPCellEvent;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfPageEvent;
-import com.lowagie.text.pdf.PdfTable;
 import com.lowagie.text.pdf.PdfWriter;
 
 public class PDFExportAction extends Action implements PdfPageEvent {
@@ -152,55 +136,44 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 		//This sets up default values for options in the dashboard
 		Long selectedDonor = null;
-		Integer selectedYear = null;
+		Integer selectedFromYear = null;
+		Integer selectedTotYear = null;
 		Boolean showLabels = true;
 		Boolean showLegends = true;
 		String selectedDonorName = "";
 
 		//Breakdown by sector parameters
 
-		if (request.getParameter("selectedDonor") != null
-				&& !request.getParameter("selectedDonor").equals("-1")) {
-			selectedDonor = Long.parseLong(request
-					.getParameter("selectedDonor"));
+		if (request.getParameter("selectedDonor") != null&& !request.getParameter("selectedDonor").equals("-1")) {
+			selectedDonor = Long.parseLong(request.getParameter("selectedDonor"));
 		}
-		if (request.getParameter("selectedDonorName") != null
-				&& !request.getParameter("selectedDonorName").equals("-1")) {
-			selectedDonorName = request
-					.getParameter("selectedDonorName");
+		if (request.getParameter("selectedDonorName") != null	&& !request.getParameter("selectedDonorName").equals("-1")) {
+			selectedDonorName = request.getParameter("selectedDonorName");
 		}
-		if (request.getParameter("selectedYear") != null
-				&& request.getParameter("selectedYear") != "-1") {
-			selectedYear = Integer.parseInt(request
-					.getParameter("selectedYear"));
+		if (request.getParameter("selectedFromYear") != null&& !request.getParameter("selectedFromYear").equals("-1")) {
+			selectedFromYear = Integer.parseInt(request.getParameter("selectedFromYear"));
 		}
-		if (request.getParameter("showLabels") != null
-				&& request.getParameter("showLabels") != "-1") {
-			showLabels = Boolean.parseBoolean(request
-					.getParameter("showLabels"));
+		if(request.getParameter("selectedToYear") != null && !request.getParameter("selectedToYear").equals("-1")){
+			selectedTotYear = Integer.parseInt(request.getParameter("selectedToYear"));
 		}
-		if (request.getParameter("showLegends") != null
-				&& request.getParameter("showLegends") != "-1") {
-			showLegends = Boolean.parseBoolean(request
-					.getParameter("showLegends"));
+		if (request.getParameter("showLabels") != null && !request.getParameter("showLabels").equals("-1")) {
+			showLabels = Boolean.parseBoolean(request.getParameter("showLabels"));
+		}
+		if (request.getParameter("showLegends") != null	&& !request.getParameter("showLegends").equals("-1")) {
+			showLegends = Boolean.parseBoolean(request.getParameter("showLegends"));
 		}
 
-		ByteArrayOutputStream outChartByteArray = getChartImage(request,
-				selectedDonor, selectedYear, showLegends, showLabels);
+		ByteArrayOutputStream outChartByteArray = getChartImage(request,selectedDonor, selectedFromYear,selectedTotYear, showLegends, showLabels);
 		Image imgChart = Image.getInstance(outChartByteArray.toByteArray());
 
 		//GIS Map parameters
 		Long secId = null;
 		Long indId = null;
-		if (request.getParameter("sectorId") != null
-				&& !request.getParameter("sectorId").equals("-1")) {
-			secId = Long.parseLong(request
-					.getParameter("sectorId"));
+		if (request.getParameter("sectorId") != null&& !request.getParameter("sectorId").equals("-1")) {
+			secId = Long.parseLong(request.getParameter("sectorId"));
 		}
-		if (request.getParameter("indicatorId") != null
-				&& !request.getParameter("indicatorId").equals("-1")) {
-			indId = Long.parseLong(request
-					.getParameter("indicatorId"));
+		if (request.getParameter("indicatorId") != null	&& !request.getParameter("indicatorId").equals("-1")) {
+			indId = Long.parseLong(request.getParameter("indicatorId"));
 		}
 
 		//Widgets parameters (selected filters)
@@ -217,8 +190,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 				tableIdIndex++;
 			}
 		}
-		if (request.getParameter("columnId") != null
-				&& !request.getParameter("columnId").equals("-1")) {
+		if (request.getParameter("columnId") != null&& !request.getParameter("columnId").equals("-1")) {
 
 			String columnStr = request.getParameter("columnId");
 			String columnIdStr[] = columnStr.split(",");
@@ -232,8 +204,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 			}
 
 		}
-		if (request.getParameter("itemId") != null
-				&& !request.getParameter("itemId").equals("-1")) {
+		if (request.getParameter("itemId") != null&& !request.getParameter("itemId").equals("-1")) {
 			String itemStr = request.getParameter("itemId");
 			String itemIdStr[] = itemStr.split(",");
 			this.itemId = new Long[itemIdStr.length];
@@ -289,7 +260,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		imagesTable.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
 
 		imagesTable.addCell(getImageMap(imgMap, sectorName, indicatorName));
-		imagesTable.addCell(getImageChart(imgChart, selectedDonorName, selectedYear));
+		imagesTable.addCell(getImageChart(imgChart, selectedDonorName, selectedFromYear));
 //		imagesTable.addCell(" ");
 
 		// First batch of widgets
@@ -1397,8 +1368,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 	}
 
-	public ByteArrayOutputStream getChartImage(HttpServletRequest request,
-			Long donorId, Integer year, Boolean showLegends, Boolean showLabels)
+	public ByteArrayOutputStream getChartImage(HttpServletRequest request,Long donorId, Integer fromYear,Integer toYear, Boolean showLegends, Boolean showLabels)
 			throws Exception {
 		ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
 
@@ -1408,8 +1378,12 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 			donorIDs[0] = donorId;
 		}
 		GregorianCalendar cal = new GregorianCalendar();
-		if (year == null)
-			year = new Integer(cal.get(Calendar.YEAR));
+		if (fromYear == null){
+			fromYear = new Integer(cal.get(Calendar.YEAR));
+		}
+		if(toYear==null){
+			toYear = new Integer(cal.get(Calendar.YEAR));
+		}
 
 		ChartOption opt = new ChartOption();
 		opt.setShowTitle(true);
@@ -1423,8 +1397,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		opt.setLangCode(langCode);
 
 		// generate chart
-		JFreeChart chart = ChartWidgetUtil.getSectorByDonorChart(donorIDs,
-				year, opt);
+		JFreeChart chart = ChartWidgetUtil.getSectorByDonorChart(donorIDs,fromYear,toYear, opt);
 		ChartRenderingInfo info = new ChartRenderingInfo();
 
 		// write image in response
@@ -1613,8 +1586,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
                     HilightData hData = new HilightData();
                     hData.setSegmentId((int) segment.getSegmentId());
                     float green = (Float.parseFloat(sd.getSegmentValue()) - min.floatValue()) * coeff;
-                    hData.setColor(new ColorRGB((int) 0,
-                                                (int) (green + 50f), 0));
+                    hData.setColor(new ColorRGB((int) 0,(int) (green + 50f), 0));
                     retVal.add(hData);
                 }
             }
@@ -1671,18 +1643,12 @@ public class PDFExportAction extends Action implements PdfPageEvent {
                     }
                     */
 
-                   if (fundDet.getTransactionType().intValue() ==
-                       Constants.COMMITMENT) {
-                       commitment += fundDet.getTransactionAmount() /
-                               exchangeRate;
-                   } else if (fundDet.getTransactionType().intValue() ==
-                              Constants.DISBURSEMENT) {
-                       disbursement += fundDet.getTransactionAmount() /
-                               exchangeRate;
-                   } else if (fundDet.getTransactionType().intValue() ==
-                              Constants.EXPENDITURE) {
-                       expenditure += fundDet.getTransactionAmount() /
-                               exchangeRate;
+                   if (fundDet.getTransactionType().intValue() == Constants.COMMITMENT) {
+                       commitment += fundDet.getTransactionAmount() /exchangeRate;
+                   } else if (fundDet.getTransactionType().intValue() ==Constants.DISBURSEMENT) {
+                       disbursement += fundDet.getTransactionAmount() /exchangeRate;
+                   } else if (fundDet.getTransactionType().intValue() ==Constants.EXPENDITURE) {
+                       expenditure += fundDet.getTransactionAmount() /exchangeRate;
                    }
 
                 }

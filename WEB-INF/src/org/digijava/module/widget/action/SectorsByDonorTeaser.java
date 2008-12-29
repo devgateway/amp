@@ -29,11 +29,15 @@ public class SectorsByDonorTeaser extends TilesAction {
 		//get current year(by default selectedYear should be the same as current year)
 		Calendar cal=Calendar.getInstance();
 		Integer year=new Integer(cal.get(java.util.Calendar.YEAR));
-		tForm.setSelectedYear(year.toString());		
+		tForm.setSelectedFromYear(year.toString());
+		tForm.setSelectedToYear(new Integer(year+1).toString());
 		tForm.setSelectedDonor(new Long(-1));
 		Collection<AmpOrganisation> donors = DbUtil.getAmpOrganisations(false);
 		tForm.setDonors(donors);
-		tForm.setYears(ChartWidgetUtil.getYears());
+		//fill from years' drop-down
+		tForm.setYearsFrom(ChartWidgetUtil.getYears(true));
+		//fill to years' drop-down
+		tForm.setYearsTo(ChartWidgetUtil.getYears(false));
 		return null;
 	}
 

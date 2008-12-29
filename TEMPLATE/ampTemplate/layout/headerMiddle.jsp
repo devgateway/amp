@@ -522,9 +522,35 @@ function adminHelp(){
                               </div>                    
                           </li>
 						<%}%>
+                         
+                          <c:set var="tabIndex">
+                              <feature:display name="Event Tab" module="Messages">4</feature:display>
+                              <feature:display name="Approval Tab" module="Messages">3</feature:display>
+                              <feature:display name="Alert tab" module="Messages">2</feature:display>
+                              <feature:display name="Message tab" module="Messages">1</feature:display>
+                          </c:set>
 						  <module:display name="Messages" parentModule="Messaging System">
                           <li class="yuiampmenuitem" style="float:left;">
-                              <a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1&childTab=inbox"  style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
+                              <c:choose>
+                                  <c:when test="${fn:contains(tabIndex, '1')}">
+                                         <a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1&childTab=inbox"  style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
+                                  </c:when>
+                                   <c:when test="${fn:contains(tabIndex, '2')}">
+                                         <a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=2&childTab=inbox"  style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
+                                  </c:when>
+                                  <c:when test="${fn:contains(tabIndex, '3')}">
+                                         <a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=3&childTab=inbox"  style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
+                                  </c:when>
+                                  <c:when test="${fn:contains(tabIndex, '4')}">
+                                         <a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=4&childTab=inbox"  style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
+                                  </c:when>
+                                  <c:otherwise>
+                                       <a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=5&childTab=inbox"  style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
+                                  </c:otherwise>
+                              </c:choose>
+
+
+
                                  <digi:trn key="fm:messages">Messages</digi:trn>
                               </a>
                               <a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">

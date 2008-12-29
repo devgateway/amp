@@ -566,11 +566,13 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			projectCode = null;
 			gbsSbs = null;	
 			
-	        Iterator<CustomField<?>> itcf = this.customFields.iterator();
-	        while(itcf.hasNext()){
-	        	CustomField<?> cf = itcf.next();
-        		cf.setValue(null);
-	        }
+			if(this.customFields!=null && this.customFields.size()>0){
+				Iterator<CustomField<?>> itcf = this.customFields.iterator();
+		        while(itcf.hasNext()){
+		        	CustomField<?> cf = itcf.next();
+	        		cf.setValue(null);
+		        }
+			}	        
 	        
 		}
 

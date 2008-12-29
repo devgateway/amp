@@ -46,7 +46,8 @@ window.onload = function(){
 	columnquerystring += "&tableId="+tableIdStr+"&columnId="+columnIdStr+"&itemId="+itemIdStr;
 
 	var selectedDonor = document.getElementsByName("selectedDonor")[0].value;
-	var selectedYear = document.getElementsByName("selectedYear")[0].value;
+	var selectedFromYear = document.getElementsByName("selectedFromYear")[0].value;
+	var selectedToYear = document.getElementsByName("selectedToYear")[0].value;
 	var showLabels = document.getElementsByName("showLabels")[0].checked;
 	var showLegends = document.getElementsByName("showLegends")[0].checked;
 
@@ -62,7 +63,7 @@ window.onload = function(){
 	var sectorId =  document.getElementById("sectorsMapCombo").value;
 	var indicatorId = document.getElementById("indicatorsCombo").value;	
   
-	openURLinWindow("/gis/pdfExport.do?selectedDonor=" + selectedDonor + "&selectedYear=" + selectedYear + "&showLabels=" + showLabels + "&showLegends=" + showLegends + "&sectorId=" + sectorId + "&indicatorId=" + indicatorId + ""+ columnquerystring + "&selectedDonorName=" +selectDonorsStr, 780, 500);
+	openURLinWindow("/gis/pdfExport.do?selectedDonor=" + selectedDonor + "&selectedFromYear=" + selectedFromYear+ "&selectedToYear=" + selectedToYear + "&showLabels=" + showLabels + "&showLegends=" + showLegends + "&sectorId=" + sectorId + "&indicatorId=" + indicatorId + ""+ columnquerystring + "&selectedDonorName=" +selectDonorsStr, 780, 500);
   }
 function resizeDivs(){
 	var tables = document.getElementsByTagName("table");

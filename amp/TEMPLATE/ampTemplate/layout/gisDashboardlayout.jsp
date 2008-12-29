@@ -4,6 +4,52 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 
+<script type="text/javascript">
+<!--
+	var lastTimeStamp;
+	
+	function donorChanged(){
+		rechart();
+	}
+	function yearChanged(){
+		rechart()
+	}
+	function rechart(){
+		lastTimeStamp = new Date().getTime();
+		var chartImage=document.getElementById('sectorByDonorChartImage');
+		chartImage.src = '<digi:file src="images/amploading.gif"/>';
+		//from year
+		var fy=document.getElementsByName('selectedFromYear')[0].value;
+		//to year
+		var ty=document.getElementsByName('selectedToYear')[0].value;
+		var d=document.getElementsByName('selectedDonor')[0].value;
+		var myUrl = chartURL+'~selectedFromYear='+fy+'~selectedToYear='+ty+'~selectedDonor='+d+'~timestamp='+lastTimeStamp;
+		myUrl+=getLegendState();
+		myUrl+=getLabelState();
+		chartImage.src=myUrl;
+		//alert(myUrl);
+	}
+	function getLegendState(){
+		var chkLegend = document.getElementsByName('showLegends')[0];
+		if (chkLegend.checked){
+			return '~showLegend=true'
+		}else{
+			return '~showLegend=false'
+		}
+	}
+	function getLabelState(){
+		var chkLabel = document.getElementsByName('showLabels')[0];
+		if (chkLabel.checked){
+			return '~showLabel=true'
+		}else{
+			return '~showLabel=false'
+		}
+	}
+	
+//-->
+</script>
+
+
 <style>
 	#content{
 		height: 100%;
@@ -51,7 +97,7 @@ else {
         <digi:ref href="css/gis.css" type="text/css" rel="stylesheet" />
 	</HEAD>
 	
-    <BODY leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0">
+    <BODY leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0">    	
 		<TABLE cellSpacing=0 cellPadding=0 width="100%" height="100%" border=0 valign="top" align="left">
 			<TBODY>
 			<TR>
@@ -73,7 +119,7 @@ else {
 										<TD vAlign="top" align="left" width="60%" height="100%" rowspan="3">
 											<digi:insert attribute="body" />
 										</TD>
-									</tr>
+									</tr>									
 									<tr> 
 										<td valign="top">
 											<digi:insert attribute="pieChart"/>

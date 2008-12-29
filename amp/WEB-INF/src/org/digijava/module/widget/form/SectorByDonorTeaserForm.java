@@ -16,7 +16,8 @@ public class SectorByDonorTeaserForm extends ActionForm {
 	private static final long serialVersionUID = 1L;
 	private Integer imageHeight;
 	private Integer imageWidth;
-	private String selectedYear;
+	private String selectedFromYear;
+	private String selectedToYear;
 	private Long selectedDonor;
 	private Collection<AmpOrganisation> donors;
 	private Boolean showLegend;
@@ -25,7 +26,8 @@ public class SectorByDonorTeaserForm extends ActionForm {
 	private Boolean showPercentage;
 	private Boolean showAmount;
 	//This property hold values that will be shown on years' drop-down
-	private Collection<LabelValueBean> years;
+	private Collection<LabelValueBean> yearsFrom;
+	private Collection<LabelValueBean> yearsTo;
 	
 	public Collection<AmpOrganisation> getDonors() {
 		return donors;
@@ -39,12 +41,7 @@ public class SectorByDonorTeaserForm extends ActionForm {
 	public void setSelectedDonor(Long selectedDonor) {
 		this.selectedDonor = selectedDonor;
 	}
-	public String getSelectedYear() {
-		return selectedYear;
-	}
-	public void setSelectedYear(String selectedYear) {
-		this.selectedYear = selectedYear;
-	}
+
 	public Integer getImageHeight() {
 		return imageHeight;
 	}
@@ -87,10 +84,29 @@ public class SectorByDonorTeaserForm extends ActionForm {
 	public void setShowAmount(Boolean showAmount) {
 		this.showAmount = showAmount;
 	}
-	public Collection<LabelValueBean> getYears() {
-		return years;
+	
+	public String getSelectedFromYear() {
+		return selectedFromYear;
 	}
-	public void setYears(Collection<LabelValueBean> years) {
-		this.years = years;
+	public void setSelectedFromYear(String selectedFromYear) {
+		this.selectedFromYear = selectedFromYear;
+	}
+	public String getSelectedToYear() {
+		return selectedToYear;
+	}
+	public void setSelectedToYear(String selectedToYear) {
+		this.selectedToYear = selectedToYear;
+	}
+	public Collection<LabelValueBean> getYearsFrom() {
+		return yearsFrom;
+	}
+	public void setYearsFrom(Collection<LabelValueBean> yearsFrom) {
+		this.yearsFrom = yearsFrom;
+	}
+	public Collection<LabelValueBean> getYearsTo() {
+		return yearsTo;
+	}
+	public void setYearsTo(Collection<LabelValueBean> yearsTo) {
+		this.yearsTo = yearsTo;
 	}
 }

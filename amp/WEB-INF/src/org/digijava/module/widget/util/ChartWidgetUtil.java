@@ -217,8 +217,6 @@ public class ChartWidgetUtil {
          
 		return chart;
 	}
-
- 
       /**
      * Generates category dataset using  filters .
      * This chart then can be rendered as image or pdf or file.
@@ -321,9 +319,9 @@ public class ChartWidgetUtil {
               Double fundingPledge = getPledgesFunding(filter.getOrgId(), i, currCode);
               result.addValue(fundingPledge .doubleValue()/MILLION, "Pledges", new Long(i));
               DecimalWraper funding = getFunding(filter.getOrgId(), i, currCode,true);  
-              result.addValue(funding.doubleValue()/MILLION, "Actual commitments", new Long(i));
+              result.addValue(funding.doubleValue()/MILLION, "Actual commitments", new Long(i));   
               funding = getFunding(filter.getOrgId(), i, currCode,false);
-              result.addValue(funding.doubleValue()/MILLION, "Actual disbursements", new Long(i));
+              result.addValue(funding.doubleValue()/MILLION, "Actual disbursements", new Long(i)); 
 
             }
 
@@ -498,22 +496,22 @@ public class ChartWidgetUtil {
 	/**
 	 * Generates chart of sector-donor funding.
 	 * @param donors ID's of donors to use in calculation
-	 * @param year
+	 * @param fromYear
 	 * @param opt chart options
 	 * @return
 	 * @throws DgException
 	 * @throws WorkerException
 	 */
-	public static JFreeChart getSectorByDonorChart(Long[] donors,Integer year,ChartOption opt)throws DgException,WorkerException{
+	public static JFreeChart getSectorByDonorChart(Long[] donors,Integer fromYear,Integer toYear,ChartOption opt)throws DgException,WorkerException{
 		JFreeChart result = null;
-		PieDataset ds = getSectorByDonorDataset(donors,year);
-		String selYear = (year==null)?"All years":year.toString();
-                //String titleMsg= TranslatorWorker.translate("widget:piechart:breakdownbysector", opt.getLangCode(), opt.getSiteId());
-                Message msg= DbUtil.getMessage("widget:piechart:breakdownbysector", opt.getLangCode(), opt.getSiteId());
-                String titleMsg="";
-                if(msg!=null){
-                   titleMsg=msg.getMessage(); 
-                }
+		PieDataset ds = getSectorByDonorDataset(donors,fromYear,toYear);		
+		
+        //String titleMsg= TranslatorWorker.translate("widget:piechart:breakdownbysector", opt.getLangCode(), opt.getSiteId());
+        Message msg= DbUtil.getMessage("widget:piechart:breakdownbysector", opt.getLangCode(), opt.getSiteId());
+        String titleMsg="";
+        if(msg!=null){
+           titleMsg=msg.getMessage(); 
+        }
 		String title = (opt.isShowTitle())? titleMsg:null;
 		boolean tooltips = false;
 		boolean urls = false;
@@ -605,15 +603,15 @@ public class ChartWidgetUtil {
 	/**
 	 * Generates dataset for sector-donor pie chart.
 	 * @param donors
-	 * @param year fundings only for this year are used.
+	 * @param fromYear fundings only for this year are used.
 	 * @return
 	 * @throws DgException
 	 */
-	public static PieDataset getSectorByDonorDataset(Long[] donors, Integer year) throws DgException{
+	public static PieDataset getSectorByDonorDataset(Long[] donors, Integer fromYear, Integer toYear) throws DgException{
 		DefaultPieDataset ds = new DefaultPieDataset();
 		Date fromDate = null;
 		Date toDate = null;
-		if (year!=null){
+		if (fromYear!=null && toYear!=null){
 			/**
 			 * we should get default calendar and from/to dates should be taken according to it.
 			 * So for example, if some calendar's startMonth is 1st of July, we should take an interval from 
@@ -621,8 +619,8 @@ public class ChartWidgetUtil {
 			 */
 			Long defaultCalendarId=new Long(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR));
 			AmpFiscalCalendar calendar=FiscalCalendarUtil.getAmpFiscalCalendar(defaultCalendarId);
-			fromDate=getStartOfYear(year.intValue(),calendar.getStartMonthNum()-1,calendar.getStartDayNum());
-			toDate = getStartOfYear(year.intValue()+1,calendar.getStartMonthNum()-1,calendar.getStartDayNum());
+			fromDate=getStartOfYear(fromYear.intValue(),calendar.getStartMonthNum()-1,calendar.getStartDayNum());
+			toDate = getStartOfYear(toYear.intValue(),calendar.getStartMonthNum()-1,calendar.getStartDayNum());
 		}		
         Double[] allFundingWrapper={new Double(0)};// to hold whole funding value
 		Collection<DonorSectorFundingHelper> fundings=getDonorSectorFunding(donors, fromDate, toDate,allFundingWrapper);
@@ -702,7 +700,7 @@ public class ChartWidgetUtil {
 		} catch (Exception e) {
 			throw new DgException(
 					"Cannot load sector fundings by donors from db", e);
-		}
+		}	
 		
 		//Process grouped data
 		if (result != null) {
@@ -711,11 +709,11 @@ public class ChartWidgetUtil {
 				Object[] rowData = (Object[]) row;
 				//AmpOrganisation donor = (AmpOrganisation) rowData[0];
 				AmpSector sector = (AmpSector) rowData[1];
-				Float sectorPrcentage = (Float) rowData[2];
+				Float sectorPrcentage = (Float) rowData[2];    //This field is NULL sometimes !
 				//AmpActivity activity = (AmpActivity) rowData[3];
 				//AmpCurrency currency = (AmpCurrency) rowData[4];
 				Double amt = (Double) rowData[4];
-                                Double amount =FeaturesUtil.applyThousandsForVisibility(amt);
+                Double amount =FeaturesUtil.applyThousandsForVisibility(amt);
 				//calculate percentage
 				Double calculated = (sectorPrcentage.floatValue() == 100)?amount:calculatePercentage(amount,sectorPrcentage);
 				//convert to
@@ -825,7 +823,7 @@ public class ChartWidgetUtil {
                 else{
                     total=cal.getTotActualDisb();
                 }
-                ds.setValue(region.getName(), total.doubleValue()/MILLION);
+                ds.setValue(region.getName(), total.doubleValue()/MILLION);                
             }
         } catch (Exception e) {
             logger.error(e);
@@ -847,7 +845,6 @@ public class ChartWidgetUtil {
 
     @SuppressWarnings("empty-statement")
 	public static DefaultPieDataset getDonorSectorDataSet(FilterHelper filter) throws DgException {
-     
 
         /* if user doesn't select year, currency we are
         taking this information from global settings value*/
@@ -1265,8 +1262,8 @@ public class ChartWidgetUtil {
 		}
     	
     }
-    
-    public static List<LabelValueBean> getYears(){
+    //from field indicates whether we are taking years for "From Year" dropdown
+    public static List<LabelValueBean> getYears(boolean from){
     	//get default calendar
     	Long defaultCalendarId=new Long(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR));
 		AmpFiscalCalendar defaultCalendar=FiscalCalendarUtil.getAmpFiscalCalendar(defaultCalendarId);
@@ -1277,6 +1274,9 @@ public class ChartWidgetUtil {
 		Integer fromYear=new Integer(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.YEAR_RANGE_START)) ;
 		if(fromYear>toYear){
 			fromYear=toYear;
+		}
+		if(!from){
+			toYear++;
 		}
     	return getYears(fromYear.intValue(),toYear.intValue(),defaultCalendar.getIsFiscal());
     }

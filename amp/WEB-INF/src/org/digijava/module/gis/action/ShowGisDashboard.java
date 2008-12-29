@@ -1,5 +1,6 @@
 package org.digijava.module.gis.action;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -13,6 +14,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.gis.form.GisDashboardForm;
 import org.digijava.module.gis.util.DbUtil;
+import org.digijava.module.widget.util.ChartWidgetUtil;
 
 /**
  * GIS Dashboard renderer action.
@@ -45,7 +47,16 @@ public class ShowGisDashboard extends Action {
          */
         gisForm.setSectorCollection(sectors);
         gisForm.setAvailYears(DbUtil.getAvailIndicatorYears());
-
+        //dropdown(on toolbar) things       
+		Calendar cal=Calendar.getInstance();
+		Integer year=new Integer(cal.get(java.util.Calendar.YEAR));  //get current year(by default selectedYear should be the same as current year)
+		gisForm.setSelectedFromYear(year.toString());
+		gisForm.setSelectedToYear(new Integer(year+1).toString());
+		//fill from years' drop-down
+		gisForm.setYearsFrom(ChartWidgetUtil.getYears(true));
+		//fill to years' drop-down
+		gisForm.setYearsTo(ChartWidgetUtil.getYears(false));
+		
         return mapping.findForward("forward");
     }
 

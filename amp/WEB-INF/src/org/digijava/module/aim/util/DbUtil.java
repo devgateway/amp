@@ -4481,6 +4481,43 @@ public class DbUtil {
         return col;
     }
 
+    public static Collection getAllOrgGroupsOfPortfolio() {
+        Session session = null;
+        Collection col = new ArrayList();
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select distinct aog.* from amp_org_group aog " +
+					            "inner join amp_organisation ao on (ao.org_grp_id = aog.amp_org_grp_id) " +
+					            "inner join amp_funding af on (af.amp_donor_org_id = ao.amp_org_id) " +
+					            "inner join amp_activity aa on (aa.amp_activity_id = af.amp_activity_id) ";                       
+            Query qry = session.createSQLQuery(queryString).addEntity(AmpOrgGroup.class);
+            col = qry.list();
+        } catch (Exception e) {
+            logger.debug("Exception from getAllOrgGroupsOfPortfolio()");
+            logger.debug(e.toString());
+        }
+        return col;
+    }
+
+    public static Collection getAllOrgTypesOfPortfolio() {
+        Session session = null;
+        Collection col = new ArrayList();
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select distinct aot.* from amp_org_type aot " +
+					            "inner join amp_organisation ao on (ao.org_type_id = aot.amp_org_type_id) " +
+					            "inner join amp_funding af on (af.amp_donor_org_id = ao.amp_org_id) " +
+					            "inner join amp_activity aa on (aa.amp_activity_id = af.amp_activity_id) " +
+					            "group by aot.amp_org_type_id";                       
+            Query qry = session.createSQLQuery(queryString).addEntity(AmpOrgType.class);
+            col = qry.list();
+        } catch (Exception e) {
+            logger.debug("Exception from getAllOrgTypesOfPortfolio()");
+            logger.debug(e.toString());
+        }
+        return col;
+    }
+
     public static AmpOrgType getAmpOrgType(Long ampOrgTypeId) {
         Session session = null;
         Query qry = null;

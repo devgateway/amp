@@ -219,10 +219,7 @@ public class ReportsFilterPicker extends MultiAction {
 		// else donors=new ArrayList();
 		// donors = DbUtil.getAllOrgGroups();
 		donors = DbUtil.getAllOrgGrpBeeingUsed();
-
-		Collection donorTypes = DbUtil.getAllOrgTypes();
-		Collection donorGroups = ARUtil.filterDonorGroups(DbUtil.getAllOrgGroups());
-
+		
 		Collection meRisks = MEIndicatorsUtil.getAllIndicatorRisks();
 		for (Iterator iter = meRisks.iterator(); iter.hasNext();) {
 			AmpIndicatorRiskRatings element = (AmpIndicatorRiskRatings) iter.next();
@@ -232,6 +229,8 @@ public class ReportsFilterPicker extends MultiAction {
 			String msg = CategoryManagerUtil.translate(key, request, value);
 			element.setRatingName(msg);
 		}
+		Collection donorTypes = DbUtil.getAllOrgTypesOfPortfolio();
+		Collection donorGroups = ARUtil.filterDonorGroups(DbUtil.getAllOrgGroupsOfPortfolio());
 
 		Collection allIndicatorRisks = meRisks;
 		Collection regions = LocationUtil.getAllDefCountryArRegions();
@@ -259,11 +258,11 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setDonorTypes(donorTypes);
 		filterForm.setDonorGroups(donorGroups);
 
-		filterForm.setExecutingAgency(ReportsUtil.getAllOrgByRole(Constants.ROLE_CODE_EXECUTING_AGENCY));
-		filterForm.setDonnorAgency((ReportsUtil.getAllOrgByRole(Constants.ROLE_CODE_DONOR)));
-		filterForm.setBeneficiaryAgency(ReportsUtil.getAllOrgByRole(Constants.ROLE_CODE_BENEFICIARY_AGENCY));
-		filterForm.setImplementingAgency(ReportsUtil.getAllOrgByRole(Constants.ROLE_CODE_IMPLEMENTING_AGENCY));
-		filterForm.setResponsibleorg(ReportsUtil.getAllOrgByRole(Constants.ROLE_CODE_RESPONSIBLE_ORG));
+		filterForm.setExecutingAgency(ReportsUtil.getAllOrgByRoleOfPortfolio(Constants.ROLE_CODE_EXECUTING_AGENCY));
+		filterForm.setDonnorAgency((ReportsUtil.getAllOrgByRoleOfPortfolio(Constants.ROLE_CODE_DONOR)));
+		filterForm.setBeneficiaryAgency(ReportsUtil.getAllOrgByRoleOfPortfolio(Constants.ROLE_CODE_BENEFICIARY_AGENCY));
+		filterForm.setImplementingAgency(ReportsUtil.getAllOrgByRoleOfPortfolio(Constants.ROLE_CODE_IMPLEMENTING_AGENCY));
+		filterForm.setResponsibleorg(ReportsUtil.getAllOrgByRoleOfPortfolio(Constants.ROLE_CODE_RESPONSIBLE_ORG));
 		
 		String calValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
 		if (filterForm.getCalendar() == null && calValue != null) {

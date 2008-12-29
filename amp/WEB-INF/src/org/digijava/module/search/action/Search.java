@@ -1,21 +1,11 @@
 package org.digijava.module.search.action;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.lucene.document.Document;
-import org.apache.lucene.search.Hits;
-import org.apache.lucene.store.Directory;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -82,7 +72,7 @@ public class Search extends Action {
 			switch (searchForm.getQueryType()) {
 			case SearchUtil.QUERY_ALL:
 				resultActivities = SearchUtil.getActivities(searchForm
-						.getKeyword(), ampContext);
+						.getKeyword(), request, tm);
 				resultReports = SearchUtil.getReports(tm, searchForm
 						.getKeyword());
 				resultTabs = SearchUtil.getTabs(tm, searchForm.getKeyword());
@@ -91,7 +81,7 @@ public class Search extends Action {
 				break;
 			case SearchUtil.ACTIVITIES:
 				resultActivities = SearchUtil.getActivities(searchForm
-						.getKeyword(), ampContext);
+						.getKeyword(), request, tm);
 				break;
 			case SearchUtil.REPORTS:
 				resultReports = SearchUtil.getReports(tm, searchForm

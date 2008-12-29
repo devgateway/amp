@@ -857,7 +857,10 @@ function remProgram(programType) {
 				                            </tr>			                            
 			                            	<tr>
 			                            		<td>
- 													<jsp:include page="addActivityCustomFields.jsp"/>
+													<table border="0">
+														<bean:define id="stepNumber" toScope="request" value="2"/>
+	 													<jsp:include page="addActivityCustomFields.jsp"/>
+													</table>
 			                            		</td>
 			                            	</tr>
 										</feature:display>

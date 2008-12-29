@@ -65,17 +65,16 @@ public class XMLCustomFieldParserTest extends TestCase {
     	
     	xr.parse(new InputSource(sr));
     	
-    	List<CustomField> customFields = handler.getCustomFields();
+    	List<CustomField<?>> customFields = handler.getCustomFields();
     	
     	assertEquals(1, customFields.size());
     	
-    	CustomField cf = customFields.get(0);
+    	CustomField<?> cf = customFields.get(0);
     	
-    	assertEquals(cf.getStep(), 1);
-    	assertEquals(cf.getName(), "Field1");
-    	assertEquals(cf.getDescription(), "Description1");
-    	assertEquals(cf.getAmpActivityPropertyName(), "field1");
-    	assertEquals(cf.getFM_field(), "Custom Field1");
+    	assertEquals("Field1", cf.getName());
+    	assertEquals("Description1", cf.getDescription());
+    	assertEquals("field1", cf.getAmpActivityPropertyName());
+    	assertEquals("Custom Field1", cf.getFM_field());
     }
     
     public void testComboCustomField() throws SAXException, IOException{    	
@@ -95,19 +94,16 @@ public class XMLCustomFieldParserTest extends TestCase {
     	
     	xr.parse(new InputSource(sr));
     	
-    	List<CustomField> customFields = handler.getCustomFields();
+    	List<CustomField<?>> customFields = handler.getCustomFields();
     	
     	assertEquals(1, customFields.size());
     	
-    	CustomField cf = customFields.get(0);
-    	
-    	assertEquals(cf.getStep(), 1);
+    	CustomField<?> cf = customFields.get(0);
     	
     	assertTrue(cf instanceof ComboBoxCustomField);
     	
     	ComboBoxCustomField combo = (ComboBoxCustomField) cf;
     	
-    	assertEquals(1,combo.getStep());
     	assertEquals("Field2", combo.getName());
     	assertEquals("Description2", combo.getDescription());
     	assertEquals("field2",combo.getAmpActivityPropertyName());
@@ -140,7 +136,7 @@ public class XMLCustomFieldParserTest extends TestCase {
     	
     	xr.parse(new InputSource(sr));
     	
-    	List<CustomField> customFields = handler.getCustomFields();
+    	List<CustomField<?>> customFields = handler.getCustomFields();
     	
     	assertEquals(1, customFields.size());
     	
@@ -148,11 +144,10 @@ public class XMLCustomFieldParserTest extends TestCase {
     	
     	CategoryCustomField cf = (CategoryCustomField) customFields.get(0);
     	
-    	assertEquals(cf.getStep(), 1);
-    	assertEquals(cf.getName(), "Field3");
-    	assertEquals(cf.getDescription(), "Description3");
-    	assertEquals(cf.getAmpActivityPropertyName(), "field3");
-    	assertEquals(cf.getFM_field(), "Custom Field3");
+    	assertEquals("Field3", cf.getName());
+    	assertEquals("Description3", cf.getDescription());
+    	assertEquals("field3", cf.getAmpActivityPropertyName());
+    	assertEquals("Custom Field3", cf.getFM_field());
     }    
     
     public void testDateCustomField() throws SAXException, IOException{    	
@@ -168,7 +163,7 @@ public class XMLCustomFieldParserTest extends TestCase {
     	
     	xr.parse(new InputSource(sr));
     	
-    	List<CustomField> customFields = handler.getCustomFields();
+    	List<CustomField<?>> customFields = handler.getCustomFields();
     	
     	assertEquals(1, customFields.size());
     	
@@ -176,11 +171,10 @@ public class XMLCustomFieldParserTest extends TestCase {
     	
     	DateCustomField dcf = (DateCustomField) customFields.get(0);
     	
-    	assertEquals(dcf.getStep(), 1);
-    	assertEquals(dcf.getName(), "Field4");
-    	assertEquals(dcf.getDescription(), "Description4");
-    	assertEquals(dcf.getAmpActivityPropertyName(), "field4");
-    	assertEquals(dcf.getFM_field(), "Custom Field4");
+    	assertEquals("Field4", dcf.getName());
+    	assertEquals("Description4", dcf.getDescription());
+    	assertEquals("field4", dcf.getAmpActivityPropertyName());
+    	assertEquals("Custom Field4", dcf.getFM_field());
     }   
     
     public void testRadioCustomField() throws SAXException, IOException{    	
@@ -200,19 +194,16 @@ public class XMLCustomFieldParserTest extends TestCase {
     	
     	xr.parse(new InputSource(sr));
     	
-    	List<CustomField> customFields = handler.getCustomFields();
+    	List<CustomField<?>> customFields = handler.getCustomFields();
     	
     	assertEquals(1, customFields.size());
     	
-    	CustomField cf = customFields.get(0);
-    	
-    	assertEquals(cf.getStep(), 1);
+    	CustomField<?> cf = customFields.get(0);
     	
     	assertTrue(cf instanceof RadioOptionCustomField);
     	
     	RadioOptionCustomField radio = (RadioOptionCustomField) cf;
     	
-    	assertEquals(1,radio.getStep());
     	assertEquals("Field2", radio.getName());
     	assertEquals("Description2", radio.getDescription());
     	assertEquals("field2",radio.getAmpActivityPropertyName());
@@ -245,7 +236,7 @@ public class XMLCustomFieldParserTest extends TestCase {
     	
     	xr.parse(new InputSource(sr));
     	
-    	List<CustomField> customFields = handler.getCustomFields();
+    	List<CustomField<?>> customFields = handler.getCustomFields();
     	
     	assertEquals(1, customFields.size());
     	
@@ -253,13 +244,34 @@ public class XMLCustomFieldParserTest extends TestCase {
     	
     	CheckCustomField ccf = (CheckCustomField) customFields.get(0);
     	
-    	
-    	assertEquals(1, ccf.getStep());
     	assertEquals("Field1", ccf.getName());
     	assertEquals("Description1", ccf.getDescription());
     	assertEquals("field1", ccf.getAmpActivityPropertyName());
     	assertEquals("Custom Field1", ccf.getFM_field());
     	assertEquals("Yes", ccf.getLabelTrue());
     	assertEquals("No", ccf.getLabelFalse());
+    } 
+    
+    public void testCustomFieldStep() throws SAXException, IOException{    	
+
+    	sb.append("<?xml version=\"1.0\"?>");
+    	sb.append("<fields>");
+    	sb.append("	<step number=\"1\" name=\"Custom Fields 1\">");
+    	sb.append("		<text name=\"Field1\" description=\"Description1\" property=\"field1\" field=\"Custom Field1\"/>");
+    	sb.append("	</step>");
+    	sb.append("</fields>");
+    	
+    	StringReader sr = new StringReader(sb.toString());
+    	
+    	xr.parse(new InputSource(sr));
+    	
+    	List<CustomField<?>> customFields = handler.getCustomFields();
+    	
+    	assertEquals(1, customFields.size());
+    	
+    	CustomField<?> cf = customFields.get(0);
+    	
+    	assertEquals(1, cf.getStep().getStep());
+    	assertEquals("Custom Fields 1", cf.getStep().getName());
     }    
 }

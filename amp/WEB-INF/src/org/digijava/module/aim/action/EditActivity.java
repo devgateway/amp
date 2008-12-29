@@ -1476,7 +1476,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
           }
         }
         
-        Iterator<CustomField> itcf = eaForm.getCustomFields().iterator();
+        Iterator<CustomField<?>> itcf = eaForm.getCustomFields().iterator();
         while(itcf.hasNext()){
         	CustomField cf = itcf.next();
         	try{

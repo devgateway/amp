@@ -1,8 +1,10 @@
 package org.digijava.module.aim.helper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -10,9 +12,10 @@ import org.xml.sax.helpers.DefaultHandler;
 
 
 public class XMLCustomFieldParser extends DefaultHandler{
-	private List<CustomField> customFields = new ArrayList<CustomField>();
-	private int step;
-	private CustomField cf;
+	private List<CustomField<?>> customFields = new ArrayList<CustomField<?>>();
+	private List<CustomFieldStep> customFieldsSteps = new ArrayList<CustomFieldStep>();
+	private CustomFieldStep step;
+	private CustomField<?> cf;
 	private LinkedHashMap<String,String> options;
 	private boolean isOption;
 	private String optionValue;
@@ -46,7 +49,11 @@ public class XMLCustomFieldParser extends DefaultHandler{
 		   ccf.setLabelTrue(atts.getValue("label_true"));
 		   ccf.setLabelFalse(atts.getValue("label_false"));
 	   }else if("step".equals(name)){
-		   step = Integer.parseInt(atts.getValue("number"));
+		   int stepInt = Integer.parseInt(atts.getValue("number"));
+		   step = new CustomFieldStep();
+		   step.setStep(stepInt);
+		   step.setName(atts.getValue("name"));
+		   customFieldsSteps.add(step);
 	   }else if("option".equals(name) && (cf instanceof  ComboBoxCustomField || cf instanceof RadioOptionCustomField) ){
 			   isOption = true;
 			   optionValue = atts.getValue("value");
@@ -88,18 +95,20 @@ public class XMLCustomFieldParser extends DefaultHandler{
 			}
 		}
 	    if ("text".equals(name) || "combo".equals(name) ||  "category".equals(name) ||  "date".equals(name) || "radio".equals(name) || "check".equals(name) ){
-		   if(cf != null) 
+		   if(cf != null){ 
 			   customFields.add(cf);
+			   step.addCustomField(cf);
+		   }
 		   cf = null;
 	    }		
 	}
 
-	public void setCustomFields(List<CustomField> customFields) {
-		this.customFields = customFields;
+	public List<CustomField<?>> getCustomFields() {
+		return customFields;
 	}
 
-	public List<CustomField> getCustomFields() {
-		return customFields;
+	public List<CustomFieldStep> getCustomFieldsSteps() {
+		return customFieldsSteps;
 	}
    
 }

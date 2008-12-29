@@ -12,17 +12,20 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <digi:instance property="aimEditActivityForm" />
+							<logic:iterate name="aimEditActivityForm" property="customFieldsSteps" id="step">
+								<logic:equal name="step" property="step" value="${stepNumber}">
 									<tr><td>
 										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
-										<b><digi:trn key="aim:customfields">Custom Fields</digi:trn></b>
+										<b>
+											<digi:trn key="aim:customfields:step_name:${stepNumber}"><c:out value="${step.name}"/></digi:trn>
+										</b>
 									</td></tr>
 									<tr><td>
 										&nbsp;
 									</td></tr>
 									<tr><td>
 										<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
-											<logic:iterate name="aimEditActivityForm" property="customFields" id="customField" indexId="index">
-											<logic:equal name="customField" property="step" value="${aimEditActivityForm.step}">
+											<logic:iterate name="step" property="customFields" id="customField" indexId="index">
 											<field:display name="${customField.FM_field}" feature="Step${aimEditActivityForm.step}">												
 												<tr>
 													<td width=200 bgcolor="#ffffff">
@@ -70,10 +73,9 @@
 													</td>
 												</tr>
 											</field:display>
-											</logic:equal>
 											</logic:iterate>
 										</table>
 									</td></tr>
-
-
+								</logic:equal>
+							</logic:iterate>
 									

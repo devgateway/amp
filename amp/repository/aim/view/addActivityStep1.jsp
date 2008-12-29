@@ -339,6 +339,7 @@ ${fn:replace(message,quote,escapedQuote)}
 									<tr><td bgColor=#f4f4f2>&nbsp;</td></tr>
 
 									<feature:display name="Step1" module="Custom Fields">
+										<bean:define id="stepNumber" toScope="request" value="1"/>
 										<jsp:include page="addActivityCustomFields.jsp"/>
 										<tr><td bgColor=#f4f4f2>&nbsp;</td></tr>
 									</feature:display>

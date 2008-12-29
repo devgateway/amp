@@ -1,20 +1,12 @@
 package org.digijava.module.aim.helper;
 
 public class CustomField<T> {
-	private int step;
+	private CustomFieldStep step;
 	private String name;
 	private String description;
 	private T value;
 	private String ampActivityPropertyName;
 	private String FM_field;
-
-	public void setStep(int step) {
-		this.step = step;
-	}
-
-	public int getStep() {
-		return step;
-	}
 
 	public void setName(String name) {
 		this.name = name;
@@ -54,6 +46,14 @@ public class CustomField<T> {
 
 	public T getValue() {
 		return value;
+	}
+
+	public void setStep(CustomFieldStep step) {
+		this.step = step;
+	}
+
+	public CustomFieldStep getStep() {
+		return step;
 	}
 
 }

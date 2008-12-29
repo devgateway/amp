@@ -2144,8 +2144,8 @@ public class SaveActivity extends Action {
 		}
 
 		if(eaForm.getCustomFields()!=null){
-			List<CustomField> customFields = eaForm.getCustomFields();
-			Iterator<CustomField> cfi = customFields.iterator();
+			List<CustomField<?>> customFields = eaForm.getCustomFields();
+			Iterator<CustomField<?>> cfi = customFields.iterator();
 			while(cfi.hasNext()){
 				CustomField customField = cfi.next();
 				String propertyName = customField.getAmpActivityPropertyName();

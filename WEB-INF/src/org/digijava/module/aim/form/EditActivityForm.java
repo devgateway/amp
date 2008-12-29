@@ -34,6 +34,7 @@ import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.CustomField;
+import org.digijava.module.aim.helper.CustomFieldStep;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.MTEFProjection;
@@ -379,7 +380,8 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 	private Boolean wasDraft;
 	
-	private List<CustomField> customFields;
+	private List<CustomField<?>> customFields;
+	private List<CustomFieldStep> customFieldsSteps;
 
 	public Boolean getWasDraft() {
 		return wasDraft;
@@ -457,6 +459,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		keyword = null;
 		
     	customFields = CustomFieldsUtil.getCustomFields();
+    	customFieldsSteps = CustomFieldsUtil.getCustomFieldsSteps();
 	}
 
 
@@ -563,9 +566,9 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			projectCode = null;
 			gbsSbs = null;	
 			
-	        Iterator<CustomField> itcf = this.customFields.iterator();
+	        Iterator<CustomField<?>> itcf = this.customFields.iterator();
 	        while(itcf.hasNext()){
-	        	CustomField cf = itcf.next();
+	        	CustomField<?> cf = itcf.next();
         		cf.setValue(null);
 	        }
 	        
@@ -5111,11 +5114,19 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		this.stepFailureText = stepFailureText;
 	}
 
-	public void setCustomFields(List<CustomField> customFields) {
+	public void setCustomFields(List<CustomField<?>> customFields) {
 		this.customFields = customFields;
 	}
 
-	public List<CustomField> getCustomFields() {
+	public List<CustomField<?>> getCustomFields() {
 		return customFields;
+	}
+
+	public void setCustomFieldsSteps(List<CustomFieldStep> customFieldsSteps) {
+		this.customFieldsSteps = customFieldsSteps;
+	}
+
+	public List<CustomFieldStep> getCustomFieldsSteps() {
+		return customFieldsSteps;
 	}
 }

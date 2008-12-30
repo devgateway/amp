@@ -335,14 +335,18 @@ ${fn:replace(message,quote,escapedQuote)}
 										<jsp:include page="addActivityStep1Planning.jsp"/>
 									</feature:display>
 										
-
-									<tr><td bgColor=#f4f4f2>&nbsp;</td></tr>
-
-									<feature:display name="Step1" module="Custom Fields">
-										<bean:define id="stepNumber" toScope="request" value="1"/>
-										<jsp:include page="addActivityCustomFields.jsp"/>
+									<logic:notEmpty name="aimEditActivityForm" property="customFields">
 										<tr><td bgColor=#f4f4f2>&nbsp;</td></tr>
-									</feature:display>
+										
+										<feature:display name="Step1" module="Custom Fields">
+											<bean:define id="stepNumber" toScope="request" value="1"/>
+											<jsp:include page="addActivityCustomFields.jsp"/>
+											<tr><td bgColor=#f4f4f2>&nbsp;</td></tr>
+										</feature:display>									
+									</logic:notEmpty>
+									
+
+									
 <!--
 									<tr><td bgColor=#f4f4f2 align="center">
 										<table cellPadding=3>

@@ -8,7 +8,7 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 <digi:instance property="orgProfilePIForm"/>
-<div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
+
 
 <table border="1" id="pIndicator">
   
@@ -50,7 +50,7 @@
     
     
 </table>
-</div>
+
 <script language="javascript">
 setStripsTable("pIndicator", "tableEven", "tableOdd");
 setHoveredTable("pIndicator");

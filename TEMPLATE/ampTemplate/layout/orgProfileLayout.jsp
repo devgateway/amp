@@ -47,11 +47,10 @@
                 <TD width="100%" vAlign="top" align="left">
                     <TABLE bgColor=#ffffff cellPadding=0 cellSpacing=0 width="99%" vAlign="top" align="left" border=0>
                         <TR>
-                            <TD class="r-dotted-lg" width="10">&nbsp;</TD>
                             <TD align=center vAlign=top>
                                 <TABLE width="100%" cellPadding=0 cellSpacing=0 vAlign="top" align="left" border="0">
                                     <TR>
-                                        <TD vAlign="top" align="left" class="r-dotted-lg">
+                                        <TD vAlign="top" align="left">
                                             <digi:insert attribute="filters"/>
                                         </TD>
                                     </TR>

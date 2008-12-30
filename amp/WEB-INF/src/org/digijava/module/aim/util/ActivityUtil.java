@@ -1015,7 +1015,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 			session.connection().setAutoCommit(true);
 			try {
 				session.close();
-				logger.error("Session closed!");
+				logger.warn("Session closed!");
 				PersistenceManager.releaseSession(session);
 			}
 			catch (Exception e) {

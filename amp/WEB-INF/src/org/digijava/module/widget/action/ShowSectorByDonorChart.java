@@ -42,7 +42,7 @@ public class ShowSectorByDonorChart extends Action {
         	toYear = new Integer(cForm.getSelectedToYear());
         }else{
         	GregorianCalendar cal = new GregorianCalendar();
-        	toYear = new Integer(cal.get(Calendar.YEAR));
+        	toYear = new Integer(cal.get(Calendar.YEAR)+1);
         }
         //donors
         if(cForm.getSelectedDonor()!=null && cForm.getSelectedDonor().longValue()!=-1){

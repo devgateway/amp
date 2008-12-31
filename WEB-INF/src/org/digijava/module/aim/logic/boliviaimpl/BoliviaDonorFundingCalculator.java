@@ -4,15 +4,12 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FilterParams;
 import org.digijava.module.aim.helper.YearlyInfo;
 import org.digijava.module.aim.logic.DonorFundingCalculator;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DecimalWraper;
-
-import com.sun.org.apache.xalan.internal.xsltc.runtime.Hashtable;
 
 /**
  * 

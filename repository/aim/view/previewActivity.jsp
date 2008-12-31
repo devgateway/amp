@@ -57,27 +57,27 @@ function backClicked() {
 function disable() {
 	document.aimEditActivityForm.submitButton.disabled = true;
 	document.aimEditActivityForm.backButton.disabled = true;
-	var appstatus = document.aimEditActivityForm.approvalStatus.value;
-	var wTLFlag   = document.aimEditActivityForm.workingTeamLeadFlag.value;
+	var appstatus = document.getElementById('approvalStatus').value;
+	var wTLFlag   = document.getElementById('workingTeamLeadFlag').value;
 	var msg='';
 	if (appstatus == "started") {
 		msg+='<digi:trn key="aim:saveActivity:started">Do you want to submit this activity for approval ?</digi:trn>';
 		if (wTLFlag == "yes") {
 			//if (confirm("Do you want to approve this activity ?"))
-				document.aimEditActivityForm.approvalStatus.value = "approved";
+				document.getElementById('approvalStatus').value = "approved";
 		}
 		else if (confirm(msg))
-				document.aimEditActivityForm.approvalStatus.value = "created";
+				document.getElementById('approvalStatus').value = "created";
 	}
 	if (appstatus == "approved") {
 		msg+='<digi:trn key="aim:saveActivity:approved">Do you want to approve this activity ?</digi:trn>';
 		if (wTLFlag != "yes")
-			document.aimEditActivityForm.approvalStatus.value = "edited";
+			document.getElementById('approvalStatus').value = "edited";
 	}
 	else if (wTLFlag == "yes") {
 		if (appstatus == "created" || appstatus == "edited") {
 			if (confirm(msg))
-				document.aimEditActivityForm.approvalStatus.value = "approved";
+				document.getElementById('approvalStatus').value = "approved";
 		}
 	}
 	document.aimEditActivityForm.submit();
@@ -159,8 +159,8 @@ function collapseAll() {
 <digi:form action="/saveActivity.do" method="post">
 <html:hidden property="step" />
 <html:hidden property="editAct" />
-<html:hidden property="approvalStatus" />
-<html:hidden property="workingTeamLeadFlag" />
+<html:hidden property="identification.approvalStatus" styleId="approvalStatus" />
+<html:hidden property="workingTeamLeadFlag"  styleId="workingTeamLeadFlag"/>
 
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left">
 <logic:present name="currentMember" scope="session">
@@ -350,7 +350,8 @@ function collapseAll() {
 							</tr>
 							<tr><td width="100%" bgcolor="#f4f4f2">
 							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
-							<tr><td align="center" vAlign="top" bgcolor="#ffffff">
+							<tr>
+							<td align="center" vAlign="top" bgcolor="#ffffff">
 								<table width="100%" cellpadding=3 cellSpacing=1 bgcolor="#dddddd">
 							<feature:display name="Identification" module="Project ID and Planning">
 								<field:display name="AMP ID" feature="Identification">
@@ -358,7 +359,7 @@ function collapseAll() {
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:ampId">
 											 AMP ID</digi:trn>										</td>
 										<td class="v-name" bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.ampId}"/>										</td>
+											<c:out value="${aimEditActivityForm.identification.ampId}"/>										</td>
 									</tr>
 								</field:display>
 									<field:display name="Contract Number" feature="Planning">
@@ -367,7 +368,7 @@ function collapseAll() {
 	                                        	<digi:trn key="aim:convenionumcont">Contract Number</digi:trn>                                       	      
 	                                        </td>
 	                                        <td bgcolor="#FFFFFF">
-	                                        	<c:out value="${aimEditActivityForm.convenioNumcont}"/>
+	                                        	<c:out value="${aimEditActivityForm.identification.convenioNumcont}"/>
 	                                        </td>
                                         </tr>
                                     </field:display>
@@ -385,7 +386,7 @@ function collapseAll() {
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:npdClasification">NPD Clasification</digi:trn>										</td>
 										<td class="v-name"  bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.clasiNPD}"/>										
+											<c:out value="${aimEditActivityForm.identification.clasiNPD}"/>										
 										</td>
 									</tr>
 									</field:display>
@@ -417,7 +418,7 @@ function collapseAll() {
 									</td>
 										
 										<td bgcolor="#ffffff">
-										 <logic:iterate name="aimEditActivityForm" id="comments" property="allComments">
+										 <logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 										 <field:display feature="Identification" name="Objective Assumption">
 										 	<logic:equal name="comments" property="key" value="Objective Assumption">
 												<logic:iterate name="comments" id="comment" property="value"
@@ -551,13 +552,13 @@ function collapseAll() {
 											<digi:edit key="${objKey}"></digi:edit>
                                          </c:if>										</td>
 									</tr>
-									<logic:present name="aimEditActivityForm" property="allComments">
+									<logic:present name="aimEditActivityForm" property="coments.allComments">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">											
 										<digi:trn key="aim:purposeComments">Purpose Comments</digi:trn>										
 										</td>
 										<td bgcolor="#ffffff">
-										 <logic:iterate name="aimEditActivityForm" id="comments" property="allComments">
+										 <logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 										 	<logic:equal name="comments" property="key" value="Purpose Assumption">
 												<logic:iterate name="comments" id="comment" property="value"
 													type="org.digijava.module.aim.dbentity.AmpComments"><b>
@@ -595,13 +596,13 @@ function collapseAll() {
 											<digi:edit key="${objKey}"></digi:edit>
                                          </c:if>										</td>
 									</tr>
-									<logic:present name="aimEditActivityForm" property="allComments">
+									<logic:present name="aimEditActivityForm" property="comments.allComments">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">											
 										<digi:trn key="aim:resultsComments">Results Comments</digi:trn>										
 										</td>
 										<td bgcolor="#ffffff">
-										 <logic:iterate name="aimEditActivityForm" id="comments" property="allComments">
+										 <logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 										 	<logic:equal name="comments" property="key" value="Results Assumption">
 												<logic:iterate name="comments" id="comment" property="value"
 													type="org.digijava.module.aim.dbentity.AmpComments"><b>
@@ -854,14 +855,14 @@ function collapseAll() {
 												</field:display>
 												<field:display name="Proposed Completion Date" feature="Planning">
 												<c:if test="${aimEditActivityForm.editAct}">
-												<c:if test="${!empty aimEditActivityForm.activityCloseDates}">
+												<c:if test="${!empty aimEditActivityForm.planning.activityCloseDates}">
 												<tr>
 													<td width="32%" valign=top><digi:trn key="aim:proposedCompletionDates">
 													Proposed Completion Dates</digi:trn></td>
 													<td width="1" valign=top>:</td>
 													<td align="left" valign=top>
 														<table cellPadding=0 cellSpacing=0>
-															<c:forEach var="closeDate" items="${aimEditActivityForm.activityCloseDates}">
+															<c:forEach var="closeDate" items="${aimEditActivityForm.planning.activityCloseDates}">
 															<tr>
 																<td>
 																	<c:out value="${closeDate}"/>																</td>
@@ -898,7 +899,7 @@ function collapseAll() {
 									<tr>
 									<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:References">References</digi:trn>									</td>
 									<td bgcolor="#ffffff">
-									<c:forEach items="${aimEditActivityForm.referenceDocs}" var="refDoc" varStatus="loopstatus">
+									<c:forEach items="${aimEditActivityForm.documents.referenceDocs}" var="refDoc" varStatus="loopstatus">
 										<table border="0">
 											<tr>
 												<td>
@@ -1041,7 +1042,7 @@ function collapseAll() {
 											<div id="component_sector_dots">...</div>
 											<div id="act_component_sector" style="display: none;">
 												<table>
-													<c:forEach var="compo" items="${aimEditActivityForm.componets.activityComponentes}">
+													<c:forEach  var="compo" items="${aimEditActivityForm.components.activityComponentes}">
 													<tr>
 														<td width="100%">
 															${compo.sectorName}														</td>
@@ -1124,9 +1125,9 @@ function collapseAll() {
 											<digi:trn key="aim:regionalFunding">
 										    Regional Funding</digi:trn>										</td>
 										<td bgcolor="#ffffff">
-											<c:if test="${!empty aimEditActivityForm.regionalFundings}">
+											<c:if test="${!empty aimEditActivityForm.funding.regionalFundings}">
 												<table width="100%" cellSpacing="1" cellPadding="3" bgcolor="#aaaaaa">
-												<c:forEach var="regFunds" items="${aimEditActivityForm.regionalFundings}">
+												<c:forEach var="regFunds" items="${aimEditActivityForm.funding.regionalFundings}">
 													<tr><td bgcolor="#ffffff">
 														<table width="100%" cellSpacing="1" cellPadding="1">
 															<tr><td bgcolor="#ffffff"><b>
@@ -1262,8 +1263,8 @@ function collapseAll() {
 										<td bgcolor="#ffffff">
 											<div id="components_dots">...</div>
 											<div id="act_components" style="display: none;">
-											<c:if test="${!empty aimEditActivityForm.selectedComponents}">
-												<c:forEach var="comp" items="${aimEditActivityForm.selectedComponents}">
+											<c:if test="${!empty aimEditActivityForm.components.selectedComponents}">
+												<c:forEach var="comp" items="${aimEditActivityForm.components.selectedComponents}">
 													<table width="100%" cellSpacing="1" cellPadding="1">
 													<tr><td>
 														<table width="100%" cellSpacing="2" cellPadding="1" class="box-border-nopadding">
@@ -1437,8 +1438,8 @@ function collapseAll() {
 										<td bgcolor="#ffffff">
 											<div id="components_resume_dots">...</div>
 											<div id="act_components_resume" style="display: none;">
-											<c:if test="${!empty aimEditActivityForm.selectedComponents}">
-												<c:forEach var="comp" items="${aimEditActivityForm.selectedComponents}">
+											<c:if test="${!empty aimEditActivityForm.components.selectedComponents}">
+												<c:forEach var="comp" items="${aimEditActivityForm.components.selectedComponents}">
 													<table width="100%" cellSpacing="1" cellPadding="1">
 													<tr><td>
 														<table width="100%" cellSpacing="2" cellPadding="1" class="box-border-nopadding">
@@ -1535,9 +1536,9 @@ function collapseAll() {
 										<td bgcolor="#ffffff">
 											<div id="issues_dots">...</div>
 											<div id="act_issues" style="display: none;">
-											<c:if test="${!empty aimEditActivityForm.issues}">
+											<c:if test="${!empty aimEditActivityForm.issues.issues}">
 												<table width="100%" cellSpacing="2" cellPadding="2" border="0">
-												<c:forEach var="issue" items="${aimEditActivityForm.issues}">
+												<c:forEach var="issue" items="${aimEditActivityForm.issues.issues}">
 													<tr><td valign="top">
 														<li class="level1"><b>
 														<digi:trn key="aim:issuename:${issue.id}"> <c:out value="${issue.name}"/> </digi:trn> <field:display feature="Issues" name="Issue Date"><c:out value="${issue.issueDate}"/> </field:display>
@@ -1588,9 +1589,9 @@ function collapseAll() {
 										<td bgcolor="#ffffff">
 											<div id="related_documents_dots">...</div>
 											<div id="act_related_documents" style="display: none;">
-											<c:if test="${ (!empty aimEditActivityForm.documentList) || (!empty aimEditActivityForm.crDocuments)}">
+											<c:if test="${ (!empty aimEditActivityForm.documents.documentList) || (!empty aimEditActivityForm.documents.crDocuments)}">
 												<table width="100%" cellSpacing="0" cellPadding="0">
-												 <logic:iterate name="aimEditActivityForm"  property="documents"
+												 <logic:iterate name="aimEditActivityForm"  property="documents.documents"
 													id="docs" type="org.digijava.module.aim.helper.Documents">
 													<c:if test="${docs.isFile == true}">
 													<tr><td>
@@ -1621,10 +1622,10 @@ function collapseAll() {
 													</td></tr>
 													</c:if>
 													</logic:iterate>
-													<logic:notEmpty name="aimEditActivityForm" property="crDocuments">
+													<logic:notEmpty name="aimEditActivityForm" property="documents.crDocuments">
 														<tr>
 														<td>
-														<logic:iterate name="aimEditActivityForm" property="crDocuments" id="crDoc">
+														<logic:iterate name="aimEditActivityForm" property="documents.crDocuments" id="crDoc">
 															<table width="100%" class="box-border-nopadding">
 															 	<tr bgcolor="#ffffff">
 																	<td vAlign="center" align="left">
@@ -1653,9 +1654,9 @@ function collapseAll() {
 													</logic:notEmpty>
 												</table>
 											</c:if>
-											<c:if test="${!empty aimEditActivityForm.linksList}">
+											<c:if test="${!empty aimEditActivityForm.documents.linksList}">
 												<table width="100%" cellSpacing="0" cellPadding="0">
-												<c:forEach var="docList" items="${aimEditActivityForm.linksList}">
+												<c:forEach var="docList" items="${aimEditActivityForm.documents.linksList}">
 					   							<bean:define id="links" name="docList" property="relLink" />
 													<tr><td>
 														<table width="100%" class="box-border-nopadding">
@@ -1998,7 +1999,7 @@ function collapseAll() {
 													<td><!-- contents -->
 								 						<logic:notEmpty name="aimEditActivityForm" property="contracts">
                                                         	<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
-                                                                 <c:forEach items="${aimEditActivityForm.contracts}" var="contract" varStatus="idx">
+                                                                 <c:forEach items="${aimEditActivityForm.contracts.contracts}" var="contract" varStatus="idx">
                                                                        <tr><td bgColor=#f4f4f2 align="center" vAlign="top">
                                                             	           <table width="100%" border="0" cellspacing="2" cellpadding="2" align="left" class="box-border-nopadding">
                                                             	           		<field:display name="Contract Name" feature="Contracting">
@@ -2369,7 +2370,7 @@ function collapseAll() {
 																										<td><field:display name="Date Disbursement" feature="Disbursement"><digi:trn key="aim:dateDisbursement">Date Disbursement</digi:trn></field:display></td>
 																										
 																									</tr>
-											                                                           <c:forEach  items="${aimEditActivityForm.allFundingDetails}" var="fundingDetail" >
+											                                                           <c:forEach  items="${aimEditActivityForm.funding.allFundingDetails}" var="fundingDetail" >
 											                                                           		<logic:equal name="contract" property="contractName" value="${fundingDetail.contract.contractName}">
 											                                                           		<c:if test="${fundingDetail.transactionType == 1}">
 											                                                               <tr>
@@ -2427,9 +2428,9 @@ function collapseAll() {
 											<digi:trn key="aim:activityCreatedBy">
 										    Activity created by</digi:trn>										</td>
 										<td width="69%" bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.actAthFirstName}"/>
-											<c:out value="${aimEditActivityForm.actAthLastName}"/> -
-											<c:out value="${aimEditActivityForm.actAthEmail}"/>										</td>
+											<c:out value="${aimEditActivityForm.identification.actAthFirstName}"/>
+											<c:out value="${aimEditActivityForm.identification.actAthLastName}"/> -
+											<c:out value="${aimEditActivityForm.identification.actAthEmail}"/>										</td>
 									</tr>
 									</field:display>
 									<field:display name="Workspace of Creator" feature="Identification">
@@ -2437,7 +2438,7 @@ function collapseAll() {
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:workspaceOfCreator">Worskpace of creator</digi:trn>										</td>
 										<td width="69%" bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.createdBy.ampTeam.name}"/> - <c:out value="${aimEditActivityForm.createdBy.ampTeam.accessType}"/>
+											<c:out value="${aimEditActivityForm.identification.createdBy.ampTeam.name}"/> - <c:out value="${aimEditActivityForm.identification.createdBy.ampTeam.accessType}"/>
 										</td>
 									</tr>
 									</field:display>
@@ -2446,10 +2447,10 @@ function collapseAll() {
 											<digi:trn key="aim:computation">Computation</digi:trn>
 										</td>
 										<td width="69%" bgcolor="#ffffff">
-											<c:if test="${aimEditActivityForm.createdBy.ampTeam.computation == 'true'}">
+											<c:if test="${aimEditActivityForm.identification.createdBy.ampTeam.computation == 'true'}">
 												  <digi:trn key="aim:yes">Yes</digi:trn>
 											</c:if>
-											<c:if test="${aimEditActivityForm.createdBy.ampTeam.computation == 'false'}">
+											<c:if test="${aimEditActivityForm.identification.createdBy.ampTeam.computation == 'false'}">
 												  <digi:trn key="aim:no">No</digi:trn>
 											</c:if>
 										</td>
@@ -2460,57 +2461,58 @@ function collapseAll() {
 											<digi:trn key="aim:dataSource">
 										    Data Source</digi:trn>										</td>
 										<td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.actAthAgencySource}"/>										</td>
+											<c:out value="${aimEditActivityForm.identification.actAthAgencySource}"/>										</td>
 									</tr>
 									</field:display>
 									<field:display name="Activity Updated On" feature="Identification">
-									<logic:notEmpty name="aimEditActivityForm" property="updatedDate">
+									<logic:notEmpty name="aimEditActivityForm" property="identification.updatedDate">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:activityUpdatedOn">
 											 Activity updated on</digi:trn>										</td>
 										<td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.updatedDate}"/>
+											<c:out value="${aimEditActivityForm.identification.updatedDate}"/>
 											<html:button  styleClass="dr-menu" property="submitButton" onclick="viewChanges()">
 												<digi:trn key="btn:last5changestoactivity">Last 5 changes to Activity</digi:trn>
 											</html:button>										</td>
 									</tr>
 									</logic:notEmpty>
 									</field:display>
+
 									<field:display name="Activity Updated By" feature="Identification">
-									<logic:notEmpty name="aimEditActivityForm" property="updatedBy">
+									<logic:notEmpty name="aimEditActivityForm" property="identification.updatedBy">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:activityUpdatedBy">
 											 Activity updated by</digi:trn>										</td>
 										<td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.updatedBy.user.firstNames}"/>
-											<c:out value="${aimEditActivityForm.updatedBy.user.lastName}"/>	-
-											<c:out value="${aimEditActivityForm.updatedBy.user.email}"/>										</td>
+											<c:out value="${aimEditActivityForm.identification.updatedBy.user.firstNames}"/>
+											<c:out value="${aimEditActivityForm.identification.updatedBy.user.lastName}"/>	-
+											<c:out value="${aimEditActivityForm.identification.updatedBy.user.email}"/>										</td>
 									</tr>
 									</logic:notEmpty>
 									</field:display>
 									<field:display name="Activity Created On" feature="Identification">
-									<logic:notEmpty name="aimEditActivityForm" property="createdDate">
+									<logic:notEmpty name="aimEditActivityForm" property="identification.createdDate">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:activityCreatedOn">
 											 Activity created on</digi:trn>										</td>
 										<td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.createdDate}"/>										</td>
+											<c:out value="${aimEditActivityForm.identification.createdDate}"/>										</td>
 									</tr>
 									</logic:notEmpty>
 									</field:display>
-									<logic:notEmpty name="aimEditActivityForm" property="team">
+									<logic:notEmpty name="aimEditActivityForm" property="identification.team">
 									<field:display name="Data Team Leader" feature="Identification">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:activityTeamLeader">
 											 Data Team Leader</digi:trn>										</td>
 										<td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.team.teamLead.user.firstNames}"/>
-											<c:out value="${aimEditActivityForm.team.teamLead.user.lastName}"/>	-
-											<c:out value="${aimEditActivityForm.team.teamLead.user.email}"/>										</td>
+											<c:out value="${aimEditActivityForm.identification.team.teamLead.user.firstNames}"/>
+											<c:out value="${aimEditActivityForm.identification.team.teamLead.user.lastName}"/>	-
+											<c:out value="${aimEditActivityForm.identification.team.teamLead.user.email}"/>										</td>
 									</tr>
 									</field:display>
 									</logic:notEmpty>

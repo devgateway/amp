@@ -27,42 +27,42 @@ public class UpdateIssue extends Action {
 		
 		EditActivityForm eaForm = (EditActivityForm) form;
 		
-		if (eaForm.getIssue() != null &&
-				eaForm.getIssue().trim().length() > 0) {
+		if (eaForm.getIssues().getIssue() != null &&
+				eaForm.getIssues().getIssue().trim().length() > 0) {
 			Issues issue = new Issues();
-			if (eaForm.getIssueId() == null || 
-					eaForm.getIssueId().longValue() < 0) {
+			if (eaForm.getIssues().getIssueId() == null || 
+					eaForm.getIssues().getIssueId().longValue() < 0) {
 				logger.debug("Setting the id from currentTimeMills()");
 				issue.setId(new Long(System.currentTimeMillis()));					
 			} else {
 				logger.debug("Setting the id from the previous");
-				issue.setId(eaForm.getIssueId());
+				issue.setId(eaForm.getIssues().getIssueId());
 			}
-			if (eaForm.getIssues() == null) {
-				issue.setName(eaForm.getIssue());
-				issue.setIssueDate(eaForm.getIssueDate());
-				if (eaForm.getIssues() == null) {
-					eaForm.setIssues(new ArrayList());
+			if (eaForm.getIssues().getIssues() == null) {
+				issue.setName(eaForm.getIssues().getIssue());
+				issue.setIssueDate(eaForm.getIssues().getIssueDate());
+				if (eaForm.getIssues().getIssues() == null) {
+					eaForm.getIssues().setIssues(new ArrayList());
 				}
-				eaForm.getIssues().add(issue);								
+				eaForm.getIssues().getIssues().add(issue);								
 			} else {
-				int index = eaForm.getIssues().indexOf(issue);
+				int index = eaForm.getIssues().getIssues().indexOf(issue);
 				if (index < 0) {
-					issue.setName(eaForm.getIssue());
-					issue.setIssueDate(eaForm.getIssueDate());
-					if (eaForm.getIssues() == null) {
-						eaForm.setIssues(new ArrayList());
+					issue.setName(eaForm.getIssues().getIssue());
+					issue.setIssueDate(eaForm.getIssues().getIssueDate());
+					if (eaForm.getIssues().getIssues() == null) {
+						eaForm.getIssues().setIssues(new ArrayList());
 					}
-					eaForm.getIssues().add(issue);				
+					eaForm.getIssues().getIssues().add(issue);				
 				} else {
-					issue = (Issues) eaForm.getIssues().get(index);
-					issue.setName(eaForm.getIssue());
-					issue.setIssueDate(eaForm.getIssueDate());
+					issue = (Issues) eaForm.getIssues().getIssues().get(index);
+					issue.setName(eaForm.getIssues().getIssue());
+					issue.setIssueDate(eaForm.getIssues().getIssueDate());
 					
 				}				
 			}
-			eaForm.setIssue(null);
-			eaForm.setIssueDate(null);
+			eaForm.getIssues().setIssue(null);
+			eaForm.getIssues().setIssueDate(null);
 			logger.debug("returning issueAdded");
 		}
 		return mapping.findForward("forward");

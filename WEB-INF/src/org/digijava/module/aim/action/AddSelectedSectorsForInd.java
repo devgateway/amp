@@ -27,9 +27,9 @@ public class AddSelectedSectorsForInd extends Action {
 			eaForm.getSectors().setActivitySectors(new ArrayList());
 		}
 
-		Long selsearchedSector[] = eaForm.getSelSectors();
+		Long selsearchedSector[] = eaForm.getSectors().getSelSectors();
 		logger.info("size off selected searched sectors: "+selsearchedSector.length);
-		Iterator itr = eaForm.getSearchedSectors().iterator();
+		Iterator itr = eaForm.getSectors().getSearchedSectors().iterator();
 		int count = 0;
 		ActivitySector sctr = null;
 

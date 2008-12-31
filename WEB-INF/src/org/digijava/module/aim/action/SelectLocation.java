@@ -28,9 +28,9 @@ public class SelectLocation extends Action {
 
 		if (request.getParameter("locationReset") != null
 				&& request.getParameter("locationReset").equals("false")) {
-			eaForm.setLocationReset(false);
+			eaForm.getLocation().setLocationReset(false);
 		} else {
-			eaForm.setLocationReset(true);
+			eaForm.getLocation().setLocationReset(true);
 			logger.info("calling reset");
 			eaForm.reset(mapping, request);
 		}
@@ -56,7 +56,7 @@ public class SelectLocation extends Action {
 		else
 			impLevelValue 	= new Integer( 1 );
 
-		eaForm.setImpLevelValue( impLevelValue );
+		eaForm.getLocation().setImpLevelValue( impLevelValue );
 /*
  * modified by Govind
  */
@@ -64,7 +64,7 @@ public class SelectLocation extends Action {
 
 		String iso= FeaturesUtil.getDefaultCountryIso();
                 if(iso!=null){
-                  eaForm.setDefaultCountryIsSet(true);
+                	eaForm.getLocation().setDefaultCountryIsSet(true);
                   String CountryName = null;
                   logger.info(" this is the ISO .... in iso " + iso);
                   Collection b = FeaturesUtil.getDefaultCountry(iso);
@@ -77,9 +77,9 @@ public class SelectLocation extends Action {
                   }
 
                   if (fill == null || fill.trim().length() == 0) {
-                    eaForm.setCountry(CountryName);
-                    eaForm.setImpCountry(iso);
-                    eaForm.setRegions(LocationUtil.getAllRegionsUnderCountry(
+                    eaForm.getLocation().setCountry(CountryName);
+                    eaForm.getLocation().setImpCountry(iso);
+                    eaForm.getLocation().setRegions(LocationUtil.getAllRegionsUnderCountry(
                         iso));
                     /*eaForm.setCountry(Constants.COUNTRY);
                         eaForm.setImpCountry(Constants.COUNTRY_ISO);
@@ -87,42 +87,42 @@ public class SelectLocation extends Action {
                   }
                   else {
                     if (fill.equals("zone")) {
-                      if (eaForm.getImpRegion() != null) {
-                        eaForm.setZones(LocationUtil.getAllZonesUnderRegion(
-                            eaForm.getImpRegion()));
-                        //eaForm.setRegions(LocationUtil.getAllRegionsUnderCountry(Constants.COUNTRY_ISO));
-                        eaForm.setRegions(LocationUtil.
+                      if (eaForm.getLocation().getImpRegion() != null) {
+                    	  eaForm.getLocation().setZones(LocationUtil.getAllZonesUnderRegion(
+                    			  eaForm.getLocation().getImpRegion()));
+                        //eaForm.getLocation().setRegions(LocationUtil.getAllRegionsUnderCountry(Constants.COUNTRY_ISO));
+                    	  eaForm.getLocation().setRegions(LocationUtil.
                                           getAllRegionsUnderCountry(iso));
-                        eaForm.setImpZone(null);
-                        eaForm.setImpMultiZone(null);
-                        eaForm.setImpMultiWoreda(null);
-                        eaForm.setImpWoreda(null);
+                    	  eaForm.getLocation().setImpZone(null);
+                    	  eaForm.getLocation().setImpMultiZone(null);
+                    	  eaForm.getLocation().setImpMultiWoreda(null);
+                    	  eaForm.getLocation().setImpWoreda(null);
                         logger.info("Zones set");
                         logger.info("Zones set size : " +
-                                    eaForm.getZones().size());
+                        		eaForm.getLocation().getZones().size());
                       }
                     }
                     else if (fill.equals("woreda")) {
-                      if (eaForm.getImpZone() != null) {
-                        eaForm.setWoredas(LocationUtil.getAllWoredasUnderZone(
-                            eaForm.getImpZone()));
-                        eaForm.setZones(LocationUtil.getAllZonesUnderRegion(
-                            eaForm.getImpRegion()));
+                      if (eaForm.getLocation().getImpZone() != null) {
+                    	  eaForm.getLocation().setWoredas(LocationUtil.getAllWoredasUnderZone(
+                    			  eaForm.getLocation().getImpZone()));
+                    	  eaForm.getLocation().setZones(LocationUtil.getAllZonesUnderRegion(
+                    			  eaForm.getLocation().getImpRegion()));
                         //eaForm.setRegions(LocationUtil.getAllRegionsUnderCountry(Constants.COUNTRY_ISO));
-                        eaForm.setRegions(LocationUtil.
+                    	  eaForm.getLocation().setRegions(LocationUtil.
                                           getAllRegionsUnderCountry(iso));
-                        eaForm.setImpWoreda(null);
+                    	  eaForm.getLocation().setImpWoreda(null);
                       }
                     }
                   }
 
-                  logger.info("Region = " + eaForm.getImpRegion());
-                  logger.info("Imp. level value = " + eaForm.getImpLevelValue());
+                  logger.info("Region = " + eaForm.getLocation().getImpRegion());
+                  logger.info("Imp. level value = " + eaForm.getLocation().getImpLevelValue());
                   logger.info("Imp. level = " + eaForm.getLocation().getImplemLocationLevel());
 
                 }
                 else{
-                eaForm.setDefaultCountryIsSet(false);
+                	eaForm.getLocation().setDefaultCountryIsSet(false);
               }
 
 

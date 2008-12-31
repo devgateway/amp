@@ -48,7 +48,7 @@ public class AddFundingDetail extends Action {
 			}
 		}
 
-		long index = formBean.getTransIndexId();
+		long index = formBean.getFunding().getTransIndexId();
                 if(event!=null){
 		String subEvent = event.substring(0,3);
 		FundingDetail fd = null;

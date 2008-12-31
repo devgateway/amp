@@ -31,16 +31,17 @@
 	<!--
 
 	function validate() {
-		if (document.aimEditActivityForm.selFundingOrgs.checked != null) { // only one org. added
-			if (document.aimEditActivityForm.selFundingOrgs.checked == false) {
+	
+		if (document.getElementsByName('funding.selFundingOrgs').length == 1) { // only one org. added
+			if (document.getElementById('selFundingOrgs').checked == false) {
 				alert("Please choose a funding organization to remove");
 				return false;
 			}
 		} else { // many org. present
-			var length = document.aimEditActivityForm.selFundingOrgs.length;
+			var length = document.getElementsByName('funding.selFundingOrgs').length;
 			var flag = 0;
 			for (i = 0;i < length;i ++) {
-				if (document.aimEditActivityForm.selFundingOrgs[i].checked == true) {
+				if (document.getElementsByName('funding.selFundingOrgs')[i].checked == true) {
 					flag = 1;
 					break;
 				}
@@ -57,7 +58,7 @@
 	function addFunding(orgId) {
 			openNewRsWindow(900, 500);
 			<digi:context name="addFunding" property="context/module/moduleinstance/addFunding.do" />
-			document.aimEditActivityForm.orgId.value = orgId;
+			document.getElementById('orgId').value = orgId;
 			document.aimEditActivityForm.action = "<%= addFunding %>?orgId" + orgId+"&edit=true";
 			document.aimEditActivityForm.prevOrg.value = orgId;
 			document.aimEditActivityForm.target = popupPointer.name;
@@ -102,9 +103,9 @@
 	function fnOnEditItem(index, orgId,fundId)	{
 			openNewWindow(900, 500);
 			<digi:context name="editItem" property="context/module/moduleinstance/editFunding.do"/>
-			document.aimEditActivityForm.action = "<%= editItem %>?orgId=" + orgId + "&offset=" + index+"&edit=true";
+			document.aimEditActivityForm.action = "<%= editItem %>?funding.orgId=" + orgId + "&funding.offset=" + index+"&edit=true";
 			document.aimEditActivityForm.prevOrg.value = orgId;
-			document.aimEditActivityForm.fundingId.value = fundId;
+			document.getElementById('fundingId').value = fundId;
 			document.aimEditActivityForm.target = popupPointer.name;
 			document.aimEditActivityForm.submit();
 	}
@@ -194,8 +195,8 @@
 <digi:instance property="aimEditActivityForm" />
 <digi:form action="/addActivity.do" method="post">
 <html:hidden property="step"/>
-<html:hidden property="orgId"/>
-<html:hidden property="fundingId"/>
+<html:hidden property="funding.orgId" styleId="orgId"/>
+<html:hidden property="funding.fundingId" styleId="fundingId"/>
 
 
 <input type="hidden" name="prevOrg">
@@ -529,7 +530,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                           	<table>
                                                           	<tr>
                                                           		<td colspan="3">
-                                                            	<html:multibox property="selFundingOrgs">
+                                                            	<html:multibox property="funding.selFundingOrgs" styleId="selFundingOrgs">
 	                                                              <bean:write name="fundingOrganization" property="ampOrgId"/>
 	                                                            </html:multibox>
                                                             <bean:write name="fundingOrganization" property="orgName"/>
@@ -564,7 +565,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                         </tr>
 
                                                         <logic:notEmpty name="fundingOrganization" property="fundings">
-                                                          <logic:iterate name="fundingOrganization" indexId="index" property="fundings" id="funding" type="org.digijava.module.aim.helper.Funding">
+                                                          <logic:iterate name="fundingOrganization"  indexId="index" property="fundings" id="funding" type="org.digijava.module.aim.helper.Funding">
                                                             <tr>
                                                               <td>
                                                                 <table cellSpacing=1 cellPadding=0 border=0 width="100%" class="box-border-nopadding">

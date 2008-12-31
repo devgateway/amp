@@ -24,14 +24,14 @@ public class SearchLocation extends Action {
 
 		EditActivityForm eaForm = (EditActivityForm) form;
 		eaForm.setReset(false);
-		eaForm.setOrgPopupReset(false);
+		//eaForm.setOrgPopupReset(false);
 
-		eaForm.setNumResults(eaForm.getTempNumResults());
+		eaForm.getLocation().setNumResults(eaForm.getLocation().getTempNumResults());
 		//eaForm.setTempNumResults(10);
 		////System.out.println("tempNumResults----->"+eaForm.getTempNumResults());
 			
-		if(eaForm.getKeyword()!=null) request.getSession().setAttribute("keywordForLocation",eaForm.getKeyword());
-		else eaForm.setKeyword((String)request.getSession().getAttribute("keywordForLocation"));
+		if(eaForm.getLocation().getKeyword()!=null) request.getSession().setAttribute("keywordForLocation",eaForm.getLocation().getKeyword());
+		else eaForm.getLocation().setKeyword((String)request.getSession().getAttribute("keywordForLocation"));
 			
 		Collection col = new ArrayList();
 		//eaForm.setNumResults(eaForm.getTempNumResults());
@@ -43,24 +43,24 @@ public class SearchLocation extends Action {
 			page = Integer.parseInt(request.getParameter("page"));
 		}
 		
-		eaForm.setCurrentPage(new Integer(page));
+		eaForm.getLocation().setCurrentPage(new Integer(page));
 
-		int implvl=eaForm.getImpLevelValue().intValue();
-		if(eaForm.getKeyword()!=null)
+		int implvl=eaForm.getLocation().getImpLevelValue().intValue();
+		if(eaForm.getLocation().getKeyword()!=null)
 		
-		if (eaForm.getKeyword().trim().length() != 0) {
+		if (eaForm.getLocation().getKeyword().trim().length() != 0) {
 			// search based on the given keyword only.
 			
-		col=(LocationUtil.searchForLocation(eaForm.getKeyword().trim(),implvl));
+		col=(LocationUtil.searchForLocation(eaForm.getLocation().getKeyword().trim(),implvl));
 
 		int stIndex = 1;
-		int edIndex = eaForm.getNumResults();
+		int edIndex = eaForm.getLocation().getNumResults();
 
-		if (eaForm.getNumResults() == 0 || eaForm.isLocationReset() == true) {
-			eaForm.setTempNumResults(10);
+		if (eaForm.getLocation().getNumResults() == 0 || eaForm.getLocation().isLocationReset() == true) {
+			eaForm.getLocation().setTempNumResults(10);
 		} else {
-			stIndex = ((page - 1) * eaForm.getTempNumResults()) + 1;
-			edIndex = page * eaForm.getTempNumResults();
+			stIndex = ((page - 1) * eaForm.getLocation().getTempNumResults()) + 1;
+			edIndex = page * eaForm.getLocation().getTempNumResults();
 		}
 		////System.out.println("start->"+stIndex);
 		Vector vect = new Vector();
@@ -70,9 +70,9 @@ public class SearchLocation extends Action {
 				edIndex = col.size();
 			}
 			vect.addAll(col);
-			if(eaForm.getNumResults() > 0) {
-				numPages = col.size() / eaForm.getNumResults();
-				numPages += (col.size() % eaForm.getNumResults() != 0) ? 1 : 0;
+			if(eaForm.getLocation().getNumResults() > 0) {
+				numPages = col.size() / eaForm.getLocation().getNumResults();
+				numPages += (col.size() % eaForm.getLocation().getNumResults() != 0) ? 1 : 0;
 			}
 			
 		Collection tempCol = new ArrayList();
@@ -80,7 +80,7 @@ public class SearchLocation extends Action {
 			tempCol.add(vect.get(i));
 		}
 
-		Collection pages = null;
+		Collection<Integer> pages = null;
 
 		if (numPages > 1) {
 			pages = new ArrayList();
@@ -90,12 +90,12 @@ public class SearchLocation extends Action {
 			}
 		}
 		
-		eaForm.setSearchLocs(col);
+		eaForm.getLocation().setSearchLocs(col);
 
-		eaForm.setCols(col);
-		eaForm.setPagedCol(tempCol);
-		eaForm.setPages(pages);
-		eaForm.setCurrentPage(new Integer(page));
+		eaForm.getLocation().setCols(col);
+		eaForm.getLocation(). setPagedCol(tempCol);
+		eaForm.getLocation().setPages(pages);
+		eaForm.getLocation().setCurrentPage(new Integer(page));
 		
 		} 
 		

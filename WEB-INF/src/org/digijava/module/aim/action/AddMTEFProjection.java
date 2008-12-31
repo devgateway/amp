@@ -42,7 +42,7 @@ public class AddMTEFProjection extends Action{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		long index = formBean.getTransIndexId();
+		long index = formBean.getFunding().getTransIndexId();
 		String subEvent = event.substring(0,3);
 		
 		

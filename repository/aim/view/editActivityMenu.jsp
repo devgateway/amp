@@ -182,8 +182,8 @@ var draftStatus=document.getElementById("draftFlag");
 <html:hidden property="workingTeamLeadFlag" />
 <html:hidden property="pageId" />
 <html:hidden property="indicator.currentValDate" />
-<html:hidden property="draft" styleId="draftFlag" />
-<html:hidden property="wasDraft" />
+<html:hidden property="identification.draft" styleId="draftFlag" />
+<html:hidden property="identification.wasDraft" />
 
 
 <table border=0 width="300" cellSpacing=0 cellPadding=0 vAlign="top" align="left" border=0>

@@ -12,7 +12,7 @@
 
 
 <digi:instance property="aimEditActivityForm" />
-									<c:if test="${!empty aimEditActivityForm.documentSpace}">
+									<c:if test="${!empty aimEditActivityForm.documents.documentSpace}">
 									<tr><td>
 										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 										<a title="<digi:trn key="aim:DMDocumentsRelated">DM - Managed Document related to the project</digi:trn>">
@@ -22,9 +22,9 @@
 										&nbsp;
 									</td></tr>									
 									<tr><td>
-										<logic:notEmpty name="aimEditActivityForm" property="managedDocumentList">
+										<logic:notEmpty name="aimEditActivityForm" property="documents.managedDocumentList">
 											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
-												<logic:iterate name="aimEditActivityForm" property="managedDocumentList"
+												<logic:iterate name="aimEditActivityForm" property="documents.managedDocumentList"
 												id="selManagedDocuments">
 												<tr>
 													<td>
@@ -74,7 +74,7 @@
 											</table>											
 										</logic:notEmpty>
 										
-										<logic:empty name="aimEditActivityForm" property="managedDocumentList">
+										<logic:empty name="aimEditActivityForm" property="documents.managedDocumentList">
 											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
 												<tr>
 													<td bgcolor="#ffffff">

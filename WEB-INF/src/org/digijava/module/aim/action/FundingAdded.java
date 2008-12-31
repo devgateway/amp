@@ -53,7 +53,7 @@ public class FundingAdded extends Action {
 		int fundOrgOffset = 0;
 		while (fundOrgsItr.hasNext()) {
 			fundOrg = (FundingOrganization) fundOrgsItr.next();
-			if (fundOrg.getAmpOrgId().equals(eaForm.getOrgId())) {
+			if (fundOrg.getAmpOrgId().equals(eaForm.getFunding().getOrgId())) {
 				found = true;
 				break;
 			}
@@ -64,7 +64,7 @@ public class FundingAdded extends Action {
 		Collection oldFundDetails = null;
 		if (found) {
 			if (eaForm.getFunding().isEditFunding()) {
-				offset = eaForm.getOffset();
+				offset = eaForm.getFunding().getOffset();
 				ArrayList fundList = new ArrayList(fundOrg.getFundings());
 				Funding fs = (Funding) fundList.get(offset);
 				oldFundDetails = fs.getFundingDetails();
@@ -76,8 +76,8 @@ public class FundingAdded extends Action {
 
 		Funding newFund = new Funding();
 
-		if (eaForm.getFundingId() != null && eaForm.getFundingId().longValue() > 0) {
-			newFund.setFundingId(eaForm.getFundingId().longValue());
+		if (eaForm.getFunding().getFundingId() != null && eaForm.getFunding().getFundingId().longValue() > 0) {
+			newFund.setFundingId(eaForm.getFunding().getFundingId().longValue());
 		} else {
 			newFund.setFundingId(System.currentTimeMillis());
 		}

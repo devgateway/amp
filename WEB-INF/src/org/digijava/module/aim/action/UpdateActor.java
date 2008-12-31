@@ -28,43 +28,43 @@ public class UpdateActor extends Action {
 			HttpServletRequest request,HttpServletResponse response) {
 		
 		EditActivityForm eaForm = (EditActivityForm) form;
-		if (eaForm.getIssueId() != null &&
-				eaForm.getIssueId().longValue() > 0) {
-			logger.debug("The issue id is " + eaForm.getIssueId());
+		if (eaForm.getIssues().getIssueId() != null &&
+				eaForm.getIssues().getIssueId().longValue() > 0) {
+			logger.debug("The issue id is " + eaForm.getIssues().getIssueId());
 			Issues issue = new Issues();
-			issue.setId(eaForm.getIssueId());
-			int index = eaForm.getIssues().indexOf(issue);
-			issue = (Issues) eaForm.getIssues().get(index);			
-			if (eaForm.getMeasureId() != null &&
-					eaForm.getMeasureId().longValue() > 0) {
-				logger.debug("The measure id is " + eaForm.getMeasureId());
+			issue.setId(eaForm.getIssues().getIssueId());
+			int index = eaForm.getIssues().getIssues().indexOf(issue);
+			issue = (Issues) eaForm.getIssues().getIssues().get(index);			
+			if (eaForm.getIssues().getMeasureId() != null &&
+					eaForm.getIssues().getMeasureId().longValue() > 0) {
+				logger.debug("The measure id is " + eaForm.getIssues().getMeasureId());
 				Measures measure = new Measures();
-				measure.setId(eaForm.getMeasureId());
+				measure.setId(eaForm.getIssues().getMeasureId());
 				int mIndex = issue.getMeasures().indexOf(measure);
 				measure = (Measures) issue.getMeasures().get(mIndex);
 				
 				AmpActor actor = new AmpActor();
-				if (eaForm.getActorId() != null && 
-						eaForm.getActorId().longValue() > -1) {
-					actor.setAmpActorId(eaForm.getActorId());
+				if (eaForm.getIssues().getActorId() != null && 
+						eaForm.getIssues().getActorId().longValue() > -1) {
+					actor.setAmpActorId(eaForm.getIssues().getActorId());
 				} else {
 					actor.setAmpActorId(new Long(System.currentTimeMillis()));
 				}
 				
 				if (measure.getActors() == null) {
 					measure.setActors(new ArrayList());
-					actor.setName(eaForm.getActor());
+					actor.setName(eaForm.getIssues().getActor());
 					measure.getActors().add(actor);
 					logger.debug("Actors empty. Adding ....");
 				} else {
 					int aIndex = measure.getActors().indexOf(actor);
 					if (aIndex > -1) {
 						actor = (AmpActor) measure.getActors().get(aIndex);
-						actor.setName(eaForm.getActor());
+						actor.setName(eaForm.getIssues().getActor());
 						measure.getActors().set(aIndex,actor);
 						logger.debug("Actor already existing. Updating .....");
 					} else {
-						actor.setName(eaForm.getActor());
+						actor.setName(eaForm.getIssues().getActor());
 						measure.getActors().add(actor);
 						logger.debug("Actor not present. Adding ....");
 					}
@@ -72,9 +72,9 @@ public class UpdateActor extends Action {
 				issue.getMeasures().set(mIndex,measure);
 				logger.debug("measure set for index at pos " + mIndex);
 			}
-			eaForm.getIssues().set(index,issue);
+			eaForm.getIssues().getIssues().set(index,issue);
 			logger.debug("issues set for formbean at pos " + index);
-			eaForm.setActor(null);
+			eaForm.getIssues().setActor(null);
 		}
 		return mapping.findForward("forward");
 	}

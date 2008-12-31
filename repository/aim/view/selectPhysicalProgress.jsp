@@ -11,7 +11,7 @@
 <!--
 
 	function load() {
-		document.addPhysicalProgressForm.phyProgTitle.focus();
+		document.getElementById('phyProgTitle').focus();
 	}
 
 	function unload() {
@@ -29,11 +29,10 @@
 
 <form name="addPhysicalProgressForm" action="/phyProgSelected.do" method="post">
 
-<html:hidden property="phyProgReset" value="false"/>
-
+<html:hidden property="phisycalProgress.phyProgReset" value="false"/>
 <input type="hidden" name="selectedDate">
-<html:hidden property="phyProgId"/>
-<html:hidden property="componentId"/>
+<html:hidden property="phisycalProgress.phyProgId"/>
+<html:hidden property="components.componentId"/>
 
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
 	<tr><td vAlign="top">
@@ -58,7 +57,7 @@
 										</td>
 										<td>
 											<div title="<digi:trn key="aim:TitleForPhysicalActivity">Title of the physical activity</digi:trn>">
-											<html:textarea property="phyProgTitle" cols="50" rows="1" styleClass="inp-text" tabindex="1"/>
+											<html:textarea property="phisycalProgress.phyProgTitle" cols="50" rows="1" styleClass="inp-text" tabindex="1" styleId="phyProgTitle"/>
 											</div>
 										</td>
 									</tr>
@@ -70,7 +69,7 @@
 										</td>
 										<td>
 											<div title="<digi:trn key="aim:ComponentDescribe">Descriptive text as to the component objectives and tasks</digi:trn>">
-											<html:textarea property="phyProgDesc" cols="50" rows="4" styleClass="inp-text" tabindex="2"/>
+											<html:textarea property="phisycalProgress.phyProgDesc" cols="50" rows="4" styleClass="inp-text" tabindex="2"/>
 											</div>
 										</td>
 									</tr>
@@ -84,12 +83,12 @@
 											<table cellSpacing=0 cellPadding=0 vAlign="top" align="left" border=0>
 												<tr>
 													<td>
-														<html:text property="phyProgRepDate" readonly="true" size="10" styleClass="inp-text"
+														<html:text property="phisycalProgress.phyProgRepDate" readonly="true" size="10" styleClass="inp-text"
 														tabindex="7" styleId="phyProgRepDate"/>
 													</td>
 													<td>
 														&nbsp;
-														<a id="date1" href='javascript:pickDate("date1",document.addPhysicalProgressForm.phyProgRepDate)'>
+														<a id="date1" href='javascript:pickDate("date1",document.getElementById("phyProgRepDate"))'>
 															<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 														</a>
 													</td>

@@ -20,7 +20,7 @@ public class RemoveSelSectors extends Action {
 
 		EditActivityForm eaForm = (EditActivityForm) form;
 
-		Long selSectors[] = eaForm.getSelActivitySectors();
+		Long selSectors[] = eaForm.getSectors().getSelActivitySectors();
 		Collection prevSelSectors = eaForm.getSectors().getActivitySectors();
 		Collection newSectors = new ArrayList();
 

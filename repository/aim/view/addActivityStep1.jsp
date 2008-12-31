@@ -29,16 +29,17 @@ function checkSelOrgs() {
 	<c:set var="translation">
 		<digi:trn key="aim:chooseOrganizationToRemove">Please choose an organization to remove</digi:trn>
 	</c:set>
-	if (document.aimEditActivityForm.selOrgs.checked != null) { // only one org. added
-		if (document.aimEditActivityForm.selOrgs.checked == false) {
+	
+	if (document.getElementById('selOrgs').checked != null) { // only one org. added
+		if (document.getElementById('selOrgs').checked == false) {
 			alert("${translation}");
 			return false;
 		}
 	} else { // many org. present
-		var length = document.aimEditActivityForm.selOrgs.length;
+		var length = document.getElementById('selOrgs').length;
 		var flag = 0;
 		for (i = 0;i < length;i ++) {
-			if (document.aimEditActivityForm.selOrgs[i].checked == true) {
+			if (document.getElementById('selOrgs')[i].checked == true) {
 				flag = 1;
 				break;
 			}
@@ -345,8 +346,7 @@ ${fn:replace(message,quote,escapedQuote)}
 										</feature:display>									
 									</logic:notEmpty>
 									
-
-									
+			
 <!--
 									<tr><td bgColor=#f4f4f2 align="center">
 										<table cellPadding=3>

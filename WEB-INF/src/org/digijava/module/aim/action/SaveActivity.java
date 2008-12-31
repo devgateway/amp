@@ -147,11 +147,11 @@ public class SaveActivity extends Action {
 		}
 
 		if(!eaForm.isEditAct()){
-			activity.setCreatedAsDraft(eaForm.getDraft());
-			createdAsDraft[0]=eaForm.getDraft();
+			activity.setCreatedAsDraft(eaForm.getIdentification().getDraft());
+			createdAsDraft[0]=eaForm.getIdentification().getDraft();
 	}
 		else{
-			if(eaForm.getWasDraft()&&!eaForm.getDraft()){
+			if(eaForm.getIdentification().getWasDraft()&&!eaForm.getIdentification().getDraft()){
 				activity.setCreatedAsDraft(false);
 				createdAsDraft[0]=false;
 			}
@@ -192,7 +192,7 @@ public class SaveActivity extends Action {
 			Long statId=eaForm.getPlanning().getStatusId();
 			
 			if(isStatusEnabled()){
-				if(eaForm.getDraft()==null || !eaForm.getDraft().booleanValue()){
+				if(eaForm.getIdentification().getDraft()==null || !eaForm.getIdentification().getDraft().booleanValue()){
 					if (statId != null && statId.equals(new Long(0))) {
 						errors.add("status", new ActionError(
 						"error.aim.addActivity.statusMissing"));
@@ -210,7 +210,7 @@ public class SaveActivity extends Action {
 		}
 		
 		//Do the initializations and all the information transfer between beans here
-		activity.setAmpId(eaForm.getAmpId());
+		activity.setAmpId(eaForm.getIdentification().getAmpId());
 		processActivityMustHaveInfo(eaForm, activity);
 		activity.setBudget(Boolean.parseBoolean(eaForm.getIdentification().getBudgetCheckbox()));
 		
@@ -305,46 +305,46 @@ public class SaveActivity extends Action {
 
 		
 		
-		if (eaForm.getContractDetails() == null
-				|| eaForm.getContractDetails().trim().length() == 0) {
+		if (eaForm.getContracts().getContractDetails() == null
+				|| eaForm.getContracts().getContractDetails().trim().length() == 0) {
 			activity.setContractDetails(new String(" "));
 		} else {
-			activity.setContractDetails(eaForm.getContractDetails());
+			activity.setContractDetails(eaForm.getContracts().getContractDetails());
 		}
 		
 		
 		/*
 		 * tanzania adds
 		 */
-		if (eaForm.getFY() == null
-				|| eaForm.getFY().trim().length() == 0)
+		if (eaForm.getIdentification().getFY() == null
+				|| eaForm.getIdentification().getFY().trim().length() == 0)
 			activity.setFY(new String(" "));
 		else
-			activity.setFY(eaForm.getFY());
+			activity.setFY(eaForm.getIdentification().getFY());
 
-		if (eaForm.getVote() == null
-				|| eaForm.getVote().trim().length() == 0)
+		if (eaForm.getIdentification().getVote() == null
+				|| eaForm.getIdentification().getVote().trim().length() == 0)
 			activity.setVote(new String(" "));
 		else
-			activity.setVote(eaForm.getVote());
+			activity.setVote(eaForm.getIdentification().getVote());
 		
-		if (eaForm.getSubVote() == null
-				|| eaForm.getSubVote().trim().length() == 0)
+		if (eaForm.getIdentification().getSubVote() == null
+				|| eaForm.getIdentification().getSubVote().trim().length() == 0)
 			activity.setSubVote(new String(" "));
 		else
-			activity.setSubVote(eaForm.getSubVote());
+			activity.setSubVote(eaForm.getIdentification().getSubVote());
 		
-		if (eaForm.getSubProgram() == null
-				|| eaForm.getSubProgram().trim().length() == 0)
+		if (eaForm.getIdentification().getSubProgram() == null
+				|| eaForm.getIdentification().getSubProgram().trim().length() == 0)
 			activity.setSubProgram(new String(" "));
 		else
-			activity.setSubProgram(eaForm.getSubProgram());
+			activity.setSubProgram(eaForm.getIdentification().getSubProgram());
 		
-		if (eaForm.getProjectCode() == null
-				|| eaForm.getProjectCode().trim().length() == 0)
+		if (eaForm.getIdentification().getProjectCode() == null
+				|| eaForm.getIdentification().getProjectCode().trim().length() == 0)
 			activity.setProjectCode(new String(" "));
 		else
-			activity.setProjectCode(eaForm.getProjectCode());
+			activity.setProjectCode(eaForm.getIdentification().getProjectCode());
 		
 		activity.setGovernmentApprovalProcedures(eaForm.getIdentification().getGovernmentApprovalProcedures());
 
@@ -370,11 +370,11 @@ public class SaveActivity extends Action {
 
 		activity.setHumanitarianAid(eaForm.getIdentification().getHumanitarianAid());
 
-		if (eaForm.getConditions() == null
-				|| eaForm.getConditions().trim().length() == 0) {
+		if (eaForm.getIdentification().getConditions() == null
+				|| eaForm.getIdentification().getConditions().trim().length() == 0) {
 			activity.setCondition(" ");
 		} else {
-			activity.setCondition(eaForm.getConditions());
+			activity.setCondition(eaForm.getIdentification().getConditions());
 		}
 
 		try {
@@ -436,8 +436,8 @@ public class SaveActivity extends Action {
 			activity.getClosingDates().add(closeDate);
 		}
 
-		if (eaForm.getActivityCloseDates() != null && eaForm.getActivityCloseDates().size()>0) {
-			Iterator itr = eaForm.getActivityCloseDates().iterator();
+		if (eaForm.getPlanning().getActivityCloseDates() != null && eaForm.getPlanning().getActivityCloseDates().size()>0) {
+			Iterator itr = eaForm.getPlanning().getActivityCloseDates().iterator();
 			while (itr.hasNext()) {
 				String date = (String) itr.next();
 				closeDate = new AmpActivityClosingDates();
@@ -487,12 +487,12 @@ public class SaveActivity extends Action {
 
 		/* Saving categories to AmpActivity */
 		CategoryManagerUtil.addCategoryToSet(eaForm.getIdentification().getAccessionInstrument(), activity.getCategories() );
-		CategoryManagerUtil.addCategoryToSet(eaForm.getAcChapter(), activity.getCategories() );
+		CategoryManagerUtil.addCategoryToSet(eaForm.getIdentification().getAcChapter(), activity.getCategories() );
 		CategoryManagerUtil.addCategoryToSet(eaForm.getPlanning().getStatusId(), activity.getCategories() );
 		CategoryManagerUtil.addCategoryToSet(eaForm.getLocation().getLevelId(), activity.getCategories() );
-		CategoryManagerUtil.addCategoryToSet(eaForm.getGbsSbs(), activity.getCategories() );
+		CategoryManagerUtil.addCategoryToSet(eaForm.getIdentification().getGbsSbs(), activity.getCategories() );
         CategoryManagerUtil.addCategoryToSet(eaForm.getLocation().getImplemLocationLevel(), activity.getCategories() );
-        CategoryManagerUtil.addCategoryToSet(eaForm.getActivityLevel(), activity.getCategories());
+        CategoryManagerUtil.addCategoryToSet(eaForm.getIdentification().getActivityLevel(), activity.getCategories());
         CategoryManagerUtil.addCategoryToSet(eaForm.getIdentification().getProjectCategory(), activity.getCategories());
 		/* END - Saving categories to AmpActivity */
 		
@@ -502,7 +502,7 @@ public class SaveActivity extends Action {
 		activity.setComments(" ");
 
 		
-        activity.setDraft(eaForm.getDraft());
+        activity.setDraft(eaForm.getIdentification().getDraft());
 
 		
 	}
@@ -524,12 +524,12 @@ public class SaveActivity extends Action {
 		}
 		
 		//Do the initializations and all the information transfer between beans here
-		List formRefDocs=eaForm.getReferenceDocs();
+		List formRefDocs=eaForm.getDocuments().getReferenceDocs();
     	Set<AmpActivityReferenceDoc> resultRefDocs=new HashSet<AmpActivityReferenceDoc>();
     	if(formRefDocs!=null && !formRefDocs.isEmpty())
 		for (Iterator refIter = formRefDocs.iterator(); refIter.hasNext();) {
 			ReferenceDoc refDoc = (ReferenceDoc) refIter.next();
-			if(ArrayUtils.contains(eaForm.getAllReferenceDocNameIds(), refDoc.getCategoryValueId())){
+			if(ArrayUtils.contains(eaForm.getDocuments().getAllReferenceDocNameIds(), refDoc.getCategoryValueId())){
 				AmpActivityReferenceDoc dbRefDoc=null;//categoryRefDocMap.get(refDoc.getCategoryValueId());
 				if (refDoc.getChecked() == true){
 					dbRefDoc=new AmpActivityReferenceDoc();
@@ -566,7 +566,7 @@ public class SaveActivity extends Action {
 		
 		if (check){
 			//Do the checks here
-			if(eaForm.getDraft()==null || !eaForm.getDraft().booleanValue()){
+			if(eaForm.getIdentification().getDraft()==null || !eaForm.getIdentification().getDraft().booleanValue()){
 				if(isSectorEnabled()){
 					if (eaForm.getSectors().getActivitySectors() == null || eaForm.getSectors().getActivitySectors().size() < 1) {
 						errors.add("sector", new ActionError("error.aim.addActivity.sectorEmpty"));
@@ -772,16 +772,16 @@ public class SaveActivity extends Action {
 			activity.setComponentes(componentes);
 		}
 
-		if (eaForm.getProgram() != null
-				&& (!eaForm.getProgram().equals(new Long(-1)))) {
-			AmpTheme theme = ProgramUtil.getThemeObject(eaForm.getProgram());
+		if (eaForm.getPrograms().getProgram() != null
+				&& (!eaForm.getPrograms().getProgram().equals(new Long(-1)))) {
+			AmpTheme theme = ProgramUtil.getThemeObject(eaForm.getPrograms().getProgram());
 			if (theme != null) {
 				activity.setThemeId(theme);
 			}
 		}
-		if (eaForm.getProgramDescription() != null
-				&& eaForm.getProgramDescription().trim().length() != 0) {
-			activity.setProgramDescription(eaForm
+		if (eaForm.getPrograms().getProgramDescription() != null
+				&& eaForm.getPrograms().getProgramDescription().trim().length() != 0) {
+			activity.setProgramDescription(eaForm.getPrograms()
 					.getProgramDescription());
 		} else {
 			activity.setProgramDescription(" ");
@@ -830,12 +830,12 @@ public class SaveActivity extends Action {
 			Iterator<Location> itr = eaForm.getLocation().getSelectedLocs().iterator();
 			while (itr.hasNext()) {
 				Location loc = itr.next();
-				if(loc.getRegion().equals("") && eaForm.getRegionalFundings()!=null){
-					eaForm.getRegionalFundings().clear();
+				if(loc.getRegion().equals("") && eaForm.getFunding().getRegionalFundings()!=null){
+					eaForm.getFunding().getRegionalFundings().clear();
 		 	      }
 			 }
 		}else if (eaForm.getLocation().getSelectedLocs()==null || eaForm.getLocation().getSelectedLocs().size() == 0){
-			if (eaForm.getRegionalFundings()!=null) eaForm.getRegionalFundings().clear();
+			if (eaForm.getFunding().getRegionalFundings()!=null) eaForm.getFunding().getRegionalFundings().clear();
 		}
 
 
@@ -1080,9 +1080,9 @@ public class SaveActivity extends Action {
 		//Do the initializations and all the information transfer between beans here
 		// set Regional fundings
 		Set regFundings = new HashSet();
-		if (eaForm.getRegionalFundings() != null
-				&& eaForm.getRegionalFundings().size() > 0) {
-			Iterator itr1 = eaForm.getRegionalFundings().iterator();
+		if (eaForm.getFunding().getRegionalFundings() != null
+				&& eaForm.getFunding().getRegionalFundings().size() > 0) {
+			Iterator itr1 = eaForm.getFunding().getRegionalFundings().iterator();
 			while (itr1.hasNext()) {
 				RegionalFunding regFund = (RegionalFunding) itr1.next();
 				if (regFund.getCommitments() != null
@@ -1111,8 +1111,8 @@ public class SaveActivity extends Action {
 
 						boolean regionFlag=false;
 
-						if(eaForm.getFundingRegions()!=null && eaForm.getFundingRegions().size()>0){
-							tmpItr = eaForm.getFundingRegions().iterator();
+						if(eaForm.getFunding().getFundingRegions()!=null && eaForm.getFunding().getFundingRegions().size()>0){
+							tmpItr = eaForm.getFunding().getFundingRegions().iterator();
 							while (tmpItr.hasNext()) {
 								AmpRegion reg = (AmpRegion) tmpItr.next();
 								if (reg.getAmpRegionId().equals(
@@ -1161,8 +1161,8 @@ public class SaveActivity extends Action {
 							}
 						}
 						boolean regionFlag=false;
-						if(eaForm.getFundingRegions()!=null && eaForm.getFundingRegions().size()>0){
-							tmpItr = eaForm.getFundingRegions().iterator();
+						if(eaForm.getFunding().getFundingRegions()!=null && eaForm.getFunding().getFundingRegions().size()>0){
+							tmpItr = eaForm.getFunding().getFundingRegions().iterator();
 							while (tmpItr.hasNext()) {
 								AmpRegion reg = (AmpRegion) tmpItr.next();
 								if (reg.getAmpRegionId().equals(
@@ -1213,8 +1213,8 @@ public class SaveActivity extends Action {
 							}
 						}
 						boolean regionFlag=false;
-						if( eaForm.getFundingRegions()!=null && eaForm.getFundingRegions().size()>0){
-							tmpItr = eaForm.getFundingRegions().iterator();
+						if( eaForm.getFunding().getFundingRegions()!=null && eaForm.getFunding().getFundingRegions().size()>0){
+							tmpItr = eaForm.getFunding().getFundingRegions().iterator();
 							while (tmpItr.hasNext()) {
 								AmpRegion reg = (AmpRegion) tmpItr.next();
 								if (reg.getAmpRegionId().equals(
@@ -1268,10 +1268,10 @@ public class SaveActivity extends Action {
 		//set components
 		proccessComponents(tempComp, eaForm, activity);
 
-		if (eaForm.getIssues() != null && eaForm.getIssues().size() > 0) {
+		if (eaForm.getIssues().getIssues() != null && eaForm.getIssues().getIssues().size() > 0) {
 			Set issueSet = new HashSet();
-			for (int i = 0; i < eaForm.getIssues().size(); i++) {
-				Issues issue = (Issues) eaForm.getIssues().get(i);
+			for (int i = 0; i < eaForm.getIssues().getIssues().size(); i++) {
+				Issues issue = (Issues) eaForm.getIssues().getIssues().get(i);
 				AmpIssues ampIssue = new AmpIssues();
 				ampIssue.setActivity(activity);
 				ampIssue.setName(issue.getName());
@@ -1329,24 +1329,24 @@ public class SaveActivity extends Action {
 		}
 		
 		//Do the initializations and all the information transfer between beans here
-		if(eaForm.getDocumentSpace() == null
-	            || eaForm.getDocumentSpace().trim().length() == 0) {
+		if(eaForm.getDocuments().getDocumentSpace() == null
+	            || eaForm.getDocuments().getDocumentSpace().trim().length() == 0) {
 			activity.setDocumentSpace(new String(" "));
 		} else {
-			activity.setDocumentSpace(eaForm.getDocumentSpace());
+			activity.setDocumentSpace(eaForm.getDocuments().getDocumentSpace());
 		}
 		
 		//relatedLinks = new ArrayList();
 		relatedLinks.clear();
-		if (eaForm.getDocumentList() != null && eaForm.getDocumentList() .size()>0) {
-			Iterator itr = eaForm.getDocumentList().iterator();
+		if (eaForm.getDocuments().getDocumentList() != null && eaForm.getDocuments().getDocumentList() .size()>0) {
+			Iterator itr = eaForm.getDocuments().getDocumentList().iterator();
 			while (itr.hasNext()) {
 				RelatedLinks rl = (RelatedLinks) itr.next();
 				relatedLinks.add(rl);
 			}
 		}
-		if (eaForm.getLinksList() != null && eaForm.getLinksList().size()>0) {
-			Iterator itr = eaForm.getLinksList().iterator();
+		if (eaForm.getDocuments().getLinksList() != null && eaForm.getDocuments().getLinksList().size()>0) {
+			Iterator itr = eaForm.getDocuments().getLinksList().iterator();
 			while (itr.hasNext()) {
 				RelatedLinks rl = (RelatedLinks) itr.next();
 				relatedLinks.add(rl);
@@ -1607,9 +1607,9 @@ public class SaveActivity extends Action {
 		}
 		
 		//Do the initializations and all the information transfer between beans here
-		if(eaForm.getCosts()!=null && eaForm.getCosts().size()>0) {
+		if(eaForm.getCosting().getCosts()!=null && eaForm.getCosting().getCosts().size()>0) {
 			Set costs=new HashSet();
-			Iterator i=eaForm.getCosts().iterator();
+			Iterator i=eaForm.getCosting().getCosts().iterator();
 			while (i.hasNext()) {
 				EUActivity element = (EUActivity) i.next();
 				element.setActivity(activity);
@@ -1636,9 +1636,9 @@ public class SaveActivity extends Action {
 		
 			//AmpActivity act = ActivityUtil.getActivityByName(eaForm.getTitle());
 			// Setting approval status of activity
-			activity.setApprovalStatus(eaForm.getApprovalStatus());
-			activity.setApprovalDate(eaForm.getApprovalDate());
-			activity.setApprovedBy(eaForm.getApprovedBy());
+			activity.setApprovalStatus(eaForm.getIdentification().getApprovalStatus());
+			activity.setApprovalDate(eaForm.getIdentification().getApprovalDate());
+			activity.setApprovedBy(eaForm.getIdentification().getApprovedBy());
 
 			//AMP-3464
 			//if an approved activity is edited and the appsettings is set to newOnly then the activity
@@ -1647,7 +1647,7 @@ public class SaveActivity extends Action {
 
 			activity.setApprovalStatus(aAct.getApprovalStatus());
 			if(tm.getTeamId().equals(aAct.getTeam().getAmpTeamId())){
-				if(eaForm.getDraft()==true){
+				if(eaForm.getIdentification().getDraft()==true){
 					if(tm.getTeamHead()){
 						activity.setApprovalStatus(Constants.APPROVED_STATUS);
 					}else{
@@ -1680,7 +1680,7 @@ public class SaveActivity extends Action {
 					else activity.setApprovalStatus(aAct.getApprovalStatus());
 				}
 			}
-			activity.setActivityCreator(eaForm.getCreatedBy());
+			activity.setActivityCreator(eaForm.getIdentification().getCreatedBy());
 		}
 		else{
 			AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(tm
@@ -1689,7 +1689,7 @@ public class SaveActivity extends Action {
 			Calendar cal = Calendar.getInstance();
 			activity.setCreatedDate(cal.getTime());
 			// Setting approval status of activity
-			activity.setApprovalStatus(eaForm.getApprovalStatus());
+			activity.setApprovalStatus(eaForm.getIdentification().getApprovalStatus());
 
 		}
 
@@ -1801,33 +1801,33 @@ public class SaveActivity extends Action {
 	
 	private void cleanup(EditActivityForm eaForm, HttpSession session, HttpServletRequest request, ActionMapping mapping, Long actId, TeamMember tm){
 		
-		eaForm.setFundDonor(null);
+		eaForm.getFunding().setFundDonor(null);
 		eaForm.setStep("1");
 		eaForm.setReset(true);
-		eaForm.setDocReset(true);
-		eaForm.setLocationReset(true);
-		eaForm.setOrgPopupReset(true);
-		eaForm.setOrgSelReset(true);
-		eaForm.setComponentReset(true);
+		eaForm.getDocuments().setDocReset(true);
+		eaForm.getLocation().setLocationReset(true);
+		//eaForm.get.setOrgPopupReset(true);
+		//eaForm.setOrgSelReset(true);
+		eaForm.getComponents().setComponentReset(true);
 //		eaForm.setSectorReset(true);
-		eaForm.setPhyProgReset(true);
+		eaForm.getPhisycalProgress().setPhyProgReset(true);
 		// Clearing comment properties
-		eaForm.getCommentsCol().clear();
-		eaForm.setCommentFlag(false);
+		eaForm.getComments().getCommentsCol().clear();
+		eaForm.getComments().setCommentFlag(false);
 		// Clearing approval process properties
 		eaForm.setWorkingTeamLeadFlag("no");
-		eaForm.setFundingRegions(null);
-		eaForm.setRegionalFundings(null);
+		eaForm.getFunding().setFundingRegions(null);
+		eaForm.getFunding().setRegionalFundings(null);
 		eaForm.getPlanning().setLineMinRank(null);
 		eaForm.getPlanning().setPlanMinRank(null);
                     eaForm.setTeamLead(false);
 
 		/* Clearing categories */
 		eaForm.getIdentification().setAccessionInstrument(new Long(0));
-		eaForm.setAcChapter(new Long(0));
+		eaForm.getIdentification().setAcChapter(new Long(0));
 		eaForm.getPlanning().setStatusId(new Long(0));
-		eaForm.setGbsSbs(new Long(0));
-        eaForm.setDraft(null);
+		eaForm.getIdentification().setGbsSbs(new Long(0));
+        eaForm.getIdentification().setDraft(null);
         eaForm.getIdentification().setProjectCategory(new Long(0));
 		/* END - Clearing categories */
 
@@ -2164,8 +2164,8 @@ public class SaveActivity extends Action {
 		//TAG HERE YOU SHOULD BE
 
 		Long field = null;
-		if (eaForm.getField() != null)
-			field = eaForm.getField().getAmpFieldId();
+		if (eaForm.getComments().getField() != null)
+			field = eaForm.getComments().getField().getAmpFieldId();
 
 		//this fields are used to determine receivers of approvals(Messaging System)
 		String oldActivityApprovalStatus="";
@@ -2209,7 +2209,7 @@ public class SaveActivity extends Action {
                         AmpActivity aAct = ActivityUtil.getAmpActivity(actId);
                         if (aAct.getDraft() != null && !aAct.getDraft()) {
                             if (aAct.getApprovalStatus().equals(Constants.APPROVED_STATUS)) {
-                                if (!eaForm.getApprovalStatus().equals(Constants.APPROVED_STATUS)||(eaForm.getWasDraft()!=null&&eaForm.getWasDraft())) {
+                                if (!eaForm.getIdentification().getApprovalStatus().equals(Constants.APPROVED_STATUS)||(eaForm.getIdentification().getWasDraft()!=null&&eaForm.getIdentification().getWasDraft())) {
                                     new ApprovedActivityTrigger(aAct);
                                 }
                             } else {
@@ -2409,8 +2409,8 @@ public class SaveActivity extends Action {
 	 */
 	private void proccessComponents(Collection<Components<AmpComponentFunding>> tempComps, EditActivityForm eaForm, AmpActivity activity) {
 		activity.setComponents(new HashSet());
-		if (eaForm.getSelectedComponents() != null) {
-			Iterator<Components<FundingDetail>> itr = eaForm.getSelectedComponents().iterator();
+		if (eaForm.getComponents().getSelectedComponents() != null) {
+			Iterator<Components<FundingDetail>> itr = eaForm.getComponents().getSelectedComponents().iterator();
 			while (itr.hasNext()) {
 				Components<FundingDetail> comp = itr.next();
 				Components<AmpComponentFunding> tempComp = new Components<AmpComponentFunding>();

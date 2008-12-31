@@ -49,20 +49,20 @@ public class AddRegionalFunding extends Action {
 		eaForm.setStep("4");
 		if (action != null && action.equalsIgnoreCase("show")) {
 			logger.debug("Forarding to forward");
-			eaForm.setFundingRegionId(new Long(-1));
+			eaForm.getFunding().setFundingRegionId(new Long(-1));
 			String defCurr = CurrencyUtil.getCurrency(
 					tm.getAppSettings().getCurrencyId()).getCurrencyCode();
 			request.setAttribute("defCurrency",defCurr);
 			
 			return mapping.findForward("forward");
 		} else if (action != null && action.equalsIgnoreCase("showEdit")) {
-			Iterator itr = eaForm.getRegionalFundings().iterator();
+			Iterator itr = eaForm.getFunding().getRegionalFundings().iterator();
 			String id = request.getParameter("fundId");
 			long fId = Long.parseLong(id); 
 			while (itr.hasNext()) {
 				RegionalFunding rd = (RegionalFunding) itr.next();
 				if (rd.getRegionId().longValue() == fId) {
-					eaForm.setFundingRegionId(rd.getRegionId());
+					eaForm.getFunding().setFundingRegionId(rd.getRegionId());
 					break;
 				}
 			}
@@ -77,12 +77,12 @@ public class AddRegionalFunding extends Action {
 			Iterator itr = eaForm.getLocation().getSelectedLocs().iterator();
 			while (itr.hasNext()) {
 				Location loc = (Location) itr.next();
-				if (loc.getRegionId().equals(eaForm.getFundingRegionId())) {
+				if (loc.getRegionId().equals(eaForm.getFunding().getFundingRegionId())) {
 					regFund.setRegionName(loc.getRegion());
 					break;
 				}
 			}
-			regFund.setRegionId(eaForm.getFundingRegionId());
+			regFund.setRegionId(eaForm.getFunding().getFundingRegionId());
 			
 			Enumeration paramNames = request.getParameterNames();
 			String param = "";
@@ -238,11 +238,11 @@ public class AddRegionalFunding extends Action {
 				regFund.getExpenditures().add(fd);
 			}			
 			
-			if (eaForm.getRegionalFundings() == null) {
-				eaForm.setRegionalFundings(new ArrayList());
+			if (eaForm.getFunding().getRegionalFundings() == null) {
+				eaForm.getFunding().setRegionalFundings(new ArrayList());
 			}
-			if (eaForm.getRegionalFundings().contains(regFund)) {
-				eaForm.getRegionalFundings().remove(regFund);
+			if (eaForm.getFunding().getRegionalFundings().contains(regFund)) {
+				eaForm.getFunding().getRegionalFundings().remove(regFund);
 			}
 			
 			List list = null;
@@ -264,7 +264,7 @@ public class AddRegionalFunding extends Action {
 			}
 			regFund.setExpenditures(list);
 			
-			eaForm.getRegionalFundings().add(regFund);
+			eaForm.getFunding().getRegionalFundings().add(regFund);
 			
 			return mapping.findForward("updated");
 		}

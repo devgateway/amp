@@ -91,7 +91,7 @@
 													<bean:define id="location" name="aimEditActivityForm" property="location"></bean:define>
 													<category:showoptions firstLine="${translation}" name="location" property="implemLocationLevel" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>" styleClass="inp-text" />
 												                                             	
-                                              		<input type="hidden" name="location.implemLocationLevel" value="${location.implemLocationLevel}">
+                                              		<html:hidden property="location.implemLocationLevel" value="${location.implemLocationLevel}"/>
 
                                               	<script language="Javascript">                                             	
 												var implemLocationLevelSelect = document.getElementsByName("implemLocationLevel")[0];
@@ -149,7 +149,7 @@
                                                                 <table width="100%" cellSpacing="1" cellPadding="1"	vAlign="top" align="left">
                                                                   <tr>
                                                                     <td width="3" vAlign="center">
-                                                                    <html:multibox property="selLocs">
+                                                                    <html:multibox property="location.selLocs" styleId="selLocs">
                                                                       <bean:write name="selectedLocs" property="locId" />
                                                                     </html:multibox>
                                                                     </td>

@@ -30,15 +30,15 @@ public class RemoveSelDocuments extends Action {
 		Collection newDocs = new ArrayList();
 		long selDocs[] = null;
 
-        if (eaForm.getDocFileOrLink().equals("document")) {
+        if (eaForm.getDocuments().getDocFileOrLink().equals("document")) {
             Site currentSite = RequestUtils.getSite(request);
-            if (eaForm.getSelManagedDocs() != null) {
-                for(int i = 0; i < eaForm.getSelManagedDocs().length; i++) {
-                    String managedDocId = eaForm.getSelManagedDocs()[i];
-                    DocumentUtil.removeDocument(currentSite, eaForm.getDocumentSpace(), managedDocId);
+            if (eaForm.getDocuments().getSelManagedDocs() != null) {
+                for(int i = 0; i < eaForm.getDocuments().getSelManagedDocs().length; i++) {
+                    String managedDocId = eaForm.getDocuments().getSelManagedDocs()[i];
+                    DocumentUtil.removeDocument(currentSite, eaForm.getDocuments().getDocumentSpace(), managedDocId);
                 }
-                eaForm.setManagedDocumentList(DocumentUtil.getDocumentsForSpace(currentSite, eaForm.getDocumentSpace()));
-                eaForm.setSelManagedDocs(null);
+                eaForm.getDocuments().setManagedDocumentList(DocumentUtil.getDocumentsForSpace(currentSite, eaForm.getDocuments().getDocumentSpace()));
+                eaForm.getDocuments().setSelManagedDocs(null);
             }
             eaForm.setStep("6");
 
@@ -46,12 +46,12 @@ public class RemoveSelDocuments extends Action {
 
         }
 
-		if (eaForm.getDocFileOrLink().equals("file")) {
-			prevDocs = eaForm.getDocumentList();
-			selDocs = eaForm.getSelDocs();
+		if (eaForm.getDocuments().getDocFileOrLink().equals("file")) {
+			prevDocs = eaForm.getDocuments().getDocumentList();
+			selDocs = eaForm.getDocuments().getSelDocs();
 		} else {
-			prevDocs = eaForm.getLinksList();
-			selDocs = eaForm.getSelLinks();
+			prevDocs = eaForm.getDocuments().getLinksList();
+			selDocs = eaForm.getDocuments().getSelLinks();
 		}
 
 		Iterator itr = prevDocs.iterator();
@@ -69,12 +69,12 @@ public class RemoveSelDocuments extends Action {
 			}
 		}
 
-		if (eaForm.getDocFileOrLink().equals("file")) {
-			eaForm.setSelDocs(null);
-			eaForm.setDocumentList(newDocs);
+		if (eaForm.getDocuments().getDocFileOrLink().equals("file")) {
+			eaForm.getDocuments().setSelDocs(null);
+			eaForm.getDocuments().setDocumentList(newDocs);
 		} else {
-			eaForm.setSelLinks(null);
-			eaForm.setLinksList(newDocs);
+			eaForm.getDocuments().setSelLinks(null);
+			eaForm.getDocuments().setLinksList(newDocs);
 		}
 		eaForm.setStep("6");
 

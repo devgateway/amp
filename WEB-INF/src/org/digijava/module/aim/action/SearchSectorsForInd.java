@@ -26,15 +26,15 @@ public class SearchSectorsForInd extends Action {
 		eaForm.setReset(false);
 		//eaForm.setOrgPopupReset(false);
 
-		eaForm.setNumResults(eaForm.getTempNumResults());
+		eaForm.getSectors().setNumResults(eaForm.getSectors().getTempNumResults());
 
-		if(eaForm.getKeyword()!=null) request.getSession().setAttribute("keywordForSectors",eaForm.getKeyword());
-			else eaForm.setKeyword((String)request.getSession().getAttribute("keywordForSectors"));
+		if(eaForm.getSectors().getKeyword()!=null) request.getSession().setAttribute("keywordForSectors",eaForm.getSectors().getKeyword());
+			else eaForm.getSectors().setKeyword((String)request.getSession().getAttribute("keywordForSectors"));
 
 		
 		
 		Collection col = new ArrayList();
-		eaForm.setNumResults(eaForm.getTempNumResults());
+		eaForm.getSectors().setNumResults(eaForm.getSectors().getTempNumResults());
 		int page = 0;
 
 		if (request.getParameter("page") == null) {
@@ -43,22 +43,22 @@ public class SearchSectorsForInd extends Action {
 			page = Integer.parseInt(request.getParameter("page"));
 		}
 		
-		eaForm.setCurrentPage(new Integer(page));
+		eaForm.getSectors().setCurrentPage(new Integer(page));
 
-		if(eaForm.getKeyword()!=null)
-		if (eaForm.getKeyword().trim().length() != 0) {
+		if(eaForm.getSectors().getKeyword()!=null)
+		if (eaForm.getSectors().getKeyword().trim().length() != 0) {
 			// search based on the given keyword only.
 			
-		col=(SectorUtil.searchForSector(eaForm.getKeyword().trim()));
+		col=(SectorUtil.searchForSector(eaForm.getSectors().getKeyword().trim()));
 		
 		int stIndex = 1;
-		int edIndex = eaForm.getNumResults();
+		int edIndex = eaForm.getSectors().getNumResults();
 
-		if (eaForm.getNumResults() == 0 || eaForm.isSectorReset() == true) {
-			eaForm.setTempNumResults(10);
+		if (eaForm.getSectors().getNumResults() == 0 || eaForm.getSectors().isSectorReset() == true) {
+			eaForm.getSectors().setTempNumResults(10);
 		} else {
-			stIndex = ((page - 1) * eaForm.getNumResults()) + 1;
-			edIndex = page * eaForm.getNumResults();
+			stIndex = ((page - 1) * eaForm.getSectors().getNumResults()) + 1;
+			edIndex = page * eaForm.getSectors().getNumResults();
 		}
 		
 		Vector vect = new Vector();
@@ -68,9 +68,9 @@ public class SearchSectorsForInd extends Action {
 				edIndex = col.size();
 			}
 			vect.addAll(col);
-			if(eaForm.getNumResults() > 0) {
-				numPages = col.size() / eaForm.getNumResults();
-				numPages += (col.size() % eaForm.getNumResults() != 0) ? 1 : 0;
+			if(eaForm.getSectors().getNumResults() > 0) {
+				numPages = col.size() / eaForm.getSectors().getNumResults();
+				numPages += (col.size() % eaForm.getSectors().getNumResults() != 0) ? 1 : 0;
 			}
 			
 		Collection tempCol = new ArrayList();
@@ -88,21 +88,13 @@ public class SearchSectorsForInd extends Action {
 			}
 		}
 
-		eaForm.setSearchedSectors(col);
+		eaForm.getSectors().setSearchedSectors(col);
 
-		eaForm.setCols(col);
-		eaForm.setPagedCol(tempCol);
-		eaForm.setPages(pages);
-		eaForm.setCurrentPage(new Integer(page));
-			
-//		eaForm.setSearchLocs(col);
-//		eaForm.setPagedCol(tempCol);
-//		eaForm.setPages(pages);
-//		eaForm.setCurrentPage(new Integer(1));
-
-//		eaForm.setSearchLocs(LocationUtil.searchForLocation(eaForm.getKeyword().trim(),implvl));
-		
-		} 
+		eaForm.getSectors().setCols(col);
+		eaForm.getSectors().setPagedCol(tempCol);
+		eaForm.getSectors().setPages(pages);
+		eaForm.getSectors().setCurrentPage(new Integer(page));
+					} 
 		else {
 			//System.out.println("no input in keyword field.....");
 		}

@@ -13,8 +13,9 @@
 <script language="JavaScript">
 	function budgetCheckboxClick()
 	{
-		if (document.aimEditActivityForm.budget != null) {
-			if((document.aimEditActivityForm.budget.checked==false))
+		
+		if (document.getElementById("budget") != null) {
+			if((document.getElementById("budget").checked==false))
 			{
 				try {
 				 	document.getElementById("hbudget").value="false";
@@ -30,7 +31,7 @@
 					//This silent try/catch was added because some of the fields can be deactivated from FM
 				}
 			 }
-			else if(document.aimEditActivityForm.budget.checked==true)
+			else if(document.getElementById("budget").checked==true)
 			{
 				try {
 				 	document.getElementById("hbudget").value="true";
@@ -52,7 +53,7 @@
 function InitBud(){
 	if(document.getElementById("hbudget").value=="true"){
 	 	try {
-			document.aimEditActivityForm.budget.checked=true;
+	 		document.getElementById("budget").checked=true;
 		 	document.getElementById("FY").style.display='';
 		 	document.getElementById("Vote").style.display='';
 		 	document.getElementById("Sub-Vote").style.display='';
@@ -67,7 +68,7 @@ function InitBud(){
 	}
 	else{
 	 	try {
-			document.aimEditActivityForm.budget.checked=false;
+	 		document.getElementById("budget").checked=false;
 		 	document.getElementById("FY").style.display='none';
 		 	document.getElementById("Vote").style.display='none';
 		 	document.getElementById("Sub-Vote").style.display='none';
@@ -441,7 +442,7 @@ target.style.cursor = "default"
 													<c:set var="translation">
 														<digi:trn key="aim:addActivityAcChapterFirstLine">Please select from below</digi:trn>
 													</c:set>
-													<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="acChapter" categoryName="<%= org.digijava.module.categorymanager.util.CategoryConstants.ACCHAPTER_NAME %>" styleClass="inp-text" />
+													<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="identification.acChapter" categoryName="<%= org.digijava.module.categorymanager.util.CategoryConstants.ACCHAPTER_NAME %>" styleClass="inp-text" />
 											</td></tr>											
 											</field:display>
 											
@@ -455,7 +456,7 @@ target.style.cursor = "default"
 														<digi:trn key="aim:actBudget">Activity Budget</digi:trn>
 														<br/>
 													</a>
-													<html:checkbox styleId="budget" property="budget"  onclick="budgetCheckboxClick();">
+													<html:checkbox styleId="budget" property="identification.budget"  onclick="budgetCheckboxClick();">
 													<digi:trn key="aim:actBudgeton">Activity is On Budget</digi:trn>
 													</html:checkbox>
 													<html:hidden property="identification.budgetCheckbox" styleId="hbudget"/>
@@ -472,7 +473,7 @@ target.style.cursor = "default"
 												</digi:trn>
 												</a>
 														<br/>
-														<html:text property="FY" size="12"/>
+														<html:text property="identification.FY" size="12"/>
 											</td>
 										</field:display>
 											
@@ -484,7 +485,7 @@ target.style.cursor = "default"
 												</digi:trn>
 												</a>
 											<br/>
-													<html:text property="vote" size="12"/>
+													<html:text property="identification.vote" size="12"/>
 										</td>	
 											</field:display>
 											
@@ -496,7 +497,7 @@ target.style.cursor = "default"
 												</digi:trn>
 												</a>
 											<br/>
-										<html:text property="subVote" size="12"/>
+										<html:text property="identification.subVote" size="12"/>
 										</td>
 											</field:display>
 											
@@ -510,7 +511,7 @@ target.style.cursor = "default"
 												</digi:trn>
 												</a>
 											<br/>
-											<html:text property="subProgram" size="12"/>
+											<html:text property="identification.subProgram" size="12"/>
 								
 									</td>
 								</field:display>
@@ -522,7 +523,7 @@ target.style.cursor = "default"
 												Project Code
 												</digi:trn>
 												</a>
-										<br/><html:text property="projectCode" size="12"/>
+										<br/><html:text property="identification.projectCode" size="12"/>
 								
 									</td>
 								</field:display>	
@@ -544,11 +545,7 @@ target.style.cursor = "default"
 												</a>
 											</td>
 										<td valign="top" align="left" >
-											<category:showoptions listView="false" name="aimEditActivityForm" property="gbsSbs" categoryName="<%=org.digijava.module.categorymanager.util.CategoryConstants.FINANCIAL_INSTRUMENT_NAME %>" styleClass="inp-text" />
-											<!-- 	<html:radio property="gbsSbs" value="1"/>GBS<br/>
-												<html:radio property="gbsSbs" value="2"/>SBS<br/>								
-												<html:radio property="gbsSbs" value="3"/>Basket<br/>
-												<html:radio property="gbsSbs" value="4"/>DPS on Budget -->
+											<category:showoptions listView="false" name="aimEditActivityForm" property="identification.gbsSbs" categoryName="<%=org.digijava.module.categorymanager.util.CategoryConstants.FINANCIAL_INSTRUMENT_NAME %>" styleClass="inp-text" />
 										</td>
 									</tr>
 								</field:display>	

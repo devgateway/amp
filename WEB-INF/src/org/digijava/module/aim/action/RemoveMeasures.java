@@ -29,25 +29,25 @@ public class RemoveMeasures extends Action {
 		
 		logger.debug("In remove measures");
 		
-		if (eaForm.getSelMeasures() != null && 
-				eaForm.getSelMeasures().length > 0) {
-			Long measures[] = eaForm.getSelMeasures();
+		if (eaForm.getIssues().getSelMeasures() != null && 
+				eaForm.getIssues().getSelMeasures().length > 0) {
+			Long measures[] = eaForm.getIssues().getSelMeasures();
 			
-			logger.debug("Issue Id = " + eaForm.getIssueId());
-			if (eaForm.getIssueId() != null) {
+			logger.debug("Issue Id = " + eaForm.getIssues().getIssueId());
+			if (eaForm.getIssues().getIssueId() != null) {
 				Issues issue = new Issues();
-				issue.setId(eaForm.getIssueId());
-				int index = eaForm.getIssues().indexOf(issue);
-				issue = (Issues) eaForm.getIssues().get(index);
+				issue.setId(eaForm.getIssues().getIssueId());
+				int index = eaForm.getIssues().getIssues().indexOf(issue);
+				issue = (Issues) eaForm.getIssues().getIssues().get(index);
 				
 				for (int i = 0;i < measures.length;i ++) {
 					Measures measure = new Measures();
 					measure.setId(measures[i]);
 					issue.getMeasures().remove(measure);
 				}
-				eaForm.getIssues().set(index,issue);
+				eaForm.getIssues().getIssues().set(index,issue);
 			}
-			eaForm.setSelMeasures(null);
+			eaForm.getIssues().setSelMeasures(null);
 		}
 		return mapping.findForward("forward");
 	}

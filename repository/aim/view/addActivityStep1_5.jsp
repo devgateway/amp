@@ -241,11 +241,11 @@ ${fn:replace(message,quote,escapedQuote)}
 											<tr bgcolor="#ffffff">
 												<td>
 													<table border="0" width="100%">
-														<c:forEach items="${aimEditActivityForm.referenceDocs}" var="refDoc" varStatus="loopstatus">
+														<c:forEach items="${aimEditActivityForm.documents.referenceDocs}" var="refDoc" varStatus="loopstatus">
 															<tr valign="top">
 																<td>
-																	<html:hidden name="aimEditActivityForm" property="referenceDoc[${loopstatus.index}].checked" value="${refDoc.checked}"/>
-																	<html:multibox onclick="toggleDiv(${loopstatus.index})" styleId="refCheck${loopstatus.index}" name="aimEditActivityForm" property="allReferenceDocNameIds" value="${refDoc.categoryValueId}"/>
+																	<html:hidden name="aimEditActivityForm" property="documents.referenceDoc[${loopstatus.index}].checked" value="${refDoc.checked}"/>
+																	<html:multibox onclick="toggleDiv(${loopstatus.index})" styleId="refCheck${loopstatus.index}" name="aimEditActivityForm" property="documents.allReferenceDocNameIds" value="${refDoc.categoryValueId}"/>
 																</td>
 																<td>
 																	${refDoc.categoryValue}
@@ -254,12 +254,12 @@ ${fn:replace(message,quote,escapedQuote)}
 																<td width="100%">
 																	<c:if test="${refDoc.checked}">
 																		<div Id="refComment${loopstatus.index}" >
-																			<html:textarea rows="4" cols="80" name="aimEditActivityForm" property="referenceDoc[${loopstatus.index}].comment" />
+																			<html:textarea rows="4" cols="80" name="aimEditActivityForm" property="documents.referenceDoc[${loopstatus.index}].comment" />
 																		</div>
 																	</c:if>
 																	<c:if test="${! refDoc.checked}">
 																		<div Id="refComment${loopstatus.index}" style="display: none;" >
-																			<html:textarea rows="4" cols="80" name="aimEditActivityForm" property="referenceDoc[${loopstatus.index}].comment" />
+																			<html:textarea rows="4" cols="80" name="aimEditActivityForm" property="documents.referenceDoc[${loopstatus.index}].comment" />
 																		</div>
 																	</c:if>
 

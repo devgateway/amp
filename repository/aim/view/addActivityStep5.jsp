@@ -35,23 +35,12 @@ function checkallIssues() {
 
 	var selectbox = document.aimEditActivityForm.checkAllIssues;
 
-	var items = document.aimEditActivityForm.selIssues;
-
-	if (document.aimEditActivityForm.selIssues.checked == true ||
-
-						 document.aimEditActivityForm.selIssues.checked == false) {
-
-			  document.aimEditActivityForm.selIssues.checked = selectbox.checked;
-
-	} else {
-
+	var items = document.getElementById('selIssues');
 		for(i=0; i<items.length; i++){
-
-			document.aimEditActivityForm.selIssues[i].checked = selectbox.checked;
-
+			document.getElementById('selIssues')[i].checked = selectbox.checked;
 		}
-
-	}
+		document.getElementById('selIssues').checked = selectbox.checked;
+	
 
 }
 
@@ -247,9 +236,9 @@ function validatePhyProg() {
 
 function validateComponents() {
 
-	if (document.aimEditActivityForm.selComp.checked != null) {
+	if (document.getElementById('selComp').checked != null) {
 
-		if (document.aimEditActivityForm.selComp.checked == false) {
+		if (document.getElementById('selComp').checked == false) {
 
 			alert("Please choose a component to remove");
 
@@ -259,13 +248,13 @@ function validateComponents() {
 
 	} else {
 
-		var length = document.aimEditActivityForm.selComp.length;
+		var length = document.getElementById('selComp').length;
 
 		var flag = 0;
 
 		for (i = 0;i < length;i ++) {
 
-			if (document.aimEditActivityForm.selComp[i].checked == true) {
+			if (document.getElementById('selComp')[i].checked == true) {
 
 				flag = 1;
 
@@ -400,7 +389,7 @@ function removeSelComponents() {
 
   <html:hidden property="step"/>
   <html:hidden property="reset" />
-  <html:hidden property="country" />
+  <html:hidden property="location.country" />
   <html:hidden property="editAct" />
 
   <input type="hidden" name="edit" value="true">
@@ -810,7 +799,7 @@ function postComponentForm(action){
 function addComponent(){
 	<digi:context name="addNewComponent" property="context/module/moduleinstance/showAddComponent.do?edit=true&compFundAct=addNewComponent" />
 
-	if (document.aimAddComponentForm.newCompoenentName.value==""){
+	if ( document.getElementById('newCompoenentName').value==""){
 		var msg="<digi:trn key="aim:msgErrorNoName">You have to enter the component name</digi:trn>"
 		alert(msg);
 		return false;
@@ -916,24 +905,24 @@ function closePopup() {
 
 	function addPhysicalProgress()
 	{
-		var titleFlag = isEmpty(document.addPhysicalProgressForm.phyProgTitle.value);
-		var dateFlag = isEmpty(document.addPhysicalProgressForm.phyProgRepDate.value);
+		var titleFlag = isEmpty(document.getElementById('phyProgTitle').value);
+		var dateFlag = isEmpty(document.getElementById('phyProgRepDate').value);
 		if(titleFlag == true & dateFlag == true)
 		{
 			alert("Please enter Title and Reporting Date");
-			document.addPhysicalProgressForm.phyProgTitle.focus();
+			document.getElementById('phyProgTitle').focus();
 		}
 		else
 		{
 			if(titleFlag == true)
 			{
 				alert(" Please enter title");
-				document.addPhysicalProgressForm.phyProgTitle.focus();
+				document.getElementById('phyProgTitle').focus();
 			}
 			if(dateFlag == true)
 			{
 				alert(" Please enter Reporting Date");
-				document.addPhysicalProgressForm.phyProgRepDate.focus();
+				document.getElementById('phyProgRepDate').focus();
 			}
 		}
 		if(titleFlag == false && dateFlag == false)

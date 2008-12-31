@@ -21,7 +21,7 @@ public class RemoveSelLocations extends Action {
 
 				EditActivityForm eaForm = (EditActivityForm) form;
 
-				Long selLocs[] = eaForm.getSelLocs();
+				Long selLocs[] = eaForm.getLocation().getSelLocs();
 				Collection prevSelLocs = eaForm.getLocation().getSelectedLocs(); 
 				Collection locs = new ArrayList<Location>();
 
@@ -43,9 +43,9 @@ public class RemoveSelLocations extends Action {
 				}
 				
 				eaForm.getLocation().setSelectedLocs(locs);
-				eaForm.setSelLocs(null);
-				eaForm.setCols(null);
-				eaForm.setNumResults(0);
+				eaForm.getLocation().setSelLocs(null);
+				eaForm.getLocation().setCols(null);
+				eaForm.getLocation().setNumResults(0);
 				eaForm.setStep("2");
 				return mapping.findForward("forward");
     }

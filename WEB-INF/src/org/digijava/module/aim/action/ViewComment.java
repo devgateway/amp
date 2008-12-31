@@ -51,83 +51,83 @@ public class ViewComment extends Action {
 					 else commentColInSession=(HashMap)session.getAttribute("commentColInSession");
 
 					 EditActivityForm editForm = (EditActivityForm) form;
-					 if (editForm.getCommentsCol() == null) {
-							editForm.setCommentsCol( new ArrayList() );
+					 if (editForm.getComments().getCommentsCol() == null) {
+						 editForm.getComments().setCommentsCol( new ArrayList() );
 					}
 					 
 					 
-					 String action = editForm.getActionFlag();
+					 String action = editForm.getComments().getActionFlag();
 					 if(action==null ||action.equals("") )
 					 {
 						 action="create";
-						 editForm.setActionFlag("create");
+						 editForm.getComments().setActionFlag("create");
 					 }
 					 String comment = request.getParameter("comment");
 					 
 					 TeamMember member = (TeamMember) request.getSession().getAttribute("currentMember");
-					 logger.debug("CommentFlag[before IF] : " + editForm.isCommentFlag());
+					 logger.debug("CommentFlag[before IF] : " + editForm.getComments().isCommentFlag());
 					 if (comment != null && comment.trim().length() != 0) {
 					 	AmpField field = null;
 						ArrayList col = new ArrayList();
-						//if (editForm.isCommentFlag() == false) {
+						//if (editForm.getComments().isCommentFlag() == false) {
 						if (comment.equals("ccd") || comment.equals("viewccd")){
-							editForm.setFieldName("current completion date");
+							editForm.getComments().setFieldName("current completion date");
 							field = DbUtil.getAmpFieldByName("current completion date");
 							}
 						else
 							if (comment.equals("fdd") || comment.equals("viewfdd")){
-								editForm.setFieldName("Final Date for Disbursements");
+								editForm.getComments().setFieldName("Final Date for Disbursements");
 								field = DbUtil.getAmpFieldByName("Final Date for Disbursements");
 							}
 							else
 								if (comment.equals("objAssumption")||comment.equals("viewobjAssumption")){
-									editForm.setFieldName("Objective Assumption");
+									editForm.getComments().setFieldName("Objective Assumption");
 									field = DbUtil.getAmpFieldByName("Objective Assumption");
 								}
 								else
 									if (comment.equals("objVerification")||comment.equals("viewobjVerification")){
-										editForm.setFieldName("Objective Verification");
+										editForm.getComments().setFieldName("Objective Verification");
 										field = DbUtil.getAmpFieldByName("Objective Verification");
 									}
 									else
 										if (comment.equals("purpAssumption")||comment.equals("viewpurpAssumption")){
-											editForm.setFieldName("Purpose Assumption");
+											editForm.getComments().setFieldName("Purpose Assumption");
 											field = DbUtil.getAmpFieldByName("Purpose Assumption");
 										}
 										else
 											if (comment.equals("purpVerification")||comment.equals("viewpurpVerification")){
-												editForm.setFieldName("Purpose Verification");
+												editForm.getComments().setFieldName("Purpose Verification");
 												field = DbUtil.getAmpFieldByName("Purpose Verification");
 											}else
 												if (comment.equals("resAssumption")||comment.equals("viewresAssumption")){
-													editForm.setFieldName("Results Assumption");
+													editForm.getComments().setFieldName("Results Assumption");
 													field = DbUtil.getAmpFieldByName("Results Assumption");
 												}
 												else
 													if (comment.equals("resVerification")||comment.equals("viewresVerification")){
-														editForm.setFieldName("Results Verification");
+														editForm.getComments().setFieldName("Results Verification");
 														field = DbUtil.getAmpFieldByName("Results Verification");
 													}
 													else
 														if (comment.equals("resObjVerIndicators")||comment.equals("viewresObjVerIndicators")){
-															editForm.setFieldName("Results Objectively Verifiable Indicators");
+															editForm.getComments().setFieldName("Results Objectively Verifiable Indicators");
 															field = DbUtil.getAmpFieldByName("Results Objectively Verifiable Indicators");
 														}
 														else
 															if (comment.equals("objObjVerIndicators")||comment.equals("viewObjObjVerIndicators")){
-																editForm.setFieldName("Objective Objectively Verifiable Indicators");
+																editForm.getComments().setFieldName("Objective Objectively Verifiable Indicators");
 																field = DbUtil.getAmpFieldByName("Objective Objectively Verifiable Indicators");
 															}
 															else
 																if (comment.equals("purpObjVerIndicators")||comment.equals("viewpurpObjVerIndicators")){
-																	editForm.setFieldName("Purpose Objectively Verifiable Indicators");
+																	editForm.getComments().setFieldName("Purpose Objectively Verifiable Indicators");
 																	field = DbUtil.getAmpFieldByName("Purpose Objectively Verifiable Indicators");
 																}
-							editForm.setField(field);
+						editForm.getComments().setField(field);
 							if (request.getParameter("previus")!=null && request.getParameter("previus").equalsIgnoreCase("vco")){
-								editForm.setField(field);
+								editForm.getComments().setField(field);
 								long actid = Long.parseLong(request.getParameter("actId"));
-								editForm.setCommentsCol(DbUtil.getAllCommentsByField(editForm.getField().getAmpFieldId(), actid));
+								editForm.getComments().setCommentsCol(DbUtil.getAllCommentsByField(editForm.getComments().getField().getAmpFieldId(), actid));
 								return mapping.findForward("overview");
 							}
 						//}
@@ -187,57 +187,57 @@ public class ViewComment extends Action {
                                     }
 								}
 						}*/
-						logger.debug("editForm.getCommentsCol().size() [At Start-II]: " + editForm.getCommentsCol().size());
+						logger.debug("editForm.getCommentsCol().size() [At Start-II]: " + editForm.getComments().getCommentsCol().size());
 
-						editForm.setActionFlag("create");
-						editForm.setAmpCommentId(null);			 // Clearing the ampCommentId property
-						if (editForm.getCommentText() != null)	// Clearing the commentText property
-							editForm.setCommentText(null);
+						editForm.getComments().setActionFlag("create");
+						editForm.getComments().setAmpCommentId(null);			 // Clearing the ampCommentId property
+						if (editForm.getComments().getCommentText() != null)	// Clearing the commentText property
+							editForm.getComments().setCommentText(null);
 						//editForm.setSerializeFlag(false);  //To make sure comment(s) not added to database without user's knowledge
 						if (comment.equals("ccd")||comment.equals("fdd")||comment.equals("objAssumption")||comment.equals("objVerification")||comment.equals("purpAssumption")
 								||comment.equals("purpVerification")||comment.equals("resAssumption")||comment.equals("resVerification"))
-							editForm.setCommentFlag(true);
-						logger.debug("CommentFlag[forwarding] : " + editForm.isCommentFlag());
+							editForm.getComments().setCommentFlag(true);
+						logger.debug("CommentFlag[forwarding] : " + editForm.getComments().isCommentFlag());
 						return mapping.findForward("forward");
 					}
 
 					 if ("create".equals(action)) {
 					 	AmpComments com = new AmpComments();
-						com.setAmpFieldId(editForm.getField());
-						if (editForm.getCommentText().trim().equals("") || editForm.getCommentText() == null)
+						com.setAmpFieldId(editForm.getComments().getField());
+						if (editForm.getComments().getCommentText().trim().equals("") || editForm.getComments().getCommentText() == null)
 							com.setComment(" ");
 						else
-						com.setComment(editForm.getCommentText());
+						com.setComment(editForm.getComments().getCommentText());
 						com.setCommentDate(new Date());
 						com.setMemberId(TeamMemberUtil.getAmpTeamMember(member.getMemberId()));
 
-						editForm.getCommentsCol().add(com);  // for setting activityId in saveAvtivity.java
+						editForm.getComments().getCommentsCol().add(com);  // for setting activityId in saveAvtivity.java
 					 	//commentColInSession.put(editForm.getField().getAmpFieldId(),editForm.getCommentsCol());
-						putObjectInListInMap(commentColInSession, editForm.getField().getAmpFieldId(), com);
+						putObjectInListInMap(commentColInSession, editForm.getComments().getField().getAmpFieldId(), com);
 					 	session.setAttribute("commentColInSession",commentColInSession);
-						logger.debug("editForm.getCommentsCol().size() [After Create]: " + editForm.getCommentsCol().size());
-						editForm.setCommentText("");  	// Clear the commentText
+						logger.debug("editForm.getComments().getCommentsCol().size() [After Create]: " + editForm.getComments().getCommentsCol().size());
+						editForm.getComments().setCommentText("");  	// Clear the commentText
 						logger.debug("Comment added");
 						return mapping.findForward("forward");
 					}
 					 else if ("edit".equals(action)){
-						AmpComments com = (AmpComments) editForm.getCommentsCol().get(Integer.parseInt(request.getParameter("ampCommentId")));
-							if (editForm.getCommentText() == null || editForm.getCommentText().trim().length() == 0) {
+						AmpComments com = (AmpComments) editForm.getComments().getCommentsCol().get(Integer.parseInt(request.getParameter("ampCommentId")));
+							if (editForm.getComments().getCommentText() == null || editForm.getComments().getCommentText().trim().length() == 0) {
 								logger.debug("Inside IF [EDIT]");
-								editForm.setCommentText(com.getComment());
+								editForm.getComments().setCommentText(com.getComment());
 								return mapping.findForward("forward");
 							 }
 							 else {
-							 	if (editForm.getCommentText().trim().equals("") || editForm.getCommentText() == null)
+							 	if (editForm.getComments().getCommentText().trim().equals("") || editForm.getComments().getCommentText() == null)
 							 		com.setComment(" ");
 							 	else
-							 		com.setComment(editForm.getCommentText());
+							 		com.setComment(editForm.getComments().getCommentText());
 
-							 	AmpComments replacedComment	= (AmpComments)editForm.getCommentsCol().set(
+							 	AmpComments replacedComment	= (AmpComments)editForm.getComments().getCommentsCol().set(
 							 							Integer.parseInt(request.getParameter("ampCommentId")),com
 							 							);  // for setting activityId in saveAvtivity.java
-							 	//commentColInSession.put(editForm.getField().getAmpFieldId(),editForm.getCommentsCol());
-							 	List tempList				= (List)commentColInSession.get( editForm.getField().getAmpFieldId() );
+							 	//commentColInSession.put(editForm.getComments().getField().getAmpFieldId(),editForm.getComments().getCommentsCol());
+							 	List tempList				= (List)commentColInSession.get( editForm.getComments().getField().getAmpFieldId() );
 							 	if (tempList != null && replacedComment != null){
 				 	 				int index	= tempList.indexOf(replacedComment);
 				 	 				if (index >= 0) {
@@ -246,25 +246,25 @@ public class ViewComment extends Action {
 							 	}
 							 	
 							 	session.setAttribute("commentColInSession",commentColInSession);
-							 	logger.debug("editForm.getCommentsCol().size() [After Edit]: " + editForm.getCommentsCol().size());
-							 	editForm.setCommentText("");  	// Clear the commentText
-							 	editForm.setActionFlag("create");  // Clear the actionFlag
+							 	logger.debug("editForm.getComments().getCommentsCol().size() [After Edit]: " + editForm.getComments().getCommentsCol().size());
+							 	editForm.getComments().setCommentText("");  	// Clear the commentText
+							 	editForm.getComments().setActionFlag("create");  // Clear the actionFlag
 							 	logger.debug("Comment updated");
 								return mapping.findForward("forward");
 							 }
 					    }
 					 	 else if ("delete".equals(action)){
-					 	 		AmpComments removedComment	= (AmpComments)editForm.getCommentsCol().remove(
+					 	 		AmpComments removedComment	= (AmpComments)editForm.getComments().getCommentsCol().remove(
 					 	 								Integer.parseInt(request.getParameter("ampCommentId"))
 					 	 							);
-							 	//commentColInSession.put(editForm.getField().getAmpFieldId(),editForm.getCommentsCol());
-				 	 			List tempList				= (List)commentColInSession.get(editForm.getField().getAmpFieldId());
+							 	//commentColInSession.put(editForm.getComments().getField().getAmpFieldId(),editForm.getComments().getCommentsCol());
+				 	 			List tempList				= (List)commentColInSession.get(editForm.getComments().getField().getAmpFieldId());
 				 	 			if (tempList != null && removedComment != null)
 					 	 				tempList.remove(removedComment);
 							 	session.setAttribute("commentColInSession",commentColInSession);
-					 	 		logger.debug("editForm.getCommentsCol().size() [After Delete]: " + editForm.getCommentsCol().size());
-								editForm.setCommentText("");      // Clear the commentText
-								editForm.setActionFlag("create");  // Clear the actionFlag
+					 	 		logger.debug("editForm.getComments().getCommentsCol().size() [After Delete]: " + editForm.getComments().getCommentsCol().size());
+					 	 		editForm.getComments().setCommentText("");      // Clear the commentText
+					 	 		editForm.getComments().setActionFlag("create");  // Clear the actionFlag
 								logger.debug("Comment deleted");
 								return mapping.findForward("forward");
 							}

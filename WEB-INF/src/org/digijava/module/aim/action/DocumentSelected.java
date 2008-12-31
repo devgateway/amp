@@ -40,73 +40,73 @@ public class DocumentSelected extends Action {
 		HttpSession session = request.getSession();
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 
-		if (eaForm.getDocFileOrLink().equals("file") || eaForm.getDocFileOrLink().equals("document")) {
-			if (eaForm.getDocTitle() == null || eaForm.getDocTitle().trim().length() == 0 ||
-								 eaForm.getDocFile() == null) {
+		if (eaForm.getDocuments().getDocFileOrLink().equals("file") || eaForm.getDocuments().getDocFileOrLink().equals("document")) {
+			if (eaForm.getDocuments().getDocTitle() == null || eaForm.getDocuments().getDocTitle().trim().length() == 0 ||
+					eaForm.getDocuments().getDocFile() == null) {
 				return mapping.findForward("forward");
 			}
 		} else {
-			if (eaForm.getDocTitle() == null || eaForm.getDocTitle().trim().length() == 0 ||
-								 eaForm.getDocWebResource() == null || eaForm.getDocWebResource().trim().length() == 0) {
+			if (eaForm.getDocuments().getDocTitle() == null || eaForm.getDocuments().getDocTitle().trim().length() == 0 ||
+					eaForm.getDocuments().getDocWebResource() == null || eaForm.getDocuments().getDocWebResource().trim().length() == 0) {
 				return mapping.findForward("forward");
 			}
 		}
 
         if (DocumentUtil.isDMEnabled()) {
-            if(eaForm.getDocFileOrLink().equals("document")) {
-                FormFile formFile = eaForm.getDocFile();
+            if(eaForm.getDocuments().getDocFileOrLink().equals("document")) {
+                FormFile formFile = eaForm.getDocuments().getDocFile();
                 Site currentSite = RequestUtils.getSite(request);
                 String docType					= null;
-                AmpCategoryValue docTypeValue	= CategoryManagerUtil.getAmpCategoryValueFromDb(eaForm.getDocType());
+                AmpCategoryValue docTypeValue	= CategoryManagerUtil.getAmpCategoryValueFromDb(eaForm.getDocuments().getDocType());
                 if (docTypeValue != null) {
                 	docType	= docTypeValue.getValue();
                 }
                 
-                DocumentUtil.addDocument(currentSite, eaForm.getDocumentSpace(), formFile.getFileName(), eaForm.getDocTitle(), eaForm.getDocDescription(), eaForm.getDocDate(), docType,formFile.getFileData());
-                eaForm.setManagedDocumentList(DocumentUtil.getDocumentsForSpace(currentSite, eaForm.getDocumentSpace()));
+                DocumentUtil.addDocument(currentSite, eaForm.getDocuments().getDocumentSpace(), formFile.getFileName(), eaForm.getDocuments().getDocTitle(), eaForm.getDocuments().getDocDescription(), eaForm.getDocuments().getDocDate(), docType,formFile.getFileData());
+                eaForm.getDocuments().setManagedDocumentList(DocumentUtil.getDocumentsForSpace(currentSite, eaForm.getDocuments().getDocumentSpace()));
 
                 return mapping.findForward("forward");
             }
         }
 		CMSContentItem cmsItem = new CMSContentItem();
 
-		cmsItem.setTitle(eaForm.getDocTitle());
-		if (eaForm.getDocDescription() == null ||
-				eaForm.getDocDescription().trim().length() == 0) {
+		cmsItem.setTitle(eaForm.getDocuments().getDocTitle());
+		if (eaForm.getDocuments().getDocDescription() == null ||
+				eaForm.getDocuments().getDocDescription().trim().length() == 0) {
 			cmsItem.setDescription(" ");
 		} else {
-			cmsItem.setDescription(eaForm.getDocDescription());
+			cmsItem.setDescription(eaForm.getDocuments().getDocDescription());
 		}
 		
-		if (eaForm.getDocComment() != null && eaForm.getDocComment().trim().length() != 0) 
-			cmsItem.setDocComment( eaForm.getDocComment() );
+		if (eaForm.getDocuments().getDocComment() != null && eaForm.getDocuments().getDocComment().trim().length() != 0) 
+			cmsItem.setDocComment( eaForm.getDocuments().getDocComment() );
 		else
 			cmsItem.setDocComment("");
 		
-		if (eaForm.getDocDate() == null ||
-				eaForm.getDocDate().trim().length() == 0) {
+		if (eaForm.getDocuments().getDocDate() == null ||
+				eaForm.getDocuments().getDocDate().trim().length() == 0) {
 			cmsItem.setDate(" ");
 		} else {
-			cmsItem.setDate(eaForm.getDocDate());
+			cmsItem.setDate(eaForm.getDocuments().getDocDate());
 		}
-		if(!eaForm.getDocFileOrLink().equals("link")){
-			if(eaForm.getDocType() == null) {
+		if(!eaForm.getDocuments().getDocFileOrLink().equals("link")){
+			if(eaForm.getDocuments().getDocType() == null) {
 				cmsItem.setDocType(null);
 			}
 			else {
-				cmsItem.setDocType( CategoryManagerUtil.getAmpCategoryValueFromDb(eaForm.getDocType()) );
+				cmsItem.setDocType( CategoryManagerUtil.getAmpCategoryValueFromDb(eaForm.getDocuments().getDocType()) );
 			}
 		}		
 		
-		if ( eaForm.getDocLang() == null ) {
+		if ( eaForm.getDocuments().getDocLang() == null ) {
 			cmsItem.setDocLanguage( null );
 		}
 		else
-			cmsItem.setDocLanguage( CategoryManagerUtil.getAmpCategoryValueFromDb( eaForm.getDocLang() ) );
+			cmsItem.setDocLanguage( CategoryManagerUtil.getAmpCategoryValueFromDb( eaForm.getDocuments().getDocLang() ) );
 
-		if (eaForm.getDocFileOrLink().equals("file")) {
+		if (eaForm.getDocuments().getDocFileOrLink().equals("file")) {
 			cmsItem.setIsFile(true);
-			FormFile formFile = eaForm.getDocFile();
+			FormFile formFile = eaForm.getDocuments().getDocFile();
 			if (formFile != null) {
 				cmsItem.setFileName(formFile.getFileName());
 		        cmsItem.setContentType(formFile.getContentType());
@@ -119,7 +119,7 @@ public class DocumentSelected extends Action {
 			}
 		} else {
 			cmsItem.setIsFile(false);
-			String url = eaForm.getDocWebResource();
+			String url = eaForm.getDocuments().getDocWebResource();
 			if (url.length() > LINK_START.length()) {
 				String temp = url.substring(0,LINK_START.length());
 				if (!temp.equalsIgnoreCase(LINK_START)) {
@@ -136,21 +136,21 @@ public class DocumentSelected extends Action {
 
 		cmsItem.setId(System.currentTimeMillis());
 		RelatedLinks rl = new RelatedLinks();
-		rl.setShowInHomePage(eaForm.isShowInHomePage());
+		rl.setShowInHomePage(eaForm.getDocuments().isShowInHomePage());
 		rl.setRelLink(cmsItem);
 		rl.setMember(org.digijava.module.aim.util.TeamMemberUtil.getAmpTeamMember(tm.getMemberId()));
 
 
 		if (cmsItem.getIsFile()) {
-			if (eaForm.getDocumentList() == null) {
-				eaForm.setDocumentList(new ArrayList());
+			if (eaForm.getDocuments().getDocumentList() == null) {
+				eaForm.getDocuments().setDocumentList(new ArrayList());
 			}
-			eaForm.getDocumentList().add(rl);
+			eaForm.getDocuments().getDocumentList().add(rl);
 		} else {
-			if (eaForm.getLinksList() == null) {
-				eaForm.setLinksList(new ArrayList());
+			if (eaForm.getDocuments().getLinksList() == null) {
+				eaForm.getDocuments().setLinksList(new ArrayList());
 			}
-			eaForm.getLinksList().add(rl);
+			eaForm.getDocuments().getLinksList().add(rl);
 		}
 		return mapping.findForward("forward");
 	}

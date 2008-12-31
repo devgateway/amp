@@ -28,15 +28,15 @@ public class RemoveComponent extends Action {
 		
 		EditActivityForm eaForm = (EditActivityForm) form;
 		
-		Long comp[] = eaForm.getSelComp();
+		Long comp[] = eaForm.getComponents().getSelComp();
 		for (int i = 0;i < comp.length; i++) {
 		    Components temp = new Components();
 		    temp.setComponentId(comp[i]);
-		    eaForm.getSelectedComponents().remove(temp);
+		    eaForm.getComponents().getSelectedComponents().remove(temp);
 		}
-		eaForm.setSelComp(null);
+		eaForm.getComponents().setSelComp(null);
 		Double totdisbur=0d;
-		for (Iterator iterator = eaForm.getSelectedComponents().iterator(); iterator.hasNext();) {
+		for (Iterator iterator = eaForm.getComponents().getSelectedComponents().iterator(); iterator.hasNext();) {
 			Components object = (Components) iterator.next();
 			if ( object.getDisbursements()!=null){
 			for (Iterator iterator2 = object.getDisbursements().iterator(); iterator2
@@ -46,7 +46,7 @@ public class RemoveComponent extends Action {
 				}
 			}
 		}
-		eaForm.setCompTotalDisb(totdisbur);
+		eaForm.getComponents().setCompTotalDisb(totdisbur);
 		return mapping.findForward("forward");
 	}
 }

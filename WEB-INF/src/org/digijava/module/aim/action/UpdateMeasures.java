@@ -24,38 +24,38 @@ public class UpdateMeasures extends Action {
 			HttpServletRequest request,HttpServletResponse response) {
 		
 		EditActivityForm eaForm = (EditActivityForm) form;
-		if (eaForm.getMeasure() != null && 
-				eaForm.getMeasure().trim().length() > 0) {
-			if (eaForm.getIssueId() != null) {
+		if (eaForm.getIssues().getMeasure() != null && 
+				eaForm.getIssues().getMeasure().trim().length() > 0) {
+			if (eaForm.getIssues().getIssueId() != null) {
 				Issues issue = new Issues();
-				issue.setId(eaForm.getIssueId());
+				issue.setId(eaForm.getIssues().getIssueId());
 				Measures measure = new Measures();
-				if (eaForm.getMeasureId() == null || 
-						eaForm.getMeasureId().longValue() < 0) {
+				if (eaForm.getIssues().getMeasureId() == null || 
+						eaForm.getIssues().getMeasureId().longValue() < 0) {
 					measure.setId(new Long(System.currentTimeMillis()));
 				} else {
-					measure.setId(eaForm.getMeasureId());
+					measure.setId(eaForm.getIssues().getMeasureId());
 				}
-				int index = eaForm.getIssues().indexOf(issue);
-				issue = (Issues) eaForm.getIssues().get(index);
+				int index = eaForm.getIssues().getIssues().indexOf(issue);
+				issue = (Issues) eaForm.getIssues().getIssues().get(index);
 				if (issue.getMeasures() == null) {
 					issue.setMeasures(new ArrayList());
-					measure.setName(eaForm.getMeasure());
+					measure.setName(eaForm.getIssues().getMeasure());
 					issue.getMeasures().add(measure);
 				} else {
 					int mIndex = issue.getMeasures().indexOf(measure);
 					if (mIndex < 0) {
-						measure.setName(eaForm.getMeasure());
+						measure.setName(eaForm.getIssues().getMeasure());
 						issue.getMeasures().add(measure);
 					} else {
 						measure = (Measures) issue.getMeasures().get(mIndex);
-						measure.setName(eaForm.getMeasure());
+						measure.setName(eaForm.getIssues().getMeasure());
 						issue.getMeasures().set(mIndex,measure);	
 					}
 				}
-				eaForm.getIssues().set(index,issue);				
-				eaForm.setMeasure(null);
-				eaForm.setIssueId(null);
+				eaForm.getIssues().getIssues().set(index,issue);				
+				eaForm.getIssues().setMeasure(null);
+				eaForm.getIssues().setIssueId(null);
 			}
 		}
 		return mapping.findForward("forward");

@@ -92,7 +92,7 @@ public class EditIPAContract extends MultiAction {
         HttpSession session = request.getSession();
         EditActivityForm eaf = (EditActivityForm) session.getAttribute("eaf");
         Integer indexId = new Integer(request.getParameter("indexId"));
-        eaf.getContracts().remove(indexId - 1);
+        eaf.getContracts().getContracts().remove(indexId - 1);
         //request.setAttribute("close", "close");
         request.setAttribute("close", "close");
         return modeFinalize(mapping, form, request, response);
@@ -108,7 +108,7 @@ public class EditIPAContract extends MultiAction {
         IPAContractForm euaf = (IPAContractForm) form;
         euaf.reset(mapping, request);
         Integer indexId = new Integer(request.getParameter("indexId")) - 1;
-        IPAContract contract = (IPAContract) eaf.getContracts().get(indexId);
+        IPAContract contract = (IPAContract) eaf.getContracts().getContracts().get(indexId);
         if(eaf.getFunding().getFundingDetails()!=null)
         for (Iterator it = eaf.getFunding().getFundingDetails().iterator(); it.hasNext();) {
 			FundingDetail afd = (FundingDetail) it.next();
@@ -623,7 +623,7 @@ public class EditIPAContract extends MultiAction {
         }
        
          if (eaf.getContracts() == null) {
-                eaf.setContracts(new ArrayList());
+                eaf.getContracts().setContracts(new ArrayList());
         }
          
 		
@@ -682,10 +682,10 @@ public class EditIPAContract extends MultiAction {
          
          
          if (eaf.getContracts() != null && euaf.getIndexId() != null && euaf.getIndexId() != -1) {
-             eaf.getContracts().set(euaf.getIndexId(), eua);
+             eaf.getContracts().getContracts().set(euaf.getIndexId(), eua);
          }
          else {
-             eaf.getContracts().add(eua);
+             eaf.getContracts().getContracts().add(eua);
          	}
          
         request.setAttribute("close", "close");

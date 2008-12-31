@@ -22,16 +22,16 @@ public class ShowUpdateIssue extends Action {
 	throws Exception {
 		
 		EditActivityForm eaForm = (EditActivityForm) form;
-		if (eaForm.getIssueId() != null 
-				&& eaForm.getIssueId().longValue() > 0) {
+		if (eaForm.getIssues().getIssueId() != null 
+				&& eaForm.getIssues().getIssueId().longValue() > 0) {
 			Issues issue = new Issues();
-			issue.setId(eaForm.getIssueId());
-			int index = eaForm.getIssues().indexOf(issue);
-			issue = (Issues) eaForm.getIssues().get(index);
-			eaForm.setIssue(issue.getName());
-			eaForm.setIssueDate(issue.getIssueDate());
+			issue.setId(eaForm.getIssues().getIssueId());
+			int index = eaForm.getIssues().getIssues().indexOf(issue);
+			issue = (Issues) eaForm.getIssues().getIssues().get(index);
+			eaForm.getIssues().setIssue(issue.getName());
+			eaForm.getIssues().setIssueDate(issue.getIssueDate());
 		}  else {
-			eaForm.setIssue(null);
+			eaForm.getIssues().setIssue(null);
 		}
 		return mapping.findForward("forward");
 	}

@@ -139,8 +139,8 @@ function validate(field) {
 function addDocuments() {
 
 		openNewWindow(600, 400);
-
-		document.aimEditActivityForm.docFileOrLink.value = "file";
+		
+		document.getElementById('docFileOrLink').value = "file";
 
 		//<digi:context name="selDoc" property="context/module/moduleinstance/selectDocument.do?edit=true" />
 
@@ -154,7 +154,7 @@ function addDocuments() {
 
 function addDocumentsDM(documentsType) {
 		openNewWindow(900, 300);
-		document.aimEditActivityForm.docFileOrLink.value = "file";
+		document.getElementById('docFileOrLink').value = "file";
 		document.aimEditActivityForm.action = "/contentrepository/selectDocumentDM.do?documentsType="+documentsType;
 		document.aimEditActivityForm.target = popupPointer.name;
 		document.aimEditActivityForm.submit();
@@ -164,7 +164,7 @@ function addManagedDocuments() {
 
 		openNewWindow(600, 230);
 
-		document.aimEditActivityForm.docFileOrLink.value = "document";
+		document.getElementById('docFileOrLink').value = "document";
 
 		<digi:context name="selDoc" property="context/module/moduleinstance/selectDocument.do?edit=true" />
 
@@ -182,7 +182,7 @@ function addLinks() {
 
 		openNewWindow(600, 225);
 
-		document.aimEditActivityForm.docFileOrLink.value = "link";
+		document.getElementById('docFileOrLink').value = "link";
 
 		<digi:context name="selDoc" property="context/module/moduleinstance/selectDocument.do?edit=true" />
 
@@ -202,7 +202,7 @@ function removeSelDocuments() {
 
 	if (flag == false) return false;
 
-	document.aimEditActivityForm.docFileOrLink.value = "file";
+	document.getElementById('docFileOrLink').value = "file";
 
 	<digi:context name="remDoc" property="context/module/moduleinstance/removeSelDocuments.do?edit=true" />
 
@@ -224,7 +224,7 @@ function removeSelManagedDocuments() {
 
 	//if (flag == false) return false;
 
-	document.aimEditActivityForm.docFileOrLink.value = "document";
+	document.getElementById('docFileOrLink').value = "document";
 
 	<digi:context name="remDoc" property="context/module/moduleinstance/removeSelDocuments.do?edit=true" />
 
@@ -264,7 +264,7 @@ function removeSelLinks() {
 
 	if (flag == false) return false;
 
-	document.aimEditActivityForm.docFileOrLink.value = "link";
+	document.getElementById('docFileOrLink').value = "link";
 
 	<digi:context name="remDoc" property="context/module/moduleinstance/removeSelDocuments.do?edit=true" />
 
@@ -292,7 +292,7 @@ function removeSelLinks() {
 
 <html:hidden property="step" />
 
-<html:hidden property="docFileOrLink" />
+<html:hidden property="documents.docFileOrLink"  styleId="docFileOrLink"/>
 
 
 

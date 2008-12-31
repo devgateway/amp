@@ -144,14 +144,14 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	AmpActivity activity = rsp.getActivity();
 	Long oldActivityId = rsp.getOldActivityId();
 	boolean edit = rsp.isEdit();
-	ArrayList commentsCol = rsp.getEaForm().getCommentsCol();
+	ArrayList commentsCol = rsp.getEaForm().getComments().getCommentsCol();
 	boolean serializeFlag = rsp.getEaForm().isSerializeFlag();
 	Long field = rsp.getField();
 	Collection relatedLinks = rsp.getRelatedLinks();
 	Long memberId = rsp.getTm().getMemberId();
 	Collection indicators = rsp.getEaForm().getIndicator().getIndicatorsME();
 	Set<Components<AmpComponentFunding>> componentsFunding = rsp.getTempComp();
-	List<IPAContract> contracts = rsp.getEaForm().getContracts();
+	List<IPAContract> contracts = rsp.getEaForm().getContracts().getContracts();
 	boolean alwaysRollback = rsp.isAlwaysRollback();
 	//***
 	

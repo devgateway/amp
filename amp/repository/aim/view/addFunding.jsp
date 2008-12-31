@@ -105,7 +105,7 @@ var isAlreadySubmitted = false;
         function addDisbOrderToDisb(indexId) {
           openNewWindow(400, 100,"addDisbOrderToDisb");
           document.aimEditActivityForm.action= "/addDisbOrderToDisb.do";
-          document.aimEditActivityForm.transIndexId.value = indexId;
+          document.getElementById('transIndexId').value = indexId;
           document.aimEditActivityForm.target =  popupPointer.name;
           document.aimEditActivityForm.submit();
 
@@ -113,7 +113,7 @@ var isAlreadySubmitted = false;
         function   addDisbOrderToContract (indexId) {
           openNewWindowWithName(400, 100,"addDisbOrderToContract");
           document.aimEditActivityForm.action= "/addDisbOrderToContract.do";
-          document.aimEditActivityForm.transIndexId.value = indexId;
+          document.getElementById('transIndexId').value = indexId;
           document.aimEditActivityForm.target =  popupPointer.name;
           document.aimEditActivityForm.submit();
             
@@ -148,7 +148,7 @@ var isAlreadySubmitted = false;
                          else if (type == 4) {
 				document.getElementsByName("funding.event")[0].value = "delDisbursementOrders";
 			}
-			document.aimEditActivityForm.transIndexId.value=index;
+			document.getElementById('transIndexId').value=index;
 		 	document.aimEditActivityForm.action="/addFundingDetail.do";
 			document.aimEditActivityForm.submit();
 		}
@@ -159,7 +159,7 @@ var isAlreadySubmitted = false;
 		var flag = confirm("<digi:trn key="aim:addFunding:warn:removeproj">Are you sure you want to remove the selected projection ?</digi:trn>");
 		if(flag != false) {
 			document.getElementsByName("funding.event")[0].value = "delProjection";
-			document.aimEditActivityForm.transIndexId.value=index;
+			document.getElementById('transIndexId').value=index;
 		 	document.aimEditActivityForm.action="/addMTEFProjection.do";
 			document.aimEditActivityForm.submit();
 		}
@@ -215,16 +215,16 @@ var isAlreadySubmitted = false;
 <digi:form action="/addFundingDetail.do" method="post">
 
 <input type="hidden" name="edit" value="true">
-<html:hidden styleId="dupFunding"  property="funding.dupFunding"/>
-<html:hidden styleId="event" property="funding.event"/>
-<html:hidden property="transIndexId"/>
-<html:hidden styleId="numComm" property="funding.numComm" />
-<html:hidden styleId="numDisb" property="funding.numDisb"/>
-<html:hidden styleId="numExp" property="funding.numExp"/>
-<html:hidden styleId="numDisbOrder" property="funding.numDisbOrder"/>
-<html:hidden styleId="numProjections" property="funding.numProjections"/>
-<html:hidden property="editAct"/>
-<html:hidden property="funding.firstSubmit"/>
+<html:hidden name="aimEditActivityForm" styleId="dupFunding"  property="funding.dupFunding"/>
+<html:hidden name="aimEditActivityForm" styleId="event" property="funding.event"/>
+<html:hidden name="aimEditActivityForm" styleId="transIndexId" property="funding.transIndexId"/>
+<html:hidden name="aimEditActivityForm" styleId="numComm" property="funding.numComm" />
+<html:hidden name="aimEditActivityForm" styleId="numDisb" property="funding.numDisb"/>
+<html:hidden name="aimEditActivityForm" styleId="numExp" property="funding.numExp"/>
+<html:hidden name="aimEditActivityForm" styleId="numDisbOrder" property="funding.numDisbOrder"/>
+<html:hidden name="aimEditActivityForm" styleId="numProjections" property="funding.numProjections"/>
+<html:hidden name="aimEditActivityForm" property="editAct"/>
+<html:hidden name="aimEditActivityForm" property="funding.firstSubmit"/>
 
 <input type="hidden" name="funding.isEditFunfing" value="true"/>
 
@@ -450,7 +450,7 @@ var isAlreadySubmitted = false;
 			<table width="100%" cellpadding=0 cellspacing=0 border="0">
 				<tr>
 					<td width="100%" bgcolor="#006699" class="textalb" height="20" align="center">
-					<a title="<digi:trn key="aim:Commitmentsmade">A firm obligation expressed in writing and backed by the necessary funds, undertaken by an official donor to provide specified assistance to a recipient country</digi:trn>"><digi:trn key="aim:commitments">Commitments</digi:trn></a>
+					<a title="<digi:trn key="aim:Commitmentsmade">A firm obligation expressed in writing and backed by the necessary funds, undertaken by an official donor to provide specified assistance to a recipient 	</digi:trn>"><digi:trn key="aim:commitments">Commitments</digi:trn></a>
 					</td>
 				</tr>
 				<tr>

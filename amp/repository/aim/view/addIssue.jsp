@@ -15,14 +15,14 @@
 <script language="JavaScript">
 
 	function validate() {
-		if(isEmpty(addIssueForm.issue.value) == true) {	
+		if(isEmpty(document.getElementById('issue').value) == true) {	
 			var issueError = "<digi:trn key="aim:enterIssue">Please enter issue</digi:trn>"; 	
 			alert(issueError);			
 			addIssueForm.issue.focus();
 			return false;
 		}
 		<field:display feature="Issues" name="Issue Date">
-			if(isEmpty(addIssueForm.issueDate.value) == true) {	
+			if(isEmpty(document.getElementById('issue').value) == true) {	
 				var issueError2 = "<digi:trn key="aim:enterIssueDate">Please enter issue date</digi:trn>"; 	
 				alert(issueError2);
 				return false;
@@ -32,7 +32,7 @@
 	}
 </script>
 
-<html:hidden property="issueId"/>
+<html:hidden property="issues.issueId"/>
 <html:hidden property="funding.event"/>
 <html:hidden property="edit" value="true"/>
 <html:hidden property="editAct"/>
@@ -51,14 +51,14 @@
 									  &nbsp; </td>
 							     <td valign="top">
 											 <a title="<digi:trn key="aim:issuesForTheActivity">The issues for the activity</digi:trn>">
-												<html:textarea property="issue" styleClass="inp-text" rows="3" cols="60"/>
+												<html:textarea styleId="issue" property="issues.issue" styleClass="inp-text" rows="3" cols="60"/>
 											 </a>										</td>
 									</tr>								
 									<field:display feature="Issues" name="Issue Date">
 									<tr>
 									  <td align="right"><digi:trn key="aim:dateOfissue">Date of Issue</digi:trn>
 								      &nbsp;</td>
-								      <td><html:text property="issueDate" size="10"
+								      <td><html:text property="issues.issueDate" size="10"
 																styleId="issueDate" styleClass="inp-text" readonly="true"/> 
 																
 																<a id="clear1" href="javascript:clearDate(document.getElementById('issueDate'), 'clear1')">
@@ -75,11 +75,11 @@
 												<tr>
 													<td>
 													
-														<c:if test="${aimEditActivityForm.issueId == -1}">
+														<c:if test="${aimEditActivityForm.issues.issueId == -1}">
 															<input type="submit" value="<digi:trn key='btn:add'>Add</digi:trn>" class="dr-menu">													</td>
 														</c:if>
 														
-														<c:if test="${aimEditActivityForm.issueId != -1}">
+														<c:if test="${aimEditActivityForm.issues.issueId != -1}">
 															<input type="submit" value="<digi:trn key='btn:update'>Update</digi:trn>" class="dr-menu">													</td>
 														</c:if>
 														

@@ -28,46 +28,46 @@ public class ComponentSelected extends Action {
 		
 		EditActivityForm eaForm = (EditActivityForm) form;
 		
-		if (eaForm.getComponentTitle() == null || eaForm.getComponentTitle().trim().length() == 0) {
+		if (eaForm.getComponents().getComponentTitle() == null || eaForm.getComponents().getComponentTitle().trim().length() == 0) {
 			return mapping.findForward("forward");
 		}
 
 		Components comp = new Components();
-		if (eaForm.getComponentAmount() == null || eaForm.getComponentAmount().trim().length() == 0) {
+		if (eaForm.getComponents().getComponentAmount() == null || eaForm.getComponents().getComponentAmount().trim().length() == 0) {
 			comp.setAmount("0.00");
 		} else {
-			String amt = eaForm.getComponentAmount().replaceAll(",","");
+			String amt = eaForm.getComponents().getComponentAmount().replaceAll(",","");
 			double amount = Double.parseDouble(amt);
 			comp.setAmount(DecimalToText.ConvertDecimalToText(amount));
 		}
-		comp.setCurrencyCode(eaForm.getCurrencyCode());
-		comp.setDescription(eaForm.getComponentDesc());
-		comp.setReportingDate(eaForm.getComponentRepDate());
-		comp.setTitle(eaForm.getComponentTitle());
-		comp.setCurrencyCode(eaForm.getCurrencyCode());
+		comp.setCurrencyCode(eaForm.getComponents().getCurrencyCode());
+		comp.setDescription(eaForm.getComponents().getComponentDesc());
+		comp.setReportingDate(eaForm.getComponents().getComponentRepDate());
+		comp.setTitle(eaForm.getComponents().getComponentTitle());
+		comp.setCurrencyCode(eaForm.getComponents().getCurrencyCode());
 		
-		if (eaForm.getComponentId() != null &&
-				eaForm.getComponentId().intValue() != 0) {
-			if (eaForm.getSelectedComponents() != null) {
-				Iterator itr = eaForm.getSelectedComponents().iterator();
+		if (eaForm.getComponents().getComponentId() != null &&
+				eaForm.getComponents().getComponentId().intValue() != 0) {
+			if (eaForm.getComponents().getSelectedComponents() != null) {
+				Iterator itr = eaForm.getComponents().getSelectedComponents().iterator();
 				while (itr.hasNext()) {
 					Components temp = (Components) itr.next();
-					if (temp.getComponentId().equals(eaForm.getComponentId())) {
+					if (temp.getComponentId().equals(eaForm.getComponents().getComponentId())) {
 						comp.setPhyProgress(temp.getPhyProgress());
 						break;
 					}
 				}
 			}
-			comp.setComponentId(eaForm.getComponentId());
-			eaForm.getSelectedComponents().remove(new Components(eaForm.getComponentId()));
+			comp.setComponentId(eaForm.getComponents().getComponentId());
+			eaForm.getComponents().getSelectedComponents().remove(new Components(eaForm.getComponents().getComponentId()));
 		} else {
 			comp.setComponentId(new Long(System.currentTimeMillis()));
 		}
-		if (eaForm.getSelectedComponents() == null) {
-			eaForm.setSelectedComponents(new ArrayList());
+		if (eaForm.getComponents().getSelectedComponents() == null) {
+			eaForm.getComponents().setSelectedComponents(new ArrayList());
 		} 
-		eaForm.getSelectedComponents().add(comp);
-		eaForm.setComponentId(null);
+		eaForm.getComponents().getSelectedComponents().add(comp);
+		eaForm.getComponents().setComponentId(null);
 		return mapping.findForward("forward");
 	}
 }

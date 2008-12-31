@@ -25,8 +25,8 @@ public class RemoveSelPhyProgress extends Action {
 		Long compId = new Long(Long.parseLong(request.getParameter("cid")));
 		Long pId = new Long(Long.parseLong(request.getParameter("pid")));
 			
-		if (eaForm.getSelectedComponents() != null) {
-			Iterator itr = eaForm.getSelectedComponents().iterator();
+		if (eaForm.getComponents().getSelectedComponents() != null) {
+			Iterator itr = eaForm.getComponents().getSelectedComponents().iterator();
 			Components comp = null;
 			boolean flag = false;
 			while (itr.hasNext()) {
@@ -38,9 +38,9 @@ public class RemoveSelPhyProgress extends Action {
 			}
 			
 			if (comp != null && flag) {
-				eaForm.getSelectedComponents().remove(comp);
+				eaForm.getComponents().getSelectedComponents().remove(comp);
 				comp.getPhyProgress().remove(new PhysicalProgress(pId));
-				eaForm.getSelectedComponents().add(comp);
+				eaForm.getComponents().getSelectedComponents().add(comp);
 			}
 		}
 

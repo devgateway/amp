@@ -53,9 +53,10 @@
 												<table cellSpacing=1 cellPadding=1 border=0 width="500">
 												<c:forEach items="${identification.selectedOrganizations}" var="selectedOrganizations">
 													<tr>
+
 														<c:if test="${!empty selectedOrganizations.id}">
 															<td align="left" width=3>
-																<html:multibox property="selOrgs">
+																<html:multibox styleId="selOrgs" property="identification.selOrgs">
 																	<c:out value="${selectedOrganizations.id}"/>
 																</html:multibox>
 															</td>

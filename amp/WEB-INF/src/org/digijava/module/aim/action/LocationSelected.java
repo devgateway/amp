@@ -41,7 +41,7 @@ public class LocationSelected extends Action {
 		String zoneName = "";
 		Long zoneId = null;
 		
-		if (eaForm.getImpLevelValue().intValue() == 1) {
+		if (eaForm.getLocation().getImpLevelValue().intValue() == 1) {
 			location = new Location[1];
 			Collection col =FeaturesUtil.getGlobalSettings();
             Iterator itr = col.iterator();
@@ -75,8 +75,8 @@ public class LocationSelected extends Action {
 			
 		}
 		
-		if (eaForm.getImpLevelValue().intValue() > 1) {
-			if (eaForm.getImpCountry() != null) {
+		if (eaForm.getLocation().getImpLevelValue().intValue() > 1) {
+			if (eaForm.getLocation().getImpCountry() != null) {
 				Country cntry =null;
 	            String Iso=null;
 	            Collection col =FeaturesUtil.getGlobalSettings();
@@ -99,10 +99,10 @@ public class LocationSelected extends Action {
 				flag = true;
 		}
 
-		if (eaForm.getImpLevelValue().intValue() == 2) {
-			if (eaForm.getImpMultiRegion() != null && eaForm.getImpMultiRegion().length > 0) {
+		if (eaForm.getLocation().getImpLevelValue().intValue() == 2) {
+			if (eaForm.getLocation().getImpMultiRegion() != null && eaForm.getLocation().getImpMultiRegion().length > 0) {
 				
-				Long rgn[] = eaForm.getImpMultiRegion();
+				Long rgn[] = eaForm.getLocation().getImpMultiRegion();
 				location = new Location[rgn.length];
 				AmpRegion reg;
 				Long id = new Long(System.currentTimeMillis());
@@ -127,11 +127,11 @@ public class LocationSelected extends Action {
 						}else {
 							location[0].setPercent("");
 						}		
-						if (eaForm.getFundingRegions() == null) {
-							eaForm.setFundingRegions(new ArrayList());
+						if (eaForm.getFunding().getFundingRegions() == null) {
+							eaForm.getFunding().setFundingRegions(new ArrayList());
 						}
-						if (eaForm.getFundingRegions().contains(reg) == false) {
-							eaForm.getFundingRegions().add(reg);
+						if (eaForm.getFunding().getFundingRegions().contains(reg) == false) {
+							eaForm.getFunding().getFundingRegions().add(reg);
 						}
 					}
 				}
@@ -140,29 +140,29 @@ public class LocationSelected extends Action {
 				flag = true;
 		}
 
-		if (eaForm.getImpLevelValue().intValue() > 2) {
-			if (eaForm.getImpRegion() != null
-					&& (!eaForm.getImpRegion().equals(new Long(-1)))) {
-				AmpRegion reg = LocationUtil.getAmpRegion(eaForm.getImpRegion());
+		if (eaForm.getLocation().getImpLevelValue().intValue() > 2) {
+			if (eaForm.getLocation().getImpRegion() != null
+					&& (!eaForm.getLocation().getImpRegion().equals(new Long(-1)))) {
+				AmpRegion reg = LocationUtil.getAmpRegion(eaForm.getLocation().getImpRegion());
 				regnId = reg.getAmpRegionId();
 				regnName = reg.getName();
-				if (eaForm.getFundingRegions() == null) {
-					eaForm.setFundingRegions(new ArrayList());
+				if (eaForm.getFunding().getFundingRegions() == null) {
+					eaForm.getFunding().setFundingRegions(new ArrayList());
 				}
-				if (eaForm.getFundingRegions().contains(reg) == false) {
-					eaForm.getFundingRegions().add(reg);
+				if (eaForm.getFunding().getFundingRegions().contains(reg) == false) {
+					eaForm.getFunding().getFundingRegions().add(reg);
 				}				
 				flag = false;
 			} else
 				flag = true;
 		}
 
-		if (eaForm.getImpLevelValue().intValue() == 3) {
-			if (eaForm.getImpMultiZone() != null && eaForm.getImpMultiZone().length > 0) {
+		if (eaForm.getLocation().getImpLevelValue().intValue() == 3) {
+			if (eaForm.getLocation().getImpMultiZone() != null && eaForm.getLocation().getImpMultiZone().length > 0) {
 				logger.info("imp ID is 3 and length="
-						+ eaForm.getImpMultiZone().length);
+						+ eaForm.getLocation().getImpMultiZone().length);
 
-				Long zone[] = eaForm.getImpMultiZone();
+				Long zone[] = eaForm.getLocation().getImpMultiZone();
 				location = new Location[zone.length];
 
 				AmpZone zne;
@@ -198,10 +198,10 @@ public class LocationSelected extends Action {
 				flag = true;
 		}
 
-		if (eaForm.getImpLevelValue().intValue() > 3) {
-			if (eaForm.getImpZone() != null
-					&& (!eaForm.getImpZone().equals(new Long(-1)))) {
-				AmpZone zon = LocationUtil.getAmpZone(eaForm.getImpZone());
+		if (eaForm.getLocation().getImpLevelValue().intValue() > 3) {
+			if (eaForm.getLocation().getImpZone() != null
+					&& (!eaForm.getLocation().getImpZone().equals(new Long(-1)))) {
+				AmpZone zon = LocationUtil.getAmpZone(eaForm.getLocation().getImpZone());
 				zoneId = zon.getAmpZoneId();
 				zoneName = zon.getName();
 				flag = false;
@@ -209,10 +209,10 @@ public class LocationSelected extends Action {
 				flag = true;
 		}
 		
-		if (eaForm.getImpLevelValue().intValue() == 4) {
-			if (eaForm.getImpMultiWoreda() != null && eaForm.getImpMultiWoreda().length > 0) {
+		if (eaForm.getLocation().getImpLevelValue().intValue() == 4) {
+			if (eaForm.getLocation().getImpMultiWoreda() != null && eaForm.getLocation().getImpMultiWoreda().length > 0) {
 
-				Long woreda[] = eaForm.getImpMultiWoreda();
+				Long woreda[] = eaForm.getLocation().getImpMultiWoreda();
 				location = new Location[woreda.length];
 
 				AmpWoreda wrda;

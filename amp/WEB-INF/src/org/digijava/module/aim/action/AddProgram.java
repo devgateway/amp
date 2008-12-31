@@ -33,7 +33,7 @@ public class AddProgram
     String selectedThemeId = request.getParameter("themeid");
     String opStatus = request.getParameter("op");
     String strLevel = request.getParameter("selPrgLevel");
-    int settingsId = eaform.getProgramType();
+    int settingsId = eaform.getPrograms().getProgramType();
     AmpActivityProgramSettings parent=null;
     switch(settingsId){
       case ProgramUtil.NATIONAL_PLAN_OBJECTIVE_KEY: parent=eaform.getPrograms().getNationalSetting(); break;
@@ -49,25 +49,25 @@ public class AddProgram
         Collection defaultHierarchy = ProgramUtil.getSubThemes(parent.getDefaultHierarchyId());
         prLevels.add(defaultHierarchy);
       }
-      eaform.setProgramLevels(prLevels);
-      eaform.setSelPrograms(null);
+      eaform.getPrograms().setProgramLevels(prLevels);
+      eaform.getPrograms().setSelPrograms(null);
       return mapping.findForward("forward");
     }
 
     if (selectedThemeId == null) {
-      if (eaform.getProgramLevels() != null) {
-        prLevels = eaform.getProgramLevels();
+      if (eaform.getPrograms().getProgramLevels() != null) {
+        prLevels = eaform.getPrograms().getProgramLevels();
       }
       if (prLevels.size() == 0) {
         prLevels.add(prl);
-        eaform.setProgramLevels(prLevels);
+        eaform.getPrograms().setProgramLevels(prLevels);
       }
       return mapping.findForward("forward");
     }
     else if (selectedThemeId.equals("-1")) {
       if (strLevel != null) {
         Long level = Long.valueOf(strLevel);
-        prLevels = eaform.getProgramLevels();
+        prLevels = eaform.getPrograms().getProgramLevels();
         int sz = prLevels.size();
         for (int i = level.intValue(); i < sz; i++) {
           prLevels.remove(level.intValue());
@@ -206,7 +206,7 @@ public class AddProgram
     int ind = 0;
     boolean opflag = false;
     AmpTheme prg = null;
-    prLevels = eaform.getProgramLevels();
+    prLevels = eaform.getPrograms().getProgramLevels();
     if (prLevels == null) {
       prLevels.add(getParents());
     }
@@ -256,7 +256,7 @@ public class AddProgram
         prLevels.remove(ind);
       }
     }
-    eaform.setProgramLevels(prLevels);
+    eaform.getPrograms().setProgramLevels(prLevels);
     return mapping.findForward("forward");
   }
 

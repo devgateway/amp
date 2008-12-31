@@ -66,7 +66,7 @@
 		     );
 	
 	//myPanel1.beforeHideEvent.subscribe(YAHOOAmp.amptab.handleClose);
-		    
+	var panelStart;	    
 	function initScripts() {
 		var msgP5='\n<digi:trn key="aim:addeditContracting">Add/Edit Contracting</digi:trn>';
 		myPanel5.setHeader(msgP5);
@@ -405,7 +405,7 @@
                             </td></tr>
 							<tr><td bgcolor="#f4f4f2" width="100%">
 								<!-- contents -->
-								 <logic:notEmpty name="aimEditActivityForm" property="contracts">
+								 <logic:notEmpty name="aimEditActivityForm" property="contracts.contracts">
 				                      <table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
 					                      <c:forEach items="${aimEditActivityForm.contracts}" var="contract" varStatus="idx">
 						                      <tr><td bgColor=#f4f4f2 align="center" vAlign="top">

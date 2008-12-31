@@ -26,24 +26,24 @@ public class ShowUpdateMeasures extends Action {
 	
 		EditActivityForm eaForm = (EditActivityForm) form;
 		logger.debug("In showUpdateMeasures");
-		if (eaForm.getMeasureId() != null && 
-				eaForm.getIssueId() != null && 
-				eaForm.getIssueId().longValue() > 0 && 
-				eaForm.getMeasureId().longValue() > 0) {
+		if (eaForm.getIssues().getMeasureId() != null && 
+				eaForm.getIssues().getIssueId() != null && 
+				eaForm.getIssues().getIssueId().longValue() > 0 && 
+				eaForm.getIssues().getMeasureId().longValue() > 0) {
 			
 			logger.debug("In here");
 			Issues issue = new Issues();
-			issue.setId(eaForm.getIssueId());
-			int index = eaForm.getIssues().indexOf(issue);
-			issue = (Issues) eaForm.getIssues().get(index);
+			issue.setId(eaForm.getIssues().getIssueId());
+			int index = eaForm.getIssues().getIssues().indexOf(issue);
+			issue = (Issues) eaForm.getIssues().getIssues().get(index);
 			
 			Measures measures = new Measures();
-			measures.setId(eaForm.getMeasureId());
+			measures.setId(eaForm.getIssues().getMeasureId());
 			index = issue.getMeasures().indexOf(measures);
 			measures = (Measures) issue.getMeasures().get(index);
-			eaForm.setMeasure(measures.getName());
+			eaForm.getIssues().setMeasure(measures.getName());
 		} else {
-			eaForm.setMeasure(null);
+			eaForm.getIssues().setMeasure(null);
 		}
 		return mapping.findForward("forward");
 	}

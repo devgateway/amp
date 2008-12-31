@@ -115,7 +115,7 @@ public class EditEUActivity extends MultiAction {
 		HttpSession session=request.getSession();
 		EditActivityForm eaf=(EditActivityForm) session.getAttribute("eaf");
 		Integer IndexId=new Integer(request.getParameter("indexId"));
-		eaf.getCosts().remove(IndexId.intValue());
+		eaf.getCosting().getCosts().remove(IndexId.intValue());
 
 		request.setAttribute("close", "close");
 		return modeFinalize(mapping, form, request, response);
@@ -133,7 +133,7 @@ public class EditEUActivity extends MultiAction {
 		Integer IndexId=new Integer(request.getParameter("indexId"));
 		euaf.setEditingIndexId(IndexId);
 
-		EUActivity element=(EUActivity) eaf.getCosts().get(IndexId.intValue());
+		EUActivity element=(EUActivity) eaf.getCosting().getCosts().get(IndexId.intValue());
 				euaf.setId(element.getId());
 				euaf.setAssumptions(element.getAssumptions());
 				euaf.setInputs(element.getInputs());
@@ -367,7 +367,7 @@ public class EditEUActivity extends MultiAction {
 
 		eua=new EUActivity();
 		if(euaf.getEditingIndexId()!=null)
-			eaf.getCosts().set(euaf.getEditingIndexId().intValue(),eua);
+			eaf.getCosting().getCosts().set(euaf.getEditingIndexId().intValue(),eua);
 
 
 
@@ -402,8 +402,8 @@ public class EditEUActivity extends MultiAction {
 		}
 
 
-		if(eaf.getCosts()==null) eaf.setCosts(new ArrayList());
-		if(euaf.getEditingIndexId()==null) eaf.getCosts().add(eua);
+		if(eaf.getCosting().getCosts()==null) eaf.getCosting().setCosts(new ArrayList());
+		if(euaf.getEditingIndexId()==null) eaf.getCosting().getCosts().add(eua);
 
 		PersistenceManager.releaseSession(sess);
 		request.setAttribute("close", "close");

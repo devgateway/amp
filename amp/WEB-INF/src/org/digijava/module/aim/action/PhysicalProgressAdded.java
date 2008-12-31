@@ -40,34 +40,31 @@ public class PhysicalProgressAdded extends Action {
 
 		EditActivityForm eaForm = (EditActivityForm) form;
 
-		if ((eaForm.getPhyProgTitle() == null ||
-							 eaForm.getPhyProgTitle().trim().length() == 0) ||
-							 eaForm.getPhyProgRepDate() == null)
+		if ((eaForm.getPhisycalProgress().getPhyProgTitle() == null ||
+				eaForm.getPhisycalProgress().getPhyProgTitle().trim().length() == 0) ||
+				eaForm.getPhisycalProgress().getPhyProgRepDate() == null)
 			return mapping.findForward("forward");
 
 		PhysicalProgress phyProg = new PhysicalProgress();
-		phyProg.setTitle(eaForm.getPhyProgTitle());
-		phyProg.setDescription(eaForm.getPhyProgDesc());
-		phyProg.setReportingDate(eaForm.getPhyProgRepDate());
-
-		logger.info("Component :" + eaForm.getComponentId());
-		logger.info("Phy Prog Id :" + eaForm.getPhyProgId());
+		phyProg.setTitle(eaForm.getPhisycalProgress().getPhyProgTitle());
+		phyProg.setDescription(eaForm.getPhisycalProgress().getPhyProgDesc());
+		phyProg.setReportingDate(eaForm.getPhisycalProgress().getPhyProgRepDate());
 
 		Components comp = null;
 
-		if (eaForm.getSelectedComponents() != null) {
-			Iterator itr = eaForm.getSelectedComponents().iterator();
+		if (eaForm.getComponents().getSelectedComponents() != null) {
+			Iterator itr = eaForm.getComponents().getSelectedComponents().iterator();
 			while (itr.hasNext()) {
 				comp = (Components) itr.next();
-				if (comp.getComponentId().equals(eaForm.getComponentId()))
+				if (comp.getComponentId().equals(eaForm.getComponents().getComponentId()))
 					break;
 			}
 
-			if (eaForm.getPhyProgId() != null &&
-					eaForm.getPhyProgId().intValue() != 0) {
-				phyProg.setPid(eaForm.getPhyProgId());
+			if (eaForm.getPhisycalProgress().getPhyProgId() != null &&
+					eaForm.getPhisycalProgress().getPhyProgId().intValue() != 0) {
+				phyProg.setPid(eaForm.getPhisycalProgress().getPhyProgId());
 				if (comp.getPhyProgress() != null && comp.getPhyProgress().size() > 0) {
-					comp.getPhyProgress().remove(new PhysicalProgress(eaForm.getPhyProgId()));
+					comp.getPhyProgress().remove(new PhysicalProgress(eaForm.getPhisycalProgress().getPhyProgId()));
 				}
 			} else {
 				phyProg.setPid(new Long(System.currentTimeMillis()));
@@ -81,17 +78,17 @@ public class PhysicalProgressAdded extends Action {
 			Collections.sort(temp);
 			comp.setPhyProgress(temp);
 
-			eaForm.getSelectedComponents().remove(new Components(comp.getComponentId()));
-			if (eaForm.getSelectedComponents() == null) {
-				eaForm.setSelectedComponents(new ArrayList());
+			eaForm.getComponents().getSelectedComponents().remove(new Components(comp.getComponentId()));
+			if (eaForm.getComponents().getSelectedComponents() == null) {
+				eaForm.getComponents().setSelectedComponents(new ArrayList());
 			}
-			eaForm.getSelectedComponents().add(comp);
-			temp = (List) eaForm.getSelectedComponents();
+			eaForm.getComponents().getSelectedComponents().add(comp);
+			temp = (List) eaForm.getComponents().getSelectedComponents();
 			Collections.sort(temp);
-			eaForm.setSelectedComponents(temp);
-			eaForm.setSelPhyProg(null);
-			eaForm.setPhyProgId(null);
-			eaForm.setComponentId(null);
+			eaForm.getComponents().setSelectedComponents(temp);
+			eaForm.getPhisycalProgress().setSelPhyProg(null);
+			eaForm.getPhisycalProgress().setPhyProgId(null);
+			eaForm.getComponents().setComponentId(null);
 		}
 
 		return mapping.findForward("forward");

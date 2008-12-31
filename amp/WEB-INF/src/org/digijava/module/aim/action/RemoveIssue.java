@@ -22,15 +22,15 @@ public class RemoveIssue extends Action {
 		
 		EditActivityForm eaForm = (EditActivityForm) form;
 		
-		if (eaForm.getSelIssues() != null && 
-				eaForm.getSelIssues().length > 0) {
-			Long issues[] = eaForm.getSelIssues();
+		if (eaForm.getIssues().getSelIssues() != null && 
+				eaForm.getIssues().getSelIssues().length > 0) {
+			Long issues[] = eaForm.getIssues().getSelIssues();
 			Issues issue = new Issues();
 			for (int i = 0;i < issues.length; i++) {
 				issue.setId(issues[i]);
-				eaForm.getIssues().remove(issue);
+				eaForm.getIssues().getIssues().remove(issue);
 			}
-			eaForm.setSelIssues(null);
+			eaForm.getIssues().setSelIssues(null);
 		}
 		return mapping.findForward("forward");
 	}

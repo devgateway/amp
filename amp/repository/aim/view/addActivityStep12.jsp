@@ -294,8 +294,8 @@ ${fn:replace(message,quote,escapedQuote)}
 																	<tr><td>&nbsp;</td></tr>
 
 																	<tr><td valign="top">
-																<logic:notEmpty name="aimEditActivityForm" property="costs">
-																<bean:define id="costs" name="aimEditActivityForm" property="costs" toScope="request"/>
+																<logic:notEmpty name="aimEditActivityForm" property="costing.costs">
+																<bean:define id="costs" name="aimEditActivityForm" property="costing.costs" toScope="request"/>
 																<bean:define id="mode" value="form" type="java.lang.String" toScope="request"/>
 																<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
                                                       				<digi:trn key="aim:amountsinthousands">Amounts in thousands (000) -</digi:trn>

@@ -29,20 +29,20 @@ public class RemoveActor extends Action {
 		EditActivityForm eaForm = (EditActivityForm) form;
 		
 		
-		if (eaForm.getSelActors() != null && 
-				eaForm.getSelActors().length > 0) {
-			Long actors[] = eaForm.getSelActors();
+		if (eaForm.getIssues().getSelActors() != null && 
+				eaForm.getIssues().getSelActors().length > 0) {
+			Long actors[] = eaForm.getIssues().getSelActors();
 			
-			if (eaForm.getIssueId() != null &&
-					eaForm.getIssueId().longValue() > -1) {
+			if (eaForm.getIssues().getIssueId() != null &&
+					eaForm.getIssues().getIssueId().longValue() > -1) {
 				Issues issue = new Issues();
-				issue.setId(eaForm.getIssueId());
-				int index = eaForm.getIssues().indexOf(issue);
-				issue = (Issues) eaForm.getIssues().get(index);
-				if (eaForm.getMeasureId() != null &&
-						eaForm.getMeasureId().longValue() > -1) {
+				issue.setId(eaForm.getIssues().getIssueId());
+				int index = eaForm.getIssues().getIssues().indexOf(issue);
+				issue = (Issues) eaForm.getIssues().getIssues().get(index);
+				if (eaForm.getIssues().getMeasureId() != null &&
+						eaForm.getIssues().getMeasureId().longValue() > -1) {
 					Measures measure = new Measures();
-					measure.setId(eaForm.getMeasureId());
+					measure.setId(eaForm.getIssues().getMeasureId());
 					int mIndex = issue.getMeasures().indexOf(measure);
 					measure = (Measures) issue.getMeasures().get(mIndex);
 					for (int i = 0;i < actors.length;i ++) {
@@ -52,13 +52,13 @@ public class RemoveActor extends Action {
 					}
 					issue.getMeasures().set(mIndex,measure);
 				}
-				eaForm.getIssues().set(index,issue);
+				eaForm.getIssues().getIssues().set(index,issue);
 				
 				
 
-				eaForm.getIssues().set(index,issue);
+				eaForm.getIssues().getIssues().set(index,issue);
 			}
-			eaForm.setSelMeasures(null);
+			eaForm.getIssues().setSelMeasures(null);
 		}
 		return mapping.findForward("forward");
 	}

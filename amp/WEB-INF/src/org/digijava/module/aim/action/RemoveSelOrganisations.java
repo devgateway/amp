@@ -16,7 +16,7 @@ public class RemoveSelOrganisations extends Action {
 
 		EditActivityForm eaForm = (EditActivityForm) form;
 
-		Long selOrgs[] = eaForm.getSelOrgs();
+		Long selOrgs[] = eaForm.getIdentification().getSelOrgs();
 		if (selOrgs == null) {
 			eaForm.setStep("1");
 			return mapping.findForward("forward");
@@ -47,9 +47,7 @@ public class RemoveSelOrganisations extends Action {
 		}
 		
 		eaForm.getIdentification().setSelectedOrganizations(currOrgs);
-		eaForm.setSelOrgs(null);
-		eaForm.setCols(null);
-		eaForm.setNumResults(0);
+		eaForm.getIdentification().setSelOrgs(null);
 		eaForm.setStep("1");
 		return mapping.findForward("forward");
 	}

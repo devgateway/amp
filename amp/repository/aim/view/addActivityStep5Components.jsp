@@ -28,7 +28,7 @@
 									<tr><td align="left">
 										<table width="100%" cellSpacing=5 cellPadding=0 border=0 class="box-border-nopadding">
 
-										<logic:notEmpty name="aimEditActivityForm" property="selectedComponents">
+											<logic:notEmpty name="aimEditActivityForm" property="components.selectedComponents">
 																	<tr><td>
 																		<b><field:display name="Components Grand Total Commitments" feature="Activity - Component Step">
 																		&nbsp;&nbsp;
@@ -62,18 +62,18 @@
 																		&nbsp;&nbsp;
 
 																		<font
-																		<c:if test="${aimEditActivityForm.funding.totalCommitmentsDouble < aimEditActivityForm.compTotalDisb }">
+																		<c:if test="${aimEditActivityForm.funding.totalCommitmentsDouble < aimEditActivityForm.components.compTotalDisb }">
 																		 color="RED"
 																		</c:if>
 																		>
 																		<digi:trn key="aim:totalComponentActualDisbursement">Component Grand Total Actual Disbursements</digi:trn>=
-																			<%=((org.digijava.module.aim.form.EditActivityForm) pageContext.getAttribute("aimEditActivityForm")).getCompTotalDisb()%>
+																			<%=((org.digijava.module.aim.form.EditActivityForm) pageContext.getAttribute("aimEditActivityForm")).getComponents().getCompTotalDisb()%>
 																	
 																		<c:out value="${aimEditActivityForm.currCode}"/>
 																		</font>
 																		</b></td></tr>
 
-											<logic:iterate name="aimEditActivityForm" property="selectedComponents"
+											<logic:iterate name="aimEditActivityForm" property="components.selectedComponents"
 											id="selComponents" type="org.digijava.module.aim.helper.Components">
 
 												<tr><td align="center">
@@ -81,7 +81,7 @@
 													class="box-border-nopadding">
 														<tr>
 															<td>
-																<logic:iterate id="type" name="aimEditActivityForm" property="allCompsType" type="org.digijava.module.aim.dbentity.AmpComponentType">
+																<logic:iterate id="type" name="aimEditActivityForm" property="components.allCompsType" type="org.digijava.module.aim.dbentity.AmpComponentType">
 																	<b>
 																		<%if (selComponents.getType_Id().longValue()==type.getType_id().longValue()){%>
 																	 		<digi:trn key="aim:type">Type:</digi:trn> <%=type.getName()%>	
@@ -92,7 +92,7 @@
 														</tr>
 														<tr bgcolor="#fffffc">
 															<td vAlign="center" align="left" width="95%">
-																<html:multibox property="selComp">
+																<html:multibox property="components.selComp"  styleId="selComp">
 																	<c:out value="${selComponents.componentId}"/>
 																</html:multibox>
 																
@@ -347,7 +347,8 @@
 										</table>
 										
 									</logic:notEmpty>
-									<logic:empty name="aimEditActivityForm" property="selectedComponents">
+									
+									<logic:empty name="aimEditActivityForm" property="components.selectedComponents">
 									<field:display name="Add Components Button" feature="Activity - Component Step">
 										<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
 											<tr><td>

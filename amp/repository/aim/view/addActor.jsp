@@ -46,9 +46,9 @@
 -->
 </script>
 
-<html:hidden property="issueId" />
-<html:hidden property="measureId" />
-<html:hidden property="actorId" />
+<html:hidden property="issues.issueId" />
+<html:hidden property="issues.measureId" />
+<html:hidden property="issues.actorId" />
 <html:hidden property="funding.event"/>
 <input type="hidden" name="edit" value="true">
 <html:hidden property="editAct"/>
@@ -69,7 +69,7 @@
 										</td>
 										<td valign="top">
 											 <a title="<digi:trn key="aim:actorsForTheMeasures">Actors</digi:trn>">
-												<html:textarea property="actor" styleClass="inp-text" rows="3" cols="60"/>
+												<html:textarea property="issues.actor" styleClass="inp-text" rows="3" cols="60"/>
 											 </a>
 										</td>
 									</tr>
@@ -78,11 +78,11 @@
 											<table cellPadding=5>
 												<tr>
 													<td>
-														<c:if test="${aimEditActivityForm.actorId == -1}">
+														<c:if test="${aimEditActivityForm.issues.actorId == -1}">
 															<input type="submit" value="<digi:trn key='btn:add'>Add</digi:trn>" class="dr-menu">
 														</c:if>
 														
-														<c:if test="${aimEditActivityForm.actorId != -1}">
+														<c:if test="${aimEditActivityForm.issues.actorId != -1}">
 															<input type="submit" value="<digi:trn key='btn:update'>Update</digi:trn>" class="dr-menu">
 														</c:if>
 													</td>

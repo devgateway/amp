@@ -24,7 +24,7 @@ extends Action {
 
 		EditActivityForm eaForm = (EditActivityForm) form;
 		
-		Long selFund[] = eaForm.getSelFundingOrgs();
+		Long selFund[] = eaForm.getFunding().getSelFundingOrgs();
 		Collection prevSelFund = eaForm.getFunding().getFundingOrganizations();
 		Collection newFund = new ArrayList();
 
@@ -47,7 +47,7 @@ extends Action {
 
 		eaForm.getFunding().setFundingOrganizations(newFund);
 		eaForm.setStep("3");
-		eaForm.setSelFundingOrgs(null);
+		eaForm.getFunding().setSelFundingOrgs(null);
 		return mapping.findForward("forward");
 	
 	}

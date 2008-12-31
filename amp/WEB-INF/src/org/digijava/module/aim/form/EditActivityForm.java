@@ -11,16 +11,14 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
+import org.digijava.kernel.dbentity.Country;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
@@ -28,8 +26,11 @@ import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.AmpWoreda;
+import org.digijava.module.aim.dbentity.AmpZone;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.Components;
@@ -39,7 +40,6 @@ import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.MTEFProjection;
 import org.digijava.module.aim.helper.OrgProjectId;
-import org.digijava.module.aim.helper.ReferenceDoc;
 import org.digijava.module.aim.util.CustomFieldsUtil;
 import org.digijava.module.aim.util.Step;
 import org.digijava.module.contentrepository.helper.DocumentData;
@@ -48,3138 +48,77 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 	private HashMap<String, String> errors = new HashMap<String, String>();
 	private HashMap<String, String> messages = new HashMap<String, String>();
-	//used by old add org selector
-	private int item;
 	
-	//identification
 	private Long activityId = null;
-	private String ampId = null;
-	private Boolean budget = true;
-	private AmpTeam team;
-	
-	//regional funding
-	private double regionTotalDisb;
-
-	// Staus
-	private String status = null;
-	private AmpTeamMember createdBy;
-	private AmpTeamMember updatedBy;
-	private AmpTeamMember approvedBy;
-	private String createdDate;
-	private String updatedDate;
-	private Date approvalDate;
-	private Boolean draft;
-	
-	//Flags
-	private boolean govFlag;
-	private boolean teamLead;
+	private String context;
+	private boolean editAct;
+	private String editKey;
+	private boolean reset;
 	private String svAction;
 	private int isPreview = 0;
 	
-	//survey
-	private Long surveyOrgId;
-	private Long activityLevel;
-
-	private Double overallCost = null;
-	private Double overallContribution = null;
-	
-	//related documents
-	private String documentSpace = null;
-	private String condition = null;
-	
-	private Collection financingBreakdown = null;
-	
-
-	// montenegro mission:
-	private Double ipaBudget = null; // EU total contribution
-	private String contractDetails = null;
-	
-	//POPUP ADD PROGRAM
-	private Long selPrograms[];
-	private Long selProgramId;
-	private Long program;
-	private List actPrograms;
-	private Collection programCollection;
-	private Long selectedPrograms[];
-	
-	//LOG FRAME
-	private Double allCosts;
-	
-
-	//PLANNING
-	private String revisedCompDate;
-	private Collection activityCloseDates;
-
-	
-	private String programDescription;
-	private boolean sectorReset;
-
-	//references
-	private List referenceDocs;
-	private Long[] allReferenceDocNameIds;
-
-	//costing
-	private List costs;
-	// to check if the current memeber is Team lead
-
-	public boolean isTeamLead() {
-		return teamLead;
-	}
-
-	public void setTeamLead(boolean teamLead) {
-		this.teamLead = teamLead;
-	}
-
-	// location selector pop-up
-	private Long selLocs[] = null; // location selected from step 2 page to
-	// remove from the locations list
-	// list of locations to be added to
-	// the activity
-	private Collection searchLocs = null; // list of searched locations.
-	private Long searchedLocs[] = null; // locations selected by user to be
-	// added in activity after searching
-
-	private Long selOrgs[] = null;
-	private List selectedOrgs = null; // list of organisations to be added to
-	// the activity
-	private Collection levelCollection = null;
-
-	private String step = null;
-	private String visibleProgram = null;
-	private Long[] selCompSectors;
-	private Collection cols = null;
-	private Collection colsAlpha = null;
-	private Collection orgTypes = null;
-	private boolean reset;
-	private boolean orgPopupReset;
-	// private String implementationLevel = null;
-	private Collection selectedPhysicalProgress;
-	private Long selPhyProg[];
-	private Collection documentList;
-	private Collection documents;
-	private Collection<DocumentData> crDocuments;
-	private Collection managedDocumentList;
-	private long selDocs[];
-	private Collection linksList;
-	private long selLinks[];
-	private String selManagedDocs[];
-	
-	
-	private String contFirstName;
-	private String contLastName;
-	private String email;
-
-	// contact information
-	private String actAthFirstName;
-	private String actAthLastName;
-	private String actAthEmail;
-	private String actAthAgencySource;
-	private String conditions;
-
-	// private Collection selectedComponents;
-	// private Long selComp[];
-
-	// FOR SELECT ORGANIZATION POPUP
-	private Long ampOrgTypeId;
-	private String orgType;
-	private String keyword;
-	private int tempNumResults;
-	private Collection pagedCol;
-	private Integer currentPage;
-	private String currentAlpha;
-	private boolean startAlphaFlag;
-	private Long selOrganisations[]; // list of org selected from
-	private Long prevOrg;
-	private TreeSet selectedOrganisationPaged;
-	private Integer selectedOrganisationFromPages;
-
-	// pop-up organisation selector window
-	private Collection pages;
-	private String[] alphaPages;
-	private int numResults;
-
-	// For view comment popup
-	private String actionFlag = null;
-	private boolean serializeFlag;
-	private boolean commentFlag;
-	private String commentText = null;
-	private Long ampCommentId;
-	private String fieldName;
-	private AmpField field = null;
-
-	private int pagesToShow;
-	private int pagesSize;
-	private int startPage;
-
-	private ArrayList commentsCol = new ArrayList();
-	private HashMap allComments = new HashMap();
-
-	// For activity approval process
-	private String approvalStatus;
 	private String workingTeamLeadFlag;
-
-
-	private Long fundingId;
-	private Long orgId;
+	private boolean teamLead;
 	
-	private Collection currencies;
-	
-	private Long selSectors[] = null; // sectors selected by user to be added
-	// in activity after searching
-
-	private int offset;
-	private long transIndexId;
-	private Long selFundingOrgs[];
-
-	private List programLevels;
-	
-	/* END FINANCIAL EDIT */
-
-	private boolean orgSelReset;
-	// FOR SELECT LOCATION POPUP
-	private String fill; // which among countries,region,zone and woreda need
-	// to
-	// be loaded with data. ie if the value
-
-	// of fill is 'region', load all region data beloning to a particluar
-	// country selected
-	private Integer impLevelValue; // Implementation Level value
-	private String impCountry; // Implementation country
-
-	private Long impRegion; // Implementation region
-	private Long impMultiRegion[]; // Implementation region
-
-	private Long impZone; // Implementation zone
-	private Long impMultiZone[]; // Implementation zone
-
-	private Long impWoreda; // Implementation woreda
-	private Long impMultiWoreda[];
-
-	private Collection countries;
-	private Collection regions;
-	private Collection zones;
-	private Collection woredas;
-	private boolean locationReset;
-	private String country;
-
-	// FOR  SECTOR POPUP
-	private Long sector;
-	private Long subsectorLevel1;
-	private Long subsectorLevel2;
-	private Long sectorScheme;
-	private Collection sectorSchemes;
-	private Collection parentSectors;
-	private Collection childSectorsLevel1;
-	private Collection childSectorsLevel2;
-	private Long selActivitySectors[];
-	private Collection orderedFundingOrganizations;
-
-	// FOR ADD PHYSICAL PROGRESS POPUP
-	private boolean phyProgReset;
-	private String phyProgTitle;
-	private String phyProgDesc;
-	private String phyProgRepDate;
-	private Long phyProgId;
-
-	// FOR ADD DOCUMENT POPUP
-	private FormFile docFile;
-	private String docWebResource;
-	private String docTitle;
-	private String docDescription;
-	private String docDate;
-	private String docFileOrLink;
-	private boolean docReset;
-	private boolean showInHomePage;
-	private int pageId;
-	private boolean editAct;
-	
-	private Long docType;
-	private Long docLang;
-	private String docComment;
-
-	// FOR ADD COMPONENTS
-	private ArrayList<AmpComponentType> allCompsType;
-	private Long selectedType;
-	private String newCompoenentName;
-	private Collection allComps;
-	private boolean componentReset;
-	private String componentTitle;
-	private String componentDesc;
-	private String componentAmount;
-	// //////////////////
-
-	private double compTotalDisb;
-	private String currencyCode;
-	private String componentRepDate;
-	private Long componentId;
-	private Collection<Components<FundingDetail>> selectedComponents;
-	private Long[] selComp;
-	private String author;
-	private String context;
-	private Collection regionalFundings;
-	private Long[] selRegFundings;
-	private Collection fundingRegions;
-	private Long fundingRegionId;
-
-	private ArrayList issues;
-	private Long[] selIssues;
-	private String issue;
-	private String issueDate;
-	private Long[] selMeasures;
-	private String measure;
-	private Long issueId;
-	private Long measureId;
-	private Long[] selActors;
-	private String actor;
-	private Long actorId;
-
-	private String editKey;
-
-	private String currCode;
-
-	private Long fundDonor;
-
-
-
-	/* Categories */
-	private Long acChapter = new Long(0);
-
-	private Collection searchedSectors = null; // list of searched Sectors.
-
-	/*
-	 * Tanzania ADDS
-	 */
-	private String FY;
-	private String vote;
-	private String subVote;
-	private String subProgram;
-	private String projectCode;
-	private Long gbsSbs;
-
-	private boolean defaultCountryIsSet;
-	// program settings
-
-	private int programType;
-	private Long[] selectedNPOPrograms;
-	private Long[] selectedPPrograms;
-	private Long[] selectedSPrograms;
-
-	
-	//*** Recovery Save
+	private List steps;
 	private String stepText[];
 	private Boolean stepFailure[];
 	private String stepFailureText[];
+	private String step = null;
+	private int pageId;
 	
-	private List contracts;
-	private Integer selContractId;
-	private Long creditTypeId;
-	private String convenioNumcont;
-	private String clasiNPD;
-
-	private List steps;
-
-	private Boolean wasDraft;
-	
+	private String currCode;
+	private Collection currencies;
+	private boolean serializeFlag;
 	private List<CustomField<?>> customFields;
 	private List<CustomFieldStep> customFieldsSteps;
-
-	public Boolean getWasDraft() {
-		return wasDraft;
-	}
-
-	public void setWasDraft(Boolean wasDraft) {
-		this.wasDraft = wasDraft;
-	}
-
-	public List getSteps() {
-		return steps;
-	}
-
-	public void setSteps(List steps) {
-		this.steps = steps;
-	}
-
-	public int getStepNumberOnPage() {
-		int stepNumberOnPage = 0;
-		if (steps != null) {
-			Iterator<Step> iter = steps.iterator();
-			while (iter.hasNext()) {
-				Step stp = iter.next();
-				if (stp.getStepNumber().equals(step)) {
-					return stp.getStepActualNumber();
-				}
-			}
-		}
-		return stepNumberOnPage;
-
-	}
-
-	public Integer getSelContractId() {
-		return selContractId;
-	}
-
-	public void setSelContractId(Integer selContractId) {
-		this.selContractId = selContractId;
-	}
-
-	public List getContracts() {
-		return contracts;
-	}
-
-	public void setContracts(List contracts) {
-		this.contracts = contracts;
-	}
-
-	public Collection getSearchedSectors() {
-		return searchedSectors;
-	}
-
-	public void setSearchedSectors(Collection searchedSectors) {
-		this.searchedSectors = searchedSectors;
-	}
-
-	public Long getAcChapter() {
-		return acChapter;
-	}
-
-	public void setAcChapter(Long acChapter) {
-		this.acChapter = acChapter;
-	}
-
-	public EditActivityForm() {
-		step = "1";
-		reset = false;
-		editAct = false;
-		orgPopupReset = true;
-		tempNumResults = 0;
-		pageId = 0;
-		docWebResource = "http://";
-		editKey = "";
-		fundingRegionId = new Long(-1);
-		keyword = null;
+	
+	
+	public class Contracts {
+		private List contracts;
+		private Double ipaBudget = null;
+		private Integer selContractId;
+		private String contractDetails = null;
 		
-    	customFields = CustomFieldsUtil.getCustomFields();
-    	customFieldsSteps = CustomFieldsUtil.getCustomFieldsSteps();
-	}
-
-
-	public void reset(ActionMapping mapping, HttpServletRequest request) {
-	if (reset) {
-			this.identification=null;
-			this.planning=null;
-			this.location=null;
-			this.sectors=null;
-			this.components=null;
-			this.program=null;
-			this.getPrograms().setNationalPlanObjectivePrograms(null);
-			this.getPrograms().setPrimaryPrograms(null);
-			this.getPrograms().setSecondaryPrograms(null);
-			this.crossIssues=null;
-			this.funding=null;
-			this.survey=null;
-			this.contactInfo=null;
-			this.agencies=null;
-			this.indicatorME=null;
-			
-			contractDetails = null;
-			fundDonor = null;
-			createdDate = null;
-			activityId = null;
-			ampId = null;
-			documentSpace = null;
-			condition = null;
-			status = null;
-			program = null;
-			selLocs = null;
-			selOrgs = null;
-			selectedOrgs = null;
-			levelCollection = null;
-			programCollection = null;
-			step = "1";
-			selSectors = null;
-			cols = null;
-			colsAlpha = null;
-			orgTypes = null;
-			selectedPhysicalProgress = null;
-			componentDesc = null;
-			selPhyProg = null;
-			documentList = null;
-			managedDocumentList = null;
-			selDocs = null;
-			linksList = null;
-			selLinks = null;
-			selManagedDocs = null;
-			pages = null;
-			alphaPages = null;
-			fundingId = null;
-			orgId = null;
-			currencies = null;
-			offset = 0;
-			selFundingOrgs = null;
-			reset = false;
-			editAct = false;
-			currentPage = new Integer(0);
-			currentAlpha = null;
-			contFirstName = null;
-			contLastName = null;
-			email = null;
-			conditions = null;
-			selectedComponents = null;
-			componentId = null;
-			selComp = null;
-			programDescription = null;
-			revisedCompDate = null;
-			activityCloseDates = null;
-			author = null;
-			actAthEmail = null;
-			actAthFirstName = null;
-			actAthAgencySource = null;
-			actAthLastName = null;
-			regionalFundings = null;
-			issues = null;
-			editKey = "";
-			regionalFundings = null;
-			costs = null;
-			docType = null;
-			docLang = null;
-			documents = null;
-			overallCost = null;
-			overallContribution = null;
-			allComments = null;
-			financingBreakdown = null;
-			visibleProgram = null;
-			fundingRegions = null;
-			allReferenceDocNameIds = null;
-			referenceDocs = null;
-			budget = false;
-			acChapter = new Long(0);
-			selectedSPrograms = null;
-			selectedPPrograms = null;
-			selectedNPOPrograms = null;
-			contracts = null;
-			selContractId = null;
-			steps = null;
-			FY = null;
-			vote = null;
-			subVote = null;
-			subProgram = null;
-			projectCode = null;
-			gbsSbs = null;	
-			
-			if(this.customFields!=null && this.customFields.size()>0){
-				Iterator<CustomField<?>> itcf = this.customFields.iterator();
-		        while(itcf.hasNext()){
-		        	CustomField<?> cf = itcf.next();
-	        		cf.setValue(null);
-		        }
-			}	        
-	        
+		public String getContractDetails() {
+			return contractDetails;
 		}
 
-		if (orgSelReset) {
-			pagedCol = null;
-			selOrganisations = null;
-			keyword = null;
-			setOrgType("");
-			setAmpOrgTypeId(null);
+		public void setContractDetails(String contractDetails) {
+			this.contractDetails = contractDetails;
 		}
 
-		
-		if (locationReset) {
-			fill = "country";
-			impLevelValue = new Integer(0);
-			impCountry = "";
-			impRegion = new Long(-1);
-			impZone = new Long(-1);
-			impWoreda = new Long(-1);
-			regions = null;
-			zones = null;
-			woredas = null;
+		public List getContracts() {
+			return contracts;
 		}
 
-		if (phyProgReset) {
-			phyProgTitle = null;
-			phyProgDesc = null;
-			phyProgRepDate = null;
-			phyProgId = null;
+		public Integer getSelContractId() {
+			return selContractId;
 		}
 
-		if (docReset) {
-			docFile = null;
-			docWebResource = null;
-			docTitle = null;
-			docDescription = null;
-			showInHomePage = false;
-			docComment = null;
-			docDate = null;
-			docType = null;
-			docLang = null;
+		public void setSelContractId(Integer selContractId) {
+			this.selContractId = selContractId;
 		}
-		if (componentReset) {
-			componentTitle = null;
-			componentDesc = null;
-			componentAmount = null;
-			currencyCode = null;
-			componentRepDate = null;
+
+		public void setContracts(List contracts) {
+			this.contracts = contracts;
 		}
-		if (request.getParameter("budgetCheckbox") != null) {
-			budget = false;
+
+		public Double getIpaBudget() {
+			return ipaBudget;
+		}
+
+		public void setIpaBudget(Double ipaBudget) {
+			this.ipaBudget = ipaBudget;
 		}
 	}
 
-	public OrgProjectId getSelectedOrgs(int index) {
-		int currentSize = selectedOrgs.size();
-		if (index >= currentSize) {
-			for (int i = 0; i <= index - currentSize; i++) {
-				selectedOrgs.add(new OrgProjectId());
-			}
-		}
-		return (OrgProjectId) selectedOrgs.get(index);
-	}
-
-	/**
-	 * @return Returns the ampId.
-	 */
-	public String getAmpId() {
-		return ampId;
-	}
-
-	/**
-	 * @param ampId
-	 *            The ampId to set.
-	 */
-	public void setAmpId(String ampId) {
-		this.ampId = ampId;
-	}
-
-	
-	/**
-	 * @return Returns the cols.
-	 */
-	public Collection getCols() {
-		return cols;
-	}
-
-	/**
-	 * @param cols
-	 *            The cols to set.
-	 */
-	public void setCols(Collection cols) {
-		this.cols = cols;
-	}
-
-	/**
-	 * @return Returns the colsAlpha.
-	 */
-	public Collection getColsAlpha() {
-		return colsAlpha;
-	}
-
-	/**
-	 * @param colsAlpha
-	 *            The colsAlpha to set.
-	 */
-	public void setColsAlpha(Collection colsAlpha) {
-		this.colsAlpha = colsAlpha;
-	}
-
-	/**
-	 * @return Returns the condition.
-	 */
-	public String getCondition() {
-		return condition;
-	}
-
-	/**
-	 * @param condition
-	 *            The condition to set.
-	 */
-	public void setCondition(String condition) {
-		this.condition = condition;
-	}
-
-	/**
-	 * @return Returns the countries.
-	 */
-	public Collection getCountries() {
-		return countries;
-	}
-
-	/**
-	 * @param countries
-	 *            The countries to set.
-	 */
-	public void setCountries(Collection countries) {
-		this.countries = countries;
-	}
-
-
-	/**
-	 * @return Returns the currencies.
-	 */
-	public Collection getCurrencies() {
-		return currencies;
-	}
-
-	/**
-	 * @param currencies
-	 *            The currencies to set.
-	 */
-	public void setCurrencies(Collection currencies) {
-		this.currencies = currencies;
-	}
-
-	
-
-	/**
-	 * @return Returns the fill.
-	 */
-	public String getFill() {
-		return fill;
-	}
-
-	/**
-	 * @param fill
-	 *            The fill to set.
-	 */
-	public void setFill(String fill) {
-		this.fill = fill;
-	}
-
-	
-	
-	/**
-	 * @return Returns the impCountry.
-	 */
-	public String getImpCountry() {
-		return impCountry;
-	}
-
-	/**
-	 * @param impCountry
-	 *            The impCountry to set.
-	 */
-	public void setImpCountry(String impCountry) {
-		this.impCountry = impCountry;
-	}
-
-	/**
-	 * @return Returns the impLevelValue.
-	 */
-	public Integer getImpLevelValue() {
-		return impLevelValue;
-	}
-
-	/**
-	 * @param impLevelValue
-	 *            The impLevelValue to set.
-	 */
-	public void setImpLevelValue(Integer impLevelValue) {
-		this.impLevelValue = impLevelValue;
-	}
-
-	/**
-	 * @return Returns the impRegion.
-	 */
-	public Long getImpRegion() {
-		return impRegion;
-	}
-
-	/**
-	 * @param impRegion
-	 *            The impRegion to set.
-	 */
-	public void setImpRegion(Long impRegion) {
-		this.impRegion = impRegion;
-	}
-
-	/**
-	 * @return Returns the impWoreda.
-	 */
-	public Long getImpWoreda() {
-		return impWoreda;
-	}
-
-	/**
-	 * @param impWoreda
-	 *            The impWoreda to set.
-	 */
-	public void setImpWoreda(Long impWoreda) {
-		this.impWoreda = impWoreda;
-	}
-
-	/**
-	 * @return Returns the impZone.
-	 */
-	public Long getImpZone() {
-		return impZone;
-	}
-
-	/**
-	 * @param impZone
-	 *            The impZone to set.
-	 */
-	public void setImpZone(Long impZone) {
-		this.impZone = impZone;
-	}
-
-	/**
-	 * @return Returns the keyword.
-	 */
-	public String getKeyword() {
-		return keyword;
-	}
-
-	/**
-	 * @param keyword
-	 *            The keyword to set.
-	 */
-	public void setKeyword(String keyword) {
-		this.keyword = keyword;
-	}
-
-	/**
-	 * @return Returns the levelCollection.
-	 */
-	public Collection getLevelCollection() {
-		return levelCollection;
-	}
-
-	/**
-	 * @param levelCollection
-	 *            The levelCollection to set.
-	 */
-	public void setLevelCollection(Collection levelCollection) {
-		this.levelCollection = levelCollection;
-	}
-
-	/**
-	 * @return Returns the locationReset.
-	 */
-	public boolean isLocationReset() {
-		return locationReset;
-	}
-
-	/**
-	 * @param locationReset
-	 *            The locationReset to set.
-	 */
-	public void setLocationReset(boolean locationReset) {
-		this.locationReset = locationReset;
-	}
-
-
-	/**
-	 * @return Returns the orgId.
-	 */
-	public Long getOrgId() {
-		return orgId;
-	}
-
-	/**
-	 * @param orgId
-	 *            The orgId to set.
-	 */
-	public void setOrgId(Long orgId) {
-		this.orgId = orgId;
-	}
-
-	
-	/**
-	 * @return Returns the orgPopupReset.
-	 */
-	public boolean isOrgPopupReset() {
-		return orgPopupReset;
-	}
-
-	/**
-	 * @param orgPopupReset
-	 *            The orgPopupReset to set.
-	 */
-	public void setOrgPopupReset(boolean orgPopupReset) {
-		this.orgPopupReset = orgPopupReset;
-	}
-
-	/**
-	 * @return Returns the orgSelReset.
-	 */
-	public boolean isOrgSelReset() {
-		return orgSelReset;
-	}
-
-	/**
-	 * @param orgSelReset
-	 *            The orgSelReset to set.
-	 */
-	public void setOrgSelReset(boolean orgSelReset) {
-		this.orgSelReset = orgSelReset;
-	}
-
-	/**
-	 * @return Returns the orgType.
-	 */
-	public String getOrgType() {
-		return orgType;
-	}
-
-	/**
-	 * @param orgType
-	 *            The orgType to set.
-	 */
-	public void setOrgType(String orgType) {
-		this.orgType = orgType;
-	}
-
-	/**
-	 * @return Returns the pagedCol.
-	 */
-	public Collection getPagedCol() {
-		return pagedCol;
-	}
-
-	/**
-	 * @param pagedCol
-	 *            The pagedCol to set.
-	 */
-	public void setPagedCol(Collection pagedCol) {
-		this.pagedCol = pagedCol;
-	}
-
-	/**
-	 * @return Returns the pages.
-	 */
-	public Collection getPages() {
-		return pages;
-	}
-
-	/**
-	 * @param alphaPages
-	 *            The alphaPages to set.
-	 */
-	public void setAlphaPages(String[] pages) {
-		this.alphaPages = pages;
-	}
-
-	/**
-	 * @return Returns the alphaPages.
-	 */
-	public String[] getAlphaPages() {
-		return alphaPages;
-	}
-
-	/**
-	 * @param pages
-	 *            The pages to set.
-	 */
-	public void setPages(Collection pages) {
-		this.pages = pages;
-		if (pages != null) {
-			this.pagesSize = pages.size();
-		}
-	}
-
-	/**
-	 * @return Returns the parentSectors.
-	 */
-	/**
-	 * @param parentSectors
-	 *            The parentSectors to set.
-	 */
-	/**
-	 * @return Returns the regions.
-	 */
-	public Collection getRegions() {
-		return regions;
-	}
-
-	/**
-	 * @param regions
-	 *            The regions to set.
-	 */
-	public void setRegions(Collection regions) {
-		this.regions = regions;
-	}
-
-	/**
-	 * @return Returns the reset.
-	 */
-	public boolean isReset() {
-		return reset;
-	}
-
-	/**
-	 * @param reset
-	 *            The reset to set.
-	 */
-	public void setReset(boolean reset) {
-		this.reset = reset;
-	}
-
-	/**
-	 * @return Returns the selectedOrgs.
-	 */
-	public List getSelectedOrgs() {
-		return selectedOrgs;
-	}
-
-	/**
-	 * @param selectedOrgs
-	 *            The selectedOrgs to set.
-	 */
-	public void setSelectedOrgs(List selectedOrgs) {
-		this.selectedOrgs = selectedOrgs;
-	}
-
-	/**
-	 * @return Returns the selLocs.
-	 */
-	public Long[] getSelLocs() {
-		return selLocs;
-	}
-
-	/**
-	 * @param selLocs
-	 *            The selLocs to set.
-	 */
-	public void setSelLocs(Long[] selLocs) {
-		this.selLocs = selLocs;
-	}
-
-	/**
-	 * @return Returns the selOrganisations.
-	 */
-	public Long[] getSelOrganisations() {
-		return selOrganisations;
-	}
-
-	/**
-	 * @param selOrganisations
-	 *            The selOrganisations to set.
-	 */
-	public void setSelOrganisations(Long[] selOrganisations) {
-		this.selOrganisations = selOrganisations;
-	}
-
-	/**
-	 * @return Returns the selOrgs.
-	 */
-	public Long[] getSelOrgs() {
-		return selOrgs;
-	}
-
-	/**
-	 * @param selOrgs
-	 *            The selOrgs to set.
-	 */
-	public void setSelOrgs(Long[] selOrgs) {
-		this.selOrgs = selOrgs;
-	}
-
-	
-	
-
-	/**
-	 * @return Returns the step.
-	 */
-	public String getStep() {
-		return step;
-	}
-
-	/**
-	 * @param step
-	 *            The step to set.
-	 */
-	public void setStep(String step) {
-		this.step = step;
-	}
-
-	/**
-	 * @return Returns the tempNumResults.
-	 */
-	public int getTempNumResults() {
-		return tempNumResults;
-	}
-
-	/**
-	 * @param tempNumResults
-	 *            The tempNumResults to set.
-	 */
-	public void setTempNumResults(int tempNumResults) {
-		this.tempNumResults = tempNumResults;
-	}
-
-	/**
-	 * @return Returns the woredas.
-	 */
-	public Collection getWoredas() {
-		return woredas;
-	}
-
-	/**
-	 * @param woredas
-	 *            The woredas to set.
-	 */
-	public void setWoredas(Collection woredas) {
-		this.woredas = woredas;
-	}
-
-	/**
-	 * @return Returns the zones.
-	 */
-	public Collection getZones() {
-		return zones;
-	}
-
-	/**
-	 * @param zones
-	 *            The zones to set.
-	 */
-	public void setZones(Collection zones) {
-		this.zones = zones;
-	}
-
-
-	public int getOffset() {
-		return offset;
-	}
-
-	public void setOffset(int offset) {
-		this.offset = offset;
-	}
-
-	public Long[] getSelFundingOrgs() {
-		return selFundingOrgs;
-	}
-
-	public void setSelFundingOrgs(Long[] selFundingOrgs) {
-		this.selFundingOrgs = selFundingOrgs;
-	}
-
-	/**
-	 * @return Returns the phyProgDesc.
-	 */
-	public String getPhyProgDesc() {
-		return phyProgDesc;
-	}
-
-	/**
-	 * @param phyProgDesc
-	 *            The phyProgDesc to set.
-	 */
-	public void setPhyProgDesc(String phyProgDesc) {
-		this.phyProgDesc = phyProgDesc;
-	}
-
-	/**
-	 * @return Returns the phyProgRepDate.
-	 */
-	public String getPhyProgRepDate() {
-		return phyProgRepDate;
-	}
-
-	/**
-	 * @param phyProgRepDate
-	 *            The phyProgRepDate to set.
-	 */
-	public void setPhyProgRepDate(String phyProgRepDate) {
-		this.phyProgRepDate = phyProgRepDate;
-	}
-
-	/**
-	 * @return Returns the phyProgReset.
-	 */
-	public boolean isPhyProgReset() {
-		return phyProgReset;
-	}
-
-	/**
-	 * @param phyProgReset
-	 *            The phyProgReset to set.
-	 */
-	public void setPhyProgReset(boolean phyProgReset) {
-		this.phyProgReset = phyProgReset;
-	}
-
-	/**
-	 * @return Returns the phyProgTitle.
-	 */
-	public String getPhyProgTitle() {
-		return phyProgTitle;
-	}
-
-	/**
-	 * @param phyProgTitle
-	 *            The phyProgTitle to set.
-	 */
-	public void setPhyProgTitle(String phyProgTitle) {
-		this.phyProgTitle = phyProgTitle;
-	}
-
-	/**
-	 * @return Returns the selectedPhysicalProgress.
-	 */
-	public Collection getSelectedPhysicalProgress() {
-		return selectedPhysicalProgress;
-	}
-
-	/**
-	 * @param selectedPhysicalProgress
-	 *            The selectedPhysicalProgress to set.
-	 */
-	public void setSelectedPhysicalProgress(Collection selectedPhysicalProgress) {
-		this.selectedPhysicalProgress = selectedPhysicalProgress;
-	}
-
-	/**
-	 * @return Returns the selPhyProg.
-	 */
-	public Long[] getSelPhyProg() {
-		return selPhyProg;
-	}
-
-	/**
-	 * @param selPhyProg
-	 *            The selPhyProg to set.
-	 */
-	public void setSelPhyProg(Long[] selPhyProg) {
-		this.selPhyProg = selPhyProg;
-	}
-
-	/**
-	 * @return Returns the docDescription.
-	 */
-	public String getDocDescription() {
-		return docDescription;
-	}
-
-	/**
-	 * @param docDescription
-	 *            The docDescription to set.
-	 */
-	public void setDocDescription(String docDescription) {
-		this.docDescription = docDescription;
-	}
-
-	/**
-	 * @return Returns the docFile.
-	 */
-	public FormFile getDocFile() {
-		return docFile;
-	}
-
-	/**
-	 * @param docFile
-	 *            The docFile to set.
-	 */
-	public void setDocFile(FormFile docFile) {
-		this.docFile = docFile;
-	}
-
-	/**
-	 * @return Returns the docFileOrLink.
-	 */
-	public String getDocFileOrLink() {
-		return docFileOrLink;
-	}
-
-	/**
-	 * @param docFileOrLink
-	 *            The docFileOrLink to set.
-	 */
-	public void setDocFileOrLink(String docFileOrLink) {
-		this.docFileOrLink = docFileOrLink;
-	}
-
-	/**
-	 * @return Returns the docReset.
-	 */
-	public boolean getDocReset() {
-		return docReset;
-	}
-
-	/**
-	 * @param docReset
-	 *            The docReset to set.
-	 */
-	public void setDocReset(boolean docReset) {
-		this.docReset = docReset;
-	}
-
-	/**
-	 * @return Returns the docTitle.
-	 */
-	public String getDocTitle() {
-		return docTitle;
-	}
-
-	/**
-	 * @param docTitle
-	 *            The docTitle to set.
-	 */
-	public void setDocTitle(String docTitle) {
-		this.docTitle = docTitle;
-	}
-
-	/**
-	 * @return Returns the docWebResource.
-	 */
-	public String getDocWebResource() {
-		return docWebResource;
-	}
-
-	/**
-	 * @param docWebResource
-	 *            The docWebResource to set.
-	 */
-	public void setDocWebResource(String docWebResource) {
-		this.docWebResource = docWebResource;
-	}
-
-	/**
-	 * @return Returns the documentList.
-	 */
-	public Collection getDocumentList() {
-		return documentList;
-	}
-
-	/**
-	 * @param documentList
-	 *            The documentList to set.
-	 */
-	public void setDocumentList(Collection documentList) {
-		this.documentList = documentList;
-	}
-
-	/**
-	 * @return Returns the linksList.
-	 */
-	public Collection getLinksList() {
-		return linksList;
-	}
-
-	/**
-	 * @param linksList
-	 *            The linksList to set.
-	 */
-	public void setLinksList(Collection linksList) {
-		this.linksList = linksList;
-	}
-
-	/**
-	 * @return Returns the selDocs.
-	 */
-	public long[] getSelDocs() {
-		return selDocs;
-	}
-
-	/**
-	 * @param selDocs
-	 *            The selDocs to set.
-	 */
-	public void setSelDocs(long[] selDocs) {
-		this.selDocs = selDocs;
-	}
-
-	/**
-	 * @return Returns the selLinks.
-	 */
-	public long[] getSelLinks() {
-		return selLinks;
-	}
-
-	/**
-	 * @param selLinks
-	 *            The selLinks to set.
-	 */
-	public void setSelLinks(long[] selLinks) {
-		this.selLinks = selLinks;
-	}
-
-	/**
-	 * @return Returns the pageId.
-	 */
-	public int getPageId() {
-		return pageId;
-	}
-
-	/**
-	 * @param pageId
-	 *            The pageId to set.
-	 */
-	public void setPageId(int pageId) {
-		this.pageId = pageId;
-	}
-
-	/**
-	 * @return Returns the activityId.
-	 */
-	public Long getActivityId() {
-		return activityId;
-	}
-
-	/**
-	 * @param activityId
-	 *            The activityId to set.
-	 */
-	public void setActivityId(Long activityId) {
-		this.activityId = activityId;
-	}
-
-	/**
-	 * @return Returns the editAct.
-	 */
-	public boolean isEditAct() {
-		return editAct;
-	}
-
-	/**
-	 * @param edit
-	 *            The editAct to set.
-	 */
-	public void setEditAct(boolean edit) {
-		this.editAct = edit;
-	}
-
-	/**
-	 * @return Returns the country.
-	 */
-	public String getCountry() {
-		return country;
-	}
-
-	/**
-	 * @param country
-	 *            The country to set.
-	 */
-	public void setCountry(String country) {
-		this.country = country;
-	}
-
-	/**
-	 * @return Returns the currentPage.
-	 */
-	public Integer getCurrentPage() {
-		return currentPage;
-	}
-
-	/**
-	 * @param currentPage
-	 *            The currentPage to set.
-	 */
-	public void setCurrentPage(Integer currentPage) {
-		this.currentPage = currentPage;
-	}
-
-	/**
-	 * @return Returns the currentAlpha.
-	 */
-	public String getCurrentAlpha() {
-		return currentAlpha;
-	}
-
-	/**
-	 * @param currentAlpha
-	 *            The currentAlpha to set.
-	 */
-	public void setCurrentAlpha(String currentAlpha) {
-		this.currentAlpha = currentAlpha;
-	}
-
-	/**
-	 * @return Returns the phyProgId.
-	 */
-	public Long getPhyProgId() {
-		return phyProgId;
-	}
-
-	/**
-	 * @param phyProgId
-	 *            The phyProgId to set.
-	 */
-	public void setPhyProgId(Long phyProgId) {
-		this.phyProgId = phyProgId;
-	}
-
-	/**
-	 * @return Returns the conditions.
-	 */
-	public String getConditions() {
-		return conditions;
-	}
-
-	/**
-	 * @param conditions
-	 *            The conditions to set.
-	 */
-	public void setConditions(String conditions) {
-		this.conditions = conditions;
-	}
-
-	
-
-	/**
-	 * @return Returns the email.
-	 */
-	public String getEmail() {
-		return email;
-	}
-
-	/**
-	 * @param email
-	 *            The email to set.
-	 */
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	/**
-	 * @return Returns the selComp.
-	 */
-	public Long[] getSelComp() {
-		return selComp;
-	}
-
-	/**
-	 * @param selComp
-	 *            The selComp to set.
-	 */
-	public void setSelComp(Long[] selComp) {
-		this.selComp = selComp;
-	}
-
-	/**
-	 * @return Returns the selectedComponents.
-	 */
-	public Collection<Components<FundingDetail>> getSelectedComponents() {
-		return selectedComponents;
-	}
-
-	/**
-	 * @param selectedComponents
-	 *            The selectedComponents to set.
-	 */
-	public void setSelectedComponents(Collection<Components<FundingDetail>> selectedComponents) {
-		this.selectedComponents = selectedComponents;
-	}
-
-	/**
-	 * @return Returns the componentAmount.
-	 */
-	public String getComponentAmount() {
-		return componentAmount;
-	}
-
-	/**
-	 * @param componentAmount
-	 *            The componentAmount to set.
-	 */
-	public void setComponentAmount(String componentAmount) {
-		this.componentAmount = componentAmount;
-	}
-
-	/**
-	 * @return Returns the componentDesc.
-	 */
-	public String getComponentDesc() {
-		return componentDesc;
-	}
-
-	/**
-	 * @param componentDesc
-	 *            The componentDesc to set.
-	 */
-	public void setComponentDesc(String componentDesc) {
-		this.componentDesc = componentDesc;
-	}
-
-	/**
-	 * @return Returns the componentRepDate.
-	 */
-	public String getComponentRepDate() {
-		return componentRepDate;
-	}
-
-	/**
-	 * @param componentRepDate
-	 *            The componentRepDate to set.
-	 */
-	public void setComponentRepDate(String componentRepDate) {
-		this.componentRepDate = componentRepDate;
-	}
-
-	/**
-	 * @return Returns the componentReset.
-	 */
-	public boolean isComponentReset() {
-		return componentReset;
-	}
-
-	/**
-	 * @param componentReset
-	 *            The componentReset to set.
-	 */
-	public void setComponentReset(boolean componentReset) {
-		this.componentReset = componentReset;
-	}
-
-	/**
-	 * @return Returns the componentTitle.
-	 */
-	public String getComponentTitle() {
-		return componentTitle;
-	}
-
-	/**
-	 * @param componentTitle
-	 *            The componentTitle to set.
-	 */
-	public void setComponentTitle(String componentTitle) {
-		this.componentTitle = componentTitle;
-	}
-
-	/**
-	 * @return Returns the currencyCode.
-	 */
-	public String getCurrencyCode() {
-		return currencyCode;
-	}
-
-	/**
-	 * @param currencyCode
-	 *            The currencyCode to set.
-	 */
-	public void setCurrencyCode(String currencyCode) {
-		this.currencyCode = currencyCode;
-	}
-
-	/**
-	 * @return Returns the componentId.
-	 */
-	public Long getComponentId() {
-		return componentId;
-	}
-
-	/**
-	 * @param componentId
-	 *            The componentId to set.
-	 */
-	public void setComponentId(Long componentId) {
-		this.componentId = componentId;
-	}
-
-	/**
-	 * @return Returns the impMultiRegion.
-	 */
-	public Long[] getImpMultiRegion() {
-		return impMultiRegion;
-	}
-
-	/**
-	 * @param impMultiRegion
-	 *            The impMultiRegion to set.
-	 */
-	public void setImpMultiRegion(Long[] impMultiRegion) {
-		this.impMultiRegion = impMultiRegion;
-	}
-
-	/**
-	 * @return Returns the impMultiZone.
-	 */
-	public Long[] getImpMultiZone() {
-		return impMultiZone;
-	}
-
-	/**
-	 * @param impMultiZone
-	 *            The impMultiZone to set.
-	 */
-	public void setImpMultiZone(Long[] impMultiZone) {
-		this.impMultiZone = impMultiZone;
-	}
-
-	/**
-	 * @return Returns the impMultiWoreda.
-	 */
-	public Long[] getImpMultiWoreda() {
-		return impMultiWoreda;
-	}
-
-	/**
-	 * @param impMultiWoreda
-	 *            The impMultiWoreda to set.
-	 */
-	public void setImpMultiWoreda(Long[] impMultiWoreda) {
-		this.impMultiWoreda = impMultiWoreda;
-	}
-
-	/**
-	 * @return Returns the transIndexId.
-	 */
-	public long getTransIndexId() {
-		return transIndexId;
-	}
-
-	/**
-	 * @param transIndexId
-	 *            The transIndexId to set.
-	 */
-	public void setTransIndexId(long transIndexId) {
-		this.transIndexId = transIndexId;
-	}
-
-	
-	/**
-	 * @return Returns the activityCloseDates.
-	 */
-	public Collection getActivityCloseDates() {
-		return activityCloseDates;
-	}
-
-	/**
-	 * @param activityCloseDates
-	 *            The activityCloseDates to set.
-	 */
-	public void setActivityCloseDates(Collection activityCloseDates) {
-		this.activityCloseDates = activityCloseDates;
-	}
-
-	/**
-	 * @return Returns the program.
-	 */
-	public Long getProgram() {
-		return program;
-	}
-
-	/**
-	 * @param program
-	 *            The program to set.
-	 */
-	public void setProgram(Long program) {
-		this.program = program;
-	}
-
-	/**
-	 * @return Returns the programCollection.
-	 */
-	public Collection getProgramCollection() {
-		return programCollection;
-	}
-
-	/**
-	 * @param programCollection
-	 *            The programCollection to set.
-	 */
-	public void setProgramCollection(Collection programCollection) {
-		this.programCollection = programCollection;
-	}
-
-	/**
-	 * @return Returns the contFirstName.
-	 */
-	public String getContFirstName() {
-		return contFirstName;
-	}
-
-	/**
-	 * @param contFirstName
-	 *            The contFirstName to set.
-	 */
-	public void setContFirstName(String contFirstName) {
-		this.contFirstName = contFirstName;
-	}
-
-	/**
-	 * @return Returns the contLastName.
-	 */
-	public String getContLastName() {
-		return contLastName;
-	}
-
-	/**
-	 * @param contLastName
-	 *            The contLastName to set.
-	 */
-	public void setContLastName(String contLastName) {
-		this.contLastName = contLastName;
-	}
-
-	/**
-	 * @return Returns the revisedCompDate.
-	 */
-	public String getRevisedCompDate() {
-		return revisedCompDate;
-	}
-
-	/**
-	 * @param revisedCompDate
-	 *            The revisedCompDate to set.
-	 */
-	public void setRevisedCompDate(String revisedCompDate) {
-		this.revisedCompDate = revisedCompDate;
-	}
-
-	/**
-	 * @return Returns the searchLocs.
-	 */
-	public Collection getSearchLocs() {
-		return searchLocs;
-	}
-
-	/**
-	 * @param searchLocs
-	 *            The searchLocs to set.
-	 */
-	public void setSearchLocs(Collection searchLocs) {
-		this.searchLocs = searchLocs;
-	}
-
-	/**
-	 * @param ampOrgTypeId
-	 *            The ampOrgTypeId to set.
-	 */
-	public void setAmpOrgTypeId(Long ampOrgTypeId) {
-		this.ampOrgTypeId = ampOrgTypeId;
-	}
-
-	/**
-	 * @return Returns the ampOrgTypeId.
-	 */
-	public Long getAmpOrgTypeId() {
-		return ampOrgTypeId;
-	}
-
-	/**
-	 * @return Returns the startAlphaFlag.
-	 */
-	public boolean getStartAlphaFlag() {
-		return startAlphaFlag;
-	}
-
-	/**
-	 * @param startAlphaFlag
-	 *            The startAlphaFlag to set.
-	 */
-	public void setStartAlphaFlag(boolean startAlphaFlag) {
-		this.startAlphaFlag = startAlphaFlag;
-	}
-
-	/**
-	 * @return Returns the orgTypes.
-	 */
-	public Collection getOrgTypes() {
-		return orgTypes;
-	}
-
-	/**
-	 * @param orgTypes
-	 *            The orgTypes to set.
-	 */
-	public void setOrgTypes(Collection orgTypes) {
-		this.orgTypes = orgTypes;
-	}
-
-	/**
-	 * @return Returns the searchedLocs.
-	 */
-	public Long[] getSearchedLocs() {
-		return searchedLocs;
-	}
-
-	/**
-	 * @param searchedLocs
-	 *            The searchedLocs to set.
-	 */
-	public void setSearchedLocs(Long[] searchedLocs) {
-		this.searchedLocs = searchedLocs;
-	}
-
-	/**
-	 * @return Returns the programDescription.
-	 */
-	public String getProgramDescription() {
-		return programDescription;
-	}
-
-	/**
-	 * @param programDescription
-	 *            The programDescription to set.
-	 */
-	public void setProgramDescription(String programDescription) {
-		this.programDescription = programDescription;
-	}
-
-	/**
-	 * @return Returns the field.
-	 */
-	public AmpField getField() {
-		return field;
-	}
-
-	/**
-	 * @param field
-	 *            The field to set.
-	 */
-	public void setField(AmpField field) {
-		this.field = field;
-	}
-
-	/**
-	 * @return Returns the fieldName.
-	 */
-	public String getFieldName() {
-		return fieldName;
-	}
-
-	/**
-	 * @param fieldName
-	 *            The fieldName to set.
-	 */
-	public void setFieldName(String fieldName) {
-		this.fieldName = fieldName;
-	}
-
-	/**
-	 * @return Returns the commentText.
-	 */
-	public String getCommentText() {
-		return commentText;
-	}
-
-	/**
-	 * @param commentText
-	 *            The commentText to set.
-	 */
-	public void setCommentText(String commentText) {
-		this.commentText = commentText;
-	}
-
-	/**
-	 * @return Returns the commentsCol.
-	 */
-	public ArrayList getCommentsCol() {
-		return commentsCol;
-	}
-
-	/**
-	 * @param commentsCol
-	 *            The commentsCol to set.
-	 */
-	public void setCommentsCol(ArrayList commentsCol) {
-		this.commentsCol = commentsCol;
-	}
-
-	/**
-	 * @return Returns the actionFlag.
-	 */
-	public String getActionFlag() {
-		return actionFlag;
-	}
-
-	/**
-	 * @param actionFlag
-	 *            The actionFlag to set.
-	 */
-	public void setActionFlag(String actionFlag) {
-		this.actionFlag = actionFlag;
-	}
-
-	/**
-	 * @return Returns the ampCommentId.
-	 */
-	public Long getAmpCommentId() {
-		return ampCommentId;
-	}
-
-	/**
-	 * @param ampCommentId
-	 *            The ampCommentId to set.
-	 */
-	public void setAmpCommentId(Long ampCommentId) {
-		this.ampCommentId = ampCommentId;
-	}
-
-	/**
-	 * @return Returns the serializeFlag.
-	 */
-	public boolean isSerializeFlag() {
-		return serializeFlag;
-	}
-
-	/**
-	 * @param serializeFlag
-	 *            The serializeFlag to set.
-	 */
-	public void setSerializeFlag(boolean serializeFlag) {
-		this.serializeFlag = serializeFlag;
-	}
-
-	/**
-	 * @return Returns the commentFlag.
-	 */
-	public boolean isCommentFlag() {
-		return commentFlag;
-	}
-
-	/**
-	 * @param commentFlag
-	 *            The commentFlag to set.
-	 */
-	public void setCommentFlag(boolean commentFlag) {
-		this.commentFlag = commentFlag;
-	}
-
-	/**
-	 * @return Returns the author.
-	 */
-	public String getAuthor() {
-		return author;
-	}
-
-	/**
-	 * @param author
-	 *            The author to set.
-	 */
-	public void setAuthor(String author) {
-		this.author = author;
-	}
-
-	/**
-	 * @return Returns the actAthEmail.
-	 */
-	public String getActAthEmail() {
-		return actAthEmail;
-	}
-
-	/**
-	 * @param actAthEmail
-	 *            The actAthEmail to set.
-	 */
-	public void setActAthEmail(String actAthEmail) {
-		this.actAthEmail = actAthEmail;
-	}
-
-	/**
-	 * @return Returns the actAthFirstName.
-	 */
-	public String getActAthFirstName() {
-		return actAthFirstName;
-	}
-
-	/**
-	 * @param actAthFirstName
-	 *            The actAthFirstName to set.
-	 */
-	public void setActAthFirstName(String actAthFirstName) {
-		this.actAthFirstName = actAthFirstName;
-	}
-
-	/**
-	 * @return Returns the actAthLastName.
-	 */
-	public String getActAthLastName() {
-		return actAthLastName;
-	}
-
-	/**
-	 * @param actAthLastName
-	 *            The actAthLastName to set.
-	 */
-	public void setActAthLastName(String actAthLastName) {
-		this.actAthLastName = actAthLastName;
-	}
-
-	
-	/**
-	 * @return Returns the createdDate.
-	 */
-	public String getCreatedDate() {
-		return createdDate;
-	}
-
-	/**
-	 * @param createdDate
-	 *            The createdDate to set.
-	 */
-	public void setCreatedDate(String createdDate) {
-		this.createdDate = createdDate;
-	}
-
-	/**
-	 * @return Returns the context.
-	 */
-	public String getContext() {
-		return context;
-	}
-
-	/**
-	 * @param context
-	 *            The context to set.
-	 */
-	public void setContext(String context) {
-		this.context = context;
-	}
-
-	/**
-	 * @return Returns the regionalFundings.
-	 */
-	public Collection getRegionalFundings() {
-		return regionalFundings;
-	}
-
-	/**
-	 * @param regionalFundings
-	 *            The regionalFundings to set.
-	 */
-	public void setRegionalFundings(Collection regionalFundings) {
-		this.regionalFundings = regionalFundings;
-	}
-
-	/**
-	 * @return Returns the issues.
-	 */
-	public ArrayList getIssues() {
-		return issues;
-	}
-
-	/**
-	 * @param issues
-	 *            The issues to set.
-	 */
-	public void setIssues(ArrayList issues) {
-		this.issues = issues;
-	}
-
-	/**
-	 * @return Returns the selIssues.
-	 */
-	public Long[] getSelIssues() {
-		return selIssues;
-	}
-
-	/**
-	 * @param selIssues
-	 *            The selIssues to set.
-	 */
-	public void setSelIssues(Long[] selIssues) {
-		this.selIssues = selIssues;
-	}
-
-	/**
-	 * @return Returns the issue.
-	 */
-	public String getIssue() {
-		return issue;
-	}
-
-	/**
-	 * @param issue
-	 *            The issue to set.
-	 */
-	public void setIssue(String issue) {
-		this.issue = issue;
-	}
-
-	/**
-	 * @return Returns the measure.
-	 */
-	public String getMeasure() {
-		return measure;
-	}
-
-	/**
-	 * @param measure
-	 *            The measure to set.
-	 */
-	public void setMeasure(String measure) {
-		this.measure = measure;
-	}
-
-	/**
-	 * @return Returns the selMeasures.
-	 */
-	public Long[] getSelMeasures() {
-		return selMeasures;
-	}
-
-	/**
-	 * @param selMeasures
-	 *            The selMeasures to set.
-	 */
-	public void setSelMeasures(Long[] selMeasures) {
-		this.selMeasures = selMeasures;
-	}
-
-	/**
-	 * @return Returns the issueId.
-	 */
-	public Long getIssueId() {
-		return issueId;
-	}
-
-	/**
-	 * @param issueId
-	 *            The issueId to set.
-	 */
-	public void setIssueId(Long issueId) {
-		this.issueId = issueId;
-	}
-
-	/**
-	 * @return Returns the measureId.
-	 */
-	public Long getMeasureId() {
-		return measureId;
-	}
-
-	/**
-	 * @param measureId
-	 *            The measureId to set.
-	 */
-	public void setMeasureId(Long measureId) {
-		this.measureId = measureId;
-	}
-
-	/**
-	 * @return Returns the actor.
-	 */
-	public String getActor() {
-		return actor;
-	}
-
-	/**
-	 * @param actor
-	 *            The actor to set.
-	 */
-	public void setActor(String actor) {
-		this.actor = actor;
-	}
-
-	/**
-	 * @return Returns the actorId.
-	 */
-	public Long getActorId() {
-		return actorId;
-	}
-
-	/**
-	 * @param actorId
-	 *            The actorId to set.
-	 */
-	public void setActorId(Long actorId) {
-		this.actorId = actorId;
-	}
-
-	/**
-	 * @return Returns the selActors.
-	 */
-	public Long[] getSelActors() {
-		return selActors;
-	}
-
-	/**
-	 * @param selActors
-	 *            The selActors to set.
-	 */
-	public void setSelActors(Long[] selActors) {
-		this.selActors = selActors;
-	}
-
-	/**
-	 * @return Returns the editKey.
-	 */
-	public String getEditKey() {
-		return editKey;
-	}
-
-	/**
-	 * @param editKey
-	 *            The editKey to set.
-	 */
-	public void setEditKey(String editKey) {
-		this.editKey = editKey;
-	}
-
-	/**
-	 * @return Returns the selRegFundings.
-	 */
-	public Long[] getSelRegFundings() {
-		return selRegFundings;
-	}
-
-	/**
-	 * @param selRegFundings
-	 *            The selRegFundings to set.
-	 */
-	public void setSelRegFundings(Long[] selRegFundings) {
-		this.selRegFundings = selRegFundings;
-	}
-
-	/**
-	 * @return Returns the fundingRegionId.
-	 */
-	public Long getFundingRegionId() {
-		return fundingRegionId;
-	}
-
-	/**
-	 * @param fundingRegionId
-	 *            The fundingRegionId to set.
-	 */
-	public void setFundingRegionId(Long fundingRegionId) {
-		this.fundingRegionId = fundingRegionId;
-	}
-
-	/**
-	 * @return Returns the fundingRegions.
-	 */
-	public Collection getFundingRegions() {
-		return fundingRegions;
-	}
-
-	/**
-	 * @param fundingRegions
-	 *            The fundingRegions to set.
-	 */
-	public void setFundingRegions(Collection fundingRegions) {
-		this.fundingRegions = fundingRegions;
-	}
-
-	/**
-	 * @return Returns the approvalStatus.
-	 */
-	public String getApprovalStatus() {
-		return approvalStatus;
-	}
-
-	/**
-	 * @param approvalStatus
-	 *            The approvalStatus to set.
-	 */
-	public void setApprovalStatus(String approvalStatus) {
-		this.approvalStatus = approvalStatus;
-	}
-
-	/**
-	 * @return Returns the workingTeamLeadFlag.
-	 */
-	public String getWorkingTeamLeadFlag() {
-		return workingTeamLeadFlag;
-	}
-
-	/**
-	 * @param workingTeamLeadFlag
-	 *            The workingTeamLeadFlag to set.
-	 */
-	public void setWorkingTeamLeadFlag(String workingTeamLeadFlag) {
-		this.workingTeamLeadFlag = workingTeamLeadFlag;
-	}
-
-	/**
-	 * @return Returns the showInHomePage.
-	 */
-	public boolean isShowInHomePage() {
-		return showInHomePage;
-	}
-
-	/**
-	 * @param showInHomePage
-	 *            The showInHomePage to set.
-	 */
-	public void setShowInHomePage(boolean showInHomePage) {
-		this.showInHomePage = showInHomePage;
-	}
-
-	/**
-	 * @return Returns the fundDonor.
-	 */
-	public Long getFundDonor() {
-		return fundDonor;
-	}
-
-	/**
-	 * @param fundDonor
-	 *            The fundDonor to set.
-	 */
-	public void setFundDonor(Long fundDonor) {
-		this.fundDonor = fundDonor;
-	}
-
-	/**
-	 * @return Returns the fundingId.
-	 */
-	public Long getFundingId() {
-		return fundingId;
-	}
-
-	/**
-	 * @param fundingId
-	 *            The fundingId to set.
-	 */
-	public void setFundingId(Long fundingId) {
-		this.fundingId = fundingId;
-	}
-
-	
-	/**
-	 * @return Returns the currCode.
-	 */
-	public String getCurrCode() {
-		return currCode;
-	}
-
-	public String getDocumentSpace() {
-		return documentSpace;
-	}
-
-	public Collection getManagedDocumentList() {
-		return managedDocumentList;
-	}
-
-	public String[] getSelManagedDocs() {
-		return selManagedDocs;
-	}
-
-	/**
-	 * @param currCode
-	 *            The currCode to set.
-	 */
-	public void setCurrCode(String currCode) {
-		this.currCode = currCode;
-	}
-
-	public void setDocumentSpace(String documentSpace) {
-		this.documentSpace = documentSpace;
-	}
-
-	public void setManagedDocumentList(Collection managedDocumentList) {
-		this.managedDocumentList = managedDocumentList;
-	}
-
-	public void setSelManagedDocs(String[] selManagedDocs) {
-		this.selManagedDocs = selManagedDocs;
-	}
-
-	
-	public Collection getAllComps() {
-		return allComps;
-	}
-
-	public void setAllComps(Collection allComps) {
-		this.allComps = allComps;
-	}
-
-	public double getCompTotalDisb() {
-		return compTotalDisb;
-	}
-
-	public void setCompTotalDisb(double compTotalDisb) {
-		this.compTotalDisb = compTotalDisb;
-	}
-
-	public double getRegionTotalDisb() {
-		return regionTotalDisb;
-	}
-
-	public Long[] getSelectedPrograms() {
-		return selectedPrograms;
-	}
-
-	public Long[] getSelPrograms() {
-		return selPrograms;
-	}
-
-	public List getProgramLevels() {
-		return programLevels;
-	}
-
-	public List getActPrograms() {
-		return actPrograms;
-	}
-
-	public Long getSelProgramId() {
-		return selProgramId;
-	}
-
-	public void setSelectedPrograms(Long[] selectedPrograms) {
-		this.selectedPrograms = selectedPrograms;
-	}
-
-	public void setRegionTotalDisb(double regionTotalDisb) {
-		this.regionTotalDisb = regionTotalDisb;
-	}
-
-	public void setSelPrograms(Long[] selPrograms) {
-		this.selPrograms = selPrograms;
-	}
-
-	public void setProgramLevels(List programLevels) {
-		this.programLevels = programLevels;
-	}
-
-	public void setActPrograms(List actPrograms) {
-		this.actPrograms = actPrograms;
-	}
-
-	public void setSelProgramId(Long selProgramId) {
-		this.selProgramId = selProgramId;
-	}
-
-	//
-	public void setSelectedNPOPrograms(Long[] selectedNPOPrograms) {
-		this.selectedNPOPrograms = selectedNPOPrograms;
-	}
-
-	public void setSelectedPPrograms(Long[] selectedPPrograms) {
-		this.selectedPPrograms = selectedPPrograms;
-	}
-
-	public void setSelectedSPrograms(Long[] selectedSPrograms) {
-		this.selectedSPrograms = selectedSPrograms;
-	}
-
-	public void setProgramType(int programType) {
-		this.programType = programType;
-	}
-
-	public Boolean getBudget() {
-		return budget;
-	}
-
-	public void setBudget(Boolean budget) {
-		this.budget = budget;
-	}
-
-	public AmpTeam getTeam() {
-		return team;
-	}
-
-	public void setTeam(AmpTeam team) {
-		this.team = team;
-	}
-
-	public AmpTeamMember getUpdatedBy() {
-		return updatedBy;
-	}
-
-	public void setUpdatedBy(AmpTeamMember updatedBy) {
-		this.updatedBy = updatedBy;
-	}
-
-	public String getUpdatedDate() {
-		return updatedDate;
-	}
-
-	public void setUpdatedDate(String updatedDate) {
-		this.updatedDate = updatedDate;
-	}
-
-	public String getActAthAgencySource() {
-		return actAthAgencySource;
-	}
-
-	public void setActAthAgencySource(String actAthAgencySource) {
-		this.actAthAgencySource = actAthAgencySource;
-	}
-
-	public String getDocDate() {
-		return docDate;
-	}
-
-	public void setDocDate(String docDate) {
-		this.docDate = docDate;
-	}
-
-	public List getCosts() {
-		return costs;
-	}
-
-	public void setCosts(List euActivities) {
-		this.costs = euActivities;
-	}
-
-
-	public Double getOverallContribution() {
-		return overallContribution;
-	}
-
-	public void setOverallContribution(Double overallContribution) {
-		this.overallContribution = overallContribution;
-	}
-
-	public Double getOverallCost() {
-		return overallCost;
-	}
-
-	public void setOverallCost(Double overallCost) {
-		this.overallCost = overallCost;
-	}
-
-	public Long getDocType() {
-		return docType;
-	}
-
-	public void setDocType(Long docType) {
-		this.docType = docType;
-	}
-
-	public Long getDocLang() {
-		return docLang;
-	}
-
-	public void setDocLang(Long docLang) {
-		this.docLang = docLang;
-	}
-
-	public Collection getDocuments() {
-		return documents;
-	}
-
-	public void setDocuments(Collection documents) {
-		this.documents = documents;
-	}
-
-	public HashMap getAllComments() {
-		return allComments;
-	}
-
-	public void setAllComments(HashMap allComments) {
-		this.allComments = allComments;
-	}
-
-	public Integer getSelectedOrganisationFromPages() {
-		return selectedOrganisationFromPages;
-	}
-
-	public void setSelectedOrganisationFromPages(Integer selectedOrganisationFromPages) {
-		this.selectedOrganisationFromPages = selectedOrganisationFromPages;
-	}
-
-	public TreeSet getSelectedOrganisationPaged() {
-		return selectedOrganisationPaged;
-	}
-
-	public void setSelectedOrganisationPaged(TreeSet selectedOrganisationPaged) {
-		this.selectedOrganisationPaged = selectedOrganisationPaged;
-	}
-
-
-	public int getNumResults() {
-		return numResults;
-	}
-
-	public void setNumResults(int numResults) {
-		this.numResults = numResults;
-	}
-
-	public Long[] getSelActivitySectors() {
-		return selActivitySectors;
-	}
-
-	public void setSelActivitySectors(Long[] selActivitySectors) {
-		this.selActivitySectors = selActivitySectors;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public Collection getFinancingBreakdown() {
-		return financingBreakdown;
-	}
-
-	public void setFinancingBreakdown(Collection financingBreakdown) {
-		this.financingBreakdown = financingBreakdown;
-	}
-
-	public String getVisibleProgram() {
-		return visibleProgram;
-	}
-
-	public void setVisibleProgram(String visibleProgram) {
-		this.visibleProgram = visibleProgram;
-	}
-
-	public String getFY() {
-		return FY;
-	}
-
-	public void setFY(String fy) {
-		FY = fy;
-	}
-
-	public Long getGbsSbs() {
-		return gbsSbs;
-	}
-
-	public void setGbsSbs(Long gbsSbs) {
-		this.gbsSbs = gbsSbs;
-	}
-
-	public String getProjectCode() {
-		return projectCode;
-	}
-
-	public void setProjectCode(String projectCode) {
-		this.projectCode = projectCode;
-	}
-
-	public String getSubProgram() {
-		return subProgram;
-	}
-
-	public void setSubProgram(String subProgram) {
-		this.subProgram = subProgram;
-	}
-
-	public String getSubVote() {
-		return subVote;
-	}
-
-	public void setSubVote(String subVote) {
-		this.subVote = subVote;
-	}
-
-	public String getVote() {
-		return vote;
-	}
-
-	public void setVote(String vote) {
-		this.vote = vote;
-	}
-
-
-
-	public AmpTeamMember getCreatedBy() {
-		return createdBy;
-	}
-
-	
-
-	public void setCreatedBy(AmpTeamMember createdBy) {
-		this.createdBy = createdBy;
-	}
-
-	public int getIsPreview() {
-		return isPreview;
-	}
-
-	public void setIsPreview(int isPreview) {
-		this.isPreview = isPreview;
-	}
-
-
-
-	public Double getAllCosts() {
-		return allCosts;
-	}
-
-	public void setAllCosts(Double allCosts) {
-		this.allCosts = allCosts;
-	}
-
-
-
-	public List getReferenceDocs() {
-		return referenceDocs;
-	}
-
-	public ReferenceDoc getReferenceDoc(int index) {
-		return (ReferenceDoc) referenceDocs.get(index);
-	}
-
-	public void setReferenceDocs(List referenceDocs) {
-		this.referenceDocs = referenceDocs;
-	}
-
-	public void setReferenceDoc(int index, ReferenceDoc doc) {
-		this.referenceDocs = referenceDocs;
-	}
-
-	public Long[] getAllReferenceDocNameIds() {
-		return allReferenceDocNameIds;
-	}
-
-	public boolean getDefaultCountryIsSet() {
-		return defaultCountryIsSet;
-	}
-
-	public void setAllReferenceDocNameIds(Long[] selectedReferenceDocs) {
-		this.allReferenceDocNameIds = selectedReferenceDocs;
-	}
-
-	public void setDefaultCountryIsSet(boolean defaultIsCountrySet) {
-		this.defaultCountryIsSet = defaultIsCountrySet;
-	}
-
-	public String getDocComment() {
-		return docComment;
-	}
-
-	public void setDocComment(String docComment) {
-		this.docComment = docComment;
-	}
-
-	public void setDraft(Boolean draft) {
-		this.draft = draft;
-	}
-
-	public Long getActivityLevel() {
-		return activityLevel;
-	}
-
-	public void setActivityLevel(Long activityLevel) {
-		this.activityLevel = activityLevel;
-	}
-
-	public Collection getChildSectorsLevel1() {
-		return childSectorsLevel1;
-	}
-
-	public void setChildSectorsLevel1(Collection childSectorsLevel1) {
-		this.childSectorsLevel1 = childSectorsLevel1;
-	}
-
-	public Collection getChildSectorsLevel2() {
-		return childSectorsLevel2;
-	}
-
-	public void setChildSectorsLevel2(Collection childSectorsLevel2) {
-		this.childSectorsLevel2 = childSectorsLevel2;
-	}
-
-	public Collection getOrderedFundingOrganizations() {
-		return orderedFundingOrganizations;
-	}
-
-	public void setOrderedFundingOrganizations(Collection orderedFundingOrganizations) {
-		this.orderedFundingOrganizations = orderedFundingOrganizations;
-	}
-
-	public Collection getParentSectors() {
-		return parentSectors;
-	}
-
-	public void setParentSectors(Collection parentSectors) {
-		this.parentSectors = parentSectors;
-	}
-
-
-	public Long getSector() {
-		return sector;
-	}
-
-	public void setSector(Long sector) {
-		this.sector = sector;
-	}
-
-	public boolean isSectorReset() {
-		return sectorReset;
-	}
-
-	public void setSectorReset(boolean sectorReset) {
-		this.sectorReset = sectorReset;
-	}
-
-	public Long getSectorScheme() {
-		return sectorScheme;
-	}
-
-	public void setSectorScheme(Long sectorScheme) {
-		this.sectorScheme = sectorScheme;
-	}
-
-	public Collection getSectorSchemes() {
-		return sectorSchemes;
-	}
-
-	public void setSectorSchemes(Collection sectorSchemes) {
-		this.sectorSchemes = sectorSchemes;
-	}
-
-	public Long[] getSelCompSectors() {
-		return selCompSectors;
-	}
-
-	public void setSelCompSectors(Long[] selCompSectors) {
-		this.selCompSectors = selCompSectors;
-	}
-
-	
-	public Long[] getSelSectors() {
-		return selSectors;
-	}
-
-	public void setSelSectors(Long[] selSectors) {
-		this.selSectors = selSectors;
-	}
-
-	public Long getSubsectorLevel1() {
-		return subsectorLevel1;
-	}
-
-	public void setSubsectorLevel1(Long subsectorLevel1) {
-		this.subsectorLevel1 = subsectorLevel1;
-	}
-
-	public Long getSubsectorLevel2() {
-		return subsectorLevel2;
-	}
-
-	public void setSubsectorLevel2(Long subsectorLevel2) {
-		this.subsectorLevel2 = subsectorLevel2;
-	}
-
-
-
-	public Boolean getDraft() {
-		return draft;
-	}
-
-	public int getProgramType() {
-		return programType;
-	}
-
-	public Long[] getSelectedNPOPrograms() {
-		return selectedNPOPrograms;
-	}
-
-	public Long[] getSelectedPPrograms() {
-		return selectedPPrograms;
-	}
-
-	public Long[] getSelectedSPrograms() {
-		return selectedSPrograms;
-	}
-
-	
-	
-
-	public String getSvAction() {
-		return svAction;
-	}
-
-	public Long getSurveyOrgId() {
-		return surveyOrgId;
-	}
-
-	
-
-	public void setSvAction(String svAction) {
-		this.svAction = svAction;
-	}
-
-	public void setSurveyOrgId(Long surveyOrgId) {
-		this.surveyOrgId = surveyOrgId;
-	}
-
-	public int getPagesToShow() {
-		return pagesToShow;
-	}
-
-	public void setPagesToShow(int pagesToShow) {
-		this.pagesToShow = pagesToShow;
-	}
-
-	public int getStartPage() {
-		int value;
-		if (getCurrentPage() > (this.getPagesToShow() / 2)) {
-			value = (this.getCurrentPage() - (this.getPagesToShow() / 2)) - 1;
-		} else {
-			value = 0;
-		}
-		this.startPage = value;
-		return startPage;
-	}
-
-	public void setstartPage(int offset) {
-		this.offset = offset;
-	}
-
-	public int getPagesSize() {
-		return pagesSize;
-	}
-
-	public boolean isGovFlag() {
-		return govFlag;
-	}
-
-	public void setPagesSize(int pagesSize) {
-		this.pagesSize = pagesSize;
-	}
-
-	public void setStartPage(int startPage) {
-		this.startPage = startPage;
-	}
-
-	public void setGovFlag(boolean govFlag) {
-		this.govFlag = govFlag;
-	}
-
-	public Collection<DocumentData> getCrDocuments() {
-		return crDocuments;
-	}
-
-	public void setCrDocuments(Collection<DocumentData> crDocuments) {
-		this.crDocuments = crDocuments;
-	}
-
-
-
-	public void setCreditTypeId(Long creditType) {
-		this.creditTypeId = creditType;
-	}
-
-	public Long getCreditTypeId() {
-		return creditTypeId;
-	}
-
-
-	
-	public void setContractDetails(String contractDetails) {
-		this.contractDetails = contractDetails;
-	}
-
-	
-	
-
-	public void addMessage(String key, String value) {
-		this.messages.put(key, value);
-	}
-
-	public void addError(String key, String value) {
-		this.errors.put(key, value);
-	}
-
-	public void clearMessages() {
-		this.errors.clear();
-		this.messages.clear();
-	}
-
-	/**
-	 * @return the errors
-	 */
-	public HashMap<String, String> getErrors() {
-		return errors;
-	}
-
-	/**
-	 * @param errors
-	 *            the errors to set
-	 */
-	public void setErrors(HashMap<String, String> errors) {
-		this.errors = errors;
-	}
-
-	/**
-	 * @return the messages
-	 */
-	public HashMap<String, String> getMessages() {
-		return messages;
-	}
-
-	/**
-	 * @param messages
-	 *            the messages to set
-	 */
-	public void setMessages(HashMap<String, String> messages) {
-		this.messages = messages;
-	}
-
-	public void setConvenioNumcont(String convenioNumcont) {
-		this.convenioNumcont = convenioNumcont;
-	}
-
-	public String getConvenioNumcont() {
-		return convenioNumcont;
-	}
-
-	public String getClasiNPD() {
-		return clasiNPD;
-	}
-
-	public void setClasiNPD(String clasiNPD) {
-		this.clasiNPD = clasiNPD;
-	}
-
-	public void setPrevOrg(Long prevOrg) {
-		this.prevOrg = prevOrg;
-	}
-
-	public Long getPrevOrg() {
-		return prevOrg;
-	}
-
-	public ArrayList<AmpComponentType> getAllCompsType() {
-		return allCompsType;
-	}
-
-	public void setAllCompsType(ArrayList<AmpComponentType> allCompsType) {
-		this.allCompsType = allCompsType;
-	}
-
-	public Long getSelectedType() {
-		return selectedType;
-	}
-
-	public void setSelectedType(Long selectedType) {
-		this.selectedType = selectedType;
-	}
-
-	public String getNewCompoenentName() {
-		return newCompoenentName;
-	}
-
-	public void setNewCompoenentName(String newCompoenentName) {
-		this.newCompoenentName = newCompoenentName;
-	}
-
-	// Dumies
-	public String getPerspectives() {
-		return null;
-	}
-
-	public Double getIpaBudget() {
-		return ipaBudget;
-	}
-
-	public void setIpaBudget(Double ipaBudget) {
-		this.ipaBudget = ipaBudget;
-	}
-
-	public AmpTeamMember getApprovedBy() {
-		return approvedBy;
-	}
-
-	public void setApprovedBy(AmpTeamMember approvedBy) {
-		this.approvedBy = approvedBy;
-	}
-
-	public Date getApprovalDate() {
-		return approvalDate;
-	}
-
-	public void setApprovalDate(Date approvalDate) {
-		this.approvalDate = approvalDate;
-	}
-
-	public String getIssueDate() {
-		return issueDate;
-	}
-
-	public void setIssueDate(String issueDate) {
-		this.issueDate = issueDate;
-	}
-	public String getContractDetails() {
-		return contractDetails;
-	}
-	
-	
-	
 	public class Identification {
+		
+		private String ampId = null;
+		private Boolean budget = true;
+		private AmpTeam team;
+		
 		private String title = null;
 		private String objectives = null;
 		private String description = null;
@@ -3197,15 +136,204 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private Long projectCategory = new Long(0);
 		private String govAgreementNumber;
 		private String budgetCodeProjectID;
-		private Long acChapter = new Long(0);
 		private String budgetCheckbox;
 		private Boolean governmentApprovalProcedures;
 		private Boolean jointCriteria;
 		private Boolean humanitarianAid;
 		private String crisNumber;
+		private Long selOrgs[];
 		private OrgProjectId selectedOrganizations[];
+		private Long acChapter = new Long(0);
+		private String status = null;
+		private AmpTeamMember createdBy;
+		private AmpTeamMember updatedBy;
+		private AmpTeamMember approvedBy;
+		private String createdDate;
+		private String updatedDate;
+		private Date approvalDate;
+		private Boolean draft;
+		private String actAthEmail;
+		private String actAthAgencySource;
+		private String actAthFirstName;
+		private String actAthLastName;
+		private String conditions;
+		private String FY;
+		private String vote;
+		private String subVote;
+		private String subProgram;
+		private String projectCode;
+		private Long gbsSbs;
+		private String approvalStatus;
+		private Boolean wasDraft;
+		private String convenioNumcont;
+		private Collection levelCollection = null;
+		private Long activityLevel;
+		private String author;
+		private String clasiNPD;
 
+		public String getApprovalStatus() {
+			return approvalStatus;
+		}
+
+		public void setApprovalStatus(String approvalStatus) {
+			this.approvalStatus = approvalStatus;
+		}
+
+		public String getFY() {
+			return FY;
+		}
+
+		public void setFY(String fy) {
+			FY = fy;
+		}
+
+		public String getVote() {
+			return vote;
+		}
+
+		public void setVote(String vote) {
+			this.vote = vote;
+		}
+
+		public String getSubVote() {
+			return subVote;
+		}
+
+		public void setSubVote(String subVote) {
+			this.subVote = subVote;
+		}
+
+		public String getSubProgram() {
+			return subProgram;
+		}
+
+		public void setSubProgram(String subProgram) {
+			this.subProgram = subProgram;
+		}
+	
 		
+		public String getProjectCode() {
+			return projectCode;
+		}
+
+		public void setProjectCode(String projectCode) {
+			this.projectCode = projectCode;
+		}
+
+		public Long getGbsSbs() {
+			return gbsSbs;
+		}
+
+		public void setGbsSbs(Long gbsSbs) {
+			this.gbsSbs = gbsSbs;
+		}
+
+		public String getConditions() {
+			return conditions;
+		}
+
+		public void setConditions(String conditions) {
+			this.conditions = conditions;
+		}
+
+		public String getActAthFirstName() {
+			return actAthFirstName;
+		}
+
+		public void setActAthFirstName(String actAthFirstName) {
+			this.actAthFirstName = actAthFirstName;
+		}
+
+		public String getActAthLastName() {
+			return actAthLastName;
+		}
+
+		public void setActAthLastName(String actAthLastName) {
+			this.actAthLastName = actAthLastName;
+		}
+
+		public String getActAthEmail() {
+			return actAthEmail;
+		}
+
+		public void setActAthEmail(String actAthEmail) {
+			this.actAthEmail = actAthEmail;
+		}
+
+
+		public String getActAthAgencySource() {
+			return actAthAgencySource;
+		}
+
+		public void setActAthAgencySource(String actAthAgencySource) {
+			this.actAthAgencySource = actAthAgencySource;
+		}
+
+		public String getStatus() {
+			return status;
+		}
+
+		public void setStatus(String status) {
+			this.status = status;
+		}
+
+		public AmpTeamMember getCreatedBy() {
+			return createdBy;
+		}
+
+		public void setCreatedBy(AmpTeamMember createdBy) {
+			this.createdBy = createdBy;
+		}
+
+		public AmpTeamMember getUpdatedBy() {
+			return updatedBy;
+		}
+
+		public void setUpdatedBy(AmpTeamMember updatedBy) {
+			this.updatedBy = updatedBy;
+		}
+
+		public AmpTeamMember getApprovedBy() {
+			return approvedBy;
+		}
+
+		public void setApprovedBy(AmpTeamMember approvedBy) {
+			this.approvedBy = approvedBy;
+		}
+
+		public String getCreatedDate() {
+			return createdDate;
+		}
+
+		public void setCreatedDate(String createdDate) {
+			this.createdDate = createdDate;
+		}
+
+		public String getUpdatedDate() {
+			return updatedDate;
+		}
+
+		public void setUpdatedDate(String updatedDate) {
+			this.updatedDate = updatedDate;
+		}
+		
+		public Date getApprovalDate() {
+			return approvalDate;
+		}
+
+		public void setApprovalDate(Date approvalDate) {
+			this.approvalDate = approvalDate;
+		}
+
+		public Boolean getDraft() {
+			return draft;
+		}
+
+	
+
+		public void setDraft(Boolean draft) {
+			this.draft = draft;
+		}
 
 		public void setSelectedOrganizations(int index, OrgProjectId orgProjectId) {
 			selectedOrganizations[index] = orgProjectId;
@@ -3403,9 +531,92 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.budgetCodeProjectID = budgetCodeProjectID;
 		}
 
+	
+
+		public String getAmpId() {
+			return ampId;
+		}
+
+		public void setAmpId(String ampId) {
+			this.ampId = ampId;
+		}
+
+		public Boolean getBudget() {
+			return budget;
+		}
+
+		public void setBudget(Boolean budget) {
+			this.budget = budget;
+		}
+
+		public AmpTeam getTeam() {
+			return team;
+		}
+
+		public void setTeam(AmpTeam team) {
+			this.team = team;
+		}
+
+		public Boolean getWasDraft() {
+			return wasDraft;
+		}
+
+		public void setWasDraft(Boolean wasDraft) {
+			this.wasDraft = wasDraft;
+		}
+
+		public String getConvenioNumcont() {
+			return convenioNumcont;
+		}
+
+		public void setConvenioNumcont(String convenioNumcont) {
+			this.convenioNumcont = convenioNumcont;
+		}
+
+		public Collection getLevelCollection() {
+			return levelCollection;
+		}
+
+		public void setLevelCollection(Collection levelCollection) {
+			this.levelCollection = levelCollection;
+		}
+
+		public Long getActivityLevel() {
+			return activityLevel;
+		}
+
+		public void setActivityLevel(Long activityLevel) {
+			this.activityLevel = activityLevel;
+		}
+
+		public String getAuthor() {
+			return author;
+		}
+
+		public void setAuthor(String author) {
+			this.author = author;
+		}
+
+		public String getClasiNPD() {
+			return clasiNPD;
+		}
+
+		public void setClasiNPD(String clasiNPD) {
+			this.clasiNPD = clasiNPD;
+		}
+
+		public Long[] getSelOrgs() {
+			return selOrgs;
+		}
+
+		public void setSelOrgs(Long[] selOrgs) {
+			this.selOrgs = selOrgs;
+		}
+
 	}
 
 	public class Planning {
+
 		private Collection actRankCollection;
 		private String lineMinRank;
 		private String planMinRank;
@@ -3419,6 +630,25 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private String currentCompDate;
 		private Long statusId = null;
 		private String statusReason = null;
+		private String revisedCompDate;
+		private Collection activityCloseDates;
+		private Long creditTypeId;
+
+		public String getRevisedCompDate() {
+			return revisedCompDate;
+		}
+
+		public void setRevisedCompDate(String revisedCompDate) {
+			this.revisedCompDate = revisedCompDate;
+		}
+
+		public Collection getActivityCloseDates() {
+			return activityCloseDates;
+		}
+
+		public void setActivityCloseDates(Collection activityCloseDates) {
+			this.activityCloseDates = activityCloseDates;
+		}
 
 		public String getLineMinRank() {
 			return lineMinRank;
@@ -3524,14 +754,60 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.actRankCollection = actRankCollection;
 		}
 
+		public Long getCreditTypeId() {
+			return creditTypeId;
+		}
+
+		public void setCreditTypeId(Long creditTypeId) {
+			this.creditTypeId = creditTypeId;
+		}
+
 	}
 
 	public class Location {
+		private String keyword;
+		private int tempNumResults;
+		private int numResults;
+		private int currentPage;
+		private Collection<Integer> pages;
+		private Collection cols;
+		private Collection pagedCol;
+		
+		private boolean locationReset;
+		private Long selLocs[] = null; // location selected from step 2 page to
+		private Collection searchLocs = null; // list of searched locations.
+		private Long searchedLocs[] = null; // locations selected by user to be
+		private String fill; // which among countries,region,zone and woreda
+		// need
+		// to
+		// be loaded with data. ie if the value
 
+		// of fill is 'region', load all region data beloning to a particluar
+		// country selected
+		private Integer impLevelValue; // Implementation Level value
+		private String impCountry; // Implementation country
+
+		private Long impRegion; // Implementation region
+		private Long impMultiRegion[]; // Implementation region
+
+		private Long impZone; // Implementation zone
+		private Long impMultiZone[]; // Implementation zone
+
+		private Long impWoreda; // Implementation woreda
+		private Long impMultiWoreda[];
+
+		private Collection<Country> countries;
+		private Collection<AmpRegion> regions;
+		private Collection<AmpZone> zones;
+		private Collection<AmpWoreda> woredas;
+
+		private String country;
 		private Long levelId = null;
 		private Long implemLocationLevel;
 		private Collection selectedLocs = null;
-
+		private boolean defaultCountryIsSet;
+		private int pagesSize;
+		
 		public Long getLevelId() {
 			return levelId;
 		}
@@ -3555,17 +831,264 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		public void setSelectedLocs(Collection selectedLocs) {
 			this.selectedLocs = selectedLocs;
 		}
+
+		public boolean isLocationReset() {
+			return locationReset;
+		}
+
+		public void setLocationReset(boolean locationReset) {
+			this.locationReset = locationReset;
+		}
+
+		public Long[] getSelLocs() {
+			return selLocs;
+		}
+
+		public void setSelLocs(Long[] selLocs) {
+			this.selLocs = selLocs;
+		}
+
+		public Collection getSearchLocs() {
+			return searchLocs;
+		}
+
+		public void setSearchLocs(Collection searchLocs) {
+			this.searchLocs = searchLocs;
+		}
+
+		public Long[] getSearchedLocs() {
+			return searchedLocs;
+		}
+
+		public void setSearchedLocs(Long[] searchedLocs) {
+			this.searchedLocs = searchedLocs;
+		}
+
+		public String getFill() {
+			return fill;
+		}
+
+		public void setFill(String fill) {
+			this.fill = fill;
+		}
+
+		public Integer getImpLevelValue() {
+			return impLevelValue;
+		}
+
+		public void setImpLevelValue(Integer impLevelValue) {
+			this.impLevelValue = impLevelValue;
+		}
+
+		public String getImpCountry() {
+			return impCountry;
+		}
+
+		public void setImpCountry(String impCountry) {
+			this.impCountry = impCountry;
+		}
+
+		public Long getImpRegion() {
+			return impRegion;
+		}
+
+		public void setImpRegion(Long impRegion) {
+			this.impRegion = impRegion;
+		}
+
+		public Long[] getImpMultiRegion() {
+			return impMultiRegion;
+		}
+
+		public void setImpMultiRegion(Long[] impMultiRegion) {
+			this.impMultiRegion = impMultiRegion;
+		}
+
+		public Long getImpZone() {
+			return impZone;
+		}
+
+		public void setImpZone(Long impZone) {
+			this.impZone = impZone;
+		}
+
+		public Long[] getImpMultiZone() {
+			return impMultiZone;
+		}
+
+		public void setImpMultiZone(Long[] impMultiZone) {
+			this.impMultiZone = impMultiZone;
+		}
+
+		public Long getImpWoreda() {
+			return impWoreda;
+		}
+
+		public void setImpWoreda(Long impWoreda) {
+			this.impWoreda = impWoreda;
+		}
+
+		public Long[] getImpMultiWoreda() {
+			return impMultiWoreda;
+		}
+
+		public void setImpMultiWoreda(Long[] impMultiWoreda) {
+			this.impMultiWoreda = impMultiWoreda;
+		}
+
+		
+
+		public Collection<Country> getCountries() {
+			return countries;
+		}
+
+		public void setCountries(Collection<Country> countries) {
+			this.countries = countries;
+		}
+
+		public Collection<AmpRegion> getRegions() {
+			return regions;
+		}
+
+		public void setRegions(Collection<AmpRegion> regions) {
+			this.regions = regions;
+		}
+
+		public Collection<AmpZone> getZones() {
+			return zones;
+		}
+
+		public void setZones(Collection<AmpZone> zones) {
+			this.zones = zones;
+		}
+
+		public Collection<AmpWoreda> getWoredas() {
+			return woredas;
+		}
+
+		public void setWoredas(Collection<AmpWoreda> woredas) {
+			this.woredas = woredas;
+		}
+
+		
+		public String getCountry() {
+			return country;
+		}
+
+		public void setCountry(String country) {
+			this.country = country;
+		}
+
+		public boolean isDefaultCountryIsSet() {
+			return defaultCountryIsSet;
+		}
+
+		public void setDefaultCountryIsSet(boolean defaultCountryIsSet) {
+			this.defaultCountryIsSet = defaultCountryIsSet;
+		}
+
+		public int getTempNumResults() {
+			return tempNumResults;
+		}
+
+		public void setTempNumResults(int tempNumResults) {
+			this.tempNumResults = tempNumResults;
+		}
+
+		public int getCurrentPage() {
+			return currentPage;
+		}
+
+		public void setCurrentPage(int currentPage) {
+			this.currentPage = currentPage;
+		}
+
+		public String getKeyword() {
+			return keyword;
+		}
+
+		public void setKeyword(String keyword) {
+			this.keyword = keyword;
+		}
+
+		public int getNumResults() {
+			return numResults;
+		}
+
+		public void setNumResults(int numResults) {
+			this.numResults = numResults;
+		}
+
+		public Collection getCols() {
+			return cols;
+		}
+
+		public void setCols(Collection cols) {
+			this.cols = cols;
+		}
+
+		public Collection getPagedCol() {
+			return pagedCol;
+		}
+
+		public void setPagedCol(Collection pagedCol) {
+			this.pagedCol = pagedCol;
+		}
+
+		public Collection getPages() {
+			return pages;
+		}
+
+		public void setPages(Collection pages) {
+			this.pages = pages;
+			if (pages != null) {
+				this.pagesSize = pages.size();
+			}
+		}
+
+		public void reset(ActionMapping mapping, HttpServletRequest request) {
+			fill = "country";
+			impLevelValue = new Integer(0);
+			impCountry = "";
+			impRegion = new Long(-1);
+			impZone = new Long(-1);
+			impWoreda = new Long(-1);
+			regions = null;
+			zones = null;
+			woredas = null;
+
+		}
 	}
-	
-	public org.digijava.module.aim.helper.Location getSelectedLocs(int index) {
-		return (org.digijava.module.aim.helper.Location)(this.location.selectedLocs.toArray()[index]);
-	}
-	
+
 	public class Sector {
+		
+		private String keyword;
+		private int tempNumResults;
+		private int numResults;
+		private int currentPage;
+		private Collection<Integer> pages;
+		private Collection cols;
+		private Collection pagedCol;
+		
+		
+		private Long sector;
+		private Long subsectorLevel1;
+		private Long subsectorLevel2;
+		private Long sectorScheme;
+		private Collection sectorSchemes;
+		private Collection parentSectors;
+		private Collection childSectorsLevel1;
+		private Collection childSectorsLevel2;
+		private Long selActivitySectors[];
 		private List classificationConfigs;
 		private String primarySectorVisible = null;
 		private String secondarySectorVisible = null;
 		private Collection<ActivitySector> activitySectors;
+		private Collection searchedSectors = null; // list of searched Sectors.
+		private Long selSectors[] = null; // sectors selected by user to be
+		// added
+		private boolean sectorReset;
+		private int pagesSize;
 
 		public List getClassificationConfigs() {
 			return classificationConfigs;
@@ -3599,12 +1122,278 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.activitySectors = activitySectors;
 		}
 
+		public Long getSector() {
+			return sector;
+		}
+
+		public void setSector(Long sector) {
+			this.sector = sector;
+		}
+
+		public Long getSubsectorLevel1() {
+			return subsectorLevel1;
+		}
+
+		public void setSubsectorLevel1(Long subsectorLevel1) {
+			this.subsectorLevel1 = subsectorLevel1;
+		}
+
+		public Long getSubsectorLevel2() {
+			return subsectorLevel2;
+		}
+
+		public void setSubsectorLevel2(Long subsectorLevel2) {
+			this.subsectorLevel2 = subsectorLevel2;
+		}
+
+		public Long getSectorScheme() {
+			return sectorScheme;
+		}
+
+		public void setSectorScheme(Long sectorScheme) {
+			this.sectorScheme = sectorScheme;
+		}
+
+		public Collection getSectorSchemes() {
+			return sectorSchemes;
+		}
+
+		public void setSectorSchemes(Collection sectorSchemes) {
+			this.sectorSchemes = sectorSchemes;
+		}
+
+		public Collection getParentSectors() {
+			return parentSectors;
+		}
+
+		public void setParentSectors(Collection parentSectors) {
+			this.parentSectors = parentSectors;
+		}
+
+		public Collection getChildSectorsLevel1() {
+			return childSectorsLevel1;
+		}
+
+		public void setChildSectorsLevel1(Collection childSectorsLevel1) {
+			this.childSectorsLevel1 = childSectorsLevel1;
+		}
+
+		public Collection getChildSectorsLevel2() {
+			return childSectorsLevel2;
+		}
+
+		public void setChildSectorsLevel2(Collection childSectorsLevel2) {
+			this.childSectorsLevel2 = childSectorsLevel2;
+		}
+
+		public Long[] getSelActivitySectors() {
+			return selActivitySectors;
+		}
+
+		public void setSelActivitySectors(Long[] selActivitySectors) {
+			this.selActivitySectors = selActivitySectors;
+		}
+
+		public Collection getSearchedSectors() {
+			return searchedSectors;
+		}
+
+		public void setSearchedSectors(Collection searchedSectors) {
+			this.searchedSectors = searchedSectors;
+		}
+
+		public Long[] getSelSectors() {
+			return selSectors;
+		}
+
+		public void setSelSectors(Long[] selSectors) {
+			this.selSectors = selSectors;
+		}
+
+		public boolean isSectorReset() {
+			return sectorReset;
+		}
+
+		public void setSectorReset(boolean sectorReset) {
+			this.sectorReset = sectorReset;
+		}
+
+		public String getKeyword() {
+			return keyword;
+		}
+
+		public void setKeyword(String keyword) {
+			this.keyword = keyword;
+		}
+
+		public int getTempNumResults() {
+			return tempNumResults;
+		}
+
+		public void setTempNumResults(int tempNumResults) {
+			this.tempNumResults = tempNumResults;
+		}
+
+		public int getNumResults() {
+			return numResults;
+		}
+
+		public void setNumResults(int numResults) {
+			this.numResults = numResults;
+		}
+
+		public int getCurrentPage() {
+			return currentPage;
+		}
+
+		public void setCurrentPage(int currentPage) {
+			this.currentPage = currentPage;
+		}
+
+		public Collection<Integer> getPages() {
+			return pages;
+		}
+
+		public void setPages(Collection pages) {
+			this.pages = pages;
+			if (pages != null) {
+				this.pagesSize = pages.size();
+			}
+		}
+
+		public Collection getCols() {
+			return cols;
+		}
+
+		public void setCols(Collection cols) {
+			this.cols = cols;
+		}
+
+		public Collection getPagedCol() {
+			return pagedCol;
+		}
+
+		public void setPagedCol(Collection pagedCol) {
+			this.pagedCol = pagedCol;
+		}
+
 	}
 
 	public class Component {
 		private Collection activityComponentes;
 		private String multiSectorSelecting;
 		private Long selActivityComponentes[];
+		private ArrayList<AmpComponentType> allCompsType;
+		private Long selectedType;
+		private String newCompoenentName;
+		private Collection allComps;
+		private boolean componentReset;
+		private String componentTitle;
+		private String componentDesc;
+		private String componentAmount;
+		private Long componentId;
+		private double compTotalDisb;
+		private Collection<Components<FundingDetail>> selectedComponents;
+		private Long[] selComp;
+		private Long[] selCompSectors;
+		private String currencyCode;
+		private String componentRepDate;
+
+		public Long getComponentId() {
+			return componentId;
+		}
+
+		public void setComponentId(Long componentId) {
+			this.componentId = componentId;
+		}
+
+		public double getCompTotalDisb() {
+			return compTotalDisb;
+		}
+
+		public void setCompTotalDisb(double compTotalDisb) {
+			this.compTotalDisb = compTotalDisb;
+		}
+
+		public Collection<Components<FundingDetail>> getSelectedComponents() {
+			return selectedComponents;
+		}
+
+		public void setSelectedComponents(Collection<Components<FundingDetail>> selectedComponents) {
+			this.selectedComponents = selectedComponents;
+		}
+
+		public Long[] getSelComp() {
+			return selComp;
+		}
+
+		public void setSelComp(Long[] selComp) {
+			this.selComp = selComp;
+		}
+
+		public ArrayList<AmpComponentType> getAllCompsType() {
+			return allCompsType;
+		}
+
+		public void setAllCompsType(ArrayList<AmpComponentType> allCompsType) {
+			this.allCompsType = allCompsType;
+		}
+
+		public Long getSelectedType() {
+			return selectedType;
+		}
+
+		public void setSelectedType(Long selectedType) {
+			this.selectedType = selectedType;
+		}
+
+		public String getNewCompoenentName() {
+			return newCompoenentName;
+		}
+
+		public void setNewCompoenentName(String newCompoenentName) {
+			this.newCompoenentName = newCompoenentName;
+		}
+
+		public Collection getAllComps() {
+			return allComps;
+		}
+
+		public void setAllComps(Collection allComps) {
+			this.allComps = allComps;
+		}
+
+		public boolean isComponentReset() {
+			return componentReset;
+		}
+
+		public void setComponentReset(boolean componentReset) {
+			this.componentReset = componentReset;
+		}
+
+		public String getComponentTitle() {
+			return componentTitle;
+		}
+
+		public void setComponentTitle(String componentTitle) {
+			this.componentTitle = componentTitle;
+		}
+
+		public String getComponentDesc() {
+			return componentDesc;
+		}
+
+		public void setComponentDesc(String componentDesc) {
+			this.componentDesc = componentDesc;
+		}
+
+		public String getComponentAmount() {
+			return componentAmount;
+		}
+
+		public void setComponentAmount(String componentAmount) {
+			this.componentAmount = componentAmount;
+		}
 
 		public Long[] getSelActivityComponentes() {
 			return selActivityComponentes;
@@ -3630,15 +1419,157 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.multiSectorSelecting = multiSectorSelecting;
 		}
 
+		public Long[] getSelCompSectors() {
+			return selCompSectors;
+		}
+
+		public void setSelCompSectors(Long[] selCompSectors) {
+			this.selCompSectors = selCompSectors;
+		}
+
+		public String getCurrencyCode() {
+			return currencyCode;
+		}
+
+		public void setCurrencyCode(String currencyCode) {
+			this.currencyCode = currencyCode;
+		}
+
+		public String getComponentRepDate() {
+			return componentRepDate;
+		}
+
+		public void setComponentRepDate(String componentRepDate) {
+			this.componentRepDate = componentRepDate;
+		}
+
+	}
+
+	public class Issues {
+
+		private String actor;
+		private Long actorId;
+		private String issue;
+		private ArrayList issues;
+		private Long[] selIssues;
+		private String issueDate;
+		private Long[] selMeasures;
+		private String measure;
+		private Long issueId;
+		private Long measureId;
+		private Long[] selActors;
+
+		public String getActor() {
+			return actor;
+		}
+
+		public void setActor(String actor) {
+			this.actor = actor;
+		}
+
+		public Long getActorId() {
+			return actorId;
+		}
+
+		public void setActorId(Long actorId) {
+			this.actorId = actorId;
+		}
+
+		public String getIssue() {
+			return issue;
+		}
+
+		public void setIssue(String issue) {
+			this.issue = issue;
+		}
+
+		public ArrayList getIssues() {
+			return issues;
+		}
+
+		public void setIssues(ArrayList issues) {
+			this.issues = issues;
+		}
+
+		public Long[] getSelIssues() {
+			return selIssues;
+		}
+
+		public void setSelIssues(Long[] selIssues) {
+			this.selIssues = selIssues;
+		}
+
+		public String getIssueDate() {
+			return issueDate;
+		}
+
+		public void setIssueDate(String issueDate) {
+			this.issueDate = issueDate;
+		}
+
+		public Long[] getSelMeasures() {
+			return selMeasures;
+		}
+
+		public void setSelMeasures(Long[] selMeasures) {
+			this.selMeasures = selMeasures;
+		}
+
+		public String getMeasure() {
+			return measure;
+		}
+
+		public void setMeasure(String measure) {
+			this.measure = measure;
+		}
+
+		public Long getIssueId() {
+			return issueId;
+		}
+
+		public void setIssueId(Long issueId) {
+			this.issueId = issueId;
+		}
+
+		public Long getMeasureId() {
+			return measureId;
+		}
+
+		public void setMeasureId(Long measureId) {
+			this.measureId = measureId;
+		}
+
+		public Long[] getSelActors() {
+			return selActors;
+		}
+
+		public void setSelActors(Long[] selActors) {
+			this.selActors = selActors;
+		}
 	}
 
 	public class Programs {
+		private int programType;
+		private Long[] selectedNPOPrograms;
+		private Long[] selectedPPrograms;
+		private Long[] selectedSPrograms;
+		private List programLevels;
+		private Long selPrograms[];
+		private Long selProgramId;
+
+		private List actPrograms;
+		private Collection programCollection;
+		private Long selectedPrograms[];
+		private Long program;
+		private String programDescription;
 		private AmpActivityProgramSettings nationalSetting;
 		private List nationalPlanObjectivePrograms;
 		private AmpActivityProgramSettings primarySetting;
 		private List primaryPrograms;
 		private List secondaryPrograms;
 		private AmpActivityProgramSettings secondarySetting;
+
+		private String visibleProgram = null;
 
 		public AmpActivityProgramSettings getNationalSetting() {
 			return nationalSetting;
@@ -3686,6 +1617,102 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 		public void setSecondaryPrograms(List secondaryPrograms) {
 			this.secondaryPrograms = secondaryPrograms;
+		}
+
+		public Long getProgram() {
+			return program;
+		}
+
+		public void setProgram(Long program) {
+			this.program = program;
+		}
+
+		public String getProgramDescription() {
+			return programDescription;
+		}
+
+		public void setProgramDescription(String programDescription) {
+			this.programDescription = programDescription;
+		}
+
+		public List getProgramLevels() {
+			return programLevels;
+		}
+
+		public void setProgramLevels(List programLevels) {
+			this.programLevels = programLevels;
+		}
+
+		public Long[] getSelPrograms() {
+			return selPrograms;
+		}
+
+		public void setSelPrograms(Long[] selPrograms) {
+			this.selPrograms = selPrograms;
+		}
+
+		public Long getSelProgramId() {
+			return selProgramId;
+		}
+
+		public void setSelProgramId(Long selProgramId) {
+			this.selProgramId = selProgramId;
+		}
+
+		public List getActPrograms() {
+			return actPrograms;
+		}
+
+		public void setActPrograms(List actPrograms) {
+			this.actPrograms = actPrograms;
+		}
+
+		public Collection getProgramCollection() {
+			return programCollection;
+		}
+
+		public void setProgramCollection(Collection programCollection) {
+			this.programCollection = programCollection;
+		}
+
+		public Long[] getSelectedPrograms() {
+			return selectedPrograms;
+		}
+
+		public void setSelectedPrograms(Long[] selectedPrograms) {
+			this.selectedPrograms = selectedPrograms;
+		}
+
+		public int getProgramType() {
+			return programType;
+		}
+
+		public void setProgramType(int programType) {
+			this.programType = programType;
+		}
+
+		public Long[] getSelectedNPOPrograms() {
+			return selectedNPOPrograms;
+		}
+
+		public void setSelectedNPOPrograms(Long[] selectedNPOPrograms) {
+			this.selectedNPOPrograms = selectedNPOPrograms;
+		}
+
+		public Long[] getSelectedPPrograms() {
+			return selectedPPrograms;
+		}
+
+		public void setSelectedPPrograms(Long[] selectedPPrograms) {
+			this.selectedPPrograms = selectedPPrograms;
+		}
+
+		public Long[] getSelectedSPrograms() {
+			return selectedSPrograms;
+		}
+
+		public void setSelectedSPrograms(Long[] selectedSPrograms) {
+			this.selectedSPrograms = selectedSPrograms;
 		}
 
 	}
@@ -3746,6 +1773,9 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private String totalActualDisbursementsOrders;
 		private String unDisbursementsBalance;
 		private boolean fixerate;
+		private double regionTotalDisb;
+		private Collection orderedFundingOrganizations;
+		private Collection financingBreakdown = null;
 
 		// Add Funding fields
 
@@ -3776,8 +1806,49 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private boolean firstSubmit;
 		private String event;
 		private boolean editFunding;
+		private Long fundDonor;
+		private Long fundingId;
+		private Long fundingRegionId;
+		private Collection fundingRegions;
+		private Long[] selRegFundings;
 
-		// end add funding field
+		private Collection regionalFundings;
+		private Long selFundingOrgs[];
+		private long orgId;
+		private int offset;
+		private int indexId;
+		private long transIndexId;
+		public int getIndexId() {
+			return indexId;
+		}
+
+		public void setIndexId(int indexId) {
+			this.indexId = indexId;
+		}
+
+		public int getOffset() {
+			return offset;
+		}
+
+		public void setOffset(int offset) {
+			this.offset = offset;
+		}
+
+		public long getOrgId() {
+			return orgId;
+		}
+
+		public void setOrgId(long orgId) {
+			this.orgId = orgId;
+		}
+
+		public Collection getFundingRegions() {
+			return fundingRegions;
+		}
+
+		public void setFundingRegions(Collection fundingRegions) {
+			this.fundingRegions = fundingRegions;
+		}
 
 		public int getNumComm() {
 			return numComm;
@@ -3827,15 +1898,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.fundingOrganizations = fundingOrganizations;
 		}
 
-		public FundingOrganization getFundingOrganization(int index) {
-			int currentSize = fundingOrganizations.size();
-			if (index >= currentSize) {
-				for (int i = 0; i <= index - currentSize; i++) {
-					fundingOrganizations.add(new FundingOrganization());
-				}
-			}
-			return (FundingOrganization) ((ArrayList) fundingOrganizations).get(index);
-		}
+	
 
 		public boolean isDisbursementOrders() {
 			boolean disbOrdersExist = false;
@@ -4191,8 +2254,100 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		public void setDonorObjective(String donorObjective) {
 			this.donorObjective = donorObjective;
 		}
+
+		public Long getFundDonor() {
+			return fundDonor;
+		}
+
+		public void setFundDonor(Long fundDonor) {
+			this.fundDonor = fundDonor;
+		}
+
+		public Long getFundingId() {
+			return fundingId;
+		}
+
+		public void setFundingId(Long fundingId) {
+			this.fundingId = fundingId;
+		}
+
+		public Long getFundingRegionId() {
+			return fundingRegionId;
+		}
+
+		public void setFundingRegionId(Long fundingRegionId) {
+			this.fundingRegionId = fundingRegionId;
+		}
+
+		public double getRegionTotalDisb() {
+			return regionTotalDisb;
+		}
+
+		public void setRegionTotalDisb(double regionTotalDisb) {
+			this.regionTotalDisb = regionTotalDisb;
+		}
+
+		public Collection getOrderedFundingOrganizations() {
+			return orderedFundingOrganizations;
+		}
+
+		public void setOrderedFundingOrganizations(Collection orderedFundingOrganizations) {
+			this.orderedFundingOrganizations = orderedFundingOrganizations;
+		}
+
+
+		public Collection getFinancingBreakdown() {
+			return financingBreakdown;
+		}
+
+		public void setFinancingBreakdown(Collection financingBreakdown) {
+			this.financingBreakdown = financingBreakdown;
+		}
+
+		public Collection getRegionalFundings() {
+			return regionalFundings;
+		}
+
+		public void setRegionalFundings(Collection regionalFundings) {
+			this.regionalFundings = regionalFundings;
+		}
+
+		public Long[] getSelFundingOrgs() {
+			return selFundingOrgs;
+		}
+
+		public void setSelFundingOrgs(Long[] selFundingOrgs) {
+			this.selFundingOrgs = selFundingOrgs;
+		}
+
+	
+
+		public Long[] getSelRegFundings() {
+			return selRegFundings;
+		}
+
+		public void setSelRegFundings(Long[] selRegFundings) {
+			this.selRegFundings = selRegFundings;
+		}
+
+		public long getTransIndexId() {
+			return transIndexId;
+		}
+
+		public void setTransIndexId(long transIndexId) {
+			this.transIndexId = transIndexId;
+		}
 	}
 
+	public FundingOrganization getFundingOrganization(int index) {
+		int currentSize = getFunding().fundingOrganizations.size();
+		if (index >= currentSize) {
+			for (int i = 0; i <= index - currentSize; i++) {
+				getFunding().fundingOrganizations.add(new FundingOrganization());
+			}
+		}
+		return (FundingOrganization) ((ArrayList) getFunding().fundingOrganizations).get(index);
+	}
 	public class ContactInformation {
 		private String dnrCntFirstName;
 		private String dnrCntLastName;
@@ -4222,6 +2377,34 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private String secMiCntOrganization;
 		private String secMiCntPhoneNumber;
 		private String secMiCntFaxNumber;
+
+		private String contFirstName;
+		private String contLastName;
+		private String email;
+
+		public String getContFirstName() {
+			return contFirstName;
+		}
+
+		public void setContFirstName(String contFirstName) {
+			this.contFirstName = contFirstName;
+		}
+
+		public String getContLastName() {
+			return contLastName;
+		}
+
+		public void setContLastName(String contLastName) {
+			this.contLastName = contLastName;
+		}
+
+		public String getEmail() {
+			return email;
+		}
+
+		public void setEmail(String email) {
+			this.email = email;
+		}
 
 		public String getDnrCntFirstName() {
 			return dnrCntFirstName;
@@ -4449,96 +2632,421 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 	}
 
-	private Identification identification;
+	public class Comments {
+		private String actionFlag;
+		private String fieldName;
+		private AmpField field = null;
 
-	public Identification getIdentification() {
-		if (this.identification == null) {
-			this.identification = new Identification();
+		private ArrayList commentsCol = new ArrayList();
+		private HashMap allComments = new HashMap();
+		private boolean commentFlag;
+		private String commentText = null;
+		private Long ampCommentId;
+		
+
+		public ArrayList getCommentsCol() {
+			return commentsCol;
 		}
-		return identification;
+
+		public void setCommentsCol(ArrayList commentsCol) {
+			this.commentsCol = commentsCol;
+		}
+
+		public HashMap getAllComments() {
+			return allComments;
+		}
+
+		public void setAllComments(HashMap allComments) {
+			this.allComments = allComments;
+		}
+
+		public boolean isCommentFlag() {
+			return commentFlag;
+		}
+
+		public void setCommentFlag(boolean commentFlag) {
+			this.commentFlag = commentFlag;
+		}
+
+		public String getCommentText() {
+			return commentText;
+		}
+
+		public void setCommentText(String commentText) {
+			this.commentText = commentText;
+		}
+
+		public Long getAmpCommentId() {
+			return ampCommentId;
+		}
+
+		public void setAmpCommentId(Long ampCommentId) {
+			this.ampCommentId = ampCommentId;
+		}
+	
+
+
+		public String getActionFlag() {
+			return actionFlag;
+		}
+
+		public void setActionFlag(String actionFlag) {
+			this.actionFlag = actionFlag;
+		}
+
+		public String getFieldName() {
+			return fieldName;
+		}
+
+		public void setFieldName(String fieldName) {
+			this.fieldName = fieldName;
+		}
+
+		public AmpField getField() {
+			return field;
+		}
+
+		public void setField(AmpField field) {
+			this.field = field;
+		}
+
 	}
 
-	private Planning planning;
+	public class PhisycalProgress {
+		private Collection selectedPhysicalProgress;
+		private Long selPhyProg[];
+		private boolean phyProgReset;
+		private String phyProgTitle;
+		private String phyProgDesc;
+		private String phyProgRepDate;
+		private Long phyProgId;
 
-	public Planning getPlanning() {
-		if (this.planning == null) {
-			this.planning = new Planning();
+		public boolean isPhyProgReset() {
+			return phyProgReset;
 		}
-		return this.planning;
+
+		public void setPhyProgReset(boolean phyProgReset) {
+			this.phyProgReset = phyProgReset;
+		}
+
+		public String getPhyProgTitle() {
+			return phyProgTitle;
+		}
+
+		public void setPhyProgTitle(String phyProgTitle) {
+			this.phyProgTitle = phyProgTitle;
+		}
+
+		public String getPhyProgDesc() {
+			return phyProgDesc;
+		}
+
+		public void setPhyProgDesc(String phyProgDesc) {
+			this.phyProgDesc = phyProgDesc;
+		}
+
+		public String getPhyProgRepDate() {
+			return phyProgRepDate;
+		}
+
+		public void setPhyProgRepDate(String phyProgRepDate) {
+			this.phyProgRepDate = phyProgRepDate;
+		}
+
+		public Long getPhyProgId() {
+			return phyProgId;
+		}
+
+		public void setPhyProgId(Long phyProgId) {
+			this.phyProgId = phyProgId;
+		}
+
+		public Collection getSelectedPhysicalProgress() {
+			return selectedPhysicalProgress;
+		}
+
+		public void setSelectedPhysicalProgress(Collection selectedPhysicalProgress) {
+			this.selectedPhysicalProgress = selectedPhysicalProgress;
+		}
+
+		public Long[] getSelPhyProg() {
+			return selPhyProg;
+		}
+
+		public void setSelPhyProg(Long[] selPhyProg) {
+			this.selPhyProg = selPhyProg;
+		}
 	}
 
-	private Location location;
+	public class Documents {
+		private String documentSpace = null;
+		private FormFile docFile;
+		private String docWebResource= "http://";
+		private String docTitle;
+		private String docDescription;
+		private String docDate;
+		private String docFileOrLink;
+		private boolean docReset;
+		private boolean showInHomePage;
+		private int pageId;
+		private Collection documentList;
+		private Collection documents;
+		private Collection<DocumentData> crDocuments;
+		private Collection managedDocumentList;
+		private long selDocs[];
+		private Collection linksList;
+		private long selLinks[];
+		private String selManagedDocs[];
+		private String actionFlag = null;
 
-	public Location getLocation() {
-		if (this.location == null) {
-			this.location = new Location();
+		
+		private int pagesToShow;
+		private int pagesSize;
+		private int startPage;
+		private List referenceDocs;
+
+		private Long docType;
+		private Long docLang;
+		private String docComment;
+		private Long[] allReferenceDocNameIds;
+
+		public FormFile getDocFile() {
+			return docFile;
 		}
-		return this.location;
-	}
 
-	private Sector sectors;
-
-	public Sector getSectors() {
-		if (this.sectors == null) {
-			this.sectors = new Sector();
+		public void setDocFile(FormFile docFile) {
+			this.docFile = docFile;
 		}
-		return this.sectors;
 
-	}
-
-	private Component components;
-
-	public Component getComponents() {
-		if (this.components == null) {
-			this.components = new Component();
+		public String getDocWebResource() {
+			return docWebResource;
 		}
-		return this.components;
 
-	}
-
-	private Programs programs;
-
-	public Programs getPrograms() {
-		if (this.programs == null) {
-			this.programs = new Programs();
+		public void setDocWebResource(String docWebResource) {
+			this.docWebResource = docWebResource;
 		}
-		return this.programs;
 
-	}
-
-	private CrossCuttingIssues crossIssues;
-
-	public CrossCuttingIssues getCrossIssues() {
-		if (this.crossIssues == null) {
-			this.crossIssues = new CrossCuttingIssues();
+		public String getDocTitle() {
+			return docTitle;
 		}
-		return this.crossIssues;
 
-	}
-
-	private Funding funding;
-
-	public Funding getFunding() {
-		if (this.funding == null) {
-			this.funding = new Funding();
+		public void setDocTitle(String docTitle) {
+			this.docTitle = docTitle;
 		}
-		return this.funding;
 
+		public String getDocDescription() {
+			return docDescription;
+		}
+
+		public void setDocDescription(String docDescription) {
+			this.docDescription = docDescription;
+		}
+
+		public String getDocDate() {
+			return docDate;
+		}
+
+		public void setDocDate(String docDate) {
+			this.docDate = docDate;
+		}
+
+		public String getDocFileOrLink() {
+			return docFileOrLink;
+		}
+
+		public void setDocFileOrLink(String docFileOrLink) {
+			this.docFileOrLink = docFileOrLink;
+		}
+
+		public boolean isDocReset() {
+			return docReset;
+		}
+
+		public void setDocReset(boolean docReset) {
+			this.docReset = docReset;
+		}
+
+		public boolean isShowInHomePage() {
+			return showInHomePage;
+		}
+
+		public void setShowInHomePage(boolean showInHomePage) {
+			this.showInHomePage = showInHomePage;
+		}
+
+		public int getPageId() {
+			return pageId;
+		}
+
+		public void setPageId(int pageId) {
+			this.pageId = pageId;
+		}
+
+		public boolean isEditAct() {
+			return editAct;
+		}
+
+		public Long getDocType() {
+			return docType;
+		}
+
+		public void setDocType(Long docType) {
+			this.docType = docType;
+		}
+
+		public Long getDocLang() {
+			return docLang;
+		}
+
+		public void setDocLang(Long docLang) {
+			this.docLang = docLang;
+		}
+
+		public String getDocComment() {
+			return docComment;
+		}
+
+		public void setDocComment(String docComment) {
+			this.docComment = docComment;
+		}
+
+		public String getDocumentSpace() {
+			return documentSpace;
+		}
+
+		public void setDocumentSpace(String documentSpace) {
+			this.documentSpace = documentSpace;
+		}
+
+		public Collection getDocumentList() {
+			return documentList;
+		}
+
+		public void setDocumentList(Collection documentList) {
+			this.documentList = documentList;
+		}
+
+		public Collection getDocuments() {
+			return documents;
+		}
+
+		public void setDocuments(Collection documents) {
+			this.documents = documents;
+		}
+
+		public Collection<DocumentData> getCrDocuments() {
+			return crDocuments;
+		}
+
+		public void setCrDocuments(Collection<DocumentData> crDocuments) {
+			this.crDocuments = crDocuments;
+		}
+
+		public Collection getManagedDocumentList() {
+			return managedDocumentList;
+		}
+
+		public void setManagedDocumentList(Collection managedDocumentList) {
+			this.managedDocumentList = managedDocumentList;
+		}
+
+		public long[] getSelDocs() {
+			return selDocs;
+		}
+
+		public void setSelDocs(long[] selDocs) {
+			this.selDocs = selDocs;
+		}
+
+		public Collection getLinksList() {
+			return linksList;
+		}
+
+		public void setLinksList(Collection linksList) {
+			this.linksList = linksList;
+		}
+
+		public long[] getSelLinks() {
+			return selLinks;
+		}
+
+		public void setSelLinks(long[] selLinks) {
+			this.selLinks = selLinks;
+		}
+
+		public String[] getSelManagedDocs() {
+			return selManagedDocs;
+		}
+
+		public void setSelManagedDocs(String[] selManagedDocs) {
+			this.selManagedDocs = selManagedDocs;
+		}
+
+		public String getActionFlag() {
+			return actionFlag;
+		}
+
+		public void setActionFlag(String actionFlag) {
+			this.actionFlag = actionFlag;
+		}
+
+		
+
+		public int getPagesToShow() {
+			return pagesToShow;
+		}
+
+		public void setPagesToShow(int pagesToShow) {
+			this.pagesToShow = pagesToShow;
+		}
+
+		public int getPagesSize() {
+			return pagesSize;
+		}
+
+		public void setPagesSize(int pagesSize) {
+			this.pagesSize = pagesSize;
+		}
+
+		public int getStartPage() {
+			return startPage;
+		}
+
+		public void setStartPage(int startPage) {
+			this.startPage = startPage;
+		}
+
+		public List getReferenceDocs() {
+			return referenceDocs;
+		}
+
+		public void setReferenceDocs(List referenceDocs) {
+			this.referenceDocs = referenceDocs;
+		}
+
+		public Long[] getAllReferenceDocNameIds() {
+			return allReferenceDocNameIds;
+		}
+
+		public void setAllReferenceDocNameIds(Long[] allReferenceDocNameIds) {
+			this.allReferenceDocNameIds = allReferenceDocNameIds;
+		}
 	}
 
 	public class Survey {
-
+		private Long surveyOrgId;
 		private AmpAhsurvey ahsurvey;
 		private Collection survey = null;
 		private List indicators = null; // holds collection of Indicator helper
 		private Collection pageColl = null; // total number of survey pages
 		private Integer currPage = null;
 		private Integer startIndex = null; // starting record for iteartion
-											// over
+		// over
 		private String fundingOrg = null; // acronym of funding organisation
 		private Long ampSurveyId = null;
 		private Boolean surveyFlag = null; // if true then survey properties
-											// are
+
+		// are
 
 		public AmpAhsurvey getAhsurvey() {
 			return ahsurvey;
@@ -4610,6 +3118,46 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 		public void setSurveyFlag(Boolean surveyFlag) {
 			this.surveyFlag = surveyFlag;
+		}
+
+	}
+
+	public class Costing {
+		private Double allCosts;
+		private List costs;
+		private Double overallCost = null;
+		private Double overallContribution = null;
+
+		public List getCosts() {
+			return costs;
+		}
+
+		public void setCosts(List costs) {
+			this.costs = costs;
+		}
+
+		public Double getOverallCost() {
+			return overallCost;
+		}
+
+		public void setOverallCost(Double overallCost) {
+			this.overallCost = overallCost;
+		}
+
+		public Double getOverallContribution() {
+			return overallContribution;
+		}
+
+		public void setOverallContribution(Double overallContribution) {
+			this.overallContribution = overallContribution;
+		}
+
+		public Double getAllCosts() {
+			return allCosts;
+		}
+
+		public void setAllCosts(Double allCosts) {
+			this.allCosts = allCosts;
 		}
 
 	}
@@ -4778,72 +3326,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.selRespOrganisations = selRespOrganisations;
 		}
 
-	}
-
-	private Agencies agencies;
-
-	public Agencies getAgencies() {
-		if (this.agencies == null) {
-			this.agencies = new Agencies();
-		}
-		return this.agencies;
-
-	}
-
-	private Survey survey = null;
-
-	public Survey getSurvey() {
-		if (this.survey == null) {
-			this.survey = new Survey();
-		}
-		return this.survey;
-	}
-
-	private ContactInformation contactInfo;
-
-	public ContactInformation getContactInfo() {
-		if (this.contactInfo == null) {
-			this.contactInfo = new ContactInformation();
-		}
-		return this.contactInfo;
-
-	}
-
-	
-	// indexed properties getter should be on the root form object
-	public OrgProjectId getSelectedOrganizations(int index) {
-		return identification.selectedOrganizations[index];
-	}
-
-	public ActivitySector getActivitySectors(int index) {
-		return (ActivitySector)(sectors.activitySectors.toArray()[index]);
-	}
-
-	public AmpActivityProgram getNationalPlanObjectivePrograms(int index) {
-		return (AmpActivityProgram)(programs.nationalPlanObjectivePrograms.toArray()[index]);
-	}
-	public AmpActivityProgram getPrimaryPrograms(int index) {
-		return (AmpActivityProgram)(programs.primaryPrograms.toArray()[index]);
-	}
-	public AmpActivityProgram getSecondaryPrograms(int index) {
-		return (AmpActivityProgram)(programs.secondaryPrograms.toArray()[index]);
-	}
-
-	public FundingDetail getFundingDetail(int index) {
-		int currentSize = funding.fundingDetails.size();
-		if (index >= currentSize) {
-			for (int i = 0; i <= index - currentSize; i++) {
-				funding.fundingDetails.add(new FundingDetail());
-			}
-		}
-		return (FundingDetail) funding.fundingDetails.get(index);
-	}
-
-	public MTEFProjection getMtefProjection(int index) {
-		while (funding.fundingMTEFProjections.size() <= index) {
-			funding.fundingMTEFProjections.add(new MTEFProjection());
-		}
-		return funding.fundingMTEFProjections.get(index);
 	}
 
 	public class IndicatorME implements Serializable {
@@ -5075,21 +3557,387 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 	}
 
+	private Identification identification;
+	private Planning planning;
+	private Location location;
+	private Sector sectors;
+	private Component components;
+	private Programs programs;
+	private CrossCuttingIssues crossIssues;
+	private Funding funding;
+	private Documents documents = null;
+	private Agencies agencies;
+	private Survey survey = null;
+	private ContactInformation contactInfo;
+	private Comments comments = null;
+	private PhisycalProgress phisycalProgress;
 	private IndicatorME indicatorME = null;
+
+	private Contracts contracts = null;
+	private Costing costing = null;
+	private Issues issues = null;
+	
+	public String getWorkingTeamLeadFlag() {
+		return workingTeamLeadFlag;
+	}
+
+	public void setWorkingTeamLeadFlag(String workingTeamLeadFlag) {
+		this.workingTeamLeadFlag = workingTeamLeadFlag;
+	}
+
+	public List getSteps() {
+		return steps;
+	}
+
+	public void setSteps(List steps) {
+		this.steps = steps;
+	}
+
+	public int getStepNumberOnPage() {
+		int stepNumberOnPage = 0;
+		if (steps != null) {
+			Iterator<Step> iter = steps.iterator();
+			while (iter.hasNext()) {
+				Step stp = iter.next();
+				if (stp.getStepNumber().equals(step)) {
+					return stp.getStepActualNumber();
+				}
+			}
+		}
+		return stepNumberOnPage;
+
+	}
+
+	public EditActivityForm() {
+		step = "1";
+		reset = false;
+		editAct = false;
+		pageId = 0;
+		editKey = "";
+		customFields = CustomFieldsUtil.getCustomFields();
+    	customFieldsSteps = CustomFieldsUtil.getCustomFieldsSteps();
+	}
+	public void reset(ActionMapping mapping, HttpServletRequest request) {
+		if (reset) {
+			this.identification = null;
+			this.planning = null;
+			this.location = null;
+			this.sectors = null;
+			this.components = null;
+			this.getPrograms().setNationalPlanObjectivePrograms(null);
+			this.getPrograms().setPrimaryPrograms(null);
+			this.getPrograms().setSecondaryPrograms(null);
+			this.crossIssues = null;
+			this.funding = null;
+			this.survey = null;
+			this.contactInfo = null;
+			this.agencies = null;
+			this.indicatorME = null;
+			step = "1";
+			reset = false;
+			steps = null;
+			if (this.customFields != null && this.customFields.size() > 0) {
+				Iterator<CustomField<?>> itcf = this.customFields.iterator();
+				while (itcf.hasNext()) {
+					CustomField<?> cf = itcf.next();
+					cf.setValue(null);
+				}
+			}
+
+		}
+		if (this.getLocation().isLocationReset()) {
+			this.getLocation().reset(mapping, request);
+		}
+		
+		 if (this.getPhisycalProgress().isPhyProgReset()) {
+			 this.phisycalProgress=new PhisycalProgress();
+			}
+
+		if (this.getDocuments().isDocReset()) {
+			this.documents=new Documents();
+		 }
+		
+		if (this.getComponents().isComponentReset()) {
+			this.components=new Component();
+		}
+		if (request.getParameter("budgetCheckbox") != null) {
+			this.getIdentification().setBudget(false);
+		}
+	}
+
+	/**
+	 * @return Returns the reset.
+	 */
+	public boolean isReset() {
+		return reset;
+	}
+
+	/**
+	 * @param reset
+	 *            The reset to set.
+	 */
+	public void setReset(boolean reset) {
+		this.reset = reset;
+	}
+
+	/**
+	 * @return Returns the step.
+	 */
+	public String getStep() {
+		return step;
+	}
+
+	/**
+	 * @param step
+	 *            The step to set.
+	 */
+	public void setStep(String step) {
+		this.step = step;
+	}
+
+	/**
+	 * @return Returns the context.
+	 */
+	public String getContext() {
+		return context;
+	}
+
+	/**
+	 * @param context
+	 *            The context to set.
+	 */
+	public void setContext(String context) {
+		this.context = context;
+	}
+
+	public int getIsPreview() {
+		return isPreview;
+	}
+
+	public void setIsPreview(int isPreview) {
+		this.isPreview = isPreview;
+	}
+
+	public String getSvAction() {
+		return svAction;
+	}
+
+	public void setSvAction(String svAction) {
+		this.svAction = svAction;
+	}
+
+	public void addMessage(String key, String value) {
+		this.messages.put(key, value);
+	}
+
+	public void addError(String key, String value) {
+		this.errors.put(key, value);
+	}
+
+	public void clearMessages() {
+		this.errors.clear();
+		this.messages.clear();
+	}
+
+	/**
+	 * @return the errors
+	 */
+	public HashMap<String, String> getErrors() {
+		return errors;
+	}
+
+	/**
+	 * @param errors
+	 *            the errors to set
+	 */
+	public void setErrors(HashMap<String, String> errors) {
+		this.errors = errors;
+	}
+
+	/**
+	 * @return the messages
+	 */
+	public HashMap<String, String> getMessages() {
+		return messages;
+	}
+
+	/**
+	 * @param messages
+	 *            the messages to set
+	 */
+	public void setMessages(HashMap<String, String> messages) {
+		this.messages = messages;
+	}
+
+	public Identification getIdentification() {
+		if (this.identification == null) {
+			this.identification = new Identification();
+		}
+		return identification;
+	}
+
+	public Planning getPlanning() {
+		if (this.planning == null) {
+			this.planning = new Planning();
+		}
+		return this.planning;
+	}
+
+	public Location getLocation() {
+		if (this.location == null) {
+			this.location = new Location();
+		}
+		return this.location;
+	}
+
+	public Sector getSectors() {
+		if (this.sectors == null) {
+			this.sectors = new Sector();
+		}
+		return this.sectors;
+
+	}
+
+	public Component getComponents() {
+		if (this.components == null) {
+			this.components = new Component();
+		}
+		return this.components;
+
+	}
+
+	public Programs getPrograms() {
+		if (this.programs == null) {
+			this.programs = new Programs();
+		}
+		return this.programs;
+
+	}
+
+	public CrossCuttingIssues getCrossIssues() {
+		if (this.crossIssues == null) {
+			this.crossIssues = new CrossCuttingIssues();
+		}
+		return this.crossIssues;
+
+	}
+
+	public Funding getFunding() {
+		if (this.funding == null) {
+			this.funding = new Funding();
+		}
+		return this.funding;
+
+	}
+
+	public Documents getDocuments() {
+		if (this.documents == null) {
+			this.documents = new Documents();
+		}
+		return documents;
+	}
+
+	public Agencies getAgencies() {
+		if (this.agencies == null) {
+			this.agencies = new Agencies();
+		}
+		return this.agencies;
+
+	}
+
+	public Survey getSurvey() {
+		if (this.survey == null) {
+			this.survey = new Survey();
+		}
+		return this.survey;
+	}
+
+	public ContactInformation getContactInfo() {
+		if (this.contactInfo == null) {
+			this.contactInfo = new ContactInformation();
+		}
+		return this.contactInfo;
+
+	}
+
+	public Comments getComments() {
+		if (this.comments == null) {
+			this.comments = new Comments();
+		}
+		return comments;
+	}
+
+	public PhisycalProgress getPhisycalProgress() {
+		if (this.phisycalProgress == null) {
+			this.phisycalProgress = new PhisycalProgress();
+		}
+		return phisycalProgress;
+	}
+
+	public Contracts getContracts() {
+		if (this.contracts == null) {
+			this.contracts = new Contracts();
+		}
+		return contracts;
+	}
+
+	public Costing getCosting() {
+		if (this.costing == null) {
+			this.costing = new Costing();
+		}
+		return costing;
+	}
+
+	public Issues getIssues() {
+		if (this.issues == null) {
+			this.issues = new Issues();
+		}
+		return issues;
+	}
+
+	// indexed properties getter should be on the root form object
+	public OrgProjectId getSelectedOrganizations(int index) {
+		return identification.selectedOrganizations[index];
+	}
+
+	public ActivitySector getActivitySectors(int index) {
+		return (ActivitySector) (sectors.activitySectors.toArray()[index]);
+	}
+
+	public AmpActivityProgram getNationalPlanObjectivePrograms(int index) {
+		return (AmpActivityProgram) (programs.nationalPlanObjectivePrograms.toArray()[index]);
+	}
+
+	public AmpActivityProgram getPrimaryPrograms(int index) {
+		return (AmpActivityProgram) (programs.primaryPrograms.toArray()[index]);
+	}
+
+	public AmpActivityProgram getSecondaryPrograms(int index) {
+		return (AmpActivityProgram) (programs.secondaryPrograms.toArray()[index]);
+	}
+
+	public FundingDetail getFundingDetail(int index) {
+		int currentSize = funding.fundingDetails.size();
+		if (index >= currentSize) {
+			for (int i = 0; i <= index - currentSize; i++) {
+				funding.fundingDetails.add(new FundingDetail());
+			}
+		}
+		return (FundingDetail) funding.fundingDetails.get(index);
+	}
+
+	public MTEFProjection getMtefProjection(int index) {
+		while (funding.fundingMTEFProjections.size() <= index) {
+			funding.fundingMTEFProjections.add(new MTEFProjection());
+		}
+		return funding.fundingMTEFProjections.get(index);
+	}
 
 	public IndicatorME getIndicator() {
 		if (this.indicatorME == null) {
 			this.indicatorME = new IndicatorME();
 		}
 		return this.indicatorME;
-	}
-
-	public int getItem() {
-		return item;
-	}
-
-	public void setItem(int item) {
-		this.item = item;
 	}
 
 	public String[] getStepText() {
@@ -5131,4 +3979,78 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	public List<CustomFieldStep> getCustomFieldsSteps() {
 		return customFieldsSteps;
 	}
+
+	public boolean isEditAct() {
+		return editAct;
+	}
+
+	public void setEditAct(boolean editAct) {
+		this.editAct = editAct;
+	}
+
+	public org.digijava.module.aim.helper.Location getSelectedLocs(int index) {
+		return (org.digijava.module.aim.helper.Location) (this.location.selectedLocs.toArray()[index]);
+	}
+
+	public String getCurrCode() {
+		return currCode;
+	}
+
+	public void setCurrCode(String currCode) {
+		this.currCode = currCode;
+	}
+
+	public Collection getCurrencies() {
+		return currencies;
+	}
+
+	public void setCurrencies(Collection currencies) {
+		this.currencies = currencies;
+	}
+
+	public boolean isSerializeFlag() {
+		return serializeFlag;
+	}
+
+	public void setSerializeFlag(boolean serializeFlag) {
+		this.serializeFlag = serializeFlag;
+	}
+
+	public int getPageId() {
+		return pageId;
+	}
+
+	public void setPageId(int pageId) {
+		this.pageId = pageId;
+	}
+
+
+
+	public boolean isTeamLead() {
+		return teamLead;
+	}
+
+	public void setTeamLead(boolean teamLead) {
+		this.teamLead = teamLead;
+	}
+
+	public Long getActivityId() {
+		return activityId;
+	}
+
+	public void setActivityId(Long activityId) {
+		this.activityId = activityId;
+	}
+
+	public String getEditKey() {
+		return editKey;
+	}
+
+	public void setEditKey(String editKey) {
+		this.editKey = editKey;
+	}
+
+
+
 }
+

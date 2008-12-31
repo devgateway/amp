@@ -20,7 +20,7 @@ public class SelectDocument extends Action {
 
 		EditActivityForm eaForm = (EditActivityForm) form;
 
-		eaForm.setDocReset(true);
+		eaForm.getDocuments().setDocReset(true);
 		return mapping.findForward("forward");
 	}
 }

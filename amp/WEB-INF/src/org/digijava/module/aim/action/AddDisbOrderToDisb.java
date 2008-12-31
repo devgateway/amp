@@ -20,7 +20,7 @@ public class AddDisbOrderToDisb  extends Action {
                         EditActivityForm eaForm = (EditActivityForm) form;
                         String event=eaForm.getFunding().getEvent();
                         if(event.equals("Add")){
-                                long indexId = eaForm.getTransIndexId();
+                                long indexId = eaForm.getFunding().getTransIndexId();
                                 FundingDetail fd = new FundingDetail();
                                 fd.setIndexId(indexId);
                                 int index = eaForm.getFunding().getFundingDetails().indexOf(

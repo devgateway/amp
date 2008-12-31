@@ -46,8 +46,8 @@ function addEvent() {
 
 
 <td align="left">
-  <html:select name="aimEditActivityForm" property="selContractId" styleClass="inp-text">
-  <c:forEach var="contract" items="${aimEditActivityForm.contracts}" varStatus="conId">
+  <html:select name="aimEditActivityForm" property="contracts.selContractId" styleClass="inp-text">
+  <c:forEach var="contract" items="${aimEditActivityForm.contracts.contracts}" varStatus="conId">
   
     <html:option value="${conId.count}">${contract.contractName}</html:option>
   

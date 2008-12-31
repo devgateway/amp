@@ -30,7 +30,7 @@
 
 <digi:form action="/showAddComponent.do" method="post" name="aimAddComponentForm" type="EditActivityForm">
 	<html:hidden property="componentReset" value="false" />
-	<html:hidden property="componentId" />
+	<html:hidden property="components.componentId" />
 
 
 	<input type="hidden" name="selectedDate">
@@ -60,13 +60,13 @@
 								<td align="right"><digi:trn key="aim:comptype">
 									              Component Type
 									              </digi:trn></td>
-								<td><html:select property="selectedType"
-									styleClass="inp-text">
+								<td><html:select property="components.selectedType"
+									styleClass="inp-text" styleId="selectedType">
 									
 									<html:option value="-1">
 										<digi:trn key="aim:selecType">-Select Type-</digi:trn>
 									</html:option>
-									<html:optionsCollection property="allCompsType" label="name"
+									<html:optionsCollection property="components.allCompsType" label="name"
 										value="type_id" />
 								</html:select></td>
 							</tr>
@@ -76,8 +76,8 @@
 								<digi:trn key="aim:title">Title</digi:trn> 
 							</td>
 							<td>
-								<html:text property="newCompoenentName" value="<%=eaForm.getComponentTitle()%>" size="40" onkeypress="validateEnter(event)"/> 
-								<html:button property="addNewCompoenent" onclick="addComponent()">
+								<html:text styleId="newCompoenentName" property="components.newCompoenentName" value="<%=eaForm.getComponents().getComponentTitle()%>" size="40" onkeypress="validateEnter(event)"/> 
+								<html:button property="components.addNewCompoenent" onclick="addComponent()">
 									<digi:trn key="aim:add">Add</digi:trn>
 								</html:button>
 							</td>
@@ -116,9 +116,9 @@
 							
 							<br>
 							<div id="comm">
-								<c:if test="${aimEditActivityForm.componentId != -1}">
-								<c:forEach var="fundComp" items="${aimEditActivityForm.selectedComponents}">
-									<c:if test="${aimEditActivityForm.componentId == fundComp.componentId}">
+								<c:if test="${aimEditActivityForm.components.componentId != -1}">
+								<c:forEach var="fundComp" items="${aimEditActivityForm.components.selectedComponents}">
+									<c:if test="${aimEditActivityForm.components.componentId == fundComp.componentId}">
 										<c:forEach var="comm" items="${fundComp.commitments}">
 											<%
 												String tNameBase = "comm_" + indexC + "_";
@@ -199,9 +199,9 @@
 							<%=eaForm.getFunding().getTotalDisbursements()%> <%=eaForm.getCurrCode()%>) </span> <a
 								href="javascript:document.addDisbursement()" style="color:blue"><digi:trn key="btn:add">Add</digi:trn></a><br>
 							<br>							
-							<div id="disb"><c:if test="${aimEditActivityForm.componentId != -1}">
-								<c:forEach var="fundComp" items="${aimEditActivityForm.selectedComponents}">
-									<c:if test="${aimEditActivityForm.componentId == fundComp.componentId}">
+							<div id="disb"><c:if test="${aimEditActivityForm.components.componentId != -1}">
+								<c:forEach var="fundComp" items="${aimEditActivityForm.components.selectedComponents}">
+									<c:if test="${aimEditActivityForm.components.componentId == fundComp.componentId}">
 										<c:forEach var="comm" items="${fundComp.disbursements}">
 											<%
 												String tNameBase = "disb_" + indexD + "_";
@@ -291,9 +291,9 @@
 										key="btn:add">Add</digi:trn></a>
 								</field:display> &nbsp;&nbsp; <br>
 								<br>
-								<div id="expn"><c:if test="${aimEditActivityForm.componentId != -1}">
-									<c:forEach var="fundComp" items="${aimEditActivityForm.selectedComponents}">
-										<c:if test="${aimEditActivityForm.componentId == fundComp.componentId}">
+								<div id="expn"><c:if test="${aimEditActivityForm.components.componentId != -1}">
+									<c:forEach var="fundComp" items="${aimEditActivityForm.components.selectedComponents}">
+										<c:if test="${aimEditActivityForm.components.componentId == fundComp.componentId}">
 											<c:forEach var="comm" items="${fundComp.expenditures}">
 												<%
 													String tNameBase = "expn_" + indexE + "_";
@@ -620,14 +620,15 @@ document.validate=function()
   var msgEnterCommitment="<digi:trn key="aim:selectComponent:errmsg:enterCommitment">Commitment not entered.</digi:trn>";
   var msgEnterExpenditure="<digi:trn key="aim:selectComponent:errmsg:enterExpenditure">Expenditure entered without entering disbursements.</digi:trn>";
 
-	var titleFlag = isEmpty(document.aimAddComponentForm.newCompoenentName.value);
+
+	var titleFlag = isEmpty(document.getElementById('newCompoenentName').value);
 	if(titleFlag == true) {
 		alert(msgEnterTitle);
 		return false;
 	}
 
 	var x = document.aimAddComponentForm;
-	if(document.aimAddComponentForm.newCompoenentName.value == '')
+	if(document.getElementById('newCompoenentName').value == '')
 	{
 		alert(msgSelectComponent);
 			return false;
@@ -719,11 +720,11 @@ document.checkAmount=function(val){
 
 
 document.switchComponent=function(){
-if (document.aimAddComponentForm.newCompoenentName.value!=''){
+if (document.getElementById('newCompoenentName').value!=''){
   	 document.getElementById('tblId').style.visibility="visible";                         		
      document.getElementById('tblId').style.position="relative";  
      //document.aimEditActivityForm.newCompoenentName.value="";
-	document.getElementById("txtTitle").innerHTML="<digi:trn key="aim:msgAddfunding">Add funding information for </digi:trn> " + document.aimAddComponentForm.newCompoenentName.value;
+	document.getElementById("txtTitle").innerHTML="<digi:trn key="aim:msgAddfunding">Add funding information for </digi:trn> " + document.getElementById('newCompoenentName').value;
   
   }else{
   	 document.getElementById('tblId').style.visibility="hidden";                         		
@@ -732,20 +733,20 @@ if (document.aimAddComponentForm.newCompoenentName.value!=''){
   }
   
 <feature:display name="Admin - Component Type" module="Components">
-  if (document.aimAddComponentForm.selectedType.value==-1){
-   document.aimAddComponentForm.newCompoenentName.disabled=true;
-    document.aimAddComponentForm.newCompoenentName.style.bgColor="#EEEEEE";
+  if (document.getElementById('selectedType').value==-1){
+   document.getElementById('newCompoenentName').disabled=true;
+    document.getElementById('newCompoenentName').style.bgColor="#EEEEEE";
   }else{
 </feature:display>
-   document.aimAddComponentForm.newCompoenentName.disabled=false;
-   document.aimAddComponentForm.newCompoenentName.style.bgColor="#EEEEEE";
+   document.getElementById('newCompoenentName').disabled=false;
+   document.getElementById('newCompoenentName').style.bgColor="#EEEEEE";
    <feature:display name="Admin - Component Type" module="Components">
   }
 </feature:display>
 }
 
 
-if (document.aimAddComponentForm.newCompoenentName.value!=''){;
+if (document.getElementById('newCompoenentName').value!=''){;
 	document.switchComponent();
 }
 	

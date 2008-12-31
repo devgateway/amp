@@ -38,22 +38,6 @@ import org.digijava.module.help.jaxb.HelpType;
 import org.digijava.module.help.jaxb.Helps;
 import org.digijava.module.help.jaxb.ObjectFactory;
 import org.digijava.module.help.util.HelpUtil;
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.queryParser.QueryParser;
-import org.apache.lucene.search.Hits;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.store.Directory;
-import org.digijava.module.editor.dbentity.Editor;
-import org.digijava.module.editor.util.DbUtil;
-import org.digijava.module.aim.util.LuceneUtil;
-import org.apache.log4j.Logger;
-import sun.misc.Regexp;
 
 
 

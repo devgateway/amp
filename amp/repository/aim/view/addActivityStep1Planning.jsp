@@ -139,10 +139,10 @@
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
-																<a id="clear1" href="javascript:clearDate(document.aimEditActivityForm.originalAppDate, 'clear1')">
+																<a id="clear1" href="javascript:clearDate(document.getElementById("originalAppDate"), 'clear1')">
 																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 																</a>
-																<a id="date1" href='javascript:pickDateWithClear("date1",document.aimEditActivityForm.originalAppDate,"clear1")'>
+																<a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("originalAppDate"),"clear1")'>
 																	<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a>
 															</td>
@@ -168,10 +168,10 @@
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
-																<a id="clear2" href="javascript:clearDate(document.aimEditActivityForm.revisedAppDate, 'clear2')">
+																<a id="clear2" href="javascript:clearDate(document.getElementById("revisedAppDate"), "clear2")">
 																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 																</a>
-																<a id="date2" href='javascript:pickDateWithClear("date2",document.aimEditActivityForm.revisedAppDate,"clear2")'>
+																<a id="date2" href='javascript:pickDateWithClear("date2",document.getElementById("revisedAppDate"),"clear2")'>
 																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a>
 															</td>
@@ -204,10 +204,10 @@
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
-																<a id="clear3" href="javascript:clearDate(document.aimEditActivityForm.originalStartDate, 'clear3')">
+																<a id="clear3" href='javascript:clearDate(document.getElementById("originalStartDate"), "clear3")'>
 																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 																</a>
-																<a id="date3" href='javascript:pickDateWithClear("date3",document.aimEditActivityForm.originalStartDate, "clear3")'>
+																<a id="date3" href='javascript:pickDateWithClear("date3",document.getElementById("originalStartDate"), "clear3")'>
 																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a>
 															</td>

@@ -41,7 +41,7 @@ public class AddFunding extends Action {
 
 		EditActivityForm formBean = (EditActivityForm) form;
 		formBean.setReset(false);
-		Long orgId = formBean.getOrgId();
+		Long orgId = formBean.getFunding().getOrgId();
 		 if ( logger.isDebugEnabled() )
 		        logger.debug("< orgId=" + orgId);
 

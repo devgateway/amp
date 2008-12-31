@@ -15,8 +15,10 @@
 
 	function selectLocation()
 	{
+		
 		var check = false;
-		var implevel=document.aimEditActivityForm.impLevelValue.value;
+		
+		var implevel=document.getElementById('impLevelValue').value;
 		if(implevel == 1)
 		{
 				check=true;
@@ -24,21 +26,21 @@
 
 		if(implevel == 2)
 		{
-			if (document.aimEditActivityForm.impMultiRegion.value != -1)
+			if (document.getElementById('impMultiRegion').value != -1)
 			{
 				check=true;
 			}
 		}
 		else if(implevel == 3)
 		{
-			if ((document.aimEditActivityForm.impMultiZone.value != "") && (document.aimEditActivityForm.impMultiZone.value != -1))
+			if ((document.getElementById('impMultiZone').value != "") && (document.getElementById('.impMultiZone').value != -1))
 			{
 				check=true;
 			}
 		}
 		else if(implevel == 4)
 		{
-			if (document.aimEditActivityForm.impMultiWoreda.value != -1)
+			if (document.getElementById('impMultiWoreda').value != -1)
 			{
 				check=true;
 			}
@@ -59,7 +61,7 @@
 	}
 
 	function countryChanged() {
-		  document.aimEditActivityForm.fill.value = "region";
+		document.getElementById('fill').value = "region";
 		  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do?edit=true" />
 		  document.aimEditActivityForm.action = "<%= selectLoc %>";
 		  document.aimEditActivityForm.target = "_self";
@@ -67,7 +69,7 @@
 	}
 
 	function regionChanged() {
-		  document.aimEditActivityForm.fill.value = "zone";
+		document.getElementById('fill').value = "zone";
 		  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do?edit=true" />
 		  document.aimEditActivityForm.action = "<%= selectLoc %>";
 		  document.aimEditActivityForm.target = "_self";
@@ -75,7 +77,7 @@
 	}
 
 	function zoneChanged() {
-		  document.aimEditActivityForm.fill.value = "woreda";
+		document.getElementById('fill').value = "woreda";
 		  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do?edit=true" />
 		  document.aimEditActivityForm.action = "<%= selectLoc %>";
 		  document.aimEditActivityForm.target = "_self";
@@ -83,12 +85,12 @@
 	}
 
 	function load() {
-		if (document.aimEditActivityForm.impLevelValue.value == 2) {
-			document.aimEditActivityForm.impMultiRegion.value=-1;
-			document.aimEditActivityForm.impMultiRegion.focus();
-		} else if (document.aimEditActivityForm.impLevelValue.value > 2){
+		if (document.getElementById('impLevelValue').value == 2) {
+			document.getElementById('impMultiRegion').value=-1;
+			document.getElementById('impMultiRegion').focus();
+		} else if (document.getElementById('impLevelValue').value > 2){
 			//document.aimEditActivityForm.impRegion.value=-1;
-			document.aimEditActivityForm.impRegion.focus();
+			document.getElementById('impRegion').focus();
 		}
 	}
 
@@ -100,12 +102,12 @@
 
 	function checkEmpty() {
 		var flag=true;
-		if(trim(document.aimEditActivityForm.keyword.value) == "")
+		if(trim(document.getElementById('keyword').value) == "")
 		{
 			alert("Please Enter a Keyword....");
 			flag=false;
 		}
-		if(trim(document.aimEditActivityForm.tempNumResults.value) == 0)
+		if(trim(document.getElementById('tempNumResults').value) == 0)
 		{
 			alert("Invalid value at 'Number of results per page'");
 			flag=false;
@@ -165,7 +167,7 @@ function checkNumeric(objName,comma,period,hyphen)
 
 
 	function searchLoc() {
-		if(checkNumeric(document.aimEditActivityForm.tempNumResults	,'','','')==true)
+		if(checkNumeric(document.getElementById('tempNumResults')	,'','','')==true)
 		{
 			if(checkEmpty())
 			{
@@ -193,11 +195,11 @@ function checkNumeric(objName,comma,period,hyphen)
 <bean:define id="location" name="aimEditActivityForm" property="location"></bean:define>
 
 <digi:form action="/locationSelected.do" method="post">
-<html:hidden property="locationReset" value="false" />
-<html:hidden property="fill" />
-<html:hidden property="impLevelValue" />
-<html:hidden property="country" />
-<html:hidden property="impCountry" />
+<html:hidden styleId="locationReset" property="location.locationReset" value="false" />
+<html:hidden styleId="fill" property="location.fill" />
+<html:hidden styleId="impLevelValue" property="location.impLevelValue" />
+<html:hidden styleId="country" property="location.country" />
+<html:hidden styleId="impCountry" property="location.impCountry" />
 
 
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
@@ -215,42 +217,36 @@ function checkNumeric(objName,comma,period,hyphen)
 						<tr>
 							<td align="center" bgcolor=#ECF3FD>
 								<table cellPadding=2 cellSpacing=2>
-									<logic:greaterEqual name="aimEditActivityForm" property="impLevelValue" value="1">
+									<logic:greaterEqual name="aimEditActivityForm" property="location.impLevelValue" value="1">
 										<tr>
 											<td>
 												<category:getoptionvalue categoryKey="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="0"/>
 											</td>
 											<td><b>
-												<c:out value="${aimEditActivityForm.country}"/></b>
-												<%--
-												<html:select property="impCountry" onchange="countryChanged()" styleClass="inp-text">
-													<html:option value=" ">Select Country</html:option>
-													<html:optionsCollection name="aimEditActivityForm" property="countries"
-													value="iso" label="countryName" />
-												</html:select>--%>
+												<c:out value="${aimEditActivityForm.location.country}"/></b>
 											</td>
 										</tr>
 									</logic:greaterEqual>
-									<logic:greaterEqual name="aimEditActivityForm" property="impLevelValue" value="2">
+									<logic:greaterEqual name="aimEditActivityForm" property="location.impLevelValue" value="2">
 										<tr>
 											<td>
 												<category:getoptionvalue categoryKey="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="1"/>
 											</td>
 											<td>
-												<c:if test="${aimEditActivityForm.impLevelValue != 2}">
-													<html:select property="impRegion" onchange="regionChanged()" styleClass="inp-text">
-                                                                                                             <html:option value="-1"><digi:trn key="aim:addActivityLocations:selectRegion">Select Region</digi:trn></html:option>
-														<logic:notEmpty name="aimEditActivityForm" property="regions">
-															<html:optionsCollection name="aimEditActivityForm" property="regions"
+												<c:if test="${aimEditActivityForm.location.impLevelValue != 2}">
+													<html:select property="location.impRegion" styleId="impRegion" onchange="regionChanged()" styleClass="inp-text">
+                                                                                                          <html:option value="-1"><digi:trn key="aim:addActivityLocations:selectRegion">Select Region</digi:trn></html:option>
+														<logic:notEmpty name="aimEditActivityForm" property="location.regions">
+															<html:optionsCollection name="aimEditActivityForm"  property="location.regions"
 															value="ampRegionId" label="name" />
 														</logic:notEmpty>
 													</html:select>
 												</c:if>
-												<c:if test="${aimEditActivityForm.impLevelValue == 2}">
-														<html:select property="impMultiRegion" styleClass="inp-text" size="5" multiple="true">
+												<c:if test="${aimEditActivityForm.location.impLevelValue == 2}">
+														<html:select property="location.impMultiRegion" styleId="impMultiRegion" styleClass="inp-text" size="5" multiple="true">
 														<html:option value="-1">&nbsp;&nbsp;<digi:trn key="aim:addActivityLocations:selectRegion">Select Region</digi:trn>&nbsp;&nbsp;</html:option>
-														<logic:notEmpty name="aimEditActivityForm" property="regions">
-															<html:optionsCollection name="aimEditActivityForm" property="regions"
+														<logic:notEmpty name="aimEditActivityForm" property="location.regions">
+															<html:optionsCollection name="aimEditActivityForm" property="location.regions"
 															value="ampRegionId" label="name" />
 														</logic:notEmpty>
 													</html:select>
@@ -258,26 +254,26 @@ function checkNumeric(objName,comma,period,hyphen)
 											</td>
 										</tr>
 									</logic:greaterEqual>
-									<logic:greaterEqual name="aimEditActivityForm" property="impLevelValue" value="3">
+									<logic:greaterEqual name="aimEditActivityForm" property="location.impLevelValue" value="3">
 										<tr>
 											<td>
 												<category:getoptionvalue categoryKey="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="2"/>
 											</td>
 											<td>
-												<c:if test="${aimEditActivityForm.impLevelValue != 3}">
-												<html:select property="impZone" onchange="zoneChanged()" styleClass="inp-text" >
+												<c:if test="${aimEditActivityForm.location.impLevelValue != 3}">
+												<html:select property="location.impZone" styleId="impZone" onchange="zoneChanged()" styleClass="inp-text" >
 													<html:option value="-1"><digi:trn key="aim:addActivityLocations:selectZone">Select Zone</digi:trn></html:option>
-													<logic:notEmpty name="aimEditActivityForm" property="zones">
-														<html:optionsCollection name="aimEditActivityForm" property="zones"
+													<logic:notEmpty name="aimEditActivityForm" property="location.zones">
+														<html:optionsCollection name="aimEditActivityForm" property="location.zones"
 														value="ampZoneId" label="name" />
 													</logic:notEmpty>
 												</html:select>
 												</c:if>
-												<c:if test="${aimEditActivityForm.impLevelValue == 3}">
-												<html:select property="impMultiZone" styleClass="inp-text" size="5" multiple="true">
+												<c:if test="${aimEditActivityForm.location.impLevelValue == 3}">
+												<html:select property="location.impMultiZone" styleId="impMultiZone" styleClass="inp-text" size="5" multiple="true">
                                                                                                      <html:option value="-1">&nbsp;&nbsp;<digi:trn key="aim:addActivityLocations:selectZone">Select Zone</digi:trn>&nbsp;&nbsp;</html:option>
-													<logic:notEmpty name="aimEditActivityForm" property="zones">
-														<html:optionsCollection name="aimEditActivityForm" property="zones"
+													<logic:notEmpty name="aimEditActivityForm" property="location.zones">
+														<html:optionsCollection name="aimEditActivityForm" property="location.zones"
 														value="ampZoneId" label="name" />
 													</logic:notEmpty>
 												</html:select>
@@ -285,16 +281,16 @@ function checkNumeric(objName,comma,period,hyphen)
 											</td>
 										</tr>
 									</logic:greaterEqual>
-									<logic:greaterEqual name="aimEditActivityForm" property="impLevelValue" value="4">
+									<logic:greaterEqual name="aimEditActivityForm" property="location.impLevelValue" value="4">
 										<tr>
 											<td>
 												<category:getoptionvalue categoryKey="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="3"/>
 											</td>
 											<td>
-												<html:select property="impMultiWoreda"  styleClass="inp-text" size="5" multiple="true">
+												<html:select property="location.impMultiWoreda"  styleId="impMultiWoreda" styleClass="inp-text" size="5" multiple="true">
 													<html:option value="-1">&nbsp;&nbsp;<digi:trn key="aim:addActivityLocations:selectDistrict">Select District </digi:trn>&nbsp;&nbsp;</html:option>
-													<logic:notEmpty name="aimEditActivityForm" property="woredas">
-														<html:optionsCollection name="aimEditActivityForm" property="woredas"
+													<logic:notEmpty name="aimEditActivityForm" property="location.woredas">
+														<html:optionsCollection name="aimEditActivityForm" property="location.woredas"
 														value="ampWoredaId" label="name" />
 													</logic:notEmpty>
 												</html:select>
@@ -333,7 +329,7 @@ function checkNumeric(objName,comma,period,hyphen)
 
 <br>
 <br>
- <c:if test="${!aimEditActivityForm.defaultCountryIsSet}">
+ <c:if test="${!aimEditActivityForm.location.defaultCountryIsSet}">
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
 	<tr><td vAlign="top">
 		<table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
@@ -361,7 +357,7 @@ function checkNumeric(objName,comma,period,hyphen)
 											Enter a keyword</digi:trn>
 										</td>
 										<td>
-											<html:text property="keyword" styleClass="inp-text" />
+											<html:text property="location.keyword" styleId="keyword" styleClass="inp-text" />
 										</td>
 									</tr>
 									<tr>
@@ -370,7 +366,7 @@ function checkNumeric(objName,comma,period,hyphen)
 											Number of results per page</digi:trn>
 										</td>
 										<td>
-											<html:text property="tempNumResults" size="2" value="10" styleClass="inp-text" />
+											<html:text styleId="tempNumResults" property="location.tempNumResults" size="2" value="10" styleClass="inp-text" />
 										</td>
 									</tr>
 									<tr>

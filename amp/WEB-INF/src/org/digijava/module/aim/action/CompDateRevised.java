@@ -39,16 +39,16 @@ public class CompDateRevised extends Action {
 		EditActivityForm eaForm = (EditActivityForm) form;
 		
 		
-		if (eaForm.getRevisedCompDate().trim().length() > 0) {
-			if (eaForm.getActivityCloseDates() != null) {
-				eaForm.getActivityCloseDates().add(eaForm.getPlanning().getCurrentCompDate());
-				eaForm.getPlanning().setCurrentCompDate(eaForm.getRevisedCompDate());
-				eaForm.setRevisedCompDate("");
+		if (eaForm.getPlanning().getRevisedCompDate().trim().length() > 0) {
+			if (eaForm.getPlanning().getActivityCloseDates() != null) {
+				eaForm.getPlanning().getActivityCloseDates().add(eaForm.getPlanning().getCurrentCompDate());
+				eaForm.getPlanning().setCurrentCompDate(eaForm.getPlanning().getRevisedCompDate());
+				eaForm.getPlanning().setRevisedCompDate("");
 			}
 		}
-		List list = new ArrayList(eaForm.getActivityCloseDates()); 
+		List list = new ArrayList(eaForm.getPlanning().getActivityCloseDates()); 
 		Collections.sort(list,DateConversion.dtComp);
-		eaForm.setActivityCloseDates(list);
+		eaForm.getPlanning().setActivityCloseDates(list);
 			
 		return mapping.findForward("forward");
 	}

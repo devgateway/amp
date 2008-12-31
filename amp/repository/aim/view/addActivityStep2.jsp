@@ -51,16 +51,17 @@ function validate(field) {
   }
   return true;
 } else { // validate sector
-if (document.aimEditActivityForm.selActivitySectors.checked != null) {
-  if (document.aimEditActivityForm.selActivitySectors.checked == false) {
+	
+if (document.getElementById('selActivitySectors').checked != null) {
+  if (document.getElementById('selActivitySectors').checked == false) {
     alert("Please choose a sector to remove");
     return false;
   }
 } else {
-  var length = document.aimEditActivityForm.selActivitySectors.length;
+  var length = document.getElementById('selActivitySectors').length;
   var flag = 0;
   for (i = 0;i < length;i ++) {
-    if (document.aimEditActivityForm.selActivitySectors[i].checked == true) {
+    if (document.getElementById('selActivitySectors')[i].checked == true) {
       flag = 1;
       break;
     }
@@ -109,25 +110,30 @@ function removeSelLocations(){
   return true;
 }
 
+
 function removeAllLocations(){
-  try
-  {
-  	var checkedItems = document.getElementsByName("selLocs");
+  try{
+  
+  	var checkedItems = document.getElementById("selLocs");
+  
   	if(checkedItems.length > 0){
 	  	for(a=0;a<checkedItems.length;a++){
 	  	checkedItems[a].checked = true;
-	  	}
-  	}
-  	else
-  	
-  	{
-  		return false;
-  	}
-
+	  }
+	  removeSelLocations();
+  	}else{
+	  	if(checkedItems!=null){
+	  		checkedItems.checked = true;
+	  		removeSelLocations();
+	  	}	
+	}
+  return false;
   }
   catch(err){
   	return false;
+  
   }
+  
   <digi:context name="remLocs" property="context/module/moduleinstance/removeSelLocations.do?edit=true" />
   document.aimEditActivityForm.action = "<%= remLocs %>";
   document.aimEditActivityForm.target = "_self"
@@ -537,7 +543,7 @@ function remProgram(programType) {
 
   <html:hidden property="step"/>
   <html:hidden property="reset" />
-  <html:hidden property="country" />
+  <html:hidden property="location.country" />
   <html:hidden property="editAct" />
 
   <input type="hidden" name="edit" value="true">

@@ -80,10 +80,10 @@ public class ShowAddComponent extends Action {
 
 		EditActivityForm eaForm = (EditActivityForm) form;
 		ArrayList<AmpComponentType> ampComponentTypes = ampComponentTypes = new ArrayList<AmpComponentType>(ComponentsUtil.getAmpComponentTypes());
-		eaForm.setAllCompsType(ampComponentTypes);
+		eaForm.getComponents().setAllCompsType(ampComponentTypes);
 
 		ArrayList<org.digijava.module.aim.dbentity.AmpComponent> ampComponents = null;
-		ampComponents = (ArrayList<org.digijava.module.aim.dbentity.AmpComponent>) ComponentsUtil.getAmpComponentsByType(eaForm.getSelectedType());
+		ampComponents = (ArrayList<org.digijava.module.aim.dbentity.AmpComponent>) ComponentsUtil.getAmpComponentsByType(eaForm.getComponents().getSelectedType());
 
 		List<AmpComponent> componentsList = new ArrayList<AmpComponent>();
 
@@ -100,7 +100,7 @@ public class ShowAddComponent extends Action {
 			}
 		}
 
-		eaForm.setAllComps(componentsList);		
+		eaForm.getComponents().setAllComps(componentsList);		
 		
 		return mapping.findForward("forward");
 
@@ -116,18 +116,18 @@ public class ShowAddComponent extends Action {
 		ArrayList<org.digijava.module.aim.dbentity.AmpComponent> ampComponents = null;
 		ArrayList<AmpComponentType> ampComponentTypes = null;
 		ampComponentTypes = new ArrayList<AmpComponentType>(ComponentsUtil.getAmpComponentTypes());
-		eaForm.setAllCompsType(ampComponentTypes);
-		eaForm.setComponentId(new Long(-1));
-		eaForm.setComponentTitle(null);
-		eaForm.setComponentDesc(null);
-		eaForm.setNewCompoenentName(null);
+		eaForm.getComponents().setAllCompsType(ampComponentTypes);
+		eaForm.getComponents().setComponentId(new Long(-1));
+		eaForm.getComponents().setComponentTitle(null);
+		eaForm.getComponents().setComponentDesc(null);
+		eaForm.getComponents().setNewCompoenentName(null);
 		//String defCurr = CurrencyUtil.getCurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
 		String defCurr = DbUtil.getMemberAppSettings(tm.getMemberId()).getCurrency().getCurrencyCode();
 		request.setAttribute("defCurrency", defCurr);
 		
 		if(!isComponentTypeEnabled()){
 			AmpComponentType defaultComponentType = FeaturesUtil.getDefaultComponentType();
-			eaForm.setSelectedType(defaultComponentType.getType_id());
+			eaForm.getComponents().setSelectedType(defaultComponentType.getType_id());
 			return switchType(mapping, form, request, response);
 		}
 
@@ -166,7 +166,7 @@ public class ShowAddComponent extends Action {
 		eaForm.setStep("5");
 		ArrayList<AmpComponentType> ampComponentTypes = null;
 		ampComponentTypes = new ArrayList<AmpComponentType>(ComponentsUtil.getAmpComponentTypes());
-		eaForm.setAllCompsType(ampComponentTypes);
+		eaForm.getComponents().setAllCompsType(ampComponentTypes);
 	
 		List<AmpComponent> componentsList = new ArrayList<AmpComponent>();
 		ampComponents = (ArrayList<org.digijava.module.aim.dbentity.AmpComponent>) ComponentsUtil.getAmpComponents();
@@ -183,18 +183,18 @@ public class ShowAddComponent extends Action {
 			}
 		}
 
-		eaForm.setAllComps(componentsList);
-		Iterator itr = eaForm.getSelectedComponents().iterator();
+		eaForm.getComponents().setAllComps(componentsList);
+		Iterator itr = eaForm.getComponents().getSelectedComponents().iterator();
 		String id = request.getParameter("fundId");
 		long cId = Long.parseLong(id);
 		
 		while (itr.hasNext()) {
 			Components comp = (Components) itr.next();
 			if (comp.getComponentId().longValue() == cId) {
-				eaForm.setComponentId(comp.getComponentId());
-				eaForm.setComponentTitle(comp.getTitle());
-				eaForm.setComponentDesc(comp.getDescription());
-				eaForm.setSelectedType(comp.getType_Id());
+				eaForm.getComponents().setComponentId(comp.getComponentId());
+				eaForm.getComponents().setComponentTitle(comp.getTitle());
+				eaForm.getComponents().setComponentDesc(comp.getDescription());
+				eaForm.getComponents().setSelectedType(comp.getType_Id());
 				break;
 			}
 		}
@@ -206,16 +206,16 @@ public class ShowAddComponent extends Action {
 
 	public ActionForward addNewComponent(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
 		EditActivityForm eaForm = (EditActivityForm) form;
-		String name = eaForm.getNewCompoenentName();
-		AmpComponentType type = ComponentsUtil.getComponentTypeById(eaForm.getSelectedType());
+		String name = eaForm.getComponents().getNewCompoenentName();
+		AmpComponentType type = ComponentsUtil.getComponentTypeById(eaForm.getComponents().getSelectedType());
 		org.digijava.module.aim.dbentity.AmpComponent newCompo = new org.digijava.module.aim.dbentity.AmpComponent();
 
 		newCompo.setType(type);
 		newCompo.setTitle(name);
 
 		ComponentsUtil.addNewComponent(newCompo);
-		eaForm.setComponentTitle(newCompo.getTitle());
-		eaForm.setNewCompoenentName(null);
+		eaForm.getComponents().setComponentTitle(newCompo.getTitle());
+		eaForm.getComponents().setNewCompoenentName(null);
 		return switchType(mapping, form, request, response);
 	}
 
@@ -230,17 +230,17 @@ public class ShowAddComponent extends Action {
 
 			Components<FundingDetail> compFund = new Components();
 			
-			compFund.setType_Id(eaForm.getSelectedType());
+			compFund.setType_Id(eaForm.getComponents().getSelectedType());
 			
-			if (eaForm.getComponentId() == null || eaForm.getComponentId().longValue() == -1) {
+			if (eaForm.getComponents().getComponentId() == null || eaForm.getComponents().getComponentId().longValue() == -1) {
 				compFund.setComponentId(new Long(System.currentTimeMillis()));
 			} else {
-				compFund.setComponentId(eaForm.getComponentId());
+				compFund.setComponentId(eaForm.getComponents().getComponentId());
 			}
-			compFund.setTitle(eaForm.getComponentTitle());
-			compFund.setAmount(eaForm.getComponentAmount());
-			compFund.setDescription(eaForm.getComponentDesc());
-			compFund.setType_Id(eaForm.getSelectedType());
+			compFund.setTitle(eaForm.getComponents().getComponentTitle());
+			compFund.setAmount(eaForm.getComponents().getComponentAmount());
+			compFund.setDescription(eaForm.getComponents().getComponentDesc());
+			compFund.setType_Id(eaForm.getComponents().getSelectedType());
 			
 			Enumeration<Object> paramNames = request.getParameterNames();
 			String param = "";
@@ -404,18 +404,18 @@ public class ShowAddComponent extends Action {
 				compFund.getExpenditures().add(fd);
 			}
 
-			if (eaForm.getSelectedComponents() == null) {
-				eaForm.setSelectedComponents(new ArrayList());
+			if (eaForm.getComponents().getSelectedComponents() == null) {
+				eaForm.getComponents().setSelectedComponents(new ArrayList());
 			}
-			if (eaForm.getSelectedComponents().contains(compFund)) {
-				Iterator itr = eaForm.getSelectedComponents().iterator();
+			if (eaForm.getComponents().getSelectedComponents().contains(compFund)) {
+				Iterator itr = eaForm.getComponents().getSelectedComponents().iterator();
 				while (itr.hasNext()) {
 					Components comp = (Components) itr.next();
 					if (compFund.equals(comp)) {
 						compFund.setPhyProgress(comp.getPhyProgress());
 					}
 				}
-				eaForm.getSelectedComponents().remove(compFund);
+				eaForm.getComponents().getSelectedComponents().remove(compFund);
 			}
 
 			List list = null;
@@ -437,9 +437,9 @@ public class ShowAddComponent extends Action {
 			}
 			compFund.setExpenditures(list);
 
-			eaForm.getSelectedComponents().add(compFund);
+			eaForm.getComponents().getSelectedComponents().add(compFund);
 			Double totdisbur = 0d;
-			for (Iterator iterator = eaForm.getSelectedComponents().iterator(); iterator.hasNext();) {
+			for (Iterator iterator = eaForm.getComponents().getSelectedComponents().iterator(); iterator.hasNext();) {
 				Components object = (Components) iterator.next();
 				if (object.getDisbursements() != null) {
 					for (Iterator iterator2 = object.getDisbursements().iterator(); iterator2.hasNext();) {
@@ -448,7 +448,7 @@ public class ShowAddComponent extends Action {
 					}
 				}
 			}
-			eaForm.setCompTotalDisb(totdisbur);
+			eaForm.getComponents().setCompTotalDisb(totdisbur);
 
 		} catch (Exception e) {
 			logger.error(e);

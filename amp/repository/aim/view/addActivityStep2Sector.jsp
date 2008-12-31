@@ -139,7 +139,7 @@
                                                             <c:if test="${activitySectors.configId==config.id}">
                                                                 <tr> 
                                                                     <td width="3%" vAlign="center">
-                                                                        <html:multibox property="selActivitySectors" disabled="${contentDisabled}">
+                                                                        <html:multibox property="sectors.selActivitySectors" styleId="selActivitySectors" disabled="${contentDisabled}">
                                                                             <c:if test="${activitySectors.subsectorLevel1Id == -1}">
                                                                             ${activitySectors.sectorId}
                                                                             </c:if>

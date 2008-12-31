@@ -27,9 +27,9 @@ public class AddSelectedLocations extends Action {
 			eaForm.getLocation().setSelectedLocs(new TreeSet());
 		}
 		
-		Long selsearchedLoc[] = eaForm.getSearchedLocs();
+		Long selsearchedLoc[] = eaForm.getLocation().getSearchedLocs();
 
-		Iterator itr = eaForm.getSearchLocs().iterator();
+		Iterator itr = eaForm.getLocation().getSearchLocs().iterator();
 		int count = 0;
 		Location loc = null;
 		

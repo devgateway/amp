@@ -108,7 +108,7 @@
 											    Objective Comments</digi:trn>
 	</b>									</td>
 <td bgcolor="#ffffff">
-											 <logic:iterate name="aimEditActivityForm" id="comments" property="allComments">
+											 <logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 											 	<logic:equal name="comments" property="key" value="Objective Assumption">
 													<logic:iterate name="comments" id="comment" property="value"
 														type="org.digijava.module.aim.dbentity.AmpComments"><b>
@@ -144,8 +144,8 @@
 									  		</b>								
 									  	</td>
 									  	<td bgcolor="#ffffff">
-											<c:if test="${aimEditActivityForm.ampId!=null}">
-													${aimEditActivityForm.ampId}
+											<c:if test="${aimEditActivityForm.identification.ampId!=null}">
+													${aimEditActivityForm.identification.ampId}
 											</c:if>
 										</td>
 									</tr>
@@ -158,7 +158,7 @@
 									  		</b>								
 									  	</td>
 									  	<td bgcolor="#ffffff">
-                                        	<c:out value="${aimEditActivityForm.convenioNumcont}"/>										
+                                        	<c:out value="${aimEditActivityForm.identification.convenioNumcont}"/>										
                                         </td>
 									</tr>
                                     </field:display>                                    
@@ -190,7 +190,7 @@
 											<digi:edit key="${objKey}"></digi:edit>
                                          </c:if>										</td>
 									</tr>
-									<logic:present name="aimEditActivityForm" property="allComments">
+									<logic:present name="aimEditActivityForm" property="comments.allComments">
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap" >
 											<b>
@@ -198,7 +198,7 @@
 										    Purpose Comments</digi:trn>		
 									  </b>								</td>
 				       <td bgcolor="#ffffff">
-										 <logic:iterate name="aimEditActivityForm" id="comments" property="allComments">
+										 <logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 										 	<logic:equal name="comments" property="key" value="Purpose Assumption">
 												<logic:iterate name="comments" id="comment" property="value"
 													type="org.digijava.module.aim.dbentity.AmpComments"><b>
@@ -238,7 +238,7 @@
 											<digi:edit key="${objKey}"></digi:edit>
                                          </c:if>										</td>
 									</tr>
-									<logic:present name="aimEditActivityForm" property="allComments">
+									<logic:present name="aimEditActivityForm" property="comments.allComments">
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap">
 											<b>
@@ -246,7 +246,7 @@
 										    Results Comments</digi:trn>		
 									  </b>								</td>
 				       <td bgcolor="#ffffff">
-										 <logic:iterate name="aimEditActivityForm" id="comments" property="allComments">
+										 <logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 										 	<logic:equal name="comments" property="key" value="Results Assumption">
 												<logic:iterate name="comments" id="comment" property="value"
 													type="org.digijava.module.aim.dbentity.AmpComments"><b>
@@ -487,14 +487,14 @@
 												</tr>
 												</field:display>
 												<c:if test="${aimEditActivityForm.editAct}">
-												<c:if test="${!empty aimEditActivityForm.activityCloseDates}">
+												<c:if test="${!empty aimEditActivityForm.planning.activityCloseDates}">
 												<tr>
 													<td width="32%" valign=top><digi:trn key="aim:proposedCompletionDates">
 													Proposed Completion Dates</digi:trn></td>
 													<td width="1" valign=top>:</td>
 													<td align="left" valign=top>
 														<table cellPadding=0 cellSpacing=0>
-															<c:forEach var="closeDate" items="${aimEditActivityForm.activityCloseDates}">
+															<c:forEach var="closeDate" items="${aimEditActivityForm.planning.activityCloseDates}">
 															<tr>
 																<td>
 																	<c:out value="${closeDate}"/>																</td>
@@ -535,7 +535,7 @@
 									</b>
 									</td>
 									<td bgcolor="#ffffff">
-									<c:forEach items="${aimEditActivityForm.referenceDocs}" var="refDoc" varStatus="loopstatus">
+									<c:forEach items="${aimEditActivityForm.documents.referenceDocs}" var="refDoc" varStatus="loopstatus">
 										<table border="0">
 											<tr>
 												<td>
@@ -1021,9 +1021,9 @@
 										  </b>
 									  </td>
 										<td bgcolor="#ffffff">
-											<c:if test="${!empty aimEditActivityForm.regionalFundings}">
+											<c:if test="${!empty aimEditActivityForm.funding.regionalFundings}">
 												<table width="100%" cellSpacing="1" cellPadding="3" bgcolor="#aaaaaa">
-												<c:forEach var="regFunds" items="${aimEditActivityForm.regionalFundings}">
+												<c:forEach var="regFunds" items="${aimEditActivityForm.funding.regionalFundings}">
 													<tr><td bgcolor="#ffffff">
 														<table width="100%" cellSpacing="1" cellPadding="1">
 															<tr><td bgcolor="#ffffff"><b>
@@ -1146,8 +1146,8 @@
 										  </b>								
 									  </td>
 										<td bgcolor="#ffffff">
-											<c:if test="${!empty aimEditActivityForm.selectedComponents}">
-												<c:forEach var="comp" items="${aimEditActivityForm.selectedComponents}">
+											<c:if test="${!empty aimEditActivityForm.components.selectedComponents}">
+												<c:forEach var="comp" items="${aimEditActivityForm.components.selectedComponents}">
 													<table width="100%" cellSpacing="1" cellPadding="1">
 													<tr><td>
 														<table width="100%" cellSpacing="2" cellPadding="1" class="box-border-nopadding">
@@ -1321,8 +1321,8 @@
 										  </b>								
 									  </td>
 										<td bgcolor="#ffffff">
-											<c:if test="${!empty aimEditActivityForm.selectedComponents}">
-												<c:forEach var="comp" items="${aimEditActivityForm.selectedComponents}">
+											<c:if test="${!empty aimEditActivityForm.components.selectedComponents}">
+												<c:forEach var="comp" items="${aimEditActivityForm.components.selectedComponents}">
 													<table width="100%" cellSpacing="1" cellPadding="1">
 													<tr><td>
 														<table width="100%" cellSpacing="2" cellPadding="1" class="box-border-nopadding">
@@ -1422,9 +1422,9 @@
 										    Issues</digi:trn>
 											</b>									</td>
 <td bgcolor="#ffffff">
-											<c:if test="${!empty aimEditActivityForm.issues}">
+											<c:if test="${!empty aimEditActivityForm.issues.issues}">
 												<table width="100%" cellSpacing="2" cellPadding="2" border="0">
-												<c:forEach var="issue" items="${aimEditActivityForm.issues}">
+												<c:forEach var="issue" items="${aimEditActivityForm.issues.issues}">
 													<tr><td valign="top">
 														<li class="level1"><b><c:out value="${issue.name}"/> <field:display feature="Issues" name="Issue Date"><c:out value="${issue.issueDate}"/> </field:display> </b></li>
 													</td></tr>
@@ -1463,9 +1463,9 @@
 										    Related Documents</digi:trn>
 											</b>									</td>
 <td bgcolor="#ffffff">											
-											<c:if test="${!empty aimEditActivityForm.documentList}">
+											<c:if test="${!empty aimEditActivityForm.documents.documentList}">
 												<table width="100%" cellSpacing="0" cellPadding="0">
-												 <logic:iterate name="aimEditActivityForm"  property="documents"
+												 <logic:iterate name="aimEditActivityForm"  property="documents.documents"
 													id="docs" type="org.digijava.module.aim.helper.Documents">
 													<c:if test="${docs.isFile == true}">
 													<tr><td>
@@ -1494,9 +1494,9 @@
 													</logic:iterate>
 												</table>
 											</c:if>
-											<c:if test="${!empty aimEditActivityForm.linksList}">
+											<c:if test="${!empty aimEditActivityForm.documents.linksList}">
 												<table width="100%" cellSpacing="0" cellPadding="0">
-												<c:forEach var="docList" items="${aimEditActivityForm.linksList}">
+												<c:forEach var="docList" items="${aimEditActivityForm.documents.linksList}">
 					   							<bean:define id="links" name="docList" property="relLink" />
 													<tr><td>
 														<table width="100%" class="box-border-nopadding">
@@ -1806,9 +1806,9 @@
 										    Activity created by</digi:trn>
 											</b>							</td>
 <td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.actAthFirstName}"/>
-											<c:out value="${aimEditActivityForm.actAthLastName}"/> -
-											<c:out value="${aimEditActivityForm.actAthEmail}"/>										</td>
+											<c:out value="${aimEditActivityForm.identification.actAthFirstName}"/>
+											<c:out value="${aimEditActivityForm.identification.actAthLastName}"/> -
+											<c:out value="${aimEditActivityForm.identification.actAthEmail}"/>										</td>
 									</tr>
 									</field:display>
 									<field:display feature="Identification" name="Data Source">
@@ -1819,11 +1819,11 @@
 										    Data Source</digi:trn>
 											</b>									</td>
 <td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.actAthAgencySource}"/>										</td>
+											<c:out value="${aimEditActivityForm.identification.actAthAgencySource}"/>										</td>
 									</tr>
 									</field:display>
 									<field:display name="Activity Updated On" feature="Identification">
-									<logic:notEmpty name="aimEditActivityForm" property="updatedDate">
+									<logic:notEmpty name="aimEditActivityForm" property="identification.updatedDate">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" >
 											<b>
@@ -1832,13 +1832,13 @@
 											</b>
 										</td>
 <td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.updatedDate}"/>
+											<c:out value="${aimEditActivityForm.identification.updatedDate}"/>
 										</td>
 									</tr>
 									</logic:notEmpty>
 									</field:display>
 									<field:display name="Activity Updated By" feature="Identification">
-									<logic:notEmpty name="aimEditActivityForm" property="updatedBy">
+									<logic:notEmpty name="aimEditActivityForm" property="identification.updatedBy">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap">
 											<b>
@@ -1847,14 +1847,14 @@
 											</b>				
 											</td>
 <td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.updatedBy.user.firstNames}"/>
-											<c:out value="${aimEditActivityForm.updatedBy.user.lastName}"/>	-
-											<c:out value="${aimEditActivityForm.updatedBy.user.email}"/>										</td>
+											<c:out value="${aimEditActivityForm.identification.updatedBy.user.firstNames}"/>
+											<c:out value="${aimEditActivityForm.identification.updatedBy.user.lastName}"/>	-
+											<c:out value="${aimEditActivityForm.identification.updatedBy.user.email}"/>										</td>
 									</tr>
 									</logic:notEmpty>
 									</field:display>
 									<field:display name="Activity Created On" feature="Identification">
-									<logic:notEmpty name="aimEditActivityForm" property="createdDate">
+									<logic:notEmpty name="aimEditActivityForm" property="identification.createdDate">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap">
 											<b>
@@ -1862,11 +1862,11 @@
 										    Activity created on</digi:trn>
 											</b>								</td>
 <td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.createdDate}"/>										</td>
+											<c:out value="${aimEditActivityForm.identification.createdDate}"/>										</td>
 									</tr>
 									</logic:notEmpty>
 									</field:display>
-									<logic:notEmpty name="aimEditActivityForm" property="team">
+									<logic:notEmpty name="aimEditActivityForm" property="identification.team">
 									<field:display name="Data Team Leader" feature="Identification">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" >
@@ -1875,6 +1875,7 @@
 										    Data Team Leader</digi:trn>
 											</b>
 										</td>
+
 										<td bgcolor="#ffffff">
 											<c:out value="${aimEditActivityForm.team.teamLead.user.firstNames}"/>
 											<c:out value="${aimEditActivityForm.team.teamLead.user.lastName}"/>	-

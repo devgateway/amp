@@ -31,9 +31,9 @@ public class ShowAddPhyProgress extends Action {
 
 		if (request.getParameter("phyProgReset") != null
 				&& request.getParameter("phyProgReset").equals("false")) {
-			eaForm.setPhyProgReset(false);
+			eaForm.getPhisycalProgress().setPhyProgReset(false);
 		} else {
-			eaForm.setPhyProgReset(true);
+			eaForm.getPhisycalProgress().setPhyProgReset(true);
 			eaForm.reset(mapping, request);
 		}
 
@@ -54,8 +54,8 @@ public class ShowAddPhyProgress extends Action {
 		
 		Components comp = null;
 		boolean flag = false;
-		if (eaForm.getSelectedComponents() != null) {
-			Iterator itr = eaForm.getSelectedComponents().iterator();
+		if (eaForm.getComponents().getSelectedComponents() != null) {
+			Iterator itr = eaForm.getComponents().getSelectedComponents().iterator();
 			while (itr.hasNext()) {
 				comp = (Components) itr.next();
 				if (comp.getComponentId().equals(compId)) {
@@ -77,13 +77,13 @@ public class ShowAddPhyProgress extends Action {
 					while (itr.hasNext()) {
 						PhysicalProgress phyProg = (PhysicalProgress) itr.next();
 						if (phyProg.getPid().equals(pId)) {
-							eaForm.setPhyProgTitle(phyProg.getTitle());
-							eaForm.setPhyProgDesc(phyProg.getDescription());
-							eaForm.setPhyProgRepDate(phyProg.getReportingDate());
+							eaForm.getPhisycalProgress().setPhyProgTitle(phyProg.getTitle());
+							eaForm.getPhisycalProgress().setPhyProgDesc(phyProg.getDescription());
+							eaForm.getPhisycalProgress().setPhyProgRepDate(phyProg.getReportingDate());
 							logger.info("phyProg.getPid() :"+ phyProg.getPid());
-							eaForm.setPhyProgId(phyProg.getPid());
+							eaForm.getPhisycalProgress().setPhyProgId(phyProg.getPid());
 							logger.info("setting form bean value for compId to " + compId);
-							eaForm.setComponentId(compId);
+							eaForm.getComponents().setComponentId(compId);
 							break;
 						}
 					}
@@ -94,7 +94,7 @@ public class ShowAddPhyProgress extends Action {
 		}
 
 		logger.info("setting form bean value for compId to " + compId);
-		eaForm.setComponentId(compId);
+		eaForm.getComponents().setComponentId(compId);
 		return mapping.findForward("forward");
 	}
 }

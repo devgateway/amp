@@ -19,13 +19,13 @@ public class RemoveRegionalFunding extends Action {
 
 		EditActivityForm eaForm = (EditActivityForm) form;
 		
-		Long selFund[] = eaForm.getSelRegFundings();
+		Long selFund[] = eaForm.getFunding().getSelRegFundings();
 		for (int i = 0;i < selFund.length;i ++) {
 			RegionalFunding rf = new RegionalFunding();
 			rf.setRegionId(selFund[i]);
-			eaForm.getRegionalFundings().remove(rf);
+			eaForm.getFunding().getRegionalFundings().remove(rf);
 		}
-		eaForm.setSelRegFundings(null);
+		eaForm.getFunding().setSelRegFundings(null);
 		return mapping.findForward("forward");
 	}
 }

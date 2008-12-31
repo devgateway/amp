@@ -174,19 +174,19 @@ public class AddAmpActivity extends Action {
 
     //set the level, if available
     String levelTxt=request.getParameter("activityLevelId");
-    if(levelTxt!=null) eaForm.setActivityLevel(Long.parseLong(levelTxt));
+    if(levelTxt!=null) eaForm.getIdentification().setActivityLevel(Long.parseLong(levelTxt));
 
      //set the contracts, if available
      //eaForm.getCurrCode()
     if(eaForm.getActivityId()!=null&&(eaForm.getContracts()==null)){
            List contracts=ActivityUtil.getIPAContracts(eaForm.getActivityId(),eaForm.getCurrCode());
-           eaForm.setContracts(contracts);
+           eaForm.getContracts().setContracts(contracts);
      }
 
      // load all the active currencies
       eaForm.setCurrencies(CurrencyUtil.getAmpCurrency());
       ArrayList<AmpComponentType> ampComponentTypes = new ArrayList<AmpComponentType>(ComponentsUtil.getAmpComponentTypes());
-      eaForm.setAllCompsType(ampComponentTypes);
+      eaForm.getComponents().setAllCompsType(ampComponentTypes);
       
       
        if (eaForm.getActivityId()!=null && eaForm.getActivityId()!=0 && eaForm.getIndicator().getIndicatorsME()==null){
@@ -213,7 +213,7 @@ public class AddAmpActivity extends Action {
     /*Clear eventually dirty information found in session related to DM*/
 		if ( request.getParameter("action") != null && request.getParameter("action").equals("create") ){
                         SelectDocumentDM.clearContentRepositoryHashMap(request);
-                        eaForm.setActPrograms(null);
+                        eaForm.getPrograms().setActPrograms(null);
                         if (ProgramUtil.getAmpActivityProgramSettingsList() != null) {
                                 eaForm.getPrograms().setNationalSetting(ProgramUtil.
                                                           getAmpActivityProgramSettings(
@@ -299,17 +299,17 @@ public class AddAmpActivity extends Action {
       action = request.getParameter("action");
       if (action != null && action.trim().length() != 0) {
         if ("create".equals(action)) {
-          eaForm.getCommentsCol().clear();
-          eaForm.setCommentFlag(false);
+          eaForm.getComments().getCommentsCol().clear();
+          eaForm.getComments().setCommentFlag(false);
           eaForm.getFunding().setProProjCost(null);
-          eaForm.setActPrograms(null);
+          eaForm.getPrograms().setActPrograms(null);
         }
       }
       // end
 
       Collection themes = new ArrayList();
       themes = ProgramUtil.getAllThemes();
-      eaForm.setProgramCollection(themes);
+      eaForm.getPrograms().setProgramCollection(themes);
 
       // added by Akash
       // desc: setting WorkingTeamLeadFlag & approval status in form bean
@@ -334,7 +334,7 @@ public class AddAmpActivity extends Action {
       if (!eaForm.isEditAct() || logframepr.compareTo("true") == 0 || request.getParameter("logframe") != null) {
        if (teamMember != null)
         if ("true".compareTo((String) session.getAttribute("teamLeadFlag"))==0)
-            eaForm.setApprovalStatus(org.digijava.module.aim.helper.Constants.APPROVED_STATUS);
+            eaForm.getIdentification().setApprovalStatus(org.digijava.module.aim.helper.Constants.APPROVED_STATUS);
           else
             {
         	  synchronized (ampContext) {
@@ -344,8 +344,8 @@ public class AddAmpActivity extends Action {
 	        	  AmpModulesVisibility moduleToTest=ampTreeVisibility.getModuleByNameFromRoot("Activity Approval Process");
 	        	  if(moduleToTest!=null)
 	          	  	activityApprovalStatusProcess= moduleToTest.isVisibleTemplateObj(ampTreeVisibility.getRoot());
-	        	  if(activityApprovalStatusProcess==true ) eaForm.setApprovalStatus(org.digijava.module.aim.helper.Constants.STARTED_STATUS);
-	        	  	else eaForm.setApprovalStatus(org.digijava.module.aim.helper.Constants.APPROVED_STATUS);
+	        	  if(activityApprovalStatusProcess==true ) eaForm.getIdentification().setApprovalStatus(org.digijava.module.aim.helper.Constants.STARTED_STATUS);
+	        	  	else eaForm.getIdentification().setApprovalStatus(org.digijava.module.aim.helper.Constants.APPROVED_STATUS);
 	        	  }
             }
       }
@@ -562,10 +562,10 @@ private ActionForward addComponente(ActionMapping mapping, HttpSession session,
 
 private ActionForward removeSector(ActionMapping mapping,
 		HttpServletRequest request, HttpSession session, EditActivityForm eaForm) {
-	Long selSectors[] = eaForm.getSelActivitySectors();
+	Long selSectors[] = eaForm.getSectors().getSelActivitySectors();
       String configId=request.getParameter("configId");
       Collection<ActivitySector> prevSelSectors = eaForm.getSectors().getActivitySectors();
-      session.setAttribute("removedSector", eaForm.getSelActivitySectors());
+      session.setAttribute("removedSector", eaForm.getSectors().getSelActivitySectors());
       Collection newSectors = new ArrayList();
 
       Iterator<ActivitySector> itr = prevSelSectors.iterator();
@@ -812,14 +812,14 @@ private ActionForward showStep9(ActionMapping mapping,
 	         */
 	        if (eaForm.getIsPreview() != 1) {
 	          if (teamMember != null && (!eaForm.isEditAct()) &&
-	              (eaForm.getActAthEmail() == null ||
-	               eaForm.getActAthEmail().trim().length() == 0)) {
+	              (eaForm.getIdentification().getActAthEmail() == null ||
+	               eaForm.getIdentification().getActAthEmail().trim().length() == 0)) {
 	            User usr = DbUtil.getUser(teamMember.getEmail());
 	            if (usr != null) {
-	              eaForm.setActAthFirstName(usr.getFirstNames());
-	              eaForm.setActAthLastName(usr.getLastName());
-	              eaForm.setActAthEmail(usr.getEmail());
-	              eaForm.setActAthAgencySource(usr.getOrganizationName());
+	              eaForm.getIdentification().setActAthFirstName(usr.getFirstNames());
+	              eaForm.getIdentification().setActAthLastName(usr.getLastName());
+	              eaForm.getIdentification().setActAthEmail(usr.getEmail());
+	              eaForm.getIdentification().setActAthAgencySource(usr.getOrganizationName());
 	
 	            }
 	          }
@@ -837,13 +837,13 @@ private ActionForward showStep9(ActionMapping mapping,
 	
 	
 	    	if (activity.getActivityCreator() != null) {
-	            eaForm.setActAthFirstName(activity.getActivityCreator().getUser().
+	            eaForm.getIdentification().setActAthFirstName(activity.getActivityCreator().getUser().
 	                                      getFirstNames());
-	            eaForm.setActAthLastName(activity.getActivityCreator().getUser().
+	            eaForm.getIdentification().setActAthLastName(activity.getActivityCreator().getUser().
 	                                     getLastName());
-	            eaForm.setActAthEmail(activity.getActivityCreator().getUser().
+	            eaForm.getIdentification().setActAthEmail(activity.getActivityCreator().getUser().
 	                                  getEmail());
-	            eaForm.setActAthAgencySource(activity.getActivityCreator().getUser().
+	            eaForm.getIdentification().setActAthAgencySource(activity.getActivityCreator().getUser().
 	                                         getOrganizationName());
 	          }
 	          eaForm.setIsPreview(0);
@@ -859,7 +859,7 @@ private ActionForward showStep9(ActionMapping mapping,
 		e.printStackTrace();
 	}
 	
-	    	if (catValues!=null && eaForm.getReferenceDocs()==null){
+	    	if (catValues!=null && eaForm.getDocuments().getReferenceDocs()==null){
 	        	List<ReferenceDoc> refDocs=new ArrayList<ReferenceDoc>();
 	    		Collection<AmpActivityReferenceDoc> activityRefDocs=null;
 	    		Map<Long, AmpActivityReferenceDoc> categoryRefDocMap=null;
@@ -900,11 +900,11 @@ private ActionForward showStep9(ActionMapping mapping,
 	        	}
 	
 	        	//set selected ids
-	        	eaForm.setAllReferenceDocNameIds(refdocIds);
+	        	eaForm.getDocuments().setAllReferenceDocNameIds(refdocIds);
 	        	//set all comments, some are empty
 	//        	eaForm.setRefDocComments(refdocComments);
 	
-	        	eaForm.setReferenceDocs(refDocs);
+	        	eaForm.getDocuments().setReferenceDocs(refDocs);
 	
 	    	}
 	
@@ -942,8 +942,8 @@ private ActionForward showStep9(ActionMapping mapping,
 	          request.setAttribute("prevId", prev);
 	        }
 	
-	        if (eaForm.getLevelCollection() == null) {
-	          eaForm.setLevelCollection(DbUtil.getAmpLevels());
+	        if (eaForm.getIdentification().getLevelCollection() == null) {
+	          eaForm.getIdentification().setLevelCollection(DbUtil.getAmpLevels());
 	        }
 	
 	//      patch for comments that were not saved yet
@@ -982,7 +982,7 @@ private ActionForward showStep9(ActionMapping mapping,
 	            allComments.put(field.getFieldName(), colAux);
 	          }
 	
-	          eaForm.setAllComments(allComments);
+	          eaForm.getComments().setAllComments(allComments);
 	          //eaForm.setCommentsCol(colAux);
 	
 	          if (request.getParameter("logframe") != null || logframepr.compareTo("true") == 0) {
@@ -1002,7 +1002,7 @@ private ActionForward showStep9(ActionMapping mapping,
 	              eaForm.getIndicator().setCurrentVal(null);
 	              eaForm.getIndicator().setCurrentValDate(null);
 	              eaForm.getIndicator().setIndicatorRisk(null);
-	              eaForm.setIpaBudget(new Double(0));
+	              eaForm.getContracts().setIpaBudget(new Double(0));
 	              
 	              
 	
@@ -1010,33 +1010,33 @@ private ActionForward showStep9(ActionMapping mapping,
 	
 	            Double totalEUContrib = new Double(0);
 	            
-	            Iterator it2 = eaForm.getContracts().iterator();
+	            Iterator it2 = eaForm.getContracts().getContracts().iterator();
 	            while (it2.hasNext()) {
 	            	IPAContract contr = (IPAContract) it2.next();
 	            	totalEUContrib += contr.getTotalECContribIBAmount();
 	            	totalEUContrib += contr.getTotalECContribINVAmount();
 	            }
-	            eaForm.setIpaBudget(totalEUContrib);
+	            eaForm.getContracts().setIpaBudget(totalEUContrib);
 	            //get the levels of risks
 	
 	            Long defaultCurrency=teamMember.getAppSettings().getCurrencyId();
 		        double allCosts=0;
-		        if(eaForm.getCosts() != null)
-		        	for(Iterator it=eaForm.getCosts().iterator();it.hasNext();)
+		        if(eaForm.getCosting().getCosts() != null)
+		        	for(Iterator it=eaForm.getCosting().getCosts().iterator();it.hasNext();)
 		        	{
 		        		EUActivity euAct=(EUActivity) it.next();
 		        		euAct.setDesktopCurrencyId(defaultCurrency);
 		        		allCosts+=euAct.getTotalCostConverted();
 		        	}
-	            eaForm.setAllCosts(new Double(allCosts));
+	            eaForm.getCosting().setAllCosts(new Double(allCosts));
 	            if ((eaForm.getIndicator().getIndicatorsME() != null) && (!eaForm.getIndicator().getIndicatorsME().isEmpty()))
 	              eaForm.getIndicator().setRiskCollection(MEIndicatorsUtil.getAllIndicatorRisks());
 	            request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.VIEW);
 	            return mapping.findForward("previewLogframe");
 	          }
 	          /* Setting documents for preview */
-	          Collection rlList	= eaForm.getDocumentList();
-	          eaForm.setDocuments( new ArrayList<Documents>() );
+	          Collection rlList	= eaForm.getDocuments().getDocumentList();
+	          eaForm.getDocuments().setDocuments( new ArrayList<Documents>() );
 	          if (rlList != null ) {
 	        	  Iterator iter 		= rlList.iterator();
 	        	  if(iter.hasNext())
@@ -1044,11 +1044,11 @@ private ActionForward showStep9(ActionMapping mapping,
 	        		  RelatedLinks rl		= (RelatedLinks) iter.next();
 	        		  CMSContentItem item	= rl.getRelLink();
 	        		  if ( item != null ) {
-	        			  eaForm.getDocuments().add( createHelperDocument(item, null, null) );
+	        			  eaForm.getDocuments().getDocuments().add( createHelperDocument(item, null, null) );
 	        		  }
 	        	  }
 	          }
-	          eaForm.setCrDocuments( DocumentManagerUtil.createDocumentDataCollectionFromSession(request) );
+	          eaForm.getDocuments().setCrDocuments( DocumentManagerUtil.createDocumentDataCollectionFromSession(request) );
 	
 	          /* END - Setting documents for preview */
 	          request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.VIEW);
@@ -1214,7 +1214,7 @@ private ActionForward showStep1(ActionMapping mapping,
 	eaForm.getIdentification().setLinkedActivities(Util.initLargeTextProperty("aim-linkedact-",eaForm.getIdentification().getLinkedActivities(), request));
 	eaForm.getIdentification().setConditionality(Util.initLargeTextProperty("aim-conditional-",eaForm.getIdentification().getConditionality(), request));
 	eaForm.getIdentification().setProjectManagement(Util.initLargeTextProperty("aim-projmanag-",eaForm.getIdentification().getProjectManagement(), request));
-	eaForm.setContractDetails(Util.initLargeTextProperty("aim-contrdetail-",eaForm.getContractDetails(), request));
+	eaForm.getContracts().setContractDetails(Util.initLargeTextProperty("aim-contrdetail-",eaForm.getContracts().getContractDetails(), request));
 
 
 	if (eaForm.getIdentification().getResults() == null ||
@@ -1314,14 +1314,14 @@ private ActionForward showStep1(ActionMapping mapping,
 	// Documents, we need to create space there.
 	// Later, we will give to space user-friendly name
 	if (DocumentUtil.isDMEnabled()) {
-	  if (eaForm.getDocumentSpace() == null ||
-	      eaForm.getDocumentSpace().trim().length() == 0) {
-	    eaForm.setDocumentSpace("aim-document-space-" +
+	  if (eaForm.getDocuments().getDocumentSpace() == null ||
+	      eaForm.getDocuments().getDocumentSpace().trim().length() == 0) {
+	    eaForm.getDocuments().setDocumentSpace("aim-document-space-" +
 	                            teamMember.getMemberId() +
 	                            "-" + System.currentTimeMillis());
 	    Site currentSite = RequestUtils.getSite(request);
 	    DocumentUtil.createDocumentSpace(currentSite,
-	                                     eaForm.getDocumentSpace());
+	                                     eaForm.getDocuments().getDocumentSpace());
 	  }
 	}
 	eaForm.setReset(false);
@@ -1333,19 +1333,19 @@ private ActionForward showStep1(ActionMapping mapping,
 	    eaForm.getPlanning().getActRankCollection().add(new Integer(i));
 	}
 
-	if (eaForm.getCosts() != null && eaForm.getCosts().size() != 0) {
+	if (eaForm.getCosting().getCosts() != null && eaForm.getCosting().getCosts().size() != 0) {
 	  double grandCost = 0;
 	  double grandContribution = 0;
 	  Long currencyId = teamMember.getAppSettings().getCurrencyId();
-	  Iterator i = eaForm.getCosts().iterator();
+	  Iterator i = eaForm.getCosting().getCosts().iterator();
 	  while (i.hasNext()) {
 	    EUActivity element = (EUActivity) i.next();
 	    element.setDesktopCurrencyId(currencyId);
 	    grandCost += element.getTotalCostConverted();
 	    grandContribution += element.getTotalContributionsConverted();
 	  }
-	  eaForm.setOverallCost(new Double(grandCost));
-	  eaForm.setOverallContribution(new Double(grandContribution));
+	  eaForm.getCosting().setOverallCost(new Double(grandCost));
+	  eaForm.getCosting().setOverallContribution(new Double(grandContribution));
 
 	}
 
@@ -1368,7 +1368,7 @@ private ActionForward showStep1(ActionMapping mapping,
 		e1.printStackTrace();
 	}
 
-	if (catValues!=null && eaForm.getReferenceDocs()==null){
+	if (catValues!=null && eaForm.getDocuments().getReferenceDocs()==null){
 		List<ReferenceDoc> refDocs=new ArrayList<ReferenceDoc>();
 		Collection<AmpActivityReferenceDoc> activityRefDocs=null;
 		Map<Long, AmpActivityReferenceDoc> categoryRefDocMap=null;
@@ -1409,11 +1409,11 @@ private ActionForward showStep1(ActionMapping mapping,
 		}
 
 		//set selected ids
-		eaForm.setAllReferenceDocNameIds(refdocIds);
+		eaForm.getDocuments().setAllReferenceDocNameIds(refdocIds);
 		//set all comments, some are empty
 //        	eaForm.setRefDocComments(refdocComments);
 
-		eaForm.setReferenceDocs(refDocs);
+		eaForm.getDocuments().setReferenceDocs(refDocs);
 
 	}
 
@@ -1447,7 +1447,7 @@ private ActionForward showStep1(ActionMapping mapping,
 	}
 
 
-	eaForm.setFundingRegionId(new Long( -1));
+	eaForm.getFunding().setFundingRegionId(new Long( -1));
 	  if (eaForm.getSteps() == null) {
 	      List steps = ActivityUtil.getSteps();
 	      eaForm.setSteps(steps);

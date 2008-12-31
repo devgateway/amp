@@ -26,29 +26,29 @@ public class ShowUpdateActor extends Action {
 	throws Exception {
 	
 		EditActivityForm eaForm = (EditActivityForm) form;
-		if (eaForm.getMeasureId() != null && 
-				eaForm.getIssueId() != null && 
-				eaForm.getActorId() != null &&
-				eaForm.getIssueId().longValue() > 0 && 
-				eaForm.getMeasureId().longValue() > 0 &&
-				eaForm.getActorId().longValue() > 0) {
+		if (eaForm.getIssues().getMeasureId() != null && 
+				eaForm.getIssues().getIssueId() != null && 
+				eaForm.getIssues().getActorId() != null &&
+				eaForm.getIssues().getIssueId().longValue() > 0 && 
+				eaForm.getIssues().getMeasureId().longValue() > 0 &&
+				eaForm.getIssues().getActorId().longValue() > 0) {
 			logger.debug("In here");
 			Issues issue = new Issues();
-			issue.setId(eaForm.getIssueId());
-			int index = eaForm.getIssues().indexOf(issue);
-			issue = (Issues) eaForm.getIssues().get(index);
+			issue.setId(eaForm.getIssues().getIssueId());
+			int index = eaForm.getIssues().getIssues().indexOf(issue);
+			issue = (Issues) eaForm.getIssues().getIssues().get(index);
 			
 			Measures measures = new Measures();
-			measures.setId(eaForm.getMeasureId());
+			measures.setId(eaForm.getIssues().getMeasureId());
 			index = issue.getMeasures().indexOf(measures);
 			measures = (Measures) issue.getMeasures().get(index);
 			AmpActor actor = new AmpActor();
-			actor.setAmpActorId(eaForm.getActorId());
+			actor.setAmpActorId(eaForm.getIssues().getActorId());
 			index = measures.getActors().indexOf(actor);
 			actor = (AmpActor) measures.getActors().get(index);
-			eaForm.setActor(actor.getName());
+			eaForm.getIssues().setActor(actor.getName());
 		} else {
-			eaForm.setActor(null);
+			eaForm.getIssues().setActor(null);
 		}
 		return mapping.findForward("forward");
 	}

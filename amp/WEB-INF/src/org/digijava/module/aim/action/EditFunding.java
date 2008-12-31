@@ -31,8 +31,8 @@ public class EditFunding extends Action {
 
 		EditActivityForm formBean = (EditActivityForm) form;
 
-		Long orgId = formBean.getOrgId();
-		int offset = formBean.getOffset();
+		Long orgId = formBean.getFunding().getOrgId();
+		int offset = formBean.getFunding().getOffset();
 		int numComm = 0;
 		int numDisb = 0;
                 int numDisbOrder=0;

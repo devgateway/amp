@@ -93,7 +93,7 @@
                                                                 <table width="100%" cellSpacing=1 cellPadding=1 vAlign="top" align="left">
                                                                   <tr>
                                                                     <td>
-                                                                      <html:multibox property="selectedNPOPrograms" value="${program.ampThemeId}"/>
+                                                                      <html:multibox property="programs.selectedNPOPrograms" value="${program.ampThemeId}"/>
 										                                         ${nationalPlanObjectivePrograms.hierarchyNames}
                                                                     </td>
                                                                       <td width="5%" align="right" vAlign="center" nowrap="nowrap">
@@ -182,7 +182,7 @@
                                                                 <table width="100%" cellSpacing=1 cellPadding=1 vAlign="top" align="left">
                                                                   <tr>
                                                                     <td>
-                                                                      <html:multibox property="selectedPPrograms" value="${program.ampThemeId}"/>
+                                                                      <html:multibox property="programs.selectedPPrograms" value="${program.ampThemeId}"/>
 
                                                                       ${primaryPrograms.hierarchyNames}                                                                    </td>
                                                                       <td width="5%" align="right" valign="center" nowrap="nowrap"><font color="red">*</font>
@@ -263,7 +263,7 @@
                                                                 <table width="100%" cellSpacing=1 cellPadding=1 vAlign="top" align="left">
                                                                   <tr>
                                                                     <td>
-                                                                      <html:multibox property="selectedSPrograms" value="${program.ampThemeId}"/>
+                                                                      <html:multibox property="programs.selectedSPrograms" value="${program.ampThemeId}"/>
 
                                                                       ${secondaryPrograms.hierarchyNames}                                                                    </td>
                                                                       <td width="5%" align="right" valign="center" nowrap="nowrap">
@@ -319,7 +319,7 @@
                                       <tr>
                                         <td>
                                           <a title="<digi:trn key="aim:ProgramDesc">Description of program, objectives, or associated projects</digi:trn>">
-                                          <html:textarea property="programDescription" rows="3" cols="75" styleClass="inp-text"/>
+                                          <html:textarea property="programs.programDescription" rows="3" cols="75" styleClass="inp-text"/>
 										  </a>
                                         </td>
                                       </tr>

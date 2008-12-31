@@ -20,8 +20,8 @@
 				flag = false;
 		}
 		if (flag == true) {
-			document.aimEditActivityForm.actionFlag.value = val1;
-			document.aimEditActivityForm.ampCommentId.value = val2;
+			document.getElementById('actionFlag').value = val1;
+			document.getElementById('ampCommentId').value = val2;
 			document.aimEditActivityForm.action = "<%=url %>";
 			document.aimEditActivityForm.target = "_self";
 			document.aimEditActivityForm.submit();
@@ -29,12 +29,12 @@
 	}
 	
 	function check() {
-		var str = document.aimEditActivityForm.commentText.value;
+		var str = document.getElementById('commentText').value;
 		str = trim(str);
-		document.aimEditActivityForm.commentText.value = str;
+		document.getElementById('commentText').value = str;
 		if (str.length == 0 || str == null) {
 			alert("Please enter your comment.");
-			document.aimEditActivityForm.commentText.focus();
+			document.getElementById('commentText').focus();
 			return false;
 		}
 		else
@@ -57,9 +57,9 @@
 	}
 	
 	function load() {
-		var str = document.aimEditActivityForm.actionFlag.value;
+		var str = document.getElementById('actionFlag').value;
 		if (str == "edit")
-			document.aimEditActivityForm.commentText.focus();
+			document.getElementById('commentText').focus();
 	}
 
 	function unload() {
@@ -72,8 +72,8 @@
 <digi:context name="digiContext" property="context"/>
 
 <digi:form action="/viewComment.do" method="post">
-<html:hidden property="actionFlag" />
-<html:hidden property="ampCommentId" />
+<html:hidden property="comments.actionFlag"  styleId="actionFlag"/>
+<html:hidden property="comments.ampCommentId"  styleId="ampCommentId"/>
 <html:hidden property="editAct" />
 
 		<table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
@@ -94,14 +94,14 @@
 							</td>
 						</tr>--%>	
 						<%-- <%=request.getLocale()%> --%>		
-						<logic:notEmpty name="aimEditActivityForm" property="commentsCol">
+						<logic:notEmpty name="aimEditActivityForm" property="comments.commentsCol">
 						<tr>
 							<td align=left vAlign=top>						
 							<table width="100%" cellPadding=3>
 								<c:set value="1" var="sno" />
-								<logic:iterate name="aimEditActivityForm" id="comment" property="commentsCol" 
+								<logic:iterate name="aimEditActivityForm" id="comment" property="comments.commentsCol" 
 									type="org.digijava.module.aim.dbentity.AmpComments">
-										<c:if test="${comment.ampFieldId.ampFieldId == aimEditActivityForm.field.ampFieldId}"> 
+										<c:if test="${comment.ampFieldId.ampFieldId == aimEditActivityForm.comments.field.ampFieldId}"> 
 											<tr>
 												<td bgcolor=#ECF3FD width="5%">
 													<b><c:out value="${sno}"/></b>
@@ -148,10 +148,10 @@
 								</logic:notEmpty>
 										<tr>
 											<td colspan="3" width="100%" align="left">
-												<c:if test="${aimEditActivityForm.actionFlag == 'create'}"><digi:trn key="aim:addCommentText">Add your comment here</digi:trn></c:if>
-												<c:if test="${aimEditActivityForm.actionFlag == 'edit'}"><digi:trn key="aim:editCommentText">Edit your comment here</digi:trn></c:if>
+												<c:if test="${aimEditActivityForm.comments.actionFlag == 'create'}"><digi:trn key="aim:addCommentText">Add your comment here</digi:trn></c:if>
+												<c:if test="${aimEditActivityForm.comments.actionFlag == 'edit'}"><digi:trn key="aim:editCommentText">Edit your comment here</digi:trn></c:if>
 												<br>
-												<html:textarea name="aimEditActivityForm" property="commentText" styleId="commentText" cols="60" rows="3" />
+												<html:textarea name="aimEditActivityForm" property="comments.commentText" styleId="commentText" cols="60" rows="3" />
 												<br>
 													<input type="button" value="<digi:trn key='btn:save'>Save</digi:trn>"   class="dr-menu" onClick="check()">
 													<input type="reset"  value="<digi:trn key='btn:clear'>Clear</digi:trn>"  class="dr-menu">

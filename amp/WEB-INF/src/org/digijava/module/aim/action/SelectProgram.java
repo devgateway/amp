@@ -34,23 +34,23 @@ public class SelectProgram
 
         if(selectedThemeId==null && opStatus==null && strLevel==null){
             prLevels.add(prl);
-            eaform.setProgramLevels(prLevels);
+            eaform.getPrograms().setProgramLevels(prLevels);
             return mapping.findForward("forward");
         }
 
         if(selectedThemeId == null) {
-            if(eaform.getProgramLevels() != null) {
-                prLevels = eaform.getProgramLevels();
+            if(eaform.getPrograms().getProgramLevels() != null) {
+                prLevels = eaform.getPrograms().getProgramLevels();
             }
             if(prLevels.size() == 0) {
                 prLevels.add(prl);
-                eaform.setProgramLevels(prLevels);
+                eaform.getPrograms().setProgramLevels(prLevels);
             }
             return mapping.findForward("forward");
         } else if(selectedThemeId.equals("-1")) {
             if(strLevel!=null){
                 Long level=Long.valueOf(strLevel);
-                prLevels = eaform.getProgramLevels();
+                prLevels = eaform.getPrograms().getProgramLevels();
                 int sz=prLevels.size();
                 for(int i = level.intValue(); i < sz; i++) {
                     prLevels.remove(level.intValue());
@@ -72,8 +72,8 @@ public class SelectProgram
         if(opStatus != null) {
             if(opStatus.equals("add")) {
                 List prgLst = new ArrayList();
-                if(eaform.getActPrograms()!=null){
-                    prgLst=eaform.getActPrograms();
+                if(eaform.getPrograms().getActPrograms()!=null){
+                    prgLst=eaform.getPrograms().getActPrograms();
                 }
                 AmpTheme prg = new AmpTheme();
                 AmpTheme theme=null;
@@ -87,7 +87,7 @@ public class SelectProgram
                     }
                 }
                 prgLst.add(prg);
-                eaform.setActPrograms(prgLst);
+                eaform.getPrograms().setActPrograms(prgLst);
             }
             return mapping.findForward("added");
         }
@@ -95,7 +95,7 @@ public class SelectProgram
         int ind = 0;
         boolean opflag = false;
         AmpTheme prg = null;
-        prLevels = eaform.getProgramLevels();
+        prLevels = eaform.getPrograms().getProgramLevels();
         if(prLevels == null) {
             prLevels.add(getParents());
         }else if(prLevels.size() == 0) {
@@ -145,7 +145,7 @@ public class SelectProgram
                 prLevels.remove(ind);
             }
         }
-        eaform.setProgramLevels(prLevels);
+        eaform.getPrograms().setProgramLevels(prLevels);
         return mapping.findForward("forward");
     }
 

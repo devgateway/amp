@@ -49,7 +49,7 @@
 										&nbsp;
 									</td></tr>
 									<tr><td>
-										<logic:notEmpty name="aimEditActivityForm" property="issues">
+										<logic:notEmpty name="aimEditActivityForm" property="issues.issues">
 											<table width="100%" cellSpacing=1 cellPadding=4 class="box-border-nopadding">
 												<tr><td align="center">
 													<table width="98%" cellSpacing=1 cellPadding=2 vAlign="top" align="center" bgcolor="#dddddd">
@@ -66,7 +66,7 @@
 															String rowClass = "";
 														%>
 
-														<logic:iterate name="aimEditActivityForm" property="issues"
+														<logic:iterate name="aimEditActivityForm" property="issues.issues"
 														id="issues" type="org.digijava.module.aim.helper.Issues">
 														<% if ((i % 2) != 0) {
 															rowClass = "rowAlternate";
@@ -78,7 +78,7 @@
 
 														<tr class="<%=rowClass%>">
 															<td vAlign="center" align="left" width="3">
-																<html:multibox property="selIssues">
+																<html:multibox property="issues.selIssues" styleId="selIssues">
 																	<c:out value="${issues.id}"/>
 																</html:multibox>
 															</td>
@@ -112,7 +112,7 @@
 																	 type="org.digijava.module.aim.helper.Measures">
 																	<tr class="<%=rowClass%>">
 																		<td vAlign="center" align="left" width="3">
-																			<html:multibox property="selMeasures">
+																			<html:multibox property="issues.selMeasures">
 																				<c:out value="${measure.id}"/>
 																			</html:multibox>
 																		</td>
@@ -141,7 +141,7 @@
 																				 type="org.digijava.module.aim.dbentity.AmpActor">
 																				<tr class="<%=rowClass%>">
 																					<td vAlign="center" align="left" width="3">
-																						<html:multibox property="selActors">
+																						<html:multibox property="issues.selActors">
 																							<c:out value="${actor.ampActorId}"/>
 																						</html:multibox>
 																					</td>
@@ -207,7 +207,7 @@
 												</td></tr>
 											</table>
 										</logic:notEmpty>
-										<logic:empty name="aimEditActivityForm" property="issues">
+										<logic:empty name="aimEditActivityForm" property="issues.issues">
 											<field:display name="Add Issues Button" feature="Issues">
 											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
 												<tr><td>

@@ -27,27 +27,27 @@ public class RemProgram extends Action
             throws java.lang.Exception
     {
         EditActivityForm eaform=(EditActivityForm)form;
-        int settingsId = eaform.getProgramType();
+        int settingsId = eaform.getPrograms().getProgramType();
          List prgLst=new ArrayList();
          Long prgIds[]=null;
          switch (settingsId) {
            case ProgramUtil.NATIONAL_PLAN_OBJECTIVE_KEY:
              prgLst = eaform.getPrograms().getNationalPlanObjectivePrograms();
-             prgIds=eaform.getSelectedNPOPrograms();
+             prgIds=eaform.getPrograms().getSelectedNPOPrograms();
              eaform.getPrograms().setNationalPlanObjectivePrograms(removePrograms(prgLst, prgIds));
-             eaform.setSelectedNPOPrograms(null);
+             eaform.getPrograms().setSelectedNPOPrograms(null);
              break;
            case ProgramUtil.PRIMARY_PROGRAM_KEY:
              prgLst = eaform.getPrograms().getPrimaryPrograms();
-             prgIds=eaform.getSelectedPPrograms();
+             prgIds=eaform.getPrograms().getSelectedPPrograms();
              eaform.getPrograms().setPrimaryPrograms(removePrograms(prgLst, prgIds));
-             eaform.setSelectedPPrograms(null);
+             eaform.getPrograms().setSelectedPPrograms(null);
              break;
            case ProgramUtil.SECONDARY_PROGRAM_KEY:
              prgLst = eaform.getPrograms().getSecondaryPrograms();
-             prgIds=eaform.getSelectedSPrograms();
+             prgIds=eaform.getPrograms().getSelectedSPrograms();
              eaform.getPrograms().setSecondaryPrograms(removePrograms(prgLst, prgIds));
-             eaform.setSelectedSPrograms(null);
+             eaform.getPrograms().setSelectedSPrograms(null);
              break;
          }
         eaform.setStep("2");

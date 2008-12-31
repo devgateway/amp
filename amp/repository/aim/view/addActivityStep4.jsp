@@ -288,7 +288,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																		<td align="left">
 																			<table width="100%" cellSpacing=5 cellPadding=0 border=0
 																			class="box-border-nopadding">
-																			<logic:notEmpty name="aimEditActivityForm" property="regionalFundings">
+																			<logic:notEmpty name="aimEditActivityForm" property="funding.regionalFundings">
 																					<field:display name="Total Donor Commitments" feature="Regional Funding">
 																					<tr><td>
 																							<b>
@@ -325,23 +325,23 @@ ${fn:replace(message,quote,escapedQuote)}
 																		<tr><td><b>
 																		
 																		<font 
-																		<c:if test="${aimEditActivityForm.funding.totalCommitmentsDouble < aimEditActivityForm.regionTotalDisb }">
+																		<c:if test="${aimEditActivityForm.funding.totalCommitmentsDouble < aimEditActivityForm.funding.regionTotalDisb }">
 																		 color="RED"
 																		</c:if>
 																		>
 																		<digi:trn key="aim:totalRegionalActualDisbursement">Regional Grand Total Actual Disbursements</digi:trn>=
-																		<c:out value="${aimEditActivityForm.regionTotalDisb}"/>
+																		<c:out value="${aimEditActivityForm.funding.regionTotalDisb}"/>
 																		<c:out value="${aimEditActivityForm.currCode}"/>
 																		</font></b>
 																		</td></tr>
 
 
-																				<logic:iterate name="aimEditActivityForm" property="regionalFundings"
+																				<logic:iterate name="aimEditActivityForm" property="funding.regionalFundings"
 																				id="regionalFunding"
 																				type="org.digijava.module.aim.helper.RegionalFunding"> <!-- L1 START-->
 																				<tr><td>
 																					<!-- Region name -->
-																					<html:multibox property="selRegFundings">
+																					<html:multibox property="funding.selRegFundings">
 																						<bean:write name="regionalFunding" property="regionId"/>
 																					</html:multibox>
 																					<bean:write name="regionalFunding" property="regionName"/>
@@ -490,8 +490,8 @@ ${fn:replace(message,quote,escapedQuote)}
 																				</gs:test>
 																				</TD></TR>
 																			</logic:notEmpty>
-																			<logic:notEmpty name="aimEditActivityForm" property="fundingRegions">
-																			<logic:empty name="aimEditActivityForm" property="regionalFundings">
+																			<logic:notEmpty name="aimEditActivityForm" property="funding.fundingRegions">
+																			<logic:empty name="aimEditActivityForm" property="funding.regionalFundings">
 																				<!-- No fundings -->
 																				<field:display name="Add Regional Fundings" feature="Regional Funding">
 																				<tr><td>
@@ -502,7 +502,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																				</td></tr>
 																				</field:display>
 																			</logic:empty>
-																			<logic:notEmpty name="aimEditActivityForm" property="regionalFundings">
+																			<logic:notEmpty name="aimEditActivityForm" property="funding.regionalFundings">
 																				<tr><td bgcolor=#ffffff>
 																					<table cellSpacing=2 cellPadding=2>
 																						<tr>
@@ -525,7 +525,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																				</td></tr>
 																			</logic:notEmpty>
 																			</logic:notEmpty>
-																			<logic:empty name="aimEditActivityForm" property="fundingRegions">
+																			<logic:empty name="aimEditActivityForm" property="funding.fundingRegions">
 																				<tr><td align="center" class="red-log">
 																					<digi:trn key="aim:noRegionsSelected">No regions selected
 																					</digi:trn>

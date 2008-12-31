@@ -59,8 +59,9 @@
 									<digi:trn key="aim:region">Region</digi:trn>
 								</td>
 								<td align="left">
-									<c:if test="${aimEditActivityForm.fundingRegionId == -1}">
-										<html:select property="fundingRegionId" styleClass="inp-text">
+								
+									<c:if test="${aimEditActivityForm.funding.fundingRegionId == -1}">
+										<html:select styleId="fundingRegionId" property="funding.fundingRegionId" styleClass="inp-text">
 											<html:option value="-1">
 												--- 
 												<digi:trn key="aim:addActivityRegionalFundingSelectRegion">
@@ -68,14 +69,14 @@
 												</digi:trn>
 												 ---
 											</html:option>
-											<html:optionsCollection name="aimEditActivityForm" property="fundingRegions" 
+											<html:optionsCollection name="aimEditActivityForm" property="funding.fundingRegions" 
 											value="ampRegionId" label="name" />										
 										</html:select>										
 									</c:if>
-									<c:if test="${aimEditActivityForm.fundingRegionId != -1}">
-										<html:select property="fundingRegionId" styleClass="inp-text" disabled="true">
+									<c:if test="${aimEditActivityForm.funding.fundingRegionId != -1}">
+										<html:select property="funding.fundingRegionId" styleClass="inp-text" styleId="fundingRegionId" disabled="true">
 											<html:option value="-1">--- Select a region ---</html:option>
-											<html:optionsCollection name="aimEditActivityForm" property="fundingRegions" 
+											<html:optionsCollection name="aimEditActivityForm" property="funding.fundingRegions" 
 											value="ampRegionId" label="name" />									
 										</html:select>
 									</c:if>
@@ -115,10 +116,10 @@
 												<br>
 										<div id="comm">
 
-										<c:if test="${aimEditActivityForm.fundingRegionId != -1}">
-											<c:forEach var="fundReg" items="${aimEditActivityForm.regionalFundings}">
+										<c:if test="${aimEditActivityForm.funding.fundingRegionId != -1}">
+											<c:forEach var="fundReg" items="${aimEditActivityForm.funding.regionalFundings}">
 
-											<c:if test="${aimEditActivityForm.fundingRegionId == fundReg.regionId}">
+											<c:if test="${aimEditActivityForm.funding.fundingRegionId == fundReg.regionId}">
 
 											<c:forEach var="comm" items="${fundReg.commitments}">
 
@@ -193,10 +194,10 @@
 												<digi:trn key="aim:DateFIE">Date</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 												<br>
 									<div id="disb">
-										<c:if test="${aimEditActivityForm.fundingRegionId != -1}">
-											<c:forEach var="fundReg" items="${aimEditActivityForm.regionalFundings}">
+										<c:if test="${aimEditActivityForm.funding.fundingRegionId != -1}">
+											<c:forEach var="fundReg" items="${aimEditActivityForm.funding.regionalFundings}">
 
-											<c:if test="${aimEditActivityForm.fundingRegionId == fundReg.regionId}">
+											<c:if test="${aimEditActivityForm.funding.fundingRegionId == fundReg.regionId}">
 
 											<c:forEach var="comm" items="${fundReg.disbursements}">
 
@@ -272,10 +273,10 @@
 												<digi:trn key="aim:DateFIE">Date</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 												<br>
 									<div id="expn">
-										<c:if test="${aimEditActivityForm.fundingRegionId != -1}">
-											<c:forEach var="fundReg" items="${aimEditActivityForm.regionalFundings}">
+										<c:if test="${aimEditActivityForm.funding.fundingRegionId != -1}">
+											<c:forEach var="fundReg" items="${aimEditActivityForm.funding.regionalFundings}">
 
-											<c:if test="${aimEditActivityForm.fundingRegionId == fundReg.regionId}">
+											<c:if test="${aimEditActivityForm.funding.fundingRegionId == fundReg.regionId}">
 
 											<c:forEach var="comm" items="${fundReg.expenditures}">
 
@@ -555,11 +556,12 @@ function validate() {
   var msgEnterCommitment="<digi:trn key="aim:addRegionalFunding:errmsg:enterCommitment">Commitment not entered.</digi:trn>";
   var msgEnterExpenditure="<digi:trn key="aim:addRegionalFunding:errmsg:enterExpenditure">Expenditure entered without entering disbursements.</digi:trn>";
 
-	if (document.aimEditActivityForm.fundingRegionId.value < 1)	 {
+	if (document.getElementById('fundingRegionId').value < 1)	 {
 		alert(msgSelectRegion);
-		document.aimEditActivityForm.fundingRegionId.focus();
+		document.getElementById('fundingRegionId').focus();
 		return false;
 	}
+		 
 		  
 	var x = document.aimEditActivityForm;
 

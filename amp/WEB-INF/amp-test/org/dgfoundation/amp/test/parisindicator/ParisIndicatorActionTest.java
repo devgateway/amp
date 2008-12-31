@@ -51,7 +51,10 @@ public class ParisIndicatorActionTest extends BasicActionTestCaseAdapter {
 		addRequestParameter("user", "atl@amp.org");
 
 		//Setup teamMember info needed for the reports.
-		AmpTeamMember ampTeamMember = TeamMemberUtil.getAmpTeamMember(new Long(79));
+		AmpTeamMember ampTeamMember = TeamMemberUtil.getAmpTeamMember(new Long(1));
+		if(ampTeamMember == null) {
+			fail("Please choose a different user id");
+		}
 		teamMember = new TeamMember();
 		teamMember.setMemberId(ampTeamMember.getAmpTeamMemId());
 		teamMember.setTeamId(ampTeamMember.getAmpTeam().getAmpTeamId());

@@ -230,8 +230,8 @@ function adminHelp(){
                                         </li>
 										</feature:display>
 										<feature:display name="Support Request Form" module="HELP">
-                                        <li>
-                                        <a class="yuiampmenuitemlabel" href="http://support.ampdev.net/" target="_blank">
+                                        <li>	
+                                        <a class="yuiampmenuitemlabel" href="http://support.ampdev.net/login.action?code=<%=FeaturesUtil.getDefaultCountryIso()%>" target="_blank">
                                         <digi:trn key="aim:supportrequestform">Support Request Form</digi:trn>
                                         </a>
                                         </li>

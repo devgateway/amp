@@ -18,8 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import net.sf.hibernate.Session;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -35,7 +33,6 @@ import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.ar.util.ReportsUtil;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
-import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -47,14 +44,10 @@ import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.ReportsFilterPickerForm;
-import org.digijava.module.aim.form.reportwizard.ReportWizardForm;
-import org.digijava.module.aim.helper.ApplicationSettings;
-import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
@@ -64,6 +57,9 @@ import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.hibernate.Session;
 import org.springframework.beans.BeanWrapperImpl;
 
 /**
@@ -223,10 +219,7 @@ public class ReportsFilterPicker extends MultiAction {
 		// else donors=new ArrayList();
 		// donors = DbUtil.getAllOrgGroups();
 		donors = DbUtil.getAllOrgGrpBeeingUsed();
-
-		Collection donorTypes = DbUtil.getAllOrgTypes();
-		Collection donorGroups = ARUtil.filterDonorGroups(DbUtil.getAllOrgGroups());
-
+		
 		Collection meRisks = MEIndicatorsUtil.getAllIndicatorRisks();
 		for (Iterator iter = meRisks.iterator(); iter.hasNext();) {
 			AmpIndicatorRiskRatings element = (AmpIndicatorRiskRatings) iter.next();
@@ -236,6 +229,8 @@ public class ReportsFilterPicker extends MultiAction {
 			String msg = CategoryManagerUtil.translate(key, request, value);
 			element.setRatingName(msg);
 		}
+		Collection donorTypes = DbUtil.getAllOrgTypesOfPortfolio();
+		Collection donorGroups = ARUtil.filterDonorGroups(DbUtil.getAllOrgGroupsOfPortfolio());
 
 		Collection allIndicatorRisks = meRisks;
 		Collection regions = LocationUtil.getAllDefCountryArRegions();
@@ -263,11 +258,11 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setDonorTypes(donorTypes);
 		filterForm.setDonorGroups(donorGroups);
 
-		filterForm.setExecutingAgency(ReportsUtil.getAllOrgByRole(Constants.ROLE_CODE_EXECUTING_AGENCY));
-		filterForm.setDonnorAgency((ReportsUtil.getAllOrgByRole(Constants.ROLE_CODE_DONOR)));
-		filterForm.setBeneficiaryAgency(ReportsUtil.getAllOrgByRole(Constants.ROLE_CODE_BENEFICIARY_AGENCY));
-		filterForm.setImplementingAgency(ReportsUtil.getAllOrgByRole(Constants.ROLE_CODE_IMPLEMENTING_AGENCY));
-		filterForm.setResponsibleorg(ReportsUtil.getAllOrgByRole(Constants.ROLE_CODE_RESPONSIBLE_ORG));
+		filterForm.setExecutingAgency(ReportsUtil.getAllOrgByRoleOfPortfolio(Constants.ROLE_CODE_EXECUTING_AGENCY));
+		filterForm.setDonnorAgency((ReportsUtil.getAllOrgByRoleOfPortfolio(Constants.ROLE_CODE_DONOR)));
+		filterForm.setBeneficiaryAgency(ReportsUtil.getAllOrgByRoleOfPortfolio(Constants.ROLE_CODE_BENEFICIARY_AGENCY));
+		filterForm.setImplementingAgency(ReportsUtil.getAllOrgByRoleOfPortfolio(Constants.ROLE_CODE_IMPLEMENTING_AGENCY));
+		filterForm.setResponsibleorg(ReportsUtil.getAllOrgByRoleOfPortfolio(Constants.ROLE_CODE_RESPONSIBLE_ORG));
 		
 		String calValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
 		if (filterForm.getCalendar() == null && calValue != null) {
@@ -724,7 +719,7 @@ public class ReportsFilterPicker extends MultiAction {
 
 		if ( filterForm.getSourceIsReportWizard() != null && filterForm.getSourceIsReportWizard() ) {
 			request.getSession().setAttribute(ReportWizardAction.SESSION_FILTER, arf);
-			return null;
+			return mapping.findForward("reportWizard");
 		}
 			
 		httpSession.setAttribute(ArConstants.REPORTS_FILTER, arf);

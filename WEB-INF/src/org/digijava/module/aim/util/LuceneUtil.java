@@ -89,7 +89,7 @@ public class LuceneUtil implements Serializable {
 	 * saved on the disk, if versions mismatch then we need to increment
 	 * the index
 	 */
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 4L;
 												
 	private static Logger logger = Logger.getLogger(LuceneUtil.class);
     /**
@@ -164,8 +164,8 @@ public class LuceneUtil implements Serializable {
     public static void checkIndex(ServletContext sc){
     	logger.info("Lucene startup!");
 
-    	File idxStamp = new File(sc.getRealPath("/") + "/" + luceneBaseDir + "/" + activityIndexSufix + luceneStampExt);
-    	File idxDir = new File(sc.getRealPath("/") + "/" + activityIndexDirectory);
+    	File idxStamp = new File(sc.getRealPath("/") + luceneBaseDir + "/" + activityIndexSufix + luceneStampExt);
+    	File idxDir = new File(sc.getRealPath("/") + activityIndexDirectory);
     	boolean deleteIndex = false;
     	
     	checkStamp:{
@@ -259,16 +259,17 @@ public class LuceneUtil implements Serializable {
     			return;
     		}
     		
-    		
+    		int mId = getMaxActivityId();
     		long startTime = System.currentTimeMillis();
     		try {
 				IndexWriter fsWriter = new IndexWriter(idxDir, analyzer, true);
 				
 				int chunkNo = 0;
 		
-				while (createIndex(chunkNo, fsWriter) != null){
+				while (createIndex(chunkNo, mId, fsWriter) != null){
 					chunkNo++;
 				}
+				fsWriter.optimize();
 				fsWriter.close();
 				long stopTime = System.currentTimeMillis();
 				
@@ -321,11 +322,31 @@ public class LuceneUtil implements Serializable {
     	else
     		logger.info("Lucene Index found, using saved one:" + idxDir.getAbsolutePath());
     }
+
+    private static int getMaxActivityId(){
+    	int ret = -1;
+		try{
+			Session session = PersistenceManager.getSession();
+			Connection	conn	= session.connection();
+			Statement st		= conn.createStatement();
+			String qryStr		= "select max(amp_activity_id) mid from v_titles";
+
+			ResultSet rs		= st.executeQuery(qryStr);
+			
+			rs.first();
+			ret = Integer.parseInt(rs.getString("mid"));
+		}
+		catch(Exception ex){
+			logger.error("Error while getting the max activity id:", ex);
+		}
+		return ret;
+    }
+    
     /**
      * Metod is used for first time index creation
      * @return
      */
-    private static Integer createIndex(int chunkNo, IndexWriter indexWriter){
+    private static Integer createIndex(int chunkNo, int mId, IndexWriter indexWriter){
 		//RAMDirectory index = new RAMDirectory();
 		/*IndexWriter indexWriter = null;
 		try {
@@ -383,10 +404,14 @@ public class LuceneUtil implements Serializable {
 			boolean isNext = rs.first();
 			
 			if (!isNext){
-				logger.info("No more results!");
-				return null;
+				if ((mId != -1)&&(mId > chunkEnd)){
+					return new Integer(1);
+				}
+				else
+					if ((mId == -1) || (mId < chunkEnd))
+						return null;
 			}
-			
+						
 			while (isNext){
 				x = new Items();
 				x.id = Integer.parseInt(rs.getString("amp_activity_id"));
@@ -526,7 +551,6 @@ public class LuceneUtil implements Serializable {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		logger.info("Done creating index!");
 		return new Integer(1);
 	}
 	
@@ -613,12 +637,12 @@ public class LuceneUtil implements Serializable {
 		ServletContext sc = request.getSession().getServletContext();
 		
 		if (update){
-			deleteActivity(sc.getRealPath("/") + "/" + activityIndexDirectory, idField, String.valueOf(id));
+			deleteActivity(sc.getRealPath("/") + activityIndexDirectory, idField, String.valueOf(id));
 		}
 		
 		IndexWriter indexWriter = null;
 		try {
-			indexWriter = new IndexWriter(sc.getRealPath("/") + "/" + activityIndexDirectory, LuceneUtil.analyzer, false);
+			indexWriter = new IndexWriter(sc.getRealPath("/") + activityIndexDirectory, LuceneUtil.analyzer, false);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -756,7 +780,7 @@ public class LuceneUtil implements Serializable {
     	Date date ; 
 
     	try{ 
-    		Long lastLucModDay = IndexReader.lastModified(sc.getRealPath("/") + "/" + helpIndexDirectory);
+    		Long lastLucModDay = IndexReader.lastModified(sc.getRealPath("/") + helpIndexDirectory);
 
     		formatter  = new SimpleDateFormat();
     		String leastUpDate = formatter.format(lastLucModDay);
@@ -812,7 +836,7 @@ public class LuceneUtil implements Serializable {
 		Searcher indexSearcher = null;
 		try {
 			if(searchString != null){
-			indexSearcher = new IndexSearcher(sc.getRealPath("/") + "/" + helpIndexDirectory);
+			indexSearcher = new IndexSearcher(sc.getRealPath("/") + helpIndexDirectory);
 			searchString = searchString.trim();
 			query = parser.parse("+"+searchString+"*");
 		
@@ -850,7 +874,7 @@ public class LuceneUtil implements Serializable {
      */
     private static Object highlight(Field field, Query query, ServletContext sc) throws IOException {
 
-    	query.rewrite(IndexReader.open(sc.getRealPath("/") + "/" + helpIndexDirectory));
+    	query.rewrite(IndexReader.open(sc.getRealPath("/") + helpIndexDirectory));
     	QueryScorer scorer = new QueryScorer(query);
     	SimpleHTMLFormatter formatter =
     		new SimpleHTMLFormatter("<span class=\"highlight\">",
@@ -910,7 +934,7 @@ public class LuceneUtil implements Serializable {
      * @return true if lucene-index directory exists otherwise false
      */
     public static boolean isDir(ServletContext sc){
-    	boolean createDir = IndexReader.indexExists(sc.getRealPath("/") + "/" + helpIndexDirectory);
+    	boolean createDir = IndexReader.indexExists(sc.getRealPath("/") + helpIndexDirectory);
     	return createDir;
     }
 
@@ -926,7 +950,7 @@ public class LuceneUtil implements Serializable {
     public static void indexHelpDocument(Document document, ServletContext sc) throws IOException {
     	try{
 
-    		boolean createDir = IndexReader.indexExists(sc.getRealPath("/") + "/" + helpIndexDirectory);
+    		boolean createDir = IndexReader.indexExists(sc.getRealPath("/") + helpIndexDirectory);
 
     		if(createDir == false){
     			createDir= true;
@@ -935,7 +959,7 @@ public class LuceneUtil implements Serializable {
     		}
 
     		StandardAnalyzer analyzer  = new StandardAnalyzer();
-    		IndexWriter writer = new IndexWriter(sc.getRealPath("/") + "/" + helpIndexDirectory, analyzer, createDir);
+    		IndexWriter writer = new IndexWriter(sc.getRealPath("/") + helpIndexDirectory, analyzer, createDir);
     		writer.addDocument(document);
     		writer.optimize();
     		writer.close();
@@ -955,7 +979,7 @@ public class LuceneUtil implements Serializable {
     	IndexReader indexReader;
 
     	try {
-    		indexReader = IndexReader.open(sc.getRealPath("/") + "/" + helpIndexDirectory);
+    		indexReader = IndexReader.open(sc.getRealPath("/") + helpIndexDirectory);
     		Integer deleted = indexReader.deleteDocuments(term);
     		indexReader.close();
     	} catch (Exception e) {

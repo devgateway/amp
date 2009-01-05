@@ -12,7 +12,8 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <digi:instance property="aimEditActivityForm" />
-							<logic:iterate name="aimEditActivityForm" property="customFieldsSteps" id="step">
+	<logic:notEmpty name="aimEditActivityForm" property="customFieldsSteps">
+		<logic:iterate name="aimEditActivityForm" property="customFieldsSteps" id="step">
 								<logic:equal name="step" property="step" value="${stepNumber}">
 									<tr><td>
 										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
@@ -78,4 +79,6 @@
 									</td></tr>
 								</logic:equal>
 							</logic:iterate>
+	</logic:notEmpty>
+							
 									

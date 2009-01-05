@@ -103,7 +103,8 @@ public class CategoryValueTagClass extends TagSupport {
 		}
 		else {
 			try{
-				out.print( "<font color='red'>No category value could be selected</font>" );
+				// AMP-4848
+				//out.print( "<font color='red'>No category value could be selected</font>" );
 			}
 			catch(Exception E){
 				logger.info(E);

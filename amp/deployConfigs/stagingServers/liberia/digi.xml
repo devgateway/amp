@@ -5,8 +5,8 @@
 		 <from>system@digijava.org</from>
 	</smtp>
 
-    <logon-site id="dglogin" host="amp-login.code.ro">http://malawi.staging.ampdev.net/login</logon-site>
-    <site-domain id="dgDomain" host="liberia.staging.ampdev.net">http://liberia.staging.ampdev.net/</site-domain>
+    <logon-site id="dglogin" host="amp-login.code.ro">http://liberia.staging.ampdev.net/login</logon-site>
+    <site-domain id="dgDomain" host="malawi.staging.ampdev.net">http://liberia.staging.ampdev.net/</site-domain>
     
         <server-type caseSensitiveTranslatioKeys="false"/>
     

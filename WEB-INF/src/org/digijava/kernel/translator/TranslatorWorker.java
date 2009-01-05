@@ -1011,7 +1011,11 @@ public class TranslatorWorker {
     	message.setKey(hash);
     }
     public static String generateTrnKey(String text){
-    	return Integer.toString(text.hashCode());
+    	if(text != null) {
+    		return Integer.toString(text.hashCode());
+    	} else {
+    		return "";
+    	}
     }
     
     protected void updateTimeStamp(Message message){

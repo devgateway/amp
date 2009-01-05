@@ -48,6 +48,7 @@ public class VerifyUserDateJobTest extends TestCase {
 
         testCal.set(Calendar.MONTH, Calendar.JANUARY);
         testCal.set(Calendar.DAY_OF_MONTH, 14);
+        testCal.set(Calendar.YEAR, 2008);
         anotherTestCal.set(Calendar.MONTH, Calendar.DECEMBER);
         anotherTestCal.set(Calendar.DAY_OF_MONTH, 15);
         anotherTestCal.set(Calendar.YEAR, 2007);

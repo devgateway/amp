@@ -31,8 +31,9 @@ body {
       </tr>
       <tr>
         <td width="39" align="right" class="textError"> * </td>
-        <td width="126" align="right" class="Text"><html:text name="%{getText('label.username')}"/>
-        &nbsp; </td>
+        <td width="126" align="right" class="Text">
+        	<html:text name="%{getText('label.username')}"/>&nbsp; 
+        </td>
         <td width="174">
         	<html:textfield name="username" cssStyle=".fields"/>        
         </td>
@@ -70,7 +71,8 @@ body {
 			<span class="textError">*</span>
 			<span class="Text">
 				<html:text name="%{getText('label.required_field')}" />
-			</span>		</td>
+			</span>		
+		</td>
       </tr>
   </table>
 </html:form>

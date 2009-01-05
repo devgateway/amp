@@ -20,6 +20,7 @@ body {
 	<table width="780" border="0" cellpadding="0" cellspacing="0" class="table">
       <tr>
         <td height="655">
+          <!-- 
           <table width="680" border="0" align="center" cellpadding="0" cellspacing="0">
             <tr>
               <td class="Text">
@@ -34,6 +35,7 @@ body {
 			  </td>
             </tr>
           </table>
+          -->
           <table width="500" border="0" align="center" cellpadding="2" cellspacing="1">
           <tr>
             <td height="23" colspan="3" align="left" class="textError">
@@ -45,35 +47,42 @@ body {
             <td width="194" align="right" class="Text">
             	<html:text name="%{getText('label.fulluser')}" />&nbsp;            
             </td>
-            <td width="234"><html:textfield name="fullusername" /></td>
+            <td width="234"><html:textfield name="fullusername"/>
+            </td>
           </tr>
           <tr>
             <td align="left" valign="top" class="textError">*</td>
             <td align="right" class="Text">
             	<html:text name="%{getText('label.email')}" />&nbsp;            
             </td>
-            <td><html:textfield name="email" /></td>
+            <td><html:textfield name="email"/>
+            </td>
           </tr>
           <tr>
             <td align="left" valign="top" class="textError">*</td>
             <td align="right" class="Text">
             	<html:text name="%{getText('label.amp_login')}"/>&nbsp;</td>
-            <td><html:textfield name="amplogin" /></td>
+            <td>
+            	<html:textfield name="amplogin"/>
+            </td>
           </tr>
           <tr>
             <td align="left" valign="top" class="textError">*</td>
             <td align="right" class="Text"><html:text
-				name="%{getText('label.amp_password')}" />
-              &nbsp;</td>
-            <td><html:password name="amppassword"/></td>
+				name="%{getText('label.amp_password')}" />&nbsp;
+			</td>
+            <td>
+            	<html:password name="amppassword"/>
+            </td>
           </tr>
           <tr>
             <td align="left" valign="top" class="textError">*</td>
             <td align="right" class="Text"><html:text
-				name="%{getText('label.browser')}" />
-              &nbsp;</td>
-            <td><html:select name="browser" list="browserlist"
-				listKey="name" listValue="name" /></td>
+				name="%{getText('label.browser')}"/>&nbsp;
+              </td>
+            <td>
+            	<html:select name="browser" list="browserlist" listKey="name" listValue="name"/>
+            </td>
           </tr>
           <tr>
             <td align="left" valign="top" class="textError">&nbsp;</td>
@@ -89,13 +98,13 @@ body {
             <td align="right" class="Text">
             	<html:text name="%{getText('label.os')}"/>&nbsp;            
             </td>
-            <td><html:select name="operatingsystem" list="os"
-				listValue="name" listKey="name" /></td>
+            <td>
+            	<html:select name="operatingsystem" list="os" listValue="name" listKey="name" /></td>
           </tr>
           <tr>
             <td align="left" valign="top" class="textError"></td>
-            <td align="right" class="Text"><html:text
-				name="%{getText('label.module')}" />&nbsp;             
+            <td align="right" class="Text">
+            	<html:text name="%{getText('label.module')}" />&nbsp;             
 			</td>
              <td align="left">
               	<html:select multiple="true" list="mlst" 
@@ -111,7 +120,7 @@ body {
             	<html:text name="%{getText('label.version')}"/>&nbsp;           	
             </td>
             <td>
-            	<html:select name="version" list="VLst"/>            
+            	<html:select name="version" list="VLst" listValue="name" listKey="name"/>            
             </td>
           </tr>
           <tr>

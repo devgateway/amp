@@ -15,7 +15,10 @@ public class Country {
 
 	@Column(name = "NAME")
 	private String name;
-
+	
+	@Column(name = "MAIL")
+	private String mail;
+	
 	public String getCode() {
 		return code;
 	}
@@ -30,5 +33,13 @@ public class Country {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getMail() {
+		return mail;
+	}
+
+	public void setMail(String mail) {
+		this.mail = mail;
 	}
 }

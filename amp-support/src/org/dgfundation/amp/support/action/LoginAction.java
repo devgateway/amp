@@ -30,7 +30,7 @@ public class LoginAction extends ActionSupport implements ServletRequestAware {
 	public String execute() throws Exception {
 		Login login = null;
 		if (request.getParameter("code") != null) {
-			String code = (String) request.getParameter("code");
+			String code = (String) request.getParameter("code").toUpperCase();
 			login = EntityHelper.getLoginbyCountry(EntityHelper.getCountry(code));
 			if (login != null) {
 				request.getSession().setAttribute("login", login);
@@ -47,8 +47,7 @@ public class LoginAction extends ActionSupport implements ServletRequestAware {
 		if (login != null) {
 			if (login.getRole() != 2) {
 				request.getSession().setAttribute("login", login);
-				request.getSession()
-						.setAttribute("request_locale", getLocale());
+				request.getSession().setAttribute("request_locale", getLocale());
 				return "succes";
 			} else {
 				request.getSession().setAttribute("login", login);

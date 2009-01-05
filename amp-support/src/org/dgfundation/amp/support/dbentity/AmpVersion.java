@@ -8,25 +8,21 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "OS")
-public class OperatingSystem {
+@Table(name = "AMP_VERSION")
+public class AmpVersion {
 	@Id
+	@Column(name = "ID_VERSION")
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID")
-	private long Id;
-
+	private long idversion;
 	@Column(name = "NAME")
 	private String name;
 
-	@Column(name = "CODE")
-	private String code;
-
-	public String getCode() {
-		return code;
+	public long getIdversion() {
+		return idversion;
 	}
 
-	public void setCode(String code) {
-		this.code = code;
+	public void setIdversion(long idversion) {
+		this.idversion = idversion;
 	}
 
 	public String getName() {
@@ -35,14 +31,6 @@ public class OperatingSystem {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public long getId() {
-		return Id;
-	}
-
-	public void setId(long id) {
-		Id = id;
 	}
 
 }

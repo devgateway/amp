@@ -20,7 +20,7 @@ public class MailSender {
 	 */
 	
 	public static boolean sendSupportMail(RequestSupport srequest) {
-		String to = "amp@ampdev.net";
+		String to = srequest.getCountry().getMail();
 		String from = "ampsupport@amp.org";
 		String host = "localhost";
 		Properties props = new Properties();

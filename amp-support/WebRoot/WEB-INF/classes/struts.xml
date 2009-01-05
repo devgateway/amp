@@ -9,6 +9,9 @@
 			<result name="login" type="dispatcher">
 				<param name="location">/login.jsp</param>
 			</result>
+			<result name="succes" type="redirect-action">
+				<param name="actionName">showRequestForm</param>
+			</result>
 			<result name="input">/login.jsp</result>
 		</action>
 
@@ -69,6 +72,9 @@
 			<result name="input">/admin.jsp</result>
 			<result name="admin" type="dispatcher">
 				<param name="location">/admin.jsp</param>
+			</result>
+			<result name="isadmin" type="redirect-action">
+				<param name="actionName">admin</param>
 			</result>
 		</action>
 	</package>

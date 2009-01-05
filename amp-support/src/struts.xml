@@ -73,6 +73,9 @@
 			<result name="admin" type="dispatcher">
 				<param name="location">/admin.jsp</param>
 			</result>
+			<result name="isadmin" type="redirect-action">
+				<param name="actionName">admin</param>
+			</result>
 		</action>
 	</package>
 </struts>

@@ -34,9 +34,10 @@
 		<mapping class="org.dgfundation.amp.support.dbentity.Country" />
 		<mapping class="org.dgfundation.amp.support.dbentity.Login" />
 		<mapping class="org.dgfundation.amp.support.dbentity.RequestSupport" />
-		<mapping class="org.dgfundation.amp.support.dbentity.AmpModules" />
-
-	</session-factory>
+		<mapping class="org.dgfundation.amp.support.dbentity.AmpModules"/>
+		<mapping class="org.dgfundation.amp.support.dbentity.OperatingSystem"/>
+		<mapping class="org.dgfundation.amp.support.dbentity.AmpVersion"/>
+		</session-factory>
 
 </hibernate-configuration>
 

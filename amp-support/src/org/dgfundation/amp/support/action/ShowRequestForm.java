@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.ServletRequestAware;
+import org.dgfundation.amp.support.dbentity.AmpVersion;
 import org.dgfundation.amp.support.dbentity.Browsers;
 import org.dgfundation.amp.support.dbentity.Country;
 import org.dgfundation.amp.support.dbentity.Login;
@@ -21,6 +22,7 @@ import org.dgfundation.amp.support.hibernate.EntityHelper;
 import org.dgfundation.amp.support.mail.MailSender;
 
 import com.opensymphony.xwork2.ActionSupport;
+import com.sun.xml.internal.bind.v2.TODO;
 
 public class ShowRequestForm extends ActionSupport implements
 		ServletRequestAware {
@@ -145,22 +147,19 @@ public class ShowRequestForm extends ActionSupport implements
 
 	public Collection<OperatingSystem> getOs() {
 		List<OperatingSystem> os = new ArrayList<OperatingSystem>();
-		os.add(new OperatingSystem("Windows XP", "XP"));
-		os.add(new OperatingSystem("Windows Vista", "VT"));
-		os.add(new OperatingSystem("Windows Server", "SV"));
-		os.add(new OperatingSystem("Windows 98", "W8"));
-		os.add(new OperatingSystem("Windows 95", "W5"));
-		os.add(new OperatingSystem("Linux", "LX"));
-		os.add(new OperatingSystem("Unix", "UX"));
-		os.add(new OperatingSystem(getText("label.other"), "OT"));
+		os = EntityHelper.getOs();
 		return os;
 	}
 
-	public ArrayList<String> getVLst() {
-		ArrayList<String> vl = new ArrayList<String>();
-		vl.add(getText("label.from.choose_version"));
-		vl.add("1.09RC1");
-		vl.add("1.09RC1.10");
+	public Collection<AmpVersion> getVLst() {
+		List<AmpVersion> vl = new ArrayList<AmpVersion>();
+		vl = EntityHelper.getAmpVersion();
+
+		/*
+		 * vl.add(getText("label.from.choose_version")); vl.add("1.09RC1");
+		 * vl.add("1.09RC1.10"); vl.add("1.12"); vl.add("1.12i");
+		 * vl.add("1.12k"); vl.add("1.12l"); vl.add("1.13");
+		 */
 		return vl;
 	}
 

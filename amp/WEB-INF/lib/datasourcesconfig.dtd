@@ -5,7 +5,7 @@
 
 <!--
      This is the XML model for XMLA DataSources Configuration.
-     Revision is $Id: datasourcesconfig.dtd,v 1.1 2008-11-07 17:34:40 ddimunzio Exp $
+     Revision is $Id: datasourcesconfig.dtd,v 1.2 2009-01-06 14:40:06 ddimunzio Exp $
   -->
 <!--
      The list of data sources supported by XMLA service.

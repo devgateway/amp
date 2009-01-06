@@ -13,12 +13,67 @@ function validate(topickey){
 		if(!topickey){
 			alert("Default topic is not tree topic");
 		return false;
-	}
+	}else{
+            return true;
+        }
 }
+  function getKey(){
+    var topicKey = document.getElementById("key").innerHTML;
+    var key = topicKey.slice(topicKey.indexOf("y:")+2);
+    return key;
+  }
+
+function edit(){
+    
+    if(validate(getKey())){
+
+        <digi:context name="editTopic" property="context/module/moduleinstance/helpActions.do~actionType=editHelpTopic"/>
+		document.helpForm.action = "<%=editTopic%>~topicKey="+getKey()+"~wizardStep=0";
+		document.helpForm.target = "_self";
+		document.helpForm.submit();
+
+    }
+
+}
+
+function remove(){
+
+    if(validate(getKey())){
+
+        <digi:context name="editTopic" property="context/module/moduleinstance/helpActions.do~actionType=deleteHelpTopic"/>
+		document.helpForm.action = "<%=editTopic%>~topicKey="+getKey()+"~wizardStep=0";
+		document.helpForm.target = "_self";
+		document.helpForm.submit();
+
+    }
+
+}
+
+
+function create(){
+
+        <digi:context name="editTopic" property="context/module/moduleinstance/helpActions.do~actionType=createHelpTopic"/>
+		document.helpForm.action = "<%=editTopic%>~wizardStep=0";
+		document.helpForm.target = "_self";
+		document.helpForm.submit();
+
+
+}
+
 
 //-->
 </script>
 
+
+<style type="text/css">
+
+  .link{
+      cursor:pointer;
+      font-size:10px;
+   }
+
+
+</style>
 <digi:instance property="helpForm"/>
 <div id="content"  class="yui-skin-sam" style="width:100%;"> 
 	<div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
@@ -34,37 +89,28 @@ function validate(topickey){
                         </ul>
                         <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
 
-<div style="padding:2px";>
-<c:set var="topicEdit">
-      <digi:trn key="aim:help:clickToEditHelpTopic">Click here to Edit Help Topic</digi:trn>
-    </c:set>
-      
-      <digi:link onclick="return validate(${helpForm.topicKey})" href="/helpActions.do?actionType=editHelpTopic&amp;topicKey=${helpForm.topicKey}&amp;wizardStep=0" 
-								title="${topicEdit}" >
-        <digi:trn key="aim:help:editTopic">Edit Topic</digi:trn>
-      </digi:link>
-      
-       
-      | <c:set var="topicCreate">
-      <digi:trn key="aim:help:clickToAddHelpTopic">Click here to Create Help Topic</digi:trn>
-    </c:set>
-      
-      <digi:link href="/helpActions.do?actionType=createHelpTopic&amp;wizardStep=0" 
-								title="${topicCreate}" >
-        <digi:trn key="aim:help:createTopic">Create Topic</digi:trn>
-      </digi:link>
-      | <c:set var="topicDelete">
-      <digi:trn key="aim:help:clickToDeleteHelpTopic">Click here to Delete Help Topic</digi:trn>
-    </c:set>
-     
-	      <digi:link href="/helpActions.do?actionType=deleteHelpTopic&amp;topicKey=${helpForm.topicKey}" 
-									title="${topicDelete}" >
-	        <digi:trn key="aim:help:removeTopic">Remove Topic</digi:trn>
-	      </digi:link>
-     
-    </div> 
-      					</div>     
+                            <div style="padding:2px;">
+                                <c:set var="topicEdit">
+                                  <digi:trn>Click here to Edit Help Topic</digi:trn>
+                                </c:set>
+                                <c:set var="topicCreate">
+                                  <digi:trn>Click here to Create Help Topic</digi:trn>
+                                </c:set>
+                                <c:set var="topicDelete">
+                                  <digi:trn>Click here to Delete Help Topic</digi:trn>
+                                </c:set>
+
+                                      <a class="link" onclick="edit();" title="${topicEdit}" ><digi:trn>Edit Topic</digi:trn></a> |
+
+                                      <a class="link" onclick="create();" title="${topicCreate}" > <digi:trn>Create Topic</digi:trn></a> |
+
+                                      <a class="link" onclick="remove();" title="${topicDelete}" ><digi:trn>Remove Topic</digi:trn></a>
+
+
+
+                          </div>
+                     </div>
 	</div>
-    </div>
+</div>
     
 

@@ -52,7 +52,7 @@ function dhtmlXTreeObject(htmlObject, width, height, rootId){
 	else
       this.parentObject=htmlObject;
 
-	this.parentObject.style.overflow="hidden";
+	this.parentObject.style.overflow="autoScroll";
    	this._itim_dg=true;
     this.dlmtr=",";
     this.dropLower=false;

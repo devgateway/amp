@@ -119,8 +119,10 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 				
 					/* Getting the ids (there might be more than 1 since it is a multiselect) of the current value of the category */
 					try{
-						PropertyDescriptor beanProperty	= new PropertyDescriptor(property, bean.getClass());
-						values							= beanProperty.getReadMethod().invoke(bean,new Object[0]);
+						BeanWrapperImpl beanWrapperImpl = new BeanWrapperImpl(bean);
+						values = beanWrapperImpl.getPropertyValue(property);
+						//PropertyDescriptor beanProperty	= new PropertyDescriptor(property, bean.getClass());
+						//values							= beanProperty.getReadMethod().invoke(bean,new Object[0]);
 						//valueIds						= (Long[])(beanProperty.getReadMethod().invoke(bean,new Object[0]));
 						valueIdsColl					= new HashSet();
 						if (values != null) {

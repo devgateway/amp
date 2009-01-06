@@ -88,17 +88,13 @@
 													</c:set>
 													
 														 									
-													<bean:define id="location" name="aimEditActivityForm" property="location"></bean:define>
-													<category:showoptions firstLine="${translation}" name="location" property="implemLocationLevel" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>" styleClass="inp-text" />
-												                                             	
-                                              		<html:hidden property="location.implemLocationLevel" value="${location.implemLocationLevel}"/>
-
-                                              	<script language="Javascript">                                             	
-												var implemLocationLevelSelect = document.getElementsByName("implemLocationLevel")[0];
-                                              		implemLocationLevelSelect.onchange=function(){
-                                              			document.getElementsByName("location.implemLocationLevel")[0].value=implemLocationLevelSelect.value;
-                                              			removeAllLocations();
-                                              	}
+													<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="location.implemLocationLevel" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>" styleClass="inp-text" />
+												                                             													                                             	                                              	
+	                                              	<script language="Javascript">                                             	
+													var implemLocationLevelSelect = document.getElementsByName("location.implemLocationLevel")[0];
+	                                              		implemLocationLevelSelect.onchange=function() {
+	                                              			removeAllLocations();
+	                                              	}
      	
                                               	</script>
 											</td>

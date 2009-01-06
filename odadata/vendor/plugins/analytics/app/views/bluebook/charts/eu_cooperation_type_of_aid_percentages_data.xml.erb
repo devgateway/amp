@@ -8,10 +8,10 @@
 	</series>
 	
 	<graphs>
-		<% translate_options(Project::TYPE_OF_AID_OPTIONS).each do |name, id| %>
-			<graph gid="<%= id %>" title="<%= name %>" color="<%= Settings::COLOR_SCHEME[id] %>">
+		<% TypeOfAid.all.each do |toa| %>
+			<graph gid="<%= toa.id %>" title="<%= toa.name %>" color="<%= Settings::COLOR_SCHEME[toa.id] %>">
 				<% @donors.each do |donor| %>
-					<value xid="<%= donor.id %>"><%= @aid_payments[donor.id][id].in_millions(2) rescue 0 %></value>
+					<value xid="<%= donor.id %>"><%= @aid_payments[donor.id][toa.id].in_millions(2) rescue 0 %></value>
 				<% end %>
 			</graph>
 		<% end %>

@@ -17,6 +17,7 @@
 	</script>
 </logic:present>
 
+ <LINK REL="SHORTCUT ICON" HREF="/favicon.ico">
 
 <digi:context name="displayFlag" property="context/aim/default/displayFlag.do" />
 <c:set var="message">

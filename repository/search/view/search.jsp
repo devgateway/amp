@@ -33,6 +33,14 @@
 </style>
 
 <script language="javascript">
+
+function resetFields() {
+	var keyword = document.getElementsByName("keyword")[0];
+	var queryType = document.getElementsByName("queryType")[0];
+	keyword.value ="";
+	queryType.value = -1;
+}
+
 function popup(mylink, windowname)
 {
 if (! window.focus)return true;
@@ -185,7 +193,7 @@ $(document).ready(function(){
                                                 <html:submit><digi:trn>Submit</digi:trn></html:submit>
                                             </td>
                                             <td valign="top">
-                                                <html:reset><digi:trn>Reset</digi:trn></html:reset>
+	                                            <input type="button" onclick="resetFields()" value="<digi:trn>Reset</digi:trn>"/>
                                             </td>
                                         </tr>
                                     </table>

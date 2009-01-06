@@ -63,13 +63,13 @@
                           </li>
                         </ul>
              		 <bean:define id="topic" name="helpForm" property="topicTree" type="java.util.Collection"/>
-                      
+        <!--
                         <div class="yui-content" style="height:700px;overflow: auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
                         <bean:define id="topic" name="helpForm" property="topicTree" type="java.util.Collection"/>
                         	<%= HelpUtil.renderTopicsTree(topic,request) %>
              		</div>
+            -->
 
- <!--
   <div id="treeboxbox_tree" class="yui-content" style="height:700px;overflow: auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;"></div>
   <div id="log"></div>
 
@@ -119,9 +119,10 @@
 
 function stateChange(){
 	 if (xmlHttp.readyState==4)
-  { 
-	 document.getElementById("bodyhelp").innerHTML=xmlHttp.responseText;
-	 document.getElementById("bodyhelp").style.border="1px solid #A5ACB2";
+  {
+	 document.getElementById("bodyhelp").innerHTML = xmlHttp.responseText.slice(0,xmlHttp.responseText.indexOf("help:"));
+     document.getElementById("key").innerHTML = xmlHttp.responseText.slice(xmlHttp.responseText.indexOf("help:"));
+     document.getElementById("bodyhelp").style.border="1px solid #A5ACB2";
 	 
    } 
    
@@ -156,5 +157,5 @@ function GetXmlHttpObject()	{
 }
 </script>
  		
- -->		
+
              		

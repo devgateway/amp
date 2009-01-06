@@ -65,31 +65,40 @@ public class HelpActions extends DispatchAction {
 	}
 
 
-    public ActionForward getbody(ActionMapping mapping,
+     public ActionForward getbody(ActionMapping mapping,
 		ActionForm form, HttpServletRequest request,
 		HttpServletResponse response)throws Exception{
 	String	lang	= RequestUtils.getNavigationLanguage(request).getCode();
 	HelpForm helpForm = (HelpForm) form;
-	OutputStreamWriter os = null;	
+	OutputStreamWriter os = null;
     PrintWriter out = null;
     String loadStatus = request.getParameter("body");
 
-	try {
+    try {
 		if(loadStatus != null){
 			os = new OutputStreamWriter(response.getOutputStream());
-			out = new PrintWriter(os, true);
+            out = new PrintWriter(os, true);
 			String id = loadStatus.toLowerCase();
 			HelpTopic key = HelpUtil.getHelpTopic(new Long(id));
-			String bodyKey =  key.getBodyEditKey();
-			List editor = HelpUtil.getEditor(bodyKey, lang);
+            String bodyKey =  key.getBodyEditKey();
+            String article = HelpUtil.getTrn(key.getBodyEditKey(),key.getTopicKey(), request);
+            out.println("<b>"+article+"</b>");
+            List editor = HelpUtil.getEditor(bodyKey, lang);
+            helpForm.setTopicKey(bodyKey);
 
-			if(!editor.isEmpty()){
-				Iterator iter = editor.iterator();
+
+            if(!editor.isEmpty()){
+               Iterator iter = editor.iterator();
 				while (iter.hasNext()) {
 					Editor help = (Editor) iter.next();
-					out.println(help.getBody());
-				}
-			}
+                    out.println(help.getBody());
+                    out.println(help.getEditorKey());
+                    helpForm.setTopicKey(help.getEditorKey());
+                    System.out.println("TopicKey:"+helpForm.getTopicKey());
+                }
+			}else{
+               out.println(helpForm.getTopicKey()); 
+            }
 		}
 		out.flush();
 		out.close();
@@ -222,7 +231,7 @@ public class HelpActions extends DispatchAction {
 		String siteId = RequestUtils.getSite(request).getSiteId();
 		String moduleInstance = RequestUtils.getRealModuleInstance(request)
 				.getInstanceName();
-		HelpTopic helpTopic = HelpUtil.getHelpTopic(helpForm.getTopicKey(),
+        HelpTopic helpTopic = HelpUtil.getHelpTopic(helpForm.getTopicKey(),
 				siteId, moduleInstance);
 		if(helpTopic != null){
 			helpForm.setBodyEditKey(helpTopic.getBodyEditKey());

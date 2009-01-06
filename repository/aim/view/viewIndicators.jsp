@@ -99,10 +99,10 @@ a.itr:hover {
 
 <digi:form action="/viewIndicators.do" method="post">
   <html:hidden property="sortBy" styleId="sortBy"/>
-  <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+  <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=800 border=0>
     <tr>
       <td class=r-dotted-lg width=14>&nbsp;</td>
-      <td align=left class=r-dotted-lg vAlign=top width=750>
+      <td align=left class=r-dotted-lg vAlign=top width=800>
         <table cellPadding=5 cellSpacing=0 width="100%" border=0>
           <tr>
             <td height=33><span class=crumb>
@@ -120,7 +120,7 @@ a.itr:hover {
             </td>
           </tr><%-- End navigation --%>
           <tr>
-            <td height="16" vAlign="center" width="571">
+            <td height="16" vAlign="center" width="100%">
               <span class="subtitle-blue">
                 <digi:trn key="aim:nIndicatorManager">
                 Indicator Manager
@@ -129,7 +129,7 @@ a.itr:hover {
             </td>
           </tr>
           <tr>
-            <td height=16 vAlign="center" width="571">
+            <td height=16 vAlign="center" width="100%">
               <digi:errors />
               <c:if test="${!empty aimViewIndicatorsForm.themeName}">
                 This indicator assigned to <span style="color:Red;">${aimViewIndicatorsForm.themeName}</span> 
@@ -146,7 +146,7 @@ a.itr:hover {
             <td noWrap width=100% vAlign="top">
               <table width="100%" cellspacing=0 cellSpacing=0 border=0>
                 <tr>
-                  <td noWrap width=700 vAlign="top">
+                  <td noWrap width=100% vAlign="top">
                     <table bgColor=#d7eafd cellPadding=0 cellSpacing=0 width="100%" valign="top">
                       <tr bgColor=#ffffff>
                         <td vAlign="top" width="100%">
@@ -187,7 +187,7 @@ a.itr:hover {
                                     </td>
                                   </tr>
                                   <tr>
-                                    <td colspan="10" width="100%" align="center">
+                                    <td colspan="6" width="100%" align="center">
                                       <table width="100%" align="center"  border="0" style="font-family:verdana;font-size:11px;">
                                         <tr bgColor="#d7eafd">
                                           <td width="80%">
@@ -225,7 +225,7 @@ a.itr:hover {
 	                                            <a class="itr" href="javascript:editIndicator('${indItr.id}');">
                                                 ${indItr.name}</a>
                                                </td>
-                                               <td width="18%">
+                                               <td width="18%" nowrap="nowrap">
 	                                                <c:if test="${!empty indItr.sectorNames}">
 	                                            	<c:forEach var="indsectname" items="${indItr.sectorNames}">
 	                                            	   ${indsectname}<br>
@@ -251,7 +251,7 @@ a.itr:hover {
                                           </c:forEach>
                                         </c:if>
                                         <tr>
-                                          <td colspan="10" align="center">
+                                          <td colspan="6" align="center">
                                           	<field:display name="Add New Indicator" feature="Admin">
                                             	<input type="button" value="<digi:trn key='btn:addIndicator'>Add Indicators</digi:trn>" id="addBtn" onclick="addIndicator();" style="font-family:verdana;font-size:11px;"/>
                                             </field:display>

@@ -76,7 +76,7 @@ public class TeamUtil {
         Collection col = new ArrayList();
 
         try {
-            session = PersistenceManager.getRequestDBSession();
+            session = PersistenceManager.getSession();
 
             // get all teams whose 'parent id' is set to null
             String qryStr = "select t from "
@@ -114,7 +114,15 @@ public class TeamUtil {
             logger.error("Exception from getUnassignedWorkspcaes : "
                          + e.getMessage());
             throw new RuntimeException(e);
-        } 
+        } finally {
+            if(session != null) {
+                try {
+                    PersistenceManager.releaseSession(session);
+                } catch(Exception rsf) {
+                    logger.error("Release Session failed");
+                }
+            }
+        }
         return col;
     }
 
@@ -148,7 +156,7 @@ public class TeamUtil {
 
         try {
             if(teamId != null && teamId.length > 0) {
-                session = PersistenceManager.getRequestDBSession();
+                session = PersistenceManager.getSession();
                 StringBuffer qryBuf = new StringBuffer();
                 qryBuf.append("select t from ");
                 qryBuf.append(AmpTeam.class.getName());
@@ -167,6 +175,14 @@ public class TeamUtil {
             }
         } catch(Exception e) {
             throw new RuntimeException(e);
+        } finally {
+            if(session != null) {
+                try {
+                    PersistenceManager.releaseSession(session);
+                } catch(Exception rsf) {
+                    logger.error("Release session failed");
+                }
+            }
         }
         return col;
     }
@@ -176,7 +192,7 @@ public class TeamUtil {
         Collection col = new ArrayList();
 
         try {
-            session = PersistenceManager.getRequestDBSession();
+            session = PersistenceManager.getSession();
             String query = "select team from " + AmpTeam.class.getName()
                 + " team where (team.accessType=:accessType)";
             Query qry = session.createQuery(query);
@@ -186,6 +202,14 @@ public class TeamUtil {
         } catch(Exception e) {
             throw new RuntimeException(e);
 
+        } finally {
+            if(session != null) {
+                try {
+                    PersistenceManager.releaseSession(session);
+                } catch(Exception rsf) {
+                    logger.error("Release session failed");
+                }
+            }
         }
         return col;
     }
@@ -194,7 +218,7 @@ public class TeamUtil {
         Session session = null;
         Collection col = new ArrayList();
         try {
-            session = PersistenceManager.getRequestDBSession();
+            session = PersistenceManager.getSession();
             String query = "select team from " + AmpTeam.class.getName()
                 + " team where (team.parentTeamId.ampTeamId=:pid) order by name";
             Query qry = session.createQuery(query);
@@ -204,6 +228,14 @@ public class TeamUtil {
         } catch(Exception e) {
             throw new RuntimeException(e);
 
+        } finally {
+            if(session != null) {
+                try {
+                    PersistenceManager.releaseSession(session);
+                } catch(Exception rsf) {
+                    logger.error("Release session failed");
+                }
+            }
         }
        return col;
     }
@@ -213,7 +245,7 @@ public class TeamUtil {
         Collection col = new ArrayList();
 
         try {
-            session = PersistenceManager.getRequestDBSession();
+            session = PersistenceManager.getSession();
             String query = "select team from "
                 + AmpTeam.class.getName()
                 + " team where (team.accessType=:accessType) and (team.type=:type)";
@@ -225,6 +257,14 @@ public class TeamUtil {
         } catch(Exception e) {
             throw new RuntimeException(e);
 
+        } finally {
+            if(session != null) {
+                try {
+                    PersistenceManager.releaseSession(session);
+                } catch(Exception rsf) {
+                    logger.error("Release session failed");
+                }
+            }
         }
         return col;
     }
@@ -234,7 +274,7 @@ public class TeamUtil {
         Collection col = new ArrayList();
         Set colSet= new TreeSet();
         try {
-            session = PersistenceManager.getRequestDBSession();
+            session = PersistenceManager.getSession();
             String query = "select team from "
                 + AmpTeam.class.getName()
                 + " team where (team.accessType=:accessType) ";
@@ -245,6 +285,14 @@ public class TeamUtil {
         } catch(Exception e) {
             throw new RuntimeException(e);
 
+        } finally {
+            if(session != null) {
+                try {
+                    PersistenceManager.releaseSession(session);
+                } catch(Exception rsf) {
+                    logger.error("Release session failed");
+                }
+            }
         }
         colSet.addAll(col);
         //return col;
@@ -268,7 +316,7 @@ public class TeamUtil {
         Transaction tx = null;
 
         try {
-            session = PersistenceManager.getRequestDBSession();
+            session = PersistenceManager.getSession();
             tx = session.beginTransaction();
 
             // check whether a team with the same name already exist
@@ -359,15 +407,15 @@ public class TeamUtil {
         * try { tx.rollback(); } catch (Exception rbf) {
         * logger.error("Rollback failed"); } } }
         finally
-//        */ {
-//           if(session != null) {
-//               try {
-//                   PersistenceManager.releaseSession(session);
-//               } catch(Exception rsf) {
-//                   logger.error("Release session failed");
-//               }
-//           }
-      }
+        */ {
+           if(session != null) {
+               try {
+                   PersistenceManager.releaseSession(session);
+               } catch(Exception rsf) {
+                   logger.error("Release session failed");
+               }
+           }
+       }
         return teamExist;
     }
 
@@ -383,7 +431,7 @@ public class TeamUtil {
         Session session = null;
 
         try {
-            session = PersistenceManager.getRequestDBSession();
+            session = PersistenceManager.getSession();
             String qryStr = "select t from " + AmpTeam.class.getName() + " t "
                 + "where (t.ampTeamId=:id)";
             Query qry = session.createQuery(qryStr);
@@ -452,7 +500,16 @@ public class TeamUtil {
         } catch(Exception e) {
             throw new RuntimeException(e);
 
+        } finally {
+            if(session != null) {
+                try {
+                    PersistenceManager.releaseSession(session);
+                } catch(Exception rsf) {
+                    logger.error("Release session failed");
+                }
+            }
         }
+
         return workspace;
     }
 
@@ -470,7 +527,7 @@ public class TeamUtil {
 
         try {
 
-            session = PersistenceManager.getRequestDBSession();
+            session = PersistenceManager.getSession();
             tx = session.beginTransaction();
 
             // check whether a team with the same name already exist
@@ -564,14 +621,14 @@ public class TeamUtil {
         * try { tx.rollback(); } catch (Exception rbf) {
         * logger.error("Rollback failed"); } } }
         finally
-//        */ {
-//           if(session != null) {
-//               try {
-//                   PersistenceManager.releaseSession(session);
-//               } catch(Exception rsf) {
-//                   logger.error("Release session failed");
-//               }
-//           }
+        */ {
+           if(session != null) {
+               try {
+                   PersistenceManager.releaseSession(session);
+               } catch(Exception rsf) {
+                   logger.error("Release session failed");
+               }
+           }
        }
         return teamExist;
     }
@@ -583,7 +640,7 @@ public class TeamUtil {
         Query qry = null;
 
         try {
-            session = PersistenceManager.getRequestDBSession();
+            session = PersistenceManager.getSession();
             qryStr = "select count(*) from " + AmpTeamMember.class.getName()
                 + " tm" + " where (tm.ampTeam=:teamId)";
             qry = session.createQuery(qryStr);
@@ -599,6 +656,14 @@ public class TeamUtil {
 
         } catch(Exception e) {
             throw new RuntimeException(e);
+        } finally {
+            try {
+                if(session != null) {
+                    PersistenceManager.releaseSession(session);
+                }
+            } catch(Exception ex) {
+                logger.error("releaseSession() failed");
+            }
         }
         return memExist;
     }
@@ -610,7 +675,7 @@ public class TeamUtil {
         Query qry = null;
 
         try {
-            session = PersistenceManager.getRequestDBSession();
+            session = PersistenceManager.getSession();
             qryStr = "select count(*) from " + AmpActivity.class.getName()
                 + " tm" + " where (tm.team=:teamId)";
             qry = session.createQuery(qryStr);
@@ -626,6 +691,14 @@ public class TeamUtil {
 
         } catch(Exception e) {
             throw new RuntimeException(e);
+        } finally {
+            try {
+                if(session != null) {
+                    PersistenceManager.releaseSession(session);
+                }
+            } catch(Exception ex) {
+                logger.error("releaseSession() failed");
+            }
         }
         return memExist;
     }
@@ -889,7 +962,7 @@ public class TeamUtil {
         AmpTeamMember member = null;
 
         try {
-            session = PersistenceManager.getRequestDBSession();
+            session = PersistenceManager.getSession();
             tx = session.beginTransaction();
 
             AmpTeam team = (AmpTeam) session.load(AmpTeam.class, teamId);
@@ -922,6 +995,14 @@ public class TeamUtil {
                 }
             }
             throw new RuntimeException(e);
+        } finally {
+            try {
+                if(session != null) {
+                    PersistenceManager.releaseSession(session);
+                }
+            } catch(Exception ex) {
+                logger.error("releaseSession() failed");
+            }
         }
     }
 
@@ -976,7 +1057,7 @@ public class TeamUtil {
         Collection donors = new ArrayList();
 
         try {
-            session = PersistenceManager.getRequestDBSession();
+            session = PersistenceManager.getSession();
             Vector teams = new Vector();
             Vector temp = new Vector();
 
@@ -1038,7 +1119,16 @@ public class TeamUtil {
         } catch(Exception e) {
             throw new RuntimeException(e);
 
+        } finally {
+            try {
+                if(session != null) {
+                    PersistenceManager.releaseSession(session);
+                }
+            } catch(Exception ex) {
+                logger.error("releaseSession() failed");
+            }
         }
+
         return donors;
     }
 
@@ -1049,7 +1139,7 @@ public class TeamUtil {
         Query qry = null;
 
         try {
-            session = PersistenceManager.getRequestDBSession();
+            session = PersistenceManager.getSession();
             tx = session.beginTransaction();
             AmpTeam ampTeam = (AmpTeam) session.load(AmpTeam.class, teamId);
             AmpPages ampPage = (AmpPages) session.load(AmpPages.class, pageId);
@@ -1086,6 +1176,14 @@ public class TeamUtil {
                 }
             }
             throw new RuntimeException(e);
+        } finally {
+            try {
+                if(session != null) {
+                    PersistenceManager.releaseSession(session);
+                }
+            } catch(Exception ex) {
+                logger.error("releaseSession() failed");
+            }
         }
     }
 
@@ -1097,7 +1195,7 @@ public class TeamUtil {
         Session session = null;
 
         try {
-            session = PersistenceManager.getRequestDBSession();
+            session = PersistenceManager.getSession();
 
             AmpTeam team = (AmpTeam) session.load(AmpTeam.class, teamId);
             if(team.getTeamCategory().equalsIgnoreCase("MOFED")) {
@@ -1124,6 +1222,14 @@ public class TeamUtil {
         } catch(Exception e) {
             throw new RuntimeException(e);
 
+        } finally {
+            try {
+                if(session != null) {
+                    PersistenceManager.releaseSession(session);
+                }
+            } catch(Exception ex) {
+                logger.error("releaseSession() failed");
+            }
         }
         return col;
     }
@@ -1188,7 +1294,7 @@ public class TeamUtil {
 
             Collection temp = getDonorTeamActivities(dnrTeamId);
 
-            session = PersistenceManager.getRequestDBSession();
+            session = PersistenceManager.getSession();
             String qryStr = "select act from " + AmpActivity.class.getName()
                 + " act where "
                 + "(act.team=:teamId) and (act.approvalStatus=:status)";
@@ -1238,16 +1344,25 @@ public class TeamUtil {
         } catch(Exception e) {
             logger.error("Unable to getDonorTeamActivities" + e.getMessage());
             throw new RuntimeException(e);
+        } finally {
+            try {
+                if(session != null) {
+                    PersistenceManager.releaseSession(session);
+                }
+            } catch(Exception ex) {
+                logger.error("releaseSession() failed");
+            }
         }
         return col;
     }
 
-    public static void assignActivitiesToDonor(Long dnrTeamId,Long activityId[]) {
+    public static void assignActivitiesToDonor(Long dnrTeamId,
+                                               Long activityId[]) {
         Session session = null;
         Transaction tx = null;
 
         try {
-            session = PersistenceManager.getRequestDBSession();
+            session = PersistenceManager.getSession();
             tx = session.beginTransaction();
 
             AmpTeam ampTeam = (AmpTeam) session.get(AmpTeam.class, dnrTeamId);
@@ -1278,15 +1393,23 @@ public class TeamUtil {
                 }
             }
             throw new RuntimeException(e);
+        } finally {
+            try {
+                if(session != null) {
+                    PersistenceManager.releaseSession(session);
+                }
+            } catch(Exception ex) {
+                logger.error("releaseSession() failed");
+            }
         }
     }
 
-    public static void removeActivitiesFromDonor(Long dnrTeamId,Long activityId[]) {
+    public static void removeActivitiesFromDonor(Long dnrTeamId, Long activityId[]) {
         Session session = null;
         Transaction tx = null;
 
         try {
-            session = PersistenceManager.getRequestDBSession();
+            session = PersistenceManager.getSession();
             tx = session.beginTransaction();
 
             AmpTeam ampTeam = (AmpTeam) session.get(AmpTeam.class, dnrTeamId);
@@ -1324,6 +1447,14 @@ public class TeamUtil {
                 }
             }
             throw new RuntimeException(e);
+        } finally {
+            try {
+                if(session != null) {
+                    PersistenceManager.releaseSession(session);
+                }
+            } catch(Exception ex) {
+                logger.error("releaseSession() failed");
+            }
         }
     }
 
@@ -1332,7 +1463,7 @@ public class TeamUtil {
         Query q = null;
         boolean ans = false;
         try {
-            session = PersistenceManager.getRequestDBSession();
+            session = PersistenceManager.getSession();
             String qry = "select tm from " + AmpTeam.class.getName()
                 + " tm where tm.parentTeamId.ampTeamId=:ampTeamId";
             q = session.createQuery(qry);
@@ -1344,6 +1475,14 @@ public class TeamUtil {
         } catch(Exception ex) {
             logger.error("Unable to get AmpTeam [checkForParentTeam()]", ex);
             throw new RuntimeException(ex);
+        } finally {
+            try {
+                if(session != null) {
+                    PersistenceManager.releaseSession(session);
+                }
+            } catch(Exception ex) {
+                logger.debug("releaseSession() failed");
+            }
         }
         logger.debug("Getting checkForParentTeam Executed successfully ");
         return ans;
@@ -1355,7 +1494,7 @@ public class TeamUtil {
         AmpTeam team = null;
 
         try {
-            session = PersistenceManager.getRequestDBSession();
+            session = PersistenceManager.getSession();
             String queryString = "select t from " + AmpTeam.class.getName()
                 + " t where (t.name=:teamName)";
             qry = session.createQuery(queryString);
@@ -1368,6 +1507,14 @@ public class TeamUtil {
             logger.error("Unable to get team");
             logger.debug("Exceptiion " + e);
             throw new RuntimeException(e);
+        } finally {
+            try {
+                if(session != null) {
+                    PersistenceManager.releaseSession(session);
+                }
+            } catch(Exception ex) {
+                logger.error("releaseSession() failed");
+            }
         }
         return team;
     }
@@ -1377,15 +1524,15 @@ public class TeamUtil {
         Collection col = null;
 
         try {
-            session = PersistenceManager.getRequestDBSession();
+            session = PersistenceManager.getSession();
             String queryString = "";
             Query qry = null;
             if(teamId == null) {
-            	queryString = "select act from " + AmpActivity.class.getName() + " act where act.team is null";
+            	queryString = "select act from "+ AmpActivity.class.getName() + " act where act.team is null";
             	qry=session.createQuery(queryString);
             }
             else{
-            	queryString = "select act from " + AmpActivity.class.getName() + " act where (act.team=:teamId)";
+            	queryString = "select act from "  + AmpActivity.class.getName() + " act where (act.team=:teamId)";
             	qry=session.createQuery(queryString);
             	qry.setParameter("teamId", teamId, Hibernate.LONG);
             }
@@ -1394,6 +1541,15 @@ public class TeamUtil {
             logger.debug("Exception from getAllTeamAmpActivities()");
             logger.debug(e.toString());
             throw new RuntimeException(e);
+        } finally {
+            try {
+                if(session != null) {
+                    PersistenceManager.releaseSession(session);
+                }
+            } catch(Exception ex) {
+                logger.debug("releaseSession() failed");
+                logger.debug(ex.toString());
+            }
         }
         return col;
     }
@@ -1403,8 +1559,10 @@ public class TeamUtil {
         boolean flag = false;
 
         try {
-            session = PersistenceManager.getRequestDBSession();
-            String queryString = "select count(*) from " + AmpActivity.class.getName() + " act where (act.team=:teamId)";
+            session = PersistenceManager.getSession();
+            String queryString = "select count(*) from "
+                + AmpActivity.class.getName()
+                + " act where (act.team=:teamId)";
             Query qry = session.createQuery(queryString);
             qry.setParameter("teamId", teamId, Hibernate.LONG);
             Iterator itr = qry.list().iterator();
@@ -1418,6 +1576,15 @@ public class TeamUtil {
             logger.debug("Exception from hasActivities()");
             logger.debug(e.toString());
             throw new RuntimeException(e);
+        } finally {
+            try {
+                if(session != null) {
+                    PersistenceManager.releaseSession(session);
+                }
+            } catch(Exception ex) {
+                logger.debug("releaseSession() failed");
+                logger.debug(ex.toString());
+            }
         }
         return flag;
     }
@@ -1429,7 +1596,7 @@ public class TeamUtil {
         Query qry = null;
 
         try {
-            session = PersistenceManager.getRequestDBSession();
+            session = PersistenceManager.getSession();
             Collection childIds = DesktopUtil.getAllChildrenIds(teamId);
             childIds.add(teamId);
             if(childIds != null && childIds.size() > 0) {
@@ -1484,6 +1651,15 @@ public class TeamUtil {
             logger.debug("Exception from getAllManagementTeamActivities()");
             logger.debug(e.toString());
             throw new RuntimeException(e);
+        } finally {
+            try {
+                if(session != null) {
+                    PersistenceManager.releaseSession(session);
+                }
+            } catch(Exception ex) {
+                logger.debug("releaseSession() failed");
+                logger.debug(ex.toString());
+            }
         }
         return col;
     }
@@ -1491,7 +1667,7 @@ public class TeamUtil {
  
     
     public static Collection getAllTeamActivities(Long teamId) {
-		Session session = null;
+    	Session session = null;
 		Collection col = new ArrayList();
 
 		try {
@@ -1565,7 +1741,7 @@ public class TeamUtil {
 			logger.debug(e.toString());
 			throw new RuntimeException(e);
 		} 
-		return col;
+		return col;		
 	}
 
     /*
@@ -1575,7 +1751,7 @@ public class TeamUtil {
         Session session = null;
         ArrayList col = null;
         try {
-            session = PersistenceManager.getRequestDBSession();
+            session = PersistenceManager.getSession();
             String queryString = "select tr from "
                 + AmpTeamReports.class.getName()
                 + " tr where (tr.team=:teamId) group by tr.report order by tr.report ";
@@ -1623,7 +1799,16 @@ public class TeamUtil {
         } catch(Exception e) {
             logger.error("Exception from getTeamReportsCollection", e);
             throw new RuntimeException(e);
-        } 
+        } finally {
+            try {
+                if(session != null) {
+                    PersistenceManager.releaseSession(session);
+                }
+            } catch(Exception ex) {
+                logger.debug("releaseSession() failed");
+                logger.debug(ex.toString());
+            }
+        }
         return col;
     }
     public static List getTeamReportsCollection(Long teamId,int currentPage, int recordPerPage, Boolean tabs) {
@@ -1698,7 +1883,7 @@ public class TeamUtil {
         Session session = null;
         Collection col = new ArrayList();
         try {
-            session = PersistenceManager.getRequestDBSession();
+            session = PersistenceManager.getSession();
             AmpTeam team = (AmpTeam) session.load(AmpTeam.class, teamId);
 
             String queryString = null;
@@ -1739,6 +1924,15 @@ public class TeamUtil {
         } catch(Exception e) {
             logger.error("Exception from getAllTeamReports()", e);
             throw new RuntimeException(e);
+        } finally {
+            try {
+                if(session != null) {
+                    PersistenceManager.releaseSession(session);
+                }
+            } catch(Exception ex) {
+                logger.debug("releaseSession() failed");
+                logger.debug(ex.toString());
+            }
         }
         return col;
     }
@@ -1990,7 +2184,7 @@ public class TeamUtil {
         Session session = null;
         AmpTeamReports ampTeamRep = null;
         try {
-            session = PersistenceManager.getRequestDBSession();
+            session = PersistenceManager.getSession();
             String queryString = "select tr from "
                 + AmpTeamReports.class.getName()
                 + " tr where (tr.team=:teamId) and (tr.report=:reportId)";
@@ -2005,7 +2199,16 @@ public class TeamUtil {
             logger.debug("Exception from getAmpTeamReport()");
             logger.debug(e.toString());
             throw new RuntimeException(e);
-        } 
+        } finally {
+            try {
+                if(session != null) {
+                    PersistenceManager.releaseSession(session);
+                }
+            } catch(Exception ex) {
+                logger.debug("releaseSession() failed");
+                logger.debug(ex.toString());
+            }
+        }
         return ampTeamRep;
     }
 
@@ -2087,7 +2290,7 @@ public class TeamUtil {
         Collection teams = new ArrayList();
 
         try {
-            session = PersistenceManager.getRequestDBSession();
+            session = PersistenceManager.getSession();
             String queryString = "select t from " + AmpTeam.class.getName()
                 + " t order by name";
             qry = session.createQuery(queryString);
@@ -2096,7 +2299,16 @@ public class TeamUtil {
             logger.debug("cannot get All teams");
             logger.debug(e.toString());
             throw new RuntimeException(e);
-        } 
+        } finally {
+            try {
+                if(session != null) {
+                    PersistenceManager.releaseSession(session);
+                }
+            } catch(Exception ex) {
+                logger.error("releaseSession() failed");
+                throw new RuntimeException(ex);
+            }
+        }
         return teams;
     }
     /**
@@ -2133,7 +2345,7 @@ public class TeamUtil {
 
         try {
             logger.debug("Team Id:" + ampTeamId);
-            session = PersistenceManager.getRequestDBSession();
+            session = PersistenceManager.getSession();
             String queryString = "select t from " + AmpTeam.class.getName()
                 + " t " + "where (t.parentTeamId.ampTeamId=:ampTeamId)";
             logger.debug("Query String:" + queryString);
@@ -2166,7 +2378,16 @@ public class TeamUtil {
             logger.debug("Exception from getAmpLevel0Team()" + e.getMessage());
             logger.debug(e.toString());
             throw new RuntimeException(e);
-        } 
+        } finally {
+            try {
+                if(session != null) {
+                    PersistenceManager.releaseSession(session);
+                }
+            } catch(Exception ex) {
+                logger.debug("releaseSession() failed");
+                logger.debug(ex.toString());
+            }
+        }
         return teams;
     }
 

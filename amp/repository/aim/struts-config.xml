@@ -1593,6 +1593,7 @@
     <action name="aimNPDgraphForm" path="/aim/getNpdGraphMap" scope="request" type="org.digijava.module.aim.action.GetNPDGraphMap" validate="false" />
     <action name="aimNPDgraphForm" parameter="actionMethod" path="/aim/npdGraph" scope="request" type="org.digijava.module.aim.action.getNPDgraph" validate="false" />
     <action name="aimActiityListForm" path="/aim/getActivities" scope="request" type="org.digijava.module.aim.action.GetActivities" validate="false" />
+    <action name="aimActiityListForm" path="/aim/getNPDFilters" scope="request" type="org.digijava.module.aim.action.GetNPDFilterSettings" validate="false" />
     <action name="aimDesktopForm" path="/aim/previewPrintMyDesktop" scope="session" type="org.digijava.module.aim.action.PreviewPrintDesktop" validate="false">
       <forward name="forward" path="/showLayout.do?layout=printMyDesktop" />
     </action>

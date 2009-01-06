@@ -24,13 +24,63 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/tree/jktreeview.js"/>" ></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
-<link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/container.css"/>">
+<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/container.css'/>"/>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/yahoo-dom-event.js"/>" ></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/container-min.js"/>" ></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/connection-min.js"/>" ></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/dragdrop-min.js"/>" ></script>
 
 <digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/amptabs.css"/>"/>
+
+<c:set var="showCurrSettings">
+	<digi:trn key="rep:showCurrSettings">Show current settings</digi:trn>
+</c:set>
+<c:set var="hideCurrSettings">
+	<digi:trn key="rep:hideCurrSettings">Hide current settings</digi:trn>
+</c:set>
+
+<script language="JavaScript">
+var filter; // Filter panel
+
+/*
+ *    method to expand or colapse
+ *    filter settings
+ */
+function toggleSettings(){
+	var currentDisplaySettings = document.getElementById('currentDisplaySettings');
+	var displaySettingsButton = document.getElementById('displaySettingsButton');
+	if(currentDisplaySettings.style.display == "block"){
+		currentDisplaySettings.style.display = "none";
+		displaySettingsButton.innerHTML = "${showCurrSettings} &gt;&gt;";
+	}
+	else
+	{
+		currentDisplaySettings.style.display = "block";
+		displaySettingsButton.innerHTML = "${hideCurrSettings} &lt;&lt;";
+	}
+}
+
+// show filter window
+function showFilter(){
+    var filterDiv = document.getElementById('filter');
+    filterDiv.style.display="block";
+    filterDiv.stytelvisibility="visible";
+    filter=new YAHOO.widget.Panel("filter",{
+            x:"20",
+            y:"20",
+            constraintoviewport: true,
+            Underlay:"shadow",
+            modal: true,
+            close:true,
+            visible:true,
+            draggable:true} );
+    filter.render();
+}
+
+
+
+</script>
 
 <style type="text/css">
 	a { text-decoration: underline; color: #46546C; }
@@ -638,8 +688,46 @@
 	}
 
 	/* ========  Tree view methods END ========= */
+    
+    
+    /* ========  Activities list filters Settings methods START ========= */
+
+    function getFilterSettings(){
+		var url=addActionToURL('getNPDFilters.do');
+        url+=getURL();
+		var async=new Asynchronous();
+		async.complete=filterSettingsCallBack;
+		async.call(url);
+	}
+
+    function getURL(){
+        var url='';
+         if (curProgId != null ){
+			url+=p1d+'programId='+curProgId;
+		}
+        if (selActStatus != null && selActStatus != '0'&& selActStatus != ''){
+			url += pd + 'statusId='+ selActStatus;
+		}
+		if(selActDonors !=null && selActDonors.match('-1') == null){
+			url+= pd+ 'donorIds='+selActDonors;
+		}
+		if (selActYearTo != null && selActYearTo != -1){
+			url+= pd + 'endYear='+selActYearTo;
+		}
+		if (selActYearFrom != null && selActYearFrom != -1){
+			url+= pd + 'startYear='+selActYearFrom;
+		}
+        return url;
+    }
+
+     function filterSettingsCallBack(status, statusText, responseText, responseXML){
+       var tblBody= document.getElementById('filterSettingsTable');
+        tblBody.innerHTML=responseText;
+
+	}
 
 
+ /* ========  Activities list filter Settings methods END ========= */
 
 	/* ========  Activities list methods START ======== */
 
@@ -648,7 +736,7 @@
 			alert('${noProgSelected}');
 			return;
 		}
-		var actList=document.getElementById('activityListPlace');
+		var actList=document.getElementById('activityResultsPlace');
 		//actList.innerHTML="<i>Loading...</i>"
 		setActivityLoading(actList);
 		var url=getActivitiesURL();
@@ -659,21 +747,7 @@
 
 	function getActivitiesURL(){
 		var result = addActionToURL('getActivities.do');
-		if (curProgId != null ){
-			result+=p1d+'programId='+curProgId;
-		}
-		if (selActStatus != null && selActStatus != '0'){
-			result += pd + 'statusId='+ selActStatus;
-		}
-		if(selActDonors !=null && selActDonors.match('-1') == null){
-			result+= pd+ 'donorIds='+selActDonors;
-		}
-		if (selActYearTo != null && selActYearTo != -1){
-			result+= pd + 'endYear='+selActYearTo;
-		}
-		if (selActYearFrom != null && selActYearFrom != -1){
-			result+= pd + 'startYear='+selActYearFrom;
-		}
+		result+=getURL();
 		result+= pd + 'currentPage='+actCurrPage;
 		return result;
 	}
@@ -684,7 +758,7 @@
 	}
 
 	function setUpActivityList(xml){
-		var tr= document.getElementById('activityListPlace');
+		var tr= document.getElementById('activityResultsPlace');
 		var paginationTr=document.getElementById('paginationPlace');
 		var tbl= tr.parentNode;
 
@@ -738,15 +812,9 @@
 		labelsTR1.appendChild(strDateLabelTD);
 
 
-		var labelsTD0 = document.createElement('TD');
-		labelsTD0.align='left';
-		labelsTD0.innerHTML='&nbsp;';
-		labelsTR1.appendChild(labelsTD0);
+		
                 
-                //apply filter blank td
-                var applyFilterLabelTD = document.createElement('TD');
-                applyFilterLabelTD.innerHTML = '&nbsp;';
-                labelsTR1.appendChild(applyFilterLabelTD);
+               
 
 		var labelTD1 = document.createElement('TD');
 		labelTD1.innerHTML='<b>'+strProposed+' </b>';
@@ -760,6 +828,7 @@
 		labelTD3.innerHTML='<b>'+strActual+' </b>';
 		labelsTR1.appendChild(labelTD3);
 
+        labelsTR1.bgColor='Silver';
 		tbl.appendChild(labelsTR1);
 		//end of sum labels
 
@@ -767,6 +836,10 @@
 		for (var i=0; i< actList.length; i++) {
 			if (actList[i].tagName=='activity'){
 				var actTR = document.createElement('TR');
+                if(i%2==1){
+                    actTR.bgColor='#CCCCCC';
+                }
+                
 				//name
 				var actTDname = document.createElement('TD');
 				var actAname = document.createElement('a');
@@ -787,14 +860,10 @@
 				actTR.appendChild(actTDdonor);
 				//sart year
 				var actTDfromYear = document.createElement('TD');
-				actTDfromYear.colSpan=2;
 				actTDfromYear.innerHTML=actList[i].getAttribute('date');
 				actTR.appendChild(actTDfromYear);
                                 
-                                //apply filter blank td
-                                var applyFilterTD = document.createElement('TD');
-				applyFilterTD.innerHTML = '&nbsp;';
-				actTR.appendChild(applyFilterTD);
+                           
                             
 				//amount
 				var actTDproposedAmount = document.createElement('TD');
@@ -835,7 +904,7 @@
 		var lastTR = document.createElement('TR');
 
 		var lastTD = document.createElement('TD');
-		lastTD.colSpan=6;
+		lastTD.colSpan=4;
 		lastTD.align='right';
 		lastTD.innerHTML='<strong>'+strTotal+' </strong>';
 		lastTR.appendChild(lastTD);
@@ -1095,20 +1164,16 @@
               if(selActDonors.length>1){
                  selActDonors=selActDonors.substring(0,selActDonors.length-1)
              }
+             getFilterSettings(); // Getting filter settings
              getActivities();
+             
+             // hide filter panel
+             if(filter!=null){
+                filter.hide();
+            }
         }
 
-	function filterFromYear(){
-		var stat = document.getElementsByName('yearFrom')[0];
-		selActYearFrom = stat.value;
-		getActivities();
-	}
-
-	function filterToYear(){
-		var stat = document.getElementsByName('yearTo')[0];
-		selActYearTo = stat.value;
-		getActivities();
-	}
+	
 
 	/* ========  Activities list methods END ========= */
 
@@ -1192,7 +1257,7 @@
 		//YAHOO.amp.container.panel2.moveTo(50,50);
 
 
-		informationPanel	= new YAHOO.widget.Panel("infoPanel", { width:"300px", visible:false, draggable:false, close:true } );
+		informationPanel	= new YAHOO.widget.Panel("infoPanel", { width:"300px", visible:false, draggable:false, close:false } );
 		informationPanel.setHeader(headerText);
 		informationPanel.setBody(bodyText);
 		informationPanel.render(document.body);
@@ -1301,6 +1366,39 @@
 	</div>
 <div class="yui-content" style="background-color:#ffffff;border:1px solid black;">
 <table id="topParttable" width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+        <td colspan="2">
+            <DIV id="subtabs">
+                <UL>
+                    <LI>
+                        <div>
+                            <span>
+                                <a href="JavaScript:openGridWindow(false);">
+                                    <digi:trn key="aim:NPD:viewTable_Link">View table</digi:trn>
+                                </a>&nbsp;&nbsp;|
+                            </span>
+                        </div>
+                    </LI>
+                    <LI>
+                        <div>
+                            <span>
+                                <a href="JavaScript:openGridWindow(true);">
+                                    <digi:trn key="aim:NPD:viewAllLink">View All</digi:trn>
+                                </a>
+                            </span>
+                        </div>
+
+                    </LI>
+                </UL>
+                &nbsp;
+            </DIV>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            &nbsp;
+        </td>
+    </tr>
 				<tr>
 					<td style="border-bottom:1px solid black;" valign="top">
 						<table id="topLeftTable" border="0" width="100%" cellspacing="0" cellpadding="5">
@@ -1327,102 +1425,152 @@
 									</div>
 								</td>
 							</tr>
-							<tr>
-								<td>
-									<table>
-										<tr>
-											<td nowrap="nowrap">
-												<!-- input class="dr-menu" type="button" onclick="openOptionsWindow()" name="addOrgs" value="Add Organization"/ -->
-												<a href="JavaScript:openOptionsWindow();">
-													<digi:trn key="aim:NPD:changeOptionsLink">Change Options</digi:trn>
-												</a>
-											</td>
-											<td>&nbsp;
-												
-											</td>
-											<td nowrap="nowrap">
-												<a href="JavaScript:openGridWindow(false);">
-													<digi:trn key="aim:NPD:viewTable_Link">View table</digi:trn>
-												</a>
-											</td>
-											<td>&nbsp;
-												
-											</td>
-											<td nowrap="nowrap">
-												<a href="JavaScript:openGridWindow(true);">
-													<digi:trn key="aim:NPD:viewAllLink">View All</digi:trn>
-												</a>
-											</td>
-											<td width="100%">&nbsp;
-												
-											</td>
-											<td align="right" nowrap="nowrap">
-												<digi:link href="/reportWizard.do"><digi:trn key="aim:NPD:advancedReportsLink">Advanced Reports</digi:trn></digi:link>
-												</td>
-										</tr>
-									</table>
-								</td>
-							</tr>
 						</table>
 					</td>
 					<td valign="top" width="100%" style="border-left:1px solid black;border-bottom:1px solid black;">
 						<div id="tree" style="width: 100%;"></div>
 					</td>
 				</tr>
-			</table>
-<table width="100%">
-    <tr>
-      <td>
-        <span id="spnAmountText" style="color:blue">
-        </span>
-      </td>
-    </tr>
-	<tr>
-		<td>
-			<table width="100%" border="0" cellpadding="5" cellspacing="0">
-				<tr id="activityListPlace" bgcolor="silver">
-					<td width="100%">
-						<digi:trn key="aim:npd:activitesFor">Activites for:</digi:trn>
-						&nbsp;<span id="actListProgname">&nbsp</span>
-					</td>
-					<td>
-						<c:set var="translation">
-							<digi:trn key="aim:npd:dropDownAnyStatus">Any Status</digi:trn>
-						</c:set>
-						<category:showoptions  firstLine="${translation}" name="aimNPDForm" property="selectedStatuses"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.ACTIVITY_STATUS_KEY %>"  multiselect="true" size="5"/>
+                <tr>
+                    <td colspan="2">
+                        <table width="100%" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td style="padding-left:-2px;">
+                                    <div style="width:99.7%;background-color:#ccdbff;padding:2px 2px 2px 2px;Font-size:8pt;font-family:Arial,Helvetica,sans-serif;">
+                                        <span style="cursor:pointer;float:left;">
+                                            <DIV id="subtabs">
+                                                <UL>
+                                                    <LI>
+                                                        <div>
+                                                            <span>
+                                                                <a href="JavaScript:showFilter();">
+                                                                    <digi:trn>Filter</digi:trn>
+                                                                </a>&nbsp;&nbsp;|
+                                                            </span>
+                                                        </div>
+                                                    </LI>
+                                                    <LI>
+                                                        <div>
+                                                            <span>
+                                                                <a href="JavaScript:openOptionsWindow();">
+                                                                    <digi:trn key="aim:NPD:changeOptionsLink">Change Options</digi:trn>
+                                                                </a>&nbsp;&nbsp;|
+                                                            </span>
+                                                        </div>
+                                                    </LI>
+                                                    <LI>
+                                                        <div>
+                                                            <span>
+                                                                <digi:link href="/reportWizard.do"><digi:trn>Reports</digi:trn></digi:link>
+                                                            </span>
+                                                        </div>
 
-					</td>
-					<td>
-                                            <html:select multiple="true" size="5" property="selectedDonors" >
-							<option value="-1"><digi:trn key="aim:npd:dropDownAnyDonor">Any Donor</digi:trn></option>
-							<html:optionsCollection name="aimNPDForm" property="donors" value="value" label="label" />
-						</html:select>
-					</td>
-					<td>
-						<html:select property="yearFrom">
-							<option value="-1"><digi:trn key="aim:npd:dropDownFromYear">From Year</digi:trn></option>
-							<html:optionsCollection name="aimNPDForm" property="years" value="value" label="label" />
-						</html:select>
-					</td>
-					<td>
-						<html:select property="yearTo">
-							<option value="-1"><digi:trn key="aim:npd:dropDownToYear">To Year</digi:trn></option>
-							<html:optionsCollection name="aimNPDForm" property="years" value="value" label="label" />
-						</html:select>
-					</td>
-                                        <td nowrap="nowrap">
-                                        <input type="button" onclick="applyFilter()" value="<digi:trn key='aim:npd:applyFilter'>Apply Filter</digi:trn>"/>
-					</td>
-					<td nowrap="nowrap" colspan="3">
-						<digi:trn key="aim:NPD:Funding">Funding</digi:trn>
-					</td>
-				</tr>
-				<tr id="activityResultsPlace">
-					<td colspan="8">&nbsp;
-						
-					</td>
-				</tr>
+                                                    </LI>
+                                                </UL>
+                                            </DIV>
+                                        </span>
+                                        <span style="cursor:pointer;font-style: italic;float:right;" onClick="toggleSettings();" id="displaySettingsButton"><digi:trn>Show Current Settings</digi:trn>  &gt;&gt;</span>
+                                        &nbsp;
+                                    </div>
+                                    <div style="display:none;background-color:#FFFFCC;padding:2px 2px 2px 2px;" id="currentDisplaySettings" >
+                                        <table cellpadding="0" cellspacing="0" border="0" width="80%" >
+                                           <tbody id="filterSettingsTable">
+                                            <tr>
+                                                <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
+                                                    <strong>
+                                                        <digi:trn key="rep:pop:SelectedFilters">Selected Filters:</digi:trn>
+                                                    </strong>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Status: ${aimNPDForm.selectedStatuses} </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Donors: ${aimNPDForm.selectedDonors} </td>
+                                            </tr>
+                                            <tr>
+                                                <td>From: ${aimNPDForm.yearFrom} </td>
+                                            </tr>
+                                            <tr>
+                                                <td>To: ${aimNPDForm.yearTo} </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                        
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+
+                </tr>
 			</table>
+            <table width="100%">
+                <tr>
+                    <td>
+                        <span id="spnAmountText" style="color:blue">
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div id="filter" style="visibility:hidden;display:none">
+                            <table width="100%" border="0" cellpadding="5" cellspacing="0">
+                                <tr>
+                                    <td>
+                                        <c:set var="translation">
+                                            <digi:trn key="aim:npd:dropDownAnyStatus">Any Status</digi:trn>
+                                        </c:set>
+                                        <category:showoptions  firstLine="${translation}" name="aimNPDForm" property="selectedStatuses"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.ACTIVITY_STATUS_KEY%>"  multiselect="true" size="5"/>
+
+                                    </td>
+                                    <td>
+                                        <html:select multiple="true" size="5" property="selectedDonors" >
+                                            <option value="-1"><digi:trn key="aim:npd:dropDownAnyDonor">Any Donor</digi:trn></option>
+                                            <html:optionsCollection name="aimNPDForm" property="donors" value="value" label="label" />
+                                        </html:select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <html:select property="yearFrom">
+                                            <option value="-1"><digi:trn key="aim:npd:dropDownFromYear">From Year</digi:trn></option>
+                                            <html:optionsCollection name="aimNPDForm" property="years" value="value" label="label" />
+                                        </html:select>
+                                    </td>
+                                    <td>
+                                        <html:select property="yearTo">
+                                            <option value="-1"><digi:trn key="aim:npd:dropDownToYear">To Year</digi:trn></option>
+                                            <html:optionsCollection name="aimNPDForm" property="years" value="value" label="label" />
+                                        </html:select>
+                                    </td>
+                                   
+                                </tr>
+                                <tr>
+                                     <td nowrap="nowrap" align="center" colspan="2">
+                                        <input type="button" onclick="applyFilter()" value="<digi:trn key='aim:npd:applyFilter'>Apply Filter</digi:trn>"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <table width="100%" border="0" cellpadding="5" cellspacing="3">
+                            <tr id="activityListPlace" bgcolor="silver">
+                                <td width="100%" colspan="9">
+                                    <digi:trn key="aim:npd:activitesFor">Activites for:</digi:trn>
+                                    &nbsp;<span id="actListProgname">&nbsp</span>
+                                </td>
+                            </tr>
+                            <tr id="activityResultsPlace">
+                                <td colspan="8">
+                                    &nbsp;
+
+                                </td>
+                            </tr>
+                        </table>
 		</td>
 	</tr>
 	<tr>

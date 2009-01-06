@@ -22,7 +22,7 @@
 		<td width=70% valign="top"><%= lc(:local_staff) %></td>
 	</tr>
 	<tr>
-		<td class="sub_title" colspan=2><%= ll(:bluebook, :donor_profile, :aid_at_a_glance_in) %> <%= Time.now.year-1 %></td>
+		<td class="sub_title" colspan=2><%= ll(:bluebook, :donor_profile, :aid_at_a_glance_in) %> <%= year %></td>
 	</tr>
 	<tr>
 		<td width=30% valign="top"><%= ll(:terms, :disbursements) %> / <%= ll(:terms, :eu_short) %> <%= ll(:terms, :disbursements) %></td>
@@ -111,7 +111,7 @@
 		<td width=70% valign="top"><%= lc(:sectors_and_regions) %></td>
 	</tr>
 	<tr>
-		<td class="sub_title"><%= ll(:terms, :disbursements) %> <%= Time.now.year - 1 %>-<%= Time.now.year %>* <%= ll(:terms, :in_millions)%></td>
+		<td class="sub_title"><%= ll(:terms, :disbursements) %> <%= year %>-<%= year+1 %>* <%= ll(:terms, :in_millions)%></td>
 		<td width=70% valign="top" class="sub_title"><%= lc(:disbursement_totals) %></td>
 	</tr>
 	<tr>

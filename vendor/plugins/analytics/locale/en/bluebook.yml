@@ -1,7 +1,8 @@
 en:
   bluebook:
       title: EU Blue Book
-      
+                    
+      # Old structure:
       pages:
         contents: # Table of Contents
             toc: Table of Contents
@@ -631,6 +632,8 @@ en:
           enlarged_chart: Click here for enlarged chart
           grant: Grant
           loan: Loan
+          data_missing_header: Missing {{donor}}'s data for {{year}}
+          data_missing_info: We're sorry but this donor has not updated and/or published his project fundings for {{year}}, yet.
           
       explanatory_note:
           management_system: 'For example: Ministry of Foreign Affairs / Development Cooperation Directorate within the Ministry of Foreign Affairs/Autonomous Aid Agency /other (please specify)'

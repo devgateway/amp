@@ -1,5 +1,9 @@
 module Report
   class Excel < Base
+    FORMATS = {
+      :heading => @workbook.add_format(:color => "blue", :bold => 1),
+      :totals => @workbook.add_format(:bold => 1)
+    }.freeze
     OFFSET_TOP = 0
     OFFSET_LEFT = 0
         
@@ -7,8 +11,6 @@ module Report
       @file = "/reports/odanic_report_#{Time.now.year}_#{Time.now.month}_#{Time.now.day}_#{Time.now.day+Time.now.hour+Time.now.sec}.xls"
       @workbook = Spreadsheet::Excel.new(File.join(RAILS_ROOT, 'public', @file))
       @worksheet = @workbook.add_worksheet("ODAnic Custom Report")
-      
-      init_formats
     end
     
     
@@ -18,7 +20,7 @@ module Report
     
     def output_head
       headings = data.columns
-      @worksheet.write_row(OFFSET_TOP, OFFSET_LEFT, encode_row_for_excel(headings), @formats[:heading])
+      @worksheet.write_row(OFFSET_TOP, OFFSET_LEFT, encode_row_for_excel(headings), FORMATS[:heading])
     end
     
     def output_body
@@ -33,7 +35,7 @@ module Report
         totals << (col.has_total? ? col.total.to_s(false) : "")
       end
       
-      @worksheet.write_row(OFFSET_TOP + 1 + data.length, OFFSET_LEFT, encode_row_for_excel(totals), @formats[:totals])
+      @worksheet.write_row(OFFSET_TOP + 1 + data.length, OFFSET_LEFT, encode_row_for_excel(totals), FORMATS[:totals])
     end
     
     def output    
@@ -47,16 +49,6 @@ module Report
     end
     
   protected
-    def init_formats
-      @formats = {}
-      
-      # Header Format
-      @formats[:heading] = @workbook.add_format(:color => "blue", :bold => 1)
-      
-      # Currency totals
-      @formats[:totals] = @workbook.add_format(:bold => 1)
-    end
-    
     # Changes encoding to ISO-8859-1, the only compatible encoding for our spreadsheet generator
     def encode_row_for_excel(row)
       # Strip characters that are not encodeable with ISO-8859-1 first

@@ -1,10 +1,10 @@
 <table class="bluebook">
 	<tr>
 		<td>
-			<b><%= ll(:bluebook, :pages, :contents, :eu_cooperation, :by_sector_in, :year => Time.now.year - 1 ) %> </b>
+			<b><%= ll(:bluebook, :pages, :contents, :eu_cooperation, :by_sector_in, :year => year ) %> </b>
 			<br>
 			<br>
-			<%= ll(:bluebook, :chart_subtitles, :by_sector_in) %> <%= Time.now.year - 1 %>
+			<%= ll(:bluebook, :chart_subtitles, :by_sector_in) %> <%= year %>
 			<div id="multicolumn_graph">
 				<strong>You need to upgrade your Flash Player</strong>
 			</div>
@@ -14,8 +14,8 @@
 			// <![CDATA[		
 					var so = new SWFObject("/amcolumn.swf", "amcolumn", "1000", "1200", "8", "#DBE2F1");
 					so.addVariable("path", "/");
-					so.addVariable("settings_file", escape("/bluebook/charts/settings/dac_sector_column_data_settings.xml"));
-					so.addVariable("data_file", escape("/bluebook/charts/dac_sectors_column_data/show.xml"));  
+					so.addVariable("settings_file", escape("/bluebook/<%= year %>/charts/settings/dac_sector_column_data_settings.xml"));
+					so.addVariable("data_file", escape("/bluebook/<%= year %>/charts/dac_sectors_column_data.xml"));  
 			    	so.addVariable("preloader_color", "#999999");
 					so.write("multicolumn_graph");
 					// ]]>

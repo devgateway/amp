@@ -16,10 +16,12 @@ Rails::Initializer.run do |config|
   # They can then be installed with "rake gems:install" on new installations.
   # You have to specify the :lib option for libraries, where the Gem name (sqlite3-ruby) differs from the file itself (sqlite3)
   config.gem "paperclip"
-  config.gem "rubyist-aasm", :source => 'http://gems.github.com', :lib => "aasm"
+  config.gem "rubyist-aasm",          :lib => "aasm", :source => 'http://gems.github.com'
   config.gem "andand"
   config.gem "RedCloth"
-  config.gem "ruby-tilecache", :lib => 'tile_cache'
+  config.gem "ruby-tilecache",        :lib => 'tile_cache'
+  config.gem 'mislav-will_paginate',  :lib => 'will_paginate', :source => 'http://gems.github.com'
+  
 
   # Add additional load paths for your own custom dirs
   config.load_paths += Dir["#{RAILS_ROOT}/app/models/*[^.rb]"]

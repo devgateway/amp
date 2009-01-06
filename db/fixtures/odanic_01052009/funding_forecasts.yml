@@ -1,0 +1,3691 @@
+--- 
+funding_forecasts_001: 
+  commitments: "0"
+  currency: EUR
+  id: "1"
+  on_budget: f
+  on_treasury: f
+  payments: "151785"
+  project_id: "272"
+  year: "2008"
+funding_forecasts_002: 
+  commitments: "0"
+  currency: EUR
+  id: "2"
+  on_budget: f
+  on_treasury: f
+  payments: "101340"
+  project_id: "272"
+  year: "2009"
+funding_forecasts_003: 
+  commitments: "0"
+  currency: EUR
+  id: "3"
+  on_budget: f
+  on_treasury: f
+  payments: "2303990"
+  project_id: "76"
+  year: "2008"
+funding_forecasts_004: 
+  commitments: "0"
+  currency: EUR
+  id: "4"
+  on_budget: f
+  on_treasury: f
+  payments: "164355"
+  project_id: "169"
+  year: "2008"
+funding_forecasts_005: 
+  commitments: "0"
+  currency: EUR
+  id: "5"
+  on_budget: f
+  on_treasury: f
+  payments: "214023"
+  project_id: "74"
+  year: "2008"
+funding_forecasts_006: 
+  commitments: "52000000"
+  currency: DKK
+  id: "6"
+  on_budget: t
+  on_treasury: t
+  payments: "52000000"
+  project_id: "444"
+  year: "2008"
+funding_forecasts_007: 
+  commitments: "0"
+  currency: EUR
+  id: "7"
+  on_budget: f
+  on_treasury: f
+  payments: "75745"
+  project_id: "276"
+  year: "2008"
+funding_forecasts_008: 
+  commitments: "0"
+  currency: EUR
+  id: "8"
+  on_budget: f
+  on_treasury: f
+  payments: "108085"
+  project_id: "276"
+  year: "2009"
+funding_forecasts_009: 
+  commitments: "2500000"
+  currency: DKK
+  id: "9"
+  on_budget: t
+  on_treasury: t
+  payments: "2500000"
+  project_id: "445"
+  year: "2008"
+funding_forecasts_010: 
+  commitments: "0"
+  currency: EUR
+  id: "10"
+  on_budget: f
+  on_treasury: f
+  payments: "91393"
+  project_id: "293"
+  year: "2008"
+funding_forecasts_011: 
+  commitments: "4000000"
+  currency: EUR
+  id: "11"
+  on_budget: f
+  on_treasury: f
+  payments: "800000"
+  project_id: "152"
+  year: "2008"
+funding_forecasts_012: 
+  commitments: "0"
+  currency: EUR
+  id: "12"
+  on_budget: f
+  on_treasury: f
+  payments: "3700"
+  project_id: "309"
+  year: "2008"
+funding_forecasts_013: 
+  commitments: "0"
+  currency: EUR
+  id: "13"
+  on_budget: f
+  on_treasury: f
+  payments: "332421"
+  project_id: "156"
+  year: "2009"
+funding_forecasts_014: 
+  commitments: "0"
+  currency: EUR
+  id: "14"
+  on_budget: t
+  on_treasury: t
+  payments: "332420"
+  project_id: "156"
+  year: "2008"
+funding_forecasts_015: 
+  commitments: "0"
+  currency: EUR
+  id: "15"
+  on_budget: f
+  on_treasury: f
+  payments: "482330"
+  project_id: "156"
+  year: "2010"
+funding_forecasts_016: 
+  commitments: "0"
+  currency: EUR
+  id: "16"
+  on_budget: f
+  on_treasury: f
+  payments: "430000"
+  project_id: "408"
+  year: "2008"
+funding_forecasts_017: 
+  commitments: "0"
+  currency: EUR
+  id: "17"
+  on_budget: t
+  on_treasury: t
+  payments: "145000"
+  project_id: "510"
+  year: "2008"
+funding_forecasts_018: 
+  commitments: "41593000"
+  currency: SEK
+  id: "18"
+  on_budget: t
+  on_treasury: f
+  payments: "41593000"
+  project_id: "238"
+  year: "2008"
+funding_forecasts_019: 
+  commitments: "0"
+  currency: EUR
+  id: "19"
+  on_budget: t
+  on_treasury: t
+  payments: "5551118"
+  project_id: "468"
+  year: "2008"
+funding_forecasts_020: 
+  commitments: "0"
+  currency: EUR
+  id: "20"
+  on_budget: f
+  on_treasury: f
+  payments: "54000"
+  project_id: "326"
+  year: "2008"
+funding_forecasts_021: 
+  commitments: "0"
+  currency: EUR
+  id: "21"
+  on_budget: t
+  on_treasury: t
+  payments: "5390669"
+  project_id: "465"
+  year: "2008"
+funding_forecasts_022: 
+  commitments: "250000"
+  currency: SEK
+  id: "22"
+  on_budget: f
+  on_treasury: f
+  payments: "250000"
+  project_id: "240"
+  year: "2008"
+funding_forecasts_023: 
+  commitments: "0"
+  currency: EUR
+  id: "23"
+  on_budget: f
+  on_treasury: f
+  payments: "2854939"
+  project_id: "462"
+  year: "2008"
+funding_forecasts_024: 
+  commitments: "0"
+  currency: EUR
+  id: "24"
+  on_budget: f
+  on_treasury: f
+  payments: "110000"
+  project_id: "325"
+  year: "2009"
+funding_forecasts_025: 
+  commitments: "0"
+  currency: EUR
+  id: "25"
+  on_budget: f
+  on_treasury: f
+  payments: "220000"
+  project_id: "325"
+  year: "2008"
+funding_forecasts_026: 
+  commitments: "0"
+  currency: EUR
+  id: "26"
+  on_budget: t
+  on_treasury: f
+  payments: "1989339"
+  project_id: "287"
+  year: "2008"
+funding_forecasts_027: 
+  commitments: "0"
+  currency: EUR
+  id: "27"
+  on_budget: t
+  on_treasury: t
+  payments: "85000"
+  project_id: "483"
+  year: "2008"
+funding_forecasts_028: 
+  commitments: "0"
+  currency: EUR
+  id: "28"
+  on_budget: t
+  on_treasury: t
+  payments: "65000"
+  project_id: "494"
+  year: "2008"
+funding_forecasts_029: 
+  commitments: "0"
+  currency: EUR
+  id: "29"
+  on_budget: f
+  on_treasury: f
+  payments: "4833"
+  project_id: "409"
+  year: "2008"
+funding_forecasts_030: 
+  commitments: "0"
+  currency: EUR
+  id: "30"
+  on_budget: f
+  on_treasury: f
+  payments: "310000"
+  project_id: "327"
+  year: "2008"
+funding_forecasts_031: 
+  commitments: "0"
+  currency: EUR
+  id: "31"
+  on_budget: f
+  on_treasury: f
+  payments: "130000"
+  project_id: "327"
+  year: "2010"
+funding_forecasts_032: 
+  commitments: "0"
+  currency: EUR
+  id: "32"
+  on_budget: f
+  on_treasury: f
+  payments: "332421"
+  project_id: "285"
+  year: "2009"
+funding_forecasts_033: 
+  commitments: "0"
+  currency: EUR
+  id: "33"
+  on_budget: f
+  on_treasury: f
+  payments: "482330"
+  project_id: "285"
+  year: "2010"
+funding_forecasts_034: 
+  commitments: "0"
+  currency: EUR
+  id: "34"
+  on_budget: f
+  on_treasury: f
+  payments: "332420"
+  project_id: "285"
+  year: "2008"
+funding_forecasts_035: 
+  commitments: "0"
+  currency: EUR
+  id: "35"
+  on_budget: t
+  on_treasury: t
+  payments: "252641"
+  project_id: "480"
+  year: "2008"
+funding_forecasts_036: 
+  commitments: "0"
+  currency: EUR
+  id: "36"
+  on_budget: t
+  on_treasury: t
+  payments: "299280"
+  project_id: "481"
+  year: "2008"
+funding_forecasts_037: 
+  commitments: "0"
+  currency: EUR
+  id: "37"
+  on_budget: f
+  on_treasury: f
+  payments: "76000"
+  project_id: "82"
+  year: "2008"
+funding_forecasts_038: 
+  commitments: "50000"
+  currency: EUR
+  id: "38"
+  on_budget: f
+  on_treasury: f
+  payments: "50000"
+  project_id: "348"
+  year: "2008"
+funding_forecasts_039: 
+  commitments: "0"
+  currency: EUR
+  id: "39"
+  on_budget: f
+  on_treasury: f
+  payments: "155397"
+  project_id: "269"
+  year: "2008"
+funding_forecasts_040: 
+  commitments: "0"
+  currency: EUR
+  id: "40"
+  on_budget: f
+  on_treasury: f
+  payments: "66092"
+  project_id: "269"
+  year: "2009"
+funding_forecasts_041: 
+  commitments: "500000"
+  currency: EUR
+  id: "41"
+  on_budget: t
+  on_treasury: t
+  payments: "0"
+  project_id: "474"
+  year: "2008"
+funding_forecasts_042: 
+  commitments: "500000"
+  currency: EUR
+  id: "42"
+  on_budget: f
+  on_treasury: f
+  payments: "465000"
+  project_id: "537"
+  year: "2008"
+funding_forecasts_043: 
+  commitments: "0"
+  currency: EUR
+  id: "43"
+  on_budget: f
+  on_treasury: f
+  payments: "740000"
+  project_id: "537"
+  year: "2009"
+funding_forecasts_044: 
+  commitments: "0"
+  currency: EUR
+  id: "44"
+  on_budget: f
+  on_treasury: f
+  payments: "35300"
+  project_id: "537"
+  year: "2010"
+funding_forecasts_045: 
+  commitments: "0"
+  currency: EUR
+  id: "45"
+  on_budget: t
+  on_treasury: f
+  payments: "292194"
+  project_id: "234"
+  year: "2008"
+funding_forecasts_046: 
+  commitments: "150000"
+  currency: SEK
+  id: "46"
+  on_budget: t
+  on_treasury: f
+  payments: "150000"
+  project_id: "216"
+  year: "2008"
+funding_forecasts_047: 
+  commitments: "0"
+  currency: EUR
+  id: "47"
+  on_budget: f
+  on_treasury: f
+  payments: "33000000"
+  project_id: "290"
+  year: "2009"
+funding_forecasts_048: 
+  commitments: "0"
+  currency: EUR
+  id: "48"
+  on_budget: t
+  on_treasury: t
+  payments: "8331000"
+  project_id: "469"
+  year: "2008"
+funding_forecasts_049: 
+  commitments: "100000"
+  currency: EUR
+  id: "49"
+  on_budget: f
+  on_treasury: f
+  payments: "100000"
+  project_id: "375"
+  year: "2008"
+funding_forecasts_050: 
+  commitments: "0"
+  currency: EUR
+  id: "50"
+  on_budget: f
+  on_treasury: f
+  payments: "204184"
+  project_id: "291"
+  year: "2008"
+funding_forecasts_051: 
+  commitments: "400000"
+  currency: EUR
+  id: "51"
+  on_budget: t
+  on_treasury: t
+  payments: "400000"
+  project_id: "476"
+  year: "2008"
+funding_forecasts_052: 
+  commitments: "400000"
+  currency: EUR
+  id: "52"
+  on_budget: f
+  on_treasury: f
+  payments: "100000"
+  project_id: "533"
+  year: "2008"
+funding_forecasts_053: 
+  commitments: "0"
+  currency: EUR
+  id: "53"
+  on_budget: f
+  on_treasury: f
+  payments: "100000"
+  project_id: "533"
+  year: "2009"
+funding_forecasts_054: 
+  commitments: "0"
+  currency: EUR
+  id: "54"
+  on_budget: f
+  on_treasury: f
+  payments: "100000"
+  project_id: "533"
+  year: "2010"
+funding_forecasts_055: 
+  commitments: "0"
+  currency: EUR
+  id: "55"
+  on_budget: f
+  on_treasury: f
+  payments: "100000"
+  project_id: "533"
+  year: "2011"
+funding_forecasts_056: 
+  commitments: "3500000"
+  currency: SEK
+  id: "56"
+  on_budget: f
+  on_treasury: f
+  payments: "3500000"
+  project_id: "227"
+  year: "2008"
+funding_forecasts_057: 
+  commitments: "175000"
+  currency: EUR
+  id: "57"
+  on_budget: t
+  on_treasury: t
+  payments: "0"
+  project_id: "467"
+  year: "2008"
+funding_forecasts_058: 
+  commitments: "50000"
+  currency: EUR
+  id: "58"
+  on_budget: f
+  on_treasury: f
+  payments: "50000"
+  project_id: "532"
+  year: "2008"
+funding_forecasts_059: 
+  commitments: "125000"
+  currency: EUR
+  id: "59"
+  on_budget: t
+  on_treasury: t
+  payments: "0"
+  project_id: "504"
+  year: "2008"
+funding_forecasts_060: 
+  commitments: "3700000"
+  currency: EUR
+  id: "60"
+  on_budget: f
+  on_treasury: f
+  payments: "370000"
+  project_id: "536"
+  year: "2008"
+funding_forecasts_061: 
+  commitments: "0"
+  currency: EUR
+  id: "61"
+  on_budget: t
+  on_treasury: t
+  payments: "140000"
+  project_id: "492"
+  year: "2008"
+funding_forecasts_062: 
+  commitments: "0"
+  currency: EUR
+  id: "62"
+  on_budget: f
+  on_treasury: f
+  payments: "26000"
+  project_id: "376"
+  year: "2008"
+funding_forecasts_063: 
+  commitments: "0"
+  currency: EUR
+  id: "63"
+  on_budget: f
+  on_treasury: f
+  payments: "600000"
+  project_id: "371"
+  year: "2008"
+funding_forecasts_064: 
+  commitments: "0"
+  currency: EUR
+  id: "64"
+  on_budget: f
+  on_treasury: f
+  payments: "600000"
+  project_id: "371"
+  year: "2009"
+funding_forecasts_065: 
+  commitments: "0"
+  currency: GBP
+  id: "65"
+  on_budget: t
+  on_treasury: t
+  payments: "1450000"
+  project_id: "44"
+  year: "2008"
+funding_forecasts_066: 
+  commitments: "228493"
+  currency: EUR
+  id: "66"
+  on_budget: f
+  on_treasury: f
+  payments: "228493"
+  project_id: "70"
+  year: "2008"
+funding_forecasts_067: 
+  commitments: "227767"
+  currency: EUR
+  id: "67"
+  on_budget: f
+  on_treasury: f
+  payments: "227767"
+  project_id: "71"
+  year: "2008"
+funding_forecasts_068: 
+  commitments: "0"
+  currency: EUR
+  id: "68"
+  on_budget: f
+  on_treasury: f
+  payments: "143500"
+  project_id: "262"
+  year: "2008"
+funding_forecasts_069: 
+  commitments: "0"
+  currency: EUR
+  id: "69"
+  on_budget: f
+  on_treasury: f
+  payments: "50000"
+  project_id: "262"
+  year: "2009"
+funding_forecasts_070: 
+  commitments: "0"
+  currency: EUR
+  id: "70"
+  on_budget: f
+  on_treasury: f
+  payments: "392916"
+  project_id: "379"
+  year: "2008"
+funding_forecasts_071: 
+  commitments: "0"
+  currency: EUR
+  id: "71"
+  on_budget: f
+  on_treasury: f
+  payments: "392910"
+  project_id: "379"
+  year: "2009"
+funding_forecasts_072: 
+  commitments: "0"
+  currency: GBP
+  id: "72"
+  on_budget: t
+  on_treasury: t
+  payments: "500000"
+  project_id: "333"
+  year: "2008"
+funding_forecasts_073: 
+  commitments: "0"
+  currency: EUR
+  id: "73"
+  on_budget: f
+  on_treasury: f
+  payments: "129833"
+  project_id: "195"
+  year: "2008"
+funding_forecasts_074: 
+  commitments: "0"
+  currency: EUR
+  id: "74"
+  on_budget: t
+  on_treasury: t
+  payments: "17865"
+  project_id: "433"
+  year: "2008"
+funding_forecasts_075: 
+  commitments: "0"
+  currency: DKK
+  id: "75"
+  on_budget: f
+  on_treasury: f
+  payments: "90300000"
+  project_id: "117"
+  year: "2009"
+funding_forecasts_076: 
+  commitments: "0"
+  currency: DKK
+  id: "76"
+  on_budget: f
+  on_treasury: f
+  payments: "56400000"
+  project_id: "117"
+  year: "2010"
+funding_forecasts_077: 
+  commitments: "29900000"
+  currency: DKK
+  id: "77"
+  on_budget: f
+  on_treasury: f
+  payments: "29900000"
+  project_id: "117"
+  year: "2008"
+funding_forecasts_078: 
+  commitments: "0"
+  currency: EUR
+  id: "78"
+  on_budget: f
+  on_treasury: f
+  payments: "435984"
+  project_id: "178"
+  year: "2008"
+funding_forecasts_079: 
+  commitments: "0"
+  currency: EUR
+  id: "79"
+  on_budget: f
+  on_treasury: f
+  payments: "191279"
+  project_id: "178"
+  year: "2009"
+funding_forecasts_080: 
+  commitments: "0"
+  currency: EUR
+  id: "80"
+  on_budget: f
+  on_treasury: f
+  payments: "89571"
+  project_id: "270"
+  year: "2009"
+funding_forecasts_081: 
+  commitments: "2500000"
+  currency: EUR
+  id: "81"
+  on_budget: f
+  on_treasury: f
+  payments: "0"
+  project_id: "57"
+  year: "2008"
+funding_forecasts_082: 
+  commitments: "125000"
+  currency: GBP
+  id: "82"
+  on_budget: f
+  on_treasury: f
+  payments: "345000"
+  project_id: "106"
+  year: "2008"
+funding_forecasts_083: 
+  commitments: "0"
+  currency: EUR
+  id: "83"
+  on_budget: t
+  on_treasury: f
+  payments: "1190000"
+  project_id: "97"
+  year: "2008"
+funding_forecasts_084: 
+  commitments: "0"
+  currency: EUR
+  id: "84"
+  on_budget: f
+  on_treasury: f
+  payments: "165000"
+  project_id: "56"
+  year: "2008"
+funding_forecasts_085: 
+  commitments: "0"
+  currency: EUR
+  id: "85"
+  on_budget: f
+  on_treasury: f
+  payments: "268701"
+  project_id: "416"
+  year: "2008"
+funding_forecasts_086: 
+  commitments: "0"
+  currency: EUR
+  id: "86"
+  on_budget: t
+  on_treasury: t
+  payments: "4130000"
+  project_id: "435"
+  year: "2008"
+funding_forecasts_087: 
+  commitments: "351697"
+  currency: EUR
+  id: "87"
+  on_budget: f
+  on_treasury: f
+  payments: "351697"
+  project_id: "150"
+  year: "2008"
+funding_forecasts_088: 
+  commitments: "70000"
+  currency: EUR
+  id: "88"
+  on_budget: t
+  on_treasury: t
+  payments: "70000"
+  project_id: "522"
+  year: "2008"
+funding_forecasts_089: 
+  commitments: "0"
+  currency: EUR
+  id: "89"
+  on_budget: t
+  on_treasury: t
+  payments: "160429"
+  project_id: "436"
+  year: "2008"
+funding_forecasts_090: 
+  commitments: "0"
+  currency: EUR
+  id: "90"
+  on_budget: t
+  on_treasury: t
+  payments: "2425000"
+  project_id: "52"
+  year: "2008"
+funding_forecasts_091: 
+  commitments: "0"
+  currency: EUR
+  id: "91"
+  on_budget: t
+  on_treasury: f
+  payments: "1227709"
+  project_id: "111"
+  year: "2008"
+funding_forecasts_092: 
+  commitments: "109914"
+  currency: EUR
+  id: "92"
+  on_budget: t
+  on_treasury: f
+  payments: "54957"
+  project_id: "452"
+  year: "2008"
+funding_forecasts_093: 
+  commitments: "0"
+  currency: EUR
+  id: "93"
+  on_budget: f
+  on_treasury: f
+  payments: "28500"
+  project_id: "80"
+  year: "2008"
+funding_forecasts_094: 
+  commitments: "160000"
+  currency: EUR
+  id: "94"
+  on_budget: f
+  on_treasury: f
+  payments: "0"
+  project_id: "454"
+  year: "2008"
+funding_forecasts_095: 
+  commitments: "0"
+  currency: EUR
+  id: "95"
+  on_budget: t
+  on_treasury: t
+  payments: "200000"
+  project_id: "176"
+  year: "2008"
+funding_forecasts_096: 
+  commitments: "0"
+  currency: EUR
+  id: "96"
+  on_budget: t
+  on_treasury: t
+  payments: "36300"
+  project_id: "341"
+  year: "2008"
+funding_forecasts_097: 
+  commitments: "0"
+  currency: EUR
+  id: "97"
+  on_budget: t
+  on_treasury: f
+  payments: "1500000"
+  project_id: "115"
+  year: "2008"
+funding_forecasts_098: 
+  commitments: "267355"
+  currency: EUR
+  id: "98"
+  on_budget: t
+  on_treasury: t
+  payments: "88492"
+  project_id: "441"
+  year: "2008"
+funding_forecasts_099: 
+  commitments: "36000000"
+  currency: EUR
+  id: "99"
+  on_budget: t
+  on_treasury: t
+  payments: "12000000"
+  project_id: "363"
+  year: "2008"
+funding_forecasts_100: 
+  commitments: "0"
+  currency: EUR
+  id: "100"
+  on_budget: f
+  on_treasury: f
+  payments: "194745"
+  project_id: "279"
+  year: "2008"
+funding_forecasts_101: 
+  commitments: "0"
+  currency: EUR
+  id: "101"
+  on_budget: f
+  on_treasury: f
+  payments: "97614"
+  project_id: "279"
+  year: "2009"
+funding_forecasts_102: 
+  commitments: "0"
+  currency: EUR
+  id: "102"
+  on_budget: t
+  on_treasury: t
+  payments: "2750000"
+  project_id: "322"
+  year: "2008"
+funding_forecasts_103: 
+  commitments: "0"
+  currency: EUR
+  id: "103"
+  on_budget: t
+  on_treasury: t
+  payments: "2750000"
+  project_id: "322"
+  year: "2009"
+funding_forecasts_104: 
+  commitments: "0"
+  currency: EUR
+  id: "104"
+  on_budget: t
+  on_treasury: t
+  payments: "315650"
+  project_id: "495"
+  year: "2008"
+funding_forecasts_105: 
+  commitments: "0"
+  currency: GBP
+  id: "105"
+  on_budget: f
+  on_treasury: f
+  payments: "36969"
+  project_id: "43"
+  year: "2008"
+funding_forecasts_106: 
+  commitments: "0"
+  currency: EUR
+  id: "106"
+  on_budget: t
+  on_treasury: t
+  payments: "1950000"
+  project_id: "164"
+  year: "2008"
+funding_forecasts_107: 
+  commitments: "0"
+  currency: EUR
+  id: "107"
+  on_budget: t
+  on_treasury: t
+  payments: "1950000"
+  project_id: "164"
+  year: "2009"
+funding_forecasts_108: 
+  commitments: "0"
+  currency: EUR
+  id: "108"
+  on_budget: t
+  on_treasury: t
+  payments: "90000"
+  project_id: "485"
+  year: "2008"
+funding_forecasts_109: 
+  commitments: "23500000"
+  currency: SEK
+  id: "109"
+  on_budget: t
+  on_treasury: f
+  payments: "23500000"
+  project_id: "217"
+  year: "2008"
+funding_forecasts_110: 
+  commitments: "0"
+  currency: EUR
+  id: "110"
+  on_budget: t
+  on_treasury: t
+  payments: "1000000"
+  project_id: "451"
+  year: "2008"
+funding_forecasts_111: 
+  commitments: "0"
+  currency: EUR
+  id: "111"
+  on_budget: f
+  on_treasury: f
+  payments: "400000"
+  project_id: "146"
+  year: "2008"
+funding_forecasts_112: 
+  commitments: "400000"
+  currency: EUR
+  id: "112"
+  on_budget: f
+  on_treasury: f
+  payments: "0"
+  project_id: "146"
+  year: "2009"
+funding_forecasts_113: 
+  commitments: "0"
+  currency: EUR
+  id: "113"
+  on_budget: t
+  on_treasury: t
+  payments: "63396"
+  project_id: "484"
+  year: "2008"
+funding_forecasts_114: 
+  commitments: "0"
+  currency: EUR
+  id: "114"
+  on_budget: f
+  on_treasury: f
+  payments: "225629"
+  project_id: "163"
+  year: "2009"
+funding_forecasts_115: 
+  commitments: "0"
+  currency: EUR
+  id: "115"
+  on_budget: f
+  on_treasury: f
+  payments: "101269"
+  project_id: "163"
+  year: "2010"
+funding_forecasts_116: 
+  commitments: "0"
+  currency: EUR
+  id: "116"
+  on_budget: f
+  on_treasury: f
+  payments: "38000"
+  project_id: "364"
+  year: "2008"
+funding_forecasts_117: 
+  commitments: "0"
+  currency: EUR
+  id: "117"
+  on_budget: f
+  on_treasury: f
+  payments: "79952"
+  project_id: "364"
+  year: "2009"
+funding_forecasts_118: 
+  commitments: "300000"
+  currency: EUR
+  id: "118"
+  on_budget: f
+  on_treasury: f
+  payments: "300000"
+  project_id: "148"
+  year: "2008"
+funding_forecasts_119: 
+  commitments: "538949"
+  currency: EUR
+  id: "119"
+  on_budget: t
+  on_treasury: t
+  payments: "0"
+  project_id: "477"
+  year: "2008"
+funding_forecasts_120: 
+  commitments: "0"
+  currency: EUR
+  id: "120"
+  on_budget: f
+  on_treasury: f
+  payments: "150000"
+  project_id: "197"
+  year: "2009"
+funding_forecasts_121: 
+  commitments: "0"
+  currency: EUR
+  id: "121"
+  on_budget: f
+  on_treasury: f
+  payments: "437381"
+  project_id: "197"
+  year: "2010"
+funding_forecasts_122: 
+  commitments: "0"
+  currency: EUR
+  id: "122"
+  on_budget: f
+  on_treasury: f
+  payments: "5039370"
+  project_id: "459"
+  year: "2008"
+funding_forecasts_123: 
+  commitments: "3303000"
+  currency: SEK
+  id: "123"
+  on_budget: f
+  on_treasury: f
+  payments: "3303000"
+  project_id: "94"
+  year: "2008"
+funding_forecasts_124: 
+  commitments: "0"
+  currency: EUR
+  id: "124"
+  on_budget: f
+  on_treasury: f
+  payments: "230432"
+  project_id: "192"
+  year: "2009"
+funding_forecasts_125: 
+  commitments: "0"
+  currency: EUR
+  id: "125"
+  on_budget: f
+  on_treasury: f
+  payments: "303451"
+  project_id: "192"
+  year: "2010"
+funding_forecasts_126: 
+  commitments: "0"
+  currency: EUR
+  id: "126"
+  on_budget: t
+  on_treasury: t
+  payments: "40000"
+  project_id: "500"
+  year: "2008"
+funding_forecasts_127: 
+  commitments: "41500000"
+  currency: SEK
+  id: "127"
+  on_budget: f
+  on_treasury: f
+  payments: "41500000"
+  project_id: "241"
+  year: "2008"
+funding_forecasts_128: 
+  commitments: "0"
+  currency: EUR
+  id: "128"
+  on_budget: t
+  on_treasury: t
+  payments: "25000"
+  project_id: "498"
+  year: "2008"
+funding_forecasts_129: 
+  commitments: "17656966"
+  currency: EUR
+  id: "129"
+  on_budget: t
+  on_treasury: f
+  payments: "17278447"
+  project_id: "67"
+  year: "2008"
+funding_forecasts_130: 
+  commitments: "200000"
+  currency: EUR
+  id: "130"
+  on_budget: f
+  on_treasury: f
+  payments: "180000"
+  project_id: "381"
+  year: "2008"
+funding_forecasts_131: 
+  commitments: "0"
+  currency: EUR
+  id: "131"
+  on_budget: f
+  on_treasury: f
+  payments: "20000"
+  project_id: "381"
+  year: "2009"
+funding_forecasts_132: 
+  commitments: "10200000"
+  currency: EUR
+  id: "132"
+  on_budget: t
+  on_treasury: t
+  payments: "10000000"
+  project_id: "144"
+  year: "2008"
+funding_forecasts_133: 
+  commitments: "0"
+  currency: EUR
+  id: "133"
+  on_budget: f
+  on_treasury: f
+  payments: "65000"
+  project_id: "359"
+  year: "2008"
+funding_forecasts_134: 
+  commitments: "0"
+  currency: EUR
+  id: "134"
+  on_budget: f
+  on_treasury: f
+  payments: "45000"
+  project_id: "359"
+  year: "2009"
+funding_forecasts_135: 
+  commitments: "1768698"
+  currency: EUR
+  id: "135"
+  on_budget: t
+  on_treasury: f
+  payments: "1768698"
+  project_id: "193"
+  year: "2008"
+funding_forecasts_136: 
+  commitments: "865232"
+  currency: EUR
+  id: "136"
+  on_budget: t
+  on_treasury: f
+  payments: "18543508"
+  project_id: "49"
+  year: "2008"
+funding_forecasts_137: 
+  commitments: "0"
+  currency: EUR
+  id: "137"
+  on_budget: f
+  on_treasury: f
+  payments: "7524223"
+  project_id: "49"
+  year: "2009"
+funding_forecasts_138: 
+  commitments: "0"
+  currency: EUR
+  id: "138"
+  on_budget: f
+  on_treasury: f
+  payments: "700000"
+  project_id: "366"
+  year: "2008"
+funding_forecasts_139: 
+  commitments: "0"
+  currency: EUR
+  id: "139"
+  on_budget: f
+  on_treasury: f
+  payments: "150000"
+  project_id: "366"
+  year: "2009"
+funding_forecasts_140: 
+  commitments: "0"
+  currency: EUR
+  id: "140"
+  on_budget: f
+  on_treasury: f
+  payments: "144532"
+  project_id: "366"
+  year: "2010"
+funding_forecasts_141: 
+  commitments: "0"
+  currency: EUR
+  id: "141"
+  on_budget: f
+  on_treasury: f
+  payments: "108086"
+  project_id: "168"
+  year: "2010"
+funding_forecasts_142: 
+  commitments: "0"
+  currency: EUR
+  id: "142"
+  on_budget: f
+  on_treasury: f
+  payments: "958190"
+  project_id: "77"
+  year: "2008"
+funding_forecasts_143: 
+  commitments: "250000"
+  currency: EUR
+  id: "143"
+  on_budget: t
+  on_treasury: f
+  payments: "250000"
+  project_id: "104"
+  year: "2008"
+funding_forecasts_144: 
+  commitments: "0"
+  currency: EUR
+  id: "144"
+  on_budget: f
+  on_treasury: f
+  payments: "302828"
+  project_id: "380"
+  year: "2008"
+funding_forecasts_145: 
+  commitments: "0"
+  currency: EUR
+  id: "145"
+  on_budget: f
+  on_treasury: f
+  payments: "65000"
+  project_id: "380"
+  year: "2009"
+funding_forecasts_146: 
+  commitments: "0"
+  currency: EUR
+  id: "146"
+  on_budget: f
+  on_treasury: f
+  payments: "10072000"
+  project_id: "410"
+  year: "2008"
+funding_forecasts_147: 
+  commitments: "0"
+  currency: EUR
+  id: "147"
+  on_budget: f
+  on_treasury: f
+  payments: "25452"
+  project_id: "395"
+  year: "2008"
+funding_forecasts_148: 
+  commitments: "5400000"
+  currency: EUR
+  id: "148"
+  on_budget: f
+  on_treasury: f
+  payments: "0"
+  project_id: "386"
+  year: "2008"
+funding_forecasts_149: 
+  commitments: "0"
+  currency: EUR
+  id: "149"
+  on_budget: f
+  on_treasury: f
+  payments: "19000"
+  project_id: "365"
+  year: "2008"
+funding_forecasts_150: 
+  commitments: "0"
+  currency: EUR
+  id: "150"
+  on_budget: f
+  on_treasury: f
+  payments: "19000"
+  project_id: "365"
+  year: "2009"
+funding_forecasts_151: 
+  commitments: "0"
+  currency: EUR
+  id: "151"
+  on_budget: f
+  on_treasury: f
+  payments: "147060"
+  project_id: "275"
+  year: "2008"
+funding_forecasts_152: 
+  commitments: "0"
+  currency: EUR
+  id: "152"
+  on_budget: f
+  on_treasury: f
+  payments: "72354"
+  project_id: "400"
+  year: "2008"
+funding_forecasts_153: 
+  commitments: "1000000"
+  currency: EUR
+  id: "153"
+  on_budget: f
+  on_treasury: f
+  payments: "1000000"
+  project_id: "368"
+  year: "2008"
+funding_forecasts_154: 
+  commitments: "400000"
+  currency: EUR
+  id: "154"
+  on_budget: t
+  on_treasury: f
+  payments: "400000"
+  project_id: "65"
+  year: "2008"
+funding_forecasts_155: 
+  commitments: "0"
+  currency: EUR
+  id: "155"
+  on_budget: f
+  on_treasury: f
+  payments: "137700"
+  project_id: "139"
+  year: "2009"
+funding_forecasts_156: 
+  commitments: "5000000"
+  currency: EUR
+  id: "156"
+  on_budget: t
+  on_treasury: f
+  payments: "0"
+  project_id: "189"
+  year: "2008"
+funding_forecasts_157: 
+  commitments: "0"
+  currency: EUR
+  id: "157"
+  on_budget: t
+  on_treasury: f
+  payments: "4560"
+  project_id: "210"
+  year: "2008"
+funding_forecasts_158: 
+  commitments: "0"
+  currency: GBP
+  id: "158"
+  on_budget: t
+  on_treasury: f
+  payments: "133805"
+  project_id: "46"
+  year: "2008"
+funding_forecasts_159: 
+  commitments: "0"
+  currency: EUR
+  id: "159"
+  on_budget: t
+  on_treasury: t
+  payments: "4225000"
+  project_id: "339"
+  year: "2008"
+funding_forecasts_160: 
+  commitments: "0"
+  currency: EUR
+  id: "160"
+  on_budget: t
+  on_treasury: t
+  payments: "5000000"
+  project_id: "339"
+  year: "2009"
+funding_forecasts_161: 
+  commitments: "0"
+  currency: EUR
+  id: "161"
+  on_budget: t
+  on_treasury: t
+  payments: "5000000"
+  project_id: "339"
+  year: "2010"
+funding_forecasts_162: 
+  commitments: "0"
+  currency: EUR
+  id: "162"
+  on_budget: t
+  on_treasury: t
+  payments: "2500000"
+  project_id: "339"
+  year: "2011"
+funding_forecasts_163: 
+  commitments: "0"
+  currency: EUR
+  id: "163"
+  on_budget: f
+  on_treasury: f
+  payments: "100000"
+  project_id: "167"
+  year: "2008"
+funding_forecasts_164: 
+  commitments: "0"
+  currency: EUR
+  id: "164"
+  on_budget: f
+  on_treasury: f
+  payments: "1697685"
+  project_id: "383"
+  year: "2008"
+funding_forecasts_165: 
+  commitments: "0"
+  currency: EUR
+  id: "165"
+  on_budget: f
+  on_treasury: f
+  payments: "2782295"
+  project_id: "382"
+  year: "2008"
+funding_forecasts_166: 
+  commitments: "3200000"
+  currency: EUR
+  id: "166"
+  on_budget: f
+  on_treasury: f
+  payments: "600000"
+  project_id: "387"
+  year: "2008"
+funding_forecasts_167: 
+  commitments: "0"
+  currency: EUR
+  id: "167"
+  on_budget: t
+  on_treasury: t
+  payments: "194745"
+  project_id: "174"
+  year: "2008"
+funding_forecasts_168: 
+  commitments: "0"
+  currency: EUR
+  id: "168"
+  on_budget: f
+  on_treasury: f
+  payments: "97614"
+  project_id: "174"
+  year: "2009"
+funding_forecasts_169: 
+  commitments: "0"
+  currency: EUR
+  id: "169"
+  on_budget: f
+  on_treasury: f
+  payments: "175000"
+  project_id: "53"
+  year: "2008"
+funding_forecasts_170: 
+  commitments: "0"
+  currency: EUR
+  id: "170"
+  on_budget: t
+  on_treasury: t
+  payments: "178397"
+  project_id: "172"
+  year: "2008"
+funding_forecasts_171: 
+  commitments: "0"
+  currency: EUR
+  id: "171"
+  on_budget: f
+  on_treasury: f
+  payments: "189248"
+  project_id: "172"
+  year: "2009"
+funding_forecasts_172: 
+  commitments: "0"
+  currency: EUR
+  id: "172"
+  on_budget: f
+  on_treasury: f
+  payments: "31631"
+  project_id: "393"
+  year: "2008"
+funding_forecasts_173: 
+  commitments: "0"
+  currency: EUR
+  id: "173"
+  on_budget: t
+  on_treasury: t
+  payments: "183483"
+  project_id: "166"
+  year: "2008"
+funding_forecasts_174: 
+  commitments: "0"
+  currency: EUR
+  id: "174"
+  on_budget: f
+  on_treasury: f
+  payments: "165999"
+  project_id: "401"
+  year: "2008"
+funding_forecasts_175: 
+  commitments: "215480"
+  currency: EUR
+  id: "175"
+  on_budget: f
+  on_treasury: f
+  payments: "215480"
+  project_id: "59"
+  year: "2008"
+funding_forecasts_176: 
+  commitments: "0"
+  currency: EUR
+  id: "176"
+  on_budget: t
+  on_treasury: t
+  payments: "600000"
+  project_id: "509"
+  year: "2008"
+funding_forecasts_177: 
+  commitments: "0"
+  currency: EUR
+  id: "177"
+  on_budget: f
+  on_treasury: f
+  payments: "392916"
+  project_id: "278"
+  year: "2008"
+funding_forecasts_178: 
+  commitments: "400000"
+  currency: EUR
+  id: "178"
+  on_budget: t
+  on_treasury: t
+  payments: "0"
+  project_id: "517"
+  year: "2008"
+funding_forecasts_179: 
+  commitments: "0"
+  currency: EUR
+  id: "179"
+  on_budget: t
+  on_treasury: t
+  payments: "3000000"
+  project_id: "145"
+  year: "2008"
+funding_forecasts_180: 
+  commitments: "341000"
+  currency: EUR
+  id: "180"
+  on_budget: t
+  on_treasury: t
+  payments: "23000"
+  project_id: "519"
+  year: "2008"
+funding_forecasts_181: 
+  commitments: "0"
+  currency: EUR
+  id: "181"
+  on_budget: t
+  on_treasury: t
+  payments: "82465"
+  project_id: "200"
+  year: "2008"
+funding_forecasts_182: 
+  commitments: "0"
+  currency: EUR
+  id: "182"
+  on_budget: f
+  on_treasury: f
+  payments: "241496"
+  project_id: "188"
+  year: "2008"
+funding_forecasts_183: 
+  commitments: "0"
+  currency: EUR
+  id: "183"
+  on_budget: f
+  on_treasury: f
+  payments: "241497"
+  project_id: "188"
+  year: "2009"
+funding_forecasts_184: 
+  commitments: "2800000"
+  currency: SEK
+  id: "184"
+  on_budget: f
+  on_treasury: f
+  payments: "2800000"
+  project_id: "230"
+  year: "2008"
+funding_forecasts_185: 
+  commitments: "0"
+  currency: EUR
+  id: "185"
+  on_budget: t
+  on_treasury: t
+  payments: "200000"
+  project_id: "508"
+  year: "2008"
+funding_forecasts_186: 
+  commitments: "100000"
+  currency: EUR
+  id: "186"
+  on_budget: f
+  on_treasury: f
+  payments: "0"
+  project_id: "534"
+  year: "2008"
+funding_forecasts_187: 
+  commitments: "0"
+  currency: EUR
+  id: "187"
+  on_budget: f
+  on_treasury: f
+  payments: "29750"
+  project_id: "263"
+  year: "2008"
+funding_forecasts_188: 
+  commitments: "0"
+  currency: EUR
+  id: "188"
+  on_budget: t
+  on_treasury: t
+  payments: "362324"
+  project_id: "147"
+  year: "2008"
+funding_forecasts_189: 
+  commitments: "75000"
+  currency: EUR
+  id: "189"
+  on_budget: t
+  on_treasury: t
+  payments: "75000"
+  project_id: "521"
+  year: "2008"
+funding_forecasts_190: 
+  commitments: "0"
+  currency: EUR
+  id: "190"
+  on_budget: f
+  on_treasury: f
+  payments: "172216"
+  project_id: "281"
+  year: "2008"
+funding_forecasts_191: 
+  commitments: "0"
+  currency: EUR
+  id: "191"
+  on_budget: f
+  on_treasury: f
+  payments: "172216"
+  project_id: "281"
+  year: "2009"
+funding_forecasts_192: 
+  commitments: "0"
+  currency: EUR
+  id: "192"
+  on_budget: f
+  on_treasury: f
+  payments: "158863"
+  project_id: "271"
+  year: "2009"
+funding_forecasts_193: 
+  commitments: "0"
+  currency: EUR
+  id: "193"
+  on_budget: t
+  on_treasury: f
+  payments: "131641"
+  project_id: "271"
+  year: "2008"
+funding_forecasts_194: 
+  commitments: "3055000"
+  currency: SEK
+  id: "194"
+  on_budget: f
+  on_treasury: f
+  payments: "3055000"
+  project_id: "255"
+  year: "2008"
+funding_forecasts_195: 
+  commitments: "0"
+  currency: EUR
+  id: "195"
+  on_budget: f
+  on_treasury: f
+  payments: "117900"
+  project_id: "201"
+  year: "2008"
+funding_forecasts_196: 
+  commitments: "0"
+  currency: EUR
+  id: "196"
+  on_budget: f
+  on_treasury: f
+  payments: "420815"
+  project_id: "201"
+  year: "2009"
+funding_forecasts_197: 
+  commitments: "0"
+  currency: EUR
+  id: "197"
+  on_budget: t
+  on_treasury: t
+  payments: "140768"
+  project_id: "472"
+  year: "2008"
+funding_forecasts_198: 
+  commitments: "0"
+  currency: EUR
+  id: "198"
+  on_budget: f
+  on_treasury: f
+  payments: "221694"
+  project_id: "280"
+  year: "2008"
+funding_forecasts_199: 
+  commitments: "0"
+  currency: EUR
+  id: "199"
+  on_budget: f
+  on_treasury: f
+  payments: "209674"
+  project_id: "280"
+  year: "2009"
+funding_forecasts_200: 
+  commitments: "0"
+  currency: EUR
+  id: "200"
+  on_budget: f
+  on_treasury: f
+  payments: "512957"
+  project_id: "294"
+  year: "2008"
+funding_forecasts_201: 
+  commitments: "30000"
+  currency: EUR
+  id: "201"
+  on_budget: t
+  on_treasury: t
+  payments: "0"
+  project_id: "525"
+  year: "2008"
+funding_forecasts_202: 
+  commitments: "0"
+  currency: EUR
+  id: "202"
+  on_budget: t
+  on_treasury: t
+  payments: "291470"
+  project_id: "471"
+  year: "2008"
+funding_forecasts_203: 
+  commitments: "2000000"
+  currency: EUR
+  id: "203"
+  on_budget: t
+  on_treasury: t
+  payments: "2000000"
+  project_id: "527"
+  year: "2008"
+funding_forecasts_204: 
+  commitments: "2110000"
+  currency: SEK
+  id: "204"
+  on_budget: f
+  on_treasury: f
+  payments: "2110000"
+  project_id: "258"
+  year: "2008"
+funding_forecasts_205: 
+  commitments: "0"
+  currency: EUR
+  id: "205"
+  on_budget: t
+  on_treasury: t
+  payments: "221000"
+  project_id: "473"
+  year: "2008"
+funding_forecasts_206: 
+  commitments: "0"
+  currency: EUR
+  id: "206"
+  on_budget: f
+  on_treasury: f
+  payments: "354804"
+  project_id: "282"
+  year: "2008"
+funding_forecasts_207: 
+  commitments: "0"
+  currency: EUR
+  id: "207"
+  on_budget: f
+  on_treasury: f
+  payments: "75000"
+  project_id: "282"
+  year: "2009"
+funding_forecasts_208: 
+  commitments: "0"
+  currency: EUR
+  id: "208"
+  on_budget: t
+  on_treasury: t
+  payments: "249566"
+  project_id: "161"
+  year: "2008"
+funding_forecasts_209: 
+  commitments: "0"
+  currency: EUR
+  id: "209"
+  on_budget: f
+  on_treasury: f
+  payments: "200643"
+  project_id: "180"
+  year: "2009"
+funding_forecasts_210: 
+  commitments: "0"
+  currency: EUR
+  id: "210"
+  on_budget: f
+  on_treasury: f
+  payments: "196020"
+  project_id: "180"
+  year: "2010"
+funding_forecasts_211: 
+  commitments: "7000000"
+  currency: SEK
+  id: "211"
+  on_budget: f
+  on_treasury: f
+  payments: "7000000"
+  project_id: "92"
+  year: "2008"
+funding_forecasts_212: 
+  commitments: "0"
+  currency: EUR
+  id: "212"
+  on_budget: f
+  on_treasury: f
+  payments: "128655"
+  project_id: "209"
+  year: "2009"
+funding_forecasts_213: 
+  commitments: "0"
+  currency: EUR
+  id: "213"
+  on_budget: f
+  on_treasury: f
+  payments: "136000"
+  project_id: "209"
+  year: "2010"
+funding_forecasts_214: 
+  commitments: "0"
+  currency: EUR
+  id: "214"
+  on_budget: t
+  on_treasury: t
+  payments: "172215"
+  project_id: "173"
+  year: "2008"
+funding_forecasts_215: 
+  commitments: "0"
+  currency: EUR
+  id: "215"
+  on_budget: f
+  on_treasury: f
+  payments: "65300"
+  project_id: "24"
+  year: "2008"
+funding_forecasts_216: 
+  commitments: "11200000"
+  currency: SEK
+  id: "216"
+  on_budget: t
+  on_treasury: f
+  payments: "0"
+  project_id: "221"
+  year: "2008"
+funding_forecasts_217: 
+  commitments: "0"
+  currency: EUR
+  id: "217"
+  on_budget: f
+  on_treasury: f
+  payments: "177000"
+  project_id: "417"
+  year: "2008"
+funding_forecasts_218: 
+  commitments: "0"
+  currency: EUR
+  id: "218"
+  on_budget: f
+  on_treasury: f
+  payments: "2700000"
+  project_id: "417"
+  year: "2009"
+funding_forecasts_219: 
+  commitments: "0"
+  currency: EUR
+  id: "219"
+  on_budget: f
+  on_treasury: f
+  payments: "434450"
+  project_id: "417"
+  year: "2010"
+funding_forecasts_220: 
+  commitments: "0"
+  currency: EUR
+  id: "220"
+  on_budget: f
+  on_treasury: f
+  payments: "266700"
+  project_id: "33"
+  year: "2008"
+funding_forecasts_221: 
+  commitments: "0"
+  currency: EUR
+  id: "221"
+  on_budget: f
+  on_treasury: f
+  payments: "46300"
+  project_id: "33"
+  year: "2009"
+funding_forecasts_222: 
+  commitments: "0"
+  currency: EUR
+  id: "222"
+  on_budget: f
+  on_treasury: f
+  payments: "200000"
+  project_id: "154"
+  year: "2009"
+funding_forecasts_223: 
+  commitments: "0"
+  currency: EUR
+  id: "223"
+  on_budget: f
+  on_treasury: f
+  payments: "257330"
+  project_id: "154"
+  year: "2010"
+funding_forecasts_224: 
+  commitments: "0"
+  currency: EUR
+  id: "224"
+  on_budget: t
+  on_treasury: t
+  payments: "157877"
+  project_id: "175"
+  year: "2008"
+funding_forecasts_225: 
+  commitments: "0"
+  currency: EUR
+  id: "225"
+  on_budget: f
+  on_treasury: f
+  payments: "1930000"
+  project_id: "184"
+  year: "2008"
+funding_forecasts_226: 
+  commitments: "0"
+  currency: EUR
+  id: "226"
+  on_budget: f
+  on_treasury: f
+  payments: "2300000"
+  project_id: "184"
+  year: "2009"
+funding_forecasts_227: 
+  commitments: "0"
+  currency: EUR
+  id: "227"
+  on_budget: f
+  on_treasury: f
+  payments: "650000"
+  project_id: "31"
+  year: "2010"
+funding_forecasts_228: 
+  commitments: "1950000"
+  currency: EUR
+  id: "228"
+  on_budget: f
+  on_treasury: f
+  payments: "700000"
+  project_id: "31"
+  year: "2008"
+funding_forecasts_229: 
+  commitments: "0"
+  currency: EUR
+  id: "229"
+  on_budget: f
+  on_treasury: f
+  payments: "600000"
+  project_id: "31"
+  year: "2009"
+funding_forecasts_230: 
+  commitments: "0"
+  currency: EUR
+  id: "230"
+  on_budget: f
+  on_treasury: f
+  payments: "44000"
+  project_id: "372"
+  year: "2008"
+funding_forecasts_231: 
+  commitments: "0"
+  currency: EUR
+  id: "231"
+  on_budget: f
+  on_treasury: f
+  payments: "40000"
+  project_id: "372"
+  year: "2009"
+funding_forecasts_232: 
+  commitments: "0"
+  currency: EUR
+  id: "232"
+  on_budget: f
+  on_treasury: f
+  payments: "268701"
+  project_id: "50"
+  year: "2008"
+funding_forecasts_233: 
+  commitments: "200000"
+  currency: EUR
+  id: "233"
+  on_budget: f
+  on_treasury: f
+  payments: "0"
+  project_id: "28"
+  year: "2008"
+funding_forecasts_234: 
+  commitments: "0"
+  currency: EUR
+  id: "234"
+  on_budget: f
+  on_treasury: f
+  payments: "511646"
+  project_id: "388"
+  year: "2008"
+funding_forecasts_235: 
+  commitments: "0"
+  currency: EUR
+  id: "235"
+  on_budget: f
+  on_treasury: f
+  payments: "33000"
+  project_id: "318"
+  year: "2008"
+funding_forecasts_236: 
+  commitments: "0"
+  currency: EUR
+  id: "236"
+  on_budget: f
+  on_treasury: f
+  payments: "33000"
+  project_id: "318"
+  year: "2009"
+funding_forecasts_237: 
+  commitments: "0"
+  currency: EUR
+  id: "237"
+  on_budget: f
+  on_treasury: f
+  payments: "500000"
+  project_id: "390"
+  year: "2008"
+funding_forecasts_238: 
+  commitments: "5000000"
+  currency: DKK
+  id: "238"
+  on_budget: f
+  on_treasury: f
+  payments: "5000000"
+  project_id: "120"
+  year: "2008"
+funding_forecasts_239: 
+  commitments: "5000000"
+  currency: DKK
+  id: "239"
+  on_budget: f
+  on_treasury: f
+  payments: "5000000"
+  project_id: "120"
+  year: "2009"
+funding_forecasts_240: 
+  commitments: "5000000"
+  currency: DKK
+  id: "240"
+  on_budget: f
+  on_treasury: f
+  payments: "5000000"
+  project_id: "120"
+  year: "2010"
+funding_forecasts_241: 
+  commitments: "0"
+  currency: EUR
+  id: "241"
+  on_budget: t
+  on_treasury: t
+  payments: "207000"
+  project_id: "141"
+  year: "2008"
+funding_forecasts_242: 
+  commitments: "0"
+  currency: EUR
+  id: "242"
+  on_budget: t
+  on_treasury: t
+  payments: "105000"
+  project_id: "141"
+  year: "2010"
+funding_forecasts_243: 
+  commitments: "0"
+  currency: EUR
+  id: "243"
+  on_budget: t
+  on_treasury: t
+  payments: "200000"
+  project_id: "141"
+  year: "2009"
+funding_forecasts_244: 
+  commitments: "0"
+  currency: EUR
+  id: "244"
+  on_budget: t
+  on_treasury: t
+  payments: "1190000"
+  project_id: "434"
+  year: "2008"
+funding_forecasts_245: 
+  commitments: "0"
+  currency: EUR
+  id: "245"
+  on_budget: f
+  on_treasury: f
+  payments: "914000"
+  project_id: "331"
+  year: "2008"
+funding_forecasts_246: 
+  commitments: "0"
+  currency: EUR
+  id: "246"
+  on_budget: f
+  on_treasury: f
+  payments: "900000"
+  project_id: "331"
+  year: "2009"
+funding_forecasts_247: 
+  commitments: "0"
+  currency: EUR
+  id: "247"
+  on_budget: f
+  on_treasury: f
+  payments: "900000"
+  project_id: "331"
+  year: "2010"
+funding_forecasts_248: 
+  commitments: "0"
+  currency: EUR
+  id: "248"
+  on_budget: f
+  on_treasury: f
+  payments: "900000"
+  project_id: "331"
+  year: "2011"
+funding_forecasts_249: 
+  commitments: "0"
+  currency: EUR
+  id: "249"
+  on_budget: f
+  on_treasury: f
+  payments: "100000"
+  project_id: "29"
+  year: "2009"
+funding_forecasts_250: 
+  commitments: "0"
+  currency: EUR
+  id: "250"
+  on_budget: f
+  on_treasury: f
+  payments: "100000"
+  project_id: "29"
+  year: "2010"
+funding_forecasts_251: 
+  commitments: "0"
+  currency: EUR
+  id: "251"
+  on_budget: f
+  on_treasury: f
+  payments: "100000"
+  project_id: "29"
+  year: "2008"
+funding_forecasts_252: 
+  commitments: "300000"
+  currency: DKK
+  id: "252"
+  on_budget: t
+  on_treasury: t
+  payments: "300000"
+  project_id: "37"
+  year: "2008"
+funding_forecasts_253: 
+  commitments: "0"
+  currency: EUR
+  id: "253"
+  on_budget: f
+  on_treasury: f
+  payments: "117900"
+  project_id: "277"
+  year: "2008"
+funding_forecasts_254: 
+  commitments: "0"
+  currency: EUR
+  id: "254"
+  on_budget: f
+  on_treasury: f
+  payments: "420815"
+  project_id: "277"
+  year: "2009"
+funding_forecasts_255: 
+  commitments: "75000"
+  currency: EUR
+  id: "255"
+  on_budget: f
+  on_treasury: f
+  payments: "0"
+  project_id: "456"
+  year: "2008"
+funding_forecasts_256: 
+  commitments: "0"
+  currency: DKK
+  id: "256"
+  on_budget: t
+  on_treasury: t
+  payments: "19500000"
+  project_id: "119"
+  year: "2008"
+funding_forecasts_257: 
+  commitments: "17000000"
+  currency: DKK
+  id: "257"
+  on_budget: f
+  on_treasury: f
+  payments: "17000000"
+  project_id: "119"
+  year: "2009"
+funding_forecasts_258: 
+  commitments: "0"
+  currency: DKK
+  id: "258"
+  on_budget: f
+  on_treasury: f
+  payments: "45000000"
+  project_id: "119"
+  year: "2010"
+funding_forecasts_259: 
+  commitments: "0"
+  currency: DKK
+  id: "259"
+  on_budget: f
+  on_treasury: f
+  payments: "66900000"
+  project_id: "119"
+  year: "2011"
+funding_forecasts_260: 
+  commitments: "13300000"
+  currency: DKK
+  id: "260"
+  on_budget: t
+  on_treasury: t
+  payments: "13300000"
+  project_id: "38"
+  year: "2008"
+funding_forecasts_261: 
+  commitments: "150000"
+  currency: EUR
+  id: "261"
+  on_budget: t
+  on_treasury: t
+  payments: "0"
+  project_id: "457"
+  year: "2008"
+funding_forecasts_262: 
+  commitments: "0"
+  currency: EUR
+  id: "262"
+  on_budget: t
+  on_treasury: t
+  payments: "17350"
+  project_id: "137"
+  year: "2008"
+funding_forecasts_263: 
+  commitments: "0"
+  currency: EUR
+  id: "263"
+  on_budget: f
+  on_treasury: f
+  payments: "82465"
+  project_id: "283"
+  year: "2008"
+funding_forecasts_264: 
+  commitments: "0"
+  currency: EUR
+  id: "264"
+  on_budget: t
+  on_treasury: t
+  payments: "151785"
+  project_id: "205"
+  year: "2008"
+funding_forecasts_265: 
+  commitments: "90000"
+  currency: EUR
+  id: "265"
+  on_budget: f
+  on_treasury: f
+  payments: "0"
+  project_id: "479"
+  year: "2008"
+funding_forecasts_266: 
+  commitments: "0"
+  currency: EUR
+  id: "266"
+  on_budget: t
+  on_treasury: t
+  payments: "316000"
+  project_id: "128"
+  year: "2008"
+funding_forecasts_267: 
+  commitments: "36000000"
+  currency: DKK
+  id: "267"
+  on_budget: t
+  on_treasury: t
+  payments: "36000000"
+  project_id: "36"
+  year: "2008"
+funding_forecasts_268: 
+  commitments: "0"
+  currency: DKK
+  id: "268"
+  on_budget: t
+  on_treasury: t
+  payments: "31300000"
+  project_id: "36"
+  year: "2009"
+funding_forecasts_269: 
+  commitments: "0"
+  currency: DKK
+  id: "269"
+  on_budget: f
+  on_treasury: f
+  payments: "20400000"
+  project_id: "36"
+  year: "2010"
+funding_forecasts_270: 
+  commitments: "11000000"
+  currency: SEK
+  id: "270"
+  on_budget: f
+  on_treasury: f
+  payments: "11000000"
+  project_id: "237"
+  year: "2008"
+funding_forecasts_271: 
+  commitments: "0"
+  currency: EUR
+  id: "271"
+  on_budget: f
+  on_treasury: f
+  payments: "4846449"
+  project_id: "466"
+  year: "2008"
+funding_forecasts_272: 
+  commitments: "3000000"
+  currency: DKK
+  id: "272"
+  on_budget: t
+  on_treasury: t
+  payments: "3000000"
+  project_id: "443"
+  year: "2008"
+funding_forecasts_273: 
+  commitments: "595000"
+  currency: EUR
+  id: "273"
+  on_budget: t
+  on_treasury: t
+  payments: "0"
+  project_id: "455"
+  year: "2008"
+funding_forecasts_274: 
+  commitments: "0"
+  currency: EUR
+  id: "274"
+  on_budget: f
+  on_treasury: f
+  payments: "3338589"
+  project_id: "48"
+  year: "2008"
+funding_forecasts_275: 
+  commitments: "750000"
+  currency: EUR
+  id: "275"
+  on_budget: t
+  on_treasury: t
+  payments: "750000"
+  project_id: "515"
+  year: "2008"
+funding_forecasts_276: 
+  commitments: "0"
+  currency: EUR
+  id: "276"
+  on_budget: f
+  on_treasury: f
+  payments: "7000"
+  project_id: "16"
+  year: "2009"
+funding_forecasts_277: 
+  commitments: "0"
+  currency: EUR
+  id: "277"
+  on_budget: f
+  on_treasury: f
+  payments: "36000"
+  project_id: "16"
+  year: "2008"
+funding_forecasts_278: 
+  commitments: "5000000"
+  currency: DKK
+  id: "278"
+  on_budget: t
+  on_treasury: t
+  payments: "5000000"
+  project_id: "440"
+  year: "2008"
+funding_forecasts_279: 
+  commitments: "341000"
+  currency: EUR
+  id: "279"
+  on_budget: t
+  on_treasury: t
+  payments: "341000"
+  project_id: "516"
+  year: "2008"
+funding_forecasts_280: 
+  commitments: "0"
+  currency: EUR
+  id: "280"
+  on_budget: f
+  on_treasury: f
+  payments: "300000"
+  project_id: "125"
+  year: "2009"
+funding_forecasts_281: 
+  commitments: "550023"
+  currency: EUR
+  id: "281"
+  on_budget: f
+  on_treasury: f
+  payments: "606000"
+  project_id: "125"
+  year: "2008"
+funding_forecasts_282: 
+  commitments: "13000000"
+  currency: DKK
+  id: "282"
+  on_budget: t
+  on_treasury: t
+  payments: "13000000"
+  project_id: "442"
+  year: "2008"
+funding_forecasts_283: 
+  commitments: "460000"
+  currency: SEK
+  id: "283"
+  on_budget: f
+  on_treasury: f
+  payments: "460000"
+  project_id: "228"
+  year: "2008"
+funding_forecasts_284: 
+  commitments: "175000"
+  currency: EUR
+  id: "284"
+  on_budget: f
+  on_treasury: f
+  payments: "0"
+  project_id: "460"
+  year: "2008"
+funding_forecasts_285: 
+  commitments: "724000"
+  currency: EUR
+  id: "285"
+  on_budget: t
+  on_treasury: f
+  payments: "0"
+  project_id: "448"
+  year: "2008"
+funding_forecasts_286: 
+  commitments: "0"
+  currency: EUR
+  id: "286"
+  on_budget: f
+  on_treasury: f
+  payments: "170000"
+  project_id: "314"
+  year: "2009"
+funding_forecasts_287: 
+  commitments: "0"
+  currency: EUR
+  id: "287"
+  on_budget: f
+  on_treasury: f
+  payments: "250000"
+  project_id: "314"
+  year: "2008"
+funding_forecasts_288: 
+  commitments: "200000"
+  currency: EUR
+  id: "288"
+  on_budget: f
+  on_treasury: f
+  payments: "0"
+  project_id: "464"
+  year: "2008"
+funding_forecasts_289: 
+  commitments: "0"
+  currency: EUR
+  id: "289"
+  on_budget: f
+  on_treasury: f
+  payments: "200880"
+  project_id: "162"
+  year: "2008"
+funding_forecasts_290: 
+  commitments: "0"
+  currency: EUR
+  id: "290"
+  on_budget: f
+  on_treasury: f
+  payments: "290000"
+  project_id: "306"
+  year: "2008"
+funding_forecasts_291: 
+  commitments: "0"
+  currency: EUR
+  id: "291"
+  on_budget: f
+  on_treasury: f
+  payments: "1000000"
+  project_id: "311"
+  year: "2008"
+funding_forecasts_292: 
+  commitments: "0"
+  currency: EUR
+  id: "292"
+  on_budget: f
+  on_treasury: f
+  payments: "1200000"
+  project_id: "311"
+  year: "2009"
+funding_forecasts_293: 
+  commitments: "0"
+  currency: EUR
+  id: "293"
+  on_budget: f
+  on_treasury: f
+  payments: "1300000"
+  project_id: "311"
+  year: "2010"
+funding_forecasts_294: 
+  commitments: "0"
+  currency: EUR
+  id: "294"
+  on_budget: f
+  on_treasury: f
+  payments: "200000"
+  project_id: "311"
+  year: "2011"
+funding_forecasts_295: 
+  commitments: "0"
+  currency: EUR
+  id: "295"
+  on_budget: t
+  on_treasury: t
+  payments: "255000"
+  project_id: "506"
+  year: "2008"
+funding_forecasts_296: 
+  commitments: "0"
+  currency: EUR
+  id: "296"
+  on_budget: f
+  on_treasury: f
+  payments: "366274"
+  project_id: "233"
+  year: "2008"
+funding_forecasts_297: 
+  commitments: "0"
+  currency: EUR
+  id: "297"
+  on_budget: f
+  on_treasury: f
+  payments: "1365288"
+  project_id: "233"
+  year: "2009"
+funding_forecasts_298: 
+  commitments: "66000"
+  currency: EUR
+  id: "298"
+  on_budget: f
+  on_treasury: f
+  payments: "127000"
+  project_id: "315"
+  year: "2008"
+funding_forecasts_299: 
+  commitments: "0"
+  currency: EUR
+  id: "299"
+  on_budget: f
+  on_treasury: f
+  payments: "241496"
+  project_id: "284"
+  year: "2008"
+funding_forecasts_300: 
+  commitments: "0"
+  currency: EUR
+  id: "300"
+  on_budget: f
+  on_treasury: f
+  payments: "241497"
+  project_id: "284"
+  year: "2009"
+funding_forecasts_301: 
+  commitments: "0"
+  currency: EUR
+  id: "301"
+  on_budget: t
+  on_treasury: f
+  payments: "2500000"
+  project_id: "105"
+  year: "2008"
+funding_forecasts_302: 
+  commitments: "0"
+  currency: EUR
+  id: "302"
+  on_budget: t
+  on_treasury: t
+  payments: "170000"
+  project_id: "505"
+  year: "2008"
+funding_forecasts_303: 
+  commitments: "0"
+  currency: EUR
+  id: "303"
+  on_budget: f
+  on_treasury: f
+  payments: "41500"
+  project_id: "78"
+  year: "2008"
+funding_forecasts_304: 
+  commitments: "0"
+  currency: EUR
+  id: "304"
+  on_budget: f
+  on_treasury: f
+  payments: "41500"
+  project_id: "78"
+  year: "2009"
+funding_forecasts_305: 
+  commitments: "834000"
+  currency: SEK
+  id: "305"
+  on_budget: f
+  on_treasury: f
+  payments: "834000"
+  project_id: "222"
+  year: "2008"
+funding_forecasts_306: 
+  commitments: "0"
+  currency: EUR
+  id: "306"
+  on_budget: t
+  on_treasury: t
+  payments: "30000"
+  project_id: "503"
+  year: "2008"
+funding_forecasts_307: 
+  commitments: "0"
+  currency: EUR
+  id: "307"
+  on_budget: t
+  on_treasury: t
+  payments: "1000000"
+  project_id: "328"
+  year: "2008"
+funding_forecasts_308: 
+  commitments: "0"
+  currency: EUR
+  id: "308"
+  on_budget: t
+  on_treasury: t
+  payments: "1000000"
+  project_id: "328"
+  year: "2009"
+funding_forecasts_309: 
+  commitments: "22000000"
+  currency: SEK
+  id: "309"
+  on_budget: t
+  on_treasury: f
+  payments: "22000000"
+  project_id: "242"
+  year: "2008"
+funding_forecasts_310: 
+  commitments: "0"
+  currency: EUR
+  id: "310"
+  on_budget: t
+  on_treasury: f
+  payments: "1800000"
+  project_id: "63"
+  year: "2008"
+funding_forecasts_311: 
+  commitments: "8000000"
+  currency: EUR
+  id: "311"
+  on_budget: t
+  on_treasury: f
+  payments: "1591622"
+  project_id: "384"
+  year: "2008"
+funding_forecasts_312: 
+  commitments: "1500000"
+  currency: EUR
+  id: "312"
+  on_budget: t
+  on_treasury: f
+  payments: "0"
+  project_id: "204"
+  year: "2008"
+funding_forecasts_313: 
+  commitments: "280224"
+  currency: EUR
+  id: "313"
+  on_budget: f
+  on_treasury: f
+  payments: "280224"
+  project_id: "413"
+  year: "2008"
+funding_forecasts_314: 
+  commitments: "0"
+  currency: EUR
+  id: "314"
+  on_budget: f
+  on_treasury: f
+  payments: "20000"
+  project_id: "404"
+  year: "2008"
+funding_forecasts_315: 
+  commitments: "217741"
+  currency: EUR
+  id: "315"
+  on_budget: f
+  on_treasury: f
+  payments: "217741"
+  project_id: "414"
+  year: "2008"
+funding_forecasts_316: 
+  commitments: "0"
+  currency: EUR
+  id: "316"
+  on_budget: f
+  on_treasury: f
+  payments: "50000"
+  project_id: "373"
+  year: "2008"
+funding_forecasts_317: 
+  commitments: "0"
+  currency: EUR
+  id: "317"
+  on_budget: f
+  on_treasury: f
+  payments: "16976"
+  project_id: "405"
+  year: "2008"
+funding_forecasts_318: 
+  commitments: "376807"
+  currency: EUR
+  id: "318"
+  on_budget: f
+  on_treasury: f
+  payments: "0"
+  project_id: "415"
+  year: "2008"
+funding_forecasts_319: 
+  commitments: "0"
+  currency: EUR
+  id: "319"
+  on_budget: f
+  on_treasury: f
+  payments: "116900"
+  project_id: "187"
+  year: "2009"
+funding_forecasts_320: 
+  commitments: "0"
+  currency: EUR
+  id: "320"
+  on_budget: f
+  on_treasury: f
+  payments: "154435"
+  project_id: "187"
+  year: "2010"
+funding_forecasts_321: 
+  commitments: "0"
+  currency: EUR
+  id: "321"
+  on_budget: t
+  on_treasury: t
+  payments: "75746"
+  project_id: "437"
+  year: "2008"
+funding_forecasts_322: 
+  commitments: "0"
+  currency: EUR
+  id: "322"
+  on_budget: f
+  on_treasury: f
+  payments: "32284"
+  project_id: "398"
+  year: "2008"
+funding_forecasts_323: 
+  commitments: "0"
+  currency: EUR
+  id: "323"
+  on_budget: f
+  on_treasury: f
+  payments: "279184"
+  project_id: "264"
+  year: "2008"
+funding_forecasts_324: 
+  commitments: "300000"
+  currency: EUR
+  id: "324"
+  on_budget: f
+  on_treasury: f
+  payments: "394420"
+  project_id: "66"
+  year: "2008"
+funding_forecasts_325: 
+  commitments: "255597"
+  currency: EUR
+  id: "325"
+  on_budget: f
+  on_treasury: f
+  payments: "255597"
+  project_id: "72"
+  year: "2008"
+funding_forecasts_326: 
+  commitments: "935000"
+  currency: EUR
+  id: "326"
+  on_budget: f
+  on_treasury: f
+  payments: "935000"
+  project_id: "68"
+  year: "2008"
+funding_forecasts_327: 
+  commitments: "0"
+  currency: EUR
+  id: "327"
+  on_budget: f
+  on_treasury: f
+  payments: "26000"
+  project_id: "377"
+  year: "2008"
+funding_forecasts_328: 
+  commitments: "327373"
+  currency: EUR
+  id: "328"
+  on_budget: f
+  on_treasury: f
+  payments: "327373"
+  project_id: "69"
+  year: "2008"
+funding_forecasts_329: 
+  commitments: "0"
+  currency: EUR
+  id: "329"
+  on_budget: f
+  on_treasury: f
+  payments: "160000"
+  project_id: "378"
+  year: "2008"
+funding_forecasts_330: 
+  commitments: "0"
+  currency: EUR
+  id: "330"
+  on_budget: f
+  on_treasury: f
+  payments: "90000"
+  project_id: "378"
+  year: "2009"
+funding_forecasts_331: 
+  commitments: "17200000"
+  currency: DKK
+  id: "331"
+  on_budget: f
+  on_treasury: f
+  payments: "17200000"
+  project_id: "39"
+  year: "2008"
+funding_forecasts_332: 
+  commitments: "0"
+  currency: DKK
+  id: "332"
+  on_budget: f
+  on_treasury: f
+  payments: "17200000"
+  project_id: "39"
+  year: "2009"
+funding_forecasts_333: 
+  commitments: "0"
+  currency: DKK
+  id: "333"
+  on_budget: f
+  on_treasury: f
+  payments: "7000000"
+  project_id: "39"
+  year: "2010"
+funding_forecasts_334: 
+  commitments: "0"
+  currency: GBP
+  id: "334"
+  on_budget: t
+  on_treasury: t
+  payments: "500000"
+  project_id: "332"
+  year: "2008"
+funding_forecasts_335: 
+  commitments: "0"
+  currency: EUR
+  id: "335"
+  on_budget: f
+  on_treasury: f
+  payments: "49000"
+  project_id: "374"
+  year: "2008"
+funding_forecasts_336: 
+  commitments: "0"
+  currency: EUR
+  id: "336"
+  on_budget: f
+  on_treasury: f
+  payments: "26400"
+  project_id: "402"
+  year: "2008"
+funding_forecasts_337: 
+  commitments: "21300000"
+  currency: DKK
+  id: "337"
+  on_budget: t
+  on_treasury: t
+  payments: "21300000"
+  project_id: "118"
+  year: "2008"
+funding_forecasts_338: 
+  commitments: "0"
+  currency: DKK
+  id: "338"
+  on_budget: t
+  on_treasury: t
+  payments: "14700000"
+  project_id: "118"
+  year: "2009"
+funding_forecasts_339: 
+  commitments: "0"
+  currency: DKK
+  id: "339"
+  on_budget: f
+  on_treasury: f
+  payments: "36400000"
+  project_id: "118"
+  year: "2010"
+funding_forecasts_340: 
+  commitments: "0"
+  currency: EUR
+  id: "340"
+  on_budget: f
+  on_treasury: f
+  payments: "191280"
+  project_id: "274"
+  year: "2009"
+funding_forecasts_341: 
+  commitments: "0"
+  currency: EUR
+  id: "341"
+  on_budget: f
+  on_treasury: f
+  payments: "34526"
+  project_id: "403"
+  year: "2008"
+funding_forecasts_342: 
+  commitments: "0"
+  currency: EUR
+  id: "342"
+  on_budget: t
+  on_treasury: t
+  payments: "2000000"
+  project_id: "54"
+  year: "2008"
+funding_forecasts_343: 
+  commitments: "215200"
+  currency: EUR
+  id: "343"
+  on_budget: f
+  on_treasury: f
+  payments: "215200"
+  project_id: "58"
+  year: "2008"
+funding_forecasts_344: 
+  commitments: "8"
+  currency: DKK
+  id: "344"
+  on_budget: t
+  on_treasury: f
+  payments: "8"
+  project_id: "13"
+  year: "2008"
+funding_forecasts_345: 
+  commitments: "0"
+  currency: EUR
+  id: "345"
+  on_budget: t
+  on_treasury: t
+  payments: "294000"
+  project_id: "446"
+  year: "2008"
+funding_forecasts_346: 
+  commitments: "20"
+  currency: DKK
+  id: "346"
+  on_budget: f
+  on_treasury: f
+  payments: "20"
+  project_id: "17"
+  year: "2008"
+funding_forecasts_347: 
+  commitments: "30"
+  currency: DKK
+  id: "347"
+  on_budget: ~
+  on_treasury: ~
+  payments: "30"
+  project_id: "17"
+  year: "2009"
+funding_forecasts_348: 
+  commitments: "38"
+  currency: DKK
+  id: "348"
+  on_budget: ~
+  on_treasury: ~
+  payments: "38"
+  project_id: "17"
+  year: "2010"
+funding_forecasts_349: 
+  commitments: "0"
+  currency: EUR
+  id: "349"
+  on_budget: f
+  on_treasury: f
+  payments: "97864"
+  project_id: "157"
+  year: "2009"
+funding_forecasts_350: 
+  commitments: "600000"
+  currency: EUR
+  id: "350"
+  on_budget: f
+  on_treasury: f
+  payments: "0"
+  project_id: "447"
+  year: "2008"
+funding_forecasts_351: 
+  commitments: "0"
+  currency: GBP
+  id: "351"
+  on_budget: f
+  on_treasury: f
+  payments: "22500"
+  project_id: "351"
+  year: "2008"
+funding_forecasts_352: 
+  commitments: "0"
+  currency: EUR
+  id: "352"
+  on_budget: f
+  on_treasury: f
+  payments: "157878"
+  project_id: "261"
+  year: "2008"
+funding_forecasts_353: 
+  commitments: "1663000"
+  currency: SEK
+  id: "353"
+  on_budget: f
+  on_treasury: f
+  payments: "1663000"
+  project_id: "251"
+  year: "2008"
+funding_forecasts_354: 
+  commitments: "0"
+  currency: GBP
+  id: "354"
+  on_budget: f
+  on_treasury: f
+  payments: "100000"
+  project_id: "358"
+  year: "2008"
+funding_forecasts_355: 
+  commitments: "120000"
+  currency: EUR
+  id: "355"
+  on_budget: f
+  on_treasury: f
+  payments: "0"
+  project_id: "502"
+  year: "2008"
+funding_forecasts_356: 
+  commitments: "0"
+  currency: EUR
+  id: "356"
+  on_budget: t
+  on_treasury: t
+  payments: "222485"
+  project_id: "199"
+  year: "2008"
+funding_forecasts_357: 
+  commitments: "0"
+  currency: EUR
+  id: "357"
+  on_budget: f
+  on_treasury: f
+  payments: "55652"
+  project_id: "199"
+  year: "2009"
+funding_forecasts_358: 
+  commitments: "1300000"
+  currency: EUR
+  id: "358"
+  on_budget: t
+  on_treasury: t
+  payments: "1300000"
+  project_id: "520"
+  year: "2008"
+funding_forecasts_359: 
+  commitments: "0"
+  currency: GBP
+  id: "359"
+  on_budget: f
+  on_treasury: f
+  payments: "100000"
+  project_id: "356"
+  year: "2008"
+funding_forecasts_360: 
+  commitments: "329000"
+  currency: EUR
+  id: "360"
+  on_budget: t
+  on_treasury: t
+  payments: "0"
+  project_id: "475"
+  year: "2008"
+funding_forecasts_361: 
+  commitments: "5000000"
+  currency: SEK
+  id: "361"
+  on_budget: f
+  on_treasury: f
+  payments: "5000000"
+  project_id: "91"
+  year: "2008"
+funding_forecasts_362: 
+  commitments: "0"
+  currency: EUR
+  id: "362"
+  on_budget: f
+  on_treasury: f
+  payments: "200880"
+  project_id: "265"
+  year: "2008"
+funding_forecasts_363: 
+  commitments: "0"
+  currency: EUR
+  id: "363"
+  on_budget: f
+  on_treasury: f
+  payments: "200880"
+  project_id: "265"
+  year: "2009"
+funding_forecasts_364: 
+  commitments: "0"
+  currency: EUR
+  id: "364"
+  on_budget: f
+  on_treasury: f
+  payments: "100000"
+  project_id: "135"
+  year: "2009"
+funding_forecasts_365: 
+  commitments: "0"
+  currency: EUR
+  id: "365"
+  on_budget: ~
+  on_treasury: ~
+  payments: "100000"
+  project_id: "135"
+  year: "2010"
+funding_forecasts_366: 
+  commitments: "3325000"
+  currency: SEK
+  id: "366"
+  on_budget: f
+  on_treasury: f
+  payments: "3325000"
+  project_id: "253"
+  year: "2008"
+funding_forecasts_367: 
+  commitments: "0"
+  currency: EUR
+  id: "367"
+  on_budget: t
+  on_treasury: f
+  payments: "1018680"
+  project_id: "51"
+  year: "2008"
+funding_forecasts_368: 
+  commitments: "5400000"
+  currency: SEK
+  id: "368"
+  on_budget: t
+  on_treasury: f
+  payments: "5400000"
+  project_id: "236"
+  year: "2008"
+funding_forecasts_369: 
+  commitments: "0"
+  currency: EUR
+  id: "369"
+  on_budget: f
+  on_treasury: f
+  payments: "222485"
+  project_id: "286"
+  year: "2008"
+funding_forecasts_370: 
+  commitments: "0"
+  currency: EUR
+  id: "370"
+  on_budget: f
+  on_treasury: f
+  payments: "55652"
+  project_id: "286"
+  year: "2009"
+funding_forecasts_371: 
+  commitments: "0"
+  currency: GBP
+  id: "371"
+  on_budget: f
+  on_treasury: f
+  payments: "43035"
+  project_id: "360"
+  year: "2008"
+funding_forecasts_372: 
+  commitments: "4687000"
+  currency: SEK
+  id: "372"
+  on_budget: f
+  on_treasury: f
+  payments: "4687000"
+  project_id: "250"
+  year: "2008"
+funding_forecasts_373: 
+  commitments: "0"
+  currency: EUR
+  id: "373"
+  on_budget: t
+  on_treasury: f
+  payments: "1457589"
+  project_id: "288"
+  year: "2008"
+funding_forecasts_374: 
+  commitments: "0"
+  currency: EUR
+  id: "374"
+  on_budget: f
+  on_treasury: f
+  payments: "250000"
+  project_id: "109"
+  year: "2008"
+funding_forecasts_375: 
+  commitments: "0"
+  currency: EUR
+  id: "375"
+  on_budget: t
+  on_treasury: t
+  payments: "244546"
+  project_id: "202"
+  year: "2008"
+funding_forecasts_376: 
+  commitments: "2918000"
+  currency: SEK
+  id: "376"
+  on_budget: f
+  on_treasury: f
+  payments: "2918000"
+  project_id: "254"
+  year: "2008"
+funding_forecasts_377: 
+  commitments: "1900000"
+  currency: EUR
+  id: "377"
+  on_budget: f
+  on_treasury: f
+  payments: "700000"
+  project_id: "129"
+  year: "2008"
+funding_forecasts_378: 
+  commitments: "0"
+  currency: EUR
+  id: "378"
+  on_budget: f
+  on_treasury: f
+  payments: "600000"
+  project_id: "129"
+  year: "2009"
+funding_forecasts_379: 
+  commitments: "0"
+  currency: EUR
+  id: "379"
+  on_budget: f
+  on_treasury: f
+  payments: "600000"
+  project_id: "129"
+  year: "2010"
+funding_forecasts_380: 
+  commitments: "3718000"
+  currency: SEK
+  id: "380"
+  on_budget: f
+  on_treasury: f
+  payments: "3718000"
+  project_id: "257"
+  year: "2008"
+funding_forecasts_381: 
+  commitments: "894000"
+  currency: SEK
+  id: "381"
+  on_budget: t
+  on_treasury: f
+  payments: "894000"
+  project_id: "259"
+  year: "2008"
+funding_forecasts_382: 
+  commitments: "0"
+  currency: GBP
+  id: "382"
+  on_budget: f
+  on_treasury: f
+  payments: "281688"
+  project_id: "41"
+  year: "2008"
+funding_forecasts_383: 
+  commitments: "0"
+  currency: EUR
+  id: "383"
+  on_budget: f
+  on_treasury: f
+  payments: "448000"
+  project_id: "213"
+  year: "2008"
+funding_forecasts_384: 
+  commitments: "992280"
+  currency: EUR
+  id: "384"
+  on_budget: t
+  on_treasury: f
+  payments: "1207094"
+  project_id: "207"
+  year: "2008"
+funding_forecasts_385: 
+  commitments: "0"
+  currency: EUR
+  id: "385"
+  on_budget: f
+  on_treasury: f
+  payments: "177957"
+  project_id: "266"
+  year: "2009"
+funding_forecasts_386: 
+  commitments: "150000"
+  currency: EUR
+  id: "386"
+  on_budget: f
+  on_treasury: f
+  payments: "150000"
+  project_id: "396"
+  year: "2008"
+funding_forecasts_387: 
+  commitments: "0"
+  currency: EUR
+  id: "387"
+  on_budget: t
+  on_treasury: t
+  payments: "29750"
+  project_id: "158"
+  year: "2008"
+funding_forecasts_388: 
+  commitments: "1000000"
+  currency: EUR
+  id: "388"
+  on_budget: t
+  on_treasury: f
+  payments: "1000000"
+  project_id: "196"
+  year: "2008"
+funding_forecasts_389: 
+  commitments: "0"
+  currency: EUR
+  id: "389"
+  on_budget: f
+  on_treasury: f
+  payments: "160000"
+  project_id: "369"
+  year: "2008"
+funding_forecasts_390: 
+  commitments: "0"
+  currency: EUR
+  id: "390"
+  on_budget: f
+  on_treasury: f
+  payments: "150000"
+  project_id: "369"
+  year: "2009"
+funding_forecasts_391: 
+  commitments: "0"
+  currency: EUR
+  id: "391"
+  on_budget: f
+  on_treasury: f
+  payments: "144864"
+  project_id: "392"
+  year: "2008"
+funding_forecasts_392: 
+  commitments: "2500000"
+  currency: EUR
+  id: "392"
+  on_budget: t
+  on_treasury: f
+  payments: "2500000"
+  project_id: "186"
+  year: "2008"
+funding_forecasts_393: 
+  commitments: "0"
+  currency: GBP
+  id: "393"
+  on_budget: f
+  on_treasury: f
+  payments: "20085"
+  project_id: "296"
+  year: "2008"
+funding_forecasts_394: 
+  commitments: "0"
+  currency: EUR
+  id: "394"
+  on_budget: f
+  on_treasury: f
+  payments: "178571"
+  project_id: "389"
+  year: "2008"
+funding_forecasts_395: 
+  commitments: "1700000"
+  currency: EUR
+  id: "395"
+  on_budget: t
+  on_treasury: f
+  payments: "1700000"
+  project_id: "64"
+  year: "2008"
+funding_forecasts_396: 
+  commitments: "0"
+  currency: EUR
+  id: "396"
+  on_budget: t
+  on_treasury: t
+  payments: "110000"
+  project_id: "361"
+  year: "2008"
+funding_forecasts_397: 
+  commitments: "0"
+  currency: EUR
+  id: "397"
+  on_budget: t
+  on_treasury: t
+  payments: "57498"
+  project_id: "361"
+  year: "2009"
+funding_forecasts_398: 
+  commitments: "0"
+  currency: EUR
+  id: "398"
+  on_budget: f
+  on_treasury: f
+  payments: "52342"
+  project_id: "268"
+  year: "2008"
+funding_forecasts_399: 
+  commitments: "0"
+  currency: EUR
+  id: "399"
+  on_budget: f
+  on_treasury: f
+  payments: "12683"
+  project_id: "394"
+  year: "2008"
+funding_forecasts_400: 
+  commitments: "451894"
+  currency: EUR
+  id: "400"
+  on_budget: f
+  on_treasury: f
+  payments: "5309842"
+  project_id: "47"
+  year: "2008"
+funding_forecasts_401: 
+  commitments: "0"
+  currency: EUR
+  id: "401"
+  on_budget: f
+  on_treasury: f
+  payments: "250000"
+  project_id: "138"
+  year: "2008"
+funding_forecasts_402: 
+  commitments: "0"
+  currency: EUR
+  id: "402"
+  on_budget: f
+  on_treasury: f
+  payments: "290685"
+  project_id: "138"
+  year: "2009"
+funding_forecasts_403: 
+  commitments: "0"
+  currency: EUR
+  id: "403"
+  on_budget: t
+  on_treasury: t
+  payments: "809504"
+  project_id: "177"
+  year: "2008"
+funding_forecasts_404: 
+  commitments: "50000"
+  currency: EUR
+  id: "404"
+  on_budget: f
+  on_treasury: f
+  payments: "50000"
+  project_id: "397"
+  year: "2008"
+funding_forecasts_405: 
+  commitments: "0"
+  currency: EUR
+  id: "405"
+  on_budget: f
+  on_treasury: f
+  payments: "80000"
+  project_id: "208"
+  year: "2009"
+funding_forecasts_406: 
+  commitments: "0"
+  currency: EUR
+  id: "406"
+  on_budget: f
+  on_treasury: f
+  payments: "220673"
+  project_id: "208"
+  year: "2010"
+funding_forecasts_407: 
+  commitments: "0"
+  currency: EUR
+  id: "407"
+  on_budget: f
+  on_treasury: f
+  payments: "65000"
+  project_id: "367"
+  year: "2009"
+funding_forecasts_408: 
+  commitments: "0"
+  currency: EUR
+  id: "408"
+  on_budget: f
+  on_treasury: f
+  payments: "45000"
+  project_id: "367"
+  year: "2010"
+funding_forecasts_409: 
+  commitments: "0"
+  currency: EUR
+  id: "409"
+  on_budget: f
+  on_treasury: f
+  payments: "150000"
+  project_id: "367"
+  year: "2008"
+funding_forecasts_410: 
+  commitments: "0"
+  currency: EUR
+  id: "410"
+  on_budget: f
+  on_treasury: f
+  payments: "63430"
+  project_id: "273"
+  year: "2008"

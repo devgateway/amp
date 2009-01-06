@@ -6,9 +6,9 @@
 	<% else %>
 		<tr>
 			<th><!-- Flags --></th>
-			<th><%= ll(:donor, :name) %></th>
-			<th><%= ll(:donor, :cofunding_only) %></th>
-			<th><%= ll(:donor, :currency) %></th>
+			<th><%= Donor.human_attribute_name('name') %></th>
+			<th><%= Donor.human_attribute_name('cofunding_only') %></th>
+			<th><%= Donor.human_attribute_name('currency') %></th>
 			<th> </th>
 			<th> </th>	
 			<th> </th>		

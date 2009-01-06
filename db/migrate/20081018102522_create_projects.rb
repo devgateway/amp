@@ -27,7 +27,7 @@ class CreateProjects < ActiveRecord::Migration
       
       # Relations
       t.references :donor, :donor_agency
-      t.references :dac_sector, :crs_sector, :type_of_aid
+      t.references :type_of_aid
       t.references :country_strategy
       t.references :government_counterpart
       

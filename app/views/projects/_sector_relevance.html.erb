@@ -1,0 +1,14 @@
+<div class="sector_relevance">
+	<li>
+		<%= f.collection_select :dac_sector_id, DacSector.ordered, :id, :name_with_code, 
+				{ :prompt => ll(:options, :prompt) }, :class => 'dynamic_select parent large' %>
+		
+		<%= f.related_collection_select :crs_sector_id, :dac_sector_id, 
+				DacSector.ordered, :'crs_sectors.ordered', :name_with_code, :id, :name_with_code, 
+				{ :label => false }, :class => 'dynamic_select child large' %>
+				
+		<%= f.text_field :amount %>
+	</li>
+	
+	<%= f.remove_link t('actions.delete') %>
+</div>

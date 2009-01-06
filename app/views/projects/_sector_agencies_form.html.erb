@@ -1,13 +1,11 @@
 <% f.field_set do %>
 	<li>
-		<% sectors = DacSector.ordered.all(:include => [:crs_sectors]) %>
-		<%= f.collection_select :dac_sector_id, sectors, :id, :name_with_code, 
-				{ :prompt => ll(:options, :prompt) }, { :class => "dynamic_select parent large" } %>
+		<%= f.label :sector_relevances %>
+		<%= f.add_associated_link(t('projects.add_sector'), SectorRelevance.new, :style => "display: block; float: right; margin-top: -20px; width: 170") %>
 		
-		<select name="project[crs_sector_id]" class="dynamic_select child large">
-			<%= option_groups_from_collection_for_select(sectors, :crs_sectors, :name_with_code, 
-					:id, :name_with_code, @project.crs_sector_id) %>
-		</select>
+		<div id="sector_relevances">
+			<%= f.render_associated_form(@project.sector_relevances.blank? ? [@project.sector_relevances.build] : @project.sector_relevances) %>
+		</div>
 	</li>
 	
 	<li>

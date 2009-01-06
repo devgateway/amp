@@ -1,23 +1,28 @@
 class ProjectsController < ApplicationController
-  before_filter :ensure_open_data_input, :except => [:show, :show_map]
-  access_rule 'focal_point', :except => [:show, :show_map]
-  cache_sweeper :reports_sweeper, :only => [:update_finances, :publish, :draft, :destroy]
-  cache_sweeper :factsheets_sweeper, :only => [:create, :update, :update_finances, :empty_recycle_bin]
+  before_filter :ensure_open_data_input, :except => [:show, :show_map, :map]
+  access_rule 'focal_point', :except => [:show, :show_map, :map]
+  
+  # FIXME: Caching disabled in version 2.6
+  #cache_sweeper :reports_sweeper, :only => [:update_finances, :publish, :draft, :destroy]
+  #cache_sweeper :factsheets_sweeper, :only => [:create, :update, :update_finances, :empty_recycle_bin]
 
   def index
     @status = params[:status].to_i || 0
-    @projects = current_donor.projects.find(:all,
-      :conditions => { :data_status => @status })
+    @projects = current_donor.projects.paginate(:all, :conditions => { :data_status => @status },
+      :page => params[:page], :per_page => 15)
   end
   
   def show
-    unless read_fragment(:id => params[:id], :currency => params[:currency], :lang => I18n.locale)
-      @project = Project.find(params[:id], :include => [:donor])
-      @finances = @project.fundings.find(:all, :order => "year ASC")
-    end
+    # No caching currently!
+    #unless read_fragment(:id => params[:id], :currency => params[:currency], :lang => I18n.locale)
+    #  @project = Project.find(params[:id], :include => [:donor])
+    #  @finances = @project.fundings.find(:all, :order => "year ASC")
+    #end
     
     
     @project ||= Project.find(params[:id])
+    
+    # TODO: Is this still working? There may be a better way to do this as well
     if !params[:report] && @project.data_status == Project::DRAFT
       @next_draft = Project.draft.find(:first, 
         :conditions => ["donor_id = ? AND donor_project_number > ?", session[:user_id], @project.donor_project_number])
@@ -58,7 +63,7 @@ class ProjectsController < ApplicationController
   # Changes project's data status
   def update_status
     @project = current_donor.projects.find(params[:id])
-    @project.update_attributes!(:data_status => params[:status])
+    @project.update_attribute(:data_status, params[:status])
     
     redirect_to projects_path
   end

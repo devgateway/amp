@@ -42,12 +42,7 @@
 	    
 	    <dt><%= @project.class.human_attribute_name('type_of_implementation') %></dt>
 	    <dd><%= option_text_by_id(Project::IMPLEMENTATION_TYPES, @project.type_of_implementation) %>&nbsp;</dd>
-	    
-	    <dt><%= @project.class.human_attribute_name('dac_sector') %></dt>
-	    <dd><%= @project.dac_sector.name_with_code %>&nbsp;</dd>
-	    
-	    <dt><%= @project.class.human_attribute_name('crs_sector') %></dt>
-	    <dd><%= @project.crs_sector.name_with_code %>&nbsp;</dd>
+
 		<dt><%= @project.class.human_attribute_name('officer_responsible') %></dt>
 		<dd><%= @project.officer_responsible %>&nbsp;</dd>
 		
@@ -161,6 +156,21 @@
 			            <li><%= agency.name %></li>
 			        <% end %>
 			    </ul>
+			</dd>
+			
+			<dt><%= @project.class.human_attribute_name('sectors') %></dt>
+		    <dd>
+				<dl>
+					<% @project.sector_relevances.ordered.each_with_index do |sector, idx| %>
+						<dt<%= (idx == 0) ? ' class="first"' : '' -%>>
+							<%= sector.amount %>%
+						</dt>
+						<dd<%= (idx == 0) ? ' class="first"' : '' -%>>
+							<%= sector.dac_sector.name_with_code %><br />
+							<%= sector.crs_sector.name_with_code %>
+						</dd>
+					<% end %>
+				</dl>
 			</dd>
 	
 			<dt><%= lc(:mdgs) %></dt>

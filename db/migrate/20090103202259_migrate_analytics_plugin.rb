@@ -1,4 +1,4 @@
-class InstallAnalyticsPlugin < ActiveRecord::Migration
+class MigrateAnalyticsPlugin < ActiveRecord::Migration
   def self.up
     #migrate_plugin :analytics, 2
   end

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081123111827) do
+ActiveRecord::Schema.define(:version => 20081202200839) do
 
   create_table "agencies", :force => true do |t|
     t.string "name"
@@ -103,26 +103,30 @@ ActiveRecord::Schema.define(:version => 20081123111827) do
   end
 
   create_table "donors", :force => true do |t|
-    t.string  "code"
-    t.string  "currency"
-    t.boolean "cofunding_only"
-    t.text    "institutions_responsible_for_oda"
-    t.integer "total_staff_in_country"
-    t.integer "total_expatriate_staff"
-    t.integer "total_local_staff"
-    t.string  "officer_responsible"
-    t.text    "field_office_address"
-    t.string  "field_office_phone"
-    t.string  "field_office_email"
-    t.string  "field_office_website"
-    t.string  "head_of_mission_name"
-    t.string  "head_of_mission_email"
-    t.string  "head_of_cooperation_name"
-    t.string  "head_of_cooperation_email"
-    t.string  "first_focal_point_name"
-    t.string  "first_focal_point_email"
-    t.string  "second_focal_point_name"
-    t.string  "second_focal_point_email"
+    t.string   "code"
+    t.string   "currency"
+    t.boolean  "cofunding_only"
+    t.text     "institutions_responsible_for_oda"
+    t.integer  "total_staff_in_country"
+    t.integer  "total_expatriate_staff"
+    t.integer  "total_local_staff"
+    t.string   "officer_responsible"
+    t.text     "field_office_address"
+    t.string   "field_office_phone"
+    t.string   "field_office_email"
+    t.string   "field_office_website"
+    t.string   "head_of_mission_name"
+    t.string   "head_of_mission_email"
+    t.string   "head_of_cooperation_name"
+    t.string   "head_of_cooperation_email"
+    t.string   "first_focal_point_name"
+    t.string   "first_focal_point_email"
+    t.string   "second_focal_point_name"
+    t.string   "second_focal_point_email"
+    t.string   "flag_file_name"
+    t.string   "flag_content_type"
+    t.integer  "flag_file_size"
+    t.datetime "flag_updated_at"
   end
 
   create_table "exchange_rates", :force => true do |t|
@@ -218,7 +222,7 @@ ActiveRecord::Schema.define(:version => 20081123111827) do
     t.date     "end"
     t.text     "comments"
     t.string   "website"
-    t.integer  "type_of_aid"
+    t.integer  "type_of_aid_id"
     t.integer  "grant_loan"
     t.integer  "national_regional"
     t.integer  "type_of_implementation"

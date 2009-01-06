@@ -26,6 +26,15 @@ class CreateSectors < ActiveRecord::Migration
       t.references :dac_sector
     end
     
+    create_table :sector_relevances do |t|
+      t.references  :project
+      
+      t.references  :dac_sector
+      t.references  :crs_sector
+      
+      t.integer     :amount
+    end
+    
     add_index :crs_sectors, :dac_sector_id
   end
 
@@ -34,5 +43,6 @@ class CreateSectors < ActiveRecord::Migration
     drop_table :dac_sectors
     drop_table :crs_sector_translations
     drop_table :dac_sector_translations
+    drop_table :sector_relevances
   end
 end

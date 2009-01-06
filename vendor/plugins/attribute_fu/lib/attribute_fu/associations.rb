@@ -9,7 +9,7 @@ module AttributeFu
         class_inheritable_accessor  :managed_association_attributes
         write_inheritable_attribute :managed_association_attributes, {}
         
-        after_update :save_managed_associations
+        before_save :save_managed_associations
       end
     end
     

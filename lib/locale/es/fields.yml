@@ -13,8 +13,6 @@ es:
         prj_status: Estado del Proyecto
         start: Fecha de inicio
         end: Fecha de finalización
-        dac_sector: Sector CAD/CRS
-        crs_sector: Sector CRS
         implementing_agencies: Agencias Implementadoras
         contracted_agencies: Agencias Contratadas
         national_regional: Nacional / Regional
@@ -32,7 +30,19 @@ es:
         desertification_marker: Desertificación
         gender_policy_marker: Política de Género
         environment_policy_marker: Política del Medio Ambiente	
+        # TODO!
+        sector_relevances: Project's Focal Sectors
         
+      sector_relevance:
+        dac_sector: Sector CAD/CRS
+        crs_sector: Sector CRS
+        # TODO!
+        amount: Amount in %
+        
+      geo_relevance:
+        province: Región
+        district: Municipios
+          
       user:
         name: Nombre
         email: Dirección de correo electrónico

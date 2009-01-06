@@ -14,7 +14,7 @@ module Report
   RELATIONS = {
     :donors => lambda { |m, v| ["donors.id IN (?)", v] },
     :targets => lambda { |m, v| ["mdg_relevances.mdg_id IN (?)", v] },
-    :sectors => lambda { |m, v| ["projects.dac_sector_id IN (?)", v] },
+    :sectors => lambda { |m, v| ["sector_relevances.dac_sector_id IN (?)", v] },
     :provinces => lambda { |m, v| ["geo_relevances.province_id IN (?)", v] },
     :markers => lambda { |m, v| 
       v.map { |name| "projects.#{name}_marker >= 1"}.join(" OR ") 

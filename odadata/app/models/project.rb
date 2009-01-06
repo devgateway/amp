@@ -34,10 +34,6 @@ class Project < ActiveRecord::Base
   
   belongs_to              :country_strategy
   
-  belongs_to              :dac_sector
-  belongs_to              :crs_sector
-  belongs_to              :type_of_aid
-  
   belongs_to              :government_counterpart, :class_name => "GovernmentCounterpartNames", :foreign_key => "government_counterpart_id"
   
   # Agencies
@@ -50,11 +46,18 @@ class Project < ActiveRecord::Base
   has_many                :targets, :through => :mdg_relevances  
   
   # Geographic relevance
-  has_many                :geo_relevances, :dependent => :delete_all
+  has_many                :geo_relevances, :dependent => :delete_all, :attributes => true
   has_many                :provinces, :through => :geo_relevances, :uniq => true
   has_many                :districts, :through => :geo_relevances
   
+  # Sector relevance
+  has_many                :sector_relevances, :dependent => :delete_all, :attributes => true
+  has_many                :dac_sectors, :through => :sector_relevances, :uniq => true
+  has_many                :crs_sectors, :through => :sector_relevances
+  
   # Funding Information
+  belongs_to              :type_of_aid
+    
   has_many                :cofundings, :dependent => :delete_all, :attributes => true, :discard_if => :blank?
   has_many                :cofinancing_donors, :through => :cofundings, :source => :donor
   
@@ -88,7 +91,6 @@ class Project < ActiveRecord::Base
       
   ##
   # Callbacks
-  before_save :update_dac_sector_id_for_crs_sector
   
   
   ##
@@ -103,7 +105,12 @@ class Project < ActiveRecord::Base
   
   # STATE: categorization
   validates_presence_of     :national_regional, :type_of_implementation, :type_of_aid, :grant_loan, 
-                            :officer_responsible_name, :dac_sector_id, :crs_sector_id
+                            :officer_responsible_name
+                            
+  validates_associated      :sector_relevances, :geo_relevances, :mdg_relevances
+  validates_associated      :fundings, :funding_forecasts, :historic_funding
+  
+  validate                  :total_sector_amount_is_100
   
   ##
   # Accessors    
@@ -167,34 +174,18 @@ class Project < ActiveRecord::Base
         fundings.total_payments
     end
   end
-  
-  
-  ##
-  # Cofundings
-  def has_cofundings
-    cofundings.empty? ? false : !(cofundings.first.new_record?)
-  end
-  
-  def has_cofundings=(value)
-    if value == "0"
-      @delete_cofundings = true
-      cofundings.destroy_all
-    end
-  end
-  
-  def cofunding_display_style
-    has_cofundings ? "" : "display: none"
-  end
-  
+
   # Sum up total Co-Funding for this project and return in project donor's currency
   def total_cofunding
     cofundings.to_a.sum(&:amount).in(donor.currency) rescue 0.to_currency(donor.currency)
   end
   
-private
-  # Update dac_sector_id according to crs_sector selected
-  def update_dac_sector_id_for_crs_sector
-    self.dac_sector = 
-      self.crs_sector ? self.crs_sector.dac_sector : nil
+  ##
+  # Validation methods
+  # Validate that the total amount per project is 100%
+  def total_sector_amount_is_100
+    unless self.sector_relevances.sum(:amount) == 100
+      #errors.add('sector_relevances', 'foo.bar')
+    end  
   end
 end

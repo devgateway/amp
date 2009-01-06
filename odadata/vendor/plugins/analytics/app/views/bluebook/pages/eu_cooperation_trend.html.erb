@@ -1,7 +1,7 @@
 <table class="bluebook">
 	<tr>
 		<td>
-			<b><%= ll(:bluebook, :pages, :contents, :eu_cooperation, :trend, :from => Time.now.year-1, :to =>  Time.now.year) %></b>
+			<b><%= ll(:bluebook, :pages, :contents, :eu_cooperation, :trend, :from => year, :to => year + 1) %></b>
 			<br>
 			<%= ll(:bluebook, :chart_subtitles, :trend) %>
 			<div id="column_graph">
@@ -13,8 +13,8 @@
 			// <![CDATA[		
 					var so = new SWFObject("/amcolumn.swf", "amcolumn", "960", "430", "8", "#DBE2F1");
 					so.addVariable("path", "/");
-					so.addVariable("settings_file", escape("/bluebook/charts/settings/cooperation_trends.xml"));
-					so.addVariable("data_file", escape("/bluebook/charts/eu_cooperation_trends_column_data/show.xml"));  
+					so.addVariable("settings_file", escape("/bluebook/<%= year %>/charts/settings/cooperation_trends.xml"));
+					so.addVariable("data_file", escape("/bluebook/<%= year %>/charts/eu_cooperation_trends_column_data.xml"));  
 			    	so.addVariable("preloader_color", "#999999");
 					so.write("column_graph");
 					// ]]>

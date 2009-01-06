@@ -1,13 +1,18 @@
 class CrsSector < ActiveRecord::Base
   translates :name, :description
   
-  belongs_to :dac_sector, :dependent => :destroy
+  belongs_to :dac_sector
+  
+  has_many :sector_relevances
+  has_many :projects, :through => :sector_relevances, 
+    # see explanation in DacSector model for this:
+    :select => "projects.*, donor_translations.name"
+
   has_many :sector_details, :as => :focal_sector
-  has_many :projects
-    
+  
+  
   alias_attribute :five_digit_code, :code
-  
-  
+    
   named_scope :ordered, :order => "code ASC"
   
   def name_with_code(maxlength = nil)

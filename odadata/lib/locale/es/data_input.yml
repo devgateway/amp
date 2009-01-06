@@ -117,6 +117,7 @@ es:
     add_province: Añadir otra provincia
     zero_provinces_warning: "¡Por favor seleccione por lo menos una provincia!"
     add_cofunding_donor: Añadir otro Donante
+    add_sector:  Añadir otro Sector
     cofunding_title: Donantes co-financiandores y montos
     historic_funding: Financiamiento Histórico (hasta el final de {{year}})
     funding_title: Finanzas {{year}}

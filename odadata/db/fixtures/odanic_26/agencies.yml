@@ -1,0 +1,3375 @@
+--- 
+agencies_001: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337366288"
+  name: "ACDI/CIDA "
+  type: ImplementingAgency
+agencies_002: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361162692"
+  name: FDL
+  type: ContractedAgency
+agencies_003: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369682369"
+  name: "Policía Nacional de Nicaragua"
+  type: ContractedAgency
+agencies_004: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369276473"
+  name: IDR
+  type: ContractedAgency
+agencies_005: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369276479"
+  name: INEC
+  type: ContractedAgency
+agencies_006: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320529878"
+  name: FDL
+  type: ImplementingAgency
+agencies_007: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361095042"
+  name: "Ejército de Nicaragua"
+  type: ContractedAgency
+agencies_008: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361095040"
+  name: EIRENE
+  type: ContractedAgency
+agencies_009: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369885319"
+  name: UNAN-Managua
+  type: ContractedAgency
+agencies_010: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369276477"
+  name: INATEC
+  type: ContractedAgency
+agencies_011: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361365636"
+  name: "Handicap International Luxembourg a.s.b.l."
+  type: ContractedAgency
+agencies_012: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337230987"
+  name: Lux-Development
+  type: ImplementingAgency
+agencies_013: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361297989"
+  name: "Global Development Links (GDL)"
+  type: ContractedAgency
+agencies_014: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369547074"
+  name: "OIKOS - Portugal"
+  type: ContractedAgency
+agencies_015: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369750016"
+  name: "Regional gvts"
+  type: ContractedAgency
+agencies_016: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369344125"
+  name: "Instituto Nicaraguense de la Mujer (INIM)"
+  type: ContractedAgency
+agencies_017: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369682373"
+  name: PRODEL
+  type: ContractedAgency
+agencies_018: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320462228"
+  name: "Ejército de Nicaragua"
+  type: ImplementingAgency
+agencies_019: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369344127"
+  name: INTA
+  type: ContractedAgency
+agencies_020: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328846605"
+  name: "Ministerio Agropecuario y Forestal de Nicaragua (MAGFOR)"
+  type: ImplementingAgency
+agencies_021: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360892098"
+  name: CATIE
+  type: ContractedAgency
+agencies_022: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320732824"
+  name: "Health Unlimited - Gran Bretaña"
+  type: ImplementingAgency
+agencies_023: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320665172"
+  name: FUNDENIC
+  type: ImplementingAgency
+agencies_024: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320394583"
+  name: "Cruz Roja - Holanda"
+  type: ImplementingAgency
+agencies_025: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337163341"
+  name: "VEREIN STAEDTEPARTNERSCHAFT FREIBURG-WIWILI IN NICARAGUA EV"
+  type: ImplementingAgency
+agencies_026: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320665174"
+  name: "FVBCh Consortium"
+  type: ImplementingAgency
+agencies_027: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328846611"
+  name: "Minsterio del Ambiente u los Recursos Naturales (MARENA)"
+  type: ImplementingAgency
+agencies_028: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328846609"
+  name: "Ministerio de Salud (MINSA)"
+  type: ImplementingAgency
+agencies_029: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329117209"
+  name: SICA
+  type: ImplementingAgency
+agencies_030: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329117206"
+  name: SERENA-RAAS
+  type: ImplementingAgency
+agencies_031: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320259280"
+  name: "CARE International - Alemania"
+  type: ImplementingAgency
+agencies_032: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377999103"
+  name: "Embassy of Denmark"
+  type: ContractedAgency
+agencies_033: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361027396"
+  name: "CRIC - Italia"
+  type: ContractedAgency
+agencies_034: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320597532"
+  name: FUNDEMOS
+  type: ImplementingAgency
+agencies_035: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377931447"
+  name: "Comision Presidencial de Promoción de Inversiones (PRONICARAGUA)"
+  type: ContractedAgency
+agencies_036: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337163334"
+  name: UNI
+  type: ImplementingAgency
+agencies_037: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "378066744"
+  name: "International Food Production Research Institute (IFPRI) -CA"
+  type: ContractedAgency
+agencies_038: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329184858"
+  name: "Terra Nuova - Italia"
+  type: ImplementingAgency
+agencies_039: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369276480"
+  name: INETER
+  type: ContractedAgency
+agencies_040: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361230337"
+  name: FONIM
+  type: ContractedAgency
+agencies_041: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377999096"
+  name: MARENA
+  type: ContractedAgency
+agencies_042: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328711309"
+  name: "Instituto de la Vivienda Urbana y Rural (INVUR)"
+  type: ImplementingAgency
+agencies_043: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337366282"
+  name: MARENA
+  type: ImplementingAgency
+agencies_044: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320394577"
+  name: "Contraloría General de la República (CGR)"
+  type: ImplementingAgency
+agencies_045: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360824443"
+  name: "Alcadia RAAN"
+  type: ContractedAgency
+agencies_046: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320394580"
+  name: COSPE
+  type: ImplementingAgency
+agencies_047: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328914254"
+  name: MTI
+  type: ImplementingAgency
+agencies_048: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328643660"
+  name: IEN-NI
+  type: ImplementingAgency
+agencies_049: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361297992"
+  name: "Gobierno de Nicaragua"
+  type: ContractedAgency
+agencies_050: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360959742"
+  name: CEPRESI
+  type: ContractedAgency
+agencies_051: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320191629"
+  name: "Alcadia RAAN"
+  type: ImplementingAgency
+agencies_052: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360959745"
+  name: "CHRISTIAN AID"
+  type: ContractedAgency
+agencies_053: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361365642"
+  name: "HIRUGARREN MUNDUA TA BAKEA-PAZ Y TERCER MUNDO"
+  type: ContractedAgency
+agencies_054: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329117200"
+  name: PROMIPYME
+  type: ImplementingAgency
+agencies_055: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320191631"
+  name: "AMIGOS DE LA TIERRA"
+  type: ImplementingAgency
+agencies_056: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377863797"
+  name: "Welthaus - Alemania"
+  type: ContractedAgency
+agencies_057: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328846612"
+  name: "Movimiento Laico para América Latina (MLAL) - Italia"
+  type: ImplementingAgency
+agencies_058: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360892095"
+  name: "CARE International - Francia"
+  type: ContractedAgency
+agencies_059: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369682364"
+  name: PDDH
+  type: ContractedAgency
+agencies_060: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369479419"
+  name: "Ministerio Agropecuario y Forestal de Nicaragua (MAGFOR)"
+  type: ContractedAgency
+agencies_061: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320462233"
+  name: ENATREL
+  type: ImplementingAgency
+agencies_062: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377796151"
+  name: "Univ. Colombo"
+  type: ContractedAgency
+agencies_063: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377796149"
+  name: UNICEF
+  type: ContractedAgency
+agencies_064: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377796154"
+  name: "Verein z Förderung Städtepartners. Kreuzberg Sn Rafael del Sur e.V"
+  type: ContractedAgency
+agencies_065: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369682365"
+  name: PGR
+  type: ContractedAgency
+agencies_066: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369750013"
+  name: PROMIPYME
+  type: ContractedAgency
+agencies_067: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328643657"
+  name: IBIS-Dinamarca
+  type: ImplementingAgency
+agencies_068: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320529874"
+  name: EPN
+  type: ImplementingAgency
+agencies_069: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329252506"
+  name: UNDP
+  type: ImplementingAgency
+agencies_070: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369479421"
+  name: "Ministerio de Fomento Industria y Comercio (MIFIC)"
+  type: ContractedAgency
+agencies_071: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369276471"
+  name: IBIS-Dinamarca
+  type: ContractedAgency
+agencies_072: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328778958"
+  name: Ixchen
+  type: ImplementingAgency
+agencies_073: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320529883"
+  name: Fondeagro
+  type: ImplementingAgency
+agencies_074: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320123982"
+  name: ACE
+  type: ImplementingAgency
+agencies_075: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369614723"
+  name: PAM
+  type: ContractedAgency
+agencies_076: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320529877"
+  name: FARMAMUNDI
+  type: ImplementingAgency
+agencies_077: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328643661"
+  name: IICA
+  type: ImplementingAgency
+agencies_078: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361230344"
+  name: "FUNDACION INTERMON OXFAM"
+  type: ContractedAgency
+agencies_079: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361162688"
+  name: EPTISA
+  type: ContractedAgency
+agencies_080: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369885321"
+  name: UNFPA
+  type: ContractedAgency
+agencies_081: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337433932"
+  name: "Initiative Eine Welt"
+  type: ImplementingAgency
+agencies_082: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369885312"
+  name: "The World Bank"
+  type: ContractedAgency
+agencies_083: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329049551"
+  name: PDDH
+  type: ImplementingAgency
+agencies_084: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320732829"
+  name: "HIVOS - Holanda"
+  type: ImplementingAgency
+agencies_085: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320732823"
+  name: "Handicap International Luxembourg a.s.b.l."
+  type: ImplementingAgency
+agencies_086: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369411771"
+  name: ISCOD
+  type: ContractedAgency
+agencies_087: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361297993"
+  name: "Gobierno RAAN"
+  type: ContractedAgency
+agencies_088: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329049553"
+  name: PMA
+  type: ImplementingAgency
+agencies_089: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369885311"
+  name: "Terres des Hommes - Italia*"
+  type: ContractedAgency
+agencies_090: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320462234"
+  name: "ENTRECULTURAS FE Y ALEGRIA"
+  type: ImplementingAgency
+agencies_091: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360959747"
+  name: CISAS
+  type: ContractedAgency
+agencies_092: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320462227"
+  name: EIRENE
+  type: ImplementingAgency
+agencies_093: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329252503"
+  name: UNAN
+  type: ImplementingAgency
+agencies_094: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360824449"
+  name: "ACRA - Italia"
+  type: ContractedAgency
+agencies_095: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320462229"
+  name: "Embassy of Norway"
+  type: ImplementingAgency
+agencies_096: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320191635"
+  name: "ACRA - Italia"
+  type: ImplementingAgency
+agencies_097: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320462231"
+  name: "Embassy of the Netherlands"
+  type: ImplementingAgency
+agencies_098: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320597528"
+  name: "Frères des Hommes Luxembourg a.s.b.l."
+  type: ImplementingAgency
+agencies_099: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361162693"
+  name: FISE
+  type: ContractedAgency
+agencies_100: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369276476"
+  name: INAFOR
+  type: ContractedAgency
+agencies_101: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369817671"
+  name: "Swedish Mission Council"
+  type: ContractedAgency
+agencies_102: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329049558"
+  name: PROATEC
+  type: ImplementingAgency
+agencies_103: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328846610"
+  name: "Ministerio del Trabajo (MITRAB)"
+  type: ImplementingAgency
+agencies_104: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369547073"
+  name: OAS
+  type: ContractedAgency
+agencies_105: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320259278"
+  name: "Broederlijk Delen - Bélgica"
+  type: ImplementingAgency
+agencies_106: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369411778"
+  name: MINED
+  type: ContractedAgency
+agencies_107: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369885318"
+  name: UNAN-León
+  type: ContractedAgency
+agencies_108: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377863801"
+  name: Lux-Development
+  type: ContractedAgency
+agencies_109: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369817672"
+  name: "Terra Nuova - Italia"
+  type: ContractedAgency
+agencies_110: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361095045"
+  name: "Embassy of the Netherlands"
+  type: ContractedAgency
+agencies_111: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320529879"
+  name: FISE
+  type: ImplementingAgency
+agencies_112: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337366286"
+  name: "MIRIAM "
+  type: ImplementingAgency
+agencies_113: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337230983"
+  name: "Welthaus - Alemania"
+  type: ImplementingAgency
+agencies_114: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337230991"
+  name: "Asociación Quincho Barrilete"
+  type: ImplementingAgency
+agencies_115: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369682372"
+  name: PROATEC
+  type: ContractedAgency
+agencies_116: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361297987"
+  name: "FVBCh Consortium"
+  type: ContractedAgency
+agencies_117: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360756795"
+  name: "Not Applicable"
+  type: ContractedAgency
+agencies_118: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369817669"
+  name: "Stiftung FUNDEVERDE"
+  type: ContractedAgency
+agencies_119: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377863803"
+  name: "Asociación de Instituciones Microfinancieras de Nicaragua (ASOMIF)"
+  type: ContractedAgency
+agencies_120: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328846608"
+  name: "Ministerio de Relaciones Exteriores (MINREX)"
+  type: ImplementingAgency
+agencies_121: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320259279"
+  name: "CARE - France"
+  type: ImplementingAgency
+agencies_122: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328981910"
+  name: "PAZ Y TERCER MUNDO"
+  type: ImplementingAgency
+agencies_123: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320732825"
+  name: "Hermanamiento Freiburg - Wiwilí e. V. - Alemania"
+  type: ImplementingAgency
+agencies_124: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329117205"
+  name: "SECOURS POPULAIRE FRANCAIS"
+  type: ImplementingAgency
+agencies_125: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320665180"
+  name: GRAAN
+  type: ImplementingAgency
+agencies_126: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320665177"
+  name: "Global Witness"
+  type: ImplementingAgency
+agencies_127: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369750021"
+  name: SETEC
+  type: ContractedAgency
+agencies_128: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361027395"
+  name: CPDH
+  type: ContractedAgency
+agencies_129: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361027398"
+  name: CSE
+  type: ContractedAgency
+agencies_130: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320259286"
+  name: "Centro Carter"
+  type: ImplementingAgency
+agencies_131: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337298641"
+  name: "Union Nacional de Agricultores y Ganaderos (UNAG)"
+  type: ImplementingAgency
+agencies_132: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328711314"
+  name: "Interact Worldwide - Gran Britania"
+  type: ImplementingAgency
+agencies_133: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337298632"
+  name: "Centro de Exportaciones e inversiones de Nicaragua (CEI)"
+  type: ImplementingAgency
+agencies_134: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369479427"
+  name: "MAIS - Italia "
+  type: ContractedAgency
+agencies_135: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377999102"
+  name: "ACDI/CIDA "
+  type: ContractedAgency
+agencies_136: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369750018"
+  name: REN
+  type: ContractedAgency
+agencies_137: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369547071"
+  name: "Nicaraguan CSOs "
+  type: ContractedAgency
+agencies_138: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329049559"
+  name: PRODEL
+  type: ImplementingAgency
+agencies_139: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337298639"
+  name: "Oficina de Organización de Estados Americanos (OEA) en Managua"
+  type: ImplementingAgency
+agencies_140: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360892093"
+  name: "CARE - France"
+  type: ContractedAgency
+agencies_141: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320462232"
+  name: ENACAL
+  type: ImplementingAgency
+agencies_142: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329117201"
+  name: PTM
+  type: ImplementingAgency
+agencies_143: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328981911"
+  name: "Paz y Tercer Mundo (PTM) - España"
+  type: ImplementingAgency
+agencies_144: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320597527"
+  name: "FOS - Bélgica"
+  type: ImplementingAgency
+agencies_145: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377796152"
+  name: "University of Helsinki"
+  type: ContractedAgency
+agencies_146: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337366290"
+  name: "Intern. Federation of Red Cross etc. (IFRC)"
+  type: ImplementingAgency
+agencies_147: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337163339"
+  name: UNOPS
+  type: ImplementingAgency
+agencies_148: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320326936"
+  name: CONICYT
+  type: ImplementingAgency
+agencies_149: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369479424"
+  name: "Ministerio del Trabajo (MITRAB)"
+  type: ContractedAgency
+agencies_150: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328711307"
+  name: INIDE
+  type: ImplementingAgency
+agencies_151: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329184856"
+  name: "Swedish Coopertive Centre"
+  type: ImplementingAgency
+agencies_152: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369479420"
+  name: "Ministerio de Educación"
+  type: ContractedAgency
+agencies_153: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361027397"
+  name: "Cruz Roja - Holanda"
+  type: ContractedAgency
+agencies_154: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369411776"
+  name: "MHCP "
+  type: ContractedAgency
+agencies_155: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369411769"
+  name: IPADE
+  type: ContractedAgency
+agencies_156: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377796150"
+  name: UNIDO
+  type: ContractedAgency
+agencies_157: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320462226"
+  name: "Diakonia Sweden"
+  type: ImplementingAgency
+agencies_158: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369817670"
+  name: "Swedish Coopertive Centre"
+  type: ContractedAgency
+agencies_159: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320326934"
+  name: CNU
+  type: ImplementingAgency
+agencies_160: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328778956"
+  name: IP-Stuttgart
+  type: ImplementingAgency
+agencies_161: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377931455"
+  name: "Union Nacional de Agricultores y Ganaderos (UNAG)"
+  type: ContractedAgency
+agencies_162: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320732822"
+  name: GVC
+  type: ImplementingAgency
+agencies_163: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369750022"
+  name: "several local NGOs"
+  type: ContractedAgency
+agencies_164: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337230990"
+  name: "Asociación de Mujeres Nicaragüense Luisa Amanda Espinoza (AMNLAE)"
+  type: ImplementingAgency
+agencies_165: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320529875"
+  name: EPTISA
+  type: ImplementingAgency
+agencies_166: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377931446"
+  name: "Centro de Exportaciones e inversiones de Nicaragua (CEI)"
+  type: ContractedAgency
+agencies_167: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329117203"
+  name: "Regional gvts"
+  type: ImplementingAgency
+agencies_168: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361095046"
+  name: ENACAL
+  type: ContractedAgency
+agencies_169: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329049556"
+  name: POLISAL
+  type: ImplementingAgency
+agencies_170: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337433930"
+  name: "International Food Production Research Institute (IFPRI) -CA"
+  type: ImplementingAgency
+agencies_171: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377863806"
+  name: "Cámara de Comercio de Nicaragua (CACONIC)"
+  type: ContractedAgency
+agencies_172: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328778959"
+  name: MAEE
+  type: ImplementingAgency
+agencies_173: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361162689"
+  name: FAO
+  type: ContractedAgency
+agencies_174: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320394585"
+  name: DANIDA
+  type: ImplementingAgency
+agencies_175: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320191634"
+  name: ASDB
+  type: ImplementingAgency
+agencies_176: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328711308"
+  name: INPYME
+  type: ImplementingAgency
+agencies_177: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369614725"
+  name: "Paz y Tercer Mundo (PTM) - España"
+  type: ContractedAgency
+agencies_178: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329049552"
+  name: PGR
+  type: ImplementingAgency
+agencies_179: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369411770"
+  name: IP-Stuttgart
+  type: ContractedAgency
+agencies_180: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361162687"
+  name: EPN
+  type: ContractedAgency
+agencies_181: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361027394"
+  name: COSPE
+  type: ContractedAgency
+agencies_182: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320259282"
+  name: "Caritas - Luxemburgo"
+  type: ImplementingAgency
+agencies_183: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328914259"
+  name: OAS
+  type: ImplementingAgency
+agencies_184: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328914257"
+  name: "Nicaraguan CSOs "
+  type: ImplementingAgency
+agencies_185: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360756801"
+  name: Agroconsulting
+  type: ContractedAgency
+agencies_186: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369614716"
+  name: OXFAM
+  type: ContractedAgency
+agencies_187: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320597526"
+  name: "Forum Syd"
+  type: ImplementingAgency
+agencies_188: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360756799"
+  name: "Africa 70"
+  type: ContractedAgency
+agencies_189: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377931453"
+  name: "Oficina de Organización de Estados Americanos (OEA) en Managua"
+  type: ContractedAgency
+agencies_190: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377863802"
+  name: "Cruz Roja Nicaragüense"
+  type: ContractedAgency
+agencies_191: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329252501"
+  name: UCRESEP
+  type: ImplementingAgency
+agencies_192: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377999098"
+  name: "EyT – Etica y Transparencia"
+  type: ContractedAgency
+agencies_193: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320462230"
+  name: "Embassy of Sweden"
+  type: ImplementingAgency
+agencies_194: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360824450"
+  name: "Assemblea Nacional"
+  type: ContractedAgency
+agencies_195: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337298638"
+  name: "OEA sede Whashington"
+  type: ImplementingAgency
+agencies_196: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329252499"
+  name: "The World Bank"
+  type: ImplementingAgency
+agencies_197: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377796157"
+  name: VSF
+  type: ContractedAgency
+agencies_198: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320191636"
+  name: "Assemblea Nacional"
+  type: ImplementingAgency
+agencies_199: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337230989"
+  name: "Asociación de Instituciones Microfinancieras de Nicaragua (ASOMIF)"
+  type: ImplementingAgency
+agencies_200: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369276474"
+  name: IEN-NI
+  type: ContractedAgency
+agencies_201: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369614722"
+  name: PAHO
+  type: ContractedAgency
+agencies_202: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320123987"
+  name: Agroconsulting
+  type: ImplementingAgency
+agencies_203: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369682370"
+  name: POLISAL
+  type: ContractedAgency
+agencies_204: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369276475"
+  name: IICA
+  type: ContractedAgency
+agencies_205: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377796148"
+  name: UNI
+  type: ContractedAgency
+agencies_206: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337366287"
+  name: CONA
+  type: ImplementingAgency
+agencies_207: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369344128"
+  name: "Interact Worldwide - Gran Britania"
+  type: ContractedAgency
+agencies_208: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369547072"
+  name: NITLAPAN
+  type: ContractedAgency
+agencies_209: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360959748"
+  name: CNU
+  type: ContractedAgency
+agencies_210: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361297988"
+  name: GEZA
+  type: ContractedAgency
+agencies_211: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369682371"
+  name: PPDH
+  type: ContractedAgency
+agencies_212: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369682368"
+  name: PN
+  type: ContractedAgency
+agencies_213: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329252505"
+  name: UNAN-Managua
+  type: ImplementingAgency
+agencies_214: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361230339"
+  name: "Forum Syd"
+  type: ContractedAgency
+agencies_215: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377863804"
+  name: "Asociación de Mujeres Nicaragüense Luisa Amanda Espinoza (AMNLAE)"
+  type: ContractedAgency
+agencies_216: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320394582"
+  name: "CRIC - Italia"
+  type: ImplementingAgency
+agencies_217: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361162694"
+  name: FNI
+  type: ContractedAgency
+agencies_218: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377931452"
+  name: "OEA sede Whashington"
+  type: ContractedAgency
+agencies_219: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329184854"
+  name: "SOS Villages d'enfants monde a.s.b.l."
+  type: ImplementingAgency
+agencies_220: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360892097"
+  name: "Catholic Institut for international Relations"
+  type: ContractedAgency
+agencies_221: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369344123"
+  name: "Instituto de la Vivienda Urbana y Rural (INVUR)"
+  type: ContractedAgency
+agencies_222: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361297994"
+  name: GRAAN
+  type: ContractedAgency
+agencies_223: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361297990"
+  name: "Global Witness"
+  type: ContractedAgency
+agencies_224: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361365643"
+  name: "HIVOS - Holanda"
+  type: ContractedAgency
+agencies_225: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337163337"
+  name: "Univ. Colombo"
+  type: ImplementingAgency
+agencies_226: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360959740"
+  name: CEPREDENAC
+  type: ContractedAgency
+agencies_227: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369547070"
+  name: NDI
+  type: ContractedAgency
+agencies_228: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360892092"
+  name: "Broederlijk Delen - Bélgica"
+  type: ContractedAgency
+agencies_229: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377863805"
+  name: "Asociación Quincho Barrilete"
+  type: ContractedAgency
+agencies_230: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369817664"
+  name: SNV
+  type: ContractedAgency
+agencies_231: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361297985"
+  name: FUNDENIC
+  type: ContractedAgency
+agencies_232: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360824446"
+  name: AMUNIC
+  type: ContractedAgency
+agencies_233: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320394584"
+  name: CSE
+  type: ImplementingAgency
+agencies_234: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369750014"
+  name: PTM
+  type: ContractedAgency
+agencies_235: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361162697"
+  name: Fondeagro
+  type: ContractedAgency
+agencies_236: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329049554"
+  name: PN
+  type: ImplementingAgency
+agencies_237: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320123984"
+  name: "ACTED - Francia"
+  type: ImplementingAgency
+agencies_238: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361230345"
+  name: "Fundacion Puntos de Encuentro"
+  type: ContractedAgency
+agencies_239: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329184855"
+  name: "Stiftung FUNDEVERDE"
+  type: ImplementingAgency
+agencies_240: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369817662"
+  name: SINAPRED
+  type: ContractedAgency
+agencies_241: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360756797"
+  name: ACRA
+  type: ContractedAgency
+agencies_242: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369411774"
+  name: MCN
+  type: ContractedAgency
+agencies_243: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337366284"
+  name: "EyT – Etica y Transparencia"
+  type: ImplementingAgency
+agencies_244: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328643658"
+  name: ICC
+  type: ImplementingAgency
+agencies_245: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360824444"
+  name: "Alcadia RAAS"
+  type: ContractedAgency
+agencies_246: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328981903"
+  name: OXFAM
+  type: ImplementingAgency
+agencies_247: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320597523"
+  name: "FONDS VOOR - F.O.S."
+  type: ImplementingAgency
+agencies_248: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328711312"
+  name: "Instituto Nicaraguense de Pesca (INPESCA). "
+  type: ImplementingAgency
+agencies_249: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329117202"
+  name: RAMA
+  type: ImplementingAgency
+agencies_250: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361297995"
+  name: GRAAS
+  type: ContractedAgency
+agencies_251: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377931454"
+  name: "Pan American Social Marketing Organization (PASMO) Nicaragua"
+  type: ContractedAgency
+agencies_252: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369411772"
+  name: Ixchen
+  type: ContractedAgency
+agencies_253: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337298634"
+  name: "Fundación Xochiquetzal"
+  type: ImplementingAgency
+agencies_254: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369817665"
+  name: "Socorro Popular Francés (SPF) - Francia"
+  type: ContractedAgency
+agencies_255: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377931449"
+  name: "Instituo Nicaragüense de Desarrollo (INDE)"
+  type: ContractedAgency
+agencies_256: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320191632"
+  name: AMUNIC
+  type: ImplementingAgency
+agencies_257: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337163335"
+  name: UNICEF
+  type: ImplementingAgency
+agencies_258: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337298636"
+  name: "Instituto Democratico Multipartidario"
+  type: ImplementingAgency
+agencies_259: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337230986"
+  name: WWF
+  type: ImplementingAgency
+agencies_260: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328981906"
+  name: TROCAIRE
+  type: ImplementingAgency
+agencies_261: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361230336"
+  name: "FONDS VOOR - F.O.S."
+  type: ContractedAgency
+agencies_262: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377863798"
+  name: "Werkhof - Alemania"
+  type: ContractedAgency
+agencies_263: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361230342"
+  name: "Frères des Hommes Luxembourg a.s.b.l."
+  type: ContractedAgency
+agencies_264: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361365635"
+  name: GVC
+  type: ContractedAgency
+agencies_265: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320326929"
+  name: CEPREV
+  type: ImplementingAgency
+agencies_266: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369479422"
+  name: "Ministerio de Relaciones Exteriores (MINREX)"
+  type: ContractedAgency
+agencies_267: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320394579"
+  name: "Corte Suprema de Justicia (CSJ)"
+  type: ImplementingAgency
+agencies_268: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337366283"
+  name: INTUR
+  type: ImplementingAgency
+agencies_269: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361162695"
+  name: FOMAV
+  type: ContractedAgency
+agencies_270: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328981904"
+  name: "OXFAM - España"
+  type: ImplementingAgency
+agencies_271: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320259281"
+  name: "CARE International - Francia"
+  type: ImplementingAgency
+agencies_272: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328711313"
+  name: INTA
+  type: ImplementingAgency
+agencies_273: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320326931"
+  name: "CHRISTIAN AID"
+  type: ImplementingAgency
+agencies_274: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328914255"
+  name: "National Police"
+  type: ImplementingAgency
+agencies_275: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328643664"
+  name: INCAP
+  type: ImplementingAgency
+agencies_276: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377999097"
+  name: INTUR
+  type: ContractedAgency
+agencies_277: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361027393"
+  name: "Corte Suprema de Justicia (CSJ)"
+  type: ContractedAgency
+agencies_278: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369276472"
+  name: ICC
+  type: ContractedAgency
+agencies_279: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320326933"
+  name: CISAS
+  type: ImplementingAgency
+agencies_280: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369682366"
+  name: PMA
+  type: ContractedAgency
+agencies_281: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328643662"
+  name: INAFOR
+  type: ImplementingAgency
+agencies_282: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361095039"
+  name: "Diakonia Sweden"
+  type: ContractedAgency
+agencies_283: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361365644"
+  name: "HORIZONT 3000 - Austria"
+  type: ContractedAgency
+agencies_284: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369614721"
+  name: NOVIB
+  type: ContractedAgency
+agencies_285: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320123986"
+  name: "Agro Acción Alemana (DWHH) "
+  type: ImplementingAgency
+agencies_286: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360756798"
+  name: "ACTED - Francia"
+  type: ContractedAgency
+agencies_287: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329117208"
+  name: "several local NGOs"
+  type: ImplementingAgency
+agencies_288: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320394581"
+  name: CPDH
+  type: ImplementingAgency
+agencies_289: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361365634"
+  name: GTZ
+  type: ContractedAgency
+agencies_290: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337163342"
+  name: "Veterenarios Sin Fronteras - Francia"
+  type: ImplementingAgency
+agencies_291: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377931451"
+  name: "Ministerio de la Familia"
+  type: ContractedAgency
+agencies_292: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369344124"
+  name: "Instituto Nicaraguense de Fomento Municipal (INIFOM)"
+  type: ContractedAgency
+agencies_293: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328914262"
+  name: OPS
+  type: ImplementingAgency
+agencies_294: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369614719"
+  name: "OXFAM - Gran Bretaña"
+  type: ContractedAgency
+agencies_295: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328846604"
+  name: MINGOB
+  type: ImplementingAgency
+agencies_296: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361027389"
+  name: CONISIDA
+  type: ContractedAgency
+agencies_297: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320123988"
+  name: AIDEP
+  type: ImplementingAgency
+agencies_298: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328778963"
+  name: "Min Gobernación"
+  type: ImplementingAgency
+agencies_299: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337298635"
+  name: "Instituo Nicaragüense de Desarrollo (INDE)"
+  type: ImplementingAgency
+agencies_300: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320665181"
+  name: GRAAS
+  type: ImplementingAgency
+agencies_301: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360824451"
+  name: "Association Solidarité Luxembourg-Nicaragua a.s.b.l."
+  type: ContractedAgency
+agencies_302: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361230338"
+  name: "Foro de Mujeres"
+  type: ContractedAgency
+agencies_303: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361027392"
+  name: "Cooperazione Italiana"
+  type: ContractedAgency
+agencies_304: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320597530"
+  name: "FUNDACION INTERMON OXFAM"
+  type: ImplementingAgency
+agencies_305: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329184853"
+  name: "SOLIDARIDAD INTERNACIONAL"
+  type: ImplementingAgency
+agencies_306: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377796155"
+  name: "VEREIN STAEDTEPARTNERSCHAFT FREIBURG-WIWILI IN NICARAGUA EV"
+  type: ContractedAgency
+agencies_307: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328914256"
+  name: NDI
+  type: ImplementingAgency
+agencies_308: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320326927"
+  name: CEPREDENAC
+  type: ImplementingAgency
+agencies_309: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369547076"
+  name: OPS
+  type: ContractedAgency
+agencies_310: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360959746"
+  name: CIES
+  type: ContractedAgency
+agencies_311: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337230984"
+  name: "Werkhof - Alemania"
+  type: ImplementingAgency
+agencies_312: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320191637"
+  name: "Association Solidarité Luxembourg-Nicaragua a.s.b.l."
+  type: ImplementingAgency
+agencies_313: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329184851"
+  name: SNV
+  type: ImplementingAgency
+agencies_314: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369344120"
+  name: "INGENIEROS SIN FRONTERAS"
+  type: ContractedAgency
+agencies_315: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329252504"
+  name: UNAN-León
+  type: ImplementingAgency
+agencies_316: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369885316"
+  name: UNAN
+  type: ContractedAgency
+agencies_317: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361365640"
+  name: "Hilfswerk Austria "
+  type: ContractedAgency
+agencies_318: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360756796"
+  name: ACE
+  type: ContractedAgency
+agencies_319: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377999104"
+  name: "Intern. Federation of Red Cross etc. (IFRC)"
+  type: ContractedAgency
+agencies_320: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320597529"
+  name: "Fundación CODESPA"
+  type: ImplementingAgency
+agencies_321: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328981908"
+  name: PAHO
+  type: ImplementingAgency
+agencies_322: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377999095"
+  name: CPML-N
+  type: ContractedAgency
+agencies_323: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337298633"
+  name: "Comision Presidencial de Promoción de Inversiones (PRONICARAGUA)"
+  type: ImplementingAgency
+agencies_324: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329049560"
+  name: PROINTEC
+  type: ImplementingAgency
+agencies_325: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361095044"
+  name: "Embassy of Sweden"
+  type: ContractedAgency
+agencies_326: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369344121"
+  name: INIDE
+  type: ContractedAgency
+agencies_327: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361027390"
+  name: "Contraloría General de la República (CGR)"
+  type: ContractedAgency
+agencies_328: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369750023"
+  name: SICA
+  type: ContractedAgency
+agencies_329: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320259285"
+  name: CENIDH
+  type: ImplementingAgency
+agencies_330: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377863800"
+  name: WWF
+  type: ContractedAgency
+agencies_331: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328914253"
+  name: MOVIMONDO
+  type: ImplementingAgency
+agencies_332: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328778957"
+  name: ISCOD
+  type: ImplementingAgency
+agencies_333: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360959750"
+  name: CONICYT
+  type: ContractedAgency
+agencies_334: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320665178"
+  name: "Gobierno de Nicaragua"
+  type: ImplementingAgency
+agencies_335: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328643666"
+  name: INETER
+  type: ImplementingAgency
+agencies_336: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360824448"
+  name: ASDB
+  type: ContractedAgency
+agencies_337: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361027399"
+  name: DANIDA
+  type: ContractedAgency
+agencies_338: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337163338"
+  name: "University of Helsinki"
+  type: ImplementingAgency
+agencies_339: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337163336"
+  name: UNIDO
+  type: ImplementingAgency
+agencies_340: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337230992"
+  name: "Cámara de Comercio de Nicaragua (CACONIC)"
+  type: ImplementingAgency
+agencies_341: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320665176"
+  name: "Global Development Links (GDL)"
+  type: ImplementingAgency
+agencies_342: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328778961"
+  name: "MEDICOS DEL MUNDO"
+  type: ImplementingAgency
+agencies_343: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320326928"
+  name: CEPRESI
+  type: ImplementingAgency
+agencies_344: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320462225"
+  name: DGI
+  type: ImplementingAgency
+agencies_345: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361230343"
+  name: "Fundación CODESPA"
+  type: ContractedAgency
+agencies_346: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361095047"
+  name: ENATREL
+  type: ContractedAgency
+agencies_347: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377999101"
+  name: CONA
+  type: ContractedAgency
+agencies_348: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361297986"
+  name: FUNICA
+  type: ContractedAgency
+agencies_349: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337230985"
+  name: "World Bank"
+  type: ImplementingAgency
+agencies_350: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320732821"
+  name: GTZ
+  type: ImplementingAgency
+agencies_351: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320732828"
+  name: "HIRUGARREN MUNDUA TA BAKEA-PAZ Y TERCER MUNDO"
+  type: ImplementingAgency
+agencies_352: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320259287"
+  name: "Centro Humbolt"
+  type: ImplementingAgency
+agencies_353: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328711315"
+  name: "INTERMON OXFAM"
+  type: ImplementingAgency
+agencies_354: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369817663"
+  name: SISCA
+  type: ContractedAgency
+agencies_355: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369344122"
+  name: INPYME
+  type: ContractedAgency
+agencies_356: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369479418"
+  name: MINGOB
+  type: ContractedAgency
+agencies_357: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329184857"
+  name: "Swedish Mission Council"
+  type: ImplementingAgency
+agencies_358: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320665179"
+  name: "Gobierno RAAN"
+  type: ImplementingAgency
+agencies_359: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360756803"
+  name: "Alcadia Las Segovias"
+  type: ContractedAgency
+agencies_360: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320123985"
+  name: "Africa 70"
+  type: ImplementingAgency
+agencies_361: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328981902"
+  name: "OTC Nicaragua"
+  type: ImplementingAgency
+agencies_362: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360824445"
+  name: "AMIGOS DE LA TIERRA"
+  type: ContractedAgency
+agencies_363: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361365639"
+  name: "Hermanamiento Kreuzberg - San Rafael del Sur e. V. - Alemania"
+  type: ContractedAgency
+agencies_364: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361365638"
+  name: "Hermanamiento Freiburg - Wiwilí e. V. - Alemania"
+  type: ContractedAgency
+agencies_365: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337366285"
+  name: OIT
+  type: ImplementingAgency
+agencies_366: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320597531"
+  name: "Fundacion Puntos de Encuentro"
+  type: ImplementingAgency
+agencies_367: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369547068"
+  name: MTI
+  type: ContractedAgency
+agencies_368: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320529882"
+  name: "Fondation Caritas Luxembourg"
+  type: ImplementingAgency
+agencies_369: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361095048"
+  name: "ENTRECULTURAS FE Y ALEGRIA"
+  type: ContractedAgency
+agencies_370: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337298640"
+  name: "Pan American Social Marketing Organization (PASMO) Nicaragua"
+  type: ImplementingAgency
+agencies_371: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369885314"
+  name: UCRESEP
+  type: ContractedAgency
+agencies_372: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361095038"
+  name: DGI
+  type: ContractedAgency
+agencies_373: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320191633"
+  name: AN
+  type: ImplementingAgency
+agencies_374: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360892101"
+  name: "Centro Humbolt"
+  type: ContractedAgency
+agencies_375: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377931450"
+  name: "Instituto Democratico Multipartidario"
+  type: ContractedAgency
+agencies_376: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377863799"
+  name: "World Bank"
+  type: ContractedAgency
+agencies_377: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361162696"
+  name: "Fondation Caritas Luxembourg"
+  type: ContractedAgency
+agencies_378: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328711311"
+  name: "Instituto Nicaraguense de la Mujer (INIM)"
+  type: ImplementingAgency
+agencies_379: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320123981"
+  name: "Not Applicable"
+  type: ImplementingAgency
+agencies_380: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360824447"
+  name: AN
+  type: ContractedAgency
+agencies_381: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369614720"
+  name: TROCAIRE
+  type: ContractedAgency
+agencies_382: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328846606"
+  name: "Ministerio de Educación"
+  type: ImplementingAgency
+agencies_383: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328778964"
+  name: MINED
+  type: ImplementingAgency
+agencies_384: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328846607"
+  name: "Ministerio de Fomento Industria y Comercio (MIFIC)"
+  type: ImplementingAgency
+agencies_385: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328914260"
+  name: "OIKOS - Portugal"
+  type: ImplementingAgency
+agencies_386: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329117204"
+  name: REN
+  type: ImplementingAgency
+agencies_387: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369885320"
+  name: UNDP
+  type: ContractedAgency
+agencies_388: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377796156"
+  name: "Veterenarios Sin Fronteras - Francia"
+  type: ContractedAgency
+agencies_389: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369344129"
+  name: "INTERMON OXFAM"
+  type: ContractedAgency
+agencies_390: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369344126"
+  name: "Instituto Nicaraguense de Pesca (INPESCA). "
+  type: ContractedAgency
+agencies_391: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320529880"
+  name: FNI
+  type: ImplementingAgency
+agencies_392: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369479425"
+  name: "Minsterio del Ambiente u los Recursos Naturales (MARENA)"
+  type: ContractedAgency
+agencies_393: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329184852"
+  name: "Socorro Popular Francés (SPF) - Francia"
+  type: ImplementingAgency
+agencies_394: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329184849"
+  name: SINAPRED
+  type: ImplementingAgency
+agencies_395: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369682374"
+  name: PROINTEC
+  type: ContractedAgency
+agencies_396: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369750019"
+  name: "SECOURS POPULAIRE FRANCAIS"
+  type: ContractedAgency
+agencies_397: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369547075"
+  name: "ÖNSI GmbH"
+  type: ContractedAgency
+agencies_398: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369614718"
+  name: "OXFAM - España"
+  type: ContractedAgency
+agencies_399: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320123989"
+  name: "Alcadia Las Segovias"
+  type: ImplementingAgency
+agencies_400: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329049557"
+  name: PPDH
+  type: ImplementingAgency
+agencies_401: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329252502"
+  name: UNA
+  type: ImplementingAgency
+agencies_402: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328778962"
+  name: "MHCP "
+  type: ImplementingAgency
+agencies_403: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320732826"
+  name: "Hermanamiento Kreuzberg - San Rafael del Sur e. V. - Alemania"
+  type: ImplementingAgency
+agencies_404: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369411777"
+  name: "Min Gobernación"
+  type: ContractedAgency
+agencies_405: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328914261"
+  name: "ÖNSI GmbH"
+  type: ImplementingAgency
+agencies_406: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337163340"
+  name: "Verein z Förderung Städtepartners. Kreuzberg Sn Rafael del Sur e.V"
+  type: ImplementingAgency
+agencies_407: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337163343"
+  name: VSF
+  type: ImplementingAgency
+agencies_408: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369817668"
+  name: "SOS Villages d'enfants monde a.s.b.l."
+  type: ContractedAgency
+agencies_409: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369276478"
+  name: INCAP
+  type: ContractedAgency
+agencies_410: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329184850"
+  name: SISCA
+  type: ImplementingAgency
+agencies_411: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328981909"
+  name: PAM
+  type: ImplementingAgency
+agencies_412: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329117207"
+  name: SETEC
+  type: ImplementingAgency
+agencies_413: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369885315"
+  name: UNA
+  type: ContractedAgency
+agencies_414: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360892099"
+  name: CENIDH
+  type: ContractedAgency
+agencies_415: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369479426"
+  name: "Movimiento Laico para América Latina (MLAL) - Italia"
+  type: ContractedAgency
+agencies_416: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360824452"
+  name: "BGR "
+  type: ContractedAgency
+agencies_417: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320191638"
+  name: "BGR "
+  type: ImplementingAgency
+agencies_418: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369750020"
+  name: SERENA-RAAS
+  type: ContractedAgency
+agencies_419: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361095043"
+  name: "Embassy of Norway"
+  type: ContractedAgency
+agencies_420: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337366289"
+  name: "Embassy of Denmark"
+  type: ImplementingAgency
+agencies_421: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320326935"
+  name: "Comision Interamericana de Derechos Humanos - OEA"
+  type: ImplementingAgency
+agencies_422: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377999100"
+  name: "MIRIAM "
+  type: ContractedAgency
+agencies_423: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328778960"
+  name: MCN
+  type: ImplementingAgency
+agencies_424: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361230346"
+  name: FUNDEMOS
+  type: ContractedAgency
+agencies_425: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328846613"
+  name: "MAIS - Italia "
+  type: ImplementingAgency
+agencies_426: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329049555"
+  name: "Policía Nacional de Nicaragua"
+  type: ImplementingAgency
+agencies_427: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360959744"
+  name: CESTAS
+  type: ContractedAgency
+agencies_428: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320732830"
+  name: "HORIZONT 3000 - Austria"
+  type: ImplementingAgency
+agencies_429: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337366281"
+  name: CPML-N
+  type: ImplementingAgency
+agencies_430: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328981907"
+  name: NOVIB
+  type: ImplementingAgency
+agencies_431: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360892094"
+  name: "CARE International - Alemania"
+  type: ContractedAgency
+agencies_432: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328778955"
+  name: IPADE
+  type: ImplementingAgency
+agencies_433: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360959749"
+  name: "Comision Interamericana de Derechos Humanos - OEA"
+  type: ContractedAgency
+agencies_434: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320665175"
+  name: GEZA
+  type: ImplementingAgency
+agencies_435: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320259284"
+  name: CATIE
+  type: ImplementingAgency
+agencies_436: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377796153"
+  name: UNOPS
+  type: ContractedAgency
+agencies_437: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320665173"
+  name: FUNICA
+  type: ImplementingAgency
+agencies_438: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377931448"
+  name: "Fundación Xochiquetzal"
+  type: ContractedAgency
+agencies_439: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320191630"
+  name: "Alcadia RAAS"
+  type: ImplementingAgency
+agencies_440: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361365637"
+  name: "Health Unlimited - Gran Bretaña"
+  type: ContractedAgency
+agencies_441: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369479423"
+  name: "Ministerio de Salud (MINSA)"
+  type: ContractedAgency
+agencies_442: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369885313"
+  name: UCA
+  type: ContractedAgency
+agencies_443: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320597525"
+  name: "Foro de Mujeres"
+  type: ImplementingAgency
+agencies_444: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320123983"
+  name: ACRA
+  type: ImplementingAgency
+agencies_445: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360892100"
+  name: "Centro Carter"
+  type: ContractedAgency
+agencies_446: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369817666"
+  name: "SOLIDARIDAD INTERNACIONAL"
+  type: ContractedAgency
+agencies_447: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369411775"
+  name: "MEDICOS DEL MUNDO"
+  type: ContractedAgency
+agencies_448: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369547069"
+  name: "National Police"
+  type: ContractedAgency
+agencies_449: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369750015"
+  name: RAMA
+  type: ContractedAgency
+agencies_450: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320394578"
+  name: "Cooperazione Italiana"
+  type: ImplementingAgency
+agencies_451: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320732827"
+  name: "Hilfswerk Austria "
+  type: ImplementingAgency
+agencies_452: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328643665"
+  name: INEC
+  type: ImplementingAgency
+agencies_453: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320529876"
+  name: FAO
+  type: ImplementingAgency
+agencies_454: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360756800"
+  name: "Agro Acción Alemana (DWHH) "
+  type: ContractedAgency
+agencies_455: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328711306"
+  name: "INGENIEROS SIN FRONTERAS"
+  type: ImplementingAgency
+agencies_456: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369614724"
+  name: "PAZ Y TERCER MUNDO"
+  type: ContractedAgency
+agencies_457: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360756802"
+  name: AIDEP
+  type: ContractedAgency
+agencies_458: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328711310"
+  name: "Instituto Nicaraguense de Fomento Municipal (INIFOM)"
+  type: ImplementingAgency
+agencies_459: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337230988"
+  name: "Cruz Roja Nicaragüense"
+  type: ImplementingAgency
+agencies_460: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328643659"
+  name: IDR
+  type: ImplementingAgency
+agencies_461: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320394576"
+  name: CONISIDA
+  type: ImplementingAgency
+agencies_462: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337433931"
+  name: "SECRETARIA DE INTEGRACION ECONOMICA CENTROAMERICANA (SIECA)"
+  type: ImplementingAgency
+agencies_463: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369547066"
+  name: MOVIMONDO
+  type: ContractedAgency
+agencies_464: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320529881"
+  name: FOMAV
+  type: ImplementingAgency
+agencies_465: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369411773"
+  name: MAEE
+  type: ContractedAgency
+agencies_466: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361162690"
+  name: FARMAMUNDI
+  type: ContractedAgency
+agencies_467: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360959743"
+  name: CEPREV
+  type: ContractedAgency
+agencies_468: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329252507"
+  name: UNFPA
+  type: ImplementingAgency
+agencies_469: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328914258"
+  name: NITLAPAN
+  type: ImplementingAgency
+agencies_470: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337298637"
+  name: "Ministerio de la Familia"
+  type: ImplementingAgency
+agencies_471: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329252500"
+  name: UCA
+  type: ImplementingAgency
+agencies_472: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369614715"
+  name: "OTC Nicaragua"
+  type: ContractedAgency
+agencies_473: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320259283"
+  name: "Catholic Institut for international Relations"
+  type: ImplementingAgency
+agencies_474: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320326932"
+  name: CIES
+  type: ImplementingAgency
+agencies_475: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320326930"
+  name: CESTAS
+  type: ImplementingAgency
+agencies_476: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328981905"
+  name: "OXFAM - Gran Bretaña"
+  type: ImplementingAgency
+agencies_477: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377999099"
+  name: OIT
+  type: ContractedAgency
+agencies_478: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320597524"
+  name: FONIM
+  type: ImplementingAgency
+agencies_479: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361230340"
+  name: "FOS - Bélgica"
+  type: ContractedAgency
+agencies_480: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360892096"
+  name: "Caritas - Luxemburgo"
+  type: ContractedAgency
+agencies_481: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328643663"
+  name: INATEC
+  type: ImplementingAgency
+agencies_482: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329252498"
+  name: "Terres des Hommes - Italia*"
+  type: ImplementingAgency

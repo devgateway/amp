@@ -10,7 +10,6 @@ class CreateDonors < ActiveRecord::Migration
       t.integer   :total_staff_in_country
       t.integer   :total_expatriate_staff
       t.integer   :total_local_staff
-      t.string    :officer_responsible
       
       # Field Office
       t.text      :field_office_address

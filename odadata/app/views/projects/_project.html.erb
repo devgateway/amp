@@ -1,16 +1,16 @@
 <tr>
-	<td><%= link_to 'Show', project_path(project) %></td>
+	<td><%= factsheet_link(project) %></td>
 	<td><%= project.donor.name %></td>
 	<td><%= project.donor_project_number %></td>
 	<td><%= short_expander_tag(project.title) %></td>
 	<td class="currency" style="text-align: right">
-		<%= project.fundings.total_commitments %>
+		<%= (project.fundings.total_commitments.currency == nil) ? 'n/a' : project.fundings.total_commitments %>
 	</td>
 	<td class="currency" style="text-align: right">
-		<%= project.fundings.find_or_initialize_by_year(Time.now.year - 1).payments %>
+		<%= project.fundings.find_by_year(Time.now.year - 1).payments rescue 'n/a' %>
 	</td>
 	<td class="currency" style="text-align: right">
-		<%= project.funding_forecasts.find_or_initialize_by_year(Time.now.year).payments %>
+		<%= project.funding_forecasts.find_by_year(Time.now.year).payments rescue 'n/a' %>
 	</td>
 	<td>
 		<select onChange="location=this.value">

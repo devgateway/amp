@@ -1,7 +1,8 @@
 es:
   bluebook:
       title: EU Blue Book
-      
+
+      # Old structure:
       pages:
         contents: # Tabla de Contenidos
             toc: Contenidos
@@ -576,6 +577,8 @@ es:
           enlarged_chart: Haga click aquí para agrandar la image
           grant: Donación
           loan: Préstamo
+          data_missing_header: Falta datos de {{donor}} por {{year}}
+          data_missing_info: Lo sentimos pero este donante todavía no ha actualizado y/o publicado sus financiamientos de proyecto por {{year}}.
       
       explanatory_note:
           management_system: 'Por ejemplo: Ministerio de Relaciones Exteriores / Dirección de Cooperación para el Desarrollo dentro del Ministerio de Relaciones Exteriores/ Agencia Autónoma de Asistencia / otro (favor especifique)'

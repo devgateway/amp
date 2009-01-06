@@ -62,7 +62,7 @@ module MultiCurrency
   
     def to_s(unit = true)
       output_currency = MultiCurrency.output_currency || @currency
-      number = number_with_delimiter(self.in(output_currency).base_value.round)
+      number = number_with_delimiter(self.in(output_currency).to_i)
   
       if output_currency && unit
         number + " #{output_currency}"

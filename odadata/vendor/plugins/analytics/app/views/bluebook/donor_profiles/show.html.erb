@@ -35,7 +35,7 @@
 			</table>
 		</td>
 		<td width=40% valign=top>
-			<strong><%= lc(:aid_at_a_glance_in) %> <%= Time.now.year - 1 %></strong>
+			<strong><%= lc(:aid_at_a_glance_in) %> <%= year %></strong>
 			<table>
 				<tr>
 					<td><%= ll(:terms, :disbursements) %> / <%= ll(:terms, :eu_short) %> <%= ll(:terms, :disbursements) %></td>
@@ -152,8 +152,8 @@
 						<table>
 							<tr>
 								<td class="title"></td>
-								<td class="title"><%= Time.now.year - 1 %></td>
-								<td class="title"><%= Time.now.year %> *</td>
+								<td class="title"><%= year %></td>
+								<td class="title"><%= year + 1 %> *</td>
 							</tr>
 							<tr>
 								<td class="sub_title"><%= lc(:grant) %></td>
@@ -179,7 +179,8 @@
 						<div id="sectors_graph">
 							<strong>You need to upgrade your Flash Player</strong>
 						</div>
-						<br><%= reports_link_to lc(:enlarged_chart), :controller => 'charts', :action => 'sectors_chart', :id => @donor %>
+						<br><%= reports_link_to lc(:enlarged_chart), 
+									:controller => 'charts', :action => 'sectors_chart', :id => @donor, :year => year %>
 						
 						<!-- Sectors Pie script-->
 					 	<script type="text/javascript">
@@ -187,7 +188,7 @@
 							var so = new SWFObject("/ampie.swf", "sectors_graph", "280", "250", "8", "#DBE2F1");
 							so.addVariable("path", "/");
 							so.addVariable("settings_file", escape("/bluebook/charts/settings/sectors_graph.xml"));       
-							so.addVariable("data_file", escape("<%= url_for(:controller => 'charts', :action => 'sectors_chart_data', :id => @donor, :format => 'xml') %>"));  
+							so.addVariable("data_file", escape("/bluebook/<%= year %>/charts/sectors_chart_data/<%= @donor.id %>.xml"));  
 							so.addVariable("preloader_color", "#999999");
 							so.write("sectors_graph");
 						// ]]>

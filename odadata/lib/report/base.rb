@@ -30,7 +30,7 @@ module Report
     def projects
       @projects ||= 
         Project.published.ordered.all(
-          :include => [:donor, :mdg_relevances, :geo_relevances], 
+          :include => [:donor, :mdg_relevances, :geo_relevances, :sector_relevances], 
           :conditions => build_sql_conditions
         ).map { |p| @proxy.new(p) }
     end

@@ -13,8 +13,6 @@ en:
         prj_status: Project Status
         start: Start Date
         end: End Date
-        dac_sector: DAC / CRS Sector
-        crs_sector: CRS Sector
         implementing_agencies: Implementing Agencies
         contracted_agencies: Contracted Agencies
         national_regional: National / Regional
@@ -32,6 +30,16 @@ en:
         desertification_marker: Desertification
         gender_policy_marker: Gender Policy
         environment_policy_marker: Environment Policy
+        sector_relevances: Project's Focal Sectors
+        
+      sector_relevance:
+        dac_sector: DAC / CRS Sector
+        crs_sector: CRS Sector
+        amount: Amount in %
+        
+      geo_relevance:
+        province: Region
+        district: Municipalities
         
       user:
         name: Name

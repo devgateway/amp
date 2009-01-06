@@ -10,8 +10,8 @@
 			</tr>
 
 			<tr>
-				<th><%= ll(:exchange_rate, :currency) %></th>
-				<th><%= ll(:exchange_rate, :euro_rate) %></th>
+				<th><%= ExchangeRate.human_attribute_name('currency') %></th>
+				<th><%= ExchangeRate.human_attribute_name('euro_rate') %></th>
 				<% restrict_to 'admin' do %>
 					<th> </th>
 				<% end %>

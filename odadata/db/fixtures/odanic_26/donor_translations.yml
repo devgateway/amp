@@ -1,0 +1,181 @@
+--- 
+donor_translations_001: 
+  donor_id: 15
+  id: "28"
+  locale: es
+  name: PNUD
+donor_translations_002: 
+  donor_id: 7
+  id: "17"
+  locale: en
+  name: Italy
+donor_translations_003: 
+  donor_id: 17
+  id: "6"
+  locale: es
+  name: "Banco de Desarollo Inter-American"
+donor_translations_004: 
+  donor_id: 2
+  id: "29"
+  locale: en
+  name: Denmark
+donor_translations_005: 
+  donor_id: 7
+  id: "18"
+  locale: es
+  name: Italia
+donor_translations_006: 
+  donor_id: 4
+  id: "7"
+  locale: en
+  name: Finland
+donor_translations_007: 
+  donor_id: 2
+  id: "30"
+  locale: es
+  name: Dinamarca
+donor_translations_008: 
+  donor_id: 5
+  id: "19"
+  locale: en
+  name: France
+donor_translations_009: 
+  donor_id: 4
+  id: "8"
+  locale: es
+  name: Finlandia
+donor_translations_010: 
+  donor_id: 3
+  id: "31"
+  locale: en
+  name: "European Commission"
+donor_translations_011: 
+  donor_id: 5
+  id: "20"
+  locale: es
+  name: Francia
+donor_translations_012: 
+  donor_id: 16
+  id: "9"
+  locale: en
+  name: "World Bank - IDA"
+donor_translations_013: 
+  donor_id: 3
+  id: "32"
+  locale: es
+  name: "Comision Europea"
+donor_translations_014: 
+  donor_id: 12
+  id: "21"
+  locale: en
+  name: "United Kingdom"
+donor_translations_015: 
+  donor_id: 16
+  id: "10"
+  locale: es
+  name: "Banco Mundial - IDA"
+donor_translations_016: 
+  donor_id: 13
+  id: "33"
+  locale: en
+  name: Canada
+donor_translations_017: 
+  donor_id: 12
+  id: "22"
+  locale: es
+  name: "Reino Unido"
+donor_translations_018: 
+  donor_id: 6
+  id: "11"
+  locale: en
+  name: Germany
+donor_translations_019: 
+  donor_id: 13
+  id: "34"
+  locale: es
+  name: Canada
+donor_translations_020: 
+  donor_id: 1
+  id: "23"
+  locale: en
+  name: Austria
+donor_translations_021: 
+  donor_id: 6
+  id: "12"
+  locale: es
+  name: Alemania
+donor_translations_022: 
+  donor_id: 14
+  id: "1"
+  locale: en
+  name: Norway
+donor_translations_023: 
+  donor_id: 11
+  id: "35"
+  locale: en
+  name: Sweden
+donor_translations_024: 
+  donor_id: 1
+  id: "24"
+  locale: es
+  name: Austria
+donor_translations_025: 
+  donor_id: 18
+  id: "13"
+  locale: en
+  name: "Nicaragua - Government Institutions"
+donor_translations_026: 
+  donor_id: 14
+  id: "2"
+  locale: es
+  name: Noruega
+donor_translations_027: 
+  donor_id: 11
+  id: "36"
+  locale: es
+  name: Suecia
+donor_translations_028: 
+  donor_id: 8
+  id: "25"
+  locale: en
+  name: Luxembourg
+donor_translations_029: 
+  donor_id: 18
+  id: "14"
+  locale: es
+  name: "Gobierno de Nicaragua"
+donor_translations_030: 
+  donor_id: 9
+  id: "3"
+  locale: en
+  name: Netherlands
+donor_translations_031: 
+  donor_id: 8
+  id: "26"
+  locale: es
+  name: Luxemburgo
+donor_translations_032: 
+  donor_id: 10
+  id: "15"
+  locale: en
+  name: Spain
+donor_translations_033: 
+  donor_id: 9
+  id: "4"
+  locale: es
+  name: "Paises Bajos"
+donor_translations_034: 
+  donor_id: 15
+  id: "27"
+  locale: en
+  name: UNDP
+donor_translations_035: 
+  donor_id: 10
+  id: "16"
+  locale: es
+  name: Espana
+donor_translations_036: 
+  donor_id: 17
+  id: "5"
+  locale: en
+  name: "Inter-American Development Bank"

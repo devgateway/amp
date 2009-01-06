@@ -75,6 +75,13 @@ module LabeledFormHelper
         label_opts)
     end
     
+    def related_collection_select(method, parent_element, collection, group_method, group_label_method, option_key_method, option_value_method, options = {}, html_options = {})
+      label_opts = extract_label_options!(options)
+      wrap_in_label_row(method,
+        @template.related_collection_select(@object_name, method, parent_element, collection, group_method, group_label_method, option_key_method, option_value_method, objectify_options(options), html_options),
+        label_opts)
+    end
+    
     def submit(value = nil, options = {})
       value ||= @template.lc(:submit)
       super(value, options)

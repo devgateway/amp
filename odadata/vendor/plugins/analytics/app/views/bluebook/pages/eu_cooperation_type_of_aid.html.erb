@@ -1,7 +1,7 @@
 <table class="bluebook">
 	<tr>
 		<td>
-			<b><%= ll(:bluebook, :pages, :contents, :eu_cooperation, :by_toa_in, :year => Time.now.year - 1, :forecasts =>Time.now.year )%></b>
+			<b><%= ll(:bluebook, :pages, :contents, :eu_cooperation, :by_toa_in, :year => year, :forecasts => year + 1)%></b>
 			<div id="column_graph">
 				<strong>You need to upgrade your Flash Player</strong>
 			</div>
@@ -11,8 +11,8 @@
 			// <![CDATA[		
 					var so = new SWFObject("/amcolumn.swf", "amcolumn", "1150", "430", "8", "#DBE2F1");
 					so.addVariable("path", "/");
-					so.addVariable("settings_file", escape("/bluebook/charts/settings/cooperation_by_type_of_aid.xml"));
-					so.addVariable("data_file", escape("/bluebook/charts/eu_cooperation_type_of_aid_data/show.xml"));  
+					so.addVariable("settings_file", escape("/bluebook/<%= year %>/charts/settings/cooperation_by_type_of_aid.xml"));
+					so.addVariable("data_file", escape("/bluebook/<%= year %>/charts/eu_cooperation_type_of_aid_data.xml"));  
 			    	so.addVariable("preloader_color", "#999999");
 					so.write("column_graph");
 					// ]]>
@@ -26,8 +26,8 @@
 <table class="admin">
 	<tr>
 		<td>
-			<b><%= ll(:bluebook, :contents, :eu_cooperation, :in_percent_by_toa) %> <%= Time.now.year - 1 %></b>
-			<br><%= ll(:bluebook, :contents, :eu_cooperation, :in_percent_by_toa_subtitle) %> <%= Time.now.year - 1 %>
+			<b><%= ll(:bluebook, :pages, :contents, :eu_cooperation, :in_percent_by_toa, :year => year) %></b>
+			<br><%= ll(:bluebook, :pages, :contents, :eu_cooperation, :in_percent_by_toa_subtitle, :year => year) %>
 			<div id="percentage_graph">
 				<strong>You need to upgrade your Flash Player</strong>
 			</div>
@@ -37,8 +37,8 @@
 			// <![CDATA[		
 					var so = new SWFObject("/amcolumn.swf", "amcolumn", "1150", "430", "8", "#DBE2F1");
 					so.addVariable("path", "/");
-					so.addVariable("settings_file", escape("/bluebook/charts/settings/cooperation_by_toa_percentages.xml"));
-					so.addVariable("data_file", escape("/bluebook/charts/eu_cooperation_type_of_aid_percentages_data/show.xml"));  
+					so.addVariable("settings_file", escape("/bluebook/<%= year %>/charts/settings/cooperation_by_toa_percentages.xml"));
+					so.addVariable("data_file", escape("/bluebook/<%= year %>/charts/eu_cooperation_type_of_aid_percentages_data.xml"));  
 			    	so.addVariable("preloader_color", "#999999");
 					so.write("percentage_graph");
 					// ]]>

@@ -48,43 +48,43 @@
 		<td class="sub_title"><%= lc(:eu_cooperation, :facts) %></td>
 	</tr>
 	<tr>
-		<td><%= link_to lc(:eu_cooperation, :achievement_in, :year => 2007), 
+		<td><%= link_to lc(:eu_cooperation, :achievement_in, :year => year), 
 					bluebook_pages_path(:action => "eu_cooperation_achievements"), 
 					:popup => ['new_window', 'height=700,width=800,scrollbars=yes,resizable=yes'] %>
 		</td>
 	</tr>
 	<tr>
-		<td><%= link_to lc(:eu_cooperation, :forecasts_for, :year => 2008), 
+		<td><%= link_to lc(:eu_cooperation, :forecasts_for, :year => year + 1), 
 					bluebook_pages_path(:action => "eu_cooperation_forecasts"), 
 					:popup => ['new_window', 'height=700,width=800,scrollbars=yes,resizable=yes'] %>
 		</td>
 	</tr>
 	<tr>
-		<td><%= link_to lc(:eu_cooperation, :trend, :from => 2007, :to => 2008), 
+		<td><%= link_to lc(:eu_cooperation, :trend, :from => year, :to => year + 1), 
 					bluebook_pages_path(:action => "eu_cooperation_trend"), 
 					:popup => ['new_window', 'height=700,width=800,scrollbars=yes,resizable=yes'] %>
 		</td>
 	</tr>
 	<tr>
-		<td><%= link_to lc(:eu_cooperation, :by_sector_in, :year => 2007), 
+		<td><%= link_to lc(:eu_cooperation, :by_sector_in, :year => year), 
 					bluebook_pages_path(:action => "eu_cooperation_dac_sector_column_chart"), 
 					:popup => ['new_window', 'height=700,width=800,scrollbars=yes,resizable=yes'] %>
 		</td>
 	</tr>
 	<tr>
-		<td><%= link_to lc(:eu_cooperation, :by_region_in, :year => 2007), 
+		<td><%= link_to lc(:eu_cooperation, :by_region_in, :year => year), 
 					bluebook_pages_path(:action => "eu_cooperation_region_column_chart"),
 					:popup => ['new_window', 'height=700,width=800,scrollbars=yes,resizable=yes'] %>
 		</td>
 	</tr>
 	<tr>
-		<td><%= link_to lc(:eu_cooperation, :by_toa_in, :year => 2007, :forecasts => 2008), 
+		<td><%= link_to lc(:eu_cooperation, :by_toa_in, :year => year, :forecasts => year + 1), 
 					bluebook_pages_path(:action => "eu_cooperation_type_of_aid"), 
 					:popup => ['new_window', 'height=700,width=800,scrollbars=yes,resizable=yes'] %>
 		</td>
 	</tr>
 	<tr>
-		<td><%= link_to lc(:eu_cooperation, :in_percent_by_toa, :year => 2007), 
+		<td><%= link_to lc(:eu_cooperation, :in_percent_by_toa, :year => year), 
 					bluebook_pages_path(:action => "eu_cooperation_type_of_aid"), 
 					:popup => ['new_window', 'height=700,width=800,scrollbars=yes,resizable=yes'] %>
 		</td>
@@ -95,7 +95,7 @@
 	
 	<% Donor.main.ordered.each do |d| %>
 		<tr>
-			<td><%= link_to(d.name.titleize, bluebook_donor_profile_path(d.id)) %></a></td>
+			<td><%= link_to(d.name.titleize, bluebook_donor_profile_path(year, d.id)) %></a></td>
 		</tr>
 	<% end %>
 	<tr>

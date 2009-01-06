@@ -39,26 +39,19 @@
 				<a href="#" class="arrow" onclick="return tm(this)"><img src="/images/menuarrow.gif" width="17" height="22" border="0" align="absmiddle"/></a>
 				<ul>
 					<li><%= link_to ll(:eu_cooperation, :process), 
-								bluebook_pages_path(:action => 'eu_at_a_glance_h_and_a_process'), 
-								:popup => ['ODAnic', 'height=700,width=800'] %></li>
-					<li><%= link_to ll(:eu_cooperation, :achievements, :year => Time.now.year-1), 
-								bluebook_pages_path(:action => 'eu_cooperation_achievements'), 
-								:popup => ['ODAnic', 'height=700,width=800'] %></li>						
-					<li><%= link_to ll(:eu_cooperation, :forecasts_for, :year => Time.now.year), 
-								bluebook_pages_path(:action => 'eu_cooperation_forecasts'), 
-								:popup => ['ODAnic', 'height=700,width=800'] %></li>
-					<li><%= link_to ll(:eu_cooperation, :trend, :from => Time.now.year-1, :to => Time.now.year), 
-								bluebook_pages_path(:action => 'eu_cooperation_trend'), 
-								:popup => ['ODAnic', 'height=700,width=800'] %></li>
-					<li><%= link_to ll(:eu_cooperation, :by_sector_in, :year => Time.now.year-1), 
-								bluebook_pages_path(:action => 'eu_cooperation_dac_sector_column_chart'), 
-								:popup => ['ODAnic', 'height=700,width=800'] %></li>
-					<li><%= link_to ll(:eu_cooperation, :by_region_in, :year => Time.now.year-1), 
-								bluebook_pages_path(:action => 'eu_cooperation_region_column_chart'),
-					 			:popup => ['ODAnic', 'height=700,width=800'] %></li>
-					<li><%= link_to ll(:eu_cooperation, :by_toa_in, :year => Time.now.year-1, :forecasts => Time.now.year), 
-								bluebook_pages_path(:action => 'eu_cooperation_type_of_aid'), 
-								:popup => ['ODAnic', 'height=700,width=800'] %></li>
+								bluebook_pages_path(:action => 'eu_at_a_glance_h_and_a_process') %></li>
+					<li><%= link_to ll(:eu_cooperation, :achievements, :year => year), 
+								bluebook_pages_path(:action => 'eu_cooperation_achievements') %></li>						
+					<li><%= link_to ll(:eu_cooperation, :forecasts_for, :year => year + 1), 
+								bluebook_pages_path(:action => 'eu_cooperation_forecasts') %></li>
+					<li><%= link_to ll(:eu_cooperation, :trend, :from => year, :to => year + 1), 
+								bluebook_pages_path(:action => 'eu_cooperation_trend') %></li>
+					<li><%= link_to ll(:eu_cooperation, :by_sector_in, :year => year), 
+								bluebook_pages_path(:action => 'eu_cooperation_dac_sector_column_chart') %></li>
+					<li><%= link_to ll(:eu_cooperation, :by_region_in, :year => year), 
+								bluebook_pages_path(:action => 'eu_cooperation_region_column_chart') %></li>
+					<li><%= link_to ll(:eu_cooperation, :by_toa_in, :year => year, :forecasts => year + 1), 
+								bluebook_pages_path(:action => 'eu_cooperation_type_of_aid') %></li>
 				</ul>
 			</li>
 
@@ -68,7 +61,7 @@
 				<a href="#" class="arrow" onclick="return tm(this)"><img src="/images/menuarrow.gif" width="17" height="22" border="0" align="absmiddle"/></a>
 				<ul>
 					<% Donor.main.ordered.each do |d| %>
-						<li><%= link_to d.name.titleize, bluebook_donor_profile_path(d.id) %></li>
+						<li><%= link_to d.name.titleize, bluebook_donor_profile_path(params[:year], d.id) %></li>
 					<% end %>
 				</ul>
 			</li>

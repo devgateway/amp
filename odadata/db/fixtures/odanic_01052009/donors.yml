@@ -1,0 +1,523 @@
+--- 
+donors_001: 
+  code: "10"
+  cofunding_only: f
+  currency: SEK
+  field_office_address: "Apartado Postal 2307, Managua"
+  field_office_email: ambassaden.managua@foreign.ministry.se
+  field_office_phone: +505-2558400
+  field_office_website: "http://swedenabroad.se/Start____21309.aspx"
+  first_focal_point_email: sten.strom@foreign.ministry.se
+  first_focal_point_name: "Economist Sten Ström"
+  flag_content_type: ~
+  flag_file_name: ~
+  flag_file_size: ~
+  flag_updated_at: ~
+  head_of_cooperation_email: karin.rohlin@foreign.ministry.se
+  head_of_cooperation_name: "Counsellor Karin Rohlin"
+  head_of_mission_email: eva.zetterberg@foreign.ministry.se
+  head_of_mission_name: "Ambassador Eva Zetterberg"
+  id: "11"
+  institutions_responsible_for_oda: "Sida Swedish International Development Cooperation Agency (sp. Asdi)"
+  profile_picture_content_type: ~
+  profile_picture_file_name: ~
+  profile_picture_file_size: ~
+  profile_picture_updated_at: ~
+  second_focal_point_email: silvia.ponce@foreign.ministry.se
+  second_focal_point_name: "Assistant Programme Officer Silvia Ponce Quevedo"
+  total_expatriate_staff: "7"
+  total_local_staff: "16"
+  total_staff_in_country: "23"
+donors_002: 
+  code: "7"
+  cofunding_only: f
+  currency: EUR
+  field_office_address: "Carretera a Masaya km 5, del Colegio Teresiano, 1 c. al sur, 1 c. abajo, Managua "
+  field_office_email: mng@minbuza.nl
+  field_office_phone: "+505-2768630 al 43"
+  field_office_website: www.embajadaholanda-nic.com
+  first_focal_point_email: jan.bauer@minbuza.nl
+  first_focal_point_name: "Jan Bauer"
+  flag_content_type: ~
+  flag_file_name: ~
+  flag_file_size: ~
+  flag_updated_at: ~
+  head_of_cooperation_email: hans.wessels@minbuza.nl
+  head_of_cooperation_name: "Hans Wessels"
+  head_of_mission_email: mng-cdp@minbuza.nl
+  head_of_mission_name: "Lambert Grijns"
+  id: "9"
+  institutions_responsible_for_oda: "Ministerio de Asuntos Exteriores / Cooperación para el Desarrollo  (MFA, Min. van Buitenlandse Zaken) "
+  profile_picture_content_type: ~
+  profile_picture_file_name: ~
+  profile_picture_file_size: ~
+  profile_picture_updated_at: ~
+  second_focal_point_email: silvia.porras@minbuza.nl
+  second_focal_point_name: "Silvia Porras"
+  total_expatriate_staff: "7"
+  total_local_staff: "5"
+  total_staff_in_country: "12"
+donors_003: 
+  code: "18"
+  cofunding_only: f
+  currency: EUR
+  field_office_address: "Embassy of Finland Managua, Paseo Naciones Unidas, Edificio El Centro 2´ piso, Rotonda El Güegüense 600m. sur, Managua, Nicaragua  "
+  field_office_email: sanomat.mgu@formin.fi
+  field_office_phone: +505-2781216
+  field_office_website: www.finlandia.org.ni
+  first_focal_point_email: Mari.Lankinen@Formin.fi
+  first_focal_point_name: "Mari Lankinen "
+  flag_content_type: ~
+  flag_file_name: ~
+  flag_file_size: ~
+  flag_updated_at: ~
+  head_of_cooperation_email: Mari.Lankinen@Formin.fi
+  head_of_cooperation_name: "Mari Lankinen "
+  head_of_mission_email: Marja.Luoto@formin.fi
+  head_of_mission_name: "Ambassador Marja Luoto"
+  id: "4"
+  institutions_responsible_for_oda: "Ministry for Foreign Affairs of Finland"
+  profile_picture_content_type: ~
+  profile_picture_file_name: ~
+  profile_picture_file_size: ~
+  profile_picture_updated_at: ~
+  second_focal_point_email: Emily.Hockert@formin.fi
+  second_focal_point_name: "Emily Höckert"
+  total_expatriate_staff: "5"
+  total_local_staff: "6"
+  total_staff_in_country: "11"
+donors_004: 
+  code: "5"
+  cofunding_only: f
+  currency: EUR
+  field_office_address: "Embajada Alemana, Bolonia, contiguo a Optica Nicaragüense"
+  field_office_email: alemania@cablenet.com.ni
+  field_office_phone: +505-2663917
+  field_office_website: www.managua.diplo.de
+  first_focal_point_email: wz-1@manag.auswaertiges-amt.de
+  first_focal_point_name: "Gundula Weitz"
+  flag_content_type: ~
+  flag_file_name: ~
+  flag_file_size: ~
+  flag_updated_at: ~
+  head_of_cooperation_email: wz-1@manag.auswaertiges-amt.de
+  head_of_cooperation_name: "Gundula Weitz"
+  head_of_mission_email: l@manag.auswaertiges-amt.de
+  head_of_mission_name: "Gregor Koebel"
+  id: "6"
+  institutions_responsible_for_oda: "Bundesministerium für Wirtschaftliche Zusammenarbeit BMZ"
+  profile_picture_content_type: ~
+  profile_picture_file_name: ~
+  profile_picture_file_size: ~
+  profile_picture_updated_at: ~
+  second_focal_point_email: wz-100@manag.auswaertiges-amt.de
+  second_focal_point_name: "Birgit Martinez"
+  total_expatriate_staff: "17"
+  total_local_staff: "7"
+  total_staff_in_country: "24"
+donors_005: 
+  code: "50"
+  cofunding_only: f
+  currency: EUR
+  field_office_address: "Plaza Bolonia 2½ cuadra abajo. Frente a Embajada de Dinamarca"
+  field_office_email: recepcion@aecinicaragua.org.ni
+  field_office_phone: +505-2669285
+  field_office_website: www.aecinicaragua.org.ni
+  first_focal_point_email: coordadj.figuero@aecinicaragua.org.ni
+  first_focal_point_name: "Carlos Figuero"
+  flag_content_type: ~
+  flag_file_name: ~
+  flag_file_size: ~
+  flag_updated_at: ~
+  head_of_cooperation_email: coordinadora@aecinicaragua.org.ni
+  head_of_cooperation_name: "Elena Montobbio de Balanzó"
+  head_of_mission_email: marisa.amores@mae.es
+  head_of_mission_name: "Jaime Lacadena e Higuera"
+  id: "10"
+  institutions_responsible_for_oda: ""
+  profile_picture_content_type: ~
+  profile_picture_file_name: ~
+  profile_picture_file_size: ~
+  profile_picture_updated_at: ~
+  second_focal_point_email: asistente.coordinador@aecinicaragua.org.ni
+  second_focal_point_name: "Nubia Palaviccini"
+  total_expatriate_staff: "22"
+  total_local_staff: "28"
+  total_staff_in_country: "50"
+donors_006: 
+  code: "4"
+  cofunding_only: f
+  currency: EUR
+  field_office_address: "Embajada de Francia - De la Iglesia El Carmen, 1 cuadra y media abajo - Montoya, Managua."
+  field_office_email: coop.managua@diplomatie.gouv.fr
+  field_office_phone: +505-2226615
+  field_office_website: www.ambafrance-ni.org
+  first_focal_point_email: coop.managua@diplomatie.gouv.fr
+  first_focal_point_name: "Amandine MEYRAN"
+  flag_content_type: ~
+  flag_file_name: ~
+  flag_file_size: ~
+  flag_updated_at: ~
+  head_of_cooperation_email: ""
+  head_of_cooperation_name: ""
+  head_of_mission_email: Thierry.FRAYSSE@diplomatie.gouv.fr
+  head_of_mission_name: "Thierry FRAYSSE"
+  id: "5"
+  institutions_responsible_for_oda: "Direction Générale pour la Coopération Internationale et le Développement (DGCID) - MAEE"
+  profile_picture_content_type: ~
+  profile_picture_file_name: ~
+  profile_picture_file_size: ~
+  profile_picture_updated_at: ~
+  second_focal_point_email: Anne.PETOT@diplomatie.gouv.fr
+  second_focal_point_name: "Anne PETOT (Consejera)"
+  total_expatriate_staff: "3"
+  total_local_staff: "1"
+  total_staff_in_country: "4"
+donors_007: 
+  code: "1"
+  cofunding_only: f
+  currency: EUR
+  field_office_address: "Plaza España 1 cuadra al lago, apartado postal 3173, Managua, Nicaragua"
+  field_office_email: managua@ada.gv.at
+  field_office_phone: +505-2663316
+  field_office_website: www.ada.gv.at
+  first_focal_point_email: christina.hoernicke@ada.gv.at
+  first_focal_point_name: "Christina Hörnicke"
+  flag_content_type: ~
+  flag_file_name: ~
+  flag_file_size: ~
+  flag_updated_at: ~
+  head_of_cooperation_email: michaela.ellmeier@ada.gv.at
+  head_of_cooperation_name: "Michaela Ellmeier"
+  head_of_mission_email: n/a
+  head_of_mission_name: n/a
+  id: "1"
+  institutions_responsible_for_oda: "Federal Ministry of Foreign Affairs,  Finance Ministry "
+  profile_picture_content_type: ~
+  profile_picture_file_name: ~
+  profile_picture_file_size: ~
+  profile_picture_updated_at: ~
+  second_focal_point_email: mabel.garcia@ada.gv.at
+  second_focal_point_name: "Mabel Garcia"
+  total_expatriate_staff: "1"
+  total_local_staff: "10"
+  total_staff_in_country: "11"
+donors_008: 
+  code: "22"
+  cofunding_only: f
+  currency: EUR
+  field_office_address: "Embajada del Gran Ducado de Luxemburgo, Oficina de Cooperación, del Hospital Militar 1c. al lago 1 1/2 c. abajo, contiguo al Hotel Maracas Inn"
+  field_office_email: embaluxe@cablenet.com.ni
+  field_office_phone: +503-2681881
+  field_office_website: ""
+  first_focal_point_email: rene.lauer@mae.etat.lu
+  first_focal_point_name: "René Lauer"
+  flag_content_type: ~
+  flag_file_name: ~
+  flag_file_size: ~
+  flag_updated_at: ~
+  head_of_cooperation_email: rene.lauer@mae.etat.lu
+  head_of_cooperation_name: "René Lauer"
+  head_of_mission_email: jean-paul.senninger@mae.etat.lu
+  head_of_mission_name: "Jean-Paul Senninger, embajador concurrente"
+  id: "8"
+  institutions_responsible_for_oda: "Ministerio de Asuntos Exteriores"
+  profile_picture_content_type: ~
+  profile_picture_file_name: ~
+  profile_picture_file_size: ~
+  profile_picture_updated_at: ~
+  second_focal_point_email: marie-anne.marx@mae.etat.lu
+  second_focal_point_name: "Marie-Anne Marx"
+  total_expatriate_staff: "3"
+  total_local_staff: "4"
+  total_staff_in_country: "7"
+donors_009: 
+  code: "3"
+  cofunding_only: f
+  currency: DKK
+  field_office_address: "De Plaza España, 1c. abajo, 2c. Al lago, 1/2c. Abajo.  Managua, Nicaragua. "
+  field_office_email: mgaamb@um.dk
+  field_office_phone: +505-2680250
+  field_office_website: www.ambmanagua.um.dk
+  first_focal_point_email: ghiort@um.dk
+  first_focal_point_name: "Ghislene Ortega Espinoza"
+  flag_content_type: ~
+  flag_file_name: ~
+  flag_file_size: ~
+  flag_updated_at: ~
+  head_of_cooperation_email: sorvoh@um.dk
+  head_of_cooperation_name: "Soren Vohtz"
+  head_of_mission_email: sorvoh@um.dk
+  head_of_mission_name: "Soren Vohtz"
+  id: "2"
+  institutions_responsible_for_oda: "Ministry of Foreign Affairs / DANIDA"
+  profile_picture_content_type: ~
+  profile_picture_file_name: ~
+  profile_picture_file_size: ~
+  profile_picture_updated_at: ~
+  second_focal_point_email: ""
+  second_focal_point_name: ""
+  total_expatriate_staff: "7"
+  total_local_staff: "13"
+  total_staff_in_country: "20"
+donors_010: 
+  code: "959"
+  cofunding_only: t
+  currency: ~
+  field_office_address: ~
+  field_office_email: ~
+  field_office_phone: ~
+  field_office_website: ~
+  first_focal_point_email: ~
+  first_focal_point_name: ~
+  flag_content_type: ~
+  flag_file_name: ~
+  flag_file_size: ~
+  flag_updated_at: ~
+  head_of_cooperation_email: ~
+  head_of_cooperation_name: ~
+  head_of_mission_email: ~
+  head_of_mission_name: ~
+  id: "15"
+  institutions_responsible_for_oda: ~
+  profile_picture_content_type: ~
+  profile_picture_file_name: ~
+  profile_picture_file_size: ~
+  profile_picture_updated_at: ~
+  second_focal_point_email: ~
+  second_focal_point_name: ~
+  total_expatriate_staff: ~
+  total_local_staff: ~
+  total_staff_in_country: ~
+donors_011: 
+  code: "918"
+  cofunding_only: f
+  currency: EUR
+  field_office_address: "DCE - Porton Ppal Col. Teresiano 1c al este.  Fte a Clinica Tiscapa"
+  field_office_email: delegation-nicaragua@ec.europa.eu
+  field_office_phone: "+505-2704499 "
+  field_office_website: www.delnic.ec.europa.eu
+  first_focal_point_email: Helen.Conefrey@ec.europa.eu
+  first_focal_point_name: "Helen Conefrey"
+  flag_content_type: ~
+  flag_file_name: ~
+  flag_file_size: ~
+  flag_updated_at: ~
+  head_of_cooperation_email: Marc.Litvine@ec.europa.eu
+  head_of_cooperation_name: "Marc Litvine"
+  head_of_mission_email: Francesca.Mosca@ec.europa.eu
+  head_of_mission_name: "Francesca Mosca"
+  id: "3"
+  institutions_responsible_for_oda: "Comision Europea"
+  profile_picture_content_type: ~
+  profile_picture_file_name: ~
+  profile_picture_file_size: ~
+  profile_picture_updated_at: ~
+  second_focal_point_email: Marbellyz.Roa@ec.europa.eu
+  second_focal_point_name: "Marbellyz Roa"
+  total_expatriate_staff: "35"
+  total_local_staff: "45"
+  total_staff_in_country: "80"
+donors_012: 
+  code: "301"
+  cofunding_only: t
+  currency: ~
+  field_office_address: ~
+  field_office_email: ~
+  field_office_phone: ~
+  field_office_website: ~
+  first_focal_point_email: ~
+  first_focal_point_name: ~
+  flag_content_type: ~
+  flag_file_name: ~
+  flag_file_size: ~
+  flag_updated_at: ~
+  head_of_cooperation_email: ~
+  head_of_cooperation_name: ~
+  head_of_mission_email: ~
+  head_of_mission_name: ~
+  id: "13"
+  institutions_responsible_for_oda: ~
+  profile_picture_content_type: ~
+  profile_picture_file_name: ~
+  profile_picture_file_size: ~
+  profile_picture_updated_at: ~
+  second_focal_point_email: ~
+  second_focal_point_name: ~
+  total_expatriate_staff: ~
+  total_local_staff: ~
+  total_staff_in_country: ~
+donors_013: 
+  code: "8"
+  cofunding_only: t
+  currency: ~
+  field_office_address: ~
+  field_office_email: ~
+  field_office_phone: ~
+  field_office_website: ~
+  first_focal_point_email: ~
+  first_focal_point_name: ~
+  flag_content_type: ~
+  flag_file_name: ~
+  flag_file_size: ~
+  flag_updated_at: ~
+  head_of_cooperation_email: ~
+  head_of_cooperation_name: ~
+  head_of_mission_email: ~
+  head_of_mission_name: ~
+  id: "14"
+  institutions_responsible_for_oda: ~
+  profile_picture_content_type: ~
+  profile_picture_file_name: ~
+  profile_picture_file_size: ~
+  profile_picture_updated_at: ~
+  second_focal_point_email: ~
+  second_focal_point_name: ~
+  total_expatriate_staff: ~
+  total_local_staff: ~
+  total_staff_in_country: ~
+donors_014: 
+  code: "909"
+  cofunding_only: t
+  currency: ~
+  field_office_address: ~
+  field_office_email: ~
+  field_office_phone: ~
+  field_office_website: ~
+  first_focal_point_email: ~
+  first_focal_point_name: ~
+  flag_content_type: ~
+  flag_file_name: ~
+  flag_file_size: ~
+  flag_updated_at: ~
+  head_of_cooperation_email: ~
+  head_of_cooperation_name: ~
+  head_of_mission_email: ~
+  head_of_mission_name: ~
+  id: "17"
+  institutions_responsible_for_oda: ~
+  profile_picture_content_type: ~
+  profile_picture_file_name: ~
+  profile_picture_file_size: ~
+  profile_picture_updated_at: ~
+  second_focal_point_email: ~
+  second_focal_point_name: ~
+  total_expatriate_staff: ~
+  total_local_staff: ~
+  total_staff_in_country: ~
+donors_015: 
+  code: "905"
+  cofunding_only: t
+  currency: ~
+  field_office_address: ~
+  field_office_email: ~
+  field_office_phone: ~
+  field_office_website: ~
+  first_focal_point_email: ~
+  first_focal_point_name: ~
+  flag_content_type: ~
+  flag_file_name: ~
+  flag_file_size: ~
+  flag_updated_at: ~
+  head_of_cooperation_email: ~
+  head_of_cooperation_name: ~
+  head_of_mission_email: ~
+  head_of_mission_name: ~
+  id: "16"
+  institutions_responsible_for_oda: ~
+  profile_picture_content_type: ~
+  profile_picture_file_name: ~
+  profile_picture_file_size: ~
+  profile_picture_updated_at: ~
+  second_focal_point_email: ~
+  second_focal_point_name: ~
+  total_expatriate_staff: ~
+  total_local_staff: ~
+  total_staff_in_country: ~
+donors_016: 
+  code: "364"
+  cofunding_only: t
+  currency: ~
+  field_office_address: ~
+  field_office_email: ~
+  field_office_phone: ~
+  field_office_website: ~
+  first_focal_point_email: ~
+  first_focal_point_name: ~
+  flag_content_type: ~
+  flag_file_name: ~
+  flag_file_size: ~
+  flag_updated_at: ~
+  head_of_cooperation_email: ~
+  head_of_cooperation_name: ~
+  head_of_mission_email: ~
+  head_of_mission_name: ~
+  id: "18"
+  institutions_responsible_for_oda: ~
+  profile_picture_content_type: ~
+  profile_picture_file_name: ~
+  profile_picture_file_size: ~
+  profile_picture_updated_at: ~
+  second_focal_point_email: ~
+  second_focal_point_name: ~
+  total_expatriate_staff: ~
+  total_local_staff: ~
+  total_staff_in_country: ~
+donors_017: 
+  code: "6"
+  cofunding_only: f
+  currency: EUR
+  field_office_address: "Ambasciata d'Italia, Rotonda el Gueguense 1cuadra al lago -Reparto Bolonia-2092, Managua"
+  field_office_email: cooperazione1.managua@esteri.it
+  field_office_phone: "+505 2666486"
+  field_office_website: "http://www.cooperaitalia.org/"
+  first_focal_point_email: Cooperazione2.managua@esteri.it
+  first_focal_point_name: "Lic.Maria Lourdes Chavez"
+  flag_content_type: ~
+  flag_file_name: ~
+  flag_file_size: ~
+  flag_updated_at: ~
+  head_of_cooperation_email: cooperazione1.managua@esteri.it
+  head_of_cooperation_name: "Dott.Luciano Palmitesta"
+  head_of_mission_email: ambasciata.managua@esteri.it
+  head_of_mission_name: "Amb.re Alberto Boniver"
+  id: "7"
+  institutions_responsible_for_oda: "Ministry of Foreign Affairs/DGCS "
+  profile_picture_content_type: ~
+  profile_picture_file_name: ~
+  profile_picture_file_size: ~
+  profile_picture_updated_at: ~
+  second_focal_point_email: ""
+  second_focal_point_name: ""
+  total_expatriate_staff: "1"
+  total_local_staff: "2"
+  total_staff_in_country: "3"
+donors_018: 
+  code: "12"
+  cofunding_only: f
+  currency: GBP
+  field_office_address: "Residencial Bel-Air, No. 77, Del Colegio Teresiano, 1c al Sur, 35 mts Abajo, Managua, Nicaragua"
+  field_office_email: m-johnston@dfid.gov.uk
+  field_office_phone: +505-2702985
+  field_office_website: www.dfid.gov.uk
+  first_focal_point_email: b-quintanilla@dfid.gov.uk
+  first_focal_point_name: "Berta Quintanilla"
+  flag_content_type: ~
+  flag_file_name: ~
+  flag_file_size: ~
+  flag_updated_at: ~
+  head_of_cooperation_email: m-johnston@dfid.gov.uk
+  head_of_cooperation_name: "Martin Johnston"
+  head_of_mission_email: m-johnston@dfid.gov.uk
+  head_of_mission_name: "Martin Johnston"
+  id: "12"
+  institutions_responsible_for_oda: DFID
+  profile_picture_content_type: ~
+  profile_picture_file_name: ~
+  profile_picture_file_size: ~
+  profile_picture_updated_at: ~
+  second_focal_point_email: c-estrada@dfid.gov.uk
+  second_focal_point_name: "Cecilia Estrada"
+  total_expatriate_staff: "2"
+  total_local_staff: "11"
+  total_staff_in_country: "13"

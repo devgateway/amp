@@ -1,0 +1,10 @@
+<li class="geo_relevance fifty">
+	<%= f.collection_select :province_id, Province.ordered, :id, :name, 
+			{ :prompt => t('options.national') }, :class => "dynamic_select parent large" %>
+	<br />
+	
+	<%= f.related_collection_select :district_id, :province_id, Province.ordered, :districts, :name, :id, :name, 
+			{ }, :multiple => true, :class => "dynamic_select child large", :style => "height: 200px" %>
+	
+	<%= f.remove_link t('actions.delete') %>
+</li>

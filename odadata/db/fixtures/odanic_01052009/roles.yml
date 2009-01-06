@@ -1,0 +1,11 @@
+--- 
+roles_001: 
+  description: "Master Focal Point"
+  id: "1"
+  layout: admin
+  title: admin
+roles_002: 
+  description: "Focal Point"
+  id: "2"
+  layout: focal_point
+  title: focal_point

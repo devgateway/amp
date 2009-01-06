@@ -1,8 +1,9 @@
 cache:
-    type: DiskCache
-    root: '../tmp/mapcache'
-    
-basic:
+  type: DiskCache
+  root: 'tmp/mapcache'
+
+layers:    
+  basic:
     type: MapServer
     mapfile: app/map/nic.map
     layers: NIC2,NIC1

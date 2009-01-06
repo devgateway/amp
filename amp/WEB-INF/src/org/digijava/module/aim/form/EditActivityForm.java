@@ -803,7 +803,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 		private String country;
 		private Long levelId = null;
-		private Long implemLocationLevel;
+		private Long implemLocationLevel = null;
 		private Collection selectedLocs = null;
 		private boolean defaultCountryIsSet;
 		private int pagesSize;

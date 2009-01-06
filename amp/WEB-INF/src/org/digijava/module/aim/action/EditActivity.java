@@ -1491,11 +1491,11 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 //                statusCol = eaForm.getStatusCollection();
 //            }
       // Initailly setting the implementation level as "country"
-      if (eaForm.getLocation().getImplemLocationLevel() == null)
-        eaForm.getLocation().setImplemLocationLevel(
-            CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.
-            IMPLEMENTATION_LOCATION_KEY, new Long(0)).getId()
-            );
+//      if (eaForm.getLocation().getImplemLocationLevel() == null)
+//        eaForm.getLocation().setImplemLocationLevel(
+//            CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.
+//            IMPLEMENTATION_LOCATION_KEY, new Long(0)).getId()
+//            );
 
       //Collection modalColl = null;
       // load the modalities from the database

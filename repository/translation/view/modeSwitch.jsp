@@ -19,7 +19,7 @@
 	<table border="2" cellpadding="5" bordercolor="#B22222" bgcolor="FFD700" style="border-collapse: collapse;">
 		<tr>
 			<logic:equal name="modeSwitchForm" property="translationMode" value="false">
-			<td><a href="javascript:switchTranslation(true)"><i>
+			<td><a   href="javascript:switchTranslation(true)"><i>
 				<digi:trn key="trn:transview1">Translator View</digi:trn></i></a>
 			</td>
 			<td><i>

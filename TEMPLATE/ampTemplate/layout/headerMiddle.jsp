@@ -292,15 +292,28 @@ function adminHelp(){
 	 <digi:context name="rev" property="/help/help.do~blankPage=true" />
 		openURLinWindow("<%=rev%>",1024,768);
 	}
+	
+	function canExit(){
+		return quitRnot1('${msg}');
+	}	
 
 </script>
-
+<!-- 
+<c:set var="message">
+<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
+</c:set>
+<c:set var="quote">'</c:set>
+<c:set var="escapedQuote">\'</c:set>
+<c:set var="msg">
+	${fn:replace(message,quote,escapedQuote)}
+</c:set>
+   --> 
              <div class="yuiamp-skin-amp" style="clear: both; width: 940px;">
               <div id="mainmenuHeader" class="yuiampmenu">
                   <div class="bd">
                       <ul class="first-of-type">
                     	 <li class="yuiampmenuitem" style="float:left;">
-                              <a class="yuiampmenuitemlabel" href="/showDesktop.do" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
+                              <a class="yuiampmenuitemlabel" href="/showDesktop.do" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px"  onclick="return canExit()" >
                                  <digi:trn key="aim:mydesktop">My Desktop</digi:trn>
                               </a>
                               <a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
@@ -322,7 +335,7 @@ function adminHelp(){
                                                     <c:set var="trnClickToAddNewActivit">
                                                     <digi:trn key="aim:clickToAddNewActivit">Click here to Add New Activity</digi:trn>
                                                     </c:set>
-                                                    <a class="yuiampmenuitemlabel" href="javascript:addActivity()" title="${trnClickToAddNewActivit}">
+                                                    <a class="yuiampmenuitemlabel" href="javascript:addActivity()" onclick="return canExit()" title="${trnClickToAddNewActivit}">
                                                     <digi:trn key="btn:addActivity">Add Activity</digi:trn>
                                                     </a>
 												</li>
@@ -332,12 +345,12 @@ function adminHelp(){
                                             </a> --%>
                                             <module:display name="Tab Generator" parentModule="REPORTING">
 		                                      	<li class="yuiampmenuitem" title='<digi:trn key="aim:createTab">Create Tab</digi:trn>'>
-		                                            <a class="yuiampmenuitemlabel" href="/reportWizard.do?tab=true&reset=true">
+		                                            <a class="yuiampmenuitemlabel"  onclick="return canExit()" href="/reportWizard.do?tab=true&reset=true">
 		                                                <b><digi:trn key="aim:addTab">Add Tab</digi:trn></b>
 		                                            </a>
 		                                        </li>
 		                                        <li class="yuiampmenuitem" title='<digi:trn key="aim:clickToViewMoreReports">Click here to view More Reports</digi:trn>'>
-		                                            <a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=true">
+		                                            <a class="yuiampmenuitemlabel" onclick="return canExit()" href="/viewTeamReports.do?tabs=true">
 		                                                <digi:trn key="aim:tabManager">Tab Manager</digi:trn>
 		                                            </a>
 												</li>
@@ -358,7 +371,7 @@ function adminHelp(){
                                                         </logic:equal>                                            		    
                                             		     <logic:notEqual name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
                                             		   	   <li class="yuiampmenuitem" style="width: 100%;">
-                                                            	<a class="yuiampmenuitemlabel" href='/selectTeam.do?id=<bean:write name="item" property="ampTeamMemId"/>'><bean:write name="team" property="name"/></a>
+                                                            	<a class="yuiampmenuitemlabel" href='/selectTeam.do?id=<bean:write name="item" property="ampTeamMemId"/>' onclick="return canExit()"><bean:write name="team" property="name"/></a>
                                                           </li>
                                                         </logic:notEqual>
                                             		</logic:iterate>
@@ -372,7 +385,7 @@ function adminHelp(){
                           </li>
 						<module:display name="REPORTING">
                           <li class="yuiampmenuitem" style="float:left;">
-                              <a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=false" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
+                              <a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=false" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px"  onclick="return canExit()">
                                   <digi:trn key="aim:reports">Reports</digi:trn>
                               </a>
                               <a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
@@ -383,21 +396,21 @@ function adminHelp(){
                                       <ul>
                                         <module:display  name="Report Generator" parentModule="REPORTING">
 	                                        <li class="yuiampmenuitem" title='<digi:trn key="aim:createReport">Create Report</digi:trn>'>
-	                                            <a class="yuiampmenuitemlabel" href="/reportWizard.do?tabs=false&reset=true">
+	                                            <a class="yuiampmenuitemlabel" href="/reportWizard.do?tabs=false&reset=true"  onclick="return canExit()">
 	                                                <b><digi:trn key="aim:reportGenerator">Report Generator</digi:trn></b>
 	                                            </a>
 	                                        </li>
 	                                    </module:display>
 										<module:display name="Off Line Reports" parentModule="REPORTING">
                                         <li class="yuiampmenuitem">
-                                            <a class="yuiampmenuitemlabel" href="/mondrian/mainreport.do">
+                                            <a class="yuiampmenuitemlabel" href="/mondrian/mainreport.do" onclick="return canExit()">
                                             	<digi:trn key="aim:offlinereports">Off Line Reports</digi:trn>
                                             </a>
                                         </li>
                                         </module:display>
                                         <feature:display name="Paris Indicators Reports" module="Portfolio">
                                                 <li class="yuiampmenuitem" title='<digi:trn key="aim:clickToViewParisIndcReports">Click here to view Paris Indicator Reports</digi:trn>'>
-                                                    <a class="yuiampmenuitemlabel" href="/aim/parisIndicatorReport.do~indcId=1~reset=true">
+                                                    <a class="yuiampmenuitemlabel" href="/aim/parisIndicatorReport.do~indcId=1~reset=true"  onclick="return canExit()">
                                                         <b><digi:trn key="aim:parisIndicator">Paris Indicator</digi:trn></b>
                                                     </a>
                                                 </li>
@@ -409,7 +422,7 @@ function adminHelp(){
                           </module:display>
 						  <feature:display name="Content Repository" module="Document Management">
                           <li class="yuiampmenuitem" style="float:left;">
-                              <a class="yuiampmenuitemlabel"  href="/contentrepository/documentManager.do" style="border-right:1px solid white;cursor:pointer;">
+                              <a class="yuiampmenuitemlabel"  href="/contentrepository/documentManager.do" style="border-right:1px solid white;cursor:pointer;"  onclick="return canExit()">
                                  <digi:trn key="aim:resources">Resources</digi:trn>
                               </a>
                           </li>
@@ -448,24 +461,24 @@ function adminHelp(){
 							  
                           <li class="yuiampmenuitem" style="float:left;">
                           	<c:if test="${not empty link}">
-                          		<a class="yuiampmenuitemlabel"  href="${link}" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
+                          		<a class="yuiampmenuitemlabel"  href="${link}" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px"  onclick="return canExit()">
                                  <digi:trn key="aim:calendar">Calendar</digi:trn>
                               </a>
                           	</c:if>
                           	<c:if test="${empty link}">
-                          		<a class="yuiampmenuitemlabel"  href="/calendar/showCalendarView.do?view=none" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
+                          		<a class="yuiampmenuitemlabel"  href="/calendar/showCalendarView.do?view=none" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px"  onclick="return canExit()">
                                  <digi:trn key="aim:calendar">Calendar</digi:trn>
                               </a>
                           	</c:if>
                           	<feature:display name="Create Event" module="Calendar">
-                          		<a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                          		<a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;"  onclick="return canExit()">
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="calendaroptions" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">
                                       <ul>
                                         <li class="yuiampmenuitem">
-                                            <a class="yuiampmenuitemlabel" href="/calendar/showCalendarEvent.do~selectedCalendarTypeId=0~method=new">
+                                            <a class="yuiampmenuitemlabel" href="/calendar/showCalendarEvent.do~selectedCalendarTypeId=0~method=new"  onclick="return canExit()">
                                             	<digi:trn key="aim:calendarAddEvent">Add Event</digi:trn>
                                             </a>
                                         </li>
@@ -497,21 +510,21 @@ function adminHelp(){
                                       <ul>
                                        <feature:display name="NPD Dashboard" module="National Planning Dashboard">
                                         <li class="yuiampmenuitem">
-                                            <a class="yuiampmenuitemlabel" href="/nationalPlaningDashboard.do">
+                                            <a class="yuiampmenuitemlabel" href="/nationalPlaningDashboard.do"  onclick="return canExit()">
                                             <digi:trn key="aim:npd">NPD</digi:trn>
                                             </a>
                                         </li>
                                        </feature:display>
                                         <module:display name="GIS DASHBOARD">
                                         <li class="yuiampmenuitem">
-                                            <a class="yuiampmenuitemlabel" href="/gis/showGisDashboard.do">
+                                            <a class="yuiampmenuitemlabel" href="/gis/showGisDashboard.do"  onclick="return canExit()">
                                             <digi:trn key="aim:gis">GIS</digi:trn>
                                             </a>
                                         </li>
                                         </module:display>
                                         <module:display name="Org Profile" >
                                             <li class="yuiampmenuitem">
-                                                <a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/orgProfile/showOrgProfile.do">
+                                                <a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/orgProfile/showOrgProfile.do"  onclick="return canExit()">
                                                     <digi:trn key="fm:orgProfile">Org. Profile</digi:trn>
                                                 </a> 
                                        
@@ -560,7 +573,7 @@ function adminHelp(){
                                   <div class="bd">                    
                                       <ul>
                                         <li class="yuiampmenuitem">
-                                        <a class="yuiampmenuitemlabel" href="/message/messageActions.do?editingMessage=false&actionType=fillTypesAndLevels">
+                                        <a class="yuiampmenuitemlabel" href="/message/messageActions.do?editingMessage=false&actionType=fillTypesAndLevels"  onclick="return canExit()">
                                         	<digi:trn key="aim:createmessage">Create Message</digi:trn>
                                         </a>
                                         </li>
@@ -588,7 +601,7 @@ function adminHelp(){
                                   <div class="bd">                    
                                       <ul>
                                         <li>
-                                        <a class="yuiampmenuitemlabel" onclick="teamWorkspaceSetup('-1')" href="#">
+                                        <a class="yuiampmenuitemlabel" onclick="return canExit() && teamWorkspaceSetup('-1');" href="#">
                                         <digi:trn key="aim:workspaceinfo">Workspace Info</digi:trn>
                                         </a>
                                         </li>
@@ -619,7 +632,7 @@ function adminHelp(){
                                             </digi:secure>
                                         </logic:notEmpty>                                        
                                         <li>
-                                        <a class="yuiampmenuitemlabel" href="/search/search.do?reset=true">
+                                        <a class="yuiampmenuitemlabel" href="/search/search.do?reset=true"  onclick="return canExit()">
                                         <digi:trn key="aim:search">Search</digi:trn>
                                         </a>
                                         </li>

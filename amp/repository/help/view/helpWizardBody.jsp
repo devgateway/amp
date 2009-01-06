@@ -9,49 +9,49 @@
 <%@page import="org.digijava.module.help.util.HelpUtil"%>
 <digi:instance property="helpForm" />
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
-   
+
 <script langauage="JavaScript">
 	function next(){
              <digi:context name="url" property="context/module/moduleinstance/helpActions.do?actionType=createHelpTopic" />
 			helpForm.action="${url}";
   			helpForm.target = "_self";
-  			helpForm.submit();	
-		 		
+  			helpForm.submit();
+
 	}
-	
+
 	function cancel(){
                 <digi:context name="url" property="context/module/moduleinstance/helpActions.do?actionType=cancelHelpTopic" />
 		helpForm.action="${url}";
   		helpForm.target = "_self";
-  		helpForm.submit();	
+  		helpForm.submit();
 	}
-	
+
 	function finish (edit){
 		if(edit=='true'){
 			document.getElementsByName('wizardStep')[0].value=2;
                         <digi:context name="url" property="context/module/moduleinstance/helpActions.do?actionType=editHelpTopic" />
 			helpForm.action="${url}";
   			helpForm.target = "_self";
-  			helpForm.submit();	
+  			helpForm.submit();
 		}
 		if(edit=='false'){
 			document.getElementsByName('wizardStep')[0].value=3;
                         <digi:context name="url" property="context/module/moduleinstance/helpActions.do?actionType=createHelpTopic" />
 			helpForm.action="${url}";
   			helpForm.target = "_self";
-  			helpForm.submit();	
-		} 		
+  			helpForm.submit();
+		}
 	}
-	
+
 		function back(){
 			document.getElementsByName('actionBack')[0].value=true;
 			document.getElementsByName('wizardStep')[0].value=0;
 			<digi:context name="url" property="context/module/moduleinstance/helpActions.do?actionType=createHelpTopic" />
 			helpForm.action="${url}";
   			helpForm.target = "_self";
-  			helpForm.submit();			 		
+  			helpForm.submit();
 	}
-	
+
 </script>
 <digi:form action="/helpActions.do">
 	<html:hidden property="wizardStep" />
@@ -111,7 +111,7 @@
 																				<tr>
 																					<td align="right"><digi:trn key="help:selectGroup">Select group</digi:trn></td>
 																					<td align="left">
-																						
+
 																						<bean:define id="firstLevel" name="helpForm" property="topicTree" type="java.util.Collection"/>
 																						<html:select property="parentId" name="helpForm" styleClass="inp-text">
 																						<html:option value=""><digi:trn key="help:noGroup">No group</digi:trn></html:option>
@@ -119,7 +119,7 @@
 																						</html:select>
 																					</td>
 																				</tr>
-																				</c:if>																				
+																				</c:if>
 																				<tr>
 																					<td colspan="2">
 																						<table width="100%">
@@ -127,7 +127,7 @@
 																								<td align="right">
 																									<c:set var="trnNextBtn">
 																										<digi:trn key="help:btn:next">next</digi:trn>
-																									</c:set> 
+																									</c:set>
 																									<input type="button" value="${trnNextBtn }" onclick="next();" />
 																								</td>
 																								<td align="left">
@@ -152,7 +152,7 @@
 													</table>
 												</td>
 											</tr>
-										</table>	
+										</table>
 									</td>
 								</tr>
 							</table>
@@ -164,7 +164,7 @@
 				</tr>
 			</table>
 		</c:if>
-		
+
 		<c:if test="${helpForm.wizardStep==2}">
 			<table width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#ffffff" align="center" valign="top">
 				<tr>
@@ -221,7 +221,7 @@
 																								<td align="right">
 																									<c:set var="trnSaveBtn">
 																										<digi:trn key="help:btn:save">Finish</digi:trn>
-																									</c:set> 
+																									</c:set>
 																									<input type="button" value="${trnSaveBtn }" onclick="finish('${helpForm.edit}');" />
 																								</td>
 																								<td align="center" width="6%">
@@ -253,7 +253,7 @@
 									</td>
 								</tr>
 							</table>
-						</td>		
+						</td>
 					</table>
 				</td>
 			</tr>
@@ -312,19 +312,19 @@
 																						<c:if test="${not empty helpForm.firstLevelTopics}">
 																							<html:select property="parentId" name="helpForm" styleClass="inp-text">
 																								<html:option value=""><digi:trn key="help:noGroup">No group</digi:trn></html:option>
-																									<logic:iterate id="firstLevTopic" name="helpForm" property="firstLevelTopics">																		
+																									<logic:iterate id="firstLevTopic" name="helpForm" property="firstLevelTopics">
 																										<c:set var="trn">
 																											<digi:trn key="${firstLevTopic.titleTrnKey}">${firstLevTopic.titleTrnKey}</digi:trn>
 																										</c:set>
-																										<html:option value="${firstLevTopic.helpTopicId}">${trn}</html:option>																		
+																										<html:option value="${firstLevTopic.helpTopicId}">${trn}</html:option>
 																									</logic:iterate>
-																							</html:select>	
+																							</html:select>
 																						</c:if>
 																					</td>
 																				</tr>
 																				<tr>
 																					<td align="right"><STRONG><digi:trn key="help:title">Title</digi:trn></STRONG></td>
-																					<td align="left"><digi:trn key="${helpForm.titleTrnKey}" linkAlwaysVisible="true">title</digi:trn></td>
+																					<td align="left"><digi:trn linkAlwaysVisible="true">${helpForm.topicKey}</digi:trn></td>
 																				</tr>
 																				<tr>
 																					<td align="right"><STRONG><digi:trn key="help:keywords">Keywords</digi:trn></STRONG></td>
@@ -341,7 +341,7 @@
 																								<td align="right">
 																									<c:set var="trnSaveBtn">
 																										<digi:trn key="help:btn:save">Finish</digi:trn>
-																									</c:set> 
+																									</c:set>
 																									<input type="button" value="${trnSaveBtn }" onclick="finish('${helpForm.edit}');" />
 																								</td>
 																								<td align="left">
@@ -353,9 +353,9 @@
 																							</tr>
 																						</table>
 																					</td>
-																				</tr>																				
+																				</tr>
 																			</table>
-																			
+
 																		</td>
 																	</tr>
 																	<tr>
@@ -367,7 +367,7 @@
 													</table>
 												</td>
 											</tr>
-										</table>	
+										</table>
 									</td>
 								</tr>
 							</table>
@@ -380,4 +380,4 @@
 			</table>
 </c:if>
 </digi:form>
-																				
+

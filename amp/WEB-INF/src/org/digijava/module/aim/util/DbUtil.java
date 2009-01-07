@@ -1434,8 +1434,8 @@ public class DbUtil {
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            String queryString = "select f from " + AmpFiscalCalendar.class.getName()
-                + " where (f.startMonthNum=:start) and (f.startDayNum=:start) and (f.yearOffset=:offset)";
+            String queryString = "from " + AmpFiscalCalendar.class.getName()
+                + " where startMonthNum=:start and startDayNum=:start and yearOffset=:offset";
             qry = session.createQuery(queryString);
             qry.setParameter("start", new Integer(1), Hibernate.INTEGER);
             qry.setParameter("offset", new Integer(0), Hibernate.INTEGER);
@@ -2970,8 +2970,10 @@ public class DbUtil {
             String queryString = new String();
             queryString = "select a.internalId from "
                 + AmpActivityInternalId.class.getName()
-                + " a inner join a.ampActivity ampAct"  
-                + " inner join a.organisation ampOrg "  
+                + " a where (a.id=:ampActivityId) "
+                + " and (a.organisation=:ampDonorOrgId)"
+                + " a inner join a.ampActivityId ampAct"  
+                + " inner join a.ampOrgId ampOrg "  
                 + " where (ampAct.ampActivityId=:ampActivityId) "
                 + " and (ampOrg.ampOrgId=:ampDonorOrgId)";
     

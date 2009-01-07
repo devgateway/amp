@@ -12,6 +12,7 @@
 		  <script type="text/javascript">
 			// <![CDATA[		
 					var so = new SWFObject("/amcolumn.swf", "amcolumn", "960", "430", "8", "#DBE2F1");
+					so.addParam("wmode", "transparent");
 					so.addVariable("path", "/");
 					so.addVariable("settings_file", escape("/bluebook/<%= year %>/charts/settings/cooperation_forecasts.xml"));
 					so.addVariable("data_file", escape("/bluebook/<%= year %>/charts/forecasts_column_data.xml"));  

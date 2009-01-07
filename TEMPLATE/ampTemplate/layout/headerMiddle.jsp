@@ -40,7 +40,12 @@
         <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
 
 <c:set var="message">
+<c:if test="${sessionScope.currentMember.addActivity == 'true'}">
+<digi:trn key="aim:activityNotSaved">You did not save your activity. Do you want proceed without saving it ?</digi:trn>
+</c:if>
+<c:if test="${sessionScope.currentMember.addActivity == 'false'}">
 <digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
+</c:if>
 </c:set>
 <c:set var="quote">'</c:set>
 <c:set var="escapedQuote">\'</c:set>

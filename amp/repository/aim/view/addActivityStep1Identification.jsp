@@ -10,7 +10,51 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
+<script type="text/javascript" language="JavaScript" src="<digi:file src="module/message/script/yahoo-dom-event.js"/>"></script>
+<script type="text/javascript" language="JavaScript" src="<digi:file src="module/message/script/animation-min.js"/>"></script>
+<script type="text/javascript" language="JavaScript" src="<digi:file src="module/message/script/autocomplete-min.js"/>"></script>
+
+<!--begin custom header content for this example-->
+<style type="text/css">
+<!--
+
+.yui-skin-sam .yui-ac{position:relative;font-family:arial;font-size: 100%}
+.yui-skin-sam .yui-ac-input{position:absolute;width:100%;font-size: 100%}
+.yui-skin-sam .yui-ac-container{position:absolute;top:1.6em;width:100%;}
+.yui-skin-sam .yui-ac-content{position:absolute;width:100%;border:1px solid #808080;background:#fff;overflow:hidden;z-index:9050;}
+.yui-skin-sam .yui-ac-shadow{position:absolute;margin:.3em;width:100%;background:#000;-moz-opacity:0.10;opacity:.10;filter:alpha(opacity=10);z-index:9049;}
+.yui-skin-sam .yui-ac-content ul{margin:0;padding:0;width:100%;}
+.yui-skin-sam .yui-ac-content li{margin:0;padding:2px 5px;cursor:default;white-space:nowrap;FONT-SIZE: 100%;}
+.yui-skin-sam .yui-ac-content li.yui-ac-prehighlight{background:#B3D4FF;}
+.yui-skin-sam .yui-ac-content li.yui-ac-highlight{background:#426FD9;color:#FFF;}
+
+#myAutoComplete .yui-ac-content { 
+    max-height:16em;overflow:auto;overflow-x:hidden; /* set scrolling */ 
+    _height:16em; /* ie6 */ 
+} 
+
+
+#myAutoComplete ul {
+	list-style: square;
+	padding-right: 0px;
+	padding-bottom: 2px;
+}
+
+#myAutoComplete div {
+	padding: 0px;
+	margin: 0px; 
+}
+
+#myAutoComplete,
+#myAutoComplete2 {
+    width:15em; /* set width here */
+    padding-bottom:2em;
+}
+-->
+</style>
+
 <script language="JavaScript">
+document.getElementsByTagName('body')[0].className='yui-skin-sam';
 	function budgetCheckboxClick()
 	{
 		
@@ -426,7 +470,10 @@ target.style.cursor = "default"
 												</a>
 											</td>
 											<td valign="top" align="left">
-												<html:text name="aimEditActivityForm" property="identification.budgetCodeProjectID"/>
+											<div id="myAutoComplete">
+												<html:text name="aimEditActivityForm" styleId="myInput" property="identification.budgetCodeProjectID"/>
+												<div id="myContainer"></div>
+											</div>	
 											</td></tr>	
 											</field:display>
 											
@@ -611,3 +658,28 @@ target.style.cursor = "default"
 									<script>
 										InitBud();
 									</script>
+
+<script type="text/javascript">
+	var myArray = [
+	   	<c:forEach var="relAct" items="${aimEditActivityForm.identification.budgetCodes}">
+			"<bean:write name="relAct" filter="true"/>",
+		</c:forEach>     
+	];
+
+	YAHOO.example.ACJSArray = new function() {
+		// Instantiate JS Array DataSource
+	    this.oACDS = new YAHOO.widget.DS_JSArray(myArray);
+	    // Instantiate AutoComplete
+	    this.oAutoComp = new YAHOO.widget.AutoComplete("myInput", "myContainer", this.oACDS);
+	    //this.oAutoComp.prehighlightClassName = "yui-ac-prehighlight";    
+	    this.oAutoComp.useShadow = true;
+	    //this.oAutoComp.forceSelection = true;
+        this.oAutoComp.maxResultsDisplayed = myArray.length; 
+	    this.oAutoComp.formatResult = function(oResultItem, sQuery) {
+	        var sMarkup = oResultItem[0];
+	        return (sMarkup);
+	    };
+	}; 
+
+</script>
+									

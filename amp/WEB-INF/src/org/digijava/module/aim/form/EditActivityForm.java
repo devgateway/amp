@@ -170,6 +170,15 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private Long activityLevel;
 		private String author;
 		private String clasiNPD;
+		private String[] budgetCodes;
+
+		public String[] getBudgetCodes() {
+			return budgetCodes;
+		}
+
+		public void setBudgetCodes(String[] budgetCodes) {
+			this.budgetCodes = budgetCodes;
+		}
 
 		public String getApprovalStatus() {
 			return approvalStatus;

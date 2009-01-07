@@ -650,7 +650,8 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
           eaForm.getIdentification().setBudgetCheckbox((activity.getBudget()!=null)?activity.getBudget().toString():"");
           eaForm.getIdentification().setHumanitarianAid(activity.getHumanitarianAid());
           eaForm.getIdentification().setGovAgreementNumber(activity.getGovAgreementNumber());
-          eaForm.getIdentification().setBudgetCodeProjectID(activity.getBudgetCodeProjectID());
+          eaForm.getIdentification().setBudgetCodeProjectID(activity.getBudgetCodeProjectID().trim());
+          eaForm.getIdentification().setBudgetCodes(ActivityUtil.getBudgetCodes());
 
           /*
            * Tanzania adds

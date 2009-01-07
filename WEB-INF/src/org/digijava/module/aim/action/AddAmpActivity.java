@@ -1215,7 +1215,7 @@ private ActionForward showStep1(ActionMapping mapping,
 	eaForm.getIdentification().setConditionality(Util.initLargeTextProperty("aim-conditional-",eaForm.getIdentification().getConditionality(), request));
 	eaForm.getIdentification().setProjectManagement(Util.initLargeTextProperty("aim-projmanag-",eaForm.getIdentification().getProjectManagement(), request));
 	eaForm.getContracts().setContractDetails(Util.initLargeTextProperty("aim-contrdetail-",eaForm.getContracts().getContractDetails(), request));
-
+	eaForm.getIdentification().setBudgetCodes(ActivityUtil.getBudgetCodes());
 
 	if (eaForm.getIdentification().getResults() == null ||
 	    eaForm.getIdentification().getResults().trim().length() == 0) {

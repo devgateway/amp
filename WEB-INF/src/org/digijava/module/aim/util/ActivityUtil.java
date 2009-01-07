@@ -3646,6 +3646,47 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         	}
         	return retValue;
         }
-       
+        /**
+         * @author Marcelo
+         * @param 
+         * @return Array of Strings, which have budget_code_project_id's 
+         */
+        public static String[] getBudgetCodes() throws DgException{
+        	Session session=null;
+    		String queryString =null;
+    		Query query=null;
+    		List activities=null;
+    		String [] retValue=null;
+    		try {
+                session=PersistenceManager.getRequestDBSession();
+                queryString = "select distinct a.budgetCodeProjectID from " + AmpActivity.class.getName() + " a";    			  			
+    			query=session.createQuery(queryString);    			
+    			activities=query.list(); 		
+    		}catch(Exception ex) { 
+    			logger.error("couldn't load Activities" + ex.getMessage());	
+    			ex.printStackTrace(); 
+    		} 
+    		if (activities != null){
+    			//filtering null and blank values 
+    			ArrayList<String> codes = new ArrayList<String>();
+    			for (Object rawRow : activities) {
+    				String val = (String)rawRow; 
+    				if(val!=null && val.trim().compareTo("")!=0){
+    					codes.add(val);
+    				}
+				}
+    			//add filtered values to the array
+    			int i=0;
+    			if(codes.size()!=0){
+    				retValue=new String[codes.size()];
+    				for(String desc : codes){
+    					retValue[i]=desc;
+    					i++;
+    				}
+    			}
+    		}
+    		return retValue;
+        }
+
 	
 } // End

@@ -10,6 +10,7 @@
 		  <script type="text/javascript">
 			// <![CDATA[		
 					var so = new SWFObject("/amcolumn.swf", "amcolumn", "1150", "430", "8", "#DBE2F1");
+					so.addParam("wmode", "transparent");
 					so.addVariable("path", "/");
 					so.addVariable("settings_file", escape("/bluebook/<%= year %>/charts/settings/cooperation_by_type_of_aid.xml"));
 					so.addVariable("data_file", escape("/bluebook/<%= year %>/charts/eu_cooperation_type_of_aid_data.xml"));  

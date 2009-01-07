@@ -63,7 +63,7 @@
 			</ul>		
 			
 			<ul class="checkbox_container">
-				<h3><span style="float:left"><%= ll(:terms, :markers) %></span><span class="link" onclick="toggleAll('donors')" id="donors_toggle" selected="false">Select All</span></h3>
+				<h3><span style="float:left"><%= ll(:terms, :markers) %></span><span class="link" onclick="toggleAll('markers')" id="markers_toggle" selected="false">Select All</span></h3>
 				<li class="all"><%= check_box "markers", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>
 				<%= render :partial => "reports/query_options/marker", :collection => translate_options(Project::AVAILABLE_MARKERS) %>
 				<li class="annotation"><%= lc(:markers_annotation) %></li>
@@ -78,8 +78,8 @@
 			</ul>
 			
 			<ul class="checkbox_container">
-				<h3><span style="float:left"><%= ll(:terms, :dac_sector) %></span><span class="link" onclick="toggleAll('crs_sectors')" id="crs_sectors_toggle" selected="false">Select All</span></h3>
-				<li class="all"><%= check_box "crs_sectors", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>
+				<h3><span style="float:left"><%= ll(:terms, :dac_sector) %></span><span class="link" onclick="toggleAll('sectors')" id="sectors_toggle" selected="false">Select All</span></h3>
+				<li class="all"><%= check_box "sectors", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>
 			  <%= render :partial => "reports/query_options/sector", :collection => DacSector.ordered.all, :locals => { :shorten_to => 40 } %>
 			</ul>
 		</div>
@@ -102,7 +102,7 @@
 		
 		<ul class="checkbox_container">
 			<h3 style="height:30px"><span style="float:left"><%= ll(:reports, :of_treasury) %></span><span class="link" onclick="toggleAll('on_off_treasury')" id="on_off_treasury_toggle" selected="false">Select All</span></h3>
-			<li class="all"><%= check_box "on_off_budget", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>	
+			<li class="all"><%= check_box "on_off_treasury", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>	
 			<%= render :partial => "reports/query_options/on_off_treasury", :collection => translate_options(Project::ON_OFF_TREASURY_OPTIONS) %>
 		</ul>
 		

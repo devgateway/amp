@@ -104,7 +104,7 @@ class Project < ActiveRecord::Base
   validates_uniqueness_of   :donor_project_number, :scope => :donor_id
   
   # STATE: categorization
-  validates_presence_of     :national_regional, :type_of_implementation, :type_of_aid, :grant_loan, 
+  validates_presence_of     :national_regional, :type_of_implementation, :type_of_aid_id, :grant_loan, 
                             :officer_responsible_name
                             
   validates_associated      :sector_relevances, :geo_relevances, :mdg_relevances

@@ -22,6 +22,8 @@
 <% f.field_set t('projects.historic_funding', :year => Project::FIRST_YEAR_OF_RELEVANCE-1) do %>
 	<% funding = HistoricFunding.find_or_initialize_by_project_id(@project.id) %>
 	<% f.fields_for "project[historic_funding_attributes]", funding do |fh| %>
+		<%= fh.hidden_field :currency, @project.donor.currency -%>
+	
 		<li class="fifty"><%= fh.text_field :commitments, :value => fh.object.commitments %></li>
 		<li class="fifty"><%= fh.text_field :payments, :value => fh.object.payments %></li>
 	<% end %>
@@ -31,6 +33,8 @@
 	<% f.field_set t('projects.funding_title', :year => y) do %>
 		<% f.fields_for_associated @project.fundings.find_or_initialize_by_year(y) do |fa| -%>
 			<%= fa.hidden_field :year, y %>
+			<%= fa.hidden_field :currency, @project.donor.currency %>
+			
 			<li><%= fa.text_field :commitments, :value => fa.object.commitments %></li>
 			
 			<li class="fifty"><%= fa.text_field :payments_q1, :value => fa.object.payments_q1 %></li>

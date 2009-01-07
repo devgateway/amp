@@ -1,0 +1,10 @@
+<jboss-web>
+<context-root>/</context-root>
+<virtual-host>liberia.ampdev.net</virtual-host>
+ <class-loading java2ClassLoadingCompliance="false">
+ <loader-repository>
+ com.example:loader=amp-liberia.war
+ <loader-repository-config>java2ParentDelegation=false</loader-repository-config>
+ </loader-repository>
+ </class-loading>
+</jboss-web>

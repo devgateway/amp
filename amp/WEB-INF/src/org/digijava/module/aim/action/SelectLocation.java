@@ -10,6 +10,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.module.aim.form.EditActivityForm;
+import org.digijava.module.aim.form.EditActivityForm.Location;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -26,16 +27,15 @@ public class SelectLocation extends Action {
 
 		EditActivityForm eaForm = (EditActivityForm) form;
 
-		if (request.getParameter("locationReset") != null
-				&& request.getParameter("locationReset").equals("false")) {
-			eaForm.getLocation().setLocationReset(false);
-		} else {
+		Location location = eaForm.getLocation();
+		
+		if (location.isLocationReset()) {
 			eaForm.getLocation().setLocationReset(true);
 			logger.info("calling reset");
 			eaForm.reset(mapping, request);
 		}
 
-		String fill = request.getParameter("fill");
+		String fill = location.getFill();
 
 
 		/*if (eaForm.getImplementationLevel().equals("country")) {

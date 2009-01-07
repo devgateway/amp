@@ -26,21 +26,22 @@
 
 		if(implevel == 2)
 		{
-			if (document.getElementById('impMultiRegion').value != -1)
+			document.aimEditActivityForm.
+			if (document.aimEditActivityForm.impMultiRegion.value != -1)
 			{
 				check=true;
 			}
 		}
 		else if(implevel == 3)
 		{
-			if ((document.getElementById('impMultiZone').value != "") && (document.getElementById('.impMultiZone').value != -1))
+			if ((document.aimEditActivityForm.impMultiZone.value != "") && (document.aimEditActivityForm.impMultiZone.value != -1))
 			{
 				check=true;
 			}
 		}
 		else if(implevel == 4)
 		{
-			if (document.getElementById('impMultiWoreda').value != -1)
+			if (document.aimEditActivityForm..getElementById('impMultiWoreda').value != -1)
 			{
 				check=true;
 			}
@@ -271,7 +272,7 @@ function checkNumeric(objName,comma,period,hyphen)
 												</c:if>
 												<c:if test="${aimEditActivityForm.location.impLevelValue == 3}">
 												<html:select property="location.impMultiZone" styleId="impMultiZone" styleClass="inp-text" size="5" multiple="true">
-                                                                                                     <html:option value="-1">&nbsp;&nbsp;<digi:trn key="aim:addActivityLocations:selectZone">Select Zone</digi:trn>&nbsp;&nbsp;</html:option>
+													<html:option value="-1">&nbsp;&nbsp;<digi:trn key="aim:addActivityLocations:selectZone">Select Zone</digi:trn>&nbsp;&nbsp;</html:option>
 													<logic:notEmpty name="aimEditActivityForm" property="location.zones">
 														<html:optionsCollection name="aimEditActivityForm" property="location.zones"
 														value="ampZoneId" label="name" />

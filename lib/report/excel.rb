@@ -1,12 +1,8 @@
 module Report
   class Excel < Base
-    FORMATS = {
-      :heading => @workbook.add_format(:color => "blue", :bold => 1),
-      :totals => @workbook.add_format(:bold => 1)
-    }.freeze
     OFFSET_TOP = 0
     OFFSET_LEFT = 0
-        
+      
     def setup_excel
       @file = "/reports/odanic_report_#{Time.now.year}_#{Time.now.month}_#{Time.now.day}_#{Time.now.day+Time.now.hour+Time.now.sec}.xls"
       @workbook = Spreadsheet::Excel.new(File.join(RAILS_ROOT, 'public', @file))
@@ -20,7 +16,7 @@ module Report
     
     def output_head
       headings = data.columns
-      @worksheet.write_row(OFFSET_TOP, OFFSET_LEFT, encode_row_for_excel(headings), FORMATS[:heading])
+      @worksheet.write_row(OFFSET_TOP, OFFSET_LEFT, encode_row_for_excel(headings), @workbook.add_format(:color => "blue", :bold => 1))
     end
     
     def output_body
@@ -35,7 +31,7 @@ module Report
         totals << (col.has_total? ? col.total.to_s(false) : "")
       end
       
-      @worksheet.write_row(OFFSET_TOP + 1 + data.length, OFFSET_LEFT, encode_row_for_excel(totals), FORMATS[:totals])
+      @worksheet.write_row(OFFSET_TOP + 1 + data.length, OFFSET_LEFT, encode_row_for_excel(totals), @workbook.add_format(:bold => 1))
     end
     
     def output    

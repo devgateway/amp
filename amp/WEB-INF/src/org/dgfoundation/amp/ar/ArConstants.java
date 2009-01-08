@@ -83,6 +83,7 @@ public final class ArConstants {
 	public final static String COLUMN_ANY_SECTOR="Sector";
 	public final static String COLUMN_SUB_SECTOR="Sub-Sector";
 	public final static String COLUMN_REGION="Region";
+	public final static String COLUMN_SECTOR_GROUP="Sector Group";
 	
 	//additional measures
 	public final static String UNDISBURSED_BALANCE="Undisbursed Balance";

@@ -45,7 +45,8 @@ public class MetaTextColWorker extends TextColWorker {
 			mtc.getMetaData().add(new MetaInfo(ArConstants.PERCENTAGE,rs.getDouble(4))); else
 		if(columnName.equals("Parent National Planning Objectives")) 
 				mtc.getMetaData().add(new MetaInfo(ArConstants.PERCENTAGE,rs.getDouble(4))); else
-		if(columnName.contains(ArConstants.COLUMN_ANY_SECTOR)) 
+		
+		if(columnName.contains(ArConstants.COLUMN_ANY_SECTOR) && (!columnName.equalsIgnoreCase(ArConstants.COLUMN_SECTOR_GROUP))) 
 			mtc.getMetaData().add(new MetaInfo(ArConstants.PERCENTAGE,rs.getDouble(4))); else
 			
 		if(columnName.equals("Executing Agency")){ 

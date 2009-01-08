@@ -335,10 +335,10 @@ public class AddAmpActivity extends Action {
 
       if (!eaForm.isEditAct() || logframepr.compareTo("true") == 0 || request.getParameter("logframe") != null) {
        if (teamMember != null)
-        if ("true".compareTo((String) session.getAttribute("teamLeadFlag"))==0)
-            eaForm.setApprovalStatus(org.digijava.module.aim.helper.Constants.APPROVED_STATUS);
-          else
-            {
+       // if ("true".compareTo((String) session.getAttribute("teamLeadFlag"))==0)
+    	   //     eaForm.setApprovalStatus(org.digijava.module.aim.helper.Constants.APPROVED_STATUS);
+    	   // else
+    	   //{
         	  synchronized (ampContext) {
 	        	  //ampContext=this.getServlet().getServletContext();
 	        	  AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
@@ -349,7 +349,7 @@ public class AddAmpActivity extends Action {
 	        	  if(activityApprovalStatusProcess==true ) eaForm.setApprovalStatus(org.digijava.module.aim.helper.Constants.STARTED_STATUS);
 	        	  	else eaForm.setApprovalStatus(org.digijava.module.aim.helper.Constants.APPROVED_STATUS);
 	        	  }
-            }
+       //  }
       }
       else {
         String sessId = session.getId();

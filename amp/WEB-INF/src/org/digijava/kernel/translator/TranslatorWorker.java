@@ -25,6 +25,7 @@ package org.digijava.kernel.translator;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -50,6 +51,7 @@ import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.I18NHelper;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.util.SiteUtils;
+import org.digijava.module.translation.entity.MessageGroup;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
@@ -139,10 +141,25 @@ public class TranslatorWorker {
      * @return
      * @throws WorkerException
      */
-    public static String translate(String key, String locale, String siteId) throws
-        WorkerException {
+    public static String translate(String key, String locale, String siteId) throws WorkerException {
         String retVal = null;
         Message msg = getInstance(key).getMessage(key, locale, siteId);
+        if (msg != null) {
+            retVal = msg.getMessage();
+        }
+        else {
+            retVal = "";
+        }
+        return retVal;
+    }
+    
+    public static String translateText(String text,String locale, String siteId) throws WorkerException{
+    	return translateText(text, null,locale, siteId);
+    }
+
+    public static String translateText(String text, String keyWords, String locale, String siteId) throws WorkerException{
+        String retVal = null;
+        Message msg = getInstance("").getByBody(text, null, locale, siteId);
         if (msg != null) {
             retVal = msg.getMessage();
         }
@@ -291,26 +308,44 @@ public class TranslatorWorker {
         return trnMess;
     }
 
-    
-    public Message getByBody(String originalText, String local, String siteId) throws WorkerException{
-    	String hashCode = generateTrnKey(originalText);
-    	return getByKey(hashCode,local,siteId);
-    }
-    
+    /**
+     * Retrives translation.
+     * @param originalText this text is used to generate key
+     * @param local
+     * @return
+     * @throws WorkerException
+     */
     public Message getByBody(String originalText, String local) throws WorkerException{
     	String siteId = getAmpSite().getSiteId();
     	return getByBody(originalText,local,siteId);
     }
+
+    public Message getByBody(String originalText, String local, String siteId) throws WorkerException{
+    	return getByBody(originalText,null,local,siteId);
+    }
+
+    public Message getByBody(String originalText, String keyWords, String local, String siteId) throws WorkerException{
+    	String hashCode = generateTrnKey(originalText);
+    	return getByKey(hashCode,originalText, keyWords,local,siteId);
+    }
     
+    public Message getByKey(String key, String locale, String siteId) throws WorkerException {
+    	return getByKey(key, "", null, locale, siteId);
+    }
+
     /**
-     * Returns a message object matching local,key,site and type
-     * @param key
-     * @param locale
+     * Returns message by key, site and local.
+     * This method searches db. See overloaded pair in {@link CachedTranslatorWorker}
+     * Note that there is old workaround in this method which breaks this description.
+     * @param key mandatory.
+     * @param defaultText default text. Should not be null.
+     * @param keyWords used for grouping. not mandatory
+     * @param locale specifies in which language this message should be searched. part of the key, mandatory.
+     * @param siteId part of the key. mandatory.
      * @return
      * @throws WorkerException
      */
-    public Message getByKey(String key, String locale, String siteId) throws
-        WorkerException {
+    public Message getByKey(String key, String defaultText, String keyWords, String locale, String siteId) throws WorkerException {
 
         /**
          * @todo This stuff needs to be changed. All developers should use
@@ -1477,6 +1512,57 @@ public class TranslatorWorker {
         }
 
         return message;
+    }
+    
+    @SuppressWarnings("unchecked")
+	public static Collection<Message> getAllTranslationOfBody(String text, String siteId) throws WorkerException{
+    	Session session = null;
+    	List<Message> result = null;
+		try {
+			String hashKey = generateTrnKey(text);
+			session = PersistenceManager.getSession();
+			String oql = "from "+Message.class.getName()+" as m where m.key = :hashKey and m.siteId = :SiteId";
+			Query query = session.createQuery(oql);
+			query.setString("hashKey", hashKey);
+			query.setString("SiteId", siteId);
+			result = query.list();
+		} catch (Exception e) {
+			throw new WorkerException(e);
+		}finally{
+			if (null != session){
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception e1) {
+					throw new WorkerException(e1);
+				}
+			}
+		}
+    	return result;
+    }
+
+    @SuppressWarnings("unchecked")
+	public static Collection<Message> getAllTranslationsOfKey(String key, String siteId) throws WorkerException{
+    	Session session = null;
+    	List<Message> result = null;
+		try {
+			session = PersistenceManager.getSession();
+			String oql = "from "+Message.class.getName()+" as m where m.key = :key and m.siteId = :SiteId";
+			Query query = session.createQuery(oql);
+			query.setString("hashKey", key);
+			query.setString("SiteId", siteId);
+			result = query.list();
+		} catch (Exception e) {
+			throw new WorkerException(e);
+		}finally{
+			if (null != session){
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception e1) {
+					throw new WorkerException(e1);
+				}
+			}
+		}
+    	return result;
     }
 
     /**

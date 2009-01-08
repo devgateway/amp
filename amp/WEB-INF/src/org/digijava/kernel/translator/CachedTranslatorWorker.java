@@ -24,6 +24,7 @@ package org.digijava.kernel.translator;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -40,7 +41,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 public class CachedTranslatorWorker extends TranslatorWorker {
-    private static Logger logger = Logger.getLogger(CachedTranslatorWorker.class);
+
+	private static Logger logger = Logger.getLogger(CachedTranslatorWorker.class);
 
     private AbstractCache messageCache;
 
@@ -94,22 +96,34 @@ public class CachedTranslatorWorker extends TranslatorWorker {
 
     }
 
-    public Message getByKey(String key, String locale, String siteId) throws WorkerException {
+    /**
+     * Overrides method in parent worker.
+     * This one searches in cache
+     * @see TranslatorWorker#getByKey(String, String, String, String, String)
+     */
+    public Message getByKey(String key, String body, String keyWords, String locale, String siteId) throws WorkerException {
 
         Message message = new Message();
-
+        //set up key trio
         message.setKey(processKeyCase(key));
         message.setLocale(locale);
         message.setSiteId(siteId);
-
+        //search message
         Object obj = messageCache.get(message);
+        
         if (obj == null) {
-            logger.debug("No translation exists for siteId="
-                         + siteId + ", key = " + key + ",locale=" + locale);
+            logger.debug("No translation exists for siteId="+ siteId + ", key = " + key + ",locale=" + locale+", creating new");
+//            message.setCreated(new Timestamp(System.currentTimeMillis()));
+//            message.setLastAccessed(message.getCreated());
+//            message.setMessage(body);
+//            message.setKeyWords(keyWords);
+//            this.save(message);
+//            return message;
             return null;
         }
         else {
         	Message foundMessage = (Message)obj;
+        	foundMessage.setKeyWords(keyWords);
         	updateTimeStamp(foundMessage);
             return foundMessage;
         }

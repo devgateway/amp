@@ -1,13 +1,9 @@
-package org.dgfoundation.amp.test;
+package org.dgfoundation.amp.test.translation;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
+import junit.framework.TestCase;
 
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.translator.TranslatorWorker;
-
-import junit.framework.TestCase;
 
 public class TranslatorWorkerTest extends TestCase {
 
@@ -29,7 +25,7 @@ public class TranslatorWorkerTest extends TestCase {
 	public void testProcessKeyCaseMessage() {
 		String keyInitial = " testKey1 ";
 		String keyExpected = " testkey1 ";
-		Message message = getMessage(keyInitial, "ge", "some body");
+		Message message = TrnTestUtil.getMessage(keyInitial, "ge", "some body");
 		worker.processKeyCase(message);
 		assertNotNull(message.getKey());
 		assertEquals(keyExpected, message.getKey());
@@ -63,21 +59,5 @@ public class TranslatorWorkerTest extends TestCase {
 		assertEquals(hash, result);
 	}
 
-	private List<Message> getMessages(){
-		List<Message> result = new ArrayList<Message>();
-		result.add(getMessage("key1", "en", "message1"));
-		result.add(getMessage("key2", "sw", "message2"));
-		result.add(getMessage("key3", "en", "message3"));
-		result.add(getMessage("key2", "ge", "message4"));
-		return result;
-	}
-	private Message getMessage(String key,String locale,String body){
-		Message result = new Message();
-		result.setCreated(new Timestamp(System.currentTimeMillis()));
-		result.setKey(key);
-		result.setLocale(locale);
-		result.setMessage(body);
-		return result;
-	}
 
 }

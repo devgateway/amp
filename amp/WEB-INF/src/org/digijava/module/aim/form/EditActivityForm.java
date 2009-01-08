@@ -3798,15 +3798,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.fundingOrganizations = fundingOrganizations;
 		}
 
-		public FundingOrganization getFundingOrganization(int index) {
-			int currentSize = fundingOrganizations.size();
-			if (index >= currentSize) {
-				for (int i = 0; i <= index - currentSize; i++) {
-					fundingOrganizations.add(new FundingOrganization());
-				}
-			}
-			return (FundingOrganization) ((ArrayList) fundingOrganizations).get(index);
-		}
+		
 
 		public boolean isDisbursementOrders() {
 			boolean disbOrdersExist = false;
@@ -5077,5 +5069,15 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 	public void setStepFailure(Boolean[] stepFailure) {
 		this.stepFailure = stepFailure;
+	}
+	
+	public FundingOrganization getFundingOrganization(int index) {
+		int currentSize = getFunding().fundingOrganizations.size();
+		if (index >= currentSize) {
+			for (int i = 0; i <= index - currentSize; i++) {
+				getFunding().fundingOrganizations.add(new FundingOrganization());
+			}
+		}
+		return (FundingOrganization) ((ArrayList) getFunding().fundingOrganizations).get(index);
 	}
 }

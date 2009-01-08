@@ -154,6 +154,15 @@
 			<put-item name="left" module="admin" page="left"/>
 			<put-item name="body" module="admin" page="body"/>
 		</layout>
+		<layout name="editor">
+			<put name="title">AMP Editor</put>
+			<put-item name="headerTop" file="headerTop.jsp"/>
+			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
+	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
+			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
+			<put-item name="footer" layout="footerLayout"/>
+			<put-item name="body" module="aim" instance="default"/>
+		</layout>
 		<layout name="single" file="popupLayout.jsp">
 			<put name="title">Popup</put>
 		</layout>
@@ -477,6 +486,11 @@
 
 		<!-- TRANSLATE LAYOUT -->
 		<page-group masterLayout="default" tile="body"/>
+		<page-group masterLayout="editor" tile="body">
+			<module name="editor">
+			  <page>editor_editText</page>
+			</module>
+		</page-group>
 
 		<page-group masterLayout="admin" tile="body">
 			<module name="admin"/>
@@ -500,9 +514,6 @@
 			  <page>cms_selectCategory</page>
   			  <page>cms_selectFile</page>
 			  <page>cms_categoryDetails</page>
-			</module>
-			<module name="editor">
-			  <page>editor_editText</page>
 			</module>
 		</page-group>
 		<page-group masterLayout="clearLayout" tile="body">

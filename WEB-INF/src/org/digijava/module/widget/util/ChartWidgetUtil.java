@@ -227,6 +227,7 @@ public class ChartWidgetUtil {
     
     
     private static CategoryDataset getTypeOfAidDataset(FilterHelper filter) throws DgException {
+        boolean nodata=true; // for displaying no data message
         DefaultCategoryDataset result = new DefaultCategoryDataset();
         Long year = filter.getYear();
         if (year == null || year == -1) {
@@ -246,10 +247,16 @@ public class ChartWidgetUtil {
                 for (AmpCategoryValue aid : typeOfAids) {
                     DecimalWraper funding = getFunding(filter.getOrgId(), i, aid.getId(), currCode,filter.getTransactionType());
                     result.addValue(funding.doubleValue()/MILLION, aid.getValue(), new Long(i));
+                     if (funding.doubleValue() != 0) {
+                        nodata = false;
+                    }
                 }
 
             }
 
+        }
+         if(nodata){
+            result= new DefaultCategoryDataset();
         }
         
         return result;
@@ -263,6 +270,7 @@ public class ChartWidgetUtil {
      */
     
      private static CategoryDataset getODAProfileDataset(FilterHelper filter) throws DgException {
+        boolean nodata=true; // for displaying no data message
         DefaultCategoryDataset result = new DefaultCategoryDataset();
         Long year = filter.getYear();
         if (year == null || year == -1) {
@@ -281,11 +289,17 @@ public class ChartWidgetUtil {
                 Collection<AmpCategoryValue> financingInstruments = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY);
                 for (AmpCategoryValue financingInstrument : financingInstruments) {
                     DecimalWraper funding = getFundingByFinancingInstrument(filter.getOrgId(), i, financingInstrument.getId(), currCode,filter.getTransactionType());
+                    if (funding.doubleValue() != 0) {
+                        nodata = false;
+                    }
                     result.addValue(funding.doubleValue()/MILLION, financingInstrument.getValue(), new Long(i));
                     }
 
             }
 
+        }
+        if(nodata){
+            result= new DefaultCategoryDataset();
         }
         
         return result;
@@ -301,6 +315,7 @@ public class ChartWidgetUtil {
     
     
     private static CategoryDataset getPledgesCommDisbDataset(FilterHelper filter) throws DgException {
+       boolean nodata=true; // for displaying no data message
        DefaultCategoryDataset result = new DefaultCategoryDataset();
         Long year = filter.getYear();
         if (year == null || year == -1) {
@@ -318,13 +333,19 @@ public class ChartWidgetUtil {
             for (long i = year - 2; i <= year; i++) {
               Double fundingPledge = getPledgesFunding(filter.getOrgId(), i, currCode);
               result.addValue(fundingPledge .doubleValue()/MILLION, "Pledges", new Long(i));
-              DecimalWraper funding = getFunding(filter.getOrgId(), i, currCode,true);  
-              result.addValue(funding.doubleValue()/MILLION, "Actual commitments", new Long(i));   
-              funding = getFunding(filter.getOrgId(), i, currCode,false);
-              result.addValue(funding.doubleValue()/MILLION, "Actual disbursements", new Long(i)); 
+              DecimalWraper fundingComm = getFunding(filter.getOrgId(), i, currCode,true);
+              result.addValue(fundingComm.doubleValue()/MILLION, "Actual commitments", new Long(i));
+              DecimalWraper fundingDisb = getFunding(filter.getOrgId(), i, currCode,false);
+              result.addValue(fundingDisb.doubleValue()/MILLION, "Actual disbursements", new Long(i));
+                if (fundingPledge.doubleValue() != 0 || fundingComm.doubleValue() != 0 || fundingDisb.doubleValue() != 0) {
+                    nodata = false;
+                }
 
             }
 
+        }
+        if(nodata){
+            result= new DefaultCategoryDataset();
         }
         
         return result;

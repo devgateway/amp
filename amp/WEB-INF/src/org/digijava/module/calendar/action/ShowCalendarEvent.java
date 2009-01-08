@@ -271,8 +271,7 @@ public class ShowCalendarEvent extends Action {
             calendarItems.add(calendarItem);
             calendar.setCalendarItem(calendarItems);
 
-            if(!ceform.getTypeofOccurrence().equals("") && ceform.getTypeofOccurrence() != null
-                    && ceform.getRecurrStartDate().equals("") && ceform.getRecurrStartDate() != null ){
+            if(ceform.getSelectedStartMonth() != null){           
 	            Set recEvent =new HashSet();
 	            RecurrCalEvent recurrEvent = new RecurrCalEvent();
 	            recurrEvent.setCalendar(calendar);
@@ -282,13 +281,21 @@ public class ShowCalendarEvent extends Action {
 
                 // selected start date and selected end date
                 String dtformat = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
-            if (dtformat == null) {
-                dtformat = "dd/MM/yyyy";
-            }
+	            if (dtformat == null) {
+	                dtformat = "dd/MM/yyyy";
+	            }
                  SimpleDateFormat sdf = new SimpleDateFormat(dtformat);
+                 Date recurrStartDate=null;
+                 Date recurrEndDate= null;
+                 if(ceform.getRecurrStartDate()!=null && !ceform.getRecurrStartDate().equals("")){
+                	 recurrStartDate=sdf.parse(ceform.getRecurrStartDate());
+                 }
+                 if(ceform.getRecurrEndDate()!=null && !ceform.getRecurrEndDate().equals("")){
+                	recurrEndDate= sdf.parse(ceform.getRecurrEndDate());
+                 }
+                recurrEvent.setRecurrStartDate(recurrStartDate);
+                recurrEvent.setRecurrEndDate(recurrEndDate);              
 
-                recurrEvent.setRecurrStartDate(sdf.parse(ceform.getRecurrStartDate()));
-                recurrEvent.setRecurrEndDate(sdf.parse(ceform.getRecurrEndDate()));
 
 	            recEvent.add(recurrEvent);
 	            calendar.setRecurrCalEvent(recEvent);

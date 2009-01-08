@@ -8,31 +8,36 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
    
-
-<table id="orgTable" border="1" width="100%">
-    <th colspan="2" class="tableHeaderCls">Summary</th>
+<table width="100%">
     <tr>
-        <td width="30%">Organization Name:</td><td>${organization.name}&nbsp;</td>
+        <td height="420px" valign="top" >
+            <table id="orgTable" border="1" width="100%">
+                <th colspan="2" class="tableHeaderCls">Summary</th>
+                <tr>
+                    <td width="30%">Organization Name:</td><td>${organization.name}&nbsp;</td>
+                </tr>
+                <tr>
+                    <td width="30%">Organization Acronym:</td><td>${organization.acronym}&nbsp;</td>
+                </tr>
+                <tr>
+                    <td width="30%">Donor Group:</td><td>${organization.orgGrpId.orgGrpName}&nbsp;</td>
+                </tr>
+                <tr>
+                    <td width="30%">Web Link:</td><td>${organization.orgUrl}&nbsp;</td>
+                </tr>
+                <tr>
+                    <td width="30%">Contact Name:</td><td>${organization.contactPersonName}&nbsp;</td>
+                </tr>
+                <tr>
+                    <td width="30%">Contact Phone:</td><td>${organization.phone}&nbsp;</td>
+                </tr>
+                <tr>
+                    <td width="30%">Contact Email:</td><td>${organization.email}&nbsp;</td>
+                </tr>
+
+            </table>
+        </td>
     </tr>
-      <tr>
-        <td width="30%">Organization Acronym:</td><td>${organization.acronym}&nbsp;</td>
-    </tr>
-      <tr>
-        <td width="30%">Donor Group:</td><td>${organization.orgGrpId.orgGrpName}&nbsp;</td>
-    </tr>
-      <tr>
-        <td width="30%">Web Link:</td><td>${organization.orgUrl}&nbsp;</td>
-    </tr>
-     <tr>
-        <td width="30%">Contact Name:</td><td>${organization.contactPersonName}&nbsp;</td>
-    </tr>
-     <tr>
-        <td width="30%">Contact Phone:</td><td>${organization.phone}&nbsp;</td>
-    </tr>
-     <tr>
-        <td width="30%">Contact Email:</td><td>${organization.email}&nbsp;</td>
-    </tr>
-	
 </table>
  
 <script language="javascript">

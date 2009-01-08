@@ -81,6 +81,8 @@ public class AmpReports implements Comparable, LoggerIdentifiable {
 	private Set logs;
 	
 	private Set<AmpFilterData> filterDataSet;
+	
+	private Boolean allowEmptyFundingColumns;
 
 	// public static final String NOTE="NOTE: All shown funding items are in USD
 	// currency. All calendaristic date cells are shown using DD/MM/YYYY format.
@@ -437,4 +439,13 @@ public class AmpReports implements Comparable, LoggerIdentifiable {
 	public void setNametrimed(String nametrimed) {
 		this.nametrimed = nametrimed;
 	}
+
+	public Boolean getAllowEmptyFundingColumns() {
+		return allowEmptyFundingColumns;
+	}
+
+	public void setAllowEmptyFundingColumns(Boolean allowEmptyFundingColumns) {
+		this.allowEmptyFundingColumns = allowEmptyFundingColumns;
+	}
+	
 }

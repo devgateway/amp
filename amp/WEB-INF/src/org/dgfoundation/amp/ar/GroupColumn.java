@@ -100,6 +100,11 @@ public class GroupColumn extends Column {
     		Iterator i=srcG.iterator();
     		while (i.hasNext()) {
 				Column element = (Column) i.next();
+				
+				if(category.equals(ArConstants.TERMS_OF_ASSISTANCE) && element instanceof TotalCommitmentsAmountColumn){ 
+					continue;
+				}
+				
 				Column splitted=verticalSplitByCateg(element,category,ids,generateTotalCols,reportMetadata);
 				
 				if(splitted!=null) {
@@ -521,4 +526,29 @@ public class GroupColumn extends Column {
 		return false;
 	}
 	
+	@Override
+	public boolean removeEmptyChildren(boolean checkFunding) {
+		List<Column> myItems	= getItems();
+		Iterator<Column> iter	= myItems.iterator();
+		boolean allEmpty		= true;
+		while ( iter.hasNext() ) {
+			Column col			= iter.next();
+			if ( checkFunding && !ArConstants.COLUMN_FUNDING.equals(col.name)) {
+				continue;
+			}
+			if ( checkFunding && col.getItems().size() == 1 ) {
+				Column child 	= (Column) col.getItems().get(0);
+				if ( ArConstants.COLUMN_FUNDING.equals(child.name) )
+					iter.remove();
+				continue;
+			}
+			if ( col.removeEmptyChildren(false) ) {
+				if (col instanceof GroupColumn)
+					iter.remove();
+			}
+			else
+				allEmpty		= false;
+		}
+		return allEmpty;
+	}
 }

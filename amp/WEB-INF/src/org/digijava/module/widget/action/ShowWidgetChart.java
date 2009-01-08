@@ -20,6 +20,7 @@ import org.digijava.module.widget.util.WidgetUtil;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.Plot;
 
 /**
  * Renders jFreeChart for widget. Initially used on gis dashboard
@@ -82,7 +83,9 @@ public class ShowWidgetChart extends Action {
                         chart = ChartWidgetUtil.getRegionByDonorChart(opt, filter);
                         break;
                 }
-            
+                    Plot plot = chart.getPlot();
+                    plot.setNoDataMessage("No data available");
+
 
                 // write image in response
                 ChartUtilities.writeChartAsPNG(

@@ -3,7 +3,9 @@
 	<name>dataExchange</name>
 	<security login-required="true" default="READ">
 		<action login-required="false" pattern="/exportWizard"/>  
-		<action login-required="false" pattern="/export"/>  
+		<action login-required="false" pattern="/export"/> 
+		<action login-required="false" pattern="/importWizard"/>  
+		<action login-required="false" pattern="/import"/> 
 	</security>
 	<!-- highlights classes Begin-->
 	<hibernate-classes required="false">

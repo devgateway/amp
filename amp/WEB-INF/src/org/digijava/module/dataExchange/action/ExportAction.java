@@ -1,8 +1,5 @@
 package org.digijava.module.dataExchange.action;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,13 +9,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.ampharvester.action.ImportExportManagerAction;
-import org.digijava.module.ampharvester.api.ExportManager;
-import org.digijava.module.ampharvester.form.ImportExportManagerForm;
-import org.digijava.module.ampharvester.jaxb10.ActivityType;
-import org.digijava.module.ampharvester.util.DbUtil;
-import org.digijava.module.ampharvester.util.XmlTransformerHelper;
+import org.digijava.module.dataExchange.form.ExportForm;
 
 public class ExportAction extends DispatchAction{
 
@@ -27,6 +18,7 @@ public class ExportAction extends DispatchAction{
 	  public ActionForward export(ActionMapping mapping, ActionForm form,
 		      HttpServletRequest request, HttpServletResponse response) throws  Exception {
 
+		  ExportForm ef= (ExportForm) form;
 		    response.setContentType("text/xml");
 		    response.setHeader("content-disposition", "attachment; filename=exportActivities.xml"); // file neme will generate by date
 		    ServletOutputStream outputStream = null;

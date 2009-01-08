@@ -83,7 +83,7 @@
 
 <digi:instance property="aimEditActivityForm" />
 
-<digi:form action="/editSurvey.do" method="post">
+<digi:form action="/editSurvey.do~edit=true" method="post">
 
 
 

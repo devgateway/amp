@@ -72,7 +72,7 @@ function validate(){
         <html:hidden name="editorForm" property="title"/>
         <c:if test="${not empty editorForm.activityName}">
             <table width="80%">
-                
+                <tr><td><br/></td></tr>
                 <tr>
                     
                     <td noWrap width="7%" align="right"><B><digi:trn key="editor:title">Title</digi:trn>:</B>

@@ -206,13 +206,14 @@
 																					<td align="right"><STRONG><digi:trn>Title</digi:trn></STRONG></td>
 																					<td align="left"><digi:trn linkAlwaysVisible="true">${helpForm.topicKey}</digi:trn></td>
 																				</tr>
-																				<!--
+																			<!--
                                                                                 <tr>
 																					<td align="right"><STRONG><digi:trn key="help:keywords">Keywords</digi:trn></STRONG></td>
 																					<td align="left"><digi:trn key="${helpForm.keywordsTrnKey}" linkAlwaysVisible="true">Keywords</digi:trn></td>
 																				</tr>
 																			-->
-																				<tr>
+                                                                                
+                                                                                <tr>
 																					<td align="right"><STRONG><digi:trn>body</digi:trn></STRONG></td>
 																					<td align="left"><digi:edit key="${helpForm.bodyEditKey}">no text preview</digi:edit></td>
 																				</tr>

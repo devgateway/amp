@@ -47,6 +47,8 @@ public class FeaturesUtil {
 
 	private ServletContext ampContext = null;
 
+	public static String errorLog="";
+	
 	public static void logGlobalSettingsCache() {
 		String log = "";
 		Iterator iter = globalSettingsCache.iterator();

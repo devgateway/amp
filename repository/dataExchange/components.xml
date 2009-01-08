@@ -2,6 +2,7 @@
 <config>
 	<secondary-pages>
 		<page name="exportWizard" title="Export Manager"/>
+		<page name="importWizard" title="Import Manager"/>
 	</secondary-pages>
 	<module>
 	</module>

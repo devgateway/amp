@@ -159,6 +159,25 @@
 						<TD vAlign="top" align="center">
 
 							<TABLE width="99%" cellSpacing=0 cellPadding=0 vAlign="top" align="center">
+                                 <TR>
+                                       <TD>
+                                     &nbsp;
+                                     </TD>
+                                </TR>
+                                  <TR>
+                                       <TD BGCOLOR="#CCDBFF" style="font-weight : bold;height:20px;">
+                                      	<field:display name="Printer Friendly Button Performance" feature="Portfolio Dashboard">
+                                   
+                                        <a style="cursor:pointer; " onclick="javascript:showPrinterFriendlyPortPerf()"><digi:trn >Printer Friendly Version</digi:trn></a>
+
+                                    </field:display>
+                                     </TD>
+                                </TR>
+                                 <TR>
+                                       <TD>
+                                     &nbsp;
+                                     </TD>
+                                </TR>
 
 								<TR><TD class="highlight">
 
@@ -183,19 +202,19 @@
 
 										<TR>
 
-											<TD align="center" class="textalb" height="20" bgcolor="#336699">
+											<TD align="center" style="font-weight : bold;font-size: large;" height="20">
 
 												<digi:trn key="aim:mePortfolioPerformance">
 
-												Portfolio - Performance</digi:trn>
+												 Performance</digi:trn>
 
 											</TD>
 
-											<TD align="center" class="textalb" height="20" bgcolor="#336699">
+											<TD align="center" style="font-weight : bold;font-size: large;" height="20">
 
 												<digi:trn key="aim:mePortfolioRisk">
 
-												Portfolio - Risk</digi:trn>
+												Risk</digi:trn>
 
 											</TD>
 
@@ -212,10 +231,6 @@
 													<br><br>
 
 													<div align="center">
-													<field:display name="Printer Friendly Button Performance" feature="Portfolio Dashboard">
-													<input type="button" class="dr-menu" value="<digi:trn key='btn:printerfriendly'>Printer Friendly</digi:trn>"
-													onclick="javascript:showPrinterFriendlyPortPerf()">
-													</field:display>
 													<field:display name="Without Baseline Button Performance" feature="Portfolio Dashboard">
 													<input type="button" class="dr-menu" value="<digi:trn key='btn:withoutBaseline'>Without Baseline</digi:trn>"
 													onclick="javascript:portPerfWithoutBaseline()">

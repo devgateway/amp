@@ -26,13 +26,13 @@
 			</set>
 
 			<set name="valuesActivity" lazy="true" inverse="true" cascade="delete-orphan">
-				<key column="id"/>
-				<one-to-many class="org.digijava.module.aim.dbentity.IndicatorActivity"/>
+				<key column="indicator_id"/>
+				<one-to-many class="org.digijava.module.aim.dbentity.IndicatorConnection"/>
 			</set>
 
 			<set name="valuesTheme" lazy="true" inverse="true" cascade="delete-orphan">
-				<key column="id"/>
-				<one-to-many class="org.digijava.module.aim.dbentity.IndicatorTheme"/>
+				<key column="indicator_id"/>
+				<one-to-many class="org.digijava.module.aim.dbentity.IndicatorConnection"/>
 			</set>
 
 	</class>

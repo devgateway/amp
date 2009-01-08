@@ -1,19 +1,20 @@
 package org.digijava.module.translation.util;
 
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.translation.entity.PatchedMessageGroup;
+import org.digijava.module.translation.entity.PatcherMessageGroup;
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -33,7 +34,8 @@ public class HashKeyPatch {
 		Session session = null;
 		try {
 			//check if we already ran this patch.
-			String gsv = FeaturesUtil.getGlobalSettingValue(TRN_HASH_PATCH_GLOBAL_SETTINGS_NAME);
+			//String gsv = FeaturesUtil.getGlobalSettingValue(TRN_HASH_PATCH_GLOBAL_SETTINGS_NAME);
+			String gsv = getGlobalSettingValueBypassCache(TRN_HASH_PATCH_GLOBAL_SETTINGS_NAME);
 			if (gsv == null){
 				session = PersistenceManager.getSession();
 				//patch translations
@@ -73,45 +75,24 @@ public class HashKeyPatch {
 		}
 	}
 	
+	/**
+	 * Executes patch
+	 * @param session
+	 */
 	private static void patch(Session session){
-		logger.info("Loading all translations from database...");
 		Transaction tx = null;
 		try {
-			String oql = "from "+ Message.class.getName();
-			Query query = session.createQuery(oql);
-			@SuppressWarnings("unchecked")
-			List<Message> allMessages = query.list();
+			logger.info("Loading all translations from database...");
+			Collection<Message> allMessages = PersistenceManager.loadAll(Message.class, session);
 			if (allMessages!= null && allMessages.size() > 0){
 				logger.info("Grouping translations with same key...");
-				Map<String, PatchedMessageGroup> keyGroupMap = new HashMap<String, PatchedMessageGroup>();
-				for (Message message : allMessages) {
-					PatchedMessageGroup group = keyGroupMap.get(message.getKey());
-					if (group == null){
-						group = new PatchedMessageGroup(message.getKey());
-						keyGroupMap.put(message.getKey(), group);
-					}
-					//session.delete(message);
-					group.addMessage(message);
-				}
+				Collection<PatcherMessageGroup> messageGroups = 
+					TrnUtil.groupByKey(allMessages, new TrnUtil.PatcherMessageGroupFactory());
+					//createPachedGroups(allMessages);
 				logger.info("Filtering duplicates...");
-				Collection<PatchedMessageGroup> patchedMessages = keyGroupMap.values();
-				Map<String, PatchedMessageGroup> mapMessageGroup = new HashMap<String, PatchedMessageGroup>();
-				for (PatchedMessageGroup messageGroup : patchedMessages) {
-					mapMessageGroup.put(messageGroup.getHashKey(), messageGroup);
-				}
+				Collection<PatcherMessageGroup> groups = TrnUtil.removeDuplicateHashCodes(messageGroups);
 				logger.info("Patching and saving new translations... this may take some time");
-				int c = 0;
-				long cm = 0;
-				for (PatchedMessageGroup messageGroup : mapMessageGroup.values()) {
-					for (Message patchedMessage : messageGroup.getPatchedMessages()) {
-						TranslatorWorker.getInstance().save(patchedMessage);
-					}
-					if(++c == 7000){
-						cm += c;
-						logger.info("Please wait, patch is still working. Processed "+cm+" messages...");
-						c=0;
-					}
-				}
+				saveToDatabase(groups);
 				logger.info("patching translations keys with hashcodes finished.");
 			}
 		} catch (Exception e) {
@@ -126,5 +107,60 @@ public class HashKeyPatch {
 		}
 	}
 
+	/**
+	 * Saves all patched groups in db. 
+	 * @param messageGroups
+	 * @throws WorkerException
+	 */
+	private static void saveToDatabase(Collection<PatcherMessageGroup> messageGroups)throws WorkerException {
+		int c = 0;
+		long cm = 0;
+		for (PatcherMessageGroup messageGroup : messageGroups) {
+			for (Message patchedMessage : messageGroup.patcheAll()) {
+				TranslatorWorker.getInstance().save(patchedMessage);
+			}
+			if(++c == 7000){
+				cm += c;
+				logger.info("Please wait, patch is still working. Processed "+cm+" messages...");
+				c=0;
+			}
+		}
+	}
+
+	
+	/**
+	 * Loads globals setting bypassing global settings cache to see changes done by autopacher.
+	 * TODO This may be moved to {@link FeaturesUtil}
+	 * TODO global settings cache may have some reload/refresh or cache update feature.
+	 * @param key
+	 * @return
+	 */
+	private static String getGlobalSettingValueBypassCache(String key){
+		Session session = null;
+		try {
+			session = PersistenceManager.getSession();
+			String oql = "from "+AmpGlobalSettings.class.getName()+" as gs where gs.globalSettingsName=:gsName";
+			Query query = session.createQuery(oql);
+			query.setString("gsName", key);
+			AmpGlobalSettings gs = (AmpGlobalSettings) query.uniqueResult();
+			if (null == gs) return null;
+			return gs.getGlobalSettingsValue();
+		} catch (HibernateException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			if (null != session){
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (HibernateException e) {
+					e.printStackTrace();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return null;
+	}
 	
 }

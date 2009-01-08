@@ -27,6 +27,7 @@ import java.io.Serializable;
 import java.io.StringWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -399,13 +400,9 @@ public class PersistenceManager {
 
 		try {
 			session = getSession();
-
 			tx = session.beginTransaction();
-
 			session.update(object);
-
 			tx.commit();
-
 		}
 		catch (Exception ex) {
 			if (tx != null) {
@@ -442,13 +439,9 @@ public class PersistenceManager {
 
 		try {
 			session = getSession();
-
 			tx = session.beginTransaction();
-
 			session.save(object);
-
 			tx.commit();
-
 		}
 		catch (Exception ex) {
 			if (tx != null) {
@@ -473,6 +466,43 @@ public class PersistenceManager {
 
 	}
 
+    /**
+     * Loads all objects of T from database, using request (thread) session.
+     * @param <T>
+     * @param object
+     * @return
+     * @throws DgException
+     */
+    public static <T> Collection<T> loadAll(Class<T> object) throws DgException{
+    	return loadAll(object, getRequestDBSession());
+    }
+
+    /**
+     * Loads all objects of T from database.
+     * Client should care about opening and releasing session which is passed as parameter to this method.
+     * @param <T>
+     * @param object class object of T
+     * @param session database session. Client should handle session - opening and releasing, including transactions if required.
+     * @return
+     * @throws DgException
+     */
+    @SuppressWarnings("unchecked")
+	public static <T> Collection<T> loadAll(Class<T> object, Session session) throws DgException{
+        Collection<T> col = null;
+        String queryString = null;
+        try {
+        	queryString = "from " + object.getName();
+            Query qry = session.createQuery(queryString);
+            col = qry.list();
+        } catch (Exception e) {
+            logger.error("cannot execute query: "+queryString, e);
+            throw new DgException(e);
+        }
+        return col;
+    }
+
+	
+	
 	/**
 	 * Returns hibernate Session related with current request if it exists,
 	 * or creates new one.

@@ -281,7 +281,9 @@ public class DbUtil {
 	 * @param key
 	 * @return
 	 * @throws DgException
+	 * @Deprecated use {@link TranslatorWorker#translateText(String, String, String)}
 	 */
+	@Deprecated
 	public static Message getMessage(String key, String langCode, Long siteId) throws
 	DgException {
 		try {

@@ -14,12 +14,22 @@ import org.digijava.module.translation.util.HashKeyPatch;
  * @see HashKeyPatch
  *
  */
-public class PatchedMessageGroup extends MessageGroup{
+public class PatcherMessageGroup extends MessageGroup{
 
 	private String hashKey = null;
+	private boolean overwriteIncoming = false;
 
-	public PatchedMessageGroup(String key) {
+	public PatcherMessageGroup(String key) {
 		super(key);
+	}
+
+	public PatcherMessageGroup(String key, boolean overwriteIncoming) {
+		super(key);
+		this.overwriteIncoming = overwriteIncoming;
+	}
+
+	public PatcherMessageGroup(Message message) {
+		super(message);
 	}
 	
 	/**
@@ -32,30 +42,38 @@ public class PatchedMessageGroup extends MessageGroup{
 	}
 
 	/**
-	 * Adds message to the group.
-	 * This method also generates hash key from them. For this it uses first message added which may be 
+	 * Puts message in the group.
+	 * This overridden method also generates hash key from message body. 
+	 * For this it uses first message added which may be 
 	 * overwritten only by English message later. So if there is English translation it will be used for 
 	 * key generation, or if there is no English then any other language message will be used. 
 	 * @param message
 	 */
-	public void addMessage(Message message){
-		if (message==null || !message.getKey().equals(this.getKey())){
-			throw new IllegalArgumentException("Cannot add null message or message with different key");
-		}
+	protected void doPutMessage(Message message){
 		if (
 				(getHashKey() == null) || 
 				(getHashKey() != null && "en".equals(message.getLocale().toLowerCase()))
-		){
-			hashKey=TranslatorWorker.generateTrnKey(message.getMessage());
+		)
+		{
+			this.hashKey = TranslatorWorker.generateTrnKey(message.getMessage());
 		}
-		getMessages().put(message.getLocale(), message);
+		if (overwriteIncoming){
+			//put without care about existing
+			getMessages().put(message.getLocale(), message);
+		}else{
+			//check to not overwrite existing 
+			if (null == getMessages().get(message.getLocale())){
+				getMessages().put(message.getLocale(), message);
+			}
+		}
+		//System.out.println("doPut "+hashKey);
 	}
 	
 	/**
 	 * Patches all messages in the group with new hash key before returning them.
 	 * @return
 	 */
-	public Collection<Message> getPatchedMessages(){
+	public Collection<Message> patcheAll(){
 		Collection<Message> myMessages = getMessages().values();
 		if (myMessages != null && myMessages.size() >0){
 			for (Message message : myMessages) {

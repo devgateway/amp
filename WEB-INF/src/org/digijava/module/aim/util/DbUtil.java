@@ -2009,17 +2009,36 @@ public class DbUtil {
     		CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
     }
 
-    public static Collection getAll(Class object) {
-        Session session = null;
-        Collection col = null;
+    /**
+     * Loads all objects of T from database, using request session.
+     * TODO there are several methods like this, let's refactor to one.
+     * @param <T>
+     * @param object
+     * @return
+     * @throws DgException
+     */
+    public static <T> Collection<T> getAll(Class<T> object) throws DgException{
+    	return getAll(object, PersistenceManager.getRequestDBSession());
+    }
 
+    /**
+     * Loads all objects of T from database.
+     * Client should care about opening and releasing session which is passed as parameter to this method.
+     * @param <T>
+     * @param object
+     * @param session database session. Client should handle session - opening and releasing, including transactions if required.
+     * @return
+     * @throws DgException
+     */
+    public static <T> Collection<T> getAll(Class<T> object, Session session) throws DgException{
+        Collection<T> col = null;
         try {
-            session = PersistenceManager.getRequestDBSession();
-            String queryString = "select from " + object.getName();
+            String queryString = "from " + object.getName();
             Query qry = session.createQuery(queryString);
             col = qry.list();
         } catch (Exception e) {
             logger.error("Exception from getAll()", e);
+            throw new DgException(e);
         }
         return col;
     }

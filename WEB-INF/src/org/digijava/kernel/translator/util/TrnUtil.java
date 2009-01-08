@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -48,6 +49,8 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.util.SiteUtils;
+import org.digijava.module.translation.entity.MessageGroup;
+import org.digijava.module.translation.entity.PatcherMessageGroup;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -498,6 +501,93 @@ public class TrnUtil {
         return sortByTranslation(source,locale,callback,false);
     }
 
+    /**
+     * Groups messages with key field in {@link MessageGroup} beans. 
+     * @param messages
+     * @return 
+     * @throws DgException
+     */
+    public static Collection<MessageGroup> groupByKey(Collection<Message> messages) throws DgException{
+    	return groupByKey(messages,new StandardMessageGroupFactory());
+    }
+
+    /**
+     * Groups messages  with key field and r
+     * @param <E> any subclass of {@link MessageGroup}
+     * @param messages collection of messages.
+     * @param factory concrete message group factory. 
+     * @return collection of message group beans. Each of them will contain messages with same key.
+     * @throws DgException
+     */
+    public static <E extends MessageGroup> Collection<E> groupByKey(Collection<Message> messages, MessageGroupFactory<E> factory) throws DgException{
+    	Map<String, E> groupByKey = new HashMap<String, E>(messages.size());
+    	for (Message message : messages) {
+			E group = groupByKey.get(message.getKey());
+			if (null == group){
+				group = factory.createGroup(message.getKey());
+				groupByKey.put(message.getKey(), group);
+			}
+			group.addMessage(message);
+		}
+    	return groupByKey.values();
+    }
+    
+    /**
+     * Message group object factory
+     * @author Irakli Kobiashvili
+     *
+     * @param <E>
+     */
+    public static interface MessageGroupFactory<E extends MessageGroup>{
+    	public E createGroup(String key);
+    }
+    
+    /**
+     * Factory of standard message groups.
+     * @author Irakli Kobiashvili
+     *
+     */
+    public static class StandardMessageGroupFactory implements MessageGroupFactory<MessageGroup>{
+		@Override
+		public MessageGroup createGroup(String key) {
+			return new MessageGroup(key);
+		}
+    }
+    
+    /**
+     * Factory of patcher message groups.
+     * @author Irakli Kobiashvili
+     *
+     */
+    public static class PatcherMessageGroupFactory implements MessageGroupFactory<PatcherMessageGroup>{
+		@Override
+		public PatcherMessageGroup createGroup(String key) {
+			return new PatcherMessageGroup(key);
+		}
+
+    }
+
+    /**
+     * Merges groups messages with same hash code key resulting in no duplicates.
+     * Used only during patching old translations using {@link PatcherMessageGroup}, with normal {@link MessageGroup} will not have any effect.
+     * @param <E>
+     * @param groups
+     * @return
+     */
+    public static <E extends MessageGroup> Collection<E> removeDuplicateHashCodes(Collection<E> groups){
+    	Map<String, E> hashKeyMap = new HashMap<String, E>();
+    	if (groups != null){
+    		for (E nextGroup : groups) {
+				E hashGroup = hashKeyMap.get(nextGroup.getHashKey());
+				if (hashGroup == null){
+					hashKeyMap.put(nextGroup.getHashKey(), nextGroup);
+				}else {
+					hashGroup.addMessagesFrom(nextGroup);
+				}
+			}
+    	}
+    	return hashKeyMap.values();
+    }
 
 
     static {

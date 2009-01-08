@@ -8,8 +8,10 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 <digi:instance property="orgProfLargestProjectsForm"/>
-
-<table border="1" id="lgProjects" bgcolor="#dddddd" width="100%">
+<table width="100%">
+<tr>
+<td height="420px" valign="top">
+<table border="1" id="lgProjects" bgcolor="#dddddd" width="100%"  >
     <th colspan="3" class="tableHeaderCls">5 Largest projects (${sessionScope.orgProfileFilter.year-1})</th>
     <tr colspan="3">
         <td class="tableHeaderCls">Project title</td>
@@ -29,9 +31,9 @@
                </tr>
           </c:forEach>
     
-  
-    
-	
+ </table>
+ </td>
+</tr>
 </table>
 <script language="javascript">
 setStripsTable("lgProjects", "tableEven", "tableOdd");

@@ -45,6 +45,7 @@ import org.digijava.kernel.security.permission.ObjectPermission;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.helper.TeamMember;
 
 public class SecureTag
     extends BodyTagSupport {
@@ -128,12 +129,14 @@ public class SecureTag
             		Group siteGroup = (Group) siteGroupIter.next();
             		if (siteGroup.getName().equals(this.getGroup())){
             			User user = RequestUtils.getUser(request);
+            			if(user !=null){
             			Iterator userGroupIter = user.getGroups().iterator();
             			while(userGroupIter.hasNext()){
             				Group userGroup = (Group)userGroupIter.next();
             				if (userGroup.getName().equals(this.getGroup())){
             					return EVAL_BODY_INCLUDE;
             				}
+            			}
             			}
             			return SKIP_BODY;
             		}

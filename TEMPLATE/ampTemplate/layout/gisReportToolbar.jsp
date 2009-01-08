@@ -64,7 +64,7 @@
 								<digi:trn>From Date:</digi:trn>
 							</td>
 							<td noWrap align=left valign="middle">
-								<html:select name="gisDashboardForm" property="selectedFromYear" onchange="yearChanged()">
+								<html:select name="gisDashboardForm" property="selectedFromYear" onchange="yearChanged();mapYearChanged()">
 									<html:optionsCollection name="gisDashboardForm" property="yearsFrom" label="label" value="value"/>
 								</html:select>
 							</td>
@@ -72,7 +72,7 @@
 								<digi:trn>To Date:</digi:trn>
 							</td>
 							<td noWrap align=left valign="middle">
-								<html:select name="gisDashboardForm" property="selectedToYear" onchange="yearChanged()">
+								<html:select name="gisDashboardForm" property="selectedToYear" onchange="yearChanged();mapYearChanged()">
 									<html:optionsCollection name="gisDashboardForm" property="yearsTo" label="label" value="value"/>
 								</html:select>
 							</td>

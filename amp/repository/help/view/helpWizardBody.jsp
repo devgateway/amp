@@ -203,15 +203,17 @@
 																		<td>
 																			<table width="100%" cellspacing="1" cellpadding="5" bgcolor="#ffffff">
 																				<tr>
-																					<td align="right"><STRONG><digi:trn key="help:title">Title</digi:trn></STRONG></td>
-																					<td align="left"><digi:trn key="${helpForm.titleTrnKey}" linkAlwaysVisible="true">title</digi:trn></td>
+																					<td align="right"><STRONG><digi:trn>Title</digi:trn></STRONG></td>
+																					<td align="left"><digi:trn linkAlwaysVisible="true">${helpForm.topicKey}</digi:trn></td>
 																				</tr>
-																				<tr>
+																				<!--
+                                                                                <tr>
 																					<td align="right"><STRONG><digi:trn key="help:keywords">Keywords</digi:trn></STRONG></td>
 																					<td align="left"><digi:trn key="${helpForm.keywordsTrnKey}" linkAlwaysVisible="true">Keywords</digi:trn></td>
 																				</tr>
+																			-->
 																				<tr>
-																					<td align="right"><STRONG><digi:trn key="help:helpbody">body</digi:trn></STRONG></td>
+																					<td align="right"><STRONG><digi:trn>body</digi:trn></STRONG></td>
 																					<td align="left"><digi:edit key="${helpForm.bodyEditKey}">no text preview</digi:edit></td>
 																				</tr>
 																				<tr>
@@ -323,15 +325,17 @@
 																					</td>
 																				</tr>
 																				<tr>
-																					<td align="right"><STRONG><digi:trn key="help:title">Title</digi:trn></STRONG></td>
+																					<td align="right"><STRONG><digi:trn>Title</digi:trn></STRONG></td>
 																					<td align="left"><digi:trn linkAlwaysVisible="true">${helpForm.topicKey}</digi:trn></td>
 																				</tr>
-																				<tr>
+																			<!--	
+                                                                                <tr>
 																					<td align="right"><STRONG><digi:trn key="help:keywords">Keywords</digi:trn></STRONG></td>
 																					<td align="left"><digi:trn key="${helpForm.keywordsTrnKey}" linkAlwaysVisible="true">Keywords</digi:trn></td>
 																				</tr>
-																				<tr>
-																					<td align="right"><STRONG><digi:trn key="help:helpbody">body</digi:trn></STRONG></td>
+																			-->
+                                                                               <tr>
+																					<td align="right"><STRONG><digi:trn>body</digi:trn></STRONG></td>
 																					<td align="left"><digi:edit key="${helpForm.bodyEditKey}">no text preview</digi:edit></td>
 																				</tr>
 																				<tr>

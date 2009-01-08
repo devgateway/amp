@@ -25,7 +25,7 @@ YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(
 YAHOO.amp.reportwizard.fundingGroups["component"]		= new Array(
 				'Status', 'A.C. Chapter', 'Accession Instrument', 'Financing Instrument',
 				'Implementation Level','Parent National Planning Objectives', 'National Planning Objectives', 'Primary Program',
-				'Secondary Program', 'Primary Sector Sub-Sector', 'Type Of Assistance',
+				'Secondary Program', 'Primary Sector Sub-Sector', 'Type Of Assistance','Region',
 				'Primary Sector', 'Component Name', 'Beneficiary Agency', 'Implementing Agency', 
 				'Secondary Sector', 'Secondary Sector Sub-Sector', 'Responsible Organization', 'Activity Created By'
 			);

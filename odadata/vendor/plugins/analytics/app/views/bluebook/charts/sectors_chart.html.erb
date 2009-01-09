@@ -1,16 +1,17 @@
-<div id="sectors_graph">
-	<strong>You need to upgrade your Flash Player</strong>
+<div id="chart_1">
+	<strong>Please download Flash Player 8.0 or higher from <a href="http://www.adobe.com">adobe.com</a>
+			in order to view this chart.</strong>
 </div>
 
-<!-- Sectors Pie script-->
 <script type="text/javascript">
-// <![CDATA[  
-	var so = new SWFObject("/ampie.swf", "sectors_graph", "700", "630", "8", "#FFFFFF");
-	so.addVariable("path", "/");
-	so.addVariable("settings_file", escape("/bluebook/charts/settings/sectors_large.xml"));       
-	so.addVariable("data_file", escape("<%= url_for(:action => :sectors_chart_data, :format => 'xml', :id => @donor) %>"));  
-	so.addVariable("preloader_color", "#999999");
-	so.write("sectors_graph");
+// <![CDATA[
+	var flashvars = {
+		path: "/",
+		settings_file: escape("/bluebook/charts/settings/sectors_large.xml"),
+		data_file: escape("<%= url_for(:action => :sectors_chart_data, :format => 'xml', :id => @donor) %>"),
+		preloader_color: "#999999"
+	};
+	
+	swfobject.embedSWF("/ampie.swf", "chart_1", "700", "630", "8.0.0", false, flashvars, { wmode: "transparent"	}, false);
 // ]]>
 </script>
-<!-- end of sectors pie script -->

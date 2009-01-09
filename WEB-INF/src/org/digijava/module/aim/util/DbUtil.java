@@ -91,10 +91,12 @@ import org.digijava.module.aim.helper.CountryBean;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.Documents;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Indicator;
 import org.digijava.module.aim.helper.ParisIndicator;
 import org.digijava.module.aim.helper.Question;
 import org.digijava.module.aim.helper.SurveyFunding;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 import org.digijava.module.aim.helper.fiscalcalendar.EthiopianCalendar;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
@@ -106,6 +108,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.orgProfile.helper.FilterHelper;
 import org.digijava.module.orgProfile.helper.Project;
+import org.digijava.module.widget.util.ChartWidgetUtil;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.JDBCException;
@@ -2450,6 +2453,7 @@ public class DbUtil {
         Session session = null;
         String queryString = null;
         int million=1000000;
+        TeamMember teamMember=filter.getTeamMember();
         List<Project> projects = new ArrayList<Project>();
         Long year = filter.getYear();
         if (year == null || year == -1) {
@@ -2475,11 +2479,18 @@ public class DbUtil {
                     " inner join f.fundingDetails fd ";
             queryString += "  where f.ampDonorOrgId=:orgID and " +
                     " fd.transactionType = 0 and  fd.adjustmentType = 1";
-            queryString += " and year(fd.transactionDate)=:year   and act.team is not null group by act order by sum(fd.transactionAmountInUSD)";
+            queryString += " and year(fd.transactionDate)=:year   ";
+
+            queryString+=ChartWidgetUtil.getTeamQuery(teamMember);
+            queryString +=" group by act order by sum(fd.transactionAmountInUSD)";
 
             Query query = session.createQuery(queryString);
             query.setLong("year", year);
             query.setLong("orgID", orgID);
+            if(teamMember!=null){
+                query.setLong("teamId", teamMember.getTeamId());
+
+            }
             List result=query.list();
             if(result.size()>5){
                 result=result.subList(0, 4);//pick 5 largest projects
@@ -2492,7 +2503,7 @@ public class DbUtil {
                 AmpActivity activity = activityIter.next();
                 queryString = "select fd from " + AmpFundingDetail.class.getName() + " fd  inner join fd.ampFundingId f ";
                 queryString += "   inner join f.ampActivityId act  where   fd.transactionType = 0 and  fd.adjustmentType = 1 and f.ampDonorOrgId=:orgID ";
-                queryString += " and year(fd.transactionDate)=:year  and act.team is not null and act=" + activity.getAmpActivityId();
+                queryString += " and year(fd.transactionDate)=:year  and act=" + activity.getAmpActivityId();
                 query = session.createQuery(queryString);
                 query.setLong("year", year);
                 query.setLong("orgID", orgID);
@@ -2501,7 +2512,8 @@ public class DbUtil {
                 project.setSectors(activity.getSectors());
                 FundingCalculationsHelper cal = new FundingCalculationsHelper();
                 cal.doCalculations(details, currCode);
-                project.setAmount(cal.getTotActualComm().doubleValue()/million);//divide by 1 000 000 to show amount in million
+                double thousands=("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)))?0.001:1;
+                project.setAmount(cal.getTotActualComm().doubleValue()/million*thousands);//divide by 1 000 000 to show amount in million
                 project.setTitle(activity.getName());
                 project.setActivityId(activity.getAmpActivityId());
                 projects.add(project);
@@ -6913,7 +6925,7 @@ public class DbUtil {
      * @param year
      * @return
      */
-    public static Double getValue(int questionNumber[], Long indId, int adjustmentType, String currCode, Long orgId, Long year, boolean isInd4) {
+    public static Double getValue(int questionNumber[], Long indId, int adjustmentType, String currCode, Long orgId, Long year, boolean isInd4,TeamMember teamMember) {
         DecimalWraper total = null;
         try {
             Session session = PersistenceManager.getRequestDBSession();
@@ -6922,8 +6934,9 @@ public class DbUtil {
                 queryString += ", ah.ampAHSurveyId";
             }
 
-            queryString += ") from " + AmpAhsurvey.class.getName() + " ah inner join ah.responses res  " + " inner join res.ampQuestionId  q  " + " inner join q.ampIndicatorId ind  " + " inner join ah.ampActivityId act   " + " inner join act.funding f   " + " inner join  f.fundingDetails fd   " + " where act.team is not null " + " and fd.transactionType =1 and  fd.adjustmentType =:adjustmentType" +
+            queryString += ") from " + AmpAhsurvey.class.getName() + " ah inner join ah.responses res  " + " inner join res.ampQuestionId  q  " + " inner join q.ampIndicatorId ind  " + " inner join ah.ampActivityId act   " + " inner join act.funding f   " + " inner join  f.fundingDetails fd   " + " where  fd.transactionType =1 and  fd.adjustmentType =:adjustmentType" +
                     " and year(fd.transactionDate)=:year " + " and ind.ampIndicatorId=:indId";
+            queryString+=ChartWidgetUtil.getTeamQuery(teamMember);
             if (questionNumber[0] != 0) {
                 queryString += " and res.response='Yes' ";
                 for (int i = 0; i < questionNumber.length; i++) {
@@ -6946,7 +6959,10 @@ public class DbUtil {
             Query qry = session.createQuery(queryString);
             qry.setLong("indId", indId);
             qry.setLong("year", year);
+            if (teamMember != null) {
+                qry.setLong("teamId", teamMember.getTeamId());
 
+            }
 
             qry.setInteger("adjustmentType", adjustmentType);
             if (orgId != null) {
@@ -6979,7 +6995,7 @@ public class DbUtil {
      * @param year
      * @return
      */
-    public static int getDonorsCount(int questionNumber[], Long indId, Long orgId, Long year) {
+    public static int getDonorsCount(int questionNumber[], Long indId, Long orgId, Long year,TeamMember member) {
         int size = 0;
         try {
             Session session = PersistenceManager.getRequestDBSession();
@@ -7005,10 +7021,16 @@ public class DbUtil {
                 queryString += " and ah.ampDonorOrgId=:orgId ";
                 queryString += " and ah.ampDonorOrgId=f.ampDonorOrgId ";
             }
+            queryString+=ChartWidgetUtil.getTeamQuery(member);
 
             Query qry = session.createQuery(queryString);
             qry.setLong("indId", indId);
             qry.setLong("year", year);
+            if(member!=null){
+                qry.setLong("teamId", member.getTeamId());
+
+            }
+
             if (orgId != null) {
                 qry.setLong("orgId", orgId);
             }
@@ -7031,7 +7053,7 @@ public class DbUtil {
      * @param year
      * @return
      */
-     public static long getPIUValue(Long indId,  Long orgId, Long year) {
+     public static long getPIUValue(Long indId,  Long orgId, Long year,TeamMember member) {
        long  size=0;
         try {
             Session session = PersistenceManager.getRequestDBSession();
@@ -7044,11 +7066,11 @@ public class DbUtil {
                     + " inner join ah.ampActivityId act   " 
                     + " inner join act.funding f   " 
                     + " inner join  f.fundingDetails fd   " 
-                    + " where act.team is not null "
-                    + " and fd.transactionType =1 and  fd.adjustmentType =1" +
+                    + " where "
+                    + " fd.transactionType =1 and  fd.adjustmentType =1" +
                     " and year(fd.transactionDate)=:year "
                      + " and ind.ampIndicatorId=:indId";
-              
+                    queryString+=ChartWidgetUtil.getTeamQuery(member);
                       queryString+= " and res.response='Yes' and q.questionNumber=9" ;
                
                    
@@ -7060,7 +7082,10 @@ public class DbUtil {
             Query qry = session.createQuery(queryString);
             qry.setLong("indId", indId);
             qry.setLong("year", year);
-            
+            if(member!=null){
+                qry.setLong("teamId", member.getTeamId());
+
+            }
 
      
              if(orgId!=null){

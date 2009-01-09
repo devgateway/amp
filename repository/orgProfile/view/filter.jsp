@@ -125,7 +125,10 @@
                 </html:select>
             </td>
 
-            <td>
+            <td nowrap>
+                <html:checkbox  property="workspaceOnly"><b><digi:trn>Show data only from workspace</digi:trn> </b></html:checkbox>
+            </td>
+             <td>
                 <html:select property="transactionType" styleClass="inp-text">
                     <html:option value="0">Comm</html:option>
                     <html:option value="1">Disb</html:option>

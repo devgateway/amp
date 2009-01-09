@@ -19,6 +19,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -76,9 +77,18 @@ public class OrgProfileFilterAction extends Action {
         if(orgForm.getYear()==null){
             orgForm.setYear(year);
         }
-			
+        FilterHelper filter=null;
         HttpSession session = request.getSession();
-        session.setAttribute("orgProfileFilter", new FilterHelper(orgForm));
+        if(orgForm.getWorkspaceOnly()!=null&&orgForm.getWorkspaceOnly()){
+            TeamMember tm =(TeamMember) session.getAttribute("currentMember");
+            filter=new FilterHelper(orgForm,tm);
+        }
+        else{
+            filter=new FilterHelper(orgForm);
+        }
+
+       session.setAttribute("orgProfileFilter", filter);
+      
         return mapping.findForward("forward");
     }
 }

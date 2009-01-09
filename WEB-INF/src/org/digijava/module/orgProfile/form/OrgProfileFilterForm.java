@@ -7,7 +7,9 @@ package org.digijava.module.orgProfile.form;
 
 import java.util.Collection;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.util.DbUtil;
@@ -23,7 +25,8 @@ public class OrgProfileFilterForm extends ActionForm {
     private Long org;
     private Long year;
     private Long currency;
-    
+    private Boolean workspaceOnly;
+
     private List<AmpCurrency>currencies;
     private List<AmpOrganisation>organizations;
     private Collection<BeanWrapperImpl> years;
@@ -88,8 +91,20 @@ public class OrgProfileFilterForm extends ActionForm {
     public void setYears(Collection<BeanWrapperImpl> years) {
         this.years = years;
     }
- 
     
-    
+     public Boolean getWorkspaceOnly() {
+        return workspaceOnly;
+    }
+
+    public void setWorkspaceOnly(Boolean workspaceOnly) {
+        this.workspaceOnly = workspaceOnly;
+    }
+
+    @Override
+    public void reset(ActionMapping mapping, HttpServletRequest request) {
+        super.reset(mapping, request);
+        workspaceOnly=false;
+    }
+
 }
 	

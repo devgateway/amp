@@ -43,6 +43,9 @@ import java.util.Date;
 import org.digijava.module.gis.util.DateInterval;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import java.util.Calendar;
+import org.digijava.module.aim.util.FeaturesUtil;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 /**
  * <p>Title: </p>
@@ -465,10 +468,20 @@ public class GetFoundingDetails extends Action {
                 FundingData totalFunding = (FundingData) fundingList[1];
 
                 XMLDocument segmendDataInfo = new XMLDocument();
+
+                String numberFormat = FeaturesUtil.getGlobalSettingValue("Default Number Format");
+                NumberFormat formatter = new DecimalFormat(numberFormat);
+
                 XML root = new XML("funding");
+                /*
                 root.addAttribute("totalCommitment", ((float) Math.round(totalFunding.getCommitment() / 10)) / 100f);
                 root.addAttribute("totalDisbursement", ((float) Math.round(totalFunding.getDisbursement() / 10)) / 100f);
                 root.addAttribute("totalExpenditure", ((float) Math.round(totalFunding.getExpenditure() / 10)) / 100f);
+*/
+
+                root.addAttribute("totalCommitment", formatter.format(totalFunding.getCommitment()));
+                root.addAttribute("totalDisbursement", formatter.format(totalFunding.getDisbursement()));
+                root.addAttribute("totalExpenditure", formatter.format(totalFunding.getExpenditure()));
 
                 segmendDataInfo.addElement(root);
                 Iterator locFoundingMapIt = fundingLocationMap.keySet().iterator();
@@ -477,9 +490,9 @@ public class GetFoundingDetails extends Action {
                     FundingData ammount = (FundingData) fundingLocationMap.get(key);
                         XML regionData = new XML("region");
                         regionData.addAttribute("reg-code", key);
-                        regionData.addAttribute("fundingCommitment", ((float) Math.round(ammount.getCommitment().intValue() * 100)) / 100f);
-                        regionData.addAttribute("fundingDisbursement", ((float) Math.round(ammount.getDisbursement().intValue() * 100)) / 100f);
-                        regionData.addAttribute("fundingExpenditure", ((float) Math.round(ammount.getExpenditure().intValue() * 100)) / 100f);
+                        regionData.addAttribute("fundingCommitment", formatter.format(ammount.getCommitment().intValue()));
+                        regionData.addAttribute("fundingDisbursement", formatter.format(ammount.getDisbursement().intValue()));
+                        regionData.addAttribute("fundingExpenditure", formatter.format(ammount.getExpenditure().intValue()));
                         root.addElement(regionData);
                 }
 

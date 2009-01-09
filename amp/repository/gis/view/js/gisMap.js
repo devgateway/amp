@@ -370,9 +370,9 @@
 			var mouseEvent = null;
 			document.getElementById("tooltipRegionContainer").innerHTML = regName;
 		
-			document.getElementById("tooltipTotalCommitmentContainer").innerHTML = totalCommitmentFund + " k";
-			document.getElementById("tooltipTotalDisbursementContainer").innerHTML = totalDisbursementFund + " k";
-			document.getElementById("tooltipTotalExpenditureContainer").innerHTML = totalExpenditureFund + " k";
+			document.getElementById("tooltipTotalCommitmentContainer").innerHTML = totalCommitmentFund;
+			document.getElementById("tooltipTotalDisbursementContainer").innerHTML = totalDisbursementFund;
+			document.getElementById("tooltipTotalExpenditureContainer").innerHTML = totalExpenditureFund;
 		
 			var regData = getRegFounding(regCode);
 		

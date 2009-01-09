@@ -545,12 +545,22 @@
 	
 	function mapYearChanged(){
 		sectorSelected(document.getElementById('sectorsMapCombo'));
-		/*
-		var fromYear = document.getElementsByName('selectedFromYear')[0].value;
-		var toYear = document.getElementsByName('selectedToYear')[0].value;
-		
-		alert (fromYear + " - " + toYear);
-		*/
+		var fromYear = getComboSelectedText(document.getElementsByName('selectedFromYear')[0]);
+		var toYear = getComboSelectedText(document.getElementsByName('selectedToYear')[0]);
+		var newCapt = "(USD) " + fromYear + " - " + toYear;
+		document.getElementById('tooltipCurencyYearRange').innerHTML = newCapt;
+	}
+	
+	function getComboSelectedText(obj) {
+		var retVal = null;
+		var optIndex = 0;
+		for (optIndex = 0; optIndex < obj.options.length; optIndex++) {
+			if (obj.options[optIndex].selected) {
+				retVal = obj.options[optIndex].text;
+				break;
+			}
+		}
+		return retVal;
 	}
 	
 	//end fo Year functions

@@ -65,17 +65,9 @@
                                                         <feature:display name="orgprof_chart_place1" module="Org Profile">
                                                             <div id="content" class="yui-skin-sam" style="width:100%;">
                                                                 <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
-                                                                    <ul class="yui-nav">
-                                                                        <li class="selected">
-                                                                            <div class="nohover">
-                                                                                <a style="cursor:default">
-                                                                                    <div>
-                                                                                        <digi:trn key="orgProfile:orgprof_chart_place1:title">orgprof_chart_place1 title</digi:trn>
-                                                                                    </div>
-                                                                                </a>
-                                                                            </div>
-                                                                        </li>
-                                                                    </ul>
+                                                                    <div class="tableHeaderCls"  style="height:20px;font-size:11px;font-weight:bold;"  align="center">
+                                                                        <digi:trn key="orgProfile:orgprof_chart_place1:title">orgprof_chart_place1 title</digi:trn>       
+                                                                    </div>
                                                                 </feature:display>
                                                                 <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
                                                                     <digi:insert attribute="chart1">
@@ -91,17 +83,10 @@
                                                         <feature:display name="orgprof_chart_place2" module="Org Profile">
                                                             <div id="content" class="yui-skin-sam" style="width:100%;">
                                                                 <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
-                                                                    <ul class="yui-nav">
-                                                                        <li class="selected">
-                                                                            <div class="nohover">
-                                                                                <a style="cursor:default">
-                                                                                    <div>
+                                                                     <div class="tableHeaderCls"  style="height:20px;font-size:11px;font-weight:bold;" align="center">
                                                                                         <digi:trn key="orgProfile:orgprof_chart_place2:title">orgprof_chart_place2 title</digi:trn>
-                                                                                    </div>
-                                                                                </a>
-                                                                            </div>
-                                                                        </li>
-                                                                    </ul>
+                                                                                 
+                                                                      </div>
                                                                 </feature:display>
                                                                 <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
                                                                     <digi:insert attribute="chart2">
@@ -119,17 +104,11 @@
                                                         <feature:display name="orgprof_chart_place3" module="Org Profile">
                                                             <div id="content" class="yui-skin-sam" style="width:100%;">
                                                                 <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
-                                                                    <ul class="yui-nav">
-                                                                        <li class="selected">
-                                                                            <div class="nohover">
-                                                                                <a style="cursor:default">
-                                                                                    <div>
+                                                                   <div class="tableHeaderCls"  style="height:20px;font-size:11px;font-weight:bold;" align="center">
                                                                                         <digi:trn key="orgProfile:orgprof_chart_place3:title">orgprof_chart_place3 title</digi:trn>
-                                                                                    </div>
-                                                                                </a>
-                                                                            </div>
-                                                                        </li>
-                                                                    </ul>
+                                                                                   
+                                                                     </div>
+                                                                    
                                                                 </feature:display>
                                                                 <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
                                                                     <digi:insert attribute="chart3">
@@ -147,17 +126,10 @@
                                                             <div id="content" class="yui-skin-sam" style="width:100%;">
                                                                 <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
 
-                                                                    <ul class="yui-nav">
-                                                                        <li class="selected">
-                                                                            <div class="nohover">
-                                                                                <a style="cursor:default">
-                                                                                    <div>
-                                                                                        <digi:trn key="orgProfile:orgprof_chart_place4:title">orgprof_chart_place4 title</digi:trn>
-                                                                                    </div>
-                                                                                </a>
-                                                                            </div>
-                                                                        </li>
-                                                                    </ul>
+                                                                <div class="tableHeaderCls"  style="height:20px;font-size:11px;font-weight:bold;" align="center">
+                                                                    <digi:trn key="orgProfile:orgprof_chart_place4:title">orgprof_chart_place4 title</digi:trn>
+                                                                </div>
+                                                                              
                                                                 </feature:display>
                                                                 <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
                                                                     <digi:insert attribute="chart4">
@@ -178,17 +150,10 @@
                                                             <div id="content" class="yui-skin-sam" style="width:100%;">
                                                                 <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
 
-                                                                    <ul class="yui-nav">
-                                                                        <li class="selected">
-                                                                            <div class="nohover">
-                                                                                <a style="cursor:default">
-                                                                                    <div>
+                                                                   <div class="tableHeaderCls"  style="height:20px;font-size:11px;font-weight:bold;" align="center">
                                                                                         <digi:trn key="orgProfile:orgprof_chart_place5:title">orgprof_chart_place5 title</digi:trn>
-                                                                                    </div>
-                                                                                </a>
-                                                                            </div>
-                                                                        </li>
-                                                                    </ul>
+                                                                   </div>
+                                                                          
                                                                 </feature:display>
                                                                 <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
                                                                     <digi:insert attribute="chart5">
@@ -204,17 +169,9 @@
                                                         <feature:display name="orgprof_chart_place6" module="Org Profile">
                                                             <div id="content" class="yui-skin-sam" style="width:100%;">
                                                                 <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
-                                                                    <ul class="yui-nav">
-                                                                        <li class="selected">
-                                                                            <div class="nohover">
-                                                                                <a style="cursor:default">
-                                                                                    <div>
+                                                                  <div class="tableHeaderCls"  style="height:20px;font-size:11px;font-weight:bold;" align="center">
                                                                                         <digi:trn key="orgProfile:orgprof_chart_place6:title">orgprof_chart_place6 title</digi:trn>
-                                                                                    </div>
-                                                                                </a>
-                                                                            </div>
-                                                                        </li>
-                                                                    </ul>
+                                                                  </div>
                                                                 </feature:display>
                                                                 <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
                                                                     <digi:insert attribute="chart6">
@@ -232,17 +189,10 @@
                                                         <feature:display name="orgprof_chart_place7" module="Org Profile">
                                                         <div id="content" class="yui-skin-sam" style="width:100%;">
                                                             <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
-                                                                    <ul class="yui-nav">
-                                                                        <li class="selected">
-                                                                            <div class="nohover">
-                                                                                <a style="cursor:default">
-                                                                                    <div>
+                                                                    <div class="tableHeaderCls"  style="height:20px;font-size:11px;font-weight:bold;" align="center">
                                                                                         <digi:trn key="orgProfile:orgprof_chart_place7:title">orgprof_chart_place7 title</digi:trn>
-                                                                                    </div>
-                                                                                </a>
-                                                                            </div>
-                                                                        </li>
-                                                                    </ul>
+                                                                     </div>
+                                                                             
                                                                 </feature:display>
                                                                 <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
                                                                     <digi:insert attribute="chart7">
@@ -258,17 +208,10 @@
                                                         <feature:display name="orgprof_chart_place8" module="Org Profile">
                                                             <div id="content" class="yui-skin-sam" style="width:100%;">
                                                                 <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
-                                                                    <ul class="yui-nav">
-                                                                        <li class="selected">
-                                                                            <div class="nohover">
-                                                                                <a style="cursor:default">
-                                                                                    <div>
+                                                                   <div class="tableHeaderCls"  style="height:20px;font-size:11px;font-weight:bold;" align="center">
                                                                                         <digi:trn key="orgProfile:orgprof_chart_place8:title">orgprof_chart_place8 title</digi:trn>
-                                                                                    </div>
-                                                                                </a>
-                                                                            </div>
-                                                                        </li>
-                                                                    </ul>
+                                                                    </div>
+                                                                        
                                                                 </feature:display>
                                                                 <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
                                                                     <digi:insert attribute="chart8">

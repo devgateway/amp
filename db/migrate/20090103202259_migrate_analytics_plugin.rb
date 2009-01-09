@@ -46,7 +46,6 @@ class MigrateAnalyticsPlugin < ActiveRecord::Migration
         ORDER BY payments DESC;
     END_SQL
   end
-  end
 
   def self.down
     execute <<-END_SQL

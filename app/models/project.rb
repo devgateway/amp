@@ -129,16 +129,6 @@ class Project < ActiveRecord::Base
   end
     
   ##
-  # Easily readable query information for reports etc.  
-  def mdg_list
-    mdgs.join("<br />")
-  end 
-  
-  def fmt_description
-    textilize_without_paragraph(description)
-  end
-  
-  ##
   # This returns a list of Provinces and Districts in the following format:
   # {"Province 1" => ["Dist 1.1", "Dist 1.2"], "Province 2" => ["Dist 2.1"] ...}
   def geo_list

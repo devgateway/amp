@@ -211,6 +211,6 @@
 		<td><b><%= @country_strategy.strategy_number %></b></td>
 	</tr>
 	<tr>
-		<td><%= textilize_without_paragraph(@country_strategy.description) %></td>
+		<td><%= markdown(@country_strategy.description) %></td>
 	</tr>
 </table>

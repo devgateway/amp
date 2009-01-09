@@ -1242,7 +1242,7 @@ public class ChartWidgetUtil {
             }
 
         } else {
-            sql += "  and act.team is not null";
+            sql += "  and act.team is not null ";
         }
         return sql;
     }

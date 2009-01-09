@@ -1,5 +1,6 @@
 package org.digijava.module.widget.action;
 
+import java.awt.Font;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -85,6 +86,8 @@ public class ShowWidgetChart extends Action {
                 }
                     Plot plot = chart.getPlot();
                     plot.setNoDataMessage("No data available");
+                    Font font= new Font(null,0,24);
+                    plot.setNoDataMessageFont(font);
 
 
                 // write image in response

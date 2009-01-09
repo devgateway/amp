@@ -67,6 +67,11 @@ module ApplicationHelper
     content_tag(:div, content, :class => "short_expander")
   end
   
+  # This should better be in a formatting helper
+  def markdown(text)
+    Markdown.new(text, :filter_html => true).to_html
+  end
+  
 private
   def strip_html_tags(string)
     string.gsub(/\<\/?.*?\>/, '')

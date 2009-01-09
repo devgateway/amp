@@ -208,6 +208,13 @@
 			<td nowrap width="50%" id="reg_district_caption">Region</td>
 			<td width="50%" id="tooltipRegionContainer">&nbsp;</td>
 		</tr>
+
+		<tr>
+			<td nowrap bgcolor="#D9DAC9" colspan="2">Funding details</td>
+		</tr>
+		<tr>
+			<td colspan="2" nowrap bgcolor="#D9DAC9" id="tooltipCurencyYearRange">(USD) FY 2009/10 - FY 2010/11</td>
+		</tr>
 		<tr>
 			<td nowrap bgcolor="#D9DAC9" colspan="2">Total funding</td>
 		</tr>

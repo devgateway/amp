@@ -69,7 +69,7 @@ module ApplicationHelper
   
   # This should better be in a formatting helper
   def markdown(text)
-    Markdown.new(text, :filter_html => true).to_html
+    Markdown.new(text, :filter_html).to_html
   end
   
 private

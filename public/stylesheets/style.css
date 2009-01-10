@@ -413,6 +413,8 @@ ul.fatlist.flexible li {
 	padding: 1px;
 	width: 80px;
 	text-align: center;
+	margin-right:6px;
+	float:right;
 }
 
 /* Top Menu Orange line */

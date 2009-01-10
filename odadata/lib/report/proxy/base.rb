@@ -4,6 +4,7 @@ module Report
       include ActionView::Helpers::TagHelper
       include ActionView::Helpers::UrlHelper
       include ApplicationHelper
+      include OptionsHelper
       include ReportsHelper
       include I18nHelper
       include OptionsHelper
@@ -60,11 +61,11 @@ module Report
       end
       
       def dac_sector
-        [ll(:terms, :dac_sector), @target.dac_sector.andand.name_with_code]
+        [ll(:terms, :dac_sectors),  @target.dac_sectors.andand.map(&:name_with_code).join(', ')]
       end
       
       def crs_sector
-        [ll(:terms, :dac_crs_sector), @target.crs_sector.andand.name_with_code]
+        [ll(:terms, :dac_crs_sector), @target.crs_sectors.andand.map(&:name_with_code).join(', ')]
       end
       
       def oecd_number

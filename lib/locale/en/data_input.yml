@@ -27,6 +27,9 @@ en:
       closed: Data Input is currently closed
       do_close: Close Data Input
       do_open: Open Data Input
+    scrollbars:
+      title: Update Newstickers
+      submit: Save tickers
       
   donors:
     index:

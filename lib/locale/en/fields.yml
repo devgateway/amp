@@ -99,20 +99,20 @@ en:
         
       historic_funding:
         commitments: Commitments
-        payments: Payments
+        payments: Disbursements
       
       funding:
         commitments: Commitments
-        payments_q1: Payments 1st Quarter
-        payments_q2: Payments 2nd Quarter
-        payments_q3: Payments 3rd Quarter
-        payments_q4: Payments 4th Quarter
+        payments_q1: Disbursements 1st Quarter
+        payments_q2: Disbursements 2nd Quarter
+        payments_q3: Disbursements 3rd Quarter
+        payments_q4: Disbursements 4th Quarter
         on_budget: On/Off Budget
         on_treasury: On/Off Treasury
       
       funding_forecast:
         commitments: Commitments
-        payments: Payments
+        payments: Disbursements
         on_budget: On/Off Budget
         on_treasury: On/Off Treasury
         
@@ -130,7 +130,7 @@ en:
         programming_responsibility: Programming Responsibility
         project_appraisal_responsibility: Project Appraisal Responsibility
         tenders_responsibility: Tenders Responsibility
-        commitments_and_payments_responsibility: Commitments and Payments Responsibility
+        commitments_and_payments_responsibility: Commitments and Disbursements Responsibility
         monitoring_and_evaluation_responsibility: Monitoring and Evaluation Responsibility
         commitment_to_budget_support: Commitment to Budget Support
         commitment_to_sectorwide_approaches_and_common_funds: Commitment to Common Funds
@@ -147,8 +147,8 @@ en:
         donor: Donor
         year: Year
         total_commitments: Total Commitments
-        total_payments: Total Payments
-        toa_payments: "{{type}} Payments"
+        total_payments: Total Disbursements
+        toa_payments: "{{type}} Disbursements"
         
       session:
         email: E-Mail Address
@@ -157,3 +157,8 @@ en:
         
       mdg:
         verbose_caption: "Goal {{number}}: {{name}}"
+        
+      prefs:
+        scroll_bar_public: Public Ticker (Reports & Bluebook, no login required)
+        scroll_bar_admin: Data Input Ticker (visible for logged-in donors only)
+        scroll_bar_mfp: Master Focal Point Ticker (shown here, in the admin area)

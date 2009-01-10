@@ -6,6 +6,7 @@ module Report
       include ApplicationHelper
       include ReportsHelper
       include I18nHelper
+      include OptionsHelper
       
       def initialize(target)
         @target = target

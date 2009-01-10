@@ -127,7 +127,7 @@ es:
       Si no seleccione por lo menos uno, el proyecto se considera un proyecto nacional.
       
     fields_missing: Faltan algunos campos requeridos. Por favor revise las pestañas destacadas.
-    successfully_created: El proyecto <i>{{project}}</i> ha sido añadido con éxito. Por favor no se olvide de publicarlo antes de verificar los datos.
+    successfully_created: El proyecto <i>{{project}}</i> ha sido añadido con éxito. Por favor no se olvide de verificar los datos antes de publicarlo.
       
     stages:
       profile_information: Información de Perfil

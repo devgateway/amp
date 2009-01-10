@@ -17,20 +17,15 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :projects,                :member => { :update_status => :get, :map => :get }
                                           
   map.resources :users                   
-  map.resources :agencies                
+  map.resources :donor_agencies                
   map.resources :country_strategies,      :collection => { :add_sector => :get }
   
   map.resources :donors, :formatted => :none do |d|
     d.resources :users                   
-    d.resources :agencies                
+    d.resources :donor_agencies,          :as => 'agencies'                
     d.resources :country_strategies      
     d.resource  :details,                 :controller => 'donor_details'
   end
-  
-  map.resources :settings, :collection => {
-    :data_input_status => :get,
-    :toggle_data_input => :post
-  }
   
   map.resource :consistency,              :only => [:index, :show]
   

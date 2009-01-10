@@ -83,7 +83,7 @@ en:
       title: Edit Contracted Agency
       submit: Update Agency
       
-  agencies:
+  donor_agencies:
     index:
       title: Agencies for {{donor}}
       empty: No Agencies Exist for this Donor. Please create a New Agency.

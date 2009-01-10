@@ -5,9 +5,9 @@
 		<tr><td class="empty"><%= lc(:empty) %></td></tr>
 	<% else %>
 		<tr>
-			<th><%= ll(:donor_agency, :code) %></th>
-			<th><%= ll(:donor_agency, :name) %></th>
-			<th><%= ll(:donor_agency, :acronym) %></th>		
+			<th><%= DonorAgency.human_attribute_name('code') %></th>
+			<th><%= DonorAgency.human_attribute_name('name') %></th>
+			<th><%= DonorAgency.human_attribute_name('acronym') %></th>		
 			<th> </th>		
 			<th> </th>		
 		</tr>
@@ -16,8 +16,8 @@
 				<td><%= agency.code %></td>
 				<td><%= agency.name %></td>
 				<td><%= agency.acronym %></td>
-				<td><%= link_to ll(:actions, :edit), edit_agency_path(agency) %></td>
-				<td><%= link_to ll(:actions, :delete), agency_path(agency), :method => 'delete', 
+				<td><%= link_to ll(:actions, :edit), edit_donor_agency_path(agency) %></td>
+				<td><%= link_to ll(:actions, :delete), donor_agency_path(agency), :method => 'delete', 
 						:confirm => lc(:confirm_delete, :agency => agency.name) %>
 				</td>
 			</tr>
@@ -25,4 +25,4 @@
 	<% end %>
 </table>
 
-<p><b><%= link_to lc(:new), new_donor_agency_path(@donor) %></b></p>
+<p><b><%= link_to lc(:new), new_donor_donor_agency_path(@donor) %></b></p>

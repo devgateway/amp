@@ -84,7 +84,7 @@ es:
       title: Editar Agencia Contratadas
       submit: Actualizar Agencia
       
-  agencies:
+  donor_agencies:
     index:
       title: Agencias por {{donor}}
       empty: No hay agencias por este donante. Por favor crea una agencia nueva.

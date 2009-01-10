@@ -1,4 +1,4 @@
-<% header lc(:title) %>
+<% header lc(:title, :donor => @agency.donor.name) %>
 
 <%= render :partial => 'form' %>
-<p><b><%= link_to ll(:actions, :back), donor_agencies_path(@agency.donor) %></b>&nbsp;</p>
+<p><b><%= link_to ll(:actions, :back), donor_donor_agencies_path(@agency.donor) %></b>&nbsp;</p>

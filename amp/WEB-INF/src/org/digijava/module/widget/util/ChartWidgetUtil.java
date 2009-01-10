@@ -798,6 +798,9 @@ public class ChartWidgetUtil {
         oql += AmpFundingDetail.class.getName() +
                 " as fd inner join fd.ampFundingId f ";
         oql += "   inner join f.ampActivityId act ";
+          if (teamMember != null && teamMember.getComputation() != null && teamMember.getComputation()) {
+            oql += " inner join act.orgrole role ";
+        }
         oql += " inner join act.locations loc inner join loc.location.ampRegion reg where " +
                 " reg is not null and f.ampDonorOrgId=:orgID and fd.transactionType =:transactionType and  fd.adjustmentType = 1";
         oql += " and year(fd.transactionDate)=:year ";
@@ -919,6 +922,9 @@ public class ChartWidgetUtil {
                 " inner join actSec.sectorId sec " +
                 " inner join actSec.activityId act " +
                 " inner join actSec.classificationConfig config ";
+         if (tm != null && tm.getComputation() != null && tm.getComputation()) {
+            oql += " inner join act.orgrole role ";
+        }
 
         oql += "  where  " +
                 "  f.ampDonorOrgId=:orgID and fd.transactionType =:transactionType  and  fd.adjustmentType = 1 ";
@@ -994,6 +1000,9 @@ public class ChartWidgetUtil {
                 " inner join actSec.sectorId sec " +
                 " inner join actSec.activityId act " +
                 " inner join actSec.classificationConfig config ";
+          if (tm != null && tm.getComputation() != null && tm.getComputation()) {
+            oql += " inner join act.orgrole role ";
+        }
 
         oql += "  where  " +
                 "   f.ampDonorOrgId=:orgID and fd.transactionType =:transactionType and  fd.adjustmentType = 1 ";
@@ -1050,6 +1059,9 @@ public class ChartWidgetUtil {
         oql += AmpFundingDetail.class.getName() +
                 " as fd inner join fd.ampFundingId f ";
         oql += "   inner join f.ampActivityId act ";
+          if (tm != null && tm.getComputation() != null && tm.getComputation()) {
+            oql += " inner join act.orgrole role ";
+        }
 
 
         oql += " where  fd.transactionType =:transactionType and  fd.adjustmentType = 1 and f.ampDonorOrgId=:orgID ";
@@ -1120,7 +1132,9 @@ public class ChartWidgetUtil {
         oql += AmpFundingDetail.class.getName() +
                 " as fd inner join fd.ampFundingId f ";
         oql += "   inner join f.ampActivityId act ";
-
+        if (tm != null && tm.getComputation() != null && tm.getComputation()) {
+            oql += " inner join act.orgrole role ";
+        }
 
         oql += " where  fd.transactionType =:transactionType and  fd.adjustmentType = 1 and f.ampDonorOrgId=:orgID ";;
        
@@ -1265,6 +1279,9 @@ public class ChartWidgetUtil {
         oql += AmpFundingDetail.class.getName() +
                 " as fd inner join fd.ampFundingId f ";
         oql += "   inner join f.ampActivityId act ";
+        if (tm != null && tm.getComputation() != null && tm.getComputation()) {
+            oql += " inner join act.orgrole role ";
+        }
         oql += " where  fd.adjustmentType = 1 and f.ampDonorOrgId=:orgID ";
         oql += " and year(fd.transactionDate)=:year ";
         oql+=getTeamQuery(tm);

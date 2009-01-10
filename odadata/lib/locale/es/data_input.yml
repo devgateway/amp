@@ -32,6 +32,7 @@ es:
     scrollbars:
       title: Update Newstickers
       submit: Save tickers
+      successful: Successfully updated news tickers!
       
   donors:
     index:

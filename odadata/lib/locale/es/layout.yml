@@ -53,6 +53,8 @@ es:
       impl_agencies: Agencias Imeplementadoras
       contr_agencies: Agencias Contratadas
       gov_counterpart: Homólogo Gubermental
+      # TODO:
+      scrollbars: News Tickers
       
   actions:
       print: Imprimir

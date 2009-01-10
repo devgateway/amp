@@ -28,6 +28,10 @@ es:
       closed: El ingreso de datos es actualmente cerrado
       do_close: Cerrar el ingreso de datos
       do_open: Abrir el ingreso de datos
+    # TODO:
+    scrollbars:
+      title: Update Newstickers
+      submit: Save tickers
       
   donors:
     index:

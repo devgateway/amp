@@ -25,7 +25,7 @@ module ReportsHelper
     
   def markers_list(record, html_options = {})
     rows = Project::AVAILABLE_MARKERS.map do |marker|
-      column_name = "#{marker}_marker"
+      column_name = "#{marker[0]}_marker"
       
       content_tag("tr", 
         content_tag("td", "#{ll(:project, column_name)}:") + 

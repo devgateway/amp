@@ -111,6 +111,7 @@ class Project < ActiveRecord::Base
   validates_associated      :fundings, :funding_forecasts, :historic_funding
   
   validate                  :total_sector_amount_is_100
+  validate                  :dates_consistency
   
   ##
   # Accessors    
@@ -177,5 +178,12 @@ class Project < ActiveRecord::Base
     unless self.sector_relevances.sum(:amount) == 100
       #errors.add('sector_relevances', 'foo.bar')
     end  
+  end
+
+  def dates_consistency
+    unless self.start <= self.end
+       errors.add('start', 'Start date is previous to End Date')
+       errors.add('end', '<br>') #added to avoid breaking the design of fieldset while showing the error
+    end if self.start && self.end
   end
 end

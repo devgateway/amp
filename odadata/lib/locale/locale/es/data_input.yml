@@ -1,0 +1,192 @@
+es:
+  admin:
+    data_input_closed:
+      title: "¡La entrada de datos está actualmente cerrada!"
+      please_wait: "¡Por favor espere hasta el próximo ciclo o ponerse en contaco con el Punto Focal Maestro!"
+      redirect: Usted va a ser redirigido en pocos segundos.
+  
+  
+  users:
+    index:
+      title: Cuentas de Ingreso
+      name: Nombre
+      role: Rol de Usuario
+      edit: Editar cuenta
+      delete: Borrar cuenta
+      new: Crear nuevo usuario
+      
+    new:
+      title: Añadir Nueva Cuenta de Ingreso
+      submit: Crear usuario
+    edit:
+      title: Editar Cuenta de Ingreso
+      submit: Actualizar Usuario
+      
+  settings:
+    data_input_status:
+      open: El ingreso de datos es actualmente abierto
+      closed: El ingreso de datos es actualmente cerrado
+      do_close: Cerrar el ingreso de datos
+      do_open: Abrir el ingreso de datos
+    # TODO:
+    scrollbars:
+      title: Update Newstickers
+      submit: Save tickers
+      successful: Successfully updated news tickers!
+      
+  donors:
+    index:
+      title: Donante / Lista de donantes co-financiandores
+      empty: No hay donantes en el base de datos. Por favor crea un donante nuevo.
+      agencies: Agencias donantes ({{total}})
+      logins: Cuenta de ingreso
+      new: Añadir donante nuevo
+    new:
+      title: Añadir donante nuevo
+      submit: Crear donante
+    edit:
+      title: Editar donante
+      submit: Actualizar donante
+      
+  donor_details:
+    edit: 
+      title: Editar donante
+      submit: Actualizar donante
+      
+  exchange_rates:
+    index:
+      title: Tasas de cambio
+      empty: No hay tasas de cambio en el base de datos. Por favor crea una tasa de cambio nueva.
+      new: Nueva tasa de cambio
+    new:
+      title: Añadir nueva tasa de cambio
+      submit: Crear tasa de cambio
+    edit:
+      title: Editar tasa de cambio
+      submit: Actualizar tasa de cambio
+      
+  implementing_agencies:
+    index:
+      title: Lista de Agencias Implementadoras
+      empty: No hay Agencias Implementadoras en el base de datos. Por favor crea una nueva agencia implementadora.
+      new: Añadir Agencia Implementadora
+    new:
+      title: Añadir Nueva Agencia Implementadora
+      submit: Crear Agencia
+    edit:
+      title: Editar Agencia Implementadora
+      submit: Actualizar Agencia
+
+  contracted_agencies:
+    index:
+      title: Lista de Agencias Contratadas
+      empty: No hay Agencias Contratadas en el base de datos. Por favor crea una nueva agencia contratada.
+      new: Añadir Agencia Contratadas
+    new:
+      title: Añadir Nueva Agencia Contratadas
+      submit: Crear Agencia
+    edit:
+      title: Editar Agencia Contratadas
+      submit: Actualizar Agencia
+      
+  donor_agencies:
+    index:
+      title: Agencias por {{donor}}
+      empty: No hay agencias por este donante. Por favor crea una agencia nueva.
+      confirm_delete: '¿Está seguro que quiere borrar "{{agency}}"?'
+      new: Añadir agencia
+    new:
+      title: Añadir Nueva Agencia por Donante {{donor}}
+      submit: Crear Agencia
+    edit:
+      title: Editar Agencia
+      submit: Actualizar Agencia
+      
+  glossaries:
+    index:
+      title: Glosario
+      new: Añadir Nueva Entrada al Glosario
+    new:
+      title: Añadir Nueva Entrada al Glosario
+      submit: Crear entrada
+    edit:
+      title: Editar Glosario
+      submit: Actualizar Glosario
+      
+  projects:
+    step_back: Dar un paso anterior
+    step_forward: Dar un paso adelante
+    
+    add_implementing_agency: Añadir otra agencia implementadora
+    add_contracted_agency: Añadir otra agencia contratada
+    add_province: Añadir otra provincia
+    zero_provinces_warning: "¡Por favor seleccione por lo menos una provincia!"
+    add_cofunding_donor: Añadir otro Donante
+    add_sector:  Añadir otro Sector
+    cofunding_title: Donantes co-financiandores y montos
+    historic_funding: Financiamiento Histórico (hasta el final de {{year}})
+    funding_title: Finanzas {{year}}
+    forecasts_title: Proyección de Financiamiento {{year}}
+    geo_usage: |
+      Por favor seleccione las regiones focales de este proyecto..<br />
+      Si no seleccione por lo menos uno, el proyecto se considera un proyecto nacional.
+      
+    fields_missing: Faltan algunos campos requeridos. Por favor revise las pestañas destacadas.
+    successfully_created: El proyecto <i>{{project}}</i> ha sido añadido con éxito. Por favor no se olvide de verificar los datos antes de publicarlo.
+      
+    stages:
+      profile_information: Información de Perfil
+      sector_agencies: Sector / Agencias
+      goals: ODM
+      location_funding: Ubicación / Financiamiento
+      funding_forecast: Proyección de Financiamiento
+      
+    index:
+      title: Listar Proyectos que son <i>{{status}}</i>
+      empty: Por favor agrega sus proyectos.
+      factsheet: Ficha Descriptiva
+      donor: Donante
+      project_no: No. de Proyecto
+      project_title: Título de Proyecto
+      total_commitments: Monto Comprometido
+      disbursed: Desembolsado {{year}}
+      disbursement_forecast: Proyección de desembolsos {{year}}
+      choose_action: 'Escoge:'
+      publish: Publica
+      draft: Borrador
+      
+    show:
+      title: Ficha Descriptiva para <i>{{project}}</i>
+      project_information: Información de Proyecto
+      funding_information: Información de Financiamiento
+      markers: Marcas
+      mdgs: ODM
+      focal_regions: Regiones Focales
+      historic: Financiamiento Histórico
+      totals: Total de Financiamiento
+      funding: Financiamiento {{year}}
+      funding_forecast: Proyección de Financiamiento {{year}}
+      
+    new:
+      title: Añadir Nuevo Proyecto
+      submit: Guardar
+      
+    edit:
+      title: Editar Proyecto "{{project}}"
+      submit: Guardar
+      
+  country_strategies:
+    index:
+      title: Estrategias de País y Detalles de Programación
+      empty: No hay estrategias de país.
+      new: Añadir nueva Estrategia de País
+    new:
+      title: Añadir nueva Estrategia de País
+      submit: Crear Estrategia
+    edit:
+      title: Editar Estrategia de País
+      submit: Actualizar Estrategia
+      
+  consistencies:
+    show:
+      title: Detalles de Regularidad de Financiamiento

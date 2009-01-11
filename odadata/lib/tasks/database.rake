@@ -29,7 +29,7 @@ namespace :db do
   Defaults to development database.'
   task :extract_fixtures => :environment do
     sql = "SELECT * FROM %s"
-    skip_tables = ["schema_migrations", "sessions"]
+    skip_tables = ["schema_migrations", "sessions", "plugin_schema_migrations"]
     ActiveRecord::Base.establish_connection
     (ActiveRecord::Base.connection.tables - skip_tables).each do |table_name|
       i = "000"

@@ -50,7 +50,7 @@ module Report
       end
       
       def payments_forecast(year)
-        ["Payments Forecast #{year}", 
+        ["Disbursements Forecast #{year}", 
           (@target.funding_forecasts.find_by_year(year).andand.payments.andand.in(Prefs.default_currency))]
       end
       

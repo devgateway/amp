@@ -1,0 +1,475 @@
+--- 
+donor_agencies_001: 
+  acronym: EKN
+  code: "71"
+  donor_id: "11"
+  id: "77"
+  name: "Swedish Export Credits Guarantee Board"
+donor_agencies_002: 
+  acronym: MFA
+  code: "1"
+  donor_id: "2"
+  id: "14"
+  name: "Ministry of Foreign Affairs"
+donor_agencies_003: 
+  acronym: DEG
+  code: "4"
+  donor_id: "6"
+  id: "35"
+  name: "German Investment and Development Company"
+donor_agencies_004: 
+  acronym: ICO
+  code: "1"
+  donor_id: "10"
+  id: "56"
+  name: "Instituto de Credito Oficial"
+donor_agencies_005: 
+  acronym: DFID
+  code: "1"
+  donor_id: "12"
+  id: "78"
+  name: "Department for International Development"
+donor_agencies_006: 
+  acronym: DANIDA
+  code: "2"
+  donor_id: "2"
+  id: "15"
+  name: "Danish International Development Agency"
+donor_agencies_007: 
+  acronym: F.O
+  code: "11"
+  donor_id: "6"
+  id: "36"
+  name: "Foreign Office"
+donor_agencies_008: 
+  acronym: AGR
+  code: "4"
+  donor_id: "10"
+  id: "57"
+  name: "Ministry of Agriculture, Fisheries, and Food"
+donor_agencies_009: 
+  acronym: CDC
+  code: "2"
+  donor_id: "12"
+  id: "79"
+  name: "CDC Capital Partners PLC"
+donor_agencies_010: 
+  acronym: DANCED
+  code: "4"
+  donor_id: "2"
+  id: "16"
+  name: "Danish Co-operation for Environment and Development"
+donor_agencies_011: 
+  acronym: L.G
+  code: "12"
+  donor_id: "6"
+  id: "37"
+  name: "Federal States & Local Governments"
+donor_agencies_012: 
+  acronym: MFA
+  code: "5"
+  donor_id: "10"
+  id: "58"
+  name: "Ministry of Foreign Affairs"
+donor_agencies_013: 
+  acronym: ECGD
+  code: "5"
+  donor_id: "12"
+  id: "80"
+  name: "Export Credit Guarantee Department"
+donor_agencies_014: 
+  acronym: EKR
+  code: "72"
+  donor_id: "2"
+  id: "17"
+  name: EKR
+donor_agencies_015: 
+  acronym: "Fed. Inst."
+  code: "14"
+  donor_id: "6"
+  id: "38"
+  name: "Federal Institutions"
+donor_agencies_016: 
+  acronym: ECON
+  code: "6"
+  donor_id: "10"
+  id: "59"
+  name: "Ministry of Economy and Finance"
+donor_agencies_017: 
+  acronym: CEC
+  code: "1"
+  donor_id: "3"
+  id: "18"
+  name: "Commission of the European Communities"
+donor_agencies_018: 
+  acronym: "Fed. Min."
+  code: "16"
+  donor_id: "6"
+  id: "39"
+  name: "Federal Ministries"
+donor_agencies_019: 
+  acronym: MPW
+  code: "8"
+  donor_id: "10"
+  id: "61"
+  name: "Ministry of Public Works"
+donor_agencies_020: 
+  acronym: EDUC
+  code: "7"
+  donor_id: "10"
+  id: "60"
+  name: "Ministry of Education, Culture and Sports"
+donor_agencies_021: 
+  acronym: EDF
+  code: "2"
+  donor_id: "3"
+  id: "19"
+  name: "European Development Fund"
+donor_agencies_022: 
+  acronym: GTZ
+  code: "52"
+  donor_id: "6"
+  id: "41"
+  name: "Deutsche Gesellschaft für Technische Zusammenarbeit"
+donor_agencies_023: 
+  acronym: Found.
+  code: "17"
+  donor_id: "6"
+  id: "40"
+  name: "Foundations/Societies/Misc. (non federal)"
+donor_agencies_024: 
+  acronym: MIE
+  code: "9"
+  donor_id: "10"
+  id: "62"
+  name: "Ministry of Industry and Energy"
+donor_agencies_025: 
+  acronym: EIB
+  code: "3"
+  donor_id: "3"
+  id: "20"
+  name: "European Investment Bank"
+donor_agencies_026: 
+  acronym: Hermes
+  code: "34"
+  donor_id: "6"
+  id: "42"
+  name: "Hermes Kreditversicherungs-AG"
+donor_agencies_027: 
+  acronym: MIE
+  code: "9"
+  donor_id: "10"
+  id: "63"
+  name: "Ministry of Industry and Energy"
+donor_agencies_028: 
+  acronym: ECHO
+  code: "4"
+  donor_id: "3"
+  id: "21"
+  name: "Humanitarian Aid Office of the European Commission"
+donor_agencies_029: 
+  acronym: ENV
+  code: "10"
+  donor_id: "10"
+  id: "64"
+  name: "Ministry of Environment"
+donor_agencies_030: 
+  acronym: FG
+  code: "1"
+  donor_id: "4"
+  id: "22"
+  name: "Finnish Government"
+donor_agencies_031: 
+  acronym: AGEA
+  code: "2"
+  donor_id: "7"
+  id: "43"
+  name: "Agenzia Erogazioni Per l’Agricoltura"
+donor_agencies_032: 
+  acronym: BMF
+  code: "1"
+  donor_id: "1"
+  id: "1"
+  name: "Federal Ministry of Finance"
+donor_agencies_033: 
+  acronym: FF
+  code: "2"
+  donor_id: "4"
+  id: "23"
+  name: FinnFund
+donor_agencies_034: 
+  acronym: DGCS
+  code: "4"
+  donor_id: "7"
+  id: "44"
+  name: "Direzione Generale per la Cooperazione allo Sviluppo"
+donor_agencies_035: 
+  acronym: MOH
+  code: "11"
+  donor_id: "10"
+  id: "65"
+  name: "Ministry of Health"
+donor_agencies_036: 
+  acronym: MIN
+  code: "2"
+  donor_id: "1"
+  id: "3"
+  name: "Various ministries"
+donor_agencies_037: 
+  acronym: MFA
+  code: "3"
+  donor_id: "4"
+  id: "24"
+  name: "Ministry of Foreign Affairs"
+donor_agencies_038: 
+  acronym: MC
+  code: "5"
+  donor_id: "7"
+  id: "45"
+  name: "Mediocredito Centrale"
+donor_agencies_039: 
+  acronym: EMP
+  code: "12"
+  donor_id: "10"
+  id: "66"
+  name: "Ministry of Labour and Social Affairs"
+donor_agencies_040: 
+  acronym: Breg
+  code: "3"
+  donor_id: "1"
+  id: "4"
+  name: "Federal Government of Austria"
+donor_agencies_041: 
+  acronym: FIDE
+  code: "4"
+  donor_id: "4"
+  id: "25"
+  name: FIDE
+donor_agencies_042: 
+  acronym: CA
+  code: "7"
+  donor_id: "7"
+  id: "46"
+  name: "Central administration"
+donor_agencies_043: 
+  acronym: INT
+  code: "13"
+  donor_id: "10"
+  id: "67"
+  name: "Ministry of Interior"
+donor_agencies_044: 
+  acronym: MPA
+  code: "14"
+  donor_id: "10"
+  id: "68"
+  name: "Ministry of Public Administration"
+donor_agencies_045: 
+  acronym: BMA
+  code: "5"
+  donor_id: "1"
+  id: "5"
+  name: "Federal Ministry of Foreign Affairs"
+donor_agencies_046: 
+  acronym: FinnVera
+  code: "72"
+  donor_id: "4"
+  id: "26"
+  name: FinnVera
+donor_agencies_047: 
+  acronym: LA
+  code: "8"
+  donor_id: "7"
+  id: "47"
+  name: "Local administration"
+donor_agencies_048: 
+  acronym: AG
+  code: "15"
+  donor_id: "10"
+  id: "69"
+  name: "Autonomous Governments"
+donor_agencies_049: 
+  acronym: Reg
+  code: "6"
+  donor_id: "1"
+  id: "6"
+  name: "Provincial governments, local communities"
+donor_agencies_050: 
+  acronym: AFD
+  code: "3"
+  donor_id: "5"
+  id: "27"
+  name: "French Development Agency"
+donor_agencies_051: 
+  acronym: SACE
+  code: "74"
+  donor_id: "7"
+  id: "48"
+  name: "Sezione Speciale per l’Assicurazione del Credito all’Esportazione"
+donor_agencies_052: 
+  acronym: MISC.
+  code: "17"
+  donor_id: "10"
+  id: "71"
+  name: Miscellaneous
+donor_agencies_053: 
+  acronym: MUNIC
+  code: "16"
+  donor_id: "10"
+  id: "70"
+  name: Municipalities
+donor_agencies_054: 
+  acronym: ADA
+  code: "8"
+  donor_id: "1"
+  id: "7"
+  name: "Austrian Development Agency"
+donor_agencies_055: 
+  acronym: MAE/FSP
+  code: "4"
+  donor_id: "5"
+  id: "28"
+  name: "Ministry of Foreign Affairs - Priority Solidarity Fund"
+donor_agencies_056: 
+  acronym: LuxDev
+  code: "1"
+  donor_id: "8"
+  id: "49"
+  name: Lux-Development
+donor_agencies_057: 
+  acronym: MST
+  code: "18"
+  donor_id: "10"
+  id: "72"
+  name: "Ministry of Science and Technology"
+donor_agencies_058: 
+  acronym: BM/BWK
+  code: "9"
+  donor_id: "1"
+  id: "8"
+  name: "Education and Science Ministry"
+donor_agencies_059: 
+  acronym: MINEFI
+  code: "8"
+  donor_id: "5"
+  id: "29"
+  name: "Ministry of Economy, Finance and Industry"
+donor_agencies_060: 
+  acronym: ODL
+  code: "22"
+  donor_id: "8"
+  id: "51"
+  name: "Ducroire Office"
+donor_agencies_061: 
+  acronym: MFA
+  code: "2"
+  donor_id: "8"
+  id: "50"
+  name: "Ministry of Foreign Affairs"
+donor_agencies_062: 
+  acronym: DEF
+  code: "19"
+  donor_id: "10"
+  id: "73"
+  name: "Ministry of Defense"
+donor_agencies_063: 
+  acronym: BMLFUW
+  code: "10"
+  donor_id: "1"
+  id: "9"
+  name: "Ministry for Agriculture and Environment"
+donor_agencies_064: 
+  acronym: MAE
+  code: "57"
+  donor_id: "5"
+  id: "31"
+  name: "Ministry of Foreign Affairs"
+donor_agencies_065: 
+  acronym: MEN
+  code: "56"
+  donor_id: "5"
+  id: "30"
+  name: "Ministry of Education, Higher education and Research"
+donor_agencies_066: 
+  acronym: MFA
+  code: "1"
+  donor_id: "9"
+  id: "52"
+  name: "Ministry of Foreign Affairs (DGIS)"
+donor_agencies_067: 
+  acronym: CESCE
+  code: "2"
+  donor_id: "10"
+  id: "74"
+  name: "Compania Espanola de Seguros de Credito a la Exportación"
+donor_agencies_068: 
+  acronym: NIO/FMO
+  code: "4"
+  donor_id: "9"
+  id: "53"
+  name: "Netherlands Gov. through Netherlands Investment Bank for Developing Countries"
+donor_agencies_069: 
+  acronym: BMI
+  code: "12"
+  donor_id: "1"
+  id: "11"
+  name: "Ministry of Interior"
+donor_agencies_070: 
+  acronym: BMLV
+  code: "11"
+  donor_id: "1"
+  id: "10"
+  name: "Ministry of Defense"
+donor_agencies_071: 
+  acronym: Coface
+  code: "71"
+  donor_id: "5"
+  id: "32"
+  name: Coface
+donor_agencies_072: 
+  acronym: MFA
+  code: "2"
+  donor_id: "11"
+  id: "75"
+  name: "Ministry of Foreign Affairs"
+donor_agencies_073: 
+  acronym: MISC
+  code: "99"
+  donor_id: "1"
+  id: "12"
+  name: Miscellaneous
+donor_agencies_074: 
+  acronym: BMZ
+  code: "1"
+  donor_id: "6"
+  id: "33"
+  name: "Bundesministerium für Wirtschaftliche Zusammenarbeit und Entwicklung"
+donor_agencies_075: 
+  acronym: NCM
+  code: "33"
+  donor_id: "9"
+  id: "54"
+  name: "NCM Credit Management Worldwide"
+donor_agencies_076: 
+  acronym: Sida
+  code: "6"
+  donor_id: "11"
+  id: "76"
+  name: "Swedish International Development Authority"
+donor_agencies_077: 
+  acronym: OeKB
+  code: "4"
+  donor_id: "1"
+  id: "13"
+  name: "Oesterreichische Kontrollbank AG"
+donor_agencies_078: 
+  acronym: KFW
+  code: "2"
+  donor_id: "6"
+  id: "34"
+  name: "Kreditanstalt für Wiederaufbau"
+donor_agencies_079: 
+  acronym: NCM
+  code: "33"
+  donor_id: "9"
+  id: "55"
+  name: "NCM Credit Management Worldwide"

@@ -75,12 +75,7 @@ class Project < ActiveRecord::Base
   
   ##
   # Custom finders
-  # TODO: This is a hack to order by the translated donor name
-  # This should better be done in the globalization plugin directly but joining in the translation
-  named_scope :ordered, lambda { {
-    :joins => "LEFT OUTER JOIN donor_translations ON (donor_translations.donor_id = projects.donor_id AND donor_translations.locale = '#{I18n.locale.to_s.split('-').first}')", 
-    :order => "donor_translations.name ASC, donor_project_number ASC"
-  } }
+  named_scope :ordered, :order => "donor_id ASC, donor_project_number ASC"
   
   named_scope :draft, :conditions => ['data_status = ?', DRAFT]
   named_scope :published, :conditions => ['data_status = ?', PUBLISHED]

@@ -2,14 +2,8 @@ class DacSector < ActiveRecord::Base
   translates :name, :description
   
   has_many :crs_sectors, :dependent => :destroy
-  
   has_many :sector_relevances
-  has_many :projects, :through => :sector_relevances, :uniq => true, 
-    # this is a hack because SELECT DISTINCT requires all fields used in the ORDER BY clause
-    # to be present in the select as well.. This could presumably be solved by using JOIN to 
-    # load the translations.. (Globalize 2 patch?!)
-    :select => "projects.*"
-  
+  has_many :projects, :through => :sector_relevances, :uniq => true  
   has_many :sector_details, :as => :focal_sector
   
   named_scope :ordered, :order => "code ASC"

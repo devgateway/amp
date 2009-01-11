@@ -2,9 +2,9 @@
 
 <% labeled_form_for :prefs do |f| %>
 	<% f.field_set do %>
-		<li class="large"><%= f.text_field :scroll_bar_public, :value => (Prefs.scroll_bar_public rescue nil), :size => 100 %></li>
-		<li class="large"><%= f.text_field :scroll_bar_admin, :value => (Prefs.scroll_bar_admin rescue nil), :size => 100 %></li>
-		<li class="large"><%= f.text_field :scroll_bar_mfp, :value => (Prefs.scroll_bar_mfp rescue nil), :size => 100 %></li>
+		<li><%= f.text_field :scroll_bar_public, :value => (Prefs.scroll_bar_public rescue nil), :class => 'large' %></li>
+		<li><%= f.text_field :scroll_bar_admin, :value => (Prefs.scroll_bar_admin rescue nil), :class => 'large' %></li>
+		<li><%= f.text_field :scroll_bar_mfp, :value => (Prefs.scroll_bar_mfp rescue nil), :class => 'large' %></li>
 	<% end %>
 	
 	<div class="buttonHolder">

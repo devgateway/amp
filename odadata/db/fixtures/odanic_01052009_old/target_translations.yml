@@ -1,0 +1,191 @@
+--- 
+target_translations_001: 
+  id: "11"
+  locale: en
+  name: "Halve, by 2015, the proportion of people without sustainable access to safe drinking water and basic sanitation"
+  target_id: "10"
+target_translations_002: 
+  id: "18"
+  locale: es
+  name: "En cooperación con las empresas farmacéuticas, proporcionar acceso a medicamentos esenciales a precios razonables en los países en desarrollo"
+  target_id: "17"
+target_translations_003: 
+  id: "32"
+  locale: es
+  name: "Atender las necesidades especiales de los países menos adelantados (se incluye el acceso libre de aranceles y contingentes a las exportaciones; el programa mejorado de alivio de la deuda de los países pobres muy endeudados (PPME) y la cancelación de la deuda bilateral oficial; y la concesión de una asistencia oficial para el desarrollo (AOD) más generosa a los países que hayan expresado su determinación de reducir la pobreza)"
+  target_id: "13"
+target_translations_004: 
+  id: "4"
+  locale: es
+  name: "Encarar de manera general los problemas de la deuda de los países en desarrollo con medidas nacionales e internacionales a fin de hacer la deuda sostenible a largo plazo"
+  target_id: "15"
+target_translations_005: 
+  id: "38"
+  locale: es
+  name: "Atender las necesidades especiales de los países sin litoral y de los pequeños Estados insulares en desarrollo (mediante el Programa de Barbados y las disposiciones del 22º período extraordinario de sesiones de la Asamblea General)"
+  target_id: "14"
+target_translations_006: 
+  id: "28"
+  locale: es
+  name: "Reducir a la mitad, entre 1990 y 2015, el porcentaje de personas cuyos ingresos sean inferiores a 1 dólar por día"
+  target_id: "1"
+target_translations_007: 
+  id: "12"
+  locale: es
+  name: "Reducir a la mitad, para el año 2015, el porcentaje de personas que carecen de acceso a agua potable"
+  target_id: "10"
+target_translations_008: 
+  id: "3"
+  locale: en
+  name: "Deal comprehensively with the debt problems of developing countries through national and international measures in order to make debt sustainable in the long term"
+  target_id: "15"
+target_translations_009: 
+  id: "34"
+  locale: es
+  name: "Haber detenido y comenzado a reducir, para el año 2015, la incidencia del paludismo y otras enfermedades graves"
+  target_id: "8"
+target_translations_010: 
+  id: "19"
+  locale: en
+  name: "Not Applicable"
+  target_id: "19"
+target_translations_011: 
+  id: "30"
+  locale: es
+  name: "Haber detenido y comenzado a reducir, para el año 2015, la propagación del VIH/SIDA"
+  target_id: "7"
+target_translations_012: 
+  id: "8"
+  locale: es
+  name: "Incorporar los principios del desarrollo sostenible en las políticas y los programas nacionales e invertir la pérdida de recursos del medio ambiente"
+  target_id: "9"
+target_translations_013: 
+  id: "5"
+  locale: en
+  name: "Eliminate gender disparity in primary and secondary education, preferably by 2005, and to all levels of education no later than 2015"
+  target_id: "4"
+target_translations_014: 
+  id: "29"
+  locale: en
+  name: "Have halted by 2015 and begun to reverse the spread of HIV/AIDS"
+  target_id: "7"
+target_translations_015: 
+  id: "26"
+  locale: es
+  name: "En colaboración con el sector privado, velar por que se puedan aprovechar los beneficios de las nuevas tecnologías, en particular de las tecnologías de la información y de las comunicaciones"
+  target_id: "18"
+target_translations_016: 
+  id: "22"
+  locale: es
+  name: "Reducir, entre 1990 y 2015, la mortalidad materna en tres cuartas partes"
+  target_id: "6"
+target_translations_017: 
+  id: "36"
+  locale: es
+  name: "Reducir a la mitad, entre 1990 y 2015, el porcentaje de personas que padezcan hambre"
+  target_id: "2"
+target_translations_018: 
+  id: "21"
+  locale: en
+  name: "Reduce by three-quarters, between 1990 and 2015, the maternal mortality ratio"
+  target_id: "6"
+target_translations_019: 
+  id: "6"
+  locale: es
+  name: "Eliminar las desigualdades entre los géneros en la enseñanza primaria y secundaria, preferiblemente para el año 2005, y en todos los niveles de la enseñanza antes del fin del año 2015"
+  target_id: "4"
+target_translations_020: 
+  id: "2"
+  locale: es
+  name: "Velar por que, para el año 2015, los niños y niñas de todo el mundo puedan terminar un ciclo completo de enseñanza primaria"
+  target_id: "3"
+target_translations_021: 
+  id: "9"
+  locale: en
+  name: "In co-operation with developing countries, develop and implement strategies for decent and productive work for youth"
+  target_id: "16"
+target_translations_022: 
+  id: "13"
+  locale: en
+  name: "Reduce by two-thirds, between 1990 and 2015, the under-five mortality rate"
+  target_id: "5"
+target_translations_023: 
+  id: "27"
+  locale: en
+  name: "Halve, between 1990 and 2015, the proportion of people whose income is less than one dollar a day"
+  target_id: "1"
+target_translations_024: 
+  id: "31"
+  locale: en
+  name: "Address the Special Needs of the Least Developed Countries [Includes: tariff and quota free access for LDC exports; enhanced programme of debt relief for HIPC and cancellation of official bilateral debt; and more generous ODA for countries committed to poverty reduction]"
+  target_id: "13"
+target_translations_025: 
+  id: "7"
+  locale: en
+  name: "Integrate the principles of sustainable development into country policies and programmes and reverse the loss of environmental resources"
+  target_id: "9"
+target_translations_026: 
+  id: "23"
+  locale: en
+  name: "Develop further an open, rule-based, predictable, non-discriminatory trading and financial system [Includes a commitment to good governance, development, and poverty reduction, both nationally and internationally]"
+  target_id: "12"
+target_translations_027: 
+  id: "17"
+  locale: en
+  name: "In co-operation with pharmaceutical companies, provide access to affordable, essential drugs in developing countries"
+  target_id: "17"
+target_translations_028: 
+  id: "33"
+  locale: en
+  name: "Have halted by 2015 and begun to reverse the incidence of malaria and other major diseases"
+  target_id: "8"
+target_translations_029: 
+  id: "10"
+  locale: es
+  name: "En cooperación con los países en desarrollo, elaborar y aplicar estrategias que proporcionen a los jóvenes un trabajo digno y productivo"
+  target_id: "16"
+target_translations_030: 
+  id: "16"
+  locale: es
+  name: "Haber mejorado considerablemente, para el año 2020, la vida de por lo menos 100 millones de habitantes de tugurios"
+  target_id: "11"
+target_translations_031: 
+  id: "15"
+  locale: en
+  name: "By 2020, to have achieved a significant improvement in the lives of at least 100 million slum dwellers"
+  target_id: "11"
+target_translations_032: 
+  id: "37"
+  locale: en
+  name: "Address the Special Needs of landlocked countries and small island developing States (through the Programme of Action for the Sustainable Development of Small Island Developing States and the outcome of the 22nd special session of the General Assembly)"
+  target_id: "14"
+target_translations_033: 
+  id: "24"
+  locale: es
+  name: "Desarrollar aún más un sistema comercial y financiero abierto, basado en normas, previsible y no discriminatorio (se incluye el compromiso de lograr una buena gestión de los asuntos públicos y el desarrollo, y la reducción de la pobreza, en cada país y en el plano internacional)"
+  target_id: "12"
+target_translations_034: 
+  id: "35"
+  locale: en
+  name: "Halve, between 1990 and 2015, the proportion of people who suffer from hunger"
+  target_id: "2"
+target_translations_035: 
+  id: "1"
+  locale: en
+  name: "Ensure that, by 2015, children everywhere, boys and girls alike, will be able to complete a full course of primary schooling"
+  target_id: "3"
+target_translations_036: 
+  id: "25"
+  locale: en
+  name: "In co-operation with the private sector, make available the benefits of new technologies, especially information and communications"
+  target_id: "18"
+target_translations_037: 
+  id: "20"
+  locale: es
+  name: "No Aplicable"
+  target_id: "19"
+target_translations_038: 
+  id: "14"
+  locale: es
+  name: "Reducir en dos terceras partes, entre 1990 y 2015, la mortalidad de los niños menores de 5 años"
+  target_id: "5"

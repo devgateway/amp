@@ -18,18 +18,15 @@ class Donor < ActiveRecord::Base
   
   ##
   # Validation
-  validates_presence_of :name
+  validates_presence_of :name, :name_es
   
   # Protect attributes that can only be modified by admin
-  attr_protected :name, :code, :currency, :cofunding_only, :flag, :profile_picture
+  attr_protected :name, :name_es, :code, :currency, :cofunding_only, :flag, :profile_picture
   
   # List of main donors (not cofunding only!)
   named_scope :main, :conditions => "cofunding_only IS DISTINCT FROM true"
   
   # TODO: This is a hack to order by the translated donor name
   # This should better be done in the globalization plugin directly but joining in the translation
-  named_scope :ordered, lambda { {
-    :joins => "LEFT OUTER JOIN donor_translations ON (donor_translations.donor_id = donors.id AND donor_translations.locale = '#{I18n.locale.to_s.split('-').first}')", 
-    :order => "name ASC"
-  } }
+  named_scope :ordered, :order => "name ASC"
 end

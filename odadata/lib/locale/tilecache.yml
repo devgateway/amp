@@ -1,0 +1,15 @@
+cache:
+  type: DiskCache
+  root: 'tmp/mapcache'
+
+layers:    
+  basic:
+    type: MapServer
+    mapfile: app/map/nic.map
+    layers: NIC2,NIC1
+    maxresolution: 0.01991484375
+    levels: 5
+    extension: jpeg
+    metatile: true
+    metabuffer: 0, 0
+    bbox: -87.6903, 10.7075, -82.5921, 15.0259

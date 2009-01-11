@@ -6,7 +6,7 @@
 module AggregatedFundings
 
   # ============
-  # = Payments =
+  # = Disbursements =
   # ============
   def total_payments
     inject(0.to_currency) { |sum, cur| cur.payments + sum }

@@ -1,0 +1,2401 @@
+--- 
+crs_sector_translations_001: 
+  crs_sector_id: "1097"
+  description: "Fishing harbours; fish markets; fishery transport and cold storage."
+  id: "311"
+  locale: en
+  name: "Fishery services"
+crs_sector_translations_002: 
+  crs_sector_id: "1148"
+  description: "Supply of edible human food under national or international programmes including transport costs; cash payments made for food supplies; project food aid and food aid for market sales when benefiting sector not specified; excluding emergency food aid."
+  id: "235"
+  locale: en
+  name: "Food aid/Food security programmes"
+crs_sector_translations_003: 
+  crs_sector_id: "987"
+  description: ""
+  id: "276"
+  locale: es
+  name: "Investigación médica"
+crs_sector_translations_004: 
+  crs_sector_id: "1000"
+  description: "All activities related to sexually transmitted diseases and HIV/AIDS control e.g. information, education and communication; testing; prevention; treatment, care."
+  id: "19"
+  locale: en
+  name: "STD control including HIV/AIDS"
+crs_sector_translations_005: 
+  crs_sector_id: "1077"
+  description: ""
+  id: "36"
+  locale: es
+  name: "Reforma agraria"
+crs_sector_translations_006: 
+  crs_sector_id: "1015"
+  description: ""
+  id: "136"
+  locale: es
+  name: "Derechos humanos"
+crs_sector_translations_007: 
+  crs_sector_id: "983"
+  description: "Degree and diploma programmes at universities, colleges and polytechnics; scholarships."
+  id: "359"
+  locale: en
+  name: "Higher education"
+crs_sector_translations_008: 
+  crs_sector_id: "1124"
+  description: ""
+  id: "8"
+  locale: es
+  name: "Recursos fondos marinos"
+crs_sector_translations_009: 
+  crs_sector_id: "1154"
+  description: ""
+  id: "144"
+  locale: es
+  name: "Reestructuración y refinanciación deuda"
+crs_sector_translations_010: 
+  crs_sector_id: "1030"
+  description: "Both in national statistical offices and any other government ministries."
+  id: "183"
+  locale: en
+  name: "Statistical capacity building"
+crs_sector_translations_011: 
+  crs_sector_id: "996"
+  description: ""
+  id: "366"
+  locale: es
+  name: "Formación personal sanitario"
+crs_sector_translations_012: 
+  crs_sector_id: "1102"
+  description: "Staple food processing, dairy products, slaughter houses and equipment, meat and fish processing and preserving, oils/fats, sugar refineries, beverages/tobacco, animal feeds production."
+  id: "253"
+  locale: en
+  name: Agro-industries
+crs_sector_translations_013: 
+  crs_sector_id: "1086"
+  description: ""
+  id: "58"
+  locale: es
+  name: "Servicios veterinarios"
+crs_sector_translations_014: 
+  crs_sector_id: "988"
+  description: ""
+  id: "370"
+  locale: es
+  name: "Servicios médicos"
+crs_sector_translations_015: 
+  crs_sector_id: "991"
+  description: ""
+  id: "24"
+  locale: es
+  name: "Nutrición básica"
+crs_sector_translations_016: 
+  crs_sector_id: "1165"
+  description: ""
+  id: "5"
+  locale: en
+  name: "Support to international NGOs"
+crs_sector_translations_017: 
+  crs_sector_id: "1038"
+  description: "Whether or not related to transportation."
+  id: "37"
+  locale: en
+  name: Storage
+crs_sector_translations_018: 
+  crs_sector_id: "1102"
+  description: ""
+  id: "254"
+  locale: es
+  name: Agro-industrias
+crs_sector_translations_019: 
+  crs_sector_id: "1032"
+  description: "Special programmes to address the consequences of HIV/AIDS, e.g. social, legal and economic assistance to people living with HIV/AIDS including food security and employment; support to vulnerable groups and children orphaned by HIV/AIDS; human rights of HIV/AIDS affected people. "
+  id: "73"
+  locale: en
+  name: "Social mitigation of HIV/AIDS"
+crs_sector_translations_020: 
+  crs_sector_id: "1082"
+  description: ""
+  id: "116"
+  locale: es
+  name: "Servicios agrícolas"
+crs_sector_translations_021: 
+  crs_sector_id: "1017"
+  description: ""
+  id: "98"
+  locale: es
+  name: "Organizaciones e instituciones de igualdad a la mujer"
+crs_sector_translations_022: 
+  crs_sector_id: "1150"
+  description: "Commodities, general goods and services, oil imports."
+  id: "45"
+  locale: en
+  name: "Import support (commodities)"
+crs_sector_translations_023: 
+  crs_sector_id: "989"
+  description: ""
+  id: "242"
+  locale: es
+  name: "Atención sanitaria básica"
+crs_sector_translations_024: 
+  crs_sector_id: "1016"
+  description: ""
+  id: "210"
+  locale: es
+  name: "Desarrollo libertad de información"
+crs_sector_translations_025: 
+  crs_sector_id: "1054"
+  description: ""
+  id: "186"
+  locale: es
+  name: "Energía geotérmica"
+crs_sector_translations_026: 
+  crs_sector_id: "1085"
+  description: "Including farmers’ organisations."
+  id: "21"
+  locale: en
+  name: "Agricultural co-operatives"
+crs_sector_translations_027: 
+  crs_sector_id: "1005"
+  description: ""
+  id: "18"
+  locale: es
+  name: "Abastecimiento y depuración de agua sistemas menores"
+crs_sector_translations_028: 
+  crs_sector_id: "1110"
+  description: "Iron and steel, structural metal production."
+  id: "285"
+  locale: en
+  name: "Basic metal industries"
+crs_sector_translations_029: 
+  crs_sector_id: "1020"
+  description: "Participation in the post-conflict peace-building phase of United Nations peace operations (activities such as human rights and elections monitoring, rehabilitation of demobilised soldiers, rehabilitation of basic national infrastructure,  monitoring or retraining of civil administrators and police forces, training in customs and border control procedures, advice or training in fiscal or macroeconomic stabilisation policy, repatriation and demobilisation of armed factions, and disposal of their weapons; support for landmine removal).  Direct contributions to the UN peacekeeping budget are excluded from bilateral ODA (they are reportable in part as multilateral ODA)."
+  id: "25"
+  locale: en
+  name: "Post-conflict peace-building (UN)"
+crs_sector_translations_030: 
+  crs_sector_id: "1046"
+  description: "Including policy, planning, development programmes, surveys and incentives. Fuelwood/ charcoal production should be included under forestry (31261)."
+  id: "123"
+  locale: en
+  name: "Power generation/renewable sources "
+crs_sector_translations_031: 
+  crs_sector_id: "1064"
+  description: ""
+  id: "352"
+  locale: es
+  name: "Intermediarios financieros semi-formales, informales"
+crs_sector_translations_032: 
+  crs_sector_id: "1048"
+  description: ""
+  id: "328"
+  locale: es
+  name: "Distribución gas"
+crs_sector_translations_033: 
+  crs_sector_id: "1107"
+  description: ""
+  id: "70"
+  locale: es
+  name: "Cemento, cal, yeso"
+crs_sector_translations_034: 
+  crs_sector_id: "1125"
+  description: ""
+  id: "214"
+  locale: es
+  name: "Política construcción y gestión administrativa"
+crs_sector_translations_035: 
+  crs_sector_id: "1130"
+  description: "Contributions to the government budget to assist the implementation of recipients' own trade reforms and adjustments to trade policy measures by other countries; assistance to manage shortfalls in the balance of payments due to changes in the world trading environment. "
+  id: "121"
+  locale: en
+  name: "Trade-related adjustment"
+crs_sector_translations_036: 
+  crs_sector_id: "1084"
+  description: ""
+  id: "142"
+  locale: es
+  name: "Servicios financieros agrícolas"
+crs_sector_translations_037: 
+  crs_sector_id: "1093"
+  description: "Fishing sector policy, planning and programmes; institution capacity building and advice; ocean and coastal fishing; marine and freshwater fish surveys and prospecting; fishing boats/equipment; unspecified fishing activities."
+  id: "167"
+  locale: en
+  name: "Fishing policy and administrative management"
+crs_sector_translations_038: 
+  crs_sector_id: "1141"
+  description: ""
+  id: "356"
+  locale: es
+  name: "Ayuda multisectorial"
+crs_sector_translations_039: 
+  crs_sector_id: "1041"
+  description: ""
+  id: "386"
+  locale: es
+  name: Telecomunicaciones
+crs_sector_translations_040: 
+  crs_sector_id: "1141"
+  description: ""
+  id: "355"
+  locale: en
+  name: "Multisector aid"
+crs_sector_translations_041: 
+  crs_sector_id: "1164"
+  description: ""
+  id: "330"
+  locale: es
+  name: "Apoyo a ONGD nacionales"
+crs_sector_translations_042: 
+  crs_sector_id: "1019"
+  description: ""
+  id: "338"
+  locale: es
+  name: "Consolidación de civilización de paz, prevención de conflicto y resolución"
+crs_sector_translations_043: 
+  crs_sector_id: "1052"
+  description: "Including nuclear safety."
+  id: "217"
+  locale: en
+  name: "Nuclear power plants"
+crs_sector_translations_044: 
+  crs_sector_id: "1088"
+  description: "Afforestation for industrial and rural consumption; exploitation and utilisation; erosion control, desertification control; integrated forestry projects."
+  id: "195"
+  locale: en
+  name: "Forestry development"
+crs_sector_translations_045: 
+  crs_sector_id: "1134"
+  description: "Air pollution control, ozone layer preservation; marine pollution control."
+  id: "15"
+  locale: en
+  name: "Biosphere protection"
+crs_sector_translations_046: 
+  crs_sector_id: "1117"
+  description: "Including lignite and peat."
+  id: "259"
+  locale: en
+  name: Coal
+crs_sector_translations_047: 
+  crs_sector_id: "1075"
+  description: "Including sugar; coffee, cocoa, tea; oil seeds, nuts, kernels; fibre crops; tobacco; rubber.  [Use code 32161 for agro-industries.]"
+  id: "263"
+  locale: en
+  name: "Industrial crops/export crops"
+crs_sector_translations_048: 
+  crs_sector_id: "1136"
+  description: "Applies to unique cultural landscape; including sites/objects of historical, archeological, aesthetic, scientific or educational value."
+  id: "159"
+  locale: en
+  name: "Site preservation"
+crs_sector_translations_049: 
+  crs_sector_id: "981"
+  description: ""
+  id: "234"
+  locale: es
+  name: "Educación secundaria"
+crs_sector_translations_050: 
+  crs_sector_id: "1050"
+  description: ""
+  id: "80"
+  locale: es
+  name: "Central térmica de gas"
+crs_sector_translations_051: 
+  crs_sector_id: "1121"
+  description: "Gold, silver, platinum, diamonds, gemstones."
+  id: "145"
+  locale: en
+  name: "Precious metals/materials"
+crs_sector_translations_052: 
+  crs_sector_id: "1153"
+  description: "Grants or credits to cover debt owed to multilateral financial institutions; including contributions to Heavily Indebted Poor Countries (HIPC) Trust Fund."
+  id: "307"
+  locale: en
+  name: "Relief of multilateral debt"
+crs_sector_translations_053: 
+  crs_sector_id: "1147"
+  description: ""
+  id: "162"
+  locale: es
+  name: "Apoyo general de Presupuesto"
+crs_sector_translations_054: 
+  crs_sector_id: "1008"
+  description: ""
+  id: "238"
+  locale: es
+  name: "Educación y formación en abastecimiento y depuración de agua"
+crs_sector_translations_055: 
+  crs_sector_id: "1166"
+  description: ""
+  id: "92"
+  locale: es
+  name: "Apoyo a ONGD locales y regionales"
+crs_sector_translations_056: 
+  crs_sector_id: "1155"
+  description: ""
+  id: "362"
+  locale: es
+  name: "Canje deuda por proyectos desarrollo"
+crs_sector_translations_057: 
+  crs_sector_id: "1091"
+  description: "Including artificial regeneration, genetic improvement, production methods, fertilizer, harvesting."
+  id: "387"
+  locale: en
+  name: "Forestry research"
+crs_sector_translations_058: 
+  crs_sector_id: "980"
+  description: ""
+  id: "182"
+  locale: es
+  name: "Educación primera infancia"
+crs_sector_translations_059: 
+  crs_sector_id: "1169"
+  description: "Spending in donor country for heightened awareness/interest in development co-operation (brochures, lectures, special research projects, etc.)."
+  id: "231"
+  locale: en
+  name: "Promotion of development awareness"
+crs_sector_translations_060: 
+  crs_sector_id: "1131"
+  description: "Human resources development in trade not included under any of the above codes.  Includes university programmes in trade."
+  id: "245"
+  locale: en
+  name: "Trade education/training"
+crs_sector_translations_061: 
+  crs_sector_id: "1080"
+  description: ""
+  id: "229"
+  locale: en
+  name: "Agricultural education/training"
+crs_sector_translations_062: 
+  crs_sector_id: "1077"
+  description: "Including agricultural sector adjustment."
+  id: "35"
+  locale: en
+  name: "Agrarian reform"
+crs_sector_translations_063: 
+  crs_sector_id: "1085"
+  description: ""
+  id: "22"
+  locale: es
+  name: "Cooperativas agrícolas"
+crs_sector_translations_064: 
+  crs_sector_id: "1001"
+  description: ""
+  id: "84"
+  locale: es
+  name: "Formación de personal para población y salud reproductiva"
+crs_sector_translations_065: 
+  crs_sector_id: "1066"
+  description: "Support to trade and business associations, chambers of commerce; legal and regulatory reform aimed at improving business and investment climate; private sector institution capacity building and advice; trade information; public-private sector networking including trade fairs; e‑commerce.  Where sector cannot be specified: general support to private sector enterprises (in particular, use code 32130 for enterprises in the industrial sector)."
+  id: "95"
+  locale: en
+  name: "Business support services and institutions"
+crs_sector_translations_066: 
+  crs_sector_id: "1133"
+  description: "Environmental policy, laws, regulations and economic instruments; administrational institutions and practices; environmental and land use planning and decision-making procedures; seminars, meetings; miscellaneous conservation and protection measures not specified below."
+  id: "339"
+  locale: en
+  name: "Environmental policy and administrative management"
+crs_sector_translations_067: 
+  crs_sector_id: "1092"
+  description: ""
+  id: "62"
+  locale: es
+  name: "Servicios forestales"
+crs_sector_translations_068: 
+  crs_sector_id: "1046"
+  description: ""
+  id: "124"
+  locale: es
+  name: "Producción energética - fuentes renovables"
+crs_sector_translations_069: 
+  crs_sector_id: "1143"
+  description: ""
+  id: "164"
+  locale: es
+  name: "Desarrollo rural"
+crs_sector_translations_070: 
+  crs_sector_id: "1049"
+  description: ""
+  id: "148"
+  locale: es
+  name: "Central térmica de petróleo"
+crs_sector_translations_071: 
+  crs_sector_id: "1070"
+  description: ""
+  id: "64"
+  locale: es
+  name: "Terrenos agrarios"
+crs_sector_translations_072: 
+  crs_sector_id: "1140"
+  description: "Including multisectoral WID projects and programmes; promotion of and support to WID groups and networks; conferences, seminars, etc."
+  id: "273"
+  locale: en
+  name: "Women in development"
+crs_sector_translations_073: 
+  crs_sector_id: "1062"
+  description: "Central banks."
+  id: "31"
+  locale: en
+  name: "Monetary institutions"
+crs_sector_translations_074: 
+  crs_sector_id: "1104"
+  description: "Including knitting factories. "
+  id: "27"
+  locale: en
+  name: "Textiles, leather and substitutes"
+crs_sector_translations_075: 
+  crs_sector_id: "1013"
+  description: ""
+  id: "82"
+  locale: es
+  name: "Fortalecimiento sociedad civil"
+crs_sector_translations_076: 
+  crs_sector_id: "1094"
+  description: "Exploitation and utilisation of fisheries; fish stock protection; aquaculture; integrated fishery projects."
+  id: "227"
+  locale: en
+  name: "Fishery development"
+crs_sector_translations_077: 
+  crs_sector_id: "1158"
+  description: ""
+  id: "10"
+  locale: es
+  name: "Ayuda Emergencia / catástrofes"
+crs_sector_translations_078: 
+  crs_sector_id: "1023"
+  description: ""
+  id: "2"
+  locale: es
+  name: "Soldados menores de edad (Prevención y desmovilización)"
+crs_sector_translations_079: 
+  crs_sector_id: "1083"
+  description: "Including integrated plant protection, biological plant protection activities, supply and management of agrochemicals, supply of pesticides, plant protection policy and legislation."
+  id: "379"
+  locale: en
+  name: "Plant and post-harvest protection and pest control"
+crs_sector_translations_080: 
+  crs_sector_id: "982"
+  description: "Elementary vocational training and secondary level technical education; on-the job training; apprenticeships; including informal vocational training."
+  id: "265"
+  locale: en
+  name: "Vocational training"
+crs_sector_translations_081: 
+  crs_sector_id: "1014"
+  description: "Electoral assistance and monitoring, voters’ education [other than in connection with UN peace building (15230)]."
+  id: "343"
+  locale: en
+  name: Elections
+crs_sector_translations_082: 
+  crs_sector_id: "974"
+  description: ""
+  id: "270"
+  locale: es
+  name: "Política educativa y gestión administrativa"
+crs_sector_translations_083: 
+  crs_sector_id: "974"
+  description: "Education sector policy, planning and programmes; aid to education ministries, administration and management systems; institution capacity building and advice; school management and governance; curriculum and materials development; unspecified education activities."
+  id: "269"
+  locale: en
+  name: "Education policy and administrative management"
+crs_sector_translations_084: 
+  crs_sector_id: "1139"
+  description: "Including establishment of databases, inventories/accounts of physical and natural resources; environmental profiles and impact studies if not sector specific."
+  id: "179"
+  locale: en
+  name: "Environmental research"
+crs_sector_translations_085: 
+  crs_sector_id: "1166"
+  description: "In the recipient country or region."
+  id: "91"
+  locale: en
+  name: "Support to local and regional NGOs"
+crs_sector_translations_086: 
+  crs_sector_id: "977"
+  description: "Research and studies on education effectiveness, relevance and quality; systematic evaluation and monitoring."
+  id: "87"
+  locale: en
+  name: "Educational research"
+crs_sector_translations_087: 
+  crs_sector_id: "1151"
+  description: "Actions falling outside the code headings below; training in debt management."
+  id: "127"
+  locale: en
+  name: "Action relating to debt"
+crs_sector_translations_088: 
+  crs_sector_id: "1167"
+  description: ""
+  id: "347"
+  locale: en
+  name: "Refugees in donor countries"
+crs_sector_translations_089: 
+  crs_sector_id: "1087"
+  description: "Forestry sector policy, planning and programmes; institution capacity building and advice; forest surveys; unspecified forestry and agro-forestry activities."
+  id: "129"
+  locale: en
+  name: "Forestry policy and administrative management"
+crs_sector_translations_090: 
+  crs_sector_id: "1039"
+  description: ""
+  id: "304"
+  locale: es
+  name: "Enseñanza y formación en materia de transporte y almacenamiento"
+crs_sector_translations_091: 
+  crs_sector_id: "1067"
+  description: "When sector cannot be specified.  Including general state enterprise restructuring or demonopolisation programmes; planning, programming, advice."
+  id: "187"
+  locale: en
+  name: Privatisation
+crs_sector_translations_092: 
+  crs_sector_id: "1034"
+  description: "Road infrastructure, road vehicles; passenger road transport, motor passenger cars."
+  id: "291"
+  locale: en
+  name: "Road transport"
+crs_sector_translations_093: 
+  crs_sector_id: "1157"
+  description: ""
+  id: "68"
+  locale: es
+  name: "Recompra deuda"
+crs_sector_translations_094: 
+  crs_sector_id: "1170"
+  description: ~
+  id: "391"
+  locale: en
+  name: "Emergency food aid"
+crs_sector_translations_095: 
+  crs_sector_id: "1138"
+  description: ""
+  id: "43"
+  locale: en
+  name: "Environmental education/ training"
+crs_sector_translations_096: 
+  crs_sector_id: "975"
+  description: "Educational buildings, equipment, materials; subsidiary services to education (boarding facilities, staff housing); language training; colloquia, seminars, lectures, etc."
+  id: "341"
+  locale: en
+  name: "Education facilities and training"
+crs_sector_translations_097: 
+  crs_sector_id: "1088"
+  description: ""
+  id: "196"
+  locale: es
+  name: "Desarrollo forestal"
+crs_sector_translations_098: 
+  crs_sector_id: "1018"
+  description: ""
+  id: "252"
+  locale: es
+  name: "Manejo del sistema de seguridad y reforma"
+crs_sector_translations_099: 
+  crs_sector_id: "981"
+  description: "Second cycle systematic instruction at both junior and senior levels."
+  id: "233"
+  locale: en
+  name: "Secondary education"
+crs_sector_translations_100: 
+  crs_sector_id: "1125"
+  description: "Construction sector policy and planning; excluding construction activities within specific sectors (e.g., hospital or school construction)."
+  id: "213"
+  locale: en
+  name: "Construction policy and administrative management"
+crs_sector_translations_101: 
+  crs_sector_id: "1171"
+  description: ~
+  id: "392"
+  locale: en
+  name: "Emergency / distress relief"
+crs_sector_translations_102: 
+  crs_sector_id: "1002"
+  description: ""
+  id: "190"
+  locale: es
+  name: "Política recursos hidrológicos y gestión administrativa"
+crs_sector_translations_103: 
+  crs_sector_id: "1063"
+  description: "All formal sector financial intermediaries; credit lines; insurance, leasing, venture capital, etc. (except when focused on only one sector)."
+  id: "281"
+  locale: en
+  name: "Formal sector financial intermediaries"
+crs_sector_translations_104: 
+  crs_sector_id: "1115"
+  description: "Mineral and mining sector policy, planning and programmes;  mining legislation, mining cadastre, mineral resources inventory, information systems, institution capacity building and advice;  unspecified mineral resources exploitation."
+  id: "103"
+  locale: en
+  name: "Mineral/mining policy and administrative management"
+crs_sector_translations_105: 
+  crs_sector_id: "1065"
+  description: ""
+  id: "41"
+  locale: en
+  name: "Education/training in banking and financial services"
+crs_sector_translations_106: 
+  crs_sector_id: "1040"
+  description: ""
+  id: "324"
+  locale: es
+  name: "Política de comunicaciones y gestión administrativa"
+crs_sector_translations_107: 
+  crs_sector_id: "1172"
+  description: ~
+  id: "393"
+  locale: en
+  name: "Aid to refugees (in donor country)"
+crs_sector_translations_108: 
+  crs_sector_id: "1106"
+  description: ""
+  id: "3"
+  locale: en
+  name: "Fertilizer plants"
+crs_sector_translations_109: 
+  crs_sector_id: "1087"
+  description: ""
+  id: "130"
+  locale: es
+  name: "Política forestal y gestión administrativa"
+crs_sector_translations_110: 
+  crs_sector_id: "1089"
+  description: ""
+  id: "284"
+  locale: es
+  name: "Producción carbón vegetal / combustible de leña"
+crs_sector_translations_111: 
+  crs_sector_id: "987"
+  description: "General medical research (excluding basic health research)."
+  id: "275"
+  locale: en
+  name: "Medical research"
+crs_sector_translations_112: 
+  crs_sector_id: "1173"
+  description: ~
+  id: "394"
+  locale: en
+  name: "Aid to refugees (in recipient countries)"
+crs_sector_translations_113: 
+  crs_sector_id: "992"
+  description: "Immunisation; prevention and control of infectious and parasite diseases, except malaria (12262), tuberculosis (12263), HIV/AIDS and other STDs (13040). It includes diarrheal diseases, vector-borne diseases (e.g. river blindness and guinea worm), viral diseases, mycosis, helminthiasis, zoonosis, diseases by other bacteria and viruses, pediculosis, etc."
+  id: "153"
+  locale: en
+  name: "Infectious disease control"
+crs_sector_translations_114: 
+  crs_sector_id: "1122"
+  description: "Baryte, limestone, feldspar, kaolin, sand, gypsym, gravel, ornamental stones."
+  id: "215"
+  locale: en
+  name: "Industrial minerals"
+crs_sector_translations_115: 
+  crs_sector_id: "1071"
+  description: "Irrigation, reservoirs, hydraulic structures, ground water exploitation for agricultural use."
+  id: "137"
+  locale: en
+  name: "Agricultural water resources"
+crs_sector_translations_116: 
+  crs_sector_id: "1174"
+  description: ~
+  id: "395"
+  locale: en
+  name: "Reconstruction relief"
+crs_sector_translations_117: 
+  crs_sector_id: "1074"
+  description: "Including grains (wheat, rice, barley, maize, rye, oats, millet, sorghum); horticulture; vegetables; fruit and berries; other annual and perennial crops. [Use code 32161 for agro-industries.]"
+  id: "219"
+  locale: en
+  name: "Food crop production"
+crs_sector_translations_118: 
+  crs_sector_id: "986"
+  description: ""
+  id: "192"
+  locale: es
+  name: "Enseñanza / formación médicas"
+crs_sector_translations_119: 
+  crs_sector_id: "1174"
+  description: ~
+  id: "396"
+  locale: es
+  name: "Ayuda para reconstrucción"
+crs_sector_translations_120: 
+  crs_sector_id: "1092"
+  description: ""
+  id: "61"
+  locale: en
+  name: "Forestry services"
+crs_sector_translations_121: 
+  crs_sector_id: "1173"
+  description: ~
+  id: "397"
+  locale: es
+  name: "Ayuda a refugios (en países destinatarios)"
+crs_sector_translations_122: 
+  crs_sector_id: "1067"
+  description: ""
+  id: "188"
+  locale: es
+  name: Privatizaciones
+crs_sector_translations_123: 
+  crs_sector_id: "1172"
+  description: ~
+  id: "398"
+  locale: es
+  name: "Ayuda a refugios (en países donantes)"
+crs_sector_translations_124: 
+  crs_sector_id: "1000"
+  description: ""
+  id: "20"
+  locale: es
+  name: "Lucha contra ETS (enfermedades de transmisión sexual), incluido el SIDA"
+crs_sector_translations_125: 
+  crs_sector_id: "1045"
+  description: "Thermal power plants including when heat source cannot be determined; combined gas-coal power plants."
+  id: "71"
+  locale: en
+  name: "Power generation/non-renewable sources "
+crs_sector_translations_126: 
+  crs_sector_id: "1171"
+  description: ~
+  id: "399"
+  locale: es
+  name: "Ayuda de emergencia / aflicción"
+crs_sector_translations_127: 
+  crs_sector_id: "1142"
+  description: "Integrated urban development projects; local development and urban management; urban infrastructure and services; municipal finances; urban environmental management; urban development and planning; urban renewal and urban housing; land information systems."
+  id: "107"
+  locale: en
+  name: "Urban development and management"
+crs_sector_translations_128: 
+  crs_sector_id: "1130"
+  description: ""
+  id: "122"
+  locale: es
+  name: "Ajustes relacionados con el comercio"
+crs_sector_translations_129: 
+  crs_sector_id: "1156"
+  description: "Where the debt swap benefits an external agent i.e. is not specifically for development purposes."
+  id: "345"
+  locale: en
+  name: "Other debt swap"
+crs_sector_translations_130: 
+  crs_sector_id: "1025"
+  description: ""
+  id: "290"
+  locale: es
+  name: "Política de empleo y gestión administrativa"
+crs_sector_translations_131: 
+  crs_sector_id: "1003"
+  description: ""
+  id: "258"
+  locale: es
+  name: "Protección recursos hídricos"
+crs_sector_translations_132: 
+  crs_sector_id: "1145"
+  description: "Including scholarships."
+  id: "313"
+  locale: en
+  name: "Multisector education/training"
+crs_sector_translations_133: 
+  crs_sector_id: "992"
+  description: ""
+  id: "154"
+  locale: es
+  name: "Control enfermedades infecciosas"
+crs_sector_translations_134: 
+  crs_sector_id: "1143"
+  description: "Integrated rural development projects;  e.g. regional development planning;  promotion of decentralised and multi-sectoral competence for planning, co-ordination and management;  implementation of regional development and measures (including natural reserve management);  land management;  land use planning; land settlement and resettlement activities [excluding resettlement of refugees and internally displaced persons (72010)]; functional integration of rural and urban areas;  geographical information systems."
+  id: "163"
+  locale: en
+  name: "Rural development"
+crs_sector_translations_135: 
+  crs_sector_id: "1111"
+  description: ""
+  id: "367"
+  locale: en
+  name: "Non-ferrous metal industries"
+crs_sector_translations_136: 
+  crs_sector_id: "1170"
+  description: ~
+  id: "400"
+  locale: es
+  name: "Asistencia alimentaria de emergencia"
+crs_sector_translations_137: 
+  crs_sector_id: "1132"
+  description: ""
+  id: "200"
+  locale: es
+  name: "Política turística y gestión administrativa"
+crs_sector_translations_138: 
+  crs_sector_id: "1112"
+  description: ""
+  id: "120"
+  locale: es
+  name: Ingeniería
+crs_sector_translations_139: 
+  crs_sector_id: "1079"
+  description: "Non-formal training in agriculture."
+  id: "157"
+  locale: en
+  name: "Agricultural extension"
+crs_sector_translations_140: 
+  crs_sector_id: "1056"
+  description: "Wind energy for water lifting and electric power generation."
+  id: "377"
+  locale: en
+  name: "Wind power"
+crs_sector_translations_141: 
+  crs_sector_id: "1053"
+  description: "Including power-generating river barges."
+  id: "131"
+  locale: en
+  name: "Hydro-electric power plants"
+crs_sector_translations_142: 
+  crs_sector_id: "1079"
+  description: ""
+  id: "158"
+  locale: es
+  name: "Extensión agraria"
+crs_sector_translations_143: 
+  crs_sector_id: "1076"
+  description: "Animal husbandry; animal feed aid."
+  id: "357"
+  locale: en
+  name: Livestock
+crs_sector_translations_144: 
+  crs_sector_id: "1127"
+  description: "Simplification and harmonisation of international import and export procedures (e.g. customs valuation, licensing procedures, transport formalities, payments, insurance); support to customs departments; tariff reforms."
+  id: "47"
+  locale: en
+  name: "Trade facilitation"
+crs_sector_translations_145: 
+  crs_sector_id: "1010"
+  description: ""
+  id: "126"
+  locale: es
+  name: "Gestión financiera sector público"
+crs_sector_translations_146: 
+  crs_sector_id: "1014"
+  description: ""
+  id: "344"
+  locale: es
+  name: "Procesos electorales"
+crs_sector_translations_147: 
+  crs_sector_id: "1146"
+  description: ""
+  id: "390"
+  locale: es
+  name: "Instituciones Investigación/Científica"
+crs_sector_translations_148: 
+  crs_sector_id: "1032"
+  description: ""
+  id: "74"
+  locale: es
+  name: "Mitigación Social del SIDA"
+crs_sector_translations_149: 
+  crs_sector_id: "986"
+  description: "Medical education and training for tertiary level services."
+  id: "191"
+  locale: en
+  name: "Medical education/training"
+crs_sector_translations_150: 
+  crs_sector_id: "1029"
+  description: ""
+  id: "118"
+  locale: es
+  name: "Cultura y Recreación"
+crs_sector_translations_151: 
+  crs_sector_id: "1057"
+  description: ""
+  id: "40"
+  locale: es
+  name: "Energía marítima"
+crs_sector_translations_152: 
+  crs_sector_id: "1066"
+  description: ""
+  id: "96"
+  locale: es
+  name: "Servicios empresariales"
+crs_sector_translations_153: 
+  crs_sector_id: "1096"
+  description: ""
+  id: "224"
+  locale: es
+  name: "Investigación pesquera"
+crs_sector_translations_154: 
+  crs_sector_id: "1013"
+  description: "Community participation and development; co-operatives; grassroots organisations; development of other participatory planning and decision making procedures and institutions (see code 15220 for civilian peace-building, conflict prevention and resolution)."
+  id: "81"
+  locale: en
+  name: "Strengthening civil society"
+crs_sector_translations_155: 
+  crs_sector_id: "1065"
+  description: ""
+  id: "42"
+  locale: es
+  name: "Enseñanza / formación en banca y servicios financieros"
+crs_sector_translations_156: 
+  crs_sector_id: "1165"
+  description: ""
+  id: "6"
+  locale: es
+  name: "Apoyo a ONGD internacionales"
+crs_sector_translations_157: 
+  crs_sector_id: "1055"
+  description: ""
+  id: "280"
+  locale: es
+  name: "Energía solar"
+crs_sector_translations_158: 
+  crs_sector_id: "1160"
+  description: "Measures to co-ordinate delivery of humanitarian aid, including logistics and communications systems;  measures to promote and protect the safety, well-being, dignity and integrity of civilians and those no longer taking part in hostilities.  (Activities designed to protect the security of persons or property through the use or display of force are not reportable as ODA.)                                                                                                                                                "
+  id: "169"
+  locale: en
+  name: "Relief co-ordination; protection and support services "
+crs_sector_translations_159: 
+  crs_sector_id: "1052"
+  description: ""
+  id: "218"
+  locale: es
+  name: "Centrales nucleares"
+crs_sector_translations_160: 
+  crs_sector_id: "1153"
+  description: ""
+  id: "308"
+  locale: es
+  name: "Reducción de la deuda con Instituciones multilaterales"
+crs_sector_translations_161: 
+  crs_sector_id: "1122"
+  description: ""
+  id: "216"
+  locale: es
+  name: "Minerales industriales"
+crs_sector_translations_162: 
+  crs_sector_id: "1131"
+  description: ""
+  id: "246"
+  locale: es
+  name: "Educación/Formación Comercial"
+crs_sector_translations_163: 
+  crs_sector_id: "1037"
+  description: "Airports, airport guidance systems, aeroplanes, aeroplane maintenance equipment."
+  id: "197"
+  locale: en
+  name: "Air transport"
+crs_sector_translations_164: 
+  crs_sector_id: "1083"
+  description: ""
+  id: "380"
+  locale: es
+  name: "Protección plantas y cosechas recogidas, y lucha contra plagas"
+crs_sector_translations_165: 
+  crs_sector_id: "1128"
+  description: "Support to regional trade arrangements [e.g. Southern African Development Community (SADC), Association of Southeast Asian Nations (ASEAN), Free Trade Area of the Americas (FTAA), African Caribbean Pacific/European Union (ACP/EU)], including work on technical barriers to trade and sanitary and phytosanitary measures (TBT/SPS) at regional level; elaboration of rules of origin and introduction of special and differential treatment in RTAs."
+  id: "101"
+  locale: en
+  name: "Regional trade agreements (RTAs)"
+crs_sector_translations_166: 
+  crs_sector_id: "1061"
+  description: "Finance sector policy, planning and programmes; institution capacity building and advice; financial markets and systems."
+  id: "333"
+  locale: en
+  name: "Financial policy and administrative management"
+crs_sector_translations_167: 
+  crs_sector_id: "1133"
+  description: ""
+  id: "340"
+  locale: es
+  name: "Política medioambiental y gestión administrativa"
+crs_sector_translations_168: 
+  crs_sector_id: "1081"
+  description: ""
+  id: "296"
+  locale: es
+  name: "Investigación agraria"
+crs_sector_translations_169: 
+  crs_sector_id: "1110"
+  description: ""
+  id: "286"
+  locale: es
+  name: "Industria metalúrgica básica"
+crs_sector_translations_170: 
+  crs_sector_id: "1137"
+  description: ""
+  id: "382"
+  locale: es
+  name: "Control / prevención de inundaciones"
+crs_sector_translations_171: 
+  crs_sector_id: "994"
+  description: ""
+  id: "300"
+  locale: es
+  name: "Malaria control"
+crs_sector_translations_172: 
+  crs_sector_id: "1098"
+  description: "Industrial sector policy, planning and programmes; institution capacity building and advice; unspecified industrial activities; manufacturing of goods not specified below."
+  id: "363"
+  locale: en
+  name: "Industrial policy and administrative management"
+crs_sector_translations_173: 
+  crs_sector_id: "1120"
+  description: ""
+  id: "54"
+  locale: es
+  name: "Metales no ferrosos"
+crs_sector_translations_174: 
+  crs_sector_id: "1062"
+  description: ""
+  id: "32"
+  locale: es
+  name: "Instituciones monetarias"
+crs_sector_translations_175: 
+  crs_sector_id: "1108"
+  description: "Including gas liquefaction; petroleum refineries."
+  id: "133"
+  locale: en
+  name: "Energy manufacturing"
+crs_sector_translations_176: 
+  crs_sector_id: "998"
+  description: ""
+  id: "66"
+  locale: es
+  name: "Atención salud reproductiva"
+crs_sector_translations_177: 
+  crs_sector_id: "1118"
+  description: ""
+  id: "310"
+  locale: es
+  name: "Petróleo y Gas"
+crs_sector_translations_178: 
+  crs_sector_id: "1123"
+  description: ""
+  id: "320"
+  locale: es
+  name: "Fertilizantes minerales"
+crs_sector_translations_179: 
+  crs_sector_id: "1006"
+  description: ""
+  id: "78"
+  locale: es
+  name: "Desarrollo cuencas fluviales"
+crs_sector_translations_180: 
+  crs_sector_id: "1050"
+  description: ""
+  id: "79"
+  locale: en
+  name: "Gas-fired power plants"
+crs_sector_translations_181: 
+  crs_sector_id: "1015"
+  description: "Monitoring of human rights performance; support for national and regional human rights bodies; protection of ethnic, religious and cultural minorities [other than in connection with UN peace building (15230)]."
+  id: "135"
+  locale: en
+  name: "Human rights"
+crs_sector_translations_182: 
+  crs_sector_id: "1031"
+  description: "In-country and customs controls including training of the police; educational programmes and awareness campaigns to restrict narcotics traffic and in-country distribution."
+  id: "271"
+  locale: en
+  name: "Narcotics control"
+crs_sector_translations_183: 
+  crs_sector_id: "991"
+  description: "Direct feeding programmes (maternal feeding, breastfeeding and weaning foods, child feeding, school feeding); determination of micro-nutrient deficiencies; provision of vitamin A, iodine, iron etc.; monitoring of nutritional status; nutrition and food hygiene education; household food security."
+  id: "23"
+  locale: en
+  name: "Basic nutrition"
+crs_sector_translations_184: 
+  crs_sector_id: "984"
+  description: ""
+  id: "60"
+  locale: es
+  name: "Formación superior técnica y de dirección"
+crs_sector_translations_185: 
+  crs_sector_id: "1107"
+  description: ""
+  id: "69"
+  locale: en
+  name: Cement/lime/plaster
+crs_sector_translations_186: 
+  crs_sector_id: "1113"
+  description: "Shipbuilding, fishing boats building; railroad equipment; motor vehicles and motor passenger cars; aircraft; navigation/guidance systems."
+  id: "173"
+  locale: en
+  name: "Transport equipment industry"
+crs_sector_translations_187: 
+  crs_sector_id: "1042"
+  description: ""
+  id: "86"
+  locale: es
+  name: "Radio, televisión, prensa"
+crs_sector_translations_188: 
+  crs_sector_id: "1095"
+  description: ""
+  id: "156"
+  locale: es
+  name: "Educación, formación pesquera"
+crs_sector_translations_189: 
+  crs_sector_id: "1169"
+  description: ""
+  id: "232"
+  locale: es
+  name: "Fomento de sensibilización cooperación al desarrollo"
+crs_sector_translations_190: 
+  crs_sector_id: "1023"
+  description: "Technical co-operation provided to government – and assistance to civil society organisations – to support and apply legislation designed to prevent the recruitment of child soldiers, and to demobilise, disarm, reintegrate, repatriate and resettle (DDR) child soldiers."
+  id: "1"
+  locale: en
+  name: "Child soldiers (Prevention and demobilisation) "
+crs_sector_translations_191: 
+  crs_sector_id: "983"
+  description: ""
+  id: "360"
+  locale: es
+  name: "Educación universitaria"
+crs_sector_translations_192: 
+  crs_sector_id: "1108"
+  description: ""
+  id: "134"
+  locale: es
+  name: "Manufacturas productos energéticos"
+crs_sector_translations_193: 
+  crs_sector_id: "1100"
+  description: "Direct support to the development of small and medium-sized enterprises in the industrial sector, including accounting, auditing and advisory services."
+  id: "113"
+  locale: en
+  name: "Small and medium-sized enterprises (SME) development"
+crs_sector_translations_194: 
+  crs_sector_id: "989"
+  description: "Basic and primary health care programmes; paramedical and nursing care programmes; supply of drugs, medicines and vaccines related to basic health care."
+  id: "241"
+  locale: en
+  name: "Basic health care"
+crs_sector_translations_195: 
+  crs_sector_id: "996"
+  description: "Training of health staff for basic health care services."
+  id: "365"
+  locale: en
+  name: "Health personnel development"
+crs_sector_translations_196: 
+  crs_sector_id: "1011"
+  description: ""
+  id: "318"
+  locale: es
+  name: "Desarrollo legal y judicial"
+crs_sector_translations_197: 
+  crs_sector_id: "1091"
+  description: ""
+  id: "388"
+  locale: es
+  name: "Investigación silvicultura"
+crs_sector_translations_198: 
+  crs_sector_id: "1167"
+  description: ""
+  id: "348"
+  locale: es
+  name: "Refugiados en los países donantes"
+crs_sector_translations_199: 
+  crs_sector_id: "1051"
+  description: ""
+  id: "13"
+  locale: en
+  name: "Coal-fired power plants"
+crs_sector_translations_200: 
+  crs_sector_id: "982"
+  description: ""
+  id: "266"
+  locale: es
+  name: "Formación profesional "
+crs_sector_translations_201: 
+  crs_sector_id: "1161"
+  description: "Short-term reconstruction work after emergency or conflict limited to restoring pre-existing infrastructure (e.g. repair or construction of roads, bridges and ports, restoration of essential facilities, such as water and sanitation, shelter, health care services); social and economic rehabilitation in the aftermath of emergencies to facilitate transition and enable populations to return to their previous livelihood or develop a new livelihood in the wake of an emergency situation (e.g. trauma counselling and treatment, employment programmes). "
+  id: "93"
+  locale: en
+  name: "Reconstruction relief and rehabilitation"
+crs_sector_translations_202: 
+  crs_sector_id: "1042"
+  description: "Radio and TV links, equipment; newspapers; printing and publishing."
+  id: "85"
+  locale: en
+  name: "Radio/television/print media"
+crs_sector_translations_203: 
+  crs_sector_id: "1082"
+  description: "Marketing policies & organisation; storage and transportation, creation of strategic reserves."
+  id: "115"
+  locale: en
+  name: "Agricultural services"
+crs_sector_translations_204: 
+  crs_sector_id: "1026"
+  description: "Housing sector policy, planning and programmes;  excluding low-cost housing and slum clearance (16040)."
+  id: "325"
+  locale: en
+  name: "Housing policy and administrative management"
+crs_sector_translations_205: 
+  crs_sector_id: "1142"
+  description: ""
+  id: "108"
+  locale: es
+  name: "Desarrollo y gestión urbanos"
+crs_sector_translations_206: 
+  crs_sector_id: "1037"
+  description: ""
+  id: "198"
+  locale: es
+  name: "Transporte aéreo"
+crs_sector_translations_207: 
+  crs_sector_id: "1154"
+  description: ""
+  id: "143"
+  locale: en
+  name: "Rescheduling and refinancing"
+crs_sector_translations_208: 
+  crs_sector_id: "979"
+  description: "Formal and non-formal education for basic life skills for young people and adults (adults education); literacy and numeracy training."
+  id: "75"
+  locale: en
+  name: "Basic life skills for youth and adults "
+crs_sector_translations_209: 
+  crs_sector_id: "1004"
+  description: ""
+  id: "332"
+  locale: es
+  name: "Abastecimiento y depuración de agua sistemas de envergadura"
+crs_sector_translations_210: 
+  crs_sector_id: "1117"
+  description: ""
+  id: "260"
+  locale: es
+  name: "Minería carbón"
+crs_sector_translations_211: 
+  crs_sector_id: "1105"
+  description: "Industrial and non-industrial production facilities; includes pesticides production."
+  id: "297"
+  locale: en
+  name: "Chemicals "
+crs_sector_translations_212: 
+  crs_sector_id: "1158"
+  description: "Shelter, water, sanitation and health services, supply of medicines and other non-food relief items; assistance to refugees and  internally displaced people in developing countries other than for food (72040) or protection (72050).  "
+  id: "9"
+  locale: en
+  name: "Material relief assistance and services "
+crs_sector_translations_213: 
+  crs_sector_id: "1084"
+  description: "Financial intermediaries for the agricultural sector including credit schemes; crop insurance."
+  id: "141"
+  locale: en
+  name: "Agricultural financial services"
+crs_sector_translations_214: 
+  crs_sector_id: "1114"
+  description: ""
+  id: "268"
+  locale: es
+  name: "Investigación y desarrollo tecnológico"
+crs_sector_translations_215: 
+  crs_sector_id: "1099"
+  description: ""
+  id: "56"
+  locale: es
+  name: "Desarrollo industrial"
+crs_sector_translations_216: 
+  crs_sector_id: "998"
+  description: "Promotion of reproductive health; prenatal and postnatal care including delivery; prevention and treatment of infertility; prevention and management of consequences of abortion; safe motherhood activities."
+  id: "65"
+  locale: en
+  name: "Reproductive health care"
+crs_sector_translations_217: 
+  crs_sector_id: "1059"
+  description: "Applies to all energy sub-sectors; all levels of training."
+  id: "205"
+  locale: en
+  name: "Energy education/training"
+crs_sector_translations_218: 
+  crs_sector_id: "1135"
+  description: "Including natural reserves and actions in the surrounding areas; other measures to protect endangered or vulnerable species and their habitats (e.g. wetlands preservation)."
+  id: "99"
+  locale: en
+  name: Bio-diversity
+crs_sector_translations_219: 
+  crs_sector_id: "1097"
+  description: ""
+  id: "312"
+  locale: es
+  name: "Servicios pesqueros"
+crs_sector_translations_220: 
+  crs_sector_id: "1069"
+  description: "Integrated projects; farm development."
+  id: "373"
+  locale: en
+  name: "Agricultural development"
+crs_sector_translations_221: 
+  crs_sector_id: "1148"
+  description: ""
+  id: "236"
+  locale: es
+  name: "Ayuda Alimentaria / Programas de seguridad alimentaria"
+crs_sector_translations_222: 
+  crs_sector_id: "1126"
+  description: ""
+  id: "354"
+  locale: es
+  name: "Política comercial y gestión administrativa"
+crs_sector_translations_223: 
+  crs_sector_id: "1074"
+  description: ""
+  id: "220"
+  locale: es
+  name: "Producción alimentos agrícolas"
+crs_sector_translations_224: 
+  crs_sector_id: "1144"
+  description: ""
+  id: "256"
+  locale: es
+  name: "Desarrollo alternativo no agrario"
+crs_sector_translations_225: 
+  crs_sector_id: "1027"
+  description: "Including slum clearance."
+  id: "11"
+  locale: en
+  name: "Low-cost housing"
+crs_sector_translations_226: 
+  crs_sector_id: "975"
+  description: ""
+  id: "342"
+  locale: es
+  name: "Servicios e instalaciones educativos y formación"
+crs_sector_translations_227: 
+  crs_sector_id: "1019"
+  description: "Support for civilian activities related to peace building, conflict prevention and resolution, including capacity building, monitoring, dialogue and information exchange."
+  id: "337"
+  locale: en
+  name: "Civilian peace-building, conflict prevention and resolution"
+crs_sector_translations_228: 
+  crs_sector_id: "1021"
+  description: "Reintegration of demobilised military personnel into the economy; conversion of production facilities from military to civilian outputs; technical co-operation to control, prevent and/or reduce the proliferation of small arms and light weapons (SALW) – see para. 39 of the DAC Statistical Reporting Directives for definition of SALW activities covered. [Other than in connection with UN peace-building (15230) or child soldiers (15261)]."
+  id: "89"
+  locale: en
+  name: "Reintegration and SALW control"
+crs_sector_translations_229: 
+  crs_sector_id: "1073"
+  description: ""
+  id: "222"
+  locale: es
+  name: "Factores producción agrícolas"
+crs_sector_translations_230: 
+  crs_sector_id: "1081"
+  description: "Plant breeding, physiology, genetic resources, ecology, taxonomy, disease control, agricultural bio-technology; including livestock research (animal health, breeding and genetics, nutrition, physiology)."
+  id: "295"
+  locale: en
+  name: "Agricultural research"
+crs_sector_translations_231: 
+  crs_sector_id: "1053"
+  description: ""
+  id: "132"
+  locale: es
+  name: "Centrales hidroeléctricas"
+crs_sector_translations_232: 
+  crs_sector_id: "1116"
+  description: ""
+  id: "172"
+  locale: es
+  name: "Prospecciones y análisis minerales"
+crs_sector_translations_233: 
+  crs_sector_id: "999"
+  description: ""
+  id: "140"
+  locale: es
+  name: "Planificación familiar"
+crs_sector_translations_234: 
+  crs_sector_id: "1071"
+  description: ""
+  id: "138"
+  locale: es
+  name: "Recursos hidrológicos para uso agrícola"
+crs_sector_translations_235: 
+  crs_sector_id: "1009"
+  description: ""
+  id: "336"
+  locale: es
+  name: "Política / planificación económica y de desarrollo"
+crs_sector_translations_236: 
+  crs_sector_id: "1156"
+  description: ""
+  id: "346"
+  locale: es
+  name: "Otros tipos de canje de deuda"
+crs_sector_translations_237: 
+  crs_sector_id: "1103"
+  description: ""
+  id: "350"
+  locale: es
+  name: "Industrias madereras"
+crs_sector_translations_238: 
+  crs_sector_id: "1168"
+  description: "Contributions to general development of the recipient should be included under programme assistance (51010)."
+  id: "149"
+  locale: en
+  name: "Sectors not specified"
+crs_sector_translations_239: 
+  crs_sector_id: "1022"
+  description: ""
+  id: "306"
+  locale: es
+  name: Desminado
+crs_sector_translations_240: 
+  crs_sector_id: "994"
+  description: "Prevention and control of malaria."
+  id: "299"
+  locale: en
+  name: "Malaria control"
+crs_sector_translations_241: 
+  crs_sector_id: "1115"
+  description: ""
+  id: "104"
+  locale: es
+  name: "Política minera y gestión administrativa"
+crs_sector_translations_242: 
+  crs_sector_id: "1145"
+  description: ""
+  id: "314"
+  locale: es
+  name: "Enseñanza / formación multisectorial"
+crs_sector_translations_243: 
+  crs_sector_id: "993"
+  description: ""
+  id: "240"
+  locale: es
+  name: "Educación sanitaria"
+crs_sector_translations_244: 
+  crs_sector_id: "988"
+  description: "Laboratories, specialised clinics and hospitals (including equipment and supplies); ambulances; dental services; mental health care; medical rehabilitation; control of non-infectious diseases; drug and substance abuse control [excluding narcotics traffic control (16063)]."
+  id: "369"
+  locale: en
+  name: "Medical services"
+crs_sector_translations_245: 
+  crs_sector_id: "1054"
+  description: ""
+  id: "185"
+  locale: en
+  name: "Geothermal energy"
+crs_sector_translations_246: 
+  crs_sector_id: "1136"
+  description: ""
+  id: "160"
+  locale: es
+  name: "Protección del patrimonio histórico, artístico y arqueológico"
+crs_sector_translations_247: 
+  crs_sector_id: "976"
+  description: "Teacher education (where the level of education is unspecified); in-service and pre-service training; materials development."
+  id: "29"
+  locale: en
+  name: "Teacher training"
+crs_sector_translations_248: 
+  crs_sector_id: "990"
+  description: ""
+  id: "316"
+  locale: es
+  name: "Infraestructura sanitaria básica"
+crs_sector_translations_249: 
+  crs_sector_id: "1007"
+  description: ""
+  id: "166"
+  locale: es
+  name: "Eliminación / tratamiento residuos sólidos"
+crs_sector_translations_250: 
+  crs_sector_id: "1048"
+  description: "Delivery for use by ultimate consumer."
+  id: "327"
+  locale: en
+  name: "Gas distribution"
+crs_sector_translations_251: 
+  crs_sector_id: "1073"
+  description: "Supply of seeds, fertilizers, agricultural machinery/equipment."
+  id: "221"
+  locale: en
+  name: "Agricultural inputs"
+crs_sector_translations_252: 
+  crs_sector_id: "976"
+  description: ""
+  id: "30"
+  locale: es
+  name: "Formación de profesores"
+crs_sector_translations_253: 
+  crs_sector_id: "1018"
+  description: "Technical co-operation provided to parliament, government ministries, law enforcement agencies and the judiciary to assist review and reform of the security system to improve democratic governance and civilian control; technical co-operation provided to government to improve civilian oversight and democratic control of budgeting, management, accountability and auditing of security expenditure, including military budgets, as part of a public expenditure management programme; assistance to civil society to enhance its competence and capacity to scrutinise the security system so that it is managed in accordance with democratic norms and principles of accountability, transparency and good governance."
+  id: "251"
+  locale: en
+  name: "Security system management and reform"
+crs_sector_translations_254: 
+  crs_sector_id: "1009"
+  description: "Macro-economic, fiscal and monetary policy and planning; social planning; economic and social analysis and forecasting; development planning and preparation of structural reforms; organisational development; support to ministries involved in aid co-ordination; other ministries and government departments when sector cannot be specified.  (Use code 51010 for budget support to macroeconomic reforms.)"
+  id: "335"
+  locale: en
+  name: "Economic and development policy/planning"
+crs_sector_translations_255: 
+  crs_sector_id: "1159"
+  description: ""
+  id: "288"
+  locale: es
+  name: "Ayuda alimentaria de emergencia"
+crs_sector_translations_256: 
+  crs_sector_id: "1135"
+  description: ""
+  id: "100"
+  locale: es
+  name: Biodiversidad
+crs_sector_translations_257: 
+  crs_sector_id: "1035"
+  description: ""
+  id: "52"
+  locale: es
+  name: "Transporte por ferrocarril"
+crs_sector_translations_258: 
+  crs_sector_id: "1060"
+  description: "Including general inventories, surveys."
+  id: "293"
+  locale: en
+  name: "Energy research"
+crs_sector_translations_259: 
+  crs_sector_id: "1163"
+  description: ""
+  id: "194"
+  locale: es
+  name: "Costos Administrativos"
+crs_sector_translations_260: 
+  crs_sector_id: "1164"
+  description: "In the donor country."
+  id: "329"
+  locale: en
+  name: "Support to national NGOs"
+crs_sector_translations_261: 
+  crs_sector_id: "1044"
+  description: "Energy sector policy, planning and programmes; aid to energy ministries; institution capacity building and advice; unspecified energy activities including energy conservation."
+  id: "371"
+  locale: en
+  name: "Energy policy and administrative management"
+crs_sector_translations_262: 
+  crs_sector_id: "1123"
+  description: "Phosphates, potash."
+  id: "319"
+  locale: en
+  name: "Fertilizer minerals"
+crs_sector_translations_263: 
+  crs_sector_id: "1016"
+  description: "Uncensored flow of information on public issues, including activities that increase the professionalism, skills and integrity of the print and broadcast media (e.g. training of journalists)."
+  id: "209"
+  locale: en
+  name: "Free flow of information"
+crs_sector_translations_264: 
+  crs_sector_id: "1004"
+  description: "Water desalination plants; intakes, storage, treatment, pumping stations, conveyance and distribution systems; sewerage; domestic and industrial waste water treatment plants. "
+  id: "331"
+  locale: en
+  name: "Water supply and sanitation - large systems"
+crs_sector_translations_265: 
+  crs_sector_id: "1005"
+  description: "Water supply and sanitation through low-cost technologies such as handpumps, spring catchment, gravity-fed systems, rain water collection, storage tanks, small distribution systems; latrines, small-bore sewers, on-site disposal (septic tanks)."
+  id: "17"
+  locale: en
+  name: "Basic drinking water supply and basic sanitation"
+crs_sector_translations_266: 
+  crs_sector_id: "1006"
+  description: "Integrated river basin projects; river flow control; dams and reservoirs [excluding dams primarily for irrigation (31140) and hydropower (23065) and activities related to river transport (21040)]. "
+  id: "77"
+  locale: en
+  name: "River development"
+crs_sector_translations_267: 
+  crs_sector_id: "1151"
+  description: ""
+  id: "128"
+  locale: es
+  name: "Actividades relacionadas con la Deuda"
+crs_sector_translations_268: 
+  crs_sector_id: "1051"
+  description: ""
+  id: "14"
+  locale: es
+  name: "Central térmica de carbón"
+crs_sector_translations_269: 
+  crs_sector_id: "1017"
+  description: "Support for institutions and organisations (governmental and non-governmental) working for gender equality and women’s empowerment."
+  id: "97"
+  locale: en
+  name: "Women’s equality organisations and institutions"
+crs_sector_translations_270: 
+  crs_sector_id: "1027"
+  description: ""
+  id: "12"
+  locale: es
+  name: "Viviendas de bajo coste"
+crs_sector_translations_271: 
+  crs_sector_id: "1127"
+  description: ""
+  id: "48"
+  locale: es
+  name: "Fomento Comercial"
+crs_sector_translations_272: 
+  crs_sector_id: "1119"
+  description: "Iron and ferro-alloy metals."
+  id: "375"
+  locale: en
+  name: "Ferrous metals"
+crs_sector_translations_273: 
+  crs_sector_id: "977"
+  description: ""
+  id: "88"
+  locale: es
+  name: "Investigación educativa"
+crs_sector_translations_274: 
+  crs_sector_id: "1140"
+  description: ""
+  id: "274"
+  locale: es
+  name: "Mujer y desarrollo"
+crs_sector_translations_275: 
+  crs_sector_id: "1155"
+  description: "Allocation of debt claims to use for development (e.g., debt for education, debt for environment)."
+  id: "361"
+  locale: en
+  name: "Debt for development swap"
+crs_sector_translations_276: 
+  crs_sector_id: "1012"
+  description: "Systems of government including parliament, local government, decentralisation; civil service and civil service reform.  Including general services by government (or commissioned by government) not elsewhere specified e.g. police, fire protection; cartography, meteorology, legal metrology, aerial surveys and remote sensing; administrative buildings. "
+  id: "383"
+  locale: en
+  name: "Government administration "
+crs_sector_translations_277: 
+  crs_sector_id: "1080"
+  description: ""
+  id: "230"
+  locale: es
+  name: "Enseñanza / formación agraria."
+crs_sector_translations_278: 
+  crs_sector_id: "1010"
+  description: "Strengthening financial and managerial accountability; public expenditure management; improving financial management systems; tax assessment procedures; budget drafting; field auditing; measures against waste, fraud and corruption."
+  id: "125"
+  locale: en
+  name: "Public sector financial management"
+crs_sector_translations_279: 
+  crs_sector_id: "1160"
+  description: ""
+  id: "170"
+  locale: es
+  name: "Coordinación de Socorro; servicios de protección y apoyo"
+crs_sector_translations_280: 
+  crs_sector_id: "1022"
+  description: "Explosive mine removal for developmental purposes [other than in connection with UN peace-building (15230)]."
+  id: "305"
+  locale: en
+  name: "Land mine clearance"
+crs_sector_translations_281: 
+  crs_sector_id: "1035"
+  description: "Rail infrastructure, rail equipment, locomotives, other rolling stock; including light rail (tram) and underground systems."
+  id: "51"
+  locale: en
+  name: "Rail transport"
+crs_sector_translations_282: 
+  crs_sector_id: "978"
+  description: "Formal and non-formal primary education for children; all elementary and first cycle systematic instruction; provision of learning materials."
+  id: "175"
+  locale: en
+  name: "Primary education"
+crs_sector_translations_283: 
+  crs_sector_id: "997"
+  description: ""
+  id: "34"
+  locale: es
+  name: "Política sobre población y gestión administrativa"
+crs_sector_translations_284: 
+  crs_sector_id: "1043"
+  description: ""
+  id: "278"
+  locale: es
+  name: "Tecnologías de Información y Comunicación (TIC)"
+crs_sector_translations_285: 
+  crs_sector_id: "1089"
+  description: "Forestry development whose primary purpose is production of fuelwood and charcoal."
+  id: "283"
+  locale: en
+  name: Fuelwood/charcoal
+crs_sector_translations_286: 
+  crs_sector_id: "979"
+  description: ""
+  id: "76"
+  locale: es
+  name: "Capacitación básica de jóvenes y adultos"
+crs_sector_translations_287: 
+  crs_sector_id: "1033"
+  description: ""
+  id: "178"
+  locale: es
+  name: "Política transporte y gestión administrativa"
+crs_sector_translations_288: 
+  crs_sector_id: "1147"
+  description: "Unearmarked contributions to the government budget; support for the implementation of macroeconomic reforms (structural adjustment programmes, poverty reduction strategies); general programme assistance (when not allocable by sector)."
+  id: "161"
+  locale: en
+  name: "General budget support"
+crs_sector_translations_289: 
+  crs_sector_id: "1099"
+  description: ""
+  id: "55"
+  locale: en
+  name: "Industrial development"
+crs_sector_translations_290: 
+  crs_sector_id: "1070"
+  description: "Including soil degradation control; soil improvement; drainage of water logged areas; soil desalination; agricultural land surveys; land reclamation; erosion control, desertification control."
+  id: "63"
+  locale: en
+  name: "Agricultural land resources"
+crs_sector_translations_291: 
+  crs_sector_id: "1094"
+  description: ""
+  id: "228"
+  locale: es
+  name: "Desarrollo pesquero"
+crs_sector_translations_292: 
+  crs_sector_id: "1152"
+  description: ""
+  id: "204"
+  locale: es
+  name: "Condonación de deuda"
+crs_sector_translations_293: 
+  crs_sector_id: "1028"
+  description: ""
+  id: "50"
+  locale: es
+  name: "Ayuda mulisector para servicios sociales básicos"
+crs_sector_translations_294: 
+  crs_sector_id: "999"
+  description: "Family planning services including counselling; information, education and communication (IEC) activities; delivery of contraceptives; capacity building and training."
+  id: "139"
+  locale: en
+  name: "Family planning"
+crs_sector_translations_295: 
+  crs_sector_id: "1138"
+  description: ""
+  id: "44"
+  locale: es
+  name: "Educación / formación medioambiental"
+crs_sector_translations_296: 
+  crs_sector_id: "1036"
+  description: "Harbours and docks, harbour guidance systems, ships and boats; river and other inland water transport, inland barges and vessels."
+  id: "105"
+  locale: en
+  name: "Water transport"
+crs_sector_translations_297: 
+  crs_sector_id: "1163"
+  description: ""
+  id: "193"
+  locale: en
+  name: "Administrative costs"
+crs_sector_translations_298: 
+  crs_sector_id: "1031"
+  description: ""
+  id: "272"
+  locale: es
+  name: "Control de estupefacientes"
+crs_sector_translations_299: 
+  crs_sector_id: "1118"
+  description: "Petroleum, natural gas, condensates, liquefied petroleum gas (LPG), liquefied natural gas (LNG);  including drilling and production."
+  id: "309"
+  locale: en
+  name: "Oil and gas"
+crs_sector_translations_300: 
+  crs_sector_id: "1003"
+  description: "Inland surface waters (rivers, lakes, etc.); conservation and rehabilitation of ground water; prevention of water contamination from agro-chemicals, industrial effluents."
+  id: "257"
+  locale: en
+  name: "Water resources protection"
+crs_sector_translations_301: 
+  crs_sector_id: "1055"
+  description: "Including photo-voltaic cells, solar thermal applications and solar heating."
+  id: "279"
+  locale: en
+  name: "Solar energy"
+crs_sector_translations_302: 
+  crs_sector_id: "1104"
+  description: ""
+  id: "28"
+  locale: es
+  name: "Textiles, piel y sustitutos"
+crs_sector_translations_303: 
+  crs_sector_id: "1068"
+  description: "Agricultural sector policy, planning and programmes; aid to agricultural ministries;  institution capacity building and advice; unspecified agriculture."
+  id: "247"
+  locale: en
+  name: "Agricultural policy and administrative management"
+crs_sector_translations_304: 
+  crs_sector_id: "985"
+  description: ""
+  id: "112"
+  locale: es
+  name: "Política sanitaria y gestión administrativa"
+crs_sector_translations_305: 
+  crs_sector_id: "1068"
+  description: ""
+  id: "248"
+  locale: es
+  name: "Política agraria y gestión administrativa"
+crs_sector_translations_306: 
+  crs_sector_id: "1008"
+  description: ""
+  id: "237"
+  locale: en
+  name: "Education and training in water supply and sanitation "
+crs_sector_translations_307: 
+  crs_sector_id: "985"
+  description: "Health sector policy, planning and programmes; aid to health ministries, public health administration; institution capacity building and advice; medical insurance programmes; unspecified health activities."
+  id: "111"
+  locale: en
+  name: "Health policy and administrative management"
+crs_sector_translations_308: 
+  crs_sector_id: "1128"
+  description: ""
+  id: "102"
+  locale: es
+  name: "Acuerdos Regionales de Comercio"
+crs_sector_translations_309: 
+  crs_sector_id: "1129"
+  description: ""
+  id: "202"
+  locale: es
+  name: "Negociaciones Multilaterales de Comercio"
+crs_sector_translations_310: 
+  crs_sector_id: "1086"
+  description: "Animal health and management, genetic resources, feed resources."
+  id: "57"
+  locale: en
+  name: "Livestock/veterinary services"
+crs_sector_translations_311: 
+  crs_sector_id: "1026"
+  description: ""
+  id: "326"
+  locale: es
+  name: "Política de vivienda y gestión administrativa"
+crs_sector_translations_312: 
+  crs_sector_id: "1011"
+  description: "Constitutional development, legal drafting; institutional strengthening of legal and judicial systems; legal training and education; legal advice and services; crime prevention."
+  id: "317"
+  locale: en
+  name: "Legal and judicial development"
+crs_sector_translations_313: 
+  crs_sector_id: "1103"
+  description: "Wood production, pulp/paper production."
+  id: "349"
+  locale: en
+  name: "Forest industries"
+crs_sector_translations_314: 
+  crs_sector_id: "995"
+  description: ""
+  id: "250"
+  locale: es
+  name: "Control de la Tuberculosis"
+crs_sector_translations_315: 
+  crs_sector_id: "1132"
+  description: ""
+  id: "199"
+  locale: en
+  name: "Tourism policy and administrative management"
+crs_sector_translations_316: 
+  crs_sector_id: "1069"
+  description: ""
+  id: "374"
+  locale: es
+  name: "Desarrollo agrario"
+crs_sector_translations_317: 
+  crs_sector_id: "1114"
+  description: "Including industrial standards; quality management; metrology;  testing;  accreditation;  certification."
+  id: "267"
+  locale: en
+  name: "Technological research and development"
+crs_sector_translations_318: 
+  crs_sector_id: "1090"
+  description: ""
+  id: "322"
+  locale: es
+  name: "Educación / formación forestal"
+crs_sector_translations_319: 
+  crs_sector_id: "1012"
+  description: ""
+  id: "384"
+  locale: es
+  name: "Administración pública"
+crs_sector_translations_320: 
+  crs_sector_id: "1113"
+  description: ""
+  id: "174"
+  locale: es
+  name: "Material de transporte"
+crs_sector_translations_321: 
+  crs_sector_id: "1116"
+  description: "Geology, geophysics, geochemistry;  excluding hydrogeology (14010) and environmental geology (41010), mineral extraction and processing, infrastructure, technology, economics, safety and environment management."
+  id: "171"
+  locale: en
+  name: "Mineral prospection and exploration"
+crs_sector_translations_322: 
+  crs_sector_id: "1076"
+  description: ""
+  id: "358"
+  locale: es
+  name: Ganadería
+crs_sector_translations_323: 
+  crs_sector_id: "1058"
+  description: "Densification technologies and use of biomass for direct power generation including biogas, gas obtained from sugar cane and other plant residues, anaerobic digesters."
+  id: "151"
+  locale: en
+  name: Biomass
+crs_sector_translations_324: 
+  crs_sector_id: "1061"
+  description: ""
+  id: "334"
+  locale: es
+  name: "Política financiera y gestión administrativa"
+crs_sector_translations_325: 
+  crs_sector_id: "1029"
+  description: "Including libraries and museums."
+  id: "117"
+  locale: en
+  name: "Culture and recreation"
+crs_sector_translations_326: 
+  crs_sector_id: "1028"
+  description: "Basic social services are defined to include basic education, basic health, basic nutrition, population/reproductive health and basic drinking water supply and basic sanitation."
+  id: "49"
+  locale: en
+  name: "Multisector aid for basic social services "
+crs_sector_translations_327: 
+  crs_sector_id: "1064"
+  description: "Micro credit, savings and credit co-operatives etc."
+  id: "351"
+  locale: en
+  name: "Informal/semi-formal financial intermediaries"
+crs_sector_translations_328: 
+  crs_sector_id: "1049"
+  description: "Including diesel power plants."
+  id: "147"
+  locale: en
+  name: "Oil-fired power plants"
+crs_sector_translations_329: 
+  crs_sector_id: "1078"
+  description: ""
+  id: "110"
+  locale: es
+  name: "Desarrollo agrario alternativo"
+crs_sector_translations_330: 
+  crs_sector_id: "1078"
+  description: "Projects to reduce illicit drug cultivation through other agricultural marketing and production opportunities (see code 43050 for non-agricultural alternative development)."
+  id: "109"
+  locale: en
+  name: "Agricultural alternative development"
+crs_sector_translations_331: 
+  crs_sector_id: "1157"
+  description: "Purchase of debt for the purpose of cancellation."
+  id: "67"
+  locale: en
+  name: "Debt buy-back"
+crs_sector_translations_332: 
+  crs_sector_id: "1024"
+  description: ""
+  id: "226"
+  locale: es
+  name: "Servicios Sociales/Bienestar"
+crs_sector_translations_333: 
+  crs_sector_id: "1007"
+  description: "Municipal and industrial solid waste management, including hazardous and toxic waste; collection, disposal and treatment; landfill areas; composting and reuse."
+  id: "165"
+  locale: en
+  name: "Waste management/disposal"
+crs_sector_translations_334: 
+  crs_sector_id: "1057"
+  description: "Including ocean thermal energy conversion, tidal and wave power."
+  id: "39"
+  locale: en
+  name: "Ocean power"
+crs_sector_translations_335: 
+  crs_sector_id: "1168"
+  description: ""
+  id: "150"
+  locale: es
+  name: "Sectores no especificados"
+crs_sector_translations_336: 
+  crs_sector_id: "1060"
+  description: ""
+  id: "294"
+  locale: es
+  name: "Investigación energética"
+crs_sector_translations_337: 
+  crs_sector_id: "978"
+  description: ""
+  id: "176"
+  locale: es
+  name: "Educación primaria"
+crs_sector_translations_338: 
+  crs_sector_id: "1109"
+  description: ""
+  id: "208"
+  locale: es
+  name: "Producción farmacéutica"
+crs_sector_translations_339: 
+  crs_sector_id: "1105"
+  description: ""
+  id: "298"
+  locale: es
+  name: "Productos químicos"
+crs_sector_translations_340: 
+  crs_sector_id: "1056"
+  description: ""
+  id: "378"
+  locale: es
+  name: "Energía eólica"
+crs_sector_translations_341: 
+  crs_sector_id: "1021"
+  description: ""
+  id: "90"
+  locale: es
+  name: "Reintegración y control de SALW (Armas Pequeñas y Ligeras)"
+crs_sector_translations_342: 
+  crs_sector_id: "1101"
+  description: ""
+  id: "211"
+  locale: en
+  name: "Cottage industries and handicraft"
+crs_sector_translations_343: 
+  crs_sector_id: "1149"
+  description: "Capital goods and services; lines of credit."
+  id: "301"
+  locale: en
+  name: "Import support (capital goods)"
+crs_sector_translations_344: 
+  crs_sector_id: "1063"
+  description: ""
+  id: "282"
+  locale: es
+  name: "Intermediarios financieros del sector formal"
+crs_sector_translations_345: 
+  crs_sector_id: "1146"
+  description: "When sector cannot be identified."
+  id: "389"
+  locale: en
+  name: "Research/scientific institutions"
+crs_sector_translations_346: 
+  crs_sector_id: "1120"
+  description: "Aluminium, copper, lead, nickel, tin, zinc."
+  id: "53"
+  locale: en
+  name: "Nonferrous metals"
+crs_sector_translations_347: 
+  crs_sector_id: "1106"
+  description: ""
+  id: "4"
+  locale: es
+  name: "Plantas de producción de fertilizantes"
+crs_sector_translations_348: 
+  crs_sector_id: "1034"
+  description: ""
+  id: "292"
+  locale: es
+  name: "Transporte por carretera"
+crs_sector_translations_349: 
+  crs_sector_id: "993"
+  description: "Information, education and training of the population for improving health knowledge and practices; public health and awareness campaigns. "
+  id: "239"
+  locale: en
+  name: "Health education"
+crs_sector_translations_350: 
+  crs_sector_id: "984"
+  description: "Professional-level vocational training programmes and in-service training."
+  id: "59"
+  locale: en
+  name: "Advanced technical and managerial training"
+crs_sector_translations_351: 
+  crs_sector_id: "1059"
+  description: ""
+  id: "206"
+  locale: es
+  name: "Educación, formación temas energéticos"
+crs_sector_translations_352: 
+  crs_sector_id: "1121"
+  description: ""
+  id: "146"
+  locale: es
+  name: "Metales / materiales preciosos"
+crs_sector_translations_353: 
+  crs_sector_id: "1047"
+  description: ""
+  id: "244"
+  locale: es
+  name: "Transmisión /distribución energía eléctrica"
+crs_sector_translations_354: 
+  crs_sector_id: "1111"
+  description: ""
+  id: "368"
+  locale: es
+  name: "Industrias metales no ferrosos"
+crs_sector_translations_355: 
+  crs_sector_id: "1150"
+  description: ""
+  id: "46"
+  locale: es
+  name: "Apoyo importación (mercaderías)"
+crs_sector_translations_356: 
+  crs_sector_id: "990"
+  description: "District-level hospitals, clinics and dispensaries and related medical equipment; excluding specialised hospitals and clinics (12191)."
+  id: "315"
+  locale: en
+  name: "Basic health infrastructure"
+crs_sector_translations_357: 
+  crs_sector_id: "1095"
+  description: ""
+  id: "155"
+  locale: en
+  name: "Fishery education/training"
+crs_sector_translations_358: 
+  crs_sector_id: "1096"
+  description: "Pilot fish culture; marine/freshwater biological research."
+  id: "223"
+  locale: en
+  name: "Fishery research"
+crs_sector_translations_359: 
+  crs_sector_id: "1161"
+  description: ""
+  id: "94"
+  locale: es
+  name: "Ayuda en Reconstrucción"
+crs_sector_translations_360: 
+  crs_sector_id: "1119"
+  description: ""
+  id: "376"
+  locale: es
+  name: "Metales ferrosos"
+crs_sector_translations_361: 
+  crs_sector_id: "1036"
+  description: ""
+  id: "106"
+  locale: es
+  name: "Transporte marítimo y fluvial"
+crs_sector_translations_362: 
+  crs_sector_id: "1149"
+  description: ""
+  id: "302"
+  locale: es
+  name: "Apoyo importación (bienes de capital)"
+crs_sector_translations_363: 
+  crs_sector_id: "1134"
+  description: ""
+  id: "16"
+  locale: es
+  name: "Protección biosfera"
+crs_sector_translations_364: 
+  crs_sector_id: "1152"
+  description: ""
+  id: "203"
+  locale: en
+  name: "Debt forgiveness "
+crs_sector_translations_365: 
+  crs_sector_id: "1162"
+  description: ""
+  id: "262"
+  locale: es
+  name: "Preparación y prevención de Desastres"
+crs_sector_translations_366: 
+  crs_sector_id: "1044"
+  description: ""
+  id: "372"
+  locale: es
+  name: "Política energética y gestión administrativa"
+crs_sector_translations_367: 
+  crs_sector_id: "1090"
+  description: ""
+  id: "321"
+  locale: en
+  name: "Forestry education/training"
+crs_sector_translations_368: 
+  crs_sector_id: "1045"
+  description: ""
+  id: "72"
+  locale: es
+  name: "Producción energética - fuentes no renovables"
+crs_sector_translations_369: 
+  crs_sector_id: "1001"
+  description: "Education and training of health staff for population and reproductive health care services."
+  id: "83"
+  locale: en
+  name: "Personnel development for population and reproductive health"
+crs_sector_translations_370: 
+  crs_sector_id: "1041"
+  description: "Telephone networks, telecommunication satellites, earth stations."
+  id: "385"
+  locale: en
+  name: Telecommunications
+crs_sector_translations_371: 
+  crs_sector_id: "1043"
+  description: "Computer hardware and software; internet access; IT training.  When sector cannot be specified.  "
+  id: "277"
+  locale: en
+  name: "Information and communication technology (ICT)"
+crs_sector_translations_372: 
+  crs_sector_id: "1047"
+  description: "Distribution from power source to end user; transmission lines."
+  id: "243"
+  locale: en
+  name: "Electrical transmission/ distribution"
+crs_sector_translations_373: 
+  crs_sector_id: "1124"
+  description: "Polymetallic nodules, phosphorites, marine placer deposits."
+  id: "7"
+  locale: en
+  name: "Offshore minerals"
+crs_sector_translations_374: 
+  crs_sector_id: "1101"
+  description: ""
+  id: "212"
+  locale: es
+  name: "Industria artesanal y manual"
+crs_sector_translations_375: 
+  crs_sector_id: "1038"
+  description: ""
+  id: "38"
+  locale: es
+  name: Almacenamiento
+crs_sector_translations_376: 
+  crs_sector_id: "1126"
+  description: "Trade policy and planning; support to ministries and departments responsible for trade policy; trade-related legislation and regulatory reforms; policy analysis and implementation of multilateral trade agreements e.g. technical barriers to trade and sanitary and phytosanitary measures (TBT/SPS) except at regional level (see 33130); mainstreaming trade in national development strategies (e.g. poverty reduction strategy papers); wholesale/retail trade; unspecified trade and trade promotion activities."
+  id: "353"
+  locale: en
+  name: "Trade policy and administrative management"
+crs_sector_translations_377: 
+  crs_sector_id: "997"
+  description: "Population/development policies; census work, vital registration; migration data; demographic research/analysis; reproductive health research; unspecified population activities."
+  id: "33"
+  locale: en
+  name: "Population policy and administrative management"
+crs_sector_translations_378: 
+  crs_sector_id: "1040"
+  description: "Communications sector policy, planning and programmes; institution capacity building and advice; including postal services development; unspecified communications activities."
+  id: "323"
+  locale: en
+  name: "Communications policy and administrative management"
+crs_sector_translations_379: 
+  crs_sector_id: "995"
+  description: "Immunisation, prevention and control of tuberculosis."
+  id: "249"
+  locale: en
+  name: "Tuberculosis control"
+crs_sector_translations_380: 
+  crs_sector_id: "1159"
+  description: "Food aid normally for general free distribution or special supplementary feeding programmes; short-term relief to targeted population groups affected by emergency situations.  Excludes non-emergency food security assistance programmes/food aid (52010)."
+  id: "287"
+  locale: en
+  name: "Emergency food aid"
+crs_sector_translations_381: 
+  crs_sector_id: "1137"
+  description: "Floods from rivers or the sea; including sea water intrusion control and sea level rise related activities."
+  id: "381"
+  locale: en
+  name: "Flood prevention/control"
+crs_sector_translations_382: 
+  crs_sector_id: "1100"
+  description: ""
+  id: "114"
+  locale: es
+  name: "Desarrollo PYMEs"
+crs_sector_translations_383: 
+  crs_sector_id: "1112"
+  description: "Manufacturing of electrical and non-electrical machinery, engines/turbines."
+  id: "119"
+  locale: en
+  name: Engineering
+crs_sector_translations_384: 
+  crs_sector_id: "1162"
+  description: "Disaster risk reduction activities (e.g. developing knowledge, natural risks cartography, legal norms for construction); early warning systems; emergency contingency stocks and contingency planning including preparations for forced displacement. "
+  id: "261"
+  locale: en
+  name: "Disaster prevention and preparedness"
+crs_sector_translations_385: 
+  crs_sector_id: "1144"
+  description: "Projects to reduce illicit drug cultivation through, for example, non-agricultural income opportunities, social and physical infrastructure (see code 31165 for agricultural alternative development)."
+  id: "255"
+  locale: en
+  name: "Non-agricultural alternative development"
+crs_sector_translations_386: 
+  crs_sector_id: "1039"
+  description: ""
+  id: "303"
+  locale: en
+  name: "Education and training in transport and storage"
+crs_sector_translations_387: 
+  crs_sector_id: "1024"
+  description: "Social legislation and administration; institution capacity building and advice; social security and other social schemes; special programmes for the elderly, orphans, the disabled, street children; social dimensions of structural adjustment; unspecified social infrastructure and services, including consumer protection."
+  id: "225"
+  locale: en
+  name: "Social/ welfare services"
+crs_sector_translations_388: 
+  crs_sector_id: "1058"
+  description: ""
+  id: "152"
+  locale: es
+  name: Biomasa
+crs_sector_translations_389: 
+  crs_sector_id: "1025"
+  description: "Employment policy and planning; labour law; labour unions; institution capacity building and advice; support programmes for unemployed; employment creation and income generation programmes; occupational safety and health; combating child labour."
+  id: "289"
+  locale: en
+  name: "Employment policy and administrative management"
+crs_sector_translations_390: 
+  crs_sector_id: "1075"
+  description: ""
+  id: "264"
+  locale: es
+  name: "Cosechas destinadas a la exportación o a la industria"
+crs_sector_translations_391: 
+  crs_sector_id: "1033"
+  description: "Transport sector policy, planning and programmes; aid to transport ministries; institution capacity building and advice; unspecified transport; activities that combine road, rail, water and/or air transport."
+  id: "177"
+  locale: en
+  name: "Transport policy and administrative management"
+crs_sector_translations_392: 
+  crs_sector_id: "1030"
+  description: ""
+  id: "184"
+  locale: es
+  name: "Capacitación estadística"
+crs_sector_translations_393: 
+  crs_sector_id: "1020"
+  description: ""
+  id: "26"
+  locale: es
+  name: "Consolidación de la paz tras los conflictos de Naciones Unidas"
+crs_sector_translations_394: 
+  crs_sector_id: "1139"
+  description: ""
+  id: "180"
+  locale: es
+  name: "Investigación medioambiental"
+crs_sector_translations_395: 
+  crs_sector_id: "1002"
+  description: "Water sector policy, planning and programmes; water legislation and management; institution capacity building and advice; water supply assessments and studies; groundwater, water quality and watershed studies; hydrogeology; excluding agricultural water resources (31140)."
+  id: "189"
+  locale: en
+  name: "Water resources policy and administrative management"
+crs_sector_translations_396: 
+  crs_sector_id: "980"
+  description: "Formal and non-formal pre-school education."
+  id: "181"
+  locale: en
+  name: "Early childhood education"
+crs_sector_translations_397: 
+  crs_sector_id: "1093"
+  description: ""
+  id: "168"
+  locale: es
+  name: "Política pesquera y gestión administrativa"
+crs_sector_translations_398: 
+  crs_sector_id: "1129"
+  description: "Support developing countries’ effective participation in multilateral trade negotiations, including training of negotiators, assessing impacts of negotiations; accession to the World Trade Organisation (WTO) and other multilateral trade-related organisations."
+  id: "201"
+  locale: en
+  name: "Multilateral trade negotiations"
+crs_sector_translations_399: 
+  crs_sector_id: "1109"
+  description: "Medical equipment/supplies; drugs, medicines, vaccines; hygienic products."
+  id: "207"
+  locale: en
+  name: "Pharmaceutical production"
+crs_sector_translations_400: 
+  crs_sector_id: "1098"
+  description: ""
+  id: "364"
+  locale: es
+  name: "Política industrial y gestión administrativa"

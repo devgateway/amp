@@ -1,8 +1,10 @@
 class CreateDonors < ActiveRecord::Migration
   def self.up
     create_table :donors do |t|
+      t.string    :name
+      t.string    :name_es
       t.string    :code
-      
+
       t.string    :currency
       t.boolean   :cofunding_only
                   
@@ -45,14 +47,7 @@ class CreateDonors < ActiveRecord::Migration
       t.integer   :profile_picture_file_size
       t.datetime  :profile_picture_updated_at
     end
-    
-    create_table :donor_translations do |t|
-      t.string     :locale
-      t.string     :name
-      
-      t.references :donor
-    end
-    
+        
     create_table :donor_agencies do |t|
       t.string  :name
       t.string  :code
@@ -64,7 +59,6 @@ class CreateDonors < ActiveRecord::Migration
 
   def self.down
     drop_table :donors
-    drop_table :donor_translations
     drop_table :donor_agencies
   end
 end

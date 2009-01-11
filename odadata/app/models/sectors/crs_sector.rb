@@ -4,10 +4,7 @@ class CrsSector < ActiveRecord::Base
   belongs_to :dac_sector
   
   has_many :sector_relevances
-  has_many :projects, :through => :sector_relevances, 
-    # see explanation in DacSector model for this:
-    :select => "projects.*, donor_translations.name"
-
+  has_many :projects, :through => :sector_relevances
   has_many :sector_details, :as => :focal_sector
   
   

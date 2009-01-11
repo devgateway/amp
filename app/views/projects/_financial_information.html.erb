@@ -11,7 +11,7 @@
 		<% if f.year == Project::FIRST_YEAR_OF_RELEVANCE-1 && f.has_historic? %>
 			<tr>
 				<td class="sub_title" colspan=2>Commitments up to end of <%= f.year %></td>
-				<td class="sub_title" colspan=2 >Payments up to end of <%= f.year %></td>
+				<td class="sub_title" colspan=2 >Disbursements up to end of <%= f.year %></td>
 			</tr>      
 			<tr>       
 				<td colspan=2 class="currency right"><%= f.commitments_up_to_end_of %></td>
@@ -30,10 +30,10 @@
 		
 		<% if f.year <= Time.now.year && f.year > Project::FIRST_YEAR_OF_RELEVANCE-1 && f.has_quarterly_payments? %>
 			<tr>
-				<td class="sub_title">Payment <%= f.year %> Q1</td>
-				<td class="sub_title">Payment <%= f.year %> Q2</td>
-				<td class="sub_title">Payment <%= f.year %> Q3</td>
-				<td class="sub_title">Payment <%= f.year %> Q4</td>
+				<td class="sub_title">Disbursement<%= f.year %> Q1</td>
+				<td class="sub_title">Disbursement<%= f.year %> Q2</td>
+				<td class="sub_title">Disbursement<%= f.year %> Q3</td>
+				<td class="sub_title">Disbursement<%= f.year %> Q4</td>
 				<td class="sub_title">Total <%= f.year %></td>
 				<td class="sub_title"><%= f.year %> On/Off Budget</td>
 				<td class="sub_title"><%= f.year %> On/Off Treasury</td>
@@ -52,7 +52,7 @@
 		<% if f.year >= Time.now.year && f.has_forecasts? %>
 			<tr>
 				<td colspan=2 class="sub_title"><%= f.year %> Commitment Forecast</td>
-				<td colspan=2 class="sub_title"><%= f.year %> Payment Forecast</td>
+				<td colspan=2 class="sub_title"><%= f.year %> DisbursementForecast</td>
 				<td class="sub_title currency"> <%= f.year %> On/Off Budget</td>
 				<td class="sub_title currency"><%= f.year %> On/Off Treasury</td>
 			</tr>      

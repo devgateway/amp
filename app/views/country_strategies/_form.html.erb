@@ -3,7 +3,8 @@
 <%= error_messages_for :country_strategy %>
 <% labeled_form_for @country_strategy do |f| %>
 	<% f.field_set do %>
-		<li><%= f.text_field :strategy_number, :class => "large" %></li>
+		<li class="fifty"><%= f.text_field :strategy_number, :class => "large" %></li>
+		<li class="fifty"><%= f.text_field :strategy_number_es, :class => "large" %></li>
 		
 		<li class="fifty">
 			<%= f.date_select :start, :start_year=> 1995, :end_year=> Time.now.year+15, 
@@ -14,7 +15,8 @@
 					:default => { :day => 1, :month => 1, :year => 1995 }, :order => [:day, :month, :year] %>
 		</li>
 		
-		<li><%= f.text_area :description, :rows => 5, :class => "full" %></li>	
+		<li><%= f.text_area :description, :rows => 5, :class => "full" %></li>
+		<li><%= f.text_area :description_es, :rows => 5, :class => "full" %></li>	
 		
 		<li><%= f.text_field :total_amount_foreseen, :value => f.object.total_amount_foreseen %></li>
 		<li><%= f.check_box :strategy_paper %></li>

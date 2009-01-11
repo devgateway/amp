@@ -574,7 +574,7 @@ es:
           preferred_approaches: Enfoques preferenciales en la distribución de la ayuda
           priorities: Prioridades de Programación
           distribution_by_sector: Sectores clave priorizados por región
-          enlarged_chart: Haga click aquí para agrandar la image
+          enlarged_chart: Haga click aquí para agrandar la imagen
           grant: Donación
           loan: Préstamo
           data_missing_header: Falta datos de {{donor}} por {{year}}

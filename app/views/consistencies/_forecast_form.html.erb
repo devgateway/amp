@@ -15,7 +15,7 @@
 
 <% Project::TYPE_OF_AID_OPTIONS.each do |name, idx| %>
 	<% field = name.downcase.gsub(/\W+/, '_') + "_forecasts" %>
-	<%= f.text_field field, :label => "#{name} Payments Forecasts", :label_class => "sub_title_bold" %>
+	<%= f.text_field field, :label => "#{name} Disbursements Forecasts", :label_class => "sub_title_bold" %>
 	<%= f.text_field "real_#{field}", :label => "Real #{name} Forecasts", :disabled => true, :value => current_donor.payments_forecasts_by_type_of_aid(@year)[idx] || 0.to_currency(current_donor.currency) %>
 <% end %>
 <!--[eoform:consistency_finances]-->

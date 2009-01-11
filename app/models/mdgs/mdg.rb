@@ -1,7 +1,6 @@
 class Mdg < ActiveRecord::Base
   translates :name, :description
-  
-  
+    
   has_many  :targets
   has_many  :mdg_relevances
   has_many  :projects, :through => :mdg_relevances, :uniq => true,

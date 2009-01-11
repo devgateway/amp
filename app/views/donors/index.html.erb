@@ -21,7 +21,7 @@
 				<td><%= null_to_na(donor.currency) %></td>
 				<td><%= link_to ll(:actions, :edit), edit_donor_path(donor) %></td>
 				<td><%= link_to lc(:agencies, :total => donor.agencies.size), 
-						donor_agencies_path(donor) unless donor.cofunding_only? %></td>
+						donor_donor_agencies_path(donor) unless donor.cofunding_only? %></td>
 				<td><%= link_to lc(:logins), donor_users_path(donor) unless donor.cofunding_only? %></td>
 			</tr>
 		<% end %>

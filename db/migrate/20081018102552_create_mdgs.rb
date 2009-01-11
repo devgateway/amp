@@ -1,26 +1,18 @@
 class CreateMdgs < ActiveRecord::Migration
   def self.up
     create_table :mdgs do |t|
-
-    end
-    
-    create_table :mdg_translations do |t|
-      t.string    :locale
-      t.string    :name
-      t.text      :description    
+      t.string  :name
+      t.string  :name_es
       
-      t.references :mdg
+      t.text    :description
+      t.text    :description_es
     end
     
-    create_table :targets do |t|              
+    create_table :targets do |t|   
+      t.text  :name
+      t.text  :name_es
+               
       t.references :mdg
-    end
-    
-    create_table :target_translations do |t|
-      t.string    :locale
-      t.text      :name
-      
-      t.references :target
     end
     
     create_table :mdg_relevances do |t|
@@ -31,8 +23,6 @@ class CreateMdgs < ActiveRecord::Migration
   def self.down
     drop_table :mdgs
     drop_table :targets
-    drop_table :mdg_translations
-    drop_table :target_translations
     drop_table :mdg_relevances
   end
 end

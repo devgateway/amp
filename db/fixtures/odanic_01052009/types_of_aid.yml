@@ -1,25 +1,49 @@
 --- 
 types_of_aid_001: 
-  id: "1"
-types_of_aid_002: 
-  id: "2"
-types_of_aid_003: 
-  id: "3"
-types_of_aid_004: 
-  id: "4"
-types_of_aid_005: 
-  id: "5"
-types_of_aid_006: 
-  id: "10"
-types_of_aid_007: 
   id: "6"
-types_of_aid_008: 
+  name: "FC Fondo Fed"
+  name_es: "FC Fondo Fed"
+types_of_aid_002: 
   id: "11"
-types_of_aid_009: 
+  name: "FC FISE"
+  name_es: "FC FISE"
+types_of_aid_003: 
   id: "7"
-types_of_aid_010: 
+  name: "FC Promipyme"
+  name_es: "FC Promipyme"
+types_of_aid_004: 
   id: "12"
-types_of_aid_011: 
+  name: "FC PROASE"
+  name_es: "FC PROASE"
+types_of_aid_005: 
   id: "8"
-types_of_aid_012: 
+  name: "FC Fonim"
+  name_es: "FC Fonim"
+types_of_aid_006: 
   id: "9"
+  name: "FC Civil Society"
+  name_es: "FC Sociedad Civil"
+types_of_aid_007: 
+  id: "1"
+  name: Project/Program
+  name_es: Proyecto/Programa
+types_of_aid_008: 
+  id: "2"
+  name: "Techn. Assistance"
+  name_es: "Techn. Asistencia"
+types_of_aid_009: 
+  id: "3"
+  name: "General Budget Support"
+  name_es: "Apoyo General del Presupuesto"
+types_of_aid_010: 
+  id: "4"
+  name: "FC Prorural"
+  name_es: "FC Prorural"
+types_of_aid_011: 
+  id: "5"
+  name: "FC FONSALUD"
+  name_es: "FC FONSALUD"
+types_of_aid_012: 
+  id: "10"
+  name: "FC Anti Corruption"
+  name_es: "FC Anticorrupción"

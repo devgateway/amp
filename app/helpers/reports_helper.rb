@@ -48,7 +48,7 @@ module ReportsHelper
         :class => "simple")
                                                                   
       rows << content_tag("tr",                                   
-        content_tag("td", "Payments Forecast") +                
+        content_tag("td", "Disbursements Forecast") +                
         content_tag("td", null_to_na(finances.payments_forecast)),
         :class => "simple")
     else
@@ -58,7 +58,7 @@ module ReportsHelper
         :class => "simple")
                                                                   
       rows << content_tag("tr",                                   
-        content_tag("td", "Total Payments") +                
+        content_tag("td", "Total Disbursements") +                
         content_tag("td", null_to_na(finances.total_payments)),
         :class => "simple")
         

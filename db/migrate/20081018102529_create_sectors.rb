@@ -1,29 +1,25 @@
 class CreateSectors < ActiveRecord::Migration
   def self.up
     create_table :crs_sectors do |t|
+      t.string  :name
+      t.string  :name_es
+      
+      t.text    :description
+      t.text    :description_es
+      
       t.integer :code
       
       t.references :dac_sector
-    end
-    
-    create_table :crs_sector_translations do |t|
-      t.string    :locale
-      t.string    :name
-      t.text      :description    
-      
-      t.references :crs_sector
     end
 
     create_table :dac_sectors do |t|
-      t.integer :code
-    end
-    
-    create_table :dac_sector_translations do |t|
-      t.string    :locale
-      t.string    :name
-      t.text      :description    
+      t.string  :name
+      t.string  :name_es
       
-      t.references :dac_sector
+      t.text    :description
+      t.text    :description_es
+      
+      t.integer :code
     end
     
     create_table :sector_relevances do |t|
@@ -41,8 +37,6 @@ class CreateSectors < ActiveRecord::Migration
   def self.down
     drop_table :crs_sectors
     drop_table :dac_sectors
-    drop_table :crs_sector_translations
-    drop_table :dac_sector_translations
     drop_table :sector_relevances
   end
 end

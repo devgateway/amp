@@ -1,0 +1,761 @@
+--- 
+crs_sectors_001: 
+  code: "22020"
+  dac_sector_id: "254"
+  id: "1041"
+crs_sectors_002: 
+  code: "21040"
+  dac_sector_id: "228"
+  id: "1036"
+crs_sectors_003: 
+  code: "24030"
+  dac_sector_id: "230"
+  id: "1063"
+crs_sectors_004: 
+  code: "32140"
+  dac_sector_id: "235"
+  id: "1101"
+crs_sectors_005: 
+  code: "21081"
+  dac_sector_id: "228"
+  id: "1039"
+crs_sectors_006: 
+  code: "43050"
+  dac_sector_id: "242"
+  id: "1144"
+crs_sectors_007: 
+  code: "23030"
+  dac_sector_id: "229"
+  id: "1046"
+crs_sectors_008: 
+  code: "12182"
+  dac_sector_id: "221"
+  id: "987"
+crs_sectors_009: 
+  code: "32168"
+  dac_sector_id: "235"
+  id: "1109"
+crs_sectors_010: 
+  code: "12110"
+  dac_sector_id: "221"
+  id: "985"
+crs_sectors_011: 
+  code: "11240"
+  dac_sector_id: "218"
+  id: "980"
+crs_sectors_012: 
+  code: "32172"
+  dac_sector_id: "235"
+  id: "1113"
+crs_sectors_013: 
+  code: "14030"
+  dac_sector_id: "224"
+  id: "1005"
+crs_sectors_014: 
+  code: "24020"
+  dac_sector_id: "230"
+  id: "1062"
+crs_sectors_015: 
+  code: "15120"
+  dac_sector_id: "225"
+  id: "1010"
+crs_sectors_016: 
+  code: "53030"
+  dac_sector_id: "245"
+  id: "1149"
+crs_sectors_017: 
+  code: "12263"
+  dac_sector_id: "222"
+  id: "995"
+crs_sectors_018: 
+  code: "16020"
+  dac_sector_id: "227"
+  id: "1025"
+crs_sectors_019: 
+  code: "33150"
+  dac_sector_id: "238"
+  id: "1130"
+crs_sectors_020: 
+  code: "23050"
+  dac_sector_id: "229"
+  id: "1048"
+crs_sectors_021: 
+  code: "32130"
+  dac_sector_id: "235"
+  id: "1100"
+crs_sectors_022: 
+  code: "32263"
+  dac_sector_id: "236"
+  id: "1119"
+crs_sectors_023: 
+  code: "31110"
+  dac_sector_id: "232"
+  id: "1068"
+crs_sectors_024: 
+  code: "22010"
+  dac_sector_id: "254"
+  id: "1040"
+crs_sectors_025: 
+  code: "42010"
+  dac_sector_id: "241"
+  id: "1140"
+crs_sectors_026: 
+  code: "12240"
+  dac_sector_id: "222"
+  id: "991"
+crs_sectors_027: 
+  code: "31150"
+  dac_sector_id: "232"
+  id: "1073"
+crs_sectors_028: 
+  code: "32310"
+  dac_sector_id: "237"
+  id: "1125"
+crs_sectors_029: 
+  code: "31192"
+  dac_sector_id: "232"
+  id: "1083"
+crs_sectors_030: 
+  code: "11120"
+  dac_sector_id: "217"
+  id: "975"
+crs_sectors_031: 
+  code: "11130"
+  dac_sector_id: "217"
+  id: "976"
+crs_sectors_032: 
+  code: "31194"
+  dac_sector_id: "232"
+  id: "1085"
+crs_sectors_033: 
+  code: "60020"
+  dac_sector_id: "246"
+  id: "1152"
+crs_sectors_034: 
+  code: "32261"
+  dac_sector_id: "236"
+  id: "1117"
+crs_sectors_035: 
+  code: "32265"
+  dac_sector_id: "236"
+  id: "1121"
+crs_sectors_036: 
+  code: "11230"
+  dac_sector_id: "218"
+  id: "979"
+crs_sectors_037: 
+  code: "31191"
+  dac_sector_id: "232"
+  id: "1082"
+crs_sectors_038: 
+  code: "32163"
+  dac_sector_id: "235"
+  id: "1104"
+crs_sectors_039: 
+  code: "16050"
+  dac_sector_id: "227"
+  id: "1028"
+crs_sectors_040: 
+  code: "23062"
+  dac_sector_id: "229"
+  id: "1050"
+crs_sectors_041: 
+  code: "33120"
+  dac_sector_id: "238"
+  id: "1127"
+crs_sectors_042: 
+  code: "51010"
+  dac_sector_id: "243"
+  id: "1147"
+crs_sectors_043: 
+  code: "33110"
+  dac_sector_id: "238"
+  id: "1126"
+crs_sectors_044: 
+  code: "15161"
+  dac_sector_id: "225"
+  id: "1014"
+crs_sectors_045: 
+  code: "23069"
+  dac_sector_id: "229"
+  id: "1057"
+crs_sectors_046: 
+  code: "25020"
+  dac_sector_id: "231"
+  id: "1067"
+crs_sectors_047: 
+  code: "33130"
+  dac_sector_id: "238"
+  id: "1128"
+crs_sectors_048: 
+  code: "23065"
+  dac_sector_id: "229"
+  id: "1053"
+crs_sectors_049: 
+  code: "23061"
+  dac_sector_id: "229"
+  id: "1049"
+crs_sectors_050: 
+  code: "11320"
+  dac_sector_id: "219"
+  id: "981"
+crs_sectors_051: 
+  code: "31130"
+  dac_sector_id: "232"
+  id: "1070"
+crs_sectors_052: 
+  code: "12191"
+  dac_sector_id: "221"
+  id: "988"
+crs_sectors_053: 
+  code: "33181"
+  dac_sector_id: "238"
+  id: "1131"
+crs_sectors_054: 
+  code: "41030"
+  dac_sector_id: "240"
+  id: "1135"
+crs_sectors_055: 
+  code: "32262"
+  dac_sector_id: "236"
+  id: "1118"
+crs_sectors_056: 
+  code: "31382"
+  dac_sector_id: "234"
+  id: "1096"
+crs_sectors_057: 
+  code: "91010"
+  dac_sector_id: "250"
+  id: "1163"
+crs_sectors_058: 
+  code: "32164"
+  dac_sector_id: "235"
+  id: "1105"
+crs_sectors_059: 
+  code: "21030"
+  dac_sector_id: "228"
+  id: "1035"
+crs_sectors_060: 
+  code: "24040"
+  dac_sector_id: "230"
+  id: "1064"
+crs_sectors_061: 
+  code: "14010"
+  dac_sector_id: "224"
+  id: "1002"
+crs_sectors_062: 
+  code: "41040"
+  dac_sector_id: "240"
+  id: "1136"
+crs_sectors_063: 
+  code: "32120"
+  dac_sector_id: "235"
+  id: "1099"
+crs_sectors_064: 
+  code: "60061"
+  dac_sector_id: "246"
+  id: "1155"
+crs_sectors_065: 
+  code: "16063"
+  dac_sector_id: "227"
+  id: "1031"
+crs_sectors_066: 
+  code: "32169"
+  dac_sector_id: "235"
+  id: "1110"
+crs_sectors_067: 
+  code: "43082"
+  dac_sector_id: "242"
+  id: "1146"
+crs_sectors_068: 
+  code: "43010"
+  dac_sector_id: "242"
+  id: "1141"
+crs_sectors_069: 
+  code: "31165"
+  dac_sector_id: "232"
+  id: "1078"
+crs_sectors_070: 
+  code: "13010"
+  dac_sector_id: "223"
+  id: "997"
+crs_sectors_071: 
+  code: "11330"
+  dac_sector_id: "219"
+  id: "982"
+crs_sectors_072: 
+  code: "21061"
+  dac_sector_id: "228"
+  id: "1038"
+crs_sectors_073: 
+  code: "23040"
+  dac_sector_id: "229"
+  id: "1047"
+crs_sectors_074: 
+  code: "31162"
+  dac_sector_id: "232"
+  id: "1075"
+crs_sectors_075: 
+  code: "23070"
+  dac_sector_id: "229"
+  id: "1058"
+crs_sectors_076: 
+  code: "12281"
+  dac_sector_id: "222"
+  id: "996"
+crs_sectors_077: 
+  code: "31193"
+  dac_sector_id: "232"
+  id: "1084"
+crs_sectors_078: 
+  code: "15110"
+  dac_sector_id: "225"
+  id: "1009"
+crs_sectors_079: 
+  code: "60040"
+  dac_sector_id: "246"
+  id: "1154"
+crs_sectors_080: 
+  code: "43081"
+  dac_sector_id: "242"
+  id: "1145"
+crs_sectors_081: 
+  code: "16010"
+  dac_sector_id: "227"
+  id: "1024"
+crs_sectors_082: 
+  code: "11182"
+  dac_sector_id: "217"
+  id: "977"
+crs_sectors_083: 
+  code: "12181"
+  dac_sector_id: "221"
+  id: "986"
+crs_sectors_084: 
+  code: "32171"
+  dac_sector_id: "235"
+  id: "1112"
+crs_sectors_085: 
+  code: "32166"
+  dac_sector_id: "235"
+  id: "1107"
+crs_sectors_086: 
+  code: "31210"
+  dac_sector_id: "233"
+  id: "1087"
+crs_sectors_087: 
+  code: "31220"
+  dac_sector_id: "233"
+  id: "1088"
+crs_sectors_088: 
+  code: "14050"
+  dac_sector_id: "224"
+  id: "1007"
+crs_sectors_089: 
+  code: "32161"
+  dac_sector_id: "235"
+  id: "1102"
+crs_sectors_090: 
+  code: "13040"
+  dac_sector_id: "223"
+  id: "1000"
+crs_sectors_091: 
+  code: "11430"
+  dac_sector_id: "220"
+  id: "984"
+crs_sectors_092: 
+  code: "32268"
+  dac_sector_id: "236"
+  id: "1124"
+crs_sectors_093: 
+  code: "31195"
+  dac_sector_id: "232"
+  id: "1086"
+crs_sectors_094: 
+  code: "24081"
+  dac_sector_id: "230"
+  id: "1065"
+crs_sectors_095: 
+  code: "24010"
+  dac_sector_id: "230"
+  id: "1061"
+crs_sectors_096: 
+  code: "23020"
+  dac_sector_id: "229"
+  id: "1045"
+crs_sectors_097: 
+  code: "60030"
+  dac_sector_id: "246"
+  id: "1153"
+crs_sectors_098: 
+  code: "23064"
+  dac_sector_id: "229"
+  id: "1052"
+crs_sectors_099: 
+  code: "13020"
+  dac_sector_id: "223"
+  id: "998"
+crs_sectors_100: 
+  code: "31163"
+  dac_sector_id: "232"
+  id: "1076"
+crs_sectors_101: 
+  code: "12250"
+  dac_sector_id: "222"
+  id: "992"
+crs_sectors_102: 
+  code: "32266"
+  dac_sector_id: "236"
+  id: "1122"
+crs_sectors_103: 
+  code: "15150"
+  dac_sector_id: "225"
+  id: "1013"
+crs_sectors_104: 
+  code: "31261"
+  dac_sector_id: "233"
+  id: "1089"
+crs_sectors_105: 
+  code: "32162"
+  dac_sector_id: "235"
+  id: "1103"
+crs_sectors_106: 
+  code: "21020"
+  dac_sector_id: "228"
+  id: "1034"
+crs_sectors_107: 
+  code: "32267"
+  dac_sector_id: "236"
+  id: "1123"
+crs_sectors_108: 
+  code: "31182"
+  dac_sector_id: "232"
+  id: "1081"
+crs_sectors_109: 
+  code: "15140"
+  dac_sector_id: "225"
+  id: "1012"
+crs_sectors_110: 
+  code: "32220"
+  dac_sector_id: "236"
+  id: "1116"
+crs_sectors_111: 
+  code: "31161"
+  dac_sector_id: "232"
+  id: "1074"
+crs_sectors_112: 
+  code: "31381"
+  dac_sector_id: "234"
+  id: "1095"
+crs_sectors_113: 
+  code: "13081"
+  dac_sector_id: "223"
+  id: "1001"
+crs_sectors_114: 
+  code: "31181"
+  dac_sector_id: "232"
+  id: "1080"
+crs_sectors_115: 
+  code: "33140"
+  dac_sector_id: "238"
+  id: "1129"
+crs_sectors_116: 
+  code: "22030"
+  dac_sector_id: "254"
+  id: "1042"
+crs_sectors_117: 
+  code: "32182"
+  dac_sector_id: "235"
+  id: "1114"
+crs_sectors_118: 
+  code: "41081"
+  dac_sector_id: "240"
+  id: "1138"
+crs_sectors_119: 
+  code: "15162"
+  dac_sector_id: "225"
+  id: "1015"
+crs_sectors_120: 
+  code: "32167"
+  dac_sector_id: "235"
+  id: "1108"
+crs_sectors_121: 
+  code: "15230"
+  dac_sector_id: "226"
+  id: "1020"
+crs_sectors_122: 
+  code: "15240"
+  dac_sector_id: "226"
+  id: "1021"
+crs_sectors_123: 
+  code: "25010"
+  dac_sector_id: "231"
+  id: "1066"
+crs_sectors_124: 
+  code: "43030"
+  dac_sector_id: "242"
+  id: "1142"
+crs_sectors_125: 
+  code: "22040"
+  dac_sector_id: "254"
+  id: "1043"
+crs_sectors_126: 
+  code: "14015"
+  dac_sector_id: "224"
+  id: "1003"
+crs_sectors_127: 
+  code: "31120"
+  dac_sector_id: "232"
+  id: "1069"
+crs_sectors_128: 
+  code: "31291"
+  dac_sector_id: "233"
+  id: "1092"
+crs_sectors_129: 
+  code: "99820"
+  dac_sector_id: "253"
+  id: "1169"
+crs_sectors_130: 
+  code: "99810"
+  dac_sector_id: "253"
+  id: "1168"
+crs_sectors_131: 
+  code: "16061"
+  dac_sector_id: "227"
+  id: "1029"
+crs_sectors_132: 
+  code: "23063"
+  dac_sector_id: "229"
+  id: "1051"
+crs_sectors_133: 
+  code: "53040"
+  dac_sector_id: "245"
+  id: "1150"
+crs_sectors_134: 
+  code: "31140"
+  dac_sector_id: "232"
+  id: "1071"
+crs_sectors_135: 
+  code: "15220"
+  dac_sector_id: "226"
+  id: "1019"
+crs_sectors_136: 
+  code: "32170"
+  dac_sector_id: "235"
+  id: "1111"
+crs_sectors_137: 
+  code: "16030"
+  dac_sector_id: "227"
+  id: "1026"
+crs_sectors_138: 
+  code: "21010"
+  dac_sector_id: "228"
+  id: "1033"
+crs_sectors_139: 
+  code: "12261"
+  dac_sector_id: "222"
+  id: "993"
+crs_sectors_140: 
+  code: "41020"
+  dac_sector_id: "240"
+  id: "1134"
+crs_sectors_141: 
+  code: "71010"
+  dac_sector_id: "255"
+  id: "1170"
+crs_sectors_142: 
+  code: "60063"
+  dac_sector_id: "246"
+  id: "1157"
+crs_sectors_143: 
+  code: "32264"
+  dac_sector_id: "236"
+  id: "1120"
+crs_sectors_144: 
+  code: "15163"
+  dac_sector_id: "225"
+  id: "1016"
+crs_sectors_145: 
+  code: "23010"
+  dac_sector_id: "229"
+  id: "1044"
+crs_sectors_146: 
+  code: "72010"
+  dac_sector_id: "255"
+  id: "1171"
+crs_sectors_147: 
+  code: "11220"
+  dac_sector_id: "218"
+  id: "978"
+crs_sectors_148: 
+  code: "23081"
+  dac_sector_id: "229"
+  id: "1059"
+crs_sectors_149: 
+  code: "32110"
+  dac_sector_id: "235"
+  id: "1098"
+crs_sectors_150: 
+  code: "15210"
+  dac_sector_id: "226"
+  id: "1018"
+crs_sectors_151: 
+  code: "72020"
+  dac_sector_id: "255"
+  id: "1172"
+crs_sectors_152: 
+  code: "15130"
+  dac_sector_id: "225"
+  id: "1011"
+crs_sectors_153: 
+  code: "23066"
+  dac_sector_id: "229"
+  id: "1054"
+crs_sectors_154: 
+  code: "12262"
+  dac_sector_id: "222"
+  id: "994"
+crs_sectors_155: 
+  code: "32165"
+  dac_sector_id: "235"
+  id: "1106"
+crs_sectors_156: 
+  code: "72030"
+  dac_sector_id: "255"
+  id: "1173"
+crs_sectors_157: 
+  code: "31164"
+  dac_sector_id: "232"
+  id: "1077"
+crs_sectors_158: 
+  code: "41010"
+  dac_sector_id: "240"
+  id: "1133"
+crs_sectors_159: 
+  code: "31282"
+  dac_sector_id: "233"
+  id: "1091"
+crs_sectors_160: 
+  code: "23082"
+  dac_sector_id: "229"
+  id: "1060"
+crs_sectors_161: 
+  code: "31310"
+  dac_sector_id: "234"
+  id: "1093"
+crs_sectors_162: 
+  code: "14040"
+  dac_sector_id: "224"
+  id: "1006"
+crs_sectors_163: 
+  code: "13030"
+  dac_sector_id: "223"
+  id: "999"
+crs_sectors_164: 
+  code: "14020"
+  dac_sector_id: "224"
+  id: "1004"
+crs_sectors_165: 
+  code: "12230"
+  dac_sector_id: "222"
+  id: "990"
+crs_sectors_166: 
+  code: "31166"
+  dac_sector_id: "232"
+  id: "1079"
+crs_sectors_167: 
+  code: "31391"
+  dac_sector_id: "234"
+  id: "1097"
+crs_sectors_168: 
+  code: "43040"
+  dac_sector_id: "242"
+  id: "1143"
+crs_sectors_169: 
+  code: "16064"
+  dac_sector_id: "227"
+  id: "1032"
+crs_sectors_170: 
+  code: "15250"
+  dac_sector_id: "226"
+  id: "1022"
+crs_sectors_171: 
+  code: "33210"
+  dac_sector_id: "239"
+  id: "1132"
+crs_sectors_172: 
+  code: "73010"
+  dac_sector_id: "255"
+  id: "1174"
+crs_sectors_173: 
+  code: "41082"
+  dac_sector_id: "240"
+  id: "1139"
+crs_sectors_174: 
+  code: "52010"
+  dac_sector_id: "244"
+  id: "1148"
+crs_sectors_175: 
+  code: "21050"
+  dac_sector_id: "228"
+  id: "1037"
+crs_sectors_176: 
+  code: "16040"
+  dac_sector_id: "227"
+  id: "1027"
+crs_sectors_177: 
+  code: "31320"
+  dac_sector_id: "234"
+  id: "1094"
+crs_sectors_178: 
+  code: "41050"
+  dac_sector_id: "240"
+  id: "1137"
+crs_sectors_179: 
+  code: "12220"
+  dac_sector_id: "222"
+  id: "989"
+crs_sectors_180: 
+  code: "16062"
+  dac_sector_id: "227"
+  id: "1030"
+crs_sectors_181: 
+  code: "15261"
+  dac_sector_id: "226"
+  id: "1023"
+crs_sectors_182: 
+  code: "11110"
+  dac_sector_id: "217"
+  id: "974"
+crs_sectors_183: 
+  code: "32210"
+  dac_sector_id: "236"
+  id: "1115"
+crs_sectors_184: 
+  code: "23067"
+  dac_sector_id: "229"
+  id: "1055"
+crs_sectors_185: 
+  code: "31281"
+  dac_sector_id: "233"
+  id: "1090"
+crs_sectors_186: 
+  code: "11420"
+  dac_sector_id: "220"
+  id: "983"
+crs_sectors_187: 
+  code: "23068"
+  dac_sector_id: "229"
+  id: "1056"
+crs_sectors_188: 
+  code: "14081"
+  dac_sector_id: "224"
+  id: "1008"
+crs_sectors_189: 
+  code: "60010"
+  dac_sector_id: "246"
+  id: "1151"
+crs_sectors_190: 
+  code: "60062"
+  dac_sector_id: "246"
+  id: "1156"

@@ -29,6 +29,7 @@ class DonorsController < ApplicationController
     
     # Manually set attributes because mass-assignment has been disabled for security reasons
     @donor.name             = params[:donor][:name]
+    @donor.name_es          = params[:donor][:name_es]
     @donor.code             = params[:donor][:code]
     @donor.currency         = params[:donor][:currency]
     @donor.cofunding_only   = params[:donor][:cofunding_only]

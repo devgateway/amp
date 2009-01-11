@@ -36,7 +36,7 @@ module Report
       end
       
       def total_payments
-        ["Total Payments to date (#{MultiCurrency.output_currency})", @target.fundings.total_payments]
+        ["Total Disbursements to date (#{MultiCurrency.output_currency})", @target.fundings.total_payments]
       end
       
       def total_commitments
@@ -80,16 +80,16 @@ module Report
         
         if year <= Time.now.year
           columns << ["Commitments #{year} in #{MultiCurrency.output_currency}", finances.commitments]
-          columns << ["Payments #{year} in #{MultiCurrency.output_currency}", finances.payments]
+          columns << ["Disbursements #{year} in #{MultiCurrency.output_currency}", finances.payments]
                     
           columns += (1..4).map do |quarter|
-           ["Payments Q#{quarter}/#{year} in #{MultiCurrency.output_currency}", finances.send("payments_q#{quarter}")]
+           ["Disbursements Q#{quarter}/#{year} in #{MultiCurrency.output_currency}", finances.send("payments_q#{quarter}")]
           end
         end
         
         if year >= Time.now.year
           columns << ["Commitments Forecast #{year} in #{MultiCurrency.output_currency}", forecasts.commitments]
-          columns << ["Payments Forecast #{year} in #{MultiCurrency.output_currency}", forecasts.payments]
+          columns << ["Disbursements Forecast #{year} in #{MultiCurrency.output_currency}", forecasts.payments]
         end
         
         columns

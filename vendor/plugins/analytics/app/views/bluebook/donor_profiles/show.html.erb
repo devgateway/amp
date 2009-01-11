@@ -30,6 +30,11 @@
 				<tr>
 					<td colspan=2>
 						<strong><%= ll(:terms, :contact) %></strong><br>
+						<%= @donor.field_office_address %>
+						Tel: <%= @donor.field_office_phone %>
+						<br>
+						<%= auto_link(@donor.field_office_email) %>
+						<%= auto_link(@donor.field_office_website) %>
 					</td>
 				</tr>
 			</table>

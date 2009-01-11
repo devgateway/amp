@@ -49,13 +49,13 @@ module Report
         
         if year <= Time.now.year
           cols << ["Total Commitments #{year}", @target.total_commitments(year)]
-          cols << ["Total Payments #{year}", @target.total_payments(year)]
-          cols << ["Quarterly Payments #{year}", quarterly_payments(@target, year)]
+          cols << ["Total Disbursements #{year}", @target.total_payments(year)]
+          cols << ["Quarterly Disbursements #{year}", quarterly_payments(@target, year)]
         end
         
         if year >= Time.now.year
           cols << ["Commitments Forecast #{year}", @target.funding_forecasts.find_by_year(year).andand.commitments]
-          cols << ["Payments Forecast #{year}", @target.funding_forecasts.find_by_year(year).andand.payments]
+          cols << ["Disbursements Forecast #{year}", @target.funding_forecasts.find_by_year(year).andand.payments]
         end
         
         cols

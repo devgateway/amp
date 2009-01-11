@@ -35,10 +35,12 @@ module Report
     [['total_cofunding', ll(:reports, :total_cofunding)], ['cofunding_donors', ll(:reports, :cofunding_donors)],
     ['national_regional', ll(:reports, :national_regional)], ['type_of_implementation', ll(:reports, :toi)],
     ['dac_sector', ll(:terms, :dac_sector)], ['crs_sector', ll(:terms, :dac_crs_sector)], 
-    ['type_of_aid', ll(:reports, :toa)], ['grant_loan', "#{ll(:options, :grant)}/#{ll(:options, :loan)}"], ['gov_counterpart', ll(:reports, :gov_counterpart)],
+    ['type_of_aid', ll(:reports, :toa)], ['grant_loan', "#{ll(:options, :grant)}/#{ll(:options, :loan)}"], 
     ['impl_agencies', ll(:reports, :impl_agencies)], ['contr_agencies', ll(:reports, :contr_agencies)],
     ['markers', ll(:terms, :markers)], ['mdg_goals', ll(:reports, :mdg_goals)], ['focal_regions', ll(:reports, :focal_regions)],
     ['officer_responsible', ll(:reports, :officer_responsible)], ['website', ll(:terms, :internet_link)], ['comments', ll(:reports, :comments)],
     ['updated_at', ll(:reports, :last_update)]]
+
+  #['gov_counterpart', ll(:reports, :gov_counterpart)], removed by 
   end
 end

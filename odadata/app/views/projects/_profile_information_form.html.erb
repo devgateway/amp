@@ -32,7 +32,15 @@
 	 		{ :prompt => I18n.t('options.country_strategy_unavailable') }, :class => "large" %></li>
 	<li><%= f.select :prj_status, Project::STATUS_OPTIONS, 
 			:include_blank => I18n.t('options.prompt'), :required => true, :translate => true %></li>
-	
-	<li class="fifty"><%= f.text_field :start, :required => true, :readonly =>true %></li>
-	<li class="fifty"><%= f.text_field :end, :required => true, :readonly =>true  %></li>                               
+
+    
+	<li class="fifty">
+    <%= f.text_field :start, :required => true, :readonly =>true %>
+    <%= error_message_on(:project, :start, "","", "error_message" ) %>
+    </li>
+	<li class="fifty">
+    <%= f.text_field :end, :required => true, :readonly =>true  %>
+    <%= error_message_on(:project, :end, "","", "error_message" ) %>
+    </li>
+
 <% end %>

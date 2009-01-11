@@ -659,6 +659,7 @@ form fieldset .full  { width: 95%; }
 form fieldset li.fifty { float: left; width: 49.9%; }
 form fieldset li.twenty { float: left; width: 20%; }
 form fieldset li.thirty { float: left; width: 33.2%; }
+form fieldset li .error_message { float: left; width: 95%; color:red;}
 
 form fieldset ol li.noborder { border: 0 !important; }
 

@@ -8,7 +8,7 @@ class DacSector < ActiveRecord::Base
     # this is a hack because SELECT DISTINCT requires all fields used in the ORDER BY clause
     # to be present in the select as well.. This could presumably be solved by using JOIN to 
     # load the translations.. (Globalize 2 patch?!)
-    :select => "projects.*, donor_translations.name"
+    :select => "projects.*"
   
   has_many :sector_details, :as => :focal_sector
   

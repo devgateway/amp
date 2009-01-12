@@ -78,10 +78,10 @@ public class TrailCellsXLS extends XLSExporter {
 			TranslatorWorker translator=TranslatorWorker.getInstance();
 			String siteId=this.getMetadata().getSiteId();
 			String locale=this.getMetadata().getLocale();
-			String prefix="rep:pop:";
+			//String prefix="rep:pop:";
 			String translatedName=null;
 			try{
-				translatedName=TranslatorWorker.translate(prefix+grd.getName(),locale,siteId);
+				translatedName=TranslatorWorker.translateText(grd.getName(),locale,siteId);
 			}catch (WorkerException e)
 				{ 
 				e.printStackTrace();

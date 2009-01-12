@@ -180,7 +180,7 @@ public class ShowTeamReports extends Action {
 			String locale = RequestUtils.getNavigationLanguage(request).getCode();
 			String text = null;
 			String translatedText = null;
-			String prefix = "aim:reportbuilder:";
+			//String prefix = "aim:reportbuilder:"; not used any more cos hash key translation.
 			Iterator iterator = reps.iterator();
 			Set<AmpReports> transReport = new TreeSet<AmpReports>(
 					new AdvancedReportUtil.AmpReportIdComparator());			
@@ -194,8 +194,8 @@ public class ShowTeamReports extends Action {
 						arh = (AmpReportHierarchy) iterator2.next();
 						text = arh.getColumn().getColumnName();
 						try {
-							translatedText = TranslatorWorker.translate(prefix
-									+ text.toLowerCase(), locale, siteId);
+							//translatedText = TranslatorWorker.translate(prefix + text.toLowerCase(), locale, siteId);
+							translatedText = TranslatorWorker.translateText(text, locale, siteId);
 						} catch (WorkerException e) {
 							e.printStackTrace();
 						}

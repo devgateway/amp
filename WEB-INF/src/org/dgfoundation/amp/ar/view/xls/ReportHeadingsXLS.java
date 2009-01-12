@@ -112,10 +112,10 @@ public class ReportHeadingsXLS extends XLSExporter {
 						}
 						//this value should be translated
 						String translatedCellValue=new String();
-						String prefix="aim:reportBuilder:";
+						//String prefix="aim:reportBuilder:";
 						
 						try{
-							translatedCellValue=TranslatorWorker.translate(prefix+cellValue,locale,siteId);
+							translatedCellValue=TranslatorWorker.translateText(cellValue,locale,siteId);
 						}catch (WorkerException e)
 						{
 							e.printStackTrace();

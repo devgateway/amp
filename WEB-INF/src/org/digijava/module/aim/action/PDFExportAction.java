@@ -10,9 +10,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.DateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
@@ -21,7 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -46,23 +43,18 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 import com.lowagie.text.BadElementException;
-import com.lowagie.text.Cell;
 import com.lowagie.text.Document;
 import com.lowagie.text.ExceptionConverter;
 import com.lowagie.text.Font;
-import com.lowagie.text.HeaderFooter;
 import com.lowagie.text.Image;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
-import com.lowagie.text.Phrase;
 import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.BaseFont;
-import com.lowagie.text.pdf.PdfCell;
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfPageEvent;
-import com.lowagie.text.pdf.PdfTextArray;
 import com.lowagie.text.pdf.PdfWriter;
 
 /**
@@ -191,7 +183,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
     		OutputStreamWriter outputStream = new OutputStreamWriter(response.getOutputStream());
     		PrintWriter out = new PrintWriter(outputStream, true);
     		String url = FeaturesUtil.getGlobalSettingValue("Site Domain");
-    		String alert = TranslatorWorker.translate("aim:session:expired",locale,siteId);
+    		String alert = TranslatorWorker.translateText("Your session has expired. Please log in again.",locale,siteId);
     		String script = "<script>opener.close();" 
     			+ "alert('"+ alert +"');" 
     			+ "window.location=('"+ url +"');"
@@ -254,7 +246,8 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 			} else if (this.request.getAttribute("statementOptions").equals("1")) {//enabled										
 				String stmt = "";
 				try {
-					stmt = TranslatorWorker.translate("aim:report:reportstatement", locale,siteId);
+					//TODO TRN:this should use default text instead of this key. if there is no such default text in this case, then leaving key is jut all right.
+					stmt = TranslatorWorker.translateText("aim:report:reportstatement", locale,siteId);
 				} catch (WorkerException e){
 				    logger.error("Error translating ", e);}
 				stmt += " " + FeaturesUtil.getCurrentCountryName();
@@ -278,24 +271,26 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 			//
 			try{	
 			    
-			    translatedCurrentFilter=TranslatorWorker.translate("rep:pop:SelectedFilters",locale,siteId);
+			    translatedCurrentFilter=TranslatorWorker.translateText("Currently Selected Filters:",locale,siteId);
 			    translatedCurrentFilter=("".equalsIgnoreCase(translatedCurrentFilter))?"Currently Selected Filters":translatedCurrentFilter;
 			    
                 String currencyCode = (String) session.getAttribute(org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY);
                 if(currencyCode != null) {
-                    translatedCurrency=TranslatorWorker.translate("aim:currency:" + currencyCode.toLowerCase().replaceAll(" ", ""),locale,siteId);
-    			    translatedCurrency=("".equalsIgnoreCase(currencyCode))?currencyCode:translatedCurrency;
+                    //translatedCurrency=TranslatorWorker.translate("aim:currency:" + currencyCode.toLowerCase().replaceAll(" ", ""),locale,siteId);
+                    translatedCurrency=TranslatorWorker.translateText(currencyCode,locale,siteId);
+        			    translatedCurrency=("".equalsIgnoreCase(currencyCode))?currencyCode:translatedCurrency;
                 }
                 else
                 {
-                    translatedCurrency=TranslatorWorker.translate("aim:currency:" +Constants.DEFAULT_CURRENCY.toLowerCase().replaceAll(" ", ""),locale,siteId);
+                    //translatedCurrency=TranslatorWorker.translate("aim:currency:" +Constants.DEFAULT_CURRENCY.toLowerCase().replaceAll(" ", ""),locale,siteId);
+                    translatedCurrency=TranslatorWorker.translateText(Constants.DEFAULT_CURRENCY,locale,siteId);
                 }
                 	
                 if (FeaturesUtil.getGlobalSettingValue("Amounts in Thousands").equalsIgnoreCase("true")){	
-                	translatedAmount=TranslatorWorker.translate("rep:pop:AllAmount",locale,siteId);
+                	translatedAmount=TranslatorWorker.translateText("Amounts are in thousands (000)",locale,siteId);
                 }
 			    translatedAmount=("".equalsIgnoreCase(translatedAmount))?AmpReports.getNote(session):translatedAmount;
-			    translatedReportDescription=TranslatorWorker.translate("rep:pop:Description",locale,siteId);
+			    translatedReportDescription=TranslatorWorker.translateText("Description:",locale,siteId);
 			
 			}catch (WorkerException e){
 			    logger.error("Error translating ", e);}
@@ -338,10 +333,11 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 	        	    while (keys.hasNext()) {
 	        		String key = keys.next();
 	        		
-	        		    String translatedName=TranslatorWorker.translate("filterproperty:" + key,locale,siteId);
-	        		    translatedName=("".equalsIgnoreCase(translatedName))?key:translatedName;
+        		    //String translatedName=TranslatorWorker.translate("filterproperty:" + key,locale,siteId);
+        		    String translatedName=TranslatorWorker.translateText(key,locale,siteId);
+        		    translatedName=("".equalsIgnoreCase(translatedName))?key:translatedName;
 				    
-				    String translatedValue=TranslatorWorker.translate("filterproperty:" + props.get(key).toString(),locale,siteId);
+				    String translatedValue=TranslatorWorker.translateText(props.get(key).toString(),locale,siteId);
 				    translatedValue=("".equalsIgnoreCase(translatedValue))?props.get(key).toString():translatedValue;
 				
 	        		strFilters.append(translatedName);
@@ -419,7 +415,8 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 			} else if (this.request.getAttribute("statementOptions").equals("1")) {//enabled										
 				String stmt = "";
 				try {
-					stmt = TranslatorWorker.translate("aim:report:reportstatement", locale,siteId);
+					//TODO TRN:this should use default text instead of this key. if there is no such default text in this case, then leaving key is jut all right.
+					stmt = TranslatorWorker.translateText("aim:report:reportstatement", locale,siteId);
 				} catch (WorkerException e){
 				    logger.error("Error translating ", e);}
 				stmt += " " + FeaturesUtil.getCurrentCountryName();
@@ -448,7 +445,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 //    		text.append(" ");
 //    	    } 
     	    if(r.getUser()!=null){
-    		String translatedUser=TranslatorWorker.translate("rep:print:user", locale, siteId);
+    		String translatedUser=TranslatorWorker.translateText("User :", locale, siteId);
     		if ("".equalsIgnoreCase(translatedUser)){
     		    	translatedUser="User:";
     		   }
@@ -476,7 +473,8 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 	    cb.setFontAndSize(font, 10);
 	    textBase = document.bottom() - 30;
 	    StringBuffer pageText=new StringBuffer();
-	    String translatedPage=TranslatorWorker.translate("rep:pop:page", locale, siteId);
+	    //TODO TRN: Key is all right here but lets think about using body as translation.
+	    String translatedPage=TranslatorWorker.translateText("rep:pop:page", locale, siteId);
 	   if ("".equalsIgnoreCase(translatedPage)){
 	       translatedPage="Page:";
 	   }

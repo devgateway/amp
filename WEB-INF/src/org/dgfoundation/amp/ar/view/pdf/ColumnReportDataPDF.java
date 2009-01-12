@@ -79,10 +79,11 @@ public class ColumnReportDataPDF extends PDFExporter {
 			
 			//introducing the translaton issues
 			
-			String prefix="rep:pop:";
+			//String prefix="rep:pop:";
 			String translatedName=null;
 			try{
-				translatedName=TranslatorWorker.translate(prefix+columnReport.getName(),locale,siteId);
+				//translatedName=TranslatorWorker.translate(prefix+columnReport.getName(),locale,siteId);
+				translatedName=TranslatorWorker.translateText(columnReport.getName(),locale,siteId);
 			}catch (WorkerException e)
 				{////System.out.println(e);
 				
@@ -122,10 +123,10 @@ public class ColumnReportDataPDF extends PDFExporter {
 					String cellValue=element2.getName(metadata.getHideActivities());
 					//this value should be translated
 					String translatedCellValue=new String();
-					String prefix="aim:reportBuilder:";
+					//String prefix="aim:reportBuilder:";
 					
 					try{
-						translatedCellValue=TranslatorWorker.translate(prefix+cellValue,locale,siteId);
+						translatedCellValue=TranslatorWorker.translateText(cellValue,locale,siteId);
 					}catch (WorkerException e)
 						{
 						e.printStackTrace();

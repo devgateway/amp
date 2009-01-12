@@ -6,8 +6,6 @@
  */
 package org.dgfoundation.amp.ar.view.pdf;
 
-import java.awt.Color;
-
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.Viewable;
@@ -66,9 +64,9 @@ public class TextCellPDF extends PDFExporter {
 			String finalStatus=new String();//the actual text to be added to the column
 			
 			String translatedStatus=null;
-			String prefix="aim:";
+			//String prefix="aim:";
 			try{
-				translatedStatus=TranslatorWorker.translate(prefix+actualStatus,locale,siteId);
+				translatedStatus=TranslatorWorker.translateText(actualStatus,locale,siteId);
 			}catch (WorkerException e)
 				{e.printStackTrace();}
 			if (translatedStatus.compareTo("")==0)

@@ -652,10 +652,9 @@ public class AmpReportGenerator extends ReportGenerator {
 				String locale = rd.getParent().getReportMetadata().getLocale();
 				String text = fakeC.getValue().toString();
 				String translatedText = null;
-				String prefix = "aim:reportGenerator:";
+				//String prefix = "aim:reportGenerator:"; not used cos hash keys
 				try {
-					translatedText = TranslatorWorker.translate(prefix
-							+ text.toLowerCase(), locale, siteId);
+					translatedText = TranslatorWorker.translateText(text, locale, siteId);
 				} catch (WorkerException e) {
 					e.printStackTrace();
 				}

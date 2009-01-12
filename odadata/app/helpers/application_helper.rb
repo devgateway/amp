@@ -69,7 +69,9 @@ module ApplicationHelper
   
   # This should better be in a formatting helper
   def markdown(text)
-    Markdown.new(text, :filter_html).to_html
+    #Markdown.new(text, :filter_html).to_html
+    r = RedCloth.new text
+    strip_html_tags(r).to_html
   end
   
 private

@@ -794,19 +794,21 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
               indConn.setValues(new HashSet<AmpIndicatorValue>());
               newIndicator = true;
           }else{
-        	  if (indConn.getValues()!=null && indConn.getValues().size()>0){
-        		 /* for (AmpIndicatorValue value : indConn.getValues()) {
+        	  if ((indConn.getValues() != null) && (indConn.getValues().size() > 0)) {
+        		 for (AmpIndicatorValue value : indConn.getValues()) {
 					session.delete(value);
-				}*/
+				}
         		  indConn.getValues().clear();
         	  }
           }
 
           //create each type of value and assign to connection
-          if (actInd.getActualVal()!=null){
-        	  AmpIndicatorValue indValActual=new AmpIndicatorValue();
+          AmpIndicatorValue indValActual = null;
+       	  if (actInd.getCurrentVal()!=null){
+       		  indValActual = new AmpIndicatorValue();
         	  indValActual.setValueType(AmpIndicatorValue.ACTUAL);
         	  indValActual.setValue(new Double(actInd.getActualVal()));
+        	  indValActual.setValue(new Double(actInd.getCurrentVal()));
         	  indValActual.setComment(actInd.getCurrentValComments());
         	  indValActual.setValueDate(DateConversion.getDate(actInd.getCurrentValDate()));
         	  indValActual.setRisk(risk);
@@ -814,8 +816,9 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         	  indValActual.setIndicatorConnection(indConn);
         	  indConn.getValues().add(indValActual);
           }
+       	AmpIndicatorValue indValTarget = null;
           if (actInd.getTargetVal()!=null){
-        	  AmpIndicatorValue indValTarget=new AmpIndicatorValue();
+        	  indValTarget=new AmpIndicatorValue();
         	  indValTarget.setValueType(AmpIndicatorValue.TARGET);
         	  indValTarget.setValue(new Double(actInd.getTargetVal()));
         	  indValTarget.setComment(actInd.getTargetValComments());
@@ -825,8 +828,9 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         	  indValTarget.setIndicatorConnection(indConn);
         	  indConn.getValues().add(indValTarget);
           }
+          AmpIndicatorValue indValBase = null;
           if (actInd.getBaseVal()!=null){
-        	  AmpIndicatorValue indValBase=new AmpIndicatorValue();
+        	  indValBase=new AmpIndicatorValue();
 
         	  indValBase.setValueType(AmpIndicatorValue.BASE);
         	  indValBase.setValue(new Double(actInd.getBaseVal()));
@@ -837,8 +841,9 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         	  indValBase.setIndicatorConnection(indConn);
         	  indConn.getValues().add(indValBase);
           }
+          AmpIndicatorValue indValRevised = null;
           if (actInd.getRevisedTargetVal()!=null){
-        	  AmpIndicatorValue indValRevised=new AmpIndicatorValue();
+        	  indValRevised=new AmpIndicatorValue();
         	  indValRevised.setValueType(AmpIndicatorValue.REVISED);
         	  indValRevised.setValue(new Double(actInd.getRevisedTargetVal()));
         	  indValRevised.setComment(actInd.getRevisedTargetValComments());

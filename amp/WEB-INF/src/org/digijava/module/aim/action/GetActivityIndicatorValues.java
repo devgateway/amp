@@ -52,8 +52,7 @@ public class GetActivityIndicatorValues extends Action
 					{
 						ActivityIndicator actInd = (ActivityIndicator) itr.next();
 
-						//if (actInd.getConnectionId()!=null && actInd.getConnectionId().equals(indValId)) 
-
+						
 						if (actInd.getIndicatorId()!=null && actInd.getIndicatorId().equals(indValId)) 
 						{
 							//AllPrgIndicators actInd = IndicatorUtil.getAmpIndicator(actIndicator.getIndicatorId(),actIndicator.getActivityId());
@@ -74,7 +73,6 @@ public class GetActivityIndicatorValues extends Action
 							}
 							eaForm.getIndicator().setBaseValComments(actInd.getBaseValComments());
 							eaForm.getIndicator().setTargetVal(actInd.getTargetVal());
-							eaForm.getIndicator().setTargetVal(actInd.getTargetVal());
 							if(actInd.getTargetValDate() != null){
 							     eaForm.getIndicator().setTargetValDate(actInd.getTargetValDate());
 							}else{
@@ -88,34 +86,29 @@ public class GetActivityIndicatorValues extends Action
 								eaForm.getIndicator().setRevTargetValDate(null);
 							}
 							eaForm.getIndicator().setRevTargetValComments(actInd.getRevisedTargetValComments());
-							if(actInd.getIndicatorsCategory()!=null){
-							eaForm.getIndicator().setLogframeCategory(actInd.getIndicatorsCategory().getId());
-							}
-							if(actInd.getCurrentValDate() != null) {
-								eaForm.getIndicator().setCurrentValDate(actInd.getCurrentValDate());
+							eaForm.getIndicator().setCurrentVal(actInd.getActualVal()+"");
+						 	if (actInd.getActualValDate() != null) {
+						 	eaForm.getIndicator().setCurrentValDate(actInd.getActualValDate());
 							}else{
 							    eaForm.getIndicator().setCurrentValDate(null);
 							}
-  							   eaForm.getIndicator().setCurrentValComments(actInd.getCurrentValComments());
+						 	eaForm.getIndicator().setCurrentValComments(actInd.getActualValComments());
 							
-							if(actInd.getRisk()!= null){
-								eaForm.getIndicator().setIndicatorRisk(actInd.getRisk());
+						 	if(actInd.getIndicatorsCategory()!=null){
+						 	 	eaForm.getIndicator().setLogframeCategory(actInd.getIndicatorsCategory().getId());
 							   
 							}else{
 								eaForm.getIndicator().setIndicatorRisk(null);
+								eaForm.getIndicator().setLogframeCategory(new Long(0));
 							}
-							
-							eaForm.getIndicator().setCurrentValComments(actInd.getActualValComments());
+
+
 							if(actInd.getRisk() != null){
 							eaForm.getIndicator().setIndicatorRisk(actInd.getRisk());
 							}else{
 								eaForm.getIndicator().setIndicatorRisk(new Long(0));
 							}
-							if(actInd.getIndicatorsCategory() != null){
-							eaForm.getIndicator().setLogframeCategory(actInd.getIndicatorsCategory().getId());
-							}else{
-								eaForm.getIndicator().setLogframeCategory(new Long(0));
-							}
+
 							break;
 						}
 					}

@@ -54,21 +54,22 @@ public class SaveIndicatorValues extends Action
 						}
 
 						if (eaForm.getIndicator().getCurrentValDate() != null) {
-							logger.debug("Setting currValComments :" + eaForm.getIndicator().getCurrentValComments());
 							if( eaForm.getIndicator().getCurrentVal() != null) {
 								temp.setCurrentVal(Float.parseFloat(eaForm.getIndicator().getCurrentVal()));
+								temp.setActualVal(Float.parseFloat(eaForm.getIndicator().getCurrentVal()));
 							}
-					     if(eaForm.getIndicator().getCurrentValDate() != null){
-							temp.setCurrentValDate(eaForm.getIndicator().getCurrValDate());
-                          }
+							temp.setCurrentValDate(eaForm.getIndicator().getCurrentValDate());
+						 	temp.setActualValDate(eaForm.getIndicator().getCurrentValDate());
 							temp.setCurrentValComments(eaForm.getIndicator().getCurrentValComments());
 							temp.setActualValComments(eaForm.getIndicator().getCurrentValComments());
 							
 						}
 						if(eaForm.getIndicator().getCurrentVal() != null){
+							temp.setCurrentVal(Float.parseFloat(eaForm.getIndicator().getCurrentVal()));
 						temp.setActualVal(Float.parseFloat(eaForm.getIndicator().getCurrentVal()));
 						
 						}else{
+							temp.setCurrentVal(null);
 							temp.setActualVal(null);
 						}
 						temp.setRisk(eaForm.getIndicator().getIndicatorRisk());

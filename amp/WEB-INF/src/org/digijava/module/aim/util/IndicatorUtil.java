@@ -871,7 +871,10 @@ public class IndicatorUtil {
 					bean.setActualVal(new Float(value.getValue()));
 					bean.setActualValComments(value.getComment());
 					bean.setActualValDate(DateConversion.ConvertDateToString(value.getValueDate()));
-					bean.setIndicatorsCategory(value.getLogFrame());
+					bean.setCurrentVal(new Float(value.getValue()));
+				 	bean.setCurrentValComments(value.getComment());
+				 	bean.setCurrentValDate(DateConversion.ConvertDateToString(value.getValueDate()));
+				 	bean.setIndicatorsCategory(value.getLogFrame());
 				}
 				if (value.getValueType()==AmpIndicatorValue.BASE){
 					bean.setBaseVal(new Float(value.getValue()));

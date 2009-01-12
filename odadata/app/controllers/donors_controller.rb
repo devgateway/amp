@@ -10,7 +10,17 @@ class DonorsController < ApplicationController
   end
 
   def create
-    @donor = Donor.new(params[:donor])
+    @donor = Donor.new
+    
+    # Manually set attributes because mass-assignment has been disabled for security reasons
+    @donor.name             = params[:donor][:name]
+    @donor.name_es          = params[:donor][:name_es]
+    @donor.code             = params[:donor][:code]
+    @donor.currency         = params[:donor][:currency]
+    @donor.cofunding_only   = params[:donor][:cofunding_only]
+    @donor.flag             = params[:donor][:flag]
+    @donor.profile_picture  = params[:donor][:profile_picture]
+    
     if @donor.save
       flash[:notice] = 'Donor was successfully created.'
       redirect_to donors_path

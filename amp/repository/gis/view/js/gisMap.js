@@ -387,6 +387,13 @@
 			
 		
 			document.getElementById("tooltipContainer").style.display = "block";
+			
+			//Set year caption
+			var fromYear = getComboSelectedText(document.getElementsByName('selectedFromYear')[0]);
+			var toYear = getComboSelectedText(document.getElementsByName('selectedToYear')[0]);
+			var newCapt = "(USD) " + fromYear + " - " + toYear;
+			document.getElementById('tooltipCurencyYearRange').innerHTML = newCapt;
+			
 		}
 	}
 	
@@ -545,10 +552,12 @@
 	
 	function mapYearChanged(){
 		sectorSelected(document.getElementById('sectorsMapCombo'));
+		/*
 		var fromYear = getComboSelectedText(document.getElementsByName('selectedFromYear')[0]);
 		var toYear = getComboSelectedText(document.getElementsByName('selectedToYear')[0]);
 		var newCapt = "(USD) " + fromYear + " - " + toYear;
 		document.getElementById('tooltipCurencyYearRange').innerHTML = newCapt;
+		*/
 	}
 	
 	function getComboSelectedText(obj) {

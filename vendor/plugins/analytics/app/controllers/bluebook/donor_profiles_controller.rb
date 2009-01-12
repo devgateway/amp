@@ -35,6 +35,10 @@ class Bluebook::DonorProfilesController < BluebookController
    
     # Specific donor's grant projects disbursements
     @disbursement_grants = @total_payments_grants.to_f * 100 / @total_payments.to_f
+    #TODO: Check why sometimes @total_payments is zero, I had to add this not NaN validations because there were errors in the page.
+    if(@disbursement_grants.nan?)
+      @disbursement_grants = 0
+    end
     # Specific donor's loan projects disbursements
     @disbursement_loans = 100 - @disbursement_grants
    
@@ -55,6 +59,13 @@ class Bluebook::DonorProfilesController < BluebookController
     @disbursement_multilaterals = @total_payments_multilaterals.to_f * 100 / @total_payments.to_f 
 
     # Specific donor's NGO Implemented projects disbursements (percentage)
+    #TODO: Check why sometimes @total_payments is zero, I had to add this not NaN validations because there were errors in the page.
+    if (@disbursement_bilaterals.nan?)
+      @disbursement_bilaterals = 0
+    end
+    if (@disbursement_multilaterals.nan?)
+      @disbursement_multilaterals = 0
+    end
     @disbursement_ngos = 100 - @disbursement_bilaterals.round - @disbursement_multilaterals.round # Ensure that we get 100% as total ;-)
 
     # Top three regions

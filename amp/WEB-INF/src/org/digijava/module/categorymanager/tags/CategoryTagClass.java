@@ -3,7 +3,6 @@
  */
 package org.digijava.module.categorymanager.tags;
 
-import java.beans.PropertyDescriptor;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -216,7 +215,7 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 		
 		if ( !isMultiselect ) {
 			if ( fLine == null ) {
-				 String pleaseSelectBelow = "aim:pleaseSelectBelow";
+				 //String pleaseSelectBelow = "aim:pleaseSelectBelow"; not used any more because of hash keys
 				 Site site = RequestUtils.getSite(request);
 				 //
 				 //requirements for translation purposes
@@ -225,9 +224,11 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 				 String locale = RequestUtils.getNavigationLanguage(request).getCode();
 				 String translatedText = null;
 				 try {
+					 	//TODO lets use debug instead of info here.
 						logger.info("siteID : "+siteId);
 						logger.info("locale : "+locale);
-						translatedText = TranslatorWorker.translate(pleaseSelectBelow, locale, siteId);
+						//TODO TRN: there is no record with such key, so using this key is all right, but if we have default text, then lets replace with it.
+						translatedText = TranslatorWorker.translateText("aim:pleaseSelectBelow", locale, siteId);
 					 } catch (WorkerException e) {
 						e.printStackTrace();
 					 }

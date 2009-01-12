@@ -6,12 +6,9 @@
  */
 package org.digijava.module.aim.action;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.util.Date;
@@ -20,8 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.poi.hslf.model.Picture;
-import org.apache.poi.hssf.model.Workbook;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
@@ -55,10 +50,6 @@ import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.form.AdvancedReportForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
-
-import com.lowagie.text.BadElementException;
-import com.lowagie.text.Image;
-import com.lowagie.text.pdf.PdfPCell;
 
 /**
  * 
@@ -172,7 +163,8 @@ public class XLSExportAction extends Action {
 			}
 			String stmt = "";
 			try {
-				stmt = TranslatorWorker.translate("aim:report:reportstatement", locale,siteId);
+				//TODO TRN: key is all right but lets use default text. Or remove this todo tag.
+				stmt = TranslatorWorker.translateText("aim:report:reportstatement", locale,siteId);
 			} catch (WorkerException e){
 			    e.printStackTrace();}
 			stmt += " " + FeaturesUtil.getCurrentCountryName();
@@ -198,26 +190,26 @@ public class XLSExportAction extends Action {
 			String translatedReportDescription="Description:";			
 			try{	
 				if (FeaturesUtil.getGlobalSettingValue("Amounts in Thousands").equalsIgnoreCase("true")){
-			    	translatedNotes=TranslatorWorker.translate("rep:pop:AllAmount",locale,siteId);
+			    	translatedNotes=TranslatorWorker.translateText("Amounts are in thousands (000)",locale,siteId);
 				}
 				
 			    if("".equalsIgnoreCase(translatedNotes)){
 			    	translatedNotes=AmpReports.getNote(session);    
 			    }
 			    
-			    translatedReportName=TranslatorWorker.translate("rep:pop:ReportName",locale,siteId);
-				translatedReportDescription=TranslatorWorker.translate("rep:pop:Description",locale,siteId);
+			    translatedReportName=TranslatorWorker.translateText("Report Name:",locale,siteId);
+				translatedReportDescription=TranslatorWorker.translateText("Description:",locale,siteId);
 			}catch (WorkerException e){;}
 			
 			String translatedCurrency = "";
 			String currencyCode = (String) session.getAttribute(org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY);
             if(currencyCode != null) {
-                translatedCurrency=TranslatorWorker.translate("aim:currency:" + currencyCode.toLowerCase().replaceAll(" ", ""),locale,siteId);
+                translatedCurrency=TranslatorWorker.translateText(currencyCode,locale,siteId);
 			    translatedCurrency=("".equalsIgnoreCase(currencyCode))?currencyCode:translatedCurrency;
             }
             else
             {
-                translatedCurrency=TranslatorWorker.translate("aim:currency:" +Constants.DEFAULT_CURRENCY.toLowerCase().replaceAll(" ", ""),locale,siteId);
+                translatedCurrency=TranslatorWorker.translateText(Constants.DEFAULT_CURRENCY,locale,siteId);
             }
             translatedNotes = translatedNotes.replaceAll("\n", " ");
 			cell.setCellValue(translatedNotes+translatedCurrency/*+"\n"*/);
@@ -296,7 +288,8 @@ public class XLSExportAction extends Action {
 			}
 			String stmt = "";
 			try {
-				stmt = TranslatorWorker.translate("aim:report:reportstatement", locale,siteId);
+				//TODO TRN: key is all right but if possible replace with default text. or delete this todo tag
+				stmt = TranslatorWorker.translateText("aim:report:reportstatement", locale,siteId);
 			} catch (WorkerException e){
 			    e.printStackTrace();}
 			stmt += " " + FeaturesUtil.getCurrentCountryName();
@@ -325,7 +318,7 @@ public class XLSExportAction extends Action {
     		OutputStreamWriter outputStream = new OutputStreamWriter(response.getOutputStream());
     		PrintWriter out = new PrintWriter(outputStream, true);
     		String url = FeaturesUtil.getGlobalSettingValue("Site Domain");
-    		String alert = TranslatorWorker.translate("aim:session:expired",locale,siteId);
+    		String alert = TranslatorWorker.translateText("Your session has expired. Please log in again.",locale,siteId);
     		String script = "<script>opener.close();" 
     			+ "alert('"+ alert +"');" 
     			+ "window.location=('"+ url +"');"

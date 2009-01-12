@@ -13,7 +13,7 @@
 		<dd><%= @project.donor.name %></dd>
 		
 		<dt><%= @project.class.human_attribute_name('donor_agency') %></dt>
-		<dd><%= @project.donor_agency.name %></dd>
+		<dd><%= @project.donor_agency.andand.name %></dd>
 		
 		<dt><%= @project.class.human_attribute_name('country_strategy') %></dt>
 		<dd><%= @project.country_strategy.andand.strategy_number || t('options.country_strategy_unavailable') %></dd>

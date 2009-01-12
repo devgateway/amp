@@ -112,9 +112,11 @@ en:
       submit: Update Glossary
       
   projects:
-    step_back: Go back one step
-    step_forward: Continue with next step
+    previous_step: Previous
+    next_step: Next
     
+    # TODO:
+    delete_associated: Delete
     add_implementing_agency: Add another Implementing Agency
     add_contracted_agency: Add another Contracted Agency
     add_province: Add another province

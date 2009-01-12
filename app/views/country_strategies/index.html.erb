@@ -5,11 +5,11 @@
 		<tr><td class="empty"><%= lc(:empty) %></td></tr>
 	<% else %>		
 		<tr>
-			<th>Country Strategy Number/Name</th>
-			<th>Country Strategy Description</th>
-			<th>Start Date</th>
-			<th>End Date</th>
-			<th>Total Amount Foreseen</th>
+			<th><%= CountryStrategy.human_attribute_name('strategy_number') %></th>
+			<th><%= CountryStrategy.human_attribute_name('description') %></th>
+			<th><%= CountryStrategy.human_attribute_name('start') %></th>
+			<th><%= CountryStrategy.human_attribute_name('end') %></th>
+			<th><%= CountryStrategy.human_attribute_name('total_amount_foreseen') %></th>
 			<th>&nbsp;</th>
 		</tr>
 	

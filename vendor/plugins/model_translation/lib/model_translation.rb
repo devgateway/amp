@@ -18,7 +18,7 @@ module Translator
     attributes.each do |attrib|
       class_eval <<-END_SRC
         def #{attrib}
-          lang = I18n.locale
+          lang = I18n.locale.to_sym
           localized_attribute = "#{attrib}_\#{lang}"
           
           if lang != Translator::DEFAULT_LANGUAGE && self.class.content_columns.map(&:name).include?(localized_attribute)
@@ -38,7 +38,7 @@ module Translator
   end
   
   def find_with_localization(*args)
-    lang = I18n.locale
+    lang = I18n.locale.to_sym
     
     if lang != DEFAULT_LANGUAGE
       options = args.extract_options!

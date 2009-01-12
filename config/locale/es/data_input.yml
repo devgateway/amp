@@ -114,9 +114,12 @@ es:
       submit: Actualizar Glosario
       
   projects:
-    step_back: Dar un paso anterior
-    step_forward: Dar un paso adelante
+    # TODO:
+    previous_step: Previous
+    next_step: Next
     
+    # TODO:
+    delete_associated: Delete
     add_implementing_agency: Añadir otra agencia implementadora
     add_contracted_agency: Añadir otra agencia contratada
     add_province: Añadir otra provincia

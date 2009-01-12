@@ -597,7 +597,8 @@ en:
                 EU donors are rising to the challenge of implementing the EU Code of Conduct (CoC) adopted in May 07. 
                 As a preparatory step, an analysis of where each EU donor stands in relation to each of the Code’s Guiding Principles was undertaken in the period November 07 – February 08. Preliminary results indicate that already much progress has been made but that more innovative efforts are needed. Some EU donors are present in more than 3 priority areas, EU donors do not always have a clear and common vision of how to proceed in relation to the division of labour, many have unsynchronised programming, budgeting and disbursement cycles. 
                 A CoC Action Plan will be drawn up for the period 2008-2009 and the EU’s fulfilment of the Code will be carefully monitored.
-      
+        
+              
       chart_subtitles:
           achievements: EU ODA commitments and disbursements by donor in EUR millions, 2007
           forecasts: EU ODA commitments and forecasts for 2008  
@@ -634,37 +635,3 @@ en:
           loan: Loan
           data_missing_header: Missing {{donor}}'s data for {{year}}
           data_missing_info: We're sorry but this donor has not updated and/or published his project fundings for {{year}}, yet.
-          
-      explanatory_note:
-          management_system: 'For example: Ministry of Foreign Affairs / Development Cooperation Directorate within the Ministry of Foreign Affairs/Autonomous Aid Agency /other (please specify)'
-          total_staff: Estimate of full time staff working on ODA in Nicaragua
-          expatriate_staff: Estimate of full time expatriate staff working on ODA in Nicaragua
-          local_staff: Estimate of full time local staff working on ODA in Nicaragua
-          total_oda: 2007 Disbursements compared to 2007 EU Disbursements (in %)
-          grant_oda: 2007 Grant Disbursements compared to total 2007 Disbursements (in %)
-          loan_oda: 2007 Loan Disbursements compared to total 2007 Disbursements (in %)
-          bilateral_oda: 2007 Bilateral Disbursements compared to total 2007 Disbursements (in %)
-          multilateral_oda: 2007 Multilateral Disbursements compared to total 2007 Disbursements (in %)
-          ngos_implementation: 2007 Support to NGOs Disbursements compared to total 2007 Disbursements (in %)
-          top_regions: |
-              Next to national activities, the top 3 regions according to disbursements made in 2007 - Please note that regional disbursements
-              are based on individual project disbursements divided by their number of regions. This might not reflect the full reality in the field
-              but gives a confident trend.
-          centralization: Who has the final decision on each stage of the ODA process? a) Headquarters or b) Field?
-          programming: Country ODA allocation, approval of country strategy
-          project_aa: Appraisal and approval of projects and programmes
-          tenders: Issue, approval and evaluation of tenders, selection of contractors
-          comm_pay: Signature of contracts, approval of commitments and disbursements
-          monitoring_eval: Monitoring and evaluation of projects
-          budget_support: Estimated % of ODA for 2007-2010 through budget support
-          sector_wide: Estimated % of ODA for 2007-2010 through sector-wide approaches
-          projects: Estimated % of ODA for 2007-2010 through projects
-          cs_papers: 'Availability of a country strategy paper (response: yes/no)'
-          period: Period covered by the last available CSP
-          internet_link: Link to the Internet webpage where the CSP is available
-          sectors_and_regions: Priority sectors according to the last CSP and their regions
-          disbursement_totals: |
-              ODA disbursements from 2007-2008* for grants and loans in million €, with 2008 being forecast data. Please note that only ODA
-              under responsability of the Agency/Embassy of the EU Member State participating is counted here. Full ODA disbursements can
-              be higher.
-          distribution_by_sector: Distribution of 2007 Disbursements by general DAC sector

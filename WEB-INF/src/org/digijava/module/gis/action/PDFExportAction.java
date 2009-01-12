@@ -329,9 +329,10 @@ public class PDFExportAction extends Action implements PdfPageEvent {
         	countryName = "";
         }
         //Translation for Result Matrix
-        Paragraph title = new Paragraph(TranslatorWorker.translate("gis:resultsmatrix", locale, siteId) + countryName, new Font(
-				Font.HELVETICA, 24, Font.BOLD));
-        String generatedOnTranslation = TranslatorWorker.translate("gis:generatedon", locale, siteId);
+        //Paragraph title = new Paragraph(TranslatorWorker.translate("gis:resultsmatrix", locale, siteId) + countryName, new Font(Font.HELVETICA, 24, Font.BOLD));
+        Paragraph title = new Paragraph(TranslatorWorker.translateText("Results Matrix:", locale, siteId) + countryName, new Font(Font.HELVETICA, 24, Font.BOLD));
+        
+        String generatedOnTranslation = TranslatorWorker.translateText("gis:generatedon", locale, siteId);
         if(generatedOnTranslation == null || generatedOnTranslation.equals(""))
         	generatedOnTranslation = "Generated on: ";
 
@@ -371,7 +372,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		firstCell.setPadding(0);
 		firstCell.setBorder(Rectangle.NO_BORDER);
 
-		Paragraph paragraph = new Paragraph(TranslatorWorker.translate("gis:outputindicators", locale, siteId)+"\n", new Font(
+		Paragraph paragraph = new Paragraph(TranslatorWorker.translateText("Output Indicators", locale, siteId)+"\n", new Font(
 				Font.HELVETICA, 7, Font.BOLD, new Color(255,255,255)));
 		paragraph.setAlignment(Element.ALIGN_CENTER);
 		firstCell.setCellEvent(border);
@@ -412,7 +413,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		layoutExAidResources.addCell(table1ExAidResources);
 
 		layoutExAidResources.addCell(" ");
-		layoutExAidResources.addCell(new Paragraph(TranslatorWorker.translate("widget:SourceOfficialgovernmentsources", locale, siteId), new Font(Font.HELVETICA, 6)));
+		layoutExAidResources.addCell(new Paragraph(TranslatorWorker.translateText("Source: Official government sources", locale, siteId), new Font(Font.HELVETICA, 6)));
 
 		layoutExAidResources.addCell(" ");
 
@@ -441,7 +442,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		PdfPCell firstCell = new PdfPCell();
 		firstCell.setPadding(0);
 		firstCell.setBorder(Rectangle.NO_BORDER);
-		Paragraph paragraph = new Paragraph(TranslatorWorker.translate("gis:totalresources", locale, siteId) + "\n", new Font(
+		Paragraph paragraph = new Paragraph(TranslatorWorker.translateText("Total resources", locale, siteId) + "\n", new Font(
 				Font.HELVETICA, 7, Font.BOLD, new Color(255,255,255)));
 		paragraph.setAlignment(Element.ALIGN_CENTER);
 		firstCell.setCellEvent(border);
@@ -482,7 +483,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 //		PdfPTable tableTotalResources2 = getWidgetTable("table_place6");
 //		layoutTotalResources.addCell(tableTotalResources2);
 
-		layoutTotalResources.addCell(new Paragraph(TranslatorWorker.translate("widget:sourceministryoffinance", locale, siteId), new Font(Font.HELVETICA, 6)));
+		layoutTotalResources.addCell(new Paragraph(TranslatorWorker.translateText("Source: Ministry of Finance", locale, siteId), new Font(Font.HELVETICA, 6)));
 
 		layoutCell.addElement(layoutTotalResources);
 		generalBox.addCell(layoutCell);
@@ -509,7 +510,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		firstCell.setPadding(0);
 		firstCell.setBorder(Rectangle.NO_BORDER);
 
-		Paragraph paragraph = new Paragraph(TranslatorWorker.translate("gis:aideffectivenessindicators", locale, siteId) + "\n", new Font(
+		Paragraph paragraph = new Paragraph(TranslatorWorker.translateText("Aid Effectiveness Process Indicators", locale, siteId) + "\n", new Font(
 				Font.HELVETICA, 7, Font.BOLD, new Color(255,255,255)));
 		paragraph.setAlignment(Element.ALIGN_CENTER);
 		firstCell.setCellEvent(border);
@@ -550,7 +551,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 		layoutAEIndicators.addCell(table1AEIndicators);
 		layoutAEIndicators.addCell(table2AEIndicators);
-		layoutAEIndicators.addCell(new Paragraph(TranslatorWorker.translate("widget:SourceParisDeclaration", locale, siteId) , new Font(Font.HELVETICA, 6)));
+		layoutAEIndicators.addCell(new Paragraph(TranslatorWorker.translateText("Source: 2006 Paris Declaration Survey", locale, siteId) , new Font(Font.HELVETICA, 6)));
 		layoutAEIndicators.addCell(" ");
 
 
@@ -582,7 +583,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		firstCell.setPadding(0);
 		firstCell.setBorder(Rectangle.NO_BORDER);
 
-		Paragraph paragraph = new Paragraph(TranslatorWorker.translate("gis:externalaidresources", locale, siteId) + "\n", new Font(
+		Paragraph paragraph = new Paragraph(TranslatorWorker.translateText("External Aid Resources", locale, siteId) + "\n", new Font(
 				Font.HELVETICA, 7, Font.BOLD, new Color(255,255,255)));
 		paragraph.setAlignment(Element.ALIGN_CENTER);
 		firstCell.setCellEvent(border);
@@ -623,7 +624,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 		layoutExAidResources.addCell(" ");
 		//widget:sourceAMPdatabase
-		layoutExAidResources.addCell(new Paragraph(TranslatorWorker.translate("widget:sourceAMPdatabase", locale, siteId), new Font(Font.HELVETICA, 6)));
+		layoutExAidResources.addCell(new Paragraph(TranslatorWorker.translateText("Source: AMP database", locale, siteId), new Font(Font.HELVETICA, 6)));
 
 		layoutExAidResources.addCell(" ");
 
@@ -653,7 +654,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		firstCell.setBorder(Rectangle.NO_BORDER);
 		//gis:breakdownbysector
 
-		Paragraph paragraph = new Paragraph(TranslatorWorker.translate("gis:breakdownbysector", locale, siteId) + "\n", new Font(
+		Paragraph paragraph = new Paragraph(TranslatorWorker.translateText("Breakdown by sector", locale, siteId) + "\n", new Font(
 				Font.HELVETICA, 7, Font.BOLD, new Color(255,255,255)));
 		paragraph.setAlignment(Element.ALIGN_CENTER);
 		firstCell.setCellEvent(border);
@@ -688,14 +689,14 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		textCell.setPadding(2);
 		textCell.setBackgroundColor(new Color(206,226,251));
 		//widget:piechart:allAmountsin000USD
-		String selectedDonorTranslation = TranslatorWorker.translate("widget:piechart:selectedDonor", locale, siteId);
+		String selectedDonorTranslation = TranslatorWorker.translateText("Selected donor", locale, siteId);
 		if(selectedDonorTranslation == null || selectedDonorTranslation.equals(""))
 			selectedDonorTranslation = "Selected donor";
-		String selectedYearTranslation = TranslatorWorker.translate("widget:piechart:selectedYear", locale, siteId);
+		String selectedYearTranslation = TranslatorWorker.translateText("Selected year", locale, siteId);
 		if(selectedYearTranslation == null || selectedYearTranslation.equals(""))
 			selectedYearTranslation = "Selected year";
 
-		textCell.addElement(new Paragraph(TranslatorWorker.translate("widget:piechart:allAmountsin000USD", locale, siteId) + "\n" + selectedDonorTranslation + ": " + selectedDonorName + "\n" + selectedYearTranslation + ": " + selectedYear + "\n\n", new Font(Font.HELVETICA, 6)));
+		textCell.addElement(new Paragraph(TranslatorWorker.translateText("All amounts in 000s of USD", locale, siteId) + "\n" + selectedDonorTranslation + ": " + selectedDonorName + "\n" + selectedYearTranslation + ": " + selectedYear + "\n\n", new Font(Font.HELVETICA, 6)));
 
 		generalBox.addCell(textCell);
 		PdfPCell text2Cell = new PdfPCell();
@@ -704,7 +705,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		//widget:SourceAmpdatabase
 
 
-		text2Cell.addElement(new Paragraph(TranslatorWorker.translate("widget:SourceAmpdatabase", locale, siteId), new Font(Font.HELVETICA, 6)));
+		text2Cell.addElement(new Paragraph(TranslatorWorker.translateText("Source: AMP database", locale, siteId), new Font(Font.HELVETICA, 6)));
 
 		generalBox.addCell(layoutCell);
 		generalBox.addCell(text2Cell);
@@ -732,7 +733,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		firstCell.setBorder(Rectangle.NO_BORDER);
 		//gis:regionalview
 
-		Paragraph paragraph = new Paragraph(TranslatorWorker.translate("gis:regionalview", locale, siteId) + "\n", new Font(
+		Paragraph paragraph = new Paragraph(TranslatorWorker.translateText("Regional View", locale, siteId) + "\n", new Font(
 				Font.HELVETICA, 7, Font.BOLD, new Color(255,255,255)));
 		paragraph.setAlignment(Element.ALIGN_CENTER);
 		firstCell.setCellEvent(border);
@@ -768,16 +769,21 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		textCell.setPadding(2);
 		textCell.setBackgroundColor(new Color(206,226,251));
 		//gis:minmax:message
-		String selectedSectorTranslation = TranslatorWorker.translate("gis:selectedSector", locale, siteId);
+		//TODO TRN: no record for this key.
+		String selectedSectorTranslation = TranslatorWorker.translateText("gis:selectedSector", locale, siteId);
 
 		if(selectedSectorTranslation == null || selectedSectorTranslation.equals(""))
 			selectedSectorTranslation = "Selected sector";
-		String selectedIndicatorTranslation = TranslatorWorker.translate("gis:selectedIndicator", locale, siteId);
+		//TODO TRN: no record for this key
+		String selectedIndicatorTranslation = TranslatorWorker.translateText("gis:selectedIndicator", locale, siteId);
 		if(selectedIndicatorTranslation == null || selectedIndicatorTranslation.equals(""))
 			selectedIndicatorTranslation = "Selected Indicator";
 
-
-		textCell.addElement(new Paragraph(TranslatorWorker.translate("gis:minmax:message", locale, siteId) + "\n" + selectedSectorTranslation + ": " + sectorName + "\n" + selectedIndicatorTranslation + ": " + indicatorName + "\n\n"+TranslatorWorker.translate("gis:datasource:message", locale, siteId), new Font(Font.HELVETICA, 6)));
+		String defaultMinMaxMessage="Regions with the lowest (MIN) values for the selected indicator are shaded dark green. "
+				+"Regions with the highest (MAX) value are shaded light green. " 
+				+"For some indicators (such as mortality rates), having the MAX value indicates the lowest performance";
+		
+		textCell.addElement(new Paragraph(TranslatorWorker.translateText(defaultMinMaxMessage, locale, siteId) + "\n" + selectedSectorTranslation + ": " + sectorName + "\n" + selectedIndicatorTranslation + ": " + indicatorName + "\n\n"+TranslatorWorker.translateText("Data Source: Dev Info", locale, siteId), new Font(Font.HELVETICA, 6)));
 		PdfPCell legendCell = new PdfPCell();
 		legendCell.setPadding(0);
 		legendCell.setBorder(Rectangle.NO_BORDER);
@@ -827,7 +833,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		firstCell.setBorder(Rectangle.NO_BORDER);
 		//gis:millenniumdevelopmentgoals
 
-		Paragraph paragraph = new Paragraph(TranslatorWorker.translate("gis:millenniumdevelopmentgoals", locale, siteId) + "\n", new Font(
+		Paragraph paragraph = new Paragraph(TranslatorWorker.translateText("Millennium Development Goals", locale, siteId) + "\n", new Font(
 				Font.HELVETICA, 7, Font.BOLD, new Color(255,255,255)));
 		paragraph.setAlignment(Element.ALIGN_CENTER);
 		firstCell.setCellEvent(border);
@@ -939,7 +945,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		legendTextCell.setBorder(Rectangle.NO_BORDER);
 		//widget:SourceOfficialgovernmentsources
 
-		legendTextCell.addElement(new Paragraph(TranslatorWorker.translate("widget:SourceOfficialgovernmentsources", locale, siteId), new Font(Font.HELVETICA, 6)));
+		legendTextCell.addElement(new Paragraph(TranslatorWorker.translateText("Source: Official government sources", locale, siteId), new Font(Font.HELVETICA, 6)));
 
 		PdfPTable legendTable = new PdfPTable(1);
 		legendTable.setWidthPercentage(100f);
@@ -976,7 +982,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		firstCell.setBorder(Rectangle.NO_BORDER);
 		//gis:resourcesatglance
 
-		Paragraph paragraph = new Paragraph(TranslatorWorker.translate("gis:resourcesatglance", locale, siteId) + "\n", new Font(
+		Paragraph paragraph = new Paragraph(TranslatorWorker.translateText("Resources at a glance", locale, siteId) + "\n", new Font(
 				Font.HELVETICA, 7, Font.BOLD, new Color(255,255,255)));
 		paragraph.setAlignment(Element.ALIGN_CENTER);
 		firstCell.setCellEvent(border);
@@ -1041,7 +1047,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		layoutCell.addElement(layoutResourcesAtAGlance);
 		//widget:SourceOECD
 
-		layoutCell.addElement(new Paragraph(TranslatorWorker.translate("widget:SourceOECD", locale, siteId), new Font(Font.HELVETICA, 6)));
+		layoutCell.addElement(new Paragraph(TranslatorWorker.translateText("Source: OECD", locale, siteId), new Font(Font.HELVETICA, 6)));
 
 		generalBox.addCell(layoutCell);
 

@@ -105,7 +105,7 @@ public class CSVExportAction
     
     String translatedNotes = "";
     if (FeaturesUtil.getGlobalSettingValue("Amounts in Thousands").equalsIgnoreCase("true")){
-    	translatedNotes = TranslatorWorker.translate("rep:pop:AllAmount", locale, siteId);
+    	translatedNotes = TranslatorWorker.translateText("Amounts are in thousands (000)", locale, siteId);
     }
 	if ("".equalsIgnoreCase(translatedNotes)) {
 	    translatedNotes = AmpReports.getNote(session);
@@ -125,8 +125,8 @@ public class CSVExportAction
 	String translatedReportName="Report Name:";
 	String translatedReportDescription="Description:";
 	try{	
-		translatedReportName=TranslatorWorker.translate("rep:pop:ReportName",locale,siteId);
-		translatedReportDescription=TranslatorWorker.translate("rep:pop:Description",locale,siteId);
+		translatedReportName=TranslatorWorker.translateText("Report Name:",locale,siteId);
+		translatedReportDescription=TranslatorWorker.translateText("Description:",locale,siteId);
 	}catch (WorkerException e){;}
 
     cell.setCellValue(translatedReportName+": " + r.getName());
@@ -187,7 +187,7 @@ public class CSVExportAction
 		OutputStreamWriter outputStream = new OutputStreamWriter(response.getOutputStream());
 		PrintWriter out = new PrintWriter(outputStream, true);
 		String url = FeaturesUtil.getGlobalSettingValue("Site Domain");
-		String alert = TranslatorWorker.translate("aim:session:expired",locale,siteId);
+		String alert = TranslatorWorker.translateText("Your session has expired. Please log in again.",locale,siteId);
 		String script = "<script>opener.close();" 
 			+ "alert('"+ alert +"');" 
 			+ "window.location=('"+ url +"');"

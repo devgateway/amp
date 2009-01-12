@@ -9,7 +9,7 @@ module Translator
       class << #{base}; alias_method_chain :find, :localization end
       
       @@localized_attributes = []
-      cattr_accessor :localized_attributes
+      class_inheritable_accessor :localized_attributes
     END_SRC
   end
   

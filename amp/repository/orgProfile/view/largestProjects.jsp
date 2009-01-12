@@ -24,8 +24,8 @@
                    <td><digi:link module="aim" href="/selectActivityTabs.do~ampActivityId=${project.activityId}">${project.title}</digi:link></td>
                <td>${project.amount}</td>
                <td>
-                <c:forEach var="sector" items="${project.sectors}">
-                   ${sector.sectorId.name},
+                <c:forEach var="sector" items="${project.sectors}" varStatus="index">
+                 ${sector.sectorId.name} <c:if test="${!index.last}">,</c:if>
                </c:forEach>
                </td>
                </tr>

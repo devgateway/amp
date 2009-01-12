@@ -213,10 +213,10 @@
 			<td nowrap bgcolor="#D9DAC9" colspan="2">Funding details</td>
 		</tr>
 		<tr>
-			<td colspan="2" nowrap bgcolor="#D9DAC9" id="tooltipCurencyYearRange">(USD) FY 2009/10 - FY 2010/11</td>
+			<td colspan="2" nowrap bgcolor="#D9DAC9" id="tooltipCurencyYearRange">&nbsp;</td>
 		</tr>
 		<tr>
-			<td nowrap bgcolor="#D9DAC9" colspan="2">Total funding</td>
+			<td nowrap bgcolor="#D9DAC9" colspan="2">Total funding for this sector</td>
 		</tr>
 		<tr>
 			<td nowrap width="50%">Commitment</td>

@@ -841,21 +841,29 @@ public class GetFoundingDetails extends Action {
 
                             locationFundingMap.put(regCode, newVal);
                         } else {
-                            FundingData newVal = new FundingData();
-                            newVal.setCommitment(new Double(fundingForSector.
-                                                            getCommitment().floatValue() *
-                                                            loc.getLocationPercentage().
-                                                            floatValue() / 100f));
-                            newVal.setDisbursement(new Double(fundingForSector.
-                                                              getDisbursement().floatValue() *
-                                                              loc.getLocationPercentage().
-                                                              floatValue() / 100f));
-                            newVal.setExpenditure(new Double(fundingForSector.
-                                                             getExpenditure().floatValue() *
-                                                             loc.getLocationPercentage().
-                                                             floatValue() / 100f));
+                            if (fundingForSector.getCommitment().floatValue() != 0f ||
+                                fundingForSector.getDisbursement().floatValue() != 0f ||
+                                fundingForSector.getExpenditure().floatValue() !=0f) {
 
-                            locationFundingMap.put(regCode, newVal);
+                                FundingData newVal = new FundingData();
+                                newVal.setCommitment(new Double(
+                                        fundingForSector.
+                                        getCommitment().floatValue() *
+                                        loc.getLocationPercentage().
+                                        floatValue() / 100f));
+                                newVal.setDisbursement(new Double(
+                                        fundingForSector.
+                                        getDisbursement().floatValue() *
+                                        loc.getLocationPercentage().
+                                        floatValue() / 100f));
+                                newVal.setExpenditure(new Double(
+                                        fundingForSector.
+                                        getExpenditure().floatValue() *
+                                        loc.getLocationPercentage().
+                                        floatValue() / 100f));
+
+                                locationFundingMap.put(regCode, newVal);
+                            }
                         }
                     }
                 }

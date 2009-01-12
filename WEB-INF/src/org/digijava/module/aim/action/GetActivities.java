@@ -290,7 +290,7 @@ public class GetActivities extends Action {
 	private String activities2XML(Collection<ActivityItem> acts,int maxPages, String currencyCode) throws Exception {
         double proposedSum = 0;
 		double actualSum = 0;
-		double plannedSum = 0;
+		double actualDisbSum = 0;
 		String result = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 		result += "<" + ROOT_TAG;
 		String temp = "";
@@ -304,17 +304,17 @@ public class GetActivities extends Action {
 				//calculate totals
 				proposedSum += amounts.getProposedAmout();
 				actualSum += amounts.getActualAmount();
-				plannedSum += amounts.getPlannedAmount();
+				actualDisbSum+= amounts.getActualDisbAmoount();
 				//generate one activity portion of XML from helper
 				temp += item.getXml();
 			}
 		}
 		result += " proposedSum=\"" + FormatHelper.formatNumberUsingCustomFormat(proposedSum) + "\" ";
 		result += " actualSum=\"" + FormatHelper.formatNumberUsingCustomFormat(actualSum) + "\" ";
-		result += " plannedSum=\"" + FormatHelper.formatNumberUsingCustomFormat(plannedSum) + "\" ";
+		result += " actualDisbSum=\"" + FormatHelper.formatNumberUsingCustomFormat(actualDisbSum) + "\" ";
 		result += " totalPages=\""+maxPages+"\" ";
 		result += ">" + temp + "</" + ROOT_TAG + ">";
 		return result;
 	}
 
-}
+			}

@@ -22,6 +22,7 @@ import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.exception.NoCategoryClassException;
+import org.digijava.module.categorymanager.action.CategoryManager;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
@@ -239,27 +240,28 @@ public class CategoryManagerUtil {
 		return null;
 	}
 	
+	public static AmpCategoryValue getAmpCategoryValueFromDb(Long valueId) {
+		return getAmpCategoryValueFromDb( valueId, false );
+	}
+	
 	/**
 	 *
 	 * @param valueId
+	 * @param initializeTaggedValues AmpCategoryValue.usedByValues property is lazyly initialized. Setting the initializeTaggedValues as true will initialize the 
+	 * property before closing the hibernate session
 	 * @return Extracts the AmpCategoryValue with id=valueId from the database. Return null if not found.
 	 */
-	public static AmpCategoryValue getAmpCategoryValueFromDb(Long valueId) {
+	public static AmpCategoryValue getAmpCategoryValueFromDb(Long valueId, boolean initializeTaggedValues) {
+		AmpCategoryValue retVal			= null;
 		if(valueId!=null)
 		{
 			Session dbSession			= null;
-			Collection returnCollection	= null;
 			try {
-				dbSession			= PersistenceManager.getSession();
-				String queryString;
-				Query qry;
-
-				queryString = "select v from "
-					+ AmpCategoryValue.class.getName()
-					+ " v where v.id=:id";
-				qry			= dbSession.createQuery(queryString);
-				qry.setParameter("id", valueId, Hibernate.LONG);
-				returnCollection	= qry.list();
+				dbSession				= PersistenceManager.getSession();
+				retVal					= (AmpCategoryValue) dbSession.load(AmpCategoryValue.class, valueId);
+				
+				if ( initializeTaggedValues )
+					retVal.getUsedByValues().size();
 
 			} catch (Exception ex) {
 				logger.error("Unable to get AmpCategoryValue: " + ex.getMessage());
@@ -271,12 +273,7 @@ public class CategoryManagerUtil {
 					logger.error("releaseSession() failed :" + ex2);
 				}
 			}
-			Iterator it=returnCollection.iterator();
-			if(it.hasNext())
-			{
-				AmpCategoryValue x=(AmpCategoryValue)it.next();
-				return x;
-			}
+			return retVal;
 		}
 		else
 			logger.debug("[getAmpCategoryValueFromDb] valueId is null");
@@ -297,6 +294,77 @@ public class CategoryManagerUtil {
 		
 		throw new Exception ("HardCodedCategoryValue not found in the database");
 	}
+	
+	
+	/**
+	 * 
+	 * @param tagId   the id of the tag (that is the id of the AmpCategoryValue object used as tag)
+	 * @param categoryKey   if not null, only the AmpCategoryValue objects belonging to the category with key=categoryKey will be returned in the set
+	 * @return set of AmpCategoryValue objects tagged with tag that has id=tagId
+	 */
+	public static Set<AmpCategoryValue> getTaggedCategoryValues(Long tagId, String categoryKey) {
+		
+		AmpCategoryValue tag	= getAmpCategoryValueFromDb(tagId, true);
+		if ( tag != null && tag.getUsedByValues() != null ) {
+			return orderCategoryValues(tag.getUsedByValues(), categoryKey);
+		}
+		return null;
+	}
+	/**
+	 * 
+	 * @param tag   the AmpCategoryValue object used as tag
+	 * @param categoryKey   if not null, only the AmpCategoryValue objects belonging to the category with key=categoryKey will be returned in the set
+	 * @return set of AmpCategoryValue objects tagged with the specified tag
+	 */
+	public static Set<AmpCategoryValue> getTaggedCategoryValues(AmpCategoryValue tag, String categoryKey) {
+		try {
+			if ( tag != null && tag.getUsedByValues() != null ) {
+				return orderCategoryValues(tag.getUsedByValues(), categoryKey);
+			}
+			return null;
+		}
+		catch (Exception e) {
+			logger.info( e.getMessage() );
+			logger.info( "Trying to reload the AmpCategoryValue object in order to initialize lazy property" );
+			return getTaggedCategoryValues(tag.getId(), categoryKey);
+		}
+	}
+	/**
+	 * 
+	 * @param unorderedSet
+	 * @param categoryKey
+	 * @return a set containing filtered and ordered category values
+	 */
+	private static Set<AmpCategoryValue> orderCategoryValues(Set<AmpCategoryValue> unorderedSet, String categoryKey) {
+		TreeSet<AmpCategoryValue> returnSet	= new TreeSet<AmpCategoryValue>(
+				new Comparator<AmpCategoryValue>() {
+					public int compare(AmpCategoryValue o1, AmpCategoryValue o2) {
+						if ( o1.getAmpCategoryClass().getId().equals( o2.getAmpCategoryClass().getId()) ) {
+							return o1.getIndex() - o2.getIndex();
+						}
+						else
+							return o1.getAmpCategoryClass().getKeyName().compareTo( o2.getAmpCategoryClass().getKeyName() );					
+					}
+				}
+		);
+		if ( unorderedSet != null)  {		
+			if ( categoryKey != null ) {
+				Iterator<AmpCategoryValue> iter		= unorderedSet.iterator();
+				while ( iter.hasNext() ) {
+					AmpCategoryValue item				= iter.next();
+					if ( item.getAmpCategoryClass().getKeyName().equals(categoryKey) )
+						returnSet.add(item);
+				}
+			}
+			else {
+				returnSet.addAll( unorderedSet );
+			}
+			return returnSet;
+		}
+		return null;
+			
+	}
+	
 	
 	/**
 	 *
@@ -624,6 +692,65 @@ public class CategoryManagerUtil {
 		}
 		return ret;
 	}
+	
+	public static void addValueToCategory(String categoryKey, String value) throws Exception {
+		Session dbSession			= null;
+		String error				= null;
+		
+		try {
+			dbSession			= PersistenceManager.getSession();
+			String queryString;
+			Query qry;
+
+			queryString = "select c from "
+				+ AmpCategoryClass.class.getName()
+				+ " c where c.keyName=:categoryKey";
+			qry			= dbSession.createQuery(queryString);
+			qry.setString("categoryKey", categoryKey );
+			
+			List<AmpCategoryClass> resultList		= qry.list();
+			
+			if ( resultList == null || resultList.size() != 1 )
+				error	= "There was a problem loading the specified AmpCategoryClass with key:" + categoryKey;
+			else {
+				AmpCategoryClass ampCategoryClass	= resultList.get(0);
+				
+				if ( ampCategoryClass.getPossibleValues() == null )
+					ampCategoryClass.setPossibleValues( new ArrayList<AmpCategoryValue>() );
+				
+				AmpCategoryValue ampCategoryValue 	= new AmpCategoryValue();
+				ampCategoryValue.setValue(value);
+				ampCategoryValue.setAmpCategoryClass(ampCategoryClass);
+				ampCategoryValue.setIndex( ampCategoryClass.getPossibleValues().size() );
+				
+				List<AmpCategoryValue> tempList		= new ArrayList<AmpCategoryValue>();
+				tempList.addAll(ampCategoryClass.getPossibleValues());
+				tempList.add( ampCategoryValue );
+				
+				if ( CategoryManager.checkDuplicateValues(tempList) == null ) {
+					ampCategoryClass.getPossibleValues().add( ampCategoryValue );
+				}
+				else
+					error							= "The value already exists";
+				dbSession.flush();
+			}
+
+		} catch (Exception ex) {
+			logger.error("Unable to get Categories: " + ex.getMessage());
+			error	= "A Hibernate exception occured. See Stacktrace above.";
+			ex.printStackTrace();
+		} finally {
+			try {
+				PersistenceManager.releaseSession(dbSession);
+			} catch (Exception ex2) {
+				logger.error("releaseSession() failed :" + ex2);
+			}
+		}
+		
+		if ( error != null )
+			throw new Exception( error );
+	}
+	
 	/**
 	 * Verify that a category value has been inserted in CategoryConstants as a HardCodedcategoryValue
 	 * @return true if the category value key has been inserted in the CategoryConstants class.

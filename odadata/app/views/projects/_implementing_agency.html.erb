@@ -4,7 +4,7 @@
 		<%= options_from_collection_for_select(ImplementingAgency.ordered.all, :id, :name, implementing_agency.id) %>
 	</select>
 
-	<%= link_to_function "Delete", <<-END_JS
+	<%= link_to_function I18n.t('projects.delete_associated'), <<-END_JS
 		if ($('.implementing_agency').length > 1) {
 			$(this).parents('.implementing_agency').remove();
 		} else {

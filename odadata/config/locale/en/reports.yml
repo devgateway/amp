@@ -48,6 +48,8 @@ en:
     map_legend: "Yellow highlighted areas are the project's focal regions/municipalities"
     currency_selection: Select Currency
     cod: Channel of Delivery
+    payments_forecast: Disbursements Forecast {{year}}
+    commitments_forecast: Commitments Forecast {{year}}
     
     donors:
         title: Projects by Donor
@@ -75,6 +77,8 @@ en:
         query_database: Query Database
         totals: Annual Totals
         output_in: Output in
+        select_all: Select All
+        deselect_all: Deselect All
     totals:
         payments: Total Disbursements per Donor
         commitments: Total Commitments per Donor

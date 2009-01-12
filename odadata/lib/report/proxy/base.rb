@@ -50,12 +50,12 @@ module Report
       end
       
       def payments_forecast(year)
-        ["Disbursements Forecast #{year}", 
+        [I18n.t('reports.payments_forecast', :year => year), 
           (@target.funding_forecasts.find_by_year(year).andand.payments.andand.in(Prefs.default_currency))]
       end
       
       def commitments_forecast(year)
-        ["Commitments Forecast #{year}", 
+        [I18n.t('reports.commitments_forecast', :year => year), 
           (@target.funding_forecasts.find_by_year(year).andand.commitments.andand.in(Prefs.default_currency))]
       end
       
@@ -85,7 +85,7 @@ module Report
       
       # Comma separated list of co-funding donors
       def cofunding_donors
-        ["Co-Funding Donor(s)", @target.cofundings.map(&:donor).map(&:name).join(', ')]
+        [I18n.t('reports.cofunding_donors'), @target.cofundings.map(&:donor).map(&:name).join(', ')]
       end
       
       def national_regional

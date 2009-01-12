@@ -3,9 +3,10 @@
 		<%= f.label :sector_relevances %>
 		<%= f.add_associated_link(t('projects.add_sector'), SectorRelevance.new, :style => "display: block; float: right; margin-top: -20px; width: 170") %>
 		
+        <%= error_message_on(:project, :sector_relevances, "","", "error_message" ) %>
 		<div id="sector_relevances">
 			<%= f.render_associated_form(@project.sector_relevances.blank? ? [@project.sector_relevances.build] : @project.sector_relevances) %>
-		</div>
+  		</div>
 	</li>
 	
 	<li>

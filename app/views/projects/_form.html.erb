@@ -38,7 +38,7 @@
 	
 	<div id="profile_information" class="stage">
 		<%# error_messages_for :project, 
-				:attributes => [:donor_project_number, :title, :description, :prj_status] %>
+				:attributes => [:donor_project_number, :title, :description, :prj_status, :start, :end] %>
 		
 		<%= render :partial => "profile_information_form", :locals => { :f => form } %>
 	</div>

@@ -39,6 +39,8 @@ public class ActivityItem implements Comparable<ActivityItem>{
 
 	public static final String PARAM_PLANNED_AMOUNT = "plannedAmount";
 
+    public static final String PARAM_ACTUAL_DISB_AMOUNT = "actualDisbAmount";
+
 	public static final String PARAM_DATE = "date";
 
 	private Long id;
@@ -52,6 +54,8 @@ public class ActivityItem implements Comparable<ActivityItem>{
 	private String plannedAmount = "error";
 
 	private String actualAmount = "error";
+
+    private String actualDisbAmount = "error";
 
 	private String startDate;
 	//end date not used
@@ -130,7 +134,7 @@ public class ActivityItem implements Comparable<ActivityItem>{
 				amounts = ActivityUtil.getActivityAmmountIn(entity,curenncyCode,percent);
 				proposedAmount=amounts.proposedAmout();
 				actualAmount=amounts.actualAmount();
-				plannedAmount=amounts.plannedAmount();
+                actualDisbAmount=amounts.actualDisbAmount();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -163,7 +167,7 @@ public class ActivityItem implements Comparable<ActivityItem>{
 			result += " " + PARAM_NAME + "=\"" + getNameValue() + "\"";
 			result += " " + PARAM_PROPOSED_AMOUNT + "=\"" + getProposedAmount() + "\"";
 			result += " " + PARAM_ACTUAL_AMOUNT + "=\"" + getActualAmount() + "\"";
-			result += " " + PARAM_PLANNED_AMOUNT + "=\"" + getPlannedAmount() + "\"";
+			result += " " + PARAM_ACTUAL_DISB_AMOUNT + "=\"" + getActualDisbAmount()+ "\"";
 			result += " " + PARAM_DATE + "=\"" + getStartDate() + "\"";
 			result += ">";
 			result += "<" + DONORS_TAG_NAME + ">";
@@ -234,6 +238,13 @@ public class ActivityItem implements Comparable<ActivityItem>{
 	public String getStatus() {
 		return status;
 	}
+    public String getActualDisbAmount() {
+        return actualDisbAmount;
+    }
+
+    public void setActualDisbAmount(String actualDisbAmount) {
+        this.actualDisbAmount = actualDisbAmount;
+    }
 
 	public void setStatus(String status) {
 		this.status = status;

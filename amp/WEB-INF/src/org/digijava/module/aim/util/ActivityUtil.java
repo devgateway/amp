@@ -3146,8 +3146,10 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 
   public static class ActivityAmounts {
     private Double proposedAmout;
+    @Deprecated
     private Double plannedAmount;
     private Double actualAmount;
+    private Double actualDisbAmount;
 
     public void AddPalenned(double amount) {
       if (plannedAmount != null) {
@@ -3155,6 +3157,15 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       }
       else {
         plannedAmount = new Double(amount);
+      }
+    }
+
+     public void AddActualDisb(double amount) {
+      if (actualDisbAmount != null) {
+        actualDisbAmount = new Double(actualDisbAmount + amount);
+      }
+      else {
+        actualDisbAmount = amount;
       }
     }
 
@@ -3174,6 +3185,13 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       return FormatHelper.formatNumber(actualAmount);
     }
 
+    public String actualDisbAmount() {
+      if (actualDisbAmount == null || actualDisbAmount == 0) {
+        return "N/A";
+      }
+      return FormatHelper.formatNumber(actualDisbAmount);
+    }
+
     public String plannedAmount() {
       if (plannedAmount == null|| plannedAmount == 0) {
         return "N/A";
@@ -3191,6 +3209,18 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     public void setProposedAmout(double proposedAmout) {
       this.proposedAmout = new Double(proposedAmout);
     }
+
+
+      public double getActualDisbAmoount() {
+          if (actualDisbAmount == null) {
+              return 0;
+          }
+          return actualDisbAmount;
+      }
+
+     public void setActualDisbAmount(Double actualDisbAmount) {
+          this.actualDisbAmount = actualDisbAmount;
+      }
 
     public double getActualAmount() {
       if (actualAmount == null) {
@@ -3251,6 +3281,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
                   //apply program percent
                   result.AddActual(calculations.getTotActualComm().doubleValue()*percent/100);
                   result.AddPalenned(calculations.getTotPlannedComm().doubleValue()*percent/100);
+                  result.AddActualDisb(calculations.getTotActualDisb().doubleValue()*percent/100);
               }
           }
         }

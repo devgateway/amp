@@ -147,6 +147,7 @@ function showFilter(){
 </gs:test>
 	var strPlanned="<digi:trn key='aim:NPD:sumplanedCommitments'>Planned Commitments</digi:trn>";
 	var strActual="<digi:trn key='aim:NPD:sumactualCommitments'>Actual Commitments</digi:trn>";
+    var strActualDisb="<digi:trn>Actual Disbursements</digi:trn>";
 	var strProposed="<digi:trn key='aim:NPD:sumproposedPrjCost'>Proposed Project Cost</digi:trn>";
 	var actCurrPage=1;
 	var actMaxPages=0;
@@ -811,22 +812,18 @@ function showFilter(){
 		strDateLabelTD.innerHTML='<b>'+strDate+' </b>';
 		labelsTR1.appendChild(strDateLabelTD);
 
-
-		
-                
-               
-
 		var labelTD1 = document.createElement('TD');
-		labelTD1.innerHTML='<b>'+strProposed+' </b>';
+		labelTD1.innerHTML='<feature:display name="Proposed Project Cost" module="Funding"><b>'+strProposed+' </b></feature:display> ';
 		labelsTR1.appendChild(labelTD1);
 
-		var labelTD2 = document.createElement('TD');
-		labelTD2.innerHTML='<b>'+strPlanned+' </b>';
-		labelsTR1.appendChild(labelTD2);
-
+		
 		var labelTD3 = document.createElement('TD');
 		labelTD3.innerHTML='<b>'+strActual+' </b>';
 		labelsTR1.appendChild(labelTD3);
+
+        var labelTD2 = document.createElement('TD');
+		labelTD2.innerHTML='<b>'+strActualDisb+' </b>';
+		labelsTR1.appendChild(labelTD2);
 
         labelsTR1.bgColor='Silver';
 		tbl.appendChild(labelsTR1);
@@ -867,18 +864,13 @@ function showFilter(){
                             
 				//amount
 				var actTDproposedAmount = document.createElement('TD');
-				actTDproposedAmount.innerHTML = actList[i].getAttribute('proposedAmount');
+				actTDproposedAmount.innerHTML = '<feature:display name="Proposed Project Cost" module="Funding">'+actList[i].getAttribute('proposedAmount')+'</feature:display>';
 				if(actTDproposedAmount.innerHTML == "N/A"){
 				   actTDproposedAmount.innerHTML = "--"
 				}
 				actTR.appendChild(actTDproposedAmount);
 
-				var actTDplannedAmount = document.createElement('TD');
-				actTDplannedAmount.innerHTML = actList[i].getAttribute('plannedAmount');
-				if(actTDplannedAmount.innerHTML == "N/A"){
-				   actTDplannedAmount.innerHTML = "--"
-				}
-				actTR.appendChild(actTDplannedAmount);
+				
 
 				var actTDActualAmount = document.createElement('TD');
 				actTDActualAmount.innerHTML = actList[i].getAttribute('actualAmount');
@@ -887,6 +879,12 @@ function showFilter(){
 				}
 				actTR.appendChild(actTDActualAmount);
 
+                var actualDisbAmountTD = document.createElement('TD');
+				actualDisbAmountTD.innerHTML = actList[i].getAttribute('actualDisbAmount');
+				if(actualDisbAmountTD.innerHTML == "N/A"){
+				   actualDisbAmountTD.innerHTML = "--"
+				}
+				actTR.appendChild(actualDisbAmountTD);
 
 				//row to table
 				tbl.appendChild(actTR);
@@ -910,16 +908,18 @@ function showFilter(){
 		lastTR.appendChild(lastTD);
 
 		var propSumTD = document.createElement('TD');
-		propSumTD.innerHTML= root.getAttribute('proposedSum');
+		propSumTD.innerHTML= '<feature:display name="Proposed Project Cost" module="Funding">'+root.getAttribute('proposedSum')+'</feature:display>';
 		lastTR.appendChild(propSumTD);
 
-		var planSumtTD = document.createElement('TD');
-		planSumtTD.innerHTML=root.getAttribute('plannedSum');
-		lastTR.appendChild(planSumtTD);
+		
 
 		var actSumTD = document.createElement('TD');
 		actSumTD.innerHTML=root.getAttribute('actualSum');
 		lastTR.appendChild(actSumTD);
+
+        var actDisbSumtTD = document.createElement('TD');
+		actDisbSumtTD.innerHTML=root.getAttribute('actualDisbSum');
+		lastTR.appendChild(actDisbSumtTD);
 
 		tbl.appendChild(lastTR);
 

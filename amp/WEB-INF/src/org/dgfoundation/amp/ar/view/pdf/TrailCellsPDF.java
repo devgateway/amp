@@ -13,12 +13,8 @@ import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.Cell;
-import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.util.RequestUtils;
 
 import com.lowagie.text.Font;
 import com.lowagie.text.Paragraph;
@@ -77,9 +73,10 @@ public class TrailCellsPDF extends PDFExporter {
 			String totalsFor="TOTALS for";
 			String translatedName=grd.getName();
 			try{
-				totalsFor=TranslatorWorker.translate("rep:pop:totalsFor",locale,siteId);
-				String namePrefix="rep:pop:";
-				translatedName=TranslatorWorker.translate(namePrefix+grd.getName(),locale,siteId );
+				//TODO TRN: no record for this key. its all right to have key here but it is better to replace with default text
+				totalsFor=TranslatorWorker.translateText("rep:pop:totalsFor",locale,siteId);
+				//String namePrefix="rep:pop:";
+				translatedName=TranslatorWorker.translateText(grd.getName(),locale,siteId );
 			}
 			catch (WorkerException e){;}
 			String result;

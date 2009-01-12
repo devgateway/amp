@@ -9,11 +9,7 @@ package org.dgfoundation.amp.ar.view.xls;
 import java.io.IOException;
 import java.io.StringReader;
 
-import javax.swing.text.html.HTMLEditorKit.ParserCallback;
-import javax.swing.text.html.parser.ParserDelegator;
-
 import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -25,10 +21,6 @@ import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.Html2TextCallback;
-
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.pdf.PdfPCell;
-import com.sun.org.apache.xalan.internal.xsltc.DOM;
 
 /**
  * 
@@ -101,9 +93,9 @@ public class TextCellXLS extends XLSExporter {
 			String finalStatus=new String();//the actual text to be added to the column
 			
 			String translatedStatus=null;
-			String prefix="aim:";
+			//String prefix="aim:";
 			try{
-				translatedStatus=TranslatorWorker.translate(prefix+actualStatus,locale,siteId);
+				translatedStatus=TranslatorWorker.translateText(actualStatus,locale,siteId);
 			}catch (WorkerException e)
 				{
 				e.printStackTrace();

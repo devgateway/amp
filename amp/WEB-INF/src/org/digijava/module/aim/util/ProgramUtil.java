@@ -1798,7 +1798,7 @@ public class ProgramUtil {
     
 	 public static String renderLevel(Collection themes,int level,HttpServletRequest request) {
 		 //CategoryManagerUtil cat = new CategoryManagerUtil();
-		 String noProgPresent = "aim:noProgramsPresent";
+		 //String noProgPresent = "aim:noProgramsPresent"; not used any more cos hash key translation
 		 Site site = RequestUtils.getSite(request);
 		 //
 		 //requirements for translation purposes
@@ -1809,7 +1809,7 @@ public class ProgramUtil {
 		 try {
 			logger.info("siteID : "+siteId);
 			logger.info("locale : "+locale);
-			translatedText = TranslatorWorker.translate(noProgPresent, locale, siteId);
+			translatedText = TranslatorWorker.translateText("No Programs present", locale, siteId);
 		 } catch (WorkerException e) {
 			e.printStackTrace();
 		 }

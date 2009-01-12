@@ -15,10 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ReportData;
@@ -27,6 +23,9 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpColumns;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
 public abstract class ARDimension {
 
@@ -78,10 +77,9 @@ public abstract class ARDimension {
 	String locale = parent.getReportMetadata().getLocale();
 	String text = ArConstants.UNALLOCATED;
 	String translatedTextUnallocated = null;
-	String prefix = "aim:reportGenerator:";
+	//String prefix = "aim:reportGenerator:"; not used, trn hash keys used.
 	try {
-		translatedTextUnallocated = TranslatorWorker.translate(prefix
-				+ text.toLowerCase(), locale, siteId);
+		translatedTextUnallocated = TranslatorWorker.translateText(text, locale, siteId);
 	} catch (WorkerException e) {
 		e.printStackTrace();
 	}

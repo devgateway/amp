@@ -1,8 +1,4 @@
-<div style="margin-top: 20px; height: 40px; vertical-align: top">
-	<span style="float: left; font-size: 1.2em; font-weight: bold"><%= lc(@type) %></span>
-</div>
-
-<div style="position: absolute; top: 13px; left: 200px;">
+<div>
 	<% query_options = params.dup %>
 	<% query_options.delete("action") %>
 	<% query_options.delete("controller") %>
@@ -18,13 +14,16 @@
 				<%= hidden_field_tag option[0], option[1] %>
 			<% end %>
 		<% end %>
+        <%= lc(:commitments_payments_selection) %>:
 		<select name="type" onchange="$(this).parent().submit()">
-			<option selected="selected"><%= lc(:commitments_payments_selection) %>:</option>
 			<% %w(commitments payments).each do |cp| %>
-				<option value="<%= cp -%>"><%= cp.titleize -%></option>
+				<option value="<%= cp -%>" <%= "selected='selected'" if  cp == @type%> ><%= cp.titleize -%></option>
 			<% end %>
 		</select>
 	<% end -%>
+</div>
+<div style="margin-top: 20px; height: 40px; vertical-align: top">
+	<span style="float: left; font-size: 1.2em; font-weight: bold"><%= lc(@type) %></span>
 </div>
 
 

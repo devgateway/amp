@@ -7,6 +7,7 @@ class CountryStrategy < ActiveRecord::Base
   has_many    :sector_details, :dependent => :delete_all
   has_many    :total_odas, :attributes => true
   
+  validate    :dates_consistency
   
   RESPONSIBILITY_OPTIONS = [["Not Available", 0], ["Field Office", 1], ["Head Quarters", 2], 
     ["Field Office / Head Quarters", 3], ["Head Quarters / Field Office", 4]]
@@ -52,6 +53,10 @@ class CountryStrategy < ActiveRecord::Base
         sector_detail.focal_sector = DacSector.find(attribute[:dac_sector_id])
       end
     end
+  end
+
+  def dates_consistency
+    errors.add('start', 'End date is previous to Start Date') unless self.start <= self.end if self.start && self.end
   end
   
   currency_columns :total_amount_foreseen, :currency => lambda { |cs| cs.donor.currency }

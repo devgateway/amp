@@ -585,7 +585,7 @@ public class ChartWidgetUtil {
         JFreeChart chart = null;
         Font font8 = new Font(null, 0, 12);
         DefaultPieDataset dataset = getDonorSectorDataSet(filter);
-        chart = ChartFactory.createPieChart("Sector Breakdown ("+(filter.getYear()-1)+")", dataset, true, true, false);
+        chart = ChartFactory.createPieChart("Primary Sector(s) Breakdown ("+(filter.getYear()-1)+")", dataset, true, true, false);
         chart.getTitle().setFont(font8);
         if (opt.isShowLegend()) {
             chart.getLegend().setItemFont(font8);

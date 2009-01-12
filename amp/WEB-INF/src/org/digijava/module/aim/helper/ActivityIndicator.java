@@ -7,8 +7,8 @@ package org.digijava.module.aim.helper;
 import java.util.Collection;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
 
-public class ActivityIndicator {
 
+public class ActivityIndicator {
 	private Long connectionId;
 	private Long indicatorId;
 	private Long indicatorValId;

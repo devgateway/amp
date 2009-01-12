@@ -778,6 +778,11 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         	  risk=(AmpIndicatorRiskRatings)session.load(AmpIndicatorRiskRatings.class, actInd.getRisk());  
           }          
 
+          AmpCategoryValue category =null;
+          if(actInd.getIndicatorsCategory()!=null){
+        	  category = actInd.getIndicatorsCategory();  
+          }          
+
           //try to find connection of current activity with current indicator
           IndicatorActivity indConn=IndicatorUtil.findActivityIndicatorConnection(activity, ind);
           //if no connection found then create new one. Else clear old values for the connection.
@@ -805,6 +810,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         	  indValActual.setComment(actInd.getCurrentValComments());
         	  indValActual.setValueDate(DateConversion.getDate(actInd.getCurrentValDate()));
         	  indValActual.setRisk(risk);
+        	  indValActual.setLogFrame(category);
         	  indValActual.setIndicatorConnection(indConn);
         	  indConn.getValues().add(indValActual);
           }
@@ -814,6 +820,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         	  indValTarget.setValue(new Double(actInd.getTargetVal()));
         	  indValTarget.setComment(actInd.getTargetValComments());
         	  indValTarget.setValueDate(DateConversion.getDate(actInd.getTargetValDate()));
+        	  indValTarget.setLogFrame(category);
         	  indValTarget.setRisk(risk);
         	  indValTarget.setIndicatorConnection(indConn);
         	  indConn.getValues().add(indValTarget);
@@ -825,6 +832,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         	  indValBase.setValue(new Double(actInd.getBaseVal()));
         	  indValBase.setComment(actInd.getBaseValComments());
         	  indValBase.setValueDate(DateConversion.getDate(actInd.getBaseValDate()));
+        	  indValBase.setLogFrame(category);
         	  indValBase.setRisk(risk);
         	  indValBase.setIndicatorConnection(indConn);
         	  indConn.getValues().add(indValBase);
@@ -835,6 +843,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         	  indValRevised.setValue(new Double(actInd.getRevisedTargetVal()));
         	  indValRevised.setComment(actInd.getRevisedTargetValComments());
         	  indValRevised.setValueDate(DateConversion.getDate(actInd.getRevisedTargetValDate()));
+        	  indValRevised.setLogFrame(category);
         	  indValRevised.setRisk(risk);
         	  indValRevised.setIndicatorConnection(indConn);
         	  indConn.getValues().add(indValRevised);

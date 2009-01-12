@@ -871,21 +871,25 @@ public class IndicatorUtil {
 					bean.setActualVal(new Float(value.getValue()));
 					bean.setActualValComments(value.getComment());
 					bean.setActualValDate(DateConversion.ConvertDateToString(value.getValueDate()));
+					bean.setIndicatorsCategory(value.getLogFrame());
 				}
 				if (value.getValueType()==AmpIndicatorValue.BASE){
 					bean.setBaseVal(new Float(value.getValue()));
 					bean.setBaseValComments(value.getComment());
 					bean.setBaseValDate(DateConversion.ConvertDateToString(value.getValueDate()));
+					bean.setIndicatorsCategory(value.getLogFrame());
 				}
 				if (value.getValueType()==AmpIndicatorValue.TARGET){
 					bean.setTargetVal(new Float(value.getValue()));
 					bean.setTargetValComments(value.getComment());
 					bean.setTargetValDate(DateConversion.ConvertDateToString(value.getValueDate()));
+					bean.setIndicatorsCategory(value.getLogFrame());
 				}
 				if (value.getValueType()==AmpIndicatorValue.REVISED){
 					bean.setRevisedTargetVal(new Float(value.getValue()));
 					bean.setRevisedTargetValComments(value.getComment());
 					bean.setRevisedTargetValDate(DateConversion.ConvertDateToString(value.getValueDate()));
+					bean.setIndicatorsCategory(value.getLogFrame());
 				}
 			}
 		}

@@ -389,7 +389,7 @@ public class CategoryManager extends Action {
 				}
 			}
 			/**
-			 * Save modifications to existing values only if we are in advvanced mode
+			 * Save modifications to existing values only if we are in advanced mode
 			 */
 			if ( myForm.isAdvancedMode() )
 				for ( int i=0; i<possibleVals.size(); i++ ) {
@@ -431,7 +431,7 @@ public class CategoryManager extends Action {
 			
 			CategoryLabelsUtil.populateCategoryWithLabels(myForm, dbCategory);
 			
-			String dupValue		= this.checkDuplicateValues(dbCategory.getPossibleValues()); 
+			String dupValue		= CategoryManager.checkDuplicateValues(dbCategory.getPossibleValues()); 
 			
 			if ( dupValue != null ) {
 				if (tx != null)
@@ -484,7 +484,7 @@ public class CategoryManager extends Action {
 			values.get(i).setIndex(i);
 	}
 	
-	private String checkDuplicateValues( List<AmpCategoryValue>  values) {
+	public static String checkDuplicateValues( List<AmpCategoryValue>  values) {
 		HashSet<String> set					= new HashSet<String>( values.size() );
 		Iterator<AmpCategoryValue> iter		= values.iterator();
 		

@@ -1,7 +1,7 @@
-<div class="project_factsheet">
+<div class="country_strategy">
     <h3> <%=ll(:country_strategy, :details) %></h3>
 
-    <dl class="main_details">
+    <dl>
         <dt class="first"><%= @country_strategy.class.human_attribute_name('name') %></dt>
         <dd class="first"><%= @country_strategy.donor.name%></dd>
 
@@ -34,7 +34,7 @@
     </dl>
 
    <h3> <%=ll(:country_strategy, :general) %></h3>
-   <dl class="main_details">
+   <dl>
         <% Project::FIRST_YEAR_OF_RELEVANCE.upto(Time.now.year-1) do |year| %>
             <dt class="first"><%=[ll(:country_strategy, :total_oda_commitments), year].join(" ")%></dt>
             <dd class="first"><%=null_to_na(@country_strategy.total_odas.find_or_initialize_by_year(year).commitments)%></dd>

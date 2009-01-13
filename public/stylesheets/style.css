@@ -839,6 +839,7 @@ form fieldset h3 {
 	width:200px;
 }
 
+
 .project_factsheet DL {
 	width:840px;
 	margin:0;
@@ -888,6 +889,111 @@ form fieldset h3 {
 }
 
 .project_factsheet .prt {
+	float:right;
+}
+
+.project_factsheet .map_image {
+	float:left;
+	height:220px;
+	width:220px;
+	border:1px solid black;
+	margin:0px 6px 0px 6px;
+}
+
+/* These are indented subsections */
+.project_factsheet dl dl {
+	width: 640px;
+}
+.project_factsheet dl dl dd {
+	width: 438px;
+}
+
+.project_factsheet dl dl .first {
+	border-top: none;
+}
+
+/* List styles */
+.project_factsheet dl ul {
+	padding-left: 0;
+	list-style-type: none;
+}
+
+/* This will currently work with Mozilla browsers only but looks quite nice */
+.project_factsheet dl ul li:before {
+	content: "\00BB \0020";
+}
+
+
+/* Start Project Factsheet Styles */
+.country_strategy {
+	margin: 0px 20px 30px 20px;
+	float:left;
+}
+
+.country_strategy .main_details {
+	width:610px;
+	float:left;
+}
+
+.country_strategy .main_details DD
+{
+	width:400px;
+}
+
+.country_strategy .main_details DT {
+	width:200px;
+}
+
+
+.country_strategy DL {
+	width:840px;
+	margin:0;
+	clear:left;
+	float:left;
+}
+
+.country_strategy DT {
+    font-weight: bold;
+	float:left;
+    clear:left;
+    width:200px;
+    margin:0;
+    padding:4px 0 4px 0;
+    border-top:1px solid #999;
+}
+
+.country_strategy DT.first {
+	border-top: none;
+}
+
+.country_strategy DD.first {
+	border-top: none;
+}
+
+.country_strategy DD {
+    border-top:1px solid #999;
+	float:left;
+    width:638px;
+    margin:0;
+    padding:4px 0 4px 0;
+}
+
+.country_strategy H3 {
+	color:#003366;
+	font-family:Arial,Helvetica,sans-serif;
+	font-style:normal;
+	font-weight:bold;
+	font-size:18px;
+  clear:left;
+	padding-top:20px;
+  border-bottom:1px solid #333;
+	margin-bottom:5px;
+	margin-top:0px;
+	line-height:normal;
+	width:	838px;
+}
+
+.country_strategy .prt {
 	float:right;
 }
 

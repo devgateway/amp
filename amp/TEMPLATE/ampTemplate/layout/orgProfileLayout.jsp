@@ -61,7 +61,7 @@
                                         <TD>
                                             <TABLE cellpadding="5" border="0" width="80%">
                                                 <TR>
-                                                    <TD WIDTH="50%">
+                                                    <TD WIDTH="50%" VALIGN="TOP">
                                                         <feature:display name="orgprof_chart_place1" module="Org Profile">
                                                             <div id="content" class="yui-skin-sam" style="width:100%;">
                                                                 <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
@@ -79,7 +79,7 @@
                                                             </div>
                                                         </feature:display>
                                                     </TD>
-                                                    <TD WIDTH="50%">
+                                                    <TD WIDTH="50%"  VALIGN="TOP">
                                                         <feature:display name="orgprof_chart_place2" module="Org Profile">
                                                             <div id="content" class="yui-skin-sam" style="width:100%;">
                                                                 <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
@@ -100,7 +100,7 @@
                                                     </TD>
                                                 </TR>
                                                 <TR>
-                                                    <TD WIDTH="50%">
+                                                    <TD WIDTH="50%"  VALIGN="TOP">
                                                         <feature:display name="orgprof_chart_place3" module="Org Profile">
                                                             <div id="content" class="yui-skin-sam" style="width:100%;">
                                                                 <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
@@ -121,7 +121,7 @@
                                                         </feature:display>
                                                     </TD>
 
-                                                    <TD WIDTH="50%">
+                                                    <TD WIDTH="50%"  VALIGN="TOP">
                                                         <feature:display name="orgprof_chart_place4" module="Org Profile">
                                                             <div id="content" class="yui-skin-sam" style="width:100%;">
                                                                 <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
@@ -145,7 +145,7 @@
 
                                                 </TR>
                                                 <TR>
-                                                    <TD WIDTH="50%">
+                                                    <TD WIDTH="50%"  VALIGN="TOP">
                                                         <feature:display name="orgprof_chart_place5" module="Org Profile">
                                                             <div id="content" class="yui-skin-sam" style="width:100%;">
                                                                 <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
@@ -165,7 +165,7 @@
                                                             </div>
                                                         </feature:display>
                                                     </TD>
-                                                    <TD WIDTH="50%">
+                                                    <TD WIDTH="50%"  VALIGN="TOP">
                                                         <feature:display name="orgprof_chart_place6" module="Org Profile">
                                                             <div id="content" class="yui-skin-sam" style="width:100%;">
                                                                 <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
@@ -185,7 +185,7 @@
                                                     </TD>
                                                 </TR>
                                                 <TR>
-                                                    <TD WIDTH="50%">
+                                                    <TD WIDTH="50%"  VALIGN="TOP">
                                                         <feature:display name="orgprof_chart_place7" module="Org Profile">
                                                         <div id="content" class="yui-skin-sam" style="width:100%;">
                                                             <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
@@ -204,7 +204,7 @@
                                                             </div>
                                                         </feature:display>
                                                     </TD>
-                                                    <TD WIDTH="50%">
+                                                    <TD WIDTH="50%"  VALIGN="TOP">
                                                         <feature:display name="orgprof_chart_place8" module="Org Profile">
                                                             <div id="content" class="yui-skin-sam" style="width:100%;">
                                                                 <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">

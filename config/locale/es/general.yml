@@ -65,9 +65,9 @@ es:
       amount: Cantidad
       payments: Desembolsos
       donor: Donante
-      sector: Sector
-      dac_sector: Sector CAD
-      dac_crs_sector: Sector CAD CRS
+      sector: Sectores
+      dac_sector: Sectores CAD
+      dac_crs_sector: Sectores CAD CRS
       location: Localidade
       mdgs: ODM
       mdg: ODM
@@ -125,15 +125,15 @@ es:
       
   admin:
       title: '¡El ingreso de los datos ya está cerrado!'
-      please_wait: '¡Por favor, espere hasta el próximo ciclo de actualización ó contacte al Punto Focal Maestro!'
+      please_wait: '¡Por favor, espere hasta el próximo ciclo de actualización o contacte al Punto Focal Maestro!'
       redirect: Usted será redireccionado en unos pocos segundos.
   
   
   
   odamap:
       next_step: Próximo Paso
-      add_remove: De Click en el mapa para agregar una o más localizaciones. Para eliminarlo de click otra vez.
-      locations: Luga
+      add_remove: De click en el mapa para agregar una o más localizaciones. Para eliminarlo de click otra vez.
+      locations: Lugar
           
   
       

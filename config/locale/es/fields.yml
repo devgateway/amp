@@ -7,7 +7,7 @@ es:
         donor_project_number: Número Donante de Proyecto
         oecd_number: Número OCDE
         recipient_country_budget_nr: Número Presupuestario del País Destinatario
-        title: Títuo
+        title: Título
         description: Descripción
         country_strategy: Estrategia Relacionada del País 
         prj_status: Estado del Proyecto
@@ -31,13 +31,13 @@ es:
         gender_policy_marker: Política de Género
         environment_policy_marker: Política del Medio Ambiente	
         # TODO!
-        sector_relevances: Project's Focal Sectors
+        sector_relevances: Sectores Focales del Proyecto
         
       sector_relevance:
-        dac_sector: Sector CAD/CRS
-        crs_sector: Sector CRS
+        dac_sector: Sectores CAD/CRS
+        crs_sector: Sectores CRS
         # TODO!
-        amount: Amount in %
+        amount: Cantidad en %
         
       geo_relevance:
         province: Región
@@ -51,8 +51,8 @@ es:
         
       donor:
         # TODO:
-        name: English Name
-        name_es: Spanish Name
+        name: Nombre en Inglés
+        name_es: Nombre en Español
         cofunding_only: Sólo donante de co-financiamiento
         code: Código donante
         currency: Moneda
@@ -164,6 +164,6 @@ es:
       
       # TODO:
       prefs:
-        scroll_bar_public: Public Ticker (Reports & Bluebook, no login required)
-        scroll_bar_admin: Data Input Ticker (visible for logged-in donors only)
-        scroll_bar_mfp: Master Focal Point Ticker (shown here, in the admin area)
+        scroll_bar_public: Señal de Pantalla Público (Reportes & Bluebook, no se requiere inscripción)
+        scroll_bar_admin: Señal de Pantalla - Entrada de Datos (sólo donantes inscribidos)
+        scroll_bar_mfp: Señal de Pantalla Master Focal Point Ticker (en la area de admin)

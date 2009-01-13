@@ -49,8 +49,8 @@ es:
       currency_selection: Seleccione la moneda
       cod: Canal de Distribución
       # TODO:
-      payments_forecast: Disbursements Forecast {{year}}
-      commitments_forecast: Commitments Forecast {{year}}
+      payments_forecast: Proyección de Desembolsos {{year}}
+      commitments_forecast: Proyección de Compromisos {{year}}
       
       donors:
           title: Proyectos por Donantes
@@ -79,8 +79,8 @@ es:
           totals: Total Anual
           output_in: Salida en 
           # TODO:
-          select_all: Select All
-          deselect_all: Deselect All
+          select_all: Seleccionar Todos
+          deselect_all: Deseleccionar Todos
       totals:
           payments: Desembolsos totales por Donantes
           commitments: Compromisos totales por Donantes

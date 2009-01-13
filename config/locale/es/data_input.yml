@@ -30,9 +30,9 @@ es:
       do_open: Abrir el ingreso de datos
     # TODO:
     scrollbars:
-      title: Update Newstickers
-      submit: Save tickers
-      successful: Successfully updated news tickers!
+      title: Actualizar Señales de Pantalla
+      submit: Guardar Señales de Pantalla
+      successful: Se ha actualizado los señales de pantalla
       
   donors:
     index:
@@ -115,11 +115,11 @@ es:
       
   projects:
     # TODO:
-    previous_step: Previous
-    next_step: Next
+    previous_step: Anterior
+    next_step: Próxima
     
     # TODO:
-    delete_associated: Delete
+    delete_associated: Borrar
     add_implementing_agency: Añadir otra agencia implementadora
     add_contracted_agency: Añadir otra agencia contratada
     add_province: Añadir otra provincia
@@ -139,7 +139,7 @@ es:
       
     stages:
       profile_information: Información de Perfil
-      sector_agencies: Sector / Agencias
+      sector_agencies: Sectores / Agencias
       goals: ODM
       location_funding: Ubicación / Financiamiento
       funding_forecast: Proyección de Financiamiento

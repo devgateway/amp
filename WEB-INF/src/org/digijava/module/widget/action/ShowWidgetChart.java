@@ -85,7 +85,7 @@ public class ShowWidgetChart extends Action {
                         break;
                 }
                     Plot plot = chart.getPlot();
-                    plot.setNoDataMessage("No data available");
+                    plot.setNoDataMessage("No Data Available");
                     Font font= new Font(null,0,24);
                     plot.setNoDataMessageFont(font);
 

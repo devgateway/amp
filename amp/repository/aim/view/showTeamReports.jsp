@@ -431,7 +431,11 @@ function confirmFunc() {
                                 <logic:iterate name="report" property="hierarchies" id="hierarchy" >
                                   <%-- <bean:write name="hierarchy" property="column.columnName"/> --%>
                                   <li>
-                                  ${hierarchy.column.columnName}
+                                  
+	                                      	<digi:trn key="aim:report:${hierarchy.column.columnName}">
+	                                        	<bean:write name="hierarchy" property="column.columnName" />
+	                                      	</digi:trn>
+                                  
                                   </li>
                                 </logic:iterate>
                               </td>

@@ -1,16 +1,16 @@
 --- 
 settings_001: 
-  key: scroll_bar_public
-  value: "Welcome to this new ODAdata System!"
-settings_002: 
   key: data_input_open
   value: t
-settings_003: 
+settings_002: 
   key: scroll_bar_mfp
   value: "Have a cool day!"
-settings_004: 
+settings_003: 
   key: scroll_bar_admin
   value: "Welcome Focal Point!"
-settings_005: 
+settings_004: 
   key: default_currency
   value: EUR
+settings_005: 
+  key: scroll_bar_public
+  value: "Welcome to this new ODAdata System!"

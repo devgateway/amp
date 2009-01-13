@@ -1,69 +1,69 @@
 --- 
 provinces_001: 
-  code: "11"
-  id: "62"
-  name: Masaya
-provinces_002: 
-  code: "6"
-  id: "57"
-  name: Granada
-provinces_003: 
-  code: "12"
-  id: "63"
-  name: Matagalpa
-provinces_004: 
-  code: "7"
-  id: "58"
-  name: Jinotega
-provinces_005: 
-  code: "3"
-  id: "54"
-  name: Chinandega
-provinces_006: 
-  code: "1"
-  id: "52"
-  name: Boaco
-provinces_007: 
-  code: "15"
-  id: "66"
-  name: "Río San Juan"
-provinces_008: 
-  code: "8"
-  id: "59"
-  name: León
-provinces_009: 
   code: "4"
   id: "55"
   name: Chontales
-provinces_010: 
+provinces_002: 
   code: "13"
   id: "64"
   name: "Nueva Segovia"
-provinces_011: 
+provinces_003: 
   code: "16"
   id: "67"
   name: "Región Autónoma del Atlántico Norte"
-provinces_012: 
+provinces_004: 
   code: "2"
   id: "53"
   name: Carazo
-provinces_013: 
+provinces_005: 
+  code: "11"
+  id: "62"
+  name: Masaya
+provinces_006: 
   code: "9"
   id: "60"
   name: Madriz
-provinces_014: 
+provinces_007: 
+  code: "6"
+  id: "57"
+  name: Granada
+provinces_008: 
   code: "14"
   id: "65"
   name: Rivas
-provinces_015: 
+provinces_009: 
+  code: "12"
+  id: "63"
+  name: Matagalpa
+provinces_010: 
   code: "5"
   id: "56"
   name: Estelí
-provinces_016: 
+provinces_011: 
+  code: "7"
+  id: "58"
+  name: Jinotega
+provinces_012: 
   code: "10"
   id: "61"
   name: Managua
-provinces_017: 
+provinces_013: 
+  code: "3"
+  id: "54"
+  name: Chinandega
+provinces_014: 
   code: "17"
   id: "68"
   name: "Región Autónoma del Atlántico Sur"
+provinces_015: 
+  code: "1"
+  id: "52"
+  name: Boaco
+provinces_016: 
+  code: "15"
+  id: "66"
+  name: "Río San Juan"
+provinces_017: 
+  code: "8"
+  id: "59"
+  name: León

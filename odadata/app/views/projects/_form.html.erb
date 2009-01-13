@@ -81,7 +81,8 @@ $("#previous_button").click(function () {
     var selected = $tabs.data('selected.tabs');
     previousTab = selected-1;
     if(previousTab < 0) previousTab = 4;
-	$tabs.tabs('select', previousTab); 
+	$tabs.tabs('select', previousTab);
+    window.scrollTo(0,0);
     return false;
     });
 
@@ -91,6 +92,7 @@ $("#next_button").click(function () {
     nextTab = selected+1;
     if(nextTab > 4) nextTab = 0;
 	$tabs.tabs('select', nextTab); 
+    window.scrollTo(0,0);
     return false;
     });
 

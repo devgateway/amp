@@ -40,10 +40,6 @@ import org.digijava.module.help.jaxb.ObjectFactory;
 import org.digijava.module.help.util.HelpUtil;
 
 
-
-
-
-
 public class HelpActions extends DispatchAction {
     private static Logger logger = Logger.getLogger("HelpActions");
 	
@@ -65,54 +61,50 @@ public class HelpActions extends DispatchAction {
 	}
 
 
-     public ActionForward getbody(ActionMapping mapping,
-		ActionForm form, HttpServletRequest request,
-		HttpServletResponse response)throws Exception{
-	String	lang	= RequestUtils.getNavigationLanguage(request).getCode();
-	HelpForm helpForm = (HelpForm) form;
-	OutputStreamWriter os = null;
-    PrintWriter out = null;
-    String loadStatus = request.getParameter("body");
-
-    try {
-		if(loadStatus != null){
-			os = new OutputStreamWriter(response.getOutputStream());
-            out = new PrintWriter(os, true);
-			String id = loadStatus.toLowerCase();
-			HelpTopic key = HelpUtil.getHelpTopic(new Long(id));
-            String bodyKey =  key.getBodyEditKey();
-            String article = HelpUtil.getTrn(key.getBodyEditKey(),key.getTopicKey(), request);
-            out.println("<b>"+article+"</b>");
-            List editor = HelpUtil.getEditor(bodyKey, lang);
-            helpForm.setTopicKey(bodyKey);
-
-
-            if(!editor.isEmpty()){
-               Iterator iter = editor.iterator();
-				while (iter.hasNext()) {
-					Editor help = (Editor) iter.next();
-                    out.println(help.getBody());
-                    out.println(help.getEditorKey());
-                    helpForm.setTopicKey(help.getEditorKey());
-                    System.out.println("TopicKey:"+helpForm.getTopicKey());
-                }
-			}else{
-               out.println(helpForm.getTopicKey()); 
-            }
-		}
-		out.flush();
-		out.close();
-
-	} catch (Exception e) {
-		 e.printStackTrace();
-   }
-	return null;
-}
+     public ActionForward getbody(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response)throws Exception{
+		String	lang	= RequestUtils.getNavigationLanguage(request).getCode();
+		HelpForm helpForm = (HelpForm) form;
+		OutputStreamWriter os = null;
+	    PrintWriter out = null;
+	    String loadStatus = request.getParameter("body");
+	
+	    try {
+			if(loadStatus != null){
+				os = new OutputStreamWriter(response.getOutputStream());
+	            out = new PrintWriter(os, true);
+				String id = loadStatus.toLowerCase();
+				HelpTopic key = HelpUtil.getHelpTopic(new Long(id));
+	            String bodyKey =  key.getBodyEditKey();
+	            String article = HelpUtil.getTrn(key.getBodyEditKey(),key.getTopicKey(), request);
+	            out.println("<b>"+article+"</b>");
+	            List editor = HelpUtil.getEditor(bodyKey, lang);
+	            helpForm.setTopicKey(bodyKey);
+	
+	
+	            if(!editor.isEmpty()){
+	               Iterator iter = editor.iterator();
+					while (iter.hasNext()) {
+						Editor help = (Editor) iter.next();
+	                    out.println(help.getBody());
+	                    out.println(help.getEditorKey());
+	                    helpForm.setTopicKey(help.getEditorKey());
+	                    System.out.println("TopicKey:"+helpForm.getTopicKey());
+	                }
+				}else{
+	               out.println(helpForm.getTopicKey()); 
+	            }
+			}
+			out.flush();
+			out.close();
+	
+		} catch (Exception e) {
+			 e.printStackTrace();
+	   }
+		return null;
+	}
 
 
-    public ActionForward vewSearchKey(ActionMapping mapping,
-			ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
+    public ActionForward vewSearchKey(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		  	OutputStreamWriter os = null;	
 		    PrintWriter out = null;
 		    String loadStatus =request.getParameter("loadKey");
@@ -155,9 +147,7 @@ public class HelpActions extends DispatchAction {
  }
 	
 	
-	public ActionForward searchHelpTopic(ActionMapping mapping,
-			ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
+	public ActionForward searchHelpTopic(ActionMapping mapping,	ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 			HelpForm helpForm = (HelpForm) form;
 		 String siteId = RequestUtils.getSite(request).getSiteId();
 		 String moduleInstance = RequestUtils.getRealModuleInstance(request)
@@ -172,8 +162,7 @@ public class HelpActions extends DispatchAction {
 		 Hits hits =  LuceneUtil.helpSearch("title", helpForm.getKeywords(), request.getSession().getServletContext());
 		 String artikleTitle;
 		 
-		 HelpForm help = (HelpForm) form;
-		 
+		 HelpForm help = (HelpForm) form;		 
 		  int hitCount = hits.length();   
     	   
     	  if(hitCount == 0){
@@ -224,9 +213,7 @@ public class HelpActions extends DispatchAction {
 
 	
 	
-	public ActionForward viewSelectedHelpTopic(ActionMapping mapping,
-			ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
+	public ActionForward viewSelectedHelpTopic(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		HelpForm helpForm = (HelpForm) form;
 		String siteId = RequestUtils.getSite(request).getSiteId();
 		String moduleInstance = RequestUtils.getRealModuleInstance(request)
@@ -255,33 +242,33 @@ public class HelpActions extends DispatchAction {
 		return mapping.findForward("help");
 	}
 
-	public ActionForward deleteHelpTopic(ActionMapping mapping,
-			ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
+	public ActionForward deleteHelpTopics(ActionMapping mapping,	ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		HelpForm helpForm = (HelpForm) form;
 		String siteId = RequestUtils.getSite(request).getSiteId();
-		String moduleInstance = RequestUtils.getRealModuleInstance(request)
-				.getInstanceName();	
+		String moduleInstance = RequestUtils.getRealModuleInstance(request).getInstanceName();	
 		String page  = request.getParameter("page");
 		helpForm.setHelpErrors(null);
-		if (helpForm.getTopicKey() != null) {
-			HelpTopic helpTopic = HelpUtil.getHelpTopic(helpForm.getTopicKey(),
-					siteId, moduleInstance);
-			if(helpTopic!=null){
-			if(HelpUtil.hasChildren(siteId, moduleInstance, helpTopic.getHelpTopicId())){
-				
-				List<String> helpErrors=new ArrayList<String>();
-				helpErrors.add("errors:help:delete:cannotDeleteTopic");
-				helpForm.setHelpErrors(helpErrors);	
-				helpForm.setBlankPage(false);
-			
-			}else {
-				HelpUtil.deleteHelpTopic(helpTopic);
-				helpForm.setTopicKey("");	
-				helpForm.setBlankPage(false);
+		if(request.getParameter("multi")!=null && request.getParameter("multi").equals("false")){
+			if (helpForm.getTopicKey() != null) {
+				HelpTopic helpTopic = HelpUtil.getHelpTopic(helpForm.getTopicKey(),	siteId, moduleInstance);
+				if(helpTopic!=null){
+					removeLastLevelTopic(helpTopic);
+					helpForm.setTopicKey("");
+					helpForm.setBlankPage(false);
+			  }
 			}
-		  }
+		}else if(request.getParameter("multi").equals("true")){
+			//remove all topics that were selected
+			String tIds=request.getParameter("tIds");
+			List<Long> topicsIds=getTopicsIds(tIds.trim());
+			for (Long id : topicsIds) {
+				HelpTopic ht=HelpUtil.loadhelpTopic(id);
+				if(ht!=null){
+					removeLastLevelTopic(ht);
+				}
+			}			
 		}
+		
         if(page != null){
             if(!page.equals("admin")){
                 return mapping.findForward("helpHome");
@@ -299,12 +286,8 @@ public class HelpActions extends DispatchAction {
     }
 	
 
-	public ActionForward createHelpTopic(ActionMapping mapping,
-			ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
+	public ActionForward createHelpTopic(ActionMapping mapping,	ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		HelpForm helpForm = (HelpForm) form;
-		 
-		
 		  
 		int wizardStep = helpForm.getWizardStep();
 		helpForm.setEdit(false);
@@ -331,9 +314,7 @@ public class HelpActions extends DispatchAction {
 		return mapping.findForward("help");
 	}
 
-	public ActionForward editHelpTopic(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+	public ActionForward editHelpTopic(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)	throws Exception {
 		HelpForm helpForm = (HelpForm) form;
 		String siteId = RequestUtils.getSite(request).getSiteId();
 		String moduleInstance = RequestUtils.getRealModuleInstance(request)
@@ -377,9 +358,7 @@ public class HelpActions extends DispatchAction {
 	 * @param form
 	 * @param topic
 	 */
-	private void editTopicStep0(HelpForm form, HttpServletRequest request,
-			HelpTopic topic) throws Exception {
-
+	private void editTopicStep0(HelpForm form, HttpServletRequest request,HelpTopic topic) throws Exception {
 		setDefaultValues(form);
 		form.setWizardStep(1);
 		form.setEdit(true);
@@ -416,8 +395,7 @@ public class HelpActions extends DispatchAction {
 	 * @param request
 	 * @param topic
 	 */
-	private void editTopicStep1(HelpForm form, HttpServletRequest request,
-			HelpTopic topic) throws AimException {
+	private void editTopicStep1(HelpForm form, HttpServletRequest request,HelpTopic topic) throws AimException {
 		String siteId = RequestUtils.getSite(request).getSiteId();
 		String moduleInstance = RequestUtils.getRealModuleInstance(request)
 				.getInstanceName();
@@ -431,8 +409,7 @@ public class HelpActions extends DispatchAction {
 		form.setEdit(false);
 	}
 
-	public ActionForward cancelHelpTopic(ActionMapping mapping,
-			ActionForm form, HttpServletRequest request,
+	public ActionForward cancelHelpTopic(ActionMapping mapping,ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		HelpForm helpForm = (HelpForm) form;
 		
@@ -452,8 +429,7 @@ public class HelpActions extends DispatchAction {
 	 * @return errors
 	 * @throws Exception
 	 */
-	private List<String> validate(HelpForm form, String siteId,
-			String moduleInstance) throws AimException {
+	private List<String> validate(HelpForm form, String siteId,String moduleInstance) throws AimException {
 		List<String> helpErrors=new ArrayList<String>();
 		if (!HelpUtil.cheackEditKey(form.getTopicKey(), siteId, moduleInstance)) {
 			helpErrors.add("errors.help.createTopic.keyIsUsed");
@@ -466,8 +442,7 @@ public class HelpActions extends DispatchAction {
 	 * 
 	 * @param form
 	 */
-	private void createTopicStep0(HelpForm form, HttpServletRequest request)
-			throws Exception {
+	private void createTopicStep0(HelpForm form, HttpServletRequest request)throws Exception {
 		if (request.getParameter("actionBack") == null) {
 			setDefaultValues(form);
 		}
@@ -478,8 +453,7 @@ public class HelpActions extends DispatchAction {
 		String moduleInstance = RequestUtils.getRealModuleInstance(request)
 				.getInstanceName();
 		String locale=RequestUtils.getNavigationLanguage(request).getCode();
-		List<HelpTopic> parentTopics=(List)HelpUtil.getFirstLevelTopics(siteId,
-				moduleInstance, null);
+		List<HelpTopic> parentTopics=(List)HelpUtil.getFirstLevelTopics(siteId,	moduleInstance, null);
 		form.setFirstLevelTopics(new ArrayList<HelpTopic>());
 		for (HelpTopic topic : parentTopics) {		
 			//topic.setTitleTrnKey(TranslatorWorker.translate(topic.getTitleTrnKey(), locale, siteId)); 
@@ -495,8 +469,7 @@ public class HelpActions extends DispatchAction {
 	 * @param request
 	 * @throws AimException
 	 */
-	private void createTopicStep1(HelpForm form, HttpServletRequest request)
-			throws AimException {
+	private void createTopicStep1(HelpForm form, HttpServletRequest request)throws AimException {
 		String siteId = RequestUtils.getSite(request).getSiteId();
 		String moduleInstance = RequestUtils.getRealModuleInstance(request)
 				.getInstanceName();
@@ -519,8 +492,7 @@ public class HelpActions extends DispatchAction {
 	 * @param request
 	 * @throws AimException
 	 */
-	private void createTopicStep3(HelpForm form, HttpServletRequest request)
-			throws AimException {
+	private void createTopicStep3(HelpForm form, HttpServletRequest request)throws AimException {
 		String siteId = RequestUtils.getSite(request).getSiteId();
 		String moduleInstance = RequestUtils.getRealModuleInstance(request)
 				.getInstanceName();
@@ -558,25 +530,18 @@ public class HelpActions extends DispatchAction {
 		form.setFirstLevelTopics(null);
 	}
 	
-	public ActionForward viewAdmin(ActionMapping mapping,
-			ActionForm form, 
-			HttpServletRequest request,
-	HttpServletResponse response) throws Exception {
+	public ActionForward viewAdmin(ActionMapping mapping,ActionForm form,HttpServletRequest request,HttpServletResponse response) throws Exception {
 		HelpForm helpForm = (HelpForm) form;
 		String siteId=RequestUtils.getSite(request).getSiteId();
 		String moduleInstance=RequestUtils.getRealModuleInstance(request).getInstanceName();
 		helpForm.setTopicTree(HelpUtil.getHelpTopicsTree(siteId, moduleInstance));
-		helpForm.setAdminTopicTree(HelpUtil.getHelpTopicsTree(siteId,"admin"));
-
-    
+		helpForm.setAdminTopicTree(HelpUtil.getHelpTopicsTree(siteId,"admin"));    
 	
 	  return mapping.findForward("admin");
 	}
 	
 	
-	public ActionForward export(ActionMapping mapping,
-			ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
+	public ActionForward export(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		
 		String	lang	= RequestUtils.getNavigationLanguage(request).getCode();
 		JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jaxb");
@@ -595,9 +560,7 @@ public class HelpActions extends DispatchAction {
 
 	}
 	
-	public ActionForward importing(ActionMapping mapping,
-			ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
+	public ActionForward importing(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		    HashMap<Long,HelpTopic> storeMap=new HashMap<Long, HelpTopic>();
 			HelpForm helpForm = (HelpForm) form;
 			String siteId=RequestUtils.getSite(request).getSiteId();
@@ -615,10 +578,17 @@ public class HelpActions extends DispatchAction {
         JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jaxb");
         Unmarshaller m = jc.createUnmarshaller();
         Helps help_in;
-                             System.out.println("inputStream:"+inputStream);
+        System.out.println("inputStream:"+inputStream);
 
             help_in = (Helps) m.unmarshal(inputStream);
             System.out.println("help_in:"+help_in);
+            //remove all existing help topics           
+            List<HelpTopic> firstLevelTopics=HelpUtil.getFirstLevelTopics(siteId);
+            
+            for (HelpTopic helpTopic : firstLevelTopics) {
+				removeLastLevelTopic(helpTopic);
+			}
+            
             if (help_in.getHelp() != null) {
 				Iterator it = help_in.getHelp().iterator();
 				while(it.hasNext())
@@ -634,4 +604,32 @@ public class HelpActions extends DispatchAction {
 			return mapping.findForward("admin");
 	}
 	
+	/**
+	 * recurrent function. If topic is last level,then it is deleted.  If not,function calls itself until it finds last level child topic and
+	 * removes it, e.t.c. until topic(function parameter) becomes last level itself and after that its also removed
+	 * @param topic
+	 * @throws Exception
+	 */
+	private void removeLastLevelTopic(HelpTopic topic) throws Exception{
+		List<HelpTopic> childs=HelpUtil.getChildTopics(topic.getSiteId(), topic.getModuleInstance(), topic.getHelpTopicId());
+		if(childs==null || childs.size()==0){
+			HelpUtil.deleteHelpTopic(topic);
+		}else{			
+			for (HelpTopic child : childs) {
+				removeLastLevelTopic(child);
+			}
+			HelpUtil.deleteHelpTopic(topic);
+		}
+	}
+	
+	private List<Long> getTopicsIds(String ids){
+		List<Long> topicsIds=new ArrayList<Long>();
+		while(ids.indexOf(",")!= -1){
+			Long id= new Long(ids.substring(0,ids.indexOf(",")).trim());
+			topicsIds.add(id);
+			ids=ids.substring(ids.indexOf(",")+1);
+		}
+		topicsIds.add(new Long(ids.trim()));
+		return topicsIds;
+	}
 }

@@ -8,6 +8,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 <%@page import="org.digijava.module.help.util.HelpUtil"%>
 
+<digi:instance property="helpForm" />
 <style type="text/css">
 <!--
 div.fileinputs {
@@ -176,7 +177,106 @@ div.fakefile2 input{
 		$(imgId).show();
 		$(divId).hide('fast');
 	}
-	
+
+	function changeRelatedCheckboxesState(topicId, parentTopicIdPrefix){
+		//get current chekcbox
+		var currentChkboxId=''+parentTopicIdPrefix+topicId;
+		var currentChkBox=document.getElementById(currentChkboxId);
+		//if checked
+		if(currentChkBox.checked==true){
+			//if this checkbox has sub-checkboxes,all they should be selected
+			checkOrUncheckAllSubCheckboxes(topicId,parentTopicIdPrefix);			
+		}
+		//if unchecked
+		if(currentChkBox.checked==false){
+			//if this checkbox has sub-checkboxes,all they should be deselected
+			checkOrUncheckAllSubCheckboxes(topicId,parentTopicIdPrefix);
+			//if this checkbox has parent, then unchecking should lead to unchecking parent checkbox too.
+			var parentTopicId= parentTopicIdPrefix.substring(parentTopicIdPrefix.indexOf('_')+1, parentTopicIdPrefix.lastIndexOf('_')); // parentTopicIdPrefix looks like "chekcbox_0_"
+			if(parentTopicId !='0'){				
+				uncheckParentCheckbox(parentTopicId);
+			}
+		}
+	}
+
+	function checkOrUncheckAllSubCheckboxes(topicId,parentTopicIdPrefix){		
+		var children= $("input[@id^='checkbox_"+topicId+"_']");
+		if(children!=null){
+			//get current checkbox for which the function was called
+			var checkboxId=''+parentTopicIdPrefix+topicId;
+			var chkBox=document.getElementById(checkboxId);
+			for(var i=0;i<children.length;i++){			
+				if(chkBox.checked==false){
+					children[i].checked=false;
+				}else{
+					children[i].checked=true;
+				}
+				//if this child topic has children itself, then they also should be checked/unchecked
+				var childChkBoxId=children[i].id;
+				var tId=childChkBoxId.substring(childChkBoxId.lastIndexOf('_')+1); // child topic's id(will be used as parentId parameter)
+				var topicsIdPrefix='checkbox_'+topicId+'_';
+				if($("input[@id^='checkbox_"+tId+"_']")!=null && $("input[@id^='checkbox_"+tId+"_']").length>0){
+					checkOrUncheckAllSubCheckboxes(tId,topicsIdPrefix);
+				}
+			}
+		}		
+	}
+
+	function uncheckParentCheckbox(parentTopicId){		
+		while(parentTopicId!='0'){
+			var parent=$("input[@id$='"+parentTopicId+"']")[0];
+			parent.checked=false;
+			parentTopicId=getParenTopictId(parent.id);			
+		}		
+	}
+
+	function getParenTopictId(checkBoxId){		
+		var parentTopicId=checkBoxId.slice(checkBoxId.indexOf('_')+1, checkBoxId.lastIndexOf('_'));
+		return parentTopicId;
+	}
+
+	function deleteMessages(){
+		if(deleteMsgs()){
+			 var chk=document.getElementsByTagName('input');
+	         var tIds='';
+	         for(var i=0;i<chk.length;i++){
+	             if(chk[i].type == 'checkbox'&&chk[i].checked){
+	            	 tIds+=chk[i].value+',';
+	             }
+	         }
+	        if(tIds.length>0){
+	        	tIds=tIds.substring(0,tIds.length-1);
+	        	<digi:context name="deleteMsgs" property="context/module/moduleinstance/helpActions.do?actionType=deleteHelpTopics"/>
+	    		document.helpForm.action = "<%=deleteMsgs %>&multi="+true+"&tIds="+tIds+"&page=admin";
+	    		document.helpForm.target = "_self";
+	    		document.helpForm.submit();	
+	        }else{
+	            alert('Please select at least one topic to be deleted');
+	            return false;
+	        }
+		}	
+	}
+
+	function deleteMsgs(){
+		return confirm("Are You Sure You Want To Remove Selected Topics ?");
+	}
+
+	function selectAll(){
+		var allChkboxes=$('input:checkbox');
+		if(allChkboxes!=null && allChkboxes.length>0){
+			for(var i=0;i<allChkboxes.length;i++){
+				allChkboxes[i].checked=true;
+			}
+		}
+	}
+	function deselectAll(){
+		var allChkboxes=$('input:checkbox');
+		if(allChkboxes!=null && allChkboxes.length>0){
+			for(var i=0;i<allChkboxes.length;i++){
+				allChkboxes[i].checked=false;
+			}
+		}
+	}
 </script>
 <style type="text/css">
 
@@ -185,7 +285,6 @@ div.fakefile2 input{
 
 </style>
 <digi:form action="/helpActions.do" method="post" enctype="multipart/form-data">
-<digi:instance property="helpForm" />
 <table bgColor=#ffffff cellPadding=2 cellSpacing=2 width=772 border="0">
 	<tr>
 	<!-- Start Navigation -->
@@ -283,6 +382,14 @@ div.fakefile2 input{
 					</td>
 				</tr>
 			</table>
+		</td>
+	</tr>
+	
+	<tr>
+		<td colspan="2" align="right">
+			<input type="button" onclick="selectAll()" value="<digi:trn>Select All</digi:trn>" class="dr-menu" />
+			<input type="button" onclick="deselectAll()" value="<digi:trn>Deselect All</digi:trn>" class="dr-menu" />
+			<input type="button" onclick="deleteMessages()" value="<digi:trn>Delete Selected Messages</digi:trn>" class="dr-menu" />
 		</td>
 	</tr>
 	

@@ -1,1 +1,1 @@
-ActiveRecord::Base.extend ModelTranslation
+ActiveRecord::Base.send(:include, ModelTranslation)

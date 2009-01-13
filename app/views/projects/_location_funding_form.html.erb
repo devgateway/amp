@@ -1,12 +1,12 @@
 <% f.field_set do %>
 	<p><%=t 'projects.geo_usage' %></p>
 	
-	<%= f.add_associated_link(t('projects.add_province'), GeoRelevance.new, 
-			:style => "display: block; float: right; margin-top: -20px; width: 170") %>
-			
+	<%= link_to_function t('projects.add_province'), :style => "display: block; float: right; margin-top: -20px; width: 170" do |page| 
+		page.insert_html :bottom, :geo_relevances, :partial => 'geo_relevance'
+	end %>
+
 	<div id="geo_relevances">
-		<%= f.render_associated_form(@project.geo_relevances.blank? ? 
-				[@project.geo_relevances.build] : @project.geo_relevances) %>
+		<%= render :partial => 'geo_relevance', :collection => (@project.provinces.blank? ? [nil] : @project.provinces) %>
 	</div>	
 	
 <% end %>

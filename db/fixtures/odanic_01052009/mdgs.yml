@@ -1,55 +1,55 @@
 --- 
 mdgs_001: 
-  description: "Improve maternal health"
-  description_es: "Mejorar la salud materna"
-  id: "5"
-  name: Health
-  name_es: Salud
-mdgs_002: 
-  description: "No MDG applicable"
-  description_es: "No Aplicable"
-  id: "9"
-  name: "Not Applicable"
-  name_es: "No Aplicable"
-mdgs_003: 
-  description: "Combat HIV/AIDS, malaria and other diseases"
-  description_es: "Combatir el VIH/SIDA, el paludismo y otras enfermedades"
-  id: "6"
-  name: "HIV/AIDS and Malaria"
-  name_es: "SIDA y Malaria"
-mdgs_004: 
-  description: "Ensure environmental sustainability"
-  description_es: "Garantizar la sostenibilidad del medio ambiente"
-  id: "7"
-  name: Environment
-  name_es: "Medio Ambiente"
-mdgs_005: 
-  description: "Develop a Global Partnership for Development"
-  description_es: "Fomentar una asociación mundial para el desarrollo"
-  id: "8"
-  name: "Global Partnership"
-  name_es: "Asociación Mundial"
-mdgs_006: 
-  description: "Eradicate extreme poverty and hunger"
-  description_es: "Erradicar la pobreza extrema y el hambre"
-  id: "1"
-  name: Poverty
-  name_es: Pobreza
-mdgs_007: 
-  description: "Achieve universal primary education"
-  description_es: "Lograr la enseñanza primaria universal"
-  id: "2"
-  name: Education
-  name_es: Educación
-mdgs_008: 
-  description: "Promote gender equality and empower women"
-  description_es: "Promover la igualdad entre los sexos y la autonomía de la mujer"
-  id: "3"
-  name: Gender
-  name_es: Sexo
-mdgs_009: 
   description: "Reduce child mortality"
   description_es: "Reducir la mortalidad infantil"
   id: "4"
   name: "Child Mortality"
   name_es: "Mortalidad Infantil"
+mdgs_002: 
+  description: "Improve maternal health"
+  description_es: "Mejorar la salud materna"
+  id: "5"
+  name: Health
+  name_es: Salud
+mdgs_003: 
+  description: "No MDG applicable"
+  description_es: "No Aplicable"
+  id: "9"
+  name: "Not Applicable"
+  name_es: "No Aplicable"
+mdgs_004: 
+  description: "Combat HIV/AIDS, malaria and other diseases"
+  description_es: "Combatir el VIH/SIDA, el paludismo y otras enfermedades"
+  id: "6"
+  name: "HIV/AIDS and Malaria"
+  name_es: "SIDA y Malaria"
+mdgs_005: 
+  description: "Ensure environmental sustainability"
+  description_es: "Garantizar la sostenibilidad del medio ambiente"
+  id: "7"
+  name: Environment
+  name_es: "Medio Ambiente"
+mdgs_006: 
+  description: "Develop a Global Partnership for Development"
+  description_es: "Fomentar una asociación mundial para el desarrollo"
+  id: "8"
+  name: "Global Partnership"
+  name_es: "Asociación Mundial"
+mdgs_007: 
+  description: "Eradicate extreme poverty and hunger"
+  description_es: "Erradicar la pobreza extrema y el hambre"
+  id: "1"
+  name: Poverty
+  name_es: Pobreza
+mdgs_008: 
+  description: "Achieve universal primary education"
+  description_es: "Lograr la enseñanza primaria universal"
+  id: "2"
+  name: Education
+  name_es: Educación
+mdgs_009: 
+  description: "Promote gender equality and empower women"
+  description_es: "Promover la igualdad entre los sexos y la autonomía de la mujer"
+  id: "3"
+  name: Gender
+  name_es: Sexo

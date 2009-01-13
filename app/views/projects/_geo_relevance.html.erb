@@ -1,10 +1,17 @@
 <li class="geo_relevance fifty">
-	<%= f.collection_select :province_id, Province.ordered, :id, :name, 
-			{ :prompt => t('options.national') }, :class => "dynamic_select parent large" %>
+	<%= select_tag "provinces[]", %{<option>#{t('options.national')}</option>} +
+			options_from_collection_for_select(Province.ordered, :id, :name, geo_relevance.andand.id),
+			:class => "dynamic_select parent large" %>
 	<br />
 	
-	<%= f.related_collection_select :district_id, :province_id, Province.ordered, :districts, :name, :id, :name, 
-			{ }, :multiple => true, :class => "dynamic_select child large", :style => "height: 200px" %>
+	<%= select_tag "project[district_ids][]",
+			option_groups_from_collection_for_select(Province.list, :districts, :name, :id, :name, @project.district_ids),
+			:multiple => true, :class => "dynamic_select child large", :style => "height: 200px" %>
 	
-	<%= f.remove_link t('actions.delete') %>
+	<%= link_to_function t('projects.delete_associated'), %{
+			if ($('.geo_relevance').length > 1) {
+				$(this).parents('.geo_relevance').remove();
+			}
+		}
+	%>
 </li>

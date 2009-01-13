@@ -76,9 +76,9 @@ class ProjectsController < ApplicationController
    
   def map
     @project = Project.find(params[:id])
-    map_file = OdaMap::ProjectInfo.new(@project).save
+    #map_file = OdaMap::ProjectInfo.new(@project).save
     
-    send_file map_file, :content_type => 'image/png', :disposition => 'inline'
+    #send_file map_file, :content_type => 'image/png', :disposition => 'inline'
   end
        
   # ================================================

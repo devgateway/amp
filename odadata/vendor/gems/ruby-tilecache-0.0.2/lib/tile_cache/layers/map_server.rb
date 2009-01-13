@@ -16,6 +16,7 @@ module TileCache
       end
       
       def render_tile(tile)
+        return nil # testing!
         set_metabuffer if @metabuffer
         req = build_request(tile)
         

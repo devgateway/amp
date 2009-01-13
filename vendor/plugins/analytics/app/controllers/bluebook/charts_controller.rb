@@ -26,9 +26,9 @@ class Bluebook::ChartsController < BluebookController
   def sectors_column_data
     @donors = Donor.main.ordered
     @donor_payments = OrderedHash.new
-    @donors.each { |d| @donor_payments[d.name] = d.annual_payments[year].in("EUR") }
+    @donors.each { |d| @donor_payments[d.name] = d.annual_payments[year].andand.in("EUR") }
     @donor_commitments = OrderedHash.new
-    @donors.each { |d| @donor_commitments[d.name] = d.annual_commitments[year].in("EUR") }
+    @donors.each { |d| @donor_commitments[d.name] = d.annual_commitments[year].andand.in("EUR") }
 
     render :layout => false
   end

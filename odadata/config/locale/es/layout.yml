@@ -4,7 +4,7 @@ es:
     
   navigation:
     logout: Salir
-    language: Lenguaje
+    language: Idioma
     language_es: Español
     language_en: Inglés
     
@@ -19,13 +19,13 @@ es:
       glossary: Glosario ODAnic
       dac_manual: Manual CAD-CRS
       # TODO: Change from "Used Exchange Rates" to just "Exchange Rates" please
-      exchange_rates: Taza de Cambio utilizada
-      design_own: 'Diseña tu Reporte'
+      exchange_rates: Taza de Cambio Utilizada
+      design_own: 'Diseña Reporte'
       contact: Contacto
       
     focal_point:
-      donor_info: Información del Donante
-      donor_details: Detalles del Donante
+      donor_info: Info Donante
+      donor_details: Detalles de Donante
       accounts: Cuentas de Ingreso
       projects: Projects
       new_project: Añadir Nuevo
@@ -47,7 +47,7 @@ es:
       
     admin:
       gen_conf: Configuración General
-      op_cl_data_input: Op./Cl. Ingreso de Datos
+      op_cl_data_input: Abrir/Cerrar Ingreso de Datos
       glossary: Glosario
       donor_admin: Administración de Donantes
       exchange_rates: Tasas de cambio
@@ -56,7 +56,7 @@ es:
       contr_agencies: Agencias Contratadas
       gov_counterpart: Homólogo Gubermental
       # TODO:
-      scrollbars: News Tickers
+      scrollbars: Señales de Pantalla
       
   actions:
       print: Imprimir

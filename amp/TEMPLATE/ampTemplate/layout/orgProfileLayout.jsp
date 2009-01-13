@@ -18,6 +18,15 @@
         <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
         <META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
         <META HTTP-EQUIV="EXPIRES" CONTENT="0">
+        <style>
+            .tableHeaderCls {
+                font-size: 12px;
+                color: White;
+                background-color:
+                rgb(55, 96, 145);
+                font-family: Tahoma;
+            }
+        </style>
     </HEAD>
     <BODY leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0">
         <TABLE cellSpacing=0 cellPadding=0 width="100%"  border=0 valign="top" align="left">

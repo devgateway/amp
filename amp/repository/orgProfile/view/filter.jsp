@@ -34,11 +34,7 @@
         background-color:#a5bcf2;
     }
 
-    .tableHeaderCls {
-        color: #FFFFFF;
-        background-color:#222E5D;
-
-    }
+    
     .toolbar{
         width: 350px;
         background: #addadd;

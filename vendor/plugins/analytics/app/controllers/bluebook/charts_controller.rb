@@ -36,9 +36,9 @@ class Bluebook::ChartsController < BluebookController
   def forecasts_column_data
     @donors = Donor.main.ordered
     @donor_payments_forecast = OrderedHash.new
-    @donors.each { |d| @donor_payments_forecast[d.name] = d.annual_payments_forecasts[year + 1].in("EUR") }
+    @donors.each { |d| @donor_payments_forecast[d.name] = d.annual_payments_forecasts[year + 1].andand.in("EUR") }
     @donor_commitments_forecast = OrderedHash.new
-    @donors.each { |d| @donor_commitments_forecast[d.name] = d.annual_commitments_forecasts[year + 1].in("EUR") }
+    @donors.each { |d| @donor_commitments_forecast[d.name] = d.annual_commitments_forecasts[year + 1].andand.in("EUR") }
  
     render :layout => false
   end
@@ -46,9 +46,9 @@ class Bluebook::ChartsController < BluebookController
   def eu_cooperation_trends_column_data
     @donors = Donor.main.ordered
     @donor_payments_forecast = OrderedHash.new
-    @donors.each { |d| @donor_payments_forecast[d.name] = d.annual_payments_forecasts[year + 1].in("EUR") }
+    @donors.each { |d| @donor_payments_forecast[d.name] = d.annual_payments_forecasts[year + 1].andand.in("EUR") }
     @donor_payments = OrderedHash.new
-    @donors.each { |d| @donor_payments[d.name] = d.annual_payments[year].in("EUR") } 
+    @donors.each { |d| @donor_payments[d.name] = d.annual_payments[year].andand.in("EUR") }
      
     render :layout => false
   end

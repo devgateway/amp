@@ -26,7 +26,6 @@
 
 		if(implevel == 2)
 		{
-			document.aimEditActivityForm.
 			if (document.aimEditActivityForm.impMultiRegion.value != -1)
 			{
 				check=true;

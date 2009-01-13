@@ -8,6 +8,8 @@ module ApplicationHelper
     
     relevant_keys = keys.select { |k| flash[k] }
     relevant_keys.inject("") { |e, k| e += content_tag(:div, flash[k], :class => "flash #{k}") }
+    
+    return "" # disabled for testing. remove this line to reenable
   end
   
   # Renders a specific header partial depending on the user's role and associated layout attribute. 

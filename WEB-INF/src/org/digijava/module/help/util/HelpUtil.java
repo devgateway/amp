@@ -144,6 +144,23 @@ public class HelpUtil {
 		return helpTopic;
 		
 	}
+	
+	public static HelpTopic loadhelpTopic(Long topicId) throws Exception{
+		Session session = null;
+		Query query = null;
+		HelpTopic helpTopic = null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString="from "+ HelpTopic.class.getName()+" topic where topic.helpTopicId="+topicId;
+			query=session.createQuery(queryString);
+			helpTopic=(HelpTopic)query.uniqueResult();
+		} catch (Exception ex) {
+			logger.error(ex);
+			throw new AimException(ex);
+		}
+		return helpTopic;
+	}
+	
 	public static HelpTopic getHelpTopic(String key,String siteId,String moduleInstance) throws AimException {
 		Session session = null;
 		Query query = null;
@@ -220,7 +237,7 @@ public class HelpUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			tx = session.beginTransaction();
-			session.delete(topic);
+			session.delete(topic);			
 			tx.commit();
 		} catch (Exception e) {
 			if (tx != null) {
@@ -234,8 +251,7 @@ public class HelpUtil {
 			throw new AimException("Can't remove help topic", e);
 		}
 	}
-	public static List<HelpTopic> getFirstLevelTopics(String siteId,
-			String moduleInstance,String key)throws AimException{
+	public static List<HelpTopic> getFirstLevelTopics(String siteId,String moduleInstance,String key)throws AimException{
 		Session session = null;
 		Query query = null;
 		List<HelpTopic> helpTopics = null;
@@ -260,8 +276,38 @@ public class HelpUtil {
 		return helpTopics;
 	}
 	
-	public static boolean hasChildren(String siteId,
-			String moduleInstance,Long parentId)throws AimException{
+	/**
+	 * Load all first level help topics(admin and default)
+	 * @param siteId
+	 * @throws Exception
+	 */
+	public static List<HelpTopic> getFirstLevelTopics(String siteId) throws Exception{
+		Session session = null;
+		Query query = null;
+		List<HelpTopic> helpTopics = null;
+		String queryString=null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			queryString = "from "+ HelpTopic.class.getName()+ " topic where topic.siteId=:siteId and topic.parent is null";
+			query = session.createQuery(queryString);			
+			query.setParameter("siteId", siteId);
+			helpTopics = query.list();
+		} catch (Exception e) {
+			logger.error("Unable to load help topics");
+  			throw new AimException("Unable to Load Help Topics", e);
+		}
+		return helpTopics;
+	}
+	
+	public static boolean hasChildren(String siteId,String moduleInstance,Long parentId)throws AimException{
+		List<HelpTopic> helpTopics = getChildTopics(siteId, moduleInstance,	parentId);
+		if (helpTopics==null || helpTopics.size()==0){
+			return false;
+		}
+	return true;	
+	}
+
+	public static List<HelpTopic> getChildTopics(String siteId,String moduleInstance, Long parentId) throws AimException {
 		Session session = null;
 		Query query = null;
 		List<HelpTopic> helpTopics = null;
@@ -274,16 +320,13 @@ public class HelpUtil {
 			query.setParameter("siteId", siteId);
 			query.setParameter("moduleInstance", moduleInstance);
 			query.setParameter("id", parentId);
-			helpTopics = query.list();
+			helpTopics = query.list();			
 
 		} catch (Exception e) {
 			logger.error("Unable to load help topics");
   			throw new AimException("Unable to Load Help Topics", e);
 		}
-		if (helpTopics==null || helpTopics.size()==0){
-			return false;
-		}
-	return true;	
+		return helpTopics;
 	}
 	
 	
@@ -491,18 +534,36 @@ public class HelpUtil {
 				if(item.getChildren().isEmpty()){
 					retVal += "<img src=\"../ampTemplate/images/tree_minus.gif\";\">\n";
 				}else{
-				retVal += "<img id=\"img_" + topic.getHelpTopicId()+ "\" onclick=\"expandProgram(" +topic.getHelpTopicId()+ ")\"  src=\"../ampTemplate/images/tree_plus.gif\"/>\n";
+					retVal += "<img id=\"img_" + topic.getHelpTopicId()+ "\" onclick=\"expandProgram(" +topic.getHelpTopicId()+ ")\"  src=\"../ampTemplate/images/tree_plus.gif\"/>\n";
 				}
 				retVal += "<img id=\"imgh_"+ topic.getHelpTopicId()+ "\" onclick=\"collapseProgram(" +topic.getHelpTopicId()+ ")\"  src=\"../ampTemplate/images/tree_minus.gif\" style=\"display : none;\">\n";
 				if(topic.getTitleTrnKey()!=null && topic.getTopicKey()!=null){
-				retVal += "<a href=\"javascript:editTopic('"+ topic.getTopicKey()+ "','"+helpType+"')\">"+getTrn(topic.getTitleTrnKey(),topic.getTopicKey(), request)+"</a>";
+					retVal += "<a href=\"javascript:editTopic('"+ topic.getTopicKey()+ "','"+helpType+"')\">"+getTrn(topic.getTitleTrnKey(),topic.getTopicKey(), request)+"</a>";
 				}
 				retVal += "   </td>";
+				//checkbox
+				retVal+="   <td width=\"12\">";
+				retVal+="<input type=\"checkbox\" value=\" "+topic.getHelpTopicId()+"\" ";				
+				if(topic.getParent()!=null){
+						retVal+=" id=\"checkbox_"+topic.getParent().getHelpTopicId()+"_"+topic.getHelpTopicId()+ "\" ";
+				}else{
+						retVal+=" id=\"checkbox_0_"+topic.getHelpTopicId()+ "\" ";
+				}
+				//if(!item.getChildren().isEmpty()){					
+					String secondParameter="checkbox_0_"; //used to get helpTopic state (is it checked or not)
+					if(item.getparent()!=null){
+						secondParameter="checkbox_"+item.getparent().getHelpTopicId()+"_";
+					}
+					retVal+=" onchange=\"javascript:changeRelatedCheckboxesState('"+topic.getHelpTopicId()+"','"+secondParameter+"')\" ";
+				//}
+				retVal+="/>";
+				retVal+="   </td>";
+				//delete link
 				retVal += "   <td width=\"12\">";
 				if(helpType != "admin"){
-				retVal += "<a href=\"/help/helpActions.do~actionType=deleteHelpTopic~topicKey="+topic.getTopicKey()+"~page=admin\" onclick=\"return deleteProgram()\"><img src=\"../ampTemplate/images/trash_12.gif\" border=\"0\"></a>";
+					retVal += "<a href=\"/help/helpActions.do~actionType=deleteHelpTopics~multi=false~topicKey="+topic.getTopicKey()+"~page=admin\" onclick=\"return deleteProgram()\"><img src=\"../ampTemplate/images/trash_12.gif\" border=\"0\"></a>";
 				}else{
-				retVal += "<a href=\"/help~admin/helpActions.do~actionType=deleteHelpTopic~topicKey="+topic.getTopicKey()+"~page=admin\" onclick=\"return deleteProgram()\"><img src=\"../ampTemplate/images/trash_12.gif\" border=\"0\"></a>";
+					retVal += "<a href=\"/help~admin/helpActions.do~actionType=deleteHelpTopics~multi=false~topicKey="+topic.getTopicKey()+"~page=admin\" onclick=\"return deleteProgram()\"><img src=\"../ampTemplate/images/trash_12.gif\" border=\"0\"></a>";
 				}
 				retVal += "   </td>";
 				retVal += " </tr></table>";
@@ -545,6 +606,22 @@ public class HelpUtil {
 			 return m.getMessage();
 		 }
 		 
+	 }
+	 
+	 public static List<HelpTopic> getAllHelpTopics() throws Exception{
+		 Session session = null;
+		 Query query;
+		 String qryStr;
+		 List<HelpTopic> topics=null;
+		 try {
+			 session=PersistenceManager.getRequestDBSession();
+			 qryStr="select t from "+HelpTopic.class.getName()+" t";
+			 query=session.createQuery(qryStr);
+			 topics=query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		 return topics;
 	 }
 
 	 public static Vector getAllHelpdataForExport(String lang) {
@@ -765,5 +842,16 @@ public class HelpUtil {
 				}
 			}
 		}
+	
+	private String[] getChildTopicsIds(Collection <HelpTopicsTreeItem> items){
+		String[] retValue=new String[items.size()];
+		int i=0;
+		for (HelpTopicsTreeItem helpTopicsTreeItem : items) {
+			HelpTopic ht=(HelpTopic)helpTopicsTreeItem.getMember();
+			retValue[i]=ht.getHelpTopicId().toString();
+			i++;
+		}
+		return retValue;
+	}
 	 
 }

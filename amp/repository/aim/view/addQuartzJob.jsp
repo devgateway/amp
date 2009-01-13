@@ -66,7 +66,7 @@ function saveJob(){
   }
 
   txt=document.getElementById("txtTime");
-  if(txt==null || txt.value==""){
+  if(txt==null || txt.value==""||txt.value=='0'){
     alert("Please enter time");
     txt.focus();
     return false;

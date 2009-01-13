@@ -622,7 +622,7 @@ public class EditIPAContract extends MultiAction {
             eua.setTotalPrivateContribAmount(Double.parseDouble(euaf.getTotalPrivateContribAmount()));
         }
        
-         if (eaf.getContracts() == null) {
+         if (eaf.getContracts().getContracts() == null) {
                 eaf.getContracts().setContracts(new ArrayList());
         }
          

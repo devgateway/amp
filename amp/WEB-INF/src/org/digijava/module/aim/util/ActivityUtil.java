@@ -808,7 +808,6 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
        		  indValActual = new AmpIndicatorValue();
         	  indValActual.setValueType(AmpIndicatorValue.ACTUAL);
         	  indValActual.setValue(new Double(actInd.getActualVal()));
-        	  indValActual.setValue(new Double(actInd.getCurrentVal()));
         	  indValActual.setComment(actInd.getCurrentValComments());
         	  indValActual.setValueDate(DateConversion.getDate(actInd.getCurrentValDate()));
         	  indValActual.setRisk(risk);

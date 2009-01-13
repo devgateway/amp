@@ -55,8 +55,8 @@ public class SaveIndicatorValues extends Action
 
 						if (eaForm.getIndicator().getCurrentValDate() != null) {
 							if( eaForm.getIndicator().getCurrentVal() != null) {
-								temp.setCurrentVal(Float.parseFloat(eaForm.getIndicator().getCurrentVal()));
-								temp.setActualVal(Float.parseFloat(eaForm.getIndicator().getCurrentVal()));
+								temp.setCurrentVal(eaForm.getIndicator().getCurrentVal());
+								temp.setActualVal(eaForm.getIndicator().getCurrentVal());
 							}
 							temp.setCurrentValDate(eaForm.getIndicator().getCurrentValDate());
 						 	temp.setActualValDate(eaForm.getIndicator().getCurrentValDate());
@@ -65,8 +65,8 @@ public class SaveIndicatorValues extends Action
 							
 						}
 						if(eaForm.getIndicator().getCurrentVal() != null){
-							temp.setCurrentVal(Float.parseFloat(eaForm.getIndicator().getCurrentVal()));
-						temp.setActualVal(Float.parseFloat(eaForm.getIndicator().getCurrentVal()));
+							temp.setCurrentVal(eaForm.getIndicator().getCurrentVal());
+						temp.setActualVal(eaForm.getIndicator().getCurrentVal());
 						
 						}else{
 							temp.setCurrentVal(null);

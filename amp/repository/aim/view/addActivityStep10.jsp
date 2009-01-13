@@ -191,8 +191,10 @@
 
 <jsp:include page="scripts/newCalendar.jsp" flush="true" />
 
+
+
 <digi:instance property="aimEditActivityForm" />
-<digi:form action="/saveIndicatorValues.do" method="post">
+<digi:form action="/saveIndicatorValues.do~edit=true" method="post">
 <html:hidden property="step" />
 <html:hidden property="editAct" />
 <html:hidden property="indicator.indicatorId" />

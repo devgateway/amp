@@ -4825,7 +4825,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private Float revTargetVal;
 		private String revTargetValDate;
 		private String revTargetValComments;
-		private String currentVal;
+		private Float currentVal;
 		private String currValDate;
 		private String currValComments;
 		private String comments;
@@ -4980,11 +4980,11 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.revTargetValComments = revTargetValComments;
 		}
 
-		public String getCurrentVal() {
+		public Float getCurrentVal() {
 			return currentVal;
 		}
 
-		public void setCurrentVal(String currentVal) {
+		public void setCurrentVal(Float currentVal) {
 			this.currentVal = currentVal;
 		}
 

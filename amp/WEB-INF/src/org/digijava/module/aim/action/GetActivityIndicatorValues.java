@@ -86,7 +86,7 @@ public class GetActivityIndicatorValues extends Action
 								eaForm.getIndicator().setRevTargetValDate(null);
 							}
 							eaForm.getIndicator().setRevTargetValComments(actInd.getRevisedTargetValComments());
-							eaForm.getIndicator().setCurrentVal(actInd.getActualVal()+"");
+							eaForm.getIndicator().setCurrentVal(actInd.getActualVal());
 						 	if (actInd.getActualValDate() != null) {
 						 	eaForm.getIndicator().setCurrentValDate(actInd.getActualValDate());
 							}else{

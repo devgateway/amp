@@ -1,3 +1,3 @@
 require 'model_translation'
 
-ActiveRecord::Base.extend Translator
+ActiveRecord::Base.send :include, Translator

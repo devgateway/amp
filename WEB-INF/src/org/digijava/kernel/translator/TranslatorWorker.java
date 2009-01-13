@@ -1547,7 +1547,7 @@ public class TranslatorWorker {
 			session = PersistenceManager.getSession();
 			String oql = "from "+Message.class.getName()+" as m where m.key = :key and m.siteId = :SiteId";
 			Query query = session.createQuery(oql);
-			query.setString("hashKey", key);
+			query.setString("key", key);
 			query.setString("SiteId", siteId);
 			result = query.list();
 		} catch (Exception e) {

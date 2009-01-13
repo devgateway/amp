@@ -105,12 +105,7 @@
 		}
 	}
 
-
-	var current = window.onload;
-	window.onload = function() {
-        current.apply(current);
-		initScripts();
-   	};
+	window.onload=initScripts();
 	
 	<logic:present parameter="displayAdd" >
 			var current2 = window.onload;
@@ -407,7 +402,7 @@
 								<!-- contents -->
 								 <logic:notEmpty name="aimEditActivityForm" property="contracts.contracts">
 				                      <table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
-					                      <c:forEach items="${aimEditActivityForm.contracts}" var="contract" varStatus="idx">
+					                      <c:forEach items="${aimEditActivityForm.contracts.contracts}" var="contract" varStatus="idx">
 						                      <tr><td bgColor=#f4f4f2 align="center" vAlign="top">
 					                          <table width="100%" border="0" cellspacing="2" cellpadding="2" align="left" class="box-border-nopadding">
 					                               <field:display name="Contract Name" feature="Contracting">
@@ -748,7 +743,7 @@
 			                                              <td>&nbsp;
 			                                              </td>
 			                                              <td>
-		                                                      <logic:notEmpty name="aimEditActivityForm" property="allFundingDetails">
+		                                                      <logic:notEmpty name="aimEditActivityForm" property="funding">
 		                                                           <table width="100%">
 																    <tr>
 																		<th><field:display name="Adjustment Type Disbursement" feature="Disbursement"><digi:trn key="aim:adjustmentTyeDisbursement">Adjustment Type Disbursement</digi:trn></field:display></th>
@@ -757,7 +752,7 @@
 																		<th><field:display name="Date Disbursement" feature="Disbursement"><digi:trn key="aim:dateDisbursement">Date Disbursement</digi:trn></field:display></th>
 																		
 																	</tr>
-			                                                           <c:forEach  items="${aimEditActivityForm.allFundingDetails}" var="fundingDetail" >
+			                                                           <c:forEach  items="${aimEditActivityForm.funding.fundingDetails}" var="fundingDetail" >
 			                                                           		<logic:equal name="contract" property="contractName" value="${fundingDetail.contract.contractName}">
 			                                                           		<c:if test="${fundingDetail.transactionType == 1}">
 			                                                               <tr>

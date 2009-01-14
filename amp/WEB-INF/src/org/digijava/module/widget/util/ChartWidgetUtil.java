@@ -833,8 +833,9 @@ public class ChartWidgetUtil {
                         " as fd inner join fd.ampFundingId f ";
                 oql += "   inner join f.ampActivityId act inner join act.locations loc inner join " +
                         " loc.location.ampRegion reg ";
-
-
+                if (teamMember != null && teamMember.getComputation() != null && teamMember.getComputation()) {
+                    oql += " inner join act.orgrole role ";
+                }
                 oql += " where  fd.transactionType =:transactionType and  fd.adjustmentType = 1 and f.ampDonorOrgId=:orgID ";
 
                 oql += " and year(fd.transactionDate)=:year and reg is not null and reg.ampRegionId=  " + region.getAmpRegionId();

@@ -39,10 +39,7 @@
             <c:set var="organization" scope="request" value="${sessionScope.orgProfileFilter.organization}"/>
             <jsp:include page="orgSummary.jsp" flush="true"/>
         </c:when>
-         <c:when test="${gisWidgetTeaserForm.type==6}">
-            <jsp:include page="/orgProfile/showLargestProjects.do" flush="true"/>
-        </c:when>
-           <c:when test="${gisWidgetTeaserForm.type==8}">
+           <c:when test="${gisWidgetTeaserForm.type==7}">
             <jsp:include page="/orgProfile/showParisIndicator.do" flush="true"/>
         </c:when>
         <c:otherwise>

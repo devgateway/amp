@@ -214,23 +214,7 @@
                                                         </feature:display>
                                                     </TD>
                                                     <TD WIDTH="50%"  VALIGN="TOP">
-                                                        <feature:display name="orgprof_chart_place8" module="Org Profile">
-                                                            <div id="content" class="yui-skin-sam" style="width:100%;">
-                                                                <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
-                                                                   <div class="tableHeaderCls"  style="height:20px;font-size:11px;font-weight:bold;" align="center">
-                                                                                        <digi:trn key="orgProfile:orgprof_chart_place8:title">orgprof_chart_place8 title</digi:trn>
-                                                                    </div>
-                                                                        
-                                                                </feature:display>
-                                                                <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
-                                                                    <digi:insert attribute="chart8">
-                                                                        <digi:put name="widget-teaser-param">orgprof_chart_place8</digi:put>
-                                                                    </digi:insert>
-                                                                    <feature:display name="orgprof_chart_place8" module="Org Profile">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </feature:display>
+                                                      &nbsp;
                                                     </TD>
                                                 </TR>
 

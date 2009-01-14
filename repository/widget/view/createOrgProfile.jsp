@@ -82,9 +82,8 @@
                                 <html:option value="3">Pledges/Comm/Disb</html:option>
                                 <html:option value="4">ODA Profile</html:option>
                                 <html:option value="5">Sector Breakdown</html:option>
-                                <html:option value="6">5 Largest Projects</html:option>
-                                <html:option value="7">Regional Breakdown</html:option>
-                                <html:option value="8">Paris Declaration</html:option>
+                                <html:option value="6">Regional Breakdown</html:option>
+                                <html:option value="7">Paris Declaration</html:option>
                             </html:select>
                         </td>
                         

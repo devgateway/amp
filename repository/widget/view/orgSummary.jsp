@@ -10,7 +10,7 @@
    
 <table width="100%">
     <tr>
-        <td height="420px" valign="top" >
+        <td height="210px" valign="top" >
             <table id="orgTable" border="1" width="100%">
                 <th colspan="2" class="tableHeaderCls">Summary</th>
                 <tr>
@@ -38,7 +38,14 @@
             </table>
         </td>
     </tr>
+    <tr>
+        <td height="210px" valign="top">
+            <jsp:include page="/orgProfile/showLargestProjects.do" flush="true"/>
+        </td>
+    </tr>
 </table>
+
+
  
 <script language="javascript">
 setStripsTable("orgTable", "tableEven", "tableOdd");

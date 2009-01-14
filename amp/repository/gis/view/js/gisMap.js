@@ -495,6 +495,8 @@
 		
 		imageMapLoaded = false;
 		mapObj.src = newUrl;
+
+		
 		
 		actionImgLoading = true;
 		document.getElementById("navCursorMap").src = modifyMapLevelURL (document.getElementById("navCursorMap").src, newVal);

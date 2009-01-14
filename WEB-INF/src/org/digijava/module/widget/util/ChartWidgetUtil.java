@@ -838,10 +838,15 @@ public class ChartWidgetUtil {
                 oql += " where  fd.transactionType =:transactionType and  fd.adjustmentType = 1 and f.ampDonorOrgId=:orgID ";
 
                 oql += " and year(fd.transactionDate)=:year and reg is not null and reg.ampRegionId=  " + region.getAmpRegionId();
+                oql+=getTeamQuery(teamMember);
                 query = session.createQuery(oql);
                 query.setLong("year", year);
                 query.setLong("orgID", orgID);
                 query.setLong("transactionType", transactionType);
+                if (teamMember != null) {
+                    query.setLong("teamId", teamMember.getTeamId());
+
+                }
                 List<AmpFundingDetail> fundingDets = query.list();
 
                 /*Newly created objects and   selected currency

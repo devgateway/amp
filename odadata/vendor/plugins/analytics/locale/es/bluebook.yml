@@ -580,3 +580,33 @@ es:
           loan: Préstamo
           data_missing_header: Falta datos de {{donor}} por {{year}}
           data_missing_info: Lo sentimos pero este donante todavía no ha actualizado y/o publicado sus financiamientos de proyecto por {{year}}.
+          
+      explanatory_note:
+          management_system: 'Por ejemplo: Ministerio de Relaciones Exteriores / Dirección de Cooperación para el Desarrollo dentro del Ministerio de Relaciones Exteriores/ Agencia Autónoma de Asistencia / otro (favor especifique)'
+          total_staff: Estimado del personal de tiempo completo trabajando para AOD en Nicaragua
+          expatriate_staff: Estimado del personal de tiempo completo no residente trabajando en AOD en Nicaragua
+          local_staff: Estimado del personal local de tiempo completo trabajando para AOD en Nicaragua
+          total_oda: Desembolsos 2007 comparados a Desembolsos de la UE 2007 (en %)
+          grant_oda: Desembolsos en Donación 2007 comparados al total de Desembolsos 2007 (en %)
+          loan_oda: Desembolsos en Préstamos 2007 comparados al total de Desembolsos 2007 (en %)
+          bilateral_oda: Desembolsos Bilaterales 2007 comparados al total de Desembolsos 2007 (en %)
+          multilateral_oda: Desembolsos Multilaterales 2007 comparados al total de Desembolsos 2007 (en %)
+          ngos_implementation: Desembolsos en apoyo a ONG 2007 comparados al total de Desembolsos 2007 (en %)
+          top_regions: |
+              Junto a las actividades nacionales, las 3 principales regiones según los desembolsos hechos en el 2007 – Notar que los desembolsos regionales se basan en desembolsos a proyectos individuales divididos por el número de región. 
+              Esto puede no reflejar toda la realidad en el campo, pero marca una tendencia confiable.
+          centralization: Quién tiene la decision final en cada etapa del proceso de AOD? a) Sedes o b) Oficinas de campo? Para…
+          programming: Ubicación de la AOD en el país, aprobación de la estrategia de país
+          project_aa: Evaluación y aprobación de proyectos y programas
+          tenders: Publicación, aprobación y evaluación de ofertas, selección de contratantes
+          comm_pay: Firma de contratos, aprobación de compromisos y pagos
+          monitoring_eval: Monitoreo y evaluación de proyectos
+          budget_support: '% Estimado de AOD para 2007 – 2010 a través de apoyo al presupuesto'
+          sector_wide: '% Estimado de AOD para 2007 – 2010 a través de enfoques sectoriales'
+          projects: '% Estimado de AOD para 2007 – 2010 a trvés de proyectos'
+          cs_papers: 'Disponibilidad de un Documento de Estrategia de País (respuesta: Si/No)'
+          period: Período cubierto por la última Estrategia de País
+          internet_link: Enlace en internet donde está disponible el último Documento de Estrategia de País
+          sectors_and_regions: Sectores prioritarios según el último Documento Estrategia de País
+          disbursement_totals: Desembolsos en AOD en los años 2007-2008* en concepto de donación y préstamo en millones de Euros, con información proyectada para el 2008. Note que solamente AOD bajo responsabilidad de la Agencia/Embajada del Estado Miembro participante es tomada en cuenta. Los desembolsos de AOD puede ser mayor.
+          distribution_by_sector: Distribución de los Desembolsos 2007 por sector CAD general

@@ -17,7 +17,7 @@
     <%= ll(:reports, :currency_selection) %>:
 	<select name="currency" onchange="$(this).parent().submit()" class="no_print">
 		<% ExchangeRate.available_currencies.each do |currency| %>
-			<option value="<%= currency -%>" <%= "selected='selected'" if params[:currency] == currency %> ><%= currency -%></option>
+			<option value="<%= currency -%>" <%= "selected='selected'" if MultiCurrency.output_currency == currency %> ><%= currency -%></option>
 		<% end %>
 	</select>
 <% end -%>

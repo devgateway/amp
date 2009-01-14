@@ -141,8 +141,8 @@
 			<option value="3">District view</option>
 		</select>
 		--%>
-		<input title="Region view" type="Radio" value="2" name="mapLevelRadio" checked onchange="mapLevelChanged(this.value)">Region view &nbsp;
-		<input title="District view" type="Radio" value="3" name="mapLevelRadio" onchange="mapLevelChanged(this.value)">District view
+		<input title="Region view" type="Radio" value="2" name="mapLevelRadio" checked onClick="mapLevelChanged(this.value)">Region view &nbsp;
+		<input title="District view" type="Radio" value="3" name="mapLevelRadio" onClick="mapLevelChanged(this.value)">District view
 		
 		<div id="imageMapContainer" style="visibility:hidden;"></div>
 		</td>

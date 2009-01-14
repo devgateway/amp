@@ -15,7 +15,7 @@
 			<put-item name="chart5" module="widget" instance="default" teaser="teaserOfWidget"/>
 			<put-item name="chart6" module="widget" instance="default" teaser="teaserOfWidget"/>
 			<put-item name="chart7" module="widget" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="chart8" module="widget" instance="default" teaser="teaserOfWidget"/>
+			
 		</layout>
 		<layout name="gisDashboardLayout" extends="default" file="gisDashboardlayout.jsp">
 			<put name="title">Results Matrix</put>

@@ -43,9 +43,8 @@ public class WidgetUtil {
         public static final int ORG_PROFILE_PLEDGES_COMM_DISB = 3;
         public static final int ORG_PROFILE_ODA_PROFILE = 4;
         public static final int ORG_PROFILE_SECTOR_BREAKDOWN = 5;
-        public static final int ORG_PROFILE_SECTOR_LARGETST_PROJECTS = 6;
-        public static final int ORG_PROFILE_REGIONAL_BREAKDOWN = 7;
-        public static final int ORG_PROFILE_PARIS_DECLARATION = 8;
+        public static final int ORG_PROFILE_REGIONAL_BREAKDOWN = 6;
+        public static final int ORG_PROFILE_PARIS_DECLARATION = 7;
               
 	
 	

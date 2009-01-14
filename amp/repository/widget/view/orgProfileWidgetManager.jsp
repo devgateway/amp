@@ -74,10 +74,7 @@
                                                          <c:when test="${orgProfile.type==5}">
                                                             Sector Breakdown
                                                         </c:when>
-                                                          <c:when test="${orgProfile.type==6}">
-                                                           5 Largest Projects
-                                                        </c:when>
-                                                        <c:when test="${orgProfile.type==7}">
+                                                        <c:when test="${orgProfile.type==6}">
                                                             Regional Breakdown
                                                         </c:when>   
                                                         <c:otherwise>

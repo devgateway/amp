@@ -10,9 +10,9 @@ module Report
     end
     
     def output_head
-      "<thead>" +
+      "<tr>" +
         data.columns.map { |h| "<th>#{h}</th>" }.join('') +
-      "</thead>"
+      "</tr>"
     end
         
     def output_body

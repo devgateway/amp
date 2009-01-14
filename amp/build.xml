@@ -42,6 +42,14 @@
         </fileset>
     </path>
 
+    <!-- classpath for JAXB -->	
+    <path id="xjc.classpath">
+        <fileset dir="${lib}">
+          <include name="**/*.jar"/>
+          <include name="**/*.zip"/>
+        </fileset>
+    </path>
+
     <!-- classpath for Struts 1.1 -->
     <path id="run.classpath">
 		<pathelement location="${etc}"/>
@@ -67,7 +75,7 @@
 	
 	
   <taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
-    <classpath refid="compile.classpath" />
+    <classpath refid="xjc.classpath" />
   </taskdef>
 
     <!-- Check timestamp on files -->

@@ -77,19 +77,19 @@ module Report
         finances = @target.fundings.find_by_year(year)
         forecasts = @target.funding_forecasts.find_by_year(year)
         columns = []
-        
+
         if year <= Time.now.year
-          columns << ["Commitments #{year} in #{MultiCurrency.output_currency}", finances.commitments]
-          columns << ["Disbursements #{year} in #{MultiCurrency.output_currency}", finances.payments]
+          columns << ["Commitments #{year} in #{MultiCurrency.output_currency}", finances.andand.commitments]
+          columns << ["Disbursements #{year} in #{MultiCurrency.output_currency}", finances.andand.payments]
                     
           columns += (1..4).map do |quarter|
-           ["Disbursements Q#{quarter}/#{year} in #{MultiCurrency.output_currency}", finances.send("payments_q#{quarter}")]
+           ["Disbursements Q#{quarter}/#{year} in #{MultiCurrency.output_currency}", finances.andand.send("payments_q#{quarter}")]
           end
         end
         
         if year >= Time.now.year
-          columns << ["Commitments Forecast #{year} in #{MultiCurrency.output_currency}", forecasts.commitments]
-          columns << ["Disbursements Forecast #{year} in #{MultiCurrency.output_currency}", forecasts.payments]
+          columns << ["Commitments Forecast #{year} in #{MultiCurrency.output_currency}", forecasts.andand.commitments]
+          columns << ["Disbursements Forecast #{year} in #{MultiCurrency.output_currency}", forecasts.andand.payments]
         end
         
         columns

@@ -29,8 +29,8 @@ public class SectorsByDonorTeaser extends TilesAction {
 		//get current year(by default selectedYear should be the same as current year)
 		Calendar cal=Calendar.getInstance();
 		Integer year=new Integer(cal.get(java.util.Calendar.YEAR));
-		tForm.setSelectedFromYear(year.toString());
-		tForm.setSelectedToYear(new Integer(year+1).toString());
+		tForm.setSelectedFromYear(new Integer(year-1).toString());
+		tForm.setSelectedToYear(year.toString());
 		tForm.setSelectedDonor(new Long(-1));
 		Collection<AmpOrganisation> donors = DbUtil.getAmpOrganisations(false);
 		tForm.setDonors(donors);

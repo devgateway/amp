@@ -49,9 +49,9 @@ public class ShowGisDashboard extends Action {
         gisForm.setAvailYears(DbUtil.getAvailIndicatorYears());
         //dropdown(on toolbar) things       
 		Calendar cal=Calendar.getInstance();
-		Integer year=new Integer(cal.get(java.util.Calendar.YEAR));  //get current year(by default selectedYear should be the same as current year)
-		gisForm.setSelectedFromYear(year.toString());
-		gisForm.setSelectedToYear(new Integer(year+1).toString());
+		Integer year=new Integer(cal.get(java.util.Calendar.YEAR));  //get current year
+		gisForm.setSelectedFromYear(new Integer(year-1).toString());
+		gisForm.setSelectedToYear(year.toString());
 		//fill from years' drop-down
 		gisForm.setYearsFrom(ChartWidgetUtil.getYears(true));
 		//fill to years' drop-down

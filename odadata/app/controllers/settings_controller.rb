@@ -7,7 +7,7 @@ class SettingsController < ApplicationController
   
   def toggle_data_input
     Prefs.data_input_open = (params[:new_status] == "1") ? true : false
-    redirect_to data_input_status_settings_path
+    redirect_to :action => "data_input_status"
   end
   
   def scrollbars

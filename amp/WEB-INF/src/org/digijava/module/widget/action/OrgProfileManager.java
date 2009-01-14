@@ -116,7 +116,6 @@ public class OrgProfileManager  extends DispatchAction {
               case WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB: name="Pledges/Comm/Disb"; break;
                case WidgetUtil.ORG_PROFILE_ODA_PROFILE: name="ODA Profile"; break;
                 case WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN: name="Sector Breakdown"; break;
-                 case WidgetUtil.ORG_PROFILE_SECTOR_LARGETST_PROJECTS: name="5 Largest Projects"; break;
                   case WidgetUtil.ORG_PROFILE_REGIONAL_BREAKDOWN: name="Regional Breakdown"; break;
                    case WidgetUtil.ORG_PROFILE_PARIS_DECLARATION: name="Paris Declaration"; break;
         }

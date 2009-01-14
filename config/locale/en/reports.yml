@@ -50,6 +50,7 @@ en:
     cod: Channel of Delivery
     payments_forecast: Disbursements Forecast {{year}}
     commitments_forecast: Commitments Forecast {{year}}
+    no_results_message: Your search has returned no results. Please try expanding the query.
     
     donors:
         title: Projects by Donor

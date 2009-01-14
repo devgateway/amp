@@ -51,6 +51,7 @@ es:
       # TODO:
       payments_forecast: Proyección de Desembolsos {{year}}
       commitments_forecast: Proyección de Compromisos {{year}}
+      no_results_message: Su búsqueda no ha encontrado resultados. Por favor, intente buscar de nuevo con diferente criterio.
       
       donors:
           title: Proyectos por Donantes

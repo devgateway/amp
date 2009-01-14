@@ -1,10 +1,19 @@
 <table class="bluebook">
 	<tr>
 		<td width=20% valign=top>
-			<%= image_tag @donor.profile_picture.url(:regular) %>
+			<% if @donor.profile_picture.url(:regular).include?('missing.png') %>
+				<img src="/flags/missing/avatar/missing.png" alt="missing.png" width="30" height="30"/>
+			<% else %>
+				<%= image_tag @donor.profile_picture.url(:regular) %>
+			<% end%>
+			
 			<br><br><br>
 			<center>
-			<%= image_tag @donor.flag.url(:regular) %><br><br>
+			<% if @donor.flag.url(:regular).include?('missing.png') %>
+				<img src="/flags/missing/regular/missing.png" alt="missing.png" width="80" height="54"/>
+			<% else %>
+				<%= image_tag @donor.flag.url(:regular) %>
+			<% end%><br><br>
 			<font size="3"><b><%= @donor.name %></b></font>
 			</center>
 		</td>

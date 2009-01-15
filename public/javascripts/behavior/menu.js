@@ -25,6 +25,7 @@ function tm(el)
     if(hasC(p,'selected')) cl();
     else{
         addC(p,'selected');
+        calculateWidth(p); //To have a cross browser way to fix widths of the submenu
         setTimeout(sh, 0);
         try {
             var u=(p.getElementsByTagName("UL")[1]), c=u.childNodes, w=u.clientWidth, e=u, x=0;  
@@ -32,4 +33,21 @@ function tm(el)
         catch (ig){}
     }
     return false;
+}
+function calculateWidth(p){
+    var blockWidth = p.clientWidth;
+    //get all children for this menu to get the widest
+    var liArray = p.getElementsByTagName("LI")
+    for(idx = 0; idx < liArray.length; idx++){
+        if(liArray[idx].clientWidth > blockWidth){
+            blockWidth = liArray[idx].clientWidth;
+        }
+    }
+    if(p.clientWidth < blockWidth) p.getElementsByTagName("UL")[0].style.width = blockWidth;
+    //Reset the widths to THAT!
+    for(idx = 0; idx < liArray.length; idx++){
+        if(liArray[idx].clientWidth < blockWidth){
+            liArray[idx].style.width = blockWidth + "px";
+        }
+    }
 }

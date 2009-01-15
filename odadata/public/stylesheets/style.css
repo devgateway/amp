@@ -520,7 +520,6 @@ ul.fatlist.flexible li {
 	position: absolute;
 	background: #376091;
 	height: auto;
-	min-width:180px;
 	top: 22px;
 	left: -1px;
 	border: 1px solid #3B5998;
@@ -534,7 +533,6 @@ ul.fatlist.flexible li {
 	display: block;
 }
 #mainMenu li ul li {
-	width:100%;
 	float: left;
 	font-weight: normal;
 	clear:both;

@@ -83,6 +83,9 @@ class Project < ActiveRecord::Base
   
   named_scope :grant, :conditions => ['grant_loan = ?', 1]
   named_scope :loan, :conditions => ['grant_loan = ?', 2]
+  
+  named_scope :national, :joins => "LEFT OUTER JOIN geo_relevances ON geo_relevances.project_id = projects.id", 
+    :conditions => "geo_relevances.province_id IS NULL"
       
   ##
   # Callbacks

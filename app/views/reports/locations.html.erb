@@ -10,7 +10,7 @@
 	
 	<tr style="font-weight: bold">
 		<td>National</td>
-		<td><%= @national.size %></td>
+		<td><%= Project.national.published.size %></td>
 		<td>
 			<%= reports_link_to(image_tag("/images/list.gif", :size => "14x15"), 
 					:controller => "reports", :action => "project_list", :query => "location", :value => 0) %>

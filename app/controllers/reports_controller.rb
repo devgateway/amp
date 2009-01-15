@@ -20,7 +20,6 @@ class ReportsController < ApplicationController
       render :action => "location_detail"
     else
       @provinces = Province.ordered.all.select { |d| d.projects.published.any? }
-      @national = Project.published.all
     end
   end
   
@@ -36,8 +35,7 @@ class ReportsController < ApplicationController
       DacSector.find(params[:value]).projects.published.ordered
     when "location"
       if params[:value].to_i == 0
-        # FIXME: Figure out a better way to select national projects..
-        #Project.published.all(:include => [:geo_level2s, :donor, :finances], :conditions => "geo_level2_id IS NULL", :order => "donor_id ASC, donor_project_number ASC")
+        Project.published.national.ordered
       else
         Province.find(params[:value]).projects.published.ordered
       end

@@ -173,8 +173,16 @@ class Project < ActiveRecord::Base
   # Validation methods
   # Validate that the total amount per project is 100%
   def total_sector_amount_is_100
-    unless self.sector_relevances.map(&:amount).sum == 100
-      errors.add('sector_relevances', 'The sum of the sector percentages should be 100%')
+    incorrect_number = false
+    for x in self.sector_relevances.map(&:amount)
+      if x == nil
+        incorrect_number = true
+      end
+    end
+    if incorrect_number == false
+      unless self.sector_relevances.map(&:amount).sum == 100
+        errors.add('sector_relevances', 'The sum of the sector percentages should be 100%')
+      end
     end  
   end
 

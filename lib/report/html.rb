@@ -12,7 +12,7 @@ module Report
     def output_head
       "<tr>" +
         data.columns.map { |h| "<th>#{h}</th>" }.join('') +
-      "</tr>"
+        "</tr>"
     end
         
     def output_body
@@ -20,7 +20,7 @@ module Report
       data.each_row do |r|
         rows << 
           "<tr>" + 
-            r.map { |f| "<td#{' class="currency right"' if f.is_a?(MultiCurrency::ConvertibleCurrency)}>#{f || ll(:reports, :na)}</td>" }.join('') + 
+          r.map { |f| "<td#{' class="currency right"' if f.is_a?(MultiCurrency::ConvertibleCurrency)}>#{f || ll(:reports, :na)}</td>" }.join('') +
           "</tr>"
       end
       
@@ -32,8 +32,9 @@ module Report
       data.each_column do |col|
         totals << %{<td class="currency right">#{col.total}</td>}
       end
-      
-      %{<tr class="totals">#{totals.join}</tr>} 
+
+      totals[0] = %{"<td><strong>TOTAL</strong></td>"}
+      %{<tr class="totals">#{totals.join}</tr>}
     end
     
     def output_end

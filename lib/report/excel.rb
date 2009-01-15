@@ -31,7 +31,7 @@ module Report
         totals << (col.has_total? ? col.total.to_s(false) : "")
       end
       
-      @worksheet.write_row(OFFSET_TOP + 1 + data.length, OFFSET_LEFT, encode_row_for_excel(totals), @workbook.add_format(:bold => 1))
+      @worksheet.write_row(OFFSET_TOP  + 1 + data.length, OFFSET_LEFT, encode_row_for_excel(totals), @workbook.add_format(:bold => 1))
     end
     
     def output    
@@ -53,8 +53,13 @@ module Report
       # Convert
       row.map do |cell| 
         # If this is a currency object convert to string without unit identifier
-        str_repr = cell.is_a?(MultiCurrency::ConvertibleCurrency) ? cell.to_s(false) : cell.to_s 
-        Iconv.iconv('ISO-8859-1', 'utf-8', str_repr.gsub(allowed, "")).first
+        if cell.is_a?(MultiCurrency::ConvertibleCurrency)
+          str_repr = cell.to_f
+        else
+          str_repr = cell.to_s
+          #str_repr = cell.is_a?(MultiCurrency::ConvertibleCurrency) ? cell.to_s(false) : cell.to_s
+          Iconv.iconv('ISO-8859-1', 'utf-8', str_repr.gsub(allowed, "")).first
+        end
       end
     end
       

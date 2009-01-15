@@ -20,6 +20,7 @@ protected
     
   def output_currency
     MultiCurrency.output_currency = params[:currency]
+    MultiCurrency.output_currency = Prefs.default_currency if MultiCurrency.output_currency.nil?
     yield
     MultiCurrency.output_currency = nil
   end

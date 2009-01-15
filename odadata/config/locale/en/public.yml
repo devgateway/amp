@@ -2,9 +2,10 @@ en:
   static:
     home: 
       introduction_short: |
-        <p>ODAnic is a new electronic tool that provides information on EU Official Development Assistance (ODA) to Nicaragua. It was created in response to the Paris Declaration which advocates strengthened coordination and harmonisation among donors and alignment with the poverty reduction strategy of the Government of Nicaragua.</p>
-        <p>ODAnic allows users to consult EU donor country strategies, projects and programmes: where they are operating, who finances them, and which organisation implements them.</p>
-        <p>It is a user-friendly tool, accessible to all through the internet. Its "Design Your Own Report" function makes it easy to search for specific information through a set of predefined criteria (i.e. donor, sector, location, project status, funding type and MDG) and offers tables, geographic maps (ODAmap) and information on Country Strategies.</p>
+        <p>ODAnic is the online database of Official Development Assistance (ODA) from EU Member States to Nicaragua. It was created in response to the Paris Declaration on Aid Effectiveness, which advocates stronger coordination of donor activities and better alignment of aid with the poverty reduction strategy of the Government of Nicaragua.</p>
+        <p>In the spirit of increasing aid harmonization, ODAnic will soon contain information on assistance from a wider range of donor organizations.</p>
+        <p>ODAnic is user-friendly, free of charge, and available to all. Users can search for projects by donor, sector, and other criteria, and create custom reports using the "Design Your Own Report" function. ODAnic also contains donor profiles with each EU Member State's strategy for assistance to Nicaragua.</p>
+		<p>With ODAmap, users can locate projects by geographic location. The EU Blue Book is an interactive, online resource with graphs and other tools to help users understand and analyze the data.</p>
         <p>Welcome to ODAnic!</p>
   
           

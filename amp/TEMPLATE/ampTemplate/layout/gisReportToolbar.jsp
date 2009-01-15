@@ -30,37 +30,17 @@
 -->
 </style>
 
-<div class="toolbar" align="center">
-	<table border="0" align="center" bgcolor="#addadd" cellpadding="3">
+
+	<table border="0" align="left"  cellpadding="3"  cellspacing="5" bgcolor="#FFFFFF">
+        <tr>
+            <td colspan="3">&nbsp;</td>
+        </tr>
 		<tr>
 			<td>
-				<div>
-					<table border="0" align="center" bgcolor="#addadd" class="toolbartable">
+			
+					<table border="0" align="left" bgcolor="#EDF5FF" >
 						<tr>
-							<td noWrap align=left valign="middle" style="cursor:pointer;">
-								<a target="_blank" onclick="exportPDF(); return false;">
-									<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/pdf.gif" border="0" alt='Export to PDF'/>
-								</a>
-							</td>
-							
-							<td noWrap align=left valign="middle">
-					            <digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/printer.gif" border="0" alt="Printer Friendly"/>
-							</td>
-					
-							<td noWrap align=left valign="middle">
-								<digi:link href="#" target="_blank" onclick="javascript:window.close(); return false;">
-									<digi:img src="module/aim/images/close.gif" border="0" alt="Close"/>
-								</digi:link>
-							</td>
-						</tr>
-					</table>
-				</div>
-			</td>
-			<td>
-				<div>
-					<table border="0" align="center" bgcolor="#addadd" class="toolbartable">
-						<tr>
-							<td nowrap="nowrap">
+							<td nowrap="nowrap" height="30px">
 								<digi:trn>From Date:</digi:trn>
 							</td>
 							<td noWrap align=left valign="middle">
@@ -78,9 +58,34 @@
 							</td>
 						</tr>
 					</table>				
-				</div>
+			
+			</td>
+            <td>
+                &nbsp;
+            </td>
+            <td>
+					<table border="0" align="center" bgcolor="#EDF5FF">
+						<tr>
+							<td noWrap align=left valign="middle" style="cursor:pointer;" height="30px">
+								<a target="_blank" onclick="exportPDF(); return false;">
+									<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/pdf.gif" border="0" alt='Export to PDF'/>
+								</a>
+							</td>
+
+							<td noWrap align=left valign="middle">
+					            <digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/printer.gif" border="0" alt="Printer Friendly"/>
+							</td>
+
+							<td noWrap align=left valign="middle">
+								<digi:link href="#" target="_blank" onclick="javascript:window.close(); return false;">
+									<digi:img src="module/aim/images/close.gif" border="0" alt="Close"/>
+								</digi:link>
+							</td>
+						</tr>
+					</table>
+				
 			</td>
 		</tr>
 	</table>
-</div>
+
 <br>

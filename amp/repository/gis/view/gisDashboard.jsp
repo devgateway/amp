@@ -40,17 +40,12 @@
 
 <div id="content" class="yui-skin-sam" style="width:100%;height:100%">
   <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
-    <ul class="yui-nav">
-        <li class="selected">
-            <div class="nohover">
-                <a style="cursor:default">
-                    <div>
-                        <digi:trn key="gis:regionalview">Regional View</digi:trn>
-                    </div>
-                </a>
-            </div>
-        </li>
-    </ul>
+      <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
+      <digi:img src="images/tableftcorner.gif" align="left" hspace="0"/>
+      <div class="longTab">
+          <digi:trn key="gis:regionalview">Regional View</digi:trn>
+      </div>
+            
     <div id="div1" class="yui-content" style="font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
 
 

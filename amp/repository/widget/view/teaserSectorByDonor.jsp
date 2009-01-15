@@ -28,17 +28,11 @@
 
 <div id="content" class="yui-skin-sam" style="width:100%;z-index: 1;">
   <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
-    <ul class="yui-nav">
-      <li class="selected">
-        <div class="nohover">
-        <a style="cursor:default">
-        <div>
+      <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
+      <digi:img src="images/tableftcorner.gif" align="left" hspace="0"/>
+      <div class="longTab">
           <digi:trn key="gis:breakdownbysector">Breakdown by sector</digi:trn>
         </div>
-        </a>
-        </div>
-      </li>
-    </ul>
     <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
 
 <table>

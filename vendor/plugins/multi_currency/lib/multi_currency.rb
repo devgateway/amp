@@ -17,6 +17,12 @@ module MultiCurrency
 
   class << self
     # This can be used to set a default output currency for the ConvertibleCurrency#to_s method
-    attr_accessor :output_currency
+    def output_currency=(currency)
+      Thread.current['mc_output_currency'] = currency
+    end
+    
+    def output_currency
+      Thread.current['mc_output_currency']
+    end
   end
 end

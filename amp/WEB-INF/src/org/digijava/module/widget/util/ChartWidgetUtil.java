@@ -646,9 +646,11 @@ public class ChartWidgetUtil {
 			 * year's(parameter that is passed to function) 1st of July to the next year's 1st of July 
 			 */
 			Long defaultCalendarId=new Long(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR));
-			AmpFiscalCalendar calendar=FiscalCalendarUtil.getAmpFiscalCalendar(defaultCalendarId);
+			AmpFiscalCalendar calendar=FiscalCalendarUtil.getAmpFiscalCalendar(defaultCalendarId);						
 			fromDate=getStartOfYear(fromYear.intValue(),calendar.getStartMonthNum()-1,calendar.getStartDayNum());
-			toDate = getStartOfYear(toYear.intValue(),calendar.getStartMonthNum()-1,calendar.getStartDayNum());
+			//we need data including the last day of toYear,this is till the first day of toYear+1
+			int MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
+			toDate =new Date(getStartOfYear(toYear.intValue()+1,calendar.getStartMonthNum()-1,calendar.getStartDayNum()).getTime()-MILLISECONDS_IN_DAY);
 		}		
         Double[] allFundingWrapper={new Double(0)};// to hold whole funding value
 		Collection<DonorSectorFundingHelper> fundings=getDonorSectorFunding(donors, fromDate, toDate,allFundingWrapper);

@@ -36,6 +36,15 @@
 	#div1{
 		height: 95,5%;
 	}
+	
+	option.dsbl {
+		color:gray;;
+	}
+	
+	option.enbl {
+		color:Black;;
+	}
+	
 </style>
 
 <div id="content" class="yui-skin-sam" style="width:100%;height:100%">

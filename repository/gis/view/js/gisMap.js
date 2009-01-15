@@ -269,7 +269,8 @@
 				fundingDataByRegion[fundingDataByRegion.length] = regionDataMap;
 			}
 			initIndicatorValues();
-			window.setTimeout(getSectorIndicators, 100);
+			actionGetIndicators = true;
+			window.setTimeout(getSectorIndicators, 500);
 		}
 		
 	}
@@ -286,6 +287,7 @@
 
 	function SectorIndicatorsReady () {
 		if (xmlhttp.readyState == 4) {
+
 			actionGetIndicators = false;
 			var indicators = xmlhttp.responseXML.getElementsByTagName('indicator');
 			var indIndex = 0;
@@ -306,7 +308,21 @@
 				var opt = document.createElement("OPTION");
 				opt.value=indicatorData.attributes.getNamedItem("id").value;
 				opt.text=indicatorData.attributes.getNamedItem("name").value;
+				
 				selectCmb.options.add(opt);
+				
+				//alert (indicatorData.attributes.getNamedItem("enbl").value);
+				
+				if (indicatorData.attributes.getNamedItem("enbl").value=="false") {
+//					opt.setAttribute("DISABLED", "true");
+//					opt.disabled = "disabled";
+					opt.className="dsbl";
+//					opt.style="text-decoration:line-through";
+				} else {
+					opt.className="enbl";
+				}
+				
+				
 				
 			}
 			initIndicatorValues();
@@ -509,6 +525,7 @@
 			document.getElementById("reg_district_caption_for").innerHTML="For this district";
 		}
 		
+		initIndicatorCombo();
 		initSubgroupCombo();
 		initYearCombo();
 		

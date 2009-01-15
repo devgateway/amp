@@ -599,7 +599,7 @@ public class GetFoundingDetails extends Action {
                 sectorIndicators.addElement(root);
 
                 //Add indicators
-                List secIndicatorList = DbUtil.getIndicatorsForSector(secId);
+                List secIndicatorList = DbUtil.getIndicatorsForSector(secId, Integer.parseInt(mapLevel));
                 Iterator indNameIterator = secIndicatorList.iterator();
 
                 while (indNameIterator.hasNext()) {
@@ -607,6 +607,7 @@ public class GetFoundingDetails extends Action {
                     XML ind = new XML("indicator");
                     ind.addAttribute("name", (String) indName[1]);
                     ind.addAttribute("id", (Long) indName[0]);
+                    ind.addAttribute("enbl", ((Boolean) indName[2]));
                     root.addElement(ind);
 
                 }

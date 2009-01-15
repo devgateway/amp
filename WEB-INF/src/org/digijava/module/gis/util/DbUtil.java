@@ -22,6 +22,7 @@ import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.gis.dbentity.GisMap;
 import org.digijava.module.aim.action.IndicatorValues;
+import java.util.ArrayList;
 
 /**
  * <p>Title: </p>
@@ -177,16 +178,57 @@ public class DbUtil {
         return retVal;
     }
 
-    public static List getIndicatorsForSector(Long sectorId) {
+    public static List getIndicatorsForSector(Long sectorId, int mapLevel) {
        List retVal = null;
        Session session = null;
        try {
            session = PersistenceManager.getRequestDBSession();
+
+           StringBuffer querySrc = new StringBuffer();
+           querySrc.append("select ds.indicator.indicatorId, ds.indicator.name from ");
+           querySrc.append(IndicatorSector.class.getName());
+           querySrc.append(" ds where ds.sector.ampSectorId=:sectorId group by ds.indicator.indicatorId order by ds.indicator.name");
+
+           /*
            Query q = session.createQuery("select ds.indicator.indicatorId, ds.indicator.name from " +
                                          IndicatorSector.class.getName() +
                                          " ds where ds.sector.ampSectorId=:sectorId group by ds.indicator.indicatorId order by ds.indicator.name");
+*/
+           Query q = session.createQuery(querySrc.toString());
            q.setParameter("sectorId", sectorId, Hibernate.LONG);
-           retVal = q.list();
+           List allIndicatorList = q.list();
+
+           //Get used indicator list for this map level
+           StringBuffer querySrc1 = new StringBuffer();
+           querySrc1.append("select distinct ds.indicatorConnection.indicator.indicatorId from ");
+           querySrc1.append(AmpIndicatorValue.class.getName());
+           querySrc1.append(" ds where ds.indicatorConnection.sector.ampSectorId=:sectorId and");
+
+           if (mapLevel == 2) {
+               querySrc1.append(" ds.indicatorConnection.location.region is not null and");
+               querySrc1.append(" ds.indicatorConnection.location.zone is null");
+           } else if (mapLevel == 3) {
+               querySrc1.append(" ds.indicatorConnection.location.zone is not null");
+           }
+           Query q1 = session.createQuery(querySrc1.toString());
+           q1.setParameter("sectorId", sectorId, Hibernate.LONG);
+           List usedIndicatorList = q1.list();
+
+           retVal = new ArrayList();
+
+           Iterator it = allIndicatorList.iterator();
+           while (it.hasNext()) {
+               Object [] obj = (Object[]) it.next();
+               Object [] filtered = new Object[3];
+               filtered[0] = obj[0];
+               filtered[1] = obj[1];
+               filtered[2] = new Boolean(usedIndicatorList.contains(obj[0]));
+
+               retVal.add(filtered);
+           }
+
+
+
        } catch (Exception ex) {
            logger.debug("Unable to get indicators from DB", ex);
        }

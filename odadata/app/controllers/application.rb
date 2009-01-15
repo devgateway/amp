@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   include I18nHelper
   
   helper :all
-  around_filter :output_currency
+  before_filter :set_output_currency
   before_filter :set_locale
   layout :smart_layout
   
@@ -18,11 +18,8 @@ protected
     I18n.locale = session[:locale] || I18n.default_locale
   end
     
-  def output_currency
+  def set_output_currency
     MultiCurrency.output_currency = params[:currency]
-    MultiCurrency.output_currency = Prefs.default_currency if MultiCurrency.output_currency.nil?
-    yield
-    MultiCurrency.output_currency = nil
   end
   
   def smart_layout

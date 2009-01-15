@@ -10,7 +10,7 @@
 	<bean:define id="starFlagLocal" name="starFlag" scope="request" toScope="page" />
 </logic:present>
 
-<div align="left" style="padding-left:<%=request.getAttribute("pading")%>" title='<digi:trn key="html.TextCell.${textCell.shortTextVersion}"><bean:write name="textCell" property="shortTextVersion" filter="false"/></digi:trn>'>
+<div align="left" style="padding-left:<%=request.getAttribute("pading")%>" title='<digi:trn key="html.TextCell.${textCell.translationKey}"><bean:write name="textCell" property="shortTextVersion" filter="false"/></digi:trn>'>
 	<%if (textCell.getShortTextVersion().length() > 39){ %>
 		<logic:present name="starFlag" scope="request">
 			<logic:equal name="starFlagLocal" value="true">*</logic:equal>
@@ -22,7 +22,7 @@
 			<logic:equal name="starFlagLocal" value="true">*</logic:equal>
 			<bean:define id="starFlag" value="" scope="page" toScope="request" />
 		</logic:present>
-		<digi:trn key="html.TextCell.${textCell.shortTextVersion}"><bean:write name="textCell" property="shortTextVersion" filter="false"/></digi:trn>
+		<digi:trn key="html.TextCell.${textCell.translationKey}"><bean:write name="textCell" property="shortTextVersion" filter="false"/></digi:trn>
 	<%}%>
 </div>
 

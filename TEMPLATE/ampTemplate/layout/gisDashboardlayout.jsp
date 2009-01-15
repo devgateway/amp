@@ -100,12 +100,17 @@ else {
     <BODY leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0">    	
 		<TABLE cellSpacing=0 cellPadding=0 width="100%" height="100%" border=0 valign="top" align="left">
 			<TBODY>
-			<TR>
+                <TR>
+                    <TD>
+                        <jsp:include page="/TEMPLATE/ampTemplate/layout/gisReportToolbar.jsp" />
+                    </TD>
+                </TR>
+            <TR>
 				<TD width="100%" vAlign="top" align="left">
 
 
 
-<jsp:include page="/TEMPLATE/ampTemplate/layout/gisReportToolbar.jsp" />
+
 <jsp:include page="/TEMPLATE/ampTemplate/layout/gisScripts.jsp" />
 
 <h2 style="padding-left:10px;font-size:15pt;"><digi:trn key="gis:resultsmatrix">Results Matrix: </digi:trn><%=countryName%></h2>
@@ -128,18 +133,12 @@ else {
 									<tr>
 										<td height="100%">
 											<div id="content" class="yui-skin-sam" style="width:100%;padding: 0px">
-	                                          <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
-	                                            <ul class="yui-nav">
-	                                              <li class="selected">
-	                                               <div class="nohover">
-	                                               		<a style="cursor:default">
-	                                                		<div>
-	                                                  			<digi:trn key="gis:resourcesatglance">Resources at a glance</digi:trn>
-	                                                		</div>
-	                                                	</a>
-	                                            	</div>
-	                                              </li>
-	                                            </ul>
+	                                          <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;"> 
+                                                  <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
+                                                  <digi:img src="images/tableftcorner.gif" align="left" hspace="0"/>
+                                                  <div class="longTab">
+                                                      <digi:trn key="gis:resourcesatglance">Resources at a glance</digi:trn>
+                                                  </div>
 	                                            <div class="yui-content" style="font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">                                        
 													<table cellpadding="5" cellspacing="0">
 														<tr valign="top">
@@ -176,17 +175,12 @@ else {
 										<td valign="top">
                                         <div id="content" class="yui-skin-sam" style="width:100%;">
                                           <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
-                                            <ul class="yui-nav">
-                                                <li class="selected">
-                                                    <div class="nohover">
-                                                        <a style="cursor:default">
-                                                            <div>
-                                                                <digi:trn key="gis:millenniumdevelopmentgoals">Millennium Development Goals</digi:trn>
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                </li>
-                                            </ul>
+                                              <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
+                                              <digi:img src="images/tableftcorner.gif" align="left" hspace="0"/>
+                                              <div class="longTab">
+                                                  <digi:trn key="gis:millenniumdevelopmentgoals">Millennium Development Goals</digi:trn>
+                                              </div>
+                                                    
                                             <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">                                        
 											<table cellpadding="5" border="0" width="100%">
 												<tr>
@@ -252,17 +246,12 @@ else {
 										<td colspan="2">
                                         <div id="content" class="yui-skin-sam" style="width:1000px;">
                                           <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
-                                            <ul class="yui-nav">
-                                              <li class="selected">
-                                                  <div class="nohover">
-                                                      <a  style="cursor:default">
-                                                          <div>
-                                                              <digi:trn key="gis:aideffectivenessindicators">Aid Effectiveness Process Indicators</digi:trn>
-                                                          </div>
-                                                      </a>
-                                                  </div>
-                                              </li>
-                                            </ul>
+                                              <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
+                                              <digi:img src="images/tableftcorner.gif" align="left" hspace="0"/>
+                                              <div class="longTab">
+                                                  <digi:trn key="gis:aideffectivenessindicators">Aid Effectiveness Process Indicators</digi:trn>
+                                              </div>
+                                                     
                                             <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
                                         
                                             <table>
@@ -306,17 +295,12 @@ else {
 										<td colspan="2" valign="top">
                                         <div id="content" class="yui-skin-sam" style="width:1000px;">
                                           <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
-                                            <ul class="yui-nav">
-                                                <li class="selected">
-                                                    <div class="nohover">
-                                                        <a  style="cursor:default">
-                                                            <div>
-                                                                <digi:trn key="gis:outputindicators">Output Indicators</digi:trn>
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                </li>
-                                            </ul>
+                                              <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
+                                              <digi:img src="images/tableftcorner.gif" align="left" hspace="0"/>
+                                              <div class="longTab">
+                                                  <digi:trn key="gis:outputindicators">Output Indicators</digi:trn>
+                                              </div>
+                                                    
                                             <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
                                             <table>
                                                 <tr>
@@ -341,17 +325,12 @@ else {
 										<td colspan="2">
                                         <div id="content" class="yui-skin-sam" style="width:1000px;">
                                           <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
-                                            <ul class="yui-nav">
-                                              <li class="selected">
-                                                  <div class="nohover">
-                                                      <a  style="cursor:default">
-                                                          <div>
-                                                              <digi:trn key="gis:totalresources">Total resources</digi:trn>
-                                                          </div>
-                                                      </a>
-                                                  </div>
-                                              </li>
-                                            </ul>
+                                              <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
+                                              <digi:img src="images/tableftcorner.gif" align="left" hspace="0"/>
+                                              <div class="longTab">
+                                                  <digi:trn key="gis:totalresources">Total resources</digi:trn>
+                                              </div>
+                                                  
                                             <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
                                             <table>
                                                 <tr>
@@ -373,17 +352,12 @@ else {
 										<td colspan="2">
                                         <div id="content" class="yui-skin-sam" style="width:1000px;">
                                           <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
-                                            <ul class="yui-nav">
-                                              <li class="selected">
-                                                  <div class="nohover">
-                                                      <a  style="cursor:default">
-                                                          <div>
-                                                              <digi:trn key="gis:externalaidresources">External Aid Resources</digi:trn>
-                                                          </div>
-                                                      </a>
-                                                  </div>
-                                              </li>
-                                            </ul>
+                                              <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
+                                              <digi:img src="images/tableftcorner.gif" align="left" hspace="0"/>
+                                              <div class="longTab">
+                                                  <digi:trn key="gis:externalaidresources">External Aid Resources</digi:trn>
+                                              </div>
+                                                    
                                             <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
                                             <table>
                                                 <tr>

@@ -520,6 +520,9 @@ public class GetFoundingDetails extends Action {
                     Long subId = (Long) subData[0];
                     String subName = (String) subData[1];
 
+                    subName = subName.replace("<", "&lt;");
+                    subName = subName.replace(">", "&gt;");
+
                     XML subNode = new XML("subgroup");
                     subNode.addAttribute("id",subId);
                     subNode.addAttribute("name",subName);

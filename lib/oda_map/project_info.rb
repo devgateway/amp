@@ -31,6 +31,9 @@ module OdaMap
     
 private
     def build_expression
+      # This highlights all regions for national projects
+      return nil if @project.geo_list.blank?
+      
       criteria = []
       @project.geo_list.each do |l1, l2s|
         # TODO: We probably shouldn't check for the exact string here

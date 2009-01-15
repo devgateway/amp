@@ -7,7 +7,9 @@
 	</form-beans>
 	<action-mappings>
 		<!-- Export routine -->
-    	<action path="/dataExchange/exportWizard" forward="/showLayout.do?layout=exportWizard" />
+    	<action path="/dataExchange/exportWizard" scope="session" type="org.digijava.module.dataExchange.action.ExportWizardAction" name="deExportForm" validate="false" parameter="method">
+			<forward name="default" path="/showLayout.do?layout=exportWizard"/>
+		</action> 
 		<action path="/dataExchange/export" scope="session" type="org.digijava.module.dataExchange.action.ExportAction" name="deExportForm" validate="false" parameter="method">
 			<forward name="default" path="/showLayout.do?layout=exportWizard"/>
 		</action> 

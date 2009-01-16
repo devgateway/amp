@@ -116,6 +116,7 @@ en:
     next_step: Next
     
     # TODO:
+    no_subsector: No Sub-Sector
     delete_associated: Delete
     add_implementing_agency: Add another Implementing Agency
     add_contracted_agency: Add another Contracted Agency

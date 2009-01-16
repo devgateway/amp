@@ -36,7 +36,7 @@ es:
       
   donors:
     index:
-      title: Donante / Lista de donantes co-financiandores
+      title: Donante / Lista de donantes co-financiadores
       empty: No hay donantes en el base de datos. Por favor crea un donante nuevo.
       agencies: Agencias donantes ({{total}})
       logins: Cuenta de ingreso
@@ -127,7 +127,7 @@ es:
     zero_provinces_warning: "¡Por favor seleccione por lo menos una provincia!"
     add_cofunding_donor: Añadir otro Donante
     add_sector:  Añadir otro Sector
-    cofunding_title: Donantes co-financiandores y montos
+    cofunding_title: Donantes co-financiadores y montos
     historic_funding: Financiamiento Histórico (hasta el final de {{year}})
     funding_title: Finanzas {{year}}
     forecasts_title: Proyección de Financiamiento {{year}}

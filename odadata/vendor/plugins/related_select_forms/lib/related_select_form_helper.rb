@@ -28,13 +28,12 @@ class ActionView::Helpers::InstanceTag #:nodoc:
   
   def option_groups_from_collection_for_select_with_prompt(collection, group_method, group_label_method, option_key_method, option_value_method, selected_key = nil,prompt=nil)
     collection.inject("") do |options_for_select, group|
-      group_label_string = eval("group.#{group_label_method}")
-      if prompt != nil
-          options_for_select += "<optgroup label=\"#{html_escape(group_label_string)}\">"
-      end
+      group_label_string = group.instance_eval(group_label_method.to_s)
+      
+      options_for_select += %{<optgroup label="#{html_escape(group_label_string)}">}
       options_for_select += prompt
-      options_for_select += options_from_collection_for_select(eval("group.#{group_method}"), option_key_method, option_value_method, selected_key)
-      options_for_select += '</optgroup>'
+      options_for_select += options_from_collection_for_select(group.instance_eval(group_method.to_s), option_key_method, option_value_method, selected_key)
+      options_for_select += "</optgroup>"
     end
   end
 end

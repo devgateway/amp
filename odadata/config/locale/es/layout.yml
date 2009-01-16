@@ -27,10 +27,11 @@ es:
       donor_info: Info Donante
       donor_details: Detalles de Donante
       accounts: Cuentas de Ingreso
-      projects: Projects
+      projects: Proyectos
+      reports_on: Reportes sobre
       new_project: Añadir Nuevo
       draft_projects: Borrador
-      published_projects: Púublicado
+      published_projects: Publicado
       deleted_projects: Papelera de Reciclaje
       bluebook: UE Blue Book
       design_own: 'Diseña tu Reporte'

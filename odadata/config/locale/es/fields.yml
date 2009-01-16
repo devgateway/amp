@@ -112,13 +112,13 @@ es:
         payments_q3: Desembolsos 3er Cuarto
         payments_q4: Desembolsos 4º Cuarto
         on_budget: En/Fuera del Presupuesto
-        on_treasury: En/Fuera de la Hacienda
+        on_treasury: En/Fuera de la Tesoreria
       
       funding_forecast:
         commitments: Compromisos
         payments: Desembolsos
         on_budget: En/Fuera del Presupuesto
-        on_treasury: En/Fuera de la Hacienda
+        on_treasury: En/Fuera de la Tesoreria
         
       country_strategy:
         donor: Donante

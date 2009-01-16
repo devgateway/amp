@@ -2477,9 +2477,7 @@ public class DbUtil {
 
             queryString += " inner join act.funding f " +
                     " inner join f.fundingDetails fd ";
-            if (teamMember != null && teamMember.getComputation() != null && teamMember.getComputation()) {
-                queryString+= " inner join act.orgrole role";
-            }
+          
             queryString += "  where f.ampDonorOrgId=:orgID and " +
                     " fd.transactionType = 0 and  fd.adjustmentType = 1";
             queryString += " and year(fd.transactionDate)=:year   ";
@@ -6938,9 +6936,7 @@ public class DbUtil {
             }
 
             queryString += ") from " + AmpAhsurvey.class.getName() + " ah inner join ah.responses res  " + " inner join res.ampQuestionId  q  " + " inner join q.ampIndicatorId ind  " + " inner join ah.ampActivityId act   " + " inner join act.funding f   " + " inner join  f.fundingDetails fd   " ;
-             if (teamMember != null && teamMember.getComputation() != null && teamMember.getComputation()) {
-               queryString+= " inner join act.orgrole role ";
-            }
+             
             queryString+= " where  fd.transactionType =1 and  fd.adjustmentType =:adjustmentType" +
                     " and year(fd.transactionDate)=:year " + " and ind.ampIndicatorId=:indId";
             queryString+=ChartWidgetUtil.getTeamQuery(teamMember);
@@ -7013,10 +7009,7 @@ public class DbUtil {
              " inner join ah.ampActivityId act   " 
              + " inner join act.funding f   " 
              + " inner join  f.fundingDetails fd   " ;
-             if (member != null && member.getComputation() != null && member.getComputation()) {
-               queryString+= " inner join act.orgrole role " ;
-            }
-
+            
              queryString+= "  where fd.transactionType =1 and  fd.adjustmentType =1" +
                     " and year(fd.transactionDate)=:year " + " and ind.ampIndicatorId=:indId";
                 queryString += " and res.response='Yes' ";
@@ -7076,9 +7069,7 @@ public class DbUtil {
                     + " inner join ah.ampActivityId act   " 
                     + " inner join act.funding f   " 
                     + " inner join  f.fundingDetails fd   ";
-                 if (member != null && member.getComputation() != null && member.getComputation()) {
-                queryString += " inner join act.orgrole role ";
-            }
+              
                    queryString += " where "
                     + " fd.transactionType =1 and  fd.adjustmentType =1" +
                     " and year(fd.transactionDate)=:year "

@@ -1,73 +1,73 @@
 --- 
 exchange_rates_001: 
-  currency: NIO
-  euro_rate: "0.038989"
-  id: "27"
-  year: "2008"
-exchange_rates_002: 
-  currency: DKK
-  euro_rate: "7.45"
-  id: "7"
-  year: "2009"
-exchange_rates_003: 
-  currency: DKK
-  euro_rate: "7.45"
-  id: "17"
-  year: "2011"
-exchange_rates_004: 
-  currency: DKK
-  euro_rate: "7.45"
-  id: "6"
-  year: "2008"
-exchange_rates_005: 
   currency: SEK
   euro_rate: "9.22"
-  id: "19"
-  year: "2011"
-exchange_rates_006: 
-  currency: NIO
-  euro_rate: "0.038989"
-  id: "26"
+  id: "13"
   year: "2007"
-exchange_rates_007: 
-  currency: GBP
-  euro_rate: "0.67"
-  id: "10"
-  year: "2008"
-exchange_rates_008: 
-  currency: GBP
-  euro_rate: "0.67"
-  id: "12"
-  year: "2010"
-exchange_rates_009: 
-  currency: EUR
-  euro_rate: "1"
-  id: "20"
-  year: "2011"
-exchange_rates_010: 
+exchange_rates_002: 
   currency: EUR
   euro_rate: "1"
   id: "1"
   year: "2007"
-exchange_rates_011: 
+exchange_rates_003: 
+  currency: GBP
+  euro_rate: "0.67"
+  id: "18"
+  year: "2011"
+exchange_rates_004: 
   currency: USD
   euro_rate: "1.37"
   id: "22"
   year: "2008"
-exchange_rates_012: 
+exchange_rates_005: 
+  currency: NIO
+  euro_rate: "0.038989"
+  id: "28"
+  year: "2009"
+exchange_rates_006: 
   currency: NIO
   euro_rate: "0.038989"
   id: "30"
   year: "2011"
-exchange_rates_013: 
+exchange_rates_007: 
+  currency: NIO
+  euro_rate: "0.038989"
+  id: "27"
+  year: "2008"
+exchange_rates_008: 
+  currency: EUR
+  euro_rate: "1"
+  id: "2"
+  year: "2008"
+exchange_rates_009: 
   currency: EUR
   euro_rate: "1"
   id: "3"
   year: "2009"
-exchange_rates_014: 
+exchange_rates_010: 
+  currency: DKK
+  euro_rate: "7.45"
+  id: "7"
+  year: "2009"
+exchange_rates_011: 
+  currency: SEK
+  euro_rate: "9.22"
+  id: "14"
+  year: "2008"
+exchange_rates_012: 
   currency: EUR
   euro_rate: "1"
   id: "4"
+  year: "2010"
+exchange_rates_013: 
+  currency: DKK
+  euro_rate: "7.45"
+  id: "17"
+  year: "2011"
+exchange_rates_014: 
+  currency: DKK
+  euro_rate: "7.45"
+  id: "8"
   year: "2010"
 exchange_rates_015: 
   currency: GBP
@@ -75,77 +75,77 @@ exchange_rates_015:
   id: "9"
   year: "2007"
 exchange_rates_016: 
-  currency: SEK
-  euro_rate: "9.22"
-  id: "16"
-  year: "2010"
+  currency: DKK
+  euro_rate: "7.45"
+  id: "6"
+  year: "2008"
 exchange_rates_017: 
-  currency: USD
-  euro_rate: "1.37"
-  id: "24"
-  year: "2010"
-exchange_rates_018: 
-  currency: DKK
-  euro_rate: "7.45"
-  id: "5"
-  year: "2007"
-exchange_rates_019: 
-  currency: NIO
-  euro_rate: "0.038989"
-  id: "29"
-  year: "2010"
-exchange_rates_020: 
-  currency: USD
-  euro_rate: "1.37"
-  id: "21"
-  year: "2007"
-exchange_rates_021: 
-  currency: SEK
-  euro_rate: "9.22"
-  id: "13"
-  year: "2007"
-exchange_rates_022: 
-  currency: GBP
-  euro_rate: "0.67"
-  id: "18"
-  year: "2011"
-exchange_rates_023: 
-  currency: NIO
-  euro_rate: "0.038989"
-  id: "28"
-  year: "2009"
-exchange_rates_024: 
-  currency: EUR
-  euro_rate: "1"
-  id: "2"
-  year: "2008"
-exchange_rates_025: 
-  currency: SEK
-  euro_rate: "9.22"
-  id: "14"
-  year: "2008"
-exchange_rates_026: 
-  currency: DKK
-  euro_rate: "7.45"
-  id: "8"
-  year: "2010"
-exchange_rates_027: 
   currency: SEK
   euro_rate: "9.22"
   id: "15"
   year: "2009"
-exchange_rates_028: 
+exchange_rates_018: 
+  currency: SEK
+  euro_rate: "9.22"
+  id: "16"
+  year: "2010"
+exchange_rates_019: 
+  currency: SEK
+  euro_rate: "9.22"
+  id: "19"
+  year: "2011"
+exchange_rates_020: 
   currency: GBP
   euro_rate: "0.67"
   id: "11"
   year: "2009"
-exchange_rates_029: 
+exchange_rates_021: 
+  currency: USD
+  euro_rate: "1.37"
+  id: "24"
+  year: "2010"
+exchange_rates_022: 
+  currency: NIO
+  euro_rate: "0.038989"
+  id: "26"
+  year: "2007"
+exchange_rates_023: 
   currency: USD
   euro_rate: "1.37"
   id: "25"
   year: "2011"
-exchange_rates_030: 
+exchange_rates_024: 
+  currency: DKK
+  euro_rate: "7.45"
+  id: "5"
+  year: "2007"
+exchange_rates_025: 
+  currency: GBP
+  euro_rate: "0.67"
+  id: "10"
+  year: "2008"
+exchange_rates_026: 
   currency: USD
   euro_rate: "1.37"
   id: "23"
   year: "2009"
+exchange_rates_027: 
+  currency: NIO
+  euro_rate: "0.038989"
+  id: "29"
+  year: "2010"
+exchange_rates_028: 
+  currency: GBP
+  euro_rate: "0.67"
+  id: "12"
+  year: "2010"
+exchange_rates_029: 
+  currency: USD
+  euro_rate: "1.37"
+  id: "21"
+  year: "2007"
+exchange_rates_030: 
+  currency: EUR
+  euro_rate: "1"
+  id: "20"
+  year: "2011"

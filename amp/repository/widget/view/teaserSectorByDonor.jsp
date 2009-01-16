@@ -47,7 +47,7 @@
         </td>
     </tr>
 	<tr>
-		<td>
+		<td width="90%">
 			<html:select name="gisSectorByDonorTeaserForm" property="selectedDonor"  style="width : 100%" onchange="donorChanged()">
 				<html:option value="-1"><digi:trn key="widget:piechart:allDonorsItem">All Donors</digi:trn></html:option>
 				<html:optionsCollection name="gisSectorByDonorTeaserForm" property="donors" label="name" value="ampOrgId"/>
@@ -60,7 +60,7 @@
 			</html:select>
 		</td>
 		--%>		
-		<td nowrap="nowrap">
+		<td nowrap="nowrap" align="right">
 			<input type="checkbox" title="Show Labels" name="showLabels" onchange="rechart()" checked="checked">
 			&nbsp;
 			<input type="checkbox" title="Show Legends" name="showLegends" onchange="rechart()" checked="checked">

@@ -1,96 +1,96 @@
 --- 
 targets_001: 
-  id: "9"
-  mdg_id: "7"
-  name: "Integrate the principles of sustainable development into country policies and programmes and reverse the loss of environmental resources"
-  name_es: "Incorporar los principios del desarrollo sostenible en las políticas y los programas nacionales e invertir la pérdida de recursos del medio ambiente"
-targets_002: 
-  id: "10"
-  mdg_id: "7"
-  name: "Halve, by 2015, the proportion of people without sustainable access to safe drinking water and basic sanitation"
-  name_es: "Reducir a la mitad, para el año 2015, el porcentaje de personas que carecen de acceso a agua potable"
-targets_003: 
-  id: "14"
-  mdg_id: "8"
-  name: "Address the Special Needs of landlocked countries and small island developing States (through the Programme of Action for the Sustainable Development of Small Island Developing States and the outcome of the 22nd special session of the General Assembly)"
-  name_es: "Atender las necesidades especiales de los países sin litoral y de los pequeños Estados insulares en desarrollo (mediante el Programa de Barbados y las disposiciones del 22º período extraordinario de sesiones de la Asamblea General)"
-targets_004: 
-  id: "19"
-  mdg_id: "9"
-  name: "Not Applicable"
-  name_es: "No Aplicable"
-targets_005: 
-  id: "7"
-  mdg_id: "6"
-  name: "Have halted by 2015 and begun to reverse the spread of HIV/AIDS"
-  name_es: "Haber detenido y comenzado a reducir, para el año 2015, la propagación del VIH/SIDA"
-targets_006: 
-  id: "1"
-  mdg_id: "1"
-  name: "Halve, between 1990 and 2015, the proportion of people whose income is less than one dollar a day"
-  name_es: "Reducir a la mitad, entre 1990 y 2015, el porcentaje de personas cuyos ingresos sean inferiores a 1 dólar por día"
-targets_007: 
-  id: "13"
-  mdg_id: "8"
-  name: "Address the Special Needs of the Least Developed Countries [Includes: tariff and quota free access for LDC exports; enhanced programme of debt relief for HIPC and cancellation of official bilateral debt; and more generous ODA for countries committed to poverty reduction]"
-  name_es: "Atender las necesidades especiales de los países menos adelantados (se incluye el acceso libre de aranceles y contingentes a las exportaciones; el programa mejorado de alivio de la deuda de los países pobres muy endeudados (PPME) y la cancelación de la deuda bilateral oficial; y la concesión de una asistencia oficial para el desarrollo (AOD) más generosa a los países que hayan expresado su determinación de reducir la pobreza)"
-targets_008: 
-  id: "8"
-  mdg_id: "6"
-  name: "Have halted by 2015 and begun to reverse the incidence of malaria and other major diseases"
-  name_es: "Haber detenido y comenzado a reducir, para el año 2015, la incidencia del paludismo y otras enfermedades graves"
-targets_009: 
-  id: "12"
-  mdg_id: "8"
-  name: "Develop further an open, rule-based, predictable, non-discriminatory trading and financial system [Includes a commitment to good governance, development, and poverty reduction, both nationally and internationally]"
-  name_es: "Desarrollar aún más un sistema comercial y financiero abierto, basado en normas, previsible y no discriminatorio (se incluye el compromiso de lograr una buena gestión de los asuntos públicos y el desarrollo, y la reducción de la pobreza, en cada país y en el plano internacional)"
-targets_010: 
   id: "3"
   mdg_id: "2"
   name: "Ensure that, by 2015, children everywhere, boys and girls alike, will be able to complete a full course of primary schooling"
   name_es: "Velar por que, para el año 2015, los niños y niñas de todo el mundo puedan terminar un ciclo completo de enseñanza primaria"
-targets_011: 
+targets_002: 
   id: "15"
   mdg_id: "8"
   name: "Deal comprehensively with the debt problems of developing countries through national and international measures in order to make debt sustainable in the long term"
   name_es: "Encarar de manera general los problemas de la deuda de los países en desarrollo con medidas nacionales e internacionales a fin de hacer la deuda sostenible a largo plazo"
-targets_012: 
+targets_003: 
   id: "17"
   mdg_id: "8"
   name: "In co-operation with pharmaceutical companies, provide access to affordable, essential drugs in developing countries"
   name_es: "En cooperación con las empresas farmacéuticas, proporcionar acceso a medicamentos esenciales a precios razonables en los países en desarrollo"
-targets_013: 
+targets_004: 
+  id: "9"
+  mdg_id: "7"
+  name: "Integrate the principles of sustainable development into country policies and programmes and reverse the loss of environmental resources"
+  name_es: "Incorporar los principios del desarrollo sostenible en las políticas y los programas nacionales e invertir la pérdida de recursos del medio ambiente"
+targets_005: 
   id: "2"
   mdg_id: "1"
   name: "Halve, between 1990 and 2015, the proportion of people who suffer from hunger"
   name_es: "Reducir a la mitad, entre 1990 y 2015, el porcentaje de personas que padezcan hambre"
-targets_014: 
+targets_006: 
+  id: "10"
+  mdg_id: "7"
+  name: "Halve, by 2015, the proportion of people without sustainable access to safe drinking water and basic sanitation"
+  name_es: "Reducir a la mitad, para el año 2015, el porcentaje de personas que carecen de acceso a agua potable"
+targets_007: 
   id: "5"
   mdg_id: "4"
   name: "Reduce by two-thirds, between 1990 and 2015, the under-five mortality rate"
   name_es: "Reducir en dos terceras partes, entre 1990 y 2015, la mortalidad de los niños menores de 5 años"
-targets_015: 
+targets_008: 
+  id: "14"
+  mdg_id: "8"
+  name: "Address the Special Needs of landlocked countries and small island developing States (through the Programme of Action for the Sustainable Development of Small Island Developing States and the outcome of the 22nd special session of the General Assembly)"
+  name_es: "Atender las necesidades especiales de los países sin litoral y de los pequeños Estados insulares en desarrollo (mediante el Programa de Barbados y las disposiciones del 22º período extraordinario de sesiones de la Asamblea General)"
+targets_009: 
   id: "16"
   mdg_id: "8"
   name: "In co-operation with developing countries, develop and implement strategies for decent and productive work for youth"
   name_es: "En cooperación con los países en desarrollo, elaborar y aplicar estrategias que proporcionen a los jóvenes un trabajo digno y productivo"
-targets_016: 
+targets_010: 
+  id: "19"
+  mdg_id: "9"
+  name: "Not Applicable"
+  name_es: "No Aplicable"
+targets_011: 
   id: "6"
   mdg_id: "5"
   name: "Reduce by three-quarters, between 1990 and 2015, the maternal mortality ratio"
   name_es: "Reducir, entre 1990 y 2015, la mortalidad materna en tres cuartas partes"
-targets_017: 
+targets_012: 
+  id: "7"
+  mdg_id: "6"
+  name: "Have halted by 2015 and begun to reverse the spread of HIV/AIDS"
+  name_es: "Haber detenido y comenzado a reducir, para el año 2015, la propagación del VIH/SIDA"
+targets_013: 
   id: "11"
   mdg_id: "7"
   name: "By 2020, to have achieved a significant improvement in the lives of at least 100 million slum dwellers"
   name_es: "Haber mejorado considerablemente, para el año 2020, la vida de por lo menos 100 millones de habitantes de tugurios"
-targets_018: 
+targets_014: 
+  id: "1"
+  mdg_id: "1"
+  name: "Halve, between 1990 and 2015, the proportion of people whose income is less than one dollar a day"
+  name_es: "Reducir a la mitad, entre 1990 y 2015, el porcentaje de personas cuyos ingresos sean inferiores a 1 dólar por día"
+targets_015: 
   id: "18"
   mdg_id: "8"
   name: "In co-operation with the private sector, make available the benefits of new technologies, especially information and communications"
   name_es: "En colaboración con el sector privado, velar por que se puedan aprovechar los beneficios de las nuevas tecnologías, en particular de las tecnologías de la información y de las comunicaciones"
-targets_019: 
+targets_016: 
+  id: "13"
+  mdg_id: "8"
+  name: "Address the Special Needs of the Least Developed Countries [Includes: tariff and quota free access for LDC exports; enhanced programme of debt relief for HIPC and cancellation of official bilateral debt; and more generous ODA for countries committed to poverty reduction]"
+  name_es: "Atender las necesidades especiales de los países menos adelantados (se incluye el acceso libre de aranceles y contingentes a las exportaciones; el programa mejorado de alivio de la deuda de los países pobres muy endeudados (PPME) y la cancelación de la deuda bilateral oficial; y la concesión de una asistencia oficial para el desarrollo (AOD) más generosa a los países que hayan expresado su determinación de reducir la pobreza)"
+targets_017: 
   id: "4"
   mdg_id: "3"
   name: "Eliminate gender disparity in primary and secondary education, preferably by 2005, and to all levels of education no later than 2015"
   name_es: "Eliminar las desigualdades entre los géneros en la enseñanza primaria y secundaria, preferiblemente para el año 2005, y en todos los niveles de la enseñanza antes del fin del año 2015"
+targets_018: 
+  id: "8"
+  mdg_id: "6"
+  name: "Have halted by 2015 and begun to reverse the incidence of malaria and other major diseases"
+  name_es: "Haber detenido y comenzado a reducir, para el año 2015, la incidencia del paludismo y otras enfermedades graves"
+targets_019: 
+  id: "12"
+  mdg_id: "8"
+  name: "Develop further an open, rule-based, predictable, non-discriminatory trading and financial system [Includes a commitment to good governance, development, and poverty reduction, both nationally and internationally]"
+  name_es: "Desarrollar aún más un sistema comercial y financiero abierto, basado en normas, previsible y no discriminatorio (se incluye el compromiso de lograr una buena gestión de los asuntos públicos y el desarrollo, y la reducción de la pobreza, en cada país y en el plano internacional)"

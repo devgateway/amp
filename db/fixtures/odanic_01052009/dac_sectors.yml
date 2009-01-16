@@ -1,239 +1,260 @@
 --- 
 dac_sectors_001: 
-  code: "122"
-  description: ""
-  description_es: ""
-  id: "222"
-  name: "Basic Health"
-  name_es: "Salud Básica"
-dac_sectors_002: 
-  code: "910"
-  description: ""
-  description_es: ""
-  id: "250"
-  name: "Administrative Costs Of Donors"
-  name_es: "Costos Administrativos De Donantes"
-dac_sectors_003: 
-  code: "160"
-  description: ""
-  description_es: ""
-  id: "227"
-  name: "Other Social Infrastructure And Services"
-  name_es: "Otros Servicios E Infraestructuras Sociales"
-dac_sectors_004: 
-  code: "151"
-  description: ""
-  description_es: ""
-  id: "225"
-  name: "Government And Civil Society, General"
-  name_es: "Gobierno Y Sociedad Civil, General"
-dac_sectors_005: 
-  code: "332"
-  description: ""
-  description_es: ""
-  id: "239"
-  name: Tourism
-  name_es: Turismo
-dac_sectors_006: 
-  code: "250"
-  description: ""
-  description_es: ""
-  id: "231"
-  name: "Business And Other Services"
-  name_es: "Empresas Y Otros Servicios"
-dac_sectors_007: 
-  code: "220"
-  description: ""
-  description_es: ""
-  id: "254"
-  name: Communications
-  name_es: Comunicaciones
-dac_sectors_008: 
-  code: "331"
-  description: ""
-  description_es: ""
-  id: "238"
-  name: "Trade Policy And Regulations"
-  name_es: Comercio
-dac_sectors_009: 
-  code: "700"
-  description: ~
-  description_es: ~
-  id: "255"
-  name: "Emergency Assistance and Reconstruction"
-  name_es: "Asistencia de emergencia y reconstrucción"
-dac_sectors_010: 
-  code: "322"
-  description: ""
-  description_es: ""
-  id: "236"
-  name: "Mineral Resources And Mining"
-  name_es: "Recursos Minerales Y Minería "
-dac_sectors_011: 
-  code: "420"
-  description: ""
-  description_es: ""
-  id: "241"
-  name: "Women In Development"
-  name_es: "Mujer Y Desarrollo"
-dac_sectors_012: 
-  code: "312"
-  description: ""
-  description_es: ""
-  id: "233"
-  name: Forestry
-  name_es: Silvicultura
-dac_sectors_013: 
-  code: "410"
-  description: "Non-sector specific."
-  description_es: ""
-  id: "240"
-  name: "General Environmental Protection"
-  name_es: "Protección General Medio Ambiente"
-dac_sectors_014: 
-  code: "114"
-  description: ""
-  description_es: ""
-  id: "220"
-  name: "Post Secondary Education"
-  name_es: "Educación Post Secundaria"
-dac_sectors_015: 
-  code: "210"
-  description: "Note: Manufacturing of transport equipment should be included under code 32172."
-  description_es: ""
-  id: "228"
-  name: "Transport And Storage"
-  name_es: "Transporte Y Almacenamiento"
-dac_sectors_016: 
-  code: "321"
-  description: ""
-  description_es: ""
-  id: "235"
-  name: Industry
-  name_es: Industria
-dac_sectors_017: 
-  code: "323"
-  description: ""
-  description_es: ""
-  id: "237"
-  name: Construction
-  name_es: Construcción
-dac_sectors_018: 
-  code: "430"
-  description: ""
-  description_es: ""
-  id: "242"
-  name: "Other Multisector"
-  name_es: "Otros Multisectorial"
-dac_sectors_019: 
-  code: "311"
-  description: ""
-  description_es: ""
-  id: "232"
-  name: Agriculture
-  name_es: Agricultura
-dac_sectors_020: 
-  code: "600"
-  description: ""
-  description_es: ""
-  id: "246"
-  name: "Action Relating To Debt"
-  name_es: "Actividades Relacionadas Con La Deuda "
-dac_sectors_021: 
-  code: "520"
-  description: ""
-  description_es: ""
-  id: "244"
-  name: "Developmental Food Aid/Food Security Assistance"
-  name_es: "Ayuda Alimentaria De Desarrollo / Seguridad Alimentaria"
-dac_sectors_022: 
-  code: "113"
-  description: ""
-  description_es: ""
-  id: "219"
-  name: "Secondary Education"
-  name_es: "Educación Secundaria"
-dac_sectors_023: 
-  code: "152"
-  description: "N.B.  Further notes on ODA eligibility (and exclusions) of conflict, peace and security related activities are given in paragraph 39 of the DAC Statistical Reporting Directives."
-  description_es: ""
-  id: "226"
-  name: "Conflict Prevention And Resolution, Peace And Security"
-  name_es: "Prevención Y Resolución De Conflictos, Paz Y Seguridad"
-dac_sectors_024: 
-  code: "240"
-  description: ""
-  description_es: ""
-  id: "230"
-  name: "Banking And Financial Services"
-  name_es: "Servicios Bancarios Y Financieros"
-dac_sectors_025: 
-  code: "111"
-  description: "The codes in this category are to be used only when level of education is unspecified or unknown (e.g. training of primary school teachers should be coded under 11220)."
-  description_es: ""
-  id: "217"
-  name: "Education, Level Unspecified"
-  name_es: "Educación, Nivel No Especificado"
-dac_sectors_026: 
-  code: "313"
-  description: ""
-  description_es: ""
-  id: "234"
-  name: Fishing
-  name_es: Pesca
-dac_sectors_027: 
-  code: "230"
-  description: ""
-  description_es: ""
-  id: "229"
-  name: "Energy Generation And Supply"
-  name_es: "Generación Y Suministro De Energía"
-dac_sectors_028: 
   code: "130"
   description: ""
   description_es: ""
   id: "223"
   name: "Population Policies/Programmes And Reproductive Health"
   name_es: "Programas / Políticas Sobre Población Y Salud Reproductiva"
-dac_sectors_029: 
+dac_sectors_002: 
+  code: "323"
+  description: ""
+  description_es: ""
+  id: "237"
+  name: Construction
+  name_es: Construcción
+dac_sectors_003: 
+  code: "250"
+  description: ""
+  description_es: ""
+  id: "231"
+  name: "Business And Other Services"
+  name_es: "Empresas Y Otros Servicios"
+dac_sectors_004: 
   code: "510"
   description: "Budget support in the form of sector-wide approaches (SWAps) should be included in the respective sectors. "
   description_es: ""
   id: "243"
   name: "General Budget Support"
   name_es: "Apoyo General De Prepuesto"
-dac_sectors_030: 
+dac_sectors_005: 
+  code: "430"
+  description: ""
+  description_es: ""
+  id: "242"
+  name: "Other Multisector"
+  name_es: "Otros Multisectorial"
+dac_sectors_006: 
+  code: "220"
+  description: ""
+  description_es: ""
+  id: "254"
+  name: Communications
+  name_es: Comunicaciones
+dac_sectors_007: 
   code: "998"
   description: ""
   description_es: ""
   id: "253"
   name: "Unallocated / Unspecified"
   name_es: "Sin Especificación / No Clasificados"
-dac_sectors_031: 
+dac_sectors_008: 
+  code: "311"
+  description: ""
+  description_es: ""
+  id: "232"
+  name: Agriculture
+  name_es: Agricultura
+dac_sectors_009: 
+  code: "331"
+  description: ""
+  description_es: ""
+  id: "238"
+  name: "Trade Policy And Regulations"
+  name_es: Comercio
+dac_sectors_010: 
   code: "530"
   description: "Non-food commodity assistance (when benefiting sector not specified)."
   description_es: ""
   id: "245"
   name: "Other Commodity Assistance"
   name_es: "Otros Programas Generales Y Ayudas A La Adquisición De Bienes."
-dac_sectors_032: 
+dac_sectors_011: 
+  code: "600"
+  description: ""
+  description_es: ""
+  id: "246"
+  name: "Action Relating To Debt"
+  name_es: "Actividades Relacionadas Con La Deuda "
+dac_sectors_012: 
   code: "112"
   description: ""
   description_es: ""
   id: "218"
   name: "Basic Education"
   name_es: "Educación Básica"
-dac_sectors_033: 
+dac_sectors_013: 
+  code: "520"
+  description: ""
+  description_es: ""
+  id: "244"
+  name: "Developmental Food Aid/Food Security Assistance"
+  name_es: "Ayuda Alimentaria De Desarrollo / Seguridad Alimentaria"
+dac_sectors_014: 
+  code: "322"
+  description: ""
+  description_es: ""
+  id: "236"
+  name: "Mineral Resources And Mining"
+  name_es: "Recursos Minerales Y Minería "
+dac_sectors_015: 
   code: "121"
   description: ""
   description_es: ""
   id: "221"
   name: "Health, General"
   name_es: "Salud, General"
-dac_sectors_034: 
+dac_sectors_016: 
+  code: "113"
+  description: ""
+  description_es: ""
+  id: "219"
+  name: "Secondary Education"
+  name_es: "Educación Secundaria"
+dac_sectors_017: 
   code: "140"
   description: ""
   description_es: ""
   id: "224"
   name: "Water Supply And Sanitation"
   name_es: "Abastecimiento Y Depuración De Agua"
+dac_sectors_018: 
+  code: "152"
+  description: "N.B.  Further notes on ODA eligibility (and exclusions) of conflict, peace and security related activities are given in paragraph 39 of the DAC Statistical Reporting Directives."
+  description_es: ""
+  id: "226"
+  name: "Conflict Prevention And Resolution, Peace And Security"
+  name_es: "Prevención Y Resolución De Conflictos, Paz Y Seguridad"
+dac_sectors_019: 
+  code: "312"
+  description: ""
+  description_es: ""
+  id: "233"
+  name: Forestry
+  name_es: Silvicultura
+dac_sectors_020: 
+  code: "122"
+  description: ""
+  description_es: ""
+  id: "222"
+  name: "Basic Health"
+  name_es: "Salud Básica"
+dac_sectors_021: 
+  code: "240"
+  description: ""
+  description_es: ""
+  id: "230"
+  name: "Banking And Financial Services"
+  name_es: "Servicios Bancarios Y Financieros"
+dac_sectors_022: 
+  code: "410"
+  description: "Non-sector specific."
+  description_es: ""
+  id: "240"
+  name: "General Environmental Protection"
+  name_es: "Protección General Medio Ambiente"
+dac_sectors_023: 
+  code: "910"
+  description: ""
+  description_es: ""
+  id: "250"
+  name: "Administrative Costs Of Donors"
+  name_es: "Costos Administrativos De Donantes"
+dac_sectors_024: 
+  code: "111"
+  description: "The codes in this category are to be used only when level of education is unspecified or unknown (e.g. training of primary school teachers should be coded under 11220)."
+  description_es: ""
+  id: "217"
+  name: "Education, Level Unspecified"
+  name_es: "Educación, Nivel No Especificado"
+dac_sectors_025: 
+  code: "114"
+  description: ""
+  description_es: ""
+  id: "220"
+  name: "Post Secondary Education"
+  name_es: "Educación Post Secundaria"
+dac_sectors_026: 
+  code: "160"
+  description: ""
+  description_es: ""
+  id: "227"
+  name: "Other Social Infrastructure And Services"
+  name_es: "Otros Servicios E Infraestructuras Sociales"
+dac_sectors_027: 
+  code: "313"
+  description: ""
+  description_es: ""
+  id: "234"
+  name: Fishing
+  name_es: Pesca
+dac_sectors_028: 
+  code: "210"
+  description: "Note: Manufacturing of transport equipment should be included under code 32172."
+  description_es: ""
+  id: "228"
+  name: "Transport And Storage"
+  name_es: "Transporte Y Almacenamiento"
+dac_sectors_029: 
+  code: "151"
+  description: ""
+  description_es: ""
+  id: "225"
+  name: "Government And Civil Society, General"
+  name_es: "Gobierno Y Sociedad Civil, General"
+dac_sectors_030: 
+  code: "230"
+  description: ""
+  description_es: ""
+  id: "229"
+  name: "Energy Generation And Supply"
+  name_es: "Generación Y Suministro De Energía"
+dac_sectors_031: 
+  code: "321"
+  description: ""
+  description_es: ""
+  id: "235"
+  name: Industry
+  name_es: Industria
+dac_sectors_032: 
+  code: "332"
+  description: ""
+  description_es: ""
+  id: "239"
+  name: Tourism
+  name_es: Turismo
+dac_sectors_033: 
+  code: "720"
+  description: ~
+  description_es: ~
+  id: "256"
+  name: "Emergency Response"
+  name_es: "Respuesta de emergencia"
+dac_sectors_034: 
+  code: "730"
+  description: ~
+  description_es: ~
+  id: "257"
+  name: "Reconstruction relief and rehabilitation"
+  name_es: "Ayuda de reconstrucción y rehabilitación"
+dac_sectors_035: 
+  code: "740"
+  description: ~
+  description_es: ~
+  id: "258"
+  name: "Disaster Prevention and Preparedness"
+  name_es: "Prevención y preparación antes de desastres"
+dac_sectors_036: 
+  code: "920"
+  description: ~
+  description_es: ~
+  id: "259"
+  name: "Support to Non-Governmental Organisations (NGOs)"
+  name_es: "Apoyo a Organizaciones no Gubernamentales (ONG)"
+dac_sectors_037: 
+  code: "930"
+  description: ~
+  description_es: ~
+  id: "260"
+  name: "Reguees in Donor Countries"
+  name_es: "Refugios en Países Donantes"

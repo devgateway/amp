@@ -1,12 +1,13 @@
 $('select.dynamic_select.parent').livequery(function() {
-  parent = $(this);
+
+parentObject = $(this);
   
-  child_element = parent.nextAll('select.dynamic_select.child')[0];
+  child_element = parentObject.nextAll('select.dynamic_select.child')[0];
   if (!child_element) {
 	  alert("JavaScript Error: Can't find child list!");
 	  return false;
 	} else {
-	  parent.data('child_element', child_element)
+	  parentObject.data('child_element', child_element)
 	}
 	
 	
@@ -32,9 +33,9 @@ $('select.dynamic_select.parent').livequery(function() {
 	  
 	  grouped_options[groups[i].label] = dupped_options;
 	}
-	parent.data('grouped_options', grouped_options);
+	parentObject.data('grouped_options', grouped_options);
 	
-	parent.change(function(e) {
+	parentObject.change(function(e) {
 	  selected = e.target.options[this.selectedIndex].text;
 	  child_element = $(e.target).data('child_element');
 	  child_options = $(e.target).data('grouped_options')[selected];
@@ -62,5 +63,5 @@ $('select.dynamic_select.parent').livequery(function() {
 	
 	
 	// Manually fire event to initialize list
-  parent.change();
+  parentObject.change();
 });

@@ -1468,6 +1468,33 @@ public class TranslatorWorker {
 
     }
 
+    /**
+     * Returns list of all language codes currently used in message table.
+     * @return
+     * @throws WorkerException
+     */
+    @SuppressWarnings("unchecked")
+	public static List<String> getAllUsedLanguages() throws WorkerException{
+    	List<String> result = null;
+    	String oql = "select m.locale from "+Message.class.getName()+" as m group by m.locale";
+    	Session session = null;
+    	try {
+			session = PersistenceManager.getSession();
+			Query query = session.createQuery(oql);
+			result = query.list();
+		} catch (Exception e) {
+			throw new WorkerException(e);
+		}finally{
+			if (session != null){
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception e2) {
+					throw new WorkerException(e2);
+				}
+			}
+		}
+    	return result;
+    }
 
     /**
      * Verify, is on-site translation mode active or not

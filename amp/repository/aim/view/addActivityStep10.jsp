@@ -266,29 +266,11 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                          </digi:trn>
                                                                      </c:set>
 
-                                                                      <c:set var="link">
-                                                                          <c:if test="${step.stepNumber==9}">
-                                                                              /editSurveyList.do?edit=true
-
-                                                                          </c:if>
-
-                                                                          <c:if test="${step.stepNumber!=9}">
-
-                                                                              /addActivity.do?step=${step.stepNumber}&edit=true
-
-                                                                          </c:if>
-                                                                      </c:set>
-
-
-
-
-
-
                                                                      <c:if test="${!index.last}">
 
                                                                          <c:if test="${index.first}">
 
-                                                                             <digi:link href=" ${link}" styleClass="comment" title="${trans}">
+                                                                             <digi:link href="/addActivity.do?step=${step.stepNumber}&edit=true" styleClass="comment" title="${trans}">
 
 
                                                                                  <c:if test="${aimEditActivityForm.editAct == true}">
@@ -306,7 +288,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                              &nbsp;&gt;&nbsp;
                                                                          </c:if>
                                                                          <c:if test="${!index.first}">
-                                                                             <digi:link href="${link}" styleClass="comment" title="${trans}">
+                                                                             <digi:link href="/addActivity.do?step=${step.stepNumber}&edit=true" styleClass="comment" title="${trans}">
                                                                                  <digi:trn key="aim:addActivityStep${step.stepActualNumber}">
                                                                                  Step ${step.stepActualNumber}
                                                                              </digi:trn>

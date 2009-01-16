@@ -800,9 +800,7 @@ public class ChartWidgetUtil {
         oql += AmpFundingDetail.class.getName() +
                 " as fd inner join fd.ampFundingId f ";
         oql += "   inner join f.ampActivityId act ";
-          if (teamMember != null && teamMember.getComputation() != null && teamMember.getComputation()) {
-            oql += " inner join act.orgrole role ";
-        }
+       
         oql += " inner join act.locations loc inner join loc.location.ampRegion reg where " +
                 " reg is not null and f.ampDonorOrgId=:orgID and fd.transactionType =:transactionType and  fd.adjustmentType = 1";
         oql += " and year(fd.transactionDate)=:year ";
@@ -835,9 +833,7 @@ public class ChartWidgetUtil {
                         " as fd inner join fd.ampFundingId f ";
                 oql += "   inner join f.ampActivityId act inner join act.locations loc inner join " +
                         " loc.location.ampRegion reg ";
-                if (teamMember != null && teamMember.getComputation() != null && teamMember.getComputation()) {
-                    oql += " inner join act.orgrole role ";
-                }
+              
                 oql += " where  fd.transactionType =:transactionType and  fd.adjustmentType = 1 and f.ampDonorOrgId=:orgID ";
 
                 oql += " and year(fd.transactionDate)=:year and reg is not null and reg.ampRegionId=  " + region.getAmpRegionId();
@@ -930,10 +926,7 @@ public class ChartWidgetUtil {
                 " inner join actSec.sectorId sec " +
                 " inner join actSec.activityId act " +
                 " inner join actSec.classificationConfig config ";
-         if (tm != null && tm.getComputation() != null && tm.getComputation()) {
-            oql += " inner join act.orgrole role ";
-        }
-
+        
         oql += "  where  " +
                 "  f.ampDonorOrgId=:orgID and fd.transactionType =:transactionType  and  fd.adjustmentType = 1 ";
         oql += " and year(fd.transactionDate)=:year    and config.name='Primary' ";
@@ -1008,10 +1001,7 @@ public class ChartWidgetUtil {
                 " inner join actSec.sectorId sec " +
                 " inner join actSec.activityId act " +
                 " inner join actSec.classificationConfig config ";
-          if (tm != null && tm.getComputation() != null && tm.getComputation()) {
-            oql += " inner join act.orgrole role ";
-        }
-
+         
         oql += "  where  " +
                 "   f.ampDonorOrgId=:orgID and fd.transactionType =:transactionType and  fd.adjustmentType = 1 ";
         oql += " and year(fd.transactionDate)=:year   and config.name='Primary'  ";
@@ -1067,11 +1057,7 @@ public class ChartWidgetUtil {
         oql += AmpFundingDetail.class.getName() +
                 " as fd inner join fd.ampFundingId f ";
         oql += "   inner join f.ampActivityId act ";
-          if (tm != null && tm.getComputation() != null && tm.getComputation()) {
-            oql += " inner join act.orgrole role ";
-        }
-
-
+      
         oql += " where  fd.transactionType =:transactionType and  fd.adjustmentType = 1 and f.ampDonorOrgId=:orgID ";
        
         oql += " and year(fd.transactionDate)=:year ";
@@ -1140,10 +1126,7 @@ public class ChartWidgetUtil {
         oql += AmpFundingDetail.class.getName() +
                 " as fd inner join fd.ampFundingId f ";
         oql += "   inner join f.ampActivityId act ";
-        if (tm != null && tm.getComputation() != null && tm.getComputation()) {
-            oql += " inner join act.orgrole role ";
-        }
-
+      
         oql += " where  fd.transactionType =:transactionType and  fd.adjustmentType = 1 and f.ampDonorOrgId=:orgID ";;
        
         oql += " and year(fd.transactionDate)=:year ";
@@ -1243,30 +1226,68 @@ public class ChartWidgetUtil {
     }
 
     public static String getTeamQuery(TeamMember teamMember) {
-        String sql = "";
+        String qr = "";
         if (teamMember != null) {
-
-            if (teamMember.getComputation() != null && teamMember.getComputation()) {
-                AmpTeam team = TeamUtil.getAmpTeam(teamMember.getTeamId());
-                Set<AmpOrganisation> orgs = team.getOrganizations();
-                Iterator<AmpOrganisation> iter = orgs.iterator();
-                String ids = "";
-                while (iter.hasNext()) {
-                    AmpOrganisation org = iter.next();
-                    ids += org.getAmpOrgId() + ",";
-                }
+            AmpTeam team = TeamUtil.getAmpTeam(teamMember.getTeamId());
+            if (team.getComputation() != null && team.getComputation()) {
+                String ids =getComputationOrgsQry(team);
                 if (ids.length() > 1) {
                     ids = ids.substring(0, ids.length() - 1);
-                    sql += "  and ( act.team.ampTeamId =:teamId or  role.organisation.ampOrgId in(" + ids + "))";
+                    qr += "  and ( act.team.ampTeamId =:teamId or  f.ampDonorOrgId in(" + ids + ")) ";
                 }
             } else {
-                sql += " and ( act.team.ampTeamId =:teamId ) ";
+                if (!teamMember.getTeamAccessType().equals("Management")) {
+                    qr += " and ( act.team.ampTeamId =:teamId ) ";
+                } else {
+                    qr = " and ( act.team.ampTeamId =:teamId or ";
+                    Collection<AmpTeam> childrenTeams = TeamUtil.getAllChildrenWorkspaces(team.getAmpTeamId());
+                    Iterator<AmpTeam> iter = childrenTeams.iterator();
+                    String teamIds = "";
+                    String orgIds = "";
+                    while (iter.hasNext()) {
+                        AmpTeam childTeam = iter.next();
+                        orgIds+=getComputationOrgsQry(childTeam);
+                        teamIds+=childTeam.getAmpTeamId()+",";
+                    }
+                       
+                    if (teamIds.length() > 1) {
+                        teamIds = teamIds.substring(0, teamIds.length() - 1);
+                        qr += "  act.team.ampTeamId in ( " + teamIds + ")";
+                    }
+                    if (orgIds.length() > 1) {
+                        orgIds = orgIds.substring(0, orgIds.length() - 1);
+                        qr+=" or f.ampDonorOrgId in(" +  orgIds + ")";
+                    }
+
+                   
+                    qr += " )";
+                }
+
             }
 
         } else {
-            sql += "  and act.team is not null ";
+            qr += "  and act.team is not null ";
         }
-        return sql;
+        return qr;
+    }
+
+    public static String getComputationOrgsQry(AmpTeam team) {
+        String orgIds = "";
+        if (team.getComputation() != null && team.getComputation()) {
+            Set<AmpOrganisation> orgs = team.getOrganizations();
+            Iterator<AmpOrganisation> orgIter = orgs.iterator();
+            while (orgIter.hasNext()) {
+                AmpOrganisation org = orgIter.next();
+                orgIds += org.getAmpOrgId() + ",";
+            }
+
+        }
+
+
+
+        return orgIds;
+
+
     }
         
       /**
@@ -1287,9 +1308,7 @@ public class ChartWidgetUtil {
         oql += AmpFundingDetail.class.getName() +
                 " as fd inner join fd.ampFundingId f ";
         oql += "   inner join f.ampActivityId act ";
-        if (tm != null && tm.getComputation() != null && tm.getComputation()) {
-            oql += " inner join act.orgrole role ";
-        }
+      
         oql += " where  fd.adjustmentType = 1 and f.ampDonorOrgId=:orgID ";
         oql += " and year(fd.transactionDate)=:year ";
         oql+=getTeamQuery(tm);

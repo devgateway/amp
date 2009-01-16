@@ -51,22 +51,34 @@ public class QuartzJobUtils {
                                 String expString = cTrg.getCronExpression();
                                 //parse cron expression to recreate date
                                 String[] dates = expString.split(" ");
+                                String hour,minute;
+                                if(!dates[2].equals("*")&&Integer.parseInt(dates[2])<10){
+                                    hour="0"+dates[2];  //appending '0' to march time format: hh:mm
+                                }
+                                else{
+                                    hour=dates[2];
+                                }
+                                 if (Integer.parseInt(dates[1]) < 10) {
+                                    minute = "0" + dates[1];  //appending '0' to march time format: hh:mm
+                                } else {
+                                    minute = dates[1];
+                                }
                                 if (!dates[3].equals("?")) {
                                     // the month day is selected
                                     job.setTriggerType(5);
-                                    job.setExeTime(dates[2] + ":" + dates[1] + ":" + dates[0]);
+                                    job.setExeTime(hour + ":" +  minute );
                                     job.setDayOfMonth(Integer.parseInt(dates[3]));
                                 } else {
                                     if (!dates[5].equals("?")&&!dates[5].equals("*")) {
                                          // week day is selected
                                         job.setTriggerType(4);
                                         job.setDayOfWeek(Integer.parseInt(dates[5]));
-                                        job.setExeTime(dates[2] + ":" + dates[1] + ":" + dates[0]);
+                                        job.setExeTime(hour + ":" +  minute );
                                     } else {
-                                        if (!dates[2].equals("*")) {
+                                        if (!hour.equals("*")) {
                                             // dayly is selected
                                             job.setTriggerType(3);
-                                            job.setExeTime(dates[2] + ":" + dates[1] + ":" + dates[0]);
+                                            job.setExeTime(hour + ":" + minute);
                                         } 
                                     }
                                 }

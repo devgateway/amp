@@ -19,10 +19,12 @@ class ActionView::Helpers::InstanceTag #:nodoc:
     add_default_name_and_id(html_options)
 
     selected_value = options.has_key?(:selected) ? options[:selected] : value(object)
+    prompt = options.has_key?(:prompt) ? "<select>#{options[:prompt]}</select>" : ""
     choices = option_groups_from_collection_for_select(collection, group_method, group_label_method, 
 									option_key_method, option_value_method, selected_value)
 									
-    content_tag("select", choices, html_options)
+    content_tag("select", prompt + choices, html_options)
+    
   end 
 end
 

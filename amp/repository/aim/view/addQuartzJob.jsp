@@ -67,7 +67,7 @@ function saveJob(){
 
               txt=document.getElementById("txtTime");
 
-              var regEx=/^\d{2}:\d{2}$/;
+              var regEx=/^[0-2][0-9]:[0-5][0-9]$/;
               if(txt==null || txt.value==""||txt.value=='0'){
                   alert("Please enter time");
                   txt.focus();
@@ -77,7 +77,7 @@ function saveJob(){
                   if(flag>2){
                       if (txt.value.search(regEx)==-1){
                           //if match failed
-                          alert("the time should be in the hh:mm format");
+                          alert("The time should be in the hh:mm format");
                           txt.focus();
                           return false;
                       }

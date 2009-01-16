@@ -167,7 +167,7 @@
 						</dt>
 						<dd<%= (idx == 0) ? ' class="first"' : '' -%>>
 							<%= sector.dac_sector.name_with_code %><br />
-							<%= sector.crs_sector.name_with_code %>
+                            <%= sector.crs_sector.andand.name_with_code %>
 						</dd>
 					<% end %>
 				</dl>

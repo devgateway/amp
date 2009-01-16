@@ -119,6 +119,7 @@ es:
     next_step: Próxima
     
     # TODO:
+    no_subsector: Sin Sub_Sector
     delete_associated: Borrar
     add_implementing_agency: Añadir otra agencia implementadora
     add_contracted_agency: Añadir otra agencia contratada

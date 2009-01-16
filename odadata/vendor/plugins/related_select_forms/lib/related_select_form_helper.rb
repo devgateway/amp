@@ -19,18 +19,22 @@ class ActionView::Helpers::InstanceTag #:nodoc:
     add_default_name_and_id(html_options)
 
     selected_value = options.has_key?(:selected) ? options[:selected] : value(object)
-    prompt = options.has_key?(:prompt) ? "<select>#{options[:prompt]}</select>" : ""
-    choices = option_groups_from_collection_for_select(collection, group_method, group_label_method, 
-									option_key_method, option_value_method, selected_value)
+    prompt = options.has_key?(:prompt) ? "<option>#{options[:prompt]}</option>" : ""
+    choices = option_groups_from_collection_for_select_with_prompt(collection, group_method, group_label_method,
+      option_key_method, option_value_method, selected_value,prompt)
 									
     content_tag("select", prompt + choices, html_options)
-    
-  end 
+   end
+  
+  def option_groups_from_collection_for_select_with_prompt(collection, group_method, group_label_method, option_key_method, option_value_method, selected_key = nil,prompt=nil)
+    collection.inject("") do |options_for_select, group|
+      group_label_string = eval("group.#{group_label_method}")
+      if prompt != nil
+          options_for_select += "<optgroup label=\"#{html_escape(group_label_string)}\">"
+      end
+      options_for_select += prompt
+      options_for_select += options_from_collection_for_select(eval("group.#{group_method}"), option_key_method, option_value_method, selected_key)
+      options_for_select += '</optgroup>'
+    end
+  end
 end
-
-
-
-
-
-
-

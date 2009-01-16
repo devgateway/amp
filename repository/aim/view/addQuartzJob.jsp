@@ -65,12 +65,31 @@ function saveJob(){
     }
   }
 
-  txt=document.getElementById("txtTime");
-  if(txt==null || txt.value==""||txt.value=='0'){
-    alert("Please enter time");
-    txt.focus();
-    return false;
-  }
+              txt=document.getElementById("txtTime");
+
+              var regEx=/^\d{2}:\d{2}$/;
+              if(txt==null || txt.value==""||txt.value=='0'){
+                  alert("Please enter time");
+                  txt.focus();
+                  return false;
+              }
+              else{
+                  if(flag>2){
+                      if (txt.value.search(regEx)==-1){
+                          //if match failed
+                          alert("the time should be in the hh:mm format");
+                          txt.focus();
+                          return false;
+                      }
+                  }
+                  else{
+                      if(isNaN(txt.value)){
+                          alert("Please enter valid time interval");
+                          txt.focus();
+                          return false;
+                      }
+                  }
+              }
   if(setAction("saveJob")){
     document.quartzJobManagerForm.submit();
   }

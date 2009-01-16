@@ -121,6 +121,7 @@ function resetSearch(){
 
 	document.getElementById("searchCriteria").value = "";
 	document.getElementById("spanSearchMessage").innerHTML = "";
+	scrollArray = new Array();
 }
 
 function nextResult()
@@ -510,6 +511,25 @@ function setSearchMessage(stringMessage){
 	</digi:form>
 		</td>
 	</tr>
+	<tr><td>
+				<TABLE width="800px">
+					<TR>
+						<TD COLSPAN="2"><strong><digi:trn >Shortcuts</digi:trn></strong></TD>
+					</TR>
+					<TR>
+						<TD nowrap="nowrap" bgcolor="#E9E9E9">
+							<digi:trn>CTRL+N - next result&nbsp;</digi:trn>
+						<br />
+						</TD>
+					</TR>
+					<TR>
+						<TD nowrap="nowrap" bgcolor="#E9E9E9">
+							<digi:trn>use CTRL+P - previous result&nbsp;</digi:trn>
+						<br />
+						</TD>
+					</TR>					
+				</TABLE>
+				</td></tr>
 </table>
 <!--[if IE]>
 <script type="text/javascript">
@@ -539,6 +559,23 @@ return myMatches;
 
 	var myTabs = new YAHOOAmp.widget.TabView("demo");
 	myTabs.set('activeIndex', 0);
+
+	//keyboard control keys
+	var isCtrl = false; 
+	document.onkeyup=function(e){ if(e.which == 17) isCtrl=false; } 
+	document.onkeydown=function(e){ if(e.which == 17) isCtrl=true; 
+		if(e.which == 78 && isCtrl == true) { //CTRL+N for next result
+			if(document.getElementById('nextSearchButton').disabled==false){
+				nextResult();
+			}			
+			return false; 
+		} else if(e.which == 80 && isCtrl == true){ //CTRL+P for previous result
+			if(document.getElementById('prevSearchButton').disabled==false){
+				prevResult();
+			}			
+			return false;
+		}
+	}  
 </script>
 
 

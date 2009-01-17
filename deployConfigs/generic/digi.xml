@@ -132,7 +132,7 @@
         <!-- Allow and Ignore directives. Can contain Java expressions. 
               There are 2 constants available: agent and agentWithCase
           --> 
-        <property name="allowedAgents">agent.indexOf("mozilla") != -1</property> 
+        <property name="allowedAgents">(agent.indexOf("mozilla") != -1)||(agent.indexOf("opera") != -1)</property>
         <property name="ignoredAgents">agent.indexOf("googlebot") != -1</property>
     </service>
     

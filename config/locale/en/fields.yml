@@ -25,6 +25,7 @@ en:
         officer_responsible_name: Name
         officer_responsible_phone: Phone
         officer_responsible_email: E-Mail
+        markers: Markers
         biodiversity_marker: Biodiversity
         climate_change_marker: Climate Change
         desertification_marker: Desertification

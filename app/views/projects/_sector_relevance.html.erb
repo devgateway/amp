@@ -4,7 +4,7 @@
 		
 		<%= f.related_collection_select :crs_sector_id, :dac_sector_id, 
 				DacSector.ordered, :'crs_sectors.ordered', :name_with_code, :id, :name_with_code, 
-				{:prompt => t('projects.no_subsector') }, :class => 'dynamic_select child large' %>
+				{ :prompt => t('projects.no_subsector'), :label => false }, :class => 'dynamic_select child large' %>
 				
 		<%= f.text_field :amount %>
 

@@ -32,6 +32,7 @@ es:
     # Data Status
     draft: Borrador
     published: Publicado
+    deleted: Borrados
     completed: Completado
     
     # Implementation Types

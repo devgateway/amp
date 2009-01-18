@@ -59,12 +59,12 @@ module Report
           (@target.funding_forecasts.find_by_year(year).andand.commitments.andand.in(Prefs.default_currency))]
       end
       
-      def dac_sector
-        [ll(:terms, :dac_sectors),  @target.dac_sectors.andand.map(&:name_with_code).join(', ')]
-      end
-      
-      def crs_sector
-        [ll(:terms, :dac_crs_sector), @target.crs_sectors.andand.map(&:name_with_code).join(', ')]
+      def sectors
+        sector_names_with_percentages = @target.sector_relevances.ordered_by_relevance.map do |sr|
+          "#{sr.sector.name_with_code} (#{sr.amount}%)"
+        end
+        
+        [ll(:terms, :dac_sector), sector_names_with_percentages.join(', ')]
       end
       
       def oecd_number

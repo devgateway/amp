@@ -28,7 +28,6 @@ es:
       closed: El ingreso de datos es actualmente cerrado
       do_close: Cerrar el ingreso de datos
       do_open: Abrir el ingreso de datos
-    # TODO:
     scrollbars:
       title: Actualizar Señales de Pantalla
       submit: Guardar Señales de Pantalla
@@ -114,12 +113,10 @@ es:
       submit: Actualizar Glosario
       
   projects:
-    # TODO:
     previous_step: Anterior
     next_step: Próxima
     
-    # TODO:
-    no_subsector: Sin Sub_Sector
+    no_subsector: Sin Sub-Sector
     delete_associated: Borrar
     add_implementing_agency: Añadir otra agencia implementadora
     add_contracted_agency: Añadir otra agencia contratada

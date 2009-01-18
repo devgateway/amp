@@ -25,18 +25,17 @@ es:
         officer_responsible_name: Nombre
         officer_responsible_phone: Teléfono
         officer_responsible_email: Correo Electrónico
+        markers: Marcos
         biodiversity_marker: Biodiversidad
         climate_change_marker: Cambio Climático
         desertification_marker: Desertificación
         gender_policy_marker: Política de Género
         environment_policy_marker: Política del Medio Ambiente	
-        # TODO!
         sector_relevances: Sectores Focales del Proyecto
         
       sector_relevance:
         dac_sector: Sectores CAD/CRS
         crs_sector: Sectores CRS
-        # TODO!
         amount: Cantidad en %
         
       geo_relevance:
@@ -162,7 +161,6 @@ es:
       mdg:
         verbose_caption: "Meta {{number}}: {{name}}"
       
-      # TODO:
       prefs:
         scroll_bar_public: Señal de Pantalla Público (Reportes & Bluebook, no se requiere inscripción)
         scroll_bar_admin: Señal de Pantalla - Entrada de Datos (sólo donantes inscribidos)

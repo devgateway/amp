@@ -3,7 +3,7 @@
 
 <script type="text/javascript" charset="utf-8">
 	function highlightTabsWithErrors(element) {
-		tabs = element.children('li');
+		var tabs = element.children('li');
 		tabs.each(function() {
 			divId = $(this).children('a').attr('href');
 			correspondingDiv = $(divId);

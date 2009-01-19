@@ -369,11 +369,6 @@ public class HelpUtil {
 			+"where (t.bodyEditKey=e.editorKey) order by e.lastModDate";
 		 query = session.createQuery(queryString);
 
-		
-		//		 Query q = session.createQuery(" from e in class " +
-//                 Editor.class.getName() +" where e.editorKey like 'help%' order by e.lastModDate");
-//
-		//helpTopics = query.list();
 		Iterator itr = query.list().iterator();
 		HelpSearchData helpsearch;
 		
@@ -650,8 +645,10 @@ public class HelpUtil {
 		 return topics;
 	 }
 
-	 public static Vector getAllHelpdataForExport(String lang) {
-        System.out.println("Start");
+	 public static Vector getAllHelpdataForExport() {
+
+         logger.info("Starting helpExport");
+
 		Vector vector = new Vector(); 
 		Session session = null;
 		Query query = null;
@@ -660,13 +657,11 @@ public class HelpUtil {
 		
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			
-		 String queryString = "select topic from "+ HelpTopic.class.getName() + " topic where (topic.bodyEditKey like 'help%')";
-   	       query = session.createQuery(queryString);
-		   
+			String queryString = "select topic from "+ HelpTopic.class.getName() + " topic where (topic.bodyEditKey like 'help%')";
+            query = session.createQuery(queryString);
+
 		    Iterator itr = query.list().iterator();
-			HelpSearchData helpsearch;
-			  System.out.println("itr:"+itr);
+
 			while (itr.hasNext()) {
 				AmpHelpType helpout=objFactory.createAmpHelpType();
 				

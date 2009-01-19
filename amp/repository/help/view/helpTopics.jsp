@@ -10,8 +10,11 @@
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/help/script/dhtmlxtree.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/help/script/dhtmlXTree_xw.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/help/script/dhtmlXTree_ed.js"/>"></script>
+
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/help/script/dhtmlxcommon.js"/>"></script>
-<!-- 
+<!--
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/dhtmlxcommon_debug.js"/>"></script>
 -->
 
@@ -28,17 +31,17 @@
 	}
 
 	 function expandProgram(progId){
-	 	
+
 	 	var imgId='#img_'+progId;
 		var imghId='#imgh_'+progId;
 		var divId='#div_theme_'+progId;
 		$(imghId).show();
 		$(imgId).hide();
 		$(divId).show('fast');
-	}       
-	
+	}
+
 	function collapseProgram(progId){
-	
+
 		var imgId='#img_'+progId;
 		var imghId='#imgh_'+progId;
 		var divId='#div_theme_'+progId;
@@ -46,12 +49,12 @@
 		$(imgId).show();
 		$(divId).hide('fast');
 	}
-			
+
 </script>
 
 <digi:instance property="helpForm" />
 <digi:context name="url" property="context/module/moduleinstance/helpActions.do?actionType=viewSelectedHelpTopic" />
-<div id="content"  class="yui-skin-sam" style="width:100%;"> 
+<div id="content"  class="yui-skin-sam" style="width:100%;">
 	<div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                <ul class="yui-nav">&nbsp;
                           <li class="selected" style="width: 100%">
@@ -73,7 +76,7 @@
   <div id="treeboxbox_tree" class="yui-content" style="height:700px;overflow: auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;"></div>
   <div id="log"></div>
 
-<script type="text/javascript">	
+<script type="text/javascript">
 
 
 	function tonclick(id){
@@ -82,38 +85,59 @@
 					show(id);
 			 	}
 			}
-
-	 		var id = document.getElementById("treeboxbox_tree");
+         var id = document.getElementById("treeboxbox_tree");
 	 		tree = new dhtmlXTreeObject(id,"100%","100%",0);
 	 		tree.setImagePath("../../repository/help/view/images/csh_vista/");
-			tree.enableDragAndDrop(true);
-		    tree.setOnClickHandler(tonclick);
-		    var xml = '<?xml version="1.0" encoding="iso-8859-1"?>';
+	        tree.enableTreeImages(false);
+            tree.enableDragAndDrop(true);
+
+            tree.setOnClickHandler(tonclick);
+            var xml = '<?xml version="1.0" encoding="iso-8859-1"?>';
 			    xml+='<tree id="0" radio="1">';
 			    xml+= '<%= HelpUtil.renderTopicTree(topic,request,false) %>';
 			    xml+='</tree>';
 		    tree.loadXMLString(xml);
+           /*
+           tree.loadXMLString(xml,function(){tree.loadState()});
+            tree.attachEvent("onOpenEnd",function(){
+            tree.saveState();});
+        var fso, f1;
+            fso = CreateObject("Scripting.FileSystemObject");
+            f1 = fso.CreateTextFile("test.txt");
 
-	function show(str){
-	
-	  if (str.length==0){ 
+        var xmlDoc = new Object("Microsoft.XMLDOM");
+        xmlDoc.async="false";
+        tree.setSerializationLevel(false, true);
+        var contextTreeXml = tree.serializeTree();
+        tree.deleteChildItems(0);
+        xmlDoc = contextTreeXml;
+        
+    var fso, fldr;
+   fso = new Object("Scripting.FileSystemObject");
+   fldr = fso.CreateFolder("MyTest");
+   Response.Write("Created folder: " + fldr.Name);
+          xmlDoc.save('AP_Sample.xml'); 
+                         */
+    function show(str){
+
+	  if (str.length==0){
 			 	document.getElementById("bodyhelp").innerHTML="";
-			 	
+
 			 	document.getElementById("bodyhelp").style.border="1px";
 		 	return
 		 }
-		 
+
 	 xmlHttp=GetXmlHttpObject();
 		if (xmlHttp==null){
 	 			alert ("Browser does not support HTTP Request")
 	 		return
-	 	} 
+	 	}
 	 	$("#bodyhelp").show();
-	 	
+
 	 	var urlact="/help/helpActions.do?actionType=getbody"
 		urlact=urlact+"&body="+str
 		xmlHttp.open("GET",urlact,true)
-		xmlHttp.onreadystatechange=stateChange 
+		xmlHttp.onreadystatechange=stateChange
 		xmlHttp.send(null)
 }
 
@@ -123,14 +147,14 @@ function stateChange(){
 	 document.getElementById("bodyhelp").innerHTML = xmlHttp.responseText.slice(0,xmlHttp.responseText.indexOf("help:"));
      document.getElementById("key").innerHTML = xmlHttp.responseText.slice(xmlHttp.responseText.indexOf("help:"));
      document.getElementById("bodyhelp").style.border="1px solid #A5ACB2";
-	 
-   } 
-   
+
+   }
+
    $("#title").hide();
    $("#searchedTitle").hide();
    $("#searchedBody").hide();
-  
-   
+
+
 }
 
 
@@ -141,9 +165,9 @@ function GetXmlHttpObject()	{
  		// Firefox, Opera 8.0+, Safari
  	xmlHttp=new XMLHttpRequest();
  	}catch (e)
- 		
+
  		{
- 		
+
  		// Internet Explorer
  	 try	{
   		xmlHttp=new ActiveXObject("Msxml2.XMLHTTP");
@@ -156,6 +180,5 @@ function GetXmlHttpObject()	{
 	return xmlHttp;
 }
 </script>
- 		
 
-             		
+

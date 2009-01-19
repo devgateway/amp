@@ -32,7 +32,7 @@
 		<div id="content" style="clear:right;">
 				<!-- TODO: Find a better way to check if report has no results. -->
 				<%= yield %>
-				<% if yield.length < 200 %>
+				<% if yield.length < 300 %>
 					<%= ll(:reports, :no_results_message) %>
 				<% end %>
 		</div>

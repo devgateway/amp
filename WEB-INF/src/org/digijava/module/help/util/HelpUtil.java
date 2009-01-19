@@ -26,11 +26,14 @@ import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.help.dbentity.HelpTopic;
 import org.digijava.module.help.helper.HelpSearchData;
 import org.digijava.module.help.helper.HelpTopicsTreeItem;
-import org.digijava.module.help.jaxb.HelpType;
+import org.digijava.module.help.jaxb.AmpHelpType;
 import org.digijava.module.help.jaxb.ObjectFactory;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.digijava.module.help.jaxb.HelpLang;
+import org.digijava.kernel.translator.TranslatorWorker;
+import java.util.Date;
 
 public class HelpUtil {
 	private static Logger logger = Logger.getLogger(HelpUtil.class);
@@ -476,7 +479,7 @@ public class HelpUtil {
 			}
 			retVal += "<img id=\"imgh_"+ topic.getHelpTopicId()+ "\" onclick=\"collapseProgram(" +topic.getHelpTopicId()+ ")\"  src=\"../ampTemplate/images/tree_minus.gif\" style=\"display : none;\">\n";
 			if(topic.getTitleTrnKey()!=null && topic.getTopicKey()!=null){
-			retVal += "<a href=\"../../help/"+instanceName+"/helpActions.do?actionType=viewSelectedHelpTopic&topicKey="+topic.getTopicKey()+"\">"+getTrn(topic.getTitleTrnKey(),topic.getTopicKey(), request)+"</a>";
+			retVal += "<a href=\"../../help/"+instanceName+"/helpActions.do?actionType=viewSelectedHelpTopic&topicKey="+topic.getTopicKey()+"\">"+getTrn(topic.getTopicKey(), request)+"</a>";
 			}
 			retVal += "</div>\n";
 			// hidden div start
@@ -499,7 +502,7 @@ public class HelpUtil {
 		
 			 if(topic.getTopicKey().length() != 0 ){
 				   
-				    String article = getTrn(topic.getTitleTrnKey(),topic.getTopicKey(), request);
+				    String article = getTrn(topic.getTopicKey(), request);
 					String newCode = article.replaceAll("&","&amp;");
 		
 					if(item.getChildren().isEmpty()){	
@@ -538,7 +541,7 @@ public class HelpUtil {
 				}
 				retVal += "<img id=\"imgh_"+ topic.getHelpTopicId()+ "\" onclick=\"collapseProgram(" +topic.getHelpTopicId()+ ")\"  src=\"../ampTemplate/images/tree_minus.gif\" style=\"display : none;\">\n";
 				if(topic.getTitleTrnKey()!=null && topic.getTopicKey()!=null){
-					retVal += "<a href=\"javascript:editTopic('"+ topic.getTopicKey()+ "','"+helpType+"')\">"+getTrn(topic.getTitleTrnKey(),topic.getTopicKey(), request)+"</a>";
+					retVal += "<a href=\"javascript:editTopic('"+ topic.getTopicKey()+ "','"+helpType+"')\">"+getTrn(topic.getTopicKey(), request)+"</a>";
 				}
 				retVal += "   </td>";
 				//checkbox
@@ -578,7 +581,7 @@ public class HelpUtil {
 			return retVal;
 		}
 	
-	 public static String getTrn(String key, String defResult, HttpServletRequest request){
+	 public static String getTrn(String defResult, HttpServletRequest request){
 		 //CategoryManagerUtil cat = new CategoryManagerUtil();
 		 //return CategoryManagerUtil.translate(key, request, defResult);
 		String	lange	= RequestUtils.getNavigationLanguage(request).getCode();
@@ -586,10 +589,7 @@ public class HelpUtil {
         Long	siteId	= RequestUtils.getSite(request).getId();
 		
 		Message m = null;
-                if(key==null){
-                    return defResult;
-                }
-		
+         
 		try {
             m = TranslatorWorker.getInstance("").getByBody(defResult, lange, siteId.toString());
             //m = DbUtil.getMessage(key.toLowerCase(), lang, siteId);
@@ -607,8 +607,34 @@ public class HelpUtil {
 		 }
 		 
 	 }
-	 
-	 public static List<HelpTopic> getAllHelpTopics() throws Exception{
+    public static String getTrn(String defResult,String	lange, Long	siteId){
+		 //CategoryManagerUtil cat = new CategoryManagerUtil();
+		 //return CategoryManagerUtil.translate(key, request, defResult);
+		//String	lange	= RequestUtils.getNavigationLanguage(request).getCode();
+        //Locale  lange    = RequestUtils.getNavigationLanguage(request);
+        //Long	siteId	= RequestUtils.getSite(request).getId();
+
+		Message m = null;
+
+		try {
+            m = TranslatorWorker.getInstance("").getByBody(defResult, lange, siteId.toString());
+            //m = DbUtil.getMessage(key.toLowerCase(), lang, siteId);
+		} catch (WorkerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 if (m == null)
+		 {
+			 return defResult;
+		 }
+		 else
+		 {
+			 return m.getMessage();
+		 }
+
+	 }
+
+     public static List<HelpTopic> getAllHelpTopics() throws Exception{
 		 Session session = null;
 		 Query query;
 		 String qryStr;
@@ -625,8 +651,8 @@ public class HelpUtil {
 	 }
 
 	 public static Vector getAllHelpdataForExport(String lang) {
-		
-		Vector vector 	= new Vector(); 
+        System.out.println("Start");
+		Vector vector = new Vector(); 
 		Session session = null;
 		Query query = null;
 		ObjectFactory objFactory = new ObjectFactory();
@@ -640,9 +666,9 @@ public class HelpUtil {
 		   
 		    Iterator itr = query.list().iterator();
 			HelpSearchData helpsearch;
-			
+			  System.out.println("itr:"+itr);
 			while (itr.hasNext()) {
-				HelpType helpout=objFactory.createHelpType();
+				AmpHelpType helpout=objFactory.createAmpHelpType();
 				
 				HelpTopic item = (HelpTopic) itr.next();
 				helpout.setTitleTrnKey(item.getTitleTrnKey());
@@ -656,27 +682,44 @@ public class HelpUtil {
 				}else{
 					helpout.setParentId(0);
 				}
-			
-				if(item.getBodyEditKey() != null){
-				List<Editor> Edit = getEditor(item.getBodyEditKey(),lang);
-				
-				if(!Edit.isEmpty()){
-					Iterator iter = Edit.iterator();
-					while (iter.hasNext()) {
-						Editor help = (Editor) iter.next();
-						
-					    helpout.setBody(help.getBody());
-					    helpout.setLeng(lang);
-					    Calendar cal_u = Calendar.getInstance();
-						cal_u.setTime(help.getLastModDate());
-						helpout.setLastModDate(cal_u);
-			   	  }
-						
-			  }
-				vector.add(helpout);
-	       }
-		}
-			
+
+                  List <String> allLang = TranslatorWorker.getAllUsedLanguages();
+
+                        Iterator iterato = allLang.iterator();
+                             while (iterato.hasNext()){
+                             String lan = (String) iterato.next();
+
+
+                            if(item.getBodyEditKey() != null){
+
+                                List <Editor> Edit = getEditor(item.getBodyEditKey(),lan);
+				                
+				                    if(!Edit.isEmpty()){
+
+                                        Iterator iter = Edit.iterator();
+					                    while (iter.hasNext()) {
+                                            Editor help = (Editor) iter.next();
+
+                                            HelpLang helplang = new HelpLang();
+                                            helplang.setBody(help.getBody());
+                                            helplang.setTitle(getTrn(item.getTopicKey(),lan,new Long(3)));
+                                            helplang.setCode(lan);
+
+                                            helpout.getLang().add(helplang);
+
+                                            Calendar cal_u = Calendar.getInstance();
+                                            cal_u.setTime(help.getLastModDate());
+                                            helpout.setLastModDate(cal_u);
+                                      }
+
+			   	            }
+				        	
+			        }
+
+             }
+
+              vector.add(helpout);
+         }	
 		} catch (Exception e) {
 			logger.error("Unable to load help data");
 				
@@ -684,7 +727,7 @@ public class HelpUtil {
 		return vector;
 	}
 		
-	 public static void updateNewEditHelpData(HelpType help,HashMap<Long,HelpTopic> storeMap){
+	 public static void updateNewEditHelpData(AmpHelpType help,HashMap<Long,HelpTopic> storeMap,Long siteId){
 		Session session = null;
 		Query query;
 		String qryStr;
@@ -703,14 +746,31 @@ public class HelpUtil {
 				   Iterator itr = query.list().iterator();
 			    while (itr.hasNext()) {
 			    	 HelpTopic helptopic = (HelpTopic) itr.next();
-			    	 helptopic.setTopicKey(help.getTopicKey());
+
 			    	 helptopic.setSiteId("amp");
-			    	 helptopic.setTitleTrnKey(help.getTitleTrnKey());
+                     helptopic.setTopicKey(help.getTopicKey());
+                     helptopic.setTitleTrnKey(help.getTitleTrnKey());
 	    	    	 helptopic.setModuleInstance(help.getModuleInstance());
 	    	    	 helptopic.setBodyEditKey(help.getEditorKey());
-	    	    		    	
-	    	    	 udateEditpData(help);
-			       
+
+                     Iterator editr = help.getLang().listIterator();
+                                         while(editr.hasNext()){
+                                             HelpLang ll = (HelpLang) editr.next();
+
+                                            Message newMsg = new Message();
+
+                                                newMsg.setSiteId(siteId.toString());
+                                                System.out.println("siteId:"+siteId);
+                                                newMsg.setMessage(ll.getTitle());
+                                                System.out.println("Message:"+ll.getTitle());
+                                                        newMsg.setKey(TranslatorWorker.generateTrnKey(help.getTopicKey()));
+
+                                                newMsg.setLocale(ll.getCode());
+
+                                            TranslatorWorker.getInstance("").save(newMsg);
+
+                                         udateEditpData(ll,help.getEditorKey(),help.getLastModDate());
+                                         }
 			       session.saveOrUpdate(helptopic);
 		    }
 		tx.commit();
@@ -727,8 +787,24 @@ public class HelpUtil {
 	    	    		 
 	    	    		 helptopic.setParent(top);
 	    	    	 }
-	    	    	 udateEditpData(help);
-	    	    	 insertHelp(helptopic);
+                     Iterator editr = help.getLang().listIterator();
+                                         while(editr.hasNext()){
+                                             HelpLang ll = (HelpLang) editr.next();
+
+                                            Message newMsg = new Message();
+
+                                                newMsg.setSiteId(siteId.toString());
+                                                System.out.println("siteId:"+siteId);
+                                                newMsg.setMessage(ll.getTitle());
+                                                System.out.println("Message:"+ll.getTitle());
+                                                        newMsg.setKey(TranslatorWorker.generateTrnKey(help.getTopicKey()));
+                                                newMsg.setLocale(ll.getCode());
+                                             
+                                            TranslatorWorker.getInstance("").save(newMsg);
+
+                                         udateEditpData(ll,help.getEditorKey(),help.getLastModDate());
+                                         }
+                 	 insertHelp(helptopic);
 	    	    	 HelpTopic parent = new HelpTopic();
 	    	    	 parent.setBodyEditKey(helptopic.getBodyEditKey());
 	    	    	 parent.setHelpTopicId(helptopic.getHelpTopicId());
@@ -750,7 +826,7 @@ public class HelpUtil {
 		 
 	 }
 	 
-	 public static void udateEditpData(HelpType help){
+	 public static void udateEditpData(HelpLang help,String key,Calendar lastModDate){
  	   List<HelpTopic> result = null;
 	   Session session = null;
 	   Query query = null;
@@ -760,9 +836,9 @@ public class HelpUtil {
 	    	Transaction tx=session.beginTransaction();
 			String queryString = "select editTopic from "+ Editor.class.getName() + " editTopic where (editTopic.editorKey=:key) and  (editTopic.language=:lang)";
    	        query = session.createQuery(queryString);
-		    query.setParameter("lang", help.getLeng());
-		    query.setParameter("key", help.getEditorKey());
-	    
+		    query.setParameter("lang", help.getCode());
+		    query.setParameter("key", key);
+
 		    
 	    	     
 	    	    if(query.list().iterator().hasNext()){
@@ -771,20 +847,20 @@ public class HelpUtil {
 				       Editor edit = (Editor) itr.next();
 				       
 				       edit.setBody(help.getBody());
-				       edit.setLastModDate(help.getLastModDate().getTime());
+				       edit.setLastModDate(lastModDate.getTime());
 				       edit.setSiteId("amp");
-				       edit.setLanguage(help.getLeng());
+				       edit.setLanguage(help.getCode());
 	    	    	   session.saveOrUpdate(edit);
 	    	     }
 	    	     tx.commit();
-	    	   }else if(help.getBody() != null) {
+	    	   }else if(help != null) {
 	  
 	    		   Editor edit = new  Editor();
 			       edit.setBody(help.getBody());
-			       edit.setLastModDate(help.getLastModDate().getTime());
+			       edit.setLastModDate(lastModDate.getTime());
 			       edit.setSiteId("amp");
-			       edit.setLanguage(help.getLeng());
-			       edit.setEditorKey(help.getEditorKey());
+			       edit.setLanguage(help.getCode());
+			       edit.setEditorKey(key);
 			       insertEdit(edit);
 	    	   }
 	     	}catch (Exception e) {

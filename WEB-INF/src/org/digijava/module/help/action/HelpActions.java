@@ -34,10 +34,11 @@ import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.help.dbentity.HelpTopic;
 import org.digijava.module.help.form.HelpForm;
-import org.digijava.module.help.jaxb.HelpType;
-import org.digijava.module.help.jaxb.Helps;
+import org.digijava.module.help.jaxb.AmpHelpRoot;
 import org.digijava.module.help.jaxb.ObjectFactory;
+import org.digijava.module.help.jaxb.AmpHelpType;
 import org.digijava.module.help.util.HelpUtil;
+import org.digijava.kernel.translator.TranslatorWorker;
 
 
 public class HelpActions extends DispatchAction {
@@ -67,15 +68,17 @@ public class HelpActions extends DispatchAction {
 		OutputStreamWriter os = null;
 	    PrintWriter out = null;
 	    String loadStatus = request.getParameter("body");
-	
-	    try {
+         String siteId = RequestUtils.getSite(request).getSiteId();
+         String	lange	= RequestUtils.getNavigationLanguage(request).getCode();
+
+        try {
 			if(loadStatus != null){
 				os = new OutputStreamWriter(response.getOutputStream());
 	            out = new PrintWriter(os, true);
 				String id = loadStatus.toLowerCase();
 				HelpTopic key = HelpUtil.getHelpTopic(new Long(id));
 	            String bodyKey =  key.getBodyEditKey();
-	            String article = HelpUtil.getTrn(key.getBodyEditKey(),key.getTopicKey(), request);
+	            String article = HelpUtil.getTrn(key.getTopicKey(),request);
 	            out.println("<b>"+article+"</b>");
 	            List editor = HelpUtil.getEditor(bodyKey, lang);
 	            helpForm.setTopicKey(bodyKey);
@@ -160,7 +163,8 @@ public class HelpActions extends DispatchAction {
 		 Collection<LabelValueBean> Searched = new ArrayList<LabelValueBean>();
 		 String instanceName=RequestUtils.getModuleInstance(request).getInstanceName();
 		 Hits hits =  LuceneUtil.helpSearch("title", helpForm.getKeywords(), request.getSession().getServletContext());
-		 String artikleTitle;
+
+         String artikleTitle;
 		 
 		 HelpForm help = (HelpForm) form;		 
 		  int hitCount = hits.length();   
@@ -198,7 +202,7 @@ public class HelpActions extends DispatchAction {
                       }
 
 			   String titlelink = 
-				   "<a href=\"../../help/"+instanceName+"/helpActions.do?actionType=viewSelectedHelpTopic&topicKey="+title+"\">"+HelpUtil.getTrn(titletrnKey,title,request)+"</a>";
+				   "<a href=\"../../help/"+instanceName+"/helpActions.do?actionType=viewSelectedHelpTopic&topicKey="+title+"\">"+HelpUtil.getTrn(title,request)+"</a>";
 			   Searched.add(new LabelValueBean(titlelink,art+"..."));
 			   help.setSearched(Searched);
 			   help.setTopicKey(title);
@@ -543,20 +547,26 @@ public class HelpActions extends DispatchAction {
 	
 	public ActionForward export(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		
-		String	lang	= RequestUtils.getNavigationLanguage(request).getCode();
-		JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jaxb");
+		String lang = RequestUtils.getNavigationLanguage(request).getCode();
+        String siteId = RequestUtils.getSite(request).getSiteId();
+        JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jaxb");
 		Marshaller m = jc.createMarshaller();
 		response.setContentType("text/xml");
 		response.setHeader("content-disposition", "attachment; filename=exportHelp.xml");
 		ObjectFactory objFactory = new ObjectFactory();
-		Helps help_out =  objFactory.createHelps();
+		AmpHelpRoot help_out = objFactory.createAmpHelpRoot();
 		Vector rsAux=new Vector();
 	
-		
-		rsAux= HelpUtil.getAllHelpdataForExport(lang);
-		help_out.getHelp().addAll(rsAux);
-		m.marshal(help_out,response.getOutputStream());
-	    return null;
+		List allLang = TranslatorWorker.getAllUsedLanguages();
+
+
+        rsAux= HelpUtil.getAllHelpdataForExport(lang);
+
+        help_out.getAmpHelp().addAll(rsAux);
+    
+        m.marshal(help_out,response.getOutputStream());
+      
+        return null;
 
 	}
 	
@@ -564,7 +574,8 @@ public class HelpActions extends DispatchAction {
 		    HashMap<Long,HelpTopic> storeMap=new HashMap<Long, HelpTopic>();
 			HelpForm helpForm = (HelpForm) form;
 			String siteId=RequestUtils.getSite(request).getSiteId();
-			String moduleInstance=RequestUtils.getRealModuleInstance(request).getInstanceName();
+            Long Id =RequestUtils.getSite(request).getId();
+            String moduleInstance=RequestUtils.getRealModuleInstance(request).getInstanceName();
 			
 		FormFile myFile = helpForm.getFileUploaded();
         byte[] fileData    = myFile.getFileData();
@@ -577,10 +588,10 @@ public class HelpActions extends DispatchAction {
 
         JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jaxb");
         Unmarshaller m = jc.createUnmarshaller();
-        Helps help_in;
+        AmpHelpRoot help_in;
         System.out.println("inputStream:"+inputStream);
 
-            help_in = (Helps) m.unmarshal(inputStream);
+            help_in = (AmpHelpRoot) m.unmarshal(inputStream);
             System.out.println("help_in:"+help_in);
             //remove all existing help topics           
             List<HelpTopic> firstLevelTopics=HelpUtil.getFirstLevelTopics(siteId);
@@ -589,13 +600,13 @@ public class HelpActions extends DispatchAction {
 				removeLastLevelTopic(helpTopic);
 			}
             
-            if (help_in.getHelp() != null) {
-				Iterator it = help_in.getHelp().iterator();
+            if (help_in.getAmpHelp()!= null) {
+				Iterator it = help_in.getAmpHelp().iterator();
 				while(it.hasNext())
 				{
-					HelpType element  = (HelpType) it.next();
+					AmpHelpType element  = (AmpHelpType) it.next();
                     System.out.println("element:"+element);
-                    HelpUtil.updateNewEditHelpData(element,storeMap);
+                    HelpUtil.updateNewEditHelpData(element,storeMap,Id);
 				}
 			}
 			helpForm.getTopicTree().clear();

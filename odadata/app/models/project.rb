@@ -111,6 +111,11 @@ class Project < ActiveRecord::Base
   validate                  :total_sector_amount_is_100
   validate                  :dates_consistency
   
+  # This gives us nicer URLs with the project number in it instead of just the id
+  def to_param
+    "#{id}-#{donor_project_number.strip.downcase.gsub(/[^[:alnum:]]/,'-')}".gsub(/-{2,}/,'-')
+  end
+          
   ##
   # Accessors    
   def historic_funding_attributes=(attribs)
@@ -181,6 +186,7 @@ class Project < ActiveRecord::Base
     end
     if incorrect_number == false
       unless self.sector_relevances.map(&:amount).sum == 100
+        # FIXME: Translation missing
         errors.add('sector_relevances', 'The sum of the sector percentages should be 100%')
       end
     end  
@@ -188,6 +194,7 @@ class Project < ActiveRecord::Base
 
   def dates_consistency
     unless self.start <= self.end
+      # FIXME: Translation missing & errors.add_to_base should be used here after views are fixed
        errors.add('start', 'Start date is previous to End Date')
        errors.add('end', '<br>') #added to avoid breaking the design of fieldset while showing the error
     end if self.start && self.end

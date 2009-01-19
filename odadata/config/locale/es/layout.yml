@@ -66,3 +66,7 @@ es:
       edit: Editar
       delete: Borrar
       show: Mostrar
+      
+  pagination:
+    next_page: Próxima página
+    previous_page: Página anterior

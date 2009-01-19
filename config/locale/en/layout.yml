@@ -63,3 +63,7 @@ en:
       edit: Edit
       delete: Delete
       show: Show
+      
+  pagination:
+    next_page: Next page
+    previous_page: Previous page

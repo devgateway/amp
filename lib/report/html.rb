@@ -33,7 +33,7 @@ module Report
         totals << %{<td class="currency right">#{col.total}</td>}
       end
 
-      totals[0] = %{"<td><strong>TOTAL</strong></td>"}
+      totals[0] = "<td><strong>TOTAL</strong></td>"
       %{<tr class="totals">#{totals.join}</tr>}
     end
     

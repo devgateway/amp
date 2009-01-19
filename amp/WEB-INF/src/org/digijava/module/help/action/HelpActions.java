@@ -547,20 +547,15 @@ public class HelpActions extends DispatchAction {
 	
 	public ActionForward export(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		
-		String lang = RequestUtils.getNavigationLanguage(request).getCode();
-        String siteId = RequestUtils.getSite(request).getSiteId();
-        JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jaxb");
+	    JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jaxb");
 		Marshaller m = jc.createMarshaller();
 		response.setContentType("text/xml");
 		response.setHeader("content-disposition", "attachment; filename=exportHelp.xml");
 		ObjectFactory objFactory = new ObjectFactory();
 		AmpHelpRoot help_out = objFactory.createAmpHelpRoot();
-		Vector rsAux=new Vector();
-	
-		List allLang = TranslatorWorker.getAllUsedLanguages();
+		Vector rsAux;
 
-
-        rsAux= HelpUtil.getAllHelpdataForExport(lang);
+        rsAux= HelpUtil.getAllHelpdataForExport();
 
         help_out.getAmpHelp().addAll(rsAux);
     

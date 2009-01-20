@@ -546,8 +546,9 @@ public class HelpActions extends DispatchAction {
 	
 	
 	public ActionForward export(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
-		
-	    JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jaxb");
+
+        System.out.println("starting Export");
+        JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jaxb");
 		Marshaller m = jc.createMarshaller();
 		response.setContentType("text/xml");
 		response.setHeader("content-disposition", "attachment; filename=exportHelp.xml");

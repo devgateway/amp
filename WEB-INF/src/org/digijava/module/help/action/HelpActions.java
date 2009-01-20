@@ -547,20 +547,17 @@ public class HelpActions extends DispatchAction {
 	
 	public ActionForward export(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 
-        System.out.println("starting Export");
+
         JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jax");
-        System.out.println("JAXBContext"+JAXBContext.JAXB_CONTEXT_FACTORY+", jc:"+jc);
         Marshaller m = jc.createMarshaller();
-        System.out.println("Created marshal");
         response.setContentType("text/xml");
 		response.setHeader("content-disposition", "attachment; filename=exportHelp.xml");
 		ObjectFactory objFactory = new ObjectFactory();
 		AmpHelpRoot help_out = objFactory.createAmpHelpRoot();
 		Vector rsAux;
-        System.out.println("loading help data");
+        logger.info("loading helpData");
         rsAux= HelpUtil.getAllHelpdataForExport();
-        logger.info("load all data:"+rsAux);
-        System.out.println("load all data:"+rsAux);
+
 
         help_out.getAmpHelp().addAll(rsAux);
     

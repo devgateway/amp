@@ -550,12 +550,13 @@ public class HelpActions extends DispatchAction {
         System.out.println("starting Export");
         JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jaxb");
 		Marshaller m = jc.createMarshaller();
-		response.setContentType("text/xml");
+        System.out.println("Created marshal");
+        response.setContentType("text/xml");
 		response.setHeader("content-disposition", "attachment; filename=exportHelp.xml");
 		ObjectFactory objFactory = new ObjectFactory();
 		AmpHelpRoot help_out = objFactory.createAmpHelpRoot();
 		Vector rsAux;
-
+        System.out.println("loading help data");
         rsAux= HelpUtil.getAllHelpdataForExport();
         logger.info("load all data:"+rsAux);
         System.out.println("load all data:"+rsAux);

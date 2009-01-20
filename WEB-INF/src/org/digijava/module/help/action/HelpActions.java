@@ -549,7 +549,8 @@ public class HelpActions extends DispatchAction {
 
         System.out.println("starting Export");
         JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jaxb");
-		Marshaller m = jc.createMarshaller();
+        System.out.println("JAXBContext"+JAXBContext.JAXB_CONTEXT_FACTORY+", jc:"+jc);
+        Marshaller m = jc.createMarshaller();
         System.out.println("Created marshal");
         response.setContentType("text/xml");
 		response.setHeader("content-disposition", "attachment; filename=exportHelp.xml");

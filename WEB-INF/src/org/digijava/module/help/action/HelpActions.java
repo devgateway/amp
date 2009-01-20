@@ -556,7 +556,7 @@ public class HelpActions extends DispatchAction {
 		Vector rsAux;
 
         rsAux= HelpUtil.getAllHelpdataForExport();
-
+        logger.info("load all data:"+rsAux);
         help_out.getAmpHelp().addAll(rsAux);
     
         m.marshal(help_out,response.getOutputStream());

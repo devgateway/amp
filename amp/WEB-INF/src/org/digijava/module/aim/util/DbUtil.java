@@ -8,6 +8,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.Collator;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -2496,8 +2497,13 @@ public class DbUtil {
             if(result.size()>5){
                 result=result.subList(0, 4);//pick 5 largest projects
             }
-           
-            
+             
+            String format = "###,###,###,##0.0"; // numbers
+
+            DecimalFormatSymbols decSymbols = new DecimalFormatSymbols();
+            decSymbols.setDecimalSeparator('.');
+            decSymbols.setGroupingSeparator(',');
+            DecimalFormat frt=new DecimalFormat(format);      
             Iterator<AmpActivity> activityIter = result.iterator();
             // converting funding to selected currency amount and creating projects
             while (activityIter.hasNext()) {
@@ -2514,12 +2520,21 @@ public class DbUtil {
                 FundingCalculationsHelper cal = new FundingCalculationsHelper();
                 cal.doCalculations(details, currCode);
                 double thousands=("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)))?0.001:1;
-                project.setAmount(cal.getTotActualComm().doubleValue()/million*thousands);//divide by 1 000 000 to show amount in million
-                project.setTitle(activity.getName());
+                Double amount=cal.getTotActualComm().doubleValue()/million*thousands; //divide by 1 000 000 to show amount in million
+
+                /* we could use FormatHelper.formatNumber in amounts were not in millions
+                and the req. did not insists on the signal decimal*/
+                
+                project.setAmount(frt.format(amount));
+                String title=activity.getName();
+                if(title.length()>15){
+                    title=title.substring(0, 14)+"...";
+                }
+                project.setTitle(title);
                 project.setActivityId(activity.getAmpActivityId());
                 projects.add(project);
 
-            }
+		}
         } catch (Exception e) {
             throw new DgException(
                     "Cannot load sector fundings by donors from db", e);

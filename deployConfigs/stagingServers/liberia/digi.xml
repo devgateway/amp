@@ -1,18 +1,23 @@
 <?xml version="1.0"?>
+<!DOCTYPE digi-common [
+        <!ENTITY commonEntities SYSTEM "resource:repository/digi-common.xml">
+]>
+
 <digi-config>
     <smtp>
 		 <host>localhost</host>
 		 <from>system@digijava.org</from>
 	</smtp>
 
-    <logon-site id="dglogin" host="amp-login.code.ro">http://liberia.staging.ampdev.net/login</logon-site>
-    <site-domain id="dgDomain" host="malawi.staging.ampdev.net">http://liberia.staging.ampdev.net/</site-domain>
-    
-        <server-type caseSensitiveTranslatioKeys="false"/>
+	
+     <logon-site id="dglogin" host="">http://liberia.staging.ampdev.net/login</logon-site>
+     <site-domain id="dgDomain" host="">http://liberia.staging.ampdev.net/</site-domain> 
+
+     
+    <server-type caseSensitiveTranslatioKeys="false"/>
     
 	<server-type prefix="">development</server-type>
 
-	<site-config>repository</site-config>
 
 	<forward-emails enabled="false">
 		<email>lasha@gateway.ge</email>
@@ -22,195 +27,8 @@
 		<email>lasha@gateway.ge</email>
 	</exception-emails>
 	
-	<!-- Indicates if resource lookup is cached.
-	Set to true on production boxes. Set to false on
-	dev machines -->
-	<res-cache>false</res-cache>
+	<enable-autologin>true</enable-autologin>
 
-	<!-- Search-engine optimization separator in URLs -->
-	<param-separator>~</param-separator>
-
-    <param-safeHTML>b,u,i,pre</param-safeHTML>
-	<param-bbTag>b,u,i,quote,code,list,list=,img,url,color,li,size</param-bbTag>
-
-    <!-- Enable/disable AccessLogger -->
-	<enable-logging>true</enable-logging>
-
-	<!-- Hibernate class -->
-	<hibernate-classes required="false">              
-		<!-- kernel classes -->
-		<hibernate-class>org.digijava.kernel.request.SiteDomain</hibernate-class>
-		<hibernate-class>org.digijava.kernel.entity.Address</hibernate-class>
-		<hibernate-class>org.digijava.kernel.entity.GeoRegion</hibernate-class>
-		<hibernate-class>org.digijava.kernel.user.User</hibernate-class>
-		<hibernate-class>org.digijava.kernel.user.UserLoginInfo</hibernate-class>
-                <hibernate-class>org.digijava.kernel.user.UserContactInfo</hibernate-class>
-		<hibernate-class>org.digijava.kernel.request.Site</hibernate-class>
-		<hibernate-class>org.digijava.kernel.entity.Image</hibernate-class>
-		<hibernate-class>org.digijava.kernel.user.Group</hibernate-class>
-		<hibernate-class>org.digijava.kernel.user.GroupPermission</hibernate-class>
-		<hibernate-class>org.digijava.kernel.entity.Locale</hibernate-class>
-		<hibernate-class>org.digijava.kernel.entity.UserPreferences</hibernate-class>
-		<hibernate-class>org.digijava.kernel.dbentity.Country</hibernate-class>
-		<hibernate-class>org.digijava.kernel.entity.OrganizationType</hibernate-class>
-		<hibernate-class>org.digijava.kernel.entity.HowDidYouHear</hibernate-class>
-		<hibernate-class>org.digijava.kernel.entity.ModuleInstance</hibernate-class>
-		<hibernate-class>org.digijava.kernel.entity.UserLangPreferences</hibernate-class>
-		<hibernate-class>org.digijava.kernel.entity.Interests</hibernate-class>
-		<hibernate-class>org.digijava.kernel.entity.ContentAlert</hibernate-class>
-		<!-- <hibernate-class>org.digijava.kernel.dbentity.SignOn</hibernate-class> -->
-		<hibernate-class>org.digijava.kernel.entity.OracleLocale</hibernate-class>
-		<hibernate-class>org.digijava.kernel.entity.PrincipalPermission</hibernate-class>
-		<hibernate-class>org.digijava.kernel.entity.PrincipalPermissionParameter</hibernate-class>
-		<hibernate-class precache="true" region="org.digijava.kernel.entity.Message.id_cache">org.digijava.kernel.entity.Message</hibernate-class>
-		<hibernate-class>org.digijava.kernel.entity.AccessLog</hibernate-class>
-		<hibernate-class>org.digijava.module.common.dbentity.ItemStatus</hibernate-class>
-		<hibernate-class>org.digijava.module.common.dbentity.ModuleTeaser</hibernate-class>
-                <hibernate-class>org.digijava.kernel.entity.MailSpool</hibernate-class>
-	</hibernate-classes>
+	&commonEntities;
 	
-	 <service id="digiFeedService" class="org.digijava.module.digifeed.core.DigifeedService">
-            <description>Digi's feed publishing service</description>
-     </service>
-	
-	
-	
-    <!--
-    <service id="urlTouchService" class="org.digijava.kernel.services.UrlTouchService">
-        <description>This service gets one or many URLs and touches them asynchronously</description>
-        <property name="bufferSize">512</property>
-        <property name="poolSize">7</property>
-    </service>
-    -->
-    <!--
-    <service id="searchService" class="org.digijava.module.search.service.SearchService">
-        <description>Lucene-based search service</description>
-        <property name="indexLocation">/Users/lasha/searchindex</property>
-        <property name="fragmentSize">512</property>
-        <property name="indexTime">2:45 pm</property>
-        <property name="indexOnStartup">false</property>
-        <property name="indexSources">news:org.digijava.module.news.indexer.NewsDocumentHandler,
-            calendar:org.digijava.module.calendar.indexer.CalendarDocumentHandler,
-            forum:org.digijava.module.forum.indexer.ForumDocumentHandler,
-            highlights:org.digijava.module.highlights.indexer.HighlightsDocumentHandler
-        </property>
-    </service>
-    -->
-    <!--
-    <service id="quartzScheduler" class="org.digijava.kernel.quartz.SchedulerService">
-        <description>Scheduler Service</description>
-        < ! - - If you have any startup jobs which must be executed when service starts,
-        uncomment startupJobFactory property declaration and put your factory
-        there - - >
-        < ! - -
-        <property name="startupJobFactory">org.digijava.kernel.quartz.DefaultStartupJobFactoryImpl</property>
-        - - >
-        < ! - - If you have any listeners, uncomment "listener" property and put coma-delimited
-        list of class names there - - >
-        < ! - -
-        <property name="listener">org.digijava.kernel.quartz.test.TestJobListener</property>
-        - - >
-    </service>
-    -->
-    
-    
-	 <service id="digiAutoPatcherService" class="org.digijava.module.autopatcher.core.AutopatcherService">
-            <description>Advanced Database Patcher Module</description>
-            <property name="patchesDir">patches</property>
-     </service>
-
-    <service id="ignoredAgentsService" class="org.digijava.kernel.request.service.IgnoredAgentsService">
-        <description>Service to determine which agents will use SSO</description> 
-        <!-- What to do if user-agent header does not exist --> 
-        <property name="ignoreUndefined">true</property> 
-        <!-- Default Behavior --> 
-        <property name="ignoreByDefault">true</property> 
-        <!-- Checking Order --> 
-        <property name="checkAllowedFirst">false</property> 
-        <!-- Allow and Ignore directives. Can contain Java expressions. 
-              There are 2 constants available: agent and agentWithCase
-          --> 
-        <property name="allowedAgents">agent.indexOf("mozilla") != -1</property> 
-        <property name="ignoredAgents">agent.indexOf("googlebot") != -1</property>
-    </service>
-	 <service id="digiCurrencyRatesService" class="org.digijava.module.currencyrates.CurrencyRatesService">
-            <description>Daily Currency Rates Service</description>
-     </service>
-    
-    <service id="digiAuditClenaerService" class="org.digijava.module.aim.services.auditcleaner.AuditCleanerService">
-            <description>This service will delete the audit log</description>
-     </service>
-<!--
-    <service id="jcrRespositoryService" class="org.digijava.module.dm.service.RMIDocumentManagementService">
-        <description>This service provides RMI access to external JCR repository</description>
-        <property name="rmiName">//192.168.0.1:10666/javaContentRepository</property>
-        <property name="userName">digi_jcr_user</property>
-        <property name="password">JCRUser123</property>
-    </service>
--->
-    <!--
-    <service id="siteIdentityService" class="org.digijava.kernel.services.siteidentity.SiteIdentityServiceImpl">
-        <description>This service converts site identities to various form (for omniture, page access counters, etc)</description>
-        <property name="config"><![CDATA[
-            <config>
-              <service id="test" default="unknown">
-                <site id="demosite">demo1</site>
-                <site id="demo">demo2</site>
-                <site id="newdemo">demo3</site>
-              </service>
-            </config>
-            ]]>
-        </property>
-    </service>
-    -->
-    <!--
-    <service id="robotsService" class="org.digijava.kernel.robots.RobotsTxtService">
-        <description>/robots.txt generator</description>
-        <property name="config"><![CDATA[
-            <robots-configs>
-                <robots-config>
-                    <domain>www.demo.ge</domain>
-                    <content>
-                        # robots.txt for http://www.demo.ge/
-
-                        User-agent:	*
-                        Disallow:	/cgi-bin
-                    </content>
-                </robots-config>
-                <robots-config default="true">
-                    <path>/robots.txt</path>
-                </robots-config>
-            </robots-configs>
-            ]]>
-        </property>
-    </service>
-    -->
-    <!--
-    <config-bean id="translateAlert" class="org.digijava.kernel.translator.TranslateAlertConfig">
-        <property name="alertUrl">http://www.listen.com/translateListener?siteId={siteId}&amp;locale={locale}&amp;key={key}</property>
-        <property name="userAgent">digi-translator</property>
-    </config-bean>
-    -->
-        <!--
-        <config-bean id="translationConfig" class="org.digijava.module.translation.config.TranslationConfig">
-            <property name="dropdownConfig"><![CDATA[
-                <groups>
-                    <group id="childdemo">
-                        <key id="ep">E-procure</key>
-                        <key id="ec">ECommerce</key>
-                        <key id="cn">Countries</key>
-                        <key id="ln">Languages</key>
-                        <key id="ag">Agencies (short)</key>
-                        <key id="aglng">Agencies (full)</key>
-                        <key id="dacon">Dacon</key>
-                        <key id="cpvct">CPV Categories</key>
-                        <key id="param">Parameters</key>
-                    </group>
-                </groups>
-                ]]></property>
-            </config-bean>
-            -->
-        <config-bean id="proxyHelperConfig" class="org.digijava.kernel.util.ProxyHelperConfig">
-             <property name="initializeUser">false</property>
-        </config-bean>
 </digi-config>

@@ -1,2 +1,1 @@
-security error
-x
+REQUEST DENIED

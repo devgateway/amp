@@ -34,9 +34,9 @@ import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.help.dbentity.HelpTopic;
 import org.digijava.module.help.form.HelpForm;
-import org.digijava.module.help.jaxb.AmpHelpRoot;
-import org.digijava.module.help.jaxb.ObjectFactory;
-import org.digijava.module.help.jaxb.AmpHelpType;
+import org.digijava.module.help.jax.AmpHelpRoot;
+import org.digijava.module.help.jax.ObjectFactory;
+import org.digijava.module.help.jax.AmpHelpType;
 import org.digijava.module.help.util.HelpUtil;
 import org.digijava.kernel.translator.TranslatorWorker;
 
@@ -556,7 +556,7 @@ public class HelpActions extends DispatchAction {
 	public ActionForward export(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 
 
-        JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jaxb");
+        JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jax");
         Marshaller m = jc.createMarshaller();
         response.setContentType("text/xml");
 		response.setHeader("content-disposition", "attachment; filename=exportHelp.xml");
@@ -591,7 +591,7 @@ public class HelpActions extends DispatchAction {
         InputStream inputStream= new ByteArrayInputStream(fileData);
         
 
-        JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jaxb");
+        JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jax");
         Unmarshaller m = jc.createUnmarshaller();
         AmpHelpRoot help_in;
         System.out.println("inputStream:"+inputStream);

@@ -5,8 +5,6 @@
 
 package org.digijava.module.aim.util;
 
-import java.sql.Savepoint;
-import java.text.DecimalFormat;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -18,7 +16,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
@@ -30,7 +27,6 @@ import net.sf.hibernate.Transaction;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.error.AMPActivityError;
-import org.dgfoundation.amp.error.AMPError;
 import org.dgfoundation.amp.utils.AmpCollectionUtils;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
@@ -51,7 +47,6 @@ import org.digijava.module.aim.dbentity.AmpClosingDateHistory;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
-import org.digijava.module.aim.dbentity.AmpExternalMapping;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -81,7 +76,6 @@ import org.digijava.module.aim.dbentity.IPAContractDisbursement;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.ActivityIndicator;
-import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.AmpProjectDonor;
 import org.digijava.module.aim.helper.CategoryConstants;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
@@ -89,15 +83,12 @@ import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.DateConversion;
-import org.digijava.module.aim.helper.DecimalToText;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingValidator;
 import org.digijava.module.aim.helper.Issues;
-import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.Measures;
 import org.digijava.module.aim.helper.PhysicalProgress;
-import org.digijava.module.aim.helper.RelOrganization;
 import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.TeamMember;
 
@@ -857,6 +848,10 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         	  // Save the new indicator that is NOT present in the indicators collection from the Activity.
         	  IndicatorUtil.saveConnectionToActivity(indConn, session);
           } else {
+        	  //They are loaded by different sessions!
+        	  for (AmpIndicatorValue value : indConn.getValues()) {
+				session.save(value);
+        	  }
         	  // Save the activity in order to save the indicators collection and its changes (values).
         	  // This is for AMP-4317, you can't save the collection because is in the Activity.
         	  session.saveOrUpdate(activity);

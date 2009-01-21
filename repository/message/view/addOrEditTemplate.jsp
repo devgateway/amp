@@ -133,6 +133,7 @@
 				<tr>
 <!--					<td class="r-dotted-lg" width="10"/>-->
 <!--					<td class="r-dotted-lg" valign="top" align="left">-->
+						<td>
 						<table width="98%" cellspacing="3" cellpadding="1" align="left" valign="top">
 						<td/>
 						<td>
@@ -141,10 +142,26 @@
 									<td width="75%" valign="top">
 										<table width="100%" cellspacing="0" cellpadding="5">
 											<tr>
-												<td height=33 width="100%">
-												&nbsp;
+												<!-- Start Navigation -->
+												<td height=33><span class=crumb>
+													<c:set var="translation">
+														<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
+													</c:set>
+							                        <digi:link module="aim" href="/admin.do" styleClass="comment" title="${translation}" >
+														<digi:trn key="aim:AmpAdminHome">
+															Admin Home
+														</digi:trn>
+													</digi:link>&nbsp;&gt;&nbsp;													
+													<c:set var="gotoTemplateAlertsPage">
+														<digi:trn>Click here to goto Template Alert Page</digi:trn>
+													</c:set>
+							                        <digi:link href="/templatesManager.do~actionType=viewTemplates" styleClass="comment" title="${gotoTemplateAlertsPage}" >
+														<digi:trn>Templates Manager</digi:trn>
+													</digi:link>&nbsp;&gt;&nbsp;													
+													<digi:trn>Add/Edit Template</digi:trn>													
 												</td>
-											</tr>
+												<!-- End navigation -->
+											</tr>											
 											<tr>
 								               <td height=16 vAlign=center width=571>
 									              <span class=subtitle-blue>							

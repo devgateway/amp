@@ -26,12 +26,12 @@ import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.help.dbentity.HelpTopic;
 import org.digijava.module.help.helper.HelpSearchData;
 import org.digijava.module.help.helper.HelpTopicsTreeItem;
-import org.digijava.module.help.jax.AmpHelpType;
-import org.digijava.module.help.jax.ObjectFactory;
+import org.digijava.module.help.jaxb.AmpHelpType;
+import org.digijava.module.help.jaxb.ObjectFactory;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.digijava.module.help.jax.HelpLang;
+import org.digijava.module.help.jaxb.HelpLang;
 import org.digijava.kernel.translator.TranslatorWorker;
 import java.util.Date;
 
@@ -675,7 +675,7 @@ public class HelpUtil {
 				if(item.getParent()!= null){
 					helpout.setParentId(item.getParent().getHelpTopicId());
 				}else{
-					helpout.setParentId(0);
+					helpout.setParentId(new Long(0));
 				}
 
                   List <String> allLang = TranslatorWorker.getAllUsedLanguages();

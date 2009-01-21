@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE digi-common [
-        <!ENTITY commonEntities SYSTEM "resource:repository/digi-common.xml">
+        <!ENTITY commonEntities SYSTEM "digi-common.xml">
 ]>
 
 <digi-config>

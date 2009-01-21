@@ -15,14 +15,14 @@
     <th colspan="3" class="tableHeaderCls">5 Largest projects (${sessionScope.orgProfileFilter.year-1})</th>
     <tr colspan="3">
         <td class="tableHeaderCls">Project title</td>
-        <td class="tableHeaderCls">Commitment (USD million)</td>
+        <td class="tableHeaderCls">Commitment</td>
         <td class="tableHeaderCls">Sector</td>
     </tr>
      
           <c:forEach items="${orgProfLargestProjectsForm.projects}" var="project"  >
                <tr>
-                   <td><digi:link module="aim" href="/selectActivityTabs.do~ampActivityId=${project.activityId}">${project.title}</digi:link></td>
-               <td>${project.amount}</td>
+                   <td nowrap><digi:link module="aim" href="/selectActivityTabs.do~ampActivityId=${project.activityId}">${project.title}</digi:link></td>
+               <td align="center">${project.amount}</td>
                <td>
                 <c:forEach var="sector" items="${project.sectors}" varStatus="index">
                  ${sector.sectorId.name} <c:if test="${!index.last}">,</c:if>

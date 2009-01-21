@@ -112,6 +112,25 @@ div.fakefile2 input{
 <digi:instance property="messageForm" />
 <table width="100%" cellspacing="2" cellpadding="2" valign="top" align="center" border="0">
 	<tr>
+	<!-- Start Navigation -->
+		<td height=33><span class=crumb>
+			<c:set var="translation">
+				<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
+			</c:set>
+		    <digi:link module="aim" href="/admin.do" styleClass="comment" title="${translation}" >
+				<digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
+			</digi:link>&nbsp;&gt;&nbsp;													
+			<c:set var="gotoTemplateAlertsPage">
+				<digi:trn>Click here to goto Template Alert Page</digi:trn>
+			</c:set>
+			<digi:link href="/templatesManager.do~actionType=viewTemplates" styleClass="comment" title="${gotoTemplateAlertsPage}" >
+				<digi:trn>Templates Manager</digi:trn>
+			</digi:link>&nbsp;&gt;&nbsp;
+			<digi:trn>Export/Import Templates</digi:trn>
+		</td>
+	<!-- End navigation -->
+	</tr>
+	<tr>
 		<th width="50%"><digi:trn key="ie:import">Import</digi:trn></th>
 		<th width="50%"><digi:trn key="ie:export">Export</digi:trn></th>
 	</tr>

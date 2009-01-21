@@ -1,10 +1,16 @@
 $('select.dynamic_select.parent').livequery(function() {
     var parent = $(this);
+        alert("Parent" + parent);
   
     var child_element = parent.nextAll('select.dynamic_select.child')[0];
     if (!child_element) {
-        alert("JavaScript Error: Can't find child list!");
-        return false;
+        //If the errors are being shown, there's an added DIV that breaks the logic, added this lines to get it from the parent if the first time fails
+        child_element = parent.parent().nextAll('select.dynamic_select.child')[0];
+        parent.data('child_element', child_element)
+        if (!child_element) {
+            alert("JavaScript Error: Can't find child list!");
+            return false;
+        }
     } else {
         parent.data('child_element', child_element)
     }

@@ -37,8 +37,8 @@
 <script>
 function 
 SwitchLanguageMenu(value) {
-if (quitRnot1('${msg}')!=false){
-  document.location.href = value;
-}
-}
+        if(typeof quitRnot1 != 'function'||quitRnot1('${msg}')!=false){
+                document.location.href = value;
+            }
+    }
 </script>

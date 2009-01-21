@@ -75,7 +75,7 @@ cursor:pointer;
                 <c:set var="message">
                 <digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
                 </c:set>
-                <digi:link styleClass="yuiampmenuitemlabel" href="/reportsPublicView.do" module="aim" onclick="return quitRnot1('${message}')">
+                <digi:link styleClass="yuiampmenuitemlabel" href="/reportsPublicView.do" module="aim" >
                 <digi:trn key='aim:PublicView'>PUBLIC VIEW</digi:trn>
                 </digi:link>
             </li>
@@ -174,7 +174,7 @@ function adminHelp(){
                                           <c:set var="message">
                        							<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
                  						  </c:set>
-					                    <digi:link style="border-right:1px solid white;" styleClass="yuiampmenuitemlabel"  href="/admin.do" module="aim" onclick="return quitRnot1('${message}')">
+					                    <digi:link style="border-right:1px solid white;" styleClass="yuiampmenuitemlabel"  href="/admin.do" module="aim" >
 					                        <digi:trn key="aim:aminTools">ADMIN TOOLS</digi:trn>
 					                    </digi:link>
                                         </li>
@@ -297,10 +297,18 @@ function adminHelp(){
 	 <digi:context name="rev" property="/help/help.do~blankPage=true" />
 		openURLinWindow("<%=rev%>",1024,768);
 	}
+
+
 	
-	function canExit(){
-		return quitRnot1('${msg}');
-	}	
+function canExit(){
+    if(typeof quitRnot1 == 'function') {
+        return quitRnot1('${msg}');
+    }
+    else{
+        return true;
+    }
+
+}	
 
 </script>
 <!-- 

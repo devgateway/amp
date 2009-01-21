@@ -34,9 +34,9 @@ import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.help.dbentity.HelpTopic;
 import org.digijava.module.help.form.HelpForm;
-import org.digijava.module.help.jax.AmpHelpRoot;
-import org.digijava.module.help.jax.ObjectFactory;
-import org.digijava.module.help.jax.AmpHelpType;
+import org.digijava.module.help.jaxbi.AmpHelpRoot;
+import org.digijava.module.help.jaxbi.ObjectFactory;
+import org.digijava.module.help.jaxbi.AmpHelpType;
 import org.digijava.module.help.util.HelpUtil;
 import org.digijava.kernel.translator.TranslatorWorker;
 

@@ -559,7 +559,7 @@ public class HelpActions extends DispatchAction {
 	public ActionForward export(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 
 
-        JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jax");
+        JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jaxbi");
         Marshaller m = jc.createMarshaller();
         response.setContentType("text/xml");
 		response.setHeader("content-disposition", "attachment; filename=exportHelp.xml");
@@ -594,7 +594,7 @@ public class HelpActions extends DispatchAction {
         InputStream inputStream= new ByteArrayInputStream(fileData);
         
 
-        JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jax");
+        JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jaxbi");
         Unmarshaller m = jc.createUnmarshaller();
         AmpHelpRoot help_in;
         System.out.println("inputStream:"+inputStream);

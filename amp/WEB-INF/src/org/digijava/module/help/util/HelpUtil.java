@@ -26,12 +26,12 @@ import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.help.dbentity.HelpTopic;
 import org.digijava.module.help.helper.HelpSearchData;
 import org.digijava.module.help.helper.HelpTopicsTreeItem;
-import org.digijava.module.help.jax.AmpHelpType;
-import org.digijava.module.help.jax.ObjectFactory;
+import org.digijava.module.help.jaxbi.AmpHelpType;
+import org.digijava.module.help.jaxbi.ObjectFactory;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.digijava.module.help.jax.HelpLang;
+import org.digijava.module.help.jaxbi.HelpLang;
 import org.digijava.kernel.translator.TranslatorWorker;
 import java.util.Date;
 

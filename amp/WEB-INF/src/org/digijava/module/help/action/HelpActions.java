@@ -35,10 +35,9 @@ import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.help.dbentity.HelpTopic;
 import org.digijava.module.help.form.HelpForm;
 import org.digijava.module.help.jaxbi.AmpHelpRoot;
-import org.digijava.module.help.jaxbi.ObjectFactory;
 import org.digijava.module.help.jaxbi.AmpHelpType;
+import org.digijava.module.help.jaxbi.ObjectFactory;
 import org.digijava.module.help.util.HelpUtil;
-import org.digijava.kernel.translator.TranslatorWorker;
 
 
 public class HelpActions extends DispatchAction {
@@ -416,9 +415,11 @@ public class HelpActions extends DispatchAction {
 	public ActionForward cancelHelpTopic(ActionMapping mapping,ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		HelpForm helpForm = (HelpForm) form;
-		
-		 int editkey = helpForm.getBodyEditKey().indexOf("body:");
-         String topickey = helpForm.getBodyEditKey().substring(editkey+5);
+		String topickey=null;
+		if(helpForm.getBodyEditKey()!=null){
+			int editkey = helpForm.getBodyEditKey().indexOf("body:");
+	        topickey = helpForm.getBodyEditKey().substring(editkey+5);
+		}		
 		helpForm.setTopicKey(topickey);
 		setDefaultValues(helpForm);
 		return mapping.findForward("help");
@@ -448,6 +449,8 @@ public class HelpActions extends DispatchAction {
 	 */
 	private void createTopicStep0(HelpForm form, HttpServletRequest request)throws Exception {
 		if (request.getParameter("actionBack") == null) {
+			form.setTopicKey(null);
+			form.setBodyEditKey(null);
 			setDefaultValues(form);
 		}
 		form.setEdit(false);

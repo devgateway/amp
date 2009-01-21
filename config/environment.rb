@@ -1,3 +1,6 @@
+$KCODE = 'u'
+require 'jcode'
+
 # Be sure to restart your server when you modify this file
 
 # Uncomment below to force Rails into production mode when
@@ -26,6 +29,7 @@ Rails::Initializer.run do |config|
   # Add additional load paths for your own custom dirs
   config.load_paths += Dir["#{RAILS_ROOT}/app/models/*[^.rb]"]
   config.load_paths << "#{RAILS_ROOT}/app/reports"
+  config.load_paths << "#{RAILS_ROOT}/app/builders"
   
   # Make Time.zone default to the specified zone, and make Active Record store time values
   # in the database in UTC, and return them converted to the specified local zone.

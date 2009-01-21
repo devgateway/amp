@@ -10,8 +10,8 @@ class DacSector < ActiveRecord::Base
   
   def name_with_code(maxlength = nil)
     string = [five_digit_code, name].join(" ")
-    if maxlength && string.chars.length > maxlength
-      "#{string.chars[0, maxlength]}..."
+    if maxlength && string.jlength > maxlength
+      "#{string[0, maxlength]}..."
     else
       string
     end

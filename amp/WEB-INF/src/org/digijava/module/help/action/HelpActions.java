@@ -34,9 +34,9 @@ import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.help.dbentity.HelpTopic;
 import org.digijava.module.help.form.HelpForm;
-import org.digijava.module.help.jax.AmpHelpRoot;
-import org.digijava.module.help.jax.ObjectFactory;
-import org.digijava.module.help.jax.AmpHelpType;
+import org.digijava.module.help.jaxb.AmpHelpRoot;
+import org.digijava.module.help.jaxb.ObjectFactory;
+import org.digijava.module.help.jaxb.AmpHelpType;
 import org.digijava.module.help.util.HelpUtil;
 import org.digijava.kernel.translator.TranslatorWorker;
 
@@ -535,11 +535,19 @@ public class HelpActions extends DispatchAction {
 	}
 	
 	public ActionForward viewAdmin(ActionMapping mapping,ActionForm form,HttpServletRequest request,HttpServletResponse response) throws Exception {
-		HelpForm helpForm = (HelpForm) form;
-		String siteId=RequestUtils.getSite(request).getSiteId();
-		String moduleInstance=RequestUtils.getRealModuleInstance(request).getInstanceName();
+		logger.info("Vew Admin");
+        HelpForm helpForm = (HelpForm) form;
+        logger.info("helpForm");
+        String siteId=RequestUtils.getSite(request).getSiteId();
+        logger.info("siteId"+siteId);
+        String moduleInstance=RequestUtils.getRealModuleInstance(request).getInstanceName();
 		helpForm.setTopicTree(HelpUtil.getHelpTopicsTree(siteId, moduleInstance));
-		helpForm.setAdminTopicTree(HelpUtil.getHelpTopicsTree(siteId,"admin"));    
+
+        helpForm.setTopicTree(HelpUtil.getHelpTopicsTree(siteId, moduleInstance));
+        logger.info("Gettreee");
+
+
+        helpForm.setAdminTopicTree(HelpUtil.getHelpTopicsTree(siteId,"admin"));
 	
 	  return mapping.findForward("admin");
 	}
@@ -548,7 +556,7 @@ public class HelpActions extends DispatchAction {
 	public ActionForward export(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 
 
-        JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jax");
+        JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jaxb");
         Marshaller m = jc.createMarshaller();
         response.setContentType("text/xml");
 		response.setHeader("content-disposition", "attachment; filename=exportHelp.xml");
@@ -583,7 +591,7 @@ public class HelpActions extends DispatchAction {
         InputStream inputStream= new ByteArrayInputStream(fileData);
         
 
-        JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jax");
+        JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jaxb");
         Unmarshaller m = jc.createUnmarshaller();
         AmpHelpRoot help_in;
         System.out.println("inputStream:"+inputStream);

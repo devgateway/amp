@@ -10,7 +10,7 @@ import org.digijava.module.aim.dbentity.AmpActivitySector;
  */
 public class Project {
    private String title;
-   private Double amount;
+   private String amount;
    private Set<AmpActivitySector> sectors;
    private Long activityId;
 
@@ -22,11 +22,11 @@ public class Project {
         this.activityId = activityId;
     }
 
-    public Double getAmount() {
+    public String getAmount() {
         return amount;
     }
 
-    public void setAmount(Double amount) {
+    public void setAmount(String amount) {
         this.amount = amount;
     }
 

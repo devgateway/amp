@@ -650,7 +650,10 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
           eaForm.getIdentification().setBudgetCheckbox((activity.getBudget()!=null)?activity.getBudget().toString():"");
           eaForm.getIdentification().setHumanitarianAid(activity.getHumanitarianAid());
           eaForm.getIdentification().setGovAgreementNumber(activity.getGovAgreementNumber());
-          eaForm.getIdentification().setBudgetCodeProjectID(activity.getBudgetCodeProjectID().trim());
+          
+          if(activity.getBudgetCodeProjectID()!=null)
+        	  eaForm.getIdentification().setBudgetCodeProjectID(activity.getBudgetCodeProjectID().trim());
+          
           eaForm.getIdentification().setBudgetCodes(ActivityUtil.getBudgetCodes());
 
           /*
@@ -1471,15 +1474,17 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
           }
         }
         
-        Iterator<CustomField<?>> itcf = eaForm.getCustomFields().iterator();
-        while(itcf.hasNext()){
-        	CustomField cf = itcf.next();
-        	try{
-        		Object value = PropertyUtils.getSimpleProperty(activity, cf.getAmpActivityPropertyName());
-        		cf.setValue(value);
-        	}catch(Exception e){
-        		logger.error("Error getting property [" + cf.getAmpActivityPropertyName() + "] from bean ", e);
-        	}
+        if(eaForm.getCustomFields()!=null){
+	        Iterator<CustomField<?>> itcf = eaForm.getCustomFields().iterator();
+	        while(itcf.hasNext()){
+	        	CustomField cf = itcf.next();
+	        	try{
+	        		Object value = PropertyUtils.getSimpleProperty(activity, cf.getAmpActivityPropertyName());
+	        		cf.setValue(value);
+	        	}catch(Exception e){
+	        		logger.error("Error getting property [" + cf.getAmpActivityPropertyName() + "] from bean ", e);
+	        	}
+	        }
         }
         
       }

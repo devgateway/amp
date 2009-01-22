@@ -25,4 +25,4 @@
 #DEFAULT (echo ""; id; echo %s; date; cat) >> $CVSROOT/CVSROOT/commitlog
 # or
 #DEFAULT (echo ""; id; echo %{sVv}; date; cat) >> $CVSROOT/CVSROOT/commitlog
-ALL /home/aartimon/scripts/cvs/postCommitBuildTrigger.sh %{} http://javatools.code.ro/Bamboo AMP-STAG AMP-TEST
+# ALL /home/aartimon/scripts/cvs/postCommitBuildTrigger.sh %{} http://javatools.code.ro/Bamboo AMP-STAG AMP-TEST

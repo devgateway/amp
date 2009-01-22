@@ -4,12 +4,5 @@
 		<%= options_from_collection_for_select(ImplementingAgency.ordered.all, :id, :name, implementing_agency.id) %>
 	</select>
 
-	<%= link_to_function I18n.t('projects.delete_associated'), <<-END_JS
-		if ($('.implementing_agency').length > 1) {
-			$(this).parents('.implementing_agency').remove();
-		} else {
-			alert('Please select at least one Implementing Agency!');
-		}
-		END_JS
-	%>
+	<%= link_to_function I18n.t('projects.delete_associated'), "$(this).parents('.implementing_agency').remove();" %>
 </div>

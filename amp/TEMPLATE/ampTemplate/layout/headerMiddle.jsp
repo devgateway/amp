@@ -270,6 +270,17 @@ function adminHelp(){
 		<logic:equal name="ampAdmin" value="no">
 	
 <script language="JavaScript">
+
+	function canExit(){
+	    if(typeof quitRnot1 == 'function') {
+	        return quitRnot1('${msg}');
+	    }
+	    else{
+	        return true;
+	    }
+	
+	}	
+
 	function addActivity() {
 		selectedLevelId=0; 
 		window.location.href="/aim/addActivity.do~pageId=1~reset=true~action=create~activityLevelId="+selectedLevelId;	
@@ -282,7 +293,8 @@ function adminHelp(){
 	}
 	
 	function teamWorkspaceSetup(a) {
-		window.location.href="/aim/workspaceOverview.do~tId="+a+"~dest=teamLead";	
+		if (canExit()) window.location.href="/aim/workspaceOverview.do~tId="+a+"~dest=teamLead";
+		else return false;	
 	}
 	function addMessage(fillTypesAndLevels) {
 		window.location.href="/message/messageActions.do?editingMessage=false&actionType="+fillTypesAndLevels;
@@ -297,18 +309,6 @@ function adminHelp(){
 	 <digi:context name="rev" property="/help/help.do~blankPage=true" />
 		openURLinWindow("<%=rev%>",1024,768);
 	}
-
-
-	
-function canExit(){
-    if(typeof quitRnot1 == 'function') {
-        return quitRnot1('${msg}');
-    }
-    else{
-        return true;
-    }
-
-}	
 
 </script>
 <!-- 
@@ -614,7 +614,7 @@ function canExit(){
                                   <div class="bd">                    
                                       <ul>
                                         <li>
-                                        <a class="yuiampmenuitemlabel" onclick="return canExit() && teamWorkspaceSetup('-1');" href="#">
+                                        <a class="yuiampmenuitemlabel" onclick="return teamWorkspaceSetup('-1');" href="#">
                                         <digi:trn key="aim:workspaceinfo">Workspace Info</digi:trn>
                                         </a>
                                         </li>

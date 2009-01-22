@@ -1,7 +1,5 @@
 $('select.dynamic_select.parent').livequery(function() {
-    var parent = $(this);
-        alert("Parent" + parent);
-  
+    var parent = $(this);  
     var child_element = parent.nextAll('select.dynamic_select.child')[0];
     if (!child_element) {
         //If the errors are being shown, there's an added DIV that breaks the logic, added this lines to get it from the parent if the first time fails
@@ -60,9 +58,6 @@ $('select.dynamic_select.parent').livequery(function() {
             for (var i = 0; i < child_options.length; i++) {
                 child_element.appendChild(child_options[i]);
             }
-    
-            // Restore value
-//            child_element.value = oldval;
         }
     });
 	

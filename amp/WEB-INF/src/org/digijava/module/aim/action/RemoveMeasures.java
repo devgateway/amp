@@ -5,6 +5,9 @@
 
 package org.digijava.module.aim.action;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -29,26 +32,30 @@ public class RemoveMeasures extends Action {
 		
 		logger.debug("In remove measures");
 		
-		if (eaForm.getIssues().getSelMeasures() != null && 
-				eaForm.getIssues().getSelMeasures().length > 0) {
-			Long measures[] = eaForm.getIssues().getSelMeasures();
+		if (eaForm.getIssues().getIssueId() != null && eaForm.getIssues().getMeasureId() != null) {
 			
-			logger.debug("Issue Id = " + eaForm.getIssues().getIssueId());
-			if (eaForm.getIssues().getIssueId() != null) {
-				Issues issue = new Issues();
-				issue.setId(eaForm.getIssues().getIssueId());
-				int index = eaForm.getIssues().getIssues().indexOf(issue);
-				issue = (Issues) eaForm.getIssues().getIssues().get(index);
-				
-				for (int i = 0;i < measures.length;i ++) {
-					Measures measure = new Measures();
-					measure.setId(measures[i]);
-					issue.getMeasures().remove(measure);
+			Long issueId = eaForm.getIssues().getIssueId();
+			Long measureId = eaForm.getIssues().getMeasureId();
+			
+			ArrayList<Issues> issues = eaForm.getIssues().getIssues();
+			
+			for (Issues issue : issues) {
+				if(issue.getId().equals(issueId)){
+					ArrayList<Measures> measures = issue.getMeasures();
+					for (Measures measure : measures) {
+						if(measure.getId().equals(measureId)){
+							measures.remove(measure);
+							break;
+						}
+					}
+					break;
 				}
-				eaForm.getIssues().getIssues().set(index,issue);
 			}
-			eaForm.getIssues().setSelMeasures(null);
+			eaForm.getIssues().setIssueId(null);
+			eaForm.getIssues().setMeasureId(null);
+			
 		}
+		
 		return mapping.findForward("forward");
 	}
 }

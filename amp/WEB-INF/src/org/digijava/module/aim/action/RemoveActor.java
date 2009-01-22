@@ -5,6 +5,8 @@
 
 package org.digijava.module.aim.action;
 
+import java.util.ArrayList;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -28,37 +30,39 @@ public class RemoveActor extends Action {
 		
 		EditActivityForm eaForm = (EditActivityForm) form;
 		
-		
-		if (eaForm.getIssues().getSelActors() != null && 
-				eaForm.getIssues().getSelActors().length > 0) {
-			Long actors[] = eaForm.getIssues().getSelActors();
+		if (eaForm.getIssues().getIssueId() != null && eaForm.getIssues().getMeasureId() != null) {
 			
-			if (eaForm.getIssues().getIssueId() != null &&
-					eaForm.getIssues().getIssueId().longValue() > -1) {
-				Issues issue = new Issues();
-				issue.setId(eaForm.getIssues().getIssueId());
-				int index = eaForm.getIssues().getIssues().indexOf(issue);
-				issue = (Issues) eaForm.getIssues().getIssues().get(index);
-				if (eaForm.getIssues().getMeasureId() != null &&
-						eaForm.getIssues().getMeasureId().longValue() > -1) {
-					Measures measure = new Measures();
-					measure.setId(eaForm.getIssues().getMeasureId());
-					int mIndex = issue.getMeasures().indexOf(measure);
-					measure = (Measures) issue.getMeasures().get(mIndex);
-					for (int i = 0;i < actors.length;i ++) {
-						AmpActor ampActor = new AmpActor();
-						ampActor.setAmpActorId(actors[i]);
-						measure.getActors().remove(ampActor);
+			Long issueId = eaForm.getIssues().getIssueId();
+			Long measureId = eaForm.getIssues().getMeasureId();
+			Long actorId = eaForm.getIssues().getActorId();
+			
+			ArrayList<Issues> issues = eaForm.getIssues().getIssues();
+			
+			for (Issues issue : issues) {
+				if(issue.getId().equals(issueId)){
+					ArrayList<Measures> measures = issue.getMeasures();
+					for (Measures measure : measures) {
+						if(measure.getId().equals(measureId)){
+							
+							ArrayList<AmpActor> actors = measure.getActors();
+							
+							for (AmpActor ampActor : actors) {
+								if(ampActor.getAmpActorId().equals(actorId)){
+									actors.remove(ampActor);
+									break;
+								}
+							}
+							
+							break;
+						}
 					}
-					issue.getMeasures().set(mIndex,measure);
+					break;
 				}
-				eaForm.getIssues().getIssues().set(index,issue);
-				
-				
-
-				eaForm.getIssues().getIssues().set(index,issue);
 			}
-			eaForm.getIssues().setSelMeasures(null);
+			eaForm.getIssues().setIssueId(null);
+			eaForm.getIssues().setMeasureId(null);
+			eaForm.getIssues().setActorId(null);
+			
 		}
 		return mapping.findForward("forward");
 	}

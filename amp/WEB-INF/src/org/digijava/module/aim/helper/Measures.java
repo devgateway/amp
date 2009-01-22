@@ -6,21 +6,23 @@ package org.digijava.module.aim.helper;
 
 import java.util.ArrayList;
 
+import org.digijava.module.aim.dbentity.AmpActor;
+
 public class Measures {
 	private Long id;
 	private String name;
 	private String nameTrimmed ;
-	private ArrayList actors;
+	private ArrayList<AmpActor> actors;
 	/**
 	 * @return Returns the actors.
 	 */
-	public ArrayList getActors() {
+	public ArrayList<AmpActor> getActors() {
 		return actors;
 	}
 	/**
 	 * @param actors The actors to set.
 	 */
-	public void setActors(ArrayList actors) {
+	public void setActors(ArrayList<AmpActor> actors) {
 		this.actors = actors;
 	}
 	/**

@@ -12,7 +12,7 @@ public class Issues {
 	private String name;
 	private String issueDate;
 	private String nameTrimmed ;
-	private ArrayList measures;
+	private ArrayList<Measures> measures;
 	/**
 	 * @return Returns the id.
 	 */
@@ -28,13 +28,13 @@ public class Issues {
 	/**
 	 * @return Returns the measures.
 	 */
-	public ArrayList getMeasures() {
+	public ArrayList<Measures> getMeasures() {
 		return measures;
 	}
 	/**
 	 * @param measures The measures to set.
 	 */
-	public void setMeasures(ArrayList measures) {
+	public void setMeasures(ArrayList<Measures> measures) {
 		this.measures = measures;
 	}
 	/**

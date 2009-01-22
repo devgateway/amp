@@ -24,7 +24,7 @@
 		<action login-required="false" pattern="/viewTeamReports" />
 		<action login-required="true" pattern="/npdSettingsAction" />
 		<action login-required="false" pattern="/feedback" />
-                <action login-required="false" pattern="/confirmRegisteration" />
+		<action login-required="false" pattern="/confirmRegisteration" />
 	</security>
 
 	<!-- AIM classes Begin-->
@@ -40,7 +40,6 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrganisation</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpRole</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpLevel</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpModality</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpPhysicalPerformance</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpNotes</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpKmDocuments</hibernate-class>
@@ -109,7 +108,6 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpExternalMapping</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpGlobalSettings</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpLuceneIndexStamp</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpProgramType</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.EUActivity</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.EUActivityContribution</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.FeatureTemplates</hibernate-class>
@@ -127,22 +125,13 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.IPAContractDisbursement</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpIndicatorValue</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.IndicatorConnection</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.IndicatorActivity</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.IndicatorTheme</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.IndicatorSector</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpClassificationConfiguration</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpCategoryValueLocations</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpDesktopTabSelection</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.CMSContentItem</hibernate-class>
-
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpIndicatorSubgroup</hibernate-class>
-		
 		<hibernate-class>org.dgfoundation.amp.ar.dbentity.AmpFilterData</hibernate-class>
-
-		<hibernate-class>org.dgfoundation.amp.ar.dbentity.AmpIndicatorSector</hibernate-class>
-
-	        <hibernate-class>org.digijava.module.aim.dbentity.AmpQuartzJobClass</hibernate-class>
-
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpQuartzJobClass</hibernate-class>
 	</hibernate-classes>
 	<!-- AIM classes End-->
 

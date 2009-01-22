@@ -1,6 +1,6 @@
 <div class="contracted_agency">
 	<select name="project[contracted_agency_ids][]" class="large">
-		<option><%= ll(:options, :prompt) %></option>
+		<option value=""><%= ll(:options, :prompt) %></option>
 		<%= options_from_collection_for_select(ContractedAgency.ordered.all, :id, :name, contracted_agency.id) %>
 	</select>
 		

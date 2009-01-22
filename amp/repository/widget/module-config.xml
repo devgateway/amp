@@ -10,8 +10,6 @@
 	
 	<hibernate-classes required="false">
 		<hibernate-class>org.digijava.module.widget.dbentity.AmpWidget</hibernate-class>
-		<hibernate-class>org.digijava.module.widget.dbentity.AmpWidgetIndicatorChart</hibernate-class>
-		<hibernate-class>org.digijava.module.widget.dbentity.AmpDaTable</hibernate-class>
 		<hibernate-class>org.digijava.module.widget.dbentity.AmpDaColumn</hibernate-class>
 		<hibernate-class>org.digijava.module.widget.dbentity.AmpDaValue</hibernate-class>
 		<hibernate-class>org.digijava.module.widget.dbentity.AmpDaWidgetPlace</hibernate-class>

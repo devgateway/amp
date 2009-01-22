@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
@@ -98,7 +99,7 @@ import org.digijava.module.gateperm.util.PermissionUtil;
  */
 public class AddAmpActivity extends Action {
 
-  //private static Logger logger = Logger.getLogger(AddAmpActivity.class);
+  private static Logger logger = Logger.getLogger(AddAmpActivity.class);
 
   private ServletContext ampContext = null;
 
@@ -499,6 +500,8 @@ private ActionForward removeComponentes(ActionMapping mapping,
 
 private ActionForward addComponente(ActionMapping mapping, HttpSession session,
 		EditActivityForm eaForm) {
+	
+	try{
 	ActivitySector selectedComponente = (ActivitySector) session.getAttribute("addComponente");
       if(selectedComponente==null) selectedComponente=new ActivitySector();
       session.removeAttribute("componenteSelected");
@@ -557,11 +560,15 @@ private ActionForward addComponente(ActionMapping mapping, HttpSession session,
       eaForm.getSectors().setSecondarySectorVisible(FeaturesUtil.isVisibleSectors("Secondary", ampContext)?"true":"false");
       session.setAttribute("Primary Sector", eaForm.getSectors().getPrimarySectorVisible());
       session.setAttribute("Secondary Sector", eaForm.getSectors().getSecondarySectorVisible());
+	}catch (Exception e) {
+		logger.error("addComponente exception", e);
+	}
       return mapping.findForward("addActivityStep2");
 }
 
 private ActionForward removeSector(ActionMapping mapping,
 		HttpServletRequest request, HttpSession session, EditActivityForm eaForm) {
+	try{
 	Long selSectors[] = eaForm.getSectors().getSelActivitySectors();
       String configId=request.getParameter("configId");
       Collection<ActivitySector> prevSelSectors = eaForm.getSectors().getActivitySectors();
@@ -601,6 +608,9 @@ private ActionForward removeSector(ActionMapping mapping,
       eaForm.getSectors().setSecondarySectorVisible(FeaturesUtil.isVisibleSectors("Secondary", ampContext)?"true":"false");
       session.setAttribute("Primary Sector", eaForm.getSectors().getPrimarySectorVisible());
       session.setAttribute("Secondary Sector", eaForm.getSectors().getSecondarySectorVisible());
+	}catch (Exception e) {
+		logger.error("removeSector exception", e);
+	}      
       return mapping.findForward("addActivityStep2");
 }
 

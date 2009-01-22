@@ -5,6 +5,9 @@
 
 package org.digijava.module.aim.action;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -22,15 +25,19 @@ public class RemoveIssue extends Action {
 		
 		EditActivityForm eaForm = (EditActivityForm) form;
 		
-		if (eaForm.getIssues().getSelIssues() != null && 
-				eaForm.getIssues().getSelIssues().length > 0) {
-			Long issues[] = eaForm.getIssues().getSelIssues();
-			Issues issue = new Issues();
-			for (int i = 0;i < issues.length; i++) {
-				issue.setId(issues[i]);
-				eaForm.getIssues().getIssues().remove(issue);
+		if (eaForm.getIssues().getIssueId() != null) {
+			Long idIssue = eaForm.getIssues().getIssueId();
+			
+			ArrayList<Issues> issues = eaForm.getIssues().getIssues();
+			
+			for (Issues issue : issues) {
+				if(issue.getId().equals(idIssue)){
+					issues.remove(issue);
+					break;
+				}
 			}
-			eaForm.getIssues().setSelIssues(null);
+			
+			eaForm.getIssues().setIssueId(null);;
 		}
 		return mapping.findForward("forward");
 	}

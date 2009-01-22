@@ -1456,17 +1456,18 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 	public class Issues {
 
-		private String actor;
-		private Long actorId;
+		private ArrayList<org.digijava.module.aim.helper.Issues> issues;
+		
 		private String issue;
-		private ArrayList issues;
-		private Long[] selIssues;
-		private String issueDate;
-		private Long[] selMeasures;
 		private String measure;
+		private String actor;		
+		
 		private Long issueId;
 		private Long measureId;
-		private Long[] selActors;
+		private Long actorId;
+		
+		private String issueDate;
+		
 
 		public String getActor() {
 			return actor;
@@ -1492,20 +1493,12 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.issue = issue;
 		}
 
-		public ArrayList getIssues() {
+		public ArrayList<org.digijava.module.aim.helper.Issues>  getIssues() {
 			return issues;
 		}
 
-		public void setIssues(ArrayList issues) {
+		public void setIssues(ArrayList<org.digijava.module.aim.helper.Issues>  issues) {
 			this.issues = issues;
-		}
-
-		public Long[] getSelIssues() {
-			return selIssues;
-		}
-
-		public void setSelIssues(Long[] selIssues) {
-			this.selIssues = selIssues;
 		}
 
 		public String getIssueDate() {
@@ -1516,13 +1509,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.issueDate = issueDate;
 		}
 
-		public Long[] getSelMeasures() {
-			return selMeasures;
-		}
-
-		public void setSelMeasures(Long[] selMeasures) {
-			this.selMeasures = selMeasures;
-		}
 
 		public String getMeasure() {
 			return measure;
@@ -1548,13 +1534,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.measureId = measureId;
 		}
 
-		public Long[] getSelActors() {
-			return selActors;
-		}
-
-		public void setSelActors(Long[] selActors) {
-			this.selActors = selActors;
-		}
 	}
 
 	public class Programs {

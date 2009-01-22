@@ -98,7 +98,7 @@ function checkallIssues() {
 	  function addIssues(){
 	 			 myPanel1.setHeader('<digi:trn key="aim:addIssue">Add Issue</digi:trn>');
 	  			 <digi:context name="addIssue" property="context/module/moduleinstance/showUpdateIssue.do?edit=true" />
- 				var connectionObject =YAHOOAmp.util.Connect.asyncRequest('GET', "<%=addIssue%>&issueId=-1",callback);
+ 				var connectionObject =YAHOOAmp.util.Connect.asyncRequest('GET', "<%=addIssue%>&issues.issueId=-1",callback);
         }
        
        
@@ -106,28 +106,28 @@ function checkallIssues() {
        function updateIssues(id) {
      		   myPanel1.setHeader('<digi:trn key="aim:updateIssue">Update Issue</digi:trn>');
 			<digi:context name="addIssue" property="context/module/moduleinstance/showUpdateIssue.do?edit=true" />
-			var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addIssue%>&issueId="+id,callback);
+			var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addIssue%>&issues.issueId="+id,callback);
 		}
         
         
 	function addMeasures(issueId) {
 	 	  myPanel1.setHeader('<digi:trn key="aim:addMeasure">Add Measure</digi:trn>');
 		 <digi:context name="addMeasure" property="context/module/moduleinstance/showUpdateMeasure.do?edit=true" />
-		 var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addMeasure%>&issueId="+issueId+"&measureId=-1",callback);
+		 var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addMeasure%>&issues.issueId="+issueId+"&issues.measureId=-1",callback);
 	}
 
 
 	function updateMeasures(issueId,measureId) {
 		myPanel1.setHeader('<digi:trn key="aim:updateMeasure">Update Measure</digi:trn>');
 		<digi:context name="addMeasure" property="context/module/moduleinstance/showUpdateMeasure.do?edit=true" />
-		var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addMeasure%>&issueId="+issueId+"&measureId="+measureId,callback);
+		var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addMeasure%>&issues.issueId="+issueId+"&issues.measureId="+measureId,callback);
 	}
 	
 	
 	function addActors(issueId,measureId) {
 		myPanel1.setHeader('<digi:trn key="aim:addActor">Add Actor</digi:trn>');
 		<digi:context name="addActors" property="context/module/moduleinstance/showUpdateActors.do?edit=true" />
-		var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addActors%>&issueId="+issueId+"&measureId="+measureId+"&actorId=-1",callback);
+		var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addActors%>&issues.issueId="+issueId+"&issues.measureId="+measureId+"&issues.actorId=-1",callback);
 	}
 
 
@@ -135,23 +135,24 @@ function checkallIssues() {
 	function updateActor(issueId,measureId,actorId) {
 		myPanel1.setHeader('<digi:trn key="aim:updateActor">Update Actor</digi:trn>');
 		<digi:context name="addActors" property="context/module/moduleinstance/showUpdateActors.do?edit=true" />
-		var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addActors%>&issueId="+issueId+"&measureId="+measureId+"&actorId="+actorId,callback);
+		var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addActors%>&issues.issueId="+issueId+"&issues.measureId="+measureId+"&issues.actorId="+actorId,callback);
 	}
 
 //END POPIN
 
-function removeIssues() {
 
-	<digi:context name="addIssue" property="context/module/moduleinstance/removeIssue.do?edit=true" />
 
-	document.aimEditActivityForm.action = "<%=addIssue%>";
+function removeIssue(idIssue) {
+
+	<digi:context name="removeIssue" property="context/module/moduleinstance/removeIssue.do?edit=true" />
+
+	document.aimEditActivityForm.action = "<%=removeIssue%>&issues.selIssue="+idIssue;
 
 	document.aimEditActivityForm.target = "_self"
 
 	document.aimEditActivityForm.submit();
 
 }
-
 
 
 
@@ -168,6 +169,17 @@ function removeMeasure(issueId) {
 
 }
 
+function removeMeasure(issueId,measureId) {
+
+	<digi:context name="removeMeasure" property="context/module/moduleinstance/removeMeasure.do?edit=true" />
+
+	document.aimEditActivityForm.action = "<%=removeMeasure%>&issues.issueId="+issueId+"&issues.measureId="+measureId;
+
+	document.aimEditActivityForm.target = "_self"
+
+	document.aimEditActivityForm.submit();
+
+}
 
 
 
@@ -184,6 +196,17 @@ function removeActors(issueId,measureId) {
 
 }
 
+
+function removeActor(issueId,measureId,actorId) {
+	<digi:context name="removeActors" property="context/module/moduleinstance/removeActors.do?edit=true" />
+
+	document.aimEditActivityForm.action = "<%=removeActors%>&issues.issueId="+issueId+"&issues.measureId="+measureId+"&issues.actorId="+actorId;
+
+	document.aimEditActivityForm.target = "_self"
+
+	document.aimEditActivityForm.submit();
+
+}
 
 
 function validatePhyProg() {

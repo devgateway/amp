@@ -381,7 +381,8 @@ public class CategoryManager extends Action {
 			 */
 			for ( int i=0; i<possibleVals.size(); i++ ) {
 				PossibleValue pVal		= possibleVals.get(i);
-				if ( pVal.getId() == null || pVal.getId() == 0L ) {
+				if ( !pVal.isDisable() && 
+						(pVal.getId() == null || pVal.getId() == 0L) ) {
 					AmpCategoryValue newVal			= new AmpCategoryValue();
 					newVal.setValue( pVal.getValue() );
 					newVal.setAmpCategoryClass( dbCategory );

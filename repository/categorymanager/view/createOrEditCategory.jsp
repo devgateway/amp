@@ -100,12 +100,14 @@
         document.cmCategoryManagerForm.submit();
     }
 	function deleteField(id, deleteId, undoId,disabeledId) {
-		if ( confirm("${translation7}") ) {
-			field						= document.getElementById(id) ;
+		field							= document.getElementById(id) ;
+		if ( !field.readOnly || confirm("${translation7}") ) {
 			disabled					= document.getElementById(disabeledId) ;
 			disabled.value				= true;
 			field.style.textDecoration	= "line-through";
 			field.style.color			= "darkgray";
+			if ( !field.readOnly )
+				field.style.backgroundColor	= "lightgray";
 			field.disabled				= true;
 			
 			del							= document.getElementById(deleteId) ;
@@ -119,6 +121,7 @@
 		field						= document.getElementById(id) ;
 		field.style.textDecoration	= "none";
 		field.style.color			= "black";
+		field.style.backgroundColor	= "white";
 		field.disabled				= false;
 		disabled					= document.getElementById(disabeledId) ;
 		disabled.value				= false;
@@ -400,21 +403,21 @@
 				</logic:iterate>
 				</logic:notEmpty>
 				<td>  
+					<span id="delete${index.count}" style="${deleteField}">
+						&nbsp;
+						<a style="cursor:pointer;"  onclick="return deleteField('field${index.count}', 'delete${index.count}','undo${index.count}','disabled${index.count}')"
+								title="<digi:trn key='aim:categoryManagerValueDelete'>Delete</digi:trn>">
+							<img src="/TEMPLATE/ampTemplate/images/deleteIcon.gif" style="height: 14px;" />
+						</a>
+					</span>
+					<span id="undo${index.count}" style="${undeleteField}">
+						&nbsp;
+						<a style="cursor:pointer;"  onclick="return undeleteField('field${index.count}', 'delete${index.count}','undo${index.count}','disabled${index.count}')"
+							title="<digi:trn key='aim:categoryManagerValueUndelete'>Undelete</digi:trn>">
+							<img src="/TEMPLATE/ampTemplate/images/undel.png" style="height: 18px;" />
+						</a>
+					</span>
 					<c:if test="${pVal.id!=null && pVal.id!=0}">                        
-						<span id="delete${index.count}" style="${deleteField}">
-							&nbsp;
-							<a style="cursor:pointer;"  onclick="return deleteField('field${index.count}', 'delete${index.count}','undo${index.count}','disabled${index.count}')"
-									title="<digi:trn key='aim:categoryManagerValueDelete'>Delete</digi:trn>">
-								<img src="/TEMPLATE/ampTemplate/images/deleteIcon.gif" style="height: 14px;" />
-							</a>
-						</span>
-						<span id="undo${index.count}" style="${undeleteField}">
-							&nbsp;
-							<a style="cursor:pointer;"  onclick="return undeleteField('field${index.count}', 'delete${index.count}','undo${index.count}','disabled${index.count}')"
-								title="<digi:trn key='aim:categoryManagerValueUndelete'>Undelete</digi:trn>">
-								<img src="/TEMPLATE/ampTemplate/images/undel.png" style="height: 18px;" />
-							</a>
-						</span>
 						<span>
 							&nbsp;
 							<a style="cursor:pointer;" onclick="addNewValue(${index.count})"

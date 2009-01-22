@@ -41,6 +41,12 @@
 <link rel="stylesheet" href="/repository/aim/view/css/css_dhtmlsuite/modal-message.css"/>
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/filters.css'/>">
 
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>" > .</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>" >.</script>
+
 <script type="text/javascript">
 messageObj = new DHTMLSuite.modalMessage();	// We only create one object of this class
 messageObj.setWaitMessage('Loading message - please wait....');
@@ -194,7 +200,7 @@ saveReportEngine	= null;
 			wrapper.appendChild(filter);
 		};
 	
-		var myPanel1 = new YAHOOAmp.widget.Panel("new", {
+		var myPanel1 = new YAHOO.widget.Panel("new", {
 			width:"700px",
 		    fixedcenter: true,
 		    constraintoviewport: true,

@@ -743,6 +743,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Web Resources Url" feature="Web Resources"></field:display> 
 <field:display name="Without Baseline Button Performance" feature="Portfolio Dashboard"></field:display> 
 <field:display name="Workspace of Creator" feature="Identification"></field:display> 
+<field:display name="Computation" feature="Identification"></field:display> 
 <field:display name="addMessageButton" feature="Messages"></field:display> 
 <field:display name='Delete Regional Funding Button' feature='Regional Funding'></field:display>
 

@@ -9,22 +9,7 @@
                       org.digijava.module.message.dbentity.AmpMessage
             </hibernate-class>
 			<hibernate-class>
-                      org.digijava.module.message.dbentity.AmpAlert
-			</hibernate-class>
-			<hibernate-class>
-					  org.digijava.module.message.dbentity.CalendarEvent
-			</hibernate-class>
-			<hibernate-class>
 					  org.digijava.module.message.dbentity.AmpMessageState
-			</hibernate-class>
-			<hibernate-class>
-					  org.digijava.module.message.dbentity.Approval
-			</hibernate-class>
-			<hibernate-class>
-					  org.digijava.module.message.dbentity.UserMessage
-			</hibernate-class>
-			<hibernate-class>
-					  org.digijava.module.message.dbentity.TemplateAlert
 			</hibernate-class>
 			<hibernate-class>
 					  org.digijava.module.message.dbentity.AmpMessageSettings

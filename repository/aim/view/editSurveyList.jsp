@@ -373,7 +373,7 @@
 
 													<digi:link href="/editSurvey.do" name="urlParams" styleClass="comment" title="${translation}" >
 
-														AES-<%=cntr.intValue()+1%></digi:link>
+														<nested:write name="surveyFund" property="acronim" /></digi:link>
 
 												</TD>
 

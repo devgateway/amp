@@ -17,7 +17,11 @@
 			end %>
 			
 		<div id="implementing_agencies">
-			<%= render :partial => 'implementing_agency', :collection => @project.implementing_agencies.ordered %>
+			<% if @project.implementing_agencies.any? %>
+				<%= render :partial => 'implementing_agency', :collection => @project.implementing_agencies.ordered %>
+			<% else %>
+				<%= render :partial => 'implementing_agency', :object => ImplementingAgency.new %>
+			<% end %>
 		</div>
 	</li>
 	
@@ -28,21 +32,25 @@
 		end %>
 		
 		<div id="contracted_agencies">
-			<%= render :partial => 'contracted_agency', :collection => @project.contracted_agencies.ordered %>
+			<% if @project.contracted_agencies.any? %>
+				<%= render :partial => 'contracted_agency', :collection => @project.contracted_agencies.ordered %>
+			<% else %>
+				<%= render :partial => 'contracted_agency', :object => ContractedAgency.new %>
+			<% end %>
 		</div>
 	</li>
 	
 	<li class="fifty"><%= f.select :national_regional, Project::NATIONAL_REGIONAL_OPTIONS,
-				:include_blank => ll(:options, :prompt), :translate => true, :required => true %></li>
+				:include_blank => ll(:options, :prompt), :translate => true %></li>
 				
 	<li class="fifty"><%= f.select :type_of_implementation, Project::IMPLEMENTATION_TYPES,
-				:include_blank => ll(:options, :prompt), :translate => true, :required => true %></li>
+				:include_blank => ll(:options, :prompt), :translate => true %></li>
 	
 	<li class="fifty"><%= f.collection_select :type_of_aid_id, TypeOfAid.all, :id, :name, 
-				:prompt => ll(:options, :prompt), :required => true %></li>
+				:prompt => ll(:options, :prompt) %></li>
 
 	<li class="fifty"><%= f.select :grant_loan, Project::GRANT_LOAN_OPTIONS,
-				 :include_blank => ll(:options, :prompt), :translate => true, :required => true %></li>
+				 :include_blank => ll(:options, :prompt), :translate => true %></li>
 		
 		
 	<li><%= f.text_field :website, :class => "large" %></li>
@@ -62,7 +70,7 @@
 <% end %>
 
 <% f.field_set Project.human_attribute_name('officer_responsible') do %>
-	<li class="thirty"><%= f.text_field :officer_responsible_name, :required => true %></li>
+	<li class="thirty"><%= f.text_field :officer_responsible_name %></li>
 	<li class="thirty"><%= f.text_field :officer_responsible_phone %></li>
 	<li class="thirty"><%= f.text_field :officer_responsible_email %></li>
 <% end %>

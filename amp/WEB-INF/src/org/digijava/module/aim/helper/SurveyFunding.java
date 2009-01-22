@@ -10,8 +10,15 @@ public class SurveyFunding {
     private Long surveyId;
     private String fundingOrgName;
     private String deliveryDonorName;
+    private String acronim;
 
-    /**
+    public String getAcronim() {
+		return acronim;
+	}
+	public void setAcronim(String acronim) {
+		this.acronim = acronim;
+	}
+	/**
      * @return Returns the fundingOrgName.
      */
     public String getFundingOrgName() {

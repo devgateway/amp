@@ -300,7 +300,7 @@ function projectFiche(id)
 
 															<digi:link href="/viewSurvey.do" name="urlParams" styleClass="comment" title="${translation}" >
 
-																AES-<%=cntr.intValue()+1%></digi:link>
+																<nested:write name="surveyFund" property="acronim" /></digi:link>
 
 														</TD>
 

@@ -5262,8 +5262,10 @@ public class DbUtil {
                             svfund.setFundingOrgName(svy.getAmpDonorOrgId().getName());
                             if (svy.getPointOfDeliveryDonor() != null) {
                                 svfund.setDeliveryDonorName(svy.getPointOfDeliveryDonor().getName());
+                                svfund.setAcronim(svy.getPointOfDeliveryDonor().getAcronym());
                             } else {
                                 svfund.setDeliveryDonorName(svy.getAmpDonorOrgId().getName());
+                                svfund.setAcronim(svy.getAmpDonorOrgId().getAcronym());
                             }
 
                             survey.add(svfund);

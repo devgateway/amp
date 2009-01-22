@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 
-<logic:messagesPresent property="reportMeta">
+<logic:notEmpty name="reportMeta" scope="session">
 
 <bean:define id="reportObject" name="reportMeta" scope="session" toScope="page" />
 
@@ -72,4 +72,4 @@
 	</div>
 </div>
 
-</logic:messagesPresent>
+</logic:notEmpty>

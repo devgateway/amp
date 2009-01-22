@@ -146,6 +146,7 @@
 <feature:display name="NPD Dashboard" module="National Planning Dashboard"></feature:display> 
 <feature:display name="NPD Programs" module="National Planning Dashboard"></feature:display> 
 <feature:display name="New Region Manager" module="ADMINISTRATIVE SECTION"></feature:display> 
+<feature:display name="Dynamic Region Manager" module="ADMINISTRATIVE SECTION"></feature:display>
 <feature:display name="PI report 10a" module="PI Reports"></feature:display> 
 <feature:display name="PI report 3" module="PI Reports"></feature:display> 
 <feature:display name="PI report 4" module="PI Reports"></feature:display> 

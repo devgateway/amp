@@ -339,15 +339,15 @@
                               </digi:link>
                             </td>
                           </tr>
-                          <feature:display name="New Region Manager" module="ADMINISTRATIVE SECTION">
+                          <feature:display name="Dynamic Region Manager" module="ADMINISTRATIVE SECTION">
                            <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
                               <c:set var="translation">
                                 <digi:trn key="aim:clickToViewRegionManager">Click here to view Region Manager</digi:trn>
                               </c:set>
-                              <digi:link href="/newLocationManager.do" title="${translation}" >
-                                <digi:trn key="aim:newRegionManager">New Region Manager</digi:trn>
+                              <digi:link href="/dynLocationManager.do" title="${translation}" >
+                                <digi:trn key="aim:dynRegionManager">Dynamic Region Manager</digi:trn>
                               </digi:link>
                             </td>
                           </tr>

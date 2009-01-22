@@ -1,5 +1,7 @@
 package org.digijava.module.aim.dbentity;
 
+import java.util.Set;
+
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 /**
@@ -12,6 +14,7 @@ public class AmpCategoryValueLocations {
     private String name;
     private AmpCategoryValue parentCategoryValue;
     private AmpCategoryValueLocations parentLocation;
+    private Set<AmpCategoryValueLocations> childLocations;
     private String description;
     private String gsLat;
     private String gsLong;
@@ -107,4 +110,18 @@ public class AmpCategoryValueLocations {
     public void setParentLocation(AmpCategoryValueLocations parentLocation) {
         this.parentLocation = parentLocation;
     }
+
+	public Set<AmpCategoryValueLocations> getChildLocations() {
+		return childLocations;
+	}
+
+	public void setChildLocations(Set<AmpCategoryValueLocations> childLocations) {
+		this.childLocations = childLocations;
+	}
+	
+	@Override
+	public String toString() {
+		return name;
+	}
+    
 }

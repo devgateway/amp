@@ -175,6 +175,7 @@
 	<page name="activityExist" title=" - Add Activity - Activity Already Exist" />
 	<page name="locationManager" title=" - Region Manager" />
         <page name="newLocationManager" title=" - Region Manager" />
+    <page page="dynLocationManager/dynLocationManager" name="aim_dynLocationManager" title=" - Region Manager" />
 <!--	<page name="locationManager" title=" - Location Manager" />
 	<page page="addLocation" name="aim_addlocPopupLayout" title=" - Region Manager" /> -->
 	<page name="addLocation" title=" - Region Manager" />

@@ -12,7 +12,7 @@
 
 		<property name="name" column="location_name" type="java.lang.String" />
 		<many-to-one name="parentCategoryValue" column="parent_category_value"
-			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" not-null="true" />
 		<many-to-one name="parentLocation" column="parent_location"
 			class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" cascade="none" />
 		<property name="description" column="description" type="text" />
@@ -22,6 +22,11 @@
 		<property name="code" column="code" type="java.lang.String" />
 		<property column="ISO3" length="3" name="iso3" type="java.lang.String" />
 		<property column="ISO" length="3" name="iso" type="java.lang.String" />
+		
+		<set name="childLocations" inverse="true" lazy="true" cascade="all-delete-orphan">
+			<key column="parent_location"/>
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" />
+		</set>
 
 	</class>
 </hibernate-mapping>

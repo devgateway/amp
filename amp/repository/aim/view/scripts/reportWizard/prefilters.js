@@ -79,4 +79,6 @@ SaveFilters.prototype.failure	= function (o) {
 	this.filterObj.filterPanel.setBody( "<font color='red'>" + this.connectionFailureMessage + "</font>");
 }
 
+/*
 function submitFilters() {;}
+*/

@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -468,7 +469,7 @@ public class ReportsFilterPicker extends MultiAction {
 		HttpSession httpSession = request.getSession();
 
 		Session session = PersistenceManager.getSession();
-
+				
 		request.setAttribute("apply", "apply");
 		AmpARFilter arf;
 		if ( filterForm.getSourceIsReportWizard() != null && filterForm.getSourceIsReportWizard() ) {
@@ -718,7 +719,7 @@ public class ReportsFilterPicker extends MultiAction {
 		arf.setProjectCategory(ReportsUtil.processSelectedFilters(filterForm.getSelectedProjectCategory(), AmpOrganisation.class));
 
 		if ( filterForm.getSourceIsReportWizard() != null && filterForm.getSourceIsReportWizard() ) {
-			request.getSession().setAttribute(ReportWizardAction.SESSION_FILTER, arf);
+			httpSession.setAttribute(ReportWizardAction.SESSION_FILTER, arf);
 			return mapping.findForward("reportWizard");
 		}
 			

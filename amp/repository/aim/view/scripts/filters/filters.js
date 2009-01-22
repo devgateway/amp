@@ -52,7 +52,7 @@ function resetFilter(){
 			aimReportsFilterPickerForm.regionSelected.selectedIndex=0;
 		
 		if(aimReportsFilterPickerForm.approvalStatusSelected)
-			aimReportsFilterPickerForm.approvalStatusSelected.selectedIndex=-1;
+			aimReportsFilterPickerForm.approvalStatusSelected.selectedIndex=0;
 		
 		if(aimReportsFilterPickerForm.selectedresponsibleorg)
 			aimReportsFilterPickerForm.selectedresponsibleorg.selectedIndex=-1;

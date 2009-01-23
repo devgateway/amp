@@ -176,7 +176,7 @@
 														<logic:notEmpty name="aimOrgManagerForm" 	property="pagedCol">
 														<tr>
 															<td width="100%">
-																<table  bgColor=#f4f4f2 cellpadding="2">
+																<table  bgColor=#f4f4f2 cellpadding="2" width="100%">
 																	<tr>
 																		<td>
 																			<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy!='nameAscending'}">

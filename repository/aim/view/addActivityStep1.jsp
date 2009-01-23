@@ -34,7 +34,7 @@
 
 <div id="myComment" style="display: none">
 	<div id="myCommentContent" class="content">
-		<jsp:include page="/viewComment.jsp"/>
+		<jsp:include page="/repository/aim/view/viewComment.jsp"/>
 	</div>
 </div>
 <script type="text/javascript">
@@ -42,6 +42,7 @@
 
 		var myPanel = new YAHOO.widget.Panel("newmyComment", {
 			width:"600px",
+			height:"400px",
 			fixedcenter: true,
 		    constraintoviewport: true,
 		    underlay:"none",
@@ -262,6 +263,7 @@ function edit(key) {
   document.aimEditActivityForm.submit();
 
 }
+
 
 function removeSelOrganisations() {
 	var flag = checkSelOrgs();

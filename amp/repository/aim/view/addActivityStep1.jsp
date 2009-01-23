@@ -324,7 +324,7 @@ function validateForm() {
     document.aimEditActivityForm.status.focus();
     return false;
   }*/
-  document.aimEditActivityForm.step.value="2";
+  document.aimEditActivityForm.value="2";
   <digi:context name="commentUrl" property="context/module/moduleinstance/addActivity.do?edit=true" />
   url = "<%=commentUrl %>?comment=" + "ccd" + "&edit=" + "true";
   document.aimEditActivityForm.action = url;

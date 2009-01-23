@@ -39,6 +39,8 @@ function resetFields() {
 	var queryType = document.getElementsByName("queryType")[0];
 	keyword.value ="";
 	queryType.value = -1;
+	document.getElementById("resultTable").innerHTML="";
+	keyword.focus();
 }
 
 function popup(mylink, windowname)
@@ -159,13 +161,23 @@ $(document).ready(function(){
 				<tr>
 					<td noWrap width=571 vAlign="top">
 
-						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%">
+						<table class="contentbox_border" border="0" bgcolor="#f4f4f2" width="100%">
+                            <tr>			
+                               <td align="center">
+                             	  <table width="100%">
+                                      <tr>
+                                    	<td style="background-color: #CCDBFF;height: 18px;"/>
+                                      </tr>
+                                  </table>
+                               </td>
+                            </tr>
+
 							<tr>
 								<td valign="top">
-									<br />
-                                	<div class="contentbox_border" style="padding: 20px 0px 20px 0px;">
+									<br/>
                                     <digi:form action="/search.do">
                                     <table cellPadding=2 cellSpacing=2 width="100%">
+                                   
                                         <tr>
                                             <td valign="top">
                                                 <digi:trn>Keyword</digi:trn>: <html:text property="keyword"></html:text><br/>
@@ -203,9 +215,10 @@ $(document).ready(function(){
 <c:if test="${param.reset != 'true'}">
     &nbsp;&nbsp;&nbsp;&nbsp;<strong><digi:trn>Your search return no results. Please try another keyword.</digi:trn></strong>
 </c:if>
+<br/>
 </logic:notPresent>
 <logic:present name="resultList" scope="request">
-									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%">	
+									<table id="resultTable" align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%">	
 										<tr>
 											<td valign="top" align="center">
 												<table border=0 cellPadding=3 cellSpacing=0 width="100%">
@@ -317,13 +330,14 @@ $(document).ready(function(){
     	                                                            </td>
                                                                 </tr>
                                                                 </logic:present>
+                                                                </table>
 														</td>
 													</tr>
+													</table>
 											</td>
 										</tr>
 									</table>
 </logic:present>
-                                    </div>
 								</td>
 							</tr>
 						</table>			
@@ -333,10 +347,15 @@ $(document).ready(function(){
 		</td>
 	</tr>
 </table>
-</td></tr>
+</td>
+</tr>
+</table>
+</td>
+</tr>
 </table>
 
-<script language="javascript">
+<script language="JavaScript">
+
 function toggleResultsGroup(rowsName) {
 	$('#'+rowsName+"_plus").toggle('fast');
 	$('#'+rowsName+"_minus").toggle('fast');

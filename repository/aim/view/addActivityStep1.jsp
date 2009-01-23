@@ -10,6 +10,8 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronousSendNotNull.js"/>"></script>
+
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
@@ -17,14 +19,203 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/jquery-latest.pack.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/jquery.disable.text.select.js"/>"></script>
 
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>" > .</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>" >.</script>
+
 <script language="JavaScript" type="text/javascript">
 	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
 </script>
+<!-- Stylesheet of AMP -->
+        <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
+<!--  -->
+
+<div id="myComment" style="display: none">
+	<div id="myCommentContent" class="content">
+		<jsp:include page="/viewComment.jsp"/>
+	</div>
+</div>
+<script type="text/javascript">
+		YAHOO.namespace("YAHOO.amp");
+
+		var myPanel = new YAHOO.widget.Panel("newmyComment", {
+			width:"600px",
+			fixedcenter: true,
+		    constraintoviewport: true,
+		    underlay:"none",
+		    close:false,//don't change this, there is a button to close it!!!
+		    visible:false,
+		    modal:true,
+		    draggable:true,		    
+		    });
+	
+	function initScripts() {
+		var msg='\n<digi:trn key="aim:addeditComment">Add/Edit Comment</digi:trn>';
+		myPanel.setHeader(msg);
+		myPanel.setBody("");
+		myPanel.render(document.body);
+	}
+	
+	window.onload=initScripts();
+	
+	
+</script>
+<style type="text/css">
+	.mask {
+	  -moz-opacity: 0.8;
+	  opacity:.80;
+	  filter: alpha(opacity=80);
+	  background-color:#2f2f2f;
+	}
+	
+	#myComment .content { 
+	    overflow:auto; 
+	    height:455px; 
+	    background-color:fff; 
+	    padding:10px; 
+	} 
+	
+</style>
+
 
 
 <script language="JavaScript">
-<!--
+    <!--
+    
+    //DO NOT REMOVE THIS FUNCTION --- AGAIN!!!!
+    function mapCallBack(status, statusText, responseText, responseXML){
+       window.location.reload();
+    }
+    
+    
+    var responseSuccess = function(o){ 
+	/* Please see the Success Case section for more
+	 * details on the response object's properties.
+	 * o.tId
+	 * o.status
+	 * o.statusText
+	 * o.getResponseHeader[ ]
+	 * o.getAllResponseHeaders
+	 * o.responseText
+	 * o.responseXML
+	 * o.argument
+	 */
+		var response = o.responseText; 
+		var content = document.getElementById("myCommentContent");
+	    //response = response.split("<!")[0];
+		content.innerHTML = response;
+		showContent()
+	}
+	var delC=false;	 
+	var responseFailure = function(o){ 
+	// Access the response object's properties in the 
+	// same manner as listed in responseSuccess( ). 
+	// Please see the Failure Case section and 
+	// Communication Error sub-section for more details on the 
+	// response object's properties.
+		alert("Connection Failure!"); 
+	}  
+	var callback = 
+	{ 
+		success:responseSuccess, 
+		failure:responseFailure 
+	};
+    
+	function showComment() {
+		var element = document.getElementById("myComment");
+		element.style.display = "inline";
+		myPanel.setBody(element);
+		document.getElementById("myCommentContent").scrollTop=0;
+		myPanel.show();
+	}
+	
+	function commentWin(commentId){
+		
+		<digi:context name="commentUrl" property="context/module/moduleinstance/viewComment.do" />
+		var url = "<%=commentUrl %>?comment=" + commentId + "&edit=" + "true";
+		
+        //var postString		= "comment=" + commentId + "&edit=true";
+		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+		showComment();
+	}
+	function showContent(){
+		if(delC==true){
+			document.getElementById("myCommentContent").innerHTML="";
+			delC=false;
+		}
+	}
+	function saveComment(){
+		var postString		= generateFields("");
+		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/viewComment.do", callback, postString);
+	}
+	 function editDelete() {
+		var postString		= generateFields("edit=true");
+		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/viewComment.do", callback, postString);
+	}
 
+	function message(val1,val2) {
+		var flag = true;
+		val2 = val2 - 1;
+		<digi:context name="url" property="context/module/moduleinstance/viewComment.do?edit=true" />
+		if (val1 == "delete") {
+			if(!confirm("Are you sure about deleting this comment?"))
+				flag = false;
+		}
+		if (flag == true) {
+			document.getElementById('actionFlag').value = val1;
+			document.getElementById('ampCommentId').value = val2;
+			editDelete();
+		}
+	}
+	function generateFields(action){
+		var ret;
+		ret=action+"&comments.actionFlag="+document.getElementById('actionFlag').value+"&comments.ampCommentId="+document.getElementById('ampCommentId').value+"&comments.commentText="+document.getElementById('commentText').value;
+		return ret;
+	}
+	function myclear(){
+		document.getElementById('commentText').value="";
+	}
+	function myclose(){
+		delC=true;
+		showContent();
+		myPanel.hide();	
+	}
+	function mycheck() {
+		var str = document.getElementById('commentText').value;
+		str = trim(str);
+		document.getElementById('commentText').value = str;
+		if (str.length == 0 || str == null) {
+			alert("Please enter your comment.");
+			document.getElementById('commentText').focus();
+			return false;
+		}
+		else{
+			saveComment();
+		}
+		delC=true;
+		myPanel.hide();
+	}
+	
+	function trim ( inputStringTrim ) {
+		fixedTrim = "";
+		lastCh = " ";
+		for (x=0; x < inputStringTrim.length; x++) {
+			ch = inputStringTrim.charAt(x);
+			if ((ch != " ") || (lastCh != " ")) { fixedTrim += ch; }
+				lastCh = ch;
+		}
+		if (fixedTrim.charAt(fixedTrim.length - 1) == " ") {
+			fixedTrim = fixedTrim.substring(0, fixedTrim.length - 1); }
+		return fixedTrim;
+	}
+	
+-->
+</script>
+<script language="JavaScript">
+<!--
+	
 function checkSelOrgs() {
 	<c:set var="translation">
 		<digi:trn key="aim:chooseOrganizationToRemove">Please choose an organization to remove</digi:trn>
@@ -69,19 +260,6 @@ function edit(key) {
   document.aimEditActivityForm.editKey.value = key;
   document.aimEditActivityForm.step.value = "1.1";
   document.aimEditActivityForm.submit();
-
-}
-
-function commentWin(commentId) {
-
-
-		openNewWindowWithName(600,400,commentId);
-
-		<digi:context name="commentUrl" property="context/module/moduleinstance/viewComment.do" />
-		url = "<%=commentUrl %>?comment=" + commentId + "&edit=" + "true";
-		document.aimEditActivityForm.action = url;
-		document.aimEditActivityForm.target = popupPointer.name;
-		document.aimEditActivityForm.submit();
 
 }
 

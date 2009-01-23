@@ -279,7 +279,7 @@ var draftStatus=document.getElementById("draftFlag");
 						<c:set var="trnClickToAdd1">
 							<digi:trn key="aim:editMenu:referenceTitle">References</digi:trn>
 						</c:set>
-						<a href="javascript:gotoStep(1_5)" class="menu" title="${trnClickToAdd1}">
+						<a href="javascript:gotoStep('1_5')" class="menu" title="${trnClickToAdd1}">
 							<digi:trn key="aim:editMenu:References">References</digi:trn>
 						</a>
 					</td>

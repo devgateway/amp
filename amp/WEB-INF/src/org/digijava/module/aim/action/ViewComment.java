@@ -221,7 +221,7 @@ public class ViewComment extends Action {
 						return mapping.findForward("forward");
 					}
 					 else if ("edit".equals(action)){
-						AmpComments com = (AmpComments) editForm.getComments().getCommentsCol().get(Integer.parseInt(request.getParameter("ampCommentId")));
+						AmpComments com = (AmpComments) editForm.getComments().getCommentsCol().get(Integer.parseInt(request.getParameter("comments.ampCommentId")));
 							if (editForm.getComments().getCommentText() == null || editForm.getComments().getCommentText().trim().length() == 0) {
 								logger.debug("Inside IF [EDIT]");
 								editForm.getComments().setCommentText(com.getComment());
@@ -234,7 +234,7 @@ public class ViewComment extends Action {
 							 		com.setComment(editForm.getComments().getCommentText());
 
 							 	AmpComments replacedComment	= (AmpComments)editForm.getComments().getCommentsCol().set(
-							 							Integer.parseInt(request.getParameter("ampCommentId")),com
+							 							Integer.parseInt(request.getParameter("comments.ampCommentId")),com
 							 							);  // for setting activityId in saveAvtivity.java
 							 	//commentColInSession.put(editForm.getComments().getField().getAmpFieldId(),editForm.getComments().getCommentsCol());
 							 	List tempList				= (List)commentColInSession.get( editForm.getComments().getField().getAmpFieldId() );
@@ -255,8 +255,7 @@ public class ViewComment extends Action {
 					    }
 					 	 else if ("delete".equals(action)){
 					 	 		AmpComments removedComment	= (AmpComments)editForm.getComments().getCommentsCol().remove(
-					 	 								Integer.parseInt(request.getParameter("ampCommentId"))
-					 	 							);
+					 	 								editForm.getComments().getAmpCommentId().intValue());
 							 	//commentColInSession.put(editForm.getComments().getField().getAmpFieldId(),editForm.getComments().getCommentsCol());
 				 	 			List tempList				= (List)commentColInSession.get(editForm.getComments().getField().getAmpFieldId());
 				 	 			if (tempList != null && removedComment != null)

@@ -9,64 +9,7 @@
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 
-<script language="JavaScript">
-<!--
-	function message(val1,val2) {
-		var flag = true;
-		val2 = val2 - 1;
-		<digi:context name="url" property="context/module/moduleinstance/viewComment.do?edit=true" />
-		if (val1 == "delete") {
-			if(!confirm("Are you sure about deleting this comment?"))
-				flag = false;
-		}
-		if (flag == true) {
-			document.getElementById('actionFlag').value = val1;
-			document.getElementById('ampCommentId').value = val2;
-			document.aimEditActivityForm.action = "<%=url %>";
-			document.aimEditActivityForm.target = "_self";
-			document.aimEditActivityForm.submit();
-		}
-	}
-	
-	function check() {
-		var str = document.getElementById('commentText').value;
-		str = trim(str);
-		document.getElementById('commentText').value = str;
-		if (str.length == 0 || str == null) {
-			alert("Please enter your comment.");
-			document.getElementById('commentText').focus();
-			return false;
-		}
-		else
-			document.aimEditActivityForm.submit();
-			window.close();
 
-	}
-	
-	function trim ( inputStringTrim ) {
-		fixedTrim = "";
-		lastCh = " ";
-		for (x=0; x < inputStringTrim.length; x++) {
-			ch = inputStringTrim.charAt(x);
-			if ((ch != " ") || (lastCh != " ")) { fixedTrim += ch; }
-				lastCh = ch;
-		}
-		if (fixedTrim.charAt(fixedTrim.length - 1) == " ") {
-			fixedTrim = fixedTrim.substring(0, fixedTrim.length - 1); }
-		return fixedTrim;
-	}
-	
-	function load() {
-		var str = document.getElementById('actionFlag').value;
-		if (str == "edit")
-			document.getElementById('commentText').focus();
-	}
-
-	function unload() {
-		//window.opener.document.aimEditActivityForm.currUrl1.value="";
-	}
--->
-</script>
 
 <digi:instance property="aimEditActivityForm" />
 <digi:context name="digiContext" property="context"/>
@@ -153,9 +96,9 @@
 												<br>
 												<html:textarea name="aimEditActivityForm" property="comments.commentText" styleId="commentText" cols="60" rows="3" />
 												<br>
-													<input type="button" value="<digi:trn key='btn:save'>Save</digi:trn>"   class="dr-menu" onClick="check()">
+													<input type="button" value="<digi:trn key='btn:save'>Save</digi:trn>"   class="dr-menu" onClick="javascript:mycheck()">
 													<input type="reset"  value="<digi:trn key='btn:clear'>Clear</digi:trn>"  class="dr-menu">
-													<input type="button"  value="<digi:trn key='btn:back'>Back</digi:trn>"  class="dr-menu" onclick="history.back(-1)">
+													<input type="button"  value="<digi:trn key='btn:close'>Close</digi:trn>"  class="dr-menu" onclick="javascript:myclose()">
 												<!--	<input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>"  class="dr-menu" onclick="window.close()"> -->
 											</td>
 										</tr>

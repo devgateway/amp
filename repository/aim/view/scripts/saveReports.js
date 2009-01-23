@@ -42,7 +42,7 @@ SaveReportEngine.prototype.checkEnter		= function (e) {
 SaveReportEngine.prototype.showPanel		= function () {
 	if (this.panel == null) {
 		document.getElementById("saveTitlePanel").style.display	= "";
-		this.panel = new YAHOOAmp.widget.Panel("saveTitlePanel", 
+		this.panel = new YAHOO.widget.Panel("saveTitlePanel", 
 				{ 	visible:true,
 					width: "400px", 
 					constraintoviewport:true, 

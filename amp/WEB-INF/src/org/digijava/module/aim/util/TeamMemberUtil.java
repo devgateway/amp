@@ -1477,8 +1477,10 @@ public class TeamMemberUtil {
                         session.update(team);
                     }
                     
+                    AmpTeamMember teamHead = getTeamHead(ampMember.getAmpTeam().getAmpTeamId());
+                    
                     Collection relatedActivities = ActivityUtil.getActivitiesRelatedToAmpTeamMember(session, ampMember.getAmpTeamMemId());
-                    removeLinksFromATMToActivity(relatedActivities, ampMember);
+                    removeLinksFromATMToActivity(relatedActivities, ampMember, teamHead);
                    
                     String queryString = "select calatt from " + AmpCalendarAttendee.class.getName() + " calatt " + "where calatt.member.ampTeamMemId=:Id ";
                     qry = session.createQuery(queryString);
@@ -1491,8 +1493,7 @@ public class TeamMemberUtil {
 							session.delete(callatt);
 							
 						}
-                    }
-                    
+                    }                    
                    
                     // Verify for reports that are owned by this user and delete them
                     //DbUtil.deleteReportsForOwner(ampMember.getAmpTeamMemId());
@@ -1546,11 +1547,12 @@ public class TeamMemberUtil {
                         if (itr.hasNext()) {
                             logger.info("Got the app settings..");
                             AmpApplicationSettings ampAppSettings = (AmpApplicationSettings) itr.next();
-                            ampAppSettings.setDefaultTeamReport(null);
+                            ampAppSettings.setDefaultTeamReport(null);                            
                             session.delete(ampAppSettings);
                             logger.info("deleted the app settings..");
                         }
                     }
+                
                     session.delete(ampMember);
                 }
             }
@@ -1665,7 +1667,7 @@ public class TeamMemberUtil {
             }
         }
 
-    private static void removeLinksFromATMToActivity (Collection activities, AmpTeamMember atm) {
+    private static void removeLinksFromATMToActivity (Collection activities, AmpTeamMember atm, AmpTeamMember teamHead) {
     	if (activities == null || atm == null) {
     		return;
     	}
@@ -1677,6 +1679,9 @@ public class TeamMemberUtil {
     		}
     		if ( act.getActivityCreator() != null && act.getActivityCreator().getAmpTeamMemId().equals(atm.getAmpTeamMemId()) ) {
     			act.setActivityCreator(null);
+    		}
+    		if ( act.getApprovedBy() != null && act.getApprovedBy().getAmpTeamMemId().equals(atm.getAmpTeamMemId()) ) {
+    			act.setApprovedBy(teamHead);
     		}
     		if ( act.getMember() != null ) {
     			Iterator iterMem	= act.getMember().iterator();

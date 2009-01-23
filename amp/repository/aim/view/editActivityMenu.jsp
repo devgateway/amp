@@ -143,8 +143,7 @@ function save() {
 function gotoStep(value) {
   var draftStatus=document.getElementById("draftFlag");
   var flag;
-  if(draftStatus!=null && draftStatus.value!="true"
-  && document.aimEditActivityForm.step.value<value){
+  if(draftStatus!=null && draftStatus.value!="true" && document.aimEditActivityForm.step.value<value){
     flag=validateForm();
   }else{
     flag=true;
@@ -161,8 +160,7 @@ function gotoStep(value) {
 function fnGetSurvey(value) {
 var draftStatus=document.getElementById("draftFlag");
   var flag;
-  if(draftStatus!=null && draftStatus.value!="true"
-  && document.aimEditActivityForm.step.value<value){
+  if((draftStatus!=null) && (draftStatus.value!="true") && (document.aimEditActivityForm.step.value<value)){
     flag=true;//validateForm();
   }else{
     flag=true;

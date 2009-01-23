@@ -161,6 +161,7 @@ public class ViewNewAdvancedReport extends Action {
 		httpSession.setAttribute("progressValue", ++progressValue); 
 		httpSession.setAttribute("progressTotalRows", request.getAttribute("recordsPerPage"));
 		
+		
 		if( (!cached && (applySorter == null && sortBy == null || ar==null)) || 
 			(ampReportId != null && ar != null && !ampReportId.equals(ar.getAmpReportId().toString()) )) 
 		{
@@ -182,13 +183,51 @@ public class ViewNewAdvancedReport extends Action {
 			httpSession.setAttribute("progressValue", progressValue); 
 		}
 		
+		/* Check to see if sorting has been saved */
+		if ( sortBy == null && !cached ) {
+			if ( filter.getSortBy() != null ) {
+				sortBy	= filter.getSortBy();
+				if ( !filter.getSortByAsc() ){
+					/**
+					 * In this case descending sorting has been saved. 
+					 * We set here the sortercolumn parameter so that it will be set a 2nd time 
+					 * below by the normal reports engine
+					 */
+					rd.setSorterColumn(sortBy);
+				}
+			}
+		}
+		else{
+			if ( sortBy.equals(filter.getSortBy()) )
+				filter.setSortByAsc( !filter.getSortByAsc() );
+			else {
+				filter.setSortBy(sortBy);
+				filter.setSortByAsc(true);
+			}
+		}
+		if ( applySorter == null && !cached) {
+			if ( filter.getHierarchySorters() != null && filter.getHierarchySorters().size() > 0 ) {
+				for(String str : filter.getHierarchySorters() ) {
+					String [] sortingInfo		= str.split("_");
+					sorters.put(sortingInfo[0], new MetaInfo(sortingInfo[1], sortingInfo[2]) );
+				}
+				rd.importLevelSorters(sorters,ar.getHierarchies().size());
+				rd.applyLevelSorter();
+			}
+		}
+		
 		
 		//test if the request was for hierarchy sorting purposes:
 		if(applySorter!=null) {
-			if(request.getParameter("levelPicked")!=null && request.getParameter("levelSorter")!=null)
+			if(request.getParameter("levelPicked")!=null && request.getParameter("levelSorter")!=null) {
 				sorters.put(request.getParameter("levelPicked"),new MetaInfo(request.getParameter("levelSorter"),request.getParameter("levelSortOrder")));
-			else 	
+				filter.getHierarchySorters().add(request.getParameter("levelPicked") + "_" + request.getParameter("levelSorter") 
+										+ "_" + request.getParameter("levelSortOrder") );
+			}
+			else{ 	
 				sorters.put(arf.getLevelPicked(),new MetaInfo(arf.getLevelSorter(),arf.getLevelSortOrder()));
+				filter.getHierarchySorters().add( arf.getLevelPicked() + "_" + arf.getLevelSorter() + "_" + arf.getLevelSortOrder() );
+			}
 			
 			rd.importLevelSorters(sorters,ar.getHierarchies().size());
 			rd.applyLevelSorter();

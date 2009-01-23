@@ -209,7 +209,10 @@ public class AmpARFilter extends PropertyListable {
 	private static final String initialFilterQuery = "SELECT distinct(amp_activity_id) FROM amp_activity WHERE 1";
 	private String generatedFilterQuery;
 	private int initialQueryLength = initialFilterQuery.length();
-
+	
+	private String sortBy;
+	private Boolean sortByAsc						= true;
+	private Collection<String> hierarchySorters		= new ArrayList<String>();
 	private void queryAppend(String filter) {
 		// generatedFilterQuery+=
 		// (initialQueryLength==generatedFilterQuery.length()?"":" AND ") + "
@@ -1358,5 +1361,30 @@ public class AmpARFilter extends PropertyListable {
 	public void setResponsibleorg(Set responsibleorg) {
 		this.responsibleorg = responsibleorg;
 	}
+
+	public String getSortBy() {
+		return sortBy;
+	}
+
+	public void setSortBy(String sortBy) {
+		this.sortBy = sortBy;
+	}
+
+	public Boolean getSortByAsc() {
+		return sortByAsc;
+	}
+
+	public void setSortByAsc(Boolean sortByAsc) {
+		this.sortByAsc = sortByAsc;
+	}
+
+	public Collection<String> getHierarchySorters() {
+		return hierarchySorters;
+	}
+
+	public void setHierarchySorters(Collection<String> hierarchySorters) {
+		this.hierarchySorters = hierarchySorters;
+	}
+	
 
 }

@@ -95,8 +95,8 @@
 
 
 
-<script language="JavaScript">
-<!--
+<script language="JavaScript"><!--
+
 function previewClicked() {
 	var flag = validateForm();
 	if (flag == true) {
@@ -141,19 +141,28 @@ function save() {
 }
 
 function gotoStep(value) {
+	var step = null;
+	var editForm = null;
+	if (document.aimEditActivityForm.step) { 
+		step = document.aimEditActivityForm.step;
+		editForm = document.aimEditActivityForm;
+	} else {
+		step = document.forms[1].step;
+		editForm = document.forms[1];
+	}
   var draftStatus=document.getElementById("draftFlag");
   var flag;
-  if(draftStatus!=null && draftStatus.value!="true" && document.aimEditActivityForm.step.value<value){
+  if((draftStatus!=null) && (draftStatus.value!="true") && (step.value<value)){
     flag=validateForm();
   }else{
     flag=true;
   }
   if (flag == true) {
-    document.aimEditActivityForm.step.value = value;
+	  step.value = value;
     <digi:context name="step" property="context/module/moduleinstance/addActivity.do?edit=true" />
-    document.aimEditActivityForm.action = "<%= step %>";
-    document.aimEditActivityForm.target = "_self";
-    document.aimEditActivityForm.submit();
+    editForm.action = "<%= step %>";
+    editForm.target = "_self";
+    editForm.submit();
   }
 }
 
@@ -173,8 +182,8 @@ var draftStatus=document.getElementById("draftFlag");
 	document.aimEditActivityForm.submit();
 	}
 }
--->
-</script>
+
+--></script>
 
 <digi:instance property="aimEditActivityForm" />
 <html:hidden property="workingTeamLeadFlag" />
@@ -270,7 +279,7 @@ var draftStatus=document.getElementById("draftFlag");
 						<c:set var="trnClickToAdd1">
 							<digi:trn key="aim:editMenu:referenceTitle">References</digi:trn>
 						</c:set>
-						<a href="javascript:gotoStep('1_5')" class="menu" title="${trnClickToAdd1}">
+						<a href="javascript:gotoStep(1_5)" class="menu" title="${trnClickToAdd1}">
 							<digi:trn key="aim:editMenu:References">References</digi:trn>
 						</a>
 					</td>

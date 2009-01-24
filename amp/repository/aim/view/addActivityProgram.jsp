@@ -31,7 +31,7 @@
 
     function addProgram() {
       <digi:context name="selPrg" property="context/module/moduleinstance/addProgram.do?edit=true"/>
-      var prgSels=document.getElementsByName("selPrograms");
+      var prgSels=document.getElementsByName("programs.selPrograms");
       var urlParams;
       var flag=false;
 
@@ -133,7 +133,7 @@ Default Program
 							<table cellSpacing=2 cellPadding=2>
 								<tr>
 									<td colspan="2" align="center"><c:choose>
-										<c:when test="${aimEditActivityForm.programType==1}">
+										<c:when test="${aimEditActivityForm.programs.programType==1}">
 											<c:choose>
 												<c:when
 													test="${aimEditActivityForm.programs.nationalSetting.defaultHierarchy!=null}">
@@ -149,7 +149,7 @@ Default Program
 
 										</c:when>
 
-										<c:when test="${aimEditActivityForm.programType==2}">
+										<c:when test="${aimEditActivityForm.programs.programType==2}">
 
 											<c:choose>
 												<c:when
@@ -185,9 +185,9 @@ Default Program
 										</c:otherwise>
 									</c:choose></td>
 								</tr>
-								<c:if test="${!empty aimEditActivityForm.programLevels}">
+								<c:if test="${!empty aimEditActivityForm.programs.programLevels}">
 									<c:forEach var="prgLevels" varStatus="varSt"
-										items="${aimEditActivityForm.programLevels}">
+										items="${aimEditActivityForm.programs.programLevels}">
 										<tr>
 											<td width="120" align="right"><c:if
 												test="${varSt.count==1}">
@@ -196,8 +196,8 @@ Default Program
 												<digi:trn key="aim:subProgramLevel">Sub program level </digi:trn>${varSt.count-1}
                             </c:if></td>
 											<td id="slo${varSt.count}"><html:select
-												property="selPrograms" onchange="reloadProgram(this)"
-												styleClass="inp-text">
+												property="programs.selPrograms" onchange="reloadProgram(this)"
+												styleClass="inp-text" >
 												<option value="-1"><digi:trn
 													key="aim:selectProgramOpt">-Select Program-</digi:trn></option>
 												<html:optionsCollection name="prgLevels" value="ampThemeId"

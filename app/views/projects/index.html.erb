@@ -1,44 +1,4 @@
-<style type="text/css" media="screen">
-	.pagination {
-		text-align: center;
-		padding: .3em; 
-		margin: 1.3em 0;
-	}
-	
-	.pagination a, .pagination span {
-		padding: .2em .5em; 
-	}
-	
-	.pagination span.disabled {
-	    color: #AAA; 
-	}
-	
-	.pagination span.current {
-	    font-weight: bold;
-	    color: #FF0084; 
-	}
-	
-	.pagination a {
-		border: 1px solid #687EAB;
-		color: #003366;
-		text-decoration: none; 
-	}
-	
-	.pagination a:hover, .pagination a:focus {
-		background: #DBE2F1;
-	}
-	
-	.pagination .page_info {
-	    color: #aaa;
-	    padding-top: .8em; 
-	}
-	 
-	.pagination .prev_page, .pagination .next_page { border-width: 2px; }
-	.pagination .prev_page { margin-right: 1em; }
-	.pagination .next_page { margin-left: 1em; }
-</style>
-
-<h2><%= lc(:title, :status => option_text_by_id(Project::DATA_STATUS_OPTIONS, @status)) %></h2>
+<h2><%= header lc(:title, :status => option_text_by_id(Project::DATA_STATUS_OPTIONS, @status)) %></h2>
 
 <table>
 	<% if @projects.blank? then %>

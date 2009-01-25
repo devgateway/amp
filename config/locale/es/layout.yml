@@ -1,6 +1,8 @@
 es:
   layout:
-    title: ODAnic {{page_title}}
+    # TODO: Translate?
+    standard_title: ODAnic - Offical Development Assistance to Nicaragua Database
+    custom_title: ODAnic - {{page_title}}
     
   navigation:
     logout: Salir

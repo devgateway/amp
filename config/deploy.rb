@@ -1,12 +1,9 @@
-default_run_options[:pty] = true
-
 set :application, "odanic"
 
-set :scm, :git
-set :repository, "gitosis@repos.hacksrus.net:#{application}.git"
-set :branch, "master"
-set :deploy_via, :remote_cache
-set :git_enable_submodules, 1
+set :scm, :cvs
+set :repository, ":ext:pehlert@cvs.digijava.org/home/source/amp-cvs"
+set :scm_module, "odadata"
+set :deploy_via, :copy
 
 set :deploy_to, "/var/www/#{application}"
 set :user, 'deploy'
@@ -38,19 +35,6 @@ namespace :deploy do
   end
 end
 
-desc "Push current HEAD to git repository"
-task :push_to_repo do
-  `git push origin #{branch}:refs/heads/#{branch}`
-end
-
-task :ask_for_branch do
-  print "Branch to deploy (empty for #{branch}): "
-  branch = STDIN.gets.strip
-  set :branch, branch unless branch.empty?
-end
-
-before "deploy", :ask_for_branch
-after "ask_for_branch", :push_to_repo
 
 ## Create and link database.yml
 
@@ -86,4 +70,14 @@ desc "Link in the database.yml"
 task :link_database_config do
   run "ln -nfs #{deploy_to}/#{shared_dir}/config/database.yml #{release_path}/config/database.yml" 
 end
+
+desc "Link shared assets"
+task :link_assets do
+  %w{ flags profile_pictures maps reports }.each do |asset_dir|
+    run "mkdir -p #{deploy_to}/#{shared_dir}/assets/#{asset_dir}"
+    run "ln -nfs #{deploy_to}/#{shared_dir}/assets/#{asset_dir} #{release_path}/public/"
+  end
+end
+
 after "deploy:update", :link_database_config
+after "deploy:update", :link_assets

@@ -23,12 +23,15 @@ module ApplicationHelper
   ##
   # Header Generation
   def header(title)
-    content_for(:header) { content_tag(:h2, title) }    
     @_page_title = title
   end
   
   def render_page_title
-    ll(:layout, :title, :page_title => (@_page_title ? "- #{strip_html_tags(@_page_title)}" : nil))
+    if @_page_title
+      t('layout.custom_title', :page_title => strip_html_tags(@_page_title))
+    else
+      t('layout.standard_title')
+    end
   end
   
   # =====================================================================

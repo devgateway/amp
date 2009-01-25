@@ -1,6 +1,6 @@
 <div class="project_factsheet">
 	 <a class="prt" href="#" onclick="window.close();"><%= ll(:actions, :close_window) %></a><a class="prt" href="#" onclick="window.print();"><%= ll(:actions, :print) %></a>
-	<h3><%= lc(:title, :project => @project.donor_project_number) %></h3>
+	<h3><%= header lc(:title, :project => @project.donor_project_number) %></h3>
 		
 	<dl class="main_details">
 		<dt class="first"><%= @project.class.human_attribute_name('title') %></dt>

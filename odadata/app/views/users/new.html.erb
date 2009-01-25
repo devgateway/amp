@@ -1,7 +1,6 @@
-<% @user.password = @user.password_confirmation = nil %>
-<%= error_messages_for :user %>
+<h2><%= header lc(:title) %></h2>
 
-<% header lc(:title) %>
+<%= error_messages_for :user %>
 <%= render :partial => 'form' %>
 
 <p><b><%= link_to ll(:actions, :back), list_path %></b>&nbsp;</p>

@@ -23,6 +23,7 @@ en:
     end: End date
     commitments_td: Total Commitments
     disbursements_td: Total Disbursements
+    quarterly_disbursements: Quarterly Disbursements
     cofunding: Co-Fundings
     total_cofunding: Co-Funding Totals
     cofunding_donors: Co-Funding Donors

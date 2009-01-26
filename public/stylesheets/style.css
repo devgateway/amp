@@ -221,6 +221,7 @@ ul.checkbox_container li {
 	vertical-align: baseline;
 	margin-top: 2px;
 	margin-bottom: 4px;
+	padding-left: 5px;
 }
 
 ul.checkbox_container li.all {
@@ -236,6 +237,7 @@ ul.checkbox_container li div {
 ul.checkbox_container li input {
 	float: left;
 	margin-right: 5px;
+	margin-left: 0;
 }
 /* End Design Own Report */
 

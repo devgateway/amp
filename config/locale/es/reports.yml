@@ -23,6 +23,7 @@ es:
       end: Fecha de Culminación
       commitments_td: Total de Compromisos 
       disbursements_td: Total de Desembolsos
+      quarterly_disbursements: Desembolsos Trimestrales
       cofunding: Co-Financiación
       total_cofunding: Total de Co-Financiación
       cofunding_donors: Donantes Co-Financiadores

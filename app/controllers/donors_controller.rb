@@ -5,6 +5,10 @@ class DonorsController < ApplicationController
     @donors = Donor.ordered
   end
   
+  def show
+    @donor = Donor.find(params[:id])
+  end
+  
   def new
     @donor = Donor.new
   end

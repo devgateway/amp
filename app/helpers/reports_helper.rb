@@ -28,7 +28,7 @@ module ReportsHelper
       column_name = "#{marker[0]}_marker"
       
       content_tag("tr", 
-        content_tag("td", "#{ll(:project, column_name)}:") + 
+        content_tag("td", "#{Project.human_attribute_name(column_name)}:") + 
         content_tag("td", option_text_by_id(Project::MARKER_OPTIONS, record.send(column_name))),
         :class => "simple")
         

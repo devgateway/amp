@@ -39,6 +39,8 @@ en:
       agencies: Donor Agencies ({{total}})
       logins: Login Accounts
       new: Add new donor
+    show:
+      title: Donor Fact Sheet for <i>{{donor}}</i>
     new:
       title: Add New Donor
       submit: Create Donor

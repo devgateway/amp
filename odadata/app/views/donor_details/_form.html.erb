@@ -1,4 +1,4 @@
-<% labeled_form_for @donor do |f| %>
+<% labeled_form_for @donor, :url => donor_details_path do |f| %>
 	<% f.field_set do %>
 		<li class="thirty"><%= f.text_field :total_staff_in_country %></li>
 		<li class="thirty"><%= f.text_field :total_expatriate_staff %></li>

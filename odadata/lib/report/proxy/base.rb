@@ -13,8 +13,7 @@ module Report
       end
       
       def build_record(fields)
-        record = fields.map { |f| self.send f }
-        record.delete_if { |r| r.blank? }
+        record = fields.map { |f| self.send(f) }.reject(&:blank?)
         Report::Data::Record.new(record)
       end
       

@@ -9,38 +9,39 @@ module Report
       
       def total_cofunding
         cofunding = @target.total_cofunding
-        ["Total Co-Funding in #{cofunding.currency}", cofunding]
+        ["#{I18n.t('reports.total_cofunding')} (#{cofunding.currency})", cofunding]
       end
       
       def impl_agencies
-        ["Implementing Agencies", @target.implementing_agencies.map(&:name).join(', ')]      
+        [I18n.t('reports.impl_agencies'), @target.implementing_agencies.map(&:name).join(', ')]      
       end
       
       def contr_agencies
-        ["Contracted Agencies", @target.contracted_agencies.map(&:name).join(', ')]   
+        [I18n.t('reports.contr_agencies'), @target.contracted_agencies.map(&:name).join(', ')]   
       end
       
       def mdg_goals
         # TODO: Put each goal in it's own column
-        ["MDG Goals", @target.mdgs.map(&:name).join(', ')]
+        [I18n.t('reports.mdg_goals'), @target.mdgs.map(&:name).join(', ')]
       end
       
       def strategy_link
         id = @target.country_strategy_id
         
         if id.blank?
-          ["Strategy Link", "Not linked to any strategy"]
+          # TODO: Translation
+          [I18n.t('reports.cs_link'), "Not linked to any strategy"]
         else
-          ["Strategy Link", "http://nic.odadata.eu/country_strategy/show/#{id}"]
+          [I18n.t('reports.cs_link'), "http://nic.odadata.eu/country_strategy/show/#{id}"]
         end
       end
       
       def total_payments
-        ["Total Disbursements to date (#{MultiCurrency.output_currency})", @target.fundings.total_payments]
+        ["#{I18n.t('reports.disbursements_td')} (#{MultiCurrency.output_currency})", @target.fundings.total_payments]
       end
       
       def total_commitments
-        ["Total Commitments to date (#{MultiCurrency.output_currency})", @target.fundings.total_commitments]
+        ["#{I18n.t('reports.commitments_td')} (#{MultiCurrency.output_currency})", @target.fundings.total_commitments]
       end
       
       # Adds one column per focal region
@@ -70,7 +71,7 @@ module Report
       end
       
       def website
-        ["Internet Link", @target.website]
+        [I18n.t('terms.internet_link'), @target.website]
       end
       
       def funds(year)  
@@ -79,17 +80,17 @@ module Report
         columns = []
 
         if year <= Time.now.year
-          columns << ["Commitments #{year} in #{MultiCurrency.output_currency}", finances.andand.commitments]
-          columns << ["Disbursements #{year} in #{MultiCurrency.output_currency}", finances.andand.payments]
+          columns << ["#{I18n.t('reports.commitments_td')} #{year} (#{MultiCurrency.output_currency})", finances.andand.commitments]
+          columns << ["#{I18n.t('reports.disbursements_td')} #{year} (#{MultiCurrency.output_currency})", finances.andand.payments]
                     
           columns += (1..4).map do |quarter|
-           ["Disbursements Q#{quarter}/#{year} in #{MultiCurrency.output_currency}", finances.andand.send("payments_q#{quarter}")]
+           ["#{I18n.t('terms.disbursements')} Q#{quarter}/#{year} (#{MultiCurrency.output_currency})", finances.andand.send("payments_q#{quarter}")]
           end
         end
         
         if year >= Time.now.year
-          columns << ["Commitments Forecast #{year} in #{MultiCurrency.output_currency}", forecasts.andand.commitments]
-          columns << ["Disbursements Forecast #{year} in #{MultiCurrency.output_currency}", forecasts.andand.payments]
+          columns << ["#{I18n.t('reports.commitments_forecast', :year => year)} (#{MultiCurrency.output_currency})", forecasts.andand.commitments]
+          columns << ["#{I18n.t('reports.payments_forecast', :year => year)} (#{MultiCurrency.output_currency})", forecasts.andand.payments]
         end
         
         columns

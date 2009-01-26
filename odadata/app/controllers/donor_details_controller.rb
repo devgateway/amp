@@ -2,18 +2,16 @@ class DonorDetailsController < ApplicationController
   before_filter :fetch_donor
   access_rule 'admin || focal_point'
   
-  def show
-    render :text => "Donor: #{@donor.name}"
-  end
-  
   def edit
     
   end
 
   def update
-    if @donor.update_attributes[:donor]
+    if @donor.update_attributes(params[:donor])
       flash[:notice] = lc(:saved)
-      redirect_to donor_detail_path
+      # TODO: Proper redirect path after donor factsheets are created
+      #redirect_to donor_path(@donor)
+      redirect_to projects_path
     else
       flash[:error] = lc(:save_failed)
       render :action => 'edit'

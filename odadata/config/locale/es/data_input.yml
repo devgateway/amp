@@ -40,13 +40,15 @@ es:
       agencies: Agencias donantes ({{total}})
       logins: Cuenta de ingreso
       new: Añadir donante nuevo
+    show:
+      title: Ficha Descriptiva para <i>{{donor}}</i>
     new:
       title: Añadir donante nuevo
       submit: Crear donante
     edit:
       title: Editar donante
       submit: Actualizar donante
-      
+    
   donor_details:
     edit: 
       title: Editar donante

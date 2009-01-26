@@ -7,7 +7,7 @@ class LabeledFormBuilder < ActionView::Helpers::FormBuilder
       def #{method_name}(field_name, *args)
         options = args.extract_options!
         label_opts = extract_label_options!(options)
-        wrap_in_label_row(field_name, @template.#{method_name}(field_name, *(args << options)), label_opts)
+        wrap_in_label_row(field_name, @template.#{method_name}(@object_name, field_name, *(args << options)), label_opts)
       end
     }
   end

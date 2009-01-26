@@ -50,6 +50,36 @@ public class StandaloneAMPStartup {
 		return result;
 	}
 
+	/**
+	 * Generate 200,000 activity copies when AMP Starts, using XML Import/Export.
+	 * @param session the Hibernate Session
+	 * @param ampActivityId the id of the source AmpActivity
+	 * @throws DgException
+	 * @throws JAXBException
+	 * @throws HibernateException
+	 * @throws SQLException
+	 */
+	private static void generate200k(Long ampActivityId,Session session) throws DgException, JAXBException, HibernateException, SQLException {
+		AmpActivity activity = loadActivity(ampActivityId,session);				
+		ActivityType xmlActivity = ExportManager.getXmlActivity(activity, session);
+		
+		
+		ObjectFactory objFactory = new ObjectFactory();
+		Activities aList=objFactory.createActivities();
+		aList.getActivity().add(xmlActivity);
+		
+		xmlActivity.setAmpId("200K ");
+		xmlActivity.getTitle().setValue("Generated Activity ");
+		byte[] toByte = XmlTransformerHelper.marshalToByte(aList);
+		
+		String title=xmlActivity.getTitle().getValue();
+		ImportManager im=new ImportManager(toByte);
+		for(long i=1;i<200000;i++){ 
+		im.startImportHttp(new String("#"+i), activity.getTeam());
+		if((i % 100)==0) logger.info("Completed #"+i);
+		}
+		PersistenceManager.releaseSession(session);		
+	}
 	
 	/**
 	 * @param args
@@ -72,27 +102,12 @@ public class StandaloneAMPStartup {
 			try {
 				//EXAMPLE OF A WORKING HIBERNATE SESSION OBJECT:
 				Session session = PersistenceManager.getSession();
-				AmpActivity activity = loadActivity(new Long(9),session);				
-				ActivityType xmlActivity = ExportManager.getXmlActivity(activity, session);
 				
+		 
+				//generate200k((long)9,session);
 				
-				ObjectFactory objFactory = new ObjectFactory();
-				Activities aList=objFactory.createActivities();
-				aList.getActivity().add(xmlActivity);
-				
-				xmlActivity.setAmpId("200K ");
-				xmlActivity.getTitle().setValue("Generated Activity ");
-				byte[] toByte = XmlTransformerHelper.marshalToByte(aList);
-				
-				String title=xmlActivity.getTitle().getValue();
-				ImportManager im=new ImportManager(toByte);
-				for(long i=15699;i<200000;i++){ 
-				im.startImportHttp(new String("#"+i), activity.getTeam());
-				if((i % 100)==0) logger.info("Completed #"+i);
-				}
 				PersistenceManager.releaseSession(session);
 				
-							
 				
 			} catch (HibernateException e) {
 				// TODO Auto-generated catch block
@@ -102,10 +117,6 @@ public class StandaloneAMPStartup {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				logger.error(e);
-			} catch (JAXBException e) {
-			    // TODO Auto-generated catch block
-			    logger.error(e);
-			    throw new RuntimeException( "JAXBException Exception encountered", e);
 			}
 			
 		} catch (DgException e) {

@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
@@ -69,8 +70,13 @@
 		</li>
 	</ul>
 </div>
+<c:set var="quote">'</c:set>
+<c:set var="escapedQuote">\'</c:set>
+<c:set var="teamName">
+    ${fn:replace(ampTeam.name,quote,escapedQuote)}
+</c:set>
 <div align="left" width="2" style="display: inline"
-	onMouseOver="stm(['<bean:write name="ampTeam" property="name"/>',document.getElementById('team-<bean:write name="ampTeam" property="ampTeamId"/>').innerHTML],Style[0])" 
+	onMouseOver="stm(['${ampTeam.name}',document.getElementById('team-<bean:write name="ampTeam" property="ampTeamId"/>').innerHTML],Style[0])"
 	onMouseOut="htm()">
 	<jsp:useBean id="urlParams22" type="java.util.Map" class="java.util.HashMap"/>
 	<c:set target="${urlParams22}" property="tId">

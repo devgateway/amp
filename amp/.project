@@ -6,12 +6,17 @@
 	</projects>
 	<buildSpec>
 		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
 			<name>org.eclipse.ui.externaltools.ExternalToolBuilder</name>
-			<triggers>clean,full,incremental,</triggers>
+			<triggers>full,incremental,</triggers>
 			<arguments>
 				<dictionary>
 					<key>LaunchConfigHandle</key>
-					<value>&lt;project&gt;/.externalToolBuilders/amp_builder_.launch</value>
+					<value>&lt;project&gt;/.externalToolBuilders/ant_amp_builder.launch</value>
 				</dictionary>
 			</arguments>
 		</buildCommand>
@@ -22,7 +27,7 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>src-1</name>
+			<name>digi-src</name>
 			<type>2</type>
 			<location>/home/mihai/workspace/digi/WEB-INF/src</location>
 		</link>

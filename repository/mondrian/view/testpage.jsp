@@ -100,7 +100,7 @@
 </c:if>
 
 <%-- render navigator --%>
-<wcf:render ref="navi01" xslUri="/WEB-INF/jpivot/navi/navigator.xsl" xslCache="true"/>
+<wcf:render ref="navi01" xslUri="/WEB-INF/jpivot/navi/navigator.xsl" xslCache="false"/>
 
 <%-- edit mdx --%>
 <c:if test="${mdxedit01.visible}">
@@ -126,8 +126,9 @@
 <!-- drill through table -->
 <wcf:render ref="query01.drillthroughtable" xslUri="/WEB-INF/wcf/wcf.xsl" xslCache="true"/>
 
+<!-- Chart -->
 <p>
-	<wcf:render  ref="chart01" xslUri="/WEB-INF/jpivot/chart/chart.xsl"  xslCache="true"/>
+	<wcf:render  ref="chart01" xslUri="/WEB-INF/jpivot/chart/chart.xsl"   xslCache="true"/>
 <p>
 </digi:form>
 </body>

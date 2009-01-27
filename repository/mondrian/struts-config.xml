@@ -4,7 +4,6 @@
   <form-beans>
   	<form-bean name="mainreportform" type="org.digijava.module.mondrian.form.MainReportForm"/>
   	<form-bean name="testpageform" type="org.digijava.module.mondrian.form.TestPageForm"/>
-  	<form-bean name="mondrianqueryform" type="org.digijava.module.mondrian.form.MondrianQueryForm"/>
   </form-beans>
   
   <action-mappings>
@@ -13,9 +12,6 @@
     </action>
     <action name="testpageform" path="/mondrian/testpage" scope="session" type="org.digijava.module.mondrian.action.TestPage">
     	<forward name="forward" path="/showLayout.do?layout=testpage"/>
-    </action>
-     <action name="mondrianqueryform" path="/mondrian/querypage" scope="session" type="org.digijava.module.mondrian.action.MondrianQuery">
-    	<forward name="forward" path="/showLayout.do?layout=querypage"/>
     </action>
    </action-mappings>
 </struts-config>

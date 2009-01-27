@@ -2228,23 +2228,13 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 
     Session session = null;
     try {
-      session = PersistenceManager.getSession();
+      session = PersistenceManager.getRequestDBSession();
       AmpActivity activity = (AmpActivity) session.load(AmpActivity.class, id);
       col = activity.getRegionalFundings();
     }
     catch (Exception e) {
       logger.debug("Exception in getRegionalFundings() " + e.getMessage());
       e.printStackTrace(System.out);
-    }
-    finally {
-      if (session != null) {
-        try {
-          PersistenceManager.releaseSession(session);
-        }
-        catch (Exception ex) {
-          logger.debug("Exception while releasing session " + ex.getMessage());
-        }
-      }
     }
     return col;
   }
@@ -2254,7 +2244,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 
     Session session = null;
     try {
-      session = PersistenceManager.getSession();
+      session = PersistenceManager.getRequestDBSession();
       AmpActivity activity = (AmpActivity) session.load(AmpActivity.class, id);
       col = activity.getRegionalFundings();
       ArrayList temp = new ArrayList(col);
@@ -2271,16 +2261,6 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     catch (Exception e) {
       logger.debug("Exception in getRegionalFundings() " + e.getMessage());
       e.printStackTrace(System.out);
-    }
-    finally {
-      if (session != null) {
-        try {
-          PersistenceManager.releaseSession(session);
-        }
-        catch (Exception ex) {
-          logger.debug("Exception while releasing session " + ex.getMessage());
-        }
-      }
     }
     return col;
   }

@@ -33,7 +33,7 @@
 			<xs:element name="locations" maxOccurs="unbounded">
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="funding" type="fundingType" minOccurs="0" maxOccurs="unbounded"/>
+						<xs:element name="locationFunding" type="locationFundingType" minOccurs="0" maxOccurs="unbounded"/>
 					</xs:sequence>
 					<xs:attribute name="lang" type="xs:language" use="optional"/>
 					<xs:attribute name="locationType" type="xs:int" use="required"/>
@@ -205,14 +205,28 @@
 			<xs:element name="expenditures" type="fundingDetailType" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="code" type="xs:string" use="required"/>
-		<xs:attribute name="type" use="optional">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="Actual"/>
-					<xs:enumeration value="Plan"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="locationFundingType">
+		<xs:sequence>
+			<xs:element name="fundingOrg" type="codeValueType" minOccurs="0"/>
+			<xs:element name="assistanceType" type="codeValueType"/>
+			<xs:element name="financingInstrument" type="codeValueType"/>
+			<xs:element name="conditions" type="freeTextType"/>
+			<xs:element name="signatureDate" type="dateType"/>
+			<xs:element name="projections" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:attribute name="type" type="xs:string" use="required"/>
+					<xs:attribute name="amount" type="xs:long" use="required"/>
+					<xs:attribute name="currency" type="xs:string" use="required"/>
+					<xs:attribute name="startYear" type="xs:int" use="required"/>
+					<xs:attribute name="endYear" type="xs:int" use="optional"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="commitments" type="fundingDetailType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="disbursements" type="fundingDetailType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="expenditures" type="fundingDetailType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="code" type="xs:string" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="contactType">
 		<xs:sequence>

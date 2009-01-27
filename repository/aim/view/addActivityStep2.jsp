@@ -185,7 +185,6 @@ function popupwin(){
 }
 
 function validateSectorPercentage(){
-	return true;
   <c:set var="errMsgAddSector">
   <digi:trn key="aim:addSecorErrorMessage">
   Please add sectors

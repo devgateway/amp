@@ -4,8 +4,41 @@
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
-<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %><%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@page import="org.digijava.module.aim.helper.FormatHelper"%>
+<%@page import="org.digijava.module.aim.form.RegionalFundingForm"%>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
+
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+
+<script type="text/javascript">
+
+function fnEditProject(id)
+{
+	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
+   document.aimRegionalFundingForm.action = "<%=addUrl%>~pageId=1~step=4~action=edit~surveyFlag=true~activityId=" + id;
+	document.aimRegionalFundingForm.target = "_self";
+   document.aimRegionalFundingForm.submit();
+}
+
+function preview(id)
+{
+
+	<digi:context name="addUrl" property="context/module/moduleinstance/viewActivityPreview.do" />
+   document.aimRegionalFundingForm.action = "<%=addUrl%>~pageId=2~activityId=" + id;
+	document.aimRegionalFundingForm.target = "_self";
+   document.aimRegionalFundingForm.submit();
+}
+
+function projectFiche(id)
+{
+	<digi:context name="ficheUrl" property="context/module/moduleinstance/projectFicheExport.do" />
+	window.open ( "<%=ficheUrl%>~ampActivityId=" + id,"<digi:trn key="aim:projectFiche">Project Fiche</digi:trn>");
+}
+
+</script>
 
 <digi:errors/>
 
@@ -43,8 +76,7 @@
 													styleClass="comment" title="${translation}" >
 													<digi:trn key="aim:regionalFunding">Regional Funding</digi:trn>
 													</digi:link>&nbsp;&gt;&nbsp;
-													<digi:trn key="aim:details">Details</digi:trn>&nbsp;&gt;&nbsp;
-													<bean:write name="aimRegionalFundingForm" property="perspective"/>
+													<digi:trn key="aim:details">Details</digi:trn>										
 												</SPAN>											
 											</TD>
 											<TD align="right">

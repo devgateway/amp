@@ -751,7 +751,7 @@ public class CurrencyUtil {
 		Session session = null;
 
 		try {
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 			// modified by Priyajith
 			// desc:used select query instead of session.load
 			// start
@@ -766,13 +766,7 @@ public class CurrencyUtil {
 			// end
 		} catch (Exception ex) {
 			logger.error("Unable to get currency " + ex);
-		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (Exception ex2) {
-				logger.debug("releaseSession() failed", ex2);
-			}
-		}
+		} 
 		return ampCurrency;
 	}
 

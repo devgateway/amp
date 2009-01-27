@@ -33,15 +33,28 @@
 			<xs:element name="locations" maxOccurs="unbounded">
 				<xs:complexType>
 					<xs:sequence>
+						<xs:element name="location" type="codeValueType" minOccurs="1" maxOccurs="unbounded"/>
 						<xs:element name="locationFunding" type="locationFundingType" minOccurs="0" maxOccurs="unbounded"/>
 					</xs:sequence>
 					<xs:attribute name="lang" type="xs:language" use="optional"/>
-					<xs:attribute name="locationType" type="xs:int" use="required"/>
+					
+					<xs:attribute name="locationType" use="required">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="Country"/>
+							<xs:enumeration value="Region"/>
+							<xs:enumeration value="Zone"/>
+							<xs:enumeration value="Woreda"/>
+							<xs:enumeration value="Department"/>
+						</xs:restriction>
+					</xs:simpleType>
+					</xs:attribute>
+					
+					
 					<xs:attribute name="gis" type="xs:string" use="optional"/>
 					<xs:attribute name="iso3" type="xs:string" use="required"/>
-					<xs:attribute name="countryName" type="xs:string" use="optional"/>
-					<xs:attribute name="regionCode" type="xs:string" use="optional"/>
-					<xs:attribute name="regionName" type="xs:string" use="optional"/>
+					<xs:attribute name="countryName" type="xs:string" use="required"/>
+												
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="proposedApprovalDate" type="dateType" minOccurs="0"/>

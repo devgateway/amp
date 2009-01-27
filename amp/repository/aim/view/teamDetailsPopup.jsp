@@ -76,7 +76,7 @@
     ${fn:replace(ampTeam.name,quote,escapedQuote)}
 </c:set>
 <div align="left" width="2" style="display: inline"
-	onMouseOver="stm(['${ampTeam.name}',document.getElementById('team-<bean:write name="ampTeam" property="ampTeamId"/>').innerHTML],Style[0])"
+	onMouseOver="stm(['${teamName}',document.getElementById('team-<bean:write name="ampTeam" property="ampTeamId"/>').innerHTML],Style[0])"
 	onMouseOut="htm()">
 	<jsp:useBean id="urlParams22" type="java.util.Map" class="java.util.HashMap"/>
 	<c:set target="${urlParams22}" property="tId">

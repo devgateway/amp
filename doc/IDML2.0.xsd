@@ -208,8 +208,6 @@
 	</xs:complexType>
 	<xs:complexType name="locationFundingType">
 		<xs:sequence>
-			<xs:element name="transactionDate" type="dateType"/>
-			<xs:element name="reportingDate" type="dateType"/>
 			<xs:element name="commitments" type="fundingDetailType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="disbursements" type="fundingDetailType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="expenditures" type="fundingDetailType" minOccurs="0" maxOccurs="unbounded"/>

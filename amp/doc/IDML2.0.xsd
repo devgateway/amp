@@ -208,25 +208,12 @@
 	</xs:complexType>
 	<xs:complexType name="locationFundingType">
 		<xs:sequence>
-			<xs:element name="fundingOrg" type="codeValueType" minOccurs="0"/>
-			<xs:element name="assistanceType" type="codeValueType"/>
-			<xs:element name="financingInstrument" type="codeValueType"/>
-			<xs:element name="conditions" type="freeTextType"/>
-			<xs:element name="signatureDate" type="dateType"/>
-			<xs:element name="projections" minOccurs="0" maxOccurs="unbounded">
-				<xs:complexType>
-					<xs:attribute name="type" type="xs:string" use="required"/>
-					<xs:attribute name="amount" type="xs:long" use="required"/>
-					<xs:attribute name="currency" type="xs:string" use="required"/>
-					<xs:attribute name="startYear" type="xs:int" use="required"/>
-					<xs:attribute name="endYear" type="xs:int" use="optional"/>
-				</xs:complexType>
-			</xs:element>
+			<xs:element name="transactionDate" type="dateType"/>
+			<xs:element name="reportingDate" type="dateType"/>
 			<xs:element name="commitments" type="fundingDetailType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="disbursements" type="fundingDetailType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="expenditures" type="fundingDetailType" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="code" type="xs:string" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="contactType">
 		<xs:sequence>

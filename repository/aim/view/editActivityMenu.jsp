@@ -141,29 +141,29 @@ function save() {
 }
 
 function gotoStep(value) {
-	var step = null;
-	var editForm = null;
-	if (document.aimEditActivityForm.step) { 
-		step = document.aimEditActivityForm.step;
-		editForm = document.aimEditActivityForm;
-	} else {
-		step = document.forms[1].step;
-		editForm = document.forms[1];
-	}
-  var draftStatus=document.getElementById("draftFlag");
-  var flag;
-  if((draftStatus!=null) && (draftStatus.value!="true") && (step.value<value)){
+var draftStatus=document.getElementById("draftFlag");
+var flag;
+var form=document.aimEditActivityForm;
+var val=form.step;
+if(typeof val =='undefined'){
+    val=document.forms[2].step;
+    form=document.forms[2];
+}
+
+if(draftStatus!=null && draftStatus.value!="true"
+    && val.value<value){
     flag=validateForm();
-  }else{
+}else{
     flag=true;
-  }
-  if (flag == true) {
-	  step.value = value;
+}
+if (flag == true) {
+
+    val.value = value;
     <digi:context name="step" property="context/module/moduleinstance/addActivity.do?edit=true" />
-    editForm.action = "<%= step %>";
-    editForm.target = "_self";
-    editForm.submit();
-  }
+    form.action = "<%= step %>";
+    form.target = "_self";
+    form.submit();
+    }
 }
 
 function fnGetSurvey(value) {

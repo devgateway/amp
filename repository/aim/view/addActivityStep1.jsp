@@ -84,14 +84,14 @@
 
 <script language="JavaScript">
     <!--
-    
+   
     //DO NOT REMOVE THIS FUNCTION --- AGAIN!!!!
     function mapCallBack(status, statusText, responseText, responseXML){
        window.location.reload();
     }
     
     
-    var responseSuccess = function(o){ 
+    var responseSuccess = function(o){
 	/* Please see the Success Case section for more
 	 * details on the response object's properties.
 	 * o.tId
@@ -123,7 +123,7 @@
 		success:responseSuccess, 
 		failure:responseFailure 
 	};
-    
+
 	function showComment() {
 		var element = document.getElementById("myComment");
 		element.style.display = "inline";
@@ -133,10 +133,10 @@
 	}
 	
 	function commentWin(commentId){
-		
+	
 		<digi:context name="commentUrl" property="context/module/moduleinstance/viewComment.do" />
 		var url = "<%=commentUrl %>?comment=" + commentId + "&edit=" + "true";
-		
+
         //var postString		= "comment=" + commentId + "&edit=true";
 		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
 		showComment();
@@ -366,7 +366,7 @@ function popupwin() {
 <digi:instance property="aimEditActivityForm" />
 
 <digi:form action="/addActivity.do" method="post">
-
+    
 <html:hidden property="step"/>
 <html:hidden property="editKey"/>
 <html:hidden property="editAct"/>

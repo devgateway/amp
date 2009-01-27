@@ -30,10 +30,10 @@
 			<xs:element name="objective" type="freeTextType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="description" type="freeTextType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="implementationLevels" type="codeValueType"/>
-			<xs:element name="locations" maxOccurs="unbounded">
+			<xs:element name="location" maxOccurs="unbounded">
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="location" type="codeValueType" minOccurs="1" maxOccurs="unbounded"/>
+						<xs:element name="locationName" type="codeValueType" minOccurs="1" maxOccurs="1"/>
 						<xs:element name="locationFunding" type="locationFundingType" minOccurs="0" maxOccurs="unbounded"/>
 					</xs:sequence>
 					<xs:attribute name="lang" type="xs:language" use="optional"/>

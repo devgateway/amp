@@ -32,7 +32,10 @@
 			<digi:trn key="rep:dynamicsave:overwriteTab">Overwrite original tab</digi:trn>
 		</c:set>
 		<c:set var="saveFilters" scope="request">
-			<digi:trn key="rep:pop:saveTabAndFilters">Save Tab&Filters</digi:trn>
+			<digi:trn key="rep:pop:saveTab">Save Tab</digi:trn>
+		</c:set>
+		<c:set var="saveFiltersTooltip" scope="request">
+			<digi:trn key="rep:pop:saveTabTooltip">Save the tab with filter and sorting criteria</digi:trn>
 		</c:set>
 	</c:when>
 	<c:otherwise>
@@ -46,10 +49,14 @@
 			<digi:trn key="rep:dynamicsave:overwriteReport">Overwrite original report</digi:trn>
 		</c:set>
 		<c:set var="saveFilters" scope="request" >
-			<digi:trn key="rep:pop:saveReportAndFilters">Save Report&Filters</digi:trn>
+			<digi:trn key="rep:pop:saveReport">Save Report</digi:trn>
+		</c:set>
+		<c:set var="saveFiltersTooltip" scope="request">
+			<digi:trn key="rep:pop:saveReportTooltip">Save the report with filter and sorting criteria</digi:trn>
 		</c:set>
 	</c:otherwise>
-</c:choose> 
+</c:choose>
+ 
 <div id="saveTitlePanel" style="display: none">
 	<div class="hd" style="font-size: 8pt">
 		${plsEnterTitle}

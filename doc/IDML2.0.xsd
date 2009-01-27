@@ -74,7 +74,7 @@
 				<xs:complexType>
 					<xs:sequence>
 						<xs:element name="componentName" type="xs:string" minOccurs="1" maxOccurs="1"/>
-						<xs:element name="componentType" type="codeValueType" minOccurs="1" maxOccurs="1"/>						
+						<xs:element name="componentType" type="xs:string" minOccurs="1" maxOccurs="1"/>						
 						<xs:element name="componentFunding" type="componentFundingType" minOccurs="1"  maxOccurs="unbounded"/>
 						<xs:element name="physicalProgress" minOccurs="0" maxOccurs="unbounded">
 							<xs:complexType>

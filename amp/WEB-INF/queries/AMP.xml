@@ -63,7 +63,9 @@
 		</CalculatedMember>
 	</Cube>
 	<Cube name="Donor Funding">
-		<Table name="cached_v_donor_funding" />
+		<Table name="cached_v_donor_funding" >
+			<SQL dialect="mysql"><![CDATA[cached_v_donor_funding.amp_activity_id IN (@donorquery)]]> </SQL>
+		</Table>
 		<Dimension name="Donor">
 			<Hierarchy hasAll="true" allLevelName="All Donors">
 				<!-- No table element here. Fact table is assumed. -->

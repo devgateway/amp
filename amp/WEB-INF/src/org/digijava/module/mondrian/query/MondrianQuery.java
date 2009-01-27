@@ -1,15 +1,13 @@
-package org.digijava.module.mondrian.action;
+package org.digijava.module.mondrian.query;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
@@ -20,17 +18,23 @@ import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.mondrian.form.MondrianQueryForm;
 
-public class MondrianQuery extends Action {
+/**
+ * 
+ * @author Diego Dimunzio
+ *
+ */
+public class MondrianQuery {
 	protected static Logger logger = Logger.getLogger(MondrianQuery.class);
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			javax.servlet.http.HttpServletRequest request,
-			javax.servlet.http.HttpServletResponse response)
-			throws java.lang.Exception {
+public static HttpServletRequest request;
+	
 
-		MondrianQueryForm queryform = (MondrianQueryForm) form;
+	public static void setRequest(HttpServletRequest r){
+		request = r;
+	}
+	
+	public static String createQuery(){
 		AmpARFilter filter = new AmpARFilter();
 		TeamMember tm = (TeamMember) request.getSession().getAttribute(
 				Constants.CURRENT_MEMBER);
@@ -160,10 +164,9 @@ public class MondrianQuery extends Action {
 		String widget = (String) request.getAttribute("widget");
 		if (widget != null)
 			filter.setWidget(new Boolean(widget).booleanValue());
-
+		
 		filter.generateFilterQuery(request);
-		queryform.setQuery(filter.getGeneratedFilterQuery());
-		return mapping.findForward("forward");
+		return (filter.getGeneratedFilterQuery());
 	}
 
 }

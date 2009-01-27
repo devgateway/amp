@@ -70,12 +70,12 @@
 			<xs:element name="notes" type="freeTextType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="funding" type="fundingType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="keywords" type="freeTextType" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="components" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="component" minOccurs="0" maxOccurs="unbounded">
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="componentTitle" type="freeTextType"/>
-						<xs:element name="componentDescription" type="freeTextType" minOccurs="0"/>
-						<xs:element name="funding" type="fundingType" maxOccurs="unbounded"/>
+						<xs:element name="componentName" type="xs:string" minOccurs="1" maxOccurs="1"/>
+						<xs:element name="componentType" type="codeValueType" minOccurs="1" maxOccurs="1"/>						
+						<xs:element name="componentFunding" type="componentFundingType" minOccurs="1"  maxOccurs="unbounded"/>
 						<xs:element name="physicalProgress" minOccurs="0" maxOccurs="unbounded">
 							<xs:complexType>
 								<xs:sequence>
@@ -86,7 +86,6 @@
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
-					<xs:attribute name="componentCode" type="xs:string" use="required"/>
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="issues" minOccurs="0" maxOccurs="unbounded">
@@ -220,6 +219,13 @@
 		<xs:attribute name="code" type="xs:string" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="locationFundingType">
+		<xs:sequence>
+			<xs:element name="commitments" type="fundingDetailType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="disbursements" type="fundingDetailType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="expenditures" type="fundingDetailType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="componentFundingType">
 		<xs:sequence>
 			<xs:element name="commitments" type="fundingDetailType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="disbursements" type="fundingDetailType" minOccurs="0" maxOccurs="unbounded"/>

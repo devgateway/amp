@@ -120,6 +120,15 @@
                 <c:set var="stepNum" value="2" scope="request" />
                 <jsp:include page="toolbar.jsp" />
                 <p>Final step Export</p>
+                
+                  <html:select name="deExportForm" property="selectedTeamId" styleId="teamId">
+                    <option value="-1">Please select team</option>
+                    <c:forEach var="vTeam" items="${deExportForm.teamList}" varStatus="lStatus">
+                      <option value="${vTeam.ampTeamId}">${vTeam.name}</option>
+                    </c:forEach>
+                  </html:select>
+                
+                
                 <button type="button" class="toolbar" onclick="exportActivity();">
                   <img height="16" src="/TEMPLATE/ampTemplate/images/green_check.png" class="toolbar" />
                   Export
@@ -141,10 +150,16 @@
 
 function exportActivity(){
 //	getCheckedNodes();
-    var form = document.getElementById('form');
-	form.action = "/dataExchange/export.do?method=export";
-    form.target="_self"
-    form.submit();
+    var selTeamId = document.getElementById('teamId');
+
+    if (selTeamId.value != "-1"){
+      var form = document.getElementById('form');
+	  form.action = "/dataExchange/export.do?method=export";
+      form.target="_self"
+      form.submit();
+    } else {
+        alert('please select one team');
+    }
 }
 
 var tree;

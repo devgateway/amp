@@ -156,4 +156,8 @@ public class AmpColumnEntry {
 	public String getPath(){
 		return this.path;
 	}
+	
+	public boolean canExport(){
+		return this.isMandatory() || this.isSelect();
+	}
 }

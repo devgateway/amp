@@ -2,6 +2,8 @@ package org.digijava.module.dataExchange.action;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.ServletOutputStream;
@@ -21,12 +23,14 @@ import org.apache.struts.actions.DispatchAction;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.dataExchange.Exception.AmpExportException;
 import org.digijava.module.dataExchange.form.ExportForm;
 import org.digijava.module.dataExchange.jaxb.Activities;
 import org.digijava.module.dataExchange.jaxb.ActivityType;
 import org.digijava.module.dataExchange.jaxb.ObjectFactory;
 import org.digijava.module.dataExchange.util.ExportBuilder;
+import org.digijava.module.dataExchange.util.ExportUtil;
 import org.xml.sax.SAXException;
 
 
@@ -41,15 +45,22 @@ public class ExportAction extends DispatchAction {
 
 		ExportForm eForm = (ExportForm)form;
 		
-		if (eForm.getActivityTree() != null){
+		if (eForm.getActivityTree() != null && 
+				eForm.getSelectedTeamId() != null && eForm.getSelectedTeamId().longValue()>=0){
 			// TODO: add search criteria. 
 			
 			Activities activities = (new ObjectFactory()).createActivities();
 			
-	
+			Collection ampActivities  = ExportUtil.getAllTeamAmpActivities(eForm.getSelectedTeamId());
+			
 			try {
-				ExportBuilder eBuilder = new ExportBuilder(10190, RequestUtils.getSite(request).getSiteId());
-				activities.getActivity().add(eBuilder.getActivityType(eForm.getActivityTree()));
+
+				for (Iterator iterator = ampActivities.iterator(); iterator.hasNext();) {
+					AmpActivity ampActivity = (AmpActivity) iterator.next();
+
+					ExportBuilder eBuilder = new ExportBuilder(ampActivity, RequestUtils.getSite(request).getSiteId());
+					activities.getActivity().add(eBuilder.getActivityType(eForm.getActivityTree()));
+				}
 			} catch (AmpExportException e) {
 				log.error(e);
 			} catch (Exception e) {

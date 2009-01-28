@@ -13,12 +13,16 @@ import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
+import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpNotes;
+import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
+import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FundingDetail;
@@ -30,10 +34,12 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.dataExchange.Exception.AmpExportException;
 import org.digijava.module.dataExchange.jaxb.ActivityType;
 import org.digijava.module.dataExchange.jaxb.CodeValueType;
+import org.digijava.module.dataExchange.jaxb.ContactType;
 import org.digijava.module.dataExchange.jaxb.DateType;
 import org.digijava.module.dataExchange.jaxb.FreeTextType;
 import org.digijava.module.dataExchange.jaxb.FundingDetailType;
 import org.digijava.module.dataExchange.jaxb.FundingType;
+import org.digijava.module.dataExchange.jaxb.LocationFundingType;
 import org.digijava.module.dataExchange.jaxb.ObjectFactory;
 import org.digijava.module.dataExchange.type.AmpColumnEntry;
 
@@ -71,7 +77,7 @@ public class ExportBuilder {
 		retValue.setDate(ExportHelper.getGregorianCalendar(ampActivity.getCreatedDate()));
 		
 		for (AmpColumnEntry elem : ampColumnEntry.getElements()) {
-			if (elem.isMandatory() || elem.isSelect()){
+			if (elem.canExport()){
 				buildActivityType(retValue, elem);
 			}
 		}
@@ -106,11 +112,11 @@ public class ExportBuilder {
 			}
 		} else if (path.equalsIgnoreCase("activity.implementationLevels")){
 			parent.setImplementationLevels(buildImplementationLevel());
-		} else if (path.equalsIgnoreCase("activity.locations")){
+		} else if (path.equalsIgnoreCase("activity.location")){
 			if (ampActivity.getLocations() != null){
 				for (Iterator iterator = ampActivity.getLocations().iterator(); iterator.hasNext();) {
 					AmpActivityLocation ampLocation = (AmpActivityLocation) iterator.next();
-					parent.getLocations().add(buildLocation(ampLocation.getLocation(), ampColumnEntry.getElementByName("funding")));
+					parent.getLocation().add(buildLocation(ampLocation.getLocation(), ampColumnEntry.getElementByName("funding")));
 				}
 			}
 		} else if (path.equalsIgnoreCase("activity.proposedApprovalDate")){
@@ -122,7 +128,7 @@ public class ExportBuilder {
 		} else if (path.equalsIgnoreCase("activity.actualStartDate")){
 			parent.setActualStartDate(buildDate(ampActivity.getActualStartDate()));
 		} else if (path.equalsIgnoreCase("activity.modifiedClosingDate")){
-//TODO			parent.setModifiedClosingDate(buildDate(ampActivity.getActivityCloseDate()));
+			parent.setModifiedClosingDate(buildDate(ampActivity.getActualCompletionDate()));
 		} else if (path.equalsIgnoreCase("activity.closingDate")){
 			parent.setModifiedClosingDate(buildDate(ampActivity.getActivityCloseDate()));
 		} else if (path.equalsIgnoreCase("activity.status")){
@@ -158,7 +164,7 @@ public class ExportBuilder {
 				parent.getFunding().add(buildFunding(ampFunding, ampColumnEntry));			
 			}
 		} else if (path.equalsIgnoreCase("activity.keywords")){
-			// TODO can not found 
+			// TODO skip at this moment.
 		} else if (path.equalsIgnoreCase("activity.components")){
 			//TODO 
 			/*
@@ -173,29 +179,74 @@ public class ExportBuilder {
 					parent.getIssues().add(buildIssue(issue, ampColumnEntry));
 				}
 			}	
-			
 		} else if (path.equalsIgnoreCase("activity.documents")){
 			if (ampActivity.getDocuments()  != null){
 				for (Iterator iterator = ampActivity.getDocuments().iterator(); iterator.hasNext();) {
-					Object issue = (Object) iterator.next();
-//					parent.getIssues().add(buildIssue(issue, ampColumnEntry));
+					CMSContentItem item = (CMSContentItem) iterator.next();
+					if (item.getIsFile()){
+						ActivityType.Documents doc = objectFactory.createActivityTypeDocuments();
+						doc.getDescription().add(item.getDescription());
+						doc.getTitle().add(item.getTitle());
+						if (item.getLanguage() != null){
+							doc.setLang(item.getLanguage().getCode());
+						}
+						parent.getDocuments().add(doc);
+					}
 				}
 			}	
-
-			
 		} else if (path.equalsIgnoreCase("activity.relatedLinks")){
+			if (ampActivity.getDocuments()  != null){
+				for (Iterator iterator = ampActivity.getDocuments().iterator(); iterator.hasNext();) {
+					CMSContentItem item = (CMSContentItem) iterator.next();
+					if (!item.getIsFile()){
+						ActivityType.RelatedLinks link = objectFactory.createActivityTypeRelatedLinks();
+						link.setDescription(item.getDescription());
+						link.setLabel(item.getTitle());
+						if (item.getLanguage() != null){
+							link.setLang(item.getLanguage().getCode());
+						}
+						parent.getRelatedLinks().add(link);
+					}
+				}
+			}	
 		} else if (path.equalsIgnoreCase("activity.relatedOrgs")){
+			if (ampActivity.getOrgrole() != null){
+				for (AmpOrgRole ampOrgRole : ampActivity.getOrgrole()) {
+					ActivityType.RelatedOrgs org = objectFactory.createActivityTypeRelatedOrgs();
+					
+					org.setValue(ampOrgRole.getOrganisation().getName());
+					org.setCode(ampOrgRole.getOrganisation().getOrgCode());
+//TODO					org.setLang("");
+
+					if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase(Constants.RESPONSIBLE_ORGANISATION)){
+						org.setType(DataExchangeConstants.ORG_ROLE_RESPONSIBLE);
+					} else if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase(Constants.EXECUTING_AGENCY)){
+						org.setType(DataExchangeConstants.ORG_ROLE_EXECUTING);
+					} else if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase(Constants.IMPLEMENTING_AGENCY)){
+						org.setType(DataExchangeConstants.ORG_ROLE_IMPLEMENTING);
+					} else if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase(Constants.BENEFICIARY_AGENCY)){
+						org.setType(DataExchangeConstants.ORG_ROLE_BENEFICIARY);
+					} else if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase(Constants.CONTRACTING_AGENCY)){
+						org.setType(DataExchangeConstants.ORG_ROLE_CONTRACTING);
+					}
+					
+
+					parent.getRelatedOrgs().add(org);
+				}
+			}
+			
 		} else if (path.equalsIgnoreCase("activity.donorContacts")){
+			
+			parent.getDonorContacts().add(buildContactType(ampActivity.getContFirstName(),
+					ampActivity.getContLastName(), ampActivity.getEmail()));	
 		} else if (path.equalsIgnoreCase("activity.govContacts")){
+			parent.getGovContacts().add(buildContactType("TODO","TODO","TODO"));	
 		} else if (path.equalsIgnoreCase("activity.additional")){
 			// TODO not implemented need more details
 		}
 	}
 
 	private ActivityType.Id buildActivityTypeId(AmpActivityInternalId ids) throws AmpExportException{
-		/* TODO  need correct implementation*/
-		
-
 		ActivityType.Id retValue = objectFactory.createActivityTypeId();
 		retValue.setUniqID(ids.getInternalId());
 
@@ -218,106 +269,82 @@ public class ExportBuilder {
 	}
 
 
-	private ActivityType.Locations buildLocation(AmpLocation location, AmpColumnEntry ampColumnEntry) throws AmpExportException{
-		/* TODO need correct implementation */
-		ActivityType.Locations retValue = objectFactory.createActivityTypeLocations();
+	private ActivityType.Location buildLocation(AmpLocation location, AmpColumnEntry ampColumnEntry) throws AmpExportException{
+		ActivityType.Location retValue = objectFactory.createActivityTypeLocation();
 		retValue.setLang(location.getLanguage());
-		//??		retValue.setLocationType(value);
-		retValue.setGis(location.getGisCoordinates());
-		retValue.setIso3(location.getIso3Code());
-		retValue.setCountryName(location.getCountry());
 		
-		if (location.getAmpRegion() != null){
-			retValue.setRegionCode(location.getAmpRegion().getRegionCode());
-			retValue.setRegionName(location.getAmpRegion().getName());
-
-			if (ampColumnEntry.isMandatory() || ampColumnEntry.isSelect()){
-				if (ampActivity.getRegionalFundings() != null){
-					Collection regFund = ampActivity.getRegionalFundings();
-					for (Iterator iterator = regFund.iterator(); iterator.hasNext();) {
-						AmpRegionalFunding regFunding = (AmpRegionalFunding) iterator.next();
-						if (location.getAmpRegion().equals(regFunding.getRegion())){
-							retValue.getFunding().add(buildRegionalFunding(regFunding, ampColumnEntry));
-						}
+//TODO		if (location.getDepartment())  can not found department
+		if (location.getAmpWoreda() != null){
+			retValue.setLocationType(DataExchangeConstants.LOCATION_TYPE_WOREDA); 
+			retValue.setLocationName(buildCodeValue(location.getAmpWoreda().getGeoCode(),location.getAmpWoreda().getName()));
+		} else if (location.getAmpZone() != null){
+			retValue.setLocationType(DataExchangeConstants.LOCATION_TYPE_ZONE); 
+			retValue.setLocationName(buildCodeValue(location.getAmpZone().getGeoCode(),location.getAmpZone().getName()));
+		} else if (location.getAmpRegion() != null){
+			retValue.setLocationType(DataExchangeConstants.LOCATION_TYPE_REGION); 
+			retValue.setLocationName(buildCodeValue(location.getAmpRegion().getGeoCode(),location.getAmpRegion().getName()));
+			
+			if (ampActivity.getRegionalFundings() != null){
+				Collection regFund = ampActivity.getRegionalFundings();
+				for (Iterator iterator = regFund.iterator(); iterator.hasNext();) {
+					AmpRegionalFunding regFunding = (AmpRegionalFunding) iterator.next();
+					if (location.getAmpRegion().equals(regFunding.getRegion())){
+						retValue.getLocationFunding().add(buildLocationFunding(regFunding, ampColumnEntry));
 					}
 				}
 			}
+			
+		} else if (location.getDgCountry() != null){
+			retValue.setLocationType(DataExchangeConstants.LOCATION_TYPE_ZONE); 
+			retValue.setLocationName(buildCodeValue(location.getDgCountry().getIso3(),location.getDgCountry().getCountryName()));
 		}
-
+		retValue.setGis(location.getGisCoordinates());
+		retValue.setIso3(location.getDgCountry().getIso3());
+		retValue.setCountryName(location.getDgCountry().getCountryName());
+		
 		return retValue;
 	}
 
-	private FundingType buildRegionalFunding(AmpRegionalFunding ampfunding, AmpColumnEntry ampColumnEntry) throws AmpExportException{
-		FundingType retValue = objectFactory.createFundingType();
-		int subType = 0 ; // projections = 1; commitments = 2; disbursements = 3; expenditures = 4;
+	private LocationFundingType buildLocationFunding(AmpRegionalFunding ampfunding, AmpColumnEntry ampColumnEntry) throws AmpExportException{
+		LocationFundingType retValue = objectFactory.createLocationFundingType();
 		
-		retValue.setCode("TODO");
-		retValue.setType("TODO");
-
-		for (AmpColumnEntry elem : ampColumnEntry.getElements()) {
-			if (elem.isMandatory() || elem.isSelect()){
-				String path = elem.getPath();
-
-				if (path.equalsIgnoreCase("activity.locations.funding.fundingOrg")){
-					if (ampfunding.getReportingOrganization() != null){
-						retValue.setFundingOrg(buildCodeValue(ampfunding.getReportingOrganization().getOrgCode(), ampfunding.getReportingOrganization().getName()));
-					}
-				} else if (path.equalsIgnoreCase("activity.locations.funding.assistanceType")){
-					retValue.setAssistanceType(buildCodeValue(null,"TODO"));
-				} else if (path.equalsIgnoreCase("activity.locations.funding.financingInstrument")){
-					retValue.setFinancingInstrument(buildCodeValue("TODO"));
-				} else if (path.equalsIgnoreCase("activity.locations.funding.conditions")){
-					retValue.setConditions(buildFreeText(null, "TODO"));
-				} else if (path.equalsIgnoreCase("activity.locations.funding.signatureDate")){
-					retValue.setSignatureDate(buildDate(new Date())); //TODO
-				} else if (path.equalsIgnoreCase("activity.locations.funding.projections")){
-					// not present
-					/*
-					if (ampfunding.getTransactionType().intValue() == 0){
-						subType = 1;
-					}
-					*/
-				} else if (path.equalsIgnoreCase("activity.locations.funding.commitments")){
-					if (ampfunding.getTransactionType().intValue() == 0){
-						subType = 2;
-					}
-				} else if (path.equalsIgnoreCase("activity.locations.funding.disbursements")){
-					if (ampfunding.getTransactionType().intValue() == 1){
-						subType = 3;
-					}
-				} else if (path.equalsIgnoreCase("activity.locations.funding.expenditures")){
-					if (ampfunding.getTransactionType().intValue() == 2){
-						subType = 4;
-					}
-				}
-			}
-		}	
-		String fDetailType = (ampfunding.getAdjustmentType() == 1) ? "Actual": "Planned";
+		String fDetailType = (ampfunding.getAdjustmentType() == 1) ? 
+				DataExchangeConstants.ADJUSTMENT_TYPE_ACTUAL : 
+					DataExchangeConstants.ADJUSTMENT_TYPE_PLANNED;
 		
 		FundingDetailType fDetail = buildFundingDetail(fDetailType, ampfunding.getTransactionDate(), 
 				ampfunding.getTransactionAmount().longValue(), ampfunding.getCurrency().getCurrencyCode());
-		switch (subType) {
-			case 2:
+
+
+		switch (ampfunding.getTransactionType().intValue()) {
+		case Constants.COMMITMENT:
+			if (ampColumnEntry.getElementByName("commitments").canExport()){
 				retValue.getCommitments().add(fDetail);
-				break;
-			case 3:
+			}
+			break;
+		case Constants.DISBURSEMENT:
+			if (ampColumnEntry.getElementByName("disbursements").canExport()){
 				retValue.getDisbursements().add(fDetail);
-				break;
-			case 4:
+			}
+			break;
+		case Constants.EXPENDITURE:
+			if (ampColumnEntry.getElementByName("expenditures").canExport()){
 				retValue.getExpenditures().add(fDetail);
-				break;
+			}
+			break;
+
 		}
+		
 		return retValue;
 	}	
 
 
 	private FundingType buildFunding(AmpFunding funding, AmpColumnEntry ampColumnEntry) throws AmpExportException{
 		FundingType retValue = objectFactory.createFundingType();
-		retValue.setCode("TODO");
-		retValue.setType("TODO");
+		retValue.setCode(funding.getFinancingId());
 
 		for (AmpColumnEntry elem : ampColumnEntry.getElements()) {
-			if (elem.isMandatory() || elem.isSelect()){
+			if (elem.canExport()){
 				buildFundingSubElements(funding, retValue, elem);
 			}
 		}				
@@ -347,7 +374,7 @@ public class ExportBuilder {
 				Calendar cal = Calendar.getInstance();
 				cal.setTime(ampProj.getProjectionDate());
 				proj.setStartYear(cal.get(Calendar.YEAR));
-//				proj.setEndYear(null); // do not have end date. 
+//				proj.setEndYear(null); // TODO 
 				funding.getProjections().add(proj);
 			}
 
@@ -375,16 +402,14 @@ public class ExportBuilder {
 		}
 	}
 
-	private ActivityType.Components buildComponent(Components<FundingDetail> component, AmpColumnEntry ampColumnEntry) throws AmpExportException{	
-		ActivityType.Components retValue = objectFactory.createActivityTypeComponents();
+	private ActivityType.Component buildComponent(Components<FundingDetail> component, AmpColumnEntry ampColumnEntry) throws AmpExportException{	
+		ActivityType.Component retValue = objectFactory.createActivityTypeComponent();
 		
-		retValue.setComponentTitle(buildFreeText(component.getTitle()));
-		retValue.setComponentDescription(buildFreeText(component.getDescription()));
-		
+		retValue.setComponentName(component.getTitle());
 		
 		
 		for (PhysicalProgress pProgress : component.getPhyProgress()) {
-			ActivityType.Components.PhysicalProgress physicalProgress = objectFactory.createActivityTypeComponentsPhysicalProgress();
+			ActivityType.Component.PhysicalProgress physicalProgress = objectFactory.createActivityTypeComponentPhysicalProgress();
 			physicalProgress.setTitle(buildFreeText(pProgress.getTitle()));
 			physicalProgress.setDescription(buildFreeText(pProgress.getDescription()));
 			physicalProgress.setReportingDate(buildDate(getDate(pProgress.getReportingDate())));
@@ -398,7 +423,34 @@ public class ExportBuilder {
 	private ActivityType.Issues buildIssue(AmpIssues ampIssue, AmpColumnEntry ampColumnEntry) throws AmpExportException{
 		ActivityType.Issues retValue = objectFactory.createActivityTypeIssues();
 		
+		retValue.setCode("TODO");
+//TODO		retValue.setLang(ampIssue.);
+		retValue.setTitle(ampIssue.getName());
 		
+		if (ampIssue.getMeasures() != null){
+			for (Iterator iterator = ampIssue.getMeasures().iterator(); iterator.hasNext();) {
+				AmpMeasure ampMeasure = (AmpMeasure) iterator.next();
+				ActivityType.Issues.Measure mesure = new ActivityType.Issues.Measure();
+				mesure.setCode(new Integer(-1)); //TODO
+//TODO				mesure.setLang("");
+				mesure.setTitle(ampMeasure.getName());
+				
+				if (ampMeasure.getActors() != null){
+					for (Iterator iterator2 = ampMeasure.getActors().iterator(); iterator2.hasNext();) {
+						AmpActor ampActor = (AmpActor) iterator2.next();
+						ActivityType.Issues.Measure.Actor actor = new ActivityType.Issues.Measure.Actor();
+						
+						actor.setCode(new Integer(-1)); //TODO
+//TODO						actor.setLang("");
+						actor.setValue(ampActor.getName());
+						
+						mesure.getActor().add(actor);
+					}
+				}
+				
+				retValue.getMeasure().add(mesure);
+			}
+		}
 		
 		return retValue;
 	}
@@ -411,7 +463,7 @@ public class ExportBuilder {
 		
 
 		for (AmpColumnEntry elem : ampColumnEntry.getElements()) {
-			if (elem.isMandatory() || elem.isSelect()){
+			if (elem.() || elem.isSelect()){
 				buildFundingSubElements(funding, retValue, elem);
 			}
 		}				
@@ -467,6 +519,17 @@ public class ExportBuilder {
 	}
 
 */	
+	
+	private ContactType buildContactType (String firstName, String lastName, String mail) throws AmpExportException{
+		ContactType retValue = objectFactory.createContactType();
+		retValue.setFirstName(firstName);
+		retValue.setLastName(lastName);
+		retValue.setEmail(mail);
+		
+		return retValue;
+	}
+	
+	
 	private CodeValueType buildCodeValue(AmpCategoryValue ampCategoryValue) throws AmpExportException{
 		/* TODO not sure that code is same */
 		if (ampCategoryValue == null){

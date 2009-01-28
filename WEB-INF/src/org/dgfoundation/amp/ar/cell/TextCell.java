@@ -68,6 +68,19 @@ public class TextCell extends Cell {
 		return value.length();
 	}
 	
+	/**
+	 * Please use this as key in translations, it generates hash from value.
+	 * this is workaround because value usually contains huge HTML tags on several lines and this kills many things. 
+	 * @return hash code of value or '0' if values is NULL.
+	 */
+	public String getTranslationKey(){
+		String result = "0";
+		if (value != null){
+			result = Integer.toString(value.hashCode());
+		}
+		return result;
+	}
+	
 	public String getShortTextVersion() {
 		if (!getHasLongVersion())
 			return value;
@@ -75,7 +88,6 @@ public class TextCell extends Cell {
 		if(alteredValue.length()<shortLength)
 			return alteredValue;
 		return alteredValue.substring(0, shortLength-1);
-		
 	}
 	
 	public boolean getHasLongVersion() {

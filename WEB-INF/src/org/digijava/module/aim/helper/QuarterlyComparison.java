@@ -1,135 +1,86 @@
-package org.digijava.module.aim.helper ;
+package org.digijava.module.aim.helper;
 
-public class QuarterlyComparison
-{
+public class QuarterlyComparison {
 	private int fiscalYear;
-	private int fiscalQuarter ;
-	private String plannedCommitment ;
-	private String actualCommitment ;
-	private String plannedDisbursement ;
-	private String actualDisbursement ;
-	private String plannedExpenditure ;
-	private String actualExpenditure ;
-        private String actualDisbOrder ;
+	private int fiscalQuarter;
+	private double plannedCommitment;
+	private double actualCommitment;
+	private double plannedDisbursement;
+	private double actualDisbursement;
+	private double plannedExpenditure;
+	private double actualExpenditure;
+	private double actualDisbOrder;
 
-	/**
-	 * @return
-	 */
-	public String getActualCommitment() {
-		return actualCommitment;
-	}
-
-	/**
-	 * @return
-	 */
-	public String getActualDisbursement() {
-		return actualDisbursement;
-	}
-
-	/**
-	 * @return
-	 */
-	public String getActualExpenditure() {
-		return actualExpenditure;
-	}
-
-	/**
-	 * @return
-	 */
 	public int getFiscalYear() {
 		return fiscalYear;
 	}
 
-	/**
-	 * @return
-	 */
-	public String getPlannedCommitment() {
-		return plannedCommitment;
+	public void setFiscalYear(int fiscalYear) {
+		this.fiscalYear = fiscalYear;
 	}
 
-	/**
-	 * @return
-	 */
-	public String getPlannedDisbursement() {
-		return plannedDisbursement;
-	}
-
-	/**
-	 * @return
-	 */
-	public String getPlannedExpenditure() {
-		return plannedExpenditure;
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setActualCommitment(String string) {
-		actualCommitment = string;
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setActualDisbursement(String string) {
-		actualDisbursement = string;
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setActualExpenditure(String string) {
-		actualExpenditure = string;
-	}
-
-	/**
-	 * @param i
-	 */
-	public void setFiscalYear(int i) {
-		fiscalYear = i;
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setPlannedCommitment(String string) {
-		plannedCommitment = string;
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setPlannedDisbursement(String string) {
-		plannedDisbursement = string;
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setPlannedExpenditure(String string) {
-		plannedExpenditure = string;
-	}
-
-	/**
-	 * @return
-	 */
 	public int getFiscalQuarter() {
 		return fiscalQuarter;
 	}
 
-        public String getActualDisbOrder() {
-                return actualDisbOrder;
-        }
-
-        /**
-	 * @param i
-	 */
-	public void setFiscalQuarter(int i) {
-		fiscalQuarter = i;
+	public void setFiscalQuarter(int fiscalQuarter) {
+		this.fiscalQuarter = fiscalQuarter;
 	}
 
-        public void setActualDisbOrder(String actualDisbOrder) {
-                this.actualDisbOrder = actualDisbOrder;
-        }
+	public double getPlannedCommitment() {
+		return plannedCommitment;
+	}
+
+	public void setPlannedCommitment(double plannedCommitment) {
+		this.plannedCommitment = plannedCommitment;
+	}
+
+	public double getActualCommitment() {
+		return actualCommitment;
+	}
+
+	public void setActualCommitment(double actualCommitment) {
+		this.actualCommitment = actualCommitment;
+	}
+
+	public double getPlannedDisbursement() {
+		return plannedDisbursement;
+	}
+
+	public void setPlannedDisbursement(double plannedDisbursement) {
+		this.plannedDisbursement = plannedDisbursement;
+	}
+
+	public double getActualDisbursement() {
+		return actualDisbursement;
+	}
+
+	public void setActualDisbursement(double actualDisbursement) {
+		this.actualDisbursement = actualDisbursement;
+	}
+
+	public double getPlannedExpenditure() {
+		return plannedExpenditure;
+	}
+
+	public void setPlannedExpenditure(double plannedExpenditure) {
+		this.plannedExpenditure = plannedExpenditure;
+	}
+
+	public double getActualExpenditure() {
+		return actualExpenditure;
+	}
+
+	public void setActualExpenditure(double actualExpenditure) {
+		this.actualExpenditure = actualExpenditure;
+	}
+
+	public double getActualDisbOrder() {
+		return actualDisbOrder;
+	}
+
+	public void setActualDisbOrder(double actualDisbOrder) {
+		this.actualDisbOrder = actualDisbOrder;
+	}
 
 }

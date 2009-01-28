@@ -146,23 +146,26 @@ public class IndicatorUtil {
 	 * @throws DgException
 	 */
 	public static void deleteIndicator(Long id) throws DgException{
-		deleteIndicator(getIndicator(id));
-	}
-
-	/**
-	 * Removes {@link AmpIndicator} from db.
-	 * Also Indicator values will be deleted because of AmpIndicator.hbm.xml mappings.
-	 * @param indicator AmpIndicator object
-	 * @throws DgException
-	 */
-	public static void deleteIndicator(AmpIndicator indicator) throws DgException{
-		unAssigneIndicatorFromAll(indicator);
 		Session session=PersistenceManager.getRequestDBSession();
 		Transaction tx=null;
 		try {
 			tx=session.beginTransaction();
 			//indicator.getSectors().clear();
 			//session.update(indicator);
+			AmpIndicator indicator = (AmpIndicator)session.load(AmpIndicator.class, id);
+
+			//Indicator values for themes.
+			if (indicator.getValuesTheme()!=null){
+				for (IndicatorConnection indicatorValues : getAllConnectionsOfIndicator(indicator)) {
+					try {
+						session.delete(indicatorValues);
+					} catch (HibernateException e) {
+						e.printStackTrace();
+					}
+				}
+				indicator.getValuesTheme().clear();
+			}
+
 			session.delete(indicator);
 			tx.commit();
 		} catch (HibernateException e) {
@@ -229,47 +232,7 @@ public class IndicatorUtil {
 		return result;
 	}
 	
-	/**
-	 * Drops all connections of indicator to activities, themes and sectors.
-	 * Removing connection beans will cascade remove on indicator values too.
-	 * @param indicator
-	 * @throws DgException
-	 */
-	public static void unAssigneIndicatorFromAll(AmpIndicator indicator)throws DgException{
-		Session session=PersistenceManager.getRequestDBSession();
-		Transaction tx=null;
-		try {
-			tx=session.beginTransaction();
 			
-			//Indicator values for themes.
-			if (indicator.getValuesTheme()!=null){
-				for (IndicatorConnection indicatorValues : getAllConnectionsOfIndicator(indicator)) {
-					try {
-						session.delete(indicatorValues);
-					} catch (HibernateException e) {
-						e.printStackTrace();
-					}
-				}
-				indicator.getValuesTheme().clear();
-			}
-			
-			//save indicator changes.
-			session.save(indicator);
-			
-			//try to commit
-			if (tx!=null) tx.commit();
-		} catch (HibernateException e) {
-			if (tx!=null){
-				try {
-					tx.rollback();
-				} catch (HibernateException e1) {
-					throw new DgException("Cannot rollback unassigne inndicator from all entities",e);
-				}
-			}
-			throw new DgException("Cannot unassigne inndicator from all entities",e);
-		}
-	}
-	
 	/**
 	 * Loads IndicatorTheme connection bean.
 	 * NULL if not found.
@@ -973,21 +936,25 @@ public class IndicatorUtil {
 					bean.setCurrentVal(new Float(value.getValue()));
 					bean.setCurrentValComments(value.getComment());
 					bean.setCurrentValDate(DateConversion.ConvertDateToString(value.getValueDate()));
+					bean.setIndicatorsCategory(value.getLogFrame());
 				}
 				if (value.getValueType()==AmpIndicatorValue.BASE){
 					bean.setBaseVal(new Float(value.getValue()));
 					bean.setBaseValComments(value.getComment());
 					bean.setBaseValDate(DateConversion.ConvertDateToString(value.getValueDate()));
+					bean.setIndicatorsCategory(value.getLogFrame());
 				}
 				if (value.getValueType()==AmpIndicatorValue.TARGET){
 					bean.setTargetVal(new Float(value.getValue()));
 					bean.setTargetValComments(value.getComment());
 					bean.setTargetValDate(DateConversion.ConvertDateToString(value.getValueDate()));
+					bean.setIndicatorsCategory(value.getLogFrame());
 				}
 				if (value.getValueType()==AmpIndicatorValue.REVISED){
 					bean.setRevisedTargetVal(new Float(value.getValue()));
 					bean.setRevisedTargetValComments(value.getComment());
 					bean.setRevisedTargetValDate(DateConversion.ConvertDateToString(value.getValueDate()));
+					bean.setIndicatorsCategory(value.getLogFrame());
 				}
 			}
 		}

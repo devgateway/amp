@@ -21,7 +21,7 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
-
+<%@ taglib uri="/taglib/aim" prefix="aim" %>
 
 <style>
 
@@ -649,7 +649,7 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 																			<div align="right">
 
-																				<bean:write name="monthlyComparison" property="actualCommitment" format="#.##" />
+																				<aim:formatNumber value="${monthlyComparison.actualCommitment}"/>
 																			</div>
 
 																		</td>
@@ -660,7 +660,7 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 																			<div align="right">
 
-																				<bean:write name="monthlyComparison" property="disbOrders" format="#.##"/>
+																				<aim:formatNumber value="${monthlyComparison.disbOrders}"/>
 																			</div>
                                                                                                                                                             </field:display >
 
@@ -673,7 +673,7 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 																			<div align="right">
 
-																				<bean:write name="monthlyComparison" property="plannedDisbursement" format="#.##"/>
+																				<aim:formatNumber value="${monthlyComparison.plannedDisbursement}"/>
 																			</div>
 
 																		</td>
@@ -682,7 +682,7 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 																			<div align="right">
 
-																				<bean:write name="monthlyComparison" property="actualDisbursement" format="#.##" />
+																				<aim:formatNumber value="${monthlyComparison.actualDisbursement}" />
 																			</div>
 
 																		</td>
@@ -691,7 +691,7 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 																			<div align="right">
 
-																				<bean:write name="monthlyComparison" property="actualExpenditure" format="#.##"/>
+																					<aim:formatNumber value="${monthlyComparison.actualExpenditure}" />
 																			</div>
 
 																		</td>
@@ -719,7 +719,7 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 																		<span class="note">
 
-																			<bean:write name="aimMonthlyInfoForm" property="totalActualCommitment" format="#.##"/>
+																			<aim:formatNumber value="${aimMonthlyInfoForm.totalActualCommitment}"/>
 
 																		</span>
 
@@ -734,7 +734,7 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 																		<span class="note">
 
-																			<bean:write name="aimMonthlyInfoForm" property="totalDisbOrder" format="#.##" />
+																			<aim:formatNumber value="${aimMonthlyInfoForm.totalDisbOrder}"/>
 
 																		</span>
 
@@ -752,7 +752,7 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 																		<span class="note">
 
-																			<bean:write name="aimMonthlyInfoForm" property="totalPlannedDisbursement" format="#.##" />
+																			<aim:formatNumber value="${aimMonthlyInfoForm.totalPlannedDisbursement}"/>
 
 																		</span>
 
@@ -766,7 +766,7 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 																		<span class="note">
 
-																			<bean:write name="aimMonthlyInfoForm" property="totalActualDisbursement" format="#.##" />
+																			<aim:formatNumber value="${aimMonthlyInfoForm.totalActualDisbursement}" />
 
 																		</span>
 
@@ -782,7 +782,7 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 																		<span class="note">
 
-																			<bean:write name="aimMonthlyInfoForm" property="totalActualExpenditure" format="#.##"/>
+																			<aim:formatNumber value="${aimMonthlyInfoForm.totalActualExpenditure}"/>
 
 																		</span>
 

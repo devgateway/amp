@@ -223,22 +223,14 @@ public class UpdateAppSettings extends Action {
 				HttpSession httpSession = request.getSession();
 				AmpReports defaultAmpReport = (AmpReports) httpSession
 						.getAttribute(Constants.DEFAULT_TEAM_REPORT);
-				/**
-				 * Just checking whether defaultTeamReport has changed
-				 */
-				if ((defaultAmpReport == null && ampReport != null)
-						|| (defaultAmpReport != null && ampReport == null)
-						|| (defaultAmpReport != null && ampReport != null && defaultAmpReport
-								.getAmpReportId().longValue() != ampReport
-								.getAmpReportId().longValue())) {
-					ampAppSettings.setDefaultTeamReport(ampReport);
+			
+				ampAppSettings.setDefaultTeamReport(ampReport);
 					httpSession.setAttribute(Constants.DEFAULT_TEAM_REPORT,
 							ampAppSettings.getDefaultTeamReport());
 					httpSession.setAttribute("filterCurrentReport",
 							ampAppSettings.getDefaultTeamReport());
 					// this.updateAllTeamMembersDefaultReport( tm.getTeamId(),
 					// ampReport);
-				}
 				// added by mouhamad for burkina on 21/02/08
 				String name = "- "
 						+ ampAppSettings.getCurrency().getCurrencyName();

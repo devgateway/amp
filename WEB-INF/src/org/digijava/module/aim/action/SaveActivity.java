@@ -907,6 +907,7 @@ public class SaveActivity extends Action {
 				ampOrgRole.setOrganisation(ampOrg);
 				orgRole.add(ampOrgRole);
 			}
+			activity.setOrgrole(orgRole);
 		}
 
         
@@ -1510,7 +1511,12 @@ public class SaveActivity extends Action {
 				orgRole.add(ampOrgRole);
 			}
 		}
-		activity.setOrgrole(orgRole);
+		//a previous step is adding another role so we have to check it
+		if (activity.getOrgrole()==null){
+			activity.setOrgrole(orgRole);
+		}else{
+			activity.getOrgrole().addAll(orgRole);
+		}
 		
 		
 	}

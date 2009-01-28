@@ -228,6 +228,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display feature="Government Contact Information" name="Government First Name"></field:display> 
 <field:display feature="Identification" name="AMP ID"></field:display> 
 <field:display feature="Identification" name="Data Source"></field:display> 
+<field:display feature="Identification" name="Computation"></field:display>
 <field:display feature="Identification" name="Description"></field:display> 
 <field:display feature="Identification" name="Objective Assumption"></field:display> 
 <field:display feature="Identification" name="Objective Comments"></field:display> 
@@ -571,6 +572,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 
 <field:display name="National Plan Objective" feature="Program"></field:display> 
 <field:display name="National Planning Objectives" feature="NPD Programs"></field:display> 
+
+<field:display name="Parent National Planning Objectives" feature="NPD Programs"></field:display> 
 <field:display name="Objective Comments" feature="Identification"></field:display> 
 <field:display name="Objective" feature="Identification"></field:display> 
 <field:display name="Objectively Verifiable Indicators" feature="Identification"></field:display> 

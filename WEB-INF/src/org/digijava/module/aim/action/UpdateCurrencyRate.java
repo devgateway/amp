@@ -115,7 +115,7 @@ public class UpdateCurrencyRate extends Action {
                         String amount="0";
                         if((rate!=null)&&(rate!=0)){
                             //amount=FormatHelper.formatNumber(1/rate);
-                        	amount=FormatHelper.formatNumber(rate);
+                        	amount=FormatHelper.formatNumberNotRounded(rate);
                         }
                         crForm.setUpdateCRateAmount(amount);
                         crForm.setReset(false);

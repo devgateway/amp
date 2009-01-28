@@ -1,73 +1,40 @@
 package org.digijava.module.aim.helper;
 
 public class AllTotals {
-	private String totalActualCommitment;
-	private String totalPlannedDisbursement;
-	private String totalActualDisbursement;
-	private String totalActualExpenditure;
-        private String totalDisbOrder;
-	/**
-	 * @return
-	 */
-	public String getTotalActualCommitment() {
+	private double totalActualCommitment;
+	private double totalPlannedDisbursement;
+	private double totalActualDisbursement;
+	private double totalActualExpenditure;
+	private double totalDisbOrder;
+	public double getTotalActualCommitment() {
 		return totalActualCommitment;
 	}
-
-	/**
-	 * @return
-	 */
-	public String getTotalActualDisbursement() {
-		return totalActualDisbursement;
+	public void setTotalActualCommitment(double totalActualCommitment) {
+		this.totalActualCommitment = totalActualCommitment;
 	}
-
-	/**
-	 * @return
-	 */
-	public String getTotalActualExpenditure() {
-		return totalActualExpenditure;
-	}
-
-	/**
-	 * @return
-	 */
-	public String getTotalPlannedDisbursement() {
+	public double getTotalPlannedDisbursement() {
 		return totalPlannedDisbursement;
 	}
-
-        public String getTotalDisbOrder() {
-                return totalDisbOrder;
-        }
-
-        /**
-	 * @param string
-	 */
-	public void setTotalActualCommitment(String string) {
-		totalActualCommitment = string;
+	public void setTotalPlannedDisbursement(double totalPlannedDisbursement) {
+		this.totalPlannedDisbursement = totalPlannedDisbursement;
 	}
-
-	/**
-	 * @param string
-	 */
-	public void setTotalActualDisbursement(String string) {
-		totalActualDisbursement = string;
+	public double getTotalActualDisbursement() {
+		return totalActualDisbursement;
 	}
-
-	/**
-	 * @param string
-	 */
-	public void setTotalActualExpenditure(String string) {
-		totalActualExpenditure = string;
+	public void setTotalActualDisbursement(double totalActualDisbursement) {
+		this.totalActualDisbursement = totalActualDisbursement;
 	}
-
-	/**
-	 * @param string
-	 */
-	public void setTotalPlannedDisbursement(String string) {
-		totalPlannedDisbursement = string;
+	public double getTotalActualExpenditure() {
+		return totalActualExpenditure;
 	}
-
-        public void setTotalDisbOrder(String totalDisbOrder) {
-                this.totalDisbOrder = totalDisbOrder;
-        }
+	public void setTotalActualExpenditure(double totalActualExpenditure) {
+		this.totalActualExpenditure = totalActualExpenditure;
+	}
+	public double getTotalDisbOrder() {
+		return totalDisbOrder;
+	}
+	public void setTotalDisbOrder(double totalDisbOrder) {
+		this.totalDisbOrder = totalDisbOrder;
+	}
 
 }

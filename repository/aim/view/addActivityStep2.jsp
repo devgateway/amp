@@ -121,13 +121,13 @@ function removeAllLocations(){
 	  	checkedItems[a].checked = true;
 	  }
 	  removeSelLocations();
-  	}else{
-	  	if(checkedItems!=null){
+  	}else if(checkedItems!=null){
 	  		checkedItems.checked = true;
 	  		removeSelLocations();
-	  	}	
+  	}else{
+  	  	return false;
 	}
-  return false;
+  	return true;
   }
   catch(err){
   	return false;
@@ -140,6 +140,18 @@ function removeAllLocations(){
   document.aimEditActivityForm.submit();
   return true;
 }
+
+function locationLevelChanged(){
+	 <digi:context name="locationLevelChanged" property="context/module/moduleinstance/locationLevelChanged.do?edit=true" />
+	 document.aimEditActivityForm.action = "<%= locationLevelChanged %>";
+	 document.aimEditActivityForm.target = "_self"
+	 document.aimEditActivityForm.submit();
+	 return true;
+
+}
+
+
+
 function validateForm(){
   <c:set var="errMsgAddSector">
   <digi:trn key="aim:addSecorErrorMessage">

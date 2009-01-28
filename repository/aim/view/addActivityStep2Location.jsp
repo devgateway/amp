@@ -64,6 +64,12 @@
 														<digi:trn key="aim:addActivityImplLevelFirstLine">Please select from below</digi:trn>
 													</c:set>
 													<category:showoptions multiselect="false" firstLine="${translation}" name="aimEditActivityForm" property="location.levelId" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LEVEL_KEY %>" styleClass="inp-text" />
+	                                              	<script language="Javascript">                                             	
+														var locationLevelSelect = document.getElementsByName("location.levelId")[0];
+														locationLevelSelect.onchange=function() {
+															locationLevelChanged();
+	                                              		}     	
+                                              		</script>
 												</td>
                                             </tr>
                                             </field:display>
@@ -88,15 +94,16 @@
 													</c:set>
 													
 														 									
-													<category:showoptions multiselect="false" firstLine="${translation}" name="aimEditActivityForm" property="location.implemLocationLevel" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>" styleClass="inp-text" />
+													<category:showoptions multiselect="false" firstLine="${translation}" name="aimEditActivityForm" property="location.implemLocationLevel" tag="${aimEditActivityForm.location.levelId}" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>" styleClass="inp-text" />
 												                                             													                                             	                                              	
 	                                              	<script language="Javascript">                                             	
-													var implemLocationLevelSelect = document.getElementsByName("location.implemLocationLevel")[0];
-	                                              		implemLocationLevelSelect.onchange=function() {
-	                                              			removeAllLocations();
-	                                              	}
-     	
-                                              	</script>
+														var implemLocationLevelSelect = document.getElementsByName("location.implemLocationLevel")[0];
+														if(implemLocationLevelSelect!=null){
+		                                              		implemLocationLevelSelect.onchange=function() {
+		                                              			removeAllLocations();
+		                                              		}
+														}
+                                              		</script>
 											</td>
                                             </tr>
                                             </field:display>

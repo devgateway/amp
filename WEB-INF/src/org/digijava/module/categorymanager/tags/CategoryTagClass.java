@@ -6,6 +6,7 @@ package org.digijava.module.categorymanager.tags;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
@@ -43,6 +44,8 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 	String categoryName	= null;
 	
 	String firstLine	= null;
+	
+	private Long tag			= null;
 	
 	StringBuffer outerDynamicAttributes	= new StringBuffer(" ");
 	StringBuffer innerDynamicAttributes	= new StringBuffer(" ");
@@ -110,8 +113,17 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 					ampCategoryValues	= CategoryManagerUtil.getAmpCategoryValueCollection(categoryName, ordered, thisRequest);
 			}
 			
+			if (ampCategoryValues != null && getTag() != null) {
+				Set<AmpCategoryValue> tagged = CategoryManagerUtil
+						.getTaggedCategoryValues(getTag(), keyName);
+				if (tagged == null)
+					ampCategoryValues.clear();
+				else
+					ampCategoryValues.retainAll(tagged);
+			}
 			
-			if (ampCategoryValues != null && ampCategoryValues.size() > 0) {
+			
+			if (ampCategoryValues != null) {
 				ampCategoryClass			= ((AmpCategoryValue)ampCategoryValues.toArray()[0]).getAmpCategoryClass();
 				boolean isMultiselect		= this.getMultiselect(ampCategoryClass);
 				if (isMultiselect) {
@@ -358,6 +370,12 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 	}
 	public void setFirstLine(String firstLine) {
 		this.firstLine = firstLine;
+	}
+	public void setTag(Long tag) {
+		this.tag = tag;
+	}
+	public Long getTag() {
+		return tag;
 	}
 	
 	

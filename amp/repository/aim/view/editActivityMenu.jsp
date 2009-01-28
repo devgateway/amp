@@ -146,8 +146,8 @@ var flag;
 var form=document.aimEditActivityForm;
 var val=form.step;
 if(typeof val =='undefined'){
-    val=document.forms[2].step;
-    form=document.forms[2];
+    val=document.forms[1].step;
+    form=document.forms[1];
 }
 
 if(draftStatus!=null && draftStatus.value!="true"

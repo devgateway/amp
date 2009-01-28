@@ -168,7 +168,7 @@ var isAlreadySubmitted = false;
 	function load()
 	{
 		var Warn="<digi:trn key="aim:addFunding:warn:dup">This information is a duplicate of existing funding information. Do you wish to proceed?</digi:trn>";
-		if(document.getElementById("dupFunding").value == "false")
+		if ((document.getElementById("dupFunding").value == "false") && (!isTotDisbIsBiggerThanTotCom()))
 		{
 				<digi:context name="addAct" property="context/module/moduleinstance/addActivity.do?edit=true"/>
 				document.aimEditActivityForm.action = "<%=addAct%>";
@@ -180,7 +180,7 @@ var isAlreadySubmitted = false;
 		{
 			if(document.getElementsByName("funding.firstSubmit")[0].value == "true")
 			{
-				if(confirm(Warn))
+				if((confirm(Warn)) && (!isTotDisbIsBiggerThanTotCom()))
 				{
 					<digi:context name="addAct" property="context/module/moduleinstance/addActivity.do?edit=true"/>
 					document.aimEditActivityForm.action = "<%=addAct%>";
@@ -192,6 +192,16 @@ var isAlreadySubmitted = false;
 		}
 	}
 
+	function isTotDisbIsBiggerThanTotCom() {
+		var Warn="<digi:trn key="aim:addFunding:warn:disbSupCom">Sum of Disbursments is bigger than sum of commitments.</digi:trn>";
+		if(document.getElementById("totDisbIsBiggerThanTotCom").value == "true") {
+			alert(Warn)
+			return true;					
+		} else {
+			return false;
+		}
+	}
+	
 	function unload() {
 	}
 
@@ -225,6 +235,8 @@ var isAlreadySubmitted = false;
 <html:hidden name="aimEditActivityForm" styleId="numProjections" property="funding.numProjections"/>
 <html:hidden name="aimEditActivityForm" property="editAct"/>
 <html:hidden name="aimEditActivityForm" property="funding.firstSubmit"/>
+<html:hidden name="aimEditActivityForm" styleId="totDisbIsBiggerThanTotCom" property="funding.totDisbIsBiggerThanTotCom"/>
+
 
 <input type="hidden" name="funding.isEditFunfing" value="true"/>
 

@@ -44,7 +44,9 @@ public class GlobalSettingsConstants {
     public static final String SPLIT_BY_TYPE_OF_ASSISTANCE= "Enabled Split by Type Of Assistance";
 
     public static final String SHOW_WIDGET_PLACE_NAMES = "Show widget place names";
-    
+
     public static final String AUTO_LOGIN = "Activate Auto Login";
+    
+    public static final String ALERT_IF_DISBURSMENT_BIGGER_COMMITMENTS = "Alert if sum of disbursments is bigger than sum of commitments";
 
 }

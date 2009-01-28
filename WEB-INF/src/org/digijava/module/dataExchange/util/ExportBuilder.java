@@ -8,32 +8,20 @@ import java.util.Iterator;
 
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityInternalId;
-import org.digijava.module.aim.dbentity.AmpActivityLocation;
-import org.digijava.module.aim.dbentity.AmpActivityProgram;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
-import org.digijava.module.aim.dbentity.AmpActor;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
-import org.digijava.module.aim.dbentity.AmpIssues;
-import org.digijava.module.aim.dbentity.AmpLocation;
-import org.digijava.module.aim.dbentity.AmpMeasure;
-import org.digijava.module.aim.dbentity.AmpNotes;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpRegionalFunding;
-import org.digijava.module.aim.dbentity.CMSContentItem;
+
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.PhysicalProgress;
-import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.*;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.dataExchange.Exception.AmpExportException;
 import org.digijava.module.dataExchange.jaxb.ActivityType;
 import org.digijava.module.dataExchange.jaxb.CodeValueType;
+import org.digijava.module.dataExchange.jaxb.ComponentFundingType;
 import org.digijava.module.dataExchange.jaxb.ContactType;
 import org.digijava.module.dataExchange.jaxb.DateType;
 import org.digijava.module.dataExchange.jaxb.FreeTextType;
@@ -164,14 +152,11 @@ public class ExportBuilder {
 				parent.getFunding().add(buildFunding(ampFunding, ampColumnEntry));			
 			}
 		} else if (path.equalsIgnoreCase("activity.keywords")){
-			// TODO skip at this moment.
+			// at this moment do not have in amp
 		} else if (path.equalsIgnoreCase("activity.components")){
-			//TODO 
-			/*
 			for (Components<FundingDetail> component : ActivityUtil.getAllComponents(ampActivity.getAmpActivityId().longValue())) {
-				parent.getComponents().add(buildComponent(component, ampColumnEntry));
+				parent.getComponent().add(buildComponent(component, ampColumnEntry));
 			}
-			*/
 		} else if (path.equalsIgnoreCase("activity.issues")){
 			if (ampActivity.getIssues()  != null){
 				for (Iterator iterator = ampActivity.getIssues().iterator(); iterator.hasNext();) {
@@ -407,13 +392,41 @@ public class ExportBuilder {
 		
 		retValue.setComponentName(component.getTitle());
 		
+		AmpComponentType type = ComponentsUtil.getComponentTypeById(component.getType_Id());
+		retValue.setComponentType(buildCodeValue(type.getCode(), type.getName()));
 		
-		for (PhysicalProgress pProgress : component.getPhyProgress()) {
-			ActivityType.Component.PhysicalProgress physicalProgress = objectFactory.createActivityTypeComponentPhysicalProgress();
-			physicalProgress.setTitle(buildFreeText(pProgress.getTitle()));
-			physicalProgress.setDescription(buildFreeText(pProgress.getDescription()));
-			physicalProgress.setReportingDate(buildDate(getDate(pProgress.getReportingDate())));
-			retValue.getPhysicalProgress().add(physicalProgress);
+		ComponentFundingType componentFunding = objectFactory.createComponentFundingType();
+		retValue.getComponentFunding().add(componentFunding);
+		
+		AmpColumnEntry componentFundingEntry = ampColumnEntry.getElementByName("componentFunding");
+		if (componentFundingEntry.getElementByName("commitments").canExport() &&
+				component.getCommitments() != null){
+			for (FundingDetail fDetail : component.getCommitments()) {
+				componentFunding.getCommitments().add(buildFundingDetail(fDetail));
+			}
+		}
+		if (componentFundingEntry.getElementByName("disbursements").canExport() &&
+				component.getDisbursements() != null){
+			for (FundingDetail fDetail : component.getDisbursements()) {
+				componentFunding.getDisbursements().add(buildFundingDetail(fDetail));
+			}
+		}
+		if (componentFundingEntry.getElementByName("expenditures").canExport() &&
+				component.getExpenditures() != null){
+			for (FundingDetail fDetail : component.getExpenditures()) {
+				componentFunding.getExpenditures().add(buildFundingDetail(fDetail));
+			}
+		}
+		
+		
+		if (ampColumnEntry.getElementByName("physicalProgress").canExport()){
+			for (PhysicalProgress pProgress : component.getPhyProgress()) {
+				ActivityType.Component.PhysicalProgress physicalProgress = objectFactory.createActivityTypeComponentPhysicalProgress();
+				physicalProgress.setTitle(buildFreeText(pProgress.getTitle()));
+				physicalProgress.setDescription(buildFreeText(pProgress.getDescription()));
+				physicalProgress.setReportingDate(buildDate(getDate(pProgress.getReportingDate())));
+				retValue.getPhysicalProgress().add(physicalProgress);
+			}
 		}
 		
 		return retValue;
@@ -423,102 +436,26 @@ public class ExportBuilder {
 	private ActivityType.Issues buildIssue(AmpIssues ampIssue, AmpColumnEntry ampColumnEntry) throws AmpExportException{
 		ActivityType.Issues retValue = objectFactory.createActivityTypeIssues();
 		
-		retValue.setCode("TODO");
-//TODO		retValue.setLang(ampIssue.);
-		retValue.setTitle(ampIssue.getName());
+		retValue.setTitle(buildFreeText(ampIssue.getName()));
 		
 		if (ampIssue.getMeasures() != null){
 			for (Iterator iterator = ampIssue.getMeasures().iterator(); iterator.hasNext();) {
 				AmpMeasure ampMeasure = (AmpMeasure) iterator.next();
 				ActivityType.Issues.Measure mesure = new ActivityType.Issues.Measure();
-				mesure.setCode(new Integer(-1)); //TODO
-//TODO				mesure.setLang("");
-				mesure.setTitle(ampMeasure.getName());
+				mesure.setTitle(buildFreeText(ampMeasure.getName()));
 				
 				if (ampMeasure.getActors() != null){
 					for (Iterator iterator2 = ampMeasure.getActors().iterator(); iterator2.hasNext();) {
 						AmpActor ampActor = (AmpActor) iterator2.next();
-						ActivityType.Issues.Measure.Actor actor = new ActivityType.Issues.Measure.Actor();
-						
-						actor.setCode(new Integer(-1)); //TODO
-//TODO						actor.setLang("");
-						actor.setValue(ampActor.getName());
-						
-						mesure.getActor().add(actor);
+						mesure.getActor().add(buildFreeText(ampActor.getName()));
 					}
 				}
-				
 				retValue.getMeasure().add(mesure);
 			}
 		}
 		
 		return retValue;
 	}
-	
-/*	
-	private FundingType buildFunding(FundingDetail funding, AmpColumnEntry ampColumnEntry) throws AmpExportException{
-		FundingType retValue = objectFactory.createFundingType();
-		retValue.setCode("TODO"); 
-		retValue.setType("TODO");
-		
-
-		for (AmpColumnEntry elem : ampColumnEntry.getElements()) {
-			if (elem.() || elem.isSelect()){
-				buildFundingSubElements(funding, retValue, elem);
-			}
-		}				
-		return retValue;
-	}	
-	
-	private void buildFundingSubElements(FundingDetail ampfunding, FundingType funding, AmpColumnEntry ampColumnEntry) throws AmpExportException{
-		String path = ampColumnEntry.getPath();
-
-		if (path.equalsIgnoreCase("activity.components.funding.fundingOrg")){
-			funding.setFundingOrg(buildCodeValue(ampfunding.getAmpDonorOrgId().getOrgCode(), ampfunding.getAmpDonorOrgId().getName()));
-		} else if (path.equalsIgnoreCase("activity.components.funding.assistanceType")){
-			funding.setAssistanceType(buildCodeValue(ampfunding.getTypeOfAssistance()));
-		} else if (path.equalsIgnoreCase("activity.components.funding.financingInstrument")){
-			funding.setFinancingInstrument(buildCodeValue(ampfunding.getFinancingInstrument()));
-		} else if (path.equalsIgnoreCase("activity.components.funding.conditions")){
-			funding.setConditions(buildFreeText(ampfunding.getLanguage(), ampfunding.getConditions()));
-		} else if (path.equalsIgnoreCase("activity.components.funding.signatureDate")){
-			funding.setSignatureDate(buildDate(ampfunding.getSignatureDate()));
-		} else if (path.equalsIgnoreCase("activity.components.funding.projections")){
-			for (AmpFundingMTEFProjection ampProj : ampfunding.getMtefProjections()) {
-				FundingType.Projections proj = objectFactory.createFundingTypeProjections();
-				proj.setType(ampProj.getProjected().getValue());
-				proj.setAmount(ampProj.getAmount().longValue());
-				proj.setCurrency(ampProj.getAmpCurrency().getCurrencyCode());
-				proj.setStartYear(2222); //TODO proj.setStartYear(ampProj.getProjectionDate().getYear());
-				//TODO 				proj.setEndYear(ampProj.getProjectionDate().getYear());
-				funding.getProjections().add(proj);
-			}
-
-		} else if (path.equalsIgnoreCase("activity.components.funding.commitments")){
-			for (Iterator iterator = ampfunding.getFundingDetails().iterator(); iterator.hasNext();) {
-				FundingDetail fDetail = (FundingDetail) iterator.next();
-				if (fDetail.getTransactionType() == Constants.COMMITMENT){
-					funding.getCommitments().add(buildFundingDetail(fDetail));
-				}
-			}
-		} else if (path.equalsIgnoreCase("activity.components.funding.disbursements")){
-			for (Iterator iterator = ampfunding.getFundingDetails().iterator(); iterator.hasNext();) {
-				FundingDetail fDetail = (FundingDetail) iterator.next();
-				if (fDetail.getTransactionType() == Constants.DISBURSEMENT){
-					funding.getCommitments().add(buildFundingDetail(fDetail));
-				}
-			}
-		} else if (path.equalsIgnoreCase("activity.components.funding.expenditures")){
-			for (Iterator iterator = ampfunding.getFundingDetails().iterator(); iterator.hasNext();) {
-				FundingDetail fDetail = (FundingDetail) iterator.next();
-				if (fDetail.getTransactionType() == Constants.EXPENDITURE){
-					funding.getCommitments().add(buildFundingDetail(fDetail));
-				}
-			}
-		}
-	}
-
-*/	
 	
 	private ContactType buildContactType (String firstName, String lastName, String mail) throws AmpExportException{
 		ContactType retValue = objectFactory.createContactType();
@@ -544,7 +481,7 @@ public class ExportBuilder {
 	
 	private CodeValueType buildCodeValue(String code, String value) throws AmpExportException{
 		CodeValueType retValue = objectFactory.createCodeValueType();
-		if (code != null){
+		if (code != null && !code.isEmpty()){
 			retValue.setCode(code);
 		}
 		retValue.setValue(value);
@@ -557,7 +494,7 @@ public class ExportBuilder {
 
 	private FreeTextType buildFreeText(String lang, String name) throws AmpExportException{
 		FreeTextType retValue = objectFactory.createFreeTextType();
-		if (lang != null){
+		if (lang != null && !lang.isEmpty()){
 			retValue.setLang(lang);
 		}
 		retValue.setValue(name);
@@ -573,7 +510,7 @@ public class ExportBuilder {
 
 	private DateType buildDate(Date date) throws AmpExportException{
 		if (date == null){
-			date = new Date();
+			date = new Date(); 
 		}
 		DateType retValue = objectFactory.createDateType();
 		retValue.setDate(ExportHelper.getGregorianCalendar(date));

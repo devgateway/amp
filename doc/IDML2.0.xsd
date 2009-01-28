@@ -33,28 +33,24 @@
 			<xs:element name="location" maxOccurs="unbounded">
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="locationName" type="codeValueType" minOccurs="1" maxOccurs="1"/>
+						<xs:element name="locationName" type="codeValueType"/>
 						<xs:element name="locationFunding" type="locationFundingType" minOccurs="0" maxOccurs="unbounded"/>
 					</xs:sequence>
 					<xs:attribute name="lang" type="xs:language" use="optional"/>
-					
 					<xs:attribute name="locationType" use="required">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="Country"/>
-							<xs:enumeration value="Region"/>
-							<xs:enumeration value="Zone"/>
-							<xs:enumeration value="Woreda"/>
-							<xs:enumeration value="Department"/>
-						</xs:restriction>
-					</xs:simpleType>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="Country"/>
+								<xs:enumeration value="Region"/>
+								<xs:enumeration value="Zone"/>
+								<xs:enumeration value="Woreda"/>
+								<xs:enumeration value="Department"/>
+							</xs:restriction>
+						</xs:simpleType>
 					</xs:attribute>
-					
-					
 					<xs:attribute name="gis" type="xs:string" use="optional"/>
 					<xs:attribute name="iso3" type="xs:string" use="required"/>
 					<xs:attribute name="countryName" type="xs:string" use="required"/>
-												
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="proposedApprovalDate" type="dateType" minOccurs="0"/>
@@ -73,9 +69,9 @@
 			<xs:element name="component" minOccurs="0" maxOccurs="unbounded">
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="componentName" type="xs:string" minOccurs="1" maxOccurs="1"/>
-						<xs:element name="componentType" type="codeValueType" minOccurs="1" maxOccurs="1"/>						
-						<xs:element name="componentFunding" type="componentFundingType" minOccurs="1"  maxOccurs="unbounded"/>
+						<xs:element name="componentName" type="xs:string"/>
+						<xs:element name="componentType" type="codeValueType"/>
+						<xs:element name="componentFunding" type="componentFundingType" maxOccurs="unbounded"/>
 						<xs:element name="physicalProgress" minOccurs="0" maxOccurs="unbounded">
 							<xs:complexType>
 								<xs:sequence>
@@ -91,29 +87,16 @@
 			<xs:element name="issues" minOccurs="0" maxOccurs="unbounded">
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="title" type="xs:string" minOccurs="0"/>
+						<xs:element name="title" type="freeTextType" minOccurs="0"/>
 						<xs:element name="measure" minOccurs="0" maxOccurs="unbounded">
 							<xs:complexType>
 								<xs:sequence>
-									<xs:element name="title" type="xs:string" minOccurs="0"/>
-									<xs:element name="actor" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:string">
-													<xs:attribute name="code" type="xs:int" use="optional"/>
-													<xs:attribute name="lang" type="xs:language" use="optional"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
+									<xs:element name="title" type="freeTextType" minOccurs="0"/>
+									<xs:element name="actor" type="freeTextType" minOccurs="0" maxOccurs="unbounded"/>
 								</xs:sequence>
-								<xs:attribute name="code" type="xs:int" use="optional"/>
-								<xs:attribute name="lang" type="xs:language" use="optional"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
-					<xs:attribute name="code" type="xs:string" use="required"/>
-					<xs:attribute name="lang" type="xs:language" use="optional"/>
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="documents" minOccurs="0" maxOccurs="unbounded">

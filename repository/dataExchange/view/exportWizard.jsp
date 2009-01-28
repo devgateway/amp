@@ -127,6 +127,7 @@
                       <option value="${vTeam.ampTeamId}">${vTeam.name}</option>
                     </c:forEach>
                   </html:select>
+                  <br/>
                 
                 
                 <button type="button" class="toolbar" onclick="exportActivity();">

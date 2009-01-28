@@ -833,8 +833,9 @@ public class FeaturesUtil {
 		}
 
 		Iterator i = settings.iterator();
+		AmpGlobalSettings element = null;
 		while (i.hasNext()) {
-			AmpGlobalSettings element = (AmpGlobalSettings) i.next();
+			element = (AmpGlobalSettings) i.next();
 			// TODO would it be better if we add 'key' field in db for this?
 			if (element.getGlobalSettingsName().equals(globalSettingName))
 				return element.getGlobalSettingsValue();
@@ -867,7 +868,7 @@ public class FeaturesUtil {
 		String qryStr = null;
 		Query qry = null;
 		try {
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 			qryStr = "select gs from " + AmpGlobalSettings.class.getName() + " gs ";
 			qry = session.createQuery(qryStr);
 			coll = qry.list();
@@ -882,16 +883,6 @@ public class FeaturesUtil {
 				}
 				catch (Exception rbf) {
 					logger.error("Rollback failed !");
-				}
-			}
-		}
-		finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				}
-				catch (Exception rsf) {
-					logger.error("Release session failed :" + rsf.getMessage());
 				}
 			}
 		}

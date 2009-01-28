@@ -1806,6 +1806,9 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private int offset;
 		private int indexId;
 		private long transIndexId;
+		
+		private boolean totDisbIsBiggerThanTotCom;
+		
 		public int getIndexId() {
 			return indexId;
 		}
@@ -2324,6 +2327,14 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 		public void setTransIndexId(long transIndexId) {
 			this.transIndexId = transIndexId;
+		}
+
+		public boolean isTotDisbIsBiggerThanTotCom() {
+			return this.totDisbIsBiggerThanTotCom;
+		}
+
+		public void setTotDisbIsBiggerThanTotCom(boolean totDisbIsBiggerThanTotCom) {
+			this.totDisbIsBiggerThanTotCom = totDisbIsBiggerThanTotCom;
 		}
 	}
 

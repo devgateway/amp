@@ -28,10 +28,12 @@ import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.FundingValidator;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.MTEFProjection;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class FundingAdded extends Action {
@@ -92,7 +94,11 @@ public class FundingAdded extends Action {
 		newFund.setFinancingInstrument(CategoryManagerUtil.getAmpCategoryValueFromDb(eaForm.getFunding().getModality()));
 		newFund.setConditions(eaForm.getFunding().getFundingConditions());
 		
-		
+		//		
+		double totalComms	= 0;
+		double totalDisbs	= 0;
+		double totalExps	= 0;
+		//
 		Collection fundDetails = new ArrayList();
 		if (eaForm.getFunding().getFundingDetails() != null) {
 			Iterator itr = eaForm.getFunding().getFundingDetails().iterator();
@@ -120,14 +126,33 @@ public class FundingAdded extends Action {
 				else if (fundDet.getAdjustmentType() == Constants.ACTUAL) {
 					fundDet.setAdjustmentTypeName("Actual");
 				}
-				
+				//
+				double amount = this.getAmountInDefaultCurrency(fundDet, tm.getAppSettings());					
+				if (( fundDet.getTransactionType() == Constants.COMMITMENT )&&(fundDet.getAdjustmentType()==Constants.ACTUAL))
+					totalComms	+= amount;
+				else 
+					if (( fundDet.getTransactionType() == Constants.DISBURSEMENT )&&(fundDet.getAdjustmentType()==Constants.ACTUAL))
+							totalDisbs	+= amount;
+					else 
+						if (( fundDet.getTransactionType() == Constants.EXPENDITURE )&&(fundDet.getAdjustmentType()==Constants.ACTUAL))
+							totalExps	+= amount;
+				//
 				fundDetails.add(fundDet);
 			}
-			
-			
-			
 		}
-		
+		// Don't know why when using constant it is not working ???
+		String alert = FeaturesUtil.getGlobalSettingValue("Alert if sum of disbursments is bigger than sum of commitments");
+		//
+		if (Boolean.parseBoolean(alert)) {
+			if (totalDisbs > totalComms) {
+				eaForm.getFunding().setTotDisbIsBiggerThanTotCom(true);
+				fundDetails.clear();
+				newFund = null;
+			} else {
+				eaForm.getFunding().setTotDisbIsBiggerThanTotCom(false);
+			}
+		}		
+		//
 		Collection mtefProjections=new ArrayList();
 		if (eaForm.getFunding().getFundingMTEFProjections() != null) {
 			Iterator itr = eaForm.getFunding().getFundingMTEFProjections().iterator();
@@ -158,17 +183,10 @@ public class FundingAdded extends Action {
 		List sortedList = new ArrayList(fundDetails);
 		Collections.sort(sortedList,FundingValidator.dateComp);
 
-		newFund.setFundingDetails(sortedList);
-		newFund.setMtefProjections(mtefProjections);
 		ArrayList fundList = new ArrayList();
 		if (fundOrg.getFundings() != null) {
 			fundList = new ArrayList(fundOrg.getFundings());
 		}
-
-		if (offset != -1)
-			fundList.set(offset, newFund);
-		else
-			fundList.add(newFund);
 
 		eaForm.getFunding().setDupFunding(false);
 		eaForm.getFunding().setFirstSubmit(false);
@@ -202,17 +220,26 @@ public class FundingAdded extends Action {
 				}
 			}
 		}
-
-		fundOrg.setFundings(fundList);
-		ArrayList fundingOrgs = new ArrayList();
-		if (eaForm.getFunding().getFundingOrganizations() != null) {
-			fundingOrgs = new ArrayList(eaForm.getFunding().getFundingOrganizations());
-			fundingOrgs.set(fundOrgOffset, fundOrg);
+		if (newFund != null) { 
+			newFund.setFundingDetails(sortedList);
+			newFund.setMtefProjections(mtefProjections);
+			if (offset != -1)
+				fundList.set(offset, newFund);
+			else
+				fundList.add(newFund);
+			//
+			fundOrg.setFundings(fundList);
+			ArrayList fundingOrgs = new ArrayList();
+			if (eaForm.getFunding().getFundingOrganizations() != null) {
+				fundingOrgs = new ArrayList(eaForm.getFunding().getFundingOrganizations());
+				fundingOrgs.set(fundOrgOffset, fundOrg);
+			}
 		}
+				
 		/*eaForm.setTotalCommitments(FormatHelper.formatNumber(totComm));
 		eaForm.setTotalDisbursements(FormatHelper.formatNumber(totDisb));
 		eaForm.setTotalExpenditures(FormatHelper.formatNumber(totExp));*/
-		
+		//
 		this.updateTotals(eaForm, tm);
 		
 		String currCode = CurrencyUtil.getAmpcurrency( tm.getAppSettings().getCurrencyId() ).getCurrencyCode();
@@ -223,11 +250,11 @@ public class FundingAdded extends Action {
 		return mapping.findForward("forward");
 	}
 	
-	private void updateTotals ( EditActivityForm form, TeamMember tm ) {
+	private double[] getFundingAmounts(EditActivityForm form, TeamMember tm) {
 		double totalComms	= 0;
 		double totalDisbs	= 0;
-		double totalExps	= 0;
-		
+		double totalExps	= 0;		
+		//
 		Collection <FundingOrganization> orgs	= form.getFunding().getFundingOrganizations();
 		if ( orgs != null ) {
 			Iterator<FundingOrganization> iterOrg	= orgs.iterator();
@@ -250,8 +277,6 @@ public class FundingAdded extends Action {
 									else 
 										if (( detail.getTransactionType() == Constants.EXPENDITURE )&&(detail.getAdjustmentType()==Constants.ACTUAL))
 											totalExps	+= amount;
-								
-								
 							}
 						}
 					}
@@ -259,9 +284,18 @@ public class FundingAdded extends Action {
 				
 			}
 		}
-		form.getFunding().setTotalCommitments( 	FormatHelper.formatNumber(totalComms) );
-		form.getFunding().setTotalDisbursements(	FormatHelper.formatNumber(totalDisbs) );
-		form.getFunding().setTotalExpenditures( 	FormatHelper.formatNumber(totalDisbs) );
+		double[] amounts = {totalComms, totalDisbs, totalExps};
+		//
+		return amounts;
+	}
+	
+	private void updateTotals ( EditActivityForm form, TeamMember tm ) {
+		double [] amounts = getFundingAmounts(form, tm);
+		System.out.println(amounts);
+		//
+		form.getFunding().setTotalCommitments( 	FormatHelper.formatNumber(amounts[0]) );
+		form.getFunding().setTotalDisbursements(	FormatHelper.formatNumber(amounts[1]) );
+		form.getFunding().setTotalExpenditures( 	FormatHelper.formatNumber(amounts[2]) );
 	}
 	
 	private double getAmountInDefaultCurrency(FundingDetail fundDet, ApplicationSettings appSet) {

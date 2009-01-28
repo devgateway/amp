@@ -146,10 +146,21 @@ var flag;
 var form=document.aimEditActivityForm;
 var val=form.step;
 if(typeof val =='undefined'){
-    val=document.forms[2].step;
-    form=document.forms[2];
+    /*
+     * There are three or two forms on the first step of
+     * the add activity: 1 modeSwitchForm (sometimes)
+     * and 2 with same name : aimEditActivityForm (this causes a lot of problems... )
+     */
+    val=document.forms[1].step;
+    if(typeof val =='undefined'){
+        val=document.forms[2].step;
+        form=document.forms[2];
+    }
+    else{
+        form=document.forms[1];
+    }
+    
 }
-
 if(draftStatus!=null && draftStatus.value!="true"
     && val.value<value){
     flag=validateForm();

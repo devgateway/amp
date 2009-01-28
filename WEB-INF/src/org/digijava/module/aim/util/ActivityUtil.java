@@ -168,10 +168,10 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     Exception savedEx = new AMPActivityError(Constants.AMP_ERROR_LEVEL_WARNING, true);
     
     try {
-      session = PersistenceManager.getSession();
-      session.connection().setAutoCommit(false);
-      tx = session.beginTransaction();
-
+      session = PersistenceManager.getRequestDBSession();
+      //session.connection().setAutoCommit(false);
+      //tx = session.beginTransaction();
+      
       AmpTeamMember member = (AmpTeamMember) session.load(AmpTeamMember.class,
           memberId);
 
@@ -295,7 +295,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         // delete all previous comments
         
           ArrayList col = org.digijava.module.aim.util.DbUtil.
-              getAllCommentsByActivityId( oldActivity.getAmpActivityId() );
+              getAllCommentsByActivityId( oldActivity.getAmpActivityId(), session );
           if (col != null) {
             Iterator itr = col.iterator();
             while (itr.hasNext()) {
@@ -648,7 +648,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         //session.saveOrUpdate(member);
       }
 
-      Collection<AmpComponentFunding>  componentFundingCol = getFundingComponentActivity(activityId);
+      Collection<AmpComponentFunding>  componentFundingCol = getFundingComponentActivity(activityId, session);
       Iterator<Components<AmpComponentFunding>> componentsFundingIt = componentsFunding.iterator();
       while(componentsFundingIt.hasNext()){
     	  Components<AmpComponentFunding> ampTempComp = componentsFundingIt.next();
@@ -688,7 +688,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	      }
 
 
-	      Collection<AmpPhysicalPerformance> phyProgress = DbUtil.getAmpPhysicalProgress(activityId,ampTempComp.getComponentId());
+	      Collection<AmpPhysicalPerformance> phyProgress = DbUtil.getAmpPhysicalProgress(activityId,ampTempComp.getComponentId(), session);
 
 	      if (ampTempComp.getPhyProgress() != null) {
 				Iterator compItr = ampTempComp.getPhyProgress().iterator();
@@ -752,7 +752,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
             }
             if (count==0){//if activity has indicator,which is not in indicators list,we should remove it from db            	
             	 AmpIndicator ind=(AmpIndicator)session.get(AmpIndicator.class,actInd.getIndicator().getIndicatorId());
-            	 IndicatorActivity indConn=IndicatorUtil.findActivityIndicatorConnection(activity, ind);
+            	 IndicatorActivity indConn=IndicatorUtil.findActivityIndicatorConnection(activity, ind, session);
             	 IndicatorUtil.removeConnection(indConn);
             }
           }
@@ -774,7 +774,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
           AmpCategoryValue categoryValue = (AmpCategoryValue) session.get(AmpCategoryValue.class, actInd.getIndicatorsCategory().getId()); 
           
           //try to find connection of current activity with current indicator
-          IndicatorActivity indConn=IndicatorUtil.findActivityIndicatorConnection(activity, ind);
+          IndicatorActivity indConn=IndicatorUtil.findActivityIndicatorConnection(activity, ind, session);
           //if no connection found then create new one. Else clear old values for the connection.
           boolean newIndicator = false;
           if (indConn == null){
@@ -844,7 +844,8 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
           // save connection with its new values.
           if(newIndicator){
         	  // Save the new indicator that is NOT present in the indicators collection from the Activity.
-        	  IndicatorUtil.saveConnectionToActivity(indConn, session);
+        	  //IndicatorUtil.saveConnectionToActivity(indConn, session);
+        	  session.saveOrUpdate(indConn);
           } else {
         	  // Save the activity in order to save the indicators collection and its changes (values).
         	  // This is for AMP-4317, you can't save the collection because is in the Activity.        	  
@@ -852,6 +853,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
           }
         }
       }
+      
         String queryString = "select con from " + IPAContract.class.getName() + " con where con.activity.ampActivityId=" + activityId;
       	IPAContract ipaAux = (IPAContract) session.get(IPAContract.class, activityId);
         String ids = "";
@@ -974,13 +976,9 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     	   session.delete(queryString);
        }
        //session.flush();
-       
-       if (alwaysRollback)
-    	   session.flush();
-       else{
-			tx.commit(); // commit the transcation
-			logger.debug("Activity saved");
-    }
+             
+		//tx.commit(); // commit the transcation
+		logger.debug("Activity saved");    
     }
     catch (Exception ex) {
       logger.error("Exception from saveActivity().", ex);
@@ -1011,17 +1009,6 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     			}
     		}
     	}
-		if (session != null) {
-			session.connection().setAutoCommit(true);
-			try {
-				session.close();
-				logger.warn("Session closed!");
-				PersistenceManager.releaseSession(session);
-			}
-			catch (Exception e) {
-				logger.error("Release session faliled.", e);
-			}
-		}
 		
 		if (exceptionRaised){
 			throw savedEx;
@@ -2067,7 +2054,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     Session session = null;
 
     try {
-      session = PersistenceManager.getSession();
+      session = PersistenceManager.getRequestDBSession();
       String qryStr = "select a from " + AmpComponentFunding.class.getName() +
           " a where activity_id = '" + activityId + "'";
       Query qry = session.createQuery(qryStr);
@@ -2076,15 +2063,27 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     catch (Exception e) {
       logger.debug("Exception in getAmpComponents() " + e.getMessage());
     }
-    finally {
-      if (session != null) {
-        try {
-          PersistenceManager.releaseSession(session);
-        }
-        catch (Exception ex) {
-          logger.debug("Exception while releasing session " + ex.getMessage());
-        }
-      }
+    //getComponents();
+    return col;
+  }
+
+  /*
+   * This function gets AmpComponentFunding of an Activity.
+   *
+   * @param activityId Activity id
+   */
+  public static Collection<AmpComponentFunding> getFundingComponentActivity(Long activityId, Session session) {
+    Collection col = null;
+    logger.info(" inside getting the funding.....");
+
+    try {
+      String qryStr = "select a from " + AmpComponentFunding.class.getName() +
+          " a where activity_id = '" + activityId + "'";
+      Query qry = session.createQuery(qryStr);
+      col = qry.list();
+    }
+    catch (Exception e) {
+      logger.debug("Exception in getAmpComponents() " + e.getMessage());
     }
     //getComponents();
     return col;

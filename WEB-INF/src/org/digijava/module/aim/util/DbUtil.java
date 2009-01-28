@@ -914,6 +914,45 @@ public class DbUtil {
         return progress;
     }
 
+    public static ArrayList getAmpPhysicalProgress(Long ampActivityId,Long componentId, Session session) {
+        ArrayList progress = new ArrayList();
+        Query q = null;
+        String queryString = null;
+        AmpPhysicalPerformance ampPhysicalPerformance = null;
+        Iterator iter = null;
+        try {
+            queryString = " select Progress from "
+                + AmpPhysicalPerformance.class.getName()
+                + " Progress where (Progress.ampActivityId=:ampActivityId )";
+                if(componentId!=null){
+              queryString+= " and (Progress.component=:componentId) ";
+            }
+            q = session.createQuery(queryString);
+            q.setParameter("ampActivityId", ampActivityId, Hibernate.LONG);
+                if(componentId!=null){
+                  q.setLong("componentId", componentId);
+                }
+            iter = q.list().iterator();
+
+            while (iter.hasNext()) {
+
+                ampPhysicalPerformance = (AmpPhysicalPerformance) iter.next();
+                logger.debug("Title :"
+                             + (String) ampPhysicalPerformance.getTitle());
+                logger.debug("DESCRIPTION :"
+                             + (String) ampPhysicalPerformance.getDescription());
+                progress.add(ampPhysicalPerformance);
+            }
+        } catch (Exception ex) {
+            logger.error("Unable to get Amp PhysicalPerformance", ex);
+            //////System.out.println(ex.toString()) ;
+        }
+        logger
+            .debug("Getting funding Executed successfully "
+                   + progress.size());
+        return progress;
+    }
+
     public static Collection getAmpFunding(Long ampActivityId, Long ampFundingId) {
         Session session = null;
         Query q = null;
@@ -4903,6 +4942,27 @@ public class DbUtil {
 
         try {
             session = PersistenceManager.getRequestDBSession();
+            String queryString = "select o from " + AmpComments.class.getName()
+                + " o "
+                + "where (o.ampActivityId=:aid)";
+            qry = session.createQuery(queryString);
+            qry.setParameter("aid", aid, Hibernate.LONG);
+            Iterator itr = qry.list().iterator();
+            while (itr.hasNext()) {
+                AmpComments com = (AmpComments) itr.next();
+                comments.add(com);
+            }
+        } catch (Exception e) {
+            logger.error("Unable to get all comments");
+            logger.debug("Exceptiion " + e);
+        }
+        return comments;
+    }
+    public static ArrayList getAllCommentsByActivityId(Long aid, Session session) {        
+        Query qry = null;
+        ArrayList comments = new ArrayList();
+
+        try {
             String queryString = "select o from " + AmpComments.class.getName()
                 + " o "
                 + "where (o.ampActivityId=:aid)";

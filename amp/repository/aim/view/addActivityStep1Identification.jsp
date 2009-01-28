@@ -509,7 +509,9 @@ target.style.cursor = "default"
 													<html:hidden property="identification.budgetCheckbox" styleId="hbudget"/>
 												</td>
 											<td>
-											<table>
+											
+											
+											<table cellpadding="3" cellspacing="3">
 											 <tr>
 											
 											<field:display name="FY" feature="Budget">
@@ -522,6 +524,7 @@ target.style.cursor = "default"
 														<br/>
 														<html:text property="identification.FY" size="12"/>
 											</td>
+										<td></td>	
 										</field:display>
 											
 										<field:display name="Vote" feature="Budget">
@@ -534,6 +537,7 @@ target.style.cursor = "default"
 											<br/>
 													<html:text property="identification.vote" size="12"/>
 										</td>	
+										<td></td>
 											</field:display>
 											
 											<field:display name="Sub-Vote" feature="Budget">
@@ -546,6 +550,7 @@ target.style.cursor = "default"
 											<br/>
 										<html:text property="identification.subVote" size="12"/>
 										</td>
+										<td></td>
 											</field:display>
 											
 	

@@ -116,7 +116,6 @@ session.setAttribute("progressValue", counter);
 <c:set var="rowIdx" value="<%=new Integer(0)%>" scope="request"/>
 <bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page" />
 
-
 <logic:notEqual name="widget" scope="request" value="true">
 	<div class="reportname" style="background: #222E5D">
 		<table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -414,9 +413,11 @@ session.setAttribute("progressValue", counter);
                 </logic:equal>
 				</logic:notEqual>
             </td>
-            <td align="right">
-            <jsp:include page="legendPopup.jsp" />
-            </td>
+            <logic:notEqual name="viewFormat" value="print">
+            	<td align="right">
+            		<jsp:include page="legendPopup.jsp"/>
+            	</td>
+            </logic:notEqual>
             </tr>
             </table>
 			</td>
@@ -524,7 +525,7 @@ session.setAttribute("progressValue", counter);
                 </c:set>
                 <c:forEach var="i" begin="0" end="${report.visibleRows-1}" step="${recordsPerPage}">
                     <logic:equal name="viewFormat" value="html">
-                        <a style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+(recordsPerPage-1)}"/>';">
+                        <a style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=false~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+(recordsPerPage-1)}"/>';">
                     </logic:equal>
                     <logic:equal name="viewFormat" value="foldable">
                         <a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+recordsPerPage-1}"/>');">	
@@ -557,9 +558,11 @@ session.setAttribute("progressValue", counter);
                 </logic:equal>
 				</logic:notEqual>
             </td>
-            <td align="right">
-            <jsp:include page="legendPopup.jsp" />
+            <logic:notEqual name="viewFormat" value="print">
+     		<td align="right">
+            	<jsp:include page="legendPopup.jsp" />
             </td>
+            </logic:notEqual>
             </tr>
             <tr>
             	<td align="left">

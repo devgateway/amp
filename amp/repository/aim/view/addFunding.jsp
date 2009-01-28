@@ -478,9 +478,12 @@ var isAlreadySubmitted = false;
 								<td align="center" valign="middle" width="170">
 								<a title="<digi:trn key="aim:TransactionCurrency">Currency used in the project</digi:trn>">											  <b><font color="white"><digi:trn key="aim:CurrencyFIE">Currency</digi:trn></font></b></a>
 								<img src= "../ampTemplate/images/help.gif" border="0" align="absmiddle" title="${translation}" /></td>
-								<td align="center" valign="middle" width="120">
+								<td align="center" valign="middle" width="200">
 									<a title="<digi:trn key="aim:CommitmentDate">The date (day, month, year) when funding commitment was signed</digi:trn>">
 									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<digi:trn key="aim:Actual">Actual</digi:trn><br><digi:trn key="aim:CommitmentDateFIE">Commitment Date</digi:trn></font></b></a>
+								</td>
+								<td align="center" valign="middle" width="*">
+									&nbsp;
 								</td>
 								</field:display>
 							</tr>
@@ -506,6 +509,7 @@ var isAlreadySubmitted = false;
 												</html:select>
 											</c:if>
 												<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>
+											</td>
 											<td valign="bottom">
 												<html:text name="fundingDetail" title="${formatTip}"  indexed="true" property="transactionAmount" onchange="this.value=trim(this.value)"  size="17" styleClass="amt"/>
 											</td>
@@ -515,7 +519,7 @@ var isAlreadySubmitted = false;
 													label="currencyName"/>
 												</html:select>
 											</td>
-											<td vAlign="bottom">
+											<td align="left" vAlign="bottom">
 												<table cellPadding=0 cellSpacing=0>
 													<tr>
 														<td>
@@ -531,12 +535,12 @@ var isAlreadySubmitted = false;
 													</tr>
 												</table>												
 											</td>
-											<td width="10px">
+											<td align="right">
 													<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,0)">
 										 				<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 													</a>
 												</td>
-											
+											</tr>	
 										<tr>
 											<td bgcolor="#ffff00">&nbsp;
 												
@@ -546,7 +550,7 @@ var isAlreadySubmitted = false;
 													<digi:trn key="aim:fixedRate">Fixed Rate</digi:trn>
 												</b>
 											</td>
-											<td colspan="2"  bgcolor="#ffff00">
+											<td colspan="5"  bgcolor="#ffff00">
 												<b>
 													<digi:trn key="aim:fixedExchangeRate">Exchange Rate</digi:trn>
 												</b>
@@ -571,7 +575,7 @@ var isAlreadySubmitted = false;
 														/>
 												
 											</td>
-											<td colspan="3">
+											<td colspan="5">
 												<logic:equal name="fundingDetail" property="useFixedRate" value="true">
 													<html:text name="fundingDetail" indexed="true" property="fixedExchangeRate" styleClass="amt"
 													disabled="false" styleId="<%=exchRatefldId%>"/>

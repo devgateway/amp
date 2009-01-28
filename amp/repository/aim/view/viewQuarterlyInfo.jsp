@@ -15,7 +15,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
-
+<%@ taglib uri="/taglib/aim" prefix="aim" %>
 
 
 <style>
@@ -747,7 +747,7 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 																<digi:trn key="aim:2nd_quarter">2nd quarter</digi:trn>
 			                     	     			 		</logic:equal>
 															<logic:equal name="qtr" property="fiscalQuarter" value="3">
-															sdsdasdasd
+														
 																<digi:trn key="aim:3rd_quarter">3rd quarter</digi:trn>
 			   		                     	  			 	</logic:equal>
 															<logic:equal name="qtr" property="fiscalQuarter" value="4">
@@ -758,13 +758,13 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 
 						                          		</td>
 													<logic:notEqual name="aimYearlyInfoForm" property="transactionType" value="4">
-			                   			       			<td valign="baseline">
-															<div align="right"><bean:write name="qtr" property="plannedAmount" /></div>
+			                   			       			<td valign="baseline" align="right">
+													         <aim:formatNumber value="${qtr.plannedAmount}"/>
 														</td>
 													</logic:notEqual>				
-			                          					<td valign="baseline">
+			                          					<td valign="baseline" align="right">
 
-			                          						<div align="right"><bean:write name="qtr" property="actualAmount" /></div>
+			                          					 <aim:formatNumber value="${qtr.actualAmount}" />
 
 						                          		</td>
 

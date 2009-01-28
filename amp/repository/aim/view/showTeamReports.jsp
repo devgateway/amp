@@ -431,7 +431,11 @@ function confirmFunc() {
                                 <logic:iterate name="report" property="hierarchies" id="hierarchy" >
                                   <%-- <bean:write name="hierarchy" property="column.columnName"/> --%>
                                   <li>
-                                  ${hierarchy.column.columnName}
+                                  
+	                                      	<digi:trn key="aim:report:${hierarchy.column.columnName}">
+	                                        	<bean:write name="hierarchy" property="column.columnName" />
+	                                      	</digi:trn>
+                                  
                                   </li>
                                 </logic:iterate>
                               </td>
@@ -458,7 +462,7 @@ function confirmFunc() {
 	                                  </logic:iterate>
 	                                </div>
 	                                                                
-	                                <span align="center" style="text-transform: capitalize;" onMouseOver="stm(['<digi:trn key="aim:teamreports:columns">columns</digi:trn>',document.getElementById('report-<bean:write name="report" property="ampReportId"/>').innerHTML],Style[1])" onMouseOut="htm()">[ <u style="text-transform:capitalize;" ><digi:trn key="aim:teamreports:columns">Columns</digi:trn></u> ]&nbsp;
+	                                <span align="center" style="text-transform: capitalize;" onMouseOver="stm(['<digi:trn key="aim:teamreports:columns">columns</digi:trn>',document.getElementById('report-<bean:write name="report" property="ampReportId"/>').innerHTML],Style[0])" onMouseOut="htm()">[ <u style="text-transform:capitalize;" ><digi:trn key="aim:teamreports:columns">Columns</digi:trn></u> ]&nbsp;
 	                                </span>
                                 
 	                                <div style='position:relative;display:none;' id='measure-<bean:write name="report" property="measures"/>'> 

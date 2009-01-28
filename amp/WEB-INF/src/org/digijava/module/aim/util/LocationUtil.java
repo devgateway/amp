@@ -581,7 +581,7 @@ public class LocationUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select r from " + AmpRegion.class.getName()
-					+ " r " + "where (r.ampRegionId=:id)";
+					+ " r " + "where (r.ampRegionId=:id) order by r.regionCode, r.name ";
 			Query qry = session.createQuery(queryString);
 			qry.setParameter("id", id, Hibernate.LONG);
 			Iterator itr = qry.list().iterator();
@@ -647,7 +647,7 @@ public class LocationUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select reg from " + AmpRegion.class.getName()
-					+ " reg " + "where country_id = '" + iso + "'";
+					+ " reg " + "where country_id = '" + iso + "' order by reg.regionCode, reg.name";
 
 			Query qry = session.createQuery(queryString);
 			col = qry.list();

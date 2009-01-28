@@ -1,4 +1,4 @@
-package org.digijava.module.aim.form ;
+package org.digijava.module.aim.form;
 
 import java.util.Collection;
 
@@ -7,58 +7,57 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
-public class QuarterlyComparisonsForm extends DetailedInfoForm
-{
+public class QuarterlyComparisonsForm extends DetailedInfoForm {
 	private Collection quarterlyComparisons;
 	private Collection quarterlyDiscrepanciesAll;
 	private Collection fiscalYears;
 	private long fiscalCalId;
-        private String totalActualCommitment;
-	private String totalPlannedDisbursement;
-	private String totalActualDisbursement;
-	private String totalActualExpenditure;
-        private String totalDisbOrder;
+	private double totalActualCommitment;
+	private double totalPlannedDisbursement;
+	private double totalActualDisbursement;
+	private double totalActualExpenditure;
+	private double totalDisbOrder;
 
-    public String getTotalActualCommitment() {
-        return totalActualCommitment;
-    }
+	public double getTotalActualCommitment() {
+		return totalActualCommitment;
+	}
 
-    public void setTotalActualCommitment(String totalActualCommitment) {
-        this.totalActualCommitment = totalActualCommitment;
-    }
+	public void setTotalActualCommitment(double totalActualCommitment) {
+		this.totalActualCommitment = totalActualCommitment;
+	}
 
-    public String getTotalActualDisbursement() {
-        return totalActualDisbursement;
-    }
+	public double getTotalPlannedDisbursement() {
+		return totalPlannedDisbursement;
+	}
 
-    public void setTotalActualDisbursement(String totalActualDisbursement) {
-        this.totalActualDisbursement = totalActualDisbursement;
-    }
+	public void setTotalPlannedDisbursement(double totalPlannedDisbursement) {
+		this.totalPlannedDisbursement = totalPlannedDisbursement;
+	}
 
-    public String getTotalActualExpenditure() {
-        return totalActualExpenditure;
-    }
+	public double getTotalActualDisbursement() {
+		return totalActualDisbursement;
+	}
 
-    public void setTotalActualExpenditure(String totalActualExpenditure) {
-        this.totalActualExpenditure = totalActualExpenditure;
-    }
+	public void setTotalActualDisbursement(double totalActualDisbursement) {
+		this.totalActualDisbursement = totalActualDisbursement;
+	}
 
-    public String getTotalDisbOrder() {
-        return totalDisbOrder;
-    }
+	public double getTotalActualExpenditure() {
+		return totalActualExpenditure;
+	}
 
-    public void setTotalDisbOrder(String totalDisbOrder) {
-        this.totalDisbOrder = totalDisbOrder;
-    }
+	public void setTotalActualExpenditure(double totalActualExpenditure) {
+		this.totalActualExpenditure = totalActualExpenditure;
+	}
 
-    public String getTotalPlannedDisbursement() {
-        return totalPlannedDisbursement;
-    }
+	public double getTotalDisbOrder() {
+		return totalDisbOrder;
+	}
 
-    public void setTotalPlannedDisbursement(String totalPlannedDisbursement) {
-        this.totalPlannedDisbursement = totalPlannedDisbursement;
-    }
-	
+	public void setTotalDisbOrder(double totalDisbOrder) {
+		this.totalDisbOrder = totalDisbOrder;
+	}
+
 	/**
 	 * @return
 	 */
@@ -72,19 +71,17 @@ public class QuarterlyComparisonsForm extends DetailedInfoForm
 	public void setQuarterlyComparisons(Collection collection) {
 		quarterlyComparisons = collection;
 	}
-	
-	public ActionErrors validate(ActionMapping actionMapping,
-									 HttpServletRequest httpServletRequest) {
-			ActionErrors errors = super.validate(actionMapping, httpServletRequest);
-			return errors;
-	}	
-	
+
+	public ActionErrors validate(ActionMapping actionMapping, HttpServletRequest httpServletRequest) {
+		ActionErrors errors = super.validate(actionMapping, httpServletRequest);
+		return errors;
+	}
+
 	public Collection getQuarterlyDiscrepanciesAll() {
 		return quarterlyDiscrepanciesAll;
 	}
-	
-	public void setQuarterlyDiscrepanciesAll(
-			Collection quarterlyDiscrepanciesAll) {
+
+	public void setQuarterlyDiscrepanciesAll(Collection quarterlyDiscrepanciesAll) {
 		this.quarterlyDiscrepanciesAll = quarterlyDiscrepanciesAll;
 	}
 
@@ -99,13 +96,11 @@ public class QuarterlyComparisonsForm extends DetailedInfoForm
 		fiscalCalId = i;
 	}
 
-	public void setFiscalYears(Collection c)
-	{
-		fiscalYears=c;
+	public void setFiscalYears(Collection c) {
+		fiscalYears = c;
 	}
 
-	public Collection getFiscalYears()
-	{
+	public Collection getFiscalYears() {
 		return fiscalYears;
 	}
 }

@@ -42,7 +42,7 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]			= new Array(
 YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(
 				'Status',
 				'A.C. Chapter', 'Accession Instrument', 'Financing Instrument',
-				'Implementation Level', 'National Planning Objectives' , 'Primary Program', 
+				'Implementation Level','Parent National Planning Objectives', 'National Planning Objectives' , 'Primary Program', 
 				'Secondary Program', 'Primary Sub-Sector', 'Type Of Assistance', 
 				'Primary Sector', 'Region', 'Primary Sector Sub-Sector',
 				'Beneficiary Agency', 'Implementing Agency',
@@ -50,13 +50,13 @@ YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(
 			);
 YAHOO.amp.reportwizard.fundingGroups["component"]		= new Array(
 				'Status', 'A.C. Chapter', 'Accession Instrument', 'Financing Instrument',
-				'Implementation Level', 'National Planning Objectives', 'Primary Program',
-				'Secondary Program', 'Primary Sector Sub-Sector', 'Type Of Assistance',
+				'Implementation Level','Parent National Planning Objectives', 'National Planning Objectives', 'Primary Program',
+				'Secondary Program', 'Primary Sector Sub-Sector', 'Type Of Assistance','Region',
 				'Primary Sector', 'Component Name', 'Beneficiary Agency', 'Implementing Agency', 
 				'Secondary Sector', 'Secondary Sector Sub-Sector', 'Responsible Organization', 'Activity Created By'
 			);
 YAHOO.amp.reportwizard.fundingGroups["contribution"]	= new Array(
-				'Costing Donor', 'National Planning Objectives', 'Primary Program', 
+				'Costing Donor','Parent National Planning Objectives', 'National Planning Objectives', 'Primary Program', 
 				'Secondary Program', 'Primary Sector Sub-Sector',
 				'Status', 'Primary Sector', 'A.C. Chapter',
 				'Accession Instrument', 'Donor', 'Secondary Sector', 'Secondary Sector Sub-Sector', 'Activity Created By'

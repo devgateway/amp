@@ -19,6 +19,7 @@ public class ProposedProjCost extends ActionForm{
     private String currencyCode;
     private String funAmount;
     private String funDate;
+    private String funAmountFormated;
 
     public String getFunAmount() {
         return funAmount;
@@ -51,5 +52,19 @@ public class ProposedProjCost extends ActionForm{
     public void setCurrencyCode(String currencyCode) {
         this.currencyCode = currencyCode;
     }
+
+	/**
+	 * @return the funAmountFormated
+	 */
+	public String getFunAmountFormated() {
+		return FormatHelper.formatNumber(getFunAmountAsDouble());
+	}
+
+	/**
+	 * @param funAmountFormated the funAmountFormated to set
+	 */
+	public void setFunAmountFormated(String funAmountFormated) {
+		this.funAmountFormated = FormatHelper.formatNumber(getFunAmountAsDouble());;
+	}
 
 }

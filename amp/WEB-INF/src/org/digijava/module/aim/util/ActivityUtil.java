@@ -847,6 +847,11 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         	  //IndicatorUtil.saveConnectionToActivity(indConn, session);
         	  session.saveOrUpdate(indConn);
           } else {
+        	  //They are loaded by different sessions!
+        	  for (AmpIndicatorValue value : indConn.getValues()) {
+				session.save(value);
+        	  }
+        	 
         	  // Save the activity in order to save the indicators collection and its changes (values).
         	  // This is for AMP-4317, you can't save the collection because is in the Activity.        	  
         	  session.saveOrUpdate(activity);

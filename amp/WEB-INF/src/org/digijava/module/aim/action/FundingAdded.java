@@ -242,13 +242,13 @@ public class FundingAdded extends Action {
 							while ( iterDet.hasNext() ) {
 								FundingDetail detail		= iterDet.next();
 								double amount				= this.getAmountInDefaultCurrency(detail, tm.getAppSettings());					
-								if ( detail.getTransactionType() == Constants.COMMITMENT )
+								if (( detail.getTransactionType() == Constants.COMMITMENT )&&(detail.getAdjustmentType()==Constants.ACTUAL))
 											totalComms	+= amount;
 								else 
-									if ( detail.getTransactionType() == Constants.DISBURSEMENT )
+									if (( detail.getTransactionType() == Constants.DISBURSEMENT )&&(detail.getAdjustmentType()==Constants.ACTUAL))
 											totalDisbs	+= amount;
 									else 
-										if ( detail.getTransactionType() == Constants.EXPENDITURE )
+										if (( detail.getTransactionType() == Constants.EXPENDITURE )&&(detail.getAdjustmentType()==Constants.ACTUAL))
 											totalExps	+= amount;
 								
 								

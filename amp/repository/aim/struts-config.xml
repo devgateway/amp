@@ -1150,7 +1150,10 @@
       <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
-
+    <action name="aimEditActivityForm" path="/aim/locationLevelChanged" scope="session" type="org.digijava.module.aim.action.LocationLevelChanged">
+      <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />
+      <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>
     <!--
     <action name="aimEditActivityForm" path="/aim/selectOrganization" scope="session" type="org.digijava.module.aim.action.SelectOrganization">
       <forward name="forward" path="/showLayout.do?layout=aim_orgPopupLayout" />

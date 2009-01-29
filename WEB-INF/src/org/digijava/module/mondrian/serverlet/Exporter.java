@@ -120,8 +120,20 @@ public class Exporter extends com.tonbeller.jpivot.print.PrintServlet {
 							}
 
 						// add parameters and image from chart if visible
-						ChartComponent chart = (ChartComponent) request.getSession().getAttribute(chartRef);
-					
+			            ChartComponent chart = (ChartComponent) request.getSession().getAttribute(chartRef);
+			            if (chart != null && chart.isVisible()) {
+
+			              String host = request.getServerName();
+			              int port = request.getServerPort();
+			              String location = request.getContextPath();
+			              String scheme = request.getScheme();
+
+			              String chartServlet = scheme + "://" + host + ":" + port + location + "/GetChart.out";
+			              parameters.put("chartimage", chartServlet + "?filename=" + chart.getFilename());
+			              parameters.put("chartheight", new Integer(chart.getChartHeight()));
+			              parameters.put("chartwidth", new Integer(chart.getChartWidth()));
+			            }
+						
 						parameters.put("context", context.getRequest().getContextPath());
 
 						// Some FOP-PDF versions require a complete URL, not a path

@@ -153,11 +153,6 @@ function locationLevelChanged(){
 
 
 function validateForm(){
-  <c:set var="errMsgAddSector">
-  <digi:trn key="aim:addSecorErrorMessage">
-  Please add sectors
-  </digi:trn>
-  </c:set>
   var draftStatus=document.getElementById("draftFlag");
   if(draftStatus!=null && draftStatus.value!="true"){
   
@@ -247,8 +242,7 @@ function validateSectorPercentage(){
     var flag = false;
     var primConf=document.getElementById('primaryConfig');
     if(primConf==null){
-         alert("${errMsgAddSector}");
-        return false;
+        return true;
      }
     var sum_prim_sector=false;
     var sum_sec_sector=false;

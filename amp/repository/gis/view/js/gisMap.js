@@ -737,6 +737,9 @@
 	function navCursorKeyDown (evt) {
 		if (evt == null) {
 			evt = window.event;
+		} else {
+			evt.stopPropagation();
+			evt.preventDefault();
 		}
 		isKeyPressed = true;
 		if (evt.offsetX != null) {
@@ -755,51 +758,52 @@
 	
 	
 	function navCursorOnMove (evt) {
-			if (evt == null) {
-				evt = window.event;
+		
+		if (evt == null) {
+			evt = window.event;
+		} else {
+			evt.stopPropagation();
+			evt.preventDefault();
+		}
+		
+		if (isKeyPressed) {
+			var pLeft = 0;
+			var pTop = 0;
+			
+			if (evt.x != null) {
+				pLeft = evt.x - initialOffsetX; 
+				pTop = evt.y - initialOffsetY; 
 			} else {
+				pLeft = evt.pageX - initialOffsetX;
+				pTop = evt.pageY - initialOffsetY - 100;
 				evt.stopPropagation();
 			}
-			
-			if (isKeyPressed) {
-				
-				var pLeft = 0;
-				var pTop = 0;
-				
-				if (evt.x != null) {
-					pLeft = evt.x - initialOffsetX; 
-					pTop = evt.y - initialOffsetY; 
-				} else {
-					pLeft = evt.pageX - initialOffsetX;
-					pTop = evt.pageY - initialOffsetY - 100;
-					evt.stopPropagation();
-				}
 
-				if (pLeft >= 23 && pLeft -23 + navCursorWidth <= navigationWidth - 14) {
-					navAreaLeft = pLeft - 23;
-				} else if (pLeft < 23) {
-					navAreaLeft = 0;
-				} else {
-					navAreaLeft = navigationWidth - navCursorWidth - 14;
-				}
-				
-				if (pTop >= 43 && pTop - 43 + navCursorHeight <= navigationHeight - 14) {
-					navAreaTop = pTop - 43;
-				} else if (pTop < 43) {
-					navAreaTop = 0;
-				} else {
-					navAreaTop = navigationHeight - navCursorHeight - 14;
-				}
-				
-				
-
-				document.getElementById("navCursor").style.left = navAreaLeft + 23 + "px";
-				document.getElementById("navCursor").style.top = navAreaTop + 43 + "px";
-				
-				
-				scrollMap (navAreaLeft, navAreaTop);
-				
+			if (pLeft >= 23 && pLeft -23 + navCursorWidth <= navigationWidth - 14) {
+				navAreaLeft = pLeft - 23;
+			} else if (pLeft < 23) {
+				navAreaLeft = 0;
+			} else {
+				navAreaLeft = navigationWidth - navCursorWidth - 14;
 			}
+			
+			if (pTop >= 43 && pTop - 43 + navCursorHeight <= navigationHeight - 14) {
+				navAreaTop = pTop - 43;
+			} else if (pTop < 43) {
+				navAreaTop = 0;
+			} else {
+				navAreaTop = navigationHeight - navCursorHeight - 14;
+			}
+			
+			
+
+			document.getElementById("navCursor").style.left = navAreaLeft + 23 + "px";
+			document.getElementById("navCursor").style.top = navAreaTop + 43 + "px";
+			
+			
+			scrollMap (navAreaLeft, navAreaTop);
+
+		}
 	}
 	
 	function initNavCursorEvents() {
@@ -808,8 +812,9 @@
 		navCursorObj.onmouseup = navCursorKeyUp;
 		navCursorObj.onmousemove = navCursorOnMove;
 		navCursorObj.onmouseout = navCursorKeyUp;
-	}
-
+		navCursorObj.onclick = navCursorKeyUp;
+	}	
+		
 	function initNavCursorSize() {
 		navCursorWidth = Math.round(navigationWidth * canvasContainerWidth / canvasWidth) - 14;
 		navCursorHeight = Math.round(navigationHeight * canvasContainerHeight / canvasHeight) - 14;

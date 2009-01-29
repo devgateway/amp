@@ -89,7 +89,6 @@
                                                 </a>&nbsp;
                                               </td>
                                               <td vAlign="center">
-													<c:if test="${aimEditActivityForm.location.levelId!=0}">
 	                                              		<c:set var="translation">
 															<digi:trn key="aim:addActivityImplLevelFirstLine">Please select from below</digi:trn>
 														</c:set>					
@@ -103,7 +102,6 @@
 			                                              		}
 															}
 	                                              		</script>
-													</c:if>
 											</td>
                                             </tr>
                                             </field:display>

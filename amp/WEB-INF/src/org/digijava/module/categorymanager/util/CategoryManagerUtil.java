@@ -258,14 +258,13 @@ public class CategoryManagerUtil {
 			Session dbSession			= null;
 			try {
 				dbSession				= PersistenceManager.getSession();
-				retVal					= (AmpCategoryValue) dbSession.load(AmpCategoryValue.class, valueId);
+				retVal					= (AmpCategoryValue) dbSession.get(AmpCategoryValue.class, valueId);
 				
-				if ( initializeTaggedValues )
+				if ( retVal != null && initializeTaggedValues )
 					retVal.getUsedByValues().size();
 
 			} catch (Exception ex) {
-				logger.error("Unable to get AmpCategoryValue: " + ex.getMessage());
-				ex.printStackTrace();
+				logger.error("Unable to get AmpCategoryValue: ", ex);
 			} finally {
 				try {
 					PersistenceManager.releaseSession(dbSession);

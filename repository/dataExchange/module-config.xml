@@ -2,8 +2,8 @@
 <module-config>
 	<name>dataExchange</name>
 	<security login-required="true" default="READ">
-		<action login-required="false" pattern="/exportWizard"/>  
-		<action login-required="false" pattern="/export"/> 
+		<action login-required="true" pattern="/exportWizard"/>  
+		<action login-required="true" pattern="/export"/> 
 		<action login-required="false" pattern="/importWizard"/>  
 		<action login-required="false" pattern="/import"/> 
 	</security>

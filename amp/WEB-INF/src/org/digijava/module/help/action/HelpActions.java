@@ -38,13 +38,10 @@ import org.digijava.module.help.jaxbi.AmpHelpRoot;
 import org.digijava.module.help.jaxbi.AmpHelpType;
 import org.digijava.module.help.jaxbi.ObjectFactory;
 import org.digijava.module.help.util.HelpUtil;
-import javax.xml.crypto.dsig.XMLObject;
-import javax.xml.crypto.dsig.XMLSignatureFactory;
-import javax.xml.transform.Source;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.xml.sax.InputSource;
-import org.digijava.module.help.helper.HelpTopicTree;
+
 
 
 import java.io.StringReader;

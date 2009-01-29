@@ -364,24 +364,30 @@ public class ExportBuilder {
 			}
 
 		} else if (path.equalsIgnoreCase("activity.funding.commitments")){
-			for (Iterator iterator = ampfunding.getFundingDetails().iterator(); iterator.hasNext();) {
-				FundingDetail fDetail = (FundingDetail) iterator.next();
-				if (fDetail.getTransactionType() == Constants.COMMITMENT){
-					funding.getCommitments().add(buildFundingDetail(fDetail));
+			if (ampfunding.getFundingDetails() != null) {
+				for (Iterator iterator = ampfunding.getFundingDetails().iterator(); iterator.hasNext();) {
+					FundingDetail fDetail = (FundingDetail) iterator.next();
+					if (fDetail.getTransactionType() == Constants.COMMITMENT){
+						funding.getCommitments().add(buildFundingDetail(fDetail));
+					}
 				}
 			}
 		} else if (path.equalsIgnoreCase("activity.funding.disbursements")){
-			for (Iterator iterator = ampfunding.getFundingDetails().iterator(); iterator.hasNext();) {
-				FundingDetail fDetail = (FundingDetail) iterator.next();
-				if (fDetail.getTransactionType() == Constants.DISBURSEMENT){
-					funding.getCommitments().add(buildFundingDetail(fDetail));
+			if (ampfunding.getFundingDetails() != null) {
+				for (Iterator iterator = ampfunding.getFundingDetails().iterator(); iterator.hasNext();) {
+					FundingDetail fDetail = (FundingDetail) iterator.next();
+					if (fDetail.getTransactionType() == Constants.DISBURSEMENT){
+						funding.getCommitments().add(buildFundingDetail(fDetail));
+					}
 				}
 			}
 		} else if (path.equalsIgnoreCase("activity.funding.expenditures")){
-			for (Iterator iterator = ampfunding.getFundingDetails().iterator(); iterator.hasNext();) {
-				FundingDetail fDetail = (FundingDetail) iterator.next();
-				if (fDetail.getTransactionType() == Constants.EXPENDITURE){
-					funding.getCommitments().add(buildFundingDetail(fDetail));
+			if (ampfunding.getFundingDetails() != null) {
+				for (Iterator iterator = ampfunding.getFundingDetails().iterator(); iterator.hasNext();) {
+					FundingDetail fDetail = (FundingDetail) iterator.next();
+					if (fDetail.getTransactionType() == Constants.EXPENDITURE){
+						funding.getCommitments().add(buildFundingDetail(fDetail));
+					}
 				}
 			}
 		}

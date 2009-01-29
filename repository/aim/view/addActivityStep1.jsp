@@ -252,16 +252,20 @@ function selectOrganisation() {
 	document.aimEditActivityForm.submit();
 }
 
-function edit(key) {
-    <digi:context name="nextSetp" property="context/module/moduleinstance/addActivity.do" />
-    document.aimEditActivityForm.action = "<%= nextSetp %>";
-    document.aimEditActivityForm.target = "_self"
+    function edit(key) {
+        var forms =document.getElementsByName("aimEditActivityForm");
+        //There are two forms with the same name...(strange) only second contain editkey
+        var form=forms[1];
+    <digi:context name="nextSetp" property="context/module/moduleinstance/addActivity.do" />;
+        
+        form.action = "<%= nextSetp%>";
+        form.target = "_self";
 
-  document.aimEditActivityForm.editKey.value = key;
-  document.aimEditActivityForm.step.value = "1.1";
-  document.aimEditActivityForm.submit();
+        form.editKey.value = key;
+        form.step.value = "1.1";
+        form.submit();
 
-}
+    }
 
 
 function removeSelOrganisations() {

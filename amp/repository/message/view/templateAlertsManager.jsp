@@ -84,7 +84,6 @@ div.fakefile2 input{
 <digi:context name="digiContext" property="context" />
 
 <!--  AMP Admin Logo -->
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
 
 

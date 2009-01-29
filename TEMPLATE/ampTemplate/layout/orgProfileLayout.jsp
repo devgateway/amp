@@ -76,7 +76,7 @@
                                                             <div id="content" class="yui-skin-sam" style="width:100%;">
                                                                 <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                                                                     <div class="tableHeaderCls"  style="height:20px;font-size:11px;font-weight:bold;"  align="center">
-                                                                        <digi:trn key="orgProfile:orgprof_chart_place1:title">orgprof_chart_place1 title</digi:trn>       
+                                                                       &nbsp;
                                                                     </div>
                                                                 </feature:display>
                                                                 <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
@@ -94,7 +94,7 @@
                                                             <div id="content" class="yui-skin-sam" style="width:100%;">
                                                                 <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                                                                      <div class="tableHeaderCls"  style="height:20px;font-size:11px;font-weight:bold;" align="center">
-                                                                                        <digi:trn key="orgProfile:orgprof_chart_place2:title">orgprof_chart_place2 title</digi:trn>
+                                                                                       &nbsp;
                                                                                  
                                                                       </div>
                                                                 </feature:display>
@@ -115,7 +115,7 @@
                                                             <div id="content" class="yui-skin-sam" style="width:100%;">
                                                                 <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                                                                    <div class="tableHeaderCls"  style="height:20px;font-size:11px;font-weight:bold;" align="center">
-                                                                                        <digi:trn key="orgProfile:orgprof_chart_place3:title">orgprof_chart_place3 title</digi:trn>
+                                                                                       &nbsp;
                                                                                    
                                                                      </div>
                                                                     
@@ -137,7 +137,7 @@
                                                                 <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
 
                                                                 <div class="tableHeaderCls"  style="height:20px;font-size:11px;font-weight:bold;" align="center">
-                                                                    <digi:trn key="orgProfile:orgprof_chart_place4:title">orgprof_chart_place4 title</digi:trn>
+                                                                     &nbsp;
                                                                 </div>
                                                                               
                                                                 </feature:display>
@@ -161,7 +161,7 @@
                                                                 <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
 
                                                                    <div class="tableHeaderCls"  style="height:20px;font-size:11px;font-weight:bold;" align="center">
-                                                                                        <digi:trn key="orgProfile:orgprof_chart_place5:title">orgprof_chart_place5 title</digi:trn>
+                                                                                        &nbsp;
                                                                    </div>
                                                                           
                                                                 </feature:display>
@@ -180,7 +180,7 @@
                                                             <div id="content" class="yui-skin-sam" style="width:100%;">
                                                                 <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                                                                   <div class="tableHeaderCls"  style="height:20px;font-size:11px;font-weight:bold;" align="center">
-                                                                                        <digi:trn key="orgProfile:orgprof_chart_place6:title">orgprof_chart_place6 title</digi:trn>
+                                                                                     &nbsp;
                                                                   </div>
                                                                 </feature:display>
                                                                 <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
@@ -200,7 +200,7 @@
                                                         <div id="content" class="yui-skin-sam" style="width:100%;">
                                                             <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                                                                     <div class="tableHeaderCls"  style="height:20px;font-size:11px;font-weight:bold;" align="center">
-                                                                                        <digi:trn key="orgProfile:orgprof_chart_place7:title">orgprof_chart_place7 title</digi:trn>
+                                                                                        &nbsp;
                                                                      </div>
                                                                              
                                                                 </feature:display>

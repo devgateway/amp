@@ -108,7 +108,7 @@ public class HelpUtil {
 			if ((keyWords == null || keyWords.equals(""))&&(locale==null)) {
 				String queryString = "from "
 						+ HelpTopic.class.getName()
-						+ " topics where (topics.siteId=:siteId) and (topics.moduleInstance=:moduleInstance) order by topics.keywordsTrnKey";
+						+ " topics where (topics.siteId=:siteId) and (topics.moduleInstance=:moduleInstance)";
 				query = session.createQuery(queryString);
 			} else {
 				String queryString = "select distinct t from "
@@ -163,8 +163,24 @@ public class HelpUtil {
 		}
 		return helpTopic;
 	}
-	
-	public static HelpTopic getHelpTopic(String key,String siteId,String moduleInstance) throws AimException {
+
+    public static HelpTopic loadhelpTopic(String topicKey) throws Exception{
+		Session session = null;
+		Query query = null;
+		HelpTopic helpTopic = null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString="from "+ HelpTopic.class.getName()+" topic where topic.topicKey="+topicKey;
+			query=session.createQuery(queryString);
+			helpTopic=(HelpTopic)query.uniqueResult();
+		} catch (Exception ex) {
+			logger.error(ex);
+			throw new AimException(ex);
+		}
+		return helpTopic;
+	}
+
+    public static HelpTopic getHelpTopic(String key,String siteId,String moduleInstance) throws AimException {
 		Session session = null;
 		Query query = null;
 		HelpTopic helpTopic = null;
@@ -292,7 +308,7 @@ public class HelpUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			queryString = "from "+ HelpTopic.class.getName()+ " topic where topic.siteId=:siteId and topic.parent is null";
-			query = session.createQuery(queryString);			
+			query = session.createQuery(queryString);
 			query.setParameter("siteId", siteId);
 			helpTopics = query.list();
 		} catch (Exception e) {
@@ -301,8 +317,27 @@ public class HelpUtil {
 		}
 		return helpTopics;
 	}
-	
-	public static boolean hasChildren(String siteId,String moduleInstance,Long parentId)throws AimException{
+
+    public static List<HelpTopic> getFirstLevelTopics(String siteId,String moduleInstance) throws Exception{
+		Session session = null;
+		Query query = null;
+		List<HelpTopic> helpTopics = null;
+		String queryString=null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			queryString = "from "+ HelpTopic.class.getName()+ " topic where topic.siteId=:siteId and topic.moduleInstance=:moduleInstance and topic.parent is null";
+			query = session.createQuery(queryString);
+			query.setParameter("siteId", siteId);
+            query.setParameter("moduleInstance", moduleInstance);
+            helpTopics = query.list();
+		} catch (Exception e) {
+			logger.error("Unable to load help topics");
+  			throw new AimException("Unable to Load Help Topics", e);
+		}
+		return helpTopics;
+	}
+
+    public static boolean hasChildren(String siteId,String moduleInstance,Long parentId)throws AimException{
 		List<HelpTopic> helpTopics = getChildTopics(siteId, moduleInstance,	parentId);
 		if (helpTopics==null || helpTopics.size()==0){
 			return false;
@@ -331,9 +366,29 @@ public class HelpUtil {
 		}
 		return helpTopics;
 	}
-	
-	
-	public static List<Editor> getAllHelpKey() throws 
+
+    public static List<HelpTopic> getChildTopics(String siteId,Long parentId) throws AimException {
+		Session session = null;
+		Query query = null;
+		List<HelpTopic> helpTopics = null;
+		String queryString=null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			queryString = "from "+ HelpTopic.class.getName()
+			+ " topic where (topic.siteId=:siteId) and (topic.parent.helpTopicId=:id)";
+			query = session.createQuery(queryString);
+			query.setParameter("siteId", siteId);
+        	query.setParameter("id", parentId);
+			helpTopics = query.list();
+
+		} catch (Exception e) {
+			logger.error("Unable to load help topics");
+  			throw new AimException("Unable to Load Help Topics", e);
+		}
+		return helpTopics;
+	}
+
+    public static List<Editor> getAllHelpKey() throws
     EditorException {
 	
 	Session session = null;
@@ -490,7 +545,6 @@ public class HelpUtil {
 	 public static String renderTopicTree(Collection topics,HttpServletRequest request,boolean child){
 		 String xml="";
 		 Iterator iter = topics.iterator();
-		 String instanceName=RequestUtils.getModuleInstance(request).getInstanceName();
 		 while (iter.hasNext()) {
 			 HelpTopicsTreeItem item = (HelpTopicsTreeItem) iter.next();
 			 HelpTopic topic = (HelpTopic) item.getMember();
@@ -502,10 +556,11 @@ public class HelpUtil {
 		
 					if(item.getChildren().isEmpty()){	
 					
-					xml+= "<item text=\""+newCode+"\" id=\"" + topic.getHelpTopicId()+"\"/>";
+					xml+= "<item text=\""+newCode+"\" id=\""+ topic.getHelpTopicId()+"\"/>";
 				}else{
-					xml+= "<item text=\""+newCode+"\" id=\"" + topic.getHelpTopicId()+"\">";
-					 if (!item.getChildren().isEmpty() || item.getChildren().size() > 0) {
+					xml+= "<item  text=\""+newCode+"\" id=\"" +topic.getHelpTopicId()+"\">";
+                        System.out.println("name:"+newCode+"Topic_PRNT:"+topic.getHelpTopicId());
+                     if (!item.getChildren().isEmpty() || item.getChildren().size() > 0) {
 						 xml += renderTopicTree(item.getChildren(),request,true);
 					 }
 					xml+= "</item>";
@@ -549,8 +604,8 @@ public class HelpUtil {
 				}
 				//if(!item.getChildren().isEmpty()){					
 					String secondParameter="checkbox_0_"; //used to get helpTopic state (is it checked or not)
-					if(item.getparent()!=null){
-						secondParameter="checkbox_"+item.getparent().getHelpTopicId()+"_";
+					if(item.getParent()!=null){
+						secondParameter="checkbox_"+item.getParent().getHelpTopicId()+"_";
 					}
 					retVal+=" onchange=\"javascript:changeRelatedCheckboxesState('"+topic.getHelpTopicId()+"','"+secondParameter+"')\" ";
 				//}
@@ -898,7 +953,8 @@ public class HelpUtil {
 					Transaction tx=session.beginTransaction();
 					session.save(help);
 					tx.commit();
-			}
+
+            }
 			catch (Exception ex) {
 				logger.error("Exception : " + ex.getMessage());
 				ex.printStackTrace(System.out);
@@ -924,5 +980,53 @@ public class HelpUtil {
 		}
 		return retValue;
 	}
-	 
+
+
+    public static void saveNewTreeState(HelpTopic help,HashMap<Long,HelpTopic> storeMap,String siteId){
+
+         Thread th = new Thread();
+      try{
+                   HelpTopic helptopic = new HelpTopic();
+                   helptopic.setTopicKey(help.getTopicKey());
+				   helptopic.setSiteId("amp");
+				   helptopic.setTitleTrnKey(help.getTitleTrnKey());
+	    	       helptopic.setModuleInstance(help.getModuleInstance());
+	    	       helptopic.setKeywordsTrnKey(help.getKeywordsTrnKey());
+                   helptopic.setBodyEditKey(help.getBodyEditKey()); 
+
+                      if(help.getParent() != null){
+                        HelpTopic top = storeMap.get(help.getParent().getHelpTopicId());
+                           if(top!=null){
+
+                                     helptopic.setParent(top);
+                                 }
+                            }
+                   
+                     insertHelp(helptopic);
+
+                    th.sleep(500);
+                 
+                    HelpTopic newTopic = getHelpTopic(help.getTopicKey(),siteId,help.getModuleInstance());
+        
+                     HelpTopic parent = new HelpTopic();
+	    	    	 parent.setBodyEditKey(newTopic.getBodyEditKey());
+	    	    	 parent.setHelpTopicId(newTopic.getHelpTopicId());
+	    	    	 parent.setKeywordsTrnKey(newTopic.getKeywordsTrnKey());
+	    	    	 parent.setModuleInstance(newTopic.getModuleInstance());
+	    	    	 parent.setSiteId(newTopic.getSiteId());
+	    	    	 parent.setParent(newTopic.getParent());
+	    	    	 parent.setTitleTrnKey(newTopic.getTitleTrnKey());
+	    	    	 parent.setTopicKey(newTopic.getTopicKey());
+
+                     Long oldid = help.getHelpTopicId();
+                     storeMap.put(oldid, parent);
+   
+        } catch (Exception e) {
+			logger.error("Unable to Save help data"+e.getMessage());
+		}
+
+
+    }
+
+
 }

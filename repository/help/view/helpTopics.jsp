@@ -70,16 +70,24 @@
                         <div class="yui-content" style="height:700px;overflow: auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
                         <bean:define id="topic" name="helpForm" property="topicTree" type="java.util.Collection"/>
                         	<%= HelpUtil.renderTopicsTree(topic,request) %>
+
              		</div>
             -->
 
   <div id="treeboxbox_tree" class="yui-content" style="height:700px;overflow: auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;"></div>
   <div id="log"></div>
+  <div id="xmlString"></div>
+  <div id="moduleInstance" style="display:none;">
+     <c:forEach var="topins" items="${topic}" begin="1" end="1">
+            ${topins.moduleInstance}
+     </c:forEach>
+  </div>
 
 <script type="text/javascript">
 
 
-	function tonclick(id){
+    
+    function tonclick(id){
 			if(id != null){
 					var id = tree.getSelectedItemId();
 					show(id);
@@ -97,27 +105,18 @@
 			    xml+= '<%= HelpUtil.renderTopicTree(topic,request,false) %>';
 			    xml+='</tree>';
 		    tree.loadXMLString(xml);
-           /*
-           tree.loadXMLString(xml,function(){tree.loadState()});
-            tree.attachEvent("onOpenEnd",function(){
-            tree.saveState();});
-        var fso, f1;
-            fso = CreateObject("Scripting.FileSystemObject");
-            f1 = fso.CreateTextFile("test.txt");
 
-        var xmlDoc = new Object("Microsoft.XMLDOM");
-        xmlDoc.async="false";
-        tree.setSerializationLevel(false, true);
-        var contextTreeXml = tree.serializeTree();
-        tree.deleteChildItems(0);
-        xmlDoc = contextTreeXml;
-        
-    var fso, fldr;
-   fso = new Object("Scripting.FileSystemObject");
-   fldr = fso.CreateFolder("MyTest");
-   Response.Write("Created folder: " + fldr.Name);
-          xmlDoc.save('AP_Sample.xml'); 
-                         */
+             tree.attachEvent("onDrag",function(sid,tid,sobj,tobj){
+
+            if(sid){
+
+                var contextTreeXml = tree.serializeTree();
+                //var xmlobject = (new DOMParser()).parseFromString(contextTreeXml, "text/xml");
+                document.getElementById("xmlString").innerHTML = contextTreeXml;
+
+                    return true;
+            }});
+
     function show(str){
 
 	  if (str.length==0){

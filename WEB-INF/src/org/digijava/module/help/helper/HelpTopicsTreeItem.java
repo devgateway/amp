@@ -24,8 +24,13 @@ public class HelpTopicsTreeItem extends HierarchyMember{
 		return topic.getHelpTopicId();
 	}
 	
-	public HelpTopic getparent(){
+	public HelpTopic getParent(){
 		HelpTopic topic=(HelpTopic)this.getMember();
 		return topic.getParent();
+	}
+
+    public String getModuleInstance(){
+		HelpTopic topic=(HelpTopic)this.getMember();
+		return topic.getModuleInstance();
 	}
 }

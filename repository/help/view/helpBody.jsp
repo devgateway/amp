@@ -107,3 +107,5 @@ function editTopic(){
        	   </tr>
         </table>
 <div id="key" style="display:none;"></div>
+<div id="progress" align="center" style="display:block;" height="4px" width="4px"></div>
+

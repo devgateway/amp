@@ -6,6 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+
 <script type="text/javascript">
 <!--
 
@@ -24,7 +25,7 @@ function validate(topickey){
   }
 
 function edit(){
-    
+
     if(validate(getKey())){
 
         <digi:context name="editTopic" property="context/module/moduleinstance/helpActions.do~actionType=editHelpTopic"/>
@@ -60,6 +61,75 @@ function create(){
 
 }
 
+function saveTreeState(){
+
+     var xmlString = document.getElementById("xmlString").innerHTML;
+    var moduleInstance = document.getElementById("moduleInstance").innerHTML;
+
+     xmlHttp=GetXmlHttpObj();
+		if (xmlHttp==null){
+	 			alert ("Browser does not support HTTP Request")
+	 		return
+	 	}
+
+        showProgress('progress');
+	 	var urlact="/help/helpActions.do?actionType=saveTreeState"
+		urlact=urlact+"&changedXml="+xmlString+"&moduleInstance="+moduleInstance
+        xmlHttp.open("GET",urlact,true)
+		xmlHttp.onreadystatechange=stateChanged
+		xmlHttp.send(null)
+}
+
+function stateChanged(){
+   
+   if (xmlHttp.readyState==4)
+  {
+        if(xmlHttp.status == 200)
+        {
+          //code to process Ajax request
+          hideProgress('progress');
+        }
+  }
+}
+
+
+function GetXmlHttpObj()	{
+	 var xmlHttp=null;
+	 try
+ 	{
+ 		// Firefox, Opera 8.0+, Safari
+ 	xmlHttp=new XMLHttpRequest();
+ 	}catch (e)
+
+ 		{
+
+ 		// Internet Explorer
+ 	 try	{
+  		xmlHttp=new ActiveXObject("Msxml2.XMLHTTP");
+  	}
+ 		catch (e)
+  		{
+  			xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");
+  		}
+ 	}
+	return xmlHttp;
+}
+
+
+   function showProgress(name)
+   {
+      var prg = '<img src="/TEMPLATE/ampTemplate/images/ajax-loader.gif" alt="loading..."/>Saving...';
+       var progressViewer = document.getElementById(name);
+       progressViewer.innerHTML = prg;
+   }
+
+   function hideProgress(name)
+   {
+      var progressViewer = document.getElementById(name);
+       progressViewer.innerHTML = "";
+   }
+
+
 
 //-->
 </script>
@@ -75,15 +145,15 @@ function create(){
 
 </style>
 <digi:instance property="helpForm"/>
-<div id="content"  class="yui-skin-sam" style="width:100%;"> 
+<div id="content"  class="yui-skin-sam" style="width:100%;">
 	<div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
-               
+
                         <ul class="yui-nav">
                           <li class="selected">
                           <a title='><digi:trn key="aim:help:editcreate"> Edit/Create</digi:trn>'>
                           <div>
                             <digi:trn key="aim:help:editcreate"> Edit/Create</digi:trn>
-                          </div> 
+                          </div>
                           </a>
                           </li>
                         </ul>
@@ -99,18 +169,23 @@ function create(){
                                 <c:set var="topicDelete">
                                   <digi:trn>Click here to Delete Help Topic</digi:trn>
                                 </c:set>
+                                <c:set var="savetreeState">
+                                  <digi:trn>Click here to Delete Help Topic</digi:trn>
+                                </c:set>
 
                                       <a class="link" onclick="edit();" title="${topicEdit}" ><digi:trn>Edit Topic</digi:trn></a> |
 
                                       <a class="link" onclick="create();" title="${topicCreate}" > <digi:trn>Create Topic</digi:trn></a> |
 
-                                      <a class="link" onclick="remove();" title="${topicDelete}" ><digi:trn>Remove Topic</digi:trn></a>
+                                      <a class="link" onclick="remove();" title="${topicDelete}" ><digi:trn>Remove Topic</digi:trn></a> |
 
+
+                                        <a class="link" onclick="saveTreeState();" title="${savetreeState}" ><digi:trn>Save Tree State</digi:trn></a>
 
 
                           </div>
                      </div>
 	</div>
 </div>
-    
+
 

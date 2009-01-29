@@ -38,6 +38,16 @@ import org.digijava.module.help.jaxbi.AmpHelpRoot;
 import org.digijava.module.help.jaxbi.AmpHelpType;
 import org.digijava.module.help.jaxbi.ObjectFactory;
 import org.digijava.module.help.util.HelpUtil;
+import javax.xml.crypto.dsig.XMLObject;
+import javax.xml.crypto.dsig.XMLSignatureFactory;
+import javax.xml.transform.Source;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import org.xml.sax.InputSource;
+import org.digijava.module.help.helper.HelpTopicTree;
+
+
+import java.io.StringReader;
 
 
 public class HelpActions extends DispatchAction {
@@ -630,7 +640,7 @@ public class HelpActions extends DispatchAction {
 	 * @throws Exception
 	 */
 	private void removeLastLevelTopic(HelpTopic topic) throws Exception{
-		List<HelpTopic> childs=HelpUtil.getChildTopics(topic.getSiteId(), topic.getModuleInstance(), topic.getHelpTopicId());
+		List<HelpTopic> childs=HelpUtil.getChildTopics(topic.getSiteId(),topic.getHelpTopicId());
 		if(childs==null || childs.size()==0){
 			HelpUtil.deleteHelpTopic(topic);
 		}else{			
@@ -640,8 +650,21 @@ public class HelpActions extends DispatchAction {
 			HelpUtil.deleteHelpTopic(topic);
 		}
 	}
-	
-	private List<Long> getTopicsIds(String ids){
+
+    private void removeLastLevelTopic(HelpTopic topic,String moduleInstance) throws Exception{
+        
+        List<HelpTopic> childs=HelpUtil.getChildTopics(topic.getSiteId(), moduleInstance, topic.getHelpTopicId());
+		if(childs==null || childs.size()==0){
+			HelpUtil.deleteHelpTopic(topic);
+		}else{
+			for (HelpTopic child : childs) {
+				removeLastLevelTopic(child);
+			}
+			HelpUtil.deleteHelpTopic(topic);
+		}
+	}
+
+    private List<Long> getTopicsIds(String ids){
 		List<Long> topicsIds=new ArrayList<Long>();
 		while(ids.indexOf(",")!= -1){
 			Long id= new Long(ids.substring(0,ids.indexOf(",")).trim());
@@ -651,4 +674,96 @@ public class HelpActions extends DispatchAction {
 		topicsIds.add(new Long(ids.trim()));
 		return topicsIds;
 	}
+
+  
+    public void saveTreeState(ActionMapping mapping,
+                                           ActionForm form,
+                                           HttpServletRequest request,
+                                           HttpServletResponse response)
+                throws Exception{
+
+          String siteId=RequestUtils.getSite(request).getSiteId();
+
+          String xmlString = request.getParameter("changedXml");
+          String moduleInstance = request.getParameter("moduleInstance").trim();
+          
+          org.w3c.dom.Element e;
+          org.w3c.dom.NamedNodeMap nnm;
+          int i;
+          org.w3c.dom.Node n;
+          String attrname;
+          String attrval;
+
+       List<HelpTopic> listOfTree = new ArrayList<HelpTopic>();
+        HashMap<Long,HelpTopic> storeMap=new HashMap<Long, HelpTopic>();
+
+
+
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+                  DocumentBuilder builder = factory.newDocumentBuilder();
+                  org.w3c.dom.Document document = builder.parse(new InputSource(new StringReader(xmlString)));
+
+        org.w3c.dom.NodeList nl = document.getElementsByTagName("*");
+
+        int len = nl.getLength();
+        for (int j=0; j < len; j++)
+      {
+         e = (org.w3c.dom.Element) nl.item(j);
+         System.out.println(e.getTagName() + ":");
+         nnm = e.getAttributes();
+         if (nnm != null)
+         {
+            for (i=0; i<nnm.getLength(); i++)
+            {
+               n = nnm.item(i);
+
+               attrname = n.getNodeName();
+               attrval = n.getNodeValue(); 
+         
+                HelpTopic tree = new HelpTopic();
+                if(attrname.equals("id") && !attrval.equals("0")){
+
+                HelpTopic topic =  HelpUtil.loadhelpTopic(new Long(attrval));
+                System.out.print(" " + topic.getHelpTopicId() + " = " + topic.getTopicKey());
+                tree.setTopicKey(topic.getTopicKey());
+                tree.setSiteId(topic.getSiteId());
+                tree.setBodyEditKey(topic.getBodyEditKey());
+                tree.setModuleInstance(topic.getModuleInstance());
+                tree.setKeywordsTrnKey(topic.getKeywordsTrnKey());
+                tree.setTitleTrnKey(topic.getTitleTrnKey());
+                tree.setHelpTopicId(topic.getHelpTopicId());
+
+                if (topic.getParent() != null) {
+			            tree.setParent(topic.getParent());
+		            }
+                listOfTree.add(tree);
+
+               }
+            }
+
+         }
+        
+      }
+        try{
+
+            List<HelpTopic> firstLevelTopics=HelpUtil.getFirstLevelTopics(siteId,moduleInstance);
+
+            for (HelpTopic helpTopic : firstLevelTopics) {
+				removeLastLevelTopic(helpTopic,moduleInstance);
+			}
+
+               for (HelpTopic topic : listOfTree) {
+                  
+                   HelpUtil.saveNewTreeState(topic,storeMap,siteId);
+
+                }
+            
+            }catch (Exception ex) {
+                 ex.printStackTrace();
+           }
+
+        }
+    
+    
 }

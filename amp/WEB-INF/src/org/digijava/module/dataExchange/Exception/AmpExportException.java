@@ -20,6 +20,10 @@ public class AmpExportException extends DgException{
 		super();
 	}
 
+	public AmpExportException(String message) {
+		super(message);
+	}
+	
 	public AmpExportException(String message, int type) {
 		super(message);
 		this.type = type;

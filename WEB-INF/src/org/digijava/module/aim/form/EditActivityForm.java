@@ -1065,7 +1065,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			regions = null;
 			zones = null;
 			woredas = null;
-
 		}
 	}
 

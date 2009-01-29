@@ -124,8 +124,11 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 			
 			
 			if (ampCategoryValues != null) {
-				ampCategoryClass			= ((AmpCategoryValue)ampCategoryValues.toArray()[0]).getAmpCategoryClass();
-				boolean isMultiselect		= this.getMultiselect(ampCategoryClass);
+				boolean isMultiselect = false;
+				if(ampCategoryValues.size() > 0){
+					ampCategoryClass			= ((AmpCategoryValue)ampCategoryValues.toArray()[0]).getAmpCategoryClass();
+					isMultiselect		= this.getMultiselect(ampCategoryClass);
+				}
 				if (isMultiselect) {
 				
 					/* Getting the ids (there might be more than 1 since it is a multiselect) of the current value of the category */
@@ -161,9 +164,7 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 						logger.error(E);
 						E.printStackTrace();
 					}
-				}
-
-				else {
+				}else {
 					/* Getting the id of the current value of the category */
 					try{
 						if(bean!=null) {

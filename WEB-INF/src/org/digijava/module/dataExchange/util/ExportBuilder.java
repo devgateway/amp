@@ -366,27 +366,27 @@ public class ExportBuilder {
 		} else if (path.equalsIgnoreCase("activity.funding.commitments")){
 			if (ampfunding.getFundingDetails() != null) {
 				for (Iterator iterator = ampfunding.getFundingDetails().iterator(); iterator.hasNext();) {
-					FundingDetail fDetail = (FundingDetail) iterator.next();
-					if (fDetail.getTransactionType() == Constants.COMMITMENT){
-						funding.getCommitments().add(buildFundingDetail(fDetail));
+					AmpFundingDetail  ampFDetail = (AmpFundingDetail) iterator.next();
+					if (ampFDetail.getTransactionType() == Constants.COMMITMENT){
+						funding.getCommitments().add(buildFundingDetail(ampFDetail));
 					}
 				}
 			}
 		} else if (path.equalsIgnoreCase("activity.funding.disbursements")){
 			if (ampfunding.getFundingDetails() != null) {
 				for (Iterator iterator = ampfunding.getFundingDetails().iterator(); iterator.hasNext();) {
-					FundingDetail fDetail = (FundingDetail) iterator.next();
-					if (fDetail.getTransactionType() == Constants.DISBURSEMENT){
-						funding.getCommitments().add(buildFundingDetail(fDetail));
+					AmpFundingDetail  ampFDetail = (AmpFundingDetail) iterator.next();
+					if (ampFDetail.getTransactionType() == Constants.DISBURSEMENT){
+						funding.getCommitments().add(buildFundingDetail(ampFDetail));
 					}
 				}
 			}
 		} else if (path.equalsIgnoreCase("activity.funding.expenditures")){
 			if (ampfunding.getFundingDetails() != null) {
 				for (Iterator iterator = ampfunding.getFundingDetails().iterator(); iterator.hasNext();) {
-					FundingDetail fDetail = (FundingDetail) iterator.next();
-					if (fDetail.getTransactionType() == Constants.EXPENDITURE){
-						funding.getCommitments().add(buildFundingDetail(fDetail));
+					AmpFundingDetail  ampFDetail = (AmpFundingDetail) iterator.next();
+					if (ampFDetail.getTransactionType() == Constants.EXPENDITURE){
+						funding.getCommitments().add(buildFundingDetail(ampFDetail));
 					}
 				}
 			}
@@ -522,6 +522,21 @@ public class ExportBuilder {
 		retValue.setDate(ExportHelper.getGregorianCalendar(date));
 		return retValue;
 	}	
+
+	private FundingDetailType buildFundingDetail(AmpFundingDetail detail) throws AmpExportException{
+		String fDetailType = (detail.getAdjustmentType() == 1) ? 
+				DataExchangeConstants.ADJUSTMENT_TYPE_ACTUAL : 
+					DataExchangeConstants.ADJUSTMENT_TYPE_PLANNED;
+		long amount = 0;
+		
+		if (detail.getTransactionAmount() != null){
+			amount = detail.getTransactionAmount().longValue();
+		} else {
+			throw new AmpExportException("AmpFundingDetail.getTransactionAmount is null", AmpExportException.ACTIVITY_FORMAT);
+		}
+		
+		return buildFundingDetail(fDetailType, detail.getTransactionDate(), amount, detail.getAmpCurrencyId().getCurrencyCode());
+	}
 
 	private FundingDetailType buildFundingDetail(FundingDetail fDetail) throws AmpExportException{
 		long amount = 0;

@@ -14,14 +14,14 @@ import org.apache.struts.upload.FormFile;
  */
 public class TranslatorManagerForm extends ActionForm {
 	
-	TreeSet languages;
-	TreeSet importedLanguages;
-	String [] selectedLanguages;
-	String [] selectedImportedLanguages;
-	String [] overwriteTrn;
-	FormFile fileUploaded;
-	String[] keywords;
-
+	private TreeSet languages;
+	private TreeSet importedLanguages;
+	private String [] selectedLanguages;
+	private String [] selectedImportedLanguages;
+	private String [] overwriteTrn;
+	private FormFile fileUploaded;
+	private String[] keywords;
+	private String skipOrUpdateTrnsWithKeywords;
 	
 
 	public String[] getSelectedLanguages() {
@@ -58,6 +58,7 @@ public class TranslatorManagerForm extends ActionForm {
 		selectedImportedLanguages=null;
 		overwriteTrn=null;
 		keywords=null;
+		skipOrUpdateTrnsWithKeywords=null;
 	}
 
 	public String[] getSelectedImportedLanguages() {
@@ -90,6 +91,14 @@ public class TranslatorManagerForm extends ActionForm {
 
 	public void setKeywords(String[] keywords) {
 		this.keywords = keywords;
+	}
+
+	public String getSkipOrUpdateTrnsWithKeywords() {
+		return skipOrUpdateTrnsWithKeywords;
+	}
+
+	public void setSkipOrUpdateTrnsWithKeywords(String skipOrUpdateTrnsWithKeywords) {
+		this.skipOrUpdateTrnsWithKeywords = skipOrUpdateTrnsWithKeywords;
 	}
 	
 }

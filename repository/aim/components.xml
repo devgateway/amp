@@ -229,6 +229,11 @@
 	<page name="viewCategoryManager"  title ="- Category Manager " />
 	<page name="createOrEditCategory" title= "- Category Manager - Create or Edit Category " />
 
+	<!-- invalid data lists  -->
+	<page name="invalidDataDashboard" title="- Invalid Data Dashboard" />
+	<page name="invalidSectorPercentages" title="- Invalid Sector Percentages" />
+
+
 	<!-- translation manager-->
 	<page name="viewTranslatorManager"  title ="- Translator Manager " />
 

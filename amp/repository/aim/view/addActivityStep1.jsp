@@ -33,7 +33,7 @@
 
 <div id="myComment" style="display: none">
 	<div id="myCommentContent" class="content">
-		<jsp:include page="/repository/aim/view/viewComment.jsp"/>
+		<!-- jsp:include page="/repository/aim/view/viewComment.jsp"/-->
 	</div>
 </div>
 <script type="text/javascript">
@@ -148,11 +148,11 @@
 	}
 	function saveComment(){
 		var postString		= generateFields("");
-		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/viewComment.do", callback, postString);
+		//YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/viewComment.do", callback, postString);
 	}
 	 function editDelete() {
 		var postString		= generateFields("edit=true");
-		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/viewComment.do", callback, postString);
+		//YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/viewComment.do", callback, postString);
 	}
 
 	function message(val1,val2) {
@@ -370,9 +370,9 @@ function popupwin() {
 
 <digi:form action="/addActivity.do" method="post">
     
-<html:hidden property="step"/>
-<html:hidden property="editKey"/>
-<html:hidden property="editAct"/>
+<html:hidden property="step" styleId="step"/>
+<html:hidden property="editKey" styleId="editKey"/>
+<html:hidden property="editAct" styleId="editAct"/>
 
 <input type="hidden" name="edit" value="true">
 

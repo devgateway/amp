@@ -49,6 +49,7 @@ import org.digijava.module.aim.helper.AmpPrgIndicator;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.EditProgram;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.IndicatorsBean;
 import org.digijava.module.aim.helper.TreeItem;
 import org.digijava.module.translation.util.DbUtil;
@@ -63,6 +64,7 @@ import org.hibernate.Transaction;
 public class ProgramUtil {
 
 		private static Logger logger = Logger.getLogger(ProgramUtil.class);
+        @Deprecated
 		public static final int YAERS_LIST_START = 2000;
                 public static final String NATIONAL_PLAN_OBJECTIVE =
                     "National Plan Objective";
@@ -326,7 +328,9 @@ public class ProgramUtil {
          * @return
          */
         public static Collection<LabelValueBean> getYearsBeanList(){
-            return getYearsBeanList(YAERS_LIST_START);
+            String startYear=FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.YEAR_RANGE_START);
+            int year=Integer.parseInt(startYear);
+            return getYearsBeanList(year);
         }
 
         public static Collection<LabelValueBean> getYearsBeanList(int from){

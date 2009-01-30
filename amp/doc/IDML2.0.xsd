@@ -128,11 +128,17 @@
 							<xs:attribute name="type" use="required">
 								<xs:simpleType>
 									<xs:restriction base="xs:string">
-										<xs:enumeration value="Responsible"/>
-										<xs:enumeration value="Executing"/>
-										<xs:enumeration value="Implementing"/>
-										<xs:enumeration value="Beneficiary"/>
-										<xs:enumeration value="Contracting"/>
+										<xs:enumeration value="Reporting Agency"/>
+										<xs:enumeration value="Funding Agency"/>
+										<xs:enumeration value="Implementing Agency"/>
+										<xs:enumeration value="Beneficiary Agency"/>
+										<xs:enumeration value="Contracting Agency"/>
+										<xs:enumeration value="Regional Group"/>
+										<xs:enumeration value="Sector Group"/>
+										<xs:enumeration value="Executing Agency"/>
+										<xs:enumeration value="Responsible Organizaton"/>
+										<xs:enumeration value="Contractor"/>
+										<xs:enumeration value="Releated Institutions"/>
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:attribute>

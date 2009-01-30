@@ -203,16 +203,30 @@ public class ExportBuilder {
 					org.setCode(ampOrgRole.getOrganisation().getOrgCode());
 //TODO					org.setLang("");
 
-					if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase(Constants.RESPONSIBLE_ORGANISATION)){
-						org.setType(DataExchangeConstants.ORG_ROLE_RESPONSIBLE);
-					} else if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase(Constants.EXECUTING_AGENCY)){
-						org.setType(DataExchangeConstants.ORG_ROLE_EXECUTING);
+					if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase(Constants.REPORTING_AGENCY)){
+						org.setType(DataExchangeConstants.ORG_ROLE_REPORTING_AGENCY);
+					} else if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase(Constants.FUNDING_AGENCY)){
+						org.setType(DataExchangeConstants.ORG_ROLE_FUNDING_AGENCY);
 					} else if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase(Constants.IMPLEMENTING_AGENCY)){
-						org.setType(DataExchangeConstants.ORG_ROLE_IMPLEMENTING);
+						org.setType(DataExchangeConstants.ORG_ROLE_IMPLEMENTING_AGENCY);
 					} else if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase(Constants.BENEFICIARY_AGENCY)){
-						org.setType(DataExchangeConstants.ORG_ROLE_BENEFICIARY);
+						org.setType(DataExchangeConstants.ORG_ROLE_BENEFICIARY_AGENCY);
 					} else if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase(Constants.CONTRACTING_AGENCY)){
-						org.setType(DataExchangeConstants.ORG_ROLE_CONTRACTING);
+						org.setType(DataExchangeConstants.ORG_ROLE_CONTRACTING_AGENCY);
+					} else if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase(Constants.REGIONAL_GROUP)){
+						org.setType(DataExchangeConstants.ORG_ROLE_REGIONAL_GROUP);
+					} else if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase(Constants.SECTOR_GROUP)){
+						org.setType(DataExchangeConstants.ORG_ROLE_SECTOR_GROUP);
+					} else if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase(Constants.EXECUTING_AGENCY)){
+						org.setType(DataExchangeConstants.ORG_ROLE_EXECUTING_AGENCY);
+					} else if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase(Constants.RESPONSIBLE_ORGANISATION)){
+						org.setType(DataExchangeConstants.ORG_ROLE_RESPONSIBLE_ORGANIZATION);
+					} else if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase(Constants.CONTRACTOR)){
+						org.setType(DataExchangeConstants.ORG_ROLE_CONTRACTOR);
+					} else if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase(Constants.RELATED_INSTITUTIONS)){
+						org.setType(DataExchangeConstants.ORG_ROLE_RELEATED_INSTITUTIONS);
+					} else {
+						throw new AmpExportException("Releated Organization type is unknown", AmpExportException.ACTIVITY_DATA_INEFFICIENT);
 					}
 					
 

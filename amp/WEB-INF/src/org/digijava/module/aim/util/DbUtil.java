@@ -92,6 +92,7 @@ import org.digijava.module.aim.helper.CountryBean;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.Documents;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Indicator;
 import org.digijava.module.aim.helper.ParisIndicator;
@@ -2537,12 +2538,7 @@ public class DbUtil {
                 result=result.subList(0, 4);//pick 5 largest projects
             }
              
-            String format = "###,###,###,##0.0"; // numbers
-
-            DecimalFormatSymbols decSymbols = new DecimalFormatSymbols();
-            decSymbols.setDecimalSeparator('.');
-            decSymbols.setGroupingSeparator(',');
-            DecimalFormat frt=new DecimalFormat(format);      
+              
             Iterator<AmpActivity> activityIter = result.iterator();
             // converting funding to selected currency amount and creating projects
             while (activityIter.hasNext()) {
@@ -2558,13 +2554,13 @@ public class DbUtil {
                 project.setSectors(activity.getSectors());
                 FundingCalculationsHelper cal = new FundingCalculationsHelper();
                 cal.doCalculations(details, currCode);
-                double thousands=("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)))?0.001:1;
-                Double amount=cal.getTotActualComm().doubleValue()/million*thousands; //divide by 1 000 000 to show amount in million
+               
+                Double amount=FeaturesUtil.applyThousandsForVisibility(cal.getTotActualComm().doubleValue());
 
                 /* we could use FormatHelper.formatNumber in amounts were not in millions
                 and the req. did not insists on the signal decimal*/
                 
-                project.setAmount(frt.format(amount));
+                project.setAmount(FormatHelper.formatNumber(amount));
                 String title=activity.getName();
                 if(title.length()>15){
                     title=title.substring(0, 14)+"...";

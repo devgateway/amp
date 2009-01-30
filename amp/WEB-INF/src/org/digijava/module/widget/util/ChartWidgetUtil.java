@@ -94,7 +94,7 @@ import org.jfree.ui.RectangleInsets;
 public class ChartWidgetUtil {
 
     private static Logger logger = Logger.getLogger(ChartWidgetUtil.class);
-    public final static int MILLION=1000000;
+    
 
     /**
      * Generates chart object from specified indicator and options.
@@ -166,14 +166,18 @@ public class ChartWidgetUtil {
 		JFreeChart chart = null;
 		Font font8 = new Font(null,0,12);
 		CategoryDataset dataset=getTypeOfAidDataset(filter);
-		chart=ChartFactory.createStackedBarChart("Type of Aid","","Amount in millions",dataset,PlotOrientation.VERTICAL, true, true,false);
+		chart=ChartFactory.createStackedBarChart("Type of Aid","","Amount in thousands",dataset,PlotOrientation.VERTICAL, true, true,false);
 		chart.getTitle().setFont(font8);
 		if (opt.isShowLegend()){
 			chart.getLegend().setItemFont(font8);		
 		}
 
-		
-		return chart;
+        CategoryPlot plot = chart.getCategoryPlot();
+        CategoryItemRenderer renderer = plot.getRenderer();
+        CategoryItemLabelGenerator labelGenerator = new WidgetCategoryItemLabelGenerator();
+		renderer.setBaseItemLabelsVisible(true);
+        renderer.setBaseItemLabelGenerator(labelGenerator);
+        return chart;
 	}
     
     
@@ -185,23 +189,28 @@ public class ChartWidgetUtil {
      * @return chart
      * @throws DgException
      */
-    public static JFreeChart getPledgesCommDisbChart(ChartOption opt, FilterHelper filter) throws DgException{
-		JFreeChart chart = null;
-		Font font8 = new Font(null,0,12);
-		CategoryDataset dataset=getPledgesCommDisbDataset(filter);
-		chart=ChartFactory.createBarChart("Pledges/Comm/Disb","","Amount in millions",dataset,PlotOrientation.VERTICAL, true, true,false);
-		chart.getTitle().setFont(font8);
-		if (opt.isShowLegend()){
-			chart.getLegend().setItemFont(font8);		
-		}
-                  // get a reference to the plot for further customisation...
-              CategoryPlot plot = chart.getCategoryPlot();
-              BarRenderer renderer = (BarRenderer) plot.getRenderer();
-              renderer.setDrawBarOutline(false);
-              renderer.setItemMargin(0);
-           
-	      return chart;
-	}
+    public static JFreeChart getPledgesCommDisbChart(ChartOption opt, FilterHelper filter) throws DgException {
+        JFreeChart chart = null;
+        Font font8 = new Font(null, 0, 12);
+        CategoryDataset dataset = getPledgesCommDisbDataset(filter);
+        chart = ChartFactory.createBarChart("Pledges/Comm/Disb", "", "Amount in thousands", dataset, PlotOrientation.VERTICAL, true, true, false);
+        chart.getTitle().setFont(font8);
+        if (opt.isShowLegend()) {
+            chart.getLegend().setItemFont(font8);
+        }
+        // get a reference to the plot for further customisation...
+        CategoryPlot plot = chart.getCategoryPlot();
+        BarRenderer renderer = (BarRenderer) plot.getRenderer();
+        renderer.setDrawBarOutline(false);
+        renderer.setItemMargin(0);
+
+
+        CategoryItemLabelGenerator labelGenerator = new WidgetCategoryItemLabelGenerator("{2}", new DecimalFormat("#.######"));
+        renderer.setBaseItemLabelsVisible(true);
+        renderer.setBaseItemLabelGenerator(labelGenerator);
+
+        return chart;
+    }
     
     /**
      * Generates chart object from specified filters and options.
@@ -215,7 +224,7 @@ public class ChartWidgetUtil {
 		JFreeChart chart = null;
 		Font font8 = new Font(null,0,12);
 		CategoryDataset dataset=getODAProfileDataset(filter);
-		chart=ChartFactory.createStackedAreaChart("ODA Profile","","Amount in millions",dataset,PlotOrientation.VERTICAL, true, true,false);
+		chart=ChartFactory.createStackedAreaChart("ODA Profile","","Amount in thousands",dataset,PlotOrientation.VERTICAL, true, true,false);
 		chart.getTitle().setFont(font8);
 		if (opt.isShowLegend()){
 			chart.getLegend().setItemFont(font8);		
@@ -252,9 +261,8 @@ public class ChartWidgetUtil {
             for (long i = year - 4; i <= year; i++) {
                 Collection<AmpCategoryValue> typeOfAids = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
                 for (AmpCategoryValue aid : typeOfAids) {
-                    DecimalWraper funding = getFunding(filter.getOrgId(), i, aid.getId(), currCode,filter.getTransactionType(),filter.getTeamMember());
-                    double thousands=("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))?0.001:1);
-                    result.addValue(funding.doubleValue()/MILLION*thousands, aid.getValue(), new Long(i));
+                    DecimalWraper funding = getFunding(filter.getOrgId(), i, aid.getId(), currCode,filter.getTransactionType(),filter.getTeamMember());    
+                    result.addValue(FeaturesUtil.applyThousandsForVisibility(funding.doubleValue()), aid.getValue(), new Long(i));
                      if (funding.doubleValue() != 0) {
                         nodata = false;
                     }
@@ -300,8 +308,7 @@ public class ChartWidgetUtil {
                     if (funding.doubleValue() != 0) {
                         nodata = false;
                     }
-                    double thousands=("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))?0.001:1);
-                    result.addValue(funding.doubleValue()/MILLION*thousands, financingInstrument.getValue(), new Long(i));
+                    result.addValue(FeaturesUtil.applyThousandsForVisibility(funding.doubleValue()), financingInstrument.getValue(), new Long(i));
                     }
 
             }
@@ -340,13 +347,13 @@ public class ChartWidgetUtil {
         }
         if (filter.getOrgId() != null) {
             for (long i = year - 2; i <= year; i++) {
-              double thousands=("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))?0.001:1);
+             
               Double fundingPledge = getPledgesFunding(filter.getOrgId(), i, currCode);
-              result.addValue(fundingPledge .doubleValue()/MILLION*thousands, "Pledges", new Long(i));
+              result.addValue(FeaturesUtil.applyThousandsForVisibility(fundingPledge) .doubleValue(), "Pledges", new Long(i));
               DecimalWraper fundingComm = getFunding(filter.getOrgId(), i, currCode,true, filter.getTeamMember());
-              result.addValue(fundingComm.doubleValue()/MILLION*thousands, "Actual commitments", new Long(i));
+              result.addValue(FeaturesUtil.applyThousandsForVisibility(fundingComm.doubleValue()), "Actual commitments", new Long(i));
               DecimalWraper fundingDisb = getFunding(filter.getOrgId(), i, currCode,false,filter.getTeamMember());
-              result.addValue(fundingDisb.doubleValue()/MILLION*thousands, "Actual disbursements", new Long(i));
+              result.addValue(FeaturesUtil.applyThousandsForVisibility(fundingDisb.doubleValue()), "Actual disbursements", new Long(i));
                 if (fundingPledge.doubleValue() != 0 || fundingComm.doubleValue() != 0 || fundingDisb.doubleValue() != 0) {
                     nodata = false;
                 }
@@ -777,7 +784,6 @@ public class ChartWidgetUtil {
      */
         
 	public static DefaultPieDataset getDonorRegionalDataSet(FilterHelper filter) throws DgException {
-            double thousands=("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))?0.001:1);
             Long year = filter.getYear();
             if (year == null || year == -1) {
                 year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
@@ -868,7 +874,7 @@ public class ChartWidgetUtil {
                 else{
                     total=cal.getTotActualDisb();
                 }
-                ds.setValue(region.getName(), total.doubleValue()/MILLION*thousands);
+                ds.setValue(region.getName(),FeaturesUtil.applyThousandsForVisibility(total.doubleValue()));
             }
         } catch (Exception e) {
             logger.error(e);
@@ -891,8 +897,7 @@ public class ChartWidgetUtil {
     @SuppressWarnings("empty-statement")
 	public static DefaultPieDataset getDonorSectorDataSet(FilterHelper filter) throws DgException {
 
-        double thousands=("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))?0.001:1);
-
+     
         /* if user doesn't select year, currency we are
         taking this information from global settings value*/
 
@@ -958,14 +963,14 @@ public class ChartWidgetUtil {
                 double percent=total.doubleValue()/totAllSeqtors.doubleValue();
                 // the sectors which percent is less then 5% should be group in "Others"
                 if (percent > 0.05) {
-                    ds.setValue(sector.getName(), total.doubleValue() / MILLION*thousands);
+                    ds.setValue(sector.getName(), FeaturesUtil.applyThousandsForVisibility(total.doubleValue()));
                 } else {
-                    others+=total.doubleValue()*thousands;
+                    others+=total.doubleValue();
                 }
                 
             }
             if(others>0){
-                  ds.setValue("Others", others / MILLION);
+                  ds.setValue("Others", FeaturesUtil.applyThousandsForVisibility(others) );
             }
         } catch (Exception e) {
             logger.error(e);
@@ -1263,7 +1268,7 @@ public class ChartWidgetUtil {
                     }
 
                    
-                    qr += " )";
+                    qr += " ) and act.draft=false and act.approvalStatus='approved' ";
                 }
 
             }

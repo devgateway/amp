@@ -31,21 +31,22 @@ import org.apache.struts.action.ActionMapping;
 
 //ActionForm for user Administration
 
-public class AdministrateUserForm
-    extends ActionForm {
+public class AdministrateUserForm extends ActionForm {
 
-    private Long selectedUserId;
+	private static final long serialVersionUID = 1L;
+
+	private Long selectedUserId;
 
     private String firstNames;
     private String lastName;
 
-    private boolean alertable;
-
-    private boolean ban;
     private String newPassword;
     private String confirmnewPassword;
 
+    private boolean alertable;
+    private boolean ban;
     private boolean globalAdmin;
+    private boolean emailVerified;
 
     public void reset(ActionMapping mapping, HttpServletRequest request) {
 
@@ -55,6 +56,7 @@ public class AdministrateUserForm
         alertable = false;
         ban = false;
         globalAdmin = false;
+        emailVerified = false;
     }
 
     public ActionErrors validate(ActionMapping actionMapping,
@@ -146,5 +148,13 @@ public class AdministrateUserForm
     public void setGlobalAdmin(boolean globalAdmin) {
         this.globalAdmin = globalAdmin;
     }
+
+	public void setEmailVerified(boolean emailVerified) {
+		this.emailVerified = emailVerified;
+	}
+
+	public boolean isEmailVerified() {
+		return emailVerified;
+	}
 
 }

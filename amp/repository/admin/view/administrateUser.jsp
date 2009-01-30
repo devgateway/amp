@@ -16,7 +16,7 @@
 		<td><digi:img src="module/admin/images/yellowLeftTile.gif" border="0" width="20"/></td>
 		<td width="100%">
 			<font class="sectionTitle">
-				<digi:trn key="admin:userAdministration">User Administration</digi:trn>
+				<digi:trn key="admin:userAdministration">User Administration</digi:trn>!!!
 			</font>
 		</td>
 	</tr>
@@ -53,6 +53,7 @@
 
       <tr><td width="100%" colspan="2"><html:checkbox name="administrateUserForm" property="globalAdmin"><digi:trn key="admin:makeUserGlobalAdmin">Make user Global Admin</digi:trn></html:checkbox></td></tr>
       <tr><td width="100%" colspan="2"><html:checkbox name="administrateUserForm" property="ban"><digi:trn key="admin:banUser">Ban a user</digi:trn></html:checkbox></td></tr>
+      <tr><td width="100%" colspan="2"><html:checkbox name="administrateUserForm" property="emailVerified"><digi:trn key="admin:userEmailVerified">Email verified</digi:trn></html:checkbox></td></tr>
 </digi:secure>
   </table>
   <br>

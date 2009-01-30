@@ -559,14 +559,14 @@ public class HelpUtil {
 					xml+= "<item text=\""+newCode+"\" id=\""+ topic.getHelpTopicId()+"\"/>";
 				}else{
 					xml+= "<item  text=\""+newCode+"\" id=\"" +topic.getHelpTopicId()+"\">";
-                        System.out.println("name:"+newCode+"Topic_PRNT:"+topic.getHelpTopicId());
+                        System.out.println("name:"+newCode+" Topic_PRNT:"+topic.getHelpTopicId());
                      if (!item.getChildren().isEmpty() || item.getChildren().size() > 0) {
 						 xml += renderTopicTree(item.getChildren(),request,true);
 					 }
 					xml+= "</item>";
 				} 
 			 }
-	}
+	      }
 		 return xml;
 	 }
 	 
@@ -762,7 +762,21 @@ public class HelpUtil {
                                             helpout.setLastModDate(cal_u);
                                       }
 
-			   	            }
+			   	            }else{
+
+                                            HelpLang helplang = new HelpLang();
+                                            helplang.setBody("");
+                                            helplang.setTitle(getTrn(item.getTopicKey(),lan,new Long(3)));
+                                            helplang.setCode(lan);
+
+                                            helpout.getLang().add(helplang);
+
+                                            Calendar cal_u = Calendar.getInstance();
+                                            cal_u.setTime(new Date());
+                                            helpout.setLastModDate(cal_u);
+
+
+                                    }
 				        	
 			        }
 

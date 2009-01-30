@@ -59,6 +59,8 @@ public class ShowAdministrateUser
         userForm.setAlertable(!selectedUser.isActivate());
 
         userForm.setGlobalAdmin(selectedUser.isGlobalAdmin());
+        
+        userForm.setEmailVerified(selectedUser.isEmailVerified());
 
         return mapping.findForward("forward");
     }

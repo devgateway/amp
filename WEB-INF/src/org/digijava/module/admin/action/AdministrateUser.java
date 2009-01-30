@@ -22,6 +22,7 @@
 
 package org.digijava.module.admin.action;
 
+import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -29,15 +30,13 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.security.DigiSecurityManager;
 import org.digijava.kernel.user.User;
-import org.digijava.kernel.util.DgUtil;
-import org.digijava.module.admin.form.AdministrateUserForm;
-import org.digijava.module.admin.util.DbUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.UserUtils;
-import javax.security.auth.Subject;
-import org.digijava.kernel.security.DigiSecurityManager;
-import org.digijava.kernel.request.Site;
+import org.digijava.module.admin.form.AdministrateUserForm;
+import org.digijava.module.admin.util.DbUtil;
 
 //Action for user administration
 
@@ -50,7 +49,6 @@ public class AdministrateUser
         java.lang.Exception {
 
         AdministrateUserForm userForm = (AdministrateUserForm) form;
-        User currentUser = RequestUtils.getUser(request);
         Site currentSite = RequestUtils.getSite(request);
 
         //take selected user
@@ -97,6 +95,12 @@ public class AdministrateUser
             if (selectedUser.isBanned() != userForm.isBan() ) {
                 selectedUser.setBanned(userForm.isBan());
                 changed = true;
+            }
+            
+            // Set/clear email verified
+            if (selectedUser.isEmailVerified() != userForm.isEmailVerified()){
+            	selectedUser.setEmailVerified(userForm.isEmailVerified());
+            	changed = true;
             }
         }
 

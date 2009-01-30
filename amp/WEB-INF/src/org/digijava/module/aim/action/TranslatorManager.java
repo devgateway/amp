@@ -198,14 +198,16 @@ public class TranslatorManager extends Action {
 								{	
 									//what was selected: overwrite,update or insert non-existing
 									String actionName=request.getParameter("LANG:"+tMngForm.getSelectedImportedLanguages()[i]);
+									//what to do with translations,which have keywords that were typed by user on import page.
+									String skipOrUpdateTrnsWithKeywords=tMngForm.getSkipOrUpdateTrnsWithKeywords();
 									List<String> keywords=tMngForm.getKeywords()==null?new ArrayList<String>():Arrays.asList(tMngForm.getKeywords());
 									//if overwrite is selected , then we should delete all translations,except those,which have keywords!=null(both on local db or in file)
-									if(actionName.compareTo("overwrite")==0){
-										//build Map from translations
-										translationsMap=buildMap(tHP.getTranslations());
-										//filter and delete unused messages										
-										removeUnusedMessages(translationsMap, tMngForm.getSelectedImportedLanguages()[i],keywords);
-									}
+//									if(actionName.compareTo("overwrite")==0){
+//										//build Map from translations
+//										translationsMap=buildMap(tHP.getTranslations());
+//										//filter and delete unused messages										
+//										removeUnusedMessages(translationsMap, tMngForm.getSelectedImportedLanguages()[i],keywords,skipOrUpdateTrnsWithKeywords);
+//									}
 									
 									Iterator<Trn> trnsIterator=tHP.getTranslations().iterator();									
 									
@@ -227,10 +229,10 @@ public class TranslatorManager extends Action {
 											updateNonExistingTranslationMessage(msg,tMngForm.getSelectedImportedLanguages()[i]);
 											logger.info("updating non existing...."+msg.getKey());
 										}else if(actionName.compareTo("update")==0){											
-											overrideOrUpdateTrns(msg,tMngForm.getSelectedImportedLanguages()[i],actionName,keywords);
+											overrideOrUpdateTrns(msg,tMngForm.getSelectedImportedLanguages()[i],actionName,keywords,skipOrUpdateTrnsWithKeywords);
 											logger.info("updating new tr msg...."+msg.getKey());
 										}else if(actionName.compareTo("overwrite")==0){											
-											overrideOrUpdateTrns(msg,tMngForm.getSelectedImportedLanguages()[i],actionName,keywords);
+											overrideOrUpdateTrns(msg,tMngForm.getSelectedImportedLanguages()[i],actionName,keywords,skipOrUpdateTrnsWithKeywords);
 											logger.info("inserting...."+msg.getKey());
 										}
 									}
@@ -364,18 +366,38 @@ public class TranslatorManager extends Action {
 	 * Remove messages which have no keywords neither in local db, nor in imported file
 	 * @author Dare
 	 */
-	private void removeUnusedMessages(Map<String,Trn> trnsMap,String lang,List<String> keywords) throws Exception{
+	private void removeUnusedMessages(Map<String,Trn> trnsMap,String lang,List<String> keywords,String skipOrUpdateTrnsWithKeywords) throws Exception{
 		Collection<Message> dbMessages=null;
 		Collection<Message> messagesToBeRemoved=null;
 		try {
 			dbMessages=getTranslationsForLang(lang);
 			for (Message message : dbMessages) {
-				if(trnsMap.get(message.getKey())==null || (!keywords.contains(message.getKeyWords()) && !keywords.contains(trnsMap.get(message.getKey()).getKeywords()))){
+				boolean msgShouldBeRemoved=false;
+				if(skipOrUpdateTrnsWithKeywords.equalsIgnoreCase("skip")){
+					//if any messages from database is not in imported messages list, but it has keyword(that user chose to be skipped),then it should not be removed from db.
+					//also if any message is in both (db and file), but it has keyword(that user chose to be skipped) in any from these two(db or file), it shouldn't be removed
+					//in any other case it has to be removed from db.
+					if((trnsMap.get(message.getKey())==null || !keywords.contains(trnsMap.get(message.getKey()).getKeywords())) && !keywords.contains(message.getKeyWords())){
+						msgShouldBeRemoved=true;
+					}	
+				}else if(skipOrUpdateTrnsWithKeywords.equalsIgnoreCase("update")){
+					//if any message from db is not in imported messages list,but it has keyword(that user chose to be updated),then it should be removed.
+					//also if any message is in both(db and file), but it has a keyword(that user chose to be updated),then it should be removed
+					//in any other case it has to be removed from db.
+					if(( trnsMap.get(message.getKey())==null || keywords.contains(trnsMap.get(message.getKey()).getKeywords())) && keywords.contains(message.getKeyWords())){
+						msgShouldBeRemoved=true;
+					}
+				}else if(skipOrUpdateTrnsWithKeywords.equalsIgnoreCase("updateEverything")){
+					//any message from db should be removed
+					msgShouldBeRemoved=true;
+				}
+				if(msgShouldBeRemoved){
 					if(messagesToBeRemoved==null){
 						messagesToBeRemoved=new ArrayList<Message>();
 					}
 					messagesToBeRemoved.add(message);
 				}				
+							
 			}
 			//remove not useful messages
 			for (Message message : messagesToBeRemoved) {
@@ -472,7 +494,7 @@ public class TranslatorManager extends Action {
 	}
 
 	
-	private void overrideOrUpdateTrns(Message msgLocal,String lang,String actionName,List<String>keyWords) throws Exception{
+	private void overrideOrUpdateTrns(Message msgLocal,String lang,String actionName,List<String>keyWords,String skipOrUpdateTrnsWithKeywords) throws Exception{
 		Session session = null;		
 		Query qry;
 		String qryStr;		
@@ -483,12 +505,22 @@ public class TranslatorManager extends Action {
 			qry= session.createQuery(qryStr);
 			qry.setParameter("msgKey", msgLocal.getKey(), Hibernate.STRING);
 			qry.setParameter("langIso", lang, Hibernate.STRING);
+			List<Message> messages=qry.list();
 			
-			if (qry.list().iterator().hasNext()) {
-				Iterator<Message> itr = qry.list().iterator();
+			if (messages.iterator().hasNext()) {
+				Iterator<Message> itr = messages.iterator();
 				while (itr.hasNext()) {
 					Message msg = itr.next();
-					if(!keyWords.contains(msgLocal.getKeyWords()) && !keyWords.contains(msg.getKeyWords())){
+					boolean gotoNextCheck=false;
+					if(skipOrUpdateTrnsWithKeywords.equalsIgnoreCase("skip") && !keyWords.contains(msgLocal.getKeyWords()) && !keyWords.contains(msg.getKeyWords()) ){
+						gotoNextCheck=true;
+					}else if( skipOrUpdateTrnsWithKeywords.equalsIgnoreCase("update") && (keyWords.contains(msgLocal.getKeyWords()) || keyWords.contains(msg.getKeyWords()) ) ){
+						gotoNextCheck=true;
+					}else if(skipOrUpdateTrnsWithKeywords.equalsIgnoreCase("updateEverything")){
+						gotoNextCheck=true;
+					}
+					
+					if(gotoNextCheck){
 						boolean saveOrUpdate=false;
 						if(actionName.equals("update")){
 							if (msgLocal.getCreated().after(msg.getCreated())&& msgLocal.getLocale().compareTo(msg.getLocale()) == 0 || msg.getMessage().equalsIgnoreCase("")) {
@@ -508,15 +540,22 @@ public class TranslatorManager extends Action {
 				}
 				tx.commit();
 			}else{
-				logger.debug("New Key Found adding "+ msgLocal.getKey() + " to local db");
-				Message msg= new Message();
-				msg.setKey(msgLocal.getKey());
-				msg.setLocale(lang);
-				msg.setSiteId(msgLocal.getSiteId());
-				msg.setMessage(msgLocal.getMessage().trim());
-				msg.setCreated(new java.sql.Timestamp(msgLocal.getCreated().getTime()));
-				insertTranslationMessage(msg);
-				
+				boolean insertNewMsg=true;
+				if(skipOrUpdateTrnsWithKeywords.equalsIgnoreCase("update") && !keyWords.contains(msgLocal.getKeyWords())){
+					//if we have skipOrUpdateTrnsWithKeywords=update case,this means that only messages with keywords(that match user's typed ones) should be inserted
+					insertNewMsg=false;
+				}
+				if(insertNewMsg){
+					logger.debug("New Key Found adding "+ msgLocal.getKey() + " to local db");
+					Message msg= new Message();
+					msg.setKey(msgLocal.getKey());
+					msg.setLocale(lang);
+					msg.setSiteId(msgLocal.getSiteId());
+					msg.setMessage(msgLocal.getMessage().trim());
+					msg.setCreated(new java.sql.Timestamp(msgLocal.getCreated().getTime()));
+					msg.setKeyWords(msgLocal.getKeyWords());
+					insertTranslationMessage(msg);
+				}
 			}
 		}
 		catch (Exception ex) {

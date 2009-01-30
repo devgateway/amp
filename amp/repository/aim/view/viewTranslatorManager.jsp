@@ -7,8 +7,16 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ page import="java.util.Map"%>
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript"  src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
+
+<!-- this is for the nice tooltip widgets -->
+<DIV id="TipLayer"  style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
 
 <script langauage="JavaScript">
+	var importHelp="<digi:trn>Translation Manager</digi:trn>"
+	var separateKeywords="<digi:trn>Please separate keywords by semicolons</digi:trn>"
+
 	function enableChkBox(chkBox) {
 		alert(chkBox);
 	}
@@ -196,7 +204,16 @@ div.fakefile2 input{
 		}
 	}
 
-
+	function changeKeywordsVisibility(){
+		var mySelect=document.getElementById('mySelect');
+		if(mySelect.value== 'updateEverything'){
+			document.getElementById('textDiv').style.display='none';
+			document.getElementById('keywordsDiv').style.display='none';
+		}else if(mySelect.value== 'skip' || mySelect.value== 'update'){
+			document.getElementById('textDiv').style.display='block';
+			document.getElementById('keywordsDiv').style.display='block';
+		}
+	}
 
 </script>
 
@@ -218,27 +235,21 @@ div.fakefile2 input{
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 						</c:set>
 						<digi:link href="/admin.do" styleClass="comment" title="${translation}" >
-						<digi:trn key="aim:AmpAdminHome">
-						Admin Home
-						</digi:trn>
+						<digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<digi:trn key="aim:translationManager">
-						Translation Manager
-						</digi:trn>
+						<digi:trn key="aim:translationManager">Translation Manager</digi:trn>
 					</td>
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571>
+					<td height="16" vAlign="middle" width="571">
                       <span class=subtitle-blue>
-                        <digi:trn key="aim:TranslationManagerHeader">
-                        Translation Manager
-                        </digi:trn>
+                        <digi:trn>Translation Manager</digi:trn>
                       </span>
 					</td>
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571>
+					<td height="16" vAlign="middle" width="571">
 						<digi:errors />
 					</td>
 				</tr>
@@ -269,25 +280,20 @@ div.fakefile2 input{
 							 <tr>
 							 	<td>
                                   <c:set var="translation">
-                                    <digi:trn key="aim:TranslationManagerExportButton">
-                                    Export
-                                    </digi:trn>
+                                    <digi:trn>Export</digi:trn>
                                   </c:set>
                                   <html:submit style="dr-menu" value="${translation}" property="export"/>
                                 </td>
 							 </tr>
 							 <td>
 									<br/>
-									<digi:trn key="aim:translationManagerLangSelectMsg">
-									Please select the languages you want to export
-									</digi:trn>
+									<digi:trn>Please select the languages you want to export</digi:trn>
 							</td>
 					 </digi:form>
 					</logic:notEmpty>
 
 					<tr>
-						<td><br/><br/><br/>
-							</td>
+						<td><br/><br/><br/></td>
 					</tr>
 
 					<digi:form action="/translationManager.do" method="post" enctype="multipart/form-data">
@@ -303,9 +309,7 @@ div.fakefile2 input{
 							 <tr>
 							 	<td>
                                   <c:set var="translation">
-                                    <digi:trn key="btn:translationManagerImport">
-                                    Import
-                                    </digi:trn>
+                                    <digi:trn >Import</digi:trn>
                                   </c:set>
                                   <html:submit style="dr-menu" value="${translation}" property="import"/></td>
 							 </tr>
@@ -329,7 +333,7 @@ div.fakefile2 input{
 										<bean:write name="lang" />
 										</td>										
 										<td>
-										<select name='<%="LANG:"+lang%>' >
+										<select name='<%="LANG:"+lang%>' class="inp-text">
 											<option value="-1" selected>
 												<digi:trn key="aim:translationManagerImportPleaseSelect">
 													-- Please select --
@@ -357,20 +361,43 @@ div.fakefile2 input{
 							 <tr height="5px"><td colspan="2">&nbsp;</td></tr>
 							 <tr>
 							 	<td colspan="2">
-							 		<digi:trn>Please enter here keywords of the translations you want to be skipped during import</digi:trn> 
+							 		<digi:trn>Please Select what to do with translations</digi:trn> 
 							 	</td>
 							 </tr>
 							 <tr>
 							 	<td>&nbsp;</td>
 							 	<td>
-							 		<input id="keyword" type="text" style="width:250px;height: 20px" align="top">
-							 		<input type="button" style="width:100px;vertical-align: top;" onclick="addKeyword(document.getElementById('keyword'))" value="<digi:trn key="message:addUsBtn">Add >></digi:trn>">
-									<br>
-									<html:select multiple="multiple" styleId="keywords" name="aimTranslatorManagerForm" property="keywords" size="11" styleClass="inp-text" style="width: 250px;height: 50px;">
-									</html:select>
-									<input type="button" style="width:100px;font-family:tahoma;font-size:11px;vertical-align: top;" onclick="removeKeyword()" value="<<<digi:trn key="message:rmbtn">Remove</digi:trn>" >
+							 		<html:select name="aimTranslatorManagerForm" property="skipOrUpdateTrnsWithKeywords" onchange="changeKeywordsVisibility()" styleId="mySelect" styleClass="inp-text">
+							 			<html:option value="skip"><digi:trn>skip all marked with this keyword </digi:trn></html:option>
+							 			<html:option value="update"><digi:trn>skip all except those marked with this keyword </digi:trn></html:option>
+							 			<html:option value="updateEverything"><digi:trn>do not skip any translations </digi:trn></html:option>
+							 		</html:select>
 							 	</td>
 							 </tr>
+							 <tr height="5px"><td colspan="2">&nbsp;</td></tr>							 
+							 
+							<tr>
+							 	<td colspan="2">
+							 		<div style="visibility: visible" id="textDiv">
+							 			<digi:trn>Please enter here keywords of the translations you want to be skipped/updated during import</digi:trn>
+							 			&nbsp;
+							 			<img src="../ampTemplate/images/help.gif" onmouseover="stm([importHelp,separateKeywords],Style[15])" onmouseout="htm()"/>
+							 		</div>									 		 
+							 	</td>
+							</tr>
+							<tr>
+							 	<td>&nbsp;</td>
+							 	<td>
+							 		<div style="visibility: visible;" id="keywordsDiv">
+							 			<input id="keyword" type="text" style="width:250px;height: 20px" align="top">
+								 		<input type="button" style="width:100px;vertical-align: top;" onclick="addKeyword(document.getElementById('keyword'))" value="<digi:trn key="message:addUsBtn">Add >></digi:trn>">
+										<br>
+										<html:select multiple="multiple" styleId="keywords" name="aimTranslatorManagerForm" property="keywords" size="11" styleClass="inp-text" style="width: 250px;height: 50px;">
+										</html:select>
+										<input type="button" style="width:100px;font-family:tahoma;font-size:11px;vertical-align: top;" onclick="removeKeyword()" value="<<<digi:trn key="message:rmbtn">Remove</digi:trn>" >
+							 		</div>
+							 	</td>
+							</tr>												 
 							 
 							 <tr height="5px"><td colspan="2">&nbsp;</td></tr>
 							 <tr>

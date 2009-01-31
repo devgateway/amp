@@ -4,7 +4,7 @@
 	<td><%= project.donor_project_number %></td>
 	<td><%= short_expander_tag(project.title) %></td>
 	<td class="currency" style="text-align: right">
-		<%= (project.fundings.total_commitments.currency == nil) ? 'n/a' : project.fundings.total_commitments %>
+		<%= project.total_commitments %>
 	</td>
 	<td class="currency" style="text-align: right">
 		<%= project.fundings.find_by_year(Time.now.year - 1).payments rescue 'n/a' %>

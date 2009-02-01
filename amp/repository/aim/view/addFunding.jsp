@@ -165,33 +165,6 @@ var isAlreadySubmitted = false;
 		}
 	}
 
-	function load()
-	{
-		var Warn="<digi:trn key="aim:addFunding:warn:dup">This information is a duplicate of existing funding information. Do you wish to proceed?</digi:trn>";
-		if ((document.getElementById("dupFunding").value == "false") && (!isTotDisbIsBiggerThanTotCom()))
-		{
-				<digi:context name="addAct" property="context/module/moduleinstance/addActivity.do?edit=true"/>
-				document.aimEditActivityForm.action = "<%=addAct%>";
-				document.aimEditActivityForm.target = window.opener.name;
-				document.aimEditActivityForm.submit();
-				window.close();
-		}
-		if(document.getElementById("dupFunding").value == "true")
-		{
-			if(document.getElementsByName("funding.firstSubmit")[0].value == "true")
-			{
-				if((confirm(Warn)) && (!isTotDisbIsBiggerThanTotCom()))
-				{
-					<digi:context name="addAct" property="context/module/moduleinstance/addActivity.do?edit=true"/>
-					document.aimEditActivityForm.action = "<%=addAct%>";
-					document.aimEditActivityForm.target = window.opener.name;
-					document.aimEditActivityForm.submit();
-					window.close();
-				}
-			}
-		}
-	}
-
 	function isTotDisbIsBiggerThanTotCom() {
 		var Warn="<digi:trn key="aim:addFunding:warn:disbSupCom">Sum of Disbursments is bigger than sum of commitments.</digi:trn>";
 		if(document.getElementById("totDisbIsBiggerThanTotCom").value == "true") {
@@ -199,6 +172,35 @@ var isAlreadySubmitted = false;
 			return true;					
 		} else {
 			return false;
+		}
+	}
+	
+	function load()
+	{
+		if (!isTotDisbIsBiggerThanTotCom()) {
+			var Warn="<digi:trn key="aim:addFunding:warn:dup">This information is a duplicate of existing funding information. Do you wish to proceed?</digi:trn>";
+			if (document.getElementById("dupFunding").value == "false")
+			{
+					<digi:context name="addAct" property="context/module/moduleinstance/addActivity.do?edit=true"/>
+					document.aimEditActivityForm.action = "<%=addAct%>";
+					document.aimEditActivityForm.target = window.opener.name;
+					document.aimEditActivityForm.submit();
+					window.close();
+			}		
+			if(document.getElementById("dupFunding").value == "true")
+			{
+				if(document.getElementsByName("funding.firstSubmit")[0].value == "true")
+				{
+					if(confirm(Warn))
+					{
+						<digi:context name="addAct" property="context/module/moduleinstance/addActivity.do?edit=true"/>
+						document.aimEditActivityForm.action = "<%=addAct%>";
+						document.aimEditActivityForm.target = window.opener.name;
+						document.aimEditActivityForm.submit();
+						window.close();
+					}
+				}
+			}
 		}
 	}
 	
@@ -235,7 +237,7 @@ var isAlreadySubmitted = false;
 <html:hidden name="aimEditActivityForm" styleId="numProjections" property="funding.numProjections"/>
 <html:hidden name="aimEditActivityForm" property="editAct"/>
 <html:hidden name="aimEditActivityForm" property="funding.firstSubmit"/>
-<html:hidden name="aimEditActivityForm" styleId="totDisbIsBiggerThanTotCom" property="funding.totDisbIsBiggerThanTotCom"/>
+<html:hidden name="aimEditActivityForm" styleId="totDisbIsBiggerThanTotCom" property="totDisbIsBiggerThanTotCom"/>
 
 
 <input type="hidden" name="funding.isEditFunfing" value="true"/>

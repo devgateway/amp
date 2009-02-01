@@ -2326,15 +2326,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 		public void setTransIndexId(long transIndexId) {
 			this.transIndexId = transIndexId;
-		}
-
-		public boolean isTotDisbIsBiggerThanTotCom() {
-			return this.totDisbIsBiggerThanTotCom;
-		}
-
-		public void setTotDisbIsBiggerThanTotCom(boolean totDisbIsBiggerThanTotCom) {
-			this.totDisbIsBiggerThanTotCom = totDisbIsBiggerThanTotCom;
-		}
+		}		
 	}
 
 	public FundingOrganization getFundingOrganization(int index) {
@@ -2346,6 +2338,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		}
 		return (FundingOrganization) ((ArrayList) getFunding().fundingOrganizations).get(index);
 	}
+	
 	public class ContactInformation {
 		private String dnrCntFirstName;
 		private String dnrCntLastName;
@@ -3563,6 +3556,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	private Programs programs;
 	private CrossCuttingIssues crossIssues;
 	private Funding funding;
+	private Funding oldFunding;
 	private Documents documents = null;
 	private Agencies agencies;
 	private Survey survey = null;
@@ -3574,6 +3568,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	private Contracts contracts = null;
 	private Costing costing = null;
 	private Issues issues = null;
+	private boolean totDisbIsBiggerThanTotCom;
 	
 	public String getWorkingTeamLeadFlag() {
 		return workingTeamLeadFlag;
@@ -3819,13 +3814,19 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		return this.crossIssues;
 
 	}
-
+	
 	public Funding getFunding() {
 		if (this.funding == null) {
 			this.funding = new Funding();
 		}
 		return this.funding;
-
+	}
+	
+	public Funding getOldFunding() {
+		if (this.oldFunding == null) {
+			this.oldFunding = new Funding();
+		}
+		return this.oldFunding;
 	}
 
 	public Documents getDocuments() {
@@ -4047,8 +4048,13 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	public void setEditKey(String editKey) {
 		this.editKey = editKey;
 	}
+	
+	public boolean isTotDisbIsBiggerThanTotCom() {
+		return this.totDisbIsBiggerThanTotCom;
+	}
 
-
-
+	public void setTotDisbIsBiggerThanTotCom(boolean totDisbIsBiggerThanTotCom) {
+		this.totDisbIsBiggerThanTotCom = totDisbIsBiggerThanTotCom;
+	}
 }
 

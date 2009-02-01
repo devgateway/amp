@@ -169,8 +169,8 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     
     try {
       session = PersistenceManager.getRequestDBSession();
-      //session.connection().setAutoCommit(false);
-      //tx = session.beginTransaction();
+      session.connection().setAutoCommit(false);
+      tx = session.beginTransaction();
       
       AmpTeamMember member = (AmpTeamMember) session.load(AmpTeamMember.class,
           memberId);
@@ -982,7 +982,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
        }
        //session.flush();
              
-		//tx.commit(); // commit the transcation
+		tx.commit(); // commit the transcation
 		logger.debug("Activity saved");    
     }
     catch (Exception ex) {

@@ -16,6 +16,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/dhtml-suite-for-applications.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/jquery-latest.pack.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/jquery.disable.text.select.js"/>"></script>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>" > .</script>
@@ -33,7 +34,6 @@
 
 <div id="myComment" style="display: none">
 	<div id="myCommentContent" class="content">
-		<!-- jsp:include page="/repository/aim/view/viewComment.jsp"/-->
 	</div>
 </div>
 <script type="text/javascript">
@@ -45,18 +45,24 @@
 			fixedcenter: true,
 		    constraintoviewport: true,
 		    underlay:"none",
-		    close:false,//don't change this, there is a button to close it!!!
+		    close:true,
 		    visible:false,
 		    modal:true,
-		    draggable:true,		    
+		    draggable:true		    
 		    });
 	
-	function initScripts() {
-		var msg='\n<digi:trn key="aim:addeditComment">Add/Edit Comment</digi:trn>';
-		myPanel.setHeader(msg);
-		myPanel.setBody("");
-		myPanel.render(document.body);
-	}
+		function initScripts() {
+			var msg='\n<digi:trn key="aim:addeditComment">Add/Edit Comment</digi:trn>';
+			myPanel.setHeader(msg);
+			myPanel.setBody("");
+			myPanel.beforeHideEvent.subscribe(function() {
+				alert("delete comment");
+				delC=true;
+				showContent();
+			}); 
+
+			myPanel.render(document.body);
+		}
 	
 	window.onload=initScripts();
 	
@@ -83,14 +89,14 @@
 
 <script language="JavaScript">
     <!--
-   
+    
     //DO NOT REMOVE THIS FUNCTION --- AGAIN!!!!
     function mapCallBack(status, statusText, responseText, responseXML){
        window.location.reload();
     }
     
     
-    var responseSuccess = function(o){
+    var responseSuccess = function(o){ 
 	/* Please see the Success Case section for more
 	 * details on the response object's properties.
 	 * o.tId
@@ -106,7 +112,8 @@
 		var content = document.getElementById("myCommentContent");
 	    //response = response.split("<!")[0];
 		content.innerHTML = response;
-		showContent()
+		//alert("response");
+		showContent();
 	}
 	var delC=false;	 
 	var responseFailure = function(o){ 
@@ -122,7 +129,7 @@
 		success:responseSuccess, 
 		failure:responseFailure 
 	};
-
+    
 	function showComment() {
 		var element = document.getElementById("myComment");
 		element.style.display = "inline";
@@ -132,27 +139,30 @@
 	}
 	
 	function commentWin(commentId){
-	
+		delC=false;
 		<digi:context name="commentUrl" property="context/module/moduleinstance/viewComment.do" />
 		var url = "<%=commentUrl %>?comment=" + commentId + "&edit=" + "true";
-
+		
         //var postString		= "comment=" + commentId + "&edit=true";
 		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
 		showComment();
 	}
 	function showContent(){
+		//alert("in showContent");
 		if(delC==true){
+			alert("delete div myCommentContent");
 			document.getElementById("myCommentContent").innerHTML="";
-			delC=false;
 		}
 	}
 	function saveComment(){
+		//alert("saveComment()");
 		var postString		= generateFields("");
-		//YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/viewComment.do", callback, postString);
+		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/viewComment.do", callback, postString);
 	}
 	 function editDelete() {
+		//alert("editDelete()");
 		var postString		= generateFields("edit=true");
-		//YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/viewComment.do", callback, postString);
+		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/viewComment.do", callback, postString);
 	}
 
 	function message(val1,val2) {
@@ -178,8 +188,6 @@
 		document.getElementById('commentText').value="";
 	}
 	function myclose(){
-		delC=true;
-		showContent();
 		myPanel.hide();	
 	}
 	function mycheck() {
@@ -194,8 +202,7 @@
 		else{
 			saveComment();
 		}
-		delC=true;
-		myPanel.hide();
+		myclose();
 	}
 	
 	function trim ( inputStringTrim ) {
@@ -252,20 +259,16 @@ function selectOrganisation() {
 	document.aimEditActivityForm.submit();
 }
 
-    function edit(key) {
-        var forms =document.getElementsByName("aimEditActivityForm");
-        //There are two forms with the same name...(strange) only second contain editkey
-        var form=forms[1];
-    <digi:context name="nextSetp" property="context/module/moduleinstance/addActivity.do" />;
-        
-        form.action = "<%= nextSetp%>";
-        form.target = "_self";
+function edit(key) {
+    <digi:context name="nextSetp" property="context/module/moduleinstance/addActivity.do" />
+    document.aimEditActivityForm.action = "<%= nextSetp %>";
+    document.aimEditActivityForm.target = "_self"
 
-        form.editKey.value = key;
-        form.step.value = "1.1";
-        form.submit();
+  document.aimEditActivityForm.editKey.value = key;
+  document.aimEditActivityForm.step.value = "1.1";
+  document.aimEditActivityForm.submit();
 
-    }
+}
 
 
 function removeSelOrganisations() {
@@ -327,7 +330,7 @@ function validateForm() {
     document.aimEditActivityForm.status.focus();
     return false;
   }*/
-  document.aimEditActivityForm.value="2";
+  document.aimEditActivityForm.step.value="2";
   <digi:context name="commentUrl" property="context/module/moduleinstance/addActivity.do?edit=true" />
   url = "<%=commentUrl %>?comment=" + "ccd" + "&edit=" + "true";
   document.aimEditActivityForm.action = url;
@@ -369,10 +372,10 @@ function popupwin() {
 <digi:instance property="aimEditActivityForm" />
 
 <digi:form action="/addActivity.do" method="post">
-    
-<html:hidden property="step" styleId="step"/>
-<html:hidden property="editKey" styleId="editKey"/>
-<html:hidden property="editAct" styleId="editAct"/>
+
+<html:hidden property="step"/>
+<html:hidden property="editKey"/>
+<html:hidden property="editAct"/>
 
 <input type="hidden" name="edit" value="true">
 

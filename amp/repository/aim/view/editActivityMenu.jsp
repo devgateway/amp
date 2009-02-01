@@ -47,12 +47,8 @@
 		    }
 		     );
 	
-	
-	
 		function initScripts() {
-			
-			
-			var msgP5="\n<digi:trn key="aim:saving">Saving</digi:trn>";
+			var msgP5='\n<digi:trn key="aim:saving">Saving</digi:trn>';
 			mySavePanel.setHeader(msgP5);
 			mySavePanel.setBody("");
 			mySavePanel.render(document.body);
@@ -99,8 +95,8 @@
 
 
 
-<script language="JavaScript"><!--
-
+<script language="JavaScript">
+<!--
 function previewClicked() {
 	var flag = validateForm();
 	if (flag == true) {
@@ -145,46 +141,28 @@ function save() {
 }
 
 function gotoStep(value) {
-var draftStatus=document.getElementById("draftFlag");
-var flag;
-var form=document.aimEditActivityForm;
-var val=form.step;
-if(typeof val =='undefined'){
-    /*
-     * There are three or two forms on the first step of
-     * the add activity: 1 modeSwitchForm (sometimes)
-     * and 2 with same name : aimEditActivityForm (this causes a lot of problems... )
-     */
-    val=document.forms[1].step;
-    if(typeof val =='undefined'){
-        val=document.forms[2].step;
-        form=document.forms[2];
-    }
-    else{
-        form=document.forms[1];
-    }
-    
-}
-if(draftStatus!=null && draftStatus.value!="true"
-    && val.value<value){
+  var draftStatus=document.getElementById("draftFlag");
+  var flag;
+  if(draftStatus!=null && draftStatus.value!="true"
+  && document.aimEditActivityForm.step.value<value){
     flag=validateForm();
-}else{
+  }else{
     flag=true;
-}
-if (flag == true) {
-
-    val.value = value;
+  }
+  if (flag == true) {
+    document.aimEditActivityForm.step.value = value;
     <digi:context name="step" property="context/module/moduleinstance/addActivity.do?edit=true" />
-    form.action = "<%= step %>";
-    form.target = "_self";
-    form.submit();
-    }
+    document.aimEditActivityForm.action = "<%= step %>";
+    document.aimEditActivityForm.target = "_self";
+    document.aimEditActivityForm.submit();
+  }
 }
 
 function fnGetSurvey(value) {
 var draftStatus=document.getElementById("draftFlag");
   var flag;
-  if((draftStatus!=null) && (draftStatus.value!="true") && (document.aimEditActivityForm.step.value<value)){
+  if(draftStatus!=null && draftStatus.value!="true"
+  && document.aimEditActivityForm.step.value<value){
     flag=true;//validateForm();
   }else{
     flag=true;
@@ -197,8 +175,8 @@ var draftStatus=document.getElementById("draftFlag");
 	document.aimEditActivityForm.submit();
 	}
 }
-
---></script>
+-->
+</script>
 
 <digi:instance property="aimEditActivityForm" />
 <html:hidden property="workingTeamLeadFlag" />

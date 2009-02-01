@@ -35,16 +35,16 @@
 									[<digi:link href="/viewComment.do" name="urlParams1"><digi:trn key="aim:createComment">Add Comment</digi:trn></digi:link>]
 
 							</td>
-						</tr>--%>
-						<%-- <%=request.getLocale()%> --%>
+						</tr>--%>	
+						<%-- <%=request.getLocale()%> --%>		
 						<logic:notEmpty name="aimEditActivityForm" property="comments.commentsCol">
 						<tr>
-							<td align=left vAlign=top>
+							<td align=left vAlign=top>						
 							<table width="100%" cellPadding=3>
 								<c:set value="1" var="sno" />
-								<logic:iterate name="aimEditActivityForm" id="comment" property="comments.commentsCol"
+								<logic:iterate name="aimEditActivityForm" id="comment" property="comments.commentsCol" 
 									type="org.digijava.module.aim.dbentity.AmpComments">
-										<c:if test="${comment.ampFieldId.ampFieldId == aimEditActivityForm.comments.field.ampFieldId}">
+										<c:if test="${comment.ampFieldId.ampFieldId == aimEditActivityForm.comments.field.ampFieldId}"> 
 											<tr>
 												<td bgcolor=#ECF3FD width="5%">
 													<b><c:out value="${sno}"/></b>
@@ -85,7 +85,7 @@
 												</TD>
 											</TR>
 										</c:if>
-
+										
 										<c:set value="${sno + 1}" var="sno"/>
 									</logic:iterate>
 								</logic:notEmpty>
@@ -97,7 +97,7 @@
 												<html:textarea name="aimEditActivityForm" property="comments.commentText" styleId="commentText" cols="60" rows="3" />
 												<br>
 													<input type="button" value="<digi:trn key='btn:save'>Save</digi:trn>"   class="dr-menu" onClick="javascript:mycheck()">
-													<input type="reset"  value="<digi:trn key='btn:clear'>Clear</digi:trn>"  class="dr-menu">
+													<input type="button"  value="<digi:trn key='btn:clear'>Clear</digi:trn>"  class="dr-menu" onclick="javascript:myclear()">
 													<input type="button"  value="<digi:trn key='btn:close'>Close</digi:trn>"  class="dr-menu" onclick="javascript:myclose()">
 												<!--	<input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>"  class="dr-menu" onclick="window.close()"> -->
 											</td>
@@ -105,10 +105,9 @@
 									</table>
 							</td>
 						</tr>
-
-					</table>
+						
+					</table>				
 				</td>
 			</tr>
 		</table>
 </digi:form>
-&nbsp;

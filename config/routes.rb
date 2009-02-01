@@ -1,6 +1,4 @@
 ActionController::Routing::Routes.draw do |map|
-  map.routes_from_plugin :analytics
-
   # Static
   map.with_options :controller => "static" do |static|
     static.root                           :action => "home"
@@ -35,7 +33,23 @@ ActionController::Routing::Routes.draw do |map|
                                           
   # Authentication                        
   map.logout    '/logout',                :controller => 'sessions', :action => 'destroy'
-  map.login     '/login',                 :controller => 'sessions', :action => 'new'  
+  map.login     '/login',                 :controller => 'sessions', :action => 'new'
+  
+  ##
+  # The EU Blue Book
+  map.namespace :bluebook do |bluebook|
+    bluebook.with_options :path_prefix => '/bluebook/:year', :year => /\d{4}/ do |bb|
+      bb.root :controller => 'pages', :action => 'contents'
+      bb.pages '/pages/:action', :controller => 'pages'
+  
+      bb.resources :donor_profiles, :only => [:show], :formatted => :none
+  
+      # Chart routes
+      bb.connect 'charts/:action/:id.:format', :controller => 'charts'
+      bb.connect 'charts/:action.:format', :controller => 'charts'
+      bb.connect 'charts/:action/:id', :controller => 'charts'
+    end
+  end
   
   # Install the default route as the lowest priority.
   map.connect ':controller/:action/:id.:format'

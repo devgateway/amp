@@ -41,7 +41,6 @@
 
 		var myPanel = new YAHOO.widget.Panel("newmyComment", {
 			width:"600px",
-			height:"400px",
 			fixedcenter: true,
 		    constraintoviewport: true,
 		    underlay:"none",
@@ -56,7 +55,7 @@
 			myPanel.setHeader(msg);
 			myPanel.setBody("");
 			myPanel.beforeHideEvent.subscribe(function() {
-				alert("delete comment");
+				//alert("delete comment");
 				delC=true;
 				showContent();
 			}); 
@@ -150,7 +149,7 @@
 	function showContent(){
 		//alert("in showContent");
 		if(delC==true){
-			alert("delete div myCommentContent");
+			//alert("delete div myCommentContent");
 			document.getElementById("myCommentContent").innerHTML="";
 		}
 	}

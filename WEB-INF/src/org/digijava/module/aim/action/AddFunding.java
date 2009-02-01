@@ -101,6 +101,7 @@ public class AddFunding extends Action {
 		formBean.getFunding().setEvent(null);
 		formBean.getFunding().setDupFunding(true);
 		formBean.getFunding().setFirstSubmit(false);
+		formBean.setTotDisbIsBiggerThanTotCom(false);
 		return mapping.findForward("forward");
 	}
 	public static String getFYDate(Integer numOfAddedYears, Integer year) {

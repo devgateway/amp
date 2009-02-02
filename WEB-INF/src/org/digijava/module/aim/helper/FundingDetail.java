@@ -28,9 +28,10 @@ public class FundingDetail implements Serializable, Comparable
 	private boolean useFixedRate;
 	private Double fixedExchangeRate;
 	private Long ampComponentFundingId;
-        private Long fundDetId;
-        private String disbOrderId;
-        private IPAContract contract;
+	private Long fundDetId;
+    private String disbOrderId;
+    private IPAContract contract;
+    private Boolean disbursementOrderRejected;        
 
         public IPAContract getContract() {
             return contract;
@@ -271,6 +272,15 @@ public class FundingDetail implements Serializable, Comparable
 
 		public void setFundingId(Long fundingId) {
 			this.fundingId = fundingId;
+		}
+
+		public void setDisbursementOrderRejected(
+				Boolean disbursementOrderRejected) {
+			this.disbursementOrderRejected = disbursementOrderRejected;
+		}
+
+		public Boolean getDisbursementOrderRejected() {
+			return disbursementOrderRejected;
 		}
        
         

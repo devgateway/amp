@@ -18,7 +18,7 @@
                     </c:if>
 	
 	                    <c:if test="${currentLevel == 1}">
-    	                    <li style="list-style:none" id="limodule:<bean:write name="moduleAux" property="root.id"/>" title="<digi:trn key="<%="fm:tooltip:"+moduleAux.getRoot().getNameTrimmed() %>"><bean:write name="moduleAux" property="root.properName"/></digi:trn>">
+    	                    <li style="list-style:none" id="limodule:<bean:write name="moduleAux" property="root.id"/>" title="<digi:trn key="<%="fm:tooltip:"+moduleAux.getRoot().getNameTrimmed() %>"><bean:write name="moduleAux" property="root.description"/></digi:trn>">
 <div style="float:right;">
 <a href="#" onclick="sortTree(<bean:write name="moduleAux" property="root.id"/>, false);return false;"><digi:trn key="fm:ascendingorder">Ascending order</digi:trn></a>
 <a href="#" onclick="sortTree(<bean:write name="moduleAux" property="root.id"/>, true);return false;"><digi:trn key="fm:descendingorder">Descending order</digi:trn></a>
@@ -27,7 +27,7 @@
                         </c:if>
     
                         <c:if test="${currentLevel != 1}">
-                            <li id="limodule:<bean:write name="moduleAux" property="root.id"/>" title="<digi:trn key="<%="fm:tooltip:"+moduleAux.getRoot().getNameTrimmed() %>"><bean:write name="moduleAux" property="root.properName"/></digi:trn>">
+                            <li id="limodule:<bean:write name="moduleAux" property="root.id"/>" title="<digi:trn key="<%="fm:tooltip:"+moduleAux.getRoot().getNameTrimmed() %>"><bean:write name="moduleAux" property="root.description"/></digi:trn>">
                         </c:if>
     
                         <logic:equal name="aimVisibilityManagerForm" property="mode" value="addNew">
@@ -78,7 +78,7 @@
 								
 									<bean:define id="featureAux" name="feature" property="value" type="org.dgfoundation.amp.visibility.AmpTreeVisibility" scope="page"/>
 									<bean:define id="featureAux2" name="featureAux" property="root" type="org.digijava.module.aim.dbentity.AmpFeaturesVisibility" scope="page"/>
-									<li id="lifeature:<bean:write name="featureAux" property="root.id"/>" title="<digi:trn key="<%="fm:tooltip:"+featureAux.getRoot().getNameTrimmed()%>"><bean:write name="featureAux" property="root.name"/></digi:trn>">
+									<li id="lifeature:<bean:write name="featureAux" property="root.id"/>" title="<digi:trn key="<%="fm:tooltip:"+featureAux.getRoot().getNameTrimmed()%>"><bean:write name="featureAux" property="root.description"/></digi:trn>">
 										<logic:equal name="aimVisibilityManagerForm" property="mode" value="addNew">
 											<input onclick="toggleChildrenVisibility('lifeature:<bean:write name="featureAux" property="root.id"/>')" 
 												type=checkbox id="featureVis:<bean:write name="featureAux" property="root.id"/>" 
@@ -102,7 +102,7 @@
 										<logic:iterate name="featureAux" property="sorteditems" id="field" type="java.util.Map.Entry" >
 											<bean:define id="fieldAux" name="field" property="value" type="org.dgfoundation.amp.visibility.AmpTreeVisibility" scope="page"/>
 											<bean:define id="fieldAux2" name="fieldAux" property="root" type="org.digijava.module.aim.dbentity.AmpFieldsVisibility" scope="page"/>
-											<li class="dhtmlgoodies_sheet.gif" title="<digi:trn key="<%="fm:tooltip:"+fieldAux.getRoot().getNameTrimmed()%>"><bean:write name="fieldAux" property="root.name"/></digi:trn>">
+											<li class="dhtmlgoodies_sheet.gif" title="<digi:trn key="<%="fm:tooltip:"+fieldAux.getRoot().getNameTrimmed()%>"><bean:write name="fieldAux" property="root.description"/></digi:trn>">
 												<logic:equal name="aimVisibilityManagerForm" property="mode" value="addNew">
 													<input type=checkbox id="fieldVis:<bean:write name="fieldAux" property="root.id"/>" 
 													name="fieldVis:<bean:write name="fieldAux" property="root.id"/>" 

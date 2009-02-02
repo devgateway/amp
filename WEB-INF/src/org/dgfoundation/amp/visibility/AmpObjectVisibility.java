@@ -32,6 +32,15 @@ public abstract class AmpObjectVisibility  extends Permissible implements Serial
 	protected String nameTrimmed;
 	protected String properName;
 	protected Boolean hasLevel;
+	protected String description;
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
 	public Boolean getHasLevel() {
 		return hasLevel;

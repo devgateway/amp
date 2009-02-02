@@ -696,6 +696,11 @@ var isAlreadySubmitted = false;
 									<b><font color="white"><digi:trn key="aim:DisbursementOrderContractId">Contract ID</digi:trn></font></b>
 								</td>
 								</field:display>
+								<field:display name="Rejected Disbursement Order" feature="Disbursement Orders">
+                                <td align="center" valign="middle">
+									<b><font color="white"><digi:trn key="aim:DisbursementOrderRejected">Rejected</digi:trn></font></b>
+								</td>
+								</field:display>
 							</tr>
 							<c:if test="${ !empty aimEditActivityForm.funding.fundingDetails}">
 							<c:forEach var="fundingDetail" items="${aimEditActivityForm.funding.fundingDetails}">
@@ -765,6 +770,11 @@ var isAlreadySubmitted = false;
                                                <input type="submit" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
 											</td>
 											</field:display>
+                                            <field:display name="Rejected Disbursement Order" feature="Disbursement Orders">
+                                            <td>
+												<html:checkbox name="fundingDetail" property="disbursementOrderRejected"/>
+											</td>
+                                            </field:display>											
 											<td>
 												<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,4)">
 												 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>

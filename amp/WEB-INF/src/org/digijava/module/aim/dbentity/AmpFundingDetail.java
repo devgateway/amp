@@ -34,6 +34,7 @@ public class AmpFundingDetail implements Serializable
 	private AmpOrganisation reportingOrgId;
 	private AmpFunding  ampFundingId;
 	private Double fixedExchangeRate;
+	private Boolean disbursementOrderRejected;
 
 	private String expCategory;
         private String disbOrderId;
@@ -345,6 +346,17 @@ public class AmpFundingDetail implements Serializable
 
 		public void setThousandsTransactionAmount(Double thousandsTransactionAmount) {
 			this.thousandsTransactionAmount = thousandsTransactionAmount;
+		}
+
+
+		public void setDisbursementOrderRejected(
+				Boolean disbursementOrderRejected) {
+			this.disbursementOrderRejected = disbursementOrderRejected;
+		}
+
+
+		public Boolean getDisbursementOrderRejected() {
+			return disbursementOrderRejected;
 		}
 
 }

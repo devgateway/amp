@@ -28,6 +28,7 @@
 		<property name="expCategory" column="exp_category" type="java.lang.String" />
 		<property name="fixedExchangeRate" column="fixed_exchange_rate" type="java.lang.Double" />
 		<property name="disbOrderId" column="disb_order_id" type="java.lang.String" />
+		<property name="disbursementOrderRejected" column="disbursement_order_rejected" type="java.lang.Boolean" />
 
 
 		<many-to-one name="reportingOrgId" column="reporting_org_id"

@@ -29,8 +29,8 @@
 			<xs:element name="title" type="freeTextType" maxOccurs="unbounded"/>
 			<xs:element name="objective" type="freeTextType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="description" type="freeTextType" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="implementationLevels" type="codeValueType"/>
-			<xs:element name="location" maxOccurs="unbounded">
+			<xs:element name="implementationLevels" type="codeValueType" minOccurs="0"/>
+			<xs:element name="location" maxOccurs="unbounded" minOccurs="0">
 				<xs:complexType>
 					<xs:sequence>
 						<xs:element name="locationName" type="codeValueType"/>
@@ -56,13 +56,13 @@
 			<xs:element name="proposedApprovalDate" type="dateType" minOccurs="0"/>
 			<xs:element name="actualApprovalDate" type="dateType" minOccurs="0"/>
 			<xs:element name="proposedStartDate" type="dateType" minOccurs="0"/>
-			<xs:element name="actualStartDate" type="dateType"/>
+			<xs:element name="actualStartDate" type="dateType" minOccurs="0"/>
 			<xs:element name="modifiedClosingDate" type="dateType" minOccurs="0"/>
-			<xs:element name="closingDate" type="dateType"/>
+			<xs:element name="closingDate" type="dateType" minOccurs="0"/>
 			<xs:element name="status" type="codeValueType"/>
 			<xs:element name="statusReason" type="freeTextType" minOccurs="0"/>
 			<xs:element name="sectors" type="codeValueType" maxOccurs="unbounded"/>
-			<xs:element name="programs" type="codeValueType" maxOccurs="unbounded"/>
+			<xs:element name="programs" type="codeValueType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="notes" type="freeTextType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="funding" type="fundingType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="keywords" type="freeTextType" minOccurs="0" maxOccurs="unbounded"/>
@@ -190,8 +190,8 @@
 			<xs:element name="fundingOrg" type="codeValueType" minOccurs="0"/>
 			<xs:element name="assistanceType" type="codeValueType"/>
 			<xs:element name="financingInstrument" type="codeValueType"/>
-			<xs:element name="conditions" type="freeTextType"/>
-			<xs:element name="signatureDate" type="dateType"/>
+			<xs:element name="conditions" type="freeTextType" minOccurs="0"/>
+			<xs:element name="signatureDate" type="dateType" minOccurs="0"/>
 			<xs:element name="projections" minOccurs="0" maxOccurs="unbounded">
 				<xs:complexType>
 					<xs:attribute name="type" type="xs:string" use="required"/>
@@ -225,7 +225,7 @@
 		<xs:sequence>
 			<xs:element name="firstName" type="xs:string"/>
 			<xs:element name="lastName" type="xs:string"/>
-			<xs:element name="email" type="xs:string"/>
+			<xs:element name="email" type="xs:string"  minOccurs="0"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="additionalFieldType">

@@ -19,9 +19,6 @@ import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 
 public class ViewActivityDashboard extends TilesAction {
-	
-	private static Logger logger = Logger.getLogger(
-			ViewActivityDashboard.class);
 
 	public ActionForward execute(ComponentContext context,ActionMapping mapping,
 			ActionForm form,HttpServletRequest request,
@@ -41,7 +38,6 @@ public class ViewActivityDashboard extends TilesAction {
 			adForm.set("riskColor",rskColor);
 		}
 		request.setAttribute("actId",actId);
-		
 		
 		return null;
 	}

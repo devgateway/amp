@@ -2291,8 +2291,7 @@ public class TeamUtil {
 
         try {
             session = PersistenceManager.getSession();
-            String queryString = "select t from " + AmpTeam.class.getName()
-                + " t order by name";
+            String queryString = "select t from " + AmpTeam.class.getName() + " t order by name";
             qry = session.createQuery(queryString);
             teams = qry.list();
         } catch(Exception e) {
@@ -2324,8 +2323,7 @@ public class TeamUtil {
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            String queryString = "select t from " + AmpTeam.class.getName()
-                + " t where t.computation=:computation";
+            String queryString = "select t from " + AmpTeam.class.getName() + " t where t.computation=:computation";
             if(!computation){
                 queryString+= " or t.computation is null ";
             }

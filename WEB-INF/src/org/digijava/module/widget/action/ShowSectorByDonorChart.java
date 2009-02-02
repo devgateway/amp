@@ -1,5 +1,6 @@
 package org.digijava.module.widget.action;
 
+import java.awt.Font;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -17,6 +18,7 @@ import org.digijava.module.widget.util.ChartWidgetUtil;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.Plot;
 
 public class ShowSectorByDonorChart extends Action {
 
@@ -52,6 +54,12 @@ public class ShowSectorByDonorChart extends Action {
         
         //generate chart
         JFreeChart chart = ChartWidgetUtil.getSectorByDonorChart(donorIDs, fromYear,toYear, opt);
+        //if no data is available,user should get a message about it.
+        Plot plot = chart.getPlot();
+        plot.setNoDataMessage("There is no data available for the selected filters. Please adjust the date and/or donor filters");
+        Font font= new Font(null,0,15);
+        plot.setNoDataMessageFont(font);
+        
         ChartRenderingInfo info = new ChartRenderingInfo();
         
         //write image in response

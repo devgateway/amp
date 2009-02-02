@@ -90,9 +90,15 @@
    <target name="jaxb" description="Compile all Java source files">
     <echo message="Compiling the schema..." />
     <mkdir dir="${gen-src}" />
-    <xjc destdir="${gen-src}" schema="./doc/IDML2.0.xsd" package="org.digijava.module.dataExchange.jaxb"/>
-   	<xjc destdir="${gen-src}" schema="./doc/translations.xsd" package="org.dgfoundation.amp.te.ampte.jaxb"/>
-    <xjc destdir="${gen-src}" schema="./doc/help.xsd" package="org.digijava.module.help.jaxbi"/>  
+    <xjc destdir="${gen-src}" schema="./doc/IDML2.0.xsd" package="org.digijava.module.dataExchange.jaxb">
+    	<produces dir="${gen-src}" includes="org/digijava/module/dataExchange/jaxb/*.java"/>
+   	</xjc>
+   	<xjc destdir="${gen-src}" schema="./doc/translations.xsd" package="org.dgfoundation.amp.te.ampte.jaxb">
+   		<produces dir="${gen-src}" includes="org/dgfoundation/amp/te/ampte/jaxb/*.java"/>
+   	</xjc>
+    <xjc destdir="${gen-src}" schema="./doc/help.xsd" package="org.digijava.module.help.jaxbi">
+    	<produces dir="${gen-src}" includes="org/digijava/module/help/jaxbi/*.java"/>
+    </xjc>
    </target>
 
 

@@ -68,7 +68,7 @@ es:
       sector: Sectores
       dac_sector: Sectores CAD
       dac_crs_sector: Sectores CAD CRS
-      location: Localidade
+      location: Localidades
       mdgs: ODM
       mdg: ODM
       map: Mapa
@@ -99,8 +99,8 @@ es:
       available_shortly: Descargas del primer reporte ODAnic 2007 en Excel será cargado en breve
           
   exchange_rates: 
-      title: Tazas de Cambio usadas por ODAnic
-      euro_rate: Taza de Cambio del Euro
+      title: Tasas de Cambio usadas por ODAnic
+      euro_rate: Tasa de Cambio del Euro
            
   country_strategy:
       general: Información General

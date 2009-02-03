@@ -14,9 +14,11 @@
         <action name="orgProfOrgProfileFilterForm" path="/orgProfile/showOrgProfile" type="org.digijava.module.orgProfile.action.OrgProfileFilterAction" validate="false">
 			<forward name="forward" path="/showLayout.do?layout=orgProfileLayout"/>
 	</action>
-          <action name="orgProfLargestProjectsForm" path="/orgProfile/showLargestProjects" type="org.digijava.module.orgProfile.action.ShowLargestProjects" validate="false">
-			<forward name="forward" path="/showLayout.do?layout=largestProjects"/>
-	</action>
+
+      <action name="orgProfOrgProfileFilterForm" path="/orgProfile/getOrganizations" scope="request" type="org.digijava.module.orgProfile.action.GetOrganizations" validate="false" />
+    <action name="orgProfLargestProjectsForm" path="/orgProfile/showLargestProjects" type="org.digijava.module.orgProfile.action.ShowLargestProjects" validate="false">
+        <forward name="forward" path="/showLayout.do?layout=largestProjects"/>
+    </action>
         <action name="orgProfilePIForm" path="/orgProfile/showParisIndicator" type="org.digijava.module.orgProfile.action.OrgProfileParisIndicatorAction" validate="false">
 			<forward name="forward" path="/showLayout.do?layout=parisIndicators"/>
 	</action>

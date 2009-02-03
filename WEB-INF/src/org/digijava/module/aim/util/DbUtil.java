@@ -2493,7 +2493,6 @@ public class DbUtil {
     public static List<Project> getOrganisationLargestProjects(FilterHelper filter) throws DgException {
         Session session = null;
         String queryString = null;
-        int million=1000000;
         TeamMember teamMember=filter.getTeamMember();
         List<Project> projects = new ArrayList<Project>();
         Long year = filter.getYear();
@@ -2519,8 +2518,14 @@ public class DbUtil {
             queryString += " inner join act.funding f " +
                     " inner join f.fundingDetails fd ";
           
-            queryString += "  where f.ampDonorOrgId=:orgID and " +
+            queryString += "  where " +
                     " fd.transactionType = 0 and  fd.adjustmentType = 1";
+
+            if (orgID == null || orgID == -1) {
+                queryString += ChartWidgetUtil.getOrganizationQuery(true);
+            } else {
+                queryString += ChartWidgetUtil.getOrganizationQuery(false);
+            }
             queryString += " and year(fd.transactionDate)=:year   ";
 
             queryString+=ChartWidgetUtil.getTeamQuery(teamMember);
@@ -2528,7 +2533,11 @@ public class DbUtil {
 
             Query query = session.createQuery(queryString);
             query.setLong("year", year);
-            query.setLong("orgID", orgID);
+            if (orgID != null && orgID != -1) {
+                query.setLong("orgID", orgID);
+            } else {
+                query.setLong("orgGroupId", filter.getOrgGroupId());
+            }
             if(teamMember!=null){
                 query.setLong("teamId", teamMember.getTeamId());
 
@@ -2544,11 +2553,20 @@ public class DbUtil {
             while (activityIter.hasNext()) {
                 AmpActivity activity = activityIter.next();
                 queryString = "select fd from " + AmpFundingDetail.class.getName() + " fd  inner join fd.ampFundingId f ";
-                queryString += "   inner join f.ampActivityId act  where   fd.transactionType = 0 and  fd.adjustmentType = 1 and f.ampDonorOrgId=:orgID ";
+                queryString += "   inner join f.ampActivityId act  where   fd.transactionType = 0 and  fd.adjustmentType = 1  ";
+                if (orgID == null || orgID == -1) {
+                    queryString += ChartWidgetUtil.getOrganizationQuery(true);
+                } else {
+                    queryString += ChartWidgetUtil.getOrganizationQuery(false);
+                }
                 queryString += " and year(fd.transactionDate)=:year  and act=" + activity.getAmpActivityId();
                 query = session.createQuery(queryString);
                 query.setLong("year", year);
-                query.setLong("orgID", orgID);
+                if (orgID != null && orgID != -1) {
+                    query.setLong("orgID", orgID);
+                } else {
+                    query.setLong("orgGroupId", filter.getOrgGroupId());
+                }
                 List<AmpFundingDetail> details = query.list();
                 Project project = new Project();
                 project.setSectors(activity.getSectors());
@@ -2604,6 +2622,55 @@ public class DbUtil {
             ex.printStackTrace();
         }
         return organizations;
+    }
+
+    public static List<AmpOrganisation> getOrganisationByGroupId(Long orgGroupId) {
+        Session session = null;
+        Query q = null;
+        List<AmpOrganisation> organizations = new ArrayList<AmpOrganisation>();
+        String queryString = null;
+
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            queryString = " select org from " + AmpOrganisation.class.getName() + " org where org.orgGrpId=:orgGroupId";
+            q = session.createQuery(queryString);
+            q.setLong("orgGroupId", orgGroupId);
+            organizations = q.list();
+        } catch (Exception ex) {
+            logger.error("Unable to get Amp organisation names  from database " + ex.getMessage());
+        }
+        return organizations;
+    }
+    /**
+     * 
+     * @return List of Mul and Bil organization groups
+     */
+
+    public static Collection<AmpOrgGroup> getBilMulOrgGroups() {
+        Collection<AmpOrgGroup> orgGroups = new ArrayList<AmpOrgGroup>();
+        Collection<AmpOrgGroup> bilOrgGroups = new ArrayList<AmpOrgGroup>();
+        Collection<AmpOrgGroup> mulOrgGroups = new ArrayList<AmpOrgGroup>();
+
+        try {
+            AmpOrgType tBil = getAmpOrgTypeByCode("BIL");
+            AmpOrgType tMul = getAmpOrgTypeByCode("MUL");
+            bilOrgGroups = searchForOrganisationGroupByType(tBil.getAmpOrgTypeId());
+            mulOrgGroups = searchForOrganisationGroupByType(tMul.getAmpOrgTypeId());
+            if (bilOrgGroups != null) {
+                orgGroups.addAll(bilOrgGroups);
+            }
+            if (mulOrgGroups != null) {
+                orgGroups.addAll(mulOrgGroups);
+            }
+
+
+
+        } catch (Exception ex) {
+            logger.error("Unable to get Amp organisation names  from database " + ex.getMessage());
+
+        }
+        return orgGroups;
     }
    /*
      * gets all organisation groups  excluding goverment groups
@@ -6999,7 +7066,7 @@ public class DbUtil {
      * @param year
      * @return
      */
-    public static Double getValue(int questionNumber[], Long indId, int adjustmentType, String currCode, Long orgId, Long year, boolean isInd4,TeamMember teamMember) {
+    public static Double getValue(int questionNumber[], Long indId, int adjustmentType, String currCode, Long orgId,Long orgGroupId, Long year, boolean isInd4,TeamMember teamMember) {
         DecimalWraper total = null;
         try {
             Session session = PersistenceManager.getRequestDBSession();
@@ -7027,10 +7094,17 @@ public class DbUtil {
                 }
             }
 
-            if (orgId != null) {
-                queryString += " and ah.ampDonorOrgId=:orgId ";
+            if (orgGroupId!=null) {
+                if(orgId==null||orgId==-1){
+                    queryString += " and ah.ampDonorOrgId.orgGrpId=:orgGroupId ";
+                }
+                else{
+                    queryString += " and ah.ampDonorOrgId=:orgId ";
+                }
                 queryString += " and ah.ampDonorOrgId=f.ampDonorOrgId ";
             }
+
+
 
             Query qry = session.createQuery(queryString);
             qry.setLong("indId", indId);
@@ -7041,8 +7115,13 @@ public class DbUtil {
             }
 
             qry.setInteger("adjustmentType", adjustmentType);
-            if (orgId != null) {
-                qry.setLong("orgId", orgId);
+              if (orgGroupId!=null) {
+                if(orgId==null||orgId==-1){
+                    qry.setLong("orgGroupId", orgGroupId);
+                }
+                else{
+                    qry.setLong("orgId", orgId);
+                }
             }
             List<AmpFundingDetail> fundingDets = qry.list();
             FundingCalculationsHelper cal = new FundingCalculationsHelper();
@@ -7071,7 +7150,7 @@ public class DbUtil {
      * @param year
      * @return
      */
-    public static int getDonorsCount(int questionNumber[], Long indId, Long orgId, Long year,TeamMember member) {
+    public static int getDonorsCount(int questionNumber[], Long indId, Long orgId,Long orgGroupId, Long year,TeamMember member) {
         int size = 0;
         try {
             Session session = PersistenceManager.getRequestDBSession();
@@ -7093,26 +7172,34 @@ public class DbUtil {
                 
                 
  
-            if (orgId != null) {
-                queryString += " and ah.ampDonorOrgId=:orgId ";
+              if (orgGroupId != null) {
+                if (orgId == null || orgId == -1) {
+                    queryString += " and ah.ampDonorOrgId.orgGrpId=:orgGroupId ";
+                } else {
+                    queryString += " and ah.ampDonorOrgId=:orgId ";
+                }
                 queryString += " and ah.ampDonorOrgId=f.ampDonorOrgId ";
             }
-            queryString+=ChartWidgetUtil.getTeamQuery(member);
+            queryString += ChartWidgetUtil.getTeamQuery(member);
 
             Query qry = session.createQuery(queryString);
             qry.setLong("indId", indId);
             qry.setLong("year", year);
-            if(member!=null){
+            if (member != null) {
                 qry.setLong("teamId", member.getTeamId());
 
             }
 
-            if (orgId != null) {
-                qry.setLong("orgId", orgId);
+            if (orgGroupId != null) {
+                if (orgId == null || orgId == -1) {
+                    qry.setLong("orgGroupId", orgGroupId);
+                } else {
+                    qry.setLong("orgId", orgId);
+                }
             }
-           size=qry.list().size();
+            size = qry.list().size();
         } catch (Exception e) {
-             logger.error("Unable get value ", e);
+            logger.error("Unable get value ", e);
 
         }
 
@@ -7129,7 +7216,7 @@ public class DbUtil {
      * @param year
      * @return
      */
-     public static long getPIUValue(Long indId,  Long orgId, Long year,TeamMember member) {
+     public static long getPIUValue(Long indId,  Long orgId,Long orgGroupId, Long year,TeamMember member) {
        long  size=0;
         try {
             Session session = PersistenceManager.getRequestDBSession();
@@ -7150,12 +7237,15 @@ public class DbUtil {
                     queryString+=ChartWidgetUtil.getTeamQuery(member);
                       queryString+= " and res.response='Yes' and q.questionNumber=9" ;
                
-                   
-            if(orgId!=null){
-                queryString +=" and ah.ampDonorOrgId=:orgId ";
-                 queryString+=" and ah.ampDonorOrgId=f.ampDonorOrgId ";
-            }
            
+            if (orgGroupId != null) {
+                if (orgId == null || orgId == -1) {
+                    queryString += " and ah.ampDonorOrgId.orgGrpId=:orgGroupId ";
+                } else {
+                    queryString += " and ah.ampDonorOrgId=:orgId ";
+                }
+                queryString += " and ah.ampDonorOrgId=f.ampDonorOrgId ";
+            }
             Query qry = session.createQuery(queryString);
             qry.setLong("indId", indId);
             qry.setLong("year", year);
@@ -7165,8 +7255,12 @@ public class DbUtil {
             }
 
      
-             if(orgId!=null){
-                qry.setLong("orgId",orgId);
+             if (orgGroupId != null) {
+                if (orgId == null || orgId == -1) {
+                    qry.setLong("orgGroupId", orgGroupId);
+                } else {
+                    qry.setLong("orgId", orgId);
+                }
             }
             size =qry.list().size();
            

@@ -37,6 +37,7 @@
     <c:choose>
         <c:when test="${gisWidgetTeaserForm.type==1}">
             <c:set var="organization" scope="request" value="${sessionScope.orgProfileFilter.organization}"/>
+            <c:set var="orgGroup" scope="request" value="${sessionScope.orgProfileFilter.orgGroup}"/>
             <jsp:include page="orgSummary.jsp" flush="true"/>
         </c:when>
            <c:when test="${gisWidgetTeaserForm.type==7}">

@@ -98,7 +98,7 @@ function stateChanged(){
         {
           //code to process Ajax request
           hideProgress('progress');
-          reFresh();
+          //reFresh();
         }
   }
 }

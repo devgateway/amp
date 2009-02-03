@@ -18,6 +18,8 @@
 		<property name="results" column="results" type="text" />
 		<property name="purpose" column="purpose" type="text" />
 
+		<property name="projectComments" column="projectComments" type="text" />
+		
 		<property name="projectImpact" column="project_impact" type="text" />
 		<property name="activitySummary" column="activity_summary" type="text" />
 		<property name="contractingArrangements" column="contracting_arrangements" type="text" />

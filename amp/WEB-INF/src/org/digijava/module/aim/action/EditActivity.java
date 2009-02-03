@@ -735,7 +735,11 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 
   		eaForm.getIdentification().setConvenioNumcont(activity.getConvenioNumcont());
   		eaForm.getIdentification().setClasiNPD(activity.getClasiNPD());
-          if (activity.getObjective() != null)
+        
+  		if (activity.getProjectComments() == null)
+            eaForm.getIdentification().setProjectComments(activity.getProjectComments().trim());
+
+  		if (activity.getObjective() != null)
             eaForm.getIdentification().setObjectives(activity.getObjective().trim());
           
           if (activity.getPurpose() != null)

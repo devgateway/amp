@@ -1169,29 +1169,29 @@ private ActionForward showStep1(ActionMapping mapping,
 	  ed.setGroupName(Constants.GROUP_OTHER);
 	  org.digijava.module.editor.util.DbUtil.saveEditor(ed);
 	}
-
-	//---
-	if (eaForm.getIdentification().getPurpose() == null ||
-	    eaForm.getIdentification().getPurpose().trim().length() == 0) {
-	  eaForm.getIdentification().setPurpose("aim-purp-" + teamMember.getMemberId() + "-" +
-	                    System.currentTimeMillis());
-	  User user = RequestUtils.getUser(request);
-	  String currentLang = RequestUtils.getNavigationLanguage(request).
-	      getCode();
-	  String refUrl = RequestUtils.getSourceURL(request);
-	  String key = eaForm.getIdentification().getPurpose();
-	  Editor ed = org.digijava.module.editor.util.DbUtil.createEditor(user,
-	      currentLang,
-	      refUrl,
-	      key,
-	      key,
-	      " ",
-	      null,
-	      request);
-	  ed.setLastModDate(new Date());
-	  ed.setGroupName(Constants.GROUP_OTHER);
-	  org.digijava.module.editor.util.DbUtil.saveEditor(ed);
-	}
+//	TODO : this already exist delete it
+//	//---
+//	if (eaForm.getIdentification().getPurpose() == null ||
+//	    eaForm.getIdentification().getPurpose().trim().length() == 0) {
+//	  eaForm.getIdentification().setPurpose("aim-purp-" + teamMember.getMemberId() + "-" +
+//	                    System.currentTimeMillis());
+//	  User user = RequestUtils.getUser(request);
+//	  String currentLang = RequestUtils.getNavigationLanguage(request).
+//	      getCode();
+//	  String refUrl = RequestUtils.getSourceURL(request);
+//	  String key = eaForm.getIdentification().getPurpose();
+//	  Editor ed = org.digijava.module.editor.util.DbUtil.createEditor(user,
+//	      currentLang,
+//	      refUrl,
+//	      key,
+//	      key,
+//	      " ",
+//	      null,
+//	      request);
+//	  ed.setLastModDate(new Date());
+//	  ed.setGroupName(Constants.GROUP_OTHER);
+//	  org.digijava.module.editor.util.DbUtil.saveEditor(ed);
+//	}
 
 //      ---
 	if (eaForm.getIdentification().getLessonsLearned() == null ||
@@ -1296,26 +1296,48 @@ private ActionForward showStep1(ActionMapping mapping,
 
 	// Creating a new entry in the DG_EDITOR table for objective with the initial value for objective as " "
 	if (eaForm.getIdentification().getObjectives() == null ||
-	    eaForm.getIdentification().getObjectives().trim().length() == 0) {
-	  eaForm.getIdentification().setObjectives("aim-obj-" + teamMember.getMemberId() + "-" +
-	                       System.currentTimeMillis());
-	  User user = RequestUtils.getUser(request);
-	  String currentLang = RequestUtils.getNavigationLanguage(request).
-	      getCode();
-	  String refUrl = RequestUtils.getSourceURL(request);
-	  String key = eaForm.getIdentification().getObjectives();
-	  Editor ed = org.digijava.module.editor.util.DbUtil.createEditor(user,
-	      currentLang,
-	      refUrl,
-	      key,
-	      key,
-	      " ",
-	      null,
-	      request);
-	  ed.setLastModDate(new Date());
-	  ed.setGroupName(Constants.GROUP_OTHER);
-	  org.digijava.module.editor.util.DbUtil.saveEditor(ed);
-	}
+		    eaForm.getIdentification().getObjectives().trim().length() == 0) {
+		  eaForm.getIdentification().setObjectives("aim-obj-" + teamMember.getMemberId() + "-" +
+		                       System.currentTimeMillis());
+		  User user = RequestUtils.getUser(request);
+		  String currentLang = RequestUtils.getNavigationLanguage(request).
+		      getCode();
+		  String refUrl = RequestUtils.getSourceURL(request);
+		  String key = eaForm.getIdentification().getObjectives();
+		  Editor ed = org.digijava.module.editor.util.DbUtil.createEditor(user,
+		      currentLang,
+		      refUrl,
+		      key,
+		      key,
+		      " ",
+		      null,
+		      request);
+		  ed.setLastModDate(new Date());
+		  ed.setGroupName(Constants.GROUP_OTHER);
+		  org.digijava.module.editor.util.DbUtil.saveEditor(ed);
+		}
+
+	if (eaForm.getIdentification().getProjectComments() == null ||
+		    eaForm.getIdentification().getProjectComments().trim().length() == 0) {
+		  eaForm.getIdentification().setProjectComments("aim-projcom-" + teamMember.getMemberId() + "-" +
+		                       System.currentTimeMillis());
+		  User user = RequestUtils.getUser(request);
+		  String currentLang = RequestUtils.getNavigationLanguage(request).
+		      getCode();
+		  String refUrl = RequestUtils.getSourceURL(request);
+		  String key = eaForm.getIdentification().getProjectComments();
+		  Editor ed = org.digijava.module.editor.util.DbUtil.createEditor(user,
+		      currentLang,
+		      refUrl,
+		      key,
+		      key,
+		      " ",
+		      null,
+		      request);
+		  ed.setLastModDate(new Date());
+		  ed.setGroupName(Constants.GROUP_OTHER);
+		  org.digijava.module.editor.util.DbUtil.saveEditor(ed);
+		}
 
 	// Exactly as description/objectives, AMP is using DigiJava's document
 	// management module to store documents (if enabled). Before storing

@@ -230,6 +230,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display feature="Identification" name="Data Source"></field:display> 
 <field:display feature="Identification" name="Computation"></field:display>
 <field:display feature="Identification" name="Description"></field:display> 
+<field:display feature="Identification" name="Project Comments"></field:display> 
 <field:display feature="Identification" name="Objective Assumption"></field:display> 
 <field:display feature="Identification" name="Objective Comments"></field:display> 
 <field:display feature="Identification" name="Objective Objectively Verifiable Indicators"></field:display> 

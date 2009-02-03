@@ -24,6 +24,7 @@ public class MainProjectDetailsForm extends ValidatorForm
 {
 	private String ampId;
 	private String name ;
+	private String projectComments ;
 	private String description ;
 	private String objectives;
 	private String results;
@@ -440,6 +441,14 @@ public class MainProjectDetailsForm extends ValidatorForm
 
 	public void setResults(String results) {
 		this.results = results;
+	}
+
+	public String getProjectComments() {
+		return this.projectComments;
+	}
+
+	public void setProjectComments(String projectComments) {
+		this.projectComments = projectComments;
 	}
 	
 }

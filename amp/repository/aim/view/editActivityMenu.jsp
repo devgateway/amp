@@ -48,7 +48,7 @@
 		     );
 	
 		function initScripts() {
-			var msgP5='\n<digi:trn key="aim:saving">Saving</digi:trn>';
+			var msgP5="\n<digi:trn key='aim:saving'>Saving</digi:trn>";
 			mySavePanel.setHeader(msgP5);
 			mySavePanel.setBody("");
 			mySavePanel.render(document.body);

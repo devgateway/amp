@@ -233,13 +233,6 @@ function collapseAll() {
                                                                               
                                                                           </c:if>
                                                                       </c:set>
-                                                                           
-                                                                         
-                                                                         
-                                                                     
-                                                                     
-                                                                     
-                                                                    
                                                                          <c:if test="${index.first}">
                                                                             
                                                                              <digi:link href=" ${link}" styleClass="comment" title="${trans}">
@@ -380,7 +373,18 @@ function collapseAll() {
 											<c:out value="${aimEditActivityForm.identification.title}"/>										</td>
 									</tr>
 									</field:display>
-								
+								                  
+						 			<field:display feature="Identification" name="Project Comments">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
+										<digi:trn key="aim:projectComments">Project Comments</digi:trn></td>
+										<td bgcolor="#ffffff">
+                                        <c:if test="${aimEditActivityForm.identification.projectComments!=null}">
+											<c:set var="projcomKey" value="${aimEditActivityForm.identification.projectComments}" />
+											<digi:edit key="${projcomKey}"></digi:edit>
+                                            </c:if>										</td>
+									</tr>
+									</field:display>
                                   
                                   <field:display name="NPD Clasification" feature="Identification">
 									<tr>

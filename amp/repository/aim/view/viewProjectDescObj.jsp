@@ -18,6 +18,23 @@
 <digi:instance property="aimMainProjectDetailsForm" />
 
 <table width="100%" height="100%" cellpadding=5 cellspacing=0 valign=top align=left bgcolor="#006699">
+	<c:if test="${aimMainProjectDetailsForm.type == 'ProjCom'}">
+		<tr height="20">
+			<td class="textalb" align="center">
+				<digi:trn key="aim:projectComments">Project Comments</digi:trn>
+			</td>
+		</tr>
+		<tr bgcolor="#ffffff" valign="top">
+			<td>
+			<logic:notEmpty name="aimMainProjectDetailsForm" property="projectComments">
+				<bean:define id="projcomKey">
+					<c:out value="${aimMainProjectDetailsForm.projectComments}"/>
+				</bean:define>
+				<digi:edit key="<%=projcomKey%>"></digi:edit>
+				</logic:notEmpty>
+			</td>
+		</tr>		
+	</c:if>
 	<c:if test="${aimMainProjectDetailsForm.type == 'Desc'}">
 		<tr height="20">
 			<td class="textalb" align="center">

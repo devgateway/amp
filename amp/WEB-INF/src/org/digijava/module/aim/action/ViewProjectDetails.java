@@ -21,6 +21,7 @@ public class ViewProjectDetails extends Action {
         request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.VIEW);
         logger.debug("Description = " + mpForm.getDescription());
         logger.debug("Objectives = " + mpForm.getObjectives());
+        logger.debug("Project Comments = " + mpForm.getProjectComments());
         
         return mapping.findForward("forward");
     }

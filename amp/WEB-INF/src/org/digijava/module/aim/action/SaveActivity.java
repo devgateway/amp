@@ -221,6 +221,13 @@ public class SaveActivity extends Action {
 			activity.setDescription(eaForm.getIdentification().getDescription());
 		}
 		
+		if (eaForm.getIdentification().getProjectComments() == null
+				|| eaForm.getIdentification().getProjectComments().trim().length() == 0) {
+			activity.setProjectComments(new String(" "));
+		} else {
+			activity.setProjectComments(eaForm.getIdentification().getProjectComments());
+		}
+		
 		if (eaForm.getIdentification().getLessonsLearned() == null
 				|| eaForm.getIdentification().getLessonsLearned().trim().length() == 0) {
 			activity.setLessonsLearned(new String(" "));

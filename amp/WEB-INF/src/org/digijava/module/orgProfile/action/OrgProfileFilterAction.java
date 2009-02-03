@@ -18,6 +18,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -53,14 +54,17 @@ public class OrgProfileFilterAction extends Action {
         if(orgForm.getCurrency()==null){
             orgForm.setCurrency(CurrencyUtil.getAmpcurrency("USD").getAmpCurrencyId());
         }
-        // Org profile is only for Mul and Bil organizations 
-        List<AmpOrganisation> orgs=DbUtil.getBilMulOrganisations();
+        // Org profile is only for Mul and Bil organizations
+        List<AmpOrgGroup> orgGroups=new ArrayList(DbUtil.getBilMulOrgGroups());
+        orgForm.setOrgGroups(orgGroups);
+        if(orgForm.getOrgGroupId()==null&&orgGroups.size()>0){
+            orgForm.setOrgGroupId(((AmpOrgGroup)orgGroups.get(0)).getAmpOrgGrpId());
+
+        }
+        List<AmpOrganisation> orgs=DbUtil.getOrganisationByGroupId(orgForm.getOrgGroupId());
         orgForm.setOrganizations(orgs);
         orgForm.setYears(new ArrayList<BeanWrapperImpl>());
-        if(orgForm.getOrg()==null&&orgs.size()>0){
-            orgForm.setOrg(((AmpOrganisation)orgs.get(0)).getAmpOrgId());
-            
-        }
+       
         Long yearFrom = Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.YEAR_RANGE_START));
         Long countYear = Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));
         for (long i = yearFrom; i <= (yearFrom + countYear); i++) {

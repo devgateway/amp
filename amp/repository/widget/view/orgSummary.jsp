@@ -14,6 +14,12 @@
             <table id="orgTable" border="1" width="100%">
                 <th colspan="2" class="tableHeaderCls">Summary</th>
                 <tr>
+                    <td width="30%">Group:</td><td>${orgGroup.orgGrpName}&nbsp;</td>
+                </tr>
+                 <tr>
+                    <td width="30%">Type:</td><td>${orgGroup.orgType.orgType}&nbsp;</td>
+                </tr>
+                <tr>
                     <td width="30%">Organization Name:</td><td>${organization.name}&nbsp;</td>
                 </tr>
                 <tr>

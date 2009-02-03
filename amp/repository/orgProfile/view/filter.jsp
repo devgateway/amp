@@ -15,7 +15,8 @@
     var helpBody="<digi:trn key='orgProfile:helpBpdy'>Sector Breakdown,5 Largest Projects,Regional Breakdown, Paris Declaration are rendering  data of the previous fiscal year</digi:trn>";
     var helpTitle="<digi:trn key='orgProfile:helpTitle'>Organization Profile Help</digi:trn>";
 </script>
-
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 <style>
 
     .tableEven {
@@ -49,6 +50,34 @@
 </style>
 
 <script language="javascript">
+  $(document).ready(function(){
+
+        $("#org_group_dropdown_id").change(function () {
+                    var orgGroupId=$('#org_group_dropdown_id option:selected').val();
+                    var partialUrl=addActionToURL('getOrganizations.do');
+                    var url=partialUrl+'?orgGroupId='+orgGroupId;
+                    var async=new Asynchronous();
+                    async.complete=buildOrgDropDown;
+                    async.call(url);
+                
+                });
+            });
+
+  
+    function addActionToURL(actionName){
+        var fullURL=document.URL;
+        var lastSlash=fullURL.lastIndexOf("/");
+        var partialURL=fullURL.substring(0,lastSlash);
+        return partialURL+"/"+actionName;
+    }
+    
+  
+
+            function buildOrgDropDown(status, statusText, responseText, responseXML){
+                var orgSelect=document.getElementById("org_select");
+                orgSelect.innerHTML=responseText;
+               
+           }
     function setStripsTable(tableId, classOdd, classEven) {
         var tableElement = document.getElementById(tableId);
         rows = tableElement.getElementsByTagName('tr');
@@ -92,17 +121,24 @@
     <DIV id="TipLayer"  style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
     <table border="0" align="left" class="toolbar">
         <tr>
-            <td><b><digi:trn key="orgProfile:filer:Organization">Organization</digi:trn></b></td>
-            <td>
-                <html:select property="org" styleClass="inp-text">
-                    <html:optionsCollection property="organizations" value="ampOrgId" label="name" />
+            <td colspan="10" align="center">
+                <b><digi:trn>Organization Group</digi:trn>:</b>
+                <html:select property="orgGroupId" styleClass="inp-text"  styleId="org_group_dropdown_id">
+                    <html:optionsCollection property="orgGroups" value="ampOrgGrpId" label="orgGrpName" />
                 </html:select>
             </td>
-
+            </tr>
+            <tr>
+            <td><b><digi:trn key="orgProfile:filer:Organization">Organization</digi:trn></b></td>
+            <td>
+                <div id="org_select">
+                    <html:select property="org" styleClass="inp-text" styleId="org_dropdown_id">
+                    <html:option value="-1"><digi:trn>All</digi:trn></html:option>
+                    <html:optionsCollection property="organizations" value="ampOrgId" label="name" />
+                </html:select>
+                </div>
+            </td>
             <td nowrap><b><digi:trn key="orgProfile:filer:fiscalCalendar">Fiscal Year</digi:trn></b></td>
-
-
-
             <td align="center">
                 <html:select property="year" styleClass="inp-text">
                     <html:optionsCollection property="years" label="wrappedInstance" value="wrappedInstance" />
@@ -140,7 +176,6 @@
         </tr>
     </table>
 
-    </div>
     <br>
 
 

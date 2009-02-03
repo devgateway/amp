@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.util.DbUtil;
 import org.springframework.beans.BeanWrapperImpl;
 
 /**
@@ -32,6 +32,25 @@ public class OrgProfileFilterForm extends ActionForm {
     private Collection<BeanWrapperImpl> years;
     
     private int transactionType;
+
+    private List<AmpOrgGroup> orgGroups;
+    private Long orgGroupId;
+
+    public Long getOrgGroupId() {
+        return orgGroupId;
+    }
+
+    public void setOrgGroupId(Long orgGroupId) {
+        this.orgGroupId = orgGroupId;
+    }
+
+    public List<AmpOrgGroup> getOrgGroups() {
+        return orgGroups;
+    }
+
+    public void setOrgGroups(List<AmpOrgGroup> orgGroups) {
+        this.orgGroups = orgGroups;
+    }
 
     public int getTransactionType() {
         return transactionType;

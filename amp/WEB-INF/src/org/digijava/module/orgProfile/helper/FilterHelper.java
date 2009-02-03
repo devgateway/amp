@@ -2,6 +2,7 @@
 package org.digijava.module.orgProfile.helper;
 
 import java.io.Serializable;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
@@ -17,6 +18,15 @@ public class FilterHelper implements Serializable{
     private Long year;
     private int transactionType;
     private TeamMember teamMember;
+    private Long orgGroupId;
+
+    public Long getOrgGroupId() {
+        return orgGroupId;
+    }
+
+    public void setOrgGroupId(Long orgGroupId) {
+        this.orgGroupId = orgGroupId;
+    }
 
     public TeamMember getTeamMember() {
         return teamMember;
@@ -41,6 +51,7 @@ public class FilterHelper implements Serializable{
         this.currId=form.getCurrency();
         this.year=form.getYear();
         this.transactionType=form.getTransactionType();
+        this.orgGroupId=form.getOrgGroupId();
     }
 
      public FilterHelper(OrgProfileFilterForm form,TeamMember tm){
@@ -73,9 +84,18 @@ public class FilterHelper implements Serializable{
         this.year = year;
     }
     
-    public AmpOrganisation getOrganization(){
+    public AmpOrganisation getOrganization() {
+        //view entire group...
+        if (orgId == null || orgId == -1) {
+            return new AmpOrganisation();
+        }
+        //view particular organization...
         return DbUtil.getOrganisation(orgId);
-        
+
     }
 
+     public AmpOrgGroup getOrgGroup(){
+        return DbUtil.getAmpOrgGroup(orgGroupId);
+
+    }
 }

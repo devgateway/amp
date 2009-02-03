@@ -263,6 +263,7 @@ html>body #mainEmpty {
 
 <digi:form action="/viewProjectDetails.do">
 <html:hidden property="type" />
+<html:hidden property="projectComments" />
 <html:hidden property="description" />
 <html:hidden property="objectives" />					
 <TABLE width="100%" cellSpacing="3" cellPadding="3" vAlign="top">

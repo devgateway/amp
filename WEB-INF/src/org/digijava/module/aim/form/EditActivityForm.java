@@ -120,6 +120,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private AmpTeam team;
 		
 		private String title = null;
+		private String projectComments = null;
 		private String objectives = null;
 		private String description = null;
 		private String purpose = null;
@@ -620,6 +621,14 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 		public void setSelOrgs(Long[] selOrgs) {
 			this.selOrgs = selOrgs;
+		}
+
+		public String getProjectComments() {
+			return this.projectComments;
+		}
+
+		public void setProjectComments(String projectComments) {
+			this.projectComments = projectComments;
 		}
 
 	}
@@ -3622,6 +3631,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.getPrograms().setSecondaryPrograms(null);
 			this.crossIssues = null;
 			this.funding = null;
+			this.oldFunding = null;
 			this.survey = null;
 			this.contactInfo = null;
 			this.agencies = null;

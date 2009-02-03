@@ -193,8 +193,34 @@ target.style.cursor = "default"
 													</a>
 												</td>											
 											</tr>
+											
+											<field:display name="Project Comments" feature="Identification">
+											<tr bgcolor="#ffffff"><td valign="top" align="left">
+												<a title="<digi:trn key="aim:CommentsOfProject">Comments realted to the whole project</digi:trn>">
+												<digi:trn key="aim:projectComments">Project Comments</digi:trn>
+												</a>
+											</td>
+											<td valign="top" align="left">
+												<table cellPadding="0" cellSpacing="0">
+													<tr>
+														<td>
+															<bean:define id="projcomKey">
+																<c:out value="${aimEditActivityForm.identification.projectComments}"/>
+															</bean:define>
+															<digi:edit key="<%=projcomKey%>"/>
+														</td>
+													</tr>
+													<tr>
+														<td>
+															<a href="javascript:edit('${projcomKey}')">
+															<digi:trn key="aim:edit">Edit</digi:trn></a>															
+														</td>
+													</tr>
+												</table>
+											</td></tr>
+											</field:display>
 																						
-												<field:display name="Objective" feature="Identification">
+											<field:display name="Objective" feature="Identification">
 											<tr bgcolor="#ffffff"><td valign="top" align="left">
 												<a title="<digi:trn key="aim:ObjectivesAndComponentsofProject">The key objectives and main components of the project</digi:trn>">
 												<digi:trn key="aim:objective">Objective</digi:trn>
@@ -263,16 +289,13 @@ target.style.cursor = "default"
 															<a href="<c:out value="${aimEditActivityForm.context}"/>/editor/showEditText.do?id=<%=descKey%>&referrer=<c:out value="${aimEditActivityForm.context}"/>/aim/addActivity.do?edit=true">Edit</a>
 															--%>
 																<a href="javascript:edit('<%=descKey%>')">
-																<digi:trn key="aim:edit">Edit</digi:trn></a>
-															
-															
+																<digi:trn key="aim:edit">Edit</digi:trn></a>															
 														</td>
 													</tr>
 												</table>
 											</td></tr>
 											</field:display>
-
-		
+											
 											<!-- Purpose -->
 											<field:display name="Purpose" feature="Identification">
 											<tr bgcolor="#ffffff"><td valign="top" align="left">

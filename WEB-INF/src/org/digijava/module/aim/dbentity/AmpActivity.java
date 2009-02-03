@@ -41,6 +41,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	@PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_LABEL})
 	private String name ;
 	private String description ;
+	private String projectComments ;
 	private String lessonsLearned;
 	private String objective ;
 	private String purpose;
@@ -1676,6 +1677,14 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 
 	public Boolean getCustomField6() {
 		return customField6;
+	}
+
+	public String getProjectComments() {
+		return this.projectComments;
+	}
+
+	public void setProjectComments(String projectComments) {
+		this.projectComments = projectComments;
 	}
 
 }

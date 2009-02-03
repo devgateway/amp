@@ -1512,7 +1512,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     AmpActivity activity = null;
 
     try {
-         session = PersistenceManager.getSession();
+         session = PersistenceManager.getRequestDBSession();
 
       activity = (AmpActivity) session.load(AmpActivity.class,
           id);

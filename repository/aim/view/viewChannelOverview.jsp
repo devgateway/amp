@@ -111,8 +111,13 @@ function commentWin(val) {
 										<TD align="left">
 										<SPAN><strong>
 										<feature:display module="Project ID and Planning" name="Identification">
+											<field:display name="Project Comments" feature="Identification">
+											&nbsp;&nbsp;<div id="gen" title='<digi:trn key="aim:clickToViewProjectComments">Click here to View Project Comments</digi:trn>'>
+											<a href="#" onclick="javascript:previewOverviewframe('ProjCom','<c:out value="${activity.projectComments}"/>'); return false;" >
+											<digi:trn key="aim:projectComments">Project Comments</digi:trn></a>&nbsp;|</div>&nbsp;
+											</field:display>
 											<field:display name="Description" feature="Identification">
-											&nbsp;&nbsp;<div id="gen" title='<digi:trn key="aim:clickToViewProjectDescription">Click here to View Project Description</digi:trn>'>
+											<div id="gen" title='<digi:trn key="aim:clickToViewProjectDescription">Click here to View Project Description</digi:trn>'>
 											<a href="#" onclick="javascript:previewOverviewframe('Desc','<c:out value="${activity.description}"/>'); return false;" >
 											<digi:trn key="aim:description">Description</digi:trn></a>&nbsp;|</div>&nbsp;
 											</field:display>

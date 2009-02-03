@@ -50,6 +50,16 @@ function remove(){
 
 }
 
+function reFresh(){
+
+        <digi:context name="tree" property="context/module/moduleinstance/helpActions.do~actionType=saved"/>
+		document.helpForm.action = "<%=tree%>~wizardStep=0";
+		document.helpForm.target = "_self";
+		document.helpForm.submit();
+
+
+}
+
 
 function create(){
 
@@ -88,6 +98,7 @@ function stateChanged(){
         {
           //code to process Ajax request
           hideProgress('progress');
+          reFresh();
         }
   }
 }
@@ -127,6 +138,7 @@ function GetXmlHttpObj()	{
    {
       var progressViewer = document.getElementById(name);
        progressViewer.innerHTML = "";
+
    }
 
 
@@ -179,8 +191,7 @@ function GetXmlHttpObj()	{
 
                                       <a class="link" onclick="remove();" title="${topicDelete}" ><digi:trn>Remove Topic</digi:trn></a> |
 
-
-                                        <a class="link" onclick="saveTreeState();" title="${savetreeState}" ><digi:trn>Save Tree State</digi:trn></a>
+                                      <a class="link" onclick="saveTreeState();" title="${savetreeState}" ><digi:trn>Save Tree State</digi:trn></a>
 
 
                           </div>

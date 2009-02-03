@@ -63,7 +63,7 @@ function create(){
 
 function saveTreeState(){
 
-     var xmlString = document.getElementById("xmlString").innerHTML;
+     var xmlString = document.getElementById("xmlString").value;
     var moduleInstance = document.getElementById("moduleInstance").innerHTML;
 
      xmlHttp=GetXmlHttpObj();

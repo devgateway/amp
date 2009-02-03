@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@page import="org.digijava.module.help.util.HelpUtil"%>
-
+ <digi:ref href="css/dhtmlxtree.css" type="text/css" rel="stylesheet" />
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/help/script/dhtmlxtree.js"/>"></script>
@@ -76,7 +76,8 @@
 
   <div id="treeboxbox_tree" class="yui-content" style="height:700px;overflow: auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;"></div>
   <div id="log"></div>
-  <div id="xmlString"></div>
+  <!--<div id="xmlString"></div>-->
+  <input type="hidden" id="xmlString"/>
   <div id="moduleInstance" style="display:none;">
      <c:forEach var="topins" items="${topic}" begin="1" end="1">
             ${topins.moduleInstance}
@@ -86,8 +87,7 @@
 <script type="text/javascript">
 
 
-    
-    function tonclick(id){
+	function tonclick(id){
 			if(id != null){
 					var id = tree.getSelectedItemId();
 					show(id);
@@ -98,21 +98,19 @@
 	 		tree.setImagePath("../../repository/help/view/images/csh_vista/");
 	        tree.enableTreeImages(false);
             tree.enableDragAndDrop(true);
-
             tree.setOnClickHandler(tonclick);
             var xml = '<?xml version="1.0" encoding="iso-8859-1"?>';
 			    xml+='<tree id="0" radio="1">';
 			    xml+= '<%= HelpUtil.renderTopicTree(topic,request,false) %>';
 			    xml+='</tree>';
 		    tree.loadXMLString(xml);
-
-             tree.attachEvent("onDrag",function(sid,tid,sobj,tobj){
+            tree.attachEvent("onDrag",function(sid,tid,sobj,tobj){
 
             if(sid){
 
                 var contextTreeXml = tree.serializeTree();
-                //var xmlobject = (new DOMParser()).parseFromString(contextTreeXml, "text/xml");
-                document.getElementById("xmlString").innerHTML = contextTreeXml;
+               // var xmlobject = (new DOMParser()).parseFromString(contextTreeXml, "text/xml");
+                document.getElementById("xmlString").value = contextTreeXml;
 
                     return true;
             }});

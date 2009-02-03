@@ -499,21 +499,20 @@
 		cmb.options.add(noneOpt);
 	}
 	
+	function initSectorCombo(){
+		var cmb = document.getElementById("sectorsMapCombo");
+		cmb.selectedIndex=0;
+	}
 		
 	//Map level functions
 	
 	function mapLevelChanged(newVal){
 		var mapObj = document.getElementById("testMap");
 		var mapSrc = mapObj.src;
-		var newUrl = modifyMapLevelURL (mapSrc, newVal);
-		newUrl = modifyUniqueStringURL (newUrl);
 		setBusy(true);
-		
 		imageMapLoaded = false;
-		mapObj.src = newUrl;
-
-		
-		
+		var uniqueStr = (new Date()).getTime();
+		mapObj.src = "/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA&mapLevel=" + newVal + "&uniqueStr=" + uniqueStr + "&year=-1&width=500&height=500";
 		actionImgLoading = true;
 		document.getElementById("navCursorMap").src = modifyMapLevelURL (document.getElementById("navCursorMap").src, newVal);
 		
@@ -528,6 +527,7 @@
 		initIndicatorCombo();
 		initSubgroupCombo();
 		initYearCombo();
+		initSectorCombo();
 		
 	}
 	
@@ -713,6 +713,15 @@
 
 		if (busy) {
 			document.getElementById("busyIndicator").style.visibility = "visible";
+			
+			document.getElementsByName("mapLevelRadio")[0].disabled = true;
+			document.getElementsByName("mapLevelRadio")[1].disabled = true;
+			document.getElementById("sectorsMapCombo").disabled = true;
+			document.getElementById("indicatorsCombo").disabled = true;
+			document.getElementById("indicatorSubgroupCombo").disabled = true;
+			document.getElementById("indicatorYearCombo").disabled = true;
+			
+			
 		} else if (!actionImgLoading &&
 				   !actionGetImageMap &&
 				   !actionSectorData &&
@@ -721,6 +730,13 @@
 				   !actionGetSubgroups &&
 				   !actionGetYears) {
 			document.getElementById("busyIndicator").style.visibility = "hidden";
+			
+			document.getElementsByName("mapLevelRadio")[0].disabled = false;
+			document.getElementsByName("mapLevelRadio")[1].disabled = false;
+			document.getElementById("sectorsMapCombo").disabled = false;
+			document.getElementById("indicatorsCombo").disabled = false;
+			document.getElementById("indicatorSubgroupCombo").disabled = false;
+			document.getElementById("indicatorYearCombo").disabled = false;
 		}
 	}
 	

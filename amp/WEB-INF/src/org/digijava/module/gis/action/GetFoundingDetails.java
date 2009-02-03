@@ -346,8 +346,20 @@ public class GetFoundingDetails extends Action {
                 List inds = null;
                 if (indYear != null && !indYear.equals("-1")) {
 
-                    String startDateStr = indYear.substring(0, indYear.indexOf("-"));
-                    String endDateStr = indYear.substring(indYear.indexOf("-")+1);
+                    String startDateStr = null;
+                    String endDateStr = null;
+
+                    if (indYear.startsWith("-")) {
+                        startDateStr = indYear.substring(0, indYear.indexOf("-", 2));
+                    } else {
+                        startDateStr = indYear.substring(0, indYear.indexOf("-"));
+                    }
+
+                    if (indYear.indexOf("--") > -1) {
+                        endDateStr = indYear.substring(indYear.indexOf("--") + 1);
+                    } else {
+                        endDateStr = indYear.substring(indYear.indexOf("-") + 1);
+                    }
 
                     DateInterval datInt = new DateInterval(new Date(new Long(startDateStr).longValue()), new Date(new Long(endDateStr).longValue()));
 

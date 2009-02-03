@@ -627,7 +627,7 @@ public class TrnTag
 	 * @return
 	 */
 	public String getGeneratedKey() {
-		return TranslatorWorker.generateTrnKey(getDefaultTranslation());
+		return TranslatorWorker.generateTrnKey(getDefaultTranslation().trim());
 	}
 
 	public void setKeyWords(String keyWords) {

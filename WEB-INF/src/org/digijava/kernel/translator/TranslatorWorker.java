@@ -371,6 +371,7 @@ public class TranslatorWorker {
 
             session = PersistenceManager.getSession();
             Message message = (Message) session.load(Message.class, mesageKey);
+            message.setKeyWords(keyWords);
             updateTimeStamp(message);
             return message;
         }
@@ -1046,7 +1047,7 @@ public class TranslatorWorker {
     }
     public static String generateTrnKey(String text){
     	if(text != null) {
-    		return Integer.toString(text.hashCode());
+    		return Integer.toString(text.trim().hashCode());
     	} else {
     		return "";
     	}

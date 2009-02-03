@@ -84,6 +84,7 @@
 		initYearCombo();
 	
 		var selSector = sec.value;
+		
 		setBusy(true);
 		var mapLevel = getRadioValue("mapLevelRadio");
 		
@@ -92,9 +93,15 @@
 		
 		var indYear = document.getElementById("indicatorYearCombo").value;
 		var uniqueStr = (new Date()).getTime();
+		
 		actionImgLoading = true;
 		document.getElementById("testMap").src = "../../gis/getFoundingDetails.do?action=getDataForIndicator&mapCode=TZA&mapLevel=" + mapLevel + "&fromYear=" + fromYear + "&toYear=" + toYear + "&indYear=" + indYear + "&sectorId=" + selSector + "&indicatorId=-1" + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
-		getDataForSector(sec);
+		
+		if (selSector > 0) {
+			getDataForSector(sec);
+		} else {
+			fundingDataByRegion = new Array();
+		}
 	}
 	
 	function indicatorSelected(ind) {

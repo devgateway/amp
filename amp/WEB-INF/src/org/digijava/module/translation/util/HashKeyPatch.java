@@ -112,17 +112,23 @@ public class HashKeyPatch {
 	 * @param messageGroups
 	 * @throws WorkerException
 	 */
-	private static void saveToDatabase(Collection<PatcherMessageGroup> messageGroups)throws WorkerException {
+	private static void saveToDatabase(Collection<PatcherMessageGroup> messageGroups){
 		int c = 0;
 		long cm = 0;
-		for (PatcherMessageGroup messageGroup : messageGroups) {
-			for (Message patchedMessage : messageGroup.patcheAll()) {
-				TranslatorWorker.getInstance().save(patchedMessage);
-			}
-			if(++c == 7000){
-				cm += c;
-				logger.info("Please wait, patch is still working. Processed "+cm+" messages...");
-				c=0;
+		if (messageGroups != null){
+			for (PatcherMessageGroup messageGroup : messageGroups) {
+				for (Message patchedMessage : messageGroup.patcheAll()) {
+					try {
+						TranslatorWorker.getInstance().save(patchedMessage);
+					} catch (Exception e) {
+						logger.error(e);
+					}
+				}
+				if(++c == 7000){
+					cm += c;
+					logger.info("Please wait, patch is still working. Processed "+cm+" messages...");
+					c=0;
+				}
 			}
 		}
 	}

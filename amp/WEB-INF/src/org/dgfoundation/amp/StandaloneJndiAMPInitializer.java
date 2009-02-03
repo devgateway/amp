@@ -160,7 +160,7 @@ public class StandaloneJndiAMPInitializer {
 			throws NamingException {
 		Properties env = new Properties();
 		env.setProperty(Context.INITIAL_CONTEXT_FACTORY,
-				"org.jboss.naming.NamingContextFactory");
+				"org.jnp.interfaces.NamingContextFactory");
 		env.setProperty(Context.PROVIDER_URL, Constants.JNP_URL);
 		env.setProperty(Context.URL_PKG_PREFIXES,
 				"org.jboss.naming:org.jnp.interfaces");

@@ -1,0 +1,54 @@
+<table class="bluebook">
+	<tr>
+		<td>
+			<b><%= ll(:bluebook, :pages, :contents, :eu_cooperation, :by_toa_in, :year => year, :forecasts => year + 1)%></b>
+			
+			<div id="chart_1">
+				<strong>Please download Flash Player 8.0 or higher from <a href="http://www.adobe.com">adobe.com</a>
+						in order to view this chart.</strong>
+			</div>
+			<script type="text/javascript">
+			// <![CDATA[
+				var flashvars = {
+					path: "/",
+					settings_file: escape("/bluebook/<%= year %>/charts/settings/cooperation_by_type_of_aid.xml"),
+					data_file: escape("/bluebook/<%= year %>/charts/eu_cooperation_type_of_aid_data.xml"),
+					preloader_color: "#999999"
+				};
+				
+				swfobject.embedSWF("/amcolumn.swf", "chart_1", "1150", "430", "8.0.0", false, flashvars, { wmode: "transparent"	}, false);
+			// ]]>
+			</script>
+			
+			<br><br><font size=1><%= ll(:terms, :source) %>: 2008 ODAnic - www.odadata.eu/odanic</font>
+		</td>
+	</tr>
+</table>
+
+<table class="admin">
+	<tr>
+		<td>
+			<b><%= ll(:bluebook, :pages, :contents, :eu_cooperation, :in_percent_by_toa, :year => year) %></b>
+			<br><%= ll(:bluebook, :pages, :contents, :eu_cooperation, :in_percent_by_toa_subtitle, :year => year) %>
+			
+			<div id="chart_2">
+				<strong>Please download Flash Player 8.0 or higher from <a href="http://www.adobe.com">adobe.com</a>
+						in order to view this chart.</strong>
+			</div>
+			<script type="text/javascript">
+			// <![CDATA[
+				var flashvars = {
+					path: "/",
+					settings_file: escape("/bluebook/<%= year %>/charts/settings/cooperation_by_toa_percentages.xml"),
+					data_file: escape("/bluebook/<%= year %>/charts/eu_cooperation_type_of_aid_percentages_data.xml"),
+					preloader_color: "#999999"
+				};
+				
+				swfobject.embedSWF("/amcolumn.swf", "chart_2", "1150", "430", "8.0.0", false, flashvars, { wmode: "transparent"	}, false);
+			// ]]>
+			</script>
+			
+			<br><br><font size=1><%= ll(:terms, :source) %>: 2008 ODAnic - www.odadata.eu/odanic</font>
+		</td>
+	</tr>
+</table>

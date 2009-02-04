@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chart>
+	<series>
+		<% @donors.each do |donor| %>
+			<value xid="<%= donor.id %>"><%= donor.name %></value>
+		<% end %>
+	
+	</series>
+	
+	<graphs>
+		<% TypeOfAid.all.each do |toa| %>
+			<graph gid="<%= toa.id %>" title="<%= toa.name %>" color="<%= Settings::COLOR_SCHEME[toa.id] %>">
+				<% @donors.each do |donor| %>
+					<value xid="<%= donor.id %>"><%= @aid_payments[donor.id][toa.id].in_millions(2) rescue 0 %></value>
+				<% end %>
+			</graph>
+		<% end %>
+	</graphs>
+</chart>

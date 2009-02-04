@@ -1,0 +1,230 @@
+<table class="bluebook">
+	<tr>
+		<td width=20% valign=top>
+			<% if @donor.profile_picture.url(:regular).include?('missing.png') %>
+				<img src="/flags/missing/avatar/missing.png" alt="missing.png" width="30" height="30"/>
+			<% else %>
+				<%= image_tag @donor.profile_picture.url(:regular) %>
+			<% end%>
+			
+			<br><br><br>
+			<center>
+			<% if @donor.flag.url(:regular).include?('missing.png') %>
+				<img src="/flags/missing/regular/missing.png" alt="missing.png" width="80" height="54"/>
+			<% else %>
+				<%= image_tag @donor.flag.url(:regular) %>
+			<% end%><br><br>
+			<font size="3"><b><%= @donor.name %></b></font>
+			</center>
+		</td>
+		<td width=40% valign=top>
+			<strong><%= lc(:institutional_framework) %></strong></br>
+			<table>
+				<tr>
+					<td><%= lc(:management_system) %></td>
+					<td><%= @donor.institutions_responsible_for_oda %></td>
+				</tr>
+				<tr>
+					<td><%= lc(:total_staff) %></td>
+					<td><%= @donor.total_staff_in_country %></td>
+				</tr>
+				<tr>
+					<td><%= lc(:expatriate_staff) %></td>
+					<td><%= @donor.total_expatriate_staff %></td>
+				</tr>
+				<tr>
+					<td><%= lc(:local_staff) %></td>
+					<td><%= @donor.total_local_staff %></td>
+				</tr>
+				<tr>
+					<td colspan=2>
+						<strong><%= ll(:terms, :contact) %></strong><br>
+						<%= @donor.field_office_address %>
+						Tel: <%= @donor.field_office_phone %>
+						<br>
+						<%= auto_link(@donor.field_office_email) %>
+						<%= auto_link(@donor.field_office_website) %>
+					</td>
+				</tr>
+			</table>
+		</td>
+		<td width=40% valign=top>
+			<strong><%= lc(:aid_at_a_glance_in) %> <%= year %></strong>
+			<table>
+				<tr>
+					<td><%= ll(:terms, :disbursements) %> / <%= ll(:terms, :eu_short) %> <%= ll(:terms, :disbursements) %></td>
+					<td><%= @disbursement.round %> %</td>
+				</tr>
+				<tr>
+					<td><%= lc(:grant_oda) %> / <%= lc(:total_oda) %></td>
+					<td><%= @disbursement_grants.round %> %</td>
+				</tr>
+				<tr>
+					<td><%= lc(:loan_oda) %> / <%= lc(:total_oda) %></td>
+					<td><%= @disbursement_loans.round %> %</td>
+				</tr>
+			</table>
+			<br />
+			<strong><%= ll(:reports, :cod) %></strong>
+			<table>
+				<tr>
+					<td><%= lc(:multilateral_oda) %> / <%= lc(:total_oda) %></td>
+					<td><%= @disbursement_multilaterals.round %> %</td>
+				</tr>
+				<tr>
+					<td><%= lc(:bilateral_oda) %> / <%= lc(:total_oda) %></td>
+					<td><%= @disbursement_bilaterals.round %> %</td>
+				</tr>
+				<tr>
+					<td><%= lc(:ngos_implementation) %> / <%= lc(:total_oda) %></td>
+					<td><%= @disbursement_ngos.round %> %</td>
+				</tr>
+				<tr>
+					<td><%= lc(:top_regions) %></td>
+					<td>
+						<% if @top_three.blank? %>
+							<i><%= lc(:only_national) %></i>
+						<% else %>
+							<%= format_as_html_list(@top_three.map { |data| "-&nbsp;#{data.province.name}" }) %>
+						<% end %>
+					</td>
+				</tr>
+			</table>
+			<div style="width: 100%; text-align: left; padding-top: 4px"><%= render :partial => '/layouts/currency_selector' %></div>
+		</td>
+	</tr>
+	<tr>
+		<td width=40% valign=top colspan=2>
+			<b><%= lc(:centralization) %></b><br>
+			<table>
+				<tr>
+					<td><%= ll(:country_strategy, :programming_responsibility) %></td>
+					<td><%= option_text_by_id(CountryStrategy::RESPONSIBILITY_OPTIONS, @country_strategy.programming_responsibility) %></td>
+				<tr>
+				<tr>
+					<td><%= ll(:country_strategy, :project_appraisal_responsibility) %></td>
+					<td><%= option_text_by_id(CountryStrategy::RESPONSIBILITY_OPTIONS, @country_strategy.project_appraisal_responsibility) %></td>
+				</tr>
+				<tr>
+					<td><%= ll(:country_strategy, :tenders_responsibility) %></td>
+					<td><%= option_text_by_id(CountryStrategy::RESPONSIBILITY_OPTIONS, @country_strategy.tenders_responsibility) %></td>
+				</tr>
+				<tr>
+					<td><%= ll(:country_strategy, :commitments_and_payments_responsibility) %></td>
+					<td><%= option_text_by_id(CountryStrategy::RESPONSIBILITY_OPTIONS, @country_strategy.commitments_and_payments_responsibility) %></td>
+				</tr>
+				<tr>
+					<td><%= ll(:country_strategy, :monitoring_and_evaluation_responsibility) %></td>
+					<td><%= option_text_by_id(CountryStrategy::RESPONSIBILITY_OPTIONS, @country_strategy.monitoring_and_evaluation_responsibility) %></td>
+				</tr>
+			</table>
+			<b><%= lc(:preferred_approaches) %></b>
+			<table>
+				<tr>
+					<td><%= ll(:country_strategy, :budget_support) %></td>
+					<td><%= @country_strategy.commitment_to_budget_support %> %</td>
+				</tr>
+				<tr>
+					<td><%= ll(:country_strategy, :sector_wide) %></td>
+					<td><%= @country_strategy.commitment_to_sectorwide_approaches_and_common_funds %> %</td>
+				</tr>
+				<tr>
+					<td><%= ll(:country_strategy, :projects) %></td>
+					<td><%= @country_strategy.commitment_to_projects %> %</td>
+				</tr>
+			</table>
+			<b><%= lc(:priorities) %></b>
+			<table style="width: 100%">
+				<tr>
+					<td><%= ll(:country_strategy, :paper) %></td>
+					<td><%= @country_strategy.strategy_paper ? ll(:yes) : ll(:no) %></td>			
+				</tr>
+				<tr>
+					<td><%= ll(:country_strategy, :period) %></td>
+					<td><%= @country_strategy.start.year %>-<%= @country_strategy.end.year %></td>
+				</tr>
+				<tr>
+					<td><%= ll(:country_strategy, :amount_foreseen) %></td>
+					<td><%= null_to_na(@country_strategy.total_amount_foreseen) %></td>
+				</tr>
+				<tr>
+					<td><%= ll(:terms, :internet_link) %></td>
+					<td><%= @country_strategy.website.to_link(:target => "_blank") %></td>
+				</tr>
+				<tr>
+					<td valign="top"><%= ll(:country_strategy, :sectors_and_regions) %></td>
+					<td>
+						<%= render :partial => "/country_strategies/focal_sectors" %>			
+					</td>
+				</tr>
+			</table>
+		</td>
+		<td width=40% valign=top>
+			<table>
+				<tr>
+					<td><b><%= ll(:terms, :disbursements) %> (<%= "#{MultiCurrency.output_currency}, #{ll(:terms, :in_millions)}" %>)</b>
+						<table>
+							<tr>
+								<td class="title"></td>
+								<td class="title"><%= year %></td>
+								<td class="title"><%= year + 1 %> *</td>
+							</tr>
+							<tr>
+								<td class="sub_title"><%= lc(:grant) %></td>
+								<td><%= in_millions(@total_payments_grants) %></td>
+								<td><%= in_millions(@total_forecasts_grants) %></td>
+							</tr>
+							<tr>
+								<td class="sub_title"><%= lc(:loan) %></td>
+								<td><%= in_millions(@total_payments_loans)  %></td>
+								<td><%= in_millions(@total_forecasts_loans)  %></td>
+							</tr>
+							<tr>
+								<td class="sub_title">Total</td>
+								<td><%= in_millions(@total_payments_grants + @total_payments_loans) %></td>
+								<td><%= in_millions(@total_forecasts_grants + @total_forecasts_loans) %></td>
+							</tr>
+						</table>
+						*&nbsp;<%= ll(:terms, :forecasts) %>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div id="sectors_chart">
+							<strong>Please download Flash Player 8.0 or higher from <a href="http://www.adobe.com">adobe.com</a>
+									in order to view this chart.</strong>
+						</div>
+						<br><%= reports_link_to lc(:enlarged_chart), 
+									:controller => 'charts', :action => 'sectors_chart', :id => @donor, :year => year %>
+									
+						<script type="text/javascript">
+						// <![CDATA[
+							var flashvars = {
+								path: "/",
+								settings_file: escape("/bluebook/<%= year %>/charts/settings/sectors_graph.xml"),
+								data_file: escape("/bluebook/<%= year %>/charts/sectors_chart_data/<%= @donor.id %>.xml"),
+								preloader_color: "#999999"
+							};
+
+							swfobject.embedSWF("/ampie.swf", "sectors_chart", "280", "250", "8.0.0", false, flashvars, { wmode: "transparent"	}, false);
+						// ]]>
+						</script>
+					</td>
+				</tr>
+			</table>
+			
+		</td>
+	</tr>	
+</table>
+
+<table class="bluebook">
+	<tr>
+		<td class="sub_title"><b><%= @donor.name %></b> - <%= ll(:country_strategy, :current) %></td>
+	</tr>
+	<tr>
+		<td><b><%= @country_strategy.strategy_number %></b></td>
+	</tr>
+	<tr>
+		<td><%= markdown(@country_strategy.description) %></td>
+	</tr>
+</table>

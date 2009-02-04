@@ -36,7 +36,7 @@ ActionController::Routing::Routes.draw do |map|
   map.login     '/login',                 :controller => 'sessions', :action => 'new'
   
   ##
-  # The EU Blue Book
+  # EU Blue Book routes
   map.namespace :bluebook do |bluebook|
     bluebook.with_options :path_prefix => '/bluebook/:year', :year => /\d{4}/ do |bb|
       bb.root :controller => 'pages', :action => 'contents'

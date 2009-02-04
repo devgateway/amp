@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+	  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+	  <title><%= render_page_title %></title>
+
+	  <%= javascript_include_tag(:defaults, 'swfobject', 'jtip', 'jquery_expander', 'jquery_template', 'behavior/menu', "ui.datepicker-#{I18n.locale}" , :cache => false) %>
+	  <%= stylesheet_link_tag('style', 'jtip', 'ui.datepicker', :media => :all, :cache => false) %>
+	  <%= stylesheet_link_tag('print', :media => :print, :cache => false) %>
+
+	  <%= yield :head %>
+	</head>
+	
+	<body id="body" class="bluebook">
+    	<div align="center">
+		<div id="generalContainer">
+			<div id="header">
+				<%= render :partial => "layouts/header/bluebook" %>
+			</div>
+			
+			<div id="content">
+				<!-- START Flash Messages section -->
+				<%= flash_messages %>
+				<!-- END Flash Messages section -->
+				
+				<!-- START yield :header section -->
+				<%= yield :header %>
+				<!-- END yield :header section -->
+    	
+				<!-- START "yield" section -->
+				<%= yield  %>
+				<!-- END "yield" section -->
+			</div>
+			
+			<!-- START footer section -->
+			<%= render :partial => 'layouts/footer' %>
+			<!-- END footer section -->
+		</div>
+        </div>
+	</body>
+</html>

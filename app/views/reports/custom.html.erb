@@ -25,17 +25,11 @@
 			<h3><%= lc(:output_format) %></h3>
 			<li><%= radio_button "output", "format", "web", :checked => true %><%= lc(:web) %></li>
 			<li><%= radio_button "output", "format", "excel" %><%= lc(:excel) %></li>
-			<li><%= check_box "output", "map", :disabled => true %><%= lc(:map) %></li>
-		</ul>
-		
-		<ul class="checkbox_container">
-			<h3><%= ll(:terms, :currency) %></h3>
-			<% ExchangeRate.available_currencies.each do |c| %>
-				<li>
-					<input type="radio" value="<%= c %>" name="currency" <%= 'checked="checked"' if c == Prefs.default_currency %>/>
-					<%= lc(:output_in) %> <%= c %>
-				</li>
-			<% end %>
+			<!--<li><%= check_box "output", "map", :disabled => true %><%= lc(:map) %></li>-->
+			<li>
+				<%= lc(:output_in) %>: 
+					<%= select_tag "currency", options_from_collection_for_select(ExchangeRate.available_currencies, :to_s, :to_s, Prefs.default_currency) %>
+			</li>
 		</ul>
 		
 		<ul class="checkbox_container">

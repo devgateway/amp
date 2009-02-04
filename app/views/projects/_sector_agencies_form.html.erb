@@ -1,44 +1,15 @@
 <% f.field_set do %>
 	<li>
 		<%= f.label :sector_relevances %>
-		<%= f.add_associated_link(t('projects.add_sector'), SectorRelevance.new, :style => "display: block; float: right; margin-top: -20px; width: 170") %>
+		<%= f.add_associated_link(t('projects.add_sector'), @project.sector_relevances.build, :style => "display: block; float: right; margin-top: -20px; width: 170") %>
 		
         <%= error_message_on(:project, :sector_relevances, "","", "error_message" ) %>
 		<div id="sector_relevances">
-			<%= f.render_associated_form(@project.sector_relevances.blank? ? [@project.sector_relevances.build] : @project.sector_relevances) %>
+			<%= f.render_associated_form @project.sector_relevances %>
   		</div>
 	</li>
 	
-	<li>
-		<%= f.label :implementing_agencies %>
-		<%= button_to_function t('projects.add_implementing_agency'), :style => "float: right; margin-top: -20px; width: 230px" do |page|  
-				page.insert_html :bottom, :implementing_agencies, 
-					:partial => 'implementing_agency', :object => ImplementingAgency.new
-			end %>
-			
-		<div id="implementing_agencies">
-			<% if @project.implementing_agencies.any? %>
-				<%= render :partial => 'implementing_agency', :collection => @project.implementing_agencies.ordered %>
-			<% else %>
-				<%= render :partial => 'implementing_agency', :object => ImplementingAgency.new %>
-			<% end %>
-		</div>
-	</li>
 	
-	<li>
-		<%= f.label :contracted_agencies %>
-		<%= button_to_function t('projects.add_contracted_agency'), :style => "float: right; margin-top: -20px; width: 230px" do |page| 
-			page.insert_html :bottom, :contracted_agencies, :partial => 'contracted_agency', :object => ContractedAgency.new
-		end %>
-		
-		<div id="contracted_agencies">
-			<% if @project.contracted_agencies.any? %>
-				<%= render :partial => 'contracted_agency', :collection => @project.contracted_agencies.ordered %>
-			<% else %>
-				<%= render :partial => 'contracted_agency', :object => ContractedAgency.new %>
-			<% end %>
-		</div>
-	</li>
 	
 	<li class="fifty"><%= f.select :national_regional, Project::NATIONAL_REGIONAL_OPTIONS,
 				:include_blank => ll(:options, :prompt), :translate => true %></li>

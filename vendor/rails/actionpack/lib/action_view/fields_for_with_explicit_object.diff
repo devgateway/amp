@@ -1,0 +1,47 @@
+From d2b6b7a7d7d8957bcc8ae4dfb2b70d1379363dd6 Mon Sep 17 00:00:00 2001
+From: Pascal Ehlert <dadark@pascal-ehlerts-macbook-pro.local>
+Date: Mon, 2 Feb 2009 22:49:28 +0100
+Subject: [PATCH] Allowing an object to be passed explicitly to a fields_for with nested_attributes on one-to-one associations
+
+---
+ actionpack/lib/action_view/helpers/form_helper.rb |    3 ++-
+ actionpack/test/template/form_helper_test.rb      |    9 +++++++++
+ 2 files changed, 11 insertions(+), 1 deletions(-)
+
+diff --git a/actionpack/lib/action_view/helpers/form_helper.rb b/actionpack/lib/action_view/helpers/form_helper.rb
+index 2ac2427..0651f75 100644
+--- a/actionpack/lib/action_view/helpers/form_helper.rb
++++ b/actionpack/lib/action_view/helpers/form_helper.rb
+@@ -971,7 +971,8 @@ module ActionView
+               @template.fields_for(child_name, child, *args, &block)
+             end.join
+           else
+-            @template.fields_for(name, association, *args, &block)
++            object = args.first.respond_to?(:new_record?) ? args.first : association
++            @template.fields_for(name, object, *args, &block)
+           end
+         end
+ 
+diff --git a/actionpack/test/template/form_helper_test.rb b/actionpack/test/template/form_helper_test.rb
+index 33a542a..2ed975b 100644
+--- a/actionpack/test/template/form_helper_test.rb
++++ b/actionpack/test/template/form_helper_test.rb
+@@ -585,6 +585,15 @@ class FormHelperTest < ActionView::TestCase
+ 
+     assert_dom_equal expected, output_buffer
+   end
++  
++  def test_nested_fields_for_with_explicitly_passed_object_on_a_nested_attributes_one_to_one_association
++    form_for(:post, @post) do |f|
++      f.fields_for(:author, Author.new(123)) do |af|
++        assert_not_nil af.object
++        assert_equal 123, af.object.id
++      end
++    end
++  end
+ 
+   def test_nested_fields_for_with_an_existing_record_on_a_nested_attributes_one_to_one_association
+     @post.author = Author.new(321)
+-- 
+1.6.1
+

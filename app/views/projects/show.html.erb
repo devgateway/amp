@@ -67,10 +67,10 @@
 		<dd>
 			<dl>
 				<dt class="first"><%= Funding.human_attribute_name('payments') %></dt>
-				<dd class="first"><%= @project.fundings.total_payments %></dd>
+				<dd class="first"><%= @project.total_payments %></dd>
 				
 		        <dt><%= Funding.human_attribute_name('commitments') %></dt>
-		        <dd><%= @project.fundings.total_commitments %></dd>
+		        <dd><%= @project.total_commitments %></dd>
 			</dl>
 		</dd>
 		

@@ -84,10 +84,12 @@ function saveTreeState(){
 
         showProgress('progress');
 	 	var urlact="/help/helpActions.do?actionType=saveTreeState"
-		urlact=urlact+"&changedXml="+xmlString+"&moduleInstance="+moduleInstance
-        xmlHttp.open("GET",urlact,true)
-		xmlHttp.onreadystatechange=stateChanged
-		xmlHttp.send(null)
+	    xmlHttp.open("POST",urlact,true);
+	    xmlHttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+        xmlHttp.send("&moduleInstance="+moduleInstance+"&changedXml="+xmlString);
+		xmlHttp.onreadystatechange=stateChanged;
+  
+
 }
 
 function stateChanged(){

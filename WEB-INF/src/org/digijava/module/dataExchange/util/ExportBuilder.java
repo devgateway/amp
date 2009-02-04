@@ -170,8 +170,8 @@ public class ExportBuilder {
 					CMSContentItem item = (CMSContentItem) iterator.next();
 					if (item.getIsFile()){
 						ActivityType.Documents doc = objectFactory.createActivityTypeDocuments();
-						doc.getDescription().add(item.getDescription());
-						doc.getTitle().add(item.getTitle());
+//						doc.getDescription().add(item.getDescription());
+//						doc.getTitle().add(item.getTitle());
 						if (item.getLanguage() != null){
 							doc.setLang(item.getLanguage().getCode());
 						}

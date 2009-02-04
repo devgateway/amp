@@ -32,11 +32,9 @@
         <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
 <!--  -->
 
-<div id="myComment" style="display: none">
-	<div id="myCommentContent" class="content">
-	</div>
-</div>
 <script type="text/javascript">
+<!--
+
 		YAHOO.namespace("YAHOO.amp");
 
 		var myPanel = new YAHOO.widget.Panel("newmyComment", {
@@ -47,25 +45,22 @@
 		    close:true,
 		    visible:false,
 		    modal:true,
-		    draggable:true		    
+		    draggable:true
 		    });
 	
-		function initScripts() {
-			var msg='\n<digi:trn key="aim:addeditComment">Add/Edit Comment</digi:trn>';
-			myPanel.setHeader(msg);
-			myPanel.setBody("");
-			myPanel.beforeHideEvent.subscribe(function() {
-				//alert("delete comment");
-				delC=true;
-				showContent();
-			}); 
-
-			myPanel.render(document.body);
-		}
-	
-	window.onload=initScripts();
-	
-	
+	function initStep1Scripts() {
+		var msg='\n<digi:trn key="aim:addeditComment">Add/Edit Comment</digi:trn>';
+		myPanel.setHeader(msg);
+		myPanel.setBody("");
+		myPanel.beforeHideEvent.subscribe(function() {
+			delCommentContent=true;
+			showContent();
+		}); 
+		myPanel.render(document.body);
+	}
+	//this is called from editActivityMenu.jsp
+	//window.onload=initStep1Scripts;
+-->	
 </script>
 <style type="text/css">
 	.mask {
@@ -88,14 +83,14 @@
 
 <script language="JavaScript">
     <!--
-    
+   
     //DO NOT REMOVE THIS FUNCTION --- AGAIN!!!!
     function mapCallBack(status, statusText, responseText, responseXML){
        window.location.reload();
     }
     
     
-    var responseSuccess = function(o){ 
+    var responseSuccess = function(o){
 	/* Please see the Success Case section for more
 	 * details on the response object's properties.
 	 * o.tId
@@ -108,13 +103,9 @@
 	 * o.argument
 	 */
 		var response = o.responseText; 
-		var content = document.getElementById("myCommentContent");
-	    //response = response.split("<!")[0];
-		content.innerHTML = response;
-		//alert("response");
-		showContent();
+		showContent(response);
 	}
-	var delC=false;	 
+	var delCommentContent=false;	 
 	var responseFailure = function(o){ 
 	// Access the response object's properties in the 
 	// same manner as listed in responseSuccess( ). 
@@ -128,38 +119,30 @@
 		success:responseSuccess, 
 		failure:responseFailure 
 	};
-    
-	function showComment() {
-		var element = document.getElementById("myComment");
-		element.style.display = "inline";
-		myPanel.setBody(element);
-		document.getElementById("myCommentContent").scrollTop=0;
-		myPanel.show();
-	}
-	
+
 	function commentWin(commentId){
-		delC=false;
+		delCommentContent=false;
 		<digi:context name="commentUrl" property="context/module/moduleinstance/viewComment.do" />
 		var url = "<%=commentUrl %>?comment=" + commentId + "&edit=" + "true";
-		
-        //var postString		= "comment=" + commentId + "&edit=true";
 		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
-		showComment();
 	}
-	function showContent(){
-		//alert("in showContent");
-		if(delC==true){
-			//alert("delete div myCommentContent");
-			document.getElementById("myCommentContent").innerHTML="";
+
+	function showContent(content){
+		if(delCommentContent==true){
+			myPanel.setBody("");
+		}else{
+			showComment(content);
 		}
 	}
+	function showComment(content) {
+		myPanel.setBody(content);
+		myPanel.show();
+	}	
 	function saveComment(){
-		//alert("saveComment()");
 		var postString		= generateFields("");
 		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/viewComment.do", callback, postString);
 	}
 	 function editDelete() {
-		//alert("editDelete()");
 		var postString		= generateFields("edit=true");
 		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/viewComment.do", callback, postString);
 	}

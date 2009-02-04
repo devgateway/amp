@@ -72,6 +72,7 @@
 	
 	window.onload = function() {
         //current.apply(current);
+        initStep1Scripts();
 		initScripts();
    	};
 		

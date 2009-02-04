@@ -13,6 +13,8 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.DbUtil;
 import org.springframework.beans.BeanWrapperImpl;
 
 /**
@@ -22,9 +24,9 @@ import org.springframework.beans.BeanWrapperImpl;
 public class OrgProfileFilterForm extends ActionForm {
     
     private static final long serialVersionUID = 1L;
-    private Long org;
+    private Long orgId;
     private Long year;
-    private Long currency;
+    private Long currencyId;
     private Boolean workspaceOnly;
 
     private List<AmpCurrency>currencies;
@@ -69,22 +71,22 @@ public class OrgProfileFilterForm extends ActionForm {
         this.currencies = currencies;
     }
 
-    public Long getCurrency() {
-        return currency;
+    public Long getCurrencyId() {
+        return currencyId;
     }
 
-    public void setCurrency(Long currency) {
-        this.currency = currency;
+    public void setCurrencyId(Long currency) {
+        this.currencyId = currency;
     }
 
   
 
-    public Long getOrg() {
-        return org;
+    public Long getOrgId() {
+        return orgId;
     }
 
-    public void setOrg(Long org) {
-        this.org = org;
+    public void setOrgId(Long orgId) {
+        this.orgId = orgId;
     }
 
     public List<AmpOrganisation> getOrganizations() {
@@ -123,6 +125,35 @@ public class OrgProfileFilterForm extends ActionForm {
     public void reset(ActionMapping mapping, HttpServletRequest request) {
         super.reset(mapping, request);
         workspaceOnly=false;
+    }
+
+    public String getOrgGroupName() {
+        String name = "All";
+        if (orgGroupId != null && orgGroupId != -1) {
+            AmpOrgGroup group = DbUtil.getAmpOrgGroup(orgGroupId);
+            name = group.getOrgGrpName();
+        }
+        return name;
+
+    }
+
+     public String getOrgName() {
+        String name = "All";
+        if (orgId != null && orgId != -1) {
+            AmpOrganisation organization = DbUtil.getOrganisation(orgId);
+            name = organization.getName();
+        }
+        return name;
+
+    }
+      public String getCurrencyCode() {
+        String name = "USD";
+        if (currencyId != null && currencyId != -1) {
+            AmpCurrency curr = CurrencyUtil.getAmpcurrency(currencyId);
+            name = curr.getCurrencyCode();
+        }
+        return name;
+
     }
 
 }

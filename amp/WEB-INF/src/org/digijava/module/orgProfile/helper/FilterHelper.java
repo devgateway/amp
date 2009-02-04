@@ -47,8 +47,8 @@ public class FilterHelper implements Serializable{
     }
     
     public FilterHelper(OrgProfileFilterForm form){
-        this.orgId=form.getOrg();
-        this.currId=form.getCurrency();
+        this.orgId=form.getOrgId();
+        this.currId=form.getCurrencyId();
         this.year=form.getYear();
         this.transactionType=form.getTransactionType();
         this.orgGroupId=form.getOrgGroupId();

@@ -51,8 +51,8 @@ public class OrgProfileFilterAction extends Action {
                 orgForm.getCurrencies().add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
             }
         }
-        if(orgForm.getCurrency()==null){
-            orgForm.setCurrency(CurrencyUtil.getAmpcurrency("USD").getAmpCurrencyId());
+        if(orgForm.getCurrencyId()==null){
+            orgForm.setCurrencyId(CurrencyUtil.getAmpcurrency("USD").getAmpCurrencyId());
         }
         // Org profile is only for Mul and Bil organizations
         List<AmpOrgGroup> orgGroups=new ArrayList(DbUtil.getBilMulOrgGroups());

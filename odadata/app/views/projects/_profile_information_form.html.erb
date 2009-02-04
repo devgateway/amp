@@ -35,12 +35,13 @@
 
     
 	<li class="fifty">
-    <%= f.text_field :start, :readonly =>true %>
-    <%= error_message_on(:project, :start, "","", "error_message" ) %>
+    	<%= f.text_field :start, :readonly =>true %>
+    	<%= error_message_on(:project, :start, "","", "error_message" ) %>
     </li>
+
 	<li class="fifty">
-    <%= f.text_field :end, :readonly =>true  %>
-    <%= error_message_on(:project, :end, "","", "error_message" ) %>
+    	<%= f.text_field :end, :readonly =>true  %>
+    	<%= error_message_on(:project, :end, "","", "error_message" ) %>
     </li>
 
 <% end %>

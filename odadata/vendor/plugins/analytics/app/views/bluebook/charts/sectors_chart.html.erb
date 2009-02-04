@@ -1,0 +1,17 @@
+<div id="chart_1">
+	<strong>Please download Flash Player 8.0 or higher from <a href="http://www.adobe.com">adobe.com</a>
+			in order to view this chart.</strong>
+</div>
+
+<script type="text/javascript">
+// <![CDATA[
+	var flashvars = {
+		path: "/",
+		settings_file: escape("/bluebook/charts/settings/sectors_large.xml"),
+		data_file: escape("<%= url_for(:action => :sectors_chart_data, :format => 'xml', :id => @donor) %>"),
+		preloader_color: "#999999"
+	};
+	
+	swfobject.embedSWF("/ampie.swf", "chart_1", "700", "630", "8.0.0", false, flashvars, { wmode: "transparent"	}, false);
+// ]]>
+</script>

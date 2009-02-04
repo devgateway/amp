@@ -1,8 +1,8 @@
 <% Time.now.year.upto(Time.now.year+Project::FORECAST_RANGE) do |y| %>
 	<% f.field_set t('projects.forecasts_title', :year => y) do %>
-		<% f.fields_for_associated @project.funding_forecasts.find_or_initialize_by_year(y) do |fa| -%>
-			<%= fa.hidden_field :year, y %>
-			<%= fa.hidden_field :currency, @project.donor.currency %>
+		<% f.fields_for :funding_forecasts, @project.funding_forecasts.find_or_initialize_by_year(y) do |fa| -%>
+			<%= fa.hidden_field :year, :value => y %>
+			<%= fa.hidden_field :currency, :value => @project.donor.currency %>
 			
 			<li class="fifty"><%= fa.text_field :commitments, :value => fa.object.commitments %></li>
 			<li class="fifty"><%= fa.text_field :payments, :value => fa.object.payments %></li>

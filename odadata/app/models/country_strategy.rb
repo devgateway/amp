@@ -5,7 +5,9 @@ class CountryStrategy < ActiveRecord::Base
   has_many    :projects  
   
   has_many    :sector_details, :dependent => :delete_all
-  has_many    :total_odas, :attributes => true
+  has_many    :total_odas
+  
+  accepts_nested_attributes_for :total_odas
   
   validate    :dates_consistency
   

@@ -46,28 +46,36 @@ class Project < ActiveRecord::Base
   has_many                :targets, :through => :mdg_relevances  
   
   # Geographic relevance
-  has_many                :geo_relevances, :dependent => :delete_all, :attributes => true
+  has_many                :geo_relevances, :dependent => :delete_all
   has_many                :provinces, :through => :geo_relevances, :uniq => true
   has_many                :districts, :through => :geo_relevances
   
   # Sector relevance
-  has_many                :sector_relevances, :dependent => :delete_all, :attributes => true
+  has_many                :sector_relevances, :dependent => :delete_all
   has_many                :dac_sectors, :through => :sector_relevances, :uniq => true
   has_many                :crs_sectors, :through => :sector_relevances
   
   # Funding Information
   belongs_to              :type_of_aid
     
-  has_many                :cofundings, :dependent => :delete_all, :attributes => true, :discard_if => :blank?
+  has_many                :cofundings, :dependent => :delete_all
   has_many                :cofinancing_donors, :through => :cofundings, :source => :donor
   
-  has_many                :fundings, :attributes => true, :extend => AggregatedFundings, :dependent => :delete_all
-  has_many                :funding_forecasts, :attributes => true, :dependent => :delete_all
+  has_many                :fundings, :extend => AggregatedFundings, :dependent => :delete_all
+  has_many                :funding_forecasts, :dependent => :delete_all
   has_one                 :historic_funding, :dependent => :delete
   
   has_many                :accessible_fundings
   has_many                :accessible_forecasts
 
+  ##
+  # Nested attributes
+  accepts_nested_attributes_for :sector_relevances, :reject_if => lambda { |a| a['dac_sector_id'].blank? }, :allow_destroy => true
+  accepts_nested_attributes_for :cofundings, :reject_if => lambda { |a| a['donor_id'].blank? }, :allow_destroy => true
+  accepts_nested_attributes_for :geo_relevances, :allow_destroy => true
+  accepts_nested_attributes_for :fundings, :funding_forecasts, :historic_funding, :allow_destroy => true
+  
+  
   ##
   # Decorated attributes
   attribute_decorator :officer_responsible, :class => Address, 
@@ -115,19 +123,7 @@ class Project < ActiveRecord::Base
   def to_param
     "#{id}-#{donor_project_number.strip.downcase.gsub(/[^[:alnum:]]/,'-')}".gsub(/-{2,}/,'-')
   end
-          
-  ##
-  # Accessors    
-  def historic_funding_attributes=(attribs)
-    ActiveSupport::Deprecation.warn("This way of accessing attributes is deprecated, but Rails currently lacks an alternative!")
-    if new_record?
-      build_historic_funding(attribs)
-    else
-      historic_funding.update_attributes(attribs)
-    end
-  end    
-      
-      
+       
   def finances_by_year
     funding.index_by(&:year)
   end

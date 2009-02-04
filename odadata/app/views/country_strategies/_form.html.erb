@@ -34,7 +34,7 @@
 	
 	<% f.field_set CountryStrategy.human_attribute_name('current_total_oda', :year => Time.now.year-1) do %>
 		<% f.fields_for_associated @country_strategy.total_odas.find_or_initialize_by_year(Time.now.year-1) do |o| %>
-			<%= o.hidden_field :year, Time.now.year-1 %>
+			<%= o.hidden_field :year, :value => Time.now.year-1 %>
 			<li class="fifty noborder"><%= o.text_field :commitments %></li>
 			<li class="fifty noborder"><%= o.text_field :disbursements %></li>
 		<% end %>
@@ -42,7 +42,7 @@
 		
 	<% f.field_set CountryStrategy.human_attribute_name('last_total_oda', :year => Time.now.year-2) do %>
 		<% f.fields_for_associated @country_strategy.total_odas.find_or_initialize_by_year(Time.now.year-2) do |o| %>
-			<%= o.hidden_field :year, Time.now.year-2 %>
+			<%= o.hidden_field :year, :value => Time.now.year-2 %>
 			<li class="fifty noborder"><%= o.text_field :commitments %></li>
 			<li class="fifty noborder"><%= o.text_field :disbursements %></li>
 		<% end %>

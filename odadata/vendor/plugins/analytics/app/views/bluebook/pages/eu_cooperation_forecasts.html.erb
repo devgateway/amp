@@ -1,0 +1,28 @@
+<table class="bluebook">
+	<tr>
+		<td>
+			<b><%= ll(:bluebook, :pages, :contents, :eu_cooperation, :forecasts_for, :year => year + 1) %></b>
+			<br>
+			<%= ll(:bluebook, :chart_subtitles, :forecasts) %>
+			
+			<div id="chart_1">
+				<strong>Please download Flash Player 8.0 or higher from <a href="http://www.adobe.com">adobe.com</a>
+						in order to view this chart.</strong>
+			</div>
+			<script type="text/javascript">
+			// <![CDATA[
+				var flashvars = {
+					path: "/",
+					settings_file: escape("/bluebook/<%= year %>/charts/settings/cooperation_forecasts.xml"),
+					data_file: escape("/bluebook/<%= year %>/charts/forecasts_column_data.xml"),
+					preloader_color: "#999999"
+				};
+				
+				swfobject.embedSWF("/amcolumn.swf", "chart_1", "960", "430", "8.0.0", false, flashvars, { wmode: "transparent"	}, false);
+			// ]]>
+			</script>
+			
+			<br><br><font size=1><%= ll(:terms, :source) %>: 2008 ODAnic - www.odadata.eu/odanic</font>
+		</td>
+	</tr>
+</table>

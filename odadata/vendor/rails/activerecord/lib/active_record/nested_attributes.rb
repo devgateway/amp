@@ -262,7 +262,7 @@ module ActiveRecord
       if reject_proc = self.class.reject_new_nested_attributes_procs[association_name]
         return if reject_proc.call(attributes)
       end
-      send(association_name).build(attributes)
+      send(association_name).build(attributes) unless should_destroy_nested_attributes_record?(true, attributes)
     end
 
     # Assigns the attributes to the record specified by +id+. Or marks it for

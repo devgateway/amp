@@ -37,11 +37,11 @@ module Report
       end
       
       def total_payments
-        ["#{I18n.t('reports.disbursements_td')} (#{MultiCurrency.output_currency})", @target.fundings.total_payments]
+        ["#{I18n.t('reports.disbursements_td')} (#{MultiCurrency.output_currency})", @target.total_payments]
       end
       
       def total_commitments
-        ["#{I18n.t('reports.commitments_td')} (#{MultiCurrency.output_currency})", @target.fundings.total_commitments]
+        ["#{I18n.t('reports.commitments_td')} (#{MultiCurrency.output_currency})", @target.total_commitments]
       end
       
       # Adds one column per focal region

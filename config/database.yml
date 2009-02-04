@@ -14,8 +14,12 @@ test:
   <<: *global
 
 production:
-  database: odanic_production
-  <<: *global
+  host: od3.hacksrus.net
+  database: odanic_development
+  username: development
+  password: ggjtea6d
+  encoding: utf8
+  adapter: postgresql
 
 ampdev_development:
   <<: *global

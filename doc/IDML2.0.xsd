@@ -102,8 +102,8 @@
 			<xs:element name="documents" minOccurs="0" maxOccurs="unbounded">
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="title" type="xs:string" maxOccurs="unbounded"/>
-						<xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+						<xs:element name="title" type="xs:string" />
+						<xs:element name="description" type="xs:string" minOccurs="0" />
 					</xs:sequence>
 					<xs:attribute name="code" type="xs:string" use="required"/>
 					<xs:attribute name="lang" type="xs:language" use="optional"/>
@@ -136,9 +136,9 @@
 										<xs:enumeration value="Regional Group"/>
 										<xs:enumeration value="Sector Group"/>
 										<xs:enumeration value="Executing Agency"/>
-										<xs:enumeration value="Responsible Organizaton"/>
+										<xs:enumeration value="Responsible Organization"/>
 										<xs:enumeration value="Contractor"/>
-										<xs:enumeration value="Releated Institutions"/>
+										<xs:enumeration value="Related Institutions"/>
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:attribute>

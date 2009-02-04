@@ -91,16 +91,16 @@ function saveTreeState(){
 }
 
 function stateChanged(){
-   
+
    if (xmlHttp.readyState==4)
   {
         if(xmlHttp.status == 200)
         {
           //code to process Ajax request
           hideProgress('progress');
-          //reFresh();
+          reFresh();
         }
-  }
+   }
 }
 
 
@@ -138,7 +138,6 @@ function GetXmlHttpObj()	{
    {
       var progressViewer = document.getElementById(name);
        progressViewer.innerHTML = "";
-
    }
 
 
@@ -191,7 +190,8 @@ function GetXmlHttpObj()	{
 
                                       <a class="link" onclick="remove();" title="${topicDelete}" ><digi:trn>Remove Topic</digi:trn></a> |
 
-                                      <a class="link" onclick="saveTreeState();" title="${savetreeState}" ><digi:trn>Save Tree State</digi:trn></a>
+
+                                        <a class="link" onclick="saveTreeState();" title="${savetreeState}" ><digi:trn>Save Tree State</digi:trn></a>
 
 
                           </div>

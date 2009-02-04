@@ -257,7 +257,7 @@ public class ChartWidgetUtil {
         } else {
             currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
         }
-        if (filter.getOrgId() != null) {
+        
             for (long i = year - 4; i <= year; i++) {
                 Collection<AmpCategoryValue> typeOfAids = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
                 for (AmpCategoryValue aid : typeOfAids) {
@@ -269,8 +269,6 @@ public class ChartWidgetUtil {
                 }
 
             }
-
-        }
          if(nodata){
             result= new DefaultCategoryDataset();
         }
@@ -299,8 +297,7 @@ public class ChartWidgetUtil {
             currCode = "USD";
         } else {
             currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
-        }
-        if (filter.getOrgId() != null) {
+        }   
             for (long i = year - 4; i <= year; i++) {
                 Collection<AmpCategoryValue> financingInstruments = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY);
                 for (AmpCategoryValue financingInstrument : financingInstruments) {
@@ -313,7 +310,7 @@ public class ChartWidgetUtil {
 
             }
 
-        }
+  
         if(nodata){
             result= new DefaultCategoryDataset();
         }
@@ -344,8 +341,7 @@ public class ChartWidgetUtil {
             currCode = "USD";
         } else {
             currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
-        }
-        if (filter.getOrgId() != null) {
+        }      
             for (long i = year - 2; i <= year; i++) {
              
               Double fundingPledge = getPledgesFunding(filter.getOrgId(),filter.getOrgGroupId(), i, currCode);
@@ -357,8 +353,6 @@ public class ChartWidgetUtil {
                 if (fundingPledge.doubleValue() != 0 || fundingComm.doubleValue() != 0 || fundingDisb.doubleValue() != 0) {
                     nodata = false;
                 }
-
-            }
 
         }
         if(nodata){
@@ -1266,7 +1260,7 @@ public class ChartWidgetUtil {
         @SuppressWarnings("unchecked")
         List<AmpPledge> fundingDets = null;
         try {
-            Query query = session.createQuery(oql);
+             Query query = session.createQuery(oql);
             query.setLong("year", year);
             if (orgID != null && orgID != -1) {
                 query.setLong("orgID", orgID);

@@ -1,7 +1,7 @@
 es:
   layout:
     # TODO: Translate?
-    standard_title: ODAnic - Offical Development Assistance to Nicaragua Database
+    standard_title: ODAnic - Sistema de la asistencia oficial de desarrollo a Nicaragua
     custom_title: ODAnic - {{page_title}}
     
   navigation:
@@ -21,7 +21,7 @@ es:
       glossary: Glosario ODAnic
       dac_manual: Manual CAD-CRS
       # TODO: Change from "Used Exchange Rates" to just "Exchange Rates" please
-      exchange_rates: Taza de Cambio Utilizada
+      exchange_rates: Tasas de Cambio
       design_own: 'Diseña Reporte'
       contact: Contacto
       

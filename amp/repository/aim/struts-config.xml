@@ -604,7 +604,7 @@
     
     <action name="aimParisIndicatorReportForm" path="/aim/parisIndicatorPopupAction" scope="session" type="org.digijava.module.aim.action.ParisIndicatorPopupAction" validate="false">
 <!--		<forward name="forward" path="/showLayout.do?layout=PI_Filter" />-->
-		<forward name="forward" path="/repository/aim/view/viewParisIndicatorPopupFilter.jsp" />
+		<forward name="forward" path="/showLayout.do?layout=view/viewParisIndicatorPopupFilter" />
     </action>
     
     <action name="aimCurrencyForm" path="/aim/changeCurrencyStatus" scope="session" type="org.digijava.module.aim.action.ChangeCurrencyStatus" validate="false">

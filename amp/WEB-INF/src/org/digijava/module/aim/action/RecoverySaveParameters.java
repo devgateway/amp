@@ -34,7 +34,6 @@ public class RecoverySaveParameters {
 	private HttpSession session;
 	private Long field;
 	private Collection relatedLinks;
-	private Set<Components<AmpComponentFunding>> tempComp;
 	private boolean alwaysRollback;
 	private Long oldActivityId;
 	private boolean edit;
@@ -129,12 +128,6 @@ public class RecoverySaveParameters {
 	}
 	public void setRelatedLinks(Collection relatedLinks) {
 		this.relatedLinks = relatedLinks;
-	}
-	public Set<Components<AmpComponentFunding>> getTempComp() {
-		return tempComp;
-	}
-	public void setTempComp(Set<Components<AmpComponentFunding>> tempComp) {
-		this.tempComp = tempComp;
 	}
 	public boolean isAlwaysRollback() {
 		return alwaysRollback;

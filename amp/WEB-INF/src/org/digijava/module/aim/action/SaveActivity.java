@@ -1256,7 +1256,7 @@ public class SaveActivity extends Action {
 	}
 	
 
-	private void processStep5(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request, Set<Components<AmpComponentFunding>> tempComp) throws Exception, AMPError{
+	private void processStep5(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPError{
 		AMPError err;
 		err = new AMPActivityError(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		
@@ -1274,7 +1274,7 @@ public class SaveActivity extends Action {
 		//Do the initializations and all the information transfer between beans here
 
 		//set components
-		proccessComponents(tempComp, eaForm, activity);
+		//proccessComponents(tempComp, eaForm, activity);
 
 		if (eaForm.getIssues().getIssues() != null && eaForm.getIssues().getIssues().size() > 0) {
 			Set issueSet = new HashSet();
@@ -1746,7 +1746,7 @@ public class SaveActivity extends Action {
 	}
 	
 	private void processStepX(int stepNumber, boolean check, EditActivityForm eaForm, AmpActivity activity, 
-			ActionErrors errors, HttpServletRequest request, HttpSession session, Set<Components<AmpComponentFunding>> tempComp,
+			ActionErrors errors, HttpServletRequest request, HttpSession session,
 			Collection relatedLinks, String stepText[]) throws Exception, AMPError{
 		
 		
@@ -1783,7 +1783,7 @@ public class SaveActivity extends Action {
 			break;
 		case 5:
 			stepText[stepNumber] = "5";
-			processStep5(check, eaForm, activity, errors, request, tempComp);
+			processStep5(check, eaForm, activity, errors, request);
 			break;
 		case 6:
 			stepText[stepNumber] = "6";
@@ -1963,7 +1963,7 @@ public class SaveActivity extends Action {
 					for (int i = 0; i < currentStep; i++)
 						if (!rsp.getStepFailure()[i])
 							try {
-								processStepX(i, false, rsp.getEaForm(), recoveryActivity, rsp.getErrors(), rsp.getRequest(), rsp.getSession(), rsp.getTempComp(), rsp.getRelatedLinks(), rsp.getStepText());
+								processStepX(i, false, rsp.getEaForm(), recoveryActivity, rsp.getErrors(), rsp.getRequest(), rsp.getSession(), rsp.getRelatedLinks(), rsp.getStepText());
 							} catch (Exception e) {
 								// All steps till here should be validated, but let's take precaution
 								rsp.getStepFailure()[i] = true;
@@ -1993,7 +1993,7 @@ public class SaveActivity extends Action {
 					logger.debug("Adding step:" + String.valueOf(currentStep));
 					//we got to the step that we're trying to add 
 					try{
-						processStepX(currentStep, false, rsp.getEaForm(), recoveryActivity, rsp.getErrors(), rsp.getRequest(), rsp.getSession(), rsp.getTempComp(), rsp.getRelatedLinks(), rsp.getStepText());
+						processStepX(currentStep, false, rsp.getEaForm(), recoveryActivity, rsp.getErrors(), rsp.getRequest(), rsp.getSession(), rsp.getRelatedLinks(), rsp.getStepText());
 					} catch (Exception e) {
 						logger.debug("    FAILED!");
 						//mark the step as failed 
@@ -2056,7 +2056,7 @@ public class SaveActivity extends Action {
 
 		Long actId = null;
 		HttpSession session = request.getSession();
-		Set<Components<AmpComponentFunding>> tempComp = new HashSet<Components<AmpComponentFunding>>();
+		//Set<Components<AmpComponentFunding>> tempComp = new HashSet<Components<AmpComponentFunding>>();
 		ampContext = getServlet().getServletContext();
 		ActionErrors errors = new ActionErrors();
 		EditActivityForm eaForm = (EditActivityForm) form;
@@ -2129,7 +2129,7 @@ public class SaveActivity extends Action {
 		int stepNumber = 0;
 		while (stepNumber < noOfSteps){
 			try {
-				processStepX(stepNumber, true, eaForm, activity, errors, request, session, tempComp, relatedLinks, stepText);
+				processStepX(stepNumber, true, eaForm, activity, errors, request, session, relatedLinks, stepText);
 			} catch (AMPError error) {
 				if (!error.isContinuable()){
 					if (error.getLevel() == Constants.AMP_ERROR_LEVEL_WARNING){
@@ -2211,7 +2211,7 @@ public class SaveActivity extends Action {
 			rsp.setField(field);
 			
 			rsp.setRelatedLinks(relatedLinks);
-			rsp.setTempComp(tempComp);
+			//rsp.setTempComp(tempComp);
 			rsp.setDidRecover(false);
 			//***
 			
@@ -2298,7 +2298,7 @@ public class SaveActivity extends Action {
 			rsp.setField(field);
 			
 			rsp.setRelatedLinks(relatedLinks);
-			rsp.setTempComp(tempComp);
+			//rsp.setTempComp(tempComp);
 			rsp.setDidRecover(false);
 			//***
 

@@ -150,7 +150,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	Collection relatedLinks = rsp.getRelatedLinks();
 	Long memberId = rsp.getTm().getMemberId();
 	Collection indicators = rsp.getEaForm().getIndicator().getIndicatorsME();
-	Set<Components<AmpComponentFunding>> componentsFunding = rsp.getTempComp();
+	//Set<Components<AmpComponentFunding>> componentsFunding = rsp.getTempComp();
 	List<IPAContract> contracts = rsp.getEaForm().getContracts().getContracts();
 	boolean alwaysRollback = rsp.isAlwaysRollback();
 	//***
@@ -649,6 +649,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         //session.saveOrUpdate(member);
       }
 
+      /*
       Collection<AmpComponentFunding>  componentFundingCol = getFundingComponentActivity(activityId, session);
       Iterator<Components<AmpComponentFunding>> componentsFundingIt = componentsFunding.iterator();
       while(componentsFundingIt.hasNext()){
@@ -714,7 +715,8 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 				session.delete(componentFundingColIt.next());
 			}
 	  }
-
+      */
+      
       /* Persists comments, of type AmpComments, related to the activity */
       if (commentsCol != null && !commentsCol.isEmpty()) {
         logger.debug("commentsCol.size() [Inside Persisting]: " +

@@ -308,12 +308,12 @@ function toggleSettings(){
 }
 </script>
 
-<div id="myFilter" style="display: none;" >
+<div id="myFilter2" style="display: none;" >
 	<jsp:include page="/aim/parisIndicatorPopupAction.do" />
 </div>
-<!--	<div id="myFilter2" style="display: none;" >-->
-<!--		<jsp:include page="/aim/viewParisIndicatorPopupFilter.jsp" />-->
-<!--	</div>-->
+<div id="myFilter" style="display: none;" >
+	<jsp:include page="viewParisIndicatorPopupFilter.jsp" />
+</div>
 
 <jsp:include page="/repository/aim/view/viewParisIndicatorPopupScripts.jsp"/>
 <jsp:include page="teamPagesHeader.jsp" flush="true" />

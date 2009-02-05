@@ -56,6 +56,7 @@ import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
+import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
@@ -185,7 +186,8 @@ public class ImportAction extends MultiAction {
 						processStep3(activityImported, activity,request, "en",hm);
 						
 						//relatedOrg, components
-						processStep5(activityImported, activity,request, "en",hm);
+						Collection<Components<AmpComponentFunding>> tempComps = new HashSet();
+						processStep5(activityImported, activity,request, "en",hm, tempComps);
 						
 						//documents
 						processStep6(activityImported, activity,request, "en",hm);
@@ -193,7 +195,7 @@ public class ImportAction extends MultiAction {
 						//contact information
 						processStep7(activityImported, activity,request, "en",hm);
 						DataExchangeUtils.saveActivity(activity, request);
-						
+						DataExchangeUtils.saveComponents(activity, request, tempComps);
 						
 					//}
 					//else logger.info("Activity was not imported-> pls implement the update step :)");
@@ -472,7 +474,7 @@ public class ImportAction extends MultiAction {
 	
 	//related orgs, components
 	
-	private void processStep5(ActivityType activityImported, AmpActivity activity, HttpServletRequest request, String string, HashMap hm) {
+	private void processStep5(ActivityType activityImported, AmpActivity activity, HttpServletRequest request, String string, HashMap hm, Collection<Components<AmpComponentFunding>> tempComps) {
 		// TODO Auto-generated method stub
 		
 		//related orgs
@@ -532,11 +534,14 @@ public class ImportAction extends MultiAction {
 		
 		//components
 		ArrayList<Component> componentList = (ArrayList<Component>) activityImported.getComponent();
+		//Collection<Components<AmpComponentFunding>> tempComps = new HashSet();
+		if(tempComps == null ) tempComps= new HashSet();
 		for (Iterator it = componentList.iterator(); it.hasNext();) {
 			Component component = (Component) it.next();
 			AmpComponent ampComp= new AmpComponent();
 			
 			ampComp.setTitle(component.getComponentName());
+			Components<AmpComponentFunding> tempComp = new Components<AmpComponentFunding>();
 			
 			//TODO: ampComponentsType -> probably soon will be moved to category manager
 			ArrayList ampCompTypes = (ArrayList) ComponentsUtil.getAmpComponentTypes();
@@ -549,49 +554,62 @@ public class ImportAction extends MultiAction {
 					ampComp.setType(act);
 				}
 			}
-			if(ampComp.getActivities() == null) ampComp.setActivities(new HashSet());
-			ampComp = (AmpComponent)DataExchangeUtils.addObjectoToAmp(ampComp);
-			
-			ampComp.getActivities().add(activity);
-			if(activity.getComponents() == null || activity.getComponents().size() == 0)
-				activity.setComponents(new HashSet());
-			activity.getComponents().add(ampComp);
-			/*
 			if(found){
+				
+					if(ampComp.getActivities() == null) ampComp.setActivities(new HashSet());
+					ampComp = (AmpComponent)DataExchangeUtils.addObjectoToAmp(ampComp);
+					
+					ampComp.getActivities().add(activity);
+					if(activity.getComponents() == null || activity.getComponents().size() == 0)
+						activity.setComponents(new HashSet());
+					activity.getComponents().add(ampComp);
+			
 					HashSet<AmpComponentFunding> acfs = new HashSet<AmpComponentFunding>();
 					for (Iterator iterator = component.getComponentFunding().iterator(); iterator.hasNext();) {
 						ComponentFundingType cft = (ComponentFundingType) iterator.next();
+						HashSet<AmpComponentFunding> temp = new HashSet<AmpComponentFunding>();
 						for (Iterator itComm = cft.getCommitments().iterator(); itComm.hasNext();) {
 							FundingDetailType fundingDetailType = (FundingDetailType) itComm.next();
 							AmpComponentFunding acf= new AmpComponentFunding();
 							acf.setComponent(ampComp);
 							acf.setActivity(activity);
 							addFundingDetailToAmpCompFund(acf,fundingDetailType, org.digijava.module.aim.helper.Constants.COMMITMENT);
-							acfs.add(acf);
+							//acfs.add(acf);
+							temp.add(acf);
 						}
+						tempComp.setCommitments(temp);
+						
+						HashSet<AmpComponentFunding> temp1 = new HashSet<AmpComponentFunding>();
 						for (Iterator itComm = cft.getDisbursements().iterator(); itComm.hasNext();) {
 							FundingDetailType fundingDetailType = (FundingDetailType) itComm.next();
 							AmpComponentFunding acf= new AmpComponentFunding();
 							acf.setComponent(ampComp);
 							acf.setActivity(activity);
 							addFundingDetailToAmpCompFund(acf,fundingDetailType, org.digijava.module.aim.helper.Constants.DISBURSEMENT);
-							acfs.add(acf);
+							//acfs.add(acf);
+							temp1.add(acf);
 						}
+						tempComp.setDisbursements(temp1);
+						
+						HashSet<AmpComponentFunding> temp2 = new HashSet<AmpComponentFunding>();
 						for (Iterator itComm = cft.getExpenditures().iterator(); itComm.hasNext();) {
 							FundingDetailType fundingDetailType = (FundingDetailType) itComm.next();
 							AmpComponentFunding acf= new AmpComponentFunding();
 							acf.setComponent(ampComp);
 							acf.setActivity(activity);
 							addFundingDetailToAmpCompFund(acf,fundingDetailType, org.digijava.module.aim.helper.Constants.EXPENDITURE);
-							acfs.add(acf);
+							//acfs.add(acf);
+							temp2.add(acf);
 						}
-						
+						tempComp.setExpenditures(temp2);
 						
 						//cft.get
 					}
 					//addCollectionToAmp(acfs);
+			
+				tempComps.add(tempComp);
 			}
-			*/
+			
 //		if(activity.getComponents() == null) activity.setComponents(new HashSet());
 //		activity.getComponents().add(ampComp);
 //		DataExchangeUtils.addObjectoToAmp(ampComp);

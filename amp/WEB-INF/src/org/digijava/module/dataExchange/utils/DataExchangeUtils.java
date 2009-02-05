@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,8 +20,10 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.dataExchange.dbentity.DEMappingFields;
@@ -402,6 +405,22 @@ public class DataExchangeUtils {
             e.printStackTrace(System.out);
         }
         return obResult;
+	}
+
+
+	public static void saveComponents(AmpActivity activity,	HttpServletRequest request,	Collection<Components<AmpComponentFunding>> tempComps) {
+		// TODO Auto-generated method stub
+		
+		for (Iterator it = tempComps.iterator(); it.hasNext();) {
+			Components<AmpComponentFunding> acfs = (Components<AmpComponentFunding>) it.next();
+			for (Iterator itcomm = acfs.getCommitments().iterator(); itcomm.hasNext();) {
+				AmpComponentFunding comm = (AmpComponentFunding) itcomm.next();
+				DataExchangeUtils.addObjectoToAmp(comm);
+			}
+			
+		}
+		
+		
 	}
 
     

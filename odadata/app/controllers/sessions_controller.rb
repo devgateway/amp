@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
   end
 
   def create
-    logout_keeping_session!
+    #logout_keeping_session!
     data = params[:session]
      
     if user = User.authenticate(data[:email], data[:password])
@@ -17,12 +17,12 @@ class SessionsController < ApplicationController
       # output locale. It might make sense to store the locale in a separate cookie
       # for that purpose. 
       # reset_session
-      current_user = user
+      #current_user = user
       # FIXME: This is because the existing system did not work with passenger on AMPdev..
       # According to the debug messages, current_user= is not being called!
       session[:user_id] = user.id
-      new_cookie_flag = (data[:remember_me] == "1")
-      handle_remember_cookie! new_cookie_flag
+      #new_cookie_flag = (data[:remember_me] == "1")
+      #handle_remember_cookie! new_cookie_flag
       redirect_back_or_default('/')
       flash[:notice] = "Logged in successfully"
     else
@@ -34,7 +34,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    logout_killing_session!
+    #logout_killing_session!
     # FIXME: This is because the existing system did not work with passenger on AMPdev..
     session[:user_id] = nil
     flash[:notice] = "You have been logged out."

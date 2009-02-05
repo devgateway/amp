@@ -32,7 +32,7 @@ module Report
           # TODO: Translation
           [I18n.t('reports.cs_link'), "Not linked to any strategy"]
         else
-          [I18n.t('reports.cs_link'), "http://nic.odadata.eu/country_strategy/show/#{id}"]
+          [I18n.t('reports.cs_link'), "http://nic.odadata.eu/country_strategies/#{id}"]
         end
       end
       
@@ -50,7 +50,7 @@ module Report
         available_regions = GeoLevel1.find(:all, :order => "name asc")
         
         columns << ["National", @target.geo_level1_ids.empty? ? "National" : ""]
-    
+    #
         available_regions.each do |loc|
           columns << if @target.geo_level1_ids.include?(loc.id)
             [loc.name, @target.geo_level2s.find_all_by_geo_level1_id(loc.id).map(&:name).join(", ")]

@@ -40,7 +40,7 @@ module Report
         if id.blank?
           [I18n.t('reports.cs_link'), "n/a"]
         else
-          [I18n.t('reports.cs_link'), reports_link_to('<img alt="Details" src="/images/details.gif" />', "http://nic.odadata.eu/country_strategy/show/#{id}")]
+          [I18n.t('reports.cs_link'), reports_link_to('<img alt="Details" src="/images/details.gif" />', "http://nic.odadata.eu/country_strategies/#{id}")]
         end
       end
       

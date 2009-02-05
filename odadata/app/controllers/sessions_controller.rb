@@ -7,9 +7,9 @@ class SessionsController < ApplicationController
 
   def create
     logout_keeping_session!
-    session = params[:session]
-    user = User.authenticate(session[:email], session[:password])
-    if user
+    data = params[:session]
+     
+    if user = User.authenticate(data[:email], data[:password])
       # Protects against session fixation attacks, causes request forgery
       # protection if user resubmits an earlier form using back
       # button. Uncomment if you understand the tradeoffs.
@@ -18,14 +18,17 @@ class SessionsController < ApplicationController
       # for that purpose. 
       # reset_session
       self.current_user = user
-      new_cookie_flag = (session[:remember_me] == "1")
+      new_cookie_flag = (data[:remember_me] == "1")
       handle_remember_cookie! new_cookie_flag
+      # TESTING ONLY!
+      session[:user_id] = 2
       redirect_back_or_default('/')
       flash[:notice] = "Logged in successfully"
     else
+      raise "WRONG LOGIN DATA GIVEN!"
       note_failed_signin
-      @email       = session[:email]
-      @remember_me = session[:remember_me]
+      @email       = data[:email]
+      @remember_me = data[:remember_me]
       render :action => 'new'
     end
   end

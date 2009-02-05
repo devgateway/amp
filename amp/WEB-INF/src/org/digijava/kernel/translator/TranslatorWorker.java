@@ -1149,9 +1149,7 @@ public class TranslatorWorker {
     }
 
     protected void updateDb(Message message) throws WorkerException {
-        logger.debug("Updating translation. siteId="
-                     + message.getSiteId() + ", key = " + message.getKey() +
-                     ",locale=" + message.getLocale());
+        logger.debug("Updating translation. siteId="+ message.getSiteId() + ", key = " + message.getKey() + ",locale=" + message.getLocale());
         Session ses = null;
         Transaction tx = null;
 
@@ -1172,9 +1170,7 @@ public class TranslatorWorker {
             tx.commit();
         }
         catch (SQLException se) {
-            logger.error("Error updating translation. siteId="
-                         + message.getSiteId() + ", key = " + message.getKey() +
-                         ",locale=" + message.getLocale(), se);
+            logger.error("Error updating translation. siteId="+ message.getSiteId() + ", key = " + message.getKey() +",locale=" + message.getLocale(), se);
             if (tx != null) {
                 try {
                     tx.rollback();

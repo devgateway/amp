@@ -24,7 +24,6 @@ package org.digijava.kernel.translator;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -102,32 +101,55 @@ public class CachedTranslatorWorker extends TranslatorWorker {
      * @see TranslatorWorker#getByKey(String, String, String, String, String)
      */
     public Message getByKey(String key, String body, String keyWords, String locale, String siteId) throws WorkerException {
-
-        Message message = new Message();
-        //set up key trio
-        message.setKey(processKeyCase(key));
-        message.setLocale(locale);
-        message.setSiteId(siteId);
-        //search message
-        Object obj = messageCache.get(message);
-        
-        if (obj == null) {
-            logger.debug("No translation exists for siteId="+ siteId + ", key = " + key + ",locale=" + locale+", creating new");
+    	return getByKey(key, locale, siteId, true, keyWords);
+//        Message message = new Message();
+//        //set up key trio
+//        message.setKey(processKeyCase(key));
+//        message.setLocale(locale);
+//        message.setSiteId(siteId);
+//        //search message
+//        Object obj = messageCache.get(message);
+//        
+//        if (obj == null) {
+//            logger.debug("No translation exists for siteId="+ siteId + ", key = " + key + ",locale=" + locale+", creating new");
 //            message.setCreated(new Timestamp(System.currentTimeMillis()));
 //            message.setLastAccessed(message.getCreated());
 //            message.setMessage(body);
 //            message.setKeyWords(keyWords);
 //            this.save(message);
 //            return message;
+//            return null;
+//        }
+//        else {
+//        	Message foundMessage = (Message)obj;
+//        	foundMessage.setKeyWords(keyWords);
+//        	updateTimeStamp(foundMessage);
+//            return foundMessage;
+//        }
+    }
+    
+    public Message getByKey(String key, String locale, String siteId,boolean overwriteKeywords,String keywords) throws WorkerException {
+    	Message message = new Message();
+        //set up key trio
+        message.setKey(processKeyCase(key));
+        message.setLocale(locale);
+        message.setSiteId(siteId);
+        //search message
+        Object obj = messageCache.get(message);        
+        if (obj == null) {
+            logger.debug("No translation exists for siteId="+ siteId + ", key = " + key + ",locale=" + locale+", creating new");
             return null;
         }
         else {
         	Message foundMessage = (Message)obj;
-        	foundMessage.setKeyWords(keyWords);
+        	if(overwriteKeywords){
+        		foundMessage.setKeyWords(keywords);
+        	}
         	updateTimeStamp(foundMessage);
             return foundMessage;
         }
     }
+    
 
     public void save(Message message) throws WorkerException {
         saveDb(message); //message key and body will be processed there 

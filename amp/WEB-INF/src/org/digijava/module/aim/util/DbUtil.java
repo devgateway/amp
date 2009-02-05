@@ -8,7 +8,6 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.Collator;
 import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -2524,11 +2523,10 @@ public class DbUtil {
 
             if (orgID == null || orgID == -1) {
                 if (orgGroupId != null && orgGroupId != -1) {
-                    queryString += ChartWidgetUtil.getOrganizationQuery(true);
+                queryString += ChartWidgetUtil.getOrganizationQuery(true);
                 }
             } else {
-                
-                    queryString += ChartWidgetUtil.getOrganizationQuery(false);
+                queryString += ChartWidgetUtil.getOrganizationQuery(false);
             }
             queryString += " and year(fd.transactionDate)=:year   ";
 
@@ -2562,7 +2560,7 @@ public class DbUtil {
                 queryString += "   inner join f.ampActivityId act  where   fd.transactionType = 0 and  fd.adjustmentType = 1  ";
                 if (orgID == null || orgID == -1) {
                     if (orgGroupId != null && orgGroupId != -1) {
-                        queryString += ChartWidgetUtil.getOrganizationQuery(true);
+                    queryString += ChartWidgetUtil.getOrganizationQuery(true);
                     }
                 } else {
                     queryString += ChartWidgetUtil.getOrganizationQuery(false);
@@ -2574,8 +2572,8 @@ public class DbUtil {
                     query.setLong("orgID", orgID);
                 } else {
                     if (orgGroupId != null && orgGroupId != -1) {
-                        query.setLong("orgGroupId", filter.getOrgGroupId());
-                    }
+                    query.setLong("orgGroupId", filter.getOrgGroupId());
+                }
                 }
                 List<AmpFundingDetail> details = query.list();
                 Project project = new Project();
@@ -7104,15 +7102,15 @@ public class DbUtil {
                 }
             }
 
-               if (orgId == null || orgId == -1) {
+                if(orgId==null||orgId==-1){
                 if (orgGroupId != null && orgGroupId != -1) {
                     queryString += " and ah.ampDonorOrgId.orgGrpId=:orgGroupId ";
                 }
             } else {
-                queryString += " and ah.ampDonorOrgId=:orgId ";
-            }
+                    queryString += " and ah.ampDonorOrgId=:orgId ";
+                }
                 queryString += " and ah.ampDonorOrgId=f.ampDonorOrgId ";
-       
+
             Query qry = session.createQuery(queryString);
             qry.setLong("indId", indId);
             qry.setLong("year", year);
@@ -7122,13 +7120,13 @@ public class DbUtil {
             }
 
             qry.setInteger("adjustmentType", adjustmentType);
-            if (orgId == null || orgId == -1) {
+                if(orgId==null||orgId==-1){
                 if (orgGroupId != null && orgGroupId != -1) {
                     qry.setLong("orgGroupId", orgGroupId);
                 }
             } else {
-                qry.setLong("orgId", orgId);
-            }
+                    qry.setLong("orgId", orgId);
+                }
             List<AmpFundingDetail> fundingDets = qry.list();
             FundingCalculationsHelper cal = new FundingCalculationsHelper();
             cal.doCalculations(fundingDets, currCode);
@@ -7176,14 +7174,14 @@ public class DbUtil {
                     
                 }
                 
-            if (orgId == null || orgId == -1) {
+                if (orgId == null || orgId == -1) {
                 if (orgGroupId != null && orgGroupId != -1) {
                     queryString += " and ah.ampDonorOrgId.orgGrpId=:orgGroupId ";
                 }
-            } else {
-                queryString += " and ah.ampDonorOrgId=:orgId ";
-            }
-            queryString += " and ah.ampDonorOrgId=f.ampDonorOrgId ";
+                } else {
+                    queryString += " and ah.ampDonorOrgId=:orgId ";
+                }
+                queryString += " and ah.ampDonorOrgId=f.ampDonorOrgId ";
          
             queryString += ChartWidgetUtil.getTeamQuery(member);
 
@@ -7194,13 +7192,13 @@ public class DbUtil {
                 qry.setLong("teamId", member.getTeamId());
 
             }
-             if (orgId == null || orgId == -1) {
+                if (orgId == null || orgId == -1) {
                 if (orgGroupId != null && orgGroupId != -1) {
                     qry.setLong("orgGroupId", orgGroupId);
                 }
-            } else {
-                qry.setLong("orgId", orgId);
-            }
+                } else {
+                    qry.setLong("orgId", orgId);
+                }
             size = qry.list().size();
         } catch (Exception e) {
             logger.error("Unable get value ", e);
@@ -7240,14 +7238,14 @@ public class DbUtil {
                      + " and ind.ampIndicatorId=:indId";
                     queryString+=ChartWidgetUtil.getTeamQuery(member);
                       queryString+= " and res.response='Yes' and q.questionNumber=9" ;
-              
-            if (orgId == null || orgId == -1) {
+               
+                if (orgId == null || orgId == -1) {
                 if (orgGroupId != null && orgGroupId != -1) {
                     queryString += " and ah.ampDonorOrgId.orgGrpId=:orgGroupId ";
                 }
-            } else {
-                queryString += " and ah.ampDonorOrgId=:orgId ";
-            }
+                } else {
+                    queryString += " and ah.ampDonorOrgId=:orgId ";
+                }
                 queryString += " and ah.ampDonorOrgId=f.ampDonorOrgId ";
            
             Query qry = session.createQuery(queryString);
@@ -7260,13 +7258,13 @@ public class DbUtil {
 
      
             
-            if (orgId == null || orgId == -1) {
+                if (orgId == null || orgId == -1) {
                 if (orgGroupId != null && orgGroupId != -1) {
                     qry.setLong("orgGroupId", orgGroupId);
                 }
-            } else {
-                qry.setLong("orgId", orgId);
-            }
+                } else {
+                    qry.setLong("orgId", orgId);
+                }
 
             size =qry.list().size();
            

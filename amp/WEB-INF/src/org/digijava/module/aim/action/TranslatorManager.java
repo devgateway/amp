@@ -1,17 +1,15 @@
 package org.digijava.module.aim.action;
 /*
 * @ author Dan Mihaila
+* co-author dare :D :D
 */
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.TreeSet;
 import java.util.Vector;
 
@@ -36,13 +34,14 @@ import org.dgfoundation.amp.te.ampte.jaxb.Translations;
 import org.dgfoundation.amp.te.ampte.jaxb.Trn;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.exception.AimException;
+import org.digijava.kernel.translator.CachedTranslatorWorker;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.form.TranslatorManagerForm;
 import org.digijava.module.aim.helper.TrnHashMap;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import edu.emory.mathcs.backport.java.util.Arrays;
 
@@ -76,8 +75,7 @@ public class TranslatorManager extends Action {
 	        
 	        JAXBContext jc = JAXBContext.newInstance("org.dgfoundation.amp.te.ampte.jaxb");
 	        Unmarshaller m = jc.createUnmarshaller();
-	        org.dgfoundation.amp.te.ampte.jaxb.Translations trns_in;
-	        //Translations trns_in;
+	        Translations trns_in;	        
 	        TreeSet<String> languagesImport = new TreeSet<String>();
 	        
 	        
@@ -101,8 +99,7 @@ public class TranslatorManager extends Action {
 				
 				saveErrors(request, errors);
 				return mapping.findForward("forward");
-			}
-	        
+			}	        
 	        
 		}
 		if(request.getParameter("importLang")!=null) {
@@ -187,12 +184,10 @@ public class TranslatorManager extends Action {
 							}	
 						}
 						
-						for(int i=0; i<tMngForm.getSelectedImportedLanguages().length;i++)//************************ai aq unda shemowmdes is keywordebi
-						{
+						for(int i=0; i<tMngForm.getSelectedImportedLanguages().length;i++)	{
 							Iterator<TrnHashMap> it=trnHashMaps.iterator();
 							while(it.hasNext())
-							{	
-								Map<String,Trn> translationsMap=null;
+							{									
 								TrnHashMap tHP=(TrnHashMap)it.next();
 								if(tHP.getLang().compareTo(tMngForm.getSelectedImportedLanguages()[i])==0)
 								{	
@@ -201,16 +196,8 @@ public class TranslatorManager extends Action {
 									//what to do with translations,which have keywords that were typed by user on import page.
 									String skipOrUpdateTrnsWithKeywords=tMngForm.getSkipOrUpdateTrnsWithKeywords();
 									List<String> keywords=tMngForm.getKeywords()==null?new ArrayList<String>():Arrays.asList(tMngForm.getKeywords());
-									//if overwrite is selected , then we should delete all translations,except those,which have keywords!=null(both on local db or in file)
-//									if(actionName.compareTo("overwrite")==0){
-//										//build Map from translations
-//										translationsMap=buildMap(tHP.getTranslations());
-//										//filter and delete unused messages										
-//										removeUnusedMessages(translationsMap, tMngForm.getSelectedImportedLanguages()[i],keywords,skipOrUpdateTrnsWithKeywords);
-//									}
 									
 									Iterator<Trn> trnsIterator=tHP.getTranslations().iterator();									
-									
 									while(trnsIterator.hasNext()){
 										Trn element=(Trn) trnsIterator.next();
 										
@@ -226,13 +213,13 @@ public class TranslatorManager extends Action {
 										}										
 										//now overwrite,update or insert non-existing translation
 										if(actionName.compareTo("nonexisting")==0){
-											updateNonExistingTranslationMessage(msg,tMngForm.getSelectedImportedLanguages()[i]);
+											updateNonExistingTranslationMessage(msg,tMngForm.getSelectedImportedLanguages()[i],request);
 											logger.info("updating non existing...."+msg.getKey());
 										}else if(actionName.compareTo("update")==0){											
-											overrideOrUpdateTrns(msg,tMngForm.getSelectedImportedLanguages()[i],actionName,keywords,skipOrUpdateTrnsWithKeywords);
+											overrideOrUpdateTrns(msg,tMngForm.getSelectedImportedLanguages()[i],actionName,keywords,skipOrUpdateTrnsWithKeywords,request);
 											logger.info("updating new tr msg...."+msg.getKey());
 										}else if(actionName.compareTo("overwrite")==0){											
-											overrideOrUpdateTrns(msg,tMngForm.getSelectedImportedLanguages()[i],actionName,keywords,skipOrUpdateTrnsWithKeywords);
+											overrideOrUpdateTrns(msg,tMngForm.getSelectedImportedLanguages()[i],actionName,keywords,skipOrUpdateTrnsWithKeywords,request);
 											logger.info("inserting...."+msg.getKey());
 										}
 									}
@@ -264,7 +251,6 @@ public class TranslatorManager extends Action {
 				ObjectFactory objFactory = new ObjectFactory();
 				Translations trns_out = objFactory.createTranslations();
 				Vector<Trn> rsAux=new Vector<Trn>();
-				//trns_out.setSrc(request.getServerName() + request.getContextPath());
 				
 				for(int i=0; i<tMngForm.getSelectedLanguages().length;i++)
 				{
@@ -290,8 +276,7 @@ public class TranslatorManager extends Action {
 	}
 	
 	
-	private TreeSet<String> getPossibleLanguages()
-	{
+	private TreeSet<String> getPossibleLanguages()	{
 		TreeSet<String> ret = new TreeSet<String>();
 		Session session = null;
 		String qryStr = null;		
@@ -314,8 +299,7 @@ public class TranslatorManager extends Action {
 	}
 
 
-	private Vector<Trn> getTranslationsForALanguage(String language)
-	{
+	private Vector<Trn> getTranslationsForALanguage(String language){
 		Vector<Trn> ret	= new Vector<Trn>();
 		Session session = null;
 		String qryStr = null;
@@ -362,218 +346,72 @@ public class TranslatorManager extends Action {
 		return ret;
 	}
 	
-	/**
-	 * Remove messages which have no keywords neither in local db, nor in imported file
-	 * @author Dare
-	 */
-	private void removeUnusedMessages(Map<String,Trn> trnsMap,String lang,List<String> keywords,String skipOrUpdateTrnsWithKeywords) throws Exception{
-		Collection<Message> dbMessages=null;
-		Collection<Message> messagesToBeRemoved=null;
+	private void updateNonExistingTranslationMessage(Message msgLocal, String lang,HttpServletRequest request){
+		CachedTranslatorWorker trnWorker=(CachedTranslatorWorker)TranslatorWorker.getInstance("");
+		String siteId = RequestUtils.getSite(request).getId().toString();
 		try {
-			dbMessages=getTranslationsForLang(lang);
-			for (Message message : dbMessages) {
-				boolean msgShouldBeRemoved=false;
-				if(skipOrUpdateTrnsWithKeywords.equalsIgnoreCase("skip")){
-					//if any messages from database is not in imported messages list, but it has keyword(that user chose to be skipped),then it should not be removed from db.
-					//also if any message is in both (db and file), but it has keyword(that user chose to be skipped) in any from these two(db or file), it shouldn't be removed
-					//in any other case it has to be removed from db.
-					if((trnsMap.get(message.getKey())==null || !keywords.contains(trnsMap.get(message.getKey()).getKeywords())) && !keywords.contains(message.getKeyWords())){
-						msgShouldBeRemoved=true;
-					}	
-				}else if(skipOrUpdateTrnsWithKeywords.equalsIgnoreCase("update")){
-					//if any message from db is not in imported messages list,but it has keyword(that user chose to be updated),then it should be removed.
-					//also if any message is in both(db and file), but it has a keyword(that user chose to be updated),then it should be removed
-					//in any other case it has to be removed from db.
-					if(( trnsMap.get(message.getKey())==null || keywords.contains(trnsMap.get(message.getKey()).getKeywords())) && keywords.contains(message.getKeyWords())){
-						msgShouldBeRemoved=true;
-					}
-				}else if(skipOrUpdateTrnsWithKeywords.equalsIgnoreCase("updateEverything")){
-					//any message from db should be removed
-					msgShouldBeRemoved=true;
-				}
-				if(msgShouldBeRemoved){
-					if(messagesToBeRemoved==null){
-						messagesToBeRemoved=new ArrayList<Message>();
-					}
-					messagesToBeRemoved.add(message);
-				}				
-							
+			Message dbMessage=trnWorker.getByKey(msgLocal.getKey(), lang, siteId,false,null);
+			if(dbMessage==null){
+				trnWorker.save(msgLocal);
+				logger.info("updated");
 			}
-			//remove not useful messages
-			for (Message message : messagesToBeRemoved) {
-				deleteMessage(message);
-			}
-			
 		} catch (Exception e) {
 			e.printStackTrace(System.out);
-		}
+		}		
 	}
 	
-	/**
-	 * return all translations of the given language
-	 */
-	private List<Message> getTranslationsForLang(String lang){
-		Session session = null;
-		List<Message> messages=null;
-		try{
-			session=PersistenceManager.getRequestDBSession();
-			Transaction tx=session.beginTransaction();
-			Query query = session.createQuery("select m from " + Message.class.getName() + " m where m.locale =:locale");
-			query.setString("locale", lang);
-			messages=query.list();				
-		}
-		catch (Exception ex) {
-			logger.error("Exception : " + ex.getMessage());
-			ex.printStackTrace(System.out);
-		}
-		return messages;
-	}
 	
-	private void deleteMessage(Message message)	throws Exception{
-		Session session=null;
-		Transaction trans=null;
-		try {
-			session=PersistenceManager.getRequestDBSession();
-			trans=session.beginTransaction();			
-			session.delete(message);
-			trans.commit();
-		} catch (Exception ex) {
-			if(trans!=null) {
-				try {
-					trans.rollback();					
-				}catch(Exception e ) {
-					logger.error("...Rollback failed");
-					throw new AimException("Can't rollback", e);
-				}			
+	private void overrideOrUpdateTrns(Message msgLocal,String lang,String actionName,List<String>keyWords,String skipOrUpdateTrnsWithKeywords,HttpServletRequest request) throws Exception{
+		CachedTranslatorWorker trnWorker=(CachedTranslatorWorker)TranslatorWorker.getInstance("");
+		String siteId = RequestUtils.getSite(request).getId().toString();
+		//get message from cache,if exists.
+		Message dbMessage=trnWorker.getByKey(msgLocal.getKey(), lang, siteId,false,null);
+		if(dbMessage!=null){
+			boolean gotoNextCheck=false;
+			if(skipOrUpdateTrnsWithKeywords.equalsIgnoreCase("skip") && !keyWords.contains(msgLocal.getKeyWords()) && !keyWords.contains(dbMessage.getKeyWords()) ){
+				gotoNextCheck=true;
+			}else if( skipOrUpdateTrnsWithKeywords.equalsIgnoreCase("update") && (keyWords.contains(msgLocal.getKeyWords()) || keyWords.contains(dbMessage.getKeyWords()) ) ){
+				gotoNextCheck=true;
+			}else if(skipOrUpdateTrnsWithKeywords.equalsIgnoreCase("updateEverything")){
+				gotoNextCheck=true;
 			}
-			logger.error("Exception : " + ex.getMessage());
-			ex.printStackTrace(System.out);
-		}
-	}
-
-	
-	private void insertTranslationMessage(Object o)
-	{
-		Session session = null;
-		Message msgLocal=(Message)o;
-		try{
-			session	= PersistenceManager.getRequestDBSession();
-			Transaction tx=session.beginTransaction();
-			session.save(msgLocal);
-			tx.commit();
-		}
-		catch (Exception ex) {
-			logger.error("Exception : " + ex.getMessage());
-			ex.printStackTrace(System.out);
-		}
-	}
-	
-	private void updateNonExistingTranslationMessage(Object o, String lang)
-	{
-		Session session = null;
-		Message msgLocal=(Message)o;
-		Query qry;
-		String qryStr;
-		
-		try{
-			session=PersistenceManager.getRequestDBSession();
-			Transaction tx=session.beginTransaction();
-			qryStr	= "select m from "	+ Message.class.getName() + " m where (m.key=:msgKey) and (m.locale=:langIso)";
-			qry= session.createQuery(qryStr);
-			qry.setParameter("msgKey", msgLocal.getKey(), Hibernate.STRING);
-			qry.setParameter("langIso", lang, Hibernate.STRING);				
-			if (qry.list().isEmpty()) {
-				session.save(msgLocal);
-			}
-			tx.commit();
-		}
-		catch (Exception ex) {
-			logger.error("Error...Inserting non existing messages... " + ex.getMessage());
-			ex.printStackTrace(System.out);
-		}
-	}
-
-	
-	private void overrideOrUpdateTrns(Message msgLocal,String lang,String actionName,List<String>keyWords,String skipOrUpdateTrnsWithKeywords) throws Exception{
-		Session session = null;		
-		Query qry;
-		String qryStr;		
-		try{
-			session = PersistenceManager.getRequestDBSession();
-			Transaction tx=session.beginTransaction();
-			qryStr	= "select m from "	+ Message.class.getName() + " m where (m.key=:msgKey) and (m.locale=:langIso)";
-			qry= session.createQuery(qryStr);
-			qry.setParameter("msgKey", msgLocal.getKey(), Hibernate.STRING);
-			qry.setParameter("langIso", lang, Hibernate.STRING);
-			List<Message> messages=qry.list();
 			
-			if (messages.iterator().hasNext()) {
-				Iterator<Message> itr = messages.iterator();
-				while (itr.hasNext()) {
-					Message msg = itr.next();
-					boolean gotoNextCheck=false;
-					if(skipOrUpdateTrnsWithKeywords.equalsIgnoreCase("skip") && !keyWords.contains(msgLocal.getKeyWords()) && !keyWords.contains(msg.getKeyWords()) ){
-						gotoNextCheck=true;
-					}else if( skipOrUpdateTrnsWithKeywords.equalsIgnoreCase("update") && (keyWords.contains(msgLocal.getKeyWords()) || keyWords.contains(msg.getKeyWords()) ) ){
-						gotoNextCheck=true;
-					}else if(skipOrUpdateTrnsWithKeywords.equalsIgnoreCase("updateEverything")){
-						gotoNextCheck=true;
+			if(gotoNextCheck){
+				boolean saveOrUpdate=false;
+				if(actionName.equals("update")){
+					if (msgLocal.getCreated().after(dbMessage.getCreated())&& msgLocal.getLocale().compareTo(dbMessage.getLocale()) == 0 || dbMessage.getMessage().equalsIgnoreCase("")) {
+						saveOrUpdate=true;								
 					}
-					
-					if(gotoNextCheck){
-						boolean saveOrUpdate=false;
-						if(actionName.equals("update")){
-							if (msgLocal.getCreated().after(msg.getCreated())&& msgLocal.getLocale().compareTo(msg.getLocale()) == 0 || msg.getMessage().equalsIgnoreCase("")) {
-								saveOrUpdate=true;								
-							}
-						}else if(actionName.equals("overwrite")){
-							saveOrUpdate=true;							
-						}
-						if(saveOrUpdate){
-							msg.setCreated(msgLocal.getCreated());
-							msg.setMessage(msgLocal.getMessage());
-							msg.setLastAccessed(msgLocal.getLastAccessed());
-							msg.setKeyWords(msgLocal.getKeyWords());
-							session.saveOrUpdate(msg);
-						}
-					}					
+				}else if(actionName.equals("overwrite")){
+					saveOrUpdate=true;							
 				}
-				tx.commit();
-			}else{
-				boolean insertNewMsg=true;
-				if(skipOrUpdateTrnsWithKeywords.equalsIgnoreCase("update") && !keyWords.contains(msgLocal.getKeyWords())){
-					//if we have skipOrUpdateTrnsWithKeywords=update case,this means that only messages with keywords(that match user's typed ones) should be inserted
-					insertNewMsg=false;
-				}
-				if(insertNewMsg){
-					logger.debug("New Key Found adding "+ msgLocal.getKey() + " to local db");
-					Message msg= new Message();
-					msg.setKey(msgLocal.getKey());
-					msg.setLocale(lang);
-					msg.setSiteId(msgLocal.getSiteId());
-					msg.setMessage(msgLocal.getMessage().trim());
-					msg.setCreated(new java.sql.Timestamp(msgLocal.getCreated().getTime()));
-					msg.setKeyWords(msgLocal.getKeyWords());
-					insertTranslationMessage(msg);
+				if(saveOrUpdate){
+					dbMessage.setCreated(msgLocal.getCreated());
+					dbMessage.setMessage(msgLocal.getMessage());
+					dbMessage.setLastAccessed(msgLocal.getLastAccessed());
+					dbMessage.setKeyWords(msgLocal.getKeyWords());					
+					//this will update both:cache and db
+					trnWorker.update(dbMessage);
 				}
 			}
+		}else{
+			boolean insertNewMsg=true;
+			if(skipOrUpdateTrnsWithKeywords.equalsIgnoreCase("update") && !keyWords.contains(msgLocal.getKeyWords())){
+				//if we have skipOrUpdateTrnsWithKeywords=update case,this means that only messages with keywords(that match user's typed ones) should be inserted
+				insertNewMsg=false;
+			}
+			if(insertNewMsg){
+				logger.debug("New Key Found adding "+ msgLocal.getKey() + " to local db");
+				Message msg= new Message();
+				msg.setKey(msgLocal.getKey());
+				msg.setLocale(lang);
+				msg.setSiteId(msgLocal.getSiteId());
+				msg.setMessage(msgLocal.getMessage().trim());
+				msg.setCreated(new java.sql.Timestamp(msgLocal.getCreated().getTime()));
+				msg.setKeyWords(msgLocal.getKeyWords());				
+				//this will update both:cache and db
+				trnWorker.save(msg);
+			}
 		}
-		catch (Exception ex) {
-			logger.error("Exception : " + ex.getMessage());
-			ex.printStackTrace(System.out);
-		}
-	}
-	
-	/**
-	 * builds map from Trn objects with key=translation's key and value=translation
-	 * @param translations
-	 * @author dare
-	 */
-	private Map<String,Trn> buildMap(ArrayList<Trn> translations){
-		Map<String,Trn> myMap=new HashMap<String, Trn>();
-		for (Trn trn : translations) {
-			myMap.put(trn.getMessageKey(), trn);
-		}
-		return myMap;
 	}
 }

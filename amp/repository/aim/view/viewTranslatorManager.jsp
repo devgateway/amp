@@ -203,15 +203,33 @@ div.fakefile2 input{
 			}
 		}
 	}
-
-	function changeKeywordsVisibility(){
-		var mySelect=document.getElementById('mySelect');
-		if(mySelect.value== 'updateEverything'){
-			document.getElementById('textDiv').style.display='none';
-			document.getElementById('keywordsDiv').style.display='none';
-		}else if(mySelect.value== 'skip' || mySelect.value== 'update'){
+	
+	function showOrHideKeywordsDiv(show){
+		if(show){
 			document.getElementById('textDiv').style.display='block';
 			document.getElementById('keywordsDiv').style.display='block';
+		}else{
+			document.getElementById('textDiv').style.display='none';
+			document.getElementById('keywordsDiv').style.display='none';
+		}
+	}
+
+	function changeDivsVisibility(){
+		var whatToDoWithTrns=document.getElementById('firstSelect').value;
+		var whatToDoWithKeywords=document.getElementById('mySelect').value;
+		
+		if(whatToDoWithTrns=='nonexisting'){
+			document.getElementById('mySelectsTextDiv').style.display='none';
+			document.getElementById('mySelect').style.display='none';
+			showOrHideKeywordsDiv(false);
+		}else {
+			document.getElementById('mySelectsTextDiv').style.display='block';
+			document.getElementById('mySelect').style.display='block';
+			if(whatToDoWithKeywords=='updateEverything'){
+				showOrHideKeywordsDiv(false);
+			}else if(whatToDoWithKeywords=='skip' || whatToDoWithKeywords=='update'){
+				showOrHideKeywordsDiv(true);
+			}
 		}
 	}
 
@@ -333,7 +351,7 @@ div.fakefile2 input{
 										<bean:write name="lang" />
 										</td>										
 										<td>
-										<select name='<%="LANG:"+lang%>' class="inp-text">
+										<select name='<%="LANG:"+lang%>' class="inp-text" id="firstSelect" onchange="changeDivsVisibility()">
 											<option value="-1" selected>
 												<digi:trn key="aim:translationManagerImportPleaseSelect">
 													-- Please select --
@@ -361,13 +379,15 @@ div.fakefile2 input{
 							 <tr height="5px"><td colspan="2">&nbsp;</td></tr>
 							 <tr>
 							 	<td colspan="2">
-							 		<digi:trn>Please Select what to do with translations</digi:trn> 
+							 		<div style="visibility: visible" id="mySelectsTextDiv">
+							 			<digi:trn>Please Select what to do with translations</digi:trn>
+							 		</div>							 		 
 							 	</td>
 							 </tr>
 							 <tr>
 							 	<td>&nbsp;</td>
 							 	<td>
-							 		<html:select name="aimTranslatorManagerForm" property="skipOrUpdateTrnsWithKeywords" onchange="changeKeywordsVisibility()" styleId="mySelect" styleClass="inp-text">
+							 		<html:select name="aimTranslatorManagerForm" property="skipOrUpdateTrnsWithKeywords" onchange="changeDivsVisibility()" styleId="mySelect" styleClass="inp-text">
 							 			<html:option value="skip"><digi:trn>skip all marked with this keyword </digi:trn></html:option>
 							 			<html:option value="update"><digi:trn>skip all except those marked with this keyword </digi:trn></html:option>
 							 			<html:option value="updateEverything"><digi:trn>do not skip any translations </digi:trn></html:option>

@@ -30,7 +30,12 @@ public class GetOrganizations  extends Action {
 
 		OrgProfileFilterForm orgForm = (OrgProfileFilterForm) form;
         Long orgGroupId=orgForm.getOrgGroupId();
-        List<AmpOrganisation> orgs=DbUtil.getOrganisationByGroupId(orgGroupId);
+        List<AmpOrganisation> orgs;
+        if (orgGroupId != null && orgGroupId != -1) {
+          orgs= DbUtil.getOrganisationByGroupId(orgGroupId);
+        } else {
+            orgs=DbUtil.getBilMulOrganisations();
+        }
         orgForm.setOrganizations(orgs);
 		response.setContentType("text/xml");
 				try {
@@ -50,7 +55,7 @@ public class GetOrganizations  extends Action {
 	}
 
     private static String generateOrgDropDown(List orgs) {
-        String orgSelect = "<select name=\"org\" class=\"inp-text\" id=\"org_dropdown_id\">";
+        String orgSelect = "<select name=\"orgId\" class=\"inp-text\" id=\"org_dropdown_id\">";
         orgSelect += "<option value=\"-1\" selected=\"selected\"><digi:trn>All</digi:trn></option>";
         Iterator<AmpOrganisation> orgIter = orgs.iterator();
         while (orgIter.hasNext()) {

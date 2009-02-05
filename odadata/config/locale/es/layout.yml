@@ -23,7 +23,9 @@ es:
       # TODO: Change from "Used Exchange Rates" to just "Exchange Rates" please
       exchange_rates: Tasas de Cambio
       design_own: 'Diseña Reporte'
-      contact: Contacto
+      help: Ayuda
+      feedback: Comentarios de ODAnic
+      support: Soporte técnico
       
     focal_point:
       donor_info: Info Donante

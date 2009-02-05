@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
   helper :all
   before_filter :set_output_currency
   before_filter :set_locale
+  after_filter  :store_location
   layout :smart_layout
   
 protected
@@ -34,6 +35,6 @@ protected
     return true if Prefs.data_input_open
     
     session[:redirect_url] = request.referrer
-    redirect_to :controller => 'admin', :action => 'data_input_closed'  
+    redirect_to :controller => 'static', :action => 'data_input_closed'  
   end
 end

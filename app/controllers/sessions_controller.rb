@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
   end
 
   def create
-    #logout_keeping_session!
+    logout_keeping_session!
     data = params[:session]
      
     if user = User.authenticate(data[:email], data[:password])
@@ -18,8 +18,11 @@ class SessionsController < ApplicationController
       # for that purpose. 
       # reset_session
       current_user = user
-      #new_cookie_flag = (data[:remember_me] == "1")
-      #handle_remember_cookie! new_cookie_flag
+      # FIXME: This is because the existing system did not work with passenger on AMPdev..
+      # According to the debug messages, current_user= is not being called!
+      session[:user_id] = user.id
+      new_cookie_flag = (data[:remember_me] == "1")
+      handle_remember_cookie! new_cookie_flag
       redirect_back_or_default('/')
       flash[:notice] = "Logged in successfully"
     else
@@ -32,6 +35,7 @@ class SessionsController < ApplicationController
 
   def destroy
     logout_killing_session!
+    # FIXME: This is because the existing system did not work with passenger on AMPdev..
     session[:user_id] = nil
     flash[:notice] = "You have been logged out."
     redirect_back_or_default('/')

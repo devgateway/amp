@@ -30,6 +30,6 @@
 		</button>
 		<button type="button" class="toolbar-dis" onclick="saveReportEngine.showTitlePanel()" name="export">
 			<img src="/TEMPLATE/ampTemplate/images/file-export-16x16.png" class="toolbar"/>
-			<digi:trn key="rep:wizard:SaveAs">Export</digi:trn>
+			<digi:trn key="btn:wizard:Export">Export</digi:trn>
 		</button>
  	 </div>

@@ -8,4 +8,12 @@ class StaticController < ApplicationController
   
   def downloads
   end
+  
+  # =====================================
+  # = Status page for closed data input =
+  # =====================================
+  def data_input_closed
+    @referer = session[:redirect_url] || root_url
+    session[:redirect_url] = nil
+  end
 end

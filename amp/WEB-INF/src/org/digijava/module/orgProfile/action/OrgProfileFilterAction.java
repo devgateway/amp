@@ -57,14 +57,17 @@ public class OrgProfileFilterAction extends Action {
         // Org profile is only for Mul and Bil organizations
         List<AmpOrgGroup> orgGroups=new ArrayList(DbUtil.getBilMulOrgGroups());
         orgForm.setOrgGroups(orgGroups);
-        if(orgForm.getOrgGroupId()==null&&orgGroups.size()>0){
-            orgForm.setOrgGroupId(((AmpOrgGroup)orgGroups.get(0)).getAmpOrgGrpId());
-
+        if(orgForm.getOrgGroupId()!=null&&orgForm.getOrgGroupId()!=-1){
+            if (orgGroups.size() > 0) {
+                List<AmpOrganisation> orgs = DbUtil.getOrganisationByGroupId(orgForm.getOrgGroupId());
+                orgForm.setOrganizations(orgs);
+            }
         }
-        List<AmpOrganisation> orgs=DbUtil.getOrganisationByGroupId(orgForm.getOrgGroupId());
-        orgForm.setOrganizations(orgs);
+        else{
+            orgForm.setOrganizations(DbUtil.getBilMulOrganisations());
+        }
+
         orgForm.setYears(new ArrayList<BeanWrapperImpl>());
-       
         Long yearFrom = Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.YEAR_RANGE_START));
         Long countYear = Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));
         for (long i = yearFrom; i <= (yearFrom + countYear); i++) {

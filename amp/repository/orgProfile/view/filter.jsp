@@ -226,6 +226,7 @@
                     <b><digi:trn>Organization Group</digi:trn>:</b>
                     <div>
                         <html:select property="orgGroupId" styleClass="inp-text"  styleId="org_group_dropdown_id">
+                            <html:option value="-1"><digi:trn>All</digi:trn></html:option>
                             <html:optionsCollection property="orgGroups" value="ampOrgGrpId" label="orgGrpName" />
                         </html:select>
                     </div>
@@ -275,7 +276,7 @@
 
                             </td>
                             <td align="center">
-                                <html:submit styleClass="buton" property="apply"><digi:trn key="orgProfile:filer:Apply">Apply</digi:trn></html:submit>
+                                <html:submit styleClass="button" property="apply"><digi:trn key="orgProfile:filer:Apply">Apply</digi:trn></html:submit>
                             </td>
                             <td  align="left">
                                 <digi:img  src="module/widget/images/help1.gif" onmouseover="stm([helpTitle,helpBody],Style[13])" onmouseout="htm()"/>

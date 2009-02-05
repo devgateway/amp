@@ -1355,7 +1355,7 @@ public class ChartWidgetUtil {
                     }
 
                    
-                    qr += " ) and act.draft=false and act.approvalStatus='approved' ";
+                    qr += " ) and act.draft=false and act.approvalStatus in ('approved','edited') ";
                 }
 
             }

@@ -236,7 +236,7 @@
 
 
 
-		<set name="internalIds" lazy="true" cascade="all-delete-orphan" inverse="true">
+		<set name="internalIds" cascade="all-delete-orphan" inverse="true">
 			<cache usage="read-write" />
 			<key column="amp_activity_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityInternalId" />

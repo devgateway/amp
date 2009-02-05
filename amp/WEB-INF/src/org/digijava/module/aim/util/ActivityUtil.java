@@ -2043,7 +2043,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     finally {
       if (session != null) {
         try {
-        	//session.close();
+        	session.close();
 			PersistenceManager.releaseSession(session);
         }
         catch (Exception ex) {

@@ -398,7 +398,10 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         if (activity.getClosingDates() != null)
         	oldActivity.getClosingDates().addAll(activity.getClosingDates());
         if (activity.getComponents() != null)
-        	oldActivity.getComponents().addAll(activity.getComponents());
+        	{
+        		if (oldActivity.getComponents() == null) oldActivity.setComponents(new HashSet());
+        		oldActivity.getComponents().addAll(activity.getComponents());
+        	}
         //oldActivity.setDocuments(activity.getDocuments());
         if (activity.getFunding() != null)
         	oldActivity.getFunding().addAll(activity.getFunding());
@@ -2025,6 +2028,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 
     try {
       session = PersistenceManager.getSession();
+    	//session = PersistenceManager.getRequestDBSession();
       String qryStr = "select a from " + AmpComponentFunding.class.getName() +
           " a " +
           "where amp_component_id = '" + componentId + "' and activity_id = '" + activityId +
@@ -2039,7 +2043,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     finally {
       if (session != null) {
         try {
-        	session.close();
+        	//session.close();
 			PersistenceManager.releaseSession(session);
         }
         catch (Exception ex) {
@@ -3389,6 +3393,30 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 		retVal=countryId+userId+lastId;
 		return retVal;
 	}
+
+	/**
+	 * combines countryId, current member id (for admin is 00) and last activityId+1 and makes ampId
+	 * @param user,actId
+	 * @return 
+	 * @author dan
+	 */
+		public static String numericAmpId(String user,Long actId){
+			String retVal=null;
+			String countryCode=FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBAL_DEFAULT_COUNTRY);
+			String userId=user;
+	                Country country=DbUtil.getDgCountry(countryCode);
+	                String countryId="0";
+	                if(country!=null){
+	                    countryId=country.getCountryId().toString();
+	                }
+			
+			String lastId=null;
+			if(actId!=null){
+				 lastId = actId.toString();	
+			}		
+			retVal=countryId+userId+lastId;
+			return retVal;
+		}
 	
 	/**
 	 * combines countryIso and last activityId+1 and makes ampId

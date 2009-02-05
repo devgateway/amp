@@ -53,6 +53,10 @@ public class TemporaryDocumentData extends DocumentData {
 		this.formFile = formFile;
 	}
 	
+	public TemporaryDocumentData (){
+		
+	}
+	
 	public TemporaryDocumentData (DocumentManagerForm dmForm, HttpServletRequest request, ActionErrors errors) {
 		errorsFound		= false;
 		//HashMap errors = new HashMap();

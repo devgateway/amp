@@ -10,6 +10,7 @@
 	<!-- highlights classes Begin-->
 	<hibernate-classes required="false">
 <!--		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivity</hibernate-class> -->
+		<hibernate-class>org.digijava.module.dataExchange.dbentity.DEMappingFields</hibernate-class>
 	</hibernate-classes>
 	<!-- highlights classes End-->
 </module-config>

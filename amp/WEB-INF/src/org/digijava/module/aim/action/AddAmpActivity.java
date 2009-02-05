@@ -193,7 +193,7 @@ public class AddAmpActivity extends Action {
               eaForm.getIndicator().setIndicatorsME(indicators);            
        }
 
-    //Only currencies havening exchanges rates AMP-2620
+    //Only currencies having exchanges rates AMP-2620
       ArrayList<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
       eaForm.getFunding().setValidcurrencies(validcurrencies);
       if(eaForm.getCurrencies()!=null && eaForm.getCurrencies().size()>0){

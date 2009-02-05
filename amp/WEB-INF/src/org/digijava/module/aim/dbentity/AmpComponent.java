@@ -102,6 +102,7 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent> {
 	
 	@Override
 	public int hashCode() {
+		if( this.ampComponentId ==null) return 0;
 		return this.ampComponentId.hashCode();
 	}
 	public java.sql.Timestamp getCreationdate() {

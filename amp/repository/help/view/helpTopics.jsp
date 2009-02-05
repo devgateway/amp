@@ -66,14 +66,6 @@
                           </li>
                         </ul>
              		 <bean:define id="topic" name="helpForm" property="topicTree" type="java.util.Collection"/>
-        <!--
-                        <div class="yui-content" style="height:700px;overflow: auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
-                        <bean:define id="topic" name="helpForm" property="topicTree" type="java.util.Collection"/>
-                        	<%= HelpUtil.renderTopicsTree(topic,request) %>
-
-             		</div>
-            -->
-
   <div id="treeboxbox_tree" class="yui-content" style="height:700px;overflow: auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;"></div>
   <div id="log"></div>
   <!--<div id="xmlString"></div>-->
@@ -93,7 +85,7 @@
 					show(id);
 			 	}
 			}
-         var id = document.getElementById("treeboxbox_tree");
+            var id = document.getElementById("treeboxbox_tree");
 	 		tree = new dhtmlXTreeObject(id,"100%","100%",0);
 	 		tree.setImagePath("../../repository/help/view/images/csh_vista/");
 	        tree.enableTreeImages(false);
@@ -104,16 +96,21 @@
 			    xml+= '<%= HelpUtil.renderTopicTree(topic,request,false) %>';
 			    xml+='</tree>';
 		    tree.loadXMLString(xml);
-            tree.attachEvent("onDrag",function(sid,tid,sobj,tobj){
-
+            tree.attachEvent("onDrop",function(sid,tid,sobj,tobj){
+            
             if(sid){
 
                 var contextTreeXml = tree.serializeTree();
-               // var xmlobject = (new DOMParser()).parseFromString(contextTreeXml, "text/xml");
                 document.getElementById("xmlString").value = contextTreeXml;
 
+
                     return true;
+
+
             }});
+
+           
+
 
     function show(str){
 

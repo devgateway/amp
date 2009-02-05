@@ -215,6 +215,7 @@ public class DigiSecurityManager {
             }
 
             , null);
+            logger.info("### TRUE #### checking permissions for"+subject.toString() + " and permission "+permission.toString());
             return true;
         }
         catch (AccessControlException ace) {
@@ -222,6 +223,7 @@ public class DigiSecurityManager {
                 logger.debug("Subject " + subject +
                              " got AccessControlException for " + permission);
             }
+            logger.info("### FALSE #### checking permissions for"+subject.toString() + " and permission "+permission.toString());
             return false;
         }
         catch (PrivilegedActionException pae) {
@@ -229,6 +231,7 @@ public class DigiSecurityManager {
                 logger.debug("Subject " + subject +
                              " got PrivilegedActionException for " + permission);
             }
+            logger.info("### FALSE #### checking permissions for"+subject.toString() + " and permission "+permission.toString());
             return false;
         }
     }

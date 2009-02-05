@@ -41,6 +41,7 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
+import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
@@ -49,8 +50,11 @@ import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
+import org.digijava.module.aim.dbentity.AmpIssues;
+import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -58,6 +62,7 @@ import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.PhysicalProgress;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ComponentsUtil;
@@ -84,8 +89,10 @@ import org.digijava.module.dataExchange.jaxb.FundingType;
 import org.digijava.module.dataExchange.jaxb.ActivityType.Component;
 import org.digijava.module.dataExchange.jaxb.ActivityType.Documents;
 import org.digijava.module.dataExchange.jaxb.ActivityType.Id;
+import org.digijava.module.dataExchange.jaxb.ActivityType.Issues;
 import org.digijava.module.dataExchange.jaxb.ActivityType.RelatedLinks;
 import org.digijava.module.dataExchange.jaxb.ActivityType.RelatedOrgs;
+import org.digijava.module.dataExchange.jaxb.ActivityType.Issues.Measure;
 import org.digijava.module.dataExchange.jaxb.FundingType.Projections;
 import org.digijava.module.dataExchange.utils.Constants;
 import org.digijava.module.dataExchange.utils.DataExchangeUtils;
@@ -194,6 +201,7 @@ public class ImportAction extends MultiAction {
 						
 						//contact information
 						processStep7(activityImported, activity,request, "en",hm);
+						
 						DataExchangeUtils.saveActivity(activity, request);
 						DataExchangeUtils.saveComponents(activity, request, tempComps);
 						
@@ -605,6 +613,22 @@ public class ImportAction extends MultiAction {
 						
 						//cft.get
 					}
+					Set phyProgess = new HashSet();
+					for (Iterator itComm = component.getPhysicalProgress().iterator(); itComm.hasNext();) {
+						org.digijava.module.dataExchange.jaxb.ActivityType.Component.PhysicalProgress pp = (org.digijava.module.dataExchange.jaxb.ActivityType.Component.PhysicalProgress) itComm.next();
+						AmpPhysicalPerformance ampPhyPerf = new AmpPhysicalPerformance();
+						if(pp.getDescription()!=null && isStringValid(pp.getDescription().getValue()))
+							ampPhyPerf.setDescription(pp.getDescription().getValue());
+						ampPhyPerf.setReportingDate(DataExchangeUtils.XMLGregorianDateToDate(pp.getReportingDate().getDate()));
+						
+						if(pp.getTitle()!=null && isStringValid(pp.getTitle().getValue()))
+							ampPhyPerf.setTitle(pp.getTitle().getValue());
+						ampPhyPerf.setAmpActivityId(activity);
+						ampPhyPerf.setComponent(ampComp);
+						ampPhyPerf.setComments(" ");
+						phyProgess.add(ampPhyPerf);
+					}
+					tempComp.setPhyProgress(phyProgess);
 					//addCollectionToAmp(acfs);
 			
 				tempComps.add(tempComp);
@@ -617,6 +641,11 @@ public class ImportAction extends MultiAction {
 		
 		
 	}//end of step 5
+
+	private void addFundingDetailToAmpCompFund(AmpComponentFunding acf,	PhysicalProgress phyprog) {
+		// TODO Auto-generated method stub
+		
+	}
 
 	//compare without white spaces
 	private boolean isEqualStringsNWS(String s, String t){
@@ -657,10 +686,10 @@ public class ImportAction extends MultiAction {
 	private void processStep6(ActivityType activityImported, AmpActivity activity, HttpServletRequest request, String string, HashMap hm) {
 		// TODO Auto-generated method stub
 		
-		setTeamMember(request, "admin@amp.org", 0L);
-		Session writeSession = DocumentManagerUtil.getWriteSession(request);
+		
 		if(activityImported.getDocuments() != null || activityImported.getDocuments().size() > 0){
-				
+			setTeamMember(request, "admin@amp.org", 0L);
+			Session writeSession = DocumentManagerUtil.getWriteSession(request);
 				for (Iterator it = activityImported.getDocuments().iterator(); it.hasNext();) {
 					Documents doc = (Documents) it.next();
 					TemporaryDocumentData tdd = new TemporaryDocumentData();
@@ -684,7 +713,8 @@ public class ImportAction extends MultiAction {
 		}
 		
 		if(activityImported.getRelatedLinks() != null || activityImported.getRelatedLinks().size() > 0){
-				
+			setTeamMember(request, "admin@amp.org", 0L);
+			Session writeSession = DocumentManagerUtil.getWriteSession(request);
 				for (Iterator it = activityImported.getRelatedLinks().iterator(); it.hasNext();) {
 					RelatedLinks doc = (RelatedLinks) it.next();
 					TemporaryDocumentData tdd = new TemporaryDocumentData();
@@ -721,7 +751,7 @@ public class ImportAction extends MultiAction {
 		//httpSession.setAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER,teamMember);
 	}
 
-	//contact information
+	//contact information, issues
 	private void processStep7(ActivityType activityImported, AmpActivity activity, HttpServletRequest request, String string, HashMap hm) {
 	
 		if (activityImported.getDonorContacts() != null && activityImported.getDonorContacts().size() > 0){
@@ -742,9 +772,56 @@ public class ImportAction extends MultiAction {
 				activity.setMofedCntEmail(contacts.getEmail());
 			}
 		}
+	
+		if(activityImported.getIssues() !=null && activityImported.getIssues().size() >0){
+			Set issueSet = new HashSet();
+			for (Iterator itIssues = activityImported.getIssues().iterator(); itIssues.hasNext();) {
+				Issues issue = (Issues) itIssues.next();
+				AmpIssues ampIssue = new AmpIssues();
+				ampIssue.setActivity(activity);
+				if(isFreeTextTypeValid(issue.getTitle()))
+					ampIssue.setName(issue.getTitle().getValue());
+				
+				Set measureSet = new HashSet();
+				
+				if (issue.getMeasure() != null && issue.getMeasure().size() > 0) {
+					for (int j = 0; j < issue.getMeasure().size(); j++) {
+						Measure measure = (Measure) issue.getMeasure().get(j);
+						AmpMeasure ampMeasure = new AmpMeasure();
+						ampMeasure.setIssue(ampIssue);
+						if(isFreeTextTypeValid(measure.getTitle()))
+							ampMeasure.setName(measure.getTitle().getValue());
+						Set actorSet = new HashSet();
+						if (measure.getActor() != null && measure.getActor().size() > 0) {
+							for (int k = 0; k < measure.getActor().size(); k++) {
+								FreeTextType idmlActor = (FreeTextType) measure.getActor().get(k);
+								AmpActor actor= new AmpActor();
+								if(isFreeTextTypeValid(idmlActor))
+									actor.setName(idmlActor.getValue());
+								actor.setAmpActorId(null);
+								actor.setMeasure(ampMeasure);
+								actorSet.add(actor);
+							}
+						}
+						ampMeasure.setActors(actorSet);
+						measureSet.add(ampMeasure);
+					}
+				}
+				ampIssue.setMeasures(measureSet);
+				issueSet.add(ampIssue);
+			}
+			activity.setIssues(issueSet);
+		}
+		
 	}
 	
 	
+	private boolean isFreeTextTypeValid(FreeTextType title) {
+		// TODO Auto-generated method stub
+		if(title != null && title.getValue()!=null) return true;
+		return false;
+	}
+
 	private Collection getFundingXMLtoAMP(ActivityType actType, AmpActivity activity, HashMap hm) throws Exception{
 		ArrayList<AmpFunding> fundings= null;
 		for (Iterator<FundingType> it = actType.getFunding().iterator(); it.hasNext();) {

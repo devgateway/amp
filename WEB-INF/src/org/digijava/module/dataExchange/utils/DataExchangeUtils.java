@@ -3,13 +3,13 @@
  */
 package org.digijava.module.dataExchange.utils;
 
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -22,6 +22,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.util.ActivityUtil;
@@ -52,7 +53,8 @@ public class DataExchangeUtils {
 		Query qry = null;
 
 		try {
-			session = PersistenceManager.getSession();
+			//session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 			qryStr = "select f from " + DEMappingFields.class.getName() + " f";
 			qry = session.createQuery(qryStr);
 			col = qry.list();
@@ -64,7 +66,7 @@ public class DataExchangeUtils {
 		finally {
 			if (session != null) {
 				try {
-					PersistenceManager.releaseSession(session);
+					;//PersistenceManager.releaseSession(session);
 				}
 				catch (Exception rsf) {
 					logger.error("Release session failed :" + rsf.getMessage());
@@ -86,7 +88,8 @@ public class DataExchangeUtils {
 		Transaction tx = null;
 
 		try {
-			session = PersistenceManager.getSession();
+			//session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 			tx = session.beginTransaction();
 			DEMappingFields demf = new DEMappingFields();
 			if(code == null && value == null) return false;
@@ -114,7 +117,7 @@ public class DataExchangeUtils {
 		finally {
 			if (session != null) {
 				try {
-					PersistenceManager.releaseSession(session);
+					;//PersistenceManager.releaseSession(session);
 				}
 				catch (Exception rsf) {
 					logger.error("Release session failed :" + rsf.getMessage());
@@ -187,7 +190,8 @@ public class DataExchangeUtils {
 	    Long activityId = null;
 	    
 	    try {
-	    	session = PersistenceManager.getSession();
+	    	//session = PersistenceManager.getSession();
+	    	session = PersistenceManager.getRequestDBSession();
 	    	//session.connection().setAutoCommit(false);
 	    	tx = session.beginTransaction();
 
@@ -197,6 +201,7 @@ public class DataExchangeUtils {
 	        activity.setAmpId(ampId);
 	        //session.update(activity);
 	        tx.commit();
+	        
 	    }catch (Exception ex) {
 	        logger.error("Exception from saveActivity().", ex);
 	        //we can't throw here the exception because we need to rollback the transaction
@@ -206,7 +211,7 @@ public class DataExchangeUtils {
 	        }
 	    finally {
 	    	try {
-				PersistenceManager.releaseSession(session);
+				;//PersistenceManager.releaseSession(session);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -260,7 +265,8 @@ public class DataExchangeUtils {
 		Session session = null;
 		AmpOrganisation ampOrg = null;
 		try {
-			session = PersistenceManager.getSession();
+			//session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 			ampOrg = (AmpOrganisation) session.load(AmpOrganisation.class, id);
 		}
 		catch (Exception ex) {
@@ -269,7 +275,7 @@ public class DataExchangeUtils {
 		finally {
 			if (session != null) {
 				try {
-					PersistenceManager.releaseSession(session);
+					;//PersistenceManager.releaseSession(session);
 				}
 				catch (Exception rsf) {
 					logger.error("Release session failed :" + rsf.getMessage());
@@ -291,7 +297,8 @@ public class DataExchangeUtils {
 		Session session = null;
 		AmpSector ampOrg = null;
 		try {
-			session = PersistenceManager.getSession();
+			//session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 			ampOrg = (AmpSector) session.load(AmpSector.class, id);
 		}
 		catch (Exception ex) {
@@ -300,7 +307,7 @@ public class DataExchangeUtils {
 		finally {
 			if (session != null) {
 				try {
-					PersistenceManager.releaseSession(session);
+					;//PersistenceManager.releaseSession(session);
 				}
 				catch (Exception rsf) {
 					logger.error("Release session failed :" + rsf.getMessage());
@@ -415,7 +422,27 @@ public class DataExchangeUtils {
 			Components<AmpComponentFunding> acfs = (Components<AmpComponentFunding>) it.next();
 			for (Iterator itcomm = acfs.getCommitments().iterator(); itcomm.hasNext();) {
 				AmpComponentFunding comm = (AmpComponentFunding) itcomm.next();
+				comm.getActivity().setComponents(new HashSet());
+				comm.getComponent().setActivities(new HashSet());
 				DataExchangeUtils.addObjectoToAmp(comm);
+			}
+			for (Iterator itcomm = acfs.getDisbursements().iterator(); itcomm.hasNext();) {
+				AmpComponentFunding disb = (AmpComponentFunding) itcomm.next();
+				disb.getActivity().setComponents(new HashSet());
+				disb.getComponent().setActivities(new HashSet());
+				DataExchangeUtils.addObjectoToAmp(disb);
+			}
+			for (Iterator itcomm = acfs.getExpenditures().iterator(); itcomm.hasNext();) {
+				AmpComponentFunding exp = (AmpComponentFunding) itcomm.next();
+				exp.getActivity().setComponents(new HashSet());
+				exp.getComponent().setActivities(new HashSet());
+				DataExchangeUtils.addObjectoToAmp(exp);
+			}
+			for (Iterator itcomm = acfs.getPhyProgress().iterator(); itcomm.hasNext();) {
+				AmpPhysicalPerformance pp =  (AmpPhysicalPerformance) itcomm.next();
+				pp.getAmpActivityId().setComponents(new HashSet());
+				pp.getComponent().setActivities(new HashSet());
+				DataExchangeUtils.addObjectoToAmp(pp);
 			}
 			
 		}

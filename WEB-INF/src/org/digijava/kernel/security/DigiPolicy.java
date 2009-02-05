@@ -49,6 +49,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.hibernate.HibernateException;
+import org.hibernate.ObjectNotFoundException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
 import org.apache.log4j.Logger;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.cache.AbstractCache;
@@ -60,11 +66,6 @@ import org.digijava.kernel.security.permission.AdditivePermission;
 import org.digijava.kernel.security.principal.GroupPrincipal;
 import org.digijava.kernel.security.principal.UserPrincipal;
 import org.digijava.kernel.util.DigiCacheManager;
-import org.hibernate.HibernateException;
-import org.hibernate.ObjectNotFoundException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 public class DigiPolicy
     extends Policy{
@@ -72,7 +73,8 @@ public class DigiPolicy
     private static final String appScopeKey = DigiPolicy.class.getName();
     private static DigiPolicy _instance = null;
 
-    private Policy currentDefaultPolicy = null;
+    private Policy currentDefaultPolicy;
+    private PermissionStorage permissionStorage;
     private AbstractCache appScopeCache;
 
     Map getPrivileges() {
@@ -240,7 +242,7 @@ public class DigiPolicy
      */
     public void refresh() {
         try {
-        	new PermissionStorage(true);
+            permissionStorage = new PermissionStorage(true);
         }
         catch (Exception ex) {
             throw new RuntimeException("refresh() failed", ex);
@@ -309,24 +311,23 @@ public class DigiPolicy
 
     }
 
-    /**
-     * Install DigiPolicy instance if the default Policy is not a custom one.
-     * TODO Ugly Policy handling! Never override default Policy behavior this way!
-     */
     public void install() {
-    	logger.debug("install() called");
+        logger.debug("install() called");
         Policy defaultPolicy = Policy.getPolicy();
-        if ( (defaultPolicy != null) && !defaultPolicy.getClass().getName().equals(DigiPolicy.class.getName()) ) {
-        	currentDefaultPolicy = defaultPolicy;
-            Policy.setPolicy(this);
+        if ( (defaultPolicy != null) && ! (defaultPolicy instanceof DigiPolicy)) {
+            currentDefaultPolicy = defaultPolicy;
         }
+        else {
+            currentDefaultPolicy = null;
+        }
+        Policy.setPolicy(this);
     }
 
-    /**
-     * Do nothing, DigiPolicy will probably be used by other shared AMP instances.
-     */
     public void uninstall() {
         logger.debug("uninstall() called");
+        if (currentDefaultPolicy != null) {
+            Policy.setPolicy(currentDefaultPolicy);
+        }
         logger.debug("uninstall() complete");
     }
 

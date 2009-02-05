@@ -21,7 +21,9 @@ en:
       dac_manual: DAC-CRS Manual
       exchange_rates: Exchange Rates
       design_own: Design own report
-      contact: Contact
+      help: Help
+      feedback: Feedback on ODAnic
+      support: Technical Support
       
     focal_point:
       donor_info: Donor Info

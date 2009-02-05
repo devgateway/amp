@@ -26,17 +26,17 @@ function showHint(str){
  		return
  	} 
  	$("#livesearch").show();
-	var url="/help/helpActions.do?actionType=vewSearchKey"
-	url=url+"&loadKey="+str
-	xmlHttp.open("GET",url,true)
-	xmlHttp.onreadystatechange=stateChanged 
+	var urls="/help/helpActions.do?actionType=vewSearchKey"
+	url=urls+"&loadKey="+str
+    xmlHttp.open("GET",url,true)
+	xmlHttp.onreadystatechange=stateChanging
 	xmlHttp.send(null)
 }
 
-function stateChanged(){
+function stateChanging(){
 	 if (xmlHttp.readyState==4)
-  { 
-	 document.getElementById("livesearch").innerHTML=xmlHttp.responseText;
+  {
+     document.getElementById("livesearch").innerHTML=xmlHttp.responseText;
 	 document.getElementById("livesearch").style.border="1px solid #A5ACB2";
    } 
 }

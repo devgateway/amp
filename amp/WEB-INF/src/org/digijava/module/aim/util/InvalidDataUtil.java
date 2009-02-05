@@ -1,6 +1,7 @@
 package org.digijava.module.aim.util;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.digijava.kernel.exception.DgException;
@@ -118,7 +119,15 @@ public class InvalidDataUtil {
 		public void setTotalPercentage(float totalPercentage) {
 			this.totalPercentage = totalPercentage;
 		}
-		
+	}
+	
+	public static class ActivitySectorPercentagesComparator implements Comparator<ActivitySectorPercentages>{
+
+		public int compare(ActivitySectorPercentages o1,ActivitySectorPercentages o2) {
+			String name1=o1.getActivityName();
+			String name2=o2.getActivityName();
+			return name1.compareTo(name2);
+		}
 		
 	}
 }

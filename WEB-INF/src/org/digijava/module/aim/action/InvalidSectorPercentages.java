@@ -1,4 +1,5 @@
 package org.digijava.module.aim.action;
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -8,7 +9,10 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.form.InvalidDataListsForm;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.InvalidDataUtil;
 
 /**
@@ -19,14 +23,23 @@ import org.digijava.module.aim.util.InvalidDataUtil;
 public class InvalidSectorPercentages extends Action{
 
 	@Override
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+	public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
 		InvalidDataListsForm listsForm = (InvalidDataListsForm)form;
 		List<InvalidDataUtil.ActivitySectorPercentages> result = null;
-		result = InvalidDataUtil.getActivitiesWithIncorrectSectorPersentage(null);
-		listsForm.setInvalidSectorpercentages(result);
+		
+		if(request.getParameter("saveDraft")!=null && request.getParameter("saveDraft").equals("true")){
+			makeActivityDraft(listsForm.getActId());
+		}else{
+			result = InvalidDataUtil.getActivitiesWithIncorrectSectorPersentage(null);
+			Collections.sort(result, new InvalidDataUtil.ActivitySectorPercentagesComparator());
+			listsForm.setInvalidSectorpercentages(result);
+		}
 		return mapping.findForward("forward");
 	}
 
+	private void makeActivityDraft(Long actId) throws Exception{
+		AmpActivity activity=ActivityUtil.loadActivity(actId);
+		activity.setDraft(true);
+		PersistenceManager.updateObject(activity);
+	}
 }

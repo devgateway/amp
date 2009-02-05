@@ -203,7 +203,7 @@ public class DgSecurityManager {
     static public boolean permitted(
         Subject subject,
         final Permission permission) {
-
+    	logger.info("### checking permissions for"+subject.toString() + " and permission "+permission.toString());
         return DigiSecurityManager.checkPermission(subject, permission);
     }
 }

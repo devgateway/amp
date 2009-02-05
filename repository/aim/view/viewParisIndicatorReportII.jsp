@@ -239,6 +239,11 @@ html>body #mainEmpty {
 		document.aimParisIndicatorReportForm.submit();
 	}
 
+	function openPrinter(){
+		var val = document.getElementsByName('indicatorId')[0].value;
+		window.open('/aim/parisIndicatorReport.do~indcId='+val+'~reset=true','mywindow','toolbar=no,location=no,directories=no,status=no,menubar=yes,scrollbars=yes,copyhistory=yes,resizable=yes');
+	}
+	
 	function popup_pdf(val) {
 		openResisableWindow(800, 600);
 		<digi:context name="pdf" property="context/module/moduleinstance/parisIndicatorReportPDFXLSCSV.do?docType=pdf" />
@@ -471,17 +476,17 @@ function toggleSettings(){
 							<table border="0" align="center" bgcolor="#addadd" class="toolbartable">
 								<tr>
 									<td noWrap align=left valign="center">
-										<a href="javascript:popup_pdf('<bean:write name="aimParisIndicatorReportForm" property="indicatorCode" />')" paramName="indcId" paramId="indcId" target="_blank">
+										<a href="" onclick="javascript:popup_pdf('<bean:write name="aimParisIndicatorReportForm" property="indicatorCode" />');return false;" paramName="indcId" paramId="indcId" target="_blank">
 											<digi:img width="17" height="20" hspace="2" vspace="2"src="module/aim/images/pdf.gif" border="0" alt="Export to PDF" />
 										</a>
 									</td>
 									<td noWrap align=left valign="center">
-										<a href="javascript:popup_xls('<bean:write name="aimParisIndicatorReportForm" property="indicatorCode" />')" paramName="indcId" paramId="indcId" target="_blank">
+										<a href="" onclick="javascript:popup_xls('<bean:write name="aimParisIndicatorReportForm" property="indicatorCode" />');return false;" paramName="indcId" paramId="indcId" target="_blank">
 											<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/excel.gif" border="0" alt="Export to Excel" />
 										</a>
 									</td>				
 									<td noWrap align=left valign="center">
-										<a href="#" paramName="indcId" paramId="indcId" onclick="javascript:openPrinter(); return false;">
+										<a href="#" paramName="indcId" paramId="indcId" onclick="javascript:openPrinter(); return false;" paramName="indcId" paramId="indcId" target="_blank">
 											<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/printer.gif" border="0" alt="Printer Friendly" />
 										</a>
 									</td>

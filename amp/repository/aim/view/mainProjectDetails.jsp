@@ -82,6 +82,7 @@ function preview(id)
 		<digi:context name="viewProjDetails" property="context/module/moduleinstance/viewProjectDetails.do"/>
 		document.aimMainProjectDetailsForm.action = "<%= viewProjDetails %>";
 		document.aimMainProjectDetailsForm.type.value = type;
+		document.aimMainProjectDetailsForm.projectComments.value = key;
 		document.aimMainProjectDetailsForm.description.value = key;
 		document.aimMainProjectDetailsForm.objectives.value = key;
 		document.aimMainProjectDetailsForm.target = popupPointer.name;

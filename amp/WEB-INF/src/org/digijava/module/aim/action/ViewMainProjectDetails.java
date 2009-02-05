@@ -55,6 +55,11 @@ public class ViewMainProjectDetails extends TilesAction {
 			formBean.setTabIndex(tabIndex);
 			AmpActivity ampActivity = ActivityUtil.getProjectChannelOverview(id);
 			if(ampActivity!=null){
+				if (ampActivity.getProjectComments() == null)
+					formBean.setProjectComments("");
+				else {
+					formBean.setProjectComments(ampActivity.getProjectComments());
+				}
 				if (ampActivity.getDescription() == null)
 					formBean.setDescription("");
 				else {

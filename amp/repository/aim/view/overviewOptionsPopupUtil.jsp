@@ -127,6 +127,7 @@
 	{
 		//alert('previewOverviewframe');
         var postString		= "type="+type+"&description="+key;
+        //alert(postString);
         showPOverviewframe();
 		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/viewProjectDetails.do", OverviewframeCallback, postString);
 	}

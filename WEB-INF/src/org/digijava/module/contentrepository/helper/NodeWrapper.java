@@ -167,17 +167,21 @@ public class NodeWrapper {
 			}
 			else{
 				//System.out.println("NodeWrapper.NodeWrapper() 2");
-				if ( !DocumentManagerUtil.checkFileSize(formFile, errors) ) {
-					errorAppeared	= true;
+				if(formFile != null){
+					
+					if ( !DocumentManagerUtil.checkFileSize(formFile, errors) ) {
+						errorAppeared	= true;
+					}
+					else {
+						newNode.setProperty(CrConstants.PROPERTY_DATA, formFile.getInputStream());
+						contentType				= formFile.getContentType();
+						int uploadedFileSize	= formFile.getFileSize(); // This is in bytes
+						//AMP-3468
+						newNode.setProperty( CrConstants.PROPERTY_NAME, new String(formFile.getFileName().getBytes("iso-8859-1"), "UTF8") );
+						newNode.setProperty( CrConstants.PROPERTY_FILE_SIZE, uploadedFileSize );
+					}
 				}
-				else {
-					newNode.setProperty(CrConstants.PROPERTY_DATA, formFile.getInputStream());
-					contentType				= formFile.getContentType();
-					int uploadedFileSize	= formFile.getFileSize(); // This is in bytes
-					//AMP-3468
-					newNode.setProperty( CrConstants.PROPERTY_NAME, new String(formFile.getFileName().getBytes("iso-8859-1"), "UTF8") );
-					newNode.setProperty( CrConstants.PROPERTY_FILE_SIZE, uploadedFileSize );
-				}
+				else logger.error("Form file is null. It is ok if it imported using IDML");
 			}
 			
 			if ( !errorAppeared ) {
@@ -217,7 +221,8 @@ public class NodeWrapper {
 			newNode.setProperty( CrConstants.PROPERTY_DESCRIPTION, encDescr );
 			newNode.setProperty( CrConstants.PROPERTY_NOTES, encNotes );
 			newNode.setProperty( CrConstants.PROPERTY_CONTENT_TYPE, contentType );
-			newNode.setProperty( CrConstants.PROPERTY_CM_DOCUMENT_TYPE, cmDocType );
+			if(cmDocType != null) newNode.setProperty( CrConstants.PROPERTY_CM_DOCUMENT_TYPE, cmDocType );
+			else logger.error("Doctype is null. It is ok if the file is importing using IDML");
 			newNode.setProperty( CrConstants.PROPERTY_ADDING_DATE, Calendar.getInstance());
 			newNode.setProperty( CrConstants.PROPERTY_CREATOR, user );
 		}

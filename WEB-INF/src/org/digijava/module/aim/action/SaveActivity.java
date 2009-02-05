@@ -502,7 +502,7 @@ public class SaveActivity extends Action {
         CategoryManagerUtil.addCategoryToSet(eaForm.getIdentification().getActivityLevel(), activity.getCategories());
         CategoryManagerUtil.addCategoryToSet(eaForm.getIdentification().getProjectCategory(), activity.getCategories());
 		/* END - Saving categories to AmpActivity */
-		
+			
         
 		
 		
@@ -2434,6 +2434,8 @@ public class SaveActivity extends Action {
 				if(it.hasNext()){
 					ampComp = (AmpComponent)it.next();
 					activity.getComponents().add(ampComp);
+//					if(ampComp.getActivities() ==  null) ampComp.setActivities(new HashSet());
+//					ampComp.getActivities().add(activity);
 				}
 
 				if (comp.getCommitments() != null
@@ -2581,6 +2583,7 @@ public class SaveActivity extends Action {
                                 tempComp.setType_Id(comp.getType_Id());
 
                                 tempComps.add(tempComp);
+                activity.getComponents().add(ampComp);
 			}
 		}
 	}

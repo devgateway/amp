@@ -49,6 +49,8 @@ public class CategoryConstants {
 	public static final String PROJECT_CATEGORY_NAME		= "Project Category";
 	public static final String PROJECT_CATEGORY_KEY		= "project_category";
 	
+	public static final String DATA_EXCHANGE_NAME		= "Data Echange Category";
+	public static final String DATA_EXCHANGE_KEY		= "data_exchange";
 	
 	//--- IPA Contracting Step 13
 	

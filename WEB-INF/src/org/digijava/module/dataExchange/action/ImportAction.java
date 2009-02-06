@@ -853,11 +853,11 @@ public class ImportAction extends MultiAction {
 			if(ampFunding.getFundingDetails() == null ) ampFunding.setFundingDetails(new HashSet<AmpFundingDetail>());
 			if(fundDetails != null) ampFunding.getFundingDetails().addAll(fundDetails);
 			if(funding.getAssistanceType() != null){
-				AmpCategoryValue acv = addCategValueForCodeValueType(actType.getStatus(), hm, Constants.IDML_ASSISTANCE_TYPE, Constants.CATEG_VALUE_TYPE_OF_ASSISTANCE);
+				AmpCategoryValue acv = addCategValueForCodeValueType(funding.getAssistanceType(), hm, Constants.IDML_ASSISTANCE_TYPE, Constants.CATEG_VALUE_TYPE_OF_ASSISTANCE);
 				ampFunding.setTypeOfAssistance(acv);
 			}
 			if(funding.getFinancingInstrument() != null){
-				AmpCategoryValue acv = addCategValueForCodeValueType(actType.getStatus(), hm, Constants.IDML_FINANCING_INSTRUMENT, Constants.CATEG_VALUE_FINANCING_INSTRUMENT);
+				AmpCategoryValue acv = addCategValueForCodeValueType(funding.getFinancingInstrument(), hm, Constants.IDML_FINANCING_INSTRUMENT, Constants.CATEG_VALUE_FINANCING_INSTRUMENT);
 				ampFunding.setFinancingInstrument(acv);
 			}
 			if(activity !=null ) ampFunding.setAmpActivityId(activity);

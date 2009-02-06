@@ -13,6 +13,17 @@
 }
 </style>
 
+<script type="text/javascript">
+function validade(){
+  var defReportsPerPage = document.getElementById("defRecsPerPage");
+  if(defReportsPerPage.value.length == 0 || parseInt(defReportsPerPage.value)==0){
+	  alert("You cannot enter 0 for number of projects and activities per page.");
+	  return;
+  }
+  document.modeSwitchForm.submit();
+}
+</script>
+
 <jsp:useBean id="bcparams" type="java.util.Map" class="java.util.HashMap"/>
 <c:set target="${bcparams}" property="tId" value="-1"/>
 <c:set target="${bcparams}" property="dest" value="teamLead"/>
@@ -109,7 +120,7 @@
 															Number of activities/projects per page</digi:trn>
 														</td>
 														<td align="left" width="70%" bgcolor="#f4f4f2">
-															<html:text property="defRecsPerPage" size="5"  styleClass="inp-text"/>
+															<html:text property="defRecsPerPage" size="5"  styleClass="inp-text" styleId="defRecsPerPage"/>
 														</td>
 													</tr>
 													<tr>
@@ -230,7 +241,7 @@
                                                                       <c:set var="caption">
                                                                         <digi:trn key="aim:btnSave">Save</digi:trn>
                                                                       </c:set>
-                                                                      <html:submit value="${caption}" property="save" styleClass="dr-menu"/>
+                                                                      <html:button value="${caption}" property="save" styleClass="dr-menu" onclick="validade();"/>
 																	</td>
 																</tr>
 															</table>

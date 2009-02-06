@@ -162,6 +162,7 @@ es:
       title: Ficha Descriptiva para <i>{{project}}</i>
       project_information: Información de Proyecto
       funding_information: Información de Financiamiento
+      classification: Clasificación
       markers: Marcas
       mdgs: ODM
       focal_regions: Regiones Focales
@@ -169,7 +170,8 @@ es:
       totals: Total de Financiamiento
       funding: Financiamiento {{year}}
       funding_forecast: Proyección de Financiamiento {{year}}
-      
+      all_district: Todos los municipios
+     
     new:
       title: Añadir Nuevo Proyecto
       submit: Guardar

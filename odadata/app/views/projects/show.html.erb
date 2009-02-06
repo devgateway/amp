@@ -138,7 +138,7 @@
 	    <% end %>
 	</dl>
 		
-	<h3>Classification</h3>
+	<h3><%= lc(:classification) %></h3>
 		<dl>		
 			<dt class="first"><%= @project.class.human_attribute_name('implementing_agencies') %></dt>
 			<dd class="first">
@@ -206,17 +206,21 @@
 					<%= ll(:options, :national) %>
 				<% else %>
 					<dl>
+
 						<% first = true # lame hack %>
 						<% geo_list.each do |province, districts| %>
 							<dt<%= ' class="first"' if first %>><%= province.name %></dt>
 							<dd<%= ' class="first"' if first %>>
 								<ul>
 									<% districts.each do |d| %>
+                                    <% if d.code.to_i%100 == 0 #this is lame hack II, but it works :( (All Municipalities code is 100*n)%>
+                                      <li><%=lc(:all_district) %></li>
+                                    <%else%>
 										<li><%= d.name %></li>
+									<% end %>
 									<% end %>
 								</ul>
 							</dd>
-							
 							<% first = false %>
 						<% end %>
 					</dl>

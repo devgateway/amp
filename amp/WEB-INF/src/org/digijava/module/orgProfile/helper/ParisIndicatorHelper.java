@@ -50,7 +50,7 @@ public class ParisIndicatorHelper {
         if (prIndicator.getIndicatorCode().equals("3")) {
             Double valueQ2 = DbUtil.getValue(new int[]{2, 1}, prIndicator.getAmpIndicatorId(), 1, currency, null,null, 2005l, false,member);
             Double valueQ1 = DbUtil.getValue(new int[]{1}, prIndicator.getAmpIndicatorId(), 1, currency, null,null, 2005l, false,member);
-            if (valueQ1 != null) {
+            if (valueQ1 != null&&valueQ1!=0) {
                 allDonorBaseLineValue = Math.round(valueQ2 / valueQ1) * 100;
             }
 
@@ -58,7 +58,7 @@ public class ParisIndicatorHelper {
             if (prIndicator.getIndicatorCode().equals("4")) {
                 Double valueQ3 = DbUtil.getValue(new int[]{3}, prIndicator.getAmpIndicatorId(), 1, currency, null,null, 2005l, true,member);
                 Double valueQ1 = DbUtil.getValue(new int[]{0}, prIndicator.getAmpIndicatorId(), 1, currency, null,null, 2005l, true,member);
-                if (valueQ1 != null) {
+                if (valueQ1 != null&&valueQ3!=null&&valueQ1!=0) {
                     allDonorBaseLineValue = Math.round(valueQ3 / valueQ1)*  100;
                 }
             } else {
@@ -68,7 +68,7 @@ public class ParisIndicatorHelper {
                     if (prIndicator.getIndicatorCode().equals("5a")) {
                         Double valueQ15 = DbUtil.getValue(new int[]{1}, prIndicator.getAmpIndicatorId(), 1, currency, null,null, 2005l, false,member);
                         Double valueQ67 = DbUtil.getValue(new int[]{1, 5, 6, 7}, prIndicator.getAmpIndicatorId(), 1, currency, null,null, 2005l, false,member);
-                        if (valueQ67 != null) {
+                        if (valueQ67 != null&&valueQ15!=null&&valueQ15!=0) {
                             allDonorBaseLineValue = Math.round(valueQ67 / valueQ15) * 100;
                         }
                     } else {
@@ -89,7 +89,7 @@ public class ParisIndicatorHelper {
                                 if (prIndicator.getIndicatorCode().equals("5b")) {
                                     Double valueQ15 = DbUtil.getValue(new int[]{8, 1}, prIndicator.getAmpIndicatorId(), 1, currency, null,null, 2005l, false,member);
                                     Double valueQ67 = DbUtil.getValue(new int[]{1}, prIndicator.getAmpIndicatorId(), 1, currency, null,null, 2005l, false,member);
-                                    if (valueQ67 != null) {
+                                    if (valueQ67 != null&&valueQ15!=null&&valueQ15!=0) {
                                         allDonorBaseLineValue = Math.round(valueQ67 / valueQ15) * 100;
                                     }
                                 } else {
@@ -101,7 +101,7 @@ public class ParisIndicatorHelper {
                                         }
                                         else{
                                             if(prIndicator.getIndicatorCode().equals("10a")){
-                                                allDonorBaseLineValue = DbUtil.getIndicator10aValue(2005l, null);
+                                                allDonorBaseLineValue = DbUtil.getIndicator10aValue(2005l, null,null);
                                             }
                                         }
 
@@ -137,7 +137,7 @@ public class ParisIndicatorHelper {
         if (prIndicator.getIndicatorCode().equals("3")) {
             Double valueQ2 = DbUtil.getValue(new int[]{2, 1}, prIndicator.getAmpIndicatorId(), 1, currency, null,null, year, false,member);
             Double valueQ1 = DbUtil.getValue(new int[]{1}, prIndicator.getAmpIndicatorId(), 1, currency, null,null, year, false,member);
-            if (valueQ1 != null) {
+            if (valueQ1 != null&& valueQ1!=0) {
                 previousYearValue = Math.round(valueQ2 / valueQ1) * 100;
             }
 
@@ -145,7 +145,7 @@ public class ParisIndicatorHelper {
             if (prIndicator.getIndicatorCode().equals("4")) {
                 Double valueQ3 = DbUtil.getValue(new int[]{3}, prIndicator.getAmpIndicatorId(), 1, currency, null,null, year, true,member);
                 Double valueQ1 = DbUtil.getValue(new int[]{0}, prIndicator.getAmpIndicatorId(), 1, currency, null,null, year, true,member);
-                if (valueQ1 != null) {
+                if (valueQ1 != null&& valueQ1!=0) {
                     previousYearValue = Math.round(valueQ3 / valueQ1) * 100;
                 }
             } else {
@@ -155,7 +155,7 @@ public class ParisIndicatorHelper {
                     if (prIndicator.getIndicatorCode().equals("5a")) {
                         Double valueQ15 = DbUtil.getValue(new int[]{1}, prIndicator.getAmpIndicatorId(), 1, currency, null,null, year, false,member);
                         Double valueQ67 = DbUtil.getValue(new int[]{1, 5, 6, 7}, prIndicator.getAmpIndicatorId(), 1, currency, null,null, year, false,member);
-                        if (valueQ67 != null) {
+                        if (valueQ67 != null&&valueQ15!=null&&valueQ15!=0) {
                             previousYearValue = Math.round(valueQ67 / valueQ15) * 100;
                         }
                     } else {
@@ -176,7 +176,7 @@ public class ParisIndicatorHelper {
                                 if (prIndicator.getIndicatorCode().equals("5b")) {
                                     Double valueQ15 = DbUtil.getValue(new int[]{8, 1}, prIndicator.getAmpIndicatorId(), 1, currency, null,null, year, false,member);
                                     Double valueQ67 = DbUtil.getValue(new int[]{1}, prIndicator.getAmpIndicatorId(), 1, currency, null,null, year, false,member);
-                                    if (valueQ67 != null) {
+                                    if (valueQ67 != null&&valueQ15!=null&&valueQ15!=0) {
                                         previousYearValue = Math.round(valueQ67 / valueQ15) * 100;
                                     }
                                 } else {
@@ -188,7 +188,7 @@ public class ParisIndicatorHelper {
                                         }
                                          else {
                                             if (prIndicator.getIndicatorCode().equals("10a")) {
-                                                previousYearValue = DbUtil.getIndicator10aValue(year, null);
+                                                previousYearValue = DbUtil.getIndicator10aValue(year, null,null);
                                             }
                                         }
 
@@ -250,7 +250,7 @@ public class ParisIndicatorHelper {
             if (prIndicator.getIndicatorCode().equals("4")) {
                 Double valueQ3 = DbUtil.getValue(new int[]{3}, prIndicator.getAmpIndicatorId(), 1, currency, organization.getAmpOrgId(),orgGroup.getAmpOrgGrpId(), 2005l, true,member);
                 Double valueQ1 = DbUtil.getValue(new int[]{0}, prIndicator.getAmpIndicatorId(), 1, currency, organization.getAmpOrgId(),orgGroup.getAmpOrgGrpId(), 2005l, true,member);
-                if (valueQ1 != null) {
+                if (valueQ1 != null&&valueQ1!=0) {
                     orgBaseLineValue = Math.round(valueQ3 / valueQ1) * 100;
                 }
             } else {
@@ -260,7 +260,7 @@ public class ParisIndicatorHelper {
                     if (prIndicator.getIndicatorCode().equals("5a")) {
                         Double valueQ15 = DbUtil.getValue(new int[]{1, 5}, prIndicator.getAmpIndicatorId(), 1, currency, organization.getAmpOrgId(),orgGroup.getAmpOrgGrpId(), 2005l, false,member);
                         Double valueQ67 = DbUtil.getValue(new int[]{6, 7}, prIndicator.getAmpIndicatorId(), 1, currency, organization.getAmpOrgId(),orgGroup.getAmpOrgGrpId(), 2005l, false,member);
-                        if (valueQ67 != null) {
+                        if (valueQ15 != null&&valueQ15!=0) {
                             orgBaseLineValue = Math.round(valueQ67 / valueQ15) * 100;
                         }
                     } else {
@@ -281,7 +281,7 @@ public class ParisIndicatorHelper {
                                 if (prIndicator.getIndicatorCode().equals("5b")) {
                                     Double valueQ15 = DbUtil.getValue(new int[]{8, 1}, prIndicator.getAmpIndicatorId(), 1, currency, organization.getAmpOrgId(),orgGroup.getAmpOrgGrpId(), 2005l, false,member);
                                     Double valueQ67 = DbUtil.getValue(new int[]{1}, prIndicator.getAmpIndicatorId(), 1, currency, organization.getAmpOrgId(),orgGroup.getAmpOrgGrpId(), 2005l, false,member);
-                                    if (valueQ67 != null) {
+                                    if (valueQ15 != null&&valueQ15!=0) {
                                         orgBaseLineValue = Math.round(valueQ67 / valueQ15) * 100;
                                     }
                                 } else {
@@ -293,7 +293,7 @@ public class ParisIndicatorHelper {
                                         }
                                         else{
                                              if(prIndicator.getIndicatorCode().equals("10a")){
-                                               orgBaseLineValue = DbUtil.getIndicator10aValue(2005l, prIndicator.getAmpIndicatorId());
+                                               orgBaseLineValue = DbUtil.getIndicator10aValue(2005l, organization.getAmpOrgId(),orgGroup.getAmpOrgGrpId());
                                             }
                                              
                                         }
@@ -371,7 +371,7 @@ public class ParisIndicatorHelper {
                                         }
                                        else {
                                             if (prIndicator.getIndicatorCode().equals("10a")) {
-                                                previousYearValue = DbUtil.getIndicator10aValue(year, prIndicator.getAmpIndicatorId());
+                                                previousYearValue = DbUtil.getIndicator10aValue(year, organization.getAmpOrgId(),orgGroup.getAmpOrgGrpId());
                                             }
                                         }
                                     }

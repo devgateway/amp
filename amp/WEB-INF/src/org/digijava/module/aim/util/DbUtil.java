@@ -7332,7 +7332,7 @@ public class DbUtil {
      * @param year
      * @return
      */
-     public static long getIndicator10aValue(Long year, Long orgId) {
+     public static long getIndicator10aValue(Long year, Long orgId,Long orgGroupId) {
         long value = 0;
         try {
             Session session = PersistenceManager.getRequestDBSession();
@@ -7345,12 +7345,22 @@ public class DbUtil {
                       
             if(orgId!=null&&orgId!=-1){
                  queryString+=" and :orgId in elements(cal.organisations)";
-            }  
+            }
+            else{
+                if(orgGroupId!=null&&orgGroupId!=-1){
+                    queryString+=" and cal.organisations.orgGrpId=:orgGroupId";
+                }
+            }
             Query qry = session.createQuery(queryString+" and size(cal.organisations)>1 "); //joint
             qry.setLong("year", year);
-            if(orgId!=null&&orgId!=-1){
-                qry.setLong("orgId", orgId); 
-            }  
+            if (orgId != null && orgId != -1) {
+                qry.setLong("orgId", orgId);
+            } else {
+                if (orgGroupId != null && orgGroupId != -1) {
+                    qry.setLong("orgGroupId", orgGroupId);
+
+                }
+            }
             long jointMisssion=qry.list().size();
             qry = session.createQuery(queryString); // all missions
             qry.setLong("year", year);

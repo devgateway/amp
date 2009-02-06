@@ -583,7 +583,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
        // HttpSession session = request.getSession();
         
         //eaForm.setApprovalStatus(actApprovalStatus);
-        if (tm != null) {
+        if (tm != null && tm.getTeamId()!=null && activity.getTeam() != null && activity.getTeam().getAmpTeamId() != null) {
             if ("true".compareTo((String) session.getAttribute("teamLeadFlag"))==0 && tm.getTeamId().equals(activity.getTeam().getAmpTeamId())){ 
               eaForm.getIdentification().setApprovalStatus(Constants.APPROVED_STATUS);
               AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());

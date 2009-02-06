@@ -35,7 +35,7 @@
         </div>
     <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
 
-<table>
+<table width="100%">
     <tr>
         <td colspan="3" align="left">
             <div id="piehelptooltip" style="display:none; width:200; position: absolute; left:50px; top: 50px; background-color: #ffffff; border: 1px solid silver;">

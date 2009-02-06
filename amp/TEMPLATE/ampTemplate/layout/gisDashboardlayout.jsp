@@ -121,14 +121,14 @@ else {
 							<TD align=center vAlign=top>
 								<TABLE width="100%" cellPadding="5" cellSpacing="0" vAlign="top" align="left" border="0">
 									<tr>
-										<TD vAlign="top" align="left" width="60%" height="100%" rowspan="3">
+										<TD vAlign="top" align="left" height="100%" rowspan="3" style="width: 600;max-width: 600;">
 											<digi:insert attribute="body" />
 										</TD>
-									</tr>									
-									<tr> 
+									</tr>
+									<tr>
 										<td valign="top">
 											<digi:insert attribute="pieChart"/>
-										</td>										
+										</td>
 									</tr>
 									<tr>
 										<td height="100%">

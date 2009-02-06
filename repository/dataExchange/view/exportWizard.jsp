@@ -12,22 +12,43 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
-	<script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>">.</script>
-	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>">.</script>
-	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
-	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/element/element-beta.js'/>" >.</script>
-	<script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>">.</script>
-	<script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/animation-min.js'/>" >.</script>
-	<script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dom-min.js'/>">.</script>
+<%@page import="org.digijava.module.dataExchange.util.ExportHelper"%>
 
-	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/tab/tabview.js'/>" >.</script>
 
-	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/ajaxconnection/connection-min.js'/>" > .</script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/yahoo-dom-event.js"></script>
+
+<script type="text/javascript">
+  if (YAHOOAmp != null){
+    var YAHOO = YAHOOAmp;
+  }
+  var tree;
+  
+</script>
+
+    <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/treeview.css" />
+    <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/fonts-min.css" />
+    <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css" />
+
+    <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/logger-min.js"></script>
+    <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/treeview-debug.js"></script>
+    <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/tabview-min.js"></script>
+
+    <script type="text/javascript" src="/repository/dataExchange/view/scripts/TaskNode.js"></script>
+
+<style type="text/css">
+
+.ygtvcheck0 { background: url(/TEMPLATE/ampTemplate/images/yui/check0.gif) 0 0 no-repeat; width:16px; cursor:pointer }
+.ygtvcheck1 { background: url(/TEMPLATE/ampTemplate/images/yui/check1.gif) 0 0 no-repeat; width:16px; cursor:pointer }
+.ygtvcheck2 { background: url(/TEMPLATE/ampTemplate/images/yui/check2.gif) 0 0 no-repeat; width:16px; cursor:pointer }
+
+#expandcontractdiv {border:1px solid #336600; background-color:#FFFFCC; margin:0 0 .5em 0; padding:0.2em;}
+#treeDiv1 { background: #fff }
+</style> 
+
+
 	
-	<script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop.js'/>" >.</script>
-	
-	<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/myDragAndDropObjects.js'/>" >.</script>
 <!--
+  <script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/myDragAndDropObjects.js'/>" >.</script>
     <script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/reportManager.js'/>" >.</script>
 	<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/fundingGroups.js'/>" >.</script>
 	<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/saving.js'/>" >.</script>
@@ -49,91 +70,140 @@
 
   
 	<script type="text/javascript">
-		YAHOO.namespace("YAHOO.amp.dataExchange");
-		YAHOO.amp.dataExchange.numOfSteps	= 3;
+	YAHOOAmp.namespace("YAHOOAmp.amp.dataExchange");
+	YAHOOAmp.amp.dataExchange.numOfSteps	= 3;
 		
-		YAHOO.amp.dataExchange.tabLabels	= new Array("tab_select_filed", "tab_additional_filed", "tab_filter");
-		selectedCols						= new Array();
-		selectedHiers						= new Array();
-		selectedMeas						= new Array();
-
+	YAHOOAmp.amp.dataExchange.tabLabels	= new Array("tab_select_filed", "tab_additional_filed", "tab_filter");
 		
         function navigateTab(value){
-        	YAHOO.amp.dataExchange.tabView.set("activeIndex", YAHOO.amp.dataExchange.tabView.get("activeIndex")+value);
+        	YAHOOAmp.amp.dataExchange.tabView.set("activeIndex", YAHOO.amp.dataExchange.tabView.get("activeIndex")+value);
         }
 		
 		
 		function initializeDragAndDrop() {
 			var height			= Math.round(YAHOO.util.Dom.getDocumentHeight() / 2.3);
-
-//			var rd				= document.getElementsByName("reportDescription")[0];
-//			rd.style.height		= (rd.parentNode.offsetHeight - 40) + "px";
 			
-			YAHOO.amp.dataExchange.tabView 		= new YAHOO.widget.TabView('wizard_container');
-			YAHOO.amp.dataExchange.tabView.addListener("contentReady", continueInitialization);
+			YAHOOAmp.amp.dataExchange.tabView 		= new YAHOO.widget.TabView('wizard_container');
+			YAHOOAmp.amp.dataExchange.tabView.addListener("contentReady", treeInit);
 		}
-		function continueInitialization(){
 
-            return;
+
+    function treeInit() {
+      YAHOOAmp.amp.dataExchange.tabView     = new YAHOO.widget.TabView('wizard_container');
+      buildRandomTaskNodeTree();
+    }
+    
+    //handler for expanding all nodes
+    YAHOOAmp.util.Event.on("expand", "click", function(e) {
+      tree.expandAll();
+      YAHOOAmp.util.Event.preventDefault(e);
+    });
+    
+    //handler for collapsing all nodes
+    YAHOOAmp.util.Event.on("collapse", "click", function(e) {
+      tree.collapseAll();
+      YAHOOAmp.util.Event.preventDefault(e);
+    });
+
+    //handler for checking all nodes
+    YAHOOAmp.util.Event.on("check", "click", function(e) {
+      checkAll();
+      YAHOOAmp.util.Event.preventDefault(e);
+    });
+    
+    //handler for unchecking all nodes
+    YAHOOAmp.util.Event.on("uncheck", "click", function(e) {
+      uncheckAll();
+      YAHOOAmp.util.Event.preventDefault(e);
+    });
+
+
+    YAHOOAmp.util.Event.on("getchecked", "click", function(e) {
+      YAHOOAmp.util.Event.preventDefault(e);
+    });
+
+    //Function  creates the tree and 
+    //builds between 3 and 7 children of the root node:
+      function buildRandomTaskNodeTree() {
+    
+      //instantiate the tree:
+          tree = new YAHOOAmp.widget.TreeView("dataExportTree");
             
-			aimReportWizardForm.reportDescriptionClone.value	= unescape(aimReportWizardForm.reportDescription.value);
-			treeObj = new DHTMLSuite.JSDragDropTree();
-			treeObj.setTreeId('dhtmlgoodies_tree');
-			treeObj.init();
-			treeObj.showHideNode(false,'dhtmlgoodies_tree');
+          <bean:define id="tree" name="deExportForm" property="activityTree" type="org.digijava.module.dataExchange.type.AmpColumnEntry" toScope="page"/>
+          <%= ExportHelper.renderActivityTree(tree) %>
 
-	
-			var saveBtns		= document.getElementsByName("save");	
-			for (var i=0; i<saveBtns.length; i++  ) {
-				repManager.addStyleToButton(saveBtns[i]);
-			}
-      
-			for (var i=0; i<YAHOO.amp.dataExchange.numOfSteps; i++) {
-				repManager.addStyleToButton("step"+ i +"_prev_button");
-				repManager.addStyleToButton("step"+ i +"_next_button");
-				repManager.addStyleToButton("step"+ i +"_add_filters_button");
-				repManager.addStyleToButton("step"+ i +"_cancel");
-			}
-			
-			columnsDragAndDropObject	= new ColumnsDragAndDropObject('source_col_div');
-			columnsDragAndDropObject.createDragAndDropItems();
-			new YAHOO.util.DDTarget('source_measures_ul');
-			new YAHOO.util.DDTarget('dest_measures_ul');
-			new YAHOO.util.DDTarget('source_hierarchies_ul');
-			new YAHOO.util.DDTarget('dest_hierarchies_ul');
-			measuresDragAndDropObject	= new MyDragAndDropObject('source_measures_ul');
-			measuresDragAndDropObject.createDragAndDropItems();
-			
-     
-			for (var i=1; i<YAHOO.amp.dataExchange.numOfSteps; i++) {
-				tab		= YAHOO.amp.dataExchange.tabView.getTab(i);
-				tab.set("disabled", true);
-			}
-      
-			tab2	= YAHOO.amp.dataExchange.tabView.getTab(2);
-			tab2.addListener("beforeActiveChange", generateHierarchies);
-			
-			ColumnsDragAndDropObject.selectObjsByDbId ("source_col_div", "dest_col_ul", selectedCols);
-			generateHierarchies();
-			MyDragAndDropObject.selectObjsByDbId ("source_hierarchies_ul", "dest_hierarchies_ul", selectedHiers);
-			MyDragAndDropObject.selectObjsByDbId ("source_measures_ul", "dest_measures_ul", selectedMeas);
-			
-			repFilters					= new Filters("${filterPanelName}", "${failureMessage}", "${filterProblemsMessage}", 
-												"${loadingDataMessage}", "${savingDataMessage}", "${cannotSaveFiltersMessage}");
-			saveReportEngine			= new SaveReportEngine("${savingMessage}","${failureMessage}");
-			
-			var dg			= document.getElementById("DHTMLSuite_treeNode1");
-			var cn			= dg.childNodes;
-			
-			for (var i=0; i<cn.length; i++) {
-				if ( cn[i].nodeName.toLowerCase()=="input" || cn[i].nodeName.toLowerCase()=="img" ||
-					cn[i].nodeName.toLowerCase()=="a" )
-					cn[i].style.display		= "none";
-			}
+      //The tree is not created in the DOM until this method is called:
+          tree.draw();
+      }
 
-			repManager.checkSteps();
-		}
-		YAHOO.util.Event.addListener(window, "load", initializeDragAndDrop) ;
+//    var callback = null;
+
+    function buildRandomTaskBranch(node) {
+      if (node.depth < 3) {
+//        YAHOOAmp.log("buildRandomTextBranch: " + node.index);
+        for ( var i = 0; i < Math.floor(Math.random() * 2) ; i++ ) {
+          var tmpNode = new YAHOOAmp.widget.TaskNode(node.label + "-" + i, node, false);
+                  //tmpNode.onCheckClick = onCheckClick;
+          buildRandomTaskBranch(tmpNode);
+        }
+      }
+    }
+
+//      function onCheckClick(node) {
+//          YAHOOAmp.log(node.label + " check was clicked, new state: " + node.checkState, "info", "example");
+//      }
+
+      function checkAll() {
+          var topNodes = tree.getRoot().children;
+          for(var i=0; i<topNodes.length; ++i) {
+              topNodes[i].checkAll();
+          }
+      }
+
+      function uncheckAll() {
+          var topNodes = tree.getRoot().children;
+          for(var i=0; i<topNodes.length; ++i) {
+              topNodes[i].unCheckAll();
+          }
+      }
+
+      // Gets the labels of all of the fully checked nodes
+      // Could be updated to only return checked leaf nodes by evaluating
+      // the children collection first.
+       function getCheckedNodes(nodes) {
+           nodes = nodes || tree.getRoot().children;
+           checkedNodes = [];
+           for(var i=0, l=nodes.length; i<l; i=i+1) {
+               var n = nodes[i];
+               //if (n.checkState > 0) { // if we were interested in the nodes that have some but not all children checked
+               if (n.checkState === 2) {
+                   checkedNodes.push(n); // just using label for simplicity
+                   alert(n.aid+' '+n.label);
+                   if (n.hasChildren()) {
+                       checkedNodes = checkedNodes.concat(getCheckedNodes(n.children));
+                    }
+               }
+           }
+
+           return checkedNodes;
+       }  
+
+
+       function exportActivity(){
+//        getCheckedNodes();
+          var selTeamId = document.getElementById('teamId');
+
+          if (selTeamId.value != "-1"){
+            var form = document.getElementById('form');
+          form.action = "/dataExchange/export.do?method=export";
+            form.target="_self"
+            form.submit();
+          } else {
+              alert('please select one team');
+          }
+      }
+           
+		YAHOOAmp.util.Event.addListener(window, "load", treeInit) ;
 	</script>
 
 
@@ -145,7 +215,7 @@
 	</tr>
 	<tr>
 		<td align="left" vAlign="top">
-		<digi:form action="/export.do?method=export" method="post">
+		<digi:form action="/export.do?method=export" method="post" styleId="form">
 		<span id="formChild" style="display:none;">&nbsp;</span>
 
         <span class="subtitle-blue">
@@ -166,7 +236,29 @@
 				<div id="tab_select_filed" class="yui-tab-content" style="padding: 0px 0px 1px 0px;" >
                     <c:set var="stepNum" value="0" scope="request" />
                     <jsp:include page="toolbar.jsp" />
-                    Select fields for export
+					<div style="height: 355px;">
+    					<table cellpadding="5px" style="vertical-align: middle" width="100%">
+    						<tr>
+        						<td width="47%" align="center">
+        							<span class="list_header">
+        								<digi:trn key="rep:wizard:availableColumns">Available Fields</digi:trn>
+        							</span>
+        							<div id="source_col_div" class="draglist">
+        <%--  								<jsp:include page="setColumns.jsp" />    --%>
+                  <div id="expandcontractdiv">
+                    <a id="expand" href="#">Expand all</a>
+                    <a id="collapse" href="#">Collapse all</a>
+                  
+                    <a id="check" href="#">Check all</a>
+                    <a id="uncheck" href="#">Uncheck all</a>
+                  </div>
+                  <div id="dataExportTree"></div>
+        
+        							</div>
+        						</td>
+    						</tr>
+    					</table>
+					</div>
 				</div>
 				<div id="tab_additional_filed"  class="yui-tab-content" align="center" style="padding: 0px 0px 1px 0px; display: none;">
                     <c:set var="stepNum" value="1" scope="request" />
@@ -177,9 +269,22 @@
                     <c:set var="stepNum" value="2" scope="request" />
                     <jsp:include page="toolbar.jsp" />
                     Select filters and team
+                    
+                  
+                    <html:select name="deExportForm" property="selectedTeamId" styleId="teamId">
+                      <option value="-1">Please select team</option>
+                      <c:forEach var="vTeam" items="${deExportForm.teamList}" varStatus="lStatus">
+                        <option value="${vTeam.ampTeamId}">${vTeam.name}</option>
+                      </c:forEach>
+                    </html:select>
+                    <br/>
+                  
+                    
 				</div>
 			</div>
 		</div>
+
+<%= ExportHelper.renderHiddenElements(tree) %>
 
 		</digi:form>
 	</td>

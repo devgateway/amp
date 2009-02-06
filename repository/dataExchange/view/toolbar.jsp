@@ -28,7 +28,7 @@
 			<img src="/TEMPLATE/ampTemplate/images/cancel.png" class="toolbar" />
 			<digi:trn key="btn:wizard:Cancel">Cancel</digi:trn>
 		</button>
-		<button type="button" class="toolbar-dis" onclick="saveReportEngine.showTitlePanel()" name="export">
+		<button type="button" class="toolbar-dis" onclick="exportActivity()" name="export">
 			<img src="/TEMPLATE/ampTemplate/images/file-export-16x16.png" class="toolbar"/>
 			<digi:trn key="btn:wizard:Export">Export</digi:trn>
 		</button>

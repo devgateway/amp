@@ -39,7 +39,7 @@ CSV.open('report.csv', 'w', ',') do |writer|
       # Implementation Type
       row << option_text_by_id(Project::IMPLEMENTATION_TYPES, project.type_of_implementation)
       # Type of Aid
-      row << option_text_by_id(Project::TYPE_OF_AID_OPTIONS, project.type_of_aid)
+      row << option_text_by_id(Project::aid_modality_OPTIONS, project.aid_modality)
       # Funding Type
       row << option_text_by_id(Project::GRANT_LOAN_OPTIONS, project.grant_loan)
       

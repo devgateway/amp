@@ -17,8 +17,7 @@
 	<li class="fifty"><%= f.select :type_of_implementation, Project::IMPLEMENTATION_TYPES,
 				:include_blank => ll(:options, :prompt), :translate => true %></li>
 	
-	<li class="fifty"><%= f.collection_select :type_of_aid_id, TypeOfAid.all, :id, :name, 
-				:prompt => ll(:options, :prompt) %></li>
+	<li class="fifty"><%= aid_modality_select(f) %></li>
 
 	<li class="fifty"><%= f.select :grant_loan, Project::GRANT_LOAN_OPTIONS,
 				 :include_blank => ll(:options, :prompt), :translate => true %></li>

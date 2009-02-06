@@ -107,7 +107,7 @@ CREATE TABLE projects (
     donor_agency_id integer,
     dac_sector_id integer,
     crs_sector_id integer,
-    type_of_aid_id integer,
+    aid_modality_id integer,
     country_strategy_id integer,
     government_counterpart_id integer,
     gender_policy_marker integer,
@@ -519,14 +519,14 @@ CREATE TABLE total_odas (
 
 
 --
--- Name: type_of_aid_translations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: aid_modality_translations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE TABLE type_of_aid_translations (
+CREATE TABLE aid_modality_translations (
     id integer NOT NULL,
     locale character varying(255),
     name character varying(255),
-    type_of_aid_id integer
+    aid_modality_id integer
 );
 
 
@@ -1109,10 +1109,10 @@ ALTER SEQUENCE total_odas_id_seq OWNED BY total_odas.id;
 
 
 --
--- Name: type_of_aid_translations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: aid_modality_translations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE type_of_aid_translations_id_seq
+CREATE SEQUENCE aid_modality_translations_id_seq
     START WITH 25
     INCREMENT BY 1
     NO MAXVALUE
@@ -1121,10 +1121,10 @@ CREATE SEQUENCE type_of_aid_translations_id_seq
 
 
 --
--- Name: type_of_aid_translations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: aid_modality_translations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE type_of_aid_translations_id_seq OWNED BY type_of_aid_translations.id;
+ALTER SEQUENCE aid_modality_translations_id_seq OWNED BY aid_modality_translations.id;
 
 
 --
@@ -1372,7 +1372,7 @@ ALTER TABLE total_odas ALTER COLUMN id SET DEFAULT nextval('total_odas_id_seq'::
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE type_of_aid_translations ALTER COLUMN id SET DEFAULT nextval('type_of_aid_translations_id_seq'::regclass);
+ALTER TABLE aid_modality_translations ALTER COLUMN id SET DEFAULT nextval('aid_modality_translations_id_seq'::regclass);
 
 
 --
@@ -1622,11 +1622,11 @@ ALTER TABLE ONLY total_odas
 
 
 --
--- Name: type_of_aid_translations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: aid_modality_translations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
-ALTER TABLE ONLY type_of_aid_translations
-    ADD CONSTRAINT type_of_aid_translations_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY aid_modality_translations
+    ADD CONSTRAINT aid_modality_translations_pkey PRIMARY KEY (id);
 
 
 --

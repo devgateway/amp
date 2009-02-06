@@ -69,24 +69,24 @@ class Donor < ActiveRecord::Base
     ).inject({}) {|totals, rec| totals[rec.year] = rec.forecast.to_currency(currency, rec.year); totals} 
   end
   
-  def payments_by_type_of_aid(year = Time.now.year)
+  def payments_by_aid_modality(year = Time.now.year)
     # FIXME: This is a very ugly solution to the problem and should be replaced asap.
     # Use lazy loading to minimize database queries
     @annual_payments_by_toa ||= Funding.find(:all, 
-      :select=>'SUM(fundings.payments_q1 + fundings.payments_q2 + fundings.payments_q3 + fundings.payments_q4) AS pay, fundings.year as year, projects.type_of_aid_id AS type_of_aid',
+      :select=>'SUM(fundings.payments_q1 + fundings.payments_q2 + fundings.payments_q3 + fundings.payments_q4) AS pay, fundings.year as year, projects.aid_modality_id AS aid_modality',
       :joins => 'JOIN projects ON fundings.project_id = projects.id',
       :conditions => ['projects.donor_id = ? AND projects.data_status = ? AND fundings.year = ?', self.id, Project::PUBLISHED, year],
-      :group => 'type_of_aid, year'
-    ).inject([]) {|totals, rec| totals[rec.type_of_aid.to_i] = rec.pay.to_currency(currency, rec.year); totals} 
+      :group => 'aid_modality, year'
+    ).inject([]) {|totals, rec| totals[rec.aid_modality.to_i] = rec.pay.to_currency(currency, rec.year); totals} 
   end
   
-  def payments_forecasts_by_type_of_aid(year = Time.now.year)
+  def payments_forecasts_by_aid_modality(year = Time.now.year)
     # Use lazy loading to minimize database queries
-    @annual_payments_forecasts_by_toa ||= Funding.find(:all, :select=>'SUM(fundings.payments_forecast) AS payments, fundings.year as year, projects.type_of_aid AS type_of_aid',
+    @annual_payments_forecasts_by_toa ||= Funding.find(:all, :select=>'SUM(fundings.payments_forecast) AS payments, fundings.year as year, projects.aid_modality AS aid_modality',
       :joins => 'JOIN projects ON fundings.project_id = projects.id',
       :conditions => ['projects.donor_id = ? AND projects.data_status = ? AND fundings.year = ?', self.id, Project::PUBLISHED, year],
-      :group => 'projects.type_of_aid, fundings.year'
-    ).inject([]) {|totals, rec| totals[rec.type_of_aid.to_i] = rec.payments.to_currency(currency, rec.year); totals} 
+      :group => 'projects.aid_modality, fundings.year'
+    ).inject([]) {|totals, rec| totals[rec.aid_modality.to_i] = rec.payments.to_currency(currency, rec.year); totals} 
   end
   
   # Returns total loan payments for a given year (or all if no argument given)

@@ -56,7 +56,7 @@ class Project < ActiveRecord::Base
   has_many                :crs_sectors, :through => :sector_relevances
   
   # Funding Information
-  belongs_to              :type_of_aid
+  belongs_to              :aid_modality
     
   has_many                :cofundings, :dependent => :delete_all
   has_many                :cofinancing_donors, :through => :cofundings, :source => :donor
@@ -110,7 +110,7 @@ class Project < ActiveRecord::Base
   validates_uniqueness_of   :donor_project_number, :scope => :donor_id
   
   # STATE: categorization
-  validates_presence_of     :national_regional, :type_of_implementation, :type_of_aid_id, :grant_loan, 
+  validates_presence_of     :national_regional, :type_of_implementation, :aid_modality_id, :grant_loan, 
                             :officer_responsible_name
                             
   validates_associated      :sector_relevances, :geo_relevances, :mdg_relevances

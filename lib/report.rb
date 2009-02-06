@@ -19,7 +19,7 @@ module Report
     :markers => lambda { |m, v| 
       v.map { |name| "projects.#{name}_marker >= 1"}.join(" OR ") 
     },
-    [:prj_status, :grant_loan, :type_of_aid_id, :type_of_implementation] => 
+    [:prj_status, :grant_loan, :aid_modality_id, :type_of_implementation] => 
       lambda { |m, v| ["#{m} IN (?)", v] }
   }
   
@@ -34,7 +34,7 @@ module Report
     (Project::FIRST_YEAR_OF_RELEVANCE..Time.now.year+3).to_a.map { |y| ["funds_#{y}", "#{ll(:reports, :funds_for)} #{y}"] } +
     [['total_cofunding', ll(:reports, :total_cofunding)], ['cofunding_donors', ll(:reports, :cofunding_donors)],
     ['national_regional', ll(:reports, :national_regional)], ['type_of_implementation', ll(:reports, :toi)],
-    ['sectors', ll(:terms, :dac_sector)], ['type_of_aid', ll(:reports, :toa)], ['grant_loan', "#{ll(:options, :grant)}/#{ll(:options, :loan)}"], 
+    ['sectors', ll(:terms, :dac_sector)], ['aid_modality', ll(:reports, :toa)], ['grant_loan', "#{ll(:options, :grant)}/#{ll(:options, :loan)}"], 
     ['impl_agencies', ll(:reports, :impl_agencies)], ['contr_agencies', ll(:reports, :contr_agencies)],
     ['markers', ll(:terms, :markers)], ['mdg_goals', ll(:reports, :mdg_goals)], ['focal_regions', ll(:reports, :focal_regions)],
     ['officer_responsible', ll(:reports, :officer_responsible)], ['website', ll(:terms, :internet_link)], ['comments', ll(:reports, :comments)],

@@ -55,8 +55,8 @@
 
 	<h3><%= lc(:funding_information) %></h3>
 	<dl>
-	    <dt class="first"><%= @project.class.human_attribute_name('type_of_aid') %></dt>
-	    <dd class="first"><%= @project.type_of_aid.name %></dd>
+	    <dt class="first"><%= @project.class.human_attribute_name('aid_modality') %></dt>
+	    <dd class="first"><%= @project.aid_modality.name %></dd>
 	    
 	    <dt><%= @project.class.human_attribute_name('grant_loan') %></dt>
 	    <dd><%= option_text_by_id(Project::GRANT_LOAN_OPTIONS, @project.grant_loan) %></dd>

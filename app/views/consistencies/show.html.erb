@@ -20,10 +20,10 @@
 		<td class="field_justify"><%= @consistency.total_payments %></td>			
 	</tr>
 	
-	<% TypeOfAid.all.each do |toa| %>
+	<% AidModality.all.each do |toa| %>
 		<tr>
 			<th><%= ll(:consistency, :toa_payments, :type => toa.name) -%></th>
-			<td><%= @consistency.payments_by_type_of_aid(toa.id) %></td>			
+			<td><%= @consistency.payments_by_aid_modality(toa.id) %></td>			
 		</tr>
 	<% end %>
 </table>

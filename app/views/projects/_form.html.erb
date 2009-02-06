@@ -50,7 +50,7 @@
 	
 	<div id="sector_agencies" class="stage">
 		<%# error_messages_for :project, 
-				:attributes => [:national_regional, :type_of_implementation, :type_of_aid, :grant_loan, 
+				:attributes => [:national_regional, :type_of_implementation, :aid_modality, :grant_loan, 
 								:officer_responsible_name, :dac_sector_id, :crs_sector_id] %>
 		
 		<%= render :partial => "sector_agencies_form", :locals => { :f => form } %>

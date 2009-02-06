@@ -32,13 +32,13 @@ es:
                 trend: Tendencia de la Cooperación UE de {{from}} para {{to}}
                 by_sector_in: Cooperación de UE por Sector CAD en {{year}}
                 by_region_in: Cooperación de UE por Región en {{year}}
-                by_toa_in: Cooperación de UE por tipo de ayuda en {{year}}, Proyecciones de {{forecasts}}
+                by_toa_in: Cooperación de UE por modalidad de ayuda en {{year}}, Proyecciones de {{forecasts}}
                 by_sector: Cooperación de UE por Sector CAD
                 by_sector_bar_subtitle: Desembolsos de AOD de la UE por Sector CAD Sector en {{year}}
                 by_region: Cooperación de UE por Región
-                by_toa: Cooperación de UE por tipo de ayuda
-                in_percent_by_toa: Cooperación de UE en % por tipo de ayuda en {{year}}
-                in_percent_by_toa_subtitle: Desembolsos de ODA UE en % por tipo de ayuda en el 2007 por cada Estado Miembro de la UE
+                by_toa: Cooperación de UE por modalidad de ayuda
+                in_percent_by_toa: Cooperación de UE en % por modalidad de ayuda en {{year}}
+                in_percent_by_toa_subtitle: Desembolsos de ODA UE en % por modalidad de ayuda en el 2007 por cada Estado Miembro de la UE
             profiles:
                 title: Perfiles Donantes
                 

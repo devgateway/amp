@@ -101,9 +101,9 @@
 		</ul>
 		
 		<ul class="checkbox_container">
-			<h3><span style="float:left"><%= ll(:reports, :toa) %></span><span class="link" onclick="toggleAll('type_of_aid_id', '<%= lc(:select_all) %>', '<%= lc(:deselect_all) %>')" id="type_of_aid_id_toggle" selected="false"><%= lc(:select_all) %></span></h3>
-			<li class="all"><%= check_box "type_of_aid_id", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>
-      		<%= render :partial => "reports/query_options/type_of_aid", :collection => TypeOfAid.all %>
+			<h3><span style="float:left"><%= ll(:reports, :toa) %></span><span class="link" onclick="toggleAll('aid_modality_id', '<%= lc(:select_all) %>', '<%= lc(:deselect_all) %>')" id="aid_modality_id_toggle" selected="false"><%= lc(:select_all) %></span></h3>
+			<li class="all"><%= check_box "aid_modality_id", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>
+      		<%= render :partial => "reports/query_options/aid_modality", :collection => AidModality.all %>
 		</ul>
 		
 		<ul class="checkbox_container">

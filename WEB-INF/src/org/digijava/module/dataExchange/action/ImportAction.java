@@ -90,6 +90,7 @@ import org.digijava.module.dataExchange.jaxb.ActivityType.Component;
 import org.digijava.module.dataExchange.jaxb.ActivityType.Documents;
 import org.digijava.module.dataExchange.jaxb.ActivityType.Id;
 import org.digijava.module.dataExchange.jaxb.ActivityType.Issues;
+import org.digijava.module.dataExchange.jaxb.ActivityType.Location;
 import org.digijava.module.dataExchange.jaxb.ActivityType.RelatedLinks;
 import org.digijava.module.dataExchange.jaxb.ActivityType.RelatedOrgs;
 import org.digijava.module.dataExchange.jaxb.ActivityType.Issues.Measure;
@@ -189,7 +190,7 @@ public class ImportAction extends MultiAction {
 						//sectors, programs
 						processStep2(activityImported, activity,request, "en",hm);
 						
-						//funding
+						//funding , regional funding
 						processStep3(activityImported, activity,request, "en",hm);
 						
 						//relatedOrg, components
@@ -317,7 +318,7 @@ public class ImportAction extends MultiAction {
 		//implementation levels
 		if( actType.getImplementationLevels()!=null ){
 			
-			AmpCategoryValue acv=addCategValueForCodeValueType(actType.getImplementationLevels(), hm, Constants.IDML_IMPLEMENTATION_LEVELS);
+			AmpCategoryValue acv=addCategValueForCodeValueType(actType.getImplementationLevels(), hm, Constants.IDML_IMPLEMENTATION_LEVELS, Constants.CATEG_VALUE_IMPLEMENTATION_LEVEL);
 			if(acv!=null)
 				activity.getCategories().add(acv);
 		}
@@ -400,7 +401,7 @@ public class ImportAction extends MultiAction {
 	  
 		//status
 		if( actType.getStatus()!=null ){
-			AmpCategoryValue acv = addCategValueForCodeValueType(actType.getStatus(), hm, Constants.IDML_STATUS);
+			AmpCategoryValue acv = addCategValueForCodeValueType(actType.getStatus(), hm, Constants.IDML_STATUS, Constants.CATEG_VALUE_ACTIVITY_STATUS);
 			if(acv!=null)
 				activity.getCategories().add(acv);
 		}
@@ -472,7 +473,14 @@ public class ImportAction extends MultiAction {
 		
 		//regional funding - locations.fundings
 		
-		
+		if(actType.getLocation() !=null && actType.getLocation().size() >0)	{
+			
+			for (Iterator it = actType.getLocation().iterator(); it.hasNext();) {
+				Location location = (Location) it.next();
+				
+			}
+			
+		}
 		
 		
 		
@@ -840,11 +848,11 @@ public class ImportAction extends MultiAction {
 			if(ampFunding.getFundingDetails() == null ) ampFunding.setFundingDetails(new HashSet<AmpFundingDetail>());
 			if(fundDetails != null) ampFunding.getFundingDetails().addAll(fundDetails);
 			if(funding.getAssistanceType() != null){
-				AmpCategoryValue acv = addCategValueForCodeValueType(actType.getStatus(), hm, Constants.IDML_ASSISTANCE_TYPE);
+				AmpCategoryValue acv = addCategValueForCodeValueType(actType.getStatus(), hm, Constants.IDML_ASSISTANCE_TYPE, Constants.CATEG_VALUE_TYPE_OF_ASSISTANCE);
 				ampFunding.setTypeOfAssistance(acv);
 			}
 			if(funding.getFinancingInstrument() != null){
-				AmpCategoryValue acv = addCategValueForCodeValueType(actType.getStatus(), hm, Constants.IDML_FINANCING_INSTRUMENT);
+				AmpCategoryValue acv = addCategValueForCodeValueType(actType.getStatus(), hm, Constants.IDML_FINANCING_INSTRUMENT, Constants.CATEG_VALUE_FINANCING_INSTRUMENT);
 				ampFunding.setFinancingInstrument(acv);
 			}
 			if(activity !=null ) ampFunding.setAmpActivityId(activity);
@@ -883,7 +891,7 @@ public class ImportAction extends MultiAction {
 					CodeValueType cvt = new CodeValueType();
 					cvt.setCode(mtef.getType());
 					cvt.setValue(mtef.getType());
-					AmpCategoryValue acv = addCategValueForCodeValueType(cvt, hm, Constants.IDML_FUNDING_PROJECTIONS_TYPE);
+					AmpCategoryValue acv = addCategValueForCodeValueType(cvt, hm, Constants.IDML_FUNDING_PROJECTIONS_TYPE, Constants.CATEG_VALUE_MTEF_PROJECTION);
 					if(acv!=null)
 						ampmtef.setProjected(acv);
 				}
@@ -1113,18 +1121,29 @@ public class ImportAction extends MultiAction {
 		return false;
 		
 	}
-	public AmpCategoryValue addCategValueForCodeValueType(CodeValueType element, HashMap hm, String fieldType ){
+	public AmpCategoryValue addCategValueForCodeValueType(CodeValueType element, HashMap hm, String fieldType, String categoryKey ){
 	//TODO: refresh the cache!!!!
 	AmpCategoryValue acv=null;
+	Collection<AmpCategoryValue> allCategValues;
+	allCategValues = (Collection<AmpCategoryValue>) CategoryManagerUtil.getAmpCategoryValueCollectionByKey(categoryKey);
+	String valueToCateg="";
+	
+	if( element.getValue()!=null && !"".equals(element.getValue().trim()) )
+		valueToCateg=element.getValue();
+	else if( element.getCode()!=null && !"".equals(element.getCode().trim()) )
+		valueToCateg=element.getCode();
+
+	if(valueToCateg == null || valueToCateg == "") return null;
+	
+	for (Iterator itacv = allCategValues.iterator(); itacv.hasNext();) {
+		acv = (AmpCategoryValue) itacv.next();
+		if(acv.getValue().equals(valueToCateg)) return acv;
+	}
+	
 	if( !existInImportCache(hm, fieldType, element.getCode(), element.getValue()) )
 		{
 			//have to be inserted
 		    
-			String valueToCateg="";
-			if( element.getValue()!=null && !"".equals(element.getValue().trim()) )
-				valueToCateg=element.getValue();
-			else if( element.getCode()!=null && !"".equals(element.getCode().trim()) )
-				    valueToCateg=element.getCode();
 			if(!valueToCateg.equals("")){
 				try{
 					CategoryManagerUtil.addValueToCategory(CategoryConstants.DATA_EXCHANGE_KEY, fieldType+"."+valueToCateg);
@@ -1132,7 +1151,7 @@ public class ImportAction extends MultiAction {
 					ex.printStackTrace();
 					//the value already there
 				}
-				Collection<AmpCategoryValue> allCategValues = (Collection<AmpCategoryValue>) CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.DATA_EXCHANGE_KEY);
+				 allCategValues = (Collection<AmpCategoryValue>) CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.DATA_EXCHANGE_KEY);
 				acv=(AmpCategoryValue) allCategValues.toArray()[allCategValues.size()-1];
 				DataExchangeUtils.insertDEMappingField( element.getCode(), element.getValue(), acv.getId(), fieldType, org.digijava.module.dataExchange.utils.Constants.STATUS_UNAPPROVED);
 				//activity.getCategories().add(acv);

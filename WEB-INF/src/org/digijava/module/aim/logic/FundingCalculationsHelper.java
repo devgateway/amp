@@ -86,7 +86,8 @@ public class FundingCalculationsHelper {
 		while (fundDetItr.hasNext()) {
 
 			AmpFundingDetail fundDet = fundDetItr.next();
-			int adjType = fundDet.getAdjustmentType().intValue();
+			int adjType = 1;
+			if(fundDet.getAdjustmentType() != null) adjType=fundDet.getAdjustmentType().intValue();
 			FundingDetail fundingDetail = new FundingDetail();
 			fundingDetail.setDisbOrderId(fundDet.getDisbOrderId());
 

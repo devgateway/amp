@@ -20,7 +20,7 @@ public class Constants {
 	public static final String IDML_ASSISTANCE_TYPE = "idml.assistanceType";
 	public static final String IDML_FINANCING_INSTRUMENT = "idml.financingInstrument";
 	public static final String IDML_FUNDING_PROJECTIONS_TYPE = "idml.funding.projections.type";
-	public static final String IDML_PLAN = "Plan";
+	public static final String IDML_PLAN = "Planned";
 	public static final String IDML_ACTUAL = "Actual";
 	
 	public static final String IDML_REPORTING_AGENCY = "Reporting Agency";
@@ -37,5 +37,11 @@ public class Constants {
 	
 	public static final String AMP_ORGANIZATION = "amp."+AmpOrganisation.class.getName();
 	public static final String AMP_SECTOR = "amp."+AmpSector.class.getName();
+	
+	public static final String CATEG_VALUE_ACTIVITY_STATUS = "activity_status";
+	public static final String CATEG_VALUE_IMPLEMENTATION_LEVEL = "implementation_level";
+	public static final String CATEG_VALUE_TYPE_OF_ASSISTANCE ="type_of_assistence";
+	public static final String CATEG_VALUE_FINANCING_INSTRUMENT = "financing_instrument";
+	public static final String CATEG_VALUE_MTEF_PROJECTION = "mtef_projection";
 	
 }

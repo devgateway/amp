@@ -32,6 +32,7 @@ en:
         gender_policy_marker: Gender Policy
         environment_policy_marker: Environment Policy
         sector_relevances: Project's Focal Sectors
+        sectors: Sectors
         
       sector_relevance:
         dac_sector: DAC / CRS Sector
@@ -107,6 +108,7 @@ en:
       
       funding:
         commitments: Commitments
+        payments: Disbursements
         payments_q1: Disbursements 1st Quarter
         payments_q2: Disbursements 2nd Quarter
         payments_q3: Disbursements 3rd Quarter

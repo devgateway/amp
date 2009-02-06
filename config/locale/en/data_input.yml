@@ -161,6 +161,7 @@ en:
       title: Project Fact Sheet for <i>{{project}}</i>
       project_information: Project Information
       funding_information: Funding Information
+      classification: Classification
       markers: Markers
       mdgs: MDGs
       focal_regions: Focal Regions
@@ -168,6 +169,7 @@ en:
       totals: Funding Totals
       funding: Funding {{year}}
       funding_forecast: Funding Forecast {{year}}
+      all_district: All municipalities
       
     new:
       title: Add New Project

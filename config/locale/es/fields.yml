@@ -32,6 +32,7 @@ es:
         gender_policy_marker: Política de Género
         environment_policy_marker: Política del Medio Ambiente	
         sector_relevances: Sectores Focales del Proyecto
+        sectors: Sectores
         
       sector_relevance:
         dac_sector: Sectores CAD/CRS
@@ -106,6 +107,7 @@ es:
       
       funding:
         commitments: Compromisos
+        payments: Desembolsos
         payments_q1: Desembolsos 1er Cuarto
         payments_q2: Desembolsos 2º Cuarto
         payments_q3: Desembolsos 3er Cuarto

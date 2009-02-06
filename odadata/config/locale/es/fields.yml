@@ -17,7 +17,7 @@ es:
         contracted_agencies: Agencias Contratadas
         national_regional: Nacional / Regional
         type_of_implementation: Tipo de implementación
-        type_of_aid: Tipo de ayuda
+        aid_modality: Modalidad de ayuda
         grant_loan: Tipo de financiamiento
         website: Sitio web
         comments: Comentarios

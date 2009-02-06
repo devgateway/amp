@@ -222,7 +222,7 @@ ActiveRecord::Schema.define(:version => 20081202200839) do
     t.date     "end"
     t.text     "comments"
     t.string   "website"
-    t.integer  "type_of_aid_id"
+    t.integer  "aid_modality_id"
     t.integer  "grant_loan"
     t.integer  "national_regional"
     t.integer  "type_of_implementation"
@@ -299,10 +299,10 @@ ActiveRecord::Schema.define(:version => 20081202200839) do
     t.integer "country_strategy_id"
   end
 
-  create_table "type_of_aid_translations", :force => true do |t|
+  create_table "aid_modality_translations", :force => true do |t|
     t.string  "locale"
     t.string  "name"
-    t.integer "type_of_aid_id"
+    t.integer "aid_modality_id"
   end
 
   create_table "types_of_aid", :force => true do |t|

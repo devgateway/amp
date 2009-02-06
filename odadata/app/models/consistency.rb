@@ -26,7 +26,7 @@ class Consistency
     donor.annual_payments[year] || 0.to_currency(donor.currency)
   end
   
-  def payments_by_type_of_aid(type)
-    donor.payments_by_type_of_aid(year)[type] || 0.to_currency(donor.currency)
+  def payments_by_aid_modality(type)
+    donor.payments_by_aid_modality(year)[type] || 0.to_currency(donor.currency)
   end
 end

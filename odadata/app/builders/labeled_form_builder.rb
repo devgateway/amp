@@ -39,6 +39,7 @@ class LabeledFormBuilder < ActionView::Helpers::FormBuilder
   
   def select(method, choices, options = {}, html_options = {})
     label_opts = extract_label_options!(options)
+    
     strip_options_for_select!(choices)
     choices = translate_options(choices) if options.delete(:translate)
     
@@ -95,6 +96,9 @@ class LabeledFormBuilder < ActionView::Helpers::FormBuilder
   end
   
   def label(method, caption = nil, options = {})
+    options.delete(:required)
+    options.delete(:glossary)
+    
     caption ||= localized_caption(method)
     caption += " *" if field_required?(method)
     @template.label(@object_name, method, caption, options)

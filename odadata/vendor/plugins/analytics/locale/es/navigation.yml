@@ -20,7 +20,7 @@ es:
         trend: Tendencia de la Cooperación UE de {{from}} para {{to}}
         by_sector_in: Cooperación de UE por Sector CAD en {{year}}
         by_region_in: Cooperación de UE por Región en {{year}}
-        by_toa_in: Cooperación de UE por tipo de ayuda en {{year}}, Proyecciones de {{forecasts}}
+        by_toa_in: Cooperación de UE por modalidad de ayuda en {{year}}, Proyecciones de {{forecasts}}
       note:
         title: Nota al Lector
         explanatory_note: Nota de explicación a los perfiles de los donantes

@@ -24,7 +24,7 @@
 			<td class="sub_title">Total Disbursements Forecasts</td>
 			<td class="field_justify"><%= @consistency_finances.total_payments_forecasts %></td>			
 		</tr>
-		<% Project::TYPE_OF_AID_OPTIONS.each do |name, idx| %>
+		<% Project::aid_modality_OPTIONS.each do |name, idx| %>
 			<% field = name.downcase.gsub(/\W+/, '_') + "_forecasts" %>
 			<tr>
 				<td class="sub_title"><%= name -%> Forecasts</td>

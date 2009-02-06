@@ -83,9 +83,9 @@ Target.all.each do |d|
   puts "Target Saved: #{d.name}"
 end
 
-TypeOfAid.all.each do |d|
-  rec_en = CON.execute("SELECT * FROM type_of_aid_translations WHERE type_of_aid_id = '#{d.id}' AND locale = 'en' LIMIT 1")[0]
-  rec_es = CON.execute("SELECT * FROM type_of_aid_translations WHERE type_of_aid_id = '#{d.id}' AND locale = 'es' LIMIT 1")[0]
+AidModality.all.each do |d|
+  rec_en = CON.execute("SELECT * FROM aid_modality_translations WHERE aid_modality_id = '#{d.id}' AND locale = 'en' LIMIT 1")[0]
+  rec_es = CON.execute("SELECT * FROM aid_modality_translations WHERE aid_modality_id = '#{d.id}' AND locale = 'es' LIMIT 1")[0]
   
   d.name = rec_en['name']
   d.name_es = rec_es['name']

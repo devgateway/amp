@@ -35,8 +35,8 @@
 		<h3><%= ll(:reports, :toa) %></h3>
 		<div>
 			<ul class="checkbox_container">
-				<li class="all"><%= check_box "type_of_aid", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>
-		  		<%= render :partial => "reports/query_options/type_of_aid", :collection => TypeOfAid.all %>
+				<li class="all"><%= check_box "aid_modality", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>
+		  		<%= render :partial => "reports/query_options/aid_modality", :collection => AidModality.all %>
 			</ul>
 			<span class="next"><a onclick="$(this).parent().parent().next('h3').click(); return false;" href="#"><%= ll(:odamap, :next_step) %>...</a></span>
 		</div>

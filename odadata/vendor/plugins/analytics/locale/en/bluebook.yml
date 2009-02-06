@@ -32,13 +32,13 @@ en:
                 trend: EU Cooperation Trend from {{from}} to {{to}}
                 by_sector_in: EU Cooperation by DAC Sector in {{year}}
                 by_region_in: EU Cooperation by Region in {{year}}
-                by_toa_in: EU Cooperation by Type of Aid in {{year}}, Forecasts for {{forecasts}}
+                by_toa_in: EU Cooperation by Aid Modality in {{year}}, Forecasts for {{forecasts}}
                 by_sector: EU Cooperation by DAC Sector
                 by_sector_bar_subtitle: EU ODA disbursements by DAC Sector in {{year}}
                 by_region: EU Cooperation by Region
-                by_toa: EU Cooperation by Type of Aid
-                in_percent_by_toa: EU Cooperation in % by Type of Aid in {{year}}
-                in_percent_by_toa_subtitle: EU ODA disbursements in % by type of aid per EU Member State in {{year}}
+                by_toa: EU Cooperation by Aid Modality
+                in_percent_by_toa: EU Cooperation in % by Aid Modality in {{year}}
+                in_percent_by_toa_subtitle: EU ODA disbursements in % by aid modality per EU Member State in {{year}}
             profiles:
                 title: EU Donor Profiles
                 
@@ -475,7 +475,7 @@ en:
                 good governance; human rights; the rights of children and indigenous peoples;
                 gender equality; environmental sustainability; and the fight against HIV/AIDS.
             policy_contents_p5: |
-                The type of aid provided will be tailored to the needs and context of each individual country.
+                The aid modality provided will be tailored to the needs and context of each individual country.
                 Where conditions allow, budget aid will be the preferred type. The Community will
                 use an approach based on results and performance indicators. Most Community aid will
                 continue to be provided in the form of grants, an approach which is particularly suitable

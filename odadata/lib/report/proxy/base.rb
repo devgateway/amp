@@ -95,8 +95,8 @@ module Report
         [ll(:reports, :toi), option_text_by_id(Project::IMPLEMENTATION_TYPES, @target.type_of_implementation)]
       end
       
-      def type_of_aid
-        [ll(:reports, :toa), @target.type_of_aid.andand.name]
+      def aid_modality
+        [ll(:reports, :toa), @target.aid_modality.andand.name]
       end
       
       def gov_counterpart

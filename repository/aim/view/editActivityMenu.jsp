@@ -72,7 +72,9 @@
 	
 	window.onload = function() {
         //current.apply(current);
-        initStep1Scripts();
+		if(document.aimEditActivityForm.step.value=="1"){
+			initStep1Scripts();
+		}        
 		initScripts();
    	};
 		

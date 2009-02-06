@@ -662,8 +662,10 @@ public class LuceneUtil implements Serializable {
 			ArrayList<String> componentsCode=new ArrayList<String>();
 		 	Collection<AmpComponent> componentsList=act.getComponents();
 
-		 	for(AmpComponent c:componentsList){
-		 	   componentsCode.add(c.getCode());
+		 	if(componentsList!=null){
+			 	for(AmpComponent c:componentsList){
+			 	   componentsCode.add(c.getCode());
+			 	}
 		 	}
 				
 			

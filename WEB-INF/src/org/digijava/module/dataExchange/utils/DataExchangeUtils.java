@@ -406,9 +406,8 @@ public class DataExchangeUtils {
             if (result.size() > 0){
             	obResult= (AmpSector) result.get(0);
             }
-            //System.out.println("DBUTIL.GETORGANISATIONBYNAME() : " + qry.getQueryString());
         } catch (Exception e) {
-            logger.debug("Exception from getOrganisationByName(): " + e);
+            logger.debug("Exception from getSectorByname(): " + e);
             e.printStackTrace(System.out);
         }
         return obResult;

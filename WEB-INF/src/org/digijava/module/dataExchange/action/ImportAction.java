@@ -440,10 +440,15 @@ public class ImportAction extends MultiAction {
 					amps.setSectorId(ampSector);
 				amps.setSectorPercentage(100.00f);
 				
+				ArrayList<AmpClassificationConfiguration> allClassifConfigs = (ArrayList<AmpClassificationConfiguration>) getAllClassificationConfiguration();
 				AmpClassificationConfiguration primConf = null;
-		    	primConf = getPrimaryClassificationConfiguration();
+				primConf = getPrimaryClassificationConfiguration();
+				for (Iterator it2 = allClassifConfigs.iterator(); it2.hasNext();) {
+					AmpClassificationConfiguration acc = (AmpClassificationConfiguration) it2.next();
+					if(acc.getClassification().getAmpSecSchemeId().equals(ampSector.getAmpSecSchemeId().getAmpSecSchemeId()))
+						primConf=acc;
+				}
                 amps.setClassificationConfig(primConf);
-				
                 sectors.add(amps);
 			}
 			if (activity.getSectors() == null) {
@@ -977,6 +982,8 @@ public class ImportAction extends MultiAction {
 			if(Constants.AMP_SECTOR.equals(fieldType)){
 				//insert a sector
 				
+				//ArrayList<AmpClassificationConfiguration> allClassifConfigs = (ArrayList<AmpClassificationConfiguration>) getAllClassificationConfiguration();
+				
 				AmpClassificationConfiguration primConf = null;
 		    	primConf = getPrimaryClassificationConfiguration();
 		    	if(primConf != null){
@@ -1020,6 +1027,19 @@ public class ImportAction extends MultiAction {
         	}
     	}
     	return primConf;
+	}
+	
+	public List<AmpClassificationConfiguration> getAllClassificationConfiguration(){
+		AmpClassificationConfiguration primConf = null;
+    	List<AmpClassificationConfiguration> configs = null;
+		try {
+			configs = SectorUtil.getAllClassificationConfigs();
+		} catch (DgException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    	return configs;
 	}
 
 	public HashMap creatingImportCacheTree(){

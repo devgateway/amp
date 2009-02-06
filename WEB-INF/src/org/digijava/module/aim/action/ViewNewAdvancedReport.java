@@ -198,7 +198,7 @@ public class ViewNewAdvancedReport extends Action {
 			}
 		}
 		else{
-			if ( sortBy.equals(filter.getSortBy()) )
+			if ( filter.getSortBy()!=null && sortBy.equals(filter.getSortBy()) )
 				filter.setSortByAsc( !filter.getSortByAsc() );
 			else {
 				filter.setSortBy(sortBy);

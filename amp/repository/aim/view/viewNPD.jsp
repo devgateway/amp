@@ -24,7 +24,8 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/tree/jktreeview.js"/>" ></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
-<link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/container.css"/>">
+<!--<link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/container.css"/>">-->
+<digi:ref href="css/container.css" type="text/css" rel="stylesheet" />
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/yahoo-dom-event.js"/>" ></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/container-min.js"/>" ></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/connection-min.js"/>" ></script>
@@ -1138,6 +1139,7 @@
 
 		setupYears();
 		initTree();
+		initScripts();//calls initScripts() in aboutScripts.jsp
 	}
 
 	/**

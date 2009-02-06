@@ -10,6 +10,7 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@page import="org.digijava.module.aim.form.EditActivityForm"%>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
+<%@ taglib uri="/taglib/aim" prefix="aim" %>
 
 <%@page import="org.digijava.module.aim.util.DbUtil"%>
 <%@page import="org.digijava.module.aim.form.ActivityForm"%><digi:instance property="aimEditActivityForm"/>
@@ -67,7 +68,7 @@
 																		</c:if>
 																		>
 																		<digi:trn key="aim:totalComponentActualDisbursement">Component Grand Total Actual Disbursements</digi:trn>=
-																			<%=((org.digijava.module.aim.form.EditActivityForm) pageContext.getAttribute("aimEditActivityForm")).getComponents().getCompTotalDisb()%>
+																			<aim:formatNumber value="<%=((org.digijava.module.aim.form.EditActivityForm) pageContext.getAttribute("aimEditActivityForm")).getComponents().getCompTotalDisb()%>"/>
 																	
 																		<c:out value="${aimEditActivityForm.currCode}"/>
 																		</font>

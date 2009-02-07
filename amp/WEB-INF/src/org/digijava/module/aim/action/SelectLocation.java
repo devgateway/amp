@@ -1,6 +1,8 @@
 package org.digijava.module.aim.action;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 
 import org.apache.log4j.Logger;
@@ -9,6 +11,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.dbentity.Country;
+import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.EditActivityForm.Location;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -78,9 +81,15 @@ public class SelectLocation extends Action {
 
                   if (fill == null || fill.trim().length() == 0) {
                     eaForm.getLocation().setCountry(CountryName);
-                    eaForm.getLocation().setImpCountry(iso);
-                    eaForm.getLocation().setRegions(LocationUtil.getAllRegionsUnderCountry(
-                        iso));
+                    eaForm.getLocation().setImpCountry(iso);                                        
+                    Collection<AmpRegion> col = null;
+                    Collection locs = eaForm.getLocation().getSelectedLocs();
+                    if (locs != null) {
+                    	col = LocationUtil.getAllRegionsUnderCountryUnselected(iso, locs); 
+                    } else {
+                    	col = LocationUtil.getAllRegionsUnderCountry(iso); 
+                    }
+                    eaForm.getLocation().setRegions(col);
                     /*eaForm.setCountry(Constants.COUNTRY);
                         eaForm.setImpCountry(Constants.COUNTRY_ISO);
                         eaForm.setRegions(LocationUtil.getAllRegionsUnderCountry(Constants.COUNTRY_ISO));*/

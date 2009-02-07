@@ -640,6 +640,35 @@ public class LocationUtil {
 		return woreda;
 	}
 
+	public static Collection<AmpRegion> getAllRegionsUnderCountryUnselected(String iso, Collection selectedLocations) {
+		Session session = null;
+		Collection<AmpRegion> col = null;
+
+		try {
+			org.digijava.module.aim.helper.Location locationHlp = null;
+			String selLocNames = "";
+			for (Iterator it = selectedLocations.iterator(); it.hasNext();) {
+        		locationHlp = (org.digijava.module.aim.helper.Location) it.next();
+        		//
+        		selLocNames += "'" + locationHlp.getRegion() + "'" + ", ";
+        	}
+			selLocNames = selLocNames.substring(0, selLocNames.lastIndexOf(","));
+			//
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = "select reg from " + AmpRegion.class.getName()
+					+ " reg " + "where (country_id = '" + iso + "' " 
+					+ "and reg.name not in ("+selLocNames+")) "
+					+ "order by reg.regionCode, reg.name";
+
+			Query qry = session.createQuery(queryString);
+			col = qry.list();
+		} catch (Exception e) {
+			logger.debug("Exception from getAllRegionsUnderCountry()");
+			logger.debug(e.toString());
+		} 
+		return col;
+	}
+
 	public static Collection<AmpRegion> getAllRegionsUnderCountry(String iso) {
 		Session session = null;
 		Collection<AmpRegion> col = null;

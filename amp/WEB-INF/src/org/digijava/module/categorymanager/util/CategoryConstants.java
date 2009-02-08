@@ -98,6 +98,11 @@ public class CategoryConstants {
 	public static final HardCodedCategoryValue FIN_INSTR_DIRECT_BUDGET_SUPPORT	= 
 		new CategoryConstants.HardCodedCategoryValue("financing_instrument","Direct Budget Support", false);
 	
+	public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_COUNTRY	= 
+		new CategoryConstants.HardCodedCategoryValue("implementation_location", "Country", true);
+	public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_REGION	= 
+		new CategoryConstants.HardCodedCategoryValue("implementation_location", "Region", true);
+	
 	public static class HardCodedCategoryValue {
 		private String valueKey;
 		private String categoryKey;

@@ -22,6 +22,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.service.AbstractServiceImpl;
 import org.digijava.kernel.service.ServiceContext;
 import org.digijava.kernel.service.ServiceException;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.autopatcher.exceptions.InvalidPatchRepositoryException;
 
 /**
@@ -47,6 +48,8 @@ public class AutopatcherService extends AbstractServiceImpl {
 	public void processInitEvent(ServiceContext serviceContext)
 			throws ServiceException {
 
+		//this.beforeApplyingPatches();
+		
 		Session session;
 		appliedPatches = new ArrayList();
 		try {
@@ -175,5 +178,11 @@ public class AutopatcherService extends AbstractServiceImpl {
 
 	public void setPatchesDir(String patchesDir) {
 		this.patchesDir = patchesDir;
+	}
+	/**
+	 * All the things that need to be done before db patches are applied can be inserted here. 
+	 */
+	private void beforeApplyingPatches () {
+		DynLocationManagerUtil.synchronizeCountries();
 	}
 }

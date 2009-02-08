@@ -1,17 +1,19 @@
 package org.digijava.module.aim.util;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionMessage;
+import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.exception.DynLocationStructuralException;
@@ -19,6 +21,9 @@ import org.digijava.module.aim.exception.DynLocationStructureStringException;
 import org.digijava.module.aim.form.DynLocationManagerForm;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -230,6 +235,184 @@ public class DynLocationManagerUtil {
 		
 		return retString;
 	}
+	
+	public static void synchronizeCountries() {
+		logger.info("Starting countries synchronization");
+		Session dbSession										= null;
+		Transaction tx											= null;
+		Collection<Country> countries							= null;
+		try {
+			dbSession						= PersistenceManager.getSession();
+			tx								= dbSession.beginTransaction();
+			String queryString 	= "select c from "
+				+ Country.class.getName()
+				+ " c " ;
+			Query qry			= dbSession.createQuery(queryString);
+			countries			= qry.list();
+			
+			if ( countries == null )
+				return;
+			
+			Set<AmpCategoryValueLocations> countryLocations					= 
+					DynLocationManagerUtil.getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+			HashMap<String, AmpCategoryValueLocations> nameToLocationsMap	= new HashMap<String, AmpCategoryValueLocations>();
+			if ( countryLocations != null && countryLocations.size() >0  ) {
+				for ( AmpCategoryValueLocations locCountry: countryLocations ){
+					nameToLocationsMap.put(locCountry.getName(), locCountry);
+				}
+			}
+			
+			AmpCategoryValue layer					= CategoryManagerUtil.getAmpCategoryValueFromDB( CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY );
+			if ( layer == null ) {
+				logger.error("No Country value found in category Implementation Location. Please correct this.");
+				throw new Exception("No Country value found in category Implementation Location. Please correct this.");
+			}
+			
+			for ( Country country: countries ) {
+				if ( nameToLocationsMap.get(country.getCountryName()) == null  ) {
+					AmpCategoryValueLocations locCountry	= new AmpCategoryValueLocations();
+					locCountry.setParentCategoryValue( layer );
+					locCountry.setName( country.getCountryName() );
+					locCountry.setIso3( country.getIso3() );
+					locCountry.setIso( country.getIso() );
+					if ( country.getCountryId() != null )
+						locCountry.setCode( country.getCountryId().toString() );
+					dbSession.save(locCountry);
+				}
+			}
+			tx.commit();
+			logger.info("Countries synchronization done.");
+		} catch (Exception e) {
+			tx.rollback();
+			e.printStackTrace();
+			logger.info("Countries synchronization NOT performed.");
+		} finally {
+			try {
+				PersistenceManager.releaseSession(dbSession);
+			} catch (Exception ex2) {
+				logger.error("releaseSession() failed :" + ex2);
+			}
+		}		
+	}
+	
+	public static AmpCategoryValueLocations getLocationByName(String locationName, HardCodedCategoryValue hcLocationLayer) {
+		try {
+			AmpCategoryValue layer	= CategoryManagerUtil.getAmpCategoryValueFromDB(hcLocationLayer);
+			return getLocationByName(locationName, layer);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	/**
+	 * 
+	 * @param locationName
+	 * @param cvLocationLayer the AmpCategoryValue specifying the layer (level) of the location...like Country or Region
+	 * @return
+	 */
+	public static AmpCategoryValueLocations getLocationByName(String locationName, AmpCategoryValue cvLocationLayer) {
+		Session dbSession										= null;
+		
+		
+		try {
+			dbSession			= PersistenceManager.getSession();
+			String queryString 	= "select loc from "
+				+ AmpCategoryValueLocations.class.getName()
+				+ " loc where (loc.name=:name)" ;
+			if ( cvLocationLayer != null ) {
+				queryString		+= " AND (loc.parentCategoryValue=:cvId) ";
+			}
+			Query qry			= dbSession.createQuery(queryString);
+			if ( cvLocationLayer != null) {
+				qry.setLong("cvId", cvLocationLayer.getId() );
+			}
+			qry.setString("name", locationName);
+			AmpCategoryValueLocations loc		= (AmpCategoryValueLocations) qry.uniqueResult();
+			return loc;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				PersistenceManager.releaseSession(dbSession);
+			} catch (Exception ex2) {
+				logger.error("releaseSession() failed :" + ex2);
+			}
+		}
+		return null;
+	}
+	
+	public static Set<AmpCategoryValueLocations> getLocationsOfTypeRegion() {
+		return getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
+	}
+	
+	public static Set<AmpCategoryValueLocations> getLocationsByLayer(HardCodedCategoryValue hcLayer) {
+		try {
+			AmpCategoryValue layer		= CategoryManagerUtil.getAmpCategoryValueFromDB(hcLayer);
+			return getLocationsByLayer(layer);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	public static AmpCategoryValueLocations getAncestorByLayer (AmpCategoryValueLocations loc, HardCodedCategoryValue hcValue) {
+		if ( loc == null )
+			logger.error ("loc parameter in getAncestorByLayer should not be null");
+		AmpCategoryValueLocations temp	= loc;
+		if ( temp.getParentCategoryValue().getValue().equals( hcValue.getValueKey() ) )
+			return temp;
+		while ( temp.getParentLocation() != null ) {
+			temp	= temp.getParentLocation();
+			if ( temp.getParentCategoryValue().getValue().equals(hcValue.getValueKey()) )
+				return temp;
+		}
+		return null;
+	}
+	/**
+	 * 
+	 * @param cvLayer
+	 * @return
+	 */
+	public static Set<AmpCategoryValueLocations> getLocationsByLayer(AmpCategoryValue cvLayer) {
+		TreeSet<AmpCategoryValueLocations> returnSet			= new TreeSet<AmpCategoryValueLocations>(alphabeticalLocComp);
+		Session dbSession										= null;
+		try {
+			dbSession			= PersistenceManager.getSession();
+			String queryString 	= "select loc from "
+				+ AmpCategoryValueLocations.class.getName()
+				+ " loc where (loc.parentCategoryValue=:cvId) ";
+			Query qry			= dbSession.createQuery(queryString);
+			qry.setLong("cvId", cvLayer.getId() );
+			returnSet.addAll( qry.list() );
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				PersistenceManager.releaseSession(dbSession);
+			} catch (Exception ex2) {
+				logger.error("releaseSession() failed :" + ex2);
+			}
+		}
+		if (returnSet.size() > 0 )
+			return returnSet;
+		return null;
+	}
+	
+	public static List<AmpCategoryValueLocations> getParents( AmpCategoryValueLocations loc ) {
+		ArrayList<AmpCategoryValueLocations> returnList		= new ArrayList<AmpCategoryValueLocations>();
+		if ( loc ==  null )
+			return returnList;
+		else
+			returnList.add(loc);
+		AmpCategoryValueLocations temp						= loc;
+		while ( temp.getParentLocation() != null ) {
+			temp 	= temp.getParentLocation();
+			returnList.add(temp);
+		}
+		return returnList;
+	}
+	
 	
 	
 	public static Comparator<AmpCategoryValueLocations> alphabeticalLocComp		=

@@ -131,7 +131,7 @@ public class ExportBuilder {
 					if (ampSector.getSectorPercentage() != null){
 						parent.getSectors().add(buildPercentageCodeValue(ampSector.getSectorId().getSectorCode(),
 								ampSector.getSectorId().getName(),
-								ampSector.getSectorPercentage().longValue()));
+								ampSector.getSectorPercentage().floatValue()));
 					} else {
 						throw new AmpExportException("Sector Precent is empty", AmpExportException.ACTIVITY_DATA_INEFFICIENT);
 					}
@@ -144,7 +144,7 @@ public class ExportBuilder {
 					if (ampProgram.getProgramPercentage() != null){
 					parent.getPrograms().add(buildPercentageCodeValue(ampProgram.getProgram().getThemeCode(),
 							ampProgram.getProgram().getName(),
-							ampProgram.getProgramPercentage().longValue()));
+							ampProgram.getProgramPercentage().floatValue()));
 					} else {
 						throw new AmpExportException("Programs Precent is empty", AmpExportException.ACTIVITY_DATA_INEFFICIENT);
 					}
@@ -521,7 +521,7 @@ public class ExportBuilder {
 		return retValue;
 	}		
 
-	private PercentageCodeValueType buildPercentageCodeValue(String code, String value, long precent) throws AmpExportException{
+	private PercentageCodeValueType buildPercentageCodeValue(String code, String value, float precent) throws AmpExportException{
 		PercentageCodeValueType retValue = objectFactory.createPercentageCodeValueType();
 		if (code != null && !code.isEmpty()){
 			retValue.setCode(code);

@@ -18,9 +18,11 @@ function validade(){
   var defReportsPerPage = document.getElementById("defRecsPerPage");
   if(defReportsPerPage.value.length == 0 || parseInt(defReportsPerPage.value)==0){
 	  alert("You cannot enter 0 for number of projects and activities per page.");
-	  return;
+	  return false;
   }
-  document.modeSwitchForm.submit();
+  document.aimUpdateAppSettingsForm.save.value = "save";
+  document.aimUpdateAppSettingsForm.submit();
+  return true;
 }
 </script>
 
@@ -34,6 +36,7 @@ function validade(){
 
 <html:hidden property="type" />
 <html:hidden property="appSettingsId" />
+<html:hidden property="save" />
 
 <!-- Start include of reportDescriptionSheet.jsp  -->
 	<%@include file="reportDescriptionSheet.jsp"%>
@@ -241,7 +244,7 @@ function validade(){
                                                                       <c:set var="caption">
                                                                         <digi:trn key="aim:btnSave">Save</digi:trn>
                                                                       </c:set>
-                                                                      <html:button value="${caption}" property="save" styleClass="dr-menu" onclick="validade();"/>
+                                                                      <input type="button"  class="dr-menu" value="${caption}" onclick="validade();" />
 																	</td>
 																</tr>
 															</table>

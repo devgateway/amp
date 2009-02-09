@@ -29,6 +29,7 @@ import org.digijava.module.dataExchange.jaxb.FundingDetailType;
 import org.digijava.module.dataExchange.jaxb.FundingType;
 import org.digijava.module.dataExchange.jaxb.LocationFundingType;
 import org.digijava.module.dataExchange.jaxb.ObjectFactory;
+import org.digijava.module.dataExchange.jaxb.PercentageCodeValueType;
 import org.digijava.module.dataExchange.type.AmpColumnEntry;
 
 
@@ -127,14 +128,26 @@ public class ExportBuilder {
 			if (ampActivity.getSectors() != null){
 				for (Iterator iterator = ampActivity.getSectors().iterator(); iterator.hasNext();) {
 					AmpActivitySector ampSector = (AmpActivitySector) iterator.next();
-					parent.getSectors().add(buildCodeValue(ampSector.getSectorId().getSectorCode(),ampSector.getSectorId().getName()));
+					if (ampSector.getSectorPercentage() != null){
+						parent.getSectors().add(buildPercentageCodeValue(ampSector.getSectorId().getSectorCode(),
+								ampSector.getSectorId().getName(),
+								ampSector.getSectorPercentage().longValue()));
+					} else {
+						throw new AmpExportException("Sector Precent is empty", AmpExportException.ACTIVITY_DATA_INEFFICIENT);
+					}
 				}
 			}
 		} else if (path.equalsIgnoreCase("activity.programs")){
 			if (ampActivity.getActivityPrograms()  != null){
 				for (Iterator iterator = ampActivity.getActivityPrograms().iterator(); iterator.hasNext();) {
 					AmpActivityProgram ampProgram = (AmpActivityProgram) iterator.next();
-					parent.getPrograms().add(buildCodeValue(ampProgram.getProgram().getThemeCode(),ampProgram.getProgram().getName()));
+					if (ampProgram.getProgramPercentage() != null){
+					parent.getPrograms().add(buildPercentageCodeValue(ampProgram.getProgram().getThemeCode(),
+							ampProgram.getProgram().getName(),
+							ampProgram.getProgramPercentage().longValue()));
+					} else {
+						throw new AmpExportException("Programs Precent is empty", AmpExportException.ACTIVITY_DATA_INEFFICIENT);
+					}
 				}
 			} else {
 				throw new AmpExportException("Prorgasm is empty", AmpExportException.ACTIVITY_DATA_INEFFICIENT);
@@ -508,6 +521,17 @@ public class ExportBuilder {
 		return retValue;
 	}		
 
+	private PercentageCodeValueType buildPercentageCodeValue(String code, String value, long precent) throws AmpExportException{
+		PercentageCodeValueType retValue = objectFactory.createPercentageCodeValueType();
+		if (code != null && !code.isEmpty()){
+			retValue.setCode(code);
+		}
+		retValue.setValue(value);
+		retValue.setPercentage(precent);
+		return retValue;
+	}		
+	
+	
 	private FreeTextType buildFreeText(String name) throws AmpExportException{
 		return buildFreeText(null, name);
 	}

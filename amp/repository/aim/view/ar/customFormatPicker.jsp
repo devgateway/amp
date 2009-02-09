@@ -16,7 +16,22 @@
 	toScope="page" />
 
 
+<script type="text/javascript">
 
+function myReset() {
+	aimReportsFilterPickerForm3.customDecimalSymbol.value = ",";
+	aimReportsFilterPickerForm3.customDecimalSymbolTxt.value = "";
+	aimReportsFilterPickerForm3.customDecimalSymbolTxt.disabled = "true";
+	aimReportsFilterPickerForm3.customDecimalPlaces.value = "-1";
+	aimReportsFilterPickerForm3.customDecimalPlacesTxt.value = "";
+	aimReportsFilterPickerForm3.customDecimalPlacesTxt.disabled = "true"
+	aimReportsFilterPickerForm3.customUseGrouping.checked = "true";
+	aimReportsFilterPickerForm3.customGroupCharacter.value = ".";
+	aimReportsFilterPickerForm3.customGroupCharacterTxt.value = "";
+	aimReportsFilterPickerForm3.customGroupSize.value = 3;
+	initFormatPopup();
+}
+</script>
 
 <digi:instance property="aimReportsFilterPickerForm" />
 
@@ -100,7 +115,7 @@
 			
 				<input type="hidden" name="apply" value="true">
 				<html:hidden property="resetFormat" value="false"/>
-				<html:button styleClass="dr-menu" onclick="resetFormat.value=true;submit()" property="applyFormat">
+				<html:button styleClass="dr-menu" onclick="myReset();" property="applyFormat">
 				<digi:trn key="rep:filer:ResetFormat">Reset</digi:trn>
 			</html:button></td>
 		</tr>

@@ -61,8 +61,8 @@
 			<xs:element name="closingDate" type="dateType" minOccurs="0"/>
 			<xs:element name="status" type="codeValueType"/>
 			<xs:element name="statusReason" type="freeTextType" minOccurs="0"/>
-			<xs:element name="sectors" type="codeValueType" maxOccurs="unbounded"/>
-			<xs:element name="programs" type="codeValueType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="sectors" type="percentageCodeValueType" maxOccurs="unbounded"/>
+			<xs:element name="programs" type="percentageCodeValueType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="notes" type="freeTextType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="funding" type="fundingType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="keywords" type="freeTextType" minOccurs="0" maxOccurs="unbounded"/>
@@ -169,6 +169,18 @@
 						<xs:documentation>If code not present or is null, text value is required.</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+		<xs:complexType name="percentageCodeValueType" >
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="code" type="xs:string" use="optional">
+					<xs:annotation>
+						<xs:documentation>If code not present or is null, text value is required.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="percentage" type="xs:long" use="required"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>

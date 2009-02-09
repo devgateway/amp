@@ -8,7 +8,14 @@ module ProjectsHelper
   
   def aid_modality_select(form)
     choices = AidModality.all.group_by(&:group_name)
-    ungrouped = options_from_collection_for_select(choices.delete(nil), :id, :name, form.object.aid_modality_id)
+    
+    ungrouped = choices.delete(nil).inject("") do |s, values|
+      options = { :value => values.id, :class => "fake-heading" }
+      options.merge!({ :selected => "selected" }) if form.object.aid_modality_id == values.id
+      
+      s << content_tag(:option, values.name, options)
+    end
+
     grouped = choices.inject("") do |s, (k, values)|
       s << content_tag(:optgroup, options_from_collection_for_select(values, :id, :name, form.object.aid_modality_id), :label => k)
     end

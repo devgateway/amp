@@ -7,7 +7,7 @@ class AddGroupsForAidModalitySelectOptions < ActiveRecord::Migration
       })
     end
     
-    ["FC FISE", "FC Civil Society", "FC Anti Corruption"].each do |a|
+    ["FC FISE", "FC Civil Society", "FC Anti Corruption", "FC Fondo Fed"].each do |a|
       AidModality.find_by_name(a).update_attributes!({
         :group_name => "Fondo Común",
         :group_name_es => "Fondo Común"

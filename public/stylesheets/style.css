@@ -651,6 +651,12 @@ form fieldset .error {
   color: #c00;
 }
 
+option.fake-heading, optgroup {
+	font-size: 1em;
+	font-weight: bold;
+	font-style: italic;
+}
+
 /* Field styles */
 form textarea { width: 75%; overflow: auto; }
 form fieldset .large { width: 80%; }

@@ -180,7 +180,7 @@
 						<xs:documentation>If code not present or is null, text value is required.</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="percentage" type="xs:long" use="required"/>
+				<xs:attribute name="percentage" type="xs:float" use="required"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>

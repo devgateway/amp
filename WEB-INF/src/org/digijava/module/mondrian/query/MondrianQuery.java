@@ -27,14 +27,7 @@ import org.digijava.module.aim.util.TeamUtil;
 public class MondrianQuery {
 	protected static Logger logger = Logger.getLogger(MondrianQuery.class);
 
-public static HttpServletRequest request;
-	
-
-	public static void setRequest(HttpServletRequest r){
-		request = r;
-	}
-	
-	public static String createQuery(){
+	public void createQuery(HttpServletRequest request){
 		AmpARFilter filter = new AmpARFilter();
 		TeamMember tm = (TeamMember) request.getSession().getAttribute(
 				Constants.CURRENT_MEMBER);
@@ -166,7 +159,7 @@ public static HttpServletRequest request;
 			filter.setWidget(new Boolean(widget).booleanValue());
 		
 		filter.generateFilterQuery(request);
-		return (filter.getGeneratedFilterQuery());
+		QueryThread.setQuery(filter.getGeneratedFilterQuery());
 	}
 
 }

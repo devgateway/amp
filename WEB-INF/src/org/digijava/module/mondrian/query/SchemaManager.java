@@ -52,7 +52,7 @@ public class SchemaManager extends FilterDynamicSchemaProcessor implements
 	}
 
 	public String getQueryText() {
-		String result = MondrianQuery.createQuery(); 
+		String result = QueryThread.getQuery(); 
 		Pattern p = Pattern.compile(AMP_ACTIVITY_TABLE);
 		Matcher m = p.matcher(result);
 		result = m.replaceAll(CACHED_ACTIVITY_TABLE);

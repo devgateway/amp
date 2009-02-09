@@ -13,6 +13,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.LabelCategory;
 import org.digijava.module.categorymanager.util.PossibleValue;
 
 /**
@@ -137,6 +138,22 @@ public class CategoryManagerForm extends ActionForm {
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
 		this.isMultiselect	= false;
 		this.isOrdered		= false;
+		
+		/* This is for removing all labels in a category for a certain category value. 
+		 * If no checkbox is selected the code below is needed */
+		Integer possibleValueIndex	= null;
+		Integer labelCategoryIndex	= null;
+		try {
+			possibleValueIndex		= Integer.parseInt( request.getParameter("possibleValueIndex") );
+			labelCategoryIndex		= Integer.parseInt( request.getParameter("labelCategoryIndex") );
+		}
+		catch (RuntimeException e) {;}
+		if ( possibleValueIndex != null && labelCategoryIndex != null ){
+			PossibleValue pv	= (PossibleValue)possibleVals.get(possibleValueIndex);
+			LabelCategory lc	= (LabelCategory)pv.getLabelCategories().get(labelCategoryIndex);
+			lc.setLabelsId(new Long[0]);
+		}
+		/* END */
 	}
 	public String getKeyName() {
 		return keyName;

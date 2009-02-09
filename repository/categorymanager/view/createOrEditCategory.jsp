@@ -55,9 +55,10 @@
 		subForm.useAction.value	= "addCategory";
 		subForm.submit();
 	}
-	function addLabelValues() {
+	function addLabelValues(possibleValueIndex, labelCategoryIndex) {
 		var subForm				= document.forms["cmCategoryManagerForm"];
-		subForm.action			= "/categorymanager/categoryLabelsAction.do";
+		subForm.action			= "/categorymanager/categoryLabelsAction.do?possibleValueIndex=" + possibleValueIndex + 
+										"&labelCategoryIndex=" + labelCategoryIndex;
 		subForm.useAction.value	= "addLabelValue";
 		subForm.submit();
 	}
@@ -382,7 +383,7 @@
 									</logic:iterate>
 									<tr>
 									<td colspan="2" align="right">
-									<button type="button" onclick="return addLabelValues()" class="buton">
+									<button type="button" onclick="return addLabelValues(${index.count-1}, ${countCateg})" class="buton">
 										<digi:trn key="aim:categoryManagerSubmit">
 												Submit
 										</digi:trn>

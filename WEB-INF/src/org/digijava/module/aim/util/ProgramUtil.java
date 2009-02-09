@@ -66,8 +66,7 @@ public class ProgramUtil {
 		private static Logger logger = Logger.getLogger(ProgramUtil.class);
         @Deprecated
 		public static final int YAERS_LIST_START = 2000;
-                public static final String NATIONAL_PLAN_OBJECTIVE =
-                    "National Plan Objective";
+                public static final String NATIONAL_PLAN_OBJECTIVE ="National Plan Objective";
                 public static final String PRIMARY_PROGRAM = "Primary Program";
                 public static final String SECONDARY_PROGRAM = "Secondary Program";
                 public static final int NATIONAL_PLAN_OBJECTIVE_KEY = 1;

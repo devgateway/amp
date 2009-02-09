@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -18,12 +17,16 @@ import javax.servlet.http.HttpSession;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
+import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.AuditLoggerUtil;
@@ -350,6 +353,17 @@ public class DataExchangeUtils {
 				}
 			}
 			
+			if(Constants.AMP_PROGRAM.equals(fieldType)){
+				if (id instanceof Long) {
+					Long newId = (Long) id;
+					return getProgramById(newId);
+				}
+				if (id instanceof String) {
+					String programName = (String) id;
+					return getProgramByName(programName);
+				}
+			}
+			
 			
 			
 		}
@@ -421,26 +435,26 @@ public class DataExchangeUtils {
 			Components<AmpComponentFunding> acfs = (Components<AmpComponentFunding>) it.next();
 			for (Iterator itcomm = acfs.getCommitments().iterator(); itcomm.hasNext();) {
 				AmpComponentFunding comm = (AmpComponentFunding) itcomm.next();
-				comm.getActivity().setComponents(new HashSet());
-				comm.getComponent().setActivities(new HashSet());
+				//comm.getActivity().setComponents(new HashSet());
+				//comm.getComponent().setActivities(new HashSet());
 				DataExchangeUtils.addObjectoToAmp(comm);
 			}
 			for (Iterator itcomm = acfs.getDisbursements().iterator(); itcomm.hasNext();) {
 				AmpComponentFunding disb = (AmpComponentFunding) itcomm.next();
-				disb.getActivity().setComponents(new HashSet());
-				disb.getComponent().setActivities(new HashSet());
+				//disb.getActivity().setComponents(new HashSet());
+				//disb.getComponent().setActivities(new HashSet());
 				DataExchangeUtils.addObjectoToAmp(disb);
 			}
 			for (Iterator itcomm = acfs.getExpenditures().iterator(); itcomm.hasNext();) {
 				AmpComponentFunding exp = (AmpComponentFunding) itcomm.next();
-				exp.getActivity().setComponents(new HashSet());
-				exp.getComponent().setActivities(new HashSet());
+				//exp.getActivity().setComponents(new HashSet());
+				//exp.getComponent().setActivities(new HashSet());
 				DataExchangeUtils.addObjectoToAmp(exp);
 			}
 			for (Iterator itcomm = acfs.getPhyProgress().iterator(); itcomm.hasNext();) {
 				AmpPhysicalPerformance pp =  (AmpPhysicalPerformance) itcomm.next();
-				pp.getAmpActivityId().setComponents(new HashSet());
-				pp.getComponent().setActivities(new HashSet());
+				//pp.getAmpActivityId().setComponents(new HashSet());
+				//pp.getComponent().setActivities(new HashSet());
 				DataExchangeUtils.addObjectoToAmp(pp);
 			}
 			
@@ -449,6 +463,91 @@ public class DataExchangeUtils {
 		
 	}
 
-    
+	/**
+	 * @author dan
+	 * @param id
+	 * @return
+	 */
+
+	
+	public static AmpTheme getProgramById(Long id) {
+		Session session = null;
+		AmpTheme ampOrg = null;
+		try {
+			//session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
+			ampOrg = (AmpTheme) session.load(AmpTheme.class, id);
+		}
+		catch (Exception ex) {
+			logger.error("Exception : " + ex.getMessage());
+		}
+		finally {
+			if (session != null) {
+				try {
+					;//PersistenceManager.releaseSession(session);
+				}
+				catch (Exception rsf) {
+					logger.error("Release session failed :" + rsf.getMessage());
+				}
+			}
+		}
+		return ampOrg;
+	}
+
+	
+	/**
+	 * @author dan
+	 * @param name
+	 * @return
+	 */
+	
+	public static AmpTheme getProgramByName(String name) {
+		AmpTheme obResult=null;
+        Session sess = null;
+        Query qry = null;
+        String queryString = null;
+
+        try {
+            sess = PersistenceManager.getRequestDBSession();
+            queryString = "select o from " + AmpTheme.class.getName()
+                + " o where (TRIM(o.name)=:programName)";
+            qry = sess.createQuery(queryString);
+            qry.setParameter("programName", name, Hibernate.STRING);
+
+            List  result=qry.list();
+            if (result.size() > 0){
+            	obResult= (AmpTheme) result.get(0);
+            }
+        } catch (Exception e) {
+            logger.debug("Exception from getSectorByname(): " + e);
+            e.printStackTrace(System.out);
+        }
+        return obResult;
+	}
+
+
+	public static List<AmpActivityProgramSettings> getAllAmpActivityProgramSettings() {
+	   
+	        String queryString = null;
+	        Session session = null;
+	        List<AmpActivityProgramSettings> configs = null;
+	        Query qry = null;
+
+	            try {
+					session = PersistenceManager.getRequestDBSession();
+	            queryString = "select cls from " + AmpActivityProgramSettings.class.getName() + " cls ";
+	            qry = session.createQuery(queryString);
+	            configs = qry.list();
+	            } catch (DgException e) {
+	            	// TODO Auto-generated catch block
+	            	e.printStackTrace();
+	            }
+	        
+
+	        return configs;
+	    }
+	
     
 }
+
+

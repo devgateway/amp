@@ -117,7 +117,6 @@
 			    {key:"v_ver_num",type:"number", text:"${headerVersion}",sortable:true},
 			    {key:"v_type",text:"${headerType}",sortable:true},
 		        {key:"v_file_name",text:"${headerFileName}",sortable:true},
-
 		        {key:"v_date",text:"${headerDate}",type:"date",sortable:true},
 		        {key:"size",type:"number",text:"${headerFileSize}",sortable:true},
 		        {key:"v_notes",text:"${headerNotes}",sortable:false},
@@ -247,7 +246,8 @@ YAHOO.namespace("YAHOO.amp.table");
 YAHOO.amp.table.enhanceMarkup = function(markupName) {
 
     this.columnHeaders = [
-        {key:"resource_title",text:"${trans_headerResourceTitle}",sortable:true,width:150},
+        {key:"select",type:"checkbox", text:"Select",sortable:false,width:10},
+		{key:"resource_title",text:"${trans_headerResourceTitle}",sortable:true,width:150},
 	    {key:"type",text:"${trans_headerType}",sortable:true},
         {key:"file_name",text:"${trans_headerFileName}",sortable:true,width:150},
         {key:"date",type:"Date",text:"${trans_headerDate}",sortable:true},
@@ -268,8 +268,9 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
 								        pageLinksLength: 2
 	                    			
 	                			};
-    
+
 	var dataTable 				= new YAHOO.widget.DataTable(markupName, this.columnSet, null, options);
+
 	YAHOO.widget.DataTable.MSG_EMPTY = "<digi:trn key="aim:noRecordsFound">No records found</digi:trn>";
     return dataTable;
 };
@@ -645,7 +646,7 @@ function getCallbackForOtherDocuments(containerElement, windowController) {
 		success: function(o) {
 					containerElement.innerHTML	= "<div class='all_markup' align='center' id='"+divId+"'>" + o.responseText + "</div>";
 					var datatable				= YAHOO.amp.table.enhanceMarkup(divId);
-					datatable.subscribe("cellClickEvent",datatable.onEventSelectRow);
+					datatable.subscribe("checkboxClickEvent", datatable.onEventSelectRow);
 					//
 	
 					YAHOO.amp.datatables[YAHOO.amp.num_of_tables-1] = datatable;

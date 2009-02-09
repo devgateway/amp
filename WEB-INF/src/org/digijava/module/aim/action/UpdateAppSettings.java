@@ -198,7 +198,7 @@ public class UpdateAppSettings extends Action {
 		} else {
 			logger.debug("In saving");
 			AmpApplicationSettings ampAppSettings = null;
-			if (uForm.getSave() != null) {
+			if ("save".equals(uForm.getSave())) {
 				ampAppSettings = new AmpApplicationSettings();
 				ampAppSettings.setAmpAppSettingsId(uForm.getAppSettingsId());
 				ampAppSettings.setDefaultRecordsPerPage(new Integer(uForm

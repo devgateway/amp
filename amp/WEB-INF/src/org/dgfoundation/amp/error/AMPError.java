@@ -2,9 +2,9 @@ package org.dgfoundation.amp.error;
 
 import org.digijava.module.aim.helper.Constants;
 
+@Deprecated
 public abstract class AMPError extends Exception{
 	private int level; //the priority that will be used to send the error to the central server
-	
 	private boolean continuable;
 
 	public AMPError() {

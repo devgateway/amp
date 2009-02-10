@@ -29,8 +29,11 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.dgfoundation.amp.error.AMPActivityError;
-import org.dgfoundation.amp.error.AMPError;
+import org.dgfoundation.amp.error.AMPException;
+import org.dgfoundation.amp.error.AMPException;
+import org.dgfoundation.amp.error.AMPUncheckedException;
+import org.dgfoundation.amp.error.ErrorReporting;
+import org.dgfoundation.amp.error.ExceptionFactory;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
@@ -122,6 +125,8 @@ import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
  */
 public class SaveActivity extends Action {
 
+	private static final String MODULE_TAG = "save";
+
 	private static Logger logger = Logger.getLogger(SaveActivity.class);
 
 	private ServletContext ampContext = null;
@@ -130,7 +135,7 @@ public class SaveActivity extends Action {
 	
 	
 	
-	private void processPreStep(EditActivityForm eaForm, AmpActivity activity, TeamMember tm, Boolean[] createdAsDraft) throws Exception, AMPError{
+	private void processPreStep(EditActivityForm eaForm, AmpActivity activity, TeamMember tm, Boolean[] createdAsDraft) throws Exception, AMPException{
 		// if the activity is being added from a users workspace,
 		// associate the
 		// activity with the team of the current member.
@@ -169,13 +174,13 @@ public class SaveActivity extends Action {
 	 * 
 	 * these are required informations for an activity to be able to be created as draft
 	 */ 
-	private void processActivityMustHaveInfo(EditActivityForm eaForm, AmpActivity activity) throws Exception, AMPError{
+	private void processActivityMustHaveInfo(EditActivityForm eaForm, AmpActivity activity) throws Exception, AMPException{
 		activity.setName(eaForm.getIdentification().getTitle());
 	}
 	
-	private void processStep1(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPError{
-		AMPError err;
-		err = new AMPActivityError(Constants.AMP_ERROR_LEVEL_WARNING, false);
+	private void processStep1(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPException{
+		AMPException err;
+		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		
 		if (check){
 			//Do the checks here
@@ -515,9 +520,9 @@ public class SaveActivity extends Action {
 	}
 	
 	
-	private void processStep1_5(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPError{
-		AMPError err;
-		err = new AMPActivityError(Constants.AMP_ERROR_LEVEL_WARNING, false);
+	private void processStep1_5(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPException{
+		AMPException err;
+		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		
 		if (check){
 			
@@ -561,10 +566,10 @@ public class SaveActivity extends Action {
 	}
 	
 	
-	private void processStep2(boolean check,EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request, HttpSession session) throws Exception, AMPError{
+	private void processStep2(boolean check,EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request, HttpSession session) throws Exception, AMPException{
 		
-		AMPError err;
-		err = new AMPActivityError(Constants.AMP_ERROR_LEVEL_WARNING, false);
+		AMPException err;
+		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		
 		eaForm.getSectors().setPrimarySectorVisible(FeaturesUtil.isVisibleSectors("Primary", ampContext)?"true":"false");
 		eaForm.getSectors().setSecondarySectorVisible(FeaturesUtil.isVisibleSectors("Secondary", ampContext)?"true":"false");
@@ -867,9 +872,9 @@ public class SaveActivity extends Action {
 		
 	}
 
-	private void processStep3(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPError{
-		AMPError err;
-		err = new AMPActivityError(Constants.AMP_ERROR_LEVEL_WARNING, false);
+	private void processStep3(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPException{
+		AMPException err;
+		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		
 		if (check){
 			//Do the checks here
@@ -1070,9 +1075,9 @@ public class SaveActivity extends Action {
 	}
 	
 	
-	private void processStep4(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPError{
-		AMPError err;
-		err = new AMPActivityError(Constants.AMP_ERROR_LEVEL_WARNING, false);
+	private void processStep4(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPException{
+		AMPException err;
+		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		
 		if (check){
 			//Do the checks here
@@ -1256,9 +1261,9 @@ public class SaveActivity extends Action {
 	}
 	
 
-	private void processStep5(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPError{
-		AMPError err;
-		err = new AMPActivityError(Constants.AMP_ERROR_LEVEL_WARNING, false);
+	private void processStep5(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPException{
+		AMPException err;
+		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		
 		if (check){
 			//Do the checks here
@@ -1321,9 +1326,9 @@ public class SaveActivity extends Action {
 
     
 
-	private void processStep6(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request, Collection relatedLinks) throws Exception, AMPError{
-		AMPError err;
-		err = new AMPActivityError(Constants.AMP_ERROR_LEVEL_WARNING, false);
+	private void processStep6(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request, Collection relatedLinks) throws Exception, AMPException{
+		AMPException err;
+		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		
 		if (check){
 			//Do the checks here
@@ -1396,9 +1401,9 @@ public class SaveActivity extends Action {
 	}
 
     
-	private void processStep7(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPError{
-		AMPError err;
-		err = new AMPActivityError(Constants.AMP_ERROR_LEVEL_WARNING, false);
+	private void processStep7(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPException{
+		AMPException err;
+		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		
 		if (check){
 			//Do the checks here
@@ -1528,9 +1533,9 @@ public class SaveActivity extends Action {
 		
 	}
 
-	private void processStep8(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPError{
-		AMPError err;
-		err = new AMPActivityError(Constants.AMP_ERROR_LEVEL_WARNING, false);
+	private void processStep8(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPException{
+		AMPException err;
+		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		
 		if (check){
 			//Do the checks here
@@ -1581,9 +1586,9 @@ public class SaveActivity extends Action {
 	}
 
 	
-	private void processStep9(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPError{
-		AMPError err;
-		err = new AMPActivityError(Constants.AMP_ERROR_LEVEL_WARNING, false);
+	private void processStep9(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPException{
+		AMPException err;
+		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		
 		if (check){
 			//Do the checks here
@@ -1604,9 +1609,9 @@ public class SaveActivity extends Action {
 
 	}
 
-	private void processStep11(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPError{
-		AMPError err;
-		err = new AMPActivityError(Constants.AMP_ERROR_LEVEL_WARNING, false);
+	private void processStep11(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPException{
+		AMPException err;
+		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		
 		if (check){
 			//Do the checks here
@@ -1720,9 +1725,9 @@ public class SaveActivity extends Action {
 	 * 
 	 * @author Arty
 	 */
-	private void processStepBulk(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPError{
-		AMPError err;
-		err = new AMPActivityError(Constants.AMP_ERROR_LEVEL_WARNING, false);
+	private void processStepBulk(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPException{
+		AMPException err;
+		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		if (check){
 			//Do the checks here			
 			
@@ -1738,16 +1743,15 @@ public class SaveActivity extends Action {
 		
 	}
 
-	private void symErr() throws Exception, AMPError{
-		AMPError err;
-		err = new AMPActivityError(Constants.AMP_ERROR_LEVEL_WARNING, false);
-		
+	private void symErr() throws Exception, AMPException{
+		AMPException err;
+		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		throw err;
 	}
 	
 	private void processStepX(int stepNumber, boolean check, EditActivityForm eaForm, AmpActivity activity, 
 			ActionErrors errors, HttpServletRequest request, HttpSession session,
-			Collection relatedLinks, String stepText[]) throws Exception, AMPError{
+			Collection relatedLinks, String stepText[]) throws Exception, AMPException{
 		
 		
 		/**
@@ -1776,6 +1780,8 @@ public class SaveActivity extends Action {
 		case 3:
 			stepText[stepNumber] = "3";
 			processStep3(check, eaForm, activity, errors, request);
+			if (check == false)
+				symErr();
 			break;
 		case 4:
 			stepText[stepNumber] = "4";
@@ -1909,9 +1915,9 @@ public class SaveActivity extends Action {
 		return actId;
 	}
 	
-	public Long recoverySave(RecoverySaveParameters rsp) throws AMPError{
+	public Long recoverySave(RecoverySaveParameters rsp) throws AMPException{
 		
-		AMPError err;
+		AMPException err;
 		Long actId;
 		
 		AmpActivity recoveryActivity=null;
@@ -1919,12 +1925,17 @@ public class SaveActivity extends Action {
 		logger.debug("Attempting normal save!");
 		try {
 			rsp.setAlwaysRollback(false);
+			symErr();
 			actId = switchSave(rsp);
 			logger.debug("Succeeded!");
 			return actId;
 		} catch (Exception e) {
-			logger.error(e);
-			//TODO: Record error that initially caused save problems
+			// Record error that initially caused save problems
+			AMPException ae = ExceptionFactory.newAMPException(Constants.AMP_ERROR_LEVEL_ERROR, true, e);
+			ae.addTag(MODULE_TAG); //even if the error only gets reported we still have to tag it
+			ErrorReporting.handle(ae, logger);
+			//logger.error(e);  //no need for this, the ErrorReporting will log the error too
+			
 			recoveryMode = true;
 		}
 		
@@ -1955,8 +1966,13 @@ public class SaveActivity extends Action {
 					} catch (Exception e) {
 						//these steps are essential
 						logger.error("Essential Step Failure!");
-						err = new AMPActivityError(Constants.AMP_ERROR_LEVEL_ERROR, false);
-						throw err;
+						
+						//err = new AMPException(Constants.AMP_ERROR_LEVEL_ERROR, false, e);
+						//throw err;
+						
+						AMPUncheckedException aue = ExceptionFactory.newAMPUncheckedException(Constants.AMP_ERROR_LEVEL_CRITICAL, false, e);
+						aue.addTag(MODULE_TAG);
+						throw aue;
 					}				
 					//We rebuild AmpActivity including all steps lower than currentStep
 					logger.debug("Adding previous steps!");
@@ -1967,15 +1983,20 @@ public class SaveActivity extends Action {
 							} catch (Exception e) {
 								// All steps till here should be validated, but let's take precaution
 								rsp.getStepFailure()[i] = true;
-								//TODO: Log a small error, that here I should never be
+								
+								//Log a small error, that here I should never be
+								AMPException aue = new AMPException(Constants.AMP_ERROR_LEVEL_ERROR, true, e);
+								aue.addTag(MODULE_TAG);
+								ErrorReporting.handle(aue, logger);
 								
 								//We invalidated this step so let's take it all over again
 								badSteps++;
 								if (badSteps >= rsp.getNoOfSteps()){
 									logger.error("WARNING: FOREVER LOOP SPOTTED!");
 									//precaution so we don't end in a forever loop
-									err = new AMPActivityError(Constants.AMP_ERROR_LEVEL_ERROR, false);
-									throw err;
+									AMPUncheckedException aue2 = new AMPUncheckedException(Constants.AMP_ERROR_LEVEL_ERROR, false, "FOREVER LOOP SPOTTED!");
+									aue2.addTag(MODULE_TAG);
+									throw aue2;
 								}
 								break thisStep;
 							}
@@ -2001,7 +2022,12 @@ public class SaveActivity extends Action {
 						rsp.getStepFailureText()[currentStep] = new String(ActivityUtil.stackTraceToString(e));
 						//no need to try saving ... because we didn't improve anything
 						currentStep++;
-						
+
+						//Log a small error know what happened
+						AMPException aue = new AMPException(Constants.AMP_ERROR_LEVEL_ERROR, true, e);
+						aue.addTag(MODULE_TAG);
+						ErrorReporting.handle(aue, logger);
+
 						break thisStep;
 					}
 					
@@ -2018,6 +2044,11 @@ public class SaveActivity extends Action {
 						logger.debug("     FAILED!");
 						rsp.getStepFailure()[currentStep] = true;
 						rsp.getStepFailureText()[currentStep] = new String(ActivityUtil.stackTraceToString(e));
+						
+						//Log a error -- see what happens
+						AMPException aue = new AMPException(Constants.AMP_ERROR_LEVEL_ERROR, true, e);
+						aue.addTag(MODULE_TAG);
+						ErrorReporting.handle(aue, logger);
 					}
 					if (currentStep == rsp.getNoOfSteps() - 1) //if the last added Step has failed then rebuild the activity
 						rebuild = true;
@@ -2033,14 +2064,19 @@ public class SaveActivity extends Action {
 				actId = switchSave(rsp);
 			}
 			else{
-				throw new AMPActivityError(Constants.AMP_ERROR_LEVEL_ERROR, false);
+				AMPException ae = new AMPException(Constants.AMP_ERROR_LEVEL_ERROR, false, "Recover Activity NULL");
+				ae.addTag(MODULE_TAG);
+				throw ae;
 			}
 			logger.debug("SUCCESS!");
 			return actId;
 		} catch (Exception e) {
 			logger.debug("FAILED!!!!!!!!!!!!");
-			err = new AMPActivityError(Constants.AMP_ERROR_LEVEL_ERROR, false, e);
-			throw err;
+
+			AMPUncheckedException aue = ExceptionFactory.newAMPUncheckedException(Constants.AMP_ERROR_LEVEL_ERROR, false, e);
+			aue.addTag(MODULE_TAG);
+			//err = new AMPException(Constants.AMP_ERROR_LEVEL_ERROR, false, e);
+			throw aue;
 		}
 	}
 	
@@ -2053,326 +2089,327 @@ public class SaveActivity extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-
-		Long actId = null;
-		HttpSession session = request.getSession();
-		//Set<Components<AmpComponentFunding>> tempComp = new HashSet<Components<AmpComponentFunding>>();
-		ampContext = getServlet().getServletContext();
-		ActionErrors errors = new ActionErrors();
-		EditActivityForm eaForm = (EditActivityForm) form;
-		AmpActivity activity = new AmpActivity();
-		Collection relatedLinks = new ArrayList();
-		
-		/**
-		 * Forward the user if:
-		 * if user has not logged in
-		 * 
-		 */
-		if (session.getAttribute("currentMember") == null || eaForm.getPageId() < 0 || eaForm.getPageId() > 1) {
-			return mapping.findForward("index");
-		}
-
-		//Some session cleanup
-		session.removeAttribute("report");
-		session.removeAttribute("reportMeta");
-		session.removeAttribute("forStep9");
-		session.removeAttribute("commentColInSession");
-
-		TeamMember tm = null;
-		if (session.getAttribute("currentMember") != null)
-			tm = (TeamMember) session.getAttribute("currentMember");
-
-		Boolean[] createdAsDraft={false};
-		//any processing that needs to be done to the activity before the actual steps
-		
-		processPreStep(eaForm, activity, tm, createdAsDraft);
-
-		String toDelete = request.getParameter("delete");
-		if (toDelete == null || (!toDelete.trim().equalsIgnoreCase("true"))) {
-			if (eaForm.isEditAct() == false) {
-				AmpActivity act = ActivityUtil.getActivityByName(eaForm.getIdentification().getTitle());
-				if (act != null) {
-					eaForm.setActivityId(act.getAmpActivityId());
-					logger.debug("Activity with the name "
-							+ eaForm.getIdentification().getTitle() + " already exist.");
-					return mapping.findForward("activityExist");
-				}
+		//BIG Try Catch to Tag errors
+		try{
+			Long actId = null;
+			HttpSession session = request.getSession();
+			//Set<Components<AmpComponentFunding>> tempComp = new HashSet<Components<AmpComponentFunding>>();
+			ampContext = getServlet().getServletContext();
+			ActionErrors errors = new ActionErrors();
+			EditActivityForm eaForm = (EditActivityForm) form;
+			AmpActivity activity = new AmpActivity();
+			Collection relatedLinks = new ArrayList();
+			
+			/**
+			 * Forward the user if:
+			 * if user has not logged in
+			 * 
+			 */
+			if (session.getAttribute("currentMember") == null || eaForm.getPageId() < 0 || eaForm.getPageId() > 1) {
+				return mapping.findForward("index");
 			}
-		} else if (toDelete.trim().equals("true")) {
-			eaForm.setEditAct(true);
-		} else {
-			logger.debug("No duplicate found");
-		}
 
-		
-		boolean titleFlag = false;
-		boolean statusFlag = false;
+			//Some session cleanup
+			session.removeAttribute("report");
+			session.removeAttribute("reportMeta");
+			session.removeAttribute("forStep9");
+			session.removeAttribute("commentColInSession");
 
-		
-		
-		//The number of processStep methods we have
-		final int noOfSteps = 11;
-		String stepText[] = new String[noOfSteps];
-		Boolean stepFailure[] = new Boolean[noOfSteps];
-		String stepFailureText[] = new String[noOfSteps];
-		for (int i = 0; i < noOfSteps; i++){
-			stepFailure[i] = false;
-			stepText[i] = new String();
-			stepFailureText[i] = new String();
-		}
-		eaForm.setStepText(stepText);
-		eaForm.setStepFailure(stepFailure);
-		eaForm.setStepFailureText(stepFailureText);
-		
-		logger.debug("No of steps:" + String.valueOf(eaForm.getSteps().size()));
-		
-		int stepNumber = 0;
-		while (stepNumber < noOfSteps){
-			try {
-				processStepX(stepNumber, true, eaForm, activity, errors, request, session, relatedLinks, stepText);
-			} catch (AMPError error) {
-				if (!error.isContinuable()){
-					if (error.getLevel() == Constants.AMP_ERROR_LEVEL_WARNING){
-						//in this case user messed up, the ActionError was set-up in the method
-						//we just redirect him to the page where he needs to correct the input
-						logger.debug(">>> Warning -> redirect to step:" + stepText[stepNumber]);
-						eaForm.setStep(stepText[stepNumber]);
-						request.setAttribute("step", stepText[stepNumber]);
-						String forwardText = "addActivityStep" + stepText[stepNumber];
-						forwardText = "addActivityStepXNR";
-						return mapping.findForward(forwardText);
+			TeamMember tm = null;
+			if (session.getAttribute("currentMember") != null)
+				tm = (TeamMember) session.getAttribute("currentMember");
+
+			Boolean[] createdAsDraft={false};
+			//any processing that needs to be done to the activity before the actual steps
+			
+			processPreStep(eaForm, activity, tm, createdAsDraft);
+
+			String toDelete = request.getParameter("delete");
+			if (toDelete == null || (!toDelete.trim().equalsIgnoreCase("true"))) {
+				if (eaForm.isEditAct() == false) {
+					AmpActivity act = ActivityUtil.getActivityByName(eaForm.getIdentification().getTitle());
+					if (act != null) {
+						eaForm.setActivityId(act.getAmpActivityId());
+						logger.debug("Activity with the name "
+								+ eaForm.getIdentification().getTitle() + " already exist.");
+						return mapping.findForward("activityExist");
+					}
+				}
+			} else if (toDelete.trim().equals("true")) {
+				eaForm.setEditAct(true);
+			} else {
+				logger.debug("No duplicate found");
+			}
+
+			
+			boolean titleFlag = false;
+			boolean statusFlag = false;
+
+			
+			
+			//The number of processStep methods we have
+			final int noOfSteps = 11;
+			String stepText[] = new String[noOfSteps];
+			Boolean stepFailure[] = new Boolean[noOfSteps];
+			String stepFailureText[] = new String[noOfSteps];
+			for (int i = 0; i < noOfSteps; i++){
+				stepFailure[i] = false;
+				stepText[i] = new String();
+				stepFailureText[i] = new String();
+			}
+			eaForm.setStepText(stepText);
+			eaForm.setStepFailure(stepFailure);
+			eaForm.setStepFailureText(stepFailureText);
+			
+			logger.debug("No of steps:" + String.valueOf(eaForm.getSteps().size()));
+			
+			int stepNumber = 0;
+			while (stepNumber < noOfSteps){
+				try {
+					processStepX(stepNumber, true, eaForm, activity, errors, request, session, relatedLinks, stepText);
+				} catch (AMPException error) {
+					if (!error.isContinuable()){
+						if (error.getLevel() == Constants.AMP_ERROR_LEVEL_WARNING){
+							//in this case user messed up, the ActionError was set-up in the method
+							//we just redirect him to the page where he needs to correct the input
+							logger.debug(">>> Warning -> redirect to step:" + stepText[stepNumber]);
+							eaForm.setStep(stepText[stepNumber]);
+							request.setAttribute("step", stepText[stepNumber]);
+							String forwardText = "addActivityStep" + stepText[stepNumber];
+							forwardText = "addActivityStepXNR";
+							return mapping.findForward(forwardText);
+						}
+						else{
+							//TODO: redirect to custom error page
+							logger.error(">>> Error on step:" + stepText[stepNumber]);
+						}
 					}
 					else{
-						//TODO: redirect to custom error page
-						logger.error(">>> Error on step:" + stepText[stepNumber]);
+						logger.error(">>> Error that is not continuable on step:" + stepText[stepNumber]);
+					}
+				} catch (Exception e) {
+					logger.error(">>> Unknown error on step:" + stepText[stepNumber]);
+				}
+				stepNumber++;
+			}
+
+			if(eaForm.getCustomFields()!=null){
+				List<CustomField<?>> customFields = eaForm.getCustomFields();
+				Iterator<CustomField<?>> cfi = customFields.iterator();
+				while(cfi.hasNext()){
+					CustomField customField = cfi.next();
+					String propertyName = customField.getAmpActivityPropertyName();
+					if(propertyName == null){
+						logger.warn("Please set AmpActivityPropertyName for all custom fields.");
+						continue;
+					}
+					try{
+						BeanUtils.setProperty(activity, customField.getAmpActivityPropertyName(), customField.getValue());
+					}catch(Exception e){
+						logger.error("Custom Field [" + customField.getAmpActivityPropertyName() + "] exception", e);
 					}
 				}
-				else{
-					logger.error(">>> Error that is not continuable on step:" + stepText[stepNumber]);
-				}
-			} catch (Exception e) {
-				logger.error(">>> Unknown error on step:" + stepText[stepNumber]);
 			}
-			stepNumber++;
-		}
+					
+			//TAG HERE YOU SHOULD BE
 
-		if(eaForm.getCustomFields()!=null){
-			List<CustomField<?>> customFields = eaForm.getCustomFields();
-			Iterator<CustomField<?>> cfi = customFields.iterator();
-			while(cfi.hasNext()){
-				CustomField customField = cfi.next();
-				String propertyName = customField.getAmpActivityPropertyName();
-				if(propertyName == null){
-					logger.warn("Please set AmpActivityPropertyName for all custom fields.");
-					continue;
-				}
-				try{
-					BeanUtils.setProperty(activity, customField.getAmpActivityPropertyName(), customField.getValue());
-				}catch(Exception e){
-					logger.error("Custom Field [" + customField.getAmpActivityPropertyName() + "] exception", e);
-				}
-			}
-		}
+			Long field = null;
+			if (eaForm.getComments().getField() != null)
+				field = eaForm.getComments().getField().getAmpFieldId();
+
+			//this fields are used to determine receivers of approvals(Messaging System)
+			String oldActivityApprovalStatus="";
+			String editedActivityApprovalStatus="";
+
+			
+			/*
+			 * Do all remaining processing for the activity before saving
+			 * Both cases (when editing and when creating a new activity) are treated inside the method 
+			 */
+		    processPostStep(eaForm, activity, tm);
+		    RecoverySaveParameters rsp;
+		    if (eaForm.isEditAct()) {
+				List<String> auditTrail = AuditLoggerUtil.generateLogs(
+						activity, eaForm.getActivityId());
+				//*** Preparing parameters for the recovery save
+				rsp = new RecoverySaveParameters();
+				rsp.setNoOfSteps(noOfSteps);
+				rsp.setStepText(stepText);
+				rsp.setStepFailure(stepFailure);
+				rsp.setStepFailureText(stepFailureText);
+				rsp.setEaForm(eaForm);
+				rsp.setTm(tm);
 				
-		//TAG HERE YOU SHOULD BE
+				rsp.setActivity(activity);
+				rsp.setCreatedAsDraft(createdAsDraft[0]);
+				rsp.setErrors(errors);
+				rsp.setRequest(request);
+				rsp.setSession(session);
+				rsp.setField(field);
+				
+				rsp.setRelatedLinks(relatedLinks);
+				//rsp.setTempComp(tempComp);
+				rsp.setDidRecover(false);
+				//***
+				
+				// update an existing activity
+				actId = recoverySave(rsp);
+				activity = rsp.getActivity();
+	              
+	                        AmpActivity aAct = ActivityUtil.getAmpActivity(actId);
+	                        if (aAct.getDraft() != null && !aAct.getDraft()) {
+	                            if (aAct.getApprovalStatus().equals(Constants.APPROVED_STATUS)) {
+	                                if (!eaForm.getIdentification().getApprovalStatus().equals(Constants.APPROVED_STATUS)||(eaForm.getIdentification().getWasDraft()!=null&&eaForm.getIdentification().getWasDraft())) {
+	                                    new ApprovedActivityTrigger(aAct);
+	                                }
+	                            } else {
+	                                new NotApprovedActivityTrigger(aAct);
 
-		Long field = null;
-		if (eaForm.getComments().getField() != null)
-			field = eaForm.getComments().getField().getAmpFieldId();
+	                            }
+	                        }
+				
+				/*actId = ActivityUtil.saveActivity(activity, eaForm.getActivityId(),
+						true, eaForm.getCommentsCol(), eaForm
+						.isSerializeFlag(), field, relatedLinks, tm
+						.getMemberId(), eaForm.getIndicatorsME(),tempComp,eaForm.getContracts());
+				*/
+				
+				//update lucene index
+				LuceneUtil.addUpdateActivity(request, true, actId);
+				//for logging the activity
+				AuditLoggerUtil.logActivityUpdate(session, request,
+						activity, auditTrail);
 
-		//this fields are used to determine receivers of approvals(Messaging System)
-		String oldActivityApprovalStatus="";
-		String editedActivityApprovalStatus="";
+				// remove the activity details from the edit activity list
+				if (toDelete == null
+						|| (!toDelete.trim().equalsIgnoreCase("true"))) {
+					String sessId = session.getId();
+					synchronized (ampContext) {
+						HashMap activityMap = (HashMap) ampContext
+						.getAttribute(Constants.EDIT_ACT_LIST);
+						activityMap.remove(sessId);
+						ArrayList sessList = (ArrayList) ampContext
+						.getAttribute(Constants.SESSION_LIST);
+						sessList.remove(sessId);
+						Collections.sort(sessList);
+						ampContext.setAttribute(Constants.EDIT_ACT_LIST,
+								activityMap);
+						ampContext.setAttribute(Constants.SESSION_LIST,
+								sessList);
 
-		
-		/*
-		 * Do all remaining processing for the activity before saving
-		 * Both cases (when editing and when creating a new activity) are treated inside the method 
-		 */
-	    processPostStep(eaForm, activity, tm);
-	    RecoverySaveParameters rsp;
-	    if (eaForm.isEditAct()) {
-			List<String> auditTrail = AuditLoggerUtil.generateLogs(
-					activity, eaForm.getActivityId());
-			//*** Preparing parameters for the recovery save
-			rsp = new RecoverySaveParameters();
-			rsp.setNoOfSteps(noOfSteps);
-			rsp.setStepText(stepText);
-			rsp.setStepFailure(stepFailure);
-			rsp.setStepFailureText(stepFailureText);
-			rsp.setEaForm(eaForm);
-			rsp.setTm(tm);
-			
-			rsp.setActivity(activity);
-			rsp.setCreatedAsDraft(createdAsDraft[0]);
-			rsp.setErrors(errors);
-			rsp.setRequest(request);
-			rsp.setSession(session);
-			rsp.setField(field);
-			
-			rsp.setRelatedLinks(relatedLinks);
-			//rsp.setTempComp(tempComp);
-			rsp.setDidRecover(false);
-			//***
-			
-			// update an existing activity
-			actId = recoverySave(rsp);
-			activity = rsp.getActivity();
-              
-                        AmpActivity aAct = ActivityUtil.getAmpActivity(actId);
-                        if (aAct.getDraft() != null && !aAct.getDraft()) {
-                            if (aAct.getApprovalStatus().equals(Constants.APPROVED_STATUS)) {
-                                if (!eaForm.getIdentification().getApprovalStatus().equals(Constants.APPROVED_STATUS)||(eaForm.getIdentification().getWasDraft()!=null&&eaForm.getIdentification().getWasDraft())) {
-                                    new ApprovedActivityTrigger(aAct);
-                                }
-                            } else {
-                                new NotApprovedActivityTrigger(aAct);
+						HashMap tsList = (HashMap) ampContext
+						.getAttribute(Constants.TS_ACT_LIST);
+						if (tsList != null) {
+							tsList.remove(eaForm.getActivityId());
+						}
+						ampContext.setAttribute(Constants.TS_ACT_LIST,
+								tsList);
+						HashMap uList = (HashMap) ampContext
+						.getAttribute(Constants.USER_ACT_LIST);
+						if (uList != null) {
+							uList.remove(tm.getMemberId());
+						}
+						ampContext.setAttribute(Constants.USER_ACT_LIST,
+								uList);
 
-                            }
-                        }
-			
-			/*actId = ActivityUtil.saveActivity(activity, eaForm.getActivityId(),
-					true, eaForm.getCommentsCol(), eaForm
-					.isSerializeFlag(), field, relatedLinks, tm
-					.getMemberId(), eaForm.getIndicatorsME(),tempComp,eaForm.getContracts());
-			*/
-			
-			//update lucene index
-			LuceneUtil.addUpdateActivity(request, true, actId);
-			//for logging the activity
-			AuditLoggerUtil.logActivityUpdate(session, request,
-					activity, auditTrail);
-
-			// remove the activity details from the edit activity list
-			if (toDelete == null
-					|| (!toDelete.trim().equalsIgnoreCase("true"))) {
-				String sessId = session.getId();
-				synchronized (ampContext) {
-					HashMap activityMap = (HashMap) ampContext
-					.getAttribute(Constants.EDIT_ACT_LIST);
-					activityMap.remove(sessId);
-					ArrayList sessList = (ArrayList) ampContext
-					.getAttribute(Constants.SESSION_LIST);
-					sessList.remove(sessId);
-					Collections.sort(sessList);
-					ampContext.setAttribute(Constants.EDIT_ACT_LIST,
-							activityMap);
-					ampContext.setAttribute(Constants.SESSION_LIST,
-							sessList);
-
-					HashMap tsList = (HashMap) ampContext
-					.getAttribute(Constants.TS_ACT_LIST);
-					if (tsList != null) {
-						tsList.remove(eaForm.getActivityId());
 					}
-					ampContext.setAttribute(Constants.TS_ACT_LIST,
-							tsList);
-					HashMap uList = (HashMap) ampContext
-					.getAttribute(Constants.USER_ACT_LIST);
-					if (uList != null) {
-						uList.remove(tm.getMemberId());
-					}
-					ampContext.setAttribute(Constants.USER_ACT_LIST,
-							uList);
-
 				}
+			} else {
+				// create a new activity
+				
+
+				//*** Preparing parameters for the recovery save
+				rsp = new RecoverySaveParameters();
+				rsp.setNoOfSteps(noOfSteps);
+				rsp.setStepText(stepText);
+				rsp.setStepFailure(stepFailure);
+				rsp.setStepFailureText(stepFailureText);
+				rsp.setEaForm(eaForm);
+				rsp.setTm(tm);
+				
+				rsp.setActivity(activity);
+				rsp.setCreatedAsDraft(createdAsDraft[0]);
+				rsp.setErrors(errors);
+				rsp.setRequest(request);
+				rsp.setSession(session);
+				rsp.setField(field);
+				
+				rsp.setRelatedLinks(relatedLinks);
+				//rsp.setTempComp(tempComp);
+				rsp.setDidRecover(false);
+				//***
+
+				actId = recoverySave(rsp);			
+				activity = rsp.getActivity();
+	                        AmpActivity aAct=ActivityUtil.getAmpActivity(actId);
+	                        if(activity.getDraft()!=null&&!activity.getDraft()){
+				if(activity.getApprovalStatus().equals(Constants.APPROVED_STATUS)){
+	                                new ApprovedActivityTrigger(aAct);
+				}
+	                        else{
+					new NotApprovedActivityTrigger(aAct);
+				
+	                        }
+	                        }
+				/*actId = ActivityUtil.saveActivity(activity, null, false, eaForm.getCommentsCol(), eaForm.isSerializeFlag(),
+						field, relatedLinks,tm.getMemberId() , eaForm.getIndicatorsME(), tempComp, eaForm.getContracts());
+				*/
+				//update lucene index
+				LuceneUtil.addUpdateActivity(request, false, actId);
+				//for logging the activity
+				AuditLoggerUtil.logObject(session, request, activity, "add");
 			}
-		} else {
-			// create a new activity
-			
 
-			//*** Preparing parameters for the recovery save
-			rsp = new RecoverySaveParameters();
-			rsp.setNoOfSteps(noOfSteps);
-			rsp.setStepText(stepText);
-			rsp.setStepFailure(stepFailure);
-			rsp.setStepFailureText(stepFailureText);
-			rsp.setEaForm(eaForm);
-			rsp.setTm(tm);
-			
-			rsp.setActivity(activity);
-			rsp.setCreatedAsDraft(createdAsDraft[0]);
-			rsp.setErrors(errors);
-			rsp.setRequest(request);
-			rsp.setSession(session);
-			rsp.setField(field);
-			
-			rsp.setRelatedLinks(relatedLinks);
-			//rsp.setTempComp(tempComp);
-			rsp.setDidRecover(false);
-			//***
-
-			actId = recoverySave(rsp);			
-			activity = rsp.getActivity();
-                        AmpActivity aAct=ActivityUtil.getAmpActivity(actId);
-                        if(activity.getDraft()!=null&&!activity.getDraft()){
-			if(activity.getApprovalStatus().equals(Constants.APPROVED_STATUS)){
-                                new ApprovedActivityTrigger(aAct);
+			//If we're adding an activity, create system/admin message
+			if(!createdAsDraft[0]) {
+				ActivitySaveTrigger ast=new ActivitySaveTrigger(activity);
 			}
-                        else{
-				new NotApprovedActivityTrigger(aAct);
+
 			
-                        }
-                        }
-			/*actId = ActivityUtil.saveActivity(activity, null, false, eaForm.getCommentsCol(), eaForm.isSerializeFlag(),
-					field, relatedLinks,tm.getMemberId() , eaForm.getIndicatorsME(), tempComp, eaForm.getContracts());
-			*/
-			//update lucene index
-			LuceneUtil.addUpdateActivity(request, false, actId);
-			//for logging the activity
-			AuditLoggerUtil.logObject(session, request, activity, "add");
+			
+			if(DocumentUtil.isDMEnabled()) {
+				Site currentSite = RequestUtils.getSite(request);
+				Node spaceNode = DocumentUtil.getDocumentSpace(currentSite,
+						activity.getDocumentSpace());
+				DocumentUtil.renameNode(spaceNode, activity.getName());
+			}
+
+			//We need to getPageId before the cleanup so it doesn't get reset
+			int temp = eaForm.getPageId();
+
+			/**
+			 *  Perform session & form cleanup
+			 */
+			cleanup(eaForm, session, request, mapping, actId, tm);
+
+			//OLD!!!
+			//boolean surveyFlag = false;
+
+			if (temp == 0)
+				return mapping.findForward("adminHome");
+			else if (temp == 1) {
+				//OLD surveyFlag was always false
+				/*if (surveyFlag) { // forwarding to edit survey action for
+					// saving survey responses
+					logger.debug("forwarding to edit survey action...");
+					return mapping.findForward("saveSurvey");
+				} else {*/
+					if (rsp.isDidRecover())
+						return mapping.findForward("saveErrors");
+					else
+						return mapping.findForward("viewMyDesktop");
+				//}
+			} else {
+				logger.info("returning null....");
+				return null;
+			}			
+		}catch (Exception e) {
+			AMPUncheckedException au = ExceptionFactory.newAMPUncheckedException(e); //we used unchecked so that code currently using this method won't be affected(no try catch)
+			au.addTag(MODULE_TAG); //tag this in concordance to the documents on Confluence
+			au.setContinuable(false); //we don't know what happend, we can't handle it
+			au.setLevel(Constants.AMP_ERROR_LEVEL_ERROR); //this should probabilly do
+			throw au; //thow
 		}
-
-		//If we're adding an activity, create system/admin message
-		if(!createdAsDraft[0]) {
-			ActivitySaveTrigger ast=new ActivitySaveTrigger(activity);
-		}
-
-		
-
-		
-	
-	
-		
-		
-		if(DocumentUtil.isDMEnabled()) {
-			Site currentSite = RequestUtils.getSite(request);
-			Node spaceNode = DocumentUtil.getDocumentSpace(currentSite,
-					activity.getDocumentSpace());
-			DocumentUtil.renameNode(spaceNode, activity.getName());
-		}
-
-		//We need to getPageId before the cleanup so it doesn't get reset
-		int temp = eaForm.getPageId();
-
-		/**
-		 *  Perform session & form cleanup
-		 */
-		cleanup(eaForm, session, request, mapping, actId, tm);
-
-		//OLD!!!
-		//boolean surveyFlag = false;
-
-		if (temp == 0)
-			return mapping.findForward("adminHome");
-		else if (temp == 1) {
-			//OLD surveyFlag was always false
-			/*if (surveyFlag) { // forwarding to edit survey action for
-				// saving survey responses
-				logger.debug("forwarding to edit survey action...");
-				return mapping.findForward("saveSurvey");
-			} else {*/
-				if (rsp.isDidRecover())
-					return mapping.findForward("saveErrors");
-				else
-					return mapping.findForward("viewMyDesktop");
-			//}
-		} else {
-			logger.info("returning null....");
-			return null;
-		}
-
-	
 	}
 
 

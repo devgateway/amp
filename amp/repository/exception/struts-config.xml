@@ -13,5 +13,6 @@
 -->
 		<action name="exceptionReportForm" type="org.digijava.module.exception.action.ExceptionReport" input="/exception/exceptionReport" path="/exception/exceptionReport" scope="request"/>
 		<action name="exceptionReportForm" type="org.digijava.module.exception.action.ShowExceptionReport" input="/exception/showExceptionReport" path="/exception/showExceptionReport" scope="request"/>
+		<action name="exceptionReportForm" type="org.digijava.module.exception.action.GetConfluenceDocs" input="/exception/getConfluenceDocs" path="/exception/getConfluenceDocs" scope="request"/>		
   </action-mappings>
 </struts-config>

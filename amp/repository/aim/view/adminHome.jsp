@@ -265,7 +265,7 @@
                             </tr>
                             -->
                            
-						  <!-- hidden Lucene Debug!
+						  <!-- hidden Lucene Debug! -->
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -273,11 +273,11 @@
                                 <digi:trn key="aim:tipUserManager">Click here to view Lucene index</digi:trn>
                               </c:set>
                               <digi:link module="aim" href="/luceneIndex.do" title="${translation}">
-                                <digi:trn key="aim:luceneDebug">Lucene Debug</digi:trn>
+                                <digi:trn key="aim:luceneDebug">Arty Debug</digi:trn>
                               </digi:link>
                             </td>
                           </tr>
-						   -->
+						  <!-- -->
                         </table>
                       </td>
                     </tr>

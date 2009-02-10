@@ -4,12 +4,6 @@
 	<classpathentry kind="src" path="gen-src"/>
 	<classpathentry kind="src" path="WEB-INF/amp-test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="var" path="JBOSS-LIB/commons-logging.jar"/>
-	<classpathentry kind="var" path="JBOSS-LIB/jsp-api.jar"/>
-	<classpathentry kind="var" path="JBOSS-LIB/log4j.jar"/>
-	<classpathentry kind="var" path="JBOSS-LIB/servlet-api.jar"/>
-	<classpathentry kind="var" path="JBOSS-LIB/commons-collections.jar"/>
-	<classpathentry kind="var" path="JBOSS-LIB/mysql-connector-java-5.0.8-bin.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/acegi-security-1.0.1.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/acegi-security-cas-1.0.1.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/activation.jar"/>
@@ -150,5 +144,13 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/jboss/jbosssx-client.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jboss/jnp-client.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jboss/jta-1.1.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/swizzle-confluence-1.1.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/xmlrpc-2.0.1.jar"/>
+	<classpathentry kind="var" path="JBOSS-LIB/commons-collections.jar"/>
+	<classpathentry kind="var" path="JBOSS-LIB/commons-logging.jar"/>
+	<classpathentry kind="var" path="JBOSS-LIB/jsp-api.jar"/>
+	<classpathentry kind="var" path="JBOSS-LIB/log4j.jar"/>
+	<classpathentry kind="var" path="JBOSS-LIB/mysql-connector-java-5.0.8-bin.jar"/>
+	<classpathentry kind="var" path="JBOSS-LIB/servlet-api.jar"/>
 	<classpathentry kind="output" path="WEB-INF/classes"/>
 </classpath>

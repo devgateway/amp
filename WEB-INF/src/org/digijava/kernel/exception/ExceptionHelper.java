@@ -26,10 +26,14 @@ import java.io.CharArrayWriter;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 
+import org.dgfoundation.amp.error.AMPException;
+import org.dgfoundation.amp.error.AMPTaggedExceptions;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
 import java.util.HashMap;
+import java.util.LinkedList;
+
 import javax.servlet.http.HttpSession;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.action.ActionForward;
@@ -70,6 +74,24 @@ public class ExceptionHelper {
         exceptionInfo.setSourceURL(RequestUtils.getSourceURL(request));
         if (cause != null) {
             exceptionInfo.setErrorMessage(cause.toString());
+            exceptionInfo.setUserMessage(cause.getMessage());
+            
+            if (cause instanceof AMPTaggedExceptions){ //we have AMP errors either checked or unchecked
+            	AMPTaggedExceptions taggedEx = ((AMPTaggedExceptions)cause);
+            	if (taggedEx.getMainCause() != null){
+            		String msg = taggedEx.getMainCause().getMessage();
+            		if (msg != null)
+            			taggedEx.getMainCause().getMessage();
+            		exceptionInfo.setUserMessage(msg);
+            		
+            	}
+            		
+            	LinkedList<String> tags = (taggedEx).getTags();
+            	if (tags != null && tags.size() > 0){
+            		exceptionInfo.setMainTag(tags.get(0));
+            	}
+            	exceptionInfo.setTags(tags);
+            }
 
             CharArrayWriter cw = new CharArrayWriter();
             PrintWriter pw = new PrintWriter(cw, true);

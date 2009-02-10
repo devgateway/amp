@@ -1,7 +1,6 @@
 package org.dgfoundation.amp.error;
 
-
-
+@Deprecated
 public class AMPActivityError extends AMPError {
 
 	private static final long serialVersionUID = -1625562870224489598L;

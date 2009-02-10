@@ -39,10 +39,26 @@
 				<tr>
 					<td height=16 vAlign=center width=571>
 						<span class=subtitle-blue>
-						<digi:trn key="aim:luceneIndexing">
-							Lucene Indexing
+						<digi:trn key="aim:artyDebug">
+							Arty Debug
 						</digi:trn>
 						</span>
+					</td>
+				</tr>
+				<tr>
+					<td height=16 vAlign=center width=571>
+						<digi:link href="/luceneIndex.do?action=checked">
+							Generate Checked Ex
+						</digi:link>
+						|
+						<digi:link href="/luceneIndex.do?action=unchecked">
+							Generate Un-Checked Ex
+						</digi:link>
+						|
+						<digi:link href="/luceneIndex.do?action=confluence">
+							Confluence
+						</digi:link>
+						
 					</td>
 				</tr>
 				<tr>

@@ -46,8 +46,17 @@ public class DigiExceptionReportForm
     private String issueId;
     private boolean teaserView;
     private Long reportId;
+    private Long rand; //random appended to a string - used in GetConfluenceDocs
 
-    /**
+    public Long getRand() {
+		return rand;
+	}
+
+	public void setRand(Long rand) {
+		this.rand = rand;
+	}
+
+	/**
      * Validate user input
      *
      * @param actionMapping

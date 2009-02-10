@@ -22,10 +22,17 @@
 
 package org.digijava.kernel.exception;
 
+import java.util.LinkedList;
+
 public class ExceptionInfo {
+	public static final String EXCEPTION_INFO = "exInfo";
     private Integer exceptionCode;
     private String stackTrace;
     private String errorMessage;
+    private String userMessage;
+    private String mainTag;
+    private LinkedList<String> tags;
+    private String backLink;
     private String sourceURL;
     private long siteId;
     private String siteKey;
@@ -113,4 +120,37 @@ public class ExceptionInfo {
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }
+
+	public String getUserMessage() {
+		return userMessage;
+	}
+
+	public void setUserMessage(String userMessage) {
+		this.userMessage = userMessage;
+	}
+
+	public String getMainTag() {
+		return mainTag;
+	}
+
+	public void setMainTag(String mainTag) {
+		this.mainTag = mainTag;
+	}
+
+	public String getBackLink() {
+		return backLink;
+	}
+
+	public void setBackLink(String backLink) {
+		this.backLink = backLink;
+	}
+
+	public LinkedList<String> getTags() {
+		return tags;
+	}
+
+	public void setTags(LinkedList<String> tags) {
+		this.tags = tags;
+	}
+	
 }

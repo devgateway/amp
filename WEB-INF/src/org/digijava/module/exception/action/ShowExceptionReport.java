@@ -67,6 +67,7 @@ public final class ShowExceptionReport
             exceptionInfo = ExceptionHelper.getExceptioinInfo(request);
         }
         if (exceptionInfo != null) {
+        	exceptionInfo.setBackLink(request.getHeader("Referer"));
             formReport.setExceptionInfo(exceptionInfo);
         }
 
@@ -76,8 +77,15 @@ public final class ShowExceptionReport
             formReport.setName(currentUser.getName());
             formReport.setEmail(currentUser.getEmail());
         }
-
+        
+        
+        //generate a unique sufix
+        long rand = System.currentTimeMillis();
+        //set the info for the ajax request in the session and store the unique suffix in the form
+        formReport.setRand(new Long(rand));
+        request.getSession().setAttribute(ExceptionInfo.EXCEPTION_INFO + String.valueOf(rand), exceptionInfo);
+        
         return new ActionForward(
-            "/showLayout.do?layout=exceptionLayout");
+            "/showLayout.do?layout=newExceptionLayout");
     }
 }

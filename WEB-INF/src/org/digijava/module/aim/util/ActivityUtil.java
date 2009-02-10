@@ -23,6 +23,9 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.error.AMPActivityError;
+import org.dgfoundation.amp.error.AMPException;
+import org.dgfoundation.amp.error.ErrorReporting;
+import org.dgfoundation.amp.error.ExceptionFactory;
 import org.dgfoundation.amp.utils.AmpCollectionUtils;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
@@ -88,6 +91,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.exception.action.ExceptionReport;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
@@ -165,7 +169,8 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     Long activityId = null;
     Set fundSet		= null;
     boolean exceptionRaised = false;
-    Exception savedEx = new AMPActivityError(Constants.AMP_ERROR_LEVEL_WARNING, true);
+    
+    AMPException savedEx = new AMPException(Constants.AMP_ERROR_LEVEL_ERROR, false, "Save activity failure");
     
     try {
       session = PersistenceManager.getRequestDBSession();
@@ -987,18 +992,22 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     	   session.delete(queryString);
        }
        //session.flush();
-             
-		tx.commit(); // commit the transcation
-		logger.debug("Activity saved");    
+        
+       session.flush();
+       if (alwaysRollback == false)
+    	  tx.commit(); // commit the transcation
+
+       logger.debug("Activity saved");    
     }
     catch (Exception ex) {
       logger.error("Exception from saveActivity().", ex);
       //we can't throw here the exception because we need to rollback the transaction
       ex.printStackTrace();
       exceptionRaised = true;
-      savedEx = new Exception(ex);
+      savedEx = ExceptionFactory.newAMPException(ex);
       if (tx != null) {
         try {
+          alwaysRollback = false;
           tx.rollback();
           logger.debug("Transaction Rollbacked");
         }
@@ -1008,19 +1017,20 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       }
     }
     finally {
-    	if (alwaysRollback){
-    		if (tx != null) {
-    			try {
-    				tx.rollback();
-    				logger.debug("Transaction Rollbacked");
-    			}
-    			catch (HibernateException e) {
-    				logger.error("Rollback failed", e);
-    				exceptionRaised = true;
-    			}
-    		}
-    	}
-		
+		if (alwaysRollback){  //if 
+			if (tx != null) {
+				try {
+					tx.rollback();
+					logger.debug("Transaction Rollbacked");
+				}
+				catch (HibernateException e) {
+					logger.error("Rollback failed", e);
+					AMPException ae = ExceptionFactory.newAMPException(Constants.AMP_ERROR_LEVEL_WARNING, false, e);
+					ErrorReporting.handle(ae, logger);
+					exceptionRaised = true;
+				}
+			}
+		}
 		if (exceptionRaised){
 			throw savedEx;
     }

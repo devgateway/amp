@@ -38,7 +38,7 @@ es:
       published_projects: Publicado
       deleted_projects: Papelera de Reciclaje
       bluebook: UE Blue Book
-      design_own: 'Diseña tu Reporte'
+      design_own: 'Diseña Reporte'
       strategy: Estrategia del País
       financial_consistency: Regularidad de Financiamiento
       # TODO: Change from "Used Exchange Rates" to just "Exchange Rates" please

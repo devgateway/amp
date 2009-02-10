@@ -36,12 +36,12 @@ public class ErrorReporting {
 			}
 		}
 		
-		sendToKeeper(e, user);
+		//sendToKeeper(e, user);
 	}
 
 	private static void sendToKeeper(Exception e, User user){
-		ErrorKeeper ek = new ErrorKeeperRAM();
-		ek.store(e, user);
+//		ErrorKeeper ek = new ErrorKeeperRAM();
+//		ek.store(e, user);
 	}
 	
 }

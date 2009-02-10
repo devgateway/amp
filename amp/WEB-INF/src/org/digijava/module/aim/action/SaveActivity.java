@@ -1780,8 +1780,8 @@ public class SaveActivity extends Action {
 		case 3:
 			stepText[stepNumber] = "3";
 			processStep3(check, eaForm, activity, errors, request);
-			if (check == false)
-				symErr();
+//			if (check == false)
+//				symErr();
 			break;
 		case 4:
 			stepText[stepNumber] = "4";
@@ -1925,7 +1925,7 @@ public class SaveActivity extends Action {
 		logger.debug("Attempting normal save!");
 		try {
 			rsp.setAlwaysRollback(false);
-			symErr();
+			//symErr();
 			actId = switchSave(rsp);
 			logger.debug("Succeeded!");
 			return actId;

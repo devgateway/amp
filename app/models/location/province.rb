@@ -19,3 +19,8 @@ class Province < ActiveRecord::Base
     self.id <=> comp.id
   end
 end
+
+# Bluebook
+class Province < ActiveRecord::Base
+  has_many :payments, :class_name => "ProvincePayment"
+end

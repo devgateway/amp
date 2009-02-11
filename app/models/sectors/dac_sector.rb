@@ -25,3 +25,9 @@ class DacSector < ActiveRecord::Base
     self.five_digit_code <=> comp.five_digit_code
   end
 end
+
+
+# Bluebook
+class DacSector < ActiveRecord::Base
+  has_many :payments, :class_name => "SectorPayment"
+end

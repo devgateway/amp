@@ -48,6 +48,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.orgProfile.helper.FilterHelper;
+import org.digijava.module.orgProfile.util.OrgProfileUtil;
 import org.digijava.module.translation.util.DbUtil;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpWidget;
@@ -257,24 +258,11 @@ public class ChartWidgetUtil {
         } else {
             currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
         }
+           Long fiscalCalendarId = filter.getFiscalCalendarId();
            for (int i = year.intValue() - 4; i <= year.intValue(); i++) {
             // apply calendar filter
-            Date startDate = null;
-            Date endDate = null;
-            Long fiscalCalendarId = filter.getFiscalCalendarId();
-            if (fiscalCalendarId != null && fiscalCalendarId != -1) {
-                startDate = FiscalCalendarUtil.getCalendarStartDate(fiscalCalendarId, i);
-                endDate = FiscalCalendarUtil.getCalendarEndDate(fiscalCalendarId, i);
-            } else {
-                Calendar cal = Calendar.getInstance();
-                cal.set(Calendar.MONTH, Calendar.JANUARY);
-                cal.set(Calendar.DAY_OF_MONTH, 1);
-                cal.set(Calendar.YEAR, i);
-                startDate = cal.getTime();
-                cal.set(Calendar.MONTH, Calendar.DECEMBER);
-                cal.set(Calendar.DAY_OF_MONTH, 31);
-                endDate = cal.getTime();
-            }
+            Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i);
+            Date endDate =OrgProfileUtil.getEndDate(fiscalCalendarId, i);
             Collection<AmpCategoryValue> typeOfAids = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
             for (AmpCategoryValue aid : typeOfAids) {
                 DecimalWraper funding = getFunding(filter.getOrgId(), filter.getOrgGroupId(), startDate, endDate, aid.getId(), currCode, filter.getTransactionType(), filter.getTeamMember());
@@ -314,24 +302,11 @@ public class ChartWidgetUtil {
         } else {
             currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
         }
+        Long fiscalCalendarId = filter.getFiscalCalendarId();
         for (int i = year.intValue() - 4; i <= year.intValue(); i++) {
             // apply calendar filter
-            Date startDate = null;
-            Date endDate = null;
-            Long fiscalCalendarId = filter.getFiscalCalendarId();
-            if (fiscalCalendarId != null && fiscalCalendarId != -1) {
-                startDate = FiscalCalendarUtil.getCalendarStartDate(fiscalCalendarId, i);
-                endDate = FiscalCalendarUtil.getCalendarEndDate(fiscalCalendarId, i);
-            } else {
-                Calendar cal = Calendar.getInstance();
-                cal.set(Calendar.MONTH, Calendar.JANUARY);
-                cal.set(Calendar.DAY_OF_MONTH, 1);
-                cal.set(Calendar.YEAR, i);
-                startDate = cal.getTime();
-                cal.set(Calendar.MONTH, Calendar.DECEMBER);
-                cal.set(Calendar.DAY_OF_MONTH, 31);
-                endDate = cal.getTime();
-            }
+            Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i);
+            Date endDate =OrgProfileUtil.getEndDate(fiscalCalendarId, i);
             Collection<AmpCategoryValue> financingInstruments = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY);
             for (AmpCategoryValue financingInstrument : financingInstruments) {
                 DecimalWraper funding = getFundingByFinancingInstrument(filter.getOrgId(), filter.getOrgGroupId(), startDate, endDate, financingInstrument.getId(), currCode, filter.getTransactionType(), filter.getTeamMember());
@@ -375,25 +350,11 @@ public class ChartWidgetUtil {
         } else {
             currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
         }
+        Long fiscalCalendarId = filter.getFiscalCalendarId();
         for (int i = year.intValue() - 2; i <= year.intValue(); i++) {
             // apply calendar filter
-            Date startDate = null;
-            Date endDate = null;
-            Long fiscalCalendarId = filter.getFiscalCalendarId();
-            if (fiscalCalendarId != null && fiscalCalendarId != -1) {
-                startDate = FiscalCalendarUtil.getCalendarStartDate(fiscalCalendarId, i);
-                endDate = FiscalCalendarUtil.getCalendarEndDate(fiscalCalendarId, i);
-            } else {
-                Calendar cal = Calendar.getInstance();
-                cal.set(Calendar.MONTH, Calendar.JANUARY);
-                cal.set(Calendar.DAY_OF_MONTH, 1);
-                cal.set(Calendar.YEAR, i);
-                startDate = cal.getTime();
-                cal.set(Calendar.MONTH, Calendar.DECEMBER);
-                cal.set(Calendar.DAY_OF_MONTH, 31);
-                endDate = cal.getTime();
-            }
-
+            Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i);
+            Date endDate =OrgProfileUtil.getEndDate(fiscalCalendarId, i);
             Double fundingPledge = getPledgesFunding(filter.getOrgId(), filter.getOrgGroupId(), startDate, endDate, currCode);
             result.addValue(FeaturesUtil.applyThousandsForVisibility(fundingPledge).doubleValue(), "Pledges", new Long(i));
             DecimalWraper fundingComm = getFunding(filter.getOrgId(), filter.getOrgGroupId(), startDate, endDate, currCode, true, filter.getTeamMember());
@@ -848,24 +809,9 @@ public class ChartWidgetUtil {
 
 
         // apply calendar filter
-           Date startDate = null;
-           Date endDate = null;
-           Long fiscalCalendarId = filter.getFiscalCalendarId();
-           if (fiscalCalendarId != null && fiscalCalendarId != -1) {
-               startDate = FiscalCalendarUtil.getCalendarStartDate(fiscalCalendarId, year.intValue());
-               endDate = FiscalCalendarUtil.getCalendarEndDate(fiscalCalendarId, year.intValue());
-           }
-           else{
-               Calendar cal = Calendar.getInstance();
-               cal.set(Calendar.MONTH, Calendar.JANUARY);
-               cal.set(Calendar.DAY_OF_MONTH, 1);
-               cal.set(Calendar.YEAR, year.intValue());
-               startDate=cal.getTime();
-               cal.set(Calendar.MONTH, Calendar.DECEMBER);
-               cal.set(Calendar.DAY_OF_MONTH, 31);
-              
-               endDate=cal.getTime();
-           }
+        Long fiscalCalendarId = filter.getFiscalCalendarId();
+        Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, year.intValue());
+        Date endDate =OrgProfileUtil.getEndDate(fiscalCalendarId, year.intValue());
         /*
          * We are selecting regions which are funded
          * In selected year by the selected organization
@@ -1013,24 +959,9 @@ public class ChartWidgetUtil {
         TeamMember tm=filter.getTeamMember();
 
          // apply calendar filter
-           Date startDate = null;
-           Date endDate = null;
-           Long fiscalCalendarId = filter.getFiscalCalendarId();
-           if (fiscalCalendarId != null && fiscalCalendarId != -1) {
-               startDate = FiscalCalendarUtil.getCalendarStartDate(fiscalCalendarId, year.intValue());
-               endDate = FiscalCalendarUtil.getCalendarEndDate(fiscalCalendarId, year.intValue());
-           }
-           else{
-               Calendar cal = Calendar.getInstance();
-               cal.set(Calendar.MONTH, Calendar.JANUARY);
-               cal.set(Calendar.DAY_OF_MONTH, 1);
-               cal.set(Calendar.YEAR, year.intValue());
-               startDate=cal.getTime();
-               cal.set(Calendar.MONTH, Calendar.DECEMBER);
-               cal.set(Calendar.DAY_OF_MONTH, 31);
-              
-               endDate=cal.getTime();
-           }
+        Long fiscalCalendarId = filter.getFiscalCalendarId();
+        Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, year.intValue());
+        Date endDate =OrgProfileUtil.getEndDate(fiscalCalendarId, year.intValue());
         DefaultPieDataset ds = new DefaultPieDataset();
         /*
          * We are selecting sectors which are funded

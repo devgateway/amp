@@ -1733,7 +1733,14 @@ public class ProgramUtil {
 
 
     public static String printHierarchyNames(AmpTheme child) {
-            String names = "";
+    	Session session = null;
+        Transaction tx = null;
+        String names = "";
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            //tx = session.beginTransaction();
+            session.refresh(child);
+    	
             AmpTheme parent = child.getParentThemeId();
             if (parent == null) {
                     return names;
@@ -1742,9 +1749,12 @@ public class ProgramUtil {
                     names = printHierarchyNames(parent);
                     names += "[" + parent.getName() + "] ";
             }
-
-            return names;
-
+            //tx.rollback();
+        } catch (Exception ex) {
+        	logger.error("Unable to get Hierarchy: " + ex);
+        	ex.printStackTrace();
+        }
+        return names;
     }
 
     //save new settings

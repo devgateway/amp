@@ -1,5 +1,6 @@
 $KCODE = 'u'
 require 'jcode'
+require 'desert'
 
 # Be sure to restart your server when you modify this file
 
@@ -20,7 +21,7 @@ Rails::Initializer.run do |config|
   config.gem "paperclip"
   config.gem "rubyist-aasm",          :lib => "aasm", :source => 'http://gems.github.com'
   config.gem "andand"
-  config.gem "rdiscount"
+  config.gem "RedCloth"
   config.gem "ruby-tilecache",        :lib => 'tile_cache'
   config.gem 'mislav-will_paginate',  :lib => 'will_paginate', :source => 'http://gems.github.com'
   

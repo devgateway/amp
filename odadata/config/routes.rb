@@ -28,6 +28,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :consistency,              :only => [:index, :show]
   
   # Easily accessible starting points for focal points and admins, respectively:
+  map.login     '/login',                 :controller => 'projects'
   map.admin     '/admin',                 :controller => 'projects'
   map.mfp       '/mfp',                   :controller => 'master_focal_point'
                                           

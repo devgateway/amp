@@ -387,7 +387,7 @@ public class HelpActions extends DispatchAction {
 			if(!helpTopic.getHelpTopicId().equals(topic.getHelpTopicId())){
 				//helpTopic.setTitleTrnKey(TranslatorWorker.translate(helpTopic.getTitleTrnKey(), locale, siteId)); 			
 				form.getFirstLevelTopics().add(helpTopic);
-			}		
+			}
 			
 		}
 		if (topic.getParent() != null) {
@@ -680,9 +680,9 @@ public class HelpActions extends DispatchAction {
                 throws Exception{
 
           String siteId=RequestUtils.getSite(request).getSiteId();
+          String moduleInstance=RequestUtils.getRealModuleInstance(request).getInstanceName();
 
           String xmlString = request.getParameter("changedXml");
-          String moduleInstance = request.getParameter("moduleInstance").trim();
           
           org.w3c.dom.Element e;
           org.w3c.dom.NamedNodeMap nnm;
@@ -701,73 +701,51 @@ public class HelpActions extends DispatchAction {
                   DocumentBuilder builder = factory.newDocumentBuilder();
                   org.w3c.dom.Document document = builder.parse(new InputSource(new StringReader(xmlString)));
 
-        org.w3c.dom.NodeList nl = document.getElementsByTagName("*");
-
-        int len = nl.getLength();
-        for (int j=0; j < len; j++)
-      {
-         e = (org.w3c.dom.Element) nl.item(j);
-         System.out.println(e.getTagName() + ":");
-         nnm = e.getAttributes();
-         if (nnm != null)
-         {
-            for (i=0; i<nnm.getLength(); i++)
-            {
-               n = nnm.item(i);
-
-               attrname = n.getNodeName();
-               attrval = n.getNodeValue(); 
-         
-                HelpTopic tree = new HelpTopic();
-                if(attrname.equals("id") && !attrval.equals("0")){
-
-                HelpTopic topic =  HelpUtil.loadhelpTopic(new Long(attrval));
-                System.out.print(" " + topic.getHelpTopicId() + " = " + topic.getTopicKey());
-                tree.setTopicKey(topic.getTopicKey());
-                tree.setSiteId(topic.getSiteId());
-                tree.setBodyEditKey(topic.getBodyEditKey());
-                tree.setModuleInstance(topic.getModuleInstance());
-                tree.setKeywordsTrnKey(topic.getKeywordsTrnKey());
-                tree.setTitleTrnKey(topic.getTitleTrnKey());
-                tree.setHelpTopicId(topic.getHelpTopicId());
-
-                if (topic.getParent() != null) {
-			            tree.setParent(topic.getParent());
-		            }
-                listOfTree.add(tree);
-
-               }
-            }
-
-         }
+                  
+                  
+        org.w3c.dom.NodeList nl = document.getElementsByTagName("item");
         
-      }
-        try{
+        for(int j=0; j<nl.getLength(); j++){
+        	org.w3c.dom.Node node = nl.item(j);
+        	HelpTopic helpTopick = new HelpTopic();
+        	helpTopick.setTopicKey(node.getAttributes().getNamedItem("text").getNodeValue());
+        	helpTopick.setHelpTopicId(new Long(node.getAttributes().getNamedItem("id").getNodeValue()));
+        	HelpTopic topic =  HelpUtil.loadhelpTopic(new Long(helpTopick.getHelpTopicId()));
+        	helpTopick.setSiteId(topic.getSiteId());
+        	helpTopick.setBodyEditKey(topic.getBodyEditKey());
+        	helpTopick.setModuleInstance(topic.getModuleInstance());
+        	helpTopick.setKeywordsTrnKey(topic.getKeywordsTrnKey());
+        	helpTopick.setTitleTrnKey(topic.getTitleTrnKey());
+        	helpTopick.setHelpTopicId(topic.getHelpTopicId());
+        	
+        	org.w3c.dom.Node parentNode = node.getParentNode();
 
-            List<HelpTopic> firstLevelTopics=HelpUtil.getFirstLevelTopics(siteId,moduleInstance);
+        	if (parentNode != null && !parentNode.getNodeName().trim().equalsIgnoreCase("tree")){
+
+        		HelpTopic parentHelpTopick = new HelpTopic();
+        		parentHelpTopick.setTopicKey(parentNode.getAttributes().getNamedItem("text").getNodeValue());
+        		parentHelpTopick.setHelpTopicId(new Long(parentNode.getAttributes().getNamedItem("id").getNodeValue()));
+        		helpTopick.setParent(parentHelpTopick);
+        	}
+        	storeMap.put(helpTopick.getHelpTopicId(), helpTopick);
+        	listOfTree.add(helpTopick);
+        }
+        	
+        	List<HelpTopic> firstLevelTopics=HelpUtil.getFirstLevelTopics(siteId,moduleInstance);
 
             for (HelpTopic helpTopic : firstLevelTopics) {
 				removeLastLevelTopic(helpTopic,moduleInstance);
 			}
-
-               for (HelpTopic topic : listOfTree) {
-                  
-                   HelpUtil.saveNewTreeState(topic,storeMap,siteId);
-
-                }
-            
-            }catch (Exception ex) {
-                 ex.printStackTrace();
-           }
-
-        }
+            for (HelpTopic topic : listOfTree){
+                HelpUtil.saveNewTreeState(topic,storeMap,siteId);
+            }
+         }
 
 
     	public ActionForward saved(ActionMapping mapping,ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 	
 		return mapping.findForward("helpHome");
+    	}
 	}
     
-    
-}

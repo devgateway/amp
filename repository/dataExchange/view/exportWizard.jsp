@@ -195,7 +195,7 @@
 
           if (selTeamId.value != "-1"){
             var form = document.getElementById('form');
-          form.action = "/dataExchange/export.do?method=export";
+            form.action = "/dataExchange/export.do?method=export";
             form.target="_self"
             form.submit();
           } else {
@@ -279,7 +279,7 @@
 --%>
                              <span >Donor Type</span>
                              <br/>
-                             <html:select name="deExportForm" property="donorTypeSelected" styleId="teamId" style="width: 400px;" multiple="true" size="3">
+                             <html:select name="deExportForm" property="donorTypeSelected"  style="width: 400px;" multiple="true" size="3">
                                <c:forEach var="fVar" items="${deExportForm.donorTypeList}" varStatus="lStatus">
                                  <option value="${fVar.ampOrgTypeId}">${fVar.orgType}</option>
                                </c:forEach>
@@ -287,7 +287,7 @@
                              <br/>
                              <span >Donor Group</span>
                              <br/>
-                             <html:select name="deExportForm" property="donorGroupSelected" styleId="teamId" style="width: 400px;" multiple="true"  size="3">
+                             <html:select name="deExportForm" property="donorGroupSelected" style="width: 400px;" multiple="true"  size="3">
                                <c:forEach var="fVar" items="${deExportForm.donorGroupList}" varStatus="lStatus">
                                  <option value="${fVar.ampOrgGrpId}">${fVar.orgGrpName}</option>
                                </c:forEach>
@@ -295,7 +295,7 @@
                              <br/>
                              <span >Donor Agency</span>
                              <br/>
-                             <html:select name="deExportForm" property="donorAgencySelected" styleId="teamId" style="width: 400px;" multiple="true"  size="3">
+                             <html:select name="deExportForm" property="donorAgencySelected"  style="width: 400px;" multiple="true"  size="3">
                                <c:forEach var="fVar" items="${deExportForm.donorAgencyList}" varStatus="lStatus">
                                  <option value="${fVar.ampOrgId}">${fVar.name}</option>
                                </c:forEach>
@@ -321,14 +321,14 @@
 --%>
                              <span>Primary Sector</span>
                              <br/>
-                             <html:select name="deExportForm" property="primarySectorsSelected" styleId="teamId" style="width: 400px;" multiple="true"  size="3">
+                             <html:select name="deExportForm" property="primarySectorsSelected"  style="width: 400px;" multiple="true"  size="3">
                                <c:forEach var="fVar" items="${deExportForm.primarySectorsList}" varStatus="lStatus">
                                  <option value="${fVar.ampSectorId}">${fVar.name}</option>
                                </c:forEach>
                              </html:select>
                              <span >Secondary Sector</span>
                              <br/>
-                             <html:select name="deExportForm" property="secondarySectorsSelected" styleId="teamId" style="width: 400px;" multiple="true"  size="3">
+                             <html:select name="deExportForm" property="secondarySectorsSelected" style="width: 400px;" multiple="true"  size="3">
                                <c:forEach var="fVar" items="${deExportForm.secondarySectorsList}" varStatus="lStatus">
                                  <option value="${fVar.ampSectorId}">${fVar.name}</option>
                                </c:forEach>

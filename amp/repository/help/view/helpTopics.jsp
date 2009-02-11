@@ -80,12 +80,12 @@
 					show(id);
 			 	}
 			}
+	
             var id = document.getElementById("treeboxbox_tree");
 	 		tree = new dhtmlXTreeObject(id,"100%","100%",0);
 	 		tree.setImagePath("../../repository/help/view/images/csh_vista/");
 	        tree.enableTreeImages(false);
             tree.enableDragAndDrop(true);
-        	
             tree.setOnClickHandler(tonclick);
             var xml ='<?xml version="1.0" encoding="iso-8859-1"?>';
 			    xml+='<tree id="0" radio="1">';
@@ -93,18 +93,19 @@
 			    xml+='</tree>';
 		  
 		    tree.loadXMLString(xml);
-	
+		    tree.attachEvent("onXLE",function(){
+		    contextTreeXml = tree.serializeTree();  
+		 	var xmlobject = (new DOMParser()).parseFromString(contextTreeXml, "text/xml");
+		    node = xmlobject.getElementsByTagName("tree");
+		    id=getFirstChild(node);
+		    show(id);
+		    });
+		    		     
           tree.attachEvent("onDrop",function(sid,tid,sobj,tobj){
-            
             if(sid){
-
                 var contextTreeXml = tree.serializeTree();
                 document.getElementById("xmlString").value = contextTreeXml;
-
-
-                    return true;
-
-
+             return true;
             }});
 
            
@@ -171,6 +172,20 @@ function GetXmlHttpObject()	{
  	}
 	return xmlHttp;
 }
+
+function  getFirstChild(nl){  
+   for (i = 0; i< nl.length; i++){
+   	nd = nl.item(i);
+
+   	x= nd.firstChild;
+   	while (x.nodeType!=1){
+   	  x=x.nextSibling;
+   	  }
+   		return x.attributes.getNamedItem("id").nodeValue;
+   		
+   	}
+   }
+
 </script>
 
 

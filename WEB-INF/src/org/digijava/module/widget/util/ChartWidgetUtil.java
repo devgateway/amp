@@ -257,18 +257,34 @@ public class ChartWidgetUtil {
         } else {
             currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
         }
-        
-            for (long i = year - 4; i <= year; i++) {
-                Collection<AmpCategoryValue> typeOfAids = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
-                for (AmpCategoryValue aid : typeOfAids) {
-                    DecimalWraper funding = getFunding(filter.getOrgId(), filter.getOrgGroupId(),i, aid.getId(), currCode,filter.getTransactionType(),filter.getTeamMember());
-                    result.addValue(FeaturesUtil.applyThousandsForVisibility(funding.doubleValue()), aid.getValue(), new Long(i));
-                     if (funding.doubleValue() != 0) {
-                        nodata = false;
-                    }
-                }
-
+           for (int i = year.intValue() - 4; i <= year.intValue(); i++) {
+            // apply calendar filter
+            Date startDate = null;
+            Date endDate = null;
+            Long fiscalCalendarId = filter.getFiscalCalendarId();
+            if (fiscalCalendarId != null && fiscalCalendarId != -1) {
+                startDate = FiscalCalendarUtil.getCalendarStartDate(fiscalCalendarId, i);
+                endDate = FiscalCalendarUtil.getCalendarEndDate(fiscalCalendarId, i);
+            } else {
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.MONTH, Calendar.JANUARY);
+                cal.set(Calendar.DAY_OF_MONTH, 1);
+                cal.set(Calendar.YEAR, i);
+                startDate = cal.getTime();
+                cal.set(Calendar.MONTH, Calendar.DECEMBER);
+                cal.set(Calendar.DAY_OF_MONTH, 31);
+                endDate = cal.getTime();
             }
+            Collection<AmpCategoryValue> typeOfAids = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
+            for (AmpCategoryValue aid : typeOfAids) {
+                DecimalWraper funding = getFunding(filter.getOrgId(), filter.getOrgGroupId(), startDate, endDate, aid.getId(), currCode, filter.getTransactionType(), filter.getTeamMember());
+                result.addValue(FeaturesUtil.applyThousandsForVisibility(funding.doubleValue()), aid.getValue(), new Long(i));
+                if (funding.doubleValue() != 0) {
+                    nodata = false;
+                }
+            }
+
+        }
          if(nodata){
             result= new DefaultCategoryDataset();
         }
@@ -283,8 +299,8 @@ public class ChartWidgetUtil {
      * @throws DgException
      */
     
-     private static CategoryDataset getODAProfileDataset(FilterHelper filter) throws DgException {
-        boolean nodata=true; // for displaying no data message
+    private static CategoryDataset getODAProfileDataset(FilterHelper filter) throws DgException {
+        boolean nodata = true; // for displaying no data message
         DefaultCategoryDataset result = new DefaultCategoryDataset();
         Long year = filter.getYear();
         if (year == null || year == -1) {
@@ -297,24 +313,41 @@ public class ChartWidgetUtil {
             currCode = "USD";
         } else {
             currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
-        }   
-            for (long i = year - 4; i <= year; i++) {
-                Collection<AmpCategoryValue> financingInstruments = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY);
-                for (AmpCategoryValue financingInstrument : financingInstruments) {
-                    DecimalWraper funding = getFundingByFinancingInstrument(filter.getOrgId(), filter.getOrgGroupId(),i, financingInstrument.getId(), currCode,filter.getTransactionType(),filter.getTeamMember());
-                    if (funding.doubleValue() != 0) {
-                        nodata = false;
-                    }
-                    result.addValue(FeaturesUtil.applyThousandsForVisibility(funding.doubleValue()), financingInstrument.getValue(), new Long(i));
-                    }
-
+        }
+        for (int i = year.intValue() - 4; i <= year.intValue(); i++) {
+            // apply calendar filter
+            Date startDate = null;
+            Date endDate = null;
+            Long fiscalCalendarId = filter.getFiscalCalendarId();
+            if (fiscalCalendarId != null && fiscalCalendarId != -1) {
+                startDate = FiscalCalendarUtil.getCalendarStartDate(fiscalCalendarId, i);
+                endDate = FiscalCalendarUtil.getCalendarEndDate(fiscalCalendarId, i);
+            } else {
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.MONTH, Calendar.JANUARY);
+                cal.set(Calendar.DAY_OF_MONTH, 1);
+                cal.set(Calendar.YEAR, i);
+                startDate = cal.getTime();
+                cal.set(Calendar.MONTH, Calendar.DECEMBER);
+                cal.set(Calendar.DAY_OF_MONTH, 31);
+                endDate = cal.getTime();
+            }
+            Collection<AmpCategoryValue> financingInstruments = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY);
+            for (AmpCategoryValue financingInstrument : financingInstruments) {
+                DecimalWraper funding = getFundingByFinancingInstrument(filter.getOrgId(), filter.getOrgGroupId(), startDate, endDate, financingInstrument.getId(), currCode, filter.getTransactionType(), filter.getTeamMember());
+                if (funding.doubleValue() != 0) {
+                    nodata = false;
+                }
+                result.addValue(FeaturesUtil.applyThousandsForVisibility(funding.doubleValue()), financingInstrument.getValue(), new Long(i));
             }
 
-  
-        if(nodata){
-            result= new DefaultCategoryDataset();
         }
-        
+
+
+        if (nodata) {
+            result = new DefaultCategoryDataset();
+        }
+
         return result;
     }
 
@@ -328,8 +361,8 @@ public class ChartWidgetUtil {
     
     
     private static CategoryDataset getPledgesCommDisbDataset(FilterHelper filter) throws DgException {
-       boolean nodata=true; // for displaying no data message
-       DefaultCategoryDataset result = new DefaultCategoryDataset();
+        boolean nodata = true; // for displaying no data message
+        DefaultCategoryDataset result = new DefaultCategoryDataset();
         Long year = filter.getYear();
         if (year == null || year == -1) {
             year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
@@ -341,27 +374,44 @@ public class ChartWidgetUtil {
             currCode = "USD";
         } else {
             currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
-        }      
-            for (long i = year - 2; i <= year; i++) {
-             
-              Double fundingPledge = getPledgesFunding(filter.getOrgId(),filter.getOrgGroupId(), i, currCode);
-              result.addValue(FeaturesUtil.applyThousandsForVisibility(fundingPledge) .doubleValue(), "Pledges", new Long(i));
-              DecimalWraper fundingComm = getFunding(filter.getOrgId(),filter.getOrgGroupId(), i, currCode,true, filter.getTeamMember());
-              result.addValue(FeaturesUtil.applyThousandsForVisibility(fundingComm.doubleValue()), "Actual commitments", new Long(i));
-              DecimalWraper fundingDisb = getFunding(filter.getOrgId(),filter.getOrgGroupId(), i, currCode,false,filter.getTeamMember());
-              result.addValue(FeaturesUtil.applyThousandsForVisibility(fundingDisb.doubleValue()), "Actual disbursements", new Long(i));
-                if (fundingPledge.doubleValue() != 0 || fundingComm.doubleValue() != 0 || fundingDisb.doubleValue() != 0) {
-                    nodata = false;
-                }
+        }
+        for (int i = year.intValue() - 2; i <= year.intValue(); i++) {
+            // apply calendar filter
+            Date startDate = null;
+            Date endDate = null;
+            Long fiscalCalendarId = filter.getFiscalCalendarId();
+            if (fiscalCalendarId != null && fiscalCalendarId != -1) {
+                startDate = FiscalCalendarUtil.getCalendarStartDate(fiscalCalendarId, i);
+                endDate = FiscalCalendarUtil.getCalendarEndDate(fiscalCalendarId, i);
+            } else {
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.MONTH, Calendar.JANUARY);
+                cal.set(Calendar.DAY_OF_MONTH, 1);
+                cal.set(Calendar.YEAR, i);
+                startDate = cal.getTime();
+                cal.set(Calendar.MONTH, Calendar.DECEMBER);
+                cal.set(Calendar.DAY_OF_MONTH, 31);
+                endDate = cal.getTime();
+            }
+
+            Double fundingPledge = getPledgesFunding(filter.getOrgId(), filter.getOrgGroupId(), startDate, endDate, currCode);
+            result.addValue(FeaturesUtil.applyThousandsForVisibility(fundingPledge).doubleValue(), "Pledges", new Long(i));
+            DecimalWraper fundingComm = getFunding(filter.getOrgId(), filter.getOrgGroupId(), startDate, endDate, currCode, true, filter.getTeamMember());
+            result.addValue(FeaturesUtil.applyThousandsForVisibility(fundingComm.doubleValue()), "Actual commitments", new Long(i));
+            DecimalWraper fundingDisb = getFunding(filter.getOrgId(), filter.getOrgGroupId(), startDate, endDate, currCode, false, filter.getTeamMember());
+            result.addValue(FeaturesUtil.applyThousandsForVisibility(fundingDisb.doubleValue()), "Actual disbursements", new Long(i));
+            if (fundingPledge.doubleValue() != 0 || fundingComm.doubleValue() != 0 || fundingDisb.doubleValue() != 0) {
+                nodata = false;
+            }
 
         }
-        if(nodata){
-            result= new DefaultCategoryDataset();
+        if (nodata) {
+            result = new DefaultCategoryDataset();
         }
-        
+
         return result;
     }
-    
+
     
     /**
      * Generates chart dataset from AMP data.
@@ -795,6 +845,27 @@ public class ChartWidgetUtil {
         int transactionType = filter.getTransactionType();
         TeamMember teamMember = filter.getTeamMember();
         DefaultPieDataset ds = new DefaultPieDataset();
+
+
+        // apply calendar filter
+           Date startDate = null;
+           Date endDate = null;
+           Long fiscalCalendarId = filter.getFiscalCalendarId();
+           if (fiscalCalendarId != null && fiscalCalendarId != -1) {
+               startDate = FiscalCalendarUtil.getCalendarStartDate(fiscalCalendarId, year.intValue());
+               endDate = FiscalCalendarUtil.getCalendarEndDate(fiscalCalendarId, year.intValue());
+           }
+           else{
+               Calendar cal = Calendar.getInstance();
+               cal.set(Calendar.MONTH, Calendar.JANUARY);
+               cal.set(Calendar.DAY_OF_MONTH, 1);
+               cal.set(Calendar.YEAR, year.intValue());
+               startDate=cal.getTime();
+               cal.set(Calendar.MONTH, Calendar.DECEMBER);
+               cal.set(Calendar.DAY_OF_MONTH, 31);
+              
+               endDate=cal.getTime();
+           }
         /*
          * We are selecting regions which are funded
          * In selected year by the selected organization
@@ -814,14 +885,15 @@ public class ChartWidgetUtil {
            } else {
                oql += getOrganizationQuery(false);
            }
-        oql += " and year(fd.transactionDate)=:year ";
+        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
         oql += getTeamQuery(teamMember);
         Session session = PersistenceManager.getRequestDBSession();
         @SuppressWarnings("unchecked")
         List<AmpRegion> regions = null;
         try {
             Query query = session.createQuery(oql);
-            query.setLong("year", year);
+            query.setDate("startDate", startDate);
+            query.setDate("endDate", endDate);
             if (orgID != null && orgID != -1) {
                 query.setLong("orgID", orgID);
             } else {
@@ -861,10 +933,11 @@ public class ChartWidgetUtil {
                     oql += getOrganizationQuery(false);
                 }
 
-                oql += " and year(fd.transactionDate)=:year and reg is not null and reg.ampRegionId=  " + region.getAmpRegionId();
+                oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  and reg is not null and reg.ampRegionId=  " + region.getAmpRegionId();
                 oql += getTeamQuery(teamMember);
                 query = session.createQuery(oql);
-                query.setLong("year", year);
+                query.setDate("startDate", startDate);
+                query.setDate("endDate", endDate);
                 if (orgID != null && orgID != -1) {
                     query.setLong("orgID", orgID);
                 } else {
@@ -938,6 +1011,26 @@ public class ChartWidgetUtil {
         Long orgGroupId=filter.getOrgGroupId();
         int transactionType=filter.getTransactionType();
         TeamMember tm=filter.getTeamMember();
+
+         // apply calendar filter
+           Date startDate = null;
+           Date endDate = null;
+           Long fiscalCalendarId = filter.getFiscalCalendarId();
+           if (fiscalCalendarId != null && fiscalCalendarId != -1) {
+               startDate = FiscalCalendarUtil.getCalendarStartDate(fiscalCalendarId, year.intValue());
+               endDate = FiscalCalendarUtil.getCalendarEndDate(fiscalCalendarId, year.intValue());
+           }
+           else{
+               Calendar cal = Calendar.getInstance();
+               cal.set(Calendar.MONTH, Calendar.JANUARY);
+               cal.set(Calendar.DAY_OF_MONTH, 1);
+               cal.set(Calendar.YEAR, year.intValue());
+               startDate=cal.getTime();
+               cal.set(Calendar.MONTH, Calendar.DECEMBER);
+               cal.set(Calendar.DAY_OF_MONTH, 31);
+              
+               endDate=cal.getTime();
+           }
         DefaultPieDataset ds = new DefaultPieDataset();
         /*
          * We are selecting sectors which are funded
@@ -968,14 +1061,15 @@ public class ChartWidgetUtil {
             oql += getOrganizationQuery(false);
         }
 
-        oql += " and year(fd.transactionDate)=:year    and config.name='Primary' ";
+        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<:endDate)     and config.name='Primary' ";
         oql+=getTeamQuery(tm);
         Session session = PersistenceManager.getRequestDBSession();
         @SuppressWarnings("unchecked")
         List<AmpSector> sectors = null;
         try {
             Query query = session.createQuery(oql);
-            query.setLong("year", year);
+             query.setDate("startDate", startDate);
+             query.setDate("endDate", endDate);
             if (orgID != null && orgID != -1) {
                 query.setLong("orgID", orgID);
             } else {
@@ -990,13 +1084,13 @@ public class ChartWidgetUtil {
             }
             sectors = query.list();
             // calculate funding for all sectors
-            DecimalWraper totAllSeqtors= getSectorFunding(year,orgID,orgGroupId,transactionType,null,currCode, tm);;
+            DecimalWraper totAllSeqtors= getSectorFunding(startDate,endDate,orgID,orgGroupId,transactionType,null,currCode, tm);;
             Iterator<AmpSector> sectorIter = sectors.iterator();
             double others=0;
             while (sectorIter.hasNext()) {
                 AmpSector sector = sectorIter.next();
                 // calculate funding for each sector
-                DecimalWraper total=getSectorFunding(year,orgID,orgGroupId,transactionType,sector.getAmpSectorId(),currCode, tm);
+                DecimalWraper total=getSectorFunding(startDate,endDate,orgID,orgGroupId,transactionType,sector.getAmpSectorId(),currCode, tm);
                 double percent=total.doubleValue()/totAllSeqtors.doubleValue();
                 // the sectors which percent is less then 5% should be group in "Others"
                 if (percent > 0.05) {
@@ -1035,7 +1129,7 @@ public class ChartWidgetUtil {
      * @see FundingCalculationsHelper
      */
 
-    public static DecimalWraper getSectorFunding(Long year, Long orgId, Long orgGroupId, int transactionType, Long sectorId, String currCode, TeamMember tm) throws DgException {
+    public static DecimalWraper getSectorFunding(Date startDate, Date endDate, Long orgId, Long orgGroupId, int transactionType, Long sectorId, String currCode, TeamMember tm) throws DgException {
         Session session = PersistenceManager.getRequestDBSession();
         String oql = "select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actSec.sectorPercentage,fd.fixedExchangeRate) ";
         oql += " from ";
@@ -1049,20 +1143,21 @@ public class ChartWidgetUtil {
 
         oql += "  where  " +
                 "   fd.transactionType =:transactionType and  fd.adjustmentType = 1 ";
-        oql += " and year(fd.transactionDate)=:year   and config.name='Primary'  ";
+        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<:endDate)    and config.name='Primary'  ";
         if (orgId == null || orgId == -1) {
             if (orgGroupId != null && orgGroupId != -1) {
-            oql += getOrganizationQuery(true);
+                oql += getOrganizationQuery(true);
             }
         } else {
-                oql += getOrganizationQuery(false);
+            oql += getOrganizationQuery(false);
         }
         if (sectorId != null) {
             oql += " and  sec.ampSectorId=:sectorId  ";
         }
         oql += getTeamQuery(tm);
         Query query = session.createQuery(oql);
-        query.setLong("year", year);
+        query.setDate("startDate", startDate);
+        query.setDate("endDate", endDate);
         if (orgId != null && orgId != -1) {
             query.setLong("orgID", orgId);
         } else {
@@ -1108,7 +1203,7 @@ public class ChartWidgetUtil {
         
         
       
-	   public static DecimalWraper getFundingByFinancingInstrument(Long orgID, Long orgGroupId, Long year, Long financingInstrumentId, String currCode, int transactionType, TeamMember tm) throws DgException {
+	   public static DecimalWraper getFundingByFinancingInstrument(Long orgID, Long orgGroupId, Date startDate,Date endDate, Long financingInstrumentId, String currCode, int transactionType, TeamMember tm) throws DgException {
         DecimalWraper total = null;
         String oql = "select fd ";
         oql += " from ";
@@ -1126,7 +1221,7 @@ public class ChartWidgetUtil {
                 oql += getOrganizationQuery(false);
         }
 
-        oql += " and year(fd.transactionDate)=:year ";
+        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
 
         oql += "   and f.financingInstrument=:financingInstrumentId ";
         oql += getTeamQuery(tm);
@@ -1137,7 +1232,8 @@ public class ChartWidgetUtil {
         List<AmpFundingDetail> fundingDets = null;
         try {
             Query query = session.createQuery(oql);
-            query.setLong("year", year);
+            query.setDate("startDate", startDate);
+            query.setDate("endDate", endDate);
             if (orgID != null && orgID != -1) {
                 query.setLong("orgID", orgID);
             } else {
@@ -1191,7 +1287,7 @@ public class ChartWidgetUtil {
         
        
 
-	   public static DecimalWraper getFunding(Long orgID, Long orgGroupId, Long year, Long assistanceTypeId, String currCode, int transactionType, TeamMember tm) throws DgException {
+	   public static DecimalWraper getFunding(Long orgID, Long orgGroupId, Date startDate,Date endDate, Long assistanceTypeId, String currCode, int transactionType, TeamMember tm) throws DgException {
         DecimalWraper total = null;
         String oql = "select fd ";
         oql += " from ";
@@ -1208,7 +1304,7 @@ public class ChartWidgetUtil {
                 oql += getOrganizationQuery(false);
         }
 
-        oql += " and year(fd.transactionDate)=:year ";
+        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
 
         oql += "  and f.typeOfAssistance=:assistanceTypeId ";
 
@@ -1219,7 +1315,8 @@ public class ChartWidgetUtil {
         List<AmpFundingDetail> fundingDets = null;
         try {
             Query query = session.createQuery(oql);
-            query.setLong("year", year);
+            query.setDate("startDate", startDate);
+            query.setDate("endDate", endDate);
             if (orgID != null && orgID != -1) {
                 query.setLong("orgID", orgID);
             } else {
@@ -1268,7 +1365,7 @@ public class ChartWidgetUtil {
         
        
 
-    public static double getPledgesFunding(Long orgID, Long orgGroupId, Long year, String currCode) throws DgException {
+    public static double getPledgesFunding(Long orgID, Long orgGroupId,  Date startDate,Date endDate, String currCode) throws DgException {
         double totalPlannedPldges = 0;
         String oql = "select fd ";
         oql += " from ";
@@ -1282,13 +1379,14 @@ public class ChartWidgetUtil {
         } else {
             oql += " and org.ampOrgId=:orgID ";
         }
-        oql += " and year(fd.date)=:year ";
+        oql += " and fd.date>=:startDate and fd.date<=:endDate ";
         Session session = PersistenceManager.getRequestDBSession();
         @SuppressWarnings("unchecked")
         List<AmpPledge> fundingDets = null;
         try {
             Query query = session.createQuery(oql);
-            query.setLong("year", year);
+            query.setDate("startDate", startDate);
+            query.setDate("endDate", endDate);
             if (orgID != null && orgID != -1) {
                 query.setLong("orgID", orgID);
             } else {
@@ -1410,7 +1508,7 @@ public class ChartWidgetUtil {
        */
        
 
-    public static DecimalWraper getFunding(Long orgID, Long orgGroupId, Long year, String currCode, boolean isComm, TeamMember tm) throws DgException {
+    public static DecimalWraper getFunding(Long orgID, Long orgGroupId, Date startDate,Date endDate, String currCode, boolean isComm, TeamMember tm) throws DgException {
         String oql = "select fd ";
         oql += " from ";
         oql += AmpFundingDetail.class.getName() +
@@ -1427,7 +1525,7 @@ public class ChartWidgetUtil {
             oql += getOrganizationQuery(false);
         }
 
-        oql += " and year(fd.transactionDate)=:year ";
+        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
         oql += getTeamQuery(tm);
 
 
@@ -1436,7 +1534,8 @@ public class ChartWidgetUtil {
         List<AmpFundingDetail> fundingDets = null;
         try {
             Query query = session.createQuery(oql);
-            query.setLong("year", year);
+           query.setDate("startDate", startDate);
+            query.setDate("endDate", endDate);
             if (orgID != null && orgID != -1) {
                 query.setLong("orgID", orgID);
             } else {
@@ -1548,5 +1647,5 @@ public class ChartWidgetUtil {
 		}
     	return years;
     }
-	
+
 }

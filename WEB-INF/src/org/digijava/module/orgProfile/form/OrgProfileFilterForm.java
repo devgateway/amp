@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -37,6 +38,24 @@ public class OrgProfileFilterForm extends ActionForm {
 
     private List<AmpOrgGroup> orgGroups;
     private Long orgGroupId;
+    private List<AmpFiscalCalendar> fiscalCalendars;
+    private Long fiscalCalendarId;
+
+    public List<AmpFiscalCalendar> getFiscalCalendars() {
+        return fiscalCalendars;
+    }
+
+    public void setFiscalCalendars(List<AmpFiscalCalendar> fiscalCalendars) {
+        this.fiscalCalendars = fiscalCalendars;
+    }
+
+    public Long getFiscalCalendarId() {
+        return fiscalCalendarId;
+    }
+
+    public void setFiscalCalendarId(Long fiscalCalendarId) {
+        this.fiscalCalendarId = fiscalCalendarId;
+    }
 
     public Long getOrgGroupId() {
         return orgGroupId;

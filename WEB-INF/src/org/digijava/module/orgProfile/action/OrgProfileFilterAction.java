@@ -20,6 +20,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
@@ -73,16 +74,24 @@ public class OrgProfileFilterAction extends Action {
         for (long i = yearFrom; i <= (yearFrom + countYear); i++) {
 			orgForm.getYears().add(new BeanWrapperImpl(new Long(i)));
         }
-        Long year =null;
-        try{
-                year=Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
-        }
-        catch(NumberFormatException ex){
-           year=new Long(Calendar.getInstance().get(Calendar.YEAR));
-        }
-        
-        if(orgForm.getYear()==null){
+        if (orgForm.getYear() == null) {
+            Long year = null;
+            try {
+                year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
+            } catch (NumberFormatException ex) {
+                year = new Long(Calendar.getInstance().get(Calendar.YEAR));
+            }
             orgForm.setYear(year);
+        }
+        Collection calendars=DbUtil.getAllFisCalenders();
+        if (calendars != null) {
+            orgForm.setFiscalCalendars(new ArrayList(calendars));
+        }
+        if(orgForm.getFiscalCalendarId()==null){
+				String value = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
+				if (value != null) {
+					orgForm.setFiscalCalendarId(Long.parseLong(value));
+				}
         }
         FilterHelper filter=null;
         HttpSession session = request.getSession();

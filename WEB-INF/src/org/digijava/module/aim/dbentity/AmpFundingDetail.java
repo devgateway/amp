@@ -5,6 +5,7 @@ import java.util.Date;
 
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.orgProfile.util.OrgProfileUtil;
 
 public class AmpFundingDetail implements Serializable
 {
@@ -57,7 +58,7 @@ public class AmpFundingDetail implements Serializable
         // used in org profile for indicator 4
          public AmpFundingDetail(Integer transactionType,Integer adjustmentType,Double transactionAmount,Date transactionDate,AmpCurrency ampCurrencyId,Double fixedExchangeRate, Long ahsureyId){
             this(transactionType,adjustmentType,transactionDate,ampCurrencyId,fixedExchangeRate); 
-            this.transactionAmount=transactionAmount*DbUtil.getQ4Value(ahsureyId);
+            this.transactionAmount=transactionAmount*OrgProfileUtil.getQ4Value(ahsureyId);
      
         }
           // used in org profile 

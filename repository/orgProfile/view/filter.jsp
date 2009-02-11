@@ -246,6 +246,13 @@
                 <td colspan="2">
                     <table>
                         <tr>
+                            <td nowrap><b><digi:trn>Fiscal Calendar</digi:trn>:</b></td>
+                            <td align="center">
+                                <html:select property="fiscalCalendarId" styleClass="inp-text">
+                                     <html:option value="-1"><digi:trn>None</digi:trn></html:option>
+                                    <html:optionsCollection property="fiscalCalendars" label="name" value="ampFiscalCalId" />
+                                </html:select>
+                            </td>
                             <td nowrap><b><digi:trn key="orgProfile:filer:fiscalCalendar">Fiscal Year</digi:trn></b></td>
                             <td align="center">
                                 <html:select property="year" styleClass="inp-text">

@@ -28,13 +28,14 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :consistency,              :only => [:index, :show]
   
   # Easily accessible starting points for focal points and admins, respectively:
-  map.login     '/login',                 :controller => 'projects'
+  map.login     '/login',                 :controller => 'projects' # TODO: Workaround.. Would be better to store a default redirect path in the roles model
+                                                                    # and use that one as a default (unless another path was requested before the login redirect.)
   map.admin     '/admin',                 :controller => 'projects'
   map.mfp       '/mfp',                   :controller => 'master_focal_point'
                                           
   # Authentication                        
   map.logout    '/logout',                :controller => 'sessions', :action => 'destroy'
-  map.login     '/login',                 :controller => 'sessions', :action => 'new'
+  #map.login     '/login',                 :controller => 'sessions', :action => 'new'
   
   ##
   # EU Blue Book routes

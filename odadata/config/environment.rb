@@ -1,6 +1,5 @@
 $KCODE = 'u'
 require 'jcode'
-require 'desert'
 
 # Be sure to restart your server when you modify this file
 

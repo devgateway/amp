@@ -272,30 +272,37 @@
                       <tr>
                         <td width="46%" style="vertical-align: top;">
 	                       <span class="list_header">Donors</span>
+                           <br/>
+<%--                          
                            <div id="reportGroupDiv" style="padding: 15px 15px 15px 15px; border: 1px solid gray; background-color: white;  position: relative;">
                              <span class="list_header" >Donor Type</span>
+--%>
+                             <span >Donor Type</span>
                              <br/>
                              <html:select name="deExportForm" property="donorTypeSelected" styleId="teamId" style="width: 400px;" multiple="true" size="3">
                                <c:forEach var="fVar" items="${deExportForm.donorTypeList}" varStatus="lStatus">
                                  <option value="${fVar.ampOrgTypeId}">${fVar.orgType}</option>
                                </c:forEach>
                              </html:select>
-                             <span class="list_header" >Donor Group</span>
+                             <br/>
+                             <span >Donor Group</span>
                              <br/>
                              <html:select name="deExportForm" property="donorGroupSelected" styleId="teamId" style="width: 400px;" multiple="true"  size="3">
                                <c:forEach var="fVar" items="${deExportForm.donorGroupList}" varStatus="lStatus">
                                  <option value="${fVar.ampOrgGrpId}">${fVar.orgGrpName}</option>
                                </c:forEach>
                              </html:select>
-                             <span class="list_header" >Donor Agency</span>
+                             <br/>
+                             <span >Donor Agency</span>
                              <br/>
                              <html:select name="deExportForm" property="donorAgencySelected" styleId="teamId" style="width: 400px;" multiple="true"  size="3">
                                <c:forEach var="fVar" items="${deExportForm.donorAgencyList}" varStatus="lStatus">
                                  <option value="${fVar.ampOrgId}">${fVar.name}</option>
                                </c:forEach>
                              </html:select>
-
+<%--                          
                            </div>
+--%>
                            <br/>
                            <span class="list_header">Select Team</span>
                            <br/>
@@ -308,29 +315,36 @@
                         </td>
                         <td width="46%" style="vertical-align: top;">
                          <span class="list_header">Sectors</span>
+                         <br/>
+<%--                          
                          <div id="reportGroupDiv" style="padding: 15px 15px 15px 15px; border: 1px solid gray; background-color: white; position: relative;">
-                             <span class="list_header" >Primary Sector</span>
+--%>
+                             <span>Primary Sector</span>
                              <br/>
                              <html:select name="deExportForm" property="primarySectorsSelected" styleId="teamId" style="width: 400px;" multiple="true"  size="3">
                                <c:forEach var="fVar" items="${deExportForm.primarySectorsList}" varStatus="lStatus">
                                  <option value="${fVar.ampSectorId}">${fVar.name}</option>
                                </c:forEach>
                              </html:select>
-                             <span class="list_header" >Secondary Sector</span>
+                             <span >Secondary Sector</span>
                              <br/>
                              <html:select name="deExportForm" property="secondarySectorsSelected" styleId="teamId" style="width: 400px;" multiple="true"  size="3">
                                <c:forEach var="fVar" items="${deExportForm.secondarySectorsList}" varStatus="lStatus">
                                  <option value="${fVar.ampSectorId}">${fVar.name}</option>
                                </c:forEach>
                              </html:select>
+<%--                          
                          </div>
+--%>
                          <br/>
+<%--                          
                          <span class="list_header">Language</span>
                          <div id="reportGroupDiv" style="padding: 15px 15px 15px 15px; border: 1px solid gray; background-color: white; position: relative;">
                            <html:radio name="deExportForm" property="language" value="en" />English<br/>
                            <html:radio name="deExportForm" property="language" value="es" />Spanish<br/>
                            <html:radio name="deExportForm" property="language" value="fr" />French<br/>
                          </div>
+--%>
                         </td>
                       </tr>
                     </table>

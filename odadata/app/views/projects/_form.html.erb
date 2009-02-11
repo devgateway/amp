@@ -2,6 +2,7 @@
 
 
 <script type="text/javascript" charset="utf-8">
+  var checkOnUnload = true;
 	function highlightTabsWithErrors(element) {
 		var tabs = element.children('li');
 		tabs.each(function() {
@@ -20,7 +21,8 @@
 		highlightTabsWithErrors($("ul#tabs"));
 	});
     function checkFirst(){
-      return "";
+      if(checkOnUnload)
+        return '';
     }
 
     $(window).scroll(function()
@@ -77,7 +79,7 @@
 	<input type="button" value="<%= t('projects.next_step') %>" id="next_button"/>
     <br/>
     <br/>
-	<%= form.submit(lc("submit"), :onclick =>"window.onbeforeunload = null") %>
+	<%= form.submit(lc("submit"), :onclick =>"checkOnUnload = null;") %>
 </div>
 <script language="javascript" >
 $("#previous_button").click(function () { 

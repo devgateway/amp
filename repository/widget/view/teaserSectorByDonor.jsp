@@ -38,11 +38,15 @@
 <table width="100%">
     <tr>
         <td colspan="3" align="left">
-            <div id="piehelptooltip" style="display:none; width:200; position: absolute; left:50px; top: 50px; background-color: #ffffff; border: 1px solid silver;">
-               <digi:trn key='widget:piechart:allAmountinUSDTooltip'>
-                   The amounts are calculated using the exchange rate for the date of the transaction.</digi:trn>
+            <div id="piehelptooltip" style="display:none; width:200; position: absolute; left:50px; top: 50px; background-color: #ffffff; border: 1px solid silver;">               
+               	<digi:trn key='widget:piechart:allAmountinUSDTooltip'>The amounts are calculated using the exchange rate for the date of the transaction.</digi:trn>               
             </div>  
-                <digi:trn key="widget:piechart:allAmountsin000USD">All amounts in 000s of USD</digi:trn>
+            	<c:if test="${gisSectorByDonorTeaserForm.amountsInThousands==true}">
+            		<digi:trn key="widget:piechart:allAmountsin000USD">All amounts in 000s of USD</digi:trn>
+            	</c:if>
+                <c:if test="${gisSectorByDonorTeaserForm.amountsInThousands==false}">
+               		<digi:trn>All amounts in USD</digi:trn>
+               </c:if>
             <digi:img  src="module/widget/images/help1.gif" onmouseover="showHelpTooltip()" onmouseout="hideHelpTooltip()"/>
         </td>
     </tr>

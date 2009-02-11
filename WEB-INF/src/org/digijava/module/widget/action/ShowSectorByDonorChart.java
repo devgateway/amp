@@ -12,6 +12,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.widget.form.SectorByDonorTeaserForm;
 import org.digijava.module.widget.helper.ChartOption;
 import org.digijava.module.widget.util.ChartWidgetUtil;
@@ -69,6 +71,8 @@ public class ShowSectorByDonorChart extends Action {
 		cForm.setYearsFrom(ChartWidgetUtil.getYears(true));
 		//fill to years' drop-down
 		cForm.setYearsTo(ChartWidgetUtil.getYears(false));
+		boolean amountsInThousands=FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS).equals("true");
+		cForm.setAmountsInThousands(amountsInThousands);
 		return null;
 	}
 	

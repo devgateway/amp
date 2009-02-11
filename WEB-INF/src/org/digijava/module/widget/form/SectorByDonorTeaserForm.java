@@ -5,6 +5,8 @@ import java.util.Collection;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * Form for sectors by donor teaser and chart action.
@@ -28,6 +30,8 @@ public class SectorByDonorTeaserForm extends ActionForm {
 	//This property hold values that will be shown on years' drop-down
 	private Collection<LabelValueBean> yearsFrom;
 	private Collection<LabelValueBean> yearsTo;
+	//indicates whether amounts are in thousands or not.
+	private Boolean amountsInThousands;
 	
 	public Collection<AmpOrganisation> getDonors() {
 		return donors;
@@ -108,5 +112,14 @@ public class SectorByDonorTeaserForm extends ActionForm {
 	}
 	public void setYearsTo(Collection<LabelValueBean> yearsTo) {
 		this.yearsTo = yearsTo;
+	}
+	public Boolean getAmountsInThousands() {
+		if(amountsInThousands==null){
+			amountsInThousands=FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS).equals("true");
+		}
+		return amountsInThousands;
+	}
+	public void setAmountsInThousands(Boolean amountsInThousands) {
+		this.amountsInThousands = amountsInThousands;
 	}
 }

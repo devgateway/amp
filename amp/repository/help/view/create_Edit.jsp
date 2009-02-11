@@ -74,7 +74,7 @@ function create(){
 function saveTreeState(){
 
      var xmlString = document.getElementById("xmlString").value;
-    var moduleInstance = document.getElementById("moduleInstance").innerHTML;
+   
 
      xmlHttp=GetXmlHttpObj();
 		if (xmlHttp==null){
@@ -86,7 +86,7 @@ function saveTreeState(){
 	 	var urlact="/help/helpActions.do?actionType=saveTreeState"
 	    xmlHttp.open("POST",urlact,true);
 	    xmlHttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-        xmlHttp.send("&moduleInstance="+moduleInstance+"&changedXml="+xmlString);
+        xmlHttp.send("&changedXml="+xmlString);
 		xmlHttp.onreadystatechange=stateChanged;
   
 

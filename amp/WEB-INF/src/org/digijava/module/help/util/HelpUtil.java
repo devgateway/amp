@@ -569,9 +569,9 @@ public class HelpUtil {
 	      }
 		 return xml;
 	 }
-	 
-	 
-	 public static String renderSelectTopicTree(Collection topics,String helpType,HttpServletRequest request) {
+
+
+	public static String renderSelectTopicTree(Collection topics,String helpType,HttpServletRequest request) {
 		 //CategoryManagerUtil cat = new CategoryManagerUtil();
 			String retVal = "";
 			Iterator iter = topics.iterator();
@@ -1041,6 +1041,5 @@ public class HelpUtil {
 
 
     }
-
 
 }

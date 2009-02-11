@@ -70,12 +70,7 @@
   <div id="log"></div>
   <!--<div id="xmlString"></div>-->
   <input type="hidden" id="xmlString"/>
-  <div id="moduleInstance" style="display:none;">
-     <c:forEach var="topins" items="${topic}" begin="1" end="1">
-            ${topins.moduleInstance}
-     </c:forEach>
-  </div>
-
+ 
 <script type="text/javascript">
 
 
@@ -90,13 +85,16 @@
 	 		tree.setImagePath("../../repository/help/view/images/csh_vista/");
 	        tree.enableTreeImages(false);
             tree.enableDragAndDrop(true);
+        	
             tree.setOnClickHandler(tonclick);
-            var xml = '<?xml version="1.0" encoding="iso-8859-1"?>';
+            var xml ='<?xml version="1.0" encoding="iso-8859-1"?>';
 			    xml+='<tree id="0" radio="1">';
-			    xml+= '<%= HelpUtil.renderTopicTree(topic,request,false) %>';
+			    xml+='<%=HelpUtil.renderTopicTree(topic,request,false) %>';
 			    xml+='</tree>';
+		  
 		    tree.loadXMLString(xml);
-            tree.attachEvent("onDrop",function(sid,tid,sobj,tobj){
+	
+          tree.attachEvent("onDrop",function(sid,tid,sobj,tobj){
             
             if(sid){
 

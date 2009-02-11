@@ -293,14 +293,17 @@ public class OrgProfileUtil {
         long value = 0;
         try {
             Session session = PersistenceManager.getRequestDBSession();
-            String queryString = "select  distinct cal  from " + AmpCalendar.class.getName() + " cal inner join cal.eventType  type " + " inner join cal.organisations   where (cal.calendarPK.calendar.startDate>=:startDate and cal.calendarPK.calendar.endDate<=:endDate)" + " and type.name='Mission' "; //I think we need made changes in db structure
+            String queryString = "select  distinct cal  from " + AmpCalendar.class.getName() + " cal inner join cal.eventType  type " 
+                    + " left join cal.organisations org "+
+                    " where (cal.calendarPK.calendar.startDate>=:startDate and cal.calendarPK.calendar.endDate<=:endDate) "
+                    + " and type.name='Mission' "; //I think we need made changes in db structure
 
 
             if (orgId != null && orgId != -1) {
                 queryString += " and :orgId in elements(cal.organisations)";
             } else {
                 if (orgGroupId != null && orgGroupId != -1) {
-                    queryString += " and cal.organisations.orgGrpId=:orgGroupId";
+                    queryString += " and org.orgGrpId=:orgGroupId";
                 }
             }
             Query qry = session.createQuery(queryString + " and size(cal.organisations)>1 "); //joint
@@ -320,6 +323,11 @@ public class OrgProfileUtil {
             qry.setDate("endDate", endDate);
             if (orgId != null && orgId != -1) {
                 qry.setLong("orgId", orgId);
+            } else {
+                if (orgGroupId != null && orgGroupId != -1) {
+                    qry.setLong("orgGroupId", orgGroupId);
+
+                }
             }
             long allMisssion = qry.list().size();
             if (allMisssion > 0) {
@@ -362,24 +370,10 @@ public class OrgProfileUtil {
             currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
         }
         Long orgID = filter.getOrgId();
-          // apply calendar filter
-           Date startDate = null;
-           Date endDate = null;
-           Long fiscalCalendarId = filter.getFiscalCalendarId();
-           if (fiscalCalendarId != null && fiscalCalendarId != -1) {
-               startDate = FiscalCalendarUtil.getCalendarStartDate(fiscalCalendarId, year.intValue());
-               endDate = FiscalCalendarUtil.getCalendarEndDate(fiscalCalendarId, year.intValue());
-           }
-           else{
-               Calendar cal = Calendar.getInstance();
-               cal.set(Calendar.MONTH, Calendar.JANUARY);
-               cal.set(Calendar.DAY_OF_MONTH, 1);
-               cal.set(Calendar.YEAR, year.intValue());
-               startDate=cal.getTime();
-               cal.set(Calendar.MONTH, Calendar.DECEMBER);
-               cal.set(Calendar.DAY_OF_MONTH, 31);
-               endDate=cal.getTime();
-           }
+        Long fiscalCalendarId = filter.getFiscalCalendarId();
+        // apply calendar filter
+        Date startDate = getStartDate(fiscalCalendarId, year.intValue());
+        Date endDate = getEndDate(fiscalCalendarId, year.intValue());
         try {
             session = PersistenceManager.getRequestDBSession();
             /* pick all activities of the organization in the selected year ordered
@@ -477,6 +471,34 @@ public class OrgProfileUtil {
 
 
         return projects;
+    }
+    public static Date getStartDate(Long fiscalCalendarId, int year) {
+        Date startDate = null;
+        if (fiscalCalendarId != null && fiscalCalendarId != -1) {
+            startDate = FiscalCalendarUtil.getCalendarStartDate(fiscalCalendarId, year);
+
+        } else {
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.MONTH, Calendar.JANUARY);
+            cal.set(Calendar.DAY_OF_MONTH, 1);
+            cal.set(Calendar.YEAR, year);
+            startDate = cal.getTime();
+        }
+        return startDate;
+    }
+     public static Date getEndDate(Long fiscalCalendarId, int year) {
+        Date startDate = null;
+        if (fiscalCalendarId != null && fiscalCalendarId != -1) {
+            startDate = FiscalCalendarUtil.getCalendarEndDate(fiscalCalendarId, year);
+
+        } else {
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.MONTH, Calendar.DECEMBER);
+            cal.set(Calendar.DAY_OF_MONTH, 31);
+            cal.set(Calendar.YEAR, year);
+            startDate = cal.getTime();
+        }
+        return startDate;
     }
 
 }

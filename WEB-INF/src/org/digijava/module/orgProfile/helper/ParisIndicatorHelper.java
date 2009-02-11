@@ -59,8 +59,8 @@ public class ParisIndicatorHelper {
     public long getAllDonorBaseLineValue() {
 
         //apply calendar filter
-        Date startDate = getStartDate(true);
-        Date endDate = getEndDate(true);
+        Date startDate =OrgProfileUtil.getStartDate(fiscalCalendarId,2005);
+        Date endDate =OrgProfileUtil.getEndDate(fiscalCalendarId, 2005);
         long allDonorBaseLineValue = 0;
         if (prIndicator.getIndicatorCode().equals("3")) {
             Double valueQ2 = OrgProfileUtil.getValue(new int[]{2, 1}, prIndicator.getAmpIndicatorId(), 1, currency, null, null, startDate, endDate, false, member);
@@ -148,8 +148,8 @@ public class ParisIndicatorHelper {
 
     public long getAllCurrentValue() {
         //apply calendar filter
-        Date startDate = getStartDate(false);
-        Date endDate = getEndDate(false);
+       Date startDate =OrgProfileUtil.getStartDate(fiscalCalendarId,year.intValue());
+       Date endDate =OrgProfileUtil.getEndDate(fiscalCalendarId, year.intValue());
 
         long previousYearValue = 0;
         if (prIndicator.getIndicatorCode().equals("3")) {
@@ -255,8 +255,8 @@ public class ParisIndicatorHelper {
 
     public long getOrgBaseLineValue() {
         //apply calendar filter
-        Date startDate = getStartDate(true);
-        Date endDate = getEndDate(true);
+        Date startDate =OrgProfileUtil.getStartDate(fiscalCalendarId,2005);
+        Date endDate =OrgProfileUtil.getEndDate(fiscalCalendarId, 2005);
         long orgBaseLineValue = 0;
         if (prIndicator.getIndicatorCode().equals("3")) {
             Double valueQ2 = OrgProfileUtil.getValue(new int[]{2, 1}, prIndicator.getAmpIndicatorId(), 1, currency, organization.getAmpOrgId(), orgGroup.getAmpOrgGrpId(), startDate, endDate, false, member);
@@ -335,8 +335,9 @@ public class ParisIndicatorHelper {
 
     public long getOrgPreviousYearValue() {
         //apply calendar filter
-        Date startDate = getStartDate(false);
-        Date endDate = getEndDate(false);
+       Date startDate =OrgProfileUtil.getStartDate(fiscalCalendarId,year.intValue());
+       Date endDate =OrgProfileUtil.getEndDate(fiscalCalendarId, year.intValue());
+
         long previousYearValue = 0;
         if (prIndicator.getIndicatorCode().equals("3")) {
             Double valueQ2 = OrgProfileUtil.getValue(new int[]{2, 1}, prIndicator.getAmpIndicatorId(), 1, currency, organization.getAmpOrgId(), orgGroup.getAmpOrgGrpId(), startDate, endDate, false, member);
@@ -462,44 +463,5 @@ public class ParisIndicatorHelper {
     public String getTargetValue() {
         return getFormula().getTargetValue();
     }
-    //getting start date from fiscal calendar...
-
-    public Date getStartDate(boolean baseValue) {
-        Date startDate = null;
-        int startDateYear = 2005;
-        if (!baseValue) {
-            startDateYear = year.intValue();
-        }
-        if (fiscalCalendarId != null && fiscalCalendarId != -1) {
-            startDate = FiscalCalendarUtil.getCalendarStartDate(fiscalCalendarId, startDateYear);
-        } else {
-            Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.MONTH, Calendar.JANUARY);
-            cal.set(Calendar.DAY_OF_MONTH, 1);
-            cal.set(Calendar.YEAR, startDateYear);
-            startDate=cal.getTime();
-        }
-        return startDate;
-
-    }
-
-    //getting end date from fiscal calendar...
-    public Date getEndDate(boolean baseValue) {
-        Date endDate = null;
-        int endDateYear = 2005;
-        if (!baseValue) {
-            endDateYear = year.intValue();
-        }
-        if (fiscalCalendarId != null && fiscalCalendarId != -1) {
-            endDate = FiscalCalendarUtil.getCalendarStartDate(fiscalCalendarId, endDateYear);
-        } else {
-            Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.MONTH, Calendar.DECEMBER);
-            cal.set(Calendar.DAY_OF_MONTH, 31);
-            cal.set(Calendar.YEAR, endDateYear);
-            endDate = cal.getTime();
-        }
-        return endDate;
-
-    }
+  
 }

@@ -76,14 +76,18 @@ public class DeleteAllReports extends Action {
 								 removeFromSession(request.getSession(), ampReportForm.getReportId());
 								 boolean deleted = AdvancedReportUtil.deleteReportsCompletely(ampReportForm.getReportId());										 
 										 if (deleted) {
-											 if(request.getParameter("isTab").equals("1")){
-												 errors.add("title", new ActionError("error.aim.deleteTabs.tabDeleted"));
-												 saveErrors(request,errors);								
-												 logger.debug("Tab deleted"); 
-											 } else {
-												 errors.add("title", new ActionError("error.aim.deleteReports.reportDeleted"));
-												 saveErrors(request,errors);								
-												 logger.debug("Report deleted");
+											 if (request.getParameter("isTab") != null) {
+												 if(request.getParameter("isTab").equals("1")){
+													 errors.add("title", new ActionError("error.aim.deleteTabs.tabDeleted"));
+													 saveErrors(request,errors);								
+													 logger.debug("Tab deleted"); 
+												 } else {
+													 errors.add("title", new ActionError("error.aim.deleteReports.reportDeleted"));
+													 saveErrors(request,errors);								
+													 logger.debug("Report deleted");
+												 } 
+											 } else { 
+												 
 											 }
 										 }												
 						 }

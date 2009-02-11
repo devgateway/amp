@@ -19,6 +19,15 @@ public class FilterHelper implements Serializable{
     private int transactionType;
     private TeamMember teamMember;
     private Long orgGroupId;
+    private Long fiscalCalendarId;
+
+    public Long getFiscalCalendarId() {
+        return fiscalCalendarId;
+    }
+
+    public void setFiscalCalendarId(Long fiscalCalendarId) {
+        this.fiscalCalendarId = fiscalCalendarId;
+    }
 
     public Long getOrgGroupId() {
         return orgGroupId;
@@ -52,6 +61,7 @@ public class FilterHelper implements Serializable{
         this.year=form.getYear();
         this.transactionType=form.getTransactionType();
         this.orgGroupId=form.getOrgGroupId();
+        this.fiscalCalendarId=form.getFiscalCalendarId();
     }
 
      public FilterHelper(OrgProfileFilterForm form,TeamMember tm){

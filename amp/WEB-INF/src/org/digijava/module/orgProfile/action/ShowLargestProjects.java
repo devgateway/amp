@@ -17,6 +17,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.orgProfile.form.LargestProjectsForm;
 import org.digijava.module.orgProfile.helper.FilterHelper;
+import org.digijava.module.orgProfile.util.OrgProfileUtil;
 
 /**
  *
@@ -31,7 +32,7 @@ public class ShowLargestProjects extends Action {
         LargestProjectsForm orgForm = (LargestProjectsForm) form;
         HttpSession session=request.getSession();
         FilterHelper filter= (FilterHelper)session.getAttribute("orgProfileFilter");
-        orgForm.setProjects(DbUtil.getOrganisationLargestProjects(filter));
+        orgForm.setProjects(OrgProfileUtil.getOrganisationLargestProjects(filter));
         return mapping.findForward("forward");
 
     }

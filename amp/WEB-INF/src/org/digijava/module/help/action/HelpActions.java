@@ -331,7 +331,8 @@ public class HelpActions extends DispatchAction {
 				.getInstanceName();
 		String page  = request.getParameter("page");
 		helpForm.setPage(page);
-		HelpTopic helpTopic = HelpUtil.getHelpTopic(helpForm.getTopicKey(),
+		String key = HelpUtil.getTrn(helpForm.getTopicKey(), request);
+		HelpTopic helpTopic = HelpUtil.getHelpTopic(key,
 				siteId, moduleInstance);
 		if (helpTopic == null) {
 			throw new AimException("helpTopic Not Found");

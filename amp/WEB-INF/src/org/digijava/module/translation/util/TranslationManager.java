@@ -115,7 +115,7 @@ public class TranslationManager {
             String relativeUrlEncode = URLEncoder.encode(relativeUrl, "UTF-8");
             actionForm.setReferrerParameter(relativeUrlEncode);
 
-            session = PersistenceManager.getSession();
+            session = PersistenceManager.getRequestDBSession();
 
             String queryString = localeQuery + rightPart;
             logger.debug(queryString);
@@ -202,14 +202,6 @@ public class TranslationManager {
         catch (Exception ex) {
             logger.debug("Unable to get Languages ", ex);
             throw new DgException("Unable to get Languages ", ex);
-        }
-        finally {
-            try {
-                PersistenceManager.releaseSession(session);
-            }
-            catch (Exception ex1) {
-                logger.warn("releaseSession() failed ", ex1);
-            }
         }
 
         Collections.sort(languages);

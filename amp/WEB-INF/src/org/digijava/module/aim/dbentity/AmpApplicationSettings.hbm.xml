@@ -25,6 +25,6 @@
 		<many-to-one name="fiscalCalendar" column="fis_cal_id"
 			class="org.digijava.module.aim.dbentity.AmpFiscalCalendar" cascade="none" />
 		<many-to-one name="member" column="member"
-			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpTeamMember" />
 	</class>
 </hibernate-mapping>

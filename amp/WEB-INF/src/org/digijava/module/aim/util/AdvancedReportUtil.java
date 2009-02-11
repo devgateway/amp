@@ -24,6 +24,7 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamPageFilters;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
+import org.hibernate.FlushMode;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -405,7 +406,8 @@ public final class AdvancedReportUtil {
 	    Query qry = null;
 	    try {
 	        session = PersistenceManager.getRequestDBSession();
-	        tx = session.beginTransaction();
+	        session.setFlushMode(FlushMode.MANUAL);
+	        tx = session.beginTransaction();	        
 	        AmpReports ampReports = null;
 	        // loading the 3 tables from where the deletion has to be done
 	        try {
@@ -418,7 +420,7 @@ public final class AdvancedReportUtil {
 	            qry.setParameter("qid", qid, Hibernate.LONG);
 	            List lst	= qry.list();
 	            Iterator itr = lst.iterator();
-	            Collection col = new ArrayList();
+	            Collection col = new ArrayList(); 
 	            while (itr.hasNext()) {
 	                ampTeamReports = (AmpTeamReports) itr.next();
 	                session.delete(ampTeamReports);
@@ -440,9 +442,8 @@ public final class AdvancedReportUtil {
 	            	AmpPages ampPage = ampReports.getAmpPage();
 	            	session.delete(ampPage);
 	            }
-	            
-	            
 	            session.delete(ampReports);
+	            session.flush();
 	            tx.commit();
 	            return true;
 	        } catch (org.hibernate.ObjectNotFoundException onfe) {

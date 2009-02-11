@@ -11,8 +11,7 @@
 		<property name="teamView" column="team_view" type="java.lang.Boolean" />
 
 		<many-to-one name="team" class="org.digijava.module.aim.dbentity.AmpTeam" cascade="none" />
-		<many-to-one name="report" class="org.digijava.module.aim.dbentity.AmpReports"
-			cascade="none" />
+		<many-to-one name="report" class="org.digijava.module.aim.dbentity.AmpReports" cascade="all" />
 
 	</class>
 </hibernate-mapping>

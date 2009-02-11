@@ -172,12 +172,15 @@ public class TemplateAlertActions extends DispatchAction {
 				for (AmpMessageState state : msgStates) {
 					if(state.getMemberId()!=null){
 						AmpTeamMember teamMember=TeamMemberUtil.getAmpTeamMember(state.getMemberId());
-						AmpTeam team = teamMember.getAmpTeam();
-						if(!teamList.contains(team)){
-						   teamList.add(team);	
-						}					
-						memberList.add(teamMember);
-					}					
+						//in case if teamMember is not banned
+						if(teamMember!=null){
+							AmpTeam team = teamMember.getAmpTeam();
+							if(!teamList.contains(team)){
+							   teamList.add(team);
+							}
+							memberList.add(teamMember);
+						}						
+					}
 				}
 				for(AmpTeam team : teamList){
 					LabelValueBean teamLabel=new LabelValueBean("---"+team.getName()+"---","t:"+team.getAmpTeamId().toString());				

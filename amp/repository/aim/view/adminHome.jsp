@@ -605,7 +605,7 @@
                               <c:set var="trnDataExchangeExportTitle">
                                 <digi:trn key="dataexchange:trnDataExchangeExportTitle">Click here to view Data Export Manager</digi:trn>
                               </c:set>
-                              <digi:link module="dataExchange"  href="/exportWizard.do?method=prepear" title="${trnDataExchangeExportTitle}" >
+                              <digi:link module="dataExchange"  href="/indexDE.do" title="${trnDataExchangeExportTitle}" >
                                 <digi:trn key="dataexchange:DataExportManager">Data Export Manager</digi:trn>
                               </digi:link>
                             </td>

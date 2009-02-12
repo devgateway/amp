@@ -16,6 +16,10 @@
 		
 		<!--  Import routine -->
 		
+		
+		<action path="/dataExchange/indexDE" forward="/showLayout.do?layout=indexDE" />
+		
+		
 		<action path="/dataExchange/importWizard" forward="/showLayout.do?layout=importWizard" />
 		<action path="/dataExchange/import" scope="session" type="org.digijava.module.dataExchange.action.ImportAction" name="deImportForm" validate="false" parameter="method">
 			<forward name="forward" path="/showLayout.do?layout=importWizard"/>

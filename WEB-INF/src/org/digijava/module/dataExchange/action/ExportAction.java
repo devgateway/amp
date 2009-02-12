@@ -51,7 +51,14 @@ public class ExportAction extends DispatchAction {
 			
 			Activities activities = (new ObjectFactory()).createActivities();
 			
-			Collection ampActivities  = ExportUtil.getAllTeamAmpActivities(eForm.getSelectedTeamId());
+			List<AmpActivity> ampActivities  = ExportUtil.getActivities(
+					eForm.getSelectedTeamId(),
+					eForm.getDonorTypeSelected(),
+					eForm.getDonorGroupSelected(),
+					eForm.getDonorAgencySelected(),
+					eForm.getPrimarySectorsSelected(),
+					eForm.getSecondarySectorsSelected()
+					);
 			
 			try {
 

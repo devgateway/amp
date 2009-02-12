@@ -41,7 +41,8 @@ public class DynLocationSelected extends Action {
 				
 				if ( eaForm.getLocation().getSelectedLocs() == null )
 					eaForm.getLocation().setSelectedLocs( new ArrayList<Location>() );
-				eaForm.getLocation().getSelectedLocs().add(location);
+				if ( !eaForm.getLocation().getSelectedLocs().contains(location) )
+					eaForm.getLocation().getSelectedLocs().add(location);
 				
 				AmpCategoryValueLocations ampRegion			= DynLocationManagerUtil.getAncestorByLayer(ampCVLocation, 
 																CategoryConstants.IMPLEMENTATION_LOCATION_REGION);

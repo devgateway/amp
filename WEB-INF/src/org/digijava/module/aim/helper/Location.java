@@ -13,7 +13,7 @@ import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
-public class Location implements Serializable, Comparable
+public class Location implements Serializable
 {
 	
 	private Long locId;
@@ -168,54 +168,59 @@ public class Location implements Serializable, Comparable
 		this.zoneId = zoneId;
 	}
 
-	  public boolean equals(Object obj) {
-		if (obj == null)
-			return false;
-		if (!(obj instanceof Location))
-			throw new ClassCastException();
+//	  public boolean equals(Object obj) {
+//		if (obj == null)
+//			return false;
+//		if (!(obj instanceof Location))
+//			throw new ClassCastException();
+//
+//		Location loc = (Location) obj;
+//		boolean equal = false;
+//
+//		if (((loc.getCountryId() == null && countryId == null) || (loc
+//				.getCountryId().equals(countryId)))
+//				&& ((loc.getRegionId() == null && regionId == null) || (loc
+//						.getRegionId().equals(regionId)))
+//				&& ((loc.getZoneId() == null && zoneId == null) || (loc
+//						.getZoneId().equals(zoneId)))
+//				&& ((loc.getWoredaId() == null && woredaId == null) || (loc
+//						.getWoredaId().equals(woredaId)))) {
+//			equal = true;
+//		}
+//
+//		return equal;
+//
+//	}
 
-		Location loc = (Location) obj;
-		boolean equal = false;
-
-		if (((loc.getCountryId() == null && countryId == null) || (loc
-				.getCountryId().equals(countryId)))
-				&& ((loc.getRegionId() == null && regionId == null) || (loc
-						.getRegionId().equals(regionId)))
-				&& ((loc.getZoneId() == null && zoneId == null) || (loc
-						.getZoneId().equals(zoneId)))
-				&& ((loc.getWoredaId() == null && woredaId == null) || (loc
-						.getWoredaId().equals(woredaId)))) {
-			equal = true;
-		}
-
-		return equal;
-
-	}
-
-	public int compareTo(Object arg0) {
-		// TODO Auto-generated method stub
-		Location l = (Location)arg0;
-		String lcntry = (l.getCountry() == null) ? "" : l.getCountry();
-		String lregion = (l.getRegion() == null) ? "" : l.getRegion();
-		String lzone = (l.getZone() == null) ? "" : l.getZone();
-		String lworeda = (l.getWoreda() == null) ? "" : l.getWoreda();
-
-		if(country != null)
-			if(country.compareTo(lcntry)!=0) return country.compareTo(lcntry);
-			else
-				  if (region != null)
-					  if(region.compareTo(lregion)!=0) return region.compareTo(lregion);
-					  else 
-						  if (zone!=null)
-							  if(zone.compareTo(lzone)!=0) return zone.compareTo(lzone);
-							  else 
-								  if (woreda != null)
-									  if(woreda.compareTo(lworeda)!=0) return woreda.compareTo(lworeda);
-									  else return 0;
-								  else return 0;
-						  else return 0;  
-				  else return 0; 
-		else return -1;			
+//	public int compareTo(Object arg0) {
+//		// TODO Auto-generated method stub
+//		Location l = (Location)arg0;
+//		String lcntry = (l.getCountry() == null) ? "" : l.getCountry();
+//		String lregion = (l.getRegion() == null) ? "" : l.getRegion();
+//		String lzone = (l.getZone() == null) ? "" : l.getZone();
+//		String lworeda = (l.getWoreda() == null) ? "" : l.getWoreda();
+//
+//		if(country != null)
+//			if(country.compareTo(lcntry)!=0) return country.compareTo(lcntry);
+//			else
+//				  if (region != null)
+//					  if(region.compareTo(lregion)!=0) return region.compareTo(lregion);
+//					  else 
+//						  if (zone!=null)
+//							  if(zone.compareTo(lzone)!=0) return zone.compareTo(lzone);
+//							  else 
+//								  if (woreda != null)
+//									  if(woreda.compareTo(lworeda)!=0) return woreda.compareTo(lworeda);
+//									  else return 0;
+//								  else return 0;
+//						  else return 0;  
+//				  else return 0; 
+//		else return -1;			
+//	}
+	@Override
+	public boolean equals (Object o){
+		Location l	= (Location)o;
+		return ampCVLocation.equals( l.getAmpCVLocation() );
 	}
 
 	public String getPercent() {

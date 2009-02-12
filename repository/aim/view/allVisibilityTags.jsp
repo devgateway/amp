@@ -346,7 +346,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Comments Current Value" feature="Activity"></field:display> 
 <field:display name="Comments Revised Target Value" feature="Activity"></field:display> 
 <field:display name="Comments Target Value" feature="Activity"></field:display> 
-<field:display name="Component Name" feature="Activity - Component Step"></field:display> 
+<field:display name="Component Name" feature="Activity - Component Step"></field:display>
+<field:display name="Component Type" feature="Activity - Component Step"></field:display>  
 <field:display name="Component description" feature="Activity - Component Step"></field:display> 
 <field:display name="Componente" feature="Planning"></field:display> 
 <field:display name="Components Actual/Planned Commitments" feature="Activity - Component Step"></field:display> 

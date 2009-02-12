@@ -32,7 +32,7 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]			= new Array(
 				,'Credit/Donation'
 				,'Beneficiary Agency'
 				,'Implementing Agency'
-				,'Component Name'
+				,'Component Type'
 				,'Secondary Sector'
 				,'Secondary Sector Sub-Sector'
 				,'Responsible Organization'
@@ -52,7 +52,7 @@ YAHOO.amp.reportwizard.fundingGroups["component"]		= new Array(
 				'Status', 'A.C. Chapter', 'Accession Instrument', 'Financing Instrument',
 				'Implementation Level','Parent National Planning Objectives', 'National Planning Objectives', 'Primary Program',
 				'Secondary Program', 'Primary Sector Sub-Sector', 'Type Of Assistance','Region',
-				'Primary Sector', 'Component Name', 'Beneficiary Agency', 'Implementing Agency', 
+				'Primary Sector', 'Component Type', 'Beneficiary Agency', 'Implementing Agency', 
 				'Secondary Sector', 'Secondary Sector Sub-Sector', 'Responsible Organization', 'Activity Created By'
 			);
 YAHOO.amp.reportwizard.fundingGroups["contribution"]	= new Array(

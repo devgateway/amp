@@ -13,13 +13,13 @@ public class AmpComponentType {
 	
 	private Boolean enable;
 
-	private Set<AmpComments> components;
+	private Set<AmpComponent> components;
 
-	public Set<AmpComments> getComponents() {
+	public Set<AmpComponent> getComponents() {
 		return components;
 	}
 
-	public void setComponents(Set<AmpComments> components) {
+	public void setComponents(Set<AmpComponent> components) {
 		this.components = components;
 	}
 

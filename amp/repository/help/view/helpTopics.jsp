@@ -86,6 +86,7 @@
 	 		tree.setImagePath("../../repository/help/view/images/csh_vista/");
 	        tree.enableTreeImages(false);
             tree.enableDragAndDrop(true);
+            tree.setDragBehavior("complex");
             tree.setOnClickHandler(tonclick);
             var xml ='<?xml version="1.0" encoding="iso-8859-1"?>';
 			    xml+='<tree id="0" radio="1">';

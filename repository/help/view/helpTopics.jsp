@@ -72,6 +72,27 @@
   <input type="hidden" id="xmlString"/>
  
 <script type="text/javascript">
+if (typeof DOMParser == "undefined") {
+	   DOMParser = function () {}
+
+	   DOMParser.prototype.parseFromString = function (str, contentType) {
+	      if (typeof ActiveXObject != "undefined") {
+	         var d = new ActiveXObject("MSXML.DomDocument");
+	         d.loadXML(str);
+	         return d;
+	      } else if (typeof XMLHttpRequest != "undefined") {
+	         var req = new XMLHttpRequest;
+	         req.open("GET", "data:" + (contentType || "application/xml") +
+	                         ";charset=utf-8," + encodeURIComponent(str), false);
+	         if (req.overrideMimeType) {
+	            req.overrideMimeType(contentType);
+	         }
+	         req.send(null);
+	         return req.responseXML;
+	      }
+	   }
+	}
+
 
 
 	function tonclick(id){

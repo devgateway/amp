@@ -444,6 +444,7 @@ public final class AdvancedReportUtil {
 	            }
 	            session.delete(ampReports);
 	            session.flush();
+	            logger.info("SESSION HAS BEEN FLUSHED OUT !!!!!!!!!!!!!!!!!!");
 	            tx.commit();
 	            return true;
 	        } catch (org.hibernate.ObjectNotFoundException onfe) {

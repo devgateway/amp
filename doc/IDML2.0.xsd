@@ -43,6 +43,7 @@
 								<xs:enumeration value="Country"/>
 								<xs:enumeration value="Region"/>
 								<xs:enumeration value="Zone"/>
+								<xs:enumeration value="District"/>
 								<xs:enumeration value="Woreda"/>
 								<xs:enumeration value="Department"/>
 							</xs:restriction>

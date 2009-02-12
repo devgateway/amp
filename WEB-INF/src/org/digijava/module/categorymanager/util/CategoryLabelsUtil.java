@@ -42,6 +42,8 @@ public class CategoryLabelsUtil {
 		while ( iterPV.hasNext() ) {
 			PossibleValue pv								= iterPV.next();
 			AmpCategoryValue categoryValue					= CategoryManagerUtil.getAmpCategoryValueFromCollectionById( pv.getId(), category.getPossibleValues() );
+			if ( categoryValue == null )
+				continue;
 			if ( categoryValue.getUsedValues() == null ) {
 				categoryValue.setUsedValues(new TreeSet<AmpCategoryValue>());
 			}

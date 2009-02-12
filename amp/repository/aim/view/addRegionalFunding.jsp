@@ -70,14 +70,14 @@
 												 ---
 											</html:option>
 											<html:optionsCollection name="aimEditActivityForm" property="funding.fundingRegions" 
-											value="ampRegionId" label="name" />										
+											value="id" label="name" />										
 										</html:select>										
 									</c:if>
 									<c:if test="${aimEditActivityForm.funding.fundingRegionId != -1}">
 										<html:select property="funding.fundingRegionId" styleClass="inp-text" styleId="fundingRegionId" disabled="true">
 											<html:option value="-1">--- Select a region ---</html:option>
 											<html:optionsCollection name="aimEditActivityForm" property="funding.fundingRegions" 
-											value="ampRegionId" label="name" />									
+											value="id" label="name" />									
 										</html:select>
 									</c:if>
 								</td>								

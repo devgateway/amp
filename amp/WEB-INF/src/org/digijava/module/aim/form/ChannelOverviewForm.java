@@ -80,6 +80,8 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	private String accessionInstrument;
 
 	private Collection closingDates;
+	
+	private Integer countryIndex;
 
 	/**
 	 * @return Returns the revCompDates.
@@ -676,6 +678,21 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 		  public void setAcChapter(String acChapter) {
 		    this.acChapter = acChapter;
 		  }
+
+		/**
+		 * @return the countryIndex
+		 */
+		public Integer getCountryIndex() {
+			return countryIndex;
+		}
+
+		/**
+		 * @param countryIndex the countryIndex to set
+		 */
+		public void setCountryIndex(Integer countryIndex) {
+			this.countryIndex = countryIndex;
+		}
 	  
 
+		  
 }

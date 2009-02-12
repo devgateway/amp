@@ -21,6 +21,35 @@ public class AmpLocation implements Serializable
 	private Set aidlocation;
 	
 	private Set activities;
+	
+	private AmpCategoryValueLocations location;
+	
+	private AmpCategoryValueLocations regionLocation;
+	
+	public AmpCategoryValueLocations getLocation() {
+		return location;
+	}
+
+	public void setLocation(AmpCategoryValueLocations location) {
+		this.location = location;
+	}
+	
+
+
+
+	/**
+	 * @return the regionLocation
+	 */
+	public AmpCategoryValueLocations getRegionLocation() {
+		return regionLocation;
+	}
+
+	/**
+	 * @param regionLocation the regionLocation to set
+	 */
+	public void setRegionLocation(AmpCategoryValueLocations regionLocation) {
+		this.regionLocation = regionLocation;
+	}
 
 	public Set getActivities() {
 		return activities;
@@ -29,40 +58,52 @@ public class AmpLocation implements Serializable
 	public void setActivities(Set activities) {
 		this.activities = activities;
 	}
-
-	private Country dgCountry; 
+	
+	@Deprecated
+	private Country dgCountry;
+	@Deprecated
 	private AmpRegion ampRegion;
+	@Deprecated
 	private AmpZone ampZone;
+	@Deprecated
 	private AmpWoreda ampWoreda;
 
+	@Deprecated
 	public Country getDgCountry() {
 			  return dgCountry;
 	}
 
+	@Deprecated
 	public void setDgCountry(Country dgCountry) {
 			  this.dgCountry = dgCountry;
 	}
 
+	@Deprecated
 	public AmpRegion getAmpRegion() {
 			  return ampRegion;
 	}
 
+	@Deprecated
 	public void setAmpRegion(AmpRegion ampRegion) {
 			  this.ampRegion = ampRegion;
 	}
 
+	@Deprecated
 	public AmpZone getAmpZone() {
 			  return ampZone;
 	}
 
+	@Deprecated
 	public void setAmpZone(AmpZone ampZone) {
 			  this.ampZone = ampZone;
 	}
 
+	@Deprecated
 	public AmpWoreda getAmpWoreda() {
 			  return ampWoreda;
 	}
 
+	@Deprecated
 	public void setAmpWoreda(AmpWoreda ampWoreda) {
 			  this.ampWoreda = ampWoreda;
 	}

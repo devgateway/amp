@@ -22,6 +22,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.FundingDetail;
@@ -72,13 +73,12 @@ public class AddRegionalFunding extends Action {
 			return mapping.findForward("forward");
 		} else if (action != null && action.equalsIgnoreCase("update")){
 
-			RegionalFunding regFund = new RegionalFunding();
-			
-			Iterator itr = eaForm.getLocation().getSelectedLocs().iterator();
+			RegionalFunding regFund = new RegionalFunding();			
+			Iterator<AmpCategoryValueLocations> itr = eaForm.getFunding().getFundingRegions().iterator();
 			while (itr.hasNext()) {
-				Location loc = (Location) itr.next();
-				if (loc.getRegionId().equals(eaForm.getFunding().getFundingRegionId())) {
-					regFund.setRegionName(loc.getRegion());
+				AmpCategoryValueLocations ampRegion	= itr.next();
+				if (ampRegion.getId().equals(eaForm.getFunding().getFundingRegionId())) {
+					regFund.setRegionName( ampRegion.getName() );
 					break;
 				}
 			}

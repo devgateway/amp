@@ -265,7 +265,31 @@ public class LocationUtil {
 		return col;
 	}
 	//End Search Location.
+	public static AmpLocation getAmpLocationByCVLocation(Long ampCVLocationId) {
+		Session session = null;
+		AmpLocation loc = null;
 
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			
+			String queryString 	= "select l from " + AmpLocation.class.getName()
+					+ " l where location=:locationId order by l.ampLocationId";
+			Query qry = session.createQuery(queryString);
+			qry.setLong("locationId", ampCVLocationId);
+			
+			Collection result	= qry.list();
+			if ( result != null && result.size() > 0 ) {
+				return (AmpLocation)result.iterator().next();
+			}
+			
+		} catch (Exception e) {
+			logger.error("Uanble to get location :" + e);
+		} 
+		return loc;
+		
+	}
+	
+	@Deprecated
 	public static AmpLocation getAmpLocation(String countryId, Long regionId,
 			Long zoneId, Long woredaId) {
 

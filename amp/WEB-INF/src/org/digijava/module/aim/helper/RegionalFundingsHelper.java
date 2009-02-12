@@ -43,8 +43,8 @@ public class RegionalFundingsHelper {
 		while (itr.hasNext()) {
 			AmpRegionalFunding regFund = (AmpRegionalFunding) itr.next();
 			RegionalFunding rf = new RegionalFunding();
-			rf.setRegionId(regFund.getRegion().getAmpRegionId());
-			rf.setRegionName(regFund.getRegion().getName());
+			rf.setRegionId( regFund.getRegionLocation().getId() );
+			rf.setRegionName( regFund.getRegionLocation().getName());
 			int index = -1;
 			if (temp.contains(rf) == true) {
 				index = temp.indexOf(rf);

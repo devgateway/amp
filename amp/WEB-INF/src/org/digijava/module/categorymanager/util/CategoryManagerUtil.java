@@ -793,6 +793,66 @@ public class CategoryManagerUtil {
 			return false;
 		}
 	}
+	
+	public static String checkImplementationLocationCategory ()  {
+			String errorString			= "The following values were not found: ";
+			String separator			= "";
+			
+			AmpCategoryValue country;
+			try {
+				country = getAmpCategoryValueFromDB(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+			} catch (Exception e) {
+				country = null;
+			}
+			AmpCategoryValue region;
+			try {
+				region 	= getAmpCategoryValueFromDB(CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
+			} catch (Exception e) {
+				region	= null;
+			}
+			AmpCategoryValue zone;
+			try {
+				zone = getAmpCategoryValueFromDB(CategoryConstants.IMPLEMENTATION_LOCATION_ZONE);
+			} catch (Exception e) {
+				zone = null;
+			}
+			AmpCategoryValue district;
+			try {
+				district = getAmpCategoryValueFromDB(CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT);
+			} catch (Exception e) {
+				district = null;
+			}
+			
+			if ( country == null ) {
+				errorString 			+= "Country";
+				separator				= ", ";
+			}
+			if ( region == null ){
+				errorString				+= separator + "Region";
+				separator				= ", ";
+			}
+			if ( zone == null ){
+				errorString				+= separator + "Zone";
+				separator				= ", ";
+			}
+			if ( district == null ){
+				errorString				+= separator + "District";
+				separator				= ", ";
+			}
+			if ( separator != "" ) {
+				return errorString;
+			}
+			else { // checking order
+				if ( country.getIndex() >= region.getIndex() )
+					return "Country must be before Region";
+				if ( region.getIndex() >= zone.getIndex() )
+					return "Region must be before Zone";
+				if ( zone.getIndex() >= district.getIndex() )
+					return "Zone must be before District";
+			}
+			return null;
+	}
+	
 	/**
 	 *
 	 * @author Alex Gartner

@@ -10,6 +10,7 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 <%@ taglib uri="/taglib/category" prefix="category"%>
 <%@ page import="org.digijava.module.categorymanager.util.CategoryConstants" %>
+<%@ page import="org.digijava.module.aim.util.DynLocationManagerUtil" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 <%@ taglib uri="/taglib/fmt" prefix="fmt" %>
@@ -638,8 +639,20 @@ function commentWin(val) {
 																					</field:display>
 
 																					<c:if test="${!empty activity.locations}">
-                                                                                                                                                                             <c:if test="${aimChannelOverviewForm.implLocationCountry}" >
-                                                                                                                                                                 
+                                                                                       
+                                                                                         <tr>
+                                                                                        	 <c:forEach var="indexLayer" begin="${aimChannelOverviewForm.countryIndex+1}" end="${aimChannelOverviewForm.numImplLocationLevels-1}">
+                                                                                        	 	<td align="center" bgcolor="#ffffff">
+                                                                                         		<i>
+                                                                                         			<category:getoptionvalue categoryIndex="${indexLayer}" categoryKey="<%=CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>"  />
+                                                                                         		</i>
+                                                                                         		</td>
+                                                                                        	 </c:forEach>
+                                                                                        	 <td  align="center" bgcolor="#ffffff">
+                                                                                              <i> <digi:trn key="aim:percent">Percent</digi:trn></i>
+																							</td>
+                                                                                         </tr>
+																						<%--
 																						<TR>
 																							<TD width="30%" align="center" bgcolor="#ffffff">
 																								<c:if test="${aimChannelOverviewForm.numImplLocationLevels > 1}" >
@@ -696,7 +709,7 @@ function commentWin(val) {
                                                                                                   <TD  align="center" bgcolor="#ffffff">
                                                                                                      <c:if test='${loc.locationPercentage > 0}'>
 
-<fmt:formatNumber type="number" value="${loc.locationPercentage}" />
+																										<fmt:formatNumber type="number" value="${loc.locationPercentage}" />
 
                                                                                                      %
 																									
@@ -704,8 +717,35 @@ function commentWin(val) {
 																								</TD>
 																							</TR>
                                                                                             </c:if>
+																						</c:forEach> --%>
+																						<c:forEach varStatus="varSt" var="actLoc" items="${activity.locations}">
+																							<bean:define id="loc" name="actLoc" property="location.location" type="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" />
+																							<% pageContext.setAttribute("ancestorMap", DynLocationManagerUtil.getParents(loc)); %>
+																							<tr>
+																							<bean:size id="numOfAncestors" name="ancestorMap"/>
+																							<c:forEach var="indexLayer" begin="${aimChannelOverviewForm.countryIndex+1}" end="${aimChannelOverviewForm.numImplLocationLevels-1}" step="1">
+																								<td align="center" bgcolor="#ffffff">
+																								<c:choose>
+																									<c:when test="${ancestorMap[indexLayer] != null}">
+																											${ancestorMap[indexLayer]}
+																									</c:when>
+																									<c:otherwise>
+																										&nbsp;
+																									</c:otherwise>
+																								</c:choose>
+																								</td>
+																							</c:forEach>
+																							<td align="center" bgcolor="#ffffff">
+																								<c:choose>
+                                                                                            		<c:when test='${actLoc.locationPercentage > 0}'>
+																										<fmt:formatNumber type="number" value="${actLoc.locationPercentage}" />
+                                             														</c:when>
+                                             														<c:otherwise>&nbsp;</c:otherwise>
+                                             													</c:choose>
+																							</td>
+																							</tr>
 																						</c:forEach>
-																					 </c:if>
+																					 
 																					</c:if>
 																					<!--commented by Sebastian Dimunzio when working on UI issues: This code Is not showing the image and can't hidde it by FM 
 																					<tr>

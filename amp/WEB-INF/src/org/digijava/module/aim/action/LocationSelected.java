@@ -131,7 +131,7 @@ public class LocationSelected extends Action {
 							eaForm.getFunding().setFundingRegions(new ArrayList());
 						}
 						if (eaForm.getFunding().getFundingRegions().contains(reg) == false) {
-							eaForm.getFunding().getFundingRegions().add(reg);
+							//eaForm.getFunding().getFundingRegions().add(reg);
 						}
 					}
 				}
@@ -150,7 +150,7 @@ public class LocationSelected extends Action {
 					eaForm.getFunding().setFundingRegions(new ArrayList());
 				}
 				if (eaForm.getFunding().getFundingRegions().contains(reg) == false) {
-					eaForm.getFunding().getFundingRegions().add(reg);
+					//eaForm.getFunding().getFundingRegions().add(reg);
 				}				
 				flag = false;
 			} else

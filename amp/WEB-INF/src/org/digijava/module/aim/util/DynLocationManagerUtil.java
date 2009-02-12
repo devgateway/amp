@@ -7,7 +7,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
@@ -340,6 +342,81 @@ public class DynLocationManagerUtil {
 		}
 		return null;
 	}
+	public static AmpCategoryValueLocations getLocationByIso(String locationIso, HardCodedCategoryValue hcLocationLayer) {
+		try {
+			AmpCategoryValue layer	= CategoryManagerUtil.getAmpCategoryValueFromDB(hcLocationLayer);
+			return getLocationByIso(locationIso, layer);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	/**
+	 * 
+	 * @param locationIso
+	 * @param cvLocationLayer the AmpCategoryValue specifying the layer (level) of the location...like Country or Region
+	 * @return
+	 */
+	public static AmpCategoryValueLocations getLocationByIso(String locationIso, AmpCategoryValue cvLocationLayer) {
+		Session dbSession										= null;
+		
+		
+		try {
+			dbSession			= PersistenceManager.getSession();
+			String queryString 	= "select loc from "
+				+ AmpCategoryValueLocations.class.getName()
+				+ " loc where (loc.iso=:iso)" ;
+			if ( cvLocationLayer != null ) {
+				queryString		+= " AND (loc.parentCategoryValue=:cvId) ";
+			}
+			Query qry			= dbSession.createQuery(queryString);
+			if ( cvLocationLayer != null) {
+				qry.setLong("cvId", cvLocationLayer.getId() );
+			}
+			qry.setString("iso", locationIso);
+			AmpCategoryValueLocations loc		= (AmpCategoryValueLocations) qry.uniqueResult();
+			return loc;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				PersistenceManager.releaseSession(dbSession);
+			} catch (Exception ex2) {
+				logger.error("releaseSession() failed :" + ex2);
+			}
+		}
+		return null;
+	}
+	/**
+	 * 
+	 * @param id
+	 * @param initChildLocs child locations are lazily initialized, so if you want to access them put "true" here
+	 * @return
+	 */
+	public static AmpCategoryValueLocations getLocation(Long id, boolean initChildLocs) {
+		Session dbSession										= null;
+		try {
+			dbSession			= PersistenceManager.getSession();
+			String queryString 	= "select loc from "
+				+ AmpCategoryValueLocations.class.getName()
+				+ " loc where (loc.id=:id)" ;			
+			Query qry			= dbSession.createQuery(queryString);
+			qry.setLong("id", id);
+			AmpCategoryValueLocations returnLoc		= (AmpCategoryValueLocations)qry.uniqueResult();
+			if ( initChildLocs )
+				returnLoc.getChildLocations().size();
+			return returnLoc;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				PersistenceManager.releaseSession(dbSession);
+			} catch (Exception ex2) {
+				logger.error("releaseSession() failed :" + ex2);
+			}
+		}
+		return null;
+	}
 	
 	public static Set<AmpCategoryValueLocations> getLocationsOfTypeRegion() {
 		return getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
@@ -399,16 +476,30 @@ public class DynLocationManagerUtil {
 		return null;
 	}
 	
-	public static List<AmpCategoryValueLocations> getParents( AmpCategoryValueLocations loc ) {
-		ArrayList<AmpCategoryValueLocations> returnList		= new ArrayList<AmpCategoryValueLocations>();
+	public static List<String> getParents( AmpCategoryValueLocations loc ) {
+		ArrayList<String> returnList		= new ArrayList<String>();
 		if ( loc ==  null )
 			return returnList;
 		else
-			returnList.add(loc);
+			returnList.add( loc.getName() );
 		AmpCategoryValueLocations temp						= loc;
 		while ( temp.getParentLocation() != null ) {
 			temp 	= temp.getParentLocation();
-			returnList.add(temp);
+			returnList.add(0, temp.getName());
+		}
+		return returnList;
+	}
+	
+	public static Map<Integer,String> getLayerToAncestorNameMap( AmpCategoryValueLocations loc ) {
+		TreeMap<Integer,String> returnList		= new TreeMap<Integer,String>();
+		if ( loc ==  null )
+			return returnList;
+		else
+			returnList.put( loc.getParentCategoryValue().getIndex(), loc.getName() );
+		AmpCategoryValueLocations temp						= loc;
+		while ( temp.getParentLocation() != null ) {
+			temp 	= temp.getParentLocation();
+			returnList.put(temp.getParentCategoryValue().getIndex(), temp.getName());
 		}
 		return returnList;
 	}

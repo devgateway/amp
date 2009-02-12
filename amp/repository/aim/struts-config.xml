@@ -1205,7 +1205,7 @@
       <forward name="index" path="/aim/index.do" redirect="true" />
       <forward name="selorg" path="/aim/selectOrganization.do?edit=true&amp;orgSelReset=false" />
     </action>
-    <action name="aimEditActivityForm" path="/aim/locationSelected" scope="session" type="org.digijava.module.aim.action.LocationSelected">
+    <action name="aimEditActivityForm" path="/aim/locationSelected" scope="session" type="org.digijava.module.aim.action.DynLocationSelected">
       <forward name="forward" path="/aim/addActivity.do?edit=true" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>

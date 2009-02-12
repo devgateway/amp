@@ -78,7 +78,7 @@ return true;
 
 function selectLocation() {
   openNewWindow(600, 500);
-  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do?edit=true" />
+  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do?edit=false" />
   document.aimEditActivityForm.action = "<%= selectLoc %>";
   document.aimEditActivityForm.target = popupPointer.name;
   document.aimEditActivityForm.submit();

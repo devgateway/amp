@@ -24,6 +24,7 @@ import org.digijava.kernel.service.ServiceContext;
 import org.digijava.kernel.service.ServiceException;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.autopatcher.exceptions.InvalidPatchRepositoryException;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 /**
  * AutopatcherService.java
@@ -48,7 +49,8 @@ public class AutopatcherService extends AbstractServiceImpl {
 	public void processInitEvent(ServiceContext serviceContext)
 			throws ServiceException {
 
-		//this.beforeApplyingPatches();
+		if ( !this.checksBeforeApplyingPatches() ) 
+			return;
 		
 		Session session;
 		appliedPatches = new ArrayList();
@@ -182,7 +184,14 @@ public class AutopatcherService extends AbstractServiceImpl {
 	/**
 	 * All the things that need to be done before db patches are applied can be inserted here. 
 	 */
-	private void beforeApplyingPatches () {
+	private boolean checksBeforeApplyingPatches () {
+		String errorString	= CategoryManagerUtil.checkImplementationLocationCategory(); 
+		if ( errorString != null ) {
+			logger.error("There is a problem in category Implementation Location: " + errorString );
+			logger.error("Patches will NOT be applied !");
+			return false;
+		} 
 		DynLocationManagerUtil.synchronizeCountries();
+		return true;
 	}
 }

@@ -36,6 +36,7 @@ import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityReferenceDoc;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActor;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
@@ -84,6 +85,7 @@ import org.digijava.module.aim.util.ComponentsUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DocumentUtil;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.EUActivityUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
@@ -389,32 +391,45 @@ public class ShowActivityPrintPreview
                         location.setCountryId(cntry.getCountryId());
                         location.setCountry(cntry.getCountryName());
                         location.setNewCountryId(cntry.getIso());
-                        if (loc.getAmpRegion() != null) {
-                          location.setRegion(loc.getAmpRegion()
-                                             .getName());
-                          location.setRegionId(loc.getAmpRegion()
-                                               .getAmpRegionId());
-                          if (eaForm.getFunding().getFundingRegions() == null) {
-                            eaForm.getFunding().setFundingRegions(new ArrayList());
-                          }
-                          if (eaForm.getFunding().getFundingRegions().contains(
-                              loc.getAmpRegion()) == false) {
-                            eaForm.getFunding().getFundingRegions().add(
-                                loc.getAmpRegion());
-                          }
-                        }
-                        if (loc.getAmpZone() != null) {
-                          location
-                              .setZone(loc.getAmpZone().getName());
-                          location.setZoneId(loc.getAmpZone()
-                                             .getAmpZoneId());
-                        }
-                        if (loc.getAmpWoreda() != null) {
-                          location.setWoreda(loc.getAmpWoreda()
-                                             .getName());
-                          location.setWoredaId(loc.getAmpWoreda()
-                                               .getAmpWoredaId());
-                        }
+                        
+                        location.setAmpCVLocation( loc.getLocation() );
+                        AmpCategoryValueLocations ampCVRegion	= 
+                			DynLocationManagerUtil.getAncestorByLayer(loc.getLocation(), CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
+						if ( ampCVRegion != null ) {
+						    if (eaForm.getFunding().getFundingRegions() == null) {
+						      eaForm.getFunding()
+						          .setFundingRegions(new ArrayList());
+						    }
+						    if (!eaForm.getFunding().getFundingRegions().contains(ampCVRegion) ) {
+						      eaForm.getFunding().getFundingRegions().add( ampCVRegion );
+						}
+}
+//                        if (loc.getAmpRegion() != null) {
+//                          location.setRegion(loc.getAmpRegion()
+//                                             .getName());
+//                          location.setRegionId(loc.getAmpRegion()
+//                                               .getAmpRegionId());
+//                          if (eaForm.getFunding().getFundingRegions() == null) {
+//                            eaForm.getFunding().setFundingRegions(new ArrayList());
+//                          }
+//                          if (eaForm.getFunding().getFundingRegions().contains(
+//                              loc.getAmpRegion()) == false) {
+//                            eaForm.getFunding().getFundingRegions().add(
+//                                loc.getAmpRegion());
+//                          }
+//                        }
+//                        if (loc.getAmpZone() != null) {
+//                          location
+//                              .setZone(loc.getAmpZone().getName());
+//                          location.setZoneId(loc.getAmpZone()
+//                                             .getAmpZoneId());
+//                        }
+//                        if (loc.getAmpWoreda() != null) {
+//                          location.setWoreda(loc.getAmpWoreda()
+//                                             .getName());
+//                          location.setWoredaId(loc.getAmpWoreda()
+//                                               .getAmpWoredaId());
+//                        }
 
                         if(actLoc.getLocationPercentage()!=null)
                         location.setPercent(FormatHelper.formatNumber( actLoc.getLocationPercentage().doubleValue()));

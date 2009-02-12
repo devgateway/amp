@@ -123,5 +123,9 @@ public class AmpCategoryValueLocations {
 	public String toString() {
 		return name;
 	}
-    
+    @Override
+	public boolean equals (Object o) {
+    	AmpCategoryValueLocations loc	= (AmpCategoryValueLocations) o;
+    	return id.equals(loc.id);
+    }
 }

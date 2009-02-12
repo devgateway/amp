@@ -24,7 +24,9 @@
 			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />
 		<many-to-one name="currency" column="currency_id"
 			class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
-		<many-to-one name="region" column="region_id"
-			class="org.digijava.module.aim.dbentity.AmpRegion" not-null="true" />
+		<!--<many-to-one name="region" column="region_id"
+			class="org.digijava.module.aim.dbentity.AmpRegion" not-null="true" />	-->
+		<many-to-one name="regionLocation" column="region_location_id"
+			class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" not-null="true" />
 	</class>
 </hibernate-mapping>

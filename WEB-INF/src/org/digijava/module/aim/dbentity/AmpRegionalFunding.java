@@ -21,7 +21,10 @@ public class AmpRegionalFunding {
 	private AmpOrganisation reportingOrganization;
 	private AmpCurrency currency;
 	private String expenditureCategory;
+	@Deprecated
 	private AmpRegion region;
+	
+	private AmpCategoryValueLocations regionLocation;
 	/**
 	 * @return Returns the activity.
 	 */
@@ -82,17 +85,18 @@ public class AmpRegionalFunding {
 	public void setExpenditureCategory(String expenditureCategory) {
 		this.expenditureCategory = expenditureCategory;
 	}
+	
 	/**
-	 * @return Returns the region.
+	 * @return the regionLocation
 	 */
-	public AmpRegion getRegion() {
-		return region;
+	public AmpCategoryValueLocations getRegionLocation() {
+		return regionLocation;
 	}
 	/**
-	 * @param region The region to set.
+	 * @param regionLocation the regionLocation to set
 	 */
-	public void setRegion(AmpRegion region) {
-		this.region = region;
+	public void setRegionLocation(AmpCategoryValueLocations regionLocation) {
+		this.regionLocation = regionLocation;
 	}
 	/**
 	 * @return Returns the reportingDate.
@@ -154,6 +158,23 @@ public class AmpRegionalFunding {
 	public void setTransactionType(Integer transactionType) {
 		this.transactionType = transactionType;
 	}
+	/**
+	 * @deprecated use regionLocation instead
+	 * @return the region
+	 */
+	@Deprecated
+	public AmpRegion getRegion() {
+		return region;
+	}
+	/**
+	 * @deprecated use regionLocation instead
+	 * @param region the region to set
+	 */
+	@Deprecated
+	public void setRegion(AmpRegion region) {
+		this.region = region;
+	}
+	
 	public boolean equals(Object arg) {
 		if (arg instanceof AmpRegionalFunding) {
 			AmpRegionalFunding regFund = (AmpRegionalFunding) arg;

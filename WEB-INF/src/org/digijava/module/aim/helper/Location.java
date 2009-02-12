@@ -6,6 +6,12 @@
 package org.digijava.module.aim.helper;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
+
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 
 public class Location implements Serializable, Comparable
 {
@@ -23,6 +29,11 @@ public class Location implements Serializable, Comparable
 	private String woreda;
 	private String percent;//AMP-2250 
 	private boolean showPercent;
+	
+	private String locationName;
+	
+	private List<String> ancestorLocationNames;
+	private AmpCategoryValueLocations ampCVLocation;
 	
 	public Location() {
 		locId = new Long(-1);
@@ -75,72 +86,84 @@ public class Location implements Serializable, Comparable
 	/**
 	 * @return Returns the region.
 	 */
+	@Deprecated
 	public String getRegion() {
 		return region;
 	}
 	/**
 	 * @param region The region to set.
 	 */
+	@Deprecated
 	public void setRegion(String region) {
 		this.region = region;
 	}
 	/**
 	 * @return Returns the regionId.
 	 */
+	@Deprecated
 	public Long getRegionId() {
 		return regionId;
 	}
 	/**
 	 * @param regionId The regionId to set.
 	 */
+	@Deprecated
 	public void setRegionId(Long regionId) {
 		this.regionId = regionId;
 	}
 	/**
 	 * @return Returns the woreda.
 	 */
+	@Deprecated
 	public String getWoreda() {
 		return woreda;
 	}
 	/**
 	 * @param woreda The woreda to set.
 	 */
+	@Deprecated
 	public void setWoreda(String woreda) {
 		this.woreda = woreda;
 	}
 	/**
 	 * @return Returns the woredaId.
 	 */
+	@Deprecated
 	public Long getWoredaId() {
 		return woredaId;
 	}
 	/**
 	 * @param woredaId The woredaId to set.
 	 */
+	@Deprecated
 	public void setWoredaId(Long woredaId) {
 		this.woredaId = woredaId;
 	}
 	/**
 	 * @return Returns the zone.
 	 */
+	@Deprecated
 	public String getZone() {
 		return zone;
 	}
 	/**
 	 * @param zone The zone to set.
 	 */
+	@Deprecated
 	public void setZone(String zone) {
 		this.zone = zone;
 	}
 	/**
 	 * @return Returns the zoneId.
 	 */
+	@Deprecated
 	public Long getZoneId() {
 		return zoneId;
 	}
 	/**
 	 * @param zoneId The zoneId to set.
 	 */
+	@Deprecated
 	public void setZoneId(Long zoneId) {
 		this.zoneId = zoneId;
 	}
@@ -224,4 +247,39 @@ public class Location implements Serializable, Comparable
         return this.showPercent;
     }
 
+	public String getLocationName() {
+		return locationName;
+	}
+
+	public void setLocationName(String locationName) {
+		this.locationName = locationName;
+	}
+
+	public List<String> getAncestorLocationNames() {
+		return ancestorLocationNames;
+	}
+
+	public void setAncestorLocationNames(List<String> ancestorLocationNames) {
+		this.ancestorLocationNames = ancestorLocationNames;
+	}
+
+	public AmpCategoryValueLocations getAmpCVLocation() {
+		return ampCVLocation;
+	}
+
+	public void setAmpCVLocation(AmpCategoryValueLocations ampCVLocation) {
+		this.ampCVLocation = ampCVLocation;
+	}
+
+	public String getRegionName() {
+		AmpCategoryValueLocations ampCVRegion	= 
+			DynLocationManagerUtil.getAncestorByLayer(ampCVLocation, CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
+		
+		if ( ampCVRegion != null )
+			return ampCVRegion.getName();
+		else
+			return null;
+	}
+
+	
 }

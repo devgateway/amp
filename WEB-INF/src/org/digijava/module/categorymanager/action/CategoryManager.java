@@ -165,6 +165,11 @@ public class CategoryManager extends Action {
 		}
                 
 		/* END- Ordering the values alphabetically if necessary */
+		String errorString		= CategoryManagerUtil.checkImplementationLocationCategory();
+		if ( errorString != null ) {
+			ActionError error	= (ActionError) new ActionError("error.aim.categoryManager.implLocProblem", errorString);
+			errors.add("title", error);
+		}
 		this.saveErrors(request, errors);
 		return mapping.findForward("forward");
 	}

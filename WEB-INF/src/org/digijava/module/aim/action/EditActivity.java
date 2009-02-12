@@ -24,7 +24,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -46,6 +45,7 @@ import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActor;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
@@ -100,6 +100,7 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.DocumentUtil;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.EUActivityUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ProgramUtil;
@@ -879,20 +880,20 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
             	if (actLoc == null)
             		continue;
             	AmpLocation loc=actLoc.getLocation();								//AMP-2250
-              if (!maxLevel) {
-                if (loc.getAmpWoreda() != null) {
-                  impLevel = 3;
-                  maxLevel = true;
-                }
-                else if (loc.getAmpZone() != null
-                         && impLevel < 2) {
-                  impLevel = 2;
-                }
-                else if (loc.getAmpRegion() != null
-                         && impLevel < 1) {
-                  impLevel = 1;
-                }
-              }
+//              if (!maxLevel) {
+//                if (loc.getAmpWoreda() != null) {
+//                  impLevel = 3;
+//                  maxLevel = true;
+//                }
+//                else if (loc.getAmpZone() != null
+//                         && impLevel < 2) {
+//                  impLevel = 2;
+//                }
+//                else if (loc.getAmpRegion() != null
+//                         && impLevel < 1) {
+//                  impLevel = 1;
+//                }
+//              }
 
               if (loc != null) {
                 Location location = new Location();
@@ -910,33 +911,42 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
                 location.setCountryId(cntry.getCountryId());
                 location.setCountry(cntry.getCountryName());
                 location.setNewCountryId(cntry.getIso());
-                if (loc.getAmpRegion() != null) {
-                  location.setRegion(loc.getAmpRegion()
-                                     .getName());
-                  location.setRegionId(loc.getAmpRegion()
-                                       .getAmpRegionId());
+                
+                location.setAmpCVLocation( loc.getLocation() );
+                if ( loc.getLocation() != null ){
+	                location.setAncestorLocationNames( DynLocationManagerUtil.getParents( loc.getLocation()) );
+					location.setLocationName(loc.getLocation().getName());
+					location.setLocId( loc.getLocation().getId() );
+                }
+                AmpCategoryValueLocations ampCVRegion	= 
+        			DynLocationManagerUtil.getAncestorByLayer(loc.getLocation(), CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
+        		
+        		if ( ampCVRegion != null ) {
+//                if (loc.getAmpRegion() != null) {
+//                  location.setRegion(loc.getAmpRegion()
+//                                     .getName());
+//                  location.setRegionId(loc.getAmpRegion()
+//                                       .getAmpRegionId());
                   if (eaForm.getFunding().getFundingRegions() == null) {
                     eaForm.getFunding()
                         .setFundingRegions(new ArrayList());
                   }
-                  if (eaForm.getFunding().getFundingRegions().contains(
-                      loc.getAmpRegion()) == false) {
-                    eaForm.getFunding().getFundingRegions().add(
-                        loc.getAmpRegion());
+                  if (!eaForm.getFunding().getFundingRegions().contains(ampCVRegion) ) {
+                    eaForm.getFunding().getFundingRegions().add( ampCVRegion );
                   }
                 }
-                if (loc.getAmpZone() != null) {
-                  location
-                      .setZone(loc.getAmpZone().getName());
-                  location.setZoneId(loc.getAmpZone()
-                                     .getAmpZoneId());
-                }
-                if (loc.getAmpWoreda() != null) {
-                  location.setWoreda(loc.getAmpWoreda()
-                                     .getName());
-                  location.setWoredaId(loc.getAmpWoreda()
-                                       .getAmpWoredaId());
-                }
+//                if (loc.getAmpZone() != null) {
+//                  location
+//                      .setZone(loc.getAmpZone().getName());
+//                  location.setZoneId(loc.getAmpZone()
+//                                     .getAmpZoneId());
+//                }
+//                if (loc.getAmpWoreda() != null) {
+//                  location.setWoreda(loc.getAmpWoreda()
+//                                     .getName());
+//                  location.setWoredaId(loc.getAmpWoreda()
+//                                       .getAmpWoredaId());
+//                }
 
                 if(actLoc.getLocationPercentage()!=null)
                 location.setPercent(FormatHelper.formatNumber( actLoc.getLocationPercentage().doubleValue()));
@@ -1204,9 +1214,8 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
                                   .intValue());
 
             RegionalFunding regFund = new RegionalFunding();
-            regFund.setRegionId(ampRegFund.getRegion()
-                                .getAmpRegionId());
-            regFund.setRegionName(ampRegFund.getRegion().getName());
+            regFund.setRegionId( ampRegFund.getRegionLocation().getId() );
+            regFund.setRegionName( ampRegFund.getRegionLocation().getName());
 
             if (regFunds.contains(regFund) == false) {
               regFunds.add(regFund);

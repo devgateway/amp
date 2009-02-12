@@ -247,7 +247,7 @@
 							</font>		
 						</p>
 						<button type="button" class="buton" onclick="checkStructure(null, -1)" >Check Structure</button> &nbsp; &nbsp;
-						<button type="button" class="buton" onclick="submitTreeStructure()">Save</button> 
+						<button type="button" class="buton" onclick="">Save</button> 
 					</td>
 				</tr>
 			</table>

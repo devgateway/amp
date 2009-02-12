@@ -54,8 +54,8 @@
 		<c:set var="msgErr">
 			<digi:trn key="aim:pleaseChooseRegionalFundingToRemove">Please choose a regional funding to remove</digi:trn>
 		</c:set>
-		if (document.aimEditActivityForm.selRegFundings.checked != null) {
-			if (document.aimEditActivityForm.selRegFundings.checked == false) {
+		if (document.aimEditActivityForm.elements["funding.selRegFundings"].checked != null) {
+			if (document.aimEditActivityForm.elements["funding.selRegFundings"].checked == false) {
 				alert("${msgErr}");
 				return false;
 			}

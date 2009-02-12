@@ -117,7 +117,15 @@ public class ViewChannelOverview extends TilesAction {
 			}
 
 			if ( implLocationLevels != null){
-				formBean.setNumImplLocationLevels( implLocationLevels.size() );
+				try{
+					formBean.setNumImplLocationLevels( implLocationLevels.size() );
+					AmpCategoryValue country		= 
+						CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+					formBean.setCountryIndex( country.getIndex() );
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
 				
 			}
 

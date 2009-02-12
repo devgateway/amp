@@ -154,7 +154,12 @@
                                                                       <bean:write name="selectedLocs" property="locId" />
                                                                     </html:multibox>
                                                                     </td>
-                                                                    <td vAlign="center" align="left" width="100%">
+                                                                    <td>
+                                                                    <c:forEach var="ancestorLoc" items="${selectedLocs.ancestorLocationNames}">
+                                                                    	[${ancestorLoc}] 
+                                                                    </c:forEach>
+                                                                    </td>
+                                                                    <%--<td vAlign="center" align="left" width="100%">
                                                                       <c:if test="${!empty selectedLocs.country}">
                                                                         [<bean:write name="selectedLocs" property="country" />]
                                                                       </c:if>
@@ -167,7 +172,7 @@
                                                                       <c:if test="${!empty selectedLocs.woreda}">
                                                                         [<bean:write name="selectedLocs" property="woreda"/>]
                                                                       </c:if>
-                                                                    </td>
+                                                                    </td> --%>
                                                                     <td align="right" nowrap="nowrap">
                                                                      <field:display name="Regional Percentage" feature="Location">
                                                                     		<field:display name="Validate Mandatory Regional Percentage" feature="Location">

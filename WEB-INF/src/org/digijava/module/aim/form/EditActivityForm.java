@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -22,6 +23,7 @@ import org.digijava.kernel.dbentity.Country;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpField;
@@ -38,6 +40,8 @@ import org.digijava.module.aim.helper.CustomField;
 import org.digijava.module.aim.helper.CustomFieldStep;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
+import org.digijava.module.aim.helper.KeyValue;
+import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.MTEFProjection;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.util.CustomFieldsUtil;
@@ -804,25 +808,43 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		// country selected
 		private Integer impLevelValue; // Implementation Level value
 		private String impCountry; // Implementation country
-
+		
+		private TreeMap<Integer, Collection<KeyValue>> locationByLayers;
+		
+		private TreeMap<Integer, Long> selectedLayers ;
+		
+		private Long parentLocId;
+		
+		private Long [] userSelectedLocs;
+		
+		@Deprecated
 		private Long impRegion; // Implementation region
+		@Deprecated
 		private Long impMultiRegion[]; // Implementation region
 
+		@Deprecated
 		private Long impZone; // Implementation zone
+		@Deprecated
 		private Long impMultiZone[]; // Implementation zone
 
+		@Deprecated
 		private Long impWoreda; // Implementation woreda
+		@Deprecated
 		private Long impMultiWoreda[];
-
+		
+		@Deprecated
 		private Collection<Country> countries;
+		@Deprecated
 		private Collection<AmpRegion> regions;
+		@Deprecated
 		private Collection<AmpZone> zones;
+		@Deprecated
 		private Collection<AmpWoreda> woredas;
 
 		private String country;
 		private Long levelId = null;
 		private Long implemLocationLevel = null;
-		private Collection selectedLocs = null;
+		private Collection<org.digijava.module.aim.helper.Location> selectedLocs = null;
 		private boolean defaultCountryIsSet;
 		private int pagesSize;
 		
@@ -842,11 +864,12 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.implemLocationLevel = implemLocationLevel;
 		}
 
-		public Collection getSelectedLocs() {
+
+		public Collection<org.digijava.module.aim.helper.Location> getSelectedLocs() {
 			return selectedLocs;
 		}
 
-		public void setSelectedLocs(Collection selectedLocs) {
+		public void setSelectedLocs(Collection<org.digijava.module.aim.helper.Location> selectedLocs) {
 			this.selectedLocs = selectedLocs;
 		}
 
@@ -1062,6 +1085,43 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			if (pages != null) {
 				this.pagesSize = pages.size();
 			}
+		}
+
+		
+		public TreeMap<Integer, Collection<KeyValue>> getLocationByLayers() {
+			if ( locationByLayers == null )
+				locationByLayers	= new TreeMap<Integer, Collection<KeyValue>>();
+			return locationByLayers;
+		}
+		
+
+		public TreeMap<Integer, Long> getSelectedLayers() {
+			if (selectedLayers == null)
+				selectedLayers		= new TreeMap<Integer, Long>();
+			return selectedLayers;
+		}
+		
+		public void setSelectedLayer(String key, Object value) {
+			selectedLayers.put(Integer.parseInt(key), (Long)value);
+		}
+		public Long getSelectedLayer(String key) {
+			return selectedLayers.get( Integer.parseInt(key) );
+		}
+
+		public Long getParentLocId() {
+			return parentLocId;
+		}
+
+		public void setParentLocId(Long parentLocId) {
+			this.parentLocId = parentLocId;
+		}
+
+		public Long[] getUserSelectedLocs() {
+			return userSelectedLocs;
+		}
+
+		public void setUserSelectedLocs(Long[] userSelectedLocs) {
+			this.userSelectedLocs = userSelectedLocs;
 		}
 
 		public void reset(ActionMapping mapping, HttpServletRequest request) {
@@ -1805,7 +1865,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private Long fundDonor;
 		private Long fundingId;
 		private Long fundingRegionId;
-		private Collection fundingRegions;
+		private Collection<AmpCategoryValueLocations> fundingRegions;
 		private Long[] selRegFundings;
 
 		private Collection regionalFundings;
@@ -1841,11 +1901,11 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.orgId = orgId;
 		}
 
-		public Collection getFundingRegions() {
+		public Collection<AmpCategoryValueLocations> getFundingRegions() {
 			return fundingRegions;
 		}
 
-		public void setFundingRegions(Collection fundingRegions) {
+		public void setFundingRegions(Collection<AmpCategoryValueLocations> fundingRegions) {
 			this.fundingRegions = fundingRegions;
 		}
 

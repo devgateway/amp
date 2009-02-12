@@ -102,6 +102,10 @@ public class CategoryConstants {
 		new CategoryConstants.HardCodedCategoryValue("implementation_location", "Country", true);
 	public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_REGION	= 
 		new CategoryConstants.HardCodedCategoryValue("implementation_location", "Region", true);
+	public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_ZONE	= 
+		new CategoryConstants.HardCodedCategoryValue("implementation_location", "Zone", true);
+	public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_DISTRICT	= 
+		new CategoryConstants.HardCodedCategoryValue("implementation_location", "District", true);
 	
 	public static class HardCodedCategoryValue {
 		private String valueKey;

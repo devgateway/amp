@@ -24,7 +24,7 @@
 			<img height="16" src="/TEMPLATE/ampTemplate/images/next_dis.png" class="toolbar" /> 
 			<digi:trn key="btn:next">Next</digi:trn>
 		</button>
-		<button id="step${stepNum}_cancel" type="button" class="toolbar" onclick="repManager.cancelWizard();" name="cancel">
+		<button id="step${stepNum}_cancel" type="button" class="toolbar" onclick="cancelFilter()" name="cancel">
 			<img src="/TEMPLATE/ampTemplate/images/cancel.png" class="toolbar" />
 			<digi:trn key="btn:wizard:Cancel">Cancel</digi:trn>
 		</button>

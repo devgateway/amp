@@ -202,7 +202,15 @@
               alert('please select one team');
           }
       }
-           
+
+      function cancelFilter(){
+          document.getElementById('donorTypeId').selectedIndex=-1;
+          document.getElementById('donorGroupId').selectedIndex=-1;
+          document.getElementById('donorAgencyId').selectedIndex=-1;
+          document.getElementById('primarySectorsId').selectedIndex=-1;
+          document.getElementById('secondarySectorsId').selectedIndex=-1;
+          document.getElementById('teamId').selectedIndex=0;
+      }
 		YAHOOAmp.util.Event.addListener(window, "load", treeInit) ;
 	</script>
 
@@ -279,7 +287,7 @@
 --%>
                              <span >Donor Type</span>
                              <br/>
-                             <html:select name="deExportForm" property="donorTypeSelected"  style="width: 400px;" multiple="true" size="3">
+                             <html:select name="deExportForm" property="donorTypeSelected" styleId="donorTypeId" style="width: 400px;" multiple="true" size="3">
                                <c:forEach var="fVar" items="${deExportForm.donorTypeList}" varStatus="lStatus">
                                  <option value="${fVar.ampOrgTypeId}">${fVar.orgType}</option>
                                </c:forEach>
@@ -287,7 +295,7 @@
                              <br/>
                              <span >Donor Group</span>
                              <br/>
-                             <html:select name="deExportForm" property="donorGroupSelected" style="width: 400px;" multiple="true"  size="3">
+                             <html:select name="deExportForm" property="donorGroupSelected" styleId="donorGroupId" style="width: 400px;" multiple="true"  size="3">
                                <c:forEach var="fVar" items="${deExportForm.donorGroupList}" varStatus="lStatus">
                                  <option value="${fVar.ampOrgGrpId}">${fVar.orgGrpName}</option>
                                </c:forEach>
@@ -295,7 +303,7 @@
                              <br/>
                              <span >Donor Agency</span>
                              <br/>
-                             <html:select name="deExportForm" property="donorAgencySelected"  style="width: 400px;" multiple="true"  size="3">
+                             <html:select name="deExportForm" property="donorAgencySelected" styleId="donorAgencyId" style="width: 400px;" multiple="true"  size="3">
                                <c:forEach var="fVar" items="${deExportForm.donorAgencyList}" varStatus="lStatus">
                                  <option value="${fVar.ampOrgId}">${fVar.name}</option>
                                </c:forEach>
@@ -321,14 +329,14 @@
 --%>
                              <span>Primary Sector</span>
                              <br/>
-                             <html:select name="deExportForm" property="primarySectorsSelected"  style="width: 400px;" multiple="true"  size="3">
+                             <html:select name="deExportForm" property="primarySectorsSelected" styleId="primarySectorsId" style="width: 400px;" multiple="true"  size="3">
                                <c:forEach var="fVar" items="${deExportForm.primarySectorsList}" varStatus="lStatus">
                                  <option value="${fVar.ampSectorId}">${fVar.name}</option>
                                </c:forEach>
                              </html:select>
                              <span >Secondary Sector</span>
                              <br/>
-                             <html:select name="deExportForm" property="secondarySectorsSelected" style="width: 400px;" multiple="true"  size="3">
+                             <html:select name="deExportForm" property="secondarySectorsSelected" styleId="secondarySectorsId" style="width: 400px;" multiple="true"  size="3">
                                <c:forEach var="fVar" items="${deExportForm.secondarySectorsList}" varStatus="lStatus">
                                  <option value="${fVar.ampSectorId}">${fVar.name}</option>
                                </c:forEach>

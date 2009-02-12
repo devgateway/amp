@@ -97,6 +97,9 @@ public class SelectLocation extends Action {
         	
         	Iterator<Entry<Integer, Collection<KeyValue>>> entryIter		= locationByLayers.entrySet().iterator();
         	while ( entryIter.hasNext() ) {
+        		/**
+        		 * In case the user changes a higher layer location all layers below need to be cleared.
+        		 */
         		if ( entryIter.next().getKey() > parentLoc.getParentCategoryValue().getIndex() ) {
         			entryIter.remove();
         		}
@@ -111,10 +114,25 @@ public class SelectLocation extends Action {
         		if ( currentLayer <= implLocValue.getIndex() ) { 
 	        		ArrayList<KeyValue> childrenKV					= new ArrayList<KeyValue>(childrenLocs.size());
 	        		for ( AmpCategoryValueLocations child : childrenLocs ) {
-	        			childrenKV.add( new KeyValue(child.getId().toString(), child.getName() ) );
+	        			boolean addLocationAllowed		= true;
+	        			/**
+	        			 * If we are on the last layer that needs to be shown, we have to 
+	        			 * hide locations that are already selected
+	        			 */
+	        			if ( currentLayer == implLocValue.getIndex() && eaForm.getLocation().getSelectedLocs() != null ) {
+	        				for ( org.digijava.module.aim.helper.Location l: eaForm.getLocation().getSelectedLocs() ) {
+	        					if ( child.equals(l.getAmpCVLocation()) ) {
+	        						addLocationAllowed	= false;
+	        						break;
+	        					}
+	        				}
+	        			}
+	        			if ( addLocationAllowed )
+	        				childrenKV.add( new KeyValue(child.getId().toString(), child.getName() ) );
 	        		}
+	        		
 	        		locationByLayers.put(currentLayer, childrenKV);
-	        		locationByLayers.entrySet().iterator();
+	        		
 	        		if ( childrenLocs.size() == 1 ) {
 	        			AmpCategoryValueLocations newParent	= (AmpCategoryValueLocations)childrenLocs.toArray()[0];
 	        			parentLocId							= newParent.getId();

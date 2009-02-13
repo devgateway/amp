@@ -35,6 +35,8 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.YearUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 
+import edu.emory.mathcs.backport.java.util.Collections;
+
 /**
  *
  * @author 
@@ -117,7 +119,7 @@ public class ViewMonthlyInfo extends TilesAction {
                        monthlyForm.setTotalPlannedDisbursement(totalPlannedDisb);
                        monthlyForm.setTotalPlannedExpenditure(totalPlannedExp);
                        monthlyForm.setTotalDisbOrder(totalDisbOrders);
-                        
+                       Collections.sort(monthlyInfos);
                     }
 
                 } else {

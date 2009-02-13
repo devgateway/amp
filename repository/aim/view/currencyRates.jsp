@@ -13,7 +13,7 @@
 	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
 </script>
 <jsp:include page="scripts/newCalendar.jsp" flush="true" />
-
+<jsp:include page="addCurrencyRate.jsp" flush="true" />
 <style type="text/css">
 <!--
 div.fileinputs {
@@ -69,11 +69,7 @@ div.fakefile2 input{
 <script language="JavaScript">
 
 function addExchangeRate() {
-	openNewWindow(420, 180);
-	<digi:context name="addExchangeRate" property="context/module/moduleinstance/showAddExchangeRates.do~reset=true" />
-  	document.aimCurrencyRateForm.action = "<%= addExchangeRate %>~doAction=addRates";
-	document.aimCurrencyRateForm.target = popupPointer.name;
-	document.aimCurrencyRateForm.submit();
+	myAddExchangeRate();
 }
 
 function loadExchangeRate() {
@@ -98,12 +94,7 @@ function updateRates()
 }
 
 function editExchangeRate(date,code) {
-	openNewWindow(420, 180);
-	<digi:context name="addExchangeRate" property="context/module/moduleinstance/showAddExchangeRates.do" />
-  	document.aimCurrencyRateForm.action = "<%= addExchangeRate %>~doAction=showRates~updateCRateCode="+code+"~updateCRateDate="+date+"~reset=false";
-  	document.aimCurrencyRateForm.target = popupPointer.name;
-	document.aimCurrencyRateForm.currUrl.value = "<%= addExchangeRate %>";
-	document.aimCurrencyRateForm.submit();
+	myEditExchangeRate(date, code);
 }
 
 function checkall() {
@@ -321,28 +312,27 @@ function fnSubmit() {
                                           <a title="<digi:trn key="aim:LocationoftheFile">URI Location of the document to be attached</digi:trn>"><digi:trn key="aim:file">File</digi:trn>
 										  </a>
                                         </td>
+                                        <td bgcolor="#f4f4f2" vAlign="middle" align="center">
+										  &nbsp;&nbsp;&nbsp;<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:currencyFormatHint"> The file should have 3 columns: the first column contains currency codes (ex. CAD, or ETB), the second column contains rates (per 1 US dollar), and the 3rd column contains the dates (in format  dd-mm-yyyy).</digi:trn>"/>
+										</td>                                   
+                                        
                                         <td bgcolor="#f4f4f2" vAlign="left" align="left">
                                         <!-- <html:file name="aimCurrencyRateForm" property="currRateFile" size="50" styleClass="dr-menu"/> -->
                                         <c:set var="trnUpdateValues">
                                             <digi:trn key="aim:UpdateValues">Update Values</digi:trn>
-                                          </c:set>
-                                          
+                                        </c:set>
+ 
                                         <a title="<digi:trn key="aim:FileLocation">Location of the document to be attached</digi:trn>">
 										 	<div class="fileinputs">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
 												<input id="currRateFile" name="currRateFile" type="file" class="file"/>
 												<input type="button" value="${trnUpdateValues}" class="button" onclick="return updateRates()">
 											</div>
-                                        </a><%--
-										<a title="<digi:trn key="aim:FileLocation">Location of the document to be attached</digi:trn>">
-												<div class="fileinputs">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
-													<input id="docFile" name="docFile" type="file" class="file"/>
-												</div>
-											</a> --%>
-                                        
-										  
+                                        </a>
+                                       
                                         </td>
                                     </table>
                                   </td>
+                                  
                                 </tr>
                                 </table>
 

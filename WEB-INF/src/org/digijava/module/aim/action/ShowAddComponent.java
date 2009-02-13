@@ -5,7 +5,9 @@
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -25,17 +27,23 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.module.aim.dbentity.AmpComponentType;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.AmpComponent;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
+import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingValidator;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.logic.FundingCalculationsHelper;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ComponentsUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
@@ -67,7 +75,7 @@ public class ShowAddComponent extends Action {
 			} else if ("showEdit".equalsIgnoreCase(event)) {
 				return showEdit(mapping, form, request, response);
 			}
-
+         
 			// default action
 			return showCompoenents(mapping, form, request, response);
 		} catch (Exception e) {
@@ -124,7 +132,11 @@ public class ShowAddComponent extends Action {
 		//String defCurr = CurrencyUtil.getCurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
 		String defCurr = DbUtil.getMemberAppSettings(tm.getMemberId()).getCurrency().getCurrencyCode();
 		request.setAttribute("defCurrency", defCurr);
-		
+        if(eaForm.getFundingCurrCode()==null){
+            eaForm.setFundingCurrCode(defCurr);
+        }
+        setFundingTotals(eaForm,session);
+
 		if(!isComponentTypeEnabled()){
 			AmpComponentType defaultComponentType = FeaturesUtil.getDefaultComponentType();
 			eaForm.getComponents().setSelectedType(defaultComponentType.getType_id());
@@ -198,9 +210,13 @@ public class ShowAddComponent extends Action {
 				break;
 			}
 		}
-
+     
 		String defCurr = CurrencyUtil.getCurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
 		request.setAttribute("defCurrency", defCurr);
+        if (eaForm.getFundingCurrCode() == null) {
+            eaForm.setFundingCurrCode(defCurr);
+        }
+        setFundingTotals(eaForm, session);
 		return mapping.findForward("forward");
 	}
 
@@ -454,4 +470,17 @@ public class ShowAddComponent extends Action {
 		return mapping.findForward("updated");
 	}
 
+    public void setFundingTotals(EditActivityForm eaForm, HttpSession session){
+        FundingCalculationsHelper cal = new FundingCalculationsHelper();
+        Collection fundDets = eaForm.getFunding().getFundingDetails();
+        if (fundDets != null) {
+            Collection<AmpFundingDetail> ampFundDets = ActivityUtil.createAmpFundingDetails(fundDets);
+            cal.doCalculations(ampFundDets, eaForm.getFundingCurrCode());
+            session.setAttribute("totalComm", cal.getTotActualComm());
+            session.setAttribute("totalDisb", cal.getTotActualDisb());
+            session.setAttribute("totalExpn", cal.getTotActualExp());
+        }
+    }
+    
+   
 }

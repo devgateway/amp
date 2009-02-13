@@ -105,13 +105,29 @@
 		  									</digi:trn> </FONT>
 </gs:test>
 							</td>
+                        </tr>
+                            <tr>
+                            <td>
+
+                               <digi:trn>Select currency </digi:trn>
+
+                               <html:select property="fundingCurrCode" styleClass="inp-text" onchange="changeCurrency()">
+                                <c:forEach var="currency" items="${aimEditActivityForm.funding.validcurrencies}">
+                                    <option value="<c:out value="${currency.currencyCode}"/>">
+                                        <c:out value="${currency.currencyName}" />
+                                    </option>
+                                </c:forEach>
+
+                                </html:select>
+
+							</td>
+
 						</tr>
 						<tr bgcolor="#f4f4f2">
-							<td colspan="2" class="box-border-alt1"><span
-								class="f-names"> <digi:trn
-								key="aim:commitmentsTotalActAllocation">Commitments - (Total Actual Allocation</digi:trn>
-							<%=eaForm.getFunding().getTotalCommitments()%> <%=eaForm.getCurrCode()%> ) </span> <!-- Commented added by mouhamad for burkina AMP-2709 -->
-							<!-- <digi:trn key="aim:PlannedFIE">Planned</digi:trn>/<digi:trn key="aim:ActualFIE">Actual</digi:trn> -->&nbsp;&nbsp;&nbsp;
+							<td colspan="2" class="box-border-alt1">
+                             <span class="f-names" id="total_comm">
+                            <digi:trn key="aim:commitmentsTotalActAllocation">Commitments - (Total Actual Allocation</digi:trn>
+                            ${sessionScope.totalComm}  ${aimEditActivityForm.fundingCurrCode} ) </span>
 							<a href="javascript:document.addCommitments()" style="color:blue"><digi:trn key="btn:add">Add</digi:trn></a><br>
 							
 							<br>
@@ -194,9 +210,9 @@
 						</tr>
 
 						<tr bgcolor="#ffffff">
-							<td colspan="2" class="box-border"><span class="f-names"><digi:trn
-								key="aim:disbursementTotalActToDate"> Disbursement - (Total actual to date</digi:trn>
-							<%=eaForm.getFunding().getTotalDisbursements()%> <%=eaForm.getCurrCode()%>) </span> <a
+							<td colspan="2" class="box-border"><span class="f-names" id="total_disb"><digi:trn
+								key="aim:disbursementTotalActToDate"> Disbursement - (Total actual to date </digi:trn>
+							${sessionScope.totalDisb}  ${aimEditActivityForm.fundingCurrCode} ) </span> <a
 								href="javascript:document.addDisbursement()" style="color:blue"><digi:trn key="btn:add">Add</digi:trn></a><br>
 							<br>							
 							<div id="disb"><c:if test="${aimEditActivityForm.components.componentId != -1}">
@@ -282,11 +298,11 @@
 						<!-- beging Expenditure  -->
 						<feature:display module="Funding" name="Expenditures">
 							<tr>
-								<td colspan="2" class="box-border-alt1"><span
-									class="f-names"><digi:trn
-									key="aim:expenditureTotalActToDate"> Expenditure - (Total actual to date</digi:trn>
-								<%=eaForm.getFunding().getTotalExpenditures()%> <%=eaForm.getCurrCode()%>)</span> <field:display
-									name="Add Expenditure Button" feature="Expenditures">
+								<td colspan="2" class="box-border-alt1">
+                                    <span class="f-names" id="total_expn">
+                                    <digi:trn key="aim:expenditureTotalActToDate"> Expenditure - (Total actual to date</digi:trn>
+                                    ${sessionScope.totalExpn}   ${aimEditActivityForm.fundingCurrCode})</span>
+                                    <field:display name="Add Expenditure Button" feature="Expenditures">
 									<a href="javascript:document.addExpenditure()" style="color:blue"> <digi:trn
 										key="btn:add">Add</digi:trn></a>
 								</field:display> &nbsp;&nbsp; <br>

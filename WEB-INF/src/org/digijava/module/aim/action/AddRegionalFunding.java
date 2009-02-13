@@ -5,6 +5,7 @@
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -23,13 +24,15 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingValidator;
-import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.RegionalFunding;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.logic.FundingCalculationsHelper;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 
 public class AddRegionalFunding extends Action {
@@ -54,6 +57,10 @@ public class AddRegionalFunding extends Action {
 			String defCurr = CurrencyUtil.getCurrency(
 					tm.getAppSettings().getCurrencyId()).getCurrencyCode();
 			request.setAttribute("defCurrency",defCurr);
+            if (eaForm.getFundingCurrCode() == null) {
+                eaForm.setFundingCurrCode(defCurr);
+            }
+            setFundingTotals(eaForm, session);
 			
 			return mapping.findForward("forward");
 		} else if (action != null && action.equalsIgnoreCase("showEdit")) {
@@ -69,7 +76,8 @@ public class AddRegionalFunding extends Action {
 			}
 			String defCurr = CurrencyUtil.getCurrency(
 					tm.getAppSettings().getCurrencyId()).getCurrencyCode();
-			request.setAttribute("defCurrency",defCurr);			
+			request.setAttribute("defCurrency",defCurr);
+            setFundingTotals(eaForm, session);
 			return mapping.findForward("forward");
 		} else if (action != null && action.equalsIgnoreCase("update")){
 
@@ -275,4 +283,15 @@ public class AddRegionalFunding extends Action {
 		}
 		return null;
 	}
+     public void setFundingTotals(EditActivityForm eaForm, HttpSession session){
+        FundingCalculationsHelper cal = new FundingCalculationsHelper();
+        Collection fundDets = eaForm.getFunding().getFundingDetails();
+        if (fundDets != null) {
+            Collection<AmpFundingDetail> ampFundDets = ActivityUtil.createAmpFundingDetails(fundDets);
+            cal.doCalculations(ampFundDets, eaForm.getFundingCurrCode());
+            session.setAttribute("totalComm", cal.getTotActualComm());
+            session.setAttribute("totalDisb", cal.getTotActualDisb());
+            session.setAttribute("totalExpn", cal.getTotActualExp());
+        }
+    }
  } 

@@ -51,7 +51,8 @@
 <module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="REPORTING"></module:display> 
 <module:display name="References" parentModule="PROJECT MANAGEMENT"></module:display> 
-<module:display name="Report Generator" parentModule="REPORTING"></module:display> 
+<module:display name="Report Generator" parentModule="REPORTING"></module:display>
+<module:display name="Off Line Reports" parentModule="REPORTING"></module:display>  
 <module:display name="Report and Tab Options" parentModule="REPORTING"></module:display>
 <module:display name="Report Types" parentModule="REPORTING"></module:display> 
 <module:display name="Scenarios" parentModule="PROJECT MANAGEMENT"></module:display> 

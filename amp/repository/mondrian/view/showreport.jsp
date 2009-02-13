@@ -3,49 +3,42 @@
 <%@ taglib uri="http://www.tonbeller.com/wcf" prefix="wcf" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
-<%--
+<%@ taglib uri="/taglib/struts-html" prefix="html" %>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 
-  JPivot / WCF comes with its own "expression language", which simply
-  is a path of properties. E.g. #{customer.address.name} is
-  translated into:
-    session.getAttribute("customer").getAddress().getName()
-  WCF uses jakarta commons beanutils to do so, for an exact syntax
-  see its documentation.
-
-  With JSP 2.0 you should use <code>#{}</code> notation to define
-  expressions for WCF attributes and <code>\${}</code> to define
-  JSP EL expressions.
-
-  JSP EL expressions can not be used with WCF tags currently, all
-  tag attributes have their <code>rtexprvalue</code> set to false.
-  There may be a twin library supporting JSP EL expressions in
-  the future (similar to the twin libraries in JSTL, e.g. core
-  and core_rt).
-
-  Check out the WCF distribution which contains many examples on
-  how to use the WCF tags (like tree, form, table etc).
-
---%>
   <link rel="stylesheet" type="text/css" href="../../../jpivot/table/mdxtable.css">
   <link rel="stylesheet" type="text/css" href="../../../navi/mdxnavi.css">
   <link rel="stylesheet" type="text/css" href="../../../wcf/form/xform.css">
   <link rel="stylesheet" type="text/css" href="../../../wcf/table/xtable.css">
   <link rel="stylesheet" type="text/css" href="../../../wcf/tree/xtree.css">
+  
+ <script type="text/javascript">
+
+function sendForm(){
+	document.ShowReportForm.action.value= "save"
+	document.ShowReportForm.submit();	
+}
+
+</script>
+
 <html>
 <head>
-  <title>Mondrian/JPivot Test Page</title>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 </head>
 <body bgcolor=white>
 
-<digi:form action="/testpage.do"  method="post">
+<digi:form action="/showreport.do"  method="post">
 <%-- include query and title, so this jsp may be used with different queries --%>
-<wcf:include id="include01" httpParam="query" prefix="/WEB-INF/queries/" suffix=".jsp"/>
-
+<wcf:include id="include01" httpParam="pagename" prefix="/WEB-INF/queries/" suffix=".jsp"/>
 <c:if test="${query01 == null}">
   <jsp:forward page="/index.jsp"/>
 </c:if>
-
+<logic:present name="currentMember" scope="session">
+	<c:set var="visible" value="true"/>
+</logic:present>
+<logic:notPresent name="currentMember" scope="session">
+<c:set var="visible" value="false"/>
+</logic:notPresent>
 <%-- define table, navigator and forms --%>
 <jp:table id="table01" query="#{query01}"/>
 <jp:navigator  id="navi01" query="#{query01}" visible="false"/>
@@ -62,11 +55,10 @@
 <wcf:table id="query01.drillthroughtable" visible="false" selmode="none" editable="true"/>
 
 <h2><c:out value="${title01}"/></h2>
-
 <%-- define a toolbar --%>
 <wcf:toolbar  id="toolbar01" bundle="com.tonbeller.jpivot.toolbar.resources">
-  <wcf:scriptbutton id="cubeNaviButton" tooltip="toolb.cube" img="cube" model="#{navi01.visible}"/>
-  <wcf:scriptbutton id="mdxEditButton" tooltip="toolb.mdx.edit" img="mdx-edit" model="#{mdxedit01.visible}"/>
+  <wcf:scriptbutton id="cubeNaviButton" tooltip="toolb.cube" img="cube" model="#{navi01.visible}" visibleRef="${visible}"/>
+  <wcf:scriptbutton id="mdxEditButton" tooltip="toolb.mdx.edit" img="mdx-edit" model="#{mdxedit01.visible}" visibleRef="${visible}"/>
   <wcf:scriptbutton id="sortConfigButton" tooltip="toolb.table.config" img="sort-asc" model="#{sortform01.visible}"/>
   <wcf:separator/>
   <wcf:scriptbutton id="levelStyle" tooltip="toolb.level.style" img="level-style" model="#{table01.extensions.axisStyle.levelStyle}"/>
@@ -89,7 +81,7 @@
 </wcf:toolbar>
 
 <%-- render toolbar --%>
-<wcf:render ref="toolbar01" xslUri="/WEB-INF/jpivot/toolbar/htoolbar.xsl" xslCache="true"/>
+<wcf:render ref="toolbar01" xslUri="/WEB-INF/jpivot/toolbar/htoolbar.xsl" xslCache="false"/>
 <p>
 
 <%-- if there was an overflow, show error message --%>
@@ -101,7 +93,6 @@
 
 <%-- render navigator --%>
 <wcf:render ref="navi01" xslUri="/WEB-INF/jpivot/navi/navigator.xsl" xslCache="false"/>
-
 <%-- edit mdx --%>
 <c:if test="${mdxedit01.visible}">
   <h3>MDX Query Editor</h3>
@@ -130,6 +121,11 @@
 <p>
 	<wcf:render  ref="chart01" xslUri="/WEB-INF/jpivot/chart/chart.xsl"   xslCache="true"/>
 <p>
+<!-- 
+<input type="text" name="reportname">
+<input type="hidden" name="action"> 
+<input type="button" onclick="sendForm();" value="Save"/>
+ -->
 </digi:form>
 </body>
 </html>

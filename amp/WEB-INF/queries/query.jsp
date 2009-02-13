@@ -10,7 +10,7 @@
 	dynResolver="org.digijava.module.mondrian.query.SchemaManager"
 	
 >
-SELECT {[Measures].[Raw Actual Commitments]} ON COLUMNS,{[Donor]} ON ROWS FROM [Donor Funding] 
+	<%=session.getAttribute("querystring")%>
 </jp:mondrianQuery>
 
-<c:set var="title01" scope="session">Test Query uses Mondrian OLAP</c:set>
+<c:set var="title01" scope="session"></c:set>

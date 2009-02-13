@@ -8,8 +8,10 @@
 <%@page import="org.digijava.module.aim.helper.FormatHelper"%>
 <%@page import="org.digijava.module.aim.util.CurrencyUtil"%>
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-
 <digi:instance property="aimCurrencyRateForm" />
+
+
+
 <jsp:include page="scripts/newCalendar.jsp" flush="true" />
 
 <script language="JavaScript" type="text/javascript">
@@ -17,35 +19,36 @@
 </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
+
 <script language="JavaScript">
 
 function validate() {
-	if (isEmpty(document.aimCurrencyRateForm.updateCRateCode.value) == true) {
+	if (isEmpty(document.aimCurrencyRateFormPop.updateCRateCode.value) == true) {
 		alert('<digi:trn key="aim:currencyCodenotEntered">Currency code not entered</digi:trn>');
-		document.aimCurrencyRateForm.updateCRateCode.focus();
+		document.aimCurrencyRateFormPop.updateCRateCode.focus();
 		return false;
 	}
-	if (document.aimCurrencyRateForm.updateCRateCode.value == 'USD') {
+	if (document.aimCurrencyRateFormPop.updateCRateCode.value == 'USD') {
 		alert('<digi:trn key="aim:selectDifferentCurrency">All exchange rates are saved in terms of USD. Please select a different currency.</digi:trn>');
-		document.aimCurrencyRateForm.updateCRateCode.focus();
+		document.aimCurrencyRateFormPop.updateCRateCode.focus();
 		return false;
 	}
 
-	if (isEmpty(document.aimCurrencyRateForm.updateCRateDate.value) == true) {
+	if (isEmpty(document.aimCurrencyRateFormPop.updateCRateDate.value) == true) {
 		alert('<digi:trn key="aim:exchangeRateDateNotEntered">Exchange rate date not entered</digi:trn>');
-		document.aimCurrencyRateForm.updateCRateDate.focus();
+		document.aimCurrencyRateFormPop.updateCRateDate.focus();
 		return false;
 	}
-	if (isEmpty(document.aimCurrencyRateForm.updateCRateAmount.value) == true) {
+	if (isEmpty(document.aimCurrencyRateFormPop.updateCRateAmount.value) == true) {
 		alert('<digi:trn key="aim:exchangeRateNotEntered">Exchange rate not entered</digi:trn>');
-		document.aimCurrencyRateForm.updateCRateAmount.focus();
+		document.aimCurrencyRateFormPop.updateCRateAmount.focus();
 		return false;
 	}
 	
-	if (checkAmountUsingSymbols(document.aimCurrencyRateForm.updateCRateAmount.value,'<%=FormatHelper.getGroupSymbol()%>','<%=FormatHelper.getDecimalSymbol()%>') == false) 
+	if (checkAmountUsingSymbols(document.aimCurrencyRateFormPop.updateCRateAmount.value,'<%=FormatHelper.getGroupSymbol()%>','<%=FormatHelper.getDecimalSymbol()%>') == false) 
 		{
 			alert('<digi:trn key="aim:invalidExchangeRateEntered">Invalid exchange rate entered</digi:trn>');
-			document.aimCurrencyRateForm.updateCRateAmount.focus();
+			document.aimCurrencyRateFormPop.updateCRateAmount.focus();
 			return false;
 		}
 	
@@ -55,19 +58,19 @@ function validate() {
 function saveRate() {
 	var valid = validate();
 	if (valid == true) {
-		document.aimCurrencyRateForm.target = window.opener.name;
-		document.aimCurrencyRateForm.submit();
+		document.aimCurrencyRateFormPop.target = window.opener.name;
+		document.aimCurrencyRateFormPop.submit();
 		window.close();
 	}
 	return valid;
 }
 
 function load() {
-	document.aimCurrencyRateForm.updateCRateCode.focus();
+	document.aimCurrencyRateFormPop.updateCRateCode.focus();
 }
 
 function unload() {
-	window.opener.document.aimCurrencyRateForm.currUrl.value = "";
+	window.opener.document.aimCurrencyRateFormPop.currUrl.value = "";
 }
 
 function closePopup() {
@@ -77,9 +80,9 @@ function closePopup() {
 </script>
 
 
-<digi:form action="/saveCurrencyRate.do">
+<digi:form action="/saveCurrencyRate.do" name="aimCurrencyRateFormPop" type="aimCurrencyRateForm">
 
-<html:hidden name="aimCurrencyRateForm" property="doAction" value="saveRate"/>
+<html:hidden name="aimCurrencyRateFormPop" property="doAction" value="saveRate"/>
 
 <input type="hidden" name="selectedDate">
 
@@ -101,7 +104,7 @@ function closePopup() {
 								</td>
 								<td align="left" valign="middle">
 									<html:select property="updateCRateCode" styleClass="inp-text">
-										<html:optionsCollection name="aimCurrencyRateForm" property="currencyCodes"
+										<html:optionsCollection property="currencyCodes"
 										value="currencyCode" label="currencyCode" />&nbsp;&nbsp;&nbsp;
 									</html:select>
 								</td>
@@ -118,7 +121,7 @@ function closePopup() {
 												<html:text property="updateCRateDate" size="10" styleClass="inp-text" readonly="true" styleId="updateCRateDate"/>
 											</td>
 											<td align="left" vAlign="center">&nbsp;
-								 				<a id="date1" href='javascript:pickDateCurrency("date1",document.aimCurrencyRateForm.updateCRateDate)'>
+								 				<a id="date1" href='javascript:pickDateCurrency("date1",document.aimCurrencyRateFormPop.updateCRateDate)'>
 													<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 												</a>
 											</td>
@@ -132,20 +135,32 @@ function closePopup() {
 									<digi:trn key="admin:currencyRates:editPopup:ExchangeRateDescr">Exchange rate (value of 1 USD in selected currency)</digi:trn>&nbsp;
 								</td>
 								<td align="left" valign="middle">
+								<table cellPadding=0 cellSpacing=0>
+								<tr>
+								<td>
 								<c:set var="formatTip">
 														<digi:trn key="aim:decimalforma">Format has to be: </digi:trn> <%=FormatHelper.formatNumber(FormatHelper.parseDouble("1"+FormatHelper.getDecimalSymbol()+"5"))%>
 								</c:set>
 								    <c:set var="codeBase"><%= CurrencyUtil.BASE_CODE %></c:set>
-									<c:if test="${aimCurrencyRateForm.updateCRateCode==codeBase}">
+									<c:if test="${aimCurrencyRateFormPop.updateCRateCode==codeBase}">
 									<html:text title="${formatTip}" property="updateCRateAmount" disabled="true" styleClass="amt" size="7"/>
 									</c:if>
-									<c:if test="${aimCurrencyRateForm.updateCRateCode!=codeBase}">
+									<c:if test="${aimCurrencyRateFormPop.updateCRateCode!=codeBase}">
 									<html:text title="${formatTip}" property="updateCRateAmount" styleClass="amt" size="7"/>
 									</c:if>
 
 									<!-- 
 									<FONT color=red>
 									<digi:trn key="aim:USD">USD</digi:trn></FONT> -->
+								</td>
+								<td>
+								<digi:trn key="aim:currencyformat">Format: <%=org.digijava.module.aim.util.FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.GlobalSettingsConstants.NUMBER_FORMAT) %> </digi:trn><br/>
+								<digi:trn key="aim:groupSymbol">Group Symbol: "<%=FormatHelper.getGroupSymbol()%>"</digi:trn><br/>
+								<digi:trn key="aim:decimalSymbol">Decimal symbol: "<%=FormatHelper.getDecimalSymbol()%>"</digi:trn>
+								
+								</td>
+								</tr>
+								</table>
 								</td>
 							</tr>
 							<tr bgcolor="#ffffff">

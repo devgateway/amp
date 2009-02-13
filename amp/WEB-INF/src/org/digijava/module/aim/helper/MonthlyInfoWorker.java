@@ -64,10 +64,10 @@ public class MonthlyInfoWorker {
      * @param fp
      * @return List
      */
-    public static List getMonthlyComparisons(FilterParams fp) throws DgException {
+    public static List<MonthlyComparison> getMonthlyComparisons(FilterParams fp) throws DgException {
 
 
-        List monthlyData = new ArrayList();
+        List<MonthlyComparison> monthlyData = new ArrayList<MonthlyComparison>();
         Long ampFundingId = fp.getAmpFundingId();
         String currCode = fp.getCurrencyCode();
 
@@ -91,6 +91,7 @@ public class MonthlyInfoWorker {
                     DateFormatSymbols dfs = new DateFormatSymbols();
                     comparison.setFiscalYear(year);
                     comparison.setMonth(dfs.getMonths()[month - 1]);
+                    comparison.setMonthNumber(month);
 
                     List monthPlannedComm = getMonthlyData(ampFundingId, Constants.COMMITMENT, Constants.PLANNED, month, year);
                     List monthActualComm = getMonthlyData(ampFundingId, Constants.COMMITMENT, Constants.ACTUAL, month, year);
@@ -158,8 +159,8 @@ public class MonthlyInfoWorker {
 
     }
 
-    public static List getMonthlyData(FilterParams fp) throws DgException {
 
+    public static List getMonthlyData(FilterParams fp) throws DgException {
         Long ampFundingId = fp.getAmpFundingId();
         String currCode = fp.getCurrencyCode();
         int transactionType = fp.getTransactionType();

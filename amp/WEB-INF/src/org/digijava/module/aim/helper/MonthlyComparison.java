@@ -4,9 +4,10 @@ package org.digijava.module.aim.helper;
  *
  * @author
  */
-public class MonthlyComparison {
+public class MonthlyComparison implements Comparable<MonthlyComparison> {
 
     private String month;
+    private int monthNumber; 
     private int fiscalYear;
     private double plannedCommitment;
     private double actualCommitment;
@@ -87,4 +88,20 @@ public class MonthlyComparison {
     public void setMonth(String month) {
         this.month = month;
     }
+
+	@Override
+	public int compareTo(MonthlyComparison o) {
+		if (Integer.valueOf(this.fiscalYear).compareTo(o.fiscalYear) !=0 ) 
+			return Integer.valueOf(this.fiscalYear).compareTo(o.fiscalYear);
+		else
+			return Integer.valueOf(this.monthNumber).compareTo(o.monthNumber);
+	}
+
+	public void setMonthNumber(int monthNumber) {
+		this.monthNumber = monthNumber;
+	}
+
+	public int getMonthNumber() {
+		return monthNumber;
+	}
 }

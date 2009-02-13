@@ -602,12 +602,23 @@
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-                              <c:set var="trnDataExchangeExportTitle">
-                                <digi:trn key="dataexchange:trnDataExchangeExportTitle">Click here to view Data Export Manager</digi:trn>
-                              </c:set>
-                              <digi:link module="dataExchange"  href="/indexDE.do" title="${trnDataExchangeExportTitle}" >
-                                <digi:trn key="dataexchange:DataExportManager">Data Export Manager</digi:trn>
-                              </digi:link>
+								   <c:set var="trnDataExchangeExportTitle">
+								    <digi:trn key="dataexchange:trnDataExchangeExportTitle">Click here to view Data Export Manager</digi:trn>
+								   </c:set>
+								   <digi:link module="dataExchange"  href="/exportWizard.do?method=prepear" title="${trnDataExchangeExportTitle}" >
+								     <digi:trn key="dataexchange:DataExportManager">Data Export Manager</digi:trn>
+							   	   </digi:link>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="f-names" nowrap="nowrap">
+                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+							   <c:set var="trnDataExchangeExportTitle">
+							    <digi:trn key="dataexchange:trnDataExchangeImportTitle">Click here to view Data Import Manager</digi:trn>
+							   </c:set>
+							   <digi:link module="dataExchange"  href="/import.do" title="${trnDataExchangeExportTitle}" >
+							      <digi:trn key="dataexchange:DataImportManager">Data Import Manager</digi:trn>
+							   </digi:link>
                             </td>
                           </tr>
                         </table>

@@ -62,19 +62,14 @@
 		<tr>
 			<td>
 				<table align=center cellPadding=0 cellSpacing=0 width="100%">
-					<tr>                    
+					<tr>
     					<td>
-        					<table border=0 cellPadding=3 cellSpacing=3 width="100%" >
+        					<table border=0 cellPadding=3 cellSpacing=3 width="100%">
             					<tr bgColor=#999999>
                 					<td bgColor=#999999 align="center" height="20">
                     					<b>
                         					${titleColumn}
                         				</b>
-                    				</td>
-                    				<td bgColor=#999999 align="center" height="20">
-                    					<b>
-                    						<digi:trn key="aim:reportOwnerName">Owner</digi:trn>
-                    					</b>
                     				</td>
                     				<td bgColor=#999999 align="center" height="20">
                     					<b>
@@ -92,13 +87,13 @@
                     				</c:if>
                     				</logic:present>
 								</tr>                          
-               		<c:if test="${reports.size == 0}">
-                		<tr>
-                			<td colspan="4">
-                    			<digi:trn key="aim:noreportspresent">No reports present</digi:trn>
-							</td>
-                		</tr>
-                	</c:if>
+               					<c:if test="${reports.size == 0}">
+                				<tr>
+                					<td colspan="4">
+                    					<digi:trn key="aim:noreportspresent">No reports present</digi:trn>
+									</td>
+                				</tr>
+                				</c:if>
                		<logic:iterate name="MainReportsForm" indexId="idx" id="report"  property="reports" type="org.digijava.module.mondrian.dbentity.OffLineReports">
 						<tr bgcolor="<%=(idx.intValue()%2==1?"#dbe5f1":"#ffffff")%>" onmouseout="setPointer(this, <%=idx.intValue()%>, 'out', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" 
 							onmouseover="setPointer(this, <%=idx.intValue()%>, 'over', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" style="" >                           
@@ -114,15 +109,6 @@
 									</a>
 	                       		</p> 		
                      		</td>
-	                        <td align="center">
-                        		<p style="white-space: nowrap">
-                                	<logic:present name="report" property="ownerId">
-                                   		<i>
-                                   			<bean:write name="report" property="ownerId.user.name" />
-                                   		</i>
-                                	</logic:present>
-                            	</p>
-                         	</td>
                          	<td align="center">
                                 <p style="white-space: nowrap">
                                   <li>

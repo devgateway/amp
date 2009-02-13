@@ -33,12 +33,6 @@ function sendForm(){
 <c:if test="${query01 == null}">
   <jsp:forward page="/index.jsp"/>
 </c:if>
-<logic:present name="currentMember" scope="session">
-	<c:set var="visible" value="true"/>
-</logic:present>
-<logic:notPresent name="currentMember" scope="session">
-<c:set var="visible" value="false"/>
-</logic:notPresent>
 <%-- define table, navigator and forms --%>
 <jp:table id="table01" query="#{query01}"/>
 <jp:navigator  id="navi01" query="#{query01}" visible="false"/>
@@ -57,8 +51,8 @@ function sendForm(){
 <h2><c:out value="${title01}"/></h2>
 <%-- define a toolbar --%>
 <wcf:toolbar  id="toolbar01" bundle="com.tonbeller.jpivot.toolbar.resources">
-  <wcf:scriptbutton id="cubeNaviButton" tooltip="toolb.cube" img="cube" model="#{navi01.visible}" visibleRef="${visible}"/>
-  <wcf:scriptbutton id="mdxEditButton" tooltip="toolb.mdx.edit" img="mdx-edit" model="#{mdxedit01.visible}" visibleRef="${visible}"/>
+  <wcf:scriptbutton id="cubeNaviButton" tooltip="toolb.cube" img="cube" model="#{navi01.visible}"/>
+  <wcf:scriptbutton id="mdxEditButton" tooltip="toolb.mdx.edit" img="mdx-edit" model="#{mdxedit01.visible}"/>
   <wcf:scriptbutton id="sortConfigButton" tooltip="toolb.table.config" img="sort-asc" model="#{sortform01.visible}"/>
   <wcf:separator/>
   <wcf:scriptbutton id="levelStyle" tooltip="toolb.level.style" img="level-style" model="#{table01.extensions.axisStyle.levelStyle}"/>
@@ -92,21 +86,24 @@ function sendForm(){
 </c:if>
 
 <%-- render navigator --%>
-<wcf:render ref="navi01" xslUri="/WEB-INF/jpivot/navi/navigator.xsl" xslCache="false"/>
+<logic:present name="currentMember" scope="session">
+	<wcf:render ref="navi01" xslUri="/WEB-INF/jpivot/navi/navigator.xsl" xslCache="false"/>
+</logic:present>
 <%-- edit mdx --%>
-<c:if test="${mdxedit01.visible}">
-  <h3>MDX Query Editor</h3>
-  <wcf:render ref="mdxedit01" xslUri="/WEB-INF/wcf/wcf.xsl" xslCache="true"/>
+<logic:present name="currentMember" scope="session">
+	<c:if test="${mdxedit01.visible}">
+  	<h3>MDX Query Editor</h3>
+  	<wcf:render ref="mdxedit01" xslUri="/WEB-INF/wcf/wcf.xsl" xslCache="false"/>
 </c:if>
-
+</logic:present>
 <%-- sort properties --%>
-<wcf:render ref="sortform01" xslUri="/WEB-INF/wcf/wcf.xsl" xslCache="true"/>
+<wcf:render ref="sortform01" xslUri="/WEB-INF/wcf/wcf.xsl" xslCache="false"/>
 
 <%-- chart properties --%>
-<wcf:render ref="chartform01" xslUri="/WEB-INF/wcf/wcf.xsl" xslCache="true"/>
+<wcf:render ref="chartform01" xslUri="/WEB-INF/wcf/wcf.xsl" xslCache="false"/>
 
 <%-- print properties --%>
-<wcf:render ref="printform01" xslUri="/WEB-INF/wcf/wcf.xsl" xslCache="true"/>
+<wcf:render ref="printform01" xslUri="/WEB-INF/wcf/wcf.xsl" xslCache="false"/>
 
 <!-- render the table -->
 <p>

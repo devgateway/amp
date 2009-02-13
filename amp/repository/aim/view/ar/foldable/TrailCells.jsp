@@ -10,15 +10,20 @@
 <bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page"/>
 <% String display=reportData.getLevelDepth()>2?"display:none":"";%>
 <!-- generate total row -->
-
-<tr id='<bean:write name="reportData" property="absoluteReportName"/>' title='<bean:write name="reportData" property="name"/>' style="<%=display%>;">
-	<% if (reportData.getLevelDepth() < 3) { %>
+<c:set var="depthRelatVar">
+	<bean:write name="reportData" property="levelDepth"/>@<bean:write name="reportData" property="relativeRowNo"/>
+</c:set>
+<c:set var="reportDataNameVar">
+<bean:write name="reportData" property="name"/>
+</c:set>
+<tr id='<bean:write name="reportData" property="absoluteReportName"/>' title="${depthRelatVar}" style="<%=display%>;" onmouseover='this.title="${reportDataNameVar}"' onmouseout='this.title="${depthRelatVar}"'>	
+	<% if (reportData.getLevelDepth() < 3) { %>		
 		<td style=" padding-left:<%=10*(reportData.getLevelDepth()-1)%>; background-color:#BFD2DF;border-bottom:1px solid white;" colspan='<bean:write name="reportData" property="sourceColsCount"/>' class="reportsBorderTD" nowrap>
 	<% } else { %>	
 		<td style=" padding-left:<%=10*(reportData.getLevelDepth()-1)%>; background-color:#dddddd;border-bottom:1px solid white" colspan='<bean:write name="reportData" property="sourceColsCount"/>' class="reportsBorderTD" nowrap>
-	<% } %>
-<c:if test="${!(reportData.name == reportMeta.name)}">
-		<img id="toggleImage" name="<bean:write name="reportData" property="absoluteReportName"/>" style="cursor:pointer" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif" alt='hidden' onclick='toggleRows(this,"<bean:write name="reportData" property="absoluteReportName"/>")' title='<digi:trn key="aim:report:expandcollapse">Expand/Collapse</digi:trn>' border="0"/>
+	<% } %>	
+<c:if test="${!(reportData.name == reportMeta.name)}">		
+		<img id="toggleImage" name="<bean:write name="reportData" property="absoluteReportName"/>" style="cursor:pointer" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif" alt='hidden' onclick="document.getElementById('<bean:write name="reportData" property="absoluteReportName"/>').title='${depthRelatVar}';toggleRows(this,'<bean:write name="reportData" property="absoluteReportName"/>')" title='<digi:trn key="aim:report:expandcollapse">Expand/Collapse</digi:trn>' border="0"/>
 </c:if>		
   
 <b>

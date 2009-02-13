@@ -14,9 +14,39 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 
 <script language="JavaScript" type="text/javascript">
 	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
+</script>
+<script language="JavaScript" type="text/javascript">
+    function addActionToURL(actionName){
+        var fullURL=document.URL;
+        var lastSlash=fullURL.lastIndexOf("/");
+        var partialURL=fullURL.substring(0,lastSlash);
+        return partialURL+"/"+actionName;
+    }
+    function changeCurrency(){
+       currency=document.aimEditActivityForm.fundingCurrCode.value;
+       var url=addActionToURL('getFundingTotals.do')+'?fundingCurrCode='+currency;
+       var async=new Asynchronous();
+       async.complete=buildFundingTotals;
+       async.call(url);
+    }
+     function buildFundingTotals(status, statusText, responseText, responseXML){
+        var root=responseXML.getElementsByTagName('total')[0];
+        var comm=document.getElementById("total_comm");
+        var disb=document.getElementById("total_disb");
+        var expn=document.getElementById("total_expn");
+        var curr=root.getAttribute("curr");
+        comm.innerHTML="<digi:trn> Commitments - (Total Actual Allocation</digi:trn> "
+            +root.getAttribute("comm")+' '+curr+')';
+        disb.innerHTML="<digi:trn> Disbursement - (Total actual to date</digi:trn> "
+            +root.getAttribute("disb")+' '+curr+')';
+        expn.innerHTML="<digi:trn> Expenditure - (Total actual to date</digi:trn>   " +root.getAttribute("expn")+' '+curr+')';
+
+    }
+
 </script>
 
 <% int indexC = 0; 
@@ -82,6 +112,20 @@
 									</c:if>
 								</td>								
 							</tr>
+                           <tr>
+                            <td colspan="2">
+                               <digi:trn>Select currency </digi:trn>
+                               <html:select property="fundingCurrCode" styleClass="inp-text" onchange="changeCurrency()">
+                                <c:forEach var="currency" items="${aimEditActivityForm.funding.validcurrencies}">
+                                    <option value="<c:out value="${currency.currencyCode}"/>">
+                                        <c:out value="${currency.currencyName}" />
+                                    </option>
+                                </c:forEach>
+                                </html:select>
+
+							</td>
+
+						</tr>
 							<tr><td colspan=2>
 								<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
 								<FONT color=blue><BIG>*</BIG>
@@ -97,14 +141,9 @@
 							<logic:notEmpty name="aimEditActivityForm" property="location.selectedLocs">
 							<tr bgcolor="#f4f4f2">
 								<td colspan="2" class="box-border-alt1">
-										<span class="f-names">						
-										<digi:trn key="aim:commitments">Commitments</digi:trn>
-										 - (
-										 <digi:trn key="aim:totalActualAllocation">Total Actual Allocation</digi:trn> 
-											<%=(eaForm.getFunding().getTotalCommitments() != null)?eaForm.getFunding().getTotalCommitments():"-"%> 
-											<%=eaForm.getCurrCode()%>
-											)
-										</span>
+                                    <span class="f-names" id="total_comm">
+                                        <digi:trn key="aim:commitmentsTotalActAllocation">Commitments - (Total Actual Allocation</digi:trn>
+                                    ${sessionScope.totalComm}  ${aimEditActivityForm.fundingCurrCode} ) </span>
 										<field:display name="Add Regional Funding Link" feature="Regional Funding">
 										<a href="javascript:addCommitments()">${translationAdd }</a>
 										</field:display>
@@ -177,11 +216,9 @@
                              <feature:display module="Funding" name="Disbursement">
 							<tr bgcolor="#ffffff">
 								<td colspan="2" class="box-border">
-										<span class="f-names"><digi:trn key="aim:disbursement">Disbursement</digi:trn> 
-										- (
-											<digi:trn key="aim:totalActualToDate">Total actual to date</digi:trn> 
-											<%=(eaForm.getFunding().getTotalDisbursements() != null)?eaForm.getFunding().getTotalDisbursements():"-"%> 
-											<%=eaForm.getCurrCode()%>)
+										<span class="f-names" id="total_disb">
+                                            <digi:trn key="aim:disbursementTotalActToDate"> Disbursement - (Total actual to date </digi:trn>
+							${sessionScope.totalDisb}  ${aimEditActivityForm.fundingCurrCode} )
 										</span>
 										<field:display name="Add Regional Funding Link" feature="Regional Funding">										
 											<a href="javascript:addDisbursement()">${translationAdd }</a>
@@ -256,13 +293,9 @@
 						<feature:display module="Funding" name="Expenditures">
                         	<tr>
 								<td colspan="2" class="box-border-alt1">
-											<span class="f-names"><digi:trn key="aim:expenditure">Expenditure</digi:trn> 
-											- 	(
-												<digi:trn key="aim:totalActualToDate">Total actual to date</digi:trn>
-												<%=(eaForm.getFunding().getTotalExpenditures() != null)?eaForm.getFunding().getTotalDisbursements():"-"%> 
-												<%=eaForm.getCurrCode()%>
-												)
-											</span>
+									<span class="f-names" id="total_expn">
+                                    <digi:trn key="aim:expenditureTotalActToDate"> Expenditure - (Total actual to date</digi:trn>
+                                    ${sessionScope.totalExpn}   ${aimEditActivityForm.fundingCurrCode})</span>
 											<field:display name="Add Regional Funding Link" feature="Regional Funding">	
 												<a href="javascript:addExpenditure()">${translationAdd }</a>&nbsp;&nbsp;
 											</field:display>

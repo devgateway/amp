@@ -76,8 +76,12 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	private boolean serializeFlag;
 	private List<CustomField<?>> customFields;
 	private List<CustomFieldStep> customFieldsSteps;
-	
-	
+    /** The currency code in which we want to  see total funding
+     * on the components and regional funding page...
+     */
+    private String fundingCurrCode;
+
+
 	public class Contracts {
 		private List contracts;
 		private Double ipaBudget = null;
@@ -4126,5 +4130,12 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	public void setTotDisbIsBiggerThanTotCom(boolean totDisbIsBiggerThanTotCom) {
 		this.totDisbIsBiggerThanTotCom = totDisbIsBiggerThanTotCom;
 	}
+      public String getFundingCurrCode() {
+        return fundingCurrCode;
+    }
+
+    public void setFundingCurrCode(String fundingCurrCode) {
+        this.fundingCurrCode = fundingCurrCode;
+    }
 }
 

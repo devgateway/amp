@@ -12,7 +12,7 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 
-
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
@@ -339,6 +339,33 @@ function removeSelPhyProgress() {
 	return true;
 
 }
+
+ function addActionToURL(actionName){
+        var fullURL=document.URL;
+        var lastSlash=fullURL.lastIndexOf("/");
+        var partialURL=fullURL.substring(0,lastSlash);
+        return partialURL+"/"+actionName;
+    }
+    function changeCurrency(){
+       currency=document.aimAddComponentForm.fundingCurrCode.value;
+       var url=addActionToURL('getFundingTotals.do')+'?fundingCurrCode='+currency;
+       var async=new Asynchronous();
+       async.complete=buildFundingTotals;
+       async.call(url);
+    }
+     function buildFundingTotals(status, statusText, responseText, responseXML){
+        var root=responseXML.getElementsByTagName('total')[0];
+        var comm=document.getElementById("total_comm");
+        var disb=document.getElementById("total_disb");
+        var expn=document.getElementById("total_expn");
+        var curr=root.getAttribute("curr");
+        comm.innerHTML="<digi:trn> Commitments - (Total Actual Allocation</digi:trn> "
+            +root.getAttribute("comm")+' '+curr+')';
+        disb.innerHTML="<digi:trn> Disbursement - (Total actual to date</digi:trn> "
+            +root.getAttribute("disb")+' '+curr+')';
+        expn.innerHTML="<digi:trn> Expenditure - (Total actual to date</digi:trn>   " +root.getAttribute("expn")+' '+curr+')';
+
+    }
 
 
 

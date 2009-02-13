@@ -1711,6 +1711,7 @@
     <action name="invalidDataList" path="/aim/invalidSectorPercentages" type="org.digijava.module.aim.action.InvalidSectorPercentages" validate="false">
       <forward name="forward" path="/showLayout.do?layout=invalidSectorPercentages" />
     </action>
+    <action name="aimEditActivityForm" path="/aim/getFundingTotals" scope="session" type="org.digijava.module.aim.action.GetFundingTotals" validate="false" />
      
   </action-mappings>
 </struts-config>

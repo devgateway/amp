@@ -22,7 +22,6 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
-import org.dgfoundation.amp.error.AMPActivityError;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.error.ErrorReporting;
 import org.dgfoundation.amp.error.ExceptionFactory;
@@ -45,6 +44,7 @@ import org.digijava.module.aim.dbentity.AmpClosingDateHistory;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -83,6 +83,7 @@ import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingValidator;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Issues;
 import org.digijava.module.aim.helper.Measures;
 import org.digijava.module.aim.helper.PhysicalProgress;
@@ -91,7 +92,6 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.digijava.module.exception.action.ExceptionReport;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
@@ -3752,6 +3752,31 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     		}
     		return retValue;
         }
+        /**
+         * 
+         * @param fundDets
+         * @return
+         * @see ShowAddComponent
+         * @see GetFundingTotals
+         * 
+         */
+       public static Collection<AmpFundingDetail> createAmpFundingDetails(Collection fundDets) {
+        Collection<AmpFundingDetail> ampFundDets = new ArrayList<AmpFundingDetail>();
+        Iterator<FundingDetail> iter = fundDets.iterator();
+        while (iter.hasNext()) {
+            FundingDetail helperFdet = iter.next();
+            AmpCurrency detCurr = CurrencyUtil.getAmpcurrency(helperFdet.getCurrencyCode());
+            Date date = DateConversion.getDate(helperFdet.getTransactionDate());
+            Double transAmt = new Double(FormatHelper.parseDouble(helperFdet.getTransactionAmount()));
+            if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
+                transAmt *= 1000;
+            }
+            AmpFundingDetail fundDet = new AmpFundingDetail(helperFdet.getTransactionType(), helperFdet.getAdjustmentType(), transAmt, date, detCurr, helperFdet.getFixedExchangeRate());
+            ampFundDets.add(fundDet);
+        }
+        return ampFundDets;
+    }
+
 
 	
 } // End

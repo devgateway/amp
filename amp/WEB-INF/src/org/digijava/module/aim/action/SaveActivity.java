@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -1294,7 +1295,7 @@ public class SaveActivity extends Action {
 		//Do the initializations and all the information transfer between beans here
 
 		//set components
-		//proccessComponents(tempComp, eaForm, activity);
+		proccessComponents(eaForm, activity);
 
 		if (eaForm.getIssues().getIssues() != null && eaForm.getIssues().getIssues().size() > 0) {
 			Set issueSet = new HashSet();
@@ -2477,34 +2478,57 @@ public class SaveActivity extends Action {
 	 * @param eaForm
 	 * @param activity
 	 */
-	private void proccessComponents(Collection<Components<AmpComponentFunding>> tempComps, EditActivityForm eaForm, AmpActivity activity) {
+	private void proccessComponents(EditActivityForm eaForm, AmpActivity activity) {
 		activity.setComponents(new HashSet());
 		if (eaForm.getComponents().getSelectedComponents() != null) {
 			Iterator<Components<FundingDetail>> itr = eaForm.getComponents().getSelectedComponents().iterator();
 			while (itr.hasNext()) {
 				Components<FundingDetail> comp = itr.next();
-				Components<AmpComponentFunding> tempComp = new Components<AmpComponentFunding>();
+				AmpComponent tempComp = new AmpComponent();
 
-				AmpComponent ampComp = null;
-				Collection col = ComponentsUtil.getComponent(comp.getTitle());
-				Iterator it = col.iterator();
-				if(it.hasNext()){
-					ampComp = (AmpComponent)it.next();
-					activity.getComponents().add(ampComp);
-//					if(ampComp.getActivities() ==  null) ampComp.setActivities(new HashSet());
-//					ampComp.getActivities().add(activity);
-				}
+				AmpComponent ampComp = ComponentsUtil.getComponentById(comp.getComponentId());
+				activity.getComponents().add(ampComp);
 
-				if (comp.getCommitments() != null
-						&& comp.getCommitments().size() > 0) {
-					HashSet<AmpComponentFunding> temp = new HashSet<AmpComponentFunding>();
-					Iterator<FundingDetail> commitmentsIter = comp.getCommitments().iterator();
-					while (commitmentsIter.hasNext()) {
-						FundingDetail fd = commitmentsIter.next();
+				if(activity.getComponentFundings()==null)
+					activity.setComponentFundings(new HashSet<AmpComponentFunding>());
+
+				
+				Set<Integer> transactionTypes = new HashSet<Integer>();
+				transactionTypes.add(Constants.COMMITMENT);
+				transactionTypes.add(Constants.DISBURSEMENT);
+				transactionTypes.add(Constants.EXPENDITURE);
+				
+				for (Iterator iterator = transactionTypes.iterator(); iterator
+						.hasNext();) {
+					Integer transactionType = (Integer) iterator.next();
+				
+					Iterator<FundingDetail> fdIterator = null;
+					if (transactionType.equals(Constants.COMMITMENT)
+							&& comp.getCommitments() != null
+							&& comp.getCommitments().size() > 0) {
+						fdIterator = comp.getCommitments().iterator();
+					} else if (transactionType.equals(Constants.DISBURSEMENT)
+							&& comp.getDisbursements() != null
+							&& comp.getDisbursements().size() > 0) {
+						fdIterator = comp.getDisbursements().iterator();
+					} else if (transactionType.equals(Constants.EXPENDITURE)
+							&& comp.getExpenditures() != null
+							&& comp.getExpenditures().size() > 0) {
+						fdIterator = comp.getExpenditures().iterator();
+					}else{
+						//maybe .getXX==null or .size()==0 
+						continue;
+					}
+					
+					while (fdIterator.hasNext()) {
+						FundingDetail fd = fdIterator.next();
+
 						AmpComponentFunding ampCompFund = new AmpComponentFunding();
+						ampCompFund.setAmpComponentFundingId(fd.getAmpComponentFundingId());
 						ampCompFund.setActivity(activity);
-						ampCompFund.setTransactionType(new Integer(
-								Constants.COMMITMENT));
+						
+						ampCompFund.setTransactionType(transactionType);
+						
 						Iterator tmpItr = eaForm.getCurrencies()
 								.iterator();
 						while (tmpItr.hasNext()) {
@@ -2517,93 +2541,20 @@ public class SaveActivity extends Action {
 							}
 						}
 
-						ampCompFund.setAmpComponentFundingId(fd.getAmpComponentFundingId());
 						ampCompFund.setReportingOrganization(null);
-							ampCompFund.setTransactionAmount(FormatHelper.parseDouble(fd.getTransactionAmount()));
-
+						ampCompFund.setTransactionAmount(FormatHelper.parseDouble(fd.getTransactionAmount()));
 						ampCompFund.setTransactionDate(DateConversion
 								.getDate(fd.getTransactionDate()));
 						ampCompFund.setAdjustmentType(new Integer(fd
 								.getAdjustmentType()));
 						ampCompFund.setComponent(ampComp);
-						temp.add(ampCompFund);
+						
+						activity.getComponentFundings().add(ampCompFund);
+						
 					}
-					tempComp.setCommitments(temp);
 				}
 
-
-				if (comp.getDisbursements() != null
-						&& comp.getDisbursements().size() > 0) {
-					HashSet<AmpComponentFunding> temp = new HashSet<AmpComponentFunding>();
-					Iterator itr2 = comp.getDisbursements().iterator();
-					while (itr2.hasNext()) {
-						AmpComponentFunding ampCompFund = new AmpComponentFunding();
-						ampCompFund.setActivity(activity);
-						ampCompFund.setTransactionType(new Integer(
-								Constants.DISBURSEMENT));
-						FundingDetail fd = (FundingDetail) itr2.next();
-						Iterator tmpItr = eaForm.getCurrencies()
-								.iterator();
-						while (tmpItr.hasNext()) {
-							AmpCurrency curr = (AmpCurrency) tmpItr
-									.next();
-							if (curr.getCurrencyCode().equals(
-									fd.getCurrencyCode())) {
-								ampCompFund.setCurrency(curr);
-								break;
-							}
-						}
-
-						ampCompFund.setAmpComponentFundingId(fd.getAmpComponentFundingId());
-
-							ampCompFund.setTransactionAmount(new Double(
-									FormatHelper.parseDouble(fd
-											.getTransactionAmount())));
-
-						ampCompFund.setTransactionDate(DateConversion
-								.getDate(fd.getTransactionDate()));
-						ampCompFund.setAdjustmentType(new Integer(fd
-								.getAdjustmentType()));
-						ampCompFund.setComponent(ampComp);
-						temp.add(ampCompFund);
-					}
-					tempComp.setDisbursements(temp);
-				}
-
-				if (comp.getExpenditures() != null
-						&& comp.getExpenditures().size() > 0) {
-					HashSet<AmpComponentFunding> temp = new HashSet<AmpComponentFunding>();
-					Iterator itr2 = comp.getExpenditures().iterator();
-					while (itr2.hasNext()) {
-						AmpComponentFunding ampCompFund = new AmpComponentFunding();
-						ampCompFund.setActivity(activity);
-						ampCompFund.setTransactionType(new Integer(
-								Constants.EXPENDITURE));
-						FundingDetail fd = (FundingDetail) itr2.next();
-						Iterator tmpItr = eaForm.getCurrencies()
-								.iterator();
-						while (tmpItr.hasNext()) {
-							AmpCurrency curr = (AmpCurrency) tmpItr
-									.next();
-							if (curr.getCurrencyCode().equals(
-									fd.getCurrencyCode())) {
-								ampCompFund.setCurrency(curr);
-								break;
-							}
-						}
-
-						ampCompFund.setAmpComponentFundingId(fd.getAmpComponentFundingId());
-						ampCompFund.setTransactionAmount(new Double(FormatHelper.parseDouble(fd.getTransactionAmount())));
-
-						ampCompFund.setTransactionDate(DateConversion
-								.getDate(fd.getTransactionDate()));
-						ampCompFund.setAdjustmentType(new Integer(fd
-								.getAdjustmentType()));
-						ampCompFund.setComponent(ampComp);
-						temp.add(ampCompFund);
-					}
-					tempComp.setExpenditures(temp);
-				}
+				/*
 
 				// set physical progress
 
@@ -2636,11 +2587,10 @@ public class SaveActivity extends Action {
 					}
 					tempComp.setPhyProgress(phyProgess);
 				}
-                                tempComp.setComponentId(comp.getComponentId());
-                                tempComp.setType_Id(comp.getType_Id());
-
-                                tempComps.add(tempComp);
+                tempComp.setComponentId(comp.getComponentId());
+                tempComp.setType_Id(comp.getType_Id());
                 activity.getComponents().add(ampComp);
+                */
 			}
 		}
 	}

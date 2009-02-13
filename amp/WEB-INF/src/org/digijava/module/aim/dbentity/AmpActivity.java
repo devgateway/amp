@@ -137,7 +137,8 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	private String comments;
 
 	private String statusReason;
-	private Set components;
+	private Set<AmpComponent> components;
+	private Set<AmpComponentFunding> componentFundings;
 
 	private Date proposedStartDate;
 	private Date actualStartDate;
@@ -699,14 +700,14 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	/**
 	 * @return Returns the components.
 	 */
-	public Set getComponents() {
+	public Set<AmpComponent> getComponents() {
 		return components;
 	}
 	/**
 	 * @param components
 	 *            The components to set.
 	 */
-	public void setComponents(Set components) {
+	public void setComponents(Set<AmpComponent> components) {
 		this.components = components;
 	}
 	/**
@@ -1685,6 +1686,14 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 
 	public void setProjectComments(String projectComments) {
 		this.projectComments = projectComments;
+	}
+
+	public void setComponentFundings(Set<AmpComponentFunding> componentFundings) {
+		this.componentFundings = componentFundings;
+	}
+
+	public Set<AmpComponentFunding> getComponentFundings() {
+		return componentFundings;
 	}
 
 }

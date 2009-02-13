@@ -310,10 +310,10 @@ public class ComponentsUtil {
         Session session = null;
         try {
             session = PersistenceManager.getRequestDBSession();
-            AmpComponent comp = (AmpComponent) session.load(AmpComponent.class, id);
+            AmpComponent comp = (AmpComponent) session.get(AmpComponent.class, id);
             return comp;
         } catch (Exception ex) {
-            ex.printStackTrace(System.out);
+        	logger.error("Unable to get Component:", ex);
         }
         return null;
     }

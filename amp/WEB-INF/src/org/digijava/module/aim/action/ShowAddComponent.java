@@ -214,6 +214,7 @@ public class ShowAddComponent extends Action {
 		newCompo.setTitle(name);
 
 		ComponentsUtil.addNewComponent(newCompo);
+		eaForm.getComponents().setComponentId(newCompo.getAmpComponentId());
 		eaForm.getComponents().setComponentTitle(newCompo.getTitle());
 		eaForm.getComponents().setNewCompoenentName(null);
 		return switchType(mapping, form, request, response);
@@ -228,15 +229,11 @@ public class ShowAddComponent extends Action {
 			List<org.digijava.module.aim.dbentity.AmpComponent> ampComponents = new ArrayList<org.digijava.module.aim.dbentity.AmpComponent>();
 			eaForm.setStep("5");
 
-			Components<FundingDetail> compFund = new Components();
+			Components<FundingDetail> compFund = new Components<FundingDetail>();
 			
 			compFund.setType_Id(eaForm.getComponents().getSelectedType());
-			
-			if (eaForm.getComponents().getComponentId() == null || eaForm.getComponents().getComponentId().longValue() == -1) {
-				compFund.setComponentId(new Long(System.currentTimeMillis()));
-			} else {
-				compFund.setComponentId(eaForm.getComponents().getComponentId());
-			}
+			compFund.setComponentId(eaForm.getComponents().getComponentId());
+				
 			compFund.setTitle(eaForm.getComponents().getComponentTitle());
 			compFund.setAmount(eaForm.getComponents().getComponentAmount());
 			compFund.setDescription(eaForm.getComponents().getComponentDesc());

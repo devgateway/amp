@@ -325,6 +325,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         oldActivity.setCreatedAsDraft(activity.isCreatedAsDraft());
         oldActivity.getClosingDates().clear();
         oldActivity.getComponents().clear();
+        oldActivity.getComponentFundings().clear();
         oldActivity.getDocuments().clear();
         oldActivity.getInternalIds().clear();
         oldActivity.getLocations().clear();
@@ -402,11 +403,17 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         oldActivity.setUpdatedDate(activity.getUpdatedDate());
         if (activity.getClosingDates() != null)
         	oldActivity.getClosingDates().addAll(activity.getClosingDates());
-        if (activity.getComponents() != null)
-        	{
-        		if (oldActivity.getComponents() == null) oldActivity.setComponents(new HashSet());
-        		oldActivity.getComponents().addAll(activity.getComponents());
-        	}
+        
+        
+        if (activity.getComponents() != null){
+        	oldActivity.getComponents().addAll(activity.getComponents());
+        }
+        
+        
+        if(activity.getComponentFundings()!=null){
+        	oldActivity.getComponentFundings().addAll(activity.getComponentFundings());
+        }
+        
         //oldActivity.setDocuments(activity.getDocuments());
         if (activity.getFunding() != null)
         	oldActivity.getFunding().addAll(activity.getFunding());
@@ -782,7 +789,10 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         	  risk=(AmpIndicatorRiskRatings)session.load(AmpIndicatorRiskRatings.class, actInd.getRisk());  
           }          
 
-          AmpCategoryValue categoryValue = (AmpCategoryValue) session.get(AmpCategoryValue.class, actInd.getIndicatorsCategory().getId()); 
+          AmpCategoryValue categoryValue = null;
+          if(actInd.getIndicatorsCategory() != null && actInd.getIndicatorsCategory().getId() != null)
+        	  categoryValue = (AmpCategoryValue) session.get(AmpCategoryValue.class, actInd.getIndicatorsCategory().getId());
+
           
           //try to find connection of current activity with current indicator
           IndicatorActivity indConn=IndicatorUtil.findActivityIndicatorConnection(activity, ind, session);
@@ -989,9 +999,8 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
             queryString += " and con.id not in (" + ids + ")";
         }
        if(ipaAux != null){//if no row is returned there is an Hibernate exception.
-    	   session.delete(queryString);
+    	   //session.delete(queryString); This method has been moved to hibernate.classic.Session.delete() and it's Deprecated
        }
-       //session.flush();
         
        session.flush();
        if (alwaysRollback == false)

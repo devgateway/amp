@@ -86,9 +86,7 @@ function sendForm(){
 </c:if>
 
 <%-- render navigator --%>
-<logic:present name="currentMember" scope="session">
-	<wcf:render ref="navi01" xslUri="/WEB-INF/jpivot/navi/navigator.xsl" xslCache="false"/>
-</logic:present>
+<wcf:render ref="navi01" xslUri="/WEB-INF/jpivot/navi/navigator.xsl" xslCache="false"/>
 <%-- edit mdx --%>
 <logic:present name="currentMember" scope="session">
 	<c:if test="${mdxedit01.visible}">

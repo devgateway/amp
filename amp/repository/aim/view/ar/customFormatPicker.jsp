@@ -22,7 +22,7 @@ function myReset() {
 	aimReportsFilterPickerForm3.customDecimalSymbol.value = ",";
 	aimReportsFilterPickerForm3.customDecimalSymbolTxt.value = "";
 	aimReportsFilterPickerForm3.customDecimalSymbolTxt.disabled = "true";
-	aimReportsFilterPickerForm3.customDecimalPlaces.value = "-1";
+	aimReportsFilterPickerForm3.customDecimalPlaces.value = <%=org.digijava.module.aim.helper.FormatHelper.getDefaultFormat().getMaximumFractionDigits()%>
 	aimReportsFilterPickerForm3.customDecimalPlacesTxt.value = "";
 	aimReportsFilterPickerForm3.customDecimalPlacesTxt.disabled = "true"
 	aimReportsFilterPickerForm3.customUseGrouping.checked = "true";
@@ -61,8 +61,9 @@ function myReset() {
     <td width="20%" height="18" nowrap="nowrap"><html:select styleClass="inp-text" property="customDecimalPlaces"
 				styleId="customDecimalPlaces" onchange="initFormatPopup();">
               <html:option value="-1">
-                <digi:trn key="aim:formatPicket:Disable">Disable</digi:trn>
+                <digi:trn key="aim:formatPicket:NoLimit">No Limit</digi:trn>
               </html:option>
+              <html:option value="0">0</html:option>
               <html:option value="1">1</html:option>
               <html:option value="2">2</html:option>
               <html:option value="3">3</html:option>

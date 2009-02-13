@@ -85,11 +85,27 @@ cursor:pointer;
                 <digi:trn key="contentrepository:publicDocuments">Public Documents</digi:trn></digi:link>
             </li>
             </feature:display>
-			<li style="float:left;"  title='<digi:trn key="aim:clickToViewMoreReports">Click here to view More Reports</digi:trn>'>
-               <a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=false">
-               <digi:trn key="aim:publicReports">Public Reports</digi:trn>
-               </a>
-			</li>            
+			<li class="yuiampmenuitem" style="float:left;">
+				<a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=false" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px"  onclick="return canExit()">
+                    <digi:trn key="aim:publicReports">Public Reports</digi:trn>
+                </a>
+                <a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                	<img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+				</a>
+                <div id="reports" class="yuiampmenu" style="opacity:0.9;">
+                	<div class="bd">                    
+                		<ul>
+            				<module:display name="Off Line Reports" parentModule="REPORTING">
+            					<li class="yuiampmenuitem" style="float:left;">
+                					<digi:link styleClass="yuiampmenuitemlabel" href="/mainreports.do" module="mondrian" >
+                    					<digi:trn key="aim:offlinereports">Off Line Reports</digi:trn>
+                    				</digi:link>
+                				</li>
+            				</module:display>
+            			</ul>
+            		</div>
+            	</div>
+            	            
             <li style="float:left;">
                 <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
                 <digi:trn key="aim:deflanguage">Language</digi:trn>
@@ -416,7 +432,7 @@ function adminHelp(){
 	                                    </module:display>
 										<module:display name="Off Line Reports" parentModule="REPORTING">
                                         <li class="yuiampmenuitem">
-                                            <a class="yuiampmenuitemlabel" href="/mondrian/mainreport.do" onclick="return canExit()">
+                                            <a class="yuiampmenuitemlabel" href="/mondrian/mainreports.do" onclick="return canExit()">
                                             	<digi:trn key="aim:offlinereports">Off Line Reports</digi:trn>
                                             </a>
                                         </li>

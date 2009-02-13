@@ -58,7 +58,7 @@
         <xsl:text> </xsl:text>
         <xsl:choose>
           <xsl:when test="@id">
-            <a href="../../../mondrian/testpage.do?{$token}&amp;{@id}=x">
+            <a href="../../../mondrian/showreport.do?{$token}&amp;{@id}=x">
               <xsl:value-of select="@name"/>
             </a>
           </xsl:when>

@@ -2,16 +2,16 @@
 <!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
 <struts-config>
   <form-beans>
-  	<form-bean name="mainreportform" type="org.digijava.module.mondrian.form.MainReportForm"/>
-  	<form-bean name="testpageform" type="org.digijava.module.mondrian.form.TestPageForm"/>
+  	<form-bean name="MainReportsForm" type="org.digijava.module.mondrian.form.MainReportsForm"/>
+  	<form-bean name="ShowReportForm" type="org.digijava.module.mondrian.form.ShowReportForm"/>
   </form-beans>
   
   <action-mappings>
-    <action name="mainreportform" path="/mondrian/mainreport" scope="session" type="org.digijava.module.mondrian.action.MainReport">
-    	<forward name="forward" path="/showLayout.do?layout=mainreport"/>
+    <action name="MainReportsForm" path="/mondrian/mainreports" scope="session" type="org.digijava.module.mondrian.action.MainReports">
+    	<forward name="forward" path="/showLayout.do?layout=mainreports"/>
     </action>
-    <action name="testpageform" path="/mondrian/testpage" scope="session" type="org.digijava.module.mondrian.action.TestPage">
-    	<forward name="forward" path="/showLayout.do?layout=testpage"/>
+    <action name="ShowReportForm" path="/mondrian/showreport" scope="session" type="org.digijava.module.mondrian.action.ShowReport">
+    	<forward name="forward" path="/showLayout.do?layout=showreport"/>
     </action>
    </action-mappings>
 </struts-config>

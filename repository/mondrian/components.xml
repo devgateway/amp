@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <config>
 <secondary-pages>
-	<page name="mainreport" title="Mondrian Analisys"/>
-	<page name="testpage" title="Mondrian Analisys"/>
+	<page name="mainreports" title="Off Line Reports List"/>
+	<page name="showreport" title="Off Line Report"/>
 </secondary-pages>
 </config>

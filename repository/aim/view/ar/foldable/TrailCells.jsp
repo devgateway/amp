@@ -11,7 +11,7 @@
 <% String display=reportData.getLevelDepth()>2?"display:none":"";%>
 <!-- generate total row -->
 
-<tr id='<bean:write name="reportData" property="absoluteReportName"/>' title='<bean:write name="reportData" property="levelDepth"/>@<bean:write name="reportData" property="relativeRowNo"/>' style="<%=display%>;">
+<tr id='<bean:write name="reportData" property="absoluteReportName"/>' title='<bean:write name="reportData" property="name"/>' style="<%=display%>;">
 	<% if (reportData.getLevelDepth() < 3) { %>
 		<td style=" padding-left:<%=10*(reportData.getLevelDepth()-1)%>; background-color:#BFD2DF;border-bottom:1px solid white;" colspan='<bean:write name="reportData" property="sourceColsCount"/>' class="reportsBorderTD" nowrap>
 	<% } else { %>	

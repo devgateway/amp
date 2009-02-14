@@ -21,6 +21,7 @@ import java.util.Iterator;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.RegionalFunding;
 
 /**
  *
@@ -49,12 +50,26 @@ public class GetFundingTotals extends Action {
                         det.setTransactionType(Constants.DISBURSEMENT);
                     }
                 }
-                compFundingDets = ActivityUtil.createAmpFundingDetails(compFunDets);
+                compFundingDets .addAll(ActivityUtil.createAmpFundingDetails(compFunDets));
 
             }
         }
+        Collection<FundingDetail> regFunDets=new ArrayList<FundingDetail>();
         if (eaForm.getFunding() != null && eaForm.getFunding().getRegionalFundings() != null) {
-            regionalFundingDets = ActivityUtil.createAmpFundingDetails(eaForm.getFunding().getRegionalFundings());
+            Iterator<RegionalFunding> iterRegFund=eaForm.getFunding().getRegionalFundings().iterator();
+            while(iterRegFund.hasNext()){
+                AmpFundingDetail det=new AmpFundingDetail();
+                 RegionalFunding  regFdet = iterRegFund.next();
+                 if (regFdet.getDisbursements() != null && regFdet.getDisbursements().size() > 0) {
+                    Iterator<FundingDetail> detIter = regFdet.getDisbursements().iterator();
+                    while (detIter.hasNext()) {
+                        FundingDetail regDet = detIter.next();
+                        regDet.setTransactionType(Constants.DISBURSEMENT);
+                        regFunDets.add(regDet);
+                    }
+                }
+            }
+            regionalFundingDets = ActivityUtil.createAmpFundingDetails(regFunDets);
         }
         response.setContentType("text/xml");
         OutputStreamWriter outputStream = new OutputStreamWriter(response.getOutputStream());

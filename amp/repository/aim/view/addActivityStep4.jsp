@@ -13,6 +13,7 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 <%@page import="org.digijava.module.aim.helper.FormatHelper"%>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
@@ -44,6 +45,42 @@
 		document.aimEditActivityForm.target = "_self";
 		document.aimEditActivityForm.submit();
 	}
+     function addActionToURL(actionName){
+        var fullURL=document.URL;
+        var lastSlash=fullURL.lastIndexOf("/");
+        var partialURL=fullURL.substring(0,lastSlash);
+        return partialURL+"/"+actionName;
+    }
+        function totalsPage() {
+       var currency=document.aimEditActivityForm.fundingCurrCode.value;
+       var url=addActionToURL('getFundingTotals.do')+'?fundingCurrCode='+currency;
+       var async=new Asynchronous();
+       async.complete=buildFundingTotalsForPage;
+       async.call(url);
+    }
+       function buildFundingTotalsForPage(status, statusText, responseText, responseXML){
+        var root=responseXML.getElementsByTagName('total')[0];
+        var comm=document.getElementById("comms");
+        var disb=document.getElementById("disb");
+        var expn=document.getElementById("expn");
+        var compTot=document.getElementById("regional_disb");
+        var curr=root.getAttribute("curr");
+       var totalComm=root.getAttribute("totalComm");
+        comm.innerHTML="<digi:trn> Commitments - (Grand Total Actual Allocation</digi:trn> "+totalComm+" "+curr+")";
+        disb.innerHTML="<digi:trn> Disbursement - (Total actual to date</digi:trn> "+root.getAttribute("disb")+' '+curr+')';
+        expn.innerHTML="<digi:trn> Expenditure - (Total actual to date</digi:trn>   " +root.getAttribute("expn")+' '+curr+')';
+        compTot.innerHTML="<digi:trn>Regional Grand Total Actual Disbursements</digi:trn>  " +root.getAttribute("regional_disb")+' '+curr+')';
+    }
+
+
+
+
+if(document.addEventListener){
+    document.addEventListener("DOMContentLoaded",totalsPage,false);
+}
+else{
+    window.onload=totalsPage;
+}
 
 	function validateForm() {
 		return true;
@@ -290,35 +327,56 @@ ${fn:replace(message,quote,escapedQuote)}
 																			class="box-border-nopadding">
 																			<logic:notEmpty name="aimEditActivityForm" property="funding.regionalFundings">
 																					<field:display name="Total Donor Commitments" feature="Regional Funding">
-																					<tr><td>
+																					<tr>
+                                                                                        <td>
+                                                                                            &nbsp;&nbsp;<b> <digi:trn>Select currency </digi:trn></b>
+                                                                                                
+                                                                                            <html:select property="fundingCurrCode" styleClass="inp-text" onchange="totalsPage()">
+                                                                                                <c:forEach var="currency" items="${aimEditActivityForm.funding.validcurrencies}">
+                                                                                                    <option value="<c:out value="${currency.currencyCode}"/>">
+                                                                                                        <c:out value="${currency.currencyName}" />
+                                                                                                    </option>
+                                                                                                </c:forEach>
+                                                                                                    
+                                                                                            </html:select>
+                                                                                        </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                        <td>
 																							<b>
+                                                                                               <span  id="comms">
 																							<digi:trn key="aim:donorcommitments">Donor Commitments</digi:trn> - (
 																							<digi:trn key="aim:totalActualAllocation">Total actual
 																							allocation</digi:trn> =
 																							<c:out value="${aimEditActivityForm.funding.totalCommitments}"/>
 																							<c:out value="${aimEditActivityForm.currCode}"/>)
+                                                                                            </span>
 																							</b>
 																						</td></tr>
 																					</field:display>
 																					<field:display name="Total Donor Disbursements" feature="Regional Funding">
-																						<tr><td>
+																						<tr><td >
 																							<b>
+                                                                                                <span id="disb">
 																							<digi:trn key="aim:donordisbursements">Donor Disbursements</digi:trn> - (
 																							<digi:trn key="aim:totalActualToDate">Total actual to date
 																							</digi:trn> =
 																							<c:out value="${aimEditActivityForm.funding.totalDisbursements}"/>
 																							<c:out value="${aimEditActivityForm.currCode}"/>)
+                                                                                            </span>
 																							</b>
 																						</td></tr>
 																				</field:display>
 																				<field:display name="Total Donor Expenditures" feature="Regional Funding">
 																						<tr><td>
 																							<b>
+                                                                                               <span id="expn">
 																							<digi:trn key="aim:expenditures">Expenditures</digi:trn> - (
 																							<digi:trn key="aim:totalActualToDate">Total actual to date
 																							</digi:trn> =
 																							<c:out value="${aimEditActivityForm.funding.totalExpenditures}"/>
 																							<c:out value="${aimEditActivityForm.currCode}"/>)
+                                                                                               </span>
 																							</b>
 																						</td></tr>
 																				</field:display>
@@ -329,9 +387,12 @@ ${fn:replace(message,quote,escapedQuote)}
 																		 color="RED"
 																		</c:if>
 																		>
+                                                                          <span id="regional_disb">
+
 																		<digi:trn key="aim:totalRegionalActualDisbursement">Regional Grand Total Actual Disbursements</digi:trn>=
 																		<c:out value="${aimEditActivityForm.funding.regionTotalDisb}"/>
 																		<c:out value="${aimEditActivityForm.currCode}"/>
+                                                                        </span>
 																		</font></b>
 																		</td></tr>
 

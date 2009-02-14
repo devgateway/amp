@@ -83,9 +83,9 @@ public class GetFundingTotals extends Action {
         xml += "expn=\"" + FormatHelper.formatNumber(cal.getTotActualExp().doubleValue()) + "\" ";
         xml += "curr=\"" + eaForm.getFundingCurrCode() + "\" ";
         calComp.doCalculations(compFundingDets, eaForm.getFundingCurrCode());
-        xml += "comp_disb=\"" + FormatHelper.formatNumber(cal.getTotActualDisb().doubleValue()) + "\" ";
+        xml += "comp_disb=\"" + FormatHelper.formatNumber(calComp.getTotActualDisb().doubleValue()) + "\" ";
         calReg.doCalculations(regionalFundingDets, eaForm.getFundingCurrCode());
-        xml += "regional_disb=\"" + FormatHelper.formatNumber(cal.getTotActualDisb().doubleValue()) + "\" ";
+        xml += "regional_disb=\"" + FormatHelper.formatNumber(calReg.getTotActualDisb().doubleValue()) + "\" ";
         xml += "/>";
         out.println(xml);
         out.close();

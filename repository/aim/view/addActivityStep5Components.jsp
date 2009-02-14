@@ -31,33 +31,46 @@
 
 											<logic:notEmpty name="aimEditActivityForm" property="components.selectedComponents">
 																	<tr><td>
+                                                                           &nbsp;&nbsp;<b> <digi:trn>Select currency </digi:trn></b>
+
+                                                                            <html:select property="fundingCurrCode" styleClass="inp-text" onchange="totalsPage()">
+                                                                                <c:forEach var="currency" items="${aimEditActivityForm.funding.validcurrencies}">
+                                                                                    <option value="<c:out value="${currency.currencyCode}"/>">
+                                                                                        <c:out value="${currency.currencyName}" />
+                                                                                    </option>
+                                                                                </c:forEach>
+
+                                                                            </html:select>
+                                                                                    <br/>
 																		<b><field:display name="Components Grand Total Commitments" feature="Activity - Component Step">
 																		&nbsp;&nbsp;
+                                                                        <span id="comp_comms">
 																			<digi:trn key="aim:commitments">Commitments</digi:trn> - (
 																			<digi:trn key="aim:grantTotalActualAllocation">Grand Total actual
 																			allocation</digi:trn> = 
 																				<%=((org.digijava.module.aim.form.EditActivityForm) pageContext.getAttribute("aimEditActivityForm")).getFunding().getTotalCommitments()%>
 																			
-																			<c:out value="${aimEditActivityForm.currCode}"/>)
+                                                                        <c:out value="${aimEditActivityForm.currCode}"/>)
+                                                                        </span>
 																		<br/></field:display>
 																		<field:display name="Components Grand Total Disbursements" feature="Activity - Component Step">
-																				&nbsp;&nbsp;
+																				&nbsp;&nbsp;<span id="comp_disb">
 																			<digi:trn key="aim:disbursements">Disbursements</digi:trn> - (
 																			<digi:trn key="aim:totalActualToDate">Total actual to date
 																			</digi:trn> =
 																			<%=((org.digijava.module.aim.form.EditActivityForm) pageContext.getAttribute("aimEditActivityForm")).getFunding().getTotalDisbursements()%>
 																			
-																			<c:out value="${aimEditActivityForm.currCode}"/>)
+                                                                                <c:out value="${aimEditActivityForm.currCode}"/>)</span>
 																		<br/>
 																		</field:display>
 																		<field:display name="Components Grand Total Expenditures" feature="Activity - Component Step">
-																		&nbsp;&nbsp;
+																		&nbsp;&nbsp;<span id="comp_expn">
 																			<digi:trn key="aim:expenditures">Expenditures</digi:trn> - (
 																			<digi:trn key="aim:totalActualToDate">Total actual to date
 																			</digi:trn> =
 																			<%=((org.digijava.module.aim.form.EditActivityForm) pageContext.getAttribute("aimEditActivityForm")).getFunding().getTotalExpenditures()%>
 																			
-																			<c:out value="${aimEditActivityForm.currCode}"/>)
+                                                                        <c:out value="${aimEditActivityForm.currCode}"/>)</span>
 																		<br/>
 																		</field:display>
 																		&nbsp;&nbsp;
@@ -67,10 +80,11 @@
 																		 color="RED"
 																		</c:if>
 																		>
+                                                                            <span id="comp_totalDisb">
 																		<digi:trn key="aim:totalComponentActualDisbursement">Component Grand Total Actual Disbursements</digi:trn>=
 																			<aim:formatNumber value="<%=((org.digijava.module.aim.form.EditActivityForm) pageContext.getAttribute("aimEditActivityForm")).getComponents().getCompTotalDisb()%>"/>
 																	
-																		<c:out value="${aimEditActivityForm.currCode}"/>
+																		<c:out value="${aimEditActivityForm.currCode}"/></span>
 																		</font>
 																		</b></td></tr>
 

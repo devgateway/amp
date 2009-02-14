@@ -304,6 +304,9 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
                       currCode = curr.getCurrencyCode();
               }
               eaForm.setCurrCode(currCode);
+              if(eaForm.getFundingCurrCode()==null){
+              eaForm.setFundingCurrCode(currCode);
+              }
       }
 
       /*List prLst = new ArrayList();

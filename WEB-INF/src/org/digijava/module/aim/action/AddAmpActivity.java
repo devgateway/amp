@@ -124,6 +124,8 @@ public class AddAmpActivity extends Action {
       if ("create".equals(action)) 
     	  PermissionUtil.resetScope(session);
     PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
+
+
     //PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
 
     // if user is not logged in, forward him to the home page
@@ -133,7 +135,16 @@ public class AddAmpActivity extends Action {
     //return mapping.findForward("publicPreview");
 
     EditActivityForm eaForm = (EditActivityForm) form;
-    session.setAttribute("selectedSectorsForActivity", eaForm.getSectors().getActivitySectors());  
+    session.setAttribute("selectedSectorsForActivity", eaForm.getSectors().getActivitySectors());
+    String currCode = "";
+    AmpCurrency curr = CurrencyUtil.getAmpcurrency(
+            teamMember.getAppSettings().getCurrencyId());
+    if (curr != null) {
+        currCode = curr.getCurrencyCode();
+    }
+    if (eaForm.getFundingCurrCode() == null) {
+        eaForm.setFundingCurrCode(currCode);
+    }
       
     //START-patch for error redirecting
     String reqStep = (String) request.getAttribute("step");
@@ -1362,6 +1373,7 @@ private ActionForward showStep1(ActionMapping mapping,
 	  for (int i = 1; i < 6; i++)
 	    eaForm.getPlanning().getActRankCollection().add(new Integer(i));
 	}
+  
 
 	if (eaForm.getCosting().getCosts() != null && eaForm.getCosting().getCosts().size() != 0) {
 	  double grandCost = 0;

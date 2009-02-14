@@ -3760,19 +3760,21 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
          * @see GetFundingTotals
          * 
          */
-       public static Collection<AmpFundingDetail> createAmpFundingDetails(Collection fundDets) {
+      public static Collection<AmpFundingDetail> createAmpFundingDetails(Collection fundDets) {
         Collection<AmpFundingDetail> ampFundDets = new ArrayList<AmpFundingDetail>();
-        Iterator<FundingDetail> iter = fundDets.iterator();
-        while (iter.hasNext()) {
-            FundingDetail helperFdet = iter.next();
-            AmpCurrency detCurr = CurrencyUtil.getAmpcurrency(helperFdet.getCurrencyCode());
-            Date date = DateConversion.getDate(helperFdet.getTransactionDate());
-            Double transAmt = new Double(FormatHelper.parseDouble(helperFdet.getTransactionAmount()));
-            if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
-                transAmt *= 1000;
+        if (fundDets != null) {
+            Iterator<FundingDetail> iter = fundDets.iterator();
+            while (iter.hasNext()) {
+                FundingDetail helperFdet = iter.next();
+                AmpCurrency detCurr = CurrencyUtil.getAmpcurrency(helperFdet.getCurrencyCode());
+                Date date = DateConversion.getDate(helperFdet.getTransactionDate());
+                Double transAmt = new Double(FormatHelper.parseDouble(helperFdet.getTransactionAmount()));
+                if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
+                    transAmt *= 1000;
+                }
+                AmpFundingDetail fundDet = new AmpFundingDetail(helperFdet.getTransactionType(), helperFdet.getAdjustmentType(), transAmt, date, detCurr, helperFdet.getFixedExchangeRate());
+                ampFundDets.add(fundDet);
             }
-            AmpFundingDetail fundDet = new AmpFundingDetail(helperFdet.getTransactionType(), helperFdet.getAdjustmentType(), transAmt, date, detCurr, helperFdet.getFixedExchangeRate());
-            ampFundDets.add(fundDet);
         }
         return ampFundDets;
     }

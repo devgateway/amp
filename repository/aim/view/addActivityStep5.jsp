@@ -347,7 +347,7 @@ function removeSelPhyProgress() {
         return partialURL+"/"+actionName;
     }
     function changeCurrency(){
-       currency=document.aimAddComponentForm.fundingCurrCode.value;
+       var currency=document.aimAddComponentForm.fundingCurrCode.value;
        var url=addActionToURL('getFundingTotals.do')+'?fundingCurrCode='+currency;
        var async=new Asynchronous();
        async.complete=buildFundingTotals;
@@ -366,9 +366,37 @@ function removeSelPhyProgress() {
         expn.innerHTML="<digi:trn> Expenditure - (Total actual to date</digi:trn>   " +root.getAttribute("expn")+' '+curr+')';
 
     }
+    function totalsPage() {
+       var currency=document.aimEditActivityForm.fundingCurrCode.value;
+       var url=addActionToURL('getFundingTotals.do')+'?fundingCurrCode='+currency;
+       var async=new Asynchronous();
+       async.complete=buildFundingTotalsForPage;
+       async.call(url);
+    }
+       function buildFundingTotalsForPage(status, statusText, responseText, responseXML){
+        var root=responseXML.getElementsByTagName('total')[0];
+        var comm=document.getElementById("comp_comms");
+        var disb=document.getElementById("comp_disb");
+        var expn=document.getElementById("comp_expn");
+        var compTot=document.getElementById("comp_totalDisb");
+        var curr=root.getAttribute("curr");
+       var totalComm=root.getAttribute("totalComm");
+        comm.innerHTML="<digi:trn> Commitments - (Grand Total Actual Allocation</digi:trn> "+totalComm+" "+curr+")";
+        disb.innerHTML="<digi:trn> Disbursement - (Total actual to date</digi:trn> "+root.getAttribute("disb")+' '+curr+')';
+        expn.innerHTML="<digi:trn> Expenditure - (Total actual to date</digi:trn>   " +root.getAttribute("expn")+' '+curr+')';
+        compTot.innerHTML="<digi:trn key="aim:totalComponentActualDisbursement">Component Grand Total Actual Disbursements</digi:trn>  " +root.getAttribute("comp_disb")+' '+curr+')';
 
+    }
 
+ 
 
+ 
+if(document.addEventListener){
+    document.addEventListener("DOMContentLoaded",totalsPage,false);
+}
+else{
+    window.onload=totalsPage;
+}
 
 
 /*
@@ -817,6 +845,7 @@ function removeSelComponents() {
 </table>
 
 </digi:form>
+
 
 <script language="javascript">
 function editFunding(id)

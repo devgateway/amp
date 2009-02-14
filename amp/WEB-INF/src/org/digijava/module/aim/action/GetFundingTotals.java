@@ -32,6 +32,8 @@ public class GetFundingTotals extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         EditActivityForm eaForm = (EditActivityForm) form;
         FundingCalculationsHelper cal = new FundingCalculationsHelper();
+        FundingCalculationsHelper calComp = new FundingCalculationsHelper();
+        FundingCalculationsHelper calReg = new FundingCalculationsHelper();
         Collection fundDets = eaForm.getFunding().getFundingDetails();
         Collection<AmpFundingDetail> ampFundDets = ActivityUtil.createAmpFundingDetails(fundDets);
         cal.doCalculations(ampFundDets, eaForm.getFundingCurrCode());
@@ -80,9 +82,9 @@ public class GetFundingTotals extends Action {
         xml += "disb=\"" + FormatHelper.formatNumber(cal.getTotActualDisb().doubleValue()) + "\" ";
         xml += "expn=\"" + FormatHelper.formatNumber(cal.getTotActualExp().doubleValue()) + "\" ";
         xml += "curr=\"" + eaForm.getFundingCurrCode() + "\" ";
-        cal.doCalculations(compFundingDets, eaForm.getFundingCurrCode());
+        calComp.doCalculations(compFundingDets, eaForm.getFundingCurrCode());
         xml += "comp_disb=\"" + FormatHelper.formatNumber(cal.getTotActualDisb().doubleValue()) + "\" ";
-        cal.doCalculations(regionalFundingDets, eaForm.getFundingCurrCode());
+        calReg.doCalculations(regionalFundingDets, eaForm.getFundingCurrCode());
         xml += "regional_disb=\"" + FormatHelper.formatNumber(cal.getTotActualDisb().doubleValue()) + "\" ";
         xml += "/>";
         out.println(xml);

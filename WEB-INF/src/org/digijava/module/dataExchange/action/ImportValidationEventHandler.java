@@ -4,16 +4,19 @@ import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.ValidationEventHandler;
 import javax.xml.bind.ValidationEventLocator;
 
+import org.apache.log4j.Logger;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 public class ImportValidationEventHandler implements ValidationEventHandler {
 
+	private static Logger logger = Logger.getLogger(ImportValidationEventHandler.class);
+	
 	public boolean handleEvent(ValidationEvent ve) {
 		// TODO Auto-generated method stub
-		if (ve.getSeverity()==ve.FATAL_ERROR)
-			System.out.print("!!!fatal error!!!");
-		if  (ve .getSeverity()==ve.ERROR) 
-			System.out.print("###ERROR###");
+//		if (ve.getSeverity()==ve.FATAL_ERROR)
+//			logger.error("!!!fatal error!!!");
+//		if  (ve .getSeverity()==ve.ERROR) 
+//			logger.error("###ERROR###");
 		if (ve.getSeverity()==ve.FATAL_ERROR ||  ve .getSeverity()==ve.ERROR) {
 			
             ValidationEventLocator  locator = ve.getLocator();

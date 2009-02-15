@@ -621,6 +621,14 @@
 							   </digi:link>
                             </td>
                           </tr>
+                          <tr>
+                            <td class="f-names" nowrap="nowrap">
+                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>							   
+							   <digi:link href="/export.do" title="" >
+							      <digi:trn key="dataexchange:exporter">Exporter</digi:trn>
+							   </digi:link>
+                            </td>
+                          </tr>
                         </table>
                       </td>
                     </tr>

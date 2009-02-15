@@ -5,7 +5,6 @@ package org.digijava.module.dataExchange.form;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.upload.FormFile;
-import org.digijava.module.dataExchange.dbentity.ActivitySelected;
 import org.digijava.module.dataExchange.dbentity.AmpDEImportLog;
 
 /**

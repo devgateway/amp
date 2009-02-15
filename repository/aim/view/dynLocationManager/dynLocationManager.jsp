@@ -86,6 +86,9 @@
 		//alert(returnString);
 		return returnString;
 	}
+	function simpleSubmit() {
+		document.getElementById("dynLocationManagerForm").submit();
+	}
 
 	
 	/** 
@@ -219,6 +222,9 @@
 						<p>
 							&nbsp;&nbsp;[<a class="functional" onclick="treeObj.expandAll();">Expand</a>]
 							&nbsp;&nbsp;[<a class="functional" onclick="treeObj.collapseAll();treeObj.showHideNode(false, 'DHTMLSuite_treeNode1');">Collapse</a>]
+						</p>
+						<p>
+							<digi:trn>Hide empty countries</digi:trn> <html:checkbox property="hideEmptyCountries" onchange="simpleSubmit();" />
 						</p>
 						<p style="display: none" id="p_tree">
 							<font size="3">

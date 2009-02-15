@@ -15,6 +15,7 @@ public class DynLocationManagerForm extends ActionForm {
 	private String treeStructure;
 	private String unorgLocations;
 	private Long deleteLocationId;
+	private boolean hideEmptyCountries	= true;
 
 	public Collection<AmpCategoryValueLocations> getFirstLevelLocations() {
 		return firstLevelLocations;
@@ -80,6 +81,20 @@ public class DynLocationManagerForm extends ActionForm {
 
 	public void setDeleteLocationId(Long deleteLocationId) {
 		this.deleteLocationId = deleteLocationId;
+	}
+
+	/**
+	 * @return the hideEmptyCountries
+	 */
+	public boolean getHideEmptyCountries() {
+		return hideEmptyCountries;
+	}
+
+	/**
+	 * @param hideEmptyCountries the hideEmptyCountries to set
+	 */
+	public void setHideEmptyCountries(boolean hideEmptyCountries) {
+		this.hideEmptyCountries = hideEmptyCountries;
 	}
 	
 	

@@ -16,18 +16,18 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
 	private Long id;
 	private AmpCategoryClass ampCategoryClass;
 	private String value;
-	private int index;
+	private Integer index;
 	private Set<AmpActivity> activities;
-	private long fieldType;
+	private Long fieldType;
 	
 	private Set<AmpCategoryValue> usedValues;
 	private Set<AmpCategoryValue> usedByValues;
 
-	public long getFieldType() {
+	public Long getFieldType() {
 		return fieldType;
 	}
 
-	public void setFieldType(long fieldType) {
+	public void setFieldType(Long fieldType) {
 		this.fieldType = fieldType;
 	}
 

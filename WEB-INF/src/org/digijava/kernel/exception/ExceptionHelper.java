@@ -72,6 +72,7 @@ public class ExceptionHelper {
         }
 
         exceptionInfo.setSourceURL(RequestUtils.getSourceURL(request));
+        exceptionInfo.setException(cause);
         if (cause != null) {
             exceptionInfo.setErrorMessage(cause.toString());
             exceptionInfo.setUserMessage(cause.getMessage());

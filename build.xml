@@ -330,5 +330,12 @@
 
     <!-- Build project and create distribution-->
     <target name="all" depends="project,dist"/>
+	
+	<target name="ecsJar" description="ECS Client Jar">
+		<jar destfile="ecs-client.jar" 
+			 basedir="${classes}" 
+			 includes="**/*.class"
+			 />
+	</target>
 
 </project>

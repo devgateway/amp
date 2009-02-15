@@ -22,11 +22,14 @@
 
 package org.digijava.module.exception.action;
 
+import java.util.Enumeration;
+
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.error.keeper.ErrorReporting;
 import org.digijava.kernel.exception.ExceptionHelper;
 import org.digijava.kernel.exception.ExceptionInfo;
 import org.digijava.module.exception.form.DigiExceptionReportForm;
@@ -67,6 +70,7 @@ public final class ShowExceptionReport
             exceptionInfo = ExceptionHelper.getExceptioinInfo(request);
         }
         if (exceptionInfo != null) {
+        	Enumeration j = request.getHeaderNames();
         	exceptionInfo.setBackLink(request.getHeader("Referer"));
             formReport.setExceptionInfo(exceptionInfo);
         }
@@ -77,6 +81,9 @@ public final class ShowExceptionReport
             formReport.setName(currentUser.getName());
             formReport.setEmail(currentUser.getEmail());
         }
+        
+        if (exceptionInfo != null && exceptionInfo.getException() != null)
+        	ErrorReporting.handle(exceptionInfo.getException(), null, request);
         
         
         //generate a unique sufix

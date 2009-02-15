@@ -3,6 +3,7 @@
 	<secondary-pages>
 		<page name="exportWizard" title="Export Manager"/>
 		<page name="importWizard" title="Import Manager"/>
+		<page name="importWizardAfterUploadFile" title="Import Manager "/>
 		<page name="indexDE" title="Data Exchange Manager"/>
 	</secondary-pages>
 	<module>

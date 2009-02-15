@@ -13,6 +13,7 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 
+<%@page import="org.digijava.module.dataExchange.utils.DataExchangeUtils;"%>
 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/yahoo-dom-event.js"></script>
 
@@ -53,7 +54,7 @@
 	<br>
 	<br>
 
-  
+  <digi:instance property="deImportForm" />
 	<script type="text/javascript">
 	YAHOOAmp.namespace("YAHOOAmp.amp.dataExchangeImport");
 	YAHOOAmp.amp.dataExchangeImport.numOfSteps	= 4;
@@ -75,17 +76,113 @@
 
     function treeInit() {
       YAHOOAmp.amp.dataExchangeImport.tabView     = new YAHOO.widget.TabView('wizard_container');
-     
+      buildRandomTaskNodeTree();
     }
     
+    //handler for expanding all nodes
+    YAHOOAmp.util.Event.on("expand", "click", function(e) {
+      tree.expandAll();
+      YAHOOAmp.util.Event.preventDefault(e);
+    });
+    
+    //handler for collapsing all nodes
+    YAHOOAmp.util.Event.on("collapse", "click", function(e) {
+      tree.collapseAll();
+      YAHOOAmp.util.Event.preventDefault(e);
+    });
+
+    //handler for checking all nodes
+    YAHOOAmp.util.Event.on("check", "click", function(e) {
+      checkAll();
+      YAHOOAmp.util.Event.preventDefault(e);
+    });
+    
+    //handler for unchecking all nodes
+    YAHOOAmp.util.Event.on("uncheck", "click", function(e) {
+      uncheckAll();
+      YAHOOAmp.util.Event.preventDefault(e);
+    });
+
+
+    YAHOOAmp.util.Event.on("getchecked", "click", function(e) {
+      YAHOOAmp.util.Event.preventDefault(e);
+    });
+
+    //Function  creates the tree and 
+    //builds between 3 and 7 children of the root node:
+      function buildRandomTaskNodeTree() {
+    
+      //instantiate the tree:
+          tree = new YAHOOAmp.widget.TreeView("dataImportTree");
+          
+          
+          <bean:define id="tree" name="deImportForm" property="activityTree" type="org.digijava.module.dataExchange.dbentity.AmpDEImportLog" toScope="page"/>
+          <%= DataExchangeUtils.renderActivityTree(tree) %>
+          
+      //The tree is not created in the DOM until this method is called:
+          tree.draw();
+          //alert(tree.getNodeCount());
+          
+           //x = tree.getNodesByProperty("checkState", "true");
+           //for(i=0; i<x.length;i++){
+           //	alert(x.getNodeByIndex(i).getCheckStyle());
+           //}
+          //alert(tree.getNodeByIndex(2).getCheckStyle());
+      }
+
+
+      function checkAll() {
+          var topNodes = tree.getRoot().children;
+          for(var i=0; i<topNodes.length; ++i) {
+              topNodes[i].checkAll();
+          }
+      }
+
+      function uncheckAll() {
+          var topNodes = tree.getRoot().children;
+          for(var i=0; i<topNodes.length; ++i) {
+              topNodes[i].unCheckAll();
+          }
+      }
+
+      // Gets the labels of all of the fully checked nodes
+      // Could be updated to only return checked leaf nodes by evaluating
+      // the children collection first.
+       function getCheckedNodes(nodes) {
+           nodes = nodes || tree.getRoot().children;
+           checkedNodes = [];
+           for(var i=0, l=nodes.length; i<l; i=i+1) {
+               var n = nodes[i];
+               //if (n.checkState > 0) { // if we were interested in the nodes that have some but not all children checked
+               if (n.checkState === 2) {
+                   checkedNodes.push(n); // just using label for simplicity
+                   alert(n.aid+' '+n.label);
+                   if (n.hasChildren()) {
+                       checkedNodes = checkedNodes.concat(getCheckedNodes(n.children));
+                    }
+               }
+           }
+
+           return checkedNodes;
+       }  
+
 	  function cancelImportManager() {
 	      <digi:context name="url" property="/aim/admin.do" />
 	      window.location="<%= url %>";
 	  }
-
+	  
        function importActivities(){
+       
+       		var mylist=document.getElementById("id_activities");
+			var listitems= mylist.getElementsByTagName("li");
+			if(listitems == null || listitems.length < 1)
+			{
+				alert("Please choose at least one activity to import");
+				return;
+			}
+       		
             var form = document.getElementById('form');
-            form.action = "/dataExchange/import.do~loadFile=true";
+            form.action = "/dataExchange/import.do~saveImport=true";
             form.target="_self"
             form.submit();
       }
@@ -102,7 +199,7 @@
 	</tr>
 	<tr>
 		<td align="left" vAlign="top">
-		<digi:instance property="deImportForm" />
+		
 		<digi:form action="/import.do" method="post" enctype="multipart/form-data" styleId="form">
 		<span id="formChild" style="display:none;">&nbsp;</span>
      
@@ -125,7 +222,7 @@
 					<logic:equal name="fileUploaded" value="false">
 	    				<li id="tab_file_selection" class="selected"><a href="#file_selection"><div>1. File Selection and Staging Area</div></a> </li>
 		    			<li id="tab_log_after_import" class="disabled"><a href="#log_after_import"><div>2. Log after Import</div></a> </li>
-		    			<li id="tab_select_activities" class="disabled"><a href="#select_activities"><div>3. Select Activities</div></a> </li>
+		    			<li id="tab_select_activities" class="enabled"><a href="#select_activities"><div>3. Select Activities</div></a> </li>
 		    			<li id="tab_confirm_import" class="disabled"><a href="#confirm_import"><div>4. Confirm Import</div></a> </li>
 					</logic:equal>
 					
@@ -194,19 +291,35 @@
                     </div>
 				</div>
 				
-				<div id="tab_select_activities"  class="yui-tab-content" align="center" style="padding: 0px 0px 1px 0px; display: none;">
+				<div id="tab_select_activities"  class="yui-tab-content" align="left" style="padding: 0px 0px 1px 0px; display: none;">
                     <c:set var="stepNum" value="2" scope="request" />
                     <jsp:include page="toolbarImport.jsp" />
+                    
+                    <div id="expandcontractdiv" align="left">
+	                    <a id="expand" href="#">Expand all</a>
+	                    <a id="collapse" href="#">Collapse all</a>
+	                  
+	                    <a id="check" href="#">Check all</a>
+	                    <a id="uncheck" href="#">Uncheck all</a>
+                    </div>
+                    
                    <div id="dataImportTree"></div>
 				</div>
-				<div id="tab_confirm_import"  class="yui-tab-content" align="center" style="padding: 0px 0px 1px 0px; display: none;">
+				<div id="tab_confirm_import"  class="yui-tab-content" align="left" style="padding: 0px 0px 1px 0px; display: none;">
                     <c:set var="stepNum" value="3" scope="request" />
                     <jsp:include page="toolbarImport.jsp" />
                     Step 4 Select additional fields
+                    <div align="left">
+					<ul id="id_activities" >
+					</ul>
+					</div>
 				</div>
 				
 			</div>
 		</div>
+		<%= DataExchangeUtils.renderHiddenElements(tree) %>
+		
+		
 
 		</digi:form>
 	</td>

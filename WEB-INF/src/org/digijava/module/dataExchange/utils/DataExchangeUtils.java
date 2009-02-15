@@ -11,6 +11,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -30,7 +32,9 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.AuditLoggerUtil;
+import org.digijava.module.dataExchange.dbentity.AmpDEImportLog;
 import org.digijava.module.dataExchange.dbentity.DEMappingFields;
+import org.digijava.module.dataExchange.type.AmpColumnEntry;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -48,6 +52,37 @@ public class DataExchangeUtils {
 	/**
 	 * @author dan
 	 */
+	
+	static String entityNames[]={
+			"&",	"'",	"\"",	"¢",	"£",	"¤",	"¥",	"¦",	"§",
+			"¨",	"©",	"ª",	"«",	"¬",	"­",	"®",	"¯",	"°",	"±",	"²",	"³",	"´",
+			"µ",	"¶",	"·",	"¸",	"¹",	"º",	"»",	"¼",	"½",	"¾",	"¿",	"×",	"÷",
+			"À",	"Á",	"Â",	"Ã",	"Ä",	"Å",	"Æ",	"Ç",	"È",	"É",	"Ê",	"Ë",	"Ì",
+			"Í",	"Î",	"Ï",	"Ð",	"Ñ",	"Ò",	"Ó",	"Ô",	"Õ",	"Ö",	"Ø",	"Ù",	"Ú",
+			"Û",	"Ü",	"Ý",	"Þ",	"ß",	"à",	"á",	"â",	"ã",	"ä",	"å",	"æ",	"ç",
+			"è",	"é",	"ê",	"ë",	"ì",	"í",	"î",	"ï",	"ð",	"ñ",	"ò",	"ó",	"ô",
+			"õ",	"ö",	"ø",	"ù",	"ú",	"û",	"ü",	"ý",	"þ",	"ÿ", "","","","",""};
+		//entity names to replace entity charactersentityCharacters
+	static String entityCharacters[]={
+			"&amp;",	"&apos;",	"\"",	
+			"&cent;",	"&pound;",	"&curren;",	"&yen;",	"&brvbar;",	"&sect;",	"&uml;",
+			"&copy;",	"&ordf;",	"&laquo;",	"&not;",	"&shy;",	"&reg;",	"&macr;",
+			"&deg;",	"&plusmn;",	"&sup2;",	"&sup3;",	"&acute;",	"&micro;",	"&para;",	
+			"&middot;",	"&cedil;",	"&sup1;",	"&ordm;",	"&raquo;",	"&frac14;",	"&frac12;",
+			"&frac34;",	"&iquest;",	"&times;",	"&divide;",	"&Agrave;",	"&Aacute;",	"&Acirc;",	
+			"&Atilde;",	"&Auml;",	"&Aring;",	"&AElig;",	"&Ccedil;",	"&Egrave;",	"&Eacute;",
+			"&Ecirc;",	"&Euml;",	"&Igrave;",	"&Iacute;",	"&Icirc;",	"&Iuml;",	"&ETH;",	
+			"&Ntilde;",	"&Ograve;",	"&Oacute;",	"&Ocirc;",	"&Otilde;",	"&Ouml;",	"&Oslash;",
+			"&Ugrave;",	"&Uacute;",	"&Ucirc;",	"&Uuml;",	"&Yacute;",	"&THORN;",	"&szlig;",	
+			"&agrave;",	"&aacute;",	"&acirc;",	"&atilde;",	"&auml;",	"&aring;",	"&aelig;",	
+			"&ccedil;",	"&egrave;",	"&eacute;",	"&ecirc;",	"&euml;",	"&igrave;",	"&iacute;",
+			"&icirc;",	"&iuml;",	"&eth;",	"&ntilde;",	"&ograve;",	"&oacute;",	"&ocirc;",
+			"&otilde;",	"&ouml;",	"&oslash;",	"&ugrave;",	"&uacute;",	"&ucirc;",	"&uuml;",	
+			"&yacute;",	"&thorn;",	"&yuml;",  
+			"&lt;" , "&quot;" , "&#x9;" , "&#xA;" , "&#xD;"};
+
+	
+	
 	
 	public static Collection getAmpDEMappingFields() {
 		Session session = null;
@@ -93,7 +128,7 @@ public class DataExchangeUtils {
 		try {
 			//session = PersistenceManager.getSession();
 			session = PersistenceManager.getRequestDBSession();
-			tx = session.beginTransaction();
+			//tx = session.beginTransaction();
 			DEMappingFields demf = new DEMappingFields();
 			if(code == null && value == null) return false;
 			if(code!=null) demf.setImportedFieldCode(code);
@@ -112,7 +147,7 @@ public class DataExchangeUtils {
 			 else demf.setStatus(null);
 			
 			session.save(demf);
-			tx.commit();
+			//tx.commit();
 		}
 		catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
@@ -380,9 +415,9 @@ public class DataExchangeUtils {
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            tx = session.beginTransaction();
+            //tx = session.beginTransaction();
             session.save(object);
-            tx.commit();
+            //tx.commit();
         } catch (Exception e) {
             logger.error("Unable to add");
             e.printStackTrace(System.out);
@@ -547,7 +582,127 @@ public class DataExchangeUtils {
 	        return configs;
 	    }
 	
+	public static String renderActivityTree(AmpDEImportLog node) {
+
+		
+		StringBuffer retValue = new StringBuffer();
+
+		retValue.append(renderActivityTreeNode(node, "tree.getRoot()"));
+
+		return retValue.toString();
+	}
+	
+	private static String renderActivityTreeNode(AmpDEImportLog node, String parentNode) {
+		
+		Pattern pattern = Pattern.compile("[\\]\\[.]");
+		Matcher matcher = pattern.matcher(node.getKey());
+		String key = matcher.replaceAll("");
+		StringBuffer retValue = new StringBuffer();
+		String nodeVarName = "atn_"+ key;
+		String result=node.getObjectNameLogged();
+		result = DataExchangeUtils.convertHTMLtoChar(result);
+		
+		retValue.append("var "+ nodeVarName +" = new YAHOOAmp.widget.TaskNode(\"" +
+				result + "\", " + parentNode + ", ");
+		retValue.append("false , false, false,");
+		retValue.append("\""+key+"\"");
+		retValue.append("); ");
+		retValue.append("\n");
+
+		if (node.getElements() != null){
+			for (AmpDEImportLog subNode : node.getElements()) {
+				retValue.append("\n");
+				retValue.append(renderActivityTreeNode(subNode, nodeVarName));
+				retValue.append("\n");
+			}
+		}			
+		return retValue.toString();
+	}
+	
+	public static String renderHiddenElements(AmpDEImportLog tag){
+//		<input type="hidden" name="activityTags[0].select" value="true">
+	
+		StringBuffer retValue = new StringBuffer();
+
+		
+		retValue.append("<input type=\"hidden\" ");
+
+		Pattern pattern = Pattern.compile("[\\]\\[.]");
+		Matcher matcher = pattern.matcher(tag.getKey());
+
+		retValue.append("id=\"");
+		retValue.append("id_"+ matcher.replaceAll(""));
+		retValue.append("\" ");
+		retValue.append("name=\"");
+//			retValue.append("activityTags["+list.indexOf(tag)+"].select");
+		retValue.append(tag.getKey());
+		retValue.append("\" ");
+		retValue.append("value=\"");
+		retValue.append("false");
+		retValue.append("\" ");
+		retValue.append("/>");
+		retValue.append("\n");
+		
+		if (tag.getElements() != null){
+			for (AmpDEImportLog subNode : tag.getElements()) {
+				retValue.append(renderHiddenElements(subNode));
+			}
+		}
+
+		
+		
+		return retValue.toString();
+	}
+
     
+	public static String convertHTMLtoChar(String tempIdref){
+		String result = tempIdref;
+		for(int x=0;x<entityCharacters.length;x++){
+			if(result.contains(entityCharacters[x]))
+				{
+					if(entityCharacters[x].equals("&#xd")){
+						result = result.replaceAll(entityCharacters[x]+"  ", entityNames[x]);
+					}
+					else result = result.replaceAll(entityCharacters[x], entityNames[x]);
+				}
+		}
+		return result.replaceAll("\n", "");
+	}
+	public static String convertEntityCharacters(String tempIdref){
+		System.out.println("Attempting conversion...");
+			//temp replacement string
+		String replaceStr=null;
+		
+			/*
+			 *	for the given string, loop though each entity
+			 * 	character and replace each with the entity 
+			 * 	name
+			 */
+		for(int x=0;x<entityCharacters.length;x++){
+			
+				// Compile regular expression
+		    String patternStr = "("+entityCharacters[x]+")";
+ 
+		    //System.out.print("Find "+patternStr+"\t");				//testing system.out
+		    
+		    	//value to replace within string
+		    replaceStr=entityNames[x];
+		   // System.out.print("\tReplace with "+replaceStr);			//testing system.out
+		    
+		    //compile the pattern
+		    Pattern pattern = Pattern.compile(patternStr);
+		    	// Replace all embedded entities with 
+		    Matcher matcher = pattern.matcher(tempIdref);
+	    		//replace with entity name
+		    tempIdref = matcher.replaceAll(replaceStr);	
+		    
+		   // System.out.print("\tnew Results:\t"+tempIdref+"\n");		//testing system.out
+		}
+			//return newly modified string
+		return tempIdref;
+	}	
+	
+	
 }
 
 

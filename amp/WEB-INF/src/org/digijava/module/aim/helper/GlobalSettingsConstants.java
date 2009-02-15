@@ -48,5 +48,11 @@ public class GlobalSettingsConstants {
     public static final String AUTO_LOGIN = "Activate Auto Login";
     
     public static final String ALERT_IF_DISBURSMENT_BIGGER_COMMITMENTS = "Alert if sum of disbursments is bigger than sum of commitments";
+    
+    public static final String ECS_ENABLED = "ECS Enabled";
+    
+    public static final String AMP_SERVER_NAME= "AMP Server Name";
+    
+    
 
 }

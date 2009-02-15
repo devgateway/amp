@@ -25,8 +25,8 @@ import org.codehaus.swizzle.confluence.Page;
 import org.codehaus.swizzle.confluence.PageSummary;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.error.AMPUncheckedException;
-import org.dgfoundation.amp.error.ErrorReporting;
 import org.dgfoundation.amp.error.ExceptionFactory;
+import org.dgfoundation.amp.error.keeper.ErrorReporting;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.ActivityUtil;
@@ -112,8 +112,6 @@ public class LuceneIndex extends Action {
 						  //wrap again with a unexistang tag
 						  AMPException a3 = new AMPException(a2);
 						  a3.addTag("categories");
-						  
-						  ErrorReporting.handle(a3, logger);
 						  
 						  throw a3;
 					  }

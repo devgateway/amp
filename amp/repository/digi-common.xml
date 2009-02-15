@@ -80,6 +80,10 @@
             <description>This service will delete the audit log</description>
     </service>
 
+	<service id="ampSyncECSService" class="org.dgfoundation.amp.error.quartz.ECSService">
+            <description>This service will sync error log with ECS Server</description>
+    </service>
+
      <config-bean id="proxyHelperConfig" class="org.digijava.kernel.util.ProxyHelperConfig">
           <property name="initializeUser">false</property>
      </config-bean>

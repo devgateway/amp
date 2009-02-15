@@ -40,8 +40,17 @@ public class ExceptionInfo {
     private String moduleName;
     private String instanceName;
     private long timestamp;
+    private Throwable exception;
 
-    public Integer getExceptionCode() {
+    public Throwable getException() {
+		return exception;
+	}
+
+	public void setException(Throwable exception) {
+		this.exception = exception;
+	}
+
+	public Integer getExceptionCode() {
         return exceptionCode;
     }
 

@@ -7,6 +7,7 @@ import java.util.Iterator;
 import javax.servlet.http.HttpSession;
 
 import mondrian.mdx.MdxVisitorImpl;
+import mondrian.web.servlet.MDXQueryServlet;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -17,12 +18,16 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.mondrian.dbentity.EntityHelper;
 import org.digijava.module.mondrian.dbentity.OffLineReports;
 import org.digijava.module.mondrian.form.MainReportsForm;
+import org.olap4j.impl.Olap4jUtil;
 import org.olap4j.query.Query;
 
 import com.tonbeller.jpivot.mondrian.MondrianModel;
+import com.tonbeller.jpivot.olap.mdxparse.parser;
+import com.tonbeller.jpivot.olap.model.OlapModelDecorator;
 import com.tonbeller.jpivot.olap.navi.MdxQuery;
 import com.tonbeller.jpivot.olap.query.MdxOlapModel;
 import com.tonbeller.jpivot.olap.query.QueryAdapter;
+import com.tonbeller.jpivot.tags.OlapModelProxy;
 
 /**
  * 
@@ -78,7 +83,6 @@ public class MainReports extends Action {
 	}
 
 	private Collection<String> getColumns(OffLineReports report) {
-		MdxVisitorImpl mdv = new MdxVisitorImpl();
 		return null;
 	}
 }

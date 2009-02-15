@@ -36,6 +36,8 @@
 <input type="hidden" name="id">
 <jsp:include page="../../aim/view/teamPagesHeader.jsp" flush="true" />
 
+<DIV id="TipLayer"
+  style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
 	<tr>
     	<td width=14>&nbsp;</td>
@@ -76,6 +78,8 @@
                     						<digi:trn key="aim:reportType">Type</digi:trn>
                    	 					</b>
                     				</td>
+                    				<td bgColor=#999999 align="center" height="20">
+                    				</td>
                     				<logic:present name="currentMember" scope="session">
                     				<bean:define id="member" name="currentMember" scope="session" />
                             		<c:if test="${member.teamHead == true && member.teamAccessType == 'Management'}">
@@ -115,6 +119,24 @@
                                   	<digi:trn key="aim:donorType">donor</digi:trn>
 	                        	  </li>
 	                        </td>
+	                         <td width="200">  
+	                                <div style='position:relative;display:none;' id='report-<bean:write name="report" property="id"/>'> 
+	                                  <li>
+	                                  	<bean:write name="report" property="columns"/>                                      
+	                                  </li>
+	                                </div>
+	                                <span align="center" style="text-transform: capitalize;" onMouseOver="stm(['<digi:trn key="aim:teamreports:columns">columns</digi:trn>',document.getElementById('report-<bean:write name="report" property="id"/>').innerHTML],Style[0])" onMouseOut="htm()">[ <u style="text-transform:capitalize;" ><digi:trn key="aim:teamreports:columns">Columns</digi:trn></u> ]&nbsp;
+	                                </span>
+	                                
+	                               	<div style='position:relative;display:none;' id='measure-<bean:write name="report" property="id"/>'> 
+	                                  <li>
+	                                  	<bean:write name="report" property="measures"/>  	                                      
+	                                   </li>
+	                                </div>
+	                                <span align="center" style="text-transform: capitalize;white-space: no-wrap;"  onMouseOver="stm(['<digi:trn key="aim:teamreports:measures">measures</digi:trn>',document.getElementById('measure-<bean:write name="report" property="id"/>').innerHTML],Style[1])" onMouseOut="htm()">[ <u><digi:trn key="aim:teamreports:measures">Measures</digi:trn></u> ]<br />
+	                                </span>
+	                            </td>
+                                
                         	<logic:present name="currentMember" scope="session">
                             <c:if test="${member.teamHead == true && member.teamAccessType == 'Management'}">
 								<td align="center">

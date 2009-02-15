@@ -23,7 +23,7 @@
 		<property column="ISO3" length="3" name="iso3" type="java.lang.String" />
 		<property column="ISO" length="3" name="iso" type="java.lang.String" unique-key="iso_key" />
 		
-		<set name="childLocations" inverse="true" lazy="true" cascade="all-delete-orphan">
+		<set name="childLocations" inverse="true" lazy="true" cascade="all-delete-orphan" order-by="location_name">
 			<key column="parent_location"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" />
 		</set>

@@ -68,7 +68,7 @@ public class DynamicLocationManager extends MultiAction {
 		
 		rootLocations						= DynLocationManagerUtil.getHighestLayerLocations(implLocClass, myForm, errors);		
 		myForm.setFirstLevelLocations(
-				this.correctStructure(rootLocations, implLocClass.getPossibleValues(), 0)
+				this.correctStructure(rootLocations, implLocClass.getPossibleValues(), 0, myForm.getHideEmptyCountries() )
 		);
 		myForm.setNumOfLayers( implLocClass.getPossibleValues().size() );
 		myForm.setFirstLayerId( implLocClass.getPossibleValues().get(0).getId() );
@@ -90,17 +90,25 @@ public class DynamicLocationManager extends MultiAction {
 			oldParent.getChildLocations().add(newParent);
 		}
 		
-		/* The childrens point of view */
+		/* The children point of view */
 		Iterator<AmpCategoryValueLocations> iter	= children.iterator();
 		while ( iter.hasNext() ) {
 			iter.next().setParentLocation(newParent);
 		}
 	}
-	private Collection<AmpCategoryValueLocations> correctStructure( Collection<AmpCategoryValueLocations> sameParentLocations, List<AmpCategoryValue> implLocValues, int layer) {
+	private Collection<AmpCategoryValueLocations> correctStructure( Collection<AmpCategoryValueLocations> sameParentLocations, 
+							List<AmpCategoryValue> implLocValues, int layer, boolean hideEmpyCountries) {
 		if ( sameParentLocations == null || sameParentLocations.size() == 0 )
 			return null;
-		
 		int largestLayerIndex											= 0;
+		int countryLayerIndex											= 0;
+		try {
+			AmpCategoryValue countryLayer									= 
+				CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+			countryLayerIndex											= countryLayer.getIndex();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		HashMap<Integer, Set<AmpCategoryValueLocations>> layerToLocMap	= new HashMap<Integer, Set<AmpCategoryValueLocations>>();
 		
 		Collection<AmpCategoryValueLocations> myLocations				= sameParentLocations;
@@ -116,6 +124,8 @@ public class DynamicLocationManager extends MultiAction {
 				layerSet					= new TreeSet<AmpCategoryValueLocations>(DynLocationManagerUtil.alphabeticalLocComp);
 				layerToLocMap.put(currentLayer, layerSet);
 			}
+			if ( currentLayer == countryLayerIndex && loc.getChildLocations().size() == 0 )
+				continue;
 			layerSet.add(loc);
 		}
 		for ( int i=largestLayerIndex; i > layer; i--){
@@ -141,7 +151,7 @@ public class DynamicLocationManager extends MultiAction {
 		while ( iter.hasNext() ) {
 			AmpCategoryValueLocations loc	= iter.next();
 			if ( loc.getChildLocations() != null && loc.getChildLocations().size() > 0 ) {
-				correctStructure(loc.getChildLocations(), implLocValues, loc.getParentCategoryValue().getIndex()+1);
+				correctStructure(loc.getChildLocations(), implLocValues, loc.getParentCategoryValue().getIndex()+1, hideEmpyCountries);
 			}
 		}
 		

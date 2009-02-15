@@ -16,7 +16,9 @@ public class OffLineReports {
 	private AmpTeamMember ownerId;
 	private Long teamid;
 	private Boolean publicreport;
-
+	private String measures;
+	private String columns;
+	
 	public long getId() {
 		return id;
 	}
@@ -63,6 +65,22 @@ public class OffLineReports {
 
 	public void setPublicreport(Boolean publicreport) {
 		this.publicreport = publicreport;
+	}
+
+	public String getMeasures() {
+		return measures;
+	}
+
+	public void setMeasures(String measures) {
+		this.measures = measures;
+	}
+
+	public String getColumns() {
+		return columns;
+	}
+
+	public void setColumns(String columns) {
+		this.columns = columns;
 	}
 
 	

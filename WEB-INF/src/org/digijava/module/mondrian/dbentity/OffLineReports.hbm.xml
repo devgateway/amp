@@ -13,6 +13,8 @@
 		<property name="query" column="query" type="text" />
 		<property name="teamid" column="teamid" type="java.lang.Long"/>
 		<property name="publicreport" column="ispublic" type="java.lang.Boolean"/>
+		<property name="measures" column="measures" type="java.lang.String"/>
+		<property name="columns" column="columns" type="java.lang.String"/>
 		<many-to-one name="ownerId" column="ownerId" class="org.digijava.module.aim.dbentity.AmpTeamMember" />
 	</class>
 </hibernate-mapping>

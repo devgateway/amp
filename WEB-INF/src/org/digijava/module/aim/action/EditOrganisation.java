@@ -111,32 +111,86 @@ public class EditOrganisation
     //
     // Add sectors
     if (request.getParameter("addSector") != null) {
-      ActivitySector sect = (ActivitySector) session.getAttribute(
-          "sectorSelected");
-      session.removeAttribute("sectorSelected");
+   	  Object searchedsector = session.getAttribute("add");
+   	  Collection<ActivitySector> prevSelSectors = editForm.getSectors();
+      if (searchedsector != null && searchedsector.equals("true")) {
+    	Collection selectedSecto = (Collection) session.getAttribute("sectorSelected");
+    	
+   		if (selectedSecto != null) {
+			Iterator<ActivitySector> itre = selectedSecto.iterator();
+			while (itre.hasNext()) {
+				ActivitySector selectedSector = (ActivitySector) itre.next();
 
-      Collection<ActivitySector> prevSelSectors = editForm.getSectors();
-      if (prevSelSectors != null) {
-        if (prevSelSectors.isEmpty())
-          sect.setSectorPercentage(new Float(100));
-        Iterator<ActivitySector> i = prevSelSectors.iterator();
-        boolean ok = true;
-        while (i.hasNext()) {
-          ActivitySector e = i.next();
-          if (e.getSectorId().equals(sect.getSectorId())) {
-            ok = false;
-            break;
+				boolean addSector = true;
+				if (prevSelSectors != null) {
+					Iterator<ActivitySector> itr = prevSelSectors
+					.iterator();
+			      while (itr.hasNext()) {
+				    ActivitySector sect = (ActivitySector) itr.next();
+		            if (selectedSector.getSectorId().equals(sect.getSectorId())) {
+		            	addSector = false;
+		                break;
+		            }
+			      }  
+				}
+				if(addSector){
+	              if (prevSelSectors != null) {
+	                Iterator iter = prevSelSectors.iterator();
+	                boolean firstSecForConfig = true;
+                    while (iter.hasNext()) {
+                      ActivitySector actSect = (ActivitySector) iter.next();
+                      if (actSect.getSectorId().equals(selectedSector.getSectorId())) {
+                        if(actSect.getSectorPercentage() != null && actSect.getSectorPercentage()==100f){
+                          actSect.setSectorPercentage(0f);
+                        }	
+                        firstSecForConfig = false;
+                        break;
+                      }
+                    }
+                    if (firstSecForConfig) {
+	                  selectedSector.setSectorPercentage(100f);
+	                }
+	                prevSelSectors.add(selectedSector);
+	              } 
+	              else {
+	                selectedSector.setSectorPercentage(new Float(100));
+	                prevSelSectors = new ArrayList<ActivitySector> ();
+	                prevSelSectors.add(selectedSector);
+	              }
+               }
+			   editForm.setSectors(prevSelSectors);	
+			}
+   		}
+		session.removeAttribute("sectorSelected");
+		session.removeAttribute("add");
+      }
+      else{
+        ActivitySector sect = (ActivitySector) session.getAttribute(
+          "sectorSelected");
+        session.removeAttribute("sectorSelected");
+        //Collection<ActivitySector> prevSelSectors = editForm.getSectors();
+        if (prevSelSectors != null) {
+          if (prevSelSectors.isEmpty())
+            sect.setSectorPercentage(new Float(100));
+          Iterator<ActivitySector> i = prevSelSectors.iterator();
+          boolean ok = true;
+          while (i.hasNext()) {
+            ActivitySector e = i.next();
+            if (e.getSectorId().equals(sect.getSectorId())) {
+              ok = false;
+              break;
+            }
           }
+          if (ok)
+            prevSelSectors.add(sect);
         }
-        if (ok)
+        else {
+          sect.setSectorPercentage(new Float(100));
+          prevSelSectors = new ArrayList<ActivitySector>();
           prevSelSectors.add(sect);
+        }
+        editForm.setSectors(prevSelSectors);
       }
-      else {
-        sect.setSectorPercentage(new Float(100));
-        prevSelSectors = new ArrayList<ActivitySector>();
-        prevSelSectors.add(sect);
-      }
-      editForm.setSectors(prevSelSectors);
       return mapping.findForward("forward");
     }
     // Remove sectors

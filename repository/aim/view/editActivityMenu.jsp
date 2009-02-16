@@ -11,7 +11,6 @@
 
 
 
-
 <div id="mySave" style="display: none">
 	<div id="mySaveContent" class="content">
 		<table width="100%" border="0" cellspacing="2" cellpadding="2" align="center" class="box-border-nopadding">
@@ -26,7 +25,6 @@
 		</table>
 	</div>
 </div>
-
 
 <script type="text/javascript">
 		YAHOOAmp.namespace("YAHOOAmp.amptab");
@@ -72,10 +70,14 @@
 	
 	window.onload = function() {
         //current.apply(current);
-		if(document.aimEditActivityForm.step.value=="1"){
-			initStep1Scripts();
-		}        
-		initScripts();
+        if(document.aimEditActivityForm.step.value=="1"){
+        	initStep1Scripts();
+        }
+        if(document.aimEditActivityForm.step.value=="2"){
+        	initSectorScript();
+        }
+
+        initScripts();
    	};
 		
 </script>

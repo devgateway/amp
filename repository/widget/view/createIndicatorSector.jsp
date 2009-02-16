@@ -6,60 +6,65 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<jsp:include page="/repository/aim/view/addSectors.jsp" flush="true" />
 <script type="text/javascript">
     <!--
+    window.onload=initSectorScript();
     function addSectors() {
-        openNewWindow(600, 450);
-          <digi:context name="selSec" property="context/aim/selectSectors.do" />
-                  document.gisIndicatorSectorRegionForm.action = "${selSec}";
-                  document.gisIndicatorSectorRegionForm.target = popupPointer.name;
-                  document.gisIndicatorSectorRegionForm.submit();
-              }
+       /*openNewWindow(600, 450);
+       <digi:context name="selSec" property="context/aim/selectSectors.do" />
+       document.gisIndicatorSectorRegionForm.action = "${selSec}";
+       document.gisIndicatorSectorRegionForm.target = popupPointer.name;
+       document.gisIndicatorSectorRegionForm.submit();
+       */
+       myAddSectors("");
+    }
               
-              function addSector(param)
-              {
-                <digi:context name="addSec" property="context/widget/indSectRegManager.do~actType=selectSector" />
-                        document.gisIndicatorSectorRegionForm.action = "${addSec}";
-                        document.gisIndicatorSectorRegionForm.target = "_self";
-                        document.gisIndicatorSectorRegionForm.submit();
-                    }
-                    function validate(){
-                        if(document.gisIndicatorSectorRegionForm.selIndicator.value=='-1'){
-                            alert("please select indicator");
-                            return false;
-                        }
-                        if(document.gisIndicatorSectorRegionForm.sectorHidden.value==''){
-                            alert("please select sector");
-                            return false;
-                        }
-                        if(document.gisIndicatorSectorRegionForm.selRegionId.value=='-1'){
-                            alert("please select region");
-                            return false;
-                        }
-                        
-                        save();
-                    }
+    function addSector(param){
+       <digi:context name="addSec" property="context/widget/indSectRegManager.do~actType=selectSector" />
+       document.gisIndicatorSectorRegionForm.action = "${addSec}";
+       document.gisIndicatorSectorRegionForm.target = "_self";
+       document.gisIndicatorSectorRegionForm.submit();
+    }
+    function validate(){
+       if(document.gisIndicatorSectorRegionForm.selIndicator.value=='-1'){
+           alert("please select indicator");
+           return false;
+       }
+       if(document.gisIndicatorSectorRegionForm.sectorHidden.value==''){
+           alert("please select sector");
+           return false;
+       }
+       if(document.gisIndicatorSectorRegionForm.selRegionId.value=='-1'){
+           alert("please select region");
+           return false;
+       }
+       
+       save();
+    }
                     
-                    function cancel(){
-                     <digi:context name="addEditIndVal" property="/widget/indSectRegManager.do~actType=cancel" />
-                      document.gisIndicatorSectorRegionForm.action = "${addEditIndVal}";
-                      document.gisIndicatorSectorRegionForm.submit();
-                      }
-                      
-                      /*
-                      * we need this save method because 
-                      *  someone may press cancel 
-                      *  on the sector selection popup
-                      */
-                function save(){
-                <digi:context name="addEditIndVal" property="/widget/indSectRegManager.do~actType=save" />
-                document.gisIndicatorSectorRegionForm.action = "${addEditIndVal}";
-                document.gisIndicatorSectorRegionForm.target = "_self";
-                document.gisIndicatorSectorRegionForm.submit();
-            }
-            //-->
-            
+    function cancel(){
+       <digi:context name="addEditIndVal" property="/widget/indSectRegManager.do~actType=cancel" />
+       document.gisIndicatorSectorRegionForm.action = "${addEditIndVal}";
+       document.gisIndicatorSectorRegionForm.submit();
+    }
+              
+    /*
+    * we need this save method because 
+    *  someone may press cancel 
+    *  on the sector selection popup
+    */
+    function save(){
+       <digi:context name="addEditIndVal" property="/widget/indSectRegManager.do~actType=save" />
+       document.gisIndicatorSectorRegionForm.action = "${addEditIndVal}";
+       document.gisIndicatorSectorRegionForm.target = "_self";
+       document.gisIndicatorSectorRegionForm.submit();
+    }
+    //-->
 </script>
+
 <digi:instance property="gisIndicatorSectorRegionForm" />
 <digi:form action="/indSectRegManager.do~actType=save">
     <input type="hidden" value="${gisIndicatorSectorRegionForm.sector}" name="sectorHidden"/>

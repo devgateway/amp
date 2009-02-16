@@ -17,6 +17,7 @@
 <script language="JavaScript" type="text/javascript">
     function addSector(param)
     {
+        
         <digi:context name="addSec" property="context/addActivity.do?addSector=true&edit=param" />
         document.aimEditActivityForm.action = "<%= addSec %>";
         document.aimEditActivityForm.target = "_self";

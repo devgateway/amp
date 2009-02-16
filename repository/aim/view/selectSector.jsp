@@ -14,12 +14,12 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
-<logic:present name="addButton" scope="request">
-	<script language="JavaScript">
-	    window.opener.addSector();
-		window.close();
-	</script>
-</logic:present>
+<!--<logic:present name="addButton" scope="request">-->
+<!--	<script language="JavaScript">-->
+<!--//	    window.opener.addSector();-->
+<!--//		window.close();-->
+<!--	</script>-->
+<!--</logic:present>-->
 		
 <script language="JavaScript">
 
@@ -171,9 +171,9 @@ function checkNumeric(objName,comma,period,hyphen)
 
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
 	<tr><td vAlign="top">
-		<logic:present name="addButton" scope="request">
-			<b>YAP!</b>
-		</logic:present>
+<!--		<logic:present name="addButton" scope="request">-->
+<!--			<b>YAP!</b>-->
+<!--		</logic:present>-->
 		<logic:present name="errSector" scope="request">
 			<font color="red">
 				<div align="center">
@@ -307,15 +307,15 @@ function checkNumeric(objName,comma,period,hyphen)
 											<table cellPadding=5>
 												<tr>
 													<td> 
-														<html:submit styleClass="dr-menu"  property="addButton" >
+														<html:button styleClass="dr-menu"  property="addButton" onclick="buttonAdd()">
 															<digi:trn key="btn:add">Add</digi:trn> 
-														</html:submit>
+														</html:button>
 														
 													</td>
 													<td>
-														<html:reset styleClass="dr-menu" property="resetButton" onclick="reloadSector(1)">
+														<html:button styleClass="dr-menu" property="resetButton" onclick="resetSectors()">
 															<digi:trn key="btn:clear">Clear</digi:trn> 
-														</html:reset>
+														</html:button>
 													</td>
 													<td>
 														 <html:button  styleClass="dr-menu" property="closeButton"  onclick="closeWindow()">

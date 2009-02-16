@@ -8,13 +8,14 @@
 
 
 
-<logic:present name="addButton" scope="request">
-	<b>YAP!</b>
-	<script language="JavaScript">
-        window.opener.addSector();
-        window.close();
-	</script>
-</logic:present>
+<!--<logic:present name="addButton" scope="request">-->
+<!--	<b>YAP!</b>-->
+<!--	<script language="JavaScript">-->
+<!--//        window.opener.addSector();-->
+<!--//        window.close();-->
+<!---->
+<!--	</script>-->
+<!--</logic:present>-->
 
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
@@ -284,9 +285,9 @@
 												<tr>
 													<td>
 
-														<html:submit styleClass="dr-menu" property="addButton">
+														<html:button styleClass="dr-menu" property="addButton" onclick="addSelectedSectors()">
 															<digi:trn key="btn:add">Add</digi:trn>
-														</html:submit>
+														</html:button>
 
 													</td>
 													<td>
@@ -337,9 +338,9 @@
 
 									<digi:trn key="aim:clickToViewNextPage">Click here to goto Next Page</digi:trn>
 											</c:set>
-											<digi:link href="/searchSectors.do" name="urlParams1" title="${translation}" >
+											<a href="javascript:selectPageSectors('${urlParams1}')" title="${translation}">
 												<%=pages%>
-											</digi:link>
+											</a>
 										</c:if>
 										|&nbsp;
 									</logic:iterate>

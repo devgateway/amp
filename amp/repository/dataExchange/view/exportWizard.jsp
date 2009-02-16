@@ -28,6 +28,7 @@
     <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/treeview.css" />
     <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/fonts-min.css" />
     <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css" />
+    <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/styles.css" />
 
     <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/logger-min.js"></script>
     <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/treeview-debug.js"></script>
@@ -71,7 +72,7 @@
   
 	<script type="text/javascript">
 	YAHOOAmp.namespace("YAHOOAmp.amp.dataExchange");
-	YAHOOAmp.amp.dataExchange.numOfSteps	= 3;
+	YAHOOAmp.amp.dataExchange.numOfSteps	= 2; // have to be 3 when we include additional fields
 		
 	YAHOOAmp.amp.dataExchange.tabLabels	= new Array("tab_select_filed", "tab_additional_filed", "tab_filter");
 		
@@ -134,6 +135,7 @@
 
       //The tree is not created in the DOM until this method is called:
           tree.draw();
+          cancelFilter();
       }
 
 //    var callback = null;
@@ -210,12 +212,25 @@
           document.getElementById('primarySectorsId').selectedIndex=-1;
           document.getElementById('secondarySectorsId').selectedIndex=-1;
           document.getElementById('teamId').selectedIndex=0;
+    	  disableExportButton();
+          
       }
+
+      function changeTeam(){
+    	  var selTeamId = document.getElementById('teamId');
+
+          if (selTeamId.value != "-1"){
+        	  enableExportButton();
+          } else {
+        	  disableExportButton();
+          }             
+      }
+          
 		YAHOOAmp.util.Event.addListener(window, "load", treeInit) ;
 	</script>
 
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="85%">
+<table bgColor=#ffffff cellPadding=10 cellSpacing=0 width="900px">
 	<tr>
 		<td valign="bottom">
 				
@@ -237,7 +252,9 @@
 		<div id="wizard_container" class="yui-navset">
     		<ul class="yui-nav">
     			<li id="tab_select_filed" class="selected"><a href="#type_step_div"><div>1. Field Selection</div></a> </li>
-    			<li id="tab_additional_filed" class="enabled"><a href="#columns_step_div"><div>2. Additional Fields</div></a> </li>
+<%--
+     			<li id="tab_additional_filed" class="enabled"><a href="#columns_step_div"><div>2. Additional Fields</div></a> </li>
+--%>
     			<li id="hierachies_tab_label" class="enabled"><a href="#hierarchies_step_div"><div>3. Team Selection and Filters</div></a> </li>
     		</ul>
 			<div class="yui-content" style="background-color: #EEEEEE">
@@ -268,11 +285,13 @@
     					</table>
 					</div>
 				</div>
+<%--   temporoary removed.      
 				<div id="tab_additional_filed"  class="yui-tab-content" align="center" style="padding: 0px 0px 1px 0px; display: none;">
                     <c:set var="stepNum" value="1" scope="request" />
                     <jsp:include page="toolbar.jsp" />
                     Select additional fields
 				</div>
+--%>
 				<div id="tab_filter"  class="yui-tab-content"  style="padding: 0px 0px 1px 0px; display: none;">
                     <c:set var="stepNum" value="2" scope="request" />
                     <jsp:include page="toolbar.jsp" />
@@ -281,13 +300,9 @@
                         <td width="46%" style="vertical-align: top;">
 	                       <span class="list_header">Donors</span>
                            <br/>
-<%--                          
-                           <div id="reportGroupDiv" style="padding: 15px 15px 15px 15px; border: 1px solid gray; background-color: white;  position: relative;">
-                             <span class="list_header" >Donor Type</span>
---%>
                              <span >Donor Type</span>
                              <br/>
-                             <html:select name="deExportForm" property="donorTypeSelected" styleId="donorTypeId" style="width: 400px;" multiple="true" size="3">
+                             <html:select name="deExportForm" property="donorTypeSelected" styleClass="inp-text" styleId="donorTypeId" style="width: 300px;" multiple="true" size="3">
                                <c:forEach var="fVar" items="${deExportForm.donorTypeList}" varStatus="lStatus">
                                  <option value="${fVar.ampOrgTypeId}">${fVar.orgType}</option>
                                </c:forEach>
@@ -295,7 +310,7 @@
                              <br/>
                              <span >Donor Group</span>
                              <br/>
-                             <html:select name="deExportForm" property="donorGroupSelected" styleId="donorGroupId" style="width: 400px;" multiple="true"  size="3">
+                             <html:select name="deExportForm" property="donorGroupSelected" styleClass="inp-text"  styleId="donorGroupId" style="width: 300px;" multiple="true"  size="3">
                                <c:forEach var="fVar" items="${deExportForm.donorGroupList}" varStatus="lStatus">
                                  <option value="${fVar.ampOrgGrpId}">${fVar.orgGrpName}</option>
                                </c:forEach>
@@ -303,18 +318,15 @@
                              <br/>
                              <span >Donor Agency</span>
                              <br/>
-                             <html:select name="deExportForm" property="donorAgencySelected" styleId="donorAgencyId" style="width: 400px;" multiple="true"  size="3">
+                             <html:select name="deExportForm" property="donorAgencySelected" styleClass="inp-text"  styleId="donorAgencyId" style="width: 300px;" multiple="true"  size="3">
                                <c:forEach var="fVar" items="${deExportForm.donorAgencyList}" varStatus="lStatus">
                                  <option value="${fVar.ampOrgId}">${fVar.name}</option>
                                </c:forEach>
                              </html:select>
-<%--                          
-                           </div>
---%>
                            <br/>
                            <span class="list_header">Select Team</span>
                            <br/>
-                           <html:select name="deExportForm" property="selectedTeamId" styleId="teamId" style="width: 400px;">
+                           <html:select name="deExportForm" property="selectedTeamId" styleClass="inp-text"  styleId="teamId" style="width: 300px;" onchange="changeTeam()">
                              <option value="-1">Please select team</option>
                              <c:forEach var="fVar" items="${deExportForm.teamList}" varStatus="lStatus">
                                <option value="${fVar.ampTeamId}">${fVar.name}</option>
@@ -324,26 +336,21 @@
                         <td width="46%" style="vertical-align: top;">
                          <span class="list_header">Sectors</span>
                          <br/>
-<%--                          
-                         <div id="reportGroupDiv" style="padding: 15px 15px 15px 15px; border: 1px solid gray; background-color: white; position: relative;">
---%>
                              <span>Primary Sector</span>
                              <br/>
-                             <html:select name="deExportForm" property="primarySectorsSelected" styleId="primarySectorsId" style="width: 400px;" multiple="true"  size="3">
+                             <html:select name="deExportForm" property="primarySectorsSelected" styleClass="inp-text"  styleId="primarySectorsId" style="width: 300px;" multiple="true"  size="3">
                                <c:forEach var="fVar" items="${deExportForm.primarySectorsList}" varStatus="lStatus">
                                  <option value="${fVar.ampSectorId}">${fVar.name}</option>
                                </c:forEach>
                              </html:select>
+                             <br/>
                              <span >Secondary Sector</span>
                              <br/>
-                             <html:select name="deExportForm" property="secondarySectorsSelected" styleId="secondarySectorsId" style="width: 400px;" multiple="true"  size="3">
+                             <html:select name="deExportForm" property="secondarySectorsSelected" styleClass="inp-text"  styleId="secondarySectorsId" style="width: 300px;" multiple="true"  size="3">
                                <c:forEach var="fVar" items="${deExportForm.secondarySectorsList}" varStatus="lStatus">
                                  <option value="${fVar.ampSectorId}">${fVar.name}</option>
                                </c:forEach>
                              </html:select>
-<%--                          
-                         </div>
---%>
                          <br/>
 <%--                          
                          <span class="list_header">Language</span>

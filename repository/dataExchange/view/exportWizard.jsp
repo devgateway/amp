@@ -251,11 +251,11 @@
 		<br />
 		<div id="wizard_container" class="yui-navset">
     		<ul class="yui-nav">
-    			<li id="tab_select_filed" class="selected"><a href="#type_step_div"><div>1. Field Selection</div></a> </li>
+    			<li id="tab_select_filed" class="selected"><a href="#type_step_div"><div>Field Selection</div></a> </li>
 <%--
-     			<li id="tab_additional_filed" class="enabled"><a href="#columns_step_div"><div>2. Additional Fields</div></a> </li>
+     			<li id="tab_additional_filed" class="enabled"><a href="#columns_step_div"><div>Additional Fields</div></a> </li>
 --%>
-    			<li id="hierachies_tab_label" class="enabled"><a href="#hierarchies_step_div"><div>3. Team Selection and Filters</div></a> </li>
+    			<li id="hierachies_tab_label" class="enabled"><a href="#hierarchies_step_div"><div>Team Selection and Filters</div></a> </li>
     		</ul>
 			<div class="yui-content" style="background-color: #EEEEEE">
 				<div id="tab_select_filed" class="yui-tab-content" style="padding: 0px 0px 1px 0px;" >

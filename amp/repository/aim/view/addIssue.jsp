@@ -74,22 +74,20 @@
 											<table cellPadding=5>
 												<tr>
 													<td>
-													
 														<c:if test="${aimEditActivityForm.issues.issueId == -1}">
-															<input type="submit" value="<digi:trn key='btn:add'>Add</digi:trn>" class="dr-menu">													</td>
+															<input type="submit" value="<digi:trn key='btn:addIssue'>Add</digi:trn>" class="dr-menu">												
 														</c:if>
 														
 														<c:if test="${aimEditActivityForm.issues.issueId != -1}">
-															<input type="submit" value="<digi:trn key='btn:update'>Update</digi:trn>" class="dr-menu">													</td>
+															<input type="submit" value="<digi:trn key='btn:updateIssue'>Update</digi:trn>" class="dr-menu">													
 														</c:if>
-														
-														
+													</td>
 													<td>
-														<input type="reset" value="<digi:trn key='btn:clear'>Clear</digi:trn>" class="dr-menu">													</td>
-													<td>
+														<input type="reset" value="<digi:trn key='btn:clear'>Clear</digi:trn>" class="dr-menu">													
 													</td>
 												</tr>
-											</table>										</td>
+											</table>										
+										</td>
 									</tr>
 								</table>
 						  </td>

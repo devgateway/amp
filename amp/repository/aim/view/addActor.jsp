@@ -79,11 +79,11 @@
 												<tr>
 													<td>
 														<c:if test="${aimEditActivityForm.issues.actorId == -1}">
-															<input type="submit" value="<digi:trn key='btn:add'>Add</digi:trn>" class="dr-menu">
+															<input type="submit" value="<digi:trn key='btn:addActor'>Add</digi:trn>" class="dr-menu">
 														</c:if>
 														
 														<c:if test="${aimEditActivityForm.issues.actorId != -1}">
-															<input type="submit" value="<digi:trn key='btn:update'>Update</digi:trn>" class="dr-menu">
+															<input type="submit" value="<digi:trn key='btn:updateActor'>Update</digi:trn>" class="dr-menu">
 														</c:if>
 													</td>
 													<td>

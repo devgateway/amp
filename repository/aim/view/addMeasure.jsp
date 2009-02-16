@@ -72,13 +72,11 @@
 												<tr>
 													<td>
 														<c:if test="${aimEditActivityForm.issues.measureId == -1}">
-															<input type="submit" value="<digi:trn key='btn:add'>Add</digi:trn>" class="dr-menu">
-															</td>
+															<input type="submit" value="<digi:trn key='btn:addMeasure'>Add</digi:trn>" class="dr-menu">
 														</c:if>
 														
 														<c:if test="${aimEditActivityForm.issues.measureId != -1}">
-															<input type="submit" value="<digi:trn key='btn:update'>Update</digi:trn>" class="dr-menu">													
-															</td>
+															<input type="submit" value="<digi:trn key='btn:updateMeasure'>Update</digi:trn>" class="dr-menu">													
 														</c:if>
 														
 													</td>

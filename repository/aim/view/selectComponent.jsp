@@ -113,7 +113,12 @@
 
                                <html:select property="fundingCurrCode" styleClass="inp-text" onchange="changeCurrency()">
                                 <c:forEach var="currency" items="${aimEditActivityForm.funding.validcurrencies}">
-                                    <option value="<c:out value="${currency.currencyCode}"/>">
+                                    <c:if test="${currency.currencyCode!=aimEditActivityForm.fundingCurrCode}">
+                                        <option value="<c:out value="${currency.currencyCode}"/>">
+                                    </c:if>
+                                    <c:if test="${currency.currencyCode==aimEditActivityForm.fundingCurrCode}">
+                                        <option value="<c:out value="${currency.currencyCode}"/>" selected="true">
+                                        </c:if>
                                         <c:out value="${currency.currencyName}" />
                                     </option>
                                 </c:forEach>

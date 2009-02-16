@@ -60,7 +60,7 @@ public class ExportUtil {
     	
         try {
             session = PersistenceManager.getRequestDBSession();
-            StringBuffer from = new StringBuffer("select act from " + AmpActivity.class.getName() + " as act, ");
+            StringBuffer from = new StringBuffer("select distinct act from " + AmpActivity.class.getName() + " as act, ");
             StringBuffer mainWhere =  new StringBuffer(" where (act.team=:teamId) ");
             
             if ((primarySectors != null && primarySectors.length > 0) ||

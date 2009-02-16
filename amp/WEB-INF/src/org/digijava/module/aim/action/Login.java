@@ -260,7 +260,7 @@ public class Login extends Action {
 					appSettings.setAppSettingsId(ampAppSettings
 							.getAmpAppSettingsId());
 					appSettings.setDefRecsPerPage(ampAppSettings
-							.getDefaultRecordsPerPage().intValue());
+							.getDefaultRecordsPerPage());
 					appSettings.setCurrencyId(ampAppSettings.getCurrency()
 							.getAmpCurrencyId());
 					appSettings.setFisCalId(ampAppSettings.getFiscalCalendar()

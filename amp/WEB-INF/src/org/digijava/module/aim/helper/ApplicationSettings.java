@@ -6,7 +6,7 @@ import org.digijava.module.aim.dbentity.AmpReports;
 public class ApplicationSettings {
 
 		  private Long appSettingsId;
-		  private int defRecsPerPage;
+		  private Integer defRecsPerPage;
 		  private String language;
 		  private Long currencyId;
 		  private Long fisCalId;
@@ -32,12 +32,12 @@ public Long getAppSettingsId() {
 					 this.appSettingsId = appSettingsId;
 		  }
 
-		  public int getDefRecsPerPage() {
-					 return this.defRecsPerPage;
+		  public Integer getDefRecsPerPage() {
+			  return this.defRecsPerPage;
 		  }
 
-		  public void setDefRecsPerPage(int defRecsPerPage) {
-					 this.defRecsPerPage = defRecsPerPage;
+		  public void setDefRecsPerPage(Integer defRecsPerPage) {
+			  this.defRecsPerPage = defRecsPerPage;
 		  }
 
 		  public String getLanguage() {

@@ -9,7 +9,7 @@ public class UpdateAppSettingsForm extends ActionForm {
 
 	private Long appSettingsId = null;
 
-	private int defRecsPerPage;
+	private Integer defRecsPerPage;
 
 	private String language = null;
 	
@@ -116,11 +116,11 @@ public class UpdateAppSettingsForm extends ActionForm {
 		this.appSettingsId = appSettingsId;
 	}
 
-	public int getDefRecsPerPage() {
+	public Integer getDefRecsPerPage() {
 		return this.defRecsPerPage;
 	}
 
-	public void setDefRecsPerPage(int defRecsPerPage) {
+	public void setDefRecsPerPage(Integer defRecsPerPage) {
 		this.defRecsPerPage = defRecsPerPage;
 	}
 

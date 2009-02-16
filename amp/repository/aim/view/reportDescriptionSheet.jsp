@@ -64,6 +64,21 @@
 			</table>
 	</div>
 </div>
+<div id="helpReports1" style="display:none">
+	<div class="hd"><digi:trn key="aim:reportsheet">Report Sheet</digi:trn></div>
+	<div align="center" class="bd" id="tableForReportSheet">
+		<table>
+				<tr>
+					<td id='reportId'>
+					<digi:trn key="aim:defReportsPerPageHelp">
+						to open all activities on one page, please enter the digit "0"
+					</digi:trn>
+					</td>
+				</tr>
+			
+			</table>
+	</div>
+</div>
 <script type="text/javascript">
 	YAHOO.namespace("YAHOO.reportsheet");
 	function initReportSheet() {
@@ -180,5 +195,20 @@
 		changePanelToHelp();
 		YAHOO.reportsheet.myPanel.show();
 	}
+	
+	function showHelpPanel_DefRecsPerPage(){
+		var reportSheetElement				= document.getElementById("helpReports1");
+		reportSheetElement.style.display	= "block";
+		YAHOO.reportsheet.myPanel		= new YAHOO.widget.Panel("helpReports1", {
+				width:"200px", 
+				fixedcenter: true, 
+				constraintoviewport: true, 
+				underlay:"shadow", 
+				close:true, 
+				visible:false, 
+				draggable:true} );
+		YAHOO.reportsheet.myPanel.render();
+		YAHOO.reportsheet.myPanel.show();
+	}	
 
 </script>

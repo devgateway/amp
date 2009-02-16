@@ -262,7 +262,7 @@ public class ViewAmp
             try {
 
                 appSettings.setDefRecsPerPage(ampAppSettings
-                        .getDefaultRecordsPerPage().intValue());
+                        .getDefaultRecordsPerPage());
                 if(ampAppSettings.getDefaultReportsPerPage()!=null){
                   appSettings.setDefReportsPerPage(ampAppSettings.
                       getDefaultReportsPerPage());

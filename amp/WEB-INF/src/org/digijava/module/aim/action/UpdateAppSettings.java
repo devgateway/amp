@@ -106,7 +106,7 @@ public class UpdateAppSettings extends Action {
 			if (ampAppSettings != null) {
 				uForm.setAppSettingsId(ampAppSettings.getAmpAppSettingsId());
 				uForm.setDefRecsPerPage(ampAppSettings
-						.getDefaultRecordsPerPage().intValue());
+						.getDefaultRecordsPerPage());
 
 				Integer reportsPerPage = ampAppSettings
 						.getDefaultReportsPerPage();
@@ -361,8 +361,7 @@ public class UpdateAppSettings extends Action {
 			AmpApplicationSettings ampAppSettings) {
 		ApplicationSettings appSettings = new ApplicationSettings();
 		appSettings.setAppSettingsId(ampAppSettings.getAmpAppSettingsId());
-		appSettings.setDefRecsPerPage(ampAppSettings.getDefaultRecordsPerPage()
-				.intValue());
+		appSettings.setDefRecsPerPage(ampAppSettings.getDefaultRecordsPerPage());
 		appSettings.setReportStartYear(ampAppSettings.getReportStartYear());
 		appSettings.setReportEndYear(ampAppSettings.getReportEndYear());
 

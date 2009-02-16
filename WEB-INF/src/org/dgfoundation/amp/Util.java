@@ -184,7 +184,7 @@ public final class Util {
 		
 		Session session=null;
 		try {
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 
 			Query q = session
 					.createQuery("select e.body,e.language from "
@@ -208,12 +208,6 @@ public final class Util {
 		} catch (Exception e) {
 			logger.error(e);
 			e.printStackTrace();			
-		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed ");
-			}
 		}
 
 		return editorBody;

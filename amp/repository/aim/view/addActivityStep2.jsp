@@ -16,6 +16,8 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
+<jsp:include page="addSectors.jsp" flush="true" />
+
 <script language="JavaScript" type="text/javascript">
 <!--
 function goNextStep(){
@@ -29,50 +31,45 @@ alert("goNextStep");
 
 function validate(field) {
   if (field == 1) { // validate location
-  if (document.aimEditActivityForm.selLocs.checked != null) {
-    if (document.aimEditActivityForm.selLocs.checked == false) {
-      alert("Please choose a location to remove");
-      return false;
-    }
-  } else {
-    var length = document.aimEditActivityForm.selLocs.length;
-    var flag = 0;
-    for (i = 0;i < length;i ++) {
-      if (document.aimEditActivityForm.selLocs[i].checked == true) {
-        flag = 1;
-        break;
-      }
-    }
-
-    if (flag == 0) {
-      alert("Please choose a location to remove");
-      return false;
-    }
-  }
-  return true;
-} else { // validate sector
+	  if (document.aimEditActivityForm.selLocs.checked != null) {
+	    if (document.aimEditActivityForm.selLocs.checked == false) {
+	      alert("Please choose a location to remove");
+	      return false;
+	    }
+	  } else {
+	    var length = document.aimEditActivityForm.selLocs.length;
+	    var flag = 0;
+	    for (i = 0;i < length;i ++) {
+	      if (document.aimEditActivityForm.selLocs[i].checked == true) {
+	        flag = 1;
+	        break;
+	      }
+	    }
 	
-if (document.getElementById('selActivitySectors').checked != null) {
-  if (document.getElementById('selActivitySectors').checked == false) {
-    alert("Please choose a sector to remove");
-    return false;
-  }
-} else {
-  var length = document.getElementById('selActivitySectors').length;
-  var flag = 0;
-  for (i = 0;i < length;i ++) {
-    if (document.getElementById('selActivitySectors')[i].checked == true) {
-      flag = 1;
-      break;
-    }
-  }
-
-  if (flag == 0) {
-    alert("Please choose a sector to remove");
-    return false;
-  }
-}
-return true;
+	    if (flag == 0) {
+	      alert("Please choose a location to remove");
+	      return false;
+	    }
+	  }
+	  return true;
+  } else { // validate sector
+	if  (document.aimEditActivityForm.selActivitySectors!=null){//checks if there is an sector in the list
+		if (document.aimEditActivityForm.selActivitySectors.length==null ) {//check if there is only 1 sector
+	  		if (document.aimEditActivityForm.selActivitySectors.checked == false) {//check if it is selected 
+	    		alert("Please choose a sector to remove");
+	    		return false;
+	  		}
+	  		return true;
+		} else {
+		  for (i = 0;i < document.aimEditActivityForm.selActivitySectors.length;i ++) {
+		    if (document.aimEditActivityForm.selActivitySectors[i].checked == true) {
+		      return true;
+		    }
+		  }
+		  return false;
+		}
+	}
+	return false;
 }
 }
 
@@ -84,13 +81,16 @@ function selectLocation() {
   document.aimEditActivityForm.submit();
 }
 
-function addSectors(editAct,configId) {
-  openNewWindow(600, 450);
+
+ function addSectors(editAct,configId) {
+/*  openNewWindow(600, 450);
   document.aimEditActivityForm.action = "/selectSectors.do?edit=true&configId="+configId;
   document.aimEditActivityForm.target = popupPointer.name;
   document.aimEditActivityForm.submit();
+*/ 
+     //alert("configId="+configId);
+	 myAddSectors("edit=true&configId="+configId);	  
 }
-
 
 function resetAll(){
   <digi:context name="resetAll" property="context/module/moduleinstance/resetAll.do?edit=true" />

@@ -11,15 +11,16 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-<script language="JavaScript" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript">
 	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
 </script>
 
 <jsp:include page="scripts/newCalendar.jsp" flush="true" />
+<jsp:include page="addSectors.jsp" flush="true" />
 
 <script language="JavaScript" type="text/javascript">
+	window.onload=initSectorScript();
 	var oldSchemeValue = -1;
 	function checkScheme(){
 		if(oldSchemeValue != -1 && document.aimAddOrgForm.ampSecSchemeId.value != oldSchemeValue)
@@ -72,22 +73,27 @@
 
 	function addSector()
 	{
+		//alert("editOrganisations.addSector()");
 		<digi:context name="addSec" property="context/module/moduleinstance/editOrganisation.do" />
 		document.aimAddOrgForm.action = "<%= addSec %>"+"~ampOrgId="+document.aimAddOrgForm.ampOrgId.value+"~actionFlag="+document.aimAddOrgForm.actionFlag.value+"~addSector=true";
 		document.aimAddOrgForm.target = "_self";
 		document.aimAddOrgForm.submit();
 	}
-	function addSectors() {
+	function addSectors(editAct,configId) {
+		//alert("editOrganisation.addSectors");
 		var schemeId = document.aimAddOrgForm.ampSecSchemeId.value;
 		if(schemeId == -1){
 			alert('<digi:trn key="aim:editOrganisation:selectScheme">Please select a sector scheme before adding sectors.</digi:trn>');
 			return false;
 		}
+/*
 		openNewWindow(600, 450);
 		<digi:context name="addSector" property="context/module/moduleinstance/selectSectors.do?edit=true" />
 	  	document.aimAddOrgForm.action = "<%= addSector %>&sectorScheme=" +schemeId;
 		document.aimAddOrgForm.target = popupPointer.name;
 		document.aimAddOrgForm.submit();
+*/		
+		myAddSectors("edit=true&sectorScheme="+schemeId+"&configId="+configId);
 	}
 	function removeSelSectors() {
 		var flag = validate();
@@ -696,7 +702,7 @@ function loadPage()
 																				<c:if test="${empty aimAddOrgForm.sectors}">
 																					<tr>
 																						<td bgcolor="#ffffff"><input type="button"
-																							class="dr-menu" onclick="addSectors();"
+																							class="dr-menu" onclick="javascript:addSectors(0,1);"
 																							value='<digi:trn key="btn:addSectors">Add Sectors</digi:trn>' />
 																						</td>
 																					</tr>
@@ -751,7 +757,7 @@ function loadPage()
 																											<field:display name="Add Sectors Button"
 																												feature="Sectors">
 																												<td><input type="button" class="dr-menu"
-																													onclick="addSectors();"
+																													onclick="javascript:addSectors(0,1);"
 																													value='<digi:trn key="btn:addSectors">Add Sectors</digi:trn>' />
 																												</td>
 																											</field:display>

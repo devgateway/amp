@@ -16,7 +16,7 @@
 <script type="text/javascript">
 function validade(){
   var defReportsPerPage = document.getElementById("defRecsPerPage");
-  if(defReportsPerPage.value.length == 0 || parseInt(defReportsPerPage.value)==0){
+  if(parseInt(defReportsPerPage.value)<0){
 	  alert("You cannot enter 0 for number of projects and activities per page.");
 	  return false;
   }
@@ -124,6 +124,9 @@ function validade(){
 														</td>
 														<td align="left" width="70%" bgcolor="#f4f4f2">
 															<html:text property="defRecsPerPage" size="5"  styleClass="inp-text" styleId="defRecsPerPage"/>
+                                                            <a style="cursor:pointer;color:#006699" onclick="showHelpPanel_DefRecsPerPage()">
+														    	<img src="../ampTemplate/images/help.gif" alt="Click to get help on Status" width=10 height=10 border=0>
+                                                            </a>
 														</td>
 													</tr>
 													<tr>
@@ -136,7 +139,8 @@ function validade(){
 														    
                                                             <a style="cursor:pointer;color:#006699" onclick="showHelpPanel()">
 														    	<img src="../ampTemplate/images/help.gif" alt="Click to get help on Status" width=10 height=10 border=0>
-                                                            </a></td>
+                                                            </a>
+														</td>
 													</tr>
 													<tr>
 														<td bgcolor="#f4f4f2"  align="right" width="50%">

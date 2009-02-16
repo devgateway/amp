@@ -20,6 +20,9 @@ public class DesktopForm extends ActionForm {
 	private int activityCount;
 	
 	private Integer currentPage;
+	private Collection pages;
+	private int stIndex;
+	private int edIndex;	
 
 	// desktop filter select box data collection
 	private Collection calendars;
@@ -38,7 +41,7 @@ public class DesktopForm extends ActionForm {
 	private String searchKey;
 
 	private ArrayList activities;
-	private Collection pages;
+	
 
 	private String totalCommitments;
 	private String defCurrency;
@@ -48,8 +51,6 @@ public class DesktopForm extends ActionForm {
 
 	private boolean showAddActivityLink;
 
-	private int stIndex;
-	private int edIndex;
 
     private Collection selDonors;
     private Collection selSectors;
@@ -237,7 +238,7 @@ public class DesktopForm extends ActionForm {
 	}
 	/**
 	 * @param pages The pages to set.
-	 */
+	 */ 
 	public void setPages(Collection pages) {
 		this.pages = pages;
 	}

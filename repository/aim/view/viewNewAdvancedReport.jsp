@@ -361,6 +361,9 @@ session.setAttribute("progressValue", counter);
 		<table width="100%">
 			<tr>
 			<td>
+
+<c:set var="max_value"><%=Integer.MAX_VALUE%></c:set>
+<c:if test="${recordsPerPage ne max_value}">
             <logic:notEqual name="viewFormat" value="print">
                 <logic:equal name="viewFormat" value="foldable">
 					<c:if test="${report.startRow != 0}">
@@ -378,6 +381,8 @@ session.setAttribute("progressValue", counter);
 				<c:set var="lastPage">
                 	0
                 </c:set>
+
+
                 <c:forEach var="i" begin="0" end="${report.visibleRows-1}" step="${recordsPerPage}">
                     <logic:equal name="viewFormat" value="html">
                         <a style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+(recordsPerPage-1)}"/>';">
@@ -400,6 +405,7 @@ session.setAttribute("progressValue", counter);
                     </c:set>
 				</c:forEach>
 
+
                 <logic:equal name="viewFormat" value="foldable">
 					<c:if  test="${(report.startRow+recordsPerPage+1) < report.visibleRows}">
                         <a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="nametrimed"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${report.startRow+recordsPerPage}"/>~endRow=<c:out value="${report.startRow+(recordsPerPage*2)-1}"/>');">	
@@ -412,6 +418,7 @@ session.setAttribute("progressValue", counter);
                     </c:if>
                 </logic:equal>
 				</logic:notEqual>
+</c:if>
             </td>
             <logic:notEqual name="viewFormat" value="print">
             	<td align="right">
@@ -506,6 +513,8 @@ session.setAttribute("progressValue", counter);
 			 <table width="100%">
 			 <tr>
 			 <td>
+<c:set var="max_value"><%=Integer.MAX_VALUE%></c:set>
+<c:if test="${recordsPerPage ne max_value}">
             <logic:notEqual name="viewFormat" value="print">
                 <logic:equal name="viewFormat" value="foldable">
 					<c:if test="${report.startRow != 0}">
@@ -557,6 +566,7 @@ session.setAttribute("progressValue", counter);
                     </c:if>
                 </logic:equal>
 				</logic:notEqual>
+</c:if>
             </td>
             <logic:notEqual name="viewFormat" value="print">
      		<td align="right">

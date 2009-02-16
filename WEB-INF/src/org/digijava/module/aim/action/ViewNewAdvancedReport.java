@@ -94,11 +94,16 @@ public class ViewNewAdvancedReport extends Action {
 			if(tm!=null)
 			ampAppSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
 		
-		if (ampAppSettings != null)
-			request.setAttribute("recordsPerPage", ampAppSettings
-					.getDefaultRecordsPerPage());
-		else
+		if (ampAppSettings != null){
+			if( ampAppSettings
+					.getDefaultRecordsPerPage().intValue() != 0){
+				request.setAttribute("recordsPerPage", ampAppSettings.getDefaultRecordsPerPage());
+			}else{
+				request.setAttribute("recordsPerPage", Integer.MAX_VALUE);
+			}
+		}else{
 			request.setAttribute("recordsPerPage", new Integer(25));
+		}
 		
 		
 		//check currency code:

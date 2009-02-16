@@ -30,8 +30,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
  */
 public class ECSClient {
 	private static final String MODULE_TAG = "ecs";
-	private static String ECS_SERVER_ADDRESS = "82.77.15.251";
-	private static String THIS_SERVER_NAME = "myAMPServer";
+	private static String ECS_SERVER_ADDRESS = "81.180.117.79";
 	private static Logger logger = Logger.getLogger(ECSClient.class);
 
 	private ECSServer server;

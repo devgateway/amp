@@ -19,7 +19,7 @@
             </button>
           </c:if>
 		  <c:if test="${stepNum!=0}">
-            <button id="step${stepNum}_prev_button" type="button" class="toolbar-dis" onclick="navigateTab(-1);">
+            <button id="step${stepNum}_prev_button" type="button" class="toolbar" onclick="navigateTab(-1);">
     			<img src="/TEMPLATE/ampTemplate/images/prev.png" class="toolbar" />
     			<digi:trn key="btn:previous">Previous</digi:trn>
             </button>
@@ -31,7 +31,7 @@
 		    </button>
           </c:if>
           <c:if test="${stepNum!=2}">
-            <button id="step${stepNum}_next_button" type="button" class="toolbar-dis" onclick="navigateTab(1)">
+            <button id="step${stepNum}_next_button" type="button" class="toolbar" onclick="navigateTab(1)">
                 <img height="16" src="/TEMPLATE/ampTemplate/images/next.png" class="toolbar" /> 
                 <digi:trn key="btn:next">Next</digi:trn>
             </button>

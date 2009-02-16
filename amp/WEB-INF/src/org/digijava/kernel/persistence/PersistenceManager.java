@@ -599,8 +599,8 @@ public class PersistenceManager {
 		}
 		Session sess = (Session) resMap.get(Constants.REQUEST_DB_SESSION);
 
-		if (sess == null) {
-			logger.debug("RequestDBSession was not found in the current thread");
+		if (sess == null || !sess.isOpen()) {
+			logger.debug("RequestDBSession was not found or is closed in the current thread");
 			if (createNew) {
 				logger.debug("Creating new RequestDBSession");
 				try {

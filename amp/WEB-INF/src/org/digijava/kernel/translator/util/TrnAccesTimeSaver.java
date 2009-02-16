@@ -50,20 +50,12 @@ public class TrnAccesTimeSaver implements Runnable {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = PersistenceManager.getSession();
-			tx = session.beginTransaction();
+			session = PersistenceManager.getRequestDBSession();
 			session.update(message);
 			//logger.info("Saved timestamp for key:"+message.getKey()+" lang="+message.getLocale()+" Thread name="+Thread.currentThread().getName());
-			tx.commit();
+			
 		} catch (Exception e) {
-			logger.error("Cannot update translation is access time saver",e);
-			if (tx!=null){
-				try {
-					tx.rollback();
-				} catch (Exception e2) {
-					logger.error("Cannot rallback translation update in access time saver",e2);
-				}
-			}
+			logger.error(e);		
 		}finally{
 			try {
 				PersistenceManager.releaseSession(session);

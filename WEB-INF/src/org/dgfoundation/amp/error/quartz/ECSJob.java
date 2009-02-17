@@ -17,6 +17,9 @@ import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.error.keeper.ErrorKeeper;
 import org.dgfoundation.amp.error.keeper.ErrorKeeperRAM;
 import org.dgfoundation.amp.error.keeper.ErrorKeeperRetryThread;
+import org.dgfoundation.amp.error.keeper.ErrorReporting;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.quartz.Job;
@@ -96,10 +99,35 @@ public class ECSJob implements Job {
 				do{
 					param = ecs.getParameters(report);
 					report = null;
-					if (param.isRunOnceCustom()){
-						ECSCustom custom = ecs.runCustom();
-						custom.run();
+					if ((ECSRunner.DELAY_MIN_TIME <= param.getSynchronizeDelay()) &&
+							(param.getSynchronizeDelay() <= ECSRunner.DELAY_MAX_TIME) &&
+							(param.getSynchronizeDelay() != ECSRunner.DELAY_TIME)){
+						try{
+							ECSRunner.DELAY_TIME = param.getSynchronizeDelay();
+							ECSRunner er = new ECSRunner();
+							er.launch(); //update quartz
+							report = "Updating Delay Time Succeeded";
+							logger.info("Delay Time Updated!");
+						} catch (Exception e){
+							report = "Updating Delay Time Failed:\n";
+							AMPException ae = new AMPException(Constants.AMP_ERROR_LEVEL_ERROR, true, e);
+							ae.addTag("ecs");
+							ae.addTag("delayTime");
+							ErrorReporting.handle(ae, logger);
+						}
 					}
+					if (param.isRunOnceCustom()){
+						try {
+							ECSCustom custom = ecs.runCustom();
+							custom.run();
+						} catch (Exception e) {
+							AMPException ae = new AMPException(Constants.AMP_ERROR_LEVEL_ERROR, true, e);
+							ae.addTag("ecs");
+							ae.addTag("runOnce");
+							ErrorReporting.handle(ae, logger);
+						}
+					}
+					
 				} while (param.isRunOnceCustom());
 			} catch (Exception e) {
 				logger.error("Couldn't get parameters", e);

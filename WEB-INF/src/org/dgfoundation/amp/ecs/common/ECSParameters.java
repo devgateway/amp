@@ -12,14 +12,13 @@ public class ECSParameters implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private int synchronizeDelay;
+	private long synchronizeDelay;
 	private boolean runOnceCustom;
 	
-	
-	public int getSynchronizeDelay() {
+	public long getSynchronizeDelay() {
 		return synchronizeDelay;
 	}
-	public void setSynchronizeDelay(int synchronizeDelay) {
+	public void setSynchronizeDelay(long synchronizeDelay) {
 		this.synchronizeDelay = synchronizeDelay;
 	}
 	public boolean isRunOnceCustom() {

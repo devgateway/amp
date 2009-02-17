@@ -8,7 +8,7 @@
 				<param name="sequence">AMP_COMMENT_seq</param>
 			</generator>
 		</id>
-		<property name="comment" column="comment" type="text" />
+		<property name="comment" column="comment_" type="text" />
 		<property name="commentDate" column="comment_date" type="java.util.Date" />
 
 		<many-to-one name="ampActivityId" column="amp_activity_id"

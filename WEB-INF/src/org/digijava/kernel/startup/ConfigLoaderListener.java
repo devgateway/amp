@@ -69,6 +69,9 @@ public class ConfigLoaderListener
 
     private static Logger logger = Logger.getLogger(ConfigLoaderListener.class);
 
+    private static final String  ORACLE_DB = "ORACLE";
+
+    
     private static String MODULE_LISTENERS = ConfigLoaderListener.class.
         getName() + ".moduleContextListeners";
     
@@ -160,13 +163,17 @@ public class ConfigLoaderListener
 		File compatFile=new File(propertiesFileName);
 		compat.load(new FileInputStream(compatFile));
 		
-		int dbMajorVersion=Integer.parseInt((String)compat.get("database.version.major"));
-		int dbMinorVersion=Integer.parseInt((String)compat.get("database.version.minor"));
-		int dbBugfixingVersion=Integer.parseInt((String)compat.get("database.version.bugfixing"));
 		
-		int jdbcMajorVersion=Integer.parseInt((String)compat.get("jdbc.version.major"));
-		int jdbcMinorVersion=Integer.parseInt((String)compat.get("jdbc.version.minor"));
-		int jdbcBugfixingVersion=Integer.parseInt((String)compat.get("jdbc.version.bugfixing"));
+		String prefix=(metaData.getDatabaseProductVersion().toUpperCase().indexOf(ORACLE_DB)>-1)?"oracle":"mysql";
+	
+		
+		int dbMajorVersion=Integer.parseInt((String)compat.get(prefix+".version.major"));
+		int dbMinorVersion=Integer.parseInt((String)compat.get(prefix+".version.minor"));
+		int dbBugfixingVersion=Integer.parseInt((String)compat.get(prefix+".version.bugfixing"));
+		
+		int jdbcMajorVersion=Integer.parseInt((String)compat.get(prefix+".jdbc.version.major"));
+		int jdbcMinorVersion=Integer.parseInt((String)compat.get(prefix+".jdbc.version.minor"));
+		int jdbcBugfixingVersion=Integer.parseInt((String)compat.get(prefix+".jdbc.version.bugfixing"));
 		
 		
 		if(metaData.getDatabaseMajorVersion()!=dbMajorVersion || 

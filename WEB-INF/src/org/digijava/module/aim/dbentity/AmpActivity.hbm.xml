@@ -56,7 +56,7 @@
 		<property name="contractingDate" column="contracting_date" type="java.util.Date" /><!-- defunct -->
 		<property name="disbursmentsDate" column="disbursments_date" type="java.util.Date" />
 		<!-- defunct -->
-		<property name="condition" column="`condition`" type="text" />
+		<property name="condition" column="condition_" type="text" />
 
 		<property name="contactName" column="contact_name" type="java.lang.String" /><!-- defunct -->
 

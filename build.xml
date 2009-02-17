@@ -3,7 +3,8 @@
 
     <!-- Local system paths -->
     <property file="digijava.properties"/>
-	 <property file="compat.properties"/>
+		
+	<property file="compat.properties"/>
     <!-- NOTE: If "dist" target is used, a local
              "dist" directory will be utilized or created -->
     <property name="distpath.project" value="./dist"/>
@@ -21,6 +22,7 @@
     <property name="test" location="./WEB-INF/test" />
     <property name="etc" location="./etc" />
     <property name="deployConfigs" location="deployConfigs"/>
+	<property name="dbConfigs" location="dbConfigs"/>
 	<property name="repository" location="./repository"/>
 	<property name="jackrabbit" location="./jackrabbit"/>
     <property name="ampTest" location="./WEB-INF/amp-test" />
@@ -311,10 +313,16 @@
 		<copy file="${deployConfigs}/${serverName}/digi.xml" todir="${repository}"/>
 		<copy file="${deployConfigs}/${serverName}/jboss-web.xml" todir="${webinf}"/>		
 		<copy file="${webinf}/repository.xml" todir="${jackrabbit}"/>
-	
+		<antcall target="copyForAnySQL"/>
 	</target>
+	
+	<target name="copyForAnySQL" if="dbName">
+		 <echo message="Using ${dbName} Configuration" />
+		<copy file="${dbConfigs}/${dbName}/hibernate-dialect.xml" todir="${src}" overwrite="true"/>
+	</target>	
 
-    <target name="junit" depends="compileTest">
+
+	<target name="junit" depends="compileTest">
         <junit printsummary="yes" haltonfailure="yes" showoutput="yes">
     	    <classpath refid="run.classpath"/>
   		<formatter type="xml"/>

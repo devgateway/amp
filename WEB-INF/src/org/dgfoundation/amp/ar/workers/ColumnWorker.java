@@ -144,15 +144,14 @@ public abstract class ColumnWorker {
 		PreparedStatement ps;
 		try {
 			
-			ps = conn.prepareStatement(query);
+			ps = conn.prepareStatement(query,ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
 
 			//add params if exist
 			ArrayList<FilterParam> params=generator.getFilter().getIndexedParams();
 			for (int i = 0; i < params.size(); i++) {
 				ps.setObject(i+1, params.get(i).getValue(),params.get(i).getSqlType());	
 			}
-		
-			
+					
 			ResultSet rs = ps.executeQuery();
 			rsmd=rs.getMetaData();
 			
@@ -164,7 +163,7 @@ public abstract class ColumnWorker {
 			columnsMetaData=new HashSet<String>();
 			
 			for (int i=1; i < colsCount;i++){
-			    columnsMetaData.add(rsmd.getColumnName(i));
+			    columnsMetaData.add(rsmd.getColumnName(i).toLowerCase());
 			}
 			rs.last();
 			int rsSize=rs.getRow();			

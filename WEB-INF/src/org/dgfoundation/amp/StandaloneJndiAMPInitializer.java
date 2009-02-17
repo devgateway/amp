@@ -93,7 +93,7 @@ public class StandaloneJndiAMPInitializer {
 	private static class AMPNamingContextFactory implements
 			InitialContextFactory {
 
-		@Override
+	
 		public Context getInitialContext(Hashtable<?, ?> environment)
 				throws NamingException {
 			return ctx;
@@ -103,7 +103,7 @@ public class StandaloneJndiAMPInitializer {
 
 	private static class AMPInitialContextFactoryBuilder implements
 			InitialContextFactoryBuilder {
-		@Override
+		
 		public InitialContextFactory createInitialContextFactory(
 				Hashtable<?, ?> environment) throws NamingException {
 			return new AMPNamingContextFactory();

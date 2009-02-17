@@ -5,7 +5,7 @@
 		<cache usage="read-write" />
 		<id name="templateId" column="id" type="java.lang.Long">
 			<generator class="native">
-				<param name="sequence">AMP_FIELD_seq</param>
+				<param name="sequence">amp_feature_templates_id_SEQ</param>
 			</generator>
 		</id>
 		<property name="featureTemplateName" column="featureTemplateName" type="java.lang.String" />

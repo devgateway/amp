@@ -1609,8 +1609,7 @@ public class TeamUtil {
                     }
                     params += id;
                 }
-                queryString = "select act from " + AmpActivity.class.getName()
-                    + " " + "act where act.team in (" + params + ")";
+                queryString = "select a from " + AmpActivity.class.getName()+" a where a.team in ("+params+")";
                 qry = session.createQuery(queryString);
 
                 itr = qry.list().iterator();
@@ -1754,7 +1753,7 @@ public class TeamUtil {
             session = PersistenceManager.getSession();
             String queryString = "select tr from "
                 + AmpTeamReports.class.getName()
-                + " tr where (tr.team=:teamId) group by tr.report order by tr.report ";
+                + " tr where (tr.team=:teamId) order by tr.report ";
             Query qry = session.createQuery(queryString);
             qry.setParameter("teamId", teamId, Hibernate.LONG);
             Iterator itr = qry.list().iterator();
@@ -1827,7 +1826,7 @@ public class TeamUtil {
 					queryString += " and r.drilldownTab=false ";
 				}
 			}
-            queryString += " group by tr.report order by tr.report limit " +currentPage+", "+recordPerPage ;
+            queryString += "  order by tr.report limit " +currentPage+", "+recordPerPage ;
             Query qry = session.createQuery(queryString);
             qry.setLong("teamId", teamId);
 
@@ -2041,16 +2040,25 @@ public class TeamUtil {
             session = PersistenceManager.getRequestDBSession();
             String queryString = null;
             Query qry = null;
-         	queryString="select distinct r from " + AmpReports.class.getName()+
+            //oracle doesn't support order by from a column that is not part of the distinct Statement  so we have to include the  m.lastView  in the select part 
+
+         	queryString="select distinct r,m.lastView from " + AmpReports.class.getName()+
 			"  r inner join r.logs m where "+tabFilter+" (m.member is not null and m.member.ampTeamMemId=:ampTeamMemId) order by m.lastView desc";
          	qry = session.createQuery(queryString); 
          	qry.setLong("ampTeamMemId", memberId);
        	    if ( getTabs!=null )
      		  qry.setBoolean("getTabs", getTabs);
-            col = qry.list();
-            if (col.isEmpty()){
-            	queryString="select distinct r from " + AmpReports.class.getName()+
-    			" r where r.drilldownTab=false AND r.ownerId is not null and r.ownerId=:ampTeamMemId";
+             
+       	 //Sience we include a new column in the query the return will be an collection havin an array the object    
+       	 Iterator itData = null;
+       	 itData = qry.iterate();
+	       	while(itData.hasNext()){
+	       		col.add((AmpReports)((Object[])itData.next())[0]);
+	       	}
+       	  //end fix for oracle
+	       	
+	       	if (col.isEmpty()){
+            	queryString="select distinct r from " + AmpReports.class.getName()+ " r where r.drilldownTab=false AND r.ownerId is not null and r.ownerId=:ampTeamMemId";
             	qry = session.createQuery(queryString); 
              	qry.setLong("ampTeamMemId", memberId);
              	col = qry.list();

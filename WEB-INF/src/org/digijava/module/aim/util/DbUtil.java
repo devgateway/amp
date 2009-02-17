@@ -464,7 +464,7 @@ public class DbUtil {
     			ResultSet rs = ps.executeQuery();
     			ResultSetMetaData rsmd;
     			rsmd=rs.getMetaData();
-    			rs.first();
+    			rs.next();
     			ii=rs.getInt(1);
     			rs.close();
 
@@ -4541,8 +4541,7 @@ public class DbUtil {
             String queryString = "select distinct aot.* from amp_org_type aot " +
 					            "inner join amp_organisation ao on (ao.org_type_id = aot.amp_org_type_id) " +
 					            "inner join amp_funding af on (af.amp_donor_org_id = ao.amp_org_id) " +
-					            "inner join amp_activity aa on (aa.amp_activity_id = af.amp_activity_id) " +
-					            "group by aot.amp_org_type_id";                       
+					            "inner join amp_activity aa on (aa.amp_activity_id = af.amp_activity_id) ";                       
             Query qry = session.createSQLQuery(queryString).addEntity(AmpOrgType.class);
             col = qry.list();
         } catch (Exception e) {

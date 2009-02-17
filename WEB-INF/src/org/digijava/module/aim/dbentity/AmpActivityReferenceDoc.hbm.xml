@@ -9,7 +9,8 @@
 				<param name="sequence">AMP_ACTIVITY_REFERENCEDOC_seq</param>
 			</generator>
 		</id>
-		<property name="comment" column="comment" type="text" />
+		
+		<property name="comment" column="comment_" type="text" />
 		<property name="created" column="created" type="java.util.Date" />
 		<property name="lastEdited" column="lastEdited" type="java.util.Date" />
 

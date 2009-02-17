@@ -29,6 +29,10 @@
 	
 	<enable-autologin>true</enable-autologin>
 
-	&commonEntities;
+    <service id="digiAutoPatcherService" class="org.digijava.module.autopatcher.core.AutopatcherService">
+            <description>Advanced Database Patcher Module</description>
+            <property name="patchesDir">patches</property>
+    </service>
+    &commonEntities;
 	
 </digi-config>

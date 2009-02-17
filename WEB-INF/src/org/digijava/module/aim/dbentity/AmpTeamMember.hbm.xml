@@ -5,7 +5,7 @@
 		<cache usage="read-write" />
 		<id name="ampTeamMemId" column="amp_team_mem_id" type="java.lang.Long">
 			<generator class="native">
-				<param name="sequence">AMP_TEAMMEM_seq</param>
+				<param name="sequence">amp_team_member_seq</param>
 			</generator>
 		</id>
 
@@ -13,7 +13,7 @@
 		<property name="writePermission" column="write_permission" type="java.lang.Boolean" />
 		<property name="deletePermission" column="delete_permission" type="java.lang.Boolean" />
 
-		<many-to-one name="user" column="user" class="org.digijava.kernel.user.User" cascade="none" />
+		<many-to-one name="user" column="user_" class="org.digijava.kernel.user.User" cascade="none" />
 		<many-to-one name="ampTeam" column="amp_team_id"
 			class="org.digijava.module.aim.dbentity.AmpTeam" cascade="none" />
 		<many-to-one name="ampMemberRole" column="amp_member_role_id"

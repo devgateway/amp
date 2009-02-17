@@ -11,7 +11,7 @@
 		</id>
 
 		<property name="adjustmentType" column="adjustment_type" type="java.lang.Integer" />
-		<property name="date" column="date" type="java.util.Date" />
+		<property name="date" column="date_" type="java.util.Date" />
 		<property access="field" name="amount" column="amount" type="java.lang.Double" />
 		<many-to-one name="currency" column="currency"
 			class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />

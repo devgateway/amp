@@ -6,7 +6,9 @@
 	<class name="org.digijava.module.aim.dbentity.AmpReportLog" table="AMP_REPORT_LOG">
 		<cache usage="read-write" />
 		<id name="ampReportMemberLogId" column="amp_reports_member_id" type="java.lang.Long">
-			<generator class="native" />
+			<generator class="native" >
+			<param name="sequence">amp_reports_log_seq</param>
+			</generator>
 		</id>
 
 		<many-to-one name="report" column="amp_report_id"

@@ -1030,6 +1030,7 @@ public class SaveActivity extends Action {
 								}
 								ampFundDet.setDisbOrderId(fundDet.getDisbOrderId());
 								ampFundDet.setContract(fundDet.getContract());
+								ampFundDet.setDisbursementOrderRejected(fundDet.getDisbursementOrderRejected());
 								fundDeatils.add(ampFundDet);
 							}
 						}

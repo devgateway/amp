@@ -183,8 +183,8 @@ public class ExportBuilder {
 					CMSContentItem item = (CMSContentItem) iterator.next();
 					if (item.getIsFile()){
 						ActivityType.Documents doc = objectFactory.createActivityTypeDocuments();
-//						doc.getDescription().add(item.getDescription());
-//						doc.getTitle().add(item.getTitle());
+						doc.setDescription(item.getDescription());
+						doc.setTitle(item.getTitle());
 						if (item.getLanguage() != null){
 							doc.setLang(item.getLanguage().getCode());
 						}
@@ -252,7 +252,8 @@ public class ExportBuilder {
 			parent.getDonorContacts().add(buildContactType(ampActivity.getContFirstName(),
 					ampActivity.getContLastName(), ampActivity.getEmail()));	
 		} else if (path.equalsIgnoreCase("activity.govContacts")){
-			parent.getGovContacts().add(buildContactType("TODO","TODO","TODO"));	
+			parent.getGovContacts().add(buildContactType(ampActivity.getMofedCntFirstName(),
+					ampActivity.getMofedCntLastName(),ampActivity.getMofedCntEmail()));	
 		} else if (path.equalsIgnoreCase("activity.additional")){
 			// TODO not implemented need more details
 		}

@@ -142,7 +142,7 @@ public class CachedTranslatorWorker extends TranslatorWorker {
         }
         else {
         	Message foundMessage = (Message)obj;
-        	if(overwriteKeywords){
+        	if(overwriteKeywords && keywords!=null){
         		foundMessage.setKeyWords(keywords);
         	}
         	updateTimeStamp(foundMessage);

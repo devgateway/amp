@@ -36,11 +36,11 @@
                 <digi:trn key="btn:next">Next</digi:trn>
             </button>
           </c:if>
-    	<button id="step${stepNum}_cancel" type="button" class="toolbar" onclick="cancelFilter()" name="cancel">
+    	<button id="step${stepNum}_cancel" type="button" class="toolbar" onclick="cancelBack()" name="cancel">
 			<img src="/TEMPLATE/ampTemplate/images/cancel.png" class="toolbar" />
 			<digi:trn key="btn:wizard:Cancel">Cancel</digi:trn>
 		</button>
-		<button name="expodtButton" type="button" class="toolbar" onclick="exportActivity()" name="export" >
+    	<button name="expodtButton" type="button" class="toolbar" onclick="exportActivity()" name="export" >
 			<img src="/TEMPLATE/ampTemplate/images/file-export-16x16.png" class="toolbar"/>
 			<digi:trn key="btn:wizard:Export">Export</digi:trn>
 		</button>

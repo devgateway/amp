@@ -205,6 +205,10 @@
           }
       }
 
+      function cancelBack(){
+        window.location = "/aim/admin.do";
+      }
+       
       function cancelFilter(){
           document.getElementById('donorTypeId').selectedIndex=-1;
           document.getElementById('donorGroupId').selectedIndex=-1;
@@ -364,8 +368,10 @@
                       </tr>
                     </table>
                     
-                    
+                    <input type="button" class="dr-menu" onclick="cancelFilter();" value="Reset" name="reset"/>
                   
+                    <br/>
+                    <br/>
                     <br/>
                   
                     

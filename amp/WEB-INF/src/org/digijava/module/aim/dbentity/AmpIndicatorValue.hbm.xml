@@ -7,7 +7,7 @@
 				<param name="sequence">AMP_INDICATOR_VALUES_seq</param>
 			</generator>
 		</id>
-		<property name="comment" column="comment" type="java.lang.String" />
+		<property name="comment" column="comment_" type="java.lang.String" />
 		<property name="valueDate" column="value_date" type="java.util.Date" />
 
                 <property name="dataIntervalStart" column="interval_start_date" type="java.util.Date" />

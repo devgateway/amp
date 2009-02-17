@@ -14,7 +14,7 @@
 		<property name="budgetProgramCode" column="budget_program_code" type="java.lang.String" />
 		<property name="name" column="name" type="java.lang.String" />
 		<!-- <property name="type" column="type" type="java.lang.String"/>  -->
-		<property name="indlevel" column="level" type="java.lang.Integer" />
+		<property name="indlevel" column="level_" type="java.lang.Integer" />
 		<property name="description" column="description" type="text" />
 		<property name="language" column="language" type="java.lang.String" />
 		<property name="version" column="version" type="java.lang.String" />

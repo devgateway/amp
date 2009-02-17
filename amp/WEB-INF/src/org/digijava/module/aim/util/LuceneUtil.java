@@ -333,7 +333,7 @@ public class LuceneUtil implements Serializable {
 
 			ResultSet rs		= st.executeQuery(qryStr);
 			
-			rs.first();
+			rs.next();
 			ret = Integer.parseInt(rs.getString("mid"));
 		}
 		catch(Exception ex){
@@ -367,19 +367,10 @@ public class LuceneUtil implements Serializable {
 		try{
 			session				= PersistenceManager.getSession();
 			Connection	conn	= session.connection();
-			Statement st		= conn.createStatement();
+			
+			Statement st		= conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY );
 			qryStr 				= "select * from v_titles where amp_activity_id >= " + chunkStart + " and amp_activity_id < " + chunkEnd + " ";
-			/*
-			qryStr 				= "select v1.amp_activity_id, v1.name, v2.amp_id, v3.`trim(dg_editor.body)`," +
-									" v4.`trim(dg_editor.body)`, v5.`trim(dg_editor.body)`, v6.`trim(dg_editor.body)`," +
-									" v7.numcont, v8.code " +
-									" from v_titles v1, v_amp_id v2, v_description v3, v_objectives v4, " +
-									" v_purposes v5, v_results v6, v_convenio_numcont v7, v_bolivia_component_code v8 " +
-									" where v1.amp_activity_id = v2.amp_activity_id and v2.amp_activity_id = v3.amp_activity_id and " +
-									" v3.amp_activity_id = v4.amp_activity_id and v4.amp_activity_id = v5.amp_activity_id and " +
-									" v5.amp_activity_id = v6.amp_activity_id and v6.amp_activity_id = v7.amp_activity_id and " +
-									" v7.amp_activity_id = v8.amp_activity_id " ;
-			*/
+			
 
 			ResultSet rs		= st.executeQuery(qryStr);
 			
@@ -442,7 +433,8 @@ public class LuceneUtil implements Serializable {
 			while (isNext){
 				int actId = Integer.parseInt(rs.getString("amp_activity_id"));
 				x = (Items) list.get(actId);
-				x.description = rs.getString("trim(dg_editor.body)");
+				//you can't use this "trim(dg_editor.body)" as column name .... 
+				x.description = rs.getString("ebody");
 				isNext = rs.next();
 				//
 			}
@@ -455,7 +447,8 @@ public class LuceneUtil implements Serializable {
 			while (isNext){
 				int actId = Integer.parseInt(rs.getString("amp_activity_id"));
 				x = (Items) list.get(actId);
-				x.objective = rs.getString("trim(dg_editor.body)");
+				//you can't use "trim(dg_editor.body)" as column name .... 
+				x.objective = rs.getString("ebody");
 				isNext = rs.next();
 				//
 			}
@@ -468,7 +461,8 @@ public class LuceneUtil implements Serializable {
 			while (isNext){
 				int actId = Integer.parseInt(rs.getString("amp_activity_id"));
 				x = (Items) list.get(actId);
-				x.purpose = rs.getString("trim(dg_editor.body)");
+				//you can't use "trim(dg_editor.body)" as column name .... 
+				x.purpose = rs.getString("ebody");
 				isNext = rs.next();
 				//
 			}
@@ -481,7 +475,8 @@ public class LuceneUtil implements Serializable {
 			while (isNext){
 				int actId = Integer.parseInt(rs.getString("amp_activity_id"));
 				x = (Items) list.get(actId);
-				x.results = rs.getString("trim(dg_editor.body)");
+				//you can't use "trim(dg_editor.body)" as column name .... 
+				x.results = rs.getString("ebody");
 				isNext = rs.next();
 				//
 			}

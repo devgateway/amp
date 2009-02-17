@@ -21,7 +21,7 @@
 		<many-to-one name="financingTypeCategVal" column="financing_type_categ_val_id"
 			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" />
 		<!-- <many-to-one name="financingInstrument" column="financing_instrument_id" class="org.digijava.module.aim.dbentity.AmpModality"/> -->
-		<many-to-one name="financingInstr" column="financing_instr_category_value_id"
+		<many-to-one name="financingInstr" column="FINANCING_INSTR_CATEGORY_VALUE"
 			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" />
 
 	</class>

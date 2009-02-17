@@ -716,8 +716,7 @@ public class TeamMemberUtil {
 		try {
 			Query q = null;
 			session = PersistenceManager.getSession();
-			query = "select member from " + AmpTeamMember.class.getName() + " "
-					+ "member where (member.user=:memberId)";
+			query = "select  from " + AmpTeamMember.class.getName()+" where member.user=:memberId";
 			q = session.createQuery(query);
 			q.setParameter("memberId", userId, Hibernate.LONG);
 			if (q != null) {

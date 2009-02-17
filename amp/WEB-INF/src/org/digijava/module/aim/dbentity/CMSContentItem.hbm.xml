@@ -13,7 +13,7 @@
 		<property name="description" column="DESCRIPTION" type="text" />
 		<property name="url" column="URL" type="java.lang.String" />
 		<property name="fileName" column="FILE_NAME" type="java.lang.String" />
-		<property name="date" column="DATE" type="java.lang.String" />
+		<property name="date" column="DATE_" type="java.lang.String" />
 		<property name="contentType" column="CONTENT_TYPE" type="java.lang.String" />
 		<property name="file" column="FILE_CONTENT" type="binary" />
 		<property name="isFile" column="IS_FILE" type="boolean" />

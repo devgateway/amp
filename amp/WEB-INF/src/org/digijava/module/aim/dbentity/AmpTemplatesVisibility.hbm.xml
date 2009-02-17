@@ -6,7 +6,7 @@
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
 			<generator class="native">
-				<param name="sequence">AMP_FIELD_seq</param>
+				<param name="sequence">amp_templates_visibility_id_SE</param>
 			</generator>
 		</id>
 		<property name="name" column="name" type="java.lang.String" />

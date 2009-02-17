@@ -47,17 +47,17 @@
 		<many-to-one name="dibusrsementsGlobalCurrency" column="disbursements_global_currency"
 			class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
 
-		<property name="totalPrivateContribAmountDate" column="total_private_contrib_amount_date"
+		<property name="totalPrivateContribAmountDate" column="TOT_PRIVATE_CONTR_DATE"
 			type="java.util.Date" />
 		<property name="totalNationalContribRegionalAmountDate"
-			column="total_national_contrib_regional_amount_date" type="java.util.Date" />
+			column="TOT_NATIONAL_CONTR_REG_DATE" type="java.util.Date" />
 		<property name="totalNationalContribIFIAmountDate"
-			column="total_national_contrib_IFI_amount_date" type="java.util.Date" />
+			column="TOT_NATIONAL_CONTR_IFI_DATE" type="java.util.Date" />
 		<property name="totalNationalContribCentralAmountDate"
-			column="total_national_contrib_central_amount_date" type="java.util.Date" />
-		<property name="totalECContribINVAmountDate" column="total_EC_contrib_INV_amount_date"
+			column="TOT_NATIONAL_CONTR_CENT_DATE" type="java.util.Date" />
+		<property name="totalECContribINVAmountDate" column="TOT_EC_CONTR_INV_DATE"
 			type="java.util.Date" />
-		<property name="totalECContribIBAmountDate" column="total_EC_contrib_IB_amount_date"
+		<property name="totalECContribIBAmountDate" column="TOT_EC_CONTR_IB_DATE"
 			type="java.util.Date" />
 
 		<property access="field" name="totalECContribIBAmount" column="total_ec_contrib_ib_amount"
@@ -65,15 +65,15 @@
 		<property access="field" name="totalECContribINVAmount" column="total_ec_contrib_inv_amount"
 			type="java.lang.Double" />
 		<property access="field" name="totalNationalContribCentralAmount"
-			column="total_national_contrib_central_amount" type="java.lang.Double" />
+			column="TOT_NATIONAL_CONTR_CENTRAL" type="java.lang.Double" />
 		<property access="field" name="totalNationalContribRegionalAmount"
-			column="total_national_contrib_regional_amount" type="java.lang.Double" />
+			column="TOT_NATIONAL_CONTR_REGIONAL" type="java.lang.Double" />
 		<property access="field" name="totalNationalContribIFIAmount"
-			column="total_national_contrib_ifi_amount" type="java.lang.Double" />
+			column="TOT_NATIONAL_CONTRIB_IFI" type="java.lang.Double" />
 		<property access="field" name="totalPrivateContribAmount"
 			column="total_private_contrib_amount" type="java.lang.Double" />
 
-		<set name="organizations" cascade="none" table="amp_ipa_contracting_organizations">
+		<set name="organizations" cascade="none" table="AMP_IPA_CONTRACTING_ORGANIZATI">
 			<key column="ipa_contract_id" />
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpOrganisation"
 				column="organization" />

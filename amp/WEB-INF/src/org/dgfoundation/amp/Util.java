@@ -208,6 +208,12 @@ public final class Util {
 		} catch (Exception e) {
 			logger.error(e);
 			e.printStackTrace();			
+		} finally {
+			try {
+				PersistenceManager.releaseSession(session);
+			} catch (Exception ex2) {
+				logger.error("releaseSession() failed ");
+			}
 		}
 
 		return editorBody;
@@ -350,7 +356,7 @@ public final class Util {
 			e.printStackTrace();
 		}
 
-		String query = "SELECT getExchange(?,?)";
+		String query = "SELECT getExchange(?,?) from dual";
 		PreparedStatement ps;
 		try {
 			ps = conn.prepareStatement(query);

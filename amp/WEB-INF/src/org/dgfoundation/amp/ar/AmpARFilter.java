@@ -206,7 +206,7 @@ public class AmpARFilter extends PropertyListable {
 	private String text;
 	private String indexText;
 
-	private static final String initialFilterQuery = "SELECT distinct(amp_activity_id) FROM amp_activity WHERE 1";
+	private static final String initialFilterQuery = "SELECT distinct(amp_activity_id) FROM amp_activity WHERE 1=1 ";
 	private String generatedFilterQuery;
 	private int initialQueryLength = initialFilterQuery.length();
 	
@@ -450,7 +450,7 @@ public class AmpARFilter extends PropertyListable {
 			
 		int c;
 		if(draft){
-			c= Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = false) )",null )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null));
+			c= Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = 0) )",null )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null));
 		}
 		else c= Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER,null)-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null) );
 		this.setActivitiesRejectedByFilter(new Long(c));
@@ -516,19 +516,19 @@ public class AmpARFilter extends PropertyListable {
 			for(String valOption:approvalStatusSelected){
 				switch (Integer.parseInt(valOption)) {
 				case -1:
-					actStatusValue.append("1");					
+					actStatusValue.append("1=1 ");					
 					break;
 				case 0://Existing Un-validated - This will show all the activities that have been approved at least once and have since been edited and not validated.
-					actStatusValue.append(" (approval_status='edited' and draft <>true)");break;
+					actStatusValue.append(" (approval_status='edited' and draft <>1)");break;
 				case 1://New Draft - This will show all the activities that have never been approved and are saved as drafts.
-					actStatusValue.append(" (approval_status='started' and draft=true) ");break;
+					actStatusValue.append(" (approval_status='started' and draft=1) ");break;
 				case 2://New Un-validated - This will show all activities that are new and have never been approved by the workspace manager.
-					actStatusValue.append(" (approval_status='started' and draft<>true)");break;
+					actStatusValue.append(" (approval_status='started' and draft<>1)");break;
 				case 3://existing draft. This is because when you filter by Existing Unvalidated you get draft activites that were edited and saved as draft
-					actStatusValue.append(" (approval_status='edited' and draft= true) ");break;
+					actStatusValue.append(" (approval_status='edited' and draft= 1) ");break;
 				case 4://Validated Activities 
-					actStatusValue.append("(approval_status='approved' and draft<>true)");break;
-				default:actStatusValue.append("1");	break;
+					actStatusValue.append("(approval_status='approved' and draft<>1)");break;
+				default:actStatusValue.append("1=1 ");	break;
 				}
 				actStatusValue.append(" OR ");
 			}
@@ -544,7 +544,7 @@ public class AmpARFilter extends PropertyListable {
 			else APPROVED_FILTER="SELECT amp_activity_id FROM amp_activity WHERE approval_status like '"
 				+ Constants.APPROVED_STATUS + "'";
 		
-		String DRAFT_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = false)";
+		String DRAFT_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = 0)";
 		String TYPE_OF_ASSISTANCE_FILTER = "SELECT amp_activity_id FROM v_terms_assist WHERE terms_assist_code IN ("
 				+ Util.toCSString(typeOfAssistance) + ")";
 
@@ -641,7 +641,7 @@ public class AmpARFilter extends PropertyListable {
 		
 		
 		if (fromDate != null) 
-			if (fromDate.length() > 0){
+			if (fromDate.trim().length() > 0){
 				String FROM_FUNDING_DATE_FILTER = "SELECT DISTINCT(f.amp_activity_id) FROM amp_funding f, amp_funding_detail fd "
 					+ "WHERE f.amp_funding_id=fd.amp_funding_id AND DATEDIFF(fd.transaction_date,?) >= 0";
 				queryAppend(FROM_FUNDING_DATE_FILTER);
@@ -649,7 +649,7 @@ public class AmpARFilter extends PropertyListable {
 				indexedParams.add(new FilterParam(new java.sql.Date(FormatHelper.parseDate2(this.getFromDate()).getTime()),java.sql.Types.DATE));
 			}
 		if (toDate != null)
-			if (toDate.length() > 0){
+			if (toDate.trim().length() > 0){
 				String TO_FUNDING_DATE_FILTER = "SELECT DISTINCT(f.amp_activity_id) FROM amp_funding f, amp_funding_detail fd "
 					+ "WHERE f.amp_funding_id=fd.amp_funding_id AND DATEDIFF(?, fd.transaction_date) >= 0";
 				queryAppend(TO_FUNDING_DATE_FILTER);
@@ -797,7 +797,7 @@ public class AmpARFilter extends PropertyListable {
 		DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams);
 		
 		if(draft){
-			c= Math.abs( DbUtil.countActivitiesByQuery(this.generatedFilterQuery + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = false) )",indexedParams )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,indexedParams) );
+			c= Math.abs( DbUtil.countActivitiesByQuery(this.generatedFilterQuery + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = 0) )",indexedParams )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,indexedParams) );
 		}
 		else c= Math.abs( DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams)-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null) );
 		this.setActivitiesRejectedByFilter(new Long(c));

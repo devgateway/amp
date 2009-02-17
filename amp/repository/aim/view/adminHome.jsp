@@ -273,7 +273,7 @@
                                 <digi:trn key="aim:tipUserManager">Click here to view Lucene index</digi:trn>
                               </c:set>
                               <digi:link module="aim" href="/luceneIndex.do" title="${translation}">
-                                <digi:trn key="aim:luceneDebug">Arty Debug</digi:trn>
+                                <digi:trn key="aim:luceneDebug2">ECS Debug</digi:trn>
                               </digi:link>
                             </td>
                           </tr>

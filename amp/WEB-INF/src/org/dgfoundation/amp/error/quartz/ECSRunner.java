@@ -33,6 +33,9 @@ public class ECSRunner {
 	private final static long FIVE_MIN = 1000 * 60 * 5;
 
 	private static Logger logger = Logger.getLogger(ECSRunner.class);
+	public final  static long DELAY_MIN_TIME = FIVE_MIN;
+	public final  static long DELAY_MAX_TIME = ONE_DAY; // servers should report at least once a day
+	public static long DELAY_TIME = FIVE_MIN;
 
 	private Long ctime = System.currentTimeMillis();
 
@@ -50,7 +53,6 @@ public class ECSRunner {
 
 	public void launch() {
 
-		final long DELAY_TIME = FIVE_MIN;
 
 		try {
 			schedulerFactory = new StdSchedulerFactory();

@@ -772,7 +772,7 @@ var isAlreadySubmitted = false;
 											</field:display>
                                             <field:display name="Rejected Disbursement Order" feature="Disbursement Orders">
                                             <td>
-												<html:checkbox name="fundingDetail" property="disbursementOrderRejected"/>
+												<html:checkbox name="fundingDetail" indexed="true" property="disbursementOrderRejected"/>
 											</td>
                                             </field:display>											
 											<td>

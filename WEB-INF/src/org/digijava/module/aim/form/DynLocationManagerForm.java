@@ -16,6 +16,7 @@ public class DynLocationManagerForm extends ActionForm {
 	private String unorgLocations;
 	private Long deleteLocationId;
 	private boolean hideEmptyCountries	= true;
+	private boolean importantErrorAppeared = false;
 
 	public Collection<AmpCategoryValueLocations> getFirstLevelLocations() {
 		return firstLevelLocations;
@@ -95,6 +96,20 @@ public class DynLocationManagerForm extends ActionForm {
 	 */
 	public void setHideEmptyCountries(boolean hideEmptyCountries) {
 		this.hideEmptyCountries = hideEmptyCountries;
+	}
+
+	/**
+	 * @return the importantErrorAppeared
+	 */
+	public boolean getImportantErrorAppeared() {
+		return importantErrorAppeared;
+	}
+
+	/**
+	 * @param importantErrorAppeared the importantErrorAppeared to set
+	 */
+	public void setImportantErrorAppeared(boolean importantErrorAppeared) {
+		this.importantErrorAppeared = importantErrorAppeared;
 	}
 	
 	

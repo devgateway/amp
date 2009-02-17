@@ -18,30 +18,13 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
 	private String value;
 	private Integer index;
 	private Set<AmpActivity> activities;
-	private Long fieldType;
+	//private Long fieldType;
 	
 	private Set<AmpCategoryValue> usedValues;
 	private Set<AmpCategoryValue> usedByValues;
 
-	public Long getFieldType() {
-		return fieldType;
-	}
-
-	public void setFieldType(Long fieldType) {
-		this.fieldType = fieldType;
-	}
-
 	/*use for only category with category key "implementation_location" 
          to show which field is used for country  */
-
-	public boolean isCountry() {
-		boolean isCoutry = false;
-		if (fieldType == CategoryConstants.COUNTRY_TYPE) {
-			isCoutry = true;
-		}
-		return isCoutry;
-
-	}
 
 	//Created because of an error with some strings with french simbols as ID.
 	public String getEncodedValue(){

@@ -84,7 +84,7 @@ public class AMPActionServlet
      */
     if (index > -1) {
       int tempIndex = url.indexOf("/" + Constants.AIM_MODULE_KEY + "/");
-      if (tempIndex != -1 && !url.endsWith("displayFlag.do") &&
+      if (tempIndex != -1 && !url.endsWith("displayFlag.do") && !url.endsWith("selectLocation.do")&&!url.endsWith("locationSelected.do")&&
           !url.endsWith("editEUActivity.do")&&!url.endsWith("editIPAContract.do")&&!url.endsWith("addDisbOrderToContract.do")&&!url.endsWith("addDisbOrderToDisb.do")) {
         String pggrp = request.getParameter("edit");
         /*

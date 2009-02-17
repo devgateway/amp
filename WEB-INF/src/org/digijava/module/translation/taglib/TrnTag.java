@@ -74,6 +74,7 @@ public class TrnTag
 
     private String key = null;
     private Boolean linkAlwaysVisible = null;
+    private Boolean jsFriendly = null;
     private String type = null;
     private String siteId = null;
     private String locale = null;
@@ -444,8 +445,12 @@ public class TrnTag
      */
     protected void writeData(String localizedMsg) {
         try {
+        	String processedBody=TranslatorWorker.processSpecialChars(localizedMsg);
+        	if (this.jsFriendly!=null && this.jsFriendly){
+        		processedBody = TranslatorWorker.makeTextJSFriendly(processedBody);
+        	}
             JspWriter out = pageContext.getOut();
-            out.print(localizedMsg);
+            out.print(processedBody);
         }
         catch (IOException ioe) {
             logger.error("IOException " + ioe, ioe);
@@ -498,7 +503,7 @@ public class TrnTag
                     "...";
             }
         }
-
+        
         return formattedString;
     }
 
@@ -640,6 +645,14 @@ public class TrnTag
 
 	public String getKeyWords() {
 		return keyWords;
+	}
+
+	public void setJsFriendly(Boolean jsFriendly) {
+		this.jsFriendly = jsFriendly;
+	}
+
+	public Boolean getJsFriendly() {
+		return jsFriendly;
 	}
 
 

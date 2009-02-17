@@ -45,6 +45,7 @@ import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.service.ServiceManager;
 import org.digijava.kernel.services.UrlTouchService;
+import org.digijava.kernel.translator.util.TrnAccesTimeSaver;
 import org.digijava.kernel.translator.util.TrnAccessUpdateQueue;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.DigiConfigManager;
@@ -134,9 +135,9 @@ public class TranslatorWorker {
     /**
      * Returns a message string matching local,key,site
      *
-     * @param key site string id
+     * @param key translation key.
      * @param locale
-     * @param siteId ( for example demosite )
+     * @param siteId site string id ( for example demosite )
      * @return
      * @throws WorkerException
      */
@@ -557,6 +558,7 @@ public class TranslatorWorker {
      * @param numResults
      * @return
      * @throws WorkerException
+     * @{@link Deprecated} we do not use prefixes because of hash codes as keys.
      */
 
     public List getMessagesForPrefix(
@@ -1029,34 +1031,74 @@ public class TranslatorWorker {
      * @param message
      */
     protected void processBodyChars(Message message){
-    	message.setMessage(processBodyChars(message.getMessage()));
-    }
-    
-    protected String processBodyChars(String messageBody){
-    	if (messageBody == null) return null;
-    	return messageBody.replace("\r", "").replace("\n", "");
+    	message.setMessage(processSpecialChars(message.getMessage()));
     }
     
     /**
+     * Processes special characters for translations to make it compatible with translations rules.
+     * currently removes new line and carriage return symbols. 
+     * @param text
+     * @return
+     */
+    public static String processSpecialChars(String text){
+    	if (text == null) return null;
+    	return text.replace("\r", "").replace("\n", "");    
+    }
+    
+    /**
+     * Makes string compatible for using within JavaScript string definition.
+     * Adds slashes in front of string start-end symbols.
+     * @param text
+     * @return
+     */
+    public static String makeTextJSFriendly(String text){
+    	if (text == null) return null;
+    	return text.replaceAll("'","\\\\'").replace("\"", "\\\"");    
+    }
+    /**
      * Generates hash code from message body and sets it as key.
+     * WARN: Use for non-English messages ONLY if there is no English record for same key. 
+     * Hash key should be generated from English translation because it is default language.  
      * @param message translation entity to update
      */
     protected void setHash(Message message){
     	String hash = generateTrnKey(message.getMessage());
     	message.setKey(hash);
     }
+    
+    /**
+     * Generates translation key from message body.
+     * Currently {@link String#hashCode()} is used for this purpose.
+     * @param text any text that but usually this should be body for trn tag or default translation text.
+     * @return key for translation, actually it is hash code of the text.
+     */
     public static String generateTrnKey(String text){
     	if(text != null) {
-    		return Integer.toString(text.trim().hashCode());
+    		return Integer.toString(text.trim().toLowerCase().hashCode());
     	} else {
     		return "";
     	}
     }
     
+    /**
+     * Puts message in update queue.
+     * This is done every time message is accessed. 
+     * When message is put in queue this also updates last access time field of the message with current time.
+     * Another lower priority worker thread will take this message out from queue and update it in db.  
+     * @param message
+     * @see TrnAccessUpdateQueue
+     * @see TrnAccesTimeSaver
+     */
     protected void updateTimeStamp(Message message){
     	timeStampQueue.put(message);
     }
     
+    /**
+     * Saves message in db.
+     * Removes form access time queue if this message is waiting update there too. 
+     * @param message
+     * @throws WorkerException
+     */
     protected void saveDb(Message message) throws WorkerException {
         logger.debug("Saving translation. siteId="+ message.getSiteId() + ", key = " + message.getKey() +
                      ",locale=" + message.getLocale());
@@ -1138,9 +1180,8 @@ public class TranslatorWorker {
     }
 
     /**
-     * Updates a particular message
+     * Updates a particular message in db.
      * @param message
-     * in the cache
      * @throws WorkerException
      */
     public void update(Message message) throws WorkerException {
@@ -1148,6 +1189,15 @@ public class TranslatorWorker {
         fireRefreshAlert(message);
     }
 
+    /**
+     * Does actual update of the message in db.
+     * Also if same message waits for update in last access time queue, then it is removed from that queue
+     * to not overwrite latest changes.
+     * @param message
+     * @throws WorkerException
+     * @see TrnAccessUpdateQueue
+     * @see TrnAccesTimeSaver
+     */
     protected void updateDb(Message message) throws WorkerException {
         logger.debug("Updating translation. siteId="+ message.getSiteId() + ", key = " + message.getKey() + ",locale=" + message.getLocale());
         Session ses = null;
@@ -1537,32 +1587,27 @@ public class TranslatorWorker {
         return message;
     }
     
-    @SuppressWarnings("unchecked")
-	public static Collection<Message> getAllTranslationOfBody(String text, String siteId) throws WorkerException{
-    	Session session = null;
-    	List<Message> result = null;
-		try {
-			String hashKey = generateTrnKey(text);
-			session = PersistenceManager.getSession();
-			String oql = "from "+Message.class.getName()+" as m where m.key = :hashKey and m.siteId = :SiteId";
-			Query query = session.createQuery(oql);
-			query.setString("hashKey", hashKey);
-			query.setString("SiteId", siteId);
-			result = query.list();
-		} catch (Exception e) {
-			throw new WorkerException(e);
-		}finally{
-			if (null != session){
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception e1) {
-					throw new WorkerException(e1);
-				}
-			}
-		}
-    	return result;
-    }
+    /**
+     * Same as {@link #getAllTranslationsOfKey(String, String)} but uses some text, 
+     * usually body of trn tag or default text to generate key.
+     * @param text
+     * @param siteId
+     * @return
+     * @throws WorkerException
+     */
+	public static Collection<Message> getAllTranslationOfBody(String text, String siteId) throws WorkerException {
+		String hashKey = generateTrnKey(text);
+		return getAllTranslationsOfKey(hashKey, siteId);
+	}
 
+    /**
+     * Returns all translations for specified key on specified site.
+     * If any some translation has been translated in 3 languages, then this will find all 3 records for the key.
+     * @param key
+     * @param siteId
+     * @return
+     * @throws WorkerException
+     */
     @SuppressWarnings("unchecked")
 	public static Collection<Message> getAllTranslationsOfKey(String key, String siteId) throws WorkerException{
     	Session session = null;
@@ -1734,6 +1779,11 @@ public class TranslatorWorker {
 		return caseSensitiveKeys;
 	}
 	
+	/**
+	 * TODO Review and move to better class.
+	 * @return
+	 * @throws WorkerException
+	 */
 	public Site getAmpSite() throws WorkerException{
 		try {
 			if (ampSite == null){

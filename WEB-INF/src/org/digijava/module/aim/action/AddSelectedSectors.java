@@ -59,10 +59,12 @@ public class AddSelectedSectors
     Long selsearchedSector[] = eaForm.getSelSectors();
     logger.info("size off selected searched sectors: " +
                 selsearchedSector.length);
+    eaForm.setSomeError(false);
      if(!config.isMultisector()&&selsearchedSector.length>1){
            errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
               "error.aim.addActivity.sectorMultipleSelectionIsOff"));
           saveErrors(request, errors);
+          eaForm.setSomeError(true);
           return mapping.findForward("forward");  
      }
     Iterator itr = eaForm.getSearchedSectors().iterator();

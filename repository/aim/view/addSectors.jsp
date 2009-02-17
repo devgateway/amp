@@ -42,6 +42,7 @@
 		    context: ["showbtn", "tl", "bl"]
 		    });
 	var panelStart=0;
+	var checkAndClose=false;
 	function initSectorScript() {
 		var msg='\n<digi:trn key="aim:addSector">Add Sectors</digi:trn>';
 		myPanel.setHeader(msg);
@@ -131,7 +132,7 @@
 			myPanel.show();
 			panelStart = 2;
 		}
-
+		checkErrorAndClose();
 	}
 
 	function generateFields(type){
@@ -248,11 +249,17 @@
 		<digi:context name="Url" property="context/aim/addSelectedSectors.do"/>
 		var url = "<%=Url %>";
 		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
-		myclose();
-		addSector();
-		
+		checkAndClose=true;
 	}
-
+	function checkErrorAndClose(){
+		if(checkAndClose==true){
+			if(document.getElementsByName("someError")[0].value=="false"){
+				myclose();
+				addSector();
+			}
+			checkAndClose=false;			
+		}
+	}
 	function selectPageSectors(pagedata){
 		var postString="";
 		pagedata = pagedata.replace(/\}$/,"");

@@ -35,6 +35,7 @@ public class SelectSectorForm extends ActionForm {
 	private Collection pages;
 
 	private Collection searchedSectors = null; // list of searched Sectors.
+	private boolean someError;
 	private Long selSectors[] = null; // sectors selected by user to be added in activity after searching
         private Long configId;
 
@@ -213,4 +214,12 @@ public class SelectSectorForm extends ActionForm {
 	public void setPages(Collection pages) {
 		this.pages = pages;
 	}
+    public boolean isSomeError() {
+		return someError;
+	}
+
+	public void setSomeError(boolean someError) {
+		this.someError = someError;
+	}
+	
 }

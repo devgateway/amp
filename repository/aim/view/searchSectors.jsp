@@ -150,6 +150,7 @@
 
 <digi:form action="/addSelectedSectors.do" method="post">
 <html:hidden property="sectorReset" value="false" />
+<html:hidden property="someError"/>
 <input type="hidden" name="edit" value="true" />
 
 
@@ -219,12 +220,12 @@
 								List of Sectors</digi:trn>
 
 							</td>
-                                                     </tr>
-                                                     <tr>
-                                                         <td>
-                                                             <digi:errors/>
-                                                         </td>
-                                                     </tr>
+                         </tr>
+                         <tr>
+                            <td>
+                               <digi:errors/>
+                            </td>
+                         </tr>
 <!-- 1 -->
 						<logic:notEmpty name="aimSelectSectorForm" property="pagedCol">
 						<tr>

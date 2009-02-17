@@ -87,7 +87,9 @@
 		return returnString;
 	}
 	function simpleSubmit() {
-		document.getElementById("dynLocationManagerForm").submit();
+		var myForm		= document.getElementById("dynLocationManagerForm");
+		myForm.action	= "/aim/dynLocationManager.do?hideEmptyCountriesAction="+document.getElementById("hide_empty_countries").checked ; 
+		myForm.submit();
 	}
 
 	
@@ -217,6 +219,7 @@
 						<digi:errors />
 					</td>
 				</tr>
+				<c:if test="${!aimDynLocationManagerForm.importantErrorAppeared}" >
 				<tr>
 					<td>
 						<p>
@@ -224,7 +227,7 @@
 							&nbsp;&nbsp;[<a class="functional" onclick="treeObj.collapseAll();treeObj.showHideNode(false, 'DHTMLSuite_treeNode1');">Collapse</a>]
 						</p>
 						<p>
-							<digi:trn>Hide empty countries</digi:trn> <html:checkbox property="hideEmptyCountries" onchange="simpleSubmit();" />
+							<digi:trn>Hide empty countries</digi:trn> <html:checkbox property="hideEmptyCountries" onchange="simpleSubmit();"  styleId="hide_empty_countries"/>
 						</p>
 						<p style="display: none" id="p_tree">
 							<font size="3">
@@ -256,6 +259,7 @@
 						<button type="button" class="buton" onclick="">Save</button> 
 					</td>
 				</tr>
+				</c:if>
 			</table>
 		</td>
 	</tr>

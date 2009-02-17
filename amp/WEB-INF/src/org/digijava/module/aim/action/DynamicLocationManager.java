@@ -34,8 +34,12 @@ public class DynamicLocationManager extends MultiAction {
 			throws Exception {
 		ActionErrors errors				= new ActionErrors();
 		request.setAttribute("myErrors", errors);
-		
 		DynLocationManagerForm myForm	= (DynLocationManagerForm) form;
+		
+		String hideEmptyCountriesStr				= request.getParameter("hideEmptyCountriesAction");
+		if ( "false".equals(hideEmptyCountriesStr) ) {
+			myForm.setHideEmptyCountries(false);
+		}
 		
 		AmpCategoryClass implLocClass	= CategoryManagerUtil.loadAmpCategoryClassByKey( CategoryConstants.IMPLEMENTATION_LOCATION_KEY );
 		myForm.setImplementationLocation(implLocClass);
@@ -57,22 +61,31 @@ public class DynamicLocationManager extends MultiAction {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		ActionErrors errors				= (ActionErrors) request.getAttribute("myErrors");
-		
 		DynLocationManagerForm myForm	= (DynLocationManagerForm) form;
-		AmpCategoryClass implLocClass	= myForm.getImplementationLocation();
 		
-		Collection<AmpCategoryValueLocations> rootLocations	 = null;
-		if ( implLocClass == null || implLocClass.getPossibleValues() == null || implLocClass.getPossibleValues().size() == 0 ) {
-			errors.add("title", new ActionError("error.aim.dynRegionManager.implLocationCategMissing" ) );
+		String errorString		= CategoryManagerUtil.checkImplementationLocationCategory();
+		if ( errorString != null ) {
+			ActionError error	= (ActionError) new ActionError("error.aim.categoryManager.implLocProblem", errorString);
+			errors.add("title", error);
+			myForm.setImportantErrorAppeared(true);
 		}
+		else {
 		
-		rootLocations						= DynLocationManagerUtil.getHighestLayerLocations(implLocClass, myForm, errors);		
-		myForm.setFirstLevelLocations(
-				this.correctStructure(rootLocations, implLocClass.getPossibleValues(), 0, myForm.getHideEmptyCountries() )
-		);
-		myForm.setNumOfLayers( implLocClass.getPossibleValues().size() );
-		myForm.setFirstLayerId( implLocClass.getPossibleValues().get(0).getId() );
-		
+			
+			AmpCategoryClass implLocClass	= myForm.getImplementationLocation();
+			
+			Collection<AmpCategoryValueLocations> rootLocations	 = null;
+			if ( implLocClass == null || implLocClass.getPossibleValues() == null || implLocClass.getPossibleValues().size() == 0 ) {
+				errors.add("title", new ActionError("error.aim.dynRegionManager.implLocationCategMissing" ) );
+			}
+			
+			rootLocations						= DynLocationManagerUtil.getHighestLayerLocations(implLocClass, myForm, errors);		
+			myForm.setFirstLevelLocations(
+					this.correctStructure(rootLocations, implLocClass.getPossibleValues(), 0, myForm.getHideEmptyCountries() )
+			);
+			myForm.setNumOfLayers( implLocClass.getPossibleValues().size() );
+			myForm.setFirstLayerId( implLocClass.getPossibleValues().get(0).getId() );
+		}
 		this.saveErrors(request, errors);
 		return mapping.findForward("forward");
 	}
@@ -97,7 +110,7 @@ public class DynamicLocationManager extends MultiAction {
 		}
 	}
 	private Collection<AmpCategoryValueLocations> correctStructure( Collection<AmpCategoryValueLocations> sameParentLocations, 
-							List<AmpCategoryValue> implLocValues, int layer, boolean hideEmpyCountries) {
+							List<AmpCategoryValue> implLocValues, int layer, boolean hideEmptyCountries) {
 		if ( sameParentLocations == null || sameParentLocations.size() == 0 )
 			return null;
 		int largestLayerIndex											= 0;
@@ -124,7 +137,7 @@ public class DynamicLocationManager extends MultiAction {
 				layerSet					= new TreeSet<AmpCategoryValueLocations>(DynLocationManagerUtil.alphabeticalLocComp);
 				layerToLocMap.put(currentLayer, layerSet);
 			}
-			if ( currentLayer == countryLayerIndex && loc.getChildLocations().size() == 0 )
+			if ( hideEmptyCountries && currentLayer == countryLayerIndex && loc.getChildLocations().size() == 0 )
 				continue;
 			layerSet.add(loc);
 		}
@@ -151,7 +164,7 @@ public class DynamicLocationManager extends MultiAction {
 		while ( iter.hasNext() ) {
 			AmpCategoryValueLocations loc	= iter.next();
 			if ( loc.getChildLocations() != null && loc.getChildLocations().size() > 0 ) {
-				correctStructure(loc.getChildLocations(), implLocValues, loc.getParentCategoryValue().getIndex()+1, hideEmpyCountries);
+				correctStructure(loc.getChildLocations(), implLocValues, loc.getParentCategoryValue().getIndex()+1, hideEmptyCountries);
 			}
 		}
 		
@@ -218,7 +231,7 @@ public class DynamicLocationManager extends MultiAction {
 		
 		if ( myForm.getTreeStructure() != null && myForm.getTreeStructure().length() > 0)
 			DynLocationManagerUtil.saveStructure(myForm.getTreeStructure(), myForm.getUnorgLocations(), myForm.getImplementationLocation(), errors);
-		else if ( myForm.getDeleteLocationId() != null )
+		else if ( myForm.getDeleteLocationId() != null  && myForm.getDeleteLocationId() > 0)
 			DynLocationManagerUtil.deleteLocation(myForm.getDeleteLocationId(), errors);
 		
 		return null;

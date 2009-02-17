@@ -2707,8 +2707,8 @@ public class DbUtil {
             sess.save(object);
             tx.commit();
         } catch (Exception e) {
-            logger.error("Unable to add");
-            e.printStackTrace(System.out);
+            logger.error("Unable to add "+object.getClass().getName());
+            e.printStackTrace();
             if (tx != null) {
                 try {
                     tx.rollback();
@@ -2725,18 +2725,21 @@ public class DbUtil {
 
         try {
             sess = PersistenceManager.getRequestDBSession();
-            tx = sess.beginTransaction();
             sess.update(object);
-            tx.commit();
         } catch (Exception e) {
-            logger.error("Unable to update", e);
-            if (tx != null) {
-                try {
-                    tx.rollback();
-                } catch (HibernateException ex) {
-                    logger.error("rollback() failed", e);
-                }
-            }
+        	logger.error(e);
+        } finally { 
+        	try {
+				PersistenceManager.releaseSession(sess);
+			} catch (HibernateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				logger.error(e);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				logger.error(e);
+			}
         }
     }
 

@@ -49,7 +49,8 @@ public class TrnAccessUpdateQueue {
 	 * @param message
 	 */
 	public synchronized void put(Message message){
-		if (!map.containsKey(message)){
+		//4 the moment we are interestd to know if a tag was accessed at all or not.
+		if (message.getLastAccessed()==null && !map.containsKey(message)){
 			queue.add(message);
 		}
 		map.put(message,new Timestamp(System.currentTimeMillis()));

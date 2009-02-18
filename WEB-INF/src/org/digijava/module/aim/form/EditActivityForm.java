@@ -41,7 +41,6 @@ import org.digijava.module.aim.helper.CustomFieldStep;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.KeyValue;
-import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.MTEFProjection;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.util.CustomFieldsUtil;
@@ -80,6 +79,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
      * on the components and regional funding page...
      */
     private String fundingCurrCode;
+    private String regFundingPageCurrCode;
 
 
 	public class Contracts {
@@ -1379,6 +1379,15 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private Long[] selCompSectors;
 		private String currencyCode;
 		private String componentRepDate;
+        private String fundingCurrCode;
+
+        public String getFundingCurrCode() {
+            return fundingCurrCode;
+        }
+
+        public void setFundingCurrCode(String fundingCurrCode) {
+            this.fundingCurrCode = fundingCurrCode;
+        }
 
 		public Long getComponentId() {
 			return componentId;
@@ -1878,6 +1887,15 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private int offset;
 		private int indexId;
 		private long transIndexId;
+        private String fundingCurrCode;
+
+        public String getFundingCurrCode() {
+            return fundingCurrCode;
+        }
+
+        public void setFundingCurrCode(String fundingCurrCode) {
+            this.fundingCurrCode = fundingCurrCode;
+        }
 		
 		private boolean totDisbIsBiggerThanTotCom;
 		
@@ -3700,6 +3718,9 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.contactInfo = null;
 			this.agencies = null;
 			this.indicatorME = null;
+            this.fundingCurrCode=null;
+            this.regFundingPageCurrCode=null;
+            this.funding=null;
 			step = "1";
 			reset = false;
 			steps = null;
@@ -4137,5 +4158,13 @@ public class EditActivityForm extends ActionForm implements Serializable {
     public void setFundingCurrCode(String fundingCurrCode) {
         this.fundingCurrCode = fundingCurrCode;
     }
+    public String getRegFundingPageCurrCode() {
+        return regFundingPageCurrCode;
+    }
+
+    public void setRegFundingPageCurrCode(String regfundingPageCurrCode) {
+        this.regFundingPageCurrCode = regfundingPageCurrCode;
+    }
+
 }
 

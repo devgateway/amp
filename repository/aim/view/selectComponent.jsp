@@ -111,12 +111,12 @@
 
                                <digi:trn>Select currency </digi:trn>
 
-                               <html:select property="fundingCurrCode" styleClass="inp-text" onchange="changeCurrency()">
+                               <html:select property="components.fundingCurrCode" styleClass="inp-text" onchange="changeCurrency()" styleId="compFundCurr">
                                 <c:forEach var="currency" items="${aimEditActivityForm.funding.validcurrencies}">
-                                    <c:if test="${currency.currencyCode!=aimEditActivityForm.fundingCurrCode}">
+                                    <c:if test="${currency.currencyCode!=aimEditActivityForm.components.fundingCurrCode}">
                                         <option value="<c:out value="${currency.currencyCode}"/>">
                                     </c:if>
-                                    <c:if test="${currency.currencyCode==aimEditActivityForm.fundingCurrCode}">
+                                    <c:if test="${currency.currencyCode==aimEditActivityForm.components.fundingCurrCode}">
                                         <option value="<c:out value="${currency.currencyCode}"/>" selected="true">
                                         </c:if>
                                         <c:out value="${currency.currencyName}" />

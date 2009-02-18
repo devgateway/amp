@@ -18,10 +18,13 @@ import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.ActivityUtil;
 import java.util.ArrayList;
 import java.util.Iterator;
+import javax.servlet.http.HttpSession;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.RegionalFunding;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.DbUtil;
 
 /**
  *
@@ -30,13 +33,34 @@ import org.digijava.module.aim.helper.RegionalFunding;
 public class GetFundingTotals extends Action {
 
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        //called from regional or component pages
+        String isRegCurr=request.getParameter("isRegcurr");
+         // called from popup or from step page
+        String stepPage=request.getParameter("isStepPage");
+        String curr=null;
+        HttpSession session = request.getSession();
+        TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
+        String defCurr = DbUtil.getMemberAppSettings(tm.getMemberId()).getCurrency().getCurrencyCode();
         EditActivityForm eaForm = (EditActivityForm) form;
+         if(isRegCurr.equals("true")){
+            curr=eaForm.getRegFundingPageCurrCode();
+             if (stepPage.equals("false")) {
+                 eaForm.setRegFundingPageCurrCode(defCurr);
+             }
+        }
+         else{
+            curr=eaForm.getFundingCurrCode();
+            if (stepPage.equals("false")) {
+                 eaForm.setFundingCurrCode(defCurr);
+             }
+         }
         FundingCalculationsHelper cal = new FundingCalculationsHelper();
         FundingCalculationsHelper calComp = new FundingCalculationsHelper();
         FundingCalculationsHelper calReg = new FundingCalculationsHelper();
         Collection fundDets = eaForm.getFunding().getFundingDetails();
         Collection<AmpFundingDetail> ampFundDets = ActivityUtil.createAmpFundingDetails(fundDets);
-        cal.doCalculations(ampFundDets, eaForm.getFundingCurrCode());
+        cal.doCalculations(ampFundDets, curr);
         Collection<AmpFundingDetail> compFundingDets = new ArrayList<AmpFundingDetail>();
         Collection<AmpFundingDetail> regionalFundingDets = new ArrayList<AmpFundingDetail>();
         Collection<FundingDetail> compFunDets = null;
@@ -81,17 +105,17 @@ public class GetFundingTotals extends Action {
         xml += " totalComm=\"" + FormatHelper.formatNumber(cal.getTotalCommitments().doubleValue()) + "\" ";
         xml += "disb=\"" + FormatHelper.formatNumber(cal.getTotActualDisb().doubleValue()) + "\" ";
         xml += "expn=\"" + FormatHelper.formatNumber(cal.getTotActualExp().doubleValue()) + "\" ";
-        xml += "curr=\"" + eaForm.getFundingCurrCode() + "\" ";
-        calComp.doCalculations(compFundingDets, eaForm.getFundingCurrCode());
+        xml += "curr=\"" + curr + "\" ";
+        calComp.doCalculations(compFundingDets, curr);
         xml += "comp_disb=\"" + FormatHelper.formatNumber(calComp.getTotActualDisb().doubleValue()) + "\" ";
-        calReg.doCalculations(regionalFundingDets, eaForm.getFundingCurrCode());
+        calReg.doCalculations(regionalFundingDets, curr);
         xml += "regional_disb=\"" + FormatHelper.formatNumber(calReg.getTotActualDisb().doubleValue()) + "\" ";
         xml += "/>";
         out.println(xml);
         out.close();
         // return xml
         outputStream.close();
-
+       
         return null;
 
     }

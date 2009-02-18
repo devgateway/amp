@@ -307,6 +307,9 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
               if(eaForm.getFundingCurrCode()==null){
               eaForm.setFundingCurrCode(currCode);
               }
+          if (eaForm.getRegFundingPageCurrCode() == null) {
+              eaForm.setRegFundingPageCurrCode(currCode);
+          }
       }
 
       /*List prLst = new ArrayList();

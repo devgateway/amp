@@ -171,8 +171,11 @@ public class ShowActivityPrintPreview
                 	eaForm.getIdentification().setLessonsLearned(activity.getLessonsLearned().trim());
                 }
                 if(activity.getObjective()!=null){
-                	 eaForm.getIdentification().setObjectives(activity.getObjective().trim());
-                }
+               	 eaForm.getIdentification().setObjectives(activity.getObjective().trim());
+               }
+                if(activity.getProjectComments()!=null){
+               	 eaForm.getIdentification().setProjectComments(activity.getProjectComments().trim());
+               }
                 // fferreyra: Added null checking for field project_impact
                 if(activity.getProjectImpact()!=null){
                 	eaForm.getIdentification().setProjectImpact(activity.getProjectImpact().trim());
@@ -1137,6 +1140,7 @@ public class ShowActivityPrintPreview
                 eaForm.getIdentification().setAmpId(null);
                 eaForm.getIdentification().setTitle(null);
                 eaForm.getIdentification().setObjectives(null);
+                eaForm.getIdentification().setProjectComments(null);
                 eaForm.getIdentification().setDescription(null);
                 eaForm.getSectors().setActivitySectors(null);
 //                eaForm.setSectorSchemes(null);

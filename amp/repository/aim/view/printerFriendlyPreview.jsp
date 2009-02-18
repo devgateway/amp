@@ -86,6 +86,22 @@
 									</tr>								
 <feature:display name="Identification" module="Project ID and Planning">
 
+									<field:display feature="Identification" name="Project Comments">
+                                    	
+                                    <tr>
+										<td width="27%" align="right" valign="top" nowrap="nowrap">
+											<b>
+											<digi:trn key="aim:projectcomments">
+										    Project Comments</digi:trn>
+											</b>								</td>
+<td bgcolor="#ffffff">
+                                          <c:if test="${aimEditActivityForm.identification.projectComments!=null}">
+											<c:set var="objKey" value="${aimEditActivityForm.identification.projectComments}" />
+											<digi:edit key="${objKey}"></digi:edit>
+                                         </c:if>										</td>
+									</tr>    
+									</field:display>
+									
 									<field:display feature="Identification" name="Objective">
                                     	
                                     <tr>

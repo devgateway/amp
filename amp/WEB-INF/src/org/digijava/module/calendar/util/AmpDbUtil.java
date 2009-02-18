@@ -147,7 +147,7 @@ public class AmpDbUtil {
     try {
         Session session = PersistenceManager.getRequestDBSession();
         String queryString = "from " + AmpCalendar.class.getName() +
-            " et where et.EVENT_TYPE_ID = :eventTypeId";
+            " et where et.eventType = :eventTypeId";
         Query query = session.createQuery(queryString);
         query.setLong("eventTypeId", eventTypeId.longValue());
 

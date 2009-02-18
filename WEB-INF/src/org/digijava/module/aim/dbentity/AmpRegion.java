@@ -12,7 +12,11 @@ import java.util.Set;
 
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.module.aim.util.Identifiable;
-
+/**
+ * 
+ * Was replaced by AmpCategoryValueLocation
+ */
+@Deprecated
 public class AmpRegion implements Serializable, Comparable, Identifiable{
 	private Long ampRegionId;
 	private String name;

@@ -328,6 +328,7 @@
                               </digi:link>
                             </td>
                           </tr>
+                          <%--
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -339,6 +340,7 @@
                               </digi:link>
                             </td>
                           </tr>
+                          --%>
                           <feature:display name="Dynamic Region Manager" module="ADMINISTRATIVE SECTION">
                            <tr>
                             <td class="f-names" nowrap="nowrap">
@@ -347,7 +349,7 @@
                                 <digi:trn key="aim:clickToViewRegionManager">Click here to view Region Manager</digi:trn>
                               </c:set>
                               <digi:link href="/dynLocationManager.do" title="${translation}" >
-                                <digi:trn key="aim:dynRegionManager">Dynamic Region Manager</digi:trn>
+                                <digi:trn key="aim:regionManager">Region Manager</digi:trn>
                               </digi:link>
                             </td>
                           </tr>

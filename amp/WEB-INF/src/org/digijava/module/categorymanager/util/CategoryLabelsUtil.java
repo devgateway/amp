@@ -21,13 +21,16 @@ public class CategoryLabelsUtil {
 		List<PossibleValue> possibleVals				= form.getPossibleVals();
 		HashSet<Long> labelCategoryIds					= new HashSet<Long>();
 		
-		if ( usedCategories == null || usedCategories.size() == 0 )
-			return;
-		
 		if ( category.getUsedCategories() == null )
 			category.setUsedCategories( new ArrayList<AmpCategoryClass>() );
 		category.getUsedCategories().clear();
 		
+		if ( usedCategories == null || usedCategories.size() == 0 )
+			return;
+		
+		/**
+		 * Adding the ids of the all label categories to the labelCategoryIds set.
+		 */
 		Iterator<AmpCategoryClass> iterUsed				= usedCategories.iterator();
 		while ( iterUsed.hasNext() ) {
 			AmpCategoryClass usedCateg		= iterUsed.next();

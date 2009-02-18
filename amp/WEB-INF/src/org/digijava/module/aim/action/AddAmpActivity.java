@@ -145,6 +145,9 @@ public class AddAmpActivity extends Action {
     if (eaForm.getFundingCurrCode() == null) {
         eaForm.setFundingCurrCode(currCode);
     }
+    if (eaForm.getRegFundingPageCurrCode() == null) {
+        eaForm.setRegFundingPageCurrCode(currCode);
+    }
       
     //START-patch for error redirecting
     String reqStep = (String) request.getAttribute("step");

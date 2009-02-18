@@ -17,7 +17,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
-<script language="JavaScript">
+<script language="JavaScript" type="text/javascript">
 
 	<!--
 
@@ -52,8 +52,8 @@
         return partialURL+"/"+actionName;
     }
         function totalsPage() {
-       var currency=document.aimEditActivityForm.fundingCurrCode.value;
-       var url=addActionToURL('getFundingTotals.do')+'?fundingCurrCode='+currency;
+       var currency=document.aimEditActivityForm.regFundingPageCurrCode.value;
+       var url=addActionToURL('getFundingTotals.do')+'?regFundingPageCurrCode='+currency+'&isRegcurr=true'+'&isStepPage=true';
        var async=new Asynchronous();
        async.complete=buildFundingTotalsForPage;
        async.call(url);
@@ -65,7 +65,7 @@
         var expn=document.getElementById("expn");
         var compTot=document.getElementById("regional_disb");
         var curr=root.getAttribute("curr");
-       var totalComm=root.getAttribute("totalComm");
+        var totalComm=root.getAttribute("totalComm");
         comm.innerHTML="<digi:trn> Commitments - (Grand Total Actual Allocation</digi:trn> "+totalComm+" "+curr+")";
         disb.innerHTML="<digi:trn> Disbursement - (Total actual to date</digi:trn> "+root.getAttribute("disb")+' '+curr+')';
         expn.innerHTML="<digi:trn> Expenditure - (Total actual to date</digi:trn>   " +root.getAttribute("expn")+' '+curr+')';
@@ -79,7 +79,13 @@ if(document.addEventListener){
     document.addEventListener("DOMContentLoaded",totalsPage,false);
 }
 else{
-    window.onload=totalsPage;
+  if (document.attachEvent){
+  window.attachEvent('onload', totalsPage);
+}
+else {
+  document.DOMContentLoaded = totalsPage;
+}
+  
 }
 
 	function validateForm() {
@@ -331,9 +337,14 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                         <td>
                                                                                             &nbsp;&nbsp;<b> <digi:trn>Select currency </digi:trn></b>
                                                                                                 
-                                                                                            <html:select property="fundingCurrCode" styleClass="inp-text" onchange="totalsPage()">
+                                                                                            <html:select property="regFundingPageCurrCode" styleClass="inp-text" onchange="totalsPage()">
                                                                                                 <c:forEach var="currency" items="${aimEditActivityForm.funding.validcurrencies}">
-                                                                                                    <option value="<c:out value="${currency.currencyCode}"/>">
+                                                                                                    <c:if test="${currency.currencyCode!=aimEditActivityForm.regFundingPageCurrCode}">
+                                                                                                        <option value="<c:out value="${currency.currencyCode}"/>">
+                                                                                                    </c:if>
+                                                                                                    <c:if test="${currency.currencyCode==aimEditActivityForm.regFundingPageCurrCode}">
+                                                                                                        <option value="<c:out value="${currency.currencyCode}"/>" selected="true">
+                                                                                                        </c:if>
                                                                                                         <c:out value="${currency.currencyName}" />
                                                                                                     </option>
                                                                                                 </c:forEach>

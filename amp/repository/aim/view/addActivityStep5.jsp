@@ -347,8 +347,8 @@ function removeSelPhyProgress() {
         return partialURL+"/"+actionName;
     }
     function changeCurrency(){
-       var currency=document.aimAddComponentForm.fundingCurrCode.value;
-       var url=addActionToURL('getFundingTotals.do')+'?fundingCurrCode='+currency;
+       var currency=document.getElementById("compFundCurr").value;
+       var url=addActionToURL('getFundingTotals.do')+'?fundingCurrCode='+currency+'&isRegcurr=false'+'&isStepPage=false';
        var async=new Asynchronous();
        async.complete=buildFundingTotals;
        async.call(url);
@@ -368,7 +368,7 @@ function removeSelPhyProgress() {
     }
     function totalsPage() {
        var currency=document.aimEditActivityForm.fundingCurrCode.value;
-       var url=addActionToURL('getFundingTotals.do')+'?fundingCurrCode='+currency;
+       var url=addActionToURL('getFundingTotals.do')+'?fundingCurrCode='+currency+'&isRegcurr=false'+'&isStepPage=true';
        var async=new Asynchronous();
        async.complete=buildFundingTotalsForPage;
        async.call(url);
@@ -395,9 +395,14 @@ if(document.addEventListener){
     document.addEventListener("DOMContentLoaded",totalsPage,false);
 }
 else{
-    window.onload=totalsPage;
+  if (document.attachEvent){
+  window.attachEvent('onload', totalsPage);
+}
+else {
+  document.DOMContentLoaded = totalsPage;
 }
 
+}
 
 /*
 

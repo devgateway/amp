@@ -132,8 +132,8 @@ public class ShowAddComponent extends Action {
 		//String defCurr = CurrencyUtil.getCurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
 		String defCurr = DbUtil.getMemberAppSettings(tm.getMemberId()).getCurrency().getCurrencyCode();
 		request.setAttribute("defCurrency", defCurr);
-        if(eaForm.getFundingCurrCode()==null){
-            eaForm.setFundingCurrCode(defCurr);
+        if(eaForm.getComponents().getFundingCurrCode()==null){
+            eaForm.getComponents().setFundingCurrCode(defCurr);
         }
         setFundingTotals(eaForm,session);
 
@@ -213,8 +213,8 @@ public class ShowAddComponent extends Action {
      
 		String defCurr = CurrencyUtil.getCurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
 		request.setAttribute("defCurrency", defCurr);
-        if (eaForm.getFundingCurrCode() == null) {
-            eaForm.setFundingCurrCode(defCurr);
+       if(eaForm.getComponents().getFundingCurrCode()==null){
+            eaForm.getComponents().setFundingCurrCode(defCurr);
         }
         setFundingTotals(eaForm, session);
 		return mapping.findForward("forward");
@@ -475,10 +475,16 @@ public class ShowAddComponent extends Action {
         Collection fundDets = eaForm.getFunding().getFundingDetails();
         if (fundDets != null) {
             Collection<AmpFundingDetail> ampFundDets = ActivityUtil.createAmpFundingDetails(fundDets);
-            cal.doCalculations(ampFundDets, eaForm.getFundingCurrCode());
+            cal.doCalculations(ampFundDets, eaForm.getComponents().getFundingCurrCode());
             session.setAttribute("totalComm", cal.getTotActualComm());
             session.setAttribute("totalDisb", cal.getTotActualDisb());
             session.setAttribute("totalExpn", cal.getTotActualExp());
+        }
+         else {
+            session.setAttribute("totalComm", 0);
+            session.setAttribute("totalDisb", 0);
+            session.setAttribute("totalExpn", 0);
+
         }
     }
     

@@ -57,8 +57,8 @@ public class AddRegionalFunding extends Action {
 			String defCurr = CurrencyUtil.getCurrency(
 					tm.getAppSettings().getCurrencyId()).getCurrencyCode();
 			request.setAttribute("defCurrency",defCurr);
-            if (eaForm.getFundingCurrCode() == null) {
-                eaForm.setFundingCurrCode(defCurr);
+            if (eaForm.getFunding().getFundingCurrCode()== null) {
+                eaForm.getFunding().setFundingCurrCode(defCurr);
             }
             setFundingTotals(eaForm, session);
 			
@@ -288,10 +288,16 @@ public class AddRegionalFunding extends Action {
         Collection fundDets = eaForm.getFunding().getFundingDetails();
         if (fundDets != null) {
             Collection<AmpFundingDetail> ampFundDets = ActivityUtil.createAmpFundingDetails(fundDets);
-            cal.doCalculations(ampFundDets, eaForm.getFundingCurrCode());
+            cal.doCalculations(ampFundDets, eaForm.getFunding().getFundingCurrCode());
             session.setAttribute("totalComm", cal.getTotActualComm());
             session.setAttribute("totalDisb", cal.getTotActualDisb());
             session.setAttribute("totalExpn", cal.getTotActualExp());
+        }
+        else{
+            session.setAttribute("totalComm", 0);
+            session.setAttribute("totalDisb", 0);
+            session.setAttribute("totalExpn", 0);
+
         }
     }
  } 

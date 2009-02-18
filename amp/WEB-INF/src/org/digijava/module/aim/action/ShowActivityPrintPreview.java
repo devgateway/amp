@@ -25,6 +25,7 @@ import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.utils.AmpCollectionUtils;
 import org.digijava.kernel.dbentity.Country;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
@@ -52,6 +53,7 @@ import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
+import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.CMSContentItem;
@@ -89,6 +91,7 @@ import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.EUActivityUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
+import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -113,7 +116,13 @@ public class ShowActivityPrintPreview
         if(actId != null) {
             HttpSession session = request.getSession();
             TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-            AmpActivity activity = ActivityUtil.getAmpActivity(actId);
+            AmpActivity activity = null;
+			try {
+				activity = ActivityUtil.loadActivity(actId);
+			} catch (DgException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
             if(activity != null){
             	
             	
@@ -140,8 +149,8 @@ public class ShowActivityPrintPreview
 
 
                 try {
-                    List actPrgs = new ArrayList();
-                    Set prgSet = activity.getActivityPrograms();
+                    List actPrgs = new ArrayList();                    
+                    Collection prgSet = ActivityUtil.getActivityPrograms(activity.getAmpActivityId());
                     if(prgSet != null) {
                         Iterator prgItr = prgSet.iterator();
                         while(prgItr.hasNext()) {
@@ -278,7 +287,7 @@ public class ShowActivityPrintPreview
             
                 
 
-                Collection col = activity.getClosingDates();
+                Collection col = ActivityUtil.getActivityCloseDates(activity.getAmpActivityId());
                 List dates = new ArrayList();
                 if(col != null && col.size() > 0) {
                     Iterator itr = col.iterator();
@@ -308,8 +317,8 @@ public class ShowActivityPrintPreview
                 Collections.sort(dates, DateConversion.dtComp);
                 eaForm.getPlanning().setActivityCloseDates(dates);
 
-                // loading organizations and thier project ids.
-                Set orgProjIdsSet = activity.getInternalIds();
+                // loading organizations and thier project ids.                
+                Collection orgProjIdsSet = DbUtil.getActivityInternalId(activity.getAmpActivityId());
                 if(orgProjIdsSet != null) {
                     Iterator projIdItr = orgProjIdsSet.iterator();
                     Collection temp = new ArrayList();
@@ -347,8 +356,8 @@ public class ShowActivityPrintPreview
 
                 // loading the locations
                 int impLevel = 0;
-
-                Collection<AmpActivityLocation> ampLocs = activity.getLocations();
+                
+                Collection<AmpActivityLocation> ampLocs = ActivityUtil.getActivityLocations(activity.getAmpActivityId());
 
                 if (ampLocs != null && ampLocs.size() > 0) {
                     Collection locs = new ArrayList();
@@ -471,7 +480,7 @@ public class ShowActivityPrintPreview
                 
                 
 
-        		Collection sectors = activity.getSectors();
+        		Collection sectors = ActivityUtil.getAmpActivitySectors(activity.getAmpActivityId());
 
         		if (sectors != null && sectors.size() > 0) {
         			List<ActivitySector> activitySectors = new ArrayList<ActivitySector>();
@@ -548,8 +557,9 @@ public class ShowActivityPrintPreview
           
                 ArrayList fundingOrgs = new ArrayList();
                 Iterator fundItr=null;
-                if(activity.getFunding()!=null) {
-                	fundItr = activity.getFunding().iterator();
+                List listf = DbUtil.getAmpFunding(activity.getAmpActivityId());
+                if(listf!=null) {                	
+                	fundItr = listf.iterator();
                     while(fundItr.hasNext()) {
                         AmpFunding ampFunding = (AmpFunding) fundItr.next();
                         AmpOrganisation org = ampFunding.getAmpDonorOrgId();
@@ -774,13 +784,14 @@ public class ShowActivityPrintPreview
                 eaForm.getComponents().setSelectedComponents(null);
                 eaForm.getComponents().setCompTotalDisb(0);
                 
-                if (activity.getComponents() != null && activity.getComponents().size() > 0) {
-                	getComponents(activity, eaForm);
+                Collection comp = ActivityUtil.getComponents(activity.getAmpActivityId());
+                if (comp != null && comp.size() > 0) {
+                	getComponents(comp, activity.getAmpActivityId(), eaForm);
                 }
                 
 
                 Collection memLinks = TeamMemberUtil.getMemberLinks(tm.getMemberId());
-                Collection actDocs = activity.getDocuments();
+                Collection actDocs = DocumentUtil.getDocumentsForActivity(RequestUtils.getSite(request), activity);
                 if(actDocs != null && actDocs.size() > 0) {
                     Collection docsList = new ArrayList();
                     Collection linksList = new ArrayList();
@@ -812,79 +823,77 @@ public class ShowActivityPrintPreview
                     }
                     eaForm.getDocuments().setDocumentList(docsList);
                     eaForm.getDocuments().setLinksList(linksList);
-                }
-                Site currentSite = RequestUtils.getSite(request);
-                eaForm.getDocuments().setManagedDocumentList(DocumentUtil.getDocumentsForActivity(currentSite, activity));
+                }                
+                eaForm.getDocuments().setManagedDocumentList(actDocs);
                 // loading the related organizations
-                eaForm.getAgencies().setExecutingAgencies(new ArrayList());
-                eaForm.getAgencies().setImpAgencies(new ArrayList());
-                eaForm.getAgencies().setBenAgencies(new ArrayList());
-                eaForm.getAgencies().setConAgencies(new ArrayList());
-                eaForm.getAgencies().setReportingOrgs(new ArrayList());
-                eaForm.getAgencies().setSectGroups(new ArrayList());
-                eaForm.getAgencies().setRegGroups(new ArrayList());
+                List executingAgencies = new ArrayList();
+                List impAgencies = new ArrayList();
+                List benAgencies = new ArrayList();
+                List conAgencies = new ArrayList();
+                List reportingOrgs = new ArrayList();
+                List sectGroups = new ArrayList();
+                List regGroups = new ArrayList();
 
-                Set relOrgs = activity.getOrgrole();
+                Collection relOrgs = ActivityUtil.getOrgRole(activity.getAmpActivityId());
                 if (relOrgs != null) {
                   Iterator relOrgsItr = relOrgs.iterator();
+                  AmpOrgRole orgRole = null;
+                  AmpRole role = null;
+                  AmpOrganisation organisation = null;
                   while (relOrgsItr.hasNext()) {
-                    AmpOrgRole orgRole = (AmpOrgRole) relOrgsItr.next();
-                    if (orgRole.getRole().getRoleCode().equals(
+                	orgRole = (AmpOrgRole) relOrgsItr.next();
+                	role = ActivityUtil.getAmpRole(activity.getAmpActivityId(), orgRole.getAmpOrgRoleId());     
+                	organisation = ActivityUtil.getAmpOrganisation(activity.getAmpActivityId(), orgRole.getAmpOrgRoleId());
+                    if (role.getRoleCode().equals(
                         Constants.EXECUTING_AGENCY)
-                        && (!eaForm
-                            .getAgencies().getExecutingAgencies()
-                            .contains(orgRole.getOrganisation()))) {
-                      eaForm.getAgencies().getExecutingAgencies().add(
-                          orgRole.getOrganisation());
+                        && (!executingAgencies.contains(organisation))) {
+                    	executingAgencies.add(organisation);
                     }
-                    else if (orgRole.getRole().getRoleCode().equals(
+                    else if (role.getRoleCode().equals(
                         Constants.IMPLEMENTING_AGENCY)
-                             && (!eaForm.getAgencies().getImpAgencies().contains(
-                                 orgRole.getOrganisation()))) {
-                      eaForm.getAgencies().getImpAgencies().add(
-                          orgRole.getOrganisation());
+                             && (!impAgencies.contains(organisation))) {
+                    	impAgencies.add(organisation);
                     }
-                    else if (orgRole.getRole().getRoleCode().equals(
+                    else if (role.getRoleCode().equals(
                         Constants.BENEFICIARY_AGENCY)
-                             && (!eaForm.getAgencies().getBenAgencies().contains(
-                                 orgRole.getOrganisation()))) {
-                      eaForm.getAgencies().getBenAgencies().add(
-                          orgRole.getOrganisation());
+                             && (!benAgencies.contains(organisation))) {
+                      benAgencies.add(organisation);
                     }
-                    else if (orgRole.getRole().getRoleCode().equals(
+                    else if (role.getRoleCode().equals(
                         Constants.CONTRACTING_AGENCY)
-                             && (!eaForm.getAgencies().getConAgencies().contains(
-                                 orgRole.getOrganisation()))) {
-                      eaForm.getAgencies().getConAgencies().add(
-                          orgRole.getOrganisation());
+                             && (!conAgencies.contains(organisation))) {
+                    	conAgencies.add(organisation);
                     }
-                    else if (orgRole.getRole().getRoleCode().equals(
+                    else if (role.getRoleCode().equals(
                         Constants.REPORTING_AGENCY)
-                             && (!eaForm.getAgencies().getReportingOrgs().contains(
-                                 orgRole.getOrganisation()))) {
-                      eaForm.getAgencies().getReportingOrgs().add(
-                          orgRole.getOrganisation());
-                    } else if (orgRole.getRole().getRoleCode().equals(
+                             && (!reportingOrgs.contains(organisation))) {
+                    	reportingOrgs.add(organisation);
+                    } else if (role.getRoleCode().equals(
                             Constants.SECTOR_GROUP)
-                            && (!eaForm.getAgencies().getSectGroups().contains(
-                                orgRole.getOrganisation()))) {
-                     eaForm.getAgencies().getSectGroups().add(
-                         orgRole.getOrganisation());
-                   } else if (orgRole.getRole().getRoleCode().equals(
+                            && (!sectGroups.contains(organisation))) {
+                    	sectGroups.add(orgRole.getOrganisation());
+                   } else if (role.getRoleCode().equals(
                            Constants.REGIONAL_GROUP)
-                           && (!eaForm.getAgencies().getRegGroups().contains(
-                               orgRole.getOrganisation()))) {
-                    eaForm.getAgencies().getRegGroups().add(
-                        orgRole.getOrganisation());
+                           && (!regGroups.contains(organisation))) {
+                	   regGroups.add(organisation);
                   }
 
                   }
                 }
-
-                if(activity.getIssues() != null
-                   && activity.getIssues().size() > 0) {
+                
+                eaForm.getAgencies().setExecutingAgencies(executingAgencies);
+                eaForm.getAgencies().setImpAgencies(impAgencies);
+                eaForm.getAgencies().setBenAgencies(benAgencies);
+                eaForm.getAgencies().setConAgencies(conAgencies);
+                eaForm.getAgencies().setReportingOrgs(reportingOrgs);
+                eaForm.getAgencies().setSectGroups(sectGroups);
+                eaForm.getAgencies().setRegGroups(regGroups);
+                
+                Collection colIssues = ActivityUtil.getAmpIssues(activity.getAmpActivityId());
+                if(colIssues != null
+                   && colIssues.size() > 0) {
                     ArrayList issueList = new ArrayList();
-                    Iterator iItr = activity.getIssues().iterator();
+                    Iterator iItr = colIssues.iterator();
                     while(iItr.hasNext()) {
                         AmpIssues ampIssue = (AmpIssues) iItr.next();
                         Issues issue = new Issues();
@@ -990,9 +999,8 @@ public class ShowActivityPrintPreview
                                  eaForm.getPrograms().setPrimarySetting(ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.PRIMARY_PROGRAM));
                                  eaForm.getPrograms().setSecondarySetting(ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.SECONDARY_PROGRAM));
                       }
-             
                     
-                    Collection<AmpActivityComponente> componentes = activity.getComponentes();
+                    Collection<AmpActivityComponente> componentes = ActivityUtil.getAmpActivityComponente(activity.getAmpActivityId());
             		if (componentes != null && componentes.size() > 0) {
             			Collection activitySectors = new ArrayList();
             			Iterator<AmpActivityComponente> sectItr = componentes.iterator();
@@ -1219,8 +1227,7 @@ public class ShowActivityPrintPreview
         return mapping.findForward("forward");
     }
 
-	private void getComponents(AmpActivity activity, EditActivityForm eaForm) {
-		Collection componets = activity.getComponents();
+	private void getComponents(Collection componets, Long actId, EditActivityForm eaForm) {
 		List<Components<FundingDetail>> selectedComponents = new ArrayList<Components<FundingDetail>>();
 		Iterator compItr = componets.iterator();
 		while (compItr.hasNext()) {
@@ -1244,7 +1251,7 @@ public class ShowActivityPrintPreview
 
 
 			Collection<AmpComponentFunding> fundingComponentActivity = ActivityUtil.getFundingComponentActivity(
-					tempComp.getComponentId(), activity.getAmpActivityId());
+					tempComp.getComponentId(), actId);
 			Iterator cItr = fundingComponentActivity.iterator();
 			while (cItr.hasNext()) {
 				AmpComponentFunding ampCompFund = (AmpComponentFunding) cItr
@@ -1281,7 +1288,7 @@ public class ShowActivityPrintPreview
 			ComponentsUtil.calculateFinanceByYearInfo(tempComp,fundingComponentActivity);
 
 			Collection<AmpPhysicalPerformance> phyProgress = ActivityUtil
-						.getPhysicalProgressComponentActivity(tempComp.getComponentId(), activity.getAmpActivityId());
+						.getPhysicalProgressComponentActivity(tempComp.getComponentId(), actId);
 
 			if (phyProgress != null && phyProgress.size() > 0) {
 				Collection physicalProgress = new ArrayList();

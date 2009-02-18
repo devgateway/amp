@@ -33,6 +33,7 @@ import org.digijava.kernel.user.User;
 import org.digijava.module.aim.action.RecoverySaveParameters;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
+import org.digijava.module.aim.dbentity.AmpActivityComponente;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityReferenceDoc;
@@ -54,6 +55,7 @@ import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpMeasure;
+import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpNotes;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
@@ -65,9 +67,11 @@ import org.digijava.module.aim.dbentity.AmpReportCache;
 import org.digijava.module.aim.dbentity.AmpReportLocation;
 import org.digijava.module.aim.dbentity.AmpReportPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpReportSector;
+import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.dbentity.IPAContractDisbursement;
@@ -1143,15 +1147,37 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 		}
 	}
 
+
+  public static Collection getAmpActivityComponente(Long actId) {
+    Session session = null;
+    Collection col = new ArrayList();
+    logger.info(" this is the other components getting called....");
+    try {
+      session = PersistenceManager.getRequestDBSession();
+      String queryString = "select aac.* from amp_activity_componente aac " +
+    	  "where (aac.amp_activity_id=:actId)";
+      Query qry = session.createSQLQuery(queryString).addEntity(AmpActivityComponente.class);
+      qry.setParameter("actId", actId, Hibernate.LONG);
+      col = qry.list();
+    }
+    catch (Exception e) {
+      logger.error("Unable to get AmpActivityComponente");
+      logger.error(e.getMessage());
+    }
+    return col;
+  }
+
+  
   public static Collection getComponents(Long actId) {
     Session session = null;
     Collection col = new ArrayList();
     logger.info(" this is the other components getting called....");
     try {
-      session = PersistenceManager.getSession();
-      String queryString = "select comp from " + AmpComponent.class.getName() +
-          " comp where (comp.activity=:actId)";
-      Query qry = session.createQuery(queryString);
+      session = PersistenceManager.getRequestDBSession();
+      String queryString = "select ac.* from amp_components ac " +
+      		"inner join amp_activity_components aac on (aac.amp_component_id = ac.amp_component_id) " +
+      		"where (ac.amp_activity_id=:actId)";
+      Query qry = session.createSQLQuery(queryString).addEntity(AmpComponent.class);
       qry.setParameter("actId", actId, Hibernate.LONG);
       col = qry.list();
     }
@@ -1159,14 +1185,14 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       logger.error("Unable to get all components");
       logger.error(e.getMessage());
     }
-    finally {
-      try {
-        PersistenceManager.releaseSession(session);
-      }
-      catch (Exception ex) {
-        logger.error("Release Session failed :" + ex);
-      }
-    }
+//    finally {
+//      try {
+//        PersistenceManager.releaseSession(session);
+//      }
+//      catch (Exception ex) {
+//        logger.error("Release Session failed :" + ex);
+//      }
+//    }
     return col;
   }
 
@@ -1428,32 +1454,87 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
   }
 
   public static Collection getActivityCloseDates(Long activityId) {
-    Session session = null;
-    Collection col = new ArrayList();
+	    Session session = null;
+	    Collection col = new ArrayList();
 
-    try {
-      session = PersistenceManager.getSession();
-      String queryString = "select date from " +
-          AmpActivityClosingDates.class.getName() +
-          " date where (date.ampActivityId=:actId) and type in (0,1) order by date.ampActivityClosingDateId";
-      Query qry = session.createQuery(queryString);
-      qry.setParameter("actId", activityId, Hibernate.LONG);
-      col = qry.list();
-    }
-    catch (Exception e) {
-      logger.error("Unable to get activity close dates");
-      logger.error(e.getMessage());
-    }
-    finally {
-      try {
-        PersistenceManager.releaseSession(session);
-      }
-      catch (Exception ex) {
-        logger.error("Release Session failed :" + ex);
-      }
-    }
-    return col;
-  }
+	    try {
+	      session = PersistenceManager.getRequestDBSession();
+	      String queryString = "select date from " +
+	          AmpActivityClosingDates.class.getName() +
+	          " date where (date.ampActivityId=:actId) and type in (0,1) order by date.ampActivityClosingDateId";
+	      Query qry = session.createQuery(queryString);
+	      qry.setParameter("actId", activityId, Hibernate.LONG);
+	      col = qry.list();
+	    }
+	    catch (Exception e) {
+	      logger.error("Unable to get activity close dates");
+	      logger.error(e.getMessage());
+	    }
+//	    finally {
+//	      try {
+//	        PersistenceManager.releaseSession(session);
+//	      }
+//	      catch (Exception ex) {
+//	        logger.error("Release Session failed :" + ex);
+//	      }
+//	    }
+	    return col;
+	  }
+
+  public static Collection getActivityPrograms(Long activityId) {
+	    Session session = null;
+	    Collection col = new ArrayList();
+
+	    try {
+	      session = PersistenceManager.getRequestDBSession();
+	      String queryString = "select prog from " +
+	          AmpTheme.class.getName() +
+	          " prog where (prog.activityId=:actId) ";
+	      Query qry = session.createQuery(queryString);
+	      qry.setParameter("actId", activityId, Hibernate.LONG);
+	      col = qry.list();
+	    }
+	    catch (Exception e) {
+	      logger.error("Unable to get activity programs");
+	      logger.error(e.getMessage());
+	    }
+//	    finally {
+//	      try {
+//	        PersistenceManager.releaseSession(session);
+//	      }
+//	      catch (Exception ex) {
+//	        logger.error("Release Session failed :" + ex);
+//	      }
+//	    }
+	    return col;
+	  }
+
+
+  public static Collection getActivityLocations(Long activityId) {
+	    Session session = null;
+	    Collection col = new ArrayList();
+
+	    try {
+	      session = PersistenceManager.getRequestDBSession();
+	      String queryString = "select locs.* from amp_activity_location locs where (locs.amp_activity_id=:actId) ";
+	      Query qry = session.createSQLQuery(queryString).addEntity(AmpActivityLocation.class);
+	      qry.setParameter("actId", activityId, Hibernate.LONG);
+	      col = qry.list();
+	    }
+	    catch (Exception e) {
+	      logger.error("Unable to get activity locations");
+	      logger.error(e.getMessage());
+	    }
+//	    finally {
+//	      try {
+//	        PersistenceManager.releaseSession(session);
+//	      }
+//	      catch (Exception ex) {
+//	        logger.error("Release Session failed :" + ex);
+//	      }
+//	    }
+	    return col;
+	  }
 
   public static Collection getOrganizationWithRole(Long actId, String roleCode) {
     Session session = null;
@@ -1878,6 +1959,24 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     return sectors;
   }
 
+
+  public static Collection getAmpActivitySectors(Long actId) {
+    Session session = null;
+    Collection sectors = new ArrayList();
+
+    try {
+      session = PersistenceManager.getRequestDBSession();
+      String queryString = "select a.* from amp_activity_sector a " + "where a.amp_activity_id=:actId";
+      Query qry = session.createSQLQuery(queryString).addEntity(AmpActivitySector.class);
+      qry.setParameter("actId", actId, Hibernate.LONG);
+      sectors = qry.list();
+    }
+    catch (Exception ex) {
+      logger.error("Unable to get activity sectors :" + ex);
+    }
+    return sectors;
+  }
+
   public static Collection getOrgRole(Long id) {
     Session session = null;
     Collection orgroles = new ArrayList();
@@ -1902,6 +2001,51 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     }
     return orgroles;
   }
+
+
+  public static AmpRole getAmpRole(Long actId, Long orgRoleId) {
+	    Session session = null;
+	    AmpRole role = null;
+	    try {
+	      session = PersistenceManager.getSession();
+	      String queryString = "select ar.* from amp_role ar " +
+	      		"inner join amp_org_role aor on (aor.role = ar.amp_role_id) " +
+	      		"inner join amp_activity aa on (aa.amp_activity_id = aor.activity) " +
+	      		"where (aa.amp_activity_id=:actId) and (aor.amp_org_role_id=:orgRoleId)";
+	      Query qry = session.createSQLQuery(queryString).addEntity(AmpRole.class);
+	      qry.setParameter("actId", actId, Hibernate.LONG);
+	      qry.setParameter("orgRoleId", orgRoleId, Hibernate.LONG);
+	      if ((qry.list() != null) && (qry.list().size()>0)) {
+	    	  role = (AmpRole)qry.list().get(0);
+	      }
+	    }
+	    catch (Exception ex) {
+	      logger.error("Unable to get amprole :" + ex);
+	    }
+	    return role;
+	  }
+
+  public static AmpOrganisation getAmpOrganisation(Long actId, Long orgRoleId) {
+	    Session session = null;
+	    AmpOrganisation organisation = null;
+	    try {
+	      session = PersistenceManager.getSession();
+	      String queryString = "select ao.* from amp_organisation ao " +
+	      		"inner join amp_org_role aor on (aor.organisation = ao.amp_org_id) " +
+	      		"inner join amp_activity aa on (aa.amp_activity_id = aor.activity) " +
+	      		"where (aa.amp_activity_id=:actId) and (aor.amp_org_role_id=:orgRoleId)";
+	      Query qry = session.createSQLQuery(queryString).addEntity(AmpOrganisation.class);
+	      qry.setParameter("actId", actId, Hibernate.LONG);
+	      qry.setParameter("orgRoleId", orgRoleId, Hibernate.LONG);
+	      if ((qry.list() != null) && (qry.list().size()>0)) {
+	    	  organisation = (AmpOrganisation) qry.list().get(0);
+	      }
+	    }
+	    catch (Exception ex) {
+	      logger.error("Unable to get AmpOrganisation :" + ex);
+	    }
+	    return organisation;
+	  }
 
   public static Collection getFundingByOrg(Long id) {
     Session session = null;
@@ -2190,6 +2334,83 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     //f.setAllComps(col);
 
     return col;
+  }
+
+  public static Collection getAmpIssues(Long actId) {
+	  	Collection issues = null;
+	    Session session = null;
+
+	    try {
+	      session = PersistenceManager.getRequestDBSession();
+	      String qryStr = "select a from " + AmpIssues.class.getName() +
+	          " a where a.amp_activity_id=:actId ";
+	      Query qry = session.createQuery(qryStr);
+	      qry.setParameter("actId", actId, Hibernate.LONG);
+	      issues = qry.list();
+	      // get issues measures
+	      AmpIssues ampIssues = null;
+	      Collection measures = null;
+	      for (Iterator it = issues.iterator(); it.hasNext();) {
+	    	  ampIssues = (AmpIssues) it.next();
+	    	  measures = getAmpMeasures(ampIssues.getAmpIssueId());
+	    	  if (ampIssues.getMeasures() == null) {
+	    		  ampIssues.setMeasures(Collections.emptySet());
+	    	  }
+	    	  ampIssues.getMeasures().addAll(measures);
+	    	  // get measures actors
+	    	  AmpMeasure ampMeasure = null;
+	    	  Collection actors = null;
+	    	  for (Iterator it2 = measures.iterator(); it2.hasNext();) {
+	    		  ampMeasure = (AmpMeasure) it2.next();
+	    		  actors = getAmpActors(ampMeasure.getAmpMeasureId());
+	    		  if (ampMeasure.getActors() == null) {
+	    			  ampMeasure.setActors(Collections.emptySet());
+	    		  }
+	    		  ampMeasure.getActors().addAll(actors);
+	    	  }
+	      }
+	    }
+	    catch (Exception e) {
+	      logger.debug("Exception in getAmpIssues() " + e.getMessage());
+	    }
+	    return issues;
+  }
+
+  public static Collection getAmpMeasures(Long issueId) {
+	  	Collection col = null;
+	    Session session = null;
+
+	    try {
+	      session = PersistenceManager.getRequestDBSession();
+	      String qryStr = "select a from " + AmpMeasure.class.getName() +
+	          " a where a.amp_issue_id=:issueId ";
+	      Query qry = session.createQuery(qryStr);
+	      qry.setParameter("issueId", issueId, Hibernate.LONG);
+	      col = qry.list();
+	    }
+	    catch (Exception e) {
+	      logger.debug("Exception in getAmpMeasures() " + e.getMessage());
+	    }
+	    return col;
+  }
+  
+
+  public static Collection getAmpActors(Long measureId) {
+	  	Collection col = null;
+	    Session session = null;
+
+	    try {
+	      session = PersistenceManager.getRequestDBSession();
+	      String qryStr = "select a from " + AmpActor.class.getName() +
+	          " a where a.amp_measure_id=:measureId ";
+	      Query qry = session.createQuery(qryStr);
+	      qry.setParameter("measureId", measureId, Hibernate.LONG);
+	      col = qry.list();
+	    }
+	    catch (Exception e) {
+	      logger.debug("Exception in getAmpActors() " + e.getMessage());
+	    }
+	    return col;
   }
 
 //end functino to get components

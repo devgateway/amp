@@ -91,25 +91,18 @@ import org.digijava.module.aim.helper.CountryBean;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.Documents;
-import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Indicator;
 import org.digijava.module.aim.helper.ParisIndicator;
 import org.digijava.module.aim.helper.Question;
 import org.digijava.module.aim.helper.SurveyFunding;
-import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 import org.digijava.module.aim.helper.fiscalcalendar.EthiopianCalendar;
-import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.Calendar;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.common.util.DateTimeUtil;
-import org.digijava.module.orgProfile.helper.FilterHelper;
-import org.digijava.module.orgProfile.helper.Project;
-import org.digijava.module.widget.util.ChartWidgetUtil;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.JDBCException;
@@ -536,6 +529,24 @@ public class DbUtil {
         return internalId;
     }
 
+    public static Collection getActivityInternalId(Long actId) {
+            Session session = null;
+            Collection col = new ArrayList();
+
+            try {
+                session = PersistenceManager.getRequestDBSession();
+                String queryString = "select aaii.* from amp_activity_internal_id aaii " +
+	            			"where aaii.amp_activity_id=:actId";
+                Query qry = session.createSQLQuery(queryString).addEntity(AmpActivityInternalId.class);
+                qry.setParameter("actId", actId, Hibernate.LONG);
+                col = qry.list();
+             } catch (Exception ex) {
+                logger.error("Unable to get Activity Internal Id :" + ex);
+            }
+            return col;
+        }
+    
+    
     public static Collection getOrganizations(Long actId, String orgCode) {
         Session session = null;
         Collection orgs = new ArrayList();

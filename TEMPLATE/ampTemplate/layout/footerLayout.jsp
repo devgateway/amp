@@ -13,7 +13,7 @@
                     		<div class="footerText">
                       <img src="images/AMPLogo.png"  height="20" align="absmiddle" hspace="5" vspace="5" />
 							<FONT color="#FFFFFF">
-							AMP <tiles:getAsString name="version"/> <tiles:getAsString name="build_version"/> -
+							AMP <tiles:getAsString name="version"/> build <tiles:getAsString name="build_version"/> -
 							<digi:trn key="aim:ampDevelopmentCredits">
 								Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DGF
 							</digi:trn>

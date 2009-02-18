@@ -11,7 +11,11 @@ import java.io.Serializable;
 import java.util.Set;
 
 import org.digijava.kernel.dbentity.Country;
-
+/**
+ * 
+ * Was replaced by AmpCategoryValueLocation
+ */
+@Deprecated
 public class AmpZone implements Serializable{
 	private Long ampZoneId;
 	private String name;

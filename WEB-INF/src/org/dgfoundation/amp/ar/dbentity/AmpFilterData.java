@@ -5,8 +5,6 @@ import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -14,19 +12,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.PropertyListable.PropertyListableIgnore;
-import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.action.ReportsFilterPicker;
 import org.digijava.module.aim.annotations.reports.IgnorePersistence;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.util.Identifiable;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
 public class AmpFilterData implements Serializable {
 	private Long id;
@@ -172,6 +165,13 @@ public class AmpFilterData implements Serializable {
 						}
 					}
 				}
+				
+				if ( fieldObj instanceof Identifiable) {
+					AmpFilterData fd = new AmpFilterData ( report, fields[i].getName(), fieldObj.getClass().getName(), 
+							null, objectValue(fieldObj) ) ;
+					fdSet.add( fd );
+				}
+				
 				else 
 					if ( primitiveTypesList.contains(fieldObj.getClass().getName()) ) {
 						AmpFilterData fd		= new AmpFilterData ( report, fields[i].getName(), fieldObj.getClass().getName(), 

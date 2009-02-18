@@ -94,6 +94,98 @@
 
 	}
 
+	function isVoid(name){
+        if (name == "" || name == null || !isNaN(name) || name.charAt(0) == ' '){
+        	return true;
+        }		
+		return false;		
+	}
+	function validate(){
+        name = document.aimUserRegisterForm.firstNames.value;
+        lastname = document.aimUserRegisterForm.lastName.value;
+        password = document.aimUserRegisterForm.password.value;
+        passwordConfirmation = document.aimUserRegisterForm.passwordConfirmation.value;
+        selectedOrgType = document.aimUserRegisterForm.selectedOrgType.value;
+        selectedOrgGroup = document.aimUserRegisterForm.selectedOrgGroup.value;
+        selectedOrganizationId = document.aimUserRegisterForm.selectedOrganizationId.value;
+        
+        if (isVoid(name))
+        {
+			<c:set var="translation">
+			<digi:trn key="erroruregistration.FirstNameBlank">First Name is Blank</digi:trn>
+    		</c:set>
+			alert("${translation}");
+        	return false;
+        }
+        if (isVoid(lastname))
+        {
+			<c:set var="translation">
+			<digi:trn key="error.registration.LastNameBlank">LastName is Blank</digi:trn>
+    		</c:set>
+			alert("${translation}");
+        	return false;
+        }
+        if(validateEmail()==false)
+            return false
+        if (isVoid(password)||isVoid(passwordConfirmation))
+        {
+			<c:set var="translation">
+			<digi:trn key="error.registration.passwordBlank">Password field is Blank</digi:trn>
+    		</c:set>
+			alert("${translation}");
+        	return false;
+        }
+        if(password != passwordConfirmation){
+			<c:set var="translation">
+			<digi:trn key="error.registration.NoPasswordMatch">Passwords in both fields must be the same</digi:trn>
+    		</c:set>
+			alert("${translation}");
+        	return false;
+        }
+        if(selectedOrgType=="-1"){
+			<c:set var="translation">
+			<digi:trn key="error.registration.enterorganizationother">Please enter Organization Type</digi:trn>
+    		</c:set>
+			alert("${translation}");
+        	return false;
+        }
+        if(selectedOrgGroup=="-1"){
+			<c:set var="translation">
+			<digi:trn key="error.registration.NoOrgGroup">Please Select Organization Group</digi:trn>
+    		</c:set>
+			alert("${translation}");
+        	return false;
+        }
+        if(selectedOrganizationId=="-1"){
+			<c:set var="translation">
+			<digi:trn key="error.registration.NoOrganization">Please Select Organization</digi:trn>
+    		</c:set>
+			alert("${translation}");
+        	return false;
+        }
+
+        return true;
+	}
+	function validateEmail() {
+	    var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+		var address = document.aimUserRegisterForm.email.value;
+		var address2 = document.aimUserRegisterForm.emailConfirmation.value;
+		if(reg.test(address) == false||reg.test(address2) == false) {
+			<c:set var="translation">
+			<digi:trn key="error.registration.noemail">you must enter Valid email please check in</digi:trn>
+    		</c:set>
+			alert("${translation}");
+        	return false;
+		}
+		if(address != address2){
+			<c:set var="translation">
+			<digi:trn key="error.registration.noemailmatch">Emails in both fields must be the same</digi:trn>
+    		</c:set>
+			alert("${translation}");
+        	return false;
+		}
+		return true;
+	}
 
 
 </script>
@@ -529,7 +621,7 @@
                                         </c:set>
 
 
-						<html:submit value="${btnSubmit}" styleClass="dr-menu" />
+						<html:submit value="${btnSubmit}" styleClass="dr-menu" onclick="return validate();"/>
 
 					</td>
 

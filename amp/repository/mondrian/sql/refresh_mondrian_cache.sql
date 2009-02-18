@@ -14,3 +14,4 @@ CREATE TABLE cached_v_primary_program AS SELECT * FROM v_primaryprogram;
 DROP TABLE IF EXISTS cached_v_secunday_program;
 CREATE TABLE cached_v_secunday_program AS SELECT * FROM v_secondaryprogram;
 DROP TABLE IF EXISTS cached_v_status;
+CREATE TABLE cached_v_status AS SELECT * FROM v_status;

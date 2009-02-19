@@ -161,7 +161,7 @@
                               </digi:link>
                             </td>
                           </tr>
-                          <feature:display name="Activity Imp&Exp" module="ADMINISTRATIVE SECTION">
+                          <module:display name="Activity Imp&Exp" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -176,7 +176,7 @@
 
                             </td>
                           </tr>
-                          </feature:display>
+                          </module:display>
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -601,6 +601,7 @@
                               </digi:link>
                             </td>
                           </tr>
+                          <module:display name="Activity Export Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -612,6 +613,8 @@
 							   	   </digi:link>
                             </td>
                           </tr>
+                          </module:display>
+                          <module:display name="Activity Import Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -623,6 +626,8 @@
 							   </digi:link>
                             </td>
                           </tr>
+                          </module:display>
+                          <module:display name="Budget Codes Exporter" parentModule="ADMINISTRATIVE SECTION"></module:display>
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>							   
@@ -631,6 +636,7 @@
 							   </digi:link>
                             </td>
                           </tr>
+                          </module:display>
                         </table>
                       </td>
                     </tr>

@@ -14,6 +14,10 @@
 <module:display name="ADMINISTRATIVE SECTION"></module:display> 
 <module:display name="Activity Approval Process" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Activity Costing" parentModule="PROJECT MANAGEMENT"></module:display> 
+<module:display name="Activity Imp&Exp" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="Activity Export Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="Activity Import Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="Budget Codes Exporter" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Activity Levels" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Add & Edit Activity" parentModule="PARIS INDICATORS"></module:display> 
 <module:display name="Admin Home" parentModule="PARIS INDICATORS"></module:display> 
@@ -81,7 +85,7 @@
 <feature:display name="About AMP" module="HELP"></feature:display> 
 <feature:display name="Activity - Component Step" module="Components"></feature:display> 
 <feature:display name="Activity Dashboard" module="M & E"></feature:display> 
-<feature:display name="Activity Imp&Exp" module="ADMINISTRATIVE SECTION"></feature:display> 
+
 <feature:display name="Activity" module="M & E"></feature:display> 
 <feature:display name="Actual Commitments" module="Measures"></feature:display> 
 <feature:display name="Actual Disbursement Orders Measure" module="Measures"></feature:display> 

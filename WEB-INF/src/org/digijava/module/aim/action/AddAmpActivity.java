@@ -1032,11 +1032,13 @@ private ActionForward showStep9(ActionMapping mapping,
 	
 	            Double totalEUContrib = new Double(0);
 	            
-	            Iterator it2 = eaForm.getContracts().getContracts().iterator();
-	            while (it2.hasNext()) {
-	            	IPAContract contr = (IPAContract) it2.next();
-	            	totalEUContrib += contr.getTotalECContribIBAmount();
-	            	totalEUContrib += contr.getTotalECContribINVAmount();
+	            if (eaForm.getContracts().getContracts() != null){
+	            	Iterator it2 = eaForm.getContracts().getContracts().iterator();
+	            	while (it2.hasNext()) {
+	            		IPAContract contr = (IPAContract) it2.next();
+	            		totalEUContrib += contr.getTotalECContribIBAmount();
+	            		totalEUContrib += contr.getTotalECContribINVAmount();
+	            	}
 	            }
 	            eaForm.getContracts().setIpaBudget(totalEUContrib);
 	            //get the levels of risks

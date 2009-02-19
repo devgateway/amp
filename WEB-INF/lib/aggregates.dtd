@@ -6,7 +6,7 @@
 <!--
      This is the XML model for defining default aggregate table recognition
      and level/measure mapping.
-     Revision is $Id: aggregates.dtd,v 1.2 2009-01-06 14:40:06 ddimunzio Exp $
+     Revision is $Id: aggregates.dtd,v 1.3 2009-02-19 16:08:31 ddimunzio Exp $
   -->
 <!--
      Base is the base class for all of the elements.

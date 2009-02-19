@@ -318,7 +318,7 @@ YAHOOAmp.extend(YAHOOAmp.widget.TaskNode, YAHOOAmp.widget.TextNode, {
         if (this.title) {                                                                                                                                                  
             sb[sb.length] = ' title="' + this.title + '"';                                                                                                                 
         }                                                                                                                                                                  
-        sb[sb.length] = ' class="' + this.labelStyle  + '"';                                                                                                               
+        sb[sb.length] = ' class="' + this.labelStyle  + '" style="font-size: larger;"';                                                                                                               
         sb[sb.length] = ' >';                                                                                                                                              
         sb[sb.length] = this.label;                                                                                                                                        
         sb[sb.length] = '</span></td>';                                                                                                                                    

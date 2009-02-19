@@ -57,8 +57,12 @@ public class ViewUserProfile
                 return mapping.getInputForward();
             }
         } else if (memId != null) {
-           // user = DbUtil.getUser(memId);
-        	 user = DbUtil.getUser(member.getUser().getId());
+        	 
+        if(member!=null){
+        		 user = DbUtil.getUser(member.getUser().getId());
+        	 }else{
+        		 user = DbUtil.getUser(memId); 
+        	}
             if(user!=null) memberInformationn = TeamMemberUtil.getMemberInformation(user.getId());
         }
 

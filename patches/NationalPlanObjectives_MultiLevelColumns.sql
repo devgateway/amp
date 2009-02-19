@@ -2,7 +2,7 @@ drop view if exists v_nationalobjectives_parent;
 drop view  if exists  `v_nationalojectives`;
 drop view  if exists  `v_nationalobjectives`;
 
-CREATE OR REPLACE VIEW `v_nationalobjectives_all_level_helper` AS
+CREATE OR REPLACE VIEW `v_nationalobjectives_all_level` AS
   select `a`.`amp_activity_id` AS `amp_activity_id`,
 		 `a`.`program_percentage` AS `program_percentage`,
          `a`.`amp_program_id` AS `amp_program_id`,
@@ -33,230 +33,230 @@ CREATE OR REPLACE VIEW `v_nationalobjectives_all_level_helper` AS
        left join `amp_theme` `b7` on ((`b7`.`amp_theme_id` = `b6`.`parent_theme_id`)));
 
 CREATE OR REPLACE VIEW `v_nationalobjectives_level_0` AS
-  select `v_nationalobjectives_all_level_helper`.`amp_activity_id` AS `amp_activity_id`,
+  select `v_nationalobjectives_all_level`.`amp_activity_id` AS `amp_activity_id`,
          (case 0
-            when `v_nationalobjectives_all_level_helper`.`l1` then
-            `v_nationalobjectives_all_level_helper`.`n1`
-            when `v_nationalobjectives_all_level_helper`.`l2` then
-            `v_nationalobjectives_all_level_helper`.`n2`
-            when `v_nationalobjectives_all_level_helper`.`l3` then
-            `v_nationalobjectives_all_level_helper`.`n3`
-            when `v_nationalobjectives_all_level_helper`.`l4` then
-            `v_nationalobjectives_all_level_helper`.`n4`
-            when `v_nationalobjectives_all_level_helper`.`l5` then
-            `v_nationalobjectives_all_level_helper`.`n5`
-            when `v_nationalobjectives_all_level_helper`.`l6` then
-            `v_nationalobjectives_all_level_helper`.`n6`
-            when `v_nationalobjectives_all_level_helper`.`l7` then
-            `v_nationalobjectives_all_level_helper`.`n7`
-            when `v_nationalobjectives_all_level_helper`.`l8` then
-            `v_nationalobjectives_all_level_helper`.`n8`
+            when `v_nationalobjectives_all_level`.`l1` then
+            `v_nationalobjectives_all_level`.`n1`
+            when `v_nationalobjectives_all_level`.`l2` then
+            `v_nationalobjectives_all_level`.`n2`
+            when `v_nationalobjectives_all_level`.`l3` then
+            `v_nationalobjectives_all_level`.`n3`
+            when `v_nationalobjectives_all_level`.`l4` then
+            `v_nationalobjectives_all_level`.`n4`
+            when `v_nationalobjectives_all_level`.`l5` then
+            `v_nationalobjectives_all_level`.`n5`
+            when `v_nationalobjectives_all_level`.`l6` then
+            `v_nationalobjectives_all_level`.`n6`
+            when `v_nationalobjectives_all_level`.`l7` then
+            `v_nationalobjectives_all_level`.`n7`
+            when `v_nationalobjectives_all_level`.`l8` then
+            `v_nationalobjectives_all_level`.`n8`
           end) AS `name`,
-         `v_nationalobjectives_all_level_helper`.`amp_program_id` AS `amp_program_id`,
-         `v_nationalobjectives_all_level_helper`.`program_percentage` AS `program_percentage`
-  from `v_nationalobjectives_all_level_helper`
+         `v_nationalobjectives_all_level`.`amp_program_id` AS `amp_program_id`,
+         `v_nationalobjectives_all_level`.`program_percentage` AS `program_percentage`
+  from `v_nationalobjectives_all_level`
   having (`name` is not null);
 
 CREATE OR REPLACE  VIEW `v_nationalobjectives_level_1` AS
-  select `v_nationalobjectives_all_level_helper`.`amp_activity_id` AS `amp_activity_id`,
+  select `v_nationalobjectives_all_level`.`amp_activity_id` AS `amp_activity_id`,
          (case 1
-            when `v_nationalobjectives_all_level_helper`.`l1` then
-            `v_nationalobjectives_all_level_helper`.`n1`
-            when `v_nationalobjectives_all_level_helper`.`l2` then
-            `v_nationalobjectives_all_level_helper`.`n2`
-            when `v_nationalobjectives_all_level_helper`.`l3` then
-            `v_nationalobjectives_all_level_helper`.`n3`
-            when `v_nationalobjectives_all_level_helper`.`l4` then
-            `v_nationalobjectives_all_level_helper`.`n4`
-            when `v_nationalobjectives_all_level_helper`.`l5` then
-            `v_nationalobjectives_all_level_helper`.`n5`
-            when `v_nationalobjectives_all_level_helper`.`l6` then
-            `v_nationalobjectives_all_level_helper`.`n6`
-            when `v_nationalobjectives_all_level_helper`.`l7` then
-            `v_nationalobjectives_all_level_helper`.`n7`
-            when `v_nationalobjectives_all_level_helper`.`l8` then
-            `v_nationalobjectives_all_level_helper`.`n8`
+            when `v_nationalobjectives_all_level`.`l1` then
+            `v_nationalobjectives_all_level`.`n1`
+            when `v_nationalobjectives_all_level`.`l2` then
+            `v_nationalobjectives_all_level`.`n2`
+            when `v_nationalobjectives_all_level`.`l3` then
+            `v_nationalobjectives_all_level`.`n3`
+            when `v_nationalobjectives_all_level`.`l4` then
+            `v_nationalobjectives_all_level`.`n4`
+            when `v_nationalobjectives_all_level`.`l5` then
+            `v_nationalobjectives_all_level`.`n5`
+            when `v_nationalobjectives_all_level`.`l6` then
+            `v_nationalobjectives_all_level`.`n6`
+            when `v_nationalobjectives_all_level`.`l7` then
+            `v_nationalobjectives_all_level`.`n7`
+            when `v_nationalobjectives_all_level`.`l8` then
+            `v_nationalobjectives_all_level`.`n8`
           end) AS `name`,
-         `v_nationalobjectives_all_level_helper`.`amp_program_id` AS `amp_program_id`,
-         `v_nationalobjectives_all_level_helper`.`program_percentage` AS `program_percentage`
-  from `v_nationalobjectives_all_level_helper`
+         `v_nationalobjectives_all_level`.`amp_program_id` AS `amp_program_id`,
+         `v_nationalobjectives_all_level`.`program_percentage` AS `program_percentage`
+  from `v_nationalobjectives_all_level`
   having (`name` is not null);
 
 CREATE OR REPLACE  VIEW `v_nationalobjectives_level_2` AS
-  select `v_nationalobjectives_all_level_helper`.`amp_activity_id` AS `amp_activity_id`,
+  select `v_nationalobjectives_all_level`.`amp_activity_id` AS `amp_activity_id`,
          (case 2
-            when `v_nationalobjectives_all_level_helper`.`l1` then
-            `v_nationalobjectives_all_level_helper`.`n1`
-            when `v_nationalobjectives_all_level_helper`.`l2` then
-            `v_nationalobjectives_all_level_helper`.`n2`
-            when `v_nationalobjectives_all_level_helper`.`l3` then
-            `v_nationalobjectives_all_level_helper`.`n3`
-            when `v_nationalobjectives_all_level_helper`.`l4` then
-            `v_nationalobjectives_all_level_helper`.`n4`
-            when `v_nationalobjectives_all_level_helper`.`l5` then
-            `v_nationalobjectives_all_level_helper`.`n5`
-            when `v_nationalobjectives_all_level_helper`.`l6` then
-            `v_nationalobjectives_all_level_helper`.`n6`
-            when `v_nationalobjectives_all_level_helper`.`l7` then
-            `v_nationalobjectives_all_level_helper`.`n7`
-            when `v_nationalobjectives_all_level_helper`.`l8` then
-            `v_nationalobjectives_all_level_helper`.`n8`
+            when `v_nationalobjectives_all_level`.`l1` then
+            `v_nationalobjectives_all_level`.`n1`
+            when `v_nationalobjectives_all_level`.`l2` then
+            `v_nationalobjectives_all_level`.`n2`
+            when `v_nationalobjectives_all_level`.`l3` then
+            `v_nationalobjectives_all_level`.`n3`
+            when `v_nationalobjectives_all_level`.`l4` then
+            `v_nationalobjectives_all_level`.`n4`
+            when `v_nationalobjectives_all_level`.`l5` then
+            `v_nationalobjectives_all_level`.`n5`
+            when `v_nationalobjectives_all_level`.`l6` then
+            `v_nationalobjectives_all_level`.`n6`
+            when `v_nationalobjectives_all_level`.`l7` then
+            `v_nationalobjectives_all_level`.`n7`
+            when `v_nationalobjectives_all_level`.`l8` then
+            `v_nationalobjectives_all_level`.`n8`
           end) AS `name`,
-         `v_nationalobjectives_all_level_helper`.`amp_program_id` AS `amp_program_id`,
-         `v_nationalobjectives_all_level_helper`.`program_percentage` AS `program_percentage`
-  from `v_nationalobjectives_all_level_helper`
+         `v_nationalobjectives_all_level`.`amp_program_id` AS `amp_program_id`,
+         `v_nationalobjectives_all_level`.`program_percentage` AS `program_percentage`
+  from `v_nationalobjectives_all_level`
   having (`name` is not null);
 
 CREATE OR REPLACE  VIEW `v_nationalobjectives_level_3` AS
-  select `v_nationalobjectives_all_level_helper`.`amp_activity_id` AS `amp_activity_id`,
+  select `v_nationalobjectives_all_level`.`amp_activity_id` AS `amp_activity_id`,
          (case 3
-            when `v_nationalobjectives_all_level_helper`.`l1` then
-            `v_nationalobjectives_all_level_helper`.`n1`
-            when `v_nationalobjectives_all_level_helper`.`l2` then
-            `v_nationalobjectives_all_level_helper`.`n2`
-            when `v_nationalobjectives_all_level_helper`.`l3` then
-            `v_nationalobjectives_all_level_helper`.`n3`
-            when `v_nationalobjectives_all_level_helper`.`l4` then
-            `v_nationalobjectives_all_level_helper`.`n4`
-            when `v_nationalobjectives_all_level_helper`.`l5` then
-            `v_nationalobjectives_all_level_helper`.`n5`
-            when `v_nationalobjectives_all_level_helper`.`l6` then
-            `v_nationalobjectives_all_level_helper`.`n6`
-            when `v_nationalobjectives_all_level_helper`.`l7` then
-            `v_nationalobjectives_all_level_helper`.`n7`
-            when `v_nationalobjectives_all_level_helper`.`l8` then
-            `v_nationalobjectives_all_level_helper`.`n8`
+            when `v_nationalobjectives_all_level`.`l1` then
+            `v_nationalobjectives_all_level`.`n1`
+            when `v_nationalobjectives_all_level`.`l2` then
+            `v_nationalobjectives_all_level`.`n2`
+            when `v_nationalobjectives_all_level`.`l3` then
+            `v_nationalobjectives_all_level`.`n3`
+            when `v_nationalobjectives_all_level`.`l4` then
+            `v_nationalobjectives_all_level`.`n4`
+            when `v_nationalobjectives_all_level`.`l5` then
+            `v_nationalobjectives_all_level`.`n5`
+            when `v_nationalobjectives_all_level`.`l6` then
+            `v_nationalobjectives_all_level`.`n6`
+            when `v_nationalobjectives_all_level`.`l7` then
+            `v_nationalobjectives_all_level`.`n7`
+            when `v_nationalobjectives_all_level`.`l8` then
+            `v_nationalobjectives_all_level`.`n8`
           end) AS `name`,
-         `v_nationalobjectives_all_level_helper`.`amp_program_id` AS `amp_program_id`,
-         `v_nationalobjectives_all_level_helper`.`program_percentage` AS `program_percentage`
-  from `v_nationalobjectives_all_level_helper`
+         `v_nationalobjectives_all_level`.`amp_program_id` AS `amp_program_id`,
+         `v_nationalobjectives_all_level`.`program_percentage` AS `program_percentage`
+  from `v_nationalobjectives_all_level`
   having (`name` is not null);
 
 CREATE OR REPLACE  VIEW `v_nationalobjectives_level_4` AS
-  select `v_nationalobjectives_all_level_helper`.`amp_activity_id` AS `amp_activity_id`,
+  select `v_nationalobjectives_all_level`.`amp_activity_id` AS `amp_activity_id`,
          (case 4
-            when `v_nationalobjectives_all_level_helper`.`l1` then
-            `v_nationalobjectives_all_level_helper`.`n1`
-            when `v_nationalobjectives_all_level_helper`.`l2` then
-            `v_nationalobjectives_all_level_helper`.`n2`
-            when `v_nationalobjectives_all_level_helper`.`l3` then
-            `v_nationalobjectives_all_level_helper`.`n3`
-            when `v_nationalobjectives_all_level_helper`.`l4` then
-            `v_nationalobjectives_all_level_helper`.`n4`
-            when `v_nationalobjectives_all_level_helper`.`l5` then
-            `v_nationalobjectives_all_level_helper`.`n5`
-            when `v_nationalobjectives_all_level_helper`.`l6` then
-            `v_nationalobjectives_all_level_helper`.`n6`
-            when `v_nationalobjectives_all_level_helper`.`l7` then
-            `v_nationalobjectives_all_level_helper`.`n7`
-            when `v_nationalobjectives_all_level_helper`.`l8` then
-            `v_nationalobjectives_all_level_helper`.`n8`
+            when `v_nationalobjectives_all_level`.`l1` then
+            `v_nationalobjectives_all_level`.`n1`
+            when `v_nationalobjectives_all_level`.`l2` then
+            `v_nationalobjectives_all_level`.`n2`
+            when `v_nationalobjectives_all_level`.`l3` then
+            `v_nationalobjectives_all_level`.`n3`
+            when `v_nationalobjectives_all_level`.`l4` then
+            `v_nationalobjectives_all_level`.`n4`
+            when `v_nationalobjectives_all_level`.`l5` then
+            `v_nationalobjectives_all_level`.`n5`
+            when `v_nationalobjectives_all_level`.`l6` then
+            `v_nationalobjectives_all_level`.`n6`
+            when `v_nationalobjectives_all_level`.`l7` then
+            `v_nationalobjectives_all_level`.`n7`
+            when `v_nationalobjectives_all_level`.`l8` then
+            `v_nationalobjectives_all_level`.`n8`
           end) AS `name`,
-         `v_nationalobjectives_all_level_helper`.`amp_program_id` AS `amp_program_id`,
-         `v_nationalobjectives_all_level_helper`.`program_percentage` AS `program_percentage`
-  from `v_nationalobjectives_all_level_helper`
+         `v_nationalobjectives_all_level`.`amp_program_id` AS `amp_program_id`,
+         `v_nationalobjectives_all_level`.`program_percentage` AS `program_percentage`
+  from `v_nationalobjectives_all_level`
   having (`name` is not null);
 
 CREATE OR REPLACE  VIEW `v_nationalobjectives_level_5` AS
-  select `v_nationalobjectives_all_level_helper`.`amp_activity_id` AS `amp_activity_id`,
+  select `v_nationalobjectives_all_level`.`amp_activity_id` AS `amp_activity_id`,
          (case 5
-            when `v_nationalobjectives_all_level_helper`.`l1` then
-            `v_nationalobjectives_all_level_helper`.`n1`
-            when `v_nationalobjectives_all_level_helper`.`l2` then
-            `v_nationalobjectives_all_level_helper`.`n2`
-            when `v_nationalobjectives_all_level_helper`.`l3` then
-            `v_nationalobjectives_all_level_helper`.`n3`
-            when `v_nationalobjectives_all_level_helper`.`l4` then
-            `v_nationalobjectives_all_level_helper`.`n4`
-            when `v_nationalobjectives_all_level_helper`.`l5` then
-            `v_nationalobjectives_all_level_helper`.`n5`
-            when `v_nationalobjectives_all_level_helper`.`l6` then
-            `v_nationalobjectives_all_level_helper`.`n6`
-            when `v_nationalobjectives_all_level_helper`.`l7` then
-            `v_nationalobjectives_all_level_helper`.`n7`
-            when `v_nationalobjectives_all_level_helper`.`l8` then
-            `v_nationalobjectives_all_level_helper`.`n8`
+            when `v_nationalobjectives_all_level`.`l1` then
+            `v_nationalobjectives_all_level`.`n1`
+            when `v_nationalobjectives_all_level`.`l2` then
+            `v_nationalobjectives_all_level`.`n2`
+            when `v_nationalobjectives_all_level`.`l3` then
+            `v_nationalobjectives_all_level`.`n3`
+            when `v_nationalobjectives_all_level`.`l4` then
+            `v_nationalobjectives_all_level`.`n4`
+            when `v_nationalobjectives_all_level`.`l5` then
+            `v_nationalobjectives_all_level`.`n5`
+            when `v_nationalobjectives_all_level`.`l6` then
+            `v_nationalobjectives_all_level`.`n6`
+            when `v_nationalobjectives_all_level`.`l7` then
+            `v_nationalobjectives_all_level`.`n7`
+            when `v_nationalobjectives_all_level`.`l8` then
+            `v_nationalobjectives_all_level`.`n8`
           end) AS `name`,
-         `v_nationalobjectives_all_level_helper`.`amp_program_id` AS `amp_program_id`,
-         `v_nationalobjectives_all_level_helper`.`program_percentage` AS `program_percentage`
-  from `v_nationalobjectives_all_level_helper`
+         `v_nationalobjectives_all_level`.`amp_program_id` AS `amp_program_id`,
+         `v_nationalobjectives_all_level`.`program_percentage` AS `program_percentage`
+  from `v_nationalobjectives_all_level`
   having (`name` is not null);
 
 
 CREATE OR REPLACE  VIEW `v_nationalobjectives_level_6` AS
-  select `v_nationalobjectives_all_level_helper`.`amp_activity_id` AS `amp_activity_id`,
+  select `v_nationalobjectives_all_level`.`amp_activity_id` AS `amp_activity_id`,
          (case 6
-            when `v_nationalobjectives_all_level_helper`.`l1` then
-            `v_nationalobjectives_all_level_helper`.`n1`
-            when `v_nationalobjectives_all_level_helper`.`l2` then
-            `v_nationalobjectives_all_level_helper`.`n2`
-            when `v_nationalobjectives_all_level_helper`.`l3` then
-            `v_nationalobjectives_all_level_helper`.`n3`
-            when `v_nationalobjectives_all_level_helper`.`l4` then
-            `v_nationalobjectives_all_level_helper`.`n4`
-            when `v_nationalobjectives_all_level_helper`.`l5` then
-            `v_nationalobjectives_all_level_helper`.`n5`
-            when `v_nationalobjectives_all_level_helper`.`l6` then
-            `v_nationalobjectives_all_level_helper`.`n6`
-            when `v_nationalobjectives_all_level_helper`.`l7` then
-            `v_nationalobjectives_all_level_helper`.`n7`
-            when `v_nationalobjectives_all_level_helper`.`l8` then
-            `v_nationalobjectives_all_level_helper`.`n8`
+            when `v_nationalobjectives_all_level`.`l1` then
+            `v_nationalobjectives_all_level`.`n1`
+            when `v_nationalobjectives_all_level`.`l2` then
+            `v_nationalobjectives_all_level`.`n2`
+            when `v_nationalobjectives_all_level`.`l3` then
+            `v_nationalobjectives_all_level`.`n3`
+            when `v_nationalobjectives_all_level`.`l4` then
+            `v_nationalobjectives_all_level`.`n4`
+            when `v_nationalobjectives_all_level`.`l5` then
+            `v_nationalobjectives_all_level`.`n5`
+            when `v_nationalobjectives_all_level`.`l6` then
+            `v_nationalobjectives_all_level`.`n6`
+            when `v_nationalobjectives_all_level`.`l7` then
+            `v_nationalobjectives_all_level`.`n7`
+            when `v_nationalobjectives_all_level`.`l8` then
+            `v_nationalobjectives_all_level`.`n8`
           end) AS `name`,
-         `v_nationalobjectives_all_level_helper`.`amp_program_id` AS `amp_program_id`,
-         `v_nationalobjectives_all_level_helper`.`program_percentage` AS `program_percentage`
-  from `v_nationalobjectives_all_level_helper`
+         `v_nationalobjectives_all_level`.`amp_program_id` AS `amp_program_id`,
+         `v_nationalobjectives_all_level`.`program_percentage` AS `program_percentage`
+  from `v_nationalobjectives_all_level`
   having (`name` is not null);
 
 
 CREATE OR REPLACE  VIEW `v_nationalobjectives_level_7` AS
-  select `v_nationalobjectives_all_level_helper`.`amp_activity_id` AS `amp_activity_id`,
+  select `v_nationalobjectives_all_level`.`amp_activity_id` AS `amp_activity_id`,
          (case 7
-            when `v_nationalobjectives_all_level_helper`.`l1` then
-            `v_nationalobjectives_all_level_helper`.`n1`
-            when `v_nationalobjectives_all_level_helper`.`l2` then
-            `v_nationalobjectives_all_level_helper`.`n2`
-            when `v_nationalobjectives_all_level_helper`.`l3` then
-            `v_nationalobjectives_all_level_helper`.`n3`
-            when `v_nationalobjectives_all_level_helper`.`l4` then
-            `v_nationalobjectives_all_level_helper`.`n4`
-            when `v_nationalobjectives_all_level_helper`.`l5` then
-            `v_nationalobjectives_all_level_helper`.`n5`
-            when `v_nationalobjectives_all_level_helper`.`l6` then
-            `v_nationalobjectives_all_level_helper`.`n6`
-            when `v_nationalobjectives_all_level_helper`.`l7` then
-            `v_nationalobjectives_all_level_helper`.`n7`
-            when `v_nationalobjectives_all_level_helper`.`l8` then
-            `v_nationalobjectives_all_level_helper`.`n8`
+            when `v_nationalobjectives_all_level`.`l1` then
+            `v_nationalobjectives_all_level`.`n1`
+            when `v_nationalobjectives_all_level`.`l2` then
+            `v_nationalobjectives_all_level`.`n2`
+            when `v_nationalobjectives_all_level`.`l3` then
+            `v_nationalobjectives_all_level`.`n3`
+            when `v_nationalobjectives_all_level`.`l4` then
+            `v_nationalobjectives_all_level`.`n4`
+            when `v_nationalobjectives_all_level`.`l5` then
+            `v_nationalobjectives_all_level`.`n5`
+            when `v_nationalobjectives_all_level`.`l6` then
+            `v_nationalobjectives_all_level`.`n6`
+            when `v_nationalobjectives_all_level`.`l7` then
+            `v_nationalobjectives_all_level`.`n7`
+            when `v_nationalobjectives_all_level`.`l8` then
+            `v_nationalobjectives_all_level`.`n8`
           end) AS `name`,
-         `v_nationalobjectives_all_level_helper`.`amp_program_id` AS `amp_program_id`,
-         `v_nationalobjectives_all_level_helper`.`program_percentage` AS `program_percentage`
-  from `v_nationalobjectives_all_level_helper`
+         `v_nationalobjectives_all_level`.`amp_program_id` AS `amp_program_id`,
+         `v_nationalobjectives_all_level`.`program_percentage` AS `program_percentage`
+  from `v_nationalobjectives_all_level`
   having (`name` is not null);
 
 CREATE OR REPLACE  VIEW `v_nationalobjectives_level_8` AS
-  select `v_nationalobjectives_all_level_helper`.`amp_activity_id` AS `amp_activity_id`,
+  select `v_nationalobjectives_all_level`.`amp_activity_id` AS `amp_activity_id`,
          (case 8
-            when `v_nationalobjectives_all_level_helper`.`l1` then
-            `v_nationalobjectives_all_level_helper`.`n1`
-            when `v_nationalobjectives_all_level_helper`.`l2` then
-            `v_nationalobjectives_all_level_helper`.`n2`
-            when `v_nationalobjectives_all_level_helper`.`l3` then
-            `v_nationalobjectives_all_level_helper`.`n3`
-            when `v_nationalobjectives_all_level_helper`.`l4` then
-            `v_nationalobjectives_all_level_helper`.`n4`
-            when `v_nationalobjectives_all_level_helper`.`l5` then
-            `v_nationalobjectives_all_level_helper`.`n5`
-            when `v_nationalobjectives_all_level_helper`.`l6` then
-            `v_nationalobjectives_all_level_helper`.`n6`
-            when `v_nationalobjectives_all_level_helper`.`l7` then
-            `v_nationalobjectives_all_level_helper`.`n7`
-            when `v_nationalobjectives_all_level_helper`.`l8` then
-            `v_nationalobjectives_all_level_helper`.`n8`
+            when `v_nationalobjectives_all_level`.`l1` then
+            `v_nationalobjectives_all_level`.`n1`
+            when `v_nationalobjectives_all_level`.`l2` then
+            `v_nationalobjectives_all_level`.`n2`
+            when `v_nationalobjectives_all_level`.`l3` then
+            `v_nationalobjectives_all_level`.`n3`
+            when `v_nationalobjectives_all_level`.`l4` then
+            `v_nationalobjectives_all_level`.`n4`
+            when `v_nationalobjectives_all_level`.`l5` then
+            `v_nationalobjectives_all_level`.`n5`
+            when `v_nationalobjectives_all_level`.`l6` then
+            `v_nationalobjectives_all_level`.`n6`
+            when `v_nationalobjectives_all_level`.`l7` then
+            `v_nationalobjectives_all_level`.`n7`
+            when `v_nationalobjectives_all_level`.`l8` then
+            `v_nationalobjectives_all_level`.`n8`
           end) AS `name`,
-         `v_nationalobjectives_all_level_helper`.`amp_program_id` AS `amp_program_id`,
-         `v_nationalobjectives_all_level_helper`.`program_percentage` AS `program_percentage`
-  from `v_nationalobjectives_all_level_helper`
+         `v_nationalobjectives_all_level`.`amp_program_id` AS `amp_program_id`,
+         `v_nationalobjectives_all_level`.`program_percentage` AS `program_percentage`
+  from `v_nationalobjectives_all_level`
   having (`name` is not null);
 
 update amp_columns set extractorView = 'v_nationalobjectives_level_0' where extractorView = 'v_nationalobjectives';

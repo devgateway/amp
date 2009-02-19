@@ -9,8 +9,8 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
-<link href="css/global.css" rel="stylesheet" type="text/css">
-<link href="/TEMPLATE/ampTemplate/css/styles.css" rel="stylesheet" type="text/css"></link>
+<!--<link href="css/global.css" rel="stylesheet" type="text/css">-->
+<!--<link href="/TEMPLATE/ampTemplate/css/styles.css" rel="stylesheet" type="text/css"></link>-->
 
 <script language="JavaScript">
 <!--
@@ -24,44 +24,44 @@ function unload() {
 -->
 </script>
 
-<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
+<!--<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />-->
 <digi:instance property="aimUserDetailForm" />
 
 <digi:errors/>
 
-<style type="text/css">
-	.text1 {
-	  font-size:9px;
-	  font:Arial;
-	  color:#666666;
-	  text-decoration: none;
-	  font-style: normal;
-	}
-	
-	TD 
-	{
-		cellpadding: 0px;
-		cellspacing: 0px;
-		padding: 0px;
-		margin: 0px;
-		FONT-WEIGHT: normal; 
-		FONT-SIZE: 10px;
-		border-color:#FFFFFF;
-	}
-	
-	TR{
-		padding:0px; 
-		margin:0px;
-		border-color:#FFFFFF;
-	}
-
-	TABLE {
-		border-spacing: 0;
-		border-color:#FFFFFF;
-		padding: 0;
-		margin: 0;
-	}
-</style>
+<!--<style type="text/css">-->
+<!--	.text1 {-->
+<!--	  font-size:9px;-->
+<!--	  font:Arial;-->
+<!--	  color:#666666;-->
+<!--	  text-decoration: none;-->
+<!--	  font-style: normal;-->
+<!--	}-->
+<!--	-->
+<!--	TD -->
+<!--	{-->
+<!--		cellpadding: 0px;-->
+<!--		cellspacing: 0px;-->
+<!--		padding: 0px;-->
+<!--		margin: 0px;-->
+<!--		FONT-WEIGHT: normal; -->
+<!--		FONT-SIZE: 10px;-->
+<!--		border-color:#FFFFFF;-->
+<!--	}-->
+<!--	-->
+<!--	TR{-->
+<!--		padding:0px; -->
+<!--		margin:0px;-->
+<!--		border-color:#FFFFFF;-->
+<!--	}-->
+<!---->
+<!--	TABLE {-->
+<!--		border-spacing: 0;-->
+<!--		border-color:#FFFFFF;-->
+<!--		padding: 0;-->
+<!--		margin: 0;-->
+<!--	}-->
+<!--</style>-->
 
 <table width="100%" cellSpacing=2 cellPadding=2 vAlign="top" border=0 height="500px">
 	<tr><td vAlign="top">
@@ -121,9 +121,9 @@ function unload() {
 							<td>
 								<%
 								String value = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AUTO_LOGIN);
-								if(value.equalsIgnoreCase("true")){
+								Long id = ((org.digijava.module.aim.helper.TeamMember) session.getAttribute("currentMember")).getMemberId();
+								if(value.equalsIgnoreCase("true") && id.equals(new Long(request.getParameter("id")))){
 									org.digijava.kernel.user.User user = (org.digijava.kernel.user.User) session.getAttribute("org.digijava.kernel.user");
-									Long id = ((org.digijava.module.aim.helper.TeamMember) session.getAttribute("currentMember")).getMemberId();
 									String encryptedPass = org.digijava.kernel.util.ShaCrypt.crypt(user.getEmail() + "_" + user.getPassword());
 								%>
 									<a href="/<%=request.getContextPath()%>repository/aim/view/autologin.jsp?user=<%=user.getEmail()%>&password=<%=encryptedPass%>&workspaceId=<%=id%>">

@@ -18,7 +18,7 @@
                     </c:if>
 	
 	                    <c:if test="${currentLevel == 1}">
-    	                    <li style="list-style:none" id="limodule:<bean:write name="moduleAux" property="root.id"/>" title="<digi:trn key="<%="fm:tooltip:"+moduleAux.getRoot().getNameTrimmed() %>"><bean:write name="moduleAux" property="root.description"/></digi:trn>">
+    	                    <li style="list-style:none" id="limodule:<bean:write name="moduleAux" property="root.id"/>" title="<digi:trn key="<%="fm:tooltip:"+moduleAux.getRoot().getNameTrimmed() %>"><bean:write name="moduleAux" property="root.name"/></digi:trn>">
 <div style="float:right;">
 <a href="#" onclick="sortTree(<bean:write name="moduleAux" property="root.id"/>, false);return false;"><digi:trn key="fm:ascendingorder">Ascending order</digi:trn></a>
 <a href="#" onclick="sortTree(<bean:write name="moduleAux" property="root.id"/>, true);return false;"><digi:trn key="fm:descendingorder">Descending order</digi:trn></a>
@@ -27,7 +27,7 @@
                         </c:if>
     
                         <c:if test="${currentLevel != 1}">
-                            <li id="limodule:<bean:write name="moduleAux" property="root.id"/>" title="<digi:trn key="<%="fm:tooltip:"+moduleAux.getRoot().getNameTrimmed() %>"><bean:write name="moduleAux" property="root.description"/></digi:trn>">
+                            <li id="limodule:<bean:write name="moduleAux" property="root.id"/>" title="<digi:trn key="<%="fm:tooltip:"+moduleAux.getRoot().getNameTrimmed() %>"><bean:write name="moduleAux" property="root.name"/></digi:trn>">
                         </c:if>
     
                         <logic:equal name="aimVisibilityManagerForm" property="mode" value="addNew">

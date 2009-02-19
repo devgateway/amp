@@ -34,13 +34,12 @@
 
 <html:hidden property="step" />
 <html:hidden property="editAct" />
-<html:hidden property="approvalStatus" />
 <html:hidden property="workingTeamLeadFlag" />
 
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left">
 <tr><td valign="top" width="100%" vAlign="top" align="left">
 
- <bean:define id="defaultCurrency" name="currentMember" property="appSettings.currencyId" type="java.lang.Long" scope="session" toScope="page"/> 
+<bean:define id="defaultCurrency" name="currentMember" property="appSettings.currencyId" type="java.lang.Long" scope="session" toScope="page"/> 
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="99%" vAlign="top" align="left" border=0>
 	<tr>
 		<td valign="top" class=r-dotted-lg width="10" align="left" vAlign="top">&nbsp;</td>
@@ -96,8 +95,8 @@
 													<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.acChapter}"/>,
 												</logic:notEqual>
 											</logic:notEmpty>
-											<logic:notEmpty name="aimEditActivityForm" property="ampId">
-												<bean:write name="aimEditActivityForm" property="ampId"/>
+											<logic:notEmpty name="aimEditActivityForm" property="identification.ampId">
+												<bean:write name="aimEditActivityForm" property="identification.ampId"/>
 											</logic:notEmpty>
 										</td>
 										<td valign="top"  width="25%" vAlign="center" align ="left" height="20">
@@ -128,11 +127,11 @@
 										</td>
 										<td valign="top"  width="25%" vAlign="center" align ="left" height="20" style="border-top: 1px solid #CCC; border-top-style: dashed;">
 											<digi:trn key="aim:plogframe:totalBudget">Total budget</digi:trn>:
-											<bean:write name="aimEditActivityForm" property="allCosts" format="###,###,###"/>
+											<bean:write name="aimEditActivityForm" property="costing.allCosts" format="###,###,###"/>
 										</td>
 										<td valign="top"  width="25%" vAlign="center" align ="left" height="20" style="border-top: 1px solid #CCC; border-top-style: dashed;">
 											<digi:trn key="aim:plogframe:ipaBudget">IPA budget</digi:trn>:
-											<bean:write name="aimEditActivityForm" property="ipaBudget" format="###,###,###.##" />
+											<bean:write name="aimEditActivityForm" property="contracts.ipaBudget" format="###,###,###.##" />
 											
 										</td>
 									</tr>	
@@ -162,7 +161,7 @@
 										<digi:edit key="${aimEditActivityForm.identification.objectives}"/>
 										</td>
 										<td valign="top"  width="33%" bgcolor="#ffffff" style="border:1px solid #CCC;">
-											<logic:iterate name="aimEditActivityForm" id="comments" property="allComments">
+											<logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 	                                        	<logic:equal name="comments" property="key" value="Objective Objectively Verifiable Indicators">
 													<logic:iterate name="comments" id="comment" property="value" 
 														type="org.digijava.module.aim.dbentity.AmpComments">
@@ -173,7 +172,7 @@
 										</td>
 											
 										<td valign="top"  width="33%" bgcolor="#ffffff" style="border:1px solid #CCC;">
-											<logic:iterate name="aimEditActivityForm" id="comments" property="allComments">
+											<logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 	                                        	<logic:equal name="comments" property="key" value="Objective Verification">
 													<logic:iterate name="comments" id="comment" property="value" 
 														type="org.digijava.module.aim.dbentity.AmpComments">
@@ -211,7 +210,7 @@
 												<digi:edit key="${aimEditActivityForm.identification.purpose}"/>
 										</td>
 										<td valign="top"  width="25%" bgcolor="#ffffff" style="border:1px solid #CCC;">&nbsp;
-											<logic:iterate name="aimEditActivityForm" id="comments" property="allComments">
+											<logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 	                                        	<logic:equal name="comments" property="key" value="Purpose Objectively Verifiable Indicators">
 													<logic:iterate name="comments" id="comment" property="value" 
 														type="org.digijava.module.aim.dbentity.AmpComments">
@@ -221,7 +220,7 @@
 											</logic:iterate>
 										</td>
 										<td valign="top"  width="25%" bgcolor="#ffffff" style="border:1px solid #CCC;">
-											<logic:iterate name="aimEditActivityForm" id="comments" property="allComments">
+											<logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 	                                        	<logic:equal name="comments" property="key" value="Purpose Verification">
 													<logic:iterate name="comments" id="comment" property="value" 
 														type="org.digijava.module.aim.dbentity.AmpComments">
@@ -231,7 +230,7 @@
 											</logic:iterate>
 										</td>
 										<td valign="top"  width="25%" bgcolor="#ffffff" style="border:1px solid #CCC;">
-										<logic:iterate name="aimEditActivityForm" id="comments" property="allComments">
+										<logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 										 	<logic:equal name="comments" property="key" value="Purpose Assumption">
 												<logic:iterate name="comments" id="comment" property="value" 
 													type="org.digijava.module.aim.dbentity.AmpComments">
@@ -267,7 +266,7 @@
 												<digi:edit key="${aimEditActivityForm.identification.results}"/>
 										</td>
 										<td valign="top"  width="25%" bgcolor="#ffffff" style="border:1px solid #CCC;">
-											<logic:iterate name="aimEditActivityForm" id="comments" property="allComments">
+											<logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 	                                        	<logic:equal name="comments" property="key" value="Results Objectively Verifiable Indicators">
 													<logic:iterate name="comments" id="comment" property="value" 
 														type="org.digijava.module.aim.dbentity.AmpComments">
@@ -277,7 +276,7 @@
 											</logic:iterate>
 										</td>
 										<td valign="top"  width="25%" bgcolor="#ffffff" style="border:1px solid #CCC;">
-											 <logic:iterate name="aimEditActivityForm" id="comments" property="allComments">
+											 <logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 												<logic:equal name="comments" property="key" value="Results Verification">
 													<logic:iterate name="comments" id="comment" property="value" 
 														type="org.digijava.module.aim.dbentity.AmpComments">
@@ -287,7 +286,7 @@
 											</logic:iterate>
 										</td>
 										<td valign="top"  width="25%" bgcolor="#ffffff" style="border:1px solid #CCC;">
-										 <logic:iterate name="aimEditActivityForm" id="comments" property="allComments">
+										 <logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 										 	<logic:equal name="comments" property="key" value="Results Assumption">
 												<logic:iterate name="comments" id="comment" property="value" 
 													type="org.digijava.module.aim.dbentity.AmpComments">

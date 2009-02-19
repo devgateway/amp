@@ -80,7 +80,7 @@ public class ProjectFicheExport extends Action {
 		Long id=new Long(request.getParameter("ampActivityId"));
 		TeamMember tm = (TeamMember) request.getSession().getAttribute(Constants.CURRENT_MEMBER);
 		
-		AmpActivity act = ActivityUtil.getAmpActivity(id);
+		AmpActivity act = ActivityUtil.loadActivity(id);
 		String currencyName = CurrencyUtil.getCurrencyName(tm.getAppSettings().getCurrencyId());
 		
 		HashMap allComments=new HashMap();		
@@ -154,7 +154,7 @@ public class ProjectFicheExport extends Action {
 		document.add(newParagraph("2.2 Project Purpose: "+Util.getEditorBody(site,act.getPurpose(),navigationLanguage),regularFont,1));
 		document.add(newParagraph("2.3 Link with AP/NPAA/EP/SAA: ",regularFont,1));
 		document.add(newParagraph("2.4 Link with MIPD: ",regularFont,1));
-		document.add(newParagraph("2.5 Link with National Development Plan (where applicable): "+Util.toCSString(act.getActivityPrograms()),regularFont,1));
+		document.add(newParagraph("2.5 Link with National Development Plan (where applicable): "+Util.toCSString(ActivityUtil.getActivityPrograms(act.getAmpActivityId())),regularFont,1));
 		document.add(newParagraph("2.6 Link with national/ sectoral investment plans (where applicable): ",regularFont,1));
 		
 
@@ -819,8 +819,9 @@ public class ProjectFicheExport extends Action {
 		
 		
 		document.add(newParagraph("ANNEX 3: References to laws, regulations and Strategic Documents",annexFont,1));
-		if(act.getReferenceDocs()!=null) {
-			i=act.getReferenceDocs().iterator();
+		Collection<AmpActivityReferenceDoc> refDocs = ActivityUtil.getReferenceDocumentsFor(act.getAmpActivityId());
+		if(refDocs !=null) {
+			i = refDocs.iterator();
 			while (i.hasNext()) {
 				AmpActivityReferenceDoc element = (AmpActivityReferenceDoc) i.next();
 				document.add(newParagraph(" - Reference to "+element.getCategoryValue()+" :"+element.getComment(),regularFont,1));

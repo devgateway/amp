@@ -7,6 +7,11 @@ import org.apache.struts.action.ActionForm;
 
 public class UpdateAppSettingsForm extends ActionForm {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private Long appSettingsId = null;
 
 	private Integer defRecsPerPage;

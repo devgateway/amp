@@ -2522,7 +2522,8 @@ function collapseAll() {
 									</tr>
 									</field:display>
 									</logic:notEmpty>
-
+									
+									<logic:notEmpty name="aimEditActivityForm" property="customFields">
 									<logic:iterate name="aimEditActivityForm" property="customFields" id="customField" indexId="index">
 									<field:display name="${customField.FM_field}" feature="Step${customField.step}">												
 										<tr>
@@ -2566,7 +2567,7 @@ function collapseAll() {
 										</tr>
 									</field:display>
 									</logic:iterate>
-
+									</logic:notEmpty>
 									<c:if test="${aimEditActivityForm.pageId == 1}">
 									<tr><td bgColor="#ffffff" align="center" colspan="2">
 										<table cellPadding=3>

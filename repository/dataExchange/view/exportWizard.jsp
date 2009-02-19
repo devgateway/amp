@@ -42,7 +42,7 @@
 .ygtvcheck1 { background: url(/TEMPLATE/ampTemplate/images/yui/check1.gif) 0 0 no-repeat; width:16px; cursor:pointer }
 .ygtvcheck2 { background: url(/TEMPLATE/ampTemplate/images/yui/check2.gif) 0 0 no-repeat; width:16px; cursor:pointer }
 
-#expandcontractdiv {border:1px solid #336600; background-color:#FFFFCC; margin:0 0 .5em 0; padding:0.2em;}
+#expandcontractdiv {background-color:#FFFFCC; margin:0 0 .5em 0; padding:0.2em;}
 #treeDiv1 { background: #fff }
 </style> 
 
@@ -272,15 +272,17 @@
         							<span class="list_header">
         								<digi:trn key="rep:wizard:availableColumns">Available Fields</digi:trn>
         							</span>
-        							<div id="source_col_div" class="draglist">
+                      <div style="text-align: left; width: 87%;">
+                        <div id="expandcontractdiv"  >
+                          <a id="expand" href="#">Expand all</a>
+                          <a id="collapse" href="#">Collapse all</a>
+                        
+                          <a id="check" href="#">Check all</a>
+                          <a id="uncheck" href="#">Uncheck all</a>
+                        </div>
+                    </div>
+        							<div id="source_col_div" class="draglist" style="border-width: 0px;">
         <%--  								<jsp:include page="setColumns.jsp" />    --%>
-                  <div id="expandcontractdiv">
-                    <a id="expand" href="#">Expand all</a>
-                    <a id="collapse" href="#">Collapse all</a>
-                  
-                    <a id="check" href="#">Check all</a>
-                    <a id="uncheck" href="#">Uncheck all</a>
-                  </div>
                   <div id="dataExportTree"></div>
         
         							</div>
@@ -328,14 +330,6 @@
                                </c:forEach>
                              </html:select>
                            <br/>
-                           <span class="list_header">Select Team</span>
-                           <br/>
-                           <html:select name="deExportForm" property="selectedTeamId" styleClass="inp-text"  styleId="teamId" style="width: 300px;" onchange="changeTeam()">
-                             <option value="-1">Please select team</option>
-                             <c:forEach var="fVar" items="${deExportForm.teamList}" varStatus="lStatus">
-                               <option value="${fVar.ampTeamId}">${fVar.name}</option>
-                             </c:forEach>
-                           </html:select>
                         </td>
                         <td width="46%" style="vertical-align: top;">
                          <span class="list_header">Sectors</span>
@@ -355,7 +349,15 @@
                                  <option value="${fVar.ampSectorId}">${fVar.name}</option>
                                </c:forEach>
                              </html:select>
-                         <br/>
+                             <br/>
+                             <span class="list_header">Select Team</span>
+                             <br/>
+                             <html:select name="deExportForm" property="selectedTeamId" styleClass="inp-text"  styleId="teamId" style="width: 300px;" onchange="changeTeam()">
+                               <option value="-1">Please select team</option>
+                               <c:forEach var="fVar" items="${deExportForm.teamList}" varStatus="lStatus">
+                                 <option value="${fVar.ampTeamId}">${fVar.name}</option>
+                               </c:forEach>
+                             </html:select>
 <%--                          
                          <span class="list_header">Language</span>
                          <div id="reportGroupDiv" style="padding: 15px 15px 15px 15px; border: 1px solid gray; background-color: white; position: relative;">
@@ -368,7 +370,7 @@
                       </tr>
                     </table>
                     
-                    <input type="button" class="dr-menu" onclick="cancelFilter();" value="Reset" name="reset"/>
+                    <input type="button" class="dr-menu" onclick="cancelFilter();" value="Reset" name="reset" style="font-size: larger;"/>
                   
                     <br/>
                     <br/>

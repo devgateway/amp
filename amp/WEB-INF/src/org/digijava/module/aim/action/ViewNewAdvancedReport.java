@@ -117,6 +117,7 @@ public class ViewNewAdvancedReport extends Action {
 		AmpReports ar=(AmpReports) httpSession.getAttribute("reportMeta");
 		Session session = PersistenceManager.getRequestDBSession();
 		String sortBy=request.getParameter("sortBy");
+		String sortByAsc=request.getParameter("sortByAsc");
 		String applySorter = request.getParameter("applySorter");
 		if(ampReportId==null) 
 			ampReportId=ar.getAmpReportId().toString();
@@ -188,28 +189,21 @@ public class ViewNewAdvancedReport extends Action {
 			httpSession.setAttribute("progressValue", progressValue); 
 		}
 		
-		/* Check to see if sorting has been saved */
+		/* In case NO sorting info comes in request check to see if sorting has been saved */
 		if ( sortBy == null && !cached ) {
 			if ( filter.getSortBy() != null ) {
 				sortBy	= filter.getSortBy();
-				if ( !filter.getSortByAsc() ){
-					/**
-					 * In this case descending sorting has been saved. 
-					 * We set here the sortercolumn parameter so that it will be set a 2nd time 
-					 * below by the normal reports engine
-					 */
-					rd.setSorterColumn(sortBy);
+				if ( filter.getSortByAsc() !=null  ){
+					sortByAsc		= filter.getSortByAsc().toString();
 				}
 			}
 		}
+		/* If sorting info comes in request save this info in the filter bean */
 		else{
-			if ( filter.getSortBy()!=null && sortBy.equals(filter.getSortBy()) )
-				filter.setSortByAsc( !filter.getSortByAsc() );
-			else {
 				filter.setSortBy(sortBy);
-				filter.setSortByAsc(true);
-			}
+				filter.setSortByAsc( Boolean.parseBoolean(sortByAsc) );
 		}
+		
 		if ( applySorter == null && !cached) {
 			if ( filter.getHierarchySorters() != null && filter.getHierarchySorters().size() > 0 ) {
 				for(String str : filter.getHierarchySorters() ) {
@@ -243,6 +237,9 @@ public class ViewNewAdvancedReport extends Action {
 		if (sortBy != null) {
 			httpSession.setAttribute("sortBy", sortBy);
 			rd.setSorterColumn(sortBy);
+			if ( sortByAsc != null  && !sortByAsc.equals( rd.getSortAscending()+"" ) )
+				rd.setSorterColumn(sortBy);
+					
 			if (applySorter == null && ar.getHierarchies() != null
 					&& !ar.getHierarchies().isEmpty()) {
 				List<AmountCell> trailCells = rd.getTrailCells();

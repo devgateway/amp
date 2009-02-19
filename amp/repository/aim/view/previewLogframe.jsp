@@ -319,8 +319,8 @@
 										</td>
 										
 									</tr>
-									<logic:notEmpty name="aimEditActivityForm" property="costs">
-									<logic:iterate name="aimEditActivityForm" property="costs" id="euActivity"
+									<logic:notEmpty name="aimEditActivityForm" property="costing.costs">
+									<logic:iterate name="aimEditActivityForm" property="costing.costs" id="euActivity"
 												type="org.digijava.module.aim.dbentity.EUActivity">	
 									<c:set target="${euActivity}" property="desktopCurrencyId" value="${defaultCurrency}"/>
 									<tr>

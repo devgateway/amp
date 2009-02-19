@@ -177,22 +177,18 @@ public class DbUtil {
 		if (reportId == null || reportId.length <= 0) return;
 
 		try {
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 			tx = session.beginTransaction();
-
-			String queryString = "select tm from "
-				+ AmpTeamMember.class.getName()
-				+ " tm where (tm.ampTeam=:teamId)";
-
+			//
+			String queryString = "select tm from " + AmpTeamMember.class.getName() + " tm where (tm.ampTeam=:teamId)";
 			Query qry = session.createQuery(queryString);
 			qry.setParameter("teamId", teamId, Hibernate.LONG);
+			//
 			Collection col = qry.list();
 			if (col != null && col.size() > 0) {
 				for (int i = 0;i < reportId.length;i ++) {
 					if (reportId[i] != null) {
-						queryString = "select r from "
-							+ AmpReports.class.getName()
-							+ " r where (r.ampReportId=:repId)";
+						queryString = "select r from " + AmpReports.class.getName() + " r where (r.ampReportId=:repId)";
 						qry = session.createQuery(queryString);
 						qry.setParameter("repId",reportId[i],Hibernate.LONG);
 						Iterator itr = qry.list().iterator();
@@ -207,29 +203,30 @@ public class DbUtil {
 								session.update(ampReport);
 							}
 						}
-
+ 
 						/*
 						 * removing the teams association with the report
 						 */
-						queryString = "select tr from " + AmpTeamReports.class.getName()
-							+ " tr where (tr.team=:teamId) and "
-							+ " (tr.report=:repId)";
+						queryString = "select tr from " + AmpTeamReports.class.getName() + " tr where (tr.team=:teamId) and " + " (tr.report=:repId)";
 						qry = session.createQuery(queryString);
 						qry.setParameter("teamId",teamId,Hibernate.LONG);
 						qry.setParameter("repId",reportId[i],Hibernate.LONG);
 						itr = qry.list().iterator();
 						if (itr.hasNext()) {
 							AmpTeamReports ampTeamRep = (AmpTeamReports) itr.next();
+							ampTeamRep.setReport(null);
+							ampTeamRep.setTeam(null);
+							session.save(ampTeamRep);
 							session.delete(ampTeamRep);
 						}
 					}
 				}
 			}
 			tx.commit();
-
 		} catch (Exception e) {
 			logger.error("Exception from updateMemberReports");
 			logger.error(e.getMessage());
+			e.printStackTrace();
 			if (tx != null) {
 				try {
 					tx.rollback();
@@ -238,15 +235,7 @@ public class DbUtil {
 					logger.error(tex);
 				}
 			}
-		} finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception ex) {
-					logger.error("Failed to release session");
-				}
-			}
-		}
+		} 
 	}
 
 	/**

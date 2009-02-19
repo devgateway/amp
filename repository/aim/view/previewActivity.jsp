@@ -1367,21 +1367,21 @@ function collapseAll() {
 																					<c:forEach var="fd" items="${comp.expenditures}">
 																						<tr bgcolor="#ffffff">
 																							<field:display name="Components Actual/Planned Expenditures" feature="Activity - Component Step">
-																							<td width="50">
+																							<td width="50" bgcolor="#ffffff">
 																								<digi:trn key="aim:${fd.adjustmentTypeNameTrimmed}"><c:out value="${fd.adjustmentTypeName}"/>
 																								</digi:trn>																							</td>
 																							</field:display>
 																							<field:display name="Components Amount Expenditures" feature="Activity - Component Step">
-																							<td align="right">
+																							<td align="right" width="100" bgcolor="#ffffff">
 																								<!--<FONT color=blue>*</FONT>-->
 																								<c:out value="${fd.transactionAmount}"/>																							</td>
 																							</field:display>
 																							<field:display name="Components Currency Expenditures" feature="Activity - Component Step">
-																							<td>
+																							<td bgcolor="#ffffff">
 																								<c:out value="${fd.currencyCode}"/>																							</td>
 																							</field:display>
 																							<field:display name="Components Date Expenditures" feature="Activity - Component Step">
-																							<td width="70">
+																							<td bgcolor="#ffffff" width="70">
 																								<c:out value="${fd.transactionDate}"/>																							</td>
 																							</field:display>
 																						</tr>

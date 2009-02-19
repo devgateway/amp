@@ -101,23 +101,27 @@ function setHoveredTable(tableId, hasHeaders) {
 	}
 
 	function validate() {
+		<c:set var="message">
+        <digi:trn key="aim:teamWorkspaceSetup:selectReportToRemove">
+        Please choose a report to remove
+        </digi:trn>
+        </c:set>
 		if (document.aimTeamReportsForm.selReports.checked != null) {
-			if (document.aimTeamReportsForm.selReports.checked == false) {
-				alert("Please choose a report to remove");
+			if (document.aimTeamReportsForm.selReports.checked == false) {				
+				alert("${message}");
 				return false;
 			}
 		} else {
 			var length = document.aimTeamReportsForm.selReports.length;
 			var flag = 0;
-			for (i = 0;i < length;i ++) {
+			for (i = 0; i < length; i ++) {
 				if (document.aimTeamReportsForm.selReports[i].checked == true) {
 					flag = 1;
 					break;
 				}
 			}
-
 			if (flag == 0) {
-				alert("Please choose a report to remove");
+				alert("${message}");
 				return false;
 			}
 		}
@@ -133,14 +137,12 @@ function setHoveredTable(tableId, hasHeaders) {
                   </c:set>
 			var flag = confirm("${message}");
 			if(flag == false)
-
 			  return false;
 			else
 				return true;
 		} else {
 			return false;
 		}
-
 	}
 
 

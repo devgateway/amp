@@ -601,7 +601,7 @@
                               </digi:link>
                             </td>
                           </tr>
-                          <module:display name="Activity Export Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
+                          <module:display name="Activity Export Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -614,7 +614,7 @@
                             </td>
                           </tr>
                           </module:display>
-                          <module:display name="Activity Import Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
+                          <module:display name="Activity Import Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -627,7 +627,7 @@
                             </td>
                           </tr>
                           </module:display>
-                          <module:display name="Budget Codes Exporter" parentModule="ADMINISTRATIVE SECTION"></module:display>
+                          <module:display name="Budget Codes Exporter" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>							   

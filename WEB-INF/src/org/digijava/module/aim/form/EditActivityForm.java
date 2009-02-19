@@ -1617,7 +1617,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 	}
 
-	public class Programs {
+	public class Programs { 
 		private int programType;
 		private Long[] selectedNPOPrograms;
 		private Long[] selectedPPrograms;

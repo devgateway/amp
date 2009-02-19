@@ -28,7 +28,7 @@ public class RemProgram extends Action
     {
         EditActivityForm eaform=(EditActivityForm)form;
         int settingsId = eaform.getPrograms().getProgramType();
-         List prgLst=new ArrayList();
+         List prgLst=new ArrayList(); 
          Long prgIds[]=null;
          switch (settingsId) {
            case ProgramUtil.NATIONAL_PLAN_OBJECTIVE_KEY:

@@ -165,7 +165,11 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 
     boolean isPublicView = (request.getParameter("public")==null)?false:request.getParameter("public").equals("true");
     EditActivityForm eaForm = (EditActivityForm) form; // form bean instance
-    Long activityId = eaForm.getActivityId();
+    Long activityId = null;
+    activityId = eaForm.getActivityId();
+    Long actIdParam = new Long(request.getParameter("ampActivityId"));
+    if(actIdParam != null && actIdParam !=0L ) 
+    	activityId=actIdParam;
     
   
     // set Globam Settings Multi-Sector Selecting

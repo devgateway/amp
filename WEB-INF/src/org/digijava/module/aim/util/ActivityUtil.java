@@ -1604,7 +1604,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 		} catch (ObjectNotFoundException e) {
 			logger.debug("AmpActivity with id=" + id + " not found");
 		} catch (Exception e) {
-			throw new DgException("Canno load AmpActivity with id" + id, e);
+			throw new DgException("Cannot load AmpActivity with id " + id, e);
 		}
 		return result;
 	}

@@ -25,6 +25,8 @@
 
 <%
 	Long actId = (Long)request.getAttribute("actId");
+	//Long actId = (Long)request.getAttribute("ampActivityId");
+
 
 	String url = "/aim/viewIndicatorValues.do?ampActivityId="+actId+"&tabIndex=6";
 

@@ -167,7 +167,8 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
     EditActivityForm eaForm = (EditActivityForm) form; // form bean instance
     Long activityId = null;
     activityId = eaForm.getActivityId();
-    Long actIdParam = new Long(request.getParameter("ampActivityId"));
+    Long actIdParam = null;
+    if(request.getParameter("ampActivityId")!=null) actIdParam = new Long(request.getParameter("ampActivityId"));
     if(actIdParam != null && actIdParam !=0L ) 
     	activityId=actIdParam;
     

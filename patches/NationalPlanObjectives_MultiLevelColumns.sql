@@ -7,21 +7,21 @@ CREATE OR REPLACE VIEW `v_nationalobjectives_all_level_helper` AS
 		 `a`.`program_percentage` AS `program_percentage`,
          `a`.`amp_program_id` AS `amp_program_id`,
          `b`.`name` AS `n1`,
-         `b`.`level` AS `l1`,
+         `b`.`level_` AS `l1`,
          `b1`.`name` AS `n2`,
-         `b1`.`level` AS `l2`,
+         `b1`.`level_` AS `l2`,
          `b2`.`name` AS `n3`,
-         `b2`.`level` AS `l3`,
+         `b2`.`level_` AS `l3`,
          `b3`.`name` AS `n4`,
-         `b3`.`level` AS `l4`,
+         `b3`.`level_` AS `l4`,
          `b4`.`name` AS `n5`,
-         `b4`.`level` AS `l5`,
+         `b4`.`level_` AS `l5`,
          `b5`.`name` AS `n6`,
-         `b5`.`level` AS `l6`,
+         `b5`.`level_` AS `l6`,
          `b6`.`name` AS `n7`,
-         `b6`.`level` AS `l7`,
+         `b6`.`level_` AS `l7`,
          `b7`.`name` AS `n8`,
-         `b7`.`level` AS `l8`
+         `b7`.`level_` AS `l8`
   from ((((((((`amp_activity_program` `a`
        join `amp_theme` `b` on ((`a`.`amp_program_id` = `b`.`amp_theme_id`)))
        left join `amp_theme` `b1` on ((`b1`.`amp_theme_id` = `b`.`parent_theme_id`)))

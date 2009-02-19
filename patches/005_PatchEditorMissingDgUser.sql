@@ -1,0 +1,3 @@
+UPDATE DG_EDITOR a, (SELECT SITE_ID,EDITOR_KEY FROM DG_EDITOR WHERE USER_ID NOT IN (select ID from dg_user)) b,(select ID FROM DG_USER WHERE email = 'admin@amp.org') c
+set a.USER_ID = c.ID where a.SITE_ID = b.SITE_ID and a.EDITOR_KEY = b.EDITOR_KEY;
+ALTER TABLE DG_EDITOR ADD  CONSTRAINT editor_user FOREIGN KEY (`USER_ID`) REFERENCES `dg_user` (`ID`);

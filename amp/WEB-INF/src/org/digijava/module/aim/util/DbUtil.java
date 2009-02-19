@@ -2737,6 +2737,7 @@ public class DbUtil {
         try {
             sess = PersistenceManager.getRequestDBSession();
             sess.update(object);
+            sess.flush();
         } catch (Exception e) {
         	logger.error(e);
         } finally { 

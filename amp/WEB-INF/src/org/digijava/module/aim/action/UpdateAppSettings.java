@@ -90,18 +90,16 @@ public class UpdateAppSettings extends Action {
 				ampAppSettings = DbUtil.getMemberAppSettings(tm.getMemberId());
 			}
 			// added by mouhamad for burkina on 21/02/08
-			HttpSession httpSession = request.getSession();
+			session = request.getSession();
 			String name = "- " + ampAppSettings.getCurrency().getCurrencyName();
-			httpSession.setAttribute(ArConstants.SELECTED_CURRENCY, name);
+			session.setAttribute(ArConstants.SELECTED_CURRENCY, name);
 
 			// AMP-3168 Currency conversion in team workspace setup
-			httpSession.setAttribute("reportCurrencyCode", ampAppSettings
-					.getCurrency().getCurrencyCode());
-			AmpARFilter filter = (AmpARFilter) httpSession
-					.getAttribute(ArConstants.REPORTS_FILTER);
+			session.setAttribute("reportCurrencyCode", ampAppSettings.getCurrency().getCurrencyCode());
+			AmpARFilter filter = (AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
 			if (filter != null) {
 				filter.setCurrency(ampAppSettings.getCurrency());
-				httpSession.setAttribute(ArConstants.REPORTS_FILTER, filter);
+				session.setAttribute(ArConstants.REPORTS_FILTER, filter);
 			}
 			if (ampAppSettings != null) {
 				uForm.setAppSettingsId(ampAppSettings.getAmpAppSettingsId());
@@ -201,67 +199,45 @@ public class UpdateAppSettings extends Action {
 			if ("save".equals(uForm.getSave())) {
 				ampAppSettings = new AmpApplicationSettings();
 				ampAppSettings.setAmpAppSettingsId(uForm.getAppSettingsId());
-				ampAppSettings.setDefaultRecordsPerPage(new Integer(uForm
-						.getDefRecsPerPage()));
-				ampAppSettings.setReportStartYear((new Integer(uForm
-						.getReportStartYear())));
-				ampAppSettings.setReportEndYear((new Integer(uForm
-						.getReportEndYear())));
-
-				ampAppSettings.setDefaultReportsPerPage(uForm
-						.getDefReportsPerPage());
-				ampAppSettings.setCurrency(CurrencyUtil.getAmpcurrency(uForm
-						.getCurrencyId()));
-				ampAppSettings.setFiscalCalendar(DbUtil
-						.getAmpFiscalCalendar(uForm.getFisCalendarId()));
+				ampAppSettings.setDefaultRecordsPerPage(new Integer(uForm.getDefRecsPerPage()));
+				ampAppSettings.setReportStartYear((new Integer(uForm.getReportStartYear())));
+				ampAppSettings.setReportEndYear((new Integer(uForm.getReportEndYear())));
+				ampAppSettings.setDefaultReportsPerPage(uForm.getDefReportsPerPage());
+				ampAppSettings.setCurrency(CurrencyUtil.getAmpcurrency(uForm.getCurrencyId()));
+				ampAppSettings.setFiscalCalendar(DbUtil.getAmpFiscalCalendar(uForm.getFisCalendarId()));
 				ampAppSettings.setLanguage(uForm.getLanguage());
 				ampAppSettings.setValidation(uForm.getValidation());
 				ampAppSettings.setTeam(TeamUtil.getAmpTeam(tm.getTeamId()));
-
-				AmpReports ampReport = DbUtil.getAmpReports(uForm
-						.getDefaultReportForTeamId());
-				HttpSession httpSession = request.getSession();
-				AmpReports defaultAmpReport = (AmpReports) httpSession
-						.getAttribute(Constants.DEFAULT_TEAM_REPORT);
-			
+				//
+				AmpReports ampReport = DbUtil.getAmpReports(uForm.getDefaultReportForTeamId());
+				//
 				ampAppSettings.setDefaultTeamReport(ampReport);
-					httpSession.setAttribute(Constants.DEFAULT_TEAM_REPORT,
-							ampAppSettings.getDefaultTeamReport());
-					httpSession.setAttribute("filterCurrentReport",
-							ampAppSettings.getDefaultTeamReport());
-					// this.updateAllTeamMembersDefaultReport( tm.getTeamId(),
-					// ampReport);
+				//
+				session.setAttribute(Constants.DEFAULT_TEAM_REPORT, ampAppSettings.getDefaultTeamReport());
+				session.setAttribute("filterCurrentReport", ampAppSettings.getDefaultTeamReport());
+				// this.updateAllTeamMembersDefaultReport( tm.getTeamId(), ampReport);
 				// added by mouhamad for burkina on 21/02/08
-				String name = "- "
-						+ ampAppSettings.getCurrency().getCurrencyName();
-				httpSession.setAttribute(ArConstants.SELECTED_CURRENCY, name);
+				String name = "- "+ ampAppSettings.getCurrency().getCurrencyName();
+				session.setAttribute(ArConstants.SELECTED_CURRENCY, name);
 				// end
 				if (uForm.getType().equals("userSpecific")) {
-					ampAppSettings.setMember(TeamMemberUtil.getAmpTeamMember(tm
-							.getMemberId()));
+					ampAppSettings.setMember(TeamMemberUtil.getAmpTeamMember(tm.getMemberId()));
 					ampAppSettings.setUseDefault(new Boolean(false));
 				} else {
 					/* change all members settings whose has 'useDefault' set */
-					Iterator itr = TeamMemberUtil.getAllTeamMembers(
-							tm.getTeamId()).iterator();
+					Iterator itr = TeamMemberUtil.getAllTeamMembers(tm.getTeamId()).iterator();
 					logger.debug("before while");
 					while (itr.hasNext()) {
 						TeamMember member = (TeamMember) itr.next();
-						AmpApplicationSettings memSettings = DbUtil
-								.getMemberAppSettings(member.getMemberId());
-
-						if (memSettings != null)
+						AmpApplicationSettings memSettings = DbUtil.getMemberAppSettings(member.getMemberId());
+						if (memSettings != null) {
 							if (memSettings.getUseDefault().booleanValue() == true) {
-
-								AmpTeamMember ampMember = TeamMemberUtil
-										.getAmpTeamMember(member.getMemberId());
-								restoreApplicationSettings(memSettings,
-										ampAppSettings, ampMember);
-
+								AmpTeamMember ampMember = TeamMemberUtil.getAmpTeamMember(member.getMemberId());
+								restoreApplicationSettings(memSettings, ampAppSettings, ampMember);
 							}
+						}
 					}
 				}
-
 				try {
 					DbUtil.update(ampAppSettings);
 					uForm.setUpdated(true);
@@ -270,36 +246,26 @@ public class UpdateAppSettings extends Action {
 				}
 			} else if (uForm.getRestore() != null) {
 				ampAppSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
-				AmpApplicationSettings memSettings = DbUtil
-						.getMemberAppSettings(tm.getMemberId());
-				AmpTeamMember member = TeamMemberUtil.getAmpTeamMember(tm
-						.getMemberId());
+				AmpApplicationSettings memSettings = DbUtil.getMemberAppSettings(tm.getMemberId());
+				AmpTeamMember member = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
 				try {
-					restoreApplicationSettings(memSettings, ampAppSettings,
-							member);
+					restoreApplicationSettings(memSettings, ampAppSettings, member);
 					uForm.setUpdated(true);
 				} catch (Exception e) {
 					uForm.setUpdated(false);
 				}
 			}
-			AmpApplicationSettings tempSettings = DbUtil
-					.getMemberAppSettings(tm.getMemberId());
+			AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(tm.getMemberId());
 			ApplicationSettings applicationSettings = getReloadedAppSettings(tempSettings);
 			tm.setAppSettings(applicationSettings);
 			if (session.getAttribute(Constants.CURRENT_MEMBER) != null) {
 				session.removeAttribute(Constants.CURRENT_MEMBER);
 				session.setAttribute(Constants.CURRENT_MEMBER, tm);
 			}
-
-			AmpARFilter arf = (AmpARFilter) session
-					.getAttribute(ArConstants.REPORTS_FILTER);
-
-			logger.debug("settings updated");
-
-			session.setAttribute(Constants.DESKTOP_SETTINGS_CHANGED,
-					new Boolean(true));
-
+			session.setAttribute(Constants.DESKTOP_SETTINGS_CHANGED, new Boolean(true));
+			//
 			uForm.setUpdateFlag(false);
+			//
 			SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
 
 			String context = SiteUtils.getSiteURL(currentDomain, request

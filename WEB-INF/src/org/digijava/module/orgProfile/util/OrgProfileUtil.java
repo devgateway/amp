@@ -449,7 +449,9 @@ public class OrgProfileUtil {
                 FundingCalculationsHelper cal = new FundingCalculationsHelper();
                 cal.doCalculations(details, currCode);
 
-                Double amount=FeaturesUtil.applyThousandsForVisibility(cal.getTotActualComm().doubleValue());
+               // Double amount=FeaturesUtil.applyThousandsForVisibility(cal.getTotActualComm().doubleValue());
+
+                Double amount=cal.getTotActualComm().doubleValue();
 
                 /* we could use FormatHelper.formatNumber in amounts were not in millions
                 and the req. did not insists on the signal decimal*/

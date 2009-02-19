@@ -266,7 +266,7 @@ public class ChartWidgetUtil {
             Collection<AmpCategoryValue> typeOfAids = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
             for (AmpCategoryValue aid : typeOfAids) {
                 DecimalWraper funding = getFunding(filter.getOrgId(), filter.getOrgGroupId(), startDate, endDate, aid.getId(), currCode, filter.getTransactionType(), filter.getTeamMember());
-                result.addValue(FeaturesUtil.applyThousandsForVisibility(funding.doubleValue()), aid.getValue(), new Long(i));
+                result.addValue(funding.doubleValue(), aid.getValue(), new Long(i));
                 if (funding.doubleValue() != 0) {
                     nodata = false;
                 }
@@ -313,7 +313,7 @@ public class ChartWidgetUtil {
                 if (funding.doubleValue() != 0) {
                     nodata = false;
                 }
-                result.addValue(FeaturesUtil.applyThousandsForVisibility(funding.doubleValue()), financingInstrument.getValue(), new Long(i));
+                result.addValue(funding.doubleValue(), financingInstrument.getValue(), new Long(i));
             }
 
         }
@@ -356,11 +356,11 @@ public class ChartWidgetUtil {
             Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i);
             Date endDate =OrgProfileUtil.getEndDate(fiscalCalendarId, i);
             Double fundingPledge = getPledgesFunding(filter.getOrgId(), filter.getOrgGroupId(), startDate, endDate, currCode);
-            result.addValue(FeaturesUtil.applyThousandsForVisibility(fundingPledge).doubleValue(), "Pledges", new Long(i));
+            result.addValue(fundingPledge.doubleValue(), "Pledges", new Long(i));
             DecimalWraper fundingComm = getFunding(filter.getOrgId(), filter.getOrgGroupId(), startDate, endDate, currCode, true, filter.getTeamMember());
-            result.addValue(FeaturesUtil.applyThousandsForVisibility(fundingComm.doubleValue()), "Actual commitments", new Long(i));
+            result.addValue(fundingComm.doubleValue(), "Actual commitments", new Long(i));
             DecimalWraper fundingDisb = getFunding(filter.getOrgId(), filter.getOrgGroupId(), startDate, endDate, currCode, false, filter.getTeamMember());
-            result.addValue(FeaturesUtil.applyThousandsForVisibility(fundingDisb.doubleValue()), "Actual disbursements", new Long(i));
+            result.addValue(fundingDisb.doubleValue(), "Actual disbursements", new Long(i));
             if (fundingPledge.doubleValue() != 0 || fundingComm.doubleValue() != 0 || fundingDisb.doubleValue() != 0) {
                 nodata = false;
             }
@@ -914,7 +914,7 @@ public class ChartWidgetUtil {
                 } else {
                     total = cal.getTotActualDisb();
                 }
-                ds.setValue(region.getName(), FeaturesUtil.applyThousandsForVisibility(total.doubleValue()));
+                ds.setValue(region.getName(), total.doubleValue());
             }
         } catch (Exception e) {
             logger.error(e);
@@ -1025,14 +1025,14 @@ public class ChartWidgetUtil {
                 double percent=total.doubleValue()/totAllSeqtors.doubleValue();
                 // the sectors which percent is less then 5% should be group in "Others"
                 if (percent > 0.05) {
-                    ds.setValue(sector.getName(), FeaturesUtil.applyThousandsForVisibility(total.doubleValue()));
+                    ds.setValue(sector.getName(), total.doubleValue());
                 } else {
                     others+=total.doubleValue();
                 }
                 
             }
             if(others>0){
-                  ds.setValue("Others", FeaturesUtil.applyThousandsForVisibility(others) );
+                  ds.setValue("Others", others);
             }
         } catch (Exception e) {
             logger.error(e);

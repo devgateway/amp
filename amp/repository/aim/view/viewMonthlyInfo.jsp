@@ -146,7 +146,7 @@ function setHoveredTable(tableId, hasHeaders) {
     
 </c:set>
 
-<c:set target="${urlAll}" property="tabIndex" value="1"/>
+<c:set target="${urlAll}" property="tabIndex" value="2"/>
 
 
 
@@ -180,7 +180,7 @@ function setHoveredTable(tableId, hasHeaders) {
     
 </c:set>
 
-<c:set target="${urlDiscrepancy}" property="tabIndex" value="1"/>
+<c:set target="${urlDiscrepancy}" property="tabIndex" value="2"/>
 
 <c:set target="${urlDiscrepancy}" property="transactionType">
     

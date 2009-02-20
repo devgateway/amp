@@ -104,7 +104,7 @@ function setHoveredTable(tableId, hasHeaders) {
 
 </c:set>
 
-<c:set target="${urlSubTabs}" property="tabIndex" value="1"/>
+<c:set target="${urlSubTabs}" property="tabIndex" value="2"/>
 
 <c:set target="${urlSubTabs}" property="transactionType" value="0"/>
 
@@ -827,7 +827,7 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 																</c:set>
 
-																<c:set target="${urlShowQuarterly}" property="tabIndex" value="1"/>
+																<c:set target="${urlShowQuarterly}" property="tabIndex" value="2"/>
 
 							<c:set var="translation">
 

@@ -309,7 +309,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 
 			ServletOutputStream outputStream = response.getOutputStream();
 			response.setHeader("Content-Disposition",
-					"inline; filename=ParisIndicator" + pId + "." + type);
+					"attachment; filename=ParisIndicator" + pId + "." + type);
 
 			if (type.equals("pdf")) {
 				response.setContentType("application/pdf");

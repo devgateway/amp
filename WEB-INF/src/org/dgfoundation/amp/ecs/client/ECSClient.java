@@ -56,7 +56,7 @@ public class ECSClient {
 		try {
 			System.setSecurityManager(new RMISecurityManager());
 			//server = (ECSServer) Naming.lookup("rmi://"+ECS_SERVER_ADDRESS+"/" + ECSConstants.SERVER_NAME);
-			Registry reg = LocateRegistry.getRegistry(ECS_SERVER_ADDRESS);
+			Registry reg = LocateRegistry.getRegistry(ECS_SERVER_ADDRESS, ECSConstants.SERVER_PORT);
 			server = (ECSServer)reg.lookup(ECSConstants.SERVER_NAME);
 		} catch (Exception e) {
 			logger.error("Unable to contact server registry!", e);

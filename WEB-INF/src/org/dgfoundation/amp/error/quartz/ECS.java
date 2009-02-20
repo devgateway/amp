@@ -20,18 +20,16 @@ public final class ECS {
 	private ECSRunner ecsrunner;
 	private Long ctime = System.currentTimeMillis();
 
+	
 	public static synchronized ECS getInstance() {
 		if (instance == null)
-			synchronized (ECS.class) {
-				if (instance == null)
-					instance = new ECS();
-			}
+			instance = new ECS();
 		return instance;
 	}
 
 	public void start() {
 		ecsrunner = new ECSRunner();
-		ecsrunner.launch();
+		ecsrunner.start();
 		status = true;
 	}
 
@@ -39,7 +37,7 @@ public final class ECS {
 		if (ecsrunner == null)
 			ecsrunner = new ECSRunner();
 			
-		ecsrunner.stop();
+		ecsrunner.stopEcs();
 		status = false;
 	}
 

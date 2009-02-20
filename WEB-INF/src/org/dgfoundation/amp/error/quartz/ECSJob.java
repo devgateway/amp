@@ -31,14 +31,12 @@ import org.quartz.JobExecutionException;
  * @author Arty
  * 
  */
-public class ECSJob implements Job {
+public class ECSJob{
 	private static Logger logger = Logger.getLogger(ECSJob.class);
 	/**
 	 * 
 	 */
-	public void execute(JobExecutionContext contex)
-			throws JobExecutionException {
-
+	public void execute(){
 		ErrorKeeperRAM ek = new ErrorKeeperRAM();
 		ConcurrentHashMap<String, ErrorKeeperItem> errors = ek.getErrors();
 		ConcurrentHashMap<String, Date> loggedErrors = ek.getLoggedErrors();
@@ -105,7 +103,7 @@ public class ECSJob implements Job {
 						try{
 							ECSRunner.DELAY_TIME = param.getSynchronizeDelay();
 							ECSRunner er = new ECSRunner();
-							er.launch(); //update quartz
+							
 							report = "Updating Delay Time Succeeded";
 							logger.info("Delay Time Updated!");
 						} catch (Exception e){

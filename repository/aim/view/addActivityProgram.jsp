@@ -29,7 +29,7 @@
       return true;
     }
 
-    function addProgram() {
+    function addProgram(pType) {
       <digi:context name="selPrg" property="context/module/moduleinstance/addProgram.do?edit=true"/>
       var prgSels=document.getElementsByName("programs.selPrograms");
       var urlParams;
@@ -40,7 +40,7 @@
           var i=0;
           for(i=prgSels.length-1;i>-1;i--){
              if(prgSels[i].value!=-1){
-               urlParams="<%=selPrg%>&themeid="+prgSels[i].value+"&op=add";
+               urlParams="<%=selPrg%>&themeid="+prgSels[i].value+"&op=add&programType="+pType;
                flag=true;
                break;
              }
@@ -49,7 +49,7 @@
             return false;
           }
         }else{
-          urlParams="<%=selPrg%>&themeid="+prgSels[prgSels.length-1].value+"&op=add";
+          urlParams="<%=selPrg%>&themeid="+prgSels[prgSels.length-1].value+"&op=add&programType="+pType;
         }
       }
 
@@ -213,7 +213,7 @@ Default Program
 											<tr>
 
 												<td><html:button styleClass="dr-menu"
-													property="submitButton" onclick="addProgram()">
+													property="submitButton" onclick="addProgram('${aimEditActivityForm.programs.programType}')">
 													<digi:trn key="btn:add">Add</digi:trn>
 												</html:button></td>
 												<td><html:button styleClass="dr-menu"

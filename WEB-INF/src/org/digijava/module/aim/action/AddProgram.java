@@ -33,7 +33,14 @@ public class AddProgram
     String selectedThemeId = request.getParameter("themeid");
     String opStatus = request.getParameter("op");
     String strLevel = request.getParameter("selPrgLevel");
+    String s= request.getParameter("programType");
+    Integer pType = null;
+    if(s!=null) pType = new Integer(s);
     int settingsId = eaform.getPrograms().getProgramType();
+    if(pType!=null) {
+    	settingsId = pType.intValue();
+    	eaform.getPrograms().setProgramType(settingsId);
+    }
     AmpActivityProgramSettings parent=null;
     switch(settingsId){
       case ProgramUtil.NATIONAL_PLAN_OBJECTIVE_KEY: parent=eaform.getPrograms().getNationalSetting(); break;

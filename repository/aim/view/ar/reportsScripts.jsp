@@ -651,7 +651,7 @@ function validateFormat(){
 		var call=function(){
 			var reporTable=new scrollableTable("reportTable",winH -320);
 			reporTable.debug=false;
-			reporTable.maxRowDepth=1;
+			reporTable.maxRowDepth=2;
 			reporTable.scroll();
 			wait.hide();		
 		}

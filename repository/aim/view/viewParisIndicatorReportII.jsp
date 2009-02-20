@@ -245,10 +245,10 @@ html>body #mainEmpty {
 	}
 	
 	function popup_pdf(val) {
-		openResisableWindow(800, 600);
+		//openResisableWindow(800, 600);
 		<digi:context name="pdf" property="context/module/moduleinstance/parisIndicatorReportPDFXLSCSV.do?docType=pdf" />
 		document.aimParisIndicatorReportForm.action = "<%= pdf %>&pid="+val;
-		document.aimParisIndicatorReportForm.target = popupPointer.name;
+		//document.aimParisIndicatorReportForm.target = popupPointer.name;
 		document.aimParisIndicatorReportForm.submit();
 	}
 

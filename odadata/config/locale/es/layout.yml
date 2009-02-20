@@ -1,6 +1,5 @@
 es:
   layout:
-    # TODO: Translate?
     standard_title: ODAnic - Sistema de la asistencia oficial de desarrollo a Nicaragua
     custom_title: ODAnic - {{page_title}}
     
@@ -20,7 +19,6 @@ es:
       odadata_manual: Manual ODAnic
       glossary: Glosario ODAnic
       dac_manual: Manual CAD-CRS
-      # TODO: Change from "Used Exchange Rates" to just "Exchange Rates" please
       exchange_rates: Tasas de Cambio
       design_own: 'Diseña Reporte'
       help: Ayuda
@@ -41,8 +39,7 @@ es:
       design_own: 'Diseña Reporte'
       strategy: Estrategia del País
       financial_consistency: Regularidad de Financiamiento
-      # TODO: Change from "Used Exchange Rates" to just "Exchange Rates" please
-      exchange_rates: Tasas de cambio ya usadas
+      exchange_rates: Tasas de Cambio
       manuals: Manuales
       data_input_manual: Manual de Ingreso de Datos
       data_input_glossary: Glosario de Ingreso de Datos
@@ -56,11 +53,9 @@ es:
       glossary: Glosario
       donor_admin: Administración de Donantes
       exchange_rates: Tasas de cambio
-      agencies: Agencias / Contrapartes
-      impl_agencies: Agencias Imeplementadoras
-      contr_agencies: Agencias Contratadas
+      agencies_top: Agencias / Contrapartes
+      agencies: Agencias Imeplementadoras
       gov_counterpart: Homólogo Gubermental
-      # TODO:
       scrollbars: Señales de Pantalla
       
   actions:

@@ -68,26 +68,14 @@ es:
       
   implementing_agencies:
     index:
-      title: Lista de Agencias Implementadoras
-      empty: No hay Agencias Implementadoras en el base de datos. Por favor crea una nueva agencia implementadora.
-      new: Añadir Agencia Implementadora
+      title: Lista de Agencias
+      empty: No hay agencias en el base de datos. Por favor crea una nueva agencia.
+      new: Añadir Agencia
     new:
-      title: Añadir Nueva Agencia Implementadora
+      title: Añadir Nueva Agencia
       submit: Crear Agencia
     edit:
-      title: Editar Agencia Implementadora
-      submit: Actualizar Agencia
-
-  contracted_agencies:
-    index:
-      title: Lista de Agencias Contratadas
-      empty: No hay Agencias Contratadas en el base de datos. Por favor crea una nueva agencia contratada.
-      new: Añadir Agencia Contratadas
-    new:
-      title: Añadir Nueva Agencia Contratadas
-      submit: Crear Agencia
-    edit:
-      title: Editar Agencia Contratadas
+      title: Editar Agencia
       submit: Actualizar Agencia
       
   donor_agencies:

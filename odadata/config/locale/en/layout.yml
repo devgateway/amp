@@ -53,9 +53,8 @@ en:
       glossary: Glossary
       donor_admin: Donor Administration
       exchange_rates: Exchange Rates
-      agencies: Agencies / Counterparts
-      impl_agencies: Implementing Agencies
-      contr_agencies: Contracted Agencies
+      agencies_top: Agencies / Counterparts
+      agencies: Agencies
       gov_counterpart: Government Counterpart
       scrollbars: News Tickers
       

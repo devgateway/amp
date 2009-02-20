@@ -1,16 +1,19 @@
 <h2><%= header lc(:title) %></h2>
 
 <table>
-	<% if @implementing_agencies.blank? %>
+	<% if @agencies.blank? %>
 		<tr><td class="empty"><%= lc(:empty) %></td></tr>
 	<% else %>
-		<% @implementing_agencies.each do |implementing_agency| %> 
+		<% @agencies.each do |agency| %> 
 			<tr>
-				<td><%= implementing_agency.name %></td>
-				<td><%= link_to ll(:actions, :edit), edit_implementing_agency_path(implementing_agency) %></td>
+				<td><%= agency.name %></td>
+				<td><%= link_to ll(:actions, :edit), edit_agency_path(agency) %></td>
 			</tr>
 		<% end %>
 	<% end %>
 </table>
 	
-<p><b><%= link_to lc(:new), new_implementing_agency_path %></b></p>
+<p><b><%= link_to lc(:new), new_agency_path %></b></p>
+
+<%= will_paginate @projects,
+	:previous_label => t('pagination.previous_page'), :next_label => t('pagination.next_page') %>

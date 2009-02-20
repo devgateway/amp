@@ -139,7 +139,7 @@
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
-																<a id="clear1" href="javascript:clearDate(document.getElementById("originalAppDate"), 'clear1')">
+																<a id="clear1" href='javascript:clearDate(document.getElementById("originalAppDate"), "clear1")'>
 																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 																</a>
 																<a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("originalAppDate"),"clear1")'>
@@ -168,7 +168,7 @@
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
-																<a id="clear2" href="javascript:clearDate(document.getElementById("revisedAppDate"), "clear2")">
+																<a id="clear2" href='javascript:clearDate(document.getElementById("revisedAppDate"), "clear2")'>
 																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 																</a>
 																<a id="date2" href='javascript:pickDateWithClear("date2",document.getElementById("revisedAppDate"),"clear2")'>

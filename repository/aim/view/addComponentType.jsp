@@ -117,7 +117,7 @@ body {
 								<field:display name="Admin - Component Type Name" feature="Admin - Component Type">
 						  		<tr>
 									<td width="35%" height="22" align="right"><font color=red>*</font> <digi:trn
-										key="aim:typeName">Name</digi:trn>NOMBRE
+										key="aim:typeName">Name</digi:trn>
 								    &nbsp;</td>
 								  <td width="65%"><html:text property="name" size="40"/></td>
 								</tr>

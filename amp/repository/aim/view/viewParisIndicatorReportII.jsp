@@ -261,10 +261,10 @@ html>body #mainEmpty {
 	}
 
 	function popup_xls(val) {
-		openResisableWindow(800, 600);
+		//openResisableWindow(800, 600);
 		<digi:context name="xls" property="context/module/moduleinstance/parisIndicatorReportPDFXLSCSV.do?docType=xls" />
 		document.aimParisIndicatorReportForm.action = "<%= xls %>&pid="+val;
-		document.aimParisIndicatorReportForm.target = popupPointer.name;
+		//document.aimParisIndicatorReportForm.target = popupPointer.name;
 		document.aimParisIndicatorReportForm.submit();
 	}
 

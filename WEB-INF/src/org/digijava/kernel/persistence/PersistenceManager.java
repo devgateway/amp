@@ -351,7 +351,7 @@ public class PersistenceManager {
 		}
 
 		try {
-			session.close();
+			if(session.isOpen()) session.close();
 		}
 		catch (HibernateException ex) {
 			logger.error("Failed to close session", ex);

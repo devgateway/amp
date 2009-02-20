@@ -109,7 +109,7 @@ function setHoveredTable(tableId, hasHeaders) {
 
 </c:set>
 
-<c:set target="${urlSubTabs}" property="tabIndex" value="1"/>
+<c:set target="${urlSubTabs}" property="tabIndex" value="2"/>
 
 <c:set target="${urlSubTabs}" property="transactionType" value="0"/>
 
@@ -151,7 +151,7 @@ function setHoveredTable(tableId, hasHeaders) {
 
 </c:set>
 
-<c:set target="${urlAll}" property="tabIndex" value="1"/>
+<c:set target="${urlAll}" property="tabIndex" value="2"/>
 
 
 
@@ -169,7 +169,7 @@ function setHoveredTable(tableId, hasHeaders) {
 
 </c:set>
 
-<c:set target="${urlQuarterlyGrouping}" property="tabIndex" value="1"/>
+<c:set target="${urlQuarterlyGrouping}" property="tabIndex" value="2"/>
 
 <c:set target="${urlQuarterlyGrouping}" property="transactionType">
 
@@ -185,7 +185,7 @@ function setHoveredTable(tableId, hasHeaders) {
 
 </c:set>
 
-<c:set target="${urlDiscrepancy}" property="tabIndex" value="1"/>
+<c:set target="${urlDiscrepancy}" property="tabIndex" value="2"/>
 
 <c:set target="${urlDiscrepancy}" property="transactionType">
 

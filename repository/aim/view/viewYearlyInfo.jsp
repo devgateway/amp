@@ -118,7 +118,7 @@ function preview(id)
 
 </c:set>
 
-<c:set target="${urlSubTabs}" property="tabIndex">
+<c:set target="${urlSubTabs}" property="tabIndex" value="2">
 	<bean:write name="aimYearlyInfoForm" property="tabIndex"/>
 </c:set>
 

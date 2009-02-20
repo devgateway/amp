@@ -65,28 +65,16 @@ en:
       title: Edit Exchange Rate
       submit: Update Exchange Rate
       
-  implementing_agencies:
+  agencies:
     index:
-      title: List of Implementing Agencies
-      empty: No Implementing Agencies Exist in the Database. Please create a New Implementing Agency.
-      new: Add Implementing Agency
+      title: List of Agencies
+      empty: No agencies exist in the database. Please add your agencies.
+      new: Add Agency
     new:
-      title: Add New Implementing Agency
+      title: Add New Agency
       submit: Create Agency
     edit:
-      title: Edit Implementing Agency
-      submit: Update Agency
-
-  contracted_agencies:
-    index:
-      title: List of Contracted Agencies
-      empty: No Contracted Agencies Exist in the Database. Please create a New Contracted Agency.
-      new: Add Contracted Agency
-    new:
-      title: Add New Contracted Agency
-      submit: Create Agency
-    edit:
-      title: Edit Contracted Agency
+      title: Edit Agency
       submit: Update Agency
       
   donor_agencies:

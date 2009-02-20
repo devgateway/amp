@@ -9,7 +9,36 @@
   		</div>
 	</li>
 	
+	<li>
+		<%= f.label :implementing_agencies %>
+		<%= button_to_function t('projects.add_implementing_agency'), :style => "float: right; margin-top: -20px; width: 230px" do |page|  
+				page.insert_html :bottom, :implementing_agencies, 
+					:partial => 'implementing_agency', :object => Agency.new
+			end %>
+			
+		<div id="implementing_agencies">
+			<% if @project.implementing_agencies.any? %>
+				<%= render :partial => 'implementing_agency', :collection => @project.implementing_agencies.ordered %>
+			<% else %>
+				<%= render :partial => 'implementing_agency', :object => Agency.new %>
+			<% end %>
+		</div>
+	</li>
 	
+	<li>
+		<%= f.label :contracted_agencies %>
+		<%= button_to_function t('projects.add_contracted_agency'), :style => "float: right; margin-top: -20px; width: 230px" do |page| 
+			page.insert_html :bottom, :contracted_agencies, :partial => 'contracted_agency', :object => Agency.new
+		end %>
+		
+		<div id="contracted_agencies">
+			<% if @project.contracted_agencies.any? %>
+				<%= render :partial => 'contracted_agency', :collection => @project.contracted_agencies.ordered %>
+			<% else %>
+				<%= render :partial => 'contracted_agency', :object => Agency.new %>
+			<% end %>
+		</div>
+	</li>
 	
 	<li class="fifty"><%= f.select :national_regional, Project::NATIONAL_REGIONAL_OPTIONS,
 				:include_blank => ll(:options, :prompt), :translate => true %></li>

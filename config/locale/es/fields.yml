@@ -78,10 +78,7 @@ es:
         euro_rate: Tasa de cambio del Euro
         year: Año
         
-      implementing_agency:
-        name: Nombre de Agencia
-        
-      contracted_agency:
+      agency:
         name: Nombre de Agencia
         
       donor_agency:

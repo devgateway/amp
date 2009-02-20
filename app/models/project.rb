@@ -36,9 +36,9 @@ class Project < ActiveRecord::Base
   
   belongs_to              :government_counterpart, :class_name => "GovernmentCounterpartNames", :foreign_key => "government_counterpart_id"
   
-  # Agencies
-  has_and_belongs_to_many :implementing_agencies
-  has_and_belongs_to_many :contracted_agencies
+  # Agencies (using habtm here is not ideal, but using a rich linking model with a role argument does not work well with Rails)
+  has_and_belongs_to_many :implementing_agencies, :class_name => "Agency", :join_table => "implementing_agencies_projects"
+  has_and_belongs_to_many :contracted_agencies, :class_name => "Agency", :join_table => "contracted_agencies_projects"
   
   # MDG relevance
   has_many                :mdg_relevances, :dependent => :delete_all

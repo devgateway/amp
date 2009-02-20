@@ -6,9 +6,7 @@ ActionController::Routing::Routes.draw do |map|
     static.downloads  "/downloads",       :action => "downloads"
   end
   
-  map.resources :implementing_agencies   
-  map.resources :contracted_agencies     
-                                          
+  map.resources :agencies                                          
   map.resources :glossaries              
   map.resources :exchange_rates          
   map.resource  :session
@@ -18,7 +16,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :donor_agencies                
   map.resources :country_strategies,      :collection => { :add_sector => :get }
   
-  map.resources :donors, :formatted => :none do |d|
+  map.resources :donors do |d|
     d.resources :users                   
     d.resources :donor_agencies,          :as => 'agencies'                
     d.resources :country_strategies      

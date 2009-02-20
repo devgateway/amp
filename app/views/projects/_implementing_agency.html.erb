@@ -1,7 +1,7 @@
 <div class="implementing_agency">
 	<select name="project[implementing_agency_ids][]" class="large">
 		<option value=""><%= ll(:options, :prompt) %></option>
-		<%= options_from_collection_for_select(ImplementingAgency.ordered.all, :id, :name, implementing_agency.id) %>
+		<%= options_from_collection_for_select(Agency.ordered.all, :id, :name, implementing_agency.id) %>
 	</select>
 
 	<%= link_to_function I18n.t('projects.delete_associated'), "$(this).parents('.implementing_agency').remove();" %>

@@ -79,10 +79,7 @@ en:
         euro_rate: Euro Exchange Rate
         year: Year
         
-      implementing_agency:
-        name: Agency Name
-        
-      contracted_agency:
+      agency:
         name: Agency Name
         
       donor_agency:

@@ -265,25 +265,26 @@
 				<div id="tab_select_filed" class="yui-tab-content" style="padding: 0px 0px 1px 0px;" >
                     <c:set var="stepNum" value="0" scope="request" />
                     <jsp:include page="toolbar.jsp" />
-					<div style="height: 355px;">
+					<div style="height: 355px; padding-bottom: 40px;">
     					<table cellpadding="5px" style="vertical-align: middle" width="100%">
     						<tr>
         						<td width="47%" align="center">
         							<span class="list_header">
         								<digi:trn key="rep:wizard:availableColumns">Available Fields</digi:trn>
         							</span>
-                      <div style="text-align: left; width: 87%;">
-                        <div id="expandcontractdiv"  >
+                      <div style="text-align: left; width: 87.5% ">
+                        <div id="expandcontractdiv" style="margin-bottom: 0px;" >
                           <a id="expand" href="#">Expand all</a>
                           <a id="collapse" href="#">Collapse all</a>
                         
                           <a id="check" href="#">Check all</a>
                           <a id="uncheck" href="#">Uncheck all</a>
                         </div>
-                    </div>
-        							<div id="source_col_div" class="draglist" style="border-width: 0px;">
+                      </div>
+                      <div id="source_col_div" class="draglist" style="border-width: 0px;">
         <%--  								<jsp:include page="setColumns.jsp" />    --%>
                   <div id="dataExportTree"></div>
+                  
         
         							</div>
         						</td>

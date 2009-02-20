@@ -13,7 +13,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
  */
 
 public class ECSService extends AbstractServiceImpl {
-	ECSRunner crummer = null;
+	private static ECSRunner crummer = new ECSRunner();
 
 	protected void processInitEvent(ServiceContext serviceContext) {
 		/*String cleanerEnabled = FeaturesUtil
@@ -25,8 +25,6 @@ public class ECSService extends AbstractServiceImpl {
 		String ecsEnabled = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ECS_ENABLED);
 		if ("true".equalsIgnoreCase(ecsEnabled))
 			startService();
-		else
-			stopService();
 	}
 
 	public void startService() {

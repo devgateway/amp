@@ -35,19 +35,19 @@
 								<digi:trn key="aim:commentList">List of Comments</digi:trn>
 							</td>
 						</tr>
-						<logic:empty name="aimEditActivityForm" property="commentsCol">
+						<logic:empty name="aimEditActivityForm" property="comments.commentsCol">
 							<tr>
 								<td align=left vAlign=top><b><font color="#FF0000">
 									<digi:trn key="aim:noCommentPresent">No comments found for this activity.</digi:trn></font></b>
 								<td>
 							</tr>
 						</logic:empty>
-						<logic:notEmpty name="aimEditActivityForm" property="commentsCol">
+						<logic:notEmpty name="aimEditActivityForm" property="comments.commentsCol">
 						<tr>
 							<td align=left vAlign=top>						
 							<table width="100%" cellPadding=3>
 								<c:set value="1" var="sno" />
-								<logic:iterate name="aimEditActivityForm" id="comment" property="commentsCol" 
+								<logic:iterate name="aimEditActivityForm" id="comment" property="comments.commentsCol" 
 									type="org.digijava.module.aim.dbentity.AmpComments">
 									<c:if test="${comment.ampFieldId.ampFieldId == aimEditActivityForm.field.ampFieldId}"> 
 										<tr>

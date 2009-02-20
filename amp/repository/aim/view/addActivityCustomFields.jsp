@@ -26,6 +26,7 @@
 									</td></tr>
 									<tr><td>
 										<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
+										    <logic:notEmpty name="step" property="customFields">
 											<logic:iterate name="step" property="customFields" id="customField" indexId="index">
 											<field:display name="${customField.FM_field}" feature="Step${aimEditActivityForm.step}">												
 												<tr>
@@ -75,6 +76,7 @@
 												</tr>
 											</field:display>
 											</logic:iterate>
+											</logic:notEmpty>
 										</table>
 									</td></tr>
 								</logic:equal>

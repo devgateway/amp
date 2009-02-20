@@ -171,11 +171,17 @@ var myTabsObject;
 			tabObject.parentNode.href = url;
 			tabObject.parentNode.id = id;
 		}
+		var len = document.getElementById("scrollableDiv").getElementsByTagName("DIV").length;
+		for (i = 0; i < len; i++) 
+			{	
+			document.getElementById("scrollableDiv").getElementsByTagName("DIV")[i].style.display='';
+			}
+		document.getElementById(label).style.display = 'none';
 		replaceableTabObject = myTabsObject.getTab(myTabsObject.get('tabs').length-2);
 		allTabsPanel.hide();
 		startajaxtabs("MyTabs");
 		reloadTab("MyTabs",id);
-	}
+		}
 
     function changeTab(e) {  
 		var region = YAHOOAmp.util.Dom.getRegion("moreTabs");

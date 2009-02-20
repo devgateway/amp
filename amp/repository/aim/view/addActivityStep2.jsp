@@ -492,11 +492,12 @@ function fnChk(frmContrl, f){
 }
 
 function addProgram(programType) {
-
+		
 		openNewRsWindow(750, 550);
 		<digi:context name="taddProgram" property="context/module/moduleinstance/addProgram.do?edit=true"/>
 
                 var url="<%= taddProgram %>&programType="+programType;
+         //       alert(programType + " "+url);
 	  	document.aimEditActivityForm.action =url ;
 
 		document.aimEditActivityForm.target = popupPointer.name;

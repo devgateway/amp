@@ -201,7 +201,7 @@ saveReportEngine	= null;
 		};
 	
 		var myPanel1 = new YAHOO.widget.Panel("new", {
-			width:"700px",
+			width:"750px",
 		    fixedcenter: true,
 		    constraintoviewport: true,
 		    underlay:"none",

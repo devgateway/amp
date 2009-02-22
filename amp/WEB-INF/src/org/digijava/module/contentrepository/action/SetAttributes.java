@@ -45,17 +45,17 @@ public class SetAttributes extends Action {
 	private void makePublic(String uuid, HttpServletRequest request) {
 		Session hbSession							= null;
 		try {
-			hbSession								= PersistenceManager.getSession();
+			hbSession								= PersistenceManager.getRequestDBSession();
 			boolean shouldSaveObject				= false;
 			
 			CrDocumentNodeAttributes docAttributes	= null;
 			try{
-				docAttributes						= (CrDocumentNodeAttributes)hbSession.load(CrDocumentNodeAttributes.class, uuid);
+				docAttributes						= (CrDocumentNodeAttributes)hbSession.get(CrDocumentNodeAttributes.class, uuid);
 			}
 			catch (Exception e) {
 				logger.debug("CrDocumentNodeAttribute object with uuid " + uuid + " was not found in db.");
 			}
-			if (docAttributes == null) {
+			if ((docAttributes == null) || (docAttributes.getUuid() == null)) {
 				docAttributes						= new CrDocumentNodeAttributes();
 				docAttributes.setUuid(uuid);
 				shouldSaveObject					= true;
@@ -74,19 +74,19 @@ public class SetAttributes extends Action {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		finally {
-			try {
-				PersistenceManager.releaseSession(hbSession);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed :" + ex2);
-			}
-		}
+//		finally {
+//			try {
+//				PersistenceManager.releaseSession(hbSession);
+//			} catch (Exception ex2) {
+//				logger.error("releaseSession() failed :" + ex2);
+//			}
+//		}
 	}
 	
 	public static void unpublish(String uuid) {
 		Session hbSession							= null;
 		try {
-			hbSession			= PersistenceManager.getSession();
+			hbSession			= PersistenceManager.getRequestDBSession();
 			String queryStr		= "SELECT a FROM " + CrDocumentNodeAttributes.class.getName() + " a WHERE uuid=:uuid" ;
 			Query query			= hbSession.createQuery(queryStr);
 			
@@ -100,12 +100,12 @@ public class SetAttributes extends Action {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		finally {
-			try {
-				PersistenceManager.releaseSession(hbSession);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed :" + ex2);
-			}
-		}
+//		finally {
+//			try {
+//				PersistenceManager.releaseSession(hbSession);
+//			} catch (Exception ex2) {
+//				logger.error("releaseSession() failed :" + ex2);
+//			}
+//		}
 	}
 }

@@ -318,7 +318,7 @@
 				<tr bgcolor="#EEEEEE">
 					<td colspan="5">
 					<category:showoptions size="3"
-						outerstyle="width: 300px" styleClass="inp-text"
+						outerstyle="width: 410px" styleClass="inp-text"
 						name="aimReportsFilterPickerForm"
 						multiselect="true"
 						property="selectedProjectCategory"

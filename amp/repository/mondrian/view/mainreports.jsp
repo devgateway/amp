@@ -104,12 +104,9 @@
                     		<td bgcolor="<%=(idx.intValue()%2==1?"#dbe5f1":"#ffffff")%>" class="reportsBorderTD">
                     			<p style="max-width: 400px;white-space: normal" title="${report.name}">
 									<a href="/mondrian/showreport.do?id=${report.id}&pagename=query" title="${report.name}">
-									<c:if test="${fn:length(report.name) > 300}" >
-										<c:out value="${fn:substring(report.name, 0, 300)}" />...
-									</c:if>
-									<c:if test="${fn:length(report.name) < 300}" >
-										<c:out value="${report.name}" />
-									</c:if>
+									<digi:trn key="${report.name}">
+										${report.name}
+									</digi:trn>
 									</a>
 	                       		</p> 		
                      		</td>

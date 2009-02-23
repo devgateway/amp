@@ -1909,7 +1909,7 @@
 									</logic:notEmpty>
 
 									<logic:iterate name="aimEditActivityForm" property="customFields" id="customField" indexId="index">
-									<field:display name="${customField.FM_field}" feature="Step${customField.step}">												
+									<field:display name="${customField.FM_field}" feature="Step${customField.step.step}">												
 										<tr>
 											<td width="30%" align="right" valign="top" nowrap="nowrap" >
 												<b>													

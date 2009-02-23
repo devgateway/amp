@@ -17,6 +17,7 @@ CREATE OR REPLACE VIEW `v_donor_funding` AS
                                                   `ot`.`org_type` AS `donor_type_name`,
                                                   `cval2`.`category_value` AS
                                                   `financing_instrument_name`,
+                                                  f.`amp_terms_assist_id` as terms_assist_id,
                                                   `d`.`amp_org_id` AS `org_grp_id`,
                                                   `ot`.`amp_org_type_id` AS `org_type_id`
                                            from (((((((`amp_funding` `f`

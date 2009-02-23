@@ -1339,7 +1339,7 @@ function showFilter(){
 	<html:hidden property="myYears" value="${sys}"/>
 </c:forEach>
 
-<div style="padding-left:10px;padding-top:10px;width:95%;">
+<div style="padding-left:10px;padding-top:10px;width:96%;">
     <div id="content" class="yui-skin-sam" style="width:100%;">
         <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
             <ul class="yui-nav">

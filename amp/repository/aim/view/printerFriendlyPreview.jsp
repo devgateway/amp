@@ -1775,19 +1775,24 @@
 															</td>
                                                         <td bgcolor="#FFFFFF" align="left" >
                                                           <c:if test="${aimEditActivityForm.funding.proProjCost.funAmount!=null}">
-																 	<FONT color=blue>*</FONT> ${aimEditActivityForm.funding.proProjCost.funAmount}                                                          </c:if>&nbsp;
-																<c:if test="${aimEditActivityForm.funding.proProjCost.currencyCode!=null}"> ${aimEditActivityForm.funding.proProjCost.currencyCode} </c:if>                                                        </td>
-												    </tr>
-													<tr bgcolor="#ffffff">
+																 	<FONT color=blue>*</FONT> ${aimEditActivityForm.funding.proProjCost.funAmount}                                                          
+														  </c:if>&nbsp;
+														  <c:if test="${aimEditActivityForm.funding.proProjCost.currencyCode!=null}"> 
+																${aimEditActivityForm.funding.proProjCost.currencyCode} </c:if>                                                        
+														</td>
+												      </tr>
+													  <tr bgcolor="#ffffff">
 														<td>
 															<digi:trn key="aim:proposedcompletiondate">Proposed Completion Date</digi:trn>  
 														</td>
                                                         <td bgcolor="#FFFFFF" align="left" width="150">
                                                           <c:if test="${aimEditActivityForm.funding.proProjCost.funDate!=null}">
-                                                             ${aimEditActivityForm.funding.proProjCost.funDate}                                                          </c:if>                                                        </td>
-                                                      </tr>
-                                              </table>
-                            </c:if>										</td>
+                                                             ${aimEditActivityForm.funding.proProjCost.funDate}                                                          
+                                                         </c:if>                                                        
+                                                         </td>
+                                                       </tr>
+                                              		</table>
+                            				</c:if>										</td>
 									</tr>
 								  </feature:display>
 								
@@ -1895,9 +1900,9 @@
 										</td>
 
 										<td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.team.teamLead.user.firstNames}"/>
-											<c:out value="${aimEditActivityForm.team.teamLead.user.lastName}"/>	-
-											<c:out value="${aimEditActivityForm.team.teamLead.user.email}"/>										
+											<c:out value="${aimEditActivityForm.identification.team.teamLead.user.firstNames}"/>
+											<c:out value="${aimEditActivityForm.identification.team.teamLead.user.lastName}"/>	-
+											<c:out value="${aimEditActivityForm.identification.team.teamLead.user.email}"/>											
 										</td>
 									</tr>
 									</field:display>

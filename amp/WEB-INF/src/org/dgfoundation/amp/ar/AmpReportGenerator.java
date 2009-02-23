@@ -419,11 +419,13 @@ public class AmpReportGenerator extends ReportGenerator {
 
 				cc.setContentCategory(ArConstants.COLUMN_FUNDING);
 				// iterate the src column and add the items with same MetaInfo
-				Iterator it = funding.iterator();
-				while (it.hasNext()) {
-					Categorizable item = (Categorizable) it.next();
-					if (item.hasMetaInfo(metaInfo))
-						cc.addCell(item);
+				if (funding != null){
+					Iterator it = funding.iterator();
+					while (it.hasNext()) {
+						Categorizable item = (Categorizable) it.next();
+						if (item.hasMetaInfo(metaInfo))
+							cc.addCell(item);
+					}
 				}
 			}
 		}

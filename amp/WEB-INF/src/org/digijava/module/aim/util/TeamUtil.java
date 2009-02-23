@@ -1488,6 +1488,27 @@ public class TeamUtil {
         return ans;
     }
 
+
+    public static AmpTeam getParentTeam(Long ampTeamId) {
+        Session session = null;
+        Query q = null;
+        AmpTeam team = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String qry = "select atp.* from amp_team atp " +
+            		"inner join amp_team at on (atp.amp_team_id = at.parent_team_id)" +
+            		"and (at.amp_team_id=:ampTeamId) ";
+            q = session.createSQLQuery(qry).addEntity(AmpTeam.class);
+            q.setParameter("ampTeamId", ampTeamId, Hibernate.LONG);
+            if(q != null && q.list().size() > 0)
+            	team = (AmpTeam)q.list().get(0);            
+        } catch(Exception ex) {
+            logger.error("Unable to get AmpTeam [checkForParentTeam()]", ex);
+            throw new RuntimeException(ex);
+        } 
+        return team;
+    }
+
     public static AmpTeam getTeamByName(String teamName) {
         Session session = null;
         Query qry = null;

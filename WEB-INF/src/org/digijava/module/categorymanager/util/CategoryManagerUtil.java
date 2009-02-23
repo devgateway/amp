@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.exception.NoCategoryClassException;
 import org.digijava.module.categorymanager.action.CategoryManager;
@@ -53,10 +54,13 @@ public class CategoryManagerUtil {
 	 * in "Translator View". This function just extracts the translation from the database
 	 * @param ampCategoryValue
 	 * @param request
-	 * @return The translated category value or ,if any eror appear, the empty string
+	 * @return The translated category value or ,if any error appears, the empty string
 	 */
 	public static String translateAmpCategoryValue(AmpCategoryValue ampCategoryValue, HttpServletRequest request) {
-		return translate(CategoryManagerUtil.getTranslationKeyForCategoryValue(ampCategoryValue), request, ampCategoryValue.getValue() );
+		//translation key is generated from the text hashcode
+		String key=TranslatorWorker.generateTrnKey(ampCategoryValue.getValue());
+		return translate(key, request, ampCategoryValue.getValue() );
+		//return translate(CategoryManagerUtil.getTranslationKeyForCategoryValue(ampCategoryValue), request, ampCategoryValue.getValue() );
 	}
 	public static String translate(String key, HttpServletRequest request, String defaultValue) {
 		Session session	= null;

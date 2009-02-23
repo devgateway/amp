@@ -5,10 +5,10 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
-
 			
 <%@page import="java.net.URLEncoder"%>
 <%@page import="java.net.URLDecoder"%>
+
 
 <table id="team_table" bgcolor="white">
 						<thead>
@@ -110,7 +110,7 @@
 										<digi:trn key="contentrepository:documentManagerDownloadHint">Click here to download document</digi:trn>
 									</c:set> 
 									<a style="cursor:pointer; text-decoration:underline; color: blue" id="D<bean:write name='documentData' property='uuid' />"
-									onClick="window.location='/contentrepository/downloadFile.do?uuid=<bean:write name='documentData' property='uuid' />'"
+									onClick="downloadFile('<bean:write name='documentData' property='uuid' />');"
 	
 									title="${translation}"><img hspace="2" src= "/repository/contentrepository/view/images/check_out.gif" border=0></a>
 								</c:when>
@@ -176,7 +176,7 @@
 <!--								</c:set>-->
 								<logic:equal name="documentData" property="hasDeleteRights" value="true">
 									<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:underline; color: blue"
-									onClick="deleteRow('<%=documentData.getUuid() %>');"
+									onClick="checkDocumentUuid('<%=documentData.getUuid() %>');deleteRow('<%=documentData.getUuid() %>');"
 									title="<digi:trn key="contentrepository:documentManagerDeleteHint">Click here to delete this document</digi:trn>"><img hspace="2" src= "/repository/contentrepository/view/images/trash_12.gif" border=0></a>
 								</logic:equal>
 								</td>

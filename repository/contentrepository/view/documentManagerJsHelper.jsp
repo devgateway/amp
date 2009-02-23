@@ -930,11 +930,29 @@ function createToolTips(containerElement) {
 
 function createToolTip (id, containerElement) {
 		new YAHOO.widget.Tooltip("tt"+id, { context: id, container: containerElement });
-}
+} 
 
 /* Number of possible panels on this page */
 YAHOO.amp.panelCounter	= 3;
 
 YAHOO.util.Event.addListener(window, "load", initPanel) ;
+
+
+function downloadFile(uuid) {
+	if (checkDocumentUuid(uuid)) {
+		window.location='/contentrepository/downloadFile.do?uuid='+uuid;
+	}
+}
+
+function checkDocumentUuid(uuid) {
+	alert(uuid);
+	var stop = '<digi:trn jsFriendly="true">Please save the activity before downloading the file !</digi:trn>';
+	if (uuid.indexOf("TEMPORARY") >= 0) {
+		alert(stop);
+		return false;
+	}
+	return true;
+}
+
 </script>
 

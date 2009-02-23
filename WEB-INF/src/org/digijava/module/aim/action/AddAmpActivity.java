@@ -227,6 +227,7 @@ public class AddAmpActivity extends Action {
 		if ( request.getParameter("action") != null && request.getParameter("action").equals("create") ){
                         SelectDocumentDM.clearContentRepositoryHashMap(request);
                         eaForm.getPrograms().setActPrograms(null);
+                        eaForm.setEditAct(false);
                         if (ProgramUtil.getAmpActivityProgramSettingsList() != null) {
                                 eaForm.getPrograms().setNationalSetting(ProgramUtil.
                                                           getAmpActivityProgramSettings(

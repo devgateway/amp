@@ -358,9 +358,7 @@
 				</tr>
 				<tr bgcolor="#EEEEEE">
 					<td colspan="5" styleClass="inp-text">
-						<html:select
-							multiple="true" property="selectedSectors" size="3"
-							style="width: 300px" styleClass="inp-text">
+						<html:select multiple="true" property="selectedSectors" size="3" style="width: 300px" styleClass="inp-text">
 							<html:optionsCollection property="sectors" value="ampSectorId"
 								label="name" />
 						</html:select>

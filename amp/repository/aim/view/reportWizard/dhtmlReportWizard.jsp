@@ -288,7 +288,7 @@
 								</span>
 								<div align="center" id="reportGroupDiv" style="border: 1px solid gray; background-color: white; height: 140px;
 											position: relative;">
-								<table style="top: 17%; left: 5%; position: absolute;">
+								<table style="top: 17%; left: 1%; position: absolute;">
 								<feature:display name="Donor Report" module="Report Types">
                                              <tr>
                                                <td>

@@ -423,6 +423,7 @@ public final class AdvancedReportUtil {
 	            Collection col = new ArrayList(); 
 	            while (itr.hasNext()) {
 	                ampTeamReports = (AmpTeamReports) itr.next();
+	                ampTeamReports.setReport(null);
 	                session.delete(ampTeamReports);
 	            }
 	            // Remove reference from AmpTeamPageFilters
@@ -442,6 +443,25 @@ public final class AdvancedReportUtil {
 	            	AmpPages ampPage = ampReports.getAmpPage();
 	            	session.delete(ampPage);
 	            }
+	            
+	            /**
+	             * Removing link between reports and AmpTeamMember entity
+	             */
+	            if ( ampReports.getMembers() != null ) {
+		            for ( Object tm: ampReports.getMembers() ) {
+		            	AmpTeamMember atm		= (AmpTeamMember) tm;
+		            	if ( atm.getReports() != null ) {
+			            	Iterator<AmpReports> itr2	= atm.getReports().iterator();
+			            	while (itr2.hasNext()) {
+			            		if ( qid.equals( itr2.next().getAmpReportId() ) ){
+			            			System.out.println("removing relation to ampTeamMember");
+			            			itr2.remove();
+			            		}
+							}
+		            	}
+		            }
+	            }
+	            ampReports.getMembers().clear();
 	            session.delete(ampReports);
 	            session.flush();
 	            logger.info("SESSION HAS BEEN FLUSHED OUT !!!!!!!!!!!!!!!!!!");

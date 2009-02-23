@@ -187,11 +187,11 @@ A.loginWidget, A.loginWidget:link, a.loginWidget, A.loginWidget:active, A.loginW
 	}
 		
 	#tab_no_link li.selected a div{ 
-			background:url(tabrightcorner.gif) no-repeat scroll right top;
+			background:url(tabrightcornerunsel.gif) no-repeat scroll right top;
 			padding: 4px 10px 4px 10px;
 	}
 	#tab_no_link .yui-nav li a:hover {
-	    background: #455786 url(tableftcornerhover.gif) left top no-repeat;  
+	    background: #3754A1 url(tableftcornerunsel.gif) left top no-repeat;  
 	}
        
         #tab_no_link li.selected .nohover a:hover {background:#222E5D url(tableftcorner.gif)  no-repeat scroll left top;}
@@ -199,7 +199,7 @@ A.loginWidget, A.loginWidget:link, a.loginWidget, A.loginWidget:active, A.loginW
         #tab_no_link li.selected .nohover a:hover div {background: url(tabrightcorner.gif) right top no-repeat;}
 	
 	#tab_no_link .yui-nav li a:hover div {
-	    background: url(tabrightcornerhover.gif) right top no-repeat;
+	    background: url(tabrightcornerunsel.gif) right top no-repeat;
 	}
 	#tab_no_link .yui-content {
 		border-top:1px solid #000;

@@ -525,7 +525,7 @@ public class AmpARFilter extends PropertyListable {
 				case 2://New Un-validated - This will show all activities that are new and have never been approved by the workspace manager.
 					actStatusValue.append(" (approval_status='started' and draft<>1)");break;
 				case 3://existing draft. This is because when you filter by Existing Unvalidated you get draft activites that were edited and saved as draft
-					actStatusValue.append(" (approval_status='edited' and draft= 1) ");break;
+					actStatusValue.append(" ( (approval_status='edited' or approval_status='approved') and draft=1) ");break;
 				case 4://Validated Activities 
 					actStatusValue.append("(approval_status='approved' and draft<>1)");break;
 				default:actStatusValue.append("1=1 ");	break;

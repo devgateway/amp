@@ -751,11 +751,9 @@ function removeSelComponents() {
 									</feature:display>
 								</td></tr>
 									
-									<tr><td>&nbsp;
-
-										
-
-									</td></tr>
+									<tr>
+										<td bgColor=#f4f4f2> &nbsp;</td>
+									</tr>
 <!--
 
 									<tr><td bgColor=#f4f4f2 align="center">

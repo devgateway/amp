@@ -315,28 +315,32 @@ public class ReportsFilterPickerForm extends ActionForm {
 		
 		if (request.getParameter("apply") != null && request.getAttribute("apply") == null || isnewreport) {
 			// this.selectedDonors = null;
-			this.selectedDonnorAgency=null;
-			this.selectedRisks = null;
-			this.selectedSectors = null;
-			this.selectedSecondarySectors = null;
-			this.selectedStatuses = null;
-			this.selectedFinancingInstruments = null;
-			this.selectedTypeOfAssistance = null;
-			this.selectedDonorTypes = null;
-			this.selectedDonorGroups = null;
-			this.selectedExecutingAgency = null;
-			this.selectedBeneficiaryAgency = null;
-			this.selectedImplementingAgency = null;
-			this.selectedProjectCategory = null;
-			this.selectedBudget = null;
-			this.justSearch=false;
-			this.selectedNatPlanObj = null;
-			this.selectedPrimaryPrograms = null;
-			this.selectedSecondaryPrograms = null;
-			this.selectedresponsibleorg=null;
-
+			// if applyFormat is clicked, the content of the filter was deleting not only the sectors...
+			//AMP-5249
 			if (request.getParameter("applyFormat")!=null)
 				this.customUseGrouping=false;
+			else{
+				this.selectedDonnorAgency=null;
+				this.selectedRisks = null;
+				this.selectedSectors = null;
+				this.selectedSecondarySectors = null;
+				this.selectedStatuses = null;
+				this.selectedFinancingInstruments = null;
+				this.selectedTypeOfAssistance = null;
+				this.selectedDonorTypes = null;
+				this.selectedDonorGroups = null;
+				this.selectedExecutingAgency = null;
+				this.selectedBeneficiaryAgency = null;
+				this.selectedImplementingAgency = null;
+				this.selectedProjectCategory = null;
+				this.selectedBudget = null;
+				this.justSearch=false;
+				this.selectedNatPlanObj = null;
+				this.selectedPrimaryPrograms = null;
+				this.selectedSecondaryPrograms = null;
+				this.selectedresponsibleorg=null;
+				this.approvalStatusSelected = null;
+			}
 		}
 		
 			

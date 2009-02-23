@@ -180,6 +180,7 @@ public class ShowCalendarEvent extends Action {
         	}else{
         		saveAmpCalendar(ceform, request);
                 ceform.setMethod("");
+                request.setAttribute("calendarEventCreated", !ceform.isPrivateEvent());
                 return mapping.findForward("forward");
         	}            
 

@@ -44,6 +44,7 @@ public class ShowCalendarView extends Action {
         HttpSession ses = request.getSession();
         TeamMember mem = (TeamMember) ses.getAttribute("currentMember");
         Boolean showPublicEvents = calendarViewForm.getResetFilter();
+        Object eventCreated=request.getAttribute("calendarEventCreated");
 
         // calendar type
         List calendarTypesList = DateNavigator.getCalendarTypes();
@@ -164,7 +165,7 @@ public class ShowCalendarView extends Action {
         }
         filter.setDonors(donors);
         // select event types, donors, showPublicEvents
-        if (!calendarViewForm.isFilterInUse()) {
+        if (!calendarViewForm.isFilterInUse()||eventCreated!=null) {
             // event types
             String[] selectedEventTypes = new String[filter.getEventTypes().size()];
             int index = 0;
@@ -189,8 +190,15 @@ public class ShowCalendarView extends Action {
             }
             filter.setSelectedDonors(selectedDonors);
 
-            // showPublicEvents
-            filter.setShowPublicEvents(false);
+
+            if (eventCreated != null) {
+                // we are showing private or public events depending on the newly created event
+                Boolean showPubEvent = (Boolean) eventCreated;
+                filter.setShowPublicEvents(showPubEvent);
+            } else {
+                // showPublicEvents
+                filter.setShowPublicEvents(false);
+            }
             
         }
         // events

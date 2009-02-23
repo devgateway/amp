@@ -75,7 +75,7 @@ public class CSVExportAction
     if (sheetName.length() > 31)
       sheetName = sheetName.substring(0, 31);
 
-    HSSFSheet sheet = wb.createSheet(sheetName);
+    HSSFSheet sheet = wb.createSheet(getCleanName(sheetName));
 
     IntWrapper rowId = new IntWrapper();
     IntWrapper colId = new IntWrapper();
@@ -200,4 +200,14 @@ public class CSVExportAction
     return null;
   }
 
+  
+  private String getCleanName(String name){
+	  name=name.replaceAll("/", "_");
+	  name=name.replace("\\\\", "_");
+	  name=name.replaceAll("\\*", "_");
+	  name=name.replaceAll("\\?", "_");
+	  name=name.replaceAll("\\[", "_");
+	  name=name.replaceAll("\\]", "_");
+	  return name;
+  }
 }

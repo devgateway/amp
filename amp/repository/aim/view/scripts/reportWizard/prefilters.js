@@ -9,7 +9,7 @@ function Filters (filterPanelName, connectionFailureMessage, filterProblemsMessa
 	this.resetString				= "&doreset=true";
 	
 	this.filterPanel = new YAHOO.widget.Panel("new", {
-			width:"700px",
+			width:"750px",
 		    fixedcenter: true,
 		    constraintoviewport: true,
 		    underlay:"none",

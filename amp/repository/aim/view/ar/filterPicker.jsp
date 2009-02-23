@@ -54,7 +54,7 @@
 					<td colspan="5">&nbsp;</td>
 				</tr>
 				<tr bgcolor="#EEEEEE" onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}')">
-					<td colspan="5"><digi:trn key="rep:filter:Keywords">`s</digi:trn> <br />
+					<td colspan="5"><!--<digi:trn key="rep:filter:Keywords">`s</digi:trn> --><br />
 					<html:text property="indexString" style="width: 250px"	styleClass="inp-text" /></td>
 				</tr>
 				<tr bgcolor="#EEEEEE"><td colspan="5">&nbsp;</td></tr>
@@ -478,8 +478,8 @@
 							</td>
 							
 						</tr>
-						<tr><td colspan="5">&nbsp; </td></tr>
-						<tr><td colspan="5">&nbsp; </td></tr>
+<!--						<tr><td colspan="5">&nbsp; </td></tr>-->
+<!--						<tr><td colspan="5">&nbsp; </td></tr>-->
 						<tr><td colspan="5">&nbsp; </td></tr>
 						<tr bgcolor="#EEEEEE">
 							<td colspan="5">

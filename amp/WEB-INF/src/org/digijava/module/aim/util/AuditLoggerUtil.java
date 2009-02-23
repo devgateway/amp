@@ -8,9 +8,14 @@ package org.digijava.module.aim.util;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.Collator;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -23,6 +28,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpAuditLogger;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.TeamMember;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
@@ -338,6 +344,13 @@ public class AuditLoggerUtil {
 
 	} 
 	
+	private static String getDateRange(int interval) {
+		GregorianCalendar cal = new GregorianCalendar();
+		cal.add(Calendar.DATE, -interval);
+		//Logs don't take in account global setting format
+		SimpleDateFormat fd = new SimpleDateFormat("yyyy-MM-dd");
+        return fd.format(cal.getTime());
+    }
 	/**
 	 * @author Diego Dimunzio
 	 * @param interval
@@ -353,7 +366,7 @@ public class AuditLoggerUtil {
 			session = PersistenceManager.getSession();
 			qryStr = "select f from " + 
 				AmpAuditLogger.class.getName() 
-				+ " f where f.loggedDate > DATE_SUB(curdate(), INTERVAL " + interval + " DAY)";
+				+ " f where f.loggedDate < '" + getDateRange(interval) + "'";
 			qry = session.createQuery(qryStr);
 			col = qry.list();
 		} catch (Exception ex) {
@@ -384,7 +397,7 @@ public class AuditLoggerUtil {
 			session = PersistenceManager.getSession();
 			qryStr = "select f from "
 				+ AmpAuditLogger.class.getName()
-				+ " f where f.loggedDate < DATE_SUB(curdate(), INTERVAL " + interval + " DAY)";
+				+ " f where f.loggedDate < '" + getDateRange(Integer.parseInt(interval)) + "'";
 			tx = session.beginTransaction();
 			session.delete(qryStr);
 			tx.commit();

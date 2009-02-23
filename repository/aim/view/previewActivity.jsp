@@ -2525,7 +2525,7 @@ function collapseAll() {
 									
 									<logic:notEmpty name="aimEditActivityForm" property="customFields">
 									<logic:iterate name="aimEditActivityForm" property="customFields" id="customField" indexId="index">
-									<field:display name="${customField.FM_field}" feature="Step${customField.step}">												
+									<field:display name="${customField.FM_field}" feature="Step${customField.step.step}">												
 										<tr>
 											<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">														
 												<digi:trn key="aim:customfield:${customField.name}">${customField.name}</digi:trn>														

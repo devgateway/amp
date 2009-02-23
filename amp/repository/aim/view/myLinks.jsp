@@ -8,9 +8,9 @@
 <br/>
 <div id="content"  class="yui-skin-sam" style="width:100%;"> 
 	
-    <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
+    <div id="tab_no_link" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
         <ul class="yui-nav">
-          <li class="selected">
+          <li class="">
           <a title='<digi:trn key="aim:ListofRelatedLinks">Frequently Used Links for Desktop</digi:trn>'>
           <div>
             <digi:trn key="aim:resources">Resources</digi:trn>

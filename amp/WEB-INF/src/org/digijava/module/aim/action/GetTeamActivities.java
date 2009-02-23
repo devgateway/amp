@@ -162,7 +162,9 @@ public class GetTeamActivities
 
                 int totActivities = taForm.getAllActivities().size();
                 int stIndex = ((page - 1) * numRecords) + 1;
-                int edIndex = page * numRecords;
+                int edIndex = 1;
+                if(page != 0) edIndex = page * numRecords;
+                else edIndex = numRecords;
                 edIndex = (edIndex > totActivities) ? totActivities : edIndex;
                 if (stIndex<1) stIndex=1;
                 Vector vect = new Vector();
@@ -187,7 +189,7 @@ public class GetTeamActivities
                 taForm.setCurrentPage(new Integer(page));
                 taForm.setPages(pages);
                 session.setAttribute("pageno", new Integer(page));
-
+                taForm.setSelActivities(new Long[0]);
                 return mapping.findForward("forward");
             } else {
                 return null;

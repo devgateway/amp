@@ -1,8 +1,6 @@
 page.insert_html :bottom, :sector_details, :partial => 'sector_detail',
                  :locals => { :sector_detail => @sector_detail, :index => params[:index] }
 
-page << "initDynamicSelects();"
-
 # FIXME: This doesn't work with the jRails replacement for Prototype and script.aculo.us
 #page.delay(1) do 
 #	page.visual_effect :highlight, "sector_detail_#{params[:index]}", :endcolor => '#dbe2f1'

@@ -46,7 +46,9 @@ en:
       bluebook_image_link: Click on Image for EU Blue Book 2007
       read_more: Read more...
       
-  sessions:
+  user_sessions:
+    login_success: Welcome {{name}}! You are now logged in!
+    logout_success: Logged out successfully! Good bye.
     new:
       title: Please log in!
       submit: Login

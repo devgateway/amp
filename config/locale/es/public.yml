@@ -46,7 +46,9 @@ es:
       bluebook_image_link: Haga Click sobre la imagen para EU Blue Book 2007
       read_more: Leer más...
       
-  sessions:
+  user_sessions:
+    login_success: ¡Bienvenido {{name}}! Usted ha ingresado al sistema.
+    logout_success: Usted ha salido del sistema con éxito. Adios.
     new:
       title: "¡Por favor ingrese al sistema!"
       submit: Ingresar

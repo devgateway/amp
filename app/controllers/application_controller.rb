@@ -1,14 +1,15 @@
 # Filters added to this controller apply to all controllers in the application.
 # Likewise, all the methods added will be available for all controllers.
 class ApplicationController < ActionController::Base
-  include AuthenticatedSystem
+  include Authorization
   include I18nHelper
   
   helper :all
   before_filter :set_output_currency
   before_filter :set_locale
-  after_filter  :store_location
   layout :smart_layout
+  
+  filter_parameter_logging :password, :password_confirmation
   
 protected
   def set_locale

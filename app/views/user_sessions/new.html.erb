@@ -1,0 +1,20 @@
+<style type="text/css" media="screen">
+	#new_user_session {
+		width: 500px;
+		margin: 2em auto;
+	}
+</style>
+
+<h2><%= header lc(:title) %></h2>
+ 
+<% labeled_form_for @user_session, :url => user_session_path do |f| %>
+  	<%# f.error_messages %>
+
+	<% f.field_set do %>
+  		<li><%= f.text_field :email %></li>
+  		<li><%= f.password_field :password %></li>
+  		<li><%= f.check_box :remember_me %></li>
+	<% end %>
+	
+	<div class="buttonHolder"><%= f.submit %></div>
+<% end %>

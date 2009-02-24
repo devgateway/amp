@@ -553,7 +553,7 @@ public class AmpDbUtil {
         	  }
               query.setParameterList("selectedEventTypes", selectedEventType);
           }
-          if (selectedDonorIds != null && selectedDonorIds.length != 0) {
+          if (selectedDonorIds != null && selectedDonorIds.length != 0 && selectedDonors.size()>0) {
               query.setParameterList("selectedDonorIds", selectedDonors);
           }
 

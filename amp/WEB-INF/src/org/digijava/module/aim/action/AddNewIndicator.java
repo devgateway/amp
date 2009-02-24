@@ -136,16 +136,24 @@ public class AddNewIndicator
 					}
                  }
                  
-                   if(!IndicatorUtil.validateIndicatorName(indicator)){
-                        IndicatorUtil.saveIndicator(indicator);
-                        newIndForm.setAction("added");
-                    }
-                    else{
-                        ActionErrors errors=new ActionErrors();
-                        errors.add("title", new ActionError("error.aim.addIndicator.duplicateName"));
-                        saveErrors(request, errors);
-                        return mapping.findForward("forward");
-                    }                
+                 if (indicator.getSectors() == null
+					|| indicator.getSectors() != null && indicator.getSectors().size() == 0) {
+                     ActionErrors errors=new ActionErrors();
+                     errors.add("noSector", new ActionError("error.aim.addIndicator.noSector"));
+                     saveErrors(request, errors);
+                     return mapping.findForward("forward");
+                 } 
+                 
+               if(!IndicatorUtil.validateIndicatorName(indicator)){
+                    IndicatorUtil.saveIndicator(indicator);
+                    newIndForm.setAction("added");
+                }
+                else{
+                    ActionErrors errors=new ActionErrors();
+                    errors.add("title", new ActionError("error.aim.addIndicator.duplicateName"));
+                    saveErrors(request, errors);
+                    return mapping.findForward("forward");
+                }                
                  
         	}
         	

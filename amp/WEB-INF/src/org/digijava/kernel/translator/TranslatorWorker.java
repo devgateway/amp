@@ -133,14 +133,27 @@ public class TranslatorWorker {
     }
 
     /**
+     * Stab method for returning default language code.
+     * Currently returns English local code, but it can get this from some settings if required.
+     * @return
+     */
+    public static String getDefaultLocalCode(){
+    	return "en";
+    }
+    
+    
+    /**
      * Returns a message string matching local,key,site
+     * NOTE: This method expects that key is already hash code of some text. Use {@link #translateText(String, String, String)}
      *
      * @param key translation key.
      * @param locale
      * @param siteId site string id ( for example demosite )
      * @return
      * @throws WorkerException
+     * @Deprecated uses key directly, use {@link #translateText(String, String, String)}
      */
+    @Deprecated
     public static String translate(String key, String locale, String siteId) throws WorkerException {
         String retVal = null;
         Message msg = getInstance(key).getMessage(key, locale, siteId);
@@ -153,18 +166,54 @@ public class TranslatorWorker {
         return retVal;
     }
     
+    /**
+     * Translates text. Returns translation of the specified text in specified language.
+     * Note that key is generated from text so it should be default English text hardcoded somewhere like in digi:trn tag
+     * If specified local was not default language and nothing is found then it tries to find English translation.
+     * If even English translation was not found then it is created using text, siteId specified and English local. 
+     * @param text default text that should be translated, this is used to generate key
+     * @param locale language code for which translation should be searched.
+     * @param siteId id of digi site.
+     * @return text translated text or default text 
+     * @throws WorkerException
+     */
     public static String translateText(String text,String locale, String siteId) throws WorkerException{
     	return translateText(text, null,locale, siteId);
     }
 
+    /**
+     * Translates text to specified local.
+     * see #translateText(String, String, String) for more details.
+     * @param text
+     * @param keyWords
+     * @param locale
+     * @param siteId
+     * @return
+     * @throws WorkerException
+     */
     public static String translateText(String text, String keyWords, String locale, String siteId) throws WorkerException{
         String retVal = null;
-        Message msg = getInstance("").getByBody(text, null, locale, siteId);
+        TranslatorWorker worker = getInstance("");
+        //Try to find translation
+        Message msg = worker.getByBody(text, keyWords, locale, siteId);
         if (msg != null) {
             retVal = msg.getMessage();
-        }
-        else {
-            retVal = "";
+        }else {
+        	//Then try to find in default language
+        	msg = worker.getByBody(text, keyWords, getDefaultLocalCode(), siteId);
+        	if (msg!=null) {
+        		retVal=msg.getMessage();
+        	}else{
+        		//then create new default and return searched text as result
+                retVal = text;
+                msg=new Message();
+                msg.setSiteId(siteId);
+                msg.setLocale(getDefaultLocalCode());
+                msg.setMessage(text);
+                msg.setKeyWords(keyWords);
+                msg.setKey(TranslatorWorker.generateTrnKey(text));
+                worker.save(msg);
+        	}
         }
         return retVal;
     }

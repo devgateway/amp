@@ -101,7 +101,7 @@
 <feature:display name="Admin - Component" module="Components"></feature:display> 
 <feature:display name="Admin Help" module="HELP"></feature:display> 
 <feature:display name="Admin NPD" module="National Planning Dashboard"></feature:display> 
-<feature:display name="Admin Topics Help" module="ADMINISTRATIVE SECTION"></feature:display> 
+<feature:display name="Admin Topics Help" module="HELP"></feature:display> 
 <feature:display name="Admin" module="M & E"></feature:display> 
 <feature:display name="Alert tab" module="Messages"></feature:display> 
 <feature:display name="Alert tab" module="Messaging System"></feature:display> 

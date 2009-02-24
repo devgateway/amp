@@ -212,7 +212,7 @@
                                 </digi:link>
                               </td>
                           	</tr>
-                          	<feature:display name="Admin Topics Help" module="ADMINISTRATIVE SECTION">
+                          	<feature:display name="Admin Topics Help" module="HELP">
                           	<tr>
                           		<td class="f-names" nowrap="nowrap">
                                 <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>

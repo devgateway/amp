@@ -63,13 +63,15 @@ public class ExportAction extends DispatchAction {
 			try {
 
 				for (Iterator iterator = ampActivities.iterator(); iterator.hasNext();) {
+					try{
 					AmpActivity ampActivity = (AmpActivity) iterator.next();
 
 					ExportBuilder eBuilder = new ExportBuilder(ampActivity, RequestUtils.getSite(request).getSiteId());
 					activities.getActivity().add(eBuilder.getActivityType(eForm.getActivityTree()));
+					} catch (AmpExportException e) {
+						log.error(e);
+					}
 				}
-			} catch (AmpExportException e) {
-				log.error(e);
 			} catch (Exception e) {
 				log.error(e);
 				throw e;

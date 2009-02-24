@@ -16,6 +16,27 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
+
+<div id="myDiv" style="display: none"></div>
+</div>
+<style type="text/css">
+	.mask {
+	  -moz-opacity: 0.8;
+	  opacity:.80;
+	  filter: alpha(opacity=80);
+	  background-color:#2f2f2f;
+	}
+	
+	#myDiv .content { 
+	    overflow:auto; 
+	    height:455px; 
+	    background-color:fff; 
+	    padding:10px; 
+	} 
+
+	
+</style>
+
 <script language="JavaScript" type="text/javascript">
 
 
@@ -956,7 +977,7 @@ YAHOOAmp.namespace("YAHOOAmp.amptab");
 	 	   				}
 
 						div=document.createElement('div');
-						div.setAttribute("style","display:inline");
+						div.setAttribute("class","content");
 						div.setAttribute("id","divContent");
      	   					
      	   				
@@ -966,7 +987,8 @@ YAHOOAmp.namespace("YAHOOAmp.amptab");
      	   				*/ 
      	   				div.innerHTML=o.responseText.substr(o.responseText.indexOf("<form"),o.responseText.indexOf("</form>")-o.responseText.indexOf("<form")+8);
      	   				//APPEND THE POPUP FORM TO THE POPIN DIV 
-     	   				document.body.appendChild(div);
+     	   				var myDiv = document.getElementById("myDiv");
+     	   				myDiv.appendChild(div);
      	   				//call this to render the popin
      	   				showPOPINDialog();
      	   				
@@ -974,7 +996,8 @@ YAHOOAmp.namespace("YAHOOAmp.amptab");
         }
 		
 		function showPOPINDialog(){
-			var element = document.getElementById("divContent");
+			var element = document.getElementById("myDiv");
+			element.style.display = "inline";
 			reusableDialog.setBody(element);
 			reusableDialog.render(document.body);
 			reusableDialog.show();

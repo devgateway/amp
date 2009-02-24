@@ -21,6 +21,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpField;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
@@ -209,7 +210,9 @@ public class ViewComment extends Action {
 						else
 						com.setComment(editForm.getComments().getCommentText());
 						com.setCommentDate(new Date());
-						com.setMemberId(TeamMemberUtil.getAmpTeamMember(member.getMemberId()));
+                        AmpTeamMember teamMember=TeamMemberUtil.getAmpTeamMember(member.getMemberId());
+						com.setMemberId(teamMember);
+                        com.setMemberName(teamMember.getUser().getName());
 
 						editForm.getComments().getCommentsCol().add(com);  // for setting activityId in saveAvtivity.java
 					 	//commentColInSession.put(editForm.getField().getAmpFieldId(),editForm.getCommentsCol());

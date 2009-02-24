@@ -9,6 +9,7 @@
 			</generator>
 		</id>
 		<property name="comment" column="comment_" type="text" />
+        <property name="memberName" column="member_name" type="java.lang.String" />
 		<property name="commentDate" column="comment_date" type="java.util.Date" />
 
 		<many-to-one name="ampActivityId" column="amp_activity_id"

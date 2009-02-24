@@ -21,6 +21,19 @@ public class AmpComments implements Serializable {
 	private AmpTeamMember memberId;
 	private Date commentDate;
 	private String comment;
+    
+    /* we will use this field to store teammember's, 
+    because team member may be removed from the team,
+    so memberId will be useless*/
+    private String memberName;
+
+    public String getMemberName() {
+        return memberName;
+    }
+
+    public void setMemberName(String memberName) {
+        this.memberName = memberName;
+    }
 	
 	/**
 	 * @return Returns the ampActivityId.

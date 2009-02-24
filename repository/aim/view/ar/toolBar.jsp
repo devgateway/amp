@@ -18,7 +18,7 @@
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/tab/assets/tabview.css'/>">
 
 <c:set var="reportStatement">
-	<digi:trn key="aim:report:reportstatement">This Report was created by AMP</digi:trn>
+	<digi:trn>This Report was created by AMP</digi:trn>
 </c:set>
 <%
 String locale = org.digijava.kernel.util.RequestUtils.getNavigationLanguage(request).getCode();

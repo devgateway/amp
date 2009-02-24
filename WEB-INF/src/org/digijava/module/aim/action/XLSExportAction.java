@@ -84,7 +84,7 @@ public class XLSExportAction extends Action {
 			Site site = RequestUtils.getSite(request);
 			Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
 					
-			String siteId=site.getSiteId();
+			String siteId=site.getId()+"";
 			String locale=navigationLanguage.getCode();	
 			
 			
@@ -164,7 +164,7 @@ public class XLSExportAction extends Action {
 			String stmt = "";
 			try {
 				//TODO TRN: key is all right but lets use default text. Or remove this todo tag.
-				stmt = TranslatorWorker.translateText("aim:report:reportstatement", locale,siteId);
+				stmt = TranslatorWorker.translateText("This Report was created by AMP", locale,siteId);
 			} catch (WorkerException e){
 			    e.printStackTrace();}
 			stmt += " " + FeaturesUtil.getCurrentCountryName();
@@ -289,8 +289,8 @@ public class XLSExportAction extends Action {
 			String stmt = "";
 			try {
 				//TODO TRN: key is all right but if possible replace with default text. or delete this todo tag
-				stmt = TranslatorWorker.translateText("aim:report:reportstatement", locale,siteId);
-			} catch (WorkerException e){
+				stmt = TranslatorWorker.translateText("This Report was created by AMP", locale,siteId);
+			} catch (WorkerException e) {
 			    e.printStackTrace();}
 			stmt += " " + FeaturesUtil.getCurrentCountryName();
 			if (reportForm.getDateOptions().equals("0")) {//disabled

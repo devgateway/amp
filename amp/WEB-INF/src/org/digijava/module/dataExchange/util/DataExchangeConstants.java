@@ -13,7 +13,7 @@ public class DataExchangeConstants {
 	public static String ORG_ROLE_REGIONAL_GROUP = "Regional Group";
 	public static String ORG_ROLE_SECTOR_GROUP = "Sector Group";
 	public static String ORG_ROLE_EXECUTING_AGENCY= "Executing Agency";
-	public static String ORG_ROLE_RESPONSIBLE_ORGANIZATION = "Responsible Organizaton";
+	public static String ORG_ROLE_RESPONSIBLE_ORGANIZATION = "Responsible Organization";
 	public static String ORG_ROLE_CONTRACTOR = "Contractor";
 	public static String ORG_ROLE_RELEATED_INSTITUTIONS = "Releated Institutions";
 	
@@ -23,5 +23,5 @@ public class DataExchangeConstants {
 	public static String LOCATION_TYPE_ZONE = "Zone";
 	public static String LOCATION_TYPE_WOREDA = "Woreda";
 	public static String LOCATION_TYPE_DEPARTMENT = "Department";
-	
+	public static String LOCATION_TYPE_DISTRICT = "District";
 }

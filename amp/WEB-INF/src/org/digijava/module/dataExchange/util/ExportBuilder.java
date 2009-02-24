@@ -79,14 +79,21 @@ public class ExportBuilder {
 		String path = ampColumnEntry.getPath();
 
 		if (path.equalsIgnoreCase("activity.id")){
-			if (ampActivity.getInternalIds() != null){
+			if (ampActivity.getInternalIds() != null && ampActivity.getInternalIds().size() > 0){
 				for (Iterator iterator = ampActivity.getInternalIds().iterator(); iterator.hasNext();) {
 					AmpActivityInternalId ids = (AmpActivityInternalId) iterator.next();
 					parent.getId().add(buildActivityTypeId(ids));
 				}
-			}			
+			} else {
+				throw new AmpExportException("Id is empty", AmpExportException.ACTIVITY_DATA_INEFFICIENT);
+			}
 		} else if (path.equalsIgnoreCase("activity.title")){
-			parent.getTitle().add(buildFreeText(null, ampActivity.getName()));
+			if (ampActivity.getName() != null){
+				parent.getTitle().add(buildFreeText(null, ampActivity.getName()));
+			} else {
+				throw new AmpExportException("Name is empty", AmpExportException.ACTIVITY_DATA_INEFFICIENT);
+			}
+				
 		} else if (path.equalsIgnoreCase("activity.objective")){
 			if (ampActivity.getObjective() != null){
 				for (Message msg : ExportHelper.getTranslations(ampActivity.getObjective(),ampActivity.getObjective(), siteId)) {
@@ -109,23 +116,27 @@ public class ExportBuilder {
 				}
 			}
 		} else if (path.equalsIgnoreCase("activity.proposedApprovalDate")){
-			parent.setProposedApprovalDate(buildDate(ampActivity.getProposedApprovalDate()));
+			parent.setProposedApprovalDate(buildDate(ampActivity.getProposedApprovalDate(), ampColumnEntry.isMandatory() ));
 		} else if (path.equalsIgnoreCase("activity.actualApprovalDate")){
-			parent.setActualApprovalDate(buildDate(ampActivity.getActivityApprovalDate()));
+			parent.setActualApprovalDate(buildDate(ampActivity.getActivityApprovalDate(), ampColumnEntry.isMandatory()));
 		} else if (path.equalsIgnoreCase("activity.proposedStartDate")){
-			parent.setProposedStartDate(buildDate(ampActivity.getProposedStartDate()));
+			parent.setProposedStartDate(buildDate(ampActivity.getProposedStartDate(), ampColumnEntry.isMandatory()));
 		} else if (path.equalsIgnoreCase("activity.actualStartDate")){
-			parent.setActualStartDate(buildDate(ampActivity.getActualStartDate()));
+			parent.setActualStartDate(buildDate(ampActivity.getActualStartDate(), ampColumnEntry.isMandatory()));
 		} else if (path.equalsIgnoreCase("activity.modifiedClosingDate")){
-			parent.setModifiedClosingDate(buildDate(ampActivity.getActualCompletionDate()));
+			parent.setModifiedClosingDate(buildDate(ampActivity.getActualCompletionDate(), ampColumnEntry.isMandatory()));
 		} else if (path.equalsIgnoreCase("activity.closingDate")){
-			parent.setModifiedClosingDate(buildDate(ampActivity.getActivityCloseDate()));
+			parent.setModifiedClosingDate(buildDate(ampActivity.getActivityCloseDate(), ampColumnEntry.isMandatory()));
 		} else if (path.equalsIgnoreCase("activity.status")){
-			parent.setStatus(buildCodeValue(ampActivity.getApprovalStatus()));
+			if (ampActivity.getApprovalStatus() != null){
+				parent.setStatus(buildCodeValue(ampActivity.getApprovalStatus()));
+			} else {
+				throw new AmpExportException("Status is empty", AmpExportException.ACTIVITY_DATA_INEFFICIENT);
+			}
 		} else if (path.equalsIgnoreCase("activity.statusReason")){
 			parent.setStatusReason(buildFreeText(ampActivity.getStatusReason()));
 		} else if (path.equalsIgnoreCase("activity.sectors")){
-			if (ampActivity.getSectors() != null){
+			if (ampActivity.getSectors() != null && ampActivity.getSectors().size() > 0){
 				for (Iterator iterator = ampActivity.getSectors().iterator(); iterator.hasNext();) {
 					AmpActivitySector ampSector = (AmpActivitySector) iterator.next();
 					if (ampSector.getSectorPercentage() != null){
@@ -136,9 +147,11 @@ public class ExportBuilder {
 						throw new AmpExportException("Sector Precent is empty", AmpExportException.ACTIVITY_DATA_INEFFICIENT);
 					}
 				}
+			} else {
+				throw new AmpExportException("Sector is empty", AmpExportException.ACTIVITY_DATA_INEFFICIENT);
 			}
 		} else if (path.equalsIgnoreCase("activity.programs")){
-			if (ampActivity.getActivityPrograms()  != null){
+			if (ampActivity.getActivityPrograms() != null && ampActivity.getActivityPrograms().size() > 0){
 				for (Iterator iterator = ampActivity.getActivityPrograms().iterator(); iterator.hasNext();) {
 					AmpActivityProgram ampProgram = (AmpActivityProgram) iterator.next();
 					if (ampProgram.getProgramPercentage() != null){
@@ -146,11 +159,9 @@ public class ExportBuilder {
 							ampProgram.getProgram().getName(),
 							ampProgram.getProgramPercentage().floatValue()));
 					} else {
-						throw new AmpExportException("Programs Precent is empty", AmpExportException.ACTIVITY_DATA_INEFFICIENT);
+						throw new AmpExportException("Programs.Precent is empty", AmpExportException.ACTIVITY_DATA_INEFFICIENT);
 					}
 				}
-			} else {
-				throw new AmpExportException("Prorgasm is empty", AmpExportException.ACTIVITY_DATA_INEFFICIENT);
 			}
 		} else if (path.equalsIgnoreCase("activity.notes")){
 			if (ampActivity.getNotes()  != null){
@@ -248,12 +259,17 @@ public class ExportBuilder {
 			}
 			
 		} else if (path.equalsIgnoreCase("activity.donorContacts")){
-			
-			parent.getDonorContacts().add(buildContactType(ampActivity.getContFirstName(),
-					ampActivity.getContLastName(), ampActivity.getEmail()));	
+			ContactType cont = buildContactType(ampActivity.getContFirstName(),
+					ampActivity.getContLastName(), ampActivity.getEmail());
+			if (cont != null){
+				parent.getDonorContacts().add(cont);
+			}
 		} else if (path.equalsIgnoreCase("activity.govContacts")){
-			parent.getGovContacts().add(buildContactType(ampActivity.getMofedCntFirstName(),
-					ampActivity.getMofedCntLastName(),ampActivity.getMofedCntEmail()));	
+			ContactType cont = buildContactType(ampActivity.getMofedCntFirstName(),
+					ampActivity.getMofedCntLastName(),ampActivity.getMofedCntEmail());
+			if (cont != null){
+				parent.getGovContacts().add(cont);
+			}
 		} else if (path.equalsIgnoreCase("activity.additional")){
 			// TODO not implemented need more details
 		}
@@ -262,8 +278,11 @@ public class ExportBuilder {
 	private ActivityType.Id buildActivityTypeId(AmpActivityInternalId ids) throws AmpExportException{
 		ActivityType.Id retValue = objectFactory.createActivityTypeId();
 		retValue.setUniqID(ids.getInternalId());
-
-		retValue.setAssigningOrg(buildCodeValue(ids.getOrganisation().getOrgCode(), ids.getOrganisation().getName()));
+		if (ids.getOrganisation() != null){
+			retValue.setAssigningOrg(buildCodeValue(ids.getOrganisation().getOrgCode(), ids.getOrganisation().getName()));
+		} else {
+			throw new AmpExportException("Id.Org is empty", AmpExportException.ACTIVITY_DATA_INEFFICIENT);
+		}
 
 		return retValue;
 	}
@@ -286,6 +305,41 @@ public class ExportBuilder {
 		ActivityType.Location retValue = objectFactory.createActivityTypeLocation();
 		retValue.setLang(location.getLanguage());
 		
+		AmpCategoryValueLocations acvLoction = location.getLocation();
+		if (acvLoction != null){
+			retValue.setIso3(""+acvLoction.getIso3());
+			retValue.setCountryName(acvLoction.getName());
+			retValue.setGis(location.getGisCoordinates());
+		}
+		AmpCategoryValueLocations acvLoctionRegion = location.getRegionLocation();
+		if (acvLoctionRegion != null){
+			retValue.setLocationName(buildCodeValue(acvLoctionRegion.getCode(),acvLoctionRegion.getName()));
+			AmpCategoryValue categoryValue = acvLoctionRegion.getParentCategoryValue();
+			if (CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT.getValueKey().equalsIgnoreCase(categoryValue.getValue()) ){
+				retValue.setLocationType(DataExchangeConstants.LOCATION_TYPE_DISTRICT); 
+			}
+			if (CategoryConstants.IMPLEMENTATION_LOCATION_ZONE.getValueKey().equalsIgnoreCase(categoryValue.getValue()) ){
+				retValue.setLocationType(DataExchangeConstants.LOCATION_TYPE_ZONE); 
+			}
+			if (CategoryConstants.IMPLEMENTATION_LOCATION_REGION.getValueKey().equalsIgnoreCase(categoryValue.getValue()) ){
+				retValue.setLocationType(DataExchangeConstants.LOCATION_TYPE_REGION); 
+
+				if (ampActivity.getRegionalFundings() != null){
+					Collection regFund = ampActivity.getRegionalFundings();
+					for (Iterator iterator = regFund.iterator(); iterator.hasNext();) {
+						AmpRegionalFunding regFunding = (AmpRegionalFunding) iterator.next();
+						if (acvLoctionRegion.getCode().equalsIgnoreCase(regFunding.getRegionLocation().getCode())){
+							retValue.getLocationFunding().add(buildLocationFunding(regFunding, ampColumnEntry));
+						}
+					}
+				}
+			
+			}
+		} else {
+			throw new AmpExportException("Location.LocationName is null", AmpExportException.ACTIVITY_DATA_INEFFICIENT);
+		}
+		
+/*		
 //TODO		if (location.getDepartment())  can not found department
 		if (location.getAmpWoreda() != null){
 			retValue.setLocationType(DataExchangeConstants.LOCATION_TYPE_WOREDA); 
@@ -314,7 +368,7 @@ public class ExportBuilder {
 		retValue.setGis(location.getGisCoordinates());
 		retValue.setIso3(location.getDgCountry().getIso3());
 		retValue.setCountryName(location.getDgCountry().getCountryName());
-		
+*/		
 		return retValue;
 	}
 
@@ -354,7 +408,7 @@ public class ExportBuilder {
 
 	private FundingType buildFunding(AmpFunding funding, AmpColumnEntry ampColumnEntry) throws AmpExportException{
 		FundingType retValue = objectFactory.createFundingType();
-		retValue.setCode(funding.getFinancingId());
+		retValue.setCode(""+funding.getFinancingId());
 
 		for (AmpColumnEntry elem : ampColumnEntry.getElements()) {
 			if (elem.canExport()){
@@ -370,13 +424,21 @@ public class ExportBuilder {
 		if (path.equalsIgnoreCase("activity.funding.fundingOrg")){
 			funding.setFundingOrg(buildCodeValue(ampfunding.getAmpDonorOrgId().getOrgCode(), ampfunding.getAmpDonorOrgId().getName()));
 		} else if (path.equalsIgnoreCase("activity.funding.assistanceType")){
-			funding.setAssistanceType(buildCodeValue(ampfunding.getTypeOfAssistance()));
+			CodeValueType cValue =  buildCodeValue(ampfunding.getTypeOfAssistance());
+			if (cValue == null){
+				throw new AmpExportException("Funding.assistanceType is null", AmpExportException.ACTIVITY_DATA_INEFFICIENT);
+			}
+			funding.setAssistanceType(cValue);
 		} else if (path.equalsIgnoreCase("activity.funding.financingInstrument")){
-			funding.setFinancingInstrument(buildCodeValue(ampfunding.getFinancingInstrument()));
+			CodeValueType cValue =  buildCodeValue(ampfunding.getFinancingInstrument());
+			if (cValue == null){
+				throw new AmpExportException("Funding.financingInstrument is null", AmpExportException.ACTIVITY_DATA_INEFFICIENT);
+			}
+			funding.setFinancingInstrument(cValue);
 		} else if (path.equalsIgnoreCase("activity.funding.conditions")){
 			funding.setConditions(buildFreeText(ampfunding.getLanguage(), ampfunding.getConditions()));
 		} else if (path.equalsIgnoreCase("activity.funding.signatureDate")){
-			funding.setSignatureDate(buildDate(ampfunding.getSignatureDate()));
+			funding.setSignatureDate(buildDate(ampfunding.getSignatureDate(), ampColumnEntry.isMandatory()));
 		} else if (path.equalsIgnoreCase("activity.funding.projections")){
 			for (AmpFundingMTEFProjection ampProj : ampfunding.getMtefProjections()) {
 				FundingType.Projections proj = objectFactory.createFundingTypeProjections();
@@ -458,7 +520,7 @@ public class ExportBuilder {
 				ActivityType.Component.PhysicalProgress physicalProgress = objectFactory.createActivityTypeComponentPhysicalProgress();
 				physicalProgress.setTitle(buildFreeText(pProgress.getTitle()));
 				physicalProgress.setDescription(buildFreeText(pProgress.getDescription()));
-				physicalProgress.setReportingDate(buildDate(getDate(pProgress.getReportingDate())));
+				physicalProgress.setReportingDate(buildDate(getDate(pProgress.getReportingDate()), ampColumnEntry.isMandatory()));
 				retValue.getPhysicalProgress().add(physicalProgress);
 			}
 		}
@@ -492,10 +554,14 @@ public class ExportBuilder {
 	}
 	
 	private ContactType buildContactType (String firstName, String lastName, String mail) throws AmpExportException{
-		ContactType retValue = objectFactory.createContactType();
-		retValue.setFirstName(firstName);
-		retValue.setLastName(lastName);
-		retValue.setEmail(mail);
+		ContactType retValue = null;
+		if (firstName != null && firstName.trim().length() > 0 &&
+				lastName != null && lastName.trim().length() > 0 ){
+			retValue = objectFactory.createContactType();
+			retValue.setFirstName(firstName);
+			retValue.setLastName(lastName);
+			retValue.setEmail(mail);
+		}
 		
 		return retValue;
 	}
@@ -514,11 +580,14 @@ public class ExportBuilder {
 	}
 	
 	private CodeValueType buildCodeValue(String code, String value) throws AmpExportException{
-		CodeValueType retValue = objectFactory.createCodeValueType();
-		if (code != null && !code.isEmpty()){
-			retValue.setCode(code);
+		CodeValueType retValue = null;
+		if (value != null && value.trim().length() > 0){
+			retValue = objectFactory.createCodeValueType();
+			if (code != null && !code.isEmpty()){
+				retValue.setCode(code);
+			}
+			retValue.setValue(value);
 		}
-		retValue.setValue(value);
 		return retValue;
 	}		
 
@@ -538,11 +607,14 @@ public class ExportBuilder {
 	}
 
 	private FreeTextType buildFreeText(String lang, String name) throws AmpExportException{
-		FreeTextType retValue = objectFactory.createFreeTextType();
-		if (lang != null && !lang.isEmpty()){
-			retValue.setLang(lang);
+		FreeTextType retValue = null;
+		if (name != null && name.trim().length() > 0 ){
+			retValue = objectFactory.createFreeTextType();
+			if (lang != null && !lang.isEmpty()){
+				retValue.setLang(lang);
+			}
+			retValue.setValue(name);
 		}
-		retValue.setValue(name);
 		return retValue;
 	}	
 
@@ -553,12 +625,16 @@ public class ExportBuilder {
 		return buildFreeText(message.getLocale(), message.getMessage());
 	}
 
-	private DateType buildDate(Date date) throws AmpExportException{
+	private DateType buildDate(Date date, boolean require) throws AmpExportException{
+		DateType retValue = null;
 		if (date == null){
-			date = new Date(); 
+			if (require){
+				throw new AmpExportException("Date is null", AmpExportException.ACTIVITY_DATA_INEFFICIENT);
+			} 
+		} else {
+			retValue = objectFactory.createDateType();
+			retValue.setDate(ExportHelper.getGregorianCalendar(date));
 		}
-		DateType retValue = objectFactory.createDateType();
-		retValue.setDate(ExportHelper.getGregorianCalendar(date));
 		return retValue;
 	}	
 

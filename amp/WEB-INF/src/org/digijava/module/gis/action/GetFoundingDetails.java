@@ -182,7 +182,6 @@ public class GetFoundingDetails extends Action {
                                                           rect.getBottom()).toString();
 
                 sos.print(imageMapCode);
-
             } else if (action.equalsIgnoreCase("getDataForSector")) {
 
                 response.setContentType("image/png");
@@ -485,11 +484,6 @@ public class GetFoundingDetails extends Action {
                 NumberFormat formatter = new DecimalFormat(numberFormat);
 
                 XML root = new XML("funding");
-                /*
-                root.addAttribute("totalCommitment", ((float) Math.round(totalFunding.getCommitment() / 10)) / 100f);
-                root.addAttribute("totalDisbursement", ((float) Math.round(totalFunding.getDisbursement() / 10)) / 100f);
-                root.addAttribute("totalExpenditure", ((float) Math.round(totalFunding.getExpenditure() / 10)) / 100f);
-*/
 
                 root.addAttribute("totalCommitment", formatter.format(totalFunding.getCommitment()));
                 root.addAttribute("totalDisbursement", formatter.format(totalFunding.getDisbursement()));
@@ -507,8 +501,7 @@ public class GetFoundingDetails extends Action {
                         regionData.addAttribute("fundingExpenditure", formatter.format(ammount.getExpenditure().intValue()));
                         root.addElement(regionData);
                 }
-
-                sos.print(segmendDataInfo.toString());
+                segmendDataInfo.output(sos);
             } else if (action.equalsIgnoreCase("getAvailIndicatorSubgroups")) {
                 response.setContentType("text/xml");
 
@@ -540,8 +533,7 @@ public class GetFoundingDetails extends Action {
                     subNode.addAttribute("name",subName);
                     root.addElement(subNode);
                 }
-
-                sos.print(availSubGroupXmlDoc.toString());
+                availSubGroupXmlDoc.output(sos);
             } else if (action.equalsIgnoreCase("getAvailIndicatorYears")) {
                 response.setContentType("text/xml");
 
@@ -584,29 +576,16 @@ public class GetFoundingDetails extends Action {
                     yearNode.addAttribute("end-caption", year.getFormatedEndTime());
                     root.addElement(yearNode);
                 }
-
-                /*
-                XML root = new XML("availYears");
-
-                availYearsXmlDoc.addElement(root);
-
-                Iterator yearIt = availYears.iterator();
-
-                while (yearIt.hasNext()) {
-                    Integer year = (Integer) yearIt.next();
-                    XML yearNode = new XML("year");
-                    yearNode.addAttribute("value",year);
-                    root.addElement(yearNode);
-                }*/
-
-                sos.print(availYearsXmlDoc.toString());
+                availYearsXmlDoc.output(sos);
             } else if (action.equalsIgnoreCase("getIndicatorNamesXML")) {
-
+                response.setCharacterEncoding("UTF-8");
                 response.setContentType("text/xml");
                 String secIdStr = request.getParameter("sectorId");
                 Long secId = new Long(secIdStr);
 
                 XMLDocument sectorIndicators = new XMLDocument();
+                sectorIndicators.setCodeset("UTF-8");
+
                 XML root = new XML("indicators");
                 sectorIndicators.addElement(root);
 
@@ -623,9 +602,10 @@ public class GetFoundingDetails extends Action {
                     root.addElement(ind);
 
                 }
-                sos.print(sectorIndicators.toString());
+                sectorIndicators.output(sos);
             } else if (action.equalsIgnoreCase("getIndicatorValues")) {
 
+                response.setCharacterEncoding("UTF-8");
                 response.setContentType("text/xml");
 
                 String indicatorUnit = (String) request.getSession().getAttribute("AMP_INDICATOR_UNIT");
@@ -650,8 +630,7 @@ public class GetFoundingDetails extends Action {
                     }
                 }
 
-                sos.print(indicators.toString());
-
+                indicators.output(sos);
             }
 
         } catch (Exception e) {
@@ -770,7 +749,7 @@ public class GetFoundingDetails extends Action {
                 //if (loc.getLocation().getAmpRegion() != null && loc.getLocation().getZone()==null && loc.getLocationPercentage().floatValue() > 0.0f) {
 
                 if (loc.getLocationPercentage().floatValue() > 0.0f) {
-                    if (level == GisMap.MAP_LEVEL_REGION) {
+                    if (level == GisMap.MAP_LEVEL_REGION && loc.getLocation().getAmpRegion() != null) {
 
                         String regCode = loc.getLocation().getAmpRegion().getRegionCode();
                         if (locationFundingMap.containsKey(regCode)) {

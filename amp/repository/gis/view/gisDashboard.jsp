@@ -80,7 +80,6 @@
 <table cellpadding="5" cellspacing="1">
 	<tr>
 		<td colspan="2">
-			<!-- onscroll="mapScroll(this)"-->
 			<div id="mapCanvasContainer" style="border:1px solid black; width:500px; height:500px; overflow:hidden;"><img onLoad="ajaxInit(); initMouseOverEvt(); getImageMap(); checkIndicatorValues(); actionImgLoading = false; setBusy(false);" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA&mapLevel=2&uniqueStr=0&year=-1&width=500&height=500"></div>
 		</td>
 	</tr>
@@ -136,29 +135,22 @@
 	</tr>
 	
 	<tr>
-        <td nowrap>
+        <td nowrap width="200">
                 <digi:trn key="gis:selectMalLevel">Select Map Level</digi:trn>:
         </td>
-		<td>
-		<%--
-		<select id="mapLevelCombo" onchange="mapLevelChanged(this.value)">
-			<option value="2">Region view</option>
-			<option value="3">District view</option>
-		</select>
-		--%>
+		<td width="90%">
 			<input title="Region view" type="Radio" value="2" name="mapLevelRadio" checked onClick="mapLevelChanged(this.value)">Region view &nbsp;
 			<input title="District view" type="Radio" value="3" name="mapLevelRadio" onClick="mapLevelChanged(this.value)">District view
-			
 			<div id="imageMapContainer" style="visibility:hidden;"></div>
 		</td>
 	</tr>
 	
 	<tr>
-        <td nowrap>
+        <td nowrap width="200">
              <digi:trn>Select Sector</digi:trn>:
         </td>
 		<td>
-			<select id="sectorsMapCombo" onChange="sectorSelected(this)" style="width: 200">
+			<select id="sectorsMapCombo" onChange="sectorSelected(this)" style="width:350px">
 			<option value="-1">Select sector</option>
 			<logic:iterate name="gisDashboardForm" property="sectorCollection" id="sec">
 				<option value="<bean:write name="sec" property="ampSectorId"/>"><bean:write name="sec" property="name"/></option>
@@ -167,30 +159,30 @@
 		</td>
 	</tr>
 	<tr>
-       <td nowrap>
+       <td nowrap width="200">
             <digi:trn>Select Indicator</digi:trn>:
 		<td>
-		<select id="indicatorsCombo" onchange="indicatorSelected(this)">
+		<select id="indicatorsCombo" onchange="indicatorSelected(this)" style="width:350px">
 			<option value=-1>Select indicator</option>
 		</select>
 		</td>
 	</tr>
 	<tr>
-        <td>
+        <td width="200">
             <digi:trn>Select subgroup for indicator data</digi:trn>:
         </td>
 		<td>
-			<select id="indicatorSubgroupCombo" onChange="subgroupSelected(this)">
+			<select id="indicatorSubgroupCombo" onChange="subgroupSelected(this)" style="width:350px">
 				<option value="-1">Select subgroup</option>
 			</select>
 		</td>
 	</tr>
 	<tr>
-        <td nowrap>
+        <td nowrap width="200">
             <digi:trn>Select year for indicator data</digi:trn>:
         </td>
 		<td>
-			<select id="indicatorYearCombo" onChange="yearSelected(this)">
+			<select id="indicatorYearCombo" onChange="yearSelected(this)" style="width:350px">
 				<option value="-1">Select year</option>
 			</select>
 		</td>

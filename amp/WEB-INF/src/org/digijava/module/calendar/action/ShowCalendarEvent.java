@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.InternetAddress;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -27,7 +25,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.kernel.entity.ModuleInstance;
-import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpOrganisation;

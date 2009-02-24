@@ -570,4 +570,4 @@ public class AmpDbUtil {
           throw new CalendarException("Unable to get amp calendar events", ex);
       }
   }
-}
+          }

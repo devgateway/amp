@@ -51,7 +51,7 @@
 												</td>
 												<td bgcolor=#ECF3FD width="65%"><b>
 													<digi:trn key="aim:commentBy">Comment By</digi:trn>:</b>&nbsp;
-													<c:out value="${comment.memberId.user.firstNames}" />&nbsp;<c:out value="${comment.memberId.user.lastName}" />
+													<c:out value="${comment.memberName}" />&nbsp;<c:out value="${comment.memberId.user.lastName}" />
 												</td>
 												<td bgcolor=#ECF3FD width="30%"><b>
 													<%--<bean:write name="comment" property="commentDate" format="dd/mm/yyyy" />--%>

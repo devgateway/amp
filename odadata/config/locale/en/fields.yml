@@ -153,7 +153,7 @@ en:
         total_payments: Total Disbursements
         toa_payments: "{{type}} Disbursements"
         
-      session:
+      user_session:
         email: E-Mail Address
         password: Password
         remember_me: Remember me

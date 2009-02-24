@@ -4,12 +4,5 @@
 		<%= options_from_collection_for_select(Province.all, :id, :name, focal_province.id) %>
 	</select>
 
-	<%= link_to_function "Delete", <<-END_JS
-			if ($('.focal_province').length > 1) {
-				$(this).parents('.focal_province').remove();
-			} else {
-				alert("Please add at least one Focal Province.")
-			}
-		END_JS
-	%>
+	<%= link_to_function ll(:actions, :delete), "$(this).parents('.focal_province').remove();" %>
 </div>

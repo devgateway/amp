@@ -152,7 +152,7 @@ es:
         total_payments: Monto Pagado
         toa_payments: "{{type}} Desembolsos"
         
-      session:
+      user_session:
         email: Dirección de Correo Electrónico
         password: Clave de acceso
         remember_me: Recordarme

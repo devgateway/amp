@@ -199,6 +199,14 @@ saveReportEngine	= null;
 					filter.parent.removeChild(filter);
 			wrapper.appendChild(filter);
 		};
+
+		YAHOOAmp.amptab.handleCloseShowFormat = function() {
+			var wrapper			= document.getElementById('myFilterWrapper');
+			var filter			= document.getElementById('customFormat');
+			if (filter.parent != null)
+					filter.parent.removeChild(filter);
+			wrapper.appendChild(filter);
+		};
 	
 		var myPanel1 = new YAHOO.widget.Panel("new", {
 			width:"750px",
@@ -237,8 +245,7 @@ saveReportEngine	= null;
 		    close:true,
 		    visible:false,
 		    modal:true,
-		    draggable:true
-		    });
+		    draggable:true} );
 
 		    var myPanel5 = new YAHOOAmp.widget.Panel("new5", {
 				width:"480px",
@@ -252,6 +259,7 @@ saveReportEngine	= null;
 	
 	myPanel1.beforeHideEvent.subscribe(YAHOOAmp.amptab.handleClose);
 	myPanel5.beforeHideEvent.subscribe(YAHOOAmp.amptab.handleCloseAbout);
+	myPanel4.beforeHideEvent.subscribe(YAHOOAmp.amptab.handleCloseShowFormat);
 		    
 	function initScripts() {
 	
@@ -346,8 +354,8 @@ saveReportEngine	= null;
 	}
 	
 	function showFormat(){
-		initFormatPopup();
 		YAHOOAmp.amptab.init();
+		initFormatPopup();
 		var element = document.getElementById("customFormat");
 		element.style.display = "inline";
 		myPanel4.setBody(element);

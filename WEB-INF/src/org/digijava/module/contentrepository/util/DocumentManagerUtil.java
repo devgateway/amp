@@ -139,7 +139,13 @@ public class DocumentManagerUtil {
 				if (teamMember == null) {
 					throw new Exception("No TeamMember found in HttpSession !");
 				}
-				String userName				= teamMember.getEmail();
+				/* From add organization the user is always admin and this user has not email*/
+				String userName	;
+				if (teamMember.getEmail()!=null){
+					userName = teamMember.getEmail(); 
+				}else{
+					userName = "admin@amp.org";
+				}
 				
 				SimpleCredentials creden	= new SimpleCredentials(userName, userName.toCharArray());
 				

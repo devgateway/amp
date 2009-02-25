@@ -89,9 +89,6 @@ public class DocumentManagerRights {
 			/**
 			 * If team leader of the team
 			 */
-			if ( teamMember.getTeamHead() && path.contains("/" + teamId + "/") ) {
-				return new Boolean(true);
-			}
 			if ( teamMember.getTeamHead() && path.contains("/" + username) ) {
 				return new Boolean(true);
 			}

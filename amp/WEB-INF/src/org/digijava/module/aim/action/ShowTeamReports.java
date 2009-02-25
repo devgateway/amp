@@ -59,7 +59,8 @@ public class ShowTeamReports extends Action {
 				rf.setShowTabs(false);
 		}
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-		rf.setCurrentMemberId(tm.getMemberId());
+		if ( tm != null )
+			rf.setCurrentMemberId(tm.getMemberId());
 		
 		if(action==null){
 			getAllReports(appSettingSet, rf, tm, request);

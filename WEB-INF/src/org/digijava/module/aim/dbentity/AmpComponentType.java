@@ -2,7 +2,9 @@ package org.digijava.module.aim.dbentity;
 
 import java.util.Set;
 
-public class AmpComponentType {
+import org.dgfoundation.amp.ar.dimension.ARDimensionable;
+
+public class AmpComponentType implements ARDimensionable{
 
 	private Long type_id;
 	
@@ -83,5 +85,10 @@ public class AmpComponentType {
 			return -1;
 		}
 		return -1;
+	}
+
+	@Override
+	public Class getDimensionClass() {
+		return null;
 	}	
 }

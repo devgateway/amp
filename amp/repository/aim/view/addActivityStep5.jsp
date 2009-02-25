@@ -18,7 +18,7 @@
 
 
 <div id="myDiv" style="display: none"></div>
-</div>
+
 <style type="text/css">
 	.mask {
 	  -moz-opacity: 0.8;

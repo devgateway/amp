@@ -15,30 +15,9 @@
 
 <script type="text/javascript">
 
-    function validate(topickey){
-		if(!topickey){
-			alert("Default topic is not tree topic");
-		return false;
-	}else{
-            return true;
-        }
-}
-  function getKey(){
-    var topicKey = document.getElementById("key").innerHTML;
-    var key = topicKey.slice(topicKey.indexOf("y:")+2);
-    return key;
-  }
-
-function editTopic(){
-
-    if(validate(getKey())){
-
-        <digi:context name="editTopic" property="context/module/moduleinstance/helpActions.do~actionType=editHelpTopic"/>
-		document.helpForm.action = "<%=editTopic%>~topicKey="+getKey()+"~wizardStep=0";
-		document.helpForm.target = "_self";
-		document.helpForm.submit();
-
-    }
+function showBody(){
+$("#bodyShort").hide();
+$("#bodyFull").show();
 
 }
 </script>
@@ -55,8 +34,7 @@ function editTopic(){
             </td>
           </tr>
   		<tr>
-
-		    <div id="title">
+		    <div id="title" >
 	            <c:if test="${not empty helpForm.searched}">
 		           <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
 		            	<ul class="yui-nav">&nbsp;
@@ -74,35 +52,9 @@ function editTopic(){
       </tr>
           <tr>
              <td>
-
-               <div id="bodyhelp" style="background-color:white;overflow:auto;display: block; text-align: left;" >
-		    </div>         
-
-                 <a onclick="editTopic();">E</a>
-                 <c:forEach var="sarched" items="${helpForm.searched}">
-		                <c:if test="${not empty sarched}">
-		                	<div id="searchedTitle" style="padding: 12px">
-		                			<font size="1px"><b><a href=""> ${sarched.label}</a>
-		                			</b></font><br>${sarched.value}
-		                	</div>
-	          		     </c:if>
-	          		   </c:forEach>
-
-		            <div id="searchedBody">
-	                      	<c:if test="${!helpForm.flag && empty helpForm.searched}"><b>
-	                       		<digi:edit key="help:topic:default">no topic selected</digi:edit></b>
-	                        </c:if>
-                             
-                              <c:if test="${helpForm.flag}">
-	                          <c:if test="${helpForm.topicKey!=''}"><b><digi:trn >${helpForm.titleTrnKey}</digi:trn></b></c:if>
-	                      	</c:if>
-	                     	<c:if test="${helpForm.flag}">
-	                      		<c:if test="${helpForm.topicKey!=''}">
-	                        		<digi:edit key="${helpForm.bodyEditKey}"></digi:edit>
-                                </c:if>
-                                 <c:if test="${helpForm.topicKey == ''}"><digi:trn>no text preview</digi:trn></c:if>
-                          </c:if>
-                     </div>
+                    <div id="bodyhelp" style="background-color:white;overflow:auto;display: block; text-align: left;">
+		             </div>
+                      <!-- <a onclick="editTopic();">E</a> -->
          		</td>
        	   </tr>
         </table>

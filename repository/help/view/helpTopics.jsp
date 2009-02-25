@@ -72,6 +72,10 @@
   <input type="hidden" id="xmlString"/>
  
 <script type="text/javascript">
+
+
+
+// DOMParser for IE
 if (typeof DOMParser == "undefined") {
 	   DOMParser = function () {}
 
@@ -115,6 +119,10 @@ if (typeof DOMParser == "undefined") {
 			    xml+='</tree>';
 		  
 		    tree.loadXMLString(xml);
+		    
+
+		 
+		  
 		    tree.attachEvent("onXLE",function(){
 		    contextTreeXml = tree.serializeTree();  
 		 	var xmlobject = (new DOMParser()).parseFromString(contextTreeXml, "text/xml");
@@ -122,6 +130,7 @@ if (typeof DOMParser == "undefined") {
 		    id=getFirstChild(node);
 		    show(id);
 		    });
+		    
 		    		     
           tree.attachEvent("onDrop",function(sid,tid,sobj,tobj){
             if(sid){
@@ -159,6 +168,8 @@ if (typeof DOMParser == "undefined") {
 function stateChange(){
 	 if (xmlHttp.readyState==4)
   {
+		
+		 
 	 document.getElementById("bodyhelp").innerHTML = xmlHttp.responseText.slice(0,xmlHttp.responseText.indexOf("help:"));
      document.getElementById("key").innerHTML = xmlHttp.responseText.slice(xmlHttp.responseText.indexOf("help:"));
      document.getElementById("bodyhelp").style.border="1px solid #A5ACB2";

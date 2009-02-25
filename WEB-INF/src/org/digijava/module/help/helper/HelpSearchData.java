@@ -4,10 +4,12 @@ import java.util.Date;
 
 public class HelpSearchData {
 
+	
 	private String titleTrnKey=null;
 	private String topicKey;
 	private String body;
 	private Date lastModDate;
+	private String lang;
 	
 	public String getTitleTrnKey() {
 		return titleTrnKey;
@@ -32,6 +34,13 @@ public class HelpSearchData {
 	}
 	public void setLastModDate(Date lastModDate) {
 		this.lastModDate = lastModDate;
+	}
+	
+	public String getLang() {
+		return lang;
+	}
+	public void setLang(String lang) {
+		this.lang = lang;
 	}
 	
 }

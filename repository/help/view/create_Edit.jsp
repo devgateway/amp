@@ -19,6 +19,7 @@ function validate(topickey){
         }
 }
   function getKey(){
+	
     var topicKey = document.getElementById("key").innerHTML;
     var key = topicKey.slice(topicKey.indexOf("y:")+2);
     return key;

@@ -251,8 +251,13 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 
 			} else if (pId.equals("5a")) {
 				realPathSubJrxml = reportPath + "_sub.jrxml";
-
+				
 				ParisIndicator5aSubJrxml subJrxml = new ParisIndicator5aSubJrxml();
+				
+				//setup some variables needed for the translation system.
+				subJrxml.setSite(RequestUtils.getSite(request));
+				subJrxml.setLangCode(RequestUtils.getNavigationLanguage(request).getCode());
+				
 				subJrxml.createSubJrxml(realPathSubJrxml, reportName, formBean
 						.getDonorsCollIndc5());
 
@@ -262,6 +267,11 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 				realPathSubJrxml = reportPath + "_sub.jrxml";
 
 				ParisIndicator5bSubJrxml subJrxml = new ParisIndicator5bSubJrxml();
+				
+				//setup some variables needed for the translation system.
+				subJrxml.setSite(RequestUtils.getSite(request));
+				subJrxml.setLangCode(RequestUtils.getNavigationLanguage(request).getCode());
+				
 				subJrxml.createSubJrxml(realPathSubJrxml, reportName, formBean
 						.getDonorsCollIndc5());
 

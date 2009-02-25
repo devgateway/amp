@@ -90,6 +90,9 @@ public abstract class ARDimension {
 	Class relatedContentPersisterClass = childCell.getColumn().getRelatedContentPersisterClass();
 	if(relatedContentPersisterClass==null) return true; // default behavior is to accept anything we have no information about
 	Class dimensionClass=childCell.getColumn().getDimensionClass();
+	if (dimensionClass == null)
+		return true;
+	
 	ARDimension d=DIMENSIONS.get(dimensionClass);
 	if(d==null) {
 	    Constructor dimensionCons = ARUtil.getConstrByParamNo(dimensionClass,0);

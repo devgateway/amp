@@ -3,6 +3,7 @@ package org.digijava.module.aim.helper;
 import java.io.IOException;
 import java.util.List;
 
+import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 
@@ -44,7 +45,7 @@ public abstract class ParisIndicatorJrxml {
 	}
 
 	public void createSubJrxml(String filePath, String reportName, List data)
-			throws IOException {
+			throws IOException, WorkerException {
 
 	}
 }

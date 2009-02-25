@@ -266,9 +266,9 @@ public class AddAmpActivity extends Action {
     //===============Sectors END=============================
 
 
+    /*
     //===============Componentes START=======================
-
-
+    
     // Add componente
     if (request.getParameter("addComponente") != null) {
       return addComponente(mapping, session, eaForm);
@@ -277,7 +277,7 @@ public class AddAmpActivity extends Action {
     }
 
     //===============Componentes END=========================
-
+	*/
 
     //eaForm.setAllComps(ActivityUtil.getAllComponentNames());
     ProposedProjCost propProjCost = null;
@@ -470,6 +470,7 @@ public class AddAmpActivity extends Action {
     return null;
   }
 
+/*
 private ActionForward removeComponentes(ActionMapping mapping,
 		HttpSession session, EditActivityForm eaForm) {
 	Long selComponentes[] = eaForm.getComponents().getSelActivityComponentes();
@@ -510,6 +511,7 @@ private ActionForward removeComponentes(ActionMapping mapping,
       session.setAttribute("Secondary Sector", eaForm.getSectors().getSecondarySectorVisible());
       return mapping.findForward("addActivityStep2");
 }
+
 
 private ActionForward addComponente(ActionMapping mapping, HttpSession session,
 		EditActivityForm eaForm) {
@@ -578,7 +580,7 @@ private ActionForward addComponente(ActionMapping mapping, HttpSession session,
 	}
       return mapping.findForward("addActivityStep2");
 }
-
+*/
 private ActionForward removeSector(ActionMapping mapping,
 		HttpServletRequest request, HttpSession session, EditActivityForm eaForm) {
 	try{

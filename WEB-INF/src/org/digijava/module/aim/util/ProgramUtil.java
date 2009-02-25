@@ -48,7 +48,6 @@ import org.digijava.module.aim.helper.AmpIndSectors;
 import org.digijava.module.aim.helper.AmpPrgIndicator;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
 import org.digijava.module.aim.helper.DateConversion;
-import org.digijava.module.aim.helper.EditProgram;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.IndicatorsBean;
 import org.digijava.module.aim.helper.TreeItem;
@@ -1551,7 +1550,8 @@ public class ProgramUtil {
             }
 		}
 
-		public static void updateTheme(EditProgram editPrg)
+	
+		public static void updateTheme(AmpTheme editeTheme)
 		{
 			Session session = null;
 			Transaction tx = null;
@@ -1559,24 +1559,24 @@ public class ProgramUtil {
 			{
 				session = PersistenceManager.getRequestDBSession();
 				AmpTheme tempAmpTheme = null;
-				tempAmpTheme = (AmpTheme) session.load(AmpTheme.class,editPrg.getAmpThemeId());
-				tempAmpTheme.setName(editPrg.getName());
-				tempAmpTheme.setThemeCode(editPrg.getThemeCode());
-				tempAmpTheme.setBudgetProgramCode(editPrg.getBudgetProgramCode());
-				tempAmpTheme.setDescription(editPrg.getDescription());
-				tempAmpTheme.setTypeCategoryValue( editPrg.getTypeCategVal() );
+				tempAmpTheme = (AmpTheme) session.load(AmpTheme.class,editeTheme.getAmpThemeId());
+				tempAmpTheme.setName(editeTheme.getName());
+				tempAmpTheme.setThemeCode(editeTheme.getThemeCode());
+				tempAmpTheme.setBudgetProgramCode(editeTheme.getBudgetProgramCode());
+				tempAmpTheme.setDescription(editeTheme.getDescription());
+				tempAmpTheme.setTypeCategoryValue( editeTheme.getTypeCategoryValue());
 
-				tempAmpTheme.setLeadAgency( editPrg.getLeadAgency() );
-				tempAmpTheme.setTargetGroups( editPrg.getTargetGroups() );
-				tempAmpTheme.setBackground( editPrg.getBackground() );
-				tempAmpTheme.setObjectives( editPrg.getObjectives() );
-				tempAmpTheme.setOutputs( editPrg.getOutputs() );
-				tempAmpTheme.setBeneficiaries( editPrg.getBeneficiaries() );
-				tempAmpTheme.setEnvironmentConsiderations( editPrg.getEnvironmentConsiderations() );
+				tempAmpTheme.setLeadAgency( editeTheme.getLeadAgency() );
+				tempAmpTheme.setTargetGroups( editeTheme.getTargetGroups() );
+				tempAmpTheme.setBackground( editeTheme.getBackground() );
+				tempAmpTheme.setObjectives( editeTheme.getObjectives() );
+				tempAmpTheme.setOutputs( editeTheme.getOutputs() );
+				tempAmpTheme.setBeneficiaries( editeTheme.getBeneficiaries() );
+				tempAmpTheme.setEnvironmentConsiderations( editeTheme.getEnvironmentConsiderations() );
 
-				tempAmpTheme.setExternalFinancing(editPrg.getExternalFinancing());
-				tempAmpTheme.setInternalFinancing(editPrg.getInternalFinancing());
-				tempAmpTheme.setTotalFinancing(editPrg.getTotalFinancing());
+				tempAmpTheme.setExternalFinancing(editeTheme.getExternalFinancing());
+				tempAmpTheme.setInternalFinancing(editeTheme.getInternalFinancing());
+				tempAmpTheme.setTotalFinancing(editeTheme.getTotalFinancing());
 				
 				tx = session.beginTransaction();
 				session.update(tempAmpTheme);
@@ -1600,7 +1600,8 @@ public class ProgramUtil {
 				}
 			}			
 		}
-
+		
+		
 		public static Collection getRelatedThemes(Long id) throws DgException
 		{
 			AmpTheme ampThemetemp = new AmpTheme();

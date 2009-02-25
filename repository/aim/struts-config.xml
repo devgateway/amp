@@ -74,7 +74,6 @@
     <form-bean name="aimThemeForm" type="org.digijava.module.aim.form.ThemeForm" />
     <form-bean name="aimAllIndicatorForm" type="org.digijava.module.aim.form.AllIndicatorForm" />
     <form-bean name="aimUserEmailForm" type="org.digijava.module.um.form.UserEmailForm" />
-    <!--<form-bean name="aimAddThemeForm" type="org.digijava.module.aim.form.AddThemeForm" /> -->
     <form-bean name="aimViewSectorForm" type="org.digijava.module.aim.form.AddSectorForm" />
     <form-bean name="aimCurrencyForm" type="org.digijava.module.aim.form.CurrencyForm" />
     <form-bean name="aimAddCurrencyForm" type="org.digijava.module.aim.form.AddCurrencyForm" />
@@ -391,9 +390,7 @@
       <forward name="forward" path="/aim/relatedLinksList.do" redirect="true" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
-    	 <action name="aimThemeForm" path="/aim/addNewTheme" scope="request" type="org.digijava.module.aim.action.AddNewTheme" validate="false">
-   	<forward name="forward" path="/showLayout.do?layout=addNewTheme"/>
-    </action>
+ 
     <action name="aimRelatedLinksForm" path="/aim/getDocumentDetails" scope="session" type="org.digijava.module.aim.action.GetDocumentDetails" validate="false">
       <forward name="forward1" path="/showLayout.do?layout=viewDocument" />
       <forward name="forward2" path="/showLayout.do?layout=teamDocument" />
@@ -458,29 +455,13 @@
       <forward name="gotoIndicators" path="/aim/overallIndicatorManager.do" redirect="true" />
       <forward name="gotoMEIndicators" path="/aim/indicatorManager.do" redirect="true" />
     </action>
+    
     <action name="aimThemeForm" path="/aim/addTheme" scope="request" type="org.digijava.module.aim.action.AddTheme" validate="false">
-      <forward name="saveIt" path="/aim/themeManager.do~view=multiprogram" redirect="true" />
-      <forward name="notadd" path="/aim/themeManager.do~view=multiprogram~flag=error" redirect="true" />
-      <forward name="forward" path="/showLayout.do?layout=aim_addProgram" />
+      <forward name="saved" path="/aim/themeManager.do~view=multiprogram" redirect="true" />
+      <forward name="addEditForm" path="/showLayout.do?layout=addNewTheme" />
     </action>
-    <action name="aimThemeForm" path="/aim/addSubTheme" scope="request" type="org.digijava.module.aim.action.AddSubTheme" validate="false">
-      <forward name="forward" path="/aim/themeManager.do" redirect="true" />
-      <forward name="addProgram" path="/showLayout.do?layout=aim_addProgram" />
-      <forward name="index" path="/aim/index.do" redirect="true" />
-    </action>
-    <action name="aimThemeForm" path="/aim/addSubPrgInd" scope="request" type="org.digijava.module.aim.action.AddSubPrgIndicator" validate="false">
-      <forward name="forward" path="/aim/themeManager.do~view=multiprogram" redirect="true"/>
-      <forward name="notadd" path="/aim/themeManager.do~view=multiprogram~flag=error" redirect="true" />
-      <forward name="addProgram" path="/showLayout.do?layout=aim_addProgram" />
-      <forward name="index" path="/aim/index.do" redirect="true" />
-    </action>
-    <action name="aimThemeForm" path="/aim/editTheme" scope="request" type="org.digijava.module.aim.action.EditTheme" validate="false">
-      <forward name="editProgram" path="/showLayout.do?layout=aim_editTheme" />
-      <forward name="subPrgEdit" path="/showLayout.do?layout=addSubTheme" />
-      <forward name="forward" path="/aim/themeManager.do~view=multiprogram" redirect="true"/>
-      <forward name="index" path="/aim/index.do" redirect="true" />
-    </action>
-    <action name="aimThemeForm" path="/aim/addThemeIndicator" scope="session" type="org.digijava.module.aim.action.AddThemeIndicator" validate="false">
+   
+   <action name="aimThemeForm" path="/aim/addThemeIndicator" scope="session" type="org.digijava.module.aim.action.AddThemeIndicator" validate="false">
       <forward name="forward" path="/showLayout.do?layout=aim_addPrgIndicator" />
     </action>
     <action name="aimThemeForm" path="/aim/editThemeIndicator" scope="session" type="org.digijava.module.aim.action.EditThemeIndicator" validate="false">

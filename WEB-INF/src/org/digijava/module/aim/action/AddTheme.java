@@ -1,17 +1,8 @@
-/*
- * AddTheme.java 
- */
-
 package org.digijava.module.aim.action;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -23,81 +14,320 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
-
-public class AddTheme extends Action 
-{
+/**
+ * 
+ * @author Sebas New add/edit theme action
+ */
+public class AddTheme extends Action {
 	private static Logger logger = Logger.getLogger(AddTheme.class);
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws java.lang.Exception 
-	{
+	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
 
 		HttpSession session = request.getSession();
-		if (session.getAttribute("ampAdmin") == null) 
-		{
+		if (session.getAttribute("ampAdmin") == null) {
 			return mapping.findForward("index");
-		} else 
-		{
+		} else {
 			String str = (String) session.getAttribute("ampAdmin");
-			if (str.equals("no")) 
-			{
+			if (str.equals("no")) {
 				return mapping.findForward("index");
 			}
 		}
+		String event = request.getParameter("event");
 
+		// new top level program
+		if (event != null && event.equals("add")) {
+			return addnew(mapping, form, request, response);
+		}
+
+		// save a top level program
+		if (event.equals("save")) {
+			return save(mapping, form, request, response);
+		}
+		// Edit any level program
+		if (event != null && event.equals("edit")) {
+			return edit(mapping, form, request, response);
+		}
+		// save any edited program
+		if (event.equals("saveEdit")) {
+			return saveEdit(mapping, form, request, response);
+		}
+		// prepare for new sub program
+		if (event.equals("addSubProgram")) {
+			return addSubProgram(mapping, form, request, response);
+		}
+		// Save the new sub program
+		if (event.equals("saveSubProgram")) {
+			return saveSubProgram(mapping, form, request, response);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Prepare a blank form to enter a new program
+	 * 
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws java.lang.Exception
+	 */
+	public ActionForward addnew(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
 		ThemeForm themeForm = (ThemeForm) form;
 		String event = request.getParameter("event");
-		Collection themes = new ArrayList();
-		themes = ProgramUtil.getParentThemes();
-		themeForm.setThemes(themes);
+		themeForm.setProgramName(null);
+		themeForm.setProgramCode(null);
+		themeForm.setBudgetProgramCode(null);
+		themeForm.setProgramDescription(null);
+		themeForm.setProgramTypeCategValId(new Long(0));
+		themeForm.setPrgLanguage(null);
+		themeForm.setVersion(null);
+		themeForm.setEvent("save");
+		return mapping.findForward("addEditForm");
+
+	}
+
+	/**
+	 * Save the new program
+	 * 
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws java.lang.Exception
+	 */
+	public ActionForward save(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+		ThemeForm themeForm = (ThemeForm) form;
+		AmpTheme ampTheme = new AmpTheme();
+		fillTheme(ampTheme, themeForm);
+		DbUtil.add(ampTheme);
+		return mapping.findForward("saved");
+	}
+
+	/**
+	 * Prepare the form to edit a program
+	 * 
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws java.lang.Exception
+	 */
+	public ActionForward edit(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+		ThemeForm themeForm = (ThemeForm) form;
+		String event = request.getParameter("event");
+		Long id = Long.parseLong(request.getParameter("themeId"));
+		AmpTheme ampTheme = ProgramUtil.getThemeObject(id);
+		fillForm(themeForm, ampTheme);
+		themeForm.setEvent("saveEdit");
+		return mapping.findForward("addEditForm");
+
+	}
+
+	/**
+	 * Save the current edited program
+	 * 
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws java.lang.Exception
+	 */
+	public ActionForward saveEdit(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+		ThemeForm themeForm = (ThemeForm) form;
+		String event = request.getParameter("event");
+		AmpTheme tempTheme = new AmpTheme();
+		fillTheme(tempTheme, themeForm);
+		ProgramUtil.updateTheme(tempTheme);
+		return mapping.findForward("saved");
+	}
+
+	/**
+	 * Prepare a blank form to enter a new sub program
+	 * 
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws java.lang.Exception
+	 */
+	public ActionForward addSubProgram(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+		ThemeForm themeForm = (ThemeForm) form;
+		Long id = new Long(Long.parseLong(request.getParameter("themeId")));
+		int indlevel = Integer.parseInt(request.getParameter("indlevel"));
+
+		themeForm.setParentId(id);
 		
-		for(Iterator itr = themeForm.getThemes().iterator(); itr.hasNext();){
+		AmpTheme parent= ProgramUtil.getThemeObject(themeForm.getParentId());
+		themeForm.setParentProgram(parent.getName());
 		
-			AmpTheme itm = (AmpTheme)itr.next();
-				if(itm.getName().equalsIgnoreCase(themeForm.getProgramName())){
-	
-				return mapping.findForward("notadd");
-			}
-		}
-	
-		if (event != null && event.equals("add")) 
-		{
-			themeForm.setProgramName(null);
-			themeForm.setProgramCode(null);
-			themeForm.setBudgetProgramCode(null);
-			themeForm.setProgramDescription(null);
-			themeForm.setProgramTypeCategValId(new Long(0));
-			themeForm.setPrgLanguage(null);
-			themeForm.setVersion(null);
-			return mapping.findForward("forward");
-		}
-		else
-		{
-			AmpTheme ampTheme = new AmpTheme();
-			ampTheme.setName(themeForm.getProgramName());
-			ampTheme.setThemeCode(themeForm.getProgramCode());
-			ampTheme.setBudgetProgramCode(themeForm.getBudgetProgramCode());
-			ampTheme.setDescription(themeForm.getProgramDescription());
-			ampTheme.setTypeCategoryValue( CategoryManagerUtil.getAmpCategoryValueFromDb(themeForm.getProgramTypeCategValId()) );
-			ampTheme.setIndlevel(new Integer(0));			
-			ampTheme.setLeadAgency( themeForm.getProgramLeadAgency() );
-			ampTheme.setTargetGroups( themeForm.getProgramTargetGroups() );
-			ampTheme.setBackground( themeForm.getProgramBackground() );
-			ampTheme.setObjectives( themeForm.getProgramObjectives() );
-			ampTheme.setOutputs( themeForm.getProgramOutputs() );
-			ampTheme.setBeneficiaries( themeForm.getProgramBeneficiaries() );
-			ampTheme.setEnvironmentConsiderations( themeForm.getProgramEnvironmentConsiderations() );
+		themeForm.setPrgLevel(indlevel);
+		themeForm.setProgramName(null);
+		themeForm.setProgramCode(null);
+		themeForm.setBudgetProgramCode(null);
+		themeForm.setProgramDescription(null);
+		themeForm.setProgramTypeCategValId(new Long(0));
+		themeForm.setPrgLanguage(null);
+		themeForm.setVersion(null);
+
+		// next event
+		themeForm.setEvent("saveSubProgram");
+		return mapping.findForward("addEditForm");
+	}
+
+	/**
+	 * Save the new sub program
+	 * 
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws java.lang.Exception
+	 */
+	public ActionForward saveSubProgram(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+		ThemeForm themeForm = (ThemeForm) form;
+
+		AmpTheme ampTheme = new AmpTheme();
+		fillTheme(ampTheme, themeForm);
+		DbUtil.add(ampTheme);
+
+		themeForm.setEvent("");
+		return mapping.findForward("saved");
+	}
+
+	/**
+	 * Prepare the form to edit a sub program
+	 * 
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws java.lang.Exception
+	 */
+	public ActionForward editSubProgram(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+		ThemeForm themeForm = (ThemeForm) form;
+		String event = request.getParameter("event");
+		Long id = new Long(Long.parseLong(request.getParameter("themeId")));
+		Long rootid = new Long(Long.parseLong(request.getParameter("rootId")));
+		AmpTheme ampTheme = ProgramUtil.getThemeObject(id);
+		themeForm.setRootId(rootid);
+		themeForm.setEvent("saveEditSubProgram");
+		fillForm(themeForm, ampTheme);
+		return mapping.findForward("addEditForm");
+	}
+
+	/**
+	 * Save the current edited sub program
+	 * 
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws java.lang.Exception
+	 */
+	public ActionForward saveEditSubProgram(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+		return null;
+	}
+
+	/**
+	 * Fill theme using form values
+	 * 
+	 * @param ampTheme
+	 * @param themeForm
+	 */
+	private void fillTheme(AmpTheme ampTheme, ThemeForm themeForm) {
+		ampTheme.setAmpThemeId(themeForm.getThemeId());
+		ampTheme.setName(themeForm.getProgramName());
+		ampTheme.setThemeCode(themeForm.getProgramCode());
+		ampTheme.setBudgetProgramCode(themeForm.getBudgetProgramCode());
+		ampTheme.setDescription(themeForm.getProgramDescription());
+		ampTheme.setTypeCategoryValue(CategoryManagerUtil.getAmpCategoryValueFromDb(themeForm.getProgramTypeCategValId()));
+		ampTheme.setLeadAgency(themeForm.getProgramLeadAgency());
+		ampTheme.setTargetGroups(themeForm.getProgramTargetGroups());
+		ampTheme.setBackground(themeForm.getProgramBackground());
+		ampTheme.setObjectives(themeForm.getProgramObjectives());
+		ampTheme.setOutputs(themeForm.getProgramOutputs());
+		ampTheme.setBeneficiaries(themeForm.getProgramBeneficiaries());
+		ampTheme.setEnvironmentConsiderations(themeForm.getProgramEnvironmentConsiderations());
+
+		if (themeForm.getParentId() != null && themeForm.getParentId().longValue()!=0 ) {
+			ampTheme.setParentThemeId(ProgramUtil.getThemeObject(themeForm.getParentId()));
+			int indlevel = themeForm.getPrgLevel();
+			int level = indlevel + 1;
+			ampTheme.setIndlevel(new Integer(level));
+		} else {
 			ampTheme.setParentThemeId(null);
-			ampTheme.setLanguage(null);
-			ampTheme.setVersion(null);				
-			themeForm.setProgramName(null);
-			themeForm.setProgramCode(null);
-			themeForm.setBudgetProgramCode(null);
-			themeForm.setProgramDescription(null);
-			themeForm.setProgramTypeCategValId( new Long(0));
-			DbUtil.add(ampTheme);
-			return mapping.findForward("saveIt");
+			ampTheme.setIndlevel(0);
+		}
+
+		ampTheme.setLanguage(null);
+		ampTheme.setVersion(null);
+		themeForm.setProgramName(null);
+		themeForm.setProgramCode(null);
+		themeForm.setBudgetProgramCode(null);
+		themeForm.setProgramDescription(null);
+		themeForm.setProgramTypeCategValId(new Long(0));
+		ampTheme.setExternalFinancing(themeForm.getProgramExternalFinancing());
+		ampTheme.setInternalFinancing(themeForm.getProgramInernalFinancing());
+		ampTheme.setTotalFinancing(themeForm.getProgramTotalFinancing());
+
+	}
+
+	/**
+	 * fill form using theme values
+	 * 
+	 * @param themeForm
+	 * @param ampTheme
+	 */
+	private void fillForm(ThemeForm themeForm, AmpTheme ampTheme) {
+
+		themeForm.setThemeId(ampTheme.getAmpThemeId());
+		if (ampTheme.getParentThemeId() != null) {
+			AmpTheme parent= ampTheme.getParentThemeId();
+			themeForm.setParentId(parent.getAmpThemeId());
+			themeForm.setParentProgram(parent.getName());
+		}
+
+		themeForm.setProgramName(ampTheme.getName());
+		themeForm.setProgramCode(ampTheme.getThemeCode());
+		themeForm.setBudgetProgramCode(ampTheme.getBudgetProgramCode());
+		themeForm.setProgramDescription(ampTheme.getDescription());
+		if (ampTheme.getTypeCategoryValue() != null)
+			themeForm.setProgramTypeCategValId(ampTheme.getTypeCategoryValue().getId());
+		else {
+			logger.error("AmpTheme " + ampTheme.getName() + " has Program Type null which should not be allowed.");
+			themeForm.setProgramTypeCategValId(new Long(0));
+		}
+		themeForm.setProgramLeadAgency(ampTheme.getLeadAgency());
+		themeForm.setProgramBackground(ampTheme.getBackground());
+		themeForm.setProgramTargetGroups(ampTheme.getTargetGroups());
+		themeForm.setProgramObjectives(ampTheme.getObjectives());
+		themeForm.setProgramOutputs(ampTheme.getOutputs());
+		themeForm.setProgramBeneficiaries(ampTheme.getBeneficiaries());
+		themeForm.setProgramEnvironmentConsiderations(ampTheme.getEnvironmentConsiderations());
+
+		if (ampTheme.getExternalFinancing() == null) {
+			themeForm.setProgramExternalFinancing(Double.valueOf(0));
+		} else {
+			themeForm.setProgramExternalFinancing(ampTheme.getExternalFinancing());
+		}
+		if (ampTheme.getInternalFinancing() == null) {
+			themeForm.setProgramInernalFinancing(Double.valueOf(0));
+		} else {
+			themeForm.setProgramInernalFinancing(ampTheme.getInternalFinancing());
+		}
+		if (ampTheme.getTotalFinancing() == null) {
+			themeForm.setProgramTotalFinancing(Double.valueOf(0));
+		} else {
+			themeForm.setProgramTotalFinancing(ampTheme.getTotalFinancing());
 		}
 	}
 }

@@ -592,7 +592,6 @@
 				<page>aim_addMEIndicator</page>
 				<page>aim_deleteIndicator</page>
 				<page>aim_addProgram</page>
-				<page>aim_editTheme</page>
 				<!-- <page>aim_addPrgIndicator</page> -->
 				<page>aim_editAllIndicator</page>
 				<page>aim_assignThemeIndicator</page>

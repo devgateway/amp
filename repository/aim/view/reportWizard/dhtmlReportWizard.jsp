@@ -277,7 +277,7 @@
 				<div id="type_step_div" class="yui-tab-content" style="padding: 0px 0px 1px 0px;" >
 					<c:set var="stepNum" value="0" scope="request" />
 					<jsp:include page="toolbar.jsp" />
-					<div style="height: 355px;">
+					<div style="height: 370px;">
 					<br />
 					<table cellpadding="15px" width="100%" align="center" border="0" >
 						<tr>
@@ -427,7 +427,7 @@
 				<div id="columns_step_div"  class="yui-tab-content" align="center" style="padding: 0px 0px 1px 0px; display: none;">
 					<c:set var="stepNum" value="1"  scope="request" />
 					<jsp:include page="toolbar.jsp" />
-					<div style="height: 355px;">
+					<div style="height: 370px;">
 					<table cellpadding="5px" style="vertical-align: middle" width="100%">
 						<tr>
 						<td width="47%" align="center">
@@ -457,7 +457,7 @@
 						</td>
 						</tr>
 						<tr>
-							<td align="center">
+							<td align="center" valign="top">
 								<span id="columnsMust" style="visibility: hidden">
 								<font color="red">* 
 									<digi:trn key="rep:wizard:hint:mustselectcolumn">
@@ -467,7 +467,7 @@
 								</span>
 							</td>
 							<td>&nbsp;</td>
-							<td align="center">
+							<td align="center" valign="top">
 								<span id="columnsLimit" style="visibility: hidden">
 								<font color="red">* 
 									<digi:trn key="rep:wizard:hint:limit3columns">
@@ -483,7 +483,7 @@
 				<div id="hierarchies_step_div"  class="yui-tab-content"  style="padding: 0px 0px 1px 0px; display: none;">
 					<c:set var="stepNum" value="2" scope="request" />
 					<jsp:include page="toolbar.jsp" />
-					<div style="height: 355px;">
+					<div style="height: 370px;">
 					<table cellpadding="5px" style="vertical-align: middle" width="100%" >
 						<tr>
 						<td width="47%" align="center">
@@ -527,7 +527,7 @@
 				<div id="measures_step_div" class="yui-tab-content" style="padding: 0px 0px 1px 0px; display: none;" >
 					<c:set var="stepNum" value="3" scope="request" />
 					<jsp:include page="toolbar.jsp" />
-					<div style="height: 355px;">
+					<div style="height: 370px;">
 					<table cellpadding="5px" style="vertical-align: middle" width="100%">
 						<tr>
 						<td width="47%" align="center">
@@ -556,7 +556,7 @@
 						</td>					
 						</tr>
 						<tr>
-							<td>
+							<td align="center" valign="top">
 								<span id="measuresMust" style="visibility: visible">
 								<font color="red">* 
 									<digi:trn key="rep:wizard:hint:mustselectmeasure">
@@ -566,7 +566,7 @@
 								</span>
 							</td>
 							<td>&nbsp;</td>
-							<td>
+							<td align="center" valign="top">
 								<span id="measuresLimit" style="visibility: hidden">
 								<font color="red">* 
 									<digi:trn key="rep:wizard:hint:limit2measures">

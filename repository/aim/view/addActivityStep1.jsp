@@ -210,16 +210,16 @@ function checkSelOrgs() {
 		<digi:trn key="aim:chooseOrganizationToRemove">Please choose an organization to remove</digi:trn>
 	</c:set>
 	
-	if (document.getElementById('selOrgs').checked != null) { // only one org. added
-		if (document.getElementById('selOrgs').checked == false) {
+	if (document.getElementsByName('identification.selOrgs').checked != null) { // only one org. added
+		if (document.getElementsByName('identification.selOrgs').checked == false) {
 			alert("${translation}");
 			return false;
 		}
 	} else { // many org. present
-		var length = document.getElementById('selOrgs').length;
+		var length = document.getElementsByName('identification.selOrgs').length;
 		var flag = 0;
 		for (i = 0;i < length;i ++) {
-			if (document.getElementById('selOrgs')[i].checked == true) {
+			if (document.getElementsByName('identification.selOrgs')[i].checked == true) {
 				flag = 1;
 				break;
 			}

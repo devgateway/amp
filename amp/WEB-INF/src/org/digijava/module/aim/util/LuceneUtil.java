@@ -792,16 +792,17 @@ public class LuceneUtil implements Serializable {
     			String article =  item.getBody();
     			String title = item.getTopicKey();
     			String titTrnKey = item.getTitleTrnKey();
+    			String lang = item.getLang();
     			// Converts html formatted help topics body to plain text format.
     			String newCode = article.replaceAll("\\<.*?\\>","");
 
     			if(update){
-    				if(item.getLastModDate().after(date)){
-    					deleteHelp("title",title, sc);
-    					indexArticle(newCode, title,titTrnKey, sc);
-    				}
+    					if(item.getLastModDate().after(date)){
+	    					deleteHelp("title",title, sc);
+	    					indexArticle(newCode, title,titTrnKey,lang,sc);
+	    				}
     			}else if(!update){
-    				indexArticle(newCode, title,titTrnKey, sc);	
+    				indexArticle(newCode, title,titTrnKey,lang,sc);	
     			}
     		}
     	} catch (Exception ex) {
@@ -857,7 +858,7 @@ public class LuceneUtil implements Serializable {
      */
     public static Object highlighter(Field field,String searchString, ServletContext sc) throws IOException, ParseException{
 		Query query = null;
-		QueryParser parser = new QueryParser(field.getClass().getName(), analyzer);
+		QueryParser parser = new QueryParser("article", analyzer);
 	
 		query = parser.parse(searchString);
 		
@@ -897,9 +898,9 @@ public class LuceneUtil implements Serializable {
      * @param titTrnKey translation key used to translate title
      * @throws java.lang.Exception
      */
-    public static void indexArticle(String article, String title,String titTrnKey, ServletContext sc)
+    public static void indexArticle(String article, String title,String titTrnKey, String lang,ServletContext sc)
     throws Exception {
-    	Document document = LuceneUtil.createHelpDocument(article,title,titTrnKey);
+    	Document document = LuceneUtil.createHelpDocument(article,title,titTrnKey,lang);
     	LuceneUtil.indexHelpDocument(document, sc);
     }	
 
@@ -913,12 +914,13 @@ public class LuceneUtil implements Serializable {
      * @param titTrnKey translation key used to translate title
      * @return newly created document
      */
-    public static Document createHelpDocument(String article, String title,String titTrnKey){
+    public static Document createHelpDocument(String article, String title,String titTrnKey,String lang){
 
     	Document document = new Document();
     	document.add(new Field("title",title,Field.Store.YES,Field.Index.TOKENIZED));
     	document.add(new Field("titletrnKey",titTrnKey,Field.Store.YES,Field.Index.TOKENIZED));
     	document.add(new Field("article",article,Field.Store.YES,Field.Index.TOKENIZED));
+    	document.add(new Field("lang",lang,Field.Store.YES,Field.Index.TOKENIZED));
     	return document;
 
     }
@@ -983,4 +985,5 @@ public class LuceneUtil implements Serializable {
     		e.printStackTrace();
     	}
     }
+ 
 }

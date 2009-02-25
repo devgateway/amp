@@ -60,6 +60,8 @@ en:
     locations:
         title: Projects by Region
         show_municipalities: Show Municipalities
+        all_districts: All Municipalities
+        national_project: National
     location_detail:
         title: Projects of <i>{{province_name}}</i> by Municipality
     mdgs:

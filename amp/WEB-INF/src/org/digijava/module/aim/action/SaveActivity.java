@@ -761,32 +761,32 @@ public class SaveActivity extends Action {
 			activity.setSectors(sectors);
 		}
 
-		if (eaForm.getComponents().getActivityComponentes() != null) {
-			Set componentes = new HashSet();
-			if (eaForm.getComponents().getActivityComponentes() != null && eaForm.getComponents().getActivityComponentes().size()>0) {
-				Iterator itr = eaForm.getComponents().getActivityComponentes().iterator();
-				while (itr.hasNext()) {
-					ActivitySector actSect = (ActivitySector) itr.next();
-					Long sectorId = null;
-					if (actSect.getSubsectorLevel2Id() != null
-							&& (!actSect.getSubsectorLevel2Id().equals(new Long(-1)))) {
-						sectorId = actSect.getSubsectorLevel2Id();
-					} else if (actSect.getSubsectorLevel1Id() != null
-							&& (!actSect.getSubsectorLevel1Id().equals(new Long(-1)))) {
-						sectorId = actSect.getSubsectorLevel1Id();
-					} else {
-						sectorId = actSect.getSectorId();
-					}
-					AmpActivityComponente ampc = new AmpActivityComponente();
-					ampc.setActivity(activity);
-					if (sectorId != null && (!sectorId.equals(new Long(-1))))
-						ampc.setSector(SectorUtil.getAmpSector(sectorId));
-					ampc.setPercentage(new Float(actSect.getSectorPercentage()));
-					componentes.add(ampc);
-				}
-			}
-			activity.setComponentes(componentes);
-		}
+//		if (eaForm.getComponents().getActivityComponentes() != null) {
+//			Set componentes = new HashSet();
+//			if (eaForm.getComponents().getActivityComponentes() != null && eaForm.getComponents().getActivityComponentes().size()>0) {
+//				Iterator itr = eaForm.getComponents().getActivityComponentes().iterator();
+//				while (itr.hasNext()) {
+//					ActivitySector actSect = (ActivitySector) itr.next();
+//					Long sectorId = null;
+//					if (actSect.getSubsectorLevel2Id() != null
+//							&& (!actSect.getSubsectorLevel2Id().equals(new Long(-1)))) {
+//						sectorId = actSect.getSubsectorLevel2Id();
+//					} else if (actSect.getSubsectorLevel1Id() != null
+//							&& (!actSect.getSubsectorLevel1Id().equals(new Long(-1)))) {
+//						sectorId = actSect.getSubsectorLevel1Id();
+//					} else {
+//						sectorId = actSect.getSectorId();
+//					}
+//					AmpActivityComponente ampc = new AmpActivityComponente();
+//					ampc.setActivity(activity);
+//					if (sectorId != null && (!sectorId.equals(new Long(-1))))
+//						ampc.setSector(SectorUtil.getAmpSector(sectorId));
+//					ampc.setPercentage(new Float(actSect.getSectorPercentage()));
+//					componentes.add(ampc);
+//				}
+//			}
+//			activity.setComponentes(componentes);
+//		}
 
 		if (eaForm.getPrograms().getProgram() != null
 				&& (!eaForm.getPrograms().getProgram().equals(new Long(-1)))) {

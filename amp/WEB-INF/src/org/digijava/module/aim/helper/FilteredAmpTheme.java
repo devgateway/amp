@@ -18,6 +18,7 @@ public class FilteredAmpTheme extends AmpTheme {
 		try{
 			String ret	= str.replaceAll("\n"," ");
 			ret			= ret.replaceAll("\r","");
+			ret  		= ret.replaceAll("'", "`"); //change by Arty - AMP-5276 - "'" causes javascript errors
 			ret			= ret.replaceAll("\t","&nbsp;&nbsp;&nbsp;");
 			return ret;
 		}

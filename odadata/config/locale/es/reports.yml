@@ -61,6 +61,8 @@ es:
       locations:
           title: Proyectos por Región
           show_municipalities: Mostrar Municipios
+          all_districts: Todos los municipios
+          national_project: Nacional
       location_detail:
           title: Proyectos de <i>{{province_name}}</i> por Municipios
       mdgs:

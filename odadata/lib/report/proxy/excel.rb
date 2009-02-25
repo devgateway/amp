@@ -46,16 +46,14 @@ module Report
       
       # Adds one column per focal region
       def focal_regions
-        columns = []
-        available_regions = GeoLevel1.find(:all, :order => "name asc")
-        
-        columns << ["National", @target.geo_level1_ids.empty? ? "National" : ""]
-    #
-        available_regions.each do |loc|
-          columns << if @target.geo_level1_ids.include?(loc.id)
-            [loc.name, @target.geo_level2s.find_all_by_geo_level1_id(loc.id).map(&:name).join(", ")]
+        columns = []        
+        columns << [I18n.t('reports.locations.national_project'), @target.geo_relevances.empty? ? I18n.t('reports.locations.national_project') : ""]
+
+        @target.provinces.each do |prov|
+          if (districts = @target.districts.find_all_by_province_id(prov.id)).any?
+            columns << [prov.name, districts.map(&:name).join(", ")]
           else
-            [loc.name, ""]
+            columns << [prov.name, I18n.t('reports.locations.all_districts')]
           end
         end
         

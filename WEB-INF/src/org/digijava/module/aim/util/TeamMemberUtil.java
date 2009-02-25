@@ -22,6 +22,7 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpReports;
@@ -33,7 +34,10 @@ import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendarAttendee;
+import org.digijava.module.calendar.dbentity.AmpCalendarPK;
+import org.digijava.module.calendar.dbentity.Calendar;
 import org.hibernate.FlushMode;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
@@ -1535,6 +1539,36 @@ public class TeamMemberUtil {
                             session.delete(rep);
                         }
                     }
+
+                    qryStr = "select com from " + AmpComments.class.getName() +
+                        " com where (com.memberId.ampTeamMemId=:memberId)";
+                    qry = session.createQuery(qryStr);
+                    qry.setParameter("memberId", id[i], Hibernate.LONG);
+                    List<AmpComments> memComments = qry.list();
+                    if(memComments!=null&&memComments.size()>0){
+                        Iterator<AmpComments> commIter=memComments.iterator();
+                        while(commIter.hasNext()){
+                            AmpComments comm=commIter.next();
+                            comm.setMemberId(null);
+                            session.saveOrUpdate(comm);
+                        }
+                    }
+                    qryStr = "select cal   from "+AmpCalendar.class.getName() +" cal where (cal.member.ampTeamMemId=:memberId) ";
+                    qry = session.createQuery(qryStr);
+                    qry.setLong("memberId", id[i]);
+                    List<AmpCalendar> ampCalendarEvents = qry.list();
+                    if(ampCalendarEvents!=null&&ampCalendarEvents.size()>0){
+                        Iterator<AmpCalendar> calIter=ampCalendarEvents.iterator();
+                        while (calIter.hasNext()) {
+                            AmpCalendar cal = calIter.next();
+                           /* Calendar calendar = (Calendar) session.load(Calendar.class, cal.getCalendarPK().getCalendar().getId());
+                            AmpCalendarPK ampCalendarPK = new AmpCalendarPK(calendar);
+                            AmpCalendar ampCalendar = (AmpCalendar) session.load(AmpCalendar.class, ampCalendarPK);*/
+                            session.delete(cal);
+                        }
+                    }
+                   
+
                     qryStr = "select a from " + AmpApplicationSettings.class.getName() +
                         " a where (a.member.ampTeamMemId=:memberId)";
                     qry = session.createQuery(qryStr);

@@ -4,6 +4,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 public class ParisIndicator4Jrxml extends ParisIndicatorJrxml {
@@ -93,7 +94,7 @@ public class ParisIndicator4Jrxml extends ParisIndicatorJrxml {
             p2.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
             p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='18' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
             p2.println("					</textElement>");
-            p2.println("				<text><![CDATA[Paris Indicator 4 Report]]></text>");
+            p2.println("				<text><![CDATA[" + TranslatorWorker.translateText("Paris Indicator", this.getLangCode(), this.getSite().getSiteId())+ " 4 " + TranslatorWorker.translateText("Report", this.getLangCode(), this.getSite().getSiteId()) + "]]></text>");
             p2.println("				</staticText>");
             p2.println("			</band>");
             p2.println("		</title>");
@@ -122,7 +123,7 @@ public class ParisIndicator4Jrxml extends ParisIndicatorJrxml {
             p2.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
             p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
             p2.println("					</textElement>");
-            p2.println("				<text><![CDATA[Donors]]></text>");
+            p2.println("				<text><![CDATA["+ TranslatorWorker.translateText("Donors", this.getLangCode(), this.getSite().getSiteId()) +"]]></text>");
             p2.println("				</staticText>");
             p2.println("				<staticText>");
             p2.println("					<reportElement");
@@ -143,7 +144,7 @@ public class ParisIndicator4Jrxml extends ParisIndicatorJrxml {
             p2.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
             p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
             p2.println("					</textElement>");
-            p2.println("				<text><![CDATA[ Disbursement Year]]></text>");
+            p2.println("				<text><![CDATA[ "+ TranslatorWorker.translateText("Disbursement Year", this.getLangCode(), this.getSite().getSiteId()) + "]]></text>");
             p2.println("				</staticText>");
             p2.println("				<staticText>");
             p2.println("					<reportElement");
@@ -164,7 +165,7 @@ public class ParisIndicator4Jrxml extends ParisIndicatorJrxml {
             p2.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
             p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
             p2.println("					</textElement>");
-            p2.println("				<text><![CDATA[  Volume of technical co-operation for capacity development provided through co-ordinated programmes]]></text>");
+            p2.println("				<text><![CDATA[  "+ TranslatorWorker.translateText("Volume of technical co-operation for capacity development provided through co-ordinated programmes", this.getLangCode(), this.getSite().getSiteId()) + "]]></text>");
             p2.println("				</staticText>");
             p2.println("				<staticText>");
             p2.println("					<reportElement");
@@ -185,7 +186,7 @@ public class ParisIndicator4Jrxml extends ParisIndicatorJrxml {
             p2.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
             p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
             p2.println("					</textElement>");
-            p2.println("				<text><![CDATA[  Total volume of technical co-operation for capacity development provided]]></text>");
+            p2.println("				<text><![CDATA[  "+ TranslatorWorker.translateText("Total volume of technical co-operation for capacity development provided", this.getLangCode(), this.getSite().getSiteId()) + "]]></text>");
             p2.println("				</staticText>");
             p2.println("				<staticText>");
             p2.println("					<reportElement");
@@ -206,7 +207,7 @@ public class ParisIndicator4Jrxml extends ParisIndicatorJrxml {
             p2.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
             p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
             p2.println("					</textElement>");
-            p2.println("				<text><![CDATA[  % of capacity development support provided through coordinated programmes consistent with national development strategies]]></text>");
+            p2.println("				<text><![CDATA[ "+ TranslatorWorker.translateText("% of capacity development support provided through coordinated programmes consistent with national development strategies", this.getLangCode(), this.getSite().getSiteId()) + " ]]></text>");
             p2.println("				</staticText>");
             if (type.equals("pdf")) {
                 p2.println("				<line direction='TopDown'>");
@@ -580,7 +581,7 @@ public class ParisIndicator4Jrxml extends ParisIndicatorJrxml {
             p2.println("</textElement>");
 			boolean returnString = Boolean.parseBoolean( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS) );
 			if(returnString){
-	            p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[\" * All the amounts are in thousands (000) "+selCurr+"\"]]></textFieldExpression>");
+				p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[\" * "+ TranslatorWorker.translateText("All the amounts are in thousands (000)", this.getLangCode(), this.getSite().getSiteId()) + selCurr+"\"]]></textFieldExpression>");
 			}
 			else
 			{

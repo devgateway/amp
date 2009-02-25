@@ -14,6 +14,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionServlet;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.form.ParisIndicatorReportForm;
 import org.digijava.module.aim.helper.ParisIndicator;
 import org.digijava.module.aim.helper.ParisIndicator10aJrxml;
@@ -282,6 +284,10 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 			}
 
 			if (jrxml != null) {
+				//setup some variables needed for the translation system.
+				jrxml.setSite(RequestUtils.getSite(request));
+				jrxml.setLangCode(RequestUtils.getNavigationLanguage(request).getCode());
+				
 				jrxml.createJrxml(realPathJrxml, reportName, formBean
 						.getCurrency(), colCnt1, rowCnt1, type);
 			} else {

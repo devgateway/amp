@@ -220,7 +220,10 @@ public class ShowPermissions
         }
 
         groupPermsForm.setInheritedPermissions(new ArrayList());
-        iter = DbUtil.getInheritedPermissions(group.getId()).iterator();
+        List inhPerms = DbUtil.getInheritedPermissions(group.getId());
+        iter = null;
+        if(inhPerms != null) iter = inhPerms.iterator();
+        if(iter != null)
         while (iter.hasNext()) {
             GroupPermission perm = (GroupPermission)iter.next();
             GroupPermissionsForm.ForeignPermissionInfo inheritedInfo = new

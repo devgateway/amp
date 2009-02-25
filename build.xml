@@ -206,7 +206,7 @@
 
     <!-- Normal build of application -->
     <target name="compile" depends="prepare,resources,jaxb">
-        <javac srcdir="${src};${gen-src}" destdir="${classes}" deprecation="off" debug="${debug}" fork="yes" memoryMaximumSize="512m">
+        <javac srcdir="${src};${gen-src}" destdir="${classes}" deprecation="off" debug="${debug}" fork="yes" memoryMaximumSize="512m" encoding="utf8">
             <classpath refid="compile.classpath"/>
         </javac>
     </target>

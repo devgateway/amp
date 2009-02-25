@@ -1,6 +1,7 @@
 package org.digijava.module.help.action;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -11,16 +12,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.ecs.xhtml.code;
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.search.Hits;
+import org.apache.poi.hssf.record.formula.functions.T;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -79,6 +83,7 @@ public class HelpActions extends DispatchAction {
 
         try {
 			if(loadStatus != null){
+				LuceneUtil.createHelp(request.getSession().getServletContext());
 				os = new OutputStreamWriter(response.getOutputStream());
 	            out = new PrintWriter(os, true);
 				String id = loadStatus.toLowerCase();
@@ -94,10 +99,10 @@ public class HelpActions extends DispatchAction {
 	               Iterator iter = editor.iterator();
 					while (iter.hasNext()) {
 						Editor help = (Editor) iter.next();
-	                    out.println(help.getBody());
-	                    out.println(help.getEditorKey());
+	                   out.println(help.getBody());
+	                   out.println(help.getEditorKey());
 	                    helpForm.setTopicKey(help.getEditorKey());
-	                    System.out.println("TopicKey:"+helpForm.getTopicKey());
+	                    //System.out.println("TopicKey:"+helpForm.getTopicKey());
 	                }
 				}else{
 	               out.println(helpForm.getTopicKey()); 
@@ -118,12 +123,13 @@ public class HelpActions extends DispatchAction {
 		    PrintWriter out = null;
 		    String loadStatus =request.getParameter("loadKey");
 		    Editor item = new Editor();
-			 
+		    String	lange	= RequestUtils.getNavigationLanguage(request).getCode();
+		    
 			 try {
 				 os = new OutputStreamWriter(response.getOutputStream());
 				 out = new PrintWriter(os, true);	 
 				 if(loadStatus != null){
-						 List<Editor> data =  HelpUtil.getAllHelpKey();
+						 List<Editor> data =  HelpUtil.getAllHelpKey(lange);
 						 
 						 for(Iterator iter = data.iterator(); iter.hasNext(); ) {
 							  item = (Editor) iter.next();
@@ -134,7 +140,7 @@ public class HelpActions extends DispatchAction {
 				             if(title.length()>=loadStatus.length()){
 				             if(loadStatus.toLowerCase().equals(title.toLowerCase().substring(0,loadStatus.length()))){
 				            	
-				            	
+				            	String xs = HelpUtil.getTrn(title,request);
 				                out.println("<div id="+title+" onclick=\"select("+title+")\" onmouseover=\"this.className='silverThing'\" onmouseout=\"this.className='whiteThing'\">"+title+"</div>");
 				             }
 				           }
@@ -157,71 +163,81 @@ public class HelpActions extends DispatchAction {
 	
 	
 	public ActionForward searchHelpTopic(ActionMapping mapping,	ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
-			HelpForm helpForm = (HelpForm) form;
-		 String siteId = RequestUtils.getSite(request).getSiteId();
-		 String moduleInstance = RequestUtils.getRealModuleInstance(request)
-		 .getInstanceName();
+		 String key =request.getParameter("key");
+		 //String keywords = HelpUtil.getTrn(key,request);
 		 String locale=RequestUtils.getNavigationLanguage(request).getCode();
-		 String keywords = helpForm.getKeywords();
+		 Object artidcle = "";
+		 OutputStreamWriter os = null;	
+		 PrintWriter out = null;
 		
-	 	
-		 if(keywords != null){
-		 Collection<LabelValueBean> Searched = new ArrayList<LabelValueBean>();
-		 String instanceName=RequestUtils.getModuleInstance(request).getInstanceName();
-		 Hits hits =  LuceneUtil.helpSearch("title", helpForm.getKeywords(), request.getSession().getServletContext());
-
-         String artikleTitle;
-		 
-		 HelpForm help = (HelpForm) form;		 
-		  int hitCount = hits.length();   
-    	   
-    	  if(hitCount == 0){
-    		  
-    		  help.setTitle(null);
-			  help.setBody(null);
-    	  
-    	  }else{
-    	  
-    		  for(int i=0; (i < hitCount && i < 10); i++){
-
-    		  Document doc = hits.doc(i);
-
-			   String title = doc.get("title");
-			   String titletrnKey = doc.get("titletrnKey");
-			   String art;
-			   Field field = doc.getField("article");
-			   Object artidcle = LuceneUtil.highlighter(field,title, request.getSession().getServletContext());
+	try{	
+	     os = new OutputStreamWriter(response.getOutputStream());
+	     out = new PrintWriter(os, true);	 
+				if(key != null){
+					 Collection<LabelValueBean> Searched = new ArrayList<LabelValueBean>();
+					 Hits hits =  LuceneUtil.helpSearch("title", key, request.getSession().getServletContext());
 			
-                      if (!artidcle.equals("")) {
-
-                          art = artidcle.toString();
-                      } else {
-                          artikleTitle = doc.get("article");
-                          if (artikleTitle == null) {
-                              artikleTitle = "";
-                          }
-                          if (artikleTitle.length() > 100) {
-                              art = artikleTitle.substring(0, 100);
-                          } else {
-                              art = artikleTitle;
-                          }
-                      }
-
-			   String titlelink = 
-				   "<a href=\"../../help/"+instanceName+"/helpActions.do?actionType=viewSelectedHelpTopic&topicKey="+title+"\">"+HelpUtil.getTrn(title,request)+"</a>";
-			   Searched.add(new LabelValueBean(titlelink,art+"..."));
-			   help.setSearched(Searched);
-			   help.setTopicKey(title);
-			   help.setFlag(false);
-    	  }
-    	}
-   	}
-		// helpForm.setHelpTopics(HelpUtil.getHelpTopics(siteId, moduleInstance,locale,
-		// keywords));
-		 return mapping.findForward("help");		
+			         String artikleTitle;
+					 
+					 HelpForm help = (HelpForm) form;	
+					 
+					  int hitCount = hits.length();   
+			    	   
+			    	  if(hitCount == 0){
+			    		  
+			    		  help.setTitle(null);
+						  help.setBody(null);
+			    	  
+			    	  }else{
+			    	  
+			    		  for(int i=0; (i < hitCount && i < 10); i++){
+			    		
+			
+			    		  Document doc = hits.doc(i);
+			    		  	if(doc.get("lang").equals(locale)){  
+			    			  
+						   String title = doc.get("title");
+						   String art;
+					
+						      if (!artidcle.equals("")) {
+			
+			                          art = artidcle.toString();
+			                      } else {
+			                          artikleTitle = doc.get("article");
+			                          if (artikleTitle == null) {
+			                              artikleTitle = "";
+			                          }
+			                          if (artikleTitle.length() > 100) {
+			                              art = artikleTitle.substring(0, 100);
+			                          } else {
+			                              art = artikleTitle;
+			                          }
+			                      }
+						   
+						   String titlelink = HelpUtil.getTrn(title,request);
+						   Searched.add(new LabelValueBean(titlelink,art+"..."));
+						 
+						 for (LabelValueBean t : Searched){
+							   out.println("<div id=\"bodyTitle\" style=\"font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;\"><a class=\"link\" onclick=\"showBody()\"><b>"+t.getLabel()+"</b></a></div>");
+							   out.println("<div id=\"bodyShort\"  style=\"display:block;\">"+t.getValue()+"</div>");
+						   }
+						  
+						  List<Editor> wholeBody = HelpUtil.getEditor("help:topic:body:"+key, locale);
+						  for (Editor wb : wholeBody){
+							  out.println("<div id=\"bodyFull\"  style=\"display:none;\">"+wb.getBody()+"</div>");
+						  }
+						  out.flush();
+						  out.close();	
+			    	  }
+			    	}
+			      }
+			   	}
+     }catch (Exception e) {
+         e.printStackTrace();
+     }
+		return null;
+		
 	}
-
-	
 	
 	public ActionForward viewSelectedHelpTopic(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		HelpForm helpForm = (HelpForm) form;
@@ -255,6 +271,7 @@ public class HelpActions extends DispatchAction {
 	public ActionForward deleteHelpTopics(ActionMapping mapping,	ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		HelpForm helpForm = (HelpForm) form;
 		String siteId = RequestUtils.getSite(request).getSiteId();
+		ServletContext sc = request.getSession().getServletContext();
 		String moduleInstance = RequestUtils.getRealModuleInstance(request).getInstanceName();	
 		String page  = request.getParameter("page");
 		helpForm.setHelpErrors(null);
@@ -278,6 +295,10 @@ public class HelpActions extends DispatchAction {
 				}
 			}			
 		}
+		
+// delete Lucene helpSearch File 
+		File path = new File(sc.getRealPath("/") +"lucene" +"/" + "help");
+		LuceneUtil.deleteDirectory(path);
 		
         if(page != null){
             if(!page.equals("admin")){

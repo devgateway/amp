@@ -13,6 +13,7 @@
 <script language="JavaScript">
 
 function showHint(str){
+
   if (str.length==0){ 
 		 	document.getElementById("livesearch").innerHTML="";
 		 	
@@ -65,9 +66,35 @@ function GetXmlHttpObject()	{
 }
 
 function select(title){
+
 		document.getElementById("selected").value=document.getElementById(title.innerHTML).innerHTML;
 		$("#livesearch").hide();
 }  
+
+function search(){
+	key = document.getElementById("selected").value;
+	
+	xmlHttp=GetXmlHttpObject()
+	if (xmlHttp==null){
+ 			alert ("Browser does not support HTTP Request")
+ 		return
+ 	} 
+ 	
+	var urls="/help/helpActions.do?actionType=searchHelpTopic"
+	url=urls+"&key="+key
+    xmlHttp.open("GET",url,true)
+	xmlHttp.onreadystatechange=stChang
+	xmlHttp.send(null)
+	
+}
+
+function stChang(){
+	 if (xmlHttp.readyState==4)
+ {
+    document.getElementById("bodyhelp").innerHTML=xmlHttp.responseText;
+	 document.getElementById("bodyhelp").style.border="1px solid #A5ACB2";
+  } 
+}
 
 </script>
 <style type="text/css">
@@ -99,7 +126,7 @@ function select(title){
 			 <c:set var="searchtpc">
 				<digi:trn key="help:SearchText">Search Topic</digi:trn>
 			</c:set>
-	  		<input type="submit" class="dr-menu" value="${searchtpc}"/></div>
+	  		<input type="button" class="dr-menu" value="${searchtpc}" onclick="search()"/></div>
 		</div>
 	  </div>
 	</div>

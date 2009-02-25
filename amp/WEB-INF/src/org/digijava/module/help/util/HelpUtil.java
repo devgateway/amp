@@ -203,6 +203,28 @@ public class HelpUtil {
 		}
 		return helpTopic;
 	}
+    
+    
+    public static HelpTopic getHelpTopic(String key) throws AimException {
+		Session session = null;
+		Query query = null;
+		HelpTopic helpTopic = null;
+		if (key != null && !key.equals("")) {
+			try {
+				session = PersistenceManager.getRequestDBSession();
+				String queryString="from "+ HelpTopic.class.getName()+" topic where (topic.bodyEditKey=:key) ";
+				query=session.createQuery(queryString);
+				query.setParameter("key", key);
+				helpTopic=(HelpTopic) query.uniqueResult();
+			} catch (Exception e) {
+				logger.error(e);
+				throw new AimException(e);
+			}
+		} else {
+			throw new AimException("incorrect parameter key");
+		}
+		return helpTopic;
+	}
 
 	public static boolean cheackEditKey(String key, String siteId,
 			String moduleInstance) throws AimException {
@@ -388,17 +410,18 @@ public class HelpUtil {
 		return helpTopics;
 	}
 
-    public static List<Editor> getAllHelpKey() throws
+    public static List<Editor> getAllHelpKey(String lang) throws
     EditorException {
-	
+System.out.println("lang:"+lang);
+    	
 	Session session = null;
 	List<Editor> helpTopics = new ArrayList<Editor>();
 	
 	try {
 		session = PersistenceManager.getRequestDBSession();
 		 Query q = session.createQuery(" from e in class " +
-                 Editor.class.getName() +" where e.editorKey like 'help%' order by e.lastModDate");
-
+                 Editor.class.getName() +" where e.editorKey like 'help%' and e.language=:lang order by e.lastModDate");
+			q.setParameter("lang", lang);
 		helpTopics = q.list();
 		
 		
@@ -416,36 +439,32 @@ public class HelpUtil {
 	Query query = null;
 	  System.out.println("GetAllHelpData");
 	Collection helpTopics = new ArrayList();
+	HelpSearchData helpsearch;
+	
 	
 	try {
 		session = PersistenceManager.getRequestDBSession();
-		String queryString = "select t from "
+		String queryString = "select e from "
 			+ HelpTopic.class.getName()+ " t, "+ Editor.class.getName()+ " e "
 			+"where (t.bodyEditKey=e.editorKey) order by e.lastModDate";
 		 query = session.createQuery(queryString);
 
 		Iterator itr = query.list().iterator();
-		HelpSearchData helpsearch;
-		
 		while (itr.hasNext()) {
-			HelpTopic help = (HelpTopic) itr.next();
 			helpsearch = new HelpSearchData();
-			helpsearch.setTitleTrnKey(help.getTitleTrnKey());
-			helpsearch.setTopicKey(help.getTopicKey());
-			List<Editor> Body = getbody(help.getBodyEditKey());
-            System.out.println("bodyeditkey:"+help.getBodyEditKey());
-            System.out.println("body:"+Body);
-			Iterator iter = Body.iterator();
-			if(Body != null){
-			while (iter.hasNext()) {
-				Editor item = (Editor) iter.next();
-				helpsearch.setBody(item.getBody());
-				helpsearch.setLastModDate(item.getLastModDate());
-			}
-
-			helpTopics.add(helpsearch);	
+			  Editor edt = (Editor) itr.next();
+			
+			   //System.out.println("body:"+edt.getBody());
+			
+				helpsearch.setBody(edt.getBody());
+				helpsearch.setLastModDate(edt.getLastModDate());
+				helpsearch.setTitleTrnKey(getHelpTopic(edt.getEditorKey()).getTitleTrnKey());
+				helpsearch.setTopicKey(getHelpTopic(edt.getEditorKey()).getTopicKey());
+				helpsearch.setLang(edt.getLanguage());
+		
+				helpTopics.add(helpsearch);	  
 		}
-        }
+		
 		
 		
 	} catch (Exception e) {

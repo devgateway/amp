@@ -9,8 +9,6 @@ import org.digijava.kernel.translator.TranslatorWorker;
 
 public abstract class ParisIndicatorJrxml {
 
-	private static TranslatorWorker trn = TranslatorWorker.getInstance();
-
 	private Site site;
 
 	private String langCode;
@@ -29,14 +27,6 @@ public abstract class ParisIndicatorJrxml {
 
 	public void setLangCode(String langCode) {
 		this.langCode = langCode;
-	}
-
-	public static TranslatorWorker getTrn() {
-		return trn;
-	}
-
-	public static void setTrn(TranslatorWorker trn) {
-		ParisIndicatorJrxml.trn = trn;
 	}
 
 	public void createJrxml(String filePath, String reportName, String selCurr,

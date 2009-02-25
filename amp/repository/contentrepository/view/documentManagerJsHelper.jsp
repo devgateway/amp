@@ -565,7 +565,13 @@ function doSelectedDocuments(action) {
 	if (action == 'set') {
 		callback	= {
 							success:function(o) {
-											window.opener.location.replace(window.opener.location.href+"&"+updatedDocsAction+"=true"); 
+											var urlstr = window.opener.location.href;
+											urlstr = urlstr.replace('~addSector=true',"");
+											urlstr = urlstr.replace('~delPledge=true',"");
+											urlstr = urlstr.replace('~addPledge=true',"");
+											urlstr = urlstr.replace('~remSectors=true',"");
+											//alert(urlstr);
+											window.opener.location.replace(urlstr+"&"+updatedDocsAction+"=true"); 
 											window.close();
 											}
 							};

@@ -137,11 +137,17 @@ public class AddAmpActivity extends Action {
     EditActivityForm eaForm = (EditActivityForm) form;
     session.setAttribute("selectedSectorsForActivity", eaForm.getSectors().getActivitySectors());
     String currCode = "";
-    AmpCurrency curr = CurrencyUtil.getAmpcurrency(
+    AmpCurrency currObj = null;
+    if ( teamMember  != null ) {
+    	currObj = CurrencyUtil.getAmpcurrency(
             teamMember.getAppSettings().getCurrencyId());
-    if (curr != null) {
-        currCode = curr.getCurrencyCode();
     }
+    	        
+    if (currObj != null) {
+        currCode 	= currObj.getCurrencyCode();
+    }
+    else
+    	currCode	= org.digijava.module.aim.helper.Constants.DEFAULT_CURRENCY;
     if (eaForm.getFundingCurrCode() == null) {
         eaForm.setFundingCurrCode(currCode);
     }

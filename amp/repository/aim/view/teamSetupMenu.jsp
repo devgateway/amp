@@ -191,7 +191,7 @@ function putLoading(){
 	return true;
 }
 </script>
-<div style="width:750">
+<div style="width:100%;">
 				<DIV id="tabs">
 					<UL>
 						<c:if test="${selectedTab  == '0'}">

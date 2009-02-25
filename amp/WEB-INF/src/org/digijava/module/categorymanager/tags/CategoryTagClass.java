@@ -241,7 +241,7 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 						logger.info("siteID : "+siteId);
 						logger.info("locale : "+locale);
 						//TODO TRN: there is no record with such key, so using this key is all right, but if we have default text, then lets replace with it.
-						translatedText = TranslatorWorker.translateText("Please select below", locale, siteId);
+						translatedText = TranslatorWorker.translateText("Please select from below", locale, siteId);
 					 } catch (WorkerException e) {
 						e.printStackTrace();
 					 }

@@ -1077,19 +1077,34 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
                          	
                          	if(currentFundingDetail.getFixedExchangeRate() == null)
                          	{
-                            	Double currencyAppliedAmount = getAmountInDefaultCurrency(currentFundingDetail, tm.getAppSettings());
-
+                            	Double currencyAppliedAmount;
+                            	String currencyCode;
+                            	if (tm != null) {
+                            		currencyCode							= CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId() ).getCurrencyCode();
+                            	}
+                            	else { 
+                            		currencyCode							= Constants.DEFAULT_CURRENCY;
+                            	}
+                            	currencyAppliedAmount			= getAmountInDefaultCurrency(currentFundingDetail, currencyCode );
+                            	
                             	String currentAmount = FormatHelper.formatNumber(currencyAppliedAmount);
                             	currentFundingDetail.setTransactionAmount(currentAmount);
-                            	currentFundingDetail.setCurrencyCode(CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId() ).getCurrencyCode());
+                            	currentFundingDetail.setCurrencyCode( currencyCode );
                          	}
                          	else
                          	{
+                         		String currencyCode;
+                            	if (tm != null) {
+                            		currencyCode							= CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId() ).getCurrencyCode();
+                            	}
+                            	else { 
+                            		currencyCode							= Constants.DEFAULT_CURRENCY;
+                            	}
                          		Double fixedExchangeRate = currentFundingDetail.getFixedExchangeRate();
                          		Double currencyAppliedAmount = CurrencyWorker.convert1(FormatHelper.parseDouble(currentFundingDetail.getTransactionAmount()),fixedExchangeRate,1);
                             	String currentAmount = FormatHelper.formatNumber(currencyAppliedAmount);
                             	currentFundingDetail.setTransactionAmount(currentAmount);
-                            	currentFundingDetail.setCurrencyCode(CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId() ).getCurrencyCode());
+                            	currentFundingDetail.setCurrencyCode( currencyCode );
                          	}
                          }
 		            }
@@ -1933,12 +1948,12 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 		eaForm.getComponents().setSelectedComponents(selectedComponents);
 	}
 
-	private double getAmountInDefaultCurrency(FundingDetail fundDet, ApplicationSettings appSet) {
+	private double getAmountInDefaultCurrency(FundingDetail fundDet, String toCurrCode ) {
 		
 		java.sql.Date dt = new java.sql.Date(DateConversion.getDate(fundDet.getTransactionDate()).getTime());
 		double frmExRt = Util.getExchange(fundDet.getCurrencyCode(),dt);
-		String toCurrCode = CurrencyUtil.getAmpcurrency( appSet.getCurrencyId() ).getCurrencyCode();
-		double toExRt = Util.getExchange(toCurrCode,dt);
+		//String toCurrCode = CurrencyUtil.getAmpcurrency( appSet.getCurrencyId() ).getCurrencyCode();
+		double toExRt = Util.getExchange(toCurrCode, dt);
 	
 		double amt = CurrencyWorker.convert1(FormatHelper.parseDouble(fundDet.getTransactionAmount()),frmExRt,toExRt);
 		

@@ -73,12 +73,9 @@
 	<page name="quarterlyReportByProject" title=" : Quarterly Report by Project" />
 	<page name="quarterlyReportBySector" title=" : Quarterly Report by Sector" />
 	<page name="themeManager" title=" - Multi-level Program Manager" />
-	<page page="addTheme" name="aim_addProgram" title="AMP - Add Program"/>
 	<page page="addThemeIndicator" name="aim_addPrgIndicator" title=" - Add Program Indicator"/>
 	<page page="editThemeIndicator" name="aim_editPrgIndicator" title=" - Edit Program Indicator"/>
 	<page name="addSubTheme" title=" - Add Sub Program"/>
-	<page page="editTheme" name="aim_editTheme" title="AMP - Edit Program" />
-	<page name="deleteTheme" title=" - Delete Program" />
 	<page name="viewTheme" title=" - View Program" />
 	<page name="overallIndicatorManager" title=" - Indicator Manager" />
 	<page page="editAllIndicator" name="aim_editAllIndicator" title="AMP - Edit Indicator"/>

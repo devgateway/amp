@@ -50,8 +50,8 @@
 
 		function addProgram()
 		{
-			openNewWindow(400,300);
-			<digi:context name="addNewTh" property="context/module/moduleinstance/addNewTheme.do"/>
+			openNewWindow(600,500);
+			<digi:context name="addNewTh" property="context/module/moduleinstance/addTheme.do?event=add"/>
 			document.aimThemeForm.action = "<%=addNewTh%>";
 			document.aimThemeForm.target = popupPointer.name;
 			document.aimThemeForm.submit();
@@ -61,18 +61,19 @@
 
 		function addSubProgram(rutId,id,level,name)
 		{
-			openNewWindow(400, 300);
-			<digi:context name="subProgram" property="context/module/moduleinstance/addSubPrgInd.do?event=addSubProgram"/>
+			openNewWindow(600,500);
+			<digi:context name="subProgram" property="context/module/moduleinstance/addTheme.do?event=addSubProgram"/>
 			document.aimThemeForm.action = "<%= subProgram %>&themeId=" + id + "&indlevel=" + level + "&indname=" + name + "&rootId=" + rutId;
 			document.aimThemeForm.target = popupPointer.name;
 			document.aimThemeForm.submit();
 		}
 
+
 		
 		function editProgram(id)
 		{
-			openNewWindow(400,300);
-			<digi:context name="editTh" property="context/module/moduleinstance/editTheme.do?event=edit"/>
+			openNewWindow(600,500);
+			<digi:context name="editTh" property="context/module/moduleinstance/addTheme.do?event=edit"/>
 			document.aimThemeForm.action = "<%= editTh %>&themeId=" + id;
 			document.aimThemeForm.target = popupPointer.name;
 			document.aimThemeForm.submit();

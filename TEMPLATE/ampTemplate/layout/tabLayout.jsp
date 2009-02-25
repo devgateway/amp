@@ -49,11 +49,6 @@
 
 			}
 
-			function quitRnot1(message)
-			{
-
-			}
-
 		</SCRIPT>
 
 	</HEAD>

@@ -1561,9 +1561,6 @@ public class TeamMemberUtil {
                         Iterator<AmpCalendar> calIter=ampCalendarEvents.iterator();
                         while (calIter.hasNext()) {
                             AmpCalendar cal = calIter.next();
-                           /* Calendar calendar = (Calendar) session.load(Calendar.class, cal.getCalendarPK().getCalendar().getId());
-                            AmpCalendarPK ampCalendarPK = new AmpCalendarPK(calendar);
-                            AmpCalendar ampCalendar = (AmpCalendar) session.load(AmpCalendar.class, ampCalendarPK);*/
                             session.delete(cal);
                         }
                     }

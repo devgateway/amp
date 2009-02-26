@@ -26,9 +26,9 @@ function validate(topickey){
   }
 
 function edit(){
-
+	
     if(validate(getKey())){
-
+    	alert(getKey());
         <digi:context name="editTopic" property="context/module/moduleinstance/helpActions.do~actionType=editHelpTopic"/>
 		document.helpForm.action = "<%=editTopic%>~topicKey="+getKey()+"~wizardStep=0";
 		document.helpForm.target = "_self";
@@ -42,8 +42,8 @@ function remove(){
 
     if(validate(getKey())){
 
-        <digi:context name="editTopic" property="context/module/moduleinstance/helpActions.do~actionType=deleteHelpTopic"/>
-		document.helpForm.action = "<%=editTopic%>~topicKey="+getKey()+"~wizardStep=0";
+        <digi:context name="removeTopic" property="context/module/moduleinstance/helpActions.do~actionType=deleteHelpTopics"/>
+		document.helpForm.action = "<%=removeTopic%>~topicKey="+getKey()+"~wizardStep=0~multi=false";
 		document.helpForm.target = "_self";
 		document.helpForm.submit();
 

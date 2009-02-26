@@ -204,6 +204,29 @@ public class HelpUtil {
 		return helpTopic;
 	}
     
+    public static HelpTopic getHelpTopicByBodyEditKey(String bodyEditKey,String siteId,String moduleInstance) throws AimException {
+		Session session = null;
+		Query query = null;
+		HelpTopic helpTopic = null;
+		if (bodyEditKey != null && !bodyEditKey.equals("")) {
+			try {
+				session = PersistenceManager.getRequestDBSession();
+				String queryString="from "+ HelpTopic.class.getName()+" topic where (topic.bodyEditKey=:bodyEditKey) " +
+						" and (topic.siteId=:siteId) and (topic.moduleInstance=:moduleInstance) ";
+				query=session.createQuery(queryString);
+				query.setParameter("siteId", siteId);
+				query.setParameter("moduleInstance", moduleInstance);
+				query.setParameter("bodyEditKey", bodyEditKey);
+				helpTopic=(HelpTopic) query.uniqueResult();
+			} catch (Exception e) {
+				logger.error(e);
+				throw new AimException(e);
+			}
+		} else {
+			throw new AimException("incorrect parameter key");
+		}
+		return helpTopic;
+	}
     
     public static HelpTopic getHelpTopic(String key) throws AimException {
 		Session session = null;

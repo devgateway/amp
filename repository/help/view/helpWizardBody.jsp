@@ -107,7 +107,9 @@
 																					<td align="right"><digi:trn key="help:topic:key">Help Topic key</digi:trn></td>
 																					<td align="left"><html:text property="topicKey" /></td>
 																				</tr>
+																				
 																				<c:if test="${not empty helpForm.topicTree}">
+																				 
 																				<tr>
 																					<td align="right"><digi:trn key="help:selectGroup">Select group</digi:trn></td>
 																					<td align="left">
@@ -119,7 +121,9 @@
 																						</html:select>
 																					</td>
 																				</tr>
+																				
 																				</c:if>
+																			
 																				<tr>
 																					<td colspan="2">
 																						<table width="100%">
@@ -309,6 +313,7 @@
 																						</tr>
 																					</c:forEach>
 																				</c:if>
+																				<!-- 
 																				<tr>
 																					<td align="right"><digi:trn key="help:selectGroup">Select group</digi:trn></td>
 																					<td align="left">
@@ -325,6 +330,7 @@
 																						</c:if>
 																					</td>
 																				</tr>
+																				-->
 																				<tr>
 																					<td align="right"><STRONG><digi:trn>Title</digi:trn></STRONG></td>
 																					<td align="left"><digi:trn linkAlwaysVisible="true">${helpForm.topicKey}</digi:trn></td>

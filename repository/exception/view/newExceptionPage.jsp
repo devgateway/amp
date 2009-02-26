@@ -109,12 +109,20 @@
 				        			</a>
 				        		</li> 
 				        		<li>Go to the 
-					        		<c:set var="translation">
-										<digi:trn>Click here to view MyDesktop</digi:trn>
-									</c:set>
-									<digi:link href="/viewMyDesktop.do" styleClass="comment" title="${translation}">
-			                        	Desktop
-									</digi:link>
+					        		<logic:present name="ampAdmin" scope="session">
+										<logic:equal name="ampAdmin" value="yes">
+											<digi:link href="/admin.do" module="aim" >
+						                        <digi:trn key="aim:adminPage">Admin Page</digi:trn>
+						                    </digi:link>
+										</logic:equal>
+									</logic:present>
+									<logic:present name="ampAdmin" scope="session">
+										<logic:equal name="ampAdmin" value="no">
+				                              <a href="/showDesktop.do" >
+				                                 <digi:trn key="aim:desktop">Desktop</digi:trn>
+				                              </a>
+										</logic:equal>
+									</logic:present>
 								</li>
 				        	You don't happen to be a <a href="javascript:toggleLayer('devInfo');"> developer</a>, do you? 
 				        </span>

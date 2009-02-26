@@ -29,7 +29,7 @@ function changeState() {
     document.calendarViewForm.resetFilter.value= false;
 
   }
-}
+} 
 </script>
 
 
@@ -107,9 +107,9 @@ function changeState() {
 	  &nbsp;Public events
 	  </digi:trn>
 	</div>
-	<div style="padding:5px;width:200px;height:28px;">
+	<div style="padding:5px;width:250px;height:28px;">
 		<field:display name="Run Filter Button" feature="Filter">
-			<input type="submit" value="<digi:trn key="calendar:runFilter">Run Filter</digi:trn>" style="width:88px;" />
+			<input type="submit" value="<digi:trn key="calendar:runFilter">Run Filter</digi:trn>" style="min-width:88px;" />
 		</field:display>
 	    &nbsp;
 	    <field:display name="Reset Filter Button" feature="Filter">

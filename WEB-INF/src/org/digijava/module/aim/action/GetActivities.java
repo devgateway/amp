@@ -309,9 +309,9 @@ public class GetActivities extends Action {
 				temp += item.getXml();
 			}
 		}
-		result += " proposedSum=\"" + FormatHelper.formatNumberUsingCustomFormat(proposedSum) + "\" ";
-		result += " actualSum=\"" + FormatHelper.formatNumberUsingCustomFormat(actualSum) + "\" ";
-		result += " actualDisbSum=\"" + FormatHelper.formatNumberUsingCustomFormat(actualDisbSum) + "\" ";
+		result += " proposedSum=\"" +((proposedSum!=0)? FormatHelper.formatNumber(proposedSum):0) + "\" ";
+		result += " actualSum=\"" + ((actualSum!=0)? FormatHelper.formatNumber(actualSum):0)+ "\" ";
+		result += " actualDisbSum=\"" + ((actualDisbSum!=0)? FormatHelper.formatNumber(actualDisbSum):0) + "\" ";
 		result += " totalPages=\""+maxPages+"\" ";
 		result += ">" + temp + "</" + ROOT_TAG + ">";
 		return result;

@@ -16,7 +16,7 @@
         <td colspan="2" rowspan="2" class="tableHeaderCls">
             PARIS DECLARATION INDICATORS - DONORS</td>
         <td colspan="3" align="center" class="tableHeaderCls">
-            All donors
+            <digi:trn key="parisIndicatorAllDonors">All donors</digi:trn>
        </td>
        <td colspan="2" align="center" class="tableHeaderCls">
            ${orgProfilePIForm.organization.name}

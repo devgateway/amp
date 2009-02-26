@@ -316,8 +316,9 @@ function load()
 									<%--<td width="15%" align="center" height="65" rowspan="3"> --%>
 									<td width="15%" align="center" height="65" rowspan='<c:out value="${yearRange}" />' >
 										<div align="center">
-											<strong>
+											<strong><digi:trn key="aim:parisIndicatorDonor">
 											<nested:write property="donor" />
+											</digi:trn>
 											</strong>
 										</div>
 									</td>

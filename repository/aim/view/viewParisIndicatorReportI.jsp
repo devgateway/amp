@@ -566,7 +566,11 @@ function toggleSettings(){
 							</tr>
 							<tr>
 								<td style="padding:5">
-                                    <strong><p><img src="/TEMPLATE/ampTemplate/images/info.png" width="15" height="15"> <digi:trn>${aimParisIndicatorReportForm.indicatorName}</digi:trn></p></strong>
+									<strong><p><img src="/TEMPLATE/ampTemplate/images/info.png" width="15" height="15">
+									<c:if test="${aimParisIndicatorReportForm.indicatorName != null}">
+									<digi:trn key="aim:parisIndicator:name"> ${aimParisIndicatorReportForm.indicatorName}</digi:trn>
+									</c:if>
+									</p></strong>
 								</td>
 							</tr>
 							<tr align="top">
@@ -761,7 +765,7 @@ function toggleSettings(){
 				                                            <c:set var="key">${fn:replace(key, " ", "")}</c:set>
 				                                            <c:set var="key">${fn:replace(key, "%", "")}</c:set>
 		                                            		<c:set var="key">${fn:toLowerCase(key)}</c:set>
-															<strong><nested:write property="donor" /></strong>
+															<strong><digi:trn key="aim:parisIndicatorDonor"><nested:write property="donor" /></digi:trn></strong>
 														</div>
 													</td> 
 													<nested:iterate property="answers"> 

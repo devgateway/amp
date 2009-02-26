@@ -195,9 +195,10 @@
 									<tr>
 										<td width="15%" align="center" height="65">
 											<div align="center">
-												<strong>
-												<nested:write property="donor" />
-												</strong>
+											<strong><digi:trn key="aim:parisIndicatorDonor">
+											<nested:write property="donor" />
+											</digi:trn>
+											</strong>
 											</div>
 										</td>
 										<nested:iterate property="answers">

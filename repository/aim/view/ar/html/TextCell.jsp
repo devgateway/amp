@@ -4,12 +4,14 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
+
 <bean:define id="textCell" name="viewable" type="org.dgfoundation.amp.ar.cell.TextCell" scope="request" toScope="page" />
 <bean:define id="caller" name="caller" scope="request" toScope="page" />
 <logic:present name="starFlag" scope="request">
 	<bean:define id="starFlagLocal" name="starFlag" scope="request" toScope="page" />
 </logic:present>
 
+<logic:notEqual name="textCell"  property="translationKey" value="0">
 <div align="left" style="padding-left:<%=request.getAttribute("pading")%>" title='<digi:trn key="html.TextCell.${textCell.translationKey}"><bean:write name="textCell" property="shortTextVersion" filter="false"/></digi:trn>'>
 	<%if (textCell.getShortTextVersion().length() > 39){ %>
 		<logic:present name="starFlag" scope="request">
@@ -25,6 +27,8 @@
 		<digi:trn key="html.TextCell.${textCell.translationKey}"><bean:write name="textCell" property="shortTextVersion" filter="false"/></digi:trn>
 	<%}%>
 </div>
+</logic:notEqual>
+
 
 <logic:notEqual name="caller" property="class.name" value="org.dgfoundation.amp.ar.cell.ListCell">
 <logic:equal name="textCell" property="hasLongVersion" value="true">

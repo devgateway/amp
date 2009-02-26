@@ -277,7 +277,7 @@ public class HelpActions extends DispatchAction {
 		helpForm.setHelpErrors(null);
 		if(request.getParameter("multi")!=null && request.getParameter("multi").equals("false")){
 			if (helpForm.getTopicKey() != null) {
-				HelpTopic helpTopic = HelpUtil.getHelpTopic(helpForm.getTopicKey(),	siteId, moduleInstance);
+				HelpTopic helpTopic = HelpUtil.getHelpTopicByBodyEditKey("help:topic:body:"+helpForm.getTopicKey(),	siteId, moduleInstance);
 				if(helpTopic!=null){
 					removeLastLevelTopic(helpTopic);
 					helpForm.setTopicKey("");
@@ -285,6 +285,9 @@ public class HelpActions extends DispatchAction {
 			  }
 			}
 		}else if(request.getParameter("multi").equals("true")){
+			// delete Lucene helpSearch Directory 
+			File path = new File(sc.getRealPath("/") +"lucene" +"/" + "help");
+			LuceneUtil.deleteDirectory(path);
 			//remove all topics that were selected
 			String tIds=request.getParameter("tIds");
 			List<Long> topicsIds=getTopicsIds(tIds.trim());
@@ -296,9 +299,9 @@ public class HelpActions extends DispatchAction {
 			}			
 		}
 		
-// delete Lucene helpSearch File 
-		File path = new File(sc.getRealPath("/") +"lucene" +"/" + "help");
-		LuceneUtil.deleteDirectory(path);
+
+			
+	
 		
         if(page != null){
             if(!page.equals("admin")){
@@ -351,10 +354,15 @@ public class HelpActions extends DispatchAction {
 		String moduleInstance = RequestUtils.getRealModuleInstance(request)
 				.getInstanceName();
 		String page  = request.getParameter("page");
+		String topicKey = request.getParameter("topicKey");
+		if(topicKey == null && helpForm.getTopicKey() != null){
+			topicKey = helpForm.getTopicKey();
+		}
 		helpForm.setPage(page);
-		String key = HelpUtil.getTrn(helpForm.getTopicKey(), request);
-		HelpTopic helpTopic = HelpUtil.getHelpTopic(key,
+		//String key = HelpUtil.getTrn(topicKey, request);
+		HelpTopic helpTopic = HelpUtil.getHelpTopicByBodyEditKey("help:topic:body:"+topicKey,
 				siteId, moduleInstance);
+		
 		if (helpTopic == null) {
 			throw new AimException("helpTopic Not Found");
 		} else {

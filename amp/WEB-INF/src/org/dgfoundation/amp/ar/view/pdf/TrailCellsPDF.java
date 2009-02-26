@@ -70,11 +70,11 @@ public class TrailCellsPDF extends PDFExporter {
 			TranslatorWorker translator=TranslatorWorker.getInstance();
 			String siteId=parent.getReportMetadata().getSiteId();
 			String locale=parent.getReportMetadata().getLocale();
-			String totalsFor="TOTALS for";
+			String totalsFor="Totals For";
 			String translatedName=grd.getName();
 			try{
 				//TODO TRN: no record for this key. its all right to have key here but it is better to replace with default text
-				totalsFor=TranslatorWorker.translateText("rep:pop:totalsFor",locale,siteId);
+				totalsFor=TranslatorWorker.translateText(totalsFor,locale,siteId);
 				//String namePrefix="rep:pop:";
 				translatedName=TranslatorWorker.translateText(grd.getName(),locale,siteId );
 			}
@@ -82,9 +82,7 @@ public class TrailCellsPDF extends PDFExporter {
 			String result;
 			
 			//create the actual output string for the totals line
-			if(totalsFor.compareTo("")==0)
-				result="TOTALS FOR: ";
-			else result=totalsFor+": ";
+			result=totalsFor+": ";
 			
 			if(translatedName.compareTo("")==0 )
 				result+=grd.getName();

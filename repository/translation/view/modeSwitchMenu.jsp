@@ -36,10 +36,5 @@
 				<a onclick="return quitRnot1('${msg}')" href="/translation/showAdvancedTranslation.do">
 		        <digi:trn key="trn:AdvancedMode">Advanced Mode</digi:trn>
                 </a>
-			</li>
-            <li>
-				<a onclick="return quitRnot1('${msg}')" href="/translation/showEditPermissions.do">
-				<digi:trn key="trn:TranslationAdmin">Translation Administration</digi:trn>
-                </a>
-			</li>
+			</li>         
 </digi:secure>

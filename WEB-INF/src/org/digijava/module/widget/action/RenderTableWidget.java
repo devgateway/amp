@@ -34,19 +34,23 @@ public class RenderTableWidget extends Action {
 		Long tableId 	= fTable.getTableId();
 		Long columnId 	= fTable.getColumnId();
 		Long itemId 	= fTable.getItemId();
-		WiTable table = new WiTable.TableBuilder(tableId).build();
-		if (columnId!=null && itemId!=null && columnId.longValue()>0 && itemId.longValue()>0){
-			WiColumnDropDownFilter filter = (WiColumnDropDownFilter) table.getColumnById(columnId);
-			//TODO this is not correct, check why columnId and itemId are not null when table is normal table.
-			if (filter!=null){
-				filter.setActiveItemId(itemId);
+		try{
+			WiTable table = new WiTable.TableBuilder(tableId).build();
+			if (columnId!=null && itemId!=null && columnId.longValue()>0 && itemId.longValue()>0){
+				WiColumnDropDownFilter filter = (WiColumnDropDownFilter) table.getColumnById(columnId);
+				//TODO this is not correct, check why columnId and itemId are not null when table is normal table.
+				if (filter!=null){
+					filter.setActiveItemId(itemId);
+				}
 			}
+			String html = table.generateHtml();	
+			OutputStreamWriter outputStream = new OutputStreamWriter( response.getOutputStream(),"UTF-8");
+			PrintWriter out = new PrintWriter(outputStream, true);
+			out.println(html);
+			response.getOutputStream().close();
+		}catch(Exception e){
+			logger.error("RenderTableWidget::execute()", e);
 		}
-		String html = table.generateHtml();	
-		OutputStreamWriter outputStream = new OutputStreamWriter( response.getOutputStream(),"UTF-8");
-		PrintWriter out = new PrintWriter(outputStream, true);
-		out.println(html);
-		response.getOutputStream().close();
 		return null;
 	}
 	

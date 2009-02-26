@@ -28,7 +28,7 @@ function validate(topickey){
 function edit(){
 	
     if(validate(getKey())){
-    	alert(getKey());
+    	
         <digi:context name="editTopic" property="context/module/moduleinstance/helpActions.do~actionType=editHelpTopic"/>
 		document.helpForm.action = "<%=editTopic%>~topicKey="+getKey()+"~wizardStep=0";
 		document.helpForm.target = "_self";

@@ -146,7 +146,7 @@ public class TeamMemberUtil {
 		Session session = null;
 
 		try {
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 			// modified by Priyajith
 			// desc:used select query instead of session.load
 			// start
@@ -162,13 +162,7 @@ public class TeamMemberUtil {
 			// end
 		} catch (Exception ex) {
 			logger.error("Unable to get team member ", ex);
-		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed", ex2);
-			}
-		}
+		} 
 		return ampMember;
 	}
 
@@ -719,8 +713,8 @@ public class TeamMemberUtil {
 		Collection memCollInfo = new ArrayList();
 		try {
 			Query q = null;
-			session = PersistenceManager.getSession();
-			query = "select  from " + AmpTeamMember.class.getName()+" where member.user=:memberId";
+			session = PersistenceManager.getRequestDBSession();
+			query = "select m from " + AmpTeamMember.class.getName()+" m where m.user=:memberId";
 			q = session.createQuery(query);
 			q.setParameter("memberId", userId, Hibernate.LONG);
 			if (q != null) {
@@ -736,13 +730,7 @@ public class TeamMemberUtil {
 		} catch (Exception e) {
 			logger.error("Exception in getTeamMemberInformation() : ", e);
 			e.printStackTrace(System.out);
-		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed for getMemberInformation()");
-			}
-		}
+		} 
 
 		return info;
 	}

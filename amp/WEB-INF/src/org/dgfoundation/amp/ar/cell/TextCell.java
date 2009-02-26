@@ -75,7 +75,7 @@ public class TextCell extends Cell {
 	 */
 	public String getTranslationKey(){
 		String result = "0";
-		if (value != null){
+		if (value != null && !"".equals(value)){
 			result = Integer.toString(value.hashCode());
 		}
 		return result;

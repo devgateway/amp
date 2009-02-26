@@ -566,7 +566,7 @@ function toggleSettings(){
 							</tr>
 							<tr>
 								<td style="padding:5">
-									<strong><p><img src="/TEMPLATE/ampTemplate/images/info.png" width="15" height="15"> ${aimParisIndicatorReportForm.indicatorName}</p></strong>
+                                    <strong><p><img src="/TEMPLATE/ampTemplate/images/info.png" width="15" height="15"> <digi:trn>${aimParisIndicatorReportForm.indicatorName}</digi:trn></p></strong>
 								</td>
 							</tr>
 							<tr align="top">

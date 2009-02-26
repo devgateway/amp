@@ -543,7 +543,7 @@ function toggleSettings(){
 													<LI>
 														<span>
 															<digi:link href="/parisIndicatorReport.do" name="urlParams" styleClass="h-box" title="${translation}" target="_self">
-															<div>
+															<div style="max-width: 100px">
 																<digi:trn key="aim:parisIndicator:${report.indicatorCode}"><c:out value="Paris Indicator ${report.indicatorCode}"/></digi:trn>
 									                        </div>
 															</digi:link>

@@ -233,14 +233,12 @@ function setHoveredTable(tableId, hasHeaders) {
 							style="position: relative; left: 20px">
 							<tr style="display: table-row" id="myDocumentstr">
 								<td colspan="3">
-									<logic:notEmpty name="crDocumentManagerForm" property="myPersonalDocuments">
 									<br />
 									<div id="my_markup" align="left" class="all_markup">
 									<bean:define name="crDocumentManagerForm" property="myPersonalDocuments" id="documentDataCollection" type="java.util.Collection" toScope="request" />
 									<jsp:include page="documentTable.jsp" flush="true" />
 									</div>
 									<br />
-									</logic:notEmpty>
 								</td>
 							</tr>
 						</table>
@@ -266,14 +264,12 @@ function setHoveredTable(tableId, hasHeaders) {
 						style="position: relative; left: 20px" >
 						<tr style="display: table-row" id="teamDocumentstr">
 							<td colspan="3">
-								<logic:notEmpty name="crDocumentManagerForm" property="myTeamDocuments">
 								<br />
 								<div id="team_markup" align="center" class="all_markup">
 								<bean:define name="crDocumentManagerForm" property="myTeamDocuments" id="documentDataCollection" type="java.util.Collection" toScope="request" />
 								<jsp:include page="documentTable.jsp" flush="true" />
 								</div>
 								<br />
-								</logic:notEmpty>
 							</td>
 						</tr>
 					</table>
@@ -284,7 +280,7 @@ function setHoveredTable(tableId, hasHeaders) {
 							<tr>
 								<td>
 									<br />
-									<div id="team_markup" align="center" class="all_markup">
+									<div id="public_markup" align="center" class="all_markup">
 									<div id="publicDocumentsDiv">&nbsp;</div>
 									</div>
 									<br />
@@ -299,7 +295,7 @@ function setHoveredTable(tableId, hasHeaders) {
 						<tr>
 							<td>
 								<br />
-								<div id="team_markup" align="center" class="all_markup">
+								<div id="other_markup" align="center" class="all_markup">
 								<div id="otherDocumentsDiv">&nbsp;</div>
 								</div>
 								<br />
@@ -394,14 +390,15 @@ function setHoveredTable(tableId, hasHeaders) {
 
 <script type="text/javascript">
 YAHOO.namespace("YAHOO.amp.table");
-YAHOO.amp.table.mytable	= YAHOO.amp.table.enhanceMarkup("team_markup");
-YAHOO.amp.table.teamtable	= YAHOO.amp.table.enhanceMarkup("my_markup");
 </script>
 <script type="text/javascript">
 	initFileUploads();
 </script>
 <script type="text/javascript">
 	function afterPageLoad(e) {
+		YAHOO.amp.table.mytable	= YAHOO.amp.table.enhanceMarkup("my_markup");
+		YAHOO.amp.table.teamtable	= YAHOO.amp.table.enhanceMarkup("team_markup");
+		
 		windowController	= newWindow( "${publicResourcesWindowName}", false, 'publicDocumentsDiv');
 		windowController.populateWithPublicDocs();
 

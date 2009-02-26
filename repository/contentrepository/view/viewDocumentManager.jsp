@@ -209,12 +209,21 @@ function setHoveredTable(tableId, hasHeaders) {
 			<tr><td>
 			<div id="demo" class="yui-navset">
 			    <ul class="yui-nav">
-			        <li id="tab1" class="selected"><a href="#my_res"><div><digi:trn key="rep:res:dhtmlTab:myresources">My Resources</digi:trn></div></a></li>
-			        <li id="tab2"><a href="#team_res"><div><digi:trn key="rep:res:dhtmlTab:teamResources">Team Resources</digi:trn></div></a></li>
-			        <li id="tab3"><a href="#public_res"><div><digi:trn key="rep:res:dhtmlTab:publicResources">Public Resources</digi:trn></div></a></li>
-			        <li id="tab4"><a href="#team_mem_res"><div><digi:trn key="rep:res:dhtmlTab:otherResources">Other Resources</digi:trn></div></a></li>
+			        <feature:display name="My Resources" module="Resources">
+			        	<li id="tab1" class="selected"><a href="#my_res"><div><digi:trn key="rep:res:dhtmlTab:myresources">My Resources</digi:trn></div></a></li>
+			        </feature:display>
+			        <feature:display name="Team Resources" module="Resources">
+			        	<li id="tab2"><a href="#team_res"><div><digi:trn key="rep:res:dhtmlTab:teamResources">Team Resources</digi:trn></div></a></li>
+					</feature:display>
+					<feature:display name="Public Resources" module="Resources">
+			        	<li id="tab3"><a href="#public_res"><div><digi:trn key="rep:res:dhtmlTab:publicResources">Public Resources</digi:trn></div></a></li>
+			        </feature:display>
+			        <feature:display name="Other Resources" module="Resources">
+			        	<li id="tab4"><a href="#team_mem_res"><div><digi:trn key="rep:res:dhtmlTab:otherResources">Other Resources</digi:trn></div></a></li>
+			        </feature:display>
 			    </ul>            
 			    <div class="yui-content" style="background-color: #EEEEEE;">
+			      <feature:display name="My Resources" module="Resources">
 			        <div id="my_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">
 			        <div>
 			        <table width="500" border="0" cellpadding="3" cellspacing="0" style="padding-left:30px;">
@@ -243,7 +252,8 @@ function setHoveredTable(tableId, hasHeaders) {
 							</tr>
 						</table>
 					</div>
-
+					</feature:display>
+					<feature:display name="Team Resources" module="Resources">
 			        <div id="team_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">
 			        <div>
 			        <table width="500" border="0" cellpadding="3" cellspacing="0" style="padding-left:30px;">
@@ -274,6 +284,8 @@ function setHoveredTable(tableId, hasHeaders) {
 						</tr>
 					</table>
 			        </div>
+					</feature:display>
+					<feature:display name="Public Resources" module="Resources">
 			        <div id="public_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">				        	       
 						<table border="0" cellPadding=1 cellSpacing=0 width="100%"
 							style="position: relative; left: 20px" >
@@ -288,21 +300,23 @@ function setHoveredTable(tableId, hasHeaders) {
 							</tr>
 						</table>	        
 			        </div>
-			        
-			        <div id="team_mem_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">
-			        <table border="0" cellPadding=1 cellSpacing=0 width="100%"
-						style="position: relative; left: 20px" >
-						<tr>
-							<td>
-								<br />
-								<div id="other_markup" align="center" class="all_markup">
-								<div id="otherDocumentsDiv">&nbsp;</div>
-								</div>
-								<br />
-							</td>
-						</tr>
-					</table>
-			    </div>			    
+			        </feature:display>
+			        <feature:display name="Other Resources" module="Resources">
+				        <div id="team_mem_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">
+					        <table border="0" cellPadding=1 cellSpacing=0 width="100%"
+								style="position: relative; left: 20px" >
+								<tr>
+									<td>
+										<br />
+										<div id="other_markup" align="center" class="all_markup">
+										<div id="otherDocumentsDiv">&nbsp;</div>
+										</div>
+										<br />
+									</td>
+								</tr>
+							</table>
+				    	</div>
+			    	</feature:display>			    
 			</div>			
 			<div id="addDocumentDiv" style="display: none">
 				<div align="center">

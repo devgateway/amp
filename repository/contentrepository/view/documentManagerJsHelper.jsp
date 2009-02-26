@@ -92,6 +92,8 @@
 <script type="text/javascript">
 	YAHOO.namespace("YAHOO.amp");
 	YAHOO.namespace("YAHOO.amp.table");
+
+	YAHOO.widget.DataTable.MSG_EMPTY = "<digi:trn key="aim:noRecordsFound">No records found</digi:trn>";
 	
 	/* AJAX Callback object for showing versions*/
 	var callbackForVersions	= {
@@ -271,7 +273,9 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
 
 	var dataTable 				= new YAHOO.widget.DataTable(markupName, this.columnSet, null, options);
 
-	YAHOO.widget.DataTable.MSG_EMPTY = "<digi:trn key="aim:noRecordsFound">No records found</digi:trn>";
+	if ( dataTable.getRecordSet().getLength() == null || dataTable.getRecordSet().getLength() == 0 ) {
+		dataTable.showEmptyMessage();
+	}
     return dataTable;
 };
 

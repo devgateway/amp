@@ -225,7 +225,11 @@ public class CalendarViewForm  extends ActionForm {
   }
 
   public void reset(ActionMapping mapping, HttpServletRequest request) {
-    /* if(filter!=null){
+	  String[] emptylist = new String[0];
+	  if (this.filter != null){
+		  this.filter.setSelectedEventTypes(emptylist);
+	  }
+	  /* if(filter!=null){
        this.filter.setShowPublicEvents(false);
      }
     */

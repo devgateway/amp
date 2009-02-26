@@ -88,7 +88,7 @@
                           </tr>
                           
                           <tr>
-                          <feature:display name="Global Permission Manager" module="ADMINISTRATIVE SECTION"> 
+                          <module:display name="Global Permission Manager" parentModule="ADMINISTRATIVE SECTION"> 
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
                               <c:set var="gatePermLink">
@@ -100,7 +100,7 @@
                                 </digi:trn>
                               </html:link>
                             </td>
-                           </feature:display>
+                           </module:display>
                           </tr>
                           <tr>
                             <td class="f-names" nowrap="nowrap">

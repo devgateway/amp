@@ -5,6 +5,8 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/globalsettings" prefix="globalsettings"%>
+
 <style>
 .contentbox_border{
 	border: 	1px solid #666666;
@@ -14,15 +16,34 @@
 </style>
 
 <script type="text/javascript">
+BASE_YEAR	= <globalsettings:value name="Year Range Start" />;
 function validade(){
   var defReportsPerPage = document.getElementById("defRecsPerPage");
   if(parseInt(defReportsPerPage.value)<0){
 	  alert("You cannot enter 0 for number of projects and activities per page.");
 	  return false;
   }
+  if ( !checkYear( parseInt(aimUpdateAppSettingsForm.reportStartYear.value), BASE_YEAR, 200 ) ) {
+	aimUpdateAppSettingsForm.reportStartYear.focus();
+	alert("<digi:trn>Chosen report start year is not realistic</digi:trn>");
+	return false;
+  }
+  if ( !checkYear( parseInt(aimUpdateAppSettingsForm.reportEndYear.value), BASE_YEAR, 200 ) ) {
+	aimUpdateAppSettingsForm.reportEndYear.focus();
+	alert("<digi:trn>Chosen report end year is not realistic</digi:trn>");
+	return false;
+  }
   document.aimUpdateAppSettingsForm.save.value = "save";
   document.aimUpdateAppSettingsForm.submit();
   return true;
+}
+function checkYear( year, base, range ) {
+	if ( year == 0 )
+		return true;
+	if ( year > base + range || year < base - range )
+		return false;
+	return true;
+	
 }
 </script>
 

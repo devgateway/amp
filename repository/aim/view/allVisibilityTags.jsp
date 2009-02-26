@@ -66,6 +66,7 @@
 <module:display name="WIDGETS"></module:display>
 <module:display name="Org Profile"></module:display>
 <module:display name="Resources"></module:display>
+<module:display name="Global Permission Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <feature:display name="My Resources" module="Resources"></feature:display> 
 <feature:display name="Team Resources" module="Resources"></feature:display>
 <feature:display name="Public Resources" module="Resources"></feature:display>
@@ -138,7 +139,6 @@
 <feature:display name="Filter Button" module="Report and Tab Options"></feature:display> 
 <feature:display name="Financial Progress Tab" module="Funding"></feature:display> 
 <feature:display name="Funding Information" module="Funding"></feature:display> 
-<feature:display name="Global Permission Manager" module="ADMINISTRATIVE SECTION"></feature:display> 
 <feature:display name="Government Contact Information" module="Contact Information"></feature:display> 
 <feature:display name="Identification" module="Project ID and Planning"></feature:display> 
 <feature:display name="Implementing Agency" module="Organizations"></feature:display> 

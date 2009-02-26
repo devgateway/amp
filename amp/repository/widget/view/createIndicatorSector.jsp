@@ -184,9 +184,7 @@
                     </tr>
                     <tr>
                         <td align="right">
-                            <html:submit onclick="return validate()">
-                                <digi:trn key="gis:createIndicatorSector:btnSave">Save</digi:trn>
-                            </html:submit>
+                             <input type="button" onclick="validate()" value="<digi:trn>Save</digi:trn>"/>
                         </td>
                         <td>
                             <input type="button" value="Cancel" onclick="cancel()">

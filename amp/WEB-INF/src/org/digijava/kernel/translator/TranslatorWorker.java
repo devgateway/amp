@@ -22,6 +22,7 @@
 
 package org.digijava.kernel.translator;
 
+import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -1842,5 +1843,18 @@ public class TranslatorWorker {
 		} catch (DgException e) {
 			throw new WorkerException("Cannot load AMP Site!",e);
 		}
+	}
+	
+	/**
+	 * Converts an Unicode string into UTF-8 string.
+	 * @param original
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	public static String unicodeToUTF8(String original) throws UnsupportedEncodingException{
+		String newString = null;
+		byte[] tempBytes = original.getBytes("UTF8");
+		newString = new String(tempBytes);
+		return newString;
 	}
 }

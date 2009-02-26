@@ -6,8 +6,11 @@ import java.io.PrintStream;
 import java.util.List;
 import java.util.ListIterator;
 
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.translator.TranslatorWorker;
+
 public class ParisIndicator5bSubJrxml extends ParisIndicatorJrxml {
-    public synchronized void createSubJrxml(String filePath, String reportName, List data) throws IOException {
+    public synchronized void createSubJrxml(String filePath, String reportName, List data) throws IOException, WorkerException {
 
         FileOutputStream out = new FileOutputStream(filePath);
         PrintStream p = new PrintStream(out);
@@ -124,7 +127,7 @@ public class ParisIndicator5bSubJrxml extends ParisIndicatorJrxml {
                 p.println("					<textElement textAlignment='Center'>");
                 p.println("						<font isBold='true'/>");
                 p.println("					</textElement>");
-                p.println("				<text><![CDATA[Percent of donors that use national procurement systems]]></text>");
+                p.println("				<text><![CDATA[ "+ TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Percent of donors that use national procurement systems", this.getLangCode(), this.getSite().getId().toString())) + "]]></text>");
                 p.println("				</staticText>");
                 p.println("				<staticText>");
                 p.println("					<reportElement");

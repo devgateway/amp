@@ -7,11 +7,13 @@
 package org.digijava.module.aim.action;
 
 import java.util.Collection;
+import java.util.Collections;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.form.NewIndicatorForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -35,18 +37,19 @@ public class EditSectorsForInd extends Action {
 			eaForm.reset(mapping, request);
 		}		
 
+		Collection secSchemes = SectorUtil.getAllSectorSchemes();
+		eaForm.setSectorSchemes(secSchemes);
+		
 		if (eaForm.getSectorScheme() == null
 				|| eaForm.getSectorScheme().equals(new Long(-1))) {
 			// if sector schemes not loaded or reset, load all sector schemes
 			// and reset the
 			// parent sectors and child sectors.
 			
-			String globalSettingValue = FeaturesUtil.getGlobalSettingValue(Constants.GLOBAL_DEFAULT_SECTOR_SCHEME);
-			
-			Collection secSchemes = SectorUtil.getAllSectorSchemes();
-			eaForm.setSectorSchemes(secSchemes);
-			if (globalSettingValue!=null){
-				eaForm.setSectorScheme(new Long(globalSettingValue));
+
+			if (secSchemes!=null && secSchemes.size() > 0){
+				AmpSectorScheme scheme = (AmpSectorScheme)secSchemes.iterator().next();
+				eaForm.setSectorScheme(scheme.getAmpSecSchemeId());
 			}
 			Collection parentSectors = SectorUtil
 			.getAllParentSectors(eaForm.getSectorScheme());

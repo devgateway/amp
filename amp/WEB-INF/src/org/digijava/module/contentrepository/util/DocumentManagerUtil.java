@@ -37,15 +37,12 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.upload.FormFile;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
-import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.contentrepository.action.DocumentManager;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
 import org.digijava.module.contentrepository.action.SetAttributes;
@@ -63,9 +60,6 @@ import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 
 
 public class DocumentManagerUtil {
-	private static String pathForTeamDocs = "";
-	private static String pathForPrivateDocs = "";
-	
 	private static Logger logger	= Logger.getLogger(DocumentManagerUtil.class);
 	public static Repository getJCRRepository (HttpServletRequest request) {
 		
@@ -139,12 +133,12 @@ public class DocumentManagerUtil {
 				if (teamMember == null) {
 					throw new Exception("No TeamMember found in HttpSession !");
 				}
-				/* From add organization the user is always admin and this user has not email*/
-				String userName	;
-				if (teamMember.getEmail()!=null){
-					userName = teamMember.getEmail(); 
-				}else{
-					userName = "admin@amp.org";
+				   /* From add organization the user is always admin and this user has not email*/
+				String userName;
+				if (teamMember.getEmail() != null) {
+				   userName = teamMember.getEmail();
+				} else {
+				   userName = "admin@amp.org";
 				}
 				
 				SimpleCredentials creden	= new SimpleCredentials(userName, userName.toCharArray());
@@ -509,14 +503,7 @@ public class DocumentManagerUtil {
 	}
 	public static Node getTeamNode(Session jcrWriteSession, TeamMember teamMember){
 		String teamId		= "" + teamMember.getTeamId();
-		AmpTeamMember member = TeamMemberUtil.getTeamHead(teamMember.getTeamId());
-		AmpTeam team = null;
-		if (TeamUtil.checkForParentTeam(teamMember.getTeamId())) {
-			team = TeamUtil.getParentTeam(teamMember.getTeamId());
-		}
-		if (team != null) {
-			teamId = team.getAmpTeamId()+"";
-		}
+		
 		return
 				DocumentManagerUtil.getNodeByPath(jcrWriteSession, teamMember, "team/"+teamId);
 	}
@@ -525,7 +512,7 @@ public class DocumentManagerUtil {
 		String teamId		= "" + teamMember.getTeamId();
 		
 		return 
-				DocumentManagerUtil.getNodeByPath(jcrWriteSession, teamMember, "private/"+userName);
+				DocumentManagerUtil.getNodeByPath(jcrWriteSession, teamMember, "private/"+teamId+"/"+userName);
 	}
 	
 	
@@ -555,7 +542,7 @@ public class DocumentManagerUtil {
 			
 			for (int i=0; i<elements.length; i++) {
 				
-					try{						
+					try{
 						tempNode	= folderNode.getNode( elements[i] );
 					}
 					catch (PathNotFoundException e) {

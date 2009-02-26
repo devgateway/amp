@@ -17,7 +17,7 @@ public class Parisindicator3Jrxml extends ParisIndicatorJrxml {
             out = new FileOutputStream(filePath);
             p2 = new PrintStream(out);
 
-            p2.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
+            p2.println("<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?>");
             p2.println("<!-- Created with iReport - A designer for JasperReports -->");
             p2.println("<!DOCTYPE jasperReport PUBLIC '//JasperReports//DTD Report Design//EN' 'http://jasperreports.sourceforge.net/dtds/jasperreport.dtd'>");
             p2.println("<jasperReport");

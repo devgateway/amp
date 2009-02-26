@@ -40,7 +40,7 @@
 	background-color: #ffffff;
 }
 .myStyleClass{	
-	width: 110px;
+	min-width: 110px;
 }
 -->
 </style>
@@ -460,7 +460,7 @@ function recurEvent(){
 													<field:display name="Remove Donor Button" feature="Donors">
 														<tr>
 															<td>
-																<html:button  property="submitButton" onclick="return removeSelOrgs()" styleClass="myStyleClass">
+																<html:button  property="submitButton" onclick="return removeSelOrgs()" style="width:110px">
 																	<digi:trn key="btn:remove">Remove</digi:trn>
 																</html:button>
 															</td> 
@@ -845,7 +845,7 @@ function recurEvent(){
 			                            	&nbsp;
 			                          	</feature:display>                           
 			                            <feature:display name="Save and Send button" module="Calendar">
-			                            	<input type="submit" style="width: 110px" onclick="return sendEvent();" value="<digi:trn key="calendar:sendSaveBtn">Save and Send</digi:trn>" />
+			                            	<input type="submit" style="min-width: 110px" onclick="return sendEvent();" value="<digi:trn key="calendar:sendSaveBtn">Save and Send</digi:trn>" />
 			                            	&nbsp;
 			                            </feature:display>
 			                            <feature:display name="Recurring Event Button" module="Calendar">

@@ -141,9 +141,11 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 			request.setAttribute("logoOptions", reportForm.getLogoOptions());
 			request.setAttribute("dateOptions", reportForm.getDateOptions());
 	        //	        			
+			
 				Document document = new Document(page.rotate(),5, 5, 15, 50);				
 				PDFExporter.headingCells=null;								
-                //
+				
+				//
                 response.setContentType("application/pdf");
 				response.setHeader("Content-Disposition","attachment; filename="+r.getName().replaceAll(" ","_"));	   	       
                 //
@@ -350,24 +352,18 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 	        	}
 			
 	        	strFilters.delete(strFilters.length()-2,strFilters.length());
-			// AMP-4289 
-//			pdfc = new PdfPCell(new Paragraph(translatedCurrentFilter +" "+ strFilters.toString(),currencyFont));
-//			pdfc.setPaddingBottom(2);
-//			pdfc.setPaddingTop(2);
-//			pdfc.setPaddingLeft(20);
-//			pdfc.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
-//			pdfc.setColspan(rd.getTotalDepth());
-//			table.addCell(pdfc);
-		  
-			//if(writer.getPageNumber()!=1) {
-        			Iterator i=PDFExporter.headingCells.iterator();
+	        	try {
+	        		//adding the table to the document before adding cells avoid stack overflow error, we can flush the memory and send the content to the client
+	        	arg1.add(table);
+	        	Iterator i=PDFExporter.headingCells.iterator();
         			while (i.hasNext()) {
         				PdfPCell element = (PdfPCell) i.next();
         				table.addCell(element);
+        				writer.flush();
         			}
-        			//}
-			try {
-			    arg1.add(table);
+			
+				
+			    
 			} catch (Exception e) {
 				logger.error("Error onStartPage",e);
 			}

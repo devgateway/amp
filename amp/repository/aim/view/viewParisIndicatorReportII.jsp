@@ -559,7 +559,7 @@ function toggleSettings(){
 							</tr>
 							<tr>
 								<td style="padding:5">
-									<strong><p><img src="/TEMPLATE/ampTemplate/images/info.png" width="15" height="15"> ${aimParisIndicatorReportForm.indicatorName}</p></strong>
+									<strong><p><img src="/TEMPLATE/ampTemplate/images/info.png" width="15" height="15"><digi:trn key="aim:parisIndicator:name"> ${aimParisIndicatorReportForm.indicatorName}</digi:trn></p></strong>
 									<c:if test="${aimParisIndicatorReportForm.indicatorCode == 6}">
 										[<digi:trn key="aim:numParallelPIU">Number Of Parallel PIUs</digi:trn>]
 									</c:if>
@@ -652,7 +652,7 @@ function toggleSettings(){
 														<%}%>
 															<td width="15%" align="center" height="65">
 																<div align="center">
-																	<strong><nested:write property="donor" /></strong>
+																	<strong><digi:trn key="aim:parisIndicatorDonor"><nested:write property="donor" /></digi:trn></strong>
 																</div>
 															</td>
 															<nested:iterate property="answers">

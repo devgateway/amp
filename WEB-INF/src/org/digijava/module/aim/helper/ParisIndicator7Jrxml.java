@@ -96,7 +96,7 @@ public class ParisIndicator7Jrxml extends ParisIndicatorJrxml {
             p2.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
             p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='18' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
             p2.println("					</textElement>");
-            p2.println("				<text><![CDATA["+ TranslatorWorker.translateText("Paris Indicator 7 Report", this.getLangCode(), this.getSite().getId().toString()) + "]]></text>");
+            p2.println("				<text><![CDATA["+ TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Paris Indicator 7 Report", this.getLangCode(), this.getSite().getId().toString())) + "]]></text>");
             p2.println("				</staticText>");
             p2.println("			</band>");
             p2.println("		</title>");
@@ -126,7 +126,7 @@ public class ParisIndicator7Jrxml extends ParisIndicatorJrxml {
             p2.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
             p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
             p2.println("					</textElement>");
-            p2.println("				<text><![CDATA["+ TranslatorWorker.translateText("Donors", this.getLangCode(), this.getSite().getId().toString()) + "]]></text>");
+            p2.println("				<text><![CDATA["+ TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Donors", this.getLangCode(), this.getSite().getId().toString())) + "]]></text>");
             p2.println("				</staticText>");
 
             String ctextkey;
@@ -182,7 +182,7 @@ public class ParisIndicator7Jrxml extends ParisIndicatorJrxml {
                 p2.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
                 p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
                 p2.println("					</textElement>");
-                p2.println("				<text><![CDATA[ "+ TranslatorWorker.translateText("Aid flows to the government sector scheduled for fiscal year", this.getLangCode(), this.getSite().getId().toString()) + "]]></text>");
+                p2.println("				<text><![CDATA[ "+ TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Aid flows to the government sector scheduled for fiscal year", this.getLangCode(), this.getSite().getId().toString())) + "]]></text>");
                 p2.println("				</staticText>");
                 if (type.equals("pdf")) {
                     p2.println("				<line direction='TopDown'>");
@@ -225,7 +225,7 @@ public class ParisIndicator7Jrxml extends ParisIndicatorJrxml {
                 p2.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
                 p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
                 p2.println("					</textElement>");
-                p2.println("				<text><![CDATA[ "+ TranslatorWorker.translateText("Total Aid flows disbursed to the government sector", this.getLangCode(), this.getSite().getId().toString()) + "]]></text>");
+                p2.println("				<text><![CDATA[ "+ TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Total Aid flows disbursed to the government sector", this.getLangCode(), this.getSite().getId().toString())) + "]]></text>");
                 p2.println("				</staticText>");
                 if (type.equals("pdf")) {
                     p2.println("				<line direction='TopDown'>");
@@ -268,7 +268,7 @@ public class ParisIndicator7Jrxml extends ParisIndicatorJrxml {
                 p2.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
                 p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
                 p2.println("					</textElement>");
-                p2.println("				<text><![CDATA[ "+ TranslatorWorker.translateText("Proportion of aid to the government sector disbursed within the fiscal year it was scheduled", this.getLangCode(), this.getSite().getId().toString()) + "]]></text>");
+                p2.println("				<text><![CDATA[ "+ TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Proportion of aid to the government sector disbursed within the fiscal year it was scheduled", this.getLangCode(), this.getSite().getId().toString())) + "]]></text>");
                 p2.println("				</staticText>");
                 if (type.equals("pdf")) {
                     p2.println("				<line direction='TopDown'>");
@@ -576,7 +576,7 @@ public class ParisIndicator7Jrxml extends ParisIndicatorJrxml {
             p2.println("</textElement>");
 			boolean returnString = Boolean.parseBoolean( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS) );
 			if(returnString){
-				p2.println("<textFieldExpression class='java.lang.String'><![CDATA[\" * "+ TranslatorWorker.translateText("All the amounts are in thousands (000)", this.getLangCode(), this.getSite().getId().toString()) + selCurr+"\"]]></textFieldExpression>");
+				p2.println("<textFieldExpression class='java.lang.String'><![CDATA[\" * "+ TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("All the amounts are in thousands (000)", this.getLangCode(), this.getSite().getId().toString())) + selCurr+"\"]]></textFieldExpression>");
 			}
 			else
 			{

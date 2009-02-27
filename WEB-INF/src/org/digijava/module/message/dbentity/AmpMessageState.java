@@ -1,5 +1,7 @@
 package org.digijava.module.message.dbentity;
 
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+
 public class AmpMessageState {
 	
 	private Long id;
@@ -13,7 +15,9 @@ public class AmpMessageState {
 	/**
 	 * team member Id
 	 */
-	private Long memberId;
+	//private Long memberId;
+	
+	private AmpTeamMember receiver;
 	
 	/**
 	 * is message already read
@@ -65,13 +69,13 @@ public class AmpMessageState {
 		this.message = message;
 	}
 
-	public Long getMemberId() {
-		return memberId;
-	}
-
-	public void setMemberId(Long memberId) {
-		this.memberId = memberId;
-	}
+//	public Long getMemberId() {
+//		return memberId;
+//	}
+//
+//	public void setMemberId(Long memberId) {
+//		this.memberId = memberId;
+//	}
 
 	public Boolean getRead() {
 		return read;
@@ -87,5 +91,13 @@ public class AmpMessageState {
 
 	public void setMessageHidden(Boolean messageHidden) {
 		this.messageHidden = messageHidden;
+	}
+
+	public AmpTeamMember getReceiver() {
+		return receiver;
+	}
+
+	public void setReceiver(AmpTeamMember receiver) {
+		this.receiver = receiver;
 	}
 }

@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 import org.digijava.kernel.user.User;
+import org.digijava.module.message.dbentity.AmpMessageState;
 
 public class AmpTeamMember implements Serializable {
 
@@ -24,6 +25,7 @@ public class AmpTeamMember implements Serializable {
 	private Set reports;
 	private Set links;
 	private Set logs;
+	private Set<AmpMessageState> messages;
 
 	// added for donor access
 	private Set editableFundingOrgs;	// in case of donor - allowed organisations whose funding details this TM can edit
@@ -179,6 +181,14 @@ public class AmpTeamMember implements Serializable {
 
 	public void setLogs(Set logs) {
 		this.logs = logs;
+	}
+
+	public Set<AmpMessageState> getMessages() {
+		return messages;
+	}
+
+	public void setMessages(Set<AmpMessageState> messages) {
+		this.messages = messages;
 	}
 
 	/* (non-Javadoc)

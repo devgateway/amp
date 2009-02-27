@@ -1,6 +1,5 @@
 package org.digijava.module.message.helper;
 
-
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -126,8 +125,8 @@ public class AmpMessageWorker {
                     if (statesRelatedToTemplate != null && statesRelatedToTemplate.size() > 0) {
                         for (AmpMessageState state : statesRelatedToTemplate) {
                             createMsgState(state, newMsg,false);
-                            if (!msgStateMap.containsKey(state.getMemberId())) {
-                                msgStateMap.put(state.getMemberId(), state);
+                            if (!msgStateMap.containsKey(state.getReceiver().getAmpTeamMemId())) {
+                                msgStateMap.put(state.getReceiver().getAmpTeamMemId(), state);
                             }
                         }
                         sendMailes(msgStateMap.values());
@@ -145,7 +144,7 @@ public class AmpMessageWorker {
         String partialURL = config.getSiteDomain().getContent() ;        
 
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
-        myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(UserRegistrationTrigger.PARAM_NAME));
+        myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(CalendarEventTrigger.PARAM_NAME));
         if (partialURL != null) {
             myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + partialURL + e.getParameters().get(CalendarEventTrigger.PARAM_URL) + "\">View Event</a>");
             event.setObjectURL(partialURL + e.getParameters().get(CalendarEventTrigger.PARAM_URL));
@@ -278,6 +277,7 @@ public class AmpMessageWorker {
 
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(ActivityActualStartDateTrigger.PARAM_NAME));
+        myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ActivityActualStartDateTrigger.PARAM_CREATED_BY)).getUser().getName());
         //url
         if (partialURL != null) {
             myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + partialURL + e.getParameters().get(ActivityActualStartDateTrigger.PARAM_URL) + "\">activity URL</a>");
@@ -297,6 +297,7 @@ public class AmpMessageWorker {
 
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(ActivityCurrentCompletionDateTrigger.PARAM_NAME));
+        myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ActivityCurrentCompletionDateTrigger.PARAM_CREATED_BY)).getUser().getName());
         //url
         if (partialURL != null) {
             myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + partialURL + e.getParameters().get(ActivityCurrentCompletionDateTrigger.PARAM_URL) + "\">activity URL</a>");
@@ -316,6 +317,8 @@ public class AmpMessageWorker {
 
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(ActivityFinalDateForContractingTrigger.PARAM_NAME));
+        //creator
+        myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ActivityFinalDateForContractingTrigger.PARAM_CREATED_BY)).getUser().getName());
         //url
         if (partialURL != null) {
             myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + partialURL + e.getParameters().get(ActivityFinalDateForContractingTrigger.PARAM_URL) + "\">activity URL</a>");
@@ -335,6 +338,8 @@ public class AmpMessageWorker {
 
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(ActivityFinalDateForDisbursementsTrigger.PARAM_NAME));
+        //creator
+        myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ActivityFinalDateForDisbursementsTrigger.PARAM_CREATED_BY)).getUser().getName());
         //url
         if (partialURL != null) {
             myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + partialURL + e.getParameters().get(ActivityFinalDateForDisbursementsTrigger.PARAM_URL) + "\">activity URL</a>");
@@ -354,6 +359,8 @@ public class AmpMessageWorker {
 
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(ActivityProposedApprovalDateTrigger.PARAM_NAME));
+        //creator
+        myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ActivityProposedApprovalDateTrigger.PARAM_CREATED_BY)).getUser().getName());
         //url
         if (partialURL != null) {
             myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + partialURL + e.getParameters().get(ActivityProposedApprovalDateTrigger.PARAM_URL) + "\">activity URL</a>");
@@ -373,6 +380,8 @@ public class AmpMessageWorker {
 
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(ActivityProposedCompletionDateTrigger.PARAM_NAME));
+        //creator
+        myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ActivityProposedCompletionDateTrigger.PARAM_CREATED_BY)).getUser().getName());
         //url
         if (partialURL != null) {
             myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + partialURL + e.getParameters().get(ActivityProposedCompletionDateTrigger.PARAM_URL) + "\">activity URL</a>");
@@ -392,9 +401,11 @@ public class AmpMessageWorker {
 
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(ActivityProposedStartDateTrigger.PARAM_NAME));
+        //creator
+        myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ActivityProposedStartDateTrigger.PARAM_CREATED_BY)).getUser().getName());
         //url
         if (partialURL != null) {
-            myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + partialURL + e.getParameters().get(ActivitySaveTrigger.PARAM_URL) + "\">activity URL</a>");
+            myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + partialURL + e.getParameters().get(ActivityProposedStartDateTrigger.PARAM_URL) + "\">activity URL</a>");
             alert.setObjectURL(partialURL + e.getParameters().get(ActivityProposedStartDateTrigger.PARAM_URL));
         }
         alert.setSenderType(MessageConstants.SENDER_TYPE_SYSTEM);
@@ -436,6 +447,8 @@ public class AmpMessageWorker {
 
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(ActivityDisbursementDateTrigger.PARAM_NAME));
+      //creator
+        myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ActivityDisbursementDateTrigger.PARAM_CREATED_BY)).getUser().getName());
         //url
         if (partialURL != null) {
             myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + partialURL + e.getParameters().get(ActivityDisbursementDateTrigger.PARAM_URL) + "\">activity URL</a>");
@@ -492,14 +505,16 @@ public class AmpMessageWorker {
      */
     private static void defineReceiversForApprovedAndNotApprovedActivities(Class triggerClass, AmpMessage approval,Long teamId) throws Exception {
         AmpMessageState state = new AmpMessageState();
-        state.setMemberId(approval.getSenderId());
+        //state.setMemberId(approval.getSenderId());
+        state.setReceiver(TeamMemberUtil.getAmpTeamMember(approval.getSenderId()));
         createMsgState(state, approval,false);
         if (triggerClass.equals(NotApprovedActivityTrigger.class)) {
             AmpTeamMember teamHead=TeamMemberUtil.getTeamHead(teamId);
             if (teamHead != null) {
-                Long teamHeadId = teamHead.getAmpTeamMemId();
+                // Long teamHeadId = teamHead.getAmpTeamMemId();
                 state = new AmpMessageState();
-                state.setMemberId(teamHeadId);
+                // state.setMemberId(teamHeadId);
+                state.setReceiver(teamHead);
                 createMsgState(state, approval,false);
             }
         }
@@ -514,8 +529,8 @@ public class AmpMessageWorker {
         List<AmpMessageState> lstMsgStates = AmpMessageUtil.loadMessageStates(template.getId());
         if (lstMsgStates != null) {
             for (AmpMessageState state : lstMsgStates) {
-                if (!temMsgStateMap.containsKey(state.getMemberId())) {
-                    temMsgStateMap.put(state.getMemberId(), state);
+                if (!temMsgStateMap.containsKey(state.getReceiver().getAmpTeamMemId())) {
+                    temMsgStateMap.put(state.getReceiver().getAmpTeamMemId(), state);
                 }
             }
         }
@@ -530,9 +545,10 @@ public class AmpMessageWorker {
                     AmpTeamMember member = ampAtt.getMember();
                     if (!eventMsgStateMap.containsKey(member.getAmpTeamMemId())) {
                         AmpMessageState state = new AmpMessageState();
-                        state.setMemberId(member.getAmpTeamMemId());
+                        //state.setMemberId(member.getAmpTeamMemId());
+                        state.setReceiver(member);
                         state.setSenderId(calEvent.getSenderId());
-                        eventMsgStateMap.put(state.getMemberId(), state);
+                        eventMsgStateMap.put(state.getReceiver().getAmpTeamMemId(), state);
                     }
                 }else if(ampAtt.getGuest()!=null){ // <---guests should always get e-mails about event
                 	String email=ampAtt.getGuest().substring(2);
@@ -546,14 +562,15 @@ public class AmpMessageWorker {
         if(saveActionWasCalled){
         	AmpTeamMember calEventcreator=ampCal.getMember();
             AmpMessageState msgState = new AmpMessageState();
-            msgState.setMemberId(calEventcreator.getAmpTeamMemId());
+           // msgState.setMemberId(calEventcreator.getAmpTeamMemId());
+            msgState.setReceiver(calEventcreator);
             msgState.setSenderId(calEvent.getSenderId());
-            msgStateMap.put(msgState.getMemberId(), msgState);
+            msgStateMap.put(msgState.getReceiver().getAmpTeamMemId(), msgState);
         }        
         
         for (AmpMessageState state : temMsgStateMap.values()) {
-            if (eventMsgStateMap.containsKey(state.getMemberId())) {
-                msgStateMap.put(state.getMemberId(), state);
+            if (eventMsgStateMap.containsKey(state.getReceiver().getAmpTeamMemId())) {
+                msgStateMap.put(state.getReceiver().getAmpTeamMemId(), state);
             }
         }       
         
@@ -580,7 +597,8 @@ public class AmpMessageWorker {
 
             for (AmpMessageState state : statesRelatedToTemplate) {
                 //get receiver Team Member.
-                AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(state.getMemberId());
+                //AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(state.getMemberId());
+            	AmpTeamMember teamMember=state.getReceiver();
                 /**
                  * Alert about new activity creation should get only members of the same team in which activity was created,if this team is listed as receivers in template.
                  */
@@ -606,7 +624,8 @@ public class AmpMessageWorker {
 
             for (AmpMessageState state : statesRelatedToTemplate) {
                 //get receiver Team Member.
-                AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(state.getMemberId());
+            	//AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(state.getMemberId());
+            	AmpTeamMember teamMember=state.getReceiver();
                 /**
                  * Alert about new activity creation should get only members of the same team in which activity was created,if this team is listed as receivers in template.
                  */
@@ -621,7 +640,8 @@ public class AmpMessageWorker {
         AmpMessageState newState = new AmpMessageState();
         Class clazz=newMsg.getClass();
         newState.setMessage(newMsg);
-        newState.setMemberId(state.getMemberId());
+        //newState.setMemberId(state.getMemberId());
+        newState.setReceiver(state.getReceiver());
         newState.setRead(false);
         if(newMsg.getClassName().equals("c")){
         	newState.setSender(((CalendarEvent)newMsg).getSenderEmail());
@@ -632,7 +652,7 @@ public class AmpMessageWorker {
 		if(setting!=null && setting.getMsgStoragePerMsgType()!=null){
 			maxStorage=setting.getMsgStoragePerMsgType().intValue();
 		}
-        if (AmpMessageUtil.isInboxFull(newMsg.getClass(), state.getMemberId()) || AmpMessageUtil.getInboxMessagesCount(clazz, state.getMemberId(), false, false, maxStorage) >= maxStorage) {
+        if (AmpMessageUtil.isInboxFull(newMsg.getClass(), state.getReceiver().getAmpTeamMemId()) || AmpMessageUtil.getInboxMessagesCount(clazz, state.getReceiver().getAmpTeamMemId(), false, false, maxStorage) >= maxStorage) {
             newState.setMessageHidden(true);
         } else {
             newState.setMessageHidden(false);
@@ -653,7 +673,7 @@ public class AmpMessageWorker {
         String receivers = "";
         for (AmpMessageState state : states) {
             for (TeamMember tm : teamMembers) {
-                if (state.getMemberId().equals(tm.getMemberId())) {
+                if (state.getReceiver().getAmpTeamMemId().equals(tm.getMemberId())) {
                     receivers += tm.getMemberName() + " " + "<" + tm.getEmail() + ">;" + tm.getTeamName() + ";" + ", ";
                 }
             }
@@ -668,7 +688,8 @@ public class AmpMessageWorker {
     }
 
     private static void sendMail(AmpMessageState state,boolean calendarSaveActionWasCalled) throws Exception {
-        AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(state.getMemberId());
+        //AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(state.getMemberId());
+    	AmpTeamMember teamMember=state.getReceiver();
         if (teamMember != null) {
         	AmpMessageSettings messageSettings = AmpMessageUtil.getMessageSettings();
             Long sendMail = messageSettings.getEmailMsgs();

@@ -347,12 +347,6 @@ $(document).ready(function(){
 		</td>
 	</tr>
 </table>
-</td>
-</tr>
-</table>
-</td>
-</tr>
-</table>
 
 <script language="JavaScript">
 

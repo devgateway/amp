@@ -263,7 +263,7 @@ function selectOrganisation1() {
 	<tr>
 	<td colspan="2">
 		<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
-		 <font color="red">All amounts are in the thousands (000)</font>
+		 <font color="red"><digi:trn>All amounts are in thousands (000)</digi:trn></font>
 		</gs:test>
 		</td>
 	</tr>	

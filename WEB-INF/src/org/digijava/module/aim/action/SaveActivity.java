@@ -8,7 +8,6 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -31,16 +30,16 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.error.AMPException;
-import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.error.AMPUncheckedException;
 import org.dgfoundation.amp.error.ExceptionFactory;
 import org.dgfoundation.amp.error.keeper.ErrorReporting;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
+import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
-import org.digijava.module.aim.dbentity.AmpActivityComponente;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
@@ -63,8 +62,6 @@ import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
-import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -90,7 +87,6 @@ import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.MTEFProjection;
 import org.digijava.module.aim.helper.Measures;
 import org.digijava.module.aim.helper.OrgProjectId;
-import org.digijava.module.aim.helper.PhysicalProgress;
 import org.digijava.module.aim.helper.ReferenceDoc;
 import org.digijava.module.aim.helper.RegionalFunding;
 import org.digijava.module.aim.helper.RelatedLinks;
@@ -135,9 +131,8 @@ public class SaveActivity extends Action {
 
 	private ServletContext ampContext = null;
 
-	
-	
-	
+	private String siteId;
+	private String locale;
 	
 	private void processPreStep(EditActivityForm eaForm, AmpActivity activity, TeamMember tm, Boolean[] createdAsDraft) throws Exception, AMPException{
 		// if the activity is being added from a users workspace,
@@ -191,10 +186,10 @@ public class SaveActivity extends Action {
 			if (eaForm.getIdentification().getTitle() != null) {
 				if (eaForm.getIdentification().getTitle().trim().length() == 0) {
 					errors.add("title", new ActionError(
-					"error.aim.addActivity.titleMissing"));
+					"error.aim.addActivity.titleMissing", TranslatorWorker.translateText("Please enter the title",locale,siteId)));
 				} else if (eaForm.getIdentification().getTitle().length() > 255) {
 					errors.add("title", new ActionError(
-					"error.aim.addActivity.titleTooLong"));
+					"error.aim.addActivity.titleTooLong", TranslatorWorker.translateText("Title should be less than 255 characters",locale,siteId)));
 				}
 			}
 			
@@ -204,7 +199,7 @@ public class SaveActivity extends Action {
 				if(eaForm.getIdentification().getDraft()==null || !eaForm.getIdentification().getDraft().booleanValue()){
 					if (statId != null && statId.equals(new Long(0))) {
 						errors.add("status", new ActionError(
-						"error.aim.addActivity.statusMissing"));
+						"error.aim.addActivity.statusMissing", TranslatorWorker.translateText("Please select the status",locale,siteId)));
 					}
 				}
 			}
@@ -585,7 +580,7 @@ public class SaveActivity extends Action {
 			if(eaForm.getIdentification().getDraft()==null || !eaForm.getIdentification().getDraft().booleanValue()){
 				if(isSectorEnabled()){
 					if (eaForm.getSectors().getActivitySectors() == null || eaForm.getSectors().getActivitySectors().size() < 1) {
-						errors.add("sector", new ActionError("error.aim.addActivity.sectorEmpty"));
+						errors.add("sector", new ActionError("error.aim.addActivity.sectorEmpty", TranslatorWorker.translateText("Please add a sector",locale,siteId)));
 					}
 					else{
 						int primaryPrc=0, secondaryPrc=0;
@@ -601,7 +596,7 @@ public class SaveActivity extends Action {
 								hasSecondarySectorsAdded=true;
 							
 							if (null == actSect.getSectorPercentage() || "".equals(actSect.getSectorPercentage())) {
-								errors.add("sectorPercentageEmpty", new ActionError("error.aim.addActivity.sectorPercentageEmpty"));
+								errors.add("sectorPercentageEmpty", new ActionError("error.aim.addActivity.sectorPercentageEmpty", TranslatorWorker.translateText("Please enter sector percentage",locale,siteId)));
 							}
 							// sector percentage is not a number
 							else {
@@ -610,7 +605,7 @@ public class SaveActivity extends Action {
 									if("Secondary".equals(config.getName())) secondaryPrc+=actSect.getSectorPercentage().intValue();
 								} catch (NumberFormatException nex) {
 									errors.add("sectorPercentageNonNumeric",
-											new ActionError("error.aim.addActivity.sectorPercentageNonNumeric"));
+											new ActionError("error.aim.addActivity.sectorPercentageNonNumeric", TranslatorWorker.translateText("Sector percentage must be numeric",locale,siteId)));
 								}
 							}
 						}
@@ -618,20 +613,20 @@ public class SaveActivity extends Action {
 						if (isPrimarySectorEnabled()){
 							if(!hasPrimarySectorsAdded){
 								errors.add("noPrimarySectorsAdded",
-										new ActionError("error.aim.addActivity.noPrimarySectorsAdded"));
+										new ActionError("error.aim.addActivity.noPrimarySectorsAdded", TranslatorWorker.translateText("please add primary sectors",locale,siteId)));
 							}
 							if(primaryPrc!=100)
-								errors.add("primarySectorPercentageSumWrong", new ActionError("error.aim.addActivity.primarySectorPercentageSumWrong"));							
+								errors.add("primarySectorPercentageSumWrong", new ActionError("error.aim.addActivity.primarySectorPercentageSumWrong", TranslatorWorker.translateText("Sum of all primary sector percentage must be 100",locale,siteId)));						
 						}
 
 						
 						if (isSecondarySectorEnabled()){
 							if(!hasSecondarySectorsAdded){
 								errors.add("noSecondarySectorsAdded",
-										new ActionError("error.aim.addActivity.noSecondarySectorsAdded"));									
+										new ActionError("error.aim.addActivity.noSecondarySectorsAdded", TranslatorWorker.translateText("please add secondary sectors",locale,siteId)));								
 							}
 							if(hasSecondarySectorsAdded && secondaryPrc!=100)
-								errors.add("secondarySectorPercentageSumWrong", new ActionError("error.aim.addActivity.secondarySectorPercentageSumWrong"));							
+								errors.add("secondarySectorPercentageSumWrong", new ActionError("error.aim.addActivity.secondarySectorPercentageSumWrong", TranslatorWorker.translateText("Sum of all secondary sector percentage must be 100",locale,siteId)));							
 						}
 
 					}
@@ -650,7 +645,7 @@ public class SaveActivity extends Action {
 					//Checks if it's 100%
 					if (totalPercentage != 100 && FeaturesUtil.isVisibleField("Regional Percentage", ampContext))
 						errors.add("locationPercentageSumWrong",
-								new ActionError("error.aim.addActivity.locationPercentageSumWrong"));
+								new ActionError("error.aim.addActivity.locationPercentageSumWrong", TranslatorWorker.translateText("Sum of all location percentage must be 100",locale,siteId)));
 				}
 				
 				if (eaForm.getPrograms().getNationalPlanObjectivePrograms() != null
@@ -667,11 +662,11 @@ public class SaveActivity extends Action {
 					}
 					if (totalPercentage != 100) {
 						errors.add("nationalPlanProgramsPercentageSumWrong",
-								new ActionError("error.aim.addActivity.nationalPlanProgramsPercentageSumWrong"));
+								new ActionError("error.aim.addActivity.nationalPlanProgramsPercentageSumWrong", TranslatorWorker.translateText("Sum of all National Planning Objective percentages must be 100",locale,siteId)));
 					}
 					if(failNOP == true) {
 						errors.add("nationalPlanProgramsPercentageWrong",
-								new ActionError("error.aim.addActivity.nationalPlanProgramsPercentageWrong"));
+								new ActionError("error.aim.addActivity.nationalPlanProgramsPercentageWrong", TranslatorWorker.translateText("Please enter all National Planning Objective percentages",locale,siteId)));
 					}
 				}
 				
@@ -685,7 +680,7 @@ public class SaveActivity extends Action {
 					}
 					if (totalPercentage != 100)
 						errors.add("primaryProgramsPercentageSumWrong",
-								new ActionError("error.aim.addActivity.primaryProgramsPercentageSumWrong"));
+								new ActionError("error.aim.addActivity.primaryProgramsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Primary Program percentages must be 100",locale,siteId)));
 				}
 				
 				if (eaForm.getPrograms().getSecondaryPrograms()!= null
@@ -698,7 +693,7 @@ public class SaveActivity extends Action {
 					}
 					if (totalPercentage != 100)
 						errors.add("secondaryProgramsPercentageSumWrong",
-								new ActionError("error.aim.addActivity.secondaryProgramsPercentageSumWrong"));
+								new ActionError("error.aim.addActivity.secondaryProgramsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Secondary Program percentages must be 100",locale,siteId)));
 				}
 			}
 			
@@ -2108,6 +2103,12 @@ public class SaveActivity extends Action {
 			throws Exception {
 		//BIG Try Catch to Tag errors
 		try{
+		Site site = RequestUtils.getSite(request);
+		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+				
+		siteId = site.getId()+"";
+		locale = navigationLanguage.getCode();	
+			
 		Long actId = null;
 		HttpSession session = request.getSession();
 		//Set<Components<AmpComponentFunding>> tempComp = new HashSet<Components<AmpComponentFunding>>();

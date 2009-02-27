@@ -47,10 +47,12 @@ Filters.prototype.failure	= function (o) {
 }
 
 Filters.prototype.showFilters	= function() {
+	alert("asdsd");
+	var avoidIECacheParam 	=	"&time=" + new Date().getTime(); 
 	this.filterPanel.setBody( "<div style='text-align: center'>" + this.loadingDataMessage + 
 			"... <br /> <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>" );
 	this.filterPanel.show();
-	YAHOO.util.Connect.asyncRequest("GET", "/aim/reportsFilterPicker.do?sourceIsReportWizard=true"+this.resetString, this);
+	YAHOO.util.Connect.asyncRequest("GET", "/aim/reportsFilterPicker.do?sourceIsReportWizard=true"+ avoidIECacheParam +this.resetString, this);
 	this.resetString		= "";
 }
 

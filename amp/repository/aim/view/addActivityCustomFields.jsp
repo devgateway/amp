@@ -52,7 +52,7 @@
 																<a id="customField_clear${index}" href="javascript:clearDate(document.aimEditActivityForm.customField${index}_input_text, 'customField_clear${index}')">
 																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 																</a>
-																<a id="customField_date${index}" href='javascript:pickDateWithClear("customField_date${index}",customField${index}_input_text,"customField_clear${index}")'>
+																<a id="customField_date${index}" href='javascript:pickDateWithClear("customField_date${index}",document.aimEditActivityForm.customField${index}_input_text,"customField_clear${index}")'>
 																	<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a>
 															</c:when>

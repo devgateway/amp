@@ -8,6 +8,10 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ page import="java.util.List"%>
 <%@ page import="org.digijava.module.categorymanager.util.CategoryConstants"%>
+<%@ taglib uri="/taglib/category" prefix="category" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <jsp:include page="/repository/aim/view/teamPagesHeader.jsp" flush="true" />
 
@@ -234,8 +238,8 @@ function setHoveredTable(tableId, hasHeaders) {
 					 	    	       Add Resource ...    				
 					  		</digi:trn>            
 				    	</button>
-				    <tr>
-				    <td>	
+				    </td>
+				    </tr>	
 				    </table>				    	
 			        </div>
 						  <table border="0" cellPadding=1 cellSpacing=0 width="95%"

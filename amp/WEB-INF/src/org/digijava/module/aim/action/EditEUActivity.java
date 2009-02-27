@@ -20,7 +20,11 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.utils.MultiAction;
+import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.EUActivity;
@@ -39,6 +43,10 @@ import org.hibernate.Session;
  *
  */
 public class EditEUActivity extends MultiAction {
+	
+	private String siteId;
+	private String locale;
+	
 	/**
 	 *
 	 */
@@ -217,6 +225,11 @@ public class EditEUActivity extends MultiAction {
                       HttpSession session=request.getSession();
 		ActionErrors errors = new ActionErrors();
                 TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+                Site site = RequestUtils.getSite(request);
+        		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+        		siteId = site.getId()+"";
+        		locale = navigationLanguage.getCode();	
+        		
 		Long currencyId = tm.getAppSettings().getCurrencyId();
                 String defaultCurCode="";
                 String defaultCurName="";
@@ -233,8 +246,7 @@ public class EditEUActivity extends MultiAction {
                           totalCurCode);
                 if (totalCostExRate == 1.0 && !totalCurCode.equals("USD")) {
                   errors.add("title", new ActionError(
-                      "error.aim.addActivity.noExchangeRateIsDefined",
-                      totalCostCurr.getCurrencyName(), defaultCurName));
+                      "error.aim.addActivity.noExchangeRateIsDefined", TranslatorWorker.translateText("There is no exchange rate defined for the currency " + totalCostCurr.getCurrencyName() + " please use the default currency " + defaultCurName,locale,siteId)));
                 }
                    else{
                      Object[] currencies = eaf.getContrCurrId();
@@ -247,8 +259,7 @@ public class EditEUActivity extends MultiAction {
                              currCode);
                          if (exchangeRate == 1.0 &&!currCode.equals("USD")) {
                            errors.add("title", new ActionError(
-                               "error.aim.addActivity.noExchangeRateIsDefined",
-                               curr.getCurrencyName(), defaultCurName));
+                               "error.aim.addActivity.noExchangeRateIsDefined", TranslatorWorker.translateText("There is no exchange rate defined for the currency " + totalCostCurr.getCurrencyName() + " please use the default currency " + defaultCurName,locale,siteId)));
                            break;
                          }
 
@@ -259,7 +270,7 @@ public class EditEUActivity extends MultiAction {
 			Double.parseDouble(eaf.getTotalCost());
 		} catch (NumberFormatException e) {
 			errors.add("title", new ActionError(
-					"error.aim.euactivity.invalidAmountFormat"));
+					"error.aim.euactivity.invalidAmountFormat", TranslatorWorker.translateText("Please enter valid numerical amounts",locale,siteId)));
 		}
 
 		try {
@@ -269,19 +280,19 @@ public class EditEUActivity extends MultiAction {
 		} catch (ParseException e) {
 			//System.out.println("Exception:"+e);
 			errors.add("title", new ActionError(
-					"error.aim.euactivity.dueDate"));
+					"error.aim.euactivity.dueDate", TranslatorWorker.translateText("Please pick the Due Date",locale,siteId)));
 		}
 
 		if(hasInvalidAmounts(eaf.getContrAmountList())) errors.add("title", new ActionError(
-		"error.aim.euactivity.invalidAmountFormat"));
+		"error.aim.euactivity.invalidAmountFormat", TranslatorWorker.translateText("Please enter valid numerical amounts",locale,siteId)));
 		if(hasUnselectedItems(eaf.getContrDonorIdList())) errors.add("title", new ActionError(
-		"error.aim.euactivity.selectDonor"));
+		"error.aim.euactivity.selectDonor", TranslatorWorker.translateText("Please pick the Donors from the drop down lists",locale,siteId)));
 		if(hasUnselectedItems(eaf.getContrCurrIdList())) errors.add("title", new ActionError(
-		"error.aim.euactivity.selectCurrency"));
+		"error.aim.euactivity.selectCurrency", TranslatorWorker.translateText("Please pick the Currencies from the drop down lists",locale,siteId)));
 		if(hasUnselectedItems(eaf.getContrFinInstrIdList())) errors.add("title", new ActionError(
-		"error.aim.euactivity.contrFinInstr"));
+		"error.aim.euactivity.contrFinInstr", TranslatorWorker.translateText("Please pick the Financing Instruments from the drop down lists",locale,siteId)));
 		if(hasUnselectedItems(eaf.getContrFinTypeIdList())) errors.add("title", new ActionError(
-		"error.aim.euactivity.contrFinType"));
+		"error.aim.euactivity.contrFinType", TranslatorWorker.translateText("Please pick the Financing Types from the drop down lists",locale,siteId)));
 
 
 

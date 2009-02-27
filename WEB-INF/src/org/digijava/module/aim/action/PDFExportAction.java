@@ -249,7 +249,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 				String stmt = "";
 				try {
 					//TODO TRN:this should use default text instead of this key. if there is no such default text in this case, then leaving key is jut all right.
-					stmt = TranslatorWorker.translateText("aim:report:reportstatement", locale,siteId);
+					stmt = TranslatorWorker.translateText("Report Name", locale,siteId);
 				} catch (WorkerException e){
 				    logger.error("Error translating ", e);}
 				stmt += " " + FeaturesUtil.getCurrentCountryName();
@@ -412,7 +412,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 				String stmt = "";
 				try {
 					//TODO TRN:this should use default text instead of this key. if there is no such default text in this case, then leaving key is jut all right.
-					stmt = TranslatorWorker.translateText("aim:report:reportstatement", locale,siteId);
+					stmt = TranslatorWorker.translateText("Report Name", locale,siteId);
 				} catch (WorkerException e){
 				    logger.error("Error translating ", e);}
 				stmt += " " + FeaturesUtil.getCurrentCountryName();
@@ -470,7 +470,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 	    textBase = document.bottom() - 30;
 	    StringBuffer pageText=new StringBuffer();
 	    //TODO TRN: Key is all right here but lets think about using body as translation.
-	    String translatedPage=TranslatorWorker.translateText("rep:pop:page", locale, siteId);
+	    String translatedPage=TranslatorWorker.translateText("Page", locale, siteId);
 	   if ("".equalsIgnoreCase(translatedPage)){
 	       translatedPage="Page:";
 	   }

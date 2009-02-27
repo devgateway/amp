@@ -18,7 +18,7 @@ public class AmpDateUtils {
     public static Date getDateAfterDays(Date fromDate, int daysCount) {
         Calendar cl = Calendar.getInstance();
         cl.setTime(fromDate);
-        cl.roll(Calendar.DAY_OF_MONTH, daysCount);
+        cl.add(Calendar.DAY_OF_MONTH, daysCount);
         return cl.getTime();
     }
 

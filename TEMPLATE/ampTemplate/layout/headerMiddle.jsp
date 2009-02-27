@@ -460,22 +460,22 @@ function adminHelp(){
 						  	<!-- On which view calendar link should redirect. depends on FM -->
 							  <c:set var="linkYearly">
 							  	<feature:display name="Yearly View" module="Calendar">
-							  		/calendar/showCalendarView.do
+							  		/calendar/showCalendarView.do?filterInUse=false
 							  	</feature:display>
 							  </c:set>
 							  <c:set var="linkMonthly">
 							  	<feature:display name="Monthly View" module="Calendar">
-							  		/calendar/showCalendarView.do?view=monthly
+							  		/calendar/showCalendarView.do?view=monthly&filterInUse=false
 							  	</feature:display>
 							  </c:set>
 							  <c:set var="linkWeekly">
 							  	<feature:display name="Weekly View" module="Calendar">
-							  		/calendar/showCalendarView.do?view=weekly
+							  		/calendar/showCalendarView.do?view=weekly&filterInUse=false
 							  	</feature:display>
 							  </c:set>
 							  <c:set var="linkDaily">
 							  	<feature:display name="Daily View" module="Calendar">
-							  		/calendar/showCalendarView.do?view=daily
+							  		/calendar/showCalendarView.do?view=daily&filterInUse=false
 							  	</feature:display>
 							  </c:set>
 							  
@@ -495,7 +495,7 @@ function adminHelp(){
                               </a>
                           	</c:if>
                           	<c:if test="${empty link}">
-                          		<a class="yuiampmenuitemlabel"  href="/calendar/showCalendarView.do?view=none" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px"  onclick="return canExit()">
+                          		<a class="yuiampmenuitemlabel"  href="/calendar/showCalendarView.do?view=none&filterInUse=false" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px"  onclick="return canExit()">
                                  <digi:trn key="aim:calendar">Calendar</digi:trn>
                               </a>
                           	</c:if>

@@ -356,7 +356,8 @@ public class HelpActions extends DispatchAction {
 		String page  = request.getParameter("page");
 		String topicKey = request.getParameter("topicKey");
 		if(topicKey == null && helpForm.getTopicKey() != null){
-			topicKey = helpForm.getTopicKey();
+			topicKey =helpForm.getBodyEditKey().substring(helpForm.getBodyEditKey().indexOf("y:")+2);
+			
 		}
 		helpForm.setPage(page);
 		//String key = HelpUtil.getTrn(topicKey, request);

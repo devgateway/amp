@@ -515,6 +515,7 @@ color:Black;
 																													<c:when test="${currentYear==startYear && startMonth<=monthIndex}">1</c:when>
 																													<c:when test="${currentYear==endYear && monthIndex<=endMonth}">1</c:when>
 																													<c:when test="${currentYear>startYear && currentYear<endYear}">1</c:when>
+																													
 																													<c:otherwise>0</c:otherwise>
 																												</c:choose>
 																											</c:when>
@@ -522,7 +523,7 @@ color:Black;
 																										</c:choose>
 																					           	   	</c:set>
 																				           	   			<c:if test="${drawTD==1}">
-																					           	   			<c:if test="${startYear==currentYear && startMonth==monthIndex}">
+																					           	   			<c:if test="${startYear==currentYear || currentYear==endYear}">
 	                                                                                                        <div style="margin:2px;padding:2px;height:15px;text-align: center;background-color:${ampCalendarGraph.ampCalendar.eventType.color};text-align:center;"  onmouseover="stm([evnt,'name:${eventName}<br>stDate:${eventStartDate}<br>endDate:${eventEndDate}'],Style[14])" onmouseout="htm()">
 																						                   		<digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~method=preview~resetForm=true">
 																						                    		<digi:img src="module/calendar/images/lookglass2.gif" border="0" alt="" align="left" style="vertical-align:middle"/>

@@ -119,6 +119,7 @@ background-color:yellow;
     var editClick='<digi:trn key="message:ClickEditMessage"> Click on this icon to edit message&nbsp;</digi:trn>';
     var deleteClick='<digi:trn key="message:ClickDeleteMessage"> Click on this icon to delete message&nbsp;</digi:trn>';
     var viewMessage='<digi:trn key="message:ClickViewMessage"> Click here to view the message</digi:trn>';
+    var viewDetails='<digi:trn key="message:ClickViewDetails">Click here to view details</digi:trn>';
 	//used to define whether we just entered page from desktop
 	var firstEntry=0;
 	var currentPage=1;
@@ -847,7 +848,7 @@ background-color:yellow;
                                         objURLTD1.innerHTML='<strong>'+referenceURL+'</strong>';
 				objURLTR.appendChild(objURLTD1);
 					var objURLTD2=document.createElement('TD');
-                    objURLTD2.innerHTML='<A href="javascript:openObjectURL(\''+objectURL+'\')";> '+'click here to view details</A>';
+                    objURLTD2.innerHTML='<A href="javascript:openObjectURL(\''+objectURL+'\')";> '+viewDetails+'</A>';
 
 				objURLTR.appendChild(objURLTD2);
 			divTblBody.appendChild(objURLTR);

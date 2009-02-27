@@ -191,6 +191,9 @@
 <c:set var="trans_headerFileName">
 	 <digi:trn key="contentrepository:TableHeader:ResourceName">Resource Name</digi:trn>  
 </c:set>
+<c:set var="trans_headerSelect">
+	 <digi:trn key="contentrepository:TableHeader:Select">Select</digi:trn>  
+</c:set>
 <c:set var="trans_headerResourceTitle">
 	 <digi:trn key="contentrepository:TableHeader:Title">Title</digi:trn>  
 </c:set>
@@ -248,7 +251,7 @@ YAHOO.namespace("YAHOO.amp.table");
 YAHOO.amp.table.enhanceMarkup = function(markupName) {
 
     this.columnHeaders = [
-        {key:"select",type:"checkbox", text:"Select",sortable:false,width:10},
+        {key:"select",type:"checkbox", text:"${trans_headerSelect}",sortable:false,width:10},
 		{key:"resource_title",text:"${trans_headerResourceTitle}",sortable:true,width:150},
 	    {key:"type",text:"${trans_headerType}",sortable:true},
         {key:"file_name",text:"${trans_headerFileName}",sortable:true,width:150},

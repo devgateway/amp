@@ -955,7 +955,7 @@ function downloadFile(uuid) {
 }
 
 function checkDocumentUuid(uuid) {
-	alert(uuid);
+	//alert(uuid);
 	var stop = '<digi:trn jsFriendly="true">Please save the activity before downloading the file !</digi:trn>';
 	if (uuid.indexOf("TEMPORARY") >= 0) {
 		alert(stop);

@@ -169,7 +169,7 @@ target.style.cursor = "default"
 
 <digi:instance property="aimEditActivityForm" />
 
-										<table width="100%" bgcolor="#cccccc" cellPadding=5 cellSpacing=1>
+										<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
 											<bean:define id="contentDisabled">false</bean:define>
 											<c:set var="contentDisabled"><field:display name="Project Title" feature="Identification">false</field:display>
 											</c:set>
@@ -525,17 +525,18 @@ target.style.cursor = "default"
 													<a title="<digi:trn key="aim:DescriptionofProject">Summary information describing the project</digi:trn>">
 														<digi:trn key="aim:actBudget">Activity Budget</digi:trn>
 												</td>
+											<td>
+											<table cellpadding="1" cellspacing="3">
+
 												<td valign="top" align="left">	
+											 <tr>
 													</a>
 													<html:checkbox styleId="budget" property="identification.budget"  onclick="budgetCheckboxClick();">
 													<digi:trn key="aim:actBudgeton">Activity is On Budget</digi:trn>
 													</html:checkbox>
 													<html:hidden property="identification.budgetCheckbox" styleId="hbudget"/>
 												</td>
-											<td>
-											
-											
-											<table cellpadding="3" cellspacing="3">
+											</tr>
 											 <tr>
 											
 											<field:display name="FY" feature="Budget">
@@ -606,8 +607,9 @@ target.style.cursor = "default"
 									
 									</tr>
 								</table>
+								</td></tr>	
 								</field:display>
-								</td></tr>		
+									
 								
 								
 								</feature:display>

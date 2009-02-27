@@ -143,39 +143,39 @@
                     <c:set var="stepNum" value="0" scope="request" />
                     <jsp:include page="toolbarImport.jsp" />
 					<div style="height: 255px;">
-    					<table cellpadding="5px" style="vertical-align: middle" width="70%">
+    					<table cellpadding="5px" width="80%">
     						<tr>
-        						<td width="47%" align="center"><br/><br/><br/><br/><br/>
+        						<td width="47%" align="left" valign="top"><br/><br/><br/>
         								<digi:trn key="aim:pleaseChooseTheFile">Please choose the file you want to import
-        								</digi:trn><br/><br/><br/>
+        								</digi:trn><br/>
 										<input id="uploadedFile" name="uploadedFile" type="file" class="file">
-										<br/><br/>
-										<c:set var="translation">
-								             <digi:trn key="btn:Import">Import</digi:trn>
-								        </c:set>
-								         
         						</td>
-        						<td align="center">
+        						<td align="left" >
         							<br/><br/><br/>
         							<digi:trn key="aim:pleaseChooseTheLanguage">Please choose the language(s) that exist in imported file
         								</digi:trn><br/>
+        							<table bgcolor="white" width="70%">
         							<logic:iterate name="deImportForm" property="languages" id="lang">
+        								<tr><td>
         								<html:multibox property="selectedLanguages">
         									<bean:write name="lang"/>
         								</html:multibox>
         								<bean:write name="lang"/>&nbsp;&nbsp;&nbsp;
+        								</td></tr>
         							</logic:iterate>
+        							</table>
         							<br/><br/><br/>
         							<digi:trn key="aim:pleaseChooseTheOption">Please choose the option for import the activities
         								</digi:trn><br/>
+        							<table bgcolor="white" width="70%">
         							<logic:iterate name="deImportForm" property="options" id="option">
-        							<div>
+        								<tr><td>
         								<bean:define id="optionValue">
                           					<bean:write name="option"/>
             							</bean:define>
         								<html:radio property="selectedOptions" value="<%=optionValue%>" styleId="<%=optionValue%>" />
         								<bean:write name="option"/> Activity<br/>
-        							</div>
+        								</td></tr>
         							</logic:iterate>
         						</td>
     						</tr>

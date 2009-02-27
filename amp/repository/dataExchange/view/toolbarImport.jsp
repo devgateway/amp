@@ -12,14 +12,16 @@
 	</c:if>
 		
 	<div class="subtabs">
-		<button id="step${stepNum}_prev_button" type="button" class="toolbar-dis"
-			<c:if test="${stepNum==0}">disabled="disabled"</c:if>
+		<button id="step${stepNum}_prev_button" type="button"
+			<c:if test="${stepNum==0}">disabled="disabled"</c:if> <c:if test="${stepNum<=1}"> class="toolbar-dis" </c:if>
+			<c:if test="${stepNum>1}">class="toolbar"</c:if>
 			onclick="navigateTab(-1);">
 			<img src="/TEMPLATE/ampTemplate/images/prev_dis.png" class="toolbar" />
 			<digi:trn key="btn:previous">Previous</digi:trn>
 		</button>
-		<button id="step${stepNum}_next_button" type="button" class="toolbar-dis" 
-			<c:if test="${stepNum==3 || stepNum==0}">disabled="disabled"</c:if>
+		<button id="step${stepNum}_next_button" type="button"  
+			<c:if test="${stepNum==3 || stepNum==0}">disabled="disabled"</c:if> <c:if test="${stepNum==3 || stepNum==0}">class="toolbar-dis"</c:if>
+			<c:if test="${stepNum==2 || stepNum==1}">class="toolbar"</c:if>
 			onclick="navigateTab(1)">
 			<img height="16" src="/TEMPLATE/ampTemplate/images/next_dis.png" class="toolbar" /> 
 			<digi:trn key="btn:next">Next</digi:trn>
@@ -28,10 +30,10 @@
 			<img src="/TEMPLATE/ampTemplate/images/cancel.png" class="toolbar" />
 			<digi:trn key="btn:wizard:Cancel">Cancel</digi:trn>
 		</button>
-		<button type="button" class="toolbar-dis" onclick="importActivities()" name="loadFile" id="de_btn_import_${stepNum}" 
+		<button type="button" class="toolbar" onclick="importActivities()" name="loadFile" id="de_btn_import_${stepNum}" 
 			<c:if test="${stepNum!=0}">disabled="disabled" </c:if>
 		>
-			<img src="/TEMPLATE/ampTemplate/images/file-export-16x16.png" class="toolbar"/>
+			<img src="/TEMPLATE/ampTemplate/images/file-export-16x16.png" class="toolbar-dis"/>
 			<digi:trn key="btn:wizard:Import">Import</digi:trn>
 		</button>
  	 </div>

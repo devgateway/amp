@@ -202,7 +202,7 @@ color:Black;
 				                            					<td id="td1" valign="top" vAlign="top" width="14%" style="padding:0px; border-right: 0px;border-left: 0px;height: 100%">
 				                              						<!-- Stars Month= Current Month -->
 				                              					
-				                              						<c:if test="${startMonth==currentMonth && startYear== currentYear && endYear == startYear}">
+				                              						<c:if test="${startMonth==currentMonth && startYear== currentYear}">
 				                              							<c:if test="${(endMonth==currentMonth && item.dayOfMonth >=startDay && item.dayOfMonth<=endDay && item.enabled) || (endMonth!=currentMonth && ((item.dayOfMonth>=startDay && item.enabled)||(item.dayOfMonth<endDay && !item.enabled)))}">
 					                                						<div id="div1" style="border:1px solid ${ampCalendarGraph.ampCalendar.eventType.color};background-color:${ampCalendarGraph.ampCalendar.eventType.color};" onmouseover="stm([evnt,'name:${eventName}<br>stDate:${eventStartDate}<br>endDate:${eventEndDate}'],Style[14])" onmouseout="htm()" >
 					                                                        	<c:if test="${item.dayOfMonth==startDay && item.enabled}">
@@ -259,8 +259,7 @@ color:Black;
 					                                                    	&nbsp;
 					                                                    </div>
 				                              						</c:if>
-				                              						${endYear}
-				                              						${startYear}
+				                              					
 				                              				<!-- when start Year < End year and start month and end month is equal -->		
 				                              					<c:if test="${endYear!=currentYear && startMonth==currentMonth && endYear > startYear}">
 				                                						<c:if test="${(endMonth==currentMonth && item.dayOfMonth >=startDay  && item.enabled)}">

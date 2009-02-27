@@ -14,6 +14,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -160,21 +161,28 @@ public class AmpDbUtil {
   }
 
   public static AmpCalendar getAmpCalendar(Long ampCalendarId) {
-    if (ampCalendarId == null) {
-      return null;
-    }
-    try {
-      Session session = PersistenceManager.getRequestDBSession();
-      Calendar calendar = (Calendar) session.load(Calendar.class,ampCalendarId);
-
-      AmpCalendarPK ampCalendarPK = new AmpCalendarPK(calendar);
-      AmpCalendar ampCalendar = (AmpCalendar) session.load(AmpCalendar.class,ampCalendarPK);
-      return ampCalendar;
-    }
-    catch (Exception e) {
-      logger.debug("Unable to get AmpCalendar by Id", e);
-      return null;
-    }
+	  AmpCalendar ampCalendar=null;
+	  Calendar calendar=null;
+	  if(ampCalendarId!=null){
+		  try {
+			Session session = PersistenceManager.getRequestDBSession();
+	        //Calendar calendar = (Calendar) session.load(Calendar.class,ampCalendarId);
+			Query query=session.createQuery("from "+ Calendar.class.getName() + " c where c.id= :calendarId");
+			query.setParameter("calendarId", ampCalendarId);
+			calendar=(Calendar)query.uniqueResult();
+			if(calendar!=null){
+				AmpCalendarPK ampCalendarPK = new AmpCalendarPK(calendar);
+				query=session.createQuery("from "+ AmpCalendar.class.getName() + " c where c.calendarPK= :calendarPK");
+				query.setParameter("calendarPK", ampCalendarPK);
+				ampCalendar=(AmpCalendar)query.uniqueResult();
+				//ampCalendar = (AmpCalendar) session.load(AmpCalendar.class,ampCalendarPK);
+			}
+		} catch (DgException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	  }
+	  return ampCalendar;
   }
 
   public static List<AmpCalendar> getAmpCalendarsByStartDate(Date startDate) {
@@ -275,9 +283,8 @@ public class AmpDbUtil {
       return null;
     }
   }
-  public static AmpCalendar getAmpCalendar(Long ampCalendarId,
-                                           String instanceId, String siteId) {
-    AmpCalendar ampCalendar = getAmpCalendar(ampCalendarId);
+  public static AmpCalendar getAmpCalendar(Long ampCalendarId,String instanceId, String siteId) {
+    AmpCalendar ampCalendar = getAmpCalendar(ampCalendarId);  
     Calendar calendar = ampCalendar != null ?
         ampCalendar.getCalendarPK().getCalendar() : null;
     if (calendar == null || calendar.getInstanceId() == null ||

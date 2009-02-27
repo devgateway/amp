@@ -1,11 +1,9 @@
 package org.digijava.module.calendar.dbentity;
 
 import java.io.Serializable;
-import java.util.Iterator;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.text.ParseException;
+import java.util.Date;
+import java.util.Iterator;
 
 public class AmpCalendarPK
     implements Serializable {

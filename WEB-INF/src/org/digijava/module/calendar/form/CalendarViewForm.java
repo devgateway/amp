@@ -229,6 +229,10 @@ public class CalendarViewForm  extends ActionForm {
 	  if (this.filter != null){
 		  this.filter.setSelectedEventTypes(emptylist);
 	  }
+	  String[] emptyDonorsList=new String[0];
+	  if (this.filter != null){
+		  this.filter.setSelectedDonors(emptyDonorsList);
+	  }
 	  /* if(filter!=null){
        this.filter.setShowPublicEvents(false);
      }

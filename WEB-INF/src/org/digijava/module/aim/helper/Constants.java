@@ -99,6 +99,9 @@ public class Constants
 	
 	//added in burkina
 	public static final String GLOBALSETTINGS_DEFAULT_EX_RATE_SEPARATOR="Default Exchange Rate Separator";
+	
+	public static final String GLOBALSETTINGS_ECS="ECS Enabled";
+	
 
 	public static final String CURRENCY_RATE_DEAFULT_START_DATE = "25/04/2005";
 	public static final String CURRENCY_RATE_DEAFULT_END_DATE = "01/05/2005";

@@ -94,7 +94,12 @@
         			<td align="left" valign="middle" style="background-color: #F0F0F0">
         				<br/>
         				<span style="font-size:14px">
-				        	<b><digi:trn key="exception:newErrorText2">The Aid Management Platform has temporarily encountered an issue. We apologize for any inconvenience. This issue has been reported to the technical support team for resolution.	</digi:trn></b><br/><br/>
+				        	<b><digi:trn key="exception:newErrorText2">The Aid Management Platform has temporarily encountered an issue. We apologize for any inconvenience. </digi:trn></b><br/>
+				        	<c:if test="<%= org.digijava.module.aim.util.FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBALSETTINGS_ECS).compareTo("true") == 0 %>">
+					        	<b><font color="blue"><digi:trn key="exception:errorHandled">This issue has been reported to the technical support team for resolution.</digi:trn></font></b><br/>
+				        	</c:if>
+				        	<br/>
+				        	<!-- 
 				        	<u><digi:trn key="exception:issueInformation">Issue Information</digi:trn></u><br/>
 				        	<digi:trn key="exception:issueDescription">Issue Description</digi:trn>:
 				        	<logic:notEmpty name="exceptionReportForm" property="exceptionInfo.userMessage">
@@ -107,7 +112,9 @@
 				        	<logic:notEmpty name="exceptionReportForm" property="exceptionInfo.mainTag">
 					        	<digi:trn key="exception:relatedTo">Related To</digi:trn>: "<i><bean:write name="exceptionReportForm" property="exceptionInfo.mainTag"/></i>" <br/>
 				        	</logic:notEmpty>
-				        	<br/><hr/><br/>
+				        	<br/>
+				        	 -->
+				        	<hr/><br/>
 				        	<digi:trn key="exception:continueInfo">To resume normal operation of the Aid Management Platform please choose one of the following actions</digi:trn>:<br />
 				        		<li><digi:trn key="exception:goBackToThe">Go Back to the</digi:trn>
 				        			<a href="<bean:write name="exceptionReportForm" property="exceptionInfo.backLink"/>">

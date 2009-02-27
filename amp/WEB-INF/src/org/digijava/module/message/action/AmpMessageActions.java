@@ -712,20 +712,24 @@ public class AmpMessageActions extends DispatchAction {
     	if(statesList==null){
     		statesList=new ArrayList<AmpMessageState>();
     	}
-
-    	if(statesList!=null && statesList.size()>0){
-			//getting members Ids from states list
-			for (AmpMessageState mId : statesList) {
-				statesMemberIds.add(mId.getMemberId());
-			}
-    	}
+    	/**
+    	 * @TODO
+    	 */
+//    	if(statesList!=null && statesList.size()>0){
+//			//getting members Ids from states list
+//			for (AmpMessageState mId : statesList) {
+//				statesMemberIds.add(mId.getMemberId());
+//			}
+//    	}
         if (messageReceivers != null && messageReceivers.length > 0) {
             Collection<InternetAddress> addrCol=new ArrayList<InternetAddress>();
             for (String receiver : messageReceivers) {
                 if (receiver.startsWith("m")) {
                     Long memId = new Long(receiver.substring(2));
-                    String teamName = TeamMemberUtil.getAmpTeamMember(memId).getAmpTeam().getName();
-                    createMessageState(message, memId, teamMember.getMemberName(), teamName);
+                    AmpTeamMember msgReceiver=TeamMemberUtil.getAmpTeamMember(memId);
+                    String teamName = msgReceiver.getAmpTeam().getName();
+                    //createMessageState(message, memId, teamMember.getMemberName(), teamName);
+                    createMessageState(message, msgReceiver, teamMember.getMemberName(), teamName);
                     if (settings != null && settings.getEmailMsgs() != null && settings.getEmailMsgs().equals(new Long(1))) {
                         //creating internet address where the mail will be sent
                         addrCol.add(new InternetAddress(TeamMemberUtil.getAmpTeamMember(memId).getUser().getEmail()));
@@ -757,11 +761,11 @@ public class AmpMessageActions extends DispatchAction {
 	}
 
 
-    private void createMessageState(AmpMessage message,Long memberId,String senderName,String teamName) throws Exception{
+    private void createMessageState(AmpMessage message,AmpTeamMember receiver,String senderName,String teamName) throws Exception{
     	AmpMessageState newMessageState=new AmpMessageState();
 		newMessageState.setMessage(message);
-		newMessageState.setSender(senderName);
-		newMessageState.setMemberId(memberId);
+		newMessageState.setSender(senderName);		
+		newMessageState.setReceiver(receiver);
         String receivers = message.getReceivers();
         if (receivers == null) {
         	receivers = "";
@@ -770,7 +774,7 @@ public class AmpMessageActions extends DispatchAction {
            		receivers += ", ";
             }
         }
-        User user=TeamMemberUtil.getAmpTeamMember(memberId).getUser();
+        User user=receiver.getUser();
 
         receivers+=user.getFirstNames()+" "+user.getLastName()+"<"+user.getEmail()+">;"+teamName+";";
         message.setReceivers(receivers);
@@ -788,7 +792,7 @@ public class AmpMessageActions extends DispatchAction {
 		if(setting!=null && setting.getMsgStoragePerMsgType()!=null){
 			maxStorage=setting.getMsgStoragePerMsgType().intValue();
 		}
-		if(AmpMessageUtil.isInboxFull(clazz, memberId) || AmpMessageUtil.getInboxMessagesCount(clazz, memberId,false,false, maxStorage)>=maxStorage){
+		if(AmpMessageUtil.isInboxFull(clazz, receiver.getAmpTeamMemId()) || AmpMessageUtil.getInboxMessagesCount(clazz, receiver.getAmpTeamMemId(),false,false, maxStorage)>=maxStorage){
 			newMessageState.setMessageHidden(true);
 		}else{
 			newMessageState.setMessageHidden(false);
@@ -1011,16 +1015,24 @@ public class AmpMessageActions extends DispatchAction {
 			Collection<AmpTeam> teamList = new ArrayList<AmpTeam>();
 			Collection<AmpTeamMember> memberList = new ArrayList<AmpTeamMember>();
 			for (AmpMessageState state : msgStates) {
-				if(state.getMemberId()!=null){
-                                AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(state.getMemberId());
-                                    if (teamMember != null) {
-                                        AmpTeam team = teamMember.getAmpTeam();
-                                        if (!teamList.contains(team)) {
-                                            teamList.add(team);
-                                        }
-                                        memberList.add(teamMember);
-                                    }
-
+//				if(state.getMemberId()!=null){
+//                                AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(state.getMemberId());
+//                                    if (teamMember != null) {
+//                                        AmpTeam team = teamMember.getAmpTeam();
+//                                        if (!teamList.contains(team)) {
+//                                            teamList.add(team);
+//                                        }
+//                                        memberList.add(teamMember);
+//                                    }
+//
+//				}
+				if(state.getReceiver()!=null){
+					AmpTeamMember teamMember=state.getReceiver();
+					AmpTeam team=teamMember.getAmpTeam();
+					if(!teamList.contains(team)){
+						teamList.add(team);
+					}
+					 memberList.add(teamMember);
 				}
 			}
 			for(AmpTeam team : teamList){

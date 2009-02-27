@@ -9,6 +9,7 @@ public class ActivityActualStartDateTrigger extends Trigger {
     public static final String PARAM_TEAM_ID="teamId";
     public static final String PARAM_TRIGGER_SENDER="sender";
     public static final String PARAM_URL="activity url";
+    public static final String PARAM_CREATED_BY="createdBy";
 
     public static final String [] parameterNames=new String[]{PARAM_NAME,PARAM_TEAM_ID,PARAM_TRIGGER_SENDER,PARAM_URL};
 
@@ -26,6 +27,7 @@ public class ActivityActualStartDateTrigger extends Trigger {
         e.getParameters().put(PARAM_TEAM_ID,activity.getTeam().getAmpTeamId());
         e.getParameters().put(PARAM_TRIGGER_SENDER,MessageConstants.SENDER_TYPE_SYSTEM);
         e.getParameters().put(PARAM_URL, "aim/selectActivityTabs.do~ampActivityId="+activity.getAmpActivityId());
+        e.getParameters().put(PARAM_CREATED_BY, activity.getActivityCreator());
         return e;
     }
 

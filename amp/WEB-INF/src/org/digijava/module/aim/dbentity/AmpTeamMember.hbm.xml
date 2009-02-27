@@ -54,5 +54,10 @@
 			<key column="owner_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpDesktopTabSelection" />
 		</set>
+		
+		<set name="messages" inverse="true" cascade="delete">
+			<key column="receiver_id" />
+			<one-to-many class="org.digijava.module.message.dbentity.AmpMessageState" />
+		</set>
 	</class>
 </hibernate-mapping>

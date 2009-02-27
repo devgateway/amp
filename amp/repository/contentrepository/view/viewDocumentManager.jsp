@@ -244,7 +244,7 @@ function setHoveredTable(tableId, hasHeaders) {
 			        </div>
 						  <table border="0" cellPadding=1 cellSpacing=0 width="95%"
 							style="position: relative; left: 20px">
-							<tr style="display: table-row" id="myDocumentstr">
+							<tr style="display: block;" id="myDocumentstr">
 								<td colspan="3">
 									<br />
 									<div id="my_markup" align="left" class="all_markup">
@@ -276,7 +276,7 @@ function setHoveredTable(tableId, hasHeaders) {
 			        </div>	        
 					<table border="0" cellPadding=1 cellSpacing=0 width="100%"
 						style="position: relative; left: 20px" >
-						<tr style="display: table-row" id="teamDocumentstr">
+						<tr style="display: block;" id="teamDocumentstr">
 							<td colspan="3">
 								<br />
 								<div id="team_markup" align="center" class="all_markup">
@@ -289,6 +289,7 @@ function setHoveredTable(tableId, hasHeaders) {
 					</table>
 			        </div>
 					</feature:display>
+					<!-- Public resources -->
 					<feature:display name="Public Resources" module="Resources">
 			        <div id="public_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">				        	       
 						<table border="0" cellPadding=1 cellSpacing=0 width="100%"
@@ -305,6 +306,10 @@ function setHoveredTable(tableId, hasHeaders) {
 						</table>	        
 			        </div>
 			        </feature:display>
+<!--End public Resources-->
+
+<!--Other Resources-->
+
 			        <feature:display name="Other Resources" module="Resources">
 				        <div id="team_mem_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">
 					        <table border="0" cellPadding=1 cellSpacing=0 width="100%"
@@ -320,7 +325,9 @@ function setHoveredTable(tableId, hasHeaders) {
 								</tr>
 							</table>
 				    	</div>
-			    	</feature:display>			    
+		    	</feature:display>			    
+<!--End Others-->	
+
 			</div>			
 			<div id="addDocumentDiv" style="display: none">
 				<div align="center">

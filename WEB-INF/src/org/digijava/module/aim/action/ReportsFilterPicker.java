@@ -609,7 +609,7 @@ public class ReportsFilterPicker extends MultiAction {
 			arf.setStatuses(null);
 
 		for (int i = 0; filterForm.getSelectedStatuses() != null && i < filterForm.getSelectedStatuses().length; i++) {
-			AmpCategoryValue value = (AmpCategoryValue) session.load(AmpCategoryValue.class, new Long((String) filterForm.getSelectedStatuses()[i]));
+			AmpCategoryValue value = (AmpCategoryValue) session.load(AmpCategoryValue.class, (Long)filterForm.getSelectedStatuses()[i]);
 			arf.getStatuses().add(value);
 		}
 		if (filterForm.getSelectedProjectCategory() != null && filterForm.getSelectedProjectCategory().length > 0)

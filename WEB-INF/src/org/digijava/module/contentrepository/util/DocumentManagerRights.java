@@ -74,7 +74,7 @@ public class DocumentManagerRights {
 		String username				= teamMember.getEmail();
 		String teamId				= teamMember.getTeamId() + "";
 		
-		String userPath				= "private"+"/"+username;
+		String userPath				= "private"+"/"+teamId+"/"+username;
 		
 		try {
 			Workspace workspace			= node.getSession().getWorkspace();
@@ -89,7 +89,7 @@ public class DocumentManagerRights {
 			/**
 			 * If team leader of the team
 			 */
-			if ( teamMember.getTeamHead() && path.contains("/" + username) ) {
+			if ( teamMember.getTeamHead() && path.contains("/" + teamId + "/") ) {
 				return new Boolean(true);
 			}
 			return new Boolean(false);

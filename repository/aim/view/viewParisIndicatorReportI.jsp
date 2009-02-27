@@ -526,10 +526,11 @@ function toggleSettings(){
 				<tr>
 					<td>
 						<logic:notEmpty name="aimParisIndicatorReportForm"  property="indicatorsColl">
-							<div style="padding-left:5px;width:1000px;">
-								<DIV id="tabs">
-									<UL>
-										<logic:iterate id="report" name="aimParisIndicatorReportForm"  property="indicatorsColl" type="org.digijava.module.aim.dbentity.AmpAhsurveyIndicator">
+							<div id="content"  class="yui-skin-sam" style="padding-left:10px;width:98%;width:1000px;"> 
+<!--							<div style="padding-left:5px;width:1000px;">-->
+								<div id="demo" class="yui-navset">
+									<ul id="MyTabs" class="yui-nav"">
+										<logic:iterate id="report" name="aimParisIndicatorReportForm"  property="indicatorsColl" type="org.digijava.module.aim.dbentity.AmpAhsurveyIndicator" indexId="tabIndex">
 											<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 											<c:if test="${report.indicatorCode != '10b'}">
 								            	<feature:display  name="PI report ${report.indicatorCode}" module="PI Reports">
@@ -540,10 +541,11 @@ function toggleSettings(){
 													<!--<digi:trn key="aim:parisIndicator:${report.indicatorCode}"><c:out value="Paris Indicator ${report.indicatorCode}"/></digi:trn>-->
 													<!--</div></a>-->
 													<!--</LI>-->
-													<LI>
+													<%int newTabIndex = tabIndex.intValue() + 1;%>
+													<LI class='<%=(request.getParameter("indcId").equals(new Integer(newTabIndex).toString()))?"selected":""%>'>
 														<span>
-															<digi:link href="/parisIndicatorReport.do" name="urlParams" styleClass="h-box" title="${translation}" target="_self">
-															<div style="max-width: 100px">
+															<digi:link href="/parisIndicatorReport.do" name="urlParams" title="${translation}" target="_self">
+															<div style="max-width: 90px">
 																<digi:trn key="aim:parisIndicator:${report.indicatorCode}"><c:out value="Paris Indicator ${report.indicatorCode}"/></digi:trn>
 									                        </div>
 															</digi:link>

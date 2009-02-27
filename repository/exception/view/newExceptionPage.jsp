@@ -86,29 +86,37 @@
   <table width="100%">
     <tr>
       <td align="center">
-        	<table width=100%>
+        	<table width="85%" cellpadding="5">
         		<tr>
-        			<td>
-        				<img alt="AMP Error Image" src="../ampTemplate/images/newerror.jpg" />
+        			<td width="120px" valign="top" >
+        				<img alt="AMP Error Image" src="../ampTemplate/images/exceptionImg.jpg" />
         			</td>
-        			<td align="left" valign="middle">
+        			<td align="left" valign="middle" style="background-color: #F0F0F0">
         				<br/>
         				<span style="font-size:14px">
-				        	<b><digi:trn key="exception:newErrorText">Hey there! I wasn't expecting you, but since you're here let me tell you what happened.</digi:trn></b><br/>
-				        	They say it was "<i><bean:write name="exceptionReportForm" property="exceptionInfo.userMessage"/></i>" 
+				        	<b><digi:trn key="exception:newErrorText2">The Aid Management Platform has temporarily encountered an issue. We apologize for any inconvenience. This issue has been reported to the technical support team for resolution.	</digi:trn></b><br/><br/>
+				        	<u><digi:trn key="exception:issueInformation">Issue Information</digi:trn></u><br/>
+				        	<digi:trn key="exception:issueDescription">Issue Description</digi:trn>:
+				        	<logic:notEmpty name="exceptionReportForm" property="exceptionInfo.userMessage">
+				        		"<i><bean:write name="exceptionReportForm" property="exceptionInfo.userMessage"/></i>"
+				        	</logic:notEmpty> 
+				        	<logic:empty name="exceptionReportForm" property="exceptionInfo.userMessage">
+				        		"<digi:trn key="exception:na">N/A</digi:trn>"
+				        	</logic:empty>
+				        	<br/>
 				        	<logic:notEmpty name="exceptionReportForm" property="exceptionInfo.mainTag">
-				        		and it's has to do with "<i><bean:write name="exceptionReportForm" property="exceptionInfo.mainTag"/></i>"
+					        	<digi:trn key="exception:relatedTo">Related To</digi:trn>: "<i><bean:write name="exceptionReportForm" property="exceptionInfo.mainTag"/></i>" <br/>
 				        	</logic:notEmpty>
-				        	! <br/>
-				        	In my opinion you can:
-				        		<li>Go back to the
+				        	<br/><hr/><br/>
+				        	<digi:trn key="exception:continueInfo">To resume normal operation of the Aid Management Platform please choose one of the following actions</digi:trn>:<br />
+				        		<li><digi:trn key="exception:goBackToThe">Go Back to the</digi:trn>
 				        			<a href="<bean:write name="exceptionReportForm" property="exceptionInfo.backLink"/>">
 					        			<digi:trn key="exception:previousPage">
 					        				previous page
 				        				</digi:trn>
 				        			</a>
 				        		</li> 
-				        		<li>Go to the 
+				        		<li><digi:trn key="exception:goToThe">Go to the</digi:trn> 
 					        		<logic:present name="ampAdmin" scope="session">
 										<logic:equal name="ampAdmin" value="yes">
 											<digi:link href="/admin.do" module="aim" >
@@ -124,15 +132,20 @@
 										</logic:equal>
 									</logic:present>
 								</li>
-				        	You don't happen to be a <a href="javascript:toggleLayer('devInfo');"> developer</a>, do you? 
+							<br/>
+							<digi:trn key="exception:viewThe">View the</digi:trn>	
+				        		<a href="javascript:toggleLayer('devInfo');"> <digi:trn key="exception:developerNotes">Developer notes</digi:trn></a> <digi:trn key="exception:forThisIssue">for this issue</digi:trn> 
 				        </span>
         			</td>
         		</tr>
         		<tr>
-        			<td colspan="2">
-       					<div id="devInfo" style="display: none; width: 80%; margin-left: 10%"  >
+        			<td width="120px">
+        				&nbsp;
+        			</td>
+        			<td style="background-color: #F0F0F0">
+       					<div id="devInfo" style="display: none;"  >
 							<fieldset>
-					          <legend >
+					          <legend>
 					       		<a href="javascript:toggleLayer('docDiv');">
 				            		<digi:trn key="exception:suggestedDocumentation">Suggested Documentation</digi:trn>
 						        </a>

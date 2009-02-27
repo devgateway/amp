@@ -62,118 +62,118 @@ public class CSVExportAction
     
     AmpARFilter arf=(AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
 	
-	if (session.getAttribute("currentMember")!=null && !arf.isPublicView()){
-    AmpReports r = (AmpReports) session.getAttribute("reportMeta");
-
-    response.setContentType("application/vnd.ms-excel");
-    response.setHeader("Content-Disposition",
-                       "inline; filename=data.csv ");
-
-    HSSFWorkbook wb = new HSSFWorkbook();
-
-    String sheetName = rd.getName();
-    if (sheetName.length() > 31)
-      sheetName = sheetName.substring(0, 31);
-
-    HSSFSheet sheet = wb.createSheet(getCleanName(sheetName));
-
-    IntWrapper rowId = new IntWrapper();
-    IntWrapper colId = new IntWrapper();
-
-    HSSFRow row = sheet.createRow(rowId.intValue());
-
-    GroupReportDataXLS grdx = new GroupReportDataXLS(wb, sheet, row, rowId,
-        colId, null, rd);
-
-    grdx.setMetadata(r);
-
-    String sortBy = (String) session.getAttribute("sortBy");
-    if (sortBy != null)
-      rd.setSorterColumn(sortBy);
-
-    //show title+desc
-    rowId.inc();
-    colId.reset();
-    row = sheet.createRow(rowId.shortValue());
-    HSSFCell cell = row.createCell(colId.shortValue());
-
-    Site site = RequestUtils.getSite(request);
-    Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-
-    String siteId=site.getSiteId();
-    String locale=navigationLanguage.getCode();	
-    
-    String translatedNotes = "";
-    if (FeaturesUtil.getGlobalSettingValue("Amounts in Thousands").equalsIgnoreCase("true")){
-    	translatedNotes = TranslatorWorker.translateText("Amounts are in thousands (000)", locale, siteId);
-    }
-	if ("".equalsIgnoreCase(translatedNotes)) {
-	    translatedNotes = AmpReports.getNote(session);
-	}
-    
+	if (session.getAttribute("currentMember")!=null || arf.isPublicView()){
+	    AmpReports r = (AmpReports) session.getAttribute("reportMeta");
 	
-    cell.setCellValue(translatedNotes + "\n");
-    
-    grdx.makeColSpan(rd.getTotalDepth(),false);
-    rowId.inc();
-    colId.reset();
-
-    row = sheet.createRow(rowId.shortValue());
-    cell = row.createCell(colId.shortValue());
-    
-  	
-	String translatedReportName="Report Name:";
-	String translatedReportDescription="Description:";
-	try{	
-		translatedReportName=TranslatorWorker.translateText("Report Name:",locale,siteId);
-		translatedReportDescription=TranslatorWorker.translateText("Description:",locale,siteId);
-	}catch (WorkerException e){;}
-
-    cell.setCellValue(translatedReportName+": " + r.getName());
-
-    grdx.makeColSpan(rd.getTotalDepth(),false);
-    rowId.inc();
-    colId.reset();
-
-    row = sheet.createRow(rowId.shortValue());
-    cell = row.createCell(colId.shortValue());
-    cell.setCellValue(translatedReportDescription+": " + r.getReportDescription());
-
-    grdx.makeColSpan(rd.getTotalDepth(),false);
-    rowId.inc();
-    colId.reset();
-
-    grdx.generate();
-    
-    // we now iterate the rows and create the csv
-
-    StringBuffer sb = new StringBuffer();
-    Iterator i = sheet.rowIterator();
-    while (i.hasNext()) {
-      HSSFRow crow = (HSSFRow) i.next();
-      for (short ii = crow.getFirstCellNum(); ii <= crow.getLastCellNum(); ii++) {
-        HSSFCell ccell = crow.getCell(ii);
-        String s = "";
-        if (ccell != null) {
-          if (ccell.getCellType() == HSSFCell.CELL_TYPE_NUMERIC)
-            s = Double.toString(ccell.getNumericCellValue());
-          else
-            s = ccell.getStringCellValue();
-          sb.append("\"").append(s).append("\"");
-
-          if (ii < crow.getLastCellNum())
-            sb.append(",");
-        }
-      }
-      sb.append("\n");
-
-    }
-    PrintWriter out = new PrintWriter(new OutputStreamWriter(response.
-        getOutputStream(), "UnicodeLittle"), true);
-
-    out.println(sb.toString());
-
-    out.close();
+	    response.setContentType("application/vnd.ms-excel");
+	    response.setHeader("Content-Disposition",
+	                       "inline; filename=data.csv ");
+	
+	    HSSFWorkbook wb = new HSSFWorkbook();
+	
+	    String sheetName = rd.getName();
+	    if (sheetName.length() > 31)
+	      sheetName = sheetName.substring(0, 31);
+	
+	    HSSFSheet sheet = wb.createSheet(getCleanName(sheetName));
+	
+	    IntWrapper rowId = new IntWrapper();
+	    IntWrapper colId = new IntWrapper();
+	
+	    HSSFRow row = sheet.createRow(rowId.intValue());
+	
+	    GroupReportDataXLS grdx = new GroupReportDataXLS(wb, sheet, row, rowId,
+	        colId, null, rd);
+	
+	    grdx.setMetadata(r);
+	
+	    String sortBy = (String) session.getAttribute("sortBy");
+	    if (sortBy != null)
+	      rd.setSorterColumn(sortBy);
+	
+	    //show title+desc
+	    rowId.inc();
+	    colId.reset();
+	    row = sheet.createRow(rowId.shortValue());
+	    HSSFCell cell = row.createCell(colId.shortValue());
+	
+	    Site site = RequestUtils.getSite(request);
+	    Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+	
+	    String siteId=site.getSiteId();
+	    String locale=navigationLanguage.getCode();	
+	    
+	    String translatedNotes = "";
+	    if (FeaturesUtil.getGlobalSettingValue("Amounts in Thousands").equalsIgnoreCase("true")){
+	    	translatedNotes = TranslatorWorker.translateText("Amounts are in thousands (000)", locale, siteId);
+	    }
+		if ("".equalsIgnoreCase(translatedNotes)) {
+		    translatedNotes = AmpReports.getNote(session);
+		}
+	    
+		
+	    cell.setCellValue(translatedNotes + "\n");
+	    
+	    grdx.makeColSpan(rd.getTotalDepth(),false);
+	    rowId.inc();
+	    colId.reset();
+	
+	    row = sheet.createRow(rowId.shortValue());
+	    cell = row.createCell(colId.shortValue());
+	    
+	  	
+		String translatedReportName="Report Name:";
+		String translatedReportDescription="Description:";
+		try{	
+			translatedReportName=TranslatorWorker.translateText("Report Name:",locale,siteId);
+			translatedReportDescription=TranslatorWorker.translateText("Description:",locale,siteId);
+		}catch (WorkerException e){;}
+	
+	    cell.setCellValue(translatedReportName+": " + r.getName());
+	
+	    grdx.makeColSpan(rd.getTotalDepth(),false);
+	    rowId.inc();
+	    colId.reset();
+	
+	    row = sheet.createRow(rowId.shortValue());
+	    cell = row.createCell(colId.shortValue());
+	    cell.setCellValue(translatedReportDescription+": " + r.getReportDescription());
+	
+	    grdx.makeColSpan(rd.getTotalDepth(),false);
+	    rowId.inc();
+	    colId.reset();
+	
+	    grdx.generate();
+	    
+	    // we now iterate the rows and create the csv
+	
+	    StringBuffer sb = new StringBuffer();
+	    Iterator i = sheet.rowIterator();
+	    while (i.hasNext()) {
+	      HSSFRow crow = (HSSFRow) i.next();
+	      for (short ii = crow.getFirstCellNum(); ii <= crow.getLastCellNum(); ii++) {
+	        HSSFCell ccell = crow.getCell(ii);
+	        String s = "";
+	        if (ccell != null) {
+	          if (ccell.getCellType() == HSSFCell.CELL_TYPE_NUMERIC)
+	            s = Double.toString(ccell.getNumericCellValue());
+	          else
+	            s = ccell.getStringCellValue();
+	          sb.append("\"").append(s).append("\"");
+	
+	          if (ii < crow.getLastCellNum())
+	            sb.append(",");
+	        }
+	      }
+	      sb.append("\n");
+	
+	    }
+	    PrintWriter out = new PrintWriter(new OutputStreamWriter(response.
+	        getOutputStream(), "UnicodeLittle"), true);
+	
+	    out.println(sb.toString());
+	
+	    out.close();
 	}else{
 		
 		Site site = RequestUtils.getSite(request);

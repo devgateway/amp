@@ -57,14 +57,15 @@ public class EditSector extends Action {
 										ampSector.setDescription(editSectorForm.getDescription());
 										ampSector.setSectorCode(AddSector.DEFAULT_VALUE_SECTOR);										
 										ampSector.setSectorCodeOfficial(editSectorForm.getSectorCodeOfficial());
+										String secSchemeCode = ampSector.getAmpSecSchemeId().getSecSchemeCode();
+										String secSchemename = ampSector.getAmpSecSchemeId().getSecSchemeName();
 										logger.debug("Updating.............................................");
 										DbUtil.update(ampSector);
 										Long schemeId =ampSector.getAmpSecSchemeId().getAmpSecSchemeId();
 										Integer schemeID = new Integer(schemeId.intValue());
-										editSectorForm.setFormFirstLevelSectors(
-												SectorUtil.getSectorLevel1(schemeID));
-										editSectorForm.setSecSchemeCode(ampSector.getAmpSecSchemeId().getSecSchemeCode());
-										editSectorForm.setSecSchemeName(ampSector.getAmpSecSchemeId().getSecSchemeName());
+										editSectorForm.setFormFirstLevelSectors(SectorUtil.getSectorLevel1(schemeID));
+										editSectorForm.setSecSchemeCode(secSchemeCode);
+										editSectorForm.setSecSchemeName(secSchemename);
 										logger.debug(" update sector1 Complete");
 										return mapping.findForward("editedSecondLevelSector");
 								}

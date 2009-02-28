@@ -33,22 +33,23 @@ public class ViewUserProfile
         TeamMember teamMember = (TeamMember) httpSession.getAttribute(
                 "currentMember");
         User user = null;
-        Long memId = null;
+        Long userid = null;
         String email = "";
         AmpTeamMember member = null;
         if (request.getParameter("id") != null) {
             long id = Long.parseLong(request.getParameter("id"));
-            memId = new Long(id);
+            userid = new Long(id);
         }
         if (request.getParameter("email") != null && request.getParameter("email") != "") {
             email = request.getParameter("email");
-            memId = DbUtil.getUser(email).getId();
+            user= DbUtil.getUser(email);
+            userid = user.getId();
         }
 
         String[] memberInformationn = null;
-        member = TeamMemberUtil.getAmpTeamMember(memId);
+        member = TeamMemberUtil.getAmpTeamMember(user);
         if (member == null && request.getParameter("id") != null) {
-            if (memId.equals(teamMember.getMemberId())) {
+            if (userid.equals(teamMember.getMemberId())) {
                 user = DbUtil.getUser(teamMember.getMemberId());
                 memberInformationn = new String[]{teamMember.getTeamName(), teamMember.getRoleName()};
             } else {

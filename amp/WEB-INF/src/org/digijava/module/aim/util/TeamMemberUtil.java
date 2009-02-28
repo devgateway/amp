@@ -641,7 +641,7 @@ public class TeamMemberUtil {
 		AmpTeamMember member = null;
 
 		try {
-			session = PersistenceManager.getRequestDBSession();
+			session = PersistenceManager.getSession();
 			String queryString = "select tm from "
 					+ AmpTeamMember.class.getName()
 					+ " tm where (tm.user=:user)";

@@ -571,7 +571,7 @@ public class SectorUtil {
 			logger.error("Unable to get amp_sector info");
 			logger.debug("Exceptiion " + ex);
 		}
-
+		session.flush();
 		return ampSector;
 
 	}
@@ -1023,6 +1023,7 @@ public class SectorUtil {
 			qry = session.createQuery(queryString);
 			qry.setParameter("schemeId",schemeId,Hibernate.INTEGER);
 			col = qry.list();
+			session.flush();
 		}
 		catch(Exception ex)
 		{

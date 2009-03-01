@@ -354,14 +354,14 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 	        	strFilters.delete(strFilters.length()-2,strFilters.length());
 	        	try {
 	        		//adding the table to the document before adding cells avoid stack overflow error, we can flush the memory and send the content to the client
-	        	arg1.add(table);
+	        
 	        	Iterator i=PDFExporter.headingCells.iterator();
         			while (i.hasNext()) {
         				PdfPCell element = (PdfPCell) i.next();
         				table.addCell(element);
         				writer.flush();
         			}
-			
+        			arg1.add(table);
 				
 			    
 			} catch (Exception e) {

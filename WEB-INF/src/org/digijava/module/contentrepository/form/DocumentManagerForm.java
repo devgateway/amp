@@ -17,7 +17,7 @@ import org.digijava.module.contentrepository.helper.DocumentData;
  */
 public class DocumentManagerForm extends ActionForm {
 	
-	private String type						= null;
+	private String type						= "private";
 	private String docTitle					= null;
 	private String docDescription				= null;
 	private String docNotes					= null;

@@ -14,8 +14,11 @@ public class OrgManagerForm
   //private Collection pages;
 
   private Long ampOrgTypeId;
+  private Long oldAmpOrgTypeId;
   private String orgType;
-  private String keyword;
+  private String oldOrgType;
+
+private String keyword;
   private int numResults;
   private int tempNumResults;
   private Collection orgTypes = null;
@@ -74,6 +77,7 @@ public OrgManagerForm() {
       keyword = null;
       setOrgType("");
       setAmpOrgTypeId(null);
+      setOldAmpOrgTypeId(null);
       setTempNumResults(10);
     }
   }
@@ -388,4 +392,19 @@ public int getOffset() {
 public void setOffset(int offset) {
 	this.offset = offset;
 }
+public String getOldOrgType() {
+	return oldOrgType;
+}
+
+public void setOldOrgType(String oldOrgType) {
+	this.oldOrgType = oldOrgType;
+}
+public Long getOldAmpOrgTypeId() {
+	return oldAmpOrgTypeId;
+}
+
+public void setOldAmpOrgTypeId(Long oldAmpOrgTypeId) {
+	this.oldAmpOrgTypeId = oldAmpOrgTypeId;
+}
+
 }

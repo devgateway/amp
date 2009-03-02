@@ -99,6 +99,15 @@ div.fakefile2 input{
 
 <digi:instance property="helpForm" />
 <script language="JavaScript">
+
+function IsEmpty(){
+ 	filed  = document.getElementById("fileUploaded").value;
+		   if (filed.length==0) {
+		      return false;
+		   }
+		   else { return true; }
+}
+
   	function exp() {
         	<digi:context name="url" property="context/module/moduleinstance/helpActions.do?actionType=export" />
 			helpForm.action="${url}";
@@ -106,10 +115,15 @@ div.fakefile2 input{
   }
   
   	function imp(){
-  			<digi:context name="url" property="context/module/moduleinstance/helpActions.do?actionType=importing" />
-			helpForm.action="${url}";
-  			helpForm.submit();
-  			}
+  		if(IsEmpty() == false){
+  	  		
+				alert("The content of the imported file is not ok. Please import a .xml file exported from this menu.");
+  	  		}else{
+	  			<digi:context name="url" property="context/module/moduleinstance/helpActions.do?actionType=importing" />
+				helpForm.action="${url}";
+	  			helpForm.submit();
+  	  		}
+  		}
 
 	function editTopic(topic,heltType){
 			if(heltType == "admin"){

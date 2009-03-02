@@ -627,18 +627,14 @@ public class HelpActions extends DispatchAction {
         byte[] fileData    = myFile.getFileData();
 
 
-
-        System.out.println("fileData"+fileData);
         InputStream inputStream= new ByteArrayInputStream(fileData);
         
 
         JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jaxbi");
         Unmarshaller m = jc.createUnmarshaller();
         AmpHelpRoot help_in;
-        System.out.println("inputStream:"+inputStream);
-
+        
             help_in = (AmpHelpRoot) m.unmarshal(inputStream);
-            System.out.println("help_in:"+help_in);
             //remove all existing help topics           
             List<HelpTopic> firstLevelTopics=HelpUtil.getFirstLevelTopics(siteId);
             
@@ -651,10 +647,10 @@ public class HelpActions extends DispatchAction {
 				while(it.hasNext())
 				{
 					AmpHelpType element  = (AmpHelpType) it.next();
-                    System.out.println("element:"+element);
                     HelpUtil.updateNewEditHelpData(element,storeMap,Id);
 				}
 			}
+            logger.info("Finished Help Exporting");
 			helpForm.getTopicTree().clear();
 			helpForm.setTopicTree(HelpUtil.getHelpTopicsTree(siteId, moduleInstance));
 			helpForm.setAdminTopicTree(HelpUtil.getHelpTopicsTree(siteId,"admin"));

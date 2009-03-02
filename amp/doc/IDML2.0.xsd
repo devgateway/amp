@@ -18,7 +18,7 @@
 	</xs:element>
 	<xs:complexType name="activityType">
 		<xs:sequence>
-			<xs:element name="id" maxOccurs="unbounded">
+			<xs:element name="id" minOccurs="0" maxOccurs="unbounded">
 				<xs:complexType>
 					<xs:sequence>
 						<xs:element name="assigningOrg" type="codeValueType"/>

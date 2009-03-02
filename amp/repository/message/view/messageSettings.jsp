@@ -29,16 +29,23 @@
 	var helpForAdvanceAlerts='<digi:trn key="message:helpForAdvAlerts">This indicates the number of days in advance an Alert will be recieved by a user<br> for all alerts that are time sensitive and for upcoming events.</digi:trn>'
 	var helpForEmailable="<digi:trn key='message:helpForEmailables'>Set this to true to allow all alerts to be forwarded to the user\'s email address</digi:trn>"
 	
-	function validate(record){
-		if(record==null || record=="" || record=="-1"){
+	function validate(record,action,minusAccepted){
+		if(action=='save' && (record==null || record=="" || record=="-1")){
 			alert('<digi:trn key="message:pleaseenterdata">Please enter data to save</digi:trn>');
 			return false;
 		}
+		if(record.length>0){
+			if((minusAccepted==false && record.indexOf("-",0)!= -1) || parseInt(record)!=(record-0)){
+				alert('<digi:trn>Please Enter Only Numeric Positive Values</digi:trn>');
+				return false;
+			}
+		}		
 		return true;
 	}
 
 	function saveRecord(settingType) {
 		var record;
+		var minusAccepted=false; //can't enter negative values
 		if(settingType=='refreshTime'){
 			 record=document.getElementsByName('msgRefreshTimeNew')[0];
 		}else if(settingType=='storage'){
@@ -47,9 +54,10 @@
 			record=document.getElementsByName('daysForAdvanceAlertsWarningsNew')[0];
 		}else if(settingType=='emailAlerts'){
 			record=document.getElementsByName('emailMsgsNew')[0];
+			minusAccepted=true;
 		}
 
-		if(validate(record.value)){
+		if(validate(record.value,'save',minusAccepted)){
 			 <digi:context name="saveRecord" property="context/module/moduleinstance/msgSettings.do"/>
 			 url = "<%= saveRecord %>?actionType=saveSettings&settingType="+settingType;
 			 messageForm.action =url;
@@ -59,11 +67,24 @@
 	}
 
 	function saveAll(){
-		<digi:context name="saveAll" property="context/module/moduleinstance/msgSettings.do"/>
-		url = "<%= saveAll %>?actionType=saveSettings&settingType=saveAll";
-		messageForm.action =url;
-		messageForm.submit();
-		return true;
+		var myArray=new Array(3);
+		myArray[0]=document.getElementsByName('msgRefreshTimeNew')[0].value;
+		myArray[1]=document.getElementsByName('msgStoragePerMsgTypeNew')[0].value;
+		myArray[2]=document.getElementsByName('daysForAdvanceAlertsWarningsNew')[0].value;		
+		var successfulValidation=false;
+		for(var i=0;i<myArray.length;i++){
+			successfulValidation=validate(myArray[i], 'saveAll',false);	
+			if(successfulValidation==false){
+				break;
+			}		
+		}
+		if(successfulValidation){
+			<digi:context name="saveAll" property="context/module/moduleinstance/msgSettings.do"/>
+			url = "<%= saveAll %>?actionType=saveSettings&settingType=saveAll";
+			messageForm.action =url;
+			messageForm.submit();
+			return true;
+		}
 	}
 </script>
 
@@ -106,7 +127,7 @@
 													<img src="../ampTemplate/images/help.gif" onmouseover="stm([help,helpForRefreshTime],Style[13])" onmouseout="htm()"/>
 												</td>
 												<td align="center">${messageForm.msgRefreshTimeCurr}</td>
-												<td align="center"><html:text name="messageForm" property="msgRefreshTimeNew" /></td>
+												<td align="center"><html:text name="messageForm" property="msgRefreshTimeNew"/></td>
 												<td align="center">
 													<c:set var="saveBtn"><digi:trn key="message:btn:save">Save</digi:trn></c:set>
 													<input type="button" value="${saveBtn}" onclick="saveRecord('refreshTime')"/>

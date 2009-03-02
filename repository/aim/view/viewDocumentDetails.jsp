@@ -122,7 +122,7 @@
 	<tr>
 		<td vAlign="top" align="center">
 						<c:set var="translation">
-							<digi:trn key="btn:back">Edit</digi:trn>
+							<digi:trn key="btn:back">Back</digi:trn>
 						</c:set>					
 						<input type="button" value="${translation}" class="dr-menu" onclick="history.back()">
 

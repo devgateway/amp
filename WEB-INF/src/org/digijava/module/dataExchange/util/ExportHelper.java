@@ -16,6 +16,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.dataExchange.Exception.AmpExportException;
 import org.digijava.module.dataExchange.type.AmpColumnEntry;
 
@@ -165,5 +166,6 @@ public class ExportHelper {
 		}
 		return retValue;
 	}
+	
 	
 }

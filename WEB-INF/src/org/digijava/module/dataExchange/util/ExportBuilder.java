@@ -13,6 +13,7 @@ import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FundingDetail;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.PhysicalProgress;
 import org.digijava.module.aim.util.*;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -62,7 +63,7 @@ public class ExportBuilder {
 
 	public ActivityType getActivityType(AmpColumnEntry ampColumnEntry) throws AmpExportException{
 		ActivityType retValue = objectFactory.createActivityType();
-		retValue.setDbKey(ampActivity.getAmpActivityId().toString());
+		retValue.setDbKey(ampActivity.getAmpId());
 		retValue.setDate(ExportHelper.getGregorianCalendar(ampActivity.getCreatedDate()));
 		
 		for (AmpColumnEntry elem : ampColumnEntry.getElements()) {
@@ -84,8 +85,8 @@ public class ExportBuilder {
 					AmpActivityInternalId ids = (AmpActivityInternalId) iterator.next();
 					parent.getId().add(buildActivityTypeId(ids));
 				}
-			} else {
-				throw new AmpExportException("Id is empty", AmpExportException.ACTIVITY_DATA_INEFFICIENT);
+//			} else {
+//				throw new AmpExportException("Id is empty", AmpExportException.ACTIVITY_DATA_INEFFICIENT);
 			}
 		} else if (path.equalsIgnoreCase("activity.title")){
 			if (ampActivity.getName() != null){
@@ -112,7 +113,7 @@ public class ExportBuilder {
 			if (ampActivity.getLocations() != null){
 				for (Iterator iterator = ampActivity.getLocations().iterator(); iterator.hasNext();) {
 					AmpActivityLocation ampLocation = (AmpActivityLocation) iterator.next();
-					parent.getLocation().add(buildLocation(ampLocation.getLocation(), ampColumnEntry.getElementByName("funding")));
+					parent.getLocation().add(buildLocation(ampLocation.getLocation(), ampColumnEntry.getElementByName("locationFunding")));
 				}
 			}
 		} else if (path.equalsIgnoreCase("activity.proposedApprovalDate")){
@@ -294,9 +295,9 @@ public class ExportBuilder {
 					CategoryConstants.IMPLEMENTATION_LEVEL_KEY, 
 					ampActivity.getCategories());		
 
-		if (ampCategoryValue == null){
-			throw new AmpExportException("IMPLEMENTATION_LEVEL is empty", AmpExportException.ACTIVITY_DATA_INEFFICIENT);
-		}
+//		if (ampCategoryValue == null){
+//			throw new AmpExportException("IMPLEMENTATION_LEVEL is empty", AmpExportException.ACTIVITY_DATA_INEFFICIENT);
+//		}
 		return buildCodeValue(ampCategoryValue);
 	}
 
@@ -306,15 +307,24 @@ public class ExportBuilder {
 		retValue.setLang(location.getLanguage());
 		
 		AmpCategoryValueLocations acvLoction = location.getLocation();
+		
+
 		if (acvLoction != null){
-			retValue.setIso3(""+acvLoction.getIso3());
-			retValue.setCountryName(acvLoction.getName());
-			retValue.setGis(location.getGisCoordinates());
-		}
-		AmpCategoryValueLocations acvLoctionRegion = location.getRegionLocation();
-		if (acvLoctionRegion != null){
-			retValue.setLocationName(buildCodeValue(acvLoctionRegion.getCode(),acvLoctionRegion.getName()));
-			AmpCategoryValue categoryValue = acvLoctionRegion.getParentCategoryValue();
+
+			AmpCategoryValueLocations  acvCountry = getCountryLocation(acvLoction);
+			
+			if (acvCountry != null){
+				retValue.setIso3(""+acvCountry.getIso3());
+				retValue.setCountryName(acvCountry.getName());
+				retValue.setGis(location.getGisCoordinates());
+			}
+
+			
+			retValue.setLocationName(buildCodeValue(acvLoction.getCode(),acvLoction.getName()));
+			AmpCategoryValue categoryValue = acvLoction.getParentCategoryValue();
+			if (CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey().equalsIgnoreCase(categoryValue.getValue()) ){
+				retValue.setLocationType(DataExchangeConstants.LOCATION_TYPE_COUNTRY); 
+			}
 			if (CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT.getValueKey().equalsIgnoreCase(categoryValue.getValue()) ){
 				retValue.setLocationType(DataExchangeConstants.LOCATION_TYPE_DISTRICT); 
 			}
@@ -326,11 +336,17 @@ public class ExportBuilder {
 
 				if (ampActivity.getRegionalFundings() != null){
 					Collection regFund = ampActivity.getRegionalFundings();
+					LocationFundingType fFundingType = objectFactory.createLocationFundingType();
 					for (Iterator iterator = regFund.iterator(); iterator.hasNext();) {
 						AmpRegionalFunding regFunding = (AmpRegionalFunding) iterator.next();
-						if (acvLoctionRegion.getCode().equalsIgnoreCase(regFunding.getRegionLocation().getCode())){
-							retValue.getLocationFunding().add(buildLocationFunding(regFunding, ampColumnEntry));
+						if (acvLoction.getName().equalsIgnoreCase(regFunding.getRegionLocation().getName())){
+							buildLocationFunding(fFundingType, regFunding, ampColumnEntry);
 						}
+					}
+					if (!(fFundingType.getCommitments().isEmpty() &&
+							fFundingType.getDisbursements().isEmpty() &&
+							fFundingType.getExpenditures().isEmpty())) {
+						retValue.getLocationFunding().add(fFundingType);
 					}
 				}
 			
@@ -338,42 +354,20 @@ public class ExportBuilder {
 		} else {
 			throw new AmpExportException("Location.LocationName is null", AmpExportException.ACTIVITY_DATA_INEFFICIENT);
 		}
-		
-/*		
-//TODO		if (location.getDepartment())  can not found department
-		if (location.getAmpWoreda() != null){
-			retValue.setLocationType(DataExchangeConstants.LOCATION_TYPE_WOREDA); 
-			retValue.setLocationName(buildCodeValue(location.getAmpWoreda().getGeoCode(),location.getAmpWoreda().getName()));
-		} else if (location.getAmpZone() != null){
-			retValue.setLocationType(DataExchangeConstants.LOCATION_TYPE_ZONE); 
-			retValue.setLocationName(buildCodeValue(location.getAmpZone().getGeoCode(),location.getAmpZone().getName()));
-		} else if (location.getAmpRegion() != null){
-			retValue.setLocationType(DataExchangeConstants.LOCATION_TYPE_REGION); 
-			retValue.setLocationName(buildCodeValue(location.getAmpRegion().getGeoCode(),location.getAmpRegion().getName()));
-			
-			if (ampActivity.getRegionalFundings() != null){
-				Collection regFund = ampActivity.getRegionalFundings();
-				for (Iterator iterator = regFund.iterator(); iterator.hasNext();) {
-					AmpRegionalFunding regFunding = (AmpRegionalFunding) iterator.next();
-					if (location.getAmpRegion().equals(regFunding.getRegion())){
-						retValue.getLocationFunding().add(buildLocationFunding(regFunding, ampColumnEntry));
-					}
-				}
-			}
-			
-		} else if (location.getDgCountry() != null){
-			retValue.setLocationType(DataExchangeConstants.LOCATION_TYPE_ZONE); 
-			retValue.setLocationName(buildCodeValue(location.getDgCountry().getIso3(),location.getDgCountry().getCountryName()));
-		}
-		retValue.setGis(location.getGisCoordinates());
-		retValue.setIso3(location.getDgCountry().getIso3());
-		retValue.setCountryName(location.getDgCountry().getCountryName());
-*/		
+
 		return retValue;
 	}
 
-	private LocationFundingType buildLocationFunding(AmpRegionalFunding ampfunding, AmpColumnEntry ampColumnEntry) throws AmpExportException{
-		LocationFundingType retValue = objectFactory.createLocationFundingType();
+	private AmpCategoryValueLocations getCountryLocation(AmpCategoryValueLocations value){
+		AmpCategoryValueLocations retValue = value;
+		if (value.getParentLocation() != null){
+			retValue = getCountryLocation(value.getParentLocation());
+		}
+		return retValue;
+	}
+	
+	private void buildLocationFunding(LocationFundingType lFundingType, AmpRegionalFunding ampfunding, AmpColumnEntry ampColumnEntry) throws AmpExportException{
+//		LocationFundingType retValue = objectFactory.createLocationFundingType();
 		
 		String fDetailType = (ampfunding.getAdjustmentType() == 1) ? 
 				DataExchangeConstants.ADJUSTMENT_TYPE_ACTUAL : 
@@ -386,25 +380,26 @@ public class ExportBuilder {
 		switch (ampfunding.getTransactionType().intValue()) {
 		case Constants.COMMITMENT:
 			if (ampColumnEntry.getElementByName("commitments").canExport()){
-				retValue.getCommitments().add(fDetail);
+				lFundingType.getCommitments().add(fDetail);
 			}
 			break;
 		case Constants.DISBURSEMENT:
 			if (ampColumnEntry.getElementByName("disbursements").canExport()){
-				retValue.getDisbursements().add(fDetail);
+				lFundingType.getDisbursements().add(fDetail);
 			}
 			break;
 		case Constants.EXPENDITURE:
 			if (ampColumnEntry.getElementByName("expenditures").canExport()){
-				retValue.getExpenditures().add(fDetail);
+				lFundingType.getExpenditures().add(fDetail);
 			}
 			break;
 
 		}
 		
-		return retValue;
+//		return retValue;
 	}	
 
+	
 
 	private FundingType buildFunding(AmpFunding funding, AmpColumnEntry ampColumnEntry) throws AmpExportException{
 		FundingType retValue = objectFactory.createFundingType();
@@ -681,6 +676,12 @@ public class ExportBuilder {
 		FundingDetailType retValue = objectFactory.createFundingDetailType();
 		retValue.setType(type);
 		retValue.setDate(ExportHelper.getGregorianCalendar(date));
+		
+		boolean returnString = Boolean.parseBoolean( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS) );
+		if (returnString){
+			amount = amount * 1000;
+		}
+
 		retValue.setAmount(amount);
 		retValue.setCurrency(currency);
 		

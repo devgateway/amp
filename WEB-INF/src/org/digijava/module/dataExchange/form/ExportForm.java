@@ -5,7 +5,10 @@ package org.digijava.module.dataExchange.form;
 import java.util.Collection;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.digijava.module.aim.ar.util.ReportsUtil;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
@@ -54,6 +57,23 @@ public class ExportForm extends ActionForm{
 	public ExportForm(){
 	
 	}
+	
+	
+
+	@Override
+	public void reset(ActionMapping mapping, HttpServletRequest request) {
+		// TODO Auto-generated method stub
+		super.reset(mapping, request);
+		
+		setSelectedTeamId(null);
+		setDonorTypeSelected(null);
+		setDonorGroupSelected(null);
+		setDonorAgencySelected(null);
+		setPrimarySectorsSelected(null);
+		setSecondarySectorsSelected(null);	
+	}
+
+
 
 
 	public AmpColumnEntry getActivityTree() {

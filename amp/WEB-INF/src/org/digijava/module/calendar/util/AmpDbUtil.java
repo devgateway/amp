@@ -322,7 +322,9 @@ public class AmpDbUtil {
     try {
       Session session = PersistenceManager.getRequestDBSession();
       tx = session.beginTransaction();
-      AmpCalendar cal = getAmpCalendar(ampCalendarId);
+      AmpCalendar ampCal = getAmpCalendar(ampCalendarId);
+      Calendar  cal=ampCal.getCalendarPK().getCalendar();
+      session.delete(ampCal);
       session.delete(cal);
       tx.commit();
     }

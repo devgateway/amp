@@ -10,6 +10,7 @@ import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.DateCell;
 
+import com.lowagie.text.Font;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
@@ -45,7 +46,7 @@ public class DateCellPDF extends PDFExporter {
 	 */
 	public void generate() {
 		DateCell c=(DateCell) item;
-		PdfPCell pdfc = new PdfPCell(new Paragraph(c.toString()));
+		PdfPCell  pdfc = new PdfPCell(new Paragraph(c.toString(),new Font(Font.COURIER, 9)));
 		
 		table.addCell(pdfc);
 	}

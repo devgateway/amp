@@ -900,14 +900,15 @@ System.out.println("lang:"+lang);
                                             Message newMsg = new Message();
 
                                                 newMsg.setSiteId(siteId.toString());
-                                                System.out.println("siteId:"+siteId);
-                                                newMsg.setMessage(ll.getTitle());
-                                                System.out.println("Message:"+ll.getTitle());
-                                                        newMsg.setKey(TranslatorWorker.generateTrnKey(help.getTopicKey()));
-                                                newMsg.setLocale(ll.getCode());
                                              
-                                            TranslatorWorker.getInstance("").save(newMsg);
-
+                                                newMsg.setMessage(ll.getTitle());
+                                                newMsg.setKey(TranslatorWorker.generateTrnKey(help.getTopicKey()));
+                                                newMsg.setLocale(ll.getCode());
+                                                
+                                                
+                                                
+                                            TranslatorWorker.getInstance("").update(newMsg);
+                                         
                                          udateEditpData(ll,help.getEditorKey(),help.getLastModDate());
                                          }
                  	 insertHelp(helptopic);

@@ -236,7 +236,11 @@ function loadPage()
 			document.aimAddOrgForm.orgTypeFlag.value = "none";
 			return false;
 		}
-        document.aimAddOrgForm.submit();
+
+		<digi:context name="addSec" property="context/module/moduleinstance/editOrganisation.do" />
+		document.aimAddOrgForm.action = "<%= addSec %>;
+		document.aimAddOrgForm.target = "_self";
+	    document.aimAddOrgForm.submit();
 	}
 
 	// defunct

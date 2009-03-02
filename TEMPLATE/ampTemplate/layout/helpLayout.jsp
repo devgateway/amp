@@ -7,7 +7,7 @@
 	<digi:base />
 	<digi:context name="digiContext" property="context"/>
 	<HEAD>
-		<TITLE>HELP<tiles:getAsString name="title"/></TITLE>
+		<TITLE><tiles:getAsString name="title"/></TITLE>
 		<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">		
 		<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
 		<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
@@ -53,9 +53,11 @@
 							<TD align=center vAlign=top>
 								<TABLE width="100%" cellPadding=0 cellSpacing=0 vAlign="top" align="left" border="0">
 									<TR>
-										<TD vAlign="top" align="left" width="75%" > -->
+										<TD vAlign="top" align="left" width="75%" >
+										 -->
 											<digi:insert attribute="body" />
-										<!--</TD>										
+										<!--
+										</TD>										
 									</TR>
 								</TABLE>
 							</TD>
@@ -65,11 +67,15 @@
 			</TR>
 			<TR>
 				<TD width="100%" >
+				-->
+
 				   <digi:insert attribute="footer" />
+				<!--
 				</TD>
 			</TR>
 			</TBODY>
-		</TABLE> -->
+		</TABLE> 
+		-->
 	</BODY>
 </HTML>
 

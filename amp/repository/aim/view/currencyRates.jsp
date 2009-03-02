@@ -250,7 +250,7 @@ function fnSubmit() {
 											<table cellPadding=0 cellSpacing=0>
 												<tr>
 													<td>
-														<html:text property="filterByDateFrom" size="10"
+														<html:text property="filterByDateFrom" size="10" readonly="true"
 														styleId="filterByDateFrom" styleClass="inp-text"/>
 													</td>
 													<td align="left" vAlign="center">&nbsp;

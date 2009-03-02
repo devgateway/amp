@@ -12,7 +12,9 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/relatedLinks.js"/>"></script>
 
-<bean:define id="reportObject" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page" />
+<logic:present name="reportMeta" scope="session">
+	<bean:define id="reportObject" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page" />
+</logic:present>
 
 <!-- this is for the nice tooltip widgets -->
 <DIV id="TipLayer"
@@ -181,7 +183,11 @@ saveReportEngine	= null;
 </script>
 
 <script type="text/javascript">
-		var currentReportId	= ${reportObject.ampReportId};
+		var currentReportId	= -1;
+		<logic:present name="reportMeta" scope="session">
+			currentReportId	= ${reportObject.ampReportId};
+		</logic:present>	
+		
 		YAHOOAmp.namespace("YAHOOAmp.amptab");
 		YAHOOAmp.amptab.init = function() {
 		    		var tabView = new YAHOOAmp.widget.TabView('tabview_container');

@@ -12,6 +12,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/relatedLinks.js"/>"></script>
 
+<bean:define id="reportObject" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page" />
 
 <!-- this is for the nice tooltip widgets -->
 <DIV id="TipLayer"
@@ -180,6 +181,7 @@ saveReportEngine	= null;
 </script>
 
 <script type="text/javascript">
+		var currentReportId	= ${reportObject.ampReportId};
 		YAHOOAmp.namespace("YAHOOAmp.amptab");
 		YAHOOAmp.amptab.init = function() {
 		    		var tabView = new YAHOOAmp.widget.TabView('tabview_container');
@@ -591,13 +593,11 @@ function validateFormat(){
 	}
 
 	
-	
-	var scrolling=readCookie('report_scrolling');
-		scrolling=(scrolling==null)?false:(scrolling=="true")?true:false;
-		
+	var scrollingStr=readCookie('report_scrolling');
+	var scrolling=(scrollingStr==null)?false:(scrollingStr==new Number(currentReportId).toString() )?true:false;	
 		
 	function makeScroll(){
-		createCookie('report_scrolling',true,1);
+		createCookie('report_scrolling',currentReportId,1);
 		showScroll();
 		document.getElementById("frezzlink").setAttribute("onClick","hiddeScroll()");
 		document.getElementById("frezzlink").setAttribute("class","settingsLink");

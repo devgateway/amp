@@ -68,6 +68,12 @@
 
       	}
 
+		if (frmContrl.value < 0 || frmContrl.value > 100) {
+      		alert('Value must be between 0 and 100.');
+      		frmContrl.value = "";
+      		return false;
+      	}
+
 	}
 
 	function validateForm() {

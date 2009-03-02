@@ -4,6 +4,7 @@
  <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
  <%@ taglib uri="/taglib/struts-html" prefix="html" %>
  <%@ taglib uri="/taglib/digijava" prefix="digi" %>
+ <%@ taglib uri="/taglib/category" prefix="category" %>
  <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
  <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
  <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
@@ -169,18 +170,13 @@ function selectOrganisation1() {
                                   </option>
                               </logic:iterate>
                             </select></td>
-							<td align="right" valign="top" nowrap><select name="contrFinInstrId" class="inp-text" style="width: 100px">
-                              <option value="-1">
-                                <digi:trn key="aim:addEditActivitySelect">Select</digi:trn>
-                              </option>
-                              <logic:iterate name="aimEUActivityForm" property="finInstrs" id="modality" indexId="cIdx" type="org.digijava.module.categorymanager.dbentity.AmpCategoryValue"> <option value='<bean:write name="modality" property="id"/>'
-								
-                                  <c:if test="${ aimEUActivityForm.contrFinInstrId[idx] == modality.id }">selected</c:if>
-                                >
-                                  <bean:write name="modality" property="value"/>
-                                  </option>
-                              </logic:iterate>
-                            </select></td>
+							<td align="right" valign="top" nowrap>
+							<c:set var="translation">
+										<digi:trn key="aim:addEditActivitySelect">Select</digi:trn>
+									</c:set>
+
+										<category:showoptions firstLine="${translation}" name ="aimEditActivityForm"   property="funding.modality"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.TYPE_OF_ASSISTENCE_KEY %>" styleClass="inp-text" />
+							</td>
 							<td align="right" valign="top" nowrap><field:display name="Contribution Donors" feature="Costing">
                               <c:set var="valueId"> contrDonorId${idx} </c:set>
                               <c:set var="nameId"> nameContrDonorId${idx} </c:set>
@@ -188,22 +184,13 @@ function selectOrganisation1() {
                               <input name="contrDonorName" type='text' id="${nameId}" style="text-align:right" value='${aimEUActivityForm.contrDonorName[idx]}' size="10" style="background-color:#CCCCCC" onKeyDown="return false"/>
                               <aim:addOrganizationButton useClient="true" htmlvalueHolder="${valueId}" htmlNameHolder="${nameId}" styleClass="dr-menu"><digi:trn key="aim:addEditActivitySelectDonorDots">....</digi:trn></aim:addOrganizationButton>
                             </field:display></td>
-							<td align="right" valign="top" nowrap><field:display name="Contribution Financing Type" feature="Costing">
-                              <logic:present name="aimEUActivityForm" property="finTypes">
-                                <select name="contrFinTypeId" style="width: 100px" class="inp-text">
-                                  <option value="-1">
-                                    <digi:trn key="aim:addEditActivitySelect">Select</digi:trn>
-                                  </option>
-                                  <logic:iterate name="aimEUActivityForm" property="finTypes" id="finType" indexId="cIdx" type="org.digijava.module.categorymanager.dbentity.AmpCategoryValue"> <option value='<bean:write name="finType" property="id"/>'
-								
-                                      <c:if test="${ aimEUActivityForm.contrFinTypeId[idx] == finType.id }">selected</c:if>
-                                    >
-                                      <bean:write name="finType" property="value"/>
-                                      </option>
-                                  </logic:iterate>
-                                </select>
-                              </logic:present>
-                            </field:display></td>
+							<td align="right" valign="top" nowrap>
+                                  <c:set var="translation">
+										<digi:trn key="aim:addEditActivitySelect">Select</digi:trn>
+									</c:set>
+
+										<category:showoptions firstLine="${translation}" name ="aimEditActivityForm"   property="funding.assistanceType"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" styleClass="inp-text" />
+                                </td>
 							</tr>
 						</logic:iterate>			
 		</table>

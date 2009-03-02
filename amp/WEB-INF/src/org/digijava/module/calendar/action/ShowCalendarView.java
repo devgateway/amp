@@ -55,8 +55,7 @@ public class ShowCalendarView extends Action {
             if (!sett.getGlobalSettingsValue().equalsIgnoreCase("et")) {
                 for (Iterator iter = calendarTypesList.iterator(); iter.hasNext(); ) {
                     LabelValueBean item = (LabelValueBean) iter.next();
-                    if (item.getLabel().equalsIgnoreCase("ethiopian") ||
-                        item.getLabel().equalsIgnoreCase("ethiopian fy")) {
+                    if (item.getLabel().equalsIgnoreCase("ethiopian") ||item.getLabel().equalsIgnoreCase("ethiopian fy")) {
                         iter.remove();
                     }
                 }
@@ -153,8 +152,11 @@ public class ShowCalendarView extends Action {
             return mapping.findForward("forward");
         }
         filter.setEventTypes(eventTypes);
-        // donors
-        // Collection organisations = org.digijava.module.aim.util.DbUtil.getDonors();
+        Boolean resetEventTypes=calendarViewForm.getResetEventTypes();
+        if(resetEventTypes!=null && resetEventTypes){
+        	filter.setSelectedEventTypes(new String[]{});
+        }
+        // donors        
         Collection organisations = org.digijava.module.aim.util.DbUtil.getOrganisations();
         List donors = new ArrayList();
         Iterator it = organisations.iterator();
@@ -164,6 +166,10 @@ public class ShowCalendarView extends Action {
             donors.add(lvb);
         }
         filter.setDonors(donors);
+        Boolean resetDonors=calendarViewForm.getResetDonors();
+        if(resetDonors!=null && resetDonors){
+        	filter.setSelectedDonors(new String[]{});
+        }
         // select event types, donors, showPublicEvents
         if (!calendarViewForm.isFilterInUse()||eventCreated!=null) {
             // event types
@@ -216,18 +222,18 @@ public class ShowCalendarView extends Action {
         calendarViewForm.setAmpCalendarGraphs(ampCalendarGraphs);      
         
         
-        if(calendarViewForm.getView().equals("yearly")){        	
-        	Integer [] eventsAmountByMonth=new Integer[] {0,0,0,0,0,0,0,0,0,0,0,0,0};
-        	String[] monthsArray=new String[]{"jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"};
-        	for (int i=0;i<monthsArray.length;i++) {
-				for(AmpCalendarGraph acg:ampCalendarGraphs){
-					if(acg.getAmpCalendar().getCalendarPK().getStartMonth()==i){
-						eventsAmountByMonth[i]++;
-					}
-				}
-			}
-        	calendarViewForm.setEventsAmountByMonth(eventsAmountByMonth);
-        }
+//        if(calendarViewForm.getView().equals("yearly")){        	
+//        	Integer [] eventsAmountByMonth=new Integer[] {0,0,0,0,0,0,0,0,0,0,0,0,0};
+//        	String[] monthsArray=new String[]{"jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"};
+//        	for (int i=0;i<monthsArray.length;i++) {
+//				for(AmpCalendarGraph acg:ampCalendarGraphs){
+//					if(acg.getAmpCalendar().getCalendarPK().getStartMonth()==i){
+//						eventsAmountByMonth[i]++;
+//					}
+//				}
+//			}
+//        	calendarViewForm.setEventsAmountByMonth(eventsAmountByMonth);
+//        }
 
 
         return mapping.findForward("success");

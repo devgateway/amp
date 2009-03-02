@@ -7,18 +7,19 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 
 <digi:instance property="calendarViewForm"/>
 
 <script type="text/javascript">
 function submitFilterForm(view, timestamp) {
 	changeState();	
-  var form = document.getElementById('filterForm');
-  if (form != null) {
-    form.view.value = view;
-    form.timestamp.value = timestamp;
-    form.submit();
-  }
+  	var form = document.getElementById('filterForm');
+  	if (form != null) {
+    	form.view.value = view;
+    	form.timestamp.value = timestamp;
+    	form.submit();
+  	}
 }
 function changeState() {
   var showPublicEvents = document.getElementById('showPublicEvents');
@@ -30,6 +31,42 @@ function changeState() {
 
   }
 } 
+function changeDonorsAndEventTypesState(){
+	changeDonorsState();
+	changeEventTypesState();
+}
+
+function changeDonorsState(){	
+	var donors= $("input[@id^='donors_']");
+	var resetDonors=true;
+	for(var i=0;i<donors.length;i++){
+		if(donors[i].checked){
+			resetDonors=false;
+			break;
+		}
+	}
+	if(resetDonors==true){
+		document.calendarViewForm.resetDonors.value=true;
+	}else{
+		document.calendarViewForm.resetDonors.value=false;
+	}
+}
+
+function changeEventTypesState(){
+	var evntTypes= $("input[@id^='evType_']");
+	var resetEventTypes=true;
+	for(var i=0;i<evntTypes.length;i++){
+		if(evntTypes[i].checked){
+			resetEventTypes=false;
+			break;
+		}
+	}
+	if(resetEventTypes==true){
+		document.calendarViewForm.resetEventTypes.value=true;
+	}else{
+		document.calendarViewForm.resetEventTypes.value=false;
+	}	
+}
 </script>
 
 
@@ -37,6 +74,8 @@ function changeState() {
 <html:hidden name="calendarViewForm" property="timestamp" value="${calendarViewForm.timestamp}"/>
 <html:hidden name="calendarViewForm" property="filterInUse" value="true"/>
 <html:hidden name="calendarViewForm" property="resetFilter" value="${calendarViewForm.resetFilter}"/>
+<html:hidden name="calendarViewForm" property="resetDonors" value="${calendarViewForm.resetDonors}"/>
+<html:hidden name="calendarViewForm" property="resetEventTypes" value="${calendarViewForm.resetEventTypes}"/>
 <html:hidden name="calendarViewForm" property="filter.showPublicEvents" value="${filter.showPublicEvents}"/>
 
 <feature:display name="Filter" module="Calendar">
@@ -48,7 +87,7 @@ function changeState() {
 		  <div style="overflow:auto;width:200px;height:auto;max-height:92px;font-size:12px;font-family:Tahoma;">
 		    <c:if test="${!empty calendarViewForm.filter.eventTypes}">
 		      <table cellpadding="0" cellspacing="0">
-		        <c:forEach var="eventType" items="${calendarViewForm.filter.eventTypes}">
+		        <c:forEach var="eventType" items="${calendarViewForm.filter.eventTypes}" varStatus="stat">
 		          <tr>
 		            <td style="background-color: #CCECFF;width:29px;padding:4px;text-align:center;">
 		              <div style="height: 15px; width: 24px; background-color: ${eventType.color}; border: solid 1px Black;">
@@ -58,7 +97,7 @@ function changeState() {
 		             <div style="white-space: nowrap;">${eventType.name}</div> 
 		            </td>
 		            <td>
-		              <html:multibox name="calendarViewForm" property="filter.selectedEventTypes" value="${eventType.id}"/>
+		              <html:multibox name="calendarViewForm" property="filter.selectedEventTypes" value="${eventType.id}" styleId="evType_${stat.index}"/>
 		            </td>
 		          </tr>
 		        </c:forEach>
@@ -80,16 +119,16 @@ function changeState() {
 		      <table cellpadding="0" cellspacing="0">
 		        <tr>
 		          <td style="background-color: #CCECFF;width:29px;padding:4px;text-align:center;">
-		            <html:multibox name="calendarViewForm" property="filter.selectedDonors" value="None" />
+		            <html:multibox name="calendarViewForm" property="filter.selectedDonors" value="None" styleId="donors_none"/>
 		          </td>
 		          <td style="padding:5px;width:115px;text-align:left;font-weight:bold;white-space: nowrap;">
 		            <digi:trn key="calendar:donorsNone">None</digi:trn>
 		          </td>
 		        </tr>
-		        <c:forEach var="donor" items="${calendarViewForm.filter.donors}">
+		        <c:forEach var="donor" items="${calendarViewForm.filter.donors}" varStatus="stat">
 		          <tr>
 		            <td style="background-color: #CCECFF;width:29px;padding:2px;text-align:center;font-weight:bold;">
-		              <html:multibox name="calendarViewForm" property="filter.selectedDonors" value="${donor.value}"/>
+		              <html:multibox name="calendarViewForm" property="filter.selectedDonors" value="${donor.value}" styleId="donors_${stat.index}"/>
 		            </td>
 		            <td style="padding:3px;width:115px;text-align:left;font-weight:bold;white-space: nowrap" title="${donor.label}" nowrap="nowrap">
 		              <div style="white-space: nowrap;">${donor.label}</div> 
@@ -109,7 +148,7 @@ function changeState() {
 	</div>
 	<div style="padding:5px;width:250px;height:28px;">
 		<field:display name="Run Filter Button" feature="Filter">
-			<input type="submit" value="<digi:trn key="calendar:runFilter">Run Filter</digi:trn>" style="min-width:88px;" />
+			<input type="submit" value="<digi:trn key="calendar:runFilter">Run Filter</digi:trn>" style="min-width:88px;" onclick="changeDonorsAndEventTypesState();"/>
 		</field:display>
 	    &nbsp;
 	    <field:display name="Reset Filter Button" feature="Filter">

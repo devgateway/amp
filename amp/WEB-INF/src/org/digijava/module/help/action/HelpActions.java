@@ -185,8 +185,9 @@ public class HelpActions extends DispatchAction {
 			    	   
 			    	  if(hitCount == 0){
 			    		  
-			    		  help.setTitle(null);
-						  help.setBody(null);
+			    		  out.println("<div style=\"font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;\"><a class=\"link\"><b>"+key+"</b></a></div>");
+
+			    		  out.println("<div>Topic "+key+" not found...</div>");
 			    	  
 			    	  }else{
 			    	  

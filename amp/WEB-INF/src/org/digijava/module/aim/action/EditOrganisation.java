@@ -263,6 +263,7 @@ public class EditOrganisation
       }
     }
     Collection orgGroup = new ArrayList();
+    Collection oldOrgGroup = editForm.getOrgGroup();
     editForm.setOrgGroup(orgGroup);
 
     //Collection country = DbUtil.getAllCountries();
@@ -800,6 +801,7 @@ public class EditOrganisation
               break;
           }
           if (forw) {
+    	    editForm.setOrgGroup(oldOrgGroup);
             editForm.setFlag("completePledges");
             return mapping.findForward("forward");
           }

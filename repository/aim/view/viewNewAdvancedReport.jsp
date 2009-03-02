@@ -194,20 +194,26 @@ session.setAttribute("progressValue", counter);
                 <a class="settingsLink" onClick="showFilter(); " >
                 <digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn>
                 </a>
+                <%
+               	 	AmpARFilter arf = (AmpARFilter) session.getAttribute("ReportsFilter");
+                	if (arf.isPublicView()==false){%>
                 <feature:display name="Save Report/Tab with Filters" module="Report and Tab Options">
 	          	 	|
 	          	 	<a class="settingsLink" onClick="initSaveReportEngine(false);saveReportEngine.showPanel(); " title="${saveFiltersTooltip}" >
 	                	${saveFilters}
 	                </a>
                 </feature:display>
+               <%}%>
+               
            	  <logic:notEqual name="viewFormat" value="foldable">
+           	  	<%if (arf.isPublicView()==false){%>
            	  	|
 				<a  id="frezzlink" class="settingsLinkDisable" style="cursor: default;">
                		<script language="javascript">
 						document.write((scrolling)?msg2:msg1);
 					</script>
                 </a>
-                      	
+                <%} %>  	
                       	
            	|<a class="settingsLink" onClick="showRange(); " >
                		 <digi:trn key="rep:pop:ChangeRange">Change Range</digi:trn>
@@ -237,10 +243,7 @@ session.setAttribute("progressValue", counter);
              <tr>
              <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
 				<strong><digi:trn key="rep:pop:SelectedRange">Selected Range:</digi:trn></strong>
-				<%
-                	AmpARFilter arf = (AmpARFilter) session.getAttribute("ReportsFilter");
-                %>
-                <c:set var="all" scope="page">
+				<c:set var="all" scope="page">
                 	<digi:trn key="rep:pop:SelectedRangeAll">All:</digi:trn>
                 </c:set>
                 
@@ -272,12 +275,16 @@ session.setAttribute("progressValue", counter);
                 <a class="settingsLink" onClick="showFilter(); " >
                 <digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn>
                 </a>
+                <%
+                AmpARFilter arf = (AmpARFilter) session.getAttribute("ReportsFilter");
+                if (arf.isPublicView()==false){%>
                 <feature:display name="Save Report/Tab with Filters" module="Report and Tab Options">
 	                |
 	          	 	<a class="settingsLink" onClick="initSaveReportEngine(true);saveReportEngine.showPanel(); " title="${saveFiltersTooltip}">
 	                	${saveFilters}
 	                </a>
            		</feature:display>
+           		<%}%>
            	  <logic:notEqual name="viewFormat" value="foldable">
            	  |
            	  	<a  id="frezzlink" class="settingsLinkDisable">
@@ -314,9 +321,6 @@ session.setAttribute("progressValue", counter);
              <tr>
              <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
 				<strong><digi:trn key="rep:pop:SelectedRange">Selected Range:</digi:trn></strong>
-				<%
-                	AmpARFilter arf = (AmpARFilter) session.getAttribute("ReportsFilter");
-                %>
                     <c:set var="all" scope="page">
                 	<digi:trn key="rep:pop:SelectedRangeAll">All:</digi:trn>
                 </c:set>

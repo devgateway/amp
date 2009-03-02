@@ -42,8 +42,8 @@ public class CalendarViewForm  extends ActionForm {
     private boolean filterInUse;
     private Collection ampCalendarGraphs;
     private Boolean resetFilter;
-    private Integer [] eventsAmountByMonth;
-    private Integer eventsAmountIndexed;
+    private Boolean resetDonors;
+    private Boolean resetEventTypes;   
 
   public GregorianCalendar getCurrentDate() {
         return currentDate;
@@ -225,34 +225,34 @@ public class CalendarViewForm  extends ActionForm {
   }
 
   public void reset(ActionMapping mapping, HttpServletRequest request) {
-	  String[] emptylist = new String[0];
-	  if (this.filter != null){
-		  this.filter.setSelectedEventTypes(emptylist);
-	  }
-	  String[] emptyDonorsList=new String[0];
-	  if (this.filter != null){
-		  this.filter.setSelectedDonors(emptyDonorsList);
-	  }
+//	  String[] emptylist = new String[0];
+//	  if (this.filter != null){
+//		  this.filter.setSelectedEventTypes(emptylist);
+//	  }
+//	  String[] emptyDonorsList=new String[0];
+//	  if (this.filter != null){
+//		  this.filter.setSelectedDonors(emptyDonorsList);
+//	  }
 	  /* if(filter!=null){
        this.filter.setShowPublicEvents(false);
      }
     */
   }
 
-public Integer[] getEventsAmountByMonth() {
-	return eventsAmountByMonth;
+public Boolean getResetDonors() {
+	return resetDonors;
 }
 
-public void setEventsAmountByMonth(Integer[] eventsAmountByMonth) {
-	this.eventsAmountByMonth = eventsAmountByMonth;
+public void setResetDonors(Boolean resetDonors) {
+	this.resetDonors = resetDonors;
 }
 
-public Integer getEventsAmountIndexed(int index) {
-	return eventsAmountByMonth[index];
+public Boolean getResetEventTypes() {
+	return resetEventTypes;
 }
 
-public void setEventsAmountIndexed(int index,Integer value) {
-	eventsAmountByMonth[index]=value;
+public void setResetEventTypes(Boolean resetEventTypes) {
+	this.resetEventTypes = resetEventTypes;
 }
 
 

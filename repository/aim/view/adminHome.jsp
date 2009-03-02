@@ -341,7 +341,7 @@
                             </td>
                           </tr>
                           --%>
-                          <feature:display name="Dynamic Region Manager" module="ADMINISTRATIVE SECTION">
+                          <module:display name="Dynamic Region Manager" parentModule="ADMINISTRATIVE SECTION">
                            <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -353,7 +353,7 @@
                               </digi:link>
                             </td>
                           </tr>
-                          </feature:display>
+                          </module:display>
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>

@@ -67,6 +67,7 @@
 <module:display name="Org Profile"></module:display>
 <module:display name="Resources"></module:display>
 <module:display name="Global Permission Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="Dynamic Region Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <feature:display name="My Resources" module="Resources"></feature:display> 
 <feature:display name="Team Resources" module="Resources"></feature:display>
 <feature:display name="Public Resources" module="Resources"></feature:display>

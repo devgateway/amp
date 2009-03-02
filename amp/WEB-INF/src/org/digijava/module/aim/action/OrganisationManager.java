@@ -1,4 +1,4 @@
-package org.digijava.module.aim.action;
+	package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -66,6 +66,14 @@ public class OrganisationManager
       eaForm.setAlpha(null);
 
     }
+    
+    //AMP-5453
+    if ((eaForm.getAmpOrgTypeId() != null) && (!eaForm.getAmpOrgTypeId().equals(eaForm.getOldAmpOrgTypeId()))){
+    	if (eaForm.getOldAmpOrgTypeId() != null)
+    		eaForm.setAlpha("viewAll");
+    	eaForm.setOldAmpOrgTypeId(eaForm.getAmpOrgTypeId());
+    }
+    
     String alpha = eaForm.getAlpha(); //request.getParameter("alpha");
     if (alpha == null || alpha.trim().length() == 0) {
     	eaForm.setOrgTypes(DbUtil.getAllOrgTypes()); 

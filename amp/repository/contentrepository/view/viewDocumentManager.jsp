@@ -27,6 +27,8 @@
 <bean:define id="meTeamMember" name="myForm" property="teamMember" />
 
 <bean:define id="tMembers" name="myForm" property="teamMembers" />
+<bean:define id="selectedType" name="myForm" property="type" />
+
 <%@include file="documentManagerJsHelper.jsp" %>
 
 
@@ -211,13 +213,23 @@ function setHoveredTable(tableId, hasHeaders) {
 			<table border="0" cellPadding=5 cellSpacing=0 width="95%"
 			style="position: relative; left: 10px">
 			<tr><td>
-			<div id="demo" class="yui-navset">
-			    <ul class="yui-nav">
+			<div id="demo" class="yui-navset">			
+				<ul class="yui-nav">
 			        <feature:display name="My Resources" module="Resources">
-			        	<li id="tab1" class="selected"><a href="#my_res"><div><digi:trn key="rep:res:dhtmlTab:myresources">My Resources</digi:trn></div></a></li>
+			        	<c:if  test="${selectedType=='private'}">
+			        		<li id="tab1" class="selected"><a href="#my_res"><div><digi:trn key="rep:res:dhtmlTab:myresources">My Resources</digi:trn></div></a></li>
+			        	</c:if>
+			        	<c:if  test="${selectedType!='private'}">
+			        		<li id="tab1"><a href="#my_res"><div><digi:trn key="rep:res:dhtmlTab:myresources">My Resources</digi:trn></div></a></li>
+			        	</c:if>
 			        </feature:display>
 			        <feature:display name="Team Resources" module="Resources">
-			        	<li id="tab2"><a href="#team_res"><div><digi:trn key="rep:res:dhtmlTab:teamResources">Team Resources</digi:trn></div></a></li>
+			        	<c:if  test="${selectedType=='team'}">
+			        		<li id="tab2" class="selected"><a href="#team_res"><div><digi:trn key="rep:res:dhtmlTab:teamResources">Team Resources</digi:trn></div></a></li>
+			        	</c:if>			        	
+			        	<c:if  test="${selectedType!='team'}">
+			        		<li id="tab2"><a href="#team_res"><div><digi:trn key="rep:res:dhtmlTab:teamResources">Team Resources</digi:trn></div></a></li>
+			        	</c:if>			        	
 					</feature:display>
 					<feature:display name="Public Resources" module="Resources">
 			        	<li id="tab3"><a href="#public_res"><div><digi:trn key="rep:res:dhtmlTab:publicResources">Public Resources</digi:trn></div></a></li>

@@ -435,11 +435,14 @@ html>body #mainEmpty {
 						
 						<feature:display name="Financial Progress Tab" module="Funding">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="2">
+							   <c:set target="${urlTabs}" property="tabIndex" value="2"/>
 							   <LI>
                                		<a name="node">
-                               		<div>
-									<digi:trn key="aim:financialProgress">Financial Progress</digi:trn>								
-                                    </div>
+                               		<digi:link href="/viewFinancingBreakdown.do" name="urlTabs">
+										<div title='<digi:trn key="aim:clickToViewFinancialProgress">Click here to view Financial Progress</digi:trn>'>
+											<digi:trn key="aim:financialProgress">Financial Progress</digi:trn>
+		                                </div>
+									</digi:link>
                                     </a>
 								</LI>
 							</logic:equal>

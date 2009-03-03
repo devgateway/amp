@@ -164,19 +164,20 @@ public class HelpActions extends DispatchAction {
 	
 	public ActionForward searchHelpTopic(ActionMapping mapping,	ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		 String key =request.getParameter("key");
-		 //String keywords = HelpUtil.getTrn(key,request);
+		 String keywords = HelpUtil.getTrn(key,request);
 		 String treKey = HelpUtil.getTrn("Topic Not Found", request);
 		 String locale=RequestUtils.getNavigationLanguage(request).getCode();
 		 Object artidcle = "";
 		 OutputStreamWriter os = null;	
 		 PrintWriter out = null;
+		 
 		
 	try{	
 	     os = new OutputStreamWriter(response.getOutputStream());
 	     out = new PrintWriter(os, true);	 
 				if(key != null){
 					 Collection<LabelValueBean> Searched = new ArrayList<LabelValueBean>();
-					 Hits hits =  LuceneUtil.helpSearch("title", key, request.getSession().getServletContext());
+					 Hits hits =  LuceneUtil.helpSearch("title", keywords, request.getSession().getServletContext());
 			
 			         String artikleTitle;
 					 
@@ -186,7 +187,7 @@ public class HelpActions extends DispatchAction {
 			    	   
 			    	  if(hitCount == 0){
 			    		
-			    		  out.println("<div style=\"font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;\"><a class=\"link\"><b>"+key+"</b></a></div>");
+						  out.println("<div style=\"font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;\"><a class=\"link\"><b>"+key+"</b></a></div>");
 
 			    		  out.println("<div>"+treKey+"...</div>");
 			    	  

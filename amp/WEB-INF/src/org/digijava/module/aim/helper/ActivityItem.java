@@ -132,9 +132,21 @@ public class ActivityItem implements Comparable<ActivityItem>{
 			name = name.replaceAll("\"","&quot;");
 			try {
 				amounts = ActivityUtil.getActivityAmmountIn(entity,curenncyCode,percent);
-				proposedAmount=amounts.proposedAmout();
-				actualAmount=amounts.actualAmount();
-                actualDisbAmount=amounts.actualDisbAmount();
+				if(!amounts.proposedAmout().equalsIgnoreCase("N/A")){
+					proposedAmount=FormatHelper.formatNumber(amounts.getProposedAmout());
+				}else{
+					proposedAmount=amounts.proposedAmout();
+				}
+				if(!amounts.actualAmount().equalsIgnoreCase("N/A")){
+					actualAmount=FormatHelper.formatNumber(amounts.getActualAmount());
+				}else{
+					actualAmount=amounts.actualAmount();
+				}
+				if(!amounts.actualDisbAmount().equalsIgnoreCase("N/A")){
+					actualDisbAmount=FormatHelper.formatNumber(amounts.getActualDisbAmoount());
+				}else{
+					actualDisbAmount=amounts.actualDisbAmount();
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

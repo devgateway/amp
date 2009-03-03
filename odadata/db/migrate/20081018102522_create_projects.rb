@@ -29,7 +29,6 @@ class CreateProjects < ActiveRecord::Migration
       t.references :donor, :donor_agency
       t.references :aid_modality
       t.references :country_strategy
-      t.references :government_counterpart
       
       # Markers
       t.integer :gender_policy_marker
@@ -44,6 +43,10 @@ class CreateProjects < ActiveRecord::Migration
       t.string  :officer_responsible_email
       
       t.timestamps
+    end
+    
+    [:donor_id, :donor_agency_id, :aid_modality_id, :country_strategy_id].each do |idx|
+      add_index :projects, idx
     end
   end
 

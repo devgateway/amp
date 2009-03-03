@@ -19,11 +19,12 @@ Rails::Initializer.run do |config|
   # You have to specify the :lib option for libraries, where the Gem name (sqlite3-ruby) differs from the file itself (sqlite3)
   config.gem "authlogic"
   config.gem "paperclip"
-  config.gem "rubyist-aasm",          :lib => "aasm", :source => 'http://gems.github.com'
+  config.gem "rubyist-aasm",            :lib => "aasm", :source => 'http://gems.github.com'
   config.gem "andand"
   config.gem "RedCloth"
-  config.gem "ruby-tilecache",        :lib => 'tile_cache'
-  config.gem 'mislav-will_paginate',  :lib => 'will_paginate', :source => 'http://gems.github.com'
+  config.gem "ruby-tilecache",          :lib => 'tile_cache'
+  config.gem 'mislav-will_paginate',    :lib => 'will_paginate', :source => 'http://gems.github.com'
+  config.gem "giraffesoft-enum_field",  :lib => "enum_field", :source => "http://gems.github.com"
   
 
   # Add additional load paths for your own custom dirs

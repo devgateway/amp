@@ -49,6 +49,8 @@ class CreateStrategies < ActiveRecord::Migration
       t.references :country_strategy, :focal_sector
       t.string  :focal_sector_type
     end
+    
+    add_index :country_strategies, :donor_id
   end
 
   def self.down

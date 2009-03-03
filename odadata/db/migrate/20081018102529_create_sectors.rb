@@ -32,6 +32,8 @@ class CreateSectors < ActiveRecord::Migration
     end
     
     add_index :crs_sectors, :dac_sector_id
+    add_index :sector_relevances, :dac_sector_id
+    add_index :sector_relevances, :crs_sector_id
   end
 
   def self.down

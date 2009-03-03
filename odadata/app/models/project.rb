@@ -33,9 +33,7 @@ class Project < ActiveRecord::Base
   belongs_to              :donor_agency
   
   belongs_to              :country_strategy
-  
-  belongs_to              :government_counterpart, :class_name => "GovernmentCounterpartNames", :foreign_key => "government_counterpart_id"
-  
+    
   # Agencies (using habtm here is not ideal, but using a rich linking model with a role argument does not work well with Rails)
   has_and_belongs_to_many :implementing_agencies, :class_name => "Agency", :join_table => "implementing_agencies_projects"
   has_and_belongs_to_many :contracted_agencies, :class_name => "Agency", :join_table => "contracted_agencies_projects"
@@ -56,6 +54,7 @@ class Project < ActiveRecord::Base
   has_many                :crs_sectors, :through => :sector_relevances
   
   # Funding Information
+  belongs_to              :delegated_cooperation
   belongs_to              :aid_modality
     
   has_many                :cofundings, :dependent => :delete_all
@@ -123,10 +122,6 @@ class Project < ActiveRecord::Base
   def to_param
     "#{id}-#{donor_project_number.strip.downcase.gsub(/[^[:alnum:]]/,'-')}".gsub(/-{2,}/,'-')
   end
-       
-  def finances_by_year
-    funding.index_by(&:year)
-  end
     
   ##
   # This returns a list of Provinces and Districts in the following format:
@@ -139,11 +134,6 @@ class Project < ActiveRecord::Base
       list
     end
   end
-  
-  def impl_agency_names
-    implementing_agencies.map(&:name).join("<br />")
-  end
-  
   
   ##
   # Funding Aggregates

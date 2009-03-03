@@ -19,18 +19,18 @@
 									</td></tr>
 									<tr><td bgColor=#f4f4f2>
 										&nbsp;
-									</td></tr>
-									<tr>
-									<td>
+									</td></tr>									
 									<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrganisations">
+										<tr>
+											<td>
 											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
-												<logic:iterate name="aimEditActivityForm" property="agencies.respOrganisations"
+												<logic:iterate name="aimEditActivityForm" property="agencies.respOrganisations" 
 												id="repOrganisation" type="org.digijava.module.aim.dbentity.AmpOrganisation">
 												<tr><td>
 													<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left" bgcolor="#ffffff">
 														<tr>
 															<td width="3">
-																<html:multibox property="agencies.selRespOrganisations">
+																<html:multibox  property="agencies.selRespOrganisations">
 																	<bean:write name="repOrganisation" property="ampOrgId" />
 																</html:multibox>
 															</td>
@@ -41,27 +41,25 @@
 													</table>
 												</td>
 												</tr>
-												</logic:iterate>
-											<tr><td>
-										<table cellSpacing=1 cellPadding=1>
-														<tr>
-															<td>
-																<field:display name="Responsible Organization Add Button" feature="Responsible Organization">
-																<aim:addOrganizationButton form="${aimEditActivityForm.agencies}" collection="respOrganisations" refreshParentDocument="true" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
-																</field:display>
-															</td>
-															<td>
-																<field:display name="Responsible Organization Organizations Button" feature="Responsible Organization">
-																<html:button  styleClass="dr-menu" property="submitButton" onclick="removeSelOrgs(9)">
-																	<digi:trn key="btn:removeSelectedOrganizations">Remove Selected Organizations</digi:trn>
-																</html:button>
-																</field:display>
+												</logic:iterate>											
+												<tr>
+													<td>
+														<field:display name="Responsible Organization Add Button" feature="Responsible Organization">
+														<aim:addOrganizationButton form="${aimEditActivityForm.agencies}" collection="respOrganisations" refreshParentDocument="true" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
+														</field:display>
+													</td>
+													<td>
+														<field:display name="Responsible Organization Organizations Button" feature="Responsible Organization">
+														<html:button  styleClass="dr-menu" property="submitButton" onclick="removeSelOrgs(9)">
+															<digi:trn key="btn:removeSelectedOrganizations">Remove Selected Organizations</digi:trn>
+														</html:button>
+														</field:display>
 
-															</td>
-														</tr>
-													</table>
-												</td></tr>
+													</td>
+												</tr>
 											</table>
+											</td>
+											</tr>
 										</logic:notEmpty>
 
 										<logic:empty name="aimEditActivityForm" property="agencies.respOrganisations">

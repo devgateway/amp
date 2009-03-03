@@ -1356,61 +1356,65 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
           eaForm.getAgencies().setSectGroups(new ArrayList<AmpOrganisation>());
           eaForm.getAgencies().setRegGroups(new ArrayList<AmpOrganisation>());
           eaForm.getAgencies().setRespOrganisations(new ArrayList<AmpOrganisation>());
-
+          
           Set relOrgs = activity.getOrgrole();
           if (relOrgs != null) {
             Iterator relOrgsItr = relOrgs.iterator();
+            AmpOrgRole orgRole = null;
+            AmpOrganisation organisation = null;
             while (relOrgsItr.hasNext()) {
-              AmpOrgRole orgRole = (AmpOrgRole) relOrgsItr.next();
+              orgRole = (AmpOrgRole) relOrgsItr.next();
+              organisation = DbUtil.getOrganisation(orgRole.getOrganisation().getAmpOrgId());
+              //
               if (orgRole.getRole().getRoleCode().equals(
                       Constants.RESPONSIBLE_ORGANISATION)
-                      && (!eaForm.getAgencies().getRespOrganisations().contains(orgRole.getOrganisation()))) {
-                	  eaForm.getAgencies().getRespOrganisations().add(orgRole.getOrganisation());
+                      && (!eaForm.getAgencies().getRespOrganisations().contains(organisation))) {
+                	  eaForm.getAgencies().getRespOrganisations().add(organisation);
                  }          
               if (orgRole.getRole().getRoleCode().equals(
                   Constants.EXECUTING_AGENCY)
-                  && (!eaForm.getAgencies().getExecutingAgencies().contains(orgRole.getOrganisation()))) {
-            	  eaForm.getAgencies().getExecutingAgencies().add(orgRole.getOrganisation());
+                  && (!eaForm.getAgencies().getExecutingAgencies().contains(organisation))) {
+            	  eaForm.getAgencies().getExecutingAgencies().add(organisation);
              }
               else if (orgRole.getRole().getRoleCode().equals(
                   Constants.IMPLEMENTING_AGENCY)
                        && (!eaForm.getAgencies().getImpAgencies().contains(
-                           orgRole.getOrganisation()))) {
+                           organisation))) {
                 eaForm.getAgencies().getImpAgencies().add(
-                    orgRole.getOrganisation());
+                    organisation);
               }
               else if (orgRole.getRole().getRoleCode().equals(
                   Constants.BENEFICIARY_AGENCY)
                        && (!eaForm.getAgencies().getBenAgencies().contains(
-                           orgRole.getOrganisation()))) {
+                           organisation))) {
                 eaForm.getAgencies().getBenAgencies().add(
-                    orgRole.getOrganisation());
+                    organisation);
               }
               else if (orgRole.getRole().getRoleCode().equals(
                   Constants.CONTRACTING_AGENCY)
                        && (!eaForm.getAgencies().getConAgencies().contains(
-                           orgRole.getOrganisation()))) {
+                           organisation))) {
                 eaForm.getAgencies().getConAgencies().add(
-                    orgRole.getOrganisation());
+                    organisation);
               }
               else if (orgRole.getRole().getRoleCode().equals(
                   Constants.REPORTING_AGENCY)
                        && (!eaForm.getAgencies().getReportingOrgs().contains(
-                           orgRole.getOrganisation()))) {
+                           organisation))) {
                 eaForm.getAgencies().getReportingOrgs().add(
-                    orgRole.getOrganisation());
+                    organisation);
               } else if (orgRole.getRole().getRoleCode().equals(
                       Constants.SECTOR_GROUP)
                       && (!eaForm.getAgencies().getSectGroups().contains(
-                          orgRole.getOrganisation()))) {
+                          organisation))) {
                eaForm.getAgencies().getSectGroups().add(
-                   orgRole.getOrganisation());
+                   organisation);
              } else if (orgRole.getRole().getRoleCode().equals(
                      Constants.REGIONAL_GROUP)
                      && (!eaForm.getAgencies().getRegGroups().contains(
-                         orgRole.getOrganisation()))) {
+                         organisation))) {
               eaForm.getAgencies().getRegGroups().add(
-                  orgRole.getOrganisation());
+                  organisation);
             }
 
             }

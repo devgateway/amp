@@ -502,6 +502,8 @@ function setHoveredTable(tableId, hasHeaders) {
 													</tr>
                                                                                                         <tr>
                                                                                                         <td>
+                                                                                                <!-- Revisit teamUtil.java, see AMP-5420 -->
+                                                                                                <!-- 
                                                                                                 <table border=0 style="float:left;">
                                                                                                 <tr>
                                                                                                   <c:forEach var="page" begin="1" end="${aimTeamReportsForm.totalPages}">
@@ -521,6 +523,7 @@ function setHoveredTable(tableId, hasHeaders) {
                                                                                                         </c:forEach>
                                                                                                         </tr>
                                                                                                 </table>
+                                                                                                 -->
                                                                                                 <a style="float:right;cursor:pointer;" onclick="window.scrollTo(0,0); return false"><digi:trn key="aim:backtotop">Back to Top</digi:trn> <span style="font-size: 10pt; font-family: Tahoma;">&uarr;</span></a>
                                                                                             </td>
                                                                                             </tr>

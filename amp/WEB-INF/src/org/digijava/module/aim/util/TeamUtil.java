@@ -1826,8 +1826,10 @@ public class TeamUtil {
 					queryString += " and r.drilldownTab=false ";
 				}
 			}
-            queryString += "  order by tr.report limit " +currentPage+", "+recordPerPage ;
+            queryString += "  order by tr.report";
             Query qry = session.createQuery(queryString);
+            
+            
             qry.setLong("teamId", teamId);
 
             col=qry.list();

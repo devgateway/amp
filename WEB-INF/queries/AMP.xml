@@ -24,27 +24,27 @@
 		</Hierarchy>
 	</Dimension>
 	<Dimension name="Regions">
-		<Hierarchy hasAll="true" allMemberName="All Regions" primaryKey="region_id">
-			<Table name="cached_v_regions" />
+		<Hierarchy hasAll="true" allMemberName="All Regions" primaryKey="amp_activity_id">
+			<Table name="cached_v_regions"/>
 			<Level name="Region" column="region" table="cached_v_regions" />
 		</Hierarchy>
 	</Dimension>
 	<Dimension name="Primary Program">
-		<Hierarchy hasAll="true" allMemberName="All Programs" primaryKey="amp_program_id">
+		<Hierarchy hasAll="true" allMemberName="All Programs" primaryKey="amp_activity_id">
 			<Table name="cached_v_primary_program" />
 			<Level name="name" column="name" table="cached_v_primary_program" />
 		</Hierarchy>
 	</Dimension>
 	<Dimension name="Secundary Program">
-		<Hierarchy hasAll="true" allMemberName="All Programs" primaryKey="amp_program_id">
+		<Hierarchy hasAll="true" allMemberName="All Programs" primaryKey="amp_activity_id">
 			<Table name="cached_v_secunday_program" />
 			<Level name="name" column="name" table="cached_v_secunday_program" />
 		</Hierarchy>
 	</Dimension>
 	<Dimension name="Status">
-		<Hierarchy hasAll="true" allMemberName="All Status" primaryKey="amp_status_id">
+		<Hierarchy hasAll="true" allMemberName="All Status" primaryKey="amp_activity_id">
 			<Table name="cached_v_status" />
-			<Level name="name" column="name" table="cached_v_status" />
+			<Level name="name" column="name" table="cached_v_status"/>
 		</Hierarchy>
 	</Dimension>
 	
@@ -89,7 +89,7 @@
 		<DimensionUsage name="Primary Sector" source="Primary Sector" foreignKey="amp_activity_id" />
 		<DimensionUsage name="Activity" source="Activity" foreignKey="amp_activity_id" />
 		<DimensionUsage name="Donor Dates" source="Donor Dates" foreignKey="amp_fund_detail_id"/>
-		<DimensionUsage name="Regions" source="Regions" foreignKey="amp_activity_id" />
+		<DimensionUsage name="Regions" source="Regions" foreignKey="amp_activity_id"  />
 		<DimensionUsage name="Primary Program" source="Primary Program" foreignKey="amp_activity_id"/>
 		<DimensionUsage name="Secundary Program" source="Secundary Program" foreignKey="amp_activity_id"/>
 		<DimensionUsage name="Status" source="Status" foreignKey="amp_activity_id"/>
@@ -152,7 +152,7 @@
 		<VirtualCubeDimension name="Primary Sector" foreignKey="amp_activity_id" />
 		<VirtualCubeDimension name="Activity" foreignKey="amp_activity_id" />
 		<VirtualCubeDimension name="Donor Dates" foreignKey="amp_fund_detail_id" />
-		<VirtualCubeDimension name="Regions" foreignKey="amp_activity_id" />
+		<VirtualCubeDimension name="Regions" foreignKey="amp_activity_id"/>
 		<VirtualCubeDimension name="Primary Program"  foreignKey="amp_activity_id"/>
 		<VirtualCubeDimension name="Secundary Program" foreignKey="amp_activity_id"/>
 		<VirtualCubeDimension name="Status" foreignKey="amp_activity_id"/>

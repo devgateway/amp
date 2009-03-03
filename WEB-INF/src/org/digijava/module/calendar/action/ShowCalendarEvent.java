@@ -490,9 +490,23 @@ public class ShowCalendarEvent extends Action {
         dtformat+=" HH:mm";
 
         SimpleDateFormat sdf = new SimpleDateFormat(dtformat);
-        Date stDate=sdf.parse(eventStartDate);
-        Date endDate=sdf.parse(eventEndDate);
-        if(!stDate.equals(endDate) && !stDate.before(endDate)){
+        Date stDate = null;
+        Date endDate=null;
+        
+        try {
+        	stDate=sdf.parse(eventStartDate);
+		} catch (Exception e) {
+			errors.add("incorrectDate", new ActionError("error.calendar.emptyEventStartDate"));
+		}
+		
+        try {
+        	endDate=sdf.parse(eventEndDate);
+		
+        } catch (Exception e) {
+			errors.add("incorrectDate", new ActionError("error.calendar.emptyEventEndDate"));
+		}
+        
+        if(stDate !=null && !stDate.equals(endDate) && !stDate.before(endDate)){
         	errors.add("incorrectDate", new ActionError("error.calendar.endDateLessThanStartDate"));
         }
     	return errors;

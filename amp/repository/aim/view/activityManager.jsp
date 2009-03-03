@@ -259,7 +259,9 @@
 										</td></tr>
 										<tr bgcolor="#ffffff">
 											<td>&nbsp;</td>
-										</tr>										
+										</tr>
+										<logic:notEmpty name="aimActivityForm" property="activityList">
+																			
 										<tr bgcolor="#ffffff">
 											<td>
 												<%
@@ -339,6 +341,7 @@
 												<c:out value="${aimActivityForm.currentPage+1}"></c:out>&nbsp;<digi:trn key="aim:of">of</digi:trn>&nbsp;<c:out value="${aimActivityForm.totalPages}"></c:out>
 											</td>											
 										</tr>
+										</logic:notEmpty>
 									</table>
 
 								</td>

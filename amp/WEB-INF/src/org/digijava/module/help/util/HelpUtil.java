@@ -907,7 +907,7 @@ System.out.println("lang:"+lang);
                                                 
                                                 
                                                 
-                                            TranslatorWorker.getInstance("").update(newMsg);
+                                            TranslatorWorker.getInstance("").save(newMsg);
                                          
                                          udateEditpData(ll,help.getEditorKey(),help.getLastModDate());
                                          }

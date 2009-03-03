@@ -95,7 +95,7 @@ cursor:pointer;
                 <div id="reports" class="yuiampmenu" style="opacity:0.9;">
                 	<div class="bd">                    
                 		<ul>
-            				<module:display name="Off Line Reports" parentModule="REPORTING">
+            				<module:display name="Off Line Reports Public View" parentModule="REPORTING">
             					<li class="yuiampmenuitem" style="float:left;">
                 					<digi:link styleClass="yuiampmenuitemlabel" href="/mainreports.do" module="mondrian" >
                     					<digi:trn key="aim:offlinereports">Off Line Reports</digi:trn>

@@ -38,6 +38,11 @@ class CreateGeoInfo < ActiveRecord::Migration
     create_table :provinces_sector_details, :id => false do |t|
       t.references :province, :sector_detail
     end
+    
+    add_index :districts, :province_id
+    add_index :geo_relevances, :project_id
+    add_index :geo_relevances, :province_id
+    add_index :geo_relevances, :district_id
   end
 
   def self.down

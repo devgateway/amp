@@ -55,6 +55,8 @@ class CreateDonors < ActiveRecord::Migration
       
       t.references :donor
     end
+    
+    add_index :donor_agencies, :donor_id
   end
 
   def self.down

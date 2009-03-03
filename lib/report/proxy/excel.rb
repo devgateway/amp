@@ -9,7 +9,7 @@ module Report
       
       def total_cofunding
         cofunding = @target.total_cofunding
-        ["#{I18n.t('reports.total_cofunding')} (#{cofunding.currency})", cofunding]
+        ["#{I18n.t('reports.total_cofunding')} (#{cofunding.currency})", cofunding.in(MultiCurrency.output_currency)]
       end
       
       def impl_agencies
@@ -37,11 +37,11 @@ module Report
       end
       
       def total_payments
-        ["#{I18n.t('reports.disbursements_td')} (#{MultiCurrency.output_currency})", @target.total_payments]
+        ["#{I18n.t('reports.disbursements_td')} (#{MultiCurrency.output_currency})", @target.total_payments.in(MultiCurrency.output_currency)]
       end
       
       def total_commitments
-        ["#{I18n.t('reports.commitments_td')} (#{MultiCurrency.output_currency})", @target.total_commitments]
+        ["#{I18n.t('reports.commitments_td')} (#{MultiCurrency.output_currency})", @target.total_commitments.in(MultiCurrency.output_currency)]
       end
       
       # Adds one column per focal region
@@ -78,17 +78,17 @@ module Report
         columns = []
 
         if year <= Time.now.year
-          columns << ["#{I18n.t('reports.commitments_td')} #{year} (#{MultiCurrency.output_currency})", finances.andand.commitments]
-          columns << ["#{I18n.t('reports.disbursements_td')} #{year} (#{MultiCurrency.output_currency})", finances.andand.payments]
+          columns << ["#{I18n.t('reports.commitments_td')} #{year} (#{MultiCurrency.output_currency})", finances.andand.commitments.andand.in(MultiCurrency.output_currency)]
+          columns << ["#{I18n.t('reports.disbursements_td')} #{year} (#{MultiCurrency.output_currency})", finances.andand.payments.andand.in(MultiCurrency.output_currency)]
                     
           columns += (1..4).map do |quarter|
-           ["#{I18n.t('terms.disbursements')} Q#{quarter}/#{year} (#{MultiCurrency.output_currency})", finances.andand.send("payments_q#{quarter}")]
+           ["#{I18n.t('terms.disbursements')} Q#{quarter}/#{year} (#{MultiCurrency.output_currency})", finances.andand.send("payments_q#{quarter}").andand.in(MultiCurrency.output_currency)]
           end
         end
         
         if year >= Time.now.year
-          columns << ["#{I18n.t('reports.commitments_forecast', :year => year)} (#{MultiCurrency.output_currency})", forecasts.andand.commitments]
-          columns << ["#{I18n.t('reports.payments_forecast', :year => year)} (#{MultiCurrency.output_currency})", forecasts.andand.payments]
+          columns << ["#{I18n.t('reports.commitments_forecast', :year => year)} (#{MultiCurrency.output_currency})", forecasts.andand.commitments.andand.in(MultiCurrency.output_currency)]
+          columns << ["#{I18n.t('reports.payments_forecast', :year => year)} (#{MultiCurrency.output_currency})", forecasts.andand.payments.andand.in(MultiCurrency.output_currency)]
         end
         
         columns

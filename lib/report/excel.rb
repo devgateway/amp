@@ -54,7 +54,7 @@ module Report
       row.map do |cell| 
         # If this is a currency object convert to string without unit identifier
         if cell.is_a?(MultiCurrency::ConvertibleCurrency)
-          str_repr = cell.to_f
+          str_repr = cell.to_i
         else
           str_repr = cell.to_s
           #str_repr = cell.is_a?(MultiCurrency::ConvertibleCurrency) ? cell.to_s(false) : cell.to_s

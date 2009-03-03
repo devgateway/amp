@@ -19,14 +19,7 @@ class ProjectsController < ApplicationController
     #  @finances = @project.fundings.find(:all, :order => "year ASC")
     #end
     
-    
-    @project ||= Project.find(params[:id])
-    
-    # TODO: Is this still working? There may be a better way to do this as well
-    if !params[:report] && @project.data_status == Project::DRAFT
-      @next_draft = Project.draft.find(:first, 
-        :conditions => ["donor_id = ? AND donor_project_number > ?", session[:user_id], @project.donor_project_number])
-    end
+    @project = Project.find(params[:id])
   end
    
   def new

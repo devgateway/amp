@@ -18,6 +18,11 @@ class CreateMdgs < ActiveRecord::Migration
     create_table :mdg_relevances do |t|
       t.references :project, :mdg, :target
     end
+    
+    add_index :targets, :mdg_id
+    add_index :mdg_relevances, :project_id
+    add_index :mdg_relevances, :mdg_id
+    add_index :mdg_relevances, :target_id
   end
 
   def self.down

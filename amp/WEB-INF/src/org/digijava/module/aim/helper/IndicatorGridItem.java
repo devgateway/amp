@@ -1,10 +1,18 @@
 package org.digijava.module.aim.helper;
 
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
 
+import org.digijava.module.aim.dbentity.AmpAuditLogger;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
+import org.digijava.module.aim.util.AuditLoggerUtil;
+import org.digijava.module.aim.util.DbUtil.AmpIndicatorValuesComparatorByTypeAndYear;
+
+import edu.emory.mathcs.backport.java.util.Collections;
 
 /**
  * Indicator value helper bean.
@@ -29,10 +37,10 @@ public class IndicatorGridItem {
 	 * @see org.digijava.module.aim.dbentity.AmpThemeIndicatorValue
 	 */
 	public IndicatorGridItem(String year, Set<AmpIndicatorValue> values){
-		this.year = year;
+		 this.year = year;
 		if (values != null && values.size() >0){
 			AmpIndicatorValue latestValue =null;
-                        AmpIndicatorValue latestTarValue =null;
+            AmpIndicatorValue latestTarValue =null;
 			AmpIndicatorValue latestBaseValue =null;
 			//AmpThemeIndicatorValue latestValue = null;
 			int yearValue=Integer.valueOf(this.year).intValue();
@@ -48,7 +56,7 @@ public class IndicatorGridItem {
 							//if this is the year we want
 							if (creationYear == yearValue){
 								// and latest Value is not set or current is the latest
-								if (latestValue == null || creationDate.compareTo(latestValue.getValueDate()) >= 0){
+								if ((latestValue == null || creationDate.compareTo(latestValue.getValueDate()) > 0)){
 									//save latest cos we need latest
 									latestValue = value;
 								}
@@ -65,9 +73,9 @@ public class IndicatorGridItem {
                                      * note: we must select only target values which date is greater (or equal) than actual value's date
                                      * (if the  actual value exists)
                                      */
-                                    if (value.getValueType() == 0 && (latestValue == null||
-                                            value.getValueDate().after(latestValue.getValueDate())
-                                            ||value.getValueDate().equals(latestValue.getValueDate()))) {
+                                    if (value.getValueType() == 0 && (latestTarValue == null||
+                                            value.getValueDate().after(latestTarValue.getValueDate())
+                                            ||value.getValueDate().equals(latestTarValue.getValueDate()))) {
                                         Date targetDate = value.getValueDate();
                                         Calendar cal = Calendar.getInstance();
                                         cal.setTime(targetDate);
@@ -86,7 +94,7 @@ public class IndicatorGridItem {
                                      * value's date(if there  exists actual value)
                                      */
                                     
-                                    if (value.getValueType() == 2 && (latestValue == null || value.getValueDate().before(latestValue.getValueDate()) || value.getValueDate().equals(latestValue.getValueDate()))) {
+                                    if (value.getValueType() == 2 && (latestBaseValue == null || value.getValueDate().before(latestBaseValue.getValueDate()) || value.getValueDate().equals(latestBaseValue.getValueDate()))) {
                                         Date baseDate = value.getValueDate();
                                         Calendar cal = Calendar.getInstance();
                                         cal.setTime(baseDate);
@@ -105,6 +113,7 @@ public class IndicatorGridItem {
                             
                               if (latestValue != null) {
                                 this.actualValue = latestValue.getValue().toString();
+                                latestValue = null;
                             }   
 			
                         if(latestBaseValue!=null){

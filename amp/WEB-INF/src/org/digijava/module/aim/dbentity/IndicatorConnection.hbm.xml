@@ -14,7 +14,7 @@
 		<many-to-one name="indicator" column="indicator_id"
 			class="org.digijava.module.aim.dbentity.AmpIndicator" cascade="none" />
 
-		<set name="values" lazy="true" inverse="true" cascade="all-delete-orphan">
+		<set name="values" lazy="true" inverse="true" cascade="all-delete-orphan" order-by="value_date">
 			<key column="ind_connect_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpIndicatorValue" />
 		</set>

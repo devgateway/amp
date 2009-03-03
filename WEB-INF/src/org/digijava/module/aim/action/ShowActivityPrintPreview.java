@@ -723,9 +723,10 @@ public class ShowActivityPrintPreview
                                               .intValue());
 
                         RegionalFunding regFund = new RegionalFunding();
-                        regFund.setRegionId(ampRegFund.getRegion()
-                                            .getAmpRegionId());
-                        regFund.setRegionName(ampRegFund.getRegion().getName());
+                        
+                        regFund.setRegionId(ampRegFund.getRegionLocation()
+                                            .getId());
+                        regFund.setRegionName(ampRegFund.getRegionLocation().getName());
 
                         if(regFunds.contains(regFund) == false) {
                             regFunds.add(regFund);
@@ -874,7 +875,8 @@ public class ShowActivityPrintPreview
                     } else if (role.getRoleCode().equals(
                             Constants.SECTOR_GROUP)
                             && (!sectGroups.contains(organisation))) {
-                    	sectGroups.add(orgRole.getOrganisation());
+                    	sectGroups.add(DbUtil.getOrganisation(orgRole.getOrganisation().getAmpOrgId()));
+                    	//sectGroups.add(orgRole.getOrganisation());
                    } else if (role.getRoleCode().equals(
                            Constants.REGIONAL_GROUP)
                            && (!regGroups.contains(organisation))) {

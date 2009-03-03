@@ -165,6 +165,7 @@ public class HelpActions extends DispatchAction {
 	public ActionForward searchHelpTopic(ActionMapping mapping,	ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		 String key =request.getParameter("key");
 		 //String keywords = HelpUtil.getTrn(key,request);
+		 String treKey = HelpUtil.getTrn("Topic Not Found", request);
 		 String locale=RequestUtils.getNavigationLanguage(request).getCode();
 		 Object artidcle = "";
 		 OutputStreamWriter os = null;	
@@ -184,10 +185,10 @@ public class HelpActions extends DispatchAction {
 					  int hitCount = hits.length();   
 			    	   
 			    	  if(hitCount == 0){
-			    		  
+			    		
 			    		  out.println("<div style=\"font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;\"><a class=\"link\"><b>"+key+"</b></a></div>");
 
-			    		  out.println("<div>Topic "+key+" not found...</div>");
+			    		  out.println("<div>"+treKey+"...</div>");
 			    	  
 			    	  }else{
 			    	  

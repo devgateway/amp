@@ -454,7 +454,7 @@ public class ChartGenerator {
 					PlotOrientation.VERTICAL,	// Orientation
 					true,	// show legend
 					false,	// show tooltips
-					true);	// show urls
+					false);	// show urls
 			chart.setBackgroundPaint(Color.WHITE);
 
 			CategoryPlot plot = (CategoryPlot) chart.getPlot();

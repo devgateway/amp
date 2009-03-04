@@ -27,8 +27,10 @@
 								<th><digi:trn key="contentrepository:TableHeader:Actions">Actions</digi:trn></th>
 							</tr>
 						</thead>
+						<tbody>
+						<bean:size name="documentDataCollection" id="taille"  />
 						<logic:iterate name="documentDataCollection" id="documentData"
-							type="org.digijava.module.contentrepository.helper.DocumentData" indexId="counter">
+							type="org.digijava.module.contentrepository.helper.DocumentData" indexId="counter" length="${taille-1}">
 							<%--
 					int index2;
 					String documentName = documentData.getName();
@@ -50,7 +52,7 @@
 							<logic:equal name="documentData" property="isPublic" value="false">
 								<c:set var="makePublicCommand">
 									<digi:trn key="contentrepository:makePublic">Pub</digi:trn>
-								</c:set>>
+								</c:set>
 							</logic:equal>
 							<tr>
 								<td>
@@ -63,7 +65,7 @@
 									</script> --%>
 								</td>
 								<td>
-									<digi:img skipBody="true" src="${documentData.iconPath}" border="0" alt="${ documentData.contentType }" align="absmiddle"/>
+									<digi:img skipBody="true" src="${documentData.iconPath}" border="0" alt="${documentData.contentType}" align="absmiddle"/>
 									&nbsp; 
 								</td>
 								<td>
@@ -72,9 +74,9 @@
 										<digi:trn key="contentrepository:documentManagerFollowLinkHint">Follow link to</digi:trn>
 									</c:set>
 									<c:if test="${documentData.webLink != null}" >
-										<a  onmouseover="Tip('${translation} ${documentData.webLink}')" onmouseout="UnTip()" 
+										<a onmouseover="Tip('${translation} ${documentData.webLink}')" onmouseout="UnTip()" 
 												 onclick="window.open('${documentData.webLink}')"
-											style="cursor:pointer; color: blue; font-size: 11px"> 
+											style="cursor:pointer; color: blue; font-size: 11px">  
 									</c:if>
 										 <bean:write name="documentData" property="name" />
 									<c:if test="${documentData.webLink != null}" >
@@ -180,6 +182,7 @@
 									title="<digi:trn key="contentrepository:documentManagerDeleteHint">Click here to delete this document</digi:trn>"><img hspace="2" src= "/repository/contentrepository/view/images/trash_12.gif" border=0></a>
 								</logic:equal>
 								</td>
-							</tr>
+							</tr>							
 						</logic:iterate>
+						</tbody>
 					</table>

@@ -46,13 +46,13 @@
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/reset.css'/>"> 
 
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/datatable/datatable-beta-min.js'/>" > .</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/datatable/datasource-beta-min.js'/>" > .</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/ajaxconnection/connection-min.js'/>" > .</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/panel/dom-min.js'/>" > .</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/menu/menu-min.js'/>" > .</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/container/container-core-min.js'/>" > .</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>" > .</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/datatable/datatable-beta-min.js'/>" > </script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/datatable/datasource-beta-min.js'/>" > </script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/ajaxconnection/connection-min.js'/>" > </script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/panel/dom-min.js'/>" > </script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/menu/menu-min.js'/>" > </script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/container/container-core-min.js'/>" > </script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>" > </script>
 
 
 <%@page import="java.net.URLDecoder"%>
@@ -265,14 +265,11 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
 
     var markup	 				= YAHOO.util.Dom.get(markupName);
     //var datasource				= YAHOO.util.DataSource(markup);
-    var options					= {paginated:true, 
-	                				 
-	                    				rowsPerPage: 10,
-	                    				pageCurrent: 1,
-	                    				startRecordIndex: 1,
-								        pageLinksLength: 2
-	                    			
-	                			};
+    var options					= {
+    	    						pageCurrent:1,
+									rowsPerPage:10,
+							        pageLinksLength:2												        
+	                			  };
 
 	var dataTable 				= new YAHOO.widget.DataTable(markupName, this.columnSet, null, options);
 
@@ -397,7 +394,7 @@ function WindowControllerObject(bodyContainerEl) {
 	
 	this.reload					= function() 
 								{
-									populateCallback(null, null, lastPopulateObject);
+									populateCallback(null, null, this.lastPopulateObject);
 								};
 	this.populateCallback		= function (sType, aArgs, obj) {
 				this.lastPopulateObject	= obj;
@@ -945,11 +942,6 @@ function createToolTip (id, containerElement) {
 		new YAHOO.widget.Tooltip("tt"+id, { context: id, container: containerElement });
 } 
 
-/* Number of possible panels on this page */
-YAHOO.amp.panelCounter	= 3;
-
-YAHOO.util.Event.addListener(window, "load", initPanel) ;
-
 
 function downloadFile(uuid) {
 	if (checkDocumentUuid(uuid)) {
@@ -966,6 +958,12 @@ function checkDocumentUuid(uuid) {
 	}
 	return true;
 }
+
+/* Number of possible panels on this page */
+YAHOO.amp.panelCounter	= 3;
+
+YAHOO.util.Event.addListener(window, "load", initPanel) ;
+
 
 </script>
 

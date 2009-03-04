@@ -103,6 +103,7 @@ div.fakefile2 input{
 	background-color:#a5bcf2;
 }
 </style>
+
 <script language="javascript">
 function setStripsTable(tableId, classOdd, classEven) {
 	var tableElement = document.getElementById(tableId);
@@ -123,12 +124,13 @@ function setHoveredTable(tableId, hasHeaders) {
         pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
         rows      = tableElement.getElementsByTagName('tr');
 
-		for(var i = 0, n = rows.length; i < n; ++i) {			
+		for(var i = 0, n = rows.length; i < n; ++i) {
 			rows[i].onmouseover = function() {
 				this.className += ' ' + className;
-			};			
+			};
 			rows[i].onmouseout = function() {
 				this.className = this.className.replace(pattern, ' ');
+
 			};
 		}
 		rows = null;
@@ -339,8 +341,8 @@ function setHoveredTable(tableId, hasHeaders) {
 				    	</div>
 		    	</feature:display>			    
 <!--End Others-->	
-
-			</div>			
+			</div>	
+			</div>		
 			<div id="addDocumentDiv" style="display: none">
 				<div align="center">
 				<div id="addDocumentErrorHolderDiv" style="font-size:11px; color: red"></div>
@@ -426,12 +428,8 @@ function setHoveredTable(tableId, hasHeaders) {
 <%@include file="documentManagerDivHelper.jsp" %>
 
 <script type="text/javascript">
-YAHOO.namespace("YAHOO.amp.table");
-</script>
-<script type="text/javascript">
-	initFileUploads();
-</script>
-<script type="text/javascript">
+	YAHOO.namespace("YAHOO.amp.table");
+
 	function afterPageLoad(e) {
 		YAHOO.amp.table.mytable	= YAHOO.amp.table.enhanceMarkup("my_markup");
 		YAHOO.amp.table.teamtable	= YAHOO.amp.table.enhanceMarkup("team_markup");
@@ -441,16 +439,19 @@ YAHOO.namespace("YAHOO.amp.table");
 
 		windowController	= newWindow( "${teammemberResourcesWindowName}", true, 'otherDocumentsDiv');
 		windowController.populateWithPublicDocs();
+
+		initFileUploads();
+
+		/*
+		setStripsTable("team_markup", "tableEven", "tableOdd");
+		setHoveredTable("team_markup", false);
+		setStripsTable("my_markup", "tableEven", "tableOdd");
+		setHoveredTable("my_markup", false);
+		setStripsTable("publicDocumentsDiv", "tableEven", "tableOdd");
+		setHoveredTable("publicDocumentsDiv", false);
+		setStripsTable("otherDocumentsDiv", "tableEven", "tableOdd");
+		setHoveredTable("otherDocumentsDiv", false);	
+		*/		
 	}
 	YAHOO.util.Event.on(window, "load", afterPageLoad); 
-</script>
-<script language="javascript">
-setStripsTable("team_markup", "tableEven", "tableOdd");
-setHoveredTable("team_markup", false);
-setStripsTable("my_markup", "tableEven", "tableOdd");
-setHoveredTable("my_markup", false);
-setStripsTable("publicDocumentsDiv", "tableEven", "tableOdd");
-setHoveredTable("publicDocumentsDiv", false);
-setStripsTable("otherDocumentsDiv", "tableEven", "tableOdd");
-setHoveredTable("otherDocumentsDiv", false);
 </script>

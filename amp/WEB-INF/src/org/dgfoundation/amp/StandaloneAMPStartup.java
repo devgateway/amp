@@ -14,13 +14,6 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.resource.ResourceStreamHandlerFactory;
 import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.ampharvester.api.ExportManager;
-import org.digijava.module.ampharvester.api.ImportManager;
-import org.digijava.module.ampharvester.jaxb10.Activities;
-import org.digijava.module.ampharvester.jaxb10.ActivityType;
-import org.digijava.module.ampharvester.jaxb10.ObjectFactory;
-import org.digijava.module.ampharvester.jaxb10.impl.FreeTextTypeImpl;
-import org.digijava.module.ampharvester.util.XmlTransformerHelper;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
@@ -60,6 +53,7 @@ public class StandaloneAMPStartup {
 	 * @throws SQLException
 	 */
 	private static void generate200k(Long ampActivityId,Session session) throws DgException, JAXBException, HibernateException, SQLException {
+/*  AmpHarvester was removed from AMP
 		AmpActivity activity = loadActivity(ampActivityId,session);				
 		ActivityType xmlActivity = ExportManager.getXmlActivity(activity, session);
 		
@@ -78,7 +72,8 @@ public class StandaloneAMPStartup {
 		im.startImportHttp(new String("#"+i), activity.getTeam());
 		if((i % 100)==0) logger.info("Completed #"+i);
 		}
-		PersistenceManager.releaseSession(session);		
+		PersistenceManager.releaseSession(session);
+*/				
 	}
 	
 	/**

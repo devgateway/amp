@@ -161,22 +161,6 @@
                               </digi:link>
                             </td>
                           </tr>
-                          <module:display name="Activity Imp&Exp" parentModule="ADMINISTRATIVE SECTION">
-                          <tr>
-                            <td class="f-names" nowrap="nowrap">
-                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-                              <c:set var="translation">
-                                <digi:trn key="aim:activityImportExportManager">Click here to view Activity import/export Manager</digi:trn>
-                              </c:set>
-
-                              <digi:link module="ampharvester" href="/ieManager.do?actionType=load" title="${translation}">
-                                <digi:trn key="aim:importExportManager">Activity import/export Manager</digi:trn>
-                              </digi:link>
-
-
-                            </td>
-                          </tr>
-                          </module:display>
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>

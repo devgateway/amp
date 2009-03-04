@@ -11,8 +11,6 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
-<%@page import="org.digijava.module.ampharvester.util.ExportHelper"%>
-
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 	<script type="text/javascript">

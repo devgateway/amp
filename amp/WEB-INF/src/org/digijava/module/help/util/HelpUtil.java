@@ -633,7 +633,8 @@ System.out.println("lang:"+lang);
 				}
 				retVal += "<img id=\"imgh_"+ topic.getHelpTopicId()+ "\" onclick=\"collapseProgram(" +topic.getHelpTopicId()+ ")\"  src=\"../ampTemplate/images/tree_minus.gif\" style=\"display : none;\">\n";
 				if(topic.getTitleTrnKey()!=null && topic.getTopicKey()!=null){
-					retVal += "<a href=\"javascript:editTopic('"+ topic.getTopicKey()+ "','"+helpType+"')\">"+getTrn(topic.getTopicKey(), request)+"</a>";
+					//retVal += "<a href=\"javascript:editTopic('"+ topic.getTopicKey()+ "','"+helpType+"')\">"+getTrn(topic.getTopicKey(), request)+"</a>";
+					retVal += "<a>"+getTrn(topic.getTopicKey(), request)+"</a>";
 				}
 				retVal += "   </td>";
 				//checkbox

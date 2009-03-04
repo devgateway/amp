@@ -89,9 +89,11 @@ cursor:pointer;
 				<a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=false" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px"  onclick="return canExit()">
                     <digi:trn key="aim:publicReports">Public Reports</digi:trn>
                 </a>
-                <a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                	<img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
-				</a>
+                <module:display name="Off Line Reports Public View" parentModule="REPORTING">
+                	<a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                		<img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+					</a>
+				</module:display>
                 <div id="reports" class="yuiampmenu" style="opacity:0.9;">
                 	<div class="bd">                    
                 		<ul>

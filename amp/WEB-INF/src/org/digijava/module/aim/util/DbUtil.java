@@ -5701,7 +5701,7 @@ public class DbUtil {
                         }
                     }
 
-                    if (null != donor && donor.trim().length() > 1 && !"all".equalsIgnoreCase(donor)) {
+                    if (null != donor && donor.trim().length() > 0 && !"all".equalsIgnoreCase(donor)) {
                         if (!donor.equals(dnOrg.getAmpOrgId().toString()))
                             continue;
                     }

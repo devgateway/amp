@@ -20,7 +20,7 @@
 	<!--
 
 	function addEUActivity() {
-			openNewWindow(700, 420);
+			openNewWindow(800, 460);
 			<digi:context name="addEUActivity" property="context/module/moduleinstance/editEUActivity.do?new" />
 			document.aimEditActivityForm.action = "<%= addEUActivity %>";
 			document.aimEditActivityForm.target = popupPointer.name;

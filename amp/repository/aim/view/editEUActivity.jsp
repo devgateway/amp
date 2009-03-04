@@ -130,7 +130,7 @@ function selectOrganisation1() {
 		<td align="center">
 		<table width="100%" cellpadding="2" cellspacing="0">
 	<tr>
-	  <td height="12"></td>
+	  <td height="12">&nbsp;</td>
 	  <td> <strong>
 	    <digi:trn key="aim:addEditActivityAmount">Amount</digi:trn>
 	    </strong></td>
@@ -153,38 +153,39 @@ function selectOrganisation1() {
 							id="currContr" scope="page">
 							<tr>
 							<td align="right" valign="top" nowrap>
-							<font color="red">*</font>
-							<input type="checkbox" name="deleteContrib" value='<bean:write name="idx"/>'>						    </td>
-
-							<td align="right" valign="top" nowrap><input name='contrAmount' type='text' style="text-align:right" onClick="clearDefault(this)"
-									value='${aimEUActivityForm.contrAmount[idx]}' size="4"></td>
-							<td align="right" valign="top" nowrap><select name="contrCurrId" style="width: 100px" class="inp-text">
-                              <option value="-1">
-                                <digi:trn key="aim:addEditActivitySelect">Select</digi:trn>
-                              </option>
-                              <logic:iterate name="aimEUActivityForm" property="currencies" id="currency" indexId="cIdx" type="org.digijava.module.aim.dbentity.AmpCurrency"> <option value='<bean:write name="currency" property="ampCurrencyId"/>' 
-								
-                                  <c:if test="${ aimEUActivityForm.contrCurrId[idx] == currency.ampCurrencyId }">selected</c:if>
-                                >
+								<font color="red">*</font>
+								<input type="checkbox" name="deleteContrib" value='<bean:write name="idx"/>'>						    
+							</td>
+							<td align="left" valign="top" nowrap>
+								<input name='contrAmount' type='text' style="text-align:right" onClick="clearDefault(this)" value='${aimEUActivityForm.contrAmount[idx]}' size="4">
+							</td>
+							<td align="left" valign="top" nowrap>
+								<select name="contrCurrId" style="width: 100px" class="inp-text">
+                              	<option value="-1">
+	                               <digi:trn key="aim:addEditActivitySelect">Select</digi:trn>
+	                            </option>
+                                <logic:iterate name="aimEUActivityForm" property="currencies" id="currency" indexId="cIdx" type="org.digijava.module.aim.dbentity.AmpCurrency"> <option value='<bean:write name="currency" property="ampCurrencyId"/>' 
+                                  <c:if test="${ aimEUActivityForm.contrCurrId[idx] == currency.ampCurrencyId }">selected</c:if>>
                                   <bean:write name="currency" property="currencyName"/>
                                   </option>
-                              </logic:iterate>
-                            </select></td>
-							<td align="right" valign="top" nowrap>
+                                </logic:iterate>
+                            	</select>
+                            </td>
+							<td align="left" valign="top" nowrap>
 							<c:set var="translation">
 										<digi:trn key="aim:addEditActivitySelect">Select</digi:trn>
 									</c:set>
 
 										<category:showoptions firstLine="${translation}" name ="aimEditActivityForm"   property="funding.modality"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.TYPE_OF_ASSISTENCE_KEY %>" styleClass="inp-text" />
 							</td>
-							<td align="right" valign="top" nowrap><field:display name="Contribution Donors" feature="Costing">
+							<td align="left" valign="top" nowrap><field:display name="Contribution Donors" feature="Costing">
                               <c:set var="valueId"> contrDonorId${idx} </c:set>
                               <c:set var="nameId"> nameContrDonorId${idx} </c:set>
                               <input   name='contrDonorId' type="hidden" id="${valueId}" style="text-align:right" value='${aimEUActivityForm.contrDonorId[idx]}' size="4"/>
                               <input name="contrDonorName" type='text' id="${nameId}" style="text-align:right" value='${aimEUActivityForm.contrDonorName[idx]}' size="10" style="background-color:#CCCCCC" onKeyDown="return false"/>
                               <aim:addOrganizationButton useClient="true" htmlvalueHolder="${valueId}" htmlNameHolder="${nameId}" styleClass="dr-menu"><digi:trn key="aim:addEditActivitySelectDonorDots">....</digi:trn></aim:addOrganizationButton>
                             </field:display></td>
-							<td align="right" valign="top" nowrap>
+							<td align="left" valign="top" nowrap>
                                   <c:set var="translation">
 										<digi:trn key="aim:addEditActivitySelect">Select</digi:trn>
 									</c:set>

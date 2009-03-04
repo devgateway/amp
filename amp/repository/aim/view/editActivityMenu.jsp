@@ -583,6 +583,7 @@ var draftStatus=document.getElementById("draftFlag");
 					</c:if>
 				</tr>
 				</module:display>
+				<module:display name="Organizations" parentModule="PROJECT MANAGEMENT">
 				<tr>
 					<c:if test="${aimEditActivityForm.step != 7}">
 					<td nowrap="nowrap">
@@ -616,6 +617,8 @@ var draftStatus=document.getElementById("draftFlag");
 					</td>
 					</c:if>
 				</tr>
+				</module:display>
+				<module:display name="Contact Information" parentModule="PROJECT MANAGEMENT">
 				<tr>
 					<c:if test="${aimEditActivityForm.step != 8}">
 					<td nowrap="nowrap">
@@ -649,6 +652,7 @@ var draftStatus=document.getElementById("draftFlag");
 					</td>
 					</c:if>
 				</tr>
+				</module:display>
 			    <feature:display  name="Paris Indicator" module="Add & Edit Activity">
 			      <tr>
 			      <c:if test="${aimEditActivityForm.step != 17}">

@@ -42,6 +42,7 @@
 <module:display name="Measures" parentModule="REPORTING"></module:display> 
 <module:display name="Messages" parentModule="Messaging System"></module:display> 
 <module:display name="Messaging System"></module:display> 
+<module:display name="My Desktop" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="NATIONAL PLAN DASHBOARD"></module:display> 
 <module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD"></module:display> 
 <module:display name="Organizations" parentModule="PROJECT MANAGEMENT"></module:display> 
@@ -63,6 +64,7 @@
 <module:display name="Scenarios" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="TREND ANALYSIS"></module:display> 
 <module:display name="Tab Generator" parentModule="REPORTING"></module:display> 
+<module:display name="Tools" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Trend Analysis and Forecasting" parentModule="TREND ANALYSIS"></module:display> 
 <module:display name="WIDGETS"></module:display>
 <module:display name="Org Profile"></module:display>
@@ -83,6 +85,7 @@
 <feature:display module="Funding" name="Funding Information"></feature:display> 
 <feature:display module="Funding" name="MTEF Projections"></feature:display> 
 <feature:display module="Funding" name="Undisbursed Balance"></feature:display> 
+<feature:display name="Change Workspace" module="My Desktop"></feature:display>
 <feature:display module="Organizations" name="Beneficiary Agency"></feature:display> 
 <feature:display module="Organizations" name="Contracting Agency"></feature:display> 
 <feature:display module="Organizations" name="Executing Agency"></feature:display> 
@@ -98,7 +101,7 @@
 <feature:display name="About AMP" module="HELP"></feature:display> 
 <feature:display name="Activity - Component Step" module="Components"></feature:display> 
 <feature:display name="Activity Dashboard" module="M & E"></feature:display> 
-
+<feature:display name="Workspace Info" module="Tools"></feature:display>
 <feature:display name="Activity" module="M & E"></feature:display> 
 <feature:display name="Actual Commitments" module="Measures"></feature:display> 
 <feature:display name="Actual Disbursement Orders Measure" module="Measures"></feature:display> 

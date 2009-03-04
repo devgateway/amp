@@ -121,18 +121,21 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 			if(arf!=null)
 				pageSize=arf.getPageSize();//use the page size set in the filters 
 
-		//the pagesize is not initialized in the filters	
-			Rectangle page=null;
 		
+			//This a temporal fix to avoid stack overflow error in large reports AMP-5324
+			Rectangle page= new Rectangle(new Float("1500"),new Float("1500"));
+			
+			//the pagesize is not initialized in the filters
+			/*
 			if(pageSize==null)
-				page=PageSize.A4;
+				page=PageSize.TABLOID;
 			else{
 				if(pageSize.equals("A0")) page=PageSize.A0;
 				if(pageSize.equals("A1")) page=PageSize.A1;
 				if(pageSize.equals("A2")) page=PageSize.A2;
 				if(pageSize.equals("A3")) page=PageSize.A3;
 					if(pageSize.equals("A4")) page=PageSize.A4;
-			}
+			}*/
 			AdvancedReportForm reportForm = (AdvancedReportForm) form;
 
 			request.setAttribute("statementPositionOptions", reportForm.getStatementPositionOptions());

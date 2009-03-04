@@ -600,38 +600,62 @@ function validateFormat(){
 
 	
 	var scrollingStr=readCookie('report_scrolling');
-	var scrolling=(scrollingStr==null)?false:(scrollingStr==new Number(currentReportId).toString() )?true:false;	
+	var scrolling=(scrollingStr==null)?false:(scrollingStr==new Number(currentReportId).toString() )?true:false;
 		
-	function makeScroll(){
+	// For some reason freezeLink.removeListener doesn't work correctly so we need an ugly hack
+	var canMakeScroll	= false;
+	function scrollCallback () {
+		if ( canMakeScroll ) 
+				makeScroll();
+		else
+				hiddeScroll();
+	}
+	//END	
+	function makeScroll (){
+		var freezeLink	= new YAHOOAmp.util.Element( "frezzlink" );
 		createCookie('report_scrolling',currentReportId,1);
 		showScroll();
-		document.getElementById("frezzlink").setAttribute("onClick","hiddeScroll()");
-		document.getElementById("frezzlink").setAttribute("class","settingsLink");
+		//document.getElementById("frezzlink").setAttribute("onClick","hiddeScroll()");
+		//document.getElementById("frezzlink").setAttribute("class","settingsLink");
+		if ( freezeLink.hasClass("settingsLinkDisable") )
+			freezeLink.removeClass("settingsLinkDisable");
+		freezeLink.addClass( "settingsLink" );
+		canMakeScroll	= false;
 		document.getElementById("frezzlink").innerHTML=msg2;
 		
 	}
 	function hiddeScroll(){
-		eraseCookie('report_scrolling',true,1);
+		eraseCookie('report_scrolling');
 		document.location=document.location;
 	}
 	
 	var enableLink=function(){
 	if (document.getElementById("frezzlink")){
-	
-	
+		var freezeLink	= new YAHOOAmp.util.Element( "frezzlink" );
 		if (scrolling){
-			document.getElementById("frezzlink").setAttribute("onClick","hiddeScroll()");
-			document.getElementById("frezzlink").setAttribute("class","settingsLink");
-			document.getElementById("frezzlink").setAttribute("style","cursor: hand;");
+			//document.getElementById("frezzlink").setAttribute("onClick","hiddeScroll()");
+			//document.getElementById("frezzlink").setAttribute("class","settingsLink");
+			if ( freezeLink.hasClass("settingsLinkDisable") )
+				freezeLink.removeClass("settingsLinkDisable");
+			freezeLink.addClass( "settingsLink" );
+			freezeLink.on("click", scrollCallback);
+			freezeLink.setStyle("cursor", "pointer");
+			canMakeScroll	= false;
+			//document.getElementById("frezzlink").setAttribute("style","cursor: hand;");
 			document.getElementById("frezzlink").innerHTML=msg2;
 			showScroll();
 		}else{
-			document.getElementById("frezzlink").setAttribute("onClick","makeScroll()");
-			document.getElementById("frezzlink").setAttribute("class","settingsLink");
-			document.getElementById("frezzlink").setAttribute("style","cursor: hand;");
+			//document.getElementById("frezzlink").setAttribute("onClick","makeScroll()");
+			//document.getElementById("frezzlink").setAttribute("class","settingsLink");
+			if ( freezeLink.hasClass("settingsLinkDisable") )
+				freezeLink.removeClass("settingsLinkDisable");
+			freezeLink.addClass( "settingsLink" );
+			freezeLink.on("click", scrollCallback);
+			freezeLink.setStyle("cursor", "pointer");
+			canMakeScroll	= true;
+			//document.getElementById("frezzlink").setAttribute("style","cursor: hand;");
 			document.getElementById("frezzlink").innerHTML=msg1;
 		}
-		
 	}
 	}
 		addOnloadEvent(enableLink);

@@ -47,7 +47,9 @@ public class ViewUserProfile
         }
 
         String[] memberInformationn = null;
-        member = TeamMemberUtil.getAmpTeamMember(user);
+        if(user != null) member = TeamMemberUtil.getAmpTeamMember(user);
+        else if(userid != null) member = TeamMemberUtil.getAmpTeamMember(userid);
+        
         if (member == null && request.getParameter("id") != null) {
             if (userid.equals(teamMember.getMemberId())) {
                 user = DbUtil.getUser(teamMember.getMemberId());

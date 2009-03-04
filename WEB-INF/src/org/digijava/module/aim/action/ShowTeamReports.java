@@ -87,7 +87,7 @@ public class ShowTeamReports extends Action {
 			pageList = new ArrayList<AmpReports>();
 			rf.setReportsList(pageList);
 		}
-		rf.setPageSize(rf.getTempNumResults());
+		rf.setPageSize(rf.getTempNumResults()); 
 		pageList.clear();
 		int i = 0;
 

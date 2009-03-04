@@ -103,6 +103,8 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.common.util.DateTimeUtil;
+import org.digijava.module.widget.dbentity.AmpDaValueFiltered;
+import org.digijava.module.widget.table.filteredColumn.FilterItemProvider;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.JDBCException;
@@ -2507,6 +2509,38 @@ public class DbUtil {
             ex.printStackTrace();
         }
         return organizations;
+    }
+    /**
+     * Returns true if org group is used in the widget table otherwise false
+     * @param orgGroupId
+     * @return
+     */
+
+     public static boolean isUsed(Long id, boolean isOrgGroup) {
+        boolean isUsed=true;
+        Session session = null;
+        Query q = null;
+        String queryString = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            queryString = " select val from " +AmpDaValueFiltered.class.getName()+
+                    " val inner join val.column col where val.filterItemId=:id and col.filterItemProvider=:filterItemProvider";
+            q = session.createQuery(queryString);
+            q.setLong("id", id);
+            if(isOrgGroup){
+            q.setLong("filterItemProvider", FilterItemProvider.ORG_GROUPS);
+            }
+            else{
+                 q.setLong("filterItemProvider", FilterItemProvider.DONORS_FILTER);
+            }
+            if(q.list().size()==0){
+                isUsed=false;
+            }
+        } catch (Exception ex) {
+            logger.error("Unable to get Org Groups  from database "
+                         + ex.getMessage());
+        }
+        return isUsed;
     }
 
     public static List<AmpOrganisation> getOrganisationByGroupId(Long orgGroupId) {

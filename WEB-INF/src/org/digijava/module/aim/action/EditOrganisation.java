@@ -869,7 +869,7 @@ public class EditOrganisation
 
         if (DbUtil.isUsed(editForm.getAmpOrgId(), false)) {
             ActionErrors errors = new ActionErrors();
-            errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.organizationGroupManager.deleteOrgGroup"));
+            errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.organizationManager.deleteOrg"));
             saveErrors(request, errors);
             editForm.setActionFlag("edit");
             return mapping.findForward("forward");

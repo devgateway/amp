@@ -87,7 +87,7 @@ public class ShowTeamReports extends Action {
 			pageList = new ArrayList<AmpReports>();
 			rf.setReportsList(pageList);
 		}
-
+		rf.setPageSize(rf.getTempNumResults());
 		pageList.clear();
 		int i = 0;
 
@@ -153,7 +153,8 @@ public class ShowTeamReports extends Action {
 				teamResults = (ArrayList)TeamUtil.getAllTeamReports(tm.getTeamId(), rf.getShowTabs(), 0, 0,true,tm.getMemberId());
 				Double totalPages = Math.ceil(1.0* TeamUtil.getAllTeamReportsCount(tm.getTeamId(), rf.getShowTabs(), true,tm.getMemberId()) / appSettings.getDefReportsPerPage());
 				rf.setTotalPages(totalPages.intValue());
-				
+				rf.setTempNumResults(appSettings.getDefReportsPerPage());
+				//rf.setTempNumResults(100);
 			}else{
 				teamResults = (ArrayList)TeamUtil.getAllTeamReports(tm.getTeamId(), rf.getShowTabs(), null, null,true,tm.getMemberId());
 				}

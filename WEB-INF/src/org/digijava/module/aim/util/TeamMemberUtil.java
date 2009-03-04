@@ -639,7 +639,7 @@ public class TeamMemberUtil {
 		Session session = null;
 		Query qry = null;
 		AmpTeamMember member = null;
-
+		//if(user == null) return null;
 		try {
 			session = PersistenceManager.getSession();
 			String queryString = "select tm from "

@@ -238,7 +238,7 @@ function loadPage()
 		}
 
 		<digi:context name="addSec" property="context/module/moduleinstance/editOrganisation.do" />
-		document.aimAddOrgForm.action = "<%= addSec %>;
+		document.aimAddOrgForm.action = "<%= addSec %>";
 		document.aimAddOrgForm.target = "_self";
 	    document.aimAddOrgForm.submit();
 	}

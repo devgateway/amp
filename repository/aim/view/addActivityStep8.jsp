@@ -14,9 +14,25 @@
 
 <script language="JavaScript">
 <!--
-	function validateForm() {
+	function validateForm() {	
 		return true;
 	}
+
+function checkPhoneNum(phoneId){
+	var num=document.getElementById(phoneId);
+	var phoneNumber=num.value;
+	var validChars= "0123456789()+ ";
+	for (i = 0;  i < phoneNumber.length;  i++) {
+		var ch = phoneNumber.charAt(i);
+		if (validChars.indexOf(ch)==-1){
+			alert('enter correct phone number');
+			num.value=phoneNumber.substring(0,i);
+			return false;
+			break;
+		}
+	}
+	return true;
+}
 
 function resetAll()
 {
@@ -36,6 +52,7 @@ function resetAll()
 <c:set var="stepNm">
   ${aimEditActivityForm.stepNumberOnPage}
  </c:set>
+ <digi:errors/>
 
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left">
 <tr><td width="100%" vAlign="top" align="left">
@@ -314,7 +331,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="contactInfo.dnrCntPhoneNumber" styleClass="inp-text"/>
+																<html:text property="contactInfo.dnrCntPhoneNumber" styleClass="inp-text" styleId="donorPhone" onkeyup="checkPhoneNum('donorPhone')"/>
 															</td>
 														</tr>
 														</field:display>
@@ -426,7 +443,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="contactInfo.mfdCntPhoneNumber" styleClass="inp-text"/>
+																<html:text property="contactInfo.mfdCntPhoneNumber" styleClass="inp-text" styleId="mofedPhone" onkeyup="checkPhoneNum('mofedPhone')"/>
 															</td>
 														</tr>
 														</field:display>
@@ -520,7 +537,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<b><digi:trn key="aim:projectCoordinator:phoneNumber">Phone Number</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="contactInfo.prjCoPhoneNumber" styleClass="inp-text"/>
+																<html:text property="contactInfo.prjCoPhoneNumber" styleClass="inp-text" styleId="prjCoPhone" onkeyup="checkPhoneNum('prjCoPhone')"/>
 															</td>
 														</tr>
 														</field:display>
@@ -604,7 +621,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<b><digi:trn key="aim:sectorMinistryCnt:phoneNumber">Phone Number</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="contactInfo.secMiCntPhoneNumber" styleClass="inp-text"/>
+																<html:text property="contactInfo.secMiCntPhoneNumber" styleClass="inp-text" styleId="MiCntPhone" onkeyup="checkPhoneNum('MiCntPhone')"/>
 															</td>
 														</tr>
 														</field:display>

@@ -654,14 +654,14 @@ function adminHelp(){
                                           <div id="reports2" class="yuiampmenu">
                                               <div class="bd">                    
                                                   <ul>
-													<digi:insert attribute="dropdownLangSwitch" />
+                                                  	<digi:insert flush="false" attribute="dropdownLangSwitch" />
                                                   </ul>
                                               </div>
                                           </div>                              
                                         </li>
                                         <logic:notEmpty name="currentMember" scope="session">
                                             <digi:secure actions="TRANSLATE">
-                                                    <digi:insert attribute="transmode"/>
+                                                    <digi:insert flush="false" attribute="transmode"/>
                                             </digi:secure>
                                         </logic:notEmpty>                                        
                                         <logic:notEmpty name="currentMember" scope="session">

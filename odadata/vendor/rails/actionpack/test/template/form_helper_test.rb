@@ -607,6 +607,7 @@ class FormHelperTest < ActionView::TestCase
 
     expected = '<form action="http://www.example.com" method="post">' +
                '<input name="post[title]" size="30" type="text" id="post_title" value="Hello World" />' +
+               '<input id="post_author_attributes_id" name="post[author_attributes][id]" type="hidden" value="321" />' +
                '<input id="post_author_attributes_name" name="post[author_attributes][name]" size="30" type="text" value="author #321" />' +
                '</form>'
 
@@ -627,8 +628,10 @@ class FormHelperTest < ActionView::TestCase
 
     expected = '<form action="http://www.example.com" method="post">' +
                '<input name="post[title]" size="30" type="text" id="post_title" value="Hello World" />' +
-               '<input id="post_comments_attributes_1_name" name="post[comments_attributes][1][name]" size="30" type="text" value="comment #1" />' +
-               '<input id="post_comments_attributes_2_name" name="post[comments_attributes][2][name]" size="30" type="text" value="comment #2" />' +
+               '<input id="post_comments_attributes_0_id" name="post[comments_attributes][0][id]" type="hidden" value="1" />' +
+               '<input id="post_comments_attributes_0_name" name="post[comments_attributes][0][name]" size="30" type="text" value="comment #1" />' +
+               '<input id="post_comments_attributes_1_id" name="post[comments_attributes][1][id]" type="hidden" value="2" />' +
+               '<input id="post_comments_attributes_1_name" name="post[comments_attributes][1][name]" size="30" type="text" value="comment #2" />' +
                '</form>'
 
     assert_dom_equal expected, output_buffer
@@ -648,8 +651,8 @@ class FormHelperTest < ActionView::TestCase
 
     expected = '<form action="http://www.example.com" method="post">' +
                '<input name="post[title]" size="30" type="text" id="post_title" value="Hello World" />' +
-               '<input id="post_comments_attributes_new_1_name" name="post[comments_attributes][new_1][name]" size="30" type="text" value="new comment" />' +
-               '<input id="post_comments_attributes_new_2_name" name="post[comments_attributes][new_2][name]" size="30" type="text" value="new comment" />' +
+               '<input id="post_comments_attributes_0_name" name="post[comments_attributes][0][name]" size="30" type="text" value="new comment" />' +
+               '<input id="post_comments_attributes_1_name" name="post[comments_attributes][1][name]" size="30" type="text" value="new comment" />' +
                '</form>'
 
     assert_dom_equal expected, output_buffer
@@ -669,8 +672,9 @@ class FormHelperTest < ActionView::TestCase
 
     expected = '<form action="http://www.example.com" method="post">' +
                '<input name="post[title]" size="30" type="text" id="post_title" value="Hello World" />' +
-               '<input id="post_comments_attributes_321_name" name="post[comments_attributes][321][name]" size="30" type="text" value="comment #321" />' +
-               '<input id="post_comments_attributes_new_1_name" name="post[comments_attributes][new_1][name]" size="30" type="text" value="new comment" />' +
+               '<input id="post_comments_attributes_0_id" name="post[comments_attributes][0][id]" type="hidden" value="321" />' +
+               '<input id="post_comments_attributes_0_name" name="post[comments_attributes][0][name]" size="30" type="text" value="comment #321" />' +
+               '<input id="post_comments_attributes_1_name" name="post[comments_attributes][1][name]" size="30" type="text" value="new comment" />' +
                '</form>'
 
     assert_dom_equal expected, output_buffer
@@ -690,12 +694,30 @@ class FormHelperTest < ActionView::TestCase
 
     expected = '<form action="http://www.example.com" method="post">' +
                '<input name="post[title]" size="30" type="text" id="post_title" value="Hello World" />' +
-               '<input id="post_comments_attributes_321_name" name="post[comments_attributes][321][name]" size="30" type="text" value="comment #321" />' +
-               '<input id="post_comments_attributes_new_1_name" name="post[comments_attributes][new_1][name]" size="30" type="text" value="new comment" />' +
+               '<input id="post_comments_attributes_0_id" name="post[comments_attributes][0][id]" type="hidden" value="321" />' +
+               '<input id="post_comments_attributes_0_name" name="post[comments_attributes][0][name]" size="30" type="text" value="comment #321" />' +
+               '<input id="post_comments_attributes_1_name" name="post[comments_attributes][1][name]" size="30" type="text" value="new comment" />' +
                '</form>'
 
     assert_dom_equal expected, output_buffer
     assert_equal yielded_comments, @post.comments
+  end
+
+  def test_nested_fields_for_with_child_index_option_override_on_a_nested_attributes_collection_association
+    @post.comments = []
+
+    form_for(:post, @post) do |f|
+      f.fields_for(:comments, Comment.new(321), :child_index => 'abc') do |cf|
+        concat cf.text_field(:name)
+      end
+    end
+
+    expected = '<form action="http://www.example.com" method="post">' +
+               '<input id="post_comments_attributes_abc_id" name="post[comments_attributes][abc][id]" type="hidden" value="321" />' +
+               '<input id="post_comments_attributes_abc_name" name="post[comments_attributes][abc][name]" size="30" type="text" value="comment #321" />' +
+               '</form>'
+
+    assert_dom_equal expected, output_buffer
   end
 
   def test_fields_for
@@ -977,6 +999,47 @@ class FormHelperTest < ActionView::TestCase
       "<label for='secret'>Secret:</label> <input name='post[secret]' type='hidden' value='0' /><input name='post[secret]' checked='checked' type='checkbox' id='post_secret' value='1' /><br/>"
 
     assert_dom_equal expected, output_buffer
+  end
+
+  def test_form_for_with_labelled_builder_with_nested_fields_for_without_options_hash
+    klass = nil
+
+    form_for(:post, @post, :builder => LabelledFormBuilder) do |f|
+      f.fields_for(:comments, Comment.new) do |nested_fields|
+        klass = nested_fields.class
+        ''
+      end
+    end
+
+    assert_equal LabelledFormBuilder, klass
+  end
+
+  def test_form_for_with_labelled_builder_with_nested_fields_for_with_options_hash
+    klass = nil
+
+    form_for(:post, @post, :builder => LabelledFormBuilder) do |f|
+      f.fields_for(:comments, Comment.new, :index => 'foo') do |nested_fields|
+        klass = nested_fields.class
+        ''
+      end
+    end
+
+    assert_equal LabelledFormBuilder, klass
+  end
+
+  class LabelledFormBuilderSubclass < LabelledFormBuilder; end
+
+  def test_form_for_with_labelled_builder_with_nested_fields_for_with_custom_builder
+    klass = nil
+
+    form_for(:post, @post, :builder => LabelledFormBuilder) do |f|
+      f.fields_for(:comments, Comment.new, :builder => LabelledFormBuilderSubclass) do |nested_fields|
+        klass = nested_fields.class
+        ''
+      end
+    end
+
+    assert_equal LabelledFormBuilderSubclass, klass
   end
 
   def test_form_for_with_html_options_adds_options_to_form_tag

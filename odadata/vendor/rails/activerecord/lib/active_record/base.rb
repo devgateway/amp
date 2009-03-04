@@ -886,7 +886,8 @@ module ActiveRecord #:nodoc:
       # Deletes the records matching +conditions+ without instantiating the records first, and hence not
       # calling the +destroy+ method nor invoking callbacks. This is a single SQL DELETE statement that
       # goes straight to the database, much more efficient than +destroy_all+. Be careful with relations
-      # though, in particular <tt>:dependent</tt> rules defined on associations are not honored.
+      # though, in particular <tt>:dependent</tt> rules defined on associations are not honored.  Returns
+      # the number of rows affected.
       #
       # ==== Parameters
       #
@@ -1758,7 +1759,7 @@ module ActiveRecord #:nodoc:
             scope = scope(:find) if :auto == scope
             if scope && (scoped_group = scope[:group])
               sql << " GROUP BY #{scoped_group}"
-              sql << " HAVING #{scoped_having}" if (scoped_having = scope[:having])
+              sql << " HAVING #{scope[:having]}" if scope[:having]
             end
           end
         end
@@ -3147,7 +3148,7 @@ module ActiveRecord #:nodoc:
     # #save_with_autosave_associations to be wrapped inside a transaction.
     include AutosaveAssociation, NestedAttributes
 
-    include Aggregations, Transactions, Reflection, Calculations, Serialization
+    include Aggregations, Transactions, Reflection, Batches, Calculations, Serialization
   end
 end
 

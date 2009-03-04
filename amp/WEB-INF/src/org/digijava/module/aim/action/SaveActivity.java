@@ -1551,7 +1551,33 @@ public class SaveActivity extends Action {
 		
 		if (check){
 			//Do the checks here
+			String[] phoneNumbers=new String[]{eaForm.getContactInfo().getDnrCntPhoneNumber(), eaForm.getContactInfo().getMfdCntPhoneNumber(), 
+												eaForm.getContactInfo().getPrjCoPhoneNumber(), eaForm.getContactInfo().getSecMiCntPhoneNumber()};
+			String validChars="0123456789+() ";
+			for (int i = 0; i < phoneNumbers.length; i++) {
+				if(phoneNumbers[i]!=null && phoneNumbers[i].length()>0){
+					String phoneNum=phoneNumbers[i];					
+					for (int j=0;j<phoneNum.length();j++) {
+						char ch=phoneNum.charAt(j);
+						if (validChars.indexOf(ch)==-1){
+							errors.add("invalidPhone",new ActionError("error.aim.addActivity.invalidPhone", TranslatorWorker.translateText("Invalid Phone Number",locale,siteId)));
+							break;
+						}
+					}
+				}				
+			}
 			
+			String[] emails=new String[]{eaForm.getContactInfo().getDnrCntEmail(), eaForm.getContactInfo().getMfdCntEmail(), 
+										eaForm.getContactInfo().getPrjCoEmail(),eaForm.getContactInfo().getSecMiCntEmail()};
+			for (int i = 0; i < emails.length; i++) {
+				String email=emails[i];
+				if(email!=null && email.length()>0){
+					if(!email.contains("@")){
+						errors.add("InvalidContactMail", new ActionError("error.aim.addActivity.contactInfo.invalidEmail", TranslatorWorker.translateText("Please provide valid Email",locale,siteId)) );
+						break;
+					}
+				}
+			}
 			end:
 			if (errors.size() > 0){
 				//we have all the errors for this step saved and we must throw the amp error

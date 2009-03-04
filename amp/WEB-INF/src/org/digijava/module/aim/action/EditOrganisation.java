@@ -17,6 +17,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -864,6 +866,14 @@ public class EditOrganisation
       }
     }
     else if ("delete".equals(action)) {
+
+        if (DbUtil.isUsed(editForm.getAmpOrgId(), false)) {
+            ActionErrors errors = new ActionErrors();
+            errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.organizationGroupManager.deleteOrgGroup"));
+            saveErrors(request, errors);
+            editForm.setActionFlag("edit");
+            return mapping.findForward("forward");
+        }
 
       Collection activities = DbUtil.getAllActivities();
       Collection testFunding = ActivityUtil.getFundingByOrg(editForm.

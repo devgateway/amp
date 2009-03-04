@@ -9,6 +9,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -166,7 +168,13 @@ public class EditOrgGroup extends Action {
 					    } else if ("delete".equals(action)){
 					    	
 					    	Iterator itr1 = DbUtil.getOrgByGroup(editForm.getAmpOrgGrpId()).iterator();
-					    	
+					    	if(DbUtil.isUsed(editForm.getAmpOrgGrpId(),true)){
+                                ActionErrors errors = new ActionErrors();
+                                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.organizationGroupManager.deleteOrgGroup"));
+                                saveErrors(request, errors);
+                                editForm.setAction("edit");
+                                return mapping.findForward("forward");
+                            }
 					    	if (itr1.hasNext()) {
 					    		editForm.setFlag("orgReferences");
 								editForm.setAction("edit");
@@ -175,15 +183,15 @@ public class EditOrgGroup extends Action {
 								if (session.getAttribute("ampOrgGrp") != null) {
 									session.removeAttribute("ampOrgGrp");
 								}
-						    	
-						    	AmpOrgGroup ampGrp = DbUtil.getAmpOrgGroup(editForm.getAmpOrgGrpId());
-								if (ampGrp != null) {
-									DbUtil.delete(ampGrp);
-									logger.debug("Organization Group deleted");
-								}
-						    	return mapping.findForward("added");
+                             
+                                    AmpOrgGroup ampGrp = DbUtil.getAmpOrgGroup(editForm.getAmpOrgGrpId());
+                                    if (ampGrp != null) {
+                                        DbUtil.delete(ampGrp);
+                                        logger.debug("Organization Group deleted");
+                                    }
+                                    return mapping.findForward("added");
+                                }
 							}
-					    }
 						
 					 return mapping.findForward("index");
 				}

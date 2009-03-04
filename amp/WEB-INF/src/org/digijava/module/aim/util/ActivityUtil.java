@@ -3487,7 +3487,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY,act.getCategories());
 
     if (act != null && statusValue != null) {
-      if ( CategoryManagerUtil.equalsCategoryValue(statusValue, CategoryConstants.ACTIVITY_STATUS_PROPOSED) &&
+      if ( 
           act.getFunAmount() != null) {
         String currencyCode = act.getCurrencyCode();
         //AMP-1403 assume USD if no code is specified
@@ -3495,7 +3495,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
           currencyCode = "USD";
         } //end of AMP-1403
         //apply program percent
-        tempProposed = CurrencyWorker.convert(act.getFunAmount().doubleValue()*percent/100,currencyCode);
+        tempProposed = CurrencyWorker.convert(act.getFunAmount().doubleValue()*percent/100,tocode);
         result.setProposedAmout(tempProposed);
       }
       else {

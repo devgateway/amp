@@ -194,6 +194,7 @@ function adminHelp(){
 					                        <digi:trn key="aim:aminTools">ADMIN TOOLS</digi:trn>
 					                    </digi:link>
                                         </li>
+                          <module:display name="Tools" parentModule="PROJECT MANAGEMENT">
                           <li class="yuiampmenuitem">
                               <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
                                  <digi:trn key="aim:tools">TOOLS</digi:trn>
@@ -225,6 +226,7 @@ function adminHelp(){
                                   </div>
                               </div>                    
                           </li>
+                          </module:display>
                           <module:display name="HELP">
                           <li class="yuiampmenuitem">
                               <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
@@ -341,6 +343,7 @@ function adminHelp(){
               <div id="mainmenuHeader" class="yuiampmenu">
                   <div class="bd">
                       <ul class="first-of-type">
+                      	<module:display name="My Desktop" parentModule="PROJECT MANAGEMENT">
                     	 <li class="yuiampmenuitem" style="float:left;">
                               <a class="yuiampmenuitemlabel" href="/showDesktop.do" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px"  onclick="return canExit()" >
                                  <digi:trn key="aim:mydesktop">My Desktop</digi:trn>
@@ -360,6 +363,7 @@ function adminHelp(){
 -->
 <c:if test="${not empty sessionScope.currentMember}">
 <c:if test="${sessionScope.currentMember.addActivity == 'true'}">
+												<field:display name="Add Activity Button" feature="Edit Activity">
 		                                        <li class="yuiampmenuitem">
                                                     <c:set var="trnClickToAddNewActivit">
                                                     <digi:trn key="aim:clickToAddNewActivit">Click here to Add New Activity</digi:trn>
@@ -368,6 +372,7 @@ function adminHelp(){
                                                     <digi:trn key="btn:addActivity">Add Activity</digi:trn>
                                                     </a>
 												</li>
+												</field:display>
 </c:if></c:if>
                                             <%--<a class="yuiampmenuitemlabel" href="/advancedReportManager.do?clear=true&reportEdit=false">
                                             <digi:trn key="aim:addTab">Add Tab</digi:trn>
@@ -384,6 +389,7 @@ function adminHelp(){
 		                                            </a>
 												</li>
 	                                        </module:display>
+	                                     <feature:display name="Change Workspace" module="My Desktop">
                                         <li class="yuiampmenuitem" style="_width:230px;">
                                         	<a class="yuiampmenuitemlabel" href="#">
                                             	<digi:trn key="aim:changeworkspace">Change workspace</digi:trn>
@@ -408,10 +414,12 @@ function adminHelp(){
                                                   </div>
                                               </div>   
                                         </li>
+                                        </feature:display>
                                       </ul>
                                   </div>
                               </div>                    
                           </li>
+                          </module:display>
 						<module:display name="REPORTING">
                           <li class="yuiampmenuitem" style="float:left;">
                               <a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=false" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px"  onclick="return canExit()">
@@ -621,7 +629,7 @@ function adminHelp(){
                               </div>                    
                           </li>
                           </module:display>
-                          
+                          <module:display name="Tools" parentModule="PROJECT MANAGEMENT">
                           <li class="yuiampmenuitem" style="float:left;">
                               <span class="yuiampmenuitemlabel" href="#"  style="float:left;position:relative;top:0px;_top:1px">
                                  <digi:trn key="aim:tools">TOOLS</digi:trn>
@@ -632,11 +640,13 @@ function adminHelp(){
                               <div id="tools" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">                    
                                       <ul>
+                                      	<feature:display name="Workspace Info" module="Tools">
                                         <li>
                                         <a class="yuiampmenuitemlabel" onclick="return teamWorkspaceSetup('-1');" href="#">
                                         <digi:trn key="aim:workspaceinfo">Workspace Info</digi:trn>
                                         </a>
                                         </li>
+                                        </feature:display>
                                         <li style="_width:300px">
                                         <a class="yuiampmenuitemlabel" href="#">
                                         <digi:trn key="aim:deflanguage">Language</digi:trn>
@@ -672,6 +682,7 @@ function adminHelp(){
                                   </div>
                               </div>                    
                           </li>
+                          </module:display>
                           <module:display name="HELP">
                           <li class="yuiampmenuitem" style="float:left;">
                               <span class="yuiampmenuitemlabel" href="#"  style="float:left;position:relative;top:0px;_top:1px;">

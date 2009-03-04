@@ -32,7 +32,7 @@ public class ECSService extends AbstractServiceImpl {
 		if (FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ECS_ENABLED).equals("true")){
 			logger.info("   - ECS is enabled");
 			String policy = System.getProperties().getProperty("java.security.policy");
-			if (policy.indexOf("ecsClient.policy") < 0){
+			if (policy == null || policy.indexOf("ecsClient.policy") < 0){
 				logger.info("   - policy NOT set!");
 				try{
 					Iterator iterator = FeaturesUtil.getGlobalSettingsCache().iterator();

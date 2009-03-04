@@ -119,7 +119,6 @@
 				/repository/struts-config.xml,
 				/repository/admin/struts-config.xml,
 				/repository/calendar/struts-config.xml,
-				/repository/ampharvester/struts-config.xml,
 				/repository/aim/struts-config.xml,
 				/repository/editor/struts-config.xml,
 				/repository/translation/struts-config.xml,

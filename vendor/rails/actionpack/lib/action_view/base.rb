@@ -182,9 +182,14 @@ module ActionView #:nodoc:
     # that alert()s the caught exception (and then re-raises it).
     cattr_accessor :debug_rjs
 
-    # Specify whether to check whether modified templates are recompiled without a restart
-    @@cache_template_loading = false
+    # Specify whether templates should be cached. Otherwise the file we be read everytime it is accessed.
+    # Automatically reloading templates are not thread safe and should only be used in development mode.
+    @@cache_template_loading = nil
     cattr_accessor :cache_template_loading
+
+    def self.cache_template_loading?
+      ActionController::Base.allow_concurrency || (cache_template_loading.nil? ? !ActiveSupport::Dependencies.load? : cache_template_loading)
+    end
 
     attr_internal :request
 
@@ -226,6 +231,8 @@ module ActionView #:nodoc:
 
     def view_paths=(paths)
       @view_paths = self.class.process_view_paths(paths)
+      # we might be using ReloadableTemplates, so we need to let them know this a new request
+      @view_paths.load!
     end
 
     # Returns the result of a render that's dictated by the options hash. The primary options are:

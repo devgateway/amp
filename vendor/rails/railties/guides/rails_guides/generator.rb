@@ -1,3 +1,5 @@
+require 'set'
+
 module RailsGuides
   class Generator
     attr_reader :output, :view_path, :view, :guides_dir
@@ -25,34 +27,39 @@ module RailsGuides
       end
 
       guides.each do |guide|
-        guide =~ /(.*?)(\.erb)?\.textile/
-        name = $1
-
-        puts "Generating #{name}"
-
-        file = File.join(output, "#{name}.html")
-        File.open(file, 'w') do |f|
-          @view = ActionView::Base.new(view_path)
-          @view.extend(Helpers)
-
-          if guide =~ /\.erb\.textile/
-            # Generate the erb pages with textile formatting - e.g. index/authors
-            result = view.render(:layout => 'layout', :file => guide)
-            f.write textile(result)
-          else
-            body = File.read(File.join(view_path, guide))
-            body = set_header_section(body, @view)
-            body = set_index(body, @view)
-
-            result = view.render(:layout => 'layout', :text => textile(body))
-            f.write result
-          end
-        end
+        generate_guide(guide)
       end
 
       # Copy images and css files to html directory
       FileUtils.cp_r File.join(guides_dir, 'images'), File.join(output, 'images')
       FileUtils.cp_r File.join(guides_dir, 'files'), File.join(output, 'files')
+    end
+
+    def generate_guide(guide)
+      guide =~ /(.*?)(\.erb)?\.textile/
+      name = $1
+
+      puts "Generating #{name}"
+
+      file = File.join(output, "#{name}.html")
+      File.open(file, 'w') do |f|
+        @view = ActionView::Base.new(view_path)
+        @view.extend(Helpers)
+
+        if guide =~ /\.erb\.textile/
+          # Generate the erb pages with textile formatting - e.g. index/authors
+          result = view.render(:layout => 'layout', :file => name)
+          f.write textile(result)
+        else
+          body = File.read(File.join(view_path, guide))
+          body = set_header_section(body, @view)
+          body = set_index(body, @view)
+
+          result = view.render(:layout => 'layout', :text => textile(body))
+          f.write result
+          warn_about_broken_links(result)
+        end
+      end
     end
 
     def set_header_section(body, view)
@@ -72,21 +79,19 @@ module RailsGuides
     def set_index(body, view)
       index = <<-INDEX
       <div id="subCol">
-        <h3 class="chapter"><img src="images/chapters_icon.gif" alt="" /> Chapters</h3>
+        <h3 class="chapter"><img src="images/chapters_icon.gif" alt="" />Chapters</h3>
         <ol class="chapters">
-  INDEX
+      INDEX
 
       i = Indexer.new(body)
       i.index
 
       # Set index for 2 levels
       i.level_hash.each do |key, value|
-        bookmark = '#' + key.gsub(/[^a-z0-9\-_\+]+/i, '').underscore.dasherize
-        link = view.content_tag(:a, :href => bookmark) { key }
+        link = view.content_tag(:a, :href => key[:id]) { textile(key[:title]) }
 
         children = value.keys.map do |k|
-          bm = '#' + k.gsub(/[^a-z0-9\-_\+]+/i, '').underscore.dasherize
-          l = view.content_tag(:a, :href => bm) { k }
+          l = view.content_tag(:a, :href => k[:id]) { textile(k[:title]) }
           view.content_tag(:li, l)
         end
 
@@ -104,9 +109,46 @@ module RailsGuides
     end
 
     def textile(body)
-      t = RedCloth.new(body)
-      t.hard_breaks = false
-      t.to_html(:notestuff, :plusplus, :code, :tip)
+      # If the issue with nontextile is fixed just remove the wrapper.
+      with_workaround_for_nontextile(body) do |body|
+        t = RedCloth.new(body)
+        t.hard_breaks = false
+        t.to_html(:notestuff, :plusplus, :code, :tip)
+      end
+    end
+
+    # For some reason the notextile tag does not always turn off textile. See
+    # LH ticket of the security guide (#7). As a temporary workaround we deal
+    # with code blocks by hand.
+    def with_workaround_for_nontextile(body)
+      code_blocks = []
+      body.gsub!(%r{<(yaml|shell|ruby|erb|html|sql|plain)>(.*?)</\1>}m) do |m|
+        es = ERB::Util.h($2)
+        css_class = ['erb', 'shell'].include?($1) ? 'html' : $1
+        code_blocks << %{<div class="code_container"><code class="#{css_class}">#{es}</code></div>}
+        "dirty_workaround_for_nontextile_#{code_blocks.size - 1}"
+      end
+      
+      body = yield body
+      
+      body.gsub(%r{<p>dirty_workaround_for_nontextile_(\d+)</p>}) do |_|
+        code_blocks[$1.to_i]
+      end
+    end
+
+    def warn_about_broken_links(html)
+      # Textile generates headers with IDs computed from titles.
+      anchors  = Set.new(html.scan(/<h\d\s+id="([^"]+)/).flatten)
+      # Also, footnotes are rendered as paragraphs this way.
+      anchors += Set.new(html.scan(/<p\s+class="footnote"\s+id="([^"]+)/).flatten)
+      
+      # Check fragment identifiers.
+      html.scan(/<a\s+href="#([^"]+)/).flatten.each do |fragment_identifier|
+        next if fragment_identifier == 'mainCol' # in layout, jumps to some DIV
+        unless anchors.member?(fragment_identifier)
+          puts "BROKEN LINK: ##{fragment_identifier}"
+        end
+      end
     end
   end
 end

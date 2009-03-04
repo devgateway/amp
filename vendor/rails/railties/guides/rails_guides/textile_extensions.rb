@@ -25,13 +25,16 @@ module RailsGuides
       body.gsub!(/\+(.*?)\+/) do |m|
         "<notextile><tt>#{$1}</tt></notextile>"
       end
+
+      # The real plus sign
+      body.gsub!('<plus>', '+')
     end
 
     def code(body)
-      body.gsub!(/\<(yaml|shell|ruby|erb|html|sql)\>(.*?)\<\/\1\>/m) do |m|
+      body.gsub!(%r{<(yaml|shell|ruby|erb|html|sql|plain)>(.*?)</\1>}m) do |m|
         es = ERB::Util.h($2)
         css_class = ['erb', 'shell'].include?($1) ? 'html' : $1
-        "<notextile><code class='#{css_class}'>#{es}\n</code></notextile>"
+        %{<notextile><div class="code_container"><code class="#{css_class}">#{es}</code></div></notextile>}
       end
     end
   end

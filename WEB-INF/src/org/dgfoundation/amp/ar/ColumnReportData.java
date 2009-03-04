@@ -266,11 +266,11 @@ public class ColumnReportData extends ReportData {
 			referenceIds.put(element.getOwnerId(),element.getOwnerId());
 		}
 		
-		//we iterate allIds and see if we have more ids that are not present in the sortedIds. If yes, we add them at bottom:
+		//we iterate allIds and see if we have more ids that are not present in the sortedIds. If yes, we add them at the top of the list:
 		i=allIds.iterator();
 		while (i.hasNext()) {
 			Long element = (Long) i.next();
-			if(!referenceIds.containsKey(element)) sortedIds.add(element);
+			if(!referenceIds.containsKey(element)) sortedIds.add(0,element);
 		}
 		
 		if(!getSortAscending()) 

@@ -17,6 +17,17 @@
 
 
 <script language="JavaScript">
+
+      function chkNumeric(frmContrl){
+          var regEx=/^[0-9]*$/;
+          var errorMsg="<digi:trn>Please enter numeric value only</digi:trn>";
+          if(!frmContrl.value.match(regEx)){
+               alert(errorMsg);
+               frmContrl.value = "";
+               frmContrl.focus();
+              return false;
+          }
+      }
     function addData(){
   <digi:context name="addEditIndVal" property="/widget/indSectRegManager.do~actType=addValue" />
           document.gisIndicatorSectorRegionForm.action = "${addEditIndVal}";
@@ -27,7 +38,7 @@
       function deleteData(ind){
           var flag = confirm("Delete this data?");
           if(flag == true){
-  <digi:context name="deleleteValue" property="/widget/indSectRegManager.do~actType=removeValue" />
+            <digi:context name="deleleteValue" property="/widget/indSectRegManager.do~actType=removeValue" />
               document.gisIndicatorSectorRegionForm.action = "${deleleteValue}~deleteValIndex="+ind;
               document.gisIndicatorSectorRegionForm.submit();
           }
@@ -44,7 +55,6 @@
       function validation(){
           var values=document.getElementsByTagName("select");
           var baseValue=0;
-          var actualValue=0;
           var targetValue=0;
           if(values!=null){
               for (var i=0;i<values.length;i++){
@@ -127,7 +137,7 @@
                                 </td>
                                 
                                 <td height="10" align="center" width="10%">
-                                    <html:text name="values" property="value" indexed="true" styleClass="amt"/>
+                                    <html:text name="values" property="value" indexed="true" styleClass="amt" onblur="chkNumeric(this)"/>
                                 </td>
                                 
                                 <td   height="10" align="center" nowrap="nowrap">

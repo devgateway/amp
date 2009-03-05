@@ -125,13 +125,11 @@
 		        {key:"v_actions",text:"${headerAction}",sortable:false}
 		    ];
 		    this.columnSetForVersions = new YAHOO.widget.ColumnSet(this.columnHeadersForVersions);
-	      var options					= {paginated:true, 
-	                				 
+	      var options					= {
 	                    				rowsPerPage: 7,
 	                    				pageCurrent: 1,
 	                    				startRecordIndex: 1,
 								        pageLinksLength: 5
-	                    			
 	                			};
 		
 		    var versionsDiv = YAHOO.util.Dom.get("versions_div");
@@ -383,7 +381,7 @@ function WindowControllerObject(bodyContainerEl) {
 									obj.mItemDoc.cfg.setProperty("checked", this.showOnlyDocs);
 									obj.mItemLink.cfg.setProperty("checked", this.showOnlyLinks);
 									if ( this.lastPopulateObject != null )
-										this.populateCallback(null, null, this.lastPopulateObject);
+										this.populateCallback(null, null, lastPopulateObject);
 									return;
 								}
 	
@@ -876,7 +874,7 @@ function setType(typeValue) {
 }
 
 function validateAddDocument() {
-	var regexp	= new RegExp("[a-zA-Z0-9_ÀÁÃÄÇÈÉËÌÍÏÑÒÓÕÖÙÚÜàáãäçèéëìíïñòóõöùúü%&' ]+");
+	var regexp	= new RegExp("[a-zA-Z0-9_ÀÁÃÄÇÈÉËÌÍÏÑÒÓÕÖÙÚÜàáãäçèéëìíïñòóõöùúü%&']+");
 	//alert( document.forms['crDocumentManagerForm'].docTitle.value );
 	//alert( document.forms['crDocumentManagerForm'].fileData.value );
 	var msg	= '';

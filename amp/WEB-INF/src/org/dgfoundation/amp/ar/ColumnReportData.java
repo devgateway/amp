@@ -36,10 +36,10 @@ public class ColumnReportData extends ReportData {
 
     	    Iterator i=items.iterator();
     	    while (i.hasNext()) {
-		Column element = (Column) i.next();
-		int visCol=element.getVisibleRows();
-		if(visCol>ret) ret=visCol;
-	    }
+				Column element = (Column) i.next();
+				int visCol=element.getVisibleRows();
+				if(visCol>ret) ret=visCol;
+		    }
     	    return ret; 
 	}
     

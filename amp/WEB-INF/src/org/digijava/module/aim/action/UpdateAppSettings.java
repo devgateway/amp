@@ -15,6 +15,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -22,7 +24,9 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.translator.util.TrnLocale;
 import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.kernel.util.RequestUtils;
@@ -53,7 +57,6 @@ public class UpdateAppSettings extends Action {
 
 		UpdateAppSettingsForm uForm = (UpdateAppSettingsForm) form;
 		logger.debug("In updtate app settings");
-
 		HttpSession session = request.getSession();
 
 		if (session.getAttribute("currentMember") == null) {
@@ -69,6 +72,13 @@ public class UpdateAppSettings extends Action {
 			uForm.setUpdated(false);
 		}
 
+		if (request.getParameter("errors") != null
+				&& request.getParameter("errors").equals("true")) {
+			uForm.setErrors(true);
+		} else {
+			uForm.setErrors(false);
+		}
+		
 		if (uForm.getType() == null || uForm.getType().trim().equals("")) {
 			String path = mapping.getPath();
 			logger.debug("path = " + path);
@@ -195,6 +205,44 @@ public class UpdateAppSettings extends Action {
 			}
 		} else {
 			logger.debug("In saving");
+			SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
+			
+			String context = SiteUtils.getSiteURL(currentDomain, request
+					.getScheme(), request.getServerPort(), request
+					.getContextPath());
+			if(uForm.getDefRecsPerPage() == null || uForm.getDefRecsPerPage() < 2)
+				{
+					ActionErrors errors = new ActionErrors();
+					Site site = RequestUtils.getSite(request);
+	        		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+	        		String siteId = site.getId()+"";
+	        		String locale = navigationLanguage.getCode();
+	        		errors.add("title", new ActionError("error.aim.addActivity.wrongNrActsPerPage", TranslatorWorker.translateText("Please enter the title",locale,siteId)));
+	        		if (errors.size() > 0)
+	        			saveErrors(request, errors);
+	        		
+					if (uForm.getType().equals("default")) {
+						uForm.setType(null);
+						String url = context + "/translation/switchLanguage.do?code="
+								+ uForm.getLanguage() + "&rfr=" + context
+								+ "/aim/defaultSettings.do~errors=true~updated="
+								+ uForm.getUpdated();
+						response.sendRedirect(url);
+						logger.debug("redirecting " + url + " ....");
+						uForm.setErrors(true);
+						return null;
+					} else if (uForm.getType().equals("userSpecific")) {
+						uForm.setType(null);
+						String url = context + "/translation/switchLanguage.do?code="
+								+ uForm.getLanguage() + "&rfr=" + context
+								+ "/aim/customizeSettings.do~errors=true~updated="
+								+ uForm.getUpdated();
+						response.sendRedirect(url);
+						logger.debug("redirecting " + url + " ....");
+						uForm.setErrors(false);
+						return null;
+					 }
+				}
 			AmpApplicationSettings ampAppSettings = null;
 			if ("save".equals(uForm.getSave())) {
 				ampAppSettings = new AmpApplicationSettings();
@@ -266,9 +314,11 @@ public class UpdateAppSettings extends Action {
 			//
 			uForm.setUpdateFlag(false);
 			//
-			SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
+			//SiteDomain 
+			currentDomain = RequestUtils.getSiteDomain(request);
 
-			String context = SiteUtils.getSiteURL(currentDomain, request
+			//String 
+			context = SiteUtils.getSiteURL(currentDomain, request
 					.getScheme(), request.getServerPort(), request
 					.getContextPath());
 			if (uForm.getType().equals("default")) {

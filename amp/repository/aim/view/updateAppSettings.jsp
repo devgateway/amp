@@ -138,6 +138,21 @@ function checkYear( year, base, range ) {
                                                         <td bgcolor="#f4f4f2" colspan="2"><digi:errors/>
                                                         </td>
                                                     </tr>
+                                                    
+                                                    <logic:equal name="aimUpdateAppSettingsForm" property="errors" value="true">
+													<tr>
+														<td colspan="2" align="center">
+															<b>
+                                                            <font color="red">
+															<digi:trn key="aim:wrongNumberOfActivitiesProjectsPerPage">
+																Wrong number of Activities/Projects per page. The number should be greater than 1.
+															</digi:trn>
+															</font>
+                                                            </b>
+														</td>
+													</tr>
+													</logic:equal>
+                                                    
 													<tr>
 														<td bgcolor="#f4f4f2" align="right" width="30%">
 															<digi:trn key="aim:numberactivitiesprojectsperpage">

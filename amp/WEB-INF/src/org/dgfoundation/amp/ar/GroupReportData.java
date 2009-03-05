@@ -38,9 +38,9 @@ public class GroupReportData extends ReportData {
 			return ret;
 		
     	    while (i.hasNext()) {
-		ReportData element = (ReportData) i.next();
-		ret+=element.getVisibleRows();
-	    }
+				ReportData element = (ReportData) i.next();
+				ret+=element.getVisibleRows();
+    	    }
     	    return ret;
 	}
     

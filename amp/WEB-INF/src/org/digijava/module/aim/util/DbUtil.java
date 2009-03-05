@@ -6236,7 +6236,8 @@ public class DbUtil {
             //logger.debug("[inside iterator]-SurveyId: " + ahs.getAmpAHSurveyId() + " AmpOrgId: " + ahs.getAmpDonorOrgId().getAmpOrgId()
             //			+ " Acronym: " + ahs.getAmpDonorOrgId().getAcronym());
             answers = new boolean[NUM_COLUMNS_CALCULATED];
-            if (null != ahs.getResponses() && ahs.getResponses().size() > 0) {
+            //Dont use "&& ahs.getResponses().size()>0" with lazy="true"
+            if (null != ahs.getResponses()/* && ahs.getResponses().size() > 0*/) {
                 //logger.debug("ahs.getResponses().size() : " + ahs.getResponses().size());
                 for (int i = 0; i < NUM_COLUMNS_CALCULATED; i++)
                     flag[i] = false;

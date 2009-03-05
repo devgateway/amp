@@ -229,7 +229,7 @@ public final class TableWidgetUtil {
 			//AMP-4097 start. Ugly !
 			AmpOrganisation dummyGrp = new AmpOrganisation();
 			dummyGrp.setAmpOrgId(new Long(-1));
-			dummyGrp.setName("Select Donor Group");
+			dummyGrp.setName("Select Donor");
 			FilterItem dummyItem = new DonorFilterItem(dummyGrp);
 			items.add(dummyItem);
 			itemsById.put(getId(), dummyItem);

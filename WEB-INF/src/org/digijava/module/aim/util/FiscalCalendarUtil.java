@@ -51,15 +51,21 @@ public class FiscalCalendarUtil {
 			AmpFiscalCalendar fisCal = (AmpFiscalCalendar) session.get(AmpFiscalCalendar.class,
 					id);
 			String stDate = null;
-			if (fisCal.getStartDayNum().intValue() == 1 && fisCal.getStartMonthNum().intValue() == 1)
+			boolean addYear = false;
+			if (fisCal.getStartDayNum().intValue() == 1 && fisCal.getStartMonthNum().intValue() == 1) {
 				stDate = fisCal.getStartDayNum() + "/" + fisCal.getStartMonthNum() + "/" + (year + 1);
-			else 
+			} else { 
 				stDate = fisCal.getStartDayNum() + "/" + fisCal.getStartMonthNum() + "/" + (year);
-			
+				addYear = true;
+			}
 			d = DateConversion.getDate(stDate);
 			GregorianCalendar gc = new GregorianCalendar();
 			gc.setTime(d);
-			gc.add(Calendar.DATE,-1);
+			if (addYear == true) {
+				//Without this the endDate was before the endDate :(
+				gc.add(Calendar.YEAR,1);
+			}
+			gc.add(Calendar.DATE, -1);
 			d = gc.getTime();
 		} catch (Exception e) {
 			logger.error("Exception from getAmpFiscalCalendar() :" + e.getMessage());

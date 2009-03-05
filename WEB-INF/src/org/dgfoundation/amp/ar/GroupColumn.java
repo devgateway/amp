@@ -35,11 +35,11 @@ public class GroupColumn extends Column {
     	 Iterator i=items.iterator();
  	    int ret=0;
  	    while (i.hasNext()) {
-		Column element = (Column) i.next();
-		int visCol=element.getVisibleRows();
-		if(visCol>ret) ret=visCol;
+			Column element = (Column) i.next();
+			int visCol=element.getVisibleRows();
+			if(visCol>ret) ret=visCol;
 	    }
- 	    return ret+1; //one is for the title
+ 	    return ret;
 	}
     	
 	public int getWidth() {

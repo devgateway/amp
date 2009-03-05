@@ -95,8 +95,7 @@ public class ViewNewAdvancedReport extends Action {
 			ampAppSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
 		
 		if (ampAppSettings != null){
-			if( ampAppSettings
-					.getDefaultRecordsPerPage().intValue() != 0){
+			if( ampAppSettings.getDefaultRecordsPerPage().intValue() != 0){
 				request.setAttribute("recordsPerPage", ampAppSettings.getDefaultRecordsPerPage());
 			}else{
 				request.setAttribute("recordsPerPage", Integer.MAX_VALUE);

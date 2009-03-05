@@ -48,6 +48,8 @@ public class UpdateAppSettingsForm extends ActionForm {
 	private boolean updateFlag = false;
 
 	private boolean updated = false;
+	
+	private boolean errors = false;
 
 	private Long defaultReportForTeamId	= new Long(0);
 
@@ -228,6 +230,14 @@ public class UpdateAppSettingsForm extends ActionForm {
 
 	public void setValidation(String validation) {
 		this.validation = validation;
+	}
+
+	public boolean isErrors() {
+		return errors;
+	}
+
+	public void setErrors(boolean errors) {
+		this.errors = errors;
 	}
 
 }

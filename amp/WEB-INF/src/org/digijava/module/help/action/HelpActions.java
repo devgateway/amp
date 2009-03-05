@@ -646,6 +646,7 @@ public class HelpActions extends DispatchAction {
 			}
             
             if (help_in.getAmpHelp()!= null) {
+            	logger.info("Starting Help Export");
 				Iterator it = help_in.getAmpHelp().iterator();
 				while(it.hasNext())
 				{

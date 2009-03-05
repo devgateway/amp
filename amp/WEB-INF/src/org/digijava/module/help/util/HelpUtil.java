@@ -835,53 +835,10 @@ System.out.println("lang:"+lang);
 	}
 		
 	 public static void updateNewEditHelpData(AmpHelpType help,HashMap<Long,HelpTopic> storeMap,Long siteId){
-		Session session = null;
-		Query query;
-		String qryStr;
+		
 			
 		try {
-			
-			session = PersistenceManager.getRequestDBSession();
-			Transaction tx=session.beginTransaction();
-
-			   
-			String queryString = "select topic from "+ HelpTopic.class.getName() + " topic where (topic.bodyEditKey=:editorKey)";
-	    	     query = session.createQuery(queryString);
-	    	     query.setParameter("editorKey", help.getEditorKey()); 
-			    
-			   if(query.list().iterator().hasNext()){
-				   Iterator itr = query.list().iterator();
-			    while (itr.hasNext()) {
-			    	 HelpTopic helptopic = (HelpTopic) itr.next();
-
-			    	 helptopic.setSiteId("amp");
-                     helptopic.setTopicKey(help.getTopicKey());
-                     helptopic.setTitleTrnKey(help.getTitleTrnKey());
-	    	    	 helptopic.setModuleInstance(help.getModuleInstance());
-	    	    	 helptopic.setBodyEditKey(help.getEditorKey());
-
-                     Iterator editr = help.getLang().listIterator();
-                                         while(editr.hasNext()){
-                                             HelpLang ll = (HelpLang) editr.next();
-
-                                            Message newMsg = new Message();
-
-                                                newMsg.setSiteId(siteId.toString());
-                                                System.out.println("siteId:"+siteId);
-                                                newMsg.setMessage(ll.getTitle());
-                                                System.out.println("Message:"+ll.getTitle());
-                                                        newMsg.setKey(TranslatorWorker.generateTrnKey(help.getTopicKey()));
-
-                                                newMsg.setLocale(ll.getCode());
-
-                                            TranslatorWorker.getInstance("").save(newMsg);
-
-                                         udateEditpData(ll,help.getEditorKey(),help.getLastModDate());
-                                         }
-			       session.saveOrUpdate(helptopic);
-		    }
-		tx.commit();
-			   }else{
+		
 				   HelpTopic helptopic = new HelpTopic(); 
 				   helptopic.setTopicKey(help.getTopicKey());
 				   helptopic.setSiteId("amp");
@@ -896,21 +853,26 @@ System.out.println("lang:"+lang);
 	    	    	 }
                      Iterator editr = help.getLang().listIterator();
                                          while(editr.hasNext()){
-                                             HelpLang ll = (HelpLang) editr.next();
+                                             HelpLang xmlLangTag = (HelpLang) editr.next();
 
                                             Message newMsg = new Message();
 
                                                 newMsg.setSiteId(siteId.toString());
-                                             
-                                                newMsg.setMessage(ll.getTitle());
+                                                newMsg.setMessage(xmlLangTag.getTitle());
                                                 newMsg.setKey(TranslatorWorker.generateTrnKey(help.getTopicKey()));
-                                                newMsg.setLocale(ll.getCode());
+                                                newMsg.setLocale(xmlLangTag.getCode());
                                                 
-                                                
-                                                
-                                            TranslatorWorker.getInstance("").save(newMsg);
+                                            
+                                               // Message msg = TranslatorWorker.getInstance("").getByBody(xmlLangTag.getTitle().trim(), xmlLangTag.getCode(), siteId.toString());
+                                                Message msg = TranslatorWorker.getInstance("").getByKey(newMsg.getKey(),xmlLangTag.getCode(), siteId.toString());
+                                                if(msg != null){
+                                                	TranslatorWorker.getInstance("").update(newMsg);
+                                                }else{
+                                                	 TranslatorWorker.getInstance("").save(newMsg);
+                                                }
+                                           
                                          
-                                         udateEditpData(ll,help.getEditorKey(),help.getLastModDate());
+                                         udateEditpData(xmlLangTag,help.getEditorKey(),help.getLastModDate());
                                          }
                  	 insertHelp(helptopic);
 	    	    	 HelpTopic parent = new HelpTopic();
@@ -926,7 +888,7 @@ System.out.println("lang:"+lang);
 	    	    	 Long oldid = help.getTopicId();
 	    	    	 storeMap.put(oldid, parent);
 	    	    	 
-			   }
+			   
 			
 		} catch (Exception e) {
 			logger.error("Unable to Update help data"+e.getMessage());

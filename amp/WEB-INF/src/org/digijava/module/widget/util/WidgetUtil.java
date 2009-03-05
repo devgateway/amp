@@ -105,6 +105,27 @@ public class WidgetUtil {
 		}
 		return result;
 	}
+
+    /**
+	 * Return all Org Profile page places objects from db.
+	 * @return
+	 * @throws DgException
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<AmpDaWidgetPlace> getAllOrgProfilePlaces() throws DgException{
+		List<AmpDaWidgetPlace> result=null;
+		Session session = PersistenceManager.getRequestDBSession();
+        // org profile places are starting with orgprof_chart_place prefix
+		String oql="from "+AmpDaWidgetPlace.class.getName()+" as p where p.name like 'orgprof_chart_place%' order by p.lastRendered desc";
+		try {
+			Query q=session.createQuery(oql);
+			result = q.list();
+		} catch (Exception e) {
+			logger.error(e);
+			throw new DgException("Cannot load all widget place object from db",e);
+		}
+		return result;
+	}
 	
 	/**
 	 * Load place object by its code.

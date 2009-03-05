@@ -52,7 +52,7 @@ public class OrgProfileManager  extends DispatchAction {
         OrgProfileWidgetForm orgForm = (OrgProfileWidgetForm) form;
         orgForm.setType(null);
         orgForm.setId(null);
-        orgForm.setPlaces(WidgetUtil.getAllPlaces());
+        orgForm.setPlaces(WidgetUtil.getAllOrgProfilePlaces());
         orgForm.setSelPlaces(null);
         return mapping.findForward("create");
 
@@ -68,7 +68,7 @@ public class OrgProfileManager  extends DispatchAction {
         OrgProfileWidgetForm orgForm = (OrgProfileWidgetForm) form;
         AmpWidgetOrgProfile orgProfWidget = OrgProfileWidgetUtil.getAmpWidgetOrgProfile(orgForm.getId());
         orgForm.setType(orgProfWidget.getType());
-        orgForm.setPlaces(WidgetUtil.getAllPlaces());
+        orgForm.setPlaces(WidgetUtil.getAllOrgProfilePlaces());
         List<AmpDaWidgetPlace> places = WidgetUtil.getWidgetPlaces(orgProfWidget.getId());
         if (places == null) {
             orgForm.setSelPlaces(new Long[0]);

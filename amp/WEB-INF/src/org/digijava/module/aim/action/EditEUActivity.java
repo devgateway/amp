@@ -58,8 +58,8 @@ public class EditEUActivity extends MultiAction {
 	public boolean hasUnselectedItems(List items) {
 		Iterator i=items.iterator();
 		while (i.hasNext()) {
-			String element = (String) i.next();
-			if("-1".equals(element)) return true;
+			Object element = (Object) i.next();
+			if("-1".equals(element.toString())) return true;
 		}
 		return false;
 	}
@@ -108,8 +108,8 @@ public class EditEUActivity extends MultiAction {
 			eaf.getContrDonorIdList().addAll(Arrays.asList(eaf.getContrDonorId()));
 			eaf.getContrDonorNameList().addAll(Arrays.asList(eaf.getContrDonorName()));
 			
-			eaf.getContrFinInstrIdList().addAll(Arrays.asList(eaf.getContrFinInstrId()));
-			eaf.getContrFinTypeIdList().addAll(Arrays.asList(eaf.getContrFinTypeId()));
+			if (eaf.getContrFinInstrId()!=null) eaf.getContrFinInstrIdList().addAll(Arrays.asList(eaf.getContrFinInstrId()));
+			if (eaf.getContrFinTypeId()!=null) eaf.getContrFinTypeIdList().addAll(Arrays.asList(eaf.getContrFinTypeId()));
 		}
 
 
@@ -165,10 +165,11 @@ public class EditEUActivity extends MultiAction {
 					EUActivityContribution element2 = (EUActivityContribution) ii.next();
 					euaf.getContrAmountList().add(element2.getAmount().toString());
 					euaf.getContrCurrIdList().add(element2.getAmountCurrency().getAmpCurrencyId().toString());
-					euaf.getContrDonorIdList().add(element2.getDonor().getAmpOrgId().toString());
-					euaf.getContrDonorNameList().add(element2.getDonor().getName());
-					euaf.getContrFinInstrIdList().add(element2.getFinancingInstr().getId().toString());
-					euaf.getContrFinTypeIdList().add(element2.getFinancingTypeCategVal().getId().toString());
+					AmpOrganisation o =  DbUtil.getOrganisation( element2.getDonor().getAmpOrgId());
+					euaf.getContrDonorIdList().add(o.getAmpOrgId().toString());
+					euaf.getContrDonorNameList().add(o.getName());
+					euaf.getContrFinInstrIdList().add(element2.getFinancingInstr().getId());
+					euaf.getContrFinTypeIdList().add(element2.getFinancingTypeCategVal().getId());
 				}
 		return modeFinalize(mapping,form,request,response);
 	}
@@ -313,8 +314,10 @@ public class EditEUActivity extends MultiAction {
 		eaf.setContrCurrId(eaf.getContrCurrIdList().toArray());
 		eaf.setContrDonorId(eaf.getContrDonorIdList().toArray());
 		eaf.setContrDonorName(eaf.getContrDonorNameList().toArray());
-		eaf.setContrFinInstrId(eaf.getContrFinInstrIdList().toArray());
-		eaf.setContrFinTypeId(eaf.getContrFinTypeIdList().toArray());
+		Long []x=new Long[1];
+		Long []y=new Long[1];
+		eaf.setContrFinInstrId(  (Long[]) eaf.getContrFinInstrIdList().toArray(x));
+		eaf.setContrFinTypeId(  (Long[]) eaf.getContrFinTypeIdList().toArray(y));
 		return mapping.findForward("forward");
 	}
 
@@ -329,8 +332,8 @@ public class EditEUActivity extends MultiAction {
 		eaf.getContrCurrIdList().add(currencyId);
 		eaf.getContrDonorNameList().add("");
 		eaf.getContrDonorIdList().add(new Long(-1));
-		eaf.getContrFinInstrIdList().add(new String("-1"));
-		eaf.getContrFinTypeIdList().add(new String("-1"));
+		eaf.getContrFinInstrIdList().add(new Long(-1));
+		eaf.getContrFinTypeIdList().add(new Long(-1));
 
 		return modeFinalize(mapping, form, 			request, response);
 	}
@@ -371,7 +374,7 @@ public class EditEUActivity extends MultiAction {
 			throws Exception {
 		// generate business objects:
 		HttpSession httpSess=request.getSession();
-		Session sess = PersistenceManager.getSession();
+		Session sess = PersistenceManager.getRequestDBSession();
 		EUActivityForm euaf = (EUActivityForm) form;
 		EditActivityForm eaf=(EditActivityForm) httpSess.getAttribute("eaf");
 		EUActivity eua =null ;
@@ -396,8 +399,8 @@ public class EditEUActivity extends MultiAction {
 		// create the contribution objects:
 		eua.getContributions().clear();
 		for (int i = 0; i < euaf.getContrAmountList().size(); i++) {
-			Long financingInstrumentId	= new Long ( (String)euaf.getContrFinInstrIdList().get(i) );
-			Long typeOfAssistanceId		= new Long( (String) euaf.getContrFinTypeIdList().get(i) );
+			Long financingInstrumentId	=  (Long) euaf.getContrFinInstrIdList().get(i) ;
+			Long typeOfAssistanceId		= (Long) euaf.getContrFinTypeIdList().get(i) ;
 
 			EUActivityContribution eac=new EUActivityContribution();
 			eac.setEuActivity(eua);

@@ -28,8 +28,8 @@ public class EUActivityForm extends ActionForm implements Serializable {
 	private Object[] contrCurrId;
 	private Object[] contrDonorId;
 	private Object[] contrDonorName;
-	private Object[] contrFinInstrId;
-	private Object[] contrFinTypeId;
+	private Long[] contrFinInstrId;
+	private Long[] contrFinTypeId;
 	
 	private List contrAmountList;
 	private List contrCurrIdList;
@@ -105,7 +105,7 @@ public class EUActivityForm extends ActionForm implements Serializable {
 		dueDate=null;
 		
 		contrAmountList=new ArrayList();
-		contrAmountList.add(new String("Amount"));
+		contrAmountList.add(new String(""));
 
 		contrCurrIdList=new ArrayList();
 		contrCurrIdList.add(new String("-1"));
@@ -114,10 +114,10 @@ public class EUActivityForm extends ActionForm implements Serializable {
 		contrDonorIdList.add(new String("-1"));
 		
 		contrFinInstrIdList=new ArrayList();
-		contrFinInstrIdList.add(new String("-1"));
+		contrFinInstrIdList.add(new Long(-1));
 		
 		contrFinTypeIdList=new ArrayList();
-		contrFinTypeIdList.add(new String("-1"));
+		contrFinTypeIdList.add(new Long(-1));
 		
 		contrDonorNameList=new ArrayList();
 		contrDonorNameList.add("");
@@ -256,19 +256,19 @@ public class EUActivityForm extends ActionForm implements Serializable {
 		this.contrDonorId = contrDonorId;
 	}
 
-	public Object[] getContrFinInstrId() {
+	public Long[] getContrFinInstrId() {
 		return contrFinInstrId;
 	}
 
-	public void setContrFinInstrId(Object[] contrFinInstr) {
+	public void setContrFinInstrId(Long[] contrFinInstr) {
 		this.contrFinInstrId = contrFinInstr;
 	}
 
-	public Object[] getContrFinTypeId() {
+	public Long[] getContrFinTypeId() {
 		return contrFinTypeId;
 	}
 
-	public void setContrFinTypeId(Object[] contrFinType) {
+	public void setContrFinTypeId(Long[] contrFinType) {
 		this.contrFinTypeId = contrFinType;
 	}
 

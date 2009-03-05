@@ -60,7 +60,9 @@ function validate(){
 			return(confirm(" Do you want to delete this Currency ?"));
 
 }
-function submit() {
+function applyFilter() {
+    <digi:context name="manager" property="context/module/moduleinstance/currencyManager.do" />
+    document.aimCurrencyForm.action = "${manager}";
 	document.aimCurrencyForm.target = "_self";
 	document.aimCurrencyForm.submit();
 }
@@ -150,7 +152,7 @@ function sortSubmit(value){
                                           <c:set var="trnGoBtn">
                                             <digi:trn key="aim:goBtn"> Go </digi:trn>
                                           </c:set>
-                                          <input type="button" value="${trnGoBtn}" class="dr-menu" onclick="submit()"/>
+                                          <input type="button" value="${trnGoBtn}" class="dr-menu" onclick="applyFilter()"/>
 										</td>
 									</tr>
 								</table>

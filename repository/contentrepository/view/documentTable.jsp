@@ -28,9 +28,8 @@
 							</tr>
 						</thead>
 						<tbody>
-						<bean:size name="documentDataCollection" id="taille"  />
 						<logic:iterate name="documentDataCollection" id="documentData"
-							type="org.digijava.module.contentrepository.helper.DocumentData" indexId="counter" length="${taille-1}">
+							type="org.digijava.module.contentrepository.helper.DocumentData" indexId="counter">
 							<%--
 					int index2;
 					String documentName = documentData.getName();

@@ -175,8 +175,8 @@ function selectOrganisation1() {
 							<c:set var="translation">
 										<digi:trn key="aim:addEditActivitySelect">Select</digi:trn>
 									</c:set>
-
-										<category:showoptions firstLine="${translation}" name ="aimEditActivityForm"   property="funding.modality"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.TYPE_OF_ASSISTENCE_KEY %>" styleClass="inp-text" />
+										<c:set var="contrFinTypeIdIndex">contrFinTypeId[${idx}]</c:set>
+										<category:showoptions firstLine="${translation}" name ="aimEUActivityForm"  property="${contrFinTypeIdIndex}"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.TYPE_OF_ASSISTENCE_KEY %>" styleClass="inp-text" />
 							</td>
 							<td align="left" valign="top" nowrap><field:display name="Contribution Donors" feature="Costing">
                               <c:set var="valueId"> contrDonorId${idx} </c:set>
@@ -189,8 +189,8 @@ function selectOrganisation1() {
                                   <c:set var="translation">
 										<digi:trn key="aim:addEditActivitySelect">Select</digi:trn>
 									</c:set>
-
-										<category:showoptions firstLine="${translation}" name ="aimEditActivityForm"   property="funding.assistanceType"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" styleClass="inp-text" />
+										<c:set var="contrFinInstrIdIndex">contrFinInstrId[${idx}]</c:set>
+										<category:showoptions firstLine="${translation}" name ="aimEUActivityForm"   property="${contrFinInstrIdIndex}"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" styleClass="inp-text" />
                                 </td>
 							</tr>
 						</logic:iterate>			

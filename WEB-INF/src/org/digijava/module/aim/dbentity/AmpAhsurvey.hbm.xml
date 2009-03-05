@@ -3,7 +3,7 @@
 
 <hibernate-mapping>
 	<class name="org.digijava.module.aim.dbentity.AmpAhsurvey" table="AMP_AHSURVEY">
-		<cache usage="read-write" />
+		
 		<id name="ampAHSurveyId" column="amp_ahsurvey_id" type="java.lang.Long">
 			<generator class="native">
 				<param name="sequence">AMP_AHSURVEY_seq</param>
@@ -25,7 +25,7 @@
 		<many-to-one name="pointOfDeliveryDonor" column="point_of_delivery_donor"
 			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />
 
-		<set name="responses" table="AMP_AHSURVEY_RESPONSE" inverse="true" lazy="true"
+		<set name="responses" table="AMP_AHSURVEY_RESPONSE" inverse="true" lazy="false"
 			cascade="save-update">
 			<cache usage="read-write" />
 			<key column="amp_ahsurvey_id" />

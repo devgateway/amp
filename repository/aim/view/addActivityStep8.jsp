@@ -18,15 +18,15 @@
 		return true;
 	}
 
-function checkPhoneNum(phoneId){
-	var num=document.getElementById(phoneId);
-	var phoneNumber=num.value;
+function checkNumber(phoneOrFaxId){
+	var phoneOrFax=document.getElementById(phoneOrFaxId);
+	var number=phoneOrFax.value;
 	var validChars= "0123456789()+ ";
-	for (i = 0;  i < phoneNumber.length;  i++) {
-		var ch = phoneNumber.charAt(i);
+	for (var i = 0;  i < number.length;  i++) {
+		var ch = number.charAt(i);
 		if (validChars.indexOf(ch)==-1){
-			alert('enter correct phone number');
-			num.value=phoneNumber.substring(0,i);
+			alert('enter correct number');
+			phoneOrFax.value=number.substring(0,i);
 			return false;
 			break;
 		}
@@ -80,15 +80,14 @@ function resetAll()
 									</digi:link>&nbsp;&gt;&nbsp;
 								</c:if>
 								<c:if test="${aimEditActivityForm.pageId == 1}">
-
-                                                                 <c:set var="message">
-<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
-</c:set>
-<c:set var="quote">'</c:set>
-<c:set var="escapedQuote">\'</c:set>
-<c:set var="msg">
-${fn:replace(message,quote,escapedQuote)}
-</c:set>
+                                    <c:set var="message">
+										<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
+									</c:set>
+									<c:set var="quote">'</c:set>
+									<c:set var="escapedQuote">\'</c:set>
+									<c:set var="msg">
+									${fn:replace(message,quote,escapedQuote)}
+									</c:set>
 									<digi:link href="/viewMyDesktop.do" styleClass="comment" onclick="return quitRnot1('${msg}')" title="Click here to view MyDesktop ">
 										<digi:trn key="aim:portfolio">
 											Portfolio
@@ -96,83 +95,56 @@ ${fn:replace(message,quote,escapedQuote)}
 									</digi:link>&nbsp;&gt;&nbsp;
 								</c:if>
 								          
-                           <c:forEach var="step" items="${aimEditActivityForm.steps}" end="${stepNm-1}" varStatus="index">
-                               
-                               <c:set property="translation" var="trans">
-                                   <digi:trn key="aim:clickToViewAddActivityStep${step.stepActualNumber}">
-                                       Click here to goto Add Activity Step ${step.stepActualNumber}
-                                   </digi:trn>
-                               </c:set>
-                               
-                               
-                               
-                               <c:if test="${!index.last}">
-                                   
-                                   <c:if test="${index.first}">
-                                       <digi:link href="/addActivity.do?step=${step.stepNumber}&edit=true" styleClass="comment" title="${trans}">
-                                           
-                                           
-                                           <c:if test="${aimEditActivityForm.editAct == true}">
-                                               <digi:trn key="aim:editActivityStep1">
-                                                   Edit Activity - Step 1
-                                               </digi:trn>
-                                           </c:if>
-                                           <c:if test="${aimEditActivityForm.editAct == false}">
-                                               <digi:trn key="aim:addActivityStep1">
-                                                   Add Activity - Step 1
-                                               </digi:trn>
-                                           </c:if>
-                                           
-                                       </digi:link>
-                                        &nbsp;&gt;&nbsp;
-                                   </c:if>
-                                   <c:if test="${!index.first}">
-                                       <digi:link href="/addActivity.do?step=${step.stepNumber}&edit=true" styleClass="comment" title="${trans}">
-                                           <digi:trn key="aim:addActivityStep${step.stepActualNumber}">Step ${step.stepActualNumber}</digi:trn>
-                                       </digi:link>
-                                        &nbsp;&gt;&nbsp;
-                                   </c:if>
-                               </c:if>
-                               
-                               
-                               
-                               <c:if test="${index.last}">
-                                   
-                                   <c:if test="${index.first}">
-                                       
-                                       
-                                       
-                                       <c:if test="${aimEditActivityForm.editAct == true}">
-                                           <digi:trn key="aim:editActivityStep1">
-                                               Edit Activity - Step 1
-                                           </digi:trn>
-                                       </c:if>
-                                       <c:if test="${aimEditActivityForm.editAct == false}">
-                                           <digi:trn key="aim:addActivityStep1">
-                                               Add Activity - Step 1
-                                           </digi:trn>
-                                       </c:if>
-                                   </c:if>
-                                   
-                                   
-                                   <c:if test="${!index.first}">
-                                       <digi:trn key="aim:addActivityStep${step.stepActualNumber}"> Step ${step.stepActualNumber}</digi:trn>
-                                   </c:if>
-                                   
-                                   
-                                   
-                               </c:if>
-                               
-                               
-                               
-                               
-                               
-                               
-                               
-                           </c:forEach>
-                            
-                           
-				
+		                           <c:forEach var="step" items="${aimEditActivityForm.steps}" end="${stepNm-1}" varStatus="index">
+		                               <c:set property="translation" var="trans">
+		                                   <digi:trn key="aim:clickToViewAddActivityStep${step.stepActualNumber}">
+		                                       Click here to goto Add Activity Step ${step.stepActualNumber}
+		                                   </digi:trn>
+		                               </c:set>
+		                               
+		                               <c:if test="${!index.last}">                                   
+		                                   <c:if test="${index.first}">
+		                                       <digi:link href="/addActivity.do?step=${step.stepNumber}&edit=true" styleClass="comment" title="${trans}">
+		                                           <c:if test="${aimEditActivityForm.editAct == true}">
+		                                               <digi:trn key="aim:editActivityStep1">
+		                                                   Edit Activity - Step 1
+		                                               </digi:trn>
+		                                           </c:if>
+		                                           <c:if test="${aimEditActivityForm.editAct == false}">
+		                                               <digi:trn key="aim:addActivityStep1">
+		                                                   Add Activity - Step 1
+		                                               </digi:trn>
+		                                           </c:if>
+		                                           
+		                                       </digi:link>
+		                                        &nbsp;&gt;&nbsp;
+		                                   </c:if>
+		                                   <c:if test="${!index.first}">
+		                                       <digi:link href="/addActivity.do?step=${step.stepNumber}&edit=true" styleClass="comment" title="${trans}">
+		                                           <digi:trn key="aim:addActivityStep${step.stepActualNumber}">Step ${step.stepActualNumber}</digi:trn>
+		                                       </digi:link>
+		                                        &nbsp;&gt;&nbsp;
+		                                   </c:if>
+		                               </c:if>
+		                               <c:if test="${index.last}">                                   
+		                                   <c:if test="${index.first}">
+		                                       <c:if test="${aimEditActivityForm.editAct == true}">
+		                                           <digi:trn key="aim:editActivityStep1">
+		                                               Edit Activity - Step 1
+		                                           </digi:trn>
+		                                       </c:if>
+		                                       <c:if test="${aimEditActivityForm.editAct == false}">
+		                                           <digi:trn key="aim:addActivityStep1">
+		                                               Add Activity - Step 1
+		                                           </digi:trn>
+		                                       </c:if>
+		                                   </c:if>
+		                                   
+		                                   <c:if test="${!index.first}">
+		                                       <digi:trn key="aim:addActivityStep${step.stepActualNumber}"> Step ${step.stepActualNumber}</digi:trn>
+		                                   </c:if>    
+		                               </c:if>
+		                           </c:forEach>
 								</span>
 							</td>
 						</tr>
@@ -210,9 +182,7 @@ ${fn:replace(message,quote,escapedQuote)}
 											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
 												<digi:trn key="aim:step8of">
 													Step 8 of  </digi:trn> ${fn:length(aimEditActivityForm.steps)}:
-                                                                                                <digi:trn key="aim:activity:ContactInformation">
-                                                                                                         Contact Information
-												</digi:trn>
+                                                <digi:trn key="aim:activity:ContactInformation">Contact Information</digi:trn>
 											</td>
 											<td width="13" height="20" background="module/aim/images/right-side.gif">
 											</td>
@@ -331,7 +301,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="contactInfo.dnrCntPhoneNumber" styleClass="inp-text" styleId="donorPhone" onkeyup="checkPhoneNum('donorPhone')"/>
+																<html:text property="contactInfo.dnrCntPhoneNumber" styleClass="inp-text" styleId="donorPhone" onkeyup="checkNumber('donorPhone')"/>
 															</td>
 														</tr>
 														</field:display>
@@ -346,7 +316,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="contactInfo.dnrCntFaxNumber" styleClass="inp-text"/>
+																<html:text property="contactInfo.dnrCntFaxNumber" styleClass="inp-text" styleId="dnrCntFax" onkeyup="checkNumber('dnrCntFax')"/>
 															</td>
 														</tr>
 														</field:display>
@@ -443,7 +413,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="contactInfo.mfdCntPhoneNumber" styleClass="inp-text" styleId="mofedPhone" onkeyup="checkPhoneNum('mofedPhone')"/>
+																<html:text property="contactInfo.mfdCntPhoneNumber" styleClass="inp-text" styleId="mofedPhone" onkeyup="checkNumber('mofedPhone')"/>
 															</td>
 														</tr>
 														</field:display>
@@ -458,7 +428,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="contactInfo.mfdCntFaxNumber" styleClass="inp-text"/>
+																<html:text property="contactInfo.mfdCntFaxNumber" styleClass="inp-text" styleId="mfdCntFax" onkeyup="checkNumber('mfdCntFax')"/>
 															</td>
 														</tr>
 														</field:display>
@@ -537,7 +507,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<b><digi:trn key="aim:projectCoordinator:phoneNumber">Phone Number</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="contactInfo.prjCoPhoneNumber" styleClass="inp-text" styleId="prjCoPhone" onkeyup="checkPhoneNum('prjCoPhone')"/>
+																<html:text property="contactInfo.prjCoPhoneNumber" styleClass="inp-text" styleId="prjCoPhone" onkeyup="checkNumber('prjCoPhone')"/>
 															</td>
 														</tr>
 														</field:display>
@@ -548,7 +518,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<b><digi:trn key="aim:projectCoordinator:faxNumber">Fax Number</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="contactInfo.prjCoFaxNumber" styleClass="inp-text"/>
+																<html:text property="contactInfo.prjCoFaxNumber" styleClass="inp-text" styleId="prjCoFax" onkeyup="checkNumber('prjCoFax')"/>
 															</td>
 														</tr>
 														</field:display>
@@ -621,7 +591,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<b><digi:trn key="aim:sectorMinistryCnt:phoneNumber">Phone Number</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="contactInfo.secMiCntPhoneNumber" styleClass="inp-text" styleId="MiCntPhone" onkeyup="checkPhoneNum('MiCntPhone')"/>
+																<html:text property="contactInfo.secMiCntPhoneNumber" styleClass="inp-text" styleId="MiCntPhone" onkeyup="checkNumber('MiCntPhone')"/>
 															</td>
 														</tr>
 														</field:display>
@@ -632,7 +602,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<b><digi:trn key="aim:sectorMinistryCnt:faxNumber">Fax Number</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="contactInfo.secMiCntFaxNumber" styleClass="inp-text"/>
+																<html:text property="contactInfo.secMiCntFaxNumber" styleClass="inp-text" styleId="MiCntFax" onkeyup="checkNumber('MiCntFax')"/>
 															</td>
 														</tr>
 														</field:display>

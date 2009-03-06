@@ -25,6 +25,7 @@
 		<many-to-one name="pointOfDeliveryDonor" column="point_of_delivery_donor"
 			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />
 
+		<!-- Please DO NOT PUT lazy="true" OR THE PI REPORTS WILL NOT WORK!!!-->
 		<set name="responses" table="AMP_AHSURVEY_RESPONSE" inverse="true" lazy="false"
 			cascade="save-update">
 			<cache usage="read-write" />

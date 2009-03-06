@@ -183,10 +183,11 @@
 	YAHOOAmp.amptab.handleClose = function() {
 		//alert('handleClose()');
 		//var wrapper = document.getElementById('myFilterWrapper');
+		var wrapper = document;
 		var filter = document.getElementById('myFilter');
 		if (filter.parent != null)
 			filter.parent.removeChild(filter);
-		//wrapper.appendChild(filter);
+		wrapper.appendChild(filter);
 	};
 
 	var myPanel1 = new YAHOOAmp.widget.Panel("new", {

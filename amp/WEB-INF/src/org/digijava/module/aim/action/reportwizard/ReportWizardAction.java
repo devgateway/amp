@@ -282,10 +282,25 @@ public class ReportWizardAction extends MultiAction {
 		
 		AmpCategoryValue level1		= CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.ACTIVITY_LEVEL_KEY , 0L);
 		
-		
 		this.addFields(myForm.getSelectedColumns(), availableCols, ampReport.getColumns(), AmpReportColumn.class, level1);
 		this.addFields(myForm.getSelectedHierarchies(), availableCols, ampReport.getHierarchies(), AmpReportHierarchy.class, level1);
 		this.addFields(myForm.getSelectedMeasures(), availableMeas, ampReport.getMeasures(), AmpReportMeasures.class, level1);
+		
+		/* If all columns are set as hierarchies we add the Project Title column */
+		if (  myForm.getSelectedColumns() != null && myForm.getSelectedHierarchies() != null &&  
+				myForm.getSelectedColumns().length == myForm.getSelectedHierarchies().length ) {
+			for ( AmpColumns tempCol: availableCols ) {
+				if ( Constants.COLUMN_PROJECT_TITLE.equals(tempCol.getColumnName()) ) {
+					AmpReportColumn titleCol			= new AmpReportColumn();
+					titleCol.setLevel(level1);
+					titleCol.setOrderId( (ampReport.getColumns().size()+1) + "" );
+					titleCol.setColumn(tempCol); 
+					
+					ampReport.getColumns().add(titleCol);
+					break;
+				}
+			}
+		}
 		
 		Object filter	= request.getSession().getAttribute( ReportWizardAction.SESSION_FILTER );
 		if ( filter == null )

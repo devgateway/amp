@@ -344,4 +344,6 @@ public class Constants
     //	 SEE jboss-web.xml
     public static final String UNIFIED_JNDI_ALIAS="java:comp/env/ampDS";
     public static final String JNP_URL="jnp://localhost:1099";
+    
+    public static final String COLUMN_PROJECT_TITLE = "Project Title";
 }

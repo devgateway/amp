@@ -48,7 +48,7 @@ es:
       show_map: Mostrar Mapa
       map_legend: "Las áreas sobresaltadas en amarillo son las regiones focales del proyecto"
       currency_selection: Seleccione la moneda
-      cod: Canal de Distribución
+      cod: Distribución de AOD
       # TODO:
       payments_forecast: Proyección de Desembolsos {{year}}
       commitments_forecast: Proyección de Compromisos {{year}}

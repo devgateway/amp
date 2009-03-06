@@ -35,7 +35,7 @@
 						onclick="editLocation(${loc.id})" title="Edit" />
 				<img src="/TEMPLATE/ampTemplate/images/deleteIcon.gif" style="height: 10px; cursor: pointer;" 
 						onclick="deleteLocation(${loc.id})" title="Delete"/>
-				<span class="spantree" style="display: none; color: red;">ERROR</span>
+				<span class="spantree" style="display: none; color: red;"><digi:trn>ERROR</digi:trn></span>
 				<logic:notEmpty name="loc" property="childLocations">
 					<bean:define id="tempLocCollection" toScope="request" name="locCollection" scope="request"/>
 					<bean:define id="locCollection" toScope="request" name="loc" property="childLocations" />

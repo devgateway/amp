@@ -60,25 +60,25 @@
 						<td nowrap="nowrap">
                                                     <c:choose>
                                                         <c:when test="${orgProfile.type==1}">
-                                                            Summary
+                                                            <digi:trn>Summary</digi:trn>
                                                         </c:when>
                                                          <c:when test="${orgProfile.type==2}">
-                                                            Type of Aid
+                                                            <digi:trn>Type of Aid</digi:trn>
                                                         </c:when>
                                                          <c:when test="${orgProfile.type==3}">
-                                                            Pledges/Comm/Disb
+                                                            <digi:trn>Pledges</digi:trn> / <digi:trn>Comm</digi:trn> / <digi:trn>Disb</digi:trn>
                                                         </c:when>
                                                          <c:when test="${orgProfile.type==4}">
-                                                            ODA Profile
+                                                            <digi:trn>ODA Profile</digi:trn>
                                                         </c:when>
                                                          <c:when test="${orgProfile.type==5}">
-                                                            Sector Breakdown
+                                                            <digi:trn>Sector Breakdown</digi:trn>
                                                         </c:when>
                                                         <c:when test="${orgProfile.type==6}">
-                                                            Regional Breakdown
+                                                            <digi:trn>Regional Breakdown</digi:trn>
                                                         </c:when>   
                                                         <c:otherwise>
-                                                            Paris Declaration
+                                                            <digi:trn>Paris Declaration</digi:trn>
                                                         </c:otherwise>
                                                     </c:choose>
 				

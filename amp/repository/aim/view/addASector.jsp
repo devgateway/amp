@@ -163,7 +163,7 @@ width="100%">
 		<td width="30%" align="right">
 																
 
-		<digi:trn key="aim:sectorName">Sector Name</digi:trn>	
+		<digi:trn key="aim:sectorName">Sector Name</digi:trn><font color="red">*</font>	
 																
 
 		</td>
@@ -187,7 +187,7 @@ width="100%">
 		<td width="30%" align="right">
 																
 
-	        <digi:trn key="aim:sectorCode">Sector Code</digi:trn>
+	        <digi:trn key="aim:sectorCode">Sector Code</digi:trn><font color="red">*</font>
 																
 
 		</td>

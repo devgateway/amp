@@ -70,6 +70,22 @@ public class AddSector extends Action {
 				   if(addSectorForm.getLevelType().equals("scheme"))
 				{
 					   logger.debug("level 1inside event if    value of schemeId============="+schemeId);
+					if(!checkSectorName(addSectorForm))
+							{
+						Collection schemeGot = SectorUtil.getEditScheme(
+								new Integer((String)session.getAttribute("Id")));
+								addSectorForm.setFormFirstLevelSectors(
+										SectorUtil.getSectorLevel1(new Integer((String)session.getAttribute("Id"))));
+									Iterator itr = schemeGot.iterator();
+									while (itr.hasNext()) {
+										AmpSectorScheme ampScheme = (AmpSectorScheme) itr.next();
+										addSectorForm.setSecSchemeId(ampScheme.getAmpSecSchemeId());
+										addSectorForm.setSecSchemeName(ampScheme.getSecSchemeName());
+										addSectorForm.setSecSchemeCode(ampScheme.getSecSchemeCode());
+										addSectorForm.setParentId(ampScheme.getAmpSecSchemeId());
+									}
+								return mapping.findForward("levelFirstSectorAdded");
+							}
 					addSectorForm.setParentId(new Long(schemeId));
 					AmpSector newSector = new AmpSector();
 					newSector.setAmpSectorId(null);
@@ -112,6 +128,8 @@ public class AddSector extends Action {
 				if(addSectorForm.getLevelType().equals("sector"))
 				{
 					logger.debug("level 2 inside event if    value of schemeId============="+schemeId);
+					if(!checkSectorName(addSectorForm))
+						return mapping.findForward("levelSecondSectorAdded");
 					Long id = new Long(schemeId);
 					addSectorForm.setParentId(new Long((String)session.getAttribute("Id")));
 					AmpSectorScheme user = SectorUtil.getParentSchemeId(id);
@@ -163,6 +181,8 @@ public class AddSector extends Action {
 					logger.debug("level 3 inside event if    value of schemeId============="+schemeId);
 					Long id = new Long(schemeId);
 					addSectorForm.setParentId(new Long((String)session.getAttribute("Id")));
+					if(!checkSectorName(addSectorForm))
+						return mapping.findForward("levelThirdSectorAdded");
 					AmpSectorScheme user = SectorUtil.getParentSchemeId(id);
 					AmpSector newSector = new AmpSector();
 					newSector.setAmpSectorId(null);
@@ -183,6 +203,7 @@ public class AddSector extends Action {
 					}
 					newSector.setLanguage(null);
 					newSector.setVersion(null);
+					
 					DbUtil.add(newSector);
 					
 					Long parentId = id;//new Long(id);
@@ -223,4 +244,17 @@ public class AddSector extends Action {
 			else return null;
 	}
 
+	private boolean checkSectorNameAndCode(AddSectorForm addSectorForm){
+		if(addSectorForm.getSectorCode() == null || "".equals(addSectorForm.getSectorCode()) ||
+				addSectorForm.getSectorName() == null || "".equals(addSectorForm.getSectorName()))
+			return false;
+		return true;
+	}
+	
+	private boolean checkSectorName(AddSectorForm addSectorForm){
+		if(	addSectorForm.getSectorName() == null || "".equals(addSectorForm.getSectorName()))
+			return false;
+		return true;
+	}
+	
 }

@@ -1666,12 +1666,12 @@
     <action name="aimAuditLoggerManagerForm" path="/aim/showActivityLog" scope="request" type="org.digijava.module.aim.action.ShowActivityLog">
       <forward name="forward" path="/showLayout.do?layout=showActivityLog"/>
     </action>
-     <action name="aimActivityProgramSettingsForm" path="/aim/programConfigurationPage" scope="session" type="org.digijava.module.aim.action.AmpActivityProgramSettingsAction" validate="false">
-          <forward name="forward" path="/showLayout.do?layout=programConfigurationPage" />
-        </action>
-        <action name="aimNPDForm" path="/aim/saveDefaultYearsForGraph" type="org.digijava.module.aim.action.SaveDefaultYearsForNpdGraph" scope="request">
-        	<forward name="gotoGraph" path="/aim/npdGraph.do"/>
-        </action>
+    <action name="aimActivityProgramSettingsForm" path="/aim/programConfigurationPage" scope="session" type="org.digijava.module.aim.action.AmpActivityProgramSettingsAction" validate="false">
+         <forward name="forward" path="/showLayout.do?layout=programConfigurationPage" />
+    </action>
+    <action name="aimNPDForm" path="/aim/saveDefaultYearsForGraph" type="org.digijava.module.aim.action.SaveDefaultYearsForNpdGraph" scope="request">
+       	<forward name="gotoGraph" path="/aim/npdGraph.do"/>
+    </action>
 
 	<action path="/aim/insertDocumentsInSession" scope="session" type="org.digijava.module.aim.action.InsertDocumentsInSession" >
 		<forward name="forward" path="/showLayout.do?layout=aim_showDocumentsInPopup" />

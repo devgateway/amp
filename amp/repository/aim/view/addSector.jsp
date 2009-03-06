@@ -69,7 +69,7 @@
 	function cancel(id){
 		<digi:context name="cancel" property="/aim/updateSectorSchemes.do" />
 		dest="<%=request.getHeader("REFERER")%>";
-		window.location=dest
+		window.location=dest;
 		return true;
 	}
 
@@ -211,7 +211,7 @@
 
 															<!-- header -->
 
-															<td bgColor=#dddddb height="20" 			align="center" colspan="5"><B>
+															<td bgColor=#dddddb height="20" align="center" colspan="5"><B>
 
 																<digi:trn key="aim:addSector">Add Sector</digi:trn>	
 
@@ -229,9 +229,9 @@
 
 																	<tr>
 
-																		<td width="30%" align="right">
+																		<td width="40%" align="left">
 
-																		<digi:trn key="aim:sectorName">Sector Name</digi:trn>	
+																		<digi:trn key="aim:sectorName">Sector Name</digi:trn><font color="red">*</font>	
 
 																		</td>
 
@@ -245,9 +245,9 @@
 
 																	<tr>
 
-																		<td width="30%" align="right">
+																		<td width="40%" align="left">
 
-																	        <digi:trn key="aim:sectorCode">Sector Code</digi:trn>
+																	        <digi:trn key="aim:sectorCode">Sector Code</digi:trn><font color="red">*</font>
 
 																		</td>
 
@@ -261,7 +261,7 @@
 
 																	<tr>
 
-																		<td width="30%" align="right">
+																		<td width="40%" align="left">
 
 																	        <digi:trn key="aim:sectorDescription">Description</digi:trn>	
 

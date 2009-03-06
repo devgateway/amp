@@ -9,7 +9,7 @@ es:
         recipient_country_budget_nr: Número Presupuestario del País Destinatario
         title: Título
         description: Descripción
-        country_strategy: Estrategia del País 
+        country_strategy: Estrategia del País Relacionada
         prj_status: Estado del Proyecto
         start: Fecha de inicio
         end: Fecha de finalización

@@ -60,7 +60,7 @@
 		}
 	}
 	function deleteLocation(deleteLocationId) {
-		if ( confirm("Are you sure you want to delete this location and all the locations it contains ?") ) {
+		if ( confirm("<digi:trn>Are you sure you want to delete this location and all the locations it contains ?</digi:trn>") ) {
 			var myForm							= document.getElementById("dynLocationManagerForm");
 			myForm.deleteLocationId.value		= deleteLocationId;
 			myForm.submit();
@@ -68,7 +68,7 @@
 	}
 	function submitTreeStructure () {
 		if ( !checkStructure(null, -1) ) {
-			alert("There is an error in the tree structure");
+			alert("<digi:trn>There is an error in the tree structure</digi:trn>");
 			return false;
 		}
 		var myForm						= document.getElementById("dynLocationManagerForm");
@@ -223,8 +223,8 @@
 				<tr>
 					<td>
 						<p>
-							&nbsp;&nbsp;[<a class="functional" onclick="treeObj.expandAll();">Expand</a>]
-							&nbsp;&nbsp;[<a class="functional" onclick="treeObj.collapseAll();treeObj.showHideNode(false, 'DHTMLSuite_treeNode1');">Collapse</a>]
+							&nbsp;&nbsp;[<a class="functional" onclick="treeObj.expandAll();"><digi:trn>Expand</digi:trn></a>]
+							&nbsp;&nbsp;[<a class="functional" onclick="treeObj.collapseAll();treeObj.showHideNode(false, 'DHTMLSuite_treeNode1');"><digi:trn>Collapse</digi:trn></a>]
 						</p>
 						<p>
 							<digi:trn>Hide empty countries</digi:trn> <html:checkbox property="hideEmptyCountries" onchange="simpleSubmit();"  styleId="hide_empty_countries"/>
@@ -234,10 +234,10 @@
 								<ul id="dhtmlgoodies_tree" class="DHTMLSuite_tree">
 									<c:set var="locCollection" scope="request" value="${aimDynLocationManagerForm.firstLevelLocations}" />
 									<li noDrag="true" id="li-root">
-										<a class="atree" id="a-root">ROOT</a>
+										<a class="atree" id="a-root"><digi:trn>ROOT</digi:trn></a>
 										<ul>
 											<li noDrag="true">
-												<a class="atree" id="a-locations">Locations</a>
+												<a class="atree" id="a-locations"><digi:trn>Locations</digi:trn></a>
 												<img src="/TEMPLATE/ampTemplate/images/green_plus.png" style="height: 13px; cursor: pointer;" 
 														onclick="addLocation(-1, ${aimDynLocationManagerForm.firstLayerId})" 
 														title="Add ${aimDynLocationManagerForm.implementationLocation.possibleValues[0]}" />
@@ -245,7 +245,7 @@
 											</li>
 											<logic:notEmpty name="aimDynLocationManagerForm" property="unorganizedLocations">
 											<li noDrag="true">
-												<a class="atree" id="a-unorganized-locations">Unorganized Locations</a>
+												<a class="atree" id="a-unorganized-locations"><digi:trn>Unorganized Locations</digi:trn></a>
 												<bean:define id="unorgLocCollection" toScope="request" name="aimDynLocationManagerForm" property="unorganizedLocations" />
 												<jsp:include page="listUnorgLocations.jsp" />
 											</li>
@@ -255,8 +255,8 @@
 								</ul>
 							</font>		
 						</p>
-						<button type="button" class="buton" onclick="checkStructure(null, -1)" >Check Structure</button> &nbsp; &nbsp;
-						<button type="button" class="buton" onclick="">Save</button> 
+						<button type="button" class="buton" onclick="checkStructure(null, -1)" ><digi:trn>Check Structure</digi:trn></button> &nbsp; &nbsp;
+						<button type="button" class="buton" onclick=""><digi:trn>Save</digi:trn></button> 
 					</td>
 				</tr>
 				</c:if>

@@ -4,12 +4,12 @@ es:
       project:
         donor: Donante
         donor_agency: Agencia Donante
-        donor_project_number: Número Donante de Proyecto
+        donor_project_number: Número de Proyecto del Donante
         oecd_number: Número OCDE
         recipient_country_budget_nr: Número Presupuestario del País Destinatario
         title: Título
         description: Descripción
-        country_strategy: Estrategia Relacionada del País 
+        country_strategy: Estrategia del País 
         prj_status: Estado del Proyecto
         start: Fecha de inicio
         end: Fecha de finalización

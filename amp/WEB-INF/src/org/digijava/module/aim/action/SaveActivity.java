@@ -1552,7 +1552,9 @@ public class SaveActivity extends Action {
 		if (check){
 			//Do the checks here
 			String[] phoneNumbers=new String[]{eaForm.getContactInfo().getDnrCntPhoneNumber(), eaForm.getContactInfo().getMfdCntPhoneNumber(), 
-												eaForm.getContactInfo().getPrjCoPhoneNumber(), eaForm.getContactInfo().getSecMiCntPhoneNumber()};
+												eaForm.getContactInfo().getPrjCoPhoneNumber(), eaForm.getContactInfo().getSecMiCntPhoneNumber(),
+												eaForm.getContactInfo().getDnrCntFaxNumber(),eaForm.getContactInfo().getMfdCntFaxNumber(),
+												eaForm.getContactInfo().getPrjCoFaxNumber(), eaForm.getContactInfo().getSecMiCntFaxNumber()};
 			String validChars="0123456789+() ";
 			for (int i = 0; i < phoneNumbers.length; i++) {
 				if(phoneNumbers[i]!=null && phoneNumbers[i].length()>0){
@@ -1560,7 +1562,11 @@ public class SaveActivity extends Action {
 					for (int j=0;j<phoneNum.length();j++) {
 						char ch=phoneNum.charAt(j);
 						if (validChars.indexOf(ch)==-1){
-							errors.add("invalidPhone",new ActionError("error.aim.addActivity.invalidPhone", TranslatorWorker.translateText("Invalid Phone Number",locale,siteId)));
+							if(i<4){
+								errors.add("invalidPhone",new ActionError("error.aim.addActivity.invalidPhone", TranslatorWorker.translateText("Invalid Phone Number",locale,siteId)));
+							}else{
+								errors.add("invalidFax",new ActionError("error.aim.addActivity.invalidFax", TranslatorWorker.translateText("Invalid Fax Number",locale,siteId)));
+							}
 							break;
 						}
 					}

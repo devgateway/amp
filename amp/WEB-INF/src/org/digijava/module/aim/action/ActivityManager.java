@@ -38,6 +38,11 @@ public class ActivityManager extends Action {
 		}
 
 		ActivityForm actForm = (ActivityForm) form;
+		
+		//AMP-5518
+		if ((action != null) && (action.equals("search")) && (actForm.getKeyword() != null) && (actForm.getLastKeyword() != null) && (!actForm.getKeyword().equals(actForm.getLastKeyword())) && ("".equals(actForm.getKeyword().replaceAll(" ", "")))){
+			action="reset";
+		}
 
 		if (action == null) {
 			reset(actForm, request);
@@ -46,6 +51,7 @@ public class ActivityManager extends Action {
 		} else if (action.equals("sort")) {
 			sortActivities(actForm, request);
 		} else if (action.equals("search")) {
+			actForm.setLastKeyword(actForm.getKeyword());
 			searchActivities(actForm, request);
 		} else if (action.equals("reset")) {
 			reset(actForm, request);
@@ -68,6 +74,7 @@ public class ActivityManager extends Action {
 	private void reset(ActivityForm actForm, HttpServletRequest request) {
 		actForm.setAllActivityList(ActivityUtil.getAllActivitiesList());
 		actForm.setKeyword(null);
+		actForm.setLastKeyword(null);
 		actForm.setSortByColumn(null);
 		actForm.setPage(0);
 	}
@@ -93,6 +100,8 @@ public class ActivityManager extends Action {
 			idx = 0;
 			actForm.setPage(0);
 		}
+		
+		actForm.setPageSize(pageSize);
 
 		Double totalPages = 0.0;
 		if(pageSize != -1){

@@ -23,16 +23,25 @@ function validade(){
 	  alert("You cannot enter 0 for number of projects and activities per page.");
 	  return false;
   }
-  if ( !checkYear( parseInt(aimUpdateAppSettingsForm.reportStartYear.value), BASE_YEAR, 200 ) ) {
+  var startYear		= parseInt(aimUpdateAppSettingsForm.reportStartYear.value);
+  var endYear		= parseInt(aimUpdateAppSettingsForm.reportEndYear.value);
+   
+  if ( !checkYear( startYear, BASE_YEAR, 200 ) ) {
 	aimUpdateAppSettingsForm.reportStartYear.focus();
 	alert("<digi:trn>Chosen report start year is not realistic</digi:trn>");
 	return false;
   }
-  if ( !checkYear( parseInt(aimUpdateAppSettingsForm.reportEndYear.value), BASE_YEAR, 200 ) ) {
+  if ( !checkYear( endYear, BASE_YEAR, 200 ) ) {
 	aimUpdateAppSettingsForm.reportEndYear.focus();
 	alert("<digi:trn>Chosen report end year is not realistic</digi:trn>");
 	return false;
   }
+  if ( startYear > endYear ) {
+	  aimUpdateAppSettingsForm.reportStartYear.focus();
+	  alert("<digi:trn>Start year greater than end year</digi:trn>");
+	  return false;
+ }
+  
   document.aimUpdateAppSettingsForm.save.value = "save";
   document.aimUpdateAppSettingsForm.submit();
   return true;

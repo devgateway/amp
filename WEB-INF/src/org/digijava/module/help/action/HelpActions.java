@@ -646,7 +646,7 @@ public class HelpActions extends DispatchAction {
 			}
             
             if (help_in.getAmpHelp()!= null) {
-            	logger.info("Starting Help Export");
+            	logger.info("Starting Help Import");
 				Iterator it = help_in.getAmpHelp().iterator();
 				while(it.hasNext())
 				{
@@ -654,7 +654,7 @@ public class HelpActions extends DispatchAction {
                     HelpUtil.updateNewEditHelpData(element,storeMap,Id);
 				}
 			}
-            logger.info("Finished Help Exporting");
+            logger.info("Finished Help Import");
 			helpForm.getTopicTree().clear();
 			helpForm.setTopicTree(HelpUtil.getHelpTopicsTree(siteId, moduleInstance));
 			helpForm.setAdminTopicTree(HelpUtil.getHelpTopicsTree(siteId,"admin"));

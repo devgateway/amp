@@ -20,7 +20,7 @@
 									<tr><td bgColor=#f4f4f2>
 										&nbsp;
 									</td></tr>
-									<feature:display name="Content Repository" module="Resouces">
+									<feature:display name="Content Repository" module="Document Management">
 									<tr>
 										<td>
 										<table width="100%" cellSpacing=1 cellPadding=5 border="0" bgcolor="white">

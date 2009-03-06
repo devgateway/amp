@@ -16,22 +16,41 @@
 <jsp:include page="/repository/aim/view/scripts/newCalendar.jsp" flush="true" />
 
 
-<script language="JavaScript">
+<script language="JavaScript">      
 
-      function chkNumeric(frmContrl){
-          var regEx=/^[0-9]*$/;
-          var errorMsg="<digi:trn>Please enter numeric value only</digi:trn>";
-          if(!frmContrl.value.match(regEx)){
-               alert(errorMsg);
-               frmContrl.value = "";
-               frmContrl.focus();
-              return false;
-          }
+      function validateValue(valId){
+    	var num=document.getElementById(valId);
+    	var amount=num.value;
+    	var validChars= "0123456789.";
+    	var dotsAmount=0; //there should be only one '.' character and not at the beggining like .3 or 0.2.6
+    	var errorMsg="<digi:trn>Please enter numeric value only</digi:trn>";
+    	var errorAppeared=false;
+    	for (var i = 0;  i < amount.length;  i++) {
+    		var ch = amount.charAt(i);
+    		if (validChars.indexOf(ch)==-1){
+    			errorAppeared=true;
+    			break;    			    			
+    		}else{
+        		if(ch=='.'){
+        			dotsAmount++;
+        		}        		
+    		}
+    	}
+    	if(dotsAmount>1 || (dotsAmount==1 &&  amount.indexOf('.')==0)){
+    		errorAppeared=true;
+		}
+    	if(errorAppeared){
+    		alert(errorMsg);
+			num.value="";
+			return false;
+    	}
+    	return true;  
       }
+      
     function addData(){
-  <digi:context name="addEditIndVal" property="/widget/indSectRegManager.do~actType=addValue" />
-          document.gisIndicatorSectorRegionForm.action = "${addEditIndVal}";
-          document.gisIndicatorSectorRegionForm.submit();
+  		<digi:context name="addEditIndVal" property="/widget/indSectRegManager.do~actType=addValue" />
+        document.gisIndicatorSectorRegionForm.action = "${addEditIndVal}";
+        document.gisIndicatorSectorRegionForm.submit();
       }
 
 
@@ -136,11 +155,11 @@
                                     </html:select>
                                 </td>
                                 
-                                <td height="10" align="center" width="10%">
-                                    <html:text name="values" property="value" indexed="true" styleClass="amt" onblur="chkNumeric(this)"/>
+                                <td height="10" align="center" width="10%">                                    
+                                    <html:text name="values" property="value" indexed="true" styleClass="amt" styleId="val_${index.index}" onblur="validateValue('val_${index.index}')"/>
                                 </td>
                                 
-                                <td   height="10" align="center" nowrap="nowrap">
+                                <td  height="10" align="center" nowrap="nowrap">
                                     <html:text name="values" property="valueDateString" indexed="true" styleId="txtDate${index.count-1}" readonly="true" style="width:80px;"/>
                                     <a id="date${index.count-1}" href='javascript:pickDateById("date${index.count-1}","txtDate${index.count-1}")'>
                                         <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0> 

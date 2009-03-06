@@ -13,6 +13,17 @@
 		myForm.action="<%=justSubmit%>";  
 		myForm.submit();
 	}
+    function unselectAll(){
+        var selectPlace=document.getElementsByName("selPlaces")[0];
+        var opts=selectPlace.options;
+        for(var i=0;i<opts.length;i++){
+            var opt=opts[i];
+            if(opt.selected){
+                opt.selected=false;
+            }
+        }
+
+    }
 //-->
 </script>
 <digi:instance property="gisIndicatorChartForm" />
@@ -85,7 +96,7 @@
 						</html:select>
 					</td>
 					<td valign="top">
-						<input type="button" value="Unselect All">
+						<input type="button" value="Unselect All" onclick="unselectAll()">
 					</td>
 				</tr>
 				<tr>

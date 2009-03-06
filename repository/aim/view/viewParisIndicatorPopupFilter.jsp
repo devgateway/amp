@@ -9,7 +9,7 @@
 
 <digi:instance property="aimParisIndicatorReportForm" />
 
-<digi:form action="/parisIndicatorReport.do">
+<digi:form action="/parisIndicatorReport.do?indcId=${aimParisIndicatorReportForm.indicatorId}">
 	<html:hidden property="filterFlag" />
 	<html:hidden property="indicatorId"/>
 	<div id="tabview_container" class="yui-navset">

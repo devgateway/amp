@@ -510,11 +510,11 @@ function addProgram(programType) {
 
 function remProgram(programType) {
 	if(programType==1){
-		var val=document.getElementsByName('selectedNPOPrograms');
+		var val=document.getElementsByName('programs.selectedNPOPrograms');
 	} else if (programType==2) {
-		var val=document.getElementsByName('selectedPPrograms');
+		var val=document.getElementsByName('programs.selectedPPrograms');
 	}else if (programType==3){
-		var val=document.getElementsByName('selectedSPrograms');
+		var val=document.getElementsByName('programs.selectedSPrograms');
 	}		
 		if(val!=null ){
 			var isProgramSelected = false;

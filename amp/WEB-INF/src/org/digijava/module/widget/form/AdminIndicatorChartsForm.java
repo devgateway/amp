@@ -2,7 +2,9 @@ package org.digijava.module.widget.form;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpWidgetIndicatorChart;
@@ -65,4 +67,8 @@ public class AdminIndicatorChartsForm extends ActionForm {
 	public void setSelPlaces(Long[] selPlaces) {
 		this.selPlaces = selPlaces;
 	}
+    @Override
+    public void reset(ActionMapping mapping,HttpServletRequest request) {
+         selPlaces=null;
+    }
 }

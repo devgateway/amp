@@ -20,21 +20,10 @@
 <div id="myDiv" style="display: none"></div>
 
 <style type="text/css">
-	.mask {
-	  -moz-opacity: 0.8;
-	  opacity:.80;
-	  filter: alpha(opacity=80);
-	  background-color:#2f2f2f;
+	.yui-panel .bd{
+	  height: 92%;
+	  overflow: auto;
 	}
-	
-	#myDiv .content { 
-	    overflow:auto; 
-	    height:455px; 
-	    background-color:fff; 
-	    padding:10px; 
-	} 
-
-	
 </style>
 
 <script language="JavaScript" type="text/javascript">
@@ -926,7 +915,8 @@ function validateEnter(e) {
 
 YAHOOAmp.namespace("YAHOOAmp.amptab");
 	var reusableDialog = new YAHOOAmp.widget.Dialog("new", {
-	width:"700px",
+	width:"750px",
+	height:"400px",
 	fixedcenter: true,
 	constraintoviewport: true,
 	underlay:"none",
@@ -938,75 +928,57 @@ YAHOOAmp.namespace("YAHOOAmp.amptab");
 	 
 	);
 
- 	reusableDialog.beforeHideEvent.subscribe(function() {
-		if (div!=null){
-			div.parentNode.removeChild(div)
-		}
-    }); 
-   
+	reusableDialog.beforeHideEvent.subscribe(function() {
+	if (div!=null){
+		div.parentNode.removeChild(div)
+	}
+}); 
+
 	var divDialog=null;
-		var callbackPost = { 
-     	   		success: function(o) {
-     	   				if (div==null){
-     	   					div=document.createElement('div');
-     	   					div.setAttribute("style","display:inline");
-     	   					div.setAttribute("id","divContent");
-     	   				}
-						else
-						{
-							div.innerHTML = "";
-						}
-     	   					
-     	   				
-     	   				/* 
-     	   				 just load the form part  of the popup page (we can improve it using DOM) 
-     	   			  	 be sure all needed (script etc) is located into the FORM on the popup page
-     	   				*/ 
-     	   				div.innerHTML= o.responseText.substr(o.responseText.indexOf("<form"),o.responseText.indexOf("</form>")-o.responseText.indexOf("<form")+8);
+	var callbackPost = { 
+ 	   		success: function(o) {
+					//Extract javascript and execute it
+					eval(o.responseText.substr(o.responseText.indexOf('<script language=\"JavaScript\"')+30,o.responseText.indexOf("</script")-30-o.responseText.indexOf('<script language=\"JavaScript\"')));
+        	} 
+    }
+	
+	var callbackDialog = { 
+ 	   		success: function(o) {
+ 	   				if (div!=null){
+						if(div.parentNode)
+							div.parentNode.removeChild(div)
+ 	   				}
 
-						//Extract javascript and execute it
-						eval(o.responseText.substr(o.responseText.indexOf('<script language=\"JavaScript\"')+30,o.responseText.indexOf("</script")-30-o.responseText.indexOf('<script language=\"JavaScript\"')));
-	        	} 
-        }
-		
-		var callbackDialog = { 
-     	   		success: function(o) {
-     	   				if (div!=null){
-							if(div.parentNode)
-								div.parentNode.removeChild(div)
-	 	   				}
-
-						div=document.createElement('div');
-						div.setAttribute("class","content");
-						div.setAttribute("id","divContent");
-     	   					
-     	   				
-     	   				/* 
-     	   				 just load the form part  of the popup page (we can improve it using DOM) 
-     	   			  	 be sure all needed (script etc) is located into the FORM on the popup page
-     	   				*/ 
-     	   				div.innerHTML=o.responseText.substr(o.responseText.indexOf("<form"),o.responseText.indexOf("</form>")-o.responseText.indexOf("<form")+8);
-     	   				//APPEND THE POPUP FORM TO THE POPIN DIV 
-     	   				var myDiv = document.getElementById("myDiv");
-     	   				myDiv.appendChild(div);
-     	   				//call this to render the popin
-     	   				showPOPINDialog();
-     	   				
-	        	} 
-        }
-		
-		function showPOPINDialog(){
-			var element = document.getElementById("myDiv");
+					div=document.createElement('div');
+					div.setAttribute("id","divContent");
+					div.style.overflow	= "auto";
+					div.style.height	= "100%";
+					div.style.display	= "block"
+ 	   				
+ 	   				/* 
+ 	   				 just load the form part  of the popup page (we can improve it using DOM) 
+ 	   			  	 be sure all needed (script etc) is located into the FORM on the popup page
+ 	   				*/ 
+ 	   				div.innerHTML=o.responseText.substr(o.responseText.indexOf("<form"),o.responseText.indexOf("</form>")-o.responseText.indexOf("<form")+8);
+ 	   				//call this to render the popin
+ 	   				showPOPINDialog(div);
+ 	   				
+        	} 
+    }
+	
+	function showPOPINDialog( element ){
+		if (element == null) {
+			element = document.getElementById("myDiv");
 			element.style.display = "inline";
-			reusableDialog.setBody(element);
-			reusableDialog.render(document.body);
-			reusableDialog.show();
 		}
-
-function closePopup() {
+		reusableDialog.setBody(element);
+		reusableDialog.render(document.body);
+		reusableDialog.show();
+	}
+	function closePopup() {
 		div.innerHTML = "";
-	reusableDialog.hide();
-}
+		reusableDialog.hide();
+	}
 
 	function addPhysicalProgress()
 	{

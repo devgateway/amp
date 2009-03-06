@@ -189,7 +189,7 @@ return false;
 
 function move() {
 
-  <digi:context name="selectLoc" property="context/module/moduleinstance/locationManager.do" />
+  <digi:context name="selectLoc" property="context/module/moduleinstance/dynLocationManager.do" />
 
 url = "<%= selectLoc%>";
 
@@ -274,7 +274,7 @@ function unload() {
                     
                 </c:set>
                 
-                <digi:link href="/newLocationManager.do" styleClass="comment" title="${translation}" >
+                <digi:link href="/dynLocationManager.do" styleClass="comment" title="${translation}" >
                     
                     <digi:trn key="aim:regionManager">Region Manager</digi:trn>
                     

@@ -849,7 +849,7 @@ function recurEvent(){
 			                            	&nbsp;
 			                            </feature:display>
 			                            <feature:display name="Recurring Event Button" module="Calendar">
-			                            	<input type="button" style="width: 110px" onclick="showRecEvent();" value="<digi:trn key="calendar:recurrinEventBtn">Recurring Event</digi:trn>">
+			                            	<input type="button" style="min-width: 110px" onclick="showRecEvent();" value="<digi:trn key="calendar:recurrinEventBtn">Recurring Event</digi:trn>">
 			                            </feature:display>
 			                          </td>
 			                        </tr>

@@ -78,7 +78,7 @@
 												<table width="100%">
 													<tr>
 														<td>
-															<digi:trn key="aim:SchemeName">Scheme Name</digi:trn>
+															<digi:trn key="aim:SchemeName">Scheme Name</digi:trn><font color="red">*</font>:
 														</td>
 														<td>
 															<html:textarea  name ="aimAddSectorForm" property="secSchemeName" rows="1" cols= "35"/> 
@@ -86,7 +86,7 @@
 													</tr>
 													<tr>
 														<td>
-															<digi:trn key="aim:SchemeCode">Scheme Code :</digi:trn>
+															<digi:trn key="aim:SchemeCode">Scheme Code</digi:trn><font color="red">*</font>:
 														</td>
 														<td>
 															<html:text name ="aimAddSectorForm" property="secSchemeCode" size="5"/> 

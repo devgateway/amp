@@ -7,13 +7,10 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <script language="JavaScript">
 
- function cancel() {
-   <digi:context name="cancel" property="context/module" />
-   document.aimActivityProgramSettingsForm.action = "<%=cancel%>";
+ function cancelSaving() {
 
-   document.aimActivityProgramSettingsForm.target =  "_self";
-
-   document.aimActivityProgramSettingsForm.submit();
+	window.location="/aim/admin.do";
+	return true;
 
    }
 
@@ -135,7 +132,9 @@ Default Hierarchy
 <c:set var="trn"><digi:trn key="aim:btnsave">Save</digi:trn></c:set>
 <html:submit property="save" value="${trn}"/>
 <c:set var="tran"><digi:trn key="aim:btncancel">Cancel</digi:trn></c:set>
-<html:cancel property="cancel" value="${tran}" onclick="return cancel();"/>
+<c:set var="resetTrn"><digi:trn key="aim:btnreset">Reset</digi:trn></c:set>
+  <html:reset property="reset" value="${resetTrn}" />
+  <html:button property="cancel" value="${tran}"  onclick="return cancelSaving();"/>
 </td>
 </tr>
 </table>

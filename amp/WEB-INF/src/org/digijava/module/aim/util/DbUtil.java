@@ -5478,14 +5478,18 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
             tx = session.beginTransaction();
 
-            AmpAhsurvey oldSurvey ;
+            /*AmpAhsurvey oldSurvey ;
             oldSurvey = (AmpAhsurvey) session.load(AmpAhsurvey.class, survey.getAmpAHSurveyId());
             oldSurvey.setAmpActivityId(survey.getAmpActivityId());
             oldSurvey.setAmpDonorOrgId(survey.getAmpDonorOrgId());
             oldSurvey.setPointOfDeliveryDonor(survey.getPointOfDeliveryDonor());
             oldSurvey.setResponses(survey.getResponses());
-
-            session.update(oldSurvey);
+            
+            session.update(oldSurvey);*/
+            
+            //With lazy="false" this is how it works ok.
+            session.update(survey);
+            
             tx.commit();
         } catch (Exception ex) {
             if (tx != null) {

@@ -519,7 +519,7 @@ public class AuditLoggerUtil {
      */
     public static class HelperAuditloggerCreationDateComparator implements Comparator<AmpAuditLogger> {
     	public int compare(AmpAuditLogger o1, AmpAuditLogger o2) {
-            int result = (o1.getLoggedDate()==null || o2.getLoggedDate()==null)?0:o1.getLoggedDate().compareTo(o1.getLoggedDate());
+            int result = (o1.getLoggedDate()==null || o2.getLoggedDate()==null)?0:o1.getLoggedDate().compareTo(o2.getLoggedDate());
             return result;
         }
     }

@@ -113,10 +113,10 @@ public class AuditLoggerManager extends MultiAction {
 				  Collections.reverse((List<AmpAuditLogger>)logs);
 			  }
 			  else if(vForm.getSortBy().equalsIgnoreCase("changedateasc")){
-				  Collections.sort((List<AmpAuditLogger>)logs, new AuditLoggerUtil.HelperAuditloggerActionComparator());
+				  Collections.sort((List<AmpAuditLogger>)logs, new AuditLoggerUtil.HelperAuditloggerChangeDateComparator());
 				}
 			  else if(vForm.getSortBy().equalsIgnoreCase("changedatedesc")){
-				  Collections.sort((List<AmpAuditLogger>)logs, new AuditLoggerUtil.HelperAuditloggerActionComparator());
+				  Collections.sort((List<AmpAuditLogger>)logs, new AuditLoggerUtil.HelperAuditloggerChangeDateComparator());
 				  Collections.reverse((List<AmpAuditLogger>)logs);
 			  }
 		}

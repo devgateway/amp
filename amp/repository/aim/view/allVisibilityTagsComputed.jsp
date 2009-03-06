@@ -14,7 +14,6 @@
 <module:display name="ADMINISTRATIVE SECTION"></module:display> 
 <module:display name="Activity Approval Process" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Activity Costing" parentModule="PROJECT MANAGEMENT"></module:display> 
-<module:display name="Activity Imp&Exp" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Activity Export Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Activity Import Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Budget Codes Exporter" parentModule="ADMINISTRATIVE SECTION"></module:display>

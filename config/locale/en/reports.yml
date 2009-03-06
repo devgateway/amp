@@ -48,7 +48,7 @@ en:
     show_map: Show Map
     map_legend: "Yellow highlighted areas are the project's focal regions/municipalities"
     currency_selection: Select Currency
-    cod: Channel of Delivery
+    cod: ODA Breakdown
     payments_forecast: Disbursements Forecast {{year}}
     commitments_forecast: Commitments Forecast {{year}}
     no_results_message: Your search has returned no results. Please try expanding the query.

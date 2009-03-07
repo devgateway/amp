@@ -19,6 +19,8 @@ es:
         type_of_implementation: Tipo de implementación
         aid_modality: Modalidad de ayuda
         grant_loan: Tipo de financiamiento
+        delegated_cooperation: Cooperación Delegada
+        delegated_by: Delegado por
         website: Sitio web
         comments: Comentarios
         officer_responsible: Oficial Responsable
@@ -117,6 +119,11 @@ es:
         payments: Desembolsos
         on_budget: En/Fuera del Presupuesto
         on_treasury: En/Fuera de la Tesoreria
+      
+      # TODO: Translation! 
+      delegated_cooperation:
+        delegating_donor: Delegating Donor
+        delegating_agency: Delegating Agency
         
       country_strategy:
         donor: Donante

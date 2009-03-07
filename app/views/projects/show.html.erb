@@ -60,6 +60,11 @@
 	    
 	    <dt><%= @project.class.human_attribute_name('grant_loan') %></dt>
 	    <dd><%= option_text_by_id(Project::GRANT_LOAN_OPTIONS, @project.grant_loan) %></dd>
+		
+		<% if @project.delegated_cooperation %>
+			<dt><%= DelegatedCooperation.human_attribute_name('delegated_by') %></dt>
+			<dd><%= @project.delegated_cooperation.delegating_donor.name %> - <%= @project.delegated_cooperation.delegating_agency.name %></dd>
+		<% end %>
 	</dl>
 	
 	<dl>

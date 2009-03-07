@@ -54,7 +54,10 @@ class Project < ActiveRecord::Base
   has_many                :crs_sectors, :through => :sector_relevances
   
   # Funding Information
-  belongs_to              :delegated_cooperation
+  has_one                 :delegated_cooperation
+  #has_one                 :delegating_donor,  :through => :delegated_cooperation
+  #has_one                 :delegating_agency, :through => :delegated_cooperation
+  
   belongs_to              :aid_modality
     
   has_many                :cofundings, :dependent => :delete_all
@@ -73,6 +76,7 @@ class Project < ActiveRecord::Base
   accepts_nested_attributes_for :cofundings, :reject_if => lambda { |a| a['donor_id'].blank? }, :allow_destroy => true
   accepts_nested_attributes_for :geo_relevances, :allow_destroy => true
   accepts_nested_attributes_for :fundings, :funding_forecasts, :historic_funding, :allow_destroy => true
+  accepts_nested_attributes_for :delegated_cooperation, :allow_destroy => true
   
   
   ##
@@ -96,7 +100,7 @@ class Project < ActiveRecord::Base
       
   ##
   # Callbacks
-  
+  #before_save :reset_delegated_cooperation
   
   ##
   # Validation
@@ -122,7 +126,7 @@ class Project < ActiveRecord::Base
   def to_param
     "#{id}-#{donor_project_number.strip.downcase.gsub(/[^[:alnum:]]/,'-')}".gsub(/-{2,}/,'-')
   end
-    
+  
   ##
   # This returns a list of Provinces and Districts in the following format:
   # {"Province 1" => ["Dist 1.1", "Dist 1.2"], "Province 2" => ["Dist 2.1"] ...}
@@ -158,6 +162,14 @@ class Project < ActiveRecord::Base
   # Sum up total Co-Funding for this project and return in project donor's currency
   def total_cofunding
     cofundings.to_a.sum(&:amount).in(donor.currency) rescue 0.to_currency(donor.currency)
+  end
+  
+protected
+  
+  ##
+  # Callback methods
+  def reset_delegated_cooperation
+    delegating_agency_id = nil unless delegated_cooperation
   end
   
   ##

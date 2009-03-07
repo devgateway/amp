@@ -19,6 +19,8 @@ en:
         type_of_implementation: Type of Implementation
         aid_modality: Aid Modality
         grant_loan: Type of Funding
+        delegated_cooperation: Delegated Cooperation
+        delegated_by: Delegated by
         website: Website
         comments: Comments
         officer_responsible: Officer Responsible
@@ -118,6 +120,10 @@ en:
         payments: Disbursements
         on_budget: On/Off Budget
         on_treasury: On/Off Treasury
+        
+      delegated_cooperation:
+        delegating_donor: Delegating Donor
+        delegating_agency: Delegating Agency
         
       country_strategy:
         donor: Donor

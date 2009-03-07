@@ -70,3 +70,7 @@ es:
     
     # Country Strategy
     country_strategy_unavailable: No vinculado a una estrategia
+    
+    # Delegated Cooperation:
+    del_yes: Yes
+    del_no: No

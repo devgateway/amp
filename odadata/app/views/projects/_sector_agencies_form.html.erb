@@ -40,17 +40,52 @@
 		</div>
 	</li>
 	
+	
 	<li class="fifty"><%= f.select :national_regional, Project::NATIONAL_REGIONAL_OPTIONS,
 				:include_blank => ll(:options, :prompt), :translate => true %></li>
 				
 	<li class="fifty"><%= f.select :type_of_implementation, Project::IMPLEMENTATION_TYPES,
 				:include_blank => ll(:options, :prompt), :translate => true %></li>
 	
-	<li class="fifty"><%= aid_modality_select(f) %></li>
-
-	<li class="fifty"><%= f.select :grant_loan, Project::GRANT_LOAN_OPTIONS,
+	<li class="thirty"><%= aid_modality_select(f) %></li>
+	
+	<li class="thirty"><%= f.select :grant_loan, Project::GRANT_LOAN_OPTIONS,
 				 :include_blank => ll(:options, :prompt), :translate => true %></li>
-		
+	
+	
+	<script type="text/javascript" charset="utf-8">
+		$(function() {
+			dropdown = $('#delegated_coorp_on_off');
+			element = $('#delegated_cooperation');
+			
+			dropdown.bind("change", function(e) {
+				if(this.value == 1) {
+					element.hide();
+				} else {
+					element.show();
+				}
+			});	
+			
+			dropdown.trigger('change');
+		});
+	</script>
+	<li class="thirty">
+		<%= f.label :delegated_cooperation %>
+		<select name="project[delegated_cooperation_attributes][_delete]" id="delegated_coorp_on_off">
+			<%= options_for_select({ t('options.del_no') => 1, t('options.del_yes') => 0}, (@project.delegated_cooperation ? 0 : 1)) %>
+		</select>
+	</li>
+	
+	<li id="delegated_cooperation">
+		<% f.fields_for :delegated_cooperation, @project.delegated_cooperation || DelegatedCooperation.new do |dc| %>			
+			<%= dc.collection_select :delegating_donor_id, Donor.ordered, :id, :name, 
+				{ :prompt => ll(:options, :prompt) }, :class => 'dynamic_select parent large' %>
+    
+			<%= dc.related_collection_select :delegating_agency_id, :donor_id, 
+				Donor.ordered, :'agencies.ordered', :name, :id, :name, 
+				{ }, :class => 'dynamic_select child large' %>
+		<% end %>
+	</li>	
 		
 	<li><%= f.text_field :website, :class => "large" %></li>
 	<li><%= f.text_area :comments, :rows => 10, :class => "large" %></li>

@@ -122,8 +122,8 @@ es:
       
       # TODO: Translation! 
       delegated_cooperation:
-        delegating_donor: Delegating Donor
-        delegating_agency: Delegating Agency
+        delegating_donor: Donante Mandante
+        delegating_agency: Agencia Mandante
         
       country_strategy:
         donor: Donante

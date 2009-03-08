@@ -2,6 +2,7 @@ es:
   options:
     all: todos
     prompt: Por favor seleccione
+    not_avail: No disponible
       
     # Grant / Loan
     grant: Donación
@@ -72,5 +73,5 @@ es:
     country_strategy_unavailable: No vinculado a una estrategia
     
     # Delegated Cooperation:
-    del_yes: Yes
-    del_no: No
+    del_yes: Sí
+    del_no: "No"

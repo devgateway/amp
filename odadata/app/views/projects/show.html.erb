@@ -63,7 +63,7 @@
 		
 		<% if @project.delegated_cooperation %>
 			<dt><%= DelegatedCooperation.human_attribute_name('delegated_by') %></dt>
-			<dd><%= @project.delegated_cooperation.delegating_donor.name %> - <%= @project.delegated_cooperation.delegating_agency.name %></dd>
+			<dd><%= @project.delegated_cooperation %></dd>
 		<% end %>
 	</dl>
 	

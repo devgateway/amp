@@ -79,11 +79,11 @@
 	<li id="delegated_cooperation">
 		<% f.fields_for :delegated_cooperation, @project.delegated_cooperation || DelegatedCooperation.new do |dc| %>			
 			<%= dc.collection_select :delegating_donor_id, Donor.ordered, :id, :name, 
-				{ :prompt => ll(:options, :prompt) }, :class => 'dynamic_select parent large' %>
+				{ :prompt => t('options.prompt') }, :class => 'dynamic_select parent large' %>
     
 			<%= dc.related_collection_select :delegating_agency_id, :donor_id, 
 				Donor.ordered, :'agencies.ordered', :name, :id, :name, 
-				{ }, :class => 'dynamic_select child large' %>
+				{ :prompt => t('options.not_avail') }, :class => 'dynamic_select child large' %>
 		<% end %>
 	</li>	
 		

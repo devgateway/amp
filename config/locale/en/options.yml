@@ -2,6 +2,7 @@ en:
   options:
     all: all
     prompt: Please select
+    not_avail: Not available
     
     # Grant / Loan
     grant: Grant

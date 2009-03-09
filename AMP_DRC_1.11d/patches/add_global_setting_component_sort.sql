@@ -1,1 +1,0 @@
-INSERT INTO `amp_global_settings`(settingsName, settingsValue, possibleValues,description) VALUES ('Components Sort Order', 'default', 't_components_sort', 'Select the desired sort order for Components Manager - Default is Alphabetical');

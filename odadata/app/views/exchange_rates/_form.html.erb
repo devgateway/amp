@@ -1,9 +1,0 @@
-<% labeled_form_for @exchange_rate do |f| %>
-	<% f.field_set do %>
-		<li><%= f.text_field :currency %></li>
-		<li><%= f.year_select :year, Project::FIRST_YEAR_OF_RELEVANCE, Time.now.year+5 %></li>
-		<li><%= f.text_field :euro_rate %></li>
-	<% end %>
-	
-	<%= f.submit %>
-<% end %>

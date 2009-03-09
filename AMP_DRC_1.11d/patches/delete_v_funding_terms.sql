@@ -1,1 +1,0 @@
-drop view if exists v_funding_terms;

@@ -1,4 +1,0 @@
-insert into amp_columns(columnName, cellType, extractorview) values("Implementing Agency Groups", "org.dgfoundation.amp.ar.cell.TextCell","v_implementing_agency_groups");
-insert into amp_columns(columnName, cellType, extractorview) values("Beneficiary Agency Groups", "org.dgfoundation.amp.ar.cell.TextCell","v_beneficiary_agency_groups");
-insert into amp_columns(columnName, cellType, extractorview) values("Executing Agency Groups", "org.dgfoundation.amp.ar.cell.TextCell","v_executing_agency_groups");
-insert into amp_columns(columnName, cellType, extractorview) values("Responsible Organisation Groups", "org.dgfoundation.amp.ar.cell.TextCell","v_responsible_organisation_groups");

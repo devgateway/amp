@@ -1,1 +1,0 @@
-server "odanic.odadata.eu", :app, :web

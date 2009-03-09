@@ -1,9 +1,0 @@
-<% labeled_form_for [@donor, @agency].compact do |f| %>
-	<% f.field_set do %>
-		<li class="fifty"><%= f.text_field :name %></li>
-		<li class="fifty"><%= f.text_field :code %></li>
-		<li><%= f.text_field :acronym %></li>
-	
-		<%= f.submit %>
-	<% end %>
-<% end %>

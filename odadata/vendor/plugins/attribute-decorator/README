@@ -1,8 +1,0 @@
-AttributeDecorator
-==================
-
-Allows you to add reader and writer methods decorating one or more attributes
-on an ActiveRecord model. It's comparable to +composed_of+, but has a much
-more concise implementation and a lot less confusing configuration options.
-
-Copyright (c) 2008 Fingertips, Eloy Duran <eloy@fngtps.com>, Manfred Stienstra <manfred@fngtps.com>, released under the MIT license

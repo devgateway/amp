@@ -1,1 +1,0 @@
-update `amp_ahsurvey` set point_of_delivery_donor=amp_org_id where point_of_delivery_donor is null

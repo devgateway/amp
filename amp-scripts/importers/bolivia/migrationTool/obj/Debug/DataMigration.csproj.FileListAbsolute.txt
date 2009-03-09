@@ -1,9 +1,0 @@
-D:\Projects\AMP\DataMigration\bin\Debug\DataMigration.exe.config
-D:\Projects\AMP\DataMigration\bin\Debug\DataMigration.exe
-D:\Projects\AMP\DataMigration\bin\Debug\DataMigration.pdb
-D:\Projects\AMP\DataMigration\obj\Debug\ResolveAssemblyReference.cache
-D:\Projects\AMP\DataMigration\obj\Debug\DataMigration.Properties.Resources.resources
-D:\Projects\AMP\DataMigration\obj\Debug\DataMigration.csproj.GenerateResource.Cache
-D:\Projects\AMP\DataMigration\obj\Debug\DataMigration.exe
-D:\Projects\AMP\DataMigration\obj\Debug\DataMigration.pdb
-D:\Projects\AMP\DataMigration\obj\Debug\DBImporter.frmRefresh.resources

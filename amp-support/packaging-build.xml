@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project name="Packaging Generator" default="_packaging_generation_">
-<target name="_packaging_generation_" depends="N65540"/>
-<target name="N65540" description="amp-support.war">
-<jar  destfile="C:\trabajo\server\jboss-4.2.0_dev_2\server\default\deploy\amp-support.war">
-	<zipfileset dir="WebRoot" excludes="*.war"/>
-</jar>
-</target>
-</project>

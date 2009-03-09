@@ -1,1 +1,0 @@
-INSERT INTO amp_global_settings(settingsName,settingsValue) VALUES('Site Domain','http://amp.mofed.gov:8080');

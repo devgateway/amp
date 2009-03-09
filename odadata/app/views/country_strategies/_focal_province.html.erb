@@ -1,8 +1,0 @@
-<div class="focal_province">
-	<select name="country_strategy[sector_detail_attributes][<%= index %>][province_ids][]" id="focal_province_<%= index %>">
-		<option value="">National</option>
-		<%= options_from_collection_for_select(Province.all, :id, :name, focal_province.id) %>
-	</select>
-
-	<%= link_to_function ll(:actions, :delete), "$(this).parents('.focal_province').remove();" %>
-</div>

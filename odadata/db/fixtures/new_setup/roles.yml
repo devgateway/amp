@@ -1,9 +1,0 @@
-focal_point:
-  title: focal_point
-  description: Focal Point
-  layout: focal_point
-  
-mfp:
-  title: admin
-  description: Master Focal Point
-  layout: admin

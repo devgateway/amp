@@ -1,5 +1,0 @@
-<div class="buttonHolder">
-	<%= submit_tag "&larr; #{ll(:projects, :step_back)}", :name => 'previous', 
-		:disabled => (@project.aasm_current_state == Project.aasm_initial_state) %>
-	<%= submit_tag "#{ll(:projects, :step_forward)} &rarr;", :name => 'next' %>
-</div>

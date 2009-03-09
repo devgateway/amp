@@ -1,1 +1,0 @@
-REPLACE  INTO `amp_role` SET amp_role_id = 13,role_code = 'RO',name = 'Responsible Organisation';

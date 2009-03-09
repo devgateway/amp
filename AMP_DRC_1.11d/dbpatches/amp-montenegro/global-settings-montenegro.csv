@@ -1,6 +1,0 @@
-id,settingsName,settingsValue,possibleValues
-1,Default Country,ME,v_global_settings_countries
-2,Public View,Off,v_global_settings_public_view
-3,Public View Budget Filter,Off Budget,v_global_settings_pv_budget_filter
-4,Feature Template,1,v_global_settings_feature_templates
-5,Default Sector Scheme,1,v_global_settings_sector_schemes

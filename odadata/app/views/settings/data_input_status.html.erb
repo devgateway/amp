@@ -1,9 +1,0 @@
-<center>
-	<h2><%= @status ? lc('open') : lc('closed') %></h2>
-	
-	<form action="toggle_data_input" method="post" accept-charset="utf-8">
-		<input type="hidden" name="new_status" value="<%= @status ? "0" : "1" %>" id="new_status" />
-		
-		<p><input type="submit" value="<%= @status ? lc('do_close') : lc('do_open') %>"></p>
-	</form>
-</center>

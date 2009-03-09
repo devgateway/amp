@@ -38,6 +38,8 @@ public class ErrorReporting {
 		log.error(e.getMessage(), e);
 		
 		String ecsEnabled = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ECS_ENABLED);
+		  String policy = System.getProperties().getProperty("java.security.policy");
+		  if (policy != null && policy.indexOf("ecsClient.policy") > 0)		  
 		if ("true".equalsIgnoreCase(ecsEnabled)){
 			ErrorUser user = new ErrorUser();
 			user.setLogin("unknown@amp.org");

@@ -10,9 +10,15 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.form.AddSectorForm;
 import org.digijava.module.aim.util.DbUtil;
@@ -40,9 +46,15 @@ public class UpdateSectorSchemes extends Action {
 		//sectorsForm.setDeleteScheme("");
 		String event = request.getParameter("event");
 		String sId = request.getParameter("ampSecSchemeId");
+		if(sId != null && !"".equals(sId)) session.setAttribute("ampSecSchemeId", sId);
 		Integer id = new Integer(0);
 		if(sId!=null)
 	    id = new Integer(sId);
+		
+		Site site = RequestUtils.getSite(request);
+		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+		String siteId = site.getId()+"";
+		String locale = navigationLanguage.getCode();
 		/*Collection scheme = null;
 		
 		
@@ -101,7 +113,7 @@ public class UpdateSectorSchemes extends Action {
 				}
 				*/
 				logger.info("FinalID=============================="+id);
-				if(event!=null){
+if(event!=null){
 					if(event.equalsIgnoreCase("edit")){
 				Collection schemeGot = SectorUtil.getEditScheme(id);
 				sectorsForm.setFormFirstLevelSectors(SectorUtil.getSectorLevel1(id));
@@ -125,16 +137,50 @@ public class UpdateSectorSchemes extends Action {
 		else if (event.equals("saveScheme")) {
 				logger.debug("saving the scheme");
 				AmpSectorScheme ampscheme = new AmpSectorScheme();
-				logger
-						.debug(" the name is...."
-								+ sectorsForm.getSecSchemeName());
-				logger.debug(" the code is ...."
-						+ sectorsForm.getSecSchemeCode());
+				logger.debug(" the name is...."	+ sectorsForm.getSecSchemeName());
+				logger.debug(" the code is ...."+ sectorsForm.getSecSchemeCode());
+				
+				if(checkSectorNameCodeIsNull(sectorsForm)){
+					//request.setAttribute("event", "view");
+					ActionErrors errors = new ActionErrors();
+	        		errors.add("title", new ActionError("error.aim.addScheme.emptyTitleOrCode", TranslatorWorker.translateText("The name or code of the scheme is empty. Please enter a title and a code for the scheme.",locale,siteId)));
+	        		if (errors.size() > 0)
+	        			{
+	        				saveErrors(request, errors);
+	        				session.setAttribute("managingSchemes",errors);
+	        			}
+					return mapping.findForward("viewSectorSchemes");
+				}
+				
+				if(existScheme(sectorsForm) == 1){
+					request.setAttribute("event", "view");
+					ActionErrors errors = new ActionErrors();
+	        		errors.add("title", new ActionError("error.aim.addScheme.wrongTitle", TranslatorWorker.translateText("The name of the scheme already exist in database. Please enter another title",locale,siteId)));
+	        		if (errors.size() > 0)
+        			{
+        				saveErrors(request, errors);
+        				session.setAttribute("managingSchemes",errors);
+        			}
+					return mapping.findForward("viewSectorSchemes");
+				}
+				
+				if(existScheme(sectorsForm) == 2){
+					request.setAttribute("event", "view");
+					ActionErrors errors = new ActionErrors();
+	        		errors.add("title", new ActionError("error.aim.addScheme.wrongCode", TranslatorWorker.translateText("The code of the scheme already exist in database. Please enter another code",locale,siteId)));
+	        		if (errors.size() > 0)
+        			{
+        				saveErrors(request, errors);
+        				session.setAttribute("managingSchemes",errors);
+        			}
+					return mapping.findForward("viewSectorSchemes");
+				}
+				
 				ampscheme.setSecSchemeCode(sectorsForm.getSecSchemeCode());
 				ampscheme.setSecSchemeName(sectorsForm.getSecSchemeName());
 				DbUtil.add(ampscheme);
 				request.setAttribute("event", "view");
-
+				session.setAttribute("managingSchemes",null);
 				logger.debug("done kutte");
 				//scheme = SectorUtil.getSectorSchemes();
 				//sectorsForm.setFormSectorSchemes(scheme);
@@ -143,12 +189,51 @@ public class UpdateSectorSchemes extends Action {
 		else if (event.equals("updateScheme")) {
 				logger.debug(" updating Scheme");
 				String editId = (String) request.getParameter("editSchemeId");
+				Long Id;
 				AmpSectorScheme ampscheme = new AmpSectorScheme();
-
-				Long Id = new Long(editId);
+				if(editId == null || "".equals(editId))
+					Id = new Long((String)session.getAttribute("ampSecSchemeId"));
+				else Id = new Long(editId);
 				logger.debug(" the name is...."	+ sectorsForm.getSecSchemeName());
 				logger.debug(" the code is ...."+ sectorsForm.getSecSchemeCode());
 				logger.debug(" this is the id......" + Id);
+				
+				if(checkSectorNameCodeIsNull(sectorsForm)){
+					request.setAttribute("event", "view");
+					ActionErrors errors = new ActionErrors();
+	        		errors.add("title", new ActionError("error.aim.addScheme.emptyTitleOrCode", TranslatorWorker.translateText("The name or code of the scheme is empty. Please enter a title and a code for the scheme.",locale,siteId)));
+	        		if (errors.size() > 0)
+        			{
+        				saveErrors(request, errors);
+        				session.setAttribute("managingSchemes",errors);
+        			}
+					return mapping.findForward("viewSectorSchemes");
+				}
+				
+				if(existSchemeForUpdate(sectorsForm,Id) == 1){
+					request.setAttribute("event", "view");
+					ActionErrors errors = new ActionErrors();
+	        		errors.add("title", new ActionError("error.aim.addScheme.wrongTitle", TranslatorWorker.translateText("The name of the scheme already exist in database. Please enter another title",locale,siteId)));
+	        		if (errors.size() > 0)
+        			{
+        				saveErrors(request, errors);
+        				session.setAttribute("managingSchemes",errors);
+        			}
+					return mapping.findForward("viewSectorSchemes");
+				}
+				
+				if(existSchemeForUpdate(sectorsForm,Id) == 2){
+					request.setAttribute("event", "view");
+					ActionErrors errors = new ActionErrors();
+	        		errors.add("title", new ActionError("error.aim.addScheme.wrongCode", TranslatorWorker.translateText("The code of the scheme already exist in database. Please enter another code",locale,siteId)));
+	        		if (errors.size() > 0)
+        			{
+        				saveErrors(request, errors);
+        				session.setAttribute("managingSchemes",errors);
+        			}
+					return mapping.findForward("viewSectorSchemes");
+				}
+				session.setAttribute("managingSchemes",null);
 				ampscheme.setSecSchemeCode(sectorsForm.getSecSchemeCode());
 				ampscheme.setSecSchemeName(sectorsForm.getSecSchemeName());
 				ampscheme.setAmpSecSchemeId(Id);
@@ -183,6 +268,38 @@ public class UpdateSectorSchemes extends Action {
 
 		return mapping.findForward("viewSectorSchemes");
 	}
+	
+	private boolean checkSectorNameCodeIsNull(AddSectorForm sectorsForm){
+		if(sectorsForm.getSecSchemeCode() == null || sectorsForm.getSecSchemeName() == null ||
+				"".equals(sectorsForm.getSecSchemeCode()) || "".equals(sectorsForm.getSecSchemeName()) )
+			return true;
+		return false;
+	}
+	
+	private int existScheme (AddSectorForm sectorsForm){
+		Collection<AmpSectorScheme> schemes = (Collection<AmpSectorScheme>)SectorUtil.getAllSectorSchemes();
+		for (Iterator it = schemes.iterator(); it.hasNext();) {
+			AmpSectorScheme scheme = (AmpSectorScheme) it.next();
+			if(scheme.getSecSchemeName() != null && sectorsForm.getSecSchemeName().equals(scheme.getSecSchemeName())) return 1;
+			if(scheme.getSecSchemeCode() != null && sectorsForm.getSecSchemeCode().equals(scheme.getSecSchemeCode())) return 2;
+		}
+		return 0;
+	}
+	
+	private int existSchemeForUpdate (AddSectorForm sectorsForm, Long Id){
+		Collection<AmpSectorScheme> schemes = (Collection<AmpSectorScheme>)SectorUtil.getAllSectorSchemes();
+		for (Iterator it = schemes.iterator(); it.hasNext();) {
+			AmpSectorScheme scheme = (AmpSectorScheme) it.next();
+			if(!Id.equals(scheme.getAmpSecSchemeId())){
+				if( scheme.getSecSchemeName() != null && sectorsForm.getSecSchemeName().equals(scheme.getSecSchemeName()) ) 
+					return 1;
+				if( scheme.getSecSchemeCode() != null && sectorsForm.getSecSchemeCode().equals(scheme.getSecSchemeCode()) ) 
+					return 2;
+			}
+		}
+		return 0;
+	}
+	
 }
 
 

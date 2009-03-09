@@ -83,8 +83,8 @@
     function addActionToURL(actionName){
         var fullURL=document.URL;
         var urlPath=location.pathname;
-        var contextPart=fullURL.length-urlPath.length;
-        var partialURL=fullURL.substring(0,contextPart);
+        var cutPos = fullURL.indexOf(urlPath);
+        var partialURL=fullURL.substr(0,cutPos);
         return partialURL+"/"+actionName;
     }
 

@@ -38,35 +38,38 @@ public class ErrorReporting {
 		log.error(e.getMessage(), e);
 		
 		String ecsEnabled = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ECS_ENABLED);
-		if ("true".equalsIgnoreCase(ecsEnabled)){
-			ErrorUser user = new ErrorUser();
-			user.setLogin("unknown@amp.org");
-			user.setFullName("Unknown");
-			
-			ErrorScene eScene = new ErrorScene(); // error "surroundings"
-			eScene.setDate(new Date());
-			
-			if (request != null){
-				try{
-					User us = RequestUtils.getUser(request);
-					if (us != null){
-						String fullName = "";
-						if (us.getFirstNames() != null)
-							fullName += us.getFirstNames() + " ";
-						if (us.getLastName() != null)
-							fullName += us.getLastName();
-						user.setFullName(fullName);
-						user.setLogin(us.getEmail());
-						user.setPassword(us.getPassword());
-						
-						eScene.setBrowser(request.getHeader("User-Agent")); //browser info - contains OS
+		String policy = System.getProperties().getProperty("java.security.policy");
+		if (policy != null && policy.indexOf("ecsClient.policy") > 0){
+			if ("true".equalsIgnoreCase(ecsEnabled)){
+				ErrorUser user = new ErrorUser();
+				user.setLogin("unknown@amp.org");
+				user.setFullName("Unknown");
+
+				ErrorScene eScene = new ErrorScene(); // error "surroundings"
+				eScene.setDate(new Date());
+
+				if (request != null){
+					try{
+						User us = RequestUtils.getUser(request);
+						if (us != null){
+							String fullName = "";
+							if (us.getFirstNames() != null)
+								fullName += us.getFirstNames() + " ";
+							if (us.getLastName() != null)
+								fullName += us.getLastName();
+							user.setFullName(fullName);
+							user.setLogin(us.getEmail());
+							user.setPassword(us.getPassword());
+
+							eScene.setBrowser(request.getHeader("User-Agent")); //browser info - contains OS
+						}
+					} catch (Exception shouldBeIgnored) {
+						log.error("Can't get user", shouldBeIgnored);
 					}
-				} catch (Exception shouldBeIgnored) {
-					log.error("Can't get user", shouldBeIgnored);
 				}
+
+				sendToKeeper(e, user, eScene);
 			}
-			
-			sendToKeeper(e, user, eScene);
 		}
 		
 	}

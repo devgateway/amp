@@ -14,6 +14,9 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.form.AddSectorForm;
 import org.digijava.module.aim.util.SectorUtil;
 
@@ -28,6 +31,8 @@ public class GetSectorSchemes extends Action {
 
 		HttpSession session = request.getSession();
 		//session.setAttribute("moreThanLevelOne",null);
+
+		
 		session.setAttribute("Id",null);
 		if (session.getAttribute("ampAdmin") == null) {
 			return mapping.findForward("index");
@@ -59,7 +64,14 @@ public class GetSectorSchemes extends Action {
 						 	saveErrors(request, errors);
 						 	session.setAttribute("schemeDeletedError",null);
 					 }
-			
+					 
+					 ActionErrors errors = (ActionErrors) session.getAttribute("managingSchemes");
+					 if(errors != null && errors.size() > 0)
+					 {
+						 saveErrors(request, errors);
+						 session.setAttribute("managingSchemes",null);
+	        		 }
+					 
 					 return mapping.findForward("viewSectorSchemes");
 		  }
 }

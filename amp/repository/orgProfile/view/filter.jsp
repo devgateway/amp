@@ -219,82 +219,83 @@
             </td>
         </tr>
     </table>
-    <div id="filter" style="visibility:hidden;display:none">
-        <table>
+    <div id="filter" style="visibility:hidden;display:none;height:350px;width:550px">
+        <table cellpadding="5" cellspacing="0">
             <tr>
-                <td align="left" nowrap>
-                    <b><digi:trn>Organization Group</digi:trn>:</b>
-                    <div>
+                <td nowrap align="left" colspan="2">
+                    <html:checkbox  property="workspaceOnly"><b><digi:trn>From Workspace Only</digi:trn> </b></html:checkbox>
+                    <html:select property="transactionType" styleClass="inp-text">
+                        <html:option value="0">Comm</html:option>
+                        <html:option value="1">Disb</html:option>
+                    </html:select>
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                      <b><digi:trn>Organization Group</digi:trn>:</b>
+                </td>
+                <td align="left" >
                         <html:select property="orgGroupId" styleClass="inp-text"  styleId="org_group_dropdown_id">
                             <html:option value="-1"><digi:trn>All</digi:trn></html:option>
                             <html:optionsCollection property="orgGroups" value="ampOrgGrpId" label="orgGrpName" />
-                        </html:select>
-                    </div>
+                        </html:select> 
                 </td>
-                <td align="left">
-                    <b><digi:trn key="orgProfile:filer:Organization">Organization</digi:trn></b>
-                    <div id="org_select">
+            </tr>
+            <tr>
+                <td>
+                     <b><digi:trn key="orgProfile:filer:Organization">Organization</digi:trn>:</b>
+                </td>
+                <td align="left" >
+                    <span id="org_select">
                         <html:select property="orgId" styleClass="inp-text" styleId="org_dropdown_id">
                             <html:option value="-1"><digi:trn>All</digi:trn></html:option>
                             <html:optionsCollection property="organizations" value="ampOrgId" label="name" />
                         </html:select>
-                    </div>
+                    </span>
                 </td>
 
             </tr>
             <tr>
-                <td colspan="2">
-                    <table>
-                        <tr>
-                            <td nowrap><b><digi:trn>Fiscal Calendar</digi:trn>:</b></td>
-                            <td align="center">
-                                <html:select property="fiscalCalendarId" styleClass="inp-text">
-                                     <html:option value="-1"><digi:trn>None</digi:trn></html:option>
-                                    <html:optionsCollection property="fiscalCalendars" label="name" value="ampFiscalCalId" />
-                                </html:select>
-                            </td>
-                            <td nowrap><b><digi:trn key="orgProfile:filer:fiscalCalendar">Fiscal Year</digi:trn></b></td>
-                            <td align="center">
-                                <html:select property="year" styleClass="inp-text">
-                                    <html:optionsCollection property="years" label="wrappedInstance" value="wrappedInstance" />
-                                </html:select>
-                            </td>
-
-
-
-                            <td nowrap><b><digi:trn key="orgProfile:filer:Currency">Currency</digi:trn></b></td>
-
-                            <td>
-                                <html:select property="currencyId" styleClass="inp-text">
-                                    <html:optionsCollection property="currencies"
-                                                            value="ampCurrencyId" label="currencyName" />
-
-                                </html:select>
-                            </td>
-
-                            <td nowrap>
-                                <html:checkbox  property="workspaceOnly"><b><digi:trn>Show data only from workspace</digi:trn> </b></html:checkbox>
-                            </td>
-                            <td>
-                                <html:select property="transactionType" styleClass="inp-text">
-                                    <html:option value="0">Comm</html:option>
-                                    <html:option value="1">Disb</html:option>
-                                </html:select>
-
-                            </td>
-                            <td align="center">
-                                <html:submit styleClass="button" property="apply"><digi:trn key="orgProfile:filer:Apply">Apply</digi:trn></html:submit>
-                            </td>
-                            <td  align="left">
-                                <digi:img  src="module/widget/images/help1.gif" onmouseover="stm([helpTitle,helpBody],Style[13])" onmouseout="htm()"/>
-                            </td>
-                        </tr>
-
-                    </table>
+                <td>
+                     <b><digi:trn key="orgProfile:filer:Currency">Currency</digi:trn>:</b>
+                </td>
+                <td>
+                   
+                    <html:select property="currencyId" styleClass="inp-text">
+                        <html:optionsCollection property="currencies"
+                                            value="ampCurrencyId" label="currencyName" /></html:select>
                 </td>
             </tr>
-
-
+            <tr>
+                <td><b><digi:trn>Fiscal Calendar</digi:trn>:</b></td>
+                <td align="left">
+                    <html:select property="fiscalCalendarId" styleClass="inp-text">
+                        <html:option value="-1"><digi:trn>None</digi:trn></html:option>
+                        <html:optionsCollection property="fiscalCalendars" label="name" value="ampFiscalCalId" />
+                    </html:select>
+                </td>
+            </tr>
+            <tr>
+                <td><b><digi:trn key="orgProfile:filer:fiscalCalendar">Fiscal Year</digi:trn>:</b></td>
+                <td align="left">
+                   
+                    <html:select property="year" styleClass="inp-text">
+                        <html:optionsCollection property="years" label="wrappedInstance" value="wrappedInstance" />
+                    </html:select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                   &nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td align="center" colspan="2">
+                    <html:submit styleClass="button" property="apply"><digi:trn key="orgProfile:filer:Apply">Apply</digi:trn></html:submit>
+                    <digi:img  src="module/widget/images/help1.gif" onmouseover="stm([helpTitle,helpBody],Style[13])" onmouseout="htm()"/>
+                </td>
+            </tr>
         </table>
     </div>
 

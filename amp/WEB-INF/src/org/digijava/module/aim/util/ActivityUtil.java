@@ -1373,9 +1373,9 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
           oql += " and ( theme.ampThemeId = :ampThemeId) ";
         }
       if (donorOrgId != null&&!donorOrgId.trim().equals("")) {
-        String s = " and act in (select rol.activity from " +
-            AmpOrgRole.class.getName() + " rol " +
-            "where rol.organisation.ampOrgId in ("+donorOrgId+")  )";
+        String s = " and act in (select f.ampActivityId from " +
+             AmpFunding.class.getName() + " f " +
+            " where f.ampDonorOrgId.ampOrgId in ("+donorOrgId+")) ";
         oql += s;
       }
       if (statusCode != null&&!"".equals(statusCode.trim())) {

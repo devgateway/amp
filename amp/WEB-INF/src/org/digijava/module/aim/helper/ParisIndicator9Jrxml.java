@@ -231,7 +231,7 @@ public class ParisIndicator9Jrxml extends ParisIndicatorJrxml {
             p2.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
             p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
             p2.println("					</textElement>");
-            p2.println("				<text><![CDATA[  "+ TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Proportion of aid flows provided in the context of programme based approach", this.getLangCode(), this.getSite().getId().toString())) + "]]></text>");
+            p2.println("				<text><![CDATA[  "+ TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Proportion of aid flows provided in the context of programme based approach (PBA)", this.getLangCode(), this.getSite().getId().toString())) + "]]></text>");
             p2.println("				</staticText>");
             if (type.equals("pdf")) {
                 p2.println("				<line direction='TopDown'>");

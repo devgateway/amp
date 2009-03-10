@@ -1351,16 +1351,23 @@ public class ImportBuilder {
         	AmpDEImportLog ilog = new AmpDEImportLog();
         	String content = s[i];
         	String[] aux = content.split("<title");
-        	String[] aux1 = aux[1].split(">",2);
+        	String[] aux1 ;
         	String[] aux2 ;
-        	if(aux1.length == 2)
-        		aux2 = aux1[1].split("</title>");
-        	else aux2 = aux1[0].split("</title>");
-        		
-        	ilog.setObjectNameLogged(aux2[0]);
+        	if(aux.length < 2){
+        		ilog.addError("JAXB Exception - XML file is damaged for this activity - NO TITLE");
+        		ilog.setObjectNameLogged("NoNameActivity");
+        		this.getActivityList().add("NoNameActivity");
+        	}
+        	else{
+        		aux1 = aux[1].split(">",2);
+        		if(aux1.length == 2)
+        			aux2 = aux1[1].split("</title>");
+        		else aux2 = aux1[0].split("</title>");
+        		ilog.setObjectNameLogged(aux2[0]);
+        		this.getActivityList().add(aux2[0]);
+        	}
+
         	ilog.setCounter(i);
-        	//creating the activityList
-        	this.getActivityList().add(aux2[0]);
         	
         	ilog.setObjectTypeLogged("IDMLActivity");
         	//OutputStream outputStream = new ByteArrayOutputStream();

@@ -6,7 +6,11 @@ module Report
         
     def output_start
       %{<h2 style="text-align: center">ODAnic #{ll(:reports, :custom, :title)}</h2>
-      <table class="admin" style="border: 1px solid #bbb; margin-top: 10px">}
+      <p class="disclaimer">
+        #{I18n.t('reports.disclaimer')}
+      </p>
+      <table class="admin" style="border: 1px solid #bbb; margin-top: 10px">
+      }
     end
     
     def output_head
@@ -38,7 +42,7 @@ module Report
     end
     
     def output_end
-      "</table>"
+      %{</table>}
     end
     
     def output

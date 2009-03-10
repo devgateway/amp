@@ -71,7 +71,7 @@
 				<tr>
 					<td id='reportId'>
 					<digi:trn key="aim:defReportsPerPageHelp">
-						to open all activities on one page, please enter the digit "0"
+						Please enter a digit greater that "1"
 					</digi:trn>
 					</td>
 				</tr>

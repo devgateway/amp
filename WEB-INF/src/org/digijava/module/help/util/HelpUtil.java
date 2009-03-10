@@ -594,7 +594,8 @@ System.out.println("lang:"+lang);
 			 if(topic.getTopicKey().length() != 0 ){
 				   
 				    String article = getTrn(topic.getTopicKey(), request);
-					String newCode = article.replaceAll("&","&amp;");
+					String code = article.replaceAll("&","&amp;");
+					String newCode = code.replaceAll("'","&#39;");
 		
 					if(item.getChildren().isEmpty()){	
 					

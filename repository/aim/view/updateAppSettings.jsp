@@ -14,9 +14,13 @@
 	background-color: #f4f4f2;
 }
 </style>
-
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript"  src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
 <script type="text/javascript">
 BASE_YEAR	= <globalsettings:value name="Year Range Start" />;
+var helpBody=' <digi:trn jsFriendly="true"> to open all reports on one page, please enter the digit "0"</digi:trn>';
+var helpBodyAct=' <digi:trn jsFriendly="true"> to open all activites on one page, please enter the digit "0"</digi:trn>';
+var helpTitle='<digi:trn jsFriendly="true">Report Sheet</digi:trn>';
 function validade(){
   var defReportsPerPage = document.getElementById("defRecsPerPage");
   if(parseInt(defReportsPerPage.value)<0){
@@ -25,7 +29,7 @@ function validade(){
   }
   var startYear		= parseInt(aimUpdateAppSettingsForm.reportStartYear.value);
   var endYear		= parseInt(aimUpdateAppSettingsForm.reportEndYear.value);
-   
+
   if ( !checkYear( startYear, BASE_YEAR, 200 ) ) {
 	aimUpdateAppSettingsForm.reportStartYear.focus();
 	alert("<digi:trn>Chosen report start year is not realistic</digi:trn>");
@@ -41,7 +45,7 @@ function validade(){
 	  alert("<digi:trn>Start year greater than end year</digi:trn>");
 	  return false;
  }
-  
+
   document.aimUpdateAppSettingsForm.save.value = "save";
   document.aimUpdateAppSettingsForm.submit();
   return true;
@@ -52,7 +56,7 @@ function checkYear( year, base, range ) {
 	if ( year > base + range || year < base - range )
 		return false;
 	return true;
-	
+
 }
 </script>
 
@@ -63,7 +67,8 @@ function checkYear( year, base, range ) {
 <digi:errors/>
 <digi:instance property="aimUpdateAppSettingsForm" />
 <digi:form action="/saveApplicationSettings.do" method="post">
-
+ <!-- this is for the nice tooltip widgets -->
+ <DIV id="TipLayer"  style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
 <html:hidden property="type" />
 <html:hidden property="appSettingsId" />
 <html:hidden property="save" />
@@ -147,7 +152,7 @@ function checkYear( year, base, range ) {
                                                         <td bgcolor="#f4f4f2" colspan="2"><digi:errors/>
                                                         </td>
                                                     </tr>
-                                                    
+
                                                     <logic:equal name="aimUpdateAppSettingsForm" property="errors" value="true">
 													<tr>
 														<td colspan="2" align="center">
@@ -161,7 +166,7 @@ function checkYear( year, base, range ) {
 														</td>
 													</tr>
 													</logic:equal>
-                                                    
+
 													<tr>
 														<td bgcolor="#f4f4f2" align="right" width="30%">
 															<digi:trn key="aim:numberactivitiesprojectsperpage">
@@ -169,7 +174,7 @@ function checkYear( year, base, range ) {
 														</td>
 														<td align="left" width="70%" bgcolor="#f4f4f2">
 															<html:text property="defRecsPerPage" size="5"  styleClass="inp-text" styleId="defRecsPerPage"/>
-                                                            <a style="cursor:pointer;color:#006699" onclick="showHelpPanel_DefRecsPerPage()">
+                                                            <a style="cursor:pointer;color:#006699" onmouseover="stm([helpTitle,helpBodyAct],Style[15])" onmouseout="htm()">
 														    	<img src="../ampTemplate/images/help.gif" alt="Click to get help on Status" width=10 height=10 border=0>
                                                             </a>
 														</td>
@@ -181,8 +186,8 @@ function checkYear( year, base, range ) {
 														</td>
 														<td align="left" width="50%" bgcolor="#f4f4f2">
 															<html:text property="defReportsPerPage" size="5"  styleClass="inp-text"/>
-														    
-                                                            <a style="cursor:pointer;color:#006699" onclick="showHelpPanel()">
+
+                                                            <a style="cursor:pointer;color:#006699" onmouseover="stm([helpTitle,helpBody],Style[15])" onmouseout="htm()">
 														    	<img src="../ampTemplate/images/help.gif" alt="Click to get help on Status" width=10 height=10 border=0>
                                                             </a>
 														</td>
@@ -307,7 +312,7 @@ function checkYear( year, base, range ) {
 								</td>
 							</tr>
 							<tr><td bgColor=#f4f4f2>&nbsp;
-								
+
 							</td></tr>
 						</table>
 					</td>

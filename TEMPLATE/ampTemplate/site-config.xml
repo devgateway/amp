@@ -135,7 +135,7 @@
 	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
 			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
 			<put-item name="footer" layout="footerLayout"/>
-			<put-item name="body" module="aim" instance="default"/>
+			<put-item name="body"/>
 		</layout>
 		<layout name="logoutLayout" file="logoutLayout.jsp">
 			<put-item name="logout" module="aim" instance="default" teaser="logout"/>

@@ -5,7 +5,13 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<script type="text/javascript">
+   function validateDelete(type){
+       var msg='<digi:trn jsFriendly="true">Do you want to delete</digi:trn> '+type+" from the org. Profile page?";
+       return confirm(msg);
+   }
 
+</script>
 
 <digi:instance property="widgetOrgProfileWidgetForm" />
 <digi:form action="/orgProfileManager.do~actType=viewAll">
@@ -58,30 +64,32 @@
 					<tr>
 			
 						<td nowrap="nowrap">
-                                                    <c:choose>
-                                                        <c:when test="${orgProfile.type==1}">
-                                                            <digi:trn>Summary</digi:trn>
-                                                        </c:when>
-                                                         <c:when test="${orgProfile.type==2}">
-                                                            <digi:trn>Type of Aid</digi:trn>
-                                                        </c:when>
-                                                         <c:when test="${orgProfile.type==3}">
-                                                            <digi:trn>Pledges</digi:trn> / <digi:trn>Comm</digi:trn> / <digi:trn>Disb</digi:trn>
-                                                        </c:when>
-                                                         <c:when test="${orgProfile.type==4}">
-                                                            <digi:trn>ODA Profile</digi:trn>
-                                                        </c:when>
-                                                         <c:when test="${orgProfile.type==5}">
-                                                            <digi:trn>Sector Breakdown</digi:trn>
-                                                        </c:when>
-                                                        <c:when test="${orgProfile.type==6}">
-                                                            <digi:trn>Regional Breakdown</digi:trn>
-                                                        </c:when>   
-                                                        <c:otherwise>
-                                                            <digi:trn>Paris Declaration</digi:trn>
-                                                        </c:otherwise>
-                                                    </c:choose>
-				
+                            <c:set var="widgetType">
+                                <c:choose>
+                                    <c:when test="${orgProfile.type==1}">
+                                        <digi:trn>Summary</digi:trn>
+                                    </c:when>
+                                    <c:when test="${orgProfile.type==2}">
+                                        <digi:trn>Type of Aid</digi:trn>
+                                    </c:when>
+                                    <c:when test="${orgProfile.type==3}">
+                                        <digi:trn>Pledges</digi:trn>/<digi:trn>Comm</digi:trn>/<digi:trn>Disb</digi:trn>
+                                    </c:when>
+                                    <c:when test="${orgProfile.type==4}">
+                                        <digi:trn>ODA Profile</digi:trn>
+                                    </c:when>
+                                    <c:when test="${orgProfile.type==5}">
+                                        <digi:trn>Sector Breakdown</digi:trn>
+                                    </c:when>
+                                    <c:when test="${orgProfile.type==6}">
+                                        <digi:trn>Regional Breakdown</digi:trn>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <digi:trn>Paris Declaration</digi:trn>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:set>
+                            ${widgetType}                   
 						</td>
                                                
 						<td nowrap="nowrap">
@@ -90,7 +98,7 @@
 							</a>
                                                         
 							|&nbsp;
-							<a href="/widget/orgProfileManager.do~actType=delete~id=${orgProfile.id}">
+							<a href="/widget/orgProfileManager.do~actType=delete~id=${orgProfile.id}" onClick='return validateDelete("${widgetType}")'>
 								<img border="0" src='<digi:file src="images/deleteIcon.gif"/>'>
 							</a>
 						</td>

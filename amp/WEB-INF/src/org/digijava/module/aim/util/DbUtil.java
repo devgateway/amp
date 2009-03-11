@@ -35,6 +35,7 @@ import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
@@ -5615,7 +5616,7 @@ public class DbUtil {
   
     public static Collection getAidSurveyReportByIndicator(String indcCode, String donor, String orgGroup,
         AmpCategoryValue statusCM, int startYear, int closeYear, String currency, String termAssist, AmpCategoryValue financingInstr,
-        String sector, String calendar) {
+        String sector, String calendar, String site, String lang) {
 
         Session session = null;
         ArrayList responses = new ArrayList();
@@ -5682,7 +5683,7 @@ public class DbUtil {
                 Collections.sort( (List) surveyDonors, dnComp);
                 // Creating first row for all-donors in indicator report.
                 ParisIndicator all = new ParisIndicator();
-                all.setDonor("All Donors");
+                all.setDonor(TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("All Donors", lang, site)));
                 all.setAnswers(new ArrayList());
                 responses.add(all);
                 if (indcFlag != 6) {
@@ -6045,7 +6046,7 @@ public class DbUtil {
         return result;
     }
 
-    public static Collection getAidSurveyReportByIndicator10a(String orgGroup, String donor, int startYear, int closeYear) {
+    public static Collection getAidSurveyReportByIndicator10a(String orgGroup, String donor, int startYear, int closeYear, String site, String lang) {
         Session session = null;
         String qry = null;
         ArrayList responses = new ArrayList();
@@ -6098,7 +6099,7 @@ public class DbUtil {
                     orgGroupFlag = true;
                 // Creating first row for 'all-donors' in indicator report.
                 ParisIndicator all = new ParisIndicator();
-                all.setDonor("All Donors");
+                all.setDonor(TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("All Donors", lang, site)));
                 all.setAnswers(new ArrayList());
                 responses.add(all);
                 for (i = 0; i < YEAR_RANGE; i++) {

@@ -105,7 +105,7 @@ public class ParisIndicator7Jrxml extends ParisIndicatorJrxml {
             p2.println("			</band>");
             p2.println("		</pageHeader>");
             p2.println("		<columnHeader>");
-            p2.println("			<band height='125'  isSplitAllowed='true' >");
+            p2.println("			<band height='140'  isSplitAllowed='true' >");
 
             p2.println("				<staticText>");
             p2.println("					<reportElement");
@@ -113,7 +113,7 @@ public class ParisIndicator7Jrxml extends ParisIndicatorJrxml {
             p2.println("						x='0'");
             p2.println("						y='0'");
             p2.println("						width='80'");
-            p2.println("						height='125'");
+            p2.println("						height='140'");
             p2.println("						forecolor='#000000'");
             p2.println("						backcolor='#CCCCCC'");
             p2.println("						key='staticText-2'");
@@ -169,7 +169,7 @@ public class ParisIndicator7Jrxml extends ParisIndicatorJrxml {
                 p2.println("						x='" + x + "'");
                 p2.println("						y='25'");
                 p2.println("						width='80'");
-                p2.println("						height='100'");
+                p2.println("						height='114'");
                 p2.println("						forecolor='#000000'");
                 p2.println("						backcolor='#CCCCCC'");
                 p2.println("						key='staticText-7'");
@@ -191,7 +191,7 @@ public class ParisIndicator7Jrxml extends ParisIndicatorJrxml {
                     p2.println("						x='" + x + "'");
                     p2.println("						y='25'");
                     p2.println("						width='0'");
-                    p2.println("						height='100'");
+                    p2.println("						height='114'");
                     p2.println("						forecolor='#000000'");
                     p2.println("						backcolor='#FFFFFF'");
                     p2.println("						key='line-11'");
@@ -212,7 +212,7 @@ public class ParisIndicator7Jrxml extends ParisIndicatorJrxml {
                 p2.println("						x='" + x + "'");
                 p2.println("						y='25'");
                 p2.println("						width='80'");
-                p2.println("						height='100'");
+                p2.println("						height='114'");
                 p2.println("						forecolor='#000000'");
                 p2.println("						backcolor='#CCCCCC'");
                 p2.println("						key='staticText-8'");
@@ -234,7 +234,7 @@ public class ParisIndicator7Jrxml extends ParisIndicatorJrxml {
                     p2.println("						x='" + x + "'");
                     p2.println("						y='25'");
                     p2.println("						width='0'");
-                    p2.println("						height='100'");
+                    p2.println("						height='114'");
                     p2.println("						forecolor='#000000'");
                     p2.println("						backcolor='#FFFFFF'");
                     p2.println("						key='line-11'");
@@ -255,7 +255,7 @@ public class ParisIndicator7Jrxml extends ParisIndicatorJrxml {
                 p2.println("						x='" + x + "'");
                 p2.println("						y='25'");
                 p2.println("						width='80'");
-                p2.println("						height='100'");
+                p2.println("						height='114'");
                 p2.println("						forecolor='#000000'");
                 p2.println("						backcolor='#CCCCCC'");
                 p2.println("						key='staticText-9'");
@@ -277,7 +277,7 @@ public class ParisIndicator7Jrxml extends ParisIndicatorJrxml {
                     p2.println("						x='" + x + "'");
                     p2.println("						y='25'");
                     p2.println("						width='0'");
-                    p2.println("						height='100'");
+                    p2.println("						height='114'");
                     p2.println("						forecolor='#000000'");
                     p2.println("						backcolor='#FFFFFF'");
                     p2.println("						key='line-11'");
@@ -302,7 +302,7 @@ public class ParisIndicator7Jrxml extends ParisIndicatorJrxml {
                     p2.println("						x='" + x + "'");
                     p2.println("						y='0'");
                     p2.println("						width='0'");
-                    p2.println("						height='125'");
+                    p2.println("						height='140'");
                     p2.println("						forecolor='#000000'");
                     p2.println("						backcolor='#FFFFFF'");
                     p2.println("						key='line-11'");
@@ -341,7 +341,7 @@ public class ParisIndicator7Jrxml extends ParisIndicatorJrxml {
                 p2.println("						x='0'");
                 p2.println("						y='0'");
                 p2.println("						width='0'");
-                p2.println("						height='125'");
+                p2.println("						height='140'");
                 p2.println("						forecolor='#000000'");
                 p2.println("						backcolor='#FFFFFF'");
                 p2.println("						key='line-11'");
@@ -393,7 +393,7 @@ public class ParisIndicator7Jrxml extends ParisIndicatorJrxml {
                 p2.println("					<reportElement");
                 p2.println("						mode='Opaque'");
                 p2.println("						x='0'");
-                p2.println("						y='124'");
+                p2.println("						y='139'");
                 p2.println("						width='" + b + "'");
                 p2.println("						height='0'");
                 p2.println("						forecolor='#000000'");

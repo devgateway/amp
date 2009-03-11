@@ -27,6 +27,7 @@ import org.digijava.module.orgProfile.helper.Project;
 import org.digijava.module.orgProfile.helper.FilterHelper;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
+import org.digijava.module.widget.dbentity.AmpWidgetOrgProfile;
 
 
 /**
@@ -501,6 +502,37 @@ public class OrgProfileUtil {
             startDate = cal.getTime();
         }
         return startDate;
+    }
+     /**
+      * validation method that only allows you to add a chart or table type once
+      * @param type
+      * @param widgetOrgId
+      * @return
+      */
+
+    public static boolean widgetTypeExists(Long type, Long widgetOrgId) {
+        boolean exists = true;
+        try {
+            Session session = PersistenceManager.getRequestDBSession();
+            String queryString = "select  widOrg from " + AmpWidgetOrgProfile.class.getName() + " widOrg where widOrg.type=:type ";
+            if (widgetOrgId != null) {
+                queryString += " and widOrg.id!=:widgetOrgId";
+            }
+            Query qry = session.createQuery(queryString);
+            qry.setLong("type", type);
+            if (widgetOrgId != null) {
+                qry.setLong("widgetOrgId", widgetOrgId);
+            }
+            if (qry.list().size() == 0) {
+                exists = false;
+            }
+        } catch (DgException ex) {
+            logger.error("Unable get value ", ex);
+
+        }
+
+
+        return exists;
     }
 
 }

@@ -125,17 +125,10 @@
 		$(divId).hide('fast');
 	}       
        
-     function expabdall(){
-     
-     for(i=0; i<300; i++){
-        var imgId='#img_'+i;
-		var imghId='#imgh_'+i;
-		var divId='#div_theme_'+i;
-		$(imghId).show();
-		$(imgId).hide();
-		$(divId).show('fast');
-     
-      }
+	function expandOrCollapseAll(){     
+        $("img[@id^='img_']").toggle();
+		$("img[@id^='imgh_']").toggle();	
+		$("div[@id^='div_theme_']").toggle();
     }
      
       
@@ -277,7 +270,7 @@
 											<tr align="center" bgcolor="#ffffff">
 												<td>
 													<input class="button" type="button" name="addBtn" value="<digi:trn key="aim:addProgramMPM">Add New Program</digi:trn>" onclick="addProgram()" style="font-family:verdana;font-size:11px;">
-													<input class="button" type="button" name="expandBtn" value="<digi:trn key="aim:expandall">Expand All</digi:trn>" onclick="expabdall()" style="font-family:verdana;font-size:11px;">
+													<input class="button" type="button" name="expandBtn" value="<digi:trn>Expand/Collapse All</digi:trn>" onclick="expandOrCollapseAll()" style="font-family:verdana;font-size:11px;">
 												</td>
 											</tr>
 											<tr>

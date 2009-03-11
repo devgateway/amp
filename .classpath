@@ -17,7 +17,6 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/batik.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/bcel.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/bsh-2.0b4.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/c3p0-0.9.1.2.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/casclient.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/castor-0.9.5.3-xml.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/commons-beanutils-1.6.jar"/>
@@ -80,7 +79,6 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/jcommon-1.0.8.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jcr-1.0.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jcs.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/jdbc2_0-stdext.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jdom.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jdt-compiler.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/je.jar"/>

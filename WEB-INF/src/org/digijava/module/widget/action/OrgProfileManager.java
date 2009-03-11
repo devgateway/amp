@@ -6,11 +6,14 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.dgfoundation.amp.utils.AmpCollectionUtils;
+import org.digijava.module.orgProfile.util.OrgProfileUtil;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpWidgetOrgProfile;
 import org.digijava.module.widget.form.OrgProfileWidgetForm;
@@ -120,6 +123,12 @@ public class OrgProfileManager  extends DispatchAction {
                    case WidgetUtil.ORG_PROFILE_PARIS_DECLARATION: name="Paris Declaration"; break;
         }
         orgProfWidget.setName(name);
+        if(OrgProfileUtil.widgetTypeExists(orgProfWidget.getType(),orgProfWidget.getId())){
+            ActionErrors errors = new ActionErrors();
+            errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.widget.widgetOrgProfile.widgetOrgTypeExist"));
+            saveErrors(request, errors);
+            return mapping.findForward("create");
+        }
         OrgProfileWidgetUtil.saveWidget(orgProfWidget);
         if (orgForm.getSelPlaces() != null && orgForm.getSelPlaces().length > 0) {
             newPlaces = WidgetUtil.getPlacesWithIDs(orgForm.getSelPlaces());

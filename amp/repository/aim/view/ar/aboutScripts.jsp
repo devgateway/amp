@@ -76,13 +76,13 @@
 	myPanel5.beforeHideEvent.subscribe(YAHOOAmp.amptab.handleCloseAbout);
 
 	var bandera = 0;
-	
-	function initScripts() {
+
+	YAHOOAmp.amptab.initScripts	= function () {
 		var msgP5 = '\n<digi:trn key="aim:aboutamp">About AMP</digi:trn>';
 		myPanel5.setHeader(msgP5);
 		myPanel5.setBody("Example");
 		myPanel5.render(document.body);
-	}
+	};
 
 	function showAbout() {
 		YAHOOAmp.amptab.init();
@@ -95,8 +95,7 @@
 		myPanel5.center();
 		myPanel5.show();
 	}
-
-	window.onload = initScripts;
+	YAHOOAmp.util.Event.addListener(window, "load", YAHOOAmp.amptab.initScripts) ;
 </script>
 
 <style type="text/css">

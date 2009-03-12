@@ -1,10 +1,20 @@
 package org.digijava.module.translation.entity;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import javax.xml.datatype.DatatypeFactory;
+
 import org.digijava.kernel.entity.Message;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.translation.jaxb.Language;
+import org.digijava.module.translation.jaxb.ObjectFactory;
+import org.digijava.module.translation.jaxb.Trn;
 import org.digijava.module.translation.util.HashKeyPatch;
 
 /**
@@ -34,6 +44,42 @@ public class MessageGroup {
 	public MessageGroup(Message message){
 		this(message.getKey());
 		addMessage(message);
+	}
+	
+	public MessageGroup(Trn trn){
+		Message message=new Message();
+		//generate key, if it's null
+		String key=trn.getKey();
+		if(key==null || key.length()==0){
+			Language lang=hasEnglishTranslation(trn.getLang());
+			String text;
+			if(lang==null){
+				//if there is no translation, then key(hashcode) should be created from any translation text
+				lang=trn.getLang().get(0);
+			}
+			text=lang.getValue();
+			key=TranslatorWorker.generateTrnKey(text);
+		}
+		message.setKey(key);
+		message.setKeyWords(trn.getKeywords());
+		message.setSiteId(trn.getSiteId());
+		for (Language lang : trn.getLang()) {
+			message.setLocale(lang.getCode());
+			message.setMessage(lang.getValue());
+			message.setCreated(new Timestamp(lang.getUpdated().toGregorianCalendar().getTime().getTime()));
+			if(lang.getLastAccessed()!=null){
+				message.setLastAccessed(new Timestamp(lang.getLastAccessed().toGregorianCalendar().getTime().getTime()));
+			}
+			
+			if(this.key==null){
+				this.key=key;
+			}
+			if(this.messages==null){
+				this.messages = new HashMap<String, Message>();
+			}
+			
+			addMessage(message);
+		}		
 	}
 	
 	/**
@@ -104,5 +150,47 @@ public class MessageGroup {
 		for (Message otherMessage : otherMessages) {
 			this.doPutMessage(otherMessage);
 		}
+	}
+	
+	private Language hasEnglishTranslation(List<Language> languages){
+		Language retValue=null;
+		for (Language language : languages) {
+			if(language.getCode().equalsIgnoreCase("en")){
+				retValue=language;
+				break;
+			}
+		}
+		return retValue;
+	}
+	
+	public Trn createTrn() throws Exception{
+		ObjectFactory of=new ObjectFactory();
+		Trn trn=of.createTrn();
+		trn.setKey(this.getKey());
+		for(Map.Entry<String ,Message> entry : messages.entrySet()){
+			Message msg=entry.getValue();
+			if(trn.getKeywords()==null){
+				trn.setKeywords(msg.getKeyWords());
+			}
+			if(trn.getSiteId()==null){
+				trn.setSiteId(msg.getSiteId());
+			}
+			//creating Language
+			Language lang=of.createLanguage();
+			lang.setCode(msg.getLocale());
+			lang.setValue(msg.getMessage());
+			//created
+			Calendar cal_u = Calendar.getInstance();
+			cal_u.setTime(msg.getCreated());
+			lang.setUpdated(DatatypeFactory.newInstance().newXMLGregorianCalendar(new GregorianCalendar(cal_u.get(Calendar.YEAR),cal_u.get(Calendar.MONTH),cal_u.get(Calendar.DAY_OF_MONTH),cal_u.get(Calendar.HOUR),cal_u.get(Calendar.MINUTE),cal_u.get(Calendar.SECOND))));
+			//last accessed			
+			if(msg.getLastAccessed()!=null){
+				Calendar lastAccessed = Calendar.getInstance();
+				lastAccessed.setTime(msg.getLastAccessed());						
+				lang.setLastAccessed(DatatypeFactory.newInstance().newXMLGregorianCalendar(new GregorianCalendar(lastAccessed.get(Calendar.YEAR),lastAccessed.get(Calendar.MONTH),lastAccessed.get(Calendar.DAY_OF_MONTH),lastAccessed.get(Calendar.HOUR),lastAccessed.get(Calendar.MINUTE),lastAccessed.get(Calendar.SECOND))));						
+			}
+			trn.getLang().add(lang);
+		}
+		return trn;
 	}
 }

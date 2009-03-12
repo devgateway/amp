@@ -87,7 +87,7 @@ public class ShowAddComponent extends Action {
 	public ActionForward switchType(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
 
 		EditActivityForm eaForm = (EditActivityForm) form;
-		ArrayList<AmpComponentType> ampComponentTypes = ampComponentTypes = new ArrayList<AmpComponentType>(ComponentsUtil.getAmpComponentTypes());
+		ArrayList<AmpComponentType> ampComponentTypes  = new ArrayList<AmpComponentType>(ComponentsUtil.getAmpComponentTypes());
 		eaForm.getComponents().setAllCompsType(ampComponentTypes);
 
 		ArrayList<org.digijava.module.aim.dbentity.AmpComponent> ampComponents = null;

@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
@@ -159,7 +162,13 @@ public class MondrianQuery {
 			filter.setWidget(new Boolean(widget).booleanValue());
 		
 		filter.generateFilterQuery(request);
+		/*Prepare thread local to process the schema*/
+		
 		QueryThread.setQuery(filter.getGeneratedFilterQuery());
+		Site site = RequestUtils.getSite(request);
+		QueryThread.setSite(site);
+		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+		QueryThread.setLocale(navigationLanguage);
 	}
 
 }

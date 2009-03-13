@@ -13,11 +13,18 @@
 <!-- jsp:include page="teamPagesHeader.jsp" flush="true" /-->
 <!-- End of Logo -->
 <script language="javascript" type="text/javascript">
+
 function goAction(value){
-  if(value!=null){
-    document.getElementById("event").value=value;
-    document.umViewEditUserForm.submit();
-  }
+	var submitForm=true;
+  	if(value!=null){
+	  	if(value=='save'){
+	  		submitForm=validateUserInfo();		  
+	  	}
+	  	if(submitForm==true){
+	  		document.getElementById("event").value=value;
+	    	document.umViewEditUserForm.submit();
+	  	}    	
+  	}
 }
 function resetPasswordFields(){
   document.umViewEditUserForm.newPassword.value='';
@@ -32,7 +39,47 @@ function validate(str,value){
   else{
     goAction(value);
   }
+}
 
+function validateUserInfo(){
+	var userMail=document.getElementById("userMail").value;
+	var firstName=document.getElementById("firstName").value;
+	var lastName=document.getElementById("lastName").value;
+	var country=document.getElementById("country").value;
+	var errorMsg='';
+	
+	if(isInvalid(userMail)){
+		errorMsg='<digi:trn>Email Is Blank</digi:trn>';
+		alert(errorMsg);
+		return false;
+	}else if(userMail.indexOf('@')==-1 || userMail.indexOf('.')==-1){
+		errorMsg='<digi:trn>Please enter valid email</digi:trn>';
+		alert(errorMsg);
+		return false;
+	}
+	if(isInvalid(firstName)){
+		errorMsg='<digi:trn>FirstName Is Blank</digi:trn>';
+		alert(errorMsg);
+		return false;
+	}
+	if(isInvalid(lastName)){
+		errorMsg='<digi:trn>LastName Is Blank</digi:trn>';
+		alert(errorMsg);
+		return false;
+	}
+	if(country=='-1'){
+		errorMsg='<digi:trn>Please Select Country</digi:trn>';
+		alert(errorMsg);
+		return false;
+	}
+	return true;
+}
+
+function isInvalid(field){
+	if (field == null || field == '' || !isNaN(field) || field.charAt(0) == ' '){
+    	return true;
+    }		
+	return false;
 }
 </script>
 <digi:form action="/viewEditUser.do" method="post">
@@ -99,7 +146,7 @@ function validate(str,value){
 						&nbsp;
 					</td>
 			    </tr>
-   <tr>
+   				<tr>
 					<td noWrap width=100% vAlign="top">
 					<table width="740" cellspacing=1 cellSpacing=1>
 					<tr>
@@ -124,33 +171,37 @@ function validate(str,value){
 																	<tr>
 																		<td width="169" align="right" height="30">
 																			<digi:trn key="aim:viewEditUser:firstName">First name</digi:trn>
+																			<font color="red">*</font>
 																		</td>
 																	    <td width="380" height="30" colspan="2" >
-																	          <html:text name="umViewEditUserForm" property="firstNames" style="font-family:verdana;font-size:11px;width:180px;"/>
+																	          <html:text name="umViewEditUserForm" property="firstNames" style="font-family:verdana;font-size:11px;width:180px;" styleId="firstName"/>																	          
 																	    </td>
 																	</tr>
 																	<tr>
 																		<td width="169" align="right" height="30">
 																			<digi:trn key="aim:viewEditUser:lastName">Last name</digi:trn>
+																			<font color="red">*</font>
 																		</td>
 																	    <td width="380" height="30" colspan="2" >
-																	          <html:text name="umViewEditUserForm" property="lastName" style="font-family:verdana;font-size:11px;width:180px;"/>
+																	          <html:text name="umViewEditUserForm" property="lastName" style="font-family:verdana;font-size:11px;width:180px;" styleId="lastName"/>
 																	    </td>
 																	</tr>
 																	<tr>
 																		<td width="169" align="right" height="30">
 																	        <digi:trn key="aim:viewEditUser:email">Email </digi:trn>
+																	        <font color="red">*</font>
 																		</td>
 																		<td width="190" height="30">
-																           <html:text name="umViewEditUserForm" property="email" style="font-family:verdana;font-size:11px;width:180px;"/>
+																           <html:text name="umViewEditUserForm" property="email" style="font-family:verdana;font-size:11px;width:180px;" styleId="userMail"/>
 																		</td>
 																	</tr>
 																	<tr>
 																		<td width="169" height="30" align="right">
 																			<digi:trn key="aim:viewEditUser:country">Country</digi:trn>
+																			<font color="red">*</font>
 																	    </td>
 																	    <td width="190" height="30">
-																           <html:select name="umViewEditUserForm" property="selectedCountryIso" style="font-family:verdana;font-size:11px;width:180px;">
+																           <html:select name="umViewEditUserForm" property="selectedCountryIso" style="font-family:verdana;font-size:11px;width:180px;" styleId="country">
 																                <c:set var="translation">
 																                  <digi:trn key="aim:viewEditUser:selectCountry">
 																                  --Select country--

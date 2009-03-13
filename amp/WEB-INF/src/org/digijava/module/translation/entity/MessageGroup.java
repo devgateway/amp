@@ -10,7 +10,10 @@ import java.util.Map;
 
 import javax.xml.datatype.DatatypeFactory;
 
+import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Message;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.translation.jaxb.Language;
 import org.digijava.module.translation.jaxb.ObjectFactory;
@@ -25,7 +28,12 @@ import org.digijava.module.translation.util.HashKeyPatch;
  *
  */
 public class MessageGroup {
+	
+    private static Logger logger = Logger.getLogger(MessageGroup.class);	
+	
 	private String key = null;
+	private String keyWords = null;
+	private String siteId = null;
 	private Map<String, Message> messages = null;
 	
 	/**
@@ -43,44 +51,75 @@ public class MessageGroup {
 	 */
 	public MessageGroup(Message message){
 		this(message.getKey());
+		this.setKeyWords(message.getKeyWords());
+		this.setSiteId(message.getSiteId());
 		addMessage(message);
 	}
-	
+
+	/**
+	 * Creates message group from XML trn tag.
+	 * @param trn tag object
+	 */
 	public MessageGroup(Trn trn){
-		Message message=new Message();
-		//generate key, if it's null
-		String key=trn.getKey();
-		if(key==null || key.length()==0){
-			Language lang=hasEnglishTranslation(trn.getLang());
-			String text;
-			if(lang==null){
-				//if there is no translation, then key(hashcode) should be created from any translation text
-				lang=trn.getLang().get(0);
-			}
-			text=lang.getValue();
-			key=TranslatorWorker.generateTrnKey(text);
-		}
-		message.setKey(key);
-		message.setKeyWords(trn.getKeywords());
-		message.setSiteId(trn.getSiteId());
-		for (Language lang : trn.getLang()) {
-			message.setLocale(lang.getCode());
-			message.setMessage(lang.getValue());
-			message.setCreated(new Timestamp(lang.getUpdated().toGregorianCalendar().getTime().getTime()));
-			if(lang.getLastAccessed()!=null){
-				message.setLastAccessed(new Timestamp(lang.getLastAccessed().toGregorianCalendar().getTime().getTime()));
-			}
-			
-			if(this.key==null){
-				this.key=key;
-			}
-			if(this.messages==null){
-				this.messages = new HashMap<String, Message>();
-			}
-			
-			addMessage(message);
-		}		
+		this(trn,null);
 	}
+	
+	/**
+	 * Creates message group from XML trn tag for specified site.
+	 * @param trn tag object.
+	 * @param currentSiteId site ID in string form. can be retrieved from request.
+	 */
+	public MessageGroup(Trn trn,String currentSiteId){
+		this.messages = new HashMap<String, Message>();
+		
+		//KeyWords
+		this.keyWords = trn.getKeywords();
+		
+		//SiteID
+		this.siteId = (currentSiteId==null)?trn.getSiteId():currentSiteId;
+		if (this.siteId == null){
+			try {
+				Site site = TranslatorWorker.getInstance("").getDefaultSite();
+				this.siteId = site.getId().toString();//unfortunately in AMP we use PK instead of string siteID value.
+			} catch (WorkerException e) {
+				e.printStackTrace();
+				logger.warn("Using hardcoded siteId=3 because of previouse error for translation with key="+key);
+				this.siteId="3";
+			}
+		}
+		
+		//key
+		this.key = trn.getKey();
+		if (this.key == null || "".equals(this.key.trim())){
+			Language englishLang = getEnglishLanguageTag(trn.getLang());
+			if (englishLang == null){
+				logger.warn("Trn tag does not cntain key attribute or English lang tag. using first available lang tag contents to generate key.");
+				//trn tag should have at least one lang tag. 
+				englishLang = trn.getLang().get(0);
+			}
+			this.key = TranslatorWorker.generateTrnKey(englishLang.getValue());
+		}
+		
+		//Languages
+		for (Language lang  : trn.getLang()) {
+			Message msg = new Message();
+			
+			msg.setSiteId(this.getSiteId());
+			msg.setKey(this.key);
+			msg.setLocale(lang.getCode());
+			
+			msg.setMessage(lang.getValue());
+
+			if (lang.getUpdated()!=null){
+				msg.setCreated(new Timestamp(lang.getUpdated().toGregorianCalendar().getTime().getTime()));
+			}
+			
+			msg.setKeyWords(this.getKeyWords());
+			
+			this.addMessage(msg);
+		}
+	}
+
 	
 	/**
 	 * Adds message to the group.
@@ -103,6 +142,10 @@ public class MessageGroup {
 		getMessages().put(message.getLocale(), message);
 	}
 
+	/**
+	 * Returns key of the group and all messages.
+	 * @return
+	 */
 	public String getKey() {
 		return key;
 	}
@@ -122,19 +165,36 @@ public class MessageGroup {
 		return this.hashCode()==anotherGroup.hashCode();
 	}
 
+	/**
+	 * Returns hash code of key which itself is hash code of english message.
+	 * TODO check carefully if this is not buggy.
+	 */
 	public int hashCode() {
 		//TODO this is not good idea because key generation may change in TranslatorWorker.generateKey()
 		return key.hashCode();
 	}
 
+	/**
+	 * Returns map of messages where keys are their language codes.
+	 * @return
+	 */
 	protected Map<String, Message> getMessages() {
 		return messages;
 	}
 	
+	/**
+	 * Rertives message by language code from the group.
+	 * @param locale language code of the message to retrive from this group.
+	 * @return
+	 */
 	public Message getMessageByLocale(String locale){
 		return messages.get(locale);
 	}
 	
+	/**
+	 * Returns list of all messages in the group.
+	 * @return
+	 */
 	public Collection<Message> getAllMessages(){
 		return this.messages.values();
 	}
@@ -152,7 +212,12 @@ public class MessageGroup {
 		}
 	}
 	
-	private Language hasEnglishTranslation(List<Language> languages){
+	/**
+	 * Retrives lang tag with language code set to English.
+	 * @param languages list of lang tags.
+	 * @return English lang tag, or null of not found.
+	 */
+	private Language getEnglishLanguageTag(List<Language> languages){
 		Language retValue=null;
 		for (Language language : languages) {
 			if(language.getCode().equalsIgnoreCase("en")){
@@ -192,5 +257,21 @@ public class MessageGroup {
 			trn.getLang().add(lang);
 		}
 		return trn;
+	}
+
+	public void setKeyWords(String keyWords) {
+		this.keyWords = keyWords;
+	}
+
+	public String getKeyWords() {
+		return keyWords;
+	}
+
+	public void setSiteId(String siteId) {
+		this.siteId = siteId;
+	}
+
+	public String getSiteId() {
+		return siteId;
 	}
 }

@@ -44,7 +44,7 @@
 																</html:select>											
 															</c:when>
 															<c:when test="<%=customField instanceof CategoryCustomField%>">
-																<category:showoptions name="aimEditActivityForm" property="customFields[${index}].value" categoryName="${customField.categoryName}" styleClass="inp-text" />								
+																<category:showoptions name="aimEditActivityForm" property="customFields[${index}].longValue" categoryName="${customField.categoryName}" styleClass="inp-text" />								
 															</c:when>
 															<c:when test="<%=customField instanceof DateCustomField%>">																
 																<html:text name="aimEditActivityForm" property="customFields[${index}].strDate" size="10"

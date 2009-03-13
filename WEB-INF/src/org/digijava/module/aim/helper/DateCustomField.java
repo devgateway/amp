@@ -6,12 +6,12 @@ public class DateCustomField extends CustomField<Date> {
 	
 	@Override
 	public void setValue(Date value) {
-		super.setValue(value);
+		this.value = value;
 	}
 
 	public void setStrDate(String value) {
 		Date date = DateConversion.getDate(value);
-		super.setValue(date);
+		this.value = date;
 	}
 
 	public String getStrDate() {

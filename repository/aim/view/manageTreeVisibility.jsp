@@ -11,7 +11,6 @@
 <script language="JavaScript">
 
 	function changeLevel(id) {
-	// alert("aaaaaaaaaaa "+id);
 		<digi:context name="urlVal" property="context/module/moduleinstance/visibilityManager.do" />			  
 		document.aimVisibilityManagerForm.action = "<%= urlVal %>?changeLevel=true&action=edit&templateId="+id;
 		document.aimVisibilityManagerForm.submit();		

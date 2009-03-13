@@ -594,8 +594,7 @@ System.out.println("lang:"+lang);
 			 if(topic.getTopicKey().length() != 0 ){
 				   
 				    String article = getTrn(topic.getTopicKey(), request);
-					String newCode = article.replaceAll("&","&amp;");
-		
+				    String newCode = HTMLEntityEncode(article);
 					if(item.getChildren().isEmpty()){	
 					
 					xml+= "<item text=\""+newCode+"\" id=\""+ topic.getHelpTopicId()+"\"/>";
@@ -1046,6 +1045,20 @@ System.out.println("lang:"+lang);
 		}
 
 
+    }
+    public static String HTMLEntityEncode(String s) {
+        StringBuffer buf = new StringBuffer();
+        int len = (s == null ? -1 : s.length());
+
+        for (int i = 0; i < len; i++) {
+            char c = s.charAt(i);
+            if (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c >= '0' && c <= '9') {
+                buf.append(c);
+            } else {
+                buf.append("&#" + (int) c + ";");
+            }
+        }
+        return buf.toString();
     }
 
 }

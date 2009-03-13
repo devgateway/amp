@@ -24,7 +24,7 @@ public class XMLCustomFieldParser extends DefaultHandler{
    public void startElement (String uri, String name,
 		      String qName, Attributes atts){
 	   if ("text".equals(name)){
-		   cf = new  CustomField<String>();
+		   cf = new  TextCustomField();
 		   processAtrributes(atts);
 	   }else if("combo".equals(name)){
 		   cf = new  ComboBoxCustomField();

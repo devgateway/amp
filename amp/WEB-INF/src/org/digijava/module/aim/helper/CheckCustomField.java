@@ -16,5 +16,10 @@ public class CheckCustomField extends CustomField<Boolean>{
 	public String getLabelFalse() {
 		return labelFalse;
 	}
+	@Override
+	public void setValue(Boolean value) {
+		this.value = value;
+		
+	}
 
 }

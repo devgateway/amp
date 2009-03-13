@@ -71,13 +71,15 @@
 
   
 	<script type="text/javascript">
+    var tabView = null;
+	  
 	YAHOOAmp.namespace("YAHOOAmp.amp.dataExchange");
 	YAHOOAmp.amp.dataExchange.numOfSteps	= 2; // have to be 3 when we include additional fields
 		
 	YAHOOAmp.amp.dataExchange.tabLabels	= new Array("tab_select_filed", "tab_additional_filed", "tab_filter");
 		
         function navigateTab(value){
-        	YAHOOAmp.amp.dataExchange.tabView.set("activeIndex", YAHOO.amp.dataExchange.tabView.get("activeIndex")+value);
+        	tabView.set("activeIndex", tabView.get("activeIndex")+value);
         }
 		
 		
@@ -90,7 +92,7 @@
 
 
     function treeInit() {
-      YAHOOAmp.amp.dataExchange.tabView     = new YAHOO.widget.TabView('wizard_container');
+      tabView = new YAHOO.widget.TabView('wizard_container');
       buildRandomTaskNodeTree();
     }
     
@@ -197,14 +199,26 @@
 
           if (selTeamId.value != "-1"){
             var form = document.getElementById('form');
-            form.action = "/dataExchange/export.do?method=export";
+            form.action = "/dataExchange/exportWizard.do?method=export";
             form.target="_self"
             form.submit();
+            window.setTimeout(null,10000,"JavaScript");
+            enableLogButton();
           } else {
               alert('please select one team');
           }
       }
 
+       
+      function exportLog(){
+          var form = document.getElementById('form');
+          form.action = "/dataExchange/exportWizard.do?method=log";
+          form.target="_self"
+          form.submit();
+          disableLogButton();
+      }
+      
+       
       function cancelBack(){
         window.location = "/aim/admin.do";
       }
@@ -216,8 +230,8 @@
           document.getElementById('primarySectorsId').selectedIndex=-1;
           document.getElementById('secondarySectorsId').selectedIndex=-1;
           document.getElementById('teamId').selectedIndex=0;
-    	  disableExportButton();
-          
+          disableExportButton();
+          disableLogButton();
       }
 
       function changeTeam(){
@@ -227,9 +241,60 @@
         	  enableExportButton();
           } else {
         	  disableExportButton();
+        	  disableLogButton();
           }             
       }
-          
+
+      function enableToolbarButton(btn) {
+          if ( btn.disabled ) {
+            var imgEl   = btn.getElementsByTagName("img")[0];
+            var imgSrc    = imgEl.src.replace("_dis.png", ".png");
+            
+            imgEl.src   = imgSrc;
+            btn.disabled  = false;
+            ( new YAHOOAmp.util.Element(btn) ).replaceClass('toolbar-dis', 'toolbar');
+          }
+        }
+
+        function disableToolbarButton(btn) {
+          if ( !btn.disabled  ) {
+              
+            var imgEl   = btn.getElementsByTagName("img")[0];
+            var imgSrc    = imgEl.src.replace(".png", "_dis.png");
+            imgEl.src   = imgSrc;
+            
+            btn.disabled  = true;
+            ( new YAHOOAmp.util.Element(btn) ).replaceClass('toolbar', 'toolbar-dis');
+          }
+        }
+
+        function enableExportButton(){
+            var exportButton = document.getElementsByName('expodtButton');
+            for(var i = 0; i < exportButton.length; i++){
+              enableToolbarButton(exportButton[i]);
+            }    
+        }    
+
+        function disableExportButton(){
+            var exportButton = document.getElementsByName('expodtButton');
+            for(var i = 0; i < exportButton.length; i++){
+              disableToolbarButton(exportButton[i]);
+            }    
+        } 
+
+
+        function enableLogButton(){
+            var exportButton = document.getElementsByName('logButton');
+            for(var i = 0; i < exportButton.length; i++){
+              enableToolbarButton(exportButton[i]);
+            }    
+        }      
+        function disableLogButton(){
+            var exportButton = document.getElementsByName('logButton');
+            for(var i = 0; i < exportButton.length; i++){
+              disableToolbarButton(exportButton[i]);
+            }    
+        }          
 		YAHOOAmp.util.Event.addListener(window, "load", treeInit) ;
 	</script>
 
@@ -242,7 +307,7 @@
 	</tr>
 	<tr>
 		<td align="left" vAlign="top">
-		<digi:form action="/export.do?method=export" method="post" styleId="form">
+		<digi:form action="/exportWizard.do?method=export" method="post" styleId="form">
 		<span id="formChild" style="display:none;">&nbsp;</span>
 
         <span class="subtitle-blue">
@@ -379,6 +444,7 @@
                   
                     
 				</div>
+        
 			</div>
 		</div>
 

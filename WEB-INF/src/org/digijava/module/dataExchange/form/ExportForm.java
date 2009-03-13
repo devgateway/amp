@@ -2,23 +2,19 @@ package org.digijava.module.dataExchange.form;
 
 
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
-import org.dgfoundation.amp.ar.ARUtil;
-import org.digijava.module.aim.ar.util.ReportsUtil;
-import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpOrgType;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.dataExchange.type.AmpColumnEntry;
-import org.digijava.module.aim.dbentity.*;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.SectorUtil;
 
 public class ExportForm extends ActionForm{
 
@@ -54,12 +50,13 @@ public class ExportForm extends ActionForm{
 	
 	private String language  = null;
 	
+	private Collection<String[]> exportLog = null;
+	
 	public ExportForm(){
 	
 	}
 	
 	
-
 	@Override
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
 		// TODO Auto-generated method stub
@@ -213,6 +210,25 @@ public class ExportForm extends ActionForm{
 		this.language = language;
 	}
 
+
+	public Collection<String[]> getExportLog() {
+		return exportLog;
+	}
+
+
+	public void setExportLog(Collection<String[]> exportLog) {
+		this.exportLog = exportLog;
+	}
+
+	public void addExportLog(String[] errorLog) {
+		if (this.exportLog == null){
+			this.exportLog = new ArrayList<String[]>();
+		}
+		this.exportLog.add(errorLog);
+	}
 	
+	public boolean isError(){
+		return this.exportLog != null;
+	}
 }
 

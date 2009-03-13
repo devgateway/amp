@@ -105,7 +105,7 @@ public class TranslatorManager extends Action {
 	        
 		}
 		if(request.getParameter("importLang")!=null) {
-			
+			long timeStart=System.currentTimeMillis();
 			FormFile myFile = (FormFile)session.getAttribute("myFile");
 			session.removeAttribute("myFile");
 			if(myFile==null)
@@ -139,6 +139,7 @@ public class TranslatorManager extends Action {
 	        try {
 				trns_in = (Translations) m.unmarshal(inputStream);
 				if (trns_in.getTrn() != null) {
+					logger.info("Processing "+trns_in.getTrn().size()+" translation groups (trn tags)...");
 					Iterator<Trn> it = trns_in.getTrn().iterator();					
 					while(it.hasNext()){
 						Trn trn = it.next();						
@@ -228,7 +229,8 @@ public class TranslatorManager extends Action {
 				saveErrors(request, errors);
 				return mapping.findForward("forward");
 			}	        
-			
+			long timeEnd=System.currentTimeMillis();
+			logger.info("Import finished in "+(timeEnd - timeEnd)+" milliseconds.");
 			session.removeAttribute("aimTranslatorManagerForm");
 			return mapping.findForward("forward");
 		}

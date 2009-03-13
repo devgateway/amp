@@ -67,6 +67,7 @@
 		<div title="Zoom 1.0X" onClick="zoomMap (this, 1)" id="mapZoom10" class="navVisible" style="width:30px; position: absolute; top:310px; left:25px;" align="center">1.0X</div>
 		<div title="Zoom 1.5X" onClick="zoomMap (this, 1.5)" id="mapZoom15" class="navHiden" style="width:30px; position: absolute; top:310px; left:60px;" align="center">1.5X</div>
 		<div title="Zoom 2.0X" onClick="zoomMap (this, 2)" id="mapZoom20" class="navHiden" style="width:30px; position: absolute; top:310px; left:95px;" align="center">2.0X</div>
+		<div title="Zoom 3.0X" onClick="zoomMap (this, 3)" id="mapZoom30" class="navHiden" style="width:30px; position: absolute; top:310px; left:130px;" align="center">3.0X</div>
 	
 	
 

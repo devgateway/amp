@@ -25,6 +25,8 @@ import java.awt.TexturePaint;
 import java.awt.geom.Rectangle2D;
 import java.awt.Rectangle;
 
+import java.awt.geom.*;
+
 /**
  *
  * @author George Kvizhinadze
@@ -614,7 +616,13 @@ public class GisUtil {
 
                 shapeNode = new XML("shape");
                 segmentNode.addElement(shapeNode);
-                skipPoints = shape.getShapePoints().size() / pointsPerShape;
+
+                if (shape.getShapePoints().size() > pointsPerShape) {
+                    skipPoints = shape.getShapePoints().size() / pointsPerShape;
+                } else {
+                    skipPoints = 1;
+                }
+
 
                 for (int mapPointId = 0;
                                       mapPointId < shape.getShapePoints().size();

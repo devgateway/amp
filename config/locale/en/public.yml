@@ -2,46 +2,44 @@ en:
   static:
     home: 
       introduction_short: |
-        <p>ODAnic is the online database of Official Development Assistance (ODA) from EU Member States to Nicaragua. It was created in response to the Paris Declaration on Aid Effectiveness, which advocates stronger coordination of donor activities and better alignment of aid with the poverty reduction strategy of the Government of Nicaragua. In the spirit of increasing aid harmonization, ODAnic will soon contain information on assistance from a wider range of donor organizations.</p>
+        <p>ODAnic is the online database of Official Development Assistance (ODA) from development partners to Nicaragua. It was created in response to the Paris Declaration on Aid Effectiveness, which advocates stronger coordination of donor activities and better alignment of aid with the poverty reduction strategy of the Government of Nicaragua. Originally a tool for EU donors, in the spirit of increasing aid harmonization, ODAnic now contains information on assistance from the entire donor community in Nicaragua.</p>
         <p>ODAnic is user-friendly, free of charge, and available to all. Users can search for projects by donor, sector, and other criteria, and create custom reports using the "Design Your Own Report" function. ODAnic also contains donor profiles with each EU Member State's strategy for assistance to Nicaragua.</p>
         <p>With ODAmap, users can locate projects by geographic location. The EU Blue Book is an interactive, online resource with graphs and other tools to help users understand and analyze the data.</p><br />
         <p>Welcome to ODAnic!</p>
           
       introduction_long: |
-        <p><strong>History</strong></p>
-        <p>In 2007, the DFID representation in Nicaragua hired ODAdata Aid Information Management Systems to create a dynamic version of the EU Blue Book based on Best Practices in Mozambique (ODAmoz) and the EU Blue Book in Vietnam. ODAnic was established in order to centralise, and make available in a harmonised and coordinated way, information on the activities of the European Commission and all EU Member States operating in Nicaragua.</p> 
-        <p>In a further step towards greater harmonisation, it was agreed to open up ODAnic in future to <strong>ALL</strong> Donors present in Nicaragua and link where possible to the Government of Nicaragua’s own Aid Information System (SYSODA).</p>
-        <p>This initiative was fully endorsed by all EU Member States present in Nicaragua in order to simplify and harmonise the provision of information on EU Aid Flows to the country.</p>
-        
+        <p><strong>About ODAnic</strong></p>
+        <p>In 2007, the UK’s Department for International Development (DFID) initiated and supported the establishment of ODAnic, an online interactive tool to centralize, coordinate and harmonize information on the activities of the European Commission and all EU Member States operating in Nicaragua.  Through ODAnic, EU donors launched the first ever electronic EU Blue Book for Nicaragua.  Both products were based on good practices in Mozambique (ODAmoz) and the EU Blue Book in Vietnam. </p>
+        <p>In 2008, in a further step towards greater harmonisation, ODAnic was opened up to all donors operating in Nicaragua.  Today, a total of 21 donors have pledged to provide information to ODAnic.  Exploration is underway to link ODAnic to the Government of Nicaragua’s own aid information management system known as SysODA.</p>
+        <p>The 2008 EU Blue Book is scheduled for release in April 2009.</p>
+        <p>This new and improved version of ODAnic is a product of the Development Gateway, an international nonprofit organization with a mission to create and implement Web-based tools to make aid and development efforts more effective.  OECD, UNDP and the World Bank comprise the Development Gateway’s Aid Effectiveness Steering Committee and play a key role in guiding the direction of the aid effectiveness program. </p>
         <p><strong>Objective</strong></p>
-        <p>The main objective and focus of ODAnic is to provide EU donors with a tool, based on international standards (e.g. OECD/DAC sector codification), to fulfill their reporting obligations It also gives the Government, donors, civil society and the public a snapshot of EU Donors strategies, projects and financial commitments.</p>
-        
-        <p><b>Update timeline</b></p>
-        <p>The information in ODAnic is based on reports of quarterly disbursements, on forecasts for the current year and on annual values for the next <strong>3 years according to the Medium Term Expenditure Forecast (MTEF) procedure. Updates</strong> will be prepared according to the following timetable:</p>
-        <center><table>
-        	<tr>
-        		<td>1st Quarter:</td>
-        		<td>1 April - 15 May</td>
-        	</tr>
-        	<tr>
-        		<td>2nd Quarter:</td>
-        		<td>1 July - 15 August</td>
-        	</tr>
-        	<tr>
-        		<td>3rd Quarter:</td>
-        		<td>1 October - 15 November</td>
-        	</tr>
-        	<tr>
-        		<td>4th Quarter / Yearly report:</td>
-        		<td>15 January - 15 February</td>
-        	</tr>
-        </table></center>
-        
-        <p>The reports will be downloaded shortly afterwards and sent to the ODAnic Community in EXCEL format for the quarterly reports and as EXCEL, .pdf and as EU Blue Book documents for the yearly reports. All reports will be available as either aggregated or disaggregated for the European Commission and each EU Member State in the download section.</p>
-        
+        <p>The main purpose of ODAnic is to provide donors in Nicaragua with the tools and training to fulfill their reporting obligations under the Paris Declaration and Accra Agenda for Action, following international standards and in the spirit of transparency and accountability.  At the same time, ODAnic also provides the Government, donors, civil society and the public a snapshot of donors’ strategies, projects and financial commitments.</p>
+        <p>Since the Rome Declaration on Aid Effectiveness in 2003, Aid Information Management Systems have been widely recognized as essential tools for improving government and donor accountability, streamlining aid management practices, advancing donor coordination and ensuring more effective alignment of donor activities with country strategies.</p>
+        <p><strong>Key Benefits</strong></p>
+        <p>This approach to system implementations recognizes that technology solutions alone are not sufficient to bring about lasting change.  They should be adopted as part of a larger effort that brings partners together, puts sustainable management processes in place, and ensures long-term technical maintenance. </p>
+        <p>Through the ODAnic tool itself, users can:<br />
+        <ul>
+        <li>
+        View pre-defined reports by donor, sector, and more<br />
+        </li>
+        <li>
+          Create custom reports and filter activities by key characteristics<br />
+        </li>
+        <li>
+          Locate activities geographically via an interactive map of the country<br />
+        </li>
+        <li>
+          View key details for a specific project<br />
+        </li>
+        <li>
+          Learn more about donor financing to the country through outputs such as the EU Blue Book, which includes graphs and donor profiles
+          </li>
+        </ul>
+          </p>
         <p><strong>Responsibility</strong></p>
-        <p>All EU donors have selected a focal point who is responsible for collecting, entering and updating the data online on a quarterly basis. Accuracy and completeness of the data is dependent on the individual EU donor inputting the data and can only be guaranteed up to the last quarterly disbursement; forecasts are based on estimates.</p>
-      
+        <p>Donors are responsible for maintaining and validating the information in ODAnic.  Each donor agency in a country selects a focal point to adhere to locally agreed guidelines and timelines for updates, while following international data classifications developed by the OECD Development Assistance Committee.  This information is then freely available to all.<br />
+        </p>
       map_image_link: Click on Map for ODAmap
       bluebook_image_link: Click on Image for EU Blue Book 2007
       read_more: Read more...

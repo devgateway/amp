@@ -2,46 +2,43 @@ es:
   static:
     home: 
       introduction_short: | 
-        <p>ODAnic es la base de datos en línea de Ayuda Oficial al Desarrollo (AOD) a Nicaragua de los Estados Miembros de la UE. Fue creado en respuesta a la Declaración de Paris sobre la Efectividad de la Ayuda, la cual aboga por una coordinación más fuerte de las actividades de donantes y el mejor alineamiento de la ayuda con la estrategia de reducción de la pobreza del Gobierno de Nicaragua. Con la intención de aumentar la armonización de la ayuda, muy pronto ODAnic incluirá información sobre la ayuda oficial de un rango más amplio de organizaciones donantes.</p>
-        <p>ODAnic es una herramienta fácil de usar, sin coste al usuario, y disponible a todos. Usuarios pueden buscar proyectos por donante, sector, y otro criterio, y crear reportes personalizados usado la herramienta "Diseña Reporte". ODAnic también incluye perfiles de donante con las estrategias para la asistencia a Nicaragua de cada Estado Miembro de la UE.</p>
-        <p>Con ODAmap, usuarios pueden localizar proyectos en su ubicación geográfica. El EU Blue Book es un recurso interactivo en línea con gráficos y otras herramientas que permite el entendimiento y el analizo de los datos.</p><br />
+        <p>ODAnic es la base de datos en línea de Ayuda Oficial al Desarrollo (AOD) a Nicaragua de los socios de desarrollo. Fue creado en respuesta a la Declaración de Paris sobre la Efectividad de la Ayuda, la cual aboga por una coordinación más fuerte de las actividades de donantes y el mejor alineamiento de la ayuda con la estrategia de reducción de la pobreza del Gobierno de Nicaragua. Originalmente desarrollada como una herramienta para los cooperantes de la Unión Europea, ODAnic contiene actualmente información de asistencia de toda la comunidad de donantes de Nicaragua.</p>
+        <p>ODAnic es una herramienta fácil de usar y disponible a todos. Los usuarios pueden buscar proyectos por donante, sector, y otros criterios, y crear reportes personalizados usado la herramienta "Diseña Reporte". ODAnic también incluye perfiles de donante con las estrategias para la asistencia a Nicaragua de cada Estado Miembro de la UE.</p>
+        <p>Con ODAmap, los usuarios pueden localizar proyectos por su ubicación geográfica. El Blue Book es un recurso interactivo y en línea con gráficos y otras herramientas para ayudar a los usuarios a entender y analizar la asistencia para el desarrollo provista por los estados miembros de la UE y la Comisión Europea.</p><br />
         <p>¡Bienvenidos a ODAnic!</p>
         
       introduction_long: |
-        <p><strong>Historia</strong></p>
-        <p>En el año 2007, la representación del DFID en Nicaragua contrató a la empresa ODAdata Aid Information Management Systems para crear una versión dinámica del EU Blue Book basada en las Mejores Prácticas realizadas en Mozambique con la herramienta ODAmoz y con el EU Blue Book elaborado para Vietnam. ODAnic fue establecida con el objetivo de centralizar y tener disponible de manera armonizada y coordinada la información de las actividades de la Comisión Europea y de todos los Estados Miembros de la Unión Europea que operan en Nicaragua.</p> 
-        <p>Para lograr una mayor armonización, se acordó disponer en un futuro ODAnic a TODOS los Donantes presentes en Nicaragua y enlazarla en lo posible al Sistema de Información de Asistencia para el Desarrollo Oficial del Gobierno de Nicaragua (SYSODA).</p>
-        <p> Esta iniciativa fue apoyada por todos los Estados Miembros de la UE presentes en Nicaragua, con el objetivo de simplificar y armonizar la provisión de información sobre los Flujos de Ayuda de la UE al país.</p>
-        
+        <p><strong>Acerca de ODAnic</strong></p>
+        <p>En el 2007, el Departamento de Ayuda Internacional (DFID) del Reino Unido comenzó y proveyó soporte para el establecimiento de ODAnic, una herramienta interactiva para centralizar, coordinar y armonizar información en las actividades de la Comisión Europea y todos los estados miembros de la Unión Europea que operan en Nicaragua. A través de ODAnic, los cooperantes de la Unión Europea lanzaron el primer Blue Book de la Unión Europea electrónico para Nicaragua. Ambos productos están basados en las buenas prácticas de Mozambique (ODAmoz) y el Blue Book de la UE en Vietnam.</p>
+        <p>En el 2008, en un paso más adelante para una mejor armonización, ODAnic fue abierto para todos los cooperantes que operan en Nicaragua. Hoy, un total de 21 cooperantes se han comprometido a ofrecer información en ODAnic. Se están llevando a cabo gestiones para enlazar ODAnic al sistema de manejo de ayuda del gobierno de Nicaragua, conocido como SysODA.</p>
+        <p>El lanzamiento del Blue Book de la UE 2008 está planeado para Abril de 2009.</p>
+        <p>Esta nueva y mejorada versión de ODAnic es un producto de Development Gateway, una organización internacional sin fines de lucro con la misión de crear e implementar herramientas basadas en internet para hacer que los esfuerzo de desarrollo y ayuda sean más efectivos. La OECD, UNDP y el Banco Mundial son parte del Comité de Dirección de la Efectividad de la Ayuda de Developer Gateway que tiene un papel esencial en guiar en la dirección del programa de efectividad de la ayuda.</p>
         <p><strong>Objetivo</strong></p>
-        <p> El objetivo principal y razón de ODAnic es proveer a los donantes de la UE con una herramienta basada en estándares internacionales (Por ejemplo la Codificación de Sector OCDE/CAD), para cumplir con la entrega obligatoria de sus reportes. También le da al Gobierno, a los donantes, a la sociedad civil y al público en general, un vistazo de las estrategias, proyectos y compromisos financieros de los Donantes de la UE.</p>
-        
-        <p><b> Plazos definidos para actualizaciones</b></p>
-        <p> La información en ODAnic está basada en los reportes de desembolsos realizados por trimestre, en las proyecciones para el año en curso y en los montos anuales para los siguientes <strong>3 años según el procedimiento de Proyección de Gastos a Mediano Plazo </strong> Las actualizaciones de la información deberán ser preparadas según el siguiente calendario:</p>
-        <center><table>
-        	<tr>
-        		<td>1er trimestre:</td>
-        		<td>1º de Abril – 15 de Mayo </td>
-        	</tr>
-        	<tr>
-        		<td>2º trimestre:</td>
-        		<td>1º de Julio – 15 de Agosto</td>
-        	</tr>
-        	<tr>
-        		<td>3er trimestre:</td>
-        		<td>1º de Octubre – 15 de Noviembre</td>
-        	</tr>
-        	<tr>
-        		<td>4º trimestre / Reporte Anual:</td>
-        		<td>15 de Enero – 15 de Febrero</td>
-        	</tr>
-        </table></center>
-        
-        <p> Los reportes deben descargarse poco después y ser enviados a la comunidad ODAnic en formato EXCEL cuando se trate de los reportes trimestrales y en formatos EXCEL, .pdf y como documentos del Blue Book para los reportes anuales. Tanto desagregados como consolidados, los reportes deben quedar disponibles para la Comisión Europea y para cada Estado Miembro de la UE en la sección de descarga.</p>
-        
+        <p>El objetivo principal de ODAnic es proveer a los donantes en Nicaragua las herramientas y el entrenamiento para cumplir con sus obligaciones de reportes bajo la declaración de París y la agenda de acción de Accra, siguiendo estándares internacionales con el espíritu de la transparencia y la responsabilidad. Al mismo tiempo, ODAnic también provee al gobierno, los cooperantes, la sociedad civil y al público un panorama de las estrategias de los cooperantes, los proyectos y los compromisos financieros.</p>
+        <p>Desde la declaración de Roma en la Efectividad de la Ayuda en 2003, los Sistemas de Información del Manejo de la Ayuda han sido ampliamente reconocidos como herramientas esenciales para mejorar la responsabilidad de los gobiernos y los cooperantes, facilitando las prácticas del manejo de la ayuda, avanzando en la cooerdinación de cooperantes y asegurando un alineamiento más efectivo de las actividades de los cooperantes con las estrategias de los países.</p>
+        <p><strong>Beneficios Principales</strong></p>
+        <p>Este enfoque hacia la implementación de sistemas reconoce que las soluciones tecnológicas solas no son suficientes para tener resultados duraderos. Deben ser adoptadas como parte de un esfuerzo mayor que une a socios, establece procesos de manejo sustentables y asegura el matenimiento técnico a largo plazo.</p>
+        <p>A través de la herramienta ODAnic, los usuarios pueden:<br />
+        <ul>
+        <li>
+        Visualizar reportes predefinidos por cooperante, sector y más.<br />
+        </li>
+        <li>
+        Crear reportes personalizados y filtrar actividades por sus características principales.<br />
+        </li>
+        <li>
+        Localizar actividades geográficamente a través de un mapa interactivo del país<br />
+        </li>
+        <li>
+        Visualizar los detalles principales de un proyecto específico<br />
+        </li>
+        <li>
+        Tener más información acerca del financiamiento de los cooperantes al país a través de resultados tales como el Blue Book de la UE, que incluye gráficos y perfiles de los cooperantes.
+        </li>
+        </ul>
+        </p>
         <p><strong>Responsabilidad</strong></p>
-        <p> Todos los donantes de la UE han seleccionado un punto focal que tiene la  responsabilidad de recolectar, digitar y actualizar los datos en línea por trimestre. La precisión y completitud de los datos dependerán del ingreso que cada donante de manera individual haga de estos y garantizará hasta el último pago trimestral realizado; las proyecciones por su parte se basan en montos estimados.</p>
-    
+        <p>Los cooperantes son responsables por el mantenimiento y la validación de la información en ODAnic. Cada agencia cooperante en el país selecciona un punto focal para adherir a las guías acordadas localmente y el cronograma de actualización, al tiempoque se siguen las clasificaciones de datos internacional desarrollado por la Comité de Ayuda al Desarrollo (DAC) de la OECD. Entonces, esta información está disponible para todos.</p>
       map_image_link: Presione Mapa para ODAmap
       bluebook_image_link: Haga Click sobre la imagen para EU Blue Book 2007
       read_more: Leer más...

@@ -97,7 +97,9 @@ public class FilterHelper implements Serializable{
     public AmpOrganisation getOrganization() {
         //view entire group...
         if (orgId == null || orgId == -1) {
-            return new AmpOrganisation();
+            AmpOrganisation org=new AmpOrganisation();
+            org.setName("All");
+            return org;
         }
         //view particular organization...
         return DbUtil.getOrganisation(orgId);
@@ -111,6 +113,7 @@ public class FilterHelper implements Serializable{
         }
         else{
              orgGroup=new AmpOrgGroup();
+             orgGroup.setOrgGrpName("All");
         }
         return orgGroup;
 

@@ -779,8 +779,17 @@ function toggleSettings(){
 															<%}%>
 														<%}%>
 															<c:set var="index" value="1" />
-															<nested:iterate id="rowVal">
-															<% indexRow++; %>
+
+															<c:set var="firstVal" value="" />
+															<c:set var="secondVal" value="" />
+															<nested:iterate id="rowVal" indexId="ansIndex">
+																<c:if test="${ansIndex == 1}">
+																	<c:set var="firstVal" value="${rowVal}" />
+																</c:if>
+																<c:if test="${ansIndex == 2}">
+																	<c:set var="secondVal" value="${rowVal}" />
+																</c:if>
+																<% indexRow++; %>
 																<td>
 																	<div align="center">
 																		<c:if test="${index == 1}">
@@ -794,8 +803,8 @@ function toggleSettings(){
 																				<c:when test="${index == (numCols-1)}">
 																					<c:choose>
 																						<c:when test="${aimParisIndicatorReportForm.indicatorCode == '5a'}">
-																							<c:if test="${rowVal == -1}">n.a.</c:if>
-																							<c:if test="${rowVal != -1}">
+																							<c:if test="${rowVal <= -1}">n.a.</c:if>
+																							<c:if test="${rowVal > -1}">
 																								<fmt:formatNumber type="number" value="${rowVal}" maxFractionDigits="0" />%
 																							</c:if>
 																						</c:when>
@@ -805,9 +814,14 @@ function toggleSettings(){
 																					</c:choose>
 																				</c:when>
 																				<c:otherwise >
-																					<c:if test="${rowVal == -1}">n.a.</c:if>
-																					<c:if test="${rowVal != -1}">
-																						<fmt:formatNumber type="number" value="${rowVal}" maxFractionDigits="0" />%
+																					<c:if test="${rowVal <= -1}">n.a.</c:if>
+																					<c:if test="${rowVal > -1}">
+																						<c:if test="${ansIndex == 3}">
+																							<fmt:formatNumber type="number" value="${firstVal/secondVal*100}" maxFractionDigits="0" />%
+																						</c:if>
+																						<c:if test="${ansIndex != 3}">
+																							<fmt:formatNumber type="number" value="${rowVal}" maxFractionDigits="0" />%
+																						</c:if>
 																					</c:if>
 																				</c:otherwise>
 																			</c:choose>

@@ -745,7 +745,8 @@ public class ReportsFilterPicker extends MultiAction {
 		if (tempSettings != null) {
 			filterForm.setCurrency(tempSettings.getCurrency().getAmpCurrencyId());
 			String name = "- " + tempSettings.getCurrency().getCurrencyName();
-			httpSession.setAttribute(ArConstants.SELECTED_CURRENCY, name);
+			if (httpSession.getAttribute(ArConstants.SELECTED_CURRENCY) == null)
+				httpSession.setAttribute(ArConstants.SELECTED_CURRENCY, name);
 			if(tempSettings.getFiscalCalendar() != null && tempSettings.getFiscalCalendar().getAmpFiscalCalId() != null) {
 				filterForm.setCalendar(tempSettings.getFiscalCalendar().getAmpFiscalCalId());
 			}

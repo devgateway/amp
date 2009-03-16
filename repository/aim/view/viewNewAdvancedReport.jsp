@@ -350,6 +350,7 @@ session.setAttribute("progressValue", counter);
 					<%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%>
 				</digi:trn>
 				</gs:test>
+				
 				<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY%>">
 					<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />
 					<digi:trn key="<%="aim:currency:" + ((String)selCurrency).toLowerCase().replaceAll(" ", "") %>"><%=selCurrency %></digi:trn>

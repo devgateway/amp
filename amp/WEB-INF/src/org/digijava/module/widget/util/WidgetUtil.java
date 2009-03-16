@@ -116,7 +116,7 @@ public class WidgetUtil {
 		List<AmpDaWidgetPlace> result=null;
 		Session session = PersistenceManager.getRequestDBSession();
         // org profile places are starting with orgprof_chart_place prefix
-		String oql="from "+AmpDaWidgetPlace.class.getName()+" as p where p.name like 'orgprof_chart_place%' order by p.lastRendered desc";
+		String oql="from "+AmpDaWidgetPlace.class.getName()+" as p where p.name like 'orgprof_chart_place%' order by p.name";
 		try {
 			Query q=session.createQuery(oql);
 			result = q.list();

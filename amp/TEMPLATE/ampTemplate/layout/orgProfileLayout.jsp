@@ -11,13 +11,18 @@
     <digi:context name="digiContext" property="context"/>
     <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
     <digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
-
+    
     <HEAD>
         <TITLE>Organization Profile</TITLE>
         <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
         <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
         <META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
         <META HTTP-EQUIV="EXPIRES" CONTENT="0">
+           <script type="text/javascript">
+               function exportPDF() {
+                   openURLinResizableWindow("/orgProfile/pdfExport.do", 780, 500);
+               }
+          </script>
         <style>
             .tableHeaderCls {
                 font-size: 12px;
@@ -62,6 +67,29 @@
                                     <TR>
                                         <TD vAlign="top" align="left">
                                             <digi:insert attribute="filters"/>
+                                        </TD>
+                                    </TR>
+                                    <TR>
+                                        <TD noWrap align="RIGHT" valign="middle" style="cursor:pointer;" height="30px">
+
+                                            <TABLE border="0" align="RIGHT" bgcolor="#addadd" class="toolbartable">
+
+                                                <TR>
+                                                     <TD>
+                                                       &nbsp;
+                                                    </TD>
+                                                    <TD>
+                                                        <a target="_blank" onclick="exportPDF(); return false;">
+                                                            <digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/pdf.gif" border="0" alt='Export to PDF'/>
+                                                        </a>
+                                                    </TD>
+                                                     <TD>
+                                                       &nbsp;
+                                                    </TD>
+
+                                                </TR>
+                                            </TABLE>
+
                                         </TD>
                                     </TR>
                                     <TR>

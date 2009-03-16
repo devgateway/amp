@@ -5940,7 +5940,8 @@ public class DbUtil {
                                     percent = new Double( (100 * sum) / answersRow[NUM_ANSWER_COLUMNS - 2]);
                                 } else
                                     percent = new Double( (100 * answersRow[NUM_ANSWER_COLUMNS - 3]) / answersRow[NUM_ANSWER_COLUMNS - 2]);
-                                answersRow[NUM_ANSWER_COLUMNS - 1] = Double.parseDouble(formatter.format(percent).replaceFirst(",", "."));
+                                //answersRow[NUM_ANSWER_COLUMNS - 1] = Double.parseDouble(formatter.format(percent).replaceFirst(",", "."));
+                                answersRow[NUM_ANSWER_COLUMNS - 1] = percent;
                                 //logger.debug("final-% : " + answersRow[NUM_ANSWER_COLUMNS - 1]);
                             } catch (NumberFormatException nex) {
                                 logger.debug("percentage is NaN");
@@ -6003,7 +6004,7 @@ public class DbUtil {
                                 allDnRow[NUM_ANSWER_COLUMNS - 1] = Double.parseDouble(formatter.format(percent).replaceFirst(",", "."));
                                 //logger.debug("final-%[all-donors row] : " + allDnRow[NUM_ANSWER_COLUMNS - 1]);
                             } catch (NumberFormatException nex) {
-                                logger.debug("percentage[all-donors row] is NaN");
+                                logger.error("percentage[all-donors row] is NaN");
                                 allDnRow[NUM_ANSWER_COLUMNS - 1] = 0.0;
                             }
                         }

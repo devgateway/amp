@@ -767,7 +767,7 @@ function toggleSettings(){
 				                                            <c:set var="key">${fn:replace(key, " ", "")}</c:set>
 				                                            <c:set var="key">${fn:replace(key, "%", "")}</c:set>
 		                                            		<c:set var="key">${fn:toLowerCase(key)}</c:set>
-															<strong><digi:trn key="aim:parisIndicatorDonor"><nested:write property="donor" /></digi:trn></strong>
+															<strong><digi:trn key="${key}"><nested:write property="donor" /></digi:trn></strong>
 														</div>
 													</td> 
 													<nested:iterate property="answers"> 

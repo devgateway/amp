@@ -2,29 +2,30 @@
 <!DOCTYPE Schema PUBLIC "//UNKNOWN/" "mondrian.dtd">
 <Schema name="AMP">
 	<Dimension name="Primary Sector">
-		<Hierarchy hasAll="true" primaryKey="amp_activity_id" allMemberName="#All_Primary_Sector#" caption="#Primary_Sector#">		
+		<Hierarchy hasAll="true" primaryKey="amp_activity_id" allMemberCaption="#All_Primary_Sector#" allMemberName="All Primary Sectors" caption="#Primary_Sector#">		
 			<Table name="cached_v_sectors" />
 			<Level name="Primary Sector Scheme" column="sec_scheme_name"/>
 			<Level name="Primary Sector Name" column="sectorname" />
 		</Hierarchy>
 	</Dimension>
 	<Dimension name="Activity">
-		<Hierarchy hasAll="true" primaryKey="amp_activity_id" primaryKeyTable="cached_amp_activity" allMemberName="#All_Activities#" caption="#Activity#">
+		<Hierarchy hasAll="true" primaryKey="amp_activity_id" primaryKeyTable="cached_amp_activity" allMemberCaption="#All_Activities#" allMemberName="All Activities" caption="#Activity#">
 			<Table name="cached_amp_activity" />
 			<Level name="Activity Title" column="name" table="cached_amp_activity" uniqueMembers="true" />
 			<Level name="AMP ID" column="amp_id" table="cached_amp_activity" uniqueMembers="true"/>
 		</Hierarchy>
 	</Dimension>
 	<Dimension name="Donor Dates" type="TimeDimension">
-		<Hierarchy hasAll="true" allMemberName="#All_Donor_Dates#" primaryKey="amp_fund_detail_id" defaultMember="#Donor_Dates#">
+		<Hierarchy hasAll="true" allMemberName="All Periods" allMemberCaption="#All_Donor_Dates#" primaryKey="amp_fund_detail_id">
 			<Table name="cached_v_donor_date_hierarchy" />
 			<Level name="Year" column="year" levelType="TimeYears" type="Numeric" />
 			<Level name="Quarter" column="quarter" ordinalColumn="quarter" nameColumn="quarter_name" levelType="TimeQuarters" type="Numeric" />
 			<Level name="Month" column="month" uniqueMembers="false" ordinalColumn="month" nameColumn="month_name" levelType="TimeMonths" type="Numeric" />
 		</Hierarchy>
 	</Dimension>
+	
 	<Dimension name="Regions">
-		<Hierarchy hasAll="true" allMemberName="#All_Regions#" primaryKey="amp_activity_id" caption="#Regions#">
+		<Hierarchy hasAll="true" allMemberCaption="#All_Regions#" allMemberName="All Regions" primaryKey="amp_activity_id" caption="#Regions#">
 			<Table name="cached_v_regions"/>
 			<Level name="Region" column="region" table="cached_v_regions">
 				<NameExpression>
@@ -37,7 +38,7 @@
 	</Dimension>
 	
 	<Dimension name="Primary Program">
-		<Hierarchy hasAll="true" allMemberName="#All_Programs#" primaryKey="amp_activity_id" caption="#Primary_Program#">
+		<Hierarchy hasAll="true" allMemberCaption="#All_Programs#" allMemberName="All Programs" primaryKey="amp_activity_id" caption="#Primary_Program#">
 			<Table name="cached_v_primary_program">
 			</Table> 
 			<Level name="name" column="name" table="cached_v_primary_program">
@@ -50,7 +51,7 @@
 		</Hierarchy>
 	</Dimension>
 	<Dimension name="Secundary Program">
-		<Hierarchy hasAll="true" allMemberName="#All_Programs#" primaryKey="amp_activity_id" caption="#Secundary_Program#">
+		<Hierarchy hasAll="true" allMemberCaption="#All_Programs#" allMemberName="All Programs" primaryKey="amp_activity_id" caption="#Secundary_Program#">
 			<Table name="cached_v_secunday_program" />
 			<Level name="name" column="name" table="cached_v_secunday_program">
 				<NameExpression>
@@ -62,7 +63,7 @@
 		</Hierarchy>
 	</Dimension>
 	<Dimension name="Status">
-		<Hierarchy hasAll="true" allMemberName="#All_Status#" primaryKey="amp_activity_id" caption="#Status#">
+		<Hierarchy hasAll="true" allMemberCaption="#All_Status#" allMemberName="All Status" primaryKey="amp_activity_id" caption="#Status#">
 			<Table name="cached_v_status" />
 			<Level name="name" column="name" table="cached_v_status"/>
 		</Hierarchy>
@@ -222,7 +223,5 @@
 		<CalculatedMember name="Planned Expenditures" dimension="Measures" caption="#Planned_Expenditures#">
 			<Formula>IIf([Measures].[Sector Percentage] &gt; 0 AND [Measures].[Sector Percentage] &lt; 100,[Measures].[Raw Planned Expenditures] * [Measures].[Sector Percentage] / 100,[Measures].[Raw Planned Expenditures])</Formula>
 		</CalculatedMember>
-
-
 	</VirtualCube>
 </Schema>

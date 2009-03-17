@@ -198,7 +198,7 @@
 	}	
 	function buttonAdd(){
 		if(document.aimSelectSectorForm.sector.value != -1){
-			var postString		= generateFields(1);
+			var postString		= "edit=true&" + generateFields(1);
 			<digi:context name="commentUrl" property="context/aim/selectSectors.do"/>
 			var url = "<%=commentUrl %>";
 			YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
@@ -236,7 +236,7 @@
 				document.aimSelectSectorForm.subsectorLevel2.value = -1;
 			}
 		}
-		var postString		= generateFields(1);//"edit=true";
+		var postString		= "edit=true&" + generateFields(1);
 		<digi:context name="commentUrl" property="context/aim/selectSectors.do"/>
 		var url = "<%=commentUrl %>";
 		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);

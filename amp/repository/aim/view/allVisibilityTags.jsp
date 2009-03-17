@@ -114,10 +114,8 @@
 <feature:display name="Admin Topics Help" module="HELP"></feature:display> 
 <feature:display name="Admin" module="M & E"></feature:display> 
 <feature:display name="Alert tab" module="Messages"></feature:display> 
-<feature:display name="Alert tab" module="Messaging System"></feature:display> 
 <feature:display name="Applied Patches" module="ADMINISTRATIVE SECTION"></feature:display> 
 <feature:display name="Approval Tab" module="Messages"></feature:display> 
-<feature:display name="Approval Tab" module="Messaging System"></feature:display> 
 <feature:display name="Beneficiary Agency" module="Organizations"></feature:display> 
 <feature:display name="Budget" module="Project ID and Planning"></feature:display> 
 <feature:display name="Budget" module="Project Id And Planning"></feature:display>
@@ -155,6 +153,7 @@
 <feature:display name="Message Manager" module="ADMIN"></feature:display> 
 <feature:display name="Message tab" module="Messages"></feature:display>
 <feature:display name="My Messages" module="Messages"></feature:display> 
+<feature:display name="Messages" module="Messaging System"></feature:display> 
 <feature:display name="NPD Dashboard" module="National Planning Dashboard"></feature:display> 
 <feature:display name="NPD Programs" module="National Planning Dashboard"></feature:display> 
 <feature:display name="New Region Manager" module="ADMINISTRATIVE SECTION"></feature:display> 

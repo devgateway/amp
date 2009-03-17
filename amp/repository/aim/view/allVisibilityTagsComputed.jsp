@@ -123,7 +123,6 @@
 <feature:display name="Edit Activity" module="Previews"></feature:display> 
 <feature:display name="Enable Scrolling Reports" module="Report Generator"></feature:display> 
 <feature:display name="Event Tab" module="Messages"></feature:display> 
-<feature:display name="Event Tab" module="Messages"></feature:display> 
 <feature:display name="Executing Agency" module="Organizations"></feature:display> 
 <feature:display name="Filter Button" module="Report Generator"></feature:display> 
 <feature:display name="Financial Progress Tab" module="Funding"></feature:display> 
@@ -143,7 +142,6 @@
 <feature:display name="Message tab" module="Messages"></feature:display> 
 <feature:display name="Message tab" module="Messages"></feature:display> 
 <feature:display name="My Messages" module="Messages"></feature:display>
-<feature:display name="Messages" module="Messaging System"></feature:display> 
 <feature:display name="NPD Dashboard" module="National Planning Dashboard"></feature:display> 
 <feature:display name="NPD Programs" module="National Planning Dashboard"></feature:display> 
 <feature:display name="New Region Manager" module="ADMINISTRATIVE SECTION"></feature:display> 

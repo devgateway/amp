@@ -44,5 +44,4 @@ public final class MoConstants {
 	public static String PLANNED_DISBURSEMENTS = "Planned Disbursements";
 	public static String PLANNED_EXPENDITURES = "Planned Expenditures";
 	public static String ACTIVITY_COUNT = "Activity Count";
-
 }

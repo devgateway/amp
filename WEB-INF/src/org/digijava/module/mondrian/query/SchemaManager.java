@@ -14,6 +14,7 @@ import org.apache.commons.vfs.FileObject;
 import org.apache.commons.vfs.FileSystemManager;
 import org.apache.commons.vfs.VFS;
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 
@@ -101,6 +102,7 @@ public class SchemaManager extends FilterDynamicSchemaProcessor implements
 			shema = shema.replaceAll("#Planned_Disbursements#", TranslatorWorker.translateText(MoConstants.PLANNED_DISBURSEMENTS, locale, siteId));
 			shema = shema.replaceAll("#Planned_Expenditures#", TranslatorWorker.translateText(MoConstants.PLANNED_EXPENDITURES, locale, siteId));
 			
+			shema = shema.replaceAll("#No_Data#", TranslatorWorker.translateText(ArConstants.UNALLOCATED, locale, siteId));
 			
 		} catch (WorkerException e) {
 			// TODO Auto-generated catch block

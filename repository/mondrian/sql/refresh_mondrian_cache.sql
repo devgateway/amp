@@ -8,10 +8,10 @@ CREATE TABLE cached_v_donor_date_hierarchy AS SELECT * FROM v_donor_date_hierarc
 DROP TABLE IF EXISTS cached_v_donor_funding;
 CREATE TABLE cached_v_donor_funding AS SELECT * FROM v_donor_funding;
 DROP TABLE IF EXISTS cached_v_regions;
-CREATE TABLE cached_v_regions AS SELECT * FROM v_regions;
+CREATE TABLE cached_v_regions AS SELECT * FROM v_regions_cached;
 DROP TABLE IF EXISTS cached_v_primary_program;
-CREATE TABLE cached_v_primary_program AS SELECT * FROM v_primaryprogram;
+CREATE TABLE cached_v_primary_program AS SELECT * FROM v_primaryprogram_cached;
 DROP TABLE IF EXISTS cached_v_secunday_program;
-CREATE TABLE cached_v_secunday_program AS SELECT * FROM v_secondaryprogram;
+CREATE TABLE cached_v_secunday_program AS SELECT * FROM v_secondaryprogram_cached;
 DROP TABLE IF EXISTS cached_v_status;
 CREATE TABLE cached_v_status AS SELECT * FROM v_status;

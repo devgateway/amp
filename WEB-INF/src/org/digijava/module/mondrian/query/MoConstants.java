@@ -17,6 +17,8 @@ public final class MoConstants {
 	public static String SECUNDARY_PROGRAMS = "Secondary Program";
 	public static String STATUS = "Status";
 	public static String DONOR = "Donor";
+	public static String DONOR_TYPES = "Donor Types";
+	public static String DONOR_GROUP = "Donor Group";
 	public static String FINANCING_INTRUMENT= "Financing Instrument";
 	public static  String TERMS_OF_ASSISTANCE= "Terms of Assistance";
 	public static String SECTORS= "Sectors";
@@ -28,6 +30,8 @@ public final class MoConstants {
 	public static String ALL_PROGRAMS = "All Programs";
 	public static String ALL_STATUS = "All Status";
 	public static String ALL_DONOR = "All Donors";
+	public static String ALL_DONOR_TYPES = "All Donors Types";
+	public static String ALL_DONOR_GROUP = "All Donors Group";
 	public static String ALL_FINANCING_INTRUMENT= "All Financing Instruments";
 	public static String ALL_TERMS_OF_ASSISTANCE= "All Terms of Assistance";
 	//Measures

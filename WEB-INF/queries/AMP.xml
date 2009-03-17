@@ -88,13 +88,25 @@
 			<SQL dialect="mysql"><![CDATA[cached_v_donor_funding.amp_activity_id IN (@donorquery)]]> </SQL>
 		</Table>
 		<Dimension name="Donor">
-			<Hierarchy hasAll="true" allLevelName="#All_Donors#" caption="#Donor#">
+			<Hierarchy hasAll="true" allLevelName="#All_Donor#" caption="#Donor#">
 				<!-- No table element here. Fact table is assumed. -->
-				<Level name="DonorType" column="donor_type_name" />
-				<Level name="DonorGroup" column="org_grp_name" />
 				<Level name="DonorName" column="donor_name" />
 			</Hierarchy>
 		</Dimension>
+		<Dimension name="Donor Group">
+			<Hierarchy hasAll="true" allLevelName="#All_Donor_Group#" caption="#Donor_Group#">
+				<!-- No table element here. Fact table is assumed. -->
+				<Level name="DonorGroup" column="org_grp_name" />
+			</Hierarchy>
+		</Dimension>
+		
+		<Dimension name="Donor Types">
+			<Hierarchy hasAll="true" allLevelName="#All_Donors_types#" caption="#Donors_types#">
+				<!-- No table element here. Fact table is assumed. -->
+				<Level name="DonorType" column="donor_type_name" />
+			</Hierarchy>
+		</Dimension>
+		
 		<Dimension name="Financing Instrument">
 			<Hierarchy hasAll="true" allLevelName="#All_Financing_Instruments#" caption="#Financing_Instrument#">
 				<!-- No table element here. Fact table is assumed. -->
@@ -180,6 +192,8 @@
 		<VirtualCubeDimension name="Financing Instrument" cubeName="Donor Funding" />
 		<VirtualCubeDimension name="Terms of Assistance" cubeName="Donor Funding" />
 		<VirtualCubeDimension name="Donor" cubeName="Donor Funding" />
+		<VirtualCubeDimension name="Donor Types" cubeName="Donor Funding" />
+		<VirtualCubeDimension name="Donor Group" cubeName="Donor Funding" />
 		<VirtualCubeMeasure cubeName="Sectors" name="[Measures].[Sector Percentage]" />
 		
 		<VirtualCubeMeasure cubeName="Donor Funding" name="[Measures].[Raw Actual Commitments]" visible="false" />

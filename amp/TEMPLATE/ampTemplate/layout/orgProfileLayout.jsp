@@ -22,6 +22,9 @@
                function exportPDF() {
                    openURLinResizableWindow("/orgProfile/pdfExport.do", 780, 500);
                }
+                function exportWord() {
+                   openURLinResizableWindow("/orgProfile/wordExport.do", 780, 500);
+               }
           </script>
         <style>
             .tableHeaderCls {
@@ -81,6 +84,11 @@
                                                     <TD>
                                                         <a target="_blank" onclick="exportPDF(); return false;">
                                                             <digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/pdf.gif" border="0" alt='Export to PDF'/>
+                                                        </a>
+                                                    </TD>
+                                                     <TD>
+                                                        <a target="_blank" onclick="exportWord(); return false;">
+                                                            <digi:img width="17" height="20" hspace="2" vspace="2" src="images/icons/doc.gif" border="0" alt='Export to Word'/>
                                                         </a>
                                                     </TD>
                                                      <TD>

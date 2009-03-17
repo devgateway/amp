@@ -28,6 +28,7 @@
         
             <action name="gisWidgetTeaserForm" path="/widget/widgetTeaser" type="org.digijava.module.widget.action.WidgetTeaser"/>
             <action name="orgProfOrgProfileFilterForm" path="/orgProfile/pdfExport" type="org.digijava.module.orgProfile.action.ExportToPDF"/>
+            <action name="orgProfOrgProfileFilterForm" path="/orgProfile/wordExport" type="org.digijava.module.orgProfile.action.ExportToWord"/>
         
                
         </action-mappings>

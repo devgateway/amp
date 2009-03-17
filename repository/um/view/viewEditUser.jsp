@@ -49,26 +49,26 @@ function validateUserInfo(){
 	var errorMsg='';
 	
 	if(isInvalid(userMail)){
-		errorMsg='<digi:trn>Email Is Blank</digi:trn>';
+		errorMsg='<digi:trn jsFriendly="true">Email Is Blank</digi:trn>';
 		alert(errorMsg);
 		return false;
 	}else if(userMail.indexOf('@')==-1 || userMail.indexOf('.')==-1){
-		errorMsg='<digi:trn>Please enter valid email</digi:trn>';
+		errorMsg='<digi:trn jsFriendly="true" >Please enter valid email</digi:trn>';
 		alert(errorMsg);
 		return false;
 	}
 	if(isInvalid(firstName)){
-		errorMsg='<digi:trn>FirstName Is Blank</digi:trn>';
+		errorMsg='<digi:trn jsFriendly="true" >FirstName Is Blank</digi:trn>';
 		alert(errorMsg);
 		return false;
 	}
 	if(isInvalid(lastName)){
-		errorMsg='<digi:trn>LastName Is Blank</digi:trn>';
+		errorMsg='<digi:trn jsFriendly="true">LastName Is Blank</digi:trn>';
 		alert(errorMsg);
 		return false;
 	}
 	if(country=='-1'){
-		errorMsg='<digi:trn>Please Select Country</digi:trn>';
+		errorMsg='<digi:trn jsFriendly="true" >Please Select Country</digi:trn>';
 		alert(errorMsg);
 		return false;
 	}
@@ -84,14 +84,14 @@ function isInvalid(field){
 </script>
 <digi:form action="/viewEditUser.do" method="post">
   <html:hidden name="umViewEditUserForm" property="event" styleId="event"/>
-  <table bgColor=#ffffff cellPadding=5 cellSpacing=1 width=705>
+  <table bgColor="#ffffff" cellPadding="5" cellSpacing="1" width="705">
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
+		<td class="r-dotted-lg" width="14">&nbsp;</td>
 		<td align=left class=r-dotted-lg vAlign=top width=752>
-			<table cellPadding=5 cellSpacing=0 width="100%">
+			<table cellPadding="5" cellSpacing="0" width="100%">
 				<tr>
 					<!-- Start Navigation -->
-					<td height=33><span class=crumb>
+					<td height="33"><span class=crumb>
 
 						<c:set var="translation">
 				            <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
@@ -147,27 +147,27 @@ function isInvalid(field){
 					</td>
 			    </tr>
    				<tr>
-					<td noWrap width=100% vAlign="top">
-					<table width="740" cellspacing=1 cellSpacing=1>
+					<td noWrap width="100%" vAlign="top">
+					<table width="740" cellspacing="1" cellSpacing="1">
 					<tr>
-						<td noWrap width=616 vAlign="top">
-							<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class="box-border-nopadding" width="100%">
+						<td noWrap width="616" vAlign="top">
+							<table bgColor="#ffffff" cellPadding="0" cellSpacing="0" class="box-border-nopadding" width="100%">
 								
-								<tr bgColor=#f4f4f2>
+								<tr bgColor="#f4f4f2">
 									<td valign="top">
-										<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="562" border=0>
+										<table align="center" bgColor="#f4f4f2" cellPadding="0" cellSpacing="0" width="562" border="0">
 											<tr>
-												<td bgColor=#ffffff class=box-border width="560">
-													<table border=0 cellPadding=1 cellSpacing=1 class="box-border" width="100%">
-														<tr bgColor=#dddddb>
-															<td bgColor=#dddddb height="20" align="center" colspan="5">
+												<td bgColor="#ffffff" class="box-border" width="560">
+													<table border="0" cellPadding="1" cellSpacing="1" class="box-border" width="100%">
+														<tr bgColor="#dddddb">
+															<td bgColor="#dddddb" height="20" align="center" colspan="5">
 																 <b><digi:trn key="aim:viewEditUser:edit">Edit</digi:trn> ${umViewEditUserForm.name}</b>
 															</td>
 														</tr>
 														<!-- Page Logic -->
 														<tr>
 															<td width="100%">
-																<table width="563" border=0	 bgColor=#f4f4f2 height="363">
+																<table width="563" border="0" bgColor="#f4f4f2" height="363">
 																	<tr>
 																		<td width="169" align="right" height="30">
 																			<digi:trn key="aim:viewEditUser:firstName">First name</digi:trn>
@@ -333,19 +333,18 @@ function isInvalid(field){
 																	<tr>
 																	    <td width="380" height="30" colspan="2" align="center">
                                                               				<c:set var="translation">
-																                <digi:trn key="aim:viewEditUser:saveButton">Save</digi:trn>
+																                <digi:trn key="aim:viewEditUser:saveButton" jsFriendly="true">Save</digi:trn>
 																              </c:set>
-																              <input type="button" value="${translation}" onclick="goAction('save');" style="font-family:verdana;font-size:11px;width:60px;"/>
+																              <input type="button" value="${translation}" onclick="goAction('save');" style="font-family:verdana;font-size:11px;min-width:60px;"/>
 																
 																              <c:set var="translation">
-																                <digi:trn key="aim:viewEditUser:cancelButton">
+																                <digi:trn key="aim:viewEditUser:cancelButton" jsFriendly="true">
 																                Cancel
 																                </digi:trn>
 																              </c:set>
 																              <input type="button" value="${translation}" onclick="history.back();" style="font-family:verdana;font-size:11px;width:60px;"/>
 																		</td>
-																	</tr>
-																	
+																	</tr>																	
 																	<tr>
 															            <td>&nbsp;</td>
 															          </tr>
@@ -373,7 +372,7 @@ function isInvalid(field){
 																	</tr>
 																	<tr>
 																		<c:set var="errMsg">
-																           <digi:trn key="aim:viewEditUser:errorMessage">
+																           <digi:trn key="aim:viewEditUser:errorMessage" jsFriendly="true">
 																              Either fields are blank or their values do not match
 																            </digi:trn>
 																        </c:set>
@@ -382,7 +381,7 @@ function isInvalid(field){
 																		</td>
 																		<td width="169" height="30" colspan="2" align="left">
 																			<c:set var="translation">
-																                <digi:trn key="aim:viewEditUser:resetPasswordButton">Reset </digi:trn>
+																                <digi:trn key="aim:viewEditUser:resetPasswordButton" jsFriendly="true">Reset </digi:trn>
 																              </c:set>
                                                               				<input type="button" value="${translation}" onclick="resetPasswordFields()" style="font-family:verdana;font-size:11px;"/></td>
 																		</td>
@@ -399,8 +398,6 @@ function isInvalid(field){
 								</tr>
         </table>
         <br />
-
-        
 </digi:form>
 
 

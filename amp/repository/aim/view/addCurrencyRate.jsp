@@ -48,7 +48,6 @@
 		    context: ["showbtn", "tl", "bl"]
 		    });
 	var panelStart=0;
-	//var ready=false;
 	function initCurrencyScripts() {
 		var msg='\n<digi:trn key="aim:addCurrencyRate">Add Currency Rate</digi:trn>';
 		myPanel.setHeader(msg);
@@ -166,21 +165,24 @@
 	}
 
 	function myAddExchangeRate(){
+		showPanelLoading();
 		var postString		= "reset=true&"+generateFields(1);
-		//alert(postString);
-		ready=true;
 		<digi:context name="addExchangeRate" property="context/module/moduleinstance/showAddExchangeRates.do" />
 		var url = "<%=addExchangeRate %>?"+postString;
 		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
 	}
 	function myEditExchangeRate(date,code){
-		//var postString		= "reset=true&"+generateFields(1);
+		showPanelLoading();
 		var postString="doAction=showRates&updateCRateCode="+code+"&updateCRateDate="+date+"&reset=false";
-		//alert(postString);
-		ready=true;
 		<digi:context name="addExchangeRate" property="context/module/moduleinstance/showAddExchangeRates.do" />
 		var url = "<%=addExchangeRate %>?"+postString;
 		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+	}
+	function showPanelLoading(){
+		  var content = document.getElementById("myContentContent");
+		  content.innerHTML = "<div style='text-align: center'>" + "Loading..." + 
+			"... <br /> <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>";		
+		  showContent();
 	}
 
 	-->
@@ -225,7 +227,6 @@ function saveRate() {
 	var valid = validate();
 	if (valid == true) {
 		var postString		= generateFields(2);
-
 		<digi:context name="addExchangeRate" property="context/module/moduleinstance/saveCurrencyRate.do" />
 		var url = "<%=addExchangeRate %>";
 		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
@@ -239,7 +240,8 @@ function reload() {
 }
 
 function load() {
-	document.aimCurrencyRateFormPop.updateCRateCode.focus();
+	if(document.getElementsByName('updateCRateCode')[0]!=null)
+		document.aimCurrencyRateFormPop.updateCRateCode.focus();
 }
 
 function closePopup() {

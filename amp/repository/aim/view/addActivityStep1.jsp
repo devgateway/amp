@@ -122,6 +122,8 @@
 
 	function commentWin(commentId){
 		delCommentContent=false;
+        showContent( "<div style='text-align: center'>" + "Loading" + 
+		"... <br /> <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>" );
 		<digi:context name="commentUrl" property="context/module/moduleinstance/viewComment.do" />
 		var url = "<%=commentUrl %>?comment=" + commentId + "&edit=" + "true";
 		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);

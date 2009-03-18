@@ -250,16 +250,7 @@ public class ExportToWord extends Action {
                                     Project project = projectIter.next();
                                     RtfCell title = new RtfCell(new Paragraph(project.getTitle(), plainFont));
                                     RtfCell amount = new RtfCell(new Paragraph(project.getAmount(), plainFont));
-                                    Set<AmpActivitySector> sectors = project.getSectors();
-                                    Iterator<AmpActivitySector> sectorIter = sectors.iterator();
-                                    String sectorsName = "";
-                                    while (sectorIter.hasNext()) {
-                                        sectorsName += " " + sectorIter.next().getSectorId().getName() + ",";
-                                    }
-                                    if (sectorsName.length() > 0) {
-                                        sectorsName = sectorsName.substring(0, sectorsName.length() - 1);
-                                    }
-                                    RtfCell sectorsCell = new RtfCell(new Paragraph(sectorsName, plainFont));
+                                    RtfCell sectorsCell = new RtfCell(new Paragraph(project.getSectorNames(), plainFont));
                                     if (count % 2 == 0) {
                                         title.setBackgroundColor(cellColor);
                                         amount.setBackgroundColor(cellColor);
@@ -278,7 +269,7 @@ public class ExportToWord extends Action {
                             case WidgetUtil.ORG_PROFILE_PARIS_DECLARATION:
                                 // creating Paris declaration table
 
-                                // ---  creating heading --//
+                                // creating heading 
                                 float widths[] = new float[]{10f, 40f, 10f, 10f, 10f, 10f, 10f};
 
                                 parisDecTbl = new Table(widths.length);
@@ -305,7 +296,7 @@ public class ExportToWord extends Action {
                                 value.setBorderColor(borderColor);
                                 target.setBorderColor(borderColor);
 
-                                //--adding headers--//
+                                //adding headers
                                 parisDecTbl.addCell(parisDecTitle);
                                 parisDecTbl.addCell(allDonorsCell);
                                 parisDecTbl.addCell(selectedOrgCell);
@@ -315,9 +306,9 @@ public class ExportToWord extends Action {
                                 parisDecTbl.addCell(baseline);
                                 parisDecTbl.addCell(value);
                               
-                                //-- end of creating heading--//
+                                //end of creating heading
 
-                                //-- creating content--//
+                                // creating content
                                 
 
                                 Collection<AmpAhsurveyIndicator> indicators = DbUtil.getAllAhSurveyIndicators();
@@ -444,7 +435,7 @@ public class ExportToWord extends Action {
                                 }
 
 
-                                //--end of creating content--//
+                                //--end of creating content
 
 
 

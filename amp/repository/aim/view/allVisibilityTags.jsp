@@ -571,7 +571,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Name" feature="Admin - Component Type"></field:display> 
 
 
-<field:display name="National Plan Objective" feature="NPD Programs"></field:display> 
+<field:display name="National Planning Objectives" feature="NPD Programs"></field:display> 
 <field:display name="National Planning Objectives Level 1" feature="NPD Programs"></field:display> 
 <field:display name="National Planning Objectives Level 2" feature="NPD Programs"></field:display> 
 <field:display name="National Planning Objectives Level 3" feature="NPD Programs"></field:display> 
@@ -581,10 +581,24 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="National Planning Objectives Level 7" feature="NPD Programs"></field:display> 
 <field:display name="National Planning Objectives Level 8" feature="NPD Programs"></field:display> 
 
+<field:display name="Primary Program Level 1" feature="NPD Programs"></field:display> 
+<field:display name="Primary Program Level 2" feature="NPD Programs"></field:display> 
+<field:display name="Primary Program Level 3" feature="NPD Programs"></field:display> 
+<field:display name="Primary Program Level 4" feature="NPD Programs"></field:display> 
+<field:display name="Primary Program Level 5" feature="NPD Programs"></field:display> 
+<field:display name="Primary Program Level 6" feature="NPD Programs"></field:display> 
+<field:display name="Primary Program Level 7" feature="NPD Programs"></field:display> 
+<field:display name="Primary Program Level 8" feature="NPD Programs"></field:display> 
 
+<field:display name="Secondary Program Level 1" feature="NPD Programs"></field:display> 
+<field:display name="Secondary Program Level 2" feature="NPD Programs"></field:display> 
+<field:display name="Secondary Program Level 3" feature="NPD Programs"></field:display> 
+<field:display name="Secondary Program Level 4" feature="NPD Programs"></field:display> 
+<field:display name="Secondary Program Level 5" feature="NPD Programs"></field:display> 
+<field:display name="Secondary Program Level 6" feature="NPD Programs"></field:display> 
+<field:display name="Secondary Program Level 7" feature="NPD Programs"></field:display> 
+<field:display name="Secondary Program Level 8" feature="NPD Programs"></field:display> 
 
-<field:display name="National Plan Objective" feature="Program"></field:display> 
-<field:display name="National Planning Objectives" feature="NPD Programs"></field:display> 
 
 <field:display name="Parent National Planning Objectives" feature="NPD Programs"></field:display> 
 <field:display name="Objective Comments" feature="Identification"></field:display> 

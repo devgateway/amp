@@ -29,6 +29,9 @@ import org.digijava.module.um.form.AddUserForm;
 import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.um.util.DbUtil;
 
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.persistence.WorkerException;
+
 public class RegisterUser extends Action {
 
 	private static Logger logger = Logger.getLogger(RegisterUser.class);
@@ -121,13 +124,42 @@ public class RegisterUser extends Action {
 				//return (new ActionForward(mapping.getInput()));
 				return (mapping.getInputForward());
 			} else {
+				
+ 				
+ 				String des1 = "Welcome to AMP!";
+ 				String des2 = "AMP Administrator has created your user profile.";
+ 				String des3 = "Your login information:";
+ 				String des4 = "Username: ";
+ 				String cri1 = "password: ";
+ 				String pti1 = "Please change your password when you first login to AMP in order to keep it private.";
+				
+				
+
+				TranslatorWorker transwob = new TranslatorWorker();
+				String siteId = RequestUtils.getSite(request).getId().toString();
+				String langCode= RequestUtils.getNavigationLanguage(request).getCode();
+				try { 
+				des1 = transwob.translateText(des1, null, langCode, siteId);
+				des2 = transwob.translateText(des2, null, langCode, siteId);
+				des3 = transwob.translateText(des3, null, langCode, siteId);
+				des4 = transwob.translateText(des4, null, langCode, siteId);
+				cri1 = transwob.translateText(cri1, null, langCode, siteId); 
+				pti1 = transwob.translateText(pti1, null, langCode, siteId); 
+				
+				} 
+				catch (WorkerException e1){
+				e1.printStackTrace(); 
+				}
+				
+				String des = des1+ '\n'+'\n'+des2 +'\n'+ des3 +'\n'+'\n'+'\t'+'\t'+ des4;
+				String cri = '\n'+'\t'+'\t'+cri1;
+				String pti = ""+'\n'+'\n'+ pti1;
+				
 				DbUtil.registerUser(user);
                 if(userRegisterForm.isSendEmail()){
-                    String description = "Welcome to AMP!"+ '\n'+'\n'+"AMP Administrator has created your user profile." +'\n'+ "Your login information:" +
-                    '\n'+'\n'+'\t'+'\t'+ "Username: " + user.getEmail() +
-                    '\n'+'\t'+'\t'+"password: " + userRegisterForm.getPassword()+
-                    '\n'+'\n'+"Please change your password when you first login to AMP in order to keep it private.";
-                	
+		    
+                    String description = des + user.getEmail() + cri + userRegisterForm.getPassword()+pti;
+
                     DgEmailManager.sendMail(user.getEmail(), "Registration Confirmation", description);
                 }	
                   

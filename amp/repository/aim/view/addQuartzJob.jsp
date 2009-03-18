@@ -227,12 +227,12 @@ function typeChanged(value){
             <table style="border:dashed 1px;width:400px;">
               <tr>
                 <td colspan="2">
-                  <html:radio name="quartzJobManagerForm" property="triggerType" value="0" onclick="typeChanged(0);" />Secondly
-                  <html:radio name="quartzJobManagerForm" property="triggerType" value="1" onclick="typeChanged(1);" />Minutely
-                  <html:radio name="quartzJobManagerForm" property="triggerType" value="2" onclick="typeChanged(2);" />Hourly
-                  <html:radio name="quartzJobManagerForm" property="triggerType" value="3" onclick="typeChanged(3);" />Daily
-                  <html:radio name="quartzJobManagerForm" property="triggerType" value="4" onclick="typeChanged(4);" />Weekly
-                  <html:radio name="quartzJobManagerForm" property="triggerType" value="5" onclick="typeChanged(5);" />Monthly
+                  <html:radio name="quartzJobManagerForm" property="triggerType" value="0" onclick="typeChanged(0);" /><digi:trn key="qSecondly">Secondly</digi:trn>
+                  <html:radio name="quartzJobManagerForm" property="triggerType" value="1" onclick="typeChanged(1);" /><digi:trn key="qMinutely">Minutely</digi:trn>
+                  <html:radio name="quartzJobManagerForm" property="triggerType" value="2" onclick="typeChanged(2);" /><digi:trn key="qHourly">Hourly</digi:trn>
+                  <html:radio name="quartzJobManagerForm" property="triggerType" value="3" onclick="typeChanged(3);" /><digi:trn key="qDaily">Daily</digi:trn>
+                  <html:radio name="quartzJobManagerForm" property="triggerType" value="4" onclick="typeChanged(4);" /><digi:trn key="qWeekly">Weekly</digi:trn>
+                  <html:radio name="quartzJobManagerForm" property="triggerType" value="5" onclick="typeChanged(5);" /><digi:trn key="qMonthly">Monthly</digi:trn>
                 </td>
               </tr>
               <tr>

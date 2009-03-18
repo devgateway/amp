@@ -4678,7 +4678,7 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select distinct org from "
                 + AmpOrgGroup.class.getName() + " org "
-                + " where lower(org.orgGrpName) like '%" + keyword + "%'";
+                + " where lower(org.orgGrpName) like '%" + keyword + "%' or lower(org.orgGrpCode) like '%"+keyword+"%'";
             Query qry = session.createQuery(queryString);
             col = qry.list();
         } catch (Exception ex) {

@@ -24,9 +24,7 @@
                    <td nowrap><digi:link module="aim" href="/selectActivityTabs.do~ampActivityId=${project.activityId}">${project.title}</digi:link></td>
                <td align="center">${project.amount}</td>
                <td>
-                <c:forEach var="sector" items="${project.sectors}" varStatus="index">
-                 ${sector.sectorId.name} <c:if test="${!index.last}">,</c:if>
-               </c:forEach>
+                ${project.sectorNames}
                </td>
                </tr>
           </c:forEach>

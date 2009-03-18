@@ -65,6 +65,12 @@ public class ExportToPDF extends Action {
             Iterator<AmpDaWidgetPlace> placeIter = orgPlaces.iterator();
             doc.open();
             PdfPTable mainLayout = new PdfPTable(2);
+            com.lowagie.text.Font pageTitleFont = new com.lowagie.text.Font(com.lowagie.text.Font.TIMES_ROMAN, 24,com.lowagie.text.Font.BOLD);
+            PdfPCell pageTitleCell=new PdfPCell(new Paragraph("Org. Profile \n\n", pageTitleFont));
+            pageTitleCell.setColspan(2);
+            pageTitleCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            pageTitleCell.setBorder(PdfPCell.NO_BORDER);
+            mainLayout.addCell(pageTitleCell);
             mainLayout.setWidthPercentage(100);
            
             while (placeIter.hasNext()) {
@@ -124,17 +130,18 @@ public class ExportToPDF extends Action {
                                  //create summary table
                                 
                                 orgSummaryTbl=new PdfPTable(2);
+                                orgSummaryTbl.setWidthPercentage(100);
                                 PdfPCell summaryTitleCell = new PdfPCell(new Paragraph("Summary",headerFont));
                                 summaryTitleCell.setBackgroundColor(titleColor);
                                 summaryTitleCell.setColspan(2);
                                 summaryTitleCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                                 orgSummaryTbl.addCell(summaryTitleCell);
-                                
+
                                 PdfPCell grTitleCell = new PdfPCell();
                                 grTitleCell.addElement(new Paragraph("Group:",plainFont));
                                 grTitleCell.setBackgroundColor(cellColor);
                                 orgSummaryTbl.addCell(grTitleCell);
-                               
+
                                 PdfPCell grCell = new PdfPCell();
                                 grCell.setBackgroundColor(cellColor);
                                 grCell.addElement(new Paragraph(filter.getOrgGroup().getOrgGrpName(),plainFont));
@@ -204,7 +211,7 @@ public class ExportToPDF extends Action {
                                 orgContactNameCell.addElement(new Paragraph(filter.getOrganization().getContactPersonName(),plainFont));
                                 orgContactNameCell.setBackgroundColor(cellColor);
                                 orgSummaryTbl.addCell(orgContactNameCell);
-                                
+
                                 PdfPCell orgPhoneTitleCell = new PdfPCell();
                                 orgPhoneTitleCell.addElement(new Paragraph("Contact Phone:",plainFont));
                                 orgSummaryTbl.addCell(orgPhoneTitleCell);
@@ -223,7 +230,8 @@ public class ExportToPDF extends Action {
                                 orgSummaryTbl.addCell(orgEmailCell);
 
                                 //create largest projects table
-                                largetsProjectsTbl=new PdfPTable(3);
+                                largetsProjectsTbl=new PdfPTable(new float[]{25,20,60});
+                                largetsProjectsTbl.setWidthPercentage(100);
                                 PdfPCell largestProjectsTitle = new PdfPCell(new Paragraph("5 Largest projects ("+(filter.getYear()-1)+")",headerFont));
                                 largestProjectsTitle.setBackgroundColor(titleColor);
                                 largestProjectsTitle.setColspan(3);
@@ -251,16 +259,7 @@ public class ExportToPDF extends Action {
                                     Project project=projectIter.next();
                                     PdfPCell title = new PdfPCell(new Paragraph(project.getTitle(),plainFont));
                                     PdfPCell amount = new PdfPCell(new Paragraph(project.getAmount(),plainFont));
-                                    Set<AmpActivitySector>sectors=project.getSectors();
-                                    Iterator<AmpActivitySector> sectorIter=sectors.iterator();
-                                    String sectorsName="";
-                                    while( sectorIter.hasNext()){
-                                        sectorsName+=" " +sectorIter.next().getSectorId().getName()+",";
-                                    }
-                                    if(sectorsName.length()>0){
-                                         sectorsName=sectorsName.substring(0, sectorsName.length()-1);
-                                    }
-                                    PdfPCell sectorsCell = new PdfPCell(new Paragraph(sectorsName,plainFont));
+                                    PdfPCell sectorsCell = new PdfPCell(new Paragraph(project.getSectorNames(),plainFont));
                                     if(count%2==0){
                                         title.setBackgroundColor(cellColor);
                                         amount.setBackgroundColor(cellColor);
@@ -268,7 +267,6 @@ public class ExportToPDF extends Action {
                                     }
                                   
                                     largetsProjectsTbl.addCell(title);
-                                    amount.setNoWrap(true);
                                     largetsProjectsTbl.addCell(amount);
                                     largetsProjectsTbl.addCell(sectorsCell);
                                     count++;
@@ -279,7 +277,7 @@ public class ExportToPDF extends Action {
                                case WidgetUtil.ORG_PROFILE_PARIS_DECLARATION:
                                    // creating Paris declaration table
 
-                                   // ---  creating heading --//
+                                   /*  creating heading */
                                    float widths[]=new float[]{10f,40f,10f,10f,10f,10f,10f};
 
                                    parisDecTbl=new PdfPTable(widths.length);
@@ -511,22 +509,20 @@ public class ExportToPDF extends Action {
                     } else {
                         PdfPCell cell = new PdfPCell();
                         cell.setBorder(PdfPCell.NO_BORDER);
-                        cell.setPaddingRight(4);
-                        cell.setPaddingLeft(4);
                         mainLayout.addCell(cell);
                     }
                 } else {
                     PdfPCell cell = new PdfPCell();
                     cell.setBorder(PdfPCell.NO_BORDER);
-                    cell.setPaddingRight(4);
-                    cell.setPaddingLeft(4);
                     mainLayout.addCell(cell);
                 }
             }
             mainLayout.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
             //empty cell
             mainLayout.addCell("");
+         //   mainLayout.writeSelectedRows(0, -1, 50, 50, writer.getDirectContent());
             doc.add(mainLayout);
+
             doc.close();
             response.setContentLength(baos.size());
             ServletOutputStream out = response.getOutputStream();
@@ -538,4 +534,4 @@ public class ExportToPDF extends Action {
 
         return null;
     }
-}
+        }

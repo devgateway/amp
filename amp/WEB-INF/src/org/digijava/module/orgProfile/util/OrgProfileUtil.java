@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 
 
+import java.util.Set;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
@@ -21,6 +22,7 @@ import org.hibernate.Session;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.orgProfile.helper.Project;
@@ -446,7 +448,16 @@ public class OrgProfileUtil {
                 }
                 List<AmpFundingDetail> details = query.list();
                 Project project = new Project();
-                project.setSectors(activity.getSectors());
+                Set<AmpActivitySector> sectors = activity.getSectors();
+                Iterator<AmpActivitySector> sectorIter = sectors.iterator();
+                String sectorsName = "";
+                while (sectorIter.hasNext()) {
+                    sectorsName += " " + sectorIter.next().getSectorId().getName() + ",";
+                }
+                if (sectorsName.length() > 0) {
+                    sectorsName = sectorsName.substring(0, sectorsName.length() - 1);
+                }
+                project.setSectorNames(sectorsName);
                 FundingCalculationsHelper cal = new FundingCalculationsHelper();
                 cal.doCalculations(details, currCode);
 

@@ -74,22 +74,12 @@ function validate(field) {
 }
 
 function selectLocation() {
-  openNewWindow(600, 500);
-  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do?edit=false" />
-  document.aimEditActivityForm.action = "<%= selectLoc %>";
-  document.aimEditActivityForm.target = popupPointer.name;
-  document.aimEditActivityForm.submit();
+	myAddLocation("edit=false");
 }
 
 
  function addSectors(editAct,configId) {
-/*  openNewWindow(600, 450);
-  document.aimEditActivityForm.action = "/selectSectors.do?edit=true&configId="+configId;
-  document.aimEditActivityForm.target = popupPointer.name;
-  document.aimEditActivityForm.submit();
-*/ 
-     //alert("configId="+configId);
-	 myAddSectors("edit=true&configId="+configId);	  
+	myAddSectors("edit=true&configId="+configId);	  
 }
 
 function resetAll(){
@@ -99,17 +89,6 @@ function resetAll(){
   document.aimEditActivityForm.submit();
   return true;
 }
-
-function removeSelLocations(){
-  var flag = validate(1);
-  if (flag == false) return false;
-  <digi:context name="remLocs" property="context/module/moduleinstance/removeSelLocations.do?edit=true" />
-  document.aimEditActivityForm.action = "<%= remLocs %>";
-  document.aimEditActivityForm.target = "_self"
-  document.aimEditActivityForm.submit();
-  return true;
-}
-
 
 function removeAllLocations(){
   try{

@@ -209,6 +209,27 @@
 			alert("Please, select a sector firts!");
 		}
 	}
+	function generateFieldsLocation(){
+		var ret="";
+		"location.locationReset="          +document.getElementsByName("location.locationReset")[0].value+"&"+
+		"location.parentLocId="          +document.getElementsByName("location.parentLocId")[0].value;
+		var opt = document.getElementsByName('location.userSelectedLocs')[0].length
+		for(var i=0; i< opt; i++){
+			if(document.getElementsByName('location.userSelectedLocs')[0].options[i].selected==true){
+				ret+="&location.userSelectedLocs="+document.getElementsByName('location.userSelectedLocs')[0].options[i].value;
+			}
+		}
+		return ret;
+	}
+	function buttonAddLocation(){
+		var postString		= generateFieldsLocation();
+		<digi:context name="commentUrl" property="context/aim/locationSelected.do"/>
+		var url = "<%=commentUrl %>";
+		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
+		checkAndClose=true;
+		document.aimEditActivityForm.submit();
+	}
+
 	function resetSectors(){
 		document.aimSelectSectorForm.sector.value = -1
 		if(document.aimSelectSectorForm.subsectorLevel1!=null){
@@ -373,16 +394,38 @@
 		else 
 			return false;
 	}
-
+	function showPanelLoading(){
+		  var content = document.getElementById("mySectorContent");
+		  content.innerHTML = "<div style='text-align: center'>" + "Loading..." + 
+			"... <br /> <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>";		
+		  showContent();
+	}
 	function myAddSectors(params) {
 		//alert(params);
-	  
-	  <digi:context name="commentUrl" property="context/aim/selectSectors.do" />
-
-	  var url = "<%=commentUrl %>";
-	  YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, params);
-	  
+		showPanelLoading();
+		<digi:context name="commentUrl" property="context/aim/selectSectors.do" />
+		var url = "<%=commentUrl %>";
+		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, params);
 	}
+	function myAddLocation(params) {
+		//alert(params);
+		showPanelLoading();
+		<digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do" />	  
+		var url = "<%=selectLoc %>";
+		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, params);
+	}
+
+	function locationChanged( selectId ) {
+		var selectEl		= document.getElementById(selectId);
+		document.aimEditActivityFormPop.parentLocId.value	= 
+			selectEl.options[selectEl.selectedIndex].value;
+		if ( document.aimEditActivityFormPop.parentLocId.value != "-1" ) {
+			<digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do" />	  
+			var url = "<%=selectLoc %>";
+			YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, "edit=true&"+generateFieldsLocation());
+		}
+	}
+
 	function removeSelSectors(configId) {
 	    var flag = validate(2);
 	    if (flag == false) return false;
@@ -393,6 +436,16 @@
 	    return true;
 	}
 
+	function removeSelLocations(){
+		  var flag = validate(1);
+		  if (flag == false) return false;
+		  <digi:context name="remLocs" property="context/module/moduleinstance/removeSelLocations.do?edit=true" />
+		  document.aimEditActivityForm.action = "<%= remLocs %>";
+		  document.aimEditActivityForm.target = "_self"
+		  document.aimEditActivityForm.submit();
+		  return true;
+		}
+			
 	-->
 
 </script>

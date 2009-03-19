@@ -335,14 +335,14 @@ function isInvalid(field){
                                                               				<c:set var="translation">
 																                <digi:trn key="aim:viewEditUser:saveButton" jsFriendly="true">Save</digi:trn>
 																              </c:set>
-																              <input type="button" value="${translation}" onclick="goAction('save');" style="font-family:verdana;font-size:11px;min-width:60px;"/>
+																              <input type="button" value="${translation}" onclick="goAction('save');" style="font-family:verdana; font-size:11px; min-width:60px; "/>
 																
 																              <c:set var="translation">
 																                <digi:trn key="aim:viewEditUser:cancelButton" jsFriendly="true">
 																                Cancel
 																                </digi:trn>
 																              </c:set>
-																              <input type="button" value="${translation}" onclick="history.back();" style="font-family:verdana;font-size:11px;width:60px;"/>
+																              <input type="button" value="${translation}" onclick="history.back();" style="font-family:verdana; font-size:11px; min-width:60px; "/>
 																		</td>
 																	</tr>																	
 																	<tr>
@@ -399,7 +399,6 @@ function isInvalid(field){
         </table>
         <br />
 </digi:form>
-
 
 
 

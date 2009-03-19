@@ -16,7 +16,7 @@
 		</Hierarchy>
 	</Dimension>
 	<Dimension name="Donor Dates" type="TimeDimension">
-		<Hierarchy hasAll="true" allMemberName="All Periods" allMemberCaption="#All_Donor_Dates#" primaryKey="amp_fund_detail_id">
+		<Hierarchy hasAll="true" allMemberName="All Periods" allMemberCaption="#All_Donor_Dates#" primaryKey="amp_fund_detail_id" caption="#Donor_Dates#">
 			<Table name="cached_v_donor_date_hierarchy" />
 			<Level name="Year" column="year" levelType="TimeYears" type="Numeric" />
 			<Level name="Quarter" column="quarter" ordinalColumn="quarter" nameColumn="quarter_name" levelType="TimeQuarters" type="Numeric" />
@@ -89,33 +89,33 @@
 			<SQL dialect="mysql"><![CDATA[cached_v_donor_funding.amp_activity_id IN (@donorquery)]]> </SQL>
 		</Table>
 		<Dimension name="Donor">
-			<Hierarchy hasAll="true" allLevelName="#All_Donor#" caption="#Donor#">
+			<Hierarchy hasAll="true" allLevelName="All Donor" caption="#Donor#" allMemberCaption="#All_Donor#">
 				<!-- No table element here. Fact table is assumed. -->
 				<Level name="DonorName" column="donor_name" />
 			</Hierarchy>
 		</Dimension>
 		<Dimension name="Donor Group">
-			<Hierarchy hasAll="true" allLevelName="#All_Donor_Group#" caption="#Donor_Group#">
+			<Hierarchy hasAll="true" allLevelName="#All Donor Group" caption="#Donor_Group#" allMemberCaption="#All_Donor_Group#">
 				<!-- No table element here. Fact table is assumed. -->
 				<Level name="DonorGroup" column="org_grp_name" />
 			</Hierarchy>
 		</Dimension>
 		
 		<Dimension name="Donor Types">
-			<Hierarchy hasAll="true" allLevelName="#All_Donors_types#" caption="#Donors_types#">
+			<Hierarchy hasAll="true" allLevelName="All Donors types" caption="#Donors_types#" allMemberCaption="#All_Donors_types#">
 				<!-- No table element here. Fact table is assumed. -->
 				<Level name="DonorType" column="donor_type_name" />
 			</Hierarchy>
 		</Dimension>
 		
 		<Dimension name="Financing Instrument">
-			<Hierarchy hasAll="true" allLevelName="#All_Financing_Instruments#" caption="#Financing_Instrument#">
+			<Hierarchy hasAll="true" allLevelName="All Financing Instruments" allMemberCaption="#All_Financing_Instrument#" caption="#Financing_Instrument#">
 				<!-- No table element here. Fact table is assumed. -->
 				<Level name="Financing Instrument" column="financing_instrument_name" />
 			</Hierarchy>
 		</Dimension>
 		<Dimension name="Terms of Assistance" caption="#Terms_of_Assistance#">
-			<Hierarchy hasAll="true" allLevelName="#All_Terms_of_Assistance#">
+			<Hierarchy hasAll="true" allLevelName="All Terms of Assistance#" allMemberCaption="#All_Terms_of_Assistance#" caption="#Terms_of_Assistance#">
 				<!-- No table element here. Fact table is assumed. -->
 				<Level name="Terms of Assistance" column="terms_assist_name" />
 			</Hierarchy>

@@ -3717,7 +3717,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
             Long templId=FeaturesUtil.getGlobalSettingValueLong("Visibility Template");
             AmpFeaturesVisibility step1=FeaturesUtil.getFeatureByName("Identification", "Project ID and Planning", templId);// step 1
             AmpFeaturesVisibility step1_1=FeaturesUtil.getFeatureByName("Planning", "Project ID and Planning", templId); // step 1
-            AmpFeaturesVisibility step2=FeaturesUtil.getFeatureByName("References", "References", templId);
+            AmpModulesVisibility step2=FeaturesUtil.getModuleByName("References", "PROJECT MANAGEMENT", templId);
             AmpFeaturesVisibility step3=FeaturesUtil.getFeatureByName("Location", "Project ID and Planning", templId);
             AmpFeaturesVisibility step3_2=FeaturesUtil.getFeatureByName("Sectors", "Project ID and Planning", templId);
             AmpModulesVisibility step3_3=FeaturesUtil.getModuleByName("National Planning Dashboard", "NATIONAL PLAN DASHBOARD", templId);

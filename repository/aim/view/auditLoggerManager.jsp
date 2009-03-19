@@ -430,8 +430,9 @@ function toggleSettings(){
 							<c:set target="${urlParamsLast}" property="sortBy" value="${aimAuditLoggerManagerForm.sortBy}" />
 							<c:set target="${urlParamsLast}" property="page" value="${aimAuditLoggerManagerForm.pagesSize}" />
 						</c:if>
-						<c:set var="translation"> <digi:trn key="aim:lastpage">
-							<span style="font-size: 8pt; font-family: Tahoma;">Last Page</span>
+						<c:set var="translation"> 
+                        <digi:trn key="aim:lastpage">
+							Last Page
 						</digi:trn>
 						</c:set>
 						<digi:link href="/auditLoggerManager.do" style="text-decoration=none" name="urlParamsLast" title="${translation}">

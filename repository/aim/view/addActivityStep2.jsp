@@ -74,12 +74,22 @@ function validate(field) {
 }
 
 function selectLocation() {
-	myAddLocation("edit=false");
+  openNewWindow(600, 500);
+  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do?edit=false" />
+  document.aimEditActivityForm.action = "<%= selectLoc %>";
+  document.aimEditActivityForm.target = popupPointer.name;
+  document.aimEditActivityForm.submit();
 }
 
 
  function addSectors(editAct,configId) {
-	myAddSectors("edit=true&configId="+configId);	  
+/*  openNewWindow(600, 450);
+  document.aimEditActivityForm.action = "/selectSectors.do?edit=true&configId="+configId;
+  document.aimEditActivityForm.target = popupPointer.name;
+  document.aimEditActivityForm.submit();
+*/ 
+     //alert("configId="+configId);
+	 myAddSectors("edit=true&configId="+configId);	  
 }
 
 function resetAll(){
@@ -89,6 +99,17 @@ function resetAll(){
   document.aimEditActivityForm.submit();
   return true;
 }
+
+function removeSelLocations(){
+  var flag = validate(1);
+  if (flag == false) return false;
+  <digi:context name="remLocs" property="context/module/moduleinstance/removeSelLocations.do?edit=true" />
+  document.aimEditActivityForm.action = "<%= remLocs %>";
+  document.aimEditActivityForm.target = "_self"
+  document.aimEditActivityForm.submit();
+  return true;
+}
+
 
 function removeAllLocations(){
   try{
@@ -775,8 +796,9 @@ function remProgram(programType) {
 				                                    &nbsp
 				                                    </td>
 				                                    <td vAlign="center" align="center" class="textalb" height="20" bgcolor="#006699">
-                                                                    	<digi:trn>
-													Step</digi:trn> ${stepNm} <digi:trn>of  </digi:trn> 
+                                                                         <digi:trn key="aim:step2of">
+													Step 2 of  
+									</digi:trn>
                                                                          ${fn:length(aimEditActivityForm.steps)}:
                                                                                                  <digi:trn key="aim:activity:LocationSectors">
                                                                                                      Location | Sectors

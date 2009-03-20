@@ -11,10 +11,31 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
+<script language="JavaScript">
+	function locationChanged( selectId ) {
+		var selectEl		= document.getElementById(selectId);
+		document.aimEditActivityForm.parentLocId.value	= 
+			selectEl.options[selectEl.selectedIndex].value;
+		if ( document.aimEditActivityForm.parentLocId.value != "-1" ) {
+			document.aimEditActivityForm.action	= "/aim/selectLocation.do?edit=true";		
+			document.aimEditActivityForm.submit();
+		}
+	}
+
+	function submitForm() {
+		document.aimEditActivityForm.target = window.opener.name;
+    	document.aimEditActivityForm.submit();
+	 	window.close();
+	}
+	function closeWindow() {
+		window.close();
+	}
+</script>
+
 <digi:instance property="aimEditActivityForm" />
 <bean:define id="location" name="aimEditActivityForm" property="location"></bean:define>
 
-<digi:form action="/locationSelected.do" name="aimEditActivityFormPop" type="aimEditActivityForm" method="post">
+<digi:form action="/locationSelected.do" method="post">
 <html:hidden styleId="locationReset" property="location.locationReset" value="false" />
 <html:hidden styleId="parentLocId" property="location.parentLocId" />
 
@@ -90,7 +111,7 @@
 									<tr>
 										<td>
 											<input type="button" value="<digi:trn key='btn:add'>Add</digi:trn>" class="dr-menu"
-											onclick="buttonAddLocation()">
+											onclick="submitForm()">
 										</td>
 										<td>
 											<input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="dr-menu" onclick="closeWindow()">

@@ -91,7 +91,7 @@ public class ExportIndicators2XSLAction extends Action {
 
 		HSSFCell cell = row.createCell(cellNum);
 
-		cell.setCellValue(TranslatorWorker.translateText("Indicators for ", locale, siteId)+ mainProg.getName());
+		cell.setCellValue(TranslatorWorker.translateText("Indicators for ", locale, siteId));
 		cell.setCellStyle(csHeader);
 
 
@@ -121,22 +121,22 @@ public class ExportIndicators2XSLAction extends Action {
 			row = sheet.createRow(rowNum++);
 			
 			cell = row.createCell(cellNum++);
-			cell.setCellValue(TranslatorWorker.translateText("indicator Name", locale, siteId)+ mainProg.getName());			
+			cell.setCellValue(TranslatorWorker.translateText("indicator Name", locale, siteId));			
 			cell.setCellStyle(csSubHeader);			
 			
 			cell=row.createCell(cellNum++);
-			cell.setCellValue(TranslatorWorker.translateText("indicator Description", locale, siteId)+ mainProg.getName());			
+			cell.setCellValue(TranslatorWorker.translateText("indicator Description", locale, siteId));			
 			cell.setCellStyle(csSubHeader);
 
 			for (int i = 0; i < npdForm.getSelYears().length; i++) {
                                 cell = row.createCell(cellNum++);
-				cell.setCellValue(TranslatorWorker.translateText("Base", locale, siteId)+ mainProg.getName());
+				cell.setCellValue(TranslatorWorker.translateText("Base", locale, siteId));
 				cell.setCellStyle(csSubHeader);
 				cell = row.createCell(cellNum++);
-				cell.setCellValue(TranslatorWorker.translateText("Actual", locale, siteId)+ mainProg.getName());
+				cell.setCellValue(TranslatorWorker.translateText("Actual", locale, siteId));
 				cell.setCellStyle(csSubHeader);
 				cell = row.createCell(cellNum++);
-				cell.setCellValue(TranslatorWorker.translateText("Target", locale, siteId)+ mainProg.getName());
+				cell.setCellValue(TranslatorWorker.translateText("Target", locale, siteId));
 				cell.setCellStyle(csSubHeader);
 			}
 

@@ -16,8 +16,9 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language=javascript>
 function showUserProfile(id){
-	<digi:context name="information" property="context/module/moduleinstance/userProfile.do" />
-	openURLinWindow("<%= information %>~edit=true~id="+id,480, 400);
+	var param = "~edit=true~id="+id;
+    previewWorkspaceframe('/aim/default/userProfile.do',param);
+	
 }
 </script>
 

@@ -5,6 +5,7 @@
 
 package org.digijava.module.aim.dbentity;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -19,7 +20,7 @@ import org.digijava.module.aim.util.LoggerIdentifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.common.util.DateTimeUtil;
 
-public class AmpReports implements Comparable, LoggerIdentifiable {
+public class AmpReports implements Comparable, LoggerIdentifiable , Serializable {
 
 	private Long ampReportId;
 

@@ -1,5 +1,6 @@
 package org.digijava.module.message.dbentity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -7,7 +8,7 @@ import java.util.Date;
  * @author Dare Roinishvili
  *
  */
-public abstract class AmpMessage {
+public abstract class AmpMessage implements Serializable {
 	private Long id;
 	
 	/**

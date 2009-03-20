@@ -2203,7 +2203,7 @@ public class ProgramUtil {
             public int compare(Object obj1, Object obj2) {
                 IndicatorsBean indic1 = (IndicatorsBean) obj1;
                 IndicatorsBean indic2 = (IndicatorsBean) obj2;
-                return indic1.getSectorName().compareTo(indic2.getSectorName());
+                return indic1.getSectorName().toLowerCase().compareTo(indic2.getSectorName().toLowerCase());
             	}
 
         }

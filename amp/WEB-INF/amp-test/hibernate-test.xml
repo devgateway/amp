@@ -5,8 +5,8 @@
 		<property name="transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
 		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
 		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/_DATABASE_NAME_?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;jdbcCompliantTruncation=false</property>
-		<property name="hibernate.connection.username">root</property>
-		<property name="hibernate.connection.password">admin</property>
+		<property name="hibernate.connection.username">amp</property>
+		<property name="hibernate.connection.password"></property>
 		<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
 		<property name="current_session_context_class">thread</property>
 		<property name="cache.provider_class">net.sf.ehcache.hibernate.SingletonEhCacheProvider</property>

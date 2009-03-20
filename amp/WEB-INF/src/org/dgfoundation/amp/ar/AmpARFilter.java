@@ -551,12 +551,15 @@ public class AmpARFilter extends PropertyListable {
 		String PROJECT_CATEGORY_FILTER = "SELECT amp_activity_id FROM v_project_category WHERE amp_category_id IN ("
 			+ Util.toCSString(projectCategory) + ")";
 
-		String DONOR_TYPE_FILTER = "SELECT aa.amp_activity_id "
-				+ "FROM amp_activity aa, amp_org_role aor, amp_role rol, amp_org_type typ, amp_organisation og  "
-				+ "WHERE aa.amp_activity_id = aor.activity AND aor.role = rol.amp_role_id AND rol.role_code='DN' "
-				+ "AND typ.amp_org_type_id =  og.org_type_id AND og.amp_org_id = aor.organisation "
-				+ "AND typ.amp_org_type_id IN ("
-				+ Util.toCSString(donorTypes) + ")";
+//		String DONOR_TYPE_FILTER = "SELECT aa.amp_activity_id "
+//				+ "FROM amp_activity aa, amp_org_role aor, amp_role rol, amp_org_type typ, amp_organisation og  "
+//				+ "WHERE aa.amp_activity_id = aor.activity AND aor.role = rol.amp_role_id AND rol.role_code='DN' "
+//				+ "AND typ.amp_org_type_id =  og.org_type_id AND og.amp_org_id = aor.organisation "
+//				+ "AND typ.amp_org_type_id IN ("
+//				+ Util.toCSString(donorTypes) + ")";
+		
+		String DONOR_TYPE_FILTER	= "SELECT amp_activity_id FROM v_donor_type WHERE org_type_id IN ("
+			+ Util.toCSString(donorTypes) + ")";
 
 		String DONOR_GROUP_FILTER = "SELECT aa.amp_activity_id "
 				+ "FROM amp_activity aa, amp_org_role aor, amp_role rol, amp_org_group grp, amp_organisation og  "

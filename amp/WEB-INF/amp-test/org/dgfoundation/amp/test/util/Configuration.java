@@ -1,10 +1,21 @@
 package org.dgfoundation.amp.test.util;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Properties;
+
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.StandaloneJndiAMPInitializer;
+import org.digijava.kernel.persistence.HibernateClassLoader;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DigiConfigManager;
 
@@ -28,8 +39,31 @@ public class Configuration {
 			String repository = getProperties().getProperty("repository");
 			String path = this.getClass().getResource("/").getPath().replaceAll("/WEB-INF/classes/", repository);
 
+			InitialContext ctx = new InitialContext();
+			DataSource src = (DataSource) ctx.lookup("java:comp/env/ampDS");
+			String databaseName = src.getConnection().getCatalog();
+
+			HibernateClassLoader.HIBERNATE_CFG_XML = "/hibernate-test.xml";
+
+			log.info("preparing hibernate configuration file");
+
+			String line;
+			StringBuffer sb = new StringBuffer();
+
+			FileInputStream fis = new FileInputStream(this.getClass().getResource(HibernateClassLoader.HIBERNATE_CFG_XML).getFile());
+			BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
+			while ((line = reader.readLine()) != null) {
+				line = line.replaceAll("_DATABASE_NAME_", src.getConnection().getCatalog());
+				sb.append(line + "\n");
+			}
+			reader.close();
+			BufferedWriter out = new BufferedWriter(new FileWriter(this.getClass().getResource(HibernateClassLoader.HIBERNATE_CFG_XML).getFile()));
+			out.write(sb.toString());
+			out.close();
+
 			DigiConfigManager.initialize(path);
-			PersistenceManager.initialize(true, null);
+			PersistenceManager.initialize(false);
+
 		} catch (Exception e) {
 			log.error(e);
 		}

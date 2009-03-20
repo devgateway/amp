@@ -1,8 +1,10 @@
 package org.digijava.module.message.dbentity;
 
+import java.io.Serializable;
+
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 
-public class AmpMessageState {
+public class AmpMessageState implements Serializable {
 	
 	private Long id;
 	

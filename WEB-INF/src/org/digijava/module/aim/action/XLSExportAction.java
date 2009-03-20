@@ -80,11 +80,10 @@ public class XLSExportAction extends Action {
 			AmpReports r=(AmpReports) session.getAttribute("reportMeta");
 		
 //			for translation purposes
-			TranslatorWorker translator=TranslatorWorker.getInstance();
 			Site site = RequestUtils.getSite(request);
 			Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
 					
-			String siteId=site.getId()+"";
+			String siteId=site.getId().toString();
 			String locale=navigationLanguage.getCode();	
 			
 			

@@ -8,7 +8,7 @@ import junit.framework.TestSuite;
 public class AllOrgProfileTest {
     public static Test suite() {
 		TestSuite suite = new TestSuite();
-		suite.addTestSuite(AddNewOrgProfileWidget.class);
+		//suite.addTestSuite(AddNewOrgProfileWidget.class);
 		return suite;
 	}
 

@@ -17,6 +17,17 @@
 
 
 <script language="JavaScript">
+
+    function chkNumeric(frmContrl){
+        var regEx=/^[0-9]*\.?[0-9]*$/;
+        var errorMsg="<digi:trn>Please enter numeric value only</digi:trn>";
+        if(!frmContrl.value.match(regEx)){
+            alert(errorMsg);
+            frmContrl.value = "";
+            frmContrl.focus();
+            return false;
+        }
+    }
 function addData(){
   <digi:context name="addEditIndicator" property="context/module/moduleinstance/addEditData.do?event=addIndValue" />
   document.forms[0].action = "<%=addEditIndicator%>";
@@ -117,7 +128,7 @@ function validation(){
           </td>
 
           <td bgColor=#d7eafd height="10" align="center" width="10%">
-            <html:text name="ind" property="valAmount" styleId="txtName" styleClass="amt"/>
+            <html:text name="ind" property="valAmount" styleId="txtName" styleClass="amt" onblur="chkNumeric(this)"/>
           </td>
 
           <td bgColor=#d7eafd  height="10" align="center" nowrap="nowrap">

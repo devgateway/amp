@@ -669,6 +669,9 @@
 		} else if (zoomRation == 2) {
 			canvasWidth = 1000;
 			canvasHeight = 1000;
+		} else if (zoomRation == 3) {
+			canvasWidth = 1500;
+			canvasHeight = 1500;
 		}
 		
 		var newUrl = modifyZoomedMapURL (mapSrc, canvasWidth, canvasHeight);

@@ -207,7 +207,7 @@ public class AddProgram
       }
 
 
-      return mapping.findForward("added");
+      return null;//mapping.findForward("added");
     }
 
     int ind = 0;

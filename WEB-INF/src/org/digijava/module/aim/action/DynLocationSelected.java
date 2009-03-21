@@ -54,6 +54,6 @@ public class DynLocationSelected extends Action {
 			}
 		}
 		
-		return mapping.findForward("forward");
+		return null;
 	}
 }

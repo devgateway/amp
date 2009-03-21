@@ -20,8 +20,8 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop-min.js'/>" >.</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>" >.</script>
 
-<div id="mySector" style="display: none">
-	<div id="mySectorContent" class="content">
+<div id="popin" style="display: none">
+	<div id="popinContent" class="content">
 	</div>
 </div>
 
@@ -30,7 +30,7 @@
 
 		YAHOOAmp.namespace("YAHOOAmp.amp");
 
-		var myPanel = new YAHOOAmp.widget.Panel("newmySectors", {
+		var myPanel = new YAHOOAmp.widget.Panel("newpopins", {
 			width:"600px",
 			fixedcenter: true,
 		    constraintoviewport: false,
@@ -65,7 +65,7 @@
 	  background-color:#2f2f2f;
 	}
 	
-	#mySector .content { 
+	#popin .content { 
 	    overflow:auto; 
 	    height:455px; 
 	    background-color:fff; 
@@ -99,7 +99,7 @@
 	 * o.argument
 	 */
 		var response = o.responseText; 
-		var content = document.getElementById("mySectorContent");
+		var content = document.getElementById("popinContent");
 	    //response = response.split("<!")[0];
 		content.innerHTML = response;
 	    //content.style.visibility = "visible";
@@ -122,13 +122,13 @@
 	};
 
 	function showContent(){
-		var element = document.getElementById("mySector");
+		var element = document.getElementById("popin");
 		element.style.display = "inline";
 		if (panelStart < 1){
 			myPanel.setBody(element);
 		}
 		if (panelStart < 2){
-			document.getElementById("mySector").scrollTop=0;
+			document.getElementById("popin").scrollTop=0;
 			myPanel.show();
 			panelStart = 2;
 		}
@@ -198,7 +198,7 @@
 	}	
 	function buttonAdd(){
 		if(document.aimSelectSectorForm.sector.value != -1){
-			var postString		= generateFields(1);
+			var postString		= "edit=true&" + generateFields(1);
 			<digi:context name="commentUrl" property="context/aim/selectSectors.do"/>
 			var url = "<%=commentUrl %>";
 			YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
@@ -209,6 +209,27 @@
 			alert("Please, select a sector firts!");
 		}
 	}
+	function generateFieldsLocation(){
+		var ret="";
+		"location.locationReset="          +document.getElementsByName("location.locationReset")[0].value+"&"+
+		"location.parentLocId="          +document.getElementsByName("location.parentLocId")[0].value;
+		var opt = document.getElementsByName('location.userSelectedLocs')[0].length
+		for(var i=0; i< opt; i++){
+			if(document.getElementsByName('location.userSelectedLocs')[0].options[i].selected==true){
+				ret+="&location.userSelectedLocs="+document.getElementsByName('location.userSelectedLocs')[0].options[i].value;
+			}
+		}
+		return ret;
+	}
+	function buttonAddLocation(){
+		var postString		= generateFieldsLocation();
+		<digi:context name="commentUrl" property="context/aim/locationSelected.do"/>
+		var url = "<%=commentUrl %>";
+		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
+		checkAndClose=true;
+		document.aimEditActivityForm.submit();
+	}
+
 	function resetSectors(){
 		document.aimSelectSectorForm.sector.value = -1
 		if(document.aimSelectSectorForm.subsectorLevel1!=null){
@@ -236,7 +257,7 @@
 				document.aimSelectSectorForm.subsectorLevel2.value = -1;
 			}
 		}
-		var postString		= generateFields(1);//"edit=true";
+		var postString		= "edit=true&" + generateFields(1);
 		<digi:context name="commentUrl" property="context/aim/selectSectors.do"/>
 		var url = "<%=commentUrl %>";
 		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
@@ -253,7 +274,7 @@
 	}
 	function checkErrorAndClose(){
 		if(checkAndClose==true){
-			if(document.getElementsByName("someError")[0].value=="false"){
+			if(document.getElementsByName("someError")[0]==null || document.getElementsByName("someError")[0].value=="false"){
 				myclose();
 				addSector();
 			}
@@ -373,25 +394,111 @@
 		else 
 			return false;
 	}
-
+	function showPanelLoading(){
+		  var content = document.getElementById("popinContent");
+		  content.innerHTML = "<div style='text-align: center'>" + "Loading..." + 
+			"... <br /> <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>";		
+		  showContent();
+	}
 	function myAddSectors(params) {
 		//alert(params);
-	  
-	  <digi:context name="commentUrl" property="context/aim/selectSectors.do" />
-
-	  var url = "<%=commentUrl %>";
-	  YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, params);
-	  
+		showPanelLoading();
+		<digi:context name="commentUrl" property="context/aim/selectSectors.do" />
+		var url = "<%=commentUrl %>";
+		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, params);
 	}
-	function removeSelSectors(configId) {
-	    var flag = validate(2);
-	    if (flag == false) return false;
-
-	    document.aimEditActivityForm.action = "/addActivity.do?remSectors=true&configId="+configId;
-	    document.aimEditActivityForm.target = "_self";
-	    document.aimEditActivityForm.submit();
-	    return true;
+	function myAddLocation(params) {
+		//alert(params);
+		showPanelLoading();
+		<digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do" />	  
+		var url = "<%=selectLoc %>";
+		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, params);
 	}
+	function locationChanged( selectId ) {
+		var selectEl		= document.getElementById(selectId);
+		document.aimEditActivityFormPop.parentLocId.value	= 
+			selectEl.options[selectEl.selectedIndex].value;
+		if ( document.aimEditActivityFormPop.parentLocId.value != "-1" ) {
+			<digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do" />	  
+			var url = "<%=selectLoc %>";
+			YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, "edit=true&"+generateFieldsLocation());
+		}
+	}
+	function myAddProgram(params){
+		showPanelLoading();
+		<digi:context name="selPrg" property="context/module/moduleinstance/addProgram.do" />	  
+		var url = "<%=selPrg %>";
+		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, params);
+	}
+	
+    function addNewProgram(pType) {
+        var prgSels=document.getElementsByName("programs.selPrograms");
+        var urlParams;
+        var flag=false;
+
+        if(prgSels!=null){
+          if(prgSels[prgSels.length-1].value==-1){
+            var i=0;
+            for(i=prgSels.length-1;i>-1;i--){
+               if(prgSels[i].value!=-1){
+                 urlParams="edit=true&themeid="+prgSels[i].value+"&op=add&programType="+pType+"&programs.selPrograms="+prgSels.value;
+                 flag=true;
+                 break;
+               }
+            }
+            if(!flag){
+              return false;
+            }
+          }else{
+            urlParams="edit=true&themeid="+prgSels[prgSels.length-1].value+"&op=add&programType="+pType;
+          }
+        }
+		<digi:context name="selPrg" property="context/module/moduleinstance/addProgram.do" />	  
+		checkAndClose=true;
+		var url = "<%=selPrg %>";
+		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, urlParams);
+        document.aimEditActivityForm.submit();
+      }
+    function reloadProgram(selectedProgram) {
+       	<digi:context name="selProgram" property="context/module/moduleinstance/addProgram.do?edit=true"/>
+
+        var prgSels=document.getElementsByName("programs.selPrograms");
+        var flag=false;
+        var i=0;
+        //alert(selectedProgram.value);
+        if(selectedProgram.value==-1){
+          for(i=0;i<prgSels.length;i++){
+            if(prgSels[i].value==-1){
+              urlParams="<%=selProgram%>&themeid="+prgSels[i].value+"&selPrgLevel="+(i+1);
+              flag=true
+              break;
+            }
+          }
+        }
+
+        if(!flag){
+        	var urlParams="<%=selProgram%>&themeid="+selectedProgram.value;  
+            for(var i=0; i<prgSels.length; i++){
+            	urlParams+="&programs.selPrograms="+prgSels[i].value;
+            }
+
+        }
+        YAHOOAmp.util.Connect.asyncRequest("POST", urlParams, callback);
+      }
+    function resetResults(){
+        <digi:context name="resetPrg" property="context/module/moduleinstance/addProgram.do?edit=true"/>
+        var urlParams="<%=resetPrg%>";
+        YAHOOAmp.util.Connect.asyncRequest("POST", urlParams, callback);
+    }
+    function addDefaultProgram() {
+        <digi:context name="selPrg" property="context/module/moduleinstance/addProgram.do?edit=true"/>
+        var urlParams;
+        var defaultProgramId = document.getElementsByName("defaultProgramId")[0];
+
+        urlParams="<%=selPrg%>&themeid="+defaultProgramId.value+"&op=add";
+        YAHOOAmp.util.Connect.asyncRequest("POST", urlParams, callback);
+        document.aimEditActivityForm.submit();
+      }
 
 	-->
 

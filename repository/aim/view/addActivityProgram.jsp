@@ -100,7 +100,7 @@
 </script>
 
 <digi:instance property="aimEditActivityForm" />
-<digi:form action="/addProgram.do" method="post">
+<digi:form action="/addProgram.do" name="aimEditActivityFormPop" type="aimEditActivityForm" method="post">
 	<c:set var="noDefaultProgram">
 		<digi:trn key="aim:noDefaultProgram">
 Default program is not selected
@@ -213,7 +213,7 @@ Default Program
 											<tr>
 
 												<td><html:button styleClass="dr-menu"
-													property="submitButton" onclick="addProgram('${aimEditActivityForm.programs.programType}')">
+													property="submitButton" onclick="addNewProgram('${aimEditActivityForm.programs.programType}')">
 													<digi:trn key="btn:add">Add</digi:trn>
 												</html:button></td>
 												<td><html:button styleClass="dr-menu"

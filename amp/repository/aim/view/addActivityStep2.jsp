@@ -16,7 +16,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
-<jsp:include page="addSectors.jsp" flush="true" />
+<jsp:include page="addActivityStep2Popin.jsp" flush="true" />
 
 <script language="JavaScript" type="text/javascript">
 <!--
@@ -74,22 +74,21 @@ function validate(field) {
 }
 
 function selectLocation() {
-  openNewWindow(600, 500);
-  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do?edit=false" />
-  document.aimEditActivityForm.action = "<%= selectLoc %>";
-  document.aimEditActivityForm.target = popupPointer.name;
-  document.aimEditActivityForm.submit();
+	myAddLocation("edit=false");
 }
 
 
  function addSectors(editAct,configId) {
-/*  openNewWindow(600, 450);
-  document.aimEditActivityForm.action = "/selectSectors.do?edit=true&configId="+configId;
-  document.aimEditActivityForm.target = popupPointer.name;
-  document.aimEditActivityForm.submit();
-*/ 
-     //alert("configId="+configId);
-	 myAddSectors("edit=true&configId="+configId);	  
+	myAddSectors("edit=true&configId="+configId);	  
+}
+
+function removeSelSectors(configId) {
+	var flag = validate(2);
+    if (flag == false) return false;
+    document.aimEditActivityForm.action = "/addActivity.do?remSectors=true&configId="+configId;
+    document.aimEditActivityForm.target = "_self";
+    document.aimEditActivityForm.submit();
+    return true;
 }
 
 function resetAll(){
@@ -492,17 +491,14 @@ function fnChk(frmContrl, f){
 }
 
 function addProgram(programType) {
-		
-		openNewRsWindow(750, 550);
+/*		openNewRsWindow(750, 550);
 		<digi:context name="taddProgram" property="context/module/moduleinstance/addProgram.do?edit=true"/>
-
-                var url="<%= taddProgram %>&programType="+programType;
-         //       alert(programType + " "+url);
+        var url="<%= taddProgram %>&programType="+programType;
 	  	document.aimEditActivityForm.action =url ;
-
 		document.aimEditActivityForm.target = popupPointer.name;
-
 		document.aimEditActivityForm.submit();
+		*/
+		myAddProgram("edit=true&programType="+programType);
 
 }
 

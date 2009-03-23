@@ -926,6 +926,7 @@ background-color:yellow;
                 deleteTDCheckbox.vAlign="top";
                 var deleteCheckbox=document.createElement('input');
                 deleteCheckbox.type='checkbox';
+                deleteCheckbox.id='delChkbox_'+msgId;
 		deleteCheckbox.value=msgId;
                 deleteTDCheckbox.appendChild(deleteCheckbox);
 		msgTr.appendChild(deleteTDCheckbox);
@@ -934,7 +935,23 @@ background-color:yellow;
 		return msgTr;			
 	
 	}
-        
+
+	function selectAllCheckboxes(){
+		var allChkboxes=$("input[@id^='delChkbox_']");
+		if(allChkboxes!=null && allChkboxes.length>0){
+			for(var i=0;i<allChkboxes.length;i++){
+				allChkboxes[i].checked=true;
+			}
+		}
+	}
+	function deselectAllCheckboxes(){
+		var allChkboxes=$("input[@id^='delChkbox_']");
+		if(allChkboxes!=null && allChkboxes.length>0){
+			for(var i=0;i<allChkboxes.length;i++){
+				allChkboxes[i].checked=false;
+			}
+		}
+	}
  
 $(document).ready(function(){
 	   $("#displaySettingsButton").toggle(function(){
@@ -949,7 +966,7 @@ $(document).ready(function(){
 	     	$("#show").show('fast');
 	   	});
 });
-        
+
 </script>
 <table cellSpacing=0 cellPadding=0 vAlign="top" align="left" width="100%">
 <tr>
@@ -1335,7 +1352,11 @@ $(document).ready(function(){
 							</TD>
                                                         </TR>
                                                           <TR>
-                                                              <TD ALIGN="RIGHT"><input type="button" onclick="deleteMessage()" value="<digi:trn key='message:deleteSelMsgs'>Delete Selected Messages</digi:trn>" class="dr-menu" /></TD>
+                                                              <TD ALIGN="RIGHT">
+                                                              	<input type="button" onclick="selectAllCheckboxes()" value="<digi:trn>Select All</digi:trn>" class="dr-menu" />
+                                                              	<input type="button" onclick="deselectAllCheckboxes()" value="<digi:trn>Deselect All</digi:trn>" class="dr-menu" />
+                                                              	<input type="button" onclick="deleteMessage()" value="<digi:trn key='message:deleteSelMsgs'>Delete Selected Messages</digi:trn>" class="dr-menu" />
+                                                              </TD>
                                                         </TR>
                                                         <TR >
                                                             <TD>&nbsp;</TD>

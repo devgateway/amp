@@ -76,8 +76,10 @@ private static Logger logger	= Logger.getLogger(AddNewOrgProfileWidget.class);
             AmpDaWidgetPlace plc=WidgetUtil.getPlace("orgprof_chart_test_place");
             if (plc != null) {
                 AmpWidgetOrgProfile wdg = (AmpWidgetOrgProfile) plc.getAssignedWidget();
-                WidgetUtil.clearPlacesForWidget(wdg.getId());
-                OrgProfileWidgetUtil.delete(wdg);
+                if (wdg != null) {
+                    WidgetUtil.clearPlacesForWidget(wdg.getId());
+                    OrgProfileWidgetUtil.delete(wdg);
+                }
                 WidgetUtil.deleteWidgetPlace(plc);
             }
         } catch (DgException ex) {

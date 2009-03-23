@@ -78,7 +78,7 @@ private static Logger logger	= Logger.getLogger(AddNewOrgProfileWidget.class);
         try {
             AmpDaWidgetPlace plc=WidgetUtil.getPlace("orgprof_chart_test_place");
             if (plc != null) {
-               AmpWidget wd = place.getAssignedWidget();
+               AmpWidget wd = plc.getAssignedWidget();
                     WidgetVisitor adapter = new WidgetVisitorAdapter() {
                         @Override
                         public void visit(AmpWidgetOrgProfile orgProfile) {

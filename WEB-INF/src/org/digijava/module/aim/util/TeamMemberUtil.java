@@ -6,12 +6,15 @@ package org.digijava.module.aim.util;
 
 
 import java.sql.SQLException;
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -362,8 +365,30 @@ public class TeamMemberUtil {
 			}
 		}
 		logger.debug("returning members");
+		Collections.sort((List<TeamMember>)members, new TeamMemberUtil.TeamMemberComparator());
 		return members;
 	}
+	
+	private static class TeamMemberComparator implements Comparator<TeamMember> {
+    	Locale locale;
+        Collator collator;
+
+        public TeamMemberComparator(){
+            this.locale=new Locale("en", "EN");
+        }
+
+        public TeamMemberComparator(String iso) {
+            this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
+        }
+
+        public int compare(TeamMember o1, TeamMember o2) {
+            collator = Collator.getInstance(locale);
+            collator.setStrength(Collator.TERTIARY);
+            
+            int result = (o1.getMemberName()==null || o2.getMemberName()==null)?0:collator.compare(o1.getMemberName().toLowerCase(), o2.getMemberName().toLowerCase());
+            return result;
+        }
+    }
 
 
     public static Collection<User> getAllTeamMemberUsers() {

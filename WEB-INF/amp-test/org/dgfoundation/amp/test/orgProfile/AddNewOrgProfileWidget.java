@@ -15,6 +15,9 @@ import org.digijava.module.widget.dbentity.AmpWidgetOrgProfile;
 import org.digijava.module.widget.form.OrgProfileWidgetForm;
 import org.digijava.module.widget.util.OrgProfileWidgetUtil;
 import org.digijava.module.widget.util.WidgetUtil;
+import org.digijava.module.widget.helper.WidgetVisitor;
+import org.digijava.module.widget.helper.WidgetVisitorAdapter;
+import org.digijava.module.widget.dbentity.AmpWidget;
 
 public class AddNewOrgProfileWidget extends BasicActionTestCaseAdapter {
 
@@ -75,11 +78,19 @@ private static Logger logger	= Logger.getLogger(AddNewOrgProfileWidget.class);
         try {
             AmpDaWidgetPlace plc=WidgetUtil.getPlace("orgprof_chart_test_place");
             if (plc != null) {
-                AmpWidgetOrgProfile wdg = (AmpWidgetOrgProfile) plc.getAssignedWidget();
-                if (wdg != null) {
-                    WidgetUtil.clearPlacesForWidget(wdg.getId());
-                    OrgProfileWidgetUtil.delete(wdg);
-                }
+               AmpWidget wd = place.getAssignedWidget();
+                    WidgetVisitor adapter = new WidgetVisitorAdapter() {
+                        @Override
+                        public void visit(AmpWidgetOrgProfile orgProfile) {
+                            try {
+                                WidgetUtil.clearPlacesForWidget(orgProfile.getId());
+                                OrgProfileWidgetUtil.delete(orgProfile);
+                            } catch (DgException ex) {
+                               logger.error("Unable to delete widget "+ex.getMessage());
+                            }
+                        }
+                    };
+                    wd.accept(adapter);
                 WidgetUtil.deleteWidgetPlace(plc);
             }
         } catch (DgException ex) {

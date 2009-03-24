@@ -182,7 +182,7 @@ div.fakefile2 input{
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="65%">
 	<tr>
 		<td valign="bottom">
-				
+				<digi:errors/>
 		</td>
 	</tr>
 	<tr>

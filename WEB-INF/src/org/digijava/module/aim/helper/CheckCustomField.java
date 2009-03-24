@@ -19,7 +19,14 @@ public class CheckCustomField extends CustomField<Boolean>{
 	@Override
 	public void setValue(Boolean value) {
 		this.value = value;
-		
 	}
+	
+	public void setBooleanValue(Boolean value) {
+		this.value = value;
+	}
+	
+	public Boolean getBooleanValue() {
+		return value;
+	}	
 
 }

@@ -1314,7 +1314,7 @@ public class ImportBuilder {
 	}
 	
 	
-	public void splitInChunks(InputStream inputStream) {
+	public boolean splitInChunks(InputStream inputStream) {
 		
 		String result="";
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -1345,6 +1345,7 @@ public class ImportBuilder {
         
         if(this.getImportLogs() == null || this.getImportLogs().size() < 1) this.setImportLogs(new ArrayList<AmpDEImportLog>());
         String newActivity = "";
+        if(s.length <2) return false;
         for (int i = 1; i < s.length; i++) {
 			newActivity="";
         	newActivity+=header+"<activity"+s[i]+footer;
@@ -1380,7 +1381,9 @@ public class ImportBuilder {
 			}
         	ilog.setOutputStream(outputStream);
         	this.getImportLogs().add(ilog);
+        	//return true;
 		}
+        return true;
 		
 	}
 //	

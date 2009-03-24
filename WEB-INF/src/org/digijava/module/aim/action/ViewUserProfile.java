@@ -40,7 +40,7 @@ public class ViewUserProfile
             long id = Long.parseLong(request.getParameter("id"));
             userid = new Long(id);
         }
-        if (request.getParameter("email") != null && request.getParameter("email") != "") {
+        if (request.getParameter("email") != null && !request.getParameter("email").equals("")) {
             email = request.getParameter("email");
             user= DbUtil.getUser(email);
             userid = user.getId();

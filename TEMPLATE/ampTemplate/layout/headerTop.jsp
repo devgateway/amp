@@ -8,10 +8,10 @@
 
 <logic:present name="currentMember" scope="session">
 	<script language=javascript>
-	function showUserProfile(id){
+	function showUserProfile(email){
 		<digi:context name="information" property="context/aim/default/userProfile.do" />
 		//openURLinWindow("<%= information %>~edit=true~id="+id,480, 350);
-		var param = "~edit=true~id="+id;
+		var param = "~edit=true~email="+email;
 		previewWorkspaceframe('/aim/default/userProfile.do',param);
 	}
 	</script>
@@ -82,17 +82,16 @@ a.header_title,a.header_title:link,a.header_title:hover,A.header_title:active, A
               <c:set var="translation">
                 <digi:trn key="aim:workspacename">Workspace Name</digi:trn>
               </c:set>
-              <span title="${translation}"'>
+              <span title="${translation}">
                 <bean:define id="teamMember" name="currentMember" scope="session" type="org.digijava.module.aim.helper.TeamMember" />
-				<!--<a href="javascript:showUserProfile(${teamMember.memberId})"class="header_text">-->
-                	<strong style="color:#FFFFFF">${teamMember.teamName}</strong>
-				<!--</a>-->
+                	<strong style="color:#FFFFFF">${teamMember.teamName}</strong>	
               </span>
               <c:set var="translation">
                 <digi:trn key="aim:clickToViewMemberDetails">Click here to view Member Details</digi:trn>
               </c:set>
-              <span title="${translation}"'>
-                <a href="javascript:showUserProfile(${teamMember.memberId})"class="header_text">
+              
+              <span title="${translation}">
+                <a href="javascript:showUserProfile('${teamMember.email}')" class="header_text">
                 	${teamMember.memberName}
                 </a>
               </span>

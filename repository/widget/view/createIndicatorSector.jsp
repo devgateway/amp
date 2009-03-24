@@ -8,7 +8,10 @@
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-<jsp:include page="/repository/aim/view/addSectors.jsp" flush="true" />
+<c:set var="src">
+   <digi:file src="module/aim/addActivityStep2Popin.jsp"/>
+</c:set>
+<jsp:include page="${src}" flush="true" />
 <script type="text/javascript">
     <!--
     window.onload=initSectorScript();

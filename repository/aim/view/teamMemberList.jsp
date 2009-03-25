@@ -268,7 +268,7 @@ function addTeamMember(id) {
 <!--																		<digi:link href="/viewMemberDetails.do" name="urlParams" title="${translation}" >-->
 <!--																			<c:out value="${mem.memberName}"/>-->
 <!--																		</digi:link>-->
-																		<a href="javascript:showUserProfile(${mem.memberId})" title="${translation}">${mem.memberName}</a>
+																		<a href="javascript:showUserProfile('${mem.email}')" title="${translation}">${mem.memberName}</a>
 																	</td>
 																	<td>
 																		<c:out value="${mem.email}"/>

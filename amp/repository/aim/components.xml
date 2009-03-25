@@ -117,7 +117,9 @@
 	<page name="removeTeamActivities" title=" - Remove team activities" />
 	<page name="teamWorkspaceOverview" title=" - Team Workspace Setup" />
 	<page name="addTeamActivities" title=" - Team Workspace Setup" />
+	<page name="addTeamActivitiesDocs" title=" - Team Workspace Setup" />
 	<page name="teamActivities" title=" - Team Workspace Setup" />
+	<page name="teamActivitiesDocuments" title=" - Team Workspace Setup" />
 	<page name="teamMembersAdd" title=" - Team Workspace Setup" />
 	<page name="teamMembers" title=" - Team Workspace Setup" />
 	<page name="teamMemberList" title=" - Team Workspace Info" />

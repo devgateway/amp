@@ -166,10 +166,14 @@ var isAlreadySubmitted = false;
 	}
 
 	function isTotDisbIsBiggerThanTotCom() {
-		var Warn="<digi:trn key="aim:addFunding:warn:disbSupCom">Sum of Disbursments is bigger than sum of commitments.</digi:trn>";
+		var Warn="<digi:trn key="aim:addFunding:warn:disbSupCom">Sum of Disbursments is bigger than sum of commitments. Do you wish to proceed?</digi:trn>";
 		if(document.getElementById("totDisbIsBiggerThanTotCom").value == "true") {
-			alert(Warn)
-			return true;					
+			if(confirm(Warn))
+			{
+				return false;
+			} else {
+				return true;	
+			}							
 		} else {
 			return false;
 		}

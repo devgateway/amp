@@ -304,12 +304,16 @@ ${fn:replace(message,quote,escapedQuote)}
 																	&nbsp;
 																	</td></tr>
 																	<tr><td>
-															
+																	
+																	<field:display name="Add Costing Button" feature="Costing">
 																	<html:button  styleClass="dr-menu" property="submitButton" onclick="addEUActivity()">
 																		<digi:trn key="btn:addActivity">Add Activity</digi:trn>
 																	</html:button>
+																	</field:display>
+																	
 																	</td></tr>
-
+																	
+																	
 																	<tr>
 																		<td align="left">
 																			<table width="100%" cellSpacing=5 cellPadding=0 border=0

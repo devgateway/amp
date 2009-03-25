@@ -341,6 +341,40 @@ public class AmpDbUtil {
       throw new CalendarException("Canot delete AMPCalendar", ex);
     }
   }
+  
+  public static void deleteAmpCalendarAttendee(AmpCalendarAttendee attendee) throws  CalendarException {
+	Transaction tx = null;
+	try {
+	  Session session = PersistenceManager.getRequestDBSession();
+	  tx = session.beginTransaction();  
+	  session.delete(attendee);
+	  tx.commit();
+	}
+	catch (Exception ex) {
+	  if (tx != null) {
+	    try {
+	      tx.rollback();
+	    }
+	    catch (Exception ex1) {
+	      throw new CalendarException(
+	          "Cannot rollback delete AMPCalendar", ex1);
+	    }
+	  }
+	  throw new CalendarException("Canot delete AMPCalendar", ex);
+	}
+  }
+  
+  public static void updateAmpCalendarAttendee(AmpCalendarAttendee attendee) throws CalendarException{
+	  Transaction tx = null;
+	  try {
+		  Session session = PersistenceManager.getRequestDBSession();
+	      tx = session.beginTransaction();
+	      session.update(attendee);
+	      tx.commit();
+	} catch (Exception e) {
+		throw new CalendarException("Unable to update AmpCalendarAttendee object", e);
+	}
+  }
 
   public static void updateAmpCalendar(AmpCalendar ampCalendar) throws
       CalendarException {
@@ -419,43 +453,49 @@ public class AmpDbUtil {
                 	  //creator of the event should see this event
                 	  if(ampCal.getMember().getAmpTeamMemId().equals(curMember.getAmpTeamMemId())){
                     		retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
-                	  } 
-//                	  if(showPublicEvents){
-//                		  retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
-//                		  continue;  		
-//                	  }else{
-//                		//If the event is not public
-//                		if(ampCal.getAttendees()!=null && ampCal.getAttendees().size()>0){
-//                        	for (Object attendee : ampCal.getAttendees()) {
-//                          		AmpCalendarAttendee att=(AmpCalendarAttendee)attendee;
-//                          		if(att.getMember()!=null && att.getMember().getAmpTeamMemId().equals(curMember.getAmpTeamMemId())){
-//                          			retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
-//                          			continue;
-//                          		}
-//                          	}
-//                		}
-//                	  }
-                	  
+                	  }
                 	  /**
                 	   * if showPublicEvents=true, then public and private events should show up on the page. (AMP-4860)
                 	   * In this case , everyone should see public events, but if event is private, 
                 	   * then it should show up only if it's attendee is current user.
                 	   */
+//                	  if(showPublicEvents && !ampCal.isPrivateEvent()){
+//                		  retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
+//            			  continue;
+//                	  }
+//                	  if(!showPublicEvents || (showPublicEvents && ampCal.isPrivateEvent())){
+//                		//If the event is not public
+//                  		if(ampCal.getAttendees()!=null && ampCal.getAttendees().size()>0){
+//                          	for (Object attendee : ampCal.getAttendees()) {
+//                            		AmpCalendarAttendee att=(AmpCalendarAttendee)attendee;
+//                            		if(att.getMember()!=null && att.getMember().getAmpTeamMemId().equals(curMember.getAmpTeamMemId())){
+//                            			retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
+//                            			continue;
+//                            		}
+//                            }
+//                  		}
+//                	  }
+                	  
+                	  boolean isCurrentMemberEventAttendee=false;                	 
+                	  if(ampCal.getAttendees()!=null && ampCal.getAttendees().size()>0){
+                		  for (Object attendee : ampCal.getAttendees()) {
+                      		AmpCalendarAttendee att=(AmpCalendarAttendee)attendee;
+                      		if(att.getMember()!=null && att.getMember().getAmpTeamMemId().equals(curMember.getAmpTeamMemId())){
+                      			isCurrentMemberEventAttendee=true;
+                      			break;
+                      		}                      		
+                		  }
+                	  }
+                	  
                 	  if(showPublicEvents && !ampCal.isPrivateEvent()){
                 		  retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
             			  continue;
                 	  }
                 	  if(!showPublicEvents || (showPublicEvents && ampCal.isPrivateEvent())){
-                		//If the event is not public
-                  		if(ampCal.getAttendees()!=null && ampCal.getAttendees().size()>0){
-                          	for (Object attendee : ampCal.getAttendees()) {
-                            		AmpCalendarAttendee att=(AmpCalendarAttendee)attendee;
-                            		if(att.getMember()!=null && att.getMember().getAmpTeamMemId().equals(curMember.getAmpTeamMemId())){
-                            			retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
-                            			continue;
-                            		}
-                            	}
-                  		}
+                		  if(isCurrentMemberEventAttendee){
+                			  retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
+                  			continue;
+                		  }
                 	  }
                      
 //                      if (calTeam != null && calTeam.getAmpTeamId().equals(curMemTeam.getAmpTeamId())) {

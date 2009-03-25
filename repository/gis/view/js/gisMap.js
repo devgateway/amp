@@ -116,7 +116,7 @@
 		var toYear = document.getElementsByName('selectedToYear')[0].value;
 		
 		var uniqueStr = (new Date()).getTime();
-		xmlhttp.open("GET", "../../gis/getFoundingDetails.do?action=getAvailIndicatorSubgroups&mapCode=TZA&mapLevel=" + mapLevel + "&fromYear=" + fromYear + "&toYear=" + toYear + "&sectorId=" + sec + "&indicatorId=" + selIndicator + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight, true);
+		xmlhttp.open("POST", "../../gis/getFoundingDetails.do?action=getAvailIndicatorSubgroups&mapCode=TZA&mapLevel=" + mapLevel + "&fromYear=" + fromYear + "&toYear=" + toYear + "&sectorId=" + sec + "&indicatorId=" + selIndicator + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight, true);
 		xmlhttp.onreadystatechange = availSubgroupsReady
 		actionGetSubgroups = true;
 		xmlhttp.send(null);
@@ -169,7 +169,7 @@
 
 		var uniqueStr = (new Date()).getTime();
 
-		xmlhttp.open("GET", "../../gis/getFoundingDetails.do?action=getAvailIndicatorYears&mapCode=TZA&mapLevel=" + mapLevel + "&fromYear=" + fromYear + "&toYear=" + toYear + "&subgroupId=" + selSubgroup + "&sectorId=" + sec + "&indicatorId=" + selIndicator + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight, true);
+		xmlhttp.open("POST", "../../gis/getFoundingDetails.do?action=getAvailIndicatorYears&mapCode=TZA&mapLevel=" + mapLevel + "&fromYear=" + fromYear + "&toYear=" + toYear + "&subgroupId=" + selSubgroup + "&sectorId=" + sec + "&indicatorId=" + selIndicator + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight, true);
 		xmlhttp.onreadystatechange = availYearsReady;
 		actionGetYears = true;
 		xmlhttp.send(null);
@@ -219,7 +219,7 @@
 			var mapLevel = getRadioValue("mapLevelRadio");
 			var indYear = document.getElementById("indicatorYearCombo").value;
 			var uniqueStr = (new Date()).getTime();
-			xmlhttp.open("GET", "../../gis/getFoundingDetails.do?action=getImageMap&mapCode=TZA&mapLevel=" + mapLevel + "&indYear=" + indYear + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight, true);
+			xmlhttp.open("POST", "../../gis/getFoundingDetails.do?action=getImageMap&mapCode=TZA&mapLevel=" + mapLevel + "&indYear=" + indYear + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight, true);
 			xmlhttp.onreadystatechange = addImageMap;
 			xmlhttp.send(null);
 		} else {
@@ -248,7 +248,7 @@
 			var toYear = document.getElementsByName('selectedToYear')[0].value;
 			
 			var uniqueStr = (new Date()).getTime();
-			xmlhttp.open("GET", "../../gis/getFoundingDetails.do?action=getSectorDataXML&mapCode=TZA&mapLevel=" + mapLevel + "&fromYear=" + fromYear + "&toYear=" + toYear + "&indYear=" + indYear + "&sectorId=" + sec.value + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight, true);
+			xmlhttp.open("POST", "../../gis/getFoundingDetails.do?action=getSectorDataXML&mapCode=TZA&mapLevel=" + mapLevel + "&fromYear=" + fromYear + "&toYear=" + toYear + "&indYear=" + indYear + "&sectorId=" + sec.value + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight, true);
 			xmlhttp.onreadystatechange = dataForSectorReady;
 			actionSectorData = true;
 			xmlhttp.send(null);
@@ -277,7 +277,7 @@
 			}
 			initIndicatorValues();
 			actionGetIndicators = true;
-			window.setTimeout(getSectorIndicators, 500);
+			window.setTimeout(getSectorIndicators, 100);
 		}
 		
 	}
@@ -286,7 +286,7 @@
 			var mapLevel = getRadioValue("mapLevelRadio");
 			var indYear = document.getElementById("indicatorYearCombo").value;
 			var uniqueStr = (new Date()).getTime();
-			xmlhttp.open("GET", "../../gis/getFoundingDetails.do?action=getIndicatorNamesXML&mapCode=TZA&mapLevel=" + mapLevel + "&indYear=" + indYear + "&sectorId=" + selSector + "&uniqueStr=" + uniqueStr, true);
+			xmlhttp.open("POST", "../../gis/getFoundingDetails.do?action=getIndicatorNamesXML&mapCode=TZA&mapLevel=" + mapLevel + "&indYear=" + indYear + "&sectorId=" + selSector + "&uniqueStr=" + uniqueStr, true);
 			xmlhttp.onreadystatechange = SectorIndicatorsReady;
 			actionGetIndicators = true;
 			xmlhttp.send(null);
@@ -294,43 +294,27 @@
 
 	function SectorIndicatorsReady () {
 		if (xmlhttp.readyState == 4) {
-
 			actionGetIndicators = false;
 			var indicators = xmlhttp.responseXML.getElementsByTagName('indicator');
 			var indIndex = 0;
-			
 			var selectCmb = document.getElementById("indicatorsCombo");
-			
 			selectCmb.innerHTML = null;
-			
 			var noneOpt = document.createElement("OPTION");
 			noneOpt.value="-1";
 			noneOpt.text="Select indicator";
 			selectCmb.options.add(noneOpt);
 			
-			
 			for (indIndex = 0; indIndex < indicators.length; indIndex ++) {
 				var indicatorData = indicators[indIndex];
-
 				var opt = document.createElement("OPTION");
 				opt.value=indicatorData.attributes.getNamedItem("id").value;
 				opt.text=indicatorData.attributes.getNamedItem("name").value;
-				
 				selectCmb.options.add(opt);
-				
-				//alert (indicatorData.attributes.getNamedItem("enbl").value);
-				
 				if (indicatorData.attributes.getNamedItem("enbl").value=="false") {
-//					opt.setAttribute("DISABLED", "true");
-//					opt.disabled = "disabled";
 					opt.className="dsbl";
-//					opt.style="text-decoration:line-through";
 				} else {
 					opt.className="enbl";
 				}
-				
-				
-				
 			}
 			initIndicatorValues();
 			setBusy(false);
@@ -341,7 +325,7 @@
 			var mapLevel = getRadioValue("mapLevelRadio");
 			var indYear = document.getElementById("indicatorYearCombo").value;
 			var uniqueStr = (new Date()).getTime();
-			xmlhttp.open("GET", "../../gis/getFoundingDetails.do?action=getIndicatorValues&mapCode=TZA&mapLevel=" + mapLevel + "&indYear=" + indYear + "&uniqueStr=" + uniqueStr, true);
+			xmlhttp.open("POST", "../../gis/getFoundingDetails.do?action=getIndicatorValues&mapCode=TZA&mapLevel=" + mapLevel + "&indYear=" + indYear + "&uniqueStr=" + uniqueStr, true);
 			xmlhttp.onreadystatechange = indicatorsValuesReady;
 			actionGetIndicatorValues = true;
 			xmlhttp.send(null);
@@ -581,16 +565,6 @@
 		actionImgLoading = true;
 		document.getElementById("testMap").src = "../../gis/getFoundingDetails.do?action=getDataForIndicator&mapCode=TZA&mapLevel=" + mapLevel + "&fromYear=" + fromYear + "&toYear=" + toYear + "&subgroupId=" + subgroupId + "&indYear=" + year.value + "&sectorId=" + selSector + "&indicatorId=" + ind + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
 		getIndValuesAction = true;
-
-	
-	
-		/*
-		var mapObj = document.getElementById("testMap");
-		var mapSrc = mapObj.src;
-		var newUrl = modifyYearURL (mapSrc, year.value);
-		setBusy(true);
-		mapObj.src = newUrl;
-		*/
 	}
 	
 	function modifyYearURL (url, newYear) {
@@ -610,12 +584,6 @@
 	
 	function mapYearChanged(){
 		sectorSelected(document.getElementById('sectorsMapCombo'));
-		/*
-		var fromYear = getComboSelectedText(document.getElementsByName('selectedFromYear')[0]);
-		var toYear = getComboSelectedText(document.getElementsByName('selectedToYear')[0]);
-		var newCapt = "(USD) " + fromYear + " - " + toYear;
-		document.getElementById('tooltipCurencyYearRange').innerHTML = newCapt;
-		*/
 	}
 	
 	function getComboSelectedText(obj) {

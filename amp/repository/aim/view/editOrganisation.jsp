@@ -17,7 +17,10 @@
 </script>
 
 <jsp:include page="scripts/newCalendar.jsp" flush="true" />
-<jsp:include page="addSectors.jsp" flush="true" />
+<c:set var="src">
+   <digi:file src="module/aim/addActivityStep2Popin.jsp"/>
+</c:set>
+<jsp:include page="${src}" flush="true" />
 
 <script language="JavaScript" type="text/javascript">
 	window.onload=initSectorScript();

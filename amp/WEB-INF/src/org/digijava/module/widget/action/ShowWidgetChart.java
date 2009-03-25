@@ -9,6 +9,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.orgProfile.helper.FilterHelper;
@@ -58,7 +59,7 @@ public class ShowWidgetChart extends Action {
                 }
             } else {
                 ChartOption opt = createChartOptions(wForm, widget);
-                   Long siteId=RequestUtils.getSiteDomain(request).getSite().getId();
+                String siteId=RequestUtils.getSiteDomain(request).getSite().getId().toString();
                 opt.setSiteId(siteId);
                 String langCode= RequestUtils.getNavigationLanguage(request).getCode();
                 opt.setLangCode(langCode);
@@ -85,7 +86,8 @@ public class ShowWidgetChart extends Action {
                         break;
                 }
                     Plot plot = chart.getPlot();
-                    plot.setNoDataMessage("No Data Available");
+                    String noDataString=TranslatorWorker.translateText("No Data Available",langCode,siteId);
+                    plot.setNoDataMessage(noDataString);
                     Font font= new Font(null,0,24);
                     plot.setNoDataMessageFont(font);
 

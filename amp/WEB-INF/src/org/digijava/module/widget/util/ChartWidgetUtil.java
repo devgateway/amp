@@ -19,10 +19,10 @@ import org.apache.log4j.Logger;
 import org.apache.struts.util.LabelValueBean;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyWorker;
-import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -49,7 +49,6 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.orgProfile.helper.FilterHelper;
 import org.digijava.module.orgProfile.util.OrgProfileUtil;
-import org.digijava.module.translation.util.DbUtil;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpWidget;
 import org.digijava.module.widget.dbentity.AmpWidgetIndicatorChart;
@@ -63,7 +62,6 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.labels.CategoryItemLabelGenerator;
 import org.jfree.chart.labels.PieSectionLabelGenerator;
-import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
 import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
 import org.jfree.chart.labels.StandardXYItemLabelGenerator;
 import org.jfree.chart.labels.XYItemLabelGenerator;
@@ -163,11 +161,19 @@ public class ChartWidgetUtil {
      * @return chart
      * @throws DgException
      */
-    public static JFreeChart getTypeOfAidChart(ChartOption opt, FilterHelper filter) throws DgException{
+    public static JFreeChart getTypeOfAidChart(ChartOption opt, FilterHelper filter) throws DgException, WorkerException{
 		JFreeChart chart = null;
 		Font font8 = new Font(null,Font.BOLD,12);
 		CategoryDataset dataset=getTypeOfAidDataset(filter);
-		chart=ChartFactory.createStackedBarChart("Type of Aid","","Amount in thousands",dataset,PlotOrientation.VERTICAL, true, true,false);
+        String titleMsg= TranslatorWorker.translateText("Type of Aid", opt.getLangCode(), opt.getSiteId());
+        String amount="";
+        if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
+            amount = "Amounts in thousands";
+        } else {
+            amount = "Amounts";
+        }
+        String amountTranslatedTitle=TranslatorWorker.translateText(amount, opt.getLangCode(), opt.getSiteId());
+		chart=ChartFactory.createStackedBarChart(titleMsg,"",amountTranslatedTitle,dataset,PlotOrientation.VERTICAL, true, true,false);
 		chart.getTitle().setFont(font8);
 		if (opt.isShowLegend()){
 			chart.getLegend().setItemFont(font8);		
@@ -190,11 +196,19 @@ public class ChartWidgetUtil {
      * @return chart
      * @throws DgException
      */
-    public static JFreeChart getPledgesCommDisbChart(ChartOption opt, FilterHelper filter) throws DgException {
+    public static JFreeChart getPledgesCommDisbChart(ChartOption opt, FilterHelper filter) throws DgException, WorkerException {
         JFreeChart chart = null;
         Font font8 = new Font(null, Font.BOLD, 12);
-        CategoryDataset dataset = getPledgesCommDisbDataset(filter);
-        chart = ChartFactory.createBarChart("Pledges/Comm/Disb", "", "Amount in thousands", dataset, PlotOrientation.VERTICAL, true, true, false);
+        CategoryDataset dataset = getPledgesCommDisbDataset(filter,opt);
+        String amount="";
+        if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
+            amount = "Amounts in thousands";
+        } else {
+            amount = "Amounts";
+        }
+        String amountTranslatedTitle=TranslatorWorker.translateText(amount, opt.getLangCode(), opt.getSiteId());
+        String titleMsg= TranslatorWorker.translateText("Pledges/Comm/Disb", opt.getLangCode(), opt.getSiteId());
+        chart = ChartFactory.createBarChart(titleMsg, "", amountTranslatedTitle, dataset, PlotOrientation.VERTICAL, true, true, false);
         chart.getTitle().setFont(font8);
         if (opt.isShowLegend()) {
             chart.getLegend().setItemFont(font8);
@@ -221,11 +235,19 @@ public class ChartWidgetUtil {
      * @return chart
      * @throws DgException
      */
-    public static JFreeChart getODAProfileChart(ChartOption opt, FilterHelper filter) throws DgException{
+    public static JFreeChart getODAProfileChart(ChartOption opt, FilterHelper filter) throws DgException, WorkerException{
 		JFreeChart chart = null;
 		Font font8 = new Font(null,Font.BOLD,12);
 		CategoryDataset dataset=getODAProfileDataset(filter);
-		chart=ChartFactory.createStackedAreaChart("ODA Profile","","Amount in thousands",dataset,PlotOrientation.VERTICAL, true, false,false);
+        String amount="";
+        if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
+            amount = "Amounts in thousands";
+        } else {
+            amount = "Amounts";
+        }
+        String amountTranslatedTitle=TranslatorWorker.translateText(amount, opt.getLangCode(), opt.getSiteId());
+        String titleMsg= TranslatorWorker.translateText("ODA Profile", opt.getLangCode(), opt.getSiteId());
+		chart=ChartFactory.createStackedAreaChart(titleMsg,"",amountTranslatedTitle,dataset,PlotOrientation.VERTICAL, true, false,false);
 		chart.getTitle().setFont(font8);
 		if (opt.isShowLegend()){
 			chart.getLegend().setItemFont(font8);		
@@ -335,7 +357,7 @@ public class ChartWidgetUtil {
      */
     
     
-    private static CategoryDataset getPledgesCommDisbDataset(FilterHelper filter) throws DgException {
+    private static CategoryDataset getPledgesCommDisbDataset(FilterHelper filter,ChartOption opt) throws DgException, WorkerException {
         boolean nodata = true; // for displaying no data message
         DefaultCategoryDataset result = new DefaultCategoryDataset();
         Long year = filter.getYear();
@@ -351,16 +373,19 @@ public class ChartWidgetUtil {
             currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
         }
         Long fiscalCalendarId = filter.getFiscalCalendarId();
+        String pledgesTranslatedTitle=TranslatorWorker.translateText("Pledges", opt.getLangCode(), opt.getSiteId());
+        String actComTranslatedTitle=TranslatorWorker.translateText("Actual commitments", opt.getLangCode(), opt.getSiteId());
+        String actDisbTranslatedTitle=TranslatorWorker.translateText("Actual disbursements", opt.getLangCode(), opt.getSiteId());
         for (int i = year.intValue() - 2; i <= year.intValue(); i++) {
             // apply calendar filter
             Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i);
             Date endDate =OrgProfileUtil.getEndDate(fiscalCalendarId, i);
             Double fundingPledge = getPledgesFunding(filter.getOrgId(), filter.getOrgGroupId(), startDate, endDate, currCode);
-            result.addValue(fundingPledge.doubleValue(), "Pledges", new Long(i));
+            result.addValue(fundingPledge.doubleValue(), pledgesTranslatedTitle, new Long(i));
             DecimalWraper fundingComm = getFunding(filter.getOrgId(), filter.getOrgGroupId(), startDate, endDate, currCode, true, filter.getTeamMember());
-            result.addValue(fundingComm.doubleValue(), "Actual commitments", new Long(i));
+            result.addValue(fundingComm.doubleValue(), actComTranslatedTitle, new Long(i));
             DecimalWraper fundingDisb = getFunding(filter.getOrgId(), filter.getOrgGroupId(), startDate, endDate, currCode, false, filter.getTeamMember());
-            result.addValue(fundingDisb.doubleValue(), "Actual disbursements", new Long(i));
+            result.addValue(fundingDisb.doubleValue(), actDisbTranslatedTitle, new Long(i));
             if (fundingPledge.doubleValue() != 0 || fundingComm.doubleValue() != 0 || fundingDisb.doubleValue() != 0) {
                 nodata = false;
             }
@@ -549,12 +574,7 @@ public class ChartWidgetUtil {
 		JFreeChart result = null;
 		PieDataset ds = getSectorByDonorDataset(donors,fromYear,toYear);		
 		
-        //String titleMsg= TranslatorWorker.translate("widget:piechart:breakdownbysector", opt.getLangCode(), opt.getSiteId());
-        Message msg= DbUtil.getMessage("widget:piechart:breakdownbysector", opt.getLangCode(), opt.getSiteId());
-        String titleMsg="";
-        if(msg!=null){
-           titleMsg=msg.getMessage(); 
-        }
+        String titleMsg= TranslatorWorker.translateText("Breakdown by Sector", opt.getLangCode(), opt.getSiteId());
 		String title = (opt.isShowTitle())? titleMsg:null;
 		boolean tooltips = false;
 		boolean urls = false;
@@ -600,7 +620,7 @@ public class ChartWidgetUtil {
         JFreeChart chart = null;
         Font font8 = new Font(null, Font.BOLD, 12);
         DefaultPieDataset dataset = getDonorSectorDataSet(filter);
-        chart = ChartFactory.createPieChart("Primary Sector(s) Breakdown ("+(filter.getYear()-1)+")", dataset, true, true, false);
+        chart = ChartFactory.createPieChart(TranslatorWorker.translateText("Primary Sector(s) Breakdown ",opt.getLangCode(),opt.getSiteId())+" ("+(filter.getYear()-1)+")", dataset, true, true, false);
         chart.getTitle().setFont(font8);
         if (opt.isShowLegend()) {
             chart.getLegend().setItemFont(font8);
@@ -633,7 +653,7 @@ public class ChartWidgetUtil {
      	JFreeChart chart = null;
 		Font font8 = new Font(null,Font.BOLD,12);
 		DefaultPieDataset dataset=getDonorRegionalDataSet(filter);
-		chart=ChartFactory.createPieChart("Regional Breakdown ("+(filter.getYear()-1)+")",dataset, true, true,false);
+		chart=ChartFactory.createPieChart(TranslatorWorker.translateText("Regional Breakdown", opt.getLangCode(),opt.getSiteId())+" ("+(filter.getYear()-1)+")",dataset, true, true,false);
 		chart.getTitle().setFont(font8);
 		if (opt.isShowLegend()){
 			chart.getLegend().setItemFont(font8);		

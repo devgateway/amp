@@ -6150,11 +6150,11 @@ public class DbUtil {
                                     // checking if the Mission is 'joint'
                                     if (null != ampCal.getOrganisations() && ampCal.getOrganisations().size() > 1) {
                                         answersRow[1] += 1;
-                                        allDnRow[1] += 1;
+                                        //allDnRow[1] += 1;
                                     }
                                     // total number of Missions
                                     answersRow[2] += 1;
-                                    allDnRow[2] += 1;
+                                    //allDnRow[2] += 1;
                                 }
                             }
                         }
@@ -6170,7 +6170,7 @@ public class DbUtil {
                     responses.add(pi);
                 }
                 // calculating total joint missions & all missions for 'all-donors' row
-                /*for (j = 0; j < YEAR_RANGE; j++) {
+                for (j = 0; j < YEAR_RANGE; j++) {
                     allDnRow = (double[]) ( ( (ParisIndicator) responses.get(0)).getAnswers().get(j));
                     Iterator itr = calDonorsList.iterator();
                     while (itr.hasNext()) {
@@ -6188,7 +6188,7 @@ public class DbUtil {
                             }
                         }
                     }
-                }*/
+                }
                 // calculating final percentage for all-donors row
                 for (j = 0; j < YEAR_RANGE; j++) {
                     allDnRow = (double[]) ( ( (ParisIndicator) responses.get(0)).getAnswers().get(j));

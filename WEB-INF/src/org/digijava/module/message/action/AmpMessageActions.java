@@ -866,7 +866,6 @@ public class AmpMessageActions extends DispatchAction {
                  }
              }
 
-
 			 form.setReceivers(getMessageRecipients(message.getId()));
 			 form.setSelectedAct(null);
 			 //getting related activity if exists
@@ -882,7 +881,6 @@ public class AmpMessageActions extends DispatchAction {
 			 }
 		 }
 	 }
-
 
 	 private String getRelatedActivity(Long actId){
 		 String retValue;
@@ -1002,7 +1000,6 @@ public class AmpMessageActions extends DispatchAction {
      	 }
      	 return msgHelper;
 	 }
-
 
 	 /**
 	  * used to get message recipients, which will be shown on edit Message Page

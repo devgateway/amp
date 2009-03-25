@@ -167,7 +167,28 @@ public class AmpMessageUtil {
 			}
 			throw new AimException("delete failed",ex);
 		}
-	}	
+	}
+	
+	public static void removeMessageState(AmpMessageState state) throws AimException{
+		Session session=null;
+		Transaction trans=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			trans=session.beginTransaction();			
+			session.delete(state);
+			trans.commit();
+		} catch (Exception ex) {
+			if(trans!=null) {
+				try {
+					trans.rollback();					
+				}catch(Exception e ) {
+					logger.error("...Rollback failed");
+					throw new AimException("Can't rollback", e);
+				}			
+			}
+			throw new AimException("delete failed",ex);
+		}
+	}
 	
 	
 	public static void saveOrUpdateMessageState(AmpMessageState messageState) throws AimException {

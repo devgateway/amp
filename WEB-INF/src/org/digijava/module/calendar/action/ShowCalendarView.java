@@ -217,24 +217,8 @@ public class ShowCalendarView extends Action {
         Collection ampCalendarEvents = AmpDbUtil.getAmpCalendarEventsByMember(startDate,
             endDate, filter.getSelectedEventTypes(), filter.getSelectedDonors(),
             member, filter.isShowPublicEvents(), null, null);
-        Collection<AmpCalendarGraph> ampCalendarGraphs = AmpUtil.getAmpCalendarGraphs(ampCalendarEvents,
-            navigator, view);
-        calendarViewForm.setAmpCalendarGraphs(ampCalendarGraphs);      
-        
-        
-//        if(calendarViewForm.getView().equals("yearly")){        	
-//        	Integer [] eventsAmountByMonth=new Integer[] {0,0,0,0,0,0,0,0,0,0,0,0,0};
-//        	String[] monthsArray=new String[]{"jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"};
-//        	for (int i=0;i<monthsArray.length;i++) {
-//				for(AmpCalendarGraph acg:ampCalendarGraphs){
-//					if(acg.getAmpCalendar().getCalendarPK().getStartMonth()==i){
-//						eventsAmountByMonth[i]++;
-//					}
-//				}
-//			}
-//        	calendarViewForm.setEventsAmountByMonth(eventsAmountByMonth);
-//        }
-
+        Collection<AmpCalendarGraph> ampCalendarGraphs = AmpUtil.getAmpCalendarGraphs(ampCalendarEvents,navigator, view);
+        calendarViewForm.setAmpCalendarGraphs(ampCalendarGraphs);
 
         return mapping.findForward("success");
     }

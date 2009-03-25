@@ -51,7 +51,9 @@ import org.digijava.module.calendar.util.AmpDbUtil;
 import org.digijava.module.common.dbentity.ItemStatus;
 import org.digijava.module.message.dbentity.AmpMessageSettings;
 import org.digijava.module.message.triggers.CalendarEventSaveTrigger;
+import org.digijava.module.message.triggers.RemoveCalendarEventTrigger;
 import org.digijava.module.message.util.AmpMessageUtil;
+
 
 public class ShowCalendarEvent extends Action {
 	
@@ -163,7 +165,7 @@ public class ShowCalendarEvent extends Action {
         
         if (ceform.getMethod().equalsIgnoreCase("new")) {
             ceform.setAmpCalendarId(null);
-
+            ceform.setActionButtonsVisible(true);
         } else if (ceform.getMethod().equalsIgnoreCase("edit")) {
             loadAmpCalendar(ceform, request);
         } else if (ceform.getMethod().equalsIgnoreCase("save")) {
@@ -182,7 +184,33 @@ public class ShowCalendarEvent extends Action {
         	}            
 
         } else if (ceform.getMethod().equalsIgnoreCase("delete")) {
-            AmpDbUtil.deleteAmpCalendar(ceform.getAmpCalendarId());
+        	AmpCalendar ampCalendar=AmpDbUtil.getAmpCalendar(ceform.getAmpCalendarId());
+        	//get current member
+        	HttpSession ses = request.getSession();
+            TeamMember mem = (TeamMember) ses.getAttribute("currentMember");
+            /**
+        	 * if event belongs to several users,then deleting event should delete only link between the user that clicked delete button and event,
+        	 * but for other users that event should remain,unless creator decides to remove it.   
+        	 */
+            if(ampCalendar.getMember()!=null && mem.getMemberId().equals(ampCalendar.getMember().getAmpTeamMemId())){
+            	AmpDbUtil.deleteAmpCalendar(ceform.getAmpCalendarId());
+            	new RemoveCalendarEventTrigger(ampCalendar);
+            }else{
+            	if(ampCalendar.getAttendees()!=null && ampCalendar.getAttendees().size()>0){        		
+            		for (Object obj : ampCalendar.getAttendees()) {
+            			AmpCalendarAttendee attendee=(AmpCalendarAttendee)obj;
+            			if(attendee.getMember()!=null && attendee.getMember().getAmpTeamMemId().equals(mem.getMemberId())){
+            				ampCalendar.getAttendees().remove(attendee);
+            				AmpDbUtil.updateAmpCalendar(ampCalendar);
+                			//delete that Attendee
+                			AmpDbUtil.deleteAmpCalendarAttendee(attendee);
+            				break;
+            			}
+    				}
+            	}else{
+            		AmpDbUtil.deleteAmpCalendar(ceform.getAmpCalendarId());
+            	}
+            }           
             ceform.setMethod("");
             return mapping.findForward("forward");
 
@@ -199,6 +227,23 @@ public class ShowCalendarEvent extends Action {
         		return mapping.findForward("success");        		
         	}else{
         		loadAmpCalendar(ceform, request);
+        		if(ceform.getAmpCalendarId()!=null && ceform.getAmpCalendarId() > 0){ //<--this means that user is not creating new event, but previewing old one
+        			ceform.setActionButtonsVisible(false);
+            		//get current member
+            		HttpSession ses = request.getSession();
+                    TeamMember mem = (TeamMember) ses.getAttribute("currentMember");
+            		String[] selattendeess=ceform.getSelectedAtts();
+            		if(ceform.getEventCreatorId()!=null && ceform.getEventCreatorId().equals(mem.getMemberId())){
+            			ceform.setActionButtonsVisible(true);
+            		}else if(ceform.isPrivateEvent()){
+            			for (String attendee : selattendeess) {
+    						if(attendee.startsWith("m:") && attendee.substring(attendee.indexOf(":")+1).equals(mem.getMemberId().toString())){
+    							ceform.setActionButtonsVisible(true);
+    							break;
+    						}
+    					}
+            		}
+        		}        		
                 ceform.setMethod("");
                 return mapping.findForward("preview");
         	}
@@ -356,6 +401,10 @@ public class ShowCalendarEvent extends Action {
                 Set<AmpTeam> teams = new HashSet<AmpTeam> ();
                 Collection<AmpTeamMember> members = new ArrayList<AmpTeamMember> ();
                 Collection<String> guests = new ArrayList<String> ();
+                //event creator
+                if(ampCalendar.getMember()!=null){
+                	ceform.setEventCreatorId(ampCalendar.getMember().getAmpTeamMemId());
+                }
                 if (ampCalendar.getAttendees() != null) {
                     //LabelValueBean lvb = null;
                     //List<AmpCalendarAttendee> atts=AmpDbUtil.getAmpCalendarAttendees(ampCalendar)
@@ -373,8 +422,7 @@ public class ShowCalendarEvent extends Action {
                         	}
                         	if(!teams.contains(member.getAmpTeam())){
                         		teams.add(member.getAmpTeam());
-                        	}
-                        	
+                        	}                        	
                         } else if(guest!=null){
                         	guests.add(guest);
                         }

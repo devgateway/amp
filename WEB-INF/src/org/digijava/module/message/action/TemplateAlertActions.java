@@ -82,7 +82,7 @@ public class TemplateAlertActions extends DispatchAction {
 	    		//remove all States that were associated to this message
 				List<AmpMessageState> statesAssociatedWithMsg=AmpMessageUtil.loadMessageStates(msgForm.getTemplateId());
 				for (AmpMessageState state : statesAssociatedWithMsg) {
-					AmpMessageUtil.removeMessageState(state.getId());
+					AmpMessageUtil.removeMessageState(state);
 				}
 				//remove message
 				AmpMessageUtil.removeMessage(msgForm.getTemplateId());
@@ -133,7 +133,7 @@ public class TemplateAlertActions extends DispatchAction {
 			 templateAlert=AmpMessageUtil.getMessage(msgForm.getTemplateId());
 			 states=AmpMessageUtil.loadMessageStates(templateAlert.getId());
 			 for (AmpMessageState state : states) {
-				 AmpMessageUtil.removeMessageState(state.getId());
+				 AmpMessageUtil.removeMessageState(state);
 			}
 			 AmpMessageUtil.removeMessage(templateAlert.getId());
 		 }

@@ -42,6 +42,7 @@ import org.digijava.module.message.triggers.ApprovedActivityTrigger;
 import org.digijava.module.message.triggers.CalendarEventSaveTrigger;
 import org.digijava.module.message.triggers.CalendarEventTrigger;
 import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
+import org.digijava.module.message.triggers.RemoveCalendarEventTrigger;
 import org.digijava.module.message.triggers.UserRegistrationTrigger;
 import org.digijava.module.message.util.AmpMessageUtil;
 
@@ -69,6 +70,8 @@ public class AmpMessageWorker {
                     newMsg = proccessCalendarEvent(e, newEvent, template,false);
                 }else if(e.getTrigger().equals(CalendarEventSaveTrigger.class)){
                 	 newMsg = proccessCalendarEvent(e, newEvent, template,true);
+                }else if(e.getTrigger().equals(RemoveCalendarEventTrigger.class)){
+                	newMsg = proccessCalendarEventRemoval(e, newEvent, template);
                 }else if (e.getTrigger().equals(ApprovedActivityTrigger.class)) {
                     newMsg = processApprovedActivityEvent(e, newApproval, template);
                 } else if (e.getTrigger().equals(NotApprovedActivityTrigger.class)) {
@@ -98,9 +101,11 @@ public class AmpMessageWorker {
                 if(e.getTrigger().equals(ApprovedActivityTrigger.class) || e.getTrigger().equals(NotApprovedActivityTrigger.class)) {
                     defineReceiversForApprovedAndNotApprovedActivities(e.getTrigger(), newMsg,(Long)e.getParameters().get(NotApprovedActivityTrigger.PARAM_ACTIVIY_CREATOR_TEAM));
                 }else if(e.getTrigger().equals(CalendarEventTrigger.class)) {
-                    defineReceiversForCalendarEvents(e, template, newMsg,false);
+                    defineReceiversForCalendarEvents(e, template, newMsg,false,false);
                 }else if(e.getTrigger().equals(CalendarEventSaveTrigger.class)){
-                	defineReceiversForCalendarEvents(e, template, newMsg,true);
+                	defineReceiversForCalendarEvents(e, template, newMsg,true,false);
+                }else if(e.getTrigger().equals(RemoveCalendarEventTrigger.class)){
+                	defineReceiversForCalendarEvents(e, template, newMsg,false,true);
                 }
                 else if(e.getTrigger().equals(ActivitySaveTrigger.class)) {
                     defineActivityCreationReceievrs(template, newMsg);
@@ -141,17 +146,19 @@ public class AmpMessageWorker {
      */
     private static CalendarEvent proccessCalendarEvent(Event e, CalendarEvent event, TemplateAlert template,boolean saveActionWasCalled) {
         DigiConfig config = DigiConfigManager.getConfig();
-        String partialURL = config.getSiteDomain().getContent() ;        
+        String partialURL = config.getSiteDomain().getContent() ;
+        //get event creator
+        AmpTeamMember tm=(AmpTeamMember)e.getParameters().get(CalendarEventSaveTrigger.SENDER);
 
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(CalendarEventTrigger.PARAM_NAME));
+        //if event was removed, then we can't create it's url
         if (partialURL != null) {
             myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + partialURL + e.getParameters().get(CalendarEventTrigger.PARAM_URL) + "\">View Event</a>");
             event.setObjectURL(partialURL + e.getParameters().get(CalendarEventTrigger.PARAM_URL));
         }
         if(saveActionWasCalled){
-        	event.setSenderType(MessageConstants.SENDER_TYPE_USER);
-        	AmpTeamMember tm=(AmpTeamMember)e.getParameters().get(CalendarEventSaveTrigger.SENDER);
+        	event.setSenderType(MessageConstants.SENDER_TYPE_USER);        	
         	event.setSenderId(tm.getAmpTeamMemId());
         	event.setSenderName(tm.getUser().getFirstNames()+" "+tm.getUser().getLastName()+"<"+tm.getUser().getEmail()+">;"+tm.getAmpTeam().getName());
         	event.setSenderEmail(tm.getUser().getEmail());
@@ -165,40 +172,62 @@ public class AmpMessageWorker {
         CalendarEvent newEvent = createEventFromTemplate(template, myHashMap, event);
 
         String receivers = new String();
-
-        HashMap<String, String> emailes=new HashMap<String, String>();
-
-        Long calId = new Long(e.getParameters().get(CalendarEventTrigger.PARAM_ID).toString());
+        
+        Long calId = new Long(e.getParameters().get(CalendarEventTrigger.PARAM_ID).toString());        
         AmpCalendar ampCal = AmpDbUtil.getAmpCalendar(calId);
-        Set<AmpCalendarAttendee> att = ampCal.getAttendees();
+        Set<AmpCalendarAttendee> att=ampCal.getAttendees();
+        
         if (att != null) {
-            for (AmpCalendarAttendee ampAtt : att) {
-                if (ampAtt.getMember() != null) {
-                    AmpTeamMember member = ampAtt.getMember();
-                    User user = member.getUser();
-                    receivers += ", " + user.getFirstNames() + " " + user.getLastName() + "<" + user.getEmail() + ">;" + member.getAmpTeam().getName() + ";";
-
-                    if (!emailes.containsKey(user.getEmail())) {
-                        emailes.put(user.getEmail(), ampCal.getCalendarPK().getCalendar().getFirstCalendarItem().getTitle());
-                    }
-                }
-                if(ampAtt.getGuest()!=null){ //guests e-mails should also be included in receivers list
-                	receivers+=", <"+ampAtt.getGuest().substring(2)+">;";
-                }
-            }            
+            receivers = createReceiversFieldForEvent(receivers, att);            
         }
         //In case this event is created when new calendar event was added, message should go to it's creator too
         //so in the receivers list we should also add it's creator (AMP-3775)
-        if(saveActionWasCalled){
-        	AmpTeamMember member = ampCal.getMember();
-            User user = member.getUser();
-            receivers += ", " + user.getFirstNames() + " " + user.getLastName() + "<" + user.getEmail() + ">;" + member.getAmpTeam().getName() + ";";
+        if(saveActionWasCalled){        	
+            User user = tm.getUser();
+            receivers += ", " + user.getFirstNames() + " " + user.getLastName() + "<" + user.getEmail() + ">;" + tm.getAmpTeam().getName() + ";";
         }        
         
         newEvent.setReceivers(receivers.substring(", ".length()));
-
         return newEvent;
+    }	
+    
+    private static CalendarEvent proccessCalendarEventRemoval(Event e, CalendarEvent event, TemplateAlert template) {
+    	HashMap<String, String> myHashMap = new HashMap<String, String> ();
+    	
+        myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(RemoveCalendarEventTrigger.PARAM_NAME));
+        //get event creator
+        AmpTeamMember tm=(AmpTeamMember)e.getParameters().get(RemoveCalendarEventTrigger.SENDER);
+        event.setSenderType(MessageConstants.SENDER_TYPE_USER);        	
+    	event.setSenderId(tm.getAmpTeamMemId());
+    	event.setSenderName(tm.getUser().getFirstNames()+" "+tm.getUser().getLastName()+"<"+tm.getUser().getEmail()+">;"+tm.getAmpTeam().getName());
+    	event.setSenderEmail(tm.getUser().getEmail());
+    	//put event's start/end dates in map.
+    	myHashMap.put(MessageConstants.START_DATE, (String) e.getParameters().get(RemoveCalendarEventTrigger.EVENT_START_DATE));
+    	myHashMap.put(MessageConstants.END_DATE, (String) e.getParameters().get(RemoveCalendarEventTrigger.EVENT_END_DATE));
+    	
+    	CalendarEvent newEvent = createEventFromTemplate(template, myHashMap, event);
+
+        String receivers = new String();
+        Set<AmpCalendarAttendee> att=(Set<AmpCalendarAttendee>) e.getParameters().get(RemoveCalendarEventTrigger.ATTENDEES);
+        if(att!=null){
+        	receivers = createReceiversFieldForEvent(receivers, att);
+        }
+    	return newEvent;
     }
+    
+    private static String createReceiversFieldForEvent(String receivers,Set<AmpCalendarAttendee> att) {
+		for (AmpCalendarAttendee ampAtt : att) {
+		    if (ampAtt.getMember() != null) {
+		        AmpTeamMember member = ampAtt.getMember();
+		        User user = member.getUser();
+		        receivers += ", " + user.getFirstNames() + " " + user.getLastName() + "<" + user.getEmail() + ">;" + member.getAmpTeam().getName() + ";";                    
+		    }
+		    if(ampAtt.getGuest()!=null){ //guests e-mails should also be included in receivers list
+		    	receivers+=", <"+ampAtt.getGuest().substring(2)+">;";
+		    }
+		}
+		return receivers;
+	}
 
     /**
      *	Not Approved Activity Event processing
@@ -395,10 +424,7 @@ public class AmpMessageWorker {
     private static AmpAlert processActivityProposedStartDateEvent(Event e, AmpAlert alert, TemplateAlert template) {
         DigiConfig config = DigiConfigManager.getConfig();
         String partialURL = config.getSiteDomain().getContent() ;
-        /*if (FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SITE_DOMAIN) != null) {
-        partialURL = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SITE_DOMAIN) + "/";
-        }*/
-
+        
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(ActivityProposedStartDateTrigger.PARAM_NAME));
         //creator
@@ -420,9 +446,6 @@ public class AmpMessageWorker {
         //url
         DigiConfig config = DigiConfigManager.getConfig();
         String partialURL = config.getSiteDomain().getContent() ;
-        /*if (FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SITE_DOMAIN) != null) {
-        partialURL = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SITE_DOMAIN) + "/";
-        }*/
 
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(UserRegistrationTrigger.PARAM_NAME));
@@ -441,9 +464,6 @@ public class AmpMessageWorker {
     private static AmpAlert processActivityDisbursementDateComingEvent(Event e, AmpAlert alert, TemplateAlert template) {
         DigiConfig config = DigiConfigManager.getConfig();
         String partialURL = config.getSiteDomain().getContent() ;
-        /*if (FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SITE_DOMAIN) != null) {
-        partialURL = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SITE_DOMAIN) + "/";
-        }*/
 
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(ActivityDisbursementDateTrigger.PARAM_NAME));
@@ -524,7 +544,7 @@ public class AmpMessageWorker {
      * this method defines calendar event receivers and creates corresponding AmpMessageStates.
      * saveActionWasCalled field is used to define whether user created new calendar event or not
      */
-    private static void defineReceiversForCalendarEvents(Event e, TemplateAlert template, AmpMessage calEvent,boolean  saveActionWasCalled) throws Exception {
+    private static void defineReceiversForCalendarEvents(Event e, TemplateAlert template, AmpMessage calEvent,boolean  saveActionWasCalled,boolean eventRemoved) throws Exception {
         HashMap<Long, AmpMessageState> temMsgStateMap = new HashMap<Long, AmpMessageState> ();
         List<AmpMessageState> lstMsgStates = AmpMessageUtil.loadMessageStates(template.getId());
         if (lstMsgStates != null) {
@@ -537,8 +557,14 @@ public class AmpMessageWorker {
 
         HashMap<Long, AmpMessageState> eventMsgStateMap = new HashMap<Long, AmpMessageState> ();
         Long calId = new Long(e.getParameters().get(CalendarEventTrigger.PARAM_ID).toString());
-        AmpCalendar ampCal = AmpDbUtil.getAmpCalendar(calId);
-        Set<AmpCalendarAttendee> att = ampCal.getAttendees();
+        AmpCalendar ampCal=null;
+        Set<AmpCalendarAttendee> att= null;
+        if(eventRemoved){
+        	att=(Set<AmpCalendarAttendee>)e.getParameters().get(RemoveCalendarEventTrigger.ATTENDEES);
+        }else{
+        	ampCal = AmpDbUtil.getAmpCalendar(calId);
+            att = ampCal.getAttendees();
+        }        
         if (att != null) {
             for (AmpCalendarAttendee ampAtt : att) {
                 if (ampAtt.getMember() != null) {

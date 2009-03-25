@@ -36,7 +36,8 @@
 function showUser(email){
 	if (email != ""){
 		<digi:context name="information" property="context/module/moduleinstance/userProfile.do" />
-		openURLinWindow("<%= information %>~edit=true~email="+email,480, 350);
+        var param = "~edit=true~email="+email;
+		previewWorkspaceframe("${information}",param);
 	}
 	else{
 		var trasnlation = '<digi:trn key="aim:userblankmail">The user does not have a valid email address</digi:trn>'

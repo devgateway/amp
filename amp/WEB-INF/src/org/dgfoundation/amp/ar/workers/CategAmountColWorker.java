@@ -28,10 +28,10 @@ import org.dgfoundation.amp.ar.cell.Cell;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 import org.digijava.module.aim.helper.fiscalcalendar.CalendarWorker;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.helper.Constants;
 
 /**
  * 
@@ -197,6 +197,17 @@ public class CategAmountColWorker extends ColumnWorker {
 		if (columnsMetaData.contains("org_grp_name")) {
 			donorGroupName	= rs.getString("org_grp_name");
 		}
+		
+		
+		//tr_type == DISBURSEMENT_ORDERS
+		if( tr_type == Constants.DISBURSEMENT_ORDER && filter.getDisbursementOrderRejected()!=null){
+			if (columnsMetaData.contains("disb_ord_rej")) {
+				Boolean disbursementOrderRejected = rs.getBoolean("disb_ord_rej");
+				if(!filter.getDisbursementOrderRejected().equals(disbursementOrderRejected))
+					return null;
+			}			
+		}
+			
 		
 		String value=FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_TYPE_OF_ASSISTANCE);
 		boolean skpyCategorize=("false".equalsIgnoreCase(value));

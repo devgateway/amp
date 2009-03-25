@@ -718,6 +718,17 @@ public class ReportsFilterPicker extends MultiAction {
 		arf.setImplementingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedImplementingAgency(), AmpOrganisation.class));
 		arf.setExecutingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedExecutingAgency(), AmpOrganisation.class));
 		arf.setProjectCategory(ReportsUtil.processSelectedFilters(filterForm.getSelectedProjectCategory(), AmpOrganisation.class));
+		
+		if(filterForm.getDisbursementOrder()!=null){
+			if(filterForm.getDisbursementOrder().equals(0)){
+				arf.setDisbursementOrderRejected(false);
+			}else if(filterForm.getDisbursementOrder().equals(1)){
+				arf.setDisbursementOrderRejected(true);
+			}else{
+				arf.setDisbursementOrderRejected(null);
+			}
+		}
+			
 
 		if ( filterForm.getSourceIsReportWizard() != null && filterForm.getSourceIsReportWizard() ) {
 			httpSession.setAttribute(ReportWizardAction.SESSION_FILTER, arf);

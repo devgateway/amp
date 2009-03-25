@@ -213,6 +213,7 @@ public class AmpARFilter extends PropertyListable {
 	private String sortBy;
 	private Boolean sortByAsc						= true;
 	private Collection<String> hierarchySorters		= new ArrayList<String>();
+	private Boolean disbursementOrderRejected;
 	private void queryAppend(String filter) {
 		// generatedFilterQuery+=
 		// (initialQueryLength==generatedFilterQuery.length()?"":" AND ") + "
@@ -1385,6 +1386,12 @@ public class AmpARFilter extends PropertyListable {
 	public void setHierarchySorters(Collection<String> hierarchySorters) {
 		this.hierarchySorters = hierarchySorters;
 	}
-	
 
+	public void setDisbursementOrderRejected(Boolean b) {
+		this.disbursementOrderRejected = b;
+	}
+	
+	public Boolean getDisbursementOrderRejected() {
+		return this.disbursementOrderRejected;
+	}
 }

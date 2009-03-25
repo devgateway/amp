@@ -326,6 +326,32 @@
 					</td>
 				</tr>
 				</field:display>
+				
+				<field:display name="Project Category" feature="Identification">
+				<tr bgcolor="#EEEEEE">
+					<td colspan="5">&nbsp;</td>
+				</tr>
+				<tr bgcolor="#EEEEEE">
+					<td colspan="5">
+					<digi:trn key="aim:DisbursementOrder">Disbursement Orders</digi:trn>
+					</td>
+				</tr>
+				<tr bgcolor="#EEEEEE">
+					<td colspan="5">
+					<html:select property="disbursementOrder" style="width: 200px" styleClass="inp-text" >
+						<html:option value="-1">
+							<digi:trn key="rep:filer:All">All</digi:trn>
+						</html:option>
+						<html:option value="0">
+							<digi:trn key="aim:DisbursementOrderRejected">No Rejected</digi:trn>
+						</html:option>
+						<html:option value="1">
+							<digi:trn key="aim:DisbursementOrderNoRejected">Rejected</digi:trn>
+						</html:option>
+					</html:select>
+					</td>
+				</tr>
+				</field:display>
 
 
 				</table>

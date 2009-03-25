@@ -776,8 +776,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Computation" feature="Identification"></field:display> 
 <field:display name="addMessageButton" feature="Messages"></field:display> 
 <field:display name='Delete Regional Funding Button' feature='Regional Funding'></field:display>
-
-
+<field:display name="Add Costing Button" feature="Costing"/>
+<field:display name="Add Documents From Repository Button" feature="Related Documents"/>
 <field:display name="Donor Filter" feature="Filter"></field:display>
 <field:display name="Event Type Filter" feature="Filter"></field:display>
 <field:display name="Run Filter Button" feature="Filter"></field:display>

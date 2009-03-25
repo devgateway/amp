@@ -1,5 +1,4 @@
---Refresh cubes tables
-DROP TABLE IF EXISTS cached_v_sectors;
+ DROP TABLE IF EXISTS cached_v_sectors;
 CREATE TABLE cached_v_sectors AS SELECT * FROM v_sectors;
 DROP TABLE IF EXISTS cached_amp_activity;
 CREATE TABLE cached_amp_activity LIKE amp_activity;
@@ -17,7 +16,6 @@ CREATE TABLE cached_v_secunday_program AS SELECT * FROM `v_secondaryprogram_cach
 DROP TABLE IF EXISTS cached_v_status;
 CREATE TABLE cached_v_status AS SELECT * FROM v_status;
 
--- Create Indexes --
 CREATE INDEX idx_amp_activity ON cached_v_donor_date_hierarchy(amp_activity_id);
 CREATE INDEX idx_fund_det_id ON cached_v_donor_date_hierarchy(amp_fund_detail_id);
 CREATE INDEX idx_year ON cached_v_donor_date_hierarchy(year);

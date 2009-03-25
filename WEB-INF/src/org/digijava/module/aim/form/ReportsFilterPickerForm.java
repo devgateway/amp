@@ -126,6 +126,8 @@ public class ReportsFilterPickerForm extends ActionForm {
 	
 	private Boolean sourceIsReportWizard;
 	
+	private Integer disbursementOrder;
+	
 	public String getResetFormat() {
 		return resetFormat;
 	}
@@ -832,6 +834,14 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public void setSourceIsReportWizard(Boolean sourceIsReportWizard) {
 		this.sourceIsReportWizard = sourceIsReportWizard;
+	}
+
+	public void setDisbursementOrder(Integer disbursementOrder) {
+		this.disbursementOrder = disbursementOrder;
+	}
+
+	public Integer getDisbursementOrder() {
+		return disbursementOrder;
 	}
 
 	

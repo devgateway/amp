@@ -27,6 +27,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFilters;
@@ -1051,6 +1052,46 @@ public class TeamUtil {
 
     }
 
+    public static void removeDocumentsFromActivities(Long activities[], String[] uuids) {
+        Session session = null;
+        Transaction tx = null;
+        Query query = null;
+        String str = "";
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            tx = session.beginTransaction();
+            str = "select act from " + AmpActivity.class.getName() + " act where act.ampId=:ampId";
+            for(int i = 0; i < activities.length; i++) {         
+            	query = session.createQuery(str);
+            	query.setParameter("ampId", activities[i] + "", Hibernate.STRING);
+            	//
+            	AmpActivity activity = (AmpActivity) query.list().get(0);
+                //         
+                Iterator it = activity.getActivityDocuments().iterator();
+                AmpActivityDocument document = null;
+                while (it.hasNext()) { 
+                	document = (AmpActivityDocument) it.next();
+                	if (document.getAmpActivity().getAmpId().equals(activities[i]+"") && document.getUuid().equals(uuids[i]))  {
+                		activity.getActivityDocuments().remove(document);	
+                	}                	
+                }
+            }
+            tx.commit();
+        } catch(Exception e) {
+            e.printStackTrace(System.out);
+            if(tx != null) {
+                try {
+                    tx.rollback();
+                } catch(Exception rbf) {
+                    logger.error("Roll back failed");
+                }
+            }
+            throw new RuntimeException(e);
+        }
+
+    }
+
     public static Collection getAllDonorsToDesktop(Long teamId) {
         Session session = null;
         Query qry = null;
@@ -1674,8 +1715,8 @@ public class TeamUtil {
 
 			String queryString = "";
 			Query qry = null;
-			queryString = "select act.ampActivityId, act.name, act.budget, act.updatedDate,act.updatedBy ," +
-						  "role.role.roleCode,role.organisation.name , act.ampId from "+ AmpActivity.class.getName()	+ " act left join  act.updatedBy  left join act.orgrole role  ";
+			queryString = "select act from "+ AmpActivity.class.getName()	
+						+ " act left join act.updatedBy  left join act.orgrole role  ";
 			if(teamId!=null){
 				queryString+="where act.team="+teamId;
 			}else{
@@ -1685,16 +1726,16 @@ public class TeamUtil {
 			
 			qry.setFetchSize(100);
 			ArrayList al=(ArrayList) qry.list();
-			Iterator itr = al.iterator();
+			Iterator itr = qry.list().iterator();
 
 			HashMap<Long, AmpActivity> holder = new HashMap<Long, AmpActivity>();
 			HashMap<Long,ArrayList<String>> donnors=new HashMap<Long, ArrayList<String>>();
 			while (itr.hasNext()) {
 
-				Object[] act = (Object[]) itr.next();
+				//Object[] act = (Object[]) itr.next();
 				//AmpActivity act = (AmpActivity) itr.next();
-				AmpActivity activity = new AmpActivity((Long) act[0], (String) act[1], (Boolean) act[2], (Date) act[3], (AmpTeamMember) act[4],(String) act[7] );
-				//AmpActivity activity = (AmpActivity)itr.next();
+				//AmpActivity activity = new AmpActivity((Long) act[0], (String) act[1], (Boolean) act[2], (Date) act[3], (AmpTeamMember) act[4],(String) act[7] );
+				AmpActivity activity = (AmpActivity)itr.next();
 				AmpActivity tmp = holder.get(activity.getAmpActivityId());
 				if (tmp==null){
 					holder.put(activity.getAmpActivityId().longValue(), activity);

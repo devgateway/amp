@@ -776,6 +776,10 @@
       <forward name="forward" path="/showLayout.do?layout=teamActivities" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
+    <action name="aimTeamActivitiesForm" path="/aim/teamActivityDocumentList" scope="request" type="org.digijava.module.aim.action.GetTeamActivitiesDocuments" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=teamActivitiesDocuments" />
+      <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>
     <action name="aimTeamActivitiesForm" path="/aim/getTeamActivities" scope="request" type="org.digijava.module.aim.action.GetTeamActivities" validate="false">
       <forward name="forward" path="/showLayout.do?layout=meActivityList" />
       <forward name="index" path="/aim/index.do" redirect="true" />
@@ -875,8 +879,10 @@
     </action>
     <action input="/showLayout.do?layout=teamActivities" name="aimTeamActivitiesForm" path="/aim/updateTeamActivity" scope="session" type="org.digijava.module.aim.action.UpdateTeamActivities" validate="false">
       <forward name="showAddActivity" path="/showLayout.do?layout=addTeamActivities" />
+      <forward name="showAddActivityDoc" path="/showLayout.do?layout=addTeamActivitiesDocs" />
       <forward name="index" path="/aim/index.do" redirect="true" />
       <forward name="forward" path="/aim/teamActivityList.do" />
+      <forward name="forward2" path="/aim/teamActivityDocumentList.do" />
     </action>
     <action name="aimTeamMemberForm" path="/aim/addTeamMember" scope="session" type="org.digijava.module.aim.action.AddTeamMember" validate="false">
       <forward name="addedFromAdmin" path="/aim/teamMembers.do" />

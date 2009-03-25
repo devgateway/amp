@@ -478,7 +478,45 @@ function putLoading(){
                                     </div>	
                                 </LI>
                             </c:if>					
-                            </c:if>					
+                        </c:if>					
+								
+                        <c:if test="${selectedSubTab  == '3'}">
+                             <LI>
+                                     <span>
+                                         <digi:trn>Linked Documents</digi:trn>
+                                     </span>
+                             </LI>
+                         </c:if>
+                         <c:if test="${selectedSubTab != '3'}">
+                             <LI>
+                                 <div title='<digi:trn>Click here to view Documents linked to activities</digi:trn>'>
+                                     <span>
+                                     <digi:link href="/teamActivityDocumentList.do" name="urlParams">
+                                         <digi:trn>Linked Documents</digi:trn>
+                                     </digi:link>							
+                                     </span>
+                                 </div>	
+                             </LI>
+                         </c:if>				
+								
+                        <c:if test="${selectedSubTab  == '4'}">
+                             <LI>
+                                     <span>
+                                         <digi:trn>Unlinked Documents</digi:trn>
+                                     </span>
+                             </LI>
+                         </c:if>
+                         <c:if test="${selectedSubTab != '4'}">
+                             <LI>
+                                 <div title='<digi:trn>Click here to view Documents not linked to activities</digi:trn>'>
+                                     <span>
+                                     <digi:link href="/updateTeamActivity.do~showUnassignedDocs=true" name="urlParams">
+                                         <digi:trn>Unlinked Documents</digi:trn>
+                                     </digi:link>							
+                                     </span>
+                                 </div>	
+                             </LI>
+                         </c:if>				
 					</c:if>
 					<c:if test="${selectedTab  == '3'}">
 						<c:if test="${selectedSubTab  == '0'}">

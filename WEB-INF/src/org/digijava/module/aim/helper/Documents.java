@@ -5,7 +5,7 @@
   
 package org.digijava.module.aim.helper;
 
-public class Documents {
+public class Documents implements Comparable<Documents> {
 	private Long docId;
 	private String title;
 	private String docDescription;
@@ -16,7 +16,7 @@ public class Documents {
 	private Long activityId;
 	private String activityName;
 	private String uuid;
-	
+	private String ampActivityId;
 	private String docType;
 	
 	private String docComment;
@@ -177,6 +177,21 @@ public class Documents {
 	public String getUuid() {
 		return uuid;
 	}
+
 	
+	public String getAmpActivityId() {
+		return this.ampActivityId;
+	}
+
+	public void setAmpActivityId(String ampActivityId) {
+		this.ampActivityId = ampActivityId;
+	}
+
+	public int compareTo(Documents d) {
+		String mytilte=(this.title==null)?"":this.title;
+		String histitle=(d.getTitle()==null)?"":d.getTitle();
+		return (mytilte.trim().toLowerCase().compareTo(histitle.trim().toLowerCase()));
+
+	}
 	
 }

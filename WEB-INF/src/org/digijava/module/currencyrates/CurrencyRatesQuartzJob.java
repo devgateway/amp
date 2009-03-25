@@ -134,12 +134,13 @@ public class CurrencyRatesQuartzJob implements Job {
 			
 			Date aDate=new Date();
 			try {
-				//String sDate = this.formatter.format(new Date());
-				//aDate = DateTimeUtil.parseDate(sDate);
+				String sDate = DateTimeUtil.formatDate(aDate);
+				aDate = DateTimeUtil.parseDate(sDate);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
 			currRate.setExchangeRateDate(aDate);
 			currRate.setToCurrencyCode(currencies[i]);
 			currRate.setDataSource(CurrencyUtil.RATE_FROM_WEB_SERVICE);

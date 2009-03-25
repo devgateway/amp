@@ -6202,9 +6202,9 @@ public class DbUtil {
                     }
                 }
             } else
-                logger.debug("[getAidSurveyReportByIndicator10a()] No donor org found");
+                logger.warn("[getAidSurveyReportByIndicator10a()] No donor org found");
         } catch (Exception ex) {
-            logger.debug("Unable to get AidSurveyReportByIndicator10a: " + ex);
+            logger.error("Unable to get AidSurveyReportByIndicator10a: " + ex);
             ex.printStackTrace(System.out);
         }
         return responses;

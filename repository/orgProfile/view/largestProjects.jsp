@@ -12,11 +12,11 @@
 <tr>
 <td valign="top">
 <table border="1" id="lgProjects" bgcolor="#dddddd" width="100%"  >
-    <th colspan="3" class="tableHeaderCls">5 Largest projects (${sessionScope.orgProfileFilter.year-1})</th>
+    <th colspan="3" class="tableHeaderCls">5 <digi:trn>Largest projects </digi:trn>(${sessionScope.orgProfileFilter.year-1})</th>
     <tr colspan="3">
-        <td class="tableHeaderCls">Project title</td>
-        <td class="tableHeaderCls">Commitment</td>
-        <td class="tableHeaderCls">Sector</td>
+        <td class="tableHeaderCls"><digi:trn>Project title</digi:trn></td>
+        <td class="tableHeaderCls"><digi:trn>Commitment</digi:trn></td>
+        <td class="tableHeaderCls"><digi:trn>Sector</digi:trn></td>
     </tr>
      
           <c:forEach items="${orgProfLargestProjectsForm.projects}" var="project"  >

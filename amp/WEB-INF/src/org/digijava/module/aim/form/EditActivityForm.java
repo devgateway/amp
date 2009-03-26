@@ -3660,6 +3660,16 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	private Costing costing = null;
 	private Issues issues = null;
 	private boolean totDisbIsBiggerThanTotCom;
+	private boolean ignoreDistBiggerThanComm = false;
+	
+
+	public boolean isIgnoreDistBiggerThanComm() {
+		return ignoreDistBiggerThanComm;
+	}
+
+	public void setIgnoreDistBiggerThanComm(boolean ignoreDistBiggerThanComm) {
+		this.ignoreDistBiggerThanComm = ignoreDistBiggerThanComm;
+	}
 	
 	public String getWorkingTeamLeadFlag() {
 		return workingTeamLeadFlag;

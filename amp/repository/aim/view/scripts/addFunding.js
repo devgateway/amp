@@ -148,10 +148,11 @@ function validateFunding() {
 
 	if (numComm == 0) {
 
-		alert ("Please enter a commitment");
-
-		return false;
-
+		//alert ("Please enter a commitment");
+		if(!confirm("No commitments entered. Do you wish to proceed?"))
+		{	
+			return false;
+		}
 	}
 
 	if (numExp > 0 && numDisb == 0) {
@@ -235,10 +236,11 @@ function validateFundingTrn(errmsg1,errmsg2,errmsg3,msgEnterAmount,msgInvalidAmo
 
 	if (numComm == 0) {
 
-		alert ("Please enter a commitment");
-
-		return false;
-
+		//alert ("Please enter a commitment");
+		if(!confirm("No commitments entered. Do you wish to proceed?"))
+		{	
+			return false;
+		}
 	}
 
 	if (numExp > 0 && numDisb == 0) {

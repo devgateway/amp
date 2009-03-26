@@ -14,6 +14,7 @@
 
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 
 
@@ -92,7 +93,7 @@
 
 		<td align=left vAlign=top class=r-dotted-lg>
 
-			<table width="98%" cellSpacing="3" cellPadding="1" vAlign="top" align="left">
+			<table width="98%" cellSpacing=<%@ taglib uri="/taglib/featureVisibility" prefix="field" %>"3" cellPadding="1" vAlign="top" align="left">
 
 				<tr><td>
 
@@ -302,8 +303,8 @@
 
 								<!-- contents -->
 
-
-							<feature:display name="Paris Indicator" module="Add & Edit Activity">
+							<feature:display name="Paris Indicators" module="Paris Indicators">
+							<field:display name="Paris Survey" feature="Paris Indicators">
 
 								<table width="95%" bgcolor="#f4f4f2" border="0">
 
@@ -391,6 +392,7 @@
 
 								</table>
 
+								</field:display>
 								</feature:display>
 						
 

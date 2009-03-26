@@ -20,6 +20,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
 import org.dgfoundation.amp.utils.MultiAction;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.dataExchange.dbentity.AmpDEImportLog;
 import org.digijava.module.dataExchange.form.ImportForm;
@@ -64,7 +66,9 @@ public class ImportAction extends MultiAction {
 		String[] langArray = {"en","fr","es"};
 		if(iform.getLanguages() == null || iform.getLanguages().length < 1) iform.setLanguages(langArray);
 		
-		String[] options = {"update","overwrite"};
+		String siteId = RequestUtils.getSite(request).getId().toString();
+		String locale= RequestUtils.getNavigationLanguage(request).getCode();
+		String[] options = {TranslatorWorker.translateText("update", locale, siteId), TranslatorWorker.translateText("overwrite", locale, siteId)};
 		if(iform.getOptions() == null || iform.getOptions().length < 1) iform.setOptions(options);
 		
 		if(request.getParameter("loadFile")!=null) {

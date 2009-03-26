@@ -358,7 +358,8 @@ function removeSelPhyProgress() {
     }
     function changeCurrency(){
        var currency=document.getElementById("compFundCurr").value;
-       var url=addActionToURL('getFundingTotals.do')+'?fundingCurrCode='+currency+'&isRegcurr=false'+'&isStepPage=false';
+    	// the edit=true parameter needs to be added to each request so that AMPActionServlet knows the user hasn't left the Activity Wizard
+       var url=addActionToURL('getFundingTotals.do')+'?fundingCurrCode='+currency+'&isRegcurr=false'+'&isStepPage=false&edit=true';
        var async=new Asynchronous();
        async.complete=buildFundingTotals;
        async.call(url);
@@ -378,7 +379,8 @@ function removeSelPhyProgress() {
     }
     function totalsPage() {
        var currency=document.aimEditActivityForm.fundingCurrCode.value;
-       var url=addActionToURL('getFundingTotals.do')+'?fundingCurrCode='+currency+'&isRegcurr=false'+'&isStepPage=true';
+       // the edit=true parameter needs to be added to each request so that AMPActionServlet knows the user hasn't left the Activity Wizard
+       var url=addActionToURL('getFundingTotals.do')+'?fundingCurrCode='+currency+'&isRegcurr=false'+'&isStepPage=true&edit=true';
        var async=new Asynchronous();
        async.complete=buildFundingTotalsForPage;
        async.call(url);
@@ -719,7 +721,7 @@ function removeSelComponents() {
 
 											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
 
-												<digi:trn key="aim:step5of">Step 5 of </digi:trn> ${fn:length(aimEditActivityForm.steps)}:
+												<digi:trn>Step</digi:trn> ${stepNm} <digi:trn>of</digi:trn>  ${fn:length(aimEditActivityForm.steps)}:
                                                                                                  <digi:trn key="aim:activity:Components">
                                                                                                  Components
                                                                                                  </digi:trn>

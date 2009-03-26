@@ -88,7 +88,7 @@ public class ExportToWord extends Action {
                         opt.setWidth(350);
                         opt.setHeight(420);
                         Long siteId = RequestUtils.getSiteDomain(request).getSite().getId();
-                        opt.setSiteId(siteId);
+                        opt.setSiteId(siteId.toString());
                         String langCode = RequestUtils.getNavigationLanguage(request).getCode();
                         opt.setLangCode(langCode);
                         JFreeChart chart = null;

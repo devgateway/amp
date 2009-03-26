@@ -16,4 +16,9 @@ public class RadioOptionCustomField extends CustomField<String> {
 	public LinkedHashMap<String,String> getOptions() {
 		return options;
 	}
+
+	@Override
+	public void setValue(String value) {
+		this.value = value;
+	}
 }

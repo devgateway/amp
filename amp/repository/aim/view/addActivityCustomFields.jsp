@@ -13,7 +13,7 @@
 
 <digi:instance property="aimEditActivityForm" />
 	<logic:notEmpty name="aimEditActivityForm" property="customFieldsSteps">
-		<logic:iterate name="aimEditActivityForm" property="customFieldsSteps" id="step">
+		<logic:iterate name="aimEditActivityForm" property="customFieldsSteps" id="step" indexId="stepIdx">
 								<logic:equal name="step" property="step" value="${stepNumber}">
 									<tr><td>
 										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
@@ -39,15 +39,15 @@
 														<a title="<digi:trn key="aim:customfield:${customField.name}:description">${customField.description}</digi:trn>">
 														<c:choose>
 															<c:when test="<%=customField instanceof ComboBoxCustomField%>">
-																<html:select name="aimEditActivityForm" property="customFields[${index}].value">
-																	<html:optionsCollection  name="aimEditActivityForm" property="customFields[${index}].options" value="key" label="value"/>
+																<html:select name="aimEditActivityForm" property="customFieldsSteps[${stepIdx}].customFields[${index}].value">
+																	<html:optionsCollection  name="aimEditActivityForm" property="customFieldsSteps[${stepIdx}].customFields[${index}].options" value="key" label="value"/>
 																</html:select>											
 															</c:when>
 															<c:when test="<%=customField instanceof CategoryCustomField%>">
-																<category:showoptions name="aimEditActivityForm" property="customFields[${index}].value" categoryName="${customField.categoryName}" styleClass="inp-text" />								
+																<category:showoptions name="aimEditActivityForm" property="customFieldsSteps[${stepIdx}].customFields[${index}].longValue" categoryName="${customField.categoryName}" styleClass="inp-text" />								
 															</c:when>
 															<c:when test="<%=customField instanceof DateCustomField%>">																
-																<html:text name="aimEditActivityForm" property="customFields[${index}].strDate" size="10"
+																<html:text name="aimEditActivityForm" property="customFieldsSteps[${stepIdx}].customFields[${index}].strDate" size="10"
 																styleId="customField${index}_input_text" styleClass="inp-text" readonly="true" />																
 																<a id="customField_clear${index}" href="javascript:clearDate(document.aimEditActivityForm.customField${index}_input_text, 'customField_clear${index}')">
 																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
@@ -57,17 +57,17 @@
 																</a>
 															</c:when>
 															<c:when test="<%=customField instanceof RadioOptionCustomField%>">
-																<logic:iterate name="aimEditActivityForm" property="customFields[${index}].options" id="option">
+																<logic:iterate name="aimEditActivityForm" property="customFieldsSteps[${stepIdx}].customFields[${index}].options" id="option">
 																	<digi:trn key="aim:customfield:${customField.name}:option:${option.key}"><c:out value="${option.value}"/></digi:trn>
-																	<html:radio name="aimEditActivityForm" property="customFields[${index}].value" value="${option.key}"/> &nbsp;&nbsp;
+																	<html:radio name="aimEditActivityForm" property="customFieldsSteps[${stepIdx}].customFields[${index}].value" value="${option.key}"/> &nbsp;&nbsp;
 																</logic:iterate>
 															</c:when>
 															<c:when test="<%=customField instanceof CheckCustomField%>">
-																<html:checkbox name="aimEditActivityForm" property="customFields[${index}].value"/>
+																<html:checkbox name="aimEditActivityForm" property="customFieldsSteps[${stepIdx}].customFields[${index}].booleanValue"/>
 																<c:out value="${customField.labelTrue}"/>
 															</c:when>
 															<c:otherwise>
-																<html:text name="aimEditActivityForm" property="customFields[${index}].value" size="40"
+																<html:text name="aimEditActivityForm" property="customFieldsSteps[${stepIdx}].customFields[${index}].value" size="40"
 																styleId="originalAppDate" styleClass="inp-text" />																														
 															</c:otherwise>
 														</c:choose>

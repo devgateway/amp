@@ -20,6 +20,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.error.AMPException;
@@ -83,6 +85,7 @@ import org.digijava.module.aim.helper.AmpProjectDonor;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
+import org.digijava.module.aim.helper.CustomField;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.FundingDetail;
@@ -534,6 +537,26 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         }
 
 
+        List<CustomField<?>> customFields = CustomFieldsUtil.getCustomFields();
+		if(customFields!=null){
+			Iterator<CustomField<?>> cfi = customFields.iterator();
+			while(cfi.hasNext()){
+				CustomField customField = cfi.next();
+				String propertyName = customField.getAmpActivityPropertyName();
+				if(propertyName == null){
+					logger.warn("Please set AmpActivityPropertyName for all custom fields.");
+					continue;
+				}
+				try{
+					//String value = BeanUtils.getProperty(activity, customField.getAmpActivityPropertyName());
+					Object value = PropertyUtils.getSimpleProperty(activity, customField.getAmpActivityPropertyName());
+					BeanUtils.setProperty(oldActivity, customField.getAmpActivityPropertyName(), value);
+				}catch(Exception e){
+					logger.error("Custom Field [" + customField.getAmpActivityPropertyName() + "] exception", e);
+				}
+			}
+		}        
+        
 
         /*
          * tanzania ADDS
@@ -1373,9 +1396,9 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
           oql += " and ( theme.ampThemeId = :ampThemeId) ";
         }
       if (donorOrgId != null&&!donorOrgId.trim().equals("")) {
-        String s = " and act in (select rol.activity from " +
-            AmpOrgRole.class.getName() + " rol " +
-            "where rol.organisation.ampOrgId in ("+donorOrgId+")  )";
+        String s = " and act in (select f.ampActivityId from " +
+             AmpFunding.class.getName() + " f " +
+            " where f.ampDonorOrgId.ampOrgId in ("+donorOrgId+")) ";
         oql += s;
       }
       if (statusCode != null&&!"".equals(statusCode.trim())) {
@@ -3717,7 +3740,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
             Long templId=FeaturesUtil.getGlobalSettingValueLong("Visibility Template");
             AmpFeaturesVisibility step1=FeaturesUtil.getFeatureByName("Identification", "Project ID and Planning", templId);// step 1
             AmpFeaturesVisibility step1_1=FeaturesUtil.getFeatureByName("Planning", "Project ID and Planning", templId); // step 1
-            AmpFeaturesVisibility step2=FeaturesUtil.getFeatureByName("References", "References", templId);
+            AmpModulesVisibility step2=FeaturesUtil.getModuleByName("References", "PROJECT MANAGEMENT", templId);
             AmpFeaturesVisibility step3=FeaturesUtil.getFeatureByName("Location", "Project ID and Planning", templId);
             AmpFeaturesVisibility step3_2=FeaturesUtil.getFeatureByName("Sectors", "Project ID and Planning", templId);
             AmpModulesVisibility step3_3=FeaturesUtil.getModuleByName("National Planning Dashboard", "NATIONAL PLAN DASHBOARD", templId);

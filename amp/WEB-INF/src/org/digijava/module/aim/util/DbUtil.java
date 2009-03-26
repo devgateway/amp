@@ -35,6 +35,7 @@ import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
@@ -4677,7 +4678,7 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select distinct org from "
                 + AmpOrgGroup.class.getName() + " org "
-                + " where lower(org.orgGrpName) like '%" + keyword + "%'";
+                + " where lower(org.orgGrpName) like '%" + keyword + "%' or lower(org.orgGrpCode) like '%"+keyword+"%'";
             Query qry = session.createQuery(queryString);
             col = qry.list();
         } catch (Exception ex) {
@@ -5615,7 +5616,7 @@ public class DbUtil {
   
     public static Collection getAidSurveyReportByIndicator(String indcCode, String donor, String orgGroup,
         AmpCategoryValue statusCM, int startYear, int closeYear, String currency, String termAssist, AmpCategoryValue financingInstr,
-        String sector, String calendar) {
+        String sector, String calendar, String site, String lang) {
 
         Session session = null;
         ArrayList responses = new ArrayList();
@@ -5682,7 +5683,7 @@ public class DbUtil {
                 Collections.sort( (List) surveyDonors, dnComp);
                 // Creating first row for all-donors in indicator report.
                 ParisIndicator all = new ParisIndicator();
-                all.setDonor("All Donors");
+                all.setDonor(TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("All Donors", lang, site)));
                 all.setAnswers(new ArrayList());
                 responses.add(all);
                 if (indcFlag != 6) {
@@ -5939,7 +5940,8 @@ public class DbUtil {
                                     percent = new Double( (100 * sum) / answersRow[NUM_ANSWER_COLUMNS - 2]);
                                 } else
                                     percent = new Double( (100 * answersRow[NUM_ANSWER_COLUMNS - 3]) / answersRow[NUM_ANSWER_COLUMNS - 2]);
-                                answersRow[NUM_ANSWER_COLUMNS - 1] = Double.parseDouble(formatter.format(percent).replaceFirst(",", "."));
+                                //answersRow[NUM_ANSWER_COLUMNS - 1] = Double.parseDouble(formatter.format(percent).replaceFirst(",", "."));
+                                answersRow[NUM_ANSWER_COLUMNS - 1] = percent;
                                 //logger.debug("final-% : " + answersRow[NUM_ANSWER_COLUMNS - 1]);
                             } catch (NumberFormatException nex) {
                                 logger.debug("percentage is NaN");
@@ -6002,7 +6004,7 @@ public class DbUtil {
                                 allDnRow[NUM_ANSWER_COLUMNS - 1] = Double.parseDouble(formatter.format(percent).replaceFirst(",", "."));
                                 //logger.debug("final-%[all-donors row] : " + allDnRow[NUM_ANSWER_COLUMNS - 1]);
                             } catch (NumberFormatException nex) {
-                                logger.debug("percentage[all-donors row] is NaN");
+                                logger.error("percentage[all-donors row] is NaN");
                                 allDnRow[NUM_ANSWER_COLUMNS - 1] = 0.0;
                             }
                         }
@@ -6045,7 +6047,7 @@ public class DbUtil {
         return result;
     }
 
-    public static Collection getAidSurveyReportByIndicator10a(String orgGroup, String donor, int startYear, int closeYear) {
+    public static Collection getAidSurveyReportByIndicator10a(String orgGroup, String donor, int startYear, int closeYear, String site, String lang) {
         Session session = null;
         String qry = null;
         ArrayList responses = new ArrayList();
@@ -6098,7 +6100,7 @@ public class DbUtil {
                     orgGroupFlag = true;
                 // Creating first row for 'all-donors' in indicator report.
                 ParisIndicator all = new ParisIndicator();
-                all.setDonor("All Donors");
+                all.setDonor(TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("All Donors", lang, site)));
                 all.setAnswers(new ArrayList());
                 responses.add(all);
                 for (i = 0; i < YEAR_RANGE; i++) {
@@ -6150,11 +6152,11 @@ public class DbUtil {
                                     // checking if the Mission is 'joint'
                                     if (null != ampCal.getOrganisations() && ampCal.getOrganisations().size() > 1) {
                                         answersRow[1] += 1;
-                                        //allDnRow[1] += 1;
+                                        allDnRow[1] += 1;
                                     }
                                     // total number of Missions
                                     answersRow[2] += 1;
-                                    //allDnRow[2] += 1;
+                                    allDnRow[2] += 1;
                                 }
                             }
                         }
@@ -6170,7 +6172,7 @@ public class DbUtil {
                     responses.add(pi);
                 }
                 // calculating total joint missions & all missions for 'all-donors' row
-                for (j = 0; j < YEAR_RANGE; j++) {
+                /*for (j = 0; j < YEAR_RANGE; j++) {
                     allDnRow = (double[]) ( ( (ParisIndicator) responses.get(0)).getAnswers().get(j));
                     Iterator itr = calDonorsList.iterator();
                     while (itr.hasNext()) {
@@ -6188,7 +6190,7 @@ public class DbUtil {
                             }
                         }
                     }
-                }
+                }*/
                 // calculating final percentage for all-donors row
                 for (j = 0; j < YEAR_RANGE; j++) {
                     allDnRow = (double[]) ( ( (ParisIndicator) responses.get(0)).getAnswers().get(j));

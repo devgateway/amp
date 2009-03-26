@@ -705,7 +705,7 @@
                                   <module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
 								
                                 	<feature:display name="NPD Programs" module="National Planning Dashboard">
-									<field:display name="National Plan Objective" feature="NPD Programs">
+									<field:display name="National Planning Objectives" feature="NPD Programs">
 									<TR>
 										<td width="27%" align="right" valign="top" nowrap="nowrap">
 												<b>

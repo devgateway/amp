@@ -25,6 +25,9 @@ import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.dgfoundation.amp.ar.view.xls.XLSExporter;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
+
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.IndicatorTheme;
 import org.digijava.module.aim.form.NpdForm;
@@ -45,6 +48,8 @@ public class ExportIndicators2XSLAction extends Action {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		NpdForm npdForm = (NpdForm) form;
+		String locale=RequestUtils.getNavigationLanguage(request).getCode();
+		String siteId=RequestUtils.getSite(request).getId().toString();
 		 
 		response.setContentType("application/vnd.ms-excel");
 		response.setHeader("Content-disposition", "inline; filename=AMPIndicatorsExport.xls");
@@ -86,7 +91,7 @@ public class ExportIndicators2XSLAction extends Action {
 
 		HSSFCell cell = row.createCell(cellNum);
 
-		cell.setCellValue("Indicators for " + mainProg.getName());
+		cell.setCellValue(TranslatorWorker.translateText("Indicators for ", locale, siteId));
 		cell.setCellStyle(csHeader);
 
 
@@ -116,22 +121,22 @@ public class ExportIndicators2XSLAction extends Action {
 			row = sheet.createRow(rowNum++);
 			
 			cell = row.createCell(cellNum++);
-			cell.setCellValue("indicator Name");			
+			cell.setCellValue(TranslatorWorker.translateText("indicator Name", locale, siteId));			
 			cell.setCellStyle(csSubHeader);			
 			
 			cell=row.createCell(cellNum++);
-			cell.setCellValue("indicator Description");			
+			cell.setCellValue(TranslatorWorker.translateText("indicator Description", locale, siteId));			
 			cell.setCellStyle(csSubHeader);
 
 			for (int i = 0; i < npdForm.getSelYears().length; i++) {
                                 cell = row.createCell(cellNum++);
-				cell.setCellValue("Base");
+				cell.setCellValue(TranslatorWorker.translateText("Base", locale, siteId));
 				cell.setCellStyle(csSubHeader);
 				cell = row.createCell(cellNum++);
-				cell.setCellValue("Actual");
+				cell.setCellValue(TranslatorWorker.translateText("Actual", locale, siteId));
 				cell.setCellStyle(csSubHeader);
 				cell = row.createCell(cellNum++);
-				cell.setCellValue("Target");
+				cell.setCellValue(TranslatorWorker.translateText("Target", locale, siteId));
 				cell.setCellStyle(csSubHeader);
 			}
 

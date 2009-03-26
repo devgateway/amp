@@ -123,7 +123,6 @@
 <feature:display name="Edit Activity" module="Previews"></feature:display> 
 <feature:display name="Enable Scrolling Reports" module="Report Generator"></feature:display> 
 <feature:display name="Event Tab" module="Messages"></feature:display> 
-<feature:display name="Event Tab" module="Messages"></feature:display> 
 <feature:display name="Executing Agency" module="Organizations"></feature:display> 
 <feature:display name="Filter Button" module="Report Generator"></feature:display> 
 <feature:display name="Financial Progress Tab" module="Funding"></feature:display> 
@@ -143,7 +142,6 @@
 <feature:display name="Message tab" module="Messages"></feature:display> 
 <feature:display name="Message tab" module="Messages"></feature:display> 
 <feature:display name="My Messages" module="Messages"></feature:display>
-<feature:display name="Messages" module="Messaging System"></feature:display> 
 <feature:display name="NPD Dashboard" module="National Planning Dashboard"></feature:display> 
 <feature:display name="NPD Programs" module="National Planning Dashboard"></feature:display> 
 <feature:display name="New Region Manager" module="ADMINISTRATIVE SECTION"></feature:display> 
@@ -189,8 +187,8 @@
 <feature:display name="Web Resources" module="Document"></feature:display> 
 <feature:display name="Widget Places" module="WIDGETS"></feature:display> 
 <field:display feature="Disbursement Orders" name="Disbursement Orders Tab"></field:display> 
-<field:display feature="Donor Contact Information" name="Donor Email"></field:display> 
-<field:display feature="Donor Contact Information" name="Donor First Name"></field:display> 
+<field:display name="Donor Email" feature="Donor Contact Information"></field:display> 
+<field:display name="Donor First Name" feature="Donor Contact Information"></field:display> 
 <field:display feature="Edit Activity" name="Edit Activity Button"></field:display> 
 <field:display feature="Edit Activity" name="Validate Activity Button"></field:display> 
 <field:display feature="Funding Information" name="Type Of Assistance"></field:display> 
@@ -525,7 +523,7 @@
 <field:display name="NPD Clasification" feature="Identification"></field:display> 
 <field:display name="NPD Program Description" feature="Program"></field:display> 
 <field:display name="Name" feature="Admin - Component Type"></field:display> 
-<field:display name="National Plan Objective" feature="NPD Programs"></field:display> 
+<field:display name="National Planning Objectives" feature="NPD Programs"></field:display> 
 <field:display name="National Plan Objective" feature="Program"></field:display> 
 <field:display name="National Planning Objectives" feature="NPD Programs"></field:display> 
 <field:display name="Objective Comments" feature="Identification"></field:display> 

@@ -23,13 +23,13 @@
     <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
     <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
     <script type="text/javascript">
-    var inboxFull='<digi:trn key="message:fullMailBox">Your MailBox Is Full</digi:trn>';
-    var deleteData='<digi:trn key="message:plzDeleteData">Please delete messages or you will not get newer ones</digi:trn>';
-    var newmessages=' <digi:trn key="message:newmessages">New Messages</digi:trn>';
-    var newalerts=' <digi:trn key="message:newalerts">New Alerts</digi:trn>';
-    var newapprovals=' <digi:trn key="message:newaprovals">New Approvals</digi:trn>;'
-    var newcalevents=' <digi:trn key="message:newcalevents">New Calendar Events</digi:trn>;'
-    var moremessages=' <digi:trn key="message:moremessages">More messages</digi:trn>;'
+    var inboxFull='<digi:trn key="message:fullMailBox" jsFriendly="true">Your MailBox Is Full</digi:trn>';
+    var deleteData='<digi:trn key="message:plzDeleteData" jsFriendly="true">Please delete messages or you will not get newer ones</digi:trn>';
+    var newmessages=' <digi:trn key="message:newmessages" jsFriendly="true">New Messages</digi:trn>';
+    var newalerts=' <digi:trn key="message:newalerts" jsFriendly="true">New Alerts</digi:trn>';
+    var newapprovals=' <digi:trn key="message:newaprovals" jsFriendly="true">New Approvals</digi:trn>;'
+    var newcalevents=' <digi:trn key="message:newcalevents" jsFriendly="true">New Calendar Events</digi:trn>;'
+    var moremessages=' <digi:trn key="message:moremessages" jsFriendly="true">More messages</digi:trn>;'
     var newCount=0;
     var prevCount=0;
     var isInboxFull='false';
@@ -91,8 +91,8 @@
     	id=window.setTimeout("checkForNewMessages()",getInterval(),"JavaScript");
     }
 
-    var clickToViewMsg='<digi:trn key="message:clickToEditAlert">Click here to view Message</digi:trn>';
-    var moreMsgs='<digi:trn key="message:clickToViewMoreMessages">Click here to view More Messages</digi:trn>';
+var clickToViewMsg='<digi:trn key="message:clickToEditAlert" jsFriendly="true">Click here to view Message</digi:trn>';
+    var moreMsgs='<digi:trn key="message:clickToViewMoreMessages" jsFriendly="true">Click here to view More Messages</digi:trn>';
 
 
     //setting timer to check for new messages after specified time

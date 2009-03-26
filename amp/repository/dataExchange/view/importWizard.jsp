@@ -42,6 +42,54 @@
 
 #expandcontractdiv {border:1px solid #336600; background-color:#FFFFCC; margin:0 0 .5em 0; padding:0.2em;}
 #treeDiv1 { background: #fff }
+
+div.fileinputs {
+	position: relative;
+	height: 30px;
+	width: 300px;
+}
+input.file {
+	width: 300px;
+	margin: 0;
+}
+input.file.hidden {
+	position: relative;
+	text-align: right;
+	-moz-opacity:0 ;
+	filter:alpha(opacity: 0);
+	width: 300px;
+	opacity: 0;
+	z-index: 2;
+}
+
+div.fakefile {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 300px;
+	padding: 0;
+	margin: 0;
+	z-index: 1;
+	line-height: 90%;
+}
+div.fakefile input {
+	margin-bottom: 5px;
+	margin-left: 0;
+	width: 217px;
+}
+div.fakefile2 {
+	position: absolute;
+	top: 0px;
+	left: 217px;
+	width: 300px;
+	padding: 0;
+	margin: 0;
+	z-index: 1;
+	line-height: 90%;
+}
+div.fakefile2 input{
+	width: 83px;
+}
 </style> 
 
 
@@ -91,13 +139,50 @@
       }
            
 		YAHOOAmp.util.Event.addListener(window, "load", treeInit) ;
-	</script>
+</script>
+
+<script type="text/javascript">
+	var W3CDOM = (document.createElement && document.getElementsByTagName);
+
+	function initFileUploads() {
+		if (!W3CDOM) return;
+		var fakeFileUpload = document.createElement('div');
+		fakeFileUpload.className = 'fakefile';
+		fakeFileUpload.appendChild(document.createElement('input'));
+
+		var fakeFileUpload2 = document.createElement('div');
+		fakeFileUpload2.className = 'fakefile2';
+
+
+		var button = document.createElement('input');
+		button.type = 'button';
+
+		button.value = '<digi:trn>Browse...</digi:trn>';
+		fakeFileUpload2.appendChild(button);
+
+		fakeFileUpload.appendChild(fakeFileUpload2);
+		var x = document.getElementsByTagName('input');
+		for (var i=0;i<x.length;i++) {
+			if (x[i].type != 'file') continue;
+			if (x[i].parentNode.className != 'fileinputs') continue;
+			x[i].className = 'file hidden';
+			var clone = fakeFileUpload.cloneNode(true);
+			x[i].parentNode.appendChild(clone);
+			x[i].relatedElement = clone.getElementsByTagName('input')[0];
+
+ 			x[i].onchange = x[i].onmouseout = function () {
+				this.relatedElement.value = this.value;
+			}
+		}
+	}
+
+</script>
 
 
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="65%">
 	<tr>
 		<td valign="bottom">
-				
+				<digi:errors/>
 		</td>
 	</tr>
 	<tr>
@@ -107,7 +192,7 @@
 		<span id="formChild" style="display:none;">&nbsp;</span>
      
         <span class="subtitle-blue">
-          &nbsp;Data Importer
+          &nbsp;<digi:trn>Data Importer</digi:trn>
         </span>		
 		
 		<div style="color: red; text-align: center; visibility: hidden" id="savingReportDiv">
@@ -123,17 +208,17 @@
 		<div id="wizard_container" class="yui-navset">
     		<ul class="yui-nav">
 					<logic:equal name="fileUploaded" value="false">
-	    				<li id="tab_file_selection" class="selected"><a href="#file_selection"><div>1. File Selection and Staging Area</div></a> </li>
-		    			<li id="tab_log_after_import" class="disabled"><a href="#log_after_import"><div>2. Log after Import</div></a> </li>
-		    			<li id="tab_select_activities" class="disabled"><a href="#select_activities"><div>3. Select Activities</div></a> </li>
-		    			<li id="tab_confirm_import" class="disabled"><a href="#confirm_import"><div>4. Confirm Import</div></a> </li>
+	    				<li id="tab_file_selection" class="selected"><a href="#file_selection"><div>1. <digi:trn>File Selection and Staging Area</digi:trn></div></a> </li>
+		    			<li id="tab_log_after_import" class="disabled"><a href="#log_after_import"><div>2. <digi:trn> Log after Import</digi:trn></div></a> </li>
+		    			<li id="tab_select_activities" class="disabled"><a href="#select_activities"><div>3. <digi:trn>Select Activities</digi:trn></div></a> </li>
+		    			<li id="tab_confirm_import" class="disabled"><a href="#confirm_import"><div>4. <digi:trn>Confirm Import</digi:trn></div></a> </li>
 					</logic:equal>
 					
 					<logic:equal name="fileUploaded" value="true">
-	    				<li id="tab_file_selection" class="disabled"><a href="#file_selection"><div>1. File Selection and Staging Area</div></a> </li>
-		    			<li id="tab_log_after_import" class="selected"><a href="#log_after_import"><div>2. Log after Import</div></a> </li>
-		    			<li id="tab_select_activities" class="enabled"><a href="#select_activities"><div>3. Select Activities</div></a> </li>
-		    			<li id="tab_confirm_import" class="enabled"><a href="#confirm_import"><div>4. Confirm Import</div></a> </li>
+	    				<li id="tab_file_selection" class="disabled"><a href="#file_selection"><div>1. <digi:trn>File Selection and Staging Area</digi:trn></div></a> </li>
+		    			<li id="tab_log_after_import" class="selected"><a href="#log_after_import"><div>2. <digi:trn> Log after Import</digi:trn></div></a> </li>
+		    			<li id="tab_select_activities" class="enabled"><a href="#select_activities"><div>3. <digi:trn>Select Activities</digi:trn></div></a> </li>
+		    			<li id="tab_confirm_import" class="enabled"><a href="#confirm_import"><div>4. <digi:trn>Confirm Import</digi:trn></div></a> </li>
 					</logic:equal>    		
 					
 					    		
@@ -145,10 +230,12 @@
 					<div style="height: 255px;">
     					<table cellpadding="5px" width="80%">
     						<tr>
-        						<td width="47%" align="left" valign="top"><br/><br/><br/>
+        						<td width="47%" align="left" valign="top"><br/><br/><br/> 
         								<digi:trn key="aim:pleaseChooseTheFile">Please choose the file you want to import
         								</digi:trn><br/>
-										<input id="uploadedFile" name="uploadedFile" type="file" class="file">
+        								<div class="fileinputs">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
+											<input id="uploadedFile" name="uploadedFile" type="file" class="file">												
+										</div>        																		
         						</td>
         						<td align="left" >
         							<br/><br/><br/>
@@ -174,9 +261,10 @@
                           					<bean:write name="option"/>
             							</bean:define>
         								<html:radio property="selectedOptions" value="<%=optionValue%>" styleId="<%=optionValue%>" />
-        								<bean:write name="option"/> Activity<br/>
+        								<bean:write name="option"/> <digi:trn>Activity</digi:trn><br/>
         								</td></tr>
         							</logic:iterate>
+        							</table>
         						</td>
     						</tr>
     					</table>
@@ -212,5 +300,7 @@
 	</td>
 	</tr>
 </table>
-
+<script type="text/javascript">
+	initFileUploads();
+</script>
 	

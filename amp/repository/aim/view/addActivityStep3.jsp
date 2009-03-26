@@ -384,9 +384,8 @@ ${fn:replace(message,quote,escapedQuote)}
                                     </td>
                                     <td vAlign="middle" align ="center" class="textalb" height="20" bgcolor="#006699">
                              
-                                      <digi:trn key="aim:step3of">
-                                      Step 3 of 
-                                      </digi:trn> ${fn:length(aimEditActivityForm.steps)}:
+                                    	<digi:trn>
+													Step</digi:trn> ${stepNm} <digi:trn>of  </digi:trn> ${fn:length(aimEditActivityForm.steps)}:
                                       <digi:trn key="aim:activity:Funding">
                                           Funding
                                       </digi:trn>

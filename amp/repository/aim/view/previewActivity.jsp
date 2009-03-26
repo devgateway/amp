@@ -1062,7 +1062,7 @@ function collapseAll() {
                                     <module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
 								
                                 	<feature:display name="NPD Programs" module="National Planning Dashboard">
-									<field:display name="National Plan Objective" feature="NPD Programs">
+									<field:display name="National Planning Objectives" feature="NPD Programs">
 									<TR>
 																		<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 												<img id="npd_npo_plus"  onclick="toggleGroup('npd_npo')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>

@@ -32,12 +32,12 @@ ${fn:replace(message,quote,escapedQuote)}
 <div id="permissionContainer">
 <table id="permissionsList">
 <thead>
-<tr><td>Name</td><td>Description</td><td>Permission Type</td><td>Contents</td><td>Linked With</td><td>Change Permission</td></tr>
+<tr><td>Name</td><td>Permissibles</td><td>Permission Type</td><td>Contents</td><td>Linked With</td><td>Change Permission</td></tr>
 </thead>
 <logic:iterate id="perm" name="allPermissions" scope="request">
 <tr>
 <td><bean:write name="perm" property="name"/></td>
-<td><bean:write name="perm" property="description"/></td>
+<td><bean:write name="perm" property="permissibleObjects"/></td>
 <td><bean:write name="perm" property="class.simpleName"/></td>
 <td>
 <logic:equal name="perm" property="class.simpleName" value="GatePermission">

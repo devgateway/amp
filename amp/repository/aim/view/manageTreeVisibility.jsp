@@ -11,7 +11,6 @@
 <script language="JavaScript">
 
 	function changeLevel(id) {
-	// alert("aaaaaaaaaaa "+id);
 		<digi:context name="urlVal" property="context/module/moduleinstance/visibilityManager.do" />			  
 		document.aimVisibilityManagerForm.action = "<%= urlVal %>?changeLevel=true&action=edit&templateId="+id;
 		document.aimVisibilityManagerForm.submit();		
@@ -92,9 +91,11 @@ function openFieldPermissionsPopup(fieldId) {
 	<c:set var="templateId">
 		<bean:write name="template" property="root.id"/>
 	</c:set>
+	<!--
 	 <gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.ACTIVITY_LEVEL %>" compareWith="true" onTrueEvalBody="true">
 		<category:showoptions name="aimVisibilityManagerForm" firstLine="${translation}" outeronchange="javascript:changeLevel('${templateId}')" property="levelCategory"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.ACTIVITY_LEVEL_KEY %>" styleClass="inp-text" />
 	</gs:test>
+	  -->
 
 <script language="javascript">
 <!--

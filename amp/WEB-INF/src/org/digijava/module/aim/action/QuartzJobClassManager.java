@@ -29,16 +29,16 @@ public class QuartzJobClassManager extends Action {
                 jc=QuartzJobClassUtils.getJobClassesByClassfullName(jcForm.getClassFullname());
                 if(jc==null){
                     jc=new AmpQuartzJobClass();
-                    jc.setName(jcForm.getName());
-                    jc.setClassFullname(jcForm.getClassFullname());
+                    jc.setName(jcForm.getName().trim());
+                    jc.setClassFullname(jcForm.getClassFullname().trim());
                     QuartzJobClassUtils.addJobClasses(jc);
                 }
             }
 
         }else if("updateJc".equals(jcForm.getAction())){
             AmpQuartzJobClass jc=QuartzJobClassUtils.getJobClassesById(jcForm.getId());
-            jc.setName(jcForm.getName());
-            jc.setClassFullname(jcForm.getClassFullname());
+            jc.setName(jcForm.getName().trim());
+            jc.setClassFullname(jcForm.getClassFullname().trim());
             QuartzJobClassUtils.updateJobClasses(jc);
 
         }else if("editJc".equals(jcForm.getAction())){

@@ -317,11 +317,11 @@ public class GisUtil {
                         Color gg = fillColor;
                         //TODO: Improve this it's a last minute solution
                         if (shape.getSegment().getSegmentName().indexOf("Lake")>=0){
-                        	g2d.setColor( new Color(51,153,255));
+                                g2d.setColor( new Color(51,153,255));
 
-            			}else{
-            				g2d.setColor(gg);
-            			}
+                                }else{
+                                        g2d.setColor(gg);
+                                }
                         g2d.fillPolygon(xCoords, yCoords,
                                         shape.getShapePoints().size());
 
@@ -481,10 +481,10 @@ public class GisUtil {
     }
 
     public CoordinateRect getMapRect(GisMap map) {
-    	if(map!=null)
-   			return getMapRect(map.getSegments());
-    	else
-    		return null;
+        if(map!=null)
+                        return getMapRect(map.getSegments());
+        else
+                return null;
     }
 
     public CoordinateRect getMapRect(List segments) {

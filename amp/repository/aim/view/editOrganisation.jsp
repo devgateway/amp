@@ -64,7 +64,7 @@
 	}
 
 	function removeFundingDetail(index) {
-		var flag = confirm('<digi:trn key="aim:areYouSureRemoveTransaction">Are you sure you want to remove the selected transaction ?</digi:trn>');
+		var flag = confirm('<digi:trn  jsFriendly="true" key="aim:areYouSureRemoveTransaction">Are you sure you want to remove the selected transaction ?</digi:trn>');
 		if(flag != false) {
 			<digi:context name="addSec" property="context/module/moduleinstance/editOrganisation.do" />
 			document.aimAddOrgForm.action = "<%= addSec %>"+"~ampOrgId="+document.aimAddOrgForm.ampOrgId.value+"~actionFlag="+document.aimAddOrgForm.actionFlag.value+"~delPledge=true";
@@ -86,7 +86,7 @@
 		//alert("editOrganisation.addSectors");
 		var schemeId = document.aimAddOrgForm.ampSecSchemeId.value;
 		if(schemeId == -1){
-			alert('<digi:trn key="aim:editOrganisation:selectScheme">Please select a sector scheme before adding sectors.</digi:trn>');
+			alert('<digi:trn jsFriendly="true" key="aim:editOrganisation:selectScheme">Please select a sector scheme before adding sectors.</digi:trn>');
 			return false;
 		}
 /*
@@ -273,7 +273,7 @@ function loadPage()
 	}
 
 	function msg() {
-		if (confirm('<digi:trn key="aim:organization:deleteQuestion">Are you sure about deleting this organization?</digi:trn>')) {
+		if (confirm('<digi:trn  jsFriendly="true"  key="aim:organization:deleteQuestion">Are you sure about deleting this organization?</digi:trn>')) {
 			document.aimAddOrgForm.actionFlag.value = "delete";
 			document.aimAddOrgForm.saveFlag.value = "yes";
 			document.aimAddOrgForm.submit();
@@ -306,27 +306,27 @@ function loadPage()
 		var val7 = document.aimAddOrgForm.ampOrgGrpId.options[index3].value;
 
 		if (str1.length == 0 || str1 == null) {		
-			alert('<digi:trn key="aim:editOrganisation:enterOrganisationName">Please enter name for this Organization.</digi:trn>');
+			alert('<digi:trn  jsFriendly="true" key="aim:editOrganisation:enterOrganisationName">Please enter name for this Organization.</digi:trn>');
 			document.aimAddOrgForm.name.focus();
 			return false;
 		}
 		if (val5.length == 0 || val5 == null) {		
-			alert('<digi:trn key="aim:editOrganisation:enterOrganisationAcronym">Please enter acronym for this Organization.</digi:trn>');
+			alert('<digi:trn  jsFriendly="true" key="aim:editOrganisation:enterOrganisationAcronym">Please enter acronym for this Organization.</digi:trn>');
 			document.aimAddOrgForm.acronym.focus();
 			return false;
 		}
 		if (val6.length == 0 || val6 == null) {		
-			alert('<digi:trn key="aim:editOrganisation:enterOrganisationCode">Please enter code for this Organization.</digi:trn>');
+			alert('<digi:trn  jsFriendly="true" key="aim:editOrganisation:enterOrganisationCode">Please enter code for this Organization.</digi:trn>');
 			document.aimAddOrgForm.orgCode.focus();
 			return false;
 		}
 		if ( val1 == "-1") {		
-			alert('<digi:trn key="aim:editOrganisation:enterOrganisationType">Please select type of this Organization.</digi:trn>');
+			alert('<digi:trn  jsFriendly="true" key="aim:editOrganisation:enterOrganisationType">Please select type of this Organization.</digi:trn>');
 			document.aimAddOrgForm.ampOrgTypeId.focus();
 			return false;
 		}
 		if ( val7 == "-1") {		
-			alert('<digi:trn key="aim:editOrganisation:enterOrganisationType">Please select group of this Organization.</digi:trn>');
+			alert('<digi:trn  jsFriendly="true" key="aim:editOrganisation:enterOrganisationType">Please select group of this Organization.</digi:trn>');
 			document.aimAddOrgForm.ampOrgGrpId.focus();
 			return false;
 		}

@@ -17,24 +17,18 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/batik.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/bcel.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/bsh-2.0b4.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/c3p0-0.9.1.2.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/casclient.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/castor-0.9.5.3-xml.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/commons-beanutils-1.6.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/commons-beanutils-bean-collections.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/commons-beanutils.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/commons-collections-3.1.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/commons-dbcp-1.2.1.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/commons-dbcp.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/commons-digester-1.5.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/commons-digester-1.8.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/commons-discovery.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/commons-fileupload-1.0.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/commons-fileupload.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/commons-lang-2.0.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/commons-math-1.0.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/commons-pool-1.2.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/commons-pool.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/commons-validator.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/commons-vfs.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/concurrent.jar"/>
@@ -42,7 +36,6 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/CordaEmbedder.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/digi-commons.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/displaytag-1.0.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/dom4j.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/ecs-1.4.2.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/ehcache-1.4.1.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/eigenbase-properties.jar"/>
@@ -67,7 +60,6 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/jakarta-regexp-1.2.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jasperreports-3.1.2.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/javacup.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/javassist.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jaxb-api.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jaxb-impl.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jaxb-libs.jar"/>
@@ -80,7 +72,6 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/jcommon-1.0.8.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jcr-1.0.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jcs.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/jdbc2_0-stdext.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jdom.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jdt-compiler.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/je.jar"/>
@@ -113,7 +104,6 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/saaj.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/saxpath.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/slf4j-api-1.5.2.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/slf4j-log4j12-1.0.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/slf4j-log4j12-1.5.2.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/spring.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/standard.jar"/>
@@ -152,5 +142,10 @@
 	<classpathentry kind="var" path="JBOSS-LIB/log4j.jar"/>
 	<classpathentry kind="var" path="JBOSS-LIB/mysql-connector-java-5.0.8-bin.jar"/>
 	<classpathentry kind="var" path="JBOSS-LIB/servlet-api.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/javassist-3.4.GA.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/logdigger-0.4.0.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/jboss/jboss-common-jdbc-wrapper.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/jboss/jboss-j2ee.jar"/>
 	<classpathentry kind="output" path="WEB-INF/classes"/>
 </classpath>

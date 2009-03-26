@@ -42,7 +42,9 @@
 		contentLocal.setAttribute('id', 'myPWorkspaceframeContent');
 		contentLocal.setAttribute('class', 'content');
 		contentLocal.innerHTML = '<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><p align="center"><img align="top" src="/repository/aim/view/scripts/ajaxtabs/loading.gif" /><font size="3"><b>Loading...</b></font></p>';
-			contentLocal.style.display = "inline";
+            contentLocal.style.height = "700px";
+            contentLocal.style.width = "594px";
+            contentLocal.style.overflow="scroll";
 			myPanelWorkspaceframe.setBody(contentLocal);
 			panelFirstShow = 0;
 		myPanelWorkspaceframe.show();

@@ -73,8 +73,15 @@ public class UserLevelGate extends Gate {
 		
 		AmpActivity act = (AmpActivity) scope.get(GatePermConst.ScopeKeys.ACTIVITY);
 		boolean owner=false;
-		if( tm!=null && act.getActivityCreator().getAmpTeamMemId().equals(tm.getMemberId()) ) owner=true;
+		if (act.getActivityCreator()==null){
+			logger.warn("Activity without owner ... ID: "+act.getAmpActivityId());
+			owner=false;
+		}else{
 		
+		if( tm!=null && act.getActivityCreator().getAmpTeamMemId().equals(tm.getMemberId()) ){ 
+			owner=true;
+		  }
+		}
 		//if im the owner and this gate checks for ownership....
 		if(owner && PARAM_OWNER.equals(param)) return true;
 		

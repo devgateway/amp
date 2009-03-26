@@ -6,10 +6,10 @@ package org.digijava.module.aim.action;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeSet;
 import java.util.Vector;
 
@@ -19,7 +19,6 @@ import javax.servlet.http.HttpSession;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.datatype.DatatypeFactory;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -29,9 +28,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
-import org.dgfoundation.amp.te.ampte.jaxb.ObjectFactory;
-import org.dgfoundation.amp.te.ampte.jaxb.Translations;
-import org.dgfoundation.amp.te.ampte.jaxb.Trn;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.CachedTranslatorWorker;
@@ -39,7 +35,11 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.form.TranslatorManagerForm;
 import org.digijava.module.aim.helper.TrnHashMap;
-import org.hibernate.Hibernate;
+import org.digijava.module.translation.entity.MessageGroup;
+import org.digijava.module.translation.jaxb.Language;
+import org.digijava.module.translation.jaxb.ObjectFactory;
+import org.digijava.module.translation.jaxb.Translations;
+import org.digijava.module.translation.jaxb.Trn;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -73,19 +73,23 @@ public class TranslatorManager extends Action {
 	        InputStream inputStream= new ByteArrayInputStream(fileData);
 	        session.setAttribute("myFile",myFile);
 	        
-	        JAXBContext jc = JAXBContext.newInstance("org.dgfoundation.amp.te.ampte.jaxb");
+	        JAXBContext jc = JAXBContext.newInstance("org.digijava.module.translation.jaxb");
 	        Unmarshaller m = jc.createUnmarshaller();
 	        Translations trns_in;	        
 	        TreeSet<String> languagesImport = new TreeSet<String>();
 	        
 	        
 	        try {
-				trns_in = (org.dgfoundation.amp.te.ampte.jaxb.Translations) m.unmarshal(inputStream);
+				trns_in = (Translations) m.unmarshal(inputStream);
 				if (trns_in.getTrn() != null) {
 					Iterator<Trn> it = trns_in.getTrn().iterator();
 					while (it.hasNext()) {
 						Trn element = it.next();
-						languagesImport.add(element.getLangIso());
+						List<Language> langs=element.getLang();
+						//translation must have at least one language,so this list can't be null.
+						for (Language lang : langs) {
+							languagesImport.add(lang.getCode());
+						}						
 					}
 					tMngForm.setImportedLanguages(languagesImport);
 
@@ -94,16 +98,14 @@ public class TranslatorManager extends Action {
 				logger.error("Exception : " + ex.getMessage());
 				ex.printStackTrace(System.out);
 				ActionErrors errors = new ActionErrors();
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-						"error.aim.importErrorFileContentTranslation"));
-				
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.importErrorFileContentTranslation"));				
 				saveErrors(request, errors);
 				return mapping.findForward("forward");
 			}	        
 	        
 		}
 		if(request.getParameter("importLang")!=null) {
-			
+			long timeStart=System.currentTimeMillis();
 			FormFile myFile = (FormFile)session.getAttribute("myFile");
 			session.removeAttribute("myFile");
 			if(myFile==null)
@@ -122,7 +124,7 @@ public class TranslatorManager extends Action {
 			}
 	        byte[] fileData    = myFile.getFileData();
 	        InputStream inputStream= new ByteArrayInputStream(fileData);
-	        JAXBContext jc = JAXBContext.newInstance("org.dgfoundation.amp.te.ampte.jaxb");
+	        JAXBContext jc = JAXBContext.newInstance("org.digijava.module.translation.jaxb");
 	        Unmarshaller m = jc.createUnmarshaller();
 	        Translations trns_in;
 	        
@@ -133,21 +135,24 @@ public class TranslatorManager extends Action {
 	        		TrnHashMap tHashMap=new TrnHashMap();
 	        		tHashMap.setLang(tMngForm.getSelectedImportedLanguages()[i]);
 	        		trnHashMaps.add(tHashMap);
-	        	}
+	        	}	        
 	        try {
 				trns_in = (Translations) m.unmarshal(inputStream);
 				if (trns_in.getTrn() != null) {
-					Iterator<Trn> it = trns_in.getTrn().iterator();
-					while(it.hasNext())
-					{
-						Trn element = it.next();
-						Iterator<TrnHashMap> itForLang=trnHashMaps.iterator();
+					logger.info("Processing "+trns_in.getTrn().size()+" translation groups (trn tags)...");
+					Iterator<Trn> it = trns_in.getTrn().iterator();					
+					while(it.hasNext()){
+						Trn trn = it.next();						
+						MessageGroup msgGroup=new MessageGroup(trn);
 						
-						while(itForLang.hasNext())
-						{
-							TrnHashMap tHashMap=(TrnHashMap)itForLang.next();
-							if(element.getLangIso().compareTo(tHashMap.getLang())==0)
-								tHashMap.getTranslations().add(element);								
+						Iterator<TrnHashMap> itForLang=trnHashMaps.iterator();
+						while(itForLang.hasNext())	{
+							TrnHashMap tanslationsHashMap=(TrnHashMap)itForLang.next();
+							//get requested languge's translation from the msgGroup
+							Message message=msgGroup.getMessageByLocale(tanslationsHashMap.getLang());
+							if(message!=null){
+								tanslationsHashMap.getTranslations().add(message);
+							}
 						}						
 					}
 				}
@@ -197,20 +202,9 @@ public class TranslatorManager extends Action {
 									String skipOrUpdateTrnsWithKeywords=tMngForm.getSkipOrUpdateTrnsWithKeywords();
 									List<String> keywords=tMngForm.getKeywords()==null?new ArrayList<String>():Arrays.asList(tMngForm.getKeywords());
 									
-									Iterator<Trn> trnsIterator=tHP.getTranslations().iterator();									
+									Iterator<Message> trnsIterator=tHP.getTranslations().iterator();									
 									while(trnsIterator.hasNext()){
-										Trn element=(Trn) trnsIterator.next();
-										
-										Message msg= new Message();
-										msg.setKey(element.getMessageKey());
-										msg.setLocale(element.getLangIso());
-										msg.setSiteId(element.getSiteId());
-										msg.setMessage(element.getValue());
-										msg.setCreated(new java.sql.Timestamp(element.getCreated().toGregorianCalendar().getTime().getTime()));//element.getCreated());
-										msg.setKeyWords(element.getKeywords());
-										if(element.getLastAccessed()!=null){
-											msg.setLastAccessed(new java.sql.Timestamp(element.getLastAccessed().toGregorianCalendar().getTime().getTime()));
-										}										
+										Message msg=(Message)trnsIterator.next();										
 										//now overwrite,update or insert non-existing translation
 										if(actionName.compareTo("nonexisting")==0){
 											updateNonExistingTranslationMessage(msg,tMngForm.getSelectedImportedLanguages()[i],request);
@@ -235,16 +229,17 @@ public class TranslatorManager extends Action {
 				saveErrors(request, errors);
 				return mapping.findForward("forward");
 			}	        
-			
+			long timeEnd=System.currentTimeMillis();
+			logger.info("Import finished in "+(timeEnd - timeEnd)+" milliseconds.");
 			session.removeAttribute("aimTranslatorManagerForm");
 			return mapping.findForward("forward");
 		}
-		if(request.getParameter("export")!=null)
-		{
+		
+		if(request.getParameter("export")!=null) {
 			if(tMngForm!=null && tMngForm.getSelectedLanguages()!=null && tMngForm.getSelectedLanguages().length>0)
 			{
 				logger.info("I am in Export step");
-				JAXBContext jc = JAXBContext.newInstance("org.dgfoundation.amp.te.ampte.jaxb");
+				JAXBContext jc = JAXBContext.newInstance("org.digijava.module.translation.jaxb");
 				Marshaller m = jc.createMarshaller();
 				response.setContentType("text/xml");
 				response.setHeader("content-disposition", "attachment; filename=exportLanguage.xml");
@@ -252,11 +247,12 @@ public class TranslatorManager extends Action {
 				Translations trns_out = objFactory.createTranslations();
 				Vector<Trn> rsAux=new Vector<Trn>();
 				
-				for(int i=0; i<tMngForm.getSelectedLanguages().length;i++)
-				{
-					rsAux=getTranslationsForALanguage(tMngForm.getSelectedLanguages()[i]);
-					trns_out.getTrn().addAll(rsAux);					
+				Map<String,MessageGroup> messageGroups=new HashMap<String, MessageGroup>();
+				for(int i=0; i<tMngForm.getSelectedLanguages().length;i++)	{
+					fillMapWithTranslationsForALanguage(tMngForm.getSelectedLanguages()[i],messageGroups);										
 				}
+				rsAux=getTranslationsFromMessageGroup(messageGroups);
+				trns_out.getTrn().addAll(rsAux);
 				
 				m.marshal(trns_out,response.getOutputStream());
 				form=null;
@@ -274,8 +270,21 @@ public class TranslatorManager extends Action {
 		
 		return mapping.findForward("forward");
 	}
+
+	private Vector<Trn> getTranslationsFromMessageGroup(Map<String, MessageGroup> messageGroups){
+		Vector<Trn> result=new Vector<Trn>();
+		for(Map.Entry<String, MessageGroup> entry: messageGroups.entrySet()){
+			try {
+				Trn trn=entry.getValue().createTrn();
+				result.add(trn);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}			
+		}		
+		return result;
+	}
 	
-	
+
 	private TreeSet<String> getPossibleLanguages()	{
 		TreeSet<String> ret = new TreeSet<String>();
 		Session session = null;
@@ -299,51 +308,31 @@ public class TranslatorManager extends Action {
 	}
 
 
-	private Vector<Trn> getTranslationsForALanguage(String language){
-		Vector<Trn> ret	= new Vector<Trn>();
+	private void fillMapWithTranslationsForALanguage(String language,Map<String,MessageGroup> map){		
 		Session session = null;
-		String qryStr = null;
-		ObjectFactory objFactory = new ObjectFactory();
+		String qryStr = null;		
 		Query qry;		
 		try{
 				session	= PersistenceManager.getRequestDBSession();
-				qryStr	= "select m from "+ Message.class.getName() + " m where (m.locale=:langIso)";
+				qryStr	= "select m from "+ Message.class.getName() + " m where m.locale='"+language+"'";
 				qry= session.createQuery(qryStr);
-				qry.setParameter("langIso", language, Hibernate.STRING);
-				
 				Iterator<Message> itr = qry.list().iterator();
-				while (itr.hasNext()){
-					Trn trnAux=objFactory.createTrn();
-				
+				while(itr.hasNext()){
 					Message msg= (Message)itr.next();
-					trnAux.setMessageKey(msg.getKey());
-					trnAux.setLangIso(msg.getLocale());
-					trnAux.setSiteId(msg.getSiteId());					
-					trnAux.setValue(msg.getMessage());
-					Calendar cal_u = Calendar.getInstance();
-					cal_u.setTime(msg.getCreated());
-					trnAux.setCreated(DatatypeFactory.newInstance().newXMLGregorianCalendar(new GregorianCalendar(cal_u.get(Calendar.YEAR),cal_u.get(Calendar.MONTH),cal_u.get(Calendar.DAY_OF_MONTH),cal_u.get(Calendar.HOUR),cal_u.get(Calendar.MINUTE),cal_u.get(Calendar.SECOND))));
-					if(msg.getKeyWords()!=null){
-						trnAux.setKeywords(msg.getKeyWords());
-					}					
-					//last accessed
-					if(msg.getLastAccessed()!=null){
-						Calendar lastAccessed = Calendar.getInstance();
-						lastAccessed.setTime(msg.getLastAccessed());						
-						trnAux.setLastAccessed(DatatypeFactory.newInstance().newXMLGregorianCalendar(new GregorianCalendar(lastAccessed.get(Calendar.YEAR),lastAccessed.get(Calendar.MONTH),lastAccessed.get(Calendar.DAY_OF_MONTH),lastAccessed.get(Calendar.HOUR),lastAccessed.get(Calendar.MINUTE),lastAccessed.get(Calendar.SECOND))));						
-					}					
-//					else{
-//						trnAux.setLastAccessed(DatatypeFactory.newInstance().newXMLGregorianCalendar());
-//					}
-					ret.add(trnAux);
+					//MessageGroup class key is equal to the message key, from which it was created
+					MessageGroup msgGroup=map.get(msg.getKey());
+					if(msgGroup==null){
+						msgGroup=new MessageGroup(msg);
+					}else{
+						msgGroup.addMessage(msg);
+					}
+					map.put(msgGroup.getKey(), msgGroup);
 				}
-
 		}
 		catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
 			ex.printStackTrace(System.out);
-		}		
-		return ret;
+		}
 	}
 	
 	private void updateNonExistingTranslationMessage(Message msgLocal, String lang,HttpServletRequest request){
@@ -388,7 +377,7 @@ public class TranslatorManager extends Action {
 				if(saveOrUpdate){
 					dbMessage.setCreated(msgLocal.getCreated());
 					dbMessage.setMessage(msgLocal.getMessage());
-					dbMessage.setLastAccessed(msgLocal.getLastAccessed());
+					//dbMessage.setLastAccessed(msgLocal.getLastAccessed());
 					dbMessage.setKeyWords(msgLocal.getKeyWords());					
 					//this will update both:cache and db
 					trnWorker.update(dbMessage);
@@ -407,7 +396,7 @@ public class TranslatorManager extends Action {
 				msg.setLocale(lang);
 				msg.setSiteId(msgLocal.getSiteId());
 				msg.setMessage(msgLocal.getMessage().trim());
-				msg.setCreated(new java.sql.Timestamp(msgLocal.getCreated().getTime()));
+				msg.setCreated(msgLocal.getCreated());
 				msg.setKeyWords(msgLocal.getKeyWords());				
 				//this will update both:cache and db
 				trnWorker.save(msg);

@@ -158,17 +158,24 @@ function validateForm(){
     var npoSize = document.aimEditActivityForm.sizeNPOPrograms.value;
     var ppSize = document.aimEditActivityForm.sizePPrograms.value;
     var spSize = document.aimEditActivityForm.sizeSPrograms.value;
-    if ( <feature:display name="Sectors" module="Project ID and Planning"> !validateSectorPercentage() || </feature:display> 
+    if ( <feature:display name="Sectors" module="Project ID and Planning"> !validateSectorPercentage()</feature:display> 
      <field:display name="Regional Percentage" feature="Location">
-   	 !validateLocationPercentage() || 
-     </field:display> 
-    !validateProgramsPercentage(npoSize,"nationalPlanObjectivePrograms") ||
-    !validateProgramsPercentage(ppSize,"primaryPrograms") ||
-    !validateProgramsPercentage(spSize,"secondaryPrograms")  ){
+   	 || !validateLocationPercentage()
+     </field:display>
+   	<field:display name="National Planning Objectives" feature="NPD Programs"> 
+    || !validateProgramsPercentage(npoSize,"nationalPlanObjectivePrograms")
+    </field:display>
+    <field:display name="Primary Program" feature="NPD Programs">
+    || !validateProgramsPercentage(ppSize,"primaryPrograms")
+    </field:display>
+    <field:display name="Secondary Program" feature="NPD Programs">
+    || !validateProgramsPercentage(spSize,"secondaryPrograms")
+    </field:display>  
+    ){
+        alert("false");
       return false;
     }
   }
-
   document.aimEditActivityForm.step.value="2";
   return true;
 }
@@ -792,9 +799,7 @@ function remProgram(programType) {
 				                                    &nbsp
 				                                    </td>
 				                                    <td vAlign="center" align="center" class="textalb" height="20" bgcolor="#006699">
-                                                                         <digi:trn key="aim:step2of">
-													Step 2 of  
-									</digi:trn>
+                                                                   <digi:trn>Step</digi:trn> ${stepNm} <digi:trn>of  </digi:trn>
                                                                          ${fn:length(aimEditActivityForm.steps)}:
                                                                                                  <digi:trn key="aim:activity:LocationSectors">
                                                                                                      Location | Sectors

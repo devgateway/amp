@@ -62,7 +62,7 @@ public class ManagePermission extends MultiAction {
 
 	pf.set_availableActions(actions);
 
-	List<Permission> permissions = PermissionUtil.getAllUnDedicatedPermissions();
+	List<Permission> permissions = PermissionUtil.getAllPermissions();
 	pf.set_availablePermissions(permissions);
 
 	return modeSelect(mapping, form, request, response);

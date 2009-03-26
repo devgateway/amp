@@ -17,6 +17,17 @@
 
 
 <script language="JavaScript">
+
+    function chkNumeric(frmContrl){
+        var regEx=/^[0-9]*\.?[0-9]*$/;
+        var errorMsg="<digi:trn>Please enter numeric value only</digi:trn>";
+        if(!frmContrl.value.match(regEx)){
+            alert(errorMsg);
+            frmContrl.value = "";
+            frmContrl.focus();
+            return false;
+        }
+    }
 function addData(){
   <digi:context name="addEditIndicator" property="context/module/moduleinstance/addEditData.do?event=addIndValue" />
   document.forms[0].action = "<%=addEditIndicator%>";
@@ -35,9 +46,7 @@ function deleteData(ind){
 
 function saveIndicator(id){
 	if (!validation()){
-	var msg='<digi:trn key="aim:addEditData:enterBaseAndTargetValues">Please ensure that you enter at least 1 base and 1 target value</digi:trn>';
-	alert(msg);
-	return false;
+        return false;
 	}
   <digi:context name="addEditIndicator" property="context/module/moduleinstance/addEditData.do?event=save" /> 
   aimThemeForm.action = "<%=addEditIndicator%>";
@@ -60,6 +69,18 @@ function selectLocation(index){
 
 function validation(){
 	var values=document.getElementsByTagName("select");
+    var msg='<digi:trn jsFriendly="true">Please ensure that you enter at least 1 base and 1 target value</digi:trn>';
+    var msgDate='<digi:trn jsFriendly="true">Please specify date</digi:trn>';
+    var dates=document.getElementsByName("creationDate");
+    for (var j=0;j<dates.length;j++){
+        var date=dates[j];
+        if(date.value==''){
+            date.focus();
+            alert(msgDate);
+            return false;
+        }
+
+    }
 	var baseValue=0;
 	var actualValue=0;
 	var targetValue=0;
@@ -75,6 +96,7 @@ function validation(){
 	}
 	//for every actual value we should have base and target values
 	if(baseValue==0||targetValue==0){
+        alert(msg);
 		return false;	
 	}
 	return true;
@@ -117,7 +139,7 @@ function validation(){
           </td>
 
           <td bgColor=#d7eafd height="10" align="center" width="10%">
-            <html:text name="ind" property="valAmount" styleId="txtName" styleClass="amt"/>
+            <html:text name="ind" property="valAmount" styleId="txtName" styleClass="amt" onblur="chkNumeric(this)"/>
           </td>
 
           <td bgColor=#d7eafd  height="10" align="center" nowrap="nowrap">

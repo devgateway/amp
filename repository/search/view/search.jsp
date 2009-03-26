@@ -145,17 +145,17 @@ $(document).ready(function(){
 							<digi:trn>Click here to view MyDesktop</digi:trn>
 						</c:set>
 						<digi:link href="/viewMyDesktop.do" styleClass="comment" title="${translation}">
-                        My Desktop
+                        <digi:trn>My Desktop</digi:trn>
 						</digi:link>
                         &nbsp;&gt;&nbsp;
 						Tools
                         &nbsp;&gt;&nbsp;
-                        Search
+                        <digi:trn>Search</digi:trn>
 						</span>
 					</td>
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571><span class=subtitle-blue>Search</span>
+					<td height=16 vAlign=center width=571><span class=subtitle-blue><digi:trn>Search</digi:trn></span>
 					</td>
 				</tr>
 				<tr>

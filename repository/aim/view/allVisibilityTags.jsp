@@ -114,10 +114,8 @@
 <feature:display name="Admin Topics Help" module="HELP"></feature:display> 
 <feature:display name="Admin" module="M & E"></feature:display> 
 <feature:display name="Alert tab" module="Messages"></feature:display> 
-<feature:display name="Alert tab" module="Messaging System"></feature:display> 
 <feature:display name="Applied Patches" module="ADMINISTRATIVE SECTION"></feature:display> 
 <feature:display name="Approval Tab" module="Messages"></feature:display> 
-<feature:display name="Approval Tab" module="Messaging System"></feature:display> 
 <feature:display name="Beneficiary Agency" module="Organizations"></feature:display> 
 <feature:display name="Budget" module="Project ID and Planning"></feature:display> 
 <feature:display name="Budget" module="Project Id And Planning"></feature:display>
@@ -138,7 +136,6 @@
 <feature:display name="Edit Activity" module="Previews"></feature:display> 
 <feature:display name="Enable Scrolling Reports" module="Report and Tab Options"></feature:display> 
 <feature:display name="Event Tab" module="Messages"></feature:display> 
-<feature:display name="Event Tab" module="Messaging System"></feature:display> 
 <feature:display name="Executing Agency" module="Organizations"></feature:display> 
 <feature:display name="Filter Button" module="Report and Tab Options"></feature:display> 
 <feature:display name="Financial Progress Tab" module="Funding"></feature:display> 
@@ -233,8 +230,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 </logic:iterate>
  
 <field:display feature="Disbursement Orders" name="Disbursement Orders Tab"></field:display> 
-<field:display feature="Donor Contact Information" name="Donor Email"></field:display> 
-<field:display feature="Donor Contact Information" name="Donor First Name"></field:display> 
 <field:display feature="Edit Activity" name="Edit Activity Button"></field:display> 
 <field:display feature="Edit Activity" name="Validate Activity Button"></field:display> 
 <field:display feature="Funding Information" name="Type Of Assistance"></field:display> 
@@ -574,7 +569,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Name" feature="Admin - Component Type"></field:display> 
 
 
-<field:display name="National Plan Objective" feature="NPD Programs"></field:display> 
+<field:display name="National Planning Objectives" feature="NPD Programs"></field:display> 
 <field:display name="National Planning Objectives Level 1" feature="NPD Programs"></field:display> 
 <field:display name="National Planning Objectives Level 2" feature="NPD Programs"></field:display> 
 <field:display name="National Planning Objectives Level 3" feature="NPD Programs"></field:display> 
@@ -584,10 +579,24 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="National Planning Objectives Level 7" feature="NPD Programs"></field:display> 
 <field:display name="National Planning Objectives Level 8" feature="NPD Programs"></field:display> 
 
+<field:display name="Primary Program Level 1" feature="NPD Programs"></field:display> 
+<field:display name="Primary Program Level 2" feature="NPD Programs"></field:display> 
+<field:display name="Primary Program Level 3" feature="NPD Programs"></field:display> 
+<field:display name="Primary Program Level 4" feature="NPD Programs"></field:display> 
+<field:display name="Primary Program Level 5" feature="NPD Programs"></field:display> 
+<field:display name="Primary Program Level 6" feature="NPD Programs"></field:display> 
+<field:display name="Primary Program Level 7" feature="NPD Programs"></field:display> 
+<field:display name="Primary Program Level 8" feature="NPD Programs"></field:display> 
 
+<field:display name="Secondary Program Level 1" feature="NPD Programs"></field:display> 
+<field:display name="Secondary Program Level 2" feature="NPD Programs"></field:display> 
+<field:display name="Secondary Program Level 3" feature="NPD Programs"></field:display> 
+<field:display name="Secondary Program Level 4" feature="NPD Programs"></field:display> 
+<field:display name="Secondary Program Level 5" feature="NPD Programs"></field:display> 
+<field:display name="Secondary Program Level 6" feature="NPD Programs"></field:display> 
+<field:display name="Secondary Program Level 7" feature="NPD Programs"></field:display> 
+<field:display name="Secondary Program Level 8" feature="NPD Programs"></field:display> 
 
-<field:display name="National Plan Objective" feature="Program"></field:display> 
-<field:display name="National Planning Objectives" feature="NPD Programs"></field:display> 
 
 <field:display name="Parent National Planning Objectives" feature="NPD Programs"></field:display> 
 <field:display name="Objective Comments" feature="Identification"></field:display> 
@@ -765,8 +774,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Computation" feature="Identification"></field:display> 
 <field:display name="addMessageButton" feature="Messages"></field:display> 
 <field:display name='Delete Regional Funding Button' feature='Regional Funding'></field:display>
-
-
+<field:display name="Add Costing Button" feature="Costing"/>
+<field:display name="Add Documents From Repository Button" feature="Related Documents"/>
 <field:display name="Donor Filter" feature="Filter"></field:display>
 <field:display name="Event Type Filter" feature="Filter"></field:display>
 <field:display name="Run Filter Button" feature="Filter"></field:display>

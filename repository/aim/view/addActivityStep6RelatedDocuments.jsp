@@ -27,10 +27,12 @@
 										
 										<tr>
 											<td>
-												<c:set var="documentsType"><%=org.digijava.module.aim.helper.ActivityDocumentsConstants.RELATED_DOCUMENTS%></c:set>
+												<field:display name="Add Documents From Repository Button" feature="Related Documents">											
+												<c:set var="documentsType"><%=org.digijava.module.aim.helper.ActivityDocumentsConstants.RELATED_DOCUMENTS%></c:set>												
 												<html:button  styleClass="dr-menu" property="submitButton" onclick="addDocumentsDM(&apos;${documentsType}&apos;)">
 														<digi:trn key="btn:addDocumentsFromRepository">Add Documents From Repository</digi:trn>
 												</html:button>
+												</field:display>
 											</td>
 										</tr>
 										</table>

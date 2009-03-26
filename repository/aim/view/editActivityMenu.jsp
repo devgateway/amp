@@ -190,6 +190,8 @@ var draftStatus=document.getElementById("draftFlag");
 <html:hidden property="identification.draft" styleId="draftFlag" />
 <html:hidden property="identification.wasDraft" />
 
+<!-- To avoid step numbering bug in the future please change getSteps() method
+of ActivityUtil class also when change step visibility module/feature name -->
 
 <table border=0 width="300" cellSpacing=0 cellPadding=0 vAlign="top" align="left" border=0>
 	<tr>

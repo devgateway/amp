@@ -14,7 +14,7 @@
   
     <tr>
         <td colspan="2" rowspan="2" class="tableHeaderCls">
-            PARIS DECLARATION INDICATORS - DONORS</td>
+        <digi:trn> PARIS DECLARATION INDICATORS - DONORS</digi:trn></td>
         <td colspan="3" align="center" class="tableHeaderCls">
             <digi:trn key="parisIndicatorAllDonors">All donors</digi:trn>
        </td>
@@ -23,10 +23,10 @@
        </td>
     </tr>
     <tr>
-        <td class="tableHeaderCls">2005 Baseline</td>
+        <td class="tableHeaderCls">2005 <digi:trn>Baseline</digi:trn></td>
         <td class="tableHeaderCls">${orgProfilePIForm.fiscalYear-1} Value</td>
-        <td class="tableHeaderCls">2010 Target</td>
-        <td class="tableHeaderCls">2005 Baseline</td>
+        <td class="tableHeaderCls">2010 <digi:trn>Target</digi:trn></td>
+        <td class="tableHeaderCls">2005 <digi:trn>Baseline</digi:trn></td>
         <td class="tableHeaderCls">${orgProfilePIForm.fiscalYear-1} Value</td>
         
     </tr>

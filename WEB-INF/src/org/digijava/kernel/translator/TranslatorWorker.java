@@ -358,18 +358,15 @@ public class TranslatorWorker {
         return trnMess;
     }
 
+
     /**
-     * Retrives translation.
-     * @param originalText this text is used to generate key
-     * @param local
-     * @return
+     * Retrieves translation using original text for searching.  
+     * @param originalText used to generate key for searching, this should be always be default text in English, tag body or string constant from code. 
+     * @param local language code to witch original text should be translated.
+     * @param siteId site ID of for which translation should be searched.
+     * @return message bean which contains translated text or default text if translation was not not found.
      * @throws WorkerException
      */
-    public Message getByBody(String originalText, String local) throws WorkerException{
-    	String siteId = getAmpSite().getSiteId();
-    	return getByBody(originalText,local,siteId);
-    }
-
     public Message getByBody(String originalText, String local, String siteId) throws WorkerException{
     	return getByBody(originalText,null,local,siteId);
     }
@@ -1831,10 +1828,11 @@ public class TranslatorWorker {
 	
 	/**
 	 * TODO Review and move to better class.
+	 * Note, this will return AMP site.
 	 * @return
 	 * @throws WorkerException
 	 */
-	public Site getAmpSite() throws WorkerException{
+	public Site getDefaultSite() throws WorkerException{
 		try {
 			if (ampSite == null){
 				ampSite = SiteUtils.getSite("amp");

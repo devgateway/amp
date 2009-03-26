@@ -1,6 +1,7 @@
 package org.digijava.module.dataExchange.util;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -43,6 +44,8 @@ public class ExportBuilder {
 
 	private String siteId =  null; //RequestUtils.getSite(request).getSiteId()
 
+	private String[] exportLog = null;
+	
 	public ExportBuilder(AmpActivity ampActivity, String siteId){
 		this.ampActivity = ampActivity;
 		this.siteId = siteId;
@@ -92,7 +95,9 @@ public class ExportBuilder {
 			if (ampActivity.getName() != null){
 				parent.getTitle().add(buildFreeText(null, ampActivity.getName()));
 			} else {
-				throw new AmpExportException("Name is empty", AmpExportException.ACTIVITY_DATA_INEFFICIENT);
+				String msg = "Name is empty";
+				this.addToLog(ampActivity, msg);
+				throw new AmpExportException(msg, AmpExportException.ACTIVITY_DATA_INEFFICIENT);
 			}
 				
 		} else if (path.equalsIgnoreCase("activity.objective")){
@@ -132,7 +137,9 @@ public class ExportBuilder {
 			if (ampActivity.getApprovalStatus() != null){
 				parent.setStatus(buildCodeValue(ampActivity.getApprovalStatus()));
 			} else {
-				throw new AmpExportException("Status is empty", AmpExportException.ACTIVITY_DATA_INEFFICIENT);
+				String msg = "Status is empty";
+				this.addToLog(ampActivity, msg);
+				throw new AmpExportException(msg, AmpExportException.ACTIVITY_DATA_INEFFICIENT);
 			}
 		} else if (path.equalsIgnoreCase("activity.statusReason")){
 			parent.setStatusReason(buildFreeText(ampActivity.getStatusReason()));
@@ -145,11 +152,15 @@ public class ExportBuilder {
 								ampSector.getSectorId().getName(),
 								ampSector.getSectorPercentage().floatValue()));
 					} else {
-						throw new AmpExportException("Sector Precent is empty", AmpExportException.ACTIVITY_DATA_INEFFICIENT);
+						String msg = "Sector Precent is empty";
+						this.addToLog(ampActivity, msg);
+						throw new AmpExportException(msg, AmpExportException.ACTIVITY_DATA_INEFFICIENT);
 					}
 				}
 			} else {
-				throw new AmpExportException("Sector is empty", AmpExportException.ACTIVITY_DATA_INEFFICIENT);
+				String msg = "Sector is empty";
+				this.addToLog(ampActivity, msg);
+				throw new AmpExportException(msg, AmpExportException.ACTIVITY_DATA_INEFFICIENT);
 			}
 		} else if (path.equalsIgnoreCase("activity.programs")){
 			if (ampActivity.getActivityPrograms() != null && ampActivity.getActivityPrograms().size() > 0){
@@ -160,7 +171,9 @@ public class ExportBuilder {
 							ampProgram.getProgram().getName(),
 							ampProgram.getProgramPercentage().floatValue()));
 					} else {
-						throw new AmpExportException("Programs.Precent is empty", AmpExportException.ACTIVITY_DATA_INEFFICIENT);
+						String msg = "Programs.Precent is empty";
+						this.addToLog(ampActivity, msg);
+						throw new AmpExportException(msg, AmpExportException.ACTIVITY_DATA_INEFFICIENT);
 					}
 				}
 			}
@@ -251,7 +264,9 @@ public class ExportBuilder {
 					} else if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase(Constants.RELATED_INSTITUTIONS)){
 						org.setType(DataExchangeConstants.ORG_ROLE_RELEATED_INSTITUTIONS);
 					} else {
-						throw new AmpExportException("Releated Organization type is unknown", AmpExportException.ACTIVITY_DATA_INEFFICIENT);
+						String msg = "Releated Organization type is unknown";
+						this.addToLog(ampActivity, msg);
+						throw new AmpExportException(msg, AmpExportException.ACTIVITY_DATA_INEFFICIENT);
 					}
 					
 
@@ -282,7 +297,9 @@ public class ExportBuilder {
 		if (ids.getOrganisation() != null){
 			retValue.setAssigningOrg(buildCodeValue(ids.getOrganisation().getOrgCode(), ids.getOrganisation().getName()));
 		} else {
-			throw new AmpExportException("Id.Org is empty", AmpExportException.ACTIVITY_DATA_INEFFICIENT);
+			String msg = "Id.Org is empty";
+			this.addToLog(ampActivity, msg);
+			throw new AmpExportException(msg, AmpExportException.ACTIVITY_DATA_INEFFICIENT);
 		}
 
 		return retValue;
@@ -352,7 +369,9 @@ public class ExportBuilder {
 			
 			}
 		} else {
-			throw new AmpExportException("Location.LocationName is null", AmpExportException.ACTIVITY_DATA_INEFFICIENT);
+			String msg = "Location.LocationName is null";
+			this.addToLog(ampActivity, msg);
+			throw new AmpExportException(msg, AmpExportException.ACTIVITY_DATA_INEFFICIENT);
 		}
 
 		return retValue;
@@ -421,13 +440,17 @@ public class ExportBuilder {
 		} else if (path.equalsIgnoreCase("activity.funding.assistanceType")){
 			CodeValueType cValue =  buildCodeValue(ampfunding.getTypeOfAssistance());
 			if (cValue == null){
-				throw new AmpExportException("Funding.assistanceType is null", AmpExportException.ACTIVITY_DATA_INEFFICIENT);
+				String msg = "Funding.assistanceType is null";
+				this.addToLog(ampActivity, msg);
+				throw new AmpExportException(msg, AmpExportException.ACTIVITY_DATA_INEFFICIENT);
 			}
 			funding.setAssistanceType(cValue);
 		} else if (path.equalsIgnoreCase("activity.funding.financingInstrument")){
 			CodeValueType cValue =  buildCodeValue(ampfunding.getFinancingInstrument());
 			if (cValue == null){
-				throw new AmpExportException("Funding.financingInstrument is null", AmpExportException.ACTIVITY_DATA_INEFFICIENT);
+				String msg = "Funding.financingInstrument is null";
+				this.addToLog(ampActivity, msg);
+				throw new AmpExportException(msg, AmpExportException.ACTIVITY_DATA_INEFFICIENT);
 			}
 			funding.setFinancingInstrument(cValue);
 		} else if (path.equalsIgnoreCase("activity.funding.conditions")){
@@ -642,7 +665,9 @@ public class ExportBuilder {
 		if (detail.getTransactionAmount() != null){
 			amount = detail.getTransactionAmount().longValue();
 		} else {
-			throw new AmpExportException("AmpFundingDetail.getTransactionAmount is null", AmpExportException.ACTIVITY_FORMAT);
+			String msg = "AmpFundingDetail.getTransactionAmount is null";
+			this.addToLog(ampActivity, msg);
+			throw new AmpExportException(msg, AmpExportException.ACTIVITY_FORMAT);
 		}
 		
 		return buildFundingDetail(fDetailType, detail.getTransactionDate(), amount, detail.getAmpCurrencyId().getCurrencyCode());
@@ -654,7 +679,9 @@ public class ExportBuilder {
 		try {
 			amount = Long.parseLong(fDetail.getTransactionAmount());
 		} catch (Exception e) {
-			throw new AmpExportException(e, AmpExportException.ACTIVITY_FORMAT);
+			String msg = "TransactionAmount is null or not correct";
+			this.addToLog(ampActivity, msg);
+			throw new AmpExportException(msg, e, AmpExportException.ACTIVITY_FORMAT);
 		}
 
 		return buildFundingDetail(fDetail.getAdjustmentTypeName(), getDate(fDetail.getTransactionDate()), amount, fDetail.getCurrencyCode());
@@ -666,7 +693,9 @@ public class ExportBuilder {
 		try{		
 			retValue = format.parse(stringDate);
 		} catch (Exception e) {
-			throw new AmpExportException(e, AmpExportException.ACTIVITY_FORMAT);
+			String msg = "Date is null or not correct";
+			this.addToLog(ampActivity, msg);
+			throw new AmpExportException(msg, e, AmpExportException.ACTIVITY_FORMAT);
 		}
 
 		return retValue;
@@ -687,7 +716,16 @@ public class ExportBuilder {
 		
 		return retValue;
 	}
-
 	
-
+	private void addToLog(AmpActivity activity, String error){
+		this.exportLog = new String[3];
+		
+		this.exportLog[0] = activity.getAmpId();
+		this.exportLog[1] = activity.getName();
+		this.exportLog[2] = error;
+	}
+	
+	public String[] getEroor(){
+		return this.exportLog;
+	}
 }

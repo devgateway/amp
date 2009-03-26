@@ -350,6 +350,7 @@ session.setAttribute("progressValue", counter);
 					<%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%>
 				</digi:trn>
 				</gs:test>
+				
 				<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY%>">
 					<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />
 					<digi:trn key="<%="aim:currency:" + ((String)selCurrency).toLowerCase().replaceAll(" ", "") %>"><%=selCurrency %></digi:trn>
@@ -386,8 +387,17 @@ session.setAttribute("progressValue", counter);
                 	0
                 </c:set>
 
-
-                <c:forEach var="i" begin="0" end="${report.visibleRows-1}" step="${recordsPerPage}">
+				<c:if test="${report.visibleRows gt 1}">
+                	<c:set var="visibleRows">
+                		${report.visibleRows-2}
+                	</c:set>
+                </c:if>
+                <c:if test="${report.visibleRows lt 2}">
+                	<c:set var="visibleRows">
+                		0
+                	</c:set>
+                </c:if>
+                <c:forEach var="i" begin="0" end="${visibleRows}" step="${recordsPerPage}">
                     <logic:equal name="viewFormat" value="html">
                         <a style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+(recordsPerPage-1)}"/>';">
                     </logic:equal>
@@ -536,7 +546,17 @@ session.setAttribute("progressValue", counter);
 				<c:set var="lastPage">
                 	0
                 </c:set>
-                <c:forEach var="i" begin="0" end="${report.visibleRows-2}" step="${recordsPerPage}">
+                <c:if test="${report.visibleRows gt 1}">
+                	<c:set var="visibleRows">
+                		${report.visibleRows-2}
+                	</c:set>
+                </c:if>
+                <c:if test="${report.visibleRows lt 2}">
+                	<c:set var="visibleRows">
+                		0
+                	</c:set>
+                </c:if>
+                <c:forEach var="i" begin="0" end="${visibleRows}" step="${recordsPerPage}">
                     <logic:equal name="viewFormat" value="html">
                         <a style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=false~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+(recordsPerPage-1)}"/>';">
                     </logic:equal>

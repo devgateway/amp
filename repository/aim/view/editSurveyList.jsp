@@ -14,7 +14,7 @@
 
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
-
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
@@ -269,9 +269,8 @@
 
 											</td>
                                                                                         <td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
-												<digi:trn key="aim:step8_5of">
-													Step 8_5 of
-												</digi:trn> 
+													<digi:trn>
+													Step</digi:trn> ${stepNm} <digi:trn>of  </digi:trn>
                                                                                                  ${fn:length(aimEditActivityForm.steps)}:
                                                                                                 <digi:trn key="aim:aidEffectiveIndicators">
 
@@ -304,8 +303,9 @@
 								<!-- contents -->
 
 
+							<feature:display name="Paris Indicator" module="Add & Edit Activity">
 
-								<table width="95%" bgcolor="#f4f4f2" border=0>
+								<table width="95%" bgcolor="#f4f4f2" border="0">
 
 									<tr><td>&nbsp;</td></tr>
 
@@ -314,7 +314,6 @@
 
 
 								<!-- Indicator Table starts here -->
-
 
 
 									<TABLE width="656"  align="center" cellpadding="4" cellspacing="1" class="box-border-nopadding">
@@ -386,14 +385,14 @@
 									</nested:notEmpty>
 
 									</TABLE>
-
 									</td></tr>
 
 									<tr><td>&nbsp;</td></tr>
 
 								</table>
 
-
+								</feature:display>
+						
 
 								<!-- Indicator Table ends here -->
 

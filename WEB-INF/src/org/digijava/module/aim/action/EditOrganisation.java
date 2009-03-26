@@ -266,7 +266,8 @@ public class EditOrganisation
     }
     Collection orgGroup = new ArrayList();
     Collection oldOrgGroup = editForm.getOrgGroup();
-    editForm.setOrgGroup(orgGroup);
+    if ( ! "yes".equals( editForm.getSaveFlag() ) ) //we need this otherwise organisation group gets reset if error on save
+    	editForm.setOrgGroup(orgGroup);
 
     //Collection country = DbUtil.getAllCountries();
     //Collection level = DbUtil.getAllLevels();
@@ -604,6 +605,7 @@ public class EditOrganisation
             ampOrg.setOrgCode(editForm.getOrgCode());
           else {
             editForm.setFlag("orgCodeExist");
+            editForm.setSaveFlag("no");
             return mapping.findForward("forward");
           }
         }

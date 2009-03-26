@@ -40,50 +40,13 @@
 			<img src="/TEMPLATE/ampTemplate/images/cancel.png" class="toolbar" />
 			<digi:trn key="btn:wizard:Cancel">Cancel</digi:trn>
 		</button>
-    	<button name="expodtButton" type="button" class="toolbar" onclick="exportActivity()" name="export" >
+    	<button id="step${stepNum}_export" name="expodtButton" type="button" class="toolbar" onclick="exportActivity()" >
 			<img src="/TEMPLATE/ampTemplate/images/file-export-16x16.png" class="toolbar"/>
 			<digi:trn key="btn:wizard:Export">Export</digi:trn>
 		</button>
+        <button id="step${stepNum}_log" name="logButton" type="button" class="toolbar" onclick="exportLog()" >
+          <img src="/TEMPLATE/ampTemplate/images/file-export-16x16.png" class="toolbar"/>
+          <digi:trn key="btn:wizard:ExportLog">Log</digi:trn>
+        </button>
  	 </div>
 
-<script type="text/javascript">
-
-  function enableToolbarButton(btn) {
-    if ( btn.disabled ) {
-      var imgEl   = btn.getElementsByTagName("img")[0];
-      var imgSrc    = imgEl.src.replace("_dis.png", ".png");
-      
-      imgEl.src   = imgSrc;
-      btn.disabled  = false;
-      ( new YAHOO.util.Element(btn) ).replaceClass('toolbar-dis', 'toolbar');
-    }
-  }
-
-  function disableToolbarButton(btn) {
-    if ( !btn.disabled ) {
-      var imgEl   = btn.getElementsByTagName("img")[0];
-      var imgSrc    = imgEl.src.replace(".png", "_dis.png");
-      imgEl.src   = imgSrc;
-      
-      btn.disabled  = true;
-      ( new YAHOO.util.Element(btn) ).replaceClass('toolbar', 'toolbar-dis');
-    }
-  }
-
-  function enableExportButton(){
-      var exportButton = document.getElementsByName('expodtButton');
-      for(var i = 0; i < exportButton.length; i++){
-    	enableToolbarButton(exportButton[i]);
-      }    
-  }    
-
-
-  function disableExportButton(){
-      var exportButton = document.getElementsByName('expodtButton');
-      for(var i = 0; i < exportButton.length; i++){
-        disableToolbarButton(exportButton[i]);
-      }    
-  }    
-
-  
-</script>

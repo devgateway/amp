@@ -64,8 +64,8 @@ function show_hide(divID){
 
 function showUser(email){
 	if (email != ""){
-		<digi:context name="information" property="context/module/moduleinstance/userProfile.do" />
-		openURLinWindow("<%= information %>~edit=true~email="+email,480, 350);
+        var param = "~edit=true~email="+email;
+		previewWorkspaceframe('/aim/default/userProfile.do',param);
 	}
 	else{
 		var trasnlation = "<digi:trn key='aim:userblankmail'>The user does not have a valid email address</digi:trn>";

@@ -159,57 +159,5 @@ public class ImportAction extends MultiAction {
 		return mapping.findForward("afterUploadFile");
 	}
 
-//	public ActionForward modeUploadedFile(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-//		// TODO Auto-generated method stub
-//		
-//		HttpSession session = request.getSession();
-//		
-//
-//			ImportForm deImportForm= (ImportForm) form;
-//			
-//			FormFile myFile = deImportForm.getUploadedFile();
-//	        byte[] fileData    = myFile.getFileData();
-//	        InputStream inputStream= new ByteArrayInputStream(fileData);
-//	        InputStream inputStream1= new ByteArrayInputStream(fileData);
-//	        
-//	        TeamMember tm = null;
-//	        if (session.getAttribute("currentMember") != null)
-//	        	tm = (TeamMember) session.getAttribute("currentMember");
-//	       
-//	        ImportBuilder importBuilder = new ImportBuilder(request, tm, inputStream);
-//	        boolean isOk = true;
-//	        
-//	        //FileCopyUtils.copy(arg0, arg1);
-//	        
-//	        try{
-//	        	isOk = importBuilder.checkXMLIntegrity(this.getServlet().getServletContext().getRealPath("/")+"/doc/IDML2.0.xsd",inputStream, inputStream1) ;
-//	        }catch(Exception ex){
-//	        	ex.printStackTrace();
-//	        }
-//	        
-//	        if(isOk)
-//	        {
-//	        	importBuilder.builImportActivitiesToAMP();
-//	        }
-//	        else{
-//	        	for (Iterator it = importBuilder.getGeneratedActivities().iterator(); it.hasNext();) {
-//					InputStream is = (InputStream) it.next();
-//					if(importBuilder.checkXMLIntegrityNoChunks(this.getServlet().getServletContext().getRealPath("/")+"/doc/IDML2.0.xsd", is)){
-//						importBuilder.builImportActivitiesToAMP();
-//					}
-//					else logger.error(" error found in one activity!!!!!!");
-//				}
-//	        }
-//	      	AmpActivity activity = new AmpActivity();
-//	        	
-//		
-//        
-//        session=request.getSession();
-//        session.setAttribute("errorLogForDE",FeaturesUtil.errorLog);
-// 		if("".equals(FeaturesUtil.errorLog)) 
-// 			session.setAttribute("messageLogForDe","There are no errors after import. <br/> Import successfully");
-//        return mapping.findForward("forward");
-//	
-//	}
 	
 }

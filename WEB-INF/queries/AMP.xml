@@ -109,7 +109,7 @@
 		</Dimension>
 		
 		<Dimension name="Financing Instrument">
-			<Hierarchy hasAll="true" allLevelName="All Financing Instruments" allMemberCaption="#All_Financing_Instrument#" caption="#Financing_Instrument#">
+			<Hierarchy hasAll="true" allLevelName="All" allMemberCaption="#All_Financing_Instrument#" caption="#Financing_Instrument#">
 				<!-- No table element here. Fact table is assumed. -->
 				<Level name="Financing Instrument" column="financing_instrument_name" />
 			</Hierarchy>

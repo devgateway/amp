@@ -187,8 +187,8 @@
 <feature:display name="Web Resources" module="Document"></feature:display> 
 <feature:display name="Widget Places" module="WIDGETS"></feature:display> 
 <field:display feature="Disbursement Orders" name="Disbursement Orders Tab"></field:display> 
-<field:display feature="Donor Contact Information" name="Donor Email"></field:display> 
-<field:display feature="Donor Contact Information" name="Donor First Name"></field:display> 
+<field:display name="Donor Email" feature="Donor Contact Information"></field:display> 
+<field:display name="Donor First Name" feature="Donor Contact Information"></field:display> 
 <field:display feature="Edit Activity" name="Edit Activity Button"></field:display> 
 <field:display feature="Edit Activity" name="Validate Activity Button"></field:display> 
 <field:display feature="Funding Information" name="Type Of Assistance"></field:display> 

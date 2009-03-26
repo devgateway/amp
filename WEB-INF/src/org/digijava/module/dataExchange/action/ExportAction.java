@@ -1,8 +1,5 @@
 package org.digijava.module.dataExchange.action;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -11,9 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
@@ -22,16 +16,12 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.dataExchange.Exception.AmpExportException;
 import org.digijava.module.dataExchange.form.ExportForm;
 import org.digijava.module.dataExchange.jaxb.Activities;
-import org.digijava.module.dataExchange.jaxb.ActivityType;
 import org.digijava.module.dataExchange.jaxb.ObjectFactory;
 import org.digijava.module.dataExchange.util.ExportBuilder;
 import org.digijava.module.dataExchange.util.ExportUtil;
-import org.xml.sax.SAXException;
 
 
 

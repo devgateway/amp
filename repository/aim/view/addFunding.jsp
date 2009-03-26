@@ -170,6 +170,7 @@ var isAlreadySubmitted = false;
 		if(document.getElementById("totDisbIsBiggerThanTotCom").value == "true") {
 			if(confirm(Warn))
 			{
+				document.getElementById("ignoreDistBiggerThanComm").value = "true";
 				return false;
 			} else {
 				return true;	
@@ -241,6 +242,7 @@ var isAlreadySubmitted = false;
 <html:hidden name="aimEditActivityForm" styleId="numProjections" property="funding.numProjections"/>
 <html:hidden name="aimEditActivityForm" property="editAct"/>
 <html:hidden name="aimEditActivityForm" property="funding.firstSubmit"/>
+<html:hidden name="aimEditActivityForm" styleId="ignoreDistBiggerThanComm" property="ignoreDistBiggerThanComm"/>
 <html:hidden name="aimEditActivityForm" styleId="totDisbIsBiggerThanTotCom" property="totDisbIsBiggerThanTotCom"/>
 
 

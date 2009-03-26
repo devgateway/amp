@@ -79,15 +79,17 @@ public class ShowReport extends Action {
 			}
 		}
 		else{
+			/*
 			XMLDecoder d = new XMLDecoder(new BufferedInputStream(new FileInputStream("storedQuery.xml")));
 			HashMap stater = (HashMap) d.readObject();
 			d.close();  
 			Bookmarkable attrquery = null;
 			Bookmarkable attrnavi = null;
-			
+		
 			session.setAttribute("query01", attrquery);
 			session.setAttribute("navi01", attrnavi);
 			BookmarkManager.instance(session).restoreSessionState(stater);
+			*/
 		}
 		if (action != null && action.equalsIgnoreCase("save")) {
 			

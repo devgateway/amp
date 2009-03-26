@@ -93,7 +93,7 @@
 
 		<td align=left vAlign=top class=r-dotted-lg>
 
-			<table width="98%" cellSpacing=<%@ taglib uri="/taglib/featureVisibility" prefix="field" %>"3" cellPadding="1" vAlign="top" align="left">
+			<table width="98%" cellSpacing="3" cellPadding="1" vAlign="top" align="left">
 
 				<tr><td>
 

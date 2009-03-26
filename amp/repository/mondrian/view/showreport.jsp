@@ -52,7 +52,7 @@ function sendForm(){
 <%-- define a toolbar --%>
 <wcf:toolbar  id="toolbar01" bundle="com.tonbeller.jpivot.toolbar.resources">
   <wcf:scriptbutton id="cubeNaviButton" tooltip="toolb.cube" img="cube" model="#{navi01.visible}"/>
-  <wcf:scriptbutton id="mdxEditButton" tooltip="toolb.mdx.edit" img="mdx-edit" model="#{mdxedit01.visible}" visibleRef="false"/>
+  <wcf:scriptbutton id="mdxEditButton" tooltip="toolb.mdx.edit" img="mdx-edit" model="#{mdxedit01.visible}"/>
   <wcf:scriptbutton id="sortConfigButton" tooltip="toolb.table.config" img="sort-asc" model="#{sortform01.visible}"/>
   <wcf:separator/>
   <wcf:scriptbutton id="levelStyle" tooltip="toolb.level.style" img="level-style" model="#{table01.extensions.axisStyle.levelStyle}"/>
@@ -116,11 +116,18 @@ function sendForm(){
 <p>
 	<wcf:render  ref="chart01" xslUri="/WEB-INF/jpivot/chart/chart.xsl"   xslCache="true"/>
 <p>
-<!-- 
-<input type="text" name="reportname">
-<input type="hidden" name="action"> 
-<input type="button" onclick="sendForm();" value="Save"/>
- -->
+<table>
+	<tr>
+		<td>
+			<digi:trn>Save report</digi:trn>&nbsp;
+		</td>
+		<td>
+			<input type="text" name="reportname">
+			<input type="hidden" name="action"> 
+			<input type="button" onclick="sendForm();" value="<digi:trn>Save</digi:trn>"/>
+		</td>
+	</tr>
+</table>
 </digi:form>
 </body>
 </html>

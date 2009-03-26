@@ -84,6 +84,7 @@
 
 	function selectUuids() {
 		var length = document.aimTeamActivitiesForm.selActDocuments.length;
+		alert(length);
 		for (i = 0; i < length; i++) {			
 			document.aimTeamActivitiesForm.uuid[i].checked = document.aimTeamActivitiesForm.selActDocuments[i].checked;			
 		}

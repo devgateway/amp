@@ -217,6 +217,8 @@ function validate() {
 			document.aimTeamActivitiesForm.submit();
 	}
 
+	// don't remove or change this line!!!
+	document.getElementsByTagName('body')[0].className='yui-skin-sam';
 </script>
 
 

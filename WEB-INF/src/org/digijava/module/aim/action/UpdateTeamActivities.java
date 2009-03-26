@@ -27,6 +27,7 @@ import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.TeamActivitiesForm;
+import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.TeamMember;
@@ -91,7 +92,8 @@ public class UpdateTeamActivities extends Action {
 				//
 				return mapping.findForward("forward2");
 			}
-			
+			taForm.setRemoveDocument(null);
+			taForm.setSelActDocuments(null);
 		}
 		//
 		if (taForm.getSelActivities() != null && taForm.getRemoveActivity().equals("remove")) {
@@ -186,10 +188,13 @@ public class UpdateTeamActivities extends Action {
 					if (selectedUuids[i] != null) {
 						String uuid = selectedUuids[i];
 						//Node node = DocumentManagerUtil.getReadNode(uuid, request);
-						
-						AmpActivity activity = ActivityUtil.getActivityByName(taForm.getSelectedAct().replace("&#39;", "'"));
+						String actSelected = taForm.getSelectedAct();
+			    		String actIdSelected = actSelected.substring(actSelected.lastIndexOf("(") + 1, actSelected.lastIndexOf("") - 1);
+			    		
+						AmpActivity activity = ActivityUtil.loadActivity(Long.valueOf(actIdSelected));
 						AmpActivityDocument document = new AmpActivityDocument();
 						document.setAmpActivity(activity);
+						document.setDocumentType(ActivityDocumentsConstants.RELATED_DOCUMENTS);
 						document.setUuid(uuid);
 						//						
 						activity.getActivityDocuments().add(document);
@@ -198,11 +203,9 @@ public class UpdateTeamActivities extends Action {
 						DbUtil.update(activity);
 					}
 				}
-			} else {
-				taForm.setAssignActivity(null);
-				taForm.setUuid(null);
-				return mapping.findForward("showAddActivityDoc");				
 			}
+			taForm.setSelectedAct("");		
+			taForm.setUuid(null);
 			taForm.setAssignActivity(null);
 			return mapping.findForward("showAddActivityDoc");
 		} else if ((request.getParameter("showUnassignedDocs") != null && (request.getParameter("showUnassignedDocs").equals("true")))) {
@@ -220,7 +223,11 @@ public class UpdateTeamActivities extends Action {
 
 			AmpTeam ampTeam = TeamUtil.getAmpTeam(id);
 			Collection actDocList = new ArrayList(); 
-				
+			//
+			List<AmpActivity> aal = ActivityUtil.getAllActivitiesList();
+			Iterator<AmpActivity> aait = aal.iterator();
+			AmpActivity aa = null;
+			//
 			Session jcrWriteSession		= DocumentManagerUtil.getWriteSession(request);
 			Collection otherTeamMembers		= TeamMemberUtil.getAllTeamMembers(id);			
 			Iterator iterator				= otherTeamMembers.iterator();	
@@ -229,9 +236,27 @@ public class UpdateTeamActivities extends Action {
 				TeamMember someTeamMember	= (TeamMember) iterator.next(); 
 				//
 				otherHomeNode				= DocumentManagerUtil.getUserPrivateNode(jcrWriteSession , someTeamMember );
-				actDocList.addAll(getDocuments(getDocuments(otherHomeNode, request)));
+				Collection c = getDocuments(otherHomeNode, request);
+				Iterator i = c.iterator();
+				DocumentData data = null;
+				//
+				while (aait.hasNext()) {
+					aa = aait.next();
+					Iterator<AmpActivityDocument> aadit = aa.getActivityDocuments().iterator();
+					AmpActivityDocument aad = null;
+					while (aadit.hasNext()) {
+						aad = aadit.next();
+						while (i.hasNext()) {
+							data = (DocumentData) i.next();
+							if (data.getUuid().equals(aad.getUuid())) {
+								c.remove(data);
+							}
+						}
+					}
+				}
+				actDocList.addAll(getDocuments(c));								
 			}
-
+			
 			//
 			Comparator acronymComp = new Comparator() {
 				public int compare(Object o1, Object o2) {
@@ -308,6 +333,7 @@ public class UpdateTeamActivities extends Action {
 			taForm.setTeamName(ampTeam.getName());
 			taForm.setCurrentPage(new Integer(page));
 			taForm.setSelActDocuments(null);
+			taForm.setUuid(null);
 			taForm.setMembers(TeamMemberUtil.getAllTeamMembers(id));
 			if(ampTeam.getTeamLead()!=null) taForm.setMemberId(ampTeam.getTeamLead().getAmpTeamMemId()); else taForm.setMemberId(null);
 			session.setAttribute("pageno", new Integer(page));

@@ -264,6 +264,7 @@ div.fakefile2 input{
         								<bean:write name="option"/> <digi:trn>Activity</digi:trn><br/>
         								</td></tr>
         							</logic:iterate>
+        							</table>
         						</td>
     						</tr>
     					</table>

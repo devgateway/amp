@@ -1422,7 +1422,8 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 		AmpDaWidgetPlace place = WidgetUtil.getPlace(code);
 		AmpWidget widget = place.getAssignedWidget();
-		AmpWidgetIndicatorChart cWidget = (AmpWidgetIndicatorChart) widget;
+		//AmpWidgetIndicatorChart cWidget = ChartWidgetUtil.getIndicatorChartWidget(place.getId());
+		AmpWidgetIndicatorChart cWidget = ChartWidgetUtil.getIndicatorChartWidget(widget.getId());
 		if (widget == null)
 			return null;
 

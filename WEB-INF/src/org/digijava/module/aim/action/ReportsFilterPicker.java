@@ -9,7 +9,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -52,9 +51,9 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
-import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
@@ -234,7 +233,7 @@ public class ReportsFilterPicker extends MultiAction {
 		Collection donorGroups = ARUtil.filterDonorGroups(DbUtil.getAllOrgGroupsOfPortfolio());
 
 		Collection allIndicatorRisks = meRisks;
-		Collection regions = LocationUtil.getAllDefCountryArRegions();
+		Collection regions = DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry();
 		// Collection regions=LocationUtil.getAllVRegions();
 		//filterForm.setCurrencies(currency);
 		filterForm.setCalendars(allFisCalenders);

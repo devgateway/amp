@@ -7,6 +7,7 @@ import java.awt.image.RenderedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -148,7 +149,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 			selectedDonor = Long.parseLong(request.getParameter("selectedDonor"));
 		}
 		if (request.getParameter("selectedDonorName") != null	&& !request.getParameter("selectedDonorName").equals("-1")) {
-			selectedDonorName = request.getParameter("selectedDonorName");
+			selectedDonorName = URLDecoder.decode(request.getParameter("selectedDonorName"),"UTF-8");
 		}
 		if (request.getParameter("selectedFromYear") != null&& !request.getParameter("selectedFromYear").equals("-1")) {
 			selectedFromYear = Integer.parseInt(request.getParameter("selectedFromYear"));

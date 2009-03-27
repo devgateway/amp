@@ -57,7 +57,7 @@ window.onload = function(){
 	for(var idx = 0; idx < selectDonors.length;idx++)
 	{
 		if(selectDonors.options[idx].value == selectDonors.value)
-			selectDonorsStr = (selectDonors.options[idx].text);
+			selectDonorsStr = escape(selectDonors.options[idx].text);
 	}
 
 	var sectorId =  document.getElementById("sectorsMapCombo").value;

@@ -418,6 +418,28 @@ public class DynLocationManagerUtil {
 		return null;
 	}
 	
+	public static Set<AmpCategoryValueLocations> getLocationsOfTypeRegionOfDefCountry() throws Exception  {
+		TreeSet<AmpCategoryValueLocations> returnSet			= new TreeSet<AmpCategoryValueLocations>(alphabeticalLocComp);
+		String defCountryIso	= FeaturesUtil.getDefaultCountryIso();
+		if ( defCountryIso != null ) {
+			Set<AmpCategoryValueLocations> allRegions	= 
+								getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
+			if ( allRegions != null && allRegions.size() > 0 ) {
+				Iterator<AmpCategoryValueLocations> regIter	= allRegions.iterator();
+				while ( regIter.hasNext() ) {
+					AmpCategoryValueLocations reg		= regIter.next();
+					AmpCategoryValueLocations country	= getAncestorByLayer( reg, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+					if ( defCountryIso.equals( country.getIso() )  ) {
+						returnSet.add(reg);
+					}
+				}
+			}
+		}
+		else
+			throw new Exception("No default country iso could be retrieved!");
+		return returnSet;
+	} 
+	
 	public static Set<AmpCategoryValueLocations> getLocationsOfTypeRegion() {
 		return getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
 	}

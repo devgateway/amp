@@ -506,8 +506,11 @@ public class LocationUtil {
 		}
 		return ampRegions;
 	}
-        
-       
+        /**
+         * 
+         * @deprecated use DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry() instead
+         */
+       @Deprecated
         public static List getAllDefCountryArRegions() {
 		ArrayList ampRegions = new ArrayList();
 		Session session = null;

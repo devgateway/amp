@@ -169,6 +169,50 @@ public class AmpMessageUtil {
 		}
 	}	
 	
+	public static void removeMessageState(AmpMessageState state) throws AimException{
+		Session session=null;
+		Transaction trans=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			trans=session.beginTransaction();			
+			session.delete(state);
+			trans.commit();
+		} catch (Exception ex) {
+			if(trans!=null) {
+				try {
+					trans.rollback();					
+				}catch(Exception e ) {
+					logger.error("...Rollback failed");
+					throw new AimException("Can't rollback", e);
+				}			
+			}
+			throw new AimException("delete failed",ex);
+		}
+	}
+	
+	public static void removeMessageStates(List<AmpMessageState> states) throws AimException{
+		Session session=null;
+		Transaction trans=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			trans=session.beginTransaction();
+			for (AmpMessageState state : states) {
+				session.delete(state);
+			}			
+			trans.commit();
+		} catch (Exception ex) {
+			if(trans!=null) {
+				try {
+					trans.rollback();					
+				}catch(Exception e ) {
+					logger.error("...Rollback failed");
+					throw new AimException("Can't rollback", e);
+				}			
+			}
+			throw new AimException("delete failed",ex);
+		}
+	}
+	
 	
 	public static void saveOrUpdateMessageState(AmpMessageState messageState) throws AimException {
 		Session session= null;
@@ -198,9 +242,8 @@ public class AmpMessageUtil {
 		List<AmpMessageState> returnValue=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
-			queryString= "select a from " + AmpMessageState.class.getName()+ " a where a.message.id=:id";
+			queryString= "select a from " + AmpMessageState.class.getName()+ " a where a.message.id="+messageId;
 			query=session.createQuery(queryString);
-			query.setParameter("id", messageId);
 			returnValue=(List<AmpMessageState>)query.list();
 		}catch(Exception ex) {
 			logger.error("couldn't load States" + ex.getMessage());	

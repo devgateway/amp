@@ -549,9 +549,12 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 		PdfPTable table1AEIndicators = getWidgetTable("table_place1");
 		PdfPTable table2AEIndicators = getWidgetTable("table_place2");
+		PdfPTable table3AEIndicators = getWidgetTable("table_place3");
 
 		layoutAEIndicators.addCell(table1AEIndicators);
 		layoutAEIndicators.addCell(table2AEIndicators);
+		layoutAEIndicators.addCell(table3AEIndicators);
+		layoutAEIndicators.addCell(" ");
 		layoutAEIndicators.addCell(new Paragraph(TranslatorWorker.translateText("Source: 2006 Paris Declaration Survey", locale, siteId) , new Font(Font.HELVETICA, 6)));
 		layoutAEIndicators.addCell(" ");
 

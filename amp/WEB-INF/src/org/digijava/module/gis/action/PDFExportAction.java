@@ -124,7 +124,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		this.site = RequestUtils.getSite(request);
 		this.navigationLanguage = RequestUtils.getNavigationLanguage(request);
 
-		this.siteId = site.getSiteId();
+		this.siteId = site.getId().toString();
 		this.locale = navigationLanguage.getCode();
 
 		HttpSession session = request.getSession();

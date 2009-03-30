@@ -69,22 +69,23 @@ public class ShowCalendarEvent extends Action {
         else if(ceform.getMethod().equalsIgnoreCase("removeOrg")) 
         {
         	Long[] listSelectedOrganizations = ceform.getSelOrganizations();
-        	Collection<AmpOrganisation> colOrganizations = ceform.getOrganizations();
-        	Collection<AmpOrganisation> newColOrganizations = new ArrayList<AmpOrganisation>();
-        	newColOrganizations.addAll(colOrganizations);
-        	
-        	Iterator<AmpOrganisation> itOrgs = colOrganizations.iterator();
-        	while(itOrgs.hasNext()){
-        		AmpOrganisation currentOrg = itOrgs.next();
-        		for(int index=0; index < listSelectedOrganizations.length ; index++)
-        		{
-              		if(currentOrg.getAmpOrgId().equals(listSelectedOrganizations[index])){
-              			newColOrganizations.remove(currentOrg);
-              			break;
-              		}
-        		}
-        	}
-        	ceform.setOrganizations(newColOrganizations);
+            if (listSelectedOrganizations != null && listSelectedOrganizations.length > 0) {
+                Collection<AmpOrganisation> colOrganizations = ceform.getOrganizations();
+                Collection<AmpOrganisation> newColOrganizations = new ArrayList<AmpOrganisation>();
+                newColOrganizations.addAll(colOrganizations);
+
+                Iterator<AmpOrganisation> itOrgs = colOrganizations.iterator();
+                while (itOrgs.hasNext()) {
+                    AmpOrganisation currentOrg = itOrgs.next();
+                    for (int index = 0; index < listSelectedOrganizations.length; index++) {
+                        if (currentOrg.getAmpOrgId().equals(listSelectedOrganizations[index])) {
+                            newColOrganizations.remove(currentOrg);
+                            break;
+                        }
+                    }
+                }
+                ceform.setOrganizations(newColOrganizations);
+            }
         }
         	
         // calendar type

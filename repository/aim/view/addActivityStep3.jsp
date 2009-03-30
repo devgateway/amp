@@ -67,7 +67,7 @@
 	}
 
     function addPropFunding() {
-            openNewWindow(450, 148);
+            openNewWindow(480, 250);
             <digi:context name="addProposedFunding" property="context/module/moduleinstance/editProposedFunding.do" />
             document.aimEditActivityForm.action = "<%= addProposedFunding %>";
             document.aimEditActivityForm.target = popupPointer.name;

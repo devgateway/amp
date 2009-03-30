@@ -22,6 +22,19 @@
 		refreshThis(myForm,id);
 		openURLinWindow('${contextPath}/widget/adminTableWidgets.do?actType=showColumnPopup');
 	}
+    function validate(){
+		var name = document.gisTableWidgetCreationForm.name.value;
+        var valid=false;
+        if(name.trim()!=""){
+            valid=true;
+        }
+        else{
+            var emptyName = '<digi:trn jsFriendly="true">Please enter the Name</digi:trn>';
+            alert(emptyName);
+        }
+        return valid;
+
+	}
 	function cancelEdit(){
 		var myForm = document.getElementById('tableId').form;
 		<digi:context name="justSubmit" property="context/module/moduleinstance/adminTableWidgets.do?actType=cancelEdit" />
@@ -153,7 +166,7 @@
 					</td>
 					<td>
 						<c:set var="saveButton"><digi:trn key="gis:saveButton">Save</digi:trn></c:set>
-						<html:submit title="Save table widget" value="${saveButton}" />
+                        <html:submit title="Save table widget" value="${saveButton}" onclick="return validate()" />
 					</td>
 				</tr>
 			</table>

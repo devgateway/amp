@@ -572,7 +572,7 @@ public class ChartWidgetUtil {
 	 */
 	public static JFreeChart getSectorByDonorChart(Long[] donors,Integer fromYear,Integer toYear,ChartOption opt)throws DgException,WorkerException{
 		JFreeChart result = null;
-		PieDataset ds = getSectorByDonorDataset(donors,fromYear,toYear);		
+		PieDataset ds = getSectorByDonorDataset(donors,fromYear,toYear,opt);		
 		
         String titleMsg= TranslatorWorker.translateText("Breakdown by Sector", opt.getLangCode(), opt.getSiteId());
 		String title = (opt.isShowTitle())? titleMsg:null;
@@ -670,7 +670,7 @@ public class ChartWidgetUtil {
 	 * @return
 	 * @throws DgException
 	 */
-	public static PieDataset getSectorByDonorDataset(Long[] donors, Integer fromYear, Integer toYear) throws DgException{
+	public static PieDataset getSectorByDonorDataset(Long[] donors, Integer fromYear, Integer toYear,ChartOption opt) throws DgException{
 		DefaultPieDataset ds = new DefaultPieDataset();
 		Date fromDate = null;
 		Date toDate = null;
@@ -701,7 +701,13 @@ public class ChartWidgetUtil {
                 }
 			}
             if(otherFunfing!=0){
-            	ds.setValue("Other Sectors",Math.round(otherFunfing));
+            	String otherSectors="Other Sectors";
+            	try {
+					otherSectors=TranslatorWorker.translateText("Other Sectors", opt.getLangCode(), opt.getSiteId());
+				} catch (WorkerException e) {					
+					e.printStackTrace();
+				}
+            	ds.setValue(otherSectors,Math.round(otherFunfing));
             }		
 		}
 		return ds;

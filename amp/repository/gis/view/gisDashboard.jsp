@@ -73,7 +73,7 @@
 
 </div>
 
-<div class="navHiden" align="center" style="position: absolute; left:10px; top:32px; width:150px;" onClick="showNavigation(this)">Map navigation</div>
+<div class="navHiden" align="center" style="position: absolute; left:10px; top:32px; width:150px;" onClick="showNavigation(this)"><digi:trn>Map navigation</digi:trn></div>
 
 
 
@@ -140,8 +140,8 @@
                 <digi:trn key="gis:selectMalLevel">Select Map Level</digi:trn>:
         </td>
 		<td width="90%">
-			<input title="Region view" type="Radio" value="2" name="mapLevelRadio" checked onClick="mapLevelChanged(this.value)">Region view &nbsp;
-			<input title="District view" type="Radio" value="3" name="mapLevelRadio" onClick="mapLevelChanged(this.value)">District view
+			<input title="Region view" type="Radio" value="2" name="mapLevelRadio" checked onClick="mapLevelChanged(this.value)"><digi:trn>Region view</digi:trn>&nbsp;
+			<input title="District view" type="Radio" value="3" name="mapLevelRadio" onClick="mapLevelChanged(this.value)"><digi:trn>District view</digi:trn> 
 			<div id="imageMapContainer" style="visibility:hidden;"></div>
 		</td>
 	</tr>
@@ -152,7 +152,7 @@
         </td>
 		<td>
 			<select id="sectorsMapCombo" onChange="sectorSelected(this)" style="width:350px">
-			<option value="-1">Select sector</option>
+			<option value="-1"><digi:trn>Select sector</digi:trn></option>
 			<logic:iterate name="gisDashboardForm" property="sectorCollection" id="sec">
 				<option value="<bean:write name="sec" property="ampSectorId"/>"><bean:write name="sec" property="name"/></option>
 			</logic:iterate>
@@ -164,7 +164,7 @@
             <digi:trn>Select Indicator</digi:trn>:
 		<td>
 		<select id="indicatorsCombo" onchange="indicatorSelected(this)" style="width:350px">
-			<option value=-1>Select indicator</option>
+			<option value=-1><digi:trn>Select Indicator</digi:trn></option>
 		</select>
 		</td>
 	</tr>
@@ -174,7 +174,7 @@
         </td>
 		<td>
 			<select id="indicatorSubgroupCombo" onChange="subgroupSelected(this)" style="width:350px">
-				<option value="-1">Select subgroup</option>
+				<option value="-1"><digi:trn>Select subgroup</digi:trn></option>
 			</select>
 		</td>
 	</tr>
@@ -184,7 +184,7 @@
         </td>
 		<td>
 			<select id="indicatorYearCombo" onChange="yearSelected(this)" style="width:350px">
-				<option value="-1">Select year</option>
+				<option value="-1"><digi:trn>Select year</digi:trn></option>
 			</select>
 		</td>
 	</tr>
@@ -199,52 +199,52 @@
 	
 	<table border="1" bordercolor="#c3b7a1" cellpadding="3" cellspacing="2" width="100%" style="border-collapse:collapse">
 		<tr>
-			<td nowrap width="50%" id="reg_district_caption">Region</td>
+			<td nowrap width="50%" id="reg_district_caption"><digi:trn>Region</digi:trn></td>
 			<td width="50%" id="tooltipRegionContainer">&nbsp;</td>
 		</tr>
 
 		<tr>
-			<td nowrap bgcolor="#D9DAC9" colspan="2">Funding details</td>
+			<td nowrap bgcolor="#D9DAC9" colspan="2"><digi:trn>Funding details</digi:trn></td>
 		</tr>
 		<tr>
 			<td colspan="2" nowrap bgcolor="#D9DAC9" id="tooltipCurencyYearRange">&nbsp;</td>
 		</tr>
 		<tr>
-			<td nowrap bgcolor="#D9DAC9" colspan="2">Total funding for this sector</td>
+			<td nowrap bgcolor="#D9DAC9" colspan="2"><digi:trn>Total funding for this sector</digi:trn></td>
 		</tr>
 		<tr>
-			<td nowrap width="50%">Commitment</td>
+			<td nowrap width="50%"><digi:trn>Commitment</digi:trn></td>
 			<td width="50%" id="tooltipTotalCommitmentContainer">&nbsp;</td>
 		</tr>
 		<tr>
-			<td nowrap width="50%">Disbursement</td>
+			<td nowrap width="50%"><digi:trn>Disbursement</digi:trn></td>
 			<td width="50%" id="tooltipTotalDisbursementContainer">&nbsp;</td>
 		</tr>
 		<tr>
-			<td nowrap width="50%">Expenditure</td>
+			<td nowrap width="50%"><digi:trn>Expenditure</digi:trn></td>
 			<td width="50%" id="tooltipTotalExpenditureContainer">&nbsp;</td>
 		</tr>
 		
 		<tr>
-			<td nowrap bgcolor="#D9DAC9" colspan="2" id="reg_district_caption_for">For this region</td>
+			<td nowrap bgcolor="#D9DAC9" colspan="2" id="reg_district_caption_for"><digi:trn>For this region</digi:trn></td>
 		</tr>
 		<tr>
-			<td nowrap width="50%">Commitment</td>
+			<td nowrap width="50%"><digi:trn>Commitment</digi:trn></td>
 			<td width="50%" id="tooltipCurrentCommitmentContainer">&nbsp;</td>
 		</tr>
 		<tr>
-			<td nowrap width="50%">Disbursement</td>
+			<td nowrap width="50%"><digi:trn>Disbursement</digi:trn></td>
 			<td width="50%" id="tooltipCurrentDisbursementContainer">&nbsp;</td>
 		</tr>
 		<tr>
-			<td nowrap width="50%">Expenditure</td>
+			<td nowrap width="50%"><digi:trn>Expenditure</digi:trn></td>
 			<td width="50%" id="tooltipCurrentExpenditureContainer">&nbsp;</td>
 		</tr>
 		<tr>
-			<td nowrap bgcolor="#D9DAC9" colspan="2">Indicator</td>
+			<td nowrap bgcolor="#D9DAC9" colspan="2"><digi:trn>Indicator</digi:trn></td>
 		</tr>
 		<tr>
-			<td nowrap width="50%" id="tooltipIndVal">value</td>
+			<td nowrap width="50%" id="tooltipIndVal"><digi:trn>value</digi:trn></td>
 			<td width="50%" id="tooltipIndUnit">&nbsp;</td>
 		</tr>
 	</table>

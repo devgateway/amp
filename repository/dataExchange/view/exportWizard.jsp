@@ -388,7 +388,7 @@
                              <br/>
                              <html:select name="deExportForm" property="donorGroupSelected" styleClass="inp-text"  styleId="donorGroupId" style="width: 300px;" multiple="true"  size="3">
                                <c:forEach var="fVar" items="${deExportForm.donorGroupList}" varStatus="lStatus">
-                                 <option value="${fVar.ampOrgGrpId}"><digi:trn></digi:trn>${fVar.orgGrpName}</option>
+                                 <option value="${fVar.ampOrgGrpId}"><digi:trn>${fVar.orgGrpName}</digi:trn></option>
                                </c:forEach>
                              </html:select>
                              <br/>

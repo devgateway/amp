@@ -69,7 +69,6 @@ public class ExportHelper {
 		StringBuffer retValue = new StringBuffer();
 
 		retValue.append(renderActivityTreeNode(node, "tree.getRoot()",locale,siteId));
-
 		return retValue.toString();
 	}
 
@@ -83,10 +82,13 @@ public class ExportHelper {
 		String name=node.getName();
 		try {
 			name=TranslatorWorker.translateText(node.getName(), locale, siteId);
+			if(name.length()==0){
+				name=node.getName();
+			}
 		} catch (WorkerException e) {			
 			e.printStackTrace();
 		}
-		retValue.append("var "+ nodeVarName +" = new YAHOOAmp.widget.TaskNode(\"" + name + "\", " + parentNode + ", ");
+		retValue.append("var "+ nodeVarName +" = new YAHOOAmp.widget.TaskNode(\"" + name+ "\", " + parentNode + ", ");
 		retValue.append("false , ");
 		retValue.append(Boolean.toString(node.isSelect()) + ", ");
 		retValue.append(Boolean.toString(node.isMandatory()) + ", ");

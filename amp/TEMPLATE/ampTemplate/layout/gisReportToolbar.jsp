@@ -73,9 +73,10 @@
 							</td>
 
 							<td noWrap align=left valign="middle">
+                                <digi:link styleId="printWin" href="#" onclick="window.print(); return false;">
 					            <digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/printer.gif" border="0" alt="Printer Friendly"/>
+                                </digi:link>
 							</td>
-
 							<td noWrap align=left valign="middle">
 								<digi:link href="#" target="_blank" onclick="javascript:window.close(); return false;">
 									<digi:img src="module/aim/images/close.gif" border="0" alt="Close"/>

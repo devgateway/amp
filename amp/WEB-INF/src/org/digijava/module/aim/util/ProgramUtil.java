@@ -1671,7 +1671,7 @@ public class ProgramUtil {
             try {
                     session = PersistenceManager.getRequestDBSession();
                     String queryString = "select ap from "
-                                    + AmpActivityProgramSettings.class.getName()+ " ap ";
+                                    + AmpActivityProgramSettings.class.getName()+ " ap";
 
                     Query qry = session.createQuery(queryString);
                     programSettings=qry.list();
@@ -1770,18 +1770,14 @@ public class ProgramUtil {
                             Iterator settingsIter = settings.iterator();
                             tx = session.beginTransaction();
                             while (settingsIter.hasNext()) {
-                                    AmpActivityProgramSettings setting = (
-                                        AmpActivityProgramSettings)
-                                        settingsIter.next();
-                                    AmpActivityProgramSettings oldSetting = (
-                                        AmpActivityProgramSettings) session.
-                                        get(AmpActivityProgramSettings.class,
-                                            setting.getAmpProgramSettingsId());
-                                    oldSetting.setAllowMultiple(setting.
-                                        isAllowMultiple());
-                                    oldSetting.setDefaultHierarchy(setting.
-                                        getDefaultHierarchy());
-                                    session.update(oldSetting);
+                                    AmpActivityProgramSettings setting = (AmpActivityProgramSettings)settingsIter.next();
+                                    if(setting.getDefaultHierarchy() != null && setting.getDefaultHierarchy().getAmpThemeId() != null && setting.getDefaultHierarchy().getAmpThemeId() != -1 )
+                                    {
+                                    	AmpActivityProgramSettings oldSetting = (AmpActivityProgramSettings) session.get(AmpActivityProgramSettings.class,setting.getAmpProgramSettingsId());
+	                                    oldSetting.setAllowMultiple(setting.isAllowMultiple());
+	                                    oldSetting.setDefaultHierarchy(setting.getDefaultHierarchy());
+	                                    session.update(oldSetting);
+                                    }
 
                             } 
                             tx.commit();

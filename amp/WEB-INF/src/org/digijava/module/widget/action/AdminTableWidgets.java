@@ -689,7 +689,11 @@ public class AdminTableWidgets extends DispatchAction {
 		cForm.setColPattern(col.getPattern());
 		cForm.setColColumnEdit(true);
 		cForm.setColumnTypes(getColumnTypes());
-		cForm.setColSelectedType(null);
+        Long type=null;
+        if(col.getColumnType()!=null){
+            type=col.getColumnType().longValue()-1;
+        }
+		cForm.setColSelectedType(type);
 		return mapping.findForward("showAddColumnPopup");
 	}
 	

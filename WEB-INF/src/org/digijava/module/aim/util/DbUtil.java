@@ -1741,9 +1741,10 @@ public class DbUtil {
         Session session = null;
         Query qry = null;
         AmpApplicationSettings ampAppSettings = null;
-
+        Transaction tx		= null;
         try {
             session = PersistenceManager.getRequestDBSession();
+            tx	= session.beginTransaction();
             String queryString = "from " + AmpApplicationSettings.class.getName() + " a where (a.member.ampTeamMemId = :memberId)";
             //String queryString = "from " + AmpApplicationSettings.class.getName();
             qry = session.createQuery(queryString);
@@ -1753,7 +1754,15 @@ public class DbUtil {
                 ampAppSettings = (AmpApplicationSettings) itr.next();
             }*/
             ampAppSettings = (AmpApplicationSettings) qry.uniqueResult();
+            tx.commit();
         } catch (Exception e) {
+        	if (tx != null) {
+				try {
+					tx.rollback();
+				} catch (Exception tex) {
+					logger.error("Transaction rollback failed");
+				}
+        	}
             logger.error("Unable to get MemberAppSettings", e);
         }
         return ampAppSettings;

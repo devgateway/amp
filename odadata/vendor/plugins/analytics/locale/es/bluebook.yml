@@ -544,9 +544,9 @@ es:
         
 
       chart_subtitles:
-          achievements: Compromisos y Desembolsos de AOD de la UE por donante en millones de Euros, 2007
-          forecasts: Compromisos y Proyecciones de AOD de la UE para el  2008  
-          trend: Desembolsos de AOD 2007 de la UE y Proyecciones de Desembolsos para el 2008
+          achievements: Compromisos y Desembolsos de AOD de la UE por donante en millones de Euros, {{year}}
+          forecasts: Compromisos y Proyecciones de AOD de la UE para el {{year}}
+          trend: Desembolsos de AOD {{from}} de la UE y Proyecciones de Desembolsos para el {{to}}
           by_sector_in: Desembolsos de AOD de la UE por Sector CAD en
           
       chart_notes:

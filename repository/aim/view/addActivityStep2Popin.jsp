@@ -402,6 +402,8 @@
 	}
 	function myAddSectors(params) {
 		//alert(params);
+        var msg='\n<digi:trn>Add Sectors</digi:trn>';
+		myPanel.setHeader(msg);
 		showPanelLoading();
 		<digi:context name="commentUrl" property="context/aim/selectSectors.do" />
 		var url = "<%=commentUrl %>";
@@ -409,6 +411,8 @@
 	}
 	function myAddLocation(params) {
 		//alert(params);
+        var msg='\n<digi:trn>Add Locations</digi:trn>';
+		myPanel.setHeader(msg);
 		showPanelLoading();
 		<digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do" />	  
 		var url = "<%=selectLoc %>";
@@ -425,6 +429,8 @@
 		}
 	}
 	function myAddProgram(params){
+        var msg='\n<digi:trn>Add Programs</digi:trn>';
+        myPanel.setHeader(msg);
 		showPanelLoading();
 		<digi:context name="selPrg" property="context/module/moduleinstance/addProgram.do" />	  
 		var url = "<%=selPrg %>";

@@ -65,7 +65,7 @@
 }
 </script>
 <digi:instance property="aimEditActivityForm" />
-<digi:form action="/addProposedFunding.do?edit=true" method="post">
+<digi:form action="/addProposedFunding.do?edit=true" name="aimEditActivityFormPropCost" type="aimEditActivityForm" method="post">
   <input type="hidden" name="edit" value="true">
   	<c:set var="translation">
 		<digi:trn key="aim:currencieswithexchange">Only currencies having exchange rate are listed here</digi:trn>
@@ -155,13 +155,13 @@
                 <c:set var="translationSave"><digi:trn key="btn:addRegionalFundingSave">Save</digi:trn></c:set>
 				<c:set var="translationReset"><digi:trn key="btn:addRegionalFundingReset">Reset</digi:trn></c:set>
 				<c:set var="translationClose"><digi:trn key="btn:addRegionalFundingClose">Close</digi:trn></c:set>
-                  <input type="button" value="${translationSave}" class="inp-text" onclick="addPropFunding();">
+                  <input type="button" value="${translationSave}" class="inp-text" onclick="addNewPropFunding();">
                 </td>
                 <td>
-                  <input type="reset" value="${translationReset}" class="inp-text">
+                  <input type="button" value="${translationReset}" class="inp-text" onclick="resetPropFunding();">
                 </td>
                 <td>
-                  <input type="button" value="${translationClose}" class="inp-text" onclick="window.close();">
+                  <input type="button" value="${translationClose}" class="inp-text" onclick="closeWindow();">
                 </td>
               </tr>
             </table>

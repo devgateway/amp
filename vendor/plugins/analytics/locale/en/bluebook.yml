@@ -600,9 +600,9 @@ en:
         
               
       chart_subtitles:
-          achievements: EU ODA commitments and disbursements by donor in EUR millions, 2007
-          forecasts: EU ODA commitments and forecasts for 2008  
-          trend: EU ODA disbursements 2007 and disbursement forecasts 2008
+          achievements: EU ODA commitments and disbursements by donor in EUR millions, {{year}}
+          forecasts: EU ODA commitments and forecasts for {{year}}
+          trend: EU ODA disbursements {{from}} and disbursement forecasts {{to}}
           by_sector_in: EU ODA disbursements by DAC Sector in
       
       chart_notes:

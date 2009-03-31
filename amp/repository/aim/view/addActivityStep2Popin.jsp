@@ -394,26 +394,25 @@
 		else 
 			return false;
 	}
-	function showPanelLoading(){
-		  var content = document.getElementById("popinContent");
-		  content.innerHTML = "<div style='text-align: center'>" + "Loading..." + 
+	function showPanelLoading(msg){
+		myPanel.setHeader(msg);		
+		var content = document.getElementById("popinContent");
+		content.innerHTML = "<div style='text-align: center'>" + "Loading..." + 
 			"... <br /> <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>";		
-		  showContent();
+		showContent();
 	}
 	function myAddSectors(params) {
 		//alert(params);
-        var msg='\n<digi:trn>Add Sectors</digi:trn>';
-		myPanel.setHeader(msg);
-		showPanelLoading();
+		var msg='\n<digi:trn key="aim:addLocation">Add Sectors</digi:trn>';
+		showPanelLoading(msg);
 		<digi:context name="commentUrl" property="context/aim/selectSectors.do" />
 		var url = "<%=commentUrl %>";
 		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, params);
 	}
 	function myAddLocation(params) {
+		var msg='\n<digi:trn key="aim:addLocation">Add Location</digi:trn>';
 		//alert(params);
-        var msg='\n<digi:trn>Add Locations</digi:trn>';
-		myPanel.setHeader(msg);
-		showPanelLoading();
+		showPanelLoading(msg);
 		<digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do" />	  
 		var url = "<%=selectLoc %>";
 		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, params);
@@ -429,9 +428,8 @@
 		}
 	}
 	function myAddProgram(params){
-        var msg='\n<digi:trn>Add Programs</digi:trn>';
-        myPanel.setHeader(msg);
-		showPanelLoading();
+		var msg='\n<digi:trn key="aim:addProgram">Add Program</digi:trn>';
+		showPanelLoading(msg);
 		<digi:context name="selPrg" property="context/module/moduleinstance/addProgram.do" />	  
 		var url = "<%=selPrg %>";
 		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, params);

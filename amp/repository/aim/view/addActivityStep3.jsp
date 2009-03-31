@@ -19,6 +19,12 @@
 <%@page import="org.digijava.module.aim.helper.FormatHelper"%>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<jsp:include page="addActivityStep3Popin.jsp" flush="true" />
+<script language="JavaScript" type="text/javascript">
+	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
+</script>
+
+<jsp:include page="scripts/newCalendar.jsp" flush="true" />
 
 <script language="JavaScript">
 	function  doNothing()
@@ -57,6 +63,8 @@
 	}
 
 	function addFunding(orgId) {
+			myAddFunding(orgId);
+			/*
 			openNewRsWindow(900, 500);
 			<digi:context name="addFunding" property="context/module/moduleinstance/addFunding.do" />
 			document.getElementById('orgId').value = orgId;
@@ -64,14 +72,18 @@
 			document.aimEditActivityForm.prevOrg.value = orgId;
 			document.aimEditActivityForm.target = popupPointer.name;
 			document.aimEditActivityForm.submit();
+			*/
 	}
 
     function addPropFunding() {
+        	myAddPropFunding();
+        	/*
             openNewWindow(450, 148);
             <digi:context name="addProposedFunding" property="context/module/moduleinstance/editProposedFunding.do" />
             document.aimEditActivityForm.action = "<%= addProposedFunding %>";
             document.aimEditActivityForm.target = popupPointer.name;
             document.aimEditActivityForm.submit();
+            */
 	}
 
     function delPropFunding() {
@@ -101,22 +113,6 @@
 			document.aimEditActivityForm.submit();
 	}
 
-	function fnOnEditItem(index, orgId,fundId)	{
-			openNewWindow(900, 500);
-			<digi:context name="editItem" property="context/module/moduleinstance/editFunding.do"/>
-			document.aimEditActivityForm.action = "<%= editItem %>?funding.orgId=" + orgId + "&funding.offset=" + index+"&edit=true";
-			document.aimEditActivityForm.prevOrg.value = orgId;
-			document.getElementById('fundingId').value = fundId;
-			document.aimEditActivityForm.target = popupPointer.name;
-			document.aimEditActivityForm.submit();
-	}
-
-	function fnOnDeleteItem(orgId,fundId)	{
-		<digi:context name="remItem" property="context/module/moduleinstance/removeFunding.do"/>
-		document.aimEditActivityForm.action = "<%= remItem %>?fundOrgId=" + orgId + "&fundId=" + fundId+"&edit=true";
-		document.aimEditActivityForm.target = "_self";
-		document.aimEditActivityForm.submit();
-	}
 
 	function resetAll()
 	{

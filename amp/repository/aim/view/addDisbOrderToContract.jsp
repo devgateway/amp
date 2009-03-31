@@ -28,7 +28,7 @@ function addEvent() {
 </script>
 
 <digi:instance property="aimEditActivityForm" />
-<digi:form action="/addDisbOrderToContract.do" method="post">
+<digi:form action="/addDisbOrderToContract.do" name="aimEditActivityFormCont" type="aimEditActivityForm" method="post">
     <html:hidden property="funding.event"/>
 <table width="100%" cellpadding=1 cellspacing=3 bgcolor="#ffffff">
 <tr>
@@ -58,7 +58,7 @@ function addEvent() {
 <td colspan="2" align="center">
     <input type="button" value="<digi:trn key="aim:add">Add</digi:trn>" class="inp-text" onclick="return addEvent();"/>
 
- <input type="button" value="<digi:trn key="aim:cancel">Cancel</digi:trn>" onclick="javascript: window.close(); return false;"/>
+ <input type="button" value="<digi:trn key="aim:cancel">Cancel</digi:trn>" onclick="return closeWindow2();"/>
 </td>
 </c:if>
 </tr>

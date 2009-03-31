@@ -13,7 +13,7 @@
 
 <%@page import="org.digijava.module.aim.helper.FormatHelper"%>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addFunding.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addFundingPopin.js"/>"></script>
 
 <script language="JavaScript" type="text/javascript">
 	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
@@ -229,8 +229,7 @@ var isAlreadySubmitted = false;
 </c:set>
 
 <digi:instance property="aimEditActivityForm" />
-<digi:form action="/addFundingDetail.do" method="post">
-
+<digi:form action="/addFundingDetail.do" type="aimEditActivityForm" name="aimEditActivityFormPopin" method="post">
 <input type="hidden" name="edit" value="true">
 <html:hidden name="aimEditActivityForm" styleId="dupFunding"  property="funding.dupFunding"/>
 <html:hidden name="aimEditActivityForm" styleId="event" property="funding.event"/>
@@ -277,7 +276,10 @@ var isAlreadySubmitted = false;
 								<td align="right" bgcolor=#ECF3FD>
 			                	<FONT color=red>*</FONT><b>
 									<a title="<digi:trn key="aim:AssitanceType">Specify whether the project was financed through a grant, a loan or in kind</digi:trn>">
-									<digi:trn key="aim:typeOfAssistance">Type of Assistance</digi:trn></a>
+			                	<font color=black>									
+									<digi:trn key="aim:typeOfAssistance">Type of Assistance</digi:trn>
+								</font>	
+									</a>
 									</b>
 								</td>
 								<td align="left" bgcolor=#ECF3FD>
@@ -293,8 +295,9 @@ var isAlreadySubmitted = false;
 								<td align="right" bgcolor=#ECF3FD>
 			                	<%-- FONT color=red>*</FONT--%><b>
 										<a title="<digi:trn key="aim:FundOrgId">This ID is specific to the financial operation. This item may be useful when one project has two or more different financial instruments. If the project has a unique financial operation, the ID can be the same as the project ID</digi:trn>">
+										<font color=black>
 										<digi:trn key="aim:fundingOrgId">
-										Funding Organization Id</digi:trn></a>
+										Funding Organization Id</digi:trn></font></a>
 									</b>
 								</td>
 								<td align="left" bgcolor=#ECF3FD>
@@ -311,7 +314,7 @@ var isAlreadySubmitted = false;
 								<td align="right" bgcolor=#ECF3FD>
 								<FONT color=red>*</FONT><b>
 									<a title="<digi:trn key="aim:FinanceInstrument">Method by which aid is delivered to an activity</digi:trn>">
-									<b><digi:trn key="aim:financingInstrument">Financing Instrument</digi:trn></b></a>
+									<b><font color=black><digi:trn key="aim:financingInstrument">Financing Instrument</digi:trn></font></b></a>
 								</td>
 								<td align="left" bgcolor=#ECF3FD>
 										<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="funding.modality"
@@ -773,7 +776,7 @@ var isAlreadySubmitted = false;
                                                  </c:if>
 											 </td>
                                              <td>
-                                               <input type="submit" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
+                                               <input type="button" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
 											</td>
 											</field:display>
                                             <field:display name="Rejected Disbursement Order" feature="Disbursement Orders">
@@ -976,7 +979,7 @@ var isAlreadySubmitted = false;
 											</field:display>
 											<field:display name="Contract of Disbursement" feature="Disbursement">
                                             <td>
-                                               <input type="submit" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
+                                               <input type="button" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
 
 											</td>
 											</field:display>
@@ -1208,10 +1211,10 @@ var isAlreadySubmitted = false;
 						<table cellPadding=3>
 							<tr>
 								<td>
-									<input type="button" value="<digi:trn key='btn:save'>Save</digi:trn>" class="inp-text" onClick="return addFunding()">
+									<input type="button" value="<digi:trn key='btn:save'>Save</digi:trn>" class="inp-text" onClick="addNewFunding()">
 								</td>
 								<td>
-									<input type="reset" value="<digi:trn key='btn:reset'>Reset</digi:trn>" class="inp-text">
+									<input type="button" value="<digi:trn key='btn:reset'>Reset</digi:trn>" class="inp-text" onClick="addFunding()">
 								</td>
 								<td>
 									<input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="inp-text" onClick="closeWindow()">

@@ -431,7 +431,7 @@
 <!-- 			<put-item name="body" module="aim" instance="default" teaser="myDesktop"/> -->
 		</layout>
 
-		<layout name="portfolioDashboardLayout" extends="desktopLayout">
+		<layout name="portfolioDashboardLayout"  extends="default">
 			<put name="title">- Dashboard</put>
 			<put-item name="body" module="aim" instance="default" teaser="portfolioDashboard"/>
 		</layout>

@@ -360,10 +360,32 @@ public class AmountCell extends Cell {
 					(Comparable) source.getValue());
 			return;
 		}
-
+		
+		/**
+		 * For hierarchies with programs
+		 */
+		this.replacePercentage(ArConstants.COLUMN_ANY_NATPROG, source, sourceCol, percentage);
+		this.replacePercentage(ArConstants.COLUMN_ANY_SECONDARYPROG, source, sourceCol, percentage);
+		this.replacePercentage(ArConstants.COLUMN_ANY_PRIMARYPROG, source, sourceCol, percentage);
+		
 		columnPercent.put(sourceCol.getName(), percentage);
 		columnCellValue
 				.put(sourceCol.getName(), (Comparable) source.getValue());
+	}
+	
+	private boolean replacePercentage (String relColumnsName,  MetaTextCell source,  Column sourceCol, double percentage) {
+		String percentColName	= null;
+		for (String colPercent : columnPercent.keySet()) 
+		    if(colPercent.contains(relColumnsName)) percentColName=colPercent; 
+		if ( percentColName != null ) {
+			columnPercent.remove(percentColName);
+			columnCellValue.remove(percentColName);
+			columnPercent.put( sourceCol.getName(), percentage);
+			columnCellValue.put(sourceCol.getName(),
+					(Comparable) source.getValue());
+			return true;
+		}
+		return false;
 	}
 
 	@Override

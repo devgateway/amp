@@ -4,6 +4,7 @@
 	<security login-required="true" default="READ">
 	<action login-required="false" pattern="/mainreports"/>
 	<action login-required="false" pattern="/showreport"/>
+	<action login-required="true" pattern="/savehtml"/>
 	</security>
 	
 	<hibernate-classes required="false">

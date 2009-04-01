@@ -44,66 +44,12 @@ public class ShowReport extends Action {
 			throws java.lang.Exception {
 		ShowReportForm tf = (ShowReportForm) form;
 		HttpSession session = request.getSession();
-		String action = request.getParameter("action");
-		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-		String currentmdx = null;
-		String measures = null;
-		String dimensions = null;
-		
 		String id = request.getParameter("id");
 		if (id!=null){
 			OffLineReports report = EntityHelper.LoadReport(Long.parseLong(id));
 			session.setAttribute("querystring", report.getQuery());
 		}
-		//request.getParameterMap().put("pagename", "query");
-		
-		
-		 OlapModelProxy omp = (OlapModelProxy) session.getAttribute("query01");
-		if (omp != null) {
-			MondrianModel mm  = (MondrianModel) omp.getDelegate().getRootModel();
-			MondrianMdxQuery mdxQueryExt = (MondrianMdxQuery) omp.getExtension("mdxQuery");
-			currentmdx = mdxQueryExt.getMdxQuery();
-			for (int i = 0; i < mm.getDimensions().length; i++) {
-				if (i>0){
-					dimensions = dimensions + mm.getDimensions()[i].getLabel()+ ",";
-				}else{
-					dimensions = mm.getDimensions()[i].getLabel() + ",";
-				}
-			}
-			for (int x = 0; x < mm.getMeasures().length; x++) {
-				if (x>0){
-					measures = measures + mm.getMeasures()[x].getLabel() + ",";
-				}else{
-					measures = mm.getMeasures()[x].getLabel()+ ",";
-				}
-			}
-		}
-		else{
-			/*
-			XMLDecoder d = new XMLDecoder(new BufferedInputStream(new FileInputStream("storedQuery.xml")));
-			HashMap stater = (HashMap) d.readObject();
-			d.close();  
-			Bookmarkable attrquery = null;
-			Bookmarkable attrnavi = null;
-		
-			session.setAttribute("query01", attrquery);
-			session.setAttribute("navi01", attrnavi);
-			BookmarkManager.instance(session).restoreSessionState(stater);
-			*/
-		}
-		if (action != null && action.equalsIgnoreCase("save")) {
-			
-			OffLineReports newreport = new OffLineReports();
-			newreport.setName(tf.getReportname());
-			newreport.setQuery(currentmdx);
-			newreport.setTeamid(tm.getTeamId());
-			newreport.setMeasures(measures);
-			newreport.setColumns(dimensions);
-			newreport.setOwnerId(TeamUtil.getAmpTeamMember(tm.getMemberId()));
-			EntityHelper.SaveReport(newreport);
-			
-		}
-		
+
 		return mapping.findForward("forward");
 	}
 }

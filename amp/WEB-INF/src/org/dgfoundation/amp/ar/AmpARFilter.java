@@ -84,10 +84,14 @@ public class AmpARFilter extends PropertyListable {
 	@PropertyListableIgnore
 	private Set secondarySectors = null;
 	private Set selectedSecondarySectors = null;
+	@PropertyListableIgnore
+	private Set relatedSecondaryProgs;
 
 	@PropertyListableIgnore
 	private List nationalPlanningObjectives;
 	private Set selectedNatPlanObj;
+	@PropertyListableIgnore
+	private Set relatedNatPlanObjs;
 
 	@PropertyListableIgnore
 	private String teamAccessType;
@@ -95,6 +99,8 @@ public class AmpARFilter extends PropertyListable {
 	@PropertyListableIgnore
 	private List primaryPrograms;
 	private Set selectedPrimaryPrograms;
+	@PropertyListableIgnore
+	private Set relatedPrimaryProgs;
 
 	@PropertyListableIgnore
 	private List secondaryPrograms;
@@ -107,6 +113,34 @@ public class AmpARFilter extends PropertyListable {
 
 	public void setNationalPlanningObjectives(List nationalPlanningObjectives) {
 		this.nationalPlanningObjectives = nationalPlanningObjectives;
+	}
+	
+	
+
+	@PropertyListableIgnore
+	public Set getRelatedNatPlanObjs() {
+		return relatedNatPlanObjs;
+	}
+
+	public void setRelatedNatPlanObjs(Set relatedNatPlanObjs) {
+		this.relatedNatPlanObjs = relatedNatPlanObjs;
+	}
+	@PropertyListableIgnore
+	public Set getRelatedSecondaryProgs() {
+		return relatedSecondaryProgs;
+	}
+
+	public void setRelatedSecondaryProgs(Set relatedSecondaryProgs) {
+		this.relatedSecondaryProgs = relatedSecondaryProgs;
+	}
+
+	@PropertyListableIgnore
+	public Set getRelatedPrimaryProgs() {
+		return relatedPrimaryProgs;
+	}
+
+	public void setRelatedPrimaryProgs(Set relatedPrimaryProgs) {
+		this.relatedPrimaryProgs = relatedPrimaryProgs;
 	}
 
 	@PropertyListableIgnore

@@ -85,6 +85,10 @@ public final class ArConstants {
 	public final static String COLUMN_REGION="Region";
 	public final static String COLUMN_SECTOR_GROUP="Sector Group";
 	
+	public final static String COLUMN_ANY_NATPROG					= "National Planning Objectives";
+	public final static String COLUMN_ANY_PRIMARYPROG			= "Primary Program";
+	public final static String COLUMN_ANY_SECONDARYPROG	= "Secondary Program";
+	
 	//additional measures
 	public final static String UNDISBURSED_BALANCE="Undisbursed Balance";
 	public final static String UNCOMMITTED_BALANCE="Uncommitted Balance";

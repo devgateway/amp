@@ -12,16 +12,8 @@
   <link rel="stylesheet" type="text/css" href="../../../wcf/table/xtable.css">
   <link rel="stylesheet" type="text/css" href="../../../wcf/tree/xtree.css">
   
- <script type="text/javascript">
-
-function sendForm(){
-	document.ShowReportForm.action.value= "save"
-	document.ShowReportForm.submit();	
-}
-
-</script>
-
 <html>
+ <jsp:include page="saveReport.jsp" flush="true" />
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 </head>
@@ -72,7 +64,9 @@ function sendForm(){
   <wcf:scriptbutton  id="printPropertiesButton01" tooltip="toolb.print.config" img="print-config" model="#{printform01.visible}"/>
   <wcf:imgbutton id="printpdf" tooltip="toolb.print" img="print" href="../../../Print.out?cube=01&type=1"/>
   <wcf:imgbutton id="printxls" tooltip="toolb.excel" img="excel" href="../../../Print.out?cube=01&type=0"/>
-</wcf:toolbar>
+  <wcf:separator/>
+  <wcf:imgbutton id="save" tooltip="save report" img="save" href="javascript:mainSaveReports()"/>
+ </wcf:toolbar>
 
 <%-- render toolbar --%>
 <wcf:render ref="toolbar01" xslUri="/WEB-INF/jpivot/toolbar/htoolbar.xsl" xslCache="false"/>
@@ -116,18 +110,6 @@ function sendForm(){
 <p>
 	<wcf:render  ref="chart01" xslUri="/WEB-INF/jpivot/chart/chart.xsl"   xslCache="true"/>
 <p>
-<table>
-	<tr>
-		<td>
-			<digi:trn>Save report</digi:trn>&nbsp;
-		</td>
-		<td>
-			<input type="text" name="reportname">
-			<input type="hidden" name="action"> 
-			<input type="button" onclick="sendForm();" value="<digi:trn>Save</digi:trn>"/>
-		</td>
-	</tr>
-</table>
 </digi:form>
 </body>
 </html>

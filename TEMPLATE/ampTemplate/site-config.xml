@@ -635,8 +635,8 @@
 				<page>addEditData</page>
 				<page>assignNewIndicator</page>
 				<page>showActivityLog</page>
-                                <page>aim_addDisbOrderToDisbPopupLayout</page>
-                                <page>aim_addDisbOrderToContractPopupLayout</page>
+                <page>aim_addDisbOrderToDisbPopupLayout</page>
+                <page>aim_addDisbOrderToContractPopupLayout</page>
 			</module>
 			<module name="contentrepository">
 				<page>amp_selectDocumentDM</page>
@@ -655,10 +655,13 @@
 				<page>tabManagerData</page>
 				<page>aim_filterPicker</page>
 			</module>
-                        <module name="orgProfile">
+            <module name="orgProfile">
 				<page>largestProjects</page>
-                                <page>parisIndicators</page>
+             	<page>parisIndicators</page>
 			</module>
+			<module name="mondrian">
+				<page>savehtml</page>
+            </module>
 		</page-group>
 	</site-layout>
 </site-config>

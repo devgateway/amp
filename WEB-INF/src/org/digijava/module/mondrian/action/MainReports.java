@@ -53,8 +53,10 @@ public class MainReports extends Action {
 		if (tm != null && action == null) {
 			mrform.setCurrentMemberId(tm.getMemberId());
 			mrform.setReports(getOffLineReports(tm));
+		
 		} else if (tm == null) {
 			mrform.setReports(getOffLineReports());
+		
 		} else if (action !=null && action.equalsIgnoreCase("public") && id != null) {
 			OffLineReports report = EntityHelper.LoadReport(Long.parseLong(id));
 			report.setPublicreport(true);
@@ -67,6 +69,12 @@ public class MainReports extends Action {
 			EntityHelper.UpdateReport(report);
 			mrform.setReports(getOffLineReports(tm));
 		}
+		
+		 else if (action !=null && action.equalsIgnoreCase("delete") && id != null) {
+			 OffLineReports report = EntityHelper.LoadReport(Long.parseLong(id));
+			 EntityHelper.DeleteReport(report);
+			 mrform.setReports(getOffLineReports(tm));
+		 }
 		return mapping.findForward("forward");
 	}
 

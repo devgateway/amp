@@ -80,6 +80,8 @@
                     				</td>
                     				<td bgColor=#999999 align="center" height="20">
                     				</td>
+                    				<td bgColor=#999999 align="center" height="20">
+                    				</td>
                     				<logic:present name="currentMember" scope="session">
                     				<bean:define id="member" name="currentMember" scope="session" />
                             		<c:if test="${member.teamHead == true && member.teamAccessType == 'Management'}">
@@ -150,6 +152,17 @@
                                  </td>
                             </c:if>
                            </logic:present>
+                            <td align="center">
+	                         	<p style="white-space: nowrap">
+	                            	<logic:equal name="teamLeadFlag" scope="session" value="true">
+	                            		<c:if test="${!empty report.teamid}">
+	                                	<a href="/mondrian/mainreports.do?id=${report.id}&action=delete" title="<digi:trn key="aim:clicktomakethispublic">Click here to make this public</digi:trn>">
+	                                		<digi:trn key="aim:reportDelete">Delete</digi:trn>
+	                                	</a>
+	                                	</c:if>
+	                                </logic:equal>    
+	                            </p>
+                             </td>
                         </tr>
 					</logic:iterate>
  				</table>

@@ -5345,7 +5345,7 @@ public class DbUtil {
 
     public static List getResposesBySurvey(Long surveyId, Long activityId) {
         ArrayList responses = new ArrayList();
-        Set response = new HashSet();
+        List response = new ArrayList();
         Collection fundingSet = new ArrayList();
         Session session = null;
         Iterator iter1 = null;
@@ -5359,11 +5359,18 @@ public class DbUtil {
 
             AmpAhsurvey svy = (AmpAhsurvey) session.get(AmpAhsurvey.class, surveyId);
             //response = svy.getResponses();
-            qry = "select res from " + AmpAhsurvey.class.getName()
-                + " res left join fetch res.responses where (res.ampAHSurveyId=:surveyId)";
+            /*qry = "select res from " + AmpAhsurvey.class.getName()
+                + " res where (res.ampAHSurveyId=:surveyId)";
             Query query = session.createQuery(qry);
             query.setParameter("surveyId", surveyId, Hibernate.LONG);
-            response = ( (AmpAhsurvey) query.list().get(0)).getResponses();
+            response = ( (AmpAhsurvey) query.list().get(0)).getResponses();*/
+            
+            //TODO: The whole logic for saving the first survey data and future retrieving must be redone.
+            //This query is necesary because of the lazy="false" which is necesary because the way the PI reports are created.
+            qry = "select resp from " + AmpAhsurveyResponse.class.getName() + " resp where resp.ampAHSurveyId=:surveyId";
+            Query query = session.createQuery(qry);
+            query.setParameter("surveyId", surveyId, Hibernate.LONG);
+            response = query.list();
 
             qry = "select fund from " + AmpFunding.class.getName()
                 + " fund where (fund.ampDonorOrgId=:donorId) and (fund.ampActivityId=:activityId)";

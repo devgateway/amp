@@ -284,38 +284,54 @@ public class WidgetUtil {
 		return places;
 	}
 
-	/**
+    /**
 	 * Removes assignment to this widget from all widget place objects.
 	 * Used when deleting widget.
 	 * @param widgetId
 	 * @throws DgException
 	 */
 	public static void clearPlacesForWidget(Long widgetId) throws DgException{
-		List<AmpDaWidgetPlace> places = getWidgetPlaces(widgetId);
-		if (places!=null && places.size()>0){
-			Session session = PersistenceManager.getRequestDBSession();
-			Transaction tx = null;
-			try {
-				tx = session.beginTransaction();
-				for (AmpDaWidgetPlace place : places) {
-					place.setAssignedWidget(null);
-					session.update(place);
-				}
-				tx.commit();
-			} catch (Exception e) {
-				if (tx!=null){
-					try {
-						tx.rollback();
-					} catch (Exception e1) {
-						logger.error(e1);
-						throw new DgException("Cannot rallback places clearing",e1);
-					}
-				}
-				logger.error(e);
-				throw new DgException("Cannot clear rallbacks",e);
-			}
-		}
+		   Session session = PersistenceManager.getRequestDBSession();
+           clearPlacesForWidget(widgetId, session);
 	}
+
+	/**
+	 * Removes assignment to this widget from all widget place objects.
+     * Used when deleting widget.
+     * @param widgetId
+     * @throws DgException
+     */
+    public static void clearPlacesForWidget(Long widgetId, Session session) throws DgException {
+        List<AmpDaWidgetPlace> places = getWidgetPlaces(widgetId);
+        if (places != null && places.size() > 0) {
+
+            Transaction tx = null;
+            try {
+                if (session == null) {
+                    /* we will use this in the Junit tests mainly because
+                    getRequestDBSession() don't work there*/
+                    session = PersistenceManager.getSession();
+                }
+                tx = session.beginTransaction();
+                for (AmpDaWidgetPlace place : places) {
+                    place.setAssignedWidget(null);
+                    session.update(place);
+                }
+                tx.commit();
+            } catch (Exception e) {
+                if (tx != null) {
+                    try {
+                        tx.rollback();
+                    } catch (Exception e1) {
+                        logger.error(e1);
+                        throw new DgException("Cannot rallback places clearing", e1);
+                    }
+                }
+                logger.error(e);
+                throw new DgException("Cannot clear rallbacks", e);
+            }
+        }
+    }
 	
 	/**
 	 * Deletes widget place from db.
@@ -327,15 +343,34 @@ public class WidgetUtil {
 		deleteWidgetPlace(place);
 	}
 
+     /**
+     * Deletes widget place from db.
+     * @param widget
+     * @throws DgException
+     */
+    public static void deleteWidgetPlace(AmpDaWidgetPlace place) throws DgException {
+        try {
+            Session session = PersistenceManager.getRequestDBSession();
+            deleteWidgetPlace(place, session);
+        } catch (Exception ex) {
+            throw new DgException("Cannot delete Widget OrgProfile!", ex);
+        }
+
+    }
+
 	/**
 	 * Deletes widget place from db.
 	 * @param place
 	 * @throws DgException
 	 */
-	public static void deleteWidgetPlace(AmpDaWidgetPlace place) throws DgException{
-		Session session = PersistenceManager.getRequestDBSession();
+	public static void deleteWidgetPlace(AmpDaWidgetPlace place,Session session) throws DgException{
 		Transaction tx = null;
 		try {
+           if (session == null) {
+                /* we will use this in the Junit tests mainly because
+                getRequestDBSession() don't work there*/
+                session = PersistenceManager.getSession();
+            }
 			tx = session.beginTransaction();
 			session.delete(place);
 			tx.commit();

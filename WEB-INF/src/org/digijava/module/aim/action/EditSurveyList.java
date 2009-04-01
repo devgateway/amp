@@ -21,6 +21,7 @@ import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.SurveyFunding;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.gateperm.core.GatePermConst;
 
 public class EditSurveyList extends Action {
 
@@ -46,6 +47,9 @@ public class EditSurveyList extends Action {
         logger.debug("step[before] : " + svForm.getStep());
         svForm.setStep("17"); // for indicators tab in donor-view
         logger.debug("step[after] : " + svForm.getStep());
+        
+        //this is needed to aknowledge that we are still under EDIT ACTIVITY mode:
+        request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.EDIT);
 
         Comparator sfComp = new Comparator() {
             public int compare(Object o1, Object o2) {

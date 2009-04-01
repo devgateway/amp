@@ -6,12 +6,15 @@
 package org.digijava.module.widget.util;
 
 
+import java.sql.SQLException;
 import java.util.List;
 
+import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.widget.dbentity.AmpWidgetOrgProfile;
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -84,15 +87,34 @@ public class OrgProfileWidgetUtil {
 		}
 	}
         
-        /**
+     /**
+     * delete OrgProfile widget from db.
+     * @param widget
+     * @throws DgException
+     */
+    public static void delete(AmpWidgetOrgProfile widget) throws DgException {
+        try {
+            Session session = PersistenceManager.getRequestDBSession();
+            delete(widget, session);
+        } catch (Exception ex) {
+            throw new DgException("Cannot delete Widget OrgProfile!", ex);
+        }
+
+    }
+
+     /**
 	 * delete OrgProfile widget from db.
 	 * @param widget
 	 * @throws DgException
 	 */
-	public static void delete(AmpWidgetOrgProfile widget) throws DgException{
-		Session session = PersistenceManager.getRequestDBSession();
+	public static void delete(AmpWidgetOrgProfile widget,Session session) throws DgException{
 		Transaction tx = null;
 		try {
+            if (session == null) {
+                /* we will use this in the Junit tests mainly because
+                getRequestDBSession() don't work there*/
+                session = PersistenceManager.getSession();
+            }
 			tx = session.beginTransaction();
 			session.delete(widget);
 			tx.commit();

@@ -1,5 +1,7 @@
 package org.digijava.module.mondrian.action;
 
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -75,6 +77,7 @@ public class SaveHtml extends Action {
 			newreport.setTeamid(tm.getTeamId());
 			newreport.setMeasures(measures);
 			newreport.setColumns(dimensions);
+			newreport.setCreationdate(new Timestamp(new java.util.Date().getTime()));
 			newreport.setOwnerId(TeamUtil.getAmpTeamMember(tm.getMemberId()));
 			EntityHelper.SaveReport(newreport);
 			

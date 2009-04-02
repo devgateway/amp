@@ -14,7 +14,9 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.mondrian.dbentity.EntityHelper;
 import org.digijava.module.mondrian.dbentity.OffLineReports;
 import org.digijava.module.mondrian.form.MainReportsForm;
@@ -52,7 +54,7 @@ public class MainReports extends Action {
 
 		if (tm != null && action == null) {
 			mrform.setCurrentMemberId(tm.getMemberId());
-			mrform.setReports(getOffLineReports(tm));
+			mrform.setReports(getOffLineReports(TeamUtil.getAmpTeamMember(tm.getMemberId())));
 		
 		} else if (tm == null) {
 			mrform.setReports(getOffLineReports());
@@ -61,19 +63,19 @@ public class MainReports extends Action {
 			OffLineReports report = EntityHelper.LoadReport(Long.parseLong(id));
 			report.setPublicreport(true);
 			EntityHelper.UpdateReport(report);
-			mrform.setReports(getOffLineReports(tm));
+			mrform.setReports(getOffLineReports(TeamUtil.getAmpTeamMember(tm.getMemberId())));
 
 		} else if (action !=null && action.equalsIgnoreCase("nopublic") && id != null) {
 			OffLineReports report = EntityHelper.LoadReport(Long.parseLong(id));
 			report.setPublicreport(false);
 			EntityHelper.UpdateReport(report);
-			mrform.setReports(getOffLineReports(tm));
+			mrform.setReports(getOffLineReports(TeamUtil.getAmpTeamMember(tm.getMemberId())));
 		}
 		
 		 else if (action !=null && action.equalsIgnoreCase("delete") && id != null) {
 			 OffLineReports report = EntityHelper.LoadReport(Long.parseLong(id));
 			 EntityHelper.DeleteReport(report);
-			 mrform.setReports(getOffLineReports(tm));
+			 mrform.setReports(getOffLineReports(TeamUtil.getAmpTeamMember(tm.getMemberId())));
 		 }
 		return mapping.findForward("forward");
 	}
@@ -84,7 +86,7 @@ public class MainReports extends Action {
 		return reports;
 	}
 
-	private Collection<OffLineReports> getOffLineReports(TeamMember tm) {
+	private Collection<OffLineReports> getOffLineReports(AmpTeamMember tm) {
 		ArrayList<OffLineReports> reports = new ArrayList<OffLineReports>();
 		reports = (ArrayList<OffLineReports>) EntityHelper.getReports(tm);
 		return reports;

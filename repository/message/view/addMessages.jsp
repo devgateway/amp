@@ -166,7 +166,7 @@
     padding-bottom:2em;
 }
 #statesautocomplete {
-    z-index:9000; /* z-index needed on top instance for ie & sf absolute inside relative issue */
+    z-index:3; /* z-index needed on top instance for ie & sf absolute inside relative issue */
 }
 #statesinput,
 #statesinput2 {

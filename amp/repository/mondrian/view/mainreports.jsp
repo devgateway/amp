@@ -126,7 +126,7 @@
 	                        <td width="100" align="center" title="${report.creationdate}">
                             	<bean:write name="report" property="creationdate" format="dd/MM/yyyy"/>
 	                        </td>
-	                         <td width="200">  
+	                         <td width=100>  
 	                                <div style='position:relative;display:none;' id='report-<bean:write name="report" property="id"/>'> 
 	                                  <li>
 	                                  	<bean:write name="report" property="columns"/>                                      
@@ -179,6 +179,7 @@
             				</span>
 						</td>
 					</tr>
+					
 					<logic:iterate name="MainReportsForm" indexId="idx" id="report"  property="reports" type="org.digijava.module.mondrian.dbentity.OffLineReports">
 					<c:if test="${!empty report.ownerId}">
 						<tr bgcolor="<%=(idx.intValue()%2==1?"#dbe5f1":"#ffffff")%>" onmouseout="setPointer(this, <%=idx.intValue()%>, 'out', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" 
@@ -201,7 +202,7 @@
 	                        <td width="100" align="center" title="${report.creationdate}">
                             	<bean:write name="report" property="creationdate" format="dd/MM/yyyy"/>
 	                        </td>
-	                         <td width="200">  
+	                         <td width="150">  
 	                                <div style='position:relative;display:none;' id='report-<bean:write name="report" property="id"/>'> 
 	                                  <li>
 	                                  	<bean:write name="report" property="columns"/>                                      
@@ -218,7 +219,14 @@
 	                                <span align="center" style="text-transform: capitalize;white-space: no-wrap;"  onMouseOver="stm(['<digi:trn key="aim:teamreports:measures">measures</digi:trn>',document.getElementById('measure-<bean:write name="report" property="id"/>').innerHTML],Style[1])" onMouseOut="htm()">[ <u><digi:trn key="aim:teamreports:measures">Measures</digi:trn></u> ]<br />
 	                                </span>
 	                            </td>
-                                
+                                <td align="center">
+                            		<c:if test="${!empty report.ownerId}">
+	                         			<p style="white-space: nowrap">
+	                         				<a href="/mondrian/mainreports.do?id=${report.id}&action=delete" title="<digi:trn key="aim:clicktomakethispublic">Click here to make this public</digi:trn>">
+	                            			<digi:trn key="aim:reportDelete">Delete</digi:trn></a>
+	                            		</p>
+	                            	</c:if>
+                             	</td>
                         	<logic:present name="currentMember" scope="session">
                             <c:if test="${member.teamHead == true && member.teamAccessType == 'Management'}">
 								<td align="center">
@@ -235,15 +243,6 @@
                                  </td>
                             </c:if>
                            </logic:present>
-                            <td align="center">
-                            	<c:if test="${!empty report.ownerId}">
-	                         	<p style="white-space: nowrap">
-	                         		<a href="/mondrian/mainreports.do?id=${report.id}&action=delete" title="<digi:trn key="aim:clicktomakethispublic">Click here to make this public</digi:trn>">
-	                            		<digi:trn key="aim:reportDelete">Delete</digi:trn>
-	                             	</a>
-	                            </p>
-	                            </c:if>
-                             </td>
                         </tr>
                         </c:if>
 					</logic:iterate>

@@ -1,10 +1,14 @@
- DROP TABLE IF EXISTS cached_v_sectors;
+DROP TABLE IF EXISTS cached_v_sectors;
 CREATE TABLE cached_v_sectors AS SELECT * FROM v_sectors;
 DROP TABLE IF EXISTS cached_amp_activity;
 CREATE TABLE cached_amp_activity LIKE amp_activity;
 INSERT INTO cached_amp_activity SELECT * FROM amp_activity;
+
 DROP TABLE IF EXISTS cached_v_donor_date_hierarchy;
-CREATE TABLE cached_v_donor_date_hierarchy AS SELECT * FROM v_donor_date_hierarchy;
+CREATE TABLE cached_v_donor_date_hierarchy AS SELECT * FROM v_donor_date_hierarchy limit 0,0;
+alter table cached_v_donor_date_hierarchy modify quarter_name varchar(2);
+insert into cached_v_donor_date_hierarchy SELECT * FROM v_donor_date_hierarchy;
+
 DROP TABLE IF EXISTS cached_v_donor_funding;
 CREATE TABLE cached_v_donor_funding AS SELECT * FROM v_donor_funding;
 DROP TABLE IF EXISTS cached_v_regions;

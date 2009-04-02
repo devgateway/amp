@@ -103,24 +103,19 @@ public class EntityHelper {
 	 * @param TeamMember
 	 * @return List
 	 */
-	public static List<OffLineReports> getReports(TeamMember tm) {
+	public static List<OffLineReports> getReports(AmpTeamMember tm) {
 		String queryString = null;
 		Query qry = null;
 		List<OffLineReports> result = null;
-
 		try {
 			Session session = PersistenceManager.getSession();
-			AmpTeam team = (AmpTeam) session
-					.load(AmpTeam.class, tm.getTeamId());
-			queryString = " select r from "
-					+ OffLineReports.class.getName() + " r ";
+			queryString = " select r from " + OffLineReports.class.getName() + " r where r.ownerId=:powner or r.ownerId is NULL";
 			qry = session.createQuery(queryString);
+			qry.setParameter("powner",tm);
 			result = qry.list();
 		} catch (HibernateException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

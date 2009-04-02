@@ -3,6 +3,7 @@ package org.digijava.module.mondrian.dbentity;
 import java.sql.Date;
 
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.helper.TeamMember;
 
 /**
  * 
@@ -18,6 +19,7 @@ public class OffLineReports {
 	private Boolean publicreport;
 	private String measures;
 	private String columns;
+	private java.sql.Timestamp creationdate;
 	
 	public long getId() {
 		return id;
@@ -41,14 +43,6 @@ public class OffLineReports {
 
 	public void setQuery(String query) {
 		this.query = query;
-	}
-
-	public AmpTeamMember getOwnerId() {
-		return ownerId;
-	}
-
-	public void setOwnerId(AmpTeamMember ownerId) {
-		this.ownerId = ownerId;
 	}
 
 	public Long getTeamid() {
@@ -81,6 +75,22 @@ public class OffLineReports {
 
 	public void setColumns(String columns) {
 		this.columns = columns;
+	}
+
+	public java.sql.Timestamp getCreationdate() {
+		return creationdate;
+	}
+
+	public void setCreationdate(java.sql.Timestamp creationdate) {
+		this.creationdate = creationdate;
+	}
+
+	public AmpTeamMember getOwnerId() {
+		return ownerId;
+	}
+
+	public void setOwnerId(AmpTeamMember ownerId) {
+		this.ownerId = ownerId;
 	}
 
 	

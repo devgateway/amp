@@ -78,6 +78,7 @@ public class AddNewOrgProfileWidget extends BasicActionTestCaseAdapter {
             WidgetUtil.savePlace(place);
         } catch (DgException ex) {
             logger.error("Unable to save place or widget" + ex.getMessage());
+            fail("Unable to add widget ");
         }
 
 
@@ -99,6 +100,7 @@ public class AddNewOrgProfileWidget extends BasicActionTestCaseAdapter {
                                 OrgProfileWidgetUtil.delete(orgProfile,null);
                             } catch (DgException ex) {
                                logger.error("Unable to delete widget "+ex.getMessage());
+                                 fail("Unable to delete widget ");
                             }
                         }
                     };
@@ -107,9 +109,38 @@ public class AddNewOrgProfileWidget extends BasicActionTestCaseAdapter {
                 WidgetUtil.deleteWidgetPlace(plc,null);
             }
         } catch (DgException ex) {
-            logger.error("Unable to delete widget "+ex.getMessage());
+            logger.error("Unable to delete widget place "+ex.getMessage());
+            fail("Unable to delete widget place");
         }
     }
+    /**
+	 * verifying action forwards...
+	 */
+	public void testForwards() {
+
+
+              //verify update
+            addRequestParameter("actType", "update");
+            verifyNoActionErrors();
+            verifyForward("forward");
+
+              //verify save
+            addRequestParameter("actType", "save");
+            verifyNoActionErrors();
+            verifyForward("forward");
+
+             //verify view all
+            addRequestParameter("actType", "viewAll");
+            verifyNoActionErrors();
+            verifyForward("forward");
+
+              //verify delete
+            addRequestParameter("actType", "delete");
+            verifyNoActionErrors();
+            verifyForward("forward");
+
+    }
+
 
 
 }

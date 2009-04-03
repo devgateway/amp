@@ -446,7 +446,13 @@ public class DocumentManagerUtil {
 				session				= PersistenceManager.getSession();
 				String queryString	= "select obj from " + className + " obj " +
 						"where obj.uuid=:uuid";
+				if ( CrDocumentNodeAttributes.class.getName().equals(className) ) {
+					queryString += " OR publicVersionUUID=:publicVersionUUID";
+				}
 				Query query			= session.createQuery(queryString);
+				if ( CrDocumentNodeAttributes.class.getName().equals(className) ) {
+					query.setString("publicVersionUUID", uuid);
+				}
 				query.setString("uuid", uuid);
 				
 				Collection<? extends ObjectReferringDocument> objsUsingDoc	= query.list();  

@@ -22,24 +22,6 @@ background: #FFF;
 -->
 </style>
 
-
-<script langauage="JavaScript">
-//	function edit(id) {	
-//		window.opener.location.href='${contextPath}/message/messageActions.do?actionType=fillTypesAndLevels&editingMessage=true&msgStateId='+id;
-//		window.close();	
-//	}
-	
-//	function deleteAlert (id) {
-//		messageForm.action="${contextPath}/message/messageActions.do?editingMessage=false&actionType=removeSelectedMessage&msgStateId="+id;
-// 		messageForm.target = "_self";
-//  		messageForm.submit();
-//  		window.opener.location.reload();
-//  		window.close();  					
-//	}
-	
-	
-</script>
-
 <digi:form action="/messageActions.do">
 			<table cellspacing="0" cellpadding="0" border="0" bgcolor="#ffffff" align="center" valign="top">
 				<tr>
@@ -82,9 +64,9 @@ background: #FFF;
 																					<td colspan="3" align="right">priority</td>
 																					<td align="left" bgcolor="#ffffff">
 																						<logic:equal name="messageForm" property="priorityLevel" value="0">None</logic:equal>
-																						<logic:equal name="messageForm" property="priorityLevel" value="1">low</logic:equal>
-																						<logic:equal name="messageForm" property="priorityLevel" value="2">medium</logic:equal>
-																						<logic:equal name="messageForm" property="priorityLevel" value="3">Critical</logic:equal>																						
+																						<logic:equal name="messageForm" property="priorityLevel" value="1"><img src="/repository/message/view/images/low.gif" title="low"/></logic:equal>
+																						<logic:equal name="messageForm" property="priorityLevel" value="2"><img src="/repository/message/view/images/medium.gif" title="medium"/></logic:equal>
+																						<logic:equal name="messageForm" property="priorityLevel" value="3"><img src="/repository/message/view/images/critical.gif" title="Critical"/></logic:equal>																						
 																					</td>																					
 																				</tr>
 																				<tr><td colspan="4"></td></tr>
@@ -132,15 +114,7 @@ background: #FFF;
                                                                                     </td>
                                                                                 </tr>
 																				<tr>
-																					<td colspan="4" align="center">
-																						<!-- <c:if test="${messageForm.className=='m'}">
-																							<c:set var="trnEdittBtn">
-																								<digi:trn key="aim:btn:edit">edit</digi:trn>
-																							</c:set> 
-																							<input type="button" value="${trnEdittBtn }" onclick="edit(${messageForm.msgStateId});" />
-																							<c:set var="trnDeletetBtn"><digi:trn key="aim:btn:delete">delete</digi:trn>	</c:set> 
-																						<input type="button" value="${trnDeletetBtn }" onclick="deleteAlert(${messageForm.msgStateId});" />
-																						</c:if>  --> 																						
+																					<td colspan="4" align="center">																		
 																						<c:set var="trnCloseBtn"><digi:trn key="aim:btn:close">Close</digi:trn>	</c:set>
 																						<input type="button" value="${trnCloseBtn }" onclick="closeWindow()" />
 																					</td>                                                                                                                                                                       

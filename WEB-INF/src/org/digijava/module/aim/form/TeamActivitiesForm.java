@@ -3,6 +3,7 @@ package org.digijava.module.aim.form;
 import java.util.Collection;
 
 import org.apache.struts.action.ActionForm;
+import org.digijava.module.message.helper.RelatedActivity;
 
 public class TeamActivitiesForm extends ActionForm {
 
@@ -32,8 +33,8 @@ public class TeamActivitiesForm extends ActionForm {
 	private Long selActDocuments[];
 	private String uuid[];
 	private String removeDocument;
-	private String selectedAct;
-	private String[] relatedActivities;
+	private Long selectedActId;
+	private RelatedActivity[] relatedActivities;
 	
     /**
      * @return Returns the activities.
@@ -299,16 +300,16 @@ public class TeamActivitiesForm extends ActionForm {
 	public void setUuid(String[] uuid) {
 		this.uuid = uuid;
 	}
-	public String getSelectedAct() {
-		return this.selectedAct;
+	public Long getSelectedActId() {
+		return selectedActId;
 	}
-	public void setSelectedAct(String selectedAct) {
-		this.selectedAct = selectedAct;
+	public void setSelectedActId(Long selectedActId) {
+		this.selectedActId = selectedActId;
 	}
-	public String[] getRelatedActivities() {
-		return this.relatedActivities;
+	public RelatedActivity[] getRelatedActivities() {
+		return relatedActivities;
 	}
-	public void setRelatedActivities(String[] relatedActivities) {
+	public void setRelatedActivities(RelatedActivity[] relatedActivities) {
 		this.relatedActivities = relatedActivities;
 	}
 	

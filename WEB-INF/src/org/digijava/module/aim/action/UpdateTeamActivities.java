@@ -188,10 +188,9 @@ public class UpdateTeamActivities extends Action {
 					if (selectedUuids[i] != null) {
 						String uuid = selectedUuids[i];
 						//Node node = DocumentManagerUtil.getReadNode(uuid, request);
-						String actSelected = taForm.getSelectedAct();
-			    		String actIdSelected = actSelected.substring(actSelected.lastIndexOf("(") + 1, actSelected.lastIndexOf("") - 1);
+						Long selectedActId = taForm.getSelectedActId();			    		
 			    		
-						AmpActivity activity = ActivityUtil.loadActivity(Long.valueOf(actIdSelected));
+						AmpActivity activity = ActivityUtil.loadActivity(Long.valueOf(selectedActId));
 						AmpActivityDocument document = new AmpActivityDocument();
 						document.setAmpActivity(activity);
 						document.setDocumentType(ActivityDocumentsConstants.RELATED_DOCUMENTS);
@@ -204,7 +203,7 @@ public class UpdateTeamActivities extends Action {
 					}
 				}
 			}
-			taForm.setSelectedAct("");		
+			taForm.setSelectedActId(null);		
 			taForm.setUuid(null);
 			taForm.setAssignActivity(null);
 			return mapping.findForward("showAddActivityDoc");
@@ -328,7 +327,7 @@ public class UpdateTeamActivities extends Action {
 			taForm.setPages(pages);
 			taForm.setDocuments(col);
 			// load activitities of current member only
-			taForm.setRelatedActivities(ActivityUtil.loadActivitiesNamesAndIds(tm));			
+			taForm.setRelatedActivities(ActivityUtil.loadRelatedActivities(tm));			
 			taForm.setTeamId(id);
 			taForm.setTeamName(ampTeam.getName());
 			taForm.setCurrentPage(new Integer(page));

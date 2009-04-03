@@ -2,8 +2,11 @@ package org.digijava.module.calendar.dbentity;
 
 import java.io.Serializable;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 public class AmpCalendarPK
     implements Serializable {
@@ -293,5 +296,31 @@ public class AmpCalendarPK
 
         return result;
     }
+    
+    public Collection<Long> getWeekDay() throws ParseException{
+        //String result = "";
+        String[] temp;
+        String delimiter = "\\,";
+        Collection<Long> list = new ArrayList<Long>();   
+
+            if(getCalendar().getRecurrCalEvent() != null ){
+              Iterator itr = getCalendar().getRecurrCalEvent().iterator();
+
+              while (itr.hasNext()) {
+       
+                 RecurrCalEvent rec = (RecurrCalEvent) itr.next();
+                  if(rec.getRecurrStartDate() != null){
+                     String month  = rec.getOccurrWeekDays();
+                     if(month !=null){
+                     temp = month.split(delimiter);
+                     for(int i=0; i<temp.length; i++){
+                    	list.add(new Long(temp[i]));
+                     }
+                  }
+               }
+            }
+           }
+         return list;
+     }
 
 }

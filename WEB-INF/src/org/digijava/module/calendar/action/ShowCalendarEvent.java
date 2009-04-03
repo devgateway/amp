@@ -322,6 +322,7 @@ public class ShowCalendarEvent extends Action {
 	            recurrEvent.setRecurrPeriod(ceform.getRecurrPeriod());
 	            recurrEvent.setSelectedStartMonth(ceform.getSelectedStartMonth());
 	            recurrEvent.setTypeofOccurrence(ceform.getTypeofOccurrence());
+	            recurrEvent.setOccurrWeekDays(ceform.getWeekDays());
 
                 // selected start date and selected end date
                 String dtformat = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
@@ -493,11 +494,48 @@ public class ShowCalendarEvent extends Action {
 
                 DateBreakDown startDateBreakDown = null;
                 DateBreakDown endDateBreakDown = null;
+                
+                if(calendar.getRecurrCalEvent() != null){
+                	
+                	Iterator iterRecevent = calendar.getRecurrCalEvent().iterator();
+                	while(iterRecevent.hasNext()){
+                		RecurrCalEvent rec = (RecurrCalEvent) iterRecevent.next();
+                		//ceform.setRecurrEndDate(new Date(rec.getRecurrEndDate());
+                		//ceform.setRecurrStartDate(rec.getRecurrStartDate());
+                		
+                		 GregorianCalendar recstartDate = new GregorianCalendar();
+                		 recstartDate.setTime(rec.getRecurrStartDate());
+                		 
+                		 GregorianCalendar recurEndDate = new GregorianCalendar();
+                		 recurEndDate.setTime(rec.getRecurrEndDate());
+                         
+                		ceform.setRecurrPeriod(rec.getRecurrPeriod());
+                		ceform.setTypeofOccurrence(rec.getTypeofOccurrence());
+                		ceform.setOccurrWeekDays(rec.getOccurrWeekDays());
+                		
+                		if(rec.getTypeofOccurrence().equals( "Yearly")){
+                		ceform.setSelectedStartMonth("");
+                		ceform.setSelectedStartYear(rec.getSelectedStartMonth());
+                		}else if(rec.getTypeofOccurrence().equals( "Monthly")){
+                			ceform.setSelectedStartYear("");
+                			ceform.setSelectedStartMonth(rec.getSelectedStartMonth());
+                		}else{
+                			ceform.setSelectedStartYear("");
+                			ceform.setSelectedStartMonth("");
+                		}
+                			
+                		
+                		rec.getId();
+                		
+                	}
+                	
+                }
+                
 
                 try {
                     startDateBreakDown = new DateBreakDown(startDate, ceform.getSelectedCalendarTypeId().intValue());
                     endDateBreakDown = new DateBreakDown(endDate, ceform.getSelectedCalendarTypeId().intValue());
-
+                    
                     ceform.setSelectedStartDate(startDateBreakDown.formatDateString());
                     ceform.setSelectedStartTime(startDateBreakDown.formatTimeString());
 

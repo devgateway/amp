@@ -375,6 +375,7 @@ function recurEvent(){
 	<html:hidden name="calendarEventForm" property="typeofOccurrence" styleId="type"/>
     <html:hidden name="calendarEventForm" property="recurrStartDate" styleId="recurrStrDate"/>
     <html:hidden name="calendarEventForm" property="recurrEndDate" styleId="recurrEndDate"/>
+    <html:hidden name="calendarEventForm" property="weekDays" styleId="weekDays"/>
 	
     <table>
     	 <tr>

@@ -18,7 +18,7 @@ import org.digijava.module.aim.helper.Constants;
 
 public class CalendarEventForm
     extends ActionForm {
-    private Long ampCalendarId;
+	private Long ampCalendarId;
     private String eventTitle;
     private String method;
     private String searchOrgKey;
@@ -40,11 +40,13 @@ public class CalendarEventForm
     private String selectedStartDate;
     private String selectedStartTime;
     private String selectedStartMonth;
+    private String selectedStartYear;
     private Long recurrPeriod;
     private String typeofOccurrence;
     private String recurrStartDate;
     private String recurrEndDate;
-    private String[] occurrWeekDays;
+    private String occurrWeekDays;
+    private String weekDays;
     private GregorianCalendar startDate;
     private DateBreakDown startDateBreakDown;
     private String selectedEndDate;
@@ -412,11 +414,11 @@ public class CalendarEventForm
 		this.typeofOccurrence = typeofOccurrence;
 	}
 
-	public String[] getOccurrWeekDays() {
+	public String getOccurrWeekDays() {
 		return occurrWeekDays;
 	}
 
-	public void setOccurrWeekDays(String[] occurrWeekDays) {
+	public void setOccurrWeekDays(String occurrWeekDays) {
 		this.occurrWeekDays = occurrWeekDays;
 	}
 
@@ -443,6 +445,23 @@ public class CalendarEventForm
     public void setRecurrEndDate(String recurrEndDate) {
         this.recurrEndDate = recurrEndDate;
     }
+    
+    public String getSelectedStartYear() {
+		return selectedStartYear;
+	}
+
+	public void setSelectedStartYear(String selectedStartYear) {
+		this.selectedStartYear = selectedStartYear;
+	}
+
+	public String getWeekDays() {
+		return weekDays;
+	}
+
+	public void setWeekDays(String weekDays) {
+		this.weekDays = weekDays;
+	}
+
 
 	public Long getEventCreatorId() {
 		return eventCreatorId;
@@ -459,4 +478,5 @@ public class CalendarEventForm
 	public void setActionButtonsVisible(Boolean actionButtonsVisible) {
 		this.actionButtonsVisible = actionButtonsVisible;
 	}
+
 }

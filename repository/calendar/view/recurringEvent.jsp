@@ -17,12 +17,12 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/main.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 
-<script language="JavaScript" type="text/javascript">
+<script language="JavaScript" type="text/javascript"><!--
 
 
 function eventType(){
     
-        var Dailly = document.getElementById("Dailly").checked;
+        var Daily = document.getElementById("Daily").checked;
 		var Weekly = document.getElementById("Weekly").checked;
 		var Monthly = document.getElementById("Monthly").checked;
 		var Yearly = document.getElementById("Yearly").checked;
@@ -39,13 +39,13 @@ function eventType(){
 
         var occurance_duration = end-start;
   
-    if(!Dailly && !Weekly && !Monthly && !Yearly){
+    if(!Daily && !Weekly && !Monthly && !Yearly){
 		alert("please choose");
 		return false;
 	}
     
     if(Yearly){
-    	var rec = document.getElementById("recurrYearly").value;
+    	var rec = document.getElementById("Yearly").value;
         var month = document.getElementById("selectedStartYearlyMonth").value;
 
         document.getElementById("type").value = 'Yearly';
@@ -54,7 +54,7 @@ function eventType(){
 	}
 	
 	if(Monthly){
-   		var rec = document.getElementById("recurrMonthly").value;
+   		var rec = document.getElementById("Monthly").value;
         var month = document.getElementById("selectedStartMonth").value;
 
         document.getElementById("type").value = 'Monthly';
@@ -62,8 +62,8 @@ function eventType(){
 		document.getElementById("hidden").value = rec;
 	}
 
-	if(Dailly){
-        var rec = document.getElementById("recurrDailly").value;
+	if(Daily){
+        var rec = document.getElementById("recurrDaily").value;
         if(rec < occurance_duration){
          alert("The duration of appointment should be shorter than how often it recurs. Modify the duration of appointment or change the recurrence");
 
@@ -72,28 +72,47 @@ function eventType(){
         }else{
 
         document.getElementById("hidden").value = rec;
-        document.getElementById("type").value = 'Dailly';
+        document.getElementById("type").value = 'Daily';
         }
     }
 
 	if(Weekly){
-        var rec = document.getElementById("recurrWeekly").value;
 
+		var result = "";
+		
+       var rec = document.getElementById("recurrWeekly").value;
         document.getElementById("type").value = 'Weekly';
         document.getElementById("hidden").value = rec;
+        document.getElementById("selectedStartMonth").value = "";
+        
+        for(i=0; i<document.getElementsByName("weekDays").length; i++){
+
+				if(document.getElementsByName("weekDays")[i].checked == true){
+						
+					var day = document.getElementsByName("weekDays")[i].value;
+
+							result += ","+day;
+							}
+
+					}
+
+		document.getElementById("weekDays").value = result.slice(1);
+        
 	}
    submit();
 }
 
-</script>
+--></script>
+
 <digi:form action="/showCalendarEvent.do">
 <table border="0" cellPadding=2 cellSpacing=0 width="100%" >
+
 
 <tr>
 	<td style="font-family: Tahoma;">
 	                <div style="padding: 1px;">
 	                    <div style="padding:7px;text-align:center;background-color: #336699; font-size: 18px;color:white; font-weight: bold;">
-	                        <digi:trn key="calendar:recurrEvent">Reccuring Event Setup</digi:trn>
+	                        <digi:trn>Reccuring Event Setup</digi:trn>
 	                    </div>
 	                </div>
 	</td>
@@ -106,18 +125,18 @@ function eventType(){
 			 		<table  border="0" width="100%">
 					 		<tr bgcolor="white">
 					 			<td colspan="3">
-					 				<input type="radio" name="typeofOccurrence" value="Dailly" id="Dailly"/>Dailly
+					 				<html:radio property="typeofOccurrence" value="Daily" styleId="Daily"/>
 					 			</td>
 					 		</tr>
 					 		<tr>
 					 			<td>
 					 			 <table bgcolor="#F5F5F5" align="center" width="320px" cellpadding="7"  style="border-style:solid;border-color:#1C5180;border-width: 1px">
 					 			 	<tr>
-							 		 	<td width="12px">Every</td>
+							 		 	<td width="12px"><digi:trn>Every</digi:trn></td>
 							 	 		<td width="12px">
-							 	 			<input type="text"  size="7px" name="recurrPeriod" id="recurrDailly" value=""/>
+							 	 			<html:text name="calendarEventForm" property="recurrPeriod" size="7px" styleId="recurrDaily" /> 
 							 	 		</td>
-							 	 		<td align="">Day(s)</td>
+							 	 		<td align=""><digi:trn>Day(s)</digi:trn></td>
 					 			 	</tr>
 					 			 </table>
 					 			</td>
@@ -128,7 +147,9 @@ function eventType(){
 							 			<table border="0" cellPadding=1 cellSpacing=1>
 									 		<tr bgcolor="white">
 										 		<td colspan="5">
-										 			<input type="radio"  name="typeofOccurrence" value="Monthly" id="Monthly"/>Monthly
+										 			<html:radio property="typeofOccurrence" value="Monthly" styleId="Monthly"/>
+										 			<digi:trn>Monthly</digi:trn>
+										 			
 										 		</td>
 									 		</tr>
 							 		 </table>
@@ -137,21 +158,24 @@ function eventType(){
 					 		<tr>
 				 			<td>
 				 				<table bgcolor="#F5F5F5" cellpadding="3" align="center" width="320px" style="border-style:solid;border-color:#1C5180;border-width: 1px">
-				 					
+				 				<!-- 	
 				 					<tr>
 							 	 		<td width="95px">Recover Every Day</td>
 							 	 		<td><input type="text" size="9px" name="recurrPeriod" id="recurrMonthly" value=""/></td>
 							 	 	</tr>
+							 	-->
 							 	 	<tr>	
-							 	 		<td width="95px">Off Every</td>
+							 	 		<td width="95px"><digi:trn>Off Every</digi:trn></td>
 							 	 		<td width="12px">
-								 	 		<select id="selectedStartMonth" name="selectedStartMonth">
-												    <c:forEach var="hour" begin="1" end="12">
-			                                                     	<option value="${hour}">${hour}</option>
-			                                        </c:forEach>		
-											</select>
+							 	 		<html:select property="selectedStartMonth" name="calendarEventForm" styleId="selectedStartMonth">
+							 	 		 			<c:forEach var="hour" begin="1" end="12">
+			                                                     	<html:option value="${hour}">${hour}</html:option>
+			                                        </c:forEach>
+							 	 		
+							 	 		</html:select>
+								 	 		
 										</td>
-										<td align="left">Month(s)</td>
+										<td align="left"><digi:trn>Month(s)</digi:trn></td>
 					 	 			</tr>
 					 	 			
 					 	 		</table>
@@ -163,31 +187,40 @@ function eventType(){
 			 		<td>
 				 		<table  bgcolor="#F5F5F5">
 						 		<tr bgcolor="white">
-						 			<td><input type="radio" name="typeofOccurrence" value="Weekly" id="Weekly"/>Weekly</td>
+						 			<td>
+						 					<html:radio property="typeofOccurrence" value="Weekly" styleId="Weekly"/>
+						 			
+						 			<digi:trn>Weekly</digi:trn></td>
 						 			<td></td>
+						 			
 						 			<td></td>
 						 		</tr>
 								<tr>
 									<td>
+									<html:hidden  property="occurrWeekDays" name="calendarEventForm"  styleId="daysOfWeek"/>
+								
+								
 									  <table cellpadding="2" width="240px" style="border-style:solid;border-color:#1C5180;border-width: 1px">		
 									 		<tr>
-									 	 		<td>Recurr every</td>
-									 	 		<td><input type="text"  size="7px" name="recurrPeriod" id="recurrWeekly" value=""/></td>
-									 	 		<td>Week (s)</td>
+									 	 		<td><digi:trn>Recurr every</digi:trn></td>
+									 	 		<td>
+									 	 		<html:text name="calendarEventForm" property="recurrPeriod" size="7px"  styleId="recurrWeekly" /> 
+									 	 		</td>
+									 	 		<td><digi:trn>Week (s)</digi:trn></td>
 									 		</tr>
 									 		<tr> 
-									 			<td><input type="checkbox" name="occurrWeekDays" value="Sun"/>Sun</td>
-									 			<td><input type="checkbox" name="occurrWeekDays" value="Wednesday"/>Wed</td>
-									 			<td><input type="checkbox" name="occurrWeekDays" value="Saturday"/>Saturday</td>
+									 			<td><input type="checkbox" name="weekDays" value="1"/><digi:trn>Sun</digi:trn></td>
+									 			<td><input type="checkbox" name="weekDays" value="2"/><digi:trn>Wed</digi:trn></td>
+									 			<td><input type="checkbox" name="weekDays" value="3"/><digi:trn>Saturday</digi:trn></td>
 									 		</tr>
 									 		<tr>
-									 			<td><input type="checkbox" name="occurrWeekDays" value="Monday"/>Monday</td>
-									 			<td><input type="checkbox" name="occurrWeekDays" value="Thur"/>Thur</td>
+									 			<td><input  type="checkbox" name="weekDays" value="4"/><digi:trn>Monday</digi:trn></td>
+									 			<td><input type="checkbox" name="weekDays" value="5"/><digi:trn>Thur</digi:trn></td>
 									 			<td>
 									 		</tr>
 									 		<tr>
-									 			<td><input type="checkbox" name="occurrWeekDays" value="Tuesday"/>Tuesday</td>
-									 			<td><input type="checkbox" name="occurrWeekDays" value="Friday"/>Friday</td>
+									 			<td><input  type="checkbox" name="weekDays" value="6"/><digi:trn>Tuesday</digi:trn></td>
+									 			<td><input  type="checkbox" name="weekDays" value="7"/><digi:trn>Friday</digi:trn></td>
 									 		</tr>
 								 		</table>
 						 			</td>
@@ -197,40 +230,69 @@ function eventType(){
 		 		   <td>
 		 		 </td>
 		 	</tr>
-		 	
+		 		<c:if test="${calendarEventForm.typeofOccurrence == 'Weekly'}">
+					<script language="JavaScript" type="text/javascript">
+					
+						document.getElementById("recurrDaily").value = "";
+						
+						
+						var allselectedDays = document.getElementById("daysOfWeek").value;
+						array = allselectedDays.split(",");
+						
+						for(i=0; i<document.getElementsByName("weekDays").length; i++){
+
+							var allDays = document.getElementsByName("weekDays")[i].value;
+								
+								   for(j=0; j<array.length; j++){
+
+									   var selectedWeekDays = array[j];
+
+										if(allDays == selectedWeekDays){
+												document.getElementsByName("weekDays")[selectedWeekDays].checked = true;
+											
+										}
+									}
+								}											
+					
+					</script>
+				</c:if>
+				<c:if test="${calendarEventForm.typeofOccurrence == 'Daily' 
+				|| calendarEventForm.typeofOccurrence == 'Monthly'
+				|| calendarEventForm.typeofOccurrence == 'Yearly'}">
+					<script language="JavaScript" type="text/javascript">
+						document.getElementById("recurrWeekly").value = "";
+						document.getElementById("weekDays").value = "";
+					</script>
+				</c:if>
 		 	    <td>
 			 	    <table border="0" bgcolor="#F5F5F5" >
 					 		<tr bgcolor="white">
-					 			<td colspan="4">
-					 				<input type="radio" name="typeofOccurrence" value="Yearly" id="Yearly"/>Yearly
+					 			<td colspan="4"><digi:trn>Yearly</digi:trn><html:radio property="typeofOccurrence" value="Yearly" styleId="Yearly"/>
 					 			</td>
 					 		</tr>
 					 		<tr>
 					 			<td>
 					 				<table cellpadding="6" width="240px" style="border-style:solid;border-color:#1C5180;border-width: 1px">
 					 				 	<tr>
-					 						<td>Every</td>
+					 						<td><digi:trn>Every</digi:trn></td>
 							 	 			<td>
-								 	 			<select id="selectedStartYearlyMonth" name="selectedStartMonth">
-
+								 	 		
+													<html:select name="calendarEventForm" property="selectedStartYear"  styleId="selectedStartYearlyMonth">
 
 			                                                     	  <c:forEach var="month" begin="1" end="12">
-
-                                                                     <%--<logic:iterate id="month"  property="months" name="calendarEventForm">--%>
                                                                             <c:if test="${month < 10}"><c:set var="hour" value="0${month}"/></c:if>
-                                                                           <option value="${month}">${month}</option>
-
-                                                                        <%--</logic:iterate>--%>
-
-			                                        </c:forEach>
+                                                                     				<html:option value="${month}">${month}</html:option>
+			                                        				</c:forEach>
 
 
 
 
-												</select>
+												</html:select>
 						 	 		    	</td>
+							 	 			<!-- 
 							 	 			<td><input type="text"  size="7px" name="recurrPeriod" id="recurrYearly" value=""/></td>
 							 	 			<td> Day(s) </td>
+							 	 			 -->
 							 	 	    </tr>
 							  	   </table>
 							  </td>
@@ -246,9 +308,9 @@ function eventType(){
 <tr>
 		<td>
 			<table bgcolor="#F5F5F5" border="0" cellPadding=2 cellSpacing=2 width="340px" style="border-style:solid;border-color:#1C5180;border-width: 1px">
-				 		<tr><td>Time</td></tr>
+				 		<tr><td><digi:trn>Time</digi:trn></td></tr>
 				 		<tr>
-				 	 		<td>Start TIme</td>
+				 	 		<td><digi:trn>Start TIme</digi:trn></td>
 				 	 		<td>
 				 	 				<select id="selectedStartHour" onchange="updateTime(document.getElementById('selectedStartTime'), 'hour', this.value)">
                                        <c:forEach var="hour" begin="0" end="23">
@@ -261,7 +323,7 @@ function eventType(){
                                    </script>
 							</td>
 				 	 		
-				 	 		<td>End TIme</td>
+				 	 		<td><digi:trn>End Time</digi:trn></td>
 				 	 		<td>
 				 	 			<select id="selectedStartHour" onchange="updateTime(document.getElementById('selectedStartTime'), 'hour', this.value)">
                                                     <c:forEach var="hour" begin="0" end="23">
@@ -278,7 +340,7 @@ function eventType(){
 				 	 	</tr>
 				 	 	<tr>
 				 	 		<td>
-				 	 			<digi:trn key="calendar:StartDate">Start date:</digi:trn>
+				 	 			<digi:trn>Start date:</digi:trn>
 				 	 		</td>
 				 	 		 <td>
 				 		 	 	<c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
@@ -305,7 +367,7 @@ function eventType(){
 						 	 </tr>
 				 	 	
 				 	 	<tr>
-				 	 		<td><digi:trn key="calendar:EndDate">End Date</digi:trn></td>
+				 	 		<td><digi:trn>End Date</digi:trn></td>
 				 	 		<td>
 			 	 				<c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
                                      <table cellpadding="0" cellspacing="0">

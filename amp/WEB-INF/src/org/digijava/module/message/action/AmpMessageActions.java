@@ -60,7 +60,7 @@ public class AmpMessageActions extends DispatchAction {
         TeamMember teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
     	if(request.getParameter("editingMessage").equals("false")){
     		//load activities
-        	messageForm.setRelatedActivities(ActivityUtil.loadActivitiesNamesAndIds(teamMember));
+        	messageForm.setRelatedActivities(ActivityUtil.loadRelatedActivities(teamMember));
     		setDefaultValues(messageForm);
     	}else {
     		Long id=new Long(request.getParameter("msgStateId"));
@@ -493,7 +493,7 @@ public class AmpMessageActions extends DispatchAction {
         	messagesForm.setForwardedMsg(msgHelper);
             HttpSession session = request.getSession();
             TeamMember teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
-            messagesForm.setRelatedActivities(ActivityUtil.loadActivitiesNamesAndIds(teamMember));
+            messagesForm.setRelatedActivities(ActivityUtil.loadRelatedActivities(teamMember));
     	}
     	return loadReceiversList(mapping,messagesForm,request,response);
     }
@@ -659,13 +659,12 @@ public class AmpMessageActions extends DispatchAction {
     		message.setForwardedMessage(AmpMessageUtil.getMessage(messageForm.getForwardedMsg().getMsgId()));
     	}
     	//link message to activity if necessary
-    	if(messageForm.getSelectedAct()!=null && messageForm.getSelectedAct().length()>0){
-    		String act=messageForm.getSelectedAct();
-    		String activityId=act.substring(act.lastIndexOf("(")+1,act.lastIndexOf("")-1);
-    		message.setRelatedActivityId(new Long(activityId));
+    	if(messageForm.getSelectedActId()!=null && messageForm.getSelectedActId().longValue()>0){
+    		Long actId=messageForm.getSelectedActId();    		
+    		message.setRelatedActivityId(actId);
     		//now we must create activity URL
     		String fullModuleURL=RequestUtils.getFullModuleUrl(request);
-    		String objUrl=fullModuleURL.substring(0,fullModuleURL.indexOf("message"))+"aim/viewChannelOverview.do~tabIndex=0~ampActivityId="+activityId;
+    		String objUrl=fullModuleURL.substring(0,fullModuleURL.indexOf("message"))+"aim/viewChannelOverview.do~tabIndex=0~ampActivityId="+actId;
     		message.setObjectURL(objUrl);
     	}
     	//should we send a message or not
@@ -833,7 +832,8 @@ public class AmpMessageActions extends DispatchAction {
 		 form.setLastPage(null);
 		 form.setDeleteActionWasCalled(false);
          form.setReceiver(null);
-         form.setSelectedAct(null);
+         form.setSelectedActId(null);
+         form.setRelatedActivityName(null);
          form.setInboxFull(false);
          form.setReceivesrsNameMail(null);
 	 }
@@ -867,10 +867,12 @@ public class AmpMessageActions extends DispatchAction {
              }
 
 			 form.setReceivers(getMessageRecipients(message.getId()));
-			 form.setSelectedAct(null);
+			 form.setSelectedActId(null);
+			 form.setRelatedActivityName(null);
 			 //getting related activity if exists
 			 if(message.getRelatedActivityId()!=null){
-				 form.setSelectedAct(getRelatedActivity(message.getRelatedActivityId()));
+				 form.setSelectedActId(message.getRelatedActivityId());
+				 form.setRelatedActivityName(ActivityUtil.getActivityName(message.getRelatedActivityId()));
 			 }
 
 			 //is alert or not

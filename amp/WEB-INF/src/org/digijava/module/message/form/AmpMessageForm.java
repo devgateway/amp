@@ -12,6 +12,7 @@ import org.digijava.module.message.dbentity.AmpMessageState;
 import org.digijava.module.message.dbentity.TemplateAlert;
 import org.digijava.module.message.helper.MessageHelper;
 import org.digijava.module.message.helper.ReciverName;
+import org.digijava.module.message.helper.RelatedActivity;
 
 public class AmpMessageForm extends ActionForm {
 	/**
@@ -45,8 +46,9 @@ public class AmpMessageForm extends ActionForm {
 	private int setAsAlert;
 	private boolean deleteActionWasCalled;
 	
-	private String[] relatedActivities;
-	private String selectedAct;
+	private RelatedActivity[] relatedActivities;
+	private Long selectedActId;
+	private String relatedActivityName;
 	
 	private String [] allPages;
 
@@ -484,22 +486,6 @@ public class AmpMessageForm extends ActionForm {
 			this.objectURL = objectURL;
 		}
 
-		public String[] getRelatedActivities() {
-			return relatedActivities;
-		}
-
-		public void setRelatedActivities(String[] relatedActivities) {
-			this.relatedActivities = relatedActivities;
-		}
-
-		public String getSelectedAct() {
-			return selectedAct;
-		}
-
-		public void setSelectedAct(String selectedAct) {
-			this.selectedAct = selectedAct;
-		}
-
 		public boolean isInboxFull() {
 			return inboxFull;
 		}
@@ -564,6 +550,27 @@ public class AmpMessageForm extends ActionForm {
 					this.fileUploaded = fileUploaded;
 				}
 
+				public RelatedActivity[] getRelatedActivities() {
+					return relatedActivities;
+				}
 
-	
+				public void setRelatedActivities(RelatedActivity[] relatedActivities) {
+					this.relatedActivities = relatedActivities;
+				}
+
+				public Long getSelectedActId() {
+					return selectedActId;
+				}
+
+				public void setSelectedActId(Long selectedActId) {
+					this.selectedActId = selectedActId;
+				}
+
+				public String getRelatedActivityName() {
+					return relatedActivityName;
+				}
+
+				public void setRelatedActivityName(String relatedActivityName) {
+					this.relatedActivityName = relatedActivityName;
+				}	
 	}

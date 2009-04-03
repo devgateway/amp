@@ -99,6 +99,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.message.helper.RelatedActivity;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
@@ -3862,12 +3863,12 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
          * @param partOfName
          * @return Array of Strings,which have a look like: activity_name(activiti_id) 
          */
-        public static String[] loadActivitiesNamesAndIds(TeamMember member) throws DgException{
+        public static RelatedActivity[] loadRelatedActivities(TeamMember member) throws DgException{
         	Session session=null;
     		String queryString =null;
     		Query query=null;
     		List activities=null;
-    		String [] retValue=null;
+    		RelatedActivity [] retValue=null;
     		try {
                     session=PersistenceManager.getRequestDBSession();
                     
@@ -3897,20 +3898,24 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     			logger.error("couldn't load Activities" + ex.getMessage());	
     			ex.printStackTrace(); 
     		} 
+    		
     		if (activities != null){
-    			retValue=new String[activities.size()];    		
+    			retValue=new RelatedActivity[activities.size()];    		
     			int i=0;
     			for (Object rawRow : activities) {
 					Object[] row = (Object[])rawRow; //:)
-					String nameRow=(String)row[0];			
+					String nameRow=(String)row[0];
+					Long idRow=(Long)row[1];
 					if(nameRow != null){
 					nameRow = nameRow.replace('\n', ' ');
 					nameRow = nameRow.replace('\r', ' ');
 					nameRow = nameRow.replace("\\", "");
 					}
 					//System.out.println(nameRow);
-					retValue[i]=nameRow+"("+row[1]+")";
-					i++;					
+					retValue[i]=new RelatedActivity();
+					retValue[i].setName(nameRow);
+					retValue[i].setActId(idRow);					
+					i++;
 				}
     		}
     		return retValue;
@@ -3935,7 +3940,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     			logger.error("couldn't load Activity" + ex.getMessage());	
     			ex.printStackTrace(); 
     		} 
-    		return null;
+    		return name;
         }
         
         public static String stackTraceToString(Throwable e) {

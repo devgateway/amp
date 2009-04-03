@@ -9,11 +9,6 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 
-<script type="text/javascript" language="JavaScript" src="<digi:file src="module/message/script/yahoo-dom-event.js"/>"></script>
-<script type="text/javascript" language="JavaScript" src="<digi:file src="module/message/script/animation-min.js"/>"></script>
-<script type="text/javascript" language="JavaScript" src="<digi:file src="module/message/script/autocomplete-min.js"/>"></script>
-
-
 <digi:instance property="messageForm" />
 <html:hidden name="messageForm" property="tabIndex"/>
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
@@ -22,28 +17,37 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.charcounter.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript"  src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
+
+<!-- this is for the nice tooltip widgets -->
+<DIV id="TipLayer"  style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
+
 <style>
 <!--
 
-.yui-skin-sam .yui-ac{position:relative;font-family:arial;font-size: 100%}
-.yui-skin-sam .yui-ac-input{position:absolute;width:100%;font-size: 100%}
+.yui-skin-sam .yui-ac{position:relative;font-family:arial;font-size:100%;}
+.yui-skin-sam .yui-ac-input{position:absolute;width:100%;}
 .yui-skin-sam .yui-ac-container{position:absolute;top:1.6em;width:100%;}
 .yui-skin-sam .yui-ac-content{position:absolute;width:100%;border:1px solid #808080;background:#fff;overflow:hidden;z-index:9050;}
-.yui-skin-sam .yui-ac-shadow{position:absolute;margin:.3em;width:100%;background:#000;-moz-opacity:0.10;opacity:.10;filter:alpha(opacity=10);z-index:9049;}
+.yui-skin-sam .yui-ac-shadow{position:absolute;margin:.3em;width:100%;background:#000;-moz-opacity:.10;opacity:.10;filter:alpha(opacity=10);z-index:9049;}
+.yui-skin-sam .yui-ac iframe{opacity:0;filter:alpha(opacity=0);padding-right:.3em;padding-bottom:.3em;}
 .yui-skin-sam .yui-ac-content ul{margin:0;padding:0;width:100%;}
-.yui-skin-sam .yui-ac-content li{margin:0;padding:2px 5px;cursor:default;white-space:nowrap;FONT-SIZE: 100%;}
+.yui-skin-sam .yui-ac-content li{margin:0;padding:2px 5px;cursor:default;white-space:nowrap;list-style:none;zoom:1;}
 .yui-skin-sam .yui-ac-content li.yui-ac-prehighlight{background:#B3D4FF;}
 .yui-skin-sam .yui-ac-content li.yui-ac-highlight{background:#426FD9;color:#FFF;}
 
-#statescontainer .yui-ac-content { 
+
+#myContainer .yui-ac-content { 
     max-height:16em;overflow:auto;overflow-x:hidden; /* set scrolling */ 
     _height:16em; /* ie6 */ 
-} 
-
+}
 -->
 </style>
 
 <script langauage="JavaScript">
+	var messageHelp='<digi:trn>Message Help</digi:trn>';
+	var relatedActs='<digi:trn>Type first letter of activity to view suggestions</digi:trn>';
 
   function MyremoveUserOrTeam(){
   	var orphands=new Array();
@@ -59,7 +63,8 @@
        registerOrphanMember(orphands);
     }
     removeUserOrTeam();
-  }  
+  } 
+   
   function MyaddUserOrTeam(){
     var list = document.getElementById('selreceivers');
 	var orphands=new Array();
@@ -80,24 +85,30 @@
   }
 	
   function validate(){
-            var titleSize=document.messageForm.messageName.value.length;
-            var descSize=document.messageForm.description.value.length;
-		if(titleSize==0){
-			alert('Please Enter Name');
-			return false;
-		}
-                else{
-                    if(titleSize>50){
-                        alert(' You have entered '+titleSize+' symblos but maximum allowed are 50');
-			return false;
-                    }
-                    if(descSize>500){
-                        alert(' You have entered '+descSize+' symblos but maximum allowed are 500');
-			return false;
-                    }
-                }
-		return true;
+  	var titleSize=document.messageForm.messageName.value.length;
+    var descSize=document.messageForm.description.value.length;
+	if(titleSize==0){
+		alert('Please Enter Name');
+		return false;
 	}
+    else{
+    	if(titleSize>50){
+        	alert(' You have entered '+titleSize+' symblos but maximum allowed are 50');
+			return false;
+        }
+        if(descSize>500){
+        	alert(' You have entered '+descSize+' symblos but maximum allowed are 500');
+			return false;
+        }
+    }
+	var hiddenField=document.getElementById('myHidden');
+	var relActName=document.getElementById('myInput');
+	if(relActName.value!=null && relActName.value!='' && (hiddenField.value==null || hiddenField.value=='')){
+		alert('Related activity with given name not exists');		
+		return false;
+	}	
+	return true;
+  }
 
 	function save (event){
 		if(!validate()){
@@ -133,6 +144,7 @@
     	
     	return true;
 	}
+
 	// don't remove or change this line!!!
 	document.getElementsByTagName('body')[0].className='yui-skin-sam';
 
@@ -147,37 +159,44 @@
 	background-color: #ffffff;
 }
 
-#statesautocomplete ul {
+#myAutoComplete ul {
 	list-style: square;
 	padding-right: 0px;
 	padding-bottom: 2px;
 }
 
-#statesautocomplete div {
+#myAutoComplete div {
 	padding: 0px;
 	margin: 0px; 
 }
 
-
-
-#statesautocomplete,
-#statesautocomplete2 {
+#myAutoComplete,
+#myAutoComplete2 {
     width:15em; /* set width here */
     padding-bottom:2em;
 }
-#statesautocomplete {
+#myAutoComplete {
     z-index:9000; /* z-index needed on top instance for ie & sf absolute inside relative issue */
 }
-#statesinput,
-#statesinput2 {
+#myInput,
+#myInput2 {
     _position:absolute; /* abs pos needed for ie quirks */
 }
 .charcounter {
     display: block;
 }
 
+#myAutoComplete {
+    width:320px; /* set width here or else widget will expand to fit its container */
+    padding-bottom:2em;
+}
+#myImage {
+    position:absolute; left:320px; margin-left:1em; /* place the button next to the input */
+}
+
 -->
 </style>
+
 
 <c:set var="messageType">
     <c:choose>
@@ -197,8 +216,7 @@
 </c:set>
 <c:set var="title">
     <c:choose>
-        <c:when test="${not empty messageForm.forwardedMsg}">
-            
+        <c:when test="${not empty messageForm.forwardedMsg}">            
             <c:choose>
                 <c:when test="${messageForm.tabIndex==1}">
             <digi:trn key="message:ForwardMessage">Forward Message</digi:trn>
@@ -256,8 +274,8 @@
 								</td>
 							</tr>
 							<tr>
-								<td height=16 vAlign=center width=571>
-									<span class=subtitle-blue>							
+								<td height="16" vAlign="center" width="571">
+									<span class="subtitle-blue">							
 											${title}						
 									</span>
 								</td>
@@ -298,11 +316,13 @@
 																	<tr>
 																	  <field:display name="Related Activity Dropdown" feature="Create Message Form">
 																		<td align="right" nowrap="nowrap" valign="top"><digi:trn key="message:relatedActivity">Related Activity</digi:trn></td>
-																		<td align="left">
-																			<div id="statesautocomplete"> 
-																				<html:text property="selectedAct" name="messageForm" styleId="statesinput" style="width:320px;font-size:100%"></html:text>																			    
-																				<div id="statescontainer" style="width:320px;"></div> 
-																			</div>																		
+																		<td align="left" nowrap="nowrap">																			
+																			<div id="myAutoComplete">
+																				<html:text property="relatedActivityName" name="messageForm" styleId="myInput" style="width:320px;font-size:100%"></html:text>																				
+																				<img src="../ampTemplate/images/help.gif" onmouseover="stm([messageHelp,relatedActs],Style[15])" onmouseout="htm()" align="top" id="myImage"/>
+																		    	<div id="myContainer" style="width:315px;"></div>																		    	
+																		   	</div>
+																		   	<html:hidden property="selectedActId" styleId="myHidden"/>											
 																		</td>
 																	  </field:display>																			
 																	</tr>	
@@ -321,10 +341,10 @@
 																		 <field:display name="Set Alert Drop down" feature="Create Message Form">
 																			<td align="right" valign="top"><digi:trn key="message:setAsAlert">Set as alert</digi:trn></td>
 																			<td align="left"> 
-	                                                                                            <html:select property="setAsAlert" styleClass="inp-text" style="width:140px">																							
-																								  <html:option value="0"><digi:trn key="message:no">No</digi:trn> </html:option>
-																								  <html:option value="1"><digi:trn key="message:yes">Yes</digi:trn> </html:option>																																														
-																			  				    </html:select>																												                                                																																												
+	                                                                            <html:select property="setAsAlert" styleClass="inp-text" style="width:140px">																							
+																					<html:option value="0"><digi:trn key="message:no">No</digi:trn> </html:option>
+																					<html:option value="1"><digi:trn key="message:yes">Yes</digi:trn> </html:option>																																														
+																			  	</html:select>																												                                                																																												
 																			</td>
 																		</field:display>
 																      </tr>	
@@ -416,7 +436,6 @@
 																	</tr>
 																</table>
 															</td>
-															
 														</tr>
 													</table>
                            						</td>
@@ -428,38 +447,51 @@
    						</td>
 					</tr>
 </table>
-																						
-
+ 
+<script type="text/javascript" language="JavaScript" src="<digi:file src="module/message/script/autocomplete.js"/>"></script>
 <script type="text/javascript">
 	var myArray = [
 		<c:forEach var="relAct" items="${messageForm.relatedActivities}">
-			 "<bean:write name="relAct" filter="true"/>",
+		 {name: "<bean:write name="relAct" property="name" filter="true"/>",id: <bean:write name="relAct" property="actId" filter="true"/>},
 		</c:forEach>     
 	];
 
-	YAHOO.example.ACJSArray = new function() {
-		// Instantiate JS Array DataSource
-	    this.oACDS2 = new YAHOO.widget.DS_JSArray(myArray);
-	    // Instantiate AutoComplete
-	    this.oAutoComp2 = new YAHOO.widget.AutoComplete('statesinput','statescontainer', this.oACDS2);
-	    this.oAutoComp2.prehighlightClassName = "yui-ac-prehighlight";    
-	    this.oAutoComp2.useShadow = true;
-	    this.oAutoComp2.forceSelection = true;
-            this.oAutoComp2.maxResultsDisplayed = myArray.length; 
-	    this.oAutoComp2.formatResult = function(oResultItem, sQuery) {
-	        var sMarkup = oResultItem[0];
-	        return (sMarkup);
+	YAHOO.example.ItemSelectHandler = function() {
+	    // Use a LocalDataSource
+	    var oDS = new YAHOO.util.LocalDataSource(myArray);
+	    oDS.responseSchema = {fields : ["name", "id"]};
+
+	    // Instantiate the AutoComplete
+	    var oAC = new YAHOO.widget.AutoComplete("myInput", "myContainer", oDS);
+	    oAC.resultTypeList = false;
+	    
+	    // Define an event handler to populate a hidden form field
+	    // when an item gets selected
+	    var myHiddenField = YAHOO.util.Dom.get("myHidden");
+	    var myHandler = function(sType, aArgs) {
+	        var myAC = aArgs[0]; // reference back to the AC instance
+	        var elLI = aArgs[1]; // reference to the selected LI element
+	        var oData = aArgs[2]; // object literal of selected item's result data
+	        
+	        // update hidden form field with the selected item's ID	        
+	        myHiddenField.value = oData.id;
+	    };	   
+	    oAC.itemSelectEvent.subscribe(myHandler);	    
+
+	    return {
+	        oDS: oDS,
+	        oAC: oAC
 	    };
-	}; 
+	}();
+	
         
-        // attach character counters
-        $("#titleMax").charCounter(50,{
-	format: " (%1"+ " <digi:trn key="message:charactersRemaining">characters remaining</digi:trn>)",
-	pulse: false});
-        $("#descMax").charCounter(500,{
-	format: " (%1"+ " <digi:trn key="message:charactersRemaining">characters remaining</digi:trn>)",
-	pulse: false});
-        
+    // attach character counters
+    $("#titleMax").charCounter(50,{
+		format: " (%1"+ " <digi:trn key="message:charactersRemaining">characters remaining</digi:trn>)",
+		pulse: false});
+    $("#descMax").charCounter(500,{
+		format: " (%1"+ " <digi:trn key="message:charactersRemaining">characters remaining</digi:trn>)",
+		pulse: false});       
 
 </script>
 </digi:form>

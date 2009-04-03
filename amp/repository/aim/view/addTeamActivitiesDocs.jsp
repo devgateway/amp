@@ -6,39 +6,52 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<script type="text/javascript" language="JavaScript" src="<digi:file src="module/aim/scripts/yahoo-dom-event.js"/>"></script>
-<script type="text/javascript" language="JavaScript" src="<digi:file src="module/aim/scripts/animation-min.js"/>"></script>
-<script type="text/javascript" language="JavaScript" src="<digi:file src="module/aim/scripts/autocomplete-min.js"/>"></script>
-
+<script type="text/javascript" language="JavaScript" src="<digi:file src="module/message/script/autocomplete.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.charcounter.js"/>"></script>
 
 <style>
 
-#statesautocomplete ul {
+<style  type="text/css">
+<!--
+
+.contentbox_border{
+        border: 1px solid black;
+	border-width: 1px 1px 1px 1px; 
+	background-color: #ffffff;
+}
+
+#myAutoComplete ul {
 	list-style: square;
 	padding-right: 0px;
 	padding-bottom: 2px;
 }
-#statesautocomplete div {
+
+#myAutoComplete div {
 	padding: 0px;
 	margin: 0px; 
 }
-#statesautocomplete,
-#statesautocomplete2 {
+
+#myAutoComplete,
+#myAutoComplete2 {
     width:15em; /* set width here */
     padding-bottom:2em;
 }
-#statesautocomplete {
+#myAutoComplete {
     z-index:9000; /* z-index needed on top instance for ie & sf absolute inside relative issue */
-} 
-#statesinput,
-#statesinput2 {
+}
+#myInput,
+#myInput2 {
     _position:absolute; /* abs pos needed for ie quirks */
 }
 .charcounter {
     display: block;
+}
+
+#myAutoComplete {
+    width:320px; /* set width here or else widget will expand to fit its container */
+    padding-bottom:2em;
 }
 
 .yui-skin-sam .yui-ac{position:relative;font-family:arial;font-size: 100%}
@@ -271,7 +284,7 @@ function validate() {
 					</td>
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571><span class=subtitle-blue><digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn></span>
+					<td height="16" vAlign="center" width="571"><span class=subtitle-blue><digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn></span>
 					</td>
 				</tr>
 				<tr>
@@ -362,10 +375,12 @@ function validate() {
 																		<digi:trn>New activity for the assigned documents :</digi:trn> 																	
 																	</td>
 																	<td align="left">
-																		<div id="statesautocomplete"> 
-																			<html:text property="selectedAct" name="aimTeamActivitiesForm" styleId="statesinput" style="width:320px;font-size:100%"></html:text>																			    
-																			<div id="statescontainer" style="width:320px;"></div> 
-																		</div>																				
+																		<div id="myAutoComplete">																			
+																			<input type="text" style="width:320px;font-size:100%" id="myInput"/>
+																		   	<div id="myContainer" style="width:315px;"></div>																		    	
+																		</div>																    
+																		<input id="myHidden" type="hidden" name="selectedActId">																		
+																																
 																		<html:submit  styleClass="dr-menu" property="submitButton"  onclick="return validate();">
 																			<digi:trn>Add Document To Activity</digi:trn> 
 																		</html:submit>																	
@@ -433,28 +448,41 @@ setStripsTable("dataTable", "tableEven", "tableOdd");
 setHoveredTable("dataTable", false);
 </script>
 
-
 <script type="text/javascript">
-	var myArray = [
-		<c:forEach var="relAct" items="${aimTeamActivitiesForm.relatedActivities}">
-			 "<bean:write name="relAct" filter="true"/>",
-		</c:forEach>     
-	];
+var myArray = [
+       		<c:forEach var="relAct" items="${aimTeamActivitiesForm.relatedActivities}">
+       		 {name: "<bean:write name="relAct" property="name" filter="true"/>",id: <bean:write name="relAct" property="actId" filter="true"/>},
+       		</c:forEach>     
+       	];
 
-	YAHOO.example.ACJSArray = new function() {
-		// Instantiate JS Array DataSource
-	    this.oACDS2 = new YAHOO.widget.DS_JSArray(myArray);
-	    // Instantiate AutoComplete
-	    this.oAutoComp2 = new YAHOO.widget.AutoComplete('statesinput','statescontainer', this.oACDS2);
-	    this.oAutoComp2.prehighlightClassName = "yui-ac-prehighlight";    
-	    this.oAutoComp2.useShadow = true;
-	    this.oAutoComp2.forceSelection = true;
-            this.oAutoComp2.maxResultsDisplayed = myArray.length; 
-	    this.oAutoComp2.formatResult = function(oResultItem, sQuery) {
-	        var sMarkup = oResultItem[0];
-	        return (sMarkup);
-	    };
-	}; 
+       	YAHOO.example.ItemSelectHandler = function() {
+       	    // Use a LocalDataSource
+       	    var oDS = new YAHOO.util.LocalDataSource(myArray);
+       	    oDS.responseSchema = {fields : ["name", "id"]};
+
+       	    // Instantiate the AutoComplete
+       	    var oAC = new YAHOO.widget.AutoComplete("myInput", "myContainer", oDS);
+       	    oAC.resultTypeList = false;
+       	    
+       	    // Define an event handler to populate a hidden form field
+       	    // when an item gets selected
+       	    var myHiddenField = YAHOO.util.Dom.get("myHidden");
+       	    var myHandler = function(sType, aArgs) {
+       	        var myAC = aArgs[0]; // reference back to the AC instance
+       	        var elLI = aArgs[1]; // reference to the selected LI element
+       	        var oData = aArgs[2]; // object literal of selected item's result data
+       	        
+       	        // update hidden form field with the selected item's ID	        
+       	        myHiddenField.value = oData.id;
+       	    };	   
+       	    oAC.itemSelectEvent.subscribe(myHandler);    
+       	    
+
+       	    return {
+       	        oDS: oDS,
+       	        oAC: oAC
+       	    };
+       	}();
         
         // attach character counters
         $("#titleMax").charCounter(50,{

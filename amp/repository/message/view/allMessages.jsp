@@ -10,8 +10,9 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 
-<link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/amptabs.css"/>"/>
+<c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
 
+<link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/amptabs.css"/>"/>
 <!-- Yahoo Panel --> 
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/container.css'/>"/>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>"></script>
@@ -96,7 +97,7 @@ background-color:yellow;
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/message/script/messages.js"/>"></script>
 <script langauage="JavaScript">
 
-        var  selectedMessagePanel;
+    var  selectedMessagePanel;
 	var noMsgs="<digi:trn key="message:noMessages">No Messages Present</digi:trn>";
     var noAlerts="<digi:trn key="message:noAlerts">No Alerts Present</digi:trn>";
     var noApprovals="<digi:trn key='message:noPendingApprovals'>No Pending Approvals</digi:trn>";
@@ -952,6 +953,12 @@ background-color:yellow;
 			}
 		}
 	}
+
+	function createMessage(){
+		messageForm.action="${contextPath}/message/messageActions.do?editingMessage=false&actionType=fillTypesAndLevels";
+		messageForm.target = "_self";
+		messageForm.submit();	
+	}
  
 $(document).ready(function(){
 	   $("#displaySettingsButton").toggle(function(){
@@ -968,7 +975,7 @@ $(document).ready(function(){
 });
 
 </script>
-<table cellSpacing=0 cellPadding=0 vAlign="top" align="left" width="100%">
+<table cellSpacing="0" cellPadding="0" vAlign="top" align="left" width="100%">
 <tr>
 <td width="100%">
 <jsp:include page="/repository/aim/view/teamPagesHeader.jsp" flush="true" />
@@ -1050,9 +1057,9 @@ $(document).ready(function(){
 															<digi:trn key="message:Messages">Messages</digi:trn>							
                                                			</div>
                                               		</a>
-                                                    </LI>
-												</c:if> 
-												<c:if test="${messageForm.tabIndex!=1}">
+                                                </LI>
+											</c:if> 
+											<c:if test="${messageForm.tabIndex!=1}">
                                                 	<LI>
                                                     	<span>
                                     						<a onclick="return unCheckMessages()" href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1">
@@ -1131,9 +1138,9 @@ $(document).ready(function(){
                                                      	</span>
                                                   	</LI>
 												</c:if>	
-											</feature:display>						
-											</UL>						
-										</DIV>
+								</feature:display>						
+							</UL>					
+						</DIV>
                     	<div id="main">
 						<DIV id="subtabs">
 	                        <div style="pa">
@@ -1353,6 +1360,7 @@ $(document).ready(function(){
                                                         </TR>
                                                           <TR>
                                                               <TD ALIGN="RIGHT">
+                                                              	<input type="button" onclick="createMessage()" value="<digi:trn>Create Message</digi:trn>" class="dr-menu" />
                                                               	<input type="button" onclick="selectAllCheckboxes()" value="<digi:trn>Select All</digi:trn>" class="dr-menu" />
                                                               	<input type="button" onclick="deselectAllCheckboxes()" value="<digi:trn>Deselect All</digi:trn>" class="dr-menu" />
                                                               	<input type="button" onclick="deleteMessage()" value="<digi:trn key='message:deleteSelMsgs'>Delete Selected Messages</digi:trn>" class="dr-menu" />
@@ -1401,9 +1409,7 @@ $(document).ready(function(){
                                                             </TR>
                                                         </TABLE>
                                                         </TD>
-                                                    </TR>
-						
-                                              
+                                                    </TR>                      
                                              </TABLE>				
                                                  
                                          </td>

@@ -225,7 +225,7 @@
 								                                  <digi:trn key="message:viewSettings">Click here to view TemplateAlerts Manager</digi:trn>
 								                                </c:set>
 								                                <digi:link module="message" href="/templatesManager.do?actionType=viewTemplates" title="${trn}">
-								                                  <digi:trn key="message:templatesManager">TemplateAlerts Manager</digi:trn>
+								                                  <digi:trn>Template Alerts Manager</digi:trn>
 								                                </digi:link>
 															</td>
 														</tr>

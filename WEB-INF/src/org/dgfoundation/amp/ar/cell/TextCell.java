@@ -7,6 +7,7 @@
 package org.dgfoundation.amp.ar.cell;
 
 import org.dgfoundation.amp.ar.workers.TextColWorker;
+import org.digijava.kernel.translator.TranslatorWorker;
 
 /**
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
@@ -76,7 +77,7 @@ public class TextCell extends Cell {
 	public String getTranslationKey(){
 		String result = "0";
 		if (value != null && !"".equals(value)){
-			result = Integer.toString(value.hashCode());
+			result = TranslatorWorker.generateTrnKey(value);
 		}
 		return result;
 	}

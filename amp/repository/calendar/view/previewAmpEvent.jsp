@@ -199,6 +199,24 @@ function deleteEvent(){
 				                <c:if test="${!calendarEventForm.privateEvent}"><digi:trn key="calendar:yes">Yes</digi:trn></c:if>
 				              </td>
 				            </tr>
+				            <c:if test="${calendarEventForm.typeofOccurrence != null}">
+					            <tr height="5px"><td colspan="2"></td></tr>
+					            <tr>
+					              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;" nowrap="nowrap">
+					                <digi:trn>Recurring Event</digi:trn>
+					              </td>
+					              <td style="font-family: Tahoma;font-size: 12px;">
+					                ${calendarEventForm.typeofOccurrence}
+					                 ${calendarEventForm.weekDays}
+					                 <c:if test="${calendarEventForm.selectedStartMonth != 0}"> ${calendarEventForm.selectedStartMonth}</c:if>
+					                  <c:if test="${calendarEventForm.selectedStartYear != 0}"> ${calendarEventForm.selectedStartYear}</c:if>
+					                 <c:if test="${calendarEventForm.recurrPeriod != 0}">${calendarEventForm.recurrPeriod}</c:if>
+					                 <c:if test="${calendarEventForm.recurrStartDate != 0}">${calendarEventForm.recurrStartDate}</c:if>
+					                 <c:if test="${calendarEventForm.recurrEndDate != 0}">${calendarEventForm.recurrStartDate}</c:if>
+					                  
+					              </td>
+					            </tr>
+				            </c:if>
 				            <tr height="5px"><td colspan="2">&nbsp;</td></tr>
 				            <tr>
 				              <td>

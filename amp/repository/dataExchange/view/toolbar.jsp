@@ -24,13 +24,13 @@
     			<digi:trn key="btn:previous">Previous</digi:trn>
             </button>
           </c:if>
-          <c:if test="${stepNum==2}">
+          <c:if test="${stepNum==deExportForm.tabCount}">
 	        <button id="step${stepNum}_next_button" type="button" class="toolbar-dis" disabled="disabled"">
     			<img height="16" src="/TEMPLATE/ampTemplate/images/next_dis.png" class="toolbar" /> 
     			<digi:trn key="btn:next">Next</digi:trn>
 		    </button>
           </c:if>
-          <c:if test="${stepNum!=2}">
+          <c:if test="${stepNum!=deExportForm.tabCount}">
             <button id="step${stepNum}_next_button" type="button" class="toolbar" onclick="navigateTab(1)">
                 <img height="16" src="/TEMPLATE/ampTemplate/images/next.png" class="toolbar" /> 
                 <digi:trn key="btn:next">Next</digi:trn>
@@ -44,9 +44,5 @@
 			<img src="/TEMPLATE/ampTemplate/images/file-export-16x16.png" class="toolbar"/>
 			<digi:trn key="btn:wizard:Export">Export</digi:trn>
 		</button>
-        <button id="step${stepNum}_log" name="logButton" type="button" class="toolbar" onclick="exportLog()" >
-          <img src="/TEMPLATE/ampTemplate/images/file-export-16x16.png" class="toolbar"/>
-          <digi:trn key="btn:wizard:ExportLog">Log</digi:trn>
-        </button>
  	 </div>
 

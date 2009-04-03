@@ -13,14 +13,18 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <%@page import="org.digijava.module.dataExchange.util.ExportHelper"%>
-<%@page import="org.digijava.kernel.util.RequestUtils"%>
+
 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/json-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/connection-min.js"></script>
+
 
 <script type="text/javascript">
   if (YAHOOAmp != null){
     var YAHOO = YAHOOAmp;
   }
+  
   var tree;
   
 </script>
@@ -44,19 +48,9 @@
 
 #expandcontractdiv {background-color:#FFFFCC; margin:0 0 .5em 0; padding:0.2em;}
 #treeDiv1 { background: #fff }
+
 </style> 
 
-
-	
-<!--
-  <script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/myDragAndDropObjects.js'/>" >.</script>
-    <script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/reportManager.js'/>" >.</script>
-	<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/fundingGroups.js'/>" >.</script>
-	<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/saving.js'/>" >.</script>
-	<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/prefilters.js'/>" >.</script>
-	<script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/filters.js'/>" ></script>
-	<script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>" > .</script>
--->
 	
 	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/tab/assets/tabview.css'/>">
 	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/border_tabs.css'/>">
@@ -69,14 +63,13 @@
     <digi:instance property="deExportForm" />
 
 
-  
 	<script type="text/javascript">
     var tabView = null;
-	  
+    
 	YAHOOAmp.namespace("YAHOOAmp.amp.dataExchange");
 	YAHOOAmp.amp.dataExchange.numOfSteps	= 2; // have to be 3 when we include additional fields
 		
-	YAHOOAmp.amp.dataExchange.tabLabels	= new Array("tab_select_filed", "tab_additional_filed", "tab_filter");
+	YAHOOAmp.amp.dataExchange.tabLabels	= new Array("tab_select_field", "tab_filter", "tab_logger");
 		
         function navigateTab(value){
         	tabView.set("activeIndex", tabView.get("activeIndex")+value);
@@ -86,8 +79,8 @@
 		function initializeDragAndDrop() {
 			var height			= Math.round(YAHOO.util.Dom.getDocumentHeight() / 2.3);
 			
-			YAHOOAmp.amp.dataExchange.tabView 		= new YAHOO.widget.TabView('wizard_container');
-			YAHOOAmp.amp.dataExchange.tabView.addListener("contentReady", treeInit);
+			tabView 		= new YAHOOAmp.widget.TabView('wizard_container');
+			tabView.addListener("contentReady", treeInit);
 		}
 
 
@@ -131,14 +124,10 @@
     
       //instantiate the tree:
           tree = new YAHOOAmp.widget.TreeView("dataExportTree");
-           //get siteId and locale for translations
-          <%String siteId = RequestUtils.getSite(request).getId().toString();
-			String locale=  RequestUtils.getNavigationLanguage(request).getCode();           
-           %>  
+            
           <bean:define id="tree" name="deExportForm" property="activityTree" type="org.digijava.module.dataExchange.type.AmpColumnEntry" toScope="page"/>
-          <%= ExportHelper.renderActivityTree(tree,locale,siteId) %>
-          
-          
+          <%= ExportHelper.renderActivityTree(tree) %>
+
       //The tree is not created in the DOM until this method is called:
           tree.draw();
           cancelFilter();
@@ -156,10 +145,6 @@
         }
       }
     }
-
-//      function onCheckClick(node) {
-//          YAHOOAmp.log(node.label + " check was clicked, new state: " + node.checkState, "info", "example");
-//      }
 
       function checkAll() {
           var topNodes = tree.getRoot().children;
@@ -206,27 +191,53 @@
             form.action = "/dataExchange/exportWizard.do?method=export";
             form.target="_self"
             form.submit();
-            window.setTimeout(null,10000,"JavaScript");
-            enableLogButton();
+
+            enableLogTab();
           } else {
               alert('please select one team');
           }
       }
 
-       
       function exportLog(){
-          var form = document.getElementById('form');
-          form.action = "/dataExchange/exportWizard.do?method=log";
-          form.target="_self"
-          form.submit();
-          disableLogButton();
+         var form = document.getElementById('form');
+         form.action = "/dataExchange/exportWizard.do?method=log";
+         form.target="_self"
+         form.submit();
       }
-      
        
       function cancelBack(){
         window.location = "/aim/admin.do";
       }
-       
+
+      function enableLogTab(){
+          var logDiv = document.getElementById('logDivId');
+          logDiv.innerHTML = '';
+          enableToolbarButton(document.getElementById('step2_next_button'));
+          addLodingImageToLogTab(logDiv);
+          enableTab(2);
+          tabView.set("activeIndex", 2);            
+          setTimeout("checkLog()",3000);
+      }
+
+      function disableLogTab(){
+          disableToolbarButton(document.getElementById('step2_next_button'));
+          disableTab(2);
+
+        var v_tbody = document.getElementById('logTableId');
+        v_tbody.innerHTML = '';
+        row = document.createElement("tr");
+        logDiv = createCall("td","");
+        logDiv.setAttribute("id","logDivId");
+        logDiv.setAttribute("width","100%");
+        logDiv.setAttribute("align","center");
+        row.appendChild(logDiv);
+        v_tbody.appendChild(row);
+
+        addLodingImageToLogTab(logDiv);
+        
+      }
+
+      
       function cancelFilter(){
           document.getElementById('donorTypeId').selectedIndex=-1;
           document.getElementById('donorGroupId').selectedIndex=-1;
@@ -234,8 +245,8 @@
           document.getElementById('primarySectorsId').selectedIndex=-1;
           document.getElementById('secondarySectorsId').selectedIndex=-1;
           document.getElementById('teamId').selectedIndex=0;
-    	  disableExportButton();
-          disableLogButton();
+          disableExportButton();
+          disableLogTab();
       }
 
       function changeTeam(){
@@ -245,7 +256,6 @@
         	  enableExportButton();
           } else {
         	  disableExportButton();
-        	  disableLogButton();
           }             
       }
 
@@ -276,9 +286,9 @@
             var exportButton = document.getElementsByName('expodtButton');
             for(var i = 0; i < exportButton.length; i++){
               enableToolbarButton(exportButton[i]);
-          }             
-      }
-          
+            }    
+        }    
+
         function disableExportButton(){
             var exportButton = document.getElementsByName('expodtButton');
             for(var i = 0; i < exportButton.length; i++){
@@ -286,19 +296,130 @@
             }    
         } 
 
+        function enableTab(tabIndex) {
+            var tab     = tabView.getTab(tabIndex);
+            if ( tab.get("disabled") ) {
+              tab.set("disabled", false);
+              var labelEl   = document.getElementById( YAHOOAmp.amp.dataExchange.tabLabels[tabIndex] );
+              (new YAHOO.util.Element(labelEl)).replaceClass('disabled', 'unsel');
+            }
+          
+          
+//          var btnid   = "step" + (tabIndex-1) + "_next_button";
+//          var btn     = document.getElementById(btnid);
+//          this.enableToolbarButton(btn);
+        }
+        
+        function disableTab(tabIndex) {
+            var tab     = tabView.getTab(tabIndex);
+            if ( !tab.get("disabled") ) {
+              tab.set("disabled", true);
+              var labelEl   = document.getElementById( YAHOOAmp.amp.dataExchange.tabLabels[tabIndex] );
+              (new YAHOO.util.Element(labelEl)).replaceClass('unsel', 'disabled');
+            }
+          
+//          var btnid   = "step" + (tabIndex-1) + "_next_button";
+//          var btn     = document.getElementById(btnid);
+//          this.disableToolbarButton(btn);
+        }
 
-        function enableLogButton(){
-            var exportButton = document.getElementsByName('logButton');
-            for(var i = 0; i < exportButton.length; i++){
-              enableToolbarButton(exportButton[i]);
-            }    
-        }      
-        function disableLogButton(){
-            var exportButton = document.getElementsByName('logButton');
-            for(var i = 0; i < exportButton.length; i++){
-              disableToolbarButton(exportButton[i]);
-            }    
-        }          
+        
+        
+        function addLodingImageToLogTab(logDiv){
+            var v_img = document.createElement("img");
+            v_img.setAttribute("src", "/TEMPLATE/ampTemplate/images/amploading.gif");
+            v_img.setAttribute("alt", "");
+            v_img.setAttribute("border", "0");
+
+            logDiv.appendChild(v_img);
+            logDiv.appendChild(document.createElement("br"));
+            logDiv.appendChild(document.createTextNode("Error logs are generated ."));
+            
+        }
+
+        function createCall(type, text, align, width){
+          var v_cell = document.createElement(type);
+          if (align == null){
+        	  align = "left";
+          } 
+          v_cell.setAttribute("align", align);
+          v_cell.appendChild(document.createTextNode(text));
+          if (width != null){
+              v_cell.setAttribute("width", width);
+          }
+          
+          return v_cell;
+        }
+        
+        function checkLog(e) {
+
+            var logDiv = document.getElementById('logDivId');
+
+            // Define the callbacks for the asyncRequest
+            var callbacks = {
+
+                success : function (o) {
+                    var messages = [];
+                    try {
+                        messages = YAHOOAmp.lang.JSON.parse(o.responseText);
+                    }
+                    catch (x) {
+//                        alert("JSON Parse failed!");
+                        return;
+                    }
+                    if (messages.status == 0){ // nothing to show
+//                        logDiv.innerHTML = '';
+//                        setTimeout("checkLog()",5000); 
+                        return;
+                    } else if (messages.status == 1){ // not ready generating
+//                        logDiv.appendChild(document.createTextNode("Error logs are generated ...."));
+                        logDiv.appendChild(document.createTextNode("."));
+                        setTimeout("checkLog()",5000); 
+                        return;
+                    } else if (messages.status == 2){ // readyadding content to div
+                    	var v_tbody = document.getElementById('logTableId');
+                    	v_tbody.innerHTML = '';
+                        row = document.createElement("tr");
+                        row.setAttribute("bgcolor", "#D7EAFD");
+                        row.appendChild(createCall("th","Activity Title", "center", "60%"));
+                        row.appendChild(createCall("th","Error", "center", "40%"));
+                        v_tbody.appendChild(row);
+
+                    	for (var i = 0, len = messages.items.length; i < len; ++i) {
+                            var m = messages.items[i];
+
+                            row = document.createElement("tr");
+                            row.setAttribute("bgcolor", "#F7F7F7");
+                            row.appendChild(createCall("td",m.ActivityName));
+                            row.appendChild(createCall("td",m.ErrorID));
+                            v_tbody.appendChild(row);
+                        }
+                        return;
+                    } else  if (messages.status == 3){ // no errors
+                        logDiv.innerHTML = '';
+                        logDiv.appendChild(document.createTextNode("There are no errors while export"));
+                        return;
+                    } else if (messages.status == 4){ // error
+                        logDiv.innerHTML = '';
+                        logDiv.appendChild(document.createTextNode("Error throw while log generation"));
+                        return;
+                    } 
+                },
+
+                failure : function (o) {
+                    if (!YAHOOAmp.util.Connect.isCallInProgress(o)) {
+                        alert("Async call failed!");
+                    }
+                },
+
+                timeout : 30000
+            }
+
+            // Make the call to the server for JSON data
+            YAHOOAmp.util.Connect.asyncRequest('GET',"/dataExchange/exportWizard.do~method=logAjax", callbacks);
+        }
+
+              
 		YAHOOAmp.util.Event.addListener(window, "load", treeInit) ;
 	</script>
 
@@ -315,7 +436,7 @@
 		<span id="formChild" style="display:none;">&nbsp;</span>
 
         <span class="subtitle-blue">
-          &nbsp;<digi:trn>Data Exporter</digi:trn>
+          &nbsp;Data Exporter
         </span>		
 		
 		<div style="color: red; text-align: center; visibility: hidden" id="savingReportDiv">
@@ -324,14 +445,17 @@
 		<br />
 		<div id="wizard_container" class="yui-navset">
     		<ul class="yui-nav">
-    			<li id="tab_select_filed" class="selected"><a href="#type_step_div"><div><digi:trn>Field Selection</digi:trn></div></a> </li>
+    			<li id="tab_select_field" class="selected"><a href="#tab_select_field"><div>Field Selection</div></a> </li>
 <%--
-     			<li id="tab_additional_filed" class="enabled"><a href="#columns_step_div"><div>Additional Fields</div></a> </li>
+     			<li id="tab_additional_field" class="enabled"><a href="#tab_additional_field"><div>Additional Fields</div></a> </li>
 --%>
-    			<li id="hierachies_tab_label" class="enabled"><a href="#hierarchies_step_div"><div><digi:trn>Team Selection and Filters</digi:trn></div></a> </li>
+    			<li id="tab_filter" class="enabled"><a href="#tab_filter"><div>Team Selection and Filters</div></a> </li>
+          <c:if test="${deExportForm.tabCount==3}">
+                <li id="tab_logger" class="enabled"><a href="#tab_logger"><div>Export log</div></a> </li>
+          </c:if>
     		</ul>
 			<div class="yui-content" style="background-color: #EEEEEE">
-				<div id="tab_select_filed" class="yui-tab-content" style="padding: 0px 0px 1px 0px;" >
+				<div id="tab_select_field" class="yui-tab-content" style="padding: 0px 0px 1px 0px;" >
                     <c:set var="stepNum" value="0" scope="request" />
                     <jsp:include page="toolbar.jsp" />
 					<div style="height: 355px; padding-bottom: 40px;">
@@ -351,18 +475,17 @@
                         </div>
                       </div>
                       <div id="source_col_div" class="draglist" style="border-width: 0px;">
-        <%--  								<jsp:include page="setColumns.jsp" />    --%>
-                  <div id="dataExportTree"></div>
+                          <div id="dataExportTree"></div>
                   
         
-        							</div>
+        			  </div>
         						</td>
     						</tr>
     					</table>
 					</div>
-				</div>
+			    </div>
 <%--   temporoary removed.      
-				<div id="tab_additional_filed"  class="yui-tab-content" align="center" style="padding: 0px 0px 1px 0px; display: none;">
+				<div id="tab_additional_field"  class="yui-tab-content" align="center" style="padding: 0px 0px 1px 0px; display: none;">
                     <c:set var="stepNum" value="1" scope="request" />
                     <jsp:include page="toolbar.jsp" />
                     Select additional fields
@@ -374,9 +497,9 @@
                     <table cellpadding="15px" width="100%" align="center" border="0" >
                       <tr>
                         <td width="46%" style="vertical-align: top;">
-	                       <span class="list_header"><digi:trn>Donors</digi:trn></span>
+	                       <span class="list_header">Donors</span>
                            <br/>
-                             <span ><digi:trn>Donor Type</digi:trn></span>
+                             <span >Donor Type</span>
                              <br/>
                              <html:select name="deExportForm" property="donorTypeSelected" styleClass="inp-text" styleId="donorTypeId" style="width: 300px;" multiple="true" size="3">
                                <c:forEach var="fVar" items="${deExportForm.donorTypeList}" varStatus="lStatus">
@@ -384,48 +507,48 @@
                                </c:forEach>
                              </html:select>
                              <br/>
-                             <span ><digi:trn>Donor Group</digi:trn></span>
+                             <span >Donor Group</span>
                              <br/>
                              <html:select name="deExportForm" property="donorGroupSelected" styleClass="inp-text"  styleId="donorGroupId" style="width: 300px;" multiple="true"  size="3">
                                <c:forEach var="fVar" items="${deExportForm.donorGroupList}" varStatus="lStatus">
-                                 <option value="${fVar.ampOrgGrpId}"><digi:trn>${fVar.orgGrpName}</digi:trn></option>
+                                 <option value="${fVar.ampOrgGrpId}">${fVar.orgGrpName}</option>
                                </c:forEach>
                              </html:select>
                              <br/>
-                             <span ><digi:trn>Donor Agency</digi:trn></span>
+                             <span >Donor Agency</span>
                              <br/>
                              <html:select name="deExportForm" property="donorAgencySelected" styleClass="inp-text"  styleId="donorAgencyId" style="width: 300px;" multiple="true"  size="3">
                                <c:forEach var="fVar" items="${deExportForm.donorAgencyList}" varStatus="lStatus">
-                                 <option value="${fVar.ampOrgId}"><digi:trn>${fVar.name}</digi:trn></option>
+                                 <option value="${fVar.ampOrgId}">${fVar.name}</option>
                                </c:forEach>
                              </html:select>
                            <br/>
                         </td>
                         <td width="46%" style="vertical-align: top;">
-                         <span class="list_header"><digi:trn>Sectors</digi:trn></span>
+                         <span class="list_header">Sectors</span>
                          <br/>
-                             <span><digi:trn>Primary Sector</digi:trn></span>
+                             <span>Primary Sector</span>
                              <br/>
                              <html:select name="deExportForm" property="primarySectorsSelected" styleClass="inp-text"  styleId="primarySectorsId" style="width: 300px;" multiple="true"  size="3">
                                <c:forEach var="fVar" items="${deExportForm.primarySectorsList}" varStatus="lStatus">
-                                 <option value="${fVar.ampSectorId}"><digi:trn>${fVar.name}</digi:trn></option>
+                                 <option value="${fVar.ampSectorId}">${fVar.name}</option>
                                </c:forEach>
                              </html:select>
                              <br/>
-                             <span ><digi:trn>Secondary Sector</digi:trn></span>
+                             <span >Secondary Sector</span>
                              <br/>
                              <html:select name="deExportForm" property="secondarySectorsSelected" styleClass="inp-text"  styleId="secondarySectorsId" style="width: 300px;" multiple="true"  size="3">
                                <c:forEach var="fVar" items="${deExportForm.secondarySectorsList}" varStatus="lStatus">
-                                 <option value="${fVar.ampSectorId}"><digi:trn>${fVar.name}</digi:trn></option>
+                                 <option value="${fVar.ampSectorId}">${fVar.name}</option>
                                </c:forEach>
                              </html:select>
                              <br/>
-                             <span class="list_header"><digi:trn>Select Team</digi:trn></span>
+                             <span class="list_header">Select Team</span>
                              <br/>
                              <html:select name="deExportForm" property="selectedTeamId" styleClass="inp-text"  styleId="teamId" style="width: 300px;" onchange="changeTeam()">
-                               <option value="-1"><digi:trn>Please select team</digi:trn></option>
+                               <option value="-1">Please select team</option>
                                <c:forEach var="fVar" items="${deExportForm.teamList}" varStatus="lStatus">
-                                 <option value="${fVar.ampTeamId}"><digi:trn>${fVar.name}</digi:trn></option>
+                                 <option value="${fVar.ampTeamId}">${fVar.name}</option>
                                </c:forEach>
                              </html:select>
 <%--                          
@@ -448,6 +571,28 @@
                   
                     
 				</div>
+          <c:if test="${deExportForm.tabCount==3}">
+                <div id="tab_logger" class="yui-tab-content" align="center" style="padding: 0px 0px 1px 0px; display: none;">
+                    <c:set var="stepNum" value="3" scope="request" />
+                    <jsp:include page="toolbar.jsp" />
+                    <div style="text-align: center; padding: 10px 10px 10px 50px;">
+                      <div class="draglist" style="text-align: center; border-width: 0px; height: 310; ">
+                        <table  border="0" style="border-collapse: separate;" width="100%" height="100%" border="0" bgcolor="#eeeeee" border-spacing="0" >
+                          <tbody id="logTableId">
+                            <tr>
+                              <td id="logDivId" width="100%" align="center">
+                                <img src="/TEMPLATE/ampTemplate/images/amploading.gif" alt="" border="0"/>  
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>                    
+                    <div style="text-align: right; padding: 0px 80px 10px 0px;">
+                      <input type="button" class="dr-menu" onclick="exportLog();" value="Save Log" name="saveLog" style="font-size: larger;"/>
+                    </div>
+                </div>
+          </c:if>
 			</div>
 		</div>
 

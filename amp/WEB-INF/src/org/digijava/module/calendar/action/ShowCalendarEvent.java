@@ -495,20 +495,20 @@ public class ShowCalendarEvent extends Action {
                 DateBreakDown startDateBreakDown = null;
                 DateBreakDown endDateBreakDown = null;
                 
-                if(calendar.getRecurrCalEvent() != null){
+             
                 	
                 	Iterator iterRecevent = calendar.getRecurrCalEvent().iterator();
                 	while(iterRecevent.hasNext()){
                 		RecurrCalEvent rec = (RecurrCalEvent) iterRecevent.next();
                 		//ceform.setRecurrEndDate(new Date(rec.getRecurrEndDate());
                 		//ceform.setRecurrStartDate(rec.getRecurrStartDate());
-                		
-                		 GregorianCalendar recstartDate = new GregorianCalendar();
-                		 recstartDate.setTime(rec.getRecurrStartDate());
-                		 
-                		 GregorianCalendar recurEndDate = new GregorianCalendar();
-                		 recurEndDate.setTime(rec.getRecurrEndDate());
-                         
+                		if(rec.getRecurrStartDate() != null){
+		                		 GregorianCalendar recstartDate = new GregorianCalendar();
+		                		 recstartDate.setTime(rec.getRecurrStartDate());
+		                		 
+		                		 GregorianCalendar recurEndDate = new GregorianCalendar();
+		                		 recurEndDate.setTime(rec.getRecurrEndDate());
+                		}
                 		ceform.setRecurrPeriod(rec.getRecurrPeriod());
                 		ceform.setTypeofOccurrence(rec.getTypeofOccurrence());
                 		ceform.setOccurrWeekDays(rec.getOccurrWeekDays());
@@ -529,7 +529,7 @@ public class ShowCalendarEvent extends Action {
                 		
                 	}
                 	
-                }
+               
                 
 
                 try {

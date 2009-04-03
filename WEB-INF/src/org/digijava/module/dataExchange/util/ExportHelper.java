@@ -16,6 +16,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.dataExchange.Exception.AmpExportException;
 import org.digijava.module.dataExchange.type.AmpColumnEntry;
 
@@ -63,32 +64,24 @@ public class ExportHelper {
 		return retValue.toString();
 	}
 	
-	public static String renderActivityTree(AmpColumnEntry node,String locale,String siteId) {
+	public static String renderActivityTree(AmpColumnEntry node) {
 
 		
 		StringBuffer retValue = new StringBuffer();
 
-		retValue.append(renderActivityTreeNode(node, "tree.getRoot()",locale,siteId));
+		retValue.append(renderActivityTreeNode(node, "tree.getRoot()"));
+
 		return retValue.toString();
 	}
 
-	private static String renderActivityTreeNode(AmpColumnEntry node, String parentNode,String locale,String siteId) {
+	private static String renderActivityTreeNode(AmpColumnEntry node, String parentNode) {
 		
 		Pattern pattern = Pattern.compile("[\\]\\[.]");
 		Matcher matcher = pattern.matcher(node.getKey());
 		String key = matcher.replaceAll("");
 		StringBuffer retValue = new StringBuffer();
 		String nodeVarName = "atn_"+ key;
-		String name=node.getName();
-		try {
-			name=TranslatorWorker.translateText(node.getName(), locale, siteId);
-			if(name.length()==0){
-				name=node.getName();
-			}
-		} catch (WorkerException e) {			
-			e.printStackTrace();
-		}
-		retValue.append("var "+ nodeVarName +" = new YAHOOAmp.widget.TaskNode(\"" + name+ "\", " + parentNode + ", ");
+		retValue.append("var "+ nodeVarName +" = new YAHOOAmp.widget.TaskNode(\"" + node.getName() + "\", " + parentNode + ", ");
 		retValue.append("false , ");
 		retValue.append(Boolean.toString(node.isSelect()) + ", ");
 		retValue.append(Boolean.toString(node.isMandatory()) + ", ");
@@ -99,7 +92,7 @@ public class ExportHelper {
 		if (node.getElements() != null){
 			for (AmpColumnEntry subNode : node.getElements()) {
 				retValue.append("\n");
-				retValue.append(renderActivityTreeNode(subNode, nodeVarName,locale,siteId));
+				retValue.append(renderActivityTreeNode(subNode, nodeVarName));
 				retValue.append("\n");
 			}
 		}			

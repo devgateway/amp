@@ -23,6 +23,8 @@ public class ExportForm extends ActionForm{
 	 */
 	private static final long serialVersionUID = 1L;
 
+	private int tabCount = 3 ; // 2 - means there is not log information. 3 - include log tab.
+	
 	private AmpColumnEntry activityTree = null;
 	
 	private Collection<AmpTeam> teamList = null;
@@ -51,6 +53,9 @@ public class ExportForm extends ActionForm{
 	private String language  = null;
 	
 	private Collection<String[]> exportLog = null;
+	
+	public LogStatus logStatus = LogStatus.IS_NULL;
+	 
 	
 	public ExportForm(){
 	
@@ -229,6 +234,25 @@ public class ExportForm extends ActionForm{
 	
 	public boolean isError(){
 		return this.exportLog != null;
+	}
+
+
+	public int getTabCount() {
+		return tabCount;
+	}
+
+
+	public void setTabCount(int tabCount) {
+		this.tabCount = tabCount;
+	}
+	
+
+	public static enum LogStatus {
+		IS_NULL ,
+		PROCCESSING ,
+		READY ,
+		NO_ERROR ,
+		ERROR ;
 	}
 }
 

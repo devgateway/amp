@@ -6,6 +6,9 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<%@page import="org.digijava.kernel.util.RequestUtils"%>
+<digi:instance property="helpForm"/>
+<c:set var="request" scope="session"><%= RequestUtils.getRealModuleInstance(request).getInstanceName() %></c:set>
 
 <script type="text/javascript">
 <!--
@@ -75,7 +78,10 @@ function create(){
 function saveTreeState(){
 
      var xmlString = document.getElementById("xmlString").value;
-   
+
+
+     //======= URL Encoded Character is %26 for &. and we have &amp; that need to replace there are ajax sending problrm ====== //
+     replacedXmlString = xmlString.replace(/&amp;/,"%26");
 
      xmlHttp=GetXmlHttpObj();
 		if (xmlHttp==null){
@@ -84,10 +90,10 @@ function saveTreeState(){
 	 	}
 
         showProgress('progress');
-	 	var urlact="/help/helpActions.do?actionType=saveTreeState"
+        var urlact="/help/helpActions.do?actionType=saveTreeState&Request=${request}"
 	    xmlHttp.open("POST",urlact,true);
 	    xmlHttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-        xmlHttp.send("&changedXml="+xmlString);
+        xmlHttp.send("&changedXml="+replacedXmlString);
 		xmlHttp.onreadystatechange=stateChanged;
   
 
@@ -158,7 +164,7 @@ function GetXmlHttpObj()	{
 
 
 </style>
-<digi:instance property="helpForm"/>
+
 <div id="content"  class="yui-skin-sam" style="width:100%;">
 	<div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
 

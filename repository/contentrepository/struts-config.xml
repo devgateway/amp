@@ -24,6 +24,7 @@
     </action>  -->
     <action path="/contentrepository/addTemporaryDocument" scope="request" type="org.digijava.module.contentrepository.action.AddTemporaryDocument" validate="false" name="crDocumentManagerForm">
     	<forward name="forward" path="/showLayout.do?layout=nondhtmlAddDocument" />
+    	<forward name="showDocs" path="/aim/addActivity.do?edit=true" redirect="true" />
     </action>
     <action name="crDocumentManagerForm" path="/contentrepository/documentManager" scope="request" type="org.digijava.module.contentrepository.action.DocumentManager" validate="false">
     	<forward name="forward" path="/showLayout.do?layout=viewDocumentManager" />

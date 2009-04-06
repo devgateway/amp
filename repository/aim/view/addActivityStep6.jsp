@@ -22,6 +22,7 @@
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
+<jsp:include page="addActivityStep6Popin.jsp" flush="true" />
 
 
 <script language="JavaScript">
@@ -137,22 +138,12 @@ function validate(field) {
 
 
 function addDocuments() {
-
-		openNewWindow(600, 400);
-		
-		document.getElementById('docFileOrLink').value = "file";
-
-		//<digi:context name="selDoc" property="context/module/moduleinstance/selectDocument.do?edit=true" />
-
-		document.aimEditActivityForm.action = "/contentrepository/addTemporaryDocument.do?webResource=false";
-
-		document.aimEditActivityForm.target = popupPointer.name;
-
-		document.aimEditActivityForm.submit();
-
+		myAddDocuments("webResource=false");
 }
 
 function addDocumentsDM(documentsType) {
+	    //myAddDocumentsDM("documentsType="+documentsType)
+		
 		openNewWindow(900, 300);
 		document.getElementById('docFileOrLink').value = "file";
 		document.aimEditActivityForm.action = "/contentrepository/selectDocumentDM.do?documentsType="+documentsType;
@@ -180,18 +171,9 @@ function addManagedDocuments() {
 
 function addLinks() {
 
-		openNewWindow(600, 225);
-
 		document.getElementById('docFileOrLink').value = "link";
 
-		<digi:context name="selDoc" property="context/module/moduleinstance/selectDocument.do?edit=true" />
-
-		document.aimEditActivityForm.action = "/contentrepository/addTemporaryDocument.do?webResource=true";
-
-		document.aimEditActivityForm.target = popupPointer.name;
-
-		document.aimEditActivityForm.submit();
-
+		myAddLinks("webResource=true");
 }
 
 

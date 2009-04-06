@@ -23,7 +23,7 @@ function selectCalendarType(view, type) {
 }
 </script>
 
-<table width="100%" style="border:1px solid; border-color: #CCECFF;width: 200px">
+<table width="100%" style="border:1px solid; border-color: #CCECFF;width: 220px">
     <tr>
         <td nowrap="nowrap">
             <table border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -41,7 +41,7 @@ function selectCalendarType(view, type) {
     </tr>
 </table>
 <c:if test="${calendarViewForm.view == 'custom'}">
-    <table width="100%" style="border:1px solid; border-color: #484846;width: 200px">
+    <table width="100%" style="border:1px solid; border-color: #484846;width: 220px">
         <tr>
             <td nowrap="nowrap">
                 <table border="0" cellpadding="0" cellspacing="0">
@@ -159,7 +159,7 @@ function selectCalendarType(view, type) {
     </table>
 </c:if>
 <c:if test="${calendarViewForm.view != 'custom'}">
-    <table width="100%" style="border-left: solid 1px #CCECFF;border-right: solid 1px #CCECFF;padding:2px;background-color:#376091;color:White;width: 200px">
+    <table width="100%" style="border-left: solid 1px #CCECFF;border-right: solid 1px #CCECFF;padding:2px;background-color:#376091;color:White;width: 220px">
         <tr>
             <td style="text-align:right;">
                 <a href="#" style="text-decoration:none" onclick="submitFilterForm('${calendarViewForm.view}', '${calendarViewForm.dateNavigator.leftTimestamp}');return(false);">
@@ -195,7 +195,7 @@ function selectCalendarType(view, type) {
             </td>
         </tr>
     </table>
-    <table width="100%" style="border: solid 1px #CCECFF;width: 200px">
+    <table width="100%" style="border: solid 1px #CCECFF;width: 220px">
         <c:forEach var="row" items="${calendarViewForm.dateNavigator.items}">
             <tr>
                 <c:forEach var="item" items="${row}">

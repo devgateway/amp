@@ -32,7 +32,7 @@
 			</td>
 		</tr>      
        	<tr>
-	        <td valign="top" width="230" > 
+	        <td valign="top" width="300" > 
 	          <digi:form action="/showCalendarView.do" styleId="filterForm">   
 	            <table border="0" width="100%">
 	                <tr style="width: 100%">

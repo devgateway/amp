@@ -44,6 +44,10 @@ public class ShowCalendarView extends Action {
         HttpSession ses = request.getSession();
         TeamMember mem = (TeamMember) ses.getAttribute("currentMember");
         Boolean showPublicEvents = calendarViewForm.getResetFilter();
+        
+        if (showPublicEvents == null)
+        	showPublicEvents = new Boolean(true);
+        
         Object eventCreated=request.getAttribute("calendarEventCreated");
 
         // calendar type
@@ -201,10 +205,10 @@ public class ShowCalendarView extends Action {
                 // we are showing private or public events depending on the newly created event
                 Boolean showPubEvent = (Boolean) eventCreated;
                 filter.setShowPublicEvents(showPubEvent);
-            } else {
+            }/* else {
                 // showPublicEvents
                 filter.setShowPublicEvents(false);
-            }
+            }*/
             
         }
         // events

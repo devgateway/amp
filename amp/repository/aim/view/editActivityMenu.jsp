@@ -79,6 +79,9 @@
         if(document.aimEditActivityForm.step.value=="3"){
             initFundingScript();
         }
+        if(document.aimEditActivityForm.step.value=="6"){
+        	initDocumentsScript();
+        }
 
         initScripts();
    	};

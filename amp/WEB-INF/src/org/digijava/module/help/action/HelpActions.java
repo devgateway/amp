@@ -711,9 +711,14 @@ public class HelpActions extends DispatchAction {
                 throws Exception{
 
           String siteId=RequestUtils.getSite(request).getSiteId();
-          String moduleInstance=RequestUtils.getRealModuleInstance(request).getInstanceName();
+          
+         // String moduleInstance=RequestUtils.getRealModuleInstance(request).getInstanceName();
 
           String xmlString = request.getParameter("changedXml");
+          String replacedXmlString =  xmlString.replaceAll("&", "&amp;");
+          
+          String moduleInstance = request.getParameter("Request");
+          
           
           org.w3c.dom.Element e;
           org.w3c.dom.NamedNodeMap nnm;
@@ -730,7 +735,7 @@ public class HelpActions extends DispatchAction {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
                   DocumentBuilder builder = factory.newDocumentBuilder();
-                  org.w3c.dom.Document document = builder.parse(new InputSource(new StringReader(xmlString)));
+                  org.w3c.dom.Document document = builder.parse(new InputSource(new StringReader(replacedXmlString)));
 
                   
                   

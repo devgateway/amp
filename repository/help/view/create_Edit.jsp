@@ -76,6 +76,8 @@ function saveTreeState(){
 
      var xmlString = document.getElementById("xmlString").value;
    
+     //======= URL Encoded Character is %26 for &. and we have &amp; that need to replace there are ajax sending problrm ====== //
+ replacedXmlString = xmlString.replace(/&amp;/,"%26");
 
      xmlHttp=GetXmlHttpObj();
 		if (xmlHttp==null){
@@ -87,7 +89,7 @@ function saveTreeState(){
 	 	var urlact="/help/helpActions.do?actionType=saveTreeState"
 	    xmlHttp.open("POST",urlact,true);
 	    xmlHttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-        xmlHttp.send("&changedXml="+xmlString);
+        xmlHttp.send("&changedXml="+replacedXmlString);
 		xmlHttp.onreadystatechange=stateChanged;
   
 

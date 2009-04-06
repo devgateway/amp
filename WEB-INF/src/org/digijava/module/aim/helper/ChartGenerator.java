@@ -28,7 +28,6 @@ import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
@@ -43,7 +42,6 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.chart.servlet.ServletUtilities;
 import org.jfree.chart.urls.StandardCategoryURLGenerator;
-import org.jfree.chart.urls.StandardPieURLGenerator;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 
@@ -367,7 +365,7 @@ public class ChartGenerator {
 
 				String url = cp.getUrl();
 				if (url != null && url.trim().length() > 0) {
-					plot.setURLGenerator(new StandardPieURLGenerator(url,"risk"));
+					plot.setURLGenerator(new PieChartURLGenerator(url,"risk",langCode,siteId));
 				}
 				ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
 

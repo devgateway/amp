@@ -34,8 +34,6 @@ public class ViewIndicatorValues extends TilesAction {
 		viForm.setIndicators(new ArrayList());
 		String ind =request.getParameter("ind");
 		String risk = request.getParameter("risk");
-        String siteId=RequestUtils.getSiteDomain(request).getSite().getId().toString();
-        String langCode= RequestUtils.getNavigationLanguage(request).getCode();
 
 		AmpActivity activity = ActivityUtil.loadActivity(viForm.getAmpActivityId());
 		//Collection col = MEIndicatorsUtil.getIndicatorsForActivity(new Long(viForm.getAmpActivityId()));
@@ -56,8 +54,7 @@ public class ViewIndicatorValues extends TilesAction {
 					AmpIndicatorRiskRatings riskValue=IndicatorUtil.getRisk(connection);
 
 					if (riskValue != null) {
-                        String msg = TranslatorWorker.translateText(riskValue.getRatingName(), langCode, siteId);
-                        if (msg.equalsIgnoreCase(risk)) {
+                        if (riskValue.getRatingName().equalsIgnoreCase(risk)) {
                             ActivityIndicator bean = IndicatorUtil.createIndicatorHelperBean(connection);
                             viForm.getIndicators().add(bean);
 

@@ -28,6 +28,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.StandaloneJndiAMPInitializer;
 import org.digijava.kernel.persistence.HibernateClassLoader;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.resource.ResourceStreamHandlerFactory;
@@ -40,7 +41,7 @@ public class DigiSchemaExport {
     private static Logger logger = Logger.getLogger(DigiSchemaExport.class);
 
     public static void main(String[] args) throws Exception {
-
+    	StandaloneJndiAMPInitializer.initAMPUnifiedJndiAlias();
         ResourceStreamHandlerFactory.installIfNeeded();
 
         Map commandLineParams = getCommandLineParameters(args);

@@ -421,7 +421,7 @@ var isAlreadySubmitted = false;
 						</field:display>
 
 											<td>
-												<a href="javascript:removeMTEFProjection(<bean:write name="mtefProjection" property="indexId"/>,0)">
+												<a href="javascript:removeMTEFProjection(${indexMTEF})">
 												 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this projection"/>
 												</a>
 											</td>

@@ -55,9 +55,10 @@ public class AddMTEFProjection extends Action{
 				mp = AddFunding.getMTEFProjection(request.getSession(), 0, afterFiscalYearStart, null);
 				mtefProjections.add(mp);		
 			} else {
-				MTEFProjection firstMtef		= formBean.getFunding().getFundingMTEFProjections().get(0);
-				boolean afterFiscalYearStart	= AddFunding.isAfterFiscalYearStart( firstMtef.getProjectionDate() );
-				String [] dateSplit				= firstMtef.getProjectionDate().split("/");
+				int lastIndex							= formBean.getFunding().getFundingMTEFProjections().size()-1;
+				MTEFProjection lastMtef		= formBean.getFunding().getFundingMTEFProjections().get(lastIndex);
+				//boolean afterFiscalYearStart	= AddFunding.isAfterFiscalYearStart( firstMtef.getProjectionDate() );
+				String [] dateSplit				= lastMtef.getProjectionDate().split("/");
 				Integer year;
 				try {
 					year	= Integer.parseInt( dateSplit[2] );
@@ -69,26 +70,19 @@ public class AddMTEFProjection extends Action{
 				
 				mtefProjections 			= formBean.getFunding().getFundingMTEFProjections();
 				if (subEvent.equals("del")) {
-					Iterator<MTEFProjection> iter	= mtefProjections.iterator();
-					int offset;
-					if (afterFiscalYearStart)
-							offset	= 1;
-					else
-							offset	= 0;
-					while (iter.hasNext()) {
-						MTEFProjection proj	= iter.next();
-						if (proj.getIndexId() == index) {
-							iter.remove();
-						}
-						else {
-							proj.setProjectionDate( AddFunding.getFYDate(offset++, year) );
-						}
-					}
-					MTEFProjection temp = new MTEFProjection();
-					temp.setIndexId(index);
-					mtefProjections.remove(temp);					
-				} else {
-					mp = AddFunding.getMTEFProjection(request.getSession(), mtefProjections.size(), afterFiscalYearStart, year );
+					mtefProjections.remove( (int)index );
+//					Iterator<MTEFProjection> iter	= mtefProjections.iterator();
+//					int offset;
+//					if (afterFiscalYearStart)
+//							offset	= 1;
+//					else
+//							offset	= 0;
+//					while (iter.hasNext()) {
+//						MTEFProjection proj	= iter.next();
+//						proj.setProjectionDate( AddFunding.getFYDate(offset++, year) );
+//					}
+				} else { // In case we add a projection
+					mp = AddFunding.getMTEFProjection(request.getSession(), mtefProjections.size(), false, year+1 );
 					mtefProjections.add(mp);							
 				}
 			}

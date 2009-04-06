@@ -538,7 +538,7 @@ div.fakefile2 input{
 											<table cellPadding=5>
 												<tr>
 													<td>
-														<input type="button" value="<digi:trn key="aim:DmfAdd">Add</digi:trn>" class="dr-menu" onclick="addDocument()">
+														<input type="button" value="<digi:trn key="aim:DmfAdd">Add</digi:trn>" class="dr-menu" onclick="addNewDocument()">
 													</td>
 													<td>
 														<input type="reset" value="<digi:trn key="aim:DmfClear">Clear</digi:trn>" class="dr-menu">													

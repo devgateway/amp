@@ -1,6 +1,7 @@
 package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
@@ -88,7 +89,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	private String contactName;
 	private AmpTeamMember updatedBy;
 
-    private Double funAmount;
+    private BigDecimal funAmount;
     private String currencyCode;
     private Date funDate;
 
@@ -1010,7 +1011,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
         return currencyCode;
     }
 
-    public Double getFunAmount() {
+    public BigDecimal getFunAmount() {
         return FeaturesUtil.applyThousandsForVisibility(funAmount);
     }
 
@@ -1034,7 +1035,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
         this.currencyCode = currenyCode;
     }
 
-    public void setFunAmount(Double funAmount) {
+    public void setFunAmount(BigDecimal funAmount) {
         this.funAmount = FeaturesUtil.applyThousandsForEntry(funAmount);
     }
 

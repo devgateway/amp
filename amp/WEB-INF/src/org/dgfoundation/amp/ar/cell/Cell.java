@@ -52,7 +52,9 @@ public abstract class Cell extends Viewable implements RowIdentifiable, ColumnId
 	        if(c1 instanceof AmountCell && c2 instanceof AmountCell){
 	        	AmountCell ac1 = (AmountCell) c1;
 	        	AmountCell ac2 = (AmountCell) c2;
-	        	return Double.compare(ac1.getAmount(), ac2.getAmount());
+	        	
+	        	return ac1.getAmount().compareTo(ac2.getAmount());
+	        	//return Double.compare(ac1.getAmount(), ac2.getAmount());
 	        }
 	        logger.info("3 cell c1 instance : "+c1.getValue());
 	        logger.info("4 cell c2 instance : "+c2.getValue());            

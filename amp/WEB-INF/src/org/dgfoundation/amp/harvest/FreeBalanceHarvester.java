@@ -9,6 +9,7 @@ package org.dgfoundation.amp.harvest;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.LineNumberReader;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -298,7 +299,7 @@ public class FreeBalanceHarvester {
 						if(element.getTransactionAmount()!=null) oldVal=element.getTransactionAmount().doubleValue();
 						double newVal=n.doubleValue();
 						
-						element.setTransactionAmount(new Double(oldVal+newVal));
+						element.setTransactionAmount(new BigDecimal(oldVal+newVal));
 						
 						break;
 					}
@@ -314,7 +315,7 @@ public class FreeBalanceHarvester {
 					if(!date.trim().equals(""))
 						acf.setTransactionDate(DateTimeUtil.parseDate(date));
 					
-					acf.setTransactionAmount(new Double(n.doubleValue()));
+					acf.setTransactionAmount(new BigDecimal(n.doubleValue()));
 					//ac.getComponentFundings().add(acf);
 				}
 				

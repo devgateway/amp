@@ -4,6 +4,7 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -26,7 +27,7 @@ public class EUActivity implements Serializable, Identifiable {
 	private String name;
 	private String textId;
 	private String inputs;
-	private Double totalCost;
+	private BigDecimal totalCost;
 	private AmpCurrency totalCostCurrency;
 	private Set contributions;
 	private String assumptions;
@@ -42,22 +43,22 @@ public class EUActivity implements Serializable, Identifiable {
 	}
 
 
-	public double getTotalContributionsConverted() throws AimException  {
-		double res=0;
+	public BigDecimal getTotalContributionsConverted() throws AimException  {
+		BigDecimal res=new BigDecimal(0);
 		Iterator i=contributions.iterator();
 		while (i.hasNext()) {
 			EUActivityContribution element = (EUActivityContribution) i.next();
-			double val=CurrencyWorker.convertToUSD(element.getAmount().doubleValue(),element.getAmountCurrency().getCurrencyCode());
-			res+=val;
+			BigDecimal val=CurrencyWorker.convertToUSD(element.getAmount(),element.getAmountCurrency().getCurrencyCode());
+			res=res.add(val);
 		}
-		double finalRes=CurrencyWorker.convertFromUSD(res,desktopCurrencyId);
+		BigDecimal finalRes=CurrencyWorker.convertFromUSD(res,desktopCurrencyId);
 		return finalRes;
 	}
 
 
-	public double getTotalCostConverted() throws AimException {
-		double usdAmount = CurrencyWorker.convertToUSD(getTotalCost().doubleValue(),totalCostCurrency.getCurrencyCode());
-		double finalAmount=CurrencyWorker.convertFromUSD(usdAmount,desktopCurrencyId);
+	public BigDecimal getTotalCostConverted() throws AimException {
+		BigDecimal usdAmount = CurrencyWorker.convertToUSD(getTotalCost(),totalCostCurrency.getCurrencyCode());
+		BigDecimal finalAmount=CurrencyWorker.convertFromUSD(usdAmount,desktopCurrencyId);
 		return finalAmount;
 	}
 
@@ -160,12 +161,12 @@ public class EUActivity implements Serializable, Identifiable {
 	}
 
 
-	public Double getTotalCost() {
+	public BigDecimal getTotalCost() {
 		return FeaturesUtil.applyThousandsForVisibility(totalCost);
 	}
 
 
-	public void setTotalCost(Double totalCost) {
+	public void setTotalCost(BigDecimal totalCost) {
 		this.totalCost = FeaturesUtil.applyThousandsForEntry(totalCost);
 	}
 

@@ -3,6 +3,7 @@
  */
 package org.digijava.module.aim.action;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -391,7 +392,7 @@ public class EditEUActivity extends MultiAction {
 		eua.setName(euaf.getName());
 		eua.setProgress(euaf.getProgress());
 		eua.setTextId(euaf.getTextId());
-		eua.setTotalCost(new Double(euaf.getTotalCost()));
+		eua.setTotalCost(new BigDecimal(euaf.getTotalCost()));
 		eua.setTotalCostCurrency((AmpCurrency) sess.load(AmpCurrency.class, euaf
 				.getTotalCostCurrencyId()));
 		eua.setTransactionDate(new Date(System.currentTimeMillis()));
@@ -404,7 +405,7 @@ public class EditEUActivity extends MultiAction {
 
 			EUActivityContribution eac=new EUActivityContribution();
 			eac.setEuActivity(eua);
-			eac.setAmount(new Double((String) euaf.getContrAmountList().get(i)));
+			eac.setAmount(new BigDecimal((String) euaf.getContrAmountList().get(i)));
 			eac.setAmountCurrency((AmpCurrency) sess.load(AmpCurrency.class,new Long((String) euaf.getContrCurrIdList().get(i))));
 			eac.setDonor((AmpOrganisation) sess.load(AmpOrganisation.class,new Long((String) euaf.getContrDonorIdList().get(i))));
 			//eac.setFinancingInstrument((AmpModality) sess.load(AmpModality.class,new Long((String) euaf.getContrFinInstrIdList().get(i))));

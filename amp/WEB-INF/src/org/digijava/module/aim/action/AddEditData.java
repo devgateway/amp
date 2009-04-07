@@ -89,7 +89,7 @@ public class AddEditData
                 AmpPrgIndicatorValue item = (AmpPrgIndicatorValue) iter.next();
                 
                 item.setCreationDate(themeForm.getCreationDate()[iter.nextIndex() - 1]);
-                item.setValAmount(themeForm.getValAmount()[iter.nextIndex() - 1]);
+                item.setValAmount(themeForm.getValAmount()[iter.nextIndex() - 1].doubleValue());
                 item.setValueType(themeForm.getValueType()[iter.nextIndex() - 1]);
                
             }

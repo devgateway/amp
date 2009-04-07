@@ -3,7 +3,10 @@
  */
 package org.dgfoundation.amp.ar.cell;
 
+import java.math.BigDecimal;
 import java.util.Iterator;
+
+import mondrian.rolap.BitKey.Big;
 
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.exprlogic.TokenRepository;
@@ -37,14 +40,14 @@ public class UncommittedAmountCell extends AmountCell {
 	 * only undisbursed related merged cells and will also make the required calculations
 	 * @return Returns the amount.
 	 */
-	public double getAmount() {
+	public BigDecimal getAmount() {
 		if (id != null)
 			return convert();
-		double ret = 0;
+		BigDecimal ret = new BigDecimal(0);
 		Iterator<CategAmountCell> i = mergedCells.iterator();
 		while (i.hasNext()) {
 			CategAmountCell element = (CategAmountCell) i.next();
-			ret+=TokenRepository.uncommittedLogicalToken.evaluate(element);	
+			ret=ret.add(TokenRepository.uncommittedLogicalToken.evaluate(element)) ;	
 		}
 		return ret;
 	}

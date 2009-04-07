@@ -3,6 +3,7 @@
  */
 package org.digijava.module.aim.util;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -51,38 +52,38 @@ public final class EUActivityUtil {
 		return euActivities;
 	}
 
-	public static Double getTotalCostConverted(Collection euActivities,Long desktopCurrencyId) {
-		double ret=0;
+	public static BigDecimal getTotalCostConverted(Collection euActivities,Long desktopCurrencyId) {
+		BigDecimal ret=new BigDecimal(0);
 		Iterator i = euActivities.iterator();
 		while (i.hasNext()) {
 			EUActivity element = (EUActivity) i.next();
 			element.setDesktopCurrencyId(desktopCurrencyId);
                         try {
-                                ret += element.getTotalCostConverted();
+                                ret =ret.add( element.getTotalCostConverted());
                         }
                         catch (AimException ex) {
                                 logger.error(
                                     "Unable to get total converted cost=" + ex);
                         }
 		}
-		return new Double(ret);
+		return ret;
 	}
 
-	public static Double getTotalContributionsConverted(Collection euActivities,Long desktopCurrencyId) {
-		double ret=0;
+	public static BigDecimal getTotalContributionsConverted(Collection euActivities,Long desktopCurrencyId) {
+		BigDecimal ret=new BigDecimal(0);
 		Iterator i = euActivities.iterator();
 		while (i.hasNext()) {
 			EUActivity element = (EUActivity) i.next();
 			element.setDesktopCurrencyId(desktopCurrencyId);
                         try {
-                                ret += element.getTotalContributionsConverted();
+                                ret =ret.add( element.getTotalContributionsConverted());
                         }
                         catch (AimException ex) {
                                 logger.error("Unable to get total converted cost contribution" + ex);
                         }
 
 		}
-		return new Double(ret);
+		return  ret ;
 	}
 
 }

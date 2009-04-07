@@ -1,5 +1,6 @@
 package org.digijava.module.aim.dbentity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -9,15 +10,15 @@ public class AmpFundingMTEFProjection {
 
 		private Long ampFundingMTEFProjectionId ;
 		private AmpCategoryValue projected; 
-		private Double amount;
+		private BigDecimal amount;
 		private AmpCurrency ampCurrency;
 		private Date projectionDate;
 		private AmpFunding  ampFunding;
 		
-		public Double getAmount() {
+		public BigDecimal getAmount() {
 			return FeaturesUtil.applyThousandsForVisibility(amount);
 		}
-		public void setAmount(Double amount) {
+		public void setAmount(BigDecimal amount) {
 			this.amount = FeaturesUtil.applyThousandsForEntry(amount);
 		}
 		public AmpFunding getAmpFunding() {

@@ -1,5 +1,6 @@
 package org.digijava.module.aim.action;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -489,19 +490,18 @@ public class NationalPlaningDashboardAction extends DispatchAction {
 		return sYear;
 	}
 	
-	public static Double getAmountSum(List actList) throws AimException {
-		Double mnt = null;
+	public static BigDecimal getAmountSum(List actList) throws AimException {
+		BigDecimal mnt = new BigDecimal(0);
 		if (actList != null) {
 			AmpActivity act;
 			Iterator actItr = actList.iterator();
 			while (actItr.hasNext()) {
 				act = (AmpActivity) actItr.next();
 				if (act!=null && act.getFunAmount() != null) {
-					double usdVal = CurrencyWorker.convert(act.getFunAmount().doubleValue(), act.getCurrencyCode());
+					BigDecimal usdVal = CurrencyWorker.convert(act.getFunAmount(), act.getCurrencyCode());
                     if(mnt!=null){
-                        mnt = new Double(mnt.doubleValue() + usdVal);
-                    }else{
-                        mnt = new Double(usdVal);
+                      mnt=mnt.add(usdVal);
+                    
 				}
 			}
 			}

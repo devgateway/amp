@@ -21,10 +21,10 @@
 		<property name="plannedCompletionDate" column="planned_completion_date"
 			type="java.util.Date" />
 		<property access="field" name="actualCommitment" column="actual_commitment"
-			type="java.lang.Double" />
+			type="java.math.BigDecimal" />
 		<property name="commCurrencyCode" column="comm_currency_code" type="java.lang.String" />
 		<property access="field" name="actualExpenditure" column="actual_expenditure"
-			type="java.lang.Double" />
+			type="java.math.BigDecimal" />
 		<property name="expCurrencyCode" column="exp_currency_code" type="java.lang.String" />
 		<property name="status" column="status" type="java.lang.String" />
 		<property name="reportingDate" column="reporting_date" type="java.util.Date" />

@@ -1,5 +1,6 @@
 package org.digijava.module.aim.helper;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
@@ -52,6 +53,27 @@ public class FormatHelper {
 		return formatNumber(d1 - d2);
 	}                      
     
+        
+        public static BigDecimal parseBigDecimal(String number) {                                                                              
+            
+            if(number==null) return null;
+            if("".equalsIgnoreCase(number)){
+         	   return new BigDecimal(0);
+            }
+                                                                             
+            BigDecimal result;                                                                                                                               
+            DecimalFormat formater = getDecimalFormat();                                                                              
+            try {    
+         	   result = new BigDecimal(formater.parse(number).toString());                                                                                       
+         	 } catch (ParseException e) {                                                                                                                 
+                    logger.error("Error parsing String to double", e);     
+                    return null;
+            }                                                                                                                                            
+            return result;                                                                                                                               
+    }                                                                                                                                                    
+                                
+     
+        
     public static String formatNumber(double nr) {
     	
     	
@@ -86,7 +108,7 @@ public class FormatHelper {
     }
 
    
-   public static String formatNumberUsingCustomFormat(double number){
+   public static String formatNumberUsingCustomFormat(Number number){
 	   DecimalFormat formater = null;     
 	   String result;  
 	   if (tlocal.get()!=null){

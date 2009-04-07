@@ -1,6 +1,7 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
 import java.util.logging.Level;
@@ -36,28 +37,28 @@ public class IPAContract implements Serializable {
     private Date totalECContribINVAmountDate;
     private Date totalECContribIBAmountDate;
     
-    private Double totalECContribIBAmount;
-    private Double totalAmount;
-    private Double contractTotalValue;
+    private BigDecimal totalECContribIBAmount;
+    private BigDecimal totalAmount;
+    private BigDecimal contractTotalValue;
     private AmpCurrency totalAmountCurrency;
     private AmpCurrency dibusrsementsGlobalCurrency;
-    private Double totalECContribINVAmount;
-    private Double totalNationalContribCentralAmount;
-    private Double totalNationalContribRegionalAmount;
-    private Double totalNationalContribIFIAmount;
-    private Double totalPrivateContribAmount;
+    private BigDecimal totalECContribINVAmount;
+    private BigDecimal totalNationalContribCentralAmount;
+    private BigDecimal totalNationalContribRegionalAmount;
+    private BigDecimal totalNationalContribIFIAmount;
+    private BigDecimal totalPrivateContribAmount;
     private Set disbursements;
     private AmpActivity activity;
     private AmpOrganisation organization;
     private Set<AmpOrganisation> organizations;
     private AmpCategoryValue status;
     //this disbursements and executionRate are used in Montenegro
-    private Double totalDisbursements;
-    private Double executionRate;
+    private BigDecimal totalDisbursements;
+    private BigDecimal executionRate;
     //burkina mission - exchange rate is computed based on the disbursement entered in funding step and total amount
     //of the contract (contractTotalValue)
-    private Double fundingTotalDisbursements;
-    private Double fundingExecutionRate;
+    private BigDecimal fundingTotalDisbursements;
+    private BigDecimal fundingExecutionRate;
     
     private AmpCategoryValue type;
     private AmpCategoryValue contractType;
@@ -212,54 +213,54 @@ public class IPAContract implements Serializable {
         this.startOfTendering = startOfTendering;
     }
 
-    public Double getTotalECContribIBAmount() {
+    public BigDecimal getTotalECContribIBAmount() {
         return FeaturesUtil.applyThousandsForVisibility(totalECContribIBAmount);
     }
 
-    public void setTotalECContribIBAmount(Double totalECContribIBAmount) {
+    public void setTotalECContribIBAmount(BigDecimal totalECContribIBAmount) {
         this.totalECContribIBAmount = FeaturesUtil.applyThousandsForEntry(totalECContribIBAmount);
     }
     
-    public Double getTotalECContribINVAmount() {
+    public BigDecimal getTotalECContribINVAmount() {
         return FeaturesUtil.applyThousandsForVisibility(totalECContribINVAmount);
     }
 
-    public void setTotalECContribINVAmount(Double totalECContribINVAmount) {
+    public void setTotalECContribINVAmount(BigDecimal totalECContribINVAmount) {
         this.totalECContribINVAmount = FeaturesUtil.applyThousandsForEntry(totalECContribINVAmount);
     }
 
-    public Double getTotalNationalContribCentralAmount() {
+    public BigDecimal getTotalNationalContribCentralAmount() {
         return FeaturesUtil.applyThousandsForVisibility(totalNationalContribCentralAmount);
     }
 
     public void setTotalNationalContribCentralAmount(
-            Double totalNationalContribCentralAmount) {
+    		BigDecimal totalNationalContribCentralAmount) {
         this.totalNationalContribCentralAmount = FeaturesUtil.applyThousandsForEntry(totalNationalContribCentralAmount);
     }
 
-    public Double getTotalNationalContribIFIAmount() {
+    public BigDecimal getTotalNationalContribIFIAmount() {
         return FeaturesUtil.applyThousandsForVisibility(totalNationalContribIFIAmount);
     }
 
     public void setTotalNationalContribIFIAmount(
-            Double totalNationalContribIFIAmount) {
+    		BigDecimal totalNationalContribIFIAmount) {
         this.totalNationalContribIFIAmount = FeaturesUtil.applyThousandsForEntry(totalNationalContribIFIAmount);
     }
 
-    public Double getTotalNationalContribRegionalAmount() {
+    public BigDecimal getTotalNationalContribRegionalAmount() {
         return FeaturesUtil.applyThousandsForVisibility(totalNationalContribRegionalAmount);
     }
 
     public void setTotalNationalContribRegionalAmount(
-            Double totalNationalContribRegionalAmount) {
+    		BigDecimal totalNationalContribRegionalAmount) {
         this.totalNationalContribRegionalAmount = FeaturesUtil.applyThousandsForEntry(totalNationalContribRegionalAmount);
     }
 
-    public Double getTotalPrivateContribAmount() {
+    public BigDecimal getTotalPrivateContribAmount() {
         return FeaturesUtil.applyThousandsForVisibility(totalPrivateContribAmount);
     }
 
-    public void setTotalPrivateContribAmount(Double totalPrivateContribAmount) {
+    public void setTotalPrivateContribAmount(BigDecimal totalPrivateContribAmount) {
         this.totalPrivateContribAmount = FeaturesUtil.applyThousandsForEntry(totalPrivateContribAmount);
     }
 
@@ -271,11 +272,11 @@ public class IPAContract implements Serializable {
 		this.contractValidity = contractValidity;
 	}
 
-	public Double getTotalAmount() {
+	public BigDecimal getTotalAmount() {
 		return FeaturesUtil.applyThousandsForVisibility(totalAmount);
 	}
 
-	public void setTotalAmount(Double totalAmount) {
+	public void setTotalAmount(BigDecimal totalAmount) {
 		this.totalAmount = FeaturesUtil.applyThousandsForEntry(totalAmount);
 	}
 
@@ -287,19 +288,19 @@ public class IPAContract implements Serializable {
 		this.totalAmountCurrency = totalAmountCurrency;
 	}
 
-	public Double getTotalDisbursements() {
+	public BigDecimal getTotalDisbursements() {
 		return FeaturesUtil.applyThousandsForVisibility(totalDisbursements);
 	}
 
-	public void setTotalDisbursements(Double totalDisbursements) {
+	public void setTotalDisbursements(BigDecimal totalDisbursements) {
 		this.totalDisbursements = FeaturesUtil.applyThousandsForEntry(totalDisbursements);
 	}
 
-	public Double getExecutionRate() {
+	public BigDecimal getExecutionRate() {
 		return executionRate;
 	}
 
-	public void setExecutionRate(Double executionRate) {
+	public void setExecutionRate(BigDecimal executionRate) {
 		this.executionRate = executionRate;
 	}
 
@@ -387,27 +388,27 @@ public class IPAContract implements Serializable {
 		this.contractType = contractType;
 	}
 
-	public Double getContractTotalValue() {
+	public BigDecimal getContractTotalValue() {
 		return FeaturesUtil.applyThousandsForVisibility(contractTotalValue);
 	}
 
-	public void setContractTotalValue(Double contractTotalValue) {
+	public void setContractTotalValue(BigDecimal contractTotalValue) {
 		this.contractTotalValue = FeaturesUtil.applyThousandsForEntry(contractTotalValue);
 	}
 
-	public Double getFundingTotalDisbursements() {
+	public BigDecimal getFundingTotalDisbursements() {
 		return FeaturesUtil.applyThousandsForVisibility(fundingTotalDisbursements);
 	}
 
-	public void setFundingTotalDisbursements(Double fundingTotalDisbursements) {
+	public void setFundingTotalDisbursements(BigDecimal fundingTotalDisbursements) {
 		this.fundingTotalDisbursements = FeaturesUtil.applyThousandsForEntry(fundingTotalDisbursements);
 	}
 
-	public Double getFundingExecutionRate() {
+	public BigDecimal getFundingExecutionRate() {
 		return fundingExecutionRate;
 	}
 
-	public void setFundingExecutionRate(Double fundingExecutionRate) {
+	public void setFundingExecutionRate(BigDecimal fundingExecutionRate) {
 		this.fundingExecutionRate = fundingExecutionRate;
 	}
 		

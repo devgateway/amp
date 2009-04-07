@@ -1,5 +1,7 @@
 package org.digijava.module.aim.action;
 
+import java.math.BigDecimal;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -315,17 +317,17 @@ public class AddTheme extends Action {
 		themeForm.setProgramEnvironmentConsiderations(ampTheme.getEnvironmentConsiderations());
 
 		if (ampTheme.getExternalFinancing() == null) {
-			themeForm.setProgramExternalFinancing(Double.valueOf(0));
+			themeForm.setProgramExternalFinancing(new BigDecimal(0));
 		} else {
 			themeForm.setProgramExternalFinancing(ampTheme.getExternalFinancing());
 		}
 		if (ampTheme.getInternalFinancing() == null) {
-			themeForm.setProgramInernalFinancing(Double.valueOf(0));
+			themeForm.setProgramInernalFinancing(new BigDecimal(0));
 		} else {
 			themeForm.setProgramInernalFinancing(ampTheme.getInternalFinancing());
 		}
 		if (ampTheme.getTotalFinancing() == null) {
-			themeForm.setProgramTotalFinancing(Double.valueOf(0));
+			themeForm.setProgramTotalFinancing(new BigDecimal(0));
 		} else {
 			themeForm.setProgramTotalFinancing(ampTheme.getTotalFinancing());
 		}

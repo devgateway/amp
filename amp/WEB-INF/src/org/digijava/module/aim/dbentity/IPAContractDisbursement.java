@@ -4,6 +4,7 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,7 +21,7 @@ public class IPAContractDisbursement implements Serializable {
 	private static final long serialVersionUID = -4688757182074104911L;
 	private Long id;
 	private Integer adjustmentType;
-	private Double amount;
+	private BigDecimal amount;
 	private AmpCurrency currency;
 	private Date date;
         private IPAContract contract;
@@ -70,10 +71,10 @@ public class IPAContractDisbursement implements Serializable {
 	public void setAdjustmentType(Integer adjustmentType) {
 		this.adjustmentType = adjustmentType;
 	}
-	public Double getAmount() {
+	public BigDecimal getAmount() {
 		return FeaturesUtil.applyThousandsForVisibility(amount);
 	}
-	public void setAmount(Double amount) {
+	public void setAmount(BigDecimal amount) {
 		this.amount = FeaturesUtil.applyThousandsForEntry(amount);
 	}
 	public AmpCurrency getCurrency() {

@@ -13,7 +13,7 @@
 		</id>
 
 		<property name="projectionDate" column="projection_date" type="java.util.Date" />
-		<property access="field" name="amount" column="amount" type="java.lang.Double" />
+		<property access="field" name="amount" column="amount" type="java.math.BigDecimal" />
 
 		<many-to-one name="ampCurrency" column="amp_currency_id"
 			class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />

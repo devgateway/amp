@@ -1,6 +1,7 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -12,7 +13,7 @@ public class AmpPledge implements Serializable{
 	private static final long serialVersionUID = -2427620222411238018L;
 	private Long ampPledgeId;
 	private Date date;
-	private Double amount;
+	private BigDecimal amount;
 	private AmpCurrency currency;
 	private Integer adjustmentType ;
 	private String program;
@@ -22,10 +23,10 @@ public class AmpPledge implements Serializable{
 	public void setAdjustmentType(Integer adjustmentType) {
 		this.adjustmentType = adjustmentType;
 	}
-	public Double getAmount() {
+	public BigDecimal getAmount() {
 		return FeaturesUtil.applyThousandsForVisibility(amount);
 	}
-	public void setAmount(Double amount) {
+	public void setAmount(BigDecimal amount) {
 		this.amount = FeaturesUtil.applyThousandsForEntry(amount);
 	}
 	public Long getAmpPledgeId() {

@@ -1,5 +1,7 @@
 package org.digijava.module.aim.helper;
 
+import java.math.BigDecimal;
+
 /**
  *
  * @author
@@ -9,47 +11,47 @@ public class MonthlyComparison implements Comparable<MonthlyComparison> {
     private String month;
     private int monthNumber; 
     private int fiscalYear;
-    private double plannedCommitment;
-    private double actualCommitment;
-    private double plannedDisbursement;
-    private double actualDisbursement;
-    private double plannedExpenditure;
-    private double actualExpenditure;
-    private double disbOrders;
+    private BigDecimal plannedCommitment;
+    private BigDecimal actualCommitment;
+    private BigDecimal plannedDisbursement;
+    private BigDecimal actualDisbursement;
+    private BigDecimal plannedExpenditure;
+    private BigDecimal actualExpenditure;
+    private BigDecimal disbOrders;
 
     public String getMonth() {
         return month;
     }
 
-    public double getActualCommitment() {
+    public BigDecimal getActualCommitment() {
         return actualCommitment;
     }
 
-    public void setActualCommitment(double actualCommitment) {
+    public void setActualCommitment(BigDecimal actualCommitment) {
         this.actualCommitment = actualCommitment;
     }
 
-    public double getActualDisbursement() {
+    public BigDecimal getActualDisbursement() {
         return actualDisbursement;
     }
 
-    public void setActualDisbursement(double actualDisbursement) {
+    public void setActualDisbursement(BigDecimal actualDisbursement) {
         this.actualDisbursement = actualDisbursement;
     }
 
-    public double getActualExpenditure() {
+    public BigDecimal getActualExpenditure() {
         return actualExpenditure;
     }
 
-    public void setActualExpenditure(double actualExpenditure) {
+    public void setActualExpenditure(BigDecimal actualExpenditure) {
         this.actualExpenditure = actualExpenditure;
     }
 
-    public double getDisbOrders() {
+    public BigDecimal getDisbOrders() {
         return disbOrders;
     }
 
-    public void setDisbOrders(double disbOrders) {
+    public void setDisbOrders(BigDecimal disbOrders) {
         this.disbOrders = disbOrders;
     }
 
@@ -61,27 +63,27 @@ public class MonthlyComparison implements Comparable<MonthlyComparison> {
         this.fiscalYear = fiscalYear;
     }
 
-    public double getPlannedCommitment() {
+    public BigDecimal getPlannedCommitment() {
         return plannedCommitment;
     }
 
-    public void setPlannedCommitment(double plannedCommitment) {
+    public void setPlannedCommitment(BigDecimal plannedCommitment) {
         this.plannedCommitment = plannedCommitment;
     }
 
-    public double getPlannedDisbursement() {
+    public BigDecimal getPlannedDisbursement() {
         return plannedDisbursement;
     }
 
-    public void setPlannedDisbursement(double plannedDisbursement) {
+    public void setPlannedDisbursement(BigDecimal plannedDisbursement) {
         this.plannedDisbursement = plannedDisbursement;
     }
 
-    public double getPlannedExpenditure() {
+    public BigDecimal getPlannedExpenditure() {
         return plannedExpenditure;
     }
 
-    public void setPlannedExpenditure(double plannedExpenditure) {
+    public void setPlannedExpenditure(BigDecimal plannedExpenditure) {
         this.plannedExpenditure = plannedExpenditure;
     }
 
@@ -89,7 +91,7 @@ public class MonthlyComparison implements Comparable<MonthlyComparison> {
         this.month = month;
     }
 
-	@Override
+	
 	public int compareTo(MonthlyComparison o) {
 		if (Integer.valueOf(this.fiscalYear).compareTo(o.fiscalYear) !=0 ) 
 			return Integer.valueOf(this.fiscalYear).compareTo(o.fiscalYear);

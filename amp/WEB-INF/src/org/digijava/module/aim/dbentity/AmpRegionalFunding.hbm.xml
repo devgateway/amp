@@ -15,7 +15,7 @@
 		<property name="transactionDate" column="transaction_date" type="java.util.Date" />
 		<property name="reportingDate" column="reporting_date" type="java.util.Date" />
 		<property access="field" name="transactionAmount" column="transaction_amount"
-			type="java.lang.Double" />
+			type="java.math.BigDecimal" />
 		<property name="expenditureCategory" column="exp_category" type="java.lang.String" />
 
 		<many-to-one name="activity" column="activity_id"

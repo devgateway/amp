@@ -1,5 +1,7 @@
 package org.digijava.module.gis.util;
 
+import java.math.BigDecimal;
+
 /**
  * <p>Title: </p>
  *
@@ -14,46 +16,46 @@ package org.digijava.module.gis.util;
  */
 public class FundingData {
 
-    private Double commitment;
-    private Double disbursement;
-    private Double expenditure;
+    private BigDecimal commitment;
+    private BigDecimal disbursement;
+    private BigDecimal expenditure;
 
 
 
     public FundingData() {
-        this.commitment = new Double(0);
-        this.disbursement = new Double(0);
-        this.expenditure = new Double(0);
+        this.commitment = new BigDecimal(0);
+        this.disbursement = new BigDecimal(0);
+        this.expenditure = new BigDecimal(0);
 
     }
 
-    public FundingData(Double commitment, Double disbursement, Double expenditure) {
+    public FundingData(BigDecimal commitment, BigDecimal disbursement, BigDecimal expenditure) {
         this.commitment = commitment;
         this.disbursement = disbursement;
         this.expenditure = expenditure;
     }
 
-    public Double getCommitment() {
+    public BigDecimal getCommitment() {
         return commitment;
     }
 
-    public Double getDisbursement() {
+    public BigDecimal getDisbursement() {
         return disbursement;
     }
 
-    public Double getExpenditure() {
+    public BigDecimal getExpenditure() {
         return expenditure;
     }
 
-    public void setCommitment(Double commitment) {
+    public void setCommitment(BigDecimal commitment) {
         this.commitment = commitment;
     }
 
-    public void setDisbursement(Double disbursement) {
+    public void setDisbursement(BigDecimal disbursement) {
         this.disbursement = disbursement;
     }
 
-    public void setExpenditure(Double expenditure) {
+    public void setExpenditure(BigDecimal expenditure) {
         this.expenditure = expenditure;
     }
 }

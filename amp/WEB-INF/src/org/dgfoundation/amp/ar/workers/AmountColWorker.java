@@ -3,6 +3,7 @@
  */
 package org.dgfoundation.amp.ar.workers;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -61,7 +62,7 @@ public class AmountColWorker extends ColumnWorker {
 	protected Cell getCellFromRow(ResultSet rs) throws SQLException {
 		long ownerId=rs.getLong(1);
 		long objectId=rs.getLong(2);
-		double amount = rs.getDouble(3);
+		BigDecimal amount = rs.getBigDecimal(3);
 		String currency=rs.getString(4);
 		java.sql.Date date= rs.getDate(5);
 		

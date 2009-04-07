@@ -1,6 +1,7 @@
 package org.digijava.module.aim.action;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -97,20 +98,24 @@ public class ViewMonthlyInfo extends TilesAction {
             List monthlyInfos = new ArrayList();
             try {
                 if (mapping.getInput().equals("/aim/viewMonthlyComparisons")) {
-                  double totalActualComm = 0, totalDisbOrders = 0,totalPlannedDisb=0,
-                          totalActualDisb=0, totalActualExp=0, totalPlannedExp=0;
+                  BigDecimal totalActualComm = new BigDecimal(0);
+                  BigDecimal totalDisbOrders = new BigDecimal(0);
+                  BigDecimal totalPlannedDisb=new BigDecimal(0);
+                  BigDecimal totalActualDisb=new BigDecimal(0);
+                  BigDecimal totalActualExp=new BigDecimal(0);
+                  BigDecimal totalPlannedExp=new BigDecimal(0);
                   
                     monthlyInfos = MonthlyInfoWorker.getMonthlyComparisons(fp);
                     if(monthlyInfos!=null){
                        Iterator iterInfo = monthlyInfos.iterator();
                         while (iterInfo.hasNext()) {
                             MonthlyComparison comparison=(MonthlyComparison)iterInfo.next();
-                            totalActualComm+=comparison.getActualCommitment();
-                            totalActualDisb+=comparison.getActualDisbursement();
-                            totalActualExp+=comparison.getActualExpenditure();
-                            totalDisbOrders+=comparison.getDisbOrders();
-                            totalPlannedDisb+=comparison.getPlannedDisbursement();
-                            totalPlannedExp+=comparison.getPlannedExpenditure();
+                            totalActualComm=totalActualComm.add(comparison.getActualCommitment());
+                            totalActualDisb=totalActualComm.add(comparison.getActualDisbursement());
+                            totalActualExp=totalActualExp.add(comparison.getActualExpenditure());
+                            totalDisbOrders=totalDisbOrders.add(comparison.getDisbOrders());
+                            totalPlannedDisb=totalPlannedDisb.add(comparison.getPlannedDisbursement());
+                            totalPlannedExp=totalPlannedExp.add(comparison.getPlannedExpenditure());
                                 
                         }
                        monthlyForm.setTotalActualCommitment(totalActualComm);
@@ -124,14 +129,15 @@ public class ViewMonthlyInfo extends TilesAction {
 
                 } else {
                     monthlyInfos = MonthlyInfoWorker.getMonthlyData(fp);
-                    double totalActual = 0, totalPlanned = 0;
+                    BigDecimal totalActual = new BigDecimal(0); 
+                    BigDecimal totalPlanned = new BigDecimal(0);
                     if (monthlyInfos != null) {
                         Iterator iterInfo = monthlyInfos.iterator();
                         while (iterInfo.hasNext()) {
                             MonthlyInfo info = (MonthlyInfo) iterInfo.next();
 
-                            totalActual += info.getActualAmount();
-                            totalPlanned += info.getPlannedAmount();
+                            totalActual = totalActual.add(info.getActualAmount());
+                            totalPlanned = totalActual.add(info.getPlannedAmount());
                     }
                         monthlyForm.setTotalActual(totalActual);
                         monthlyForm.setTotalPlanned(totalPlanned);

@@ -4,33 +4,38 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.text.DecimalFormat;
 
+import mondrian.rolap.BitKey.Big;
+import mondrian.util.Bug;
+
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 
+import com.sun.tools.xjc.reader.xmlschema.bindinfo.BIDeclaration;
+
 public class CurrencyWorker {
 	private static Logger logger = Logger.getLogger(CurrencyWorker.class);
 
 	public static DecimalFormat mf = new DecimalFormat("###,###,###,###,###.##");
 
-	private static double resultDbl = 0.0;
+	private static BigDecimal resultDbl = new BigDecimal(0);
 
 	private static String resultStr = "";
 
 	private static double exchangeRate = 0.0;
 
-	public static double convertToDouble(double amt, double fromExchangeRate,
+	public static BigDecimal convertToBigDecimal(BigDecimal amt, double fromExchangeRate,
 			double toExchangeRate)
 	{
 		if (logger.isDebugEnabled())
 			logger.debug("convert passed amt=" + amt + " ,fromExchangeRate="
 					+ fromExchangeRate + ",toExchangeRate" + toExchangeRate);
 		if (fromExchangeRate != toExchangeRate&&fromExchangeRate!=0) {
-			double inter = 1 / fromExchangeRate;
-			inter = inter * amt;
-			resultDbl = inter * toExchangeRate;
+			BigDecimal inter = new BigDecimal(1 / fromExchangeRate);
+			inter = inter.multiply(amt) ;
+			resultDbl = inter.multiply(new BigDecimal(toExchangeRate))  ;
 		} else {
 			resultDbl = amt;
 		}
@@ -38,10 +43,10 @@ public class CurrencyWorker {
 		return resultDbl;
 	}
 
-	public static String convert(double amt, double fromExchangeRate,
+	public static String convert(BigDecimal amt, double fromExchangeRate,
 			double toExchangeRate) {
 
-		resultDbl	= convertToDouble(amt, fromExchangeRate, toExchangeRate);
+		resultDbl	= convertToBigDecimal(amt, fromExchangeRate, toExchangeRate);
 
 		//*** fix for AMP-1755
 //		DecimalFormat format = new DecimalFormat();
@@ -58,9 +63,9 @@ public class CurrencyWorker {
 	}
 
 
-	public static double convertToUSD(double amnt,String fromCurrencyCode)  throws AimException{
+	public static BigDecimal convertToUSD(BigDecimal amnt,String fromCurrencyCode)  throws AimException{
 		exchangeRate = CurrencyUtil.getLatestExchangeRate(fromCurrencyCode);
-		return amnt*exchangeRate;
+		return amnt.multiply(new BigDecimal(exchangeRate)) ;
 	}
         public static double convertToDefaultCurr(double amnt,String fromCurrencyCode) throws AimException {
           double amount=0;
@@ -76,33 +81,33 @@ public class CurrencyWorker {
         }
 
 
-	public static double convertFromUSD(double amnt, String toCurrencyCode) throws AimException{
+	public static BigDecimal convertFromUSD(BigDecimal amnt, String toCurrencyCode) throws AimException{
 		exchangeRate = CurrencyUtil.getLatestExchangeRate(toCurrencyCode);
-		return amnt/exchangeRate;
+		return amnt.divide(new BigDecimal(exchangeRate));
 	}
 
-	public static double convertFromUSD(double amnt, Long toCurrencyId) throws AimException{
+	public static BigDecimal convertFromUSD(BigDecimal amnt, Long toCurrencyId) throws AimException{
 		AmpCurrency ampcurrency = CurrencyUtil.getAmpcurrency(toCurrencyId);
 		return convertFromUSD(amnt,ampcurrency.getCurrencyCode());
 	}
 
 
 
-	public static double convert(double Amt, String currencyCode) {
+	public static BigDecimal convert(BigDecimal amt, String currencyCode) {
 		if (logger.isDebugEnabled())
-			logger.debug("convert passed amt=" + Amt + " ,currencyCode="
+			logger.debug("convert passed amt=" + amt.toString() + " ,currencyCode="
 					+ currencyCode);
 		exchangeRate = CurrencyUtil.getExchangeRate(currencyCode);
-		resultDbl = exchangeRate * Amt;
+		resultDbl = amt.multiply(new BigDecimal(exchangeRate));
 		return resultDbl;
 	}
 
-	public static double convert1(double amt, double fromExchangeRate,
+	public static BigDecimal convert1(BigDecimal amt, double fromExchangeRate,
 			double toExchangeRate) {
-		if (fromExchangeRate != toExchangeRate && fromExchangeRate != 0) {
-			double inter = 1 / fromExchangeRate;
-			inter = inter * amt;
-			resultDbl = inter * toExchangeRate;
+		if (fromExchangeRate != toExchangeRate && fromExchangeRate != 0d) {
+			BigDecimal inter = new BigDecimal(1 / fromExchangeRate);
+			inter = inter.multiply(amt);
+			resultDbl = inter.multiply(new BigDecimal(toExchangeRate));
 		} else {
 			resultDbl = amt;
 		}
@@ -110,11 +115,12 @@ public class CurrencyWorker {
 		return resultDbl;
 	}
 
-	public static DecimalWraper convertWrapper(double amt, double fromExchangeRate,
-			double toExchangeRate, Date date) {
+
+	
+	public static DecimalWraper convertWrapper(BigDecimal amt, double fromExchangeRate,double toExchangeRate, Date date) {
 		DecimalWraper result = new DecimalWraper();
 		BigDecimal reference = new BigDecimal(1d);
-		BigDecimal amount = new BigDecimal(amt);
+		BigDecimal amount = amt;
 		BigDecimal fromRate = new BigDecimal(fromExchangeRate);
 		BigDecimal toRate = new BigDecimal(toExchangeRate);
 		BigDecimal inter = reference.divide(fromRate,30,java.math.RoundingMode.HALF_EVEN);

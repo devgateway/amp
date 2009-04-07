@@ -5,6 +5,7 @@
 
 package org.digijava.module.aim.action;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -141,7 +142,7 @@ public class ShowActivityPrintPreview
 
             	ProposedProjCost pg = new ProposedProjCost();
                 if (activity.getFunAmount() != null){
-                	pg.setFunAmountAsDouble(activity.getFunAmount());
+                	pg.setFunAmountAsDouble(activity.getFunAmount().doubleValue());
                 }                  
                 pg.setCurrencyCode(activity.getCurrencyCode());
                 pg.setFunDate(FormatHelper.formatDate(activity.getFunDate()));
@@ -601,7 +602,7 @@ public class ShowActivityPrintPreview
 	                         	
 	                         	if(currentFundingDetail.getFixedExchangeRate() == null)
 	                         	{
-	                            	Double currencyAppliedAmount = getAmountInDefaultCurrency(currentFundingDetail, tm.getAppSettings());
+	                            	BigDecimal currencyAppliedAmount = getAmountInDefaultCurrency(currentFundingDetail, tm.getAppSettings());
 
 	                            	String currentAmount = FormatHelper.formatNumber(currencyAppliedAmount);
 	                            	currentFundingDetail.setTransactionAmount(currentAmount);
@@ -610,7 +611,7 @@ public class ShowActivityPrintPreview
 	                         	else
 	                         	{
 	                         		Double fixedExchangeRate = currentFundingDetail.getFixedExchangeRate();
-	                         		Double currencyAppliedAmount = CurrencyWorker.convert1(FormatHelper.parseDouble(currentFundingDetail.getTransactionAmount()),fixedExchangeRate,1);
+	                         		BigDecimal currencyAppliedAmount = CurrencyWorker.convert1(FormatHelper.parseBigDecimal(currentFundingDetail.getTransactionAmount()),fixedExchangeRate,1);
 	                            	String currentAmount = FormatHelper.formatNumber(currencyAppliedAmount);
 	                            	currentFundingDetail.setTransactionAmount(currentAmount);
 	                            	currentFundingDetail.setCurrencyCode(CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId() ).getCurrencyCode());
@@ -1346,14 +1347,14 @@ public class ShowActivityPrintPreview
 		eaForm.getComponents().setSelectedComponents(selectedComponents);
 	}
 
-	private double getAmountInDefaultCurrency(FundingDetail fundDet, ApplicationSettings appSet) {
+	private BigDecimal getAmountInDefaultCurrency(FundingDetail fundDet, ApplicationSettings appSet) {
 		
 		java.sql.Date dt = new java.sql.Date(DateConversion.getDate(fundDet.getTransactionDate()).getTime());
 		double frmExRt = Util.getExchange(fundDet.getCurrencyCode(),dt);
 		String toCurrCode = CurrencyUtil.getAmpcurrency( appSet.getCurrencyId() ).getCurrencyCode();
 		double toExRt = Util.getExchange(toCurrCode,dt);
 	
-		double amt = CurrencyWorker.convert1(FormatHelper.parseDouble(fundDet.getTransactionAmount()),frmExRt,toExRt);
+		BigDecimal amt = CurrencyWorker.convert1(FormatHelper.parseBigDecimal(fundDet.getTransactionAmount()),frmExRt,toExRt);
 		
 		return amt;
 		

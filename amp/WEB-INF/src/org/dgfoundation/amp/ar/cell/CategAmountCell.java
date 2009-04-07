@@ -5,6 +5,7 @@
  */
 package org.dgfoundation.amp.ar.cell;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -117,11 +118,11 @@ public class CategAmountCell extends AmountCell implements Categorizable {
 	}
 
 	public void setValue(Object o) {
-		this.amount = ((Double) o).doubleValue();
+		this.amount =  (BigDecimal) o;
 	}
 
 	public Object getValue() {
-		return new Double(amount);
+		return amount;
 	}
 
 	/*

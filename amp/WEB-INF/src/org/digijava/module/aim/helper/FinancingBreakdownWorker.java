@@ -1,5 +1,6 @@
 package org.digijava.module.aim.helper ;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -66,7 +67,7 @@ public class FinancingBreakdownWorker
 	{
 		Integer trsType = new Integer(Constants.DISBURSEMENT) ;
 		Integer adjType = new Integer(Constants.ACTUAL) ;
-		double total = DbUtil.getTotalDonorFund(ampFundingId,trsType,adjType) ;
+		BigDecimal total = DbUtil.getTotalDonorFund(ampFundingId,trsType,adjType) ;
 		String strTotal = CurrencyWorker.convert(total,fromExchangeRate,toExchangeRate) ;
 		if ( logger.isDebugEnabled() )
 		logger.debug("getTotalDonorDisbursement() strTotal " + strTotal ) ;
@@ -79,7 +80,7 @@ public class FinancingBreakdownWorker
 	{
 		Integer trsType = new Integer(Constants.EXPENDITURE) ;
 		Integer adjType = new Integer(Constants.ACTUAL) ;
-		double total = DbUtil.getTotalDonorFund(ampFundingId,trsType,adjType) ;
+		BigDecimal total = DbUtil.getTotalDonorFund(ampFundingId,trsType,adjType) ;
 		String strTotal =  CurrencyWorker.convert(total,fromExchangeRate,toExchangeRate) ;
 		return strTotal ;
 	}

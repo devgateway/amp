@@ -1,5 +1,6 @@
 package org.digijava.module.aim.dbentity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -20,12 +21,12 @@ public class AmpReportCache {
 		  private String orgType;
 		  private String statusName;
 		  private Long ampFundingId;
-		  private Double plannedCommitment;
-		  private Double plannedDisbursement;
-		  private Double plannedExpenditure;
-		  private Double actualCommitment;
-		  private Double actualDisbursement;
-		  private Double actualExpenditure;
+		  private BigDecimal plannedCommitment;
+		  private BigDecimal plannedDisbursement;
+		  private BigDecimal plannedExpenditure;
+		  private BigDecimal actualCommitment;
+		  private BigDecimal actualDisbursement;
+		  private BigDecimal actualExpenditure;
 		  private String currencyCode;
 		  private Date actualStartDate;
 		  private Date actualCompletionDate;
@@ -97,27 +98,27 @@ public class AmpReportCache {
 					 return ampFundingId;
 		  }
 
-		  public Double getPlannedCommitment() {
+		  public BigDecimal getPlannedCommitment() {
 					 return FeaturesUtil.applyThousandsForVisibility(plannedCommitment);
 		  }
 
-		  public Double getPlannedDisbursement() {
+		  public BigDecimal getPlannedDisbursement() {
 					 return FeaturesUtil.applyThousandsForVisibility(plannedDisbursement);
 		  }
 
-		  public Double getPlannedExpenditure() {
+		  public BigDecimal getPlannedExpenditure() {
 					 return FeaturesUtil.applyThousandsForVisibility(plannedExpenditure);
 		  }
 
-		  public Double getActualCommitment() {
+		  public BigDecimal getActualCommitment() {
 					 return FeaturesUtil.applyThousandsForVisibility(actualCommitment);
 		  }
 
-		  public Double getActualDisbursement() {
+		  public BigDecimal getActualDisbursement() {
 					 return FeaturesUtil.applyThousandsForVisibility(actualDisbursement);
 		  }
 
-		  public Double getActualExpenditure() {
+		  public BigDecimal getActualExpenditure() {
 					 return FeaturesUtil.applyThousandsForVisibility(actualExpenditure);
 		  }
 
@@ -242,27 +243,27 @@ public class AmpReportCache {
 					 this.ampFundingId = ampFundingId;
 		  }
 
-		  public void setPlannedCommitment(Double plannedCommitment) {
+		  public void setPlannedCommitment(BigDecimal plannedCommitment) {
 					 this.plannedCommitment = FeaturesUtil.applyThousandsForEntry(plannedCommitment);
 		  }
 
-		  public void setPlannedDisbursement(Double plannedDisbursement) {
+		  public void setPlannedDisbursement(BigDecimal plannedDisbursement) {
 					 this.plannedDisbursement = FeaturesUtil.applyThousandsForEntry(plannedDisbursement);
 		  }
 
-		  public void setPlannedExpenditure(Double plannedExpenditure) {
+		  public void setPlannedExpenditure(BigDecimal plannedExpenditure) {
 					 this.plannedExpenditure = FeaturesUtil.applyThousandsForEntry(plannedExpenditure);
 		  }
 
-		  public void setActualCommitment(Double actualCommitment) {
+		  public void setActualCommitment(BigDecimal actualCommitment) {
 					 this.actualCommitment = FeaturesUtil.applyThousandsForEntry(actualCommitment);
 		  }
 
-		  public void setActualDisbursement(Double actualDisbursement) {
+		  public void setActualDisbursement(BigDecimal actualDisbursement) {
 					 this.actualDisbursement = FeaturesUtil.applyThousandsForEntry(actualDisbursement);
 		  }
 
-		  public void setActualExpenditure(Double actualExpenditure) {
+		  public void setActualExpenditure(BigDecimal actualExpenditure) {
 					 this.actualExpenditure = FeaturesUtil.applyThousandsForEntry(actualExpenditure);
 		  }
 

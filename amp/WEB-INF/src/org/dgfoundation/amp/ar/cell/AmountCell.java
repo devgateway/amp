@@ -6,6 +6,7 @@
  */
 package org.dgfoundation.amp.ar.cell;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,7 +29,7 @@ import org.digijava.module.aim.helper.FormatHelper;
 public class AmountCell extends Cell {
 	// public static DecimalFormat mf = new DecimalFormat("###,###,###,###.##");
 
-	protected double amount;
+	protected BigDecimal amount;
 
 	protected double percentage = 100;
 
@@ -121,8 +122,8 @@ public class AmountCell extends Cell {
 	 */
 	public String toString() {
 		// mf.setMaximumFractionDigits(2);
-		double am = getAmount();
-		if (am == 0)
+		BigDecimal am = getAmount();
+		if (am.doubleValue()==0d)
 			return "";
 		else
 			return FormatHelper.formatNumberUsingCustomFormat(getAmount());
@@ -134,7 +135,7 @@ public class AmountCell extends Cell {
 	 * @see org.dgfoundation.amp.ar.cell.Cell#getValue()
 	 */
 	public Object getValue() {
-		return new Double(amount);
+		return amount;
 	}
 
 	/*
@@ -143,7 +144,7 @@ public class AmountCell extends Cell {
 	 * @see org.dgfoundation.amp.ar.cell.Cell#setValue(java.lang.Object)
 	 */
 	public void setValue(Object value) {
-		amount = ((Double) value).doubleValue();
+		amount = (BigDecimal) value;
 
 	}
 
@@ -182,25 +183,21 @@ public class AmountCell extends Cell {
 	/**
 	 * @return Returns the amount.
 	 */
-	public double getAmount() {
-		double ret = 0;
+	public BigDecimal getAmount() {
+		BigDecimal ret = new BigDecimal(0);
 		if (id != null)
-			return convert() * getPercentage() / 100;
+			return convert().multiply(new BigDecimal(getPercentage())).divide(new BigDecimal(100));
 		Iterator i = mergedCells.iterator();
 		while (i.hasNext()) {
 			AmountCell element = (AmountCell) i.next();
-			ret += element.getAmount();
-			// logger.info("amount++"+element.getAmount());
+			ret =ret.add(element.getAmount());
 		}
-		// logger.info("******total amount for owner
-		// "+this.getOwnerId()+"="+ret);
 		return ret;
 	}
 
 	public String getWrappedAmount() {
 		if (id != null)
-			return FormatHelper.formatNumberUsingCustomFormat(convert()
-					* getPercentage() / 100);
+			return FormatHelper.formatNumberUsingCustomFormat(convert().multiply(new BigDecimal(getPercentage())).divide(new BigDecimal(100)));
 		else
 			return "";
 	}
@@ -209,7 +206,7 @@ public class AmountCell extends Cell {
 	 * @param amount
 	 *            The amount to set.
 	 */
-	public void setAmount(double amount) {
+	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
 
@@ -254,12 +251,12 @@ public class AmountCell extends Cell {
 		this.fromExchangeRate = exchangeRate;
 	}
 
-	public double convert() {
-		double resultDbl = 0.0;
+	public BigDecimal convert() {
+		BigDecimal resultDbl = new BigDecimal(0.0);
 		if (fromExchangeRate != toExchangeRate) {
-			double inter = 1 / fromExchangeRate;
-			inter = inter * amount;
-			resultDbl = inter * toExchangeRate;
+			BigDecimal inter = new BigDecimal(1/fromExchangeRate);
+			inter = inter.multiply(amount);
+			resultDbl = inter.multiply(new BigDecimal(toExchangeRate));
 		} else {
 			resultDbl = amount;
 		}
@@ -273,8 +270,8 @@ public class AmountCell extends Cell {
 	 * @param amount
 	 *            the amount to be added to the internal property.
 	 */
-	public void rawAdd(double amount) {
-		this.amount += amount;
+	public void rawAdd(BigDecimal amount) {
+		this.amount=this.amount.add(amount);
 	}
 
 	public Date getCurrencyDate() {
@@ -312,7 +309,7 @@ public class AmountCell extends Cell {
 	}
 
 	public Comparable comparableToken() {
-		return new Double(getAmount());
+		return  getAmount();
 	}
 
 	public double getPercentage() {

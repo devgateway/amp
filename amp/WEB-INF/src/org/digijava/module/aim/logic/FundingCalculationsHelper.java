@@ -107,7 +107,7 @@ public class FundingCalculationsHelper {
 				toCurrCode = userCurrencyCode;
 
 			double toExRt = Util.getExchange(toCurrCode, dt);
-			DecimalWraper amt = CurrencyWorker.convertWrapper(fundDet.getTransactionAmount().doubleValue(), frmExRt, toExRt, dt);
+			DecimalWraper amt = CurrencyWorker.convertWrapper(fundDet.getTransactionAmount(), frmExRt, toExRt, dt);
 
 			if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
 				fundingDetail.setClassification(fundDet.getExpCategory());
@@ -115,7 +115,7 @@ public class FundingCalculationsHelper {
 			fundingDetail.setCurrencyCode(fundDet.getAmpCurrencyId().getCurrencyCode());
 			fundingDetail.setCurrencyName(fundDet.getAmpCurrencyId().getCountryName());
 
-			fundingDetail.setTransactionAmount(CurrencyWorker.convert(fundDet.getTransactionAmount().doubleValue(), 1, 1));
+			fundingDetail.setTransactionAmount(CurrencyWorker.convert(fundDet.getTransactionAmount(), 1, 1));
 			fundingDetail.setTransactionDate(DateConversion.ConvertDateToString(fundDet.getTransactionDate()));
 
 			fundingDetail.setTransactionType(fundDet.getTransactionType().intValue());

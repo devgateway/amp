@@ -4,7 +4,7 @@
 package org.digijava.module.aim.action;
 
 import java.awt.Color;
-import java.text.DecimalFormat;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -36,12 +36,14 @@ import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.dbentity.IPAContractDisbursement;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.fiscalcalendar.GregorianBasedWorker;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.EUActivityUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -278,42 +280,42 @@ public class ProjectFicheExport extends Action {
 		final double grayLevel2 = 0.8;
 		
 		final class TableHelper {
-			Double totalCost = new Double(0);
+			BigDecimal totalCost = new BigDecimal(0);
 
-			Double euTotal = new Double(0);
-			Double euPercent = new Double(0);
-			Double euIB = new Double(0);
-			Double euINV = new Double(0);
+			BigDecimal euTotal = new BigDecimal(0);
+			BigDecimal euPercent = new BigDecimal(0);
+			BigDecimal euIB = new BigDecimal(0);
+			BigDecimal euINV = new BigDecimal(0);
 			
-			Double nationalTotal = new Double(0);
-			Double nationalPercent = new Double(0);
-			Double nationalCentral = new Double(0);
-			Double nationalRegional = new Double(0);
-			Double nationalIFIs = new Double(0);
+			BigDecimal nationalTotal = new BigDecimal(0);
+			BigDecimal nationalPercent = new BigDecimal(0);
+			BigDecimal nationalCentral = new BigDecimal(0);
+			BigDecimal nationalRegional = new BigDecimal(0);
+			BigDecimal nationalIFIs = new BigDecimal(0);
 
-			Double privateTotal = new Double(0);
-			Double privatePercent = new Double(0);
+			BigDecimal privateTotal = new BigDecimal(0);
+			BigDecimal privatePercent = new BigDecimal(0);
 			
 			public void magic(){
-				euTotal = euIB + euINV;
-				nationalTotal = nationalCentral + nationalRegional + nationalIFIs;
+				euTotal = euIB.add(euINV);
+				nationalTotal = nationalCentral.add(nationalRegional).add(nationalIFIs);
 				
-				totalCost = euTotal + nationalTotal + privateTotal;
+				totalCost = euTotal.add(nationalTotal).add(privateTotal);
 				
-				euPercent = euTotal*100.00/totalCost;
-				nationalPercent = nationalTotal*100.00/totalCost;
-				privatePercent = privateTotal*100.00/totalCost;
+				euPercent = euTotal.multiply(new BigDecimal(100.00)).divide(totalCost);
+				nationalPercent = nationalTotal.multiply(new BigDecimal(100.00)).divide(totalCost);
+				privatePercent = privateTotal.multiply(new BigDecimal(100.00)).divide(totalCost);
 			}
 			
 			public void add(TableHelper x){
-				euIB += x.euIB;
-				euINV += x.euINV;
+				euIB =euIB.add(x.euIB);
+				euINV= euINV.add(euINV);
 				
-				nationalCentral += x.nationalCentral;
-				nationalIFIs += x.nationalIFIs;
-				nationalRegional += x.nationalRegional;
+				nationalCentral.add(x.nationalCentral);
+				nationalIFIs.add(x.nationalIFIs);
+				nationalRegional.add(x.nationalRegional);
 				
-				privateTotal += x.privateTotal;
+				privateTotal.add(x.privateTotal);
 				
 				this.magic();
 			}
@@ -329,54 +331,54 @@ public class ProjectFicheExport extends Action {
 			    RtfFont boldTableFont = getRegularFont();
 				boldTableFont.setStyle(RtfFont.BOLD);
 				boldTableFont.setSize(tableFontSize);
-				c = new Cell(newParagraph(formatNumber(totalCost), boldTableFont, 0));
+				c = new Cell(newParagraph(FormatHelper.formatNumber(totalCost), boldTableFont, 0));
 				c.setColspan(2);
 				if (grayOut)
 					c.setGrayFill((float)grayLevel1);
 				tbl.addCell(c);
-				c = new Cell(newParagraph(formatNumber(euTotal), tableFont, 0));
+				c = new Cell(newParagraph(FormatHelper.formatNumber(euTotal), tableFont, 0));
 				if (grayOut)
 					c.setGrayFill((float)grayLevel1);
 				tbl.addCell(c);
-				c = new Cell(newParagraph(formatNumber(euPercent), tableFont, 0));
+				c = new Cell(newParagraph(FormatHelper.formatNumber(euPercent), tableFont, 0));
 				if (grayOut)
 					c.setGrayFill((float)grayLevel1);
 				tbl.addCell(c);
-				c = new Cell(newParagraph(formatNumber(euIB), tableFont, 0));
+				c = new Cell(newParagraph(FormatHelper.formatNumber(euIB), tableFont, 0));
 				if (grayOut)
 					c.setGrayFill((float)grayLevel1);
 				tbl.addCell(c);
-				c = new Cell(newParagraph(formatNumber(euINV), tableFont, 0));
+				c = new Cell(newParagraph(FormatHelper.formatNumber(euINV), tableFont, 0));
 				if (grayOut)
 					c.setGrayFill((float)grayLevel1);
 				tbl.addCell(c);
 				
-				c = new Cell(newParagraph(formatNumber(nationalTotal), boldTableFont, 0));
+				c = new Cell(newParagraph(FormatHelper.formatNumber(nationalTotal), boldTableFont, 0));
 				if (grayOut)
 					c.setGrayFill((float)grayLevel1);
 				tbl.addCell(c);
-				c = new Cell(newParagraph(formatNumber(nationalPercent), tableFont, 0));
+				c = new Cell(newParagraph(FormatHelper.formatNumber(nationalPercent), tableFont, 0));
 				if (grayOut)
 					c.setGrayFill((float)grayLevel1);
 				tbl.addCell(c);
-				c = new Cell(newParagraph(formatNumber(nationalCentral), tableFont, 0));
+				c = new Cell(newParagraph(FormatHelper.formatNumber(nationalCentral), tableFont, 0));
 				if (grayOut)
 					c.setGrayFill((float)grayLevel1);
 				tbl.addCell(c);
-				c = new Cell(newParagraph(formatNumber(nationalRegional), tableFont, 0));
+				c = new Cell(newParagraph(FormatHelper.formatNumber(nationalRegional), tableFont, 0));
 				if (grayOut)
 					c.setGrayFill((float)grayLevel1);
 				tbl.addCell(c);
-				c = new Cell(newParagraph(formatNumber(nationalIFIs), tableFont, 0));
+				c = new Cell(newParagraph(FormatHelper.formatNumber(nationalIFIs), tableFont, 0));
 				if (grayOut)
 					c.setGrayFill((float)grayLevel1);
 				tbl.addCell(c);
 
-				c = new Cell(newParagraph(formatNumber(privateTotal), boldTableFont, 0));
+				c = new Cell(newParagraph(FormatHelper.formatNumber(privateTotal), boldTableFont, 0));
 				if (grayOut)
 					c.setGrayFill((float)grayLevel1);
 				tbl.addCell(c);
-				c = new Cell(newParagraph(formatNumber(privatePercent), tableFont, 0));
+				c = new Cell(newParagraph(FormatHelper.formatNumber(privatePercent), tableFont, 0));
 				if (grayOut)
 					c.setGrayFill((float)grayLevel1);
 				tbl.addCell(c);
@@ -408,19 +410,19 @@ public class ProjectFicheExport extends Action {
 							found = true;
 						}
 						if (ipaContr.getTotalECContribIBAmount() != null)
-							th.euIB += ipaContr.getTotalECContribIBAmount();
+							th.euIB =th.euIB.add(ipaContr.getTotalECContribIBAmount());
 						if (ipaContr.getTotalECContribINVAmount() != null)
-							th.euINV += ipaContr.getTotalECContribINVAmount();
+							th.euINV =th.euINV.add(ipaContr.getTotalECContribINVAmount());
 						
 						if (ipaContr.getTotalNationalContribCentralAmount() != null)
-							th.nationalCentral += ipaContr.getTotalNationalContribCentralAmount();
+							th.nationalCentral =th.nationalCentral.add(ipaContr.getTotalNationalContribCentralAmount());
 						if (ipaContr.getTotalNationalContribIFIAmount() != null)
-							th.nationalIFIs += ipaContr.getTotalNationalContribIFIAmount();
+							th.nationalIFIs =th.nationalIFIs.add(ipaContr.getTotalNationalContribIFIAmount());
 						if (ipaContr.getTotalNationalContribRegionalAmount() != null)
-							th.nationalRegional += ipaContr.getTotalNationalContribRegionalAmount();
+							th.nationalRegional = th.nationalRegional.add(ipaContr.getTotalNationalContribRegionalAmount());
 						
 						if (ipaContr.getTotalPrivateContribAmount() != null)
-							th.privateTotal += ipaContr.getTotalPrivateContribAmount();
+							th.privateTotal = th.privateTotal.add(ipaContr.getTotalPrivateContribAmount());
 					}
 					
 				}
@@ -586,8 +588,8 @@ public class ProjectFicheExport extends Action {
 			EUActivity element = (EUActivity) i.next();
 			element.setDesktopCurrencyId(tm.getAppSettings().getCurrencyId());
 			tbl.addCell(new Cell(element.getName()));
-			tbl.addCell(new Cell(CurrencyUtil.df.format(convertToThousands(element.getTotalContributionsConverted()))+" "+currencyName));
-			tbl.addCell(new Cell(CurrencyUtil.df.format(convertToThousands(element.getTotalCostConverted()))+" "+currencyName));
+			tbl.addCell(new Cell(FormatHelper.formatNumber(FeaturesUtil.applyThousandsForVisibility(element.getTotalContributionsConverted()))+" "+currencyName));
+			tbl.addCell(new Cell(FormatHelper.formatNumber(FeaturesUtil.applyThousandsForVisibility(element.getTotalCostConverted()))+" "+currencyName));
 			tbl.addCell(new Cell(element.getAssumptions()));
 		}
 		
@@ -693,22 +695,22 @@ public class ProjectFicheExport extends Action {
 		
 		final int noOfStaticAmounts = 6;
 		
-		Double[] quarterAmounts = new Double[noOfQuarters];
+		BigDecimal[] quarterAmounts = new  BigDecimal[noOfQuarters];
 		for (int h = 0; h < noOfQuarters; h++)
-			quarterAmounts[h] = new Double(0);
-		Double[] totalQuarterAmounts = new Double[noOfQuarters];
+			quarterAmounts[h] = new BigDecimal(0);
+		BigDecimal[] totalQuarterAmounts = new BigDecimal[noOfQuarters];
 		for (int h = 0; h < noOfQuarters; h++)
-			totalQuarterAmounts[h] = new Double(0);
+			totalQuarterAmounts[h] = new BigDecimal(0);
 		
 
 		cit = contracts.iterator();
 		while (cit.hasNext()) {
 			IPAContract contract = (IPAContract) cit.next();
 			for (int h = 0; h < noOfQuarters; h++)
-				quarterAmounts[h] = new Double(0);
+				quarterAmounts[h] = new BigDecimal(0);
 			 
 			
-			Double[] staticAmounts = new Double[noOfStaticAmounts];
+			BigDecimal[] staticAmounts = new BigDecimal[noOfStaticAmounts];
 			Date[] staticDates = new Date[noOfStaticAmounts];
 			staticAmounts[0] = contract.getTotalECContribIBAmount();
 			staticDates[0] = contract.getTotalECContribIBAmountDate();
@@ -730,7 +732,7 @@ public class ProjectFicheExport extends Action {
 						//calendarHelper.setTime(new java.sql.Date(staticDates[j].getYear(), staticDates[j].getMonth(), staticDates[j].getDay()));
 						int quarter = worker.getQuarter();
 						int position = 4*(staticDates[j].getYear() - lowDate.getYear()) + quarter - lowDateQuarter;
-						quarterAmounts[position] += staticAmounts[j];
+						quarterAmounts[position] =quarterAmounts[position].add(staticAmounts[j]) ;
 					}
 				}
 				
@@ -741,9 +743,9 @@ public class ProjectFicheExport extends Action {
 			tbl.addCell(c);
 			
 			for (int j = 0; j < noOfQuarters; j++){
-				c = new Cell(newParagraph(formatNumber(quarterAmounts[j]), tableFont2, 0));
+				c = new Cell(newParagraph(FormatHelper.formatNumber(quarterAmounts[j]), tableFont2, 0));
 				tbl.addCell(c);
-				totalQuarterAmounts[j] += quarterAmounts[j];
+				totalQuarterAmounts[j] =totalQuarterAmounts[j].add(quarterAmounts[j]);
 			}
 		}
 		
@@ -753,7 +755,7 @@ public class ProjectFicheExport extends Action {
 		tbl.addCell(c);
 		
 		for (int j = 0; j < noOfQuarters; j++){
-			c = new Cell(newParagraph(formatNumber(totalQuarterAmounts[j]), tableFont, 0));
+			c = new Cell(newParagraph(FormatHelper.formatNumber(totalQuarterAmounts[j]), tableFont, 0));
 			c.setGrayFill((float)grayLevel2);
 			tbl.addCell(c);
 		}
@@ -770,19 +772,19 @@ public class ProjectFicheExport extends Action {
 
 		
 		for (int h = 0; h < noOfQuarters; h++)
-			totalQuarterAmounts[h] = new Double(0);
+			totalQuarterAmounts[h] = new BigDecimal(0);
 
 		cit = contracts.iterator();
 		while (cit.hasNext()) {
 			IPAContract contract = (IPAContract) cit.next();
 			for (int h = 0; h < noOfQuarters; h++)
-				quarterAmounts[h] = new Double(0);
+				quarterAmounts[h] = new BigDecimal(0);
 			
 			Iterator dit = contract.getDisbursements().iterator();
 			while (dit.hasNext()) {
 				IPAContractDisbursement disb = (IPAContractDisbursement) dit.next();
 				
-				Double amount = disb.getAmount();
+				BigDecimal amount = disb.getAmount();
 				Date date = disb.getDate();
 				worker.setTime(date);
 				if (amount != null){
@@ -790,7 +792,7 @@ public class ProjectFicheExport extends Action {
 						worker.setTime(new java.sql.Date(date.getYear(), date.getMonth(), date.getDay()));
 						int quarter = worker.getQuarter();
 						int position = 4*(date.getYear() - lowDate.getYear()) + quarter - lowDateQuarter;
-						quarterAmounts[position] += amount;
+						quarterAmounts[position] =quarterAmounts[position].add(amount);
 					}
 				}
 			}
@@ -799,9 +801,9 @@ public class ProjectFicheExport extends Action {
 			tbl.addCell(c);
 			
 			for (int j = 0; j < noOfQuarters; j++){
-				c = new Cell(newParagraph(formatNumber(quarterAmounts[j]), tableFont2, 0));
+				c = new Cell(newParagraph(FormatHelper.formatNumber(quarterAmounts[j]), tableFont2, 0));
 				tbl.addCell(c);
-				totalQuarterAmounts[j] += quarterAmounts[j];
+				totalQuarterAmounts[j] =totalQuarterAmounts[j].add(quarterAmounts[j]);
 			}
 		}
 		c = new Cell(newParagraph("Cumulative", tableFont, 0));
@@ -810,7 +812,7 @@ public class ProjectFicheExport extends Action {
 		tbl.addCell(c);
 		
 		for (int j = 0; j < noOfQuarters; j++){
-			c = new Cell(newParagraph(formatNumber(totalQuarterAmounts[j]), tableFont, 0));
+			c = new Cell(newParagraph(FormatHelper.formatNumber(totalQuarterAmounts[j]), tableFont, 0));
 			c.setGrayFill((float)grayLevel2);
 			tbl.addCell(c);
 		}
@@ -898,21 +900,7 @@ public class ProjectFicheExport extends Action {
 	}
 	
 
-	private String formatNumber(double nr) {
-		Double number;
-		String result;
-		if (nr == 0) {
-			number = new Double(0);
-		}
-		else 
-			number = new Double(nr);
-	
-		
-		String format = "#0.0";
-		DecimalFormat formater = new DecimalFormat(format);
-		result = formater.format(number);
-		return result;
-	}
+
 
 	public Cell getLogframeHeadingCell(String text) {
 		Cell c=new Cell(text);

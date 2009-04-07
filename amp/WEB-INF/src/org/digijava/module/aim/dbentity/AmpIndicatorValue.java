@@ -1,6 +1,7 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -25,8 +26,8 @@ public class AmpIndicatorValue implements Serializable{
 	private String comment;
 	private Date valueDate;
 
-        private Date dataIntervalStart;
-        private Date dataIntervalEnd;
+    private Date dataIntervalStart;
+    private Date dataIntervalEnd;
 
 	private Double value;
 	private int valueType;
@@ -74,10 +75,10 @@ public class AmpIndicatorValue implements Serializable{
 		this.valueDate = valueDate;
 	}
 	public Double getValue() {
-		return FeaturesUtil.applyThousandsForVisibility(value);
+		return FeaturesUtil.applyThousandsForVisibility(new BigDecimal(value)).doubleValue();
 	}
 	public void setValue(Double value) {
-		this.value = FeaturesUtil.applyThousandsForEntry(value);
+		this.value = FeaturesUtil.applyThousandsForEntry(new BigDecimal(value)).doubleValue();
 	}
 	public int getValueType() {
 		return valueType;

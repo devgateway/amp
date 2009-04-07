@@ -4,6 +4,7 @@
  */
 package org.digijava.module.aim.action;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -113,24 +114,22 @@ public class GetRegionalFundings extends TilesAction {
 				ArrayList temp = RegionalFundingsHelper.getRegionalFundings(
 						regFunds, currCode, calCode);
 
-				double totComm = 0;
-				double totDisb = 0;
-				double totUnDisb = 0;
-				double totExp = 0;
-				double totUnExp = 0;
+				BigDecimal totComm = new BigDecimal(0);
+				BigDecimal totDisb = new BigDecimal(0);
+				BigDecimal totUnDisb = new BigDecimal(0);
+				BigDecimal totExp = new BigDecimal(0);
+				BigDecimal totUnExp = new BigDecimal(0);
 
 				for (int i = 0; i < temp.size(); i++) {
 					RegionalFunding regFund = (RegionalFunding) temp.get(i);
-					regFund.setTotUnDisbursed(regFund.getTotCommitments()
-							- regFund.getTotDisbursements());
-					regFund.setTotUnExpended(regFund.getTotDisbursements()
-							- regFund.getTotExpenditures());
+					regFund.setTotUnDisbursed(regFund.getTotCommitments().subtract( regFund.getTotDisbursements()));
+					regFund.setTotUnExpended(regFund.getTotDisbursements().subtract( regFund.getTotExpenditures()) );
 					temp.set(i, regFund);
-					totComm += regFund.getTotCommitments();
-					totDisb += regFund.getTotDisbursements();
-					totUnDisb += regFund.getTotUnDisbursed();
-					totExp += regFund.getTotExpenditures();
-					totUnExp += regFund.getTotUnExpended();
+					totComm =totComm.add( regFund.getTotCommitments());
+					totDisb =totDisb.add(regFund.getTotDisbursements());
+					totUnDisb =totUnDisb.add(regFund.getTotUnDisbursed());
+					totExp =totExp.add(regFund.getTotExpenditures());
+					totUnExp =totUnExp.add( regFund.getTotUnExpended());
 				}
 
 				rfForm.setTotCommitments(totComm);

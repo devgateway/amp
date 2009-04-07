@@ -2,6 +2,7 @@ package org.digijava.module.widget.util;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -777,10 +778,10 @@ public class ChartWidgetUtil {
 				Float sectorPrcentage = (Float) rowData[2];    //This field is NULL sometimes !
 				//AmpActivity activity = (AmpActivity) rowData[3];
 				//AmpCurrency currency = (AmpCurrency) rowData[4];
-				Double amt = (Double) rowData[4];
-                Double amount =FeaturesUtil.applyThousandsForVisibility(amt);
+				BigDecimal amt = (BigDecimal) rowData[4];
+                BigDecimal amount =FeaturesUtil.applyThousandsForVisibility(amt);
 				//calculate percentage
-				Double calculated = (sectorPrcentage.floatValue() == 100)?amount:calculatePercentage(amount,sectorPrcentage);
+				BigDecimal calculated = (sectorPrcentage.floatValue() == 100)?amount:calculatePercentage(amount,sectorPrcentage);
 				//convert to
 				//Double converted = convert(calculated, currency);
 				//search if we already have such sector data
@@ -1516,7 +1517,7 @@ public class ChartWidgetUtil {
         }
     }
     
-    public static Double convert(Double amount,AmpCurrency originalCurrency){
+    public static BigDecimal convert(BigDecimal amount,AmpCurrency originalCurrency){
     	try {
 			CurrencyWorker.convertToUSD(amount, originalCurrency.getCurrencyCode());
 		} catch (AimException e) {
@@ -1526,9 +1527,9 @@ public class ChartWidgetUtil {
     	return amount;
     }
     
-    public static Double calculatePercentage(Double amount,Float percentage){
-    	double result=amount.doubleValue()*percentage.floatValue()/100;
-    	return new Double(result);
+    public static BigDecimal calculatePercentage(BigDecimal amount,Float percentage){
+    	BigDecimal result=amount.multiply(new BigDecimal(percentage)).divide(new BigDecimal(100));
+    	return result;
     }
     
     public static String getInStatment(Long ids[]){

@@ -3,6 +3,7 @@
  */
 package org.dgfoundation.amp.ar.cell;
 
+import java.math.BigDecimal;
 import java.util.Iterator;
 
 import org.dgfoundation.amp.ar.ArConstants;
@@ -37,7 +38,7 @@ public class TotalCommitmentsAmountCell extends AmountCell {
          * 
          * @return Returns the amount.
          */
-    public double getAmount() {
+    public BigDecimal getAmount() {
 		if (id != null)
 			return convert();
 		return Logic.getInstance().getCommitmentCalculator().calculateAmount(mergedCells);

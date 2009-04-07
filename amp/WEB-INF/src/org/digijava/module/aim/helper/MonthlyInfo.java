@@ -1,14 +1,16 @@
 
 package org.digijava.module.aim.helper;
 
+import java.math.BigDecimal;
+
 /**
  *
  * @author 
  */
 public class MonthlyInfo {
-    private Double actualAmount;
+    private BigDecimal actualAmount;
     private String month;
-    private Double plannedAmount;
+    private BigDecimal plannedAmount;
     private int year;
 
     public int getYear() {
@@ -19,11 +21,11 @@ public class MonthlyInfo {
         this.year = year;
     }
 
-    public Double getActualAmount() {
+    public BigDecimal getActualAmount() {
         return actualAmount;
     }
 
-    public void setActualAmount(Double actualAmount) {
+    public void setActualAmount(BigDecimal actualAmount) {
         this.actualAmount = actualAmount;
     }
 
@@ -35,11 +37,11 @@ public class MonthlyInfo {
         this.month = month;
     }
 
-    public Double getPlannedAmount() {
+    public BigDecimal getPlannedAmount() {
         return plannedAmount;
     }
 
-    public void setPlannedAmount(Double plannedAmount) {
+    public void setPlannedAmount(BigDecimal plannedAmount) {
         this.plannedAmount = plannedAmount;
     }
     

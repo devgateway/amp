@@ -1,5 +1,6 @@
 package org.digijava.module.aim.action;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -815,7 +816,7 @@ public class EditOrganisation
             Pledge el = itr.next();
             AmpPledge pledge = new AmpPledge();
             pledge.setAdjustmentType(new Integer(el.getAdjustmentType()));
-            pledge.setAmount(Double.valueOf(el.getAmount()));
+            pledge.setAmount(new BigDecimal(el.getAmount()));
             AmpCurrency c = CurrencyUtil.getCurrencyByCode(el.getCurrencyCode());
             pledge.setCurrency(c);
             pledge.setProgram(el.getProgram());

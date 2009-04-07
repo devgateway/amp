@@ -39,9 +39,8 @@
 		<property name="contractCompletion" column="contract_completion" type="java.util.Date" />
 
 
-		<property access="field" name="totalAmount" column="total_amount" type="java.lang.Double" />
-		<property access="field" name="contractTotalValue" column="contract_total_value"
-			type="java.lang.Double" />
+		<property access="field" name="totalAmount" column="total_amount" type="java.math.BigDecimal" />
+		<property access="field" name="contractTotalValue" column="contract_total_value" type="java.math.BigDecimal" />
 		<many-to-one name="totalAmountCurrency" column="total_amount_currency"
 			class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
 		<many-to-one name="dibusrsementsGlobalCurrency" column="disbursements_global_currency"
@@ -60,18 +59,12 @@
 		<property name="totalECContribIBAmountDate" column="TOT_EC_CONTR_IB_DATE"
 			type="java.util.Date" />
 
-		<property access="field" name="totalECContribIBAmount" column="total_ec_contrib_ib_amount"
-			type="java.lang.Double" />
-		<property access="field" name="totalECContribINVAmount" column="total_ec_contrib_inv_amount"
-			type="java.lang.Double" />
-		<property access="field" name="totalNationalContribCentralAmount"
-			column="TOT_NATIONAL_CONTR_CENTRAL" type="java.lang.Double" />
-		<property access="field" name="totalNationalContribRegionalAmount"
-			column="TOT_NATIONAL_CONTR_REGIONAL" type="java.lang.Double" />
-		<property access="field" name="totalNationalContribIFIAmount"
-			column="TOT_NATIONAL_CONTRIB_IFI" type="java.lang.Double" />
-		<property access="field" name="totalPrivateContribAmount"
-			column="total_private_contrib_amount" type="java.lang.Double" />
+		<property access="field" name="totalECContribIBAmount" column="total_ec_contrib_ib_amount" 	type="java.math.BigDecimal" />
+		<property access="field" name="totalECContribINVAmount" column="total_ec_contrib_inv_amount" type="java.math.BigDecimal" />
+		<property access="field" name="totalNationalContribCentralAmount" column="TOT_NATIONAL_CONTR_CENTRAL" type="java.math.BigDecimal" />
+		<property access="field" name="totalNationalContribRegionalAmount" column="TOT_NATIONAL_CONTR_REGIONAL" type="java.math.BigDecimal" />
+		<property access="field" name="totalNationalContribIFIAmount"		column="TOT_NATIONAL_CONTRIB_IFI" type="java.math.BigDecimal" />
+		<property access="field" name="totalPrivateContribAmount"			column="total_private_contrib_amount" type="java.math.BigDecimal" />
 
 		<set name="organizations" cascade="none" table="AMP_IPA_CONTRACTING_ORGANIZATI">
 			<key column="ipa_contract_id" />

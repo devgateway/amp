@@ -9,7 +9,7 @@
 				<param name="sequence">EU_ACTIVITY_CONTRIBUTION_seq</param>
 			</generator>
 		</id>
-		<property access="field" name="amount" column="amount" type="java.lang.Double" />
+		<property access="field" name="amount" column="amount" type="java.math.BigDecimal" />
 		<property name="transactionDate" column="transaction_date" type="java.util.Date" />
 		<many-to-one name="amountCurrency" column="amount_currency"
 			class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />

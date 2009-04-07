@@ -3,6 +3,7 @@
  */
 package org.digijava.module.aim.action;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -904,7 +905,7 @@ public class SaveActivity extends Action {
             activity.setFunDate(null);
             activity.setCurrencyCode(null);
         }else{
-            activity.setFunAmount(eaForm.getFunding().getProProjCost().getFunAmountAsDouble());
+            activity.setFunAmount(FormatHelper.parseBigDecimal( eaForm.getFunding().getProProjCost().getFunAmount()));
             //check for null on bolivia
             if(eaForm.getFunding().getProProjCost().getFunDate()!=null){
         	activity.setFunDate(FormatHelper.parseDate(eaForm.getFunding().getProProjCost().getFunDate()).getTime());
@@ -998,14 +999,13 @@ public class SaveActivity extends Action {
 								}
 
 								if (!useFixedRate) {
-									Double transAmt = new Double(
-											FormatHelper.parseDouble(fundDet.getTransactionAmount()));
+									BigDecimal transAmt = FormatHelper.parseBigDecimal(fundDet.getTransactionAmount());
 									ampFundDet.setTransactionAmount(transAmt);
 									ampFundDet.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet.getCurrencyCode()));
 									ampFundDet.setFixedExchangeRate(null);
 								} else {
 									// Use the fixed exchange rate
-									double transAmt = FormatHelper.parseDouble(fundDet.getTransactionAmount());
+									BigDecimal transAmt = FormatHelper.parseBigDecimal(fundDet.getTransactionAmount());
 									Date trDate = DateConversion.getDate(fundDet.getTransactionDate());
 									// double frmExRt =
 									// CurrencyUtil.getExchangeRate(fundDet.getCurrencyCode(),1,trDate);
@@ -1014,7 +1014,7 @@ public class SaveActivity extends Action {
 									// frmExRt,1);
 									// amt *=
 									// fundDet.getFixedExchangeRate();
-									ampFundDet.setTransactionAmount(new Double(transAmt));
+									ampFundDet.setTransactionAmount(transAmt);
 									ampFundDet.setFixedExchangeRate(fundDet.getFixedExchangeRate());
 									ampFundDet.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet
 															.getCurrencyCode()));
@@ -1073,7 +1073,7 @@ public class SaveActivity extends Action {
             activity.setFunDate(null);
             activity.setCurrencyCode(null);
         }else{
-            activity.setFunAmount(eaForm.getFunding().getProProjCost().getFunAmountAsDouble());
+            activity.setFunAmount(FormatHelper.parseBigDecimal(eaForm.getFunding().getProProjCost().getFunAmount()));
             //check null for bolivia
             if (eaForm.getFunding().getProProjCost().getFunDate()!=null){
                 activity.setFunDate(FormatHelper.parseDate(eaForm.getFunding().getProProjCost().getFunDate()).getTime());
@@ -1148,9 +1148,9 @@ public class SaveActivity extends Action {
 								}
 							}
 						}
-						ampRegFund.setTransactionAmount(new Double(
-								FormatHelper.parseDouble(fd
-										.getTransactionAmount())));
+						ampRegFund.setTransactionAmount(
+								FormatHelper.parseBigDecimal(fd
+										.getTransactionAmount()));
 						ampRegFund.setTransactionDate(DateConversion
 								.getDate(fd.getTransactionDate()));
 						ampRegFund.setAdjustmentType(new Integer(fd
@@ -1199,9 +1199,9 @@ public class SaveActivity extends Action {
 							}
 						}
 
-						ampRegFund.setTransactionAmount(new Double(
-								FormatHelper.parseDouble(fd
-										.getTransactionAmount())));
+						ampRegFund.setTransactionAmount(
+								FormatHelper.parseBigDecimal(fd
+										.getTransactionAmount()));
 						ampRegFund.setTransactionDate(DateConversion
 								.getDate(fd.getTransactionDate()));
 						ampRegFund.setAdjustmentType(new Integer(fd
@@ -1251,9 +1251,9 @@ public class SaveActivity extends Action {
 							}
 						}
 
-						ampRegFund.setTransactionAmount(new Double(
-								FormatHelper.parseDouble(fd
-										.getTransactionAmount())));
+						ampRegFund.setTransactionAmount(
+								FormatHelper.parseBigDecimal(fd
+										.getTransactionAmount()));
 						ampRegFund.setTransactionDate(DateConversion
 								.getDate(fd.getTransactionDate()));
 						ampRegFund.setAdjustmentType(new Integer(fd
@@ -2576,7 +2576,7 @@ public class SaveActivity extends Action {
 						}
 
 						ampCompFund.setReportingOrganization(null);
-						ampCompFund.setTransactionAmount(FormatHelper.parseDouble(fd.getTransactionAmount()));
+						ampCompFund.setTransactionAmount(FormatHelper.parseBigDecimal(fd.getTransactionAmount()));
 						ampCompFund.setTransactionDate(DateConversion
 								.getDate(fd.getTransactionDate()));
 						ampCompFund.setAdjustmentType(new Integer(fd
@@ -2642,7 +2642,7 @@ public class SaveActivity extends Action {
 			{
 				MTEFProjection mtef=(MTEFProjection)mtefItr.next();
 				AmpFundingMTEFProjection ampmtef=new AmpFundingMTEFProjection();
-				ampmtef.setAmount(FormatHelper.parseDouble(mtef.getAmount()));
+				ampmtef.setAmount(FormatHelper.parseBigDecimal(mtef.getAmount()));
 
 				ampmtef.setAmpFunding(ampFunding);
 				ampmtef.setAmpCurrency(CurrencyUtil.getCurrencyByCode(mtef.getCurrencyCode()));

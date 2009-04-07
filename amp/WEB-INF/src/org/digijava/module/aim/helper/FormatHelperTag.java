@@ -1,12 +1,14 @@
 package org.digijava.module.aim.helper;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
+import org.apache.ecs.html.Big;
 import org.apache.taglibs.standard.resources.Resources;
 
 /**
@@ -78,12 +80,8 @@ public class FormatHelperTag extends BodyTagSupport {
 	 */
 	if (input instanceof String) {
 	    try {
-		if (((String) input).indexOf('.') != -1) {
-		    input = Double.valueOf((String) input);
-		} else {
-		    input = Long.valueOf((String) input);
-		}
-	    } catch (NumberFormatException nfe) {
+		   input = new BigDecimal((String) input);
+		 } catch (NumberFormatException nfe) {
 		throw new JspException(
                     Resources.getMessage("FORMAT_NUMBER_PARSE_ERROR", input),
 		    nfe);

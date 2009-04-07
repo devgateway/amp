@@ -119,7 +119,7 @@
 		<property name="programDescription" column="program_description" type="text" />
 		<property name="contractors" column="contractors" type="text" />
 
-		<property access="field" name="funAmount" column="proj_cost_amount" type="java.lang.Double" />
+		<property access="field" name="funAmount" column="proj_cost_amount" type="java.math.BigDecimal" />
 		<property name="funDate" column="proj_cost_date" type="java.util.Date" />
 		<property name="currencyCode" column="proj_cost_currcode" type="java.lang.String" />
 

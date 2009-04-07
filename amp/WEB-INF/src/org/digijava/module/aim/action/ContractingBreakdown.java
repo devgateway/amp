@@ -5,6 +5,7 @@
 
 package org.digijava.module.aim.action;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -100,9 +101,9 @@ public class ContractingBreakdown extends TilesAction {
 		             
 		            if(contract.getDibusrsementsGlobalCurrency()!=null)
 		         	   cc=contract.getDibusrsementsGlobalCurrency().getCurrencyCode();
-		            double td=0;
-		            double usdAmount=0;  
-		    		double finalAmount=0; 
+		            BigDecimal td=new BigDecimal(0);
+		            BigDecimal usdAmount=new BigDecimal(0);  
+		            BigDecimal finalAmount=new BigDecimal(0); 
 
 		    		for(Iterator<IPAContractDisbursement> j=disbs.iterator();j.hasNext();)
 		       	  	{
@@ -111,18 +112,19 @@ public class ContractingBreakdown extends TilesAction {
 		       		  if(cd.getAmount()!=null)
 		       			  {
 		       			  	try {
-								usdAmount = CurrencyWorker.convertToUSD(cd.getAmount().doubleValue(),cd.getCurrCode());
+								usdAmount = CurrencyWorker.convertToUSD(cd.getAmount(),cd.getCurrCode());
 							} catch (AimException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 		       			  	try {
+		       			  		
 								finalAmount = CurrencyWorker.convertFromUSD(usdAmount,cc);
 							} catch (AimException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-		       			  	td+=finalAmount;
+		       			  	td=td.add(finalAmount);
 		       			  }
 		       	  	}
 		       	  	

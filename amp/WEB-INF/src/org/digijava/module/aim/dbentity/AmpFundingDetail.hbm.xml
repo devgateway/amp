@@ -10,8 +10,7 @@
 			</generator>
 		</id>
 
-		<property name="thousandsTransactionAmount" type="java.lang.Double"
-			formula="applyThousandsForVisibility(transaction_amount)" />
+		<property name="thousandsTransactionAmount" type="java.math.BigDecimal" formula="applyThousandsForVisibility(transaction_amount)" />
 		<property name="fiscalYear" column="fiscal_year" type="java.lang.Integer" />
 		<property name="fiscalQuarter" column="fiscal_quarter" type="java.lang.Integer" />
 		<property name="transactionType" column="transaction_type" type="java.lang.Integer" />
@@ -19,8 +18,9 @@
 		<property name="transactionDate" column="transaction_date" type="java.util.Date" />
 		<property name="transactionDate2" column="transaction_date2" type="java.util.Date" />
 		<property name="reportingDate" column="reporting_date" type="java.util.Date" />
-		<property access="field" name="transactionAmount" column="transaction_amount"
-			type="java.lang.Double" />
+		
+		<property access="field" name="transactionAmount" column="transaction_amount" type="java.math.BigDecimal" />
+		
 		<property name="language" column="language" type="java.lang.String" />
 		<property name="version" column="version" type="java.lang.String" />
 		<property name="calType" column="cal_type" type="java.lang.String" />
@@ -42,8 +42,7 @@
 			class="org.digijava.module.aim.dbentity.AmpFunding" />
 		<many-to-one name="contract" column="ipa_contract_id"
 			class="org.digijava.module.aim.dbentity.IPAContract" cascade="none" />
-		<property name="transactionAmountInUSD" type="java.lang.Double"
-			formula="getTransactionAmmountUSD(amp_fund_detail_id)" />
+		<property name="transactionAmountInUSD" type="java.math.BigDecimal"  formula="getTransactionAmmountUSD(amp_fund_detail_id)" />
 
 	</class>
 </hibernate-mapping>

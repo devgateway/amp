@@ -4,6 +4,7 @@
 
 package org.digijava.module.aim.action;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -1040,35 +1041,35 @@ private ActionForward showStep9(ActionMapping mapping,
 	              eaForm.getIndicator().setCurrentVal(null);
 	              eaForm.getIndicator().setCurrentValDate(null);
 	              eaForm.getIndicator().setIndicatorRisk(null);
-	              eaForm.getContracts().setIpaBudget(new Double(0));
+	              eaForm.getContracts().setIpaBudget(new BigDecimal(0));
 	              
 	              
 	
 	            }
 	
-	            Double totalEUContrib = new Double(0);
+	            BigDecimal totalEUContrib = new BigDecimal(0);
 	            
 	            if (eaForm.getContracts().getContracts() != null){
 	            	Iterator it2 = eaForm.getContracts().getContracts().iterator();
 	            	while (it2.hasNext()) {
 	            		IPAContract contr = (IPAContract) it2.next();
-	            		totalEUContrib += contr.getTotalECContribIBAmount();
-	            		totalEUContrib += contr.getTotalECContribINVAmount();
+	            		totalEUContrib =totalEUContrib.add( contr.getTotalECContribIBAmount());
+	            		totalEUContrib =totalEUContrib.add( contr.getTotalECContribINVAmount());
 	            	}
 	            }
 	            eaForm.getContracts().setIpaBudget(totalEUContrib);
 	            //get the levels of risks
 	
 	            Long defaultCurrency=teamMember.getAppSettings().getCurrencyId();
-		        double allCosts=0;
+		        BigDecimal allCosts=new BigDecimal(0);
 		        if(eaForm.getCosting().getCosts() != null)
 		        	for(Iterator it=eaForm.getCosting().getCosts().iterator();it.hasNext();)
 		        	{
 		        		EUActivity euAct=(EUActivity) it.next();
 		        		euAct.setDesktopCurrencyId(defaultCurrency);
-		        		allCosts+=euAct.getTotalCostConverted();
+		        		allCosts=allCosts.add(euAct.getTotalCostConverted());
 		        	}
-	            eaForm.getCosting().setAllCosts(new Double(allCosts));
+	            eaForm.getCosting().setAllCosts(allCosts);
 	            if ((eaForm.getIndicator().getIndicatorsME() != null) && (!eaForm.getIndicator().getIndicatorsME().isEmpty()))
 	              eaForm.getIndicator().setRiskCollection(MEIndicatorsUtil.getAllIndicatorRisks());
 	            request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.VIEW);
@@ -1397,18 +1398,18 @@ private ActionForward showStep1(ActionMapping mapping,
   
 
 	if (eaForm.getCosting().getCosts() != null && eaForm.getCosting().getCosts().size() != 0) {
-	  double grandCost = 0;
-	  double grandContribution = 0;
+	  BigDecimal grandCost = new BigDecimal(0);
+	  BigDecimal grandContribution = new BigDecimal(0);
 	  Long currencyId = teamMember.getAppSettings().getCurrencyId();
 	  Iterator i = eaForm.getCosting().getCosts().iterator();
 	  while (i.hasNext()) {
 	    EUActivity element = (EUActivity) i.next();
 	    element.setDesktopCurrencyId(currencyId);
-	    grandCost += element.getTotalCostConverted();
-	    grandContribution += element.getTotalContributionsConverted();
+	    grandCost =grandCost.add(element.getTotalCostConverted());
+	    grandContribution =grandContribution.add(element.getTotalContributionsConverted());
 	  }
-	  eaForm.getCosting().setOverallCost(new Double(grandCost));
-	  eaForm.getCosting().setOverallContribution(new Double(grandContribution));
+	  eaForm.getCosting().setOverallCost(grandCost);
+	  eaForm.getCosting().setOverallContribution(grandContribution);
 
 	}
 

@@ -2,6 +2,7 @@
 
 package org.digijava.module.aim.form;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -11,52 +12,52 @@ import java.util.List;
 public class MonthlyInfoForm extends DetailedInfoForm {
 
     private List monthlyInfoList;
-    private Double totalPlanned;
-    private Double totalActual;
-    private Double totalActualCommitment;
-    private Double totalPlannedDisbursement;
-    private Double totalActualDisbursement;
-    private Double totalActualExpenditure;
-    private Double totalPlannedExpenditure;
-    private Double totalDisbOrder;
+    private BigDecimal totalPlanned;
+    private BigDecimal totalActual;
+    private BigDecimal totalActualCommitment;
+    private BigDecimal totalPlannedDisbursement;
+    private BigDecimal totalActualDisbursement;
+    private BigDecimal totalActualExpenditure;
+    private BigDecimal totalPlannedExpenditure;
+    private BigDecimal totalDisbOrder;
 
-    public Double getTotalActualCommitment() {
+    public BigDecimal getTotalActualCommitment() {
         return totalActualCommitment;
     }
 
-    public void setTotalActualCommitment(Double totalActualCommitment) {
+    public void setTotalActualCommitment(BigDecimal totalActualCommitment) {
         this.totalActualCommitment = totalActualCommitment;
     }
 
-    public Double getTotalActualDisbursement() {
+    public BigDecimal getTotalActualDisbursement() {
         return totalActualDisbursement;
     }
 
-    public void setTotalActualDisbursement(Double totalActualDisbursement) {
+    public void setTotalActualDisbursement(BigDecimal totalActualDisbursement) {
         this.totalActualDisbursement = totalActualDisbursement;
     }
 
-    public Double getTotalActualExpenditure() {
+    public BigDecimal getTotalActualExpenditure() {
         return totalActualExpenditure;
     }
 
-    public void setTotalActualExpenditure(Double totalActualExpenditure) {
+    public void setTotalActualExpenditure(BigDecimal totalActualExpenditure) {
         this.totalActualExpenditure = totalActualExpenditure;
     }
 
-    public Double getTotalDisbOrder() {
+    public BigDecimal getTotalDisbOrder() {
         return totalDisbOrder;
     }
 
-    public void setTotalDisbOrder(Double totalDisbOrder) {
+    public void setTotalDisbOrder(BigDecimal totalDisbOrder) {
         this.totalDisbOrder = totalDisbOrder;
     }
 
-    public Double getTotalPlannedDisbursement() {
+    public BigDecimal getTotalPlannedDisbursement() {
         return totalPlannedDisbursement;
     }
 
-    public void setTotalPlannedDisbursement(Double totalPlannedDisbursement) {
+    public void setTotalPlannedDisbursement(BigDecimal totalPlannedDisbursement) {
         this.totalPlannedDisbursement = totalPlannedDisbursement;
     }
    
@@ -69,27 +70,27 @@ public class MonthlyInfoForm extends DetailedInfoForm {
         this.monthlyInfoList = monthlyInfoList;
     }
 
-    public Double getTotalActual() {
+    public BigDecimal getTotalActual() {
         return totalActual;
     }
 
-    public void setTotalActual(Double totalActual) {
+    public void setTotalActual(BigDecimal totalActual) {
         this.totalActual = totalActual;
     }
 
-    public Double getTotalPlanned() {
+    public BigDecimal getTotalPlanned() {
         return totalPlanned;
     }
 
-    public void setTotalPlanned(Double totalPlanned) {
+    public void setTotalPlanned(BigDecimal totalPlanned) {
         this.totalPlanned = totalPlanned;
     }
 
-    public Double getTotalPlannedExpenditure() {
+    public BigDecimal getTotalPlannedExpenditure() {
         return totalPlannedExpenditure;
     }
 
-    public void setTotalPlannedExpenditure(Double totalPlannedExpenditure) {
+    public void setTotalPlannedExpenditure(BigDecimal totalPlannedExpenditure) {
         this.totalPlannedExpenditure = totalPlannedExpenditure;
     }
 }

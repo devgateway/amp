@@ -189,7 +189,7 @@
 		success:responseSuccess2, 
 		failure:responseFailure2 
 	};
-		
+	
 	function showContent(){
 		var element = document.getElementById("popin");
 		element.style.display = "inline";
@@ -297,6 +297,7 @@
 		   "&editAct="+document.getElementsByName('editAct')[0].value+
 		   "&funding.firstSubmit="+document.getElementsByName('funding.firstSubmit')[0].value+
 		   "&totDisbIsBiggerThanTotCom="+document.getElementsByName('totDisbIsBiggerThanTotCom')[0].value+
+		   "&ignoreDistBiggerThanComm="+document.getElementsByName('ignoreDistBiggerThanComm')[0].value+
 		   "&funding.isEditFunfing="+document.getElementsByName('funding.isEditFunfing')[0].value+
 		   "&funding.assistanceType="+document.getElementsByName('funding.assistanceType')[0].value+
 		   "&funding.orgFundingId="+document.getElementsByName('funding.orgFundingId')[0].value+
@@ -343,9 +344,41 @@
 		}
 		ret+="&funding.fundingConditions="+document.getElementsByName('funding.fundingConditions')[0].value+
 			"&funding.donorObjective="+document.getElementsByName('funding.donorObjective')[0].value;
-		
+
 		return ret;
     }
+
+    function validateAmounts(){
+    	var totalComms	= 0;
+    	var totalDisbs	= 0;
+    	var rows = getCommitmentRows();
+    	for(i=0; rows!=0 && i<rows; i++){
+    		var adjLabel="fundingDetail["+i+"].adjustmentType";
+			var transAmountLabel="fundingDetail["+i+"].transactionAmount";
+			var transTypeLabel="fundingDetail["+i+"].transactionType";
+			var amount = 0;
+	    	amount = (document.getElementsByName(transAmountLabel)[0].value) * 1;
+	    	if ((document.getElementsByName(transTypeLabel)[0].value == 0) && (document.getElementsByName(adjLabel)[0].value == 1)) {
+				totalComms	+= amount;
+			} else {
+				if ((document.getElementsByName(transTypeLabel)[0].value == 1) && (document.getElementsByName(adjLabel)[0].value == 1)) {
+					totalDisbs	+= amount;
+				}
+			}
+		}
+		if (totalDisbs > totalComms) {
+			var Warn="<digi:trn key="aim:addFunding:warn:disbSupCom">Sum of Disbursments is bigger than sum of commitments. Do you wish to proceed?</digi:trn>";
+			if(confirm(Warn))
+				{
+					return true;
+				} else {
+					return false;	
+				}
+		} else {
+			return true;
+		}
+   	}
+    
 	function addMTEFProjection() {
 		document.getElementsByName("funding.event")[0].value = "addProjections";
 		<digi:context name="addFunding" property="context/module/moduleinstance/addMTEFProjection.do"/>
@@ -472,13 +505,16 @@
 		var urlParams="<%=fundAdded%>";
 		var params = getParameters()+"&edit=true";
 		checkAndClose=true;
-		YAHOOAmp.util.Connect.asyncRequest("POST", urlParams+"?"+params, callback );
-		isAlreadySubmitted = true;
-	  	document.aimEditActivityForm.submit();
+		if (validateAmounts()) {
+			YAHOOAmp.util.Connect.asyncRequest("POST", urlParams+"?"+params, callback );
+			isAlreadySubmitted = true;
+			document.aimEditActivityForm.submit();
+			return true;
+		} else {
+			return false;
+		}
 			//validateFormatUsingSymbos();
 		}
-	  	
-		return true;
 	}
 	function fnOnEditItem(index, orgId,fundId)	{
 		myPanel.cfg.setProperty("width","1000px");

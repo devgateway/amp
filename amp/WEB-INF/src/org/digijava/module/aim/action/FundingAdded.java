@@ -108,7 +108,7 @@ public class FundingAdded extends Action {
 			}
 		}
 		EditActivityForm.Funding currentFunding = null;
-		if ((!isBigger) || (eaForm.isIgnoreDistBiggerThanComm())) {
+		//if ((!isBigger) || (eaForm.isIgnoreDistBiggerThanComm())) {
 			eaForm.setIgnoreDistBiggerThanComm(false);
 			currentFunding = eaForm.getFunding();
 			//
@@ -244,7 +244,7 @@ public class FundingAdded extends Action {
 			}
 			//
 			this.updateTotals(eaForm, tm);
-		}
+		//}
 		//
 		String currCode = CurrencyUtil.getAmpcurrency( tm.getAppSettings().getCurrencyId() ).getCurrencyCode();
 		eaForm.setCurrCode( currCode );

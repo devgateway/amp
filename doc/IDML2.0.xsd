@@ -195,7 +195,7 @@
 	<xs:complexType name="fundingDetailType">
 		<xs:attribute name="type" type="xs:string" use="required"/>
 		<xs:attribute name="date" type="xs:date" use="required"/>
-		<xs:attribute name="amount" type="xs:long" use="required"/>
+		<xs:attribute name="amount" type="xs:decimal" use="required"/>
 		<xs:attribute name="currency" type="xs:string" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="fundingType">
@@ -208,7 +208,7 @@
 			<xs:element name="projections" minOccurs="0" maxOccurs="unbounded">
 				<xs:complexType>
 					<xs:attribute name="type" type="xs:string" use="required"/>
-					<xs:attribute name="amount" type="xs:long" use="required"/>
+					<xs:attribute name="amount" type="xs:decimal" use="required"/>
 					<xs:attribute name="currency" type="xs:string" use="required"/>
 					<xs:attribute name="startYear" type="xs:int" use="required"/>
 					<xs:attribute name="endYear" type="xs:int" use="optional"/>

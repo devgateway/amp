@@ -5,6 +5,7 @@
 
 package org.digijava.module.aim.helper;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -37,34 +38,35 @@ public class FundingValidator {
 	};
 	
 	private static void makeCumulativeAmounts() {
-		double value = 0;
+		BigDecimal value = new BigDecimal(0);
 		for (int i = 0;i < list1.size();i ++) {
 			FundingDetail fd = (FundingDetail)list1.get(i);
-			String tempAmt = fd.getTransactionAmount().replaceAll(",","");
-			double amt = Double.parseDouble(tempAmt);
+			//String tempAmt = fd.getTransactionAmount().replaceAll(",","");
+			BigDecimal amt = FormatHelper.parseBigDecimal(fd.getTransactionAmount());
+				//BigDecimal.parseDouble(tempAmt);
 			
 			java.sql.Date dt = new java.sql.Date( DateConversion.getDate(fd.getTransactionDate()).getTime());
 			double frmExRt = Util.getExchange(fd.getCurrencyCode(),dt);
 			double toExRt = Util.getExchange("USD",dt);
 			amt = CurrencyWorker.convert1(amt,frmExRt,toExRt);			
 			
-			value += amt;
+			value =value.add(amt);
 			fd.setTransactionAmount(""+value);
 			list1.set(i,fd);				
 		}
 		
-		value = 0;
+		value = new  BigDecimal(0);
 		for (int i = 0;i < list2.size();i ++) {
 			FundingDetail fd = (FundingDetail)list2.get(i);
-			String tempAmt = fd.getTransactionAmount().replaceAll(",","");
-			double amt = Double.parseDouble(tempAmt);
+			//String tempAmt = fd.getTransactionAmount().replaceAll(",","");
+			BigDecimal amt = FormatHelper.parseBigDecimal( fd.getTransactionAmount());
 			
 			java.sql.Date dt = new java.sql.Date (DateConversion.getDate(fd.getTransactionDate()).getTime());
 			double frmExRt = Util.getExchange(fd.getCurrencyCode(),dt);
 			double toExRt = Util.getExchange("USD",dt);
 			amt = CurrencyWorker.convert1(amt,frmExRt,toExRt);			
 			
-			value += amt;
+			value =value.add(amt);
 			fd.setTransactionAmount(""+value);
 			list2.set(i,fd);
 		}

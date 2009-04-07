@@ -5,6 +5,7 @@
 
 package org.digijava.module.aim.dbentity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -17,7 +18,7 @@ public class AmpRegionalFunding {
 	private Integer adjustmentType;
 	private Date transactionDate;
 	private Date reportingDate;
-	private Double transactionAmount;
+	private BigDecimal transactionAmount;
 	private AmpOrganisation reportingOrganization;
 	private AmpCurrency currency;
 	private String expenditureCategory;
@@ -125,13 +126,13 @@ public class AmpRegionalFunding {
 	/**
 	 * @return Returns the transactionAmount.
 	 */
-	public Double getTransactionAmount() {
+	public BigDecimal getTransactionAmount() {
 		return FeaturesUtil.applyThousandsForVisibility(transactionAmount);
 	}
 	/**
 	 * @param transactionAmount The transactionAmount to set.
 	 */
-	public void setTransactionAmount(Double transactionAmount) {
+	public void setTransactionAmount(BigDecimal transactionAmount) {
 		this.transactionAmount = FeaturesUtil.applyThousandsForEntry(transactionAmount);
 	}
 	/**

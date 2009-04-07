@@ -1,8 +1,10 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
+import org.apache.ecs.wml.Do;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 @Deprecated
@@ -54,13 +56,13 @@ public class AmpThemeIndicatorValue implements Comparable, Serializable
 	 * @return Returns the valueAmount.
 	 */
 	public Double getValueAmount() {
-		return FeaturesUtil.applyThousandsForVisibility(valueAmount);
+		return FeaturesUtil.applyThousandsForVisibility(new BigDecimal(valueAmount)).doubleValue();
 	}
 	/**
 	 * @param valueAmount The valueAmount to set.
 	 */
 	public void setValueAmount(Double valueAmount) {
-		this.valueAmount = FeaturesUtil.applyThousandsForEntry(valueAmount);
+		this.valueAmount = FeaturesUtil.applyThousandsForEntry(new BigDecimal(valueAmount)).doubleValue();
 	}
 	/**
 	 * @return Returns the valueType.

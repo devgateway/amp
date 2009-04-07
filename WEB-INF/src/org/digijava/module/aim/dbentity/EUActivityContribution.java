@@ -4,6 +4,7 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -17,7 +18,7 @@ public class EUActivityContribution implements Serializable, Comparable {
 	private static final long serialVersionUID = -7752194026135595434L;
 	
 	private Long id;
-	private Double amount;
+	private BigDecimal amount;
 	private AmpCurrency amountCurrency;
 	private EUActivity euActivity;
 	private AmpOrganisation donor;
@@ -35,11 +36,11 @@ public class EUActivityContribution implements Serializable, Comparable {
 		this.euActivity = euActivity;
 	}
 
-	public Double getAmount() {
+	public BigDecimal getAmount() {
 		return FeaturesUtil.applyThousandsForVisibility(amount);
 	}
 
-	public void setAmount(Double amount) {
+	public void setAmount(BigDecimal amount) {
 		this.amount = FeaturesUtil.applyThousandsForEntry(amount);
 	}
 

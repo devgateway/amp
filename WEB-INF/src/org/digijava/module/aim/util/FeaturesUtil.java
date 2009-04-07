@@ -1,5 +1,6 @@
 package org.digijava.module.aim.util;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -77,14 +78,14 @@ public class FeaturesUtil {
 		return false;
 	}
 	
-	public static Double applyThousandsForVisibility(Double amount) {
+	public static BigDecimal applyThousandsForVisibility(BigDecimal amount) {
 		if(amount==null) return null;
-		return amount*("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))?0.001:1);
+		return amount.multiply("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))?new BigDecimal(0.001d): new BigDecimal(1));
 	}
 
-	public static Double applyThousandsForEntry(Double amount) {
+	public static BigDecimal applyThousandsForEntry(BigDecimal amount) {
 		if(amount==null) return null;
-		return amount*("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))?1000:1);
+		return amount.multiply(("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))?new BigDecimal(1000):new BigDecimal(1)));
 	}
 
 	

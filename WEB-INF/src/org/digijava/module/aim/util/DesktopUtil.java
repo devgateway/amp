@@ -1,5 +1,6 @@
 package org.digijava.module.aim.util;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -177,7 +178,7 @@ public class DesktopUtil {
 											fd.getTransactionType().intValue() == Constants.COMMITMENT) {
 										Commitments comm = new Commitments();
 										comm.setDonorId(funding.getAmpDonorOrgId().getAmpOrgId());
-										comm.setAmount(fd.getTransactionAmount().doubleValue());
+										comm.setAmount(fd.getTransactionAmount());
 										comm.setCurrencyCode(fd.getAmpCurrencyId().getCurrencyCode());
 										comm.setTransactionDate(fd.getTransactionDate());
 										project.getCommitmentList().add(comm);
@@ -286,7 +287,7 @@ public class DesktopUtil {
 											fd.getTransactionType().intValue() == Constants.COMMITMENT) {
 										Commitments comm = new Commitments();
 										comm.setDonorId(funding.getAmpDonorOrgId().getAmpOrgId());
-										comm.setAmount(fd.getTransactionAmount().doubleValue());
+										comm.setAmount(fd.getTransactionAmount());
 										comm.setCurrencyCode(fd.getAmpCurrencyId().getCurrencyCode());
 										comm.setTransactionDate(fd.getTransactionDate());
 										project.getCommitmentList().add(comm);
@@ -415,17 +416,17 @@ public class DesktopUtil {
 		return col;
 	}
 
-	public static double updateProjectTotals(Collection activities,String currCode) {
+	public static BigDecimal updateProjectTotals(Collection activities,String currCode) {
 
 		logger.info("updateProjectTotals called with currcode =" + currCode);
 
 		DecimalFormat mf = new DecimalFormat("###,###,###,###,###") ;
-		double grandTotal = 0;
+		BigDecimal grandTotal = new BigDecimal(0);
 		if (activities != null) {
 			Iterator itr = activities.iterator();
 			while (itr.hasNext()) {
 				AmpProject project = (AmpProject) itr.next();
-				double totAmount = 0;
+				BigDecimal totAmount = new BigDecimal(0);
 				if (project.getCommitmentList() != null &&
 						project.getCommitmentList().size() > 0) {
 					Iterator cItr = project.getCommitmentList().iterator();
@@ -433,11 +434,11 @@ public class DesktopUtil {
 						Commitments comm = (Commitments) cItr.next();
 						double toCurrency = Util.getExchange(currCode, new java.sql.Date( comm.getTransactionDate().getTime()));
 						double fromCurrency = Util.getExchange(comm.getCurrencyCode(),new java.sql.Date(comm.getTransactionDate().getTime()));
-						totAmount += CurrencyWorker.convert1(comm.getAmount(),fromCurrency, toCurrency);
+						totAmount =totAmount.add( CurrencyWorker.convert1(comm.getAmount(),fromCurrency, toCurrency));
 					}
 				}
-				grandTotal += totAmount;
-				if (totAmount <= 0) {
+				grandTotal =grandTotal.add(totAmount);
+				if (totAmount.doubleValue() <= 0) {
 					project.setTotalCommited("");
 				} else {
 					project.setTotalCommited(mf.format(totAmount));

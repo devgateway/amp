@@ -1,5 +1,6 @@
 package org.digijava.module.aim.helper ;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -26,12 +27,12 @@ public class ReportQuarterWorker
 	}
 	
 	
-	public static double getAmount1(int yr, int qtr, Long ampFundingId,
+	public static BigDecimal getAmount1(int yr, int qtr, Long ampFundingId,
 	Integer transactionType,
 	Integer adjustmentType)
 	{
 		Collection ampFundings = DbUtil.getDonorFund1(ampFundingId, transactionType, adjustmentType);
-		double amt = 0.0;
+		BigDecimal amt = new BigDecimal(0);
 		if(ampFundings.size() != 0){
 			Iterator iterfunding = ampFundings.iterator();
 			int i=0;
@@ -46,12 +47,12 @@ public class ReportQuarterWorker
 				i++;
 				if(fdo.getFiscalYear() == yr && fdo.getFiscalQuarter() == qtr){
 					if(ampFundingDetail.getAmpCurrencyId().getCurrencyCode().equals("USD")){
-						amt = amt + ampFundingDetail.getTransactionAmount().doubleValue();
+						amt = amt.add(ampFundingDetail.getTransactionAmount());
 					}
 					else{
 						double fromCurrency = CurrencyUtil.getExchangeRate(ampFundingDetail.getAmpCurrencyId().getCurrencyCode());
 						double toCurrency = CurrencyUtil.getExchangeRate("USD");
-						amt = amt + CurrencyWorker.convert1(ampFundingDetail.getTransactionAmount().doubleValue(),fromCurrency,toCurrency);
+						amt = amt.add( CurrencyWorker.convert1(ampFundingDetail.getTransactionAmount(),fromCurrency,toCurrency));
 					}
 					
 				}
@@ -65,12 +66,12 @@ public class ReportQuarterWorker
 		}//if ampFundings
 		return amt;
 	}
-	public static double getAmountbyYr(int yr, Long ampFundingId,
+	public static BigDecimal getAmountbyYr(int yr, Long ampFundingId,
 		Integer transactionType,
 		Integer adjustmentType )
 	{
 	//	logger.info("getAmount1() with year = "+yr ) ;
-		double amt = 0.0;
+		BigDecimal amt = new BigDecimal(0);
 		Collection ampFundings = DbUtil.getDonorFund1(ampFundingId, transactionType, adjustmentType);
 	//	logger.info("Funding Size: " + ampFundings.size());
 		if(ampFundings.size() != 0){
@@ -88,12 +89,12 @@ public class ReportQuarterWorker
 				i++;
 				if(fdo.getFiscalYear() == yr ){
 					if(ampFundingDetail.getAmpCurrencyId().getCurrencyCode().equals("USD")){
-						amt = amt + ampFundingDetail.getTransactionAmount().doubleValue();
+						amt = amt.add(ampFundingDetail.getTransactionAmount());
 					}
 					else{
 						double fromCurrency = CurrencyUtil.getExchangeRate(ampFundingDetail.getAmpCurrencyId().getCurrencyCode());
 						double toCurrency = CurrencyUtil.getExchangeRate("USD");
-						amt = amt + CurrencyWorker.convert1(ampFundingDetail.getTransactionAmount().doubleValue(),fromCurrency,toCurrency);
+						amt = amt.add( CurrencyWorker.convert1(ampFundingDetail.getTransactionAmount(),fromCurrency,toCurrency));
 					}
 				
 				}

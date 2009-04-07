@@ -1,5 +1,6 @@
 package org.digijava.module.aim.helper;
 
+import java.math.BigDecimal;
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -129,28 +130,28 @@ public class MonthlyInfoWorker {
 
     }
 
-    public static double getSumAmounts(List fundingDetails, String currCode) throws DgException {
-        double sum = 0;
+    public static BigDecimal getSumAmounts(List fundingDetails, String currCode) throws DgException {
+        BigDecimal sum = new BigDecimal(0);
         if (fundingDetails != null && fundingDetails.size() > 0) {
             Iterator<AmpFundingDetail> monthPlannedIter = fundingDetails.iterator();
 
             while (monthPlannedIter.hasNext()) {
                 AmpFundingDetail det = monthPlannedIter.next();
-                double rate;
-                double defCurrRate;
+                BigDecimal rate=new BigDecimal(0);
+                BigDecimal defCurrRate=new BigDecimal(0);
                 java.sql.Date date = new java.sql.Date(det.getTransactionDate().getTime());
-                defCurrRate = Util.getExchange(currCode, date);
+                defCurrRate =new BigDecimal( Util.getExchange(currCode, date));
                 if (det.getFixedExchangeRate() == null) {
 
 
 
-                    rate = Util.getExchange(det.getAmpCurrencyId().getCurrencyCode(), date);
+                    rate = new BigDecimal( Util.getExchange(det.getAmpCurrencyId().getCurrencyCode(), date));
                 } else {
-                    rate = det.getFixedExchangeRate();
+                    rate = new BigDecimal(det.getFixedExchangeRate());
                 }
 
 
-                sum += det.getTransactionAmount() / rate * defCurrRate;
+                sum = sum.add(det.getTransactionAmount().divide(rate).multiply(defCurrRate));
 
             }
 
@@ -165,8 +166,8 @@ public class MonthlyInfoWorker {
         String currCode = fp.getCurrencyCode();
         int transactionType = fp.getTransactionType();
         List monthlyData = new ArrayList();
-        Double actualSum = new Double(0);
-        Double plannedSum = new Double(0);
+        BigDecimal actualSum = new BigDecimal(0);
+        BigDecimal plannedSum = new BigDecimal(0);
 
 
         /* if (transactionType == Constants.MTEFPROJECTION ) {

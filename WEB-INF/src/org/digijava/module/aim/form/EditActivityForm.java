@@ -6,6 +6,7 @@
 package org.digijava.module.aim.form;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -84,7 +85,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 	public class Contracts {
 		private List contracts;
-		private Double ipaBudget = null;
+		private BigDecimal ipaBudget = null;
 		private Integer selContractId;
 		private String contractDetails = null;
 		
@@ -112,11 +113,11 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.contracts = contracts;
 		}
 
-		public Double getIpaBudget() {
+		public BigDecimal getIpaBudget() {
 			return ipaBudget;
 		}
 
-		public void setIpaBudget(Double ipaBudget) {
+		public void setIpaBudget(BigDecimal ipaBudget) {
 			this.ipaBudget = ipaBudget;
 		}
 	}
@@ -3205,10 +3206,10 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	}
 
 	public class Costing {
-		private Double allCosts;
+		private BigDecimal allCosts;
 		private List costs;
-		private Double overallCost = null;
-		private Double overallContribution = null;
+		private BigDecimal overallCost = null;
+		private BigDecimal overallContribution = null;
 
 		public List getCosts() {
 			return costs;
@@ -3218,27 +3219,27 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.costs = costs;
 		}
 
-		public Double getOverallCost() {
+		public BigDecimal getOverallCost() {
 			return overallCost;
 		}
 
-		public void setOverallCost(Double overallCost) {
+		public void setOverallCost(BigDecimal overallCost) {
 			this.overallCost = overallCost;
 		}
 
-		public Double getOverallContribution() {
+		public BigDecimal getOverallContribution() {
 			return overallContribution;
 		}
 
-		public void setOverallContribution(Double overallContribution) {
+		public void setOverallContribution(BigDecimal overallContribution) {
 			this.overallContribution = overallContribution;
 		}
 
-		public Double getAllCosts() {
+		public BigDecimal getAllCosts() {
 			return allCosts;
 		}
 
-		public void setAllCosts(Double allCosts) {
+		public void setAllCosts(BigDecimal allCosts) {
 			this.allCosts = allCosts;
 		}
 

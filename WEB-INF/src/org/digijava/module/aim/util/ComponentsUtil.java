@@ -3,6 +3,7 @@ package org.digijava.module.aim.util;
 /*
  * @author Govind G Dalwani
  */
+import java.math.BigDecimal;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -517,7 +518,7 @@ public class ComponentsUtil {
     }
 
     public static void calculateFinanceByYearInfo(Components<FundingDetail> tempComp, Collection<AmpComponentFunding> fundingComponentActivity) {
-        SortedMap<Integer, Map<String, Double>> fbyi = new TreeMap<Integer, Map<String, Double>> ();
+        SortedMap<Integer, Map<String, BigDecimal>> fbyi = new TreeMap<Integer, Map<String, BigDecimal>> ();
         Iterator<AmpComponentFunding> fundingDetailIterator = fundingComponentActivity.iterator();
         while (fundingDetailIterator.hasNext()) {
             AmpComponentFunding fundingDetail = fundingDetailIterator.next();
@@ -525,22 +526,22 @@ public class ComponentsUtil {
             cal.setTime(fundingDetail.getTransactionDate());
             int year = cal.get(Calendar.YEAR);
             if (!fbyi.containsKey(year)) {
-                fbyi.put(year, new HashMap<String, Double> ());
+                fbyi.put(year, new HashMap<String, BigDecimal> ());
             }
-            Map<String, Double> yearInfo = fbyi.get(year);
-            double montoProgramado = yearInfo.get("MontoProgramado") != null ? yearInfo.get("MontoProgramado") : 0;
-            double montoReprogramado = yearInfo.get("MontoReprogramado") != null ? yearInfo.get("MontoReprogramado") : 0;
-            double montoEjecutado = yearInfo.get("MontoEjecutado") != null ? yearInfo.get("MontoEjecutado") : 0;
-            double exchangeRate = 1;
+            Map<String, BigDecimal> yearInfo = fbyi.get(year);
+            BigDecimal montoProgramado = yearInfo.get("MontoProgramado") != null ? yearInfo.get("MontoProgramado") : new BigDecimal(0);
+            BigDecimal montoReprogramado = yearInfo.get("MontoReprogramado") != null ? yearInfo.get("MontoReprogramado") : new BigDecimal(0);
+            BigDecimal montoEjecutado = yearInfo.get("MontoEjecutado") != null ? yearInfo.get("MontoEjecutado") : new BigDecimal(0);
+            BigDecimal exchangeRate = new BigDecimal(1);
             if (fundingDetail.getExchangeRate() != null && fundingDetail.getExchangeRate() != 0) {
-                exchangeRate = fundingDetail.getExchangeRate();
+                exchangeRate =new BigDecimal(fundingDetail.getExchangeRate()) ;
             }
             if (fundingDetail.getTransactionType() == 0 && fundingDetail.getAdjustmentType() == 0) {
-                montoProgramado += fundingDetail.getTransactionAmount() / exchangeRate;
+                montoProgramado =montoProgramado.add(fundingDetail.getTransactionAmount().divide(exchangeRate))   ;
             } else if (fundingDetail.getTransactionType() == 0 && fundingDetail.getAdjustmentType() == 1) {
-                montoReprogramado += fundingDetail.getTransactionAmount() / exchangeRate;
+                montoReprogramado =montoReprogramado.add(fundingDetail.getTransactionAmount().divide(exchangeRate)) ;
             } else if (fundingDetail.getTransactionType() == 2 && fundingDetail.getAdjustmentType() == 1) {
-                montoEjecutado += fundingDetail.getTransactionAmount() / exchangeRate;
+                montoEjecutado =montoEjecutado.add(fundingDetail.getTransactionAmount().divide( exchangeRate)) ;
             }
             yearInfo.put("MontoProgramado", montoProgramado);
             yearInfo.put("MontoReprogramado", montoReprogramado);

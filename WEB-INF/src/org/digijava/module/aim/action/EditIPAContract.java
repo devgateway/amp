@@ -1,5 +1,6 @@
     package org.digijava.module.aim.action;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -271,9 +272,9 @@ public class EditIPAContract extends MultiAction {
             
            if(contract.getDibusrsementsGlobalCurrency()!=null)
         	   cc=contract.getDibusrsementsGlobalCurrency().getCurrencyCode();
-           double td=0;
-           double usdAmount=0;  
-   		   double finalAmount=0; 
+           BigDecimal td=new BigDecimal(0);
+           BigDecimal usdAmount=new BigDecimal(0);  
+           BigDecimal finalAmount=new BigDecimal(0); 
    		   
 
 
@@ -283,9 +284,9 @@ public class EditIPAContract extends MultiAction {
       		  // converting the amount to the currency from the top and adding to the final sum.
       		  if(cd.getAmount()!=null)
       			  {
-      			  	usdAmount = CurrencyWorker.convertToUSD(cd.getAmount().doubleValue(),cd.getCurrCode());
+      			  	usdAmount = CurrencyWorker.convertToUSD(cd.getAmount(),cd.getCurrCode());
       			  	finalAmount = CurrencyWorker.convertFromUSD(usdAmount,cc);
-      			  	td+=finalAmount;
+      			  	td.add(finalAmount);
       			  }
       	  	}
       	  	
@@ -340,8 +341,8 @@ public class EditIPAContract extends MultiAction {
 	    	  		euaf.setExecutionRate(ActivityUtil.computeExecutionRateFromContractTotalValue(contract, cc));
 	        }
 	   	  	else {
-	   	  		contract.setExecutionRate(new Double(0));
-	   	  		euaf.setExecutionRate(new Double(0));
+	   	  		contract.setExecutionRate(new BigDecimal(0));
+	   	  		euaf.setExecutionRate(new BigDecimal(0));
 	   	  	}
 
         return modeFinalize(mapping, form, request, response);
@@ -579,14 +580,14 @@ public class EditIPAContract extends MultiAction {
         }
         
         if (euaf.getTotalECContribIBAmount() != null&&!euaf.getTotalECContribIBAmount().equals("")) {
-            eua.setTotalECContribIBAmount(Double.parseDouble(euaf.getTotalECContribIBAmount()));
+            eua.setTotalECContribIBAmount(new BigDecimal(Double.parseDouble(euaf.getTotalECContribIBAmount())));
         }
         if (euaf.getTotalAmount() != null && !euaf.getTotalAmount().equals("")) {
-            eua.setTotalAmount(Double.parseDouble(euaf.getTotalAmount()));
+            eua.setTotalAmount(new BigDecimal(Double.parseDouble(euaf.getTotalAmount())));
         }
         
         if (euaf.getContractTotalValue() != null && !euaf.getContractTotalValue().equals("")) {
-            eua.setContractTotalValue(Double.parseDouble(euaf.getContractTotalValue()));
+            eua.setContractTotalValue(new BigDecimal(Double.parseDouble(euaf.getContractTotalValue())));
         }
         
         if (euaf.getTotalAmountCurrency() != null && !euaf.getTotalAmountCurrency().equals("") && !euaf.getTotalAmountCurrency().equals(new Long(-1))) {
@@ -602,24 +603,24 @@ public class EditIPAContract extends MultiAction {
         
         if (euaf.getTotalECContribINVAmount() != null&&!euaf.getTotalECContribINVAmount().equals("")) {
 
-            eua.setTotalECContribINVAmount(Double.parseDouble(euaf.getTotalECContribINVAmount()));
+            eua.setTotalECContribINVAmount(new BigDecimal(Double.parseDouble(euaf.getTotalECContribINVAmount())));
         }
       
         if (euaf.getTotalNationalContribCentralAmount() != null&&!euaf.getTotalNationalContribCentralAmount().equals("")) {
-            eua.setTotalNationalContribCentralAmount(Double.parseDouble(euaf.getTotalNationalContribCentralAmount()));
+            eua.setTotalNationalContribCentralAmount(new BigDecimal(Double.parseDouble(euaf.getTotalNationalContribCentralAmount())));
         }
         
         if (euaf.getTotalNationalContribRegionalAmount() != null&&!euaf.getTotalNationalContribRegionalAmount().equals("")) {
 
-            eua.setTotalNationalContribRegionalAmount(Double.parseDouble(euaf.getTotalNationalContribRegionalAmount()));
+            eua.setTotalNationalContribRegionalAmount(new BigDecimal(Double.parseDouble(euaf.getTotalNationalContribRegionalAmount())));
         }
        
         if (euaf.getTotalNationalContribIFIAmount() != null&&!euaf.getTotalNationalContribIFIAmount().equals("")) {
-            eua.setTotalNationalContribIFIAmount(Double.parseDouble(euaf.getTotalNationalContribIFIAmount()));
+            eua.setTotalNationalContribIFIAmount(new BigDecimal((Double.parseDouble(euaf.getTotalNationalContribIFIAmount()))));
         }
         
         if (euaf.getTotalPrivateContribAmount() != null&&!euaf.getTotalPrivateContribAmount().equals("")) {
-            eua.setTotalPrivateContribAmount(Double.parseDouble(euaf.getTotalPrivateContribAmount()));
+            eua.setTotalPrivateContribAmount(new BigDecimal(Double.parseDouble(euaf.getTotalPrivateContribAmount())));
         }
        
          if (eaf.getContracts().getContracts() == null) {
@@ -655,9 +656,9 @@ public class EditIPAContract extends MultiAction {
              
             if(eua.getDibusrsementsGlobalCurrency()!=null)
          	   cc=eua.getDibusrsementsGlobalCurrency().getCurrencyCode();
-            double td=0;
-            double usdAmount;  
-    		   double finalAmount; 
+            BigDecimal td=new BigDecimal(0);
+            BigDecimal usdAmount=new BigDecimal(0);  
+            BigDecimal finalAmount=new BigDecimal(0); 
 
     		   for(Iterator j=disbs.iterator();j.hasNext();)
        	  	{
@@ -665,9 +666,9 @@ public class EditIPAContract extends MultiAction {
        		  // converting the amount to the currency from the top and adding to the final sum.
        		  if(cd.getAmount()!=null)
        			  {
-       			  	usdAmount = CurrencyWorker.convertToUSD(cd.getAmount().doubleValue(),cd.getCurrCode());
+       			  	usdAmount = CurrencyWorker.convertToUSD(cd.getAmount(),cd.getCurrCode());
        			  	finalAmount = CurrencyWorker.convertFromUSD(usdAmount,cc);
-       			  	td+=finalAmount;
+       			  	td=td.add(finalAmount);
        			  }
        	  	}
        	  	

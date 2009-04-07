@@ -8,6 +8,7 @@ package org.digijava.module.aim.util;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -32,7 +33,9 @@ import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
+import org.digijava.module.aim.action.GetFundingTotals;
 import org.digijava.module.aim.action.RecoverySaveParameters;
+import org.digijava.module.aim.action.ShowAddComponent;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActivityComponente;
@@ -57,7 +60,6 @@ import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpMeasure;
-import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpNotes;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
@@ -90,7 +92,6 @@ import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingValidator;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Issues;
 import org.digijava.module.aim.helper.Measures;
 import org.digijava.module.aim.helper.PhysicalProgress;
@@ -2810,16 +2811,16 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       {
     	  IPAContract c=(IPAContract) i.next();
     	  cc=c.getTotalAmountCurrency().getCurrencyCode();
-    	  double td=0;
+    	  BigDecimal td=new BigDecimal(0);
     	  for(Iterator j=c.getDisbursements().iterator();j.hasNext();)
     	  {
     		  IPAContractDisbursement cd=(IPAContractDisbursement) j.next();
     		  if(cd.getAmount()!=null)
-    			  td+=cd.getAmount().doubleValue();
+    			  td=td.add(cd.getAmount());
     	  }
     	  if(c.getDibusrsementsGlobalCurrency()!=null)
         	   cc=c.getDibusrsementsGlobalCurrency().getCurrencyCode();
-    	  c.setTotalDisbursements(new Double(td));
+    	  c.setTotalDisbursements(td);
     	  c.setExecutionRate(ActivityUtil.computeExecutionRateFromTotalAmount(c, c.getTotalAmountCurrency().getCurrencyCode()));
 		  c.setFundingTotalDisbursements(ActivityUtil.computeFundingDisbursementIPA(c, cc));
 		  c.setFundingExecutionRate(ActivityUtil.computeExecutionRateFromContractTotalValue(c, cc));
@@ -2853,8 +2854,8 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	      contrcats = qry.list();
 	      String cc=currCode;
           
-          double usdAmount;  
-  		   double finalAmount; 
+          BigDecimal usdAmount=new BigDecimal(0);  
+          BigDecimal finalAmount=new BigDecimal(0); 
 
 	      for(Iterator i=contrcats.iterator();i.hasNext();)
 	      {
@@ -2863,18 +2864,18 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	    		  cc=c.getTotalAmountCurrency().getCurrencyCode();
 	    	  if(c.getDibusrsementsGlobalCurrency()!=null)
 	          	   cc=c.getDibusrsementsGlobalCurrency().getCurrencyCode();
-	    	  double td=0;
+	    	  BigDecimal td=new BigDecimal(0);
 	    	  for(Iterator j=c.getDisbursements().iterator();j.hasNext();)
 	    	  {
 	    		  IPAContractDisbursement cd=(IPAContractDisbursement) j.next();
 	    		  if(cd.getAmount()!=null)
      			  {
-     			  	usdAmount = CurrencyWorker.convertToUSD(cd.getAmount().doubleValue(),cd.getCurrCode());
+     			  	usdAmount = CurrencyWorker.convertToUSD(cd.getAmount(),cd.getCurrCode());
      			  	finalAmount = CurrencyWorker.convertFromUSD(usdAmount,cc);
-     			  	td+=finalAmount;
+     			  	td=td.add(finalAmount);
      			  }
 	    	  }
-	    	  c.setTotalDisbursements(new Double(td));
+	    	  c.setTotalDisbursements(td);
 	    	  c.setExecutionRate(ActivityUtil.computeExecutionRateFromTotalAmount(c, cc));
  		      c.setFundingTotalDisbursements(ActivityUtil.computeFundingDisbursementIPA(c, cc));
 			  c.setFundingExecutionRate(ActivityUtil.computeExecutionRateFromContractTotalValue(c, cc));
@@ -2891,16 +2892,16 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	    return  contrcats ;
 	  } 
   
-  	public static double computeFundingDisbursementIPA(IPAContract contract, String cc){
+  	public static BigDecimal computeFundingDisbursementIPA(IPAContract contract, String cc){
   		
   		ArrayList<AmpFundingDetail> disbs1 = (ArrayList<AmpFundingDetail>) DbUtil.getDisbursementsFundingOfIPAContract(contract);	             
         //if there is no disbursement global currency saved in db we'll use the default from edit activity form
         
        if(contract.getTotalAmountCurrency()!=null)
     	   cc=contract.getTotalAmountCurrency().getCurrencyCode();
-        double td=0;
-        double usdAmount=0;  
-		double finalAmount=0; 
+       BigDecimal td=new BigDecimal(0) ;
+       BigDecimal usdAmount=new BigDecimal(0);  
+       BigDecimal finalAmount=new BigDecimal(0); 
 
 		for(Iterator<AmpFundingDetail> j=disbs1.iterator();j.hasNext();)
   	  	{
@@ -2909,7 +2910,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
   		  if(fd.getTransactionAmount()!=null)
   			  {
   			  	try {
-					usdAmount = CurrencyWorker.convertToUSD(fd.getTransactionAmount().doubleValue(),fd.getAmpCurrencyId().getCurrencyCode());
+					usdAmount = CurrencyWorker.convertToUSD(fd.getTransactionAmount(),fd.getAmpCurrencyId().getCurrencyCode());
 				} catch (AimException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -2920,7 +2921,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-  			  	td+=finalAmount;
+  			  	td=td.add(finalAmount);
   			  }
   	  	 }
 //      	contract.setFundingTotalDisbursements(td);
@@ -2928,13 +2929,13 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
   		return td;
   	}
   
-  	public static double computeExecutionRateFromContractTotalValue(IPAContract c, String currCode){
-  		double usdAmount1=0;  
-		   double finalAmount1=0; 
+  	public static BigDecimal computeExecutionRateFromContractTotalValue(IPAContract c, String currCode){
+  		BigDecimal usdAmount1=new BigDecimal(0);  
+  		BigDecimal finalAmount1=new BigDecimal(0); 
       	try {
 			if(c.getContractTotalValue()!=null && c.getTotalAmountCurrency().getCurrencyCode()!=null)	
-				usdAmount1 = CurrencyWorker.convertToUSD(c.getContractTotalValue().doubleValue(),c.getTotalAmountCurrency().getCurrencyCode());
-			else usdAmount1 = 0.0;
+				usdAmount1 = CurrencyWorker.convertToUSD(c.getContractTotalValue(),c.getTotalAmountCurrency().getCurrencyCode());
+			else usdAmount1 = new BigDecimal(0);
 			} catch (AimException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -2946,20 +2947,20 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 				e.printStackTrace();
 			}	
 		  
-		  double execRate=0;
-		  if(finalAmount1!=0)
-			  execRate=c.getFundingTotalDisbursements()/finalAmount1;
+		  BigDecimal execRate=new BigDecimal(0);
+		  if(finalAmount1.doubleValue()!=0)
+			  execRate=c.getFundingTotalDisbursements().divide(finalAmount1);
 		  c.setExecutionRate(execRate);
 		  return execRate;
   	}
 
-  	public static double computeExecutionRateFromTotalAmount(IPAContract c, String currCode){
-  		double usdAmount1=0;  
-		   double finalAmount1=0; 
+  	public static BigDecimal computeExecutionRateFromTotalAmount(IPAContract c, String currCode){
+  		BigDecimal usdAmount1=new BigDecimal(0);  
+  		BigDecimal finalAmount1=new BigDecimal(0); 
       	try {
 			if(c.getTotalAmount()!=null && c.getTotalAmountCurrency()!=null )	
-				usdAmount1 = CurrencyWorker.convertToUSD(c.getTotalAmount().doubleValue(),c.getTotalAmountCurrency().getCurrencyCode());
-			else usdAmount1=0.0;
+				usdAmount1 = CurrencyWorker.convertToUSD(c.getTotalAmount(),c.getTotalAmountCurrency().getCurrencyCode());
+			else usdAmount1=new BigDecimal(0);
 			} catch (AimException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -2971,9 +2972,9 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 				e.printStackTrace();
 			}	
 		  
-		  double execRate=0;
-		  if(finalAmount1!=0)
-			  execRate=c.getTotalDisbursements()/finalAmount1;
+			BigDecimal execRate=new BigDecimal(0);
+		  if(finalAmount1.doubleValue()!=0)
+			  execRate=c.getTotalDisbursements().divide(finalAmount1);
 		  c.setExecutionRate(execRate);
 		  return execRate;
   	}
@@ -3400,55 +3401,42 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 
 
   public static class ActivityAmounts {
-    private Double proposedAmout;
+    private BigDecimal proposedAmout =new BigDecimal(0);
     @Deprecated
-    private Double plannedAmount;
-    private Double actualAmount;
-    private Double actualDisbAmount;
+    private BigDecimal plannedAmount=new BigDecimal(0);
+    private BigDecimal actualAmount=new BigDecimal(0);
+    private BigDecimal actualDisbAmount=new BigDecimal(0);
 
-    public void AddPalenned(double amount) {
-      if (plannedAmount != null) {
-        plannedAmount = new Double(plannedAmount.doubleValue() + amount);
-      }
-      else {
-        plannedAmount = new Double(amount);
-      }
+    public void AddPalenned(BigDecimal amount) {
+      
+        plannedAmount = plannedAmount.add(amount);
+      
     }
 
-     public void AddActualDisb(double amount) {
-      if (actualDisbAmount != null) {
-        actualDisbAmount = new Double(actualDisbAmount + amount);
-      }
-      else {
-        actualDisbAmount = amount;
-      }
+     public void AddActualDisb(BigDecimal amount) {
+        actualDisbAmount = actualDisbAmount.add(amount);
     }
 
-    public void AddActual(double amount) {
-      if (actualAmount != null) {
-        actualAmount = new Double(actualAmount.doubleValue() + amount);
-      }
-      else {
-        actualAmount = new Double(amount);
-      }
+    public void AddActual(BigDecimal amount) {
+        actualAmount = actualAmount.add(amount);
     }
 
     public String actualAmount() {
-      if (actualAmount == null || actualAmount == 0) {
+      if (actualAmount == null || actualAmount.doubleValue() == 0d) {
         return "N/A";
       }
       return FormatHelper.formatNumber(actualAmount);
     }
 
     public String actualDisbAmount() {
-      if (actualDisbAmount == null || actualDisbAmount == 0) {
+      if (actualDisbAmount == null || actualDisbAmount.doubleValue() == 0d) {
         return "N/A";
       }
       return FormatHelper.formatNumber(actualDisbAmount);
     }
 
     public String plannedAmount() {
-      if (plannedAmount == null|| plannedAmount == 0) {
+      if (plannedAmount == null|| plannedAmount.doubleValue() == 0d) {
         return "N/A";
       }
       return FormatHelper.formatNumber(plannedAmount);
@@ -3461,50 +3449,40 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       return FormatHelper.formatNumber(proposedAmout);
     }
 
-    public void setProposedAmout(double proposedAmout) {
-      this.proposedAmout = new Double(proposedAmout);
+    public void setProposedAmout(BigDecimal proposedAmout) {
+      this.proposedAmout =proposedAmout;
     }
 
 
-      public double getActualDisbAmoount() {
-          if (actualDisbAmount == null) {
-              return 0;
-          }
+      public BigDecimal getActualDisbAmoount() {
+      
           return actualDisbAmount;
       }
 
-     public void setActualDisbAmount(Double actualDisbAmount) {
+     public void setActualDisbAmount(BigDecimal actualDisbAmount) {
           this.actualDisbAmount = actualDisbAmount;
       }
 
-    public double getActualAmount() {
-      if (actualAmount == null) {
-        return 0;
-      }
-      return actualAmount.doubleValue();
+    public BigDecimal getActualAmount() {
+
+      return actualAmount;
     }
 
-    public double getPlannedAmount() {
-      if (plannedAmount == null) {
-        return 0;
-      }
-      return plannedAmount.doubleValue();
+    public BigDecimal getPlannedAmount() {
+    	return plannedAmount;
     }
 
-    public double getProposedAmout() {
-      if (proposedAmout == null) {
-        return 0;
-      }
-      return proposedAmout.doubleValue();
+    public BigDecimal getProposedAmout() {
+       return proposedAmout;
     }
 
   }
 
   public static ActivityAmounts getActivityAmmountIn(AmpActivity act,
       String tocode,Long percent) throws Exception {
-    double tempProposed = 0;
-    double tempActual = 0;
-    double tempPlanned = 0;
+    BigDecimal tempProposed = new BigDecimal(0);
+    BigDecimal tempActual = new BigDecimal(0);
+    BigDecimal tempPlanned = new BigDecimal(0);
     ActivityAmounts result = new ActivityAmounts();
 
     AmpCategoryValue statusValue = CategoryManagerUtil.
@@ -3519,7 +3497,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
           currencyCode = "USD";
         } //end of AMP-1403
         //apply program percent
-        tempProposed = CurrencyWorker.convert(act.getFunAmount().doubleValue()*percent/100,tocode);
+        tempProposed = CurrencyWorker.convert(act.getFunAmount().multiply(new BigDecimal(percent/100)),tocode);
         result.setProposedAmout(tempProposed);
       }
       else {
@@ -3534,9 +3512,9 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
                   org.digijava.module.aim.logic.FundingCalculationsHelper calculations = new org.digijava.module.aim.logic.FundingCalculationsHelper();
                   calculations.doCalculations(fundDetails, tocode);
                   //apply program percent
-                  result.AddActual(calculations.getTotActualComm().doubleValue()*percent/100);
-                  result.AddPalenned(calculations.getTotPlannedComm().doubleValue()*percent/100);
-                  result.AddActualDisb(calculations.getTotActualDisb().doubleValue()*percent/100);
+                  result.AddActual(calculations.getTotActualComm().getValue().multiply(new BigDecimal(percent/100)));
+                  result.AddPalenned(calculations.getTotPlannedComm().getValue().multiply(new BigDecimal(percent/100)));
+                  result.AddActualDisb(calculations.getTotActualDisb().getValue().multiply(new BigDecimal(percent/100)));
               }
           }
         }
@@ -4017,10 +3995,8 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
                 FundingDetail helperFdet = iter.next();
                 AmpCurrency detCurr = CurrencyUtil.getAmpcurrency(helperFdet.getCurrencyCode());
                 Date date = DateConversion.getDate(helperFdet.getTransactionDate());
-                Double transAmt = new Double(FormatHelper.parseDouble(helperFdet.getTransactionAmount()));
-                if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
-                    transAmt *= 1000;
-                }
+                BigDecimal transAmt = FormatHelper.parseBigDecimal(helperFdet.getTransactionAmount());
+                transAmt=FeaturesUtil.applyThousandsForEntry(transAmt);
                 AmpFundingDetail fundDet = new AmpFundingDetail(helperFdet.getTransactionType(), helperFdet.getAdjustmentType(), transAmt, date, detCurr, helperFdet.getFixedExchangeRate());
                 ampFundDets.add(fundDet);
             }

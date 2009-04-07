@@ -1,234 +1,228 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
-import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.orgProfile.util.OrgProfileUtil;
 
-public class AmpFundingDetail implements Serializable
-{
-	private Long ampFundDetailId ;
-	private Integer fiscalYear ;
+public class AmpFundingDetail implements Serializable {
+	private Long ampFundDetailId;
+	private Integer fiscalYear;
 	private Integer fiscalQuarter;
 	/**
-	 * values of transactionType
-	 * public static final int COMMITMENT = 0 ;
-	public static final int DISBURSEMENT = 1 ;
-	public static final int EXPENDITURE = 2 ;
-    public static final int DISBURSEMENT_ORDER = 4 ;
-	public static final int MTEFPROJECTION = 3 ;
+	 * values of transactionType public static final int COMMITMENT = 0 ; public
+	 * static final int DISBURSEMENT = 1 ; public static final int EXPENDITURE =
+	 * 2 ; public static final int DISBURSEMENT_ORDER = 4 ; public static final
+	 * int MTEFPROJECTION = 3 ;
 	 */
-	private Integer transactionType ;
-	private Integer adjustmentType ;
-	private Date transactionDate ;
-	private Date transactionDate2 ;
+	private Integer transactionType;
+	private Integer adjustmentType;
+	private Date transactionDate;
+	private Date transactionDate2;
 	private Date reportingDate;
-	private Double transactionAmount;
-	private Double thousandsTransactionAmount;
-	private String language ;
-	private String version ;
-	private String calType ;
-	private String orgRoleCode ; // defunct
-	private AmpCurrency ampCurrencyId ;
+	private BigDecimal transactionAmount;
+	private BigDecimal thousandsTransactionAmount;
+	private String language;
+	private String version;
+	private String calType;
+	private String orgRoleCode; // defunct
+	private AmpCurrency ampCurrencyId;
 	private AmpOrganisation reportingOrgId;
-	private AmpFunding  ampFundingId;
+	private AmpFunding ampFundingId;
 	private Double fixedExchangeRate;
 	private Boolean disbursementOrderRejected;
 
 	private String expCategory;
-        private String disbOrderId;
-        private IPAContract contract;
-        private Double transactionAmountInUSD;
-        
-        public AmpFundingDetail(){}
-        
-        
-        public AmpFundingDetail(Integer transactionType,Integer adjustmentType,Double transactionAmount,Date transactionDate,AmpCurrency ampCurrencyId, Float percent,Double fixedExchangeRate){
-            this(transactionType,adjustmentType,transactionDate,ampCurrencyId,fixedExchangeRate); 
-            if(percent==null||percent==0){
-            this.transactionAmount=transactionAmount;
-            }
-            else{
-                this.transactionAmount=transactionAmount*percent/100;
-            }
-        }
-        
-        // used in org profile for indicator 4
-         public AmpFundingDetail(Integer transactionType,Integer adjustmentType,Double transactionAmount,Date transactionDate,AmpCurrency ampCurrencyId,Double fixedExchangeRate, Long ahsureyId){
-            this(transactionType,adjustmentType,transactionDate,ampCurrencyId,fixedExchangeRate); 
-            this.transactionAmount=transactionAmount*OrgProfileUtil.getQ4Value(ahsureyId);
-     
-        }
-          // used in org profile 
-         public AmpFundingDetail(Integer transactionType,Integer adjustmentType,Double transactionAmount,Date transactionDate,AmpCurrency ampCurrencyId,Double fixedExchangeRate){
-            this(transactionType,adjustmentType,transactionDate,ampCurrencyId,fixedExchangeRate); 
-            this.transactionAmount=transactionAmount;
-            
-        }
-         
-        public AmpFundingDetail(Integer transactionType,Integer adjustmentType,Date transactionDate,AmpCurrency ampCurrencyId,Double fixedExchangeRate){
-            this.transactionType=transactionType;
-            this.adjustmentType=adjustmentType;
-            this.transactionDate=transactionDate;
-            this.ampCurrencyId=ampCurrencyId;
-            this.fixedExchangeRate=fixedExchangeRate;
-            
-        }
-        
+	private String disbOrderId;
+	private IPAContract contract;
+	private BigDecimal transactionAmountInUSD;
 
-        public Double getTransactionAmountInUSD() {
-            return transactionAmountInUSD;
-        }
+	public AmpFundingDetail() {
+	}
 
-        public void setTransactionAmountInUSD(Double transactionAmountInUSD) {
-            this.transactionAmountInUSD = transactionAmountInUSD;
-        }
-
-       
-
-        public IPAContract getContract() {
-            return contract;
-        }
-
-        public void setContract(IPAContract contract) {
-            this.contract = contract;
-        }
-
-        /**
-		 * @return
-		 */
-		public Integer getAdjustmentType() {
-			return adjustmentType;
+	public AmpFundingDetail(Integer transactionType, Integer adjustmentType, BigDecimal transactionAmount, Date transactionDate, AmpCurrency ampCurrencyId, Float percent, Double fixedExchangeRate) {
+		this(transactionType, adjustmentType, transactionDate, ampCurrencyId, fixedExchangeRate);
+		if (percent == null || percent == 0) {
+			this.transactionAmount = transactionAmount;
+		} else {
+			this.transactionAmount = transactionAmount.multiply(new BigDecimal(percent)).divide(new BigDecimal(100));
 		}
+	}
 
-		/**
-		 * @return
-		 */
-		public Long getAmpFundDetailId() {
-			return ampFundDetailId;
-		}
+	// used in org profile for indicator 4
+	public AmpFundingDetail(Integer transactionType, Integer adjustmentType, BigDecimal transactionAmount, Date transactionDate, AmpCurrency ampCurrencyId, Double fixedExchangeRate, Long ahsureyId) {
+		this(transactionType, adjustmentType, transactionDate, ampCurrencyId, fixedExchangeRate);
+		this.transactionAmount = transactionAmount.multiply(new BigDecimal(OrgProfileUtil.getQ4Value(ahsureyId)));
 
-/*		public Long getAmpFundingId() {
-			return ampFundingId;
-		}*/
+	}
 
-		/**
-		 * @return
-		 */
-		public Integer getFiscalQuarter() {
-			return fiscalQuarter;
-		}
+	// used in org profile
+	public AmpFundingDetail(Integer transactionType, Integer adjustmentType, BigDecimal transactionAmount, Date transactionDate, AmpCurrency ampCurrencyId, Double fixedExchangeRate) {
+		this(transactionType, adjustmentType, transactionDate, ampCurrencyId, fixedExchangeRate);
+		this.transactionAmount = transactionAmount;
 
-		/**
-		 * @return
-		 */
-		public Integer getFiscalYear() {
-			return fiscalYear;
-		}
+	}
 
-		/**
-		 * @return
-		 */
-		public String getOrgRoleCode() {
-			return orgRoleCode;
-		}
+	public AmpFundingDetail(Integer transactionType, Integer adjustmentType, Date transactionDate, AmpCurrency ampCurrencyId, Double fixedExchangeRate) {
+		this.transactionType = transactionType;
+		this.adjustmentType = adjustmentType;
+		this.transactionDate = transactionDate;
+		this.ampCurrencyId = ampCurrencyId;
+		this.fixedExchangeRate = fixedExchangeRate;
 
-		/**
-		 * @return
-		 */
-		public Date getReportingDate() {
-			return reportingDate;
-		}
+	}
 
-		/**
-		 * @return
-		 */
-		public Double getTransactionAmount() {
-			return FeaturesUtil.applyThousandsForVisibility(transactionAmount);
-		}
+	public BigDecimal getTransactionAmountInUSD() {
+		return transactionAmountInUSD;
+	}
 
-		/**
-		 * @return
-		 */
-		public Date getTransactionDate() {
-			return transactionDate;
-		}
+	public void setTransactionAmountInUSD(BigDecimal transactionAmountInUSD) {
+		this.transactionAmountInUSD = transactionAmountInUSD;
+	}
 
-		/**
-		 * @return
-		 */
-		public Integer getTransactionType() {
-			return transactionType;
-		}
+	public IPAContract getContract() {
+		return contract;
+	}
 
-		/**
-		 * @param i
-		 */
-		public void setAdjustmentType(Integer i) {
-			adjustmentType = i;
-		}
+	public void setContract(IPAContract contract) {
+		this.contract = contract;
+	}
 
-		/**
-		 * @param long1
-		 */
-		public void setAmpFundDetailId(Long long1) {
-			ampFundDetailId = long1;
-		}
+	/**
+	 * @return
+	 */
+	public Integer getAdjustmentType() {
+		return adjustmentType;
+	}
 
-/*		public void setAmpFundingId(Long long1) {
-			ampFundingId = long1;
-		}*/
+	/**
+	 * @return
+	 */
+	public Long getAmpFundDetailId() {
+		return ampFundDetailId;
+	}
 
-		/**
-		 * @param string
-		 */
-		public void setFiscalQuarter(Integer i) {
-			fiscalQuarter = i;
-		}
+	/*
+	 * public Long getAmpFundingId() { return ampFundingId; }
+	 */
 
-		/**
-		 * @param i
-		 */
-		public void setFiscalYear(Integer i) {
-			fiscalYear = i;
-		}
+	/**
+	 * @return
+	 */
+	public Integer getFiscalQuarter() {
+		return fiscalQuarter;
+	}
 
-		/**
-		 * @param string
-		 */
-		public void setOrgRoleCode(String string) {
-			orgRoleCode = string;
-		}
+	/**
+	 * @return
+	 */
+	public Integer getFiscalYear() {
+		return fiscalYear;
+	}
 
-		/**
-		 * @param date
-		 */
-		public void setReportingDate(Date date) {
-			reportingDate = date;
-		}
+	/**
+	 * @return
+	 */
+	public String getOrgRoleCode() {
+		return orgRoleCode;
+	}
 
-		/**
-		 * @param d
-		 */
-		public void setTransactionAmount(Double d) {
-			transactionAmount =FeaturesUtil.applyThousandsForEntry(d);
-		}
+	/**
+	 * @return
+	 */
+	public Date getReportingDate() {
+		return reportingDate;
+	}
 
-		/**
-		 * @param date
-		 */
-		public void setTransactionDate(Date date) {
-			transactionDate = date;
-		}
+	/**
+	 * @return
+	 */
+	public BigDecimal getTransactionAmount() {
+		return FeaturesUtil.applyThousandsForVisibility(transactionAmount);
+	}
 
-		/**
-		 * @param i
-		 */
-		public void setTransactionType(Integer i) {
-			transactionType = i;
-		}
+	/**
+	 * @return
+	 */
+	public Date getTransactionDate() {
+		return transactionDate;
+	}
+
+	/**
+	 * @return
+	 */
+	public Integer getTransactionType() {
+		return transactionType;
+	}
+
+	/**
+	 * @param i
+	 */
+	public void setAdjustmentType(Integer i) {
+		adjustmentType = i;
+	}
+
+	/**
+	 * @param long1
+	 */
+	public void setAmpFundDetailId(Long long1) {
+		ampFundDetailId = long1;
+	}
+
+	/*
+	 * public void setAmpFundingId(Long long1) { ampFundingId = long1; }
+	 */
+
+	/**
+	 * @param string
+	 */
+	public void setFiscalQuarter(Integer i) {
+		fiscalQuarter = i;
+	}
+
+	/**
+	 * @param i
+	 */
+	public void setFiscalYear(Integer i) {
+		fiscalYear = i;
+	}
+
+	/**
+	 * @param string
+	 */
+	public void setOrgRoleCode(String string) {
+		orgRoleCode = string;
+	}
+
+	/**
+	 * @param date
+	 */
+	public void setReportingDate(Date date) {
+		reportingDate = date;
+	}
+
+	/**
+	 * @param d
+	 */
+	public void setTransactionAmount(BigDecimal d) {
+		transactionAmount = FeaturesUtil.applyThousandsForEntry(d);
+	}
+
+	/**
+	 * @param date
+	 */
+	public void setTransactionDate(Date date) {
+		transactionDate = date;
+	}
+
+	/**
+	 * @param i
+	 */
+	public void setTransactionType(Integer i) {
+		transactionType = i;
+	}
 
 	public String getLanguage() {
 		return language;
@@ -238,7 +232,6 @@ public class AmpFundingDetail implements Serializable
 		return version;
 	}
 
-
 	public void setLanguage(String string) {
 		language = string;
 	}
@@ -247,8 +240,9 @@ public class AmpFundingDetail implements Serializable
 		version = string;
 	}
 
-
-	/**reportingOrgId
+	/**
+	 * reportingOrgId
+	 * 
 	 * @return
 	 */
 	public AmpCurrency getAmpCurrencyId() {
@@ -277,10 +271,9 @@ public class AmpFundingDetail implements Serializable
 		return ampFundingId;
 	}
 
-	public void setAmpFundingId(AmpFunding f ) {
+	public void setAmpFundingId(AmpFunding f) {
 		this.ampFundingId = f;
 	}
-
 
 	/**
 	 * @return
@@ -316,8 +309,10 @@ public class AmpFundingDetail implements Serializable
 	public String getExpCategory() {
 		return expCategory;
 	}
+
 	/**
-	 * @param expCategory The expCategory to set.
+	 * @param expCategory
+	 *            The expCategory to set.
 	 */
 	public void setExpCategory(String expCategory) {
 		this.expCategory = expCategory;
@@ -327,41 +322,32 @@ public class AmpFundingDetail implements Serializable
 		return fixedExchangeRate;
 	}
 
+	public String getDisbOrderId() {
+		return disbOrderId;
+	}
 
-        public String getDisbOrderId() {
-                return disbOrderId;
-        }
-
-        public void setFixedExchangeRate(Double fixedExchangeRate) {
+	public void setFixedExchangeRate(Double fixedExchangeRate) {
 		this.fixedExchangeRate = fixedExchangeRate;
 	}
 
+	public void setDisbOrderId(String disbOrderId) {
+		this.disbOrderId = disbOrderId;
+	}
 
-        public void setDisbOrderId(String disbOrderId) {
-                this.disbOrderId = disbOrderId;
-        }
+	public BigDecimal getThousandsTransactionAmount() {
+		return thousandsTransactionAmount;
+	}
 
-		public Double getThousandsTransactionAmount() {
-			return thousandsTransactionAmount;
-		}
+	public void setThousandsTransactionAmount(BigDecimal thousandsTransactionAmount) {
+		this.thousandsTransactionAmount = thousandsTransactionAmount;
+	}
 
-		public void setThousandsTransactionAmount(Double thousandsTransactionAmount) {
-			this.thousandsTransactionAmount = thousandsTransactionAmount;
-		}
+	public void setDisbursementOrderRejected(Boolean disbursementOrderRejected) {
+		this.disbursementOrderRejected = disbursementOrderRejected;
+	}
 
-
-		public void setDisbursementOrderRejected(
-				Boolean disbursementOrderRejected) {
-			this.disbursementOrderRejected = disbursementOrderRejected;
-		}
-
-
-		public Boolean getDisbursementOrderRejected() {
-			return disbursementOrderRejected;
-		}
+	public Boolean getDisbursementOrderRejected() {
+		return disbursementOrderRejected;
+	}
 
 }
-
-
-
-

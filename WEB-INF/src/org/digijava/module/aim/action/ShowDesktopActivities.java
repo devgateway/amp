@@ -1,5 +1,6 @@
 package org.digijava.module.aim.action;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -264,7 +265,7 @@ public class ShowDesktopActivities extends TilesAction {
 
 			itr = null;
 
-			double grandTotal = DesktopUtil.updateProjectTotals(
+			BigDecimal grandTotal = DesktopUtil.updateProjectTotals(
 					dForm.getActivities(),currCode);
 
 			dForm.setTotalCommitments(mf.format(grandTotal));

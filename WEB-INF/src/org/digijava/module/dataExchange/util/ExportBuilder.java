@@ -1,5 +1,6 @@
 package org.digijava.module.dataExchange.util;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -393,7 +394,7 @@ public class ExportBuilder {
 					DataExchangeConstants.ADJUSTMENT_TYPE_PLANNED;
 		
 		FundingDetailType fDetail = buildFundingDetail(fDetailType, ampfunding.getTransactionDate(), 
-				ampfunding.getTransactionAmount().longValue(), ampfunding.getCurrency().getCurrencyCode());
+				ampfunding.getTransactionAmount(), ampfunding.getCurrency().getCurrencyCode());
 
 
 		switch (ampfunding.getTransactionType().intValue()) {
@@ -461,7 +462,7 @@ public class ExportBuilder {
 			for (AmpFundingMTEFProjection ampProj : ampfunding.getMtefProjections()) {
 				FundingType.Projections proj = objectFactory.createFundingTypeProjections();
 				proj.setType(ampProj.getProjected().getValue());
-				proj.setAmount(ampProj.getAmount().longValue());
+				proj.setAmount(ampProj.getAmount());
 				proj.setCurrency(ampProj.getAmpCurrency().getCurrencyCode());
 
 				Calendar cal = Calendar.getInstance();
@@ -660,10 +661,10 @@ public class ExportBuilder {
 		String fDetailType = (detail.getAdjustmentType() == 1) ? 
 				DataExchangeConstants.ADJUSTMENT_TYPE_ACTUAL : 
 					DataExchangeConstants.ADJUSTMENT_TYPE_PLANNED;
-		long amount = 0;
+		BigDecimal amount = new BigDecimal(0);
 		
 		if (detail.getTransactionAmount() != null){
-			amount = detail.getTransactionAmount().longValue();
+			amount = detail.getTransactionAmount();
 		} else {
 			String msg = "AmpFundingDetail.getTransactionAmount is null";
 			this.addToLog(ampActivity, msg);
@@ -674,10 +675,10 @@ public class ExportBuilder {
 	}
 
 	private FundingDetailType buildFundingDetail(FundingDetail fDetail) throws AmpExportException{
-		long amount = 0;
+		BigDecimal amount = new BigDecimal(0);
 		
 		try {
-			amount = Long.parseLong(fDetail.getTransactionAmount());
+			amount = new BigDecimal(fDetail.getTransactionAmount());
 		} catch (Exception e) {
 			String msg = "TransactionAmount is null or not correct";
 			this.addToLog(ampActivity, msg);
@@ -701,14 +702,14 @@ public class ExportBuilder {
 		return retValue;
 	}
 	
-	private FundingDetailType buildFundingDetail(String type, Date date, long amount, String currency) throws AmpExportException{
+	private FundingDetailType buildFundingDetail(String type, Date date, BigDecimal amount, String currency) throws AmpExportException{
 		FundingDetailType retValue = objectFactory.createFundingDetailType();
 		retValue.setType(type);
 		retValue.setDate(ExportHelper.getGregorianCalendar(date));
 		
 		boolean returnString = Boolean.parseBoolean( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS) );
 		if (returnString){
-			amount = amount * 1000;
+			amount = amount.multiply(new BigDecimal(1000)) ;
 		}
 
 		retValue.setAmount(amount);

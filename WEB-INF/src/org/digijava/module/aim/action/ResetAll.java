@@ -457,7 +457,7 @@ public class ResetAll extends Action
 							}
 							fundingDetail.setCurrencyCode(fundDet.getAmpCurrencyId().getCurrencyCode());
 							fundingDetail.setCurrencyName(fundDet.getAmpCurrencyId().getCountryName());
-							fundingDetail.setTransactionAmount(CurrencyWorker.convert(fundDet.getTransactionAmount().doubleValue(),1, 1));
+							fundingDetail.setTransactionAmount(CurrencyWorker.convert(fundDet.getTransactionAmount(),1, 1));
 							fundingDetail.setTransactionDate(DateConversion.ConvertDateToString(fundDet.getTransactionDate()));
 							fundingDetail.setTransactionType(fundDet.getTransactionType().intValue());
 							fundDetail.add(fundingDetail);

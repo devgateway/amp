@@ -1059,7 +1059,7 @@ public class DbUtil {
 				return total;
     }
 
-    public static double getTotalDonorFund(Long ampFundingId,
+    public static BigDecimal getTotalDonorFund(Long ampFundingId,
                                            Integer transactionType, Integer adjustmentType) {
 
         logger.debug("getTotalDonorFund() with ampFundingId " + ampFundingId
@@ -1070,8 +1070,8 @@ public class DbUtil {
         Query q = null;
         List list = null;
         Iterator iter = null;
-        Double total = new Double(0.0);
-        ;
+        BigDecimal total = new BigDecimal(0);
+        
 
         try {
             session = PersistenceManager.getRequestDBSession();
@@ -1090,7 +1090,7 @@ public class DbUtil {
             if (list.size() != 0) {
                 iter = list.iterator();
                 while (iter.hasNext()) {
-                    total = (Double) iter.next();
+                    total = (BigDecimal) iter.next();
                 }
             }
         } catch (Exception ex) {
@@ -1098,7 +1098,7 @@ public class DbUtil {
         }
 
         logger.debug("getTotalDonorFund() total : " + total);
-        return total.doubleValue();
+        return total;
     }
 
     public static Collection getYearlySum(Long ampFundingId,
@@ -3310,7 +3310,7 @@ public class DbUtil {
  									.getTransactionDate().getTime()));
 
                 	 DecimalWraper tmpamount =CurrencyWorker.convertWrapper(ampFundingDetail
-							.getTransactionAmount().doubleValue(),
+							.getTransactionAmount(),
 							fromCurrency, toCurrency, new java.sql.Date(
 									ampFundingDetail.getTransactionDate()
 											.getTime()));
@@ -3336,7 +3336,7 @@ public class DbUtil {
 					logger.debug("From Currency: " + fromCurrency);
 
 					DecimalWraper tmpamount =CurrencyWorker.convertWrapper(ampFundingDetail
-							.getTransactionAmount().doubleValue(),
+							.getTransactionAmount(),
 							fromCurrency, toCurrency, new java.sql.Date(
 									ampFundingDetail.getTransactionDate()
 											.getTime()));
@@ -3612,7 +3612,7 @@ public class DbUtil {
         return project;
     }
 
-    public static double getDonorFund(Long ampFundingId,
+    public static BigDecimal getDonorFund(Long ampFundingId,
                                       Integer transactionType, Integer adjustmentType) {
         logger.debug("getTotalDonorFund() with ampFundingId " + ampFundingId
                      + " transactionType " + transactionType + " adjustmentType "
@@ -3621,7 +3621,7 @@ public class DbUtil {
         Query q = null;
         List list = null;
         Iterator iter = null;
-        double total = 0.0;
+        BigDecimal total =new BigDecimal(0);
 
         try {
             session = PersistenceManager.getRequestDBSession();
@@ -3645,8 +3645,7 @@ public class DbUtil {
                 fundDetails = (AmpFundingDetail) iter.next();
                 if (fundDetails.getAmpCurrencyId().getCurrencyCode().equals(
                     "USD")) { //logger.debug("equals USD");
-                    total = total
-                        + fundDetails.getTransactionAmount().doubleValue();
+                    total = total.add(fundDetails.getTransactionAmount());
                 } else { //logger.debug(" not equal to USD ") ;
                     double fromCurrency = Util.getExchange(fundDetails
                         .getAmpCurrencyId().getCurrencyCode(),new java.sql.Date(fundDetails.getTransactionDate().getTime()));
@@ -3654,10 +3653,7 @@ public class DbUtil {
                     //total = total +
                     // CurrencyWorker.convert(fundDetails.getTransactionAmount().doubleValue(),"USD")
                     // ;
-                    total = total
-                        + CurrencyWorker.convert1(fundDetails
-                                                  .getTransactionAmount().doubleValue(),
-                                                  fromCurrency, toCurrency);
+                    total = total.add(CurrencyWorker.convert1(fundDetails.getTransactionAmount(),fromCurrency, toCurrency));
                     //logger.debug("AFTER conversion total is " + total);
                 }
 
@@ -3668,14 +3664,14 @@ public class DbUtil {
         return total;
     }
 
-    public static double getDonorFundbyFiscalYear(Long ampFundingId,
+    public static BigDecimal getDonorFundbyFiscalYear(Long ampFundingId,
                                                   Integer transactionType, Integer adjustmentType,
                                                   Integer fiscalYear) {
         Session session = null;
         Query q = null;
         List list = null;
         Iterator iter = null;
-        double total = 0.0;
+        BigDecimal total = new BigDecimal(0);
 
         try {
             session = PersistenceManager.getRequestDBSession();
@@ -3708,14 +3704,12 @@ public class DbUtil {
 
                 if (fundDetails.getAmpCurrencyId().getCurrencyCode().equals(
                     "USD")) {
-                    total = total
-                        + fundDetails.getTransactionAmount().doubleValue();
+                    total = total.add(fundDetails.getTransactionAmount());
                     logger.debug("if total " + total);
                 } else {
-                    total = total
-                        + CurrencyWorker.convert1(fundDetails
-                                                  .getTransactionAmount().doubleValue(),
-                                                  fromCurrency, toCurrency);
+                    total = total.add(CurrencyWorker.convert1(fundDetails
+                                                  .getTransactionAmount(),
+                                                  fromCurrency, toCurrency));
                     logger.debug(" else total " + total);
                 }
 
@@ -3727,7 +3721,7 @@ public class DbUtil {
         return total;
     }
 
-    public static double getDonorFundbyFiscalYear(Long ampFundingId,
+    public static BigDecimal getDonorFundbyFiscalYear(Long ampFundingId,
                                                   Integer transactionType, Integer adjustmentType,
                                                   Integer fiscalYear, Integer fiscalQuarter) {
         /*
@@ -3740,7 +3734,7 @@ public class DbUtil {
         Query q = null;
         List list = null;
         Iterator iter = null;
-        double total = 0.0;
+        BigDecimal total = new BigDecimal(0);
 
         try {
             session = PersistenceManager.getRequestDBSession();
@@ -3767,13 +3761,9 @@ public class DbUtil {
                 fundDetails = (AmpFundingDetail) iter.next();
                 if (fundDetails.getAmpCurrencyId().getCurrencyCode().equals(
                     "USD")) {
-                    total = total
-                        + fundDetails.getTransactionAmount().doubleValue();
+                    total = total.add(fundDetails.getTransactionAmount());
                 } else {
-                    total = total
-                        + CurrencyWorker.convert(fundDetails
-                                                 .getTransactionAmount().doubleValue(),
-                                                 "USD");
+                    total = total.add(CurrencyWorker.convert(fundDetails.getTransactionAmount(),"USD"));
 
                 }
 
@@ -5626,13 +5616,14 @@ public class DbUtil {
         int NUM_ANSWER_COLUMNS = 4;
         int YEAR_RANGE = (closeYear - startYear + 1);
         int indcFlag = 0, index = 0, j = 0, convYr = 0;
-        double sum = 0.0, fromExchangeRate = 0.0, toExchangeRate = 0.0, ansToQues4 = 0.0;
+        BigDecimal sum = new BigDecimal(0);
+        double fromExchangeRate = 0.0, toExchangeRate = 0.0, ansToQues4 = 0.0;
         Date startDates[] = null;
         Date endDates[] = null;
-        double answersRow[] = null;
-        double allDnRow[] = null;
+        BigDecimal answersRow[] = null;
+        BigDecimal allDnRow[] = null;
         boolean answers[] = null;
-        Double percent = null;
+        BigDecimal percent = null;
         NumberFormat formatter = new DecimalFormat("#.##");
         String date = null;
         Iterator itr1 = null, itr2 = null, itr3 = null, itr4 = null;
@@ -5688,8 +5679,8 @@ public class DbUtil {
                 responses.add(all);
                 if (indcFlag != 6) {
                     for (int i = 0; i < YEAR_RANGE; i++) {
-                        answersRow = new double[NUM_ANSWER_COLUMNS];
-                        answersRow[0] = startYear + i;
+                        answersRow = new BigDecimal[NUM_ANSWER_COLUMNS];
+                        answersRow[0] = new BigDecimal(startYear + i);
                         ( (ParisIndicator) responses.get(0)).getAnswers().add(answersRow);
                     }
                 } else
@@ -5727,14 +5718,14 @@ public class DbUtil {
 
                     pi.setAnswers(new ArrayList());
                     if (indcFlag == 6)
-                        answersRow = new double[NUM_ANSWER_COLUMNS];
+                        answersRow = new BigDecimal[NUM_ANSWER_COLUMNS];
                     //logger.debug("surveySet.size() : " + surveySet.size());
                     boolean[][] answersColl = getSurveyReportAnswer(indcCode, surveySet);
                     for (int i = 0; i < YEAR_RANGE; i++) {
                         if (indcFlag != 6) {
                             // answersRow will represent row for one disbursement year inside answer-collection of pi helper object.
-                            answersRow = new double[NUM_ANSWER_COLUMNS];
-                            answersRow[0] = (startYear + i);
+                            answersRow = new BigDecimal[NUM_ANSWER_COLUMNS];
+                            answersRow[0] = new BigDecimal(startYear + i);
                         }
                         AmpFiscalCalendar fCalendar = FiscalCalendarUtil.getAmpFiscalCalendar(Long.parseLong(calendar));
 
@@ -5801,7 +5792,7 @@ public class DbUtil {
                             if (null != answers) {
                                 indc6Break:
                                     for (j = 0; j < answers.length; j++) {
-                                    sum = 0.0;
+                                    sum = new BigDecimal(0);
                                     if (answers[j]) {
                                         /*
                                          if (indcFlag == 6) {
@@ -5864,7 +5855,7 @@ public class DbUtil {
                                                             }
                                                             // For indc-6: (Q9 = yes) & there is an actual-disb in the year
                                                             if (indcFlag == 6) {
-                                                                answersRow[i] += 1;
+                                                                answersRow[i]=  answersRow[i].add(new BigDecimal(1));
                                                                 break indc6Break;
                                                             }
                                                             // Filtering by currency here
@@ -5884,8 +5875,8 @@ public class DbUtil {
                                                                 else
                                                                     toExchangeRate = Util.getExchange(currency, new java.sql.Date(fundtl.getTransactionDate().getTime()));
                                                             }
-                                                            sum += CurrencyWorker.convert1(fundtl.getTransactionAmount().doubleValue(),
-                                                                fromExchangeRate, toExchangeRate);
+                                                            sum =sum.add( CurrencyWorker.convert1(fundtl.getTransactionAmount(),
+                                                                fromExchangeRate, toExchangeRate));
                                                         }
                                                     //}
                                                 }
@@ -5894,10 +5885,10 @@ public class DbUtil {
                                     }
                                     if (indcFlag != 6) {
                                         if ("4".equalsIgnoreCase(indcCode)) {
-                                            percent = new Double(sum * ansToQues4);
-                                            sum = Double.parseDouble(formatter.format(percent).replaceFirst(",", "."));
+                                            percent = sum.multiply(new BigDecimal(ansToQues4));
+                                            sum = percent;
                                         }
-                                        answersRow[j + 1] += sum;
+                                        answersRow[j + 1] = answersRow[j + 1].add(sum);
                                     }
                                 }
                             } else
@@ -5910,60 +5901,57 @@ public class DbUtil {
                         // computing last two columns of indicator-5a report
                         if (indcFlag == 5) {
                             //calculating percentage for second-last column here
-                            sum = answersRow[NUM_ANSWER_COLUMNS - 7] + answersRow[NUM_ANSWER_COLUMNS - 6]
-                                + answersRow[NUM_ANSWER_COLUMNS - 5];
-                            if (answersRow[NUM_ANSWER_COLUMNS - 3] == 0.0)
-                                answersRow[NUM_ANSWER_COLUMNS - 2] = -1.0;
+                            sum = answersRow[NUM_ANSWER_COLUMNS - 7].add(answersRow[NUM_ANSWER_COLUMNS - 6]).add(answersRow[NUM_ANSWER_COLUMNS - 5]);
+                            if (answersRow[NUM_ANSWER_COLUMNS - 3].doubleValue() == 0.0)
+                                answersRow[NUM_ANSWER_COLUMNS - 2] = new BigDecimal(-1.0) ;
                             else {
-                                sum /= 3;
-                                percent = new Double( (sum * 100) / answersRow[NUM_ANSWER_COLUMNS - 3]);
+                                sum =sum.divide(new BigDecimal(3));
+                                percent = sum.multiply(new BigDecimal(100)).divide(answersRow[NUM_ANSWER_COLUMNS - 3]) ;
                                 try{
-                                	answersRow[NUM_ANSWER_COLUMNS - 2] = Double.parseDouble(formatter.format(percent).replaceFirst(",", "."));
+                                	answersRow[NUM_ANSWER_COLUMNS - 2] = percent;
                                 }catch(Exception e){
                                 	e.printStackTrace();
                                 }
                             }
                         }
                         // calculating final percentage here
-                        if ( (indcFlag == 5 || indcFlag == 7) && answersRow[NUM_ANSWER_COLUMNS - 3] == 0.0)
-                            answersRow[NUM_ANSWER_COLUMNS - 1] = -1.0;
-                        else if ( (indcFlag == 0 || indcFlag == 9) && answersRow[NUM_ANSWER_COLUMNS - 2] == 0.0)
-                            answersRow[NUM_ANSWER_COLUMNS - 1] = -1.0;
+                        if ( (indcFlag == 5 || indcFlag == 7) && answersRow[NUM_ANSWER_COLUMNS - 3].doubleValue() == 0.0)
+                            answersRow[NUM_ANSWER_COLUMNS - 1] = new BigDecimal(-1.0)	;
+                        else if ( (indcFlag == 0 || indcFlag == 9) && answersRow[NUM_ANSWER_COLUMNS - 2].doubleValue() == 0.0)
+                            answersRow[NUM_ANSWER_COLUMNS - 1] = new BigDecimal(-1.0);
                         else {
                             try {
                                 if (indcFlag == 5)
-                                    percent = new Double( (100 * answersRow[NUM_ANSWER_COLUMNS - 4]) / answersRow[NUM_ANSWER_COLUMNS - 3]);
+                                    percent = answersRow[NUM_ANSWER_COLUMNS - 4].multiply(new BigDecimal(100)).divide(answersRow[NUM_ANSWER_COLUMNS - 3]);
                                 else if (indcFlag == 7)
-                                    percent = new Double( (100 * answersRow[NUM_ANSWER_COLUMNS - 2]) / answersRow[NUM_ANSWER_COLUMNS - 3]);
+                                    percent =  answersRow[NUM_ANSWER_COLUMNS - 2].multiply(new BigDecimal(100)).divide(answersRow[NUM_ANSWER_COLUMNS - 3]);
                                 else if (indcFlag == 9) {
-                                    sum = answersRow[NUM_ANSWER_COLUMNS - 4] + answersRow[NUM_ANSWER_COLUMNS - 3];
-                                    percent = new Double( (100 * sum) / answersRow[NUM_ANSWER_COLUMNS - 2]);
+                                    sum = answersRow[NUM_ANSWER_COLUMNS - 4].add(answersRow[NUM_ANSWER_COLUMNS - 3]);
+                                    percent = sum.multiply(new BigDecimal(100)).divide( answersRow[NUM_ANSWER_COLUMNS - 2]);
                                 } else
-                                    percent = new Double( (100 * answersRow[NUM_ANSWER_COLUMNS - 3]) / answersRow[NUM_ANSWER_COLUMNS - 2]);
-                                //answersRow[NUM_ANSWER_COLUMNS - 1] = Double.parseDouble(formatter.format(percent).replaceFirst(",", "."));
-                                answersRow[NUM_ANSWER_COLUMNS - 1] = percent;
-                                //logger.debug("final-% : " + answersRow[NUM_ANSWER_COLUMNS - 1]);
+                                    percent =  answersRow[NUM_ANSWER_COLUMNS - 3].multiply(new BigDecimal(100)).divide(answersRow[NUM_ANSWER_COLUMNS - 2]);
+                                   answersRow[NUM_ANSWER_COLUMNS - 1] = percent;
                             } catch (NumberFormatException nex) {
                                 logger.debug("percentage is NaN");
-                                answersRow[NUM_ANSWER_COLUMNS - 1] = 0.0;
+                                answersRow[NUM_ANSWER_COLUMNS - 1] = new BigDecimal(0.0);
                             }
                         }
                         pi.getAnswers().add(answersRow);
 
                         // getting results year-wise for all-donor row
-                        allDnRow = (double[]) ( ( (ParisIndicator) responses.get(0)).getAnswers().get(i));
+                        allDnRow = (BigDecimal[]) ( ( (ParisIndicator) responses.get(0)).getAnswers().get(i));
                         for (j = 1; j < (NUM_ANSWER_COLUMNS - 1); j++) {
                             if (indcFlag == 5 && j == (NUM_ANSWER_COLUMNS - 2))
                                 break;
-                            allDnRow[j] += answersRow[j];
+                            allDnRow[j] = allDnRow[j].add(answersRow[j]);
                         }
                     }
                     if (indcFlag == 6) {
                         pi.getAnswers().add(answersRow);
                         responses.add(pi);
-                        allDnRow = (double[]) ( ( (ParisIndicator) responses.get(0)).getAnswers().get(0));
+                        allDnRow = (BigDecimal[]) ( ( (ParisIndicator) responses.get(0)).getAnswers().get(0));
                         for (j = 0; j < NUM_ANSWER_COLUMNS; j++) {
-                            allDnRow[j] += answersRow[j];
+                            allDnRow[j] =allDnRow[j].add(answersRow[j]);
                         }
                     } else
                         responses.add(pi);
@@ -5972,40 +5960,39 @@ public class DbUtil {
                 if (indcFlag != 6) {
                     // calculating final percentage for all-donors row
                     for (j = 0; j < YEAR_RANGE; j++) {
-                        allDnRow = (double[]) ( ( (ParisIndicator) responses.get(0)).getAnswers().get(j));
+                        allDnRow = (BigDecimal[]) ( ( (ParisIndicator) responses.get(0)).getAnswers().get(j));
                         if (indcFlag == 5) {
                             //calculating percentage for second-last column here
-                            sum = allDnRow[NUM_ANSWER_COLUMNS - 7] + allDnRow[NUM_ANSWER_COLUMNS - 6]
-                                + allDnRow[NUM_ANSWER_COLUMNS - 5];
-                            if (allDnRow[NUM_ANSWER_COLUMNS - 3] == 0.0)
-                                allDnRow[NUM_ANSWER_COLUMNS - 2] = -1.0;
+                            sum = allDnRow[NUM_ANSWER_COLUMNS - 7].add( allDnRow[NUM_ANSWER_COLUMNS - 6]).add( allDnRow[NUM_ANSWER_COLUMNS - 5]);
+                            if (allDnRow[NUM_ANSWER_COLUMNS - 3] == new BigDecimal(0.0))
+                                allDnRow[NUM_ANSWER_COLUMNS - 2] = new BigDecimal(-1.0);
                             else {
-                                sum /= 3;
-                                percent = new Double( (sum * 100) / allDnRow[NUM_ANSWER_COLUMNS - 3]);
-                                allDnRow[NUM_ANSWER_COLUMNS - 2] = Double.parseDouble(formatter.format(percent).replaceFirst(",", "."));
+                                sum =sum.divide(new BigDecimal(3)) ;
+                                percent = sum.multiply(new BigDecimal(100).divide(allDnRow[NUM_ANSWER_COLUMNS - 3]));
+                                allDnRow[NUM_ANSWER_COLUMNS - 2] = percent;
                             }
                         }
                         // calculating final percentage here
-                        if ( (indcFlag == 5 || indcFlag == 7) && allDnRow[NUM_ANSWER_COLUMNS - 3] == 0.0)
-                            allDnRow[NUM_ANSWER_COLUMNS - 1] = -1.0;
-                        else if ( (indcFlag == 0 || indcFlag == 9) && allDnRow[NUM_ANSWER_COLUMNS - 2] == 0.0)
-                            allDnRow[NUM_ANSWER_COLUMNS - 1] = -1.0;
+                        if ( (indcFlag == 5 || indcFlag == 7) && allDnRow[NUM_ANSWER_COLUMNS - 3] ==new BigDecimal( 0.0))
+                            allDnRow[NUM_ANSWER_COLUMNS - 1] = new BigDecimal(-1.0);
+                        else if ( (indcFlag == 0 || indcFlag == 9) && allDnRow[NUM_ANSWER_COLUMNS - 2] == new BigDecimal(0.0))
+                            allDnRow[NUM_ANSWER_COLUMNS - 1] = new BigDecimal(-1.0);
                         else {
                             try {
                                 if (indcFlag == 5)
-                                    percent = new Double( (100 * allDnRow[NUM_ANSWER_COLUMNS - 4]) / allDnRow[NUM_ANSWER_COLUMNS - 3]);
+                                    percent = allDnRow[NUM_ANSWER_COLUMNS - 4].multiply(new BigDecimal(100)).multiply(allDnRow[NUM_ANSWER_COLUMNS - 3]);
                                 else if (indcFlag == 7)
-                                    percent = new Double( (100 * allDnRow[NUM_ANSWER_COLUMNS - 2]) / allDnRow[NUM_ANSWER_COLUMNS - 3]);
+                                    percent = allDnRow[NUM_ANSWER_COLUMNS - 2].multiply(new BigDecimal(100 )).multiply(allDnRow[NUM_ANSWER_COLUMNS - 3]);
                                 else if (indcFlag == 9) {
-                                    sum = allDnRow[NUM_ANSWER_COLUMNS - 4] + allDnRow[NUM_ANSWER_COLUMNS - 3];
-                                    percent = new Double( (100 * sum) / allDnRow[NUM_ANSWER_COLUMNS - 2]);
+                                    sum = allDnRow[NUM_ANSWER_COLUMNS - 4].add(allDnRow[NUM_ANSWER_COLUMNS - 3]) ;
+                                    percent =sum.multiply(new BigDecimal(100)).divide(allDnRow[NUM_ANSWER_COLUMNS - 2]) ;
                                 } else
-                                    percent = new Double( (100 * allDnRow[NUM_ANSWER_COLUMNS - 3]) / allDnRow[NUM_ANSWER_COLUMNS - 2]);
-                                allDnRow[NUM_ANSWER_COLUMNS - 1] = Double.parseDouble(formatter.format(percent).replaceFirst(",", "."));
+                                    percent = allDnRow[NUM_ANSWER_COLUMNS - 3].multiply(new BigDecimal(100 )).divide(allDnRow[NUM_ANSWER_COLUMNS - 2]);
+                                allDnRow[NUM_ANSWER_COLUMNS - 1] = percent;
                                 //logger.debug("final-%[all-donors row] : " + allDnRow[NUM_ANSWER_COLUMNS - 1]);
                             } catch (NumberFormatException nex) {
                                 logger.error("percentage[all-donors row] is NaN");
-                                allDnRow[NUM_ANSWER_COLUMNS - 1] = 0.0;
+                                allDnRow[NUM_ANSWER_COLUMNS - 1] = new BigDecimal(0.0);
                             }
                         }
                     }

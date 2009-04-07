@@ -6,15 +6,13 @@
  */
 package org.dgfoundation.amp.ar.workers;
 
-import java.sql.Date;
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.poi.hssf.util.HSSFColor.SKY_BLUE;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmountCellColumn;
 import org.dgfoundation.amp.ar.AmpARFilter;
@@ -26,12 +24,11 @@ import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.helper.fiscalcalendar.CalendarWorker;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.helper.Constants;
 
 /**
  * 
@@ -161,7 +158,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		
 		int tr_type = -1;
 		int adj_type = -1;
-		double tr_amount = rs.getDouble("transaction_amount");
+		BigDecimal tr_amount = rs.getBigDecimal("transaction_amount");
 		java.sql.Date td= rs.getDate("transaction_date");
 		
 		String currencyCode="";

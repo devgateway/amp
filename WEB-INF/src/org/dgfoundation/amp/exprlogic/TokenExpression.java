@@ -1,5 +1,7 @@
 package org.dgfoundation.amp.exprlogic;
 
+import java.math.BigDecimal;
+
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
 
@@ -10,16 +12,16 @@ public class TokenExpression {
 		this.tokens=tokens;
 	}
 	
-	public double evaluate(CategAmountCell c) {
+	public BigDecimal evaluate(CategAmountCell c) {
 		for (int i = 0; i < tokens.length; i++) {
-			if(tokens[i].evaluate(c)) return tokens[i].getSign()*c.getAmount();
+			if(tokens[i].evaluate(c)) return c.getAmount().multiply(new BigDecimal(tokens[i].getSign()));
 		}
-		return 0;
+		return new BigDecimal(0);
 	}
 	
 	public AmountCell evaluateAsAmountCell(CategAmountCell c) {
-		double evaluate = evaluate(c);
-		if(evaluate==0) return null;
+		BigDecimal evaluate = evaluate(c);
+		if(evaluate.doubleValue()==0d) return null;
 		AmountCell ac=new AmountCell(c.getOwnerId());
 		ac.setCurrencyCode(c.getCurrencyCode());
 		ac.setId(c.getId());

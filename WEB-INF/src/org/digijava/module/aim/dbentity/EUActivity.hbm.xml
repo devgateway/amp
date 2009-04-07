@@ -12,7 +12,7 @@
 		<property name="textId" column="text_id" type="java.lang.String" />
 		<property name="inputs" column="inputs" type="java.lang.String" />
 		<property name="transactionDate" column="transaction_date" type="java.util.Date" />
-		<property access="field" name="totalCost" column="total_cost" type="java.lang.Double" />
+		<property access="field" name="totalCost" column="total_cost" type="java.math.BigDecimal" />
 		<many-to-one name="totalCostCurrency" column="total_cost_currency_id"
 			class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
 		<many-to-one name="activity" column="amp_activity_id"

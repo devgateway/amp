@@ -3,6 +3,7 @@ package org.digijava.module.aim.action;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -288,9 +289,9 @@ public class GetActivities extends Action {
 	 * @see ActivityItem
 	 */
 	private String activities2XML(Collection<ActivityItem> acts,int maxPages, String currencyCode) throws Exception {
-        double proposedSum = 0;
-		double actualSum = 0;
-		double actualDisbSum = 0;
+        BigDecimal proposedSum = new BigDecimal(0);
+        BigDecimal actualSum = new BigDecimal(0);
+        BigDecimal actualDisbSum = new BigDecimal(0);
 		String result = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 		result += "<" + ROOT_TAG;
 		String temp = "";
@@ -302,16 +303,16 @@ public class GetActivities extends Action {
 				//get already calculated amounts from helper
 				ActivityUtil.ActivityAmounts amounts = item.getAmounts();
 				//calculate totals
-				proposedSum += amounts.getProposedAmout();
-				actualSum += amounts.getActualAmount();
-				actualDisbSum+= amounts.getActualDisbAmoount();
+				proposedSum =proposedSum.add( amounts.getProposedAmout());
+				actualSum =actualSum.add( amounts.getActualAmount());
+				actualDisbSum=actualDisbSum.add( amounts.getActualDisbAmoount());
 				//generate one activity portion of XML from helper
 				temp += item.getXml();
 			}
 		}
-		result += " proposedSum=\"" +((proposedSum!=0)? FormatHelper.formatNumber(proposedSum):0) + "\" ";
-		result += " actualSum=\"" + ((actualSum!=0)? FormatHelper.formatNumber(actualSum):0)+ "\" ";
-		result += " actualDisbSum=\"" + ((actualDisbSum!=0)? FormatHelper.formatNumber(actualDisbSum):0) + "\" ";
+		result += " proposedSum=\"" +((proposedSum.doubleValue()!=0)? FormatHelper.formatNumber(proposedSum):0) + "\" ";
+		result += " actualSum=\"" + ((actualSum.doubleValue()!=0)? FormatHelper.formatNumber(actualSum):0)+ "\" ";
+		result += " actualDisbSum=\"" + ((actualDisbSum.doubleValue()!=0)? FormatHelper.formatNumber(actualDisbSum):0) + "\" ";
 		result += " totalPages=\""+maxPages+"\" ";
 		result += ">" + temp + "</" + ROOT_TAG + ">";
 		return result;

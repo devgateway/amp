@@ -1,5 +1,6 @@
 package org.digijava.module.aim.action;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -74,9 +75,9 @@ public class FundingAdded extends Action {
 			}
 		}
 		//		
-		double totalComms	= 0;
-		double totalDisbs	= 0;
-		double totalExps	= 0;
+		BigDecimal totalComms	= new BigDecimal(0);
+		BigDecimal totalDisbs	= new BigDecimal(0);
+		BigDecimal totalExps	= new BigDecimal(0);
 		boolean isBigger = false;
 		//
 		if (eaForm.getFunding().getFundingDetails() != null) {
@@ -84,21 +85,21 @@ public class FundingAdded extends Action {
 			while (itr.hasNext()) {
 				FundingDetail fundDet = (FundingDetail) itr.next();
 				//
-				double amount = this.getAmountInDefaultCurrency(fundDet, tm.getAppSettings());					
+				BigDecimal amount = this.getAmountInDefaultCurrency(fundDet, tm.getAppSettings());					
 				if (( fundDet.getTransactionType() == Constants.COMMITMENT )&&(fundDet.getAdjustmentType()==Constants.ACTUAL))
-					totalComms	+= amount;
+					totalComms=totalComms.add(amount);
 				else 
 					if (( fundDet.getTransactionType() == Constants.DISBURSEMENT )&&(fundDet.getAdjustmentType()==Constants.ACTUAL))
-						totalDisbs	+= amount;
+						totalDisbs=totalDisbs.add( amount);
 					else 
 						if (( fundDet.getTransactionType() == Constants.EXPENDITURE )&&(fundDet.getAdjustmentType()==Constants.ACTUAL))
-							totalExps	+= amount;
+							totalExps =totalExps.add( amount);
 			}
 			// Don't know why when using constant it is not working ???
 			String alert = FeaturesUtil.getGlobalSettingValue("Alert if sum of disbursments is bigger than sum of commitments");
 			//
 			if (Boolean.parseBoolean(alert)) {
-				if (totalDisbs > totalComms) {
+				if (totalDisbs.compareTo(totalComms) > 0 ) {
 					eaForm.setTotDisbIsBiggerThanTotCom(true);
 					isBigger = true;
 				} else {
@@ -252,10 +253,10 @@ public class FundingAdded extends Action {
 		return mapping.findForward("forward");
 	}
 	
-	private double[] getFundingAmounts(EditActivityForm form, TeamMember tm) {
-		double totalComms	= 0;
-		double totalDisbs	= 0;
-		double totalExps	= 0;		
+	private BigDecimal[] getFundingAmounts(EditActivityForm form, TeamMember tm) {
+		BigDecimal totalComms	= new BigDecimal(0);
+		BigDecimal totalDisbs	= new BigDecimal(0);
+		BigDecimal totalExps	= new BigDecimal(0);		
 		//
 		Collection <FundingOrganization> orgs	= form.getFunding().getFundingOrganizations();
 		if ( orgs != null ) {
@@ -270,15 +271,15 @@ public class FundingAdded extends Action {
 							Iterator<FundingDetail> iterDet	= details.iterator();
 							while ( iterDet.hasNext() ) {
 								FundingDetail detail		= iterDet.next();
-								double amount				= this.getAmountInDefaultCurrency(detail, tm.getAppSettings());					
+								BigDecimal amount				= this.getAmountInDefaultCurrency(detail, tm.getAppSettings());					
 								if (( detail.getTransactionType() == Constants.COMMITMENT )&&(detail.getAdjustmentType()==Constants.ACTUAL))
-											totalComms	+= amount;
+											totalComms	=totalComms.add(amount) ;
 								else 
 									if (( detail.getTransactionType() == Constants.DISBURSEMENT )&&(detail.getAdjustmentType()==Constants.ACTUAL))
-											totalDisbs	+= amount;
+											totalDisbs=totalDisbs.add( amount);
 									else 
 										if (( detail.getTransactionType() == Constants.EXPENDITURE )&&(detail.getAdjustmentType()==Constants.ACTUAL))
-											totalExps	+= amount;
+											totalExps=totalExps.add(amount);
 							}
 						}
 					}
@@ -286,25 +287,25 @@ public class FundingAdded extends Action {
 				
 			}
 		}
-		double[] amounts = {totalComms, totalDisbs, totalExps};
+		BigDecimal[] amounts = {totalComms, totalDisbs, totalExps};
 		//
 		return amounts;
 	}
 	
 	private void updateTotals ( EditActivityForm form, TeamMember tm ) {
-		double [] amounts = getFundingAmounts(form, tm);
+		BigDecimal [] amounts = getFundingAmounts(form, tm);
 		//
 		form.getFunding().setTotalCommitments(FormatHelper.formatNumber(amounts[0]));
 		form.getFunding().setTotalDisbursements(FormatHelper.formatNumber(amounts[1]));
 		form.getFunding().setTotalExpenditures(FormatHelper.formatNumber(amounts[2])	);
 	}
 	
-	private double getAmountInDefaultCurrency(FundingDetail fundDet, ApplicationSettings appSet) {		
+	private BigDecimal getAmountInDefaultCurrency(FundingDetail fundDet, ApplicationSettings appSet) {		
 		java.sql.Date dt = new java.sql.Date(DateConversion.getDate(fundDet.getTransactionDate()).getTime());
 		double frmExRt = Util.getExchange(fundDet.getCurrencyCode(),dt);
 		String toCurrCode = CurrencyUtil.getAmpcurrency( appSet.getCurrencyId() ).getCurrencyCode();
 		double toExRt = Util.getExchange(toCurrCode,dt);
-		double amt = CurrencyWorker.convert1(FormatHelper.parseDouble(fundDet.getTransactionAmount()),frmExRt,toExRt);
+		BigDecimal amt = CurrencyWorker.convert1(FormatHelper.parseBigDecimal(fundDet.getTransactionAmount()),frmExRt,toExRt);
 		//
 		return amt;		
 	}

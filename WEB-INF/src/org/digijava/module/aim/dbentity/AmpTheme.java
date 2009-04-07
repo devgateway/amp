@@ -1,6 +1,7 @@
 package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -39,9 +40,9 @@ public class AmpTheme implements Serializable, Identifiable
 	private String outputs;
 	private String beneficiaries;
 	private String environmentConsiderations;
-	private Double externalFinancing;
-	private Double internalFinancing;
-	private Double totalFinancing;
+	private BigDecimal externalFinancing;
+	private BigDecimal internalFinancing;
+	private BigDecimal totalFinancing;
 	
 	private String programviewname;
         private Set programSettings;
@@ -303,42 +304,42 @@ public class AmpTheme implements Serializable, Identifiable
 		/**
 		 * @return the totalFinancing
 		 */
-		public Double getTotalFinancing() {
+		public BigDecimal getTotalFinancing() {
 			return FeaturesUtil.applyThousandsForVisibility(totalFinancing);
 		}
 
 		/**
 		 * @param totalFinancing the totalFinancing to set
 		 */
-		public void setTotalFinancing(Double totalFinancing) {
+		public void setTotalFinancing(BigDecimal totalFinancing) {
 			this.totalFinancing = FeaturesUtil.applyThousandsForEntry(totalFinancing);
 		}
 
 		/**
 		 * @return the externalFinancing
 		 */
-		public Double getExternalFinancing() {
+		public BigDecimal getExternalFinancing() {
 			return FeaturesUtil.applyThousandsForVisibility(externalFinancing);
 		}
 
 		/**
 		 * @param externalFinancing the externalFinancing to set
 		 */
-		public void setExternalFinancing(Double externalFinancing) {
+		public void setExternalFinancing(BigDecimal externalFinancing) {
 			this.externalFinancing = FeaturesUtil.applyThousandsForEntry(externalFinancing);
 		}
 
 		/**
 		 * @return the internalFinancing
 		 */
-		public Double getInternalFinancing() {
+		public BigDecimal getInternalFinancing() {
 			return FeaturesUtil.applyThousandsForVisibility(internalFinancing);
 		}
 
 		/**
 		 * @param internalFinancing the internalFinancing to set
 		 */
-		public void setInternalFinancing(Double internalFinancing) {
+		public void setInternalFinancing(BigDecimal internalFinancing) {
 			this.internalFinancing = FeaturesUtil.applyThousandsForEntry(internalFinancing);
 		}
 

@@ -1,5 +1,6 @@
 package org.digijava.module.aim.logic;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
@@ -10,6 +11,6 @@ import org.dgfoundation.amp.ar.cell.CategAmountCell;
  */
 public interface AmountCalculator {
 
-	double calculateAmount(Set<CategAmountCell> mergedCells);
+	BigDecimal calculateAmount(Set<CategAmountCell> mergedCells);
 
 }

@@ -10,6 +10,8 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<%@ taglib uri="/taglib/aim" prefix="aim" %>
+<%@page import="java.math.BigDecimal"%>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
@@ -43,8 +45,10 @@ function openEUActivityDetails(euActivityId) {
 		<td><b><digi:trn key="aim:viewcostssummary:totalContribution">Total Contribution</digi:trn></b></td>
 		</field:display>
 	</tr>
-	<%Double grandCost = new Double(0);
-	Double grandContribution = new Double(0);%>
+	
+	<%
+	BigDecimal grandCost = new BigDecimal(0);
+	BigDecimal grandContribution = new BigDecimal(0);%>
 	<%-- TODO AMP-2579 temporary fix--%>
 	<logic:present name="currentMember" scope="session">
 		<bean:define id="defaultCurrency" name="currentMember"
@@ -59,11 +63,10 @@ function openEUActivityDetails(euActivityId) {
 		<bean:define id="euActivity" name="cost"
 			type="org.digijava.module.aim.dbentity.EUActivity" scope="page"
 			toScope="request" />
-		<c:set target="${euActivity}" property="desktopCurrencyId"
-			value="${defaultCurrency}" />
-		<%grandCost = new Double(euActivity.getTotalCostConverted()+grandCost.doubleValue());%>
-		<%grandContribution = new Double(euActivity
-						.getTotalContributionsConverted()+grandContribution.doubleValue());%>
+		
+		<c:set target="${euActivity}" property="desktopCurrencyId" value="${defaultCurrency}" />
+		<%grandCost = euActivity.getTotalCostConverted().add(grandCost);%>
+		<%grandContribution = euActivity.getTotalContributionsConverted().add(grandContribution);%>
 
 		<tr bgcolor="#FFFFFF" align="right">
 			<td align="left"><b>
@@ -92,9 +95,10 @@ function openEUActivityDetails(euActivityId) {
 			</logic:equal>
 			</field:display>
 				</td>
-				<field:display name="Costing Total Cost" feature="Costing">
-			<td><bean:write name="euActivity" property="totalCostConverted"
-				format="###,###,###.##" /></td>
+			<field:display name="Costing Total Cost" feature="Costing">
+				<td>
+					<aim:formatNumber value="${euActivity.totalCostConverted}"/>
+				</td>
 				</field:display>
 				<field:display name="Costing Total Contribution" feature="Costing">
 			<td><bean:write name="euActivity"
@@ -140,22 +144,24 @@ function openEUActivityDetails(euActivityId) {
 	<tr bgcolor="#FFFFFF">
 		<td align="right"><b><digi:trn key="aim:viewcostssummary:totals">Totals:</digi:trn></b></td>
 		<field:display name="Grand Total Cost" feature="Costing">
-		<td align="right"><fmt:formatNumber var="grandCostFormatted"
-			pattern="###,###,###.##" value="<%=grandCost%>" />
-		${grandCostFormatted}</td>
+		<td align="right">
+			<aim:formatNumber value="<%=grandCost%>" /> 
+		</td>
 		</field:display>
 		<field:display name="Grand Total Cost" feature="Costing">
-		<td align="right"><fmt:formatNumber var="grandContributionFormatted"
-			pattern="###,###,###.##" value="<%=grandContribution%>" />
-		${grandContributionFormatted}</td>
+		<td align="right">
+	
+		<aim:formatNumber value="<%=grandContribution%>"/> 
+		
+		</td>
 		</field:display>
 	</tr>
 	<field:display name="Costing Contribution Gap" feature="Costing">
 		<tr bgcolor="#FFFFFF">
 			<td align="right"><b><digi:trn key="aim:viewcostssummary:contributionGap">Contribution Gap:</digi:trn></b></td>
-			<td align="right"><b> <fmt:formatNumber var="contributionGap"
-				pattern="###,###,###.##" value="<%=new Double(grandCost.doubleValue()-grandContribution.doubleValue())%>" />
-			${contributionGap} </b></td>
+			<td align="right"><b> 
+			
+				<aim:formatNumber value="<%=(grandCost.subtract(grandContribution))%>"/></b></td>
 			<td align="right">&nbsp;</td>
 		</tr>
 	</field:display>

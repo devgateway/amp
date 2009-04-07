@@ -61,10 +61,10 @@ public class AmountCellXLS extends XLSExporter {
 
 		//DecimalFormat mf = new DecimalFormat("###,###,###,###.##");
 		//mf.setMaximumFractionDigits(2);
-		double tempAm = ac.getAmount();
-		BigDecimal bd = new BigDecimal(tempAm);
+		BigDecimal tempAm = ac.getAmount();
+		BigDecimal bd = tempAm;
 		 bd = bd.setScale(2, BigDecimal.ROUND_UP);
-		if (tempAm == 0)
+		if (tempAm.doubleValue()== 0d)
 			cell.setCellValue("");
 		else
 		    	cell.setCellValue(new Double(bd.doubleValue()));

@@ -28,12 +28,9 @@
 		<property name="environmentConsiderations" column="environment_considerations"
 			type="java.lang.String" />
 
-		<property access="field" name="externalFinancing" column="external_financing"
-			type="java.lang.Double" />
-		<property access="field" name="internalFinancing" column="internal_financing"
-			type="java.lang.Double" />
-		<property access="field" name="totalFinancing" column="total_financing"
-			type="java.lang.Double" />
+		<property access="field" name="externalFinancing" column="external_financing" type="java.math.BigDecimal" />
+		<property access="field" name="internalFinancing" column="internal_financing" type="java.math.BigDecimal" />
+		<property access="field" name="totalFinancing" column="total_financing" type="java.math.BigDecimal" />
 
 		<many-to-one name="typeCategoryValue" column="type_category_value_id"
 			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" not-null="true" />

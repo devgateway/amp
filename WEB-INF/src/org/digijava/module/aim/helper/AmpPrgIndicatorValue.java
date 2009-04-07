@@ -1,6 +1,7 @@
 package org.digijava.module.aim.helper;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import org.digijava.module.aim.dbentity.AmpLocation;
 

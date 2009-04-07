@@ -6,6 +6,7 @@
  */
 package org.dgfoundation.amp.ar.workers;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -56,7 +57,7 @@ public class CummulativeColWorker extends ColumnWorker {
 		AmpARFilter filter=(AmpARFilter) generator.getFilter();
 		Long ownerId=new Long(rs.getLong(1));
 		Long id=new Long(rs.getLong(2));
-		double value=rs.getDouble(3);
+		BigDecimal value=rs.getBigDecimal(3);
 		String currencyCode=rs.getString(4);
 		Date currencyDate = rs.getDate(5);
 		double exchangeRate=rs.getDouble(6);

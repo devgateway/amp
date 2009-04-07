@@ -1,5 +1,6 @@
 package org.digijava.module.aim.form;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 
@@ -67,9 +68,9 @@ public class ThemeForm extends ActionForm {
 		  private String programOutputs;
 		  private String programBeneficiaries;
 		  private String programEnvironmentConsiderations;
-		  private Double programExternalFinancing;
-		  private Double programInernalFinancing;
-		  private Double programTotalFinancing;
+		  private BigDecimal programExternalFinancing;
+		  private BigDecimal programInernalFinancing;
+		  private BigDecimal programTotalFinancing;
 		  
 		 
 		  private boolean reset;
@@ -88,7 +89,7 @@ public class ThemeForm extends ActionForm {
       	  private Collection  allSectors;
       	  private Collection pagedCol;
       	  private Long parentId;
-      	  private Double valAmount[];
+      	  private BigDecimal[] valAmount;
       	  private Long indid[]; // list of ind selected from
       	  private Long parentIndex;
       	  private String action;
@@ -664,27 +665,27 @@ public class ThemeForm extends ActionForm {
 		this.encodeName = encodeName;
 	}
 
-	public Double getProgramExternalFinancing() {
+	public BigDecimal getProgramExternalFinancing() {
 		return programExternalFinancing;
 	}
 
-	public void setProgramExternalFinancing(Double programExternalFinancing) {
+	public void setProgramExternalFinancing(BigDecimal programExternalFinancing) {
 		this.programExternalFinancing = programExternalFinancing;
 	}
 
-	public Double getProgramInernalFinancing() {
+	public BigDecimal getProgramInernalFinancing() {
 		return programInernalFinancing;
 	}
 
-	public void setProgramInernalFinancing(Double programInernalFinancing) {
+	public void setProgramInernalFinancing(BigDecimal programInernalFinancing) {
 		this.programInernalFinancing = programInernalFinancing;
 	}
 
-	public Double getProgramTotalFinancing() {
+	public BigDecimal getProgramTotalFinancing() {
 		return programTotalFinancing;
 	}
 
-	public void setProgramTotalFinancing(Double programTotalFinancing) {
+	public void setProgramTotalFinancing(BigDecimal programTotalFinancing) {
 		this.programTotalFinancing = programTotalFinancing;
 	}
 
@@ -896,11 +897,11 @@ public class ThemeForm extends ActionForm {
 		this.parentId = parentId;
 	}
 
-	public Double[] getValAmount() {
+	public BigDecimal[] getValAmount() {
 		return valAmount;
 	}
 
-	public void setValAmount(Double[] valAmount) {
+	public void setValAmount(BigDecimal[] valAmount) {
 		this.valAmount = valAmount;
 	}
 

@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -668,8 +669,8 @@ public class ImportBuilder {
 		
 		//TODO how are the amounts? in thousands?
 		if("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)))
-			acf.setTransactionAmount(new Double(fundingDetailType.getAmount()*1000));
-		else acf.setTransactionAmount(new Double(fundingDetailType.getAmount()));
+			acf.setTransactionAmount(fundingDetailType.getAmount().multiply(new BigDecimal(1000)));
+		else acf.setTransactionAmount(fundingDetailType.getAmount());
 		
 	}
 
@@ -863,8 +864,8 @@ public class ImportBuilder {
 				AmpFundingMTEFProjection ampmtef=new AmpFundingMTEFProjection();
 				
 				if("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)))
-					ampmtef.setAmount(new Double(mtef.getAmount()*1000));
-				else ampmtef.setAmount(new Double(mtef.getAmount()));
+					ampmtef.setAmount(mtef.getAmount().multiply(new BigDecimal(1000)));
+				else ampmtef.setAmount(mtef.getAmount());
 				
 
 				ampmtef.setAmpFunding(ampFunding);
@@ -904,8 +905,8 @@ public class ImportBuilder {
 			
 			//TODO how are the amounts? in thousands?
 			if("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)))
-				ampFundDet.setTransactionAmount(new Double(fundDet.getAmount()*1000));
-			else ampFundDet.setTransactionAmount(new Double(fundDet.getAmount()));
+				ampFundDet.setTransactionAmount(fundDet.getAmount().multiply(new BigDecimal(1000)));
+			else ampFundDet.setTransactionAmount(fundDet.getAmount());
 			fundDetails.add(ampFundDet);
 		}
 		

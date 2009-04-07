@@ -1,10 +1,10 @@
 package org.digijava.module.dataExchange.action;
 
 
+import java.io.OutputStreamWriter;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBContext;
@@ -110,7 +110,7 @@ public class ExportWizardAction extends DispatchAction {
 			}
 			response.setContentType("text/xml");
 			response.setHeader("content-disposition","attachment; filename=exportActivities.xml"); // file name will generate by date
-			ServletOutputStream outputStream = null;
+			OutputStreamWriter outputStream =  null;
 			try {
 
 				// package name
@@ -121,7 +121,7 @@ public class ExportWizardAction extends DispatchAction {
 				Marshaller m = jc.createMarshaller();
 				m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
-				outputStream = response.getOutputStream();
+	            outputStream = new OutputStreamWriter( response.getOutputStream(),"UTF-8");
 				m.marshal(activities, outputStream);
 
 				eForm.logStatus = LogStatus.READY;
@@ -158,20 +158,21 @@ public class ExportWizardAction extends DispatchAction {
 
 		response.setContentType("text/xml");
 		response.setHeader("content-disposition","attachment; filename=exportLog.txt"); // file name will generate by date
-		ServletOutputStream outputStream = null;
+		OutputStreamWriter outputStream =  null;
+
 		try {
-			outputStream = response.getOutputStream();
+            outputStream = new OutputStreamWriter( response.getOutputStream(),"UTF-8");
 			if (eForm.getExportLog() != null && eForm.logStatus ==  LogStatus.READY){
-				outputStream.println("AmpID\tActivity Name\tError");
+				outputStream.write("AmpID\tActivity Name\tError\n");
 
 				for (String[] row : eForm.getExportLog()) {
-					outputStream.print(row[0]+"\t");
-					outputStream.print(row[1]+"\t");
-					outputStream.println(row[2]);
+					outputStream.write(row[0]+"\t");
+					outputStream.write(row[1]+"\t");
+					outputStream.write(row[2]+"\n");
 				}
 
 			} else {
-				outputStream.println("There is no error while Export");
+				outputStream.write("There is no error while Export");
 			}
 		} catch (Exception ex) {
 			log.error("dataExchange.exportLog.error", ex);
@@ -224,10 +225,11 @@ public class ExportWizardAction extends DispatchAction {
         }
         
 		response.setContentType("text/json-comment-filtered");
-        ServletOutputStream outputStream = null;
+		OutputStreamWriter outputStream =  null;
+        
         try {
-            outputStream = response.getOutputStream();
-            outputStream.println(json.toString());
+            outputStream = new OutputStreamWriter( response.getOutputStream(),"UTF-8");
+            outputStream.write(json.toString());
         } finally {
             if (outputStream != null) {
                 outputStream.close();

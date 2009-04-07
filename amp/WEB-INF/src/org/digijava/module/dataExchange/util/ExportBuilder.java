@@ -485,7 +485,7 @@ public class ExportBuilder {
 				for (Iterator iterator = ampfunding.getFundingDetails().iterator(); iterator.hasNext();) {
 					AmpFundingDetail  ampFDetail = (AmpFundingDetail) iterator.next();
 					if (ampFDetail.getTransactionType() == Constants.DISBURSEMENT){
-						funding.getCommitments().add(buildFundingDetail(ampFDetail));
+						funding.getDisbursements().add(buildFundingDetail(ampFDetail));
 					}
 				}
 			}
@@ -494,7 +494,7 @@ public class ExportBuilder {
 				for (Iterator iterator = ampfunding.getFundingDetails().iterator(); iterator.hasNext();) {
 					AmpFundingDetail  ampFDetail = (AmpFundingDetail) iterator.next();
 					if (ampFDetail.getTransactionType() == Constants.EXPENDITURE){
-						funding.getCommitments().add(buildFundingDetail(ampFDetail));
+						funding.getExpenditures().add(buildFundingDetail(ampFDetail));
 					}
 				}
 			}

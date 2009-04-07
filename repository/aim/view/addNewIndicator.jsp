@@ -206,7 +206,7 @@ function closeWindow() {
        
       <td>
         <table border="0">
-        <field:display name="Indicator name" feature="Admin">
+        <field:display name="Admin Indicator name" feature="Admin">
           <tr id="trName">
             <td>
             <digi:trn key="aim:indicatorname">Indicator name:</digi:trn>

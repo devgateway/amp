@@ -502,7 +502,7 @@
 <field:display name="Indicator Target Value" feature="Activity"></field:display> 
 <field:display name="Indicator Type" feature="Admin"></field:display> 
 <field:display name="Indicator code" feature="Admin"></field:display> 
-<field:display name="Indicator name" feature="Admin"></field:display> 
+<field:display name="Admin Indicator name" feature="Admin"></field:display> 
 <field:display name="Internal Financing" feature="Admin NPD"></field:display> 
 <field:display name="Issue Date" feature="Issues"></field:display> 
 <field:display name="Issues" feature="Issues"></field:display> 

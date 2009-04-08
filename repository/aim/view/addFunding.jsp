@@ -1171,7 +1171,7 @@ var isAlreadySubmitted = false;
 					<td align="left" bgcolor=#ECF3FD valign="top" width="80">
 						<b>
 						<a title="<digi:trn key="aim:ConditionsforFundRelease">Enter the conditions attached to the release of the funds</digi:trn>">
-						<digi:trn key="aim:conditions">Conditions</digi:trn></b></a>
+						<font color=black>	<digi:trn key="aim:conditions">Conditions</digi:trn></font></a></b>
 					</td>
 					<td align="left" bgcolor=#ECF3FD>
 					<a title="<digi:trn key="aim:ConditionsforFundRelease">Enter the conditions attached to the release of the funds</digi:trn>">
@@ -1191,7 +1191,7 @@ var isAlreadySubmitted = false;
 					<td align="left" bgcolor=#ECF3FD valign="top" width="80">
 						<b>
 						<a title="<digi:trn key="aim:DonorObjectiveforFundRelease">Enter the donor objective attached to the release of the funds</digi:trn>">
-						<digi:trn key="aim:donorobjective">Donor Objective</digi:trn></b></a>
+						<font color=black>	<digi:trn key="aim:donorobjective">Donor Objective</digi:trn></font></b></a>
 					</td>
 					<td align="left" bgcolor=#ECF3FD>
 					<a title="<digi:trn key="aim:DonorObjectiveforFundRelease">Enter the donor objective attached to the release of the funds</digi:trn>">

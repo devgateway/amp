@@ -999,11 +999,16 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		layoutResourcesAtAGlance.addCell(layoutResourcesAtAGlanceTable1and2);
 
 		PdfPTable layoutResourcesAtAGlanceTable3alone = new PdfPTable(1);
-		layoutResourcesAtAGlanceTable3.setExtendLastRow(false);
-		layoutResourcesAtAGlanceTable3alone.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
-		layoutResourcesAtAGlanceTable3alone.addCell(layoutResourcesAtAGlanceTable3);
+                if (layoutResourcesAtAGlanceTable3 != null) {
+                    layoutResourcesAtAGlanceTable3.setExtendLastRow(false);
+                    layoutResourcesAtAGlanceTable3alone.getDefaultCell().
+                            setBorder(PdfPCell.NO_BORDER);
+                    layoutResourcesAtAGlanceTable3alone.addCell(
+                            layoutResourcesAtAGlanceTable3);
 
-		layoutResourcesAtAGlance.addCell(layoutResourcesAtAGlanceTable3alone);
+                    layoutResourcesAtAGlance.addCell(
+                            layoutResourcesAtAGlanceTable3alone);
+                }
 		layoutCell.addElement(layoutResourcesAtAGlance);
 		// widget:SourceOECD
 

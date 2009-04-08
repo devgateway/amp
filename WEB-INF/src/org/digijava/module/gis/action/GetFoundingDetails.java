@@ -47,6 +47,9 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
+
+import java.math.BigDecimal;
+
 /**
  * <p>Title: </p>
  *
@@ -787,27 +790,27 @@ public class GetFoundingDetails extends Action {
                 FundingData totalFunding = getActivityTotalFundingInUSD(
                         activity, start, end);
 
-                totalFundingForSector.setCommitment(totalFundingForSector.
-                        getCommitment() +
+                totalFundingForSector.setCommitment(new BigDecimal(totalFundingForSector.
+                        getCommitment().floatValue() +
                         totalFunding.getCommitment().floatValue() *
-                                  percentsForSectorSelected.floatValue() / 100f);
-                totalFundingForSector.setDisbursement(totalFundingForSector.
-                        getDisbursement() +
+                                  percentsForSectorSelected.floatValue() / 100f));
+                totalFundingForSector.setDisbursement(new BigDecimal(totalFundingForSector.
+                        getDisbursement().floatValue() +
                         totalFunding.getDisbursement().floatValue() *
-                                  percentsForSectorSelected.floatValue() / 100f);
-                totalFundingForSector.setExpenditure(totalFundingForSector.
-                        getExpenditure() +
+                                  percentsForSectorSelected.floatValue() / 100f));
+                totalFundingForSector.setExpenditure(new BigDecimal(totalFundingForSector.
+                        getExpenditure().floatValue() +
                         totalFunding.getExpenditure().floatValue() *
-                                  percentsForSectorSelected.floatValue() / 100f);
+                                  percentsForSectorSelected.floatValue() / 100f));
 
                 FundingData fundingForSector = new FundingData();
-                fundingForSector.setCommitment(new Double(totalFunding.
+                fundingForSector.setCommitment(new BigDecimal(totalFunding.
                         getCommitment().floatValue() *
                         percentsForSectorSelected.floatValue() / 100f));
-                fundingForSector.setDisbursement(new Double(totalFunding.
+                fundingForSector.setDisbursement(new BigDecimal(totalFunding.
                         getDisbursement().floatValue() *
                         percentsForSectorSelected.floatValue() / 100f));
-                fundingForSector.setExpenditure(new Double(totalFunding.
+                fundingForSector.setExpenditure(new BigDecimal(totalFunding.
                         getExpenditure().floatValue() *
                         percentsForSectorSelected.floatValue() / 100f));
 
@@ -832,20 +835,20 @@ public class GetFoundingDetails extends Action {
                                                 regCode);
 
                                 FundingData newVal = new FundingData();
-                                newVal.setCommitment(new Double(existingVal.
-                                        getCommitment() +
+                                newVal.setCommitment(new BigDecimal(existingVal.
+                                        getCommitment().floatValue() +
                                         fundingForSector.getCommitment().
                                         floatValue() *
                                         loc.getLocationPercentage().
                                         floatValue() / 100f));
-                                newVal.setDisbursement(new Double(existingVal.
-                                        getDisbursement() +
+                                newVal.setDisbursement(new BigDecimal(existingVal.
+                                        getDisbursement().floatValue() +
                                         fundingForSector.
                                         getDisbursement().floatValue() *
                                         loc.getLocationPercentage().
                                         floatValue() / 100f));
-                                newVal.setExpenditure(new Double(existingVal.
-                                        getExpenditure() +
+                                newVal.setExpenditure(new BigDecimal(existingVal.
+                                        getExpenditure().floatValue() +
                                         fundingForSector.
                                         getExpenditure().floatValue() *
                                         loc.getLocationPercentage().
@@ -860,17 +863,17 @@ public class GetFoundingDetails extends Action {
                                     fundingForSector.getExpenditure().
                                     floatValue() != 0f) {
                                     FundingData newVal = new FundingData();
-                                    newVal.setCommitment(new Double(
+                                    newVal.setCommitment(new BigDecimal(
                                             fundingForSector.getCommitment().
                                             floatValue() *
                                             loc.getLocationPercentage().
                                             floatValue() / 100f));
-                                    newVal.setDisbursement(new Double(
+                                    newVal.setDisbursement(new BigDecimal(
                                             fundingForSector.
                                             getDisbursement().floatValue() *
                                             loc.getLocationPercentage().
                                             floatValue() / 100f));
-                                    newVal.setExpenditure(new Double(
+                                    newVal.setExpenditure(new BigDecimal(
                                             fundingForSector.
                                             getExpenditure().floatValue() *
                                             loc.getLocationPercentage().
@@ -894,22 +897,22 @@ public class GetFoundingDetails extends Action {
                                                 regCode);
 
                                 FundingData newVal = new FundingData();
-                                newVal.setCommitment(new Double(existingVal.
-                                        getCommitment() +
+                                newVal.setCommitment(new BigDecimal(existingVal.
+                                        getCommitment().floatValue() +
                                         fundingForSector.getCommitment().
                                         floatValue() *
                                         loc.getLocationPercentage().
                                         floatValue() /
                                         100f));
-                                newVal.setDisbursement(new Double(existingVal.
-                                        getDisbursement() +
+                                newVal.setDisbursement(new BigDecimal(existingVal.
+                                        getDisbursement().floatValue() +
                                         fundingForSector.
                                         getDisbursement().
                                         floatValue() *
                                         loc.getLocationPercentage().
                                         floatValue() / 100f));
-                                newVal.setExpenditure(new Double(existingVal.
-                                        getExpenditure() +
+                                newVal.setExpenditure(new BigDecimal(existingVal.
+                                        getExpenditure().floatValue() +
                                         fundingForSector.
                                         getExpenditure().
                                         floatValue() *
@@ -927,17 +930,17 @@ public class GetFoundingDetails extends Action {
                                     floatValue() != 0f) {
 
                                     FundingData newVal = new FundingData();
-                                    newVal.setCommitment(new Double(
+                                    newVal.setCommitment(new BigDecimal(
                                             fundingForSector.
                                             getCommitment().floatValue() *
                                             loc.getLocationPercentage().
                                             floatValue() / 100f));
-                                    newVal.setDisbursement(new Double(
+                                    newVal.setDisbursement(new BigDecimal(
                                             fundingForSector.
                                             getDisbursement().floatValue() *
                                             loc.getLocationPercentage().
                                             floatValue() / 100f));
-                                    newVal.setExpenditure(new Double(
+                                    newVal.setExpenditure(new BigDecimal(
                                             fundingForSector.
                                             getExpenditure().floatValue() *
                                             loc.getLocationPercentage().
@@ -1025,7 +1028,7 @@ public class GetFoundingDetails extends Action {
             //Add exception reporting
         }
 
-        retVal = new FundingData(commitment, disbursement, expenditure);
+        retVal = new FundingData(new BigDecimal(commitment), new BigDecimal(disbursement), new BigDecimal(expenditure));
 
         return retVal;
     }

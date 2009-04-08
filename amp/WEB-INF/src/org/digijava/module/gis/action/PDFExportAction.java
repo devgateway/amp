@@ -1032,6 +1032,8 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 			WiTable table = new WiTable.TableBuilder(widget.getId()).build();
 			WiColumnDropDownFilter filter = null;
+                        if (table == null)
+				return null;
 			int currentTableIdIndex = matchesId(table.getId());
 			if (currentTableIdIndex > -1) {
 				table = new WiTable.TableBuilder(this.tableId[currentTableIdIndex]).build();

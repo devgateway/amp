@@ -206,22 +206,15 @@
 	function showContent2(){
 		var element = document.getElementById("popin2");
 		element.style.display = "inline";
-		//if (panelStart < 1){
-			myPanel2.setBody(element);
-		//}
-		//if (panelStart < 2){
-			document.getElementById("popin2").scrollTop=0;
-			myPanel2.show();
-			//panelStart = 2;
-		//}
-		//checkErrorAndClose();
+		myPanel2.setBody(element);
+		document.getElementById("popin2").scrollTop=0;
+		myPanel2.show();
 	}
 
 	function checkErrorAndClose(){
 		if(checkAndClose==true){
 			if(document.getElementsByName("someError")[0]==null || document.getElementsByName("someError")[0].value=="false"){
 				myclose();
-				addSector();
 			}
 			checkAndClose=false;			
 		}
@@ -342,8 +335,12 @@
 				ret+="&"+disbOrderRejLabel+"="+document.getElementsByName(disbOrderRejLabel)[0].value;
 
 		}
-		ret+="&funding.fundingConditions="+document.getElementsByName('funding.fundingConditions')[0].value+
-			"&funding.donorObjective="+document.getElementsByName('funding.donorObjective')[0].value;
+		if(document.getElementsByName('funding.fundingConditions')[0]!=null){
+			ret+="&funding.fundingConditions="+document.getElementsByName('funding.fundingConditions')[0].value;
+		}
+		if(document.getElementsByName('funding.donorObjective')[0]!=null){
+			ret+="&funding.donorObjective="+document.getElementsByName('funding.donorObjective')[0].value;
+		}
 
 		return ret;
     }

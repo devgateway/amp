@@ -1204,10 +1204,17 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		g2d.clearRect(0, 0, canvasWidth, canvasHeight);
 		GisUtil gisUtil = new GisUtil();
 		CoordinateRect rect = gisUtil.getMapRect(map);
-		gisUtil.addDataToImage(g2d, map.getSegments(), hilightData, hilightDashData, canvasWidth, canvasHeight, rect.getLeft(), rect.getRight(), rect.getTop(), rect.getBottom(), true, false);
 
-		gisUtil.addCaptionsToImage(g2d, map.getSegments(), canvasWidth, canvasHeight, rect.getLeft(), rect.getRight(), rect.getTop(), rect.getBottom());
+                if (map != null) {
 
+                    gisUtil.addDataToImage(g2d, map.getSegments(), hilightData, hilightDashData,
+                                           canvasWidth, canvasHeight, rect.getLeft(),
+                                           rect.getRight(), rect.getTop(), rect.getBottom(), true, false);
+
+                    gisUtil.addCaptionsToImage(g2d, map.getSegments(), canvasWidth,
+                                               canvasHeight, rect.getLeft(), rect.getRight(),
+                                               rect.getTop(), rect.getBottom());
+                }
 		g2d.dispose();
 
 		RenderedImage ri = graph;

@@ -215,9 +215,16 @@
 		if(checkAndClose==true){
 			if(document.getElementsByName("someError")[0]==null || document.getElementsByName("someError")[0].value=="false"){
 				myclose();
+				refreshPage();
 			}
 			checkAndClose=false;			
 		}
+	}
+	function refreshPage(){
+		document.aimEditActivityForm.step.value = "3";
+		document.aimEditActivityForm.action = "/aim/addActivity.do?edit=true";
+		document.aimEditActivityForm.target = "_self";
+		document.aimEditActivityForm.submit();
 	}
 
 	function myclose(){
@@ -384,9 +391,6 @@
 		var params = getParameters();
 		
 		YAHOOAmp.util.Connect.asyncRequest("POST", urlParams+"?"+params, callback );
-		
-	 	//document.aimEditActivityForm.action="/addMTEFProjection.do";
-	 	//document.aimEditActivityForm.submit();
 	}
 	function removeMTEFProjection(index) {
 		var flag = confirm("<digi:trn key="aim:addFunding:warn:removeproj">Are you sure you want to remove the selected projection ?</digi:trn>");
@@ -460,8 +464,6 @@
 			}
 			document.getElementById('transIndexId').value=index;
 			
-		 	//document.aimEditActivityForm.action="/addFundingDetail.do";
-			//document.aimEditActivityForm.submit();
 			<digi:context name="addFunding" property="context/module/moduleinstance/addFundingDetail.do"/>
 			
 			var urlParams="<%=addFunding%>";
@@ -505,7 +507,7 @@
 		if (validateAmounts()) {
 			YAHOOAmp.util.Connect.asyncRequest("POST", urlParams+"?"+params, callback );
 			isAlreadySubmitted = true;
-			document.aimEditActivityForm.submit();
+			
 			return true;
 		} else {
 			return false;
@@ -603,7 +605,7 @@
 		    var urlParams="<%=fundAdded%>";
 		    checkAndClose=true;
 		    YAHOOAmp.util.Connect.asyncRequest("POST", urlParams+"?"+getPropCostParams(), callback );
-		    document.aimEditActivityForm.submit();
+		    //document.aimEditActivityForm.submit();
 	      return true;
 		}
 	   function checkAmountUsingSymbol(amount,decimalSymbol,groupSymbol){

@@ -171,7 +171,7 @@
                                 <html:option value="-1">Select Region</html:option>
                                  <html:option value="-2">All</html:option>
                                  <html:option value="-3">National</html:option>
-                                <html:optionsCollection name="gisIndicatorSectorRegionForm" property="regions" label="name" value="ampRegionId"/>
+                                <html:optionsCollection name="gisIndicatorSectorRegionForm" property="regions" label="name" value="id"/>
                             </html:select>
                         </td>
                         

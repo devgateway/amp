@@ -3,9 +3,9 @@ package org.digijava.module.widget.form;
 import java.util.List;
 
 import org.apache.struts.action.ActionForm;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
-import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.IndicatorSector;
 
@@ -19,7 +19,7 @@ public class IndicatorSectorRegionForm extends ActionForm {
 	private List<IndicatorSector> indSectList;
     private List<AmpIndicator> indicators;
     private Long selIndicator;
-    private List<AmpRegion> regions;
+    private List<AmpCategoryValueLocations> regions;
     private Long selRegionId;
     private AmpSector sector;
     private Long indSectId;
@@ -105,11 +105,11 @@ public class IndicatorSectorRegionForm extends ActionForm {
         this.selRegionId = selRegionId;
     }
 
-    public List<AmpRegion> getRegions() {
+    public List<AmpCategoryValueLocations> getRegions() {
         return regions;
     }
 
-    public void setRegions(List<AmpRegion> regions) {
+    public void setRegions(List<AmpCategoryValueLocations> regions) {
         this.regions = regions;
     }
 

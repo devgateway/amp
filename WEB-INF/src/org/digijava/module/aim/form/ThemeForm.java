@@ -5,10 +5,9 @@ import java.util.List;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.util.LabelValueBean;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpRegion;
-import org.digijava.module.aim.dbentity.AmpWoreda;
-import org.digijava.module.aim.dbentity.AmpZone;
 import org.digijava.module.aim.dbentity.IndicatorTheme;
 import org.digijava.module.aim.helper.IndicatorThemeBean;
 import org.digijava.module.aim.helper.IndicatorsBean;
@@ -95,13 +94,13 @@ public class ThemeForm extends ActionForm {
       	  
       	  private String fill; // National, region, district 	
       	  private boolean defaultCountryIsSet;
-      	  private Collection<AmpRegion> regions;
+      	  private Collection<AmpCategoryValueLocations> regions;
       	  private Long impRegion;
       	  
-      	  private Collection<AmpZone> zones;
+      	  private Collection<AmpCategoryValueLocations> zones;
       	  private Long impZone;
           
-      	  private Collection<AmpWoreda> woredas;
+      	  private Collection<AmpCategoryValueLocations> woredas;
       	  private Long impWoreda;
       	  
       	  private String country;
@@ -172,11 +171,11 @@ public class ThemeForm extends ActionForm {
 			this.defaultCountryIsSet = defaultCountryIsSet;
 		}
 
-		public Collection<AmpRegion> getRegions() {
+		public Collection<AmpCategoryValueLocations> getRegions() {
 			return regions;
 		}
 
-		public void setRegions(Collection<AmpRegion> regions) {
+		public void setRegions(Collection<AmpCategoryValueLocations> regions) {
 			this.regions = regions;
 		}
 
@@ -188,11 +187,11 @@ public class ThemeForm extends ActionForm {
 			this.impRegion = impRegion;
 		}
 
-		public Collection<AmpZone> getZones() {
+		public Collection<AmpCategoryValueLocations> getZones() {
 			return zones;
 		}
 
-		public void setZones(Collection<AmpZone> zones) {
+		public void setZones(Collection<AmpCategoryValueLocations> zones) {
 			this.zones = zones;
 		}
 
@@ -204,11 +203,11 @@ public class ThemeForm extends ActionForm {
 			this.impZone = impZone;
 		}
 
-		public Collection<AmpWoreda> getWoredas() {
+		public Collection<AmpCategoryValueLocations> getWoredas() {
 			return woredas;
 		}
 
-		public void setWoredas(Collection<AmpWoreda> woredas) {
+		public void setWoredas(Collection<AmpCategoryValueLocations> woredas) {
 			this.woredas = woredas;
 		}
 

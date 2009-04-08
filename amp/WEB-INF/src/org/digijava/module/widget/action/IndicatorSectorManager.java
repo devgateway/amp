@@ -264,7 +264,7 @@ public class IndicatorSectorManager extends DispatchAction {
         }
         indSecForm.setIndicators(allIndicators);
         Set<AmpCategoryValueLocations>  regions=
-                			DynLocationManagerUtil.getLocationsOfTypeRegion() ;
+                			DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry() ;
         indSecForm.setRegions(new ArrayList(regions));
         indSecForm.setSelIndicator(-1l);
         indSecForm.setSelRegionId(-1l);
@@ -283,7 +283,7 @@ public class IndicatorSectorManager extends DispatchAction {
         IndicatorSectorRegionForm indSecForm = (IndicatorSectorRegionForm) form;
         indSecForm.setIndicators(IndicatorUtil.getAllIndicators());
         Set<AmpCategoryValueLocations>  regions=
-                			DynLocationManagerUtil.getLocationsOfTypeRegion() ;
+                			DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry() ;
         indSecForm.setRegions(new ArrayList(regions));
         IndicatorSector indSec = IndicatorUtil.getConnectionToSector(indSecForm.getIndSectId());
         if (indSec.getIndicator() != null) {

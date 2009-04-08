@@ -14,7 +14,7 @@
 <TR>
 	<TD bgcolor="#ffffff"><field:display feature="${largeTextFeature}"
 		name="${largeTextLabel}">
-		<i>${largeTextLabel}</i>:
+		<i><digi:trn>${largeTextLabel}</digi:trn></i>:
 		<digi:edit key="${largeTextKey}"/>
 	</field:display></TD>
 </TR>

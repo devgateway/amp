@@ -1104,10 +1104,12 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 	}
 
 	private int matchesId(Long ptableId) {
-		for (int a = 0; a < this.tableId.length; a++) {
-			if (this.tableId[a].equals(ptableId))
-				return a;
-		}
+            if (ptableId != null && this.tableId != null) {
+                for (int a = 0; a < this.tableId.length; a++) {
+                    if (this.tableId[a].equals(ptableId))
+                        return a;
+                }
+            }
 		return -1;
 	}
 

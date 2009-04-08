@@ -332,7 +332,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
         //Translation for Result Matrix
         //Paragraph title = new Paragraph(TranslatorWorker.translate("gis:resultsmatrix", locale, siteId) + countryName, new Font(Font.HELVETICA, 24, Font.BOLD));
         Paragraph title = new Paragraph(TranslatorWorker.translateText("Results Matrix:", locale, siteId) + countryName, new Font(Font.HELVETICA, 24, Font.BOLD));
-        
+
         String generatedOnTranslation = TranslatorWorker.translateText("gis:generatedon", locale, siteId);
         if(generatedOnTranslation == null || generatedOnTranslation.equals(""))
         	generatedOnTranslation = "Generated on: ";
@@ -784,9 +784,9 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 			selectedIndicatorTranslation = "Selected Indicator";
 
 		String defaultMinMaxMessage="Regions with the lowest (MIN) values for the selected indicator are shaded dark green. "
-				+"Regions with the highest (MAX) value are shaded light green. " 
+				+"Regions with the highest (MAX) value are shaded light green. "
 				+"For some indicators (such as mortality rates), having the MAX value indicates the lowest performance";
-		
+
 		textCell.addElement(new Paragraph(TranslatorWorker.translateText(defaultMinMaxMessage, locale, siteId) + "\n" + selectedSectorTranslation + ": " + sectorName + "\n" + selectedIndicatorTranslation + ": " + indicatorName + "\n\n"+TranslatorWorker.translateText("Data Source: Dev Info", locale, siteId), new Font(Font.HELVETICA, 6)));
 		PdfPCell legendCell = new PdfPCell();
 		legendCell.setPadding(0);
@@ -1296,14 +1296,19 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 		g2d.clearRect(0, 0, canvasWidth, canvasHeight);
 
-		gisUtil.addDataToImage(g2d, map.getSegments(), -1, canvasWidth,
-				canvasHeight, rect.getLeft(), rect.getRight(), rect.getTop(),
-				rect.getBottom(), true, false);
 
-		gisUtil.addCaptionsToImage(g2d, map.getSegments(), canvasWidth,
-				canvasHeight, rect.getLeft(), rect.getRight(), rect.getTop(),
-				rect.getBottom());
+                if (map != null) {
 
+                    gisUtil.addDataToImage(g2d, map.getSegments(), -1, canvasWidth,
+                                           canvasHeight, rect.getLeft(), rect.getRight(),
+                                           rect.getTop(),
+                                           rect.getBottom(), true, false);
+
+                    gisUtil.addCaptionsToImage(g2d, map.getSegments(), canvasWidth,
+                                               canvasHeight, rect.getLeft(), rect.getRight(),
+                                               rect.getTop(),
+                                               rect.getBottom());
+                }
 		g2d.dispose();
 
 		RenderedImage ri = graph;

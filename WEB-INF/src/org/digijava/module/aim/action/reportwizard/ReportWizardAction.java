@@ -287,20 +287,20 @@ public class ReportWizardAction extends MultiAction {
 		this.addFields(myForm.getSelectedMeasures(), availableMeas, ampReport.getMeasures(), AmpReportMeasures.class, level1);
 		
 		/* If all columns are set as hierarchies we add the Project Title column */
-//		if (  myForm.getSelectedColumns() != null && myForm.getSelectedHierarchies() != null &&  
-//				myForm.getSelectedColumns().length == myForm.getSelectedHierarchies().length ) {
-//			for ( AmpColumns tempCol: availableCols ) {
-//				if ( Constants.COLUMN_PROJECT_TITLE.equals(tempCol.getColumnName()) ) {
-//					AmpReportColumn titleCol			= new AmpReportColumn();
-//					titleCol.setLevel(level1);
-//					titleCol.setOrderId( (ampReport.getColumns().size()+1) + "" );
-//					titleCol.setColumn(tempCol); 
-//					
-//					ampReport.getColumns().add(titleCol);
-//					break;
-//				}
-//			}
-//		}
+		if (  ampReport.getColumns() != null && ampReport.getHierarchies() != null &&  
+				ampReport.getColumns().size() == ampReport.getHierarchies().size() ) {
+			for ( AmpColumns tempCol: availableCols ) {
+				if ( Constants.COLUMN_PROJECT_TITLE.equals(tempCol.getColumnName()) ) {
+					AmpReportColumn titleCol			= new AmpReportColumn();
+					titleCol.setLevel(level1);
+					titleCol.setOrderId( (ampReport.getColumns().size()+1) + "" );
+					titleCol.setColumn(tempCol); 
+					
+					ampReport.getColumns().add(titleCol);
+					break;
+				}
+			}
+		}
 		
 		Object filter	= request.getSession().getAttribute( ReportWizardAction.SESSION_FILTER );
 		if ( filter == null )

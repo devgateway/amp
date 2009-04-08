@@ -1238,9 +1238,15 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 		g2d.clearRect(0, 0, canvasWidth, canvasHeight);
 
-		gisUtil.addDataToImage(g2d, map.getSegments(), -1, canvasWidth, canvasHeight, rect.getLeft(), rect.getRight(), rect.getTop(), rect.getBottom(), true, false);
+                if (map != null) {
+                    gisUtil.addDataToImage(g2d, map.getSegments(), -1, canvasWidth,
+                                           canvasHeight, rect.getLeft(), rect.getRight(),
+                                           rect.getTop(), rect.getBottom(), true, false);
 
-		gisUtil.addCaptionsToImage(g2d, map.getSegments(), canvasWidth, canvasHeight, rect.getLeft(), rect.getRight(), rect.getTop(), rect.getBottom());
+                    gisUtil.addCaptionsToImage(g2d, map.getSegments(), canvasWidth,
+                                               canvasHeight, rect.getLeft(), rect.getRight(),
+                                               rect.getTop(), rect.getBottom());
+                }
 
 		g2d.dispose();
 
@@ -1547,10 +1553,10 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 					BigDecimal exchangeRate = null;
 					/*
 					 * try {
-					 * 
+					 *
 					 * exchangeRate = CurrencyUtil.getLatestExchangeRate(
 					 * fundDet.getAmpCurrencyId().getCurrencyCode());
-					 * 
+					 *
 					 * } catch (AimException ex) { //Add exception reporting }
 					 */
 					exchangeRate = new BigDecimal(fundDet.getFixedExchangeRate());
@@ -1559,10 +1565,10 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 					 * switch (fundDet.getTransactionType().intValue()) { case
 					 * Constants.COMMITMENT: commitment +=
 					 * fundDet.getTransactionAmount() / exchangeRate; break;
-					 * 
+					 *
 					 * case Constants.DISBURSEMENT: disbursement +=
 					 * fundDet.getTransactionAmount() / exchangeRate; break;
-					 * 
+					 *
 					 * case Constants.EXPENDITURE: expenditure +=
 					 * fundDet.getTransactionAmount() / exchangeRate; break; }
 					 */

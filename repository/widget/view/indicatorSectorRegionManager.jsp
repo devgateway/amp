@@ -116,7 +116,7 @@
                                                             National
                                                         </c:when>
                                                         <c:otherwise>
-                                                            ${indSecReg.location.ampRegion.name}
+                                                            ${indSecReg.location.location.name}
                                                         </c:otherwise>
                                                     </c:choose>
                                                

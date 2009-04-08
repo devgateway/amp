@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -14,17 +15,19 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpLocation;
-import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.helper.ActivitySector;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.gis.util.DbUtil;
 import org.digijava.module.widget.form.IndicatorSectorRegionForm;
 import org.digijava.module.widget.util.ChartWidgetUtil;
@@ -104,7 +107,7 @@ public class IndicatorSectorManager extends DispatchAction {
         IndicatorSectorRegionForm indSecForm = (IndicatorSectorRegionForm) form;
         ActionErrors errors = new ActionErrors();
         IndicatorSector indSec;
-        List<AmpRegion> regions = new ArrayList<AmpRegion>();
+        List<AmpCategoryValueLocations> regions = new ArrayList<AmpCategoryValueLocations>();
         AmpSector selectedSector = indSecForm.getSector();
         Long indId = indSecForm.getSelIndicator();
         AmpIndicator selectedIndicator = IndicatorUtil.getIndicator(indId);
@@ -120,16 +123,19 @@ public class IndicatorSectorManager extends DispatchAction {
             regions.addAll(indSecForm.getRegions());
         } else {
             if (!nationalSelected) {
-                regions.add(LocationUtil.getAmpRegion(indSecForm.getSelRegionId()));
+                regions.add(DynLocationManagerUtil.getLocation(indSecForm.getSelRegionId(),false));
             } else {
                 //National means no region, zone, district are selected
-                locNational = LocationUtil.getAmpLocation(FeaturesUtil.getDefaultCountryIso(), null, null, null);
+                String iso= FeaturesUtil.getDefaultCountryIso();
+                AmpCategoryValueLocations defCountry = DynLocationManagerUtil.getLocationByIso(iso, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+                locNational = LocationUtil.getAmpLocationByCVLocation(defCountry.getId());
                 if (locNational == null) {
                     locNational = new AmpLocation();
                     locNational.setCountry(FeaturesUtil.getDefaultCountryIso());
-                    locNational.setDgCountry(org.digijava.module.aim.util.DbUtil.getDgCountry(FeaturesUtil.getDefaultCountryIso()));
+                    locNational.setLocation(defCountry);
                     LocationUtil.saveLocation(locNational);
                 }
+                
             }
         }
 
@@ -149,7 +155,7 @@ public class IndicatorSectorManager extends DispatchAction {
                  * that is why we are removing it from list of regions
                  */
 
-                regions.remove(indSec.getLocation().getAmpRegion());
+                regions.remove(indSec.getLocation().getLocation());
                 IndicatorUtil.saveIndicatorConnection(indSec);
             } else if (nationalSelected) {
                 indSec.setLocation(locNational);
@@ -178,7 +184,7 @@ public class IndicatorSectorManager extends DispatchAction {
             ind.setIndicator(selectedIndicator);
             IndicatorUtil.saveIndicatorConnection(ind);
         } else {
-            for (AmpRegion region : regions) {
+            for (AmpCategoryValueLocations  region : regions) {
 
                 IndicatorSector ind = new IndicatorSector();
                 AmpLocation ampLoc = getAmpLocation(region);
@@ -257,7 +263,9 @@ public class IndicatorSectorManager extends DispatchAction {
         	Collections.sort(allIndicators, new IndicatorUtil.IndicatorNameComparator());
         }
         indSecForm.setIndicators(allIndicators);
-        indSecForm.setRegions(new ArrayList(LocationUtil.getAllRegionsUnderCountry(FeaturesUtil.getDefaultCountryIso())));
+        Set<AmpCategoryValueLocations>  regions=
+                			DynLocationManagerUtil.getLocationsOfTypeRegion() ;
+        indSecForm.setRegions(new ArrayList(regions));
         indSecForm.setSelIndicator(-1l);
         indSecForm.setSelRegionId(-1l);
         indSecForm.setSector(null);
@@ -274,7 +282,9 @@ public class IndicatorSectorManager extends DispatchAction {
             HttpServletResponse response) throws Exception {
         IndicatorSectorRegionForm indSecForm = (IndicatorSectorRegionForm) form;
         indSecForm.setIndicators(IndicatorUtil.getAllIndicators());
-        indSecForm.setRegions(new ArrayList(LocationUtil.getAllRegionsUnderCountry(FeaturesUtil.getDefaultCountryIso())));
+        Set<AmpCategoryValueLocations>  regions=
+                			DynLocationManagerUtil.getLocationsOfTypeRegion() ;
+        indSecForm.setRegions(new ArrayList(regions));
         IndicatorSector indSec = IndicatorUtil.getConnectionToSector(indSecForm.getIndSectId());
         if (indSec.getIndicator() != null) {
             indSecForm.setSelIndicator(indSec.getIndicator().getIndicatorId());
@@ -284,17 +294,15 @@ public class IndicatorSectorManager extends DispatchAction {
         if (indSec.getLocation() == null) {
             indSecForm.setSelRegionId(null);
         } else {
-            if (indSec.getLocation().getAmpRegion() != null) {
-                indSecForm.setSelRegionId(indSec.getLocation().getAmpRegion().getAmpRegionId());
-            } else {
-                if (indSec.getLocation().getDgCountry() != null) {
-                    //National is selected
-                    indSecForm.setSelRegionId(-3L); 
-                } else {
-                    indSecForm.setSelIndicator(null);
-                }
-
-            }
+          AmpCategoryValueLocations loc = indSec.getLocation().getLocation();
+          String parentCategoryName=loc.getParentCategoryValue().getValue();
+          if (CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey().equalsIgnoreCase(parentCategoryName) ){
+				//National is selected
+                    indSecForm.setSelRegionId(NATIONAL_SELECTED);
+			}
+          else{
+               indSecForm.setSelRegionId(indSec.getLocation().getLocation().getId());
+          }
         }
 
         indSecForm.setSector(indSec.getSector());
@@ -338,9 +346,9 @@ public class IndicatorSectorManager extends DispatchAction {
             indSecForm.setSelIndicator(null);
             indSecForm.setIndicatorName("");
         }
-        if (indSec.getLocation() != null && indSec.getLocation().getAmpRegion() != null) {
-            indSecForm.setSelRegionId(indSec.getLocation().getAmpRegion().getAmpRegionId());
-            indSecForm.setRegionName(indSec.getLocation().getAmpRegion().getName());
+        if (indSec.getLocation() != null && indSec.getLocation().getLocation() != null) {
+            indSecForm.setSelRegionId(indSec.getLocation().getLocation().getId());
+            indSecForm.setRegionName(indSec.getLocation().getLocation().getName());
         } else {
             indSecForm.setSelRegionId(null);
             indSecForm.setRegionName("");
@@ -440,13 +448,13 @@ public class IndicatorSectorManager extends DispatchAction {
 
     }
 
-    private AmpLocation getAmpLocation(AmpRegion region) throws Exception {
-        AmpLocation ampLoc = LocationUtil.getAmpLocation(FeaturesUtil.getDefaultCountryIso(), region.getAmpRegionId(), null, null);
+    private AmpLocation getAmpLocation(AmpCategoryValueLocations region) throws Exception {
+        AmpLocation ampLoc = LocationUtil.getAmpLocationByCVLocation(region.getId());
         if (ampLoc == null) {
             ampLoc = new AmpLocation();
             ampLoc.setCountry(FeaturesUtil.getDefaultCountryIso());
-            ampLoc.setDgCountry(org.digijava.module.aim.util.DbUtil.getDgCountry(FeaturesUtil.getDefaultCountryIso()));
-            ampLoc.setAmpRegion(LocationUtil.getAmpRegion(region.getAmpRegionId()));
+            ampLoc.setRegionLocation(region);
+            ampLoc.setLocation(region);
             LocationUtil.saveLocation(ampLoc);
         }
         return ampLoc;

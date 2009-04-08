@@ -275,7 +275,7 @@
 													<html:option value="-1">-- <digi:trn key="um:selectWorkspace">Select a workspace</digi:trn> --</html:option>
 													<c:forEach items="${umAddUserForm.workspaces}" var="workspaces">
 														<html:option value="${workspaces.ampTeamId}">
-															<c:out value="${workspaces.name}"/>
+															<digi:trn key="${workspaces.name}"><c:out value="${workspaces.name}"/></digi:trn>
 														</html:option>
 													</c:forEach>
 													</html:select>
@@ -291,7 +291,7 @@
 													<html:option value="-1">-- <digi:trn key="um:selectRole">Select a role</digi:trn> --</html:option>
 													<c:forEach items="${umAddUserForm.ampRoles}" var="roles">
 														<html:option value="${roles.ampTeamMemRoleId}">
-															<c:out value="${roles.description}"/>
+															<digi:trn key="${roles.description}"><c:out value="${roles.description}"/></digi:trn>
 														</html:option>
 													</c:forEach>
 													</html:select>

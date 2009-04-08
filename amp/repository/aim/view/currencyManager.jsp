@@ -57,7 +57,7 @@ function deleteCurrency(code) {
 function validate(){
 
 
-			return(confirm(" Do you want to delete this Currency ?"));
+			return(confirm('<digi:trn key="Do you want to delete this Currency?">Do you want to delete this Currency?</digi:trn>'));
 
 }
 function applyFilter() {

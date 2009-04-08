@@ -61,7 +61,9 @@
 				<c:forEach var="widgetTable" items="${gisTableWidgetCreationForm.tables}" varStatus="stat">
 					<tr>
 						<td>
-							<html:link href="/widget/tableWidgetData.do~actType=startEdit~widgetId=${widgetTable.id}">${widgetTable.name}</html:link>
+							<html:link href="/widget/tableWidgetData.do~actType=startEdit~widgetId=${widgetTable.id}">
+							     <digi:trn key="${widgetTable.name}">${widgetTable.name}</digi:trn>
+							</html:link>
 						</td>
 						<td nowrap="nowrap">
 						 	${widgetTable.code}

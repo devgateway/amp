@@ -72,12 +72,12 @@
 						<td>
 							<c:if test="${col.type==1}">
 								<strong>
-									${col.name}
+									<digi:trn key="${col.name}">${col.name}</digi:trn>
 								</strong>
 							</c:if>
 							<c:if test="${col.type==2}">
 								<strong>
-									${col.name}
+									<digi:trn key="${col.name}">${col.name}</digi:trn>
 								</strong>
 							</c:if>
 							<c:if test="${col.type==3}">

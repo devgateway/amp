@@ -290,7 +290,7 @@ div.fakefile2 input{
 				<div id="tab_confirm_import"  class="yui-tab-content" align="center" style="padding: 0px 0px 1px 0px; display: none;">
                     <c:set var="stepNum" value="3" scope="request" />
                     <jsp:include page="toolbarImport.jsp" />
-                    Step 4 Select additional fields
+                    <digi:trn>Step 4 Select additional fields</digi:trn>
 				</div>
 				
 			</div>

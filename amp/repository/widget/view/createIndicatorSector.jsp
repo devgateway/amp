@@ -122,8 +122,11 @@
                         </td>
                         <td  colspan="2">
                             <html:select name="gisIndicatorSectorRegionForm" property="selIndicator">
-                                <html:option value="-1">Select Indicator</html:option>
-                                <html:optionsCollection name="gisIndicatorSectorRegionForm" property="indicators" label="name" value="indicatorId"/>
+                                <html:option value="-1"><digi:trn>Select Indicator</digi:trn></html:option>
+                                <c:forEach var="indicator" items="${gisIndicatorSectorRegionForm.indicators}">
+                                    <html:option value="${indicator.indicatorId}"><digi:trn>${indicator.name}</digi:trn></html:option>
+                                </c:forEach>
+<!--                                <html:optionsCollection name="gisIndicatorSectorRegionForm" property="indicators" label="name" value="indicatorId"/>-->
                             </html:select>
                         </td>
                         
@@ -171,10 +174,13 @@
                         </td>
                         <td  colspan="2">
                             <html:select name="gisIndicatorSectorRegionForm" property="selRegionId">
-                                <html:option value="-1">Select Region</html:option>
-                                 <html:option value="-2">All</html:option>
-                                 <html:option value="-3">National</html:option>
-                                <html:optionsCollection name="gisIndicatorSectorRegionForm" property="regions" label="name" value="ampRegionId"/>
+                                <html:option value="-1"><digi:trn>Select Region</digi:trn></html:option>
+                                 <html:option value="-2"><digi:trn>All</digi:trn></html:option>
+                                 <html:option value="-3"><digi:trn>National</digi:trn></html:option>
+                                 <c:forEach var="region" items="${gisIndicatorSectorRegionForm.regions}">
+                                    <html:option value="${region.ampRegionId}"><digi:trn>${region.name}</digi:trn></html:option>
+                                 </c:forEach>
+<!--                                 <html:optionsCollection name="gisIndicatorSectorRegionForm" property="regions" label="name" value="ampRegionId"/>-->
                             </html:select>
                         </td>
                         

@@ -170,7 +170,7 @@ public class XLSExportAction extends Action {
 			if (reportForm.getDateOptions().equals("0")) {//disabled
 				// no date
 			} else if (reportForm.getDateOptions().equals("1")) {//enable		
-				stmt += " " + DateFormat.getDateInstance(DateFormat.FULL, new java.util.Locale(locale)).format(new Date());
+				stmt += " " + TranslatorWorker.translateText("on", locale,siteId)+ " " + DateFormat.getDateInstance(DateFormat.FULL, new java.util.Locale(locale)).format(new Date());
 			}				 	                	                
 			if (reportForm.getStatementPositionOptions().equals("0")) {//header		
 				cell.setCellValue(stmt);  

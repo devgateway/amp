@@ -31,15 +31,22 @@ echo "Importing DDL..."
 mysql $extra $newdb < amp_clean_ddl.sql
 echo "Importing data..."
 mysql $extra $newdb < $database-data.sql
+echo "1"
 mysql $extra $newdb < generate_orphan_viewer.sql > orphan_viewer.sql
+echo "2"
 mysql $extra $newdb < generate_orphan_deleter.sql > orphans_deleter_$newdb.sql
+echo "3"
 mysql $extra $newdb < orphan_viewer.sql > orphans_$newdb.txt
 echo "ALERT! Orhpan data information has been saved into orphans_$newdb.txt. Please review it !"
 echo "Cleaning temp files..."
-rm orphan_viewer.sql
-rm $database-patch.sql
-rm amp_clean_ddl.sql
-rm $database-data.sql
+mv orphan_viewer.sql scripts/
+mv $database-patch.sql scripts/
+mv amp_clean_ddl.sql scripts/
+mv $database-data.sql scripts/
+
+mysql $extra $database -e "drop table columns_ampclean"
+mysql $extra $database -e "drop table tables_ampclean"
+
 echo "Done! The new database is called $newdb"
 else 
 echo "amp-dbfix 0.3 - Fix an AMP db by re-creating it based on an AMP_CLEAN schema plus data from an existing AMP db."

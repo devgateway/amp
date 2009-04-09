@@ -177,7 +177,7 @@
 			var listitems= mylist.getElementsByTagName("li");
 			if(listitems == null || listitems.length < 1)
 			{
-				alert("Please choose at least one activity to import");
+				alert('<digi:trn>Please choose at least one activity to import</digi:trn>');
 				return;
 			}
        		
@@ -204,7 +204,7 @@
 		<span id="formChild" style="display:none;">&nbsp;</span>
      
         <span class="subtitle-blue">
-          &nbsp;Data Importer
+          &nbsp;<digi:trn>Data Importer</digi:trn>
         </span>		
 		
 		<div style="color: red; text-align: center; visibility: hidden" id="savingReportDiv">
@@ -220,17 +220,17 @@
 		<div id="wizard_container" class="yui-navset">
     		<ul class="yui-nav">
 					<logic:equal name="fileUploaded" value="false">
-	    				<li id="tab_file_selection" class="selected"><a href="#file_selection"><div>1. File Selection and Staging Area</div></a> </li>
-		    			<li id="tab_log_after_import" class="disabled"><a href="#log_after_import"><div>2. Log after Import</div></a> </li>
-		    			<li id="tab_select_activities" class="enabled"><a href="#select_activities"><div>3. Select Activities</div></a> </li>
-		    			<li id="tab_confirm_import" class="disabled"><a href="#confirm_import"><div>4. Confirm Import</div></a> </li>
+	    				<li id="tab_file_selection" class="selected"><a href="#file_selection"><div><digi:trn>1. File Selection and Staging Area</digi:trn></div></a> </li>
+		    			<li id="tab_log_after_import" class="disabled"><a href="#log_after_import"><div><digi:trn>2. Log after Import</digi:trn></div></a> </li>
+		    			<li id="tab_select_activities" class="enabled"><a href="#select_activities"><div><digi:trn>3. Select Activities</digi:trn></div></a> </li>
+		    			<li id="tab_confirm_import" class="disabled"><a href="#confirm_import"><div><digi:trn>4. Confirm Import</digi:trn></div></a> </li>
 					</logic:equal>
 					
 					<logic:equal name="fileUploaded" value="true">
-	    				<li id="tab_file_selection" class="disabled"><a href="#file_selection"><div>1. File Selection and Staging Area</div></a> </li>
-		    			<li id="tab_log_after_import" class="selected"><a href="#log_after_import"><div>2. Log after Import</div></a> </li>
-		    			<li id="tab_select_activities" class="enabled"><a href="#select_activities"><div>3. Select Activities</div></a> </li>
-		    			<li id="tab_confirm_import" class="enabled"><a href="#confirm_import"><div>4. Confirm Import</div></a> </li>
+	    				<li id="tab_file_selection" class="disabled"><a href="#file_selection"><div><digi:trn>1. File Selection and Staging Area</digi:trn></div></a> </li>
+		    			<li id="tab_log_after_import" class="selected"><a href="#log_after_import"><div><digi:trn>2. Log after Import</digi:trn></div></a> </li>
+		    			<li id="tab_select_activities" class="enabled"><a href="#select_activities"><div><digi:trn>3. Select Activities</digi:trn></div></a> </li>
+		    			<li id="tab_confirm_import" class="enabled"><a href="#confirm_import"><div><digi:trn>4. Confirm Import</digi:trn></div></a> </li>
 					</logic:equal>    		
 					
 					    		
@@ -296,11 +296,11 @@
                     <jsp:include page="toolbarImport.jsp" />
                     
                     <div id="expandcontractdiv" align="left">
-	                    <a id="expand" href="#">Expand all</a>
-	                    <a id="collapse" href="#">Collapse all</a>
+	                    <a id="expand" href="#"><digi:trn>Expand all</digi:trn></a>
+	                    <a id="collapse" href="#"><digi:trn>Collapse all</digi:trn></a>
 	                  
-	                    <a id="check" href="#">Check all</a>
-	                    <a id="uncheck" href="#">Uncheck all</a>
+	                    <a id="check" href="#"><digi:trn>Check all</digi:trn></a>
+	                    <a id="uncheck" href="#"><digi:trn>Uncheck all</digi:trn></a>
                     </div>
                     
                    <div id="dataImportTree"></div>
@@ -308,7 +308,7 @@
 				<div id="tab_confirm_import"  class="yui-tab-content" align="left" style="padding: 0px 0px 1px 0px; display: none;">
                     <c:set var="stepNum" value="3" scope="request" />
                     <jsp:include page="toolbarImport.jsp" />
-                    Step 4 Select additional fields
+                    <digi:trn>Step 4 Select additional fields</digi:trn>
                     <div align="left">
 					<ul id="id_activities" >
 					</ul>

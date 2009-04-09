@@ -130,7 +130,7 @@
 		<DimensionUsage name="Secundary Program" source="Secundary Program" foreignKey="amp_activity_id"/>
 		<DimensionUsage name="Status" source="Status" foreignKey="amp_activity_id"/>
 		
-		<Measure name="Raw Actual Commitments" aggregator="sum" caption="#Raw_Actual_Commitments#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter">
+		<Measure name="Raw Actual Commitments" aggregator="sum" caption="#Raw_Actual_Commitments#">
 			<MeasureExpression>
 				<SQL dialect="mysql">
 					 distinct case when cached_v_donor_funding.transaction_type=0 and cached_v_donor_funding.adjustment_type=1 then
@@ -138,7 +138,7 @@
 				</SQL>
 			</MeasureExpression>
 		</Measure>
-		<Measure name="Raw Actual Disbursements" aggregator="sum" caption="Raw_Actual_Disbursements" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter">
+		<Measure name="Raw Actual Disbursements" aggregator="sum" caption="Raw_Actual_Disbursements">
 			<MeasureExpression>
 				<SQL dialect="mysql">
 					distinct case when cached_v_donor_funding.transaction_type=1 and cached_v_donor_funding.adjustment_type=1 then
@@ -146,7 +146,7 @@
 				</SQL>
 			</MeasureExpression>
 		</Measure>
-		<Measure name="Activity Count" aggregator="distinct-count" column="amp_activity_id" caption="#Activity_Count#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter"/>
+		<Measure name="Activity Count" aggregator="distinct-count" column="amp_activity_id" caption="#Activity_Count#"/>
 		<Measure name="Raw Actual Expenditures" aggregator="sum" caption="#Raw_Actual_Expenditures#">
 			<MeasureExpression>
 				<SQL dialect="mysql">
@@ -155,7 +155,7 @@
 				</SQL>
 			</MeasureExpression>
 		</Measure>
-		<Measure name="Raw Planned Commitments" aggregator="sum" caption="#Raw_Planned_Commitments#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter">
+		<Measure name="Raw Planned Commitments" aggregator="sum" caption="#Raw_Planned_Commitments#">
 			<MeasureExpression>
 				<SQL dialect="mysql">
 					distinct case when cached_v_donor_funding.transaction_type=0 and cached_v_donor_funding.adjustment_type=0 then
@@ -163,7 +163,7 @@
 				</SQL>
 			</MeasureExpression>
 		</Measure>
-		<Measure name="Raw Planned Disbursements" aggregator="sum" caption="#Raw_Planned_Disbursements#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter">
+		<Measure name="Raw Planned Disbursements" aggregator="sum" caption="#Raw_Planned_Disbursements#">
 			<MeasureExpression>
 				<SQL dialect="mysql">
 					distinct case when cached_v_donor_funding.transaction_type=1 and cached_v_donor_funding.adjustment_type=0 then
@@ -171,7 +171,7 @@
 				</SQL>
 			</MeasureExpression>
 		</Measure>
-		<Measure name="Raw Planned Expenditures" aggregator="sum" caption="#Raw_Planned_Expenditures#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter">
+		<Measure name="Raw Planned Expenditures" aggregator="sum" caption="#Raw_Planned_Expenditures#">
 			<MeasureExpression>
 				<SQL dialect="mysql">
 					distinct case when cached_v_donor_funding.transaction_type=2 and cached_v_donor_funding.adjustment_type=0 then
@@ -208,32 +208,26 @@
 		
 		<CalculatedMember name="Actual Commitments" dimension="Measures" caption="#Actual_Commitments#" >
 			<Formula>IIf([Measures].[Sector Percentage] &gt; 0 AND [Measures].[Sector Percentage] &lt; 100,[Measures].[Raw Actual Commitments] * [Measures].[Sector Percentage] / 100,[Measures].[Raw Actual Commitments])</Formula>
-			<CalculatedMemberProperty name="CELL_FORMATTER" value="org.digijava.module.mondrian.Formatter.TotalCellFormatter"/>
 		</CalculatedMember>
 		
 		<CalculatedMember name="Actual Disbursements" dimension="Measures" caption="#Actual_Disbursements#">
 			<Formula>IIf([Measures].[Sector Percentage] &gt; 0 AND [Measures].[Sector Percentage] &lt; 100,[Measures].[Raw Actual Disbursements] * [Measures].[Sector Percentage] / 100,[Measures].[Raw Actual Disbursements])</Formula>
-			<CalculatedMemberProperty name="CELL_FORMATTER" value="org.digijava.module.mondrian.Formatter.TotalCellFormatter"/>
 		</CalculatedMember>
 		
 		<CalculatedMember name="Actual Expenditures" dimension="Measures" caption="#Actual_Expenditures#">
 			<Formula>IIf([Measures].[Sector Percentage] &gt; 0 AND [Measures].[Sector Percentage] &lt; 100,[Measures].[Raw Actual Expenditures] * [Measures].[Sector Percentage] / 100,[Measures].[Raw Actual Expenditures])</Formula>
-			<CalculatedMemberProperty name="CELL_FORMATTER" value="org.digijava.module.mondrian.Formatter.TotalCellFormatter"/>
 		</CalculatedMember>
 
 		<CalculatedMember name="Planned Commitments" dimension="Measures" caption="#Planned_Commitments#">
 			<Formula>IIf([Measures].[Sector Percentage] &gt; 0 AND [Measures].[Sector Percentage] &lt; 100,[Measures].[Raw Planned Commitments] * [Measures].[Sector Percentage] / 100,[Measures].[Raw Planned Commitments])</Formula>
-			<CalculatedMemberProperty name="CELL_FORMATTER" value="org.digijava.module.mondrian.Formatter.TotalCellFormatter"/>
 		</CalculatedMember>
 		
 		<CalculatedMember name="Planned Disbursements" dimension="Measures" caption="#Planned_Disbursements#">
 			<Formula>IIf([Measures].[Sector Percentage] &gt; 0 AND [Measures].[Sector Percentage] &lt; 100,[Measures].[Raw Planned Disbursements] * [Measures].[Sector Percentage] / 100,[Measures].[Raw Planned Disbursements])</Formula>
-			<CalculatedMemberProperty name="CELL_FORMATTER" value="org.digijava.module.mondrian.Formatter.TotalCellFormatter"/>
 		</CalculatedMember>
 		
 		<CalculatedMember name="Planned Expenditures" dimension="Measures" caption="#Planned_Expenditures#">
 			<Formula>IIf([Measures].[Sector Percentage] &gt; 0 AND [Measures].[Sector Percentage] &lt; 100,[Measures].[Raw Planned Expenditures] * [Measures].[Sector Percentage] / 100,[Measures].[Raw Planned Expenditures])</Formula>
-			<CalculatedMemberProperty name="CELL_FORMATTER" value="org.digijava.module.mondrian.Formatter.TotalCellFormatter"/>
 		</CalculatedMember>
 	</VirtualCube>
 </Schema>

@@ -36,7 +36,7 @@
 																							 <a id="1" style="font-size: 12px;color:#0e69b3;text-decoration:none">AMP</a>
 																							 <ul class="nodragul">
                                                                                                  <bean:define id="tree" name="deExportForm" property="activityTree" type="org.digijava.module.dataExchange.type.AmpColumnEntry" toScope="page"/>
-                                                                                                 <%= ExportHelper.renderActivityTree(tree) %>
+                                                                                                 <%= ExportHelper.renderActivityTree(tree, request) %>
 																							 </ul>
 																							</li>
                                                                                           </ul>

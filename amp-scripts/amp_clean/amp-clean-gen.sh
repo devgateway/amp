@@ -40,10 +40,10 @@ mysqldump --default-character-set=utf8 --single-transaction -c -e --no-create-in
 
 #DUMPING THE PROGRAM SETTINGS
 mysqldump --default-character-set=utf8 --single-transaction -c -e --no-create-info $extra $database --tables amp_program_settings --where 'default_hierarchy=2';
-mysqldump --hex-blob  --default-character-set=utf8 --single-transaction -c -e --no-create-info $extra $database --tables amp_theme --where 'amp_theme_id IN (SELECT at.amp_theme_id FROM amp_theme at, amp_program_settings aps WHERE at.amp_theme_id=aps.default_hierarchy AND aps.default_hierarhcy=2)'; 
+mysqldump --hex-blob  --default-character-set=utf8 --single-transaction -c -e --no-create-info $extra $database --tables amp_theme --where 'amp_theme_id IN (SELECT at.amp_theme_id FROM amp_theme at, amp_program_settings aps WHERE at.amp_theme_id=aps.default_hierarchy AND aps.default_hierarchy=2)'; 
 
 #DUMPIG EXTRA TABLES
-mysqldump --hex-blob  --default-character-set=utf8 --single-transaction -c -e $extra $database --tables util_global_settings_possible_values;
+mysqldump --hex-blob  --default-character-set=utf8 --single-transaction -c -e $extra $database --tables util_global_settings_possible_;
 
 #DUMPIG THE VIEWS AND QRTZ TABLES
 mysqldump --hex-blob  --default-character-set=utf8 --skip-add-drop-table --single-transaction -c -e $extra $database --tables \

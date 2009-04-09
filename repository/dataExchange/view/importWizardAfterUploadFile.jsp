@@ -117,7 +117,7 @@
           
           
           <bean:define id="tree" name="deImportForm" property="activityTree" type="org.digijava.module.dataExchange.dbentity.AmpDEImportLog" toScope="page"/>
-          <%= DataExchangeUtils.renderActivityTree(tree) %>
+          <%= DataExchangeUtils.renderActivityTree(tree, request) %>
           
       //The tree is not created in the DOM until this method is called:
           tree.draw();

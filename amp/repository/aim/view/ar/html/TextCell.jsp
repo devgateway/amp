@@ -11,7 +11,8 @@
 </logic:present>
 
 <logic:notEqual name="textCell"  property="translationKey" value="0">
-<div align="left" style="padding-left:<%=request.getAttribute("pading")%>" title='<digi:trn><bean:write name="textCell" property="shortTextVersion" filter="false"/></digi:trn>'>
+<div align="left" style="padding-left:<%=request.getAttribute("pading")%>" 
+title="<digi:trn><bean:write name="textCell" property="fullTextVersion" filter="false"/></digi:trn>">
 	<%if (textCell.getShortTextVersion().length() > 39){ %>
 		<logic:present name="starFlag" scope="request">
 			<logic:equal name="starFlagLocal" value="true">*</logic:equal>

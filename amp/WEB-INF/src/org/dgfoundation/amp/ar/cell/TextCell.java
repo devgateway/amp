@@ -91,6 +91,15 @@ public class TextCell extends Cell {
 		return alteredValue.substring(0, shortLength-1);
 	}
 	
+	
+	public String getFullTextVersion() {
+		if (!getHasLongVersion())
+			return value;
+		String alteredValue = value.replaceAll("\\<.*?>", "");
+		return alteredValue;
+
+	}
+	
 	public boolean getHasLongVersion() {
 		if(getTextLength()>shortLength) return true;
 		return false;

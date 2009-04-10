@@ -46,6 +46,7 @@ import org.digijava.module.calendar.dbentity.RecurrCalEvent;
 import org.digijava.module.calendar.entity.CalendarOptions;
 import org.digijava.module.calendar.entity.DateBreakDown;
 import org.digijava.module.calendar.entity.DateNavigator;
+import org.digijava.module.calendar.exception.CalendarException;
 import org.digijava.module.calendar.form.CalendarEventForm;
 import org.digijava.module.calendar.util.AmpDbUtil;
 import org.digijava.module.common.dbentity.ItemStatus;
@@ -385,7 +386,7 @@ public class ShowCalendarEvent extends Action {
 
     }
 
-    private void loadAmpCalendar(CalendarEventForm ceform, HttpServletRequest request) {
+    private void loadAmpCalendar(CalendarEventForm ceform, HttpServletRequest request) throws CalendarException {
         if (ceform.getAmpCalendarId() != null &&
             ceform.getAmpCalendarId() > 0 &&
             ceform.isResetForm()) {
@@ -506,8 +507,15 @@ public class ShowCalendarEvent extends Action {
 		                		 GregorianCalendar recstartDate = new GregorianCalendar();
 		                		 recstartDate.setTime(rec.getRecurrStartDate());
 		                		 
+		                		 startDateBreakDown = new DateBreakDown(recstartDate, ceform.getSelectedCalendarTypeId().intValue());
+		                		 ceform.setRecurrStartDate(startDateBreakDown.formatDateString());
+		                		 
+		                		 
 		                		 GregorianCalendar recurEndDate = new GregorianCalendar();
 		                		 recurEndDate.setTime(rec.getRecurrEndDate());
+		                		 
+		                		 startDateBreakDown = new DateBreakDown(recurEndDate, ceform.getSelectedCalendarTypeId().intValue());
+		                		 ceform.setRecurrEndDate(startDateBreakDown.formatDateString());
                 		}
                 		ceform.setRecurrPeriod(rec.getRecurrPeriod());
                 		ceform.setTypeofOccurrence(rec.getTypeofOccurrence());
@@ -541,6 +549,7 @@ public class ShowCalendarEvent extends Action {
 
                     ceform.setSelectedEndDate(endDateBreakDown.formatDateString());
                     ceform.setSelectedEndTime(endDateBreakDown.formatTimeString());
+                    
                 } catch (Exception ex) {
                 }
 

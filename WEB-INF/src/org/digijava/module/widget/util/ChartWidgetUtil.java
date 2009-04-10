@@ -23,6 +23,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -848,7 +849,7 @@ public class ChartWidgetUtil {
                 " as fd inner join fd.ampFundingId f ";
         oql += "   inner join f.ampActivityId act ";
 
-        oql += " inner join act.locations loc inner join loc.location.ampRegion reg where " +
+        oql += " inner join act.locations loc inner join loc.location.regionLocation reg where " +
                 " reg is not null  and fd.transactionType =:transactionType and  fd.adjustmentType = 1";
            if (orgID == null || orgID == -1) {
                if (orgGroupId != null && orgGroupId != -1) {
@@ -861,7 +862,7 @@ public class ChartWidgetUtil {
         oql += getTeamQuery(teamMember);
         Session session = PersistenceManager.getRequestDBSession();
         @SuppressWarnings("unchecked")
-        List<AmpRegion> regions = null;
+        List<AmpCategoryValueLocations> regions = null;
         try {
             Query query = session.createQuery(oql);
             query.setDate("startDate", startDate);
@@ -879,10 +880,10 @@ public class ChartWidgetUtil {
 
             }
             regions = query.list();
-            Iterator<AmpRegion> regionIter = regions.iterator();
+            Iterator<AmpCategoryValueLocations> regionIter = regions.iterator();
             while (regionIter.hasNext()) {
                 //calculating funding for each region
-                AmpRegion region = regionIter.next();
+                AmpCategoryValueLocations region = regionIter.next();
 
                 /* query that creates new  AmpFundingDetail objects
                 which amounts are calculated by multiplication
@@ -893,7 +894,7 @@ public class ChartWidgetUtil {
                 oql += AmpFundingDetail.class.getName() +
                         " as fd inner join fd.ampFundingId f ";
                 oql += "   inner join f.ampActivityId act inner join act.locations loc inner join " +
-                        " loc.location.ampRegion reg ";
+                        " loc.location.regionLocation reg ";
 
                 oql += " where  fd.transactionType =:transactionType and  fd.adjustmentType = 1 ";
                 if (orgID == null || orgID == -1) {
@@ -905,7 +906,7 @@ public class ChartWidgetUtil {
                     oql += getOrganizationQuery(false);
                 }
 
-                oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  and reg is not null and reg.ampRegionId=  " + region.getAmpRegionId();
+                oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  and reg is not null and reg.id=  " + region.getId();
                 oql += getTeamQuery(teamMember);
                 query = session.createQuery(oql);
                 query.setDate("startDate", startDate);

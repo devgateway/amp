@@ -90,7 +90,8 @@ public class HelpActions extends DispatchAction {
 				HelpTopic key = HelpUtil.getHelpTopic(new Long(id));
 	            String bodyKey =  key.getBodyEditKey();
 	            String article = HelpUtil.getTrn(key.getTopicKey(),request);
-	            out.println("<b>"+article+"</b>");
+	            String encodedArticle = HelpUtil.HTMLEntityEncode(article);
+	            out.println("<b>"+encodedArticle+"</b>");
 	            List editor = HelpUtil.getEditor(bodyKey, lang);
 	            helpForm.setTopicKey(bodyKey);
 	

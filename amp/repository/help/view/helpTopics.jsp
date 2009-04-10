@@ -172,7 +172,7 @@ function stateChange(){
 		 
 	 document.getElementById("bodyhelp").innerHTML = xmlHttp.responseText.slice(0,xmlHttp.responseText.indexOf("help:"));
      document.getElementById("key").innerHTML = xmlHttp.responseText.slice(xmlHttp.responseText.indexOf("help:"));
-     document.getElementById("bodyhelp").style.border="1px solid #A5ACB2";
+     document.getElementById("bodyhelp").style.border="1px solid white";
 
    }
 

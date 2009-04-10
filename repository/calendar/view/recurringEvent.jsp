@@ -20,6 +20,20 @@
 <script language="JavaScript" type="text/javascript"><!--
 
 
+function validateDuration(rec,duration){
+
+     if(rec < duration){
+	
+     	alert("The duration of appointment should be shorter than how often it recurs. Modify the duration of appointment or change the recurrence");
+
+		return false;
+     }else{
+
+         return true;
+	}
+}
+
+
 function eventType(){
     
         var Daily = document.getElementById("Daily").checked;
@@ -37,37 +51,63 @@ function eventType(){
         var start = parseInt(occStartDate.slice(0,occStartDate.indexOf("/")));
         var end = parseInt(occEndDate.slice(0,occEndDate.indexOf("/")));
 
-        var occurance_duration = end-start;
-  
+        var daily_occurance_duration = end-start;
+
+        var startMonth = parseInt(occStartDate.slice(3,5),10);
+        var endMonth = parseInt(occEndDate.slice(3,5),10);
+
+        var month_occurance_duration = endMonth - startMonth;
+
+        var startYear = parseInt(occStartDate.slice(6));
+        var endYear = parseInt(occEndDate.slice(6));
+        var year_occurance_duration = endYear - startYear;
+
+
     if(!Daily && !Weekly && !Monthly && !Yearly){
 		alert("please choose");
 		return false;
 	}
     
     if(Yearly){
-    	var rec = document.getElementById("Yearly").value;
-        var month = document.getElementById("selectedStartYearlyMonth").value;
+        
+    	var yearlyMonth = document.getElementById("selectedStartYearlyMonth").value;
 
+    	if(!validateDuration(yearlyMonth,month_occurance_duration)){
+            return false;
+   		}else{
+        
+    	var rec = document.getElementById("Yearly").value;
         document.getElementById("type").value = 'Yearly';
-        document.getElementById("hiddenMonth").value = month;
+        document.getElementById("hiddenYearMonth").value = yearlyMonth;
+        document.getElementById("hiddenMonth").value = yearlyMonth;
 		document.getElementById("hidden").value = rec;
-	}
+	 }
+   }
+
+	
 	
 	if(Monthly){
-   		var rec = document.getElementById("Monthly").value;
-        var month = document.getElementById("selectedStartMonth").value;
+		 var month = document.getElementById("selectedStartMonth").value;
 
-        document.getElementById("type").value = 'Monthly';
-        document.getElementById("hiddenMonth").value = month;
-		document.getElementById("hidden").value = rec;
+		if(!validateDuration(month,month_occurance_duration)){
+            return false;
+   		}else{
+			alert(month_occurance_duration);
+	   		var rec = document.getElementById("Monthly").value;
+	        document.getElementById("type").value = 'Monthly';
+	        document.getElementById("hiddenMonth").value = month;
+			document.getElementById("hidden").value = rec;
+		}
 	}
 
 	if(Daily){
-        var rec = document.getElementById("recurrDaily").value;
-        if(rec < occurance_duration){
-         alert("The duration of appointment should be shorter than how often it recurs. Modify the duration of appointment or change the recurrence");
 
-            return false;
+		
+        var rec = document.getElementById("recurrDaily").value;
+       
+        if(!validateDuration(rec,daily_occurance_duration)){
+
+                 return false;
 
         }else{
 
@@ -78,10 +118,17 @@ function eventType(){
 
 	if(Weekly){
 
+		 var rec = document.getElementById("recurrWeekly").value;
+		   
+	        if(!validateDuration(rec,daily_occurance_duration)){
+	            return false;
+	            
+	        }else{     
+		        
 		var result = "";
 		
-       var rec = document.getElementById("recurrWeekly").value;
-        document.getElementById("type").value = 'Weekly';
+	
+	    document.getElementById("type").value = 'Weekly';
         document.getElementById("hidden").value = rec;
         document.getElementById("selectedStartMonth").value = "";
         
@@ -96,9 +143,10 @@ function eventType(){
 
 					}
 
-		document.getElementById("weekDays").value = result.slice(1);
-        
+				document.getElementById("weekDays").value = result.slice(1);
+	    	}
 	}
+	
    submit();
 }
 
@@ -277,17 +325,19 @@ function eventType(){
 					 						<td><digi:trn>Every</digi:trn></td>
 							 	 			<td>
 								 	 		
-													<html:select name="calendarEventForm" property="selectedStartYear"  styleId="selectedStartYearlyMonth">
+													<html:select property="selectedStartYear" name="calendarEventForm"  styleId="selectedStartYearlyMonth">
 
 			                                                     	  <c:forEach var="month" begin="1" end="12">
                                                                             <c:if test="${month < 10}"><c:set var="hour" value="0${month}"/></c:if>
                                                                      				<html:option value="${month}">${month}</html:option>
-			                                        				</c:forEach>
-
-
-
+			                                        				 </c:forEach>
 
 												</html:select>
+												
+												
+												
+							 	 
+								 	 		
 						 	 		    	</td>
 							 	 			<!-- 
 							 	 			<td><input type="text"  size="7px" name="recurrPeriod" id="recurrYearly" value=""/></td>
@@ -349,7 +399,7 @@ function eventType(){
 		                                     <table cellpadding="0" cellspacing="0">
 		                                         <tr>
 		                                                <td nowrap="nowrap">
-		                                                  <html:text styleId="recurrSelectedStartDate" readonly="true" name="calendarEventForm" property="selectedStartDate" style="width:80px"/>
+		                                                  <html:text styleId="recurrSelectedStartDate" readonly="true" name="calendarEventForm" property="recurrStartDate" style="width:80px"/>
 		                                                </td>
 		                                                <td>&nbsp;</td>
 		                                                <td>
@@ -373,7 +423,7 @@ function eventType(){
                                      <table cellpadding="0" cellspacing="0">
                                            <tr>
                                              <td nowrap="nowrap">
-        	                                       <html:text styleId="recurrSelectedEndDate" readonly="true" name="calendarEventForm" property="selectedEndDate" style="width:80px"/>
+        	                                       <html:text styleId="recurrSelectedEndDate" readonly="true" name="calendarEventForm" property="recurrEndDate" style="width:80px"/>
                                              </td>
                                              <td>
             	                                 &nbsp;

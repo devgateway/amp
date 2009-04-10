@@ -71,8 +71,16 @@
 	window.onload=initScripts;
 	
 function submit() {
+	
+	 var list = document.getElementById('selreceivers');  
+	 if(list!=null){
+	  	for(var i = 0; i < list.length; i++) {
+	  		list.options[i].selected = true;
+	  	}
+	}
 		var eventForm = document.getElementsByName("calendarEventForm")[0];
-		eventForm.action = "/calendar/showCalendarEvent.do" 
+		eventForm.action = "/calendar/showCalendarEvent.do?method=recurr"; 
+		eventForm.target = "_self";
 		eventForm.submit();
 	}
 </script>

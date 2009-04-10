@@ -258,7 +258,7 @@
 		<digi:context name="addFunding" property="context/module/moduleinstance/addFunding.do"/>
 		document.getElementById('orgId').value = orgId;
 		var urlParams="<%=addFunding%>";
-		var params = "orgId="+ orgId+"&edit=true";
+		var params = "funding.orgId="+ orgId+"&edit=true";
 		
 		YAHOOAmp.util.Connect.asyncRequest("POST", urlParams+"?"+params, callback );
 	}
@@ -524,7 +524,7 @@
 
 		<digi:context name="editItem" property="context/module/moduleinstance/editFunding.do"/>
 		var urlParams="<%=editItem%>";
-		var params = "funding.orgId=" + orgId + "&funding.offset=" + index+"&edit=true";;
+		var params = "funding.orgId=" + orgId + "&funding.offset=" + index+"&edit=true" + "&funding.fundingId=" + fundId;
 		document.aimEditActivityForm.prevOrg.value = orgId;
 		document.getElementById('fundingId').value = fundId;
 

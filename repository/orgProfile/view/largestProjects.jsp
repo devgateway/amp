@@ -7,6 +7,10 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
+ <script langauage="JavaScript">
+    var helpTitle="<digi:trn>Project Title Full Text</digi:trn>";
+</script>
+
 <digi:instance property="orgProfLargestProjectsForm"/>
 <table width="100%">
 <tr>
@@ -21,7 +25,16 @@
      
           <c:forEach items="${orgProfLargestProjectsForm.projects}" var="project"  >
                <tr>
-                   <td nowrap><digi:link module="aim" href="/selectActivityTabs.do~ampActivityId=${project.activityId}">${project.title}</digi:link></td>
+                  <td nowrap>
+                   <c:choose>
+                       <c:when test="${empty project.fullTitle}">
+                           <digi:link module="aim" href="/selectActivityTabs.do~ampActivityId=${project.activityId}">${project.title}</digi:link>
+                       </c:when>
+                       <c:otherwise>
+                           <digi:link module="aim" href="/selectActivityTabs.do~ampActivityId=${project.activityId}" onmouseover="stm([helpTitle,'${project.fullTitle}'],Style[11])" onmouseout="htm()">${project.title}</digi:link>
+                       </c:otherwise>
+                   </c:choose>
+                   </td>
                <td align="center">${project.amount}</td>
                <td>
                 ${project.sectorNames}

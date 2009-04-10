@@ -465,12 +465,10 @@ public class OrgProfileUtil {
 
                 Double amount=cal.getTotActualComm().doubleValue();
 
-                /* we could use FormatHelper.formatNumber in amounts were not in millions
-                and the req. did not insists on the signal decimal*/
-
                 project.setAmount(FormatHelper.formatNumber(amount));
                 String title=activity.getName();
                 if(title.length()>15){
+                    project.setFullTitle(title);
                     title=title.substring(0, 14)+"...";
                 }
                 project.setTitle(title);

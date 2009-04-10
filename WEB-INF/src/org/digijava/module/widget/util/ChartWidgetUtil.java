@@ -63,7 +63,9 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.labels.CategoryItemLabelGenerator;
 import org.jfree.chart.labels.PieSectionLabelGenerator;
+import org.jfree.chart.labels.StandardCategoryToolTipGenerator;
 import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
+import org.jfree.chart.labels.StandardPieToolTipGenerator;
 import org.jfree.chart.labels.StandardXYItemLabelGenerator;
 import org.jfree.chart.labels.XYItemLabelGenerator;
 import org.jfree.chart.plot.CategoryPlot;
@@ -179,12 +181,13 @@ public class ChartWidgetUtil {
 		if (opt.isShowLegend()){
 			chart.getLegend().setItemFont(font8);		
 		}
-
+        DecimalFormat formatter=FormatHelper.getDecimalFormat();
         CategoryPlot plot = chart.getCategoryPlot();
         CategoryItemRenderer renderer = plot.getRenderer();
-        CategoryItemLabelGenerator labelGenerator = new WidgetCategoryItemLabelGenerator();
+        CategoryItemLabelGenerator labelGenerator = new WidgetCategoryItemLabelGenerator("{2}",formatter);
 		renderer.setBaseItemLabelsVisible(true);
         renderer.setBaseItemLabelGenerator(labelGenerator);
+        renderer.setBaseToolTipGenerator(new StandardCategoryToolTipGenerator("{2}",formatter));
         return chart;
 	}
     
@@ -219,11 +222,11 @@ public class ChartWidgetUtil {
         BarRenderer renderer = (BarRenderer) plot.getRenderer();
         renderer.setDrawBarOutline(false);
         renderer.setItemMargin(0);
-
-
-        CategoryItemLabelGenerator labelGenerator = new WidgetCategoryItemLabelGenerator("{2}", new DecimalFormat("#.######"));
+        DecimalFormat formatter=FormatHelper.getDecimalFormat();
+        CategoryItemLabelGenerator labelGenerator = new WidgetCategoryItemLabelGenerator("{2}",formatter);
         renderer.setBaseItemLabelsVisible(true);
         renderer.setBaseItemLabelGenerator(labelGenerator);
+        renderer.setBaseToolTipGenerator(new StandardCategoryToolTipGenerator("{2}",formatter));
 
         return chart;
     }
@@ -250,9 +253,7 @@ public class ChartWidgetUtil {
         String titleMsg= TranslatorWorker.translateText("ODA Profile", opt.getLangCode(), opt.getSiteId());
 		chart=ChartFactory.createStackedAreaChart(titleMsg,"",amountTranslatedTitle,dataset,PlotOrientation.VERTICAL, true, false,false);
 		chart.getTitle().setFont(font8);
-		if (opt.isShowLegend()){
-			chart.getLegend().setItemFont(font8);		
-		}
+	
 
          
 		return chart;
@@ -623,21 +624,18 @@ public class ChartWidgetUtil {
         DefaultPieDataset dataset = getDonorSectorDataSet(filter);
         chart = ChartFactory.createPieChart(TranslatorWorker.translateText("Primary Sector(s) Breakdown ",opt.getLangCode(),opt.getSiteId())+" ("+(filter.getYear()-1)+")", dataset, true, true, false);
         chart.getTitle().setFont(font8);
-        if (opt.isShowLegend()) {
-            chart.getLegend().setItemFont(font8);
-        }
         PiePlot plot = (PiePlot) chart.getPlot();
         String pattern = "{0} = {1} ({2})";
         if (opt.getLabelPattern() != null) {
             pattern = opt.getLabelPattern();
         }
+
         DecimalFormat format = FormatHelper.getDecimalFormat();
         format.setMaximumFractionDigits(0);
         PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator(pattern, format, new DecimalFormat("0.0%"));
         plot.setLabelGenerator(gen);
-
-
-
+        plot.setLegendLabelGenerator(gen);
+        plot.setToolTipGenerator(new StandardPieToolTipGenerator(pattern, format, new DecimalFormat("0.0%")));
         return chart;
     }
       /**
@@ -659,8 +657,17 @@ public class ChartWidgetUtil {
 		if (opt.isShowLegend()){
 			chart.getLegend().setItemFont(font8);		
 		}
-		
-		
+        PiePlot plot = (PiePlot) chart.getPlot();
+        String pattern = "{0} = {1} ({2})";
+        if (opt.getLabelPattern() != null) {
+            pattern = opt.getLabelPattern();
+        }
+        DecimalFormat format = FormatHelper.getDecimalFormat();
+        format.setMaximumFractionDigits(0);
+        PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator(pattern, format, new DecimalFormat("0.0%"));
+        plot.setLabelGenerator(gen);
+        plot.setLegendLabelGenerator(gen);
+        plot.setToolTipGenerator(new StandardPieToolTipGenerator(pattern, format, new DecimalFormat("0.0%")));
 		return chart;
     }
 

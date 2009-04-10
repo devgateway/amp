@@ -171,7 +171,7 @@
                                         <span id="changeFilterLink">
                                             <a>
                                                 <digi:trn>Change Filter</digi:trn>
-                                            </a>&nbsp;&nbsp;|
+                                            </a>&nbsp;&nbsp;
                                         </span>
                                     </div>
                                 </LI>
@@ -258,7 +258,7 @@
             </tr>
             <tr>
                 <td>
-                     <b><digi:trn key="orgProfile:filer:Currency">Currency</digi:trn>:</b>
+                     <b><digi:trn>Currency Code</digi:trn>:</b>
                 </td>
                 <td>
                    

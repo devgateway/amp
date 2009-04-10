@@ -5,8 +5,9 @@ package org.digijava.module.orgProfile.helper;
  * @author medea
  */
 public class Project {
-
+    // truncated title, 14 characters only
     private String title;
+    private String fullTitle;
     private String amount;
     private String sectorNames;
     private Long activityId;
@@ -41,5 +42,12 @@ public class Project {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+     public String getFullTitle() {
+        return fullTitle;
+    }
+
+    public void setFullTitle(String fullTitle) {
+        this.fullTitle = fullTitle;
     }
 }

@@ -219,7 +219,7 @@
             </td>
         </tr>
     </table>
-    <div id="filter" style="visibility:hidden;display:none;height:350px;">
+    <div id="filter" style="visibility:hidden;display:none;height:250px;">
         <table cellpadding="5" cellspacing="0">
             <tr>
                 <td nowrap align="left" colspan="2">

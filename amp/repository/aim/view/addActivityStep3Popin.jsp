@@ -228,6 +228,8 @@
 	}
 
 	function myclose(){
+		var content = document.getElementById("popinContent");
+		content.innerHTML="";
 		myPanel.hide();	
 		panelStart=1;
 	
@@ -582,7 +584,7 @@
 	        </c:set>
 	        alert("${message}");
 	        return false;
-	      }else if(!checkAmountUsingSymbol(fna,"<%=FormatHelper.getDecimalSymbol()%>","<%=FormatHelper.getGroupSymbol()%>")){
+	      }else if(!checkAmountUsingSymbols(fna,"<%=FormatHelper.getDecimalSymbol()%>","<%=FormatHelper.getGroupSymbol()%>")){
 	        <c:set var="message">
 	        <digi:trn key="aim:invalidAmountValue">Invalid amount value</digi:trn>
 	        </c:set>
@@ -608,6 +610,7 @@
 		    //document.aimEditActivityForm.submit();
 	      return true;
 		}
+	/*
 	   function checkAmountUsingSymbol(amount,decimalSymbol,groupSymbol){
 		var validChars= "0123456789"+decimalSymbol+groupSymbol;
 		for (i = 0;  i < amount.length;  i++) {
@@ -619,6 +622,7 @@
 		}
 			return true;
 	   }
+	   */
 		function  addOrgPopin(param1, param2, param3){
 			YAHOOAmp.util.Connect.asyncRequest("POST", param1, callback );
 		}

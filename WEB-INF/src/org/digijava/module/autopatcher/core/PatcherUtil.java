@@ -98,7 +98,7 @@ public class PatcherUtil {
 		String[] files = dir.list();
 		for (int i = 0; i < files.length; i++) {
 			File f = new File(dir, files[i]);
-			if (f.isDirectory() && !f.getName().equals("CVS"))
+			if (f.isDirectory() && !f.getName().equals("CVS") && !f.getName().equals(".svn"))
 				patchFiles.addAll(getAllPatchesFiles(f.getAbsolutePath()));
 			if(!f.isDirectory())
 				patchFiles.add(f);

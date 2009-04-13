@@ -35,6 +35,7 @@ import org.dgfoundation.amp.PropertyListable;
 import org.dgfoundation.amp.Util;
 import org.digijava.module.aim.annotations.reports.IgnorePersistence;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -218,7 +219,7 @@ public class AmpARFilter extends PropertyListable {
 	private Integer yearFrom;
 	private Integer toMonth;
 	private Integer yearTo;
-	private Long regionSelected = null;
+	private AmpCategoryValueLocations regionSelected = null;
 	private Collection<String> approvalStatusSelected=null;
 	private boolean approved = false;
 	private boolean draft = false;
@@ -544,7 +545,7 @@ public class AmpARFilter extends PropertyListable {
 		String PLAN_MIN_RANK_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE plan_min_rank="
 				+ planMinRank;
 		String REGION_SELECTED_FILTER = "SELECT amp_activity_id FROM v_regions WHERE region_id ="
-				+ regionSelected;
+				+ (regionSelected==null?null:regionSelected.getIdentifier());
 		StringBuffer actStatusValue = new StringBuffer("");
 		if(approvalStatusSelected!=null){
 			for(String valOption:approvalStatusSelected){
@@ -1181,11 +1182,17 @@ public class AmpARFilter extends PropertyListable {
 		return null;
 	}
 
-	public Long getRegionSelected() {
+	/**
+	 * @return the regionSelected
+	 */
+	public AmpCategoryValueLocations getRegionSelected() {
 		return regionSelected;
 	}
 
-	public void setRegionSelected(Long regionSelected) {
+	/**
+	 * @param regionSelected the regionSelected to set
+	 */
+	public void setRegionSelected(AmpCategoryValueLocations regionSelected) {
 		this.regionSelected = regionSelected;
 	}
 

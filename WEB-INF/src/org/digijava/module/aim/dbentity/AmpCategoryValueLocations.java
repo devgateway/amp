@@ -2,13 +2,14 @@ package org.digijava.module.aim.dbentity;
 
 import java.util.Set;
 
+import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 /**
  *
  * @author medea
  */
-public class AmpCategoryValueLocations {
+public class AmpCategoryValueLocations implements Identifiable {
 
     private Long id;
     private String name;
@@ -128,4 +129,9 @@ public class AmpCategoryValueLocations {
     	AmpCategoryValueLocations loc	= (AmpCategoryValueLocations) o;
     	return id.equals(loc.id);
     }
+
+	@Override
+	public Object getIdentifier() {
+		return this.id;
+	}
 }

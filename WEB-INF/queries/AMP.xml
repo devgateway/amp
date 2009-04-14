@@ -81,6 +81,55 @@
 		<DimensionUsage name="Secundary Program" source="Secundary Program" foreignKey="amp_activity_id"/>
 		<DimensionUsage name="Status" source="Status" foreignKey="amp_activity_id"/>
 		<Measure name="Raw Sector Percentage" aggregator="sum" column="sector_percentage" visible="false"/>
+		<Measure name="Sector Actual Commitments" aggregator="sum" visible="false">
+			<MeasureExpression>
+				<SQL dialect="mysql">
+					case when cached_v_sectors.transaction_type=0 and cached_v_sectors.adjustment_type=1 then
+					cached_v_sectors.transaction_amount/getExchangeWithFixed(cached_v_sectors.currency_code,cached_v_sectors.transaction_date,cached_v_sectors.fixed_exchange_rate) else 0 end
+				</SQL>
+			</MeasureExpression>
+		</Measure>
+		
+		<Measure name="Sector Actual Disbursements" aggregator="sum" visible="false">
+			<MeasureExpression>
+				<SQL dialect="mysql">
+					case when cached_v_sectors.transaction_type=1 and cached_v_sectors.adjustment_type=1 then
+					cached_v_sectors.transaction_amount/getExchangeWithFixed(cached_v_sectors.currency_code,cached_v_sectors.transaction_date,cached_v_sectors.fixed_exchange_rate) else 0 end
+				</SQL>
+			</MeasureExpression>
+		</Measure>
+		<Measure name="Sector Actual Expenditures" aggregator="sum" visible="false">
+			<MeasureExpression>
+				<SQL dialect="mysql">
+					case when cached_v_sectors.transaction_type=2 and cached_v_sectors.adjustment_type=1 then
+					cached_v_sectors.transaction_amount/getExchangeWithFixed(cached_v_sectors.currency_code,cached_v_sectors.transaction_date,cached_v_sectors.fixed_exchange_rate) else 0 end
+				</SQL>
+			</MeasureExpression>
+		</Measure>
+		<Measure name="Sector Planned Commitments" aggregator="sum" visible="false">
+			<MeasureExpression>
+				<SQL dialect="mysql">
+					case when cached_v_sectors.transaction_type=0 and cached_v_sectors.adjustment_type=0 then
+					cached_v_sectors.transaction_amount/getExchangeWithFixed(cached_v_sectors.currency_code,cached_v_sectors.transaction_date,cached_v_sectors.fixed_exchange_rate) else 0 end
+				</SQL>
+			</MeasureExpression>
+		</Measure>
+		<Measure name="Sector Planned Disbursements" aggregator="sum" visible="false">
+			<MeasureExpression>
+				<SQL dialect="mysql">
+					case when cached_v_sectors.transaction_type=1 and cached_v_sectors.adjustment_type=0 then
+					cached_v_sectors.transaction_amount/getExchangeWithFixed(cached_v_sectors.currency_code,cached_v_sectors.transaction_date,cached_v_sectors.fixed_exchange_rate) else 0 end
+				</SQL>
+			</MeasureExpression>
+		</Measure>
+		<Measure name="Sector Planned Expenditures" aggregator="sum" visible="false">
+			<MeasureExpression>
+				<SQL dialect="mysql">
+					case when cached_v_sectors.transaction_type=2 and cached_v_sectors.adjustment_type=0 then
+					cached_v_sectors.transaction_amount/getExchangeWithFixed(cached_v_sectors.currency_code,cached_v_sectors.transaction_date,cached_v_sectors.fixed_exchange_rate) else 0 end
+				</SQL>
+			</MeasureExpression>
+		</Measure>
 		
 		<CalculatedMember name="Sector Percentage" dimension="Measures">
 			<Formula>IIf([Measures].[Raw Sector Percentage] &gt; 0 AND [Measures].[Raw Sector Percentage] &lt; 100,[Measures].[Raw Sector Percentage],null)</Formula>
@@ -198,6 +247,12 @@
 		<VirtualCubeDimension name="Donor Types" cubeName="Donor Funding" />
 		<VirtualCubeDimension name="Donor Group" cubeName="Donor Funding" />
 		<VirtualCubeMeasure cubeName="Sectors" name="[Measures].[Sector Percentage]" />
+		<VirtualCubeMeasure cubeName="Sectors" name="[Measures].[Sector Actual Commitments]" visible="false" />
+		<VirtualCubeMeasure cubeName="Sectors" name="[Measures].[Sector Actual Disbursements]" visible="false" />
+		<VirtualCubeMeasure cubeName="Sectors" name="[Measures].[Sector Actual Expenditures]" visible="false" />
+		<VirtualCubeMeasure cubeName="Sectors" name="[Measures].[Sector Planned Commitments]" visible="false" />
+		<VirtualCubeMeasure cubeName="Sectors" name="[Measures].[Sector Planned Disbursements]" visible="false" />
+		<VirtualCubeMeasure cubeName="Sectors" name="[Measures].[Sector Planned Expenditures]" visible="false" />
 		
 		<VirtualCubeMeasure cubeName="Donor Funding" name="[Measures].[Raw Actual Commitments]" visible="false" />
 		<VirtualCubeMeasure cubeName="Donor Funding" name="[Measures].[Raw Actual Disbursements]" visible="false" />

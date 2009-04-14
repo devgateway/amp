@@ -807,12 +807,14 @@ public class GetFoundingDetails extends Action {
                     //Region level
                     //if (loc.getLocation().getAmpRegion() != null && loc.getLocation().getZone()==null && loc.getLocationPercentage().floatValue() > 0.0f) {
 
-                    if (loc.getLocationPercentage().floatValue() > 0.0f) {
+                    if (loc.getLocationPercentage() != null &&
+                        loc.getLocationPercentage().floatValue() > 0.0f &&
+                        loc.getLocation().getRegionLocation() != null) {
                         if (level == GisMap.MAP_LEVEL_REGION &&
-                            loc.getLocation().getAmpRegion() != null) {
+                            loc.getLocation().getRegionLocation().getParentCategoryValue().getEncodedValue().equals("Region")) {
 
-                            String regCode = loc.getLocation().getAmpRegion().
-                                             getRegionCode();
+                            String regCode = loc.getLocation().getRegionLocation().getName();
+
                             if (locationFundingMap.containsKey(regCode)) {
                                 FundingData existingVal = (FundingData) locationFundingMap.get(regCode);
 
@@ -831,12 +833,12 @@ public class GetFoundingDetails extends Action {
                                 }
                             }
                         } else if (level == GisMap.MAP_LEVEL_DISTRICT &&
-                                   loc.getLocation().getAmpZone() != null) {
+                                   loc.getLocation().getRegionLocation().getParentCategoryValue().getEncodedValue().equals("Zone")) {
 
                             //District level
                             //if (loc.getLocation().getAmpZone()!=null && loc.getLocationPercentage().floatValue() > 0.0f) {
 
-                            String regCode = loc.getLocation().getAmpZone().getZoneCode();
+                            String regCode = loc.getLocation().getRegionLocation().getName();
 
                             if (locationFundingMap.containsKey(regCode)) {
                                 FundingData existingVal = (FundingData)

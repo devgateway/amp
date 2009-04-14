@@ -146,7 +146,7 @@ function changeEventTypesState(){
 	  &nbsp;Public events
 	  </digi:trn>
 	</div>
-	<div style="padding:5px;width:250px;height:28px;">
+	<div style="padding:5px;width:200px;height:28px;">
 		<field:display name="Run Filter Button" feature="Filter">
 			<input type="submit" value="<digi:trn key="calendar:runFilter">Run Filter</digi:trn>" style="min-width:88px;" onclick="changeDonorsAndEventTypesState();"/>
 		</field:display>

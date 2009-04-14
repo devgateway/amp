@@ -123,13 +123,14 @@ color:Black;
 	  		<table width="100%">
 	  			<tr>
 				    <td align="center" vAlign="middle" width="100%">
-				    	<table cellpadding="0" cellspacing="0" align="center" style="width:100%">
+				    
 				        	<c:if test="${calendarViewForm.view != 'custom'}">
 				        		<!-- Monthly view start -->
 				        		<feature:display name="Monthly View" module="Calendar">
 				        			<c:if test="${calendarViewForm.view == 'monthly'}">
 				            		<tr align="center" vAlign="middle">
 				                		<td width="100%">
+                                             <div style="overflow:auto;height:424px;">
 				                  			<table width="99%" border="0" align="center" cellspacing="0">
 							                    <tr>
 							                    	<td align="left" valign="top" bgcolor="#376091" style="font-size:12px;color:White;font-family:Tahoma;"><digi:trn key="aim:mon">Mon</digi:trn></td>
@@ -152,9 +153,9 @@ color:Black;
 				                      			</tr>
 				                      			<c:forEach var="row" items="${calendarViewForm.dateNavigator.items}">
 				                   					<!-- In this row,if in monthly view other months' dates are shown,they should be of 'inactive' color-->
-							                    	<tr vAlign="middle" bgcolor="#ffffff">
+							                    	<tr vAlign="middle" bgcolor="#ffffff" style="height:30px">
 							                        	<c:forEach var="item" items="${row}" >
-							                          		<td vAlign="top" style="padding-right: 0px;padding-left:0px; border-right: 0px;border-left: 0px;">
+							                          		<td vAlign="top" style="padding-right: 0px;padding-left:0px; border-right: 0px;border-left: 0px;width:14.2%">
 									                          	<c:if test="${!item.enabled}">
 									                          		<span style="color:#cbcbcb">
 									                          			${item.dayOfMonth}
@@ -228,7 +229,7 @@ color:Black;
 					                      				</tr>
 				                        				<tr vAlign="middle" bgcolor="#ffffff">
 				                          					<c:forEach var="item" items="${row}" varStatus="stat">
-				                          						<td id="td1" valign="top" vAlign="top" width="14%" style="padding:0px; border-right: 0px;border-left: 0px;height: 100%">
+				                          						<td id="td1" valign="top" vAlign="top" width="14%" style="padding:0px; border-right: 0px;border-left: 0px;height: 100%;">
 				                              						<!-- Stars Month= Current Month -->
 				                              						<c:if test="${startMonth==currentMonth && startYear== currentYear}">
 				                              							<c:if test="${(endMonth==currentMonth && item.dayOfMonth >=startDay && item.dayOfMonth<=endDay && item.enabled) || (endMonth!=currentMonth && ((item.dayOfMonth>=startDay && item.enabled)||(item.dayOfMonth<endDay && !item.enabled)))}">
@@ -447,11 +448,11 @@ color:Black;
 				                      				<tr height="4px" bgcolor="#e8eef7">
 				                        				<td colspan="14" />
 				                      				</tr>
-				                    			</c:forEach>
-				                    			
+				                    			</c:forEach>			
 				                  			</table>
+                                              </div>
 				    					</td>
-				              		</tr>
+				              		</tr> 
 								</c:if>
 				        		</feature:display>				            	
 				                <!-- Monthly view End -->
@@ -463,7 +464,7 @@ color:Black;
 				                        	<table align="center" style="min-width:700px;" width="100%">
 				                            	<tr>
 				                                	<td>
-				                                    	<div style="overflow:auto;height:500px;border:2px solid #e8eef7;">
+				                                    	<div style="overflow:auto;height:388px;border:2px solid #e8eef7;">
 				                                        	<table width="100%">
 				                                            	<c:forEach var="hour" begin="0" end="23">
 				                                              		<tr style="height:40px;">
@@ -602,10 +603,8 @@ color:Black;
 				            		<c:if test="${calendarViewForm.view == 'yearly'}">
 									<tr style="width: 100%">
 					                    	<td style="padding:10px;text-align:center;width: 100%">
-					                        	<table  style="width: 100%">
-					                            	<tr style="width: 100%">
-					                                	<td style="width: 100%">
-					                                    	<div style="border:2px solid #e8eef7;width: 100%">
+					                        	
+					                                    	<div style="border:2px solid #e8eef7;width: 100%;overflow:auto;height:366px;">
 					                                        	<table style="width: 100%">
 						                                        		<c:forEach var="row" items="${calendarViewForm.dateNavigator.items}"  varStatus="stat">
 						  													<c:forEach var="item" items="${row}">
@@ -794,26 +793,26 @@ color:Black;
 						  												</c:forEach>
 					  											</table>
 					  										</div>
-					  									</td>
-					  								</tr>
-					  							</table>
+					  								
 					  						</td>
 					  					</tr>	
 									</c:if>
 								<!-- yearly view End   -->
-				            	</feature:display>								
-								
-								
+				            	</feature:display>							
+
+
 								<feature:display name="Weekly View" module="Calendar">
 									<!-- Weekly view Start -->
 									<c:if test="${calendarViewForm.view == 'weekly'}">
-									<tr>
-				                    	<td style="padding:20px;text-align:center">
-				                        	<table align="center" style="min-width:700px;" width="100%">
+                                   
+                                       <tr  valign="top">
+				                    	<td style="padding:20px;text-align:center;">
+                                         <div style="overflow:auto;height:388px;width:100%">
+				                        	<table align="center" width="100%">
 				                            	<tr>
-				                                	<td width="100%">
-				                                    	<div style="border:2px solid #e8eef7;width: 100%">
-				                                        	<table width="100%">
+				                                	<td width="100%" valign="top">
+				                                    	<div style="border:2px solid #e8eef7;width: 99.5%;">
+				                                        	<table width="99.5%" >
 					                                        		<c:forEach var="row" items="${calendarViewForm.dateNavigator.items}">
 					  													<c:forEach var="item" items="${row}">
 					  														<c:if test="${calendarViewForm.view == 'weekly' && item.selected}">
@@ -932,8 +931,10 @@ color:Black;
 				  									</td>
 				  								</tr>
 				  							</table>
+                                               </div>
 				  						</td>
 				  					</tr>
+                                 
 				  				</c:if>
 				  				<!-- Weekly view End -->
 								</feature:display>								
@@ -942,7 +943,5 @@ color:Black;
 					</td>
 				</tr>
 	  		</table>
-	  	</td>
- 	</tr>
+	 
     </c:if>
-</table>

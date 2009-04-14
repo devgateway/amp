@@ -13,7 +13,7 @@
           <td colspan="2" valign="top"><jsp:include page="../../aim/view/teamPagesHeader.jsp" flush="true"/><td>
        </tr> 
        <tr>			
-			<td height=33>
+			<td height=33 colspan="2">
 				<span class=crumb>
 					&nbsp;
 					<c:set var="translation">
@@ -32,12 +32,12 @@
 			</td>
 		</tr>      
        	<tr>
-	        <td valign="top" width="230" > 
+	        <td>
 	          <digi:form action="/showCalendarView.do" styleId="filterForm">   
-	            <table border="0" width="100%">
-	                <tr style="width: 100%">
-			          	<td valign="top" style="padding:5px;" align="left">          	
-			          		<table>
+	            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+	                <tr>
+			          	<td valign="top"  align="left">
+			          		<table border="0" cellpadding="0" cellspacing="0" width="100%">
 				                <tr>
 				                  <td style="font-weight:Bold;font-family:Tahoma;padding:6px;font-size: 12px;color: #800000">
 				                   		<digi:trn key="calendar:navToday"> Today&nbsp;is:</digi:trn>
@@ -52,12 +52,12 @@
 	                </tr>
 	                <tr valign="top">
 	                    <td valign="top" style="padding:10px;"><jsp:include page="viewEventsFilter.jsp" flush="true"/></td>
-	                </tr>	               		                
+	                </tr>
 	            </table>
 	            </digi:form>
 	        </td>
-	        <td valign="top" width="100%">
-	            <table width="100%">                           
+	        <td valign="top" width="85%">
+	            <table width="100%">
 	                <tr>
 	                    <td valign="top" style="padding:10px;height: 100%;"><jsp:include page="viewEventsBody.jsp" flush="true"/></td>
 	                </tr>

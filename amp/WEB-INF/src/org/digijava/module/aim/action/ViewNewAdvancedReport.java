@@ -9,6 +9,7 @@ package org.digijava.module.aim.action;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -32,6 +33,7 @@ import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReportLog;
 import org.digijava.module.aim.dbentity.AmpReports;
@@ -195,6 +197,15 @@ public class ViewNewAdvancedReport extends Action {
 				if ( filter.getSortByAsc() !=null  ){
 					sortByAsc		= filter.getSortByAsc().toString();
 				}
+			}else {
+				for (Iterator iterator = ar.getColumns().iterator(); iterator
+						.hasNext();) {
+					AmpReportColumn coumn = (AmpReportColumn) iterator.next();
+					if(coumn.getOrderId().equals("1")){
+						sortBy = coumn.getColumn().getColumnName();
+					}
+				} 
+				
 			}
 		}
 		/* If sorting info comes in request save this info in the filter bean */

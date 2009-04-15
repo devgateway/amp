@@ -74,6 +74,8 @@ es:
         total_staff_in_country: Personal Total en País
         total_expatriate_staff: Personal Total Expatriado
         total_local_staff: Personal Total Local
+        flag: Bandera/Logo del Donante
+        profile_picture: Foto para el Blue Book
         
       exchange_rate:
         currency: Moneda

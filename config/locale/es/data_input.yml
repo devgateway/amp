@@ -65,8 +65,8 @@ es:
     edit:
       title: Editar tasa de cambio
       submit: Actualizar tasa de cambio
-      
-  implementing_agencies:
+
+  agencies:
     index:
       title: Lista de Agencias
       empty: No hay agencias en el base de datos. Por favor crea una nueva agencia.

@@ -560,7 +560,7 @@ function adminHelp(){
                                         <module:display name="GIS DASHBOARD">
                                         <li class="yuiampmenuitem">
                                             <a class="yuiampmenuitemlabel" href="javascript:openGIS()"  onclick="return canExit()">
-                                            <digi:trn key="aim:gis">GIS</digi:trn>
+                                            <digi:trn key="aim:gisResultMatrix">Results Matrix</digi:trn>
                                             </a>
                                         </li>
                                         </module:display>

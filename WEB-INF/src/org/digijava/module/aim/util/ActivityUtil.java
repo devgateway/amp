@@ -1031,11 +1031,28 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     	   //session.delete(queryString); This method has been moved to hibernate.classic.Session.delete() and it's Deprecated
        }
         
+       boolean newActivity = false;
+       if (activity.getAmpActivityId() != null) {
+    	   newActivity = true;
+       }
+       
        session.flush();
        if (alwaysRollback == false)
     	  tx.commit(); // commit the transcation
 
        logger.debug("Activity saved");    
+       
+       //Save surveys for new activities.
+       //TODO: Check if this code can be removed, apparently the survey and their responses
+       //are being saved ok.
+       if (newActivity) {
+	       session = PersistenceManager.getRequestDBSession();
+	       tx = session.beginTransaction();
+	       AmpActivity savedActivity = (AmpActivity) session.load(AmpActivity.class, activity.getAmpActivityId());
+	       savedActivity.setSurvey(activity.getSurvey());
+	       session.saveOrUpdate(savedActivity);
+	       tx.commit();
+       }       
     }
     catch (Exception ex) {
       logger.error("Exception from saveActivity().", ex);

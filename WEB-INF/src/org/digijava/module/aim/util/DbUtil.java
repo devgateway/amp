@@ -5456,7 +5456,7 @@ public class DbUtil {
         return survey;
     }
 
-    public static void updateSurvey(AmpAhsurvey survey) {
+    public static void updateSurvey(AmpAhsurvey survey, AmpActivity activity) {
         Session session = null;
         Transaction tx = null;
 
@@ -5478,8 +5478,12 @@ public class DbUtil {
             
             session.update(oldSurvey);*/
             
+            if(survey.getAmpActivityId() == null) {
+            	survey.setAmpActivityId(activity);
+            }
+            
             //With lazy="false" this is how it works ok.
-            session.update(survey);
+            session.update(survey);//try saveOrUpdate() if this doesnt work.
             
             tx.commit();
         } catch (Exception ex) {
@@ -5487,11 +5491,43 @@ public class DbUtil {
                 try {
                     tx.rollback();
                 } catch (HibernateException e) {
-                    logger.debug("rollback() failed : ", e);
+                    logger.error("rollback() failed : ", e);
                 }
             }
             logger.error("Unable to save survey response : ", ex);
         }
+    }
+    
+    public static void saveNewSurvey(AmpAhsurvey survey, AmpActivity activity, List<Indicator> indicators) throws DgException {
+    		Session session = null;
+        	if (survey == null /*|| survey.getAmpAHSurveyId()==null*/)
+        	{
+        		logger.warn("The survey or AHSurvey is null ... no update for Survey");
+        		return;
+        	}
+        	//setup the survey.
+            survey.setAmpActivityId(activity);
+            if(activity.getSurvey() == null) {
+            	activity.setSurvey(new HashSet<AmpAhsurvey>());
+            }
+            activity.getSurvey().add(survey);
+            survey.setAmpAHSurveyId(null);
+            
+            //setup responses.
+            Iterator itr1 = indicators.iterator();
+            while (itr1.hasNext()) {
+                Iterator itr2 = ( (Indicator) itr1.next()).getQuestion().iterator();
+                while (itr2.hasNext()) {
+                    Question q = (Question) itr2.next();
+                    AmpAhsurveyResponse res = new AmpAhsurveyResponse();
+                    res.setAmpAHSurveyId(survey);
+                    session = PersistenceManager.getRequestDBSession();
+                    AmpAhsurveyQuestion ques = (AmpAhsurveyQuestion) session.load(AmpAhsurveyQuestion.class, q.getQuestionId());
+                    res.setAmpQuestionId(ques);
+                    res.setResponse(q.getResponse());
+                    survey.getResponses().add(res);
+                }
+            }
     }
 
     public static void saveSurveyResponses(Long surveyId, Collection indicator) {

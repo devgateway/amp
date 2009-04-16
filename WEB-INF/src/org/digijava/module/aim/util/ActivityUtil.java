@@ -1029,12 +1029,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         }
        if(ipaAux != null){//if no row is returned there is an Hibernate exception.
     	   //session.delete(queryString); This method has been moved to hibernate.classic.Session.delete() and it's Deprecated
-       }
-        
-       boolean newActivity = false;
-       if (activity.getAmpActivityId() != null) {
-    	   newActivity = true;
-       }
+       }      
        
        session.flush();
        if (alwaysRollback == false)
@@ -1045,7 +1040,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
        //Save surveys for new activities.
        //TODO: Check if this code can be removed, apparently the survey and their responses
        //are being saved ok.
-       if (newActivity) {
+       if (!edit) {
 	       session = PersistenceManager.getRequestDBSession();
 	       tx = session.beginTransaction();
 	       AmpActivity savedActivity = (AmpActivity) session.load(AmpActivity.class, activity.getAmpActivityId());

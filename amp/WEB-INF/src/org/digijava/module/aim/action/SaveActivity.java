@@ -1646,11 +1646,14 @@ public class SaveActivity extends Action {
 		}
 		
 		//Do the initializations and all the information transfer between beans here
-        if(eaForm.getSurvey().getAhsurvey()!=null) 
-        	DbUtil.updateSurvey(eaForm.getSurvey().getAhsurvey());
-        if(eaForm.getSurvey().getAmpSurveyId()!=null) 
-        	DbUtil.saveSurveyResponses(eaForm.getSurvey().getAmpSurveyId(), eaForm.getSurvey().getIndicators());
-
+		if(activity.getAmpActivityId()!=null){
+			if(eaForm.getSurvey().getAhsurvey()!=null) 
+	        	DbUtil.updateSurvey(eaForm.getSurvey().getAhsurvey(), activity);
+	        if(eaForm.getSurvey().getAmpSurveyId()!=null) 
+	        	DbUtil.saveSurveyResponses(eaForm.getSurvey().getAmpSurveyId(), eaForm.getSurvey().getIndicators());	
+		} else {
+			DbUtil.saveNewSurvey(eaForm.getSurvey().getAhsurvey(), activity, eaForm.getSurvey().getIndicators());
+		} 
 	}
 
 	private void processStep11(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPException{

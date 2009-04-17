@@ -961,7 +961,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 //                }
 
                 if(actLoc.getLocationPercentage()!=null)
-                location.setPercent(FormatHelper.formatNumber( actLoc.getLocationPercentage().doubleValue()));
+                location.setPercent(String.valueOf(( actLoc.getLocationPercentage().floatValue())));
 
                 locs.add(location);
               }

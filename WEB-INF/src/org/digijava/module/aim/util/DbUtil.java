@@ -1,6 +1,7 @@
 package org.digijava.module.aim.util;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -5725,6 +5726,9 @@ public class DbUtil {
                     for (int i = 0; i < YEAR_RANGE; i++) {
                         answersRow = new BigDecimal[NUM_ANSWER_COLUMNS];
                         answersRow[0] = new BigDecimal(startYear + i);
+                        for (int k = 1; k < NUM_ANSWER_COLUMNS; k++) {
+                        	answersRow[k] = new BigDecimal(0.0);
+                        }
                         ( (ParisIndicator) responses.get(0)).getAnswers().add(answersRow);
                     }
                 } else
@@ -5769,6 +5773,9 @@ public class DbUtil {
                         if (indcFlag != 6) {
                             // answersRow will represent row for one disbursement year inside answer-collection of pi helper object.
                             answersRow = new BigDecimal[NUM_ANSWER_COLUMNS];
+                            for (int k = 1; k < NUM_ANSWER_COLUMNS; k++) {
+                            	answersRow[k] = new BigDecimal(0.0);
+                            }
                             answersRow[0] = new BigDecimal(startYear + i);
                         }
                         AmpFiscalCalendar fCalendar = FiscalCalendarUtil.getAmpFiscalCalendar(Long.parseLong(calendar));
@@ -5949,8 +5956,8 @@ public class DbUtil {
                             if (answersRow[NUM_ANSWER_COLUMNS - 3].doubleValue() == 0.0)
                                 answersRow[NUM_ANSWER_COLUMNS - 2] = new BigDecimal(-1.0) ;
                             else {
-                                sum =sum.divide(new BigDecimal(3));
-                                percent = sum.multiply(new BigDecimal(100)).divide(answersRow[NUM_ANSWER_COLUMNS - 3]) ;
+                                sum =sum.divide(new BigDecimal(3), RoundingMode.HALF_UP);
+                                percent = sum.multiply(new BigDecimal(100)).divide(answersRow[NUM_ANSWER_COLUMNS - 3], RoundingMode.HALF_UP) ;
                                 try{
                                 	answersRow[NUM_ANSWER_COLUMNS - 2] = percent;
                                 }catch(Exception e){
@@ -5966,14 +5973,14 @@ public class DbUtil {
                         else {
                             try {
                                 if (indcFlag == 5)
-                                    percent = answersRow[NUM_ANSWER_COLUMNS - 4].multiply(new BigDecimal(100)).divide(answersRow[NUM_ANSWER_COLUMNS - 3]);
+                                    percent = answersRow[NUM_ANSWER_COLUMNS - 4].multiply(new BigDecimal(100)).divide(answersRow[NUM_ANSWER_COLUMNS - 3], RoundingMode.HALF_UP);
                                 else if (indcFlag == 7)
-                                    percent =  answersRow[NUM_ANSWER_COLUMNS - 2].multiply(new BigDecimal(100)).divide(answersRow[NUM_ANSWER_COLUMNS - 3]);
+                                    percent =  answersRow[NUM_ANSWER_COLUMNS - 2].multiply(new BigDecimal(100)).divide(answersRow[NUM_ANSWER_COLUMNS - 3], RoundingMode.HALF_UP);
                                 else if (indcFlag == 9) {
                                     sum = answersRow[NUM_ANSWER_COLUMNS - 4].add(answersRow[NUM_ANSWER_COLUMNS - 3]);
-                                    percent = sum.multiply(new BigDecimal(100)).divide( answersRow[NUM_ANSWER_COLUMNS - 2]);
+                                    percent = sum.multiply(new BigDecimal(100)).divide( answersRow[NUM_ANSWER_COLUMNS - 2], RoundingMode.HALF_UP);
                                 } else
-                                    percent =  answersRow[NUM_ANSWER_COLUMNS - 3].multiply(new BigDecimal(100)).divide(answersRow[NUM_ANSWER_COLUMNS - 2]);
+                                    percent =  answersRow[NUM_ANSWER_COLUMNS - 3].multiply(new BigDecimal(100)).divide(answersRow[NUM_ANSWER_COLUMNS - 2], RoundingMode.HALF_UP);
                                    answersRow[NUM_ANSWER_COLUMNS - 1] = percent;
                             } catch (NumberFormatException nex) {
                                 logger.debug("percentage is NaN");
@@ -6011,8 +6018,8 @@ public class DbUtil {
                             if (allDnRow[NUM_ANSWER_COLUMNS - 3] == new BigDecimal(0.0))
                                 allDnRow[NUM_ANSWER_COLUMNS - 2] = new BigDecimal(-1.0);
                             else {
-                                sum =sum.divide(new BigDecimal(3)) ;
-                                percent = sum.multiply(new BigDecimal(100).divide(allDnRow[NUM_ANSWER_COLUMNS - 3]));
+                                sum =sum.divide(new BigDecimal(3), RoundingMode.HALF_UP) ;
+                                percent = sum.multiply(new BigDecimal(100).divide(allDnRow[NUM_ANSWER_COLUMNS - 3], RoundingMode.HALF_UP));
                                 allDnRow[NUM_ANSWER_COLUMNS - 2] = percent;
                             }
                         }
@@ -6029,9 +6036,9 @@ public class DbUtil {
                                     percent = allDnRow[NUM_ANSWER_COLUMNS - 2].multiply(new BigDecimal(100 )).multiply(allDnRow[NUM_ANSWER_COLUMNS - 3]);
                                 else if (indcFlag == 9) {
                                     sum = allDnRow[NUM_ANSWER_COLUMNS - 4].add(allDnRow[NUM_ANSWER_COLUMNS - 3]) ;
-                                    percent =sum.multiply(new BigDecimal(100)).divide(allDnRow[NUM_ANSWER_COLUMNS - 2]) ;
+                                    percent =sum.multiply(new BigDecimal(100)).divide(allDnRow[NUM_ANSWER_COLUMNS - 2], RoundingMode.HALF_UP) ;
                                 } else
-                                    percent = allDnRow[NUM_ANSWER_COLUMNS - 3].multiply(new BigDecimal(100 )).divide(allDnRow[NUM_ANSWER_COLUMNS - 2]);
+                                    percent = allDnRow[NUM_ANSWER_COLUMNS - 3].multiply(new BigDecimal(100 )).divide(allDnRow[NUM_ANSWER_COLUMNS - 2], RoundingMode.HALF_UP);
                                 allDnRow[NUM_ANSWER_COLUMNS - 1] = percent;
                                 //logger.debug("final-%[all-donors row] : " + allDnRow[NUM_ANSWER_COLUMNS - 1]);
                             } catch (NumberFormatException nex) {

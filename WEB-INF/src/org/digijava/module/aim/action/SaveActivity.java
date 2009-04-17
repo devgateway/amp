@@ -1646,7 +1646,7 @@ public class SaveActivity extends Action {
 		}
 		
 		//Do the initializations and all the information transfer between beans here
-		if(activity.getAmpActivityId()!=null){
+		if(eaForm.isEditAct()){
 			if(eaForm.getSurvey().getAhsurvey()!=null) 
 	        	DbUtil.updateSurvey(eaForm.getSurvey().getAhsurvey(), activity);
 	        if(eaForm.getSurvey().getAmpSurveyId()!=null) 

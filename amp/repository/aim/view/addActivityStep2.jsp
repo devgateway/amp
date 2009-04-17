@@ -113,10 +113,9 @@ function removeSelLocations(){
 function removeAllLocations(){
   try{
   
-  	var checkedItems = document.getElementById("selLocs");
-  
+  	var checkedItems = document.aimEditActivityForm.selLocs;
   	if(checkedItems.length > 0){
-	  	for(a=0;a<checkedItems.length;a++){
+	  for(a=0;a<checkedItems.length;a++){
 	  	checkedItems[a].checked = true;
 	  }
 	  removeSelLocations();
@@ -133,11 +132,6 @@ function removeAllLocations(){
   
   }
   
-  <digi:context name="remLocs" property="context/module/moduleinstance/removeSelLocations.do?edit=true" />
-  document.aimEditActivityForm.action = "<%= remLocs %>";
-  document.aimEditActivityForm.target = "_self"
-  document.aimEditActivityForm.submit();
-  return true;
 }
 
 function locationLevelChanged(){

@@ -5,6 +5,7 @@
  */
 package org.digijava.module.aim.action;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -239,22 +240,22 @@ public class ParisIndicatorReport extends Action {
                                 j = 0;
                                 itr2 = pi.getAnswers().iterator();
                                 while (itr2.hasNext()) {
-                                    temp = (double[]) itr2.next();
+                                    BigDecimal[] tempBD = ((BigDecimal[]) itr2.next());
                                     switch (cntr) {
                                         case 0:
-                                            if (temp[lastIndex] < 10)
+                                            if (tempBD[lastIndex].doubleValue() < 10)
                                                 answers[j] += 1;
                                             break;
                                         case 1:
-                                            if (temp[lastIndex] >= 10 && temp[lastIndex] < 50)
+                                            if (tempBD[lastIndex].doubleValue() >= 10 && tempBD[lastIndex].doubleValue() < 50)
                                                 answers[j] += 1;
                                             break;
                                         case 2:
-                                            if (temp[lastIndex] >= 50 && temp[lastIndex] <= 90)
+                                            if (tempBD[lastIndex].doubleValue() >= 50 && tempBD[lastIndex].doubleValue() <= 90)
                                                 answers[j] += 1;
                                             break;
                                         case 3:
-                                            if (temp[lastIndex] > 90)
+                                            if (tempBD[lastIndex].doubleValue() > 90)
                                                 answers[j] += 1;
                                     }
                                     j++;
@@ -421,10 +422,10 @@ public class ParisIndicatorReport extends Action {
                     ArrayList answ2 = donor.getAnswers();
 
                     for (int i = 0; i < answ1.size(); i++) {
-                        double ans1[] = (double[]) answ1.get(i);
-                        double ans2[] = (double[]) answ2.get(i);
+                        BigDecimal ans1[] = (BigDecimal[]) answ1.get(i);
+                        BigDecimal ans2[] = (BigDecimal[]) answ2.get(i);
                         for (int j = st; j < ans1.length; j++) {
-                            ans2[j] += ans1[j];
+                            ans2[j].add(ans1[j]);
                         }
                     }
                 }

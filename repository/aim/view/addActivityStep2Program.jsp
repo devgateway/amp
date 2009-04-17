@@ -104,7 +104,7 @@
                                                                     <td width="5%" vAlign="center" align="left">
 
                                                                       <html:text name="nationalPlanObjectivePrograms" indexed="true" property="programPercentage"
-                                                                      			 size="2" maxlength="3"  onkeyup="fnChk(this, 'program')"/>
+                                                                      			 size="2" maxlength="5"  onkeyup="fnChk(this, 'program')"/>
 
                                                                     </td>
                                                                   </tr>
@@ -189,7 +189,7 @@
                                                                           <digi:trn key="aim:editActivity:program_percentage">Percentage</digi:trn></td>
                                                                      <td width="5%" vAlign="center" align="left">
                                                                       <html:text name="primaryPrograms" indexed="true" property="programPercentage"
-                                                                      			 size="2" maxlength="3" onkeyup="fnChk(this, 'program')"/>                                                                    </td>
+                                                                      			 size="2" maxlength="5" onkeyup="fnChk(this, 'program')"/>                                                                    </td>
                                                                   </tr>
                                                                 </table>
                                                               </td>
@@ -272,7 +272,7 @@
                                                                           <digi:trn key="aim:editActivity:program_percentage">Percentage</digi:trn></td>
                                                                      <td width="5%" vAlign="center" align="left">
                                                                       <html:text name="secondaryPrograms" indexed="true" property="programPercentage"
-                                                                      			 size="2" maxlength="3" onkeyup="fnChk(this, 'program')"/>                                                                    </td>
+                                                                      			 size="2" maxlength="5" onkeyup="fnChk(this, 'program')"/>                                                                    </td>
                                                                   </tr>
                                                                 </table>
                                                               </td>

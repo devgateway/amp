@@ -584,7 +584,7 @@ public class SaveActivity extends Action {
 						errors.add("sector", new ActionError("error.aim.addActivity.sectorEmpty", TranslatorWorker.translateText("Please add a sector",locale,siteId)));
 					}
 					else{
-						int primaryPrc=0, secondaryPrc=0;
+						float primaryPrc=0, secondaryPrc=0;
 						boolean hasPrimarySectorsAdded=false, hasSecondarySectorsAdded=false;
 						
 						Iterator<ActivitySector> secPerItr = eaForm.getSectors().getActivitySectors().iterator();
@@ -602,8 +602,8 @@ public class SaveActivity extends Action {
 							// sector percentage is not a number
 							else {
 								try {
-									if("Primary".equals(config.getName())) primaryPrc+=actSect.getSectorPercentage().intValue();
-									if("Secondary".equals(config.getName())) secondaryPrc+=actSect.getSectorPercentage().intValue();
+									if("Primary".equals(config.getName())) primaryPrc+=actSect.getSectorPercentage().floatValue();
+									if("Secondary".equals(config.getName())) secondaryPrc+=actSect.getSectorPercentage().floatValue();
 								} catch (NumberFormatException nex) {
 									errors.add("sectorPercentageNonNumeric",
 											new ActionError("error.aim.addActivity.sectorPercentageNonNumeric", TranslatorWorker.translateText("Sector percentage must be numeric",locale,siteId)));

@@ -38,20 +38,12 @@
 										<logic:iterate name="aimEditActivityForm" property="location.locationByLayers" id="entry">
 											<bean:define id="myCollection" type="java.util.Collection" name="entry" property="value" />
 											<% pageContext.setAttribute("colSize", myCollection.size() ) ;%>
-											<c:choose>
-												<c:when test="${entry.key==(aimEditActivityForm.location.impLevelValue -1) }">
+													
 													<c:set var="sizeString">5</c:set>
 													<c:set var="multipleString">multiple="multiple"</c:set>
 													<c:set var="changeString"> </c:set>
 													<c:set var="nameString">name="location.userSelectedLocs"</c:set>
-												</c:when>
-												<c:otherwise>
-													<c:set var="sizeString">1</c:set>
-													<c:set var="multipleString"></c:set>
-													<c:set var="changeString">locationChanged('loc_${entry.key}')</c:set>
-													<c:set var="nameString"></c:set>
-												</c:otherwise>
-											</c:choose>
+
 											<tr>
 											<td>
 												<category:getoptionvalue categoryKey="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="${entry.key}"/>

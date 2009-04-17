@@ -5340,11 +5340,16 @@ public class DbUtil {
 
             AmpAhsurvey svy = (AmpAhsurvey) session.get(AmpAhsurvey.class, surveyId);
             //response = svy.getResponses();
-            qry = "select res from " + AmpAhsurvey.class.getName()
+            /*qry = "select res from " + AmpAhsurvey.class.getName()
                 + " res left join fetch res.responses where (res.ampAHSurveyId=:surveyId)";
             Query query = session.createQuery(qry);
             query.setParameter("surveyId", surveyId, Hibernate.LONG);
             response = ( (AmpAhsurvey) query.list().get(0)).getResponses();
+            */
+            qry = "select res from " + AmpAhsurveyResponse.class.getName() + " res where res.ampAHSurveyId=:surveyId";
+            Query query = session.createQuery(qry);
+            query.setParameter("surveyId", surveyId, Hibernate.LONG);
+            response = new HashSet(query.list());
 
             qry = "select fund from " + AmpFunding.class.getName()
                 + " fund where (fund.ampDonorOrgId=:donorId) and (fund.ampActivityId=:activityId)";
@@ -5424,6 +5429,9 @@ public class DbUtil {
 
                                 ques.setResponse(res.getResponse());
                                 ques.setResponseId(res.getAmpReponseId());
+                                if(res.getAmpReponseId() == null) {
+                                	logger.warn("ES NULLLLLLLLLLLLLLLL");
+                                }
                                 break;
                             }
                         }

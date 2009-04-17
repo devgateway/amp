@@ -5731,8 +5731,14 @@ public class DbUtil {
                         }
                         ( (ParisIndicator) responses.get(0)).getAnswers().add(answersRow);
                     }
-                } else
-                    ( (ParisIndicator) responses.get(0)).getAnswers().add(new double[NUM_ANSWER_COLUMNS]);
+                } else {
+                    ( (ParisIndicator) responses.get(0)).getAnswers().add(new BigDecimal[NUM_ANSWER_COLUMNS]);
+                    for (int m = 0; m < ( (ParisIndicator) responses.get(0)).getAnswers().size(); m++) {
+                    	for (int k = 0; k < NUM_ANSWER_COLUMNS; k++) {
+                        	((BigDecimal[])( (ParisIndicator) responses.get(0)).getAnswers().get(m))[k] = new BigDecimal(0);
+                        }
+                    }
+                }
 
                 itr1 = surveyDonors.iterator();
                 while (itr1.hasNext()) {
@@ -5765,8 +5771,12 @@ public class DbUtil {
                     }
 
                     pi.setAnswers(new ArrayList());
-                    if (indcFlag == 6)
+                    if (indcFlag == 6) {
                         answersRow = new BigDecimal[NUM_ANSWER_COLUMNS];
+                        for (int k = 0; k < NUM_ANSWER_COLUMNS; k++) {
+                        	answersRow[k] = new BigDecimal(0.0);
+                        }
+                    }
                     //logger.debug("surveySet.size() : " + surveySet.size());
                     boolean[][] answersColl = getSurveyReportAnswer(indcCode, surveySet);
                     for (int i = 0; i < YEAR_RANGE; i++) {

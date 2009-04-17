@@ -179,7 +179,7 @@
                                                                     			<FONT color="red">*</FONT>
                                                                     		</field:display>
                                                                     		<digi:trn key="aim:editActivity:location_percentage">Percentage</digi:trn>:&nbsp;
-                                                                    		<html:text name="selectedLocs" indexed="true" property="percent" size="2"  maxlength="3" onkeyup="fnChk(this, 'region')"/>
+                                                                    		<html:text name="selectedLocs" indexed="true" property="percent" size="2"  maxlength="5" onkeyup="fnChk(this, 'region')"/>
                                                                     </field:display>
                                                                     </td>
                                                                   </tr>

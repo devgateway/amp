@@ -107,7 +107,7 @@ cursor:pointer;
             			</ul>
             		</div>
             	</div>
-            	            
+           	</li>    
             <li style="float:left;">
                 <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
                 <digi:trn key="aim:deflanguage">Language</digi:trn>

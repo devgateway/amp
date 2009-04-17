@@ -71,7 +71,7 @@
 						   	<TD align="left" vAlign="center" height="15">
 									<digi:insert attribute="headerMiddle" />
 								</TD>
-							<td align="right" vAlign="top" height="15">
+							<td align="right" vAlign="top" height="15" nowrap="nowrap">
 									<digi:insert attribute="loginWidget" />
 							</td>
 

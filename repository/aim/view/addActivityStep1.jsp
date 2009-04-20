@@ -31,7 +31,12 @@
 <!-- Stylesheet of AMP -->
         <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
 <!--  -->
+<jsp:include page="/repository/aim/view/addOrganizationPopin.jsp" flush="true" />
 
+<div id="popin" style="display: none">
+	<div id="popinContent" class="content">
+	</div>
+</div>
 <script type="text/javascript">
 <!--
 
@@ -47,14 +52,15 @@
 		    modal:true,
 		    draggable:true
 		    });
-	
+		var panelStart=0;
+		var checkAndClose=false;
+		var refresh=true;
 	function initStep1Scripts() {
 		var msg='\n<digi:trn key="aim:addeditComment">Add/Edit Comment</digi:trn>';
 		myPanel.setHeader(msg);
 		myPanel.setBody("");
 		myPanel.beforeHideEvent.subscribe(function() {
-			delCommentContent=true;
-			showContent();
+			panelStart=1;
 		}); 
 		myPanel.render(document.body);
 	}
@@ -70,13 +76,23 @@
 	  background-color:#2f2f2f;
 	}
 	
-	#myComment .content { 
+	#popin .content { 
 	    overflow:auto; 
 	    height:455px; 
 	    background-color:fff; 
 	    padding:10px; 
 	} 
-	
+	.bd a:hover {
+  		background-color:#ecf3fd;
+		font-size: 10px; 
+		color: #0e69b3; 
+		text-decoration: none	  
+	}
+	.bd a {
+	  	color:black;
+	  	font-size:10px;
+	}
+		
 </style>
 
 
@@ -103,7 +119,11 @@
 	 * o.argument
 	 */
 		var response = o.responseText; 
-		showContent(response);
+		var content = document.getElementById("popinContent");
+	    //response = response.split("<!")[0];
+		content.innerHTML = response;
+	    //content.style.visibility = "visible";
+		showContent();
 	}
 	var delCommentContent=false;	 
 	var responseFailure = function(o){ 
@@ -119,16 +139,46 @@
 		success:responseSuccess, 
 		failure:responseFailure 
 	};
-
-	function commentWin(commentId){
-		delCommentContent=false;
-        showContent( "<div style='text-align: center'>" + "Loading" + 
-		"... <br /> <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>" );
-		<digi:context name="commentUrl" property="context/module/moduleinstance/viewComment.do" />
-		var url = "<%=commentUrl %>?comment=" + commentId + "&edit=" + "true";
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+	function showContent(){
+		var element = document.getElementById("popin");
+		element.style.display = "inline";
+		if (panelStart < 1){
+			myPanel.setBody(element);
+		}
+		if (panelStart < 2){
+			document.getElementById("popin").scrollTop=0;
+			myPanel.show();
+			panelStart = 2;
+		}
+		checkErrorAndClose();
+	}
+	function checkErrorAndClose(){
+		if(checkAndClose==true){
+			if(document.getElementsByName("someError")[0]==null || document.getElementsByName("someError")[0].value=="false"){
+				myclose();
+				refreshPage();
+			}
+			checkAndClose=false;			
+		}
+	}
+	function refreshPage(){
+		if(refresh==true){
+			submitAfterSelectingOrg();
+		}else{
+			refresh=true;
+		}
 	}
 
+	function myclose(){
+		myPanel.hide();	
+		panelStart=1;
+	
+	}
+	function closeWindow() {
+		myclose();
+	}
+
+	/*
 	function showContent(content){
 		if(delCommentContent==true){
 			myPanel.setBody("");
@@ -136,12 +186,33 @@
 			showComment(content);
 		}
 	}
+	
 	function showComment(content) {
 		myPanel.setBody(content);
 		myPanel.show();
 	}	
+	*/
+	
+	function showPanelLoading(msg){
+		myPanel.setHeader(msg);		
+		var content = document.getElementById("popinContent");
+		content.innerHTML = "<div style='text-align: center'>" + "Loading..." + 
+			"... <br /> <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>";		
+		showContent();
+	}
+	
+	function commentWin(commentId){
+		var msg='\n<digi:trn key="aim:selectOrg">Select Organization</digi:trn>';
+		showPanelLoading(msg);
+		<digi:context name="commentUrl" property="context/module/moduleinstance/viewComment.do" />
+		var url = "<%=commentUrl %>?comment=" + commentId + "&edit=" + "true";
+		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+	}
+
 	function saveComment(){
-		var postString		= generateFields("");
+		refresh=false;
+		checkAndClose=true;
+		var postString = generateFields("");
 		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/viewComment.do", callback, postString);
 	}
 	 function editDelete() {
@@ -160,6 +231,7 @@
 		if (flag == true) {
 			document.getElementById('actionFlag').value = val1;
 			document.getElementById('ampCommentId').value = val2;
+			document.getElementById('commentText').value = "";
 			editDelete();
 		}
 	}
@@ -186,7 +258,6 @@
 		else{
 			saveComment();
 		}
-		myclose();
 	}
 	
 	function trim ( inputStringTrim ) {

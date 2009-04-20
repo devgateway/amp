@@ -197,7 +197,6 @@
 		if(checkAndClose==true){
 			if(document.getElementsByName("someError")[0]==null || document.getElementsByName("someError")[0].value=="false"){
 				myclose();
-				addSector();
 			}
 			checkAndClose=false;			
 		}

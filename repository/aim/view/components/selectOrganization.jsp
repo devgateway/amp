@@ -207,6 +207,8 @@
 <digi:form action="/selectOrganizationComponent.do" method="post">
 
 <html:hidden property="selectedOrganisationFromPages" />
+<html:hidden property="valueHoder" />
+<html:hidden property="nameHolder" />
 	<script language="JavaScript">
 	//if use client yes
 	

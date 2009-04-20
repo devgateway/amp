@@ -49,8 +49,9 @@ public class AddOrganizationButton extends BodyTagSupport {
 				html.append("=");
 				html.append("\""+styleClass+"\"");				
 			}
-			html.append(" onclick=\"window.open('/aim/selectOrganizationComponent.do~edit=true~reset=true~");
-
+			//html.append(" onclick=\"window.open('/aim/selectOrganizationComponent.do~edit=true~reset=true~");
+			html.append(" onclick=\"javascript:selectOrg('/aim/selectOrganizationComponent.do~edit=true~reset=true~");
+			
 			html.append(PARAM_RESET_FORM);
 			html.append("=true~");
 

@@ -14,9 +14,9 @@ function checkAmountUsingSymbol(amount){
 		var ch = amount.charAt(i);
 		if (validChars.indexOf(ch)==-1){
 			return false;
-			break
 		}
 	}
+	return true;
 }
 
 function chkNumericForProjection(objName)

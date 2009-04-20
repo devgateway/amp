@@ -14,7 +14,7 @@
 <digi:instance property="aimEditActivityForm" />
 <digi:context name="digiContext" property="context"/>
 
-<digi:form action="/viewComment.do" method="post">
+<digi:form action="/viewComment.do" name="aimEditActivityFormPopin" type="aimEditActivityForm" method="post">
 <html:hidden property="comments.actionFlag"  styleId="actionFlag"/>
 <html:hidden property="comments.ampCommentId"  styleId="ampCommentId"/>
 <html:hidden property="editAct" />

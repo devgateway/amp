@@ -15,10 +15,12 @@
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<jsp:include page="addActivityStep11Popin.jsp" flush="true" />
+
 
 <script language="JavaScript">
 	<!--
-
+/*
 	function addEUActivity() {
 			openNewWindow(800, 460);
 			<digi:context name="addEUActivity" property="context/module/moduleinstance/editEUActivity.do?new" />
@@ -43,7 +45,7 @@
 			document.aimEditActivityForm.submit();
 	}
 
-
+*/
 	function addRegionalFunding() {
 		openNewWindow(650, 500);
 		<digi:context name="addRegFunding" property="context/module/moduleinstance/addRegionalFunding.do?edit=true&regFundAct=show" />

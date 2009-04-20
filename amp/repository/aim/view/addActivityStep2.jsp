@@ -73,8 +73,12 @@ function validate(field) {
 }
 }
 
+
 function selectLocation() {
-	myAddLocation("edit=false");
+	var params="location.levelId="+document.getElementsByName("location.levelId")[0].value;
+	params+="&location.implemLocationLevel="+document.getElementsByName("location.implemLocationLevel")[0].value;
+	params+="&edit=false";
+	myAddLocation(params);
 }
 
 

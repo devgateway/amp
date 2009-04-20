@@ -76,7 +76,7 @@ function selectOrganisation1() {
 
 <input type="hidden" name="edit" value="true">
 <html:hidden property="id"/>
-
+<html:hidden property="someError"/>
 <digi:errors/>
 
 <table width="100%" border="0" cellspacing="2" cellpadding="2" align="center" class="box-border-nopadding">
@@ -196,8 +196,14 @@ function selectOrganisation1() {
 						</logic:iterate>			
 		</table>
 	  <tr><td colspan="2" align="center">
-				<html:submit styleClass="dr-menu" property="addFields"><digi:trn key="aim:addEditActivityAddContribution">Add Contribution</digi:trn></html:submit>&nbsp;&nbsp;
-				<html:submit styleClass="dr-menu" property="removeFields"><digi:trn key="aim:addEditActivityDeleteSelected">Delete Selected</digi:trn></html:submit>				
+             	<c:set var="translation">
+                   	<digi:trn key="aim:addEditActivityAddContribution">Add Contribution</digi:trn>
+                </c:set>				
+				<input type="Button" value="${translation}" class="dr-menu" onclick="addFields();">
+             	<c:set var="translation">
+                   	<digi:trn key="aim:addEditActivityDeleteSelected">Delete Selected</digi:trn>
+                </c:set>
+				<input type="Button" value="${translation}" class="dr-menu" onclick="removeFields();">
 		</td></tr>
 	
 	
@@ -235,15 +241,20 @@ function selectOrganisation1() {
 
 	<tr>
 		<td colspan="2" align="center">
-		<html:submit styleClass="dr-menu" property="save">
-		 <digi:trn key="aim:addEditActivitySave">Save</digi:trn>
-		</html:submit>
+		<c:set var="translation">
+			<digi:trn key="aim:addEditActivitySave">Save</digi:trn>
+		</c:set>
+	
+		<input type="Button" value="${translation}" class="dr-menu" onclick="mysave();">
+
 		
 		&nbsp;&nbsp;
-		<html:button styleClass="dr-menu" property="cancel" onclick="window.close();">
-		<digi:trn key="aim:addEditActivitySlose">Close</digi:trn>
-
-		</html:button>
+		<c:set var="translation">
+			<digi:trn key="aim:addEditActivitySlose">Close</digi:trn>
+		</c:set>
+	
+		<input type="Button" value="${translation}" class="dr-menu" onclick="myclose();">
+		
 		</td>
 		
 		

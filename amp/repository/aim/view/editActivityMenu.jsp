@@ -82,6 +82,15 @@
         if(document.aimEditActivityForm.step.value=="6"){
         	initDocumentsScript();
         }
+        if(document.aimEditActivityForm.step.value=="7"){
+        	initOrganizationsScript();
+        }
+        if(document.aimEditActivityForm.step.value=="17"){
+        	initStep17Scripts();
+        }
+        if(document.aimEditActivityForm.step.value=="11"){
+        	initCostingScript();
+        }
 
         initScripts();
    	};

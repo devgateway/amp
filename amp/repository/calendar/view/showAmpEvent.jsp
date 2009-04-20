@@ -26,8 +26,169 @@
 <script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript"  src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
 
+<jsp:include page="/repository/aim/view/addOrganizationPopin.jsp" flush="true" />
+
+<div id="popin" style="display: none">
+	<div id="popinContent" class="content">
+	</div>
+</div>
+
 <!-- this is for the nice tooltip widgets -->
 <DIV id="TipLayer"  style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
+
+<script type="text/javascript">
+<!--
+
+		YAHOOAmp.namespace("YAHOOAmp.amp");
+
+		var myPanel = new YAHOOAmp.widget.Panel("newpopins", {
+			width:"600px",
+			fixedcenter: true,
+		    constraintoviewport: false,
+		    underlay:"none",
+		    close:true,
+		    visible:false,
+		    modal:true,
+		    draggable:true,
+		    context: ["showbtn", "tl", "bl"]
+		    });
+	var panelStart=0;
+	var checkAndClose=false;
+	function initOrganizationsScript() {
+		var msg='\n<digi:trn key="aim:selectOrg">Select Organization</digi:trn>';
+		myPanel.setHeader(msg);
+		myPanel.setBody("");
+		myPanel.beforeHideEvent.subscribe(function() {
+			panelStart=1;
+		}); 
+		
+		myPanel.render(document.body);
+	}
+	//this is called from editActivityMenu.jsp
+	window.onload=initOrganizationsScript();
+-->	
+</script>
+<style type="text/css">
+	.mask {
+	  -moz-opacity: 0.8;
+	  opacity:.80;
+	  filter: alpha(opacity=80);
+	  background-color:#2f2f2f;
+	}
+	
+	#popin .content { 
+	    overflow:auto; 
+	    height:455px; 
+	    background-color:fff; 
+	    padding:10px; 
+	} 
+	.bd a:hover {
+  		background-color:#ecf3fd;
+		font-size: 10px; 
+		color: #0e69b3; 
+		text-decoration: none	  
+	}
+	.bd a {
+	  	color:black;
+	  	font-size:10px;
+	}
+		
+</style>
+<script language="JavaScript">
+    <!--
+   
+    //DO NOT REMOVE THIS FUNCTION --- AGAIN!!!!
+    function mapCallBack(status, statusText, responseText, responseXML){
+       window.location.reload();
+    }
+    
+    
+    var responseSuccess = function(o){
+	/* Please see the Success Case section for more
+	 * details on the response object's properties.
+	 * o.tId
+	 * o.status
+	 * o.statusText
+	 * o.getResponseHeader[ ]
+	 * o.getAllResponseHeaders
+	 * o.responseText
+	 * o.responseXML
+	 * o.argument
+	 */
+		var response = o.responseText; 
+		var content = document.getElementById("popinContent");
+	    //response = response.split("<!")[0];
+		content.innerHTML = response;
+	    //content.style.visibility = "visible";
+		
+		showContent();
+	}
+ 
+	var responseFailure = function(o){ 
+	// Access the response object's properties in the 
+	// same manner as listed in responseSuccess( ). 
+	// Please see the Failure Case section and 
+	// Communication Error sub-section for more details on the 
+	// response object's properties.
+		//alert("Connection Failure!"); 
+	}  
+	var callback = 
+	{ 
+		success:responseSuccess, 
+		failure:responseFailure 
+	};
+
+	function showContent(){
+		var element = document.getElementById("popin");
+		element.style.display = "inline";
+		if (panelStart < 1){
+			myPanel.setBody(element);
+		}
+		if (panelStart < 2){
+			document.getElementById("popin").scrollTop=0;
+			myPanel.show();
+			panelStart = 2;
+		}
+		checkErrorAndClose();
+	}
+	function checkErrorAndClose(){
+		if(checkAndClose==true){
+			if(document.getElementsByName("someError")[0]==null || document.getElementsByName("someError")[0].value=="false"){
+				myclose();
+				refreshPage();
+			}
+			checkAndClose=false;			
+		}
+	}
+	function refreshPage(){
+		submitForm();
+	}
+
+	function myclose(){
+		myPanel.hide();	
+		panelStart=1;
+	
+	}
+	function closeWindow() {
+		myclose();
+	}
+	function showPanelLoading(msg){
+		myPanel.setHeader(msg);		
+		var content = document.getElementById("popinContent");
+		content.innerHTML = "<div style='text-align: center'>" + "Loading..." + 
+			"... <br /> <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>";		
+		showContent();
+	}
+
+	function selectOrg(params1, params2, params3, params4) {
+		var msg='\n<digi:trn key="aim:selectOrg">Select Organization</digi:trn>';
+		showPanelLoading(msg);
+		YAHOOAmp.util.Connect.asyncRequest("POST", params1, callback);
+	}
+
+	-->
+
+</script>
 
 
 <digi:instance property="calendarEventForm"/>

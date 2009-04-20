@@ -300,7 +300,13 @@ public class EditEUActivity extends MultiAction {
 
 		saveErrors(request, errors);
 
-		if(!errors.isEmpty()) return modeFinalize(mapping, form, request, response);
+		if(!errors.isEmpty()) {
+			eaf.setSomeError(true);
+			return modeFinalize(mapping, form, request, response);
+		}
+		else{
+			eaf.setSomeError(false);
+		}
 
 		return modeSave(mapping, form, request, response);
 

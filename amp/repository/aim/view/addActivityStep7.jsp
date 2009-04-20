@@ -10,6 +10,9 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
+<jsp:include page="addActivityStep7Popin.jsp" flush="true" />
+<jsp:include page="addOrganizationPopin.jsp" flush="true" />
+
 <digi:instance property="aimEditActivityForm" />
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>

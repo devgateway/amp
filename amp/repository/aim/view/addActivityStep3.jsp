@@ -20,6 +20,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <jsp:include page="addActivityStep3Popin.jsp" flush="true" />
+<jsp:include page="addOrganizationPopin.jsp" flush="true" />
 <script language="JavaScript" type="text/javascript">
 	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
 </script>
@@ -37,7 +38,7 @@
 
 	<!--
 
-	function validate() {
+	function validateFunding() {
 	
 		if (document.getElementsByName('funding.selFundingOrgs').length == 1) { // only one org. added
 			if (document.getElementById('selFundingOrgs').checked == false) {
@@ -124,7 +125,7 @@
 	}
 
 	function removeSelOrganisations() {
-		var flag = validate();
+		var flag = validateFunding();
 		if (flag == false) return false;
 		<digi:context name="remSelOrg" property="context/module/moduleinstance/remSelFundOrgs.do?edit=true" />
 		document.aimEditActivityForm.action = "<%= remSelOrg %>";
@@ -185,7 +186,9 @@
 		if(checkbox.checked==false)
 		{	inputHidden[0].value="unchecked";}
 	}
-
+	/*function selectOrg(params1, params2, params3, params4) {
+		mySelectOrg(params1, params2, params3, params4);
+	}*/
 	-->
 </script>
 

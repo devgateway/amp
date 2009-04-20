@@ -28,14 +28,11 @@ public class FinancingBreakdownWorker
 	}
 
 	public static String getTotalProjections(FilterParams fp) {
-		Collection amounts	= QuarterlyInfoWorker.getQuarterlyForProjections(fp, true);
-		double totals		= 0;
-		Iterator iter		= amounts.iterator();
-		while (iter.hasNext()) {
-			double temp	= (Double)iter.next();
-			totals			+= temp;
+		Collection <BigDecimal> amounts	= QuarterlyInfoWorker.getQuarterlyForProjections(fp, true);
+		BigDecimal totals		= new BigDecimal(0);
+		for(BigDecimal amount :amounts){
+			totals = totals.add(amount);
 		}
-
 		return FormatHelper.formatNumber(totals);
 	}
 

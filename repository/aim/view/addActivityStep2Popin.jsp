@@ -424,7 +424,6 @@
 	
 
 	function locationChanged( selectId ) {
-		alert("locationChanged");
 		var selectEl		= document.getElementById(selectId);
 		if ( selectEl.value != "-1" ) {
 			document.aimEditActivityFormPop.parentLocId.value=selectEl.value;

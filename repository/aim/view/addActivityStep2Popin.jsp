@@ -213,14 +213,18 @@
 		
 		var ret="location.locationReset=" + document.getElementsByName("location.locationReset")[0].value+"&"+
 		"location.parentLocId=" + document.getElementsByName("location.parentLocId")[0].value;
-		var opt = document.getElementsByName('location.userSelectedLocs')[1].length;
-		for(var i=0; i< opt; i++){
-			if(document.getElementsByName('location.userSelectedLocs')[1].options[i].selected==true){
-				ret += "&location.userSelectedLocs=" + document.getElementsByName('location.userSelectedLocs')[1].options[i].value;
+
+		if (document.getElementsByName('location.userSelectedLocs').length > 0){
+			var opt = document.getElementsByName('location.userSelectedLocs')[0].length;
+			for(var i=0; i< opt; i++){
+				if(document.getElementsByName('location.userSelectedLocs')[0].options[i].selected==true){
+					ret += "&location.userSelectedLocs=" + document.getElementsByName('location.userSelectedLocs')[0].options[i].value;
+				}
 			}
 		}
 		return ret;
 	}
+	
 	function buttonAddLocation(){
 		var postString		= generateFieldsLocation();
 		<digi:context name="commentUrl" property="context/aim/locationSelected.do"/>
@@ -417,16 +421,20 @@
 		var url = "<%=selectLoc %>";
 		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, params);
 	}
+	
+
 	function locationChanged( selectId ) {
+		alert("locationChanged");
 		var selectEl		= document.getElementById(selectId);
-		document.aimEditActivityFormPop.parentLocId.value	= 
-			selectEl.options[selectEl.selectedIndex].value;
-		if ( document.aimEditActivityFormPop.parentLocId.value != "-1" ) {
+		if ( selectEl.value != "-1" ) {
+			document.aimEditActivityFormPop.parentLocId.value=selectEl.value;
+			//selectEl.options[selectEl.selectedIndex].value;
 			<digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do" />	  
 			var url = "<%=selectLoc %>";
 			YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, "edit=true&"+generateFieldsLocation());
 		}
 	}
+	
 	function myAddProgram(params){
 		var msg='\n<digi:trn key="aim:addProgram">Add Program</digi:trn>';
 		showPanelLoading(msg);

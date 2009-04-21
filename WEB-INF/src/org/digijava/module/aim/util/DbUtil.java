@@ -6029,7 +6029,7 @@ public class DbUtil {
                                 allDnRow[NUM_ANSWER_COLUMNS - 2] = new BigDecimal(-1.0);
                             else {
                                 sum =sum.divide(new BigDecimal(3), RoundingMode.HALF_UP) ;
-                                percent = sum.multiply(new BigDecimal(100).divide(allDnRow[NUM_ANSWER_COLUMNS - 3], RoundingMode.HALF_UP));
+                                percent = sum.divide(allDnRow[NUM_ANSWER_COLUMNS - 3], RoundingMode.HALF_UP).multiply(new BigDecimal(100));
                                 allDnRow[NUM_ANSWER_COLUMNS - 2] = percent;
                             }
                         }
@@ -6041,9 +6041,9 @@ public class DbUtil {
                         else {
                             try {
                                 if (indcFlag == 5)
-                                    percent = allDnRow[NUM_ANSWER_COLUMNS - 4].multiply(new BigDecimal(100)).multiply(allDnRow[NUM_ANSWER_COLUMNS - 3]);
+                                    percent = allDnRow[NUM_ANSWER_COLUMNS - 4].multiply(new BigDecimal(100)).divide(allDnRow[NUM_ANSWER_COLUMNS - 3], RoundingMode.HALF_UP);
                                 else if (indcFlag == 7)
-                                    percent = allDnRow[NUM_ANSWER_COLUMNS - 2].multiply(new BigDecimal(100 )).multiply(allDnRow[NUM_ANSWER_COLUMNS - 3]);
+                                    percent = allDnRow[NUM_ANSWER_COLUMNS - 2].multiply(new BigDecimal(100 )).divide(allDnRow[NUM_ANSWER_COLUMNS - 3], RoundingMode.HALF_UP);
                                 else if (indcFlag == 9) {
                                     sum = allDnRow[NUM_ANSWER_COLUMNS - 4].add(allDnRow[NUM_ANSWER_COLUMNS - 3]) ;
                                     percent =sum.multiply(new BigDecimal(100)).divide(allDnRow[NUM_ANSWER_COLUMNS - 2], RoundingMode.HALF_UP) ;

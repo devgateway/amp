@@ -1,13 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE Schema PUBLIC "//UNKNOWN/" "mondrian.dtd">
 <Schema name="AMP">
-	<Dimension name="Primary Sector">
-		<Hierarchy hasAll="true" primaryKey="amp_activity_id" allMemberCaption="#All_Primary_Sector#" allMemberName="All Primary Sectors" caption="#Primary_Sector#">		
-			<Table name="cached_v_sectors" />
-			<Level name="Primary Sector Scheme" column="sec_scheme_name"/>
-			<Level name="Primary Sector Name" column="sectorname" />
-		</Hierarchy>
-	</Dimension>
 	<Dimension name="Activity">
 		<Hierarchy hasAll="true" primaryKey="amp_activity_id" primaryKeyTable="cached_amp_activity" allMemberCaption="#All_Activities#" allMemberName="All Activities" caption="#Activity#">
 			<Table name="cached_amp_activity" />
@@ -73,14 +66,19 @@
 		<Table name="cached_v_sectors">
 			<SQL dialect="mysql"><![CDATA[cached_v_sectors.amp_activity_id IN (@donorquery)]]> </SQL>
 		</Table>
-		<DimensionUsage name="Primary Sector" source="Primary Sector" foreignKey="amp_activity_id" />
+		<Dimension name="Primary Sector">
+			<Hierarchy hasAll="true" primaryKey="amp_activity_id" allMemberCaption="#All_Primary_Sector#" allMemberName="All Primary Sectors" caption="#Primary_Sector#">		
+				<Level name="Primary Sector Scheme" column="sec_scheme_name"/>
+				<Level name="Primary Sector Name" column="sectorname" />
+			</Hierarchy>
+		</Dimension>
 		<DimensionUsage name="Activity" source="Activity" foreignKey="amp_activity_id" />
 		<DimensionUsage name="Donor Dates" source="Donor Dates" foreignKey="amp_activity_id"/>
 		<DimensionUsage name="Regions" source="Regions" foreignKey="amp_activity_id" />
 		<DimensionUsage name="Primary Program" source="Primary Program" foreignKey="amp_activity_id"/>
 		<DimensionUsage name="Secundary Program" source="Secundary Program" foreignKey="amp_activity_id"/>
 		<DimensionUsage name="Status" source="Status" foreignKey="amp_activity_id"/>
-		<Measure name="Raw Sector Percentage" aggregator="sum" column="sector_percentage" visible="false"/>
+		<Measure name="Sector Percentage" aggregator="sum" column="sector_percentage"/>
 		<Measure name="Sector Actual Commitments" aggregator="sum" visible="false">
 			<MeasureExpression>
 				<SQL dialect="mysql">
@@ -130,18 +128,14 @@
 				</SQL>
 			</MeasureExpression>
 		</Measure>
-		
-		<CalculatedMember name="Sector Percentage" dimension="Measures">
-			<Formula>IIf([Measures].[Raw Sector Percentage] &gt; 0 AND [Measures].[Raw Sector Percentage] &lt; 100,[Measures].[Raw Sector Percentage],null)</Formula>
-		</CalculatedMember>
 	</Cube>
 	<Cube name="Donor Funding">
 		<Table name="cached_v_donor_funding" >
 			<SQL dialect="mysql"><![CDATA[cached_v_donor_funding.amp_activity_id IN (@donorquery)]]> </SQL>
 		</Table>
+		
 		<Dimension name="Donor">
-			<Hierarchy hasAll="true" allLevelName="All Donor" caption="#Donor#" allMemberCaption="#All_Donor#">
-				<!-- No table element here. Fact table is assumed. -->
+			<Hierarchy primaryKey="amp_activity_id" hasAll="true" allLevelName="All Donor" caption="#Donor#" allMemberCaption="#All_Donor#">
 				<Level name="DonorName" column="donor_name" />
 			</Hierarchy>
 		</Dimension>
@@ -151,14 +145,12 @@
 				<Level name="DonorGroup" column="org_grp_name" />
 			</Hierarchy>
 		</Dimension>
-		
 		<Dimension name="Donor Types">
 			<Hierarchy hasAll="true" allLevelName="All Donors types" caption="#Donors_types#" allMemberCaption="#All_Donors_types#">
 				<!-- No table element here. Fact table is assumed. -->
 				<Level name="DonorType" column="donor_type_name" />
 			</Hierarchy>
 		</Dimension>
-		
 		<Dimension name="Financing Instrument">
 			<Hierarchy hasAll="true" allLevelName="All" allMemberCaption="#All_Financing_Instrument#" caption="#Financing_Instrument#">
 				<!-- No table element here. Fact table is assumed. -->
@@ -171,14 +163,12 @@
 				<Level name="Terms of Assistance" column="terms_assist_name" />
 			</Hierarchy>
 		</Dimension>
-		<DimensionUsage name="Primary Sector" source="Primary Sector" foreignKey="amp_activity_id" />
 		<DimensionUsage name="Activity" source="Activity" foreignKey="amp_activity_id" />
 		<DimensionUsage name="Donor Dates" source="Donor Dates" foreignKey="amp_fund_detail_id"/>
 		<DimensionUsage name="Regions" source="Regions" foreignKey="amp_activity_id"  />
 		<DimensionUsage name="Primary Program" source="Primary Program" foreignKey="amp_activity_id"/>
 		<DimensionUsage name="Secundary Program" source="Secundary Program" foreignKey="amp_activity_id"/>
 		<DimensionUsage name="Status" source="Status" foreignKey="amp_activity_id"/>
-		
 		<Measure name="Raw Actual Commitments" aggregator="sum" caption="#Raw_Actual_Commitments#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter">
 			<MeasureExpression>
 				<SQL dialect="mysql">
@@ -234,7 +224,6 @@
 			<CubeUsage cubeName="Sectors" />
 			<CubeUsage cubeName="Donor Funding" />
 		</CubeUsages>
-		<VirtualCubeDimension name="Primary Sector" foreignKey="amp_activity_id"/>
 		<VirtualCubeDimension name="Activity" foreignKey="amp_activity_id" />
 		<VirtualCubeDimension name="Donor Dates" foreignKey="amp_fund_detail_id" />
 		<VirtualCubeDimension name="Regions" foreignKey="amp_activity_id"/> 
@@ -243,10 +232,12 @@
 		<VirtualCubeDimension name="Status" foreignKey="amp_activity_id"/>
 		<VirtualCubeDimension name="Financing Instrument" cubeName="Donor Funding" />
 		<VirtualCubeDimension name="Terms of Assistance" cubeName="Donor Funding" />
-		<VirtualCubeDimension name="Donor" cubeName="Donor Funding" />
-		<VirtualCubeDimension name="Donor Types" cubeName="Donor Funding" />
+		<VirtualCubeDimension name="Donor" cubeName="Donor Funding"/>
+		<VirtualCubeDimension name="Donor Types" cubeName="Donor Funding"/>
 		<VirtualCubeDimension name="Donor Group" cubeName="Donor Funding" />
-		<VirtualCubeMeasure cubeName="Sectors" name="[Measures].[Sector Percentage]" />
+		<VirtualCubeDimension name="Primary Sector" cubeName="Sectors"/>
+		
+		<VirtualCubeMeasure cubeName="Sectors" name="[Measures].[Sector Percentage]"/>
 		<VirtualCubeMeasure cubeName="Sectors" name="[Measures].[Sector Actual Commitments]" visible="false" />
 		<VirtualCubeMeasure cubeName="Sectors" name="[Measures].[Sector Actual Disbursements]" visible="false" />
 		<VirtualCubeMeasure cubeName="Sectors" name="[Measures].[Sector Actual Expenditures]" visible="false" />

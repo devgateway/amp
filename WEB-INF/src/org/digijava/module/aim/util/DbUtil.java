@@ -6025,7 +6025,7 @@ public class DbUtil {
                         if (indcFlag == 5) {
                             //calculating percentage for second-last column here
                             sum = allDnRow[NUM_ANSWER_COLUMNS - 7].add( allDnRow[NUM_ANSWER_COLUMNS - 6]).add( allDnRow[NUM_ANSWER_COLUMNS - 5]);
-                            if (allDnRow[NUM_ANSWER_COLUMNS - 3] == new BigDecimal(0.0))
+                            if (allDnRow[NUM_ANSWER_COLUMNS - 3].doubleValue() == 0)
                                 allDnRow[NUM_ANSWER_COLUMNS - 2] = new BigDecimal(-1.0);
                             else {
                                 sum =sum.divide(new BigDecimal(3), RoundingMode.HALF_UP) ;
@@ -6034,9 +6034,9 @@ public class DbUtil {
                             }
                         }
                         // calculating final percentage here
-                        if ( (indcFlag == 5 || indcFlag == 7) && allDnRow[NUM_ANSWER_COLUMNS - 3] ==new BigDecimal( 0.0))
+                        if ( (indcFlag == 5 || indcFlag == 7) && allDnRow[NUM_ANSWER_COLUMNS - 3].doubleValue() == 0)
                             allDnRow[NUM_ANSWER_COLUMNS - 1] = new BigDecimal(-1.0);
-                        else if ( (indcFlag == 0 || indcFlag == 9) && allDnRow[NUM_ANSWER_COLUMNS - 2] == new BigDecimal(0.0))
+                        else if ( (indcFlag == 0 || indcFlag == 9) && allDnRow[NUM_ANSWER_COLUMNS - 2].doubleValue() == 0)
                             allDnRow[NUM_ANSWER_COLUMNS - 1] = new BigDecimal(-1.0);
                         else {
                             try {

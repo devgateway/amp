@@ -822,14 +822,14 @@ function toggleSettings(){
 																					<c:if test="${rowVal > -1}">
 																						<c:if test="${ansIndex == 3}">
 																							<c:if test="${secondVal != 0}">
-                                                                                                <fmt:formatNumber type="number" value="${firstVal/secondVal*100}" maxFractionDigits="0"/>%
+                                                                                                <fmt:formatNumber type="number" value="${firstVal*100/secondVal}" maxFractionDigits="0"/>%
                                                                                             </c:if>
                                                                                             <c:if test="${secondVal == 0}">n.a.</c:if>
 																						</c:if>
 																						<c:if test="${ansIndex != 3}">
                                                                                             <c:if test="${aimParisIndicatorReportForm.indicatorCode == '9'}">
                                                                                                  <c:if test="${thirdVal != 0}">
-                                                                                                     <fmt:formatNumber type="number" value="${secondVal/thirdVal*100}" maxFractionDigits="0" />%
+                                                                                                     <fmt:formatNumber type="number" value="${secondVal*100/thirdVal}" maxFractionDigits="0" />%
                                                                                                  </c:if>
                                                                                                  <c:if test="${thirdVal == 0}">n.a.</c:if>
                                                                                             </c:if>

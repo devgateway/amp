@@ -151,7 +151,7 @@
              <digi:trn>Select Sector</digi:trn>:
         </td>
 		<td>
-			<select id="sectorsMapCombo" onChange="sectorSelected(this)" style="width:350px">
+			<select id="sectorsMapCombo" onChange="sectorSelected(this.value)" style="width:350px">
 			<option value="-1">Select sector</option>
 			<logic:iterate name="gisDashboardForm" property="sectorCollection" id="sec">
 				<option value="<bean:write name="sec" property="ampSectorId"/>"><bean:write name="sec" property="name"/></option>

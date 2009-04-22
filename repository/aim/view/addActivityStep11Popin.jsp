@@ -202,7 +202,7 @@
 		panelStart=1;
 	
 	}
-	function close() {
+	function closeCosting() {
 		myclose();
 	}
 	function showPanelLoading(msg){
@@ -238,7 +238,7 @@
 	{
 		if(editBox.value=='Amount') editBox.value='';
 	}	
-	function addFields(){
+	function addContributors(){
 		<digi:context name="addEUActivity" property="context/module/moduleinstance/editEUActivity.do" />
 		var url = "<%=addEUActivity %>?addFields=true&edit=true"
 		url+=getParamsActivity()+getSelectedCont();
@@ -246,15 +246,36 @@
 		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
 		
 	}	
-	function removeFields(){
-		<digi:context name="addEUActivity" property="context/module/moduleinstance/editEUActivity.do" />
-		var url = "<%=addEUActivity %>?removeFields=true&edit=true"
-		url+=getParamsActivity()+getSelectedCont2();
-		
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+	function removeContributors(){
+		if(checkSelectedCont()){
+			<digi:context name="addEUActivity" property="context/module/moduleinstance/editEUActivity.do" />
+			var url = "<%=addEUActivity %>?removeFields=true&edit=true"
+			url+=getParamsActivity()+getSelectedCont2();
+			
+			YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+		}
+		else{
+			<c:set var="translation">
+				<digi:trn>Select a Contributor to remove</digi:trn>
+			</c:set>
+			alert('${translation}');
+		}
+	}
+	function checkSelectedCont(){
+		if(document.getElementsByName("deleteContrib")!=null){
+			var items = document.getElementsByName("deleteContrib").length;
+			for(var i=0; i< items; i++){
+				if(document.getElementsByName("deleteContrib")[i].checked){
+					return true;
+				}
+			}
+			return false;
+		}
+		else{
+			return false;
+		}
 		
 	}
-	
 	function getSelectedCont2(){
 		var ret="";
 		if(document.getElementsByName("deleteContrib")!=null){
@@ -308,15 +329,93 @@
 			"&dueDate="+document.getElementsByName('dueDate')[0].value;
 		return ret;
 	}
-	function mysave(){
-		<digi:context name="addEUActivity" property="context/module/moduleinstance/editEUActivity.do" />
-		var url = "<%=addEUActivity %>?save=true&edit=true"
-		url+=getParamsActivity()+getSelectedCont();
-		checkAndClose=true;
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
-		
+	function saveCosting(){
+		if(checkFields()){
+			<digi:context name="addEUActivity" property="context/module/moduleinstance/editEUActivity.do" />
+			var url = "<%=addEUActivity %>?save=true&edit=true"
+			url+=getParamsActivity()+getSelectedCont();
+			checkAndClose=true;
+			YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+		}
 	}
-	
+	function checkFields(){
+		if(document.getElementsByName("name")[0].value<=0){
+			<c:set var="translation">
+				<digi:trn>Enter a valid Activity Name</digi:trn>
+			</c:set>
+			alert('${translation}');
+			return false;
+		}
+		if(document.getElementsByName("totalCost")[0].value<=0){
+			<c:set var="translation">
+				<digi:trn>Enter a valid Total Cost</digi:trn>
+			</c:set>
+			alert('${translation}');
+			return false;
+		}
+		if(document.getElementsByName("totalCostCurrencyId")[0].value==-1){
+			<c:set var="translation">
+				<digi:trn>Enter a valid Currency for Total Cost</digi:trn>
+			</c:set>
+			alert('${translation}');		
+			return false;
+		}
+		if(document.getElementsByName("deleteContrib")!=null){
+			var items = document.getElementsByName("deleteContrib").length;
+			for(var i=0; i< items; i++){
+				if(document.getElementsByName("contrAmount")[i].value<=0){
+					<c:set var="translation">
+						<digi:trn>Enter a valid Amount</digi:trn>
+					</c:set>
+					alert('${translation}');
+					return false;
+				}
+				if(document.getElementsByName("contrCurrId")[i].value==-1){
+					<c:set var="translation">
+						<digi:trn>Select a Currency</digi:trn>
+					</c:set>
+					alert('${translation}');
+					return false;					
+				}
+				if(document.getElementsByName("contrFinTypeId["+i+"]")[0].value==0){
+					<c:set var="translation">
+						<digi:trn>Select Type of Assistance</digi:trn>
+					</c:set>
+					alert('${translation}');
+					return false
+				}
+				if(document.getElementsByName("contrDonorName")[i].value==""){
+					<c:set var="translation">
+						<digi:trn>Select a Donor</digi:trn>
+					</c:set>
+					alert('${translation}');
+					return false;
+				}
+				if(document.getElementsByName("contrFinInstrId["+i+"]")[0].value==0){
+					<c:set var="translation">
+						<digi:trn>Select a Financing Instrument</digi:trn>
+					</c:set>
+					alert('${translation}');
+					return false;
+				}
+			}
+		} else {
+			<c:set var="translation">
+				<digi:trn>Please add a contributor</digi:trn>
+			</c:set>
+			alert('${translation}');
+			return false;
+		}
+		if(document.getElementsByName("dueDate")[0].value==""){
+			<c:set var="translation">
+				<digi:trn>Enter a valid Due Date</digi:trn>
+			</c:set>
+			alert('${translation}');
+			return false;
+		}
+		
+		return true;		
+	}
 	var responseSuccess2 = function(o){
 		/* Please see the Success Case section for more
 		 * details on the response object's properties.

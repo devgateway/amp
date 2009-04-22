@@ -84,7 +84,7 @@ function selectOrganisation1() {
 <digi:trn key="aim:addEditActivity">Add/Edit Activity</digi:trn>
 </td></tr>
 	<tr>
-		<td align="right">
+		<td align="right"><font color="red">*</font>
 		<b><digi:trn key="aim:addEditActivityName">Activity name:</digi:trn></b>
 		</td>		
 		<td>
@@ -199,11 +199,11 @@ function selectOrganisation1() {
              	<c:set var="translation">
                    	<digi:trn key="aim:addEditActivityAddContribution">Add Contribution</digi:trn>
                 </c:set>				
-				<input type="Button" value="${translation}" class="dr-menu" onclick="addFields();">
+				<input type="Button" value="${translation}" class="dr-menu" onclick="addContributors();">
              	<c:set var="translation">
                    	<digi:trn key="aim:addEditActivityDeleteSelected">Delete Selected</digi:trn>
                 </c:set>
-				<input type="Button" value="${translation}" class="dr-menu" onclick="removeFields();">
+				<input type="Button" value="${translation}" class="dr-menu" onclick="removeContributors();">
 		</td></tr>
 	
 	
@@ -245,7 +245,7 @@ function selectOrganisation1() {
 			<digi:trn key="aim:addEditActivitySave">Save</digi:trn>
 		</c:set>
 	
-		<input type="Button" value="${translation}" class="dr-menu" onclick="mysave();">
+		<input type="Button" value="${translation}" class="dr-menu" onclick="saveCosting();">
 
 		
 		&nbsp;&nbsp;
@@ -253,7 +253,7 @@ function selectOrganisation1() {
 			<digi:trn key="aim:addEditActivitySlose">Close</digi:trn>
 		</c:set>
 	
-		<input type="Button" value="${translation}" class="dr-menu" onclick="myclose();">
+		<input type="Button" value="${translation}" class="dr-menu" onclick="closeCosting();">
 		
 		</td>
 		

@@ -804,6 +804,7 @@ public class GetFoundingDetails extends Action {
                 while (locIt.hasNext()) {
                     AmpActivityLocation loc = locIt.next();
 
+
                     //Region level
                     //if (loc.getLocation().getAmpRegion() != null && loc.getLocation().getZone()==null && loc.getLocationPercentage().floatValue() > 0.0f) {
 

@@ -66,7 +66,11 @@ public class EditSurveyList extends Action {
         } else {
         	//This is a new activity not saved yet.
         	//If the activity has fundings then a survey can be taken.
-        	if(svForm.getFunding().getFundingOrganizations().size() > 0 && svForm.getFunding().getFundingDetails().size() > 0) {
+        	if(svForm.getFunding() != null 
+        			&& svForm.getFunding().getFundingOrganizations()!= null 
+        			&& svForm.getFunding().getFundingOrganizations().size() > 0 
+        			&& svForm.getFunding().getFundingDetails() != null
+        			&& svForm.getFunding().getFundingDetails().size() > 0) {
         		Iterator<FundingOrganization> iterOrgFundings = svForm.getFunding().getFundingOrganizations().iterator();
         		int tempID = 0;
         		while (iterOrgFundings.hasNext()) {

@@ -596,7 +596,7 @@
 	
 	
 	function mapYearChanged(){
-		sectorSelected(document.getElementById('sectorsMapCombo'));
+		sectorSelected(document.getElementById('sectorsMapCombo').value);
 	}
 	
 	function getComboSelectedText(obj) {

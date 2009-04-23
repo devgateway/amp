@@ -696,7 +696,7 @@ public class ChartWidgetUtil {
 			toDate =new Date(getStartOfYear(toYear.intValue()+1,calendar.getStartMonthNum()-1,calendar.getStartDayNum()).getTime()-MILLISECONDS_IN_DAY);
 		}		
         Double[] allFundingWrapper={new Double(0)};// to hold whole funding value
-		Collection<DonorSectorFundingHelper> fundings=getDonorSectorFunding(donors, fromDate, toDate,allFundingWrapper);
+		Collection<DonorSectorFundingHelper> fundings=getDonorSectorFunding(donors, fromDate, toDate,allFundingWrapper,null);
 		if (fundings!=null){
             double otherFunfing=0;
 			for (DonorSectorFundingHelper funding : fundings) {
@@ -731,7 +731,7 @@ public class ChartWidgetUtil {
 	 * @return
 	 * @throws DgException
 	 */
-	public static Collection<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[],Date fromDate, Date toDate,Double[] wholeFunding) throws DgException {
+	public static Collection<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[],Date fromDate, Date toDate,Double[] wholeFunding,Long sectorIds[]) throws DgException {
     	Collection<DonorSectorFundingHelper> fundings=null;  
 		String oql ="select f.ampDonorOrgId, actSec.sectorId, "+
                         " actSec.sectorPercentage, act.ampActivityId,  sum(fd.transactionAmountInUSD)";
@@ -752,7 +752,10 @@ public class ChartWidgetUtil {
 		if (fromDate != null && toDate != null) {
 			oql += " and (fd.transactionDate between :fDate and  :eDate ) ";
 		}
-                oql +=" and config.name='Primary' and act.team is not null ";
+        if (sectorIds!=null) {
+			oql += " and actSec.sectorId in ("+ getInStatment(sectorIds) + ") ";
+		}
+        oql +=" and config.name='Primary' and act.team is not null ";
 		oql += " group by f.ampDonorOrgId, actSec.sectorId,  fd.ampCurrencyId";
 		oql += " order by f.ampDonorOrgId, actSec.sectorId";
 

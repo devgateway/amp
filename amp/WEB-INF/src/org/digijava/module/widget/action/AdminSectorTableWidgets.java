@@ -155,6 +155,7 @@ public class AdminSectorTableWidgets extends DispatchAction {
 
         } else {
             secTableWidget = SectorTableWidgetUtil.getAmpSectorTableWidget(tablesForm.getSectorTableId());
+            oldPlaces = WidgetUtil.getWidgetPlaces(tablesForm.getSectorTableId());
             isNew=false;
         }
         if (secTableWidget.getPercentYears() == null) {

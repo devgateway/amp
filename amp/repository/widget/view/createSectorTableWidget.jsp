@@ -19,13 +19,23 @@
         myAddSectors("");
     }
 
-           function addSector(param){
+    function addSector(param){
        <digi:context name="addSec" property="context/widget/sectorTableManager.do~actType=selectSector" />
                document.sectorTableWidgetForm.action = "${addSec}";
                document.sectorTableWidgetForm.target = "_self";
                document.sectorTableWidgetForm.submit();
            }
            function validate(){
+               var selSectors=document.sectorTableWidgetForm.selectedSectors
+               if(typeof selSectors=='undefined'||selSectors.length==0){
+                   alert("Please add at least one sector");
+                   return false;
+               }
+               if(document.sectorTableWidgetForm.name.value==''){
+                   alert("Please enter the name");
+                   return false;
+               }
+             
                save();
            }
 
@@ -52,23 +62,23 @@
                        document.sectorTableWidgetForm.action = "${addEditSectorTable}";
                        document.sectorTableWidgetForm.target = "_self";
                        document.sectorTableWidgetForm.submit();
-          
+
                    }
 
-         function moveUp(sectorId){
+                   function moveUp(sectorId){
          <digi:context name="addEditSectorTable" property="context/widget/sectorTableManager.do~actType=reorderUp" />
-             document.sectorTableWidgetForm.action = "${addEditSectorTable}&sectorToReorderId="+sectorId;
-             document.sectorTableWidgetForm.target = "_self";
-             document.sectorTableWidgetForm.submit();
+                 document.sectorTableWidgetForm.action = "${addEditSectorTable}&sectorToReorderId="+sectorId;
+                 document.sectorTableWidgetForm.target = "_self";
+                 document.sectorTableWidgetForm.submit();
 
-         }
-         function moveDown(sectorId){
+             }
+             function moveDown(sectorId){
          <digi:context name="addEditSectorTable" property="context/widget/sectorTableManager.do~actType=reorderDown" />
-             document.sectorTableWidgetForm.action = "${addEditSectorTable}&sectorToReorderId="+sectorId;
-             document.sectorTableWidgetForm.target = "_self";
-             document.sectorTableWidgetForm.submit();
-         }
-                   //-->
+                 document.sectorTableWidgetForm.action = "${addEditSectorTable}&sectorToReorderId="+sectorId;
+                 document.sectorTableWidgetForm.target = "_self";
+                 document.sectorTableWidgetForm.submit();
+             }
+             //-->
 </script>
 
 <digi:instance property="sectorTableWidgetForm" />
@@ -150,7 +160,7 @@
 
                                             </td>
                                             <td>
-                                              <c:if test="${status.last != true}">
+                                                <c:if test="${status.last != true}">
                                                     <a href="javascript:moveDown(${sector.sector.ampSectorId})"><img border="0" src='<digi:file src="images/down.gif"/>'></a>
                                                 </c:if>
                                             </td>

@@ -355,13 +355,13 @@ public class ParisIndicatorReport extends Action {
             }
         	ParisIndicator donor = (ParisIndicator) donorCol.get(0);
             ArrayList answ1 = donor.getAnswers();
-            double ans1[] = (double[]) answ1.get(0);
+            BigDecimal[] ans1 = (BigDecimal[]) answ1.get(0);
             if (ans1 != null) {
                 String formula = null;
                 if (lastColumn) {
-                    formula = getFormulaText(fl, ans1[ans1.length - 1]);
+                    formula = getFormulaText(fl, ans1[ans1.length - 1].doubleValue());
                 } else {
-                    formula = getFormulaText(fl, ans1[0]);
+                    formula = getFormulaText(fl, ans1[0].doubleValue());
                 }
 
                 return String.valueOf(AmpMath.calcExp(formula));

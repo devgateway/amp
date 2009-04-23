@@ -362,6 +362,19 @@
                             </td>
                           </tr>
                           </feature:display>
+                           <feature:display  name="Sector Table Widgets" module="WIDGETS">
+                          <tr>
+                            <td class="f-names" nowrap="nowrap">
+                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+                              <c:set var="translation">
+                                <digi:trn>Click here to view Sector Table Widgets Manager</digi:trn>
+                              </c:set>
+                            <digi:link module="widget" href="/sectorTableManager.do" title="${translation}">
+                                  <digi:trn>Sector Table Widget</digi:trn>
+                              </digi:link>
+                            </td>
+                          </tr>
+                          </feature:display>
                           <feature:display  name="Org Profile Widgets" module="WIDGETS">
                           <tr>
                             <td class="f-names" nowrap="nowrap">

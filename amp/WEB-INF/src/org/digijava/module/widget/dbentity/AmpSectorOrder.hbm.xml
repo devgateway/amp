@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.widget.dbentity.AmpSectorOrder" table="AMP_WIDGET_SECTOR_ORDER"
+		discriminator-value="secOrd">
+		<cache usage="read-write" />
+		<id column="ID" name="id" type="java.lang.Long" unsaved-value="null">
+			<generator class="native">
+				<param name="sequence">AMP_WIDGET_SECTOR_ORDER_seq</param>
+			</generator>
+		</id>
+        <property name="order" column="order_number" type="int" />
+		<many-to-one name="widget" column="sector_widget_table_id"
+			class="org.digijava.module.widget.dbentity.AmpSectorTableWidget" cascade="none" />
+        <many-to-one name="sector" column="sector_id"
+			class="org.digijava.module.aim.dbentity.AmpSector" cascade="none" />
+	</class>
+</hibernate-mapping>

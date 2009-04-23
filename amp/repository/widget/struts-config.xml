@@ -13,6 +13,8 @@
 	  <form-bean name="gisSectorByDonorTeaserForm" type="org.digijava.module.widget.form.SectorByDonorTeaserForm"/>
 	  <form-bean name="gisIndicatorSectorRegionForm" type="org.digijava.module.widget.form.IndicatorSectorRegionForm" />
           <form-bean name="widgetOrgProfileWidgetForm" type="org.digijava.module.widget.form.OrgProfileWidgetForm" />
+       <form-bean name="sectorTableWidgetForm" type="org.digijava.module.widget.form.AdminSectorTableWidgetForm" />
+       <form-bean name="showSectorTableForm" type="org.digijava.module.widget.form.ShowSectorTableForm" />
 	</form-beans>
 	
 	<global-forwards>
@@ -79,6 +81,15 @@
 		<action name="gisTableWidgetRenderForm" scope="request"  
 			path="/widget/getTableWidget" 
 			type="org.digijava.module.widget.action.RenderTableWidget"/>
+
+       <action name="sectorTableWidgetForm" path="/widget/sectorTableManager" scope="session" type="org.digijava.module.widget.action.AdminSectorTableWidgets" validate="false" parameter="actType">
+	      <forward name="forward" path="/showLayout.do?layout=widget_sectorTableManager" />
+          <forward name="create" path="/showLayout.do?layout=widget_createSectorTable" />
+    	</action>
+
+        <action name="showSectorTableForm" path="/widget/showSectorTable" scope="request" type="org.digijava.module.widget.action.ShowSectorTable" validate="false">
+	      <forward name="forward" path="/showLayout.do?layout=widget_showSectorTable" />
+    	</action>
 		
 		<!-- Teasers below this -->
 		<action name="gisWidgetTeaserForm" path="/widget/widgetTeaser" type="org.digijava.module.widget.action.WidgetTeaser"/>

@@ -23,6 +23,9 @@
                 <page page="addEditValue" name="gis_addEditValue" title="Add/Edit Value"/>
                 <page page="orgProfileWidgetManager" name="widget_orgProfileManager" title=" Org Profile Manager"/>
                 <page page="createOrgProfile" name="widget_orgProfileCreate" title=" Create/Update Org Profile"/>
+        <page page="sectorTableWidgetAdmin" name="widget_sectorTableManager" title="Sector Table Manager"/>
+        <page page="createSectorTableWidget" name="widget_createSectorTable" title="Create Sector Table"/>
+        <page page="showSectorTable" name="widget_showSectorTable" title="Show Sector Table"/>
                 
 		
 	</secondary-pages>

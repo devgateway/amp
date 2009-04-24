@@ -337,7 +337,7 @@ public class TranslatorManager extends Action {
 	
 	private void updateNonExistingTranslationMessage(Message msgLocal, String lang,HttpServletRequest request){
 		CachedTranslatorWorker trnWorker=(CachedTranslatorWorker)TranslatorWorker.getInstance("");
-		String siteId = RequestUtils.getSite(request).getId().toString();
+		Long siteId = RequestUtils.getSite(request).getId();
 		try {
 			Message dbMessage=trnWorker.getByKey(msgLocal.getKey(), lang, siteId,false,null);
 			if(dbMessage==null){
@@ -352,7 +352,7 @@ public class TranslatorManager extends Action {
 	
 	private void overrideOrUpdateTrns(Message msgLocal,String lang,String actionName,List<String>keyWords,String skipOrUpdateTrnsWithKeywords,HttpServletRequest request) throws Exception{
 		CachedTranslatorWorker trnWorker=(CachedTranslatorWorker)TranslatorWorker.getInstance("");
-		String siteId = RequestUtils.getSite(request).getId().toString();
+		Long siteId = RequestUtils.getSite(request).getId();
 		//get message from cache,if exists.
 		Message dbMessage=trnWorker.getByKey(msgLocal.getKey(), lang, siteId,false,null);
 		if(dbMessage!=null){

@@ -91,7 +91,7 @@ public class UpdateMessage
                     msg = new Message();
 
                     msg.setKey(decodedKey);
-                    msg.setSiteId(formBean.getSiteId().toString());
+                    msg.setSiteId(formBean.getSiteId());
                     msg.setLocale(formBean.getSelectedLangTarget().trim());
                 }
 

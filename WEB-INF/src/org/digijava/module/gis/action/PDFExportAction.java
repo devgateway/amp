@@ -102,7 +102,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 	private Long[] tableId = null;
 	private Long[] columnId = null;
 	private Long[] itemId = null;
-	private String siteId;
+	private Long siteId;
 
 	public PDFExportAction(HttpSession session, String locale, Site site, HttpServletResponse response) {
 		this.session = session;
@@ -121,7 +121,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		this.site = RequestUtils.getSite(request);
 		this.navigationLanguage = RequestUtils.getNavigationLanguage(request);
 
-		this.siteId = site.getSiteId();
+		this.siteId = site.getId();
 		this.locale = navigationLanguage.getCode();
 
 		HttpSession session = request.getSession();
@@ -1357,7 +1357,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		opt.setShowLabels(showLabels);
 		opt.setHeight(new Integer(660));
 		opt.setWidth(new Integer(420));
-		String sitId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
+		Long sitId = RequestUtils.getSiteDomain(request).getSite().getId();
 		opt.setSiteId(sitId);
 		String langCode = RequestUtils.getNavigationLanguage(request).getCode();
 		opt.setLangCode(langCode);

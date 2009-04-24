@@ -215,7 +215,7 @@ public class UpdateAppSettings extends Action {
 					ActionErrors errors = new ActionErrors();
 					Site site = RequestUtils.getSite(request);
 	        		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-	        		String siteId = site.getId()+"";
+	        		Long siteId = site.getId();
 	        		String locale = navigationLanguage.getCode();
 	        		errors.add("title", new ActionError("error.aim.addActivity.wrongNrActsPerPage", TranslatorWorker.translateText("Please enter the title",locale,siteId)));
 	        		if (errors.size() > 0)

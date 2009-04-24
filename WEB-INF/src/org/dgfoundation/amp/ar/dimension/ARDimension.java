@@ -79,7 +79,7 @@ public abstract class ARDimension {
 	String translatedTextUnallocated = null;
 	//String prefix = "aim:reportGenerator:"; not used, trn hash keys used.
 	try {
-		translatedTextUnallocated = TranslatorWorker.translateText(text, locale, siteId);
+		translatedTextUnallocated = TranslatorWorker.translateText(text, locale, new Long(siteId));
 	} catch (WorkerException e) {
 		e.printStackTrace();
 	}

@@ -68,7 +68,7 @@ public class TrailCellsPDF extends PDFExporter {
 			//requirements for translation purposes
 			//this is the translation part for the rep:pop:totalsfor and the rep:pop:($donorName} part
 			TranslatorWorker translator=TranslatorWorker.getInstance();
-			String siteId=parent.getReportMetadata().getSiteId();
+			Long siteId=new Long (parent.getReportMetadata().getSiteId());
 			String locale=parent.getReportMetadata().getLocale();
 			String totalsFor="Totals For";
 			String translatedName=grd.getName();

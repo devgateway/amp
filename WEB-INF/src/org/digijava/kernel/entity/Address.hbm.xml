@@ -5,7 +5,7 @@
 		proxy="org.digijava.kernel.entity.Address">
 		<id column="ADDRESS_ID" name="addressId" type="java.lang.Long">
 			<generator class="native">
-				<param name="sequence">ep_addresses_id_seq</param>
+				<param name="sequence">ep_addresses_seq</param>
 			</generator>
 		</id>
 		<!--property column="AGENCY_ID" length="22" name="agencyId" type="java.lang.Long"//-->

@@ -28,14 +28,14 @@ public class ValueBean implements Serializable {
 	private String keyId;
 	private String source;
 	private String target;
-	private String targetSiteId;
-	private String sourceSiteId;
+	private Long targetSiteId;
+	private Long sourceSiteId;
 	boolean needsUpdate = false;
 
 	public ValueBean() {
 
 	}
-	public ValueBean(String key,String message_source,String message_target,String sourceSiteId,String targetSiteId,boolean update) {
+	public ValueBean(String key,String message_source,String message_target,Long sourceSiteId,Long targetSiteId,boolean update) {
 		this.keyId = key;
 		this.source = message_source;
 		this.target = message_target;
@@ -67,28 +67,18 @@ public class ValueBean implements Serializable {
 	public void setTarget(String message_target) {
 		this.target = message_target;
 	}
-
-	public void setTargetSiteId(String siteId) {
-		this.targetSiteId = siteId;
+	public Long getTargetSiteId() {
+		return targetSiteId;
+	}
+	public void setTargetSiteId(Long targetSiteId) {
+		this.targetSiteId = targetSiteId;
+	}
+	public Long getSourceSiteId() {
+		return sourceSiteId;
+	}
+	public void setSourceSiteId(Long sourceSiteId) {
+		this.sourceSiteId = sourceSiteId;
 	}
 
-	public String getTargetSiteId() {
-		return this.targetSiteId;
-	}
-	public void setSourceSiteId(String siteId) {
-		this.sourceSiteId = siteId;
-	}
-
-	public String getSourceSiteId() {
-		return this.sourceSiteId;
-	}
-	public boolean isNeedsUpdate() {
-			return this.needsUpdate;
-	}
-
-	public void setNeedsUpdate(boolean b) {
-			needsUpdate = b;
-	}
-
-
+	
 }

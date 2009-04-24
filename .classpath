@@ -95,7 +95,6 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/poi-3.0.2-FINAL-20080204.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/poi-contrib-3.0.2-FINAL-20080204.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/poi-scratchpad-3.0.2-FINAL-20080204.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/quartz-1.6.0.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/relaxngDatatype.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/retroweaver-rt.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/rowset.jar"/>
@@ -147,5 +146,8 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/logdigger-0.4.0.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jboss/jboss-common-jdbc-wrapper.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jboss/jboss-j2ee.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/ezmorph-1.0.6.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/json-lib-2.2.3-jdk15.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/quartz-1.6.5.jar"/>
 	<classpathentry kind="output" path="WEB-INF/classes"/>
 </classpath>

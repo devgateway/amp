@@ -136,7 +136,7 @@ public class RegisterUser extends Action {
 				
 
 				TranslatorWorker transwob = new TranslatorWorker();
-				String siteId = RequestUtils.getSite(request).getId().toString();
+				Long siteId = RequestUtils.getSite(request).getId();
 				String langCode= RequestUtils.getNavigationLanguage(request).getCode();
 				try { 
 				des1 = transwob.translateText(des1, null, langCode, siteId);

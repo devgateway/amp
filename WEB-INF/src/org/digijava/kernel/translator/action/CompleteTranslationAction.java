@@ -100,19 +100,19 @@ public class CompleteTranslationAction extends DispatchAction
 			if(request.getParameter("expired") != null && request.getParameter("expired").equals("on")){
 				if( source.getMessage() != null && time<0 ){
 					if(target.getMessage() == null){
-						message.add(new ValueBean(source.getKey(),source.getMessage(),"","","",tb.isNeedsUpdate()));
+						message.add(new ValueBean(source.getKey(),source.getMessage(),"",null,null,tb.isNeedsUpdate()));
 					}else{
-						message.add(new ValueBean(source.getKey(),source.getMessage(),target.getMessage(),"","",tb.isNeedsUpdate()));
+						message.add(new ValueBean(source.getKey(),source.getMessage(),target.getMessage(),null,null,tb.isNeedsUpdate()));
 					}
 				}
 			}else{
-				String targetSiteId = target.getSiteId();
-				String sourceSiteId = source.getSiteId();
+				Long targetSiteId = target.getSiteId();
+				Long sourceSiteId = source.getSiteId();
 				if(targetSiteId == null){
-					targetSiteId="";
+					targetSiteId=null;
 				}
 				if(sourceSiteId == null){
-					sourceSiteId="";
+					sourceSiteId=null;
 				}
 				if((source.getMessage()!=null)&&((time>=0)||(source.getCreated()==null))){
 					if(target.getMessage() == null){
@@ -163,8 +163,8 @@ public class CompleteTranslationAction extends DispatchAction
 				param,
 				null);
 		}
-		String siteId = getSiteId(request);
-		String rootSiteId = getRootSiteId(request);
+		Long siteId = getSiteId(request);
+		Long rootSiteId = getRootSiteId(request);
 
 		String search = request.getParameter("search");
 		request.setAttribute("search",search);
@@ -269,8 +269,8 @@ public class CompleteTranslationAction extends DispatchAction
 				param,
 				null);
 		}
-		String siteId = getSiteId(request);
-		String rootSiteId = getRootSiteId(request);
+		Long siteId = getSiteId(request);
+		Long rootSiteId = getRootSiteId(request);
 
 		String search = request.getParameter("search");
 		request.setAttribute("search",search);
@@ -617,8 +617,8 @@ public class CompleteTranslationAction extends DispatchAction
 				null);
 		}
 		List message = new ArrayList();
-		String siteId = getSiteId(request);
-		String rootSiteId = getRootSiteId(request);
+		Long siteId = getSiteId(request);
+		Long rootSiteId = getRootSiteId(request);
 
 		//setup languages to be shown selected
 		if(request.getParameter("radio_locale1") == null || request.getParameter("radio_locale1").equals("")){
@@ -683,28 +683,28 @@ public class CompleteTranslationAction extends DispatchAction
 	}
 
 
-	private String getSiteId(HttpServletRequest request){
+	private Long getSiteId(HttpServletRequest request){
 
 		if((request.getRequestURL()).indexOf("complete")>0){
 
-			return RequestUtils.getSiteDomain(request).getSite().getId().toString();
+			return RequestUtils.getSiteDomain(request).getSite().getId();
 
 		}else{
 
-			return "0";
+			return new Long(0);
 			}
 
 
 	}
-	private String getRootSiteId(HttpServletRequest request){
+	private Long getRootSiteId(HttpServletRequest request){
 
 		if((request.getRequestURL()).indexOf("complete")>0){
 
-			return DgUtil.getRootSite(RequestUtils.getSiteDomain(request).getSite()).getId().toString();
+			return DgUtil.getRootSite(RequestUtils.getSiteDomain(request).getSite()).getId();
 
 		}else{
 
-			return "0";
+			return new Long(0);
 			}
 
 
@@ -730,8 +730,8 @@ public class CompleteTranslationAction extends DispatchAction
 				param,
 				null);
 		}
-		String siteId = getSiteId(request);
-		String rootSiteId = getRootSiteId(request);
+		Long siteId = getSiteId(request);
+		Long rootSiteId = getRootSiteId(request);
 
 		if(request.getParameter("radio_locale1") == null || request.getParameter("radio_locale1").equals("")){
 			request.setAttribute("radio_locale1","en");
@@ -809,14 +809,14 @@ public class CompleteTranslationAction extends DispatchAction
 					}
 
 					if((source.getMessage()!=null)&&((time>=0)||(source.getCreated()==null))){
-						String targetSiteId = target.getSiteId();
-						String sourceSiteId = source.getSiteId();
+						Long targetSiteId = target.getSiteId();
+						Long sourceSiteId = source.getSiteId();
 
 						if(sourceSiteId == null){
-							sourceSiteId="";
+							sourceSiteId=null;
 						}
 						if(targetSiteId == null){
-							targetSiteId="";
+							targetSiteId=null;
 						}
 
 						if(target.getMessage() == null){
@@ -859,7 +859,7 @@ public class CompleteTranslationAction extends DispatchAction
 	 * @param siteId
 	 * @throws WorkerException
 	 */
-	private void updateMsg(HttpServletRequest request, String key,String strMessage, Locale locale, String siteId)
+	private void updateMsg(HttpServletRequest request, String key,String strMessage, Locale locale, Long siteId)
 		throws WorkerException {
 
 		if (logger.isDebugEnabled()) {

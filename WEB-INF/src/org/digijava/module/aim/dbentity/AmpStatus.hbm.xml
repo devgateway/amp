@@ -4,7 +4,7 @@
 	<class name="org.digijava.module.aim.dbentity.AmpStatus" table="AMP_STATUS">
 		<id name="ampStatusId" column="amp_status_id" type="java.lang.Long">
 			<generator class="native">
-				<param name="sequence">AMP_ACTIVITY_seq</param>
+				<param name="sequence">AMP_STATUS_seq</param>
 			</generator>
 		</id>
 		<property column="status_code" name="statusCode" type="java.lang.String" />

@@ -425,14 +425,14 @@ public class TrnUtil {
                   Message trnMess = null;
                   if (site != null) {
                     trnMess = trnWork.getByBody(defTrans, locale.getCode(),
-                                          String.valueOf(site.getId()));
+                                         site.getId());
                     if (trnMess == null && groupTranslation && site.getParentId() != null) {
                       Site root = SiteCache.getInstance().getRootSite(site);
                       trnMess = trnWork.getByBody(defTrans, locale.getCode(),
-                                            String.valueOf(root.getId()));
+                                            root.getId());
                     }
                   } else {
-                    trnMess = trnWork.getByBody(defTrans, locale.getCode(), "0");
+                    trnMess = trnWork.getByBody(defTrans, locale.getCode(), new Long(0));
                   }
                     if (trnMess == null) {
                         trnString = defTrans;

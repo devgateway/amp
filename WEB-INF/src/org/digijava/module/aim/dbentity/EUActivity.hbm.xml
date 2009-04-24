@@ -5,7 +5,7 @@
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long" unsaved-value="null">
 			<generator class="native">
-				<param name="sequence">EU_ACTIVITY_seq</param>
+				<param name="sequence">AMP_EU_ACTIVITY_seq</param>
 			</generator>
 		</id>
 		<property name="name" column="name" type="java.lang.String" />

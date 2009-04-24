@@ -67,10 +67,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPhysicalComponentReport;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
-import org.digijava.module.aim.dbentity.AmpReportCache;
 import org.digijava.module.aim.dbentity.AmpReportLocation;
-import org.digijava.module.aim.dbentity.AmpReportPhysicalPerformance;
-import org.digijava.module.aim.dbentity.AmpReportSector;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -3284,10 +3281,10 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     //Section moved here from ActivityManager.java because it didn't worked there.
 	ActivityUtil.deleteActivityAmpComments(DbUtil.getActivityAmpComments(ampActId), session);
 	ActivityUtil.deleteActivityPhysicalComponentReport(DbUtil.getActivityPhysicalComponentReport(ampActId), session);
-	ActivityUtil.deleteActivityAmpReportCache(DbUtil.getActivityReportCache(ampActId), session);
+	//ActivityUtil.deleteActivityAmpReportCache(DbUtil.getActivityReportCache(ampActId), session);
 	ActivityUtil.deleteActivityReportLocation(DbUtil.getActivityReportLocation(ampActId), session);
-	ActivityUtil.deleteActivityReportPhyPerformance(DbUtil.getActivityRepPhyPerformance(ampActId), session);
-	ActivityUtil.deleteActivityReportSector(DbUtil.getActivityReportSector(ampActId), session);
+	//ActivityUtil.deleteActivityReportPhyPerformance(DbUtil.getActivityRepPhyPerformance(ampActId), session);
+	//ActivityUtil.deleteActivityReportSector(DbUtil.getActivityReportSector(ampActId), session);
 	//This is not deleting AmpMEIndicators, just indicators, ME is deprecated.
 	ActivityUtil.deleteActivityIndicators(DbUtil.getActivityMEIndValue(ampActId), ampAct, session);
       
@@ -3335,17 +3332,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       }
   }
 
-  public static void deleteActivityAmpReportCache(Collection repCache, Session session) throws Exception {
-      if (repCache != null) {
-        Iterator repCacheItr = repCache.iterator();
-        while (repCacheItr.hasNext()) {
-          AmpReportCache reportCache = (AmpReportCache) repCacheItr.next();
-          /*AmpReportCache ampReportCache = (AmpReportCache) session.load
-              (AmpReportCache.class, reportCache.getAmpReportId());*/
-          session.delete(reportCache);
-        }
-      }
-  }
+
 
   public static void deleteActivityReportLocation(Collection repLoc, Session session) throws Exception {
       if (repLoc != null) {
@@ -3359,31 +3346,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       }
   }
 
-  public static void deleteActivityReportPhyPerformance(Collection phyPerform, Session session) throws Exception {
-      if (phyPerform != null) {
-        Iterator phyPerformItr = phyPerform.iterator();
-        while (phyPerformItr.hasNext()) {
-          AmpReportPhysicalPerformance repPhyTemp = (
-              AmpReportPhysicalPerformance) phyPerformItr.next();
-          /*AmpReportPhysicalPerformance repPhyPerform = (
-              AmpReportPhysicalPerformance) session.load
-              (AmpReportPhysicalPerformance.class, repPhyTemp.getAmpPpId());*/
-          session.delete(repPhyTemp);
-        }
-      }
-  }
 
-  public static void deleteActivityReportSector(Collection repSector, Session session) throws Exception {
-      if (repSector != null) {
-        Iterator repSectorItr = repSector.iterator();
-        while (repSectorItr.hasNext()) {
-          AmpReportSector repSecTemp = (AmpReportSector) repSectorItr.next();
-          /*AmpReportSector ampRepSector = (AmpReportSector) session.load
-              (AmpReportSector.class, repSecTemp.getAmpReportId());*/
-          session.delete(repSecTemp);
-        }
-      }
-  }
 
   public static void deleteActivityIndicators(Collection activityInd, AmpActivity activity, Session session) throws Exception {
     

@@ -61,7 +61,7 @@ public class AddKey
 
             msg.setKey(formBean.getKey().trim());
             msg.setMessage(formBean.getMessageText());
-            msg.setSiteId(formBean.getSiteId().toString());
+            msg.setSiteId(formBean.getSiteId());
             msg.setLocale(formBean.getLocale().trim());
 
             boolean saved = false;

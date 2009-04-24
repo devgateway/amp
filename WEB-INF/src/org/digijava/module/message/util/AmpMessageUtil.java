@@ -245,11 +245,13 @@ public class AmpMessageUtil {
 			if(onlyUnread){
 				queryString+=" and state.read=false";
 			}
-			queryString+=" order by msg.creationDate desc";
+			queryString+=" group by msg.creationDate order by msg.creationDate desc ";
 			query=session.createQuery(queryString);			 				
 			query.setParameter("tmId", tmId);
                         query.setParameter("hidden", hidden);
-			retValue=((Integer)query.uniqueResult()).intValue();
+                        Integer retInt=((Integer)query.uniqueResult());
+            if(retInt==null) return 0;
+			retValue=retInt.intValue();
                         
                        /* Someone may change msgStoragePerMsgType (make it more then it was previously). 
                         In this case we need to unhide some states which are marked as hidden in db*/

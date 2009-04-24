@@ -53,7 +53,7 @@ public class UpdateSectorSchemes extends Action {
 		
 		Site site = RequestUtils.getSite(request);
 		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-		String siteId = site.getId()+"";
+		Long siteId = site.getId();
 		String locale = navigationLanguage.getCode();
 		/*Collection scheme = null;
 		

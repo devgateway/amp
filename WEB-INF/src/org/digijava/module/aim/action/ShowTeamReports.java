@@ -178,7 +178,7 @@ public class ShowTeamReports extends Action {
 			//
 			// requirements for translation purposes of hierarchies
 			AmpReports el = null;
-			String siteId = RequestUtils.getSite(request).getSiteId();
+			Long siteId = RequestUtils.getSite(request).getId();
 			String locale = RequestUtils.getNavigationLanguage(request).getCode();
 			String text = null;
 			String translatedText = null;

@@ -6,7 +6,7 @@
 		<cache usage="read-write" />
 		<id name="ampTeamPageFilterId" column="amp_team_page_filter_id" type="java.lang.Long">
 			<generator class="native">
-				<param name="sequence">AMP_TEAMPAGEFILTER_seq</param>
+				<param name="sequence">AMP_TEAM_PAGE_FILTERS_seq</param>
 			</generator>
 		</id>
 

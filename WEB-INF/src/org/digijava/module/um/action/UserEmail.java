@@ -142,7 +142,7 @@ public class UserEmail
 
         // get SiteName
         worker = TranslatorWorker.getInstance(site.getName());
-        message = worker.getByBody(site.getName(),currentLocale.getCode(), site.getSiteId());
+        message = worker.getByBody(site.getName(),currentLocale.getCode(), site.getId());
         if (message == null) {
             siteName = site.getName();
         }

@@ -5,7 +5,7 @@
 		<cache usage="read-write" />
 		<id name="globalId" column="id" type="java.lang.Long">
 			<generator class="native">
-				<param name="sequence">amp_global_settings_id_SEQ</param>
+				<param name="sequence">AMP_GLOBAL_SETTINGS_seq</param>
 			</generator>
 		</id>
 		<property name="globalSettingsName" column="settingsName" type="java.lang.String" />

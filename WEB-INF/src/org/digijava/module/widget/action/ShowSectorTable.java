@@ -37,7 +37,7 @@ public class ShowSectorTable extends Action {
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         ShowSectorTableForm tableForm = (ShowSectorTableForm) form;
-        String siteId=RequestUtils.getSiteDomain(request).getSite().getId().toString();
+        Long siteId=RequestUtils.getSiteDomain(request).getSite().getId();
         String langCode= RequestUtils.getNavigationLanguage(request).getCode();
         String headingTotal=TranslatorWorker.translateText("US$ millions",langCode,siteId);
         String headingFY=TranslatorWorker.translateText("FY",langCode,siteId);

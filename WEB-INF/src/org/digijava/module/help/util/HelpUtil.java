@@ -683,7 +683,7 @@ System.out.println("lang:"+lang);
 		Message m = null;
          
 		try {
-            m = TranslatorWorker.getInstance("").getByBody(defResult, lange, siteId.toString());
+            m = TranslatorWorker.getInstance("").getByBody(defResult, lange, siteId);
             //m = DbUtil.getMessage(key.toLowerCase(), lang, siteId);
 		} catch (WorkerException e) {
 			// TODO Auto-generated catch block
@@ -709,7 +709,7 @@ System.out.println("lang:"+lang);
 		Message m = null;
 
 		try {
-            m = TranslatorWorker.getInstance("").getByBody(defResult, lange, siteId.toString());
+            m = TranslatorWorker.getInstance("").getByBody(defResult, lange, siteId);
             //m = DbUtil.getMessage(key.toLowerCase(), lang, siteId);
 		} catch (WorkerException e) {
 			// TODO Auto-generated catch block
@@ -856,14 +856,14 @@ System.out.println("lang:"+lang);
 
                                             Message newMsg = new Message();
 
-                                                newMsg.setSiteId(siteId.toString());
+                                                newMsg.setSiteId(siteId);
                                                 newMsg.setMessage(xmlLangTag.getTitle());
                                                 newMsg.setKey(TranslatorWorker.generateTrnKey(help.getTopicKey()));
                                                 newMsg.setLocale(xmlLangTag.getCode());
                                                 
                                             
                                                // Message msg = TranslatorWorker.getInstance("").getByBody(xmlLangTag.getTitle().trim(), xmlLangTag.getCode(), siteId.toString());
-                                                Message msg = TranslatorWorker.getInstance("").getByKey(newMsg.getKey(),xmlLangTag.getCode(), siteId.toString());
+                                                Message msg = TranslatorWorker.getInstance("").getByKey(newMsg.getKey(),xmlLangTag.getCode(), siteId);
                                                 if(msg != null){
                                                 	TranslatorWorker.getInstance("").update(newMsg);
                                                 }else{

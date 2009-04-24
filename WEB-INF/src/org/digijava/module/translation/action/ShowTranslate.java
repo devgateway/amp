@@ -67,12 +67,12 @@ public class ShowTranslate
         if (key != null && formBean.getType() != null) {
 
             //Site site = RequestUtils.getSite(request);
-            String siteId = trnSite.getSiteId();
+            Long siteId = trnSite.getId();
              formBean.setGroupTranslation(null);
              formBean.setGlobalTranslation(null);
 
             if (formBean.getType().equalsIgnoreCase(TrnTag.LOCAL_TRANSLATION)) {
-                String rootSiteId = DgUtil.getRootSite(trnSite).getSiteId();
+                Long rootSiteId = DgUtil.getRootSite(trnSite).getId();
 
                 String msgGroup = TranslatorWorker.translate(key,
                     formBean.getLangCode(), rootSiteId);
@@ -81,7 +81,7 @@ public class ShowTranslate
                 }
             }
             if (formBean.getType().equalsIgnoreCase(TrnTag.GROUP_TRANSLATION)) {
-                siteId = DgUtil.getRootSite(trnSite).getSiteId();
+                siteId = DgUtil.getRootSite(trnSite).getId();
             }
 
             if (!formBean.getType().equalsIgnoreCase(TrnTag.GLOBAL_TRANSLATION)) {

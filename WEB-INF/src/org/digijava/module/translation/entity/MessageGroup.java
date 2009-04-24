@@ -33,7 +33,7 @@ public class MessageGroup {
 	
 	private String key = null;
 	private String keyWords = null;
-	private String siteId = null;
+	private Long siteId = null;
 	private Map<String, Message> messages = null;
 	
 	/**
@@ -69,22 +69,22 @@ public class MessageGroup {
 	 * @param trn tag object.
 	 * @param currentSiteId site ID in string form. can be retrieved from request.
 	 */
-	public MessageGroup(Trn trn,String currentSiteId){
+	public MessageGroup(Trn trn,Long currentSiteId){
 		this.messages = new HashMap<String, Message>();
 		
 		//KeyWords
 		this.keyWords = trn.getKeywords();
 		
 		//SiteID
-		this.siteId = (currentSiteId==null)?trn.getSiteId():currentSiteId;
+		this.siteId = (currentSiteId==null)?Long.parseLong(trn.getSiteId()):currentSiteId;
 		if (this.siteId == null){
 			try {
 				Site site = TranslatorWorker.getInstance("").getDefaultSite();
-				this.siteId = site.getId().toString();//unfortunately in AMP we use PK instead of string siteID value.
+				this.siteId = site.getId();//unfortunately in AMP we use PK instead of string siteID value.
 			} catch (WorkerException e) {
 				e.printStackTrace();
 				logger.warn("Using hardcoded siteId=3 because of previouse error for translation with key="+key);
-				this.siteId="3";
+				this.siteId=new Long(3);
 			}
 		}
 		
@@ -238,7 +238,7 @@ public class MessageGroup {
 				trn.setKeywords(msg.getKeyWords());
 			}
 			if(trn.getSiteId()==null){
-				trn.setSiteId(msg.getSiteId());
+				trn.setSiteId(msg.getSiteId().toString());
 			}
 			//creating Language
 			Language lang=of.createLanguage();
@@ -267,11 +267,11 @@ public class MessageGroup {
 		return keyWords;
 	}
 
-	public void setSiteId(String siteId) {
+	public void setSiteId(Long siteId) {
 		this.siteId = siteId;
 	}
 
-	public String getSiteId() {
+	public Long getSiteId() {
 		return siteId;
 	}
 }

@@ -22,19 +22,14 @@
 
 package org.digijava.module.editor.util;
 
+import java.sql.BatchUpdateException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
-import org.hibernate.ObjectNotFoundException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.ModuleInstance;
@@ -44,6 +39,12 @@ import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
+import org.hibernate.ObjectNotFoundException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 /**
  * <p>Title: DiGiJava</p>
@@ -395,10 +396,19 @@ public class DbUtil {
             session.save(editor);
             tx.commit();
         }
+        
         catch (Exception ex) {
             logger.debug("Unable to save editor information into database",
                          ex);
-
+            BatchUpdateException bue=(BatchUpdateException) ex;
+        	SQLException exx = bue.getNextException();
+        	while(exx!=null) {
+        		logger.error("Batch exception: "+exx);
+        		exx.printStackTrace();
+        		exx=bue.getNextException();
+        	}
+        
+            
             if (tx != null) {
                 try {
                     tx.rollback();
@@ -407,6 +417,7 @@ public class DbUtil {
                     logger.warn("rollback() failed", ex1);
                 }
             }
+            
             throw new EditorException(
                 "Unable to save editor information into database", ex);
         }

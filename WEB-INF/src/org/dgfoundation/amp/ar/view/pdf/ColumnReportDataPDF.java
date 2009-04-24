@@ -83,7 +83,7 @@ public class ColumnReportDataPDF extends PDFExporter {
 			String translatedName=null;
 			try{
 				//translatedName=TranslatorWorker.translate(prefix+columnReport.getName(),locale,siteId);
-				translatedName=TranslatorWorker.translateText(columnReport.getName(),locale,siteId);
+				translatedName=TranslatorWorker.translateText(columnReport.getName(),locale,new Long(siteId));
 			}catch (WorkerException e)
 				{////System.out.println(e);
 				
@@ -126,7 +126,7 @@ public class ColumnReportDataPDF extends PDFExporter {
 					//String prefix="aim:reportBuilder:";
 					
 					try{
-						translatedCellValue=TranslatorWorker.translateText(cellValue,locale,siteId);
+						translatedCellValue=TranslatorWorker.translateText(cellValue,locale,new Long(siteId));
 					}catch (WorkerException e)
 						{
 						e.printStackTrace();

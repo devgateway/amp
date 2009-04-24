@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>amp-head</name>
+	<name>amp</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -34,7 +34,7 @@
 		<link>
 			<name>digi-src</name>
 			<type>2</type>
-			<location>/home/mihai/workspace/digi/WEB-INF/src</location>
+			<location>C:/home/mihai/workspace/digi/WEB-INF/src</location>
 		</link>
 	</linkedResources>
 </projectDescription>

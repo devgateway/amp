@@ -9,6 +9,24 @@ public class SectorTableHelper {
     private String sectorName;
     private List<Long> totalYearsValue;
     private List<Long> percentYearsValue;
+    private boolean applyStyle;
+    private boolean emptyRow;
+
+    public boolean isEmptyRow() {
+        return emptyRow;
+    }
+
+    public void setEmptyRow(boolean emptyRow) {
+        this.emptyRow = emptyRow;
+    }
+
+    public boolean isApplyStyle() {
+        return applyStyle;
+    }
+
+    public void setApplyStyle(boolean applyStyle) {
+        this.applyStyle = applyStyle;
+    }
     
     public String getSectorName() {
         return sectorName;

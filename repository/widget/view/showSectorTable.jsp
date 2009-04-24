@@ -11,7 +11,7 @@
 
 
 <digi:instance property="showSectorTableForm"/>
-<table  id="sectorTable${showSectorTableForm.widgetId}">
+<table  id="sectorTable${showSectorTableForm.widgetId}" width="100%">
     <tr>
         <td style="color:#FFFFFF;font-weight:bold"><digi:trn>Sector</digi:trn></td>
         <c:forEach items="${showSectorTableForm.years}"    var="year">
@@ -20,12 +20,39 @@
     </tr>
     <c:forEach items="${showSectorTableForm.sectorsInfo}"    var="sectorInfo">
         <tr>
-            <td>${sectorInfo.sectorName}</td>
+            <c:choose>
+                <c:when test="${sectorInfo.applyStyle}">
+                    <td style="font-weight:bold">${sectorInfo.sectorName}</td>
+                </c:when>
+                <c:when test="${sectorInfo.emptyRow}">
+                    <c:forEach items="${showSectorTableForm.years}">
+                        <td>&nbsp;</td>
+                    </c:forEach>
+                    <td>&nbsp;</td>
+                </c:when>
+                <c:otherwise>
+                    <td>${sectorInfo.sectorName}</td>
+                </c:otherwise>
+            </c:choose>
             <c:forEach items="${sectorInfo.totalYearsValue}"    var="totalYear">
-                <td align="center">${totalYear}</td>
+                <c:choose>
+                    <c:when test="${sectorInfo.applyStyle}">
+                        <td style="font-weight:bold;text-align:center">${totalYear}</td>
+                    </c:when>
+                    <c:otherwise>
+                        <td align="center">${totalYear}</td>
+                    </c:otherwise>
+                </c:choose>
             </c:forEach>
             <c:forEach items="${sectorInfo.percentYearsValue}"    var="percentYear">
-                <td align="center">${percentYear}%</td>
+                <c:choose>
+                    <c:when test="${sectorInfo.applyStyle}">
+                        <td style="font-weight:bold;text-align:center">${percentYear}%</td>
+                    </c:when>
+                    <c:otherwise>
+                        <td align="center">${percentYear}%</td>
+                    </c:otherwise>
+                </c:choose>
             </c:forEach>
         </tr>
     </c:forEach>

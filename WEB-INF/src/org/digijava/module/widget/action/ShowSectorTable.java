@@ -14,6 +14,8 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -35,6 +37,11 @@ public class ShowSectorTable extends Action {
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         ShowSectorTableForm tableForm = (ShowSectorTableForm) form;
+        String siteId=RequestUtils.getSiteDomain(request).getSite().getId().toString();
+        String langCode= RequestUtils.getNavigationLanguage(request).getCode();
+        String headingTotal=TranslatorWorker.translateText("US$ millions",langCode,siteId);
+        String headingFY=TranslatorWorker.translateText("FY",langCode,siteId);
+        String headingPercent=TranslatorWorker.translateText("Of",langCode,siteId);
         AmpSectorTableWidget secTableWidget = SectorTableWidgetUtil.getAmpSectorTableWidget(tableForm.getWidgetId());
         List<AmpSectorOrder> sectorOrders = new ArrayList(secTableWidget.getSectorsColumns());
         List<String> years = new ArrayList();
@@ -74,9 +81,9 @@ public class ShowSectorTable extends Action {
 
                 if (!totalYearsAdded) {
                     if (calendar.getIsFiscal()) {
-                        years.add(year + "/" + (year + 1));
+                        years.add(headingFY+" "+year + "/" + (year + 1)+" ("+headingTotal+")");
                     } else {
-                        years.add(year + "");
+                        years.add(year + " ("+headingTotal+")");
                     }
                 }
                 totalValues.add(amount);
@@ -117,9 +124,9 @@ public class ShowSectorTable extends Action {
                 }
                 if (!percentYearsAdded) {
                     if (calendar.getIsFiscal()) {
-                        years.add(year + "/" + (year + 1) + " %");
+                        years.add(headingFY+" % "+headingPercent+" "+year + "/" + (year + 1) );
                     } else {
-                        years.add(year + "%");
+                        years.add(" % "+headingPercent+" "+year );
                     }
                 }
                 if (!totalPercentForYearExceptOthers.containsKey(year)) {
@@ -135,7 +142,7 @@ public class ShowSectorTable extends Action {
             sectorsInfo.add(sectorTable);
         }
         SectorTableHelper otherSectorTableRow = new SectorTableHelper();
-        otherSectorTableRow.setSectorName("Others");
+        otherSectorTableRow.setSectorName(TranslatorWorker.translateText("Others",langCode,siteId));
         otherSectorTableRow.setTotalYearsValue(new ArrayList());
         otherSectorTableRow.setPercentYearsValue(new ArrayList());
         List totalValuesExceptOthers = new ArrayList(totalForYearExceptOthers.keySet());
@@ -163,8 +170,12 @@ public class ShowSectorTable extends Action {
             totalPercentValues.add(wholeValue);
         }
         sectorsInfo.add(otherSectorTableRow);
+        SectorTableHelper emptyRow=new SectorTableHelper();
+        emptyRow.setEmptyRow(true);
+        sectorsInfo.add(emptyRow);
         SectorTableHelper totalSectorTableRow = new SectorTableHelper();
-        totalSectorTableRow.setSectorName("Total");
+        totalSectorTableRow.setSectorName(TranslatorWorker.translateText("Total",langCode,siteId));
+        totalSectorTableRow.setApplyStyle(true);
         totalSectorTableRow.setTotalYearsValue(totalValues);
         totalSectorTableRow.setPercentYearsValue(totalPercentValues);
         sectorsInfo.add(totalSectorTableRow);

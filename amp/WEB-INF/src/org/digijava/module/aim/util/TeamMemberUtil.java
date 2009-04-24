@@ -886,7 +886,7 @@ public class TeamMemberUtil {
 		try {
 			session = PersistenceManager.getSession();
 			String queryString = "select tm from " + AmpTeamMember.class.getName() +
-			  " tm where (tm.user=:user)";
+			  " tm where (tm.user=:user) order by ampTeam.name";
 			qry = session.createQuery(queryString);
 			qry.setParameter("user",user.getId(),Hibernate.LONG);
 			col = qry.list();

@@ -19,6 +19,7 @@ import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.IndicatorSector;
+import org.digijava.module.aim.dbentity.IndicatorConnection;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.gis.dbentity.GisMap;
 import org.digijava.module.aim.action.IndicatorValues;
@@ -186,14 +187,13 @@ public class DbUtil {
 
            StringBuffer querySrc = new StringBuffer();
            querySrc.append("select ds.indicator.indicatorId, ds.indicator.name from ");
-           querySrc.append(IndicatorSector.class.getName());
-           querySrc.append(" ds where ds.sector.ampSectorId=:sectorId group by ds.indicator.indicatorId order by ds.indicator.name");
+           querySrc.append(IndicatorConnection.class.getName());
+           querySrc.append(" ds");
+           querySrc.append(" where ds.sector.ampSectorId=:sectorId and");
+           querySrc.append(" (ds.location.regionLocation.parentCategoryValue.value='Region' or");
+           querySrc.append(" ds.location.regionLocation.parentCategoryValue.value='District')");
+           querySrc.append(" group by ds.indicator.indicatorId order by ds.indicator.name");
 
-           /*
-           Query q = session.createQuery("select ds.indicator.indicatorId, ds.indicator.name from " +
-                                         IndicatorSector.class.getName() +
-                                         " ds where ds.sector.ampSectorId=:sectorId group by ds.indicator.indicatorId order by ds.indicator.name");
-*/
            Query q = session.createQuery(querySrc.toString());
            q.setParameter("sectorId", sectorId, Hibernate.LONG);
            List allIndicatorList = q.list();
@@ -205,10 +205,9 @@ public class DbUtil {
            querySrc1.append(" ds where ds.indicatorConnection.sector.ampSectorId=:sectorId and");
 
            if (mapLevel == 2) {
-               querySrc1.append(" ds.indicatorConnection.location.region is not null and");
-               querySrc1.append(" ds.indicatorConnection.location.zone is null");
+               querySrc1.append(" ds.indicatorConnection.location.regionLocation.parentCategoryValue.value='Region'");
            } else if (mapLevel == 3) {
-               querySrc1.append(" ds.indicatorConnection.location.zone is not null");
+               querySrc1.append(" ds.indicatorConnection.location.regionLocation.parentCategoryValue.value='District'");
            }
            Query q1 = session.createQuery(querySrc1.toString());
            q1.setParameter("sectorId", sectorId, Hibernate.LONG);

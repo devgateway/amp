@@ -68,7 +68,7 @@ public class ImportAction extends MultiAction {
 		String[] langArray = {"en","fr","es"};
 		if(iform.getLanguages() == null || iform.getLanguages().length < 1) iform.setLanguages(langArray);
 		
-		String siteId = RequestUtils.getSite(request).getId().toString();
+		Long siteId = RequestUtils.getSite(request).getId();
 		String locale= RequestUtils.getNavigationLanguage(request).getCode();
 		String[] options = {TranslatorWorker.translateText("update", locale, siteId), TranslatorWorker.translateText("overwrite", locale, siteId)};
 		if(iform.getOptions() == null || iform.getOptions().length < 1) iform.setOptions(options);

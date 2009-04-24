@@ -76,7 +76,7 @@ public class TrailCellsXLS extends XLSExporter {
 			
 			//requirements for translation purposes
 			TranslatorWorker translator=TranslatorWorker.getInstance();
-			String siteId=this.getMetadata().getSiteId();
+			Long siteId=new Long(this.getMetadata().getSiteId());
 			String locale=this.getMetadata().getLocale();
 			//String prefix="rep:pop:";
 			String translatedName=null;

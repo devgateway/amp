@@ -43,16 +43,16 @@ public class ExportBuilder {
 
 	private ObjectFactory objectFactory = new ObjectFactory();
 
-	private String siteId =  null; //RequestUtils.getSite(request).getSiteId()
+	private Long siteId =  null; //RequestUtils.getSite(request).getSiteId()
 
 	private String[] exportLog = null;
 	
-	public ExportBuilder(AmpActivity ampActivity, String siteId){
+	public ExportBuilder(AmpActivity ampActivity, Long siteId){
 		this.ampActivity = ampActivity;
 		this.siteId = siteId;
 	}
 
-	public ExportBuilder(Long ampActivityId, String siteId) throws AmpExportException{
+	public ExportBuilder(Long ampActivityId, Long siteId) throws AmpExportException{
 		try{
 			this.ampActivity = ActivityUtil.loadActivity(ampActivityId);
 			this.siteId = siteId;
@@ -61,7 +61,7 @@ public class ExportBuilder {
 		}	
 	}
 
-	public ExportBuilder(long ampActivityId, String siteId) throws AmpExportException{
+	public ExportBuilder(long ampActivityId, Long siteId) throws AmpExportException{
 		this(new Long(ampActivityId), siteId);
 	}
 

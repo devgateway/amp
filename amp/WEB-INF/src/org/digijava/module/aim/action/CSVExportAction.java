@@ -100,7 +100,7 @@ public class CSVExportAction
 	    Site site = RequestUtils.getSite(request);
 	    Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
 	
-	    String siteId=site.getSiteId();
+	    Long siteId=site.getId();
 	    String locale=navigationLanguage.getCode();	
 	    
 	    String translatedNotes = "";
@@ -179,7 +179,7 @@ public class CSVExportAction
 		Site site = RequestUtils.getSite(request);
 		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
 		
-		String siteId=site.getSiteId();
+		Long siteId=site.getId();
 		String locale=navigationLanguage.getCode();
 		
 		session.setAttribute("sessionExpired", true);

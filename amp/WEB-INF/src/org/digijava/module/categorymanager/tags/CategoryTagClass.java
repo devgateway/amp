@@ -240,7 +240,7 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 				 //
 				 //requirements for translation purposes
 				 TranslatorWorker translator = TranslatorWorker.getInstance();
-				 String siteId = site.getId()+"";
+				 Long siteId = site.getId();
 				 String locale = RequestUtils.getNavigationLanguage(request).getCode();
 				 String translatedText = null;
 				 try {

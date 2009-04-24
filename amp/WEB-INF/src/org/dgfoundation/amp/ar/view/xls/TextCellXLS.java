@@ -87,7 +87,7 @@ public class TextCellXLS extends XLSExporter {
 			
 			//requirements for translation purposes
 			TranslatorWorker translator=TranslatorWorker.getInstance();
-			String siteId=parent.getReportMetadata().getSiteId();
+			Long siteId=new Long (parent.getReportMetadata().getSiteId());
 			String locale=parent.getReportMetadata().getLocale();
 			
 			String finalStatus=new String();//the actual text to be added to the column

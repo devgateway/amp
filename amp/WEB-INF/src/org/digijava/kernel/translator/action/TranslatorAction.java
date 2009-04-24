@@ -106,7 +106,7 @@ public class TranslatorAction extends Action {
 							.getSiteDomain(request)
 							.getSite()
 							.getId()
-							.toString());
+							);
 				} else {
 
 					msg.setSiteId(
@@ -114,7 +114,7 @@ public class TranslatorAction extends Action {
 							.getRootSite(
 								RequestUtils.getSiteDomain(request).getSite())
 							.getId()
-							.toString());
+							);
 
 				}
 

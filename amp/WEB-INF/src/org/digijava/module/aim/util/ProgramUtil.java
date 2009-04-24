@@ -1817,7 +1817,7 @@ public class ProgramUtil {
 		 //
 		 //requirements for translation purposes
 		 TranslatorWorker translator = TranslatorWorker.getInstance();
-		 String siteId = site.getSiteId();
+		 Long siteId = site.getId();
 		 String locale = RequestUtils.getNavigationLanguage(request).getCode();
 		 String translatedText = null;
 		 try {

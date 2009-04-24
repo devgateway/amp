@@ -5,7 +5,9 @@
 		table="AMP_EXTERNAL_MAPPING">
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
-			<generator class="native" />
+			<generator class="native" >
+			<param name="sequence">AMP_EXTERNAL_MAPPING_seq</param>
+			</generator>
 		</id>
 		<property name="ampId" column="amp_id" type="java.lang.String" />
 		<property name="externalId" column="external_id" type="java.lang.String" />

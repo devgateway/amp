@@ -769,7 +769,7 @@ public class TeamMemberUtil {
 			session = PersistenceManager.getSession();
 			String queryString = "select r from "
 					+ AmpTeamMemberRoles.class.getName()
-					+ " r where r.teamHead = 1";
+					+ " r where r.teamHead = true";
 			qry = session.createQuery(queryString);
 			Iterator itr = qry.list().iterator();
 			if (itr.hasNext()) {

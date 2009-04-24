@@ -58,7 +58,7 @@ public class CachedTranslatorWorker extends TranslatorWorker {
      * @param siteId owner site
      * @throws WorkerException if process was not completed successfully
      */
-    public void refresh(String key, String locale, String siteId) throws WorkerException {
+    public void refresh(String key, String locale, Long siteId) throws WorkerException {
         Session session = null;
 
         try {
@@ -100,7 +100,7 @@ public class CachedTranslatorWorker extends TranslatorWorker {
      * This one searches in cache
      * @see TranslatorWorker#getByKey(String, String, String, String, String)
      */
-    public Message getByKey(String key, String body, String keyWords, String locale, String siteId) throws WorkerException {
+    public Message getByKey(String key, String body, String keyWords, String locale, Long siteId) throws WorkerException {
     	return getByKey(key, locale, siteId, true, keyWords);
 //        Message message = new Message();
 //        //set up key trio
@@ -128,7 +128,7 @@ public class CachedTranslatorWorker extends TranslatorWorker {
 //        }
     }
     
-    public Message getByKey(String key, String locale, String siteId,boolean overwriteKeywords,String keywords) throws WorkerException {
+    public Message getByKey(String key, String locale, Long siteId,boolean overwriteKeywords,String keywords) throws WorkerException {
     	Message message = new Message();
         //set up key trio
         message.setKey(processKeyCase(key));

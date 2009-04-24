@@ -192,10 +192,10 @@ public class ErrorsTag extends org.apache.struts.taglib.html.ErrorsTag {
 	                Message msg = new Message();
 	                msg.setKey(item.getKey().trim().toLowerCase());
 	                msg.setMessage(bundleApplication.getString(item.getKey()));
-	                msg.setSiteId(site.getId().toString());
+	                msg.setSiteId(site.getId());
 	                msg.setLocale(currentLocale.getCode().trim());
 	                //msg.setLocale("en");
-	                if (TranslatorWorker.getInstance(msg.getKey()).getByKey(msg.getKey(), msg.getLocale(), site.getId().toString()) == null) {
+	                if (TranslatorWorker.getInstance(msg.getKey()).getByKey(msg.getKey(), msg.getLocale(), site.getId()) == null) {
 		                if (item.getKey() != null)  {                   
 	               			TranslatorWorker.getInstance(msg.getKey()).save(msg);
 		                }

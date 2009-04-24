@@ -59,7 +59,7 @@ public class ShowWidgetChart extends Action {
                 }
             } else {
                 ChartOption opt = createChartOptions(wForm, widget);
-                String siteId=RequestUtils.getSiteDomain(request).getSite().getId().toString();
+                Long siteId=RequestUtils.getSiteDomain(request).getSite().getId();
                 opt.setSiteId(siteId);
                 String langCode= RequestUtils.getNavigationLanguage(request).getCode();
                 opt.setLangCode(langCode);

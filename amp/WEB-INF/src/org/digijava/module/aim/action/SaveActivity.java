@@ -132,7 +132,7 @@ public class SaveActivity extends Action {
 
 	private ServletContext ampContext = null;
 
-	private String siteId;
+	private Long siteId;
 	private String locale;
 	
 	private void processPreStep(EditActivityForm eaForm, AmpActivity activity, TeamMember tm, Boolean[] createdAsDraft) throws Exception, AMPException{
@@ -2141,7 +2141,7 @@ public class SaveActivity extends Action {
 		Site site = RequestUtils.getSite(request);
 		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
 				
-		siteId = site.getId()+"";
+		siteId = site.getId();
 		locale = navigationLanguage.getCode();	
 			
 		Long actId = null;

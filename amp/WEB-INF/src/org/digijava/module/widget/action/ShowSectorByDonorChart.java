@@ -109,7 +109,7 @@ public class ShowSectorByDonorChart extends Action {
         }else{
         	opt.setWidth(form.getImageWidth());
         }
-                String siteId=RequestUtils.getSiteDomain(request).getSite().getId().toString();
+                Long siteId=RequestUtils.getSiteDomain(request).getSite().getId();
                 opt.setSiteId(siteId);
                 String langCode= RequestUtils.getNavigationLanguage(request).getCode();
                 opt.setLangCode(langCode);

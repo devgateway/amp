@@ -86,7 +86,7 @@ public class ExportHelper {
 		String nodeVarName = "atn_"+ key;
 		try {
 			retValue.append("var "+ nodeVarName +" = new YAHOOAmp.widget.TaskNode(\"" + 
-					TranslatorWorker.translateText(node.getName(), RequestUtils.getNavigationLanguage(request).getCode(), RequestUtils.getSite(request).getId().toString()) 
+					TranslatorWorker.translateText(node.getName(), RequestUtils.getNavigationLanguage(request).getCode(), RequestUtils.getSite(request).getId()) 
 					+ "\", " + parentNode + ", ");
 		} catch (WorkerException e) {
 			e.printStackTrace();
@@ -143,7 +143,7 @@ public class ExportHelper {
 		return retValue;
 	}
 	
-	public static List<Message> getTranslations(String key, String body, String siteId) throws AmpExportException{
+	public static List<Message> getTranslations(String key, String body, Long siteId) throws AmpExportException{
 
 		List<Message> retValue = new ArrayList<Message>();
 		TranslatorWorker tw = new TranslatorWorker();

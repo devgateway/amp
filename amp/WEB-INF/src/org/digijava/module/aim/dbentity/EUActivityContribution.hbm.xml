@@ -6,7 +6,7 @@
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long" unsaved-value="null">
 			<generator class="native">
-				<param name="sequence">EU_ACTIVITY_CONTRIBUTION_seq</param>
+				<param name="sequence">AMP_EU_ACTIVITY_CONTRIBUTIONS_seq</param>
 			</generator>
 		</id>
 		<property access="field" name="amount" column="amount" type="java.math.BigDecimal" />

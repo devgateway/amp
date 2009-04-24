@@ -99,7 +99,7 @@ public class ParisIndicator5bJrxml extends ParisIndicatorJrxml {
             p2.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
             p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='18' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
             p2.println("					</textElement>");
-            p2.println("				<text><![CDATA["+ TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Paris Indicator 5b Report", this.getLangCode(), this.getSite().getId().toString())) + "]]></text>");
+            p2.println("				<text><![CDATA["+ TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Paris Indicator 5b Report", this.getLangCode(), this.getSite().getId())) + "]]></text>");
             p2.println("				</staticText>");
             p2.println("			</band>");
             p2.println("		</title>");
@@ -146,7 +146,7 @@ public class ParisIndicator5bJrxml extends ParisIndicatorJrxml {
             p2.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
             p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
             p2.println("					</textElement>");
-            p2.println("				<text><![CDATA["+ TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Donors", this.getLangCode(), this.getSite().getId().toString())) +"]]></text>");
+            p2.println("				<text><![CDATA["+ TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Donors", this.getLangCode(), this.getSite().getId())) +"]]></text>");
             p2.println("				</staticText>");
             p2.println("				<staticText>");
             p2.println("					<reportElement");
@@ -167,7 +167,7 @@ public class ParisIndicator5bJrxml extends ParisIndicatorJrxml {
             p2.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
             p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
             p2.println("					</textElement>");
-            p2.println("				<text><![CDATA[ "+ TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Disbursement Year", this.getLangCode(), this.getSite().getId().toString())) + "]]></text>");
+            p2.println("				<text><![CDATA[ "+ TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Disbursement Year", this.getLangCode(), this.getSite().getId())) + "]]></text>");
             p2.println("				</staticText>");
             p2.println("				<staticText>");
             p2.println("					<reportElement");
@@ -188,7 +188,7 @@ public class ParisIndicator5bJrxml extends ParisIndicatorJrxml {
             p2.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
             p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
             p2.println("					</textElement>");
-            p2.println("				<text><![CDATA["+ TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Aid flows to the government sector that use national procurement procedures", this.getLangCode(), this.getSite().getId().toString())) + "]]></text>");
+            p2.println("				<text><![CDATA["+ TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Aid flows to the government sector that use national procurement procedures", this.getLangCode(), this.getSite().getId())) + "]]></text>");
             p2.println("				</staticText>");
             p2.println("				<staticText>");
             p2.println("					<reportElement");
@@ -209,7 +209,7 @@ public class ParisIndicator5bJrxml extends ParisIndicatorJrxml {
             p2.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
             p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
             p2.println("					</textElement>");
-            p2.println("				<text><![CDATA[ "+ TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Total Aid flows disbursed to the government sector", this.getLangCode(), this.getSite().getId().toString())) + "]]></text>");
+            p2.println("				<text><![CDATA[ "+ TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Total Aid flows disbursed to the government sector", this.getLangCode(), this.getSite().getId())) + "]]></text>");
             p2.println("				</staticText>");
             p2.println("				<staticText>");
             p2.println("					<reportElement");
@@ -230,7 +230,7 @@ public class ParisIndicator5bJrxml extends ParisIndicatorJrxml {
             p2.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
             p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='8' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
             p2.println("					</textElement>");
-            p2.println("				<text><![CDATA[ "+ TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Proportion of aid flows to the government sector using national procurement procedures", this.getLangCode(), this.getSite().getId().toString())) + "]]></text>");
+            p2.println("				<text><![CDATA[ "+ TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Proportion of aid flows to the government sector using national procurement procedures", this.getLangCode(), this.getSite().getId())) + "]]></text>");
             p2.println("				</staticText>");
             if (type.equals("pdf")) {
                 p2.println("				<line direction='TopDown'>");
@@ -605,7 +605,7 @@ public class ParisIndicator5bJrxml extends ParisIndicatorJrxml {
 
 			boolean returnString = Boolean.parseBoolean( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS) );
 			if(returnString){
-				p2.println("<textFieldExpression class='java.lang.String'><![CDATA[\" * "+ TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("All the amounts are in thousands (000)", this.getLangCode(), this.getSite().getId().toString())) + selCurr+"\"]]></textFieldExpression>");
+				p2.println("<textFieldExpression class='java.lang.String'><![CDATA[\" * "+ TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("All the amounts are in thousands (000)", this.getLangCode(), this.getSite().getId())) + selCurr+"\"]]></textFieldExpression>");
 			}
 			else
 			{

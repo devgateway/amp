@@ -83,7 +83,7 @@ public class XLSExportAction extends Action {
 			Site site = RequestUtils.getSite(request);
 			Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
 					
-			String siteId=site.getId().toString();
+			Long siteId=site.getId();
 			String locale=navigationLanguage.getCode();	
 			
 			
@@ -309,7 +309,7 @@ public class XLSExportAction extends Action {
 			Site site = RequestUtils.getSite(request);
 			Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
 			
-			String siteId=site.getSiteId();
+			Long siteId=site.getId();
 			String locale=navigationLanguage.getCode();
 			
 			session.setAttribute("sessionExpired", true);

@@ -6,7 +6,7 @@
 		<composite-id unsaved-value="any">
 			<key-property name="key" type="java.lang.String" column="MESSAGE_KEY" />
 			<key-property name="locale" type="java.lang.String" column="LANG_ISO" length="2" />
-			<key-property name="siteId" type="java.lang.String" column="SITE_ID" length="100" />
+			<key-property name="siteId" type="java.lang.Long" column="SITE_ID" />
 		</composite-id>
 		<property name="message" type="text" column="MESSAGE_UTF8" />
 		<property name="created" type="java.sql.Timestamp" column="CREATED" />

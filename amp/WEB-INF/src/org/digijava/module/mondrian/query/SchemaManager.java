@@ -62,7 +62,7 @@ public class SchemaManager extends FilterDynamicSchemaProcessor implements
 	}
 	
 	private String Translate(String shema){
-		String siteId = QueryThread.getSite().getId().toString();
+		Long siteId = QueryThread.getSite().getId();
 		String locale = QueryThread.getLocale().getCode();
 		
 		try {

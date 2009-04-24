@@ -177,7 +177,7 @@ public class ParisIndicatorReport extends Action {
                 }
                 if ("10a".equalsIgnoreCase(svForm.getIndicatorCode())) {
                     svForm.setDonorsColl(DbUtil.getAidSurveyReportByIndicator10a(svForm.getOrgGroup(), svForm.getDonor(),
-                        svForm.getStartYear().intValue(), svForm.getCloseYear().intValue(), RequestUtils.getSite(request).getId().toString(), RequestUtils.getNavigationLanguage(request).getCode()));
+                        svForm.getStartYear().intValue(), svForm.getCloseYear().intValue(), RequestUtils.getSite(request).getId(), RequestUtils.getNavigationLanguage(request).getCode()));
                     svForm.setDonorsColl(filterDonors(svForm.getDonorsColl(), 1));
                     return mapping.findForward("report1");
                 }
@@ -194,7 +194,7 @@ public class ParisIndicatorReport extends Action {
                 Collection spCol = DbUtil.getAidSurveyReportByIndicator(svForm.getIndicatorCode(), svForm.getDonor(),
                     svForm.getOrgGroup(), status, svForm.getStartYear().intValue(), svForm.getCloseYear().intValue(),
                     svForm.getCurrency(), svForm.getTermAssist(), financingInstrument,
-                    svForm.getSector(), svForm.getCalendar(), RequestUtils.getSite(request).getId().toString(), RequestUtils.getNavigationLanguage(request).getCode());
+                    svForm.getSector(), svForm.getCalendar(), RequestUtils.getSite(request).getId(), RequestUtils.getNavigationLanguage(request).getCode());
 
                 svForm.setDonorsColl(spCol);
 
@@ -203,10 +203,10 @@ public class ParisIndicatorReport extends Action {
                         int dnSize = svForm.getDonorsColl().size() - 1;
                         int lastIndex = Integer.parseInt(svForm.getNumColsCalculated()) - 1;
                         int numCols = svForm.getCloseYear().intValue() - svForm.getStartYear().intValue() + 1;
-                        String donor[] = {TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Less than 10%", RequestUtils.getNavigationLanguage(request).getCode(), RequestUtils.getSite(request).getId().toString()))
-                        		, TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("From 10 to 50%", RequestUtils.getNavigationLanguage(request).getCode(), RequestUtils.getSite(request).getId().toString()))
-                        		, TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("From 50 to 90%", RequestUtils.getNavigationLanguage(request).getCode(), RequestUtils.getSite(request).getId().toString()))
-                        		, TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("More than 90%", RequestUtils.getNavigationLanguage(request).getCode(), RequestUtils.getSite(request).getId().toString()))};
+                        String donor[] = {TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Less than 10%", RequestUtils.getNavigationLanguage(request).getCode(), RequestUtils.getSite(request).getId()))
+                        		, TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("From 10 to 50%", RequestUtils.getNavigationLanguage(request).getCode(), RequestUtils.getSite(request).getId()))
+                        		, TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("From 50 to 90%", RequestUtils.getNavigationLanguage(request).getCode(), RequestUtils.getSite(request).getId()))
+                        		, TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("More than 90%", RequestUtils.getNavigationLanguage(request).getCode(), RequestUtils.getSite(request).getId()))};
                         
                         String dnIndc5Row[] = null;
                         int answers[] = new int[numCols];
@@ -221,9 +221,9 @@ public class ParisIndicatorReport extends Action {
 
                         // creating header row
                         if ("5a".equalsIgnoreCase(svForm.getIndicatorCode()))
-                            dnIndc5Row[0] = TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Percent of ODA using all three partner's PFM procedures", RequestUtils.getNavigationLanguage(request).getCode(), RequestUtils.getSite(request).getId().toString()));
+                            dnIndc5Row[0] = TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Percent of ODA using all three partner's PFM procedures", RequestUtils.getNavigationLanguage(request).getCode(), RequestUtils.getSite(request).getId()));
                         else
-                            dnIndc5Row[0] = TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Percent of ODA using national procurement systems", RequestUtils.getNavigationLanguage(request).getCode(), RequestUtils.getSite(request).getId().toString()));
+                            dnIndc5Row[0] = TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Percent of ODA using national procurement systems", RequestUtils.getNavigationLanguage(request).getCode(), RequestUtils.getSite(request).getId()));
 
                         for (; j < numCols; j++)
                             dnIndc5Row[j + 1] = Integer.toString(svForm.getStartYear().intValue() + j);
@@ -235,7 +235,7 @@ public class ParisIndicatorReport extends Action {
                             itr1 = svForm.getDonorsColl().iterator();
                             while (itr1.hasNext()) {
                                 ParisIndicator pi = (ParisIndicator) itr1.next();
-                                if (TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("All Donors", RequestUtils.getNavigationLanguage(request).getCode(), RequestUtils.getSite(request).getId().toString())).equalsIgnoreCase(pi.getDonor()))
+                                if (TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("All Donors", RequestUtils.getNavigationLanguage(request).getCode(), RequestUtils.getSite(request).getId())).equalsIgnoreCase(pi.getDonor()))
                                     continue;
                                 j = 0;
                                 itr2 = pi.getAnswers().iterator();

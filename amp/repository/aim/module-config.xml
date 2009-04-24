@@ -69,7 +69,6 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpPages</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpFilters</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpTeamReports</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpReportCache</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpReportSector</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpReportLocation</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpRegion</hibernate-class>
@@ -95,7 +94,6 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpActor</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpComponentFunding</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpRegionalFunding</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpReportPhysicalPerformance</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpReportsOptions</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpAhsurvey</hibernate-class>

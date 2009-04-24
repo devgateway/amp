@@ -57,7 +57,7 @@ public class ExportToPDF extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
         response.setContentType("application/pdf");
         com.lowagie.text.Document doc = new com.lowagie.text.Document(PageSize.A4.rotate());
-        String siteId=RequestUtils.getSiteDomain(request).getSite().getId().toString();
+        Long siteId=RequestUtils.getSiteDomain(request).getSite().getId();
         String langCode= RequestUtils.getNavigationLanguage(request).getCode();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
@@ -89,7 +89,7 @@ public class ExportToPDF extends Action {
                         ChartOption opt = new ChartOption();
                         opt.setWidth(350);
                         opt.setHeight(420);
-                        opt.setSiteId(siteId.toString());
+                        opt.setSiteId(siteId);
                         opt.setLangCode(langCode);
                         JFreeChart chart = null;
                         PdfPTable orgSummaryTbl =null;

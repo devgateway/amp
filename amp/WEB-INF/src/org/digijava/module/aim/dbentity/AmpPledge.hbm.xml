@@ -6,7 +6,7 @@
 		<cache usage="read-write" />
 		<id name="ampPledgeId" column="amp_pledge_id" type="java.lang.Long">
 			<generator class="native">
-				<param name="sequence">AMP_PLEDGE_seq</param>
+				<param name="sequence">AMP_PLEDGES_SEQ</param>
 			</generator>
 		</id>
 

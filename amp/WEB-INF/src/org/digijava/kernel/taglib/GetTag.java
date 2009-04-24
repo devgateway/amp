@@ -62,25 +62,24 @@ public class GetTag extends BodyTagSupport {
 		if (getKey() != null && getType() != null) { //commented
 //        if (getKey() != null) {
 
-			String siteId = "";
+			Long siteId = null;
 
 			if(this.getKey().trim().startsWith("cn") || this.getKey().trim().startsWith("ln")){
 
-				siteId="0";
+				siteId=new Long(0);
 
 
 			}else{
 				if (getType().equalsIgnoreCase("local")) {
 
 					siteId =
-						RequestUtils.getSiteDomain(request).getSite().getId().toString();
+						RequestUtils.getSiteDomain(request).getSite().getId();
 
 				} else {
 					siteId =
 						DgUtil
 							.getRootSite(RequestUtils.getSiteDomain(request).getSite())
-							.getId()
-							.toString();
+							.getId();
 
 				}
 			}

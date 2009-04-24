@@ -6,7 +6,7 @@
 		<cache usage="read-write" />
 		<id name="ampMeIndValId" column="amp_me_indicator_val_id" type="java.lang.Long">
 			<generator class="native">
-				<param name="sequence">AMP_ME_IND_VAL_seq</param>
+				<param name="sequence">AMP_ME_INDICATOR_VALUE_SEQ</param>
 			</generator>
 		</id>
 

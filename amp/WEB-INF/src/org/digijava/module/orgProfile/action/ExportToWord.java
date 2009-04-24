@@ -54,7 +54,7 @@ public class ExportToWord extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
         response.setContentType("application/msword");
         response.setHeader("content-disposition", "inline;filename=orgProfile.doc");
-        String siteId=RequestUtils.getSiteDomain(request).getSite().getId().toString();
+        Long siteId=RequestUtils.getSiteDomain(request).getSite().getId();
         String langCode= RequestUtils.getNavigationLanguage(request).getCode();
         com.lowagie.text.Document doc = new com.lowagie.text.Document(PageSize.A4);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -88,7 +88,7 @@ public class ExportToWord extends Action {
                         ChartOption opt = new ChartOption();
                         opt.setWidth(350);
                         opt.setHeight(420);
-                        opt.setSiteId(siteId.toString());
+                        opt.setSiteId(siteId);
                         opt.setLangCode(langCode);
                         JFreeChart chart = null;
                         Table orgSummaryTbl = null;

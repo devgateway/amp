@@ -745,7 +745,7 @@ public class ChartWidgetUtil {
                         " inner join actSec.classificationConfig config ";
 		
 		
-		oql += " where sec.parentSectorId is null  and fd.transactionType = 0 and fd.adjustmentType = 1 ";
+		oql += " where  fd.transactionType = 0 and fd.adjustmentType = 1 ";
 		if (donorIDs != null && donorIDs.length > 0) {
 			oql += " and (fd.ampFundingId.ampDonorOrgId in ("+ getInStatment(donorIDs) + ") ) ";
 		}
@@ -755,6 +755,9 @@ public class ChartWidgetUtil {
         if (sectorIds!=null) {
 			oql += " and actSec.sectorId in ("+ getInStatment(sectorIds) + ") ";
 		}
+        else{
+           oql +=" and sec.parentSectorId is null";
+        }
         oql +=" and config.name='Primary' and act.team is not null ";
 		oql += " group by f.ampDonorOrgId, actSec.sectorId,  fd.ampCurrencyId";
 		oql += " order by f.ampDonorOrgId, actSec.sectorId";

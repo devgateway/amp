@@ -75,7 +75,7 @@ public class FeedBinder extends GenericFeedBinder {
 		while (i.hasNext()) {
 			AmpReportColumn element = (AmpReportColumn) i.next();
 			ColumnType xmlm=fact.createColumnType();
-			xmlm.setOrder(BigInteger.valueOf(Long.parseLong(element.getOrderId())));
+			xmlm.setOrder(new BigInteger(element.getOrderId().toString()));
 			xmlm.setId(BigInteger.valueOf(element.getColumn().getColumnId().longValue()));
 			xmlm.setValue(element.getColumn().getColumnName());
 			xmlr.getColumn().add(xmlm);
@@ -85,7 +85,7 @@ public class FeedBinder extends GenericFeedBinder {
 		while (i.hasNext()) {
 			AmpReportHierarchy element = (AmpReportHierarchy) i.next();
 			ColumnType xmlm=fact.createColumnType();
-			xmlm.setOrder(BigInteger.valueOf(Long.parseLong(element.getLevelId())));
+			xmlm.setOrder(BigInteger.valueOf(element.getLevelId().intValue()));
 			xmlm.setId(BigInteger.valueOf(element.getColumn().getColumnId().longValue()));
 			xmlm.setValue(element.getColumn().getColumnName());
 			xmlr.getHierarchy().add(xmlm);

@@ -60,8 +60,8 @@ public class CellColumn extends Column {
 		super(source.getParent(), source.getName());
 		this.contentCategory = source.getContentCategory();
 		this.dimensionClass = source.getDimensionClass();
-		this.relatedContentPersisterClass = source
-				.getRelatedContentPersisterClass();
+		this.relatedContentPersisterClass = source.getRelatedContentPersisterClass();
+		this.worker=source.getWorker();
 		itemsMap = new HashMap();
 	}
 

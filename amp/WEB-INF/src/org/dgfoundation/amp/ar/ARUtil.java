@@ -241,7 +241,7 @@ public final class ARUtil {
 			Iterator i = hierarchies.iterator();
 			while (i.hasNext()) {
 				AmpReportHierarchy element = (AmpReportHierarchy) i.next();
-				int order = Integer.parseInt(element.getLevelId());
+				int order = element.getLevelId().intValue();
 				if (order - 1 == x)
 					orderedColumns.add(element);
 			}
@@ -265,7 +265,7 @@ public final class ARUtil {
 			Iterator i = columns.iterator();
 			while (i.hasNext()) {
 				AmpReportColumn element = (AmpReportColumn) i.next();
-				int order = Integer.parseInt(element.getOrderId());
+				int order = element.getOrderId().intValue();
 				if (order - 1 == x)
 					orderedColumns.add(element);
 			}

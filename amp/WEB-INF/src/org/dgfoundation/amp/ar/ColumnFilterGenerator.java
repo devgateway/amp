@@ -199,7 +199,7 @@ public class ColumnFilterGenerator {
 				if(cf.getColumn().getFilterRetrievable()!=null && cf.getColumn().getFilterRetrievable().booleanValue()) {
 					AmpReportColumn arc = new AmpReportColumn();
 					arc.setColumn(cf.getColumn());
-					arc.setOrderId(new String("1"));
+					arc.setOrderId(1L);
 					logger.info("Adding additional column "+cf.getColumn().getColumnName()+" because selected filter "+cf.getBeanFieldName()+" is filterRetrievable");
 					extractable.add(arc);
 					addedColumnNames.add(arc.getColumn().getColumnName());

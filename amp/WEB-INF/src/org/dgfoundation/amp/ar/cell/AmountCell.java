@@ -324,7 +324,7 @@ public class AmountCell extends Cell {
 	public void setPercentage(double percentage, MetaTextCell source) {
 		Column sourceCol = source.getColumn();
 		
-		initializePercentageMaps();
+	 	initializePercentageMaps();
 		logger.debug("percent "+percentage +" apply to "+this+" (hash"+this.getHashCode()+") with source "+sourceCol.getName());
 		logger.debug("...column already has "+columnPercent+" for "+columnCellValue);
 		// never apply same percentage of same value again

@@ -81,6 +81,7 @@
             <description>This service will sync error log with ECS Server</description>
     </service>
 
+
      <config-bean id="proxyHelperConfig" class="org.digijava.kernel.util.ProxyHelperConfig">
           <property name="initializeUser">false</property>
      </config-bean>

@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE jackrabbitRepository[
+<!ENTITY schema SYSTEM "jackrabbit-schema.xml">
+]>
+
 <Repository>
 
     <!-- Virtual file system where the repository stores global state -->
     <FileSystem class="org.apache.jackrabbit.core.fs.db.JNDIDatabaseFileSystem">
         <param name="dataSourceLocation" value="java:comp/env/ampDS" />
         <param name="schemaObjectPrefix" value="repfsgs_" />
-	<param name="schema" value="postgresql" />
+	&schema;
     </FileSystem>
     
     
@@ -32,7 +36,7 @@
         <FileSystem class="org.apache.jackrabbit.core.fs.db.JNDIDatabaseFileSystem">
             <param name="dataSourceLocation" value="java:comp/env/ampDS" />
         	<param name="schemaObjectPrefix" value="repfsws_" />
-		<param name="schema" value="postgresql" />
+		&schema;
         </FileSystem>
         
         
@@ -41,7 +45,7 @@
         	<param name="dataSourceLocation" value="java:comp/env/ampDS" />
         	<param name="schemaObjectPrefix" value="reppm_" />
         	<param name="externalBLOBs" value="false" />
-		<param name="schema" value="postgresql" />
+		&schema;
  
         </PersistenceManager>
         
@@ -74,7 +78,7 @@
         <FileSystem class="org.apache.jackrabbit.core.fs.db.JNDIDatabaseFileSystem">
             <param name="dataSourceLocation" value="java:comp/env/ampDS" />
         	<param name="schemaObjectPrefix" value="repfsver_" />
-		<param name="schema" value="postgresql" />
+		&schema;
         </FileSystem>
         
         <!-- Persistence Manager for versioning -->
@@ -82,7 +86,7 @@
         	<param name="dataSourceLocation" value="java:comp/env/ampDS" />
         	<param name="schemaObjectPrefix" value="reppmver_" />
         	<param name="externalBLOBs" value="false" />
-		<param name="schema" value="postgresql" />
+		&schema;
         </PersistenceManager>
 
     </Versioning>

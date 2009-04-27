@@ -329,12 +329,12 @@ public class LuceneUtil implements Serializable {
 			Session session = PersistenceManager.getSession();
 			Connection	conn	= session.connection();
 			Statement st		= conn.createStatement();
-			String qryStr		= "select max(amp_activity_id) mid from v_titles";
+			String qryStr		= "select max(amp_activity_id) from amp_activity";
 
 			ResultSet rs		= st.executeQuery(qryStr);
 			
 			rs.next();
-			ret = Integer.parseInt(rs.getString("mid"));
+			ret = rs.getInt(1);
 		}
 		catch(Exception ex){
 			logger.error("Error while getting the max activity id:", ex);

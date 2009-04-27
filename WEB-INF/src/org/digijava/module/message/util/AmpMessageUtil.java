@@ -245,7 +245,6 @@ public class AmpMessageUtil {
 			if(onlyUnread){
 				queryString+=" and state.read=false";
 			}
-			queryString+=" group by msg.creationDate order by msg.creationDate desc ";
 			query=session.createQuery(queryString);			 				
 			query.setParameter("tmId", tmId);
                         query.setParameter("hidden", hidden);

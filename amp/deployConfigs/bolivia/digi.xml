@@ -1,7 +1,9 @@
 <?xml version="1.0"?>
 <!DOCTYPE digi-common [
         <!ENTITY commonEntities SYSTEM "digi-common.xml">
+		<!ENTITY patchesDir SYSTEM "patches-dir.xml">
 ]>
+
 
 <digi-config>
     <smtp>
@@ -30,7 +32,7 @@
     
     <service id="digiAutoPatcherService" class="org.digijava.module.autopatcher.core.AutopatcherService">
             <description>Advanced Database Patcher Module</description>
-            <property name="patchesDir">patches</property>
+            &patchesDir;
     </service>
 	
 	&commonEntities;

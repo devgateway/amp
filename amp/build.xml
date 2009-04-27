@@ -320,6 +320,9 @@
 	<target name="copyForAnySQL" if="dbName">
 		 <echo message="Using ${dbName} Configuration" />
 		<copy file="${dbConfigs}/${dbName}/hibernate-dialect.xml" todir="${src}" overwrite="true"/>
+		<copy file="${dbConfigs}/${dbName}/jackrabbit-schema.xml" todir="${jackrabbit}" overwrite="true"/>
+		<copy file="${dbConfigs}/${dbName}/patches-dir.xml" todir="${repository}" overwrite="true"/>
+		<copy file="${dbConfigs}/${dbName}/quartz.properties" todir="${src}" overwrite="true"/>
 	</target>	
 
 

@@ -704,3 +704,4 @@
 <feature:display name="Team Resources" module="Resources"></feature:display>
 <feature:display name="Public Resources" module="Resources"></feature:display>
 <feature:display name="Other Resources" module="Resources"></feature:display>
+

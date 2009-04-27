@@ -783,4 +783,11 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Add Donor Button" feature="Donors"></field:display>
 <field:display name="Remove Donor Button" feature="Donors"></field:display>
 
-		
+
+<feature:display name="Computed Fields"  module="Report Generator"></feature:display>
+<field:display name="Overage Project" feature="Computed Fields"></field:display>
+<field:display name="Age of Project" feature="Computed Fields"></field:display>
+<field:display name="Predictability of Funding" feature="Computed Fields"></field:display>
+<field:display name="Average Size of Projects" feature="Computed Fields"></field:display>
+<field:display name="Variance Of Commitments" feature="Computed Fields"></field:display>
+<field:display name="Variance Of Disbursements" feature="Computed Fields"></field:display>

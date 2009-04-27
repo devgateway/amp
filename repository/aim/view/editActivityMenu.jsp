@@ -813,9 +813,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					</c:if>
 				</tr>
 				</feature:display>
-			
-			
-				<feature:display name="Contracting" module="Contracting">
+				<field:display name="Add IPA Contract" feature="Contracting">
 				<tr>
 					<c:if test="${aimEditActivityForm.step != 13}">
 					<td nowrap="nowrap">
@@ -847,7 +845,7 @@ of ActivityUtil class also when change step visibility module/feature name -->
 					</td>
 					</c:if>
 				</tr>
-				</feature:display>
+				</field:display>
 				<tr>
 					<td align="center">
 					</td>

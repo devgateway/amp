@@ -209,6 +209,8 @@ public Cell filter(Cell metaCell,Set ids) {
 					//NEVER apply this for regional reports with regional metaCell:
 					if(metaCell.getColumn().getName().equals(ArConstants.REGION) && this.getNearestReportData().getReportMetadata().getType()==ArConstants.REGIONAL_TYPE)
 						continue;
+					//column is needed to get the tokenExpression on computed fields
+					ret.setColumn(this.getColumn());
 					applyMetaFilter(col.getColumn().getColumnName(), metaCell, ret);
 			}
 			

@@ -70,6 +70,7 @@ public class TotalAmountColumn extends AmountCellColumn {
 	    AmountCell newcell = (AmountCell) ac.newInstance();
 	    // AmountCell newcell = new AmountCell();
 	    newcell.merge(newcell, ac);
+	    newcell.setColumn(this);
 	    super.addCell(newcell);
 	}
 

@@ -167,10 +167,10 @@ public class ExportBuilder {
 			if (ampActivity.getActivityPrograms() != null && ampActivity.getActivityPrograms().size() > 0){
 				for (Iterator iterator = ampActivity.getActivityPrograms().iterator(); iterator.hasNext();) {
 					AmpActivityProgram ampProgram = (AmpActivityProgram) iterator.next();
-					if (ampProgram.getProgramPercentage() != null){
+					if (ampProgram.getProgramPercentage() != 0){
 					parent.getPrograms().add(buildPercentageCodeValue(ampProgram.getProgram().getThemeCode(),
 							ampProgram.getProgram().getName(),
-							ampProgram.getProgramPercentage().floatValue()));
+							ampProgram.getProgramPercentage()));
 					} else {
 						String msg = "Programs.Precent is empty";
 						this.addToLog(ampActivity, msg);

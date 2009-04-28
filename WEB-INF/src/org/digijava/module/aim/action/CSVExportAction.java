@@ -142,7 +142,7 @@ public class CSVExportAction
 	    grdx.makeColSpan(rd.getTotalDepth(),false);
 	    rowId.inc();
 	    colId.reset();
-	
+	    grdx.setAutoSize(false);
 	    grdx.generate();
 	    
 	    // we now iterate the rows and create the csv

@@ -10,41 +10,9 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
-<script language="JavaScript">
-
-	<!--
-
-	function selectSector() {		
-		<digi:context name="selSector" property="context/module/moduleinstance/sectorActions.do?actionType=addsectorToindicator"/>
-	    document.aimIndicatorForm.action = "<%= selSector %>";
-		 document.aimIndicatorForm.target = window.opener.name;
-	    document.aimIndicatorForm.submit();
-            window.opener.location.reload(true);
-            window.opener.focus();
-		window.close();
-		
-	}	
-	
-	function reloadSector(value) {		
-		if (value == 1) {
-			document.aimIndicatorForm.sector.value = -1;
-		}	
-		<digi:context name="selSector" property="context/module/moduleinstance/sectorActions.do?actionType=loadSectors"/>
-	    document.aimIndicatorForm.action = "<%= selSector %>";
-  		document.aimIndicatorForm.submit();									
-	}	
-	
-	
-	function closeWindow() {
-		window.close();
-	}
-
-	-->
-
-</script>
 
 <digi:instance property="aimIndicatorForm" />
-<digi:form action="/sectorActions.do" method="post">
+<digi:form action="/sectorActions.do" type="aimIndicatorForm" name="aimIndicatorFormSector" method="post">
 <html:hidden property="sectorReset" value="false"/>
 
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
@@ -102,7 +70,7 @@
 														</html:reset>
 													</td>
 													<td>
-														 <html:button  styleClass="dr-menu" property="submitButton"  onclick="closeWindow()">
+														 <html:button  styleClass="dr-menu" property="submitButton"  onclick="closeWindow2()">
 																<digi:trn key="btn:close">Close</digi:trn> 
 														 </html:button>
 													</td>

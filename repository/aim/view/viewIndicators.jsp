@@ -221,7 +221,7 @@ a.itr:hover {
                                         <c:if test="${!empty aimViewIndicatorsForm.allIndicators}">
                                           <c:forEach var="indItr" items="${aimViewIndicatorsForm.allIndicators}">
                                             <tr onmouseover="style.backgroundColor='#dddddd';" onmouseout="style.backgroundColor='white'">
-                                              <td width="80%" nowrap="nowrap">
+                                              <td width="80%">
 	                                            <a class="itr" href="javascript:editIndicator('${indItr.id}');">
                                                 ${indItr.name}</a>
                                                </td>

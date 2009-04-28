@@ -17,7 +17,7 @@
 <script language="JavaScript" type="text/javascript">
 	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
 </script>
-
+<jsp:include page="addActivityStep10Popin.jsp" flush="true" />
 <script language="JavaScript">
 <!--
 
@@ -171,7 +171,7 @@
 			document.aimEditActivityForm.submit();
 		}
 	}
-
+/*
 	function addIndicator()
 	{
 		openNewRsWindow(800, 400);
@@ -180,7 +180,7 @@
 		document.aimEditActivityForm.target = popupPointer.name;
 		document.aimEditActivityForm.submit();
 	}
-
+*/
 	function deleteIndicator()
 		{
 			return confirm(deleteThisIndicator);

@@ -7,13 +7,19 @@ import java.util.List;
 
 public class SectorTableHelper {
     private String sectorName;
-    private List<Long> totalYearsValue;
-    private List<Long> percentYearsValue;
+    private List<String> values;
     private boolean applyStyle;
     private boolean emptyRow;
 
     public boolean isEmptyRow() {
         return emptyRow;
+    }
+    public List<String> getValues() {
+        return values;
+    }
+
+    public void setValues(List<String> values) {
+        this.values = values;
     }
 
     public void setEmptyRow(boolean emptyRow) {
@@ -30,22 +36,6 @@ public class SectorTableHelper {
     
     public String getSectorName() {
         return sectorName;
-    }
-
-    public List<Long> getPercentYearsValue() {
-        return percentYearsValue;
-    }
-
-    public void setPercentYearsValue(List<Long> percentYearsValue) {
-        this.percentYearsValue = percentYearsValue;
-    }
-
-    public List<Long> getTotalYearsValue() {
-        return totalYearsValue;
-    }
-
-    public void setTotalYearsValue(List<Long> totalYearsValue) {
-        this.totalYearsValue = totalYearsValue;
     }
 
     public void setSectorName(String sectorName) {

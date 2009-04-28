@@ -58,6 +58,7 @@ public class AdminSectorTableWidgets extends DispatchAction {
         }
         tablesForm.setSelPlaces(null);
         tablesForm.setPlaces(WidgetUtil.getAllPlaces());
+        tablesForm.setSectorTableYears(new ArrayList<AmpSectorTableYear>());
         return mapping.findForward("create");
 
     }
@@ -96,6 +97,7 @@ public class AdminSectorTableWidgets extends DispatchAction {
                 selectedYears.add(percentYearsColIter.next().getYear().toString());
             }
         }
+        tablesForm.setSectorTableYears(new ArrayList(secTbWidget.getYears()));
         String[] percentYears = new String[selectedYears.size()];
         tablesForm.setSelectedPercentYears(selectedYears.toArray(percentYears));
 
@@ -141,14 +143,13 @@ public class AdminSectorTableWidgets extends DispatchAction {
     public ActionForward save(ActionMapping mapping,
             ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception {
-        boolean isNew=true;
+        boolean isNew = true;
         AdminSectorTableWidgetForm tablesForm = (AdminSectorTableWidgetForm) form;
         AmpSectorTableWidget secTableWidget = null;
         List<AmpDaWidgetPlace> oldPlaces = null;
         List<AmpDaWidgetPlace> newPlaces = null;
         List<AmpSectorOrder> sectorOrders = tablesForm.getSectors();
-        String[] selTotalYears = tablesForm.getSelectedTotalYears();
-        String[] selPercentYears = tablesForm.getSelectedPercentYears();
+
 
         if (tablesForm.getSectorTableId() == null || tablesForm.getSectorTableId() == 0) {
             secTableWidget = new AmpSectorTableWidget();
@@ -156,7 +157,7 @@ public class AdminSectorTableWidgets extends DispatchAction {
         } else {
             secTableWidget = SectorTableWidgetUtil.getAmpSectorTableWidget(tablesForm.getSectorTableId());
             oldPlaces = WidgetUtil.getWidgetPlaces(tablesForm.getSectorTableId());
-            isNew=false;
+            isNew = false;
         }
         if (secTableWidget.getPercentYears() == null) {
             secTableWidget.setPercentYears(new HashSet<AmpSectorTableYear>());
@@ -164,22 +165,22 @@ public class AdminSectorTableWidgets extends DispatchAction {
         if (secTableWidget.getTotalYears() == null) {
             secTableWidget.setTotalYears(new HashSet<AmpSectorTableYear>());
         }
-        if (secTableWidget.getSectorsColumns()== null) {
+        if (secTableWidget.getSectorsColumns() == null) {
             secTableWidget.setSectorsColumns(new HashSet<AmpSectorOrder>());
         }
 
-       
+
         List<AmpSectorOrder> secOrderRetain = new ArrayList<AmpSectorOrder>();
         Set<AmpSectorOrder> sectors = secTableWidget.getSectorsColumns();
         Iterator<AmpSectorOrder> sectorOrdeIter = sectorOrders.iterator();
-       
+
         int order = 0;
         while (sectorOrdeIter.hasNext()) {
             boolean sectorExist = false;
             AmpSectorOrder sectorOrder = sectorOrdeIter.next();
             Iterator<AmpSectorOrder> oldSecOrderIter = sectors.iterator();
             while (oldSecOrderIter.hasNext()) {
-                AmpSectorOrder oldSectorOrder =oldSecOrderIter.next();
+                AmpSectorOrder oldSectorOrder = oldSecOrderIter.next();
                 if (sectorOrder.getSector().getAmpSectorId().equals(oldSectorOrder.getSector().getAmpSectorId())) {
                     sectorExist = true;
                     secOrderRetain.add(sectorOrder);
@@ -201,82 +202,23 @@ public class AdminSectorTableWidgets extends DispatchAction {
         secTableWidget.getSectorsColumns().clear();
         secTableWidget.getSectorsColumns().addAll(secOrderRetain);
 
-        // Total column
-        Set<AmpSectorTableYear> oldTotYears = secTableWidget.getTotalYears();
-        List<AmpSectorTableYear> yearsToRetain = new ArrayList<AmpSectorTableYear>();
+        // year columns
 
-        if (selTotalYears != null) {
-            Arrays.sort(selTotalYears);
-            for (int i = 0; i < selTotalYears.length; i++) {
-                Long year = Long.parseLong(selTotalYears[i]);
-                boolean yearExist = false;
-                if (oldTotYears != null) {
-
-                    Iterator<AmpSectorTableYear> yearIter = oldTotYears.iterator();
-                    while (yearIter.hasNext()) {
-                        AmpSectorTableYear yearCol = yearIter.next();
-                        if (yearCol.getYear().equals(year)) {
-                            yearExist = true;
-                            yearsToRetain.add(yearCol);
-                            break;
-                        }
-
-                    }
-                }
-                if (!yearExist) {
-                    AmpSectorTableYear totColumn = new AmpSectorTableYear();
-                    totColumn.setType(AmpSectorTableYear.TOTAL_TYPE_YEAR);
-                    totColumn.setYear(year);
-                    secTableWidget.addYear(totColumn);
-                    yearsToRetain.add(totColumn);
-                }
-
-            }
+        List<AmpSectorTableYear> newYears = tablesForm.getSectorTableYears();
+        long ord = 1;
+        Iterator<AmpSectorTableYear> yearIter = newYears.iterator();
+        while (yearIter.hasNext()) {
+            AmpSectorTableYear year = yearIter.next();
+            year.setOrder(ord);
+            year.setWidget(secTableWidget);
+            ord++;
 
         }
-        secTableWidget.getTotalYears().retainAll(yearsToRetain);
-
-         // Percent column
-        Set<AmpSectorTableYear> oldPercYears = secTableWidget.getPercentYears();
-        List<AmpSectorTableYear> yearsPercRetain = new ArrayList<AmpSectorTableYear>();
-        if (selPercentYears != null) {
-            Arrays.sort(selPercentYears);
-
-            for (int i = 0; i < selPercentYears.length; i++) {
-                Long year = Long.parseLong(selPercentYears[i]);
-                boolean yearExist = false;
-                if (oldPercYears != null) {
-
-                    Iterator<AmpSectorTableYear> yearIter = oldPercYears.iterator();
-                    while (yearIter.hasNext()) {
-                        AmpSectorTableYear yearCol = yearIter.next();
-                        if (yearCol.getYear().equals(year)) {
-                            yearExist = true;
-                            yearsPercRetain.add(yearCol);
-                            break;
-                        }
-
-
-                    }
-
-                }
-                if (!yearExist) {
-                    AmpSectorTableYear percCol = new AmpSectorTableYear();
-                    percCol.setType(AmpSectorTableYear.PERCENT_TYPE_YEAR);
-                    percCol.setYear(year);
-                    secTableWidget.addYear(percCol);
-                    yearsPercRetain.add(percCol);
-                }
-
-            }
-
-        }
-        secTableWidget.getPercentYears().retainAll(yearsPercRetain);
-
-
+        secTableWidget.getTotalYears().clear();
+        secTableWidget.getTotalYears().addAll(newYears);
 
         secTableWidget.setName(tablesForm.getName());
-        SectorTableWidgetUtil.saveWidget(secTableWidget,isNew);
+        SectorTableWidgetUtil.saveWidget(secTableWidget, isNew);
         if (tablesForm.getSelPlaces() != null && tablesForm.getSelPlaces().length > 0) {
             newPlaces = WidgetUtil.getPlacesWithIDs(tablesForm.getSelPlaces());
             if (oldPlaces != null && newPlaces != null) {
@@ -370,7 +312,7 @@ public class AdminSectorTableWidgets extends DispatchAction {
                 break;
             }
         }
-        return mapping.findForward("create");
+        return mapping.findForward("reorder");
     }
 
     public ActionForward reorderDown(ActionMapping mapping,
@@ -389,7 +331,113 @@ public class AdminSectorTableWidgets extends DispatchAction {
                 break;
             }
         }
+        return mapping.findForward("reorder");
+    }
+
+    public ActionForward gotoSecondStep(ActionMapping mapping,
+            ActionForm form, HttpServletRequest request,
+            HttpServletResponse response) throws Exception {
+        AdminSectorTableWidgetForm tablesForm = (AdminSectorTableWidgetForm) form;
+        String[] totalYears = tablesForm.getSelectedTotalYears();
+        String[] percentYears = tablesForm.getSelectedPercentYears();
+        List<AmpSectorTableYear> years = new ArrayList<AmpSectorTableYear>();
+        long order = tablesForm.getSectorTableYears().size();
+        Iterator<AmpSectorTableYear> iter = tablesForm.getSectorTableYears().iterator();
+        List<String> oldYears = new ArrayList<String>();
+        List<String> oldPercentYears = new ArrayList<String>();
+        while (iter.hasNext()) {
+            AmpSectorTableYear year = iter.next();
+            for (String totalYear : totalYears) {
+                if (year.getYear().toString().equals(totalYear) && year.getType().equals(AmpSectorTableYear.TOTAL_TYPE_YEAR)) {
+                    years.add(year);
+                    oldYears.add(totalYear);
+                    break;
+                }
+            }
+            for (String percentYear : percentYears) {
+                if (year.getYear().toString().equals(percentYear) && year.getType().equals(AmpSectorTableYear.PERCENT_TYPE_YEAR)) {
+                    years.add(year);
+                    oldPercentYears.add(percentYear);
+                    break;
+                }
+            }
+        }
+        if (totalYears != null) {
+            for (String totalYear : totalYears) {
+                if (!oldYears.contains(totalYear)) {
+                    order++;
+                    AmpSectorTableYear newYear = new AmpSectorTableYear();
+                    newYear.setType(AmpSectorTableYear.TOTAL_TYPE_YEAR);
+                    newYear.setYear(Long.parseLong(totalYear));
+                    newYear.setOrder(order);
+                    years.add(newYear);
+
+                }
+            }
+        }
+        if (percentYears != null) {
+            for (String percentYear : percentYears) {
+                if (!oldPercentYears.contains(percentYear)) {
+                    order++;
+                    AmpSectorTableYear newYear = new AmpSectorTableYear();
+                    newYear.setType(AmpSectorTableYear.PERCENT_TYPE_YEAR);
+                    newYear.setYear(Long.parseLong(percentYear));
+                    newYear.setOrder(order);
+                    years.add(newYear);
+
+                }
+            }
+        }
+
+
+        tablesForm.setSectorTableYears(years);
+        return mapping.findForward("reorder");
+    }
+
+    public ActionForward gotoFirstStep(ActionMapping mapping,
+            ActionForm form, HttpServletRequest request,
+            HttpServletResponse response) throws Exception {
         return mapping.findForward("create");
+    }
+
+    public ActionForward reorderColumnUp(ActionMapping mapping,
+            ActionForm form, HttpServletRequest request,
+            HttpServletResponse response) throws Exception {
+        AdminSectorTableWidgetForm tablesForm = (AdminSectorTableWidgetForm) form;
+        List<AmpSectorTableYear> years = tablesForm.getSectorTableYears();
+        Iterator<AmpSectorTableYear> iterYears = years.iterator();
+        Long type = Long.parseLong(request.getParameter("type"));
+        while (iterYears.hasNext()) {
+            AmpSectorTableYear year = iterYears.next();
+            if (year.getYear().equals(tablesForm.getSectorTableYearId()) & year.getType().equals(type)) {
+                int index = years.indexOf(year);
+                years.remove(year);
+                years.add(index - 1, year);
+                tablesForm.setSectorTableYears(years);
+                break;
+            }
+        }
+        return mapping.findForward("reorder");
+    }
+
+    public ActionForward reorderColumnDown(ActionMapping mapping,
+            ActionForm form, HttpServletRequest request,
+            HttpServletResponse response) throws Exception {
+        AdminSectorTableWidgetForm tablesForm = (AdminSectorTableWidgetForm) form;
+        List<AmpSectorTableYear> years = tablesForm.getSectorTableYears();
+        Long type = Long.parseLong(request.getParameter("type"));
+        Iterator<AmpSectorTableYear> iterYears = years.iterator();
+        while (iterYears.hasNext()) {
+            AmpSectorTableYear year = iterYears.next();
+            if (year.getYear().equals(tablesForm.getSectorTableYearId()) & year.getType().equals(type)) {
+                int index = years.indexOf(year);
+                years.remove(year);
+                years.add(index + 1, year);
+                tablesForm.setSectorTableYears(years);
+                break;
+            }
+        }
+        return mapping.findForward("reorder");
     }
 
     private static Long getSectorId(ActivitySector selectedSector) {

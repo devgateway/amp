@@ -36,7 +36,7 @@
                    return false;
                }
              
-               save();
+              next();
            }
 
            function cancel(){
@@ -50,7 +50,13 @@
             *  someone may press cancel
             *  on the sector selection popup
             */
-           function save(){
+           function next(){
+       <digi:context name="addEditSectorTable" property="/widget/sectorTableManager.do~actType=gotoSecondStep" />
+               document.sectorTableWidgetForm.action = "${addEditSectorTable}";
+               document.sectorTableWidgetForm.target = "_self";
+               document.sectorTableWidgetForm.submit();
+           }
+             function save(){
        <digi:context name="addEditSectorTable" property="/widget/sectorTableManager.do~actType=save" />
                document.sectorTableWidgetForm.action = "${addEditSectorTable}";
                document.sectorTableWidgetForm.target = "_self";
@@ -143,7 +149,6 @@
                                 <table border="0" style="font-family:verdana;font-size:11px;border:1px solid silver;width:100%">
                                     <tr bgColor="#d7eafd">
                                         <td><digi:trn>Sector Name</digi:trn></td>
-                                        <td width="10%" colspan="2"><digi:trn>Order</digi:trn></td>
                                     </tr>
                                     <c:forEach var="sector" items="${sectorTableWidgetForm.sectors}" varStatus="status">
                                         <tr>
@@ -153,17 +158,7 @@
                                                 </html:multibox>
                                                 <c:out value="${sector.sector.name}"/>
                                             </td>
-                                            <td >
-                                                <c:if test="${status.first != true}">
-                                                    <a href="javascript:moveUp(${sector.sector.ampSectorId})"><img border="0" src='<digi:file src="images/up.gif"/>'></a>
-                                                </c:if>
-
-                                            </td>
-                                            <td>
-                                                <c:if test="${status.last != true}">
-                                                    <a href="javascript:moveDown(${sector.sector.ampSectorId})"><img border="0" src='<digi:file src="images/down.gif"/>'></a>
-                                                </c:if>
-                                            </td>
+                                          
                                         </tr>
                                     </c:forEach>
                                 </table>
@@ -221,7 +216,7 @@
 
                     <tr>
                         <td align="right">
-                            <input type="button" onclick="validate()" value="<digi:trn>Save</digi:trn>"/>
+                            <input type="button" onclick="validate()" value="<digi:trn>Next</digi:trn>"/>
                         </td>
                         <td>
                             <input type="button" value="Cancel" onclick="cancel()">

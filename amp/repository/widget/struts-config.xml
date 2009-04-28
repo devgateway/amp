@@ -85,6 +85,7 @@
        <action name="sectorTableWidgetForm" path="/widget/sectorTableManager" scope="session" type="org.digijava.module.widget.action.AdminSectorTableWidgets" validate="false" parameter="actType">
 	      <forward name="forward" path="/showLayout.do?layout=widget_sectorTableManager" />
           <forward name="create" path="/showLayout.do?layout=widget_createSectorTable" />
+          <forward name="reorder" path="/showLayout.do?layout=widget_reorderSectorTableCols" />
     	</action>
 
         <action name="showSectorTableForm" path="/widget/showSectorTable" scope="request" type="org.digijava.module.widget.action.ShowSectorTable" validate="false">

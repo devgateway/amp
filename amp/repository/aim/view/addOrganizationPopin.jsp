@@ -159,8 +159,9 @@
 	function getParams(){
 		ret="";
 		ret+="&selectedOrganisationFromPages="+document.getElementsByName('selectedOrganisationFromPages')[0].value+
-		"&keyword="+document.getElementsByName('keyword')[0].value+
-		"&ampOrgTypeId="+document.getElementsByName('ampOrgTypeId')[0].value;
+		"&keyword="+document.getElementsByName('keyword')[0].value +
+		"&ampOrgTypeId="+document.getElementsByName('ampOrgTypeId')[0].value +
+		"&tempNumResults="+document.getElementsByName('tempNumResults')[0].value;
 		//else if (type==3){//add sectors chosen from the list
 		if(document.getElementsByName("selOrganisations")!=null){
 			var sectors = document.getElementsByName("selOrganisations").length;
@@ -182,12 +183,10 @@
 				  //return false;
 			} else {
 				 <digi:context name="searchOrg" property="/aim/selectOrganizationComponent.do"/>
-			    //document.aimSelectOrganizationForm.action = "<%= searchOrg %>";
-			    //document.aimSelectOrganizationForm.submit();
 			    var url = "<%=searchOrg %>"
 				var params = "?edit=true&subAction=search"+getParams();    
 			    YAHOOAmp.util.Connect.asyncRequest("POST", url+params, callback);
-				//return true;
+			    //return true;
 			}
 		}
 		else return false;

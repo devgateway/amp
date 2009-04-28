@@ -9,8 +9,9 @@
 				<param name="sequence">AMP_WIDGET_SECTOR_TABLE_YEAR_seq</param>
 			</generator>
 		</id>
-		<property name="year"  type="java.lang.Long" />
-        <property name="type"  type="java.lang.Long" />
+		<property name="year"  type="java.lang.Long" not-null="true"/>
+        <property name="type"  type="java.lang.Long"  not-null="true"/>
+        <property name="order"  type="java.lang.Long"  column="column_order"/>
 		<many-to-one name="widget" column="sector_widget_table_id"
 			class="org.digijava.module.widget.dbentity.AmpSectorTableWidget" cascade="none" />
 	</class>

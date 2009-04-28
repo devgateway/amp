@@ -2,6 +2,7 @@ package org.digijava.module.widget.action;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -24,6 +25,7 @@ import org.digijava.module.widget.dbentity.AmpSectorOrder;
 import org.digijava.module.widget.dbentity.AmpSectorTableWidget;
 import org.digijava.module.widget.dbentity.AmpSectorTableYear;
 import org.digijava.module.widget.form.ShowSectorTableForm;
+import org.digijava.module.widget.helper.OrderHelper;
 import org.digijava.module.widget.helper.SectorTableHelper;
 import org.digijava.module.widget.util.ChartWidgetUtil;
 import org.digijava.module.widget.util.SectorTableWidgetUtil;
@@ -37,37 +39,58 @@ public class ShowSectorTable extends Action {
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         ShowSectorTableForm tableForm = (ShowSectorTableForm) form;
-        Long siteId=RequestUtils.getSiteDomain(request).getSite().getId();
-        String langCode= RequestUtils.getNavigationLanguage(request).getCode();
-        String headingTotal=TranslatorWorker.translateText("US$ millions",langCode,siteId);
-        String headingFY=TranslatorWorker.translateText("FY",langCode,siteId);
-        String headingPercent=TranslatorWorker.translateText("Of",langCode,siteId);
-        AmpSectorTableWidget secTableWidget = SectorTableWidgetUtil.getAmpSectorTableWidget(tableForm.getWidgetId());
-        List<AmpSectorOrder> sectorOrders = new ArrayList(secTableWidget.getSectorsColumns());
-        List<String> years = new ArrayList();
-        List<AmpSectorTableYear> totalYears = new ArrayList(secTableWidget.getTotalYears());
-        List<AmpSectorTableYear> percentYears = new ArrayList(secTableWidget.getPercentYears());
+
+        // translate headers
+        Long siteId = RequestUtils.getSiteDomain(request).getSite().getId();
+        String langCode = RequestUtils.getNavigationLanguage(request).getCode();
+        String headingUSMil = TranslatorWorker.translateText("US$ millions", langCode, siteId);
+        String headingFY = TranslatorWorker.translateText("FY", langCode, siteId);
+        String headingPercent = TranslatorWorker.translateText("Of", langCode, siteId);
+        String headingOther = TranslatorWorker.translateText("Other", langCode, siteId);
+        String headingTotal = TranslatorWorker.translateText("Total", langCode, siteId);
+
+          Comparator<OrderHelper> SENIORITY_ORDER = new Comparator<OrderHelper>() {
+
+                public int compare(OrderHelper ord1, OrderHelper ord2) {
+                    return ord1.getOrder().compareTo(ord2.getOrder());
+                }
+            };
+
+
+
+        List<String> years = new ArrayList<String>();
         List<SectorTableHelper> sectorsInfo = new ArrayList<SectorTableHelper>();
-        HashMap<Long, Long> totalForYearExceptOthers = new HashMap<Long, Long>();
-        HashMap<Long, Long> totalPercentForYearExceptOthers = new HashMap<Long, Long>();
-        HashMap<Long, Long> totalForYear = new HashMap<Long, Long>();
-        HashMap<Long, Long> percentTotalForYear = new HashMap<Long, Long>();
+
+        HashMap<String, OrderHelper> totalExceptOthers = new HashMap<String, OrderHelper>();
+        HashMap<String, OrderHelper> totalValues  = new HashMap<String, OrderHelper>();
+
         String fiscalCalendarId = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
         AmpFiscalCalendar calendar = FiscalCalendarUtil.getAmpFiscalCalendar(Long.parseLong(fiscalCalendarId));
 
-        boolean totalYearsAdded = false;
-        boolean percentYearsAdded = false;
+        AmpSectorTableWidget secTableWidget = SectorTableWidgetUtil.getAmpSectorTableWidget(tableForm.getWidgetId());
+        List<AmpSectorTableYear> sectorTableYears = new ArrayList(secTableWidget.getYears());
+        List<AmpSectorOrder> sectorOrders = new ArrayList(secTableWidget.getSectorsColumns());
         Iterator<AmpSectorOrder> sectorOrderIter = sectorOrders.iterator();
+
+        SectorTableHelper sectorTableRowOther = new SectorTableHelper();
+        sectorTableRowOther.setSectorName(headingOther);
+
+        SectorTableHelper sectorTableRowEmpty = new SectorTableHelper();
+        sectorTableRowEmpty.setEmptyRow(true);
+
+        SectorTableHelper sectorTableRowTotal = new SectorTableHelper();
+        sectorTableRowTotal.setSectorName(headingTotal);
+        sectorTableRowTotal.setApplyStyle(true);
+
         while (sectorOrderIter.hasNext()) {
             AmpSectorOrder sectorTableRow = sectorOrderIter.next();
             SectorTableHelper sectorTable = new SectorTableHelper();
             sectorTable.setSectorName(sectorTableRow.getSector().getName());
-            List<Long> percentValues = new ArrayList<Long>();
-            List<Long> totalValues = new ArrayList<Long>();
-            Iterator<AmpSectorTableYear> totalYearIter = totalYears.iterator();
+            HashMap<String, OrderHelper> cols = new HashMap<String, OrderHelper>();
+            Iterator<AmpSectorTableYear> totalYearIter = sectorTableYears.iterator();
             while (totalYearIter.hasNext()) {
-                AmpSectorTableYear totalYear = totalYearIter.next();
-                Long year = totalYear.getYear();
+                AmpSectorTableYear sectorTableYear = totalYearIter.next();
+                Long year = sectorTableYear.getYear();
                 Long sectorId = sectorTableRow.getSector().getAmpSectorId();
                 Date startDate = ChartWidgetUtil.getStartOfYear(year.intValue(), calendar.getStartMonthNum() - 1, calendar.getStartDayNum());
                 //we need data including the last day of toYear,this is till the first day of toYear+1
@@ -75,112 +98,105 @@ public class ShowSectorTable extends Action {
                 Date endDate = new Date(ChartWidgetUtil.getStartOfYear(year.intValue() + 1, calendar.getStartMonthNum() - 1, calendar.getStartDayNum()).getTime() - MILLISECONDS_IN_DAY);
                 Long amount = SectorTableWidgetUtil.calculateFunding(year, new Long[]{sectorId}, startDate, endDate);
                 Long wholeAmount = SectorTableWidgetUtil.calculateFunding(year, null, startDate, endDate);
-                if (!totalForYear.containsKey(year)) {
-                    totalForYear.put(year, wholeAmount);
-                }
+                String heading = "";
+                if (sectorTableYear.getType().equals(AmpSectorTableYear.TOTAL_TYPE_YEAR)) {
+                    if (calendar.getIsFiscal()) {
+                        heading = headingFY + " " + year + "/" + (year + 1) + " (" + headingUSMil + ")";
+                    } else {
+                        heading = year + " (" + headingUSMil + ")";
+                    }
+                    if (!totalValues.containsKey(year)) {
+                        totalValues.put(year.toString(),  new OrderHelper( wholeAmount, sectorTableYear.getOrder(), AmpSectorTableYear.TOTAL_TYPE_YEAR,year.toString()));
+                    }
+                    OrderHelper totalColumn = new OrderHelper(amount, sectorTableYear.getOrder(), AmpSectorTableYear.TOTAL_TYPE_YEAR, year.toString());
+                    cols.put(year.toString(),totalColumn);
 
-                if (!totalYearsAdded) {
-                    if (calendar.getIsFiscal()) {
-                        years.add(headingFY+" "+year + "/" + (year + 1)+" ("+headingTotal+")");
+                    if (!totalExceptOthers.containsKey(year.toString())) {
+                        totalExceptOthers.put(year.toString(),totalColumn);
                     } else {
-                        years.add(year + " ("+headingTotal+")");
+                        OrderHelper helper = totalExceptOthers.get(year.toString());
+                        Long value = helper.getValue();
+                        helper.setValue(value + amount);
+                        totalExceptOthers.put(year.toString(), helper);
                     }
-                }
-                totalValues.add(amount);
-                if (!totalForYearExceptOthers.containsKey(year)) {
-                    totalForYearExceptOthers.put(year, amount);
                 } else {
-                    Long totalAmount = totalForYearExceptOthers.get(year);
-                    totalAmount += amount;
-                    totalForYearExceptOthers.put(year, totalAmount);
-                }
-            }
-            totalYearsAdded = true;
-            sectorTable.setTotalYearsValue(totalValues);
-            Iterator<AmpSectorTableYear> percentYearIter = percentYears.iterator();
-            while (percentYearIter.hasNext()) {
-                AmpSectorTableYear percentYear = percentYearIter.next();
-                Long year = percentYear.getYear();
-                Long sectorId = sectorTableRow.getSector().getAmpSectorId();
-                Date startDate = ChartWidgetUtil.getStartOfYear(year.intValue(), calendar.getStartMonthNum() - 1, calendar.getStartDayNum());
-                //we need data including the last day of toYear,this is till the first day of toYear+1
-                int MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
-                Date endDate = new Date(ChartWidgetUtil.getStartOfYear(year.intValue() + 1, calendar.getStartMonthNum() - 1, calendar.getStartDayNum()).getTime() - MILLISECONDS_IN_DAY);
-                Long amount = SectorTableWidgetUtil.calculateFunding(year, new Long[]{sectorId}, startDate, endDate);
-                Long wholeAmount = SectorTableWidgetUtil.calculateFunding(year, null, startDate, endDate);
-                if (!percentTotalForYear.containsKey(year)) {
-                    Long wholePercent=0l;
+
+                    if (calendar.getIsFiscal()) {
+                        heading = headingFY + " % " + headingPercent + " " + year + "/" + (year + 1);
+                    } else {
+                        heading = " % " + headingPercent + " " + year;
+                    }
+                    long percent = 0;
                     if (wholeAmount != 0) {
-                        wholePercent=100l;
+                        percent = Math.round(1.0 * amount / wholeAmount * 100);
+                       
                     }
-                    percentTotalForYear.put(year,wholePercent);
-                }
-                long percent = 0;
-                if (wholeAmount != 0) {
-                    percent = Math.round(1.0*amount / wholeAmount * 100);
-                    percentValues.add(percent);
-                } else {
-                    percentValues.add(percent);
-                }
-                if (!percentYearsAdded) {
-                    if (calendar.getIsFiscal()) {
-                        years.add(headingFY+" % "+headingPercent+" "+year + "/" + (year + 1) );
+                     if (!totalValues.containsKey(year+ "%") ) {
+                         long wholePercent=0;
+                         if (wholeAmount != 0) {
+                             wholePercent=100;
+                         }
+                           totalValues.put(year.toString() + "%", new OrderHelper(wholePercent, sectorTableYear.getOrder(), AmpSectorTableYear.PERCENT_TYPE_YEAR,year.toString() + "%"));
+                      }
+                    OrderHelper percentColumn = new OrderHelper(percent, sectorTableYear.getOrder(), AmpSectorTableYear.PERCENT_TYPE_YEAR, year.toString() + "%");
+
+                    cols.put(year.toString()+ "%",percentColumn);
+                    if (!totalExceptOthers.containsKey(year.toString() + "%")) {
+                        totalExceptOthers.put(year.toString() + "%",percentColumn);
                     } else {
-                        years.add(" % "+headingPercent+" "+year );
+                        OrderHelper helper = totalExceptOthers.get(year.toString() + "%");
+                        Long value = helper.getValue();
+                        helper.setValue(value + percent);
+                        totalExceptOthers.put(year.toString() + "%", helper);
                     }
                 }
-                if (!totalPercentForYearExceptOthers.containsKey(year)) {
-                    totalPercentForYearExceptOthers.put(year, percent);
-                } else {
-                    Long totalPercent = totalPercentForYearExceptOthers.get(year);
-                    totalPercent += percent;
-                    totalPercentForYearExceptOthers.put(year, totalPercent);
+                if (!years.contains(heading)) {
+                    years.add(heading);
                 }
             }
-            sectorTable.setPercentYearsValue(percentValues);
-            percentYearsAdded = true;
+            List<OrderHelper> orderHelpers = new ArrayList(cols.values());
+            Collections.sort(orderHelpers, SENIORITY_ORDER);
+            Iterator<OrderHelper> orderHelperIter = orderHelpers.iterator();
+            List<String> values = new ArrayList<String>();
+            while (orderHelperIter.hasNext()) {
+                OrderHelper orderHelper = orderHelperIter.next();
+                String value = orderHelper.getValue().toString();
+                if (orderHelper.getType().equals(AmpSectorTableYear.PERCENT_TYPE_YEAR)) {
+                    value += "%";
+                }
+                values.add(value);
+            }
+            sectorTable.setValues(values);
             sectorsInfo.add(sectorTable);
         }
-        SectorTableHelper otherSectorTableRow = new SectorTableHelper();
-        otherSectorTableRow.setSectorName(TranslatorWorker.translateText("Others",langCode,siteId));
-        otherSectorTableRow.setTotalYearsValue(new ArrayList());
-        otherSectorTableRow.setPercentYearsValue(new ArrayList());
-        List totalValuesExceptOthers = new ArrayList(totalForYearExceptOthers.keySet());
-        Collections.sort(totalValuesExceptOthers);
-        List<Long> totalValues = new ArrayList<Long>();
-        List<Long> totalPercentValues = new ArrayList<Long>();
-        List totalPercentExceptOthers = new ArrayList(totalPercentForYearExceptOthers.keySet());
-        Collections.sort(totalPercentExceptOthers);
-        Iterator<Long> totValueIter = totalValuesExceptOthers.iterator();
-        while (totValueIter.hasNext()) {
-            Long keyYear = totValueIter.next();
-            Long wholeValue = totalForYear.get(keyYear);
-            Long exceptOthersValue = totalForYearExceptOthers.get(keyYear);
-            Long othersValue = wholeValue - exceptOthersValue;
-            otherSectorTableRow.getTotalYearsValue().add(othersValue);
-            totalValues.add(wholeValue);
-        }
-        Iterator<Long> percentValueIter = totalPercentExceptOthers.iterator();
-        while (percentValueIter.hasNext()) {
-            Long keyYear = percentValueIter.next();
-            Long wholeValue = percentTotalForYear.get(keyYear);
-            Long exceptOthersValue = totalPercentForYearExceptOthers.get(keyYear);
-            Long othersValue = wholeValue - exceptOthersValue;
-            otherSectorTableRow.getPercentYearsValue().add(othersValue);
-            totalPercentValues.add(wholeValue);
-        }
-        sectorsInfo.add(otherSectorTableRow);
-        SectorTableHelper emptyRow=new SectorTableHelper();
-        emptyRow.setEmptyRow(true);
-        sectorsInfo.add(emptyRow);
-        SectorTableHelper totalSectorTableRow = new SectorTableHelper();
-        totalSectorTableRow.setSectorName(TranslatorWorker.translateText("Total",langCode,siteId));
-        totalSectorTableRow.setApplyStyle(true);
-        totalSectorTableRow.setTotalYearsValue(totalValues);
-        totalSectorTableRow.setPercentYearsValue(totalPercentValues);
-        sectorsInfo.add(totalSectorTableRow);
         tableForm.setYears(years);
+        List<OrderHelper> totals = new ArrayList(totalExceptOthers.values());
+        Collections.sort(totals, SENIORITY_ORDER);
+        Iterator<OrderHelper> orderHelperTotal = totals.iterator();
+        List<String> values = new ArrayList<String>();
+        List<String> otherValues = new ArrayList<String>();
+           while (orderHelperTotal.hasNext()) {
+            OrderHelper orderHelper = orderHelperTotal.next();
+            OrderHelper exceptOtherOrderHelper=totalExceptOthers.get(orderHelper.getYear());
+            OrderHelper total=totalValues.get(orderHelper.getYear());
+            String otherValue=(total.getValue()-exceptOtherOrderHelper.getValue())+"";
+            String value = total.getValue().toString();
+            if (orderHelper.getType().equals(AmpSectorTableYear.PERCENT_TYPE_YEAR)) {
+                value += "%";
+                otherValue+="%";
+            }
+            values.add(value);
+            otherValues.add(otherValue);
+        }
+        sectorTableRowTotal.setValues(values);
+        sectorTableRowOther.setValues(otherValues);
+        sectorsInfo.add(sectorTableRowOther);
+        sectorsInfo.add(sectorTableRowEmpty);
+        sectorsInfo.add(sectorTableRowTotal);
         tableForm.setSectorsInfo(sectorsInfo);
+
         return mapping.findForward("forward");
     }
 }
+
+

@@ -1,18 +1,16 @@
 package org.digijava.module.widget.form;
 
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpSectorOrder;
 import org.digijava.module.widget.dbentity.AmpSectorTableWidget;
+import org.digijava.module.widget.dbentity.AmpSectorTableYear;
 
 public class AdminSectorTableWidgetForm extends ActionForm {
 
     private List<AmpSectorTableWidget> sectorTables;
     private Long sectorTableId;
-    private Long startYear;
     private String name;
     private String[] selectedTotalYears;
     private String[] selectedPercentYears;
@@ -22,6 +20,24 @@ public class AdminSectorTableWidgetForm extends ActionForm {
     private Long sectorToReorderId;
     private Long[] selPlaces;
     private List<AmpDaWidgetPlace> places;
+    private List<AmpSectorTableYear> sectorTableYears;
+    private Long sectorTableYearId;
+
+    public Long getSectorTableYearId() {
+        return sectorTableYearId;
+    }
+
+    public void setSectorTableYearId(Long sectorTableYearId) {
+        this.sectorTableYearId = sectorTableYearId;
+    }
+
+    public List<AmpSectorTableYear> getSectorTableYears() {
+        return sectorTableYears;
+    }
+
+    public void setSectorTableYears(List<AmpSectorTableYear> sectorTableYears) {
+        this.sectorTableYears = sectorTableYears;
+    }
 
     public Long[] getSelPlaces() {
         return selPlaces;
@@ -110,14 +126,4 @@ public class AdminSectorTableWidgetForm extends ActionForm {
     public void setSelectedTotalYears(String[] selectedTotalYears) {
         this.selectedTotalYears = selectedTotalYears;
     }
-
-    public Long getStartYear() {
-        return startYear;
-    }
-
-    public void setStartYear(Long startYear) {
-        this.startYear = startYear;
-    }
-    
-  
 }

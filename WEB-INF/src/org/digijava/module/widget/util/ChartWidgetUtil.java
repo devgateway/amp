@@ -1,3 +1,4 @@
+
 package org.digijava.module.widget.util;
 
 import java.awt.Color;

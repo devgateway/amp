@@ -26,6 +26,7 @@
         <page page="sectorTableWidgetAdmin" name="widget_sectorTableManager" title="Sector Table Manager"/>
         <page page="createSectorTableWidget" name="widget_createSectorTable" title="Create Sector Table"/>
         <page page="showSectorTable" name="widget_showSectorTable" title="Show Sector Table"/>
+        <page page="reorderSectorTableCols" name="widget_reorderSectorTableCols" title="Reorder Sector Table Columns"/>
                 
 		
 	</secondary-pages>

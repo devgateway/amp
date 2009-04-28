@@ -34,23 +34,13 @@
                     <td>${sectorInfo.sectorName}</td>
                 </c:otherwise>
             </c:choose>
-            <c:forEach items="${sectorInfo.totalYearsValue}"    var="totalYear">
+            <c:forEach items="${sectorInfo.values}"    var="value">
                 <c:choose>
                     <c:when test="${sectorInfo.applyStyle}">
-                        <td style="font-weight:bold;text-align:center">${totalYear}</td>
+                        <td style="font-weight:bold;text-align:center">${value}</td>
                     </c:when>
                     <c:otherwise>
-                        <td align="center">${totalYear}</td>
-                    </c:otherwise>
-                </c:choose>
-            </c:forEach>
-            <c:forEach items="${sectorInfo.percentYearsValue}"    var="percentYear">
-                <c:choose>
-                    <c:when test="${sectorInfo.applyStyle}">
-                        <td style="font-weight:bold;text-align:center">${percentYear}%</td>
-                    </c:when>
-                    <c:otherwise>
-                        <td align="center">${percentYear}%</td>
+                        <td align="center">${value}</td>
                     </c:otherwise>
                 </c:choose>
             </c:forEach>

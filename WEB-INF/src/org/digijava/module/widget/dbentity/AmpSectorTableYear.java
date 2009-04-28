@@ -5,8 +5,17 @@ public class AmpSectorTableYear {
     public final static Long PERCENT_TYPE_YEAR=2l;
     private Long id;
     private Long year;
-    private  AmpSectorTableWidget widget;
+    private AmpSectorTableWidget widget;
     private Long type;
+    private Long order;
+
+    public Long getOrder() {
+        return order;
+    }
+
+    public void setOrder(Long order) {
+        this.order = order;
+    }
 
     public Long getType() {
         return type;

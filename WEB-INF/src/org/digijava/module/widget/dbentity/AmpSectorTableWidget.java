@@ -9,6 +9,15 @@ public class AmpSectorTableWidget extends AmpWidget {
     private Set<AmpSectorOrder> sectorsColumns;
     private Set<AmpSectorTableYear> totalYears;
     private Set<AmpSectorTableYear> percentYears;
+    private Set<AmpSectorTableYear> years;
+
+    public Set<AmpSectorTableYear> getYears() {
+        return years;
+    }
+
+    public void setYears(Set<AmpSectorTableYear> years) {
+        this.years = years;
+    }
 
     public Set<AmpSectorTableYear> getPercentYears() {
         return percentYears;

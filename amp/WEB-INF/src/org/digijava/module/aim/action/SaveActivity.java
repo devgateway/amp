@@ -635,11 +635,11 @@ public class SaveActivity extends Action {
 				
 				if(eaForm.getLocation().getSelectedLocs() != null && eaForm.getLocation().getSelectedLocs().size()>0){
 					Iterator<Location> itr = eaForm.getLocation().getSelectedLocs().iterator();
-					Double totalPercentage = 0d;
+					float totalPercentage = 0;
 					while (itr.hasNext()) {
 						Location loc = itr.next();
-						Double percentage=FormatHelper.parseDouble(loc.getPercent());
-						if(percentage != null)
+						float percentage = Float.parseFloat(loc.getPercent());
+						if(percentage != 0)
 							totalPercentage += percentage;
 					}
 					
@@ -653,7 +653,7 @@ public class SaveActivity extends Action {
 						&& eaForm.getPrograms().getNationalPlanObjectivePrograms().size() > 0) {
 					boolean failNOP = false;
 					Iterator<AmpActivityProgram> npoIt = eaForm.getPrograms().getNationalPlanObjectivePrograms().iterator();
-					Double totalPercentage = 0d;
+					float totalPercentage = 0;
 					while (npoIt.hasNext()) {
 						AmpActivityProgram activityProgram = npoIt.next();
 						totalPercentage += activityProgram.getProgramPercentage();
@@ -674,7 +674,7 @@ public class SaveActivity extends Action {
 				if (eaForm.getPrograms().getPrimaryPrograms()!= null
 						&& eaForm.getPrograms().getPrimaryPrograms().size() > 0) {
 					Iterator<AmpActivityProgram> ppIt = eaForm.getPrograms().getPrimaryPrograms().iterator();
-					Double totalPercentage = 0d;
+					float totalPercentage = 0;
 					while (ppIt.hasNext()) {
 						AmpActivityProgram activityProgram = ppIt.next();
 						totalPercentage += activityProgram.getProgramPercentage();
@@ -687,7 +687,7 @@ public class SaveActivity extends Action {
 				if (eaForm.getPrograms().getSecondaryPrograms()!= null
 						&& eaForm.getPrograms().getSecondaryPrograms().size() > 0) {
 					Iterator<AmpActivityProgram> spIt = eaForm.getPrograms().getSecondaryPrograms().iterator();
-					Double totalPercentage = 0d;
+					float totalPercentage = 0;
 					while (spIt.hasNext()) {
 						AmpActivityProgram activityProgram = spIt.next();
 						totalPercentage += activityProgram.getProgramPercentage();
@@ -839,11 +839,11 @@ public class SaveActivity extends Action {
 				actLoc.setActivity(activity);//activity);
 				actLoc.getActivity().setAmpActivityId(eaForm.getActivityId());
 				actLoc.setLocation(ampLoc);
-				Double percent=FormatHelper.parseDouble(loc.getPercent());
-                                        if(percent==null){
-				percent=new Double(0);
-                                        }
-                                        actLoc.setLocationPercentage(percent.floatValue());
+				float percent=Float.parseFloat(loc.getPercent());
+                //if(percent==0){
+                //	percent=new Double(0);
+                //}
+                actLoc.setLocationPercentage(percent);
 				locations.add(actLoc);
 				//locations.add(ampLoc);
 				//AMP-2250

@@ -28,6 +28,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.StandaloneJndiAMPInitializer;
 import org.digijava.kernel.persistence.HibernateClassLoader;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.resource.ResourceStreamHandlerFactory;
@@ -53,7 +54,8 @@ public class DigiSchemaExport {
         else {
             logger.info("Working for the whole database");
         }
-
+        
+        StandaloneJndiAMPInitializer.initAMPUnifiedJndiAlias();
         DigiConfigManager.initialize("./repository");
         PersistenceManager.initialize(false, moduleName);
         try {

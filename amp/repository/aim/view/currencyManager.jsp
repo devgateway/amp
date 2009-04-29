@@ -10,6 +10,7 @@
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/currency.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<jsp:include page="currencyManagerPopin.jsp" flush="true" />
 
 <script language="JavaScript">
 
@@ -24,22 +25,6 @@ function makeActive(code) {
 	<digi:context name="changeStatus" property="context/module/moduleinstance/changeCurrencyStatus.do" />
 	document.aimCurrencyForm.action = "<%= changeStatus %>~currCode="+code+"~status=1";
 	document.aimCurrencyForm.target = "_self";
-	document.aimCurrencyForm.submit();
-}
-
-function addNewCurrency() {
-	openNewWindow(450, 230);
-	<digi:context name="add" property="context/module/moduleinstance/updateCurrency.do" />
-	document.aimCurrencyForm.action = "<%= add %>~doAction=new~closeFlag=false";
-	document.aimCurrencyForm.target = popupPointer.name;
-	document.aimCurrencyForm.submit();
-}
-
-function editCurrency(code) {
-	openNewWindow(450, 230);
-	<digi:context name="add" property="context/module/moduleinstance/updateCurrency.do" />
-	document.aimCurrencyForm.action = "<%= add %>~closeFlag=false~doAction=show~currencyCode="+code;
-	document.aimCurrencyForm.target = popupPointer.name;
 	document.aimCurrencyForm.submit();
 }
 

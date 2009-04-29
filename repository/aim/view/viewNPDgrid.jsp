@@ -8,56 +8,6 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <digi:instance property="aimNPDForm"/>
 
-<script language="javascript" type="text/javascript">
-
-	function getDescription() {
-	document.getElementById("t1").innerHTML="txt";	
-		
-	}
-	
-	var localIndicators=[];
-	
-	function setUpWin(){
-		showGraph();
-		setExcelURL();
-	}
-	
-	function showGraph(){
-		var getImage  = document.getElementById('graph');
-		if (getImage != null){
-			getImage.src = window.opener.curGraphURL;
-		}
-	}
-	
-	function setExcelURL(){
-		var exportLink  = document.getElementById('export2xsl');
-		var url = window.opener.addActionToURL('exportIndicators2xsl.do');
-		var params = window.opener.getInidcatorsParam();
-		exportLink.href=url+params;
-	}
-
-	window.onload=setUpWin;
-
-</script>
-
-<style>
-
-	table#indres {
-		border : silver solid;
-		border-width: 1px 1px 0px 0px;
-		
-	}
-
-	table#indres td{
-		border : silver solid;
-		border-width: 0px 0px 1px 1px;
-		
-	}
-
-</style>
-
-
-
 <table width="100%" cellSpacing="5" cellPadding="5" vAlign="top" border="0">
 	<tr>
 		<td valign="top">
@@ -184,7 +134,7 @@
 <table width="100%">
 	<tr>
 		<td align="center">
-		<html:button styleClass="dr-dialogmenu" property="submitButton" onclick="window.close();">
+		<html:button styleClass="dr-dialogmenu" property="submitButton" onclick="closeWindow();">
 				<digi:trn key="aim:close">Close</digi:trn>
 			</html:button>
 		</td>

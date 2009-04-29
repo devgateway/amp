@@ -13,90 +13,6 @@
 <digi:instance property="aimNPDForm"/>
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
 
-<script language="javascript" type="text/javascript">
-
-	var localIndicators=[];
-	
-
-	function getSelectedIndicators(){
-		var localIndicators=document.getElementsByName('selIndicators');
-		var res=[];
-		if (localIndicators != null){
-			for (var i=0;i<localIndicators.length;i++){
-				var chbx=localIndicators[i];
-				if (chbx.checked) {
-					res[res.length]=chbx.value;
-				}
-			}
-		}
-		return res;
-	}
-	
-	function getSelectedYears(){
-		var localYears = document.getElementsByName('selYears');
-		var res = [];
-		if (localYears !=null){
-			for (var i=0;i<localYears.length;i++){
-				var chbx=localYears[i];
-				if (chbx.checked) {
-					res[res.length]=chbx.value;
-				}
-			}
-		}
-		return res;
-	}
-
-	function doChanges(){
-		var ins=getSelectedIndicators();
-		var yrs=getSelectedYears();
-		yrs.sort();
-		var partialUrl=addActionToURL('saveDefaultYearsForGraph.do');
-		var url=getUrl(partialUrl);
-		var async=new Asynchronous();
-		async.complete=emptyFunction;
-		async.call(url);
-		window.opener.changeOptions(ins,yrs,null);
-		window.close();
-	}
-	
-	function addActionToURL(actionName){
-		var fullURL=document.URL;
-		var lastSlash=fullURL.lastIndexOf("/");
-		var partialURL=fullURL.substring(0,lastSlash);
-		return partialURL+"/"+actionName;
-	}
-	
-	function getUrl(url){
-		var locYears = document.getElementsByName('selYears');		
-		var result=url;
-		if(locYears.length>0){
-			var res;		
-			for (var i = 0; i < locYears.length; i++) {
-				if(locYears[i].checked){
-					res=locYears[i].value;	
-					result+='~selYears='+res;			
-				}
-			}			
-		}		
-		return result;
-	}
-	
-	function emptyFunction (){
-	}
-
-	function checkYearsRules(){
-		var locYears = document.getElementsByName('selYears');
-		var cou=0;
-		for(var i=0;i<locYears.length;i++){
-			if (locYears[i].checked == true) cou++;
-		}
-		if (cou > 5) return false;
-		return true;
-	}
-</script>
-
-
-
 <table width="100%" cellSpacing="5" cellPadding="5" vAlign="top" border="0">
 	<tr>
 		<td valign="top">
@@ -171,7 +87,7 @@
 			</html:button>
 		</td>
 		<td align="left">
-			<html:button styleClass="dr-dialogmenu" property="submitButton" onclick="window.close();">
+			<html:button styleClass="dr-dialogmenu" property="submitButton" onclick="closeWindow();">
 				<digi:trn key="aim:close">Close</digi:trn>
 			</html:button>
 		</td>

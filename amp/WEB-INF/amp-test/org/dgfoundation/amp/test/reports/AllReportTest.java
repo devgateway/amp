@@ -2,15 +2,19 @@ package org.dgfoundation.amp.test.reports;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
+
 /**
- * All report test 
+ * All report test
+ * 
  * @author Sebas
- *
+ * 
  */
 public class AllReportTest {
 	public static Test suite() {
 		TestSuite suite = new TestSuite();
 		suite.addTestSuite(TestReportWizard.class);
+		suite.addTestSuite(ExpressionsTest.class);
+		suite.addTestSuite(ComputedColumnsTest.class);
 		return suite;
 	}
 

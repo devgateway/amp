@@ -73,16 +73,13 @@
 																										<a id="field:<bean:write name="ampColumnFromTree" property="columnId"/>" style="font-size: 12px;color:#0e69b3;text-decoration:none">
 																										</a>
 																										<span style="font-size: 12px;color:#0e69b3;text-decoration:none">
-																											<digi:trn key="aim:report:${ampColumnFromTree.columnName}"><bean:write name="ampColumnFromTree" property="columnName"/></digi:trn>
-																											<logic:equal name="ampColumnFromTree" property="columnName" value="Cumulative Commitment">
-																												<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:report:CumulativeCommitmentToolip">Sum of all ACTUAL COMMITMENTS independent of filters</digi:trn>">
-																											</logic:equal>
-																											<logic:equal name="ampColumnFromTree" property="columnName" value="Cumulative Disbursement">
-																												<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:report:CumulativeDisbursementToolip">Sum of all ACTUAL DISBURSEMENTS independent of filters</digi:trn>">
-																											</logic:equal>
-																											<logic:equal name="ampColumnFromTree" property="columnName" value="Undisbursed Cumulative Balance">
-																												<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:report:UndisbursedCumulativeBalanceToolip">Cumulative Commitment - Cumulative Disbursement (independent of filters)</digi:trn>">
-																											</logic:equal>
+																											<digi:trn key="aim:report:${ampColumnFromTree.columnName}">
+																											<bean:write name="ampColumnFromTree" property="columnName"/></digi:trn>
+																											
+																											<logic:notEmpty name="ampColumnFromTree" property="description">
+																												<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:report:${ampColumnFromTree.columnName}_toolip">${ampColumnFromTree.description}</digi:trn>">
+																											</logic:notEmpty>
+																											
 																										</span>
 																									
 																									</li>

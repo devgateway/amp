@@ -39,8 +39,136 @@
 <c:set var="hideCurrSettings">
 	<digi:trn key="rep:hideCurrSettings">Hide current settings</digi:trn>
 </c:set>
+<div id="popin" style="display: none">
+	<div id="popinContent" class="content">
+	</div>
+</div>
+<script type="text/javascript">
+<!--
+
+		YAHOOAmp.namespace("YAHOOAmp.amp");
+
+		var myPanel = new YAHOOAmp.widget.Panel("newpopins", {
+			width:"700px",
+			fixedcenter: true,
+		    constraintoviewport: false,
+		    underlay:"none",
+		    close:true,
+		    visible:false,
+		    modal:true,
+		    draggable:true,
+		    context: ["showbtn", "tl", "bl"]
+		    });
+	var panelStart
+	var checkAndClose=false, extraActions = false;	    
+	    
+	function initPopinScript() {
+		var msg='\n<digi:trn>Title</digi:trn>';
+		myPanel.setHeader(msg);
+		myPanel.setBody("");
+		myPanel.beforeHideEvent.subscribe(function() {
+			panelStart=1;
+		}); 
+		myPanel.render(document.body);
+		panelStart = 0;
+	}
+-->	
+</script>
+<style type="text/css">
+	.mask {
+	  -moz-opacity: 0.8;
+	  opacity:.80;
+	  filter: alpha(opacity=80);
+	  background-color:#2f2f2f;
+	}
+	
+	#popin .content { 
+	    overflow:auto; 
+	    height:455px; 
+	    background-color:fff; 
+	    padding:10px; 
+	} 
+	.bd a:hover {
+  		background-color:#ecf3fd;
+		font-size: 10px; 
+		color: #0e69b3; 
+		text-decoration: none	  
+	}
+	.bd a {
+	  	color:black;
+	  	font-size:10px;
+	}
+		
+</style>
 
 <script language="JavaScript">
+    <!--
+  
+    function mapCallBack(status, statusText, responseText, responseXML){
+       window.location.reload();
+    }
+    var responseSuccess = function(o){
+		var response = o.responseText; 
+		var content = document.getElementById("popinContent");
+		content.innerHTML = response;
+		showContent();
+	}
+	var responseFailure = function(o){ 
+		alert("Connection Failure!"); 
+	}  
+	var callback = 
+	{ 
+		success:responseSuccess, 
+		failure:responseFailure 
+	};
+	function showContent(){
+		var element = document.getElementById("popin");
+		element.style.display = "inline";
+		if (panelStart < 1){
+			myPanel.setBody(element);
+		}
+		if (panelStart < 2){
+			document.getElementById("popin").scrollTop=0;
+			myPanel.show();
+			panelStart = 2;
+		}
+		checkErrorAndClose();
+	}
+	function checkErrorAndClose(){
+		if(checkAndClose==true){
+			if(document.getElementsByName("someError")[0]==null || document.getElementsByName("someError")[0].value=="false"){
+				myclose();
+				refreshPage();
+			}
+			checkAndClose=false;			
+		}
+		if(extraActions == true){
+			setUpWin();
+			extraActions = false;	
+		}
+	}
+	function refreshPage(){
+		
+	}
+
+	function myclose(){
+		var content = document.getElementById("popinContent");
+		content.innerHTML="";
+		myPanel.hide();	
+		panelStart=1;
+	
+	}
+	function closeWindow() {
+		myclose();
+	}
+	function showPanelLoading(msg){
+		myPanel.setHeader(msg);		
+		var content = document.getElementById("popinContent");
+		content.innerHTML = "<div style='text-align: center'>" + "Loading..." + 
+			"... <br /> <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>";		
+		showContent();
+	}
+
 var filter; // Filter panel
 
 /*
@@ -77,9 +205,6 @@ function showFilter(){
             draggable:true} );
     filter.render();
 }
-
-
-
 </script>
 
 <style type="text/css">
@@ -195,7 +320,11 @@ function showFilter(){
             url += pd + 'selYears=' + selYear[y];
           }
         }
-        var win=openURLinResizableWindow(url,600,400);
+        //var win=openURLinResizableWindow(url,600,400);
+		var msg='\n<digi:trn>Change Options</digi:trn>';
+		showPanelLoading(msg);
+		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);			
+    
       }
     }
 
@@ -211,13 +340,19 @@ function showFilter(){
 
 	function openGridWindow(showGraph){
 		if (curProgId !=null){
+			var msg='\n<digi:trn>View Indicators</digi:trn>';
+			showPanelLoading(msg);			
+			
 			var url=addActionToURL('npdGrid.do');
 			var params = getInidcatorsParam();
 			if (showGraph == true ){
 				params += pd + 'mode=1';
+				extraActions = true;
 			}
 			url += params;
-			var win = openURLinResizableWindow(url,600,600);
+			
+			YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+			//var win = openURLinResizableWindow(url,600,600);
 		}
 	}
 
@@ -1203,6 +1338,7 @@ function showFilter(){
 
 		setupYears();
 		initTree();
+		initPopinScript();
 	}
 
 	/**
@@ -1333,6 +1469,127 @@ function showFilter(){
 
     </c:forEach>
 </script>
+<style>
+
+	table#indres {
+		border : silver solid;
+		border-width: 1px 1px 0px 0px;
+		
+	}
+
+	table#indres td{
+		border : silver solid;
+		border-width: 0px 0px 1px 1px;
+		
+	}
+
+</style>
+
+<script language="javascript" type="text/javascript">
+
+	function getDescription() {
+	document.getElementById("t1").innerHTML="txt";	
+		
+	}
+	
+	function setUpWin(){
+		showGraph();
+		setExcelURL();
+	}
+	
+	function showGraph(){
+		var getImage  = document.getElementById('graph');
+		if (getImage != null){
+			getImage.src = curGraphURL;
+		}
+	}
+	
+	function setExcelURL(){
+		/*var exportLink  = document.getElementById('export2xsl');
+		var url = addActionToURL('exportIndicators2xsl.do');
+		var params = getInidcatorsParam();
+		exportLink.href=url+params;
+		*/
+	}
+
+	//window.onload=setUpWin;
+
+</script>
+<script language="javascript" type="text/javascript">
+
+	var localIndicators=[];
+	
+
+	function getSelectedIndicators(){
+		var localIndicators=document.getElementsByName('selIndicators');
+		var res=[];
+		if (localIndicators != null){
+			for (var i=0;i<localIndicators.length;i++){
+				var chbx=localIndicators[i];
+				if (chbx.checked) {
+					res[res.length]=chbx.value;
+				}
+			}
+		}
+		return res;
+	}
+	
+	function getSelectedYears(){
+		var localYears = document.getElementsByName('selYears');
+		var res = [];
+		if (localYears !=null){
+			for (var i=0;i<localYears.length;i++){
+				var chbx=localYears[i];
+				if (chbx.checked) {
+					res[res.length]=chbx.value;
+				}
+			}
+		}
+		return res;
+	}
+
+	function doChanges(){
+		var ins=getSelectedIndicators();
+		var yrs=getSelectedYears();
+		yrs.sort();
+		var partialUrl=addActionToURL('saveDefaultYearsForGraph.do');
+		var url=getUrl2(partialUrl);
+		var async=new Asynchronous();
+		async.complete=emptyFunction;
+		async.call(url);
+		changeOptions(ins,yrs,null);
+		closeWindow();
+	}
+	
+	function getUrl2(url){
+		var locYears = document.getElementsByName('selYears');		
+		var result=url;
+		if(locYears.length>0){
+			var res;		
+			for (var i = 0; i < locYears.length; i++) {
+				if(locYears[i].checked){
+					res=locYears[i].value;	
+					result+='~selYears='+res;			
+				}
+			}			
+		}		
+		return result;
+	}
+	
+	function emptyFunction (){
+	}
+
+	function checkYearsRules(){
+		var locYears = document.getElementsByName('selYears');
+		var cou=0;
+		for(var i=0;i<locYears.length;i++){
+			if (locYears[i].checked == true) cou++;
+		}
+		if (cou > 5) return false;
+		return true;
+	}
+</script>
+
 <input type="hidden" id="hdYears" value=""/>
 <input type="hidden" id="hdIndicators" value=""/>
 <c:forEach var="sys" items="${aimNPDForm.selYears}">

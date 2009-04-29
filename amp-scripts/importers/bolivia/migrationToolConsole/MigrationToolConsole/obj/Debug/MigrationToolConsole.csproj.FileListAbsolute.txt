@@ -1,0 +1,7 @@
+D:\Projects\AMP\MigrationToolConsole\MigrationToolConsole\obj\Debug\ResolveAssemblyReference.cache
+D:\Projects\AMP\MigrationToolConsole\MigrationToolConsole\bin\Debug\MigrationToolConsole.exe.config
+D:\Projects\AMP\MigrationToolConsole\MigrationToolConsole\bin\Debug\MigrationToolConsole.exe
+D:\Projects\AMP\MigrationToolConsole\MigrationToolConsole\bin\Debug\MigrationToolConsole.pdb
+D:\Projects\AMP\MigrationToolConsole\MigrationToolConsole\obj\Debug\MigrationToolConsole.exe
+D:\Projects\AMP\MigrationToolConsole\MigrationToolConsole\obj\Debug\MigrationToolConsole.pdb
+D:\Projects\AMP\MigrationToolConsole\MigrationToolConsole\bin\Debug\otro.config

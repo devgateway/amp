@@ -1,0 +1,54 @@
+#!/bin/bash
+
+# Recreate an AMP database from a clean hibernate generated DDL plus the contents of an already existing AMP
+# In order to run this script, you need to have a database called amp_clean installed !
+# Version 0.3
+# Copyright (c) 2008 Development Gateway Foundation
+# Author Mihai Postelnicu - mpostelnicu@dginternational.org
+
+extra=""                                                                                                                     
+while [ "$#" -gt "1" ]                                                                                                       
+do                                                                                                                           
+  extra+=$1" "                                                                                                               
+  shift                                                                                                                      
+done     
+                                                                                                                    
+database=$1 
+
+if [ -n "$1" ]; then 
+echo "Creating the sql to patch $database. We are comparing against amp_clean database to find garbage tables and columns..."
+mysql $extra $database < patch_generator.sql > $database-patch.sql
+echo "Creating a DLL dump of amp_clean database..."
+mysqldump $extra --no-data -R amp_clean | sed -e 's/`amp_clean`.//g' >  amp_clean_ddl.sql
+echo "Patching $database..."
+mysql $extra $database < $database-patch.sql
+echo "Exporting the data contents of $database..."
+mysqldump $extra  --hex-blob --insert-ignore -c -e --no-create-info $database > $database-data.sql
+newdb=$database"_fixed"
+echo "Creating a new database to import into... $newdb"
+mysql $extra -e "CREATE DATABASE $newdb"
+echo "Importing DDL..."
+mysql $extra $newdb < amp_clean_ddl.sql
+echo "Importing data..."
+mysql $extra $newdb < $database-data.sql
+echo "1"
+mysql $extra $newdb < generate_orphan_viewer.sql > orphan_viewer.sql
+echo "2"
+mysql $extra $newdb < generate_orphan_deleter.sql > orphans_deleter_$newdb.sql
+echo "3"
+mysql $extra $newdb < orphan_viewer.sql > orphans_$newdb.txt
+echo "ALERT! Orhpan data information has been saved into orphans_$newdb.txt. Please review it !"
+echo "Cleaning temp files..."
+mv orphan_viewer.sql scripts/
+mv $database-patch.sql scripts/
+mv amp_clean_ddl.sql scripts/
+mv $database-data.sql scripts/
+
+mysql $extra $database -e "drop table columns_ampclean"
+mysql $extra $database -e "drop table tables_ampclean"
+
+echo "Done! The new database is called $newdb"
+else 
+echo "amp-dbfix 0.3 - Fix an AMP db by re-creating it based on an AMP_CLEAN schema plus data from an existing AMP db."
+echo "Usage: $0 [connect params] source_database"
+fi

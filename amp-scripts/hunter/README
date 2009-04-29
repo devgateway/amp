@@ -1,0 +1,25 @@
+************
+*  Hunter  *
+************
+(Author: Arty)
+
+1) What does it do?
+   ----------------
+    The script searches for the unclosed sessions in a source directory
+structure. It will search in all the sub-folders recursively and verify
+only the java files.
+
+2) How do I use it?
+   ----------------
+   First you edit launch.sh and change the path variable to match the 
+folder where the scripts are located (you can put them in /bin also).
+   
+   Then you go to the parent directory where the sources folder is and
+run launch.sh (with the whole path if you didn't put in bin) with the
+sources folder name as a parameter. It will output the name of the file and
+the function name where the problems are located.
+
+3) Who do I credit for this?
+   -------------------------
+   See the Author section ... btw does anyone read this ? ;))
+   

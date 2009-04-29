@@ -1,0 +1,106 @@
+#!/bin/sh
+
+JBOSS_HOME=${JBOSS_HOME:-"/home/jboss/jboss"}                                                                                                                
+usage="usage: $0 (jbossrestart | tail [logname] | deltemp | delwork [srvname] | deldmcache [srvname] | redeploy [srvname] | enable [srvname] | disable [srvname] | warsnapshot [srvname] | clean [srvname] | help)"
+cdate=`date +%d%b%Y-%H%M`                                                                                                                                    
+
+
+case "$1" in
+deltemp)
+    rm -rI $JBOSS_HOME/server/default/tmp/*
+    ;;
+help)
+    echo $usage
+    echo ""
+    echo "* jbossrestart- restarts jboss and makes sure no leftover processes are running. VERY SLOW! USE ONLY WHEN JBOSS IS UNRESPONSIVE FOR SEVERAL MINS!"
+    echo "* tail        - tails the specified jboss log. invoke without parameters to display the list of logs"
+    echo "* deltemp     - deletes the temporary dir of jboss. make sure to jbossrestart jboss aftewards!"
+    echo "* delwork     - deletes the jboss work dir for the specified application. invoke without parameters to display the list of apps. redeploy the WAR afterwards!"
+    echo "* deldmcache  - deletes the indexes,cache and lock used by jackrabbit. The specific AMP server should be disabled first!"
+    echo "* redeploy    - redeploys the specified application WAR. invoke without parameters to display the list of WARs."
+    echo "* enable      - enables the specified application WAR. invoke without parameters to display the list of WARs."
+    echo "* disable     - disables (undeploys) the specified application WAR. invoke without parameters to display the list of WARs."
+    echo "* warsnapshot - creates a WAR snapshot and saves it as a tar.bz2 in the current dir. invoke without parameters to display the list of WARs"
+    echo "* clean       - performs ant clean on the specified WAR.  The specific AMP server should be disabled first!"
+    ;;
+delwork)
+    if [ ! -n "$2" ]; then
+	echo "usage: $0 delwork [servername] where servername is one of the following:"
+	echo `ls $JBOSS_HOME/server/default/work/jboss.web`
+    else
+	rm -rI $JBOSS_HOME/server/default/work/jboss.web/$2
+    fi    
+    ;;
+redeploy)
+    if [ ! -n "$2" ]; then
+	echo "usage: $0 redeploy [servername] where servername is one of the following:"
+	echo `cd $JBOSS_HOME/server/default/deploy/; ls -d */`
+    else
+	touch $JBOSS_HOME/server/default/deploy/$2/WEB-INF/web.xml
+    fi    
+    ;;
+enable)
+    if [ ! -n "$2" ]; then
+	echo "usage: $0 enable [warname] where warname is one of the following:"
+	echo `cd $JBOSS_HOME/../disabled_wars; ls -d */`
+    else
+	mv $JBOSS_HOME/../disabled_wars/$2 $JBOSS_HOME/server/default/deploy/ 
+    fi    
+    ;;
+disable)
+    if [ ! -n "$2" ]; then
+	echo "usage: $0 disable [warname] where warname is one of the following:"
+	echo `cd $JBOSS_HOME/server/default/deploy/; ls -d */`
+    else
+	mv $JBOSS_HOME/server/default/deploy/$2 $JBOSS_HOME/../disabled_wars/
+    fi    
+    ;;
+jbossrestart)
+    echo "Sending shutdown command to jboss"                                                                                                                     
+    /usr/local/etc/rc.d/jboss stop                                                                                                                               
+    echo "Waiting 15s for jboss to undeploy everything ..."
+    sleep 15                                                                                                                                                     
+    echo "Killing any other java processes started by jboss"
+    ps -U jboss -caeo pid,command | grep java | awk '{print $1}' | xargs kill -9                                                                                 
+    sleep 3                                                                                                                                                     
+    echo "Starting up jboss again..."                                                                                                                            
+    /usr/local/etc/rc.d/jboss start                                                                                                                              
+    ;;
+tail)
+    if [ -n "$2" ]; then 
+	tail -f $JBOSS_HOME/server/default/log/$2
+    else
+	echo "usage: $0 tail [logname] - where logname is one of the following:"
+	echo `cd $JBOSS_HOME/server/default/log/; ls *log`
+    fi
+    ;;
+deldmcache)
+    if [ -n "$2" ]; then
+        rm -rI $JBOSS_HOME/../disabled_wars/$2/jackrabbit/repository
+        rm -rI $JBOSS_HOME/../disabled_wars/$2/jackrabbit/workspaces
+	rm $JBOSS_HOME/../disabled_wars/$2/jackrabbit/.lock
+    else
+	echo "usage: $0 deldmcache [warname] where warname is a *disabled* server from the following list:"
+	echo `cd $JBOSS_HOME/../disabled_wars/; ls -d */`
+    fi
+    ;;
+clean)
+    if [ -n "$2" ]; then
+	cd $JBOSS_HOME/server/default/deploy/$2; ant clean
+    else
+	echo "usage: $0 clean [servername] - where servername is a *disabled* server from the following list:"
+	echo `cd $JBOSS_HOME/../disabled_wars/; ls -d */`
+    fi
+    ;;
+warsnapshot)
+if [ -n "$2" ]; then                                                                                                                                         
+tar -cLvjf $2-$cdate.tar.bz2 $JBOSS_HOME/server/default/deploy/$2                                                                                                                      
+echo "Export saved as $2-$cdate.tar.bz2"
+else                                                                                                                                                         
+echo "usage $0 [war_name] where war name is:"                                                                                                                
+echo `cd $JBOSS_HOME/server/default/deploy/; ls -d */`                                                                                                                                 
+fi   
+;;
+*)
+    echo $usage
+esac

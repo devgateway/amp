@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MigrationToolConsole", "MigrationToolConsole\MigrationToolConsole.csproj", "{46F31B1B-5BC3-4E13-89E4-C9E15FE91184}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "MigrationToolSetup", "MigrationToolSetup\MigrationToolSetup.vdproj", "{28B05883-5C6D-456D-9BB2-CD6B38321554}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MigrationToolConfiguration", "MigrationToolConfiguration\MigrationToolConfiguration.csproj", "{8005EAD1-CE7E-43FF-B1DA-B28A8E46E469}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{46F31B1B-5BC3-4E13-89E4-C9E15FE91184}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46F31B1B-5BC3-4E13-89E4-C9E15FE91184}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46F31B1B-5BC3-4E13-89E4-C9E15FE91184}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46F31B1B-5BC3-4E13-89E4-C9E15FE91184}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28B05883-5C6D-456D-9BB2-CD6B38321554}.Debug|Any CPU.ActiveCfg = Debug
+		{28B05883-5C6D-456D-9BB2-CD6B38321554}.Release|Any CPU.ActiveCfg = Release
+		{8005EAD1-CE7E-43FF-B1DA-B28A8E46E469}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8005EAD1-CE7E-43FF-B1DA-B28A8E46E469}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

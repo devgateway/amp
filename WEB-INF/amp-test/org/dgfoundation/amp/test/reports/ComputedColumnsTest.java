@@ -102,7 +102,7 @@ public class ComputedColumnsTest extends TestCase {
 
 		Collection<TextCell> list = c.getItems();
 		for (TextCell textCell : list) {
-			assertEquals(textCell.getValue(), "10");
+			assertEquals("10", textCell.getValue());
 		}
 
 	}
@@ -145,7 +145,11 @@ public class ComputedColumnsTest extends TestCase {
 		Column c = worker.populateCellColumn();
 
 		Collection<ComputedAmountCell> list = c.getItems();
-		assertEquals(list.iterator().next().getAmount().intValue(), -50);
+		for (ComputedAmountCell computedAmountCell : list) {
+			if (computedAmountCell.getAmount().intValue()!=0){
+				assertEquals(-50, computedAmountCell.getAmount().intValue());
+			} 
+		}
 
 	}
 

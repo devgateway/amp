@@ -17,6 +17,7 @@ public class AmpColumns  implements Serializable, Comparable
 	private String extractorView;
 	private Set filters;
 	private String tokenExpression;
+	private String description;
 	private String relatedContentPersisterClass;
 	
 	/**
@@ -26,6 +27,12 @@ public class AmpColumns  implements Serializable, Comparable
 	private Boolean filterRetrievable;
 	
 
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
 	public Boolean getFilterRetrievable() {
 		return filterRetrievable;
 	}

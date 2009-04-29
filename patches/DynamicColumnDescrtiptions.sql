@@ -1,4 +1,3 @@
-ALTER TABLE `amp_columns` ADD COLUMN description varchar(255);
 update amp_columns set description='Cumulative Commitment - Cumulative Disbursement (independent of filters)' where columnName='Undisbursed Balance';
 update amp_columns set description='Sum of all ACTUAL COMMITMENTS independent of filters'  where columnName='Cumulative Commitment';
 update amp_columns set description='Sum of all ACTUAL DISBURSEMENTS independent of filters' where columnName= 'Cumulative Disbursement';

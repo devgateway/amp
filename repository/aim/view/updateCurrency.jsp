@@ -12,88 +12,9 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/calendar.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
-<script language="JavaScript">
-
-function validate() {
-  if (isEmpty(document.aimCurrencyForm.currencyCode.value) ||
-  checkCode(document.aimCurrencyForm.currencyCode.value)== false) {
-    alert("Invalid currency code entered");
-    document.aimCurrencyForm.currencyCode.focus();
-    return false;
-  }
-  if (isEmpty(document.aimCurrencyForm.currencyName.value) ||
-  checkName(document.aimCurrencyForm.currencyName.value)== false) {
-    alert("Invalid currency name entered");
-    document.aimCurrencyForm.currencyName.focus();
-    return false;
-  }
-  var cn=document.getElementById("lstCountry");
-  if(cn!=null){
-    if(cn.value==-1){
-      alert("Please select country");
-      cn.focus();
-      return false;
-    }
-  }
-  return true;
-}
-
-function saveCurrency() {
-  var valid = validate();
-  if (valid != false) {
-    <digi:context name="back" property="context/module/moduleinstance/saveCurrency.do" />
-    document.aimCurrencyForm.action = "<%= back %>";
-    document.aimCurrencyForm.submit();
-  }
-  return valid;
-
-}
-
-function checkRate(val){
-  if(val.match("[^0-9.,]")){
-    return false;
-  }
-  return true;
-}
-
-function checkName(val){
-  if(val.match("[^a-zA-ZÁ-ÿ ]")){
-    return false;
-  }
-  return true;
-}
-
-function checkCode(val){
-  if(val.match("[^A-Z]")){
-    return false;
-  }else if(val.length>3){
-    return false;
-  }
-  return true;
-}
-
-function closePopup() {
-  <digi:context name="back" property="context/module/moduleinstance/currencyManager.do" />
-  document.aimCurrencyForm.action = "<%= back %>";
-  document.aimCurrencyForm.target = window.opener.name;
-  document.aimCurrencyForm.submit();
-  window.close();
-}
-
-function load() {
-  document.aimCurrencyForm.currencyCode.focus();
-  if (document.aimCurrencyForm.closeFlag.value == "true") {
-    closePopup();
-  }
-}
-
-function unload() {
-}
-
-</script>
 
 
-<digi:form action="/saveCurrency.do">
+<digi:form action="/saveCurrency.do" type="aimCurrencyForm" name="aimCurrencyFormPopin">
 
   <input type="hidden" name="selectedDate">
   <html:hidden property="id"/>

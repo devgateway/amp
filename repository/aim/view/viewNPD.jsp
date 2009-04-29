@@ -340,7 +340,7 @@ function showFilter(){
 
 	function openGridWindow(showGraph){
 		if (curProgId !=null){
-			var msg='\n<digi:trn>View Indicators</digi:trn>';
+			var msg='\n<digi:trn>NPD Print</digi:trn>';
 			showPanelLoading(msg);			
 			
 			var url=addActionToURL('npdGrid.do');

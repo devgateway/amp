@@ -14,7 +14,12 @@
 <jsp:include page="${src}" flush="true" />
 <script type="text/javascript">
     <!--
-    window.onload=initSectorScript();
+    window.onload=initFunctions;
+
+    function initFunctions(){
+        initSectorScript();
+        checkDonorColumn();
+    }
     function addSectors() {
         myAddSectors("");
     }
@@ -84,12 +89,26 @@
                  document.sectorTableWidgetForm.target = "_self";
                  document.sectorTableWidgetForm.submit();
              }
-             function check(){
+             function checkDonorColumn(){
                  var donorCheckbox=document.getElementById("donorCheckbox").checked;
                  var hidden=document.getElementById("donorCheckboxHidden");
                  hidden.value=donorCheckbox;
-           
+               
+                 var donorColumnYears=document.getElementsByName("donorColumnYear");
+                 if(donorColumnYears!=null){
+                     for(var i=0;i<donorColumnYears.length;i++){
+                         if(donorCheckbox){
+                              donorColumnYears[i].disabled=false;
+                         }
+                         else{
+                             donorColumnYears[i].disabled=true;
+                         }
+                      
+                     }
+                 }
              }
+
+   
              //-->
 </script>
 
@@ -222,9 +241,10 @@
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <html:checkbox name="sectorTableWidgetForm" property="donorColumn" onchange="check()" styleId="donorCheckbox">
+                            <html:checkbox name="sectorTableWidgetForm" property="donorColumn" onclick="checkDonorColumn()" styleId="donorCheckbox">
                                   <digi:trn>Add Donor column</digi:trn>:
                             </html:checkbox>
+                            <br/>
                               <fieldset style="width:50%">
                                 <legend align="left"><digi:trn>Donor Year</digi:trn></legend>
                                 <c:forEach var="year" items="${sectorTableWidgetForm.years}" varStatus="status">

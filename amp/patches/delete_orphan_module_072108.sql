@@ -1,0 +1,2 @@
+delete from amp_modules_templates where module = (select id from amp_modules_visibility where name = "Physical Progress" and parent = 5);
+delete from amp_modules_visibility where name = "Physical Progress" and parent = 5;

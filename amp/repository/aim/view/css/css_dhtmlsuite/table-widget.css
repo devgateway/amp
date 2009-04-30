@@ -1,0 +1,89 @@
+/************************************************************************************************************
+
+	DHTML Suite for Applications
+	(C) www.dhtmlgoodies.com, August 2006
+
+	CSS for the DHTMLsuite_tableWidget class.
+	
+	Terms of use:
+	Look at the terms of use at http://www.dhtmlgoodies.com/index.html?page=termsOfUse
+	
+	Thank you!
+	
+	www.dhtmlgoodies.com
+	Alf Magne Kalleland
+
+************************************************************************************************************/
+
+.DHTMLSuite_tableWidget_headerCell,.DHTMLSuite_tableWigdet_headerCellOver,.DHTMLSuite_tableWigdet_headerCellDown{	/* General rules for both standard column header and mouse on header of sortable columns */
+	cursor:pointer;	
+	border-bottom:3px solid #C5C2B2;
+	border-right:1px solid #ACA899;
+
+	border-left:1px solid #FFF;	
+	background-color: #ECE9D8;
+}
+
+.DHTMLSuite_tableWidget_headerCell{	/* Standard column header */
+	border-top:2px solid #ECE9D8;
+	
+}
+
+.DHTMLSuite_tableWigdet_headerCellOver{	/* Rollover on sortable column header */
+	border-top:2px solid #FFC83C;		
+}
+.DHTMLSuite_tableWidget tbody .DHTMLSuite_tableWidget_dataRollOver{	/* Rollover style on mouse over (Data) */
+	background-color:#EEE;	/* No mouseover color in this example - specify another color if you want this */
+}
+
+.DHTMLSuite_tableWigdet_headerCellDown{
+	border-top:2px solid #FFC83C;	
+	background-color:#DBD8C5;
+	border-left:1px solid #ACA899;
+	border-right:1px solid #FFF;			
+}
+.DHTMLSuite_tableWidget td{
+	margin:0px;
+	padding:2px;
+	border-bottom:1px solid #EAE9E1;	/* Border bottom of table data cells */
+	
+}
+.DHTMLSuite_tableWidget{
+	font-family:arial;
+	font-size:12px;	
+	width:400px;
+}
+
+/* Div around the table */
+div.DHTMLSuite_widget_tableDiv {
+	border:1px solid #ACA899;	/* Border around entire widget */
+	height: 200px;
+	overflow:auto;
+	overflow-y:auto;
+	overflow:-moz-scrollbars-vertical;
+	width:400px;
+}
+
+html>body div.DHTMLSuite_widget_tableDiv {
+	overflow: auto;	/* This value will be replaced with "hidden" for non-safari browsers. Ie. will also have overflow-x:hidden in order to prevent a horizontal scrollbar */
+	width:400px;
+}
+
+.DHTMLSuite_tableWidget thead{
+	position:relative;
+}
+.DHTMLSuite_tableWidget thead tr{
+	position:relative;
+	top:0px;
+	bottom:0px;
+}
+.DHTMLSuite_tableWidget .DHTMLSuite_scrollingContent{
+	overflow-y:auto;
+	overflow:-moz-scrollbars-vertical;
+	width:100%;
+
+}
+.DHTMLSuite_tableWidget .DHTMLSuite_tableWidget_MSIESPACER{
+	width:16px;
+	overflowX:hidden;
+} 

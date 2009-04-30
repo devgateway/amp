@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<config>
+
+<secondary-pages>
+	<page page="createSite" name="admin_createSite" title="Create Site :: Blank admin site page" />
+	<page page="editSite" name="admin_editSite" title="Edit Site :: Blank admin site page" />
+	<page page="searchSite" name="admin_searchSite" title="Search Site :: Blank admin site page" />
+	<page page="siteDeleted" name="admin_siteDeleted" title="Search Site :: Blank admin site page" />
+	<page page="siteInstances" name="admin_siteInstances" title="Module instances for site :: Blank admin site page" />
+	<page page="groups" name="admin_groups" title="Group administration :: Blank admin site page" />
+	<page page="groupPerms" name="admin_groupPermissions" title="Group Permission administration :: Blank admin site page" />
+	<page page="pickupSite" name="admin_pickupSite" title="Pickup site :: Blank admin site page" />
+	<page page="groupMembers" name="admin_groupMembers" title="Group Membership :: Blank admin site page" />
+	<page page="searchUser" name="admin_searchUser" title="Search User :: Blank admin site page" />
+	<page page="administrateUser" name="admin_administrateUser" title="Administrate User :: Blank admin site page" />
+	<page page="userUpdated" name="admin_userUpdated" title="User Updated:: Blank admin site page" />
+	<page page="allSites" name="admin_allSites" title="All Sites :: Blank admin site page" />
+	<page page="referenceCache" name="admin_referenceCache" title="Reference Caches :: Blank admin site page" />
+	<page page="locales" name="admin_locales" title="Locales :: Blank admin site page" />
+	<page page="childSites" name="admin_childSites" title="Search User :: Blank admin site page" />
+	<page page="caches" name="admin_caches" title="Blank admin site page" />
+	<page page="selectUsers" name="admin_usersPopupLayout" title="Choose User" />
+	<page page="masterInstances" name="admin_instPopupLayout" title="Choose Instance" />
+	<page page="pickupGroup" name="admin_pickupGroupPopupLayout" title="Choose Group" />
+	<page page="configuration" name="admin_configurationPage" title="Configuration" />
+	<page page="emailTemplates" name="admin_emailTemplates" title="Email Templates" />
+	<page page="commonInstances" name="admin_commonInstances" title="Common instances for site :: Blank admin site page" />
+	<page page="unclosedSessions" name="admin_unclosedSessions" title="Unclosed Sessions List :: Blank admin site page" />
+</secondary-pages>
+
+<module>
+	<teaser name="adminLink" action="blankForward.do">adminLink.jsp</teaser>
+	<teaser name="mailStatus" action="showMailStatus.do">mailStatus.jsp</teaser>
+</module>
+
+</config>

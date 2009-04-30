@@ -1,0 +1,51 @@
+
+	#tabview_container .yui-nav{
+
+	}
+	#tabview_container .yui-nav li {
+		margin-right:0;
+ 	}
+
+	#tabview_container .yui-content { border-top-width: 2px; border-top-style: solid; border-top-color: #006699;}
+	
+	#tabview_container .yui-nav li a { 
+			float:left;
+			cursor:pointer; 
+			text-decoration: none; 
+			font-size: 8pt; 
+			color:#fff;
+			font-weight: bold;
+			background-color: white;
+			margin:0pt 0px 0pt 0pt;
+			background:#3754A1 url(/TEMPLATE/ampTemplate/images/tableftcornerunsel.gif) no-repeat scroll left top;
+	}
+	
+	#tabview_container li.selected a{ 
+			float:left;
+			cursor:pointer; 
+			text-decoration: none; 
+			font-size: 8pt; 
+			font-weight: bold;
+			background:#222E5D url(/TEMPLATE/ampTemplate/images/tableftcorner.gif) no-repeat scroll left top;
+			color: white;
+	}
+	#tabview_container li a div{ 
+			background:url(/TEMPLATE/ampTemplate/images/tabrightcornerunsel.gif) no-repeat scroll right top;
+			padding: 6px 10px 6px 10px;
+	}
+		
+	#tabview_container li.selected a div{ 
+			background:url(/TEMPLATE/ampTemplate/images/tabrightcorner.gif) no-repeat scroll right top;
+			padding: 6px 10px 6px 10px;
+	}
+	#tabview_container .yui-nav li a:hover {
+	    background: #455786 url(/TEMPLATE/ampTemplate/images/tableftcornerhover.gif) left top no-repeat;  
+	}
+	
+	#tabview_container .yui-nav li a:hover div {
+	    background: url(/TEMPLATE/ampTemplate/images/tabrightcornerhover.gif) right top no-repeat;  
+	}
+	#tabview_container .yui-content {
+		border-top:1px solid #000;
+	}
+	

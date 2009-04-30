@@ -52,6 +52,7 @@
           <forward name="create" path="/showLayout.do?layout=widget_orgProfileCreate" />
     	</action>
          <action name="gisWidgetTeaserForm" path="/widget/getWidgetMap" scope="request" type="org.digijava.module.widget.action.GetWidgetMap" validate="false" />
+         <action name="gisWidgetTeaserForm" path="/widget/getSectorDonorAmounts" scope="request" type="org.digijava.module.widget.action.GetSectorDonorAmounts" validate="false" />
 
 		  <action name="gisIndicatorChartForm" parameter="actType"
 		   path="/widget/indicatorchartwidgets" scope="session"

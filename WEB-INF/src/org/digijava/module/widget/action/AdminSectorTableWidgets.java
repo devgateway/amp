@@ -59,6 +59,8 @@ public class AdminSectorTableWidgets extends DispatchAction {
         tablesForm.setSelPlaces(null);
         tablesForm.setPlaces(WidgetUtil.getAllPlaces());
         tablesForm.setSectorTableYears(new ArrayList<AmpSectorTableYear>());
+        tablesForm.setDonorColumn(false);
+        tablesForm.setDonorColumnYear(null);
         return mapping.findForward("create");
 
     }
@@ -122,6 +124,12 @@ public class AdminSectorTableWidgets extends DispatchAction {
             tablesForm.getYears().add(new Long(i));
         }
         tablesForm.setPlaces(WidgetUtil.getAllPlaces());
+        if (secTbWidget.getDonorYear() != null) {
+            tablesForm.setDonorColumn(true);
+        } else {
+            tablesForm.setDonorColumn(false);
+        }
+        tablesForm.setDonorColumnYear(secTbWidget.getDonorYear());
         return mapping.findForward("create");
     }
 
@@ -168,7 +176,11 @@ public class AdminSectorTableWidgets extends DispatchAction {
         if (secTableWidget.getSectorsColumns() == null) {
             secTableWidget.setSectorsColumns(new HashSet<AmpSectorOrder>());
         }
-
+        if (tablesForm.isDonorColumn()) {
+           secTableWidget.setDonorYear(tablesForm.getDonorColumnYear());
+        } else {
+             secTableWidget.setDonorYear(null);
+        }
 
         List<AmpSectorOrder> secOrderRetain = new ArrayList<AmpSectorOrder>();
         Set<AmpSectorOrder> sectors = secTableWidget.getSectorsColumns();

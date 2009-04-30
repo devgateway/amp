@@ -424,6 +424,13 @@ public class ParisIndicatorReport extends Action {
                         double ans1[] = (double[]) answ1.get(i);
                         double ans2[] = (double[]) answ2.get(i);
                         for (int j = st; j < ans1.length; j++) {
+                        	//This method should not exist :( but for now if the value is < 0 then make it 0, otherwise a 100% percentage will become 98%, etc.
+                        	if(ans2[j]<0) {
+                        		ans2[j] = 0;
+                        	}
+                        	if(ans1[j]<0) {
+                        		ans1[j] = 0;
+                        	}
                             ans2[j] += ans1[j];
                         }
                     }

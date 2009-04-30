@@ -6230,7 +6230,7 @@ public class DbUtil {
      * survey-responses with required report-answers for the aid-effectiveness-indicator
      * except for those indicators with code '10a', '10b'.
      */
-    public static boolean[][] getSurveyReportAnswer(String indCode, Set surveys) {
+    public static boolean[][] getSurveyReportAnswer(String indCode, Set surveys) throws DgException {
         boolean answersColl[][] = new boolean[surveys.size()][];
         boolean answers[] = null;
         boolean flag[] = null;
@@ -6259,11 +6259,21 @@ public class DbUtil {
             //			+ " Acronym: " + ahs.getAmpDonorOrgId().getAcronym());
             answers = new boolean[NUM_COLUMNS_CALCULATED];
             //Dont use "&& ahs.getResponses().size()>0" with lazy="true"
-            if (null != ahs.getResponses()/* && ahs.getResponses().size() > 0*/) {
+            
+            //TODO: The whole logic for saving the first survey data and future retrieving must be redone.
+            //This query is necesary because of the lazy="false" which is necesary because the way the PI reports are created.
+            Session session = PersistenceManager.getRequestDBSession();
+            String qry = "select resp from " + AmpAhsurveyResponse.class.getName() + " resp where resp.ampAHSurveyId=:surveyId";
+            Query query = session.createQuery(qry);
+            query.setParameter("surveyId", ahs.getAmpAHSurveyId(), Hibernate.LONG);
+            List response = query.list();
+            
+            if (response != null /* null != ahs.getResponses()*//* && ahs.getResponses().size() > 0*/) {
                 //logger.debug("ahs.getResponses().size() : " + ahs.getResponses().size());
                 for (int i = 0; i < NUM_COLUMNS_CALCULATED; i++)
                     flag[i] = false;
-                itr2 = ahs.getResponses().iterator();
+                //itr2 = ahs.getResponses().iterator();
+                itr2 = response.iterator();
                 while (itr2.hasNext()) {
                     AmpAhsurveyResponse resp = (AmpAhsurveyResponse) itr2.next();
                     quesNum = resp.getAmpQuestionId().getQuestionNumber().intValue();
@@ -6324,19 +6334,13 @@ public class DbUtil {
                     }
                     if ("5b".equalsIgnoreCase(indCode)) {
                         if (quesNum == 8) {
-                            flag[0] = true;
-                            answers[0] = ("Yes".equalsIgnoreCase(resp.getResponse())) ? true : false;
-                            //logger.debug("indCode: " + indCode + " q#: " + 8 + " - answers[0] : " + answers[0]);
+                            flag[0] = "Yes".equalsIgnoreCase(resp.getResponse());
                         }
                         if (quesNum == 1) {
-                            flag[1] = true;
-                            answers[1] = ("Yes".equalsIgnoreCase(resp.getResponse())) ? true : false;
-                            //logger.debug("indCode: " + indCode + " q#: " + 1 + " - answers[1] : " + answers[1]);
+                            answers[1] = "Yes".equalsIgnoreCase(resp.getResponse());
+                            flag[1] = answers[1];
                         }
-                        if (flag[0] && flag[1])
-                            break;
-                        else
-                            continue;
+                        answers[0] = (flag[0] & flag[1]);
                     }
                     if ("6".equalsIgnoreCase(indCode)) {
                         if (quesNum == 9) {

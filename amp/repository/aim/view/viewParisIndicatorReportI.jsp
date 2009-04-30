@@ -782,6 +782,7 @@ function toggleSettings(){
 
 															<c:set var="firstVal" value="" />
 															<c:set var="secondVal" value="" />
+                                                            <c:set var="thirdVal" value="" />
 															<nested:iterate id="rowVal" indexId="ansIndex">
 																<c:if test="${ansIndex == 1}">
 																	<c:set var="firstVal" value="${rowVal}" />
@@ -789,6 +790,9 @@ function toggleSettings(){
 																<c:if test="${ansIndex == 2}">
 																	<c:set var="secondVal" value="${rowVal}" />
 																</c:if>
+                                                                <c:if test="${ansIndex == 3}">
+                                                                    <c:set var="thirdVal" value="${rowVal}" />
+                                                                </c:if>
 																<% indexRow++; %>
 																<td>
 																	<div align="center">
@@ -817,10 +821,21 @@ function toggleSettings(){
 																					<c:if test="${rowVal <= -1}">n.a.</c:if>
 																					<c:if test="${rowVal > -1}">
 																						<c:if test="${ansIndex == 3}">
-																							<fmt:formatNumber type="number" value="${firstVal/secondVal*100}" maxFractionDigits="0" />%
+                                                                                            <c:if test="${secondVal != 0}">
+                                                                                                <fmt:formatNumber type="number" value="${firstVal*100/secondVal}" maxFractionDigits="0"/>%
+                                                                                            </c:if>
+                                                                                            <c:if test="${secondVal == 0}">n.a.</c:if>
 																						</c:if>
 																						<c:if test="${ansIndex != 3}">
-																							<fmt:formatNumber type="number" value="${rowVal}" maxFractionDigits="0" />%
+                                                                                            <c:if test="${aimParisIndicatorReportForm.indicatorCode == '9'}">
+                                                                                                 <c:if test="${thirdVal != 0}">
+																							         <fmt:formatNumber type="number" value="${secondVal*100/thirdVal}" maxFractionDigits="0" />%
+                                                                                                 </c:if>
+                                                                                                 <c:if test="${thirdVal == 0}">n.a.</c:if>
+                                                                                            </c:if>
+                                                                                            <c:if test="${aimParisIndicatorReportForm.indicatorCode != '9'}">
+                                                                                                 <fmt:formatNumber type="number" value="${rowVal}" maxFractionDigits="0" />%
+                                                                                            </c:if>
 																						</c:if>
 																					</c:if>
 																				</c:otherwise>

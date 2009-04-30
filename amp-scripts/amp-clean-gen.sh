@@ -11,7 +11,7 @@ if [ ! -n "$1" ]; then
 echo $usage
 exit 0;
 fi
-
+sdads
 extra=""
 while [ "$#" -gt "1" ]
 do

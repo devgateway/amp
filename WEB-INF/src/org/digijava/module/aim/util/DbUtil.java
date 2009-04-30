@@ -6324,19 +6324,13 @@ public class DbUtil {
                     }
                     if ("5b".equalsIgnoreCase(indCode)) {
                         if (quesNum == 8) {
-                            flag[0] = true;
-                            answers[0] = ("Yes".equalsIgnoreCase(resp.getResponse())) ? true : false;
-                            //logger.debug("indCode: " + indCode + " q#: " + 8 + " - answers[0] : " + answers[0]);
+                            flag[0] = "Yes".equalsIgnoreCase(resp.getResponse());
                         }
                         if (quesNum == 1) {
-                            flag[1] = true;
-                            answers[1] = ("Yes".equalsIgnoreCase(resp.getResponse())) ? true : false;
-                            //logger.debug("indCode: " + indCode + " q#: " + 1 + " - answers[1] : " + answers[1]);
+                            answers[1] = "Yes".equalsIgnoreCase(resp.getResponse());
+                            flag[1] = answers[1];
                         }
-                        if (flag[0] && flag[1])
-                            break;
-                        else
-                            continue;
+                        answers[0] = (flag[0] & flag[1]);
                     }
                     if ("6".equalsIgnoreCase(indCode)) {
                         if (quesNum == 9) {

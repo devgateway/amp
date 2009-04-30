@@ -1855,6 +1855,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private Long assistanceType = null;
 		private Long modality = null;
 		private List<MTEFProjection> fundingMTEFProjections;
+		private List<KeyValue> availableMTEFProjectionYears;
 		private Collection projections;
 		private String orgFundingId;
 		private int numComm;
@@ -1888,6 +1889,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private int indexId;
 		private long transIndexId;
         private String fundingCurrCode;
+        private int selectedMTEFProjectionYear;
 
         public String getFundingCurrCode() {
             return fundingCurrCode;
@@ -2207,6 +2209,22 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		public void setFundingMTEFProjections(List<MTEFProjection> fundingMTEFProjections) {
 			this.fundingMTEFProjections = fundingMTEFProjections;
 		}
+		
+
+		/**
+		 * @return the availableMTEFProjectionYears
+		 */
+		public List<KeyValue> getAvailableMTEFProjectionYears() {
+			return availableMTEFProjectionYears;
+		}
+
+		/**
+		 * @param availableMTEFProjectionYears the availableMTEFProjectionYears to set
+		 */
+		public void setAvailableMTEFProjectionYears(
+				List<KeyValue> availableMTEFProjectionYears) {
+			this.availableMTEFProjectionYears = availableMTEFProjectionYears;
+		}
 
 		public Collection getProjections() {
 			return projections;
@@ -2417,7 +2435,22 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 		public void setTransIndexId(long transIndexId) {
 			this.transIndexId = transIndexId;
-		}		
+		}
+
+		/**
+		 * @return the selectedMTEFProjectionYear
+		 */
+		public int getSelectedMTEFProjectionYear() {
+			return selectedMTEFProjectionYear;
+		}
+
+		/**
+		 * @param selectedMTEFProjectionYear the selectedMTEFProjectionYear to set
+		 */
+		public void setSelectedMTEFProjectionYear(int selectedMTEFProjectionYear) {
+			this.selectedMTEFProjectionYear = selectedMTEFProjectionYear;
+		}	
+		
 	}
 
 	public FundingOrganization getFundingOrganization(int index) {

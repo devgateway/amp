@@ -124,5 +124,12 @@ public class MTEFProjection implements Serializable, Comparable<MTEFProjection>{
 			this.projectionDateLabel = projectionDateLabel;
 		}
 
+		
+		public int getBaseYear() {
+			if ( this.projectionDate == null || this.projectionDate.length() == 0 )
+				return 0;
+			
+			return Integer.parseInt( this.projectionDate.split("/")[2] );
+		}
 
 }

@@ -2,6 +2,7 @@ package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,6 +16,7 @@ import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
+import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.helper.MTEFProjection;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
@@ -87,6 +89,15 @@ public class EditFunding extends Action {
 									formBean.getOldFunding().setFundingConditions(funding.getConditions());
 									formBean.getOldFunding().setFundingMTEFProjections( new ArrayList<MTEFProjection> (funding.getMtefProjections()) );
 									formBean.getOldFunding().setFundingDetails(new ArrayList<FundingDetail>());
+									
+									List<KeyValue> availableMTEFProjectionYears		= 
+										AddFunding.generateAvailableMTEFProjectionYears( formBean.getFunding().getFundingMTEFProjections() ); 
+									formBean.getFunding().setAvailableMTEFProjectionYears( availableMTEFProjectionYears );
+									
+									int defaultIndex				= availableMTEFProjectionYears.size() - 1 - AddMTEFProjection.ADDITIONAL_AVAILABLE_YEARS;
+									formBean.getFunding().setSelectedMTEFProjectionYear( Integer.parseInt( 
+											availableMTEFProjectionYears.get(defaultIndex).getKey() )
+									);
 								}
 
 								if (funding.getFundingDetails() != null) {

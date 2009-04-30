@@ -436,6 +436,10 @@ var isAlreadySubmitted = false;
 						<table cellPadding=3>
 							<tr>
 								<td>
+									<html:select property="funding.selectedMTEFProjectionYear" name="aimEditActivityForm">
+										<html:optionsCollection name="aimEditActivityForm" property="funding.availableMTEFProjectionYears" 
+												label="value" value="key"/>
+									</html:select>
 									<input class="dr-menu" type="button" name="addMTEFProj" value="<digi:trn key='aim:addMTEFProjection'>Add Projection</digi:trn>"
 								   onclick="addMTEFProjection()">
 								</td>

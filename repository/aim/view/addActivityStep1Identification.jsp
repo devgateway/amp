@@ -69,6 +69,11 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 				 	document.getElementById("Sub-Program").style.display='none';
 				 	document.getElementById("ProjectCode").style.display='none';
 				 	document.getElementById("financial").style.display='none';
+				 	document.getElementById("FY1").style.display='none';
+				 	document.getElementById("Vote1").style.display='none';
+				 	document.getElementById("Sub-Vote1").style.display='none';
+				 	document.getElementById("Sub-Program1").style.display='none';
+				 	document.getElementById("ProjectCode1").style.display='none';
 				}
 				catch(e)
 				{
@@ -84,6 +89,11 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 				 	document.getElementById("Sub-Vote").style.display='';
 				 	document.getElementById("Sub-Program").style.display='';
 				 	document.getElementById("ProjectCode").style.display='';
+				 	document.getElementById("FY1").style.display='';
+				 	document.getElementById("Vote1").style.display='';
+				 	document.getElementById("Sub-Vote1").style.display='';
+				 	document.getElementById("Sub-Program1").style.display='';
+				 	document.getElementById("ProjectCode1").style.display='';
 				 	document.getElementById("financial").style.display='';
 				}
 				catch(e)
@@ -103,6 +113,11 @@ function InitBud(){
 		 	document.getElementById("Sub-Vote").style.display='';
 		 	document.getElementById("Sub-Program").style.display='';
 		 	document.getElementById("ProjectCode").style.display='';
+		 	document.getElementById("FY1").style.display='';
+		 	document.getElementById("Vote1").style.display='';
+		 	document.getElementById("Sub-Vote1").style.display='';
+		 	document.getElementById("Sub-Program1").style.display='';
+		 	document.getElementById("ProjectCode1").style.display='';
 		 	document.getElementById("financial").style.display='';
 		}
 		catch(e)
@@ -118,6 +133,11 @@ function InitBud(){
 		 	document.getElementById("Sub-Vote").style.display='none';
 		 	document.getElementById("Sub-Program").style.display='none';
 		 	document.getElementById("ProjectCode").style.display='none';
+		 	document.getElementById("FY1").style.display='none';
+		 	document.getElementById("Vote1").style.display='none';
+		 	document.getElementById("Sub-Vote1").style.display='none';
+		 	document.getElementById("Sub-Program1").style.display='none';
+		 	document.getElementById("ProjectCode1").style.display='none';
 		 	document.getElementById("financial").style.display='none';
 		}
 		catch(e)
@@ -524,13 +544,13 @@ target.style.cursor = "default"
 
 													<a title="<digi:trn key="aim:DescriptionofProject">Summary information describing the project</digi:trn>">
 														<digi:trn key="aim:actBudget">Activity Budget</digi:trn>
+													</a>
 												</td>
 											<td>
 											<table cellpadding="1" cellspacing="3">
 
-												<td valign="top" align="left">	
 											 <tr>
-													</a>
+												<td valign="top" align="left" colspan="5">	
 													<html:checkbox styleId="budget" property="identification.budget"  onclick="budgetCheckboxClick();">
 													<digi:trn key="aim:actBudgeton">Activity is On Budget</digi:trn>
 													</html:checkbox>
@@ -540,72 +560,87 @@ target.style.cursor = "default"
 											 <tr>
 											
 											<field:display name="FY" feature="Budget">
-											<td valign="top" align="left" id="FY" align="right" style="display:none">
+											<td valign="top" id="FY" align="center" width="20%" >
 												<a title="<digi:trn key="aim:FY">FY</digi:trn>">
 												<digi:trn key="aim:actFY">
 												FY
 												</digi:trn>
 												</a>
-														<br/>
-														<html:text property="identification.FY" size="12"/>
 											</td>
-										<td></td>	
-										</field:display>
+											</field:display>
 											
-										<field:display name="Vote" feature="Budget">
-											<td valign="top" align="left" id="Vote" align="right">
+										<field:display name="Vote" feature="Budget" >
+											<td valign="top"  id="Vote" align="center"  width="20%">
 												<a title="<digi:trn key="aim:Vote">Vote</digi:trn>">
 												<digi:trn key="aim:actVote">
 												Vote
 												</digi:trn>
 												</a>
-											<br/>
-													<html:text property="identification.vote" size="12"/>
-										</td>	
-										<td></td>
+											</td>	
 											</field:display>
 											
 											<field:display name="Sub-Vote" feature="Budget">
-											<td valign="top" align="left" id="Sub-Vote" align="right">
+											<td valign="top" id="Sub-Vote" align="center" width="20%">
 												<a title="<digi:trn key="aim:Sub-Vote">Sub-Vote</digi:trn>">
 												<digi:trn key="aim:actSub-Vote">
 												Sub-Vote
 												</digi:trn>
 												</a>
-											<br/>
-										<html:text property="identification.subVote" size="12"/>
-										</td>
-										<td></td>
+											</td>
 											</field:display>
 											
 	
 											
-								<field:display name="Sub-Program" feature="Budget">
-										<td valign="top" align="left" id="Sub-Program" align="right">
+									<field:display name="Sub-Program" feature="Budget">
+										<td valign="top" id="Sub-Program" align="center" width="20%">
 											<a title="<digi:trn key="aim:Sub_Program">Sub-Program</digi:trn>">
 											<digi:trn key="aim:actSubProgram">
 												Sub-Program
 												</digi:trn>
 												</a>
-											<br/>
-											<html:text property="identification.subProgram" size="12"/>
-								
-									</td>
-								</field:display>
+										</td>
+									</field:display>
 											
 								<field:display name="Project Code" feature="Budget">
-										<td valign="top" align="left" id="ProjectCode" align="right">
+										<td valign="top" id="ProjectCode" align="center" width="20%">
 											<a title="<digi:trn key="aim:ProjectCode">Project Code</digi:trn>">
 											<digi:trn key="aim:actProjectCode">
 												Project Code
 												</digi:trn>
 												</a>
-										<br/><html:text property="identification.projectCode" size="12"/>
-								
 									</td>
 								</field:display>	
 									
 									</tr>
+										<tr>
+											<field:display name="FY" feature="Budget">
+												<td valign="top"  id="FY1" align="center"  width="20%">
+														<html:text property="identification.FY" size="12"/>
+												</td>
+											</field:display>
+											
+											<field:display name="Vote" feature="Budget">
+												<td valign="top"  id="Vote1" align="center" width="20%">
+													<html:text property="identification.vote" size="12"/>
+												</td>	
+											</field:display>
+											<field:display name="Sub-Vote" feature="Budget">
+											<td valign="top"  id="Sub-Vote1" align="center" width="20%">
+												<html:text property="identification.subVote" size="12"/>
+											</td>
+											</field:display>
+											<field:display name="Sub-Program" feature="Budget">
+												<td valign="top" id="Sub-Program1" align="center" width="20%">
+													<html:text property="identification.subProgram" size="12"/>
+												</td>
+											</field:display>
+											<field:display name="Project Code" feature="Budget">
+												<td valign="top" id="ProjectCode1" align="center" width="20%">
+													<html:text property="identification.projectCode" size="12"/>
+												</td>
+											</field:display>	
+									
+										</tr>
 								</table>
 								</td></tr>	
 								</field:display>

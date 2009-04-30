@@ -10,6 +10,15 @@ public class AmpSectorTableWidget extends AmpWidget {
     private Set<AmpSectorTableYear> totalYears;
     private Set<AmpSectorTableYear> percentYears;
     private Set<AmpSectorTableYear> years;
+    private Long donorYear;
+
+    public Long getDonorYear() {
+        return donorYear;
+    }
+
+    public void setDonorYear(Long donorYear) {
+        this.donorYear = donorYear;
+    }
 
     public Set<AmpSectorTableYear> getYears() {
         return years;

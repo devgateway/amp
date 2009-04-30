@@ -1,6 +1,7 @@
 package org.digijava.module.widget.action;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -18,7 +19,9 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.widget.dbentity.AmpSectorOrder;
@@ -68,23 +71,34 @@ public class ShowSectorTable extends Action {
         AmpFiscalCalendar calendar = FiscalCalendarUtil.getAmpFiscalCalendar(Long.parseLong(fiscalCalendarId));
 
         AmpSectorTableWidget secTableWidget = SectorTableWidgetUtil.getAmpSectorTableWidget(tableForm.getWidgetId());
+        boolean donorColumnAdded=false;
+        if(secTableWidget.getDonorYear()!=null){
+            donorColumnAdded=true;
+            Collection<AmpOrganisation> donors = DbUtil.getAmpOrganisations(false);
+            tableForm.setDonors(new ArrayList(donors));
+        }
+        tableForm.setDonorColumnAdded(donorColumnAdded);
         List<AmpSectorTableYear> sectorTableYears = new ArrayList(secTableWidget.getYears());
         List<AmpSectorOrder> sectorOrders = new ArrayList(secTableWidget.getSectorsColumns());
         Iterator<AmpSectorOrder> sectorOrderIter = sectorOrders.iterator();
 
         SectorTableHelper sectorTableRowOther = new SectorTableHelper();
         sectorTableRowOther.setSectorName(headingOther);
+        sectorTableRowOther.setSectorId(SectorTableHelper.OTHER_ROW_SECTOR_ID);
 
         SectorTableHelper sectorTableRowEmpty = new SectorTableHelper();
         sectorTableRowEmpty.setEmptyRow(true);
+        sectorTableRowEmpty.setSectorId(SectorTableHelper.EMPTY_ROW_SECTOR_ID);
 
         SectorTableHelper sectorTableRowTotal = new SectorTableHelper();
         sectorTableRowTotal.setSectorName(headingTotal);
         sectorTableRowTotal.setApplyStyle(true);
+        sectorTableRowTotal.setSectorId(SectorTableHelper.TOTAL_ROW_SECTOR_ID);
 
         while (sectorOrderIter.hasNext()) {
             AmpSectorOrder sectorTableRow = sectorOrderIter.next();
             SectorTableHelper sectorTable = new SectorTableHelper();
+            sectorTable.setSectorId(sectorTableRow.getSector().getAmpSectorId());
             sectorTable.setSectorName(sectorTableRow.getSector().getName());
             HashMap<String, OrderHelper> cols = new HashMap<String, OrderHelper>();
             Iterator<AmpSectorTableYear> totalYearIter = sectorTableYears.iterator();
@@ -96,8 +110,8 @@ public class ShowSectorTable extends Action {
                 //we need data including the last day of toYear,this is till the first day of toYear+1
                 int MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
                 Date endDate = new Date(ChartWidgetUtil.getStartOfYear(year.intValue() + 1, calendar.getStartMonthNum() - 1, calendar.getStartDayNum()).getTime() - MILLISECONDS_IN_DAY);
-                Long amount = SectorTableWidgetUtil.calculateFunding(year, new Long[]{sectorId}, startDate, endDate);
-                Long wholeAmount = SectorTableWidgetUtil.calculateFunding(year, null, startDate, endDate);
+                Long amount = SectorTableWidgetUtil.calculateFunding(null, new Long[]{sectorId}, startDate, endDate);
+                Long wholeAmount = SectorTableWidgetUtil.calculateFunding(null, null, startDate, endDate);
                 String heading = "";
                 if (sectorTableYear.getType().equals(AmpSectorTableYear.TOTAL_TYPE_YEAR)) {
                     if (calendar.getIsFiscal()) {

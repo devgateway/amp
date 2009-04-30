@@ -84,6 +84,12 @@
                  document.sectorTableWidgetForm.target = "_self";
                  document.sectorTableWidgetForm.submit();
              }
+             function check(){
+                 var donorCheckbox=document.getElementById("donorCheckbox").checked;
+                 var hidden=document.getElementById("donorCheckboxHidden");
+                 hidden.value=donorCheckbox;
+           
+             }
              //-->
 </script>
 
@@ -91,6 +97,7 @@
 <digi:form action="/sectorTableManager.do~actType=save">
 
     <html:hidden name="sectorTableWidgetForm" property="sectorTableId"/>
+    <html:hidden name="sectorTableWidgetForm" property="donorColumn" styleId="donorCheckboxHidden"/>
     <table width="60%" border="0" cellpadding="15">
         <tr>
             <td>
@@ -211,6 +218,22 @@
                             <html:select name="sectorTableWidgetForm" property="selPlaces" style="width: 300px">
                                 <html:optionsCollection name="sectorTableWidgetForm" property="places" value="id" label="name"/>
                             </html:select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <html:checkbox name="sectorTableWidgetForm" property="donorColumn" onchange="check()" styleId="donorCheckbox">
+                                  <digi:trn>Add Donor column</digi:trn>:
+                            </html:checkbox>
+                              <fieldset style="width:50%">
+                                <legend align="left"><digi:trn>Donor Year</digi:trn></legend>
+                                <c:forEach var="year" items="${sectorTableWidgetForm.years}" varStatus="status">
+                                 <html:radio  name="sectorTableWidgetForm" property="donorColumnYear" value="${year}"/>${year}
+                                 <c:if test="${status.count%4==0}">
+                                        <br/>
+                                  </c:if>
+                                </c:forEach>
+                            </fieldset>
                         </td>
                     </tr>
 

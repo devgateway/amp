@@ -2,6 +2,7 @@ package org.digijava.module.widget.form;
 
 import java.util.List;
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpSectorOrder;
 import org.digijava.module.widget.dbentity.AmpSectorTableWidget;
@@ -22,6 +23,24 @@ public class AdminSectorTableWidgetForm extends ActionForm {
     private List<AmpDaWidgetPlace> places;
     private List<AmpSectorTableYear> sectorTableYears;
     private Long sectorTableYearId;
+    private boolean donorColumn;
+    private Long donorColumnYear;
+
+    public Long getDonorColumnYear() {
+        return donorColumnYear;
+    }
+
+    public void setDonorColumnYear(Long donorColumnYear) {
+        this.donorColumnYear = donorColumnYear;
+    }
+
+    public boolean isDonorColumn() {
+        return donorColumn;
+    }
+
+    public void setDonorColumn(boolean donorColumn) {
+        this.donorColumn = donorColumn;
+    }
 
     public Long getSectorTableYearId() {
         return sectorTableYearId;

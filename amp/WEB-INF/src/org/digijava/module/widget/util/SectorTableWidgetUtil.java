@@ -119,10 +119,10 @@ public class SectorTableWidgetUtil {
      * @return
      * @throws DgException
      */
-    public static Long calculateFunding(Long year, Long[] sectorId,Date startDate,Date endDate) throws DgException {
+    public static Long calculateFunding(Long[] donorId, Long[] sectorId,Date startDate,Date endDate) throws DgException {
         double result = 0;
         Double[] allFundingWrapper = {new Double(0)};// to hold whole funding value
-        Collection<DonorSectorFundingHelper> fundings = ChartWidgetUtil.getDonorSectorFunding(null, startDate, endDate, allFundingWrapper, sectorId);
+        Collection<DonorSectorFundingHelper> fundings = ChartWidgetUtil.getDonorSectorFunding(donorId, startDate, endDate, allFundingWrapper, sectorId);
         for (DonorSectorFundingHelper funding : fundings) {
         result+=funding.getFounding();
         }

@@ -8,72 +8,6 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 <script defer src="ie_onload.js" type="text/javascript"></script>
-<script language="JavaScript">
-
-function onDelete() {
-  var flag = confirm('<digi:trn key="aim:deleteconfirm">Are you sure?</digi:trn>');
-  return flag;
-}
-
-function onCancel() {
-  <digi:context name="cancelComponents" property="context/module/moduleinstance/updateComponentType..do?event=cancel" />
-  document.aimComponentsTypeForm.action = "<%= cancelComponents%>";
-  document.aimComponentsTypeForm.target = "_self";
-  document.aimComponentsTypeForm.submit();
-}
-
-
-function validate()
-{
-  if ((document.aimComponentsTypeForm.name.value).length == 0)
-  {
-    alert("<digi:trn key="aim:errortypeName">Please Enter the name</digi:trn>");
-    document.aimComponentsTypeForm.name.focus();
-    return false;
-  }
-  if ((document.aimComponentsTypeForm.code.value).length == 0)
-  {
-    alert("<digi:trn key="aim:errortypeCode">Please Enter the code</digi:trn>");
-    document.aimComponentsTypeForm.code.focus();
-    return false;
-  }
-  return true;
-}
-
-function updateComponentsType()
-{
-  var temp = validate();
-  if (temp == true)
-  {
-    document.aimComponentsTypeForm.addBtn.disabled = true;
-	
-    <digi:context name="update" property="context/module/moduleinstance/updateComponentType.do?event=save" />
-    
-	document.aimComponentsTypeForm.action = "<%=update%>";
-    
-	document.aimComponentsTypeForm.target = "_self";
-    
-	document.aimComponentsTypeForm.submit();
-    
-	}
-  
-  return temp;
-}
-
-function myOnload(){
-  if(document.aimComponentsTypeForm.check.value=="save"){
-    <digi:context name="refresh" property="context/module/moduleinstance/updateComponentType.do" />
-    document.aimComponentsTypeForm.action = "<%= refresh %>";
-    document.aimComponentsTypeForm.target = window.opener.name;
-    document.aimComponentsTypeForm.submit();
-    closeWindow();
-  }
-}
-
-function unload(){}
-
-function closeWindow(){window.close();}
-</script>
 <style type="text/css">
 <!--
 body {
@@ -84,9 +18,9 @@ body {
 }
 -->
 </style>
-<body onLoad="myOnload()">
+<body>
 <digi:instance property="aimComponentsTypeForm" />
-<digi:form action="/updateComponentType.do" method="post">
+<digi:form action="/updateComponentType.do" method="post" type="aimComponentsTypeForm" name="aimComponentsTypeFormPopin">
 
 
 <html:hidden property="check" />

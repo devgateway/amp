@@ -6,6 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<jsp:include page="viewComponentTypesPopin.jsp" flush="true" />
 
 <script langauage="JavaScript">
 function onDelete() {
@@ -13,31 +14,13 @@ function onDelete() {
   return flag;
 }
 
-function addType()
-{
-  openNewWindow(550, 300);
-  <digi:context name="addComponentType" property="context/module/moduleinstance/updateComponentType.do?event=add" />
-  document.aimComponentsTypeForm.action = "<%= addComponentType %>";
-  document.aimComponentsTypeForm.target = popupPointer.name;
-  document.aimComponentsTypeForm.submit();
-  return true;
-}
-
-function editType(id){
-  openNewWindow(600, 400);
-  <digi:context name="editComponentType" property="context/module/moduleinstance/updateComponentType.do?event=edit" />
-  document.aimComponentsTypeForm.action = "<%= editComponentType %>&id="+id;
-  document.aimComponentsTypeForm.target = popupPointer.name;
-  document.aimComponentsTypeForm.submit();
-}
-
 function deleteType(id){
-if (onDelete()){
-  <digi:context name="delComponentType" property="context/module/moduleinstance/updateComponentType.do?event=delete" />
-  document.aimComponentsTypeForm.action = "<%= delComponentType %>&id="+id;
-  document.aimComponentsTypeForm.target = "_self";
-  document.aimComponentsTypeForm.submit();
-}
+  if (onDelete()){
+	<digi:context name="delComponentType" property="context/module/moduleinstance/updateComponentType.do?event=delete" />
+    document.aimComponentsTypeForm.action = "<%= delComponentType %>&id="+id;
+    document.aimComponentsTypeForm.target = "_self";
+    document.aimComponentsTypeForm.submit();
+  }
 }
 </script>
 

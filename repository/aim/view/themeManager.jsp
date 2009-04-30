@@ -8,65 +8,11 @@
 <%@ page import = "org.digijava.module.aim.util.ProgramUtil" %>
 <%@ page import = "java.util.Collection" %>
 <%@page import="java.util.Iterator"%>
-
+<digi:instance property="aimThemeForm" />
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-
+<jsp:include page="themeManagerPopin.jsp" flush="true"/>
 <script language="JavaScript">
 	<!--
-		function validate()
-		{
-			if (trim(document.aimThemeForm.programName.value).length == 0)
-			{
-				alert("Please enter Program name");
-				document.aimThemeForm.programName.focus();
-				return false;
-			}			
-			if (document.aimThemeForm.programType.value == -1)
-			{
-				alert("Please Select a  Program type");
-				document.aimThemeForm.programType.focus();
-				return false;
-			}
-			if (trim(document.aimThemeForm.programType.value).length == 0)
-			{
-				alert("Please enter Program type");
-				document.aimThemeForm.programType.focus();
-				return false;
-			}
-			return true;
-		}
-		function saveProgram()
-		{
-			var temp = validate();
-			if (temp == true)
-			{
-				<digi:context name="addThm" property="context/module/moduleinstance/addTheme.do"/>
-				document.aimThemeForm.action = "<%=addThm%>";
-				document.aimThemeForm.target = "context/module/moduleinstance/addNewTheme.do";
-				document.aimThemeForm.submit();
-			}
-			return true;
-		}
-
-		function addProgram()
-		{
-			openNewWindow(600,500);
-			<digi:context name="addNewTh" property="context/module/moduleinstance/addTheme.do?event=add"/>
-			document.aimThemeForm.action = "<%=addNewTh%>";
-			document.aimThemeForm.target = popupPointer.name;
-			document.aimThemeForm.submit();
-			return true;
-		}
-
-
-		function addSubProgram(rutId,id,level,name)
-		{
-			openNewWindow(600,500);
-			<digi:context name="subProgram" property="context/module/moduleinstance/addTheme.do?event=addSubProgram"/>
-			document.aimThemeForm.action = "<%= subProgram %>&themeId=" + id + "&indlevel=" + level + "&indname=" + name + "&rootId=" + rutId;
-			document.aimThemeForm.target = popupPointer.name;
-			document.aimThemeForm.submit();
-		}
 
 
 		
@@ -137,7 +83,7 @@
 </script>
 
 <digi:errors/>
-<digi:instance property="aimThemeForm" />
+
 <digi:form action="/themeManager.do" method="post">
 
 <digi:context name="digiContext" property="context" />

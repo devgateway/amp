@@ -100,9 +100,10 @@ public class ComputedColumnsTest extends TestCase {
 		worker.setRelatedColumn(a);
 		Column c = worker.populateCellColumn();
 
+		
 		Collection<TextCell> list = c.getItems();
 		for (TextCell textCell : list) {
-			assertEquals("9", textCell.getValue());
+			assertEquals("10", textCell.getValue());
 		}
 		//TODO: Check why in the server the result is 9 AMP-5585
 	}

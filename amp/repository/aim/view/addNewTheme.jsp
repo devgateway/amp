@@ -7,146 +7,14 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 
-<c:set var="msgValidNumbers">
-    <digi:trn key="aim:msgEnterNumericValues">Please enter numeric values for field </digi:trn>
-</c:set>
-
-<c:set var="programInernalFinancing">
-	<digi:trn key="aim:Internal"> Internal financing </digi:trn>
-</c:set>
-
-<c:set var="programExternalFinancing">
-	<digi:trn key="aim:External"> External financing </digi:trn> 
-</c:set>
-
-<c:set var="programTotalFinancing">
-	<digi:trn key="aim:TotasFinance"> Total financing  </digi:trn> 
-</c:set>
-
-<c:set var="msgEnterPgrName">
-<digi:trn key="aim:sgEnterPgrName">Please enter the program name </digi:trn>
-</c:set>
-
-<c:set var="msgEnterPgrType">
-    <digi:trn key="aim:msgEnterPgrType">Please Select a  program type</digi:trn>
-</c:set>
-
-<c:set var="msgEnterCode">
-    <digi:trn key="aim:msgEnterPgrCode">Please enter the program code</digi:trn>
-</c:set>
 
 
 <digi:instance property="aimThemeForm" />
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
-<script language="JavaScript">
-	<!--
-		
-	function validate() 
-	{
-		var validNumbers='0123456789,.'
-		if (trim(document.aimThemeForm.programName.value).length == 0) 
-		{
-			alert("${msgEnterPgrName}" );
-			document.aimThemeForm.programName.focus();
-			return false;
-		}	
-		if (trim(document.aimThemeForm.programCode.value).length == 0) 
-		{
-			alert("${msgEnterCode}");
-			document.aimThemeForm.programCode.focus();
-			return false;
-		}		
-		if (document.aimThemeForm.programTypeCategValId.value == 0) 
-		{
-			alert("${msgEnterPgrType}");
-			document.aimThemeForm.programTypeCategValId.focus();
-			return false;
-		}			
-
-	<logic:empty name="aimThemeForm" property="parentId"> 
-		document.aimThemeForm.programInernalFinancing.value=trim(document.aimThemeForm.programInernalFinancing.value);
-		if (document.aimThemeForm.programInernalFinancing.value.length > 0){
-				var text=document.aimThemeForm.programInernalFinancing.value;
-				for (i=0; i < text.length; i++){
-					if (validNumbers.indexOf(text.charAt(i)) ==-1){
-					alert("${msgValidNumbers} ${programInernalFinancing}");
-					document.aimThemeForm.programInernalFinancing.focus();
-					return false;
-					}
-				}			
-			}else{
-			document.aimThemeForm.programInernalFinancing.value=0;
-		} 
-
-		document.aimThemeForm.programExternalFinancing.value=trim(document.aimThemeForm.programExternalFinancing.value);
-		if (document.aimThemeForm.programExternalFinancing.value.length > 0){
-			var text=document.aimThemeForm.programExternalFinancing.value;
-			for (i=0; i < text.length; i++){
-				if (validNumbers.indexOf(text.charAt(i)) ==-1){
-				alert("${msgValidNumbers} ${programExternalFinancing}");
-				document.aimThemeForm.programExternalFinancing.focus();
-				return false;
-				}
-			}			
-		} else{
-			document.aimThemeForm.programExternalFinancing.value=0;
-			}
-
-		document.aimThemeForm.programTotalFinancing.value=trim(document.aimThemeForm.programTotalFinancing.value);
-			if (document.aimThemeForm.programTotalFinancing.value.length > 0){
-			var text=document.aimThemeForm.programTotalFinancing.value;
-			for (i=0; i < text.length; i++){
-				if (validNumbers.indexOf(text.charAt(i)) ==-1){
-				alert("${msgValidNumbers} ${programTotalFinancing}");
-				document.aimThemeForm.programTotalFinancing.focus();
-				return false;
-				}
-			}
-		} else{
-			document.aimThemeForm.programTotalFinancing.value=0;
-		}
-	</logic:empty>
-
-			
-			
-		return true;
-	}
-
-		function saveProgram()
-	{
-		var temp = validate();
-		if (temp == true) 
-		{
-			<digi:context name="addThm" property="context/module/moduleinstance/addTheme.do"/>
-			document.aimThemeForm.action = "<%=addThm%>";
-			document.aimThemeForm.target = window.opener.name;
-			document.aimThemeForm.submit();
-			window.close();
-			
-		}
-		
-		return true;
-	}	
-	
-		function load()
-	{
-		document.aimThemeForm.programName.value = "";
-		document.aimThemeForm.programCode.value = "";
-		document.aimThemeForm.programType.value = "";
-		document.aimThemeForm.programDescription.value = "";		
-	}
-	
-	function closeWindow() 
-	{
-		window.close();
-	}
--->
-
-</script>
 <digi:errors/>
 
-<digi:form action="/addTheme.do" method="post">
+<digi:form action="/addTheme.do" method="post" type="aimThemeForm" name="aimThemeFormPopin">
 <digi:context name="digiContext" property="context" />
 
 

@@ -54,7 +54,7 @@ public class ComputedColumnsTest extends TestCase {
 				java.sql.PreparedStatement ps;
 
 				ps = conn
-						.prepareStatement("select 1 AS amp_activity_id, date ('2009-02-01') AS activity_close_date,  date( CURRENT_DATE - 10) AS actual_start_date, date ('2009-02-01') AS actual_approval_date, date ('2009-02-01') AS activity_approval_date, date ('2009-02-01') AS proposed_start_date, date ('2009-02-01') AS actual_completion_date, date ('2009-02-01') AS proposed_completion_date from dual");
+						.prepareStatement("select 1 AS amp_activity_id, date ('2009-02-01') AS activity_close_date,  date( CURRENT_DATE - 1) AS actual_start_date, date ('2009-02-01') AS actual_approval_date, date ('2009-02-01') AS activity_approval_date, date ('2009-02-01') AS proposed_start_date, date ('2009-02-01') AS actual_completion_date, date ('2009-02-01') AS proposed_completion_date from dual");
 				java.sql.ResultSet rs = ps.executeQuery();
 				rsmd = rs.getMetaData();
 				int colsCount = rsmd.getColumnCount() + 1;
@@ -92,6 +92,7 @@ public class ComputedColumnsTest extends TestCase {
 	}
 
 	// Current Date - Actual Start Date 
+	//needs to be reviewed 
 	public void testComputedDateCell() {
 		Configuration.initConfig();
 		ComputedDateColWorker worker = new TestDateWorker(null, "v_computed_dates", "", null);
@@ -103,7 +104,7 @@ public class ComputedColumnsTest extends TestCase {
 		
 		Collection<TextCell> list = c.getItems();
 		for (TextCell textCell : list) {
-			assertEquals("10", textCell.getValue());
+			assertEquals("1", textCell.getValue());
 		}
 		//TODO: Check why in the server the result is 9 AMP-5585
 	}
@@ -237,6 +238,31 @@ public class ComputedColumnsTest extends TestCase {
 		cell.setOwnerId(1l);
 		trMs = getCachedMetaInfo(ArConstants.TRANSACTION_TYPE, ArConstants.DISBURSEMENT);
 		adjMs = getCachedMetaInfo(ArConstants.ADJUSTMENT_TYPE, ArConstants.PLANNED);
+		cell.getMetaData().add(trMs);
+		cell.getMetaData().add(adjMs);
+		list.add(cell);
+		
+		
+		cell = new ComputedCountingAmountCell();
+		cell.setId(1l);
+		cell.setAmount(new BigDecimal(9999));
+		cell.setCurrencyCode("USD");
+		cell.setCurrencyDate(new Date());
+		cell.setOwnerId(1l);
+		trMs = getCachedMetaInfo(ArConstants.TRANSACTION_TYPE, ArConstants.EXPENDITURE);
+		adjMs = getCachedMetaInfo(ArConstants.ADJUSTMENT_TYPE, ArConstants.PLANNED);
+		cell.getMetaData().add(trMs);
+		cell.getMetaData().add(adjMs);
+		list.add(cell);
+		
+		cell = new ComputedCountingAmountCell();
+		cell.setId(1l);
+		cell.setAmount(new BigDecimal(9999));
+		cell.setCurrencyCode("USD");
+		cell.setCurrencyDate(new Date());
+		cell.setOwnerId(1l);
+		trMs = getCachedMetaInfo(ArConstants.TRANSACTION_TYPE, ArConstants.EXPENDITURE);
+		adjMs = getCachedMetaInfo(ArConstants.ADJUSTMENT_TYPE, ArConstants.ACTUAL);
 		cell.getMetaData().add(trMs);
 		cell.getMetaData().add(adjMs);
 		list.add(cell);

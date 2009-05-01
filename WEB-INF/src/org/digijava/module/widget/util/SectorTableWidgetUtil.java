@@ -1,5 +1,6 @@
 package org.digijava.module.widget.util;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -7,11 +8,10 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.widget.dbentity.AmpSectorTableWidget;
+import org.digijava.module.widget.dbentity.AmpSectorTableYear;
 import org.digijava.module.widget.helper.DonorSectorFundingHelper;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -133,6 +133,27 @@ public class SectorTableWidgetUtil {
             result/=1000000;
         }
         return Math.round(result);
+    }
+
+      /**
+     * Loads Sector Table Years by table widget id.
+     * @param id
+     * @return
+     * @throws DgException
+     */
+    public static List<AmpSectorTableYear> getAmpSectorTableYears(Long id,Long columnType) throws DgException {
+        Session session = PersistenceManager.getRequestDBSession();
+        List<AmpSectorTableYear> result = new ArrayList();
+        try {
+            String oql = "select year  from " + AmpSectorTableYear.class.getName() + " year  where  year.widget.id=:id and year.type=:type order by year.order";
+            Query query = session.createQuery(oql);
+            query.setLong("type", columnType);
+            query.setLong("id", id);
+            result = query.list();
+        } catch (Exception e) {
+            throw new DgException("Cannot get Sector Table Widget!", e);
+        }
+        return result;
     }
 
 }

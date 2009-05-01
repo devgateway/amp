@@ -1,7 +1,6 @@
 package org.digijava.module.widget.action;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -80,8 +79,8 @@ public class AdminSectorTableWidgets extends DispatchAction {
         AmpSectorTableWidget secTbWidget = SectorTableWidgetUtil.getAmpSectorTableWidget(tablesForm.getSectorTableId());
         tablesForm.setName(secTbWidget.getName());
 
-        Set<AmpSectorTableYear> totalYearsCol = secTbWidget.getTotalYears();
-        Set<AmpSectorTableYear> totalPercentYearsCol = secTbWidget.getPercentYears();
+        List<AmpSectorTableYear> totalYearsCol =SectorTableWidgetUtil.getAmpSectorTableYears(tablesForm.getSectorTableId(),AmpSectorTableYear.TOTAL_TYPE_YEAR);
+        List<AmpSectorTableYear> totalPercentYearsCol = SectorTableWidgetUtil.getAmpSectorTableYears(tablesForm.getSectorTableId(),AmpSectorTableYear.PERCENT_TYPE_YEAR);
         ArrayList<String> selectedYears = new ArrayList<String>();
         if (totalYearsCol != null) {
             Iterator<AmpSectorTableYear> totalYearsColIter = totalYearsCol.iterator();
@@ -167,12 +166,7 @@ public class AdminSectorTableWidgets extends DispatchAction {
             oldPlaces = WidgetUtil.getWidgetPlaces(tablesForm.getSectorTableId());
             isNew = false;
         }
-        if (secTableWidget.getPercentYears() == null) {
-            secTableWidget.setPercentYears(new HashSet<AmpSectorTableYear>());
-        }
-        if (secTableWidget.getTotalYears() == null) {
-            secTableWidget.setTotalYears(new HashSet<AmpSectorTableYear>());
-        }
+    
         if (secTableWidget.getSectorsColumns() == null) {
             secTableWidget.setSectorsColumns(new HashSet<AmpSectorOrder>());
         }
@@ -226,8 +220,11 @@ public class AdminSectorTableWidgets extends DispatchAction {
             ord++;
 
         }
-        secTableWidget.getTotalYears().clear();
-        secTableWidget.getTotalYears().addAll(newYears);
+        if(secTableWidget.getYears()==null){
+            secTableWidget.setYears(new HashSet<AmpSectorTableYear>());
+        }
+        secTableWidget.getYears().clear();
+        secTableWidget.getYears().addAll(newYears);
 
         secTableWidget.setName(tablesForm.getName());
         SectorTableWidgetUtil.saveWidget(secTableWidget, isNew);

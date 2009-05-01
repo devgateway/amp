@@ -155,7 +155,7 @@
                                     <td  align="center"><digi:trn>Type</digi:trn></td>
                                     <td width="10%" colspan="2" align="center"><digi:trn>Order</digi:trn></td>
                                 </tr>
-                                <c:forEach var="sectorTableYear" items="${sectorTableWidgetForm.sectorTableYears}">
+                                <c:forEach var="sectorTableYear" items="${sectorTableWidgetForm.sectorTableYears}" varStatus="status">
                                     <tr>
                                         <td>
 

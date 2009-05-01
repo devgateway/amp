@@ -32,14 +32,6 @@
         <key column="sector_widget_table_id"/>
         <one-to-many class="org.digijava.module.widget.dbentity.AmpSectorOrder"/>
       </set>
-      <set cascade="all-delete-orphan" inverse="true" lazy="true" name="totalYears" order-by="column_order asc" where="type=1">
-        <key column="sector_widget_table_id"/>
-        <one-to-many class="org.digijava.module.widget.dbentity.AmpSectorTableYear"/>
-      </set>
-      <set cascade="all-delete-orphan" inverse="true" lazy="true" name="percentYears" order-by="column_order asc" where="type=2">
-        <key column="sector_widget_table_id"/>
-        <one-to-many class="org.digijava.module.widget.dbentity.AmpSectorTableYear"/>
-      </set>
       <set cascade="all-delete-orphan" inverse="true" lazy="true" name="years" order-by="column_order asc">
         <key column="sector_widget_table_id"/>
         <one-to-many class="org.digijava.module.widget.dbentity.AmpSectorTableYear"/>

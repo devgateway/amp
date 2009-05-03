@@ -5860,8 +5860,8 @@ public class DbUtil {
                                             AmpFunding fund = (AmpFunding) itr3.next();
                                             // Only those donors are considered who have funding for the activity/project
                                             //System.out.println(dnOrgOriginalOrganization.getAmpOrgId()+" - "+fund.getAmpDonorOrgId().getAmpOrgId());
-                                            if (dnOrg.getAmpOrgId().equals(fund.getAmpDonorOrgId().getAmpOrgId()) || 
-                                            		dnOrgOriginalOrganization.getAmpOrgId().equals(fund.getAmpDonorOrgId().getAmpOrgId())) {
+                                            if (svy.getAmpDonorOrgId().getAmpOrgId().equals(fund.getAmpDonorOrgId().getAmpOrgId())/* dnOrg.getAmpOrgId().equals(fund.getAmpDonorOrgId().getAmpOrgId()) || 
+                                            		dnOrgOriginalOrganization.getAmpOrgId().equals(fund.getAmpDonorOrgId().getAmpOrgId())*/) {
                                             	// Filtering by financing-instrument here
                                                 if (null != financingInstr) {
                                                     if (!financingInstr.getId().equals(fund.getFinancingInstrument().getId()))

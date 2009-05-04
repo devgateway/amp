@@ -26,6 +26,7 @@ public class AmpTeamMember implements Serializable {
 	private Set links;
 	private Set logs;
 	private Set<AmpMessageState> messages;
+	private Set<AmpContact> contacts;
 
 	// added for donor access
 	private Set editableFundingOrgs;	// in case of donor - allowed organisations whose funding details this TM can edit
@@ -189,6 +190,14 @@ public class AmpTeamMember implements Serializable {
 
 	public void setMessages(Set<AmpMessageState> messages) {
 		this.messages = messages;
+	}
+
+	public Set<AmpContact> getContacts() {
+		return contacts;
+	}
+
+	public void setContacts(Set<AmpContact> contacts) {
+		this.contacts = contacts;
 	}
 
 	/* (non-Javadoc)

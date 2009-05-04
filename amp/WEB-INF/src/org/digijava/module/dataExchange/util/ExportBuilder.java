@@ -275,19 +275,21 @@ public class ExportBuilder {
 				}
 			}
 			
-		} else if (path.equalsIgnoreCase("activity.donorContacts")){
-			ContactType cont = buildContactType(ampActivity.getContFirstName(),
-					ampActivity.getContLastName(), ampActivity.getEmail());
-			if (cont != null){
-				parent.getDonorContacts().add(cont);
-			}
-		} else if (path.equalsIgnoreCase("activity.govContacts")){
-			ContactType cont = buildContactType(ampActivity.getMofedCntFirstName(),
-					ampActivity.getMofedCntLastName(),ampActivity.getMofedCntEmail());
-			if (cont != null){
-				parent.getGovContacts().add(cont);
-			}
-		} else if (path.equalsIgnoreCase("activity.additional")){
+		} 
+//		else if (path.equalsIgnoreCase("activity.donorContacts")){
+//			ContactType cont = buildContactType(ampActivity.getContFirstName(),
+//					ampActivity.getContLastName(), ampActivity.getEmail());
+//			if (cont != null){
+//				parent.getDonorContacts().add(cont);
+//			}
+//		} else if (path.equalsIgnoreCase("activity.govContacts")){
+//			ContactType cont = buildContactType(ampActivity.getMofedCntFirstName(),
+//					ampActivity.getMofedCntLastName(),ampActivity.getMofedCntEmail());
+//			if (cont != null){
+//				parent.getGovContacts().add(cont);
+//			}
+//		} 
+		else if (path.equalsIgnoreCase("activity.additional")){
 			// TODO not implemented need more details
 		}
 	}

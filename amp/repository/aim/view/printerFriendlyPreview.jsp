@@ -1658,62 +1658,79 @@
 								
 									</module:display>
 									
-
-									
-									 
-									
-                                    <module:display name="Contact Information" parentModule="PROJECT MANAGEMENT">
-									<feature:display name="Donor Contact Information" module="Contact Information">
-									<tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap">
-											<b>
-											<digi:trn key="aim:donorFundingContactInformation">
-										    Donor funding contact information</digi:trn>	
-									  </b>									</td>
-										<td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.contactInfo.dnrCntFirstName}"/>
-											<c:out value="${aimEditActivityForm.contactInfo.dnrCntLastName}"/> -
-											<c:out value="${aimEditActivityForm.contactInfo.dnrCntEmail}"/>										</td>
-									</tr>
-									</feature:display>
-									<feature:display name="Government Contact Information" module="Contact Information">
-									<tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap">
-										<b>	<digi:trn key="aim:mofedContactInformation">
-										    MOFED contact information</digi:trn>	
-									  </b>									</td>
-										<td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.contactInfo.mfdCntFirstName}"/>
-											<c:out value="${aimEditActivityForm.contactInfo.mfdCntLastName}"/> -
-											<c:out value="${aimEditActivityForm.contactInfo.mfdCntEmail}"/>										</td>
-									</tr>
-									</feature:display>
-									<feature:display name="Project Coordinator Contact Information" module="Contact Information">
-									<tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap">
-											<b>
-											<digi:trn key="aim:projectCoordinator">
-										    Project Coordinator Contact Information</digi:trn>	
-									  </b>									</td>
-										<td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.contactInfo.prjCoFirstName}"/>
-											<c:out value="${aimEditActivityForm.contactInfo.prjCoLastName}"/> -
-											<c:out value="${aimEditActivityForm.contactInfo.prjCoEmail}"/>										</td>
-									</tr>
-									</feature:display>
-									<feature:display name="Sector Ministry Contact Information" module="Contact Information">
-									<tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap">
-											<b>
-											<digi:trn key="aim:sectorMinistryCnt">
-										    Sector Ministry Contact Information</digi:trn>	
-									  </b>									</td>
-										<td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.contactInfo.secMiCntFirstName}"/>
-											<c:out value="${aimEditActivityForm.contactInfo.secMiCntLastName}"/> -
-											<c:out value="${aimEditActivityForm.contactInfo.secMiCntEmail}"/>										</td>
-									</tr>
-									</feature:display>
+                                     <module:display name="Contact Information" parentModule="PROJECT MANAGEMENT">
+										<feature:display name="Donor Contact Information" module="Contact Information">
+											<tr>
+												<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
+													<digi:trn>Donor funding contact information</digi:trn>
+												</td>
+												<td bgcolor="#ffffff">
+													<c:if test="${not empty aimEditActivityForm.contactInformation.donorContacts}">
+														<c:forEach var="donorContact" items="${aimEditActivityForm.contactInformation.donorContacts}">
+															<div>
+																<c:out value="${donorContact.contact.name}"/>
+																<c:out value="${donorContact.contact.lastname}"/> -
+																<c:out value="${donorContact.contact.email}"/>			
+															</div>
+														</c:forEach>
+													</c:if>																						
+												</td>
+											</tr>
+											</feature:display>
+											<feature:display name="Government Contact Information" module="Contact Information">
+											<tr>
+												<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
+													<digi:trn>MOFED contact information</digi:trn>
+												</td>
+												<td bgcolor="#ffffff">
+													<c:if test="${not empty aimEditActivityForm.contactInformation.mofedContacts}">
+														<c:forEach var="mofedContact" items="${aimEditActivityForm.contactInformation.mofedContacts}">
+															<div>
+																<c:out value="${mofedContact.contact.name}"/>
+																<c:out value="${mofedContact.contact.lastname}"/> -
+																<c:out value="${mofedContact.contact.email}"/>			
+															</div>
+														</c:forEach>
+													</c:if>
+												</td>
+											</tr>
+											</feature:display>
+											<feature:display name="Project Coordinator Contact Information" module="Contact Information">
+											<tr>
+												<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
+													<digi:trn>Project Coordinator Contact Information</digi:trn>
+												</td>
+												<td bgcolor="#ffffff">
+													<c:if test="${not empty aimEditActivityForm.contactInformation.projCoordinatorContacts}">
+														<c:forEach var="projCoordinatorContact" items="${aimEditActivityForm.contactInformation.projCoordinatorContacts}">
+															<div>
+																<c:out value="${projCoordinatorContact.contact.name}"/>
+																<c:out value="${projCoordinatorContact.contact.lastname}"/> -
+																<c:out value="${projCoordinatorContact.contact.email}"/>			
+															</div>
+														</c:forEach>
+													</c:if>
+												</td>
+											</tr>
+											</feature:display>
+											<feature:display name="Sector Ministry Contact Information" module="Contact Information">
+											<tr>
+												<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
+													<digi:trn>Sector Ministry Contact Information</digi:trn>
+												</td>
+												<td bgcolor="#ffffff">
+													<c:if test="${not empty aimEditActivityForm.contactInformation.sectorMinistryContacts}">
+														<c:forEach var="sectorMinistryContact" items="${aimEditActivityForm.contactInformation.sectorMinistryContacts}">
+															<div>
+																<c:out value="${sectorMinistryContact.contact.name}"/>
+																<c:out value="${sectorMinistryContact.contact.lastname}"/> -
+																<c:out value="${sectorMinistryContact.contact.email}"/>			
+															</div>
+														</c:forEach>
+													</c:if>
+												</td>
+											</tr>
+										</feature:display>
 									</module:display>
 							 		<field:display name="Activity Performance"  feature="Activity Dashboard">
 									<tr>

@@ -74,14 +74,14 @@
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+<table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="772">
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750>
-			<table cellPadding=5 cellSpacing=0 width="100%" border=0>
+		<td class="r-dotted-lg" width="14">&nbsp;</td>
+		<td align="left" class="r-dotted-lg" vAlign="top" width="750">
+			<table cellPadding="5" cellSpacing="0" width="100%" border="0">
 				<tr>
 					<!-- Start Navigation -->
-					<td height=33><span class=crumb>
+					<td height="33"><span class="crumb">
 					<c:set var="clickToViewAdmin">
 					<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 					</c:set>	
@@ -97,8 +97,8 @@
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571>
-						<span class=subtitle-blue>
+					<td height="16" vAlign="center" width="571">
+						<span class="subtitle-blue">
 						<digi:trn key="aim:activityManager">
 							Activity Manager
 						</digi:trn>
@@ -106,14 +106,14 @@
 					</td>
 				</tr>
 				<tr>
-					<td noWrap width=100% vAlign="top">
-					<table width="100%" cellspacing=1 cellSpacing=1 border=0>
-					<tr><td noWrap width=600 vAlign="top">
-						<table bgColor=#d7eafd cellPadding=1 cellSpacing=1 width="100%" valign="top">
-							<tr bgColor=#ffffff>
+					<td noWrap width="100%" vAlign="top">
+					<table width="100%" cellspacing="1" cellSpacing="1" border="0">
+					<tr><td noWrap width="600" vAlign="top">
+						<table bgColor="#d7eafd" cellPadding="1" cellSpacing="1" width="100%" valign="top">
+							<tr bgColor="#ffffff">
 								<td vAlign="top" width="100%">
 
-									<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left>
+									<table width="100%" cellspacing="1" cellpadding="1" valign="top" align="left">
 										<tr>
 											<td>
 												<table>
@@ -150,7 +150,7 @@
 											</td>
 										</tr>
 									
-										<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
+										<tr><td bgColor="#d7eafd" class="box-title" height="20" align="center">
 											<!-- Table title -->
 											<digi:trn key="aim:activityList">
 												Activity List
@@ -158,11 +158,11 @@
 											<!-- end table title -->
 										</td></tr>
 										<tr><td>
-											<table width="100%" cellspacing=1 cellpadding=4 valign=top align=left bgcolor="#ffffff">
+											<table width="100%" cellspacing="1" cellpadding="4" valign="top" align="left" bgcolor="#ffffff">
 
 													<logic:notEmpty name="aimActivityForm" property="activityList">
 														<tr><td>
-															<table width="100%" cellspacing=1 cellpadding=3 bgcolor="#d7eafd">
+															<table width="100%" cellspacing="1" cellpadding="3" bgcolor="#d7eafd">
 																<tr bgcolor="#ffffff">
 																		<jsp:useBean id="urlParamsSort" type="java.util.Map" class="java.util.HashMap"/>
 																		<c:set target="${urlParamsSort}" property="action" value="sort"/>						
@@ -254,8 +254,8 @@
 													</logic:empty>
 											</table>
 										</td></tr>
-										<tr><td bgColor=#ffffff height="20" align="left">
-												<img src= "../ampTemplate/images/start_button.gif" border=0> - <b><digi:trn key="aim:unassignedactivities">Unassigned Activities</digi:trn></b>
+										<tr><td bgColor="#ffffff" height="20" align="left">
+												<img src= "../ampTemplate/images/start_button.gif" border="0"> - <b><digi:trn key="aim:unassignedactivities">Unassigned Activities</digi:trn></b>
 										</td></tr>
 										<tr bgcolor="#ffffff">
 											<td>&nbsp;</td>

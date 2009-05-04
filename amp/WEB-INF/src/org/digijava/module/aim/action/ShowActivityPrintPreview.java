@@ -33,6 +33,7 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActivityComponente;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityReferenceDoc;
@@ -60,6 +61,7 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.ProposedProjCost;
+import org.digijava.module.aim.form.EditActivityForm.ActivityContactInfo;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Components;
@@ -92,7 +94,6 @@ import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.EUActivityUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
-import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -937,37 +938,9 @@ public class ShowActivityPrintPreview
                 }
 
                 // loading the contact person details and condition
-                eaForm.getContactInfo().setDnrCntFirstName(activity.getContFirstName());
-                eaForm.getContactInfo().setDnrCntLastName(activity.getContLastName());
-                eaForm.getContactInfo().setDnrCntEmail(activity.getEmail());
-                eaForm.getContactInfo().setDnrCntTitle(activity.getDnrCntTitle());
-                eaForm.getContactInfo().setDnrCntOrganization(activity.getDnrCntOrganization());
-                eaForm.getContactInfo().setDnrCntPhoneNumber(activity.getDnrCntPhoneNumber());
-                eaForm.getContactInfo().setDnrCntFaxNumber(activity.getDnrCntFaxNumber());
-    
-                eaForm.getContactInfo().setMfdCntFirstName(activity.getMofedCntFirstName());
-                eaForm.getContactInfo().setMfdCntLastName(activity.getMofedCntLastName());
-                eaForm.getContactInfo().setMfdCntEmail(activity.getMofedCntEmail());
-                eaForm.getContactInfo().setMfdCntTitle(activity.getMfdCntTitle());
-                eaForm.getContactInfo().setMfdCntOrganization(activity.getMfdCntOrganization());
-                eaForm.getContactInfo().setMfdCntPhoneNumber(activity.getMfdCntPhoneNumber());
-                eaForm.getContactInfo().setMfdCntFaxNumber(activity.getMfdCntFaxNumber());
-                
-                eaForm.getContactInfo().setPrjCoFirstName(activity.getPrjCoFirstName());
-                eaForm.getContactInfo().setPrjCoLastName(activity.getPrjCoLastName());
-                eaForm.getContactInfo().setPrjCoEmail(activity.getPrjCoEmail());
-                eaForm.getContactInfo().setPrjCoTitle(activity.getPrjCoTitle());
-                eaForm.getContactInfo().setPrjCoOrganization(activity.getPrjCoOrganization());
-                eaForm.getContactInfo().setPrjCoPhoneNumber(activity.getPrjCoPhoneNumber());
-                eaForm.getContactInfo().setPrjCoFaxNumber(activity.getPrjCoFaxNumber());
-                
-                eaForm.getContactInfo().setSecMiCntFirstName(activity.getSecMiCntFirstName());
-                eaForm.getContactInfo().setSecMiCntLastName(activity.getSecMiCntLastName());
-                eaForm.getContactInfo().setSecMiCntEmail(activity.getSecMiCntEmail());
-                eaForm.getContactInfo().setSecMiCntTitle(activity.getSecMiCntTitle());
-                eaForm.getContactInfo().setSecMiCntOrganization(activity.getSecMiCntOrganization());
-                eaForm.getContactInfo().setSecMiCntPhoneNumber(activity.getSecMiCntPhoneNumber());
-                eaForm.getContactInfo().setSecMiCntFaxNumber(activity.getSecMiCntFaxNumber());
+                ActivityContactInfo contactInfo=eaForm.getContactInformation();
+		    	Set<AmpActivityContact> activityContacts=activity.getActivityContacts();
+		    	contactInfo.setActivityContacts(new ArrayList<AmpActivityContact>(activityContacts));
                 
                 if(activity.getCondition()!=null){
                 	 eaForm.getIdentification().setConditions(activity.getCondition().trim());
@@ -1173,37 +1146,12 @@ public class ShowActivityPrintPreview
                 eaForm.getFunding().setRegionalFundings(null);
                 eaForm.getComponents().setSelectedComponents(null);
                 eaForm.getComponents().setCompTotalDisb(0);
-                eaForm.getContactInfo().setDnrCntFirstName(null);
-                eaForm.getContactInfo().setDnrCntLastName(null);
-                eaForm.getContactInfo().setDnrCntEmail(null);
-                eaForm.getContactInfo().setDnrCntTitle(null);
-				eaForm.getContactInfo().setDnrCntOrganization(null);
-				eaForm.getContactInfo().setDnrCntPhoneNumber(null);
-				eaForm.getContactInfo().setDnrCntFaxNumber(null);
-				
-                eaForm.getContactInfo().setMfdCntFirstName(null);
-                eaForm.getContactInfo().setMfdCntLastName(null);
-                eaForm.getContactInfo().setMfdCntEmail(null);
-                eaForm.getContactInfo().setMfdCntTitle(null);
-				eaForm.getContactInfo().setMfdCntOrganization(null);
-				eaForm.getContactInfo().setMfdCntPhoneNumber(null);
-				eaForm.getContactInfo().setMfdCntFaxNumber(null);
-				
-				eaForm.getContactInfo().setPrjCoFirstName(null);
-				eaForm.getContactInfo().setPrjCoLastName(null);
-				eaForm.getContactInfo().setPrjCoEmail(null);
-				eaForm.getContactInfo().setPrjCoTitle(null);
-				eaForm.getContactInfo().setPrjCoOrganization(null);
-				eaForm.getContactInfo().setPrjCoPhoneNumber(null);
-				eaForm.getContactInfo().setPrjCoFaxNumber(null);
-				
-				eaForm.getContactInfo().setSecMiCntFirstName(null);
-				eaForm.getContactInfo().setSecMiCntLastName(null);
-				eaForm.getContactInfo().setSecMiCntEmail(null);
-				eaForm.getContactInfo().setSecMiCntTitle(null);
-				eaForm.getContactInfo().setSecMiCntOrganization(null);
-				eaForm.getContactInfo().setSecMiCntPhoneNumber(null);
-				eaForm.getContactInfo().setSecMiCntFaxNumber(null);
+                //contact info
+                eaForm.getContactInformation().setActivityContacts(null);
+                eaForm.getContactInformation().setContacts(null);
+                eaForm.getContactInformation().setContacts(null);
+                eaForm.getContactInformation().setContactType(null);
+                eaForm.getContactInformation().setPrimaryContact(null);
 				
                 eaForm.getIdentification().setConditions(null);
                 eaForm.getIdentification().setActAthFirstName(null);

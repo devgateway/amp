@@ -59,45 +59,7 @@
 		<property name="condition" column="condition_" type="text" />
 
 		<property name="contactName" column="contact_name" type="java.lang.String" /><!-- defunct -->
-
-		<!-- Donor contact information -->
-		<property name="contFirstName" column="cont_first_name" type="java.lang.String" />
-		<property name="contLastName" column="cont_last_name" type="java.lang.String" />
-		<property name="email" column="email" type="java.lang.String" />
-		<property name="dnrCntTitle" column="dnr_cont_title" type="java.lang.String" />
-		<property name="dnrCntOrganization" column="dnr_cont_organization" type="java.lang.String" />
-		<property name="dnrCntPhoneNumber" column="dnr_cont_phone_number" type="java.lang.String" />
-		<property name="dnrCntFaxNumber" column="dnr_cont_fax_number" type="java.lang.String" />
-
-		<!-- MOFED contact information -->
-		<property name="mofedCntFirstName" column="mofed_cnt_first_name" type="java.lang.String" />
-		<property name="mofedCntLastName" column="mofed_cnt_last_name" type="java.lang.String" />
-		<property name="mofedCntEmail" column="mofed_cnt_email" type="java.lang.String" />
-		<property name="mfdCntTitle" column="mfd_cont_title" type="java.lang.String" />
-		<property name="mfdCntOrganization" column="mfd_cont_organization" type="java.lang.String" />
-		<property name="mfdCntPhoneNumber" column="mfd_cont_phone_number" type="java.lang.String" />
-		<property name="mfdCntFaxNumber" column="mfd_cont_fax_number" type="java.lang.String" />
-
-		<!-- Project coordinator contact information -->
-		<property name="prjCoFirstName" column="prj_co_first_name" type="java.lang.String" />
-		<property name="prjCoLastName" column="prj_co_last_name" type="java.lang.String" />
-		<property name="prjCoEmail" column="prj_co_email" type="java.lang.String" />
-		<property name="prjCoTitle" column="prj_co_title" type="java.lang.String" />
-		<property name="prjCoOrganization" column="prj_co_organization" type="java.lang.String" />
-		<property name="prjCoPhoneNumber" column="prj_co_phone_number" type="java.lang.String" />
-		<property name="prjCoFaxNumber" column="prj_co_fax_number" type="java.lang.String" />
-
-		<!-- Sector Ministry contact information -->
-		<property name="secMiCntFirstName" column="sec_min_first_name" type="java.lang.String" />
-		<property name="secMiCntLastName" column="sec_min_last_name" type="java.lang.String" />
-		<property name="secMiCntEmail" column="sec_min_email" type="java.lang.String" />
-		<property name="secMiCntTitle" column="sec_min_title" type="java.lang.String" />
-		<property name="secMiCntOrganization" column="sec_min_organization" type="java.lang.String" />
-		<property name="secMiCntPhoneNumber" column="sec_min_phone_number" type="java.lang.String" />
-		<property name="secMiCntFaxNumber" column="sec_min_fax_number" type="java.lang.String" />
-
-
-
+		
 		<property name="comments" column="comments" type="text" />
 		<property name="statusReason" column="status_reason" type="text" />
 
@@ -316,6 +278,11 @@
 		<many-to-one name="approvedBy" column="approvedBy"
 			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none" />
 		<property name="approvalDate" column="approvalDate" type="java.util.Date" />
-
+	
+		<set name="activityContacts" inverse="true" cascade="delete" lazy="false">
+			<key column="activity_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityContact" />
+		</set>
+		
 	</class>
 </hibernate-mapping>

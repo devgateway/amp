@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.util.ActivityUtil;
@@ -55,6 +56,11 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
     private List secondaryPrograms;
     private List nationalPlanObjectivePrograms;
 	private Collection<ActivitySector> activitySectors;
+	//contact Information
+	private AmpActivityContact primaryDonorContact;
+	private AmpActivityContact primaryMofedContact;
+	private AmpActivityContact primaryprojCoordinatorContact;
+	private AmpActivityContact primarySectorMinistryContact;
 	
 	private Collection financingBreakdown;
         
@@ -692,7 +698,38 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 		public void setCountryIndex(Integer countryIndex) {
 			this.countryIndex = countryIndex;
 		}
-	  
 
-		  
+		public AmpActivityContact getPrimaryDonorContact() {
+			return primaryDonorContact;
+		}
+
+		public void setPrimaryDonorContact(AmpActivityContact primaryDonorContact) {
+			this.primaryDonorContact = primaryDonorContact;
+		}
+
+		public AmpActivityContact getPrimaryMofedContact() {
+			return primaryMofedContact;
+		}
+
+		public void setPrimaryMofedContact(AmpActivityContact primaryMofedContact) {
+			this.primaryMofedContact = primaryMofedContact;
+		}
+
+		public AmpActivityContact getPrimaryprojCoordinatorContact() {
+			return primaryprojCoordinatorContact;
+		}
+
+		public void setPrimaryprojCoordinatorContact(
+				AmpActivityContact primaryprojCoordinatorContact) {
+			this.primaryprojCoordinatorContact = primaryprojCoordinatorContact;
+		}
+
+		public AmpActivityContact getPrimarySectorMinistryContact() {
+			return primarySectorMinistryContact;
+		}
+
+		public void setPrimarySectorMinistryContact(
+				AmpActivityContact primarySectorMinistryContact) {
+			this.primarySectorMinistryContact = primarySectorMinistryContact;
+		}		  
 }

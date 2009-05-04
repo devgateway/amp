@@ -1703,7 +1703,12 @@
     <action path="/aim/export" scope="session" type="org.digijava.module.dataExchange.action.SimpleExportAction" validate="false">
     	<forward name="forward" path="/showLayout.do?layout=export" />    	
       	<forward name="index" path="/aim/index.do" redirect="true" />
-    </action>      
+    </action>
+          
+   <action name="aimEditActivityForm"  path="/aim/activityContactInfo" scope="session" type="org.digijava.module.aim.action.ActivityContactInformationAction" validate="false">
+    	<forward name="forward" path="/showLayout.do?layout=addActivityContactInfo" />    	
+      	<forward name="step8" path="/showLayout.do?layout=addActivityStep8"/>      
+   </action>
     
   </action-mappings>
 </struts-config>

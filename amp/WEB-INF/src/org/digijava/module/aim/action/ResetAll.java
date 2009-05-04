@@ -19,6 +19,7 @@ import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActor;
@@ -35,6 +36,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.form.EditActivityForm;
+import org.digijava.module.aim.form.EditActivityForm.ActivityContactInfo;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
@@ -163,35 +165,15 @@ public class ResetAll extends Action
 	    		
 	    	}
 	    	if(eaForm.getStep().equals("7"))
-	    	{
-				eaForm.getContactInfo().setDnrCntFirstName(null);
-				eaForm.getContactInfo().setDnrCntLastName(null);
-				eaForm.getContactInfo().setDnrCntEmail(null);
-				eaForm.getContactInfo().setDnrCntTitle(null);
-				eaForm.getContactInfo().setDnrCntOrganization(null);
-				eaForm.getContactInfo().setDnrCntPhoneNumber(null);
-				eaForm.getContactInfo().setDnrCntFaxNumber(null);
-				eaForm.getContactInfo().setMfdCntFirstName(null);
-				eaForm.getContactInfo().setMfdCntLastName(null);
-				eaForm.getContactInfo().setMfdCntEmail(null);
-				eaForm.getContactInfo().setMfdCntTitle(null);
-				eaForm.getContactInfo().setMfdCntOrganization(null);
-				eaForm.getContactInfo().setMfdCntPhoneNumber(null);
-				eaForm.getContactInfo().setMfdCntFaxNumber(null);
-				eaForm.getContactInfo().setPrjCoFirstName(null);
-				eaForm.getContactInfo().setPrjCoLastName(null);
-				eaForm.getContactInfo().setPrjCoEmail(null);
-				eaForm.getContactInfo().setPrjCoTitle(null);
-				eaForm.getContactInfo().setPrjCoOrganization(null);
-				eaForm.getContactInfo().setPrjCoPhoneNumber(null);
-				eaForm.getContactInfo().setPrjCoFaxNumber(null);
-				eaForm.getContactInfo().setSecMiCntFirstName(null);
-				eaForm.getContactInfo().setSecMiCntLastName(null);
-				eaForm.getContactInfo().setSecMiCntEmail(null);
-				eaForm.getContactInfo().setSecMiCntTitle(null);
-				eaForm.getContactInfo().setSecMiCntOrganization(null);
-				eaForm.getContactInfo().setSecMiCntPhoneNumber(null);
-				eaForm.getContactInfo().setSecMiCntFaxNumber(null);
+	    	{	    		
+	    		eaForm.getContactInformation().setContacts(null);
+	    		eaForm.getContactInformation().setContactType("-1");
+	    		eaForm.getContactInformation().setPrimaryContact(null);
+	    		eaForm.getContactInformation().setActivityContacts(null);
+	    		eaForm.getContactInformation().setMofedContacts(null);
+	    		eaForm.getContactInformation().setDonorContacts(null);
+	    		eaForm.getContactInformation().setSectorMinistryContacts(null);
+	    		eaForm.getContactInformation().setProjCoordinatorContacts(null);
 				
 	    	}
 	    }
@@ -651,37 +633,41 @@ public class ResetAll extends Action
 		    }
 		    if(eaForm.getStep().equals("7"))
 		    {
-		    	eaForm.getContactInfo().setDnrCntFirstName(activity.getContFirstName());
-		    	eaForm.getContactInfo().setDnrCntLastName(activity.getContLastName());
-		    	eaForm.getContactInfo().setDnrCntEmail(activity.getEmail());
-		    	eaForm.getContactInfo().setDnrCntTitle(activity.getDnrCntTitle());
-		    	eaForm.getContactInfo().setDnrCntOrganization(activity.getDnrCntOrganization());
-		    	eaForm.getContactInfo().setDnrCntPhoneNumber(activity.getDnrCntPhoneNumber());
-		    	eaForm.getContactInfo().setDnrCntFaxNumber(activity.getDnrCntFaxNumber());
-
-		    	eaForm.getContactInfo().setMfdCntFirstName(activity.getMofedCntFirstName());
-		    	eaForm.getContactInfo().setMfdCntLastName(activity.getMofedCntLastName());
-		    	eaForm.getContactInfo().setMfdCntEmail(activity.getMofedCntEmail());
-		    	eaForm.getContactInfo().setMfdCntTitle(activity.getMfdCntTitle());
-		    	eaForm.getContactInfo().setMfdCntOrganization(activity.getMfdCntOrganization());
-		    	eaForm.getContactInfo().setMfdCntPhoneNumber(activity.getMfdCntPhoneNumber());
-		    	eaForm.getContactInfo().setMfdCntFaxNumber(activity.getMfdCntFaxNumber());
-                
-		    	eaForm.getContactInfo().setPrjCoFirstName(activity.getPrjCoFirstName());
-		    	eaForm.getContactInfo().setPrjCoLastName(activity.getPrjCoLastName());
-		    	eaForm.getContactInfo().setPrjCoEmail(activity.getPrjCoEmail());
-		    	eaForm.getContactInfo().setPrjCoTitle(activity.getPrjCoTitle());
-		    	eaForm.getContactInfo().setPrjCoOrganization(activity.getPrjCoOrganization());
-		    	eaForm.getContactInfo().setPrjCoPhoneNumber(activity.getPrjCoPhoneNumber());
-		    	eaForm.getContactInfo().setPrjCoFaxNumber(activity.getPrjCoFaxNumber());
-                
-		    	eaForm.getContactInfo().setSecMiCntFirstName(activity.getSecMiCntFirstName());
-		    	eaForm.getContactInfo().setSecMiCntLastName(activity.getSecMiCntLastName());
-		    	eaForm.getContactInfo().setSecMiCntEmail(activity.getSecMiCntEmail());
-		    	eaForm.getContactInfo().setSecMiCntTitle(activity.getSecMiCntTitle());
-		    	eaForm.getContactInfo().setSecMiCntOrganization(activity.getSecMiCntOrganization());
-		    	eaForm.getContactInfo().setSecMiCntPhoneNumber(activity.getSecMiCntPhoneNumber());
-		    	eaForm.getContactInfo().setSecMiCntFaxNumber(activity.getSecMiCntFaxNumber());
+		    	ActivityContactInfo contactInfo=eaForm.getContactInformation();
+		    	Set<AmpActivityContact> activityContacts=activity.getActivityContacts();
+		    	contactInfo.setActivityContacts(new ArrayList<AmpActivityContact>(activityContacts));
+		    	 if(activityContacts!=null && activityContacts.size()>0){
+			    	  for (AmpActivityContact ampActContact : activityContacts) {
+			    		//donor contact
+						if(ampActContact.getContactType().equals(Constants.DONOR_CONTACT)){
+							if(contactInfo.getDonorContacts()==null){
+								contactInfo.setDonorContacts(new ArrayList<AmpActivityContact>());
+							}
+							contactInfo.getDonorContacts().add(ampActContact);
+						}
+						//mofed contact
+						else if(ampActContact.getContactType().equals(Constants.MOFED_CONTACT)){
+							if(contactInfo.getMofedContacts()==null){
+								contactInfo.setMofedContacts(new ArrayList<AmpActivityContact>());
+							}
+							contactInfo.getMofedContacts().add(ampActContact);
+						}
+						//project coordinator contact
+						else if(ampActContact.getContactType().equals(Constants.PROJECT_COORDINATOR_CONTACT)){
+							if(contactInfo.getProjCoordinatorContacts()==null){
+								contactInfo.setProjCoordinatorContacts(new ArrayList<AmpActivityContact>());
+							}
+							contactInfo.getProjCoordinatorContacts().add(ampActContact);
+						}
+						//sector ministry contact
+						else if(ampActContact.getContactType().equals(Constants.SECTOR_MINISTRY_CONTACT)){
+							if(contactInfo.getSectorMinistryContacts()==null){
+								contactInfo.setSectorMinistryContacts(new ArrayList<AmpActivityContact>());
+							}
+							contactInfo.getSectorMinistryContacts().add(ampActContact);
+						}
+					}
+		    	 }
 			}
 		}
 		return mapping.findForward("forward");

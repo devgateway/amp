@@ -59,5 +59,10 @@
 			<key column="receiver_id" />
 			<one-to-many class="org.digijava.module.message.dbentity.AmpMessageState" />
 		</set>
+		
+		<set name="contacts" inverse="true" cascade="delete">
+			<key column="creator_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpContact" />
+		</set>
 	</class>
 </hibernate-mapping>

@@ -39,6 +39,7 @@ import org.digijava.module.aim.action.ShowAddComponent;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActivityComponente;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityReferenceDoc;
@@ -50,6 +51,7 @@ import org.digijava.module.aim.dbentity.AmpClosingDateHistory;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
+import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -163,6 +165,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	//Set<Components<AmpComponentFunding>> componentsFunding = rsp.getTempComp();
 	List<IPAContract> contracts = rsp.getEaForm().getContracts().getContracts();
 	boolean alwaysRollback = rsp.isAlwaysRollback();
+	List<AmpActivityContact> activityContacts=rsp.getEaForm().getContactInformation().getActivityContacts();
 	//***
 	
 	
@@ -350,46 +353,12 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         oldActivity.setActualStartDate(activity.getActualStartDate());
         oldActivity.setAmpId(activity.getAmpId());
         oldActivity.setCalType(activity.getCalType());
-        oldActivity.setCondition(activity.getCondition());
-        oldActivity.setContFirstName(activity.getContFirstName());
-        oldActivity.setContLastName(activity.getContLastName());
+        oldActivity.setCondition(activity.getCondition());        
         oldActivity.setContractors(activity.getContractors());
         oldActivity.setDescription(activity.getDescription());
-        oldActivity.setDocumentSpace(activity.getDocumentSpace());
-        oldActivity.setEmail(activity.getEmail());
+        oldActivity.setDocumentSpace(activity.getDocumentSpace());        
         oldActivity.setLanguage(activity.getLanguage());
 
-        oldActivity.setDnrCntTitle(activity.getDnrCntTitle());
-        oldActivity.setDnrCntOrganization(activity.getDnrCntOrganization());
-        oldActivity.setDnrCntPhoneNumber(activity.getDnrCntPhoneNumber());
-        oldActivity.setDnrCntFaxNumber(activity.getDnrCntFaxNumber());
-
-        oldActivity.setMfdCntTitle(activity.getMfdCntTitle());
-        oldActivity.setMfdCntOrganization(activity.getMfdCntOrganization());
-        oldActivity.setMfdCntPhoneNumber(activity.getMfdCntPhoneNumber());
-        oldActivity.setMfdCntFaxNumber(activity.getMfdCntFaxNumber());
-        
-        oldActivity.setPrjCoFirstName(activity.getPrjCoFirstName());
-        oldActivity.setPrjCoLastName(activity.getPrjCoLastName());
-        oldActivity.setPrjCoTitle(activity.getPrjCoTitle());
-        oldActivity.setPrjCoOrganization(activity.getPrjCoOrganization());
-        oldActivity.setPrjCoPhoneNumber(activity.getPrjCoPhoneNumber());
-        oldActivity.setPrjCoEmail(activity.getPrjCoEmail());
-        oldActivity.setPrjCoFaxNumber(activity.getPrjCoFaxNumber());
-        
-        oldActivity.setSecMiCntFirstName(activity.getSecMiCntFirstName());
-        oldActivity.setSecMiCntLastName(activity.getSecMiCntLastName());
-        oldActivity.setSecMiCntEmail(activity.getSecMiCntEmail());
-        oldActivity.setSecMiCntOrganization(activity.getSecMiCntOrganization());
-        oldActivity.setSecMiCntTitle(activity.getSecMiCntTitle());
-        oldActivity.setSecMiCntPhoneNumber(activity.getSecMiCntPhoneNumber());
-        oldActivity.setSecMiCntFaxNumber(activity.getSecMiCntFaxNumber());
-
-//				oldActivity.setLevel(activity.getLevel()); //TO BE DELETED
-        oldActivity.setModality(activity.getModality());
-        oldActivity.setMofedCntEmail(activity.getMofedCntEmail());
-        oldActivity.setMofedCntFirstName(activity.getMofedCntFirstName());
-        oldActivity.setMofedCntLastName(activity.getMofedCntLastName());
         oldActivity.setName(activity.getName());
         oldActivity.setBudget(activity.getBudget());
         oldActivity.setProjectComments(activity.getProjectComments());
@@ -757,6 +726,65 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 			}
 	  }
       */
+      /**
+       * Contact Information
+       */ 
+      
+      // if activity contains contact,which is not in contact list, we should remove it
+      if(activity.getActivityContacts()!=null && activity.getActivityContacts().size()>0){
+    	  Iterator<AmpActivityContact> iter=activity.getActivityContacts().iterator();
+    	  while(iter.hasNext()){
+    		  AmpActivityContact actContact=iter.next();
+    		  int count=0;
+    		  if(activityContacts!=null){
+    			  for (AmpActivityContact activityContact : activityContacts) {
+					if(activityContact.getId()!=null && activityContact.getId().equals(actContact.getId())){
+						count++;
+						break;
+					}
+				}
+    		  }
+    		  if(count==0){ //if activity contains contact,which is not in contact list, we should remove it
+    			  AmpActivityContact activityCont=(AmpActivityContact)session.get(AmpActivityContact.class, actContact.getId());
+    			  session.delete(activityCont);
+    		  }
+    	  }
+      }
+      //add or edit activity contact and amp contact
+      if(activityContacts!=null && activityContacts.size()>0){
+    	  for (AmpActivityContact activityContact : activityContacts) {
+    	   	//save or update contact
+    		AmpContact contact=activityContact.getContact();
+    		if(contact.getId()!=null){ //contact already exists.
+    			AmpContact ampContact=(AmpContact)session.get(AmpContact.class, contact.getId());
+    			ampContact.setName(contact.getName());
+    			ampContact.setLastname(contact.getLastname());
+    			ampContact.setEmail(contact.getEmail());
+    			ampContact.setTitle(contact.getTitle());
+    			ampContact.setOrganisationName(contact.getOrganisationName());
+    			ampContact.setPhone(contact.getPhone());
+    			ampContact.setFax(contact.getFax());
+    			ampContact.setCreator(contact.getCreator());
+    			ampContact.setShared(true);
+    			session.update(ampContact);
+    		}else{
+    			session.save(contact);
+    		}
+    		//link activity to activityContact
+    		if(activityContact.getId()!=null){
+    			AmpActivityContact ampActContact=(AmpActivityContact)session.get(AmpActivityContact.class, activityContact.getId());
+    			ampActContact.setContactType(activityContact.getContactType());
+    			ampActContact.setPrimaryContact(activityContact.getPrimaryContact());
+    			ampActContact.setActivity(activity);
+    			session.update(ampActContact);
+    		}else{
+    			activityContact.setActivity(activity);
+        		session.save(activityContact);
+    		}
+    	  }
+      }
+      
+      
       
       /* Persists comments, of type AmpComments, related to the activity */
       if (commentsCol != null && !commentsCol.isEmpty()) {
@@ -1026,8 +1054,8 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         }
        if(ipaAux != null){//if no row is returned there is an Hibernate exception.
     	   //session.delete(queryString); This method has been moved to hibernate.classic.Session.delete() and it's Deprecated
-       }      
-       
+       }
+        
        session.flush();
        if (alwaysRollback == false)
     	  tx.commit(); // commit the transcation

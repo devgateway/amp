@@ -746,24 +746,24 @@ public class ImportBuilder {
 	//contact information, issues
 	private void processStep7(ActivityType activityImported, AmpActivity activity, HttpServletRequest request, String string, HashMap hm) {
 	
-		if (activityImported.getDonorContacts() != null && activityImported.getDonorContacts().size() > 0){
-			//TODO: after refactoring the contact in AMP, save all the information
-			ContactType contacts = activityImported.getDonorContacts().iterator().next();
-			if(contacts != null){
-				activity.setContFirstName(contacts.getFirstName());
-				activity.setContLastName(contacts.getLastName());
-				activity.setEmail(contacts.getEmail());
-			}
-		}
-		
-		if(activityImported.getGovContacts() !=null  && activityImported.getGovContacts().size() > 0){
-			ContactType contacts = activityImported.getGovContacts().iterator().next();
-			if(contacts != null){
-				activity.setMofedCntFirstName(contacts.getFirstName());
-				activity.setMofedCntLastName(contacts.getLastName());
-				activity.setMofedCntEmail(contacts.getEmail());
-			}
-		}
+//		if (activityImported.getDonorContacts() != null && activityImported.getDonorContacts().size() > 0){
+//			//TODO: after refactoring the contact in AMP, save all the information
+//			ContactType contacts = activityImported.getDonorContacts().iterator().next();
+//			if(contacts != null){
+//				activity.setContFirstName(contacts.getFirstName());
+//				activity.setContLastName(contacts.getLastName());
+//				activity.setEmail(contacts.getEmail());
+//			}
+//		}
+//		
+//		if(activityImported.getGovContacts() !=null  && activityImported.getGovContacts().size() > 0){
+//			ContactType contacts = activityImported.getGovContacts().iterator().next();
+//			if(contacts != null){
+//				activity.setMofedCntFirstName(contacts.getFirstName());
+//				activity.setMofedCntLastName(contacts.getLastName());
+//				activity.setMofedCntEmail(contacts.getEmail());
+//			}
+//		}
 	
 		if(activityImported.getIssues() !=null && activityImported.getIssues().size() >0){
 			Set issueSet = new HashSet();

@@ -41,6 +41,7 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
@@ -1542,48 +1543,53 @@ public class SaveActivity extends Action {
 			activity.getOrgrole().addAll(orgRole);
 		}
 		
-		
 	}
 
 	private void processStep8(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPException{
 		AMPException err;
 		err = new AMPException(Constants.AMP_ERROR_LEVEL_WARNING, false);
 		
+		if(eaForm.getContactInformation().getResetDonorIds()!=null && eaForm.getContactInformation().getResetDonorIds()){
+			eaForm.getContactInformation().setPrimaryDonorContIds(null);
+		}
+		if(eaForm.getContactInformation().getResetMofedIds()!=null && eaForm.getContactInformation().getResetMofedIds()){
+			eaForm.getContactInformation().setPrimaryMofedContIds(null);
+		}
+		if(eaForm.getContactInformation().getResetProjCoordIds()!=null && eaForm.getContactInformation().getResetProjCoordIds()){
+			eaForm.getContactInformation().setPrimaryProjCoordContIds(null);
+		}
+		if(eaForm.getContactInformation().getResetSecMinIds()!=null && eaForm.getContactInformation().getResetSecMinIds()){
+			eaForm.getContactInformation().setPrimarySecMinContIds(null);
+		}
+		
+		String[] donorContsIds=null;
+		String[] mofedContsIds=null;
+		String[] projCoordContsIds=null;
+		String[] sectorMinContsIds=null;	
+		
 		if (check){
 			//Do the checks here
-			String[] phoneNumbers=new String[]{eaForm.getContactInfo().getDnrCntPhoneNumber(), eaForm.getContactInfo().getMfdCntPhoneNumber(), 
-												eaForm.getContactInfo().getPrjCoPhoneNumber(), eaForm.getContactInfo().getSecMiCntPhoneNumber(),
-												eaForm.getContactInfo().getDnrCntFaxNumber(),eaForm.getContactInfo().getMfdCntFaxNumber(),
-												eaForm.getContactInfo().getPrjCoFaxNumber(), eaForm.getContactInfo().getSecMiCntFaxNumber()};
-			String validChars="0123456789+() ";
-			for (int i = 0; i < phoneNumbers.length; i++) {
-				if(phoneNumbers[i]!=null && phoneNumbers[i].length()>0){
-					String phoneNum=phoneNumbers[i];					
-					for (int j=0;j<phoneNum.length();j++) {
-						char ch=phoneNum.charAt(j);
-						if (validChars.indexOf(ch)==-1){
-							if(i<4){
-								errors.add("invalidPhone",new ActionError("error.aim.addActivity.invalidPhone", TranslatorWorker.translateText("Invalid Phone Number",locale,siteId)));
-							}else{
-								errors.add("invalidFax",new ActionError("error.aim.addActivity.invalidFax", TranslatorWorker.translateText("Invalid Fax Number",locale,siteId)));
-							}
-							break;
-						}
-					}
-				}				
+			donorContsIds=eaForm.getContactInformation().getPrimaryDonorContIds();
+			mofedContsIds=eaForm.getContactInformation().getPrimaryMofedContIds();
+			projCoordContsIds=eaForm.getContactInformation().getPrimaryProjCoordContIds();
+			sectorMinContsIds=eaForm.getContactInformation().getPrimarySecMinContIds();			
+			
+			if(donorContsIds!=null && donorContsIds.length>1){ //more then one primary contact is not allowed				
+				errors.add("invalidDonorCont",new ActionError("error.aim.addActivity.contactInfo.invalidDonorCont", TranslatorWorker.translateText("Must Be One Primary Donor Contact",locale,siteId)));				
 			}
 			
-			String[] emails=new String[]{eaForm.getContactInfo().getDnrCntEmail(), eaForm.getContactInfo().getMfdCntEmail(), 
-										eaForm.getContactInfo().getPrjCoEmail(),eaForm.getContactInfo().getSecMiCntEmail()};
-			for (int i = 0; i < emails.length; i++) {
-				String email=emails[i];
-				if(email!=null && email.length()>0){
-					if(!email.contains("@")){
-						errors.add("InvalidContactMail", new ActionError("error.aim.addActivity.contactInfo.invalidEmail", TranslatorWorker.translateText("Please provide valid Email",locale,siteId)) );
-						break;
-					}
-				}
+			if(mofedContsIds!=null && mofedContsIds.length>1){
+				errors.add("invalidMofedCont",new ActionError("error.aim.addActivity.contactInfo.invalidMofedCont", TranslatorWorker.translateText("Must Be One Primary MOFED Contact",locale,siteId)));
 			}
+			
+			if(projCoordContsIds!=null && projCoordContsIds.length>1){				
+				errors.add("invalidProjCoordCont",new ActionError("error.aim.addActivity.contactInfo.invalidProjCoordCont", TranslatorWorker.translateText("Must Be One Primary Project Coordinator Contact",locale,siteId)));				
+			}
+			
+			if(sectorMinContsIds!=null && sectorMinContsIds.length>1){
+				errors.add("invalidSecMinCont",new ActionError("error.aim.addActivity.contactInfo.invalidSecMinCont", TranslatorWorker.translateText("Must Be One Primary Sector Ministry Contact",locale,siteId)));
+			}
+			
 			end:
 			if (errors.size() > 0){
 				//we have all the errors for this step saved and we must throw the amp error
@@ -1593,40 +1599,35 @@ public class SaveActivity extends Action {
 		}
 		
 		//Do the initializations and all the information transfer between beans here
+		List<AmpActivityContact> allContacts=eaForm.getContactInformation().getActivityContacts();
+		if(allContacts!=null && allContacts.size()>0){
+			for (AmpActivityContact ampActContact : allContacts) {
+				if(ampActContact.getContactType().equals(Constants.DONOR_CONTACT)){
+					fillActivityContactPrimaryField(donorContsIds,ampActContact);
+				}else if(ampActContact.getContactType().equals(Constants.MOFED_CONTACT)){
+					fillActivityContactPrimaryField(mofedContsIds, ampActContact);
+				}else if(ampActContact.getContactType().equals(Constants.PROJECT_COORDINATOR_CONTACT)){
+					fillActivityContactPrimaryField(projCoordContsIds,	ampActContact);
+				}else if(ampActContact.getContactType().equals(Constants.SECTOR_MINISTRY_CONTACT)){
+					fillActivityContactPrimaryField(sectorMinContsIds,	ampActContact);
+				}
+			}
+		}
+		
+	}
 
-		activity.setContFirstName(eaForm.getContactInfo().getDnrCntFirstName());
-		activity.setContLastName(eaForm.getContactInfo().getDnrCntLastName());
-		activity.setEmail(eaForm.getContactInfo().getDnrCntEmail());
-		activity.setDnrCntTitle(eaForm.getContactInfo().getDnrCntTitle());
-		activity.setDnrCntOrganization(eaForm.getContactInfo().getDnrCntOrganization());
-		activity.setDnrCntFaxNumber(eaForm.getContactInfo().getDnrCntFaxNumber());
-		activity.setDnrCntPhoneNumber(eaForm.getContactInfo().getDnrCntPhoneNumber());
-
-
-		activity.setMofedCntFirstName(eaForm.getContactInfo().getMfdCntFirstName());
-		activity.setMofedCntLastName(eaForm.getContactInfo().getMfdCntLastName());
-		activity.setMofedCntEmail(eaForm.getContactInfo().getMfdCntEmail());
-		activity.setMfdCntTitle(eaForm.getContactInfo().getMfdCntTitle());
-		activity.setMfdCntOrganization(eaForm.getContactInfo().getMfdCntOrganization());
-		activity.setMfdCntFaxNumber(eaForm.getContactInfo().getMfdCntFaxNumber());
-		activity.setMfdCntPhoneNumber(eaForm.getContactInfo().getMfdCntPhoneNumber());
-
-		activity.setPrjCoFirstName(eaForm.getContactInfo().getPrjCoFirstName());
-		activity.setPrjCoLastName(eaForm.getContactInfo().getPrjCoLastName());
-		activity.setPrjCoEmail(eaForm.getContactInfo().getPrjCoEmail());
-		activity.setPrjCoTitle(eaForm.getContactInfo().getPrjCoTitle());
-		activity.setPrjCoOrganization(eaForm.getContactInfo().getPrjCoOrganization());
-		activity.setPrjCoPhoneNumber(eaForm.getContactInfo().getPrjCoPhoneNumber());
-		activity.setPrjCoFaxNumber(eaForm.getContactInfo().getPrjCoFaxNumber());
-
-		activity.setSecMiCntFirstName(eaForm.getContactInfo().getSecMiCntFirstName());
-		activity.setSecMiCntLastName(eaForm.getContactInfo().getSecMiCntLastName());
-		activity.setSecMiCntEmail(eaForm.getContactInfo().getSecMiCntEmail());
-		activity.setSecMiCntTitle(eaForm.getContactInfo().getSecMiCntTitle());
-		activity.setSecMiCntOrganization(eaForm.getContactInfo().getSecMiCntOrganization());
-		activity.setSecMiCntPhoneNumber(eaForm.getContactInfo().getSecMiCntPhoneNumber());
-		activity.setSecMiCntFaxNumber(eaForm.getContactInfo().getSecMiCntFaxNumber());
-
+	private void fillActivityContactPrimaryField(String[] actContactIds,AmpActivityContact ampActContact) {
+		if(actContactIds!=null && actContactIds.length>0){
+			for (int i = 0; i < actContactIds.length; i++) {
+				if(ampActContact.getContact().getTemporaryId().equals(actContactIds[i])){
+					ampActContact.setPrimaryContact(true);
+				}else{
+					ampActContact.setPrimaryContact(false);
+				}
+			}
+		}else{
+			ampActContact.setPrimaryContact(false);
+		}
 	}
 
 	

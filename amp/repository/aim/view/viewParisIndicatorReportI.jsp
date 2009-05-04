@@ -793,6 +793,12 @@ function toggleSettings(){
                                                                 <c:if test="${ansIndex == 3}">
                                                                     <c:set var="thirdVal" value="${rowVal}" />
                                                                 </c:if>
+                                                                <c:if test="${ansIndex == 4}">
+                                                                    <c:set var="fourthVal" value="${rowVal}" />
+                                                                </c:if>
+                                                                <c:if test="${ansIndex == 5}">
+                                                                    <c:set var="fifthVal" value="${rowVal}" />
+                                                                </c:if>
 																<% indexRow++; %>
 																<td>
 																	<div align="center">
@@ -809,7 +815,10 @@ function toggleSettings(){
 																						<c:when test="${aimParisIndicatorReportForm.indicatorCode == '5a'}">
 																							<c:if test="${rowVal <= -1}">n.a.</c:if>
 																							<c:if test="${rowVal > -1}">
-																								<fmt:formatNumber type="number" value="${rowVal}" maxFractionDigits="0" />%
+                                                                                                <c:if test="${firstVal+secondVal+thirdVal > 0}">
+																								    <fmt:formatNumber type="number" value="${(firstVal+secondVal+thirdVal)*100/3/fifthVal}" maxFractionDigits="0" />%
+                                                                                                </c:if>
+                                                                                                <c:if test="${firstVal+secondVal+thirdVal <= 0}">n.a.</c:if>
 																							</c:if>
 																						</c:when>
 																						<c:otherwise >
@@ -834,7 +843,15 @@ function toggleSettings(){
                                                                                                  <c:if test="${thirdVal == 0}">n.a.</c:if>
                                                                                             </c:if>
                                                                                             <c:if test="${aimParisIndicatorReportForm.indicatorCode != '9'}">
-                                                                                                 <fmt:formatNumber type="number" value="${rowVal}" maxFractionDigits="0" />%
+                                                                                                <c:if test="${aimParisIndicatorReportForm.indicatorCode != '5a'}">
+                                                                                                    <fmt:formatNumber type="number" value="${rowVal}" maxFractionDigits="0" />%
+                                                                                                </c:if>
+                                                                                                <c:if test="${aimParisIndicatorReportForm.indicatorCode == '5a'}">
+                                                                                                    <c:if test="${firstVal+secondVal+thirdVal > 0}">
+                                                                                                        <fmt:formatNumber type="number" value="${fourthVal*100/fifthVal}" maxFractionDigits="0" />%
+                                                                                                    </c:if>
+                                                                                                    <c:if test="${firstVal+secondVal+thirdVal <= 0}">n.a.</c:if>
+                                                                                                </c:if>
                                                                                             </c:if>
 																						</c:if>
 																					</c:if>

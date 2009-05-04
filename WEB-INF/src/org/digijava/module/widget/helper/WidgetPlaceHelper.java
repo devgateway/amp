@@ -9,6 +9,7 @@ import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpWidget;
 import org.digijava.module.widget.dbentity.AmpWidgetIndicatorChart;
 import org.digijava.module.widget.dbentity.AmpWidgetOrgProfile;
+import org.digijava.module.widget.dbentity.AmpSectorTableWidget;
 import org.digijava.module.widget.util.WidgetUtil;
 
 /**
@@ -88,6 +89,11 @@ public class WidgetPlaceHelper implements Serializable{
             public void visit(AmpDaTable table) {
                 rendertype.add(WidgetUtil.TABLE);
                 rendertypeName.add("Table");
+            }
+             @Override
+            public void visit(AmpSectorTableWidget table) {
+                rendertype.add(WidgetUtil.SECTOR_TABLE);
+                rendertypeName.add("Sector Table");
             }
         };
         widget.accept(adapter);

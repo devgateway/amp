@@ -69,6 +69,8 @@
 	<div id="tableWidgetContainer_${gisWidgetTeaserForm.id}">
 		
 	</div>
+	<table id="table" style="display: none"></table>
+	
          
 
 	<script language="JavaScript">
@@ -85,26 +87,69 @@
 		}
 	
 		function tableCallBack_${gisWidgetTeaserForm.id}(status, statusText, responseText, responseXML){
+			
 			processTableResponce_${gisWidgetTeaserForm.id}(responseText);
 			applyStyle(document.getElementById("tableWidget${gisWidgetTeaserForm.id}"));
+			
 		}
 	
 		function processTableResponce_${gisWidgetTeaserForm.id}(htmlResponce){
 			var myDiv = document.getElementById('tableWidgetContainer_${gisWidgetTeaserForm.id}');
-			myDiv.innerHTML = htmlResponce;		
-		}
+
+
+if(myDiv.childNodes.length>1){
 	
+	var table = document.getElementById("tableWidget${gisWidgetTeaserForm.id}");
+	var responce = document.getElementById("table");
+	responce.innerHTML= htmlResponce;
+	var responceHtmlTable = responce.firstChild;	
+
+	
+		for(k=1; k<table.rows.length; k++){
+			
+			var row = table.rows[k];
+			var celllength = row.cells.length;
+	
+		     for(i=1; i<responceHtmlTable.rows.length; i++){
+					
+					var responceRow = responceHtmlTable.rows[i];
+					//alert(responceRow.innerHTML);
+					var responceCellLength = responceRow.cells.length;
+					if(k == i){
+						var value = responceRow.cells[responceCellLength-1].innerHTML;
+						
+					}
+				}
+				
+			row.cells[celllength-1].innerHTML = value;
+	
+	  	}
+
+	 //erase Helper hidden < Table> was select tag problems;
+	responce.innerHTML = '';
+	
+	}else{
+	
+		myDiv.innerHTML = htmlResponce;	
+	}
+
+
+}
+		
 		function tableWidgetFilterChanged_${gisWidgetTeaserForm.id}(columnId){
+
+			
+			
 			var myDiv = document.getElementById('tableWidgetContainer_${gisWidgetTeaserForm.id}');
-			var selItem = document.getElementsByName('selectedFilterItemId_${gisWidgetTeaserForm.id}')[0];
+			var selItem = document.getElementsByName('selectedFilterItemId_${gisWidgetTeaserForm.id}')[0];	
 			var itemId = selItem.value;
-			myDiv.innerHTML = 'loading...';
+			//myDiv.innerHTML = 'loading...';
 			requestTable_${gisWidgetTeaserForm.id}(columnId,itemId);
 		}
 		
 		requestTable_${gisWidgetTeaserForm.id}();
 	
-	</script>
+</script>
 
 </c:if>
 
@@ -121,3 +166,4 @@
 <c:if test="${gisWidgetTeaserForm.rendertype==0}">
 	<digi:trn key="gis:widgetTeaser:noParamSpecified">ERROR : no place param specified in layout definition for this teaser.</digi:trn>
 </c:if>
+

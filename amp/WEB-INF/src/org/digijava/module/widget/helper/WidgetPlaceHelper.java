@@ -93,7 +93,7 @@ public class WidgetPlaceHelper implements Serializable{
              @Override
             public void visit(AmpSectorTableWidget table) {
                 rendertype.add(WidgetUtil.SECTOR_TABLE);
-                rendertypeName.add("Sector Table");
+                rendertypeName.add("Sector Table Widget");
             }
         };
         widget.accept(adapter);

@@ -30,6 +30,7 @@ import org.apache.struts.tiles.actions.TilesAction;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpField;
@@ -52,6 +53,7 @@ import org.digijava.module.aim.helper.RelOrganization;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.Logic;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DecimalWraper;
@@ -390,8 +392,24 @@ public class ViewChannelOverview extends TilesAction {
 		            CategoryConstants.ACCHAPTER_NAME, activity.getCategories())
 		            )
 		            );
-
-
+				    
+				    //contact information
+				    AmpActivityContact primaryDonorContact=null;
+				    AmpActivityContact primaryMofedContact=null;
+				    AmpActivityContact primaryProjCoordContact=null;
+				    AmpActivityContact primarySecMinContact=null;
+				    try {
+						primaryDonorContact=ContactInfoUtil.getActivityPrimaryContact(activity.getAmpActivityId(),Constants.DONOR_CONTACT);
+						primaryMofedContact=ContactInfoUtil.getActivityPrimaryContact(activity.getAmpActivityId(),Constants.MOFED_CONTACT);
+						primaryProjCoordContact=ContactInfoUtil.getActivityPrimaryContact(activity.getAmpActivityId(),Constants.PROJECT_COORDINATOR_CONTACT);
+						primarySecMinContact=ContactInfoUtil.getActivityPrimaryContact(activity.getAmpActivityId(),Constants.SECTOR_MINISTRY_CONTACT);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					formBean.setPrimaryDonorContact(primaryDonorContact);
+					formBean.setPrimaryMofedContact(primaryMofedContact);
+					formBean.setPrimaryprojCoordinatorContact(primaryProjCoordContact);
+					formBean.setPrimarySectorMinistryContact(primarySecMinContact);
           	        
           	        // queryString = "select distinct f.typeOfAssistance.value from " +
 //                      AmpFunding.class.getName() + " f where f.ampActivityId=:actId";

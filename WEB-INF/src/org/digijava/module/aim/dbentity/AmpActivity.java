@@ -99,41 +99,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
     // use contFirstName and contLastName instead.
 								 // The field is defunct
 
-	// Donor contact information
-	private String contFirstName;
-	private String contLastName;
-	private String email;
-	private String dnrCntTitle;
-	private String dnrCntOrganization;
-	private String dnrCntPhoneNumber;
-	private String dnrCntFaxNumber;
-
-	// MOFED contact information
-	private String mofedCntFirstName;
-	private String mofedCntLastName;
-	private String mofedCntEmail;
-	private String mfdCntTitle;
-	private String mfdCntOrganization;
-	private String mfdCntPhoneNumber;
-	private String mfdCntFaxNumber;
-	
-	// Project Coordinator contact information
-	private String prjCoFirstName;
-	private String prjCoLastName;
-	private String prjCoEmail;
-	private String prjCoTitle;
-	private String prjCoOrganization;
-	private String prjCoPhoneNumber;
-	private String prjCoFaxNumber;
-	
-	// Sector Ministry contact information
-	private String secMiCntFirstName;
-	private String secMiCntLastName;
-	private String secMiCntEmail;
-	private String secMiCntTitle;
-	private String secMiCntOrganization;
-	private String secMiCntPhoneNumber;
-	private String secMiCntFaxNumber;
+    private Set<AmpActivityContact> activityContacts;
 
 	private String comments;
 
@@ -671,20 +637,14 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	public void setContactName(String string) {
 		contactName = string;
 	}
+	public Set<AmpActivityContact> getActivityContacts() {
+		return activityContacts;
+	}
 
-	/**
-	 * @return Returns the email.
-	 */
-	public String getEmail() {
-		return email;
+	public void setActivityContacts(Set<AmpActivityContact> activityContacts) {
+		this.activityContacts = activityContacts;
 	}
-	/**
-	 * @param email
-	 *            The email to set.
-	 */
-	public void setEmail(String email) {
-		this.email = email;
-	}
+
 	/**
 	 * @return Returns the statusReason.
 	 */
@@ -843,35 +803,6 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	}
 
 	/**
-	 * @return Returns the contFirstName.
-	 */
-	public String getContFirstName() {
-		return contFirstName;
-	}
-
-	/**
-	 * @param contFirstName
-	 *            The contFirstName to set.
-	 */
-	public void setContFirstName(String contFirstName) {
-		this.contFirstName = contFirstName;
-	}
-
-	/**
-	 * @return Returns the contLastName.
-	 */
-	public String getContLastName() {
-		return contLastName;
-	}
-
-	/**
-	 * @param contLastName
-	 *            The contLastName to set.
-	 */
-	public void setContLastName(String contLastName) {
-		this.contLastName = contLastName;
-	}
-	/**
 	 * @return Returns the programDescription.
 	 */
 	public String getProgramDescription() {
@@ -911,45 +842,6 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	 */
 	public void setActivityCreator(AmpTeamMember activityCreator) {
 		this.activityCreator = activityCreator;
-	}
-	/**
-	 * @return Returns the mofedCntEmail.
-	 */
-	public String getMofedCntEmail() {
-		return mofedCntEmail;
-	}
-	/**
-	 * @param mofedCntEmail
-	 *            The mofedCntEmail to set.
-	 */
-	public void setMofedCntEmail(String mofedCntEmail) {
-		this.mofedCntEmail = mofedCntEmail;
-	}
-	/**
-	 * @return Returns the mofedCntFirstName.
-	 */
-	public String getMofedCntFirstName() {
-		return mofedCntFirstName;
-	}
-	/**
-	 * @param mofedCntFirstName
-	 *            The mofedCntFirstName to set.
-	 */
-	public void setMofedCntFirstName(String mofedCntFirstName) {
-		this.mofedCntFirstName = mofedCntFirstName;
-	}
-	/**
-	 * @return Returns the mofedCntLastName.
-	 */
-	public String getMofedCntLastName() {
-		return mofedCntLastName;
-	}
-	/**
-	 * @param mofedCntLastName
-	 *            The mofedCntLastName to set.
-	 */
-	public void setMofedCntLastName(String mofedCntLastName) {
-		this.mofedCntLastName = mofedCntLastName;
 	}
 
 	// Commented by Mikheil - in general, Hibernate classes do not need to
@@ -1126,70 +1018,6 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 
 	public void setResults(String results) {
 		this.results = results;
-	}
-
-	public String getDnrCntFaxNumber() {
-		return dnrCntFaxNumber;
-	}
-
-	public void setDnrCntFaxNumber(String dnrCntFaxNumber) {
-		this.dnrCntFaxNumber = dnrCntFaxNumber;
-	}
-
-	public String getDnrCntOrganization() {
-		return dnrCntOrganization;
-	}
-
-	public void setDnrCntOrganization(String dnrCntOrganization) {
-		this.dnrCntOrganization = dnrCntOrganization;
-	}
-
-	public String getDnrCntPhoneNumber() {
-		return dnrCntPhoneNumber;
-	}
-
-	public void setDnrCntPhoneNumber(String dnrCntPhoneNumber) {
-		this.dnrCntPhoneNumber = dnrCntPhoneNumber;
-	}
-
-	public String getDnrCntTitle() {
-		return dnrCntTitle;
-	}
-
-	public void setDnrCntTitle(String dnrCntTitle) {
-		this.dnrCntTitle = dnrCntTitle;
-	}
-
-	public String getMfdCntFaxNumber() {
-		return mfdCntFaxNumber;
-	}
-
-	public void setMfdCntFaxNumber(String mfdCntFaxNumber) {
-		this.mfdCntFaxNumber = mfdCntFaxNumber;
-	}
-
-	public String getMfdCntOrganization() {
-		return mfdCntOrganization;
-	}
-
-	public void setMfdCntOrganization(String mfdCntOrganization) {
-		this.mfdCntOrganization = mfdCntOrganization;
-	}
-
-	public String getMfdCntPhoneNumber() {
-		return mfdCntPhoneNumber;
-	}
-
-	public void setMfdCntPhoneNumber(String mfdCntPhoneNumber) {
-		this.mfdCntPhoneNumber = mfdCntPhoneNumber;
-	}
-
-	public String getMfdCntTitle() {
-		return mfdCntTitle;
-	}
-
-	public void setMfdCntTitle(String mfdCntTitle) {
-		this.mfdCntTitle = mfdCntTitle;
 	}
 
 	public Object getObjectType() {
@@ -1436,121 +1264,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 
 	public void setContractDetails(String contractDetails) {
 		this.contractDetails = contractDetails;
-	}
-
-	public String getPrjCoFirstName() {
-		return prjCoFirstName;
-	}
-
-	public void setPrjCoFirstName(String prjCoFirstName) {
-		this.prjCoFirstName = prjCoFirstName;
-	}
-
-	public String getPrjCoLastName() {
-		return prjCoLastName;
-	}
-
-	public void setPrjCoLastName(String prjCoLastName) {
-		this.prjCoLastName = prjCoLastName;
-	}
-
-	public String getPrjCoEmail() {
-		return prjCoEmail;
-	}
-
-	public void setPrjCoEmail(String prjCoEmail) {
-		this.prjCoEmail = prjCoEmail;
-	}
-
-	public String getPrjCoTitle() {
-		return prjCoTitle;
-	}
-
-	public void setPrjCoTitle(String prjCoTitle) {
-		this.prjCoTitle = prjCoTitle;
-	}
-
-	public String getPrjCoOrganization() {
-		return prjCoOrganization;
-	}
-
-	public void setPrjCoOrganization(String prjCoOrganization) {
-		this.prjCoOrganization = prjCoOrganization;
-	}
-
-	public String getPrjCoPhoneNumber() {
-		return prjCoPhoneNumber;
-	}
-
-	public void setPrjCoPhoneNumber(String prjCoPhoneNumber) {
-		this.prjCoPhoneNumber = prjCoPhoneNumber;
-	}
-
-	public String getPrjCoFaxNumber() {
-		return prjCoFaxNumber;
-	}
-
-	public void setPrjCoFaxNumber(String prjCoFaxNumber) {
-		this.prjCoFaxNumber = prjCoFaxNumber;
-	}
-
-	public String getSecMiCntFirstName() {
-		return secMiCntFirstName;
-	}
-
-	public void setSecMiCntFirstName(String secMiCntFirstName) {
-		this.secMiCntFirstName = secMiCntFirstName;
-	}
-
-	public String getSecMiCntLastName() {
-		return secMiCntLastName;
-	}
-
-	public void setSecMiCntLastName(String secMiCntLastName) {
-		this.secMiCntLastName = secMiCntLastName;
-	}
-
-	public String getSecMiCntEmail() {
-		return secMiCntEmail;
-	}
-
-	public void setSecMiCntEmail(String secMiCntEmail) {
-		this.secMiCntEmail = secMiCntEmail;
-	}
-
-	public String getSecMiCntTitle() {
-		return secMiCntTitle;
-	}
-
-	public void setSecMiCntTitle(String secMiCntTitle) {
-		this.secMiCntTitle = secMiCntTitle;
-	}
-
-	public String getSecMiCntOrganization() {
-		return secMiCntOrganization;
-	}
-
-	public void setSecMiCntOrganization(String secMiCntOrganization) {
-		this.secMiCntOrganization = secMiCntOrganization;
-	}
-
-	public String getSecMiCntPhoneNumber() {
-		return secMiCntPhoneNumber;
-	}
-
-	public void setSecMiCntPhoneNumber(String secMiCntPhoneNumber) {
-		this.secMiCntPhoneNumber = secMiCntPhoneNumber;
-	}
-
-	public String getSecMiCntFaxNumber() {
-		return secMiCntFaxNumber;
-	}
-
-	public void setSecMiCntFaxNumber(String secMiCntFaxNumber) {
-		this.secMiCntFaxNumber = secMiCntFaxNumber;
-	}
-
-	public void setConvenioNumcont(String convenioNumcont) {
+	}	public void setConvenioNumcont(String convenioNumcont) {
 		this.convenioNumcont = convenioNumcont;
 	}
 

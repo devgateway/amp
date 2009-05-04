@@ -346,4 +346,10 @@ public class Constants
     public static final String JNP_URL="jnp://localhost:1099";
     
     public static final String COLUMN_PROJECT_TITLE = "Project Title";
+    
+    //contact information 
+    public static final String DONOR_CONTACT = "DONOR_CONT";
+    public static final String MOFED_CONTACT = "MOFED_CONT";
+    public static final String SECTOR_MINISTRY_CONTACT = "SECTOR_MINISTRY_CONT";
+    public static final String PROJECT_COORDINATOR_CONTACT = "PROJ_COORDINATOR_CONT";
 }

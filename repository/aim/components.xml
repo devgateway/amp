@@ -420,7 +420,7 @@
     <page name="addQuartzJobClass" title="Add Job Class" />
     <page name="editQuartzJobClass" title="Edit Job Class" />
     <page name="quartzJobClassManager" title="Job Class Manager" />
-
+	<page name="addActivityContactInfo" title="Activity Contact Information"/>
 
 </secondary-pages>
 <module>

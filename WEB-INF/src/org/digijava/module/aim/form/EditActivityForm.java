@@ -21,11 +21,13 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
 import org.digijava.kernel.dbentity.Country;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpComponentType;
+import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -81,7 +83,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
      */
     private String fundingCurrCode;
     private String regFundingPageCurrCode;
-
 
 	public class Contracts {
 		private List contracts;
@@ -2402,8 +2403,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.selFundingOrgs = selFundingOrgs;
 		}
 
-	
-
 		public Long[] getSelRegFundings() {
 			return selRegFundings;
 		}
@@ -2431,288 +2430,214 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		return (FundingOrganization) ((ArrayList) getFunding().fundingOrganizations).get(index);
 	}
 	
-	public class ContactInformation {
-		private String dnrCntFirstName;
-		private String dnrCntLastName;
-		private String dnrCntEmail;
-		private String dnrCntTitle;
-		private String dnrCntOrganization;
-		private String dnrCntPhoneNumber;
-		private String dnrCntFaxNumber;
-		private String mfdCntFirstName;
-		private String mfdCntLastName;
-		private String mfdCntEmail;
-		private String mfdCntTitle;
-		private String mfdCntOrganization;
-		private String mfdCntPhoneNumber;
-		private String mfdCntFaxNumber;
-		private String prjCoFirstName;
-		private String prjCoLastName;
-		private String prjCoEmail;
-		private String prjCoTitle;
-		private String prjCoOrganization;
-		private String prjCoPhoneNumber;
-		private String prjCoFaxNumber;
-		private String secMiCntFirstName;
-		private String secMiCntLastName;
-		private String secMiCntEmail;
-		private String secMiCntTitle;
-		private String secMiCntOrganization;
-		private String secMiCntPhoneNumber;
-		private String secMiCntFaxNumber;
-
-		private String contFirstName;
-		private String contLastName;
+	public class ActivityContactInfo{
+		
+		private List<AmpActivityContact> activityContacts; //holds all activity contacts
+		private List<AmpActivityContact> mofedContacts;
+		private List<AmpActivityContact> donorContacts;
+		private List<AmpActivityContact> sectorMinistryContacts;
+		private List<AmpActivityContact> projCoordinatorContacts;
+		
+		private String[] primaryDonorContIds;
+		private String[] primaryMofedContIds;
+		private String[] primaryProjCoordContIds;
+		private String[] primarySecMinContIds;
+		private Boolean resetDonorIds;
+		private Boolean resetMofedIds;
+		private Boolean resetProjCoordIds;
+		private Boolean resetSecMinIds;
+		
+		
+		private List<AmpContact> contacts; //holds all existing contacts		
+		private String primaryContact;
+		private Boolean primaryAllowed; //defines whether activity contact can be primary or not. primary contact must be one for each type(mofed,donor,e.t.c.)
+		private String contactType;		
+		
+		private String name;
+		private String lastname;
 		private String email;
-
-		public String getContFirstName() {
-			return contFirstName;
+		private String title;
+		private String organisationName;
+		private String phone;
+		private String fax;
+		private String temporaryId; //contact's temporary id
+		
+		private String keyword;
+		private Long[] contactIds; //for adding several contacts
+		
+		private String action;
+		
+		public String[] getPrimaryDonorContIds() {
+			return primaryDonorContIds;
 		}
-
-		public void setContFirstName(String contFirstName) {
-			this.contFirstName = contFirstName;
+		public void setPrimaryDonorContIds(String[] primaryDonorContIds) {
+			this.primaryDonorContIds = primaryDonorContIds;
 		}
-
-		public String getContLastName() {
-			return contLastName;
+		public String[] getPrimaryMofedContIds() {
+			return primaryMofedContIds;
 		}
-
-		public void setContLastName(String contLastName) {
-			this.contLastName = contLastName;
+		public void setPrimaryMofedContIds(String[] primaryMofedContIds) {
+			this.primaryMofedContIds = primaryMofedContIds;
 		}
-
+		public String[] getPrimaryProjCoordContIds() {
+			return primaryProjCoordContIds;
+		}
+		public void setPrimaryProjCoordContIds(String[] primaryProjCoordContIds) {
+			this.primaryProjCoordContIds = primaryProjCoordContIds;
+		}
+		public String[] getPrimarySecMinContIds() {
+			return primarySecMinContIds;
+		}
+		public void setPrimarySecMinContIds(String[] primarySecMinContIds) {
+			this.primarySecMinContIds = primarySecMinContIds;
+		}
+		public String getAction() {
+			return action;
+		}
+		public void setAction(String action) {
+			this.action = action;
+		}
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+		public String getLastname() {
+			return lastname;
+		}
+		public void setLastname(String lastname) {
+			this.lastname = lastname;
+		}
 		public String getEmail() {
 			return email;
 		}
-
 		public void setEmail(String email) {
 			this.email = email;
 		}
-
-		public String getDnrCntFirstName() {
-			return dnrCntFirstName;
+		public String getTitle() {
+			return title;
 		}
-
-		public void setDnrCntFirstName(String dnrCntFirstName) {
-			this.dnrCntFirstName = dnrCntFirstName;
+		public void setTitle(String title) {
+			this.title = title;
 		}
-
-		public String getDnrCntLastName() {
-			return dnrCntLastName;
+		public String getOrganisationName() {
+			return organisationName;
 		}
-
-		public void setDnrCntLastName(String dnrCntLastName) {
-			this.dnrCntLastName = dnrCntLastName;
+		public void setOrganisationName(String organisationName) {
+			this.organisationName = organisationName;
 		}
-
-		public String getDnrCntEmail() {
-			return dnrCntEmail;
+		public String getPhone() {
+			return phone;
 		}
-
-		public void setDnrCntEmail(String dnrCntEmail) {
-			this.dnrCntEmail = dnrCntEmail;
+		public void setPhone(String phone) {
+			this.phone = phone;
 		}
-
-		public String getDnrCntTitle() {
-			return dnrCntTitle;
+		public String getFax() {
+			return fax;
 		}
-
-		public void setDnrCntTitle(String dnrCntTitle) {
-			this.dnrCntTitle = dnrCntTitle;
+		public void setFax(String fax) {
+			this.fax = fax;
 		}
-
-		public String getDnrCntOrganization() {
-			return dnrCntOrganization;
+		public List<AmpActivityContact> getMofedContacts() {
+			return mofedContacts;
 		}
-
-		public void setDnrCntOrganization(String dnrCntOrganization) {
-			this.dnrCntOrganization = dnrCntOrganization;
+		public void setMofedContacts(List<AmpActivityContact> mofedContacts) {
+			this.mofedContacts = mofedContacts;
 		}
-
-		public String getDnrCntPhoneNumber() {
-			return dnrCntPhoneNumber;
+		public List<AmpActivityContact> getDonorContacts() {
+			return donorContacts;
 		}
-
-		public void setDnrCntPhoneNumber(String dnrCntPhoneNumber) {
-			this.dnrCntPhoneNumber = dnrCntPhoneNumber;
+		public void setDonorContacts(List<AmpActivityContact> donorContacts) {
+			this.donorContacts = donorContacts;
 		}
-
-		public String getDnrCntFaxNumber() {
-			return dnrCntFaxNumber;
+		public List<AmpActivityContact> getSectorMinistryContacts() {
+			return sectorMinistryContacts;
 		}
-
-		public void setDnrCntFaxNumber(String dnrCntFaxNumber) {
-			this.dnrCntFaxNumber = dnrCntFaxNumber;
+		public void setSectorMinistryContacts(
+				List<AmpActivityContact> sectorMinistryContacts) {
+			this.sectorMinistryContacts = sectorMinistryContacts;
 		}
-
-		public String getMfdCntFirstName() {
-			return mfdCntFirstName;
+		public List<AmpActivityContact> getProjCoordinatorContacts() {
+			return projCoordinatorContacts;
 		}
-
-		public void setMfdCntFirstName(String mfdCntFirstName) {
-			this.mfdCntFirstName = mfdCntFirstName;
+		public void setProjCoordinatorContacts(
+				List<AmpActivityContact> projCoordinatorContacts) {
+			this.projCoordinatorContacts = projCoordinatorContacts;
 		}
-
-		public String getMfdCntLastName() {
-			return mfdCntLastName;
+		public List<AmpActivityContact> getActivityContacts() {
+			return activityContacts;
 		}
-
-		public void setMfdCntLastName(String mfdCntLastName) {
-			this.mfdCntLastName = mfdCntLastName;
+		public void setActivityContacts(List<AmpActivityContact> activityContacts) {
+			this.activityContacts = activityContacts;
 		}
-
-		public String getMfdCntEmail() {
-			return mfdCntEmail;
+		public List<AmpContact> getContacts() {
+			return contacts;
 		}
-
-		public void setMfdCntEmail(String mfdCntEmail) {
-			this.mfdCntEmail = mfdCntEmail;
+		public void setContacts(List<AmpContact> contacts) {
+			this.contacts = contacts;
 		}
-
-		public String getMfdCntTitle() {
-			return mfdCntTitle;
+		
+		public String getPrimaryContact() {
+			return primaryContact;
 		}
-
-		public void setMfdCntTitle(String mfdCntTitle) {
-			this.mfdCntTitle = mfdCntTitle;
+		public void setPrimaryContact(String primaryContact) {
+			this.primaryContact = primaryContact;
 		}
-
-		public String getMfdCntOrganization() {
-			return mfdCntOrganization;
+		public String getContactType() {
+			return contactType;
 		}
-
-		public void setMfdCntOrganization(String mfdCntOrganization) {
-			this.mfdCntOrganization = mfdCntOrganization;
+		public void setContactType(String contactType) {
+			this.contactType = contactType;
 		}
-
-		public String getMfdCntPhoneNumber() {
-			return mfdCntPhoneNumber;
+		public String getTemporaryId() {
+			return temporaryId;
 		}
-
-		public void setMfdCntPhoneNumber(String mfdCntPhoneNumber) {
-			this.mfdCntPhoneNumber = mfdCntPhoneNumber;
+		public void setTemporaryId(String temporaryId) {
+			this.temporaryId = temporaryId;
 		}
-
-		public String getMfdCntFaxNumber() {
-			return mfdCntFaxNumber;
+		public Boolean getPrimaryAllowed() {
+			return primaryAllowed;
 		}
-
-		public void setMfdCntFaxNumber(String mfdCntFaxNumber) {
-			this.mfdCntFaxNumber = mfdCntFaxNumber;
+		public void setPrimaryAllowed(Boolean primaryAllowed) {
+			this.primaryAllowed = primaryAllowed;
 		}
-
-		public String getPrjCoFirstName() {
-			return prjCoFirstName;
+		public String getKeyword() {
+			return keyword;
 		}
-
-		public void setPrjCoFirstName(String prjCoFirstName) {
-			this.prjCoFirstName = prjCoFirstName;
+		public void setKeyword(String keyword) {
+			this.keyword = keyword;
 		}
-
-		public String getPrjCoLastName() {
-			return prjCoLastName;
+		public Long[] getContactIds() {
+			return contactIds;
 		}
-
-		public void setPrjCoLastName(String prjCoLastName) {
-			this.prjCoLastName = prjCoLastName;
+		public void setContactIds(Long[] contactIds) {
+			this.contactIds = contactIds;
 		}
-
-		public String getPrjCoEmail() {
-			return prjCoEmail;
+		public Boolean getResetDonorIds() {
+			return resetDonorIds;
 		}
-
-		public void setPrjCoEmail(String prjCoEmail) {
-			this.prjCoEmail = prjCoEmail;
+		public void setResetDonorIds(Boolean resetDonorIds) {
+			this.resetDonorIds = resetDonorIds;
 		}
-
-		public String getPrjCoTitle() {
-			return prjCoTitle;
+		public Boolean getResetMofedIds() {
+			return resetMofedIds;
 		}
-
-		public void setPrjCoTitle(String prjCoTitle) {
-			this.prjCoTitle = prjCoTitle;
+		public void setResetMofedIds(Boolean resetMofedIds) {
+			this.resetMofedIds = resetMofedIds;
 		}
-
-		public String getPrjCoOrganization() {
-			return prjCoOrganization;
+		public Boolean getResetProjCoordIds() {
+			return resetProjCoordIds;
 		}
-
-		public void setPrjCoOrganization(String prjCoOrganization) {
-			this.prjCoOrganization = prjCoOrganization;
+		public void setResetProjCoordIds(Boolean resetProjCoordIds) {
+			this.resetProjCoordIds = resetProjCoordIds;
 		}
-
-		public String getPrjCoPhoneNumber() {
-			return prjCoPhoneNumber;
+		public Boolean getResetSecMinIds() {
+			return resetSecMinIds;
 		}
-
-		public void setPrjCoPhoneNumber(String prjCoPhoneNumber) {
-			this.prjCoPhoneNumber = prjCoPhoneNumber;
-		}
-
-		public String getPrjCoFaxNumber() {
-			return prjCoFaxNumber;
-		}
-
-		public void setPrjCoFaxNumber(String prjCoFaxNumber) {
-			this.prjCoFaxNumber = prjCoFaxNumber;
-		}
-
-		public String getSecMiCntFirstName() {
-			return secMiCntFirstName;
-		}
-
-		public void setSecMiCntFirstName(String secMiCntFirstName) {
-			this.secMiCntFirstName = secMiCntFirstName;
-		}
-
-		public String getSecMiCntLastName() {
-			return secMiCntLastName;
-		}
-
-		public void setSecMiCntLastName(String secMiCntLastName) {
-			this.secMiCntLastName = secMiCntLastName;
-		}
-
-		public String getSecMiCntEmail() {
-			return secMiCntEmail;
-		}
-
-		public void setSecMiCntEmail(String secMiCntEmail) {
-			this.secMiCntEmail = secMiCntEmail;
-		}
-
-		public String getSecMiCntTitle() {
-			return secMiCntTitle;
-		}
-
-		public void setSecMiCntTitle(String secMiCntTitle) {
-			this.secMiCntTitle = secMiCntTitle;
-		}
-
-		public String getSecMiCntOrganization() {
-			return secMiCntOrganization;
-		}
-
-		public void setSecMiCntOrganization(String secMiCntOrganization) {
-			this.secMiCntOrganization = secMiCntOrganization;
-		}
-
-		public String getSecMiCntPhoneNumber() {
-			return secMiCntPhoneNumber;
-		}
-
-		public void setSecMiCntPhoneNumber(String secMiCntPhoneNumber) {
-			this.secMiCntPhoneNumber = secMiCntPhoneNumber;
-		}
-
-		public String getSecMiCntFaxNumber() {
-			return secMiCntFaxNumber;
-		}
-
-		public void setSecMiCntFaxNumber(String secMiCntFaxNumber) {
-			this.secMiCntFaxNumber = secMiCntFaxNumber;
-		}
-
+		public void setResetSecMinIds(Boolean resetSecMinIds) {
+			this.resetSecMinIds = resetSecMinIds;
+		}		
 	}
 
 	public class Comments {
@@ -3652,7 +3577,8 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	private Documents documents = null;
 	private Agencies agencies;
 	private Survey survey = null;
-	private ContactInformation contactInfo;
+	private ActivityContactInfo contactInformation;
+	//	private ContactInformation contactInfo;
 	private Comments comments = null;
 	private PhisycalProgress phisycalProgress;
 	private IndicatorME indicatorME = null;
@@ -3726,7 +3652,8 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.funding = null;
 			this.oldFunding = null;
 			this.survey = null;
-			this.contactInfo = null;
+			//this.contactInfo = null;
+			this.contactInformation=null;
 			this.agencies = null;
 			this.indicatorME = null;
             this.fundingCurrCode=null;
@@ -3957,13 +3884,20 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		return this.survey;
 	}
 
-	public ContactInformation getContactInfo() {
-		if (this.contactInfo == null) {
-			this.contactInfo = new ContactInformation();
+//	public ContactInformation getContactInfo() {
+//		if (this.contactInfo == null) {
+//			this.contactInfo = new ContactInformation();
+//		}
+//		return this.contactInfo;
+//
+//	}
+	
+	public ActivityContactInfo getContactInformation() {
+		if(this.contactInformation==null){
+			this.contactInformation=new ActivityContactInfo ();
 		}
-		return this.contactInfo;
-
-	}
+		return this.contactInformation;
+	}	
 
 	public Comments getComments() {
 		if (this.comments == null) {
@@ -4178,4 +4112,3 @@ public class EditActivityForm extends ActionForm implements Serializable {
     }
 
 }
-

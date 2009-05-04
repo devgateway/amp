@@ -638,6 +638,7 @@
 				<page>showActivityLog</page>
                 <page>aim_addDisbOrderToDisbPopupLayout</page>
                 <page>aim_addDisbOrderToContractPopupLayout</page>
+                <page>addActivityContactInfo</page>
 			</module>
 			<module name="contentrepository">
 				<page>amp_selectDocumentDM</page>

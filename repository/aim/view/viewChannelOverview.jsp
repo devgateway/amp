@@ -1686,7 +1686,7 @@ function commentWin(val) {
 																				items="${aimChannelOverviewForm.typesOfAssistance}">
 																				<TR>
 																					<TD bgcolor="#ffffff">
-																					<category:getoptionvalue categoryValueId="${asstType.id}"/>
+																						<category:getoptionvalue categoryValueId="${asstType.id}"/>
 																					</TD>
 																				</TR>
 																			</c:forEach>
@@ -1719,8 +1719,9 @@ function commentWin(val) {
 																			<c:forEach var="modal"
 																				items="${aimChannelOverviewForm.uniqueModalities}">
 																				<TR>
-																					<TD bgcolor="#ffffff"><c:out
-																						value="${modal.value}" /></TD>
+																					<TD bgcolor="#ffffff">
+																						<category:getoptionvalue categoryValueId="${modal.id}"/>
+																					</TD>
 																				</TR>
 																			</c:forEach>
 																		</c:if>

@@ -368,12 +368,27 @@ public class DgUtil {
                              language.getCode());
                 return language;
             }
-            // Determine list of accepted languages from request
 
+            // Determine language from root site
+            if (rootSite.getDefaultLanguage() != null) {
+                language = getSupportedLanguage(rootSite.getDefaultLanguage().
+                                                getCode(),
+                                                currentSite,
+                                                isLocalTranslatorForSite(
+                    request));
+            }
+            if (language != null) {
+                logger.debug(
+                    "Language, determined from root site's default language is: " +
+                    language.getCode());
+                return language;
+            }
+            
+            // Determine list of accepted languages from request
             // request.getLocales() contains at least one value: if
             // Accept-Language was not set in header, container puts server's
             // default locale there. That's why we need this check
-            if (request.getHeader("Accept-Language") != null) {
+           if (request.getHeader("Accept-Language") != null) {
                 Enumeration enumLocales = request.getLocales();
                 while (enumLocales.hasMoreElements()) {
                     java.util.Locale locale = (java.util.Locale) enumLocales.
@@ -395,20 +410,7 @@ public class DgUtil {
                 return language;
             }
 
-            // Determine language from root site
-            if (rootSite.getDefaultLanguage() != null) {
-                language = getSupportedLanguage(rootSite.getDefaultLanguage().
-                                                getCode(),
-                                                currentSite,
-                                                isLocalTranslatorForSite(
-                    request));
-            }
-            if (language != null) {
-                logger.debug(
-                    "Language, determined from root site's default language is: " +
-                    language.getCode());
-                return language;
-            }
+
             // Return english language
             language = new Locale();
             language.setCode(java.util.Locale.ENGLISH.getLanguage());

@@ -56,10 +56,14 @@
 	              		</digi:trn>
 	              	
 	              	<%
+	              	if (subColumn.getWorker()!=null && subColumn.getWorker().getRelatedColumn()!=null){
 	              	String text=subColumn.getWorker().getRelatedColumn().getDescription();
 	              	if (text!=null){ %>	
                  	   <img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:report:${reportHeading}_toolip"><%=text%></digi:trn>">
-                  	<%}%>
+                  	<%
+                  	}
+	              	}
+                  	%>
 	              	</html:link>
 	            </logic:notEqual>
             

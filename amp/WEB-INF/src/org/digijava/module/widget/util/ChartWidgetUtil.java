@@ -77,6 +77,7 @@ import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.chart.title.LegendTitle;
 import org.jfree.data.Range;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
@@ -575,8 +576,8 @@ public class ChartWidgetUtil {
 	 */
 	public static JFreeChart getSectorByDonorChart(Long[] donors,Integer fromYear,Integer toYear,ChartOption opt)throws DgException,WorkerException{
 		JFreeChart result = null;
-		PieDataset ds = getSectorByDonorDataset(donors,fromYear,toYear);		
-		
+		PieDataset ds = getSectorByDonorDataset(donors,fromYear,toYear);
+
         String titleMsg= TranslatorWorker.translateText("Breakdown by Sector", opt.getLangCode(), opt.getSiteId());
 		String title = (opt.isShowTitle())? titleMsg:null;
 		boolean tooltips = false;
@@ -603,6 +604,10 @@ public class ChartWidgetUtil {
 		}
 		
 		//plot.setSectionOutlinesVisible(false);
+        LegendTitle lt = result.getLegend();
+        Font labelFont = new Font(null, Font.PLAIN, 9);
+        lt.setItemFont(labelFont);
+        plot.setLabelFont(labelFont);
 		plot.setIgnoreNullValues(true);
 		plot.setIgnoreZeroValues(true);
 		return result;

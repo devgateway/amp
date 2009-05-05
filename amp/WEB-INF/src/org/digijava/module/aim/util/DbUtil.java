@@ -5869,13 +5869,13 @@ public class DbUtil {
                                                 }
                                                 if ("9".equalsIgnoreCase(indcCode)) {
                                                     if (j == 0)
-                                                    	if ( !CategoryManagerUtil.equalsCategoryValue(fund.getFinancingInstrument(), CategoryConstants.FIN_INSTR_DIRECT_BUDGET_SUPPORT) )
+                                                    	if ( !CategoryManagerUtil.equalsCategoryValue(fund.getFinancingInstrument(), CategoryConstants.FIN_INSTR_BUDGET_SUPPORT) )
                                                         {
-                                                            //logger.debug("continue[indcCode=9]: because of !Direct Budget Suppor");
+                                                            //logger.warn(fund.getFinancingInstrument() + " - " + CategoryConstants.FIN_INSTR_BUDGET_SUPPORT.getValueKey());
                                                             continue;
                                                         }
                                                     if (j == 1)
-                                                        if (CategoryManagerUtil.equalsCategoryValue(fund.getFinancingInstrument(), CategoryConstants.FIN_INSTR_DIRECT_BUDGET_SUPPORT)) {
+                                                        if (CategoryManagerUtil.equalsCategoryValue(fund.getFinancingInstrument(), CategoryConstants.FIN_INSTR_BUDGET_SUPPORT)) {
                                                             //logger.debug("continue[indcCode=9]: because of Direct Budget Suppor");
                                                             continue;
                                                         }

@@ -287,6 +287,8 @@ public final class ARUtil {
 	
 		
 			Object prevPeriod					= null;
+			Object first							= periods.first();
+			Object last								= periods.last();
 			Iterator periodIter					= periods.iterator();
 			while ( periodIter.hasNext() ) {
 				Object period			= periodIter.next();
@@ -295,7 +297,7 @@ public final class ARUtil {
 				if ( prevPeriod != null && 
 						(difference=ARUtil.periodDifference(type, prevPeriod, period)) > 1 ) {
 					for (int i=1; i< difference; i++) {
-						Comparable comparable	= ARUtil.getFuturePeriod(type, prevPeriod, i, filter);
+						Comparable comparable	= ARUtil.getFuturePeriod(type, prevPeriod, i, first, last);
 						if (comparable != null)
 							destMetaSet.add( new MetaInfo(type, comparable) );
 					}
@@ -310,14 +312,16 @@ public final class ARUtil {
 		}
 		
 	}
-	private static Comparable getFuturePeriod(String type, Object period, int step, AmpARFilter filter) throws Exception{
+	private static Comparable getFuturePeriod(String type, Object period, int step,  Object first, Object last) throws Exception{
 		if ( ArConstants.YEAR.equals( type ) ) {
+			Integer firstEl		= (Integer) first;
+			Integer lastEl			= (Integer) last;
 			System.out.println("Adding year:" + (((Integer)period) + step) );
-			if ( filter.getRenderStartYear() != null && 
-					(((Integer)period) + step) < filter.getRenderStartYear())
+			if ( firstEl != null && 
+					(((Integer)period) + step) < firstEl )
 				return null;
-			if ( filter.getRenderEndYear() != null && 
-					(((Integer)period) + step) > filter.getRenderEndYear())
+			if ( lastEl != null && 
+					(((Integer)period) + step) > lastEl)
 				return null;
 			
 			return ((Integer)period) + step;
@@ -396,9 +400,9 @@ public final class ARUtil {
 		if ( ArConstants.YEAR.equals(type) ) {
 			if ( filter == null  )
 				throw new Exception("Filter is null when adding empty years to report");
-			if ( filter.getRenderStartYear() != null )
+			if ( filter.getRenderStartYear() != null && filter.getRenderStartYear() > 1800  && filter.getRenderStartYear() < 2200 )
 				periods.add(  filter.getRenderStartYear() -1 );
-			if ( filter.getRenderEndYear() != null )
+			if ( filter.getRenderEndYear() != null && filter.getRenderStartYear() > 1800  && filter.getRenderEndYear() < 2200 )
 				periods.add( filter.getRenderEndYear() + 1 );
 		}
 		if ( ArConstants.QUARTER.equals(type) ) {

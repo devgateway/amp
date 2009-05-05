@@ -118,6 +118,16 @@ public abstract class ARDimension {
    
     public abstract void initialize() throws HibernateException, SQLException;
     
+    /**
+     * 
+     * @param parentId
+     * @param relatedContentPersisterClass
+     * @return 
+     * if the parent and child of the hierarchy are of the same type (like sectors or NPO) we have to get all the parents and grandparents
+     * if the parent and child are different types like donor group and donor agency, we do not have to get the grandparents.
+     */
+    public abstract Long getParentObject(Long parentId, Class relatedContentPersisterClass);
+    
     public boolean internalIsLinkedWith(ReportData parent, Cell childCell) {
 	Set<Cell> s = new HashSet<Cell>();
 	parent.appendAllSplitterCells(s);	
@@ -133,11 +143,16 @@ public abstract class ARDimension {
 		Long childId=childCell.getId();
 		
 		Long parentId=null;
+		int ii=0;
+		Long newParent = null;
 		do {
-		    parentId = m.get(childId);
-		    childId=parentId;
+		    
+			parentId = m.get(childId);
+			newParent = getParentObject(childId, relatedContentPersisterClass);
+			if(newParent!= null) childId=newParent;
 		    if(parentId!=null && parentId.equals(c.getId())) break;
-		}while(parentId!=null);
+		    
+		}while(newParent!=null);
 		
 		if( !(parentId!=null && parentId.equals(c.getId()))) return false;
 	    } 	    

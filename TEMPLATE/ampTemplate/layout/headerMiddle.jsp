@@ -396,13 +396,13 @@ function adminHelp(){
                                         	<a class="yuiampmenuitemlabel" href="#">
                                             	<digi:trn key="aim:changeworkspace">Change workspace</digi:trn>
                                             </a>
-                                            <div id="workspaceSubmenu" class="yuiampmenu">
-                                          	<div class="bd">                    
+                                            <div id="workspaceSubmenu" class="yuiampmenu" style="width: 500px;">
+                                          		<div class="bd">                    
                                                       <ul>                                                      
                                                         <logic:iterate id="item"  name="USER_WORKSPACES" scope="session" type="org.digijava.module.aim.dbentity.AmpTeamMember">
                                             		    <bean:define id="team" name="item" property="ampTeam" type="org.digijava.module.aim.dbentity.AmpTeam"></bean:define>
                                             		    <logic:equal name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
-                                            		       <li class="yuiampmenuitem yuiampmenuitem-checked " style="_width:100%;">
+                                            		       <li class="yuiampmenuitem yuiampmenuitem-checked " style="width: 100%;">
                                                             	 <a class="yuiampmenuitemlabel" href="#"><bean:write name="team" property="name"/></a>
                                                           </li>
                                                         </logic:equal>                                            		    
@@ -411,7 +411,7 @@ function adminHelp(){
                                                             	<a class="yuiampmenuitemlabel" href='/selectTeam.do?id=<bean:write name="item" property="ampTeamMemId"/>' onclick="return canExit()"><bean:write name="team" property="name"/></a>
                                                           </li>
                                                         </logic:notEqual>
-                                            		</logic:iterate>
+                                            		    </logic:iterate>
                                                       </ul>
                                                   </div>
                                               </div>   

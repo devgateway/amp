@@ -838,7 +838,7 @@ function toggleSettings(){
 																						<c:if test="${ansIndex != 3}">
                                                                                             <c:if test="${aimParisIndicatorReportForm.indicatorCode == '9'}">
                                                                                                  <c:if test="${thirdVal != 0}">
-																							         <fmt:formatNumber type="number" value="${secondVal*100/thirdVal}" maxFractionDigits="0" />%
+																							         <fmt:formatNumber type="number" value="${(firstVal+secondVal)*100/thirdVal}" maxFractionDigits="0" />%
                                                                                                  </c:if>
                                                                                                  <c:if test="${thirdVal == 0}">n.a.</c:if>
                                                                                             </c:if>

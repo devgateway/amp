@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpTheme;
@@ -38,5 +39,14 @@ public class NPODimension extends ARDimension  {
 
 		PersistenceManager.releaseSession(session);
 
+	}
+	
+	@Override
+	public Long getParentObject(Long parentId,	Class relatedContentPersisterClass) {
+		// TODO Auto-generated method stub
+		Map<Long,Long> m=links.get(relatedContentPersisterClass);
+		if(m!=null)
+			return m.get(parentId);
+		return null;
 	}
 }

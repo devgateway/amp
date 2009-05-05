@@ -57,5 +57,9 @@ public class DonorDimension extends ARDimension {
 		PersistenceManager.releaseSession(session);
 
 	}
-
+	@Override
+	public Long getParentObject(Long parentId,	Class relatedContentPersisterClass) {
+		// TODO Auto-generated method stub
+		return null;
+}
 }

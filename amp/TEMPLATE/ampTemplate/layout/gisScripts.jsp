@@ -135,6 +135,13 @@ function setHoveredTable(tableId, hasHeaders) {
 		if(hasHeaders){
 			rows[0].className += " tableHeader";
 			i = 1;
+            /*class don't work if sector table widget is rendered,
+             *because global.css overrides gis.css  */
+            var cells= rows[0].cells;
+            for(var j=0;j<cells.length;j++){
+                 cells[j].style.color="#FFFFFF";
+            }
+           
 			
 		}
 	

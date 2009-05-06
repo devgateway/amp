@@ -75,7 +75,7 @@ public class ViewEditUser extends Action {
         Boolean isBanned = uForm.getBan();
         if (isBanned != null) {
             if (isAmpAdmin.equalsIgnoreCase("yes") &&
-            		!(user.getId().longValue() == 1 || user.getId().longValue() == 2) // AMP-4598 build in administrator can not be banned.
+            		!user.isBuildInAdmin() // AMP-4598 build in administrator can not be banned.
             		) {
             	if (isBanned) {
             		List ampTeamMembers	= TeamMemberUtil.getAmpTeamMembersbyDgUserId(userId);

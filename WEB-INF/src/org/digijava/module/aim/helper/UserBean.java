@@ -2,6 +2,7 @@ package org.digijava.module.aim.helper;
 
 import java.util.Collection;
 
+import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 
@@ -73,4 +74,10 @@ public UserBean() {
   public void setTeamMembers(Collection<AmpTeamMember> teamMembers) {
         this.teamMembers = teamMembers;
     }
+  
+  public boolean isBuildInAdmin(){
+  	return UserUtils.isBuildInAdmin(this.email);
+  }
+  
 }
+

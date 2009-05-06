@@ -249,7 +249,7 @@ function banUser(txt) {
 								                                                    <digi:link href="/viewEditUser.do?id=${us.id}&ban=false" onclick="return unbanUser()"  >${translation}</digi:link>
 								                                                  </c:when>
 								                                                  <c:otherwise>
-																			  <c:if test="${!(us.id == 1 || us.id == 2)}">  <%--  AMP-4598 Build in administrator can not be banned. --%>
+																			  <c:if test="${!(us.buildInAdmin)}">  <%--  AMP-4598 Build in administrator can not be banned. --%>
 								                                                    <c:set var="translation">
 								                                                      <digi:trn key="um:viewAllUsers:banUsersLink">Ban user </digi:trn>
 								                                                    </c:set>

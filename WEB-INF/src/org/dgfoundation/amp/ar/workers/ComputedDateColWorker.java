@@ -52,6 +52,23 @@ public class ComputedDateColWorker extends ColumnWorker {
 			values.put(ArConstants.PROPOSED_COMPLETION_DATE_VALUE, new BigDecimal(rs.getDate(PROPOSED_COMPLETION_DATE).getTime()));
 		}
 
+		
+		if (rs.getDate(ACTIVITY_CLOSE_DATE) != null) {
+			values.put(ArConstants.ACTIVITY_CLOSE_DATE_VALUE, new BigDecimal(rs.getDate(ACTIVITY_CLOSE_DATE).getTime()));
+		}
+
+		if (rs.getDate(PROPOSED_START_DATE) != null) {
+			values.put(ArConstants.PROPOSED_START_DATE_VALUE, new BigDecimal(rs.getDate(PROPOSED_START_DATE).getTime()));
+		}
+		
+		if (rs.getDate(ACTUAL_APPROVAL_DATE) != null) {
+			values.put(ArConstants.ACTUAL_APPROVAL_DATE_VALUE, new BigDecimal(rs.getDate(ACTUAL_APPROVAL_DATE).getTime()));
+		}
+		
+		if (rs.getDate(ACTIVITY_APPROVAL_DATE) != null) {
+			values.put(ArConstants.ACTIVITY_APPROVAL_DATE_VALUE, new BigDecimal(rs.getDate(ACTIVITY_APPROVAL_DATE).getTime()));
+		}
+		
 		values.put(ArConstants.CURRENT_DATE_VALUE, new BigDecimal((new java.util.Date().getTime())));
 
 		Long id = new Long(rs.getLong(AMP_ACTIVITY_ID));

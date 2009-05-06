@@ -332,7 +332,24 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         oldActivity.setCreatedAsDraft(activity.isCreatedAsDraft());
         oldActivity.getClosingDates().clear();
         oldActivity.getComponents().clear();
+      
+        Collection<AmpPhysicalPerformance> oldProgress= oldActivity.getComponentProgress();
+      
+        for (Iterator iterator = oldProgress.iterator(); iterator.hasNext();) {
+			AmpPhysicalPerformance ampPhysicalPerformance = (AmpPhysicalPerformance) iterator.next();
+			session.delete(ampPhysicalPerformance);
+		}
+        
+        Collection<AmpPhysicalPerformance> newProgress= activity.getComponentProgress();
+        for (AmpPhysicalPerformance ampPhysicalPerformance : newProgress) {
+        	session.save(ampPhysicalPerformance);
+		}
+        
+        
         oldActivity.getComponentFundings().clear();
+      
+        
+        
         oldActivity.getDocuments().clear();
         oldActivity.getInternalIds().clear();
         oldActivity.getLocations().clear();
@@ -416,10 +433,16 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         	oldActivity.getComponents().addAll(activity.getComponents());
         }
         
+        if(activity.getComponentProgress()!=null){
+        	oldActivity.getComponentProgress().addAll(activity.getComponentProgress());
+        }
+        
         
         if(activity.getComponentFundings()!=null){
         	oldActivity.getComponentFundings().addAll(activity.getComponentFundings());
         }
+        
+      
         
         //oldActivity.setDocuments(activity.getDocuments());
         if (activity.getFunding() != null)
@@ -439,6 +462,9 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         	oldActivity.getSectors().addAll(activity.getSectors()); 
         if (activity.getComponentes() != null)
         	oldActivity.getComponentes().addAll(activity.getComponentes());
+        
+       
+        
         if (activity.getIssues() != null)
         	oldActivity.getIssues().addAll(activity.getIssues());
         if (activity.getCosts() != null)

@@ -154,7 +154,7 @@ public class AmpPhysicalPerformance implements Serializable
 	public int hashCode() {
 		if (this.ampPpId == null)
 			return 0;
-		return ampPpId.intValue();
+		return ampPpId.hashCode();
 	}
 	
 	public boolean equals(Object obj) {

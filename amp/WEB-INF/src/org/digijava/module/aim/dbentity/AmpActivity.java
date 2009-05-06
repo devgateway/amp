@@ -139,7 +139,9 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	private String statusReason;
 	private Set<AmpComponent> components;
 	private Set<AmpComponentFunding> componentFundings;
+	private Set<AmpPhysicalPerformance> componentProgress;
 
+	
 	private Date proposedStartDate;
 	private Date actualStartDate;
 	private Date proposedApprovalDate;
@@ -1694,6 +1696,14 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 
 	public Set<AmpComponentFunding> getComponentFundings() {
 		return componentFundings;
+	}
+
+	public Set<AmpPhysicalPerformance> getComponentProgress() {
+		return componentProgress;
+	}
+
+	public void setComponentProgress(Set<AmpPhysicalPerformance> componentProgress) {
+		this.componentProgress = componentProgress;
 	}
 
 }

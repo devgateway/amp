@@ -5867,15 +5867,17 @@ public class DbUtil {
                                                     if (!financingInstr.getId().equals(fund.getFinancingInstrument().getId()))
                                                         continue;
                                                 }
+                                                //TODO: get rid of hardcoded values and check for the french string "Support Budgétaire Direct".
                                                 if ("9".equalsIgnoreCase(indcCode)) {
                                                     if (j == 0)
-                                                    	if ( !CategoryManagerUtil.equalsCategoryValue(fund.getFinancingInstrument(), CategoryConstants.FIN_INSTR_BUDGET_SUPPORT) )
-                                                        {
-                                                            //logger.warn(fund.getFinancingInstrument() + " - " + CategoryConstants.FIN_INSTR_BUDGET_SUPPORT.getValueKey());
+                                                    	if ( !CategoryManagerUtil.equalsCategoryValue(fund.getFinancingInstrument(), CategoryConstants.FIN_INSTR_BUDGET_SUPPORT) 
+                                                    			& !fund.getFinancingInstrument().getId().equals(new Long(84))) {
+                                                            logger.warn(fund.getFinancingInstrument().getValue());
                                                             continue;
                                                         }
                                                     if (j == 1)
-                                                        if (CategoryManagerUtil.equalsCategoryValue(fund.getFinancingInstrument(), CategoryConstants.FIN_INSTR_BUDGET_SUPPORT)) {
+                                                        if (CategoryManagerUtil.equalsCategoryValue(fund.getFinancingInstrument(), CategoryConstants.FIN_INSTR_BUDGET_SUPPORT)
+                                                        		|| fund.getFinancingInstrument().getId().equals(new Long(84))) {
                                                             //logger.debug("continue[indcCode=9]: because of Direct Budget Suppor");
                                                             continue;
                                                         }

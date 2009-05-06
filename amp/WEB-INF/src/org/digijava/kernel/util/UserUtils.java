@@ -529,4 +529,17 @@ public class UserUtils {
 		user.setPassword(ShaCrypt.crypt(password.trim()).trim());
 		user.setSalt(new Long(password.trim().hashCode()).toString());
 	}
+	
+    /**
+     * check if user is build in admin
+     * @param email
+     * @return
+     */
+    public static boolean isBuildInAdmin(String email){
+    	if (email.trim().equalsIgnoreCase("system@digijava.org") || 
+    		email.trim().equalsIgnoreCase("admin@mofed.gov") ||
+    		email.trim().equalsIgnoreCase("admin@amp.org"))
+    		return true;
+    	return false;
+    }    	
 }

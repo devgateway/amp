@@ -37,6 +37,7 @@ import org.digijava.kernel.entity.OrganizationType;
 import org.digijava.kernel.entity.UserLangPreferences;
 import org.digijava.kernel.entity.UserPreferences;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.util.UserUtils;
 
 public class User
     extends Entity {
@@ -407,4 +408,7 @@ public class User
         this.contacts = contacts;
     }
 
+    public boolean isBuildInAdmin(){
+    	return UserUtils.isBuildInAdmin(this.email);
+    }
 }

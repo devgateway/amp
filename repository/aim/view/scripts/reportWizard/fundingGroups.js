@@ -5,6 +5,7 @@ YAHOO.amp.reportwizard.fundingGroups	= new Array();
 YAHOO.amp.reportwizard.fundingGroups["donor"]			= new Array(
 				 'A.C. Chapter'
 				,'Primary Sector Sub-Sector'
+				,'Primary Sector Sub-Sub-Sector'
 				,'Implementation Level'
 				,'Accession Instrument'
 				,'Executing Agency'

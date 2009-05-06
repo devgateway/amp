@@ -114,7 +114,7 @@ public class SectorTableWidgetUtil {
     }
 
      /**
-     * Loads sector table widget by id.
+     * Returns amounts for the selected sectors.
      * @param id
      * @return
      * @throws DgException
@@ -126,6 +126,7 @@ public class SectorTableWidgetUtil {
         for (DonorSectorFundingHelper funding : fundings) {
         result+=funding.getFounding();
         }
+        // we need to show amount in millions
 		if("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))){
 			result/=1000;
         }

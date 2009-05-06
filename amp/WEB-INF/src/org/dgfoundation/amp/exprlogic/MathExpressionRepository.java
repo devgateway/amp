@@ -40,7 +40,9 @@ public class MathExpressionRepository {
 	 */
 	private static void buildOverageProjects() {
 		try {
-			MathExpression oper = new MathExpression(MathExpression.Operation.SUBSTRACT, ArConstants.CURRENT_DATE_VALUE, ArConstants.PROPOSED_COMPLETION_DATE_VALUE);
+			// subtract PROPOSED_COMPLETION_DATE_VALUE to CURRENT_DATE_VALUE
+			MathExpression oper = new MathExpression(MathExpression.Operation.SUBTRACT, ArConstants.CURRENT_DATE_VALUE, ArConstants.PROPOSED_COMPLETION_DATE_VALUE);
+			// get the result in days
 			MathExpression oper2 = new MathExpression(MathExpression.Operation.DIVIDE_ROUND_DOWN, oper, new BigDecimal(1000 * 60 * 60 * 24));
 			expresions.put(OVERAGE_PROJECT_KEY, oper2);
 		} catch (Exception e) {
@@ -53,7 +55,7 @@ public class MathExpressionRepository {
 	 */
 	private static void buildAgeOfProject() {
 		try {
-			MathExpression oper = new MathExpression(MathExpression.Operation.SUBSTRACT, ArConstants.CURRENT_DATE_VALUE, ArConstants.ACTUAL_START_DATE_VALUE);
+			MathExpression oper = new MathExpression(MathExpression.Operation.SUBTRACT, ArConstants.CURRENT_DATE_VALUE, ArConstants.ACTUAL_START_DATE_VALUE);
 			MathExpression oper2 = new MathExpression(MathExpression.Operation.DIVIDE_ROUND_DOWN, oper, new BigDecimal(1000 * 60 * 60 * 24));
 			expresions.put(AGE_OF_PROJECT_KEY, oper2);
 		} catch (Exception e) {
@@ -68,7 +70,7 @@ public class MathExpressionRepository {
 	 */
 	private static void buildPredictabilityOfFunding() {
 		try {
-			MathExpression substractActualPlanned = new MathExpression(MathExpression.Operation.SUBSTRACT, ArConstants.ACTUAL_DISBURSEMENT, ArConstants.PLANNED_DISBURSEMENT);
+			MathExpression substractActualPlanned = new MathExpression(MathExpression.Operation.SUBTRACT, ArConstants.ACTUAL_DISBURSEMENT, ArConstants.PLANNED_DISBURSEMENT);
 			MathExpression divideOper1ByPLanned = new MathExpression(MathExpression.Operation.DIVIDE, substractActualPlanned, ArConstants.PLANNED_DISBURSEMENT);
 
 			MathExpression multiResultPannedBy100 = new MathExpression(MathExpression.Operation.MULTIPLY, divideOper1ByPLanned, new BigDecimal(100));
@@ -96,7 +98,7 @@ public class MathExpressionRepository {
 
 	private static void buildActualCommitmentsVariance() {
 		try {
-			MathExpression variance = new MathExpression(MathExpression.Operation.SUBSTRACT, ArConstants.MAX_ACTUAL_COMMITMENT, ArConstants.MIN_ACTUAL_COMMITMENT);
+			MathExpression variance = new MathExpression(MathExpression.Operation.SUBTRACT, ArConstants.MAX_ACTUAL_COMMITMENT, ArConstants.MIN_ACTUAL_COMMITMENT);
 			expresions.put(VARIANCE_ACTUAL_COMMITMENTS_KEY, variance);
 
 		} catch (Exception e) {
@@ -106,7 +108,7 @@ public class MathExpressionRepository {
 
 	private static void buildActualDisbursementVariance() {
 		try {
-			MathExpression variance = new MathExpression(MathExpression.Operation.SUBSTRACT, ArConstants.MAX_ACTUAL_DISBURSEMENT, ArConstants.MIN_ACTUAL_DISBURSEMENT);
+			MathExpression variance = new MathExpression(MathExpression.Operation.SUBTRACT, ArConstants.MAX_ACTUAL_DISBURSEMENT, ArConstants.MIN_ACTUAL_DISBURSEMENT);
 			expresions.put(VARIANCE_ACTUAL_DISBURSEMENTS_KEY, variance);
 
 		} catch (Exception e) {

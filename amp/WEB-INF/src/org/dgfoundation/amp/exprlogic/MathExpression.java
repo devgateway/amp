@@ -14,7 +14,7 @@ public class MathExpression {
 	 * @author Sebastian Dimunzio Apr 27, 2009
 	 */
 	public enum Operation {
-		ADD, SUBSTRACT, DIVIDE, MULTIPLY, DIVIDE_ROUND_DOWN, DIVIDE_ROUND_UP;
+		ADD, SUBTRACT, DIVIDE, MULTIPLY, DIVIDE_ROUND_DOWN, DIVIDE_ROUND_UP;
 	}
 
 	private Operation operation = null;
@@ -122,7 +122,7 @@ public class MathExpression {
 			switch (this.operation) {
 			case ADD:
 				return oper1.add(oper2);
-			case SUBSTRACT:
+			case SUBTRACT:
 				return oper1.subtract(oper2);
 			case DIVIDE:
 				if (oper2.doubleValue() == 0d) {

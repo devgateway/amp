@@ -49,11 +49,11 @@ public class AmpReports implements Comparable, LoggerIdentifiable {
 
 	private Set members;
 
-	private Set columns;
+	private Set<AmpReportColumn> columns;
 
 	private List orderedColumns;
 
-	private Set hierarchies;
+	private Set<AmpReportHierarchy> hierarchies;
 
 	private Set<AmpReportMeasures> measures;
 
@@ -131,14 +131,6 @@ public class AmpReports implements Comparable, LoggerIdentifiable {
 		this.measures = measures;
 	}
 
-	public Set getColumns() {
-		return columns;
-	}
-
-	public void setColumns(Set columns) {
-		this.columns = columns;
-	}
-
 	public Long getAmpReportId() {
 		return ampReportId;
 	}
@@ -208,11 +200,33 @@ public class AmpReports implements Comparable, LoggerIdentifiable {
 
 	}
 
-	public Set getHierarchies() {
+
+
+	/**
+	 * @return the columns
+	 */
+	public Set<AmpReportColumn> getColumns() {
+		return columns;
+	}
+
+	/**
+	 * @param columns the columns to set
+	 */
+	public void setColumns(Set<AmpReportColumn> columns) {
+		this.columns = columns;
+	}
+
+	/**
+	 * @return the hierarchies
+	 */
+	public Set<AmpReportHierarchy> getHierarchies() {
 		return hierarchies;
 	}
 
-	public void setHierarchies(Set hierarchies) {
+	/**
+	 * @param hierarchies the hierarchies to set
+	 */
+	public void setHierarchies(Set<AmpReportHierarchy> hierarchies) {
 		this.hierarchies = hierarchies;
 	}
 

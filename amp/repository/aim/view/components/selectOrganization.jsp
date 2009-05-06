@@ -238,7 +238,11 @@
 </script>
 
 
-
+    <logic:iterate id="iterAdParam" property="aditionalParameters" name="aimSelectOrganizationForm" type="Map.Entry">
+        <% if (iterAdParam.getKey().equals(new String("removeAddButton")) && iterAdParam.getValue().equals(new String("true"))) { %>
+            <bean:define id="removeAddButton" value="true"></bean:define>
+        <% } %>
+    </logic:iterate>
 
 
 
@@ -360,11 +364,13 @@
 										<td align="center" colspan="3">
 										<table cellPadding=5>
 											<tr>
-												<td><html:button styleClass="dr-menu"
-													property="submitButton"
-													onclick="return selectOrganization()">
-													<digi:trn key="btn:add">Add</digi:trn>
-												</html:button></td>
+                                                <logic:notEqual value="true" name="removeAddButton">
+													<td><html:button styleClass="dr-menu"
+														property="submitButton"
+														onclick="return selectOrganization()">
+														<digi:trn key="btn:add">Add</digi:trn>
+													</html:button></td>
+                                                </logic:notEqual>
 												<td><html:button styleClass="dr-menu"
 													property="submitButton" onclick="closeWindow()">
 													<digi:trn key="btn:close">Close</digi:trn>

@@ -112,6 +112,7 @@ public class selectOrganizationComponent extends Action {
 			oForm.setDelegateClass(request.getParameter(AddOrganizationButton.PARAM_NAME_DELEGATE_CLASS));
 		}
 
+		oForm.getAditionalParameters().clear();
 		if (request.getParameter(AddOrganizationButton.ADITIONAL_REQUEST_PARAMS) != null && !"".equalsIgnoreCase(request.getParameter(AddOrganizationButton.ADITIONAL_REQUEST_PARAMS))) 
 		{
 

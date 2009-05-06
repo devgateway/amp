@@ -293,10 +293,22 @@ public class ReportWizardAction extends MultiAction {
 			/* "Cumulative Commitment", and "Cumulative Disbursement" are not treated as columns so if they appear 
 			 * we need to substract them from the total number of cols */
 			for ( AmpReportColumn tempRepCol: ampReport.getColumns() ) {
-				if ( ArConstants.COLUMN_CUMULATIVE_COMMITMENT.equals(tempRepCol.getColumn().getColumnName()) ) 
+				if ( ArConstants.COLUMN_CUMULATIVE_COMMITMENT.equals(tempRepCol.getColumn().getColumnName()) ) {
 					numOfCols--;
-				if ( ArConstants.COLUMN_CUMULATIVE_DISBURSEMENT.equals(tempRepCol.getColumn().getColumnName()) ) 
+					continue;
+				}
+				if ( ArConstants.COLUMN_CUMULATIVE_DISBURSEMENT.equals(tempRepCol.getColumn().getColumnName()) ) {
 					numOfCols--;
+					continue;
+				}
+				if ( ArConstants.COLUMN_UNDISB_CUMULATIVE_BALANCE.equals(tempRepCol.getColumn().getColumnName()) ) {
+					numOfCols--;
+					continue;
+				}
+				if ( ArConstants.COLUMN_UNCOMM_CUMULATIVE_BALANCE.equals(tempRepCol.getColumn().getColumnName()) ) {
+					numOfCols--;
+					continue;
+				}
 			}
 			if ( numOfCols == numOfHiers ) {
 				for ( AmpColumns tempCol: availableCols ) {

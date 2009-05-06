@@ -138,4 +138,6 @@ public final class ArConstants {
 	public static final String COLUMN_PROJECT_TITLE						 		= "Project Title";
 	public static final String COLUMN_CUMULATIVE_COMMITMENT			= "Cumulative Commitment";
 	public static final String COLUMN_CUMULATIVE_DISBURSEMENT		= "Cumulative Disbursement";
+	public static final String COLUMN_UNDISB_CUMULATIVE_BALANCE		= "Undisbursed Cumulative Balance";
+	public static final String COLUMN_UNCOMM_CUMULATIVE_BALANCE	= "Uncommitted Cumulative Balance";
 }

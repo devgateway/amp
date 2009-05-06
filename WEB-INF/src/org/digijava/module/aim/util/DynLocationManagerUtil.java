@@ -18,6 +18,7 @@ import org.apache.struts.action.ActionErrors;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.exception.DynLocationStructuralException;
 import org.digijava.module.aim.exception.DynLocationStructureStringException;
 import org.digijava.module.aim.form.DynLocationManagerForm;
@@ -387,6 +388,51 @@ public class DynLocationManagerUtil {
 		}
 		return null;
 	}
+	public static AmpCategoryValueLocations getLocationByCode(String locationCode, HardCodedCategoryValue hcLocationLayer) {
+		try {
+			AmpCategoryValue layer	= CategoryManagerUtil.getAmpCategoryValueFromDB(hcLocationLayer);
+			return getLocationByIso(locationCode, layer);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	/**
+	 * 
+	 * @param locationIso
+	 * @param cvLocationLayer the AmpCategoryValue specifying the layer (level) of the location...like Country or Region
+	 * @return
+	 */
+	public static AmpCategoryValueLocations getLocationByCode(String locationCode, AmpCategoryValue cvLocationLayer) {
+		Session dbSession										= null;
+		
+		
+		try {
+			dbSession			= PersistenceManager.getSession();
+			String queryString 	= "select loc from "
+				+ AmpCategoryValueLocations.class.getName()
+				+ " loc where (loc.code=:code)" ;
+			if ( cvLocationLayer != null ) {
+				queryString		+= " AND (loc.parentCategoryValue=:cvId) ";
+			}
+			Query qry			= dbSession.createQuery(queryString);
+			if ( cvLocationLayer != null) {
+				qry.setLong("cvId", cvLocationLayer.getId() );
+			}
+			qry.setString("code", locationCode);
+			AmpCategoryValueLocations loc		= (AmpCategoryValueLocations) qry.uniqueResult();
+			return loc;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				PersistenceManager.releaseSession(dbSession);
+			} catch (Exception ex2) {
+				logger.error("releaseSession() failed :" + ex2);
+			}
+		}
+		return null;
+	}
 	/**
 	 * 
 	 * @param id
@@ -526,6 +572,34 @@ public class DynLocationManagerUtil {
 		return returnList;
 	}
 	
+	/**
+	 * 
+	 * @param ampCVLocation
+	 * @return If there is a corresponding AmpLocation object in the database then it is returned. 
+	 * Otherwise a new entity is being created and saved to the db. 
+	 * @throws Exception
+	 */
+	public static AmpLocation getAmpLocation (AmpCategoryValueLocations ampCVLocation)  throws Exception {
+		if ( ampCVLocation == null )
+			throw new Exception("ampCVLocations is null");
+		
+		AmpLocation ampLoc		= LocationUtil.getAmpLocationByCVLocation( ampCVLocation.getId() );
+
+		if (ampLoc == null) {
+			ampLoc = new AmpLocation();
+			ampLoc.setDescription(new String(" "));
+			
+			ampLoc.setLocation( ampCVLocation );
+			AmpCategoryValueLocations regionLocation	= 
+				DynLocationManagerUtil.getAncestorByLayer( ampCVLocation, CategoryConstants.IMPLEMENTATION_LOCATION_REGION );
+			if ( regionLocation != null ) {
+				ampLoc.setRegionLocation(regionLocation);
+				ampLoc.setRegion( regionLocation.getName() );
+			}
+			DbUtil.add(ampLoc);
+		}
+		return ampLoc;
+	}
 	
 	
 	public static Comparator<AmpCategoryValueLocations> alphabeticalLocComp		=

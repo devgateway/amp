@@ -35,6 +35,7 @@ import org.dgfoundation.amp.PropertyListable;
 import org.dgfoundation.amp.Util;
 import org.digijava.module.aim.annotations.reports.IgnorePersistence;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -51,6 +52,8 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 
 
 /**
@@ -184,7 +187,7 @@ public class AmpARFilter extends PropertyListable {
 	private Integer yearFrom;
 	private Integer toMonth;
 	private Integer yearTo;
-	private Long regionSelected = null;
+	private AmpCategoryValueLocations regionSelected = null;
 	private Collection<String> approvalStatusSelected=null;
 	private boolean approved = false;
 	private boolean draft = false;
@@ -510,8 +513,29 @@ public class AmpARFilter extends PropertyListable {
 				+ lineMinRank;
 		String PLAN_MIN_RANK_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE plan_min_rank="
 				+ planMinRank;
-		String REGION_SELECTED_FILTER = "SELECT amp_activity_id FROM v_regions WHERE region_id ="
-				+ regionSelected;
+		//String REGION_SELECTED_FILTER = "SELECT amp_activity_id FROM v_regions WHERE region_id ="
+		//		+ (regionSelected==null?null:regionSelected.getIdentifier());
+		
+		String REGION_SELECTED_FILTER = "";
+		if (regionSelected!=null) {
+			HardCodedCategoryValue hcValue = CategoryConstants.IMPLEMENTATION_LOCATION_REGION;
+			if (regionSelected.getParentCategoryValue().getValue().equals( hcValue.getValueKey() ) ) {
+				REGION_SELECTED_FILTER = "SELECT amp_activity_id FROM v_regions WHERE region_id =" + regionSelected.getIdentifier();
+			}else{
+				hcValue = CategoryConstants.IMPLEMENTATION_LOCATION_ZONE;
+				if (regionSelected.getParentCategoryValue().getValue().equals( hcValue.getValueKey() ) ) {
+					REGION_SELECTED_FILTER = "SELECT amp_activity_id FROM v_regions WHERE zone_id = (SELECT zone_id FROM amp_location WHERE location_id = " + regionSelected.getIdentifier() + " LIMIT 1)";
+				}else{
+					hcValue = CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT;
+					if (regionSelected.getParentCategoryValue().getValue().equals( hcValue.getValueKey() ) ) {
+						REGION_SELECTED_FILTER = "SELECT amp_activity_id FROM v_regions WHERE location_id = " + regionSelected.getIdentifier();
+					}
+				}
+			}
+		}else{
+			REGION_SELECTED_FILTER = "SELECT amp_activity_id FROM v_regions WHERE region_id =null";
+		}
+		
 		StringBuffer actStatusValue = new StringBuffer("");
 		if(approvalStatusSelected!=null){
 			for(String valOption:approvalStatusSelected){
@@ -1148,11 +1172,17 @@ public class AmpARFilter extends PropertyListable {
 		return null;
 	}
 
-	public Long getRegionSelected() {
+	/**
+	 * @return the regionSelected
+	 */
+	public AmpCategoryValueLocations getRegionSelected() {
 		return regionSelected;
 	}
 
-	public void setRegionSelected(Long regionSelected) {
+	/**
+	 * @param regionSelected the regionSelected to set
+	 */
+	public void setRegionSelected(AmpCategoryValueLocations regionSelected) {
 		this.regionSelected = regionSelected;
 	}
 

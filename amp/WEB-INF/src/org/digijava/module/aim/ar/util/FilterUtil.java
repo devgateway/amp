@@ -158,7 +158,8 @@ public class FilterUtil {
 		
 		form.setLineMinRank( filter.getLineMinRank() );
 		form.setPlanMinRank( filter.getPlanMinRank() );
-		form.setRegionSelected( filter.getRegionSelected() );
+		if ( filter.getRegionSelected() != null )
+			form.setRegionSelected( filter.getRegionSelected().getId() );
 		
 		Collection<String> appStatuses		= filter.getApprovalStatusSelected();
 		if ( appStatuses!=null && appStatuses.size()>0  ) {

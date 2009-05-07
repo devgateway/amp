@@ -16,3 +16,5 @@ alter table qrtz_job_details alter column requests_recovery type boolean using p
 -- fix reports order_id columns
 alter table amp_report_measures alter column order_id type bigint using pc_chartoint(order_id);
 alter table amp_report_column alter column order_id type bigint using pc_chartoint(order_id);
+alter table amp_report_xlevel_measures alter column order_id type bigint using pc_chartoint(order_id);
+alter table amp_report_hierarchy alter column levelid type bigint using pc_chartoint(levelid);

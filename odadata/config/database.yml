@@ -21,6 +21,10 @@ production:
   encoding: utf8
   adapter: postgresql
 
-ampdev_development:
+ampdev_nicaragua_development:
   <<: *global
   database: odadata_nicaragua
+
+ampdev_mozambique_development:
+  <<: *global
+  database: odadata_mozambique

@@ -417,7 +417,48 @@ public class DynLocationManagerUtil {
 		}
 		return null;
 	}
-	
+	public static List<AmpCategoryValueLocations> getLocationsOfTypeRegionOfDefCountry() throws Exception  {
+		List<AmpCategoryValueLocations> returnSet			= new ArrayList<AmpCategoryValueLocations>();
+		String defCountryIso	= FeaturesUtil.getDefaultCountryIso();
+		if ( defCountryIso != null ) {
+			Set<AmpCategoryValueLocations> allRegions	= getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
+			Set<AmpCategoryValueLocations> allZones	= getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_ZONE);
+			Set<AmpCategoryValueLocations> allDistricts	= getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT);
+			if ( allRegions != null && allRegions.size() > 0 ) {
+				Iterator<AmpCategoryValueLocations> regIter	= allRegions.iterator();
+				while ( regIter.hasNext() ) {
+					AmpCategoryValueLocations reg		= regIter.next();
+					AmpCategoryValueLocations country	= getAncestorByLayer( reg, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+					if ( defCountryIso.equals( country.getIso() )  ) {
+						returnSet.add(reg);
+						Iterator<AmpCategoryValueLocations> zoneIter	= allZones.iterator();
+						while (zoneIter.hasNext()) {
+							AmpCategoryValueLocations zone = zoneIter.next();
+							long zoneParentId = zone.getParentLocation().getId();
+							long regId = reg.getId();
+							if (zoneParentId == regId){
+								zone.setName(" -- " + zone.getName());
+								returnSet.add(zone);
+								Iterator<AmpCategoryValueLocations> distIter	= allDistricts.iterator();
+								while (distIter.hasNext()) {
+									AmpCategoryValueLocations dist = distIter.next();
+									long distParentId = dist.getParentLocation().getId();
+									long zoneId = zone.getId();
+									if (distParentId == zoneId){
+										dist.setName(" ---- " + dist.getName());
+										returnSet.add(dist);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		else
+			throw new Exception("No default country iso could be retrieved!");
+		return returnSet;
+	} 
 	public static Set<AmpCategoryValueLocations> getLocationsOfTypeRegion() {
 		return getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
 	}

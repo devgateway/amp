@@ -273,7 +273,7 @@
 			}
 			initIndicatorValues();
 			actionGetIndicators = true;
-			window.setTimeout(getSectorIndicators, 100);
+			window.setTimeout(getSectorIndicators, 0);
 		}
 		
 	}

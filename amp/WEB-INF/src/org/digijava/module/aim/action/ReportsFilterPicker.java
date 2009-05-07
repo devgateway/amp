@@ -52,6 +52,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.LocationUtil;
@@ -234,7 +235,7 @@ public class ReportsFilterPicker extends MultiAction {
 		Collection donorGroups = ARUtil.filterDonorGroups(DbUtil.getAllOrgGroupsOfPortfolio());
 
 		Collection allIndicatorRisks = meRisks;
-		Collection regions = LocationUtil.getAllDefCountryArRegions();
+		Collection regions = DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry();
 		// Collection regions=LocationUtil.getAllVRegions();
 		//filterForm.setCurrencies(currency);
 		filterForm.setCalendars(allFisCalenders);
@@ -585,8 +586,8 @@ public class ReportsFilterPicker extends MultiAction {
 		if (!all.equals(filterForm.getPlanMinRank()))
 			arf.setPlanMinRank(filterForm.getPlanMinRank());
 		if (!all.equals(filterForm.getRegionSelected()))
-			arf.setRegionSelected(filterForm.getRegionSelected() == null || filterForm.getRegionSelected() == -1 ? null : filterForm.getRegionSelected());
-		
+			arf.setRegionSelected(filterForm.getRegionSelected() == null || filterForm.getRegionSelected() == -1 ? 
+					null : DynLocationManagerUtil.getLocation(filterForm.getRegionSelected(),false) );
 		if (!all.equals(filterForm.getApprovalStatusSelected())){
 			if(filterForm.getApprovalStatusSelected() != null){
 				ArrayList<String> appvals = new ArrayList<String>();

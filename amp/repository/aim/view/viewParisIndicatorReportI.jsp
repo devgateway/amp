@@ -650,11 +650,11 @@ function toggleSettings(){
 														<strong><digi:trn key="aim:totalAidFlowsDisbursed">Total aid flows disbursed to the government sector</digi:trn></strong>
 													</div>
 												</td>
-												<td width="11%" height="33">
-													<div align="center">
-														<strong><digi:trn key="aim:proportionAidFlowsUsingOne">Proportion aid flows to the government sector using one of the 3 country PFM systems</digi:trn></strong>
-													</div>
-												</td>
+<!--												<td width="0%" height="0" style="visibility: hidden">-->
+<!--													<div align="center">-->
+<!--														<strong><digi:trn key="aim:proportionAidFlowsUsingOne">Proportion aid flows to the government sector using one of the 3 country PFM systems</digi:trn></strong>-->
+<!--													</div>-->
+<!--												</td>-->
 												<td width="11%" height="33">
 													<div align="center">
 														<strong><digi:trn key="aim:proportionOfAidFlowsUsingAll">Proportion of aid flows to the government sector using all the 3 country PFM systems</digi:trn></strong>
@@ -800,7 +800,12 @@ function toggleSettings(){
                                                                     <c:set var="fifthVal" value="${rowVal}" />
                                                                 </c:if>
 																<% indexRow++; %>
-																<td>
+                                                                <%String visible = ""; boolean show = true;%>
+																<c:if test="${aimParisIndicatorReportForm.indicatorCode == '5a' && ansIndex == 7}">
+                                                                    <%visible = "style='visibility: hidden'"; show = false;%>
+                                                                </c:if>
+                                                                <%if(show){ %>
+                                                                <td>
 																	<div align="center">
 																		<c:if test="${index == 1}">
 																			<fmt:formatNumber type="number" value="${rowVal}" pattern="####" maxFractionDigits="0" />
@@ -813,13 +818,19 @@ function toggleSettings(){
 																				<c:when test="${index == (numCols-1)}">
 																					<c:choose>
 																						<c:when test="${aimParisIndicatorReportForm.indicatorCode == '5a'}">
-																							<c:if test="${rowVal <= -1}">n.a.</c:if>
-																							<c:if test="${rowVal > -1}">
-                                                                                                <c:if test="${firstVal+secondVal+thirdVal > 0}">
-																								    <fmt:formatNumber type="number" value="${(firstVal+secondVal+thirdVal)*100/3/fifthVal}" maxFractionDigits="0" />%
-                                                                                                </c:if>
-                                                                                                <c:if test="${firstVal+secondVal+thirdVal <= 0}">n.a.</c:if>
-																							</c:if>
+<!--                                                                                            <c:if test="${rowVal <= -1}">-->
+<!--																								<c:if test="${rowVal <= -1}">n.a.</c:if>-->
+<!--																								<c:if test="${rowVal > -1}">-->
+<!--	                                                                                                <c:if test="${firstVal+secondVal+thirdVal > 0}">-->
+<!--																									    <fmt:formatNumber type="number" value="${(firstVal+secondVal+thirdVal)*100/3/fifthVal}" maxFractionDigits="0" />%-->
+<!--	                                                                                                </c:if>-->
+<!--	                                                                                                <c:if test="${firstVal+secondVal+thirdVal <= 0}">n.a.</c:if>-->
+<!--																								</c:if>-->
+<!--                                                                                            </c:if>-->
+                                                                                            <c:if test="${firstVal+secondVal+thirdVal > 0}">
+                                                                                                        <fmt:formatNumber type="number" value="${fourthVal*100/fifthVal}" maxFractionDigits="0" />%
+                                                                                                    </c:if>
+                                                                                                    <c:if test="${firstVal+secondVal+thirdVal <= 0}">n.a.</c:if>
 																						</c:when>
 																						<c:otherwise >
 																							<fmt:formatNumber type="number" value="${rowVal}" pattern="###" maxFractionDigits="0" />
@@ -861,6 +872,7 @@ function toggleSettings(){
 																		<c:set var="index" value="${index + 1}" />
 																	</div>
 																</td>
+                                                                <%} %>
 															</nested:iterate>
 															<% flag = true; %>
 														</tr>

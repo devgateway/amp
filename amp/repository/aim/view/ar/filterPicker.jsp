@@ -305,7 +305,7 @@
 							<digi:trn key="rep:filer:All">All</digi:trn>
 						</html:option>
 						<html:optionsCollection property="regionSelectedCollection"
-							label="region" value="regionId" />
+							label="name" value="id" />
 					</html:select></td>
 				</tr>
 				<field:display name="Project Category" feature="Identification">

@@ -165,7 +165,7 @@
 	}
 
 	function editType(id){
-		var msg='\n<digi:trn>Currency Editor</digi:trn>';
+		var msg='\n<digi:trn>AMP - Add Component Type</digi:trn>';
 		showPanelLoading(msg);
   
 		<digi:context name="editComponentType" property="context/module/moduleinstance/updateComponentType.do?event=edit" />

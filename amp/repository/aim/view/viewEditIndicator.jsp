@@ -9,25 +9,10 @@
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/calendar.js"/>"></script>
-
+<jsp:include page="scripts/newCalendar.jsp" flush="true" />
 <digi:instance property="aimNewIndicatorForm" />
 <script language="javascript">
 	
-<%--	function validete (){
-	
-	if(document.getElementById("radioProgramIndicator").checked){
-	   alert("ok");
-	}else{
-	      alert("no");  }  
-	
-	if(document.getElementById("radioProjectSpecific").checked){
-	   alert("ok1");
-	 }else{
-	 alert("no1");
-	 }
-	 
-	}
---%>
 
 function removeActivity(id) {
 	<c:set var="translation">
@@ -48,68 +33,6 @@ function removeActivity(id) {
     }
 }
 
-
-function saveIndicator(){
-
- if(document.getElementById("txtName").value==""){
-    <c:set var="translation">
-		<digi:trn key="admin:enterName">Please enter name</digi:trn>
-	</c:set>
-	alert("${translation}");
-    return false;
-  }
-
-  if(document.getElementById("txtCode").value==""){
-    <c:set var="translation">
-		<digi:trn key="admin:enterCode">Please enter code</digi:trn>
-	</c:set>
-	alert("${translation}");
-    return false;
-  }
- 
- <%-- 
-  if(!document.getElementById("radioProgramIndicator").checked){
-		 var indStatus = "prgUnchecked"
-		 document.getElementById("programStatus").value = indStatus;
-	}	
-	
-	if(!document.getElementById("radioProjectSpecific").checked){
-		var indStatus = "prjUnchecked"		
-		document.getElementById("projectStatus").value = indStatus;		
-	}
-	--%>   
-		
-	  
-		var length = document.aimNewIndicatorForm.selActivitySector.length;		
-		var Sector;
-		
-		if(!length){
-			<c:set var="translation">
-				<digi:trn key="admin:addSector">Please add Sectors</digi:trn>
-			</c:set>
-			alert("${translation}");
-			return false;
-		}else{
-			for(i = 0; i<length; i++){
-				Sector = document.aimNewIndicatorForm.selActivitySector[i].value;
-				document.getElementById("hdnselActivitySectors").value = Sector;
-			}
-		} 
-
-  
-  <digi:context name="addInd" property="context/module/moduleinstance/viewEditIndicator.do?action=save" />
-  
-  //document.forms[0].action="<%=addInd%>";
-  //document.forms[0].submit();
-  //window.close();
-  //window.opener.document.forms[0].submit();
-  
-  document.aimNewIndicatorForm.action = "<%=addInd%>";
-  document.aimNewIndicatorForm.target="_self";
-  document.aimNewIndicatorForm.submit(); 
- 
-}
-
 function selectProgram(){
   <digi:context name="selPrg" property="context/module/moduleinstance/selectProgramForIndicator.do?action=edit" />
   openURLinWindow("<%= selPrg %>",700, 500);
@@ -120,91 +43,8 @@ function selectActivity(){
   <digi:context name="selAct" property="context/module/moduleinstance/selectActivityForIndicator.do?action=edit" />
   openURLinWindow("<%= selAct %>",700, 500);
 }
- <%-- 
-function radiosStatus(type){
-	
-	  if(type=="global"){
-	    document.getElementById("radioProgramIndicator").checked=false;
-	    document.getElementById("radioProjectSpecific").checked=true;
-	  }else
-	  if(type == "prg/prj "){
-	    document.getElementById("radioProgramIndicator").checked=true;
-	    document.getElementById("radioProjectSpecific").checked=true;
-	  }else 
-	  if(type == "programInd"){
-	    document.getElementById("radioProgramIndicator").checked=true;
-	    document.getElementById("radioProjectSpecific").checked=false;
-	  }else
-	  if(type == "projectInd"){
-	    document.getElementById("radioProgramIndicator").checked=false;
-	    document.getElementById("radioProjectSpecific").checked=true;
-	  }
- }
- --%>
- 
-
-
-function validate(field) {
-	<c:set var="translation">
-		<digi:trn key="admin:chooseSectorToRemove">Please choose a sector to remove</digi:trn>
-	</c:set>
-	if (field == 2){  // validate sector
-		if (document.aimNewIndicatorForm.selActivitySector.checked != null) {
-			if (document.aimNewIndicatorForm.selActivitySector.checked == false) {
-				alert("${translation}");
-				return false;
-			}
-		} else {
-			var length = document.aimNewIndicatorForm.selActivitySector.length;
-			var flag = 0;
-			for (i = 0;i < length;i ++) {
-				if (document.aimNewIndicatorForm.selActivitySector[i].checked == true) {
-					flag = 1;
-					break;
-				}
-			}
-
-			if (flag == 0) {
-				alert("${translation}");
-				return false;
-			}
-		}
-		return true;
-	}
-}
-
-function removeSelSectors() {
-		  var flag = validate(2);
-		  if (flag == false) return false;
-          <digi:context name="remSec" property="context/module/moduleinstance/removeIndicatorEditSectors.do?edit=true" />
-          document.aimNewIndicatorForm.action = "<%= remSec %>";
-          document.aimNewIndicatorForm.target = "_self"
-          document.aimNewIndicatorForm.submit();
-          return true;
-}
-
-function addSectors() {
-		openNewWindow(600, 450);
-		<digi:context name="addSector" property="context/module/moduleinstance/editSectorForind.do?edit=true" />
-	  	document.aimNewIndicatorForm.action = "<%= addSector %>";
-		document.aimNewIndicatorForm.target = popupPointer.name;
-		document.aimNewIndicatorForm.submit();
-}
- 
-function closeWindow() {
-		window.close();
-	}
-
 </script>
 <digi:form action="/viewEditIndicator.do" method="post"> 
-<script language="javascript">
-<c:if test="${aimNewIndicatorForm.action=='added'}">
-    window.opener.location.reload(true);
-    window.opener.focus();
-    window.close();
-</c:if>
-  
-</script>
   <html:hidden property="prjStatus" styleId="projectStatus" />
   <html:hidden property="prgStatus" styleId="programStatus" /> 
   <html:hidden name="aimNewIndicatorForm" property="themeId" styleId="hdnThemeId" />
@@ -280,9 +120,11 @@ function closeWindow() {
             </td>
             <td>
                <html:text property="date" styleId="date" readonly="true" style="font-family:verdana;font-size:11px;width:80px;"/>
-                  <a href="javascript:calendar('date')">
-              <img src="../ampTemplate/images/show-calendar.gif" border="1" alt="" />
-            </a>
+			<a id="date0" href='javascript:pickDateById("date0","date")'>
+				<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0> 
+			</a> 
+
+
             </td>
           </tr>
           <!-- 
@@ -338,11 +180,6 @@ function closeWindow() {
  	     <html:button  styleClass="dr-menu" property="submitButton"  onclick="closeWindow()">
 			<digi:trn key="btn:close">Close</digi:trn> 
 	     </html:button>
-      </td>
-    </tr>
-    <tr>
-      <td bgcolor="#006699">
-       
       </td>
     </tr>
   </table>

@@ -13,7 +13,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/calendar.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addFunding.js"/>"></script>
-
+<jsp:include page="addThemeIndicatorPopin.jsp" flush="true" />
 <script language="JavaScript">
     var openImg;
     var closeImg;
@@ -85,21 +85,6 @@
 	}
 
 
-function addIndicator(id){
-  <digi:context name="addIndicator" property="context/module/moduleinstance/assignNewIndicator.do" />
-  openURLinWindow("<%= addIndicator %>?parentid=" + id + "&type=program",800, 500);
-}
-
-
-function editIndicator(id,parentid,type){
-  <digi:context name="viewEditIndicator" property="context/module/moduleinstance/viewEditIndicator.do" />
-  openURLinWindow("<%=viewEditIndicator%>?id=" + id + "&parentid="+parentid+"&type=program&event=edit",500, 300);
-}
-
-function addData(id){
-  <digi:context name="addEditIndicator" property="context/module/moduleinstance/addEditData.do" />
-  openURLinWindow("<%= addEditIndicator %>?parent=" + id,575, 300);
-}
 
 function checkValues(){
   var values=getTypeValues();
@@ -185,14 +170,14 @@ function load(){}
 
 function unload(){}
 
-function closeWindow(){
+/*function closeWindow(){
 	<digi:context name="closeInd" property="context/module/moduleinstance/closeThemeIndicator.do"/>
 	document.aimThemeForm.action = "<%=closeInd%>";
 	document.aimThemeForm.submit();
 	window.close();
 	return true;
-}
-
+}*/
+/*
   function closeWindow(indiType)
   {
     <digi:context name="closeInd" property="context/module/moduleinstance/closeThemeIndicator.do"/>
@@ -201,7 +186,7 @@ function closeWindow(){
     document.aimThemeForm.submit();
     window.close();
   }
-
+*/
   function trim(s) {
     return s.replace( /^\s*/, "" ).replace( /\s*$/, "" );
   }

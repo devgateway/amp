@@ -104,7 +104,7 @@ function validation(){
 </script>
 
 <digi:instance property="aimThemeForm" />
-<digi:form action="/addEditData.do" method="post">
+<digi:form action="/addEditData.do" method="post" type="aimThemeForm" name="aimThemeFormDataPopin">
 <digi:context name="digiContext" property="context"/>
 <input type="hidden" name="event">
 <table  width=572 cellPadding=4 cellSpacing=1 valign=top align=left bgcolor="#ffffff" border="0">
@@ -199,7 +199,7 @@ function validation(){
   <tr>
     <td height="25" align="center" colspan="6">
       <c:set var="trnadd"><digi:trn key="aim:btn:adddata">Add data</digi:trn></c:set>
-      <input style="font-family:verdana;font-size:11px;" type="button" name="addValBtn" value="${trnadd}" onclick="addData()">&nbsp;&nbsp;
+      <input style="font-family:verdana;font-size:11px;" type="button" name="addValBtn" value="${trnadd}" onclick="addNewData()">&nbsp;&nbsp;
     </td>
   </tr>  
   <tr>
@@ -210,7 +210,7 @@ function validation(){
       
       <input class="dr-menu" type="button" name="addBtn" value="${trn}" onclick="return saveIndicator('${aimThemeForm.themeId}')">&nbsp;&nbsp;
       <input class="dr-menu" type="reset" value="${trncancel}">
-      <input class="dr-menu" type="button" name="close" value="${trnclose}" onclick="window.close();">
+      <input class="dr-menu" type="button" name="close" value="${trnclose}" onclick="closeWindow();">
     </td>
   </tr>
    <tr><td width="100%" colspan="6"><br>

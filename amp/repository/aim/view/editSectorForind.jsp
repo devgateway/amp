@@ -149,7 +149,7 @@ function checkNumeric(objName,comma,period,hyphen)
 
 
 <digi:instance property="aimNewIndicatorForm" />
-<digi:form action="/sectorSelectedForind.do" method="post">
+<digi:form action="/sectorSelectedForind.do" method="post" type="aimNewIndicatorForm" name="aimNewIndicatorSectorForm">
 <html:hidden property="sectorReset" value="false"/>
 
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
@@ -242,7 +242,7 @@ function checkNumeric(objName,comma,period,hyphen)
 														</html:reset>
 													</td>
 													<td>
-														 <html:button  styleClass="dr-menu" property="submitButton"  onclick="closeWindow()">
+														 <html:button  styleClass="dr-menu" property="submitButton"  onclick="closeWindow2()">
 																<digi:trn key="btn:close">Close</digi:trn> 
 														 </html:button>
 													</td>
@@ -259,56 +259,5 @@ function checkNumeric(objName,comma,period,hyphen)
 		</table>
 	</td></tr>
 </table>
-<!-- 
-<br>
-<br>
-<table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
-	<tr><td vAlign="top">
-		<table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
-			<tr>
-				<td align=left vAlign=top>
-					<table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding>
-						<tr bgcolor="#006699">
-							<td vAlign="center" width="100%" align ="center" class="textalb" height="20">
-								<digi:trn key="aim:searchSectors">
-								Search Sectors</digi:trn>
-							</td></tr>
-						<tr>
-							<td align="center" bgcolor=#ECF3FD>
-								<table cellSpacing=2 cellPadding=2>
-									<tr>
-										<td>
-											<digi:trn key="aim:enterKeyword">
-											Enter a keyword </digi:trn>
-										</td>
-										<td>
-											<html:text property="keyword"  styleClass="inp-text" />
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<digi:trn key="aim:numResultsPerPage">
-											Number of results per page</digi:trn>
-										</td>
-										<td>
-											<html:text property="tempNumResults" size="2" value="10" styleClass="inp-text" />
-										</td>
-									</tr>
-									<tr>
-										<td align="center" colspan=2>
-											<html:button  styleClass="dr-menu" property="submitButton" onclick="return searchSector()">
-												<digi:trn key="btn:search">Search</digi:trn> 
-											</html:button>
-										</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-					</table>
-				</td>
-			</tr>
-</table>
-
- -->
 </digi:form>
 

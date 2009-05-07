@@ -149,7 +149,7 @@ function checkNumeric(objName,comma,period,hyphen)
 </script>
 
 <digi:instance property="aimNewIndicatorForm" />
-<digi:form action="/sectorSelectedForind.do" method="post">
+<digi:form action="/sectorSelectedForind.do" method="post" type="aimNewIndicatorForm" name="aimNewIndicatorSectorForm">
 <html:hidden property="sectorReset" value="false"/>
 
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
@@ -201,36 +201,6 @@ function checkNumeric(objName,comma,period,hyphen)
                                                                                         </c:if>
 										</td>
 									</tr>								
-									<!--<tr>
-										<td>
-											<digi:trn key="aim:subSectorLevel1">
-											Sub-Sector Level 1</digi:trn>
-										</td>
-										<td>
-											<html:select property="subsectorLevel1" onchange="reloadSector(3)" styleClass="inp-text">
-												<html:option value="-1">Select sub-sector</html:option>
-												<logic:notEmpty name="aimNewIndicatorForm" property="childSectorsLevel1">
-													<html:optionsCollection name="aimNewIndicatorForm" property="childSectorsLevel1" 
-													value="ampSectorId" label="name" />												
-												</logic:notEmpty>													
-											</html:select>
-										</td>
-												</tr>
-									<tr <logic:empty name="SA" scope="application">style="position:relative;display:none;"</logic:empty>>
-										<td>
-											<digi:trn key="aim:subSectorLevel2">
-											Sub-Sector Level 2</digi:trn>
-										</td>
-										<td>
-											<html:select property="subsectorLevel2" styleClass="inp-text">
-												<html:option value="-1">Select sub-sector</html:option>
-												<logic:notEmpty name="aimNewIndicatorForm" property="childSectorsLevel2">
-													<html:optionsCollection name="aimNewIndicatorForm" property="childSectorsLevel2" 
-													value="ampSectorId" label="name" />												
-												</logic:notEmpty>													
-											</html:select>
-										</td>
-									</tr>-->									
 									<tr>
 										<td align="center" colspan=2>
 											<table cellPadding=5>
@@ -246,7 +216,7 @@ function checkNumeric(objName,comma,period,hyphen)
 														</html:reset>
 													</td>
 													<td>
-														 <html:button  styleClass="dr-menu" property="submitButton"  onclick="closeWindow()">
+														 <html:button  styleClass="dr-menu" property="submitButton"  onclick="closeWindow2()">
 																<digi:trn key="btn:close">Close</digi:trn> 
 														 </html:button>
 													</td>

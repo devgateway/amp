@@ -13,6 +13,9 @@
 
 
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
+
+<jsp:include page="viewIndicatorsPopin.jsp" flush="true" />
+
 <style type="text/css">
 
 a.itr:hover {
@@ -69,15 +72,6 @@ a.itr:hover {
 	  }
 	}
 	
-	function addIndicator(){
-	  <digi:context name="addIndicator" property="context/module/moduleinstance/addNewIndicator.do" />
-	  openURLinWindow("<%= addIndicator %>",500, 300);
-	}
-	
-	function editIndicator(id){
-	  <digi:context name="viewEditIndicator" property="context/module/moduleinstance/viewEditIndicator.do" />
-	  openURLinWindow("<%= viewEditIndicator %>?id="+id,500, 300);
-	}
 	
 	function deletePrgIndicator(){  
 		<c:set var="translation"> 

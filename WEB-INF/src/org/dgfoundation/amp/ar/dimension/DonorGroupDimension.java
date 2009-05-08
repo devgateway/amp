@@ -51,7 +51,6 @@ public class DonorGroupDimension extends ARDimension {
 		PersistenceManager.releaseSession(session);
 
 	}
-	
 	@Override
 	public Long getParentObject(Long parentId,
 			Class relatedContentPersisterClass) {

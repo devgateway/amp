@@ -256,10 +256,20 @@
 				column="amp_component_id" />
 		</set>
 		
+		
+		<set name="componentProgress"  cascade="none">
+			<key column="amp_activity_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpPhysicalPerformance" />
+		</set>
+	
+		
 		<set name="componentFundings" inverse="true" cascade="all-delete-orphan">
 			<key column="amp_activity_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpComponentFunding" />
 		</set>			
+		
+		
+		
 				
 		<set name="documents" table="AMP_ACTIVITY_KM_DOCUMENTS" lazy="true" cascade="none">
 			<cache usage="read-write" />

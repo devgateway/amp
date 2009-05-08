@@ -409,9 +409,15 @@
 		
 			var regData = getRegFounding(regCode);
 		
-			document.getElementById("tooltipCurrentCommitmentContainer").innerHTML = regData[0];
-			document.getElementById("tooltipCurrentDisbursementContainer").innerHTML = regData[1];
-			document.getElementById("tooltipCurrentExpenditureContainer").innerHTML = regData[2];
+			var note="";
+			if (!validatedRegPercentage || !displayeRegPercentage) {
+				note="<font color='red'> (*)</font>";
+			}
+		
+		
+			document.getElementById("tooltipCurrentCommitmentContainer").innerHTML = regData[0] + note;
+			document.getElementById("tooltipCurrentDisbursementContainer").innerHTML = regData[1] + note;
+			document.getElementById("tooltipCurrentExpenditureContainer").innerHTML = regData[2] + note;
 			
 			
 			document.getElementById("tooltipIndUnit").innerHTML = selIndicatorUnit;

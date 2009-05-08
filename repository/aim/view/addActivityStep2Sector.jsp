@@ -139,7 +139,7 @@
                                                         <c:forEach var="activitySectors" items="${aimEditActivityForm.sectors.activitySectors}" varStatus="index">
                                                             <c:if test="${activitySectors.configId==config.id}">
                                                                 <tr> 
-                                                                    <td width="3%" vAlign="center">
+                                                                    <td width="3%" vAlign="middle">
                                                                         <html:multibox property="sectors.selActivitySectors" styleId="selActivitySectors" disabled="${contentDisabled}">
                                                                             <c:if test="${activitySectors.subsectorLevel1Id == -1}">
                                                                             ${activitySectors.sectorId}
@@ -154,7 +154,7 @@
                                                                             </c:if>
                                                                         </html:multibox>
                                                                     </td>
-                                                                    <td  width="87%" vAlign="center" align="left">
+                                                                    <td  width="87%" valign="middle" align="left">
                                                                         
                                                                         [${activitySectors.sectorScheme}]
                                                                         <c:if test="${!empty activitySectors.sectorName}">
@@ -171,10 +171,10 @@
 																			</field:display>
 																		</field:display>
                                                                     </td>
-                                                                    <td width="5%" vAlign="center" align="right">
+                                                                    <td width="5%" valign="middle" align="right">
                                                                        
                                                                     <FONT color="red">*</FONT><digi:trn key="aim:percentage">Percentage</digi:trn>:&nbsp;</td>
-                                                                    <td width="5%" vAlign="center" align="left">
+                                                                    <td width="5%" valign="middle" align="left">
                                                                         <html:text name="activitySectors" indexed="true" property="sectorPercentage"
                                                                                    size="2" onkeyup="fnChk(this, 'sector')" disabled="${contentDisabled}"/>
                                                                     </td>
@@ -188,7 +188,7 @@
                                                     </table>
                                                     <c:if test="${config.primary}">
                                                       </div>
-                                                     </c:if>
+                                                    </c:if>
                                                 </div>
                                                     
                                                   

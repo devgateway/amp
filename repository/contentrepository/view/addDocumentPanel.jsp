@@ -25,7 +25,7 @@
 	function initPanel() {
 		for (counter=0; counter<YAHOO.amp.panelCounter; counter++) {
 			YAHOO.amp.panels[counter]		= new YAHOO.widget.Panel("aPanel"+counter, {
-					width:"500px", 
+					width:"600px", 
 					fixedcenter: true, 
 					constraintoviewport: true, 
 					underlay:"shadow", 

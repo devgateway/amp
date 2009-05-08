@@ -904,7 +904,7 @@ function validateAddDocument() {
 
 function setHeightOfDiv(divId, maxLimit, value ){
 	var obj	= document.getElementById(divId);
-	obj.style.width		= "480px";
+	obj.style.width		= "580px";
 	obj.style.overflow	= "auto";
 	if (obj.offsetHeight > maxLimit)  {
 		obj.style.height	= value;

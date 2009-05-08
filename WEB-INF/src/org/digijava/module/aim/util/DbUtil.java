@@ -22,6 +22,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -5637,7 +5638,6 @@ public class DbUtil {
         Session session = null;
         ArrayList responses = new ArrayList();
         Collection surveyDonors = new ArrayList();
-        Set surveySet = new HashSet();
         boolean orgGroupFlag = false;
         int NUM_ANSWER_COLUMNS = 4;
         int YEAR_RANGE = (closeYear - startYear + 1);
@@ -5653,10 +5653,23 @@ public class DbUtil {
         String date = null;
         Iterator itr1 = null, itr2 = null, itr3 = null, itr4 = null;
 
+        
+        Comparator surveyComp = new Comparator() {
+            public int compare(Object o1, Object o2) {
+            	AmpAhsurvey s1 = (AmpAhsurvey) o1;
+            	AmpAhsurvey s2 = (AmpAhsurvey) o2;
+                if(s1 != null && s2 != null) {
+                	return s1.getAmpAHSurveyId().toString().compareTo(s2.getAmpAHSurveyId().toString());
+                } else {
+                	return 0;
+                }
+            }
+        };
+        Set surveySet = new TreeSet(surveyComp);
         try {
             //logger.debug("indcCode[inside getAidSurveyReportByIndicator] : " + indcCode);
             session = PersistenceManager.getRequestDBSession();
-            String qry = "select distinct dn.pointOfDeliveryDonor from " + AmpAhsurvey.class.getName() + " dn";
+            String qry = "select distinct dn.pointOfDeliveryDonor from " + AmpAhsurvey.class.getName() + " dn order by dn.pointOfDeliveryDonor.acronym";
             //String qry = "select distinct dn.pointOfDeliveryDonor from " + AmpAhsurvey.class.getName() + " dn";
             surveyDonors.addAll(session.createQuery(qry).list());
             //logger.debug("total donors from AmpOrganisation[surveyDonors] : " + surveyDonors.size());
@@ -5686,14 +5699,14 @@ public class DbUtil {
                         AmpOrgGroup og2 = r2.getOrgGrpId();
                         if (og1 != null && og2 != null) {
                             if (og1.getOrgGrpName() != null && og2.getOrgGrpName() != null) {
-                                og1.getOrgGrpName().compareTo(og2.getOrgGrpName());
+                                return og1.getOrgGrpName().compareTo(og2.getOrgGrpName());
                             } else {
                                 return 0;
                             }
                         } else {
                             return 0;
                         }
-                        return r1.getAcronym().trim().toLowerCase().compareTo(r2.getAcronym().trim().toLowerCase());
+                        //return r1.getAcronym().trim().toLowerCase().compareTo(r2.getAcronym().trim().toLowerCase());
                     }
                 };
                 Collections.sort( (List) surveyDonors, dnComp);
@@ -5726,7 +5739,14 @@ public class DbUtil {
                         if (!donor.equals(dnOrg.getAmpOrgId().toString()))
                             continue;
                     }
-                    surveySet.addAll(dnOrg.getSurveyByPointOfDeliveryDonor());
+                    
+                    Collection surveysAux = null;
+                    qry = "select sv from " + AmpAhsurvey.class.getName() + " sv where sv.pointOfDeliveryDonor.ampOrgId=:orgId ";
+                    surveysAux = session.createQuery(qry).setParameter("orgId", dnOrg.getAmpOrgId(), Hibernate.LONG).list();
+                    Collections.sort((List) surveysAux, surveyComp);
+                    surveySet.addAll(surveysAux);
+                    
+                    //surveySet.addAll(dnOrg.getSurveyByPointOfDeliveryDonor());
                     //logger.debug("dnOrg.getAmpOrgId() : " + dnOrg.getAmpOrgId() + "  dnOrg.getAcronym() : " +dnOrg.getAcronym());
                     //logger.debug("----------------------------------------------------------------------------------------------");
                     // Filtering by org-group here
@@ -5787,7 +5807,14 @@ public class DbUtil {
                                 }
                             }
                             if ("4".equalsIgnoreCase(indcCode)) {
-                                Iterator iter = svy.getResponses().iterator();
+                            	session = PersistenceManager.getRequestDBSession();
+                                qry = "select resp from " + AmpAhsurveyResponse.class.getName() + " resp where resp.ampAHSurveyId=:surveyId order by resp.ampAHSurveyId.ampAHSurveyId";
+                                Query query = session.createQuery(qry);
+                                query.setParameter("surveyId", svy.getAmpAHSurveyId(), Hibernate.LONG);
+                                List response = query.list();
+                                Iterator iter = response.iterator();
+                                
+                                //Iterator iter = svy.getResponses().iterator();
                                 while (iter.hasNext()) {
                                     AmpAhsurveyResponse resp = (AmpAhsurveyResponse) iter.next();
                                     if (4 == resp.getAmpQuestionId().getQuestionNumber().intValue()) {
@@ -5806,10 +5833,10 @@ public class DbUtil {
                             answers = answersColl[index++];
                             ////System.out.println(svy.getAmpActivityId().getName());
 
-                            AmpOrganisation pdOrg=svy.getPointOfDeliveryDonor();
+                            AmpOrganisation pdOrgPoDD=svy.getPointOfDeliveryDonor();
                             AmpOrganisation dnOrgOriginalOrganization = svy.getAmpDonorOrgId();
-                            if (pdOrg!=null && pdOrg.getOrgGrpId() != null && pdOrg.getOrgGrpId().getOrgGrpName() != null) {
-                                pi.setDonor(pdOrg.getOrgGrpId().getOrgGrpName());
+                            if (pdOrgPoDD!=null && pdOrgPoDD.getOrgGrpId() != null && pdOrgPoDD.getOrgGrpId().getOrgGrpName() != null) {
+                                pi.setDonor(pdOrgPoDD.getOrgGrpId().getOrgGrpName());
                             } else {
                                 pi.setDonor("N/A");
                             }
@@ -5833,22 +5860,24 @@ public class DbUtil {
                                             AmpFunding fund = (AmpFunding) itr3.next();
                                             // Only those donors are considered who have funding for the activity/project
                                             //System.out.println(dnOrgOriginalOrganization.getAmpOrgId()+" - "+fund.getAmpDonorOrgId().getAmpOrgId());
-                                            if (0 == dnOrg.getAmpOrgId().compareTo(fund.getAmpDonorOrgId().getAmpOrgId()) || 
-                                            		0 == dnOrgOriginalOrganization.getAmpOrgId().compareTo(fund.getAmpDonorOrgId().getAmpOrgId())) {
+                                            if (svy.getAmpDonorOrgId().getAmpOrgId().equals(fund.getAmpDonorOrgId().getAmpOrgId())/* dnOrg.getAmpOrgId().equals(fund.getAmpDonorOrgId().getAmpOrgId()) || 
+                                            		dnOrgOriginalOrganization.getAmpOrgId().equals(fund.getAmpDonorOrgId().getAmpOrgId())*/) {
                                             	// Filtering by financing-instrument here
                                                 if (null != financingInstr) {
                                                     if (!financingInstr.getId().equals(fund.getFinancingInstrument().getId()))
                                                         continue;
                                                 }
+                                                //TODO: get rid of hardcoded values and check for the french string "Support Budgétaire Direct".
                                                 if ("9".equalsIgnoreCase(indcCode)) {
                                                     if (j == 0)
-                                                    	if ( !CategoryManagerUtil.equalsCategoryValue(fund.getFinancingInstrument(), CategoryConstants.FIN_INSTR_DIRECT_BUDGET_SUPPORT) )
-                                                        {
-                                                            //logger.debug("continue[indcCode=9]: because of !Direct Budget Suppor");
+                                                    	if ( !CategoryManagerUtil.equalsCategoryValue(fund.getFinancingInstrument(), CategoryConstants.FIN_INSTR_BUDGET_SUPPORT) 
+                                                    			& !fund.getFinancingInstrument().getId().equals(new Long(84))) {
+                                                            logger.warn(fund.getFinancingInstrument().getValue());
                                                             continue;
                                                         }
                                                     if (j == 1)
-                                                        if (CategoryManagerUtil.equalsCategoryValue(fund.getFinancingInstrument(), CategoryConstants.FIN_INSTR_DIRECT_BUDGET_SUPPORT)) {
+                                                        if (CategoryManagerUtil.equalsCategoryValue(fund.getFinancingInstrument(), CategoryConstants.FIN_INSTR_BUDGET_SUPPORT)
+                                                        		|| fund.getFinancingInstrument().getId().equals(new Long(84))) {
                                                             //logger.debug("continue[indcCode=9]: because of Direct Budget Suppor");
                                                             continue;
                                                         }

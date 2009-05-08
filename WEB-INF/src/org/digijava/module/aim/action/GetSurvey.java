@@ -46,7 +46,7 @@ public class GetSurvey extends TilesAction {
             svForm.setAmpSurveyId(null);
         }
 
-        if (svForm.getAmpSurveyId()!=null && flag) {
+        if (svForm.getAmpSurveyId()!=null) {
             svForm.setIndicators(DbUtil.getResposesBySurvey(svForm.getAmpSurveyId(), svForm.getAmpActivityId()));
             svForm.setReset(Boolean.FALSE);
             AmpAhsurvey survey = DbUtil.getAhSurvey(svForm.getAmpSurveyId());

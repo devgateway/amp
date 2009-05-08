@@ -391,7 +391,7 @@ public class DynLocationManagerUtil {
 	public static AmpCategoryValueLocations getLocationByCode(String locationCode, HardCodedCategoryValue hcLocationLayer) {
 		try {
 			AmpCategoryValue layer	= CategoryManagerUtil.getAmpCategoryValueFromDB(hcLocationLayer);
-			return getLocationByIso(locationCode, layer);
+			return getLocationByCode(locationCode, layer);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

@@ -331,12 +331,14 @@ public class ReportsFilterPicker extends MultiAction {
 			rEnd = getYearOnCalendar(filterForm.getCalendar(), rEnd,tempSettings);
 		}
 
-		if (filterForm.getRenderStartYear() == null) {
+		if (filterForm.getRenderStartYear() == null || (request.getParameter("view") != null && "reset".compareTo(request.getParameter("view")) == 0)) {
 			filterForm.setRenderStartYear(rStart);
+			tempSettings = null;
 		}
 
-		if (filterForm.getRenderEndYear() == null) {
+		if (filterForm.getRenderEndYear() == null || (request.getParameter("view") != null && "reset".compareTo(request.getParameter("view")) == 0)) {
 			filterForm.setRenderEndYear(rEnd);
+			tempSettings = null;
 		}
 		
 		filterForm.getPageSizes().add(new BeanWrapperImpl(new String("A0")));

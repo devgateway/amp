@@ -336,7 +336,7 @@ public class AmpARFilter extends PropertyListable {
 		///Set the range depending of workspase setup / global setting and selected calendar
 		ICalendarWorker worker = null;
 		Date checkDate = null;
-		if (renderStartYear == null) {
+		if (renderStartYear == null || (request.getParameter("view") != null && "reset".compareTo(request.getParameter("view")) == 0)) {
 			// Check if there is value on workspace setting
 			if (tempSettings != null
 					&& tempSettings.getReportStartYear() != null
@@ -369,7 +369,7 @@ public class AmpARFilter extends PropertyListable {
 		
 		renderStartYear=(renderStartYear==null)?-1:renderStartYear;
 		
-		if (renderEndYear == null) {
+		if (renderEndYear == null || (request.getParameter("view") != null && "reset".compareTo(request.getParameter("view")) == 0)) {
 			// Check if there is value on workspace setting
 			if (tempSettings != null && tempSettings.getReportEndYear() != null
 					&& tempSettings.getReportEndYear().intValue() != 0) {

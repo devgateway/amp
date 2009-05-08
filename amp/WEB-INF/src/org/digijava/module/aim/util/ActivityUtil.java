@@ -333,18 +333,21 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         oldActivity.getClosingDates().clear();
         oldActivity.getComponents().clear();
       
-        Collection<AmpPhysicalPerformance> oldProgress= oldActivity.getComponentProgress();
-      
-        for (Iterator iterator = oldProgress.iterator(); iterator.hasNext();) {
-			AmpPhysicalPerformance ampPhysicalPerformance = (AmpPhysicalPerformance) iterator.next();
-			session.delete(ampPhysicalPerformance);
-		}
+        if ( oldActivity.getComponentProgress() != null ) {
+	        Collection<AmpPhysicalPerformance> oldProgress= oldActivity.getComponentProgress();
+	      
+	        for (Iterator iterator = oldProgress.iterator(); iterator.hasNext();) {
+				AmpPhysicalPerformance ampPhysicalPerformance = (AmpPhysicalPerformance) iterator.next();
+				session.delete(ampPhysicalPerformance);
+			}
+        }
         
-        Collection<AmpPhysicalPerformance> newProgress= activity.getComponentProgress();
-        for (AmpPhysicalPerformance ampPhysicalPerformance : newProgress) {
-        	session.save(ampPhysicalPerformance);
-		}
-        
+        if ( activity.getComponentProgress() != null  ) {
+	        Collection<AmpPhysicalPerformance> newProgress= activity.getComponentProgress();
+	        for (AmpPhysicalPerformance ampPhysicalPerformance : newProgress) {
+	        	session.save(ampPhysicalPerformance);
+			}
+        }
         
         oldActivity.getComponentFundings().clear();
       

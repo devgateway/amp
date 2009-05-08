@@ -51,21 +51,11 @@ public class DonorTypeDimension extends ARDimension {
 		PersistenceManager.releaseSession(session);
 
 	}
-<<<<<<< .working
-	
 	@Override
 	public Long getParentObject(Long parentId,
 			Class relatedContentPersisterClass) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-=======
-	@Override
-	public Long getParentObject(Long parentId,
-			Class relatedContentPersisterClass) {
-		// TODO Auto-generated method stub
-		return null;
-	}
->>>>>>> .merge-right.r9307
 }
 

@@ -11,7 +11,7 @@ public class AmpCurrency implements Serializable,Comparable, Identifiable
 	private String currencyCode;
 	private String countryName;
 	private String currencyName;
-	private Country countryId;
+	private AmpCategoryValueLocations countryLocation;
 	private Integer activeFlag;
 
 	/**
@@ -38,17 +38,18 @@ public class AmpCurrency implements Serializable,Comparable, Identifiable
 	public void setAmpCurrencyId(Long ampCurrencyId) {
 		this.ampCurrencyId = ampCurrencyId;
 	}
+	
 	/**
-	 * @return Returns the countryId.
+	 * @return the countryLocation
 	 */
-	public Country getCountryId() {
-		return countryId;
+	public AmpCategoryValueLocations getCountryLocation() {
+		return countryLocation;
 	}
 	/**
-	 * @param countryId The countryId to set.
+	 * @param countryLocation the countryLocation to set
 	 */
-	public void setCountryId(Country countryId) {
-		this.countryId = countryId;
+	public void setCountryLocation(AmpCategoryValueLocations countryLocation) {
+		this.countryLocation = countryLocation;
 	}
 	/**
 	 * @return Returns the countryName.

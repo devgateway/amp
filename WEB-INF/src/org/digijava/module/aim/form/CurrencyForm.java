@@ -3,6 +3,7 @@ package org.digijava.module.aim.form;
 import java.util.Collection;
 
 import org.apache.struts.action.ActionForm;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 
 public class CurrencyForm extends ActionForm {
 
@@ -22,7 +23,7 @@ public class CurrencyForm extends ActionForm {
     private Long countryId;
 	private Double exchangeRate;
 	private String exchangeRateDate;
-	private Collection countries;
+	private Collection<AmpCategoryValueLocations> countries;
 	private String countryName;
 	private boolean cantDelete = false;
 
@@ -130,16 +131,17 @@ public class CurrencyForm extends ActionForm {
 	public void setPage(int page) {
 		this.page = page;
 	}
+
 	/**
-	 * @return Returns the countries.
+	 * @return the countries
 	 */
-	public Collection getCountries() {
+	public Collection<AmpCategoryValueLocations> getCountries() {
 		return countries;
 	}
 	/**
-	 * @param countries The countries to set.
+	 * @param countries the countries to set
 	 */
-	public void setCountries(Collection countries) {
+	public void setCountries(Collection<AmpCategoryValueLocations> countries) {
 		this.countries = countries;
 	}
 	/**

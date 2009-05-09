@@ -14,6 +14,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.dbentity.Country;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.form.CurrencyForm;
 import org.digijava.module.aim.helper.Constants;
@@ -72,10 +73,10 @@ public class CurrencyManager extends Action {
             if(currencies!=null){
                 for (Iterator cuIter = currencies.iterator(); cuIter.hasNext(); ) {
                     AmpCurrency cur = (AmpCurrency) cuIter.next();
-                    Country cn=cur.getCountryId();
-                    if(cn!=null){
-                        cur.setCountryId(DbUtil.getTranlatedCountry(request,cn));
-                    }
+                    AmpCategoryValueLocations cn=cur.getCountryLocation();
+//                    if(cn!=null){
+//                        cur.setCountryId(DbUtil.getTranlatedCountry(request,cn));
+//                    }
                 }
                 crForm.setAllCurrencies(currencies);
             }

@@ -50,7 +50,7 @@ public class SearchSectors
       if (ssForm.getKeyword().trim().length() != 0) {
         // search based on the given keyword only.
 
-        col = (SectorUtil.searchForSector(ssForm.getKeyword().trim()));
+        col = (SectorUtil.searchForSector(ssForm.getKeyword().trim(), ssForm.getConfigId()));
 
         int stIndex = 1;
         int edIndex = ssForm.getNumResults();

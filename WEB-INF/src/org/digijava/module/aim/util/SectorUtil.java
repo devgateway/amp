@@ -63,7 +63,7 @@ public class SectorUtil {
 					+ " where lower(sector.name) like '%"
 					+ keyword.toLowerCase()
 					+ "%' and " + "sector.ampSecSchemeId = sscheme.ampSecSchemeId";
-
+					
 				Query qry = session.createQuery(qryStr);
 				//qry.setParameter("orgType", orgType, Hibernate.LONG) ;
 				//col =qry.list();
@@ -115,6 +115,76 @@ public class SectorUtil {
 		return col;
 	}//End Search Sector.
 
+	public static Collection searchForSector(String keyword, Long secSchemeId) {
+		Session session = null;
+		Collection col = new ArrayList();
+
+		logger.info("INSIDE Search Sector DBUTIL..... ");
+
+		try {
+
+			session = PersistenceManager.getSession();
+			int tempIncr = 0;
+				logger.info("searching SECTORS...............");
+				String qryStr = "select sector from " + AmpSector.class.getName()
+					+ " sector , "
+					+ AmpSectorScheme.class.getName()
+					+ " sscheme"
+					+ " where lower(sector.name) like '%"
+					+ keyword.toLowerCase()
+					+ "%' and " + "sector.ampSecSchemeId = " + secSchemeId;
+
+				Query qry = session.createQuery(qryStr);
+				//qry.setParameter("orgType", orgType, Hibernate.LONG) ;
+				//col =qry.list();
+				Iterator itr = qry.list().iterator();
+
+				ActivitySector sectr;
+				tempIncr = 0;
+
+				while (itr.hasNext()) {
+					AmpSector as=(AmpSector) itr.next();
+					sectr = new ActivitySector();
+			   		sectr.setSectorScheme(as.getAmpSecSchemeId().getSecSchemeName());
+					if(as.getParentSectorId() != null){
+						
+						sectr.setSectorName(as.getParentSectorId().getName());
+						sectr.setSectorId(as.getParentSectorId().getAmpSectorId());
+						sectr.setSubsectorLevel1Id(as.getAmpSectorId());
+						sectr.setSubsectorLevel1Name(as.getName());
+						
+						if(as.getParentSectorId().getParentSectorId() != null){
+						
+							sectr.setSectorName(as.getParentSectorId().getParentSectorId().getName());
+							sectr.setSectorId(as.getParentSectorId().getAmpSectorId());
+							sectr.setSubsectorLevel1Id(as.getParentSectorId().getAmpSectorId());
+							sectr.setSubsectorLevel1Name(as.getParentSectorId().getName());
+							sectr.setSubsectorLevel2Id(as.getAmpSectorId());
+							sectr.setSubsectorLevel2Name(as.getName());
+							
+						}
+					}else{
+						
+						sectr.setSectorName(as.getName());
+				   		sectr.setSectorId(as.getAmpSectorId());
+						
+						
+					}
+					col.add(sectr);
+				}
+
+		} catch (Exception ex) {
+			logger.debug("Unable to search sectors" + ex);
+		} finally {
+			try {
+				PersistenceManager.releaseSession(session);
+			} catch (Exception ex2) {
+				logger.debug("releaseSession() failed", ex2);
+			}
+		}
+		return col;
+	}
+	
 	public static List getAmpSectors(Long id) {
 		ArrayList ampSectors = new ArrayList();
 		AmpSector ampSector = null;

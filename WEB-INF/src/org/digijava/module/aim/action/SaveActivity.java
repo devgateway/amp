@@ -634,20 +634,23 @@ public class SaveActivity extends Action {
 					}
 				}
 				
-				if(eaForm.getLocation().getSelectedLocs() != null && eaForm.getLocation().getSelectedLocs().size()>0){
-					Iterator<Location> itr = eaForm.getLocation().getSelectedLocs().iterator();
-					Double totalPercentage = 0d;
-					while (itr.hasNext()) {
-						Location loc = itr.next();
-						Double percentage=FormatHelper.parseDouble(loc.getPercent());
-						if(percentage != null)
-							totalPercentage += percentage;
+				//check if the FM option is enabled to check location percentages
+				if (FeaturesUtil.isVisibleField("Validate Mandatory Regional Percentage", ampContext)){
+					if(eaForm.getLocation().getSelectedLocs() != null && eaForm.getLocation().getSelectedLocs().size()>0){
+						Iterator<Location> itr = eaForm.getLocation().getSelectedLocs().iterator();
+						Double totalPercentage = 0d;
+						while (itr.hasNext()) {
+							Location loc = itr.next();
+							Double percentage=FormatHelper.parseDouble(loc.getPercent());
+							if(percentage != null)
+								totalPercentage += percentage;
+						}
+						
+						//Checks if it's 100%
+						if (totalPercentage != 100)
+							errors.add("locationPercentageSumWrong",
+									new ActionError("error.aim.addActivity.locationPercentageSumWrong", TranslatorWorker.translateText("Sum of all location percentage must be 100",locale,siteId)));
 					}
-					
-					//Checks if it's 100%
-					if (totalPercentage != 100 && FeaturesUtil.isVisibleField("Regional Percentage", ampContext))
-						errors.add("locationPercentageSumWrong",
-								new ActionError("error.aim.addActivity.locationPercentageSumWrong", TranslatorWorker.translateText("Sum of all location percentage must be 100",locale,siteId)));
 				}
 				
 				if (eaForm.getPrograms().getNationalPlanObjectivePrograms() != null

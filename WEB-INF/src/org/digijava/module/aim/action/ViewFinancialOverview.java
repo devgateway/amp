@@ -14,6 +14,10 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
+import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -76,9 +80,13 @@ public class ViewFinancialOverview extends TilesAction {
 					logger.debug("Modality name : "
 							+ (modality != null ? modality.getValue()
 									: "null"));
-
+				Site site = RequestUtils.getSite(request);
+				Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+				String siteId = site.getId().toString();
+				String locale = navigationLanguage.getCode();
+				
 				if (modality != null)
-					formBean.setTypeOfAssistance(modality.getValue());
+					formBean.setTypeOfAssistance(TranslatorWorker.translateText((String) modality.getValue(),locale,siteId));
 
 				formBean.setAmpId(ampActivity.getAmpId());
 
@@ -117,7 +125,8 @@ public class ViewFinancialOverview extends TilesAction {
 					if (typeOfAssistance != null) {
 //						formBean.setTermsOfAssistance(ampTermsAssist
 //								.getTermsAssistName());
-						formBean.setTermsOfAssistance( typeOfAssistance.getValue() );
+					
+						formBean.setTermsOfAssistance(TranslatorWorker.translateText((String) typeOfAssistance.getValue(),locale,siteId));
 					}
 					if (logger.isDebugEnabled())
 						logger.debug("signature date : "

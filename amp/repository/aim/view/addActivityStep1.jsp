@@ -31,7 +31,7 @@
 <!-- Stylesheet of AMP -->
         <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
 <!--  -->
-<jsp:include page="/repository/aim/view/addOrganizationPopin.jsp" flush="true" />
+<jsp:include page="addOrganizationPopin.jsp" flush="true" />
 
 <div id="popin" style="display: none">
 	<div id="popinContent" class="content">
@@ -40,21 +40,22 @@
 <script type="text/javascript">
 <!--
 
-		YAHOO.namespace("YAHOO.amp");
-
-		var myPanel = new YAHOO.widget.Panel("newmyComment", {
-			width:"600px",
-			fixedcenter: true,
-		    constraintoviewport: true,
-		    underlay:"none",
-		    close:true,
-		    visible:false,
-		    modal:true,
-		    draggable:true
-		    });
-		var panelStart=0;
-		var checkAndClose=false;
-		var refresh=true;
+	YAHOOAmp.namespace("YAHOOAmp.amp");
+	
+	var myPanel = new YAHOOAmp.widget.Panel("newpopins", {
+		width:"600px",
+		fixedcenter: true,
+	    constraintoviewport: false,
+	    underlay:"none",
+	    close:true,
+	    visible:false,
+	    modal:true,
+	    draggable:true,
+	    context: ["showbtn", "tl", "bl"]
+	    });
+	var panelStart=0;
+	var checkAndClose=false;
+	var refresh=true;
 	function initStep1Scripts() {
 		var msg='\n<digi:trn key="aim:addeditComment">Add/Edit Comment</digi:trn>';
 		myPanel.setHeader(msg);
@@ -81,6 +82,7 @@
 	    height:455px; 
 	    background-color:fff; 
 	    padding:10px; 
+	    width: 98%;
 	} 
 	.bd a:hover {
   		background-color:#ecf3fd;
@@ -94,8 +96,6 @@
 	}
 		
 </style>
-
-
 
 <script language="JavaScript">
     <!--
@@ -202,7 +202,7 @@
 	}
 	
 	function commentWin(commentId){
-		var msg='\n<digi:trn key="aim:selectOrg">Select Organization</digi:trn>';
+		var msg='\n<digi:trn>Add/Edit Comment</digi:trn>';
 		showPanelLoading(msg);
 		<digi:context name="commentUrl" property="context/module/moduleinstance/viewComment.do" />
 		var url = "<%=commentUrl %>?comment=" + commentId + "&edit=" + "true";

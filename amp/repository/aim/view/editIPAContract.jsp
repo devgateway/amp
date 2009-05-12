@@ -80,7 +80,7 @@ function autosum(){
 	return true; 
 }
 
-function validate(){
+function validatef(){
     if (trim(document.aimIPAContractForm.contractName.value) == "") {
         <c:set var="translation">
         <digi:trn key="aim:pleaseEnterContractName">Please enter Contract Name</digi:trn>
@@ -847,7 +847,7 @@ window.onload=autosum;
 	<tr>
 		<td colspan="2" align="center">
 			<field:display name="Contracting Save Button" feature="Contracting">
-				<html:button property="submit" styleClass="dr-menu" onclick="validate()"><digi:trn key="aim:save">Save</digi:trn></html:button>
+				<html:button property="submit" styleClass="dr-menu" onclick="validatef()"><digi:trn key="aim:save">Save</digi:trn></html:button>
 			</field:display>
 			&nbsp;&nbsp;
 			<field:display name="Contracting Cancel Saving" feature="Contracting">

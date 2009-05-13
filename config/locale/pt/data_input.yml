@@ -1,0 +1,185 @@
+pt:
+  admin:
+    data_input_closed:
+      title: The data input is currently closed!
+      please_wait: Please wait for the next update cycle or contact the Master Focal Point!
+      redirect: You will be redirected back in a few seconds.
+  
+  users:
+    index:
+      title: Login Accounts
+      name: Name
+      role: User Role
+      edit: Edit account
+      delete: Delete account
+      new: Create new user
+      
+    new:
+      title: Add New Login Account
+      submit: Create user
+    edit:
+      title: Edit Login Account
+      submit: Update user
+      
+  settings:
+    data_input_status:
+      open: Data Input is currently open
+      closed: Data Input is currently closed
+      do_close: Close Data Input
+      do_open: Open Data Input
+    scrollbars:
+      title: Update Newstickers
+      submit: Save tickers
+      successful: Successfully updated news tickers!
+      
+  donors:
+    index:
+      title: Donor / Co-funding Donor List
+      empty: No donors exist in the Database. Please create a new donor.
+      agencies: Donor Agencies ({{total}})
+      logins: Login Accounts
+      new: Add new donor
+    show:
+      title: Donor Fact Sheet for <i>{{donor}}</i>
+    new:
+      title: Add New Donor
+      submit: Create Donor
+    edit:
+      title: Edit Donor
+      submit: Update Donor
+      
+  donor_details:
+    edit: 
+      title: Edit Donor Contact Details
+      submit: Save
+      
+  exchange_rates:
+    index:
+      title: Exchange Rates
+      empty: No Exchange Rates Exist in the Database. Please create a New Exchange Rate.
+      new: New Exchange Rate
+    new:
+      title: Add New Exchange Rate
+      submit: Create Exchange Rate
+    edit:
+      title: Edit Exchange Rate
+      submit: Update Exchange Rate
+      
+  agencies:
+    index:
+      title: List of Agencies
+      empty: No agencies exist in the database. Please add your agencies.
+      new: Add Agency
+    new:
+      title: Add New Agency
+      submit: Create Agency
+    edit:
+      title: Edit Agency
+      submit: Update Agency
+      
+  donor_agencies:
+    index:
+      title: Agencies for {{donor}}
+      empty: No Agencies Exist for this Donor. Please create a New Agency.
+      confirm_delete: Are you sure you want to delete "{{agency}}"?
+      new: Add Agency
+    new:
+      title: Add New Agency for Donor {{donor}}
+      submit: Create Agency
+    edit:
+      title: Edit Agency
+      submit: Update Agency
+      
+  glossaries:
+    index:
+      title: Glossary
+      new: Add New Entry to Glossary
+    new:
+      title: Add New Entry to Glossary
+      submit: Create Entry
+    edit:
+      title: Edit Glossary
+      submit: Update Glossary
+      
+  projects:
+    previous_step: Previous
+    next_step: Next
+    
+    no_subsector: No Sub-Sector
+    delete_associated: Delete
+    add_implementing_agency: Add another Implementing Agency
+    add_contracted_agency: Add another Contracted Agency
+    add_province: Add another province
+    zero_provinces_warning: Please select at least one province!
+    add_cofunding_donor: Add another Donor
+    add_sector: Add another Sector
+    cofunding_title: Co-Funding Donors and Amounts
+    historic_funding: Historic Funding (up to the end of {{year}})
+    funding_title: Finances {{year}}
+    forecasts_title: Funding Forecast {{year}}
+    geo_usage: |
+      Please select the focal regions of this project.<br />
+      If you do not select any, it will be considered a national project.
+    
+    fields_missing: Some required fields are missing! Please check the highlighted tabs.
+    successfully_created: Successfully added project <i>{{project}}</i>. Please do not forget to publish once you verified the input.
+    
+    stages:
+      profile_information: Profile Information
+      sector_agencies: Sector / Agencies
+      goals: MDGs
+      location_funding: Location / Funding
+      funding_forecast: Funding Forecasts
+      
+    index:
+      title: List <i>{{status}}</i> Projects
+      empty: Please add your projects.
+      factsheet: Fact Sheet
+      donor: Donor
+      project_no: Project No.
+      project_title: Project Title
+      total_commitments: Total Committed
+      disbursed: Disbursed {{year}}
+      disbursement_forecast: Disbursement Forecast {{year}}
+      choose_action: 'Choose:'
+      publish: Publish
+      draft: Draft
+      
+    show:
+      title: Project Fact Sheet for <i>{{project}}</i>
+      project_information: Project Information
+      funding_information: Funding Information
+      classification: Classification
+      markers: Markers
+      mdgs: MDGs
+      focal_regions: Focal Regions
+      historic: Historic Funding
+      totals: Funding Totals
+      funding: Funding {{year}}
+      funding_forecast: Funding Forecast {{year}}
+      all_district: All municipalities
+      
+    new:
+      title: Add New Project
+      submit: Save
+      
+    edit:
+      title: Edit Project "{{project}}"
+      submit: Save
+      
+  country_strategies:
+    index:
+      title: Country Strategies and Programming Details
+      empty: You do not have any Country Strategies
+      new: Add new Country Strategy
+    new:
+      title: Add New Country Strategy
+      submit: Create Strategy
+    edit:
+      title: Edit Country Strategy
+      submit: Update Strategy
+      
+  consistencies:
+    show:
+      title: Financial Consistency Details
+      

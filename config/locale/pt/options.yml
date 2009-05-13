@@ -1,0 +1,77 @@
+pt: 
+  options:
+    all: all
+    prompt: Please select
+    not_avail: Not available
+    
+    # Grant / Loan
+    grant: Grant
+    loan: Loan
+    
+    # Markers
+    gender_policy: Gender Policy
+    environment_policy: Environment Policy
+    biodiversity: Biodiversity
+    climate_change: Climate Change
+    desertification: Desertification
+    
+    # Marker Options
+    not_relevant: Not Relevant
+    significant: Significant
+    principal_objective: Principal Objective
+    
+    # National/Regional
+    national: National
+    regional: Regional
+    regional_with_nicaraguan_component_available: Regional with Nicaraguan Component Available
+    
+    # Project Status
+    ongoing: Ongoing
+    pipeline: Pipeline
+    completed: Completed
+    
+    # Data Status
+    draft: Draft
+    published: Published
+    deleted: Deleted
+    completed: Completed
+    
+    # Implementation Types
+    bilateral: Bilateral
+    multilateral: Multilateral
+    ngo_implementation: NGO Implementation
+    
+    # Type of Aid
+    project_program: Project/Program
+    techn_assistance: Techn. Assistance
+    general_budget_support: General Budget Support
+    fc_prorural: FC Prorural
+    fc_fonsalud: FC FONSALUD
+    fc_fondo_fed: FC Fondo Fed
+    fc_promipyme: FC Promipyme
+    fc_fonim: FC Fonim
+    fc_civil_society: FC Civil Society
+    fc_anti_corruption: FC Anti Corruption
+    fc_fise: FC FISE
+    fc_proase: FC PROASE
+    
+    # On/Off Budget/Treasury
+    on_budget: On Budget
+    off_budget: Off Budget
+    
+    on_treasury: On Treasury
+    off_treasury: Off Treasury
+    
+    # Responsibilities
+    not_available: Not Available
+    field_office: Field Office
+    head_quarters: Head Quarters
+    field_office_head_quarters: Field Office / Head Quarters
+    head_quarters_field_office: Head Quarters / Field Office
+    
+    # Country Strategy
+    country_strategy_unavailable: Not linked to any strategy
+    
+    # Delegated Cooperation:
+    del_yes: "Yes"
+    del_no: "No"

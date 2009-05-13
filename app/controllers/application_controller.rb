@@ -17,7 +17,7 @@ protected
     session[:locale] = params[:locale] if params[:locale]
     
     # Set locale based on session or default
-    I18n.locale = session[:locale] || I18n.default_locale
+    I18n.locale = session[:locale] || Prefs.default_locale || I18n.default_locale
   end
     
   def set_output_currency

@@ -52,7 +52,7 @@ public class ReportsAccess {
 		try {
 			session 					= PersistenceManager.getRequestDBSession();
 			tx							= session.beginTransaction();
-			String qryString		= "select r from " + AmpReports.class.getName() + " r where 1=1 " + this.tabsQuery  + this.generateFilter() + " order by " + orderQuery +  " r.name" ;
+			String qryString		= "select r from " + AmpReports.class.getName() + " r where 1=1 AND r.ownerId!=null " + this.tabsQuery  + this.generateFilter() + " order by " + orderQuery +  " r.name" ;
 			System.out.println( "Query is: "  + qryString );
 			Query query			= session.createQuery(qryString);
 			List result				= query.list();

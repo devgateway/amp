@@ -17,11 +17,6 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.workers.CategAmountColWorker;
@@ -41,6 +36,10 @@ import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.springframework.beans.BeanWrapperImpl;
 
 public final class Util {
@@ -442,6 +441,15 @@ public final class Util {
 		return gc.get(Calendar.YEAR);
 	}
 
-	
+	public static String collectionToString ( Collection<? extends Object> col) {
+		String str	= "";
+		if (col != null && col.size() > 0) {
+			for ( Object o: col ) {
+				str		+= o.toString() + ", ";
+			}
+			return str.substring(0, str.length()-2);
+		}
+		return str;
+	}
 
 }

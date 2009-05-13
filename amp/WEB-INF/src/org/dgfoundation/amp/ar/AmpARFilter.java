@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -187,7 +188,7 @@ public class AmpARFilter extends PropertyListable {
 	private Integer yearFrom;
 	private Integer toMonth;
 	private Integer yearTo;
-	private AmpCategoryValueLocations regionSelected = null;
+	private Collection<AmpCategoryValueLocations> regionSelected = null;
 	private Collection<String> approvalStatusSelected=null;
 	private boolean approved = false;
 	private boolean draft = false;
@@ -518,22 +519,50 @@ public class AmpARFilter extends PropertyListable {
 		
 		String REGION_SELECTED_FILTER = "";
 		if (regionSelected!=null) {
-			HardCodedCategoryValue hcValue = CategoryConstants.IMPLEMENTATION_LOCATION_REGION;
-			if (regionSelected.getParentCategoryValue().getValue().equals( hcValue.getValueKey() ) ) {
-				REGION_SELECTED_FILTER = "SELECT amp_activity_id FROM v_regions WHERE region_id =" + regionSelected.getIdentifier();
-			}else{
-				hcValue = CategoryConstants.IMPLEMENTATION_LOCATION_ZONE;
-				if (regionSelected.getParentCategoryValue().getValue().equals( hcValue.getValueKey() ) ) {
-					REGION_SELECTED_FILTER = "SELECT amp_activity_id FROM v_regions WHERE zone_id = (SELECT zone_id FROM amp_location WHERE location_id = " + regionSelected.getIdentifier() + " LIMIT 1)";
+			String inRegions = "";
+			String inZones = "";
+			String inDistrics = "";
+			
+			Iterator<AmpCategoryValueLocations> iter = regionSelected.iterator();
+			while (iter.hasNext()) {
+				AmpCategoryValueLocations cvl = iter.next();
+				HardCodedCategoryValue hcValue = CategoryConstants.IMPLEMENTATION_LOCATION_REGION;
+				if (cvl.getParentCategoryValue().getValue().equals( hcValue.getValueKey() ) ) {
+					if (!inRegions.equals(""))
+						inRegions += " , ";
+					inRegions += cvl.getIdentifier();
 				}else{
-					hcValue = CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT;
-					if (regionSelected.getParentCategoryValue().getValue().equals( hcValue.getValueKey() ) ) {
-						REGION_SELECTED_FILTER = "SELECT amp_activity_id FROM v_regions WHERE location_id = " + regionSelected.getIdentifier();
+					hcValue = CategoryConstants.IMPLEMENTATION_LOCATION_ZONE;
+					if (cvl.getParentCategoryValue().getValue().equals( hcValue.getValueKey() ) ) {
+						if (!inZones.equals(""))
+							inZones += " , ";
+						inZones += cvl.getIdentifier();
+					}else{
+						hcValue = CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT;
+						if (cvl.getParentCategoryValue().getValue().equals( hcValue.getValueKey() ) ) {
+							if (!inDistrics.equals(""))
+								inDistrics += " , ";
+							inDistrics += cvl.getIdentifier();
+						}
 					}
 				}
 			}
-		}else{
-			REGION_SELECTED_FILTER = "SELECT amp_activity_id FROM v_regions WHERE region_id =null";
+			REGION_SELECTED_FILTER = "SELECT amp_activity_id FROM v_regions WHERE ";
+			if (!inRegions.equals("")) {
+				REGION_SELECTED_FILTER += " region_id in (" + inRegions + ")";
+			}
+			if (!inZones.equals("")) {
+				if (!inRegions.equals("")) {
+					REGION_SELECTED_FILTER += " OR ";
+				}
+				REGION_SELECTED_FILTER += " zone_id in (" + inZones + ")";
+			}
+			if (!inDistrics.equals("")) {
+				if (!inRegions.equals("") || !inZones.equals("")) {
+					REGION_SELECTED_FILTER += " OR ";
+				}
+				REGION_SELECTED_FILTER += " location_id in (" + inDistrics + ")";
+			}
 		}
 		
 		StringBuffer actStatusValue = new StringBuffer("");
@@ -1175,14 +1204,14 @@ public class AmpARFilter extends PropertyListable {
 	/**
 	 * @return the regionSelected
 	 */
-	public AmpCategoryValueLocations getRegionSelected() {
+	public Collection<AmpCategoryValueLocations> getRegionSelected() {
 		return regionSelected;
 	}
 
 	/**
 	 * @param regionSelected the regionSelected to set
 	 */
-	public void setRegionSelected(AmpCategoryValueLocations regionSelected) {
+	public void setRegionSelected(Collection<AmpCategoryValueLocations> regionSelected) {
 		this.regionSelected = regionSelected;
 	}
 

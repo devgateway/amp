@@ -1,0 +1,1 @@
+select 'nada' from DUAL ;

@@ -1,0 +1,2 @@
+CREATE OR REPLACE VIEW `v_global_settings_templates_visibility` AS select `amp_templates_visibility`.`id` AS `id`,`amp_templates_visibility`.`name` AS `value` from `amp_templates_visibility`;
+insert into amp_global_settings(settingsName,settingsValue,possibleValues) values('Visibility Template',1,'v_global_settings_templates_visibility');

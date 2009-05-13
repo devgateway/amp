@@ -153,6 +153,10 @@
 		
 	}
 	
+	function subgroupSelectedEx(sbgr) {
+		window.setTimeout(subgroupSelected(sbgr), 10);
+	}
+	
 	function subgroupSelected(sbgr) {
 	
 		initYearCombo();
@@ -169,6 +173,7 @@
 
 		xmlhttp.open("POST", "../../gis/getFoundingDetails.do?action=getAvailIndicatorYears&mapCode=TZA&mapLevel=" + mapLevel + "&fromYear=" + fromYear + "&toYear=" + toYear + "&subgroupId=" + selSubgroup + "&sectorId=" + sec + "&indicatorId=" + selIndicator + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight, true);
 		xmlhttp.onreadystatechange = availYearsReady;
+		
 		actionGetYears = true;
 		xmlhttp.send(null);
 		
@@ -365,7 +370,7 @@
 	function checkIndicatorValues() {
 		if (getIndValuesAction) {
 			getIndValuesAction = false;
-			getIndicatorsValues();
+			window.setTimeout(getIndicatorsValues, 0);
 		}
 	}
 	

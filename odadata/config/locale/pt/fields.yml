@@ -1,0 +1,173 @@
+pt:
+  activerecord:
+    attributes:
+      project:
+        donor: Donor
+        donor_agency: Donor Agency
+        donor_project_number: Donor Project Number
+        oecd_number: OECD Number
+        recipient_country_budget_nr: Recipient Country Budget Number
+        title: Title
+        description: Description
+        country_strategy: Related Country Strategy
+        prj_status: Project Status
+        start: Start Date
+        end: End Date
+        implementing_agencies: Implementing Agencies
+        contracted_agencies: Contracted Agencies
+        national_regional: National / Regional
+        type_of_implementation: Type of Implementation
+        aid_modality: Aid Modality
+        grant_loan: Type of Funding
+        delegated_cooperation: Delegated Cooperation
+        delegated_by: Delegated by
+        website: Website
+        comments: Comments
+        officer_responsible: Officer Responsible
+        officer_responsible_name: Name
+        officer_responsible_phone: Phone
+        officer_responsible_email: E-Mail
+        markers: Markers
+        biodiversity_marker: Biodiversity
+        climate_change_marker: Climate Change
+        desertification_marker: Desertification
+        gender_policy_marker: Gender Policy
+        environment_policy_marker: Environment Policy
+        sector_relevances: Project's Focal Sectors
+        sectors: Sectors
+        
+      sector_relevance:
+        dac_sector: DAC / CRS Sector
+        crs_sector: CRS Sector
+        amount: Amount in %
+        
+      geo_relevance:
+        province: Region
+        district: Municipalities
+        
+      user:
+        name: Name
+        email: E-Mail Address
+        password: Password
+        password_confirmation: Confirm Password
+        
+      donor:
+        name: English Name
+        name_es: Spanish Name
+        cofunding_only: Co-Funding Donor Only
+        code: Donor Code
+        currency: Currency
+        field_office_address: Field Office Address
+        field_office_email: Field Office Email
+        field_office_phone: Field Office Phone
+        field_office_website: Field Office Website
+        head_of_mission_name: Head of Mission Name
+        head_of_mission_email: Head of Mission Email
+        head_of_cooperation_name: Head of Cooperation Name
+        head_of_cooperation_email: Head of Cooperation Email
+        first_focal_point_name: First Focal Point Name
+        first_focal_point_email: First Focal Point Email
+        second_focal_point_name: Second Focal Point Name
+        second_focal_point_email: Second Focal Point Email
+        institutions_responsible_for_oda: Institution Responsible for ODA
+        total_staff_in_country: Total Staff in Country
+        total_expatriate_staff: Total Expatriate Staff
+        total_local_staff: Total Local Staff
+        flag: Country Flag or Organisation Logo
+        profile_picture: Representative Picture of Donor Country (for EU Blue Book)
+        
+      exchange_rate:
+        currency: Currency
+        euro_rate: Euro Exchange Rate
+        year: Year
+        
+      agency:
+        name: Agency Name
+        
+      donor_agency:
+        name: Agency Name
+        code: Code
+        acronym: Acronym
+        
+      glossary:
+        model: Model Name
+        method: Target Method
+        locale: Locale
+        description: Description / Explanation
+        
+      cofunding:
+        donor: Co-Funding Donor
+        amount: Amount of Funding
+        currency: Currency
+        in: in
+        
+      historic_funding:
+        commitments: Commitments
+        payments: Disbursements
+      
+      funding:
+        commitments: Commitments
+        payments: Disbursements
+        payments_q1: Disbursements 1st Quarter
+        payments_q2: Disbursements 2nd Quarter
+        payments_q3: Disbursements 3rd Quarter
+        payments_q4: Disbursements 4th Quarter
+        on_budget: On/Off Budget
+        on_treasury: On/Off Treasury
+      
+      funding_forecast:
+        commitments: Commitments
+        payments: Disbursements
+        on_budget: On/Off Budget
+        on_treasury: On/Off Treasury
+        
+      delegated_cooperation:
+        delegating_donor: Delegating Donor
+        delegating_agency: Delegating Agency
+        
+      country_strategy:
+        donor: Donor
+        strategy_number: English Name/Title
+        strategy_number_es: Spanish Name/Title
+        description: English Description
+        description_es: Spanish Description
+        start: Start Date
+        end: End Date
+        total_amount_foreseen: Total Amount Foreseen
+        strategy_paper: Strategy Paper Available?
+        website: Website
+        programming_responsibility: Programming Responsibility
+        project_appraisal_responsibility: Project Appraisal Responsibility
+        tenders_responsibility: Tenders Responsibility
+        commitments_and_payments_responsibility: Commitments and Disbursements Responsibility
+        monitoring_and_evaluation_responsibility: Monitoring and Evaluation Responsibility
+        commitment_to_budget_support: Commitment to Budget Support
+        commitment_to_sectorwide_approaches_and_common_funds: Commitment to Common Funds
+        commitment_to_projects: Commitment to Projects
+        comment: Comment
+        current_total_oda: Current Total ODA ({{year}})
+        last_total_oda: Last Total ODA ({{year}})
+        
+      total_oda:
+        commitments: Total ODA Commitments
+        disbursements: Total ODA Disbursements
+        
+      consistency:
+        donor: Donor
+        year: Year
+        total_commitments: Total Commitments
+        total_payments: Total Disbursements
+        toa_payments: "{{type}} Disbursements"
+        
+      user_session:
+        email: E-Mail Address
+        password: Password
+        remember_me: Remember me
+        
+      mdg:
+        verbose_caption: "Goal {{number}}: {{name}}"
+        
+      prefs:
+        scroll_bar_public: Public Ticker (Reports & Bluebook, no login required)
+        scroll_bar_admin: Data Input Ticker (visible for logged-in donors only)
+        scroll_bar_mfp: Master Focal Point Ticker (shown here, in the admin area)

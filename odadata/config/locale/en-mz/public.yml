@@ -1,0 +1,41 @@
+en-mz:
+  static:
+    home: 
+      introduction_short: |
+        <p>ODAmoz is the online database of Official Development Assistance (ODA) from development partners to Mozambique. Add text for Mozambique </p>
+        <p>Welcome to ODAmoz!</p>
+          
+      introduction_long: |
+        <p><strong>About ODAmoz</strong></p>
+        <p>Through the ODAmoz tool itself, users can:<br />
+        <ul>
+        <li>
+        View pre-defined reports by donor, sector, and more<br />
+        </li>
+        <li>
+          Create custom reports and filter activities by key characteristics<br />
+        </li>
+        <li>
+          Locate activities geographically via an interactive map of the country<br />
+        </li>
+        <li>
+          View key details for a specific project<br />
+        </li>
+        <li>
+          Learn more about donor financing to the country through outputs such as the EU Blue Book, which includes graphs and donor profiles
+          </li>
+        </ul>
+          </p>
+        <p><strong>Responsibility</strong></p>
+        <p>Donors are responsible for maintaining and validating the information in ODAmoz.  Each donor agency in a country selects a focal point to adhere to locally agreed guidelines and timelines for updates, while following international data classifications developed by the OECD Development Assistance Committee.  This information is then freely available to all.<br />
+        </p>
+      map_image_link: Click on Map for ODAmap
+      bluebook_image_link: Click on Image for EU Blue Book 2007
+      read_more: Read more...
+      
+  user_sessions:
+    login_success: Welcome {{name}}! You are now logged in!
+    logout_success: Logged out successfully! Good bye.
+    new:
+      title: Please log in!
+      submit: Login

@@ -299,7 +299,7 @@
 					<td colspan="5"><digi:trn key="rep:filter:Location">Region</digi:trn></td>
 				</tr>
 				<tr bgcolor="#EEEEEE" onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}');">
-					<td colspan="5"><html:select property="regionSelected"
+					<td colspan="5"><html:select multiple="true" size="3" property="regionSelected"
 						style="width: 300px" styleClass="inp-text">
 						<html:option value="-1">
 							<digi:trn key="rep:filer:All">All</digi:trn>

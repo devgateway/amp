@@ -77,7 +77,7 @@ function removeActivity(id) {
             <span style="color:Red;">*</span>
             </td>
             <td>
-              <html:text property="name" styleId="txtName" style="font-family:verdana;font-size:11px;width:200px;"/>
+              <html:text property="name" styleId="txtName" style="font-family:verdana;font-size:11px;width:200px;" maxlength="256"/>
             </td>
           </tr>
           </field:display>

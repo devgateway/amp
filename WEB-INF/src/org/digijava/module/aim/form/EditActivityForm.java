@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,6 +44,7 @@ import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.helper.MTEFProjection;
 import org.digijava.module.aim.helper.OrgProjectId;
+import org.digijava.module.aim.helper.SurveyFunding;
 import org.digijava.module.aim.util.CustomFieldsUtil;
 import org.digijava.module.aim.util.Step;
 import org.digijava.module.contentrepository.helper.DocumentData;
@@ -80,7 +82,19 @@ public class EditActivityForm extends ActionForm implements Serializable {
      */
     private String fundingCurrCode;
     private String regFundingPageCurrCode;
+    
+    /**
+     * This collection represents the list of surveys available in the Paris Indicator page.
+     */
+    private Collection<SurveyFunding> surveyFundings = null;
 
+	public Collection<SurveyFunding> getSurveyFundings() {
+		return surveyFundings;
+	}
+
+	public void setSurveyFundings(Collection<SurveyFunding> surveyFundings) {
+		this.surveyFundings = surveyFundings;
+	}
 
 	public class Contracts {
 		private List contracts;
@@ -3234,7 +3248,25 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		public void setSurveyFlag(Boolean surveyFlag) {
 			this.surveyFlag = surveyFlag;
 		}
-
+		
+		@Override
+		public boolean equals(Object obj) {
+			if(obj instanceof Survey) {
+				Survey aux = (Survey) obj;
+				if(aux.getAmpSurveyId().equals(this.getAmpSurveyId())) {
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		}
+		
+		@Override
+		public int hashCode() {
+			return (this.ampSurveyId == null ? 0 : this.ampSurveyId.intValue());
+		}
 	}
 
 	public class Costing {
@@ -3683,16 +3715,46 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	private Funding oldFunding;
 	private Documents documents = null;
 	private Agencies agencies;
+	
+	/**
+	 * This is the survey helper object for the actual or last edited survey.
+	 */
 	private Survey survey = null;
+	
+	/**
+	 * This collection holds Survey objects (helpers) that have been edited.
+	 */
+	private Set<Survey> surveys;
+	
+	/**
+	 * This collection holds AmpAHsurvey objects (surveys) that have been edited.
+	 */
+	private Set<AmpAhsurvey> ampAhsurveys;
+	
 	private ContactInformation contactInfo;
 	private Comments comments = null;
 	private PhisycalProgress phisycalProgress;
 	private IndicatorME indicatorME = null;
-
 	private Contracts contracts = null;
 	private Costing costing = null;
 	private Issues issues = null;
 	private boolean totDisbIsBiggerThanTotCom;
+	
+	public Set<Survey> getSurveys() {
+		return surveys;
+	}
+
+	public void setSurveys(Set<Survey> surveys) {
+		this.surveys = surveys;
+	}
+	
+	public Set<AmpAhsurvey> getAmpAhsurveys() {
+		return ampAhsurveys;
+	}
+
+	public void setAmpAhsurveys(Set<AmpAhsurvey> surveys) {
+		this.ampAhsurveys = surveys;
+	}
 	
 	public String getWorkingTeamLeadFlag() {
 		return workingTeamLeadFlag;
@@ -3748,6 +3810,8 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.funding = null;
 			this.oldFunding = null;
 			this.survey = null;
+			this.surveys = null;
+			this.ampAhsurveys = null;
 			this.contactInfo = null;
 			this.agencies = null;
 			this.indicatorME = null;
@@ -3784,6 +3848,10 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		if (request.getParameter("budgetCheckbox") != null) {
 			this.getIdentification().setBudget(false);
 		}
+	}
+
+	public void setSurvey(Survey survey) {
+		this.survey = survey;
 	}
 
 	/**
@@ -3973,9 +4041,9 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	}
 
 	public Survey getSurvey() {
-		if (this.survey == null) {
+		/*if (this.survey == null) {
 			this.survey = new Survey();
-		}
+		}*/
 		return this.survey;
 	}
 

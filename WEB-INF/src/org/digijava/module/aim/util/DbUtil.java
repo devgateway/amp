@@ -5246,7 +5246,7 @@ public class DbUtil {
         Iterator iter1 = null;
         Iterator iter2 = null;
         Transaction tx = null;
-        boolean flag1 = false;
+        boolean surveySetEmpty = false;
 
         try {
         	if(activityId==null) return survey;
@@ -5259,36 +5259,36 @@ public class DbUtil {
             //logger.debug("fundingSet.size() : " + fundingSet.size());
             //logger.debug("surveySet.size() : " + surveySet.size());
             if (surveySet.size() < 1)
-                flag1 = true;
+                surveySetEmpty = true;
             if (fundingSet.size() < 1)
                 return survey;
             else {
                 // adding a survey per donor, having at least one funding for this activity, if there is none
                 // or if a new donor with funding is added.
-                boolean flag2 = true;
+                boolean newSurvey = true;
                 tx = session.beginTransaction();
                 iter1 = fundingSet.iterator();
                 while (iter1.hasNext()) {
                     AmpFunding ampFund = (AmpFunding) iter1.next();
                     donorOrgs.add(ampFund.getAmpDonorOrgId());
-                    if (!flag1) {
+                    if (!surveySetEmpty) {
                         iter2 = surveySet.iterator();
                         while (iter2.hasNext()) {
                             AmpAhsurvey ahs = (AmpAhsurvey) iter2.next();
                             if (ahs.getAmpDonorOrgId().equals(ampFund.getAmpDonorOrgId())) {
-                                flag2 = false;
+                                newSurvey = false;
                                 break;
                             }
                         }
                     }
-                    if (flag1 || flag2) {
+                    if (surveySetEmpty || newSurvey) {
                         AmpAhsurvey ahsvy = new AmpAhsurvey();
                         ahsvy.setAmpActivityId(activity);
                         ahsvy.setAmpDonorOrgId(ampFund.getAmpDonorOrgId());
                         activity.getSurvey().add(ahsvy);
-                        flag1 = false;
+                        surveySetEmpty = false;
                     }
-                    flag2 = true;
+                    newSurvey = true;
                 }
 
                 iter2 = surveySet.iterator();
@@ -5481,7 +5481,7 @@ public class DbUtil {
         return survey;
     }
 
-    public static void updateSurvey(AmpAhsurvey survey) {
+    public static void updateSurvey(AmpAhsurvey survey, AmpActivity activity) {
         Session session = null;
         Transaction tx = null;
 
@@ -5503,8 +5503,12 @@ public class DbUtil {
             
             session.update(oldSurvey);*/
             
+            if(survey.getAmpActivityId() == null) {
+            	survey.setAmpActivityId(activity);
+            }
+            
             //With lazy="false" this is how it works ok.
-            session.update(survey);
+            session.update(survey);//try saveOrUpdate() if this doesnt work.
             
             tx.commit();
         } catch (Exception ex) {
@@ -5512,11 +5516,43 @@ public class DbUtil {
                 try {
                     tx.rollback();
                 } catch (HibernateException e) {
-                    logger.debug("rollback() failed : ", e);
+                    logger.error("rollback() failed : ", e);
                 }
             }
             logger.error("Unable to save survey response : ", ex);
         }
+    }
+    
+    public static void saveNewSurvey(AmpAhsurvey survey, AmpActivity activity, List<Indicator> indicators) throws DgException {
+    		Session session = null;
+        	if (survey == null /*|| survey.getAmpAHSurveyId()==null*/)
+        	{
+        		logger.warn("The survey or AHSurvey is null ... no update for Survey");
+        		return;
+        	}
+        	//setup the survey.
+            survey.setAmpActivityId(activity);
+            if(activity.getSurvey() == null) {
+            	activity.setSurvey(new HashSet<AmpAhsurvey>());
+            }
+            activity.getSurvey().add(survey);
+            survey.setAmpAHSurveyId(null);
+            
+            //setup responses.
+            Iterator itr1 = indicators.iterator();
+            while (itr1.hasNext()) {
+                Iterator itr2 = ( (Indicator) itr1.next()).getQuestion().iterator();
+                while (itr2.hasNext()) {
+                    Question q = (Question) itr2.next();
+                    AmpAhsurveyResponse res = new AmpAhsurveyResponse();
+                    res.setAmpAHSurveyId(survey);
+                    session = PersistenceManager.getRequestDBSession();
+                    AmpAhsurveyQuestion ques = (AmpAhsurveyQuestion) session.load(AmpAhsurveyQuestion.class, q.getQuestionId());
+                    res.setAmpQuestionId(ques);
+                    res.setResponse(q.getResponse());
+                    survey.getResponses().add(res);
+                }
+            }
     }
 
     public static void saveSurveyResponses(Long surveyId, Collection indicator) {

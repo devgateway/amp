@@ -231,11 +231,14 @@ public class AddAmpActivity extends Action {
 
     /*Clear eventually dirty information found in session related to DM*/
 		if ( request.getParameter("action") != null && request.getParameter("action").equals("create") ){
-						eaForm.getSurvey().setSurvey(null);
-						eaForm.getSurvey().setAhsurvey(null);
-						eaForm.getSurvey().setAmpSurveyId(null);
-						eaForm.getSurvey().setFundingOrg(null);
-						eaForm.getSurvey().setIndicators(null);
+						eaForm.setSurveyFundings(null);
+						if(eaForm.getSurvey() != null) {
+							eaForm.getSurvey().setAhsurvey(null);
+							eaForm.getSurvey().setAmpSurveyId(null);
+							eaForm.getSurvey().setFundingOrg(null);
+							eaForm.getSurvey().setIndicators(null);
+							eaForm.setSurvey(null);
+						}
 						eaForm.setActivityId(null);
 						
                         SelectDocumentDM.clearContentRepositoryHashMap(request);

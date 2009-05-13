@@ -338,7 +338,7 @@
                                         <TD width="200"><digi:trn key="aim:pointOfDeliveryDonor">Point of delivery donor</digi:trn></TD>
 									</TR>
 
-									<nested:empty name="aimEditActivityForm" property="survey.survey">
+									<nested:empty name="aimEditActivityForm" property="surveyFundings">
 
 			                    		<TR valign="top">
 
@@ -349,9 +349,9 @@
 
 			                    	</nested:empty>
 
-			                    	<nested:notEmpty name="aimEditActivityForm" property="survey.survey">
+			                    	<nested:notEmpty name="aimEditActivityForm" property="surveyFundings">
 
-										<nested:iterate name="aimEditActivityForm" property="survey.survey" id="surveyFund" indexId="cntr"
+										<nested:iterate name="aimEditActivityForm" property="surveyFundings" id="surveyFund" indexId="cntr"
 
 			  	                   					    type="org.digijava.module.aim.helper.SurveyFunding">
 
@@ -362,6 +362,8 @@
 												<c:set target="${urlParams}" property="surveyId" value="${surveyFund.surveyId}" />
 
 												<c:set target="${urlParams}" property="edit" value="true" />
+
+                                                <c:set target="${urlParams}" property="index" value="${cntr}" />
 
 												<c:set var="translation">
 

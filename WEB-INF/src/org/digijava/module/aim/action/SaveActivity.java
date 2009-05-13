@@ -72,6 +72,7 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.dbentity.EUActivityContribution;
 import org.digijava.module.aim.form.EditActivityForm;
+import org.digijava.module.aim.form.EditActivityForm.Survey;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.AmpProject;
@@ -1651,11 +1652,26 @@ public class SaveActivity extends Action {
 		}
 		
 		//Do the initializations and all the information transfer between beans here
-        if(eaForm.getSurvey().getAhsurvey()!=null) 
-        	DbUtil.updateSurvey(eaForm.getSurvey().getAhsurvey());
-        if(eaForm.getSurvey().getAmpSurveyId()!=null) 
-        	DbUtil.saveSurveyResponses(eaForm.getSurvey().getAmpSurveyId(), eaForm.getSurvey().getIndicators());
-
+		if(eaForm.isEditAct()){
+			if (eaForm.getSurveys() != null) {
+				Iterator<Survey> iterSurveys = eaForm.getSurveys().iterator();
+				while (iterSurveys.hasNext()) {
+					Survey auxSurvey = iterSurveys.next();
+					if (auxSurvey.getAhsurvey() != null) {
+						DbUtil.updateSurvey(auxSurvey.getAhsurvey(), activity);
+					}
+					if (auxSurvey.getAmpSurveyId() != null) {
+			        	DbUtil.saveSurveyResponses(auxSurvey.getAmpSurveyId(), auxSurvey.getIndicators());
+					}
+				}
+			}
+		} else {
+			Iterator<Survey> iterSurveys = eaForm.getSurveys().iterator();
+			while (iterSurveys.hasNext()) {
+				Survey auxSurvey = iterSurveys.next();
+				DbUtil.saveNewSurvey(auxSurvey.getAhsurvey(), activity, auxSurvey.getIndicators());
+			}
+		}
 	}
 
 	private void processStep11(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPException{

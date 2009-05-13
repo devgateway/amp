@@ -394,7 +394,7 @@
 
 
 
-	function validate() {
+	function validateOrg() {
 		<c:set var="translation">
 			<digi:trn key="aim:chooseOrganizationToAdd">Please choose an organization to add</digi:trn>
 		</c:set>
@@ -439,7 +439,7 @@
 	}
 	
 	function selectOrganization() {
-		var flag = validate();
+		var flag = validateOrg();
 		if (flag == false)
 			return false;
 

@@ -12,6 +12,7 @@ import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
 import org.digijava.module.widget.dbentity.AmpDaTable;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
+import org.digijava.module.widget.dbentity.AmpParisIndicatorTableWidget;
 import org.digijava.module.widget.dbentity.AmpSectorTableWidget;
 import org.digijava.module.widget.dbentity.AmpWidget;
 import org.digijava.module.widget.dbentity.AmpWidgetIndicatorChart;
@@ -62,7 +63,7 @@ public class WidgetTeaser extends TilesAction {
                 WidgetVisitor adapter=new WidgetVisitorAdapter(){
                     @Override
                     public void visit(AmpWidgetIndicatorChart chart){
-			rendertype.add(WidgetUtil.CHART_INDICATOR);
+                        rendertype.add(WidgetUtil.CHART_INDICATOR);
                     }
                      @Override
                     public void visit(AmpWidgetOrgProfile orgProfile){
@@ -77,6 +78,10 @@ public class WidgetTeaser extends TilesAction {
                     @Override
                     public void visit(AmpSectorTableWidget sectorTable){
                          rendertype.add(WidgetUtil.SECTOR_TABLE);
+                    }
+                    @Override
+                    public void visit(AmpParisIndicatorTableWidget sectorTable){
+                         rendertype.add(WidgetUtil.PARIS_INDICAROR_TABLE);
                     }
                 };
                 widget.accept(adapter);

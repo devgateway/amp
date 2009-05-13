@@ -375,6 +375,19 @@
                             </td>
                           </tr>
                           </feature:display>
+                           <feature:display  name="Paris Indicator Table Widgets" module="WIDGETS">
+                          <tr>
+                            <td class="f-names" nowrap="nowrap">
+                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+                              <c:set var="translation">
+                                <digi:trn>Click here to view Paris Indicator Table Table Widgets Manager</digi:trn>
+                              </c:set>
+                            <digi:link module="widget" href="/piTableWidgetManager.do" title="${translation}">
+                                  <digi:trn> Paris Indicator Table Widget</digi:trn>
+                              </digi:link>
+                            </td>
+                          </tr>
+                          </feature:display>
                           <feature:display  name="Org Profile Widgets" module="WIDGETS">
                           <tr>
                             <td class="f-names" nowrap="nowrap">

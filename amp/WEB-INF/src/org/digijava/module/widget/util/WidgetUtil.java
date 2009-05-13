@@ -36,6 +36,7 @@ public class WidgetUtil {
 	public static final int CHART_INDICATOR = 4;
     public static final int ORG_PROFILE = 5;
     public static final int SECTOR_TABLE = 6;
+    public static final int PARIS_INDICAROR_TABLE = 7;
         
     // org profile pages
     public static final int ORG_PROFILE_SUMMARY = 1;

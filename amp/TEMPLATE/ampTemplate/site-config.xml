@@ -534,6 +534,7 @@
             	<page>popup_addWidgetColumn</page>
             	<page>preview_tableWidget</page>
                 <page>widget_showSectorTable</page>
+                <page>widget_showParisIndicatorTableWidget</page>
             </module>
 			<module name="aim">
 				<page>aim_showDocumentsInPopup</page>

@@ -316,7 +316,7 @@ public class ExportToWord extends Action {
                                 count = 0;
                                 while (iter.hasNext()) {
                                     AmpAhsurveyIndicator piIndicator = iter.next();
-                                    ParisIndicatorHelper piHelper = new ParisIndicatorHelper(piIndicator, filter);
+                                    ParisIndicatorHelper piHelper = new ParisIndicatorHelper(piIndicator, filter,true);
                                     RtfCell indicatorCode = new RtfCell(new Paragraph(piIndicator.getIndicatorCode()));
                                     RtfCell indicatorName = new RtfCell(new Paragraph(TranslatorWorker.translateText(piIndicator.getName(),langCode,siteId)));
                                     String sufix = "";
@@ -328,7 +328,7 @@ public class ExportToWord extends Action {
                                     RtfCell indicatorAllCurrentValue = new RtfCell(new Paragraph(piHelper.getAllCurrentValue() + sufix));
                                     RtfCell indicatorAllTargetValue = new RtfCell(new Paragraph(piHelper.getAllTargetValue() + sufix));
                                     RtfCell indicatorOrgBaseline = new RtfCell(new Paragraph(piHelper.getOrgBaseLineValue() + sufix));
-                                    RtfCell indicatorOrgCurrentValue = new RtfCell(new Paragraph(piHelper.getOrgPreviousYearValue() + sufix));
+                                    RtfCell indicatorOrgCurrentValue = new RtfCell(new Paragraph(piHelper.getOrgValue() + sufix));
                                     if (count % 2 == 1) {
                                         indicatorAllBaseline.setBackgroundColor(cellColor);
                                         indicatorAllCurrentValue.setBackgroundColor(cellColor);
@@ -363,12 +363,12 @@ public class ExportToWord extends Action {
                                         RtfCell indicator5aCode = new RtfCell(new Paragraph("5aii"));
                                         RtfCell indicator5aName = new RtfCell(new Paragraph(TranslatorWorker.translateText("Number of donors using country PFM",langCode,siteId)));
 
-                                        ParisIndicatorHelper piInd5aHelper = new ParisIndicatorHelper(ind5aii, filter);
+                                        ParisIndicatorHelper piInd5aHelper = new ParisIndicatorHelper(ind5aii, filter,true);
                                         RtfCell indicator5aAllBaseline = new RtfCell(new Paragraph(piInd5aHelper.getAllDonorBaseLineValue() + " "));
                                         RtfCell indicatorAll5aCurrentValue = new RtfCell(new Paragraph(piInd5aHelper.getAllCurrentValue() + " "));
                                         RtfCell indicatorAll5aTargetValue = new RtfCell(new Paragraph(piInd5aHelper.getAllTargetValue() + " "));
                                         RtfCell indicatorOrg5aBaseline = new RtfCell(new Paragraph(piInd5aHelper.getOrgBaseLineValue() + " "));
-                                        RtfCell indicatorOrg5aCurrentValue = new RtfCell(new Paragraph(piInd5aHelper.getOrgPreviousYearValue() + " "));
+                                        RtfCell indicatorOrg5aCurrentValue = new RtfCell(new Paragraph(piInd5aHelper.getOrgValue() + " "));
 
                                         if (count % 2 == 1) {
                                             indicator5aAllBaseline.setBackgroundColor(cellColor);
@@ -402,12 +402,12 @@ public class ExportToWord extends Action {
                                         RtfCell indicator5bCode = new RtfCell(new Paragraph("5bii"));
                                         RtfCell indicator5bName = new RtfCell(new Paragraph(TranslatorWorker.translateText("Number of donors using country procurement system",langCode,siteId)));
 
-                                        ParisIndicatorHelper piInd5bHelper = new ParisIndicatorHelper(ind5bii, filter);
+                                        ParisIndicatorHelper piInd5bHelper = new ParisIndicatorHelper(ind5bii, filter,true);
                                         RtfCell indicator5bAllBaseline = new RtfCell(new Paragraph(piInd5bHelper.getAllDonorBaseLineValue() + sufix));
                                         RtfCell indicator5bAllCurrentValue = new RtfCell(new Paragraph(piInd5bHelper.getAllCurrentValue() + sufix));
                                         RtfCell indicator5bAllTargetValue = new RtfCell(new Paragraph(piInd5bHelper.getAllTargetValue() + sufix));
                                         RtfCell indicator5bOrgBaseline = new RtfCell(new Paragraph(piInd5bHelper.getOrgBaseLineValue() + sufix));
-                                        RtfCell indicator5bOrgCurrentValue = new RtfCell(new Paragraph(piInd5bHelper.getOrgPreviousYearValue() + sufix));
+                                        RtfCell indicator5bOrgCurrentValue = new RtfCell(new Paragraph(piInd5bHelper.getOrgValue() + sufix));
 
                                         if (count % 2 == 1) {
                                             indicator5bAllBaseline.setBackgroundColor(cellColor);

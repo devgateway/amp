@@ -38,5 +38,13 @@
       </set>
       <property column="donor_year" name="donorYear" type="java.lang.Long"/>
     </subclass>
+    <subclass discriminator-value="piTbl" name="org.digijava.module.widget.dbentity.AmpParisIndicatorTableWidget">
+      <list cascade="all-delete-orphan" inverse="true" lazy="true" name="parisIndicators">
+        <key column="pi_table_widget_id"/>
+		<list-index column="index_column"/>
+        <one-to-many class="org.digijava.module.widget.dbentity.AmpParisIndicatorBaseTargetValues"/>
+      </list>
+      <property column="donor_group_year" name="donorGroupYear" type="java.lang.Long"/>
+    </subclass>
   </class>
 </hibernate-mapping>

@@ -70,9 +70,9 @@
 		
 	</div>
 	<table id="table" style="display: none"></table>
+
 	
          
-
 	<script language="JavaScript">
 	
 		function requestTable_${gisWidgetTeaserForm.id}(columnId,itemId){
@@ -120,17 +120,17 @@ if(myDiv.childNodes.length>1){
 						
 					}
 				}
-				
-			row.cells[celllength-1].innerHTML = value;
-	
+
+                row.cells[celllength-1].innerHTML = value;
+                
 	  	}
 
 	 //erase Helper hidden < Table> was select tag problems;
 	responce.innerHTML = '';
 	
 	}else{
-	
-		myDiv.innerHTML = htmlResponce;	
+
+		myDiv.innerHTML = htmlResponce;
 	}
 
 
@@ -148,13 +148,17 @@ if(myDiv.childNodes.length>1){
 		}
 		
 		requestTable_${gisWidgetTeaserForm.id}();
-	
+		
 </script>
 
 </c:if>
 
 <c:if test="${gisWidgetTeaserForm.rendertype==6}">
      <jsp:include page="/widget/showSectorTable.do?widgetId=${gisWidgetTeaserForm.id}" flush="true"/>
+</c:if>
+
+<c:if test="${gisWidgetTeaserForm.rendertype==7}">
+     <jsp:include page="/widget/showParisIndicatorTableWidget.do?widgetId=${gisWidgetTeaserForm.id}" flush="true"/>
 </c:if>
 
 <c:if test="${gisWidgetTeaserForm.rendertype==1}">

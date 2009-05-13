@@ -43,7 +43,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Collection<AmpOrganisation> responsibleorg;
 	private Collection implementingAgency;
 	private Collection beneficiaryAgency;
-	private Long regionSelected;
+	private Object[] regionSelected;
 	private Object[] approvalStatusSelected;
 
 	private String teamAccessType;
@@ -567,11 +567,11 @@ public class ReportsFilterPickerForm extends ActionForm {
 		this.regionSelectedCollection = regionSelectedCollection;
 	}
 
-	public Long getRegionSelected() {
+	public Object[] getRegionSelected() {
 		return regionSelected;
 	}
 
-	public void setRegionSelected(Long regionSelected) {
+	public void setRegionSelected(Object[] regionSelected) {
 		this.regionSelected = regionSelected;
 	}
 

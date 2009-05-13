@@ -27,6 +27,9 @@
         <page page="createSectorTableWidget" name="widget_createSectorTable" title="Create Sector Table"/>
         <page page="showSectorTable" name="widget_showSectorTable" title="Show Sector Table"/>
         <page page="reorderSectorTableCols" name="widget_reorderSectorTableCols" title="Reorder Sector Table Columns"/>
+        <page page="parisIndicatorTableWidgetAdmin" name="widget_parisIndicatorTableManager" title="Paris Indicator Table Manager"/>
+        <page page="createParisIndicatorTableWidget" name="widget_createParisIndicatorTableWidget" title="Paris Indicator Table"/>
+        <page page="showParisIndicatorTableWidget" name="widget_showParisIndicatorTableWidget" title="Paris Indicator Table"/>
                 
 		
 	</secondary-pages>

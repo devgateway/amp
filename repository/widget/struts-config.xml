@@ -15,6 +15,8 @@
           <form-bean name="widgetOrgProfileWidgetForm" type="org.digijava.module.widget.form.OrgProfileWidgetForm" />
        <form-bean name="sectorTableWidgetForm" type="org.digijava.module.widget.form.AdminSectorTableWidgetForm" />
        <form-bean name="showSectorTableForm" type="org.digijava.module.widget.form.ShowSectorTableForm" />
+       <form-bean name="piTableWidgetForm" type="org.digijava.module.widget.form.AdminParisIndicatorTableWidgetForm" />
+       <form-bean name="showParisIndicatorTableForm" type="org.digijava.module.widget.form.ShowParisIndicatorTableForm" />
 	</form-beans>
 	
 	<global-forwards>
@@ -53,7 +55,7 @@
     	</action>
          <action name="gisWidgetTeaserForm" path="/widget/getWidgetMap" scope="request" type="org.digijava.module.widget.action.GetWidgetMap" validate="false" />
          <action name="gisWidgetTeaserForm" path="/widget/getSectorDonorAmounts" scope="request" type="org.digijava.module.widget.action.GetSectorDonorAmounts" validate="false" />
-
+         <action name="gisWidgetTeaserForm" path="/widget/getParisIndicatorDonorGroupValues" scope="request" type="org.digijava.module.widget.action.GetParisIndicatorValues" validate="false" />
 		  <action name="gisIndicatorChartForm" parameter="actType"
 		   path="/widget/indicatorchartwidgets" scope="session"
 		   type="org.digijava.module.widget.action.AdminIndicatorChartWidgets" validate="false">
@@ -91,6 +93,15 @@
 
         <action name="showSectorTableForm" path="/widget/showSectorTable" scope="request" type="org.digijava.module.widget.action.ShowSectorTable" validate="false">
 	      <forward name="forward" path="/showLayout.do?layout=widget_showSectorTable" />
+    	</action>
+
+         <action name="piTableWidgetForm" path="/widget/piTableWidgetManager" scope="session" type="org.digijava.module.widget.action.AdminParisIndicatorTableWidgets" validate="false" parameter="actType">
+	      <forward name="forward" path="/showLayout.do?layout=widget_parisIndicatorTableManager" />
+          <forward name="create" path="/showLayout.do?layout=widget_createParisIndicatorTableWidget" />
+    	</action>
+
+         <action name="showParisIndicatorTableForm" path="/widget/showParisIndicatorTableWidget" scope="request" type="org.digijava.module.widget.action.ShowParisIndicatorTableWidget" validate="false">
+	      <forward name="forward" path="/showLayout.do?layout=widget_showParisIndicatorTableWidget" />
     	</action>
 		
 		<!-- Teasers below this -->

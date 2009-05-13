@@ -63,6 +63,11 @@ public class FilterHelper implements Serializable{
         this.orgGroupId=form.getOrgGroupId();
         this.fiscalCalendarId=form.getFiscalCalendarId();
     }
+    public FilterHelper(Long orgGroupId,Long year,Long fiscalCalendarId){
+        this.year=year;
+        this.orgGroupId=orgGroupId;
+        this.fiscalCalendarId=fiscalCalendarId;
+    }
 
      public FilterHelper(OrgProfileFilterForm form,TeamMember tm){
        this(form);

@@ -15,6 +15,7 @@
 		<hibernate-class>org.digijava.module.widget.dbentity.AmpDaWidgetPlace</hibernate-class>
         <hibernate-class>org.digijava.module.widget.dbentity.AmpSectorOrder</hibernate-class>
         <hibernate-class>org.digijava.module.widget.dbentity.AmpSectorTableYear</hibernate-class>
+        <hibernate-class>org.digijava.module.widget.dbentity.AmpParisIndicatorBaseTargetValues</hibernate-class>
 	</hibernate-classes>
 	
 </module-config>

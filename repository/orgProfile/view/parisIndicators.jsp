@@ -43,7 +43,7 @@
             <td>${indicator.allCurrentValue}${percent}</td>
             <td>${indicator.allTargetValue}${percent}</td>
             <td>${indicator.orgBaseLineValue}${percent}</td>
-            <td>${indicator.orgPreviousYearValue}${percent}</td>
+            <td>${indicator.orgValue}${percent}</td>
                 
         </tr>
     </c:forEach>

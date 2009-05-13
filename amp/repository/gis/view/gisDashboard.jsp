@@ -190,7 +190,7 @@
             <digi:trn>Select subgroup for indicator data</digi:trn>:
         </td>
 		<td>
-			<select id="indicatorSubgroupCombo" onChange="subgroupSelected(this)" style="width:350px">
+			<select id="indicatorSubgroupCombo" onChange="subgroupSelectedEx(this)" style="width:350px">
 				<option value="-1">Select subgroup</option>
 			</select>
 		</td>

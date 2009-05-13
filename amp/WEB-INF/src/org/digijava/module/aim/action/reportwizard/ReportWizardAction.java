@@ -535,7 +535,15 @@ public class ReportWizardAction extends MultiAction {
 			Session session				= PersistenceManager.getSession();
 			ampReport	= (AmpReports) session.load(AmpReports.class, ampReportId );
 			session.close();
-			
+			return duplicateReportData(ampReport);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return ampReport;
+	}
+	public static AmpReports duplicateReportData (AmpReports ampReport) throws Exception {
 			ampReport.setAmpReportId(null);
 			ampReport.setAmpPage(null);
 			ampReport.setFilterDataSet(null);
@@ -548,29 +556,30 @@ public class ReportWizardAction extends MultiAction {
 			ampReport.setOwnerId(null);
 			ampReport.setDesktopTabSelections(null);
 			
+			
+			
 			HashSet columns		= new HashSet();
-			columns.addAll( ampReport.getColumns() );
+			if ( ampReport.getColumns() != null )
+				columns.addAll( ampReport.getColumns() );
 			
 			HashSet hierarchies	= new HashSet();
-			hierarchies.addAll( ampReport.getHierarchies() );
+			if ( ampReport.getHierarchies() != null )			
+				hierarchies.addAll( ampReport.getHierarchies() );
 			
 			HashSet measures	= new HashSet();
-			measures.addAll( ampReport.getMeasures() );
+			if ( ampReport.getMeasures() != null )
+				measures.addAll( ampReport.getMeasures() );
 			
 			HashSet reportMeasures	= new HashSet();
-			reportMeasures.addAll( ampReport.getReportMeasures() );
+			if ( ampReport.getReportMeasures() != null )
+				reportMeasures.addAll( ampReport.getReportMeasures() );
 			
 			ampReport.setColumns( columns );
 			ampReport.setHierarchies( hierarchies );
 			ampReport.setMeasures( measures );
 			ampReport.setReportMeasures( reportMeasures );
 			
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return ampReport;
+			return ampReport;
 	}
 	
 	private class FieldsComparator implements Comparator<Object> {

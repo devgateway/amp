@@ -2335,6 +2335,24 @@ public class TeamUtil {
         return col;
     }
 
+    public static Collection<AmpTeam> getAllTeamsRequestSession() {
+    	Session session = null;
+        Query qry = null;
+        Collection teams = new ArrayList();
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select t from " + AmpTeam.class.getName() + " t order by name";
+            qry = session.createQuery(queryString);
+            teams = qry.list();
+        } catch(Exception e) {
+            logger.debug("cannot get All teams");
+            logger.debug(e.toString());
+            throw new RuntimeException(e);
+        }
+        return teams;
+    }
+    
     public static Collection<AmpTeam> getAllTeams() {
         Session session = null;
         Query qry = null;

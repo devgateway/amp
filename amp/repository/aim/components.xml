@@ -359,6 +359,8 @@
 	<page page="reportWizard/dhtmlReportWizard" name="aim_dhtmlTabWizard" title=" - Tab Wizard" />
 	<page page="reportWizard/saveMessage" name="aim_saveMessage" />
 	<page page="reportWizard/showSelectedFilters" name="aim_showSelectedFilters" />
+	
+	<page page="reportsImpExp/mainImpExp" name="aim_impExpReports" />
 
 	<page page="printableActivityPerformance" name="aim_printActPerf" title="AMP - Activity-Performance" />
 	<page page="printableActivityRisk" name="aim_printActRisk" title="AMP - Activity-Risk" />

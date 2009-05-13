@@ -14,6 +14,7 @@ import java.util.Set;
 import javax.servlet.http.HttpSession;
 
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
+import org.digijava.module.aim.ar.impexp.annotations.TransformerAnn;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
@@ -35,14 +36,26 @@ public class AmpReports implements Comparable, LoggerIdentifiable , Serializable
 	// private String description;
 	private String reportDescription;
 
+	@TransformerAnn(
+			expTransformerFactoryClass = "org.digijava.module.aim.ar.impexp.impl.PropertyExpTransformerFactory", 
+			impTransformerFactoryClass = "org.digijava.module.aim.ar.impexp.impl.PropertyImpTransformerFactory"
+	)
 	private String options;
 
+	@TransformerAnn(
+			expTransformerFactoryClass = "org.digijava.module.aim.ar.impexp.impl.PropertyExpTransformerFactory", 
+			impTransformerFactoryClass = "org.digijava.module.aim.ar.impexp.impl.PropertyImpTransformerFactory"
+	)
 	private Boolean hideActivities;
 
 	private Boolean drilldownTab;
 
 	private Boolean publicReport;
 
+	@TransformerAnn(
+			expTransformerFactoryClass="org.digijava.module.aim.ar.impexp.impl.TypePropertyExpTransformerFactory",
+			impTransformerFactoryClass="org.digijava.module.aim.ar.impexp.impl.TypePropertyImpTransformerFactory"
+	)
 	private Long type;
 
 	// private AmpReportsOptions ampReportsOptions;
@@ -50,12 +63,24 @@ public class AmpReports implements Comparable, LoggerIdentifiable , Serializable
 
 	private Set members;
 
+	@TransformerAnn(
+			expTransformerFactoryClass="org.digijava.module.aim.ar.impexp.impl.ColumnLikeExpTransformerFactory",
+			impTransformerFactoryClass="org.digijava.module.aim.ar.impexp.impl.ColumnLikeImpTransformerFactory"
+	)
 	private Set columns;
 
 	private List orderedColumns;
-
+	
+	@TransformerAnn(
+			expTransformerFactoryClass="org.digijava.module.aim.ar.impexp.impl.ColumnLikeExpTransformerFactory",
+			impTransformerFactoryClass="org.digijava.module.aim.ar.impexp.impl.ColumnLikeImpTransformerFactory"
+	)
 	private Set hierarchies;
 
+	@TransformerAnn(
+			expTransformerFactoryClass="org.digijava.module.aim.ar.impexp.impl.ColumnLikeExpTransformerFactory",
+			impTransformerFactoryClass="org.digijava.module.aim.ar.impexp.impl.ColumnLikeImpTransformerFactory"
+	)
 	private Set<AmpReportMeasures> measures;
 
 	private Set reportMeasures;
@@ -84,6 +109,10 @@ public class AmpReports implements Comparable, LoggerIdentifiable , Serializable
 	
 	private Set<AmpFilterData> filterDataSet;
 	
+	@TransformerAnn(
+			expTransformerFactoryClass = "org.digijava.module.aim.ar.impexp.impl.PropertyExpTransformerFactory", 
+			impTransformerFactoryClass = "org.digijava.module.aim.ar.impexp.impl.PropertyImpTransformerFactory"
+	)
 	private Boolean allowEmptyFundingColumns;
 
 	// public static final String NOTE="NOTE: All shown funding items are in USD
@@ -448,6 +477,11 @@ public class AmpReports implements Comparable, LoggerIdentifiable , Serializable
 
 	public void setAllowEmptyFundingColumns(Boolean allowEmptyFundingColumns) {
 		this.allowEmptyFundingColumns = allowEmptyFundingColumns;
+	}
+	
+	@Override
+	public String toString() {
+		return this.name;
 	}
 	
 }

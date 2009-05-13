@@ -56,4 +56,7 @@ public class AmpMeasures  implements Serializable, Comparable
 		AmpMeasures auxColumn=(AmpMeasures) o;
 		return this.getMeasureName().compareTo(auxColumn.getMeasureName());
 	}
+	public String toString(){
+		return this.measureName;
+	}
 }

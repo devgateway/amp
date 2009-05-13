@@ -647,6 +647,14 @@
                             </td>
                           </tr>
                           </module:display>
+                          <tr>
+                            <td class="f-names" nowrap="nowrap">
+                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>							   
+							   <digi:link href="/reportsExport.do?action=new" title="" >
+							      <digi:trn>Reports Import Export</digi:trn>
+							   </digi:link>
+                            </td>
+                          </tr>
                         </table>
                       </td>
                     </tr>

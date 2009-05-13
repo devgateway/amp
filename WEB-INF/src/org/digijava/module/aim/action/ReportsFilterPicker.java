@@ -34,6 +34,7 @@ import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.ar.util.ReportsUtil;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -585,9 +586,19 @@ public class ReportsFilterPicker extends MultiAction {
 			arf.setLineMinRank(filterForm.getLineMinRank());
 		if (!all.equals(filterForm.getPlanMinRank()))
 			arf.setPlanMinRank(filterForm.getPlanMinRank());
-		if (!all.equals(filterForm.getRegionSelected()))
-			arf.setRegionSelected(filterForm.getRegionSelected() == null || filterForm.getRegionSelected() == -1 ? 
-					null : DynLocationManagerUtil.getLocation(filterForm.getRegionSelected(),false) );
+//		if (!all.equals(filterForm.getRegionSelected()))
+//			arf.setRegionSelected(filterForm.getRegionSelected() == null || filterForm.getRegionSelected() == -1 ? 
+//					null : DynLocationManagerUtil.getLocation(filterForm.getRegionSelected(),false) );
+		
+		Set selectedRegions = Util.getSelectedObjects(AmpCategoryValueLocations.class, filterForm.getRegionSelected());
+
+		if (selectedRegions != null && selectedRegions.size() > 0) {
+			arf.setRegionSelected(new HashSet());
+			arf.getRegionSelected().addAll(selectedRegions);
+		} else {
+			arf.setRegionSelected(null);
+		}
+		
 		if (!all.equals(filterForm.getApprovalStatusSelected())){
 			if(filterForm.getApprovalStatusSelected() != null){
 				ArrayList<String> appvals = new ArrayList<String>();

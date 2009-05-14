@@ -170,13 +170,29 @@ public class ActivityContactInformationAction extends Action {
 			//create new  contact
 			contact=new AmpContact();
 		}			
-		contact.setName(eaForm.getContactInformation().getName());
-		contact.setLastname(eaForm.getContactInformation().getLastname());
-		contact.setEmail(eaForm.getContactInformation().getEmail());
-		contact.setTitle(eaForm.getContactInformation().getTitle());
-		contact.setOrganisationName(eaForm.getContactInformation().getOrganisationName());
-		contact.setPhone(eaForm.getContactInformation().getPhone());
-		contact.setFax(eaForm.getContactInformation().getFax());
+		contact.setName(eaForm.getContactInformation().getName().trim());
+		contact.setLastname(eaForm.getContactInformation().getLastname().trim());
+		contact.setEmail(eaForm.getContactInformation().getEmail().trim());
+		if(eaForm.getContactInformation().getTitle()!=null){
+			contact.setTitle(eaForm.getContactInformation().getTitle().trim());
+		}else{
+			contact.setTitle(null);
+		}
+		if(eaForm.getContactInformation().getOrganisationName()!=null){
+			contact.setOrganisationName(eaForm.getContactInformation().getOrganisationName().trim());
+		}else{
+			contact.setOrganisationName(null);
+		}
+		if(eaForm.getContactInformation().getPhone()!=null){
+			contact.setPhone(eaForm.getContactInformation().getPhone().trim());
+		}else{
+			contact.setPhone(null);
+		}
+		if(eaForm.getContactInformation().getFax()!=null){
+			contact.setFax(eaForm.getContactInformation().getFax().trim());
+		}else{
+			contact.setFax(null);
+		}		
 		
 		if(tempId==null || tempId.equals("")){ // we are adding contact,not editing. So we should put it in the list of all contacts
 			//create activity contact

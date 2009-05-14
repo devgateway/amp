@@ -352,4 +352,7 @@ public class Constants
     public static final String MOFED_CONTACT = "MOFED_CONT";
     public static final String SECTOR_MINISTRY_CONTACT = "SECTOR_MINISTRY_CONT";
     public static final String PROJECT_COORDINATOR_CONTACT = "PROJ_COORDINATOR_CONT";
+    //contact information pagination elements
+    public static final int CONTACTS_PER_PAGE=15;
+    public static final int PAGES_TO_SHOW=5;
 }

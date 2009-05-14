@@ -154,6 +154,8 @@
     <form-bean name="quartzJobManagerForm" type="org.digijava.module.aim.form.QuartzJobManagerForm" />
     <form-bean name="quartzJobClassManagerForm" type="org.digijava.module.aim.form.QuartzJobClassManagerForm" />
     <form-bean name="invalidDataList" type="org.digijava.module.aim.form.InvalidDataListsForm"/>
+	
+    <form-bean name="addressbookForm" type="org.digijava.module.aim.form.AddressBookForm"/>
     
 </form-beans>
 
@@ -1702,6 +1704,10 @@
     	<forward name="forward" path="/showLayout.do?layout=addActivityContactInfo" />    	
       	<forward name="step8" path="/showLayout.do?layout=addActivityStep8"/>      
    </action>
+   <action path="/aim/addressBook" name="addressbookForm" scope="session" parameter="actionType" type="org.digijava.module.aim.action.AddressBookActions">
+     	<forward name="addOrEditContact" path="/showLayout.do?layout=addContact" />
+     	<forward name="showAllContacts" path="/showLayout.do?layout=allContacts"/>
+     </action>
     
   </action-mappings>
 </struts-config>

@@ -32,7 +32,8 @@
     <property name="doc.src" value="./src/java"/>
     <property name="gen-src" value="./gen-src"/>
 
-
+	<property name="gen-src" value="./gen-src"/>
+	
     <!-- classpath for Struts 1.1 -->
     <path id="compile.classpath">
         <fileset dir="${lib}">
@@ -317,7 +318,12 @@
 		<antcall target="copyForAnySQL"/>
 	</target>
 	
-	<target name="copyForAnySQL" if="dbName">
+	<target name="copyForAnySQL">
+		<condition property="dbName" value="mysql">
+			<not>
+				<isset property="dbName"/>				
+			</not>
+		</condition>
 		 <echo message="Using ${dbName} Configuration" />
 		<copy file="${dbConfigs}/${dbName}/hibernate-dialect.xml" todir="${src}" overwrite="true"/>
 		<copy file="${dbConfigs}/${dbName}/jackrabbit-schema.xml" todir="${jackrabbit}" overwrite="true"/>

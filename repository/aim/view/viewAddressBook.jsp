@@ -254,10 +254,7 @@
 																<digi:link href="/addressBook.do?actionType=searchContacts"  style="text-decoration=none" name="urlParamsNext" title="${translation}"  >
 																	&gt;
 																</digi:link>
-																<jsp:useBean id="urlParamsLast" type="java.util.Map" class="java.util.HashMap"/>
-																<c:if test="${addressbookForm.pagesSize > 5}">
-																	<c:set target="${urlParamsLast}" property="page" value="${addressbookForm.pagesSize-1}"/>
-																</c:if>
+																<jsp:useBean id="urlParamsLast" type="java.util.Map" class="java.util.HashMap"/>																
 																<c:if test="${addressbookForm.pagesSize < 5}">
 																	<c:set target="${urlParamsLast}" property="page" value="${addressbookForm.pagesSize}"/>
 																</c:if>																

@@ -8,7 +8,9 @@ import java.util.List;
 
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 
 /**
  *
@@ -29,7 +31,6 @@ public class NewAddLocationForm extends ActivityForm {
     private String event;
     private Long editedId;
     private Long categoryIndex;
-    private boolean categoryLevelCountry;
     private Long parentLocationId;
     private Long parentCatValId;
     
@@ -56,13 +57,11 @@ public class NewAddLocationForm extends ActivityForm {
         this.parentLocationId = parentLocationId;
     }
 
-    public boolean isCategoryLevelCountry() {
-        return categoryLevelCountry;
+    public boolean getCategoryLevelCountry() {
+        return CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey().equals( 
+        		 CategoryManagerUtil.getAmpCategoryValueFromDb(parentCatValId).getValue() );
     }
 
-    public void setCategoryLevelCountry(boolean categoryLevelCountry) {
-        this.categoryLevelCountry = categoryLevelCountry;
-    }
 
     public Long getCategoryIndex() {
         return categoryIndex;

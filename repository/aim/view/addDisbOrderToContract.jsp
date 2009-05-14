@@ -18,7 +18,7 @@
 
 <script language="JavaScript">
 function addEvent() {
-  document.aimEditActivityForm.event.value = "Add";
+  document.getElementsByName("funding.event")[0].value = "Add";
   document.aimEditActivityForm.action= "/addDisbOrderToContract.do";
   document.aimEditActivityForm.target = "_self";
   document.aimEditActivityForm.submit();

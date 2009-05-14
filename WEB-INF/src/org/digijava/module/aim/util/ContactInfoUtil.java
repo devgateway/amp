@@ -38,6 +38,27 @@ public class ContactInfoUtil {
 		}
 	}
 	
+	public static void deleteContact(AmpContact contact) throws Exception{
+		Session session= null;
+		Transaction tx=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			tx=session.beginTransaction();
+			session.delete(contact);
+			tx.commit();
+		}catch(Exception ex) {
+			if(tx!=null) {
+				try {
+					tx.rollback();					
+				}catch(Exception e ) {
+					logger.error("...Rollback failed");
+					throw new AimException("Can't rollback", e);
+				}			
+			}
+			throw new AimException("delete failed",ex);
+		}
+	}
+	
 	public static AmpContact getContact(Long id) throws Exception{
 		Session session=null;
 		String queryString =null;
@@ -63,9 +84,64 @@ public class ContactInfoUtil {
 		Query query=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
-			queryString="select cont from " +AmpContact.class.getName() + " cont where cont.name like '%"+keyword+"%' and cont.lastname like '%"+keyword
-			+"%' and cont.email like '%" + keyword + "%'";
+			queryString="select cont from " +AmpContact.class.getName() + " cont where cont.name like '%"+keyword+"%' or cont.lastname like '%"+keyword
+			+"%' or cont.email like '%" + keyword + "%'";
 			query=session.createQuery(queryString);
+			contacts=query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return contacts;
+	}
+	
+	public static int getContactsSize() throws Exception{
+		int retValue=0;
+		Session session=null;
+		String queryString =null;
+		Query query=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			queryString= "select count(*) from " + AmpContact.class.getName();
+			query=session.createQuery(queryString);
+			retValue=(Integer)query.uniqueResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return retValue;
+	}
+	
+	public static List<AmpContact> getPagedContacts(int fromRecord,int resultsNum,String sortBy,String keyword) throws Exception{
+		List<AmpContact> contacts=null;
+		Session session=null;
+		String queryString =null;
+		Query query=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			queryString="select cont from " + AmpContact.class.getName() +" cont ";
+			//filter
+			if(keyword != null && keyword.length()>0){
+				queryString+=" where cont.name like '%"+keyword+"%' or cont.lastname like '%"+keyword
+							+"%' or cont.email like '%" + keyword + "%'";
+			}
+			//sort
+			if(sortBy==null || sortBy.equals("nameAscending")){
+				queryString += " order by cont.name" ;
+			}else if(sortBy.equals("nameDescending")){
+				queryString += " order by cont.name desc" ;
+			}else if(sortBy.equals("emailAscending")){
+				queryString += " order by cont.email";
+			}else if(sortBy.equals("emailDescending")){
+				queryString += " order by cont.email desc";
+			}else if(sortBy.equals("orgNameAscending")){
+				queryString += " order by cont.organisationName";
+			}else if(sortBy.equals("orgNameDescending")){
+				queryString += " order by cont.organisationName desc";
+			}
+			query=session.createQuery(queryString);
+			query.setFirstResult(fromRecord);
+			if(resultsNum!=-1){
+				query.setMaxResults(resultsNum);
+			}			
 			contacts=query.list();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -84,11 +160,11 @@ public class ContactInfoUtil {
 		}catch(Exception ex) {
 			if(tx!=null) {
 				try {
-					tx.rollback();					
+					tx.rollback();
 				}catch(Exception e ) {
 					logger.error("...Rollback failed");
 					throw new AimException("Can't rollback", e);
-				}			
+				}
 			}
 			throw new AimException("update failed",ex);
 		}

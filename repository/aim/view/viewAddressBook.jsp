@@ -255,11 +255,9 @@
 																	&gt;
 																</digi:link>
 																<jsp:useBean id="urlParamsLast" type="java.util.Map" class="java.util.HashMap"/>																
-																<c:if test="${addressbookForm.pagesSize < 5}">
-																	<c:set target="${urlParamsLast}" property="page" value="${addressbookForm.pagesSize}"/>
-																</c:if>																
+																<c:set target="${urlParamsLast}" property="page" value="${addressbookForm.pagesSize}"/>																																
 																<c:set var="translation">
-																<digi:trn key="aim:lastpage">Last Page</digi:trn>
+																	<digi:trn key="aim:lastpage">Last Page</digi:trn>
 																</c:set>
 																<digi:link href="/addressBook.do?actionType=searchContacts"  style="text-decoration=none" name="urlParamsLast" title="${translation}">
 																	&gt;&gt; 

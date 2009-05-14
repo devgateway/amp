@@ -24,6 +24,13 @@
 	  height: 92%;
 	  overflow: auto;
 	}
+	
+.rowIssue { background-color: #B2C2D2; }
+
+.rowMeasure { background-color: #E2E3DE; }
+
+.rowActor { background-color: #FFFFFF; }
+	
 </style>
 
 <script language="JavaScript" type="text/javascript">

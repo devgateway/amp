@@ -9,6 +9,9 @@
 <script language="javascript" type="text/javascript">
     function getDonorGroupValues(widgetId){
         var donorGroupSelectId="parisIndicatorTableSelect_"+widgetId;
+        //used to insert ajax loading image
+        var partialId="donorGroup_"+widgetId+"_";  
+        $("td[@id^='"+partialId+"']").html('<img src="images/amploading.gif" height="10px"/>');
         var donorGroupSelect=document.getElementById(donorGroupSelectId);
         var selectedIndex=donorGroupSelect.selectedIndex;
         var options=donorGroupSelect.options;
@@ -55,18 +58,23 @@
                     </c:forEach>
                 </select>
             </td>
-    
     </tr>
     <c:forEach items="${showParisIndicatorTableForm.parisIndicators}"    var="parisIndicatorInfo">
-
-        <tr>
-          
-           <td>${parisIndicatorInfo.parisIndicator.indicatorCode}</td>
+        <tr>      
+          <td><digi:trn>Indicator</digi:trn>${parisIndicatorInfo.parisIndicator.indicatorCode}</td>
            <td>${parisIndicatorInfo.parisIndicator.name}</td>
-           <td>${parisIndicatorInfo.baseValue}</td>
-           <td>${parisIndicatorInfo.targetValue}</td>
-           <td id="donorGroup_${showParisIndicatorTableForm.widgetId}_${parisIndicatorInfo.parisIndicator.ampIndicatorId}">&nbsp</td>
-        
+           <c:choose>
+               <c:when test="${parisIndicatorInfo.parisIndicator.indicatorCode=='10b'}">
+                   <td><digi:trn>NA</digi:trn></td>
+                   <td><digi:trn>NA</digi:trn></td>
+                   <td><digi:trn>NA</digi:trn></td>
+               </c:when>
+               <c:otherwise>
+                   <td>${parisIndicatorInfo.baseValue}</td>
+                   <td>${parisIndicatorInfo.targetValue}</td>
+                   <td id="donorGroup_${showParisIndicatorTableForm.widgetId}_${parisIndicatorInfo.parisIndicator.ampIndicatorId}">&nbsp</td>
+               </c:otherwise>
+           </c:choose>
         </tr>
     </c:forEach>
 </table>

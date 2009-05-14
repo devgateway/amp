@@ -1,5 +1,6 @@
 <jboss-web>
 <context-root>/</context-root>
+
 <virtual-host>madagascar-oracle.staging.ampdev.net</virtual-host>
  <class-loading java2ClassLoadingCompliance="false">
  <loader-repository>

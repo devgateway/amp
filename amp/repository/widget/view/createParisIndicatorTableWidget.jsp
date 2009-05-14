@@ -9,7 +9,7 @@
 
 <script type="text/javascript">
     <!--
-
+   
 
     function validate(){
         if(document.piTableWidgetForm.name.value==''){
@@ -111,46 +111,50 @@
                     <tr>
                         <td nowrap="nowrap" align="left" colspan="2">
                             <table class="tableElement">
-                                <tr class="tableHeader">
-                                    <td>
-                                        &nbsp;
-                                    </td>
-                                    <td>
-                                        Name
-                                    </td>
-                                    <td>
-                                        <digi:trn>Base Value</digi:trn>
-                                    </td>
-                                    <td>
-                                        <digi:trn>Target Value</digi:trn>
-                                    </td>
-                                </tr>
+                                    <thead>
+                                        <tr class="tableHeader">
+                                            <td>
+                                                &nbsp;
+                                            </td>
+                                            <td>
+                                                Name
+                                            </td>
+                                            <td>
+                                                <digi:trn>Base Value</digi:trn>
+                                            </td>
+                                            <td>
+                                                <digi:trn>Target Value</digi:trn>
+                                            </td>
+                                        </tr>
 
-                                <c:forEach var="parisIndicators" items="${piTableWidgetForm.parisIndicators}" varStatus="status">
-                                <c:set var="cssClass">
-                                     <c:if test="${status.count%2==0}">
-                                         tableEven
-                                    </c:if>
-                                    <c:if test="${status.count%2!=0}">
-                                         tableOdd
-                                    </c:if>
-                                </c:set>
-                                  <tr class="${cssClass}">
+                                    </thead>
+                                 <tbody>
+
+                                <c:forEach var="parisIndicators" items="${piTableWidgetForm.parisIndicators}">
+                                  <tr>
                                         <td>
                                             ${parisIndicators.parisIndicator.indicatorCode}
                                         </td>
                                         <td>
                                             ${parisIndicators.parisIndicator.name}
                                         </td>
-                                        <td>
-                                            <html:text name="parisIndicators" property="baseValue" indexed="true"/>
-                                        </td>
-                                        <td>
-                                            <html:text name="parisIndicators" property="targetValue" indexed="true"/>
-                                        </td>
-
+                                             <c:choose>
+                                                <c:when test="${parisIndicators.parisIndicator.indicatorCode=='10b'}">
+                                                    <td><digi:trn>NA</digi:trn></td>
+                                                    <td><digi:trn>NA</digi:trn></td>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <td>
+                                                          <html:text name="parisIndicators" property="baseValue" indexed="true"/>
+                                                    </td>
+                                                    <td>
+                                                   <html:text name="parisIndicators" property="targetValue" indexed="true"/>
+                                                   </td>
+                                                </c:otherwise>
+                                            </c:choose>     
                                     </tr>
                                 </c:forEach>
+                                 </tbody>
                             </table>
                         </td>
                     </tr>
@@ -198,4 +202,9 @@
         </tr>
     </table>
 </digi:form>
+<script type="text/javascript">
+     $(document).ready(function() {
+        $('table.tableElement tbody tr:odd').addClass('tableOdd');
+        $('table.tableElement tbody tr:even').addClass('tableEven');});
+</script>
 

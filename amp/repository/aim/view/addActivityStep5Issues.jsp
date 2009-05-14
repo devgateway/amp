@@ -52,86 +52,89 @@
 										<logic:notEmpty name="aimEditActivityForm" property="issues.issues">
 											<table width="100%" cellSpacing=1 cellPadding=4 class="box-border-nopadding">
 												<tr><td align="center">
-													<table width="98%" cellSpacing=1 cellPadding=2 vAlign="top" align="center" bgcolor="#dddddd">
+													<table width="98%" cellSpacing=1 cellPadding=2 vAlign="top" align="center">
 														<%--<tr bgcolor="#d7eafd">--%>
-														<% int i = 1;
-															String rowClass = "";
-														%>
 
 														<logic:iterate name="aimEditActivityForm" property="issues.issues"
 														id="issues" type="org.digijava.module.aim.helper.Issues">
-														<% if ((i % 2) != 0) {
-															rowClass = "rowAlternate";
-															} else {
-															rowClass = "rowNormal";
-															}
-															i++;
-														%>
 
-														<tr class="<%=rowClass%>">
+														<tr>
 															<td vAlign="center" align="left">
-																<a href="javascript:updateIssues('<c:out value="${issues.id}"/>')">
-																<c:out value="${issues.name}"/></a>
-																 &nbsp;
-																<field:display feature="Issues" name="Issue Date">
-																	<c:out value="${issues.issueDate}"/>
-																</field:display>
-																<a href="javascript:removeIssue('${issues.id}')">
-																	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0"/>
-																</a>&nbsp;&nbsp;&nbsp;&nbsp;
-																<field:display feature="Issues" name="Measures Taken">
-																	<field:display name="Add Measures Link" feature="Issues">
-																		<a href="javascript:addMeasures('<c:out value="${issues.id}"/>')">
-																			<digi:trn key="aim:addMeasures">Add Measures</digi:trn>
-																		</a>
-																	</field:display>													
-																</field:display>
+															<table width="100%" cellPadding=4 cellSpacing=1 vAlign="top" border=0>
+																<tr class="rowIssue" >
+																	<td width="20%" align="left">
+																	    <IMG src="../ampTemplate/images/arrow_down.gif"/>
+																		<a href="javascript:updateIssues('<c:out value="${issues.id}"/>')">
+																		<c:out value="${issues.name}"/></a>
+																		 &nbsp;
+																		<field:display feature="Issues" name="Issue Date">
+																			<c:out value="${issues.issueDate}"/>
+																		</field:display>
+																		<a href="javascript:removeIssue('${issues.id}')" >
+																			<IMG src="../ampTemplate/images/deleteIcon.gif" border="0" />
+																		</a> 
+																	</td>
+																	<td align="left">
+																		<field:display feature="Issues" name="Measures Taken">
+																			<field:display name="Add Measures Link" feature="Issues">
+																				<a href="javascript:addMeasures('<c:out value="${issues.id}"/>')">
+																					<digi:trn key="aim:addMeasures">Add Measures</digi:trn>
+																				</a>
+																			</field:display>													
+																		</field:display>
+																	</td>
+																</tr>
+															</table>
 															</td>
 														</tr>
 														<field:display feature="Issues" name="Measures Taken">
-														<tr class="<%=rowClass%>">
+														<tr>
 															<td vAlign="center" align="left">
-																<table width="100%" cellPadding=4 cellSpacing=1 vAlign="top" border=0
-																bgcolor="#dddddd">
+																<table width="100%" cellPadding=4 cellSpacing=1 vAlign="top" border=0>
 																	<logic:notEmpty name="issues" property="measures">
 																	<logic:iterate name="issues" property="measures" id="measure"
 																	 type="org.digijava.module.aim.helper.Measures">
-																	<tr class="<%=rowClass%>">
+																	<tr class="rowMeasure">
 																		<td vAlign="center" align="left" width="3">
-																			&nbsp;&nbsp;
+																			<IMG src="../ampTemplate/images/link_out_bot.gif"/>
 																		</td>
-																		<td vAlign="center" align="left">
+																		<td vAlign="center" align="left" width="20%" >
+																		    <IMG src="../ampTemplate/images/arrow_down.gif"/>
 																			<a href="javascript:updateMeasures('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')">
 																			<c:out value="${measure.name}"/> </a>
 																			<a href="javascript:removeMeasure('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')">
 																				<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0"/>
-																			</a>&nbsp;&nbsp;&nbsp;&nbsp;
+																			</a>
+																		</td>
+																		<td>
 																			<field:display name="Add Actors Link" feature="Issues">
 																				<a href="javascript:addActors('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')"><digi:trn key="aim:addActors">Add Actors</digi:trn></a>
-																			</field:display>
+																			</field:display>																		
 																		</td>
 																	</tr>
-																	<tr class="<%=rowClass%>">
+																	<tr class="rowActor">
 																		<td vAlign="center" align="left" width="3">
 																		</td>
-																		<td vAlign="center" align="left">
+																		<td vAlign="center" align="left" colspan="2">
 																		  <field:display name="Actors" feature="Issues">
-																			<table width="100%" cellPadding=4 cellSpacing=1 vAlign="top" border=0
-																			bgcolor="#dddddd">
+																			<table cellPadding=4 cellSpacing=1 vAlign="top" border=0>
 																				<logic:notEmpty name="measure" property="actors">
 																				<logic:iterate name="measure" property="actors" id="actor"
 																				 type="org.digijava.module.aim.dbentity.AmpActor">
-																				<tr class="<%=rowClass%>">
+																				<tr>
 																					<td vAlign="center" align="left" width="3">
 																						&nbsp;&nbsp;
 																					</td>
 																					<td vAlign="center" align="left">
+																					    <IMG src="../ampTemplate/images/link_out_bot.gif"/>
 																						<a href="javascript:updateActor('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>','<c:out value="${actor.ampActorId}"/>')">
 																							<c:out value="${actor.name}"/>
 																						</a>
+																					</td>
+																					<td  align="left">
 																						<a href="javascript:removeActor('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>','<c:out value="${actor.ampActorId}"/>')">
 																							<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0"/>
-																						</a>&nbsp;
+																						</a>																					
 																					</td>
 																				</tr>
 																				</logic:iterate>

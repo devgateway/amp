@@ -142,7 +142,6 @@
 		<td>
 			<%if(DigiConfigManager.getConfig().isEnableAutoLogin()){%>
 				<font color="red"><digi:trn key="aim:warningAutoLogin">Warning: Auto Login option is enabled, please disable it in production environments.</digi:trn></font>
-                <font color="red">Note: This is version 1.13r PI</font>
 			<%}%>
 		</td>
 	

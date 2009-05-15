@@ -16,16 +16,6 @@
 </script>	
 </logic:present>
 
-<script language="JavaScript">
-function addEvent() {
-  document.aimEditActivityForm.event.value = "Add";
-  document.aimEditActivityForm.action= "/addDisbOrderToContract.do";
-  document.aimEditActivityForm.target = "_self";
-  document.aimEditActivityForm.submit();
-  return true;
- 
- }
-</script>
 
 <digi:instance property="aimEditActivityForm" />
 <digi:form action="/addDisbOrderToContract.do" name="aimEditActivityFormCont" type="aimEditActivityForm" method="post">

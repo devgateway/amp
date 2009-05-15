@@ -43,6 +43,7 @@ public class AddDisbOrderToContract  extends Action {
                                 disbOrder.setContract(contracts.get(conId-1));
                                 eaForm.getFunding().setEvent(null);
                                 request.setAttribute("close", "close");
+                                return mapping.findForward("callparent");
                         }
                            
                         return mapping.findForward("forward");

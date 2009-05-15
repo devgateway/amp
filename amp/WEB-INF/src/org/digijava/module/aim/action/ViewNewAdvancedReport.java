@@ -201,7 +201,7 @@ public class ViewNewAdvancedReport extends Action {
 				for (Iterator iterator = ar.getColumns().iterator(); iterator
 						.hasNext();) {
 					AmpReportColumn coumn = (AmpReportColumn) iterator.next();
-					if(coumn.getOrderId().equals("1")){
+					if(coumn.getOrderId().equals(1L)){
 						sortBy = coumn.getColumn().getColumnName();
 					}
 				} 

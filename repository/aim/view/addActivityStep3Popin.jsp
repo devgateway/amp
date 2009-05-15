@@ -51,24 +51,6 @@
 		    draggable:true,
 		    context: ["showbtn", "tl", "bl"]
 		    });
-	var panelStart=0;
-	var checkAndClose=false;
-	function initFundingScript() {
-		var msg='\n<digi:trn key="aim:addSector">Add Sectors</digi:trn>';
-		myPanel.setHeader(msg);
-		myPanel.setBody("");
-		myPanel.beforeHideEvent.subscribe(function() {
-			panelStart=1;
-		}); 
-		
-		myPanel.render(document.body);
-		
-		myPanel2.setHeader(msg);
-		myPanel2.setBody("");
-		
-		myPanel2.render(document.body);
-
-	}
 	var myPanel2 = new YAHOOAmp.widget.Panel("newpopins", {
 		width:"300px",
 		height:"200px",
@@ -81,6 +63,27 @@
 	    draggable:true,
 	    context: ["showbtn", "tl", "bl"]
 	    });
+	var panelStart, panelStart2;
+	var checkAndClose2=false;
+	var checkAndClose=false;	    
+	function initFundingScript() {
+		var msg='\n<digi:trn key="aim:addSector">Add Sectors</digi:trn>';
+		myPanel.setHeader(msg);
+		myPanel.setBody("");
+		myPanel.beforeHideEvent.subscribe(function() {
+			panelStart=1;
+		}); 
+		myPanel.render(document.body);
+		panelStart = 0;
+		var msg2='\n<digi:trn key="aim:addSector">AMP Disbursement Order Contract for Activity</digi:trn>';				
+		myPanel2.setHeader(msg2);
+		myPanel2.setBody("");
+		myPanel2.beforeHideEvent.subscribe(function() {
+			panelStart2=1;
+		}); 
+		myPanel2.render(document.body);
+		panelStart2 = 0;
+	}
 
 	//this is called from editActivityMenu.jsp
 	//window.onload=initSectorScript();
@@ -206,11 +209,29 @@
 	function showContent2(){
 		var element = document.getElementById("popin2");
 		element.style.display = "inline";
-		myPanel2.setBody(element);
-		document.getElementById("popin2").scrollTop=0;
-		myPanel2.show();
+		if (panelStart2 < 1){
+			myPanel2.setBody(element);
+		}
+		if (panelStart2 < 2){
+			document.getElementById("popin2").scrollTop=0;
+			myPanel2.show();
+			panelStart2 = 2;
+		}
+		checkErrorAndClose2();
 	}
 
+	function checkErrorAndClose2(){
+		if(checkAndClose2==true){
+			if(document.getElementsByName("someError")[0]==null || document.getElementsByName("someError")[0].value=="false"){
+				myclose2();
+				refreshPage2();
+			}
+			checkAndClose2=false;			
+		}
+	}
+	function refreshPage2(){
+		
+	}
 	function checkErrorAndClose(){
 		if(checkAndClose==true){
 			if(document.getElementsByName("someError")[0]==null || document.getElementsByName("someError")[0].value=="false"){
@@ -219,7 +240,7 @@
 			}
 			checkAndClose=false;			
 		}
-	}
+	}	
 	function refreshPage(){
 		document.aimEditActivityForm.step.value = "3";
 		document.aimEditActivityForm.action = "/aim/addActivity.do?edit=true";
@@ -238,9 +259,13 @@
 		myclose();
 	}
 	function myclose2(){
-		myPanel2.hide();	
+		var content = document.getElementById("popinContent2");
+		content.innerHTML="";
+		panelStart2=1;
+		myPanel2.hide();
 	
 	}
+
 	function closeWindow2() {
 		myclose2();
 	}
@@ -629,3 +654,18 @@
     -->
 
 </script>
+
+<script language="JavaScript">
+<!--
+function addEvent() {
+  document.getElementsByName('funding.event')[0].value = "Add";
+  var url= "/addDisbOrderToContract.do?funding.event=Add&contracts.selContractId="+document.getElementsByName('contracts.selContractId')[0].value+"&"+getParameters();
+  //document.aimEditActivityForm.target = "_self";
+  //document.aimEditActivityForm.submit();
+  //checkAndClose2=true;
+  closeWindow2();
+  YAHOOAmp.util.Connect.asyncRequest("POST", url, callback );
+ }
+-->
+</script>
+

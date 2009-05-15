@@ -1478,6 +1478,7 @@
     <action name="aimEditActivityForm" path="/aim/addDisbOrderToContract" scope="session" type="org.digijava.module.aim.action.AddDisbOrderToContract">
       <forward name="forward" path="/showLayout.do?layout=aim_addDisbOrderToContractPopupLayout" />
        <forward name="save" path="/showLayout.do?layout=aim_fundingPopupLayout"/>
+       <forward name="callparent" path="/aim/addFundingDetail.do?edit=true" redirect="true"/>
     </action>
 
     <action name="aimEditActivityForm" path="/aim/remSelFundOrgs" scope="session" type="org.digijava.module.aim.action.RemoveSelFundingOrgs">

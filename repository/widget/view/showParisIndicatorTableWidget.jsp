@@ -47,9 +47,9 @@
 <table  id="parisIndicatorTable${showParisIndicatorTableForm.widgetId}" width="100%">
     <tr>
         <td>&nbsp;</td>
-        <td><digi:trn>Paris Declaration Indicators: Donors</digi:trn></td>
-        <td><digi:trn>2005 Baseline</digi:trn></td>
-        <td><digi:trn>2010 Target</digi:trn></td>
+        <td style="font-weight:bold"><digi:trn>Paris Declaration Indicators: Donors</digi:trn></td>
+        <td style="font-weight:bold"><digi:trn>2005 Baseline</digi:trn></td>
+        <td style="font-weight:bold"><digi:trn>2010 Target</digi:trn></td>
             <td>
                 <select id="parisIndicatorTableSelect_${showParisIndicatorTableForm.widgetId}" onchange="getDonorGroupValues('${showParisIndicatorTableForm.widgetId}')" AUTOCOMPLETE="OFF">
                     <option value="-1"><digi:trn>Select Donor Group</digi:trn></option>
@@ -64,14 +64,12 @@
           <td><digi:trn>Indicator</digi:trn>&nbsp;${parisIndicatorInfo.parisIndicator.indicatorCode}</td>
            <td>${parisIndicatorInfo.parisIndicator.name}</td>
            <c:choose>
-               <c:when test="${parisIndicatorInfo.parisIndicator.indicatorCode=='10b'}">
-                   <td><digi:trn>NA</digi:trn></td>
-                   <td><digi:trn>NA</digi:trn></td>
-                   <td><digi:trn>NA</digi:trn></td>
-               </c:when>
-               <c:otherwise>
                    <td>${parisIndicatorInfo.baseValue}</td>
                    <td>${parisIndicatorInfo.targetValue}</td>
+               <c:when test="${parisIndicatorInfo.parisIndicator.indicatorCode=='10b'}">
+                   <td><digi:trn>N/A</digi:trn></td>
+               </c:when>
+               <c:otherwise>
                    <td id="donorGroup_${showParisIndicatorTableForm.widgetId}_${parisIndicatorInfo.parisIndicator.ampIndicatorId}">&nbsp</td>
                </c:otherwise>
            </c:choose>

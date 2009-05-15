@@ -49,7 +49,6 @@ public class EditSurvey extends Action {
         final int NUM_RECORDS = 5;
         long surveyId = 0;
         boolean firstLoad = false;
-        int index= new Integer(request.getParameter("index")).intValue();
         
         if(svForm.getAmpAhsurveys() == null) {
         	svForm.setAmpAhsurveys(new HashSet<AmpAhsurvey>());

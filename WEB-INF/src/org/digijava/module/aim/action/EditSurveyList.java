@@ -64,7 +64,7 @@ public class EditSurveyList extends Action {
         };
         List<SurveyFunding> surveyColl = new ArrayList<SurveyFunding>();
         if (svForm.isEditAct() == true) {
-        	surveyColl = (List<SurveyFunding>) DbUtil.getAllSurveysByActivity(svForm.getActivityId());
+        	surveyColl = (List<SurveyFunding>) DbUtil.getAllSurveysByActivity(svForm.getActivityId(), svForm);
         	Collections.sort(surveyColl, sfComp);
             svForm.setSurveyFundings(surveyColl);
         } else {

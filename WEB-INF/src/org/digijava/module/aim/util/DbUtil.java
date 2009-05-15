@@ -85,6 +85,7 @@ import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.exception.AimException;
+import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
 import org.digijava.module.aim.helper.AmpProjectBySector;
 import org.digijava.module.aim.helper.Assistance;
@@ -93,6 +94,8 @@ import org.digijava.module.aim.helper.CountryBean;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.Documents;
+import org.digijava.module.aim.helper.Funding;
+import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.Indicator;
 import org.digijava.module.aim.helper.ParisIndicator;
 import org.digijava.module.aim.helper.Question;
@@ -5237,6 +5240,129 @@ public class DbUtil {
         }
         return null;
     }
+    public static Collection<SurveyFunding> getAllSurveysByActivity(Long activityId, EditActivityForm svForm) {
+        ArrayList survey = new ArrayList();
+        List fundingSet = new ArrayList();
+        Set surveySet = new HashSet();
+        ArrayList donorOrgs = new ArrayList();
+        Session session = null;
+        Iterator iter1 = null;
+        Iterator iter2 = null;
+        Transaction tx = null;
+        boolean surveySetEmpty = false;
+
+        try {
+        	if(activityId==null) return survey;
+            session = PersistenceManager.getRequestDBSession();
+
+            if(activityId==null || activityId.longValue()==0) return survey;
+            AmpActivity activity = (AmpActivity) session.load(AmpActivity.class, activityId);
+            
+            //This section was added to get all funding organizations even the new ones not yet saved. 
+            if (svForm.getFunding().getFundingOrganizations() != null) {
+    			Iterator itr1 = svForm.getFunding().getFundingOrganizations().iterator();
+    			while (itr1.hasNext()) {
+    				FundingOrganization fOrg = (FundingOrganization) itr1.next();
+    				//add fundings
+    				if (fOrg.getFundings() != null) {
+    					Iterator itr2 = fOrg.getFundings().iterator();
+    					while (itr2.hasNext()) {
+    						Funding fund = (Funding) itr2.next();
+    						AmpFunding ampFunding = new AmpFunding();
+    						ampFunding.setAmpDonorOrgId(DbUtil.getOrganisation(fOrg.getAmpOrgId()));
+    						fundingSet.add(ampFunding);
+    					}
+    				}
+    			}
+            }
+            
+            surveySet = activity.getSurvey();
+            //logger.debug("fundingSet.size() : " + fundingSet.size());
+            //logger.debug("surveySet.size() : " + surveySet.size());
+            if (surveySet.size() < 1)
+                surveySetEmpty = true;
+            if (fundingSet.size() < 1)
+                return survey;
+            else {
+                // adding a survey per donor, having at least one funding for this activity, if there is none
+                // or if a new donor with funding is added.
+                boolean newSurvey = true;
+                tx = session.beginTransaction();
+                iter1 = fundingSet.iterator();
+                while (iter1.hasNext()) {
+                    AmpFunding ampFund = (AmpFunding) iter1.next();
+                    donorOrgs.add(ampFund.getAmpDonorOrgId());
+                    if (!surveySetEmpty) {
+                        iter2 = surveySet.iterator();
+                        while (iter2.hasNext()) {
+                            AmpAhsurvey ahs = (AmpAhsurvey) iter2.next();
+                            if (ahs.getAmpDonorOrgId().equals(ampFund.getAmpDonorOrgId())) {
+                                newSurvey = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (surveySetEmpty || newSurvey) {
+                        AmpAhsurvey ahsvy = new AmpAhsurvey();
+                        ahsvy.setAmpActivityId(activity);
+                        ahsvy.setAmpDonorOrgId(ampFund.getAmpDonorOrgId());
+                        activity.getSurvey().add(ahsvy);
+                        surveySetEmpty = false;
+                    }
+                    newSurvey = true;
+                }
+
+                iter2 = surveySet.iterator();
+                while (iter2.hasNext()) {
+                    AmpAhsurvey ahs = (AmpAhsurvey) iter2.next();
+                    if (ahs.getPointOfDeliveryDonor() == null) {
+                        ahs.setPointOfDeliveryDonor(ahs.getAmpDonorOrgId());
+                    }
+                }
+                session.update(activity);
+                tx.commit();
+
+                if (activity.getSurvey().isEmpty())
+                    logger.debug("activity.getSurvey() is empty.");
+                else {
+                    //logger.debug("activity.getSurvey().size() : " + activity.getSurvey().size());
+                    //logger.debug("donorOrgs.size() : " + donorOrgs.size());
+                    iter2 = activity.getSurvey().iterator();
+                    while (iter2.hasNext()) {
+                        AmpAhsurvey svy = (AmpAhsurvey) iter2.next();
+                        // getting only those survey records where donor-org is in current funding list
+                        if (donorOrgs.indexOf(svy.getAmpDonorOrgId()) != -1) {
+                            SurveyFunding svfund = new SurveyFunding();
+                            svfund.setSurveyId(svy.getAmpAHSurveyId());
+                            svfund.setFundingOrgName(svy.getAmpDonorOrgId().getName());
+                            if (svy.getPointOfDeliveryDonor() != null) {
+                                svfund.setDeliveryDonorName(svy.getPointOfDeliveryDonor().getName());
+                                svfund.setAcronim(svy.getPointOfDeliveryDonor().getAcronym());
+                            } else {
+                                svfund.setDeliveryDonorName(svy.getAmpDonorOrgId().getName());
+                                svfund.setAcronim(svy.getAmpDonorOrgId().getAcronym());
+                            }
+
+                            survey.add(svfund);
+                        }
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            if (tx != null) {
+                try {
+                    tx.rollback();
+                } catch (HibernateException e) {
+                    logger.debug("rollback() failed : " + e.getMessage());
+                }
+            }
+            logger.debug("Unable to get survey : " + ex.getMessage());
+            ex.printStackTrace(System.out);
+        }
+        logger.debug("survey.size() : " + survey.size());
+        return survey;
+    }
+    
     public static Collection getAllSurveysByActivity(Long activityId) {
         ArrayList survey = new ArrayList();
         Set fundingSet = new HashSet();
@@ -5254,6 +5380,7 @@ public class DbUtil {
 
             if(activityId==null || activityId.longValue()==0) return survey;
             AmpActivity activity = (AmpActivity) session.load(AmpActivity.class, activityId);
+            
             fundingSet = activity.getFunding();
             surveySet = activity.getSurvey();
             //logger.debug("fundingSet.size() : " + fundingSet.size());

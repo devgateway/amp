@@ -126,12 +126,12 @@ else {
 										</TD>
 									</tr>
 									<tr>
-										<td valign="top">
+										<td valign="top" align="left">
 											<digi:insert attribute="pieChart"/>
 										</td>
 									</tr>
 									<tr>
-										<td height="100%">
+										<td height="100%" align="left" valign="top">
 											<div id="content" class="yui-skin-sam" style="width:100%;padding: 0px">
 	                                          <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;"> 
                                                   <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
@@ -172,7 +172,7 @@ else {
 										</td>
 									</tr>									
 									<tr>
-										<td valign="top">
+										<td valign="top" align="left">
                                         <div id="content" class="yui-skin-sam" style="width:100%;">
                                           <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                                               <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
@@ -243,7 +243,7 @@ else {
 										</td>
 									</tr>
 									<tr>
-										<td colspan="2">
+										<td colspan="2" align="left" valign="top">
                                         <div id="content" class="yui-skin-sam" style="width:1000px;">
                                           <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                                               <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
@@ -292,7 +292,7 @@ else {
                                         </td>
                                     </tr>
 									<tr>
-										<td colspan="2" valign="top">
+										<td colspan="2" valign="top" align="left">
                                         <div id="content" class="yui-skin-sam" style="width:1000px;">
                                           <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                                               <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
@@ -322,7 +322,7 @@ else {
     									</td>
 									</tr>
 									<tr>
-										<td colspan="2">
+										<td colspan="2" align="left" valign="top">
                                         <div id="content" class="yui-skin-sam" style="width:1000px;">
                                           <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                                               <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
@@ -349,7 +349,7 @@ else {
     									</td>
 									</tr>
 									<tr>
-										<td colspan="2">
+										<td colspan="2" align="left" valign="top">
                                         <div id="content" class="yui-skin-sam" style="width:1000px;">
                                           <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                                               <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>

@@ -1,4 +1,3 @@
-
 CREATE OR REPLACE FUNCTION  "APPLYTHOUSANDSFORVISIBILITY" 
     (
       d IN NUMBER )
@@ -76,6 +75,20 @@ end;
   END IF;
   return retVal;
     END;
+END;
+/
+ CREATE OR REPLACE FUNCTION  "GETEXCHANGEWITHFIXED" (
+   currency IN CHAR,
+    cdate   IN DATE,
+    fixedExchangeRate NUMBER)
+    RETURN NUMBER
+  IS
+    begin
+      if fixedExchangeRate is not null then 
+        return fixedExchangeRate;
+      end if;
+      return getexchange(currency,cdate);
+  
 END;
 /
  CREATE OR REPLACE FUNCTION  "GETPARENTSECTORID" 
@@ -447,6 +460,16 @@ CREATE OR REPLACE FORCE VIEW  "V_COMPONENT_FUNDING" ("AMP_ACTIVITY_ID", "AMP_COM
         f.amp_component_id = c.amp_component_id
   order by f.activity_id
 /
+CREATE OR REPLACE FORCE VIEW  "V_COMPONENT_TYPE" ("AMP_ACTIVITY_ID", "COMPONENT_TYPE", "COMPONENT_TYPE_ID") AS 
+  select 
+    aac.amp_activity_id AS amp_activity_id,
+    ct.name AS component_type,
+    ct.type_id AS component_type_id 
+  from 
+    amp_components c ,amp_component_type ct , amp_activity_components aac 
+  where 
+    c.type = ct.type_id and aac.amp_component_id = c.amp_component_id
+/
 CREATE OR REPLACE FORCE VIEW  "V_CONTACT_NAME" ("AMP_ACTIVITY_ID", "CONTACT", "CONTACT_ID") AS 
   select amp_activity.amp_activity_id AS amp_activity_id,
          ' '         || amp_activity.cont_first_name || ' ' ||
@@ -593,7 +616,38 @@ CREATE OR REPLACE FORCE VIEW  "V_DONOR_COMMITMENT_DATE" ("AMP_ACTIVITY_ID", "TRA
   order by
      f.amp_activity_id , fd.transaction_date
 /
-CREATE OR REPLACE FORCE VIEW  "V_DONOR_FUNDING" ("AMP_ACTIVITY_ID", "AMP_FUNDING_ID", "AMP_FUND_DETAIL_ID", "DONOR_NAME", "TRANSACTION_TYPE", "ADJUSTMENT_TYPE", "TRANSACTION_DATE", "TRANSACTION_AMOUNT", "CURRENCY_CODE", "TERMS_ASSIST_NAME", "FIXED_EXCHANGE_RATE", "ORG_GRP_NAME", "DONOR_TYPE_NAME", "FINANCING_INSTRUMENT_NAME", "ORG_GRP_ID", "ORG_TYPE_ID", "FINANCING_INSTRUMENT_ID", "TERMS_ASSIST_ID") AS 
+CREATE OR REPLACE FORCE VIEW  "V_DONOR_DATE_HIERARCHY" ("AMP_ACTIVITY_ID", "AMP_FUND_DETAIL_ID", "FULL_DATE", "year", "month", "MONTH_NAME", "QUARTER", "QUARTER_NAME") AS 
+  select 
+    a.amp_activity_id AS amp_activity_id,
+    fd.amp_fund_detail_id AS amp_fund_detail_id,
+    fd.transaction_date AS full_date,
+    to_char(fd.transaction_date,'YYYY') AS "year",
+    to_char(fd.transaction_date,'MM') 	AS "month",
+    to_char(fd.transaction_date,'MONTH') AS month_name,
+ 	   case 
+    when to_char(fd.transaction_date,'MM') < 4   then 1 
+    when to_char(fd.transaction_date,'MM') > 3 	and   to_char(fd.transaction_date,'MM') < 7 then 2 
+    when to_char(fd.transaction_date,'MM') > 6 	and to_char(fd.transaction_date,'MM') <  10 then 3
+    when to_char(fd.transaction_date,'MM') > 9  then 4  
+    
+    end as quarter,
+    
+    case 
+    when to_char(fd.transaction_date,'MM') < 4   then 'Q1' 
+    when to_char(fd.transaction_date,'MM') > 3 and   to_char(fd.transaction_date,'MM') < 7 then 'Q2'
+    when to_char(fd.transaction_date,'MM') > 6 and to_char(fd.transaction_date,'MM') <  10 then 'Q3'
+    when to_char(fd.transaction_date,'MM') > 9  then 'Q4' 
+    
+    end as quarter_name
+    
+    from 
+    amp_activity a,
+    amp_funding f ,
+    amp_funding_detail fd 
+  where 
+    a.amp_activity_id = f.amp_activity_id and f.amp_funding_id = fd.amp_funding_id
+/
+CREATE OR REPLACE FORCE VIEW  "V_DONOR_FUNDING" ("AMP_ACTIVITY_ID", "AMP_FUNDING_ID", "AMP_FUND_DETAIL_ID", "DONOR_NAME", "TRANSACTION_TYPE", "ADJUSTMENT_TYPE", "TRANSACTION_DATE", "TRANSACTION_AMOUNT", "CURRENCY_CODE", "TERMS_ASSIST_ID", "TERMS_ASSIST_NAME", "FIXED_EXCHANGE_RATE", "ORG_GRP_NAME", "DONOR_TYPE_NAME", "FINANCING_INSTRUMENT_NAME", "FINANCING_INSTRUMENT_ID", "ORG_ID", "ORG_GRP_ID", "ORG_TYPE_ID") AS 
   select f.amp_activity_id AS amp_activity_id,
          f.amp_funding_id AS amp_funding_id,
          fd.amp_fund_detail_id AS amp_fund_detail_id,
@@ -603,32 +657,33 @@ CREATE OR REPLACE FORCE VIEW  "V_DONOR_FUNDING" ("AMP_ACTIVITY_ID", "AMP_FUNDING
          fd.transaction_date AS transaction_date,
          fd.transaction_amount AS transaction_amount,
          c.currency_code AS currency_code,
+         cval.id AS terms_assist_id,
          cval.category_value AS terms_assist_name,
          fd.fixed_exchange_rate AS fixed_exchange_rate,
          b.org_grp_name AS org_grp_name,
          ot.org_type AS donor_type_name,
          cval2.category_value AS financing_instrument_name,
-         b.amp_org_grp_id AS org_grp_id,
-         ot.amp_org_type_id AS org_type_id,
          cval2.id AS financing_instrument_id,
-         cval.id AS terms_assist_id
-  from amp_funding f,
-       amp_funding_detail fd,
-       amp_category_value cval,
-       amp_currency c,
-       amp_organisation d,
-       amp_org_group b,
-       amp_org_type ot,
-       amp_category_value cval2
-  where cval2.id = f.financing_instr_category_value and
+         d.amp_org_id AS org_id,
+         d.org_grp_id AS org_grp_id,
+         ot.amp_org_type_id AS org_type_id
+  from  amp_funding f,
+        amp_funding_detail fd,
+        amp_category_value cval,
+        amp_currency c,
+        amp_organisation d,
+        amp_org_group b,
+        amp_org_type ot,
+        amp_category_value cval2
+  where 
+         cval2.id = f.financing_instr_category_value and
         c.amp_currency_id = fd.amp_currency_id and
         f.amp_funding_id = fd.amp_funding_id and
-        cval.id = f.TYPE_OF_ASSISTANCE_CATEGORY_VA and
+        cval.id = f.type_of_assistance_category_va and
         d.amp_org_id = f.amp_donor_org_id and
         d.org_grp_id = b.amp_org_grp_id and
         ot.amp_org_type_id = d.org_type_id
-  order by
-     f.amp_activity_id
+  order by f.amp_activity_id
 /
 CREATE OR REPLACE FORCE VIEW  "V_DONOR_GROUPS" ("AMP_ACTIVITY_ID", "NAME", "AMP_ORG_GRP_ID") AS 
   select a.amp_activity_id AS amp_activity_id,
@@ -1158,6 +1213,392 @@ CREATE OR REPLACE FORCE VIEW  "V_PRIMARYPROGRAM" ("AMP_ACTIVITY_ID", "NAME", "AM
   order by
      a.amp_activity_id , t.name
 /
+CREATE OR REPLACE FORCE VIEW  "V_PRIMARYPROGRAM_ALL_LEVEL" ("AMP_ACTIVITY_ID", "PROGRAM_PERCENTAGE", "AMP_PROGRAM_ID1", "N1", "L1", "AMP_PROGRAM_ID2", "N2", "L2", "AMP_PROGRAM_ID3", "N3", "L3", "AMP_PROGRAM_ID4", "N4", "L4", "AMP_PROGRAM_ID5", "N5", "L5", "AMP_PROGRAM_ID6", "N6", "L6", "AMP_PROGRAM_ID7", "N7", "L7", "AMP_PROGRAM_ID8", "N8", "L8") AS 
+  select 
+    a.amp_activity_id AS amp_activity_id,
+    a.program_percentage AS program_percentage,
+    b.amp_theme_id AS amp_program_id1,
+    b.name AS n1,
+    b.level_ AS l1,
+    b1.amp_theme_id AS amp_program_id2,
+    b1.name AS n2,
+    b1.level_ AS l2,
+    b2.amp_theme_id AS amp_program_id3,
+    b2.name AS n3,
+    b2.level_ AS l3,
+    b3.amp_theme_id AS amp_program_id4,
+    b3.name AS n4,
+    b3.level_ AS l4,
+    b4.amp_theme_id AS amp_program_id5,
+    b4.name AS n5,
+    b4.level_ AS l5,
+    b5.amp_theme_id AS amp_program_id6,
+    b5.name AS n6,
+    b5.level_ AS l6,
+    b6.amp_theme_id AS amp_program_id7,
+    b6.name AS n7,
+    b6.level_ AS l7,
+    b7.amp_theme_id AS amp_program_id8,
+    b7.name AS n8,
+    b7.level_ AS l8 
+  from 
+    amp_activity_program a join 
+    amp_theme b on a.amp_program_id = b.amp_theme_id 
+    left join amp_theme b1 on b1.amp_theme_id = b.parent_theme_id 
+    left join amp_theme b2 on b2.amp_theme_id = b1.parent_theme_id 
+    left join amp_theme b3 on b3.amp_theme_id = b2.parent_theme_id 
+    left join amp_theme b4 on b4.amp_theme_id = b3.parent_theme_id 
+    left join amp_theme b5 on b5.amp_theme_id = b4.parent_theme_id 
+    left join amp_theme b6 on b6.amp_theme_id = b5.parent_theme_id 
+    left join amp_theme b7 on b7.amp_theme_id = b6.parent_theme_id 
+  where 
+    a.program_setting = 2
+/
+CREATE OR REPLACE FORCE VIEW  "V_PRIMARYPROGRAM_CACHED" ("AMP_ACTIVITY_ID", "NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE", "PROGRAM_SETTING") AS 
+  select a.amp_activity_id AS amp_activity_id,
+   
+         decode(program_setting, 3, t.name, NULL) AS name, 
+         ap.amp_program_id AS amp_program_id,
+         ap.program_percentage AS program_percentage,
+         ap.program_setting AS program_setting
+  from amp_activity a
+       left join amp_activity_program ap on a.amp_activity_id = ap.amp_activity_id
+       left join amp_theme t on t.amp_theme_id = ap.amp_program_id
+  order by a.amp_activity_id, t.name
+/
+CREATE OR REPLACE FORCE VIEW  "V_PRIMARYPROGRAM_LEVEL_0" ("AMP_ACTIVITY_ID", "NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
+  select 
+		amp_activity_id,
+       name,
+       amp_program_id,
+       sum(program_percentage) as program_percentage
+from (
+      select v_primaryprogram_all_level.amp_activity_id AS amp_activity_id,
+             case             0
+               when v_primaryprogram_all_level.l1 then v_primaryprogram_all_level.n1
+               when v_primaryprogram_all_level.l2 then v_primaryprogram_all_level.n2
+               when v_primaryprogram_all_level.l3 then v_primaryprogram_all_level.n3
+               when v_primaryprogram_all_level.l4 then v_primaryprogram_all_level.n4
+               when v_primaryprogram_all_level.l5 then v_primaryprogram_all_level.n5
+               when v_primaryprogram_all_level.l6 then v_primaryprogram_all_level.n6
+               when v_primaryprogram_all_level.l7 then v_primaryprogram_all_level.n7
+               when v_primaryprogram_all_level.l8 then v_primaryprogram_all_level.n8
+             end AS name,
+             case             0
+               when v_primaryprogram_all_level.l1 then v_primaryprogram_all_level.amp_program_id1
+               when v_primaryprogram_all_level.l2 then v_primaryprogram_all_level.amp_program_id2
+               when v_primaryprogram_all_level.l3 then v_primaryprogram_all_level.amp_program_id3
+               when v_primaryprogram_all_level.l4 then v_primaryprogram_all_level.amp_program_id4
+               when v_primaryprogram_all_level.l5 then v_primaryprogram_all_level.amp_program_id5
+               when v_primaryprogram_all_level.l6 then v_primaryprogram_all_level.amp_program_id6
+               when v_primaryprogram_all_level.l7 then v_primaryprogram_all_level.amp_program_id7
+               when v_primaryprogram_all_level.l8 then v_primaryprogram_all_level.amp_program_id8
+             end AS amp_program_id,
+             v_primaryprogram_all_level.program_percentage AS program_percentage
+      from v_primaryprogram_all_level
+     ) t1
+group by 
+	amp_activity_id,
+       name,
+       amp_program_id
+having name is not null
+/
+CREATE OR REPLACE FORCE VIEW  "V_PRIMARYPROGRAM_LEVEL_1" ("AMP_ACTIVITY_ID", "NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
+  select 
+		amp_activity_id,
+       name,
+       amp_program_id,
+       sum(program_percentage) as program_percentage
+from (
+      select v_primaryprogram_all_level.amp_activity_id AS amp_activity_id,
+             case             1
+               when v_primaryprogram_all_level.l1 then v_primaryprogram_all_level.n1
+               when v_primaryprogram_all_level.l2 then v_primaryprogram_all_level.n2
+               when v_primaryprogram_all_level.l3 then v_primaryprogram_all_level.n3
+               when v_primaryprogram_all_level.l4 then v_primaryprogram_all_level.n4
+               when v_primaryprogram_all_level.l5 then v_primaryprogram_all_level.n5
+               when v_primaryprogram_all_level.l6 then v_primaryprogram_all_level.n6
+               when v_primaryprogram_all_level.l7 then v_primaryprogram_all_level.n7
+               when v_primaryprogram_all_level.l8 then v_primaryprogram_all_level.n8
+             end AS name,
+             case             1
+               when v_primaryprogram_all_level.l1 then v_primaryprogram_all_level.amp_program_id1
+               when v_primaryprogram_all_level.l2 then v_primaryprogram_all_level.amp_program_id2
+               when v_primaryprogram_all_level.l3 then v_primaryprogram_all_level.amp_program_id3
+               when v_primaryprogram_all_level.l4 then v_primaryprogram_all_level.amp_program_id4
+               when v_primaryprogram_all_level.l5 then v_primaryprogram_all_level.amp_program_id5
+               when v_primaryprogram_all_level.l6 then v_primaryprogram_all_level.amp_program_id6
+               when v_primaryprogram_all_level.l7 then v_primaryprogram_all_level.amp_program_id7
+               when v_primaryprogram_all_level.l8 then v_primaryprogram_all_level.amp_program_id8
+             end AS amp_program_id,
+             v_primaryprogram_all_level.program_percentage AS program_percentage
+      from v_primaryprogram_all_level
+     ) t1
+group by 
+	amp_activity_id,
+       name,
+       amp_program_id
+having name is not null
+/
+CREATE OR REPLACE FORCE VIEW  "V_PRIMARYPROGRAM_LEVEL_2" ("AMP_ACTIVITY_ID", "NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
+  select 
+		amp_activity_id,
+       name,
+       amp_program_id,
+       sum(program_percentage) as program_percentage
+from (
+      select v_primaryprogram_all_level.amp_activity_id AS amp_activity_id,
+             case 2
+               when v_primaryprogram_all_level.l1 then v_primaryprogram_all_level.n1
+               when v_primaryprogram_all_level.l2 then v_primaryprogram_all_level.n2
+               when v_primaryprogram_all_level.l3 then v_primaryprogram_all_level.n3
+               when v_primaryprogram_all_level.l4 then v_primaryprogram_all_level.n4
+               when v_primaryprogram_all_level.l5 then v_primaryprogram_all_level.n5
+               when v_primaryprogram_all_level.l6 then v_primaryprogram_all_level.n6
+               when v_primaryprogram_all_level.l7 then v_primaryprogram_all_level.n7
+               when v_primaryprogram_all_level.l8 then v_primaryprogram_all_level.n8
+             end AS name,
+             case 2
+               when v_primaryprogram_all_level.l1 then v_primaryprogram_all_level.amp_program_id1
+               when v_primaryprogram_all_level.l2 then v_primaryprogram_all_level.amp_program_id2
+               when v_primaryprogram_all_level.l3 then v_primaryprogram_all_level.amp_program_id3
+               when v_primaryprogram_all_level.l4 then v_primaryprogram_all_level.amp_program_id4
+               when v_primaryprogram_all_level.l5 then v_primaryprogram_all_level.amp_program_id5
+               when v_primaryprogram_all_level.l6 then v_primaryprogram_all_level.amp_program_id6
+               when v_primaryprogram_all_level.l7 then v_primaryprogram_all_level.amp_program_id7
+               when v_primaryprogram_all_level.l8 then v_primaryprogram_all_level.amp_program_id8
+             end AS amp_program_id,
+             v_primaryprogram_all_level.program_percentage AS program_percentage
+      from v_primaryprogram_all_level
+     ) t1
+group by 
+	amp_activity_id,
+       name,
+       amp_program_id
+having name is not null
+/
+CREATE OR REPLACE FORCE VIEW  "V_PRIMARYPROGRAM_LEVEL_3" ("AMP_ACTIVITY_ID", "NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
+  select 
+		amp_activity_id,
+       name,
+       amp_program_id,
+       sum(program_percentage) as program_percentage
+from (
+      select v_primaryprogram_all_level.amp_activity_id AS amp_activity_id,
+             case 3
+               when v_primaryprogram_all_level.l1 then v_primaryprogram_all_level.n1
+               when v_primaryprogram_all_level.l2 then v_primaryprogram_all_level.n2
+               when v_primaryprogram_all_level.l3 then v_primaryprogram_all_level.n3
+               when v_primaryprogram_all_level.l4 then v_primaryprogram_all_level.n4
+               when v_primaryprogram_all_level.l5 then v_primaryprogram_all_level.n5
+               when v_primaryprogram_all_level.l6 then v_primaryprogram_all_level.n6
+               when v_primaryprogram_all_level.l7 then v_primaryprogram_all_level.n7
+               when v_primaryprogram_all_level.l8 then v_primaryprogram_all_level.n8
+             end AS name,
+             case 3
+               when v_primaryprogram_all_level.l1 then v_primaryprogram_all_level.amp_program_id1
+               when v_primaryprogram_all_level.l2 then v_primaryprogram_all_level.amp_program_id2
+               when v_primaryprogram_all_level.l3 then v_primaryprogram_all_level.amp_program_id3
+               when v_primaryprogram_all_level.l4 then v_primaryprogram_all_level.amp_program_id4
+               when v_primaryprogram_all_level.l5 then v_primaryprogram_all_level.amp_program_id5
+               when v_primaryprogram_all_level.l6 then v_primaryprogram_all_level.amp_program_id6
+               when v_primaryprogram_all_level.l7 then v_primaryprogram_all_level.amp_program_id7
+               when v_primaryprogram_all_level.l8 then v_primaryprogram_all_level.amp_program_id8
+             end AS amp_program_id,
+             v_primaryprogram_all_level.program_percentage AS program_percentage
+      from v_primaryprogram_all_level
+     ) t1
+group by 
+	amp_activity_id,
+       name,
+       amp_program_id
+having name is not null
+/
+CREATE OR REPLACE FORCE VIEW  "V_PRIMARYPROGRAM_LEVEL_4" ("AMP_ACTIVITY_ID", "NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
+  select 
+		amp_activity_id,
+       name,
+       amp_program_id,
+       sum(program_percentage) as program_percentage
+from (
+      select v_primaryprogram_all_level.amp_activity_id AS amp_activity_id,
+             case 4
+               when v_primaryprogram_all_level.l1 then v_primaryprogram_all_level.n1
+               when v_primaryprogram_all_level.l2 then v_primaryprogram_all_level.n2
+               when v_primaryprogram_all_level.l3 then v_primaryprogram_all_level.n3
+               when v_primaryprogram_all_level.l4 then v_primaryprogram_all_level.n4
+               when v_primaryprogram_all_level.l5 then v_primaryprogram_all_level.n5
+               when v_primaryprogram_all_level.l6 then v_primaryprogram_all_level.n6
+               when v_primaryprogram_all_level.l7 then v_primaryprogram_all_level.n7
+               when v_primaryprogram_all_level.l8 then v_primaryprogram_all_level.n8
+             end AS name,
+             case 4
+               when v_primaryprogram_all_level.l1 then v_primaryprogram_all_level.amp_program_id1
+               when v_primaryprogram_all_level.l2 then v_primaryprogram_all_level.amp_program_id2
+               when v_primaryprogram_all_level.l3 then v_primaryprogram_all_level.amp_program_id3
+               when v_primaryprogram_all_level.l4 then v_primaryprogram_all_level.amp_program_id4
+               when v_primaryprogram_all_level.l5 then v_primaryprogram_all_level.amp_program_id5
+               when v_primaryprogram_all_level.l6 then v_primaryprogram_all_level.amp_program_id6
+               when v_primaryprogram_all_level.l7 then v_primaryprogram_all_level.amp_program_id7
+               when v_primaryprogram_all_level.l8 then v_primaryprogram_all_level.amp_program_id8
+             end AS amp_program_id,
+             v_primaryprogram_all_level.program_percentage AS program_percentage
+      from v_primaryprogram_all_level
+     ) t1
+group by 
+	amp_activity_id,
+       name,
+       amp_program_id
+having name is not null
+/
+CREATE OR REPLACE FORCE VIEW  "V_PRIMARYPROGRAM_LEVEL_5" ("AMP_ACTIVITY_ID", "NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
+  select 
+		amp_activity_id,
+       name,
+       amp_program_id,
+       sum(program_percentage) as program_percentage
+from (
+      select v_primaryprogram_all_level.amp_activity_id AS amp_activity_id,
+             case 5
+               when v_primaryprogram_all_level.l1 then v_primaryprogram_all_level.n1
+               when v_primaryprogram_all_level.l2 then v_primaryprogram_all_level.n2
+               when v_primaryprogram_all_level.l3 then v_primaryprogram_all_level.n3
+               when v_primaryprogram_all_level.l4 then v_primaryprogram_all_level.n4
+               when v_primaryprogram_all_level.l5 then v_primaryprogram_all_level.n5
+               when v_primaryprogram_all_level.l6 then v_primaryprogram_all_level.n6
+               when v_primaryprogram_all_level.l7 then v_primaryprogram_all_level.n7
+               when v_primaryprogram_all_level.l8 then v_primaryprogram_all_level.n8
+             end AS name,
+             case 5
+               when v_primaryprogram_all_level.l1 then v_primaryprogram_all_level.amp_program_id1
+               when v_primaryprogram_all_level.l2 then v_primaryprogram_all_level.amp_program_id2
+               when v_primaryprogram_all_level.l3 then v_primaryprogram_all_level.amp_program_id3
+               when v_primaryprogram_all_level.l4 then v_primaryprogram_all_level.amp_program_id4
+               when v_primaryprogram_all_level.l5 then v_primaryprogram_all_level.amp_program_id5
+               when v_primaryprogram_all_level.l6 then v_primaryprogram_all_level.amp_program_id6
+               when v_primaryprogram_all_level.l7 then v_primaryprogram_all_level.amp_program_id7
+               when v_primaryprogram_all_level.l8 then v_primaryprogram_all_level.amp_program_id8
+             end AS amp_program_id,
+             v_primaryprogram_all_level.program_percentage AS program_percentage
+      from v_primaryprogram_all_level
+     ) t1
+group by 
+	amp_activity_id,
+       name,
+       amp_program_id
+having name is not null
+/
+CREATE OR REPLACE FORCE VIEW  "V_PRIMARYPROGRAM_LEVEL_6" ("AMP_ACTIVITY_ID", "NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
+  select 
+		amp_activity_id,
+       name,
+       amp_program_id,
+       sum(program_percentage) as program_percentage
+from (
+      select v_primaryprogram_all_level.amp_activity_id AS amp_activity_id,
+             case 6
+               when v_primaryprogram_all_level.l1 then v_primaryprogram_all_level.n1
+               when v_primaryprogram_all_level.l2 then v_primaryprogram_all_level.n2
+               when v_primaryprogram_all_level.l3 then v_primaryprogram_all_level.n3
+               when v_primaryprogram_all_level.l4 then v_primaryprogram_all_level.n4
+               when v_primaryprogram_all_level.l5 then v_primaryprogram_all_level.n5
+               when v_primaryprogram_all_level.l6 then v_primaryprogram_all_level.n6
+               when v_primaryprogram_all_level.l7 then v_primaryprogram_all_level.n7
+               when v_primaryprogram_all_level.l8 then v_primaryprogram_all_level.n8
+             end AS name,
+             case 6
+               when v_primaryprogram_all_level.l1 then v_primaryprogram_all_level.amp_program_id1
+               when v_primaryprogram_all_level.l2 then v_primaryprogram_all_level.amp_program_id2
+               when v_primaryprogram_all_level.l3 then v_primaryprogram_all_level.amp_program_id3
+               when v_primaryprogram_all_level.l4 then v_primaryprogram_all_level.amp_program_id4
+               when v_primaryprogram_all_level.l5 then v_primaryprogram_all_level.amp_program_id5
+               when v_primaryprogram_all_level.l6 then v_primaryprogram_all_level.amp_program_id6
+               when v_primaryprogram_all_level.l7 then v_primaryprogram_all_level.amp_program_id7
+               when v_primaryprogram_all_level.l8 then v_primaryprogram_all_level.amp_program_id8
+             end AS amp_program_id,
+             v_primaryprogram_all_level.program_percentage AS program_percentage
+      from v_primaryprogram_all_level
+     ) t1
+group by 
+	amp_activity_id,
+       name,
+       amp_program_id
+having name is not null
+/
+CREATE OR REPLACE FORCE VIEW  "V_PRIMARYPROGRAM_LEVEL_7" ("AMP_ACTIVITY_ID", "NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
+  select 
+		amp_activity_id,
+       name,
+       amp_program_id,
+       sum(program_percentage) as program_percentage
+from (
+      select v_primaryprogram_all_level.amp_activity_id AS amp_activity_id,
+             case 7
+               when v_primaryprogram_all_level.l1 then v_primaryprogram_all_level.n1
+               when v_primaryprogram_all_level.l2 then v_primaryprogram_all_level.n2
+               when v_primaryprogram_all_level.l3 then v_primaryprogram_all_level.n3
+               when v_primaryprogram_all_level.l4 then v_primaryprogram_all_level.n4
+               when v_primaryprogram_all_level.l5 then v_primaryprogram_all_level.n5
+               when v_primaryprogram_all_level.l6 then v_primaryprogram_all_level.n6
+               when v_primaryprogram_all_level.l7 then v_primaryprogram_all_level.n7
+               when v_primaryprogram_all_level.l8 then v_primaryprogram_all_level.n8
+             end AS name,
+             case 7
+               when v_primaryprogram_all_level.l1 then v_primaryprogram_all_level.amp_program_id1
+               when v_primaryprogram_all_level.l2 then v_primaryprogram_all_level.amp_program_id2
+               when v_primaryprogram_all_level.l3 then v_primaryprogram_all_level.amp_program_id3
+               when v_primaryprogram_all_level.l4 then v_primaryprogram_all_level.amp_program_id4
+               when v_primaryprogram_all_level.l5 then v_primaryprogram_all_level.amp_program_id5
+               when v_primaryprogram_all_level.l6 then v_primaryprogram_all_level.amp_program_id6
+               when v_primaryprogram_all_level.l7 then v_primaryprogram_all_level.amp_program_id7
+               when v_primaryprogram_all_level.l8 then v_primaryprogram_all_level.amp_program_id8
+             end AS amp_program_id,
+             v_primaryprogram_all_level.program_percentage AS program_percentage
+      from v_primaryprogram_all_level
+     ) t1
+group by 
+	amp_activity_id,
+       name,
+       amp_program_id
+having name is not null
+/
+CREATE OR REPLACE FORCE VIEW  "V_PRIMARYPROGRAM_LEVEL_8" ("AMP_ACTIVITY_ID", "NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
+  select 
+		amp_activity_id,
+       name,
+       amp_program_id,
+       sum(program_percentage) as program_percentage
+from (
+      select v_primaryprogram_all_level.amp_activity_id AS amp_activity_id,
+             case 8
+               when v_primaryprogram_all_level.l1 then v_primaryprogram_all_level.n1
+               when v_primaryprogram_all_level.l2 then v_primaryprogram_all_level.n2
+               when v_primaryprogram_all_level.l3 then v_primaryprogram_all_level.n3
+               when v_primaryprogram_all_level.l4 then v_primaryprogram_all_level.n4
+               when v_primaryprogram_all_level.l5 then v_primaryprogram_all_level.n5
+               when v_primaryprogram_all_level.l6 then v_primaryprogram_all_level.n6
+               when v_primaryprogram_all_level.l7 then v_primaryprogram_all_level.n7
+               when v_primaryprogram_all_level.l8 then v_primaryprogram_all_level.n8
+             end AS name,
+             case 8
+               when v_primaryprogram_all_level.l1 then v_primaryprogram_all_level.amp_program_id1
+               when v_primaryprogram_all_level.l2 then v_primaryprogram_all_level.amp_program_id2
+               when v_primaryprogram_all_level.l3 then v_primaryprogram_all_level.amp_program_id3
+               when v_primaryprogram_all_level.l4 then v_primaryprogram_all_level.amp_program_id4
+               when v_primaryprogram_all_level.l5 then v_primaryprogram_all_level.amp_program_id5
+               when v_primaryprogram_all_level.l6 then v_primaryprogram_all_level.amp_program_id6
+               when v_primaryprogram_all_level.l7 then v_primaryprogram_all_level.amp_program_id7
+               when v_primaryprogram_all_level.l8 then v_primaryprogram_all_level.amp_program_id8
+             end AS amp_program_id,
+             v_primaryprogram_all_level.program_percentage AS program_percentage
+      from v_primaryprogram_all_level
+     ) t1
+group by 
+	amp_activity_id,
+       name,
+       amp_program_id
+having name is not null
+/
 CREATE OR REPLACE FORCE VIEW  "V_PROJECT_CATEGORY" ("AMP_ACTIVITY_ID", "NAME", "AMP_CATEGORY_ID") AS 
   select aac.amp_activity_id AS amp_activity_id,
          acv.category_value AS "NAME",
@@ -1201,23 +1642,29 @@ CREATE OR REPLACE FORCE VIEW  "V_PURPOSES" ("AMP_ACTIVITY_ID", "EBODY") AS
   order by amp_activity.amp_activity_id
 /
 CREATE OR REPLACE FORCE VIEW  "V_REGIONAL_FUNDING" ("AMP_ACTIVITY_ID", "AMP_REGIONAL_FUNDING_ID", "AMP_FUND_DETAIL_ID", "REGION_NAME", "TRANSACTION_TYPE", "ADJUSTMENT_TYPE", "TRANSACTION_DATE", "TRANSACTION_AMOUNT", "CURRENCY_CODE", "REGION_ID") AS 
-  select f.activity_id AS amp_activity_id,
-         f.amp_regional_funding_id AS amp_regional_funding_id,
-         f.amp_regional_funding_id AS amp_fund_detail_id,
-         r.name AS region_name,
-         f.transaction_type AS transaction_type,
-         f.adjustment_type AS adjustment_type,
-         f.transaction_date AS transaction_date,
-         f.transaction_amount AS transaction_amount,
-         c.currency_code AS currency_code,
-         f.region_id AS region_id
-  from amp_regional_funding f,
-       amp_region r,
-       amp_currency c
-  where c.amp_currency_id = f.currency_id and
-        f.region_id = r.amp_region_id
-  order by
-     f.activity_id
+  select 
+    f.activity_id AS amp_activity_id,
+    f.amp_regional_funding_id AS amp_regional_funding_id,
+    f.amp_regional_funding_id AS amp_fund_detail_id,
+    r.location_name AS region_name,
+    f.transaction_type AS transaction_type,
+    f.adjustment_type AS adjustment_type,
+    f.transaction_date AS transaction_date,
+    f.transaction_amount AS transaction_amount,
+    c.currency_code AS currency_code,
+    f.region_location_id AS region_id 
+  from 
+      amp_regional_funding f,
+     amp_category_value_location r,
+     amp_currency c, 
+     amp_category_value v 
+  where 
+    c.amp_currency_id = f.currency_id and 
+    f.region_location_id = r.id and 
+    r.parent_category_value = v.id 
+    and v.category_value ='Region' 
+  order by 
+    f.activity_id
 /
 CREATE OR REPLACE FORCE VIEW  "V_REGIONAL_GROUP" ("AMP_ACTIVITY_ID", "NAME", "AMP_ORG_ID") AS 
   select f.activity AS amp_activity_id,
@@ -1234,14 +1681,15 @@ CREATE OR REPLACE FORCE VIEW  "V_REGIONAL_GROUP" ("AMP_ACTIVITY_ID", "NAME", "AM
 CREATE OR REPLACE FORCE VIEW  "V_REGIONS" ("AMP_ACTIVITY_ID", "REGION", "REGION_ID", "LOCATION_PERCENTAGE") AS 
   select ra.amp_activity_id AS amp_activity_id,
          l.region AS region,
-         l.region_id AS region_id,
+         l.region_location_id AS region_id,
          sum(ra.location_percentage) AS location_percentage
   from amp_activity_location ra,
-       amp_location l
+       amp_location l,
+       amp_category_value_location cvl
   where
-      l.region_id  is not null and ra.amp_location_id = l.amp_location_id
+      l.region_id  is not null and ra.amp_location_id = l.amp_location_id and l.location_id = cvl.id
   group by
-     ra.amp_activity_id , l.region_id ,l.region
+     ra.amp_activity_id ,l.region, l.region_id ,l.region_location_id
   order by      ra.amp_activity_id , l.region
 /
 CREATE OR REPLACE FORCE VIEW  "V_RESPONSIBLE_ORGANISATION" ("AMP_ACTIVITY_ID", "NAME", "AMP_ORG_ID") AS 
@@ -1289,6 +1737,392 @@ CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM" ("AMP_ACTIVITY_ID", "NAME", "
             ap.amp_program_id
   order by
      a.amp_activity_id , t.name
+/
+CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_ALL_LEVEL" ("AMP_ACTIVITY_ID", "PROGRAM_PERCENTAGE", "AMP_PROGRAM_ID1", "N1", "L1", "AMP_PROGRAM_ID2", "N2", "L2", "AMP_PROGRAM_ID3", "N3", "L3", "AMP_PROGRAM_ID4", "N4", "L4", "AMP_PROGRAM_ID5", "N5", "L5", "AMP_PROGRAM_ID6", "N6", "L6", "AMP_PROGRAM_ID7", "N7", "L7", "AMP_PROGRAM_ID8", "N8", "L8") AS 
+  select 
+    a.amp_activity_id AS amp_activity_id,
+    a.program_percentage AS program_percentage,
+    b.amp_theme_id AS amp_program_id1,
+    b.name AS n1,
+    b.level_ AS l1,
+    b1.amp_theme_id AS amp_program_id2,
+    b1.name AS n2,
+    b1.level_ AS l2,
+    b2.amp_theme_id AS amp_program_id3,
+    b2.name AS n3,
+    b2.level_ AS l3,
+    b3.amp_theme_id AS amp_program_id4,
+    b3.name AS n4,
+    b3.level_ AS l4,
+    b4.amp_theme_id AS amp_program_id5,
+    b4.name AS n5,
+    b4.level_ AS l5,
+    b5.amp_theme_id AS amp_program_id6,
+    b5.name AS n6,
+    b5.level_ AS l6,
+    b6.amp_theme_id AS amp_program_id7,
+    b6.name AS n7,
+    b6.level_ AS l7,
+    b7.amp_theme_id AS amp_program_id8,
+    b7.name AS n8,
+    b7.level_ AS l8 
+  from 
+     amp_activity_program a, 
+     amp_theme b, 
+     amp_theme b1, 
+     amp_theme b2, 
+     amp_theme b3, 
+     amp_theme b4, 
+     amp_theme b5, 
+     amp_theme b6, 
+     amp_theme b7 
+  where  a.program_setting = 3 and 
+    a.amp_program_id = b.amp_theme_id
+    and b1.amp_theme_id = b.parent_theme_id 
+    and b2.amp_theme_id = b1.parent_theme_id 
+    and b3.amp_theme_id = b2.parent_theme_id 
+    and b4.amp_theme_id = b3.parent_theme_id 
+    and b5.amp_theme_id = b4.parent_theme_id 
+    and b6.amp_theme_id = b5.parent_theme_id 
+    and b7.amp_theme_id = b6.parent_theme_id
+/
+CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_CACHED" ("AMP_ACTIVITY_ID", "NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE", "PROGRAM_SETTING") AS 
+  select 
+    a.amp_activity_id AS amp_activity_id,
+    decode(ap.program_setting,3,t.name,NULL) AS name,
+    ap.amp_program_id AS amp_program_id,
+    ap.program_percentage AS program_percentage,
+    ap.program_setting AS program_setting 
+  from 
+    amp_activity a 
+    left join amp_activity_program ap on a.amp_activity_id = ap.amp_activity_id 
+    left join amp_theme t on t.amp_theme_id = ap.amp_program_id 
+  order by 
+    a.amp_activity_id,t.name
+/
+CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_0" ("NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
+  select 
+amp_activity_id
+name,
+amp_program_id,
+sum(program_percentage) program_percentage
+from(
+select 
+    v_secondaryprogram_all_level.amp_activity_id AS amp_activity_id,
+    
+    case 0 
+    when v_secondaryprogram_all_level.l1 then v_secondaryprogram_all_level.n1 
+    when v_secondaryprogram_all_level.l2 then v_secondaryprogram_all_level.n2 
+    when v_secondaryprogram_all_level.l3 then v_secondaryprogram_all_level.n3 
+    when v_secondaryprogram_all_level.l4 then v_secondaryprogram_all_level.n4 
+    when v_secondaryprogram_all_level.l5 then v_secondaryprogram_all_level.n5 
+    when v_secondaryprogram_all_level.l6 then v_secondaryprogram_all_level.n6 
+    when v_secondaryprogram_all_level.l7 then v_secondaryprogram_all_level.n7 
+    when v_secondaryprogram_all_level.l8 then v_secondaryprogram_all_level.n8 
+    end AS name,
+    case 0 
+    when v_secondaryprogram_all_level.l1 then v_secondaryprogram_all_level.amp_program_id1 
+    when v_secondaryprogram_all_level.l2 then v_secondaryprogram_all_level.amp_program_id2 
+    when v_secondaryprogram_all_level.l3 then v_secondaryprogram_all_level.amp_program_id3 
+    when v_secondaryprogram_all_level.l4 then v_secondaryprogram_all_level.amp_program_id4 
+    when v_secondaryprogram_all_level.l5 then v_secondaryprogram_all_level.amp_program_id5 
+    when v_secondaryprogram_all_level.l6 then v_secondaryprogram_all_level.amp_program_id6 
+    when v_secondaryprogram_all_level.l7 then v_secondaryprogram_all_level.amp_program_id7 
+    when v_secondaryprogram_all_level.l8 then v_secondaryprogram_all_level.amp_program_id8 
+    end  AS amp_program_id,
+    v_secondaryprogram_all_level.program_percentage AS program_percentage 
+  from 
+    v_secondaryprogram_all_level )  t1 
+group by amp_activity_id,name,amp_program_id 
+having name is not null
+/
+CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_1" ("NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
+  select 
+amp_activity_id
+name,
+amp_program_id,
+sum(program_percentage) program_percentage
+from(
+select 
+    v_secondaryprogram_all_level.amp_activity_id AS amp_activity_id,
+    
+    case 1 
+    when v_secondaryprogram_all_level.l1 then v_secondaryprogram_all_level.n1 
+    when v_secondaryprogram_all_level.l2 then v_secondaryprogram_all_level.n2 
+    when v_secondaryprogram_all_level.l3 then v_secondaryprogram_all_level.n3 
+    when v_secondaryprogram_all_level.l4 then v_secondaryprogram_all_level.n4 
+    when v_secondaryprogram_all_level.l5 then v_secondaryprogram_all_level.n5 
+    when v_secondaryprogram_all_level.l6 then v_secondaryprogram_all_level.n6 
+    when v_secondaryprogram_all_level.l7 then v_secondaryprogram_all_level.n7 
+    when v_secondaryprogram_all_level.l8 then v_secondaryprogram_all_level.n8 
+    end AS name,
+    case 1 
+    when v_secondaryprogram_all_level.l1 then v_secondaryprogram_all_level.amp_program_id1 
+    when v_secondaryprogram_all_level.l2 then v_secondaryprogram_all_level.amp_program_id2 
+    when v_secondaryprogram_all_level.l3 then v_secondaryprogram_all_level.amp_program_id3 
+    when v_secondaryprogram_all_level.l4 then v_secondaryprogram_all_level.amp_program_id4 
+    when v_secondaryprogram_all_level.l5 then v_secondaryprogram_all_level.amp_program_id5 
+    when v_secondaryprogram_all_level.l6 then v_secondaryprogram_all_level.amp_program_id6 
+    when v_secondaryprogram_all_level.l7 then v_secondaryprogram_all_level.amp_program_id7 
+    when v_secondaryprogram_all_level.l8 then v_secondaryprogram_all_level.amp_program_id8 
+    end  AS amp_program_id,
+    v_secondaryprogram_all_level.program_percentage AS program_percentage 
+  from 
+    v_secondaryprogram_all_level )  t1 
+group by amp_activity_id,name,amp_program_id 
+having name is not null
+/
+CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_2" ("NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
+  select 
+amp_activity_id
+name,
+amp_program_id,
+sum(program_percentage) program_percentage
+from(
+select 
+    v_secondaryprogram_all_level.amp_activity_id AS amp_activity_id,
+    
+    case 2 
+    when v_secondaryprogram_all_level.l1 then v_secondaryprogram_all_level.n1 
+    when v_secondaryprogram_all_level.l2 then v_secondaryprogram_all_level.n2 
+    when v_secondaryprogram_all_level.l3 then v_secondaryprogram_all_level.n3 
+    when v_secondaryprogram_all_level.l4 then v_secondaryprogram_all_level.n4 
+    when v_secondaryprogram_all_level.l5 then v_secondaryprogram_all_level.n5 
+    when v_secondaryprogram_all_level.l6 then v_secondaryprogram_all_level.n6 
+    when v_secondaryprogram_all_level.l7 then v_secondaryprogram_all_level.n7 
+    when v_secondaryprogram_all_level.l8 then v_secondaryprogram_all_level.n8 
+    end AS name,
+    case 2 
+    when v_secondaryprogram_all_level.l1 then v_secondaryprogram_all_level.amp_program_id1 
+    when v_secondaryprogram_all_level.l2 then v_secondaryprogram_all_level.amp_program_id2 
+    when v_secondaryprogram_all_level.l3 then v_secondaryprogram_all_level.amp_program_id3 
+    when v_secondaryprogram_all_level.l4 then v_secondaryprogram_all_level.amp_program_id4 
+    when v_secondaryprogram_all_level.l5 then v_secondaryprogram_all_level.amp_program_id5 
+    when v_secondaryprogram_all_level.l6 then v_secondaryprogram_all_level.amp_program_id6 
+    when v_secondaryprogram_all_level.l7 then v_secondaryprogram_all_level.amp_program_id7 
+    when v_secondaryprogram_all_level.l8 then v_secondaryprogram_all_level.amp_program_id8 
+    end  AS amp_program_id,
+    v_secondaryprogram_all_level.program_percentage AS program_percentage 
+  from 
+    v_secondaryprogram_all_level )  t1 
+group by amp_activity_id,name,amp_program_id 
+having name is not null
+/
+CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_3" ("NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
+  select 
+amp_activity_id
+name,
+amp_program_id,
+sum(program_percentage) program_percentage
+from(
+select 
+    v_secondaryprogram_all_level.amp_activity_id AS amp_activity_id,
+    
+    case 3 
+    when v_secondaryprogram_all_level.l1 then v_secondaryprogram_all_level.n1 
+    when v_secondaryprogram_all_level.l2 then v_secondaryprogram_all_level.n2 
+    when v_secondaryprogram_all_level.l3 then v_secondaryprogram_all_level.n3 
+    when v_secondaryprogram_all_level.l4 then v_secondaryprogram_all_level.n4 
+    when v_secondaryprogram_all_level.l5 then v_secondaryprogram_all_level.n5 
+    when v_secondaryprogram_all_level.l6 then v_secondaryprogram_all_level.n6 
+    when v_secondaryprogram_all_level.l7 then v_secondaryprogram_all_level.n7 
+    when v_secondaryprogram_all_level.l8 then v_secondaryprogram_all_level.n8 
+    end AS name,
+    case 3 
+    when v_secondaryprogram_all_level.l1 then v_secondaryprogram_all_level.amp_program_id1 
+    when v_secondaryprogram_all_level.l2 then v_secondaryprogram_all_level.amp_program_id2 
+    when v_secondaryprogram_all_level.l3 then v_secondaryprogram_all_level.amp_program_id3 
+    when v_secondaryprogram_all_level.l4 then v_secondaryprogram_all_level.amp_program_id4 
+    when v_secondaryprogram_all_level.l5 then v_secondaryprogram_all_level.amp_program_id5 
+    when v_secondaryprogram_all_level.l6 then v_secondaryprogram_all_level.amp_program_id6 
+    when v_secondaryprogram_all_level.l7 then v_secondaryprogram_all_level.amp_program_id7 
+    when v_secondaryprogram_all_level.l8 then v_secondaryprogram_all_level.amp_program_id8 
+    end  AS amp_program_id,
+    v_secondaryprogram_all_level.program_percentage AS program_percentage 
+  from 
+    v_secondaryprogram_all_level )  t1 
+group by amp_activity_id,name,amp_program_id 
+having name is not null
+/
+CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_4" ("NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
+  select 
+amp_activity_id
+name,
+amp_program_id,
+sum(program_percentage) program_percentage
+from(
+select 
+    v_secondaryprogram_all_level.amp_activity_id AS amp_activity_id,
+    
+    case 4 
+    when v_secondaryprogram_all_level.l1 then v_secondaryprogram_all_level.n1 
+    when v_secondaryprogram_all_level.l2 then v_secondaryprogram_all_level.n2 
+    when v_secondaryprogram_all_level.l3 then v_secondaryprogram_all_level.n3 
+    when v_secondaryprogram_all_level.l4 then v_secondaryprogram_all_level.n4 
+    when v_secondaryprogram_all_level.l5 then v_secondaryprogram_all_level.n5 
+    when v_secondaryprogram_all_level.l6 then v_secondaryprogram_all_level.n6 
+    when v_secondaryprogram_all_level.l7 then v_secondaryprogram_all_level.n7 
+    when v_secondaryprogram_all_level.l8 then v_secondaryprogram_all_level.n8 
+    end AS name,
+    case 4 
+    when v_secondaryprogram_all_level.l1 then v_secondaryprogram_all_level.amp_program_id1 
+    when v_secondaryprogram_all_level.l2 then v_secondaryprogram_all_level.amp_program_id2 
+    when v_secondaryprogram_all_level.l3 then v_secondaryprogram_all_level.amp_program_id3 
+    when v_secondaryprogram_all_level.l4 then v_secondaryprogram_all_level.amp_program_id4 
+    when v_secondaryprogram_all_level.l5 then v_secondaryprogram_all_level.amp_program_id5 
+    when v_secondaryprogram_all_level.l6 then v_secondaryprogram_all_level.amp_program_id6 
+    when v_secondaryprogram_all_level.l7 then v_secondaryprogram_all_level.amp_program_id7 
+    when v_secondaryprogram_all_level.l8 then v_secondaryprogram_all_level.amp_program_id8 
+    end  AS amp_program_id,
+    v_secondaryprogram_all_level.program_percentage AS program_percentage 
+  from 
+    v_secondaryprogram_all_level )  t1 
+group by amp_activity_id,name,amp_program_id 
+having name is not null
+/
+CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_5" ("NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
+  select 
+amp_activity_id
+name,
+amp_program_id,
+sum(program_percentage) program_percentage
+from(
+select 
+    v_secondaryprogram_all_level.amp_activity_id AS amp_activity_id,
+    
+    case 5 
+    when v_secondaryprogram_all_level.l1 then v_secondaryprogram_all_level.n1 
+    when v_secondaryprogram_all_level.l2 then v_secondaryprogram_all_level.n2 
+    when v_secondaryprogram_all_level.l3 then v_secondaryprogram_all_level.n3 
+    when v_secondaryprogram_all_level.l4 then v_secondaryprogram_all_level.n4 
+    when v_secondaryprogram_all_level.l5 then v_secondaryprogram_all_level.n5 
+    when v_secondaryprogram_all_level.l6 then v_secondaryprogram_all_level.n6 
+    when v_secondaryprogram_all_level.l7 then v_secondaryprogram_all_level.n7 
+    when v_secondaryprogram_all_level.l8 then v_secondaryprogram_all_level.n8 
+    end AS name,
+    case 5 
+    when v_secondaryprogram_all_level.l1 then v_secondaryprogram_all_level.amp_program_id1 
+    when v_secondaryprogram_all_level.l2 then v_secondaryprogram_all_level.amp_program_id2 
+    when v_secondaryprogram_all_level.l3 then v_secondaryprogram_all_level.amp_program_id3 
+    when v_secondaryprogram_all_level.l4 then v_secondaryprogram_all_level.amp_program_id4 
+    when v_secondaryprogram_all_level.l5 then v_secondaryprogram_all_level.amp_program_id5 
+    when v_secondaryprogram_all_level.l6 then v_secondaryprogram_all_level.amp_program_id6 
+    when v_secondaryprogram_all_level.l7 then v_secondaryprogram_all_level.amp_program_id7 
+    when v_secondaryprogram_all_level.l8 then v_secondaryprogram_all_level.amp_program_id8 
+    end  AS amp_program_id,
+    v_secondaryprogram_all_level.program_percentage AS program_percentage 
+  from 
+    v_secondaryprogram_all_level )  t1 
+group by amp_activity_id,name,amp_program_id 
+having name is not null
+/
+CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_6" ("NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
+  select 
+amp_activity_id
+name,
+amp_program_id,
+sum(program_percentage) program_percentage
+from(
+select 
+    v_secondaryprogram_all_level.amp_activity_id AS amp_activity_id,
+    
+    case 6 
+    when v_secondaryprogram_all_level.l1 then v_secondaryprogram_all_level.n1 
+    when v_secondaryprogram_all_level.l2 then v_secondaryprogram_all_level.n2 
+    when v_secondaryprogram_all_level.l3 then v_secondaryprogram_all_level.n3 
+    when v_secondaryprogram_all_level.l4 then v_secondaryprogram_all_level.n4 
+    when v_secondaryprogram_all_level.l5 then v_secondaryprogram_all_level.n5 
+    when v_secondaryprogram_all_level.l6 then v_secondaryprogram_all_level.n6 
+    when v_secondaryprogram_all_level.l7 then v_secondaryprogram_all_level.n7 
+    when v_secondaryprogram_all_level.l8 then v_secondaryprogram_all_level.n8 
+    end AS name,
+    case 6 
+    when v_secondaryprogram_all_level.l1 then v_secondaryprogram_all_level.amp_program_id1 
+    when v_secondaryprogram_all_level.l2 then v_secondaryprogram_all_level.amp_program_id2 
+    when v_secondaryprogram_all_level.l3 then v_secondaryprogram_all_level.amp_program_id3 
+    when v_secondaryprogram_all_level.l4 then v_secondaryprogram_all_level.amp_program_id4 
+    when v_secondaryprogram_all_level.l5 then v_secondaryprogram_all_level.amp_program_id5 
+    when v_secondaryprogram_all_level.l6 then v_secondaryprogram_all_level.amp_program_id6 
+    when v_secondaryprogram_all_level.l7 then v_secondaryprogram_all_level.amp_program_id7 
+    when v_secondaryprogram_all_level.l8 then v_secondaryprogram_all_level.amp_program_id8 
+    end  AS amp_program_id,
+    v_secondaryprogram_all_level.program_percentage AS program_percentage 
+  from 
+    v_secondaryprogram_all_level )  t1 
+group by amp_activity_id,name,amp_program_id 
+having name is not null
+/
+CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_7" ("NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
+  select 
+amp_activity_id
+name,
+amp_program_id,
+sum(program_percentage) program_percentage
+from(
+select 
+    v_secondaryprogram_all_level.amp_activity_id AS amp_activity_id,
+    
+    case 7 
+    when v_secondaryprogram_all_level.l1 then v_secondaryprogram_all_level.n1 
+    when v_secondaryprogram_all_level.l2 then v_secondaryprogram_all_level.n2 
+    when v_secondaryprogram_all_level.l3 then v_secondaryprogram_all_level.n3 
+    when v_secondaryprogram_all_level.l4 then v_secondaryprogram_all_level.n4 
+    when v_secondaryprogram_all_level.l5 then v_secondaryprogram_all_level.n5 
+    when v_secondaryprogram_all_level.l6 then v_secondaryprogram_all_level.n6 
+    when v_secondaryprogram_all_level.l7 then v_secondaryprogram_all_level.n7 
+    when v_secondaryprogram_all_level.l8 then v_secondaryprogram_all_level.n8 
+    end AS name,
+    case 7 
+    when v_secondaryprogram_all_level.l1 then v_secondaryprogram_all_level.amp_program_id1 
+    when v_secondaryprogram_all_level.l2 then v_secondaryprogram_all_level.amp_program_id2 
+    when v_secondaryprogram_all_level.l3 then v_secondaryprogram_all_level.amp_program_id3 
+    when v_secondaryprogram_all_level.l4 then v_secondaryprogram_all_level.amp_program_id4 
+    when v_secondaryprogram_all_level.l5 then v_secondaryprogram_all_level.amp_program_id5 
+    when v_secondaryprogram_all_level.l6 then v_secondaryprogram_all_level.amp_program_id6 
+    when v_secondaryprogram_all_level.l7 then v_secondaryprogram_all_level.amp_program_id7 
+    when v_secondaryprogram_all_level.l8 then v_secondaryprogram_all_level.amp_program_id8 
+    end  AS amp_program_id,
+    v_secondaryprogram_all_level.program_percentage AS program_percentage 
+  from 
+    v_secondaryprogram_all_level )  t1 
+group by amp_activity_id,name,amp_program_id 
+having name is not null
+/
+CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_8" ("NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
+  select 
+amp_activity_id
+name,
+amp_program_id,
+sum(program_percentage) program_percentage
+from(
+select 
+    v_secondaryprogram_all_level.amp_activity_id AS amp_activity_id,
+    
+    case 8 
+    when v_secondaryprogram_all_level.l1 then v_secondaryprogram_all_level.n1 
+    when v_secondaryprogram_all_level.l2 then v_secondaryprogram_all_level.n2 
+    when v_secondaryprogram_all_level.l3 then v_secondaryprogram_all_level.n3 
+    when v_secondaryprogram_all_level.l4 then v_secondaryprogram_all_level.n4 
+    when v_secondaryprogram_all_level.l5 then v_secondaryprogram_all_level.n5 
+    when v_secondaryprogram_all_level.l6 then v_secondaryprogram_all_level.n6 
+    when v_secondaryprogram_all_level.l7 then v_secondaryprogram_all_level.n7 
+    when v_secondaryprogram_all_level.l8 then v_secondaryprogram_all_level.n8 
+    end AS name,
+    case 8 
+    when v_secondaryprogram_all_level.l1 then v_secondaryprogram_all_level.amp_program_id1 
+    when v_secondaryprogram_all_level.l2 then v_secondaryprogram_all_level.amp_program_id2 
+    when v_secondaryprogram_all_level.l3 then v_secondaryprogram_all_level.amp_program_id3 
+    when v_secondaryprogram_all_level.l4 then v_secondaryprogram_all_level.amp_program_id4 
+    when v_secondaryprogram_all_level.l5 then v_secondaryprogram_all_level.amp_program_id5 
+    when v_secondaryprogram_all_level.l6 then v_secondaryprogram_all_level.amp_program_id6 
+    when v_secondaryprogram_all_level.l7 then v_secondaryprogram_all_level.amp_program_id7 
+    when v_secondaryprogram_all_level.l8 then v_secondaryprogram_all_level.amp_program_id8 
+    end  AS amp_program_id,
+    v_secondaryprogram_all_level.program_percentage AS program_percentage 
+  from 
+    v_secondaryprogram_all_level )  t1 
+group by amp_activity_id,name,amp_program_id 
+having name is not null
 /
 CREATE OR REPLACE FORCE VIEW  "V_SECONDARY_SECTORS" ("AMP_ACTIVITY_ID", "SECTORNAME", "AMP_SECTOR_ID", "SECTOR_PERCENTAGE", "AMP_SECTOR_SCHEME_ID") AS 
   select
@@ -1382,6 +2216,42 @@ CREATE OR REPLACE FORCE VIEW  "V_SECTORS" ("AMP_ACTIVITY_ID", "SECTORNAME", "AMP
   order by
      amp_activity_id ,sectorname
 /
+CREATE OR REPLACE FORCE VIEW  "V_SECTORS_CACHED" ("AMP_ACTIVITY_ID", "SECTORNAME", "AMP_SECTOR_ID", "AMP_SECTOR_SCHEME_ID", "SEC_SCHEME_NAME", "SECTOR_PERCENTAGE", "TRANSACTION_AMOUNT", "TRANSACTION_TYPE", "ADJUSTMENT_TYPE", "TRANSACTION_DATE", "FIXED_EXCHANGE_RATE", "CURRENCY_CODE") AS 
+  select sa.amp_activity_id AS amp_activity_id,
+         getSectorName(getParentSectorId(s.amp_sector_id)) AS sectorname,
+         getParentSectorId(s.amp_sector_id) AS amp_sector_id,
+         s.amp_sec_scheme_id AS amp_sector_scheme_id,
+         ss.sec_scheme_name AS sec_scheme_name,
+         sa.sector_percentage AS sector_percentage,
+         ((fd.transaction_amount * sa.sector_percentage) / 100) AS transaction_amount,
+         fd.transaction_type AS transaction_type,
+         fd.adjustment_type AS adjustment_type,
+         fd.transaction_date AS transaction_date,
+         fd.fixed_exchange_rate AS fixed_exchange_rate,
+         c.currency_code AS currency_code
+  from
+  amp_funding_detail fd,
+  amp_sector_scheme ss,
+  amp_classification_config cc,
+  amp_sector s  ,
+  amp_activity_sector sa ,
+  amp_funding f ,
+  amp_currency c
+where
+cc.name = 'Primary'
+and cc.classification_id = ss.amp_sec_scheme_id
+and sa.classification_config_id = cc.id
+and s.amp_sec_scheme_id = ss.amp_sec_scheme_id
+and sa.amp_activity_id = f.amp_activity_id
+and f.amp_funding_id = fd.amp_funding_id
+and fd.amp_currency_id = c.amp_currency_id
+and sa.amp_sector_id = s.amp_sector_id
+
+  order by sa.amp_activity_id,
+           getSectorName(getParentSectorId(s.amp_sector_id)),
+           fd.transaction_type,
+           f.amp_funding_id
+/
 CREATE OR REPLACE FORCE VIEW  "V_SECTOR_GROUP" ("AMP_ACTIVITY_ID", "NAME", "AMP_ORG_ID") AS 
   select f.activity AS amp_activity_id,
          o.name AS "NAME",
@@ -1474,7 +2344,3 @@ CREATE OR REPLACE FORCE VIEW  "V_UPDATED_DATE" ("AMP_ACTIVITY_ID", "DATE_UPDATED
   from amp_activity a
   order by a.amp_activity_id
 /
-
-			
-
-

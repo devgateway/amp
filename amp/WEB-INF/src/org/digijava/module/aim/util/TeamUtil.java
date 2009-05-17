@@ -1990,15 +1990,37 @@ public class TeamUtil {
      * @author Dare
      */
 
-    public synchronized static List getAllTeamReports(Long teamId, Boolean getTabs, Integer currentPage, Integer reportPerPage, Boolean inlcludeMemberReport, Long memberId) {
+    public synchronized static List getAllTeamReports(Long teamId, Boolean getTabs, Integer currentPage, Integer reportPerPage, Boolean inlcludeMemberReport, Long memberId, String nameTextFilter) {
     
     	   Session session 	= null;
            List col 		= new ArrayList();
            String tabFilter	= "";
+           String nameFilter = "";
            try {
         	   
         	   if ( getTabs!=null ) {
-        			   tabFilter	= "r.drilldownTab=:getTabs AND";
+        			   tabFilter	= " r.drilldownTab=:getTabs AND";
+        	   }
+        	   if (nameTextFilter != null){
+        		   if(nameTextFilter.equals("0-9%")) //Special case of names starting with numbers. Couldn't find regex support for HQL
+        		   {
+        			   StringBuffer sb = new StringBuffer();
+        			   for (Integer number = 0; number < 10; number++ )
+        			   {
+        				   sb.append("r.name like '" + number + "%'");
+        				   if (number < 9) sb.append(" OR ");
+        			   }
+        				   
+        			   nameFilter = " (" + sb.toString() + ") AND";
+        		   }
+        		   else if (!nameTextFilter.equals(""))
+        		   {
+        			   nameFilter = " lower(r.name) like lower(:nameFilter) AND";
+        		   }
+        		   else 
+        		   {
+        			   nameFilter = null; //reset it so it doesn't affect the rest of the queries
+        		   }
         	   }
         	   
                session = PersistenceManager.getRequestDBSession();
@@ -2012,12 +2034,16 @@ public class TeamUtil {
                if(team.getAccessType().equalsIgnoreCase(
                    Constants.ACCESS_TYPE_MNGMT)) {
                    queryString = "select DISTINCT r from " + AmpReports.class.getName()
-                       + " r where " + tabFilter + " (r.ownerId.ampTeamMemId = :memberid or r.ampReportId IN (select r2.report from " 
+                       + " r where " + tabFilter 
+                       + nameFilter
+                       + " (r.ownerId.ampTeamMemId = :memberid or r.ampReportId IN (select r2.report from " 
                        + AmpTeamReports.class.getName() 
                        + " r2 where r2.team.ampTeamId = :teamid and r2.teamView = true)) order by r.name";
                    qry = session.createQuery(queryString);
                    qry.setParameter("memberid", ampteammember.getAmpTeamMemId());
                    qry.setParameter("teamid", teamId);
+                   if (nameTextFilter != null && !nameTextFilter.equals("0-9%"))
+                	   qry.setParameter("nameFilter", nameTextFilter);
                    if ( getTabs!=null )
                 	   qry.setBoolean("getTabs", getTabs);
                    if (currentPage !=null){
@@ -2030,11 +2056,16 @@ public class TeamUtil {
                } else if (!inlcludeMemberReport){
                    queryString = "select r from "
                        + AmpTeamReports.class.getName()+" tr inner join  tr.report r "
-                       + "  where " + tabFilter + " (tr.team=:teamId) order by r.name ";
+                       + "  where " + tabFilter 
+                       + nameFilter
+                       + " (tr.team=:teamId) order by r.name ";
                    qry = session.createQuery(queryString);
                    qry.setLong("teamId", teamId);
                    if ( getTabs!=null )
                 	   qry.setBoolean("getTabs", getTabs);
+
+                   if (nameTextFilter != null && !nameTextFilter.equals("0-9%"))
+                	   qry.setParameter("nameFilter", nameTextFilter);
                    
                    if (currentPage !=null){
                 	   qry.setFirstResult(currentPage);
@@ -2045,12 +2076,17 @@ public class TeamUtil {
                    col = qry.list();
                }else if(inlcludeMemberReport){
             	   queryString="select distinct r from " + AmpReports.class.getName()+
-   				"  r left join r.members m where " + tabFilter + " ((m.ampTeamMemId is not null and m.ampTeamMemId=:ampTeamMemId)"+ 
+   				"  r left join r.members m where " 
+            	   + tabFilter 
+                   + nameFilter
+            	   + " ((m.ampTeamMemId is not null and m.ampTeamMemId=:ampTeamMemId)"+ 
 				" or r.id in (select r2.id from "+ AmpTeamReports.class.getName() + 
 				" tr inner join  tr.report r2 where tr.team=:teamId and tr.teamView = true))";
             	  qry = session.createQuery(queryString); 
             	  qry.setLong("ampTeamMemId", memberId);
              	  qry.setLong("teamId", teamId);
+                  if (nameTextFilter != null && !nameTextFilter.equals("0-9%"))
+               	   qry.setParameter("nameFilter", nameTextFilter);
              	  if ( getTabs!=null )
              		  qry.setBoolean("getTabs", getTabs);
             	  if (currentPage !=null){
@@ -2060,6 +2096,7 @@ public class TeamUtil {
                	   qry.setMaxResults(reportPerPage);
                   }
                   col = qry.list();
+
 
                }
                
@@ -2114,7 +2151,7 @@ public class TeamUtil {
  }
 
     public static List getAllTeamReports(Long teamId, Integer currentPage, Integer reportPerPage) {
-    	return getAllTeamReports( teamId, null,  currentPage,  reportPerPage, false,null);
+    	return getAllTeamReports( teamId, null,  currentPage,  reportPerPage, false,null, null);
     }
  
     /**

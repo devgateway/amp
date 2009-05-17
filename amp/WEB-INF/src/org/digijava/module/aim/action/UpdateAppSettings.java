@@ -149,7 +149,7 @@ public class UpdateAppSettings extends Action {
 			}
 			/* Select only the reports that are shown as tabs */
 			List<AmpReports> reports = TeamUtil.getAllTeamReports(tm.getTeamId(), null,
-					null, null, true, tm.getMemberId());
+					null, null, true, tm.getMemberId(), null);
 			if (reports != null) {
 				Iterator iterator = reports.iterator();
 				while (iterator.hasNext()) {

@@ -14,6 +14,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
+import org.digijava.kernel.request.SiteDomain;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
@@ -56,7 +59,21 @@ public class IndicatorSectorManager extends DispatchAction {
     public ActionForward viewAll(ActionMapping mapping, ActionForm form,
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
-        IndicatorSectorRegionForm indSecForm = (IndicatorSectorRegionForm) form;
+		HttpSession session = request.getSession();
+		String str = (String) session.getAttribute("ampAdmin");
+
+		if (str == null || str.equals("no")) {
+			  SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
+
+			  String url = SiteUtils.getSiteURL(currentDomain, request
+									.getScheme(), request.getServerPort(), request
+									.getContextPath());
+			  url += "/aim/index.do";
+			  response.sendRedirect(url);
+			  return null;
+		} 
+    	
+    	IndicatorSectorRegionForm indSecForm = (IndicatorSectorRegionForm) form;
         int pages;
         int allRecords=DbUtil.getAllIndicatorSectorsSize();
         if(allRecords==0){

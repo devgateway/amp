@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
@@ -13,6 +14,9 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.dgfoundation.amp.utils.AmpCollectionUtils;
+import org.digijava.kernel.request.SiteDomain;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.orgProfile.util.OrgProfileUtil;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpWidgetOrgProfile;
@@ -39,7 +43,21 @@ public class OrgProfileManager  extends DispatchAction {
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
         
-        OrgProfileWidgetForm orgForm = (OrgProfileWidgetForm) form;
+		HttpSession session = request.getSession();
+		String str = (String) session.getAttribute("ampAdmin");
+
+		if (str == null || str.equals("no")) {
+			  SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
+
+			  String url = SiteUtils.getSiteURL(currentDomain, request
+									.getScheme(), request.getServerPort(), request
+									.getContextPath());
+			  url += "/aim/index.do";
+			  response.sendRedirect(url);
+			  return null;
+		}   
+
+    	OrgProfileWidgetForm orgForm = (OrgProfileWidgetForm) form;
         orgForm.setOrgProfilePages(OrgProfileWidgetUtil.getAllOrgProfileWidgets());
         return mapping.findForward("forward");
 

@@ -20,6 +20,9 @@ import org.apache.struts.actions.DispatchAction;
 import org.apache.struts.util.LabelValueBean;
 import org.dgfoundation.amp.utils.AmpCollectionUtils;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.request.SiteDomain;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.widget.dbentity.AmpDaColumn;
 import org.digijava.module.widget.dbentity.AmpDaColumnFilter;
 import org.digijava.module.widget.dbentity.AmpDaTable;
@@ -267,6 +270,19 @@ public class AdminTableWidgets extends DispatchAction {
 	public ActionForward list(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
+		HttpSession session = request.getSession();
+		String str = (String) session.getAttribute("ampAdmin");
+
+		if (str == null || str.equals("no")) {
+			  SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
+
+			  String url = SiteUtils.getSiteURL(currentDomain, request
+									.getScheme(), request.getServerPort(), request
+									.getContextPath());
+			  url += "/aim/index.do";
+			  response.sendRedirect(url);
+			  return null;
+		}   
 		
 		TableWidgetCreationForm tableForm=(TableWidgetCreationForm)form;
 

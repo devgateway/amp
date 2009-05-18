@@ -26,6 +26,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
+import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -392,7 +393,7 @@ public class DynLocationManagerUtil {
 	 * @param id
 	 * @param initChildLocs child locations are lazily initialized, so if you want to access them put "true" here
 	 * @return
-	 */
+	 */	
 	public static AmpCategoryValueLocations getLocation(Long id, boolean initChildLocs) {
 		Session dbSession										= null;
 		try {
@@ -417,48 +418,53 @@ public class DynLocationManagerUtil {
 		}
 		return null;
 	}
+	
+	
 	public static List<AmpCategoryValueLocations> getLocationsOfTypeRegionOfDefCountry() throws Exception  {
-		List<AmpCategoryValueLocations> returnSet			= new ArrayList<AmpCategoryValueLocations>();
-		String defCountryIso	= FeaturesUtil.getDefaultCountryIso();
-		if ( defCountryIso != null ) {
-			Set<AmpCategoryValueLocations> allRegions	= getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
-			Set<AmpCategoryValueLocations> allZones	= getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_ZONE);
-			Set<AmpCategoryValueLocations> allDistricts	= getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT);
-			if ( allRegions != null && allRegions.size() > 0 ) {
-				Iterator<AmpCategoryValueLocations> regIter	= allRegions.iterator();
-				while ( regIter.hasNext() ) {
-					AmpCategoryValueLocations reg		= regIter.next();
-					AmpCategoryValueLocations country	= getAncestorByLayer( reg, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
-					if ( defCountryIso.equals( country.getIso() )  ) {
-						returnSet.add(reg);
-						Iterator<AmpCategoryValueLocations> zoneIter	= allZones.iterator();
-						while (zoneIter.hasNext()) {
-							AmpCategoryValueLocations zone = zoneIter.next();
-							long zoneParentId = zone.getParentLocation().getId();
-							long regId = reg.getId();
-							if (zoneParentId == regId){
-								zone.setName(" -- " + zone.getName());
-								returnSet.add(zone);
-								Iterator<AmpCategoryValueLocations> distIter	= allDistricts.iterator();
-								while (distIter.hasNext()) {
-									AmpCategoryValueLocations dist = distIter.next();
-									long distParentId = dist.getParentLocation().getId();
-									long zoneId = zone.getId();
-									if (distParentId == zoneId){
-										dist.setName(" ---- " + dist.getName());
-										returnSet.add(dist);
-									}
-								}
-							}
-						}
-					}
-				}
+		AmpCategoryValueLocations country = DynLocationManagerUtil.getLocationByIso(  FeaturesUtil.getDefaultCountryIso(), CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+		List<AmpCategoryValueLocations> returnSetLocations = new ArrayList<AmpCategoryValueLocations>();
+			AmpCategoryValueLocations coun = getLocation(country.getId(), true);
+			AmpCategoryClass acc = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.IMPLEMENTATION_LOCATION_KEY);
+			int maxLevelLocation = getCategoryValueByClass(acc).size();
+			Set<AmpCategoryValueLocations> childLocs = coun.getChildLocations();
+			Iterator<AmpCategoryValueLocations> iter = childLocs.iterator();
+			while (iter.hasNext()) {
+				AmpCategoryValueLocations cvl = getLocation(iter.next().getId(), true);
+				//cvl.getParentCategoryValue().getIndex();
+				loopChildLocation(0, cvl, maxLevelLocation , returnSetLocations);	
+			}
+		return returnSetLocations;
+	} 
+	
+	private static void loopChildLocation (int level, AmpCategoryValueLocations cvl, int maxLevel, List<AmpCategoryValueLocations> returnSetLocations){
+		cvl.setName(tabulateByLevel(level) + cvl.getName());
+		returnSetLocations.add(cvl);
+		Set<AmpCategoryValueLocations> childLocs = cvl.getChildLocations();
+		Iterator<AmpCategoryValueLocations> iter = childLocs.iterator();
+		while (iter.hasNext()) {
+			AmpCategoryValueLocations cvlChild = getLocation(iter.next().getId(), true);
+			int levelTemp = level;
+			levelTemp++;
+			if (levelTemp < maxLevel) {
+				loopChildLocation(levelTemp, cvlChild, maxLevel, returnSetLocations);	
+			} else {
+				cvlChild.setName(tabulateByLevel(level) + cvlChild.getName());
+				returnSetLocations.add(cvlChild);
 			}
 		}
-		else
-			throw new Exception("No default country iso could be retrieved!");
-		return returnSet;
-	} 
+	}
+	
+	public static String tabulateByLevel (int level){
+		if (level == 0)
+			return "";
+		String tab = " ";
+		for (int i = 0; i < level; i++) {
+			tab += "--";
+		}
+		tab += " ";
+		return tab;
+	}
+	
 	public static Set<AmpCategoryValueLocations> getLocationsOfTypeRegion() {
 		return getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
 	}
@@ -473,6 +479,7 @@ public class DynLocationManagerUtil {
 			return null;
 		}
 	}
+	
 	public static AmpCategoryValueLocations getAncestorByLayer (AmpCategoryValueLocations loc, HardCodedCategoryValue hcValue) {
 		if ( loc == null )
 			logger.error ("loc parameter in getAncestorByLayer should not be null");
@@ -516,6 +523,33 @@ public class DynLocationManagerUtil {
 			return returnSet;
 		return null;
 	}
+	
+	public static Set<AmpCategoryValue> getCategoryValueByClass(AmpCategoryClass acc) {
+		TreeSet<AmpCategoryValue> returnSet			= new TreeSet<AmpCategoryValue>();
+		Session dbSession										= null;
+		try {
+			dbSession			= PersistenceManager.getSession();
+			String queryString 	= "select cv from "
+				+ AmpCategoryValue.class.getName()
+				+ " cv where (cv.ampCategoryClass=:accId) ";
+			Query qry			= dbSession.createQuery(queryString);
+			qry.setLong("accId", acc.getId() );
+			returnSet.addAll( qry.list() );
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				PersistenceManager.releaseSession(dbSession);
+			} catch (Exception ex2) {
+				logger.error("releaseSession() failed :" + ex2);
+			}
+		}
+		if (returnSet.size() > 0 )
+			return returnSet;
+		return null;
+	}
+	
 	
 	public static List<String> getParents( AmpCategoryValueLocations loc ) {
 		ArrayList<String> returnList		= new ArrayList<String>();

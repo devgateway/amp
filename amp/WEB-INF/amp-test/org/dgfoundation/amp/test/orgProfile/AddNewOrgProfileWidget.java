@@ -40,6 +40,7 @@ public class AddNewOrgProfileWidget extends BasicActionTestCaseAdapter {
         context.setAttribute(OrgProfileManager.class.getName(), orgProfileManagerAction);
         orgProfForm = (OrgProfileWidgetForm) createActionForm(OrgProfileWidgetForm.class);
         session = getActionMockObjectFactory().getMockSession();
+        session.setAttribute("ampAdmin", "yes");
         request = getActionMockObjectFactory().getMockRequest();
         getActionMockObjectFactory().getMockActionMapping().setParameter("actType");
         setValidate(false);

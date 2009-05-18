@@ -12,7 +12,6 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <%@ page language="java" import="org.digijava.module.aim.helper.TeamMember" %>
-
 <!-- this is for the nice tooltip widgets -->
 <DIV id="TipLayer"
   style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
@@ -23,6 +22,7 @@
   src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
   
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
+
 <digi:instance property="aimTeamReportsForm" />
 
 <c:if test="${aimTeamReportsForm.showTabs}">
@@ -241,6 +241,41 @@ function confirmFunc() {
                         </c:if>
                         <c:out value="${aimTeamReportsForm.currentPage+1}"></c:out>&nbsp;<digi:trn key="aim:of">of</digi:trn>&nbsp;<c:out value="${aimTeamReportsForm.totalPages}"></c:out>
                       </td>
+					  <digi:form action="/viewTeamReports.do" method="post">
+                      <td align="right">
+                        <digi:trn>Go to</digi:trn>
+						<html:select property="filter" onchange="document.aimTeamReportsForm.submit()">
+							<html:option value="">ALL</html:option>
+							<html:option value="0-9">0-9</html:option>
+							<html:option value="A">A</html:option>
+							<html:option value="B">B</html:option>
+							<html:option value="C">C</html:option>
+							<html:option value="D">D</html:option>
+							<html:option value="E">E</html:option>
+							<html:option value="F">F</html:option>
+							<html:option value="G">G</html:option>
+							<html:option value="H">H</html:option>
+							<html:option value="I">I</html:option>
+							<html:option value="J">J</html:option>
+							<html:option value="K">K</html:option>
+							<html:option value="L">L</html:option>
+							<html:option value="M">M</html:option>
+							<html:option value="N">N</html:option>
+							<html:option value="O">O</html:option>
+							<html:option value="P">P</html:option>
+							<html:option value="Q">Q</html:option>
+							<html:option value="R">R</html:option>
+							<html:option value="S">S</html:option>
+							<html:option value="T">T</html:option>
+							<html:option value="U">U</html:option>
+							<html:option value="V">V</html:option>
+							<html:option value="W">W</html:option>
+							<html:option value="X">X</html:option>
+							<html:option value="Y">Y</html:option>
+							<html:option value="Z">Z</html:option>
+						</html:select>
+					</td>
+					</digi:form>
                     </tr>
                   </table>
                   </c:if>

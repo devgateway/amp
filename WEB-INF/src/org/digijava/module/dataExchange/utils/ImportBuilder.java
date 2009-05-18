@@ -7,7 +7,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -60,8 +59,6 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.Components;
-import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.PhysicalProgress;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
@@ -70,14 +67,12 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
@@ -224,6 +219,9 @@ public class ImportBuilder {
 			
 		}
 		
+		//approval status Senegal change
+		
+		activity.setApprovalStatus(org.digijava.module.aim.helper.Constants.STARTED_STATUS);
 		
 		
 		//assigning org
@@ -501,9 +499,6 @@ public class ImportBuilder {
 						else cvt.setValue("District");
 						acv = addCategValueForCodeValueType(cvt, hm, Constants.IDML_IMPLEMENTATION_LOCATION, Constants.CATEG_VALUE_IMPLEMENTATION_LOCATION);
 				}
-				System.out.println("-----------------------");
-				System.out.println("-----------------------------------------");
-				System.out.println("-----------------------------------------------------"+location.getLocationName().getCode());
 				AmpLocation ampLoc		= DynLocationManagerUtil.getAmpLocation(ampCVLoc);
 				AmpActivityLocation actLoc=new AmpActivityLocation();
 				actLoc.setActivity(activity);//activity);

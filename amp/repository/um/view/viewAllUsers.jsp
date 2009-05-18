@@ -7,6 +7,40 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
+<style>
+.contentbox_border{
+	border:1px solid #666666;
+	width:100%;	
+	background-color: #f4f4f2;
+	padding: 20 0 20 0;
+}
+</style>
+<style>
+.link{
+	text-decoration: none;
+	font-size: 8pt; font-family: Tahoma;
+}
+</style>
+
+<style>
+
+.tableEven {
+	background-color:#dbe5f1;
+	font-size:8pt;
+	padding:2px;
+}
+
+.tableOdd {
+	background-color:#FFFFFF;
+	font-size:8pt;!important
+	padding:2px;
+}
+ 
+.Hovered {
+	background-color:#a5bcf2;
+}
+
+</style>
 
 <c:set var="translationBan">
 	<digi:trn key="um:confirmBanMsg">Do you really want to ban the user ?</digi:trn>
@@ -35,7 +69,38 @@ function banUser(txt) {
 		     document.umViewAllUsersForm.submit();
 			 return true;		
 	}
-	
+
+  function setStripsTable(tableId, classOdd, classEven) {
+		var tableElement = document.getElementById(tableId);
+		rows = tableElement.getElementsByTagName('tr');
+		for(var i = 0, n = rows.length; i < n; ++i) {
+			if(i%2 == 0)
+				rows[i].className = classEven;
+			else
+				rows[i].className = classOdd;
+		}
+		rows = null;
+	}
+	function setHoveredTable(tableId, hasHeaders) {
+
+		var tableElement = document.getElementById(tableId);
+		if(tableElement){
+	    	var className = 'Hovered',
+	        pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
+	        rows      = tableElement.getElementsByTagName('tr');
+
+			for(var i = 0, n = rows.length; i < n; ++i) {
+				rows[i].onmouseover = function() {
+					this.className += ' ' + className;
+				};
+				rows[i].onmouseout = function() {
+					this.className = this.className.replace(pattern, ' ');
+
+				};
+			}
+			rows = null;
+		}
+	}
 
 </script>
 
@@ -159,28 +224,14 @@ function banUser(txt) {
 					<tr>
 						<td noWrap width=700 vAlign="top">
 							<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%">
-								<tr bgColor=#f4f4f2>
-									<td vAlign="top" width="100%">
-										&nbsp;
-									</td>
-								</tr>
+								
 								<tr bgColor=#f4f4f2>
 									<td valign="top">
-										<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%" border=0>
+										<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" border=0>
 											<tr>
-												<td bgColor=#ffffff class=box-border>
-													<table border=0 cellPadding=1 cellSpacing=1 class=box-border width="100%">
-														<tr bgColor=#dddddb>
-															<!-- header -->
-															<td bgColor=#dddddb height="20" 			align="center" colspan="5"><B>
-																<digi:trn key="um:users">Users</digi:trn>
-                                                              </b>
-															</td>
-															<!-- end header -->
-														</tr>		
- 														<tr>
+														<tr>
 															<td width="100%">
-																<table width="734" BORDER=1 bordercolor="cccccc" RULES=ALL FRAME=VOID  bgColor="#f4f4f2">
+																<table width="100%" height="100%" border="0" align=center cellPadding=0 cellSpacing=0  id="dataTable">
 																	<c:if test="${empty umViewAllUsersForm.pagedUsers}">
 								                                         <tr>
 																			<td colspan="5">
@@ -191,20 +242,20 @@ function banUser(txt) {
 							                                        </c:if>
 																	<c:if test="${not empty umViewAllUsersForm.pagedUsers}">
 																		<tr>
-																			<td height="30" width="220">
-																				<digi:link href="/viewAllUsers.do?sortBy=name&reset=false"><b>
+																			<td height="30" width="220" align="center" valign="center" bgcolor="#999999"style="color: black">
+																				<digi:link style="color:black" href="/viewAllUsers.do?sortBy=name&reset=false"><b>
 																					<digi:trn key="um:viewAllUsers:UsersNames">Name</digi:trn></b>
 																				</digi:link>
 																			</td>	
-																			<td height="30" width="220">
-																				<digi:link href="/viewAllUsers.do?sortBy=email&reset=false"><b>
+																			<td height="30" width="220" align="center" valign="center" bgcolor="#999999"style="color: black">
+																				<digi:link style="color:black" href="/viewAllUsers.do?sortBy=email&reset=false"><b>
 																					<digi:trn key="um:viewAllUsers:UsersEmails">Email</digi:trn></b>
 																				</digi:link>
 																			</td>																	
-																			<td height="30" width="220"><b>
+																			<td height="30" width="220" align="center" valign="center" bgcolor="#999999"style="color: black"><b>
 																					<digi:trn key="um:viewAllUsers:UserWorkspace">Workspace</digi:trn></b>
 																			</td>
-																			<td height="30"width="150" colspan="3"><b>
+																			<td height="30"width="150" colspan="3" align="center" valign="center" bgcolor="#999999"style="color: black"><b>
 																				<digi:trn key="aim:viewAllUsers:action">Actions</digi:trn></b>
 																			</td>																		
 																		</tr>
@@ -219,17 +270,12 @@ function banUser(txt) {
 																			<td height="30">
 																				<div>
 								                                                  <c:if test="${!empty us.teamMembers}">
-                                                                                                                       <table>
-                                                                                                                           <c:forEach var="member" items="${us.teamMembers}">
-                                                                                                                               <tr>
-                                                                                                                                   <td nowrap><li> ${member.ampTeam.name}&nbsp;(${member.ampMemberRole.role})&nbsp;&nbsp;</li></td>
-                                                                                                                               
-                                                                                                                               </tr>
-                                                                                                                           </c:forEach>
-                                                                                                                     </table>
-								                                                  </c:if>
+	                                                                                  <c:forEach var="member" items="${us.teamMembers}">
+	                                                                                           <li> ${member.ampTeam.name}&nbsp;(${member.ampMemberRole.role})&nbsp;&nbsp;</li>
+	                                                                                  </c:forEach>
+                                                                             	  </c:if>
 								                                                  <c:if test="${empty us.teamMembers}">
-								                                                    <digi:trn key="um:viewAllUsers:UnassignedUser">Unassigned</digi:trn>
+								                                            		<digi:trn key="um:viewAllUsers:UnassignedUser">Unassigned</digi:trn>
 								                                                  </c:if>
 								                                                </div>
 																			</td>
@@ -346,60 +392,29 @@ function banUser(txt) {
 												
 												 <logic:notEmpty name="umViewAllUsersForm" property="alphaPages">
 											<tr>
-												<td align="center" colspan="4">
+												<td align="left">
 													<table width="90%">
 														<tr>
-														    <td>
-														    <c:if test="${not empty umViewAllUsersForm.currentAlpha}">
-														    	<c:if test="${umViewAllUsersForm.currentAlpha!='viewAll'}">
-															    	<c:if test="${umViewAllUsersForm.currentAlpha!=''}">														    	
-																    	<c:set var="trnViewAllLink">
-																			<digi:trn key="aim:clickToViewAllSearchPages">Click here to view all search pages</digi:trn>
-																		</c:set>
-																		<a href="javascript:searchAlpha('viewAll')" title="${trnViewAllLink}">
-																				<digi:trn key="aim:viewAllLink">viewAll</digi:trn></a>
-																	</c:if>
-																</c:if>
-														    </c:if>
-															
-															<logic:iterate name="umViewAllUsersForm" property="alphaPages" id="alphaPages" type="java.lang.String">
-															<c:if test="${alphaPages != null}">
-																<c:if test="${umViewAllUsersForm.currentAlpha == alphaPages}">
-																	<font color="#FF0000"><%=alphaPages %></font>
-																</c:if>
-																<c:if test="${umViewAllUsersForm.currentAlpha != alphaPages}">
-																	<c:set var="translation">
-																		<digi:trn key="aim:clickToGoToNext">Click here to go to next page</digi:trn>
-																	</c:set>
-																	<a href="javascript:searchAlpha('<%=alphaPages%>')" title="${translation}" >
-																		<%=alphaPages %></a>
-																</c:if>
-															|&nbsp;
-															</c:if>
-															</logic:iterate>
-												   </td>
-												 </tr>
+														   <digi:form action="/viewAllUsers.do" method="post">
+                      										<td align="left">
+                        										<digi:trn>Go to</digi:trn>
 
+																<html:select property="currentAlpha" onchange="document.umViewAllUsersForm.submit()">
+																	<html:option value="viewAll">ALL</html:option>
+																	<logic:iterate name="umViewAllUsersForm" property="alphaPages" id="alphaPages" type="java.lang.String">
+																		<c:if test="${alphaPages != null}">
+																			<html:option value="<%=alphaPages %>"><%=alphaPages %></html:option>
+																		</c:if>
+																	</logic:iterate>
+																</html:select>
+															</td>
+															</digi:form>
+												 	</tr>
 												</table>
 											</td>
 										</tr>
 										</logic:notEmpty>									
-										<logic:notEmpty name="umViewAllUsersForm" property="alphaPages">
-											<tr>
-												<td bgColor=#f4f4f2>
-													<c:if test="${not empty umViewAllUsersForm.currentAlpha}">
-														<c:if test="${umViewAllUsersForm.currentAlpha!='viewAll'}">
-													   		<c:if test="${umViewAllUsersForm.currentAlpha!=''}">														    	
-													    		<digi:trn key="um:UserMan:alphaFilterNote">
-																	Click on viewAll to see all existing Users.
-																</digi:trn>
-															</c:if>
-														</c:if>
-													</c:if>										
-												</td>
-											</tr>
-										</logic:notEmpty>	
-					                         </table>
+										
 										</td>
 									</tr>
 									
@@ -505,6 +520,10 @@ function banUser(txt) {
 			</td>
 		</tr>
 	</table>
+<script language="javascript">
+	setStripsTable("dataTable", "tableEven", "tableOdd");
+	setHoveredTable("dataTable", false);
+</script>
 </digi:form>
 
 

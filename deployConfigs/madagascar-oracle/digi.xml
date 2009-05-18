@@ -10,8 +10,8 @@
 	</smtp>
 
 	
-         <logon-site id="dglogin" host="">http://malawi.ampdev.net/login</logon-site>
-     <site-domain id="dgDomain" host="">http://malawi.ampdev.net/</site-domain>
+         <logon-site id="dglogin" host="">http://madagascar-oracle.ampdev.net/login</logon-site>
+     <site-domain id="dgDomain" host="">http://madagascar-oracle.ampdev.net/</site-domain>
 
      
     <server-type caseSensitiveTranslatioKeys="false"/>

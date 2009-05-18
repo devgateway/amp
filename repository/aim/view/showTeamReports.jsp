@@ -305,13 +305,25 @@ function confirmFunc() {
                             <% } %>
                           </tr>                          
                           <c:if test="${reportNumber == 0}">
-                          <tr>
-                            <td colspan="4">
-                            <digi:trn key="aim:noreportspresent">
-                            No reports present
-                            </digi:trn>
-                            </td>
-                          </tr>
+								<c:if test="${!aimTeamReportsForm.showTabs}">
+		                          <tr>
+		                            <td colspan="4">
+		                            <digi:trn key="aim:noreportspresent">
+		                            	No reports present
+		                            </digi:trn>
+		                            </td>
+		                          </tr>
+								</c:if>
+								<c:if test="${aimTeamReportsForm.showTabs}">
+		                          <tr>
+		                            <td colspan="4">
+		                            <digi:trn key="aim:notabspresent">
+		                            	No tabs present
+		                            </digi:trn>
+		                            </td>
+		                          </tr>
+								</c:if>
+
                           </c:if>
                           <logic:iterate name="aimTeamReportsForm"  property="reportsList" id="report" indexId="idx"
                             type="org.digijava.module.aim.dbentity.AmpReports">

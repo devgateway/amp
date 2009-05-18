@@ -49,6 +49,7 @@ import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.logic.AmpARFilterHelper;
 import org.digijava.module.aim.logic.Logic;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -519,50 +520,13 @@ public class AmpARFilter extends PropertyListable {
 		
 		String REGION_SELECTED_FILTER = "";
 		if (regionSelected!=null) {
-			String inRegions = "";
-			String inZones = "";
-			String inDistrics = "";
-			
+			Set<AmpCategoryValueLocations> allSelectedLocations = new HashSet<AmpCategoryValueLocations>();
 			Iterator<AmpCategoryValueLocations> iter = regionSelected.iterator();
 			while (iter.hasNext()) {
-				AmpCategoryValueLocations cvl = iter.next();
-				HardCodedCategoryValue hcValue = CategoryConstants.IMPLEMENTATION_LOCATION_REGION;
-				if (cvl.getParentCategoryValue().getValue().equals( hcValue.getValueKey() ) ) {
-					if (!inRegions.equals(""))
-						inRegions += " , ";
-					inRegions += cvl.getIdentifier();
-				}else{
-					hcValue = CategoryConstants.IMPLEMENTATION_LOCATION_ZONE;
-					if (cvl.getParentCategoryValue().getValue().equals( hcValue.getValueKey() ) ) {
-						if (!inZones.equals(""))
-							inZones += " , ";
-						inZones += cvl.getIdentifier();
-					}else{
-						hcValue = CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT;
-						if (cvl.getParentCategoryValue().getValue().equals( hcValue.getValueKey() ) ) {
-							if (!inDistrics.equals(""))
-								inDistrics += " , ";
-							inDistrics += cvl.getIdentifier();
-						}
-					}
-				}
+				AmpCategoryValueLocations cvl = DynLocationManagerUtil.getLocation(iter.next().getId(), true);
+				fillAllLocationWithChild(cvl, allSelectedLocations);
 			}
-			REGION_SELECTED_FILTER = "SELECT amp_activity_id FROM v_regions WHERE ";
-			if (!inRegions.equals("")) {
-				REGION_SELECTED_FILTER += " region_id in (" + inRegions + ")";
-			}
-			if (!inZones.equals("")) {
-				if (!inRegions.equals("")) {
-					REGION_SELECTED_FILTER += " OR ";
-				}
-				REGION_SELECTED_FILTER += " zone_id in (" + inZones + ")";
-			}
-			if (!inDistrics.equals("")) {
-				if (!inRegions.equals("") || !inZones.equals("")) {
-					REGION_SELECTED_FILTER += " OR ";
-				}
-				REGION_SELECTED_FILTER += " location_id in (" + inDistrics + ")";
-			}
+			REGION_SELECTED_FILTER = "SELECT amp_activity_id FROM v_regions WHERE location_id IN (" + Util.toCSString(allSelectedLocations) + ")";
 		}
 		
 		StringBuffer actStatusValue = new StringBuffer("");
@@ -863,6 +827,20 @@ public class AmpARFilter extends PropertyListable {
 		
 	}
 
+	private void fillAllLocationWithChild (AmpCategoryValueLocations cvl, Set<AmpCategoryValueLocations> allSelectedLocations){
+		allSelectedLocations.add(cvl);
+		Set<AmpCategoryValueLocations> childLocs = cvl.getChildLocations();
+		Iterator<AmpCategoryValueLocations> iter = childLocs.iterator();
+		while (iter.hasNext()) {
+			AmpCategoryValueLocations cvlChild = DynLocationManagerUtil.getLocation(iter.next().getId(), true);
+			if (cvlChild.getChildLocations().size() > 0) {
+				fillAllLocationWithChild(cvlChild, allSelectedLocations);	
+			} else {
+				allSelectedLocations.add(cvlChild);
+			}
+		}
+	}
+	
 	/**
 	 * @return Returns the ampCurrencyCode.
 	 */

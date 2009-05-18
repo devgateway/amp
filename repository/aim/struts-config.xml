@@ -1324,7 +1324,11 @@
     <action name="aimEditActivityForm" path="/aim/removeActors" scope="session" type="org.digijava.module.aim.action.RemoveActor">
       <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />
     </action>
-    <action forward="/showLayout.do?layout=adminHome" path="/aim/admin" type="org.digijava.module.aim.action.ShowAdminHome" />
+    <action path="/aim/admin" type="org.digijava.module.aim.action.ShowAdminHome">
+    	<forward name="forward" path="/showLayout.do?layout=adminHome" />
+    	<forward name="returnforward" path="/index.do" />
+    </action>
+    
      <!--<action name="aimStatusListForm" path="/aim/statusManager" scope="request" type="org.digijava.module.aim.action.StatusManager" validate="false">
       <forward name="forward" path="/showLayout.do?layout=statusManager" />
     </action>  -->

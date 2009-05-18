@@ -13,6 +13,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -20,6 +21,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.LabelValueBean;
+import org.digijava.kernel.request.SiteDomain;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.form.CurrencyRateForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyRateLoader;
@@ -40,6 +44,20 @@ public class ShowCurrencyRates extends Action {
 
 	public ActionForward execute(ActionMapping mapping,ActionForm form,
 			HttpServletRequest request,HttpServletResponse response) throws Exception {
+
+		HttpSession session = request.getSession();
+		String str = (String) session.getAttribute("ampAdmin");
+
+		if (str == null || str.equals("no")) {
+			  SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
+
+			  String url = SiteUtils.getSiteURL(currentDomain, request
+									.getScheme(), request.getServerPort(), request
+									.getContextPath());
+			  url += "/aim/index.do";
+			  response.sendRedirect(url);
+			  return null;
+		}   
 
 		CurrencyRateForm crForm = (CurrencyRateForm) form;
                 Boolean isFromAdminHome=crForm.isClean();

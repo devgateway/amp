@@ -27,6 +27,9 @@ import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.error.AMPUncheckedException;
 import org.dgfoundation.amp.error.ExceptionFactory;
 import org.dgfoundation.amp.error.keeper.ErrorReporting;
+import org.digijava.kernel.request.SiteDomain;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.ActivityUtil;
@@ -67,7 +70,18 @@ public class LuceneIndex extends Action {
 							HttpServletResponse response) throws java.lang.Exception {
 
 		  HttpSession session = request.getSession();
-
+		  
+		  String str = (String) session.getAttribute("ampAdmin");
+		  if (str == null || str.equals("no")) {
+			  SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
+			
+			  String url = SiteUtils.getSiteURL(currentDomain, request
+									.getScheme(), request.getServerPort(), request
+									.getContextPath());
+			  url += "/aim/index.do";
+			  response.sendRedirect(url);
+			  return null;
+		  }
 		  ServletContext ampContext = session.getServletContext();
 		  
 		  String action = request.getParameter("action");

@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 
@@ -19,7 +20,9 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.dgfoundation.amp.ar.ARUtil;
+import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.ar.util.ReportsUtil;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
@@ -46,7 +49,19 @@ public class ExportWizardAction extends DispatchAction {
 			HttpServletRequest request, HttpServletResponse response)
 	throws Exception {
 		log.debug("ExportWizardAction.prepear call");
+		HttpSession session = request.getSession();
+		String str = (String) session.getAttribute("ampAdmin");
 
+		if (str == null || str.equals("no")) {
+			  SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
+
+			  String url = SiteUtils.getSiteURL(currentDomain, request
+									.getScheme(), request.getServerPort(), request
+									.getContextPath());
+			  url += "/aim/index.do";
+			  response.sendRedirect(url);
+			  return null;
+		}
 		ExportForm eForm = (ExportForm)form;
 		eForm.logStatus = LogStatus.IS_NULL;
 		eForm.setActivityTree(ExportHelper.getActivityStruct("activity","activityTree","activity",ActivityType.class,true));

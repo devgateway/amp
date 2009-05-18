@@ -5,11 +5,15 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
+import org.digijava.kernel.request.SiteDomain;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.message.dbentity.AmpAlert;
 import org.digijava.module.message.dbentity.AmpMessage;
 import org.digijava.module.message.dbentity.AmpMessageSettings;
@@ -23,6 +27,20 @@ import org.digijava.module.message.util.AmpMessageUtil;
 public class MsgSettingsAction extends DispatchAction {
 	
 	public ActionForward getSettings (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
+		HttpSession session = request.getSession();
+		String str = (String) session.getAttribute("ampAdmin");
+
+		if (str == null || str.equals("no")) {
+			  SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
+
+			  String url = SiteUtils.getSiteURL(currentDomain, request
+									.getScheme(), request.getServerPort(), request
+									.getContextPath());
+			  url += "/aim/index.do";
+			  response.sendRedirect(url);
+			  return null;
+		}
+
 		AmpMessageForm msgForm=(AmpMessageForm)form;
 		msgForm=clearForm(msgForm); //clear form 
 		AmpMessageSettings settings=AmpMessageUtil.getMessageSettings();

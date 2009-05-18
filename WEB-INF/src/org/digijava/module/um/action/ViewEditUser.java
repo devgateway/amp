@@ -25,6 +25,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
@@ -47,9 +48,23 @@ public class ViewEditUser extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form,
                                  HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
-        ViewEditUserForm uForm = (ViewEditUserForm) form;
+
+		HttpSession session = request.getSession();
+		String str = (String) session.getAttribute("ampAdmin");
+
+		if (str == null || str.equals("no")) {
+			  SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
+
+			  String url = SiteUtils.getSiteURL(currentDomain, request
+									.getScheme(), request.getServerPort(), request
+									.getContextPath());
+			  url += "/aim/index.do";
+			  response.sendRedirect(url);
+			  return null;
+		}
+    	
+    	ViewEditUserForm uForm = (ViewEditUserForm) form;
         User user = null;
-        HttpSession session = request.getSession();
         String isAmpAdmin = (String) session.getAttribute("ampAdmin");
         ActionErrors errors = new ActionErrors();
         Site curSite = RequestUtils.getSite(request);

@@ -168,6 +168,13 @@ public class ViewNewAdvancedReport extends Action {
 		httpSession.setAttribute("progressValue", ++progressValue); 
 		httpSession.setAttribute("progressTotalRows", request.getAttribute("recordsPerPage"));
 		
+		//Validate if the report belongs to the same workspace as the current user
+		if(tm!=null)
+		{
+			if(ar != null && ar.getOwnerId() != null && ar.getOwnerId().getAmpTeam().getAmpTeamId().longValue() != tm.getTeamId().longValue()){
+				return null;
+			}
+		}
 		
 		if( (!cached && (applySorter == null && sortBy == null || ar==null)) || 
 			(ampReportId != null && ar != null && !ampReportId.equals(ar.getAmpReportId().toString()) )) 

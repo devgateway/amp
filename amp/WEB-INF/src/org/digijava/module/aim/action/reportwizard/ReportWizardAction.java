@@ -20,6 +20,7 @@ import java.util.TreeSet;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
@@ -179,7 +180,15 @@ public class ReportWizardAction extends MultiAction {
 		Long reportId		= Long.parseLong( request.getParameter("editReportId") );
 		
 		AmpReports ampReport	= (AmpReports) session.load(AmpReports.class, reportId );
-		
+
+		//Validate that the report belongs to the user's workspace
+		HttpSession httpSession = request.getSession();
+		TeamMember tm = (TeamMember) httpSession.getAttribute("currentMember");
+		if(tm != null && ampReport != null && ampReport.getOwnerId().getAmpTeamMemId().longValue() != tm.getMemberId().longValue()){
+			response.sendRedirect("/index.do");
+			return null;
+		}
+
 		myForm.setReportId( reportId );
 		
 		myForm.setReportTitle( ampReport.getName() );

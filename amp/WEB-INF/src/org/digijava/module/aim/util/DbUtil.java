@@ -6066,12 +6066,12 @@ public class DbUtil {
                                     answersRow[0].doubleValue() == Double.parseDouble(year.format(cal.getEndDate()))) {
                                     // checking if the Mission is 'joint'
                                     if (null != ampCal.getOrganisations() && ampCal.getOrganisations().size() > 1) {
-                                        answersRow[1].add(new BigDecimal(1));
-                                        allDnRow[1].add(new BigDecimal(1));
+                                        answersRow[1] = answersRow[1].add(new BigDecimal(1));
+                                        allDnRow[1] = allDnRow[1].add(new BigDecimal(1));
                                     }
                                     // total number of Missions
-                                    answersRow[2].add(new BigDecimal(1));
-                                    allDnRow[2].add(new BigDecimal(1));
+                                    answersRow[2] = answersRow[2].add(new BigDecimal(1));
+                                    allDnRow[2] = allDnRow[2].add(new BigDecimal(1));
                                 }
                             }
                         }

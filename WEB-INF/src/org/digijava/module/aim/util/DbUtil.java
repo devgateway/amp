@@ -5966,8 +5966,8 @@ public class DbUtil {
         boolean orgGroupFlag = false;
         int NUM_ANSWER_COLUMNS = 4, i = 0, j = 0;
         int YEAR_RANGE = (closeYear - startYear + 1);
-        double answersRow[] = null;
-        double allDnRow[] = null;
+        BigDecimal answersRow[] = null;
+        BigDecimal allDnRow[] = null;
         Iterator itr1 = null, itr2 = null;
         Double percent = null;
         NumberFormat formatter = new DecimalFormat("#.##");
@@ -6013,8 +6013,11 @@ public class DbUtil {
                 all.setAnswers(new ArrayList());
                 responses.add(all);
                 for (i = 0; i < YEAR_RANGE; i++) {
-                    answersRow = new double[NUM_ANSWER_COLUMNS];
-                    answersRow[0] = startYear + i;
+                    answersRow = new BigDecimal[NUM_ANSWER_COLUMNS];
+                    answersRow[0] = new BigDecimal(startYear + i);
+                    for (int k = 1; k < NUM_ANSWER_COLUMNS; k++) {
+                    	answersRow[k] = new BigDecimal(0.0);
+                    }
                     ( (ParisIndicator) responses.get(0)).getAnswers().add(answersRow);
                 }
                 itr1 = sortedDonors.iterator();
@@ -6047,34 +6050,37 @@ public class DbUtil {
                     }
                     pi.setAnswers(new ArrayList());
                     for (i = 0; i < YEAR_RANGE; i++) {
-                        allDnRow = (double[]) ( ( (ParisIndicator) responses.get(0)).getAnswers().get(i));
+                        allDnRow = (BigDecimal[]) ( ( (ParisIndicator) responses.get(0)).getAnswers().get(i));
                         // answersRow will represent row for one disbursement year inside answer-collection of pi helper object.
-                        answersRow = new double[NUM_ANSWER_COLUMNS];
-                        answersRow[0] = (startYear + i);
+                        answersRow = new BigDecimal[NUM_ANSWER_COLUMNS];
+                        answersRow[0] = new BigDecimal(startYear + i);
+                        for (int k = 1; k < NUM_ANSWER_COLUMNS; k++) {
+                        	answersRow[k] = new BigDecimal(0.0);
+                        }
                         itr2 = dnOrg.getCalendar().iterator();
                         while (itr2.hasNext()) {
                             AmpCalendar ampCal = (AmpCalendar) itr2.next();
                             if ("Mission".equalsIgnoreCase(ampCal.getEventType().getName())) {
                                 Calendar cal = (Calendar) ampCal.getCalendarPK().getCalendar();
-                                if (answersRow[0] == Double.parseDouble(year.format(cal.getStartDate())) ||
-                                    answersRow[0] == Double.parseDouble(year.format(cal.getEndDate()))) {
+                                if (answersRow[0].doubleValue() == Double.parseDouble(year.format(cal.getStartDate())) ||
+                                    answersRow[0].doubleValue() == Double.parseDouble(year.format(cal.getEndDate()))) {
                                     // checking if the Mission is 'joint'
                                     if (null != ampCal.getOrganisations() && ampCal.getOrganisations().size() > 1) {
-                                        answersRow[1] += 1;
-                                        allDnRow[1] += 1;
+                                        answersRow[1].add(new BigDecimal(1));
+                                        allDnRow[1].add(new BigDecimal(1));
                                     }
                                     // total number of Missions
-                                    answersRow[2] += 1;
-                                    allDnRow[2] += 1;
+                                    answersRow[2].add(new BigDecimal(1));
+                                    allDnRow[2].add(new BigDecimal(1));
                                 }
                             }
                         }
                         // calculating final percentage here
-                        if (answersRow[2] == 0)
-                            answersRow[NUM_ANSWER_COLUMNS - 1] = -1.0;
+                        if (answersRow[2].doubleValue() == 0)
+                            answersRow[NUM_ANSWER_COLUMNS - 1] = new BigDecimal(-1.0);
                         else {
-                            percent = new Double( (100 * answersRow[1]) / answersRow[2]);
-                            answersRow[NUM_ANSWER_COLUMNS - 1] = Double.parseDouble(formatter.format(percent));
+                            percent = new Double( (100 * answersRow[1].doubleValue()) / answersRow[2].doubleValue());
+                            answersRow[NUM_ANSWER_COLUMNS - 1] = new BigDecimal(formatter.format(percent));
                         }
                         pi.getAnswers().add(answersRow);
                     }
@@ -6102,12 +6108,12 @@ public class DbUtil {
                 }*/
                 // calculating final percentage for all-donors row
                 for (j = 0; j < YEAR_RANGE; j++) {
-                    allDnRow = (double[]) ( ( (ParisIndicator) responses.get(0)).getAnswers().get(j));
-                    if (allDnRow[2] == 0)
-                        allDnRow[NUM_ANSWER_COLUMNS - 1] = -1.0;
+                    allDnRow = (BigDecimal[]) ( ( (ParisIndicator) responses.get(0)).getAnswers().get(j));
+                    if (allDnRow[2].doubleValue() == 0)
+                        allDnRow[NUM_ANSWER_COLUMNS - 1] = new BigDecimal(-1.0);
                     else {
-                        percent = new Double( (100 * allDnRow[1]) / allDnRow[2]);
-                        allDnRow[NUM_ANSWER_COLUMNS - 1] = Double.parseDouble(formatter.format(percent));
+                        percent = new Double( (100 * allDnRow[1].doubleValue()) / allDnRow[2].doubleValue());
+                        allDnRow[NUM_ANSWER_COLUMNS - 1] = new BigDecimal(formatter.format(percent));
                     }
                 }
             } else

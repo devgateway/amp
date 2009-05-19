@@ -1666,10 +1666,12 @@ public class SaveActivity extends Action {
 				}
 			}
 		} else {
-			Iterator<Survey> iterSurveys = eaForm.getSurveys().iterator();
-			while (iterSurveys.hasNext()) {
-				Survey auxSurvey = iterSurveys.next();
-				DbUtil.saveNewSurvey(auxSurvey.getAhsurvey(), activity, auxSurvey.getIndicators());
+			if (eaForm.getSurveys() != null) {
+				Iterator<Survey> iterSurveys = eaForm.getSurveys().iterator();
+				while (iterSurveys.hasNext()) {
+					Survey auxSurvey = iterSurveys.next();
+					DbUtil.saveNewSurvey(auxSurvey.getAhsurvey(), activity, auxSurvey.getIndicators());
+				}
 			}
 		}
 	}

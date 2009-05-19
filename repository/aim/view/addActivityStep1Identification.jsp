@@ -54,6 +54,35 @@
 </style>
 
 <script language="JavaScript">
+
+
+function toggleElement ( elementId, show ) {
+	var displayValue;
+	if ( show )
+		displayValue	= '';
+	else
+		displayValue	= 'none';
+
+ 	var el			= document.getElementById( elementId );
+ 	if ( el != null )
+ 		el.style.display=displayValue;
+}
+
+function toggleBudgetFields( show ) {
+
+	toggleElement("FY", show);
+	toggleElement("Vote", show);
+	toggleElement("Sub-Vote", show);
+	toggleElement("Sub-Program", show);
+	toggleElement("ProjectCode", show);
+	toggleElement("financial", show);
+	toggleElement("FY1", show);
+	toggleElement("Vote1", show);
+	toggleElement("Sub-Vote1", show);
+	toggleElement("Sub-Program1", show);
+	toggleElement("ProjectCode1", show);
+}
+
 document.getElementsByTagName('body')[0].className='yui-skin-sam';
 	function budgetCheckboxClick()
 	{
@@ -61,89 +90,37 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 		if (document.getElementById("budget") != null) {
 			if((document.getElementById("budget").checked==false))
 			{
-				try {
-				 	document.getElementById("hbudget").value="false";
-				 	document.getElementById("FY").style.display='none';
-				 	document.getElementById("Vote").style.display='none';
-				 	document.getElementById("Sub-Vote").style.display='none';
-				 	document.getElementById("Sub-Program").style.display='none';
-				 	document.getElementById("ProjectCode").style.display='none';
-				 	document.getElementById("financial").style.display='none';
-				 	document.getElementById("FY1").style.display='none';
-				 	document.getElementById("Vote1").style.display='none';
-				 	document.getElementById("Sub-Vote1").style.display='none';
-				 	document.getElementById("Sub-Program1").style.display='none';
-				 	document.getElementById("ProjectCode1").style.display='none';
-				}
-				catch(e)
-				{
-					//This silent try/catch was added because some of the fields can be deactivated from FM
-				}
+					var hbudgetEl	= 	document.getElementById("hbudget");
+					if ( hbudgetEl != null )
+							hbudgetEl.value="false";
+					
+				 	toggleBudgetFields( false );
 			 }
 			else if(document.getElementById("budget").checked==true)
 			{
-				try {
-				 	document.getElementById("hbudget").value="true";
-				 	document.getElementById("FY").style.display='';
-				 	document.getElementById("Vote").style.display='';
-				 	document.getElementById("Sub-Vote").style.display='';
-				 	document.getElementById("Sub-Program").style.display='';
-				 	document.getElementById("ProjectCode").style.display='';
-				 	document.getElementById("FY1").style.display='';
-				 	document.getElementById("Vote1").style.display='';
-				 	document.getElementById("Sub-Vote1").style.display='';
-				 	document.getElementById("Sub-Program1").style.display='';
-				 	document.getElementById("ProjectCode1").style.display='';
-				 	document.getElementById("financial").style.display='';
-				}
-				catch(e)
-				{
-					//This silent try/catch was added because some of the fields can be deactivated from FM
-				}
+				var hbudgetEl	= 	document.getElementById("hbudget");
+				if ( hbudgetEl != null )
+						hbudgetEl.value="true";
+
+				 toggleBudgetFields ( true );
 			}
 		}
 	}
 
 function InitBud(){
 	if(document.getElementById("hbudget").value=="true"){
-	 	try {
-	 		document.getElementById("budget").checked=true;
-		 	document.getElementById("FY").style.display='';
-		 	document.getElementById("Vote").style.display='';
-		 	document.getElementById("Sub-Vote").style.display='';
-		 	document.getElementById("Sub-Program").style.display='';
-		 	document.getElementById("ProjectCode").style.display='';
-		 	document.getElementById("FY1").style.display='';
-		 	document.getElementById("Vote1").style.display='';
-		 	document.getElementById("Sub-Vote1").style.display='';
-		 	document.getElementById("Sub-Program1").style.display='';
-		 	document.getElementById("ProjectCode1").style.display='';
-		 	document.getElementById("financial").style.display='';
-		}
-		catch(e)
-		{
-			//This silent try/catch was added because some of the fields can be deactivated from FM
-		}
+		var budgetEl		= 	document.getElementById("budget");
+		if ( budgetEl != null )
+				budgetEl.checked=true;
+
+		 toggleBudgetFields ( true );
 	}
 	else{
-	 	try {
-	 		document.getElementById("budget").checked=false;
-		 	document.getElementById("FY").style.display='none';
-		 	document.getElementById("Vote").style.display='none';
-		 	document.getElementById("Sub-Vote").style.display='none';
-		 	document.getElementById("Sub-Program").style.display='none';
-		 	document.getElementById("ProjectCode").style.display='none';
-		 	document.getElementById("FY1").style.display='none';
-		 	document.getElementById("Vote1").style.display='none';
-		 	document.getElementById("Sub-Vote1").style.display='none';
-		 	document.getElementById("Sub-Program1").style.display='none';
-		 	document.getElementById("ProjectCode1").style.display='none';
-		 	document.getElementById("financial").style.display='none';
-		}
-		catch(e)
-		{
-			//This silent try/catch was added because some of the fields can be deactivated from FM
-		}
+		var budgetEl		= 	document.getElementById("budget");
+		if ( budgetEl != null )
+				budgetEl.checked=false;
+
+		 toggleBudgetFields ( false );
 	}
 }
 

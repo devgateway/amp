@@ -317,8 +317,12 @@ public class TrnTag
         }
         // determine User permissions
         if (showLinks) {
-            backUrl = RequestUtils.getRelativeSourceURL(request);
-
+        	try{
+        	backUrl = java.net.URLEncoder.encode(RequestUtils.getRelativeSourceURL(request),"UTF-8");
+        	} catch (Exception ex){
+        		logger.debug(ex);
+            	backUrl = RequestUtils.getRelativeSourceURL(request);
+        	}
 
             Site rootSite = DgUtil.getRootSite(site);
             Subject subject = RequestUtils.getSubject(request);
@@ -513,7 +517,7 @@ public class TrnTag
      */
     private String showLinks(char operType) {
         String translatorTag = "";
-
+        
         if (showLinks) {
             if (this.getKey() != null
 					&& (this.getKey().trim().startsWith("cn") || this.getKey().trim().startsWith("ln"))) {
@@ -580,6 +584,7 @@ public class TrnTag
     }
 
     private String getTranslationLink(String trnType, char operType) {
+    	
         String suffix = "L";
         if (!trnType.equals(LOCAL_TRANSLATION)) {
             suffix = "";

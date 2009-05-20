@@ -74,6 +74,9 @@ public class CurrencyRatesQuartzJob implements Job {
 						.getCurrencyRates(ampCurrencies, baseCurrency);
 				showValues(ampCurrencies, wsCurrencyValues);
 				save(ampCurrencies, wsCurrencyValues);
+				//checks if all values are wrong
+				if(!isRightRate(ampCurrencies, wsCurrencyValues))
+					Thread.sleep(1000*60*60);//wait an hour before next intent
 				ampCurrencies = this.getWrongCurrencies(ampCurrencies,
 						wsCurrencyValues);
 				mytries++;
@@ -93,9 +96,21 @@ public class CurrencyRatesQuartzJob implements Job {
 						+ formatter.format(new Date()));
 	}
 
+	private boolean isRightRate(String[] currencies,
+			HashMap<String, Double> wsCurrencyValues) {
+		for (int i=0; i<currencies.length; i++) {
+			double value = wsCurrencyValues.get(currencies[i]);
+			if (value != WSCurrencyClient.CONNECTION_ERROR && value != WSCurrencyClient.INVALID_CURRENCY_CODE && value != 1) {
+				//we were able to get a valid rate at least, so there is internet connection
+				return true;
+			}
+		}
+		return false;
+	}
+
 	private String[] getWrongCurrencies(String[] currencies,
 			HashMap<String, Double> wsCurrencyValues) {
-		String[] wrongArray = null;
+		String[] wrongValuesArray = null;
 		ArrayList<AmpCurrencyRate> wrongAList = new ArrayList<AmpCurrencyRate>();
 		for (int i=0; i<currencies.length; i++) {
 			AmpCurrencyRate currRate = new AmpCurrencyRate();
@@ -106,13 +121,13 @@ public class CurrencyRatesQuartzJob implements Job {
 			}
 		}
 		if (wrongAList.size() != 0) {
-			wrongArray = new String[wrongAList.size()];
+			wrongValuesArray = new String[wrongAList.size()];
 			int i = 0;
 			for (AmpCurrencyRate ampCurrency : wrongAList) {
-				wrongArray[i++] = ampCurrency.getToCurrencyCode();
+				wrongValuesArray[i++] = ampCurrency.getToCurrencyCode();
 			}
 		}
-		return wrongArray;
+		return wrongValuesArray;
 	}
 	private void save(String[] currencies,
 			HashMap<String, Double> wsCurrencyValues) {

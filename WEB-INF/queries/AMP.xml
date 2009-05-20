@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?> 
+<?xml version="1.0"?>
 <!DOCTYPE Schema PUBLIC "//UNKNOWN/" "mondrian.dtd">
 <Schema name="AMP">
 	<Dimension name="Primary Sector">
 		<Hierarchy hasAll="true" primaryKey="amp_activity_id" allMemberCaption="#All_Primary_Sector#" allMemberName="All Primary Sectors" caption="#Primary_Sector#">		
+			<Table name="cached_v_sectors" />
 			<Level name="Primary Sector Scheme" column="sec_scheme_name"/>
-			<Level name="Primary Sector Name" column="sectorname">
-			</Level>
+			<Level name="Primary Sector Name" column="sectorname" />
 		</Hierarchy>
 	</Dimension>
 	<Dimension name="Activity">
@@ -17,8 +17,8 @@
 	</Dimension>
 	<Dimension name="Donor Dates" type="TimeDimension">
 		<Hierarchy hasAll="true" allMemberName="All Periods" allMemberCaption="#All_Donor_Dates#" primaryKey="amp_fund_detail_id" caption="#Donor_Dates#">
-			<Table name="cached_v_donor_date_hierarchy"/>
-			<Level name="Year" column="year" levelType="TimeYears" type="Numeric"/>
+			<Table name="cached_v_donor_date_hierarchy" />
+			<Level name="Year" column="year" levelType="TimeYears" type="Numeric" />
 			<Level name="Quarter" column="quarter" ordinalColumn="quarter" nameColumn="quarter_name" levelType="TimeQuarters" type="Numeric" />
 			<Level name="Month" column="month" uniqueMembers="false" ordinalColumn="month" nameColumn="month_name" levelType="TimeMonths" type="Numeric" />
 		</Hierarchy>
@@ -70,9 +70,7 @@
 	</Dimension>
 	
 	<Cube name="Sectors">
-		<Table name="cached_v_sectors" >
-			<SQL dialect="mysql"><![CDATA[cached_v_sectors.amp_activity_id IN (@donorquery)]]> </SQL>
-		</Table>
+		<Table name="cached_v_sectors" />
 		<DimensionUsage name="Primary Sector" source="Primary Sector" foreignKey="amp_activity_id" />
 		<DimensionUsage name="Activity" source="Activity" foreignKey="amp_activity_id" />
 		<DimensionUsage name="Donor Dates" source="Donor Dates" foreignKey="amp_activity_id"/>
@@ -81,55 +79,6 @@
 		<DimensionUsage name="Secundary Program" source="Secundary Program" foreignKey="amp_activity_id"/>
 		<DimensionUsage name="Status" source="Status" foreignKey="amp_activity_id"/>
 		<Measure name="Raw Sector Percentage" aggregator="sum" column="sector_percentage" visible="false"/>
-		<Measure name="Sector Actual Commitments" aggregator="sum" visible="false">
-			<MeasureExpression>
-				<SQL dialect="mysql">
-					case when cached_v_sectors.transaction_type=0 and cached_v_sectors.adjustment_type=1 then
-					cached_v_sectors.transaction_amount/getExchangeWithFixed(cached_v_sectors.currency_code,cached_v_sectors.transaction_date,cached_v_sectors.fixed_exchange_rate) else 0 end
-				</SQL>
-			</MeasureExpression>
-		</Measure>
-		
-		<Measure name="Sector Actual Disbursements" aggregator="sum" visible="false">
-			<MeasureExpression>
-				<SQL dialect="mysql">
-					case when cached_v_sectors.transaction_type=1 and cached_v_sectors.adjustment_type=1 then
-					cached_v_sectors.transaction_amount/getExchangeWithFixed(cached_v_sectors.currency_code,cached_v_sectors.transaction_date,cached_v_sectors.fixed_exchange_rate) else 0 end
-				</SQL>
-			</MeasureExpression>
-		</Measure>
-		<Measure name="Sector Actual Expenditures" aggregator="sum" visible="false">
-			<MeasureExpression>
-				<SQL dialect="mysql">
-					case when cached_v_sectors.transaction_type=2 and cached_v_sectors.adjustment_type=1 then
-					cached_v_sectors.transaction_amount/getExchangeWithFixed(cached_v_sectors.currency_code,cached_v_sectors.transaction_date,cached_v_sectors.fixed_exchange_rate) else 0 end
-				</SQL>
-			</MeasureExpression>
-		</Measure>
-		<Measure name="Sector Planned Commitments" aggregator="sum" visible="false">
-			<MeasureExpression>
-				<SQL dialect="mysql">
-					case when cached_v_sectors.transaction_type=0 and cached_v_sectors.adjustment_type=0 then
-					cached_v_sectors.transaction_amount/getExchangeWithFixed(cached_v_sectors.currency_code,cached_v_sectors.transaction_date,cached_v_sectors.fixed_exchange_rate) else 0 end
-				</SQL>
-			</MeasureExpression>
-		</Measure>
-		<Measure name="Sector Planned Disbursements" aggregator="sum" visible="false">
-			<MeasureExpression>
-				<SQL dialect="mysql">
-					case when cached_v_sectors.transaction_type=1 and cached_v_sectors.adjustment_type=0 then
-					cached_v_sectors.transaction_amount/getExchangeWithFixed(cached_v_sectors.currency_code,cached_v_sectors.transaction_date,cached_v_sectors.fixed_exchange_rate) else 0 end
-				</SQL>
-			</MeasureExpression>
-		</Measure>
-		<Measure name="Sector Planned Expenditures" aggregator="sum" visible="false">
-			<MeasureExpression>
-				<SQL dialect="mysql">
-					case when cached_v_sectors.transaction_type=2 and cached_v_sectors.adjustment_type=0 then
-					cached_v_sectors.transaction_amount/getExchangeWithFixed(cached_v_sectors.currency_code,cached_v_sectors.transaction_date,cached_v_sectors.fixed_exchange_rate) else 0 end
-				</SQL>
-			</MeasureExpression>
-		</Measure>
 		
 		<CalculatedMember name="Sector Percentage" dimension="Measures">
 			<Formula>IIf([Measures].[Raw Sector Percentage] &gt; 0 AND [Measures].[Raw Sector Percentage] &lt; 100,[Measures].[Raw Sector Percentage],null)</Formula>
@@ -182,7 +131,7 @@
 		<Measure name="Raw Actual Commitments" aggregator="sum" caption="#Raw_Actual_Commitments#">
 			<MeasureExpression>
 				<SQL dialect="mysql">
-					 distinct case when cached_v_donor_funding.transaction_type=0 and cached_v_donor_funding.adjustment_type=1 then
+					case when cached_v_donor_funding.transaction_type=0 and cached_v_donor_funding.adjustment_type=1 then
 					cached_v_donor_funding.transaction_amount/getExchangeWithFixed(cached_v_donor_funding.currency_code,cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate) else 0 end
 				</SQL>
 			</MeasureExpression>
@@ -190,7 +139,7 @@
 		<Measure name="Raw Actual Disbursements" aggregator="sum" caption="Raw_Actual_Disbursements">
 			<MeasureExpression>
 				<SQL dialect="mysql">
-					distinct case when cached_v_donor_funding.transaction_type=1 and cached_v_donor_funding.adjustment_type=1 then
+					case when cached_v_donor_funding.transaction_type=1 and cached_v_donor_funding.adjustment_type=1 then
 					cached_v_donor_funding.transaction_amount/getExchangeWithFixed(cached_v_donor_funding.currency_code,cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate) else 0 end
 				</SQL>
 			</MeasureExpression>
@@ -199,7 +148,7 @@
 		<Measure name="Raw Actual Expenditures" aggregator="sum" caption="#Raw_Actual_Expenditures#">
 			<MeasureExpression>
 				<SQL dialect="mysql">
-					distinct case when cached_v_donor_funding.transaction_type=2 and cached_v_donor_funding.adjustment_type=1 then
+					case when cached_v_donor_funding.transaction_type=2 and cached_v_donor_funding.adjustment_type=1 then
 					cached_v_donor_funding.transaction_amount/getExchangeWithFixed(cached_v_donor_funding.currency_code,cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate) else 0 end
 				</SQL>
 			</MeasureExpression>
@@ -207,7 +156,7 @@
 		<Measure name="Raw Planned Commitments" aggregator="sum" caption="#Raw_Planned_Commitments#">
 			<MeasureExpression>
 				<SQL dialect="mysql">
-					distinct case when cached_v_donor_funding.transaction_type=0 and cached_v_donor_funding.adjustment_type=0 then
+					case when cached_v_donor_funding.transaction_type=0 and cached_v_donor_funding.adjustment_type=0 then
 					cached_v_donor_funding.transaction_amount/getExchangeWithFixed(cached_v_donor_funding.currency_code,cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate) else 0 end
 				</SQL>
 			</MeasureExpression>
@@ -215,7 +164,7 @@
 		<Measure name="Raw Planned Disbursements" aggregator="sum" caption="#Raw_Planned_Disbursements#">
 			<MeasureExpression>
 				<SQL dialect="mysql">
-					distinct case when cached_v_donor_funding.transaction_type=1 and cached_v_donor_funding.adjustment_type=0 then
+					case when cached_v_donor_funding.transaction_type=1 and cached_v_donor_funding.adjustment_type=0 then
 					cached_v_donor_funding.transaction_amount/getExchangeWithFixed(cached_v_donor_funding.currency_code,cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate) else 0 end
 				</SQL>
 			</MeasureExpression>
@@ -223,7 +172,7 @@
 		<Measure name="Raw Planned Expenditures" aggregator="sum" caption="#Raw_Planned_Expenditures#">
 			<MeasureExpression>
 				<SQL dialect="mysql">
-					distinct case when cached_v_donor_funding.transaction_type=2 and cached_v_donor_funding.adjustment_type=0 then
+					case when cached_v_donor_funding.transaction_type=2 and cached_v_donor_funding.adjustment_type=0 then
 					cached_v_donor_funding.transaction_amount/getExchangeWithFixed(cached_v_donor_funding.currency_code,cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate) else 0 end
 				</SQL>
 			</MeasureExpression>
@@ -247,12 +196,6 @@
 		<VirtualCubeDimension name="Donor Types" cubeName="Donor Funding" />
 		<VirtualCubeDimension name="Donor Group" cubeName="Donor Funding" />
 		<VirtualCubeMeasure cubeName="Sectors" name="[Measures].[Sector Percentage]" />
-		<VirtualCubeMeasure cubeName="Sectors" name="[Measures].[Sector Actual Commitments]" visible="false" />
-		<VirtualCubeMeasure cubeName="Sectors" name="[Measures].[Sector Actual Disbursements]" visible="false" />
-		<VirtualCubeMeasure cubeName="Sectors" name="[Measures].[Sector Actual Expenditures]" visible="false" />
-		<VirtualCubeMeasure cubeName="Sectors" name="[Measures].[Sector Planned Commitments]" visible="false" />
-		<VirtualCubeMeasure cubeName="Sectors" name="[Measures].[Sector Planned Disbursements]" visible="false" />
-		<VirtualCubeMeasure cubeName="Sectors" name="[Measures].[Sector Planned Expenditures]" visible="false" />
 		
 		<VirtualCubeMeasure cubeName="Donor Funding" name="[Measures].[Raw Actual Commitments]" visible="false" />
 		<VirtualCubeMeasure cubeName="Donor Funding" name="[Measures].[Raw Actual Disbursements]" visible="false" />
@@ -282,7 +225,8 @@
 		</CalculatedMember>
 		
 		<CalculatedMember name="Planned Expenditures" dimension="Measures" caption="#Planned_Expenditures#">
-			<Formula>IIf([Measures].[Sector Percentage] &gt; 0 AND [Measures].[Sector Percentage] &lt; 100,[Measures].[Raw Planned Expenditures] * [Measures].[Sector Percentage] / 100,[Measures].[Raw Planned Expenditures])</Formula>
+			<Formula>IIf([Measures].[Sector Percentage] &gt; 0 AND [Measures].[Sector Percentage] &lt; 100,[Measures].[Raw Planned Expenditures] * [Measures].[Sector Percentage] / 100,[Measures].[Raw Planned Expenditures])
+		</Formula>
 		</CalculatedMember>
 	</VirtualCube>
 </Schema>

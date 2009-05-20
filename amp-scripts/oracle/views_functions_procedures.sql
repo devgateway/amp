@@ -2344,3 +2344,85 @@ CREATE OR REPLACE FORCE VIEW  "V_UPDATED_DATE" ("AMP_ACTIVITY_ID", "DATE_UPDATED
   from amp_activity a
   order by a.amp_activity_id
 /
+CREATE OR REPLACE FORCE VIEW  "V_SECTORS_CACHED" ("AMP_ACTIVITY_ID", "SECTORNAME", "AMP_SECTOR_ID", "AMP_SECTOR_SCHEME_ID", "SEC_SCHEME_NAME", "SECTOR_PERCENTAGE", "TRANSACTION_AMOUNT", "TRANSACTION_TYPE", "ADJUSTMENT_TYPE", "TRANSACTION_DATE", "FIXED_EXCHANGE_RATE", "CURRENCY_CODE") AS 
+  select sa.amp_activity_id AS amp_activity_id,
+         getSectorName(getParentSectorId(s.amp_sector_id)) AS sectorname,
+         getParentSectorId(s.amp_sector_id) AS amp_sector_id,
+         s.amp_sec_scheme_id AS amp_sector_scheme_id,
+         ss.sec_scheme_name AS sec_scheme_name,
+         sa.sector_percentage AS sector_percentage,
+         ((fd.transaction_amount * sa.sector_percentage) / 100) AS transaction_amount,
+         fd.transaction_type AS transaction_type,
+         fd.adjustment_type AS adjustment_type,
+         fd.transaction_date AS transaction_date,
+         fd.fixed_exchange_rate AS fixed_exchange_rate,
+         c.currency_code AS currency_code
+  from
+  amp_funding_detail fd,
+  amp_sector_scheme ss,
+  amp_classification_config cc,
+  amp_sector s  ,
+  amp_activity_sector sa ,
+  amp_funding f ,
+  amp_currency c
+where
+cc.name = 'Primary'
+and cc.classification_id = ss.amp_sec_scheme_id
+and sa.classification_config_id = cc.id
+and s.amp_sec_scheme_id = ss.amp_sec_scheme_id
+and sa.amp_activity_id = f.amp_activity_id
+and f.amp_funding_id = fd.amp_funding_id
+and fd.amp_currency_id = c.amp_currency_id
+and sa.amp_sector_id = s.amp_sector_id
+
+  order by sa.amp_activity_id,
+           getSectorName(getParentSectorId(s.amp_sector_id)),
+           fd.transaction_type,
+           f.amp_funding_id
+/
+
+  CREATE OR REPLACE PROCEDURE "DROP_TABLE_IF_EXIST" 
+  (tableName IN varchar2)
+/***************************************************************************
+NAME: DROP_TABLE_IF_EXIST
+PURPOSE: Drops a table IF IT EXISTS
+EXAMPLE USE: call DROP_TABLE_IF_EXIST('table_name');
+
+****************************************************************************/
+IS
+BEGIN
+  DECLARE
+    COUNST   NUMBER;
+    sql_stmt VARCHAR2(255);
+  BEGIN
+    sql_stmt:= 'SELECT count(*) from ALL_OBJECTS WHERE OBJECT_NAME=:1' ;
+    EXECUTE IMMEDIATE sql_stmt INTO COUNST USING upper(tableName) ;
+    if COUNST  > 0 then
+      sql_stmt:= 'DROP TABLE '||tableName;
+      EXECUTE IMMEDIATE sql_stmt ;
+    end if;
+    COMMIT;
+  END;
+END;
+/
+ CREATE OR REPLACE FORCE VIEW  "V_REGIONS_CACHED" ("AMP_ACTIVITY_ID", "REGION_ID", "LOCATION_PERCENTAGE", "REGION") AS 
+  select aa.amp_activity_id AS amp_activity_id,
+         al.region_location_id AS region_id,
+         sum(lp.location_percentage) AS location_percentage,
+         acvl.location_name AS Region
+  from amp_activity aa
+       left join amp_activity_location lp 
+          on aa.amp_activity_id = lp.amp_activity_id      
+       left join amp_location al 
+          on lp.amp_location_id = al.amp_location_id
+       left join amp_category_value_location acvl 
+          on al.region_location_id = acvl.id
+   group by aa.amp_activity_id,
+           al.region_location_id,
+           acvl.location_name
+  order by aa.amp_activity_id,
+           al.region_location_id
+/
+
+
+

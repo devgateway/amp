@@ -223,7 +223,9 @@
           disableToolbarButton(document.getElementById('step2_next_button'));
           disableTab(2);
 
-        var v_tbody = document.getElementById('logTableId');
+        var v_table = document.getElementById('logTableId');
+      	v_table.setAttribute("height","100%");
+        var v_tbody = v_table.childNodes[1];
         v_tbody.innerHTML = '';
         row = document.createElement("tr");
         logDiv = createCall("td","");
@@ -237,7 +239,6 @@
         
       }
 
-      
       function cancelFilter(){
           document.getElementById('donorTypeId').selectedIndex=-1;
           document.getElementById('donorGroupId').selectedIndex=-1;
@@ -251,7 +252,8 @@
 
       function changeTeam(){
     	  var selTeamId = document.getElementById('teamId');
-
+    	  disableLogTab();
+    	  
           if (selTeamId.value != "-1"){
         	  enableExportButton();
           } else {
@@ -377,7 +379,9 @@
                         setTimeout("checkLog()",5000); 
                         return;
                     } else if (messages.status == 2){ // readyadding content to div
-                    	var v_tbody = document.getElementById('logTableId');
+                    	var v_table = document.getElementById('logTableId');
+                    	v_table.removeAttribute("height");
+                    	var v_tbody = v_table.childNodes[1];
                     	v_tbody.innerHTML = '';
                         row = document.createElement("tr");
                         row.setAttribute("bgcolor", "#D7EAFD");
@@ -577,8 +581,8 @@
                     <jsp:include page="toolbar.jsp" />
                     <div style="text-align: center; padding: 10px 10px 10px 50px;">
                       <div class="draglist" style="text-align: center; border-width: 0px; height: 310; ">
-                        <table  border="0" style="border-collapse: separate;" width="100%" height="100%" border="0" bgcolor="#eeeeee" border-spacing="0" >
-                          <tbody id="logTableId">
+                        <table id="logTableId" border="0" style="border-collapse: separate;" width="100%" height="100%" border="0" bgcolor="#eeeeee" border-spacing="0" >
+                          <tbody>
                             <tr>
                               <td id="logDivId" width="100%" align="center">
                                 <img src="/TEMPLATE/ampTemplate/images/amploading.gif" alt="" border="0"/>  

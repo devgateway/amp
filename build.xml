@@ -24,6 +24,8 @@
     <property name="deployConfigs" location="deployConfigs"/>
 	<property name="dbConfigs" location="dbConfigs"/>
 	<property name="repository" location="./repository"/>
+	<property name="RefreshMondrian" location="./repository/mondrian/sql"/>
+	<property name="MondrianConfig" location="./WEB-INF/queries"/>
 	<property name="jackrabbit" location="./jackrabbit"/>
     <property name="ampTest" location="./WEB-INF/amp-test" />
 
@@ -320,6 +322,8 @@
 	<target name="copyForAnySQL" if="dbName">
 		 <echo message="Using ${dbName} Configuration" />
 		<copy file="${dbConfigs}/${dbName}/hibernate-dialect.xml" todir="${src}" overwrite="true"/>
+		<copy file="${dbConfigs}/${dbName}/refresh_mondrian_cache.sql" todir="${RefreshMondrian}" overwrite="true"/>
+		<copy file="${dbConfigs}/${dbName}/AMP.xml" todir="${MondrianConfig}" overwrite="true"/>
 	</target>	
 
 

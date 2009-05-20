@@ -91,7 +91,7 @@ END;
   
 END;
 /
- CREATE OR REPLACE FUNCTION  "GETPARENTSECTORID" 
+CREATE OR REPLACE FUNCTION "GETPARENTSECTORID" 
     (
       sectorId IN NUMBER)
     RETURN NUMBER
@@ -111,16 +111,16 @@ END;
            SELECT
             CASE
               WHEN parent_sector_id IS NULL
-              THEN -1
+              THEN sid
               ELSE parent_sector_id
             END
-             INTO sid
+             INTO pid
              FROM amp_sector
             WHERE amp_sector_id = sid;
-          IF sid                = -1 THEN
+          IF sid                = pid THEN
             EXIT;
           ELSE
-            pid:=sid;
+            sid:=pid;
           END IF;
         END LOOP;
         RETURN pid;

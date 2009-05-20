@@ -51,6 +51,7 @@ public class EditFunding extends Action {
 		formBean.getOldFunding().setSignatureDate("");
 		formBean.getOldFunding().setFundingDetails(null);
 		formBean.getOldFunding().setFundingMTEFProjections(null);
+		formBean.setTotDisbIsBiggerThanTotCom(false);
 		//
 		ArrayList<FundingOrganization> fundingOrganizations = new ArrayList<FundingOrganization>(formBean.getFunding().getFundingOrganizations());
 		if (fundingOrganizations != null) {

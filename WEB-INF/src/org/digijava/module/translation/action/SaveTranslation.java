@@ -47,6 +47,18 @@ public class SaveTranslation
 
         TranslatorForm formBean = (TranslatorForm) form;
         Site currentSite;
+        
+        String backUrl = null;
+        try
+        {
+        	backUrl = java.net.URLDecoder.decode(formBean.getBack_url(),"UTF-8");
+        }catch (Exception ex){
+        	// need logger.
+        	backUrl = formBean.getBack_url();
+        }
+        
+        
+        
         if (formBean.getSiteId()!= null && formBean.getSiteId().trim().length() != 0) {
             currentSite = SiteUtils.getSite(formBean.getSiteId());
         } else {
@@ -94,10 +106,10 @@ public class SaveTranslation
 
                 TranslatorWorker.getInstance(formBean.getKey()).save(newMsg);
             }
-            return new ActionForward(formBean.getBack_url(), true);
+            return new ActionForward(backUrl, true);
         }
 
-        return new ActionForward(formBean.getBack_url(), true);
+        return new ActionForward(backUrl, true);
 
     }
 }

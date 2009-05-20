@@ -143,7 +143,7 @@
                                                             <tr>
                                                                 <td><digi:trn key="aim:indicatorName">Indicator Name</digi:trn><font color="red">*</font></td>
                                                                 <td>
-                                                                    <html:text property="indicatorName" size="20" styleClass="inp-text"/>	
+                                                                    <html:text property="indicatorName" size="20" styleClass="inp-text" maxlength="50"/>	
                                                                 </td>
                                                             </tr>
                                                             <tr>

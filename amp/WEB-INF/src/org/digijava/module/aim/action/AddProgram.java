@@ -119,7 +119,7 @@ public class AddProgram
 
         if (settingsId == ProgramUtil.NATIONAL_PLAN_OBJECTIVE_KEY) {
           if(npoPrograms.size()==0) {
-            activityProgram.setProgramPercentage(100L);
+            activityProgram.setProgramPercentage(100);
           }
           // changed by mouhamad for burkina the 22/02/08
           // for AMP-2666

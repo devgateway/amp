@@ -1,0 +1,1 @@
+insert into amp_quartz_job_class(jc_name,jc_class_fullname)values('User Verified Date Job','org.digijava.module.message.jobs.UserVerifiedDateJob');

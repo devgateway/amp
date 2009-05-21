@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<config>
+<secondary-pages>
+	<page page="exceptionPage" name="exceptionLayout" title="Blank site page title exception" />
+	<page page="newExceptionPage" name="newExceptionLayout" title="Error Page" />
+	<page page="getConfluenceDocs" name="getConfluenceDocs" title="Confluence Docs" />
+	<page page="500" name="http500layout" title="Blank site page title http error 500" />
+	<page page="400" name="http400layout" title="Blank site page title http error 400" />
+	<page page="404" name="http404layout" title="Blank site page title http error 404" />
+</secondary-pages>
+
+<module>
+	<page name="exceptionPage">exceptionPage.jsp</page>
+	<page name="500">500.jsp</page>
+	<page name="400">400.jsp</page>
+	<page name="404">404.jsp</page>
+</module>
+
+</config>

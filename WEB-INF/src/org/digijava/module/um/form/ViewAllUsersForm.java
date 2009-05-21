@@ -25,6 +25,8 @@ public class ViewAllUsersForm   extends ActionForm {
     //amount of results per page
     private int tempNumResults;
     private int numResults;
+   
+	private int numUsers;
     private Collection pages = null;
     //this field is used to sort user by name,email or workspace
     private String sortBy;
@@ -117,7 +119,16 @@ public class ViewAllUsersForm   extends ActionForm {
 
     public void setUsers(Collection<UserBean> users) {
         this.users = users;
+        this.setNumUsers(users.size());
     }
+    
+    public int getNumUsers() {
+		return numUsers;
+	}
+
+	public void setNumUsers(int numUsers) {
+		this.numUsers = numUsers;
+	}
 
     public void setKeyword(String keyword) {
         this.keyword = keyword;

@@ -9,140 +9,217 @@ import org.digijava.module.aim.dbentity.AmpQuartzJobClass;
 import org.digijava.module.aim.helper.QuartzJobForm;
 
 public class QuartzJobManagerForm extends ActionForm {
-    /**
+	/**
 	 *
 	 */
 	private static final long serialVersionUID = 1L;
+	private boolean invalidTrigger = false;
+	private boolean invalidEndDate = false;
+	
+
 
 	private String name;
-    private String classFullname;
-    private String startDateTime;
-    private String endDateTime;
-    private int triggerType;
-    private int selectedDay;
-    private int selectedMonthDay;
-    private String exeTime;
-    private QuartzJobForm job;
-    private Collection<QuartzJobForm> jobs;
-    private Collection<AmpQuartzJobClass> jcCol;
-    private String action;
-    private Boolean editAction;
+	
 
-    public QuartzJobManagerForm() {
+	private String classFullname;
+	private String startDateTime;
+	private String endDateTime;
+	private int triggerType;
+	private int selectedDay;
+	private int selectedMonthDay;
 
-    }
+	private QuartzJobForm job;
+	private Collection<QuartzJobForm> jobs;
+	private Collection<AmpQuartzJobClass> jcCol;
+	private String action;
+	private Boolean editAction;
+	private String startH;
+	private String startM;
 
-    public void reset(){
-        name=null;
-        startDateTime=null;
-        endDateTime=null;
-        triggerType=0;
-        selectedDay=1;
-        exeTime=null;
-        jobs=null;
-        action=null;
-        selectedMonthDay=1;
-        editAction=false;
-    }
+	private String endH;
+	private String endM;
 
-    public Collection<QuartzJobForm> getJobs() {
-        return jobs;
-    }
+	private String exeTimeM;
+	private String exeTimeH;
 
-    public String getAction() {
-        return action;
-    }
+	public String getEndH() {
+		return endH;
+	}
 
-    public QuartzJobForm getJob() {
-        return job;
-    }
+	public void setEndH(String endH) {
+		this.endH = endH;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getEndM() {
+		return endM;
+	}
 
-    public String getEndDateTime() {
-        return endDateTime;
-    }
+	public String getExeTimeM() {
+		return exeTimeM;
+	}
 
-    public String getExeTime() {
-        return exeTime;
-    }
+	public void setExeTimeM(String exeTimeM) {
+		this.exeTimeM = exeTimeM;
+	}
 
-    public int getSelectedDay() {
-        return selectedDay;
-    }
+	public String getExeTimeH() {
+		return exeTimeH;
+	}
 
-    public String getStartDateTime() {
-        return startDateTime;
-    }
+	public void setExeTimeH(String exeTimeH) {
+		this.exeTimeH = exeTimeH;
+	}
 
-    public int getTriggerType() {
-        return triggerType;
-    }
+	public void setEndM(String endM) {
+		this.endM = endM;
+	}
 
-    public String getClassFullname() {
-        return classFullname;
-    }
+	public String getStartH() {
+		return startH;
+	}
 
-    public Collection<AmpQuartzJobClass> getJcCol() {
-        return jcCol;
-    }
-    public int getSelectedMonthDay() {
-        return selectedMonthDay;
-    }
-     public Boolean getEditAction() {
-        return editAction;
-    }
+	public void setStartH(String startH) {
+		this.startH = startH;
+	}
 
-    public void setEditAction(Boolean editAction) {
-        this.editAction = editAction;
-    }
-    public void setSelectedMonthDay(int selectedMonthDay) {
-        this.selectedMonthDay = selectedMonthDay;
-    }
+	public String getStartM() {
+		return startM;
+	}
 
-    public void setJobs(Collection<QuartzJobForm> jobs) {
-        this.jobs = jobs;
-    }
+	public void setStartM(String startM) {
+		this.startM = startM;
+	}
 
-    public void setAction(String action) {
-        this.action = action;
-    }
+	public static long getSerialVersionUID() {
+		return serialVersionUID;
+	}
 
-    public void setJob(QuartzJobForm job) {
-        this.job = job;
-    }
+	public QuartzJobManagerForm() {
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	}
 
-    public void setExeTime(String exeTime) {
-        this.exeTime = exeTime;
-    }
+	public void reset() {
+		name = null;
+		startDateTime = null;
+		endDateTime = null;
+		triggerType = 0;
+		selectedDay = 1;
+		exeTimeH = null;
+		exeTimeM = null;
+		jobs = null;
+		action = null;
+		selectedMonthDay = 1;
+		editAction = false;
+	}
 
-    public void setEndDateTime(String endDateTime) {
-        this.endDateTime = endDateTime;
-    }
+	public Collection<QuartzJobForm> getJobs() {
+		return jobs;
+	}
 
-    public void setSelectedDay(int selectedDay) {
-        this.selectedDay = selectedDay;
-    }
+	public String getAction() {
+		return action;
+	}
 
-    public void setStartDateTime(String startDateTime) {
-        this.startDateTime = startDateTime;
-    }
+	public QuartzJobForm getJob() {
+		return job;
+	}
 
-    public void setTriggerType(int triggerType) {
-        this.triggerType = triggerType;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setClassFullname(String classFullname) {
-        this.classFullname = classFullname;
-    }
+	public String getEndDateTime() {
+		return endDateTime;
+	}
 
-    public void setJcCol(Collection<AmpQuartzJobClass> jcCol) {
-        this.jcCol = jcCol;
-    }
+	public int getSelectedDay() {
+		return selectedDay;
+	}
+
+	public String getStartDateTime() {
+		return startDateTime;
+	}
+
+	public int getTriggerType() {
+		return triggerType;
+	}
+
+	public String getClassFullname() {
+		return classFullname;
+	}
+
+	public Collection<AmpQuartzJobClass> getJcCol() {
+		return jcCol;
+	}
+
+	public int getSelectedMonthDay() {
+		return selectedMonthDay;
+	}
+
+	public Boolean getEditAction() {
+		return editAction;
+	}
+
+	public void setEditAction(Boolean editAction) {
+		this.editAction = editAction;
+	}
+
+	public void setSelectedMonthDay(int selectedMonthDay) {
+		this.selectedMonthDay = selectedMonthDay;
+	}
+
+	public void setJobs(Collection<QuartzJobForm> jobs) {
+		this.jobs = jobs;
+	}
+
+	public void setAction(String action) {
+		this.action = action;
+	}
+
+	public void setJob(QuartzJobForm job) {
+		this.job = job;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setEndDateTime(String endDateTime) {
+		this.endDateTime = endDateTime;
+	}
+
+	public void setSelectedDay(int selectedDay) {
+		this.selectedDay = selectedDay;
+	}
+
+	public void setStartDateTime(String startDateTime) {
+		this.startDateTime = startDateTime;
+	}
+
+	public void setTriggerType(int triggerType) {
+		this.triggerType = triggerType;
+	}
+
+	public void setClassFullname(String classFullname) {
+		this.classFullname = classFullname;
+	}
+
+	public void setJcCol(Collection<AmpQuartzJobClass> jcCol) {
+		this.jcCol = jcCol;
+	}
+	
+	public boolean isInvalidTrigger() {
+		return invalidTrigger;
+	}
+
+	public void setInvalidTrigger(boolean invalidTrigger) {
+		this.invalidTrigger = invalidTrigger;
+	}
+	public boolean isInvalidEndDate() {
+		return invalidEndDate;
+	}
+
+	public void setInvalidEndDate(boolean invalidEndDate) {
+		this.invalidEndDate = invalidEndDate;
+	}
 }

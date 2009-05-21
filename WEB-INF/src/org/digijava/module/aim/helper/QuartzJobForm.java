@@ -12,13 +12,80 @@ public class QuartzJobForm {
     private String groupName;
     private String triggerGroupName;
     private int triggerType;
-    private String exeTime;
     private boolean paused;
     private int dayOfWeek;
     private int dayOfMonth;
     private boolean manualJob;
+   
+    private String startH;
+    private String startM;
 
-    public boolean isManualJob() {
+    private String endH;
+    private String endM;
+
+    private String exeTimeH;
+    private String exeTimeM;
+    private String exeTimeS;
+    
+    public String getExeTimeS() {
+		return exeTimeS;
+	}
+
+	public void setExeTimeS(String exeTimeS) {
+		this.exeTimeS = exeTimeS;
+	}
+
+	public String getExeTimeH() {
+		return exeTimeH;
+	}
+
+	public void setExeTimeH(String exeTimeH) {
+		this.exeTimeH = exeTimeH;
+	}
+
+	public String getExeTimeM() {
+		return exeTimeM;
+	}
+
+	public void setExeTimeM(String exeTimeM) {
+		this.exeTimeM = exeTimeM;
+	}
+
+	public String getStartH() {
+		return startH;
+	}
+
+	public void setStartH(String startH) {
+		this.startH = startH;
+	}
+
+	public String getStartM() {
+		return startM;
+	}
+
+	public void setStartM(String startM) {
+		this.startM = startM;
+	}
+
+
+	public String getEndH() {
+		return endH;
+	}
+
+	public void setEndH(String endH) {
+		this.endH = endH;
+	}
+
+	public String getEndM() {
+		return endM;
+	}
+
+	public void setEndM(String endM) {
+		this.endM = endM;
+	}
+
+	
+	public boolean isManualJob() {
         return manualJob;
     }
 
@@ -81,9 +148,7 @@ public class QuartzJobForm {
         return triggerType;
     }
 
-    public String getExeTime() {
-        return exeTime;
-    }
+ 
 
     public int getDayOfWeek() {
         return dayOfWeek;
@@ -137,9 +202,7 @@ public class QuartzJobForm {
         this.triggerType = triggerType;
     }
 
-    public void setExeTime(String exeTime) {
-        this.exeTime = exeTime;
-    }
+  
 
     public void setDayOfWeek(int dayOfWeek) {
         this.dayOfWeek = dayOfWeek;

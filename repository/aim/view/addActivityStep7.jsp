@@ -64,13 +64,15 @@ function removeSelOrgs(value) {
  </c:set>
 
 
-<table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left">
+<table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left"  border=0>
+
 <tr><td width="100%" vAlign="top" align="left">
-<!--  AMP Admin Logo -->
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
-<!-- End of Logo -->
-</td></tr>
-<tr><td width="100%" vAlign="top" align="left">
+
+	<tr><td width="100%" vAlign="top" align="left">
+	<!--  AMP Admin Logo -->
+	<jsp:include page="teamPagesHeader.jsp" flush="true" />
+	<!-- End of Logo -->
+	</td></tr>
 
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%" vAlign="top" align="center" border=0>
 	<tr>

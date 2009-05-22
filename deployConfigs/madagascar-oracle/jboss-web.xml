@@ -1,6 +1,6 @@
 <jboss-web>
 <context-root>/</context-root>
-<virtual-host>madagascar-oracle.ampdev.net</virtual-host>
+<virtual-host>madagascar-oracle.staging.ampdev.net</virtual-host>
  <class-loading java2ClassLoadingCompliance="false">
  <loader-repository>
  com.example:loader=amp-madagascar-oracle.war
@@ -16,7 +16,7 @@
 	<res-type>javax.sql.DataSource</res-type>
 	
 	<!-- THIS IS THE RELATED JNDI DATASOURCE NAME. SET THIS TO THE REAL C3P0/JBOSS DATASOURCE -->
-	<jndi-name>madaOracleDS</jndi-name>
+	<jndi-name>madaOracleStagingDS</jndi-name>
 
 </resource-ref>
 </jboss-web>

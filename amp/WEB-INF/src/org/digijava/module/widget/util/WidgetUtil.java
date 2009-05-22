@@ -14,6 +14,7 @@ import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpWidget;
+import org.digijava.module.widget.dbentity.AmpWidgetOrgProfile;
 import org.digijava.module.widget.helper.WidgetPlaceHelper;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -257,6 +258,50 @@ public class WidgetUtil {
 		return places;
 	}
 
+	public static List<AmpDaWidgetPlace> getPlacesWithID(Long[] pids) throws DgException{
+		List<AmpDaWidgetPlace> places = new ArrayList<AmpDaWidgetPlace>(pids.length);
+		String oql = "select p from "+AmpDaWidgetPlace.class.getName()+" as p where (p.id in ( ";
+		for (int i = 0; i < pids.length; i++) {
+			oql+=""+pids[i];
+			if (i<pids.length-1){
+				oql+=",";
+			}
+		}
+		oql += " )) ";
+		Session session = PersistenceManager.getRequestDBSession();
+		try {
+			Query query = session.createQuery(oql);
+			places = (List<AmpDaWidgetPlace>)query.list();
+		} catch (Exception e) {
+			logger.error(e);
+			throw new DgException("cannot search widget places!",e);
+		}
+		return places;
+	}
+	
+	public static List<AmpWidgetOrgProfile> getNewWidgetWithID(Long[] pids) throws DgException{
+		List<AmpWidgetOrgProfile> places = new ArrayList<AmpWidgetOrgProfile>(pids.length);
+		String oql = "select p from "+AmpWidgetOrgProfile.class.getName()+" as p where (p.id in ( ";
+		for (int i = 0; i < pids.length; i++) {
+			oql+=""+pids[i];
+			if (i<pids.length-1){
+				oql+=",";
+			}
+		}
+		oql += " )) ";
+		Session session = PersistenceManager.getRequestDBSession();
+		try {
+			Query query = session.createQuery(oql);
+			places = (List<AmpWidgetOrgProfile>)query.list();
+		} catch (Exception e) {
+			logger.error(e);
+			throw new DgException("cannot search widget places!",e);
+		}
+		return places;
+	}
+	
+	
+	
 	/**
 	 * Retrieves places with IDs specified.
 	 * @param pids id's of places.

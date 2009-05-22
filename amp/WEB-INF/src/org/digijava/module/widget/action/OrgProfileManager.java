@@ -1,6 +1,8 @@
 package org.digijava.module.widget.action;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +23,7 @@ import org.digijava.module.orgProfile.util.OrgProfileUtil;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpWidgetOrgProfile;
 import org.digijava.module.widget.form.OrgProfileWidgetForm;
+import org.digijava.module.widget.helper.WidgetUpdatePlaceHelper;
 import org.digijava.module.widget.util.OrgProfileWidgetUtil;
 import org.digijava.module.widget.util.WidgetUtil;
 
@@ -43,6 +46,7 @@ public class OrgProfileManager  extends DispatchAction {
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
         
+       
 		HttpSession session = request.getSession();
 		String str = (String) session.getAttribute("ampAdmin");
 
@@ -53,6 +57,7 @@ public class OrgProfileManager  extends DispatchAction {
 		}   
 
     	OrgProfileWidgetForm orgForm = (OrgProfileWidgetForm) form;
+    	orgForm.setPlaces(WidgetUtil.getAllOrgProfilePlaces());
         orgForm.setOrgProfilePages(OrgProfileWidgetUtil.getAllOrgProfileWidgets());
         return mapping.findForward("forward");
 
@@ -107,16 +112,46 @@ public class OrgProfileManager  extends DispatchAction {
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
 
-        OrgProfileWidgetForm orgForm = (OrgProfileWidgetForm) form;
+        OrgProfileWidgetForm orgForm = (OrgProfileWidgetForm) form;        
         AmpWidgetOrgProfile orgProfWidget = null;
+        AmpWidgetOrgProfile orgNewProfWidget = null;
         List<AmpDaWidgetPlace> oldPlaces = null;
+        List<AmpDaWidgetPlace> oldPlaceso = null;
         List<AmpDaWidgetPlace> newPlaces = null;
+        AmpDaWidgetPlace widgetPlace = null;
+        Collection<WidgetUpdatePlaceHelper> placesWi = new ArrayList();
+       
+            
+        String[] id = orgForm.getoldId().split(",");
+      String[] selId = orgForm.getSelectedId().split(",");
+     
+      for(int i=1; i<id.length; i++){
+      	
+       String data = id[i];
+       orgForm.setId(new Long(data));
+       orgForm.setType(new Long(i));
+       
+       Long[] placeIDs = new Long[1];
+       
+      for(int j=1; j<selId.length; j++ ){
+  if(j==i){	
+      String d = selId[j];
+      placeIDs[0] = new Long(d);
+     
+      
+      orgForm.setSelPlaces(null);
+      orgForm.setSelPlaces(placeIDs);
+		
+        
 
         if (orgForm.getId() == null||orgForm.getId()==0) {
             orgProfWidget = new AmpWidgetOrgProfile();
         } else {
-            orgProfWidget = OrgProfileWidgetUtil.getAmpWidgetOrgProfile(orgForm.getId());
-            oldPlaces = WidgetUtil.getWidgetPlaces(orgProfWidget.getId());
+        	
+        	widgetPlace = WidgetUtil.getPlace(orgForm.getId());
+            orgProfWidget = OrgProfileWidgetUtil.getAmpWidgetOrgProfile(widgetPlace.getAssignedWidget().getId());
+            //oldPlaces = WidgetUtil.getWidgetPlaces(orgProfWidget.getId());
+            oldPlaceso = WidgetUtil.getWidgetPlaces(orgProfWidget.getId());
         }
         orgProfWidget.setType(orgForm.getType());
         /*
@@ -144,17 +179,38 @@ public class OrgProfileManager  extends DispatchAction {
         }
         OrgProfileWidgetUtil.saveWidget(orgProfWidget);
         if (orgForm.getSelPlaces() != null && orgForm.getSelPlaces().length > 0) {
-            newPlaces = WidgetUtil.getPlacesWithIDs(orgForm.getSelPlaces());
-            if (oldPlaces != null && newPlaces != null) {
-                Collection<AmpDaWidgetPlace> deleted = AmpCollectionUtils.split(oldPlaces, newPlaces, new WidgetUtil.PlaceKeyWorker());
-                WidgetUtil.updatePlacesWithWidget(oldPlaces, orgProfWidget);
-                WidgetUtil.updatePlacesWithWidget(deleted, null);
+        	newPlaces  = WidgetUtil.getPlacesWithID(orgForm.getSelPlaces());
+        	for (AmpDaWidgetPlace place : newPlaces) {
+                orgNewProfWidget = OrgProfileWidgetUtil.getAmpWidgetOrgProfile(place.getAssignedWidget().getId());
+            }
+            //newPlaces = WidgetUtil.getPlacesWithIDs(orgForm.getSelPlaces());
+            if (newPlaces != null) {
+                //Collection<AmpDaWidgetPlace> deleted = AmpCollectionUtils.split(oldPlaces, newPlaces, new WidgetUtil.PlaceKeyWorker());
+                
+                WidgetUpdatePlaceHelper update = new WidgetUpdatePlaceHelper();
+                update.setOldplace(oldPlaceso);
+                update.setOrgNewProfWidget(orgNewProfWidget);
+                placesWi.add(update);
+              
             } else {
-                WidgetUtil.updatePlacesWithWidget(newPlaces, orgProfWidget);
+                WidgetUtil.updatePlacesWithWidget(oldPlaceso, orgNewProfWidget);
             }
         } else {
             WidgetUtil.clearPlacesForWidget(orgProfWidget.getId());
         }
+   
+    	 }
+      }
+   }
+      for (Iterator<WidgetUpdatePlaceHelper> iter = placesWi.iterator(); iter.hasNext();) {
+    	  
+    	  WidgetUpdatePlaceHelper data = iter.next();
+    	  
+    	   
+    	    WidgetUtil.updatePlacesWithWidget(data.getOldplace(), data.getOrgNewProfWidget());
+    	    
+    	}
+        
        return viewAll(mapping, form, request, response);
 
     }

@@ -13,13 +13,36 @@ import org.digijava.module.widget.dbentity.AmpWidgetOrgProfile;
  */
 public class OrgProfileWidgetForm extends ActionForm {
     
-    private static final long serialVersionUID = 1L;
+
+
+
+	private static final long serialVersionUID = 1L;
     
     private List<AmpWidgetOrgProfile> orgProfilePages;
     private Long type;
     private Long id;
     private Long[] selPlaces;
     private List<AmpDaWidgetPlace>places;
+    private String oldId;
+    private String selectedId;
+    
+
+	public String getSelectedId() {
+		return selectedId;
+	}
+
+	public void setSelectedId(String selectedId) {
+		this.selectedId = selectedId;
+	}
+    
+    
+    public String getoldId() {
+		return oldId;
+	}
+
+	public void setoldId(String oldId) {
+		this.oldId = oldId;
+	}
 
     public Long[] getSelPlaces() {
         return selPlaces;

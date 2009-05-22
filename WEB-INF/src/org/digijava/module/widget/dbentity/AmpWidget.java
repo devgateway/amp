@@ -11,11 +11,13 @@ import org.digijava.module.widget.helper.WidgetVisitor;
  */
 public class AmpWidget implements Serializable {
 
+	
 	private static final long serialVersionUID = 1L;
 	private Long id;
 	private String name;
 	private String code;
 	private Boolean nameAsTitle;
+	private String widgetType;
 	
 	public Boolean getNameAsTitle() {
 		return nameAsTitle;
@@ -40,6 +42,13 @@ public class AmpWidget implements Serializable {
 	}
 	public void setCode(String code) {
 		this.code = code;
+	}
+	
+	public String getWidgetType() {
+		return widgetType;
+	}
+	public void setWidgetType(String widgetType) {
+		this.widgetType = widgetType;
 	}
          public void accept(WidgetVisitor visitor){}
 

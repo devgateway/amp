@@ -9,6 +9,7 @@
       </generator>
     </id>
     <discriminator column="widget_type"/>
+    <property name="widgetType" column="widget_type" type="java.lang.String"  insert="false" update="false"/> 
     <property column="widget_name" name="name" type="java.lang.String"/>
     <property column="widget_code" name="code" type="java.lang.String"/>
     <property column="name_as_title" name="nameAsTitle" type="java.lang.Boolean"/>

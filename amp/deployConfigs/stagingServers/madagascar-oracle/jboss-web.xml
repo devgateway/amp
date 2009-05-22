@@ -1,9 +1,9 @@
 <jboss-web>
 <context-root>/</context-root>
-<virtual-host>madagascar-oracle.ampdev.net</virtual-host>
+<virtual-host>madagascar-oracle.staging.ampdev.net</virtual-host>
  <class-loading java2ClassLoadingCompliance="false">
  <loader-repository>
- com.example:loader=amp-madagascar-oracle.war
+ com.example:loader=amp-madagascar-oracle-staging.war
  <loader-repository-config>java2ParentDelegation=false</loader-repository-config>
  </loader-repository>
  </class-loading>

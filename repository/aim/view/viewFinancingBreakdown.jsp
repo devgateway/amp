@@ -191,10 +191,12 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 											<TR>
 			               			<logic:equal name="aimFinancingBreakdownForm" property="currencyPresent" value="true">
 												<TD>
-                         					<html:select property="currency" styleClass="dr-menu">
-                       							<html:optionsCollection name="aimFinancingBreakdownForm" property="currencies" value="currencyCode"
+												<logic:notEmpty name="aimFinancingBreakdownForm" property="currencies">
+                         						<html:select property="currency" styleClass="dr-menu">
+                         							<html:optionsCollection name="aimFinancingBreakdownForm" property="currencies" value="currencyCode"
 														label="currencyName"/>
 													</html:select>
+												</logic:notEmpty>
 												</TD>
 											</logic:equal>
 											<logic:equal name="aimFinancingBreakdownForm" property="calendarPresent" value="true">

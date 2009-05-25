@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+    <xs:element name="Contacts">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Contact" type="Contact" maxOccurs="unbounded" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="Contact">
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="lastname" type="xs:string" use="required"/>
+        <xs:attribute name="email" type="xs:string" use="required"/>
+        <xs:attribute name="title" type="xs:string" use="optional"/>
+        <xs:attribute name="organisationName" type="xs:string" use="optional"/>
+        <xs:attribute name="phone" type="xs:string" use="optional"/>
+        <xs:attribute name="fax" type="xs:string" use="optional"/>
+    </xs:complexType>
+</xs:schema>

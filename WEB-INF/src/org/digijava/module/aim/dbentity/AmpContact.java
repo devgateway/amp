@@ -1,6 +1,8 @@
 package org.digijava.module.aim.dbentity;
 
 import java.util.Set;
+import org.digijava.module.contacts.jaxb.ObjectFactory;
+import org.digijava.module.contacts.jaxb.Contact;
 
 /**
  * holds contact user's information
@@ -102,4 +104,17 @@ public class AmpContact {
 		this.temporaryId = temporaryId;
 	}
 	
+	//for export
+	public Contact createContact(){
+		ObjectFactory of= new ObjectFactory();
+		Contact cont= of.createContact();
+		cont.setName(this.getName());
+		cont.setLastname(this.getLastname());
+		cont.setEmail(this.getEmail());
+		cont.setTitle(this.getTitle());
+		cont.setOrganisationName(this.getOrganisationName());
+		cont.setPhone(this.getPhone());
+		cont.setFax(this.getFax());
+		return cont;
+	}	
 }

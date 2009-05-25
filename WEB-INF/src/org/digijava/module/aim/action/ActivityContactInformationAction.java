@@ -1,5 +1,7 @@
 package org.digijava.module.aim.action;
 
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +19,8 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.ContactInfoUtil;
 
 public class ActivityContactInformationAction extends Action {
+	
+	public static final String ROOT_TAG = "CONTACTS";
 	
 	public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
 		EditActivityForm eaForm=(EditActivityForm)form;
@@ -73,6 +77,29 @@ public class ActivityContactInformationAction extends Action {
 			}
 			clearForm(eaForm);
 			eaForm.getContactInformation().setContactType(null);
+		}
+		if(action!=null && action.equalsIgnoreCase("checkDulicateEmail")){
+			String email=request.getParameter("email");
+			int emailCount=ContactInfoUtil.getContactsCount(email);
+			String contactEmail=null;
+			if(emailCount>0){
+				contactEmail="exists";
+			}else{
+				contactEmail="notExists";
+			}
+			//creating xml that will be returned			
+    		response.setContentType("text/xml");
+    		OutputStreamWriter outputStream = new OutputStreamWriter(response.getOutputStream());
+    		PrintWriter out = new PrintWriter(outputStream, true);
+    		String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+    		xml += "<" + ROOT_TAG +">";    		
+    		xml+="<"+"contact email=\""+contactEmail+"\" />";
+    		xml+="</"+ROOT_TAG+">";
+    		out.println(xml);
+			out.close();
+			// return xml
+			outputStream.close();
+			return null;
 		}
 		return mapping.findForward("step8");
 	}

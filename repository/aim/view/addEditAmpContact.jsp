@@ -96,7 +96,7 @@
 					</tr>
 					<tr>
 						<td noWrap width=100% vAlign="top">
-							<table bgcolor="#ffffff" border="0" >
+							<table bgcolor="#ffffff" border="0" width="100%">
 								<tr>
 									<td>
 										<table>
@@ -120,15 +120,15 @@
 																				<!-- Page Logic -->
 																				<tr>
 																					<td width="100%">
-																						<table border="0" bgColor="#f4f4f2">
+																						<table border="0" bgColor="#f4f4f2" width="100%">
 																							<tr height="5"><td>&nbsp;</td></tr>
 																							<tr>
-																								<td rowspan="9" width="30%"/>
-																								<td align="right"><strong><digi:trn>Firstname</digi:trn></strong><font color="red">*</font></td>
+																								<td rowspan="9" width="10%"/>
+																								<td align="right"><strong><digi:trn>First Name</digi:trn></strong><font color="red">*</font></td>
 																								<td align="left"><html:text property="name" styleId="name"/></td>
 																							</tr>
 																							<tr>
-																								<td align="right"><strong><digi:trn>Lastname</digi:trn></strong><font color="red">*</font></td>
+																								<td align="right"><strong><digi:trn>Last Name</digi:trn></strong><font color="red">*</font></td>
 																								<td align="left"><html:text property="lastname" styleId="lastname"/></td>
 																							</tr>
 																							<tr>

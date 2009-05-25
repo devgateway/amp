@@ -14,6 +14,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/container.css'/>"/>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/yahoo-dom-event.js"/>" ></script>
@@ -30,7 +31,7 @@
 	
 	#popin .content { 
 	    overflow:auto; 
-	    height:455px; 
+	    height:300px; 
 	    background-color:fff; 
 	    padding:10px; 
 	} 
@@ -48,7 +49,7 @@
 		YAHOOAmp.namespace("YAHOOAmp.amp");
 
 		var myPanel = new YAHOOAmp.widget.Panel("newpopins", {
-			width:"400px",
+			width:"650px",
 			fixedcenter: true,
 		    constraintoviewport: true,
 		    underlay:"none",
@@ -125,7 +126,7 @@
 		checkErrorAndClose();
 	}
 	
-	function myclose(){
+	function myclose(){		
 		myPanel.hide();	
 		panelStart=1;
 	
@@ -134,11 +135,38 @@
 		myclose();
 	}
 
-	function saveContact(){
+	function saveContact(){		
 		if(validateInfo()){
-			myclose();
-			addContact();	
+			//ajax check for duplicate email
+			checkForduplicateEmail();
 		}
+	}
+
+	function checkForduplicateEmail(){ //checks whether such email already exists in db
+		var email=document.getElementById('email').value;
+		var url=addActionToURL('activityContactInfo.do?toDo=checkDulicateEmail&email='+email);			
+		var async=new Asynchronous();
+		async.complete=showErrorOrSaveContact;
+		async.call(url);
+	}
+
+	function showErrorOrSaveContact(status, statusText, responseText, responseXML){
+		var root=responseXML.getElementsByTagName('CONTACTS')[0].childNodes[0];
+		var contEmail=root.getAttribute('email');		
+		if(contEmail=='exists'){
+			alert('Contact with the given email already exists');			
+			return false;
+		}
+		//if emails doesn't exist, save contact.
+		myclose();
+		addContact();
+	}
+
+	function addActionToURL(actionName){
+	  var fullURL=document.URL;
+	  var lastSlash=fullURL.lastIndexOf("/");
+	  var partialURL=fullURL.substring(0,lastSlash);
+	  return partialURL+"/"+actionName;
 	}
 
 	function validateInfo(){
@@ -180,13 +208,7 @@
 	 }	 
 	 return true;
 	}
-
-	function addSelectedContact(){		
-		<digi:context name="Url" property="context/aim/addSelectedSectors.do"/>
-		var url = "<%=Url %>";
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
-		checkAndClose=true;
-	}
+	
 	function checkErrorAndClose(){
 		if(checkAndClose==true){
 			if(document.getElementsByName("someError")[0]==null || document.getElementsByName("someError")[0].value=="false"){

@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.upload.FormFile;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.helper.Constants;
 
@@ -30,6 +31,9 @@ public class AddressBookForm   extends ActionForm {
 	private Integer currentPage;
 	private int offset;
 	private int pagesSize;
+	
+	//for import
+	private FormFile fileUploaded;
 	
 	public int getPagesSize() {
 		return pagesSize;
@@ -139,5 +143,11 @@ public class AddressBookForm   extends ActionForm {
 	}
 	public void setContactsForPage(List<AmpContact> contactsForPage) {
 		this.contactsForPage = contactsForPage;
+	}
+	public FormFile getFileUploaded() {
+		return fileUploaded;
+	}
+	public void setFileUploaded(FormFile fileUploaded) {
+		this.fileUploaded = fileUploaded;
 	}	
 }

@@ -1381,7 +1381,6 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	      Session session = PersistenceManager.getRequestDBSession();
 	      String oql = "select count(distinct act) from " + AmpActivityProgram.class.getName() + " prog ";
 	      oql += getSearchActivitiesWhereClause(ampThemeId, statusCode, donorOrgId, fromDate, toDate, locationId, teamMember);
-	      oql += " order by act.name";
 
 	      Query query = session.createQuery(oql);
 
@@ -3481,7 +3480,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
   }
 
   public static ActivityAmounts getActivityAmmountIn(AmpActivity act,
-      String tocode,Long percent) throws Exception {
+      String tocode,Float percent) throws Exception {
     BigDecimal tempProposed = new BigDecimal(0);
     BigDecimal tempActual = new BigDecimal(0);
     BigDecimal tempPlanned = new BigDecimal(0);

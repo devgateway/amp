@@ -1336,8 +1336,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 
       String oql = "select  new  org.digijava.module.aim.helper.ActivityItem(act,prog.programPercentage) from " + AmpActivityProgram.class.getName() + " prog ";
       oql+= getSearchActivitiesWhereClause(ampThemeId, statusCode, donorOrgId, fromDate, toDate, locationId, teamMember);
-      oql += " order by act.name";
-
+     
       Query query = session.createQuery(oql);
 
       setSearchActivitiesQueryParams(query, ampThemeId, statusCode, donorOrgId, fromDate, toDate, locationId, teamMember);

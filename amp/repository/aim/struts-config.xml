@@ -1712,7 +1712,12 @@
    <action path="/aim/addressBook" name="addressbookForm" scope="session" parameter="actionType" type="org.digijava.module.aim.action.AddressBookActions">
      	<forward name="addOrEditContact" path="/showLayout.do?layout=addContact" />
      	<forward name="showAllContacts" path="/showLayout.do?layout=allContacts"/>
-     </action>
+   </action>
+   
+   <action path="/aim/exportImportContacts" name="addressbookForm" scope="session" parameter="actionType" type="org.digijava.module.aim.action.AmpContactsExportImport">
+     	<forward name="gotoPage" path="/showLayout.do?layout=exportImportContacts" />
+     	<forward name="forward" path="/aim/admin.do" redirect="true"/>
+   </action>
     
   </action-mappings>
 </struts-config>

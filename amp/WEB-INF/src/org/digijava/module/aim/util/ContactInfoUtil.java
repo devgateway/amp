@@ -59,6 +59,23 @@ public class ContactInfoUtil {
 		}
 	}
 	
+	public static List<AmpContact> getContacts() throws Exception{
+		Session session=null;
+		String queryString =null;
+		Query query=null;
+		List<AmpContact> contacts=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			queryString= "select cont from " + AmpContact.class.getName()+" cont";
+			query=session.createQuery(queryString);
+			contacts=(List<AmpContact>)query.list();
+		}catch(Exception ex) {
+			logger.error("couldn't load contacts" + ex.getMessage());	
+			ex.printStackTrace();
+		}
+		return contacts;
+	}
+	
 	public static AmpContact getContact(Long id) throws Exception{
 		Session session=null;
 		String queryString =null;
@@ -92,6 +109,22 @@ public class ContactInfoUtil {
 			e.printStackTrace();
 		}
 		return contacts;
+	}
+	
+	public static int getContactsCount(String email) throws Exception{
+		int retValue=0;
+		Session session=null;
+		String queryString =null;
+		Query query=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			queryString="select count(cont) from " +AmpContact.class.getName() + " cont where cont.email like '" + email + "'";
+			query=session.createQuery(queryString);
+			retValue=(Integer)query.uniqueResult();			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return retValue;
 	}
 	
 	public static int getContactsSize() throws Exception{

@@ -102,6 +102,9 @@
     <xjc destdir="${gen-src}" schema="./doc/help.xsd" package="org.digijava.module.help.jaxbi">
     	<produces dir="${gen-src}" includes="org/digijava/module/help/jaxbi/*.java"/>
     </xjc>
+    <xjc destdir="${gen-src}" schema="./doc/amp_contacts.xsd" package="org.digijava.module.contacts.jaxb">
+       	<produces dir="${gen-src}" includes="org/digijava/module/contacts/jaxb/*.java"/>
+      </xjc>
    </target>
 	  
 

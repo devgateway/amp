@@ -1328,15 +1328,14 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       Date toDate,
       Long locationId,
       TeamMember teamMember,Integer pageStart,Integer rowCount) throws DgException{
-       Collection<ActivityItem> result = null;
+      List<ActivityItem> result = null;
     try {
       Session session = PersistenceManager.getRequestDBSession();
 
       String oql = "select distinct  new  org.digijava.module.aim.helper.ActivityItem(act,prog.programPercentage) from " + AmpActivityProgram.class.getName() + " prog ";
       oql+= getSearchActivitiesWhereClause(ampThemeId, statusCode, donorOrgId, fromDate, toDate, locationId, teamMember);
-      oql += " order by act.name";
+    
       
-
       Query query = session.createQuery(oql);
 
       setSearchActivitiesQueryParams(query, ampThemeId, statusCode, donorOrgId, fromDate, toDate, locationId, teamMember);

@@ -1,45 +1,46 @@
-#!/bin/sh
+#!/bin/bash
+# dbsnapshot tool for ampdev.net
+# version 0.2
+# Copyright (c) 2009 Development Gateway Foundation, Inc
+# author: Mihai Postelnicu - mpostelnicu@dgfoundation.org
 
 me=`whoami`
 cdate=`date +%d%b%Y-%H%M`
-if [ -n "$1" ]; then                                                                                                                                   
-mysqldump --hex-blob -v --add-drop-database --add-drop-table --default-character-set=utf8 -R --single-transaction -u amp --databases $1 > tmp-$1-$cdate-$me.sql
-echo " "
-echo " "
-echo "Replacing dg_site_domain sites with 'localhost' and removing references to user amp@localhost ..."
-echo " "
+cdir=`pwd`
 
-cat tmp-$1-$cdate-$me.sql | awk '
-BEGIN { 
-   FS = ",";
-    }
-/`amp`@`localhost`/ {
-  gsub(/`amp`@/, "`root`@");
- }
-/^INSERT INTO `dg_site_domain` VALUES/ {
-   printf $1;
-   for (i=2; i<=NF; i++){
-      printf ",";
-      if ($i ~ /ampdev.net/)
-         printf ("\047localhost\047"); 
-      else
-         printf $i; 
-   }
-   printf "\n";
+function help {
+	echo "Creates a 7zipped AMP database snapshot from the specified database engine"
+        echo "Usage:  $0 [database_type] [database_name]"
+	echo "database_type = mysql|postgres|oracle"
+	echo ""
+	echo "Examples: $0 mysql amp_generic"
+	echo "          $0 oracle amp_madagascar"
+	echo ""
 }
-!/^INSERT INTO `dg_site_domain` VALUES/{ 
-    print $0;
-}
-' > tmp2-$1-$cdate-$me.sql;
-rm -f tmp-$1-$cdate-$me.sql
-cat tmp2-$1-$cdate-$me.sql | bzip2 > $1-$cdate.sql.bz2
-rm -f tmp2-$1-$cdate-$me.sql
 
-echo " "
-echo " "
-echo "Export saved as $1-$cdate.sql.bz2"
-echo "To download locally, paste this command: scp $me@ampdev.net:$1-$cdate.sql.bz2 ."
+if [ -n "$1" -a -n "$2" ]; then
+    case "$1" in
+    mysql)    
+        zipfile=$2-$cdate.mysql.7z                                                                                                                               
+	mysqldump --hex-blob -v --add-drop-database --add-drop-table --default-character-set=utf8 -R --single-transaction -c -e -u amp --databases $2 | dbstrip | p7zip > $zipfile
+    ;;
+    postgres)
+	zipfile=$2-$cdate.pgsql.7z
+	pg_dump -vFt -U postgres $2 | p7zip > $zipfile
+    ;;
+    oracle)
+	zipfile=$2-$cdate.orcl.7z
+	expcommand="'./expdaemon $2'"
+	ssh -o "StrictHostKeyChecking no" -i /usr/local/share/identity-ampdev-oracle oracle@localhost -p21212 "./expdaemon $2" | p7zip > $zipfile
+    ;;
+    *)
+	help
+    ;;
+    esac
+    echo " "
+    echo " "
+    echo "Export saved as $zipfile"
+    echo "To download on a linux machine, paste this command: scp -P22222 $me@ampdev.net:$cdir/$zipfile ."
 else
-echo "usage $0 [database_name]"
+    help
 fi
-

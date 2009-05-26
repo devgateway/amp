@@ -22,6 +22,7 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.gateperm.core.GatePermConst;
 
 public class EditFunding extends Action {
 
@@ -33,6 +34,9 @@ public class EditFunding extends Action {
 
 		EditActivityForm formBean = (EditActivityForm) form;
 
+		//this is needed to aknowledge that we are still under EDIT ACTIVITY mode:
+        request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.EDIT);
+		
 		Long orgId = formBean.getFunding().getOrgId();
 		int offset = formBean.getFunding().getOffset();
 		int numComm = 0;

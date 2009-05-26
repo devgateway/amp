@@ -30,6 +30,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.gateperm.core.GatePermConst;
 
 public class AddFunding extends Action {
 
@@ -42,6 +43,8 @@ public class AddFunding extends Action {
 								response) throws java.lang.Exception {
 
 		EditActivityForm formBean = (EditActivityForm) form;
+		//this is needed to aknowledge that we are still under EDIT ACTIVITY mode:
+        request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.EDIT);
 		formBean.setReset(false);
 		Long orgId = formBean.getFunding().getOrgId();
 		 if ( logger.isDebugEnabled() )

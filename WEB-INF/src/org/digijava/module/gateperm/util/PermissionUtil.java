@@ -410,7 +410,9 @@ public final class PermissionUtil {
 		    + " p WHERE p.permissibleCategory=:categoryName AND (p.objectIdentifier is null OR p.objectIdentifier=:objectId) ORDER BY p.objectIdentifier");
 	    query.setParameter("objectId", obj.getIdentifier());
 	    query.setParameter("categoryName", obj.getPermissibleCategory().getSimpleName());
+	    query.setCacheable(true);
 	    List col = query.list();
+	    
 
 	    if (col.size() == 0)
 		return null;

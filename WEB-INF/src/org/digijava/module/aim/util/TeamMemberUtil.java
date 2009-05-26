@@ -158,6 +158,7 @@ public class TeamMemberUtil {
 					+ "where (t.ampTeamMemId=:id)";
 			Query qry = session.createQuery(queryString);
 			qry.setParameter("id", id, Hibernate.LONG);
+			qry.setCacheable(true);
 			Iterator itr = qry.list().iterator();
 			while (itr.hasNext()) {
 				ampMember = (AmpTeamMember) itr.next();

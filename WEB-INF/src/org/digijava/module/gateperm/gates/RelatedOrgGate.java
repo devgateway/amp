@@ -17,6 +17,7 @@ import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.RelOrganization;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.gateperm.core.Gate;
 import org.digijava.module.gateperm.core.GatePermConst;
 
@@ -81,7 +82,8 @@ public class RelatedOrgGate extends Gate {
 	TeamMember tm = (TeamMember) scope.get(GatePermConst.ScopeKeys.CURRENT_MEMBER);
 	//TODO AMP-2579 this IF was added to fix null pointer temporary.
 	if (tm==null) return false; 
-	AmpTeamMember atm = (AmpTeamMember) session.get(AmpTeamMember.class, tm.getMemberId());
+	//AmpTeamMember atm = (AmpTeamMember) session.get(AmpTeamMember.class, tm.getMemberId());
+	AmpTeamMember atm=TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
 	PersistenceManager.releaseSession(session);
 	User user = atm.getUser();
 

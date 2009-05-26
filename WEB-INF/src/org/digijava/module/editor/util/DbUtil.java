@@ -200,20 +200,19 @@ public class DbUtil {
         Editor item = null;
         try {
             session = PersistenceManager.getRequestDBSession();
-            Editor editorKeyObj = new Editor();
-            editorKeyObj.setSiteId(siteId);
-            editorKeyObj.setEditorKey(editorKey);
-            editorKeyObj.setLanguage(language);
-
             try {
-                   System.out.println("try");
-                item = (Editor) session.load(Editor.class, editorKeyObj);
-                  System.out.println("Item:"+item);
+            	Query q = session.createQuery("from " + Editor.class.getName() +" e where e.siteId=:siteId and e.editorKey=:editorKey and e.language=:language");
+            		q.setParameter("siteId", siteId,Hibernate.STRING);
+            		q.setParameter("editorKey", editorKey,Hibernate.STRING);
+            		q.setParameter("language", language,Hibernate.STRING);
+            		Collection<Editor> edits=q.list();
+            		if (edits.size() > 0){
+            			return edits.iterator().next();
+            		}
+            		
             }
             catch (ObjectNotFoundException ex1) {
                 logger.error("DbUtil:getEditor:Unable to get Editor item", ex1);
-                return item = null;
-
             }
         }
         catch (Exception ex) {

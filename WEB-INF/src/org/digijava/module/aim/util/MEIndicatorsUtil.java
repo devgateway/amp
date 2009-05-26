@@ -1259,7 +1259,7 @@ public class MEIndicatorsUtil
 			session = PersistenceManager.getSession();
 			String qryStr = "select count(*), indVal.risk from " + AmpMEIndicatorValue.class.getName() + "" +
 					" indVal where (indVal.activityId=:actId)" +
-							" group by indVal.risk";
+							" group by  risk,amp_ind_risk_ratings_id ,rating_name,rating_value";
 
 			Query qry = session.createQuery(qryStr);
 

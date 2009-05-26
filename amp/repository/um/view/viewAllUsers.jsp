@@ -148,9 +148,11 @@ function banUser(txt) {
             </td>
           </tr>
           <tr style="width:100%;">
+			<td>
+			<table>
           	<c:choose>
           		<c:when test="${umViewAllUsersForm.showBanned}">
-          		<td width="190">
+          		<td width="200">
 		              <digi:trn key="um:viewAllUsers:filter">
 		              Filter by:
 		              </digi:trn>
@@ -165,7 +167,7 @@ function banUser(txt) {
 	              </td>
           		</c:when>
           		<c:otherwise>
-	            <td width="190">
+	            <td width="200">
 		              <digi:trn key="um:viewAllUsers:filter">
 		              Filter by:
 		              </digi:trn>
@@ -232,6 +234,8 @@ function banUser(txt) {
 	              </c:set>
 	              <input type="submit" value="${translation}"  class="dr-menu" style="font-family:verdana;font-size:11px;" />
             </td>
+			</table>
+			</td>
           </tr>
           <tr>
             <td noWrap width=967 vAlign="top" colspan="7">
@@ -441,110 +445,153 @@ function banUser(txt) {
 					
 						<tr style="width:50%;">
 							<logic:notEmpty name="umViewAllUsersForm" property="pages">
-							
 								<td>
 								<table style="padding:5px;">
-								<c:if test="${umViewAllUsersForm.currentPage > 1}">
-									<td style="padding:3px;border:1px solid #999999">
-									<jsp:useBean id="urlParamsFirst" type="java.util.Map" class="java.util.HashMap"/>
-									<c:set target="${urlParamsFirst}" property="page" value="1"/>
-									<c:set var="translation">
-										<digi:trn key="aim:firstpage">First Page</digi:trn>
-									</c:set>
-									<digi:link href="/userSearch.do"  style="text-decoration=none" name="urlParamsFirst" title="${translation}"  >
-										&lt;&lt;
-									</digi:link>
-									</td>
-									
-									<td style="padding:3px;border:1px solid #999999">
-									<jsp:useBean id="urlParamsPrevious" type="java.util.Map" class="java.util.HashMap"/>
-									<c:set target="${urlParamsPrevious}" property="page" value="${umViewAllUsersForm.currentPage -1}"/>
-										<c:set var="translation">
-										<digi:trn key="aim:previouspage">Previous Page</digi:trn>
-										</c:set>
-									<digi:link href="/userSearch.do" name="urlParamsPrevious" style="text-decoration=none" title="${translation}" >
-										&lt;
-									</digi:link>
-									</td>
-								</c:if>
-								
-								
-								<c:set var="length" value="${umViewAllUsersForm.pagesToShow}"></c:set>
-								<c:set var="start" value="${umViewAllUsersForm.offset}"/>
-								
-								<logic:iterate name="umViewAllUsersForm" property="pages" id="pages" type="java.lang.Integer" offset="${start}" length="${length}">	
-									<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
-									<c:set target="${urlParams1}" property="page"><%=pages%>
-									</c:set>
-									<c:set target="${urlParams1}" property="orgSelReset" value="false"/>
-									<c:if test="${umViewAllUsersForm.currentPage == pages}">
-										<td style="padding:3px;border:2px solid #333333">
-											<font color="#FF0000"><%=pages%></font>
-										</td>
-									</c:if>
-									<c:if test="${umViewAllUsersForm.currentPage != pages}">
-										<td style="padding:3px;border:1px solid #999999">
-										<c:set var="translation">
-										<digi:trn key="aim:clickToViewNextPage">Click here to go to page #</digi:trn><%=pages%>
-										</c:set>
-										<digi:link href="/userSearch.do" name="urlParams1" title="${translation}" >
-											<%=pages%>
-										</digi:link>
-										</td>
-									</c:if>
-								</logic:iterate>	
-								
-								<c:if test="${umViewAllUsersForm.currentPage != umViewAllUsersForm.pagesSize}">
-									<td style="padding:3px;border:1px solid #999999">
-										<jsp:useBean id="urlParamsNext" type="java.util.Map" class="java.util.HashMap"/>
-										<c:set target="${urlParamsNext}" property="page" value="${umViewAllUsersForm.currentPage+1}"/>
-										<c:set target="${urlParamsNext}" property="orgSelReset" value="false"/>
-											<c:set var="translation">
-											<digi:trn key="aim:nextpage">Next Page</digi:trn>
-											</c:set>
-										<digi:link href="/userSearch.do"  style="text-decoration=none" name="urlParamsNext" title="${translation}"  >
-											&gt;
-										</digi:link>
-									</td>
-									<td style="padding:3px;border:1px solid #999999">
-										<jsp:useBean id="urlParamsLast" type="java.util.Map" class="java.util.HashMap"/>
-										<c:if test="${umViewAllUsersForm.pagesSize > aimOrgManagerForm.pagesToShow}">
-											<c:set target="${urlParamsLast}" property="page" value="${umViewAllUsersForm.pagesSize-1}"/>
-										</c:if>
-										<c:if test="${umViewAllUsersForm.pagesSize <umViewAllUsersForm.pagesToShow}">
-											<c:set target="${urlParamsLast}" property="page" value="${umViewAllUsersForm.pagesSize}"/>
-										</c:if>
-										<c:set target="${urlParamsLast}" property="orgSelReset" value="false"/>
-											<c:set var="translation">
-											<digi:trn key="aim:lastpage">Last Page</digi:trn>
-											</c:set>
-										<digi:link href="/userSearch.do"  style="text-decoration=none" name="urlParamsLast" title="${translation}">
-											&gt;&gt; 
-										</digi:link>
-									</td>
-								</c:if>
-							<td style="padding:3px;border:1px solid #999999">
-								&nbsp;<digi:trn key="aim:page">Page</digi:trn>&nbsp;<c:out value="${umViewAllUsersForm.currentPage}"></c:out>&nbsp;<digi:trn key="aim:of">of</digi:trn>&nbsp;<c:out value="${umViewAllUsersForm.pagesSize}"></c:out>
-							</td>
-							<td style="padding:3px;border:1px solid #FFFFFF">
-							</td>
-							<td style="padding:3px;border:1px solid #999999">
-								<c:out value="${umViewAllUsersForm.numUsers}"></c:out>&nbsp;<digi:trn key="aim:records">records</digi:trn>
-							</td>						
-
+									<tr>
+										<td>
+											<c:if test="${umViewAllUsersForm.currentPage > 1}">
+												<td style="padding:3px;border:1px solid #999999">
+													<jsp:useBean id="urlParamsFirst" type="java.util.Map" class="java.util.HashMap"/>
+													<c:set target="${urlParamsFirst}" property="page" value="1"/>
+													<c:set var="translation">
+														<digi:trn key="aim:firstpage">First Page</digi:trn>
+													</c:set>
+													<digi:link href="/userSearch.do"  style="text-decoration=none" name="urlParamsFirst" title="${translation}"  >
+														&lt;&lt;
+													</digi:link>
+												</td>
+												<td style="padding:3px;border:1px solid #999999">
+													<jsp:useBean id="urlParamsPrevious" type="java.util.Map" class="java.util.HashMap"/>
+													<c:set target="${urlParamsPrevious}" property="page" value="${umViewAllUsersForm.currentPage -1}"/>
+														<c:set var="translation">
+														<digi:trn key="aim:previouspage">Previous Page</digi:trn>
+														</c:set>
+													<digi:link href="/userSearch.do" name="urlParamsPrevious" style="text-decoration=none" title="${translation}" >
+														&lt;
+													</digi:link>
+												</td>
+												<c:if test="${umViewAllUsersForm.offset > 0}">
+													<c:if test="${umViewAllUsersForm.offset > 10}">
+														<td style="padding:3px;border:1px solid #999999;" nowrap="nowrap">
+														<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
+														<c:set target="${urlParams2}" property="page" value="${umViewAllUsersForm.currentPage -10}"/>
+															<c:set var="translation">
+															<digi:trn key="aim:previouspages">Previous pages</digi:trn>
+															</c:set>
+														<digi:link href="/userSearch.do" name="urlParams2" style="text-decoration=none" title="${translation}" >
+															<digi:trn key="aim:previous">Previous</digi:trn> 10
+														</digi:link>
+														</td>
+													</c:if>	
+													<c:if test="${umViewAllUsersForm.offset <= 10}">
+														<td style="padding:3px;border:1px solid #999999;" nowrap="nowrap">
+														<c:set target="${urlParamsFirst}" property="page" value="1"/>
+															<c:set var="translation">
+															<digi:trn key="aim:previouspages">Previous pages</digi:trn>
+															</c:set>
+														<digi:link href="/userSearch.do" name="urlParamsFirst" style="text-decoration=none" title="${translation}" >
+															<digi:trn key="aim:previous">Previous</digi:trn> ${umViewAllUsersForm.offset}
+														</digi:link>
+														</td>
+													</c:if>
+												</c:if>
+											</c:if>
+										
+											<c:set var="length" value="${umViewAllUsersForm.pagesToShow}"></c:set>
+											<c:set var="start" value="${umViewAllUsersForm.offset}"/>
+											<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
+											<logic:iterate name="umViewAllUsersForm" property="pages" id="pages" type="java.lang.Integer" offset="${start}" length="${length}">	
+												<c:set target="${urlParams1}" property="page"><%=pages%>
+												</c:set>
+												<c:set target="${urlParams1}" property="orgSelReset" value="false"/>
+												<c:if test="${umViewAllUsersForm.currentPage == pages}">
+													<td style="padding:3px;border:2px solid #333333">
+														<font color="#FF0000"><%=pages%></font>
+													</td>
+												</c:if>
+												<c:if test="${umViewAllUsersForm.currentPage != pages}">
+													<td style="padding:3px;border:1px solid #999999">
+													<c:set var="translation">
+													<digi:trn key="aim:clickToViewNextPage">Click here to go to page #</digi:trn><%=pages%>
+													</c:set>
+													<digi:link href="/userSearch.do" name="urlParams1" title="${translation}" >
+														<%=pages%>
+													</digi:link>
+													</td>
+												</c:if>
+											</logic:iterate>	
+										
+											<c:if test="${umViewAllUsersForm.currentPage != umViewAllUsersForm.pagesSize}">
+												<c:if test="${umViewAllUsersForm.offset + umViewAllUsersForm.pagesToShow < umViewAllUsersForm.pagesSize}">
+													<c:if test="${umViewAllUsersForm.offset + umViewAllUsersForm.pagesToShow +10 <= umViewAllUsersForm.pagesSize}">
+														<td style="padding:3px;border:1px solid #999999;" nowrap="nowrap">
+														<c:set target="${urlParams1}" property="page" value="${umViewAllUsersForm.currentPage +10}"/>
+															<c:set var="translation">
+															<digi:trn key="aim:nextpages">Next pages</digi:trn>
+															</c:set>
+														<digi:link href="/userSearch.do" name="urlParams1" style="text-decoration=none" title="${translation}" >
+															<digi:trn key="aim:next">Next</digi:trn> 10
+														</digi:link>
+														</td>
+													</c:if>
+													<c:if test="${umViewAllUsersForm.offset + umViewAllUsersForm.pagesToShow +10 > umViewAllUsersForm.pagesSize}">
+														<td style="padding:3px;border:1px solid #999999;" nowrap="nowrap">
+														<c:set target="${urlParams1}" property="page" value="${umViewAllUsersForm.pagesSize}"/>
+															<c:set var="translation">
+															<digi:trn key="aim:nextpages">Next pages</digi:trn>
+															</c:set>
+														<digi:link href="/userSearch.do" name="urlParams1" style="text-decoration=none" title="${translation}" >
+															<digi:trn key="aim:next">Next</digi:trn> ${umViewAllUsersForm.pagesSize - (umViewAllUsersForm.offset + umViewAllUsersForm.pagesToShow)}
+														</digi:link>
+														</td>
+													</c:if>
+												</c:if>
+												<td style="padding:3px;border:1px solid #999999">
+													<jsp:useBean id="urlParamsNext" type="java.util.Map" class="java.util.HashMap"/>
+													<c:set target="${urlParamsNext}" property="page" value="${umViewAllUsersForm.currentPage+1}"/>
+													<c:set target="${urlParamsNext}" property="orgSelReset" value="false"/>
+														<c:set var="translation">
+														<digi:trn key="aim:nextpage">Next Page</digi:trn>
+														</c:set>
+													<digi:link href="/userSearch.do"  style="text-decoration=none" name="urlParamsNext" title="${translation}"  >
+														&gt;
+													</digi:link>
+												</td>
+												<td style="padding:3px;border:1px solid #999999">
+													<jsp:useBean id="urlParamsLast" type="java.util.Map" class="java.util.HashMap"/>
+													<c:set target="${urlParamsLast}" property="page" value="${umViewAllUsersForm.pagesSize}"/>
+													<c:set target="${urlParamsLast}" property="orgSelReset" value="false"/>
+														<c:set var="translation">
+														<digi:trn key="aim:lastpage">Last Page</digi:trn>
+														</c:set>
+													<digi:link href="/userSearch.do"  style="text-decoration=none" name="urlParamsLast" title="${translation}">
+														&gt;&gt; 
+													</digi:link>
+												</td>
+											</c:if>
+											<td style="padding:3px;border:1px solid #999999">
+												&nbsp;<digi:trn key="aim:page">Page</digi:trn>&nbsp;<c:out value="${umViewAllUsersForm.currentPage}"></c:out>&nbsp;<digi:trn key="aim:of">of</digi:trn>&nbsp;<c:out value="${umViewAllUsersForm.pagesSize}"></c:out>
+											</td>
+											<td style="padding:3px;border:1px solid #FFFFFF">
+											</td>
+											<td style="padding:3px;border:1px solid #999999">
+												<c:out value="${umViewAllUsersForm.numUsers}"></c:out>&nbsp;<digi:trn key="aim:records">records</digi:trn>
+											</td>						
+									</td>	
+									<td width="200" align="right" nowrap="nowrap">
+						              	<digi:trn key="aim:results">Results</digi:trn>&nbsp;
+										<html:select property="tempNumResults" styleClass="inp-text">
+											<html:option value="10">10</html:option>
+											<html:option value="20">20</html:option>
+											<html:option value="50">50</html:option>
+											<html:option value="-1">-All-</html:option>
+										</html:select>
+					              	</td>
+								</tr>	
 							</table>
 							</td>
-							</logic:notEmpty>
-							<td width="100" align="right">
-			              	<digi:trn key="aim:results">Results</digi:trn>&nbsp;
-							<html:select property="tempNumResults" styleClass="inp-text">
-								<html:option value="10">10</html:option>
-								<html:option value="20">20</html:option>
-								<html:option value="50">50</html:option>
-								<html:option value="-1">-All-</html:option>
-							</html:select>
-			              </td>
-						</tr>
+						</logic:notEmpty>
+					</tr>
 				</table>
 			</td>
 		</tr>

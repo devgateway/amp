@@ -354,6 +354,7 @@
 				var regionIndicatorMap = new Array();
 				regionIndicatorMap[0] = indData.attributes.getNamedItem("reg").value;
 				regionIndicatorMap[1] = indData.attributes.getNamedItem("val").value;
+				regionIndicatorMap[2] = indData.attributes.getNamedItem("src").value;
 
 				indicatorDataByRegion[indicatorDataByRegion.length] = regionIndicatorMap;
 			}
@@ -427,6 +428,8 @@
 			
 			document.getElementById("tooltipIndUnit").innerHTML = selIndicatorUnit;
 			document.getElementById("tooltipIndVal").innerHTML = getRegIndicatorValue(regCode);
+			document.getElementById("tooltipIndSrc").innerHTML = getRegIndicatorSource(regCode);
+			
 		
 			
 		
@@ -470,6 +473,20 @@
 		}
 		return retVal;
 	}
+	
+	function getRegIndicatorSource (regCode) {
+		var retVal = "N/A";
+		var dataIndex = 0;
+		for (dataIndex = 0; dataIndex < indicatorDataByRegion.length; dataIndex ++) {
+			var dataItem = indicatorDataByRegion[dataIndex];
+			if (dataItem[0] == regCode) {
+				retVal = dataItem[2];
+				break;
+			}
+		}
+		return retVal;
+	}
+	
 	
 	function initSubgroupCombo(){
 		var cmb = document.getElementById("indicatorSubgroupCombo");

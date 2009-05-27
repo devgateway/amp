@@ -82,11 +82,12 @@ public class DbUtil {
                     GisMap.class,
                     new Long(id));
         } catch (Exception ex) {
-            String gg = null;
+            ex.printStackTrace();
         } finally {
             try {
                 PersistenceManager.releaseSession(session);
             } catch (Exception ex2) {
+                ex2.printStackTrace();
             }
         }
         return gisMap;
@@ -148,7 +149,7 @@ public class DbUtil {
         try {
             retVal = SectorUtil.getSectorLevel1(new Integer(SectorUtil.getPrimaryConfigClassificationId().intValue()));
         } catch (DgException ex) {
-            String ggg="123";
+            ex.printStackTrace();
         }
         return retVal;
     }
@@ -244,9 +245,9 @@ public class DbUtil {
               StringBuffer queryString = new StringBuffer();
 
               if (areaLevel==GisMap.MAP_LEVEL_REGION) {
-                  queryString.append("select indVal.value, indConn.location.ampRegion.regionCode from ");
+                  queryString.append("select indVal.value, indConn.location.ampRegion.regionCode, indVal.source from ");
               } else if (areaLevel==GisMap.MAP_LEVEL_DISTRICT) {
-                  queryString.append("select indVal.value, indConn.location.ampZone.zoneCode from ");
+                  queryString.append("select indVal.value, indConn.location.ampZone.zoneCode, indVal.source from ");
               }
               queryString.append(AmpIndicatorValue.class.getName());
               queryString.append(" indVal, ");
@@ -289,9 +290,9 @@ public class DbUtil {
               StringBuffer queryString = new StringBuffer();
 
               if (areaLevel==GisMap.MAP_LEVEL_REGION) {
-                  queryString.append("select indVal.value, indConn.location.ampRegion.regionCode from ");
+                  queryString.append("select indVal.value, indConn.location.ampRegion.regionCode, indVal.source.sourceName from ");
               } else if (areaLevel==GisMap.MAP_LEVEL_DISTRICT) {
-                  queryString.append("select indVal.value, indConn.location.ampZone.zoneCode from ");
+                  queryString.append("select indVal.value, indConn.location.ampZone.zoneCode, indVal.source.sourceName from ");
               }
               queryString.append(AmpIndicatorValue.class.getName());
               queryString.append(" indVal, ");

@@ -11,7 +11,7 @@
 
 
 <table border="1" id="pIndicator">
-  
+
     <tr>
         <td colspan="2" rowspan="2" class="tableHeaderCls">
         <digi:trn> PARIS DECLARATION INDICATORS - DONORS</digi:trn></td>
@@ -28,33 +28,30 @@
         <td class="tableHeaderCls">2010 <digi:trn>Target</digi:trn></td>
         <td class="tableHeaderCls">2005 <digi:trn>Baseline</digi:trn></td>
         <td class="tableHeaderCls">${orgProfilePIForm.fiscalYear-1} Value</td>
-        
+
     </tr>
     <c:forEach var="indicator" items="${orgProfilePIForm.indicators}">
         <c:set var="percent">
              <c:if test="${indicator.prIndicator.indicatorCode!='5aii'&&indicator.prIndicator.indicatorCode!='6'}">
                 %
-            </c:if>  
+            </c:if>
         </c:set>
         <tr>
             <td>${indicator.prIndicator.indicatorCode}</td>
-            <td><digi:trn>${indicator.prIndicator.name}</digi:trn></td>
+            <td>${indicator.prIndicator.name}</td>
             <td>${indicator.allDonorBaseLineValue}${percent}</td>
             <td>${indicator.allCurrentValue}${percent}</td>
             <td>${indicator.allTargetValue}${percent}</td>
             <td>${indicator.orgBaseLineValue}${percent}</td>
-            <td>${indicator.orgPreviousYearValue}${percent}</td>
-                
+            <td>${indicator.orgValue}${percent}</td>
+
         </tr>
     </c:forEach>
-    
-    
+
+
 </table>
 
 <script language="javascript">
 setStripsTable("pIndicator", "tableEven", "tableOdd");
 setHoveredTable("pIndicator");
 </script>
-
- 
-

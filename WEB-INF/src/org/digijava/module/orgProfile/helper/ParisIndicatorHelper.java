@@ -1,21 +1,19 @@
 package org.digijava.module.orgProfile.helper;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 
-import org.digijava.module.orgProfile.helper.FilterHelper;
 import org.digijava.module.aim.dbentity.AmpAhsurveyIndicatorCalcFormula;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.AmpMath;
 import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.orgProfile.util.OrgProfileUtil;
 
 /**
@@ -56,177 +54,45 @@ public class ParisIndicatorHelper {
         this.member = member;
     }
 
-    public long getAllDonorBaseLineValue() {
+    public long getAllDonorBaseLineValue() throws DgException {
 
         //apply calendar filter
-        Date startDate =OrgProfileUtil.getStartDate(fiscalCalendarId,2005);
-        Date endDate =OrgProfileUtil.getEndDate(fiscalCalendarId, 2005);
-        long allDonorBaseLineValue = 0;
-        if (prIndicator.getIndicatorCode().equals("3")) {
-            Double valueQ2 = OrgProfileUtil.getValue(new int[]{2, 1}, prIndicator.getAmpIndicatorId(), 1, currency, null, null, startDate, endDate, false, member);
-            Double valueQ1 = OrgProfileUtil.getValue(new int[]{1}, prIndicator.getAmpIndicatorId(), 1, currency, null, null, startDate, endDate, false, member);
-            if (valueQ1 != null && valueQ1 != 0) {
-                allDonorBaseLineValue = Math.round(valueQ2 / valueQ1) * 100;
-            }
-
-        } else {
-            if (prIndicator.getIndicatorCode().equals("4")) {
-                Double valueQ3 = OrgProfileUtil.getValue(new int[]{3}, prIndicator.getAmpIndicatorId(), 1, currency, null, null, startDate, endDate, true, member);
-                Double valueQ1 = OrgProfileUtil.getValue(new int[]{0}, prIndicator.getAmpIndicatorId(), 1, currency, null, null, startDate, endDate, true, member);
-                if (valueQ1 != null && valueQ3 != null && valueQ1 != 0) {
-                    allDonorBaseLineValue = Math.round(valueQ3 / valueQ1) * 100;
-                }
-            } else {
-                if (prIndicator.getIndicatorCode().equals("6")) {
-                    allDonorBaseLineValue = OrgProfileUtil.getPIUValue(prIndicator.getAmpIndicatorId(), null, null, startDate, endDate, member);
-                } else {
-                    if (prIndicator.getIndicatorCode().equals("5a")) {
-                        Double valueQ15 = OrgProfileUtil.getValue(new int[]{1}, prIndicator.getAmpIndicatorId(), 1, currency, null, null, startDate, endDate, false, member);
-                        Double valueQ67 = OrgProfileUtil.getValue(new int[]{1, 5, 6, 7}, prIndicator.getAmpIndicatorId(), 1, currency, null, null, startDate, endDate, false, member);
-                        if (valueQ67 != null && valueQ15 != null && valueQ15 != 0) {
-                            allDonorBaseLineValue = Math.round(valueQ67 / valueQ15) * 100;
-                        }
-                    } else {
-                        if (prIndicator.getIndicatorCode().equals("7")) {
-                            Double valueQ1 = OrgProfileUtil.getValue(new int[]{1}, prIndicator.getAmpIndicatorId(), 1, currency, null, null, startDate, endDate, false, member);
-                            Double valueQ2 = OrgProfileUtil.getValue(new int[]{1}, prIndicator.getAmpIndicatorId(), 0, currency, null, null, startDate, endDate, false, member);
-                            if (valueQ2 != null && valueQ2 != 0) {
-                                allDonorBaseLineValue = Math.round(valueQ1 / valueQ2) * 100;
-                            }
-                        } else {
-                            if (prIndicator.getIndicatorCode().equals("9")) {
-                                Double valueQ1 = OrgProfileUtil.getValue(new int[]{10}, prIndicator.getAmpIndicatorId(), 1, currency, null, null, startDate, endDate, false, member);
-                                Double valueQ2 = OrgProfileUtil.getValue(new int[]{0}, prIndicator.getAmpIndicatorId(), 0, currency, null, null, startDate, endDate, false, member);
-                                if (valueQ2 != null && valueQ2 != 0) {
-                                    allDonorBaseLineValue = Math.round(valueQ1 / valueQ2) * 100;
-                                }
-                            } else {
-                                if (prIndicator.getIndicatorCode().equals("5b")) {
-                                    Double valueQ15 = OrgProfileUtil.getValue(new int[]{8, 1}, prIndicator.getAmpIndicatorId(), 1, currency, null, null, startDate, endDate, false, member);
-                                    Double valueQ67 = OrgProfileUtil.getValue(new int[]{1}, prIndicator.getAmpIndicatorId(), 1, currency, null, null, startDate, endDate, false, member);
-                                    if (valueQ67 != null && valueQ15 != null && valueQ15 != 0) {
-                                        allDonorBaseLineValue = Math.round(valueQ67 / valueQ15) * 100;
-                                    }
-                                } else {
-                                    if (prIndicator.getIndicatorCode().equals("5bii")) {
-                                        allDonorBaseLineValue = OrgProfileUtil.getDonorsCount(new int[]{8, 1}, prIndicator.getAmpIndicatorId(), null, null, startDate, endDate, member);
-                                    } else {
-                                        if (prIndicator.getIndicatorCode().equals("5aii")) {
-                                            allDonorBaseLineValue = OrgProfileUtil.getDonorsCount(new int[]{1, 5, 6, 7}, prIndicator.getAmpIndicatorId(), null, null, startDate, endDate, member);
-                                        } else {
-                                            if (prIndicator.getIndicatorCode().equals("10a")) {
-                                                allDonorBaseLineValue = OrgProfileUtil.getIndicator10aValue(startDate, endDate, null, null);
-                                            }
-                                        }
-
-                                    }
-
-                                }
-                            }
-
-                        }
-                    }
-
-                }
-
-            }
-        }
+        Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, 2005);
+        Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, 2005);
+        String indicatorCode = prIndicator.getIndicatorCode();
+        long allDonorBaseLineValue = OrgProfileUtil.getValue( indicatorCode, currency, null, null, startDate, endDate, member);
         return allDonorBaseLineValue;
     }
 
-    public ParisIndicatorHelper(AmpAhsurveyIndicator prIndicator, FilterHelper helper) {
+    public ParisIndicatorHelper(AmpAhsurveyIndicator prIndicator, FilterHelper helper,boolean previousYear) {
         this.prIndicator = prIndicator;
         this.organization = helper.getOrganization();
-        this.year = helper.getYear();
+        if (previousYear) {
+            // in the org profile we are interested in previous year value according to specs.
+            this.year = helper.getYear() - 1;
+        } else {
+            this.year = helper.getYear();
+        }
         AmpCurrency curr = CurrencyUtil.getAmpcurrency(helper.getCurrId());
         this.currency = curr.getCurrencyCode();
         this.member = helper.getTeamMember();
         this.orgGroup = helper.getOrgGroup();
+        this.fiscalCalendarId=helper.getFiscalCalendarId();
 
 
     }
 
-    public long getAllCurrentValue() {
+    public long getAllCurrentValue() throws DgException {
         //apply calendar filter
-       Date startDate =OrgProfileUtil.getStartDate(fiscalCalendarId,year.intValue());
-       Date endDate =OrgProfileUtil.getEndDate(fiscalCalendarId, year.intValue());
-
-        long previousYearValue = 0;
-        if (prIndicator.getIndicatorCode().equals("3")) {
-            Double valueQ2 = OrgProfileUtil.getValue(new int[]{2, 1}, prIndicator.getAmpIndicatorId(), 1, currency, null, null, startDate, endDate, false, member);
-            Double valueQ1 = OrgProfileUtil.getValue(new int[]{1}, prIndicator.getAmpIndicatorId(), 1, currency, null, null, startDate, endDate, false, member);
-            if (valueQ1 != null && valueQ1 != 0) {
-                previousYearValue = Math.round(valueQ2 / valueQ1) * 100;
-            }
-
-        } else {
-            if (prIndicator.getIndicatorCode().equals("4")) {
-                Double valueQ3 = OrgProfileUtil.getValue(new int[]{3}, prIndicator.getAmpIndicatorId(), 1, currency, null, null, startDate, endDate, true, member);
-                Double valueQ1 = OrgProfileUtil.getValue(new int[]{0}, prIndicator.getAmpIndicatorId(), 1, currency, null, null, startDate, endDate, true, member);
-                if (valueQ1 != null && valueQ1 != 0) {
-                    previousYearValue = Math.round(valueQ3 / valueQ1) * 100;
-                }
-            } else {
-                if (prIndicator.getIndicatorCode().equals("6")) {
-                    previousYearValue = OrgProfileUtil.getPIUValue(prIndicator.getAmpIndicatorId(), null, null, startDate, endDate, member);
-                } else {
-                    if (prIndicator.getIndicatorCode().equals("5a")) {
-                        Double valueQ15 = OrgProfileUtil.getValue(new int[]{1}, prIndicator.getAmpIndicatorId(), 1, currency, null, null, startDate, endDate, false, member);
-                        Double valueQ67 = OrgProfileUtil.getValue(new int[]{1, 5, 6, 7}, prIndicator.getAmpIndicatorId(), 1, currency, null, null, startDate, endDate, false, member);
-                        if (valueQ67 != null && valueQ15 != null && valueQ15 != 0) {
-                            previousYearValue = Math.round(valueQ67 / valueQ15) * 100;
-                        }
-                    } else {
-                        if (prIndicator.getIndicatorCode().equals("7")) {
-                            Double valueQ1 = OrgProfileUtil.getValue(new int[]{1}, prIndicator.getAmpIndicatorId(), 1, currency, null, null, startDate, endDate, false, member);
-                            Double valueQ2 = OrgProfileUtil.getValue(new int[]{1}, prIndicator.getAmpIndicatorId(), 0, currency, null, null, startDate, endDate, false, member);
-                            if (valueQ2 != null && valueQ2 != 0) {
-                                previousYearValue = Math.round(valueQ1 / valueQ2) * 100;
-                            }
-                        } else {
-                            if (prIndicator.getIndicatorCode().equals("9")) {
-                                Double valueQ1 = OrgProfileUtil.getValue(new int[]{10}, prIndicator.getAmpIndicatorId(), 1, currency, null, null, startDate, endDate, false, member);
-                                Double valueQ2 = OrgProfileUtil.getValue(new int[]{0}, prIndicator.getAmpIndicatorId(), 0, currency, null, null, startDate, endDate, false, member);
-                                if (valueQ2 != null && valueQ2 != 0) {
-                                    previousYearValue = Math.round(valueQ1 / valueQ2) * 100;
-                                }
-                            } else {
-                                if (prIndicator.getIndicatorCode().equals("5b")) {
-                                    Double valueQ15 = OrgProfileUtil.getValue(new int[]{8, 1}, prIndicator.getAmpIndicatorId(), 1, currency, null, null, startDate, endDate, false, member);
-                                    Double valueQ67 = OrgProfileUtil.getValue(new int[]{1}, prIndicator.getAmpIndicatorId(), 1, currency, null, null, startDate, endDate, false, member);
-                                    if (valueQ67 != null && valueQ15 != null && valueQ15 != 0) {
-                                        previousYearValue = Math.round(valueQ67 / valueQ15) * 100;
-                                    }
-                                } else {
-                                    if (prIndicator.getIndicatorCode().equals("5bii")) {
-                                        previousYearValue = OrgProfileUtil.getDonorsCount(new int[]{8, 1}, prIndicator.getAmpIndicatorId(), null, null, startDate, endDate, member);
-                                    } else {
-                                        if (prIndicator.getIndicatorCode().equals("5aii")) {
-                                            previousYearValue = OrgProfileUtil.getDonorsCount(new int[]{1, 5, 6, 7}, prIndicator.getAmpIndicatorId(), null, null, startDate, endDate, member);
-                                        } else {
-                                            if (prIndicator.getIndicatorCode().equals("10a")) {
-                                                previousYearValue = OrgProfileUtil.getIndicator10aValue(startDate, endDate, null, null);
-                                            }
-                                        }
-
-                                    }
-
-                                }
-                            }
-
-
-                        }
-                    }
-
-                }
-
-            }
-        }
+        Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, year.intValue());
+        Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, year.intValue());
+        String indicatorCode = prIndicator.getIndicatorCode();
+        long previousYearValue =OrgProfileUtil.getValue( indicatorCode,  currency, null, null, startDate, endDate, member);;
         return previousYearValue;
 
     }
 
-    public long getAllTargetValue() {
+    public long getAllTargetValue() throws DgException {
         long targetValue = 0;
         AmpAhsurveyIndicatorCalcFormula formula = getFormula();
         if (formula != null) {
@@ -253,161 +119,22 @@ public class ParisIndicatorHelper {
         return flText;
     }
 
-    public long getOrgBaseLineValue() {
+    public long getOrgBaseLineValue() throws DgException {
         //apply calendar filter
-        Date startDate =OrgProfileUtil.getStartDate(fiscalCalendarId,2005);
-        Date endDate =OrgProfileUtil.getEndDate(fiscalCalendarId, 2005);
-        long orgBaseLineValue = 0;
-        if (prIndicator.getIndicatorCode().equals("3")) {
-            Double valueQ2 = OrgProfileUtil.getValue(new int[]{2, 1}, prIndicator.getAmpIndicatorId(), 1, currency, organization.getAmpOrgId(), orgGroup.getAmpOrgGrpId(), startDate, endDate, false, member);
-            Double valueQ1 = OrgProfileUtil.getValue(new int[]{1}, prIndicator.getAmpIndicatorId(), 1, currency, organization.getAmpOrgId(), orgGroup.getAmpOrgGrpId(), startDate, endDate, false, member);
-            if (valueQ1 != null) {
-                orgBaseLineValue = Math.round(valueQ2 / valueQ1) * 100;
-            }
-
-
-        } else {
-            if (prIndicator.getIndicatorCode().equals("4")) {
-                Double valueQ3 = OrgProfileUtil.getValue(new int[]{3}, prIndicator.getAmpIndicatorId(), 1, currency, organization.getAmpOrgId(), orgGroup.getAmpOrgGrpId(), startDate, endDate, true, member);
-                Double valueQ1 = OrgProfileUtil.getValue(new int[]{0}, prIndicator.getAmpIndicatorId(), 1, currency, organization.getAmpOrgId(), orgGroup.getAmpOrgGrpId(), startDate, endDate, true, member);
-                if (valueQ1 != null && valueQ1 != 0) {
-                    orgBaseLineValue = Math.round(valueQ3 / valueQ1) * 100;
-                }
-            } else {
-                if (prIndicator.getIndicatorCode().equals("6")) {
-                    orgBaseLineValue = OrgProfileUtil.getPIUValue(prIndicator.getAmpIndicatorId(), organization.getAmpOrgId(), orgGroup.getAmpOrgGrpId(), startDate, endDate, member);
-                } else {
-                    if (prIndicator.getIndicatorCode().equals("5a")) {
-                        Double valueQ15 = OrgProfileUtil.getValue(new int[]{1, 5}, prIndicator.getAmpIndicatorId(), 1, currency, organization.getAmpOrgId(), orgGroup.getAmpOrgGrpId(), startDate, endDate, false, member);
-                        Double valueQ67 = OrgProfileUtil.getValue(new int[]{6, 7}, prIndicator.getAmpIndicatorId(), 1, currency, organization.getAmpOrgId(), orgGroup.getAmpOrgGrpId(), startDate, endDate, false, member);
-                        if (valueQ15 != null && valueQ15 != 0) {
-                            orgBaseLineValue = Math.round(valueQ67 / valueQ15) * 100;
-                        }
-                    } else {
-                        if (prIndicator.getIndicatorCode().equals("7")) {
-                            Double valueQ1 = OrgProfileUtil.getValue(new int[]{1}, prIndicator.getAmpIndicatorId(), 1, currency, organization.getAmpOrgId(), orgGroup.getAmpOrgGrpId(), startDate, endDate, false, member);
-                            Double valueQ2 = OrgProfileUtil.getValue(new int[]{1}, prIndicator.getAmpIndicatorId(), 0, currency, organization.getAmpOrgId(), orgGroup.getAmpOrgGrpId(), startDate, endDate, false, member);
-                            if (valueQ2 != null && valueQ2 != 0) {
-                                orgBaseLineValue = Math.round(valueQ1 / valueQ2) * 100;
-                            }
-                        } else {
-                            if (prIndicator.getIndicatorCode().equals("9")) {
-                                Double valueQ1 = OrgProfileUtil.getValue(new int[]{10}, prIndicator.getAmpIndicatorId(), 1, currency, organization.getAmpOrgId(), orgGroup.getAmpOrgGrpId(), startDate, endDate, false, member);
-                                Double valueQ2 = OrgProfileUtil.getValue(new int[]{0}, prIndicator.getAmpIndicatorId(), 0, currency, organization.getAmpOrgId(), orgGroup.getAmpOrgGrpId(), startDate, endDate, false, member);
-                                if (valueQ2 != null && valueQ2 != 0) {
-                                    orgBaseLineValue = Math.round(valueQ1 / valueQ2) * 100;
-                                }
-                            } else {
-                                if (prIndicator.getIndicatorCode().equals("5b")) {
-                                    Double valueQ15 = OrgProfileUtil.getValue(new int[]{8, 1}, prIndicator.getAmpIndicatorId(), 1, currency, organization.getAmpOrgId(), orgGroup.getAmpOrgGrpId(), startDate, endDate, false, member);
-                                    Double valueQ67 = OrgProfileUtil.getValue(new int[]{1}, prIndicator.getAmpIndicatorId(), 1, currency, organization.getAmpOrgId(), orgGroup.getAmpOrgGrpId(), startDate, endDate, false, member);
-                                    if (valueQ15 != null && valueQ15 != 0) {
-                                        orgBaseLineValue = Math.round(valueQ67 / valueQ15) * 100;
-                                    }
-                                } else {
-                                    if (prIndicator.getIndicatorCode().equals("5bii")) {
-                                        orgBaseLineValue = OrgProfileUtil.getDonorsCount(new int[]{8, 1}, prIndicator.getAmpIndicatorId(), organization.getAmpOrgId(), orgGroup.getAmpOrgGrpId(), startDate, endDate, member);
-                                    } else {
-                                        if (prIndicator.getIndicatorCode().equals("5aii")) {
-                                            orgBaseLineValue = OrgProfileUtil.getDonorsCount(new int[]{1, 5, 6, 7}, prIndicator.getAmpIndicatorId(), organization.getAmpOrgId(), orgGroup.getAmpOrgGrpId(), startDate, endDate, member);
-                                        } else {
-                                            if (prIndicator.getIndicatorCode().equals("10a")) {
-                                                orgBaseLineValue = OrgProfileUtil.getIndicator10aValue(startDate, endDate, organization.getAmpOrgId(), orgGroup.getAmpOrgGrpId());
-                                            }
-
-                                        }
-
-                                    }
-                                }
-
-                            }
-
-                        }
-                    }
-
-
-                }
-            }
-        }
-
+        Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, 2005);
+        Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, 2005);
+        String indicatorCode = prIndicator.getIndicatorCode();
+        long orgBaseLineValue = OrgProfileUtil.getValue(indicatorCode, currency, organization.getAmpOrgId(), orgGroup.getAmpOrgGrpId(), startDate, endDate, member);
         return orgBaseLineValue;
     }
 
-    public long getOrgPreviousYearValue() {
+    public long getOrgValue() throws DgException {
         //apply calendar filter
-       Date startDate =OrgProfileUtil.getStartDate(fiscalCalendarId,year.intValue());
-       Date endDate =OrgProfileUtil.getEndDate(fiscalCalendarId, year.intValue());
+        Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, year.intValue());
+        Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, year.intValue());
+        String indicatorCode = prIndicator.getIndicatorCode();
+        long previousYearValue = OrgProfileUtil.getValue( indicatorCode,  currency, organization.getAmpOrgId(), orgGroup.getAmpOrgGrpId(), startDate, endDate, member);;
 
-        long previousYearValue = 0;
-        if (prIndicator.getIndicatorCode().equals("3")) {
-            Double valueQ2 = OrgProfileUtil.getValue(new int[]{2, 1}, prIndicator.getAmpIndicatorId(), 1, currency, organization.getAmpOrgId(), orgGroup.getAmpOrgGrpId(), startDate, endDate, false, member);
-            Double valueQ1 = OrgProfileUtil.getValue(new int[]{1}, prIndicator.getAmpIndicatorId(), 1, currency, organization.getAmpOrgId(), orgGroup.getAmpOrgGrpId(), startDate, endDate, false, member);
-            if (valueQ1 != null) {
-                previousYearValue = Math.round(valueQ2 / valueQ1) * 100;
-            }
-
-        } else {
-            if (prIndicator.getIndicatorCode().equals("4")) {
-                Double valueQ3 = OrgProfileUtil.getValue(new int[]{3}, prIndicator.getAmpIndicatorId(), 1, currency, organization.getAmpOrgId(), orgGroup.getAmpOrgGrpId(), startDate, endDate, true, member);
-                Double valueQ1 = OrgProfileUtil.getValue(new int[]{0}, prIndicator.getAmpIndicatorId(), 1, currency, organization.getAmpOrgId(), orgGroup.getAmpOrgGrpId(), startDate, endDate, true, member);
-                if (valueQ1 != null) {
-                    previousYearValue = Math.round(valueQ3 / valueQ1) * 100;
-                }
-            } else {
-                if (prIndicator.getIndicatorCode().equals("6")) {
-
-                    previousYearValue = OrgProfileUtil.getPIUValue(prIndicator.getAmpIndicatorId(), organization.getAmpOrgId(), orgGroup.getAmpOrgGrpId(), startDate, endDate, member);
-                } else {
-                    if (prIndicator.getIndicatorCode().equals("5a")) {
-                        Double valueQ15 = OrgProfileUtil.getValue(new int[]{1}, prIndicator.getAmpIndicatorId(), 1, currency, organization.getAmpOrgId(), orgGroup.getAmpOrgGrpId(), startDate, endDate, false, member);
-                        Double valueQ67 = OrgProfileUtil.getValue(new int[]{1, 5, 6, 7}, prIndicator.getAmpIndicatorId(), 1, currency, organization.getAmpOrgId(), orgGroup.getAmpOrgGrpId(), startDate, endDate, false, member);
-                        if (valueQ67 != null) {
-                            previousYearValue = Math.round(valueQ67 / valueQ15) * 100;
-                        }
-                    } else {
-                        if (prIndicator.getIndicatorCode().equals("7")) {
-                            Double valueQ1 = OrgProfileUtil.getValue(new int[]{1}, prIndicator.getAmpIndicatorId(), 1, currency, organization.getAmpOrgId(), orgGroup.getAmpOrgGrpId(), startDate, endDate, false, member);
-                            Double valueQ2 = OrgProfileUtil.getValue(new int[]{1}, prIndicator.getAmpIndicatorId(), 0, currency, organization.getAmpOrgId(), orgGroup.getAmpOrgGrpId(), startDate, endDate, false, member);
-                            if (valueQ2 != null && valueQ2 != 0) {
-                                previousYearValue = Math.round(valueQ1 / valueQ2) * 100;
-                            }
-                        } else {
-                            if (prIndicator.getIndicatorCode().equals("9")) {
-                                Double valueQ1 = OrgProfileUtil.getValue(new int[]{10}, prIndicator.getAmpIndicatorId(), 1, currency, organization.getAmpOrgId(), orgGroup.getAmpOrgGrpId(), startDate, endDate, false, member);
-                                Double valueQ2 = OrgProfileUtil.getValue(new int[]{0}, prIndicator.getAmpIndicatorId(), 0, currency, organization.getAmpOrgId(), orgGroup.getAmpOrgGrpId(), startDate, endDate, false, member);
-                                if (valueQ2 != null && valueQ2 != 0) {
-                                    previousYearValue = Math.round(valueQ1 / valueQ2) * 100;
-                                }
-                            } else {
-                                if (prIndicator.getIndicatorCode().equals("5b")) {
-                                    Double valueQ15 = OrgProfileUtil.getValue(new int[]{8, 1}, prIndicator.getAmpIndicatorId(), 1, currency, organization.getAmpOrgId(), orgGroup.getAmpOrgGrpId(), startDate, endDate, false, member);
-                                    Double valueQ67 = OrgProfileUtil.getValue(new int[]{1}, prIndicator.getAmpIndicatorId(), 1, currency, organization.getAmpOrgId(), orgGroup.getAmpOrgGrpId(), startDate, endDate, false, member);
-                                    if (valueQ67 != null) {
-                                        previousYearValue = Math.round(valueQ67 / valueQ15) * 100;
-                                    }
-                                } else {
-                                    if (prIndicator.getIndicatorCode().equals("5bii")) {
-                                        previousYearValue = OrgProfileUtil.getDonorsCount(new int[]{8, 1}, prIndicator.getAmpIndicatorId(), organization.getAmpOrgId(), orgGroup.getAmpOrgGrpId(), startDate, endDate, member);
-                                    } else {
-                                        if (prIndicator.getIndicatorCode().equals("5aii")) {
-                                            previousYearValue = OrgProfileUtil.getDonorsCount(new int[]{1, 5, 6,}, prIndicator.getAmpIndicatorId(), organization.getAmpOrgId(), orgGroup.getAmpOrgGrpId(), startDate, endDate, member);
-                                        } else {
-                                            if (prIndicator.getIndicatorCode().equals("10a")) {
-                                                previousYearValue = OrgProfileUtil.getIndicator10aValue(startDate, endDate, organization.getAmpOrgId(), orgGroup.getAmpOrgGrpId());
-                                            }
-                                        }
-                                    }
-
-                                }
-                            }
-
-                        }
-                    }
-
-                }
-
-            }
-        }
         return previousYearValue;
     }
 
@@ -458,10 +185,9 @@ public class ParisIndicatorHelper {
     public String getBaseLineValue() {
         return getFormula().getBaseLineValue();
     }
-    // all targetvalue 
+    // all targetvalue
 
     public String getTargetValue() {
         return getFormula().getTargetValue();
     }
-  
 }

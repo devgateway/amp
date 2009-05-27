@@ -119,8 +119,8 @@
 						<td noWrap width=600 vAlign="top">
 							<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%">
 								<tr bgColor=#f4f4f2>
-									<td vAlign="top" width="100%">
-										&nbsp;
+									<td vAlign="top" width="100%">&nbsp;
+										
 									</td>
 								</tr>
 								<tr bgColor=#f4f4f2>
@@ -193,36 +193,25 @@
 																	</tr> --%>
 																	<tr>
 																		<td colspan="2" width="60%"  align="center">
-																			<table width="100%" cellspacing="5">
-																				<tr>
-																					<td width="45%" align="right">
+																			
 																						<html:button  styleClass="dr-menu" property="submitButton"  onclick="check()">
 																							<digi:trn key="btn:save">Save</digi:trn>
 																						</html:button>
-																					</td>
-																					<td width="8%" align="left">
-																						<html:reset  styleClass="dr-menu" property="submitButton">
-																							<digi:trn key="btn:reset">Reset</digi:trn>
-																						</html:reset>
-																					</td>
-																					<td width="45%" align="left">
+																					
+																						
 																						<html:button  styleClass="dr-menu" property="submitButton"  onclick="move()">
 																							<digi:trn key="btn:cancel">Cancel</digi:trn>
 																						</html:button>
-																					</td>
-																				</tr>
-																			</table>
-																		</td>
-																	</tr>
-																	<logic:equal name="aimAddOrgGroupForm" property="flag" value="delete" >
-																		<tr>
-																			<td colspan="2" width="60%"  align="center">
+                                                                                        	<logic:equal name="aimAddOrgGroupForm" property="flag" value="delete" >
 																				<html:button  styleClass="dr-menu" property="submitButton"  onclick="msg()">
 																					<digi:trn key="btn:deleteThisGroup">Delete this Group</digi:trn>
 																				</html:button>
-																			</td>
-																		</tr>
+																		
 																	</logic:equal>
+																					
+																		</td>
+																	</tr>
+																
 																	<logic:equal name="aimAddOrgGroupForm" property="flag" value="orgReferences" >
 																		<tr>
 																			<td colspan="2" width="60%"  align="center">
@@ -245,8 +234,8 @@
 									</td>
 								</tr>
 								<tr>
-									<td bgColor=#f4f4f2>
-										&nbsp;
+									<td bgColor=#f4f4f2>&nbsp;
+										
 									</td>
 								</tr>
 							</table>

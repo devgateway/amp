@@ -372,8 +372,7 @@ function loadPage()
 	<!--  AMP Admin Logo -->
 	<jsp:include page="teamPagesHeader.jsp" flush="true" />
 	<!-- End of Logo -->
-
-	<table bgColor=#ffffff cellPadding=5 cellSpacing=1 >
+<table bgColor=#ffffff cellPadding=5 cellSpacing=1 >
 		<tr>
 			<td class=r-dotted-lg width=14>&nbsp;</td>
 			<td align=left class=r-dotted-lg vAlign=top width=752>
@@ -879,7 +878,7 @@ function loadPage()
 				  															</td>
 																		</tr>
 																	</table>
-																	<!-- ############################## --></td>
+																	</td>
 																</tr>
 																<tr>
 																	<td width="169" align="right" height="30"><digi:trn
@@ -964,34 +963,25 @@ function loadPage()
 																</tr>
 																<tr>
 																	<td colspan="3" width="555" align="center" height="30">
-																	<table width="100%" cellspacing="5">
-																		<tr>
-																			<td width="42%" align="right"><html:button
+																			<html:button
 																				styleClass="dr-menu" property="submitButton"
 																				onclick="return check()">
 																				<digi:trn key="btn:save">Save</digi:trn>
-																			</html:button></td>
-																			<td width="8%" align="left"><input type="reset"
-																				value='<digi:trn key="btn:reset">Reset</digi:trn>'
-																				class="dr-menu"></td>
-																			<td width="45%" align="left"><input
+																			</html:button>
+																			<input
 																				type="button"
 																				value="<digi:trn key="btn:cancel">Cancel</digi:trn>"
-																				class="dr-menu" onclick="move()"></td>
-																		</tr>
-																	</table>
+																				class="dr-menu" onclick="move()">
+                                                                        <logic:equal name="aimAddOrgForm" property="flag" value="delete">
+																			<html:button styleClass="dr-menu" property="submitButton" onclick="return msg()">
+																			<	digi:trn key="btn:deleteThisOrganization">Delete this Organization</digi:trn>
+																			</html:button>
+																		</logic:equal>
+                                                                                
+                                                                       
 																	</td>
 																</tr>
-																<logic:equal name="aimAddOrgForm" property="flag"
-																	value="delete">
-																	<tr>
-																		<td colspan="3" width="555" align="center" height="27">
-																		<html:button styleClass="dr-menu"
-																			property="submitButton" onclick="return msg()">
-																			<digi:trn key="btn:deleteThisOrganization">Delete this Organization</digi:trn>
-																		</html:button></td>
-																	</tr>
-																</logic:equal>
+															
 															</table>
 														</td>
 														</tr>
@@ -1018,6 +1008,7 @@ function loadPage()
 			</td>
 		</tr>
 	</table>
+	
 	<script language="JavaScript">
 if(document.aimAddOrgForm.actionFlag.value == "editOrgGroup") {
 	document.aimAddOrgForm.actionFlag.value="";

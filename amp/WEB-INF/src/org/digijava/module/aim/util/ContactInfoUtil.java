@@ -169,6 +169,10 @@ public class ContactInfoUtil {
 				queryString += " order by cont.organisationName";
 			}else if(sortBy.equals("orgNameDescending")){
 				queryString += " order by cont.organisationName desc";
+			}else if(sortBy.equals("titleAscending")){
+				queryString += " order by cont.title";
+			}else if(sortBy.equals("titleDescending")){
+				queryString += " order by cont.title desc";
 			}
 			query=session.createQuery(queryString);
 			query.setFirstResult(fromRecord);
@@ -297,6 +301,5 @@ public class ContactInfoUtil {
 			}
 			eaForm.getContactInformation().setSectorMinistryContacts(sectorMinistryContacts);
 		}
-	}
-	
+	}	
 }

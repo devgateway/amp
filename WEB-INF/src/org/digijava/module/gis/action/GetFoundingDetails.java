@@ -48,6 +48,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import org.digijava.module.aim.dbentity.AmpIndicatorSource;
 
 /**
  * <p>Title: </p>
@@ -403,7 +404,17 @@ public class GetFoundingDetails extends Action {
 
                         String segmentCode = (String) indData[1];
                         Double indValue = (Double) indData[0];
-                        String src = (String) indData[2];
+
+                        //.sourceName
+
+                        AmpIndicatorSource srcObj = (AmpIndicatorSource)indData[2];
+                        String src = null;
+
+                        if (srcObj != null && srcObj.getSourceName() != null &&
+                            srcObj.getSourceName().trim().length() > 0){
+                            src = srcObj.getSourceName();
+                        }
+
 
                         if (isRegion(map, segmentCode) &&
                             !regSet.contains(segmentCode)) {

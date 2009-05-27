@@ -3,6 +3,7 @@ package org.digijava.module.aim.action;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,10 +16,13 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.form.AddSectorForm;
 import org.digijava.module.aim.util.DbUtil;
@@ -184,6 +188,36 @@ if(event!=null){
 				logger.debug("done kutte");
 				//scheme = SectorUtil.getSectorSchemes();
 				//sectorsForm.setFormSectorSchemes(scheme);
+				if (SectorUtil.getAllSectorSchemes().size() == 1) {
+					Collection schemes = SectorUtil.getAllSectorSchemes();
+					Iterator it = schemes.iterator();
+					AmpSectorScheme ampScheme = null;
+					while (it.hasNext()) {
+						ampScheme = (AmpSectorScheme) it.next();
+					}
+					List<AmpClassificationConfiguration> classificationsList = SectorUtil.getAllClassificationConfigs();
+					Iterator iter = classificationsList.iterator();
+					AmpClassificationConfiguration classification = null;
+					while (iter.hasNext()) {
+						AmpClassificationConfiguration classificationTemp = (AmpClassificationConfiguration) iter.next();
+						if (classificationTemp.getName().equalsIgnoreCase("Primary")) {
+							classification = classificationTemp;
+						}
+					}
+					if (classification != null) {
+						SectorUtil.saveClassificationConfig(classification.getId(), classification.getName(), classification.isMultisector(), ampScheme);
+					}else{
+						SectorUtil.saveClassificationConfig(0l, "Primary", true, ampScheme);
+					}
+					ActionErrors errors = new ActionErrors();
+	        		errors.add("title", new ActionError("error.aim.addScheme.setDefConfig", TranslatorWorker.translateText("Scheme added was set to default Primary Configuration.",locale,siteId)));
+	        		if (errors.size() > 0)
+        			{
+        				saveErrors(request, errors);
+        				session.setAttribute("managingSchemes",errors);
+        			}
+				}	
+					
 				return mapping.findForward("viewSectorSchemes");
 			}
 		else if (event.equals("updateScheme")) {

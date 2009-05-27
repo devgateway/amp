@@ -270,8 +270,12 @@
 			<td nowrap bgcolor="#D9DAC9" colspan="2">Indicator</td>
 		</tr>
 		<tr>
-			<td nowrap width="50%" id="tooltipIndVal">value</td>
+			<td nowrap width="50%" id="tooltipIndVal">Value</td>
 			<td width="50%" id="tooltipIndUnit">&nbsp;</td>
+		</tr>
+		<tr>
+			<td nowrap width="50%">Source</td>
+			<td width="50%" id="tooltipIndSrc">&nbsp;</td>
 		</tr>
 	</table>
 	</div>

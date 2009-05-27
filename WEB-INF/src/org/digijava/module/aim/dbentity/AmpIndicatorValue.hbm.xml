@@ -29,6 +29,9 @@
 		<many-to-one name="subgroup" column="subgroup"
 			class="org.digijava.module.aim.dbentity.AmpIndicatorSubgroup" cascade="none" />
 
+                <many-to-one name="source" column="source"
+			class="org.digijava.module.aim.dbentity.AmpIndicatorSource" cascade="none" />
+
 
 
 	</class>

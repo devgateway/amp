@@ -26,8 +26,8 @@ public class AmpIndicatorValue implements Serializable{
 	private String comment;
 	private Date valueDate;
 
-    private Date dataIntervalStart;
-    private Date dataIntervalEnd;
+        private Date dataIntervalStart;
+        private Date dataIntervalEnd;
 
 	private Double value;
 	private int valueType;
@@ -39,6 +39,7 @@ public class AmpIndicatorValue implements Serializable{
 
 
         private AmpIndicatorSubgroup subgroup;
+        private AmpIndicatorSource source;
 
         /*these  helper methods are used
          to set and get date object value to(from) the date input field
@@ -126,6 +127,10 @@ public class AmpIndicatorValue implements Serializable{
         return dataIntervalStart;
     }
 
+    public AmpIndicatorSource getSource() {
+        return source;
+    }
+
     public void setLocation(AmpLocation location) {
 		this.location = location;
 	}
@@ -140,6 +145,10 @@ public class AmpIndicatorValue implements Serializable{
 
     public void setDataIntervalStart(Date dataIntervalStart) {
         this.dataIntervalStart = dataIntervalStart;
+    }
+
+    public void setSource(AmpIndicatorSource source) {
+        this.source = source;
     }
 
 

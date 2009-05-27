@@ -403,6 +403,7 @@ public class GetFoundingDetails extends Action {
 
                         String segmentCode = (String) indData[1];
                         Double indValue = (Double) indData[0];
+                        String src = (String) indData[2];
 
                         if (isRegion(map, segmentCode) &&
                             !regSet.contains(segmentCode)) {
@@ -410,6 +411,7 @@ public class GetFoundingDetails extends Action {
                             SegmentData indHilightData = new SegmentData();
                             indHilightData.setSegmentCode(segmentCode);
                             indHilightData.setSegmentValue(indValue.toString());
+                            indHilightData.setIndicatorSrcName(src);
 
                             if (min == null) {
                                 min = indValue;
@@ -679,6 +681,12 @@ public class GetFoundingDetails extends Action {
                             XML indVal = new XML("indVal");
                             indVal.addAttribute("val", sd.getSegmentValue());
                             indVal.addAttribute("reg", sd.getSegmentCode());
+                            if (sd.getIndicatorSrcName() != null) {
+                                indVal.addAttribute("src",
+                                        sd.getIndicatorSrcName());
+                            } else {
+                                indVal.addAttribute("src","Unknown");
+                            }
                             root.addElement(indVal);
                         }
                     }
@@ -918,7 +926,7 @@ public class GetFoundingDetails extends Action {
             expenditure = fch.getTotActualExp().getValue();
 
         } catch (Exception ex1) {
-            String ggg = "gadfg";
+            ex1.printStackTrace();
             //Add exception reporting
         }
 

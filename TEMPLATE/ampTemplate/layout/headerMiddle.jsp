@@ -306,11 +306,6 @@ function adminHelp(){
 		window.location.href="/aim/addActivity.do~pageId=1~reset=true~action=create~activityLevelId="+selectedLevelId;	
 	}
 
-	function showWorkspaceList() {
-		var dis = document.getElementById("workspaceList");
-		dis.setAttribute("style","display: block");
-	}
-	
 	function openGIS() {
 		openNewWindowWithMenubar(1000, 600);
 		popupPointer.location.href = "/gis/showGisDashboard.do";
@@ -397,28 +392,24 @@ function adminHelp(){
 	                                        </module:display>
 	                                     <feature:display name="Change Workspace" module="My Desktop">
 	                                        <li class="yuiampmenuitem" style="_width:230px;">
-	                                        	<a class="yuiampmenuitemlabel" href="#" onmouseover="javascript:showWorkspaceList()">
+	                                        	<a class="yuiampmenuitemlabel" href="#">
 	                                            	<digi:trn key="aim:changeworkspace">Change workspace</digi:trn>
 	                                            </a>
-	                                            <div id="workspaceSubmenu" class="yuiampmenuitem"  style="width:500px;">
-	                                          		<div id = "workspaceList" class="bd" style="display:  none;">                    
-	                                                      <ul>                                                      
-	                                                        <logic:iterate id="item"  name="USER_WORKSPACES" scope="session" type="org.digijava.module.aim.dbentity.AmpTeamMember">
-	                                            		    <bean:define id="team" name="item" property="ampTeam" type="org.digijava.module.aim.dbentity.AmpTeam"></bean:define>
-	                                            		    <logic:equal name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
-	                                            		       <li class="yuiampmenuitem yuiampmenuitem-checked " style="width: 100%;">
-	                                                            	 <a class="yuiampmenuitemlabel" href="#"><bean:write name="team" property="name"/></a>
-	                                                          </li>
-	                                                        </logic:equal>                                            		    
-	                                            		     <logic:notEqual name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
-	                                            		   	   <li class="yuiampmenuitem" style="width: 100%;">
-	                                                            	<a class="yuiampmenuitemlabel" href='/selectTeam.do?id=<bean:write name="item" property="ampTeamMemId"/>' onclick="return canExit()"><bean:write name="team" property="name"/></a>
-	                                                          </li>
-	                                                        </logic:notEqual>
-	                                            		    </logic:iterate>
+	                                            <div id="workspaceSubmenu" class="yuiampmenu">
+	                                          		<div id="workspaceList" class="bd"  style="width:500px;">                    
+	                                                      <ul>
+															<logic:iterate id="item"  name="USER_WORKSPACES" scope="session" type="org.digijava.module.aim.dbentity.AmpTeamMember">
+																<bean:define id="team" name="item" property="ampTeam" type="org.digijava.module.aim.dbentity.AmpTeam"></bean:define>
+																<logic:equal name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
+																	<li class="yuiampmenuitem yuiampmenuitem-checked" style="height:18px"><a href="#"><bean:write name="team" property="name"/></a></li>
+																</logic:equal>
+																<logic:notEqual name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
+																	<li class="yuiampmenuitem" style="height:18px"><a href='/selectTeam.do?id=<bean:write name="item" property="ampTeamMemId"/>' onclick="return canExit()"><bean:write name="team" property="name"/></a></li>
+																</logic:notEqual>
+															</logic:iterate>
 	                                                      </ul>
 	                                                  </div>
-	                                              </div>   
+	                                              </div>
 	                                        </li>
                                         </feature:display>
                                       </ul>

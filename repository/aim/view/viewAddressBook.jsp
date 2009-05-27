@@ -17,18 +17,30 @@
 		addressbookForm.target = "_self";
 		addressbookForm.submit();
 	}
+
+	function confirmDelete(){
+		var msg='<digi:trn>Are you sure you want to delete contact ?</digi:trn>';
+		return confirm(msg);
+	}
+
+	function resetSearch(){
+		addressbookForm.action="${contextPath}/aim/addressBook.do?actionType=viewAddressBook&reset=true";
+		addressbookForm.target = "_self";
+		addressbookForm.submit();
+		return true;
+	}
 </script>
 
 <digi:form action="/addressBook.do?actionType=viewAddressBook" method="post">	
-	<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+	<table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="772">
 		<tr>
-			<td class=r-dotted-lg width=14>&nbsp;</td>
-			<td align=left class=r-dotted-lg vAlign=top width=750>
-				<table cellPadding=5 cellSpacing=0 width="879">
+			<td class="r-dotted-lg" width="14">&nbsp;</td>
+			<td align="left" class="r-dotted-lg" vAlign="top" width="750">
+				<table cellPadding="5" cellSpacing="0" width="879">
 					<tr>
 						<!-- Start Navigation -->
-						<td height=33 colspan="7" width="867">
-							<span class=crumb>
+						<td height="33" colspan="7" width="867">
+							<span class="crumb">
 				              	<c:set var="translation">
 									<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
 								</c:set>
@@ -60,32 +72,36 @@
 							</html:select>
 			            </td>
 						<td align="left" width="70%">
-				              <c:set var="trn">
+							<c:set var="resetTrn">
+								<digi:trn>Reset</digi:trn>
+							</c:set>
+							<input type="button" value="${resetTrn}" class="dr-menu" onclick="return resetSearch()">
+				            <c:set var="trn">
 				                <digi:trn>Show</digi:trn>
-				              </c:set>
-				              <input type="submit" value="${trn}"  class="dr-menu" style="font-family:verdana;font-size:11px;" />
+				            </c:set>
+				            <input type="submit" value="${trn}"  class="dr-menu" style="font-family:verdana;font-size:11px;" />
 			            </td>
 					</tr>
 					<tr>
-						<td noWrap width=867 vAlign="top" colspan="7">
-						<table width="100%" cellspacing=1 cellSpacing=1>
+						<td noWrap width="867" vAlign="top" colspan="7">
+						<table width="100%" cellspacing="1" cellSpacing="1">
 						<tr>
-							<td noWrap width=600 vAlign="top">
-								<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%">
-									<tr bgColor=#f4f4f2>
+							<td noWrap width="600" vAlign="top">
+								<table bgColor="#ffffff" cellPadding="0" cellSpacing="0" class="box-border-nopadding" width="100%">
+									<tr bgColor="#f4f4f2">
 										<td vAlign="top" width="100%">
 											&nbsp;
 										</td>
 									</tr>
-									<tr bgColor=#f4f4f2>
+									<tr bgColor="#f4f4f2">
 										<td valign="top">
-											<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" border=0>
+											<table align="center" bgColor="#f4f4f2" cellPadding="0" cellSpacing="0" width="100%" border="0">
 												<tr>
-													<td bgColor=#ffffff class=box-border>
-														<table border=0 cellPadding=1 cellSpacing=1 class=box-border width="100%">
-															<tr bgColor=#dddddb>
+													<td bgColor="#ffffff" class="box-border">
+														<table border="0" cellPadding="1" cellSpacing="1" class="box-border" width="100%">
+															<tr bgColor="#dddddb">
 																<!-- header -->
-																<td bgColor=#dddddb height="20"	align="center" colspan="5"><B>
+																<td bgColor="#dddddb" height="20" align="center" colspan="5"><B>
 																	<digi:trn >Contact List</digi:trn>
 	                                                              </b>
 																</td>
@@ -147,7 +163,18 @@
 																					<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='orgNameDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>																																			
 																				</td>
 																				<td height="30">
-																					<b><digi:trn>Title</digi:trn></b>													
+																					<c:if test="${empty addressbookForm.sortBy || addressbookForm.sortBy!='titleAscending'}">
+																						<digi:link href="/addressBook.do?actionType=searchContacts&sortBy=titleAscending&reset=false">
+																							<b><digi:trn>Title</digi:trn></b>
+																						</digi:link>																					
+																					</c:if>
+																					<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='titleAscending'}">
+																						<digi:link href="/addressBook.do?actionType=searchContacts&sortBy=titleDescending&reset=false">
+																							<b><digi:trn>Title</digi:trn></b>
+																						</digi:link>																					
+																					</c:if>
+																					<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='titleAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
+																					<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='titleDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>
 																				</td>
 																				<td height="30">
 																					<b><digi:trn>Phone</digi:trn></b>													
@@ -189,7 +216,7 @@
 																						<bean:write name="cont" property="id"/>
 																					</c:set>
 																					<digi:link href="/addressBook.do?actionType=editContact" name="urlParams"><img src="/repository/message/view/images/edit.gif" border="0" /></digi:link>
-																					<digi:link href="/addressBook.do?actionType=deleteContact" name="urlParams"><img src="/repository/message/view/images/trash_12.gif" border="0" /></digi:link>
+																					<digi:link href="/addressBook.do?actionType=deleteContact" name="urlParams" onclick="return confirmDelete()"><img src="/repository/message/view/images/trash_12.gif" border="0" /></digi:link>
 																				</td>																			
 			                                                            	</tr>
 																		</c:forEach>	

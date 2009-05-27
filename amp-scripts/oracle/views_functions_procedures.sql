@@ -207,8 +207,7 @@ CREATE OR REPLACE FUNCTION "GETPARENTSECTORID"
        SELECT transaction_amount/fixed_exchange_rate
          INTO r
          FROM amp_funding_detail
-        WHERE amp_fund_detail_id =fdId
-      AND fixed_exchange_rate   IS NOT NULL;
+        WHERE amp_fund_detail_id =fdId;
       IF r                      IS NOT NULL THEN
         RETURN r;
       END IF;

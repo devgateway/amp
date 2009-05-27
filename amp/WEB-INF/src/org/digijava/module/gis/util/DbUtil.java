@@ -283,17 +283,19 @@ public class DbUtil {
    public static List getIndicatorValuesForSectorIndicator(Long sectorId,
               Long indicatorId, DateInterval interval, Long subgroupId, int areaLevel) {
           List retVal = null;
+          List qResult = null;
           Session session = null;
           try {
               session = PersistenceManager.getRequestDBSession();
 
               StringBuffer queryString = new StringBuffer();
 
-              if (areaLevel==GisMap.MAP_LEVEL_REGION) {
-                  queryString.append("select indVal.value, indConn.location.ampRegion.regionCode, indVal.source.sourceName from ");
+//              if (areaLevel==GisMap.MAP_LEVEL_REGION) {
+                  queryString.append("select indVal, indConn.location.regionLocation.name from ");
+                  /*
               } else if (areaLevel==GisMap.MAP_LEVEL_DISTRICT) {
-                  queryString.append("select indVal.value, indConn.location.ampZone.zoneCode, indVal.source.sourceName from ");
-              }
+                  queryString.append("select indVal.value, indConn.location.ampZone.zoneCode, indVal.source from ");
+              }*/
               queryString.append(AmpIndicatorValue.class.getName());
               queryString.append(" indVal, ");
               queryString.append(IndicatorSector.class.getName());
@@ -320,10 +322,27 @@ public class DbUtil {
               }
 
 
-              retVal = q.list();
+              qResult = q.list();
           } catch (Exception ex) {
               logger.debug("Unable to get indicators from DB", ex);
           }
+
+          if (qResult != null) {
+              retVal = new ArrayList();
+              Iterator it = qResult.iterator();
+              while (it.hasNext()) {
+                  Object[] tmpObj = (Object[])it.next();
+                  AmpIndicatorValue indValObj = (AmpIndicatorValue)tmpObj[0];
+                  String locCode = (String)tmpObj[1];
+                  Object[] actualObj = new Object[3];
+                  actualObj[0] = indValObj.getValue();
+                  actualObj[1] = locCode;
+                  actualObj[2] = indValObj.getSource();
+
+                  retVal.add(actualObj);
+              }
+          }
+
           return retVal;
    }
 

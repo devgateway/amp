@@ -1849,7 +1849,7 @@ CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_CACHED" ("AMP_ACTIVITY_ID", "N
 /
 CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_0" ("AMP_ACTIVITY_ID","NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
   select 
-amp_activity_id
+amp_activity_id,
 name,
 amp_program_id,
 sum(program_percentage) program_percentage
@@ -1885,7 +1885,7 @@ having name is not null
 /
 CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_1" ("AMP_ACTIVITY_ID","NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
   select 
-amp_activity_id
+amp_activity_id,
 name,
 amp_program_id,
 sum(program_percentage) program_percentage
@@ -1921,7 +1921,7 @@ having name is not null
 /
 CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_2" ("AMP_ACTIVITY_ID","NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
   select 
-amp_activity_id
+amp_activity_id,
 name,
 amp_program_id,
 sum(program_percentage) program_percentage
@@ -1957,7 +1957,7 @@ having name is not null
 /
 CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_3" ("AMP_ACTIVITY_ID","NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
   select 
-amp_activity_id
+amp_activity_id,
 name,
 amp_program_id,
 sum(program_percentage) program_percentage
@@ -1993,7 +1993,7 @@ having name is not null
 /
 CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_4" ("AMP_ACTIVITY_ID","NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
   select 
-amp_activity_id
+amp_activity_id,
 name,
 amp_program_id,
 sum(program_percentage) program_percentage
@@ -2029,7 +2029,7 @@ having name is not null
 /
 CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_5" ("AMP_ACTIVITY_ID","NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
   select 
-amp_activity_id
+amp_activity_id,
 name,
 amp_program_id,
 sum(program_percentage) program_percentage
@@ -2065,7 +2065,7 @@ having name is not null
 /
 CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_6" ("AMP_ACTIVITY_ID","NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
   select 
-amp_activity_id
+amp_activity_id,
 name,
 amp_program_id,
 sum(program_percentage) program_percentage
@@ -2101,7 +2101,7 @@ having name is not null
 /
 CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_7" ("AMP_ACTIVITY_ID","NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
   select 
-amp_activity_id
+amp_activity_id,
 name,
 amp_program_id,
 sum(program_percentage) program_percentage
@@ -2137,7 +2137,7 @@ having name is not null
 /
 CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_8" ("AMP_ACTIVITY_ID","NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
   select 
-amp_activity_id
+amp_activity_id,
 name,
 amp_program_id,
 sum(program_percentage) program_percentage

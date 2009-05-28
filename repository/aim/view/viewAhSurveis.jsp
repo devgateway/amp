@@ -73,7 +73,7 @@
                           </c:if>
                           <c:if test="${!empty aimViewAhSurveisForm.surveis}">
                             <c:forEach var="report" items="${aimViewAhSurveisForm.surveis}">
-                              <c:if test="${report.indicatorCode != '4' && report.indicatorCode != '5aii' && report.indicatorCode != '5bii' && report.indicatorCode != '9'&& report.indicatorCode != '10a' && report.indicatorCode != '10b'}">
+                              <c:if test="${report.indicatorCode != '4' && report.indicatorCode != '5aii' && report.indicatorCode != '5bii' && report.indicatorCode != '9'&& report.indicatorCode != '10a' && report.indicatorCode != '10b'&&report.indicatorCode != '8'}">
                                 <tr>
                                   <td>
                                     <IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10 />

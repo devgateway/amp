@@ -222,7 +222,7 @@
                         </div>
                         <div style="clear:both; font-size:10px;">&nbsp;</div>
                         <div style="display:block; clear:both; font-size:1px;"></div>
-                        <div id="content" class="yui-skin-sam" style="width:1000px;float:left">
+                        <div id="content" class="yui-skin-sam" style="width:80%;float:left">
                             <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                                 <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
                                 <digi:img src="images/tableftcorner.gif" align="left" hspace="0"/>
@@ -268,7 +268,7 @@
                             </div>
                         </div>
                         <div style="clear:both; font-size:10px;">&nbsp;</div>
-                        <div id="content" class="yui-skin-sam" style="width:1000px;float:left">
+                        <div id="content" class="yui-skin-sam" style="width:80%;float:left">
                             <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                                 <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
                                 <digi:img src="images/tableftcorner.gif" align="left" hspace="0"/>
@@ -295,7 +295,7 @@
                             </div>
                         </div>
                          <div style="clear:both; font-size:10px;">&nbsp;</div>
-                        <div id="content" class="yui-skin-sam" style="width:1000px;float:left">
+                        <div id="content" class="yui-skin-sam" style="width:80%;float:left">
                             <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                                 <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
                                 <digi:img src="images/tableftcorner.gif" align="left" hspace="0"/>
@@ -319,7 +319,7 @@
                             </div>
                         </div>
                          <div style="clear:both; font-size:10px;">&nbsp;</div>
-                        <div id="content" class="yui-skin-sam" style="width:1000px;float:left">
+                        <div id="content" class="yui-skin-sam" style="width:80%;float:left">
                             <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                                 <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
                                 <digi:img src="images/tableftcorner.gif" align="left" hspace="0"/>

@@ -1,6 +1,8 @@
-
 package org.digijava.module.currencyrates;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -14,7 +16,6 @@ import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpCurrencyRate;
-import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.calendar.exception.CalendarException;
 import org.digijava.module.calendar.util.AmpDbUtil;
@@ -35,7 +36,7 @@ public class CurrencyRatesQuartzJob implements Job {
 	private WSCurrencyClient myWSCurrencyClient;
 	private String baseCurrency;
 	private Date lastExcecution;
-	private static final int tries = 3;
+	private static final int tries = 10;
 
 	public CurrencyRatesQuartzJob() {
 		myWSCurrencyClient = DailyCurrencyRateSingleton.getInstance()
@@ -66,19 +67,21 @@ public class CurrencyRatesQuartzJob implements Job {
 		HashMap<String, Double> wsCurrencyValues=null;
 
 		try {
-			
-			int mytries = 1;			
-			while (mytries <= tries && ampCurrencies!=null) {
+
+			int mytries = 1;
+			while (mytries <= tries && ampCurrencies != null) {
 				logger.info("Attempt.........................." + mytries);
-				wsCurrencyValues = this.myWSCurrencyClient
-						.getCurrencyRates(ampCurrencies, baseCurrency);
-				showValues(ampCurrencies, wsCurrencyValues);
-				save(ampCurrencies, wsCurrencyValues);
-				//checks if all values are wrong
-				if(!isRightRate(ampCurrencies, wsCurrencyValues))
-					Thread.sleep(1000*60*60);//wait an hour before next intent
-				ampCurrencies = this.getWrongCurrencies(ampCurrencies,
-						wsCurrencyValues);
+				if (checkConnection()) {
+					wsCurrencyValues = this.myWSCurrencyClient
+							.getCurrencyRates(ampCurrencies, baseCurrency);
+					showValues(ampCurrencies, wsCurrencyValues);
+					save(ampCurrencies, wsCurrencyValues);
+					ampCurrencies = this.getWrongCurrencies(ampCurrencies,
+							wsCurrencyValues);
+				} else {
+					// wait 10 minutes before next intent
+					Thread.sleep(1000 * 60 * 10);
+				}
 				mytries++;
 			}
 			this.lastExcecution = new Date();
@@ -88,7 +91,7 @@ public class CurrencyRatesQuartzJob implements Job {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if(ampCurrencies!=null){
+		if (ampCurrencies != null) {
 			sendEmailToAdmin();
 		}
 		logger
@@ -96,23 +99,28 @@ public class CurrencyRatesQuartzJob implements Job {
 						+ formatter.format(new Date()));
 	}
 
-	private boolean isRightRate(String[] currencies,
-			HashMap<String, Double> wsCurrencyValues) {
-		for (int i=0; i<currencies.length; i++) {
-			double value = wsCurrencyValues.get(currencies[i]);
-			if (value != WSCurrencyClient.CONNECTION_ERROR && value != WSCurrencyClient.INVALID_CURRENCY_CODE && value != 1) {
-				//we were able to get a valid rate at least, so there is internet connection
+	private boolean checkConnection() {
+		String requestUrl = this.myWSCurrencyClient.getCurrencyRateUrlAddress();
+		try {
+			URL url = new URL(requestUrl.toString());
+			HttpURLConnection urlConnection = (HttpURLConnection) url
+					.openConnection();
+			urlConnection.connect();
+			if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+				urlConnection.disconnect();
 				return true;
 			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		return false;
 	}
-
 	private String[] getWrongCurrencies(String[] currencies,
 			HashMap<String, Double> wsCurrencyValues) {
 		String[] wrongValuesArray = null;
 		ArrayList<AmpCurrencyRate> wrongAList = new ArrayList<AmpCurrencyRate>();
-		for (int i=0; i<currencies.length; i++) {
+		for (int i = 0; i < currencies.length; i++) {
 			AmpCurrencyRate currRate = new AmpCurrencyRate();
 			currRate.setToCurrencyCode(currencies[i]);
 			double value = wsCurrencyValues.get(currencies[i]);
@@ -129,11 +137,12 @@ public class CurrencyRatesQuartzJob implements Job {
 		}
 		return wrongValuesArray;
 	}
+
 	private void save(String[] currencies,
 			HashMap<String, Double> wsCurrencyValues) {
-		for (int i=0; i<currencies.length; i++) {
+		for (int i = 0; i < currencies.length; i++) {
 			AmpCurrencyRate currRate = new AmpCurrencyRate();
-			//currRate.setAmpCurrencyRateId(ampCurrency.getAmpCurrencyId());
+			// currRate.setAmpCurrencyRateId(ampCurrency.getAmpCurrencyId());
 			double value = wsCurrencyValues.get(currencies[i]);
 			if (value == WSCurrencyClient.INVALID_CURRENCY_CODE) {
 				logger.info(currencies[i]
@@ -145,9 +154,8 @@ public class CurrencyRatesQuartzJob implements Job {
 				continue;
 			}
 			currRate.setExchangeRate(value);
-			
-			
-			Date aDate=new Date();
+
+			Date aDate = new Date();
 			try {
 				String sDate = DateTimeUtil.formatDate(aDate);
 				aDate = DateTimeUtil.parseDate(sDate);
@@ -155,14 +163,14 @@ public class CurrencyRatesQuartzJob implements Job {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+
 			currRate.setExchangeRateDate(aDate);
 			currRate.setToCurrencyCode(currencies[i]);
 			currRate.setDataSource(CurrencyUtil.RATE_FROM_WEB_SERVICE);
 			CurrencyUtil.saveCurrencyRate(currRate);
 		}
 	}
- 
+
 	private void save(Collection<AmpCurrency> currencies,
 			HashMap<String, Double> wsCurrencyValues) {
 		for (AmpCurrency ampCurrency : currencies) {
@@ -180,9 +188,8 @@ public class CurrencyRatesQuartzJob implements Job {
 				continue;
 			}
 			currRate.setExchangeRate(value);
-			
-			
-			Date aDate=new Date();
+
+			Date aDate = new Date();
 			try {
 				String sDate = this.formatter.format(new Date());
 				aDate = DateTimeUtil.parseDate(sDate);
@@ -217,11 +224,11 @@ public class CurrencyRatesQuartzJob implements Job {
 		}
 	}
 
-	void sendEmailToAdmin(){
+	void sendEmailToAdmin() {
 		try {
-			Collection<User> users = (List <User>)AmpDbUtil.getUsers();
-			for(User user:users){
-				if(user.isGlobalAdmin()){
+			Collection<User> users = (List<User>) AmpDbUtil.getUsers();
+			for (User user : users) {
+				if (user.isGlobalAdmin()) {
 					System.out.println("An email has been sent to "+ user.getFirstNames()+" "+user.getLastName() +"-"+user.getEmail());
 					DgEmailManager.sendMail(user.getEmail(), "Daily Currency Rates Update ERROR","Please, check your internet connection and Timeout at Admin Tools > Global Settings >Timeout Daily Currency Update.");
 				}
@@ -229,8 +236,8 @@ public class CurrencyRatesQuartzJob implements Job {
 		} catch (CalendarException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
-		    e.printStackTrace();
-	    }
+			e.printStackTrace();
+		}
 		logger.info("There were connection error trying to update currencies");
 	}
 }

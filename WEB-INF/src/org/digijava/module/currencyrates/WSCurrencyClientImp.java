@@ -18,21 +18,28 @@ import org.digijava.module.currencyrates.NET.webserviceX.www.CurrencyConvertorSo
  */
 public class WSCurrencyClientImp implements WSCurrencyClient {
 	private CurrencyConvertorSoap currencyConvertor;
+	private CurrencyConvertorLocator currencyConvertorLocator;
 
 	public WSCurrencyClientImp() {
 		this.currencyConvertor = null;
 		try {
-			this.currencyConvertor = new CurrencyConvertorLocator()
-					.getCurrencyConvertorSoap();
+			this.currencyConvertorLocator = new CurrencyConvertorLocator();
+			this.currencyConvertor= currencyConvertorLocator.getCurrencyConvertorSoap();
+			
+			
 		} catch (ServiceException e) {
 			e.printStackTrace();
 		}
 	}
+	public String getCurrencyRateUrlAddress(){
+		return this.currencyConvertorLocator.getCurrencyConvertorSoapAddress();
+	}
 	public WSCurrencyClientImp(int minutes) {
 		this.currencyConvertor = null;
 		try {
-			this.currencyConvertor = new MyCurrencyConvertorLocator()
-					.getCurrencyConvertorSoap(minutes);
+			MyCurrencyConvertorLocator ccl = new MyCurrencyConvertorLocator();
+			this.currencyConvertorLocator = ccl;
+			this.currencyConvertor = ccl.getCurrencyConvertorSoap(minutes);
 		} catch (ServiceException e) {
 			e.printStackTrace();
 		}

@@ -6,11 +6,10 @@ import org.digijava.module.currencyrates.NET.webserviceX.www.CurrencyConvertorLo
  * 
  */
 public class MyCurrencyConvertorLocator extends CurrencyConvertorLocator {
-	private java.lang.String CurrencyConvertorSoap_address = "http://www.webservicex.net/CurrencyConvertor.asmx";
     public org.digijava.module.currencyrates.NET.webserviceX.www.CurrencyConvertorSoap getCurrencyConvertorSoap(int minutes) throws javax.xml.rpc.ServiceException {
         java.net.URL endpoint;
          try {
-             endpoint = new java.net.URL(CurrencyConvertorSoap_address);
+             endpoint = new java.net.URL(getCurrencyConvertorSoapAddress());
              
          }
          catch (java.net.MalformedURLException e) {

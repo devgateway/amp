@@ -140,7 +140,7 @@ public class AddressBookActions extends DispatchAction {
 		//check unique email 
 		if(validateData){
 			ActionErrors errors= new ActionErrors();
-			int contactWithSameEmail=ContactInfoUtil.getContactsCount(myForm.getEmail());
+			int contactWithSameEmail=ContactInfoUtil.getContactsCount(myForm.getEmail().trim());
 			if(contactWithSameEmail!=0){
 				Site site = RequestUtils.getSite(request);
 				Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);

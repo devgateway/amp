@@ -1847,7 +1847,7 @@ CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_CACHED" ("AMP_ACTIVITY_ID", "N
   order by 
     a.amp_activity_id,t.name
 /
-CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_0" ("NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
+CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_0" ("AMP_ACTIVITY_ID","NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
   select 
 amp_activity_id
 name,
@@ -1883,7 +1883,7 @@ select
 group by amp_activity_id,name,amp_program_id 
 having name is not null
 /
-CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_1" ("NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
+CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_1" ("AMP_ACTIVITY_ID","NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
   select 
 amp_activity_id
 name,
@@ -1919,7 +1919,7 @@ select
 group by amp_activity_id,name,amp_program_id 
 having name is not null
 /
-CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_2" ("NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
+CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_2" ("AMP_ACTIVITY_ID","NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
   select 
 amp_activity_id
 name,
@@ -1955,7 +1955,7 @@ select
 group by amp_activity_id,name,amp_program_id 
 having name is not null
 /
-CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_3" ("NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
+CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_3" ("AMP_ACTIVITY_ID","NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
   select 
 amp_activity_id
 name,
@@ -1991,7 +1991,7 @@ select
 group by amp_activity_id,name,amp_program_id 
 having name is not null
 /
-CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_4" ("NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
+CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_4" ("AMP_ACTIVITY_ID","NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
   select 
 amp_activity_id
 name,
@@ -2027,7 +2027,7 @@ select
 group by amp_activity_id,name,amp_program_id 
 having name is not null
 /
-CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_5" ("NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
+CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_5" ("AMP_ACTIVITY_ID","NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
   select 
 amp_activity_id
 name,
@@ -2063,7 +2063,7 @@ select
 group by amp_activity_id,name,amp_program_id 
 having name is not null
 /
-CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_6" ("NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
+CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_6" ("AMP_ACTIVITY_ID","NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
   select 
 amp_activity_id
 name,
@@ -2099,7 +2099,7 @@ select
 group by amp_activity_id,name,amp_program_id 
 having name is not null
 /
-CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_7" ("NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
+CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_7" ("AMP_ACTIVITY_ID","NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
   select 
 amp_activity_id
 name,
@@ -2135,7 +2135,7 @@ select
 group by amp_activity_id,name,amp_program_id 
 having name is not null
 /
-CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_8" ("NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
+CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_8" ("AMP_ACTIVITY_ID","NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
   select 
 amp_activity_id
 name,

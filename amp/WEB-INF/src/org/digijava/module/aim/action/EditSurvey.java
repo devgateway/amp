@@ -92,6 +92,10 @@ public class EditSurvey extends Action {
 	        	Iterator<AmpAhsurveyIndicator> iterAhSurveyIndicators = ampAhSurveyIndicators.iterator();
 	        	while (iterAhSurveyIndicators.hasNext()) {
 	        		AmpAhsurveyIndicator auxAmpAhSurveyIndicator = iterAhSurveyIndicators.next();
+                    //AMP doesn't calculate the 8th indicator, but we need in the result matrix
+                    if(auxAmpAhSurveyIndicator.getIndicatorCode().equals("8")){
+                        continue;
+                    }
 	        		Indicator auxIndicator = new Indicator();
 	        		auxIndicator.setIndicatorCode(auxAmpAhSurveyIndicator.getIndicatorCode());
 	        		auxIndicator.setName(auxAmpAhSurveyIndicator.getName());

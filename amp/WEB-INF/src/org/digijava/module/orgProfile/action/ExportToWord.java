@@ -316,6 +316,9 @@ public class ExportToWord extends Action {
                                 count = 0;
                                 while (iter.hasNext()) {
                                     AmpAhsurveyIndicator piIndicator = iter.next();
+                                    if(piIndicator.getIndicatorCode().equals("10b")||piIndicator.getIndicatorCode().equals("8")){
+                                        continue;
+                                    }
                                     ParisIndicatorHelper piHelper = new ParisIndicatorHelper(piIndicator, filter,true);
                                     RtfCell indicatorCode = new RtfCell(new Paragraph(piIndicator.getIndicatorCode()));
                                     RtfCell indicatorName = new RtfCell(new Paragraph(TranslatorWorker.translateText(piIndicator.getName(),langCode,siteId)));

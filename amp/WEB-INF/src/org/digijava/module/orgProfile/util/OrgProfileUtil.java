@@ -107,7 +107,7 @@ public class OrgProfileUtil {
                                                     return total;
                                                 }
                                                 else{
-                                                     if (indCode.equals("10b")) {
+                                                     if (indCode.equals("10b")||indCode.equals("8")) {
                                                          return total;
                                                      }
 

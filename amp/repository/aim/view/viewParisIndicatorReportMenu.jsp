@@ -275,7 +275,7 @@ html>body #mainEmpty {
 											<UL>
 											<logic:iterate id="report" name="aimParisIndicatorReportForm"  property="indicatorsColl" type="org.digijava.module.aim.dbentity.AmpAhsurveyIndicator">
 												<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
-												<c:if test="${report.indicatorCode != '10b'}">
+												<c:if test="${report.indicatorCode != '10b'&& report.indicatorCode != '8'}">
                                                     <feature:display  name="PI report ${report.indicatorCode}" module="PI Reports">
 														<c:set target="${urlParams}" property="indcId" value="${report.ampIndicatorId}" />
 														<c:set target="${urlParams}" property="reset" value="true" />

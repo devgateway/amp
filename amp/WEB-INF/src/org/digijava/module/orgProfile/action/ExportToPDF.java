@@ -334,6 +334,9 @@ public class ExportToPDF extends Action {
                                    count=0;
                                    while (iter.hasNext()) {
                                        AmpAhsurveyIndicator piIndicator = iter.next();
+                                       if (piIndicator.getIndicatorCode().equals("10b") || piIndicator.getIndicatorCode().equals("8")) {
+                                           continue;
+                                       }
                                        ParisIndicatorHelper piHelper = new ParisIndicatorHelper(piIndicator, filter,true);
                                        PdfPCell indicatorCode = new PdfPCell(new Paragraph(piIndicator.getIndicatorCode()));
                                        PdfPCell indicatorName = new PdfPCell(new Paragraph(TranslatorWorker.translateText(piIndicator.getName(),langCode,siteId)));

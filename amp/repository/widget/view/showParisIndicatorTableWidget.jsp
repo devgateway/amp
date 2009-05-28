@@ -23,21 +23,23 @@
     }
 
     function donorGroupValueCallBack(status, statusText, responseText, responseXML){
-     var mainTag=responseXML.getElementsByTagName('ParisIndicatorValuesList')[0];
-     var parisIndicatorsValues=mainTag.childNodes;
-     for(var i=0;i<parisIndicatorsValues.length;i++){
-        var tdId=parisIndicatorsValues[i].getAttribute('id');
-        var value=parisIndicatorsValues[i].getAttribute('value');
-        var donorGroupTD=document.getElementById(tdId);
-        var empty=parisIndicatorsValues[i].getAttribute('empty');
-        if(empty=='true'){
-            donorGroupTD.innerHTML="";
+        var mainTag=responseXML.getElementsByTagName('ParisIndicatorValuesList')[0];
+        var parisIndicatorsValues=mainTag.childNodes;
+        for(var i=0;i<parisIndicatorsValues.length;i++){
+            var tdId=parisIndicatorsValues[i].getAttribute('id');
+            var value=parisIndicatorsValues[i].getAttribute('value');
+            var donorGroupTD=document.getElementById(tdId);
+            var empty=parisIndicatorsValues[i].getAttribute('empty');
+            if(donorGroupTD!=null){
+                if(empty=='true'){
+                    donorGroupTD.innerHTML="";
+                }
+                else{
+                    donorGroupTD.innerHTML=value;
+                }
+
+            }  
         }
-        else{
-           donorGroupTD.innerHTML=value;
-        }
-        
-     }
     }
 </script>
 
@@ -66,7 +68,7 @@
            <c:choose>
                    <td>${parisIndicatorInfo.baseValue}</td>
                    <td>${parisIndicatorInfo.targetValue}</td>
-               <c:when test="${parisIndicatorInfo.parisIndicator.indicatorCode=='10b'}">
+               <c:when test="${parisIndicatorInfo.parisIndicator.indicatorCode=='10b'||parisIndicatorInfo.parisIndicator.indicatorCode=='8'}">
                    <td><digi:trn>N/A</digi:trn></td>
                </c:when>
                <c:otherwise>

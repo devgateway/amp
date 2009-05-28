@@ -18,6 +18,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.gateperm.core.GatePermConst;
 
 /**
  * @author jose
@@ -38,7 +39,7 @@ public class AddFundingDetail extends Action {
 		formBean.setReset(false);
 		event = formBean.getFunding().getEvent();
 		TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
-
+		request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.EDIT);
 
 		String currCode = Constants.DEFAULT_CURRENCY;
 		if (teamMember.getAppSettings() != null) {

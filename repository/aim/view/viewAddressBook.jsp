@@ -94,6 +94,11 @@
 										</td>
 									</tr>
 									<tr bgColor="#f4f4f2">
+										<td align="right">
+											<input type="button" onclick="createContact()" value="<digi:trn>Create Contact</digi:trn>" class="dr-menu" />
+										</td>
+									</tr>
+									<tr bgColor="#f4f4f2">
 										<td valign="top">
 											<table align="center" bgColor="#f4f4f2" cellPadding="0" cellSpacing="0" width="100%" border="0">
 												<tr>
@@ -298,12 +303,7 @@
 												<!-- end page logic for pagination -->
 											</table>
 										</td>
-									</tr>
-									<tr>
-										<td align="right">
-											<input type="button" onclick="createContact()" value="<digi:trn>Create Contact</digi:trn>" class="dr-menu" />
-										</td>
-									</tr>											
+									</tr>																				
 								</table>
 							</td>						
 					</tr>

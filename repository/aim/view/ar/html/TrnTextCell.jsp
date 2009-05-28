@@ -11,19 +11,27 @@
 </logic:present>
 
 <div align="left" style="padding-left:<%=request.getAttribute("pading")%>" 
-	<%if trnTextCell.getTrasnlatedValue(request).length() > 39){ %>
+	<%
+		if (trnTextCell.getTrasnlatedValue(request).length() > 39){ 
+	%>
 		<logic:present name="starFlag" scope="request">
 			<logic:equal name="starFlagLocal" value="true">*</logic:equal>
 			<bean:define id="starFlag" value="" scope="page" toScope="request" />
 		</logic:present>
-		<%=trnTextCell.getTrasnlatedValue(request).substring(0,39)%>...
-	<%}else{ %>
+		<%=trnTextCell.getTrasnlatedValue(request).substring(0,39)%> ...
+	<%
+	 }
+	 else
+	 { 
+	 %>
 		<logic:present name="starFlag" scope="request">
 			<logic:equal name="starFlagLocal" value="true">*</logic:equal>
 			<bean:define id="starFlag" value="" scope="page" toScope="request" />
 		</logic:present>
 		<%=trnTextCell.getTrasnlatedValue(request)%>
-	<%}%>
+	<%
+	}
+	%>
 </div>
 
 

@@ -156,11 +156,7 @@
                             <td>
                                 <input type="button" onclick="addSectors()" value="<digi:trn key='gis:createIndicatorSector:changeSector'>Change Sector</digi:trn>" >
                             </td>
-                        </c:if>
-                        
-                   
-                     
-                     
+                        </c:if>                     
                     </tr>
                     <tr>
                         <td colspan="3">&nbsp;</td>
@@ -178,9 +174,8 @@
                                  <html:option value="-2"><digi:trn>All</digi:trn></html:option>
                                  <html:option value="-3"><digi:trn>National</digi:trn></html:option>
                                  <c:forEach var="region" items="${gisIndicatorSectorRegionForm.regions}">
-                                    <html:option value="${region.ampRegionId}"><digi:trn>${region.name}</digi:trn></html:option>
+                                    <html:option value="${region.id}"><digi:trn>${region.name}</digi:trn></html:option>
                                  </c:forEach>
-<!--                                 <html:optionsCollection name="gisIndicatorSectorRegionForm" property="regions" label="name" value="ampRegionId"/>-->
                             </html:select>
                         </td>
                         

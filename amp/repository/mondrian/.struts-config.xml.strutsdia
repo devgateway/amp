@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PROCESS model-entity="StrutsProcess">
+ <PROCESS-ITEM ID="#mondrian#mainreport" NAME="action0"
+  PATH="/mondrian/mainreport" SHAPE="32,17,0,0" TITLE="testpageform"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="forward" NAME="forward0"
+   PATH="/showLayout.do?layout=mainreport" TARGET="action1"
+   TITLE="forward" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#showLayout" NAME="action1" PATH="/showLayout"
+  SHAPE="240,129,0,0" SUBTYPE="unknown" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#mondrian#testpage" NAME="action2"
+  PATH="/mondrian/testpage" SHAPE="32,129,0,0" TITLE="testpageform"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="forward" NAME="forward0"
+   PATH="/showLayout.do?layout=testpage" TARGET="action1"
+   TITLE="forward" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+</PROCESS>

@@ -1,0 +1,1 @@
+UPDATE amp_reports SET drilldown_tab=false WHERE drilldown_tab=true and hide_activities=true;

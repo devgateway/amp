@@ -36,39 +36,33 @@ end;
        BEGIN
        declare retVal number;
        BEGIN
-          IF currency='USD' THEN
+        
+	       --IF USD return 1 
+	       IF currency='USD' THEN
             retVal  :=1;
           ELSE
-             SELECT COUNT(exchange_rate)
-             INTO retVal
-             FROM amp_currency_rate
-             WHERE to_currency_code = currency AND
-                   exchange_rate_date = cdate;
-            IF retVal   > 0 THEN
-               SELECT exchange_rate
-               INTO retVal
-               FROM amp_currency_rate
-               WHERE to_currency_code = currency AND
-                     exchange_rate_date = cdate;
+          	--check if exist a rate for the transaction date
+             SELECT COUNT(exchange_rate)  INTO retVal FROM amp_currency_rate WHERE to_currency_code = currency AND exchange_rate_date = cdate;
+            --if exist  return the rate 
+             IF retVal  > 0 THEN
+               SELECT exchange_rate INTO retVal FROM amp_currency_rate WHERE to_currency_code = currency AND exchange_rate_date = cdate;
             ELSE
-                SELECT count(exchange_rate)
-               INTO retVal
-               FROM amp_currency_rate
-               WHERE to_currency_code = currency AND
-                     exchange_rate_date = cdate;
-              IF retVal                > 0 THEN
-                 SELECT exchange_rate
-                 INTO retVal
-                 FROM amp_currency_rate
-                 WHERE to_currency_code = currency AND
-                       exchange_rate_date = cdate;
+             --check if exist a rate for a date before to transaction amount 
+            	SELECT count(exchange_rate) INTO retVal FROM amp_currency_rate    WHERE to_currency_code = currency AND exchange_rate_date < cdate;
+              IF retVal > 0 THEN
+			      SELECT exchange_rate INTO retVal
+            	     FROM (
+            	     		SELECT exchange_rate, ROW_NUMBER() OVER(order by exchange_rate_date) AS rid 
+            	     			FROM amp_currency_rate 
+                		 			WHERE  to_currency_code = currency AND exchange_rate_date <= cdate ORDER BY exchange_rate_date DESC
+                		 ) t1 WHERE t1.rid = 1;
+              
               ELSE
-                 SELECT exchange_rate
-                 INTO retVal
-                 FROM (SELECT exchange_rate, ROW_NUMBER() OVER(order by
-                  exchange_rate_date) AS rid FROM amp_currency_rate WHERE
-                   to_currency_code = currency AND exchange_rate_date <= cdate
-                    ORDER BY exchange_rate_date DESC) t1
+                 SELECT exchange_rate INTO retVal FROM 
+                 	(SELECT exchange_rate, ROW_NUMBER() OVER(order by exchange_rate_date) AS rid 
+                 		FROM amp_currency_rate 
+                 		WHERE to_currency_code = currency AND exchange_rate_date >= cdate ORDER BY exchange_rate_date DESC
+                 	) t1
                  WHERE t1.rid = 1;
               END IF;
   END IF;
@@ -1847,7 +1841,7 @@ CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_CACHED" ("AMP_ACTIVITY_ID", "N
   order by 
     a.amp_activity_id,t.name
 /
-CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_0" ("AMP_ACTIVITY_ID","NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
+CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_0" ("AMP_ACTIVITY_ID", "NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
   select 
 amp_activity_id,
 name,
@@ -1883,7 +1877,7 @@ select
 group by amp_activity_id,name,amp_program_id 
 having name is not null
 /
-CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_1" ("AMP_ACTIVITY_ID","NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
+CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_1" ("AMP_ACTIVITY_ID", "NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
   select 
 amp_activity_id,
 name,
@@ -1919,7 +1913,7 @@ select
 group by amp_activity_id,name,amp_program_id 
 having name is not null
 /
-CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_2" ("AMP_ACTIVITY_ID","NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
+CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_2" ("AMP_ACTIVITY_ID", "NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
   select 
 amp_activity_id,
 name,
@@ -1955,7 +1949,7 @@ select
 group by amp_activity_id,name,amp_program_id 
 having name is not null
 /
-CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_3" ("AMP_ACTIVITY_ID","NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
+CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_3" ("AMP_ACTIVITY_ID", "NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
   select 
 amp_activity_id,
 name,
@@ -1991,7 +1985,7 @@ select
 group by amp_activity_id,name,amp_program_id 
 having name is not null
 /
-CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_4" ("AMP_ACTIVITY_ID","NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
+CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_4" ("AMP_ACTIVITY_ID", "NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
   select 
 amp_activity_id,
 name,
@@ -2027,7 +2021,7 @@ select
 group by amp_activity_id,name,amp_program_id 
 having name is not null
 /
-CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_5" ("AMP_ACTIVITY_ID","NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
+CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_5" ("AMP_ACTIVITY_ID", "NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
   select 
 amp_activity_id,
 name,
@@ -2063,7 +2057,7 @@ select
 group by amp_activity_id,name,amp_program_id 
 having name is not null
 /
-CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_6" ("AMP_ACTIVITY_ID","NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
+CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_6" ("AMP_ACTIVITY_ID", "NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
   select 
 amp_activity_id,
 name,
@@ -2099,7 +2093,7 @@ select
 group by amp_activity_id,name,amp_program_id 
 having name is not null
 /
-CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_7" ("AMP_ACTIVITY_ID","NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
+CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_7" ("AMP_ACTIVITY_ID", "NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
   select 
 amp_activity_id,
 name,
@@ -2135,7 +2129,7 @@ select
 group by amp_activity_id,name,amp_program_id 
 having name is not null
 /
-CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_8" ("AMP_ACTIVITY_ID","NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
+CREATE OR REPLACE FORCE VIEW  "V_SECONDARYPROGRAM_LEVEL_8" ("AMP_ACTIVITY_ID", "NAME", "AMP_PROGRAM_ID", "PROGRAM_PERCENTAGE") AS 
   select 
 amp_activity_id,
 name,

@@ -39,10 +39,7 @@ public class AmpUserUtil {
 			String queryString = "select u from " + User.class.getName() + " u"
 					+ " where u.banned=:banned order by u.email";
 			qry = session.createQuery(queryString);
-			if ( getBanned )
-				qry.setInteger("banned", 1);
-			else
-				qry.setInteger("banned", 0);
+			qry.setBoolean("banned", getBanned);
 			users = qry.list();
 		} catch (Exception e) {
 			logger.error("Unable to get user");

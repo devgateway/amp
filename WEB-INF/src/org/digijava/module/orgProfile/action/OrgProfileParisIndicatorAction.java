@@ -38,6 +38,10 @@ public class OrgProfileParisIndicatorAction extends Action {
         List<ParisIndicatorHelper> indicatorHelpers = new ArrayList<ParisIndicatorHelper>();
         while (iter.hasNext()) {
             AmpAhsurveyIndicator piIndicator = iter.next();
+            // currently the rules are undefined for indicator 10b
+            if(piIndicator.getIndicatorCode().equals("10b")){
+                continue;
+            }
             ParisIndicatorHelper piHelper = new ParisIndicatorHelper(piIndicator, filter, true);
             indicatorHelpers.add(piHelper);
 

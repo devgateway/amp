@@ -197,6 +197,7 @@ public class AmpMessageUtil {
 		try {
 			session=PersistenceManager.getRequestDBSession();
 			tx=session.beginTransaction();
+			session.clear();
 			session.saveOrUpdate(messageState);
 			tx.commit();
 		}catch(Exception ex) {

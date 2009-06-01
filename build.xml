@@ -319,7 +319,12 @@
 		<antcall target="copyForAnySQL"/>
 	</target>
 	
-	<target name="copyForAnySQL" if="dbName">
+	<target name="copyForAnySQL">
+		<condition property="dbName" value="mysql">
+		 	<not>
+		 		<isset property="dbName"/>                              
+		 	</not>
+		 </condition>
 		 <echo message="Using ${dbName} Configuration" />
 		<copy file="${dbConfigs}/${dbName}/hibernate-dialect.xml" todir="${src}" overwrite="true"/>
 		<copy file="${dbConfigs}/${dbName}/refresh_mondrian_cache.sql" todir="${RefreshMondrian}" overwrite="true"/>

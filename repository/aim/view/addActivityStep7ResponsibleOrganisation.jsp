@@ -19,7 +19,8 @@
 									</td></tr>
 									<tr><td bgColor=#f4f4f2>
 										&nbsp;
-									</td></tr>									
+									</td></tr>	
+									<tr><td>								
 									<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrganisations">
 										<tr>
 											<td>
@@ -78,3 +79,4 @@
 												</tr>
 											</table>
 										</logic:empty>
+										</td></tr>

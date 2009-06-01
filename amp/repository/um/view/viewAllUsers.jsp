@@ -7,40 +7,39 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-<style>
-.contentbox_border{
-	border:1px solid #666666;
-	width:100%;	
-	background-color: #f4f4f2;
-	padding: 20 0 20 0;
-}
+
+<style type="text/css">
+		.jcol{												
+		padding-left:10px;												 
+		}
+		.jlien{
+			text-decoration:none;
+		}
+		.tableEven {
+			background-color:#dbe5f1;
+			font-size:8pt;
+			padding:2px;
+		}
+
+		.tableOdd {
+			background-color:#FFFFFF;
+			font-size:8pt;!important
+			padding:2px;
+		}
+		 
+		.Hovered {
+			background-color:#a5bcf2;
+		}
+		
+		
+		
 </style>
-<style>
-.link{
-	text-decoration: none;
-	font-size: 8pt; font-family: Tahoma;
-}
-</style>
 
-<style>
 
-.tableEven {
-	background-color:#dbe5f1;
-	font-size:8pt;
-	padding:2px;
-}
 
-.tableOdd {
-	background-color:#FFFFFF;
-	font-size:8pt;!important
-	padding:2px;
-}
- 
-.Hovered {
-	background-color:#a5bcf2;
-}
 
-</style>
+
+
 
 <c:set var="translationBan">
 	<digi:trn key="um:confirmBanMsg">Do you really want to ban the user ?</digi:trn>
@@ -102,6 +101,9 @@ function banUser(txt) {
 		}
 	}
 
+
+	
+
 </script>
 
 <digi:instance property="umViewAllUsersForm" />
@@ -147,12 +149,10 @@ function banUser(txt) {
               </span>
             </td>
           </tr>
-          <tr style="width:100%;">
-			<td>
-			<table>
+          <tr style="width:50%;">
           	<c:choose>
           		<c:when test="${umViewAllUsersForm.showBanned}">
-          		<td width="200">
+          		<td width="160">
 		              <digi:trn key="um:viewAllUsers:filter">
 		              Filter by:
 		              </digi:trn>
@@ -164,14 +164,18 @@ function banUser(txt) {
 		                </c:set>
 		                <html:option value="-1">${translation}</html:option>
 		              </html:select>
+		             
+					  
+					  
+					  
 	              </td>
           		</c:when>
           		<c:otherwise>
-	            <td width="200">
+	            <td width="800px;" >
 		              <digi:trn key="um:viewAllUsers:filter">
 		              Filter by:
 		              </digi:trn>
-		              <html:select property="type" style="font-family:verdana;font-size:11px;" >
+		              <html:select property="type" style="font-family:verdana;font-size:11px; margin-right:70px;" >
 		                <c:set var="translation">
 		                  <digi:trn key="um:viewAllUsers:all">
 		                  -All-
@@ -193,18 +197,25 @@ function banUser(txt) {
 		                </c:set>
 		                <html:option value="1">${translation}</html:option>	                
 		              </html:select>
-	              </td>
+	           <!-- </td>  -->   
 	              </c:otherwise>
               </c:choose>
-				<logic:notEmpty name="umViewAllUsersForm" property="alphaPages">
-				<td width="120" align="left">
-					<table>
-						<tr>
-						   <digi:form action="/viewAllUsers.do" method="post">
-							<td align="left">
-								<digi:trn>Go to</digi:trn>
+            <!--  <td width="300px" style="background-color:#99FF66">  -->
+               <c:if test="${not empty umViewAllUsersForm.currentAlpha}">
+														    	<c:if test="${umViewAllUsersForm.currentAlpha!='viewAll'}">
+															    	<c:if test="${umViewAllUsersForm.currentAlpha!=''}">														    	
+																    	<c:set var="trnViewAllLink">
+																			<digi:trn key="aim:clickToViewAllSearchPages">Click here to view all search pages</digi:trn>
+																		</c:set>
+																		<a href="javascript:searchAlpha('viewAll')" title="${trnViewAllLink}">
+																				<digi:trn key="aim:viewAllLink"><!-- viewAll  --></digi:trn></a>
+																	</c:if>
+																</c:if>
+														    </c:if>
 
-								<html:select property="currentAlpha" style="font-family:verdana;font-size:11px;" onchange="document.umViewAllUsersForm.submit()">
+              <digi:trn>Go to</digi:trn>
+
+								<html:select property="currentAlpha" style="font-family:verdana;font-size:11px; margin-right:100px;" onchange="document.umViewAllUsersForm.submit()">
 									<html:option value="viewAll">-All-</html:option>
 									<logic:iterate name="umViewAllUsersForm" property="alphaPages" id="alphaPages" type="java.lang.String">
 										<c:if test="${alphaPages != null}">
@@ -212,106 +223,128 @@ function banUser(txt) {
 										</c:if>
 									</logic:iterate>
 								</html:select>
-							</td>
-							</digi:form>
-				 	</tr>
-				</table>
-			</td>
-			</logic:notEmpty>									
-										
-              <td width="200">
-	              <digi:trn key="um:viewAllUsers:keyword">
-	              keyword:
-	              </digi:trn>
-	              <html:text property="keyword" style="font-family:verdana;font-size:11px;"/>
+					   		    <digi:trn key="um:viewAllUsers:keyword">
+						              keyword:
+						              </digi:trn>
+						              <html:text property="keyword" style="font-family:verdana;font-size:11px; width:130px; text-align:left;"/>
+					              <c:set var="translation">
+								<digi:trn key="um:viewAllUsers:showButton">
+									 Show
+								 </digi:trn>
+								</c:set>
+								<input type="submit" value="${translation}"  class="dr-menu" style="font-family:verdana;font-size:11px;" />
+						         
               </td>
-              
-			  <td width="330">
-	              <c:set var="translation">
-	                <digi:trn key="um:viewAllUsers:showButton">
-	                Show
-	                </digi:trn>
-	              </c:set>
-	              <input type="submit" value="${translation}"  class="dr-menu" style="font-family:verdana;font-size:11px;" />
+              <td  >
+
+     
             </td>
-			</table>
-			</td>
           </tr>
           <tr>
             <td noWrap width=967 vAlign="top" colspan="7">
               <table width="100%" cellspacing=1 cellSpacing=1>
 					<tr>
-						<td noWrap width=700 vAlign="top">
-							<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%">
-								
+						<td noWrap width=700 vAlign="top"> 
+							
+							<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%"  >
+								<tr bgColor=#f4f4f2>
+									<td vAlign="top" width="100%">
+									</td>
+								</tr>
 								<tr bgColor=#f4f4f2>
 									<td valign="top">
-										<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" border=0>
+									
+
+										<table align=center bgColor=#ffffff cellPadding=0 cellSpacing=0  border=1 >
 											<tr>
-													
-														<tr>
-															<td width="100%" >
-															<div style="width:100%;height:auto;max-height:250px;vertical-align: center;align: center;">
-															  <div style="padding:5px;font-size:12px;color:Black;background-color: #999999;align: center;">
-															  	<table cellpadding="0" cellspacing="0">
-																	<tr>
-																			<td style="width:210px;padding:3px;color:Black;background-color: #999999;align: center;text-align:center;">
-																		  	<digi:link style="color:black;align: center;" href="/viewAllUsers.do?sortBy=name&reset=false"><b>
-																					<digi:trn key="um:viewAllUsers:UsersNames">Name</digi:trn></b>
-																				</digi:link>
-																		  </td><td style="width:210px;padding:3px;color:Black;background-color: #999999;align: center;text-align:center;">
-																		  	<digi:link style="color:black;align: center;" href="/viewAllUsers.do?sortBy=email&reset=false"><b>
-																					<digi:trn key="um:viewAllUsers:UsersEmails">Email</digi:trn></b>
-																				</digi:link>
-																		  </td><td style="width:210px;padding:3px;color:Black;background-color: #999999;align: center;text-align:center;">
-																		  	<b><digi:trn key="um:viewAllUsers:UserWorkspace">Workspace</digi:trn></b>
-																		  </td><td style="width:70px;padding:3px;color:Black;background-color: #999999;align: center;text-align:center;">
-																		  	<b><digi:trn key="aim:viewAllUsers:action">Actions</digi:trn></b>
-																		  </td>
-																		</tr>
-																	</table>
-																</div>
-															  <div style="overflow:auto;width:auto;height:auto;max-height:220px;">
-															    <c:if test="${empty umViewAllUsersForm.pagedUsers}">
+												<td bgColor=#ffffff >
+													<table border=0 cellPadding=0 cellSpacing=0  width="100%">
+														<tr bgColor=#ffffff>
+															<!-- header -->
+															<td height="" align="center" colspan="5"><B>
+															<!-- <digi:trn key="um:users"></digi:trn> -->
+                                                              </b>
+															</td>
+															<!-- end header -->
+														</tr>		
+ 														<tr>
+															<td width="100%">
+																<!--  ==== Test begin overflow ==== -->
+
+															
+
+
+
+																<table width="753"BORDER=0 cellpadding="0" cellspacing="0"     >
+																	<c:if test="${empty umViewAllUsersForm.pagedUsers}">
 								                                         <tr>
 																			<td colspan="5">
 				                                                   				<b><digi:trn key="um:viewAllUsers:NoUsers">No users present</digi:trn>
 				                                                       			</b>
 																			</td>
 																		</tr>
-																</c:if>
-															    <c:if test="${not empty umViewAllUsersForm.pagedUsers}">
-															      <table width="100%" height="100%" border="0" align=center cellPadding=0 cellSpacing=0  id="dataTable">
-															        <c:forEach var="us" items="${umViewAllUsersForm.pagedUsers}">
-															          <tr>
-															            <td style="padding:2px;width:220px;text-align:left;">
-															              <div style="white-space: nowrap;">
-																			${us.firstNames}&nbsp;${us.lastName}
-															              </div>
-															            </td>
-															            <td style="padding:5px;width:115px;text-align:left;" nowrap="nowrap">
-															             <div style="white-space: nowrap;">${us.email}</div> 
-															            </td>
-															            <td style="padding:2px;width:200px;text-align:left;">
-															              <div>
+							                                        </c:if>
+																	<c:if test="${not empty umViewAllUsersForm.pagedUsers}">
+																		<tr style="background-color:#999999; color:#000;  " >
+																			<td height="30" width="220"  >
+																				<digi:link href="/viewAllUsers.do?sortBy=name&reset=false" style="color:#000;"><b>
+																					<digi:trn key="um:viewAllUsers:UsersNames">Name</digi:trn></b>
+																				</digi:link>
+																			</td>	
+																			<td height="30" width="220">
+																				<digi:link href="/viewAllUsers.do?sortBy=email&reset=false" style="color:#000;"><b>
+																					<digi:trn key="um:viewAllUsers:UsersEmails">Email</digi:trn></b>
+																				</digi:link>
+																			</td>																	
+																			<td height="30" width="220"><b>
+																					<digi:trn key="um:viewAllUsers:UserWorkspace">Workspace</digi:trn></b>
+																			</td>
+																			<td height="30"width="150" colspan="3"><b>
+																				<digi:trn key="aim:viewAllUsers:action">Actions</digi:trn></b>
+																			</td>																		
+																		</tr>
+																		</table>
+
+																		
+																<div  style="overflow:auto;width:752px;height:220px;max-height:220px;"  >
+																		<table width="734" BORDER=0 cellpadding="0" cellspacing="0" id="dataTable"    >
+
+
+
+
+																	<c:forEach var="us" items="${umViewAllUsersForm.pagedUsers}">
+	                                                           			<tr >
+		                                                           			<td height="30" >
+																			  ${us.firstNames}&nbsp;${us.lastName}
+																			</td>
+																			<td height="30">
+																			  	${us.email}																		  
+																			</td>																	
+																			<td height="30">
+																				<div style="width:300px;">
 								                                                  <c:if test="${!empty us.teamMembers}">
-	                                                                                  <c:forEach var="member" items="${us.teamMembers}">
-	                                                                                           <li> ${member.ampTeam.name}&nbsp;(${member.ampMemberRole.role})&nbsp;&nbsp;</li>
-	                                                                                  </c:forEach>
-                                                                             	  </c:if>
+																					   
+																						   <c:forEach var="member" items="${us.teamMembers}">
+																							   
+																								   <li> ${member.ampTeam.name}&nbsp;(${member.ampMemberRole.role})&nbsp;&nbsp;</li>
+																							   
+																							   
+																						   </c:forEach>
+																					 
+								                                                  </c:if>
 								                                                  <c:if test="${empty us.teamMembers}">
-								                                            		<digi:trn key="um:viewAllUsers:UnassignedUser">Unassigned</digi:trn>
+								                                                    <digi:trn key="um:viewAllUsers:UnassignedUser">Unassigned</digi:trn>
 								                                                  </c:if>
 								                                                </div>
-															            </td>
-																		<td>
-															              <c:set var="translation">
+																			</td>
+																			<td height="30" >
+																				<c:set var="translation">
 								                                                  <digi:trn key="um:viewAllUsers:EditUserLink">Edit user </digi:trn>
 								                                                </c:set>
 								                                                <digi:link href="/viewEditUser.do?id=${us.id}">${translation}</digi:link>
 																			</td>
 																			
-																			<td>
+																			<td height="30">
 																				<c:choose>
 								                                                  <c:when test="${us.ban}">
 								                                                    <c:set var="translation">
@@ -320,33 +353,193 @@ function banUser(txt) {
 								                                                    <digi:link href="/viewEditUser.do?id=${us.id}&ban=false" onclick="return unbanUser()"  >${translation}</digi:link>
 								                                                  </c:when>
 								                                                  <c:otherwise>
-																			  <c:if test="${!(us.buildInAdmin)}">  <%--  AMP-4598 Build in administrator can not be banned. --%>
 								                                                    <c:set var="translation">
 								                                                      <digi:trn key="um:viewAllUsers:banUsersLink">Ban user </digi:trn>
 								                                                    </c:set>
 								
 								                                                    <digi:link href="/viewEditUser.do?id=${us.id}&ban=true" onclick="return banUser()">${translation}</digi:link>
-								                                              </c:if>
 								                                                  </c:otherwise>
 								                                                </c:choose>
-															            </td>
-															          </tr>
-															        </c:forEach>
-															      </table>
-															    </c:if>
-															  </div>
-															</div>
+																			</td>
+	                                                            		</tr>
+																	</c:forEach>
+																</c:if>
+															</table>
+															</div> <!-- ==end mon test overflow======= -->
 														</td>
 													</tr>
-												
 												 <!-- end page logic -->
+												 
+												 <!-- page logic for pagination $$$$$$$ -->
+												
+												<tr>
+														
+												</tr>
+												
+												
+												 <logic:notEmpty name="umViewAllUsersForm" property="alphaPages">
+											<tr>
+											<td align="center" colspan="4">
+													
 											</td>
+										</tr>
+										</logic:notEmpty>									
+										<logic:notEmpty name="umViewAllUsersForm" property="alphaPages">
+											<tr>
+												<td bgColor=#ffffff>
+													<c:if test="${not empty umViewAllUsersForm.currentAlpha}">
+														<c:if test="${umViewAllUsersForm.currentAlpha!='viewAll'}">
+													   		<c:if test="${umViewAllUsersForm.currentAlpha!=''}">														    	
+													    		<digi:trn key="um:UserMan:alphaFilterNote">
+																	Click on viewAll to see all existing Users.
+																</digi:trn>
+															</c:if>
+														</c:if>
+													</c:if>										
+												</td>
+											</tr>
+										</logic:notEmpty>	
+					                         </table>
+											
+										</td>
 									</tr>
 									
 								</table>
+									
+								
+								<table>
+									<tr><!-- ===========  -->
+										<logic:notEmpty name="umViewAllUsersForm" property="pages">
+													<td colspan="4" nowrap="nowrap" >
+												
+													
+													
+													<div  style="   float:left;">
+													
+													
+													<table style="padding:5px;" >
+													
+													<!--	<digi:trn key="um:userPages">Pages :</digi:trn> -->
+														<c:if test="${umViewAllUsersForm.currentPage > 1}">
+														<jsp:useBean id="urlParamsFirst" type="java.util.Map" class="java.util.HashMap"/>
+														<c:set target="${urlParamsFirst}" property="page" value="1"/>
+														<c:set var="translation">
+															<digi:trn key="aim:firstpage">First Page</digi:trn>
+														</c:set>
+														<td style="padding:3px;border:1px solid #999999;" nowrap="nowrap">
+														<digi:link href="/userSearch.do"  style="text-decoration=none" name="urlParamsFirst" title="${translation}"  >
+															&lt;&lt; First
+														</digi:link>
+														</td>
+														<jsp:useBean id="urlParamsPrevious" type="java.util.Map" class="java.util.HashMap"/>
+														<c:set target="${urlParamsPrevious}" property="page" value="${umViewAllUsersForm.currentPage -1}"/>
+														<c:set var="translation">
+															<digi:trn key="aim:previouspage">Previous Page</digi:trn>
+														</c:set>
+														<td style="padding:3px;border:1px solid #999999;" nowrap="nowrap">
+														<digi:link href="/userSearch.do" name="urlParamsPrevious" style="text-decoration=none" title="${translation}" >
+															&lt; Previous
+														</digi:link>
+														</td>
+														</c:if>
+														<c:set var="length" value="${umViewAllUsersForm.pagesToShow}"></c:set>
+														<c:set var="start" value="${umViewAllUsersForm.offset}"/>
+														<logic:iterate name="umViewAllUsersForm" property="pages" id="pages" type="java.lang.Integer" offset="${start}" length="${length}">	
+														<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
+														<c:set target="${urlParams1}" property="page"><%=pages%>
+														</c:set>
+														<c:set target="${urlParams1}" property="orgSelReset" value="false"/>
+														<c:if test="${umViewAllUsersForm.currentPage == pages}">
+														<td style="padding:3px;border:2px solid #000000; background-color:#DBE5F1;" nowrap="nowrap">
+															<font color="#FF0000"><%=pages%></font>
+															</td>
+														</c:if>
+														<c:if test="${umViewAllUsersForm.currentPage != pages}">
+															<c:set var="translation">
+															<digi:trn key="aim:clickToViewNextPage">Click here to go to Next Page</digi:trn>
+															</c:set>
+															<td style="padding:3px;border:1px solid #999999;" nowrap="nowrap">
+															<digi:link href="/userSearch.do" name="urlParams1" title="${translation}" >
+																<%=pages%>
+															</digi:link>
+															</td>
+														</c:if>
+														
+														</logic:iterate>	
+															
+														<c:if test="${umViewAllUsersForm.currentPage != umViewAllUsersForm.pagesSize}">
+														<jsp:useBean id="urlParamsNext" type="java.util.Map" class="java.util.HashMap"/>
+														<c:set target="${urlParamsNext}" property="page" value="${umViewAllUsersForm.currentPage+1}"/>
+														<c:set target="${urlParamsNext}" property="orgSelReset" value="false"/>
+														<c:set var="translation">
+															<digi:trn key="aim:nextpage">Next Page</digi:trn>
+														</c:set>
+														<td style="padding:3px;border:1px solid #999999;" nowrap="nowrap" >
+														<digi:link href="/userSearch.do"  style="text-decoration=none" name="urlParamsNext" title="${translation}"  >
+															&gt; Next
+														</digi:link>
+														</td>
+														<jsp:useBean id="urlParamsLast" type="java.util.Map" class="java.util.HashMap"/>
+														<c:if test="${umViewAllUsersForm.pagesSize > aimOrgManagerForm.pagesToShow}">
+															<c:set target="${urlParamsLast}" property="page" value="${umViewAllUsersForm.pagesSize-1}"/>
+														</c:if>
+														<c:if test="${umViewAllUsersForm.pagesSize <umViewAllUsersForm.pagesToShow}">
+															<c:set target="${urlParamsLast}" property="page" value="${umViewAllUsersForm.pagesSize}"/>
+														</c:if>
+														<c:set target="${urlParamsLast}" property="orgSelReset" value="false"/>
+														<c:set var="translation">
+														<digi:trn key="aim:lastpage">Last Page</digi:trn>
+														</c:set>
+														<td style="padding:3px;border:1px solid #999999;" nowrap="nowrap">
+														<digi:link href="/userSearch.do"  style="text-decoration=none" name="urlParamsLast" title="${translation}">
+															&gt;&gt; 
+														</digi:link>
+														</td>
+													</c:if>
+													<td style="padding:3px;border:1px solid #999999;" nowrap="nowrap">
+													<!--<c:out value="${umViewAllUsersForm.currentPage}"></c:out>&nbsp;-->
+													<digi:trn key="aim:of">of</digi:trn>&nbsp;<c:out value="${umViewAllUsersForm.pagesSize}"></c:out>&nbsp;Pages
+													</td>
+													<td>&nbsp;&nbsp;&nbsp;</td>
+													<td style="padding:3px;border:1px solid #999999">
+											            <c:out value="${umViewAllUsersForm.numUsers}"></c:out>&nbsp;<digi:trn key="aim:records">records</digi:trn>
+								         			</td>
+													
+													</table>
+	
+													</div>
+													
+													
+													<div  style=" float:left; padding-top:4px; padding-left:30px;">
+														   
+															
+												   			  <digi:trn key="aim:results">Results</digi:trn>&nbsp;
+																<html:select property="tempNumResults" styleClass="inp-text" onchange="document.umViewAllUsersForm.submit()"  >
+																	<html:option value="10">10</html:option>
+																	<html:option value="20">20</html:option>
+																	<html:option value="50">50</html:option>
+																	<html:option value="-1">ALL</html:option>
+																</html:select>
+																	<!-- 											
+																	<c:set var="translation">
+													                <digi:trn key="um:viewAllUsers:showButton">
+													                Show
+													                </digi:trn>
+													              </c:set>
+													              <input type="submit" value="${translation}"  class="dr-menu" style="font-family:verdana;font-size:11px;" />
+																 -->
+													</div>
+													
+													</td>
+												</logic:notEmpty>
+									</tr>
+
+								</table>
+								
 							</td>
 						</tr>
-					                    </table>
+					</table>
+				
 					                  </td>
 									<td noWrap width=100% vAlign="top">
 										<table align=center cellPadding=0 cellSpacing=0 width="90%" border=0>
@@ -360,8 +553,8 @@ function banUser(txt) {
 																Other links
 																</digi:trn>
 															</td>
-															<td background="module/aim/images/corner-r.gif" 	height="17" width=17>
-															&nbsp;
+															<td background="module/aim/images/corner-r.gif" 	height="17" width=17>&nbsp;
+															
 															</td>
 														</tr>
 													</table>
@@ -441,165 +634,19 @@ function banUser(txt) {
 							</table>
 						</td>
 					</tr>
-					 <!-- page logic for pagination -->
-					
-						<tr style="width:50%;">
-							<logic:notEmpty name="umViewAllUsersForm" property="pages">
-								<td>
-								<table style="padding:5px;">
-									<tr>
-										<td>
-											<c:if test="${umViewAllUsersForm.currentPage > 1}">
-												<td style="padding:3px;border:1px solid #999999">
-													<jsp:useBean id="urlParamsFirst" type="java.util.Map" class="java.util.HashMap"/>
-													<c:set target="${urlParamsFirst}" property="page" value="1"/>
-													<c:set var="translation">
-														<digi:trn key="aim:firstpage">First Page</digi:trn>
-													</c:set>
-													<digi:link href="/userSearch.do"  style="text-decoration=none" name="urlParamsFirst" title="${translation}"  >
-														&lt;&lt;
-													</digi:link>
-												</td>
-												<td style="padding:3px;border:1px solid #999999">
-													<jsp:useBean id="urlParamsPrevious" type="java.util.Map" class="java.util.HashMap"/>
-													<c:set target="${urlParamsPrevious}" property="page" value="${umViewAllUsersForm.currentPage -1}"/>
-														<c:set var="translation">
-														<digi:trn key="aim:previouspage">Previous Page</digi:trn>
-														</c:set>
-													<digi:link href="/userSearch.do" name="urlParamsPrevious" style="text-decoration=none" title="${translation}" >
-														&lt;
-													</digi:link>
-												</td>
-												<c:if test="${umViewAllUsersForm.offset > 0}">
-													<c:if test="${umViewAllUsersForm.offset > 10}">
-														<td style="padding:3px;border:1px solid #999999;" nowrap="nowrap">
-														<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
-														<c:set target="${urlParams2}" property="page" value="${umViewAllUsersForm.currentPage -10}"/>
-															<c:set var="translation">
-															<digi:trn key="aim:previouspages">Previous pages</digi:trn>
-															</c:set>
-														<digi:link href="/userSearch.do" name="urlParams2" style="text-decoration=none" title="${translation}" >
-															<digi:trn key="aim:previous">Previous</digi:trn> 10
-														</digi:link>
-														</td>
-													</c:if>	
-													<c:if test="${umViewAllUsersForm.offset <= 10}">
-														<td style="padding:3px;border:1px solid #999999;" nowrap="nowrap">
-														<c:set target="${urlParamsFirst}" property="page" value="1"/>
-															<c:set var="translation">
-															<digi:trn key="aim:previouspages">Previous pages</digi:trn>
-															</c:set>
-														<digi:link href="/userSearch.do" name="urlParamsFirst" style="text-decoration=none" title="${translation}" >
-															<digi:trn key="aim:previous">Previous</digi:trn> ${umViewAllUsersForm.offset}
-														</digi:link>
-														</td>
-													</c:if>
-												</c:if>
-											</c:if>
-										
-											<c:set var="length" value="${umViewAllUsersForm.pagesToShow}"></c:set>
-											<c:set var="start" value="${umViewAllUsersForm.offset}"/>
-											<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
-											<logic:iterate name="umViewAllUsersForm" property="pages" id="pages" type="java.lang.Integer" offset="${start}" length="${length}">	
-												<c:set target="${urlParams1}" property="page"><%=pages%>
-												</c:set>
-												<c:set target="${urlParams1}" property="orgSelReset" value="false"/>
-												<c:if test="${umViewAllUsersForm.currentPage == pages}">
-													<td style="padding:3px;border:2px solid #333333">
-														<font color="#FF0000"><%=pages%></font>
-													</td>
-												</c:if>
-												<c:if test="${umViewAllUsersForm.currentPage != pages}">
-													<td style="padding:3px;border:1px solid #999999">
-													<c:set var="translation">
-													<digi:trn key="aim:clickToViewNextPage">Click here to go to page #</digi:trn><%=pages%>
-													</c:set>
-													<digi:link href="/userSearch.do" name="urlParams1" title="${translation}" >
-														<%=pages%>
-													</digi:link>
-													</td>
-												</c:if>
-											</logic:iterate>	
-										
-											<c:if test="${umViewAllUsersForm.currentPage != umViewAllUsersForm.pagesSize}">
-												<c:if test="${umViewAllUsersForm.offset + umViewAllUsersForm.pagesToShow < umViewAllUsersForm.pagesSize}">
-													<c:if test="${umViewAllUsersForm.offset + umViewAllUsersForm.pagesToShow +10 <= umViewAllUsersForm.pagesSize}">
-														<td style="padding:3px;border:1px solid #999999;" nowrap="nowrap">
-														<c:set target="${urlParams1}" property="page" value="${umViewAllUsersForm.currentPage +10}"/>
-															<c:set var="translation">
-															<digi:trn key="aim:nextpages">Next pages</digi:trn>
-															</c:set>
-														<digi:link href="/userSearch.do" name="urlParams1" style="text-decoration=none" title="${translation}" >
-															<digi:trn key="aim:next">Next</digi:trn> 10
-														</digi:link>
-														</td>
-													</c:if>
-													<c:if test="${umViewAllUsersForm.offset + umViewAllUsersForm.pagesToShow +10 > umViewAllUsersForm.pagesSize}">
-														<td style="padding:3px;border:1px solid #999999;" nowrap="nowrap">
-														<c:set target="${urlParams1}" property="page" value="${umViewAllUsersForm.pagesSize}"/>
-															<c:set var="translation">
-															<digi:trn key="aim:nextpages">Next pages</digi:trn>
-															</c:set>
-														<digi:link href="/userSearch.do" name="urlParams1" style="text-decoration=none" title="${translation}" >
-															<digi:trn key="aim:next">Next</digi:trn> ${umViewAllUsersForm.pagesSize - (umViewAllUsersForm.offset + umViewAllUsersForm.pagesToShow)}
-														</digi:link>
-														</td>
-													</c:if>
-												</c:if>
-												<td style="padding:3px;border:1px solid #999999">
-													<jsp:useBean id="urlParamsNext" type="java.util.Map" class="java.util.HashMap"/>
-													<c:set target="${urlParamsNext}" property="page" value="${umViewAllUsersForm.currentPage+1}"/>
-													<c:set target="${urlParamsNext}" property="orgSelReset" value="false"/>
-														<c:set var="translation">
-														<digi:trn key="aim:nextpage">Next Page</digi:trn>
-														</c:set>
-													<digi:link href="/userSearch.do"  style="text-decoration=none" name="urlParamsNext" title="${translation}"  >
-														&gt;
-													</digi:link>
-												</td>
-												<td style="padding:3px;border:1px solid #999999">
-													<jsp:useBean id="urlParamsLast" type="java.util.Map" class="java.util.HashMap"/>
-													<c:set target="${urlParamsLast}" property="page" value="${umViewAllUsersForm.pagesSize}"/>
-													<c:set target="${urlParamsLast}" property="orgSelReset" value="false"/>
-														<c:set var="translation">
-														<digi:trn key="aim:lastpage">Last Page</digi:trn>
-														</c:set>
-													<digi:link href="/userSearch.do"  style="text-decoration=none" name="urlParamsLast" title="${translation}">
-														&gt;&gt; 
-													</digi:link>
-												</td>
-											</c:if>
-											<td style="padding:3px;border:1px solid #999999">
-												&nbsp;<digi:trn key="aim:page">Page</digi:trn>&nbsp;<c:out value="${umViewAllUsersForm.currentPage}"></c:out>&nbsp;<digi:trn key="aim:of">of</digi:trn>&nbsp;<c:out value="${umViewAllUsersForm.pagesSize}"></c:out>
-											</td>
-											<td style="padding:3px;border:1px solid #FFFFFF">
-											</td>
-											<td style="padding:3px;border:1px solid #999999">
-												<c:out value="${umViewAllUsersForm.numUsers}"></c:out>&nbsp;<digi:trn key="aim:records">records</digi:trn>
-											</td>						
-									</td>	
-									<td width="200" align="right" nowrap="nowrap">
-						              	<digi:trn key="aim:results">Results</digi:trn>&nbsp;
-										<html:select property="tempNumResults" styleClass="inp-text">
-											<html:option value="10">10</html:option>
-											<html:option value="20">20</html:option>
-											<html:option value="50">50</html:option>
-											<html:option value="-1">-All-</html:option>
-										</html:select>
-					              	</td>
-								</tr>	
-							</table>
-							</td>
-						</logic:notEmpty>
-					</tr>
 				</table>
 			</td>
 		</tr>
 	</table>
+
+
+
+
 <script language="javascript">
 	setStripsTable("dataTable", "tableEven", "tableOdd");
 	setHoveredTable("dataTable", false);
 </script>
 </digi:form>
+
 
 

@@ -19,7 +19,7 @@
 		<Hierarchy hasAll="true" allMemberName="All Periods" allMemberCaption="#All_Donor_Dates#" primaryKey="AMP_FUND_DETAIL_ID" caption="#Donor_Dates#">
 			<Table name="CACHED_V_DONOR_DATE_HIERARCHY" />
 			<Level name="Year" column="year" levelType="TimeYears" type="Numeric" />
-			<Level name="Quarter" column="QUARTER" ordinalColumn="quarter" nameColumn="QUARTER_NAME" levelType="TimeQuarters" type="Numeric" />
+			<Level name="Quarter" column="QUARTER" ordinalColumn="QUARTER" nameColumn="QUARTER_NAME" levelType="TimeQuarters" type="Numeric" />
 			<Level name="Month" column="month" uniqueMembers="false" ordinalColumn="month" nameColumn="MONTH_NAME" levelType="TimeMonths" type="Numeric" />
 		</Hierarchy>
 	</Dimension>

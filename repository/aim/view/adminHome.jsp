@@ -250,6 +250,7 @@
                             -->
                            
 						  <!-- hidden Lucene Debug! -->
+						  <!-- 
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -261,6 +262,7 @@
                               </digi:link>
                             </td>
                           </tr>
+                           -->
 						  <!-- -->
                         </table>
                       </td>

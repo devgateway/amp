@@ -1077,6 +1077,9 @@ var isAlreadySubmitted = false;
 									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<digi:trn key="aim:Actual">Actual</digi:trn><br><digi:trn key="aim:ExpenditureDateFIE">Expenditure Date</digi:trn></font></b></a>
 								</td>
 								</field:display>
+								<field:display name="Remove Expenditure Link" feature="Expenditures">
+											<td>&nbsp;</td>
+								</field:display>
 							</tr>
 							<c:if test="${ !empty aimEditActivityForm.funding.fundingDetails}">
 						 	<c:forEach var="fundingDetail" items="${aimEditActivityForm.funding.fundingDetails}">
@@ -1115,28 +1118,29 @@ var isAlreadySubmitted = false;
 										<td valign="bottom">
 											<table cellPadding=0 cellSpacing=0>
 												<tr>
-													<td>
-														<% tempIndexStr = "" + tempIndex; tempIndex++;%>
-														<html:text name="fundingDetail" indexed="true" property="transactionDate" styleId="<%=tempIndexStr%>" readonly="true" size="10"/>
-													</td>
-													<td align="left" vAlign="center">&nbsp;
-														<a id="trans6Date<%=tempIndexStr%>" href='javascript:pickDateById("trans6Date<%=tempIndexStr%>",<%=tempIndexStr%>)'>
-															<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
-														</a>
-														<% tempIndex++; %>
-													</td>
+														<td>
+															<% tempIndexStr = "" + tempIndex; tempIndex++;%>
+															<html:text name="fundingDetail" indexed="true" property="transactionDate" styleId="<%=tempIndexStr%>" readonly="true" size="10"/>
+														</td>
+														<td align="left" vAlign="center">&nbsp;
+															<a id="trans6Date<%=tempIndexStr%>" href='javascript:pickDateById("trans6Date<%=tempIndexStr%>",<%=tempIndexStr%>)'>
+																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+															</a>
+															<% tempIndex++; %>
+														</td>
+													
 												</tr>
 											</table>
 										</td>
 									</field:display>
-									<td valign="bottom"></td>
 									<field:display name="Remove Expenditure Link" feature="Expenditures">
-										<td>
-											<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,2)">
-											 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
-											</a>
-										</td>
+											<td align="center"> 
+												<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,2)">
+								 					<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+												</a>
+											</td>
 									</field:display>
+									
 								</tr>
 								<tr bgcolor="#ffffff">
 									<td colspan="6">

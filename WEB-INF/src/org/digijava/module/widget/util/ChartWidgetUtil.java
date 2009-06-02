@@ -23,6 +23,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -40,6 +41,7 @@ import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -732,8 +734,8 @@ public class ChartWidgetUtil {
 	 */
 	public static Collection<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[],Date fromDate, Date toDate,Double[] wholeFunding) throws DgException {
     	Collection<DonorSectorFundingHelper> fundings=null;  
-		String oql ="select f.ampDonorOrgId, actSec.sectorId, "+
-                        " actSec.sectorPercentage, act.ampActivityId,  sum(fd.transactionAmountInUSD)";
+		String oql ="select  actSec.ampActivitySectorId, "+
+                        "  act.ampActivityId.ampActivityId, sum(fd.transactionAmountInUSD)";
 		oql += " from ";
 		oql += AmpFundingDetail.class.getName() +
                         " as fd inner join fd.ampFundingId f ";
@@ -751,9 +753,10 @@ public class ChartWidgetUtil {
 		if (fromDate != null && toDate != null) {
 			oql += " and (fd.transactionDate between :fDate and  :eDate ) ";
 		}
-                oql +=" and config.name='Primary' and act.team is not null ";
-		oql += " group by f.ampDonorOrgId, actSec.sectorId,  fd.ampCurrencyId";
-		oql += " order by f.ampDonorOrgId, actSec.sectorId";
+        oql +=" and config.name='Primary' and act.team is not null ";
+        //  strange oracle doesn't understand act.ampActivityId... need to investigate...
+		oql += " group by act.ampActivityId.ampActivityId, actSec.ampActivitySectorId ";
+		oql += " order by actSec.ampActivitySectorId";
 
 		Session session = PersistenceManager.getRequestDBSession();
 
@@ -780,11 +783,13 @@ public class ChartWidgetUtil {
 			for (Object row : result) {
 				Object[] rowData = (Object[]) row;
 				//AmpOrganisation donor = (AmpOrganisation) rowData[0];
-				AmpSector sector = (AmpSector) rowData[1];
-				Float sectorPrcentage = (Float) rowData[2];    //This field is NULL sometimes !
+                Long activitySectorId=(Long) rowData[0];
+                AmpActivitySector activitySector=ActivityUtil.getAmpActivitySector(activitySectorId);
+				AmpSector sector =activitySector.getSectorId() ;
+				Float sectorPrcentage =activitySector.getSectorPercentage();    //This field is NULL sometimes !
 				//AmpActivity activity = (AmpActivity) rowData[3];
 				//AmpCurrency currency = (AmpCurrency) rowData[4];
-				Double amt = (Double) rowData[4];
+				Double amt = (Double) rowData[2];
                 Double amount =FeaturesUtil.applyThousandsForVisibility(amt);
 				//calculate percentage
 				Double calculated = (sectorPrcentage.floatValue() == 100)?amount:calculatePercentage(amount,sectorPrcentage);

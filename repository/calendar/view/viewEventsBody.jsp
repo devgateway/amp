@@ -129,10 +129,10 @@ color:Black;
 				        		<feature:display name="Monthly View" module="Calendar">
 				        			<c:if test="${calendarViewForm.view == 'monthly'}">
 				            		<tr align="center" vAlign="middle">
-				                		<td width="100%">
+				                		<td style="padding:15px;text-align:center;">
                                              <div style="overflow:auto;height:424px;">
-				                  			<table width="99%" border="0" align="center" cellspacing="0">
-							                    <tr>
+				                  			<table width="100%" border="0" align="center" cellspacing="0">
+							                    <tr style=" width: 100%; height: 25px;">
 							                    	<td align="left" valign="top" bgcolor="#376091" style="font-size:12px;color:White;font-family:Tahoma;"><digi:trn key="aim:mon">Mon</digi:trn></td>
 							                    	<td width="1px" bgcolor="#7B9EBD"/>
 							                      	<td align="left" valign="top" bgcolor="#376091" style="font-size:12px;color:White;font-family:Tahoma;"><digi:trn key="aim:tue">Tue</digi:trn></td>
@@ -467,7 +467,7 @@ color:Black;
 				                                    	<div style="overflow:auto;height:388px;border:2px solid #e8eef7;">
 				                                        	<table width="100%">
 				                                            	<c:forEach var="hour" begin="0" end="23">
-				                                              		<tr style="height:40px;">
+				                                              		<tr style="height:25px;">
 				                                                		<td align="left" style="border-top:2px solid #e8eef7;color:White;background-color:#376091;vertical-align:top;width:70px;padding:6px;font-size:12px;font-family: Tahoma">
 				                                                  			<c:if test="${hour < 12}">
 				                                                    			<c:if test="${hour < 10}">
@@ -602,9 +602,9 @@ color:Black;
 				            		<!-- yearly view Start -->
 				            		<c:if test="${calendarViewForm.view == 'yearly'}">
 									<tr style="width: 100%">
-					                    	<td style="padding:10px;text-align:center;width: 100%">
+					                    	<td style="padding:15px;text-align:center;">
 					                        	
-					                                    	<div style="border:2px solid #e8eef7;width: 100%;overflow:auto;height:366px;">
+					                                    	<div style="border:2px solid #e8eef7;width: 100%;overflow:auto;">
 					                                        	<table style="width: 100%">
 						                                        		<c:forEach var="row" items="${calendarViewForm.dateNavigator.items}"  varStatus="stat">
 						  													<c:forEach var="item" items="${row}">
@@ -806,21 +806,22 @@ color:Black;
 									<c:if test="${calendarViewForm.view == 'weekly'}">
                                    
                                        <tr  valign="top">
-				                    	<td style="padding:20px;text-align:center;">
+				                    	<td style="padding:15px;text-align:center;">
                                          <div style="overflow:auto;height:388px;width:100%">
 				                        	<table align="center" width="100%">
 				                            	<tr>
 				                                	<td width="100%" valign="top">
 				                                    	<div style="border:2px solid #e8eef7;width: 99.5%;">
-				                                        	<table width="99.5%" >
+				                                        	<table width="100%" >
 					                                        		<c:forEach var="row" items="${calendarViewForm.dateNavigator.items}">
 					  													<c:forEach var="item" items="${row}">
 					  														<c:if test="${calendarViewForm.view == 'weekly' && item.selected}">
 																				<tr style="width: 100%;height: 25px">
-																					<td align="left" vAlign="top" style="font-size:12px;color:White;background-color: #376091;font-family:Tahoma;border-bottom:1px solid #ffffff;width: 80px;height: 25px">
-																					   	<span id="calenderSubFont" style="width:25px">
-																					       	<digi:trn key="aim:dayOfWeek${item.dayOfWeek}">${item.dayOfWeek}</digi:trn>, &nbsp;
+																					<td align="center" vAlign="top" style="font-size:12px;color:White;background-color: #376091;font-family:Tahoma;border-bottom:1px solid #ffffff;width: 80px;height: 25px">
+																					   	<span id="calenderSubFont" style="width:25px;align:left;">
+																					       	<digi:trn key="aim:dayOfWeek${item.dayOfWeek}">${item.dayOfWeek}</digi:trn>
 																					   	</span>
+																					   	<br/>
 																					   	<a href="#" style="font-size:10px;color:White;font-family:Tahoma;" onclick="submitFilterForm('${calendarViewForm.view}', '${item.timestamp}');return(false);">
 																					  		${item.dayOfMonth}<c:if test="${item.dayOfMonth>3}"><digi:trn key="calendar:dayPrefix">th</digi:trn></c:if>
 																					   	</a>

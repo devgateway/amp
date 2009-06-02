@@ -58,11 +58,15 @@ public class QuartzJobManager extends Action {
 			}
 
 			Date startDate = fullDateFormat.parse(job.getStartDateTime()+" "+qmform.getStartH()+":"+qmform.getStartM()+":00");
-			Date endDate = fullDateFormat.parse(job.getEndDateTime()+" "+qmform.getEndH()+":"+qmform.getEndM()+":00");
+			Date endDate;
+			if (job.getEndDateTime() != null && job.getEndDateTime().trim().compareTo("") != 0)
+				endDate = fullDateFormat.parse(job.getEndDateTime()+" "+qmform.getEndH()+":"+qmform.getEndM()+":00");
+			else
+				endDate = null;
 
 			job.setTriggerType(qmform.getTriggerType());
 
-			if (startDate.after(endDate)) {
+			if (endDate != null && startDate.after(endDate)) {
 				qmform.setInvalidEndDate(true);
 				return mapping.findForward("addJob");
 			}

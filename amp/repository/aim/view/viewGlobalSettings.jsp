@@ -573,7 +573,7 @@ function setIndex(index){
 				                                    		%>
 															</select>
 															<%
-															if (!globalSett.getGlobalSettingsValue().equalsIgnoreCase("-1")){
+															if (!globalSett.getGlobalSettingsValue().equalsIgnoreCase("-1") && AuditCleaner.getInstance().getNextcleanup() != null){
 																String sdate = org.digijava.module.common.util.DateTimeUtil.formatDate(AuditCleaner.getInstance().getNextcleanup()); %>
 																<br>
 																<digi:trn key="aim:globalSettings:NextCleanUp">Next Audit Cleanup:</digi:trn>

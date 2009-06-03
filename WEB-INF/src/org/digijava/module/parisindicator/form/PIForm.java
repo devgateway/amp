@@ -6,6 +6,7 @@ import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpStatus;
@@ -28,7 +29,7 @@ public class PIForm extends ActionForm {
 	private AmpCurrency selectedCurrency;
 	private AmpFiscalCalendar selectedCalendar;
 	private Collection<AmpStatus> selectedStatuses;
-	private Collection<AmpOrganisation> selectedOrganisations;
+	private Collection<AmpOrgGroup> selectedDonorGroups;
 	private Collection<AmpSector> selectedSectors;
 	private Collection<AmpOrganisation> selectedDonors;
 
@@ -39,6 +40,7 @@ public class PIForm extends ActionForm {
 	private Collection<AmpStatus> statuses;
 	private Collection<AmpFiscalCalendar> calendars;
 	private Collection<AmpOrganisation> donors;
+	private Collection<AmpOrgGroup> donorGroups;
 	private Collection<AmpSector> sectors;
 	private Collection financingInstruments;
 
@@ -195,15 +197,6 @@ public class PIForm extends ActionForm {
 		this.selectedStatuses = selectedStatuses;
 	}
 
-	public Collection<AmpOrganisation> getSelectedOrganisations() {
-		return selectedOrganisations;
-	}
-
-	public void setSelectedOrganisations(
-			Collection<AmpOrganisation> selectedOrganisations) {
-		this.selectedOrganisations = selectedOrganisations;
-	}
-
 	public Collection<AmpSector> getSelectedSectors() {
 		return selectedSectors;
 	}
@@ -218,5 +211,22 @@ public class PIForm extends ActionForm {
 
 	public void setSelectedDonors(Collection<AmpOrganisation> selectedDonors) {
 		this.selectedDonors = selectedDonors;
+	}
+
+	public Collection<AmpOrgGroup> getSelectedDonorGroups() {
+		return selectedDonorGroups;
+	}
+
+	public void setSelectedDonorGroups(
+			Collection<AmpOrgGroup> selectedDonorGroups) {
+		this.selectedDonorGroups = selectedDonorGroups;
+	}
+
+	public Collection<AmpOrgGroup> getDonorGroups() {
+		return donorGroups;
+	}
+
+	public void setDonorGroups(Collection<AmpOrgGroup> donorGroups) {
+		this.donorGroups = donorGroups;
 	}
 }

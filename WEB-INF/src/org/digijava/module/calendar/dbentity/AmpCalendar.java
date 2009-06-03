@@ -2,13 +2,14 @@ package org.digijava.module.calendar.dbentity;
 
 import java.util.Set;
 
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 
 public class AmpCalendar {
     private AmpCalendarPK calendarPK;
     private AmpEventType eventType;
     private AmpTeamMember member;
-    private Set organisations;
+    private Set<AmpOrganisation> organisations;
     private Set attendees;
     private boolean privateEvent;
 

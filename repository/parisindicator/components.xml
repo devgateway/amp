@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config>
+	<secondary-pages>
+		<page name="parisindicator_base" title="AMP Paris Indicators" />
+		<page name="parisindicator_3" title="AMP Paris Indicator Report 3" />
+	</secondary-pages>
+</config>

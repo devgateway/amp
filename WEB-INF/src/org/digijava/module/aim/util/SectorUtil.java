@@ -697,7 +697,7 @@ public class SectorUtil {
 	}
 
 
-	public static ArrayList getAmpSectors() {
+	public static ArrayList<AmpSector> getAmpSectors() {
 		Session session = null;
 		Query q = null;
 		AmpSector ampSector = null;

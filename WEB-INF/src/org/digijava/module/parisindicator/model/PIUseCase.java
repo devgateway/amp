@@ -1,0 +1,155 @@
+package org.digijava.module.parisindicator.model;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+
+import org.apache.log4j.Logger;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpAhsurvey;
+import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.helper.AmpDonors;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.parisindicator.action.PIAction;
+import org.digijava.module.parisindicator.form.PIForm;
+import org.digijava.module.parisindicator.helper.PIAbstractReport;
+import org.digijava.module.parisindicator.helper.PIReport3;
+import org.digijava.module.parisindicator.util.PIConstants;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
+
+public class PIUseCase {
+
+	private static Logger logger = Logger.getLogger(PIUseCase.class);
+
+	/*
+	 * Receives the form and populates the collections used in the filters.
+	 * TODO: Replace the form variable for all collections to decouple the
+	 * Action from the UseCase, so this method can be used from elsewhere.
+	 */
+	public PIForm setupFiltersData(PIForm form) {
+		if (form.getStatuses() == null || form.getStatuses().isEmpty()) {
+			form.setStatuses(DbUtil.getAllActivityStatus());
+		}
+		if (form.getDonors() == null || form.getStatuses().isEmpty()) {
+			form.setDonors(DbUtil.getAllDonorOrgs());
+		}
+		if (form.getSectors() == null || form.getSectors().isEmpty()) {
+			form.setSectors(SectorUtil.getAmpSectors());
+		}
+
+		return form;
+	}
+
+	public void resetFilterSelections(PIForm form) {
+		form.setSelectedCalendar(null);
+		form.setSelectedCurrency(null);
+		form.setSelectedDonors(null);
+		form.setSelectedEndYear(0);
+		form.setSelectedOrganisations(null);
+		form.setSelectedSectors(null);
+		form.setSelectedStartYear(0);
+		form.setSelectedStatuses(null);
+	}
+
+	/*
+	 * Gets the collection of PI reports from the DB and filters any report if
+	 * necessary.
+	 */
+	public Collection<AmpAhsurveyIndicator> setupAvailablePIReports() {
+		Collection<AmpAhsurveyIndicator> list = new ArrayList<AmpAhsurveyIndicator>();
+		list = DbUtil.getAllAhSurveyIndicators();
+		Iterator<AmpAhsurveyIndicator> iter = list.iterator();
+		while (iter.hasNext()) {
+			AmpAhsurveyIndicator aux = iter.next();
+			if (checkReportName(aux.getIndicatorCode()) == null) {
+				iter.remove();
+			}
+		}
+		return list;
+	}
+
+	/*
+	 * Checks the report name with the available PI reports.
+	 */
+	public String checkReportName(String name) {
+		String ret = null;
+		if (name == null) {
+		} else if (name.equals(PIConstants.PARIS_INDICATOR_REPORT_3)
+				|| name.equals(PIConstants.PARIS_INDICATOR_REPORT_4)
+				|| name.equals(PIConstants.PARIS_INDICATOR_REPORT_5a)
+				|| name.equals(PIConstants.PARIS_INDICATOR_REPORT_5b)
+				|| name.equals(PIConstants.PARIS_INDICATOR_REPORT_6)
+				|| name.equals(PIConstants.PARIS_INDICATOR_REPORT_7)
+				|| name.equals(PIConstants.PARIS_INDICATOR_REPORT_9)
+				|| name.equals(PIConstants.PARIS_INDICATOR_REPORT_10a)) {
+			ret = name;
+		}
+		return ret;
+	}
+
+	/*
+	 * Returns an indicator object from the list of available reports given the
+	 * report code.
+	 */
+	public AmpAhsurveyIndicator getPIReport(String code) {
+		AmpAhsurveyIndicator ret = null;
+		Collection<AmpAhsurveyIndicator> list = this.setupAvailablePIReports();
+		Iterator<AmpAhsurveyIndicator> iter = list.iterator();
+		while (iter.hasNext()) {
+			AmpAhsurveyIndicator aux = iter.next();
+			if (aux.getIndicatorCode().equals(code)) {
+				ret = aux;
+			}
+		}
+		return ret;
+	}
+
+	/*
+	 * Executes part of the common logic for all reports and then creates the
+	 * concrete report.
+	 */
+	public PIAbstractReport createReport(PIForm form) {
+		// Create the report.
+		PIAbstractReport report = null;
+		if (form.getPiReport().getIndicatorCode().equals(
+				PIConstants.PARIS_INDICATOR_REPORT_3)) {
+			report = new PIReport3();
+		}
+
+		// Get the common info from surveys and apply some filters.
+		Collection commonData = getCommonSurveyData(
+				form.getSelectedStartYear(), form.getSelectedEndYear(), form
+						.getSelectedDonors(), form.getSelectedOrganisations());
+
+		report.generateReport();
+
+		return report;
+	}
+
+	/*
+	 * Returns a collection that basically has AmpAhSurvey objects plus
+	 * organizations info, donor groups info, activities, fundings and fundings
+	 * details, for further analisis on each report.
+	 */
+	public Collection getCommonSurveyData(int startYear, int endYear,
+			Collection<AmpOrganisation> donors,
+			Collection<AmpOrganisation> organizations) {
+
+		Collection commonData = null;
+		Session session = null;
+		try {
+			//aca lo que necesito es traer la lista de surveys ya filtrada o la lista expandida con sus fundings?
+			//porque los fundings los puedo obtener despues :(
+			session = PersistenceManager.getRequestDBSession();
+			Criteria criteria = session.createCriteria(AmpAhsurvey.class);
+			//criteria.createCriteria(arg0, arg1)
+		} catch (Exception e) {
+			logger.error(e);
+		}
+		return commonData;
+	}
+}

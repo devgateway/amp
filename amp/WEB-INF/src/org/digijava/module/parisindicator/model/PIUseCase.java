@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.AmpDonors;
 import org.digijava.module.aim.util.DbUtil;
@@ -34,13 +35,15 @@ public class PIUseCase {
 		if (form.getStatuses() == null || form.getStatuses().isEmpty()) {
 			form.setStatuses(DbUtil.getAllActivityStatus());
 		}
-		if (form.getDonors() == null || form.getStatuses().isEmpty()) {
+		if (form.getDonors() == null || form.getDonors().isEmpty()) {
 			form.setDonors(DbUtil.getAllDonorOrgs());
 		}
 		if (form.getSectors() == null || form.getSectors().isEmpty()) {
 			form.setSectors(SectorUtil.getAmpSectors());
 		}
-
+		if (form.getDonorGroups() == null || form.getDonorGroups().isEmpty()) {
+			form.setDonorGroups(DbUtil.getAllOrgGroups());
+		}
 		return form;
 	}
 
@@ -49,7 +52,7 @@ public class PIUseCase {
 		form.setSelectedCurrency(null);
 		form.setSelectedDonors(null);
 		form.setSelectedEndYear(0);
-		form.setSelectedOrganisations(null);
+		form.setSelectedDonorGroups(null);
 		form.setSelectedSectors(null);
 		form.setSelectedStartYear(0);
 		form.setSelectedStatuses(null);
@@ -123,7 +126,7 @@ public class PIUseCase {
 		// Get the common info from surveys and apply some filters.
 		Collection commonData = getCommonSurveyData(
 				form.getSelectedStartYear(), form.getSelectedEndYear(), form
-						.getSelectedDonors(), form.getSelectedOrganisations());
+						.getSelectedDonors(), form.getSelectedDonorGroups());
 
 		report.generateReport();
 
@@ -133,20 +136,35 @@ public class PIUseCase {
 	/*
 	 * Returns a collection that basically has AmpAhSurvey objects plus
 	 * organizations info, donor groups info, activities, fundings and fundings
-	 * details, for further analisis on each report.
+	 * details, for further analysis on each report.
 	 */
-	public Collection getCommonSurveyData(int startYear, int endYear,
-			Collection<AmpOrganisation> donors,
-			Collection<AmpOrganisation> organizations) {
+	public Collection<AmpAhsurvey> getCommonSurveyData(int startYear,
+			int endYear, Collection<AmpOrganisation> filterDonors,
+			Collection<AmpOrgGroup> filterDonorGroups) {
 
-		Collection commonData = null;
+		Collection<AmpAhsurvey> commonData = null;
 		Session session = null;
 		try {
-			//aca lo que necesito es traer la lista de surveys ya filtrada o la lista expandida con sus fundings?
-			//porque los fundings los puedo obtener despues :(
 			session = PersistenceManager.getRequestDBSession();
+			// Set the query to return AmpAhSurvey objects.
 			Criteria criteria = session.createCriteria(AmpAhsurvey.class);
-			//criteria.createCriteria(arg0, arg1)
+			criteria.createAlias("pointOfDeliveryDonor", "podd1");
+			criteria.createAlias("pointOfDeliveryDonor.orgTypeId", "podd2");
+			// Set the filter for Multilateral and Bilateral PoDDs.
+			criteria.add(Restrictions.in("podd2.orgTypeCode", new String[] {
+					"MUL", "BIL" }));
+			// If needed, filter for organizations.
+			if (filterDonors != null) {
+				criteria.add(Restrictions.in("pointOfDeliveryDonor",
+						filterDonors));
+			}
+			// If needed, filter for organizations groups.
+			if (filterDonorGroups != null) {
+				criteria.add(Restrictions.in("podd1.orgGrpId",
+						filterDonorGroups));
+			}
+			commonData = criteria.list();
+
 		} catch (Exception e) {
 			logger.error(e);
 		}

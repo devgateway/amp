@@ -39,7 +39,7 @@
 							<tr>
 								<td align=left vAlign=top><b><font color="#FF0000">
 									<digi:trn key="aim:noCommentPresent">No comments found for this activity.</digi:trn></font></b>
-								<td>
+								</td>
 							</tr>
 						</logic:empty>
 						<logic:notEmpty name="aimEditActivityForm" property="comments.commentsCol">
@@ -52,14 +52,14 @@
 									
 									
 											<tr>
-												<td bgcolor=#ECF3FD width="5%">
+												<td bgcolor="#ECF3FD" width="5%">
 													<b><c:out value="${sno}"/></b>
 												</td>
-												<td bgcolor=#ECF3FD width="65%"><b>
+												<td bgcolor="#ECF3FD" width="65%"><b>
 													<digi:trn key="aim:commentBy">Comment By</digi:trn>:</b>&nbsp;
 													<c:out value="${comment.memberId.user.firstNames}" />&nbsp;<c:out value="${comment.memberId.user.lastName}" />
 												</td>
-												<td bgcolor=#ECF3FD width="30%"><b>
+												<td bgcolor="#ECF3FD" width="30%"><b>
 													<fmt:formatDate type="both" value="${comment.commentDate}" dateStyle="short" timeStyle="short"/></b>
 												</td>
 											</tr>
@@ -77,7 +77,6 @@
 											<c:set value="${sno + 1}" var="sno"/>
 										
 									</logic:iterate>
-							</logic:notEmpty>
 										<tr>
 											<td colspan="3" width="100%" align="center" height="20">
 												<input type="button" value="Close"  class="dr-menu" onclick="window.close()">
@@ -86,6 +85,7 @@
 									</table>
 							</td>
 						</tr>
+							</logic:notEmpty>
 						
 					</table>				
 				</td>

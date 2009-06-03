@@ -62,15 +62,9 @@ public class FundingAdded extends Action {
 		}
 		//
 		int offset = -1;
-		Collection oldFundDetails = null;
 		if (found) {
 			if (eaForm.getFunding().isEditFunding()) {
 				offset = eaForm.getFunding().getOffset();
-				ArrayList fundList = new ArrayList(fundOrg.getFundings());
-				Funding fs = (Funding) fundList.get(offset);
-				oldFundDetails = fs.getFundingDetails();
-				fundList.set(offset, null);
-				fundOrg.setFundings(fundList);
 			}
 		}
 		//		

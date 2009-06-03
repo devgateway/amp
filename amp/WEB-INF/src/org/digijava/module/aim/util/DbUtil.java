@@ -82,6 +82,7 @@ import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.exception.AimException;
+import org.digijava.module.aim.helper.AmpDonors;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
 import org.digijava.module.aim.helper.Assistance;
 import org.digijava.module.aim.helper.Constants;
@@ -4305,7 +4306,7 @@ public class DbUtil {
         return col;
     }
 
-    public static Collection getAllActivityStatus() {
+    public static Collection<AmpStatus> getAllActivityStatus() {
         Session session = null;
         Collection col = new ArrayList();
 
@@ -4358,7 +4359,7 @@ public class DbUtil {
     				CategoryConstants.FINANCING_INSTRUMENT_KEY);
     }
 
-    public static Collection getAllDonorOrgs() {
+    public static Collection<AmpOrganisation> getAllDonorOrgs() {
         Session session = null;
         Collection col = new ArrayList();
 
@@ -5456,7 +5457,7 @@ public class DbUtil {
         }
     }
 
-    public static Collection getAllAhSurveyIndicators() {
+    public static Collection<AmpAhsurveyIndicator> getAllAhSurveyIndicators() {
         Collection responses = new ArrayList();
         Session session = null;
 

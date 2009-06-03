@@ -20,7 +20,7 @@
 									<tr><td bgColor=#f4f4f2>
 										&nbsp;
 									</td></tr>	
-									<tr><td>								
+																
 									<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrganisations">
 										<tr>
 											<td>
@@ -69,14 +69,18 @@
 										</logic:notEmpty>
 
 										<logic:empty name="aimEditActivityForm" property="agencies.respOrganisations">
-											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
-												<tr>
-													<td bgcolor="#ffffff">
-														<field:display name="Responsible Organization Add Button" feature="Responsible Organization">
-														<aim:addOrganizationButton form="${aimEditActivityForm.agencies}" collection="respOrganisations" refreshParentDocument="true" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
-														</field:display>
-													</td>
-												</tr>
-											</table>
+											<tr>
+												<td>
+													<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
+														<tr>
+															<td bgcolor="#ffffff">
+																<field:display name="Responsible Organization Add Button" feature="Responsible Organization">
+																<aim:addOrganizationButton form="${aimEditActivityForm.agencies}" collection="respOrganisations" refreshParentDocument="true" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
+																</field:display>
+															</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
 										</logic:empty>
-										</td></tr>
+										

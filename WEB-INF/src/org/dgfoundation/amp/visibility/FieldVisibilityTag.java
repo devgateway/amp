@@ -170,7 +170,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
    	   			    	!ampFieldFromTree.canDo(GatePermConst.Actions.EDIT.equals(actionMode)?
    	   			    			actionMode:GatePermConst.Actions.VIEW,scope))
    	   			    {
-   	   			    	System.out.println("		FM ::: field:"+this.getName()+" is disabled from permissions");
+   	   			    	//System.out.println("		FM ::: field:"+this.getName()+" is disabled from permissions");
    	   			    	return SKIP_BODY;
    	   			    }
    				}

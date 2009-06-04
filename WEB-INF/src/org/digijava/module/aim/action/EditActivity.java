@@ -590,18 +590,17 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
         /* END - Clearing session information about comments */
 
         // load the activity details
-        String actApprovalStatus = DbUtil.getActivityApprovalStatus(
-            activityId);
+        String actApprovalStatus = DbUtil.getActivityApprovalStatus(activityId);
        // HttpSession session = request.getSession();
         
         //eaForm.setApprovalStatus(actApprovalStatus);
         if (tm != null && tm.getTeamId()!=null && activity.getTeam() != null && activity.getTeam().getAmpTeamId() != null) {
-            if ("true".compareTo((String) session.getAttribute("teamLeadFlag"))==0 && tm.getTeamId().equals(activity.getTeam().getAmpTeamId())){ 
-              eaForm.getIdentification().setApprovalStatus(Constants.APPROVED_STATUS);
+            if ("true".compareTo((String) session.getAttribute("teamLeadFlag"))==0 && tm.getTeamId().equals(activity.getTeam().getAmpTeamId())){
               AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
 			  eaForm.getIdentification().setApprovedBy(teamMember);
 			  eaForm.getIdentification().setApprovalDate(new Date());
-			  eaForm.getIdentification().setApprovalStatus(Constants.APPROVED_STATUS);
+			  //eaForm.getIdentification().setApprovalStatus(Constants.APPROVED_STATUS);
+			  eaForm.getIdentification().setApprovalStatus(actApprovalStatus);
 			  }
 
             else{

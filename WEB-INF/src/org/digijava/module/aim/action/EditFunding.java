@@ -56,7 +56,17 @@ public class EditFunding extends Action {
 		formBean.getOldFunding().setFundingDetails(null);
 		formBean.getOldFunding().setFundingMTEFProjections(null);
 		formBean.setTotDisbIsBiggerThanTotCom(false);
-		//
+		
+		List<KeyValue> availableMTEFProjectionYears		= 
+			AddFunding.generateAvailableMTEFProjectionYears( formBean.getFunding().getFundingMTEFProjections() ); 
+		formBean.getFunding().setAvailableMTEFProjectionYears( availableMTEFProjectionYears );
+	
+		int defaultIndex				= availableMTEFProjectionYears.size() - 1 - AddMTEFProjection.ADDITIONAL_AVAILABLE_YEARS;
+		formBean.getFunding().setSelectedMTEFProjectionYear( Integer.parseInt( 
+				availableMTEFProjectionYears.get(defaultIndex).getKey() )
+		);
+		
+	
 		ArrayList<FundingOrganization> fundingOrganizations = new ArrayList<FundingOrganization>(formBean.getFunding().getFundingOrganizations());
 		if (fundingOrganizations != null) {
 			FundingOrganization fundingOrganization = null;
@@ -94,15 +104,6 @@ public class EditFunding extends Action {
 									formBean.getOldFunding().setFundingConditions(funding.getConditions());
 									formBean.getOldFunding().setFundingMTEFProjections( new ArrayList<MTEFProjection> (funding.getMtefProjections()) );
 									formBean.getOldFunding().setFundingDetails(new ArrayList<FundingDetail>());
-									
-									List<KeyValue> availableMTEFProjectionYears		= 
-										AddFunding.generateAvailableMTEFProjectionYears( formBean.getFunding().getFundingMTEFProjections() ); 
-									formBean.getFunding().setAvailableMTEFProjectionYears( availableMTEFProjectionYears );
-									
-									int defaultIndex				= availableMTEFProjectionYears.size() - 1 - AddMTEFProjection.ADDITIONAL_AVAILABLE_YEARS;
-									formBean.getFunding().setSelectedMTEFProjectionYear( Integer.parseInt( 
-											availableMTEFProjectionYears.get(defaultIndex).getKey() )
-									);
 								}
 
 								if (funding.getFundingDetails() != null) {

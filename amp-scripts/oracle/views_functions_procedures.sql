@@ -2385,3 +2385,65 @@ CREATE OR REPLACE FORCE VIEW  "V_UPDATED_DATE" ("AMP_ACTIVITY_ID", "DATE_UPDATED
   from amp_activity a
   order by a.amp_activity_id
 /
+CREATE OR REPLACE FORCE VIEW  "V_DONOR_FUNDING_CACHED" ("AMP_ACTIVITY_ID", "AMP_FUNDING_ID", "AMP_FUND_DETAIL_ID", "DONOR_NAME", "TRANSACTION_TYPE", "ADJUSTMENT_TYPE", "TRANSACTION_DATE", "TRANSACTION_AMOUNT", "CURRENCY_CODE", "TERMS_ASSIST_ID", "TERMS_ASSIST_NAME", "FIXED_EXCHANGE_RATE", "ORG_GRP_NAME", "DONOR_TYPE_NAME", "FINANCING_INSTRUMENT_NAME", "FINANCING_INSTRUMENT_ID", "ORG_ID", "ORG_GRP_ID", "ORG_TYPE_ID", "SECTORNAME", "AMP_SECTOR_ID", "SECTOR_PERCENTAGE", "SEC_SCHEME_NAME", "CLASSIFICATION_NAME", "CLASSIFICATION_ID", "AMP_SEC_SCHEME_ID", "SEC_ACT_ID", "CC_ID", "SECTOR_CODE") AS 
+  select f.amp_activity_id AS amp_activity_id,
+         f.amp_funding_id AS amp_funding_id,
+         fd.amp_fund_detail_id AS amp_fund_detail_id,
+         d.name AS donor_name,
+         fd.transaction_type AS transaction_type,
+         fd.adjustment_type AS adjustment_type,
+         fd.transaction_date AS transaction_date,
+         ((fd.transaction_amount * sa.sector_percentage) / 100) AS transaction_amount,
+         c.currency_code AS currency_code,
+         cval.id AS terms_assist_id,
+         cval.category_value AS terms_assist_name,
+         fd.fixed_exchange_rate AS fixed_exchange_rate,
+         b.org_grp_name AS org_grp_name,
+         ot.org_type AS donor_type_name,
+         cval2.category_value AS financing_instrument_name,
+         cval2.id AS financing_instrument_id,
+         d.amp_org_id AS org_id,
+         d.org_grp_id AS org_grp_id,
+         ot.amp_org_type_id AS org_type_id,
+         getSectorName(getParentSectorId(s.amp_sector_id)) AS sectorname,
+         getParentSectorId(s.amp_sector_id) AS amp_sector_id,
+         sa.sector_percentage AS sector_percentage,
+         ss.sec_scheme_name AS sec_scheme_name,
+         cc.name AS classification_name,
+         cc.classification_id AS classification_id,
+         ss.amp_sec_scheme_id AS amp_sec_scheme_id,
+         sa.classification_config_id AS sec_act_id,
+         cc.id AS cc_id,
+         s.sector_code AS sector_code
+  from  amp_funding f,
+        amp_funding_detail fd,
+        amp_category_value cval,
+        amp_currency c,
+        amp_organisation d,
+        amp_org_group b,
+        amp_org_type ot,
+        amp_category_value cval2,
+        amp_activity_sector sa,
+        amp_sector s, 
+        amp_sector_scheme ss,
+        amp_classification_config cc
+        
+  where 
+        cval2.id = f.financing_instr_category_value and
+        c.amp_currency_id = fd.amp_currency_id and
+        f.amp_funding_id = fd.amp_funding_id and
+        cval.id = f.type_of_assistance_category_va and
+        d.amp_org_id = f.amp_donor_org_id and
+        d.org_grp_id = b.amp_org_grp_id and
+        ot.amp_org_type_id = d.org_type_id and
+        f.amp_activity_id = sa.amp_activity_id and
+        sa.amp_sector_id = s.amp_sector_id and
+        cc.name = 'Primary' and
+        sa.classification_config_id = cc.id and
+        cc.classification_id = ss.amp_sec_scheme_id
+  order by 
+        f.amp_activity_id,
+        getSectorName (getParentSectorId(s.amp_sector_id)),
+        fd.transaction_type,
+        f.amp_funding_id
+/

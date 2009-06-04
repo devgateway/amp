@@ -2,6 +2,7 @@ es:
   layout:
     standard_title: ODAnic - Sistema de la asistencia oficial de desarrollo a Nicaragua
     custom_title: ODAnic - {{page_title}}
+    short_title: Sistema de la asistencia oficial <br/>de desarrollo a Nicaragua
     
   navigation:
     logout: Salir

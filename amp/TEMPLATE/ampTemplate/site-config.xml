@@ -109,7 +109,7 @@
 		</layout>
 		
 		<layout name="headerMiddleLayout" file="headerMiddle.jsp">
-	    	<put name="version">2.0</put>
+	    	<put name="version">1.14</put>
 			<put name="build_version">ALPHA</put>
 	    	<put-item name="transmode" module="translation" instance="default" teaser="modeSwitchMenu"/>
 			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitchMenu"/>
@@ -119,7 +119,7 @@
 		</layout>
 		
 		<layout name="footerLayout" file="footerLayout.jsp">
-			<put name="version">2.0</put>
+			<put name="version">1.14</put>
 			<put name="build_version">ALPHA</put>
 		    <put-item name="transmode" module="translation" instance="default" teaser="modeSwitch"/>
 			<put-item name="ampAdminLink" file="ampAdminLink.jsp"/>

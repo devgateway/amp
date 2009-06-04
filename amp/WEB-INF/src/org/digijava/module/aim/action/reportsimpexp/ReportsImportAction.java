@@ -44,7 +44,7 @@ public class ReportsImportAction extends MultiAction {
 			Set<KeyValue> allTeams			= new TreeSet<KeyValue>( KeyValue.valueComparator );
 			if ( teams != null ) {
 				for (AmpTeam team : teams) {
-					AmpTeamMember tLead	= team.getTeamLead();
+					AmpTeamMember tLead	= TeamMemberUtil.getTeamHead(team.getAmpTeamId());
 					if ( tLead  != null ) {
 						allTeams.add( new KeyValue(tLead.getAmpTeamMemId()+"", "   " +  team.getName()) );
 					}

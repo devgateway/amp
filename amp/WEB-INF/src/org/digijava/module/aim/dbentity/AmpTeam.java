@@ -21,8 +21,6 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable {
 
 	private String description;
 
-	private AmpTeamMember teamLead; // Denotes the Team Leader
-
 	//private String type; 			// Whether Bilateral or Multilateral
 	
 	private AmpCategoryValue type;  // Replaces the old "type" attribute (Bilateral, Multilateral)
@@ -72,13 +70,6 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable {
 	}
 
 	/**
-	 * @return teamLeadId
-	 */
-	public AmpTeamMember getTeamLead() {
-		return teamLead;
-	}
-
-	/**
 	 * @param ampTeamId
 	 */
 	public void setAmpTeamId(Long ampTeamId) {
@@ -97,13 +88,6 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable {
 	 */
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	/**
-	 * @param teamLeadId
-	 */
-	public void setTeamLead(AmpTeamMember teamLead) {
-		this.teamLead = teamLead;
 	}
 
 //	public String getType() {

@@ -141,7 +141,8 @@ public class UpdateTeamActivities extends Action {
 //						AmpTeamMemberRoles headRole = TeamMemberUtil.getAmpTeamHeadRole();
 						//AMP-3937 - the activities assigned to an user, if that user is team lead then the 
 						//activities are approved!
-						if(ampTeam.getTeamLead().getAmpTeamMemId().equals(atm.getAmpTeamMemId())){
+						
+						if(TeamMemberUtil.getTeamHead(atm.getAmpTeam().getAmpTeamId()).getAmpTeamMemId().equals(atm.getAmpTeamMemId())){
 						//if (headRole!=null && ampRole.getAmpTeamMemRoleId().equals(headRole.getAmpTeamMemRoleId())) {
 							activity.setApprovalStatus(Constants.APPROVED_STATUS);
 						}
@@ -334,7 +335,11 @@ public class UpdateTeamActivities extends Action {
 			taForm.setSelActDocuments(null);
 			taForm.setUuid(null);
 			taForm.setMembers(TeamMemberUtil.getAllTeamMembers(id));
-			if(ampTeam.getTeamLead()!=null) taForm.setMemberId(ampTeam.getTeamLead().getAmpTeamMemId()); else taForm.setMemberId(null);
+			
+			if(TeamMemberUtil.getTeamHead(ampTeam.getAmpTeamId())!=null) 
+				taForm.setMemberId(TeamMemberUtil.getTeamHead(ampTeam.getAmpTeamId()).getAmpTeamMemId()); 
+			else 
+				taForm.setMemberId(null);
 			session.setAttribute("pageno", new Integer(page));
 			return mapping.findForward("showAddActivityDoc");
 		} else {
@@ -433,7 +438,10 @@ public class UpdateTeamActivities extends Action {
 			taForm.setCurrentPage(new Integer(page));
 			taForm.setSelActivities(null);
 			taForm.setMembers(TeamMemberUtil.getAllTeamMembers(id));
-			if(ampTeam.getTeamLead()!=null) taForm.setMemberId(ampTeam.getTeamLead().getAmpTeamMemId()); else taForm.setMemberId(null);
+			if(TeamMemberUtil.getTeamHead(ampTeam.getAmpTeamId())!=null) 
+				taForm.setMemberId(TeamMemberUtil.getTeamHead(ampTeam.getAmpTeamId()).getAmpTeamMemId()); 
+			else 
+				taForm.setMemberId(null);
 			session.setAttribute("pageno", new Integer(page));
 			return mapping.findForward("showAddActivity");
 			//return mapping.findForward("forward");

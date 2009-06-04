@@ -893,11 +893,11 @@ public class TeamUtil {
             session.saveOrUpdate(member);
             session.saveOrUpdate(appSettings);
             
-            if(member.getAmpMemberRole().getTeamHead()) {
-                AmpTeam team = (AmpTeam) session.load(AmpTeam.class, (Serializable) member.getAmpTeam().getIdentifier());
-                team.setTeamLead(member);
-                session.saveOrUpdate(team);
-            }
+//            if(member.getAmpMemberRole().getTeamHead()) {
+//                AmpTeam team = (AmpTeam) session.load(AmpTeam.class, (Serializable) member.getAmpTeam().getIdentifier());
+//                team.setTeamLead(member);
+//                session.saveOrUpdate(team);
+//            }
             User user = (User) session.load(User.class, member.getUser().getId());
             String qryStr = "select grp from " + Group.class.getName()
                 + " grp " + "where (grp.key=:key) and (grp.site=:sid)";
@@ -1239,7 +1239,7 @@ public class TeamUtil {
             session = PersistenceManager.getSession();
 
             AmpTeam team = (AmpTeam) session.load(AmpTeam.class, teamId);
-            if(team.getTeamCategory().equalsIgnoreCase("MOFED")) {
+            if(team.getTeamCategory() != null && team.getTeamCategory().equalsIgnoreCase("MOFED")) {
                 String qryStr = "select t from " + AmpTeam.class.getName()
                     + " t " + "where (t.relatedTeamId=:tId)";
                 Query qry = session.createQuery(qryStr);
@@ -1249,10 +1249,10 @@ public class TeamUtil {
                     AmpTeam ampTeam = (AmpTeam) itr.next();
                     DonorTeam dt = new DonorTeam();
                     dt.setTeamId(ampTeam.getAmpTeamId());
-                    if(ampTeam.getTeamLead() != null) {
-                        dt.setTeamMeberId(ampTeam.getTeamLead()
+                    if(TeamMemberUtil.getTeamHead(ampTeam.getAmpTeamId()) != null) {
+                        dt.setTeamMeberId(TeamMemberUtil.getTeamHead(ampTeam.getAmpTeamId())
                                           .getAmpTeamMemId());
-                        dt.setTeamMemberName(ampTeam.getTeamLead().getUser()
+                        dt.setTeamMemberName(TeamMemberUtil.getTeamHead(ampTeam.getAmpTeamId()).getUser()
                                              .getEmail());
                     }
                     dt.setTeamName(ampTeam.getName());

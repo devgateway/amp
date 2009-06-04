@@ -11,7 +11,7 @@
 
 
 <table border="1" id="pIndicator">
-  
+
     <tr>
         <td colspan="2" rowspan="2" class="tableHeaderCls">
         <digi:trn> PARIS DECLARATION INDICATORS - DONORS</digi:trn></td>
@@ -28,7 +28,7 @@
         <td class="tableHeaderCls">2010 <digi:trn>Target</digi:trn></td>
         <td class="tableHeaderCls">2005 <digi:trn>Baseline</digi:trn></td>
         <td class="tableHeaderCls">${orgProfilePIForm.fiscalYear-1} Value</td>
-        
+
     </tr>
     <c:forEach var="indicator" items="${orgProfilePIForm.indicators}">
                <c:set var="percent">
@@ -47,14 +47,11 @@
 
         </tr>
     </c:forEach>
-    
-    
+
+
 </table>
 
 <script language="javascript">
 setStripsTable("pIndicator", "tableEven", "tableOdd");
 setHoveredTable("pIndicator");
 </script>
-
- 
-

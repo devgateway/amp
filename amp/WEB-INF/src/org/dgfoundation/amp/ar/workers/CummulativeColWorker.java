@@ -92,8 +92,8 @@ public class CummulativeColWorker extends ColumnWorker {
 		
 		String trStr="";
 		if(!c.isCummulativeShow() && columnName.equalsIgnoreCase("Cumulative Disbursement")) return null;
-		if(columnName.equalsIgnoreCase("Cumulative Commitment")) trStr=ArConstants.COMMITMENT;
-		if(columnName.equalsIgnoreCase("Cumulative Disbursement")) trStr=ArConstants.DISBURSEMENT;
+		if(columnName.equalsIgnoreCase(ArConstants.COLUMN_CUMULATIVE_COMMITMENT)) trStr=ArConstants.COMMITMENT;
+		if(columnName.equalsIgnoreCase(ArConstants.COLUMN_CUMULATIVE_DISBURSEMENT)) trStr=ArConstants.DISBURSEMENT;
 		
 		try{
 			if (MetaInfo.getMetaInfo(c.getMetaData(),ArConstants.TRANSACTION_TYPE) != null) {

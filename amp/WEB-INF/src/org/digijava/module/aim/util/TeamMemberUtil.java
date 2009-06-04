@@ -25,6 +25,7 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -158,6 +159,7 @@ public class TeamMemberUtil {
 					+ "where (t.ampTeamMemId=:id)";
 			Query qry = session.createQuery(queryString);
 			qry.setParameter("id", id, Hibernate.LONG);
+			qry.setCacheable(true);
 			Iterator itr = qry.list().iterator();
 			while (itr.hasNext()) {
 				ampMember = (AmpTeamMember) itr.next();
@@ -881,7 +883,7 @@ public class TeamMemberUtil {
 
 		Session session = null;
 		Query qry = null;
-		Collection col = new ArrayList();
+		List col = new ArrayList<AmpTeamMember>();
 
 		try {
 			session = PersistenceManager.getSession();
@@ -902,8 +904,19 @@ public class TeamMemberUtil {
 				logger.error("releaseSession() failed");
 			}
 		}
+		Collections.sort(col, alphabeticalTeamComp);
 		return col;
 	}
+	
+	public static Comparator<AmpTeamMember> alphabeticalTeamComp		=
+		new Comparator<AmpTeamMember>() {
+			public int compare(AmpTeamMember o1,
+					AmpTeamMember o2) {
+				return o1.getAmpTeam().getName().compareTo(o2.getAmpTeam().getName());
+			}
+		};  
+
+	
 	public static Collection getTMTeamMembers(String email) {
 		 User user = org.digijava.module.aim.util.DbUtil.getUser(email);
 		 if (user == null) return null;

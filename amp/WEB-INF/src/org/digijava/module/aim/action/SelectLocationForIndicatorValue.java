@@ -13,15 +13,17 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpLocation;
-import org.digijava.module.aim.dbentity.AmpRegion;
-import org.digijava.module.aim.dbentity.AmpWoreda;
-import org.digijava.module.aim.dbentity.AmpZone;
 import org.digijava.module.aim.form.ThemeForm;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
-	
+
+/**
+ *
+ *Todo refactoring whole code using Dynamic location manager
+ * but not today. This is a quick bug fix version.
+ */
 	public class SelectLocationForIndicatorValue   extends Action {
 		
 	    public ActionForward execute(ActionMapping mapping, ActionForm form,
@@ -56,7 +58,7 @@ import org.digijava.module.aim.util.LocationUtil;
 	          else {
 	            if (themeForm.getFill().equals("zone")) {
 	              if (themeForm.getImpRegion() != null) {
-	            	  AmpCategoryValueLocations selectedRegion=DynLocationManagerUtil.getLocation(themeForm.getImpRegion(), true);
+                      AmpCategoryValueLocations selectedRegion=DynLocationManagerUtil.getLocation(themeForm.getImpRegion(), true);
 	            	  themeForm.setZones(selectedRegion.getChildLocations());
 	            	  themeForm.setRegions(DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry());
 	            	  themeForm.setImpZone(null);
@@ -67,12 +69,12 @@ import org.digijava.module.aim.util.LocationUtil;
 	            }
 	            else if (themeForm.getFill().equals("woreda")) {
 	              if (themeForm.getImpZone() != null) {
-	            	  AmpCategoryValueLocations selectedRegion=DynLocationManagerUtil.getLocation(themeForm.getImpRegion(), true);
-	                  AmpCategoryValueLocations selectedZone=DynLocationManagerUtil.getLocation(themeForm.getImpZone(), true);
-		              themeForm.setWoredas(selectedZone.getChildLocations());
-		              themeForm.setZones(selectedRegion.getChildLocations());
-		           	  themeForm.setRegions(DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry());
-		           	  themeForm.setImpWoreda(null);
+                      AmpCategoryValueLocations selectedRegion=DynLocationManagerUtil.getLocation(themeForm.getImpRegion(), true);
+                     AmpCategoryValueLocations selectedZone=DynLocationManagerUtil.getLocation(themeForm.getImpZone(), true);
+	            	  themeForm.setWoredas(selectedZone.getChildLocations());
+	            	  themeForm.setZones(selectedRegion.getChildLocations());
+	            	  themeForm.setRegions(DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry());
+	            	  themeForm.setImpWoreda(null);
 	              }
 	            }
 	          }
@@ -87,13 +89,13 @@ import org.digijava.module.aim.util.LocationUtil;
 	        	
 	        	AmpPrgIndicatorValue indValue = (AmpPrgIndicatorValue) themeForm.getPrgIndValues().get(themeForm.getParentIndex().intValue());
 	        	
-	        	Long id=null;
+                Long id=null;
 //	        	if(indValue.getLocation()!=null){
 //	        		location=indValue.getLocation();
 //	        	}else {
 //	        		location=new AmpLocation();
 //	        	}
-	        	//National
+	            //National
 		   		if(themeForm.getLocationLevelIndex().intValue()==2){
                     //Regional
 		   			id=themeForm.getImpRegion();

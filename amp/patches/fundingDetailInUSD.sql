@@ -7,7 +7,7 @@ declare code char(3);
 declare dateFD datetime;  
 declare amount double;  
 
-select transaction_amount/fixed_exchange_rate into r from amp_funding_detail where amp_fund_detail_id =fdId and fixed_exchange_rate is not NULL;
+select transaction_amount/fixed_exchange_rate into r from amp_funding_detail where amp_fund_detail_id =fdId;
 if r is not null then return r;
 end if; 
 

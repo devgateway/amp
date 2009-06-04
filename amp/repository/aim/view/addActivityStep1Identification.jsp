@@ -54,6 +54,35 @@
 </style>
 
 <script language="JavaScript">
+
+
+function toggleElement ( elementId, show ) {
+	var displayValue;
+	if ( show )
+		displayValue	= '';
+	else
+		displayValue	= 'none';
+
+ 	var el			= document.getElementById( elementId );
+ 	if ( el != null )
+ 		el.style.display=displayValue;
+}
+
+function toggleBudgetFields( show ) {
+
+	toggleElement("FY", show);
+	toggleElement("Vote", show);
+	toggleElement("Sub-Vote", show);
+	toggleElement("Sub-Program", show);
+	toggleElement("ProjectCode", show);
+	toggleElement("financial", show);
+	toggleElement("FY1", show);
+	toggleElement("Vote1", show);
+	toggleElement("Sub-Vote1", show);
+	toggleElement("Sub-Program1", show);
+	toggleElement("ProjectCode1", show);
+}
+
 document.getElementsByTagName('body')[0].className='yui-skin-sam';
 	function budgetCheckboxClick()
 	{
@@ -61,69 +90,37 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 		if (document.getElementById("budget") != null) {
 			if((document.getElementById("budget").checked==false))
 			{
-				try {
-				 	document.getElementById("hbudget").value="false";
-				 	document.getElementById("FY").style.display='none';
-				 	document.getElementById("Vote").style.display='none';
-				 	document.getElementById("Sub-Vote").style.display='none';
-				 	document.getElementById("Sub-Program").style.display='none';
-				 	document.getElementById("ProjectCode").style.display='none';
-				 	document.getElementById("financial").style.display='none';
-				}
-				catch(e)
-				{
-					//This silent try/catch was added because some of the fields can be deactivated from FM
-				}
+					var hbudgetEl	= 	document.getElementById("hbudget");
+					if ( hbudgetEl != null )
+							hbudgetEl.value="false";
+					
+				 	toggleBudgetFields( false );
 			 }
 			else if(document.getElementById("budget").checked==true)
 			{
-				try {
-				 	document.getElementById("hbudget").value="true";
-				 	document.getElementById("FY").style.display='';
-				 	document.getElementById("Vote").style.display='';
-				 	document.getElementById("Sub-Vote").style.display='';
-				 	document.getElementById("Sub-Program").style.display='';
-				 	document.getElementById("ProjectCode").style.display='';
-				 	document.getElementById("financial").style.display='';
-				}
-				catch(e)
-				{
-					//This silent try/catch was added because some of the fields can be deactivated from FM
-				}
+				var hbudgetEl	= 	document.getElementById("hbudget");
+				if ( hbudgetEl != null )
+						hbudgetEl.value="true";
+
+				 toggleBudgetFields ( true );
 			}
 		}
 	}
 
 function InitBud(){
 	if(document.getElementById("hbudget").value=="true"){
-	 	try {
-	 		document.getElementById("budget").checked=true;
-		 	document.getElementById("FY").style.display='';
-		 	document.getElementById("Vote").style.display='';
-		 	document.getElementById("Sub-Vote").style.display='';
-		 	document.getElementById("Sub-Program").style.display='';
-		 	document.getElementById("ProjectCode").style.display='';
-		 	document.getElementById("financial").style.display='';
-		}
-		catch(e)
-		{
-			//This silent try/catch was added because some of the fields can be deactivated from FM
-		}
+		var budgetEl		= 	document.getElementById("budget");
+		if ( budgetEl != null )
+				budgetEl.checked=true;
+
+		 toggleBudgetFields ( true );
 	}
 	else{
-	 	try {
-	 		document.getElementById("budget").checked=false;
-		 	document.getElementById("FY").style.display='none';
-		 	document.getElementById("Vote").style.display='none';
-		 	document.getElementById("Sub-Vote").style.display='none';
-		 	document.getElementById("Sub-Program").style.display='none';
-		 	document.getElementById("ProjectCode").style.display='none';
-		 	document.getElementById("financial").style.display='none';
-		}
-		catch(e)
-		{
-			//This silent try/catch was added because some of the fields can be deactivated from FM
-		}
+		var budgetEl		= 	document.getElementById("budget");
+		if ( budgetEl != null )
+				budgetEl.checked=false;
+
+		 toggleBudgetFields ( false );
 	}
 }
 
@@ -524,13 +521,13 @@ target.style.cursor = "default"
 
 													<a title="<digi:trn key="aim:DescriptionofProject">Summary information describing the project</digi:trn>">
 														<digi:trn key="aim:actBudget">Activity Budget</digi:trn>
+													</a>
 												</td>
 											<td>
 											<table cellpadding="1" cellspacing="3">
 
-												<td valign="top" align="left">	
 											 <tr>
-													</a>
+												<td valign="top" align="left" colspan="5">	
 													<html:checkbox styleId="budget" property="identification.budget"  onclick="budgetCheckboxClick();">
 													<digi:trn key="aim:actBudgeton">Activity is On Budget</digi:trn>
 													</html:checkbox>
@@ -540,72 +537,87 @@ target.style.cursor = "default"
 											 <tr>
 											
 											<field:display name="FY" feature="Budget">
-											<td valign="top" align="left" id="FY" align="right" style="display:none">
+											<td valign="top" id="FY" align="center" width="20%" >
 												<a title="<digi:trn key="aim:FY">FY</digi:trn>">
 												<digi:trn key="aim:actFY">
 												FY
 												</digi:trn>
 												</a>
-														<br/>
-														<html:text property="identification.FY" size="12"/>
 											</td>
-										<td></td>	
-										</field:display>
+											</field:display>
 											
-										<field:display name="Vote" feature="Budget">
-											<td valign="top" align="left" id="Vote" align="right">
+										<field:display name="Vote" feature="Budget" >
+											<td valign="top"  id="Vote" align="center"  width="20%">
 												<a title="<digi:trn key="aim:Vote">Vote</digi:trn>">
 												<digi:trn key="aim:actVote">
 												Vote
 												</digi:trn>
 												</a>
-											<br/>
-													<html:text property="identification.vote" size="12"/>
-										</td>	
-										<td></td>
+											</td>	
 											</field:display>
 											
 											<field:display name="Sub-Vote" feature="Budget">
-											<td valign="top" align="left" id="Sub-Vote" align="right">
+											<td valign="top" id="Sub-Vote" align="center" width="20%">
 												<a title="<digi:trn key="aim:Sub-Vote">Sub-Vote</digi:trn>">
 												<digi:trn key="aim:actSub-Vote">
 												Sub-Vote
 												</digi:trn>
 												</a>
-											<br/>
-										<html:text property="identification.subVote" size="12"/>
-										</td>
-										<td></td>
+											</td>
 											</field:display>
 											
 	
 											
-								<field:display name="Sub-Program" feature="Budget">
-										<td valign="top" align="left" id="Sub-Program" align="right">
+									<field:display name="Sub-Program" feature="Budget">
+										<td valign="top" id="Sub-Program" align="center" width="20%">
 											<a title="<digi:trn key="aim:Sub_Program">Sub-Program</digi:trn>">
 											<digi:trn key="aim:actSubProgram">
 												Sub-Program
 												</digi:trn>
 												</a>
-											<br/>
-											<html:text property="identification.subProgram" size="12"/>
-								
-									</td>
-								</field:display>
+										</td>
+									</field:display>
 											
 								<field:display name="Project Code" feature="Budget">
-										<td valign="top" align="left" id="ProjectCode" align="right">
+										<td valign="top" id="ProjectCode" align="center" width="20%">
 											<a title="<digi:trn key="aim:ProjectCode">Project Code</digi:trn>">
 											<digi:trn key="aim:actProjectCode">
 												Project Code
 												</digi:trn>
 												</a>
-										<br/><html:text property="identification.projectCode" size="12"/>
-								
 									</td>
 								</field:display>	
 									
 									</tr>
+										<tr>
+											<field:display name="FY" feature="Budget">
+												<td valign="top"  id="FY1" align="center"  width="20%">
+														<html:text property="identification.FY" size="12"/>
+												</td>
+											</field:display>
+											
+											<field:display name="Vote" feature="Budget">
+												<td valign="top"  id="Vote1" align="center" width="20%">
+													<html:text property="identification.vote" size="12"/>
+												</td>	
+											</field:display>
+											<field:display name="Sub-Vote" feature="Budget">
+											<td valign="top"  id="Sub-Vote1" align="center" width="20%">
+												<html:text property="identification.subVote" size="12"/>
+											</td>
+											</field:display>
+											<field:display name="Sub-Program" feature="Budget">
+												<td valign="top" id="Sub-Program1" align="center" width="20%">
+													<html:text property="identification.subProgram" size="12"/>
+												</td>
+											</field:display>
+											<field:display name="Project Code" feature="Budget">
+												<td valign="top" id="ProjectCode1" align="center" width="20%">
+													<html:text property="identification.projectCode" size="12"/>
+												</td>
+											</field:display>	
+									
+										</tr>
 								</table>
 								</td></tr>	
 								</field:display>

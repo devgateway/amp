@@ -343,8 +343,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Beneficiary Agency Groups" feature="Beneficiary Agency"></field:display> 
 <field:display name="Beneficiary Agency Remove Button" feature="Beneficiary Agency"></field:display> 
 <field:display name="Beneficiary Agency" feature="Beneficiary Agency"></field:display> 
-<field:display name="Cancel Button" feature="Admin - Component Type"></field:display> 
-<field:display name="Cancel Button" feature="Admin - Component"></field:display> 
 <field:display name="Cancel button" feature="Create Message Form"></field:display> 
 <field:display name="Channel Overview Tab" feature="Channel Overview"></field:display> 
 <field:display name="Classification Expenditure" feature="Funding Information"></field:display> 
@@ -546,7 +544,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Indicator Target Value" feature="Activity"></field:display> 
 <field:display name="Indicator Type" feature="Admin"></field:display> 
 <field:display name="Indicator code" feature="Admin"></field:display> 
-<field:display name="Indicator name" feature="Admin"></field:display> 
+<field:display name="Admin Indicator name" feature="Admin"></field:display> 
 <field:display name="Internal Financing" feature="Admin NPD"></field:display> 
 <field:display name="Issue Date" feature="Issues"></field:display> 
 <field:display name="Issues" feature="Issues"></field:display> 
@@ -687,8 +685,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Risk" feature="Activity"></field:display> 
 <field:display name="Same as Proposed Approval Date" feature="Planning"></field:display> 
 <field:display name="Same as Proposed Start Date" feature="Planning"></field:display> 
-<field:display name="Save Button" feature="Admin - Component Type"></field:display> 
-<field:display name="Save Button" feature="Admin - Component"></field:display> 
 <field:display name="Save button" feature="Create Message Form"></field:display> 
 <field:display name="Secondary Program" feature="NPD Programs"></field:display> 
 <field:display name="Secondary Sector Sub-Sector" feature="Sectors"></field:display> 
@@ -737,7 +733,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Target Value" feature="Activity"></field:display> 
 <field:display name="Template Manager" feature="Message Manager"></field:display> 
 <field:display name="Title Text Box" feature="Create Message Form"></field:display> 
-<field:display name="Title" feature="Admin - Component"></field:display> 
 <field:display name="Total Amount Commitments" feature="Regional Funding"></field:display> 
 <field:display name="Total Amount Disbursements" feature="Regional Funding"></field:display> 
 <field:display name="Total Amount Expenditures" feature="Regional Funding"></field:display> 

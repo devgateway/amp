@@ -16,7 +16,6 @@ function selectLocation(){
   document.getElementById("indAction").value="add";
   document.aimThemeForm.target=window.opener.name;
   document.aimThemeForm.submit();
-  window.opener.document.aimThemeForm.submit();
   window.close();
 }
 
@@ -77,7 +76,8 @@ function countryChanged() {
 												<html:option value="-1"><digi:trn key="aim:selectFromBelow">Select From Below</digi:trn></html:option>
 												<html:option value="1"><digi:trn key="aim:national">National</digi:trn></html:option>
 												<html:option value="2"><digi:trn key="aim:regional">Regional</digi:trn></html:option>
-												<html:option value="3"><digi:trn key="aim:district">District</digi:trn></html:option>
+                                                <html:option value="3"><digi:trn key="aim:district">Zone</digi:trn></html:option>
+												<html:option value="4"><digi:trn key="aim:district">District</digi:trn></html:option>
 											</html:select>
 										</td>
 									</tr>
@@ -94,7 +94,7 @@ function countryChanged() {
 												<html:select name="aimThemeForm" property="impRegion" onchange="regionChanged()">
 													<html:option value="-1">Select Region</html:option>
 													<logic:notEmpty name="aimThemeForm" property="regions">
-														<html:optionsCollection name="aimThemeForm" property="regions" value="ampRegionId" label="name" />
+														<html:optionsCollection name="aimThemeForm" property="regions" value="id" label="name" />
 													</logic:notEmpty>
 												</html:select>
 											</td>
@@ -107,7 +107,7 @@ function countryChanged() {
 											<html:select property="impZone" onchange="zoneChanged()" styleClass="inp-text" >
 												<html:option value="-1">Select Zone</html:option>
 												<logic:notEmpty name="aimThemeForm" property="zones">
-													<html:optionsCollection name="aimThemeForm" property="zones"value="ampZoneId" label="name" />
+													<html:optionsCollection name="aimThemeForm" property="zones"value="id" label="name" />
 												</logic:notEmpty>
 											</html:select>
 										</td>
@@ -119,7 +119,7 @@ function countryChanged() {
 											<html:select property="impWoreda"  styleClass="inp-text" >
 												<html:option value="-1">Select Woreda</html:option>
 												<logic:notEmpty name="aimThemeForm" property="woredas">
-													<html:optionsCollection name="aimThemeForm" property="woredas"value="ampWoredaId" label="name" />
+													<html:optionsCollection name="aimThemeForm" property="woredas"value="id" label="name" />
 												</logic:notEmpty>
 											</html:select>
 										</td>

@@ -70,7 +70,7 @@ function removeActivity(id) {
        
       <td>
         <table border="0">
-        <field:display name="Indicator name" feature="Admin">
+        <field:display name="Admin Indicator name" feature="Admin"></field:display>
           <tr id="trName">
             <td>
             <digi:trn key="aim:indicatorname">Indicator name:</digi:trn>
@@ -80,7 +80,7 @@ function removeActivity(id) {
               <html:text property="name" styleId="txtName" style="font-family:verdana;font-size:11px;width:200px;" maxlength="256"/>
             </td>
           </tr>
-          </field:display>
+          
           <field:display name="Admin Description" feature="Admin">
           <tr id="trDescription">
             <td valign="top">
@@ -93,7 +93,7 @@ function removeActivity(id) {
             </td>
           </tr>
           </field:display>
-          <field:display name="Indicator code" feature="Admin">
+          <field:display name="Indicator code" feature="Admin"></field:display>
           <tr>
             <td>
             	<digi:trn key="admin:indicatorcode">
@@ -105,7 +105,7 @@ function removeActivity(id) {
                <html:text property="code" styleId="txtCode" style="font-family:verdana;font-size:11px;width:100px;"/>
             </td>
           </tr>
-          </field:display>
+          
           <field:display name="Indicator Type" feature="Admin">
           <tr>
           	<td><digi:trn key="admin:indicatorType">Indicator Type</digi:trn>: <span style="color:Red;">*</span></td>
@@ -120,18 +120,18 @@ function removeActivity(id) {
           </tr>
           <tr id="trCategory">
           </tr>
-          <field:display name="Sectors" feature="Admin">
+          <field:display name="Sectors" feature="Admin"></field:display> 
           <tr>
           <td>
           <digi:trn key="admin:sectors">
           	Sectors
           </digi:trn>
-          <span style="color:Red;">*</td>
+          <span style="color:Red;">*</span></td>
             <td >
               <jsp:include page="addIndicatorSector.jsp"/>
              </td>
           </tr> 
-          </field:display>  
+           
            <tr id="trSector">
            </tr>
           <field:display name="Creation date" feature="Admin">

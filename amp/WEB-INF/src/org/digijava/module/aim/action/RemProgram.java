@@ -28,6 +28,8 @@ public class RemProgram extends Action
     {
         EditActivityForm eaform=(EditActivityForm)form;
         int settingsId = eaform.getPrograms().getProgramType();
+        if (settingsId == 0)
+        	settingsId = Integer.parseInt(request.getParameter("programType"));
          List prgLst=new ArrayList(); 
          Long prgIds[]=null;
          switch (settingsId) {
@@ -58,7 +60,7 @@ public class RemProgram extends Action
       Iterator itr = prgLst.listIterator();
       AmpActivityProgram ampActivityProgram = null;
       Set newPrograms = new HashSet();
-      while (itr.hasNext()) {
+      while (itr!=null && itr.hasNext()) {
         ampActivityProgram = (AmpActivityProgram) itr.next();
         for (int i = 0; i < prgIds.length; i++) {
           if (ampActivityProgram.getProgram().getAmpThemeId().equals(prgIds[i])) {

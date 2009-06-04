@@ -24,12 +24,11 @@ public class RemoveIssue extends Action {
 	throws Exception {
 		
 		EditActivityForm eaForm = (EditActivityForm) form;
-		
-		if (eaForm.getIssues().getIssueId() != null) {
-			Long idIssue = eaForm.getIssues().getIssueId();
+		if (request.getParameter("issues.selIssue") != null) {
+			Long idIssue = Long.parseLong(request.getParameter("issues.selIssue"));
 			
 			ArrayList<Issues> issues = eaForm.getIssues().getIssues();
-			
+	
 			for (Issues issue : issues) {
 				if(issue.getId().equals(idIssue)){
 					issues.remove(issue);

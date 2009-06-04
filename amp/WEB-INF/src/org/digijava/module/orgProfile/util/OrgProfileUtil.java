@@ -31,6 +31,7 @@ import org.digijava.module.orgProfile.helper.FilterHelper;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.widget.dbentity.AmpWidgetOrgProfile;
+import org.digijava.module.aim.util.ActivityUtil;
 
 /**
  *
@@ -370,7 +371,7 @@ public class OrgProfileUtil {
         return value;
     }
 
-    /**
+	  /**
      * Returns list of 5 (or less) largest projects
      * TODO review this method
      * @param filter
@@ -405,7 +406,7 @@ public class OrgProfileUtil {
             /* pick all activities of the organization in the selected year ordered
             by their amounts in USD
             alas that "Limit" does not work in the query...  */
-            queryString = " select act from " + AmpActivity.class.getName() + " act  ";
+            queryString = " select act.ampActivityId from " + AmpActivity.class.getName() + " act  ";
 
             queryString += " inner join act.funding f " +
                     " inner join f.fundingDetails fd ";
@@ -421,9 +422,8 @@ public class OrgProfileUtil {
                 queryString += ChartWidgetUtil.getOrganizationQuery(false);
             }
             queryString += " and fd.transactionDate>=:startDate and  fd.transactionDate<=:endDate  ";
-
-            queryString += ChartWidgetUtil.getTeamQuery(teamMember);
-            queryString += " group by act order by sum(fd.transactionAmountInUSD) desc ";
+            queryString+=ChartWidgetUtil.getTeamQuery(teamMember);
+            queryString +=" group by act.ampActivityId order by sum(fd.transactionAmountInUSD) desc ";
 
             Query query = session.createQuery(queryString);
             query.setDate("startDate", startDate);
@@ -445,10 +445,11 @@ public class OrgProfileUtil {
             }
 
 
-            Iterator<AmpActivity> activityIter = result.iterator();
+            Iterator<Long> activityIter = result.iterator();
             // converting funding to selected currency amount and creating projects
             while (activityIter.hasNext()) {
-                AmpActivity activity = activityIter.next();
+                Long activityId = activityIter.next();
+                AmpActivity activity=ActivityUtil.getAmpActivity(activityId);
                 queryString = "select fd from " + AmpFundingDetail.class.getName() + " fd  inner join fd.ampFundingId f ";
                 queryString += "   inner join f.ampActivityId act  where   fd.transactionType = 0 and  fd.adjustmentType = 1  ";
                 if (orgID == null || orgID == -1) {
@@ -483,8 +484,6 @@ public class OrgProfileUtil {
                 project.setSectorNames(sectorsName);
                 FundingCalculationsHelper cal = new FundingCalculationsHelper();
                 cal.doCalculations(details, currCode);
-
-                // Double amount=FeaturesUtil.applyThousandsForVisibility(cal.getTotActualComm().doubleValue());
 
                 Double amount = cal.getTotActualComm().doubleValue();
 
@@ -647,7 +646,7 @@ public class OrgProfileUtil {
         String queryString = "";
         Double total = new Double(0);
         Query qry = null;
-        queryString = "select  new AmpFundingDetail(fd.transactionType,fd.adjustmentType,";
+        queryString = "select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,";
         queryString += "fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,fd.fixedExchangeRate";
         if (indCode.equals("4")) {
             queryString += ", ah.ampAHSurveyId";
@@ -666,11 +665,10 @@ public class OrgProfileUtil {
         } else {
             queryString += " and ah.ampDonorOrgId=:orgId ";
         }
-        
+
         // specified survyes
         queryString += " and ah.ampAHSurveyId in (" + condition + ")";
 
-        queryString += " group by fd.ampFundDetailId ";
         qry = session.createQuery(queryString);
         qry.setDate("startDate", startDate);
         qry.setDate("endDate", endDate);
@@ -698,8 +696,6 @@ public class OrgProfileUtil {
         total = tot.doubleValue();
         return total;
     }
-
-
 
 
 }

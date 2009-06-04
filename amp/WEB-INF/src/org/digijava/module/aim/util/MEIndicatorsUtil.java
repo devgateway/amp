@@ -1264,6 +1264,7 @@ public class MEIndicatorsUtil
 							"amp_ind_risk_ratings_id," +
 							"rating_value";
 
+
 			Query qry = session.createQuery(qryStr);
 
 			qry.setParameter("actId",actId,Hibernate.LONG);

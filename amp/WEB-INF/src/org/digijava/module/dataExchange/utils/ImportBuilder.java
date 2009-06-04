@@ -7,7 +7,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,10 +35,12 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
+import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActor;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
@@ -48,6 +49,7 @@ import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.AmpIssues;
+import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -65,6 +67,7 @@ import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ComponentsUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
@@ -80,9 +83,9 @@ import org.digijava.module.dataExchange.dbentity.AmpDEImportLog;
 import org.digijava.module.dataExchange.dbentity.DEMappingFields;
 import org.digijava.module.dataExchange.jaxb.Activities;
 import org.digijava.module.dataExchange.jaxb.ActivityType;
+import org.digijava.module.dataExchange.jaxb.AdditionalFieldType;
 import org.digijava.module.dataExchange.jaxb.CodeValueType;
 import org.digijava.module.dataExchange.jaxb.ComponentFundingType;
-import org.digijava.module.dataExchange.jaxb.ContactType;
 import org.digijava.module.dataExchange.jaxb.FreeTextType;
 import org.digijava.module.dataExchange.jaxb.FundingDetailType;
 import org.digijava.module.dataExchange.jaxb.FundingType;
@@ -214,7 +217,13 @@ public class ImportBuilder {
 			AmpCategoryValue acv=addCategValueForCodeValueType(actType.getImplementationLevels(), hm, Constants.IDML_IMPLEMENTATION_LEVELS, Constants.CATEG_VALUE_IMPLEMENTATION_LEVEL);
 			if(acv!=null)
 				activity.getCategories().add(acv);
+			
 		}
+		
+		//approval status Senegal change
+		
+		activity.setApprovalStatus(org.digijava.module.aim.helper.Constants.STARTED_STATUS);
+		
 		
 		//assigning org
 		
@@ -330,13 +339,21 @@ public class ImportBuilder {
 			}
 			if(percentage != 100){
 				//TODO 
-				logger.error("The sum of sectors percentage is not 100!!!!");
+				//logger.error("The sum of sectors percentage is not 100!!!!");
 			}
 			for (Iterator iterator = activityImported.getSectors().iterator(); iterator.hasNext();) {
 				PercentageCodeValueType idmlSector = (PercentageCodeValueType) iterator.next();
 				CodeValueType sectorAux = new CodeValueType();
 				sectorAux.setCode(idmlSector.getCode());
-				sectorAux.setValue(idmlSector.getValue());
+				
+				String sectorValue = "";
+				
+				//sectorAux.setValue(idmlSector.getValue());
+				//sectorValue= idmlSector.getValue();
+				//SENEGAL changes
+			    sectorValue= idmlSector.getCode()+". "+idmlSector.getValue();
+				
+			    sectorAux.setValue(sectorValue);
 				AmpSector ampSector = (AmpSector) mapCodeValueTypeElementInAmp(Constants.AMP_SECTOR,sectorAux,hm);
 				
 				if(ampSector == null || ampSector.getAmpSectorId() == null) continue;
@@ -459,11 +476,44 @@ public class ImportBuilder {
 		
 		if(actType.getLocation() !=null && actType.getLocation().size() >0)	{
 			
+			Set<AmpActivityLocation> locations = new HashSet<AmpActivityLocation>();
 			for (Iterator it = actType.getLocation().iterator(); it.hasNext();) {
 				Location location = (Location) it.next();
 				
+				AmpCategoryValueLocations ampCVLoc		= null;
+				AmpCategoryValue acv= null;
+				CodeValueType cvt = new CodeValueType();
+				
+				if("001".equals(location.getLocationName().getCode()) || "0000".equals(location.getLocationName().getCode()) ){
+					ampCVLoc = DynLocationManagerUtil.getLocationByCode("87274", (AmpCategoryValue)null );
+
+					cvt.setCode("001");
+					cvt.setValue("Country");
+					acv = addCategValueForCodeValueType(cvt, hm, Constants.IDML_IMPLEMENTATION_LOCATION, Constants.CATEG_VALUE_IMPLEMENTATION_LOCATION);
+				}
+				else {
+						ampCVLoc = DynLocationManagerUtil.getLocationByIso(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBAL_DEFAULT_COUNTRY), (AmpCategoryValue)null );
+						
+						cvt.setCode(location.getLocationName().getCode());
+						if(location.getLocationName().getCode().length() <=3)
+							cvt.setValue("Zone");
+						else cvt.setValue("District");
+						acv = addCategValueForCodeValueType(cvt, hm, Constants.IDML_IMPLEMENTATION_LOCATION, Constants.CATEG_VALUE_IMPLEMENTATION_LOCATION);
+				}
+				AmpLocation ampLoc		= DynLocationManagerUtil.getAmpLocation(ampCVLoc);
+				AmpActivityLocation actLoc=new AmpActivityLocation();
+				actLoc.setActivity(activity);//activity);
+				actLoc.getActivity().setAmpActivityId(null);
+				actLoc.setLocation(ampLoc);
+				Double percent=new Double(100);
+                actLoc.setLocationPercentage(percent.floatValue());
+				locations.add(actLoc);
+
+				if(acv!=null)
+					activity.getCategories().add(acv);
+				
 			}
-			
+			activity.setLocations(locations);
 		}
 		
 		
@@ -506,7 +556,12 @@ public class ImportBuilder {
 					if(isEqualStringsNWS(type, Constants.IDML_REPORTING_AGENCY))
 						role=DbUtil.getAmpRole(org.digijava.module.aim.helper.Constants.REPORTING_AGENCY);
 					if(isEqualStringsNWS(type, Constants.IDML_RESPONSIBLE_ORGANIZATION))
-						role=DbUtil.getAmpRole(org.digijava.module.aim.helper.Constants.RESPONSIBLE_ORGANISATION);
+						{
+							role=DbUtil.getAmpRole(org.digijava.module.aim.helper.Constants.RESPONSIBLE_ORGANISATION);
+							//senegal add
+							if(isStringValid(relOrg.getCode()))
+								activity.setFY(relOrg.getCode());
+						}
 					if(isEqualStringsNWS(type, Constants.IDML_SECTOR_GROUP))
 						role=DbUtil.getAmpRole(org.digijava.module.aim.helper.Constants.SECTOR_GROUP);
 					if(role !=null){
@@ -807,7 +862,26 @@ public class ImportBuilder {
 		
 	}
 	
-	
+	private void processStep8(ActivityType activityImported, AmpActivity activity, HttpServletRequest request, String string, HashMap hm) {
+		
+		if(activityImported.getAdditional() != null && activityImported.getAdditional().size() > 0){
+			for (AdditionalFieldType aft : activityImported.getAdditional()) {
+				if( isEqualStringsNWS(aft.getField(), "PTIP") ){
+					activity.setCrisNumber(aft.getValue());
+				}
+				if( isEqualStringsNWS(aft.getField(), "Code du Chapitre") ){
+					activity.setVote(aft.getValue().substring(0, 3));
+					activity.setSubVote(aft.getValue().substring(3, 5));
+					activity.setSubProgram(aft.getValue().substring(5, 8));
+					activity.setProjectCode(aft.getValue().substring(8, 11));
+				}
+				if( isEqualStringsNWS(aft.getField(), "onBudget") ){
+					activity.setBudget(true);
+				}
+			}
+		}
+		
+	}
 	private boolean isFreeTextTypeValid(FreeTextType title) {
 		// TODO Auto-generated method stub
 		if(title != null && title.getValue()!=null) return true;
@@ -861,6 +935,10 @@ public class ImportBuilder {
 			while (mtefItr.hasNext())
 			{
 				Projections mtef=(Projections)mtefItr.next();
+
+				//senegal add
+				if(mtef.getAmount().compareTo(new BigDecimal(0)) == 0 ) continue;
+
 				AmpFundingMTEFProjection ampmtef=new AmpFundingMTEFProjection();
 				
 				if("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)))
@@ -891,6 +969,9 @@ public class ImportBuilder {
 		for (Iterator it = fundingsDetails.iterator(); it.hasNext();) {
 			FundingDetailType fundDet = (FundingDetailType) it.next();
 			
+			//senegal
+			if(fundDet.getAmount().compareTo(new BigDecimal(0)) == 0 ) continue;
+			
 			AmpFundingDetail ampFundDet = new AmpFundingDetail();
 	
 			ampFundDet.setTransactionType(new Integer(transactionType));
@@ -920,7 +1001,7 @@ public class ImportBuilder {
 			
 			//if it is in the db
 			Object obj=null;
-			obj = DataExchangeUtils.getElementFromAmp(fieldType, element.getValue());
+			obj = DataExchangeUtils.getElementFromAmp(fieldType, element.getValue(),element);
 			if(obj != null) 
 				return obj; //return the field which is in db
 			else 
@@ -933,7 +1014,7 @@ public class ImportBuilder {
 					}
 				else{
 					// the field is already in mapping table
-						obj = DataExchangeUtils.getElementFromAmp(fieldType, demf.getAmpFieldId());
+						obj = DataExchangeUtils.getElementFromAmp(fieldType, demf.getAmpFieldId(),element);
 				}
 				return obj;
 			}
@@ -1306,6 +1387,9 @@ public class ImportBuilder {
 				//contact information
 				processStep7(activityImported, activity,request, "en",hm);
 				
+				//custom fields
+				processStep8(activityImported, activity,request, "en",hm);
+				
 				DataExchangeUtils.saveComponents(activity, request, tempComps);
 				DataExchangeUtils.saveActivity(activity, request);
 				
@@ -1365,7 +1449,7 @@ public class ImportBuilder {
         		if(aux1.length == 2)
         			aux2 = aux1[1].split("</title>");
         		else aux2 = aux1[0].split("</title>");
-        		ilog.setObjectNameLogged(aux2[0]);
+        		ilog.setObjectNameLogged(i+". "+aux2[0]);
         		this.getActivityList().add(aux2[0]);
         	}
 

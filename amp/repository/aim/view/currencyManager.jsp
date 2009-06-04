@@ -243,8 +243,8 @@ function sortSubmit(value){
 											</td>
 											<td align="left">
                                               <a href="javascript:editCurrency('${curr.currencyCode}')">
-                                                <c:if test="${curr.countryId!=null}">
-                                                ${curr.countryId.countryName}
+                                                <c:if test="${curr.countryLocation.id!=null}">
+                                                <digi:trn>${curr.countryLocation.name}</digi:trn>
                                                 </c:if>
                                               </a>
                                             </td>

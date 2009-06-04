@@ -83,11 +83,11 @@ function saveJc(){
             <td>
               <table style="width:400px;">
                 <tr>
-                  <td>
+                  <td width="169">
                     <span style="color:red;">*</span>
-                    <digi:trn key="aim:job:name">name</digi:trn>
+                    <digi:trn key="aim:job:name">Name</digi:trn>
                   </td>
-                  <td>
+                  <td width="219">
                     <html:text name="quartzJobClassManagerForm" property="name" styleId="txtName" style="font-family:Verdana;font-size:10px;width:250px;" />
                   </td>
                 </tr>
@@ -104,13 +104,13 @@ function saveJc(){
             </td>
           </tr>
           <tr>
-            <td colspan="6">
-            &nbsp;
+            <td colspan="6">&nbsp;
+            
             </td>
           </tr>
           <tr>
-            <td colspan="6">
-            &nbsp;
+            <td colspan="6">&nbsp;
+            
             </td>
           </tr>
           <tr>

@@ -59,6 +59,8 @@ public class ColumnFilterGenerator {
 			c.getFilters().add(acf3);
 			AmpColumnsFilters acf4= new AmpColumnsFilters(c,"typeOfAssistance","terms_assist_id");
 			c.getFilters().add(acf4);
+			AmpColumnsFilters acf5= new AmpColumnsFilters(c,"donnorgAgency","org_id");
+			c.getFilters().add(acf5);
 		}
 		if (ArConstants.VIEW_CONTRIBUTION_FUNDING.equals(c.getExtractorView())) {
 			//TODO: add filters here

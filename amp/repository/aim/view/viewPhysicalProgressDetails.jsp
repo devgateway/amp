@@ -8,12 +8,38 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 <script type="text/javascript">
+
+
 function login()
 {
 	<digi:context name="addUrl" property="context/module/moduleinstance/login.do" />
-    document.aimPhysicalProgressForm.action = "<%=addUrl%>";
-    document.aimPhysicalProgressForm.submit();
+    document.aimMainProjectDetailsForm.action = "<%=addUrl%>";
+    document.aimMainProjectDetailsForm.submit();
 }
+
+function fnEditProject(id)
+{
+	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
+   document.aimMainProjectDetailsForm.action = "<%=addUrl%>~pageId=1~step=5~action=edit~surveyFlag=true~activityId=" + id;
+	document.aimMainProjectDetailsForm.target = "_self";
+   document.aimMainProjectDetailsForm.submit();
+}
+
+function preview(id)
+{
+	<digi:context name="addUrl" property="context/module/moduleinstance/viewActivityPreview.do" />
+    document.aimMainProjectDetailsForm.action = "<%=addUrl%>~pageId=2~activityId=" + id;
+	document.aimMainProjectDetailsForm.target = "_self";
+    document.aimMainProjectDetailsForm.submit();
+}
+
+function projectFiche(id)
+{
+	<digi:context name="ficheUrl" property="context/module/moduleinstance/projectFicheExport.do" />
+	window.open ( "<%=ficheUrl%>~ampActivityId=" + id,"<digi:trn key="aim:projectFiche">Project Fiche</digi:trn>");
+}
+
+
 </script>
 <digi:errors/>
 <digi:instance property="aimPhysicalProgressForm" />

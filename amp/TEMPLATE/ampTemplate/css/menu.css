@@ -155,7 +155,7 @@
 }
 .yuiamp-skin-amp .yuiampmenu .topscrollbar, .yuiamp-skin-amp .yuiampmenu .bottomscrollbar {
 	height: 16px;
-	background: #fff  no-repeat 0 0;
+	background: #376091  url(sprite.png) no-repeat 0 0;
 }
 .yuiamp-skin-amp .yuiampmenu .topscrollbar {
 	border-bottom-width: 0;

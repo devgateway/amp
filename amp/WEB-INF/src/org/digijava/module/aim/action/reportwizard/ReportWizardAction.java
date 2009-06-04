@@ -296,17 +296,43 @@ public class ReportWizardAction extends MultiAction {
 		this.addFields(myForm.getSelectedMeasures(), availableMeas, ampReport.getMeasures(), AmpReportMeasures.class, level1);
 		
 		/* If all columns are set as hierarchies we add the Project Title column */
-		if (  myForm.getSelectedColumns() != null && myForm.getSelectedHierarchies() != null &&  
-				myForm.getSelectedColumns().length == myForm.getSelectedHierarchies().length ) {
-			for ( AmpColumns tempCol: availableCols ) {
-				if ( Constants.COLUMN_PROJECT_TITLE.equals(tempCol.getColumnName()) ) {
-					AmpReportColumn titleCol			= new AmpReportColumn();
-					titleCol.setLevel(level1);
-					titleCol.setOrderId( new Long(ampReport.getColumns().size()+1) );
-					titleCol.setColumn(tempCol); 
-					
-					ampReport.getColumns().add(titleCol);
-					break;
+
+	
+
+		if (  ampReport.getColumns() != null && ampReport.getHierarchies() != null ) {
+			int numOfCols		= ampReport.getColumns().size();
+			int numOfHiers		= ampReport.getHierarchies().size();
+			/* "Cumulative Commitment", and "Cumulative Disbursement" are not treated as columns so if they appear 
+			 * we need to substract them from the total number of cols */
+			for ( AmpReportColumn tempRepCol: ampReport.getColumns() ) {
+				if ( ArConstants.COLUMN_CUMULATIVE_COMMITMENT.equals(tempRepCol.getColumn().getColumnName()) ) {
+					numOfCols--;
+					continue;
+				}
+				if ( ArConstants.COLUMN_CUMULATIVE_DISBURSEMENT.equals(tempRepCol.getColumn().getColumnName()) ) {
+					numOfCols--;
+					continue;
+				}
+				if ( ArConstants.COLUMN_UNDISB_CUMULATIVE_BALANCE.equals(tempRepCol.getColumn().getColumnName()) ) {
+					numOfCols--;
+					continue;
+				}
+				if ( ArConstants.COLUMN_UNCOMM_CUMULATIVE_BALANCE.equals(tempRepCol.getColumn().getColumnName()) ) {
+					numOfCols--;
+					continue;
+				}
+			}
+			if ( numOfCols == numOfHiers ) {
+				for ( AmpColumns tempCol: availableCols ) {
+					if ( ArConstants.COLUMN_PROJECT_TITLE.equals(tempCol.getColumnName()) ) {
+						AmpReportColumn titleCol			= new AmpReportColumn();
+						titleCol.setLevel(level1);
+						titleCol.setOrderId( (ampReport.getColumns().size()+(long)1) );
+						titleCol.setColumn(tempCol); 
+						
+						ampReport.getColumns().add(titleCol);
+						break;
+					}
 				}
 			}
 		}

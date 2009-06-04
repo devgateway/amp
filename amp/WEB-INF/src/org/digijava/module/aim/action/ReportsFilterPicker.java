@@ -332,12 +332,14 @@ public class ReportsFilterPicker extends MultiAction {
 			rEnd = getYearOnCalendar(filterForm.getCalendar(), rEnd,tempSettings);
 		}
 
-		if (filterForm.getRenderStartYear() == null) {
+		if (filterForm.getRenderStartYear() == null || (request.getParameter("view") != null && "reset".compareTo(request.getParameter("view")) == 0)) {
 			filterForm.setRenderStartYear(rStart);
+			tempSettings = null;
 		}
 
-		if (filterForm.getRenderEndYear() == null) {
+		if (filterForm.getRenderEndYear() == null || (request.getParameter("view") != null && "reset".compareTo(request.getParameter("view")) == 0)) {
 			filterForm.setRenderEndYear(rEnd);
+			tempSettings = null;
 		}
 		
 		filterForm.getPageSizes().add(new BeanWrapperImpl(new String("A0")));
@@ -516,30 +518,43 @@ public class ReportsFilterPicker extends MultiAction {
 		if (selectedNatPlanObj != null && selectedNatPlanObj.size() > 0) {
 			arf.setSelectedNatPlanObj(new HashSet());
 			arf.getSelectedNatPlanObj().addAll(selectedNatPlanObj);
-			arf.setNationalPlanningObjectives(new ArrayList(selectedNatPlanObj));
+			arf.setNationalPlanningObjectives( new ArrayList(selectedNatPlanObj) );
+			
+			arf.setRelatedNatPlanObjs(new HashSet<AmpTheme>() );
+			ProgramUtil.collectFilteringInformation(selectedNatPlanObj, arf.getNationalPlanningObjectives(), arf.getRelatedNatPlanObjs() );
+			
 		} else {
 			arf.setSelectedNatPlanObj(null);
 			arf.setNationalPlanningObjectives(null);
+			arf.setRelatedNatPlanObjs(null);
 		}
 
 		if (selectedPrimaryPrograms != null && selectedPrimaryPrograms.size() > 0) {
 			arf.setSelectedPrimaryPrograms(new HashSet());
 			arf.getSelectedPrimaryPrograms().addAll(selectedPrimaryPrograms);
 			arf.setPrimaryPrograms(new ArrayList(selectedPrimaryPrograms));
+			
+			arf.setRelatedPrimaryProgs(new HashSet<AmpTheme>() );
+			ProgramUtil.collectFilteringInformation(selectedPrimaryPrograms, arf.getPrimaryPrograms(), arf.getRelatedPrimaryProgs() );
+			
 		} else {
-
 			arf.setPrimaryPrograms(null);
 			arf.setSelectedPrimaryPrograms(null);
-
+			arf.setRelatedPrimaryProgs(null);
 		}
 
 		if (selectedSecondaryPrograms != null && selectedSecondaryPrograms.size() > 0) {
 			arf.setSelectedSecondaryPrograms(new HashSet());
 			arf.getSelectedSecondaryPrograms().addAll(selectedSecondaryPrograms);
 			arf.setSecondaryPrograms(new ArrayList(selectedSecondaryPrograms));
+			
+			arf.setRelatedSecondaryProgs( new HashSet<AmpTheme>() );
+			ProgramUtil.collectFilteringInformation(selectedSecondaryPrograms, arf.getSecondaryPrograms(), arf.getRelatedSecondaryProgs() );
+			
 		} else {
 			arf.setSecondaryPrograms(null);
 			arf.setSelectedSecondaryPrograms(null);
+			arf.setRelatedSecondaryProgs(null);
 
 		}
 		AmpApplicationSettings tempSettings = getAppSetting(request);

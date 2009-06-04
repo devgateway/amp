@@ -9,8 +9,6 @@ import org.apache.struts.util.LabelValueBean;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpRegion;
-import org.digijava.module.aim.dbentity.AmpWoreda;
-import org.digijava.module.aim.dbentity.AmpZone;
 import org.digijava.module.aim.dbentity.IndicatorTheme;
 import org.digijava.module.aim.helper.IndicatorThemeBean;
 import org.digijava.module.aim.helper.IndicatorsBean;
@@ -105,7 +103,7 @@ public class ThemeForm extends ActionForm {
         
     	  private Collection<AmpCategoryValueLocations> woredas;
     	  private Long impWoreda;
-      	  
+
       	  private String country;
       	  private String impCountry;
       	  

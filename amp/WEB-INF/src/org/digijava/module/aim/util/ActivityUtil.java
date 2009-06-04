@@ -334,7 +334,27 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         oldActivity.setCreatedAsDraft(activity.isCreatedAsDraft());
         oldActivity.getClosingDates().clear();
         oldActivity.getComponents().clear();
+      
+        if ( oldActivity.getComponentProgress() != null ) {
+	        Collection<AmpPhysicalPerformance> oldProgress= oldActivity.getComponentProgress();
+	      
+	        for (Iterator iterator = oldProgress.iterator(); iterator.hasNext();) {
+				AmpPhysicalPerformance ampPhysicalPerformance = (AmpPhysicalPerformance) iterator.next();
+				session.delete(ampPhysicalPerformance);
+			}
+        }
+        
+        if ( activity.getComponentProgress() != null  ) {
+	        Collection<AmpPhysicalPerformance> newProgress= activity.getComponentProgress();
+	        for (AmpPhysicalPerformance ampPhysicalPerformance : newProgress) {
+	        	session.save(ampPhysicalPerformance);
+			}
+        }
+        
         oldActivity.getComponentFundings().clear();
+      
+        
+        
         oldActivity.getDocuments().clear();
         oldActivity.getInternalIds().clear();
         oldActivity.getLocations().clear();
@@ -384,10 +404,16 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         	oldActivity.getComponents().addAll(activity.getComponents());
         }
         
+        if(activity.getComponentProgress()!=null){
+        	oldActivity.getComponentProgress().addAll(activity.getComponentProgress());
+        }
+        
         
         if(activity.getComponentFundings()!=null){
         	oldActivity.getComponentFundings().addAll(activity.getComponentFundings());
         }
+        
+      
         
         //oldActivity.setDocuments(activity.getDocuments());
         if (activity.getFunding() != null)
@@ -407,6 +433,9 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         	oldActivity.getSectors().addAll(activity.getSectors()); 
         if (activity.getComponentes() != null)
         	oldActivity.getComponentes().addAll(activity.getComponentes());
+        
+       
+        
         if (activity.getIssues() != null)
         	oldActivity.getIssues().addAll(activity.getIssues());
         if (activity.getCosts() != null)
@@ -657,6 +686,14 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         activity.setAmpId(ampId);
         session.update(activity);
         //session.saveOrUpdate(member);
+     
+      if(activity.getComponentProgress()!=null){
+	        Collection<AmpPhysicalPerformance> newProgress= activity.getComponentProgress();
+	        for (AmpPhysicalPerformance ampPhysicalPerformance : newProgress) {
+	      	  ampPhysicalPerformance.setAmpActivityId(activity);
+	      	  session.save(ampPhysicalPerformance);
+	  		}
+	      }
       }
 
       /*
@@ -1330,11 +1367,11 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       Date toDate,
       Long locationId,
       TeamMember teamMember,Integer pageStart,Integer rowCount) throws DgException{
-       Collection<ActivityItem> result = null;
+      List<ActivityItem> result = null;
     try {
       Session session = PersistenceManager.getRequestDBSession();
 
-      String oql = "select  new  org.digijava.module.aim.helper.ActivityItem(act,prog.programPercentage) from " + AmpActivityProgram.class.getName() + " prog ";
+      String oql = "select distinct  new  org.digijava.module.aim.helper.ActivityItem(act,prog.programPercentage) from " + AmpActivityProgram.class.getName() + " prog ";
       oql+= getSearchActivitiesWhereClause(ampThemeId, statusCode, donorOrgId, fromDate, toDate, locationId, teamMember);
      
       Query query = session.createQuery(oql);

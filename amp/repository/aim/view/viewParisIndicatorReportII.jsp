@@ -660,6 +660,12 @@ function toggleSettings(){
 															<nested:iterate property="answers">
 																<c:set var="index2" value="0" />
 																<nested:iterate id="rowVal">
+	                                                                <c:if test="${index2 == 1}">
+	                                                                    <c:set var="firstVal" value="${rowVal}" />
+	                                                                </c:if>
+	                                                                <c:if test="${index2 == 2}">
+	                                                                    <c:set var="secondVal" value="${rowVal}" />
+	                                                                </c:if>
 																	<c:if test="${aimParisIndicatorReportForm.indicatorCode == '6'}">
 																		<td>
 																			<div align="center">
@@ -673,7 +679,12 @@ function toggleSettings(){
 																				<div align="center">
 																					<c:if test="${index1 == index2}">
 																						<c:if test="${rowVal == -1}">n.a.</c:if>
-					                                                                    <c:if test="${rowVal != -1}"><fmt:formatNumber type="number" value="${rowVal}" pattern="###" maxFractionDigits="0" />%</c:if>
+					                                                                    <c:if test="${rowVal != -1}">
+					                                                                       <c:if test="${secondVal != 0}">
+					                                                                           <fmt:formatNumber type="number" value="${firstVal*100/secondVal}" pattern="###" maxFractionDigits="0" />%
+                                                                                           </c:if>
+                                                                                           <c:if test="${secondVal == 0}">n.a.</c:if>
+					                                                                    </c:if>
 																					</c:if>
 																					<c:if test="${index1 != index2}">
 				    	                                                                <fmt:formatNumber type="number" value="${rowVal}" pattern="###" maxFractionDigits="0" />

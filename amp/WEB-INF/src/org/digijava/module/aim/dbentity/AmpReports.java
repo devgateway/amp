@@ -48,6 +48,14 @@ public class AmpReports implements Comparable, LoggerIdentifiable , Serializable
 	)
 	private Boolean hideActivities;
 
+	public Long getSiteId() {
+		return siteId;
+	}
+
+	public void setSiteId(Long siteId) {
+		this.siteId = siteId;
+	}
+
 	private Boolean drilldownTab;
 
 	private Boolean publicReport;
@@ -63,11 +71,12 @@ public class AmpReports implements Comparable, LoggerIdentifiable , Serializable
 
 	private Set members;
 
+
 	@TransformerAnn(
 			expTransformerFactoryClass="org.digijava.module.aim.ar.impexp.impl.ColumnLikeExpTransformerFactory",
 			impTransformerFactoryClass="org.digijava.module.aim.ar.impexp.impl.ColumnLikeImpTransformerFactory"
 	)
-	private Set columns;
+	private Set<AmpReportColumn> columns;
 
 	private List orderedColumns;
 	
@@ -75,7 +84,7 @@ public class AmpReports implements Comparable, LoggerIdentifiable , Serializable
 			expTransformerFactoryClass="org.digijava.module.aim.ar.impexp.impl.ColumnLikeExpTransformerFactory",
 			impTransformerFactoryClass="org.digijava.module.aim.ar.impexp.impl.ColumnLikeImpTransformerFactory"
 	)
-	private Set hierarchies;
+	private Set<AmpReportHierarchy> hierarchies;
 
 	@TransformerAnn(
 			expTransformerFactoryClass="org.digijava.module.aim.ar.impexp.impl.ColumnLikeExpTransformerFactory",
@@ -93,7 +102,7 @@ public class AmpReports implements Comparable, LoggerIdentifiable , Serializable
 
 	// to be set in order to get information for translation purposes in pdf and
 	// excel reports
-	private String siteId;
+	private Long siteId;
 
 	private String locale;
 
@@ -159,14 +168,6 @@ public class AmpReports implements Comparable, LoggerIdentifiable , Serializable
 
 	public void setMeasures(Set<AmpReportMeasures> measures) {
 		this.measures = measures;
-	}
-
-	public Set getColumns() {
-		return columns;
-	}
-
-	public void setColumns(Set columns) {
-		this.columns = columns;
 	}
 
 	public Long getAmpReportId() {
@@ -238,11 +239,33 @@ public class AmpReports implements Comparable, LoggerIdentifiable , Serializable
 
 	}
 
-	public Set getHierarchies() {
+
+
+	/**
+	 * @return the columns
+	 */
+	public Set<AmpReportColumn> getColumns() {
+		return columns;
+	}
+
+	/**
+	 * @param columns the columns to set
+	 */
+	public void setColumns(Set<AmpReportColumn> columns) {
+		this.columns = columns;
+	}
+
+	/**
+	 * @return the hierarchies
+	 */
+	public Set<AmpReportHierarchy> getHierarchies() {
 		return hierarchies;
 	}
 
-	public void setHierarchies(Set hierarchies) {
+	/**
+	 * @param hierarchies the hierarchies to set
+	 */
+	public void setHierarchies(Set<AmpReportHierarchy> hierarchies) {
 		this.hierarchies = hierarchies;
 	}
 
@@ -346,14 +369,6 @@ public class AmpReports implements Comparable, LoggerIdentifiable , Serializable
 		this.locale = locale;
 	}
 
-	public String getSiteId() {
-		return siteId;
-	}
-
-	public void setSiteId(String siteId) {
-		this.siteId = siteId;
-	}
-
 	public Object getObjectType() {
 		// TODO Auto-generated method stub
 		return this.getClass().getName();
@@ -362,7 +377,7 @@ public class AmpReports implements Comparable, LoggerIdentifiable , Serializable
 	public Object getIdentifier() {
 		// TODO Auto-generated method stub
 		return this.getAmpReportId().toString();
-	}
+	}	
 
 	public Long getId() {
 		return this.getAmpReportId();

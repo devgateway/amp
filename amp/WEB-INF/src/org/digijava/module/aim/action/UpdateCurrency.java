@@ -18,6 +18,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.dbentity.Country;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpCurrencyRate;
 import org.digijava.module.aim.form.CurrencyForm;
@@ -25,6 +26,8 @@ import org.digijava.module.aim.helper.CountryBean;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 
 public class UpdateCurrency extends Action {
 
@@ -61,9 +64,9 @@ public class UpdateCurrency extends Action {
                 while (itr.hasNext()) {
                     curr = (AmpCurrency) itr.next();
                     if (curr.getCurrencyCode().equals(crForm.getCurrencyCode())) {
-                        if (curr.getCountryId() != null) {
-                            crForm.setCountryId(curr.getCountryId().getCountryId());
-                            crForm.setCountryName(curr.getCountryId().getCountryName());
+                        if (curr.getCountryLocation() != null) {
+                            crForm.setCountryId(curr.getCountryLocation().getId() );
+                            crForm.setCountryName( curr.getCountryLocation().getName() );
                         }
                         crForm.setCurrencyName(curr.getCurrencyName());
                         crForm.setId(curr.getAmpCurrencyId());
@@ -80,7 +83,7 @@ public class UpdateCurrency extends Action {
                 crForm.setExchangeRateDate(null);
             }
 
-            Collection<CountryBean> countries = org.digijava.module.aim.util.DbUtil.getTranlatedCountries(request);
+            Collection<AmpCategoryValueLocations> countries = DynLocationManagerUtil.getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
             crForm.setCountries(countries);
 
             if (crForm.getCurrencyCode() != null && crForm.getDoAction().equals("add")) {
@@ -96,9 +99,9 @@ public class UpdateCurrency extends Action {
                     crForm.getCountryId().equals(Long.valueOf( -1))) {
                     return mapping.findForward("forward");
                 } else {
-                    Country cn = DbUtil.getDgCountry(crForm.getCountryId());
+                    AmpCategoryValueLocations cn = DynLocationManagerUtil.getLocation( crForm.getCountryId(), false);
                     if (cn != null) {
-                        curr.setCountryId(cn);
+                        curr.setCountryLocation(cn);
                     }
                 }
 
@@ -118,9 +121,9 @@ public class UpdateCurrency extends Action {
                     crForm.getCountryId().equals(Long.valueOf( -1))) {
                     return mapping.findForward("forward");
                 } else {
-                    Country cn = DbUtil.getDgCountry(crForm.getCountryId());
+                    AmpCategoryValueLocations cn = DynLocationManagerUtil.getLocation(crForm.getCountryId(), false);
                     if (cn != null) {
-                        curr.setCountryId(cn);
+                        curr.setCountryLocation(cn);
                     }
                 }
 

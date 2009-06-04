@@ -6,8 +6,7 @@ import java.util.Date;
 import org.digijava.module.aim.dbentity.AmpFunding;
 
 public class MTEFProjection implements Serializable, Comparable<MTEFProjection>{
-	
-	private long indexId;
+
 	private Long projected; 
 	private String amount;
 	private String currencyCode;
@@ -23,10 +22,6 @@ public class MTEFProjection implements Serializable, Comparable<MTEFProjection>{
 	
 	
 		public MTEFProjection() {}
-
-		public MTEFProjection(long id) {
-			this.indexId = id;
-		}
 	
 		public String getCurrencyCode() {
 			return currencyCode;
@@ -82,27 +77,6 @@ public class MTEFProjection implements Serializable, Comparable<MTEFProjection>{
 			this.index = index;
 		}
 
-		/**
-		 * @return Returns the indexId.
-		 */
-		public long getIndexId() {
-			return indexId;
-		}
-		/**
-		 * @param indexId The indexId to set.
-		 */
-		public void setIndexId(long indexId) {
-			this.indexId = indexId;
-		}
-		
-		public boolean equals(Object obj) {
-			if (obj == null) throw new NullPointerException();
-			if (!(obj instanceof MTEFProjection)) throw new ClassCastException();
-			
-			MTEFProjection mtefPrj = (MTEFProjection) obj;
-			return (this.indexId == mtefPrj.indexId);
-		}
-
 		public Long getProjected() {
 			return projected;
 		}
@@ -150,5 +124,12 @@ public class MTEFProjection implements Serializable, Comparable<MTEFProjection>{
 			this.projectionDateLabel = projectionDateLabel;
 		}
 
+		
+		public int getBaseYear() {
+			if ( this.projectionDate == null || this.projectionDate.length() == 0 )
+				return 0;
+			
+			return Integer.parseInt( this.projectionDate.split("/")[2] );
+		}
 
 }

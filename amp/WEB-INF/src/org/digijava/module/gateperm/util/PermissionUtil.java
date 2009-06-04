@@ -3,6 +3,7 @@
  */
 package org.digijava.module.gateperm.util;
 
+
 import java.io.File;
 import java.io.FileFilter;
 import java.sql.SQLException;
@@ -12,13 +13,10 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
-
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.MetaInfo;
@@ -32,6 +30,10 @@ import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.core.Permissible;
 import org.digijava.module.gateperm.core.Permission;
 import org.digijava.module.gateperm.core.PermissionMap;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 /**
  * PermissionUtil.java TODO description here
@@ -47,12 +49,24 @@ public final class PermissionUtil {
 	private static final String gateDefLocation="/classes/org/digijava/module/gateperm/gates";
 	private static final String gateDefPackage="org.digijava.module.gateperm.gates";
 
+	/**
+	 * gets the gate permissions scope. The scope is the place to put external objects needed by gates logical evaluation 
+	 * (like the current user) which are not the permissible istelf (so objects other than the current object on which the
+	 * permission query is invoked on)
+	 * @param session
+	 * @return
+	 */
 	public static Map getScope(HttpSession session) {
 	    Map scope = (Map) session.getAttribute(GatePermConst.SCOPE);
 	    if(scope==null) return resetScope(session);
 	    return scope;
 	}
 	
+	/**
+	 * flushes the gate permissions scope
+	 * @param session
+	 * @return
+	 */
 	public static Map resetScope(HttpSession session) {
 	    Map scope = (Map) session.getAttribute(GatePermConst.SCOPE);
 	    if(scope==null) {
@@ -62,6 +76,54 @@ public final class PermissionUtil {
 	    return scope;
 	}
 	
+	/**
+	 * Deletes a permission and removes any references to objects associated with it
+	 * @param id the id of the permission to be removed
+	 * @throws HibernateException
+	 * @throws SQLException
+	 * @throws DgException
+	 */
+	public static void deletePermission(Long id) throws HibernateException, SQLException, DgException{
+		Session hs = PersistenceManager.getRequestDBSession();
+		Permission p = (Permission) hs.get(Permission.class, id);
+		
+		Set<CompositePermission> compositeLinkedPermissions = p.getCompositeLinkedPermissions();
+		Iterator<CompositePermission> i=compositeLinkedPermissions.iterator();
+		while (i.hasNext()) {
+		    Transaction transaction = hs.beginTransaction();
+		    CompositePermission element = (CompositePermission) i.next();
+		    element.getPermissions().remove(p);
+		    i.remove();
+		    hs.saveOrUpdate(element);
+		    transaction.commit();
+		 }
+		
+		
+		Set<PermissionMap> permissibleObjects = p.getPermissibleObjects();
+		Iterator<PermissionMap> ii=permissibleObjects.iterator();
+		while (ii.hasNext()) {
+		    Transaction transaction = hs.beginTransaction();
+			PermissionMap permissionMap = (PermissionMap) ii.next();
+			p.getPermissibleObjects().remove(permissionMap);
+			hs.saveOrUpdate(p);
+			transaction.commit();
+		}
+		
+		//delete perm maps:
+//		String hql="delete from "+PermissionMap.class.getName()+" where permission= :perm";
+//		Query query = hs.createQuery(hql);
+//		query.setEntity("perm", p);
+//		int rowCount = query.executeUpdate();
+//	    logger.info("Rows affected: " + rowCount);
+
+	    //delete the permission itself
+		hs.delete(p);
+		hs.beginTransaction().commit();
+		
+		PersistenceManager.releaseSession(hs);
+		
+	}
+	
 	public static boolean arrayContains(Object[] a,Object o) {
 		for (int i = 0; i < a.length; i++) {
 			if(o.equals(a[i])) return true;
@@ -69,6 +131,12 @@ public final class PermissionUtil {
 		return false;
 	}
 	
+	/**
+	 * Puts an objects in the permission scope. This will be later used by a gate to evaluate if an action is allowed or not
+	 * @param session the http session (where the scope lies)
+	 * @param key the scope key that can be used to get the object back
+	 * @param value the object
+	 */
 	public static void putInScope(HttpSession session ,MetaInfo key, Object value) {
 		Map scope=getScope(session);
 		scope.put(key, value);
@@ -77,6 +145,13 @@ public final class PermissionUtil {
 		}
 	}
 	
+	/**
+	 * Gets the object associated with the given key, if any, from the permissions scope
+	 * @param session
+	 * @param key the key used to put the object in the scope with putInScope
+	 * @return the object
+	 * @see PermissionUtil#putInScope(HttpSession, MetaInfo, Object)
+	 */
 	public static Object getFromScope(HttpSession session,MetaInfo key) {
 	    Map scope=getScope(session);
 	  return  scope.get(key);	    
@@ -125,11 +200,11 @@ public final class PermissionUtil {
 	
 	
  
-    public static List<Permission> getAllPermissions() {
+    public static List<Permission> getAllPermissions() throws DgException {
 	Session session = null;
 
 	try {
-	    session = PersistenceManager.getSession();
+	    session = PersistenceManager.getRequestDBSession();
 	    Query query = session.createQuery(" from " + Permission.class.getName());
 	    List list = query.list();
 
@@ -137,9 +212,6 @@ public final class PermissionUtil {
 	} catch (HibernateException e) {
 	    logger.error(e);
 	    throw new RuntimeException("HibernateException Exception encountered", e);
-	} catch (SQLException e) {
-	    logger.error(e);
-	    throw new RuntimeException("SQLException Exception encountered", e);
 	} finally { 
 	    try {
 		PersistenceManager.releaseSession(session);
@@ -410,7 +482,9 @@ public final class PermissionUtil {
 		    + " p WHERE p.permissibleCategory=:categoryName AND (p.objectIdentifier is null OR p.objectIdentifier=:objectId) ORDER BY p.objectIdentifier");
 	    query.setParameter("objectId", obj.getIdentifier());
 	    query.setParameter("categoryName", obj.getPermissibleCategory().getSimpleName());
+	    query.setCacheable(true);
 	    List col = query.list();
+	    
 
 	    if (col.size() == 0)
 		return null;

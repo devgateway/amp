@@ -380,7 +380,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 	    cb.saveState();  
 	    
     	    AmpReports r = (AmpReports) session.getAttribute("reportMeta");
-    	    r.setSiteId((site.getId().toString()));
+    	    r.setSiteId((site.getId()));
     	    r.setLocale(locale);
     	    BaseFont font = BaseFont.createFont(BaseFont.COURIER,BaseFont.CP1250,false);
     	    // HEADER/FOOTER logo/statement				

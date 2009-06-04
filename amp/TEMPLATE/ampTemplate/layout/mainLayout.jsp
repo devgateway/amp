@@ -108,7 +108,7 @@
 									<digi:insert attribute="headerMiddle" />
 
 								</TD>
-							 	<TD align="right" vAlign="middle" style="padding-right:5px;">
+							 	<TD align="right" vAlign="middle" style="padding-right:5px;" nowrap="nowrap">
 										<digi:insert attribute="loginWidget" />
 								</TD>
 

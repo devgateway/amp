@@ -14,6 +14,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.form.EditActivityForm;
+import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.helper.MTEFProjection;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -21,6 +22,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class AddMTEFProjection extends Action{
 
+	public static final int ADDITIONAL_AVAILABLE_YEARS	= 2;
 	private static Logger logger = Logger.getLogger(AddMTEFProjection.class);
 	
 	private List<MTEFProjection> mtefProjections=null;
@@ -50,49 +52,67 @@ public class AddMTEFProjection extends Action{
 		if (subEvent.equalsIgnoreCase("del") || subEvent.equalsIgnoreCase("add")) {
 			if (formBean.getFunding().getFundingMTEFProjections() == null || 
 					formBean.getFunding().getFundingMTEFProjections().size() == 0) {
-				boolean afterFiscalYearStart	= AddFunding.isAfterFiscalYearStart( null );
+				//boolean afterFiscalYearStart	= AddFunding.isAfterFiscalYearStart( null );
 				mtefProjections = new ArrayList<MTEFProjection>();
-				mp = AddFunding.getMTEFProjection(request.getSession(), 0, afterFiscalYearStart, null);
+				mp = AddFunding.getMTEFProjection(request.getSession(), 0, false, formBean.getFunding().getSelectedMTEFProjectionYear() );
 				mtefProjections.add(mp);		
 			} else {
-				MTEFProjection firstMtef		= formBean.getFunding().getFundingMTEFProjections().get(0);
-				boolean afterFiscalYearStart	= AddFunding.isAfterFiscalYearStart( firstMtef.getProjectionDate() );
-				String [] dateSplit				= firstMtef.getProjectionDate().split("/");
-				Integer year;
-				try {
-					year	= Integer.parseInt( dateSplit[2] );
-				}
-				catch (Exception E) {
-					year	= null;
-					logger.error(E.getMessage());
-				}
+				int lastIndex							= formBean.getFunding().getFundingMTEFProjections().size()-1;
+				//MTEFProjection lastMtef		= formBean.getFunding().getFundingMTEFProjections().get(lastIndex);
+				//boolean afterFiscalYearStart	= AddFunding.isAfterFiscalYearStart( firstMtef.getProjectionDate() );
+				//String [] dateSplit				= lastMtef.getProjectionDate().split("/");
+				//Integer year;
+				//try {
+				//	year	= Integer.parseInt( dateSplit[2] );
+				//}
+				//catch (Exception E) {
+				//	year	= null;
+				//	logger.error(E.getMessage());
+				//}
 				
 				mtefProjections 			= formBean.getFunding().getFundingMTEFProjections();
 				if (subEvent.equals("del")) {
-					Iterator<MTEFProjection> iter	= mtefProjections.iterator();
-					int offset;
-					if (afterFiscalYearStart)
-							offset	= 1;
-					else
-							offset	= 0;
-					while (iter.hasNext()) {
-						MTEFProjection proj	= iter.next();
-						if (proj.getIndexId() == index) {
-							iter.remove();
-						}
-						else {
-							proj.setProjectionDate( AddFunding.getFYDate(offset++, year) );
-						}
+					mtefProjections.remove( (int)index );
+//					Iterator<MTEFProjection> iter	= mtefProjections.iterator();
+//					int offset;
+//					if (afterFiscalYearStart)
+//							offset	= 1;
+//					else
+//							offset	= 0;
+//					while (iter.hasNext()) {
+//						MTEFProjection proj	= iter.next();
+//						proj.setProjectionDate( AddFunding.getFYDate(offset++, year) );
+//					}
+				} else { // In case we add a projection
+					int selectedYear		= formBean.getFunding().getSelectedMTEFProjectionYear();
+					int lastIdx			= mtefProjections.size()-1;
+					if ( selectedYear > mtefProjections.get(lastIdx).getBaseYear() ) {
+						mp = AddFunding.getMTEFProjection(request.getSession(), lastIdx+1, false, selectedYear );
+						mtefProjections.add(mp);	
 					}
-					MTEFProjection temp = new MTEFProjection();
-					temp.setIndexId(index);
-					mtefProjections.remove(temp);					
-				} else {
-					mp = AddFunding.getMTEFProjection(request.getSession(), mtefProjections.size(), afterFiscalYearStart, year );
-					mtefProjections.add(mp);							
+					else
+						for ( int i=0; i<mtefProjections.size(); i++ ) {
+							if ( selectedYear < mtefProjections.get(i).getBaseYear() ) {
+								mp = AddFunding.getMTEFProjection(request.getSession(), i, false, selectedYear );
+								mtefProjections.add(i, mp);							
+								break;
+							}
+						}
+					for ( int i=0; i<mtefProjections.size(); i++ ) {
+						mtefProjections.get(i).setIndex(i);
+					}
 				}
 			}
 			formBean.getFunding().setFundingMTEFProjections(mtefProjections);			
+			
+			List<KeyValue> availableMTEFProjectionYears		= 
+				AddFunding.generateAvailableMTEFProjectionYears( formBean.getFunding().getFundingMTEFProjections() ); 
+			formBean.getFunding().setAvailableMTEFProjectionYears( availableMTEFProjectionYears );
+			
+			int defaultIndex				= availableMTEFProjectionYears.size() -1 - AddMTEFProjection.ADDITIONAL_AVAILABLE_YEARS;
+			formBean.getFunding().setSelectedMTEFProjectionYear( Integer.parseInt( 
+					availableMTEFProjectionYears.get(defaultIndex).getKey() )
+			);
 		}
 		formBean.getFunding().setEvent(null);
 		formBean.getFunding().setDupFunding(true);

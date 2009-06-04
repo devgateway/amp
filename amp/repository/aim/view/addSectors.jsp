@@ -121,6 +121,17 @@
 		failure:responseFailure 
 	};
 
+
+    var specialResponseSuccess = function(o){
+		myclose();
+		addSector();
+   	}
+	var specialCallback =
+	{
+			success:specialResponseSuccess, 
+			failure:responseFailure 
+	}
+
 	function showContent(){
 		var element = document.getElementById("mySector");
 		element.style.display = "inline";
@@ -201,9 +212,7 @@
 			var postString		= "edit=true&" + generateFields(1);
 			<digi:context name="commentUrl" property="context/aim/selectSectors.do"/>
 			var url = "<%=commentUrl %>";
-			YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
-			myclose();
-			addSector();
+			YAHOOAmp.util.Connect.asyncRequest("POST", url, specialCallback, postString);
 		}
 		else{
 			alert("Please, select a sector firts!");

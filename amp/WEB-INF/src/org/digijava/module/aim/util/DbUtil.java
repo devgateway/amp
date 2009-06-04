@@ -23,6 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -83,6 +84,7 @@ import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.AmpDonors;
+import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
 import org.digijava.module.aim.helper.Assistance;
 import org.digijava.module.aim.helper.Constants;
@@ -90,6 +92,8 @@ import org.digijava.module.aim.helper.CountryBean;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.Documents;
+import org.digijava.module.aim.helper.Funding;
+import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.Indicator;
 import org.digijava.module.aim.helper.ParisIndicator;
 import org.digijava.module.aim.helper.Question;
@@ -1739,9 +1743,10 @@ public class DbUtil {
         Session session = null;
         Query qry = null;
         AmpApplicationSettings ampAppSettings = null;
-
+        Transaction tx		= null;
         try {
             session = PersistenceManager.getRequestDBSession();
+            tx	= session.beginTransaction();
             String queryString = "from " + AmpApplicationSettings.class.getName() + " a where (a.member.ampTeamMemId = :memberId)";
             //String queryString = "from " + AmpApplicationSettings.class.getName();
             qry = session.createQuery(queryString);
@@ -1751,7 +1756,15 @@ public class DbUtil {
                 ampAppSettings = (AmpApplicationSettings) itr.next();
             }*/
             ampAppSettings = (AmpApplicationSettings) qry.uniqueResult();
+            tx.commit();
         } catch (Exception e) {
+        	if (tx != null) {
+				try {
+					tx.rollback();
+				} catch (Exception tex) {
+					logger.error("Transaction rollback failed");
+				}
+        	}
             logger.error("Unable to get MemberAppSettings", e);
         }
         return ampAppSettings;
@@ -3071,10 +3084,8 @@ public class DbUtil {
             String queryString = new String();
             queryString = "select a.internalId from "
                 + AmpActivityInternalId.class.getName()
-                + " a where (a.id=:ampActivityId) "
-                + " and (a.organisation=:ampDonorOrgId)"
-                + " a inner join a.ampActivityId ampAct"  
-                + " inner join a.ampOrgId ampOrg "  
+                + " a inner join a.ampActivity ampAct"  
+                + " inner join a.organisation ampOrg "  
                 + " where (ampAct.ampActivityId=:ampActivityId) "
                 + " and (ampOrg.ampOrgId=:ampDonorOrgId)";
     
@@ -4306,7 +4317,7 @@ public class DbUtil {
         return col;
     }
 
-    public static Collection<AmpStatus> getAllActivityStatus() {
+    public static Collection getAllActivityStatus() {
         Session session = null;
         Collection col = new ArrayList();
 
@@ -4359,7 +4370,7 @@ public class DbUtil {
     				CategoryConstants.FINANCING_INSTRUMENT_KEY);
     }
 
-    public static Collection<AmpOrganisation> getAllDonorOrgs() {
+    public static Collection getAllDonorOrgs() {
         Session session = null;
         Collection col = new ArrayList();
 
@@ -5082,6 +5093,129 @@ public class DbUtil {
         }
         return null;
     }
+    public static Collection<SurveyFunding> getAllSurveysByActivity(Long activityId, EditActivityForm svForm) {
+        ArrayList survey = new ArrayList();
+        List fundingSet = new ArrayList();
+        Set surveySet = new HashSet();
+        ArrayList donorOrgs = new ArrayList();
+        Session session = null;
+        Iterator iter1 = null;
+        Iterator iter2 = null;
+        Transaction tx = null;
+        boolean surveySetEmpty = false;
+
+        try {
+        	if(activityId==null) return survey;
+            session = PersistenceManager.getRequestDBSession();
+
+            if(activityId==null || activityId.longValue()==0) return survey;
+            AmpActivity activity = (AmpActivity) session.load(AmpActivity.class, activityId);
+            
+            //This section was added to get all funding organizations even the new ones not yet saved. 
+            if (svForm.getFunding().getFundingOrganizations() != null) {
+    			Iterator itr1 = svForm.getFunding().getFundingOrganizations().iterator();
+    			while (itr1.hasNext()) {
+    				FundingOrganization fOrg = (FundingOrganization) itr1.next();
+    				//add fundings
+    				if (fOrg.getFundings() != null) {
+    					Iterator itr2 = fOrg.getFundings().iterator();
+    					while (itr2.hasNext()) {
+    						Funding fund = (Funding) itr2.next();
+    						AmpFunding ampFunding = new AmpFunding();
+    						ampFunding.setAmpDonorOrgId(DbUtil.getOrganisation(fOrg.getAmpOrgId()));
+    						fundingSet.add(ampFunding);
+    					}
+    				}
+    			}
+            }
+            
+            surveySet = activity.getSurvey();
+            //logger.debug("fundingSet.size() : " + fundingSet.size());
+            //logger.debug("surveySet.size() : " + surveySet.size());
+            if (surveySet.size() < 1)
+                surveySetEmpty = true;
+            if (fundingSet.size() < 1)
+                return survey;
+            else {
+                // adding a survey per donor, having at least one funding for this activity, if there is none
+                // or if a new donor with funding is added.
+                boolean newSurvey = true;
+                tx = session.beginTransaction();
+                iter1 = fundingSet.iterator();
+                while (iter1.hasNext()) {
+                    AmpFunding ampFund = (AmpFunding) iter1.next();
+                    donorOrgs.add(ampFund.getAmpDonorOrgId());
+                    if (!surveySetEmpty) {
+                        iter2 = surveySet.iterator();
+                        while (iter2.hasNext()) {
+                            AmpAhsurvey ahs = (AmpAhsurvey) iter2.next();
+                            if (ahs.getAmpDonorOrgId().equals(ampFund.getAmpDonorOrgId())) {
+                                newSurvey = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (surveySetEmpty || newSurvey) {
+                        AmpAhsurvey ahsvy = new AmpAhsurvey();
+                        ahsvy.setAmpActivityId(activity);
+                        ahsvy.setAmpDonorOrgId(ampFund.getAmpDonorOrgId());
+                        activity.getSurvey().add(ahsvy);
+                        surveySetEmpty = false;
+                    }
+                    newSurvey = true;
+                }
+
+                iter2 = surveySet.iterator();
+                while (iter2.hasNext()) {
+                    AmpAhsurvey ahs = (AmpAhsurvey) iter2.next();
+                    if (ahs.getPointOfDeliveryDonor() == null) {
+                        ahs.setPointOfDeliveryDonor(ahs.getAmpDonorOrgId());
+                    }
+                }
+                session.update(activity);
+                tx.commit();
+
+                if (activity.getSurvey().isEmpty())
+                    logger.debug("activity.getSurvey() is empty.");
+                else {
+                    //logger.debug("activity.getSurvey().size() : " + activity.getSurvey().size());
+                    //logger.debug("donorOrgs.size() : " + donorOrgs.size());
+                    iter2 = activity.getSurvey().iterator();
+                    while (iter2.hasNext()) {
+                        AmpAhsurvey svy = (AmpAhsurvey) iter2.next();
+                        // getting only those survey records where donor-org is in current funding list
+                        if (donorOrgs.indexOf(svy.getAmpDonorOrgId()) != -1) {
+                            SurveyFunding svfund = new SurveyFunding();
+                            svfund.setSurveyId(svy.getAmpAHSurveyId());
+                            svfund.setFundingOrgName(svy.getAmpDonorOrgId().getName());
+                            if (svy.getPointOfDeliveryDonor() != null) {
+                                svfund.setDeliveryDonorName(svy.getPointOfDeliveryDonor().getName());
+                                svfund.setAcronim(svy.getPointOfDeliveryDonor().getAcronym());
+                            } else {
+                                svfund.setDeliveryDonorName(svy.getAmpDonorOrgId().getName());
+                                svfund.setAcronim(svy.getAmpDonorOrgId().getAcronym());
+                            }
+
+                            survey.add(svfund);
+                        }
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            if (tx != null) {
+                try {
+                    tx.rollback();
+                } catch (HibernateException e) {
+                    logger.debug("rollback() failed : " + e.getMessage());
+                }
+            }
+            logger.debug("Unable to get survey : " + ex.getMessage());
+            ex.printStackTrace(System.out);
+        }
+        logger.debug("survey.size() : " + survey.size());
+        return survey;
+    }
+    
     public static Collection getAllSurveysByActivity(Long activityId) {
         ArrayList survey = new ArrayList();
         Set fundingSet = new HashSet();
@@ -5091,7 +5225,7 @@ public class DbUtil {
         Iterator iter1 = null;
         Iterator iter2 = null;
         Transaction tx = null;
-        boolean flag1 = false;
+        boolean surveySetEmpty = false;
 
         try {
         	if(activityId==null) return survey;
@@ -5099,41 +5233,42 @@ public class DbUtil {
 
             if(activityId==null || activityId.longValue()==0) return survey;
             AmpActivity activity = (AmpActivity) session.load(AmpActivity.class, activityId);
+            
             fundingSet = activity.getFunding();
             surveySet = activity.getSurvey();
             //logger.debug("fundingSet.size() : " + fundingSet.size());
             //logger.debug("surveySet.size() : " + surveySet.size());
             if (surveySet.size() < 1)
-                flag1 = true;
+                surveySetEmpty = true;
             if (fundingSet.size() < 1)
                 return survey;
             else {
                 // adding a survey per donor, having at least one funding for this activity, if there is none
                 // or if a new donor with funding is added.
-                boolean flag2 = true;
+                boolean newSurvey = true;
                 tx = session.beginTransaction();
                 iter1 = fundingSet.iterator();
                 while (iter1.hasNext()) {
                     AmpFunding ampFund = (AmpFunding) iter1.next();
                     donorOrgs.add(ampFund.getAmpDonorOrgId());
-                    if (!flag1) {
+                    if (!surveySetEmpty) {
                         iter2 = surveySet.iterator();
                         while (iter2.hasNext()) {
                             AmpAhsurvey ahs = (AmpAhsurvey) iter2.next();
                             if (ahs.getAmpDonorOrgId().equals(ampFund.getAmpDonorOrgId())) {
-                                flag2 = false;
+                                newSurvey = false;
                                 break;
                             }
                         }
                     }
-                    if (flag1 || flag2) {
+                    if (surveySetEmpty || newSurvey) {
                         AmpAhsurvey ahsvy = new AmpAhsurvey();
                         ahsvy.setAmpActivityId(activity);
                         ahsvy.setAmpDonorOrgId(ampFund.getAmpDonorOrgId());
                         activity.getSurvey().add(ahsvy);
-                        flag1 = false;
+                        surveySetEmpty = false;
                     }
-                    flag2 = true;
+                    newSurvey = true;
                 }
 
                 iter2 = surveySet.iterator();
@@ -5189,7 +5324,7 @@ public class DbUtil {
 
     public static List getResposesBySurvey(Long surveyId, Long activityId) {
         ArrayList responses = new ArrayList();
-        Set response = new HashSet();
+        List response = new ArrayList();
         Collection fundingSet = new ArrayList();
         Session session = null;
         Iterator iter1 = null;
@@ -5204,16 +5339,19 @@ public class DbUtil {
             AmpAhsurvey svy = (AmpAhsurvey) session.get(AmpAhsurvey.class, surveyId);
             //response = svy.getResponses();
             /*qry = "select res from " + AmpAhsurvey.class.getName()
-                + " res left join fetch res.responses where (res.ampAHSurveyId=:surveyId)";
+                + " res where (res.ampAHSurveyId=:surveyId)";
             Query query = session.createQuery(qry);
             query.setParameter("surveyId", surveyId, Hibernate.LONG);
-            response = ( (AmpAhsurvey) query.list().get(0)).getResponses();
-            */
-            qry = "select res from " + AmpAhsurveyResponse.class.getName() + " res where res.ampAHSurveyId=:surveyId";
+            response = ( (AmpAhsurvey) query.list().get(0)).getResponses();*/
+            
+            //TODO: The whole logic for saving the first survey data and future retrieving must be redone.
+            //This query is necesary because of the lazy="false" which is necesary because the way the PI reports are created.
+            qry = "select resp from " + AmpAhsurveyResponse.class.getName() + " resp where resp.ampAHSurveyId=:surveyId";
             Query query = session.createQuery(qry);
             query.setParameter("surveyId", surveyId, Hibernate.LONG);
-            response = new HashSet(query.list());
-
+            response = query.list();
+            
+     
             qry = "select fund from " + AmpFunding.class.getName()
                 + " fund where (fund.ampDonorOrgId=:donorId) and (fund.ampActivityId=:activityId)";
             query = session.createQuery(qry);
@@ -5457,7 +5595,7 @@ public class DbUtil {
         }
     }
 
-    public static Collection<AmpAhsurveyIndicator> getAllAhSurveyIndicators() {
+    public static Collection getAllAhSurveyIndicators() {
         Collection responses = new ArrayList();
         Session session = null;
 
@@ -5518,7 +5656,6 @@ public class DbUtil {
         Session session = null;
         ArrayList responses = new ArrayList();
         Collection surveyDonors = new ArrayList();
-        Set surveySet = new HashSet();
         boolean orgGroupFlag = false;
         int NUM_ANSWER_COLUMNS = 4;
         int YEAR_RANGE = (closeYear - startYear + 1);
@@ -5535,10 +5672,23 @@ public class DbUtil {
         String date = null;
         Iterator itr1 = null, itr2 = null, itr3 = null, itr4 = null;
 
+        
+        Comparator surveyComp = new Comparator() {
+            public int compare(Object o1, Object o2) {
+            	AmpAhsurvey s1 = (AmpAhsurvey) o1;
+            	AmpAhsurvey s2 = (AmpAhsurvey) o2;
+                if(s1 != null && s2 != null) {
+                	return s1.getAmpAHSurveyId().toString().compareTo(s2.getAmpAHSurveyId().toString());
+                } else {
+                	return 0;
+                }
+            }
+        };
+        Set surveySet = new TreeSet(surveyComp);
         try {
             //logger.debug("indcCode[inside getAidSurveyReportByIndicator] : " + indcCode);
             session = PersistenceManager.getRequestDBSession();
-            String qry = "select distinct dn.pointOfDeliveryDonor from " + AmpAhsurvey.class.getName() + " dn";
+            String qry = "select distinct dn.pointOfDeliveryDonor from " + AmpAhsurvey.class.getName() + " dn order by dn.pointOfDeliveryDonor.acronym";
             //String qry = "select distinct dn.pointOfDeliveryDonor from " + AmpAhsurvey.class.getName() + " dn";
             surveyDonors.addAll(session.createQuery(qry).list());
             //logger.debug("total donors from AmpOrganisation[surveyDonors] : " + surveyDonors.size());
@@ -5568,14 +5718,14 @@ public class DbUtil {
                         AmpOrgGroup og2 = r2.getOrgGrpId();
                         if (og1 != null && og2 != null) {
                             if (og1.getOrgGrpName() != null && og2.getOrgGrpName() != null) {
-                                og1.getOrgGrpName().compareTo(og2.getOrgGrpName());
+                                return og1.getOrgGrpName().compareTo(og2.getOrgGrpName());
                             } else {
                                 return 0;
                             }
                         } else {
                             return 0;
                         }
-                        return r1.getAcronym().trim().toLowerCase().compareTo(r2.getAcronym().trim().toLowerCase());
+                        //return r1.getAcronym().trim().toLowerCase().compareTo(r2.getAcronym().trim().toLowerCase());
                     }
                 };
                 Collections.sort( (List) surveyDonors, dnComp);
@@ -5617,7 +5767,14 @@ public class DbUtil {
                         if (!donor.equals(dnOrg.getAmpOrgId().toString()))
                             continue;
                     }
-                    surveySet.addAll(dnOrg.getSurveyByPointOfDeliveryDonor());
+                    
+                    Collection surveysAux = null;
+                    qry = "select sv from " + AmpAhsurvey.class.getName() + " sv where sv.pointOfDeliveryDonor.ampOrgId=:orgId ";
+                    surveysAux = session.createQuery(qry).setParameter("orgId", dnOrg.getAmpOrgId(), Hibernate.LONG).list();
+                    Collections.sort((List) surveysAux, surveyComp);
+                    surveySet.addAll(surveysAux);
+                    
+                    //surveySet.addAll(dnOrg.getSurveyByPointOfDeliveryDonor());
                     //logger.debug("dnOrg.getAmpOrgId() : " + dnOrg.getAmpOrgId() + "  dnOrg.getAcronym() : " +dnOrg.getAcronym());
                     //logger.debug("----------------------------------------------------------------------------------------------");
                     // Filtering by org-group here
@@ -5685,7 +5842,14 @@ public class DbUtil {
                                 }
                             }
                             if ("4".equalsIgnoreCase(indcCode)) {
-                                Iterator iter = svy.getResponses().iterator();
+                            	session = PersistenceManager.getRequestDBSession();
+                                qry = "select resp from " + AmpAhsurveyResponse.class.getName() + " resp where resp.ampAHSurveyId=:surveyId order by resp.ampAHSurveyId.ampAHSurveyId";
+                                Query query = session.createQuery(qry);
+                                query.setParameter("surveyId", svy.getAmpAHSurveyId(), Hibernate.LONG);
+                                List response = query.list();
+                                Iterator iter = response.iterator();
+                                
+                                //Iterator iter = svy.getResponses().iterator();
                                 while (iter.hasNext()) {
                                     AmpAhsurveyResponse resp = (AmpAhsurveyResponse) iter.next();
                                     if (4 == resp.getAmpQuestionId().getQuestionNumber().intValue()) {
@@ -5704,10 +5868,10 @@ public class DbUtil {
                             answers = answersColl[index++];
                             ////System.out.println(svy.getAmpActivityId().getName());
 
-                            AmpOrganisation pdOrg=svy.getPointOfDeliveryDonor();
+                            AmpOrganisation pdOrgPoDD=svy.getPointOfDeliveryDonor();
                             AmpOrganisation dnOrgOriginalOrganization = svy.getAmpDonorOrgId();
-                            if (pdOrg!=null && pdOrg.getOrgGrpId() != null && pdOrg.getOrgGrpId().getOrgGrpName() != null) {
-                                pi.setDonor(pdOrg.getOrgGrpId().getOrgGrpName());
+                            if (pdOrgPoDD!=null && pdOrgPoDD.getOrgGrpId() != null && pdOrgPoDD.getOrgGrpId().getOrgGrpName() != null) {
+                                pi.setDonor(pdOrgPoDD.getOrgGrpId().getOrgGrpName());
                             } else {
                                 pi.setDonor("N/A");
                             }
@@ -5731,22 +5895,24 @@ public class DbUtil {
                                             AmpFunding fund = (AmpFunding) itr3.next();
                                             // Only those donors are considered who have funding for the activity/project
                                             //System.out.println(dnOrgOriginalOrganization.getAmpOrgId()+" - "+fund.getAmpDonorOrgId().getAmpOrgId());
-                                            if (0 == dnOrg.getAmpOrgId().compareTo(fund.getAmpDonorOrgId().getAmpOrgId()) || 
-                                            		0 == dnOrgOriginalOrganization.getAmpOrgId().compareTo(fund.getAmpDonorOrgId().getAmpOrgId())) {
+                                            if (svy.getAmpDonorOrgId().getAmpOrgId().equals(fund.getAmpDonorOrgId().getAmpOrgId())/* dnOrg.getAmpOrgId().equals(fund.getAmpDonorOrgId().getAmpOrgId()) || 
+                                            		dnOrgOriginalOrganization.getAmpOrgId().equals(fund.getAmpDonorOrgId().getAmpOrgId())*/) {
                                             	// Filtering by financing-instrument here
                                                 if (null != financingInstr) {
                                                     if (!financingInstr.getId().equals(fund.getFinancingInstrument().getId()))
                                                         continue;
                                                 }
+                                                //TODO: get rid of hardcoded values and check for the french string "Support Budg�taire Direct".
                                                 if ("9".equalsIgnoreCase(indcCode)) {
                                                     if (j == 0)
-                                                    	if ( !CategoryManagerUtil.equalsCategoryValue(fund.getFinancingInstrument(), CategoryConstants.FIN_INSTR_DIRECT_BUDGET_SUPPORT) )
-                                                        {
-                                                            //logger.debug("continue[indcCode=9]: because of !Direct Budget Suppor");
+                                                    	if ( !CategoryManagerUtil.equalsCategoryValue(fund.getFinancingInstrument(), CategoryConstants.FIN_INSTR_BUDGET_SUPPORT) 
+                                                    			& !fund.getFinancingInstrument().getId().equals(new Long(84))) {
+                                                            logger.warn(fund.getFinancingInstrument().getValue());
                                                             continue;
                                                         }
                                                     if (j == 1)
-                                                        if (CategoryManagerUtil.equalsCategoryValue(fund.getFinancingInstrument(), CategoryConstants.FIN_INSTR_DIRECT_BUDGET_SUPPORT)) {
+                                                        if (CategoryManagerUtil.equalsCategoryValue(fund.getFinancingInstrument(), CategoryConstants.FIN_INSTR_BUDGET_SUPPORT)
+                                                        		|| fund.getFinancingInstrument().getId().equals(new Long(84))) {
                                                             //logger.debug("continue[indcCode=9]: because of Direct Budget Suppor");
                                                             continue;
                                                         }
@@ -6130,7 +6296,7 @@ public class DbUtil {
      * survey-responses with required report-answers for the aid-effectiveness-indicator
      * except for those indicators with code '10a', '10b'.
      */
-    public static boolean[][] getSurveyReportAnswer(String indCode, Set surveys) {
+    public static boolean[][] getSurveyReportAnswer(String indCode, Set surveys) throws DgException {
         boolean answersColl[][] = new boolean[surveys.size()][];
         boolean answers[] = null;
         boolean flag[] = null;
@@ -6159,11 +6325,21 @@ public class DbUtil {
             //			+ " Acronym: " + ahs.getAmpDonorOrgId().getAcronym());
             answers = new boolean[NUM_COLUMNS_CALCULATED];
             //Dont use "&& ahs.getResponses().size()>0" with lazy="true"
-            if (null != ahs.getResponses()/* && ahs.getResponses().size() > 0*/) {
+            
+            //TODO: The whole logic for saving the first survey data and future retrieving must be redone.
+            //This query is necesary because of the lazy="false" which is necesary because the way the PI reports are created.
+            Session session = PersistenceManager.getRequestDBSession();
+            String qry = "select resp from " + AmpAhsurveyResponse.class.getName() + " resp where resp.ampAHSurveyId=:surveyId";
+            Query query = session.createQuery(qry);
+            query.setParameter("surveyId", ahs.getAmpAHSurveyId(), Hibernate.LONG);
+            List response = query.list();
+            
+            if (response != null /* null != ahs.getResponses()*//* && ahs.getResponses().size() > 0*/) {
                 //logger.debug("ahs.getResponses().size() : " + ahs.getResponses().size());
                 for (int i = 0; i < NUM_COLUMNS_CALCULATED; i++)
                     flag[i] = false;
-                itr2 = ahs.getResponses().iterator();
+                //itr2 = ahs.getResponses().iterator();
+                itr2 = response.iterator();
                 while (itr2.hasNext()) {
                     AmpAhsurveyResponse resp = (AmpAhsurveyResponse) itr2.next();
                     quesNum = resp.getAmpQuestionId().getQuestionNumber().intValue();
@@ -6224,19 +6400,13 @@ public class DbUtil {
                     }
                     if ("5b".equalsIgnoreCase(indCode)) {
                         if (quesNum == 8) {
-                            flag[0] = true;
-                            answers[0] = ("Yes".equalsIgnoreCase(resp.getResponse())) ? true : false;
-                            //logger.debug("indCode: " + indCode + " q#: " + 8 + " - answers[0] : " + answers[0]);
+                            flag[0] = "Yes".equalsIgnoreCase(resp.getResponse());
                         }
                         if (quesNum == 1) {
-                            flag[1] = true;
-                            answers[1] = ("Yes".equalsIgnoreCase(resp.getResponse())) ? true : false;
-                            //logger.debug("indCode: " + indCode + " q#: " + 1 + " - answers[1] : " + answers[1]);
+                            answers[1] = "Yes".equalsIgnoreCase(resp.getResponse());
+                            flag[1] = answers[1];
                         }
-                        if (flag[0] && flag[1])
-                            break;
-                        else
-                            continue;
+                        answers[0] = (flag[0] & flag[1]);
                     }
                     if ("6".equalsIgnoreCase(indCode)) {
                         if (quesNum == 9) {

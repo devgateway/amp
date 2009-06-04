@@ -19,7 +19,7 @@
 <script type="text/javascript">
 BASE_YEAR	= <globalsettings:value name="Year Range Start" />;
 var helpBody=' <digi:trn jsFriendly="true"> to open all reports on one page, please enter the digit "0"</digi:trn>';
-var helpBodyAct=' <digi:trn jsFriendly="true"> to open all activites on one page, please enter the digit "0"</digi:trn>';
+var helpBodyAct=' <digi:trn jsFriendly="true"> Please enter a number greater than "1"</digi:trn>';
 var helpTitle='<digi:trn jsFriendly="true">Report Sheet</digi:trn>';
 function validade(){
   var defReportsPerPage = document.getElementById("defRecsPerPage");

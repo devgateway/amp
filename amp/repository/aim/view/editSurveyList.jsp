@@ -14,6 +14,7 @@
 
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 
 
@@ -302,8 +303,8 @@
 
 								<!-- contents -->
 
-
-							<feature:display name="Paris Indicator" module="Add & Edit Activity">
+							<feature:display name="Paris Indicators" module="Paris Indicators">
+							<field:display name="Paris Survey" feature="Paris Indicators">
 
 								<table width="95%" bgcolor="#f4f4f2" border="0">
 
@@ -337,7 +338,7 @@
                                         <TD width="200"><digi:trn key="aim:pointOfDeliveryDonor">Point of delivery donor</digi:trn></TD>
 									</TR>
 
-									<nested:empty name="aimEditActivityForm" property="survey.survey">
+									<nested:empty name="aimEditActivityForm" property="surveyFundings">
 
 			                    		<TR valign="top">
 
@@ -348,9 +349,9 @@
 
 			                    	</nested:empty>
 
-			                    	<nested:notEmpty name="aimEditActivityForm" property="survey.survey">
+			                    	<nested:notEmpty name="aimEditActivityForm" property="surveyFundings">
 
-										<nested:iterate name="aimEditActivityForm" property="survey.survey" id="surveyFund" indexId="cntr"
+										<nested:iterate name="aimEditActivityForm" property="surveyFundings" id="surveyFund" indexId="cntr"
 
 			  	                   					    type="org.digijava.module.aim.helper.SurveyFunding">
 
@@ -361,6 +362,8 @@
 												<c:set target="${urlParams}" property="surveyId" value="${surveyFund.surveyId}" />
 
 												<c:set target="${urlParams}" property="edit" value="true" />
+
+                                                <c:set target="${urlParams}" property="index" value="${cntr}" />
 
 												<c:set var="translation">
 
@@ -391,6 +394,7 @@
 
 								</table>
 
+								</field:display>
 								</feature:display>
 						
 

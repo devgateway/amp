@@ -60,11 +60,11 @@ public class EventTypeForm
         ActionErrors errors = new ActionErrors();
 
         if(this.getEventTypeColor()==null || this.getEventTypeColor().trim().equals("")){
-            errors.add(null, new ActionError("error.calendar.emptyEventTypeName"));
+            errors.add(null, new ActionError("error.calendar.emptyEventTypeColor"));
         }
 
         if(this.getEventTypeName()==null || this.getEventTypeName().trim().equals("")){
-            errors.add(null, new ActionError("error.calendar.emptyEventTypeColor"));
+            errors.add(null, new ActionError("error.calendar.emptyEventTypeName"));
         }else{
             String color = this.getEventTypeColor();
             if(color != null) {

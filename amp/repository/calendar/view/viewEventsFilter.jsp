@@ -23,7 +23,7 @@ function submitFilterForm(view, timestamp) {
 }
 function changeState() {
   var showPublicEvents = document.getElementById('showPublicEvents');
-  if ( showPublicEvents.checked==true) {
+  if (showPublicEvents!=null && showPublicEvents.checked==true) {
     document.calendarViewForm.resetFilter.value=true;
   }
   else{
@@ -80,11 +80,11 @@ function changeEventTypesState(){
 
 <feature:display name="Filter" module="Calendar">
 	<field:display name="Event Type Filter" feature="Filter">
-		<div style="width:200px;height:auto;max-height:120px;border:1px solid #CCECFF;font-family:Tahoma;vertical-align: top;">
+		<div style="width:220px;height:auto;max-height:120px;border:1px solid #CCECFF;font-family:Tahoma;vertical-align: top;">
 		  <div style="padding:5px;font-size:12px;color:White;background-color: #376091;font-family:Tahoma;">
 		  	<digi:trn key="calendar:eventTypes:page_header">Event Types</digi:trn>
 		  </div>
-		  <div style="overflow:auto;width:200px;height:auto;max-height:92px;font-size:12px;font-family:Tahoma;">
+		  <div style="overflow:auto;width:220px;height:auto;max-height:92px;font-size:12px;font-family:Tahoma;">
 		    <c:if test="${!empty calendarViewForm.filter.eventTypes}">
 		      <table cellpadding="0" cellspacing="0">
 		        <c:forEach var="eventType" items="${calendarViewForm.filter.eventTypes}" varStatus="stat">
@@ -106,15 +106,15 @@ function changeEventTypesState(){
 		  </div>
 		</div>
 	</field:display>	
-	<div style="width:200px;height:5px;font-family:Tahoma;">
+	<div style="width:220px;height:5px;font-family:Tahoma;">
 	&nbsp;
 	</div>
 	<field:display name="Donor Filter" feature="Filter">
-		<div style="width:200px;height:auto;max-height:220px;border:1px solid #CCECFF;font-family:Tahoma;white-space: nowrap;">
+		<div style="width:220px;height:auto;max-height:220px;border:1px solid #CCECFF;font-family:Tahoma;white-space: nowrap;">
 		  <div style="padding:5px;font-size:12px;color:White;background-color: #376091;font-family: Tahoma;">
 		  <digi:trn key="calendar:bodydonors">Donors</digi:trn>
 		  </div>
-		  <div style="overflow:auto;width:200px;height:auto;max-height:200px;font-size:12px;font-weight:bold;font-family:Tahoma;white-space: nowrap">
+		  <div style="overflow:auto;width:220px;height:auto;max-height:200px;font-size:12px;font-weight:bold;font-family:Tahoma;white-space: nowrap">
 		    <c:if test="${!empty calendarViewForm.filter.donors}">
 		      <table cellpadding="0" cellspacing="0">
 		        <tr>

@@ -76,11 +76,11 @@ public class TemplateAlertActions extends DispatchAction {
 	    	String[] messageReceivers=msgForm.getReceiversIds();
 	    	
 	    	if(msgForm.getTemplateId()==null) {
-	    		newTemplate=new TemplateAlert();   		    		
+	    		newTemplate=new TemplateAlert();
 	    	}else {
 	    		newTemplate=new TemplateAlert();
 	    		//remove all States that were associated to this message
-				List<AmpMessageState> statesAssociatedWithMsg=AmpMessageUtil.loadMessageStates(msgForm.getTemplateId());
+				List<AmpMessageState> statesAssociatedWithMsg=AmpMessageUtil.loadMessageStates(msgForm.getTemplateId());				
 				for (AmpMessageState state : statesAssociatedWithMsg) {
 					AmpMessageUtil.removeMessageState(state);
 				}

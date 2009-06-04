@@ -57,14 +57,14 @@ function saveIndicator(id){
 }
 
 function selectLocation(index){
-	
+    <digi:context name="justSubmit" property="context/module/moduleinstance/addEditData.do?action=justSubmit" />
+  	document.aimThemeForm.action = "<%=justSubmit%>&index="+index;
+  	document.aimThemeForm.submit();
   <digi:context name="selLoc" property="context/module/moduleinstance/selectLocationForIndicatorValue.do?action=justSubmit"/>  
   openURLinWindow("<%=selLoc%>&index="+index,700,500);
-  
-  <digi:context name="justSubmit" property="context/module/moduleinstance/addEditData.do?action=justSubmit" /> 
-  	aimThemeForm.action = "<%=justSubmit%>&index="+index;  
-  	aimThemeForm.submit();    
-  
+
+
+
 }
 
 function validation(){
@@ -151,19 +151,8 @@ function validation(){
           </td>
 
           <td bgColor=#d7eafd width="100%">
-            <c:if test="${ind.location!=null}">
-            	<c:if test="${!empty ind.location.country}">
-                	[${ind.location.country}]
-                </c:if>
-                <c:if test="${!empty ind.location.region}">
-                	[${ind.location.region}]
-                </c:if>
-                <c:if test="${!empty ind.location.zone}">
-                	[${ind.location.zone}]
-                </c:if>
-                <c:if test="${!empty ind.location.woreda}">
-                	[${ind.location.woreda}]
-                </c:if> 
+            <c:if test="${ind.location!=null&&ind.location.location!=null}">
+                ${ind.location.location.name}
             </c:if>
             <c:if test="${ind.location==null}">
               <span>[<span style="color:Red"><digi:trn key="aim:addeditdata:national">National</digi:trn></span>]</span>

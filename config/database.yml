@@ -28,3 +28,7 @@ ampdev_nicaragua_development:
 ampdev_mozambique_development:
   <<: *global
   database: odadata_mozambique
+
+odanic_production:
+  <<: *global
+  database: odanic_production

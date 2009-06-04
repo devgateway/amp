@@ -28,6 +28,7 @@ import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.FundingValidator;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.MTEFProjection;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -88,8 +89,7 @@ public class FundingAdded extends Action {
 						if (( fundDet.getTransactionType() == Constants.EXPENDITURE )&&(fundDet.getAdjustmentType()==Constants.ACTUAL))
 							totalExps	+= amount;
 			}
-			// Don't know why when using constant it is not working ???
-			String alert = FeaturesUtil.getGlobalSettingValue("Alert if sum of disbursments is bigger than sum of commitments");
+			String alert = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALERT_IF_DISBURSMENT_BIGGER_COMMITMENTS);
 			//
 			if (Boolean.parseBoolean(alert)) {
 				if (totalDisbs > totalComms) {

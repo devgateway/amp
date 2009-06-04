@@ -75,8 +75,8 @@ public class addWorkSpaceUser extends Action{
 			
 			/* check if user have selected role as Team Lead when a team lead 
 			 * already exist for the team */
-			if (ampTeam.getTeamLead() != null &&
-					ampTeam.getTeamLead().getAmpMemberRole().getAmpTeamMemRoleId().equals(upMemForm.getRole())) {
+			if (TeamMemberUtil.getTeamHead(ampTeam.getAmpTeamId()) != null &&
+					TeamMemberUtil.getTeamHead(ampTeam.getAmpTeamId()).getAmpMemberRole().getAmpTeamMemRoleId().equals(upMemForm.getRole())) {
 				upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
 				errors.add(ActionErrors.GLOBAL_ERROR,new ActionError(
 						"error.aim.addTeamMember.teamLeadAlreadyExist"));

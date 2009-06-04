@@ -1,5 +1,3 @@
-call drop_table_if_exist ('cached_v_sectors');
-CREATE TABLE cached_v_sectors AS SELECT * FROM v_sectors_cached;
 call drop_table_if_exist ('cached_amp_activity');
 CREATE TABLE cached_amp_activity as select * from amp_activity;
 call drop_table_if_exist ('cached_v_donor_date_hierarchy');
@@ -12,7 +10,7 @@ CREATE TABLE cached_v_donor_date_hierarchy AS SELECT * FROM v_donor_date_hierarc
 alter table cached_v_donor_date_hierarchy modify quarter_name varchar(2);
 insert into cached_v_donor_date_hierarchy SELECT * FROM v_donor_date_hierarchy;
 call drop_table_if_exist ('cached_v_donor_funding');
-CREATE TABLE cached_v_donor_funding AS SELECT * FROM v_donor_funding;
+CREATE TABLE cached_v_donor_funding AS SELECT * FROM v_donor_funding_cached;
 call drop_table_if_exist ('cached_v_regions');
 CREATE TABLE cached_v_regions AS SELECT * FROM v_regions_cached;
 call drop_table_if_exist ('cached_v_primary_program');

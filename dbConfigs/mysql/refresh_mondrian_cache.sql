@@ -1,5 +1,3 @@
-DROP TABLE IF EXISTS cached_v_sectors;
-CREATE TABLE cached_v_sectors AS SELECT * FROM v_sectors_cached;
 DROP TABLE IF EXISTS cached_amp_activity;
 CREATE TABLE cached_amp_activity LIKE amp_activity;
 INSERT INTO cached_amp_activity SELECT * FROM amp_activity;
@@ -10,7 +8,7 @@ alter table cached_v_donor_date_hierarchy modify quarter_name varchar(2);
 insert into cached_v_donor_date_hierarchy SELECT * FROM v_donor_date_hierarchy;
 
 DROP TABLE IF EXISTS cached_v_donor_funding;
-CREATE TABLE cached_v_donor_funding AS SELECT * FROM v_donor_funding;
+CREATE TABLE cached_v_donor_funding AS SELECT * FROM `v_donor_funding_cached`;
 DROP TABLE IF EXISTS cached_v_regions;
 CREATE TABLE cached_v_regions AS SELECT * FROM `v_regions_cached`;
 DROP TABLE IF EXISTS cached_v_primary_program;
@@ -32,14 +30,6 @@ CREATE INDEX idx_curr_code ON `cached_v_donor_funding`(currency_code);
 CREATE INDEX idx_financ_intrum ON `cached_v_donor_funding`(financing_instrument_name);
 CREATE INDEX idx_donor_type ON `cached_v_donor_funding`(donor_type_name);
 CREATE INDEX idx_donor_group ON `cached_v_donor_funding`(org_grp_name);
-
-CREATE INDEX idx_amp_activity ON `cached_v_sectors`(amp_activity_id);
-CREATE INDEX idx_sector_id ON `cached_v_sectors`(amp_sector_id);
-CREATE INDEX idx_sector_name ON `cached_v_sectors`(sectorname);
-CREATE INDEX idx_trans_amount ON `cached_v_sectors`(transaction_amount);
-CREATE INDEX idx_trans_type ON `cached_v_sectors`(transaction_type);
-CREATE INDEX idx_adj_type ON `cached_v_sectors`(adjustment_type);
-CREATE INDEX idx_currency_code ON `cached_v_sectors`(currency_code);
 
 CREATE INDEX idx_amp_activity ON `cached_v_regions`(amp_activity_id);
 CREATE INDEX idx_region_id ON `cached_v_regions`(region_id);

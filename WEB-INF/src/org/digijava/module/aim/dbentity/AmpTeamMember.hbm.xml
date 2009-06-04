@@ -20,6 +20,7 @@
 			class="org.digijava.module.aim.dbentity.AmpTeamMemberRoles" cascade="none" />
 
 		<set name="activities" table="AMP_MEMBER_ACTIVITIES" lazy="true">
+			<cache usage="read-write" />
 			<key column="amp_member_id" />
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpActivity"
 				column="amp_activity_id" />
@@ -33,12 +34,14 @@
 		</set>
 
 
-		<set name="reports" table="AMP_MEMBER_REPORTS" lazy="false" cascade="save-update">
+		<set name="reports" table="AMP_MEMBER_REPORTS" lazy="true" cascade="save-update">
+			<cache usage="read-write" />
 			<key column="amp_member_id" />
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpReports"
 				column="amp_report_id" />
 		</set>
 		<set name="logs" table="AMP_REPORT_LOG" lazy="true" cascade="save-update">
+			<cache usage="read-write" />
 			<key column="amp_member_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpReportLog" />
 		</set>
@@ -51,11 +54,13 @@
 		</set>
 
 		<set name="desktopTabSelections" lazy="true" inverse="true" cascade="all-delete-orphan">
+			<cache usage="read-write" />
 			<key column="owner_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpDesktopTabSelection" />
 		</set>
 		
 		<set name="messages" inverse="true" cascade="delete">
+			<cache usage="read-write" />
 			<key column="receiver_id" />
 			<one-to-many class="org.digijava.module.message.dbentity.AmpMessageState" />
 		</set>

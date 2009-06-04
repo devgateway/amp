@@ -218,10 +218,10 @@ function setHoveredTable(tableId, hasHeaders) {
 			<div id="demo" class="yui-navset">			
 				<ul class="yui-nav">
 			        <feature:display name="My Resources" module="Resources">
-			        	<c:if  test="${selectedType=='private'}">
+			        	<c:if  test="${selectedType=='private' || selectedType=='version'}">
 			        		<li id="tab1" class="selected"><a href="#my_res"><div><digi:trn key="rep:res:dhtmlTab:myresources">My Resources</digi:trn></div></a></li>
 			        	</c:if>
-			        	<c:if  test="${selectedType!='private'}">
+			        	<c:if  test="${selectedType!='private' && selectedType!='version'}">
 			        		<li id="tab1"><a href="#my_res"><div><digi:trn key="rep:res:dhtmlTab:myresources">My Resources</digi:trn></div></a></li>
 			        	</c:if>
 			        </feature:display>

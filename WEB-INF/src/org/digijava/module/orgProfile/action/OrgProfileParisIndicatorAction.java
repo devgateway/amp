@@ -1,7 +1,4 @@
-
-
 package org.digijava.module.orgProfile.action;
-
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,9 +23,9 @@ import org.digijava.module.orgProfile.helper.ParisIndicatorHelper;
  *
  * @author medea
  */
-public class OrgProfileParisIndicatorAction extends Action  {
+public class OrgProfileParisIndicatorAction extends Action {
 
- private static Logger logger = Logger.getLogger(OrgProfileParisIndicatorAction.class);
+    private static Logger logger = Logger.getLogger(OrgProfileParisIndicatorAction.class);
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
@@ -48,8 +45,8 @@ public class OrgProfileParisIndicatorAction extends Action  {
                     ParisIndicatorHelper piHelper=new ParisIndicatorHelper(piIndicator,filter,true);
                     indicatorHelpers.add(piHelper);
 
-                    /* we should add indicator 5aii and indicator 5bii,
-                        these indicators don't exist in db so we add them manually*/
+            /* we should add indicator 5aii and indicator 5bii,
+            these indicators don't exist in db so we add them manually*/
 
                     if(piIndicator.getIndicatorCode().equals("5a")){
                         AmpAhsurveyIndicator ind5aii=new AmpAhsurveyIndicator();

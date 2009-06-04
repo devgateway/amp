@@ -41,7 +41,7 @@ public class DigiSchemaExport {
     private static Logger logger = Logger.getLogger(DigiSchemaExport.class);
 
     public static void main(String[] args) throws Exception {
-
+    	StandaloneJndiAMPInitializer.initAMPUnifiedJndiAlias();
         ResourceStreamHandlerFactory.installIfNeeded();
 
         Map commandLineParams = getCommandLineParameters(args);

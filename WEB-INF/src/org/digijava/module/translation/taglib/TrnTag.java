@@ -321,7 +321,7 @@ public class TrnTag
         	backUrl = java.net.URLEncoder.encode(RequestUtils.getRelativeSourceURL(request),"UTF-8");
         	} catch (Exception ex){
         		logger.debug(ex);
-            	backUrl = RequestUtils.getRelativeSourceURL(request);
+            backUrl = RequestUtils.getRelativeSourceURL(request);
         	}
 
             Site rootSite = DgUtil.getRootSite(site);

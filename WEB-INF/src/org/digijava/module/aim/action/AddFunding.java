@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -20,6 +21,7 @@ import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.helper.MTEFProjection;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -28,6 +30,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.gateperm.core.GatePermConst;
 
 public class AddFunding extends Action {
 
@@ -40,6 +43,8 @@ public class AddFunding extends Action {
 								response) throws java.lang.Exception {
 
 		EditActivityForm formBean = (EditActivityForm) form;
+		//this is needed to aknowledge that we are still under EDIT ACTIVITY mode:
+        request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.EDIT);
 		formBean.setReset(false);
 		Long orgId = formBean.getFunding().getOrgId();
 		 if ( logger.isDebugEnabled() )
@@ -63,10 +68,33 @@ public class AddFunding extends Action {
         formBean.getFunding().setFundingMTEFProjections( new ArrayList<MTEFProjection>() );
 
         boolean afterFiscalYearStart	= isAfterFiscalYearStart(null);
+        MTEFProjection me	= null;
+        Integer year				= null;
 		for (int i=0; i<3; i++) {
-			MTEFProjection me	= getMTEFProjection(request.getSession(), i, afterFiscalYearStart, null );
+			if ( i == 0 )  {
+					me	= getMTEFProjection(request.getSession(), 0, afterFiscalYearStart, null );
+					try {
+						year	= Integer.parseInt( me.getProjectionDate().split("/")[2] );
+					}
+					catch (Exception e) {
+						logger.error(e);
+						break;
+					}
+			}
+			else
+				me		= getMTEFProjection(request.getSession(), i, false, year + i);
+				
 			formBean.getFunding().getFundingMTEFProjections().add( me );
 		}
+		List<KeyValue> availableMTEFProjectionYears		= 
+			AddFunding.generateAvailableMTEFProjectionYears( formBean.getFunding().getFundingMTEFProjections() ); 
+		formBean.getFunding().setAvailableMTEFProjectionYears( availableMTEFProjectionYears );
+		
+		int defaultIndex				= availableMTEFProjectionYears.size() - 1 - AddMTEFProjection.ADDITIONAL_AVAILABLE_YEARS;
+		formBean.getFunding().setSelectedMTEFProjectionYear( Integer.parseInt( 
+				availableMTEFProjectionYears.get(defaultIndex).getKey() )
+		);
+		
 		formBean.getFunding().setNumProjections(formBean.getFunding().getFundingMTEFProjections().size());
 
 		Collection<FundingOrganization> fundingOrganizations = formBean.getFunding().getFundingOrganizations();
@@ -146,13 +174,15 @@ public class AddFunding extends Action {
 
 		return gcCur.after(gcFY);
 	}
-	public static MTEFProjection getMTEFProjection(HttpSession session, int index, boolean afterFiscalYearStart, Integer baseYear) {
-		TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
+	public static MTEFProjection getMTEFProjection(HttpSession session, int index, boolean afterFiscalYearStart, Integer year) {
 		String currCode = Constants.DEFAULT_CURRENCY;
-		if (teamMember.getAppSettings() != null) {
-			ApplicationSettings appSettings = teamMember.getAppSettings();
-			if (appSettings.getCurrencyId() != null) {
-				currCode = CurrencyUtil.getCurrency(appSettings.getCurrencyId()).getCurrencyCode();
+		if ( session != null ) {
+			TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
+			if (teamMember.getAppSettings() != null) {
+				ApplicationSettings appSettings = teamMember.getAppSettings();
+				if (appSettings.getCurrencyId() != null) {
+					currCode = CurrencyUtil.getCurrency(appSettings.getCurrencyId()).getCurrencyCode();
+				}
 			}
 		}
 
@@ -164,9 +194,45 @@ public class AddFunding extends Action {
 
 		MTEFProjection mp 		= new MTEFProjection();
 		mp.setCurrencyCode(currCode);
-		mp.setProjectionDate( getFYDate(index+offset, baseYear) );
+		mp.setProjectionDate( getFYDate(offset, year) );
 		mp.setIndex( index );
-		mp.setIndexId( System.currentTimeMillis() );
 		return mp;
+	}
+	public static List<KeyValue> generateAvailableMTEFProjectionYears(List<MTEFProjection> projections) {
+		ArrayList<KeyValue> list		= new ArrayList<KeyValue>();
+		int maxYear							= 0;
+		int firstYear							= AddFunding.getMTEFProjection(null, 0, AddFunding.isAfterFiscalYearStart(null), null).getBaseYear();
+		if ( projections == null || projections.size() == 0 ) {
+			list.add( keyValueFromYear(firstYear) );
+			maxYear		= firstYear;
+		}
+		else {
+			int tempYear		= projections.get(0).getBaseYear();
+			maxYear			= tempYear;
+			
+			for ( int i=0; (firstYear+i)<tempYear; i++ ) {
+				list.add( keyValueFromYear(firstYear+i) );
+			}
+			
+			Iterator<MTEFProjection> iter 	= projections.iterator();
+			iter.next(); // we skip the first element in the list
+			while ( iter.hasNext() ) {
+				MTEFProjection nextProjection		= iter.next();
+				
+				for ( int i=1; i < nextProjection.getBaseYear()-tempYear; i++ ) {
+					list.add( keyValueFromYear(tempYear+i) );
+				}
+				maxYear	= tempYear					= nextProjection.getBaseYear();
+			}
+			list.add( keyValueFromYear(++maxYear) );
+		}
+		for (int i=1; i<=2; i++) 
+			list.add( keyValueFromYear(maxYear+i) );
+		return list;
+	}
+	public static KeyValue keyValueFromYear(int year) {
+			String value	= year + "/" + (year+1);
+			String key		= year+"";
+			return new KeyValue(key, value);
 	}
 }

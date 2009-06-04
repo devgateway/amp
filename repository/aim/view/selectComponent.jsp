@@ -200,7 +200,7 @@
 													</select>
 												</td>
 												<td>
-													<input type="text" readonly="true" name="<%=field4%>" id="<%=field4%>" value="<c:out value="${comm.transactionDate}"/>" size="10" class="inp-text">&nbsp; <a id="date1<%=field4%>" href='javascript:pickDateById("date1<%=field4%>","<%=field4%>")'>
+													<input type="text" readonly="true" name="<%=field4%>" id="<%=field4%>" value="<c:out value="${comm.transactionDate}"/>" size="10" class="inp-text">&nbsp; <a id="date1<%=field4%>" href='javascript:pickDateById_divContent("<%=field4%>","<%=field4%>")'>
 												</td>
 												<td>
 													<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
@@ -286,7 +286,7 @@
 														<input type="text" name="<%=field4%>" id="<%=field4%>" readonly="true" value="<c:out value="${comm.transactionDate}"/>" size="10" class="inp-text">
 													</td>
 													<td>
-														<a id="date2<%=field4%>" href='javascript:pickDateById("date2<%=field4%>","<%=field4%>")'>
+														<a id="date2<%=field4%>" href='javascript:pickDateById_divContent("<%=field4%>","<%=field4%>")'>
 														<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0></a>
 														<input type="hidden" name="<%=field6%>" value="${comm.ampComponentFundingId}">
 													</td>
@@ -376,7 +376,7 @@
 															<input type="text" name="<%=field4%>" id="<%=field4%>" readonly="true" value="<c:out value="${comm.transactionDate}"/>" size="10" class="inp-text">
 														</td>
 														<td>
-															<a id="date3<%=field4%>" href='javascript:pickDateById("date3<%=field4%>","<%=field4%>")'>
+															<a id="date3<%=field4%>" href='javascript:pickDateById_divContent("<%=field4%>","<%=field4%>")'>
 																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0> 
 															</a>
 														</td>
@@ -444,7 +444,7 @@
 				</select>
 			</td>
 			<td><input type='text' name='comm_@@_4' id='comm_@@_4' size='10' class='inp-text'></td>
-			<td><a id='date1comm_@@_4' href="javascript:pickDateById('date1comm_@@_4','comm_@@_4')"><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0></a></td>
+			<td><a id='date1comm_@@_4' href="javascript:pickDateById_divContent('comm_@@_4','comm_@@_4')"><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0></a></td>
 			<td><input type='hidden' name='comm_@@_6' value=''></td>
 		    <c:set var='trnDeleteBtn'><digi:trn key='btn:delete'>delete</digi:trn></c:set>
 			<td><input type="button" value="${trnDeleteBtn}" class="inp-text" onclick="document.removeCommitment('comm_@@')"></td>
@@ -485,7 +485,7 @@
 				</select>
 			</td>
 			<td><input type='text' name='disb_@@_4' id='disb_@@_4' size='10' class='inp-text'></td>
-			<td><a id='date1disb_@@_4' href="javascript:pickDateById('date1disb_@@_4','disb_@@_4')"><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0></a></td>
+			<td><a id='date1disb_@@_4' href="javascript:pickDateById_divContent('disb_@@_4','disb_@@_4')"><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0></a></td>
 			<td><input type='hidden' name='disb_@@_6' value=''></td>
 		    <c:set var='trnDeleteBtn'><digi:trn key='btn:delete'>delete</digi:trn></c:set>
 			<td><input type="button" value="${trnDeleteBtn}" class="inp-text" onclick="document.removeDisbursement('disb_@@')"></td>
@@ -526,13 +526,13 @@
 				</select>
 			</td>
 			<td><input type='text' name='expn_@@_4' id='expn_@@_4' size='10' class='inp-text'></td>
-			<td><a id='date1expn_@@_4' href="javascript:pickDateById('date1expn_@@_4','expn_@@_4')"><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0></a></td>
+			<td><a id='date1expn_@@_4' href="javascript:pickDateById_divContent('expn_@@_4','expn_@@_4')"><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0></a></td>
 			<td><input type='hidden' name='expn_@@_6' value=''></td>
 		    <c:set var='trnDeleteBtn'><digi:trn key='btn:delete'>delete</digi:trn></c:set>
 			<td><input type="button" value="${trnDeleteBtn}" class="inp-text" onclick="document.removeExpenditure('expn_@@')"></td>
 		</tr>
 	</table>
-	<br>	
+	<br>
 </div>
 
 <script language="JavaScript">

@@ -2,6 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 	<class name="org.digijava.module.aim.dbentity.NpdSettings" table="AMP_NpdSettings">
+	<cache usage="read-write" />
 		<id name="npdSettingsId" column="npdSettings_id" type="java.lang.Long"
 			unsaved-value="null">
 			<generator class="native">

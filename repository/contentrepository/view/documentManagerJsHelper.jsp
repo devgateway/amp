@@ -10,7 +10,6 @@
 .all_markup .yui-dt-even {background-color:#FFFFFF;} 
 .all_markup .yui-dt-odd {background-color:#CCDBFF;} /* a light blue color */ 
 .all_markup .yui-dt-selected {background-color:#A7CC25;} /*green*/
-
 .all_markup .yui-dt-headtext {background-color: rgb(153, 153, 153); color: black;margin-right:5px;padding-right:15px;font-size: 10px;font: bold 7.5pt "Verdana"; color:black;}
 .all_markup .yui-dt-headcontainer {background-color: rgb(153, 153, 153); color: black;}
 .all_markup .yui-dt-sortedbyasc .yui-dt-headcontainer {color: black;background: url('/repository/contentrepository/view/images/up.gif') no-repeat right;}/*arrow up*/
@@ -249,9 +248,9 @@ YAHOO.namespace("YAHOO.amp.table");
 
 /* Function for creating YAHOO datatable for all documents*/
 YAHOO.amp.table.enhanceMarkup = function(markupName) {
-	//var cb = {key:"select",type:"checkbox", text:"${trans_headerSelect}",sortable:false,width:10};
-	
+
     this.columnHeaders = [
+        {key:"select",type:"checkbox", text:"${trans_headerSelect}",sortable:false,width:10},
 		{key:"resource_title",text:"${trans_headerResourceTitle}",sortable:true,width:150},
 	    {key:"type",text:"${trans_headerType}",sortable:true},
         {key:"file_name",text:"${trans_headerFileName}",sortable:true,width:150},
@@ -273,7 +272,6 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
 
 	var dataTable 				= new YAHOO.widget.DataTable(markupName, this.columnSet, null, options);
 	dataTable.subscribe("cellClickEvent", dataTable.onEventSelectRow);
-
 	if ( dataTable.getRecordSet().getLength() == null || dataTable.getRecordSet().getLength() == 0 ) {
 		dataTable.showEmptyMessage();
 	}
@@ -907,7 +905,7 @@ function validateAddDocument() {
 
 function setHeightOfDiv(divId, maxLimit, value ){
 	var obj	= document.getElementById(divId);
-	obj.style.width		= "480px";
+	obj.style.width		= "580px";
 	obj.style.overflow	= "auto";
 	if (obj.offsetHeight > maxLimit)  {
 		obj.style.height	= value;
@@ -967,4 +965,3 @@ YAHOO.util.Event.addListener(window, "load", initPanel) ;
 
 
 </script>
-

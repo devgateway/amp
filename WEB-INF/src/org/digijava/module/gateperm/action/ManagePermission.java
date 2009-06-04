@@ -12,9 +12,6 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -26,9 +23,13 @@ import org.digijava.module.gateperm.core.CompositePermission;
 import org.digijava.module.gateperm.core.Gate;
 import org.digijava.module.gateperm.core.GatePermission;
 import org.digijava.module.gateperm.core.Permission;
+import org.digijava.module.gateperm.core.PermissionMap;
 import org.digijava.module.gateperm.form.PermissionForm;
 import org.digijava.module.gateperm.util.ActionUtil;
 import org.digijava.module.gateperm.util.PermissionUtil;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.springframework.beans.BeanWrapperImpl;
 
 /**
@@ -101,32 +102,15 @@ public class ManagePermission extends MultiAction {
     }
 
     private ActionForward modeDelete(ActionMapping mapping, PermissionForm pf, HttpServletRequest request, HttpServletResponse response) throws Exception {
-	Session hs = PersistenceManager.getSession();
-	Long id = Long.parseLong(request.getParameter("permissionId"));
-	Permission p = (Permission) hs.get(Permission.class, id);
-	
-	Set<CompositePermission> compositeLinkedPermissions = p.getCompositeLinkedPermissions();
-	Iterator<CompositePermission> i=compositeLinkedPermissions.iterator();
-	while (i.hasNext()) {
-	    Transaction transaction = hs.beginTransaction();
-	    CompositePermission element = (CompositePermission) i.next();
-	    element.getPermissions().remove(p);
-	    hs.saveOrUpdate(element);
-	    transaction.commit();
-	 }
-
-	
-	hs.delete(p);
-	hs.flush();
-	PersistenceManager.releaseSession(hs);
-	
+    Long id = Long.parseLong(request.getParameter("permissionId"));
+    PermissionUtil.deletePermission(id);
 	return modeListExisting(mapping, pf, request, response);
     }
 
     private ActionForward modeListExisting(ActionMapping mapping, PermissionForm pf, HttpServletRequest request,
 	    HttpServletResponse response) throws Exception {
 
-	request.setAttribute("allPermissions", PermissionUtil.getAllUnDedicatedPermissions());
+	request.setAttribute("allPermissions", PermissionUtil.getAllPermissions());
 
 	return mapping.findForward("list");
     }

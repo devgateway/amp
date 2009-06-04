@@ -21,6 +21,10 @@ public class PermissionMap implements Serializable,Comparable {
 	protected Long objectIdentifier;
 	protected Permission permission;
 	
+	public String toString() {
+		return permissibleCategory+"("+(objectIdentifier==null?"global":objectIdentifier)+")";
+	}
+	
 	public boolean getDedicated() {
 	    if(permission==null) return false;
 	    return permission.isDedicated();

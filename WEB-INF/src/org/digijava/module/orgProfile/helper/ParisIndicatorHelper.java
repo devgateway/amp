@@ -134,7 +134,7 @@ public class ParisIndicatorHelper {
         Date endDate = OrgProfileUtil.getEndDate(fiscalCalendarId, year.intValue());
         String indicatorCode = prIndicator.getIndicatorCode();
         long previousYearValue = OrgProfileUtil.getValue( indicatorCode,  currency, organization.getAmpOrgId(), orgGroup.getAmpOrgGrpId(), startDate, endDate, member);;
-     
+
         return previousYearValue;
     }
 
@@ -185,7 +185,7 @@ public class ParisIndicatorHelper {
     public String getBaseLineValue() {
         return getFormula().getBaseLineValue();
     }
-    // all targetvalue 
+    // all targetvalue
 
     public String getTargetValue() {
         return getFormula().getTargetValue();

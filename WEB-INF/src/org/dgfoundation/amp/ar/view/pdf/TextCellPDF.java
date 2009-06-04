@@ -58,7 +58,7 @@ public class TextCellPDF extends PDFExporter {
 			
 			//requirements for translation purposes
 			TranslatorWorker translator=TranslatorWorker.getInstance();
-			String siteId=parent.getReportMetadata().getSiteId();
+			Long siteId=parent.getReportMetadata().getSiteId();
 			String locale=parent.getReportMetadata().getLocale();
 			
 			String finalStatus=new String();//the actual text to be added to the column

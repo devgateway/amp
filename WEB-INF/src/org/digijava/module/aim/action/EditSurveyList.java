@@ -25,6 +25,7 @@ import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.SurveyFunding;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.gateperm.core.GatePermConst;
 
 public class EditSurveyList extends Action {
 
@@ -50,6 +51,9 @@ public class EditSurveyList extends Action {
         logger.debug("step[before] : " + svForm.getStep());
         svForm.setStep("17"); // for indicators tab in donor-view
         logger.debug("step[after] : " + svForm.getStep());
+        
+        //this is needed to aknowledge that we are still under EDIT ACTIVITY mode:
+        request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.EDIT);
 
         Comparator sfComp = new Comparator() {
             public int compare(Object o1, Object o2) {
@@ -58,11 +62,11 @@ public class EditSurveyList extends Action {
                 return sf1.getFundingOrgName().trim().toLowerCase().compareTo(sf2.getFundingOrgName().trim().toLowerCase());
             }
         };
-        List surveyColl = new ArrayList<SurveyFunding>();
-        if (svForm.getActivityId() != null) {
-        	surveyColl = (List) DbUtil.getAllSurveysByActivity(svForm.getActivityId());
+        List<SurveyFunding> surveyColl = new ArrayList<SurveyFunding>();
+        if (svForm.isEditAct() == true) {
+        	surveyColl = (List<SurveyFunding>) DbUtil.getAllSurveysByActivity(svForm.getActivityId(), svForm);
         	Collections.sort(surveyColl, sfComp);
-            svForm.getSurvey().setSurvey(surveyColl);
+            svForm.setSurveyFundings(surveyColl);
         } else {
         	//This is a new activity not saved yet.
         	//If the activity has fundings then a survey can be taken.
@@ -86,7 +90,7 @@ public class EditSurveyList extends Action {
         			auxSurveyFunding.setSurveyId(new Long(tempID));
         			surveyColl.add(auxSurveyFunding);
         		}
-        		svForm.getSurvey().setSurvey(surveyColl);
+        		svForm.setSurveyFundings(surveyColl);
         	}
         }
         return mapping.findForward("forward");

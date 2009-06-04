@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -21,7 +22,6 @@ import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpLocation;
-import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.helper.ActivitySector;
@@ -172,7 +172,7 @@ public class IndicatorSectorManager extends DispatchAction {
                  * that is why we are removing it from list of regions
                  */
 
-            	regions.remove(indSec.getLocation().getLocation());
+                regions.remove(indSec.getLocation().getLocation());
                 IndicatorUtil.saveIndicatorConnection(indSec);
             } else if (nationalSelected) {
                 indSec.setLocation(locNational);
@@ -201,7 +201,7 @@ public class IndicatorSectorManager extends DispatchAction {
             ind.setIndicator(selectedIndicator);
             IndicatorUtil.saveIndicatorConnection(ind);
         } else {
-            for (AmpCategoryValueLocations   region : regions) {
+            for (AmpCategoryValueLocations  region : regions) {
 
                 IndicatorSector ind = new IndicatorSector();
                 AmpLocation ampLoc = getAmpLocation(region);
@@ -281,8 +281,8 @@ public class IndicatorSectorManager extends DispatchAction {
         }
         indSecForm.setIndicators(allIndicators);
         List<AmpCategoryValueLocations>  regions=
-			DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry() ;
-        indSecForm.setRegions(regions);
+                			DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry() ;
+        indSecForm.setRegions(new ArrayList(regions));
         indSecForm.setSelIndicator(-1l);
         indSecForm.setSelRegionId(-1l);
         indSecForm.setSector(null);
@@ -299,9 +299,10 @@ public class IndicatorSectorManager extends DispatchAction {
             HttpServletResponse response) throws Exception {
         IndicatorSectorRegionForm indSecForm = (IndicatorSectorRegionForm) form;
         indSecForm.setIndicators(IndicatorUtil.getAllIndicators());
+
         List<AmpCategoryValueLocations>  regions=
-			DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry() ;
-        indSecForm.setRegions(regions);
+                			DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry() ;
+        indSecForm.setRegions(new ArrayList(regions));
         IndicatorSector indSec = IndicatorUtil.getConnectionToSector(indSecForm.getIndSectId());
         if (indSec.getIndicator() != null) {
             indSecForm.setSelIndicator(indSec.getIndicator().getIndicatorId());
@@ -311,15 +312,15 @@ public class IndicatorSectorManager extends DispatchAction {
         if (indSec.getLocation() == null) {
             indSecForm.setSelRegionId(null);
         } else {
-        	AmpCategoryValueLocations loc = indSec.getLocation().getLocation();
-            String parentCategoryName=loc.getParentCategoryValue().getValue();
-            if (CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey().equalsIgnoreCase(parentCategoryName) ){
-  				//National is selected
-                      indSecForm.setSelRegionId(NATIONAL_SELECTED);
-  			}
-            else{
-                 indSecForm.setSelRegionId(indSec.getLocation().getLocation().getId());
-            }
+          AmpCategoryValueLocations loc = indSec.getLocation().getLocation();
+          String parentCategoryName=loc.getParentCategoryValue().getValue();
+          if (CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey().equalsIgnoreCase(parentCategoryName) ){
+				//National is selected
+                    indSecForm.setSelRegionId(NATIONAL_SELECTED);
+			}
+          else{
+               indSecForm.setSelRegionId(indSec.getLocation().getLocation().getId());
+          }
         }
 
         indSecForm.setSector(indSec.getSector());

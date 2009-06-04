@@ -18,7 +18,7 @@
 		<property column="language" name="Language" type="java.lang.String" />
 		<property column="comments" name="comments" type="text" />
 
-		<many-to-one name="ampActivityId" column="amp_activity_id"
+		<many-to-one   name="ampActivityId" column="amp_activity_id"
 			class="org.digijava.module.aim.dbentity.AmpActivity" cascade="none" />
 		<many-to-one name="reportingOrgId" column="reporting_org_id"
 			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />

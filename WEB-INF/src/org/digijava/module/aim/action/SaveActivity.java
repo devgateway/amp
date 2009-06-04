@@ -64,6 +64,7 @@ import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -73,6 +74,7 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.dbentity.EUActivityContribution;
 import org.digijava.module.aim.form.EditActivityForm;
+import org.digijava.module.aim.form.EditActivityForm.Survey;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.AmpProject;
@@ -89,6 +91,7 @@ import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.MTEFProjection;
 import org.digijava.module.aim.helper.Measures;
 import org.digijava.module.aim.helper.OrgProjectId;
+import org.digijava.module.aim.helper.PhysicalProgress;
 import org.digijava.module.aim.helper.ReferenceDoc;
 import org.digijava.module.aim.helper.RegionalFunding;
 import org.digijava.module.aim.helper.RelatedLinks;
@@ -634,20 +637,23 @@ public class SaveActivity extends Action {
 					}
 				}
 				
-				if(eaForm.getLocation().getSelectedLocs() != null && eaForm.getLocation().getSelectedLocs().size()>0){
-					Iterator<Location> itr = eaForm.getLocation().getSelectedLocs().iterator();
-					float totalPercentage = 0;
-					while (itr.hasNext()) {
-						Location loc = itr.next();
-						float percentage = Float.parseFloat(loc.getPercent());
-						if(percentage != 0)
-							totalPercentage += percentage;
+				//check if the FM option is enabled to check location percentages
+				if (FeaturesUtil.isVisibleField("Validate Mandatory Regional Percentage", ampContext)){
+					if(eaForm.getLocation().getSelectedLocs() != null && eaForm.getLocation().getSelectedLocs().size()>0){
+						Iterator<Location> itr = eaForm.getLocation().getSelectedLocs().iterator();
+						Double totalPercentage = 0d;
+						while (itr.hasNext()) {
+							Location loc = itr.next();
+							Double percentage=FormatHelper.parseDouble(loc.getPercent());
+							if(percentage != null)
+								totalPercentage += percentage;
+						}
+						
+						//Checks if it's 100%
+						if (totalPercentage != 100)
+							errors.add("locationPercentageSumWrong",
+									new ActionError("error.aim.addActivity.locationPercentageSumWrong", TranslatorWorker.translateText("Sum of all location percentage must be 100",locale,siteId)));
 					}
-					
-					//Checks if it's 100%
-					if (totalPercentage != 100 && FeaturesUtil.isVisibleField("Regional Percentage", ampContext))
-						errors.add("locationPercentageSumWrong",
-								new ActionError("error.aim.addActivity.locationPercentageSumWrong", TranslatorWorker.translateText("Sum of all location percentage must be 100",locale,siteId)));
 				}
 				
 				if (eaForm.getPrograms().getNationalPlanObjectivePrograms() != null
@@ -1647,14 +1653,29 @@ public class SaveActivity extends Action {
 		}
 		
 		//Do the initializations and all the information transfer between beans here
+
 		if(eaForm.isEditAct()){
-			if(eaForm.getSurvey().getAhsurvey()!=null) 
-	        	DbUtil.updateSurvey(eaForm.getSurvey().getAhsurvey(), activity);
-	        if(eaForm.getSurvey().getAmpSurveyId()!=null) 
-	        	DbUtil.saveSurveyResponses(eaForm.getSurvey().getAmpSurveyId(), eaForm.getSurvey().getIndicators());	
+			if (eaForm.getSurveys() != null) {
+				Iterator<Survey> iterSurveys = eaForm.getSurveys().iterator();
+				while (iterSurveys.hasNext()) {
+					Survey auxSurvey = iterSurveys.next();
+					if (auxSurvey.getAhsurvey() != null) {
+						DbUtil.updateSurvey(auxSurvey.getAhsurvey(), activity);
+					}
+					if (auxSurvey.getAmpSurveyId() != null) {
+			        	DbUtil.saveSurveyResponses(auxSurvey.getAmpSurveyId(), auxSurvey.getIndicators());
+					}
+				}
+			}
 		} else {
-			DbUtil.saveNewSurvey(eaForm.getSurvey().getAhsurvey(), activity, eaForm.getSurvey().getIndicators());
-		} 
+			if (eaForm.getSurveys() != null) {
+				Iterator<Survey> iterSurveys = eaForm.getSurveys().iterator();
+				while (iterSurveys.hasNext()) {
+					Survey auxSurvey = iterSurveys.next();
+					DbUtil.saveNewSurvey(auxSurvey.getAhsurvey(), activity, auxSurvey.getIndicators());
+				}
+			}
+		}
 	}
 
 	private void processStep11(boolean check, EditActivityForm eaForm, AmpActivity activity, ActionErrors errors, HttpServletRequest request) throws Exception, AMPException{
@@ -2522,8 +2543,6 @@ public class SaveActivity extends Action {
 			Iterator<Components<FundingDetail>> itr = eaForm.getComponents().getSelectedComponents().iterator();
 			while (itr.hasNext()) {
 				Components<FundingDetail> comp = itr.next();
-				AmpComponent tempComp = new AmpComponent();
-
 				AmpComponent ampComp = ComponentsUtil.getComponentById(comp.getComponentId());
 				activity.getComponents().add(ampComp);
 
@@ -2592,12 +2611,12 @@ public class SaveActivity extends Action {
 					}
 				}
 
-				/*
 
 				// set physical progress
+				if(activity.getComponentProgress()==null)
+					activity.setComponentProgress(new HashSet<AmpPhysicalPerformance>());
 
 				if (comp.getPhyProgress() != null) {
-					Set phyProgess = new HashSet();
 					Iterator itr1 = comp.getPhyProgress().iterator();
 					while (itr1.hasNext()) {
 						PhysicalProgress phyProg = (PhysicalProgress) itr1
@@ -2621,14 +2640,11 @@ public class SaveActivity extends Action {
 						ampPhyPerf.setAmpActivityId(activity);
 						ampPhyPerf.setComponent(ampComp);
 						ampPhyPerf.setComments(" ");
-						phyProgess.add(ampPhyPerf);
+						activity.getComponentProgress().add(ampPhyPerf);
 					}
-					tempComp.setPhyProgress(phyProgess);
+					
 				}
-                tempComp.setComponentId(comp.getComponentId());
-                tempComp.setType_Id(comp.getType_Id());
-                activity.getComponents().add(ampComp);
-                */
+                
 			}
 		}
 	}

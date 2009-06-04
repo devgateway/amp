@@ -18,7 +18,7 @@ import org.digijava.kernel.service.ServiceException;
  * 
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
  * @since Nov 4, 2005
- * 
+ * @see FeedControl
  */
 public class DigifeedService extends AbstractServiceImpl {
 

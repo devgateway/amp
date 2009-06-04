@@ -23,7 +23,6 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
-import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
@@ -34,7 +33,7 @@ import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.dataExchange.dbentity.AmpDEImportLog;
 import org.digijava.module.dataExchange.dbentity.DEMappingFields;
-import org.digijava.module.dataExchange.type.AmpColumnEntry;
+import org.digijava.module.dataExchange.jaxb.CodeValueType;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -277,7 +276,38 @@ public class DataExchangeUtils {
             queryString = "select o from " + AmpOrganisation.class.getName()
                 + " o where (TRIM(o.name)=:orgName)";
             qry = sess.createQuery(queryString);
-            qry.setParameter("orgName", name, Hibernate.STRING);
+            qry.setParameter("orgName", name.trim(), Hibernate.STRING);
+
+            List  result=qry.list();
+            if (result.size() > 0){
+            	obResult= (AmpOrganisation) result.get(0);
+            }
+            //System.out.println("DBUTIL.GETORGANISATIONBYNAME() : " + qry.getQueryString());
+        } catch (Exception e) {
+            logger.debug("Exception from getOrganisationByName(): " + e);
+            e.printStackTrace(System.out);
+        }
+        return obResult;
+	}
+	
+	/**
+	 * @author dan
+	 * @param name
+	 * @return
+	 */
+	
+	public static AmpOrganisation getOrganisationByCode(String code) {
+		AmpOrganisation obResult=null;
+        Session sess = null;
+        Query qry = null;
+        String queryString = null;
+
+        try {
+            sess = PersistenceManager.getRequestDBSession();
+            queryString = "select o from " + AmpOrganisation.class.getName()
+                + " o where (TRIM(o.orgCode)=:orgCode)";
+            qry = sess.createQuery(queryString);
+            qry.setParameter("orgCode", code.trim(), Hibernate.STRING);
 
             List  result=qry.list();
             if (result.size() > 0){
@@ -362,7 +392,7 @@ public class DataExchangeUtils {
 	 * @param id
 	 * @return
 	 */
-	public static Object getElementFromAmp(String fieldType, Object id){
+	public static Object getElementFromAmp(String fieldType, Object id, CodeValueType element){
 		
 		if( !fieldType.equals(null) ){
 			
@@ -373,7 +403,9 @@ public class DataExchangeUtils {
 				}
 				if (id instanceof String) {
 					String orgName = (String) id;
-					return getOrganisationByName(orgName);
+					//return getOrganisationByName(orgName);
+					//SENEGAL changes
+					return getOrganisationByCode(element.getCode());
 				}
 			}
 			
@@ -449,7 +481,7 @@ public class DataExchangeUtils {
             queryString = "select o from " + AmpSector.class.getName()
                 + " o where (TRIM(o.name)=:sectorName)";
             qry = sess.createQuery(queryString);
-            qry.setParameter("sectorName", name, Hibernate.STRING);
+            qry.setParameter("sectorName", name.trim(), Hibernate.STRING);
 
             List  result=qry.list();
             if (result.size() > 0){
@@ -547,7 +579,7 @@ public class DataExchangeUtils {
             queryString = "select o from " + AmpTheme.class.getName()
                 + " o where (TRIM(o.name)=:programName)";
             qry = sess.createQuery(queryString);
-            qry.setParameter("programName", name, Hibernate.STRING);
+            qry.setParameter("programName", name.trim(), Hibernate.STRING);
 
             List  result=qry.list();
             if (result.size() > 0){

@@ -162,7 +162,6 @@ public class RegisterUser extends Action {
 
                     DgEmailManager.sendMail(user.getEmail(), "Registration Confirmation", description);
                 }	
-                  
 				Site site = RequestUtils.getSite(request);
 				Group memberGroup = org.digijava.module.aim.util.DbUtil.getGroup(Group.MEMBERS,site.getId());
 				Long uid[] = new Long[1];

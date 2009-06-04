@@ -80,7 +80,12 @@
 <digi:trn key="aim:none"> None</digi:trn>
 </c:if>
 <c:if test="${!empty setting.defaultHierarchy}">
-<c:out value="${setting.defaultHierarchy.name}"/>
+	<c:if test="${setting.defaultHierarchy.ampThemeId ne -1}">
+		<c:out value="${setting.defaultHierarchy.name}"/>
+	</c:if>
+	<c:if test="${setting.defaultHierarchy.ampThemeId eq -1}">
+		<digi:trn key="aim:noHierarchy">No Hierarchy</digi:trn>
+	</c:if>
 </c:if>
 </td>
 <td>

@@ -24,6 +24,8 @@
     <property name="deployConfigs" location="deployConfigs"/>
 	<property name="dbConfigs" location="dbConfigs"/>
 	<property name="repository" location="./repository"/>
+	<property name="RefreshMondrian" location="./repository/mondrian/sql"/>
+	<property name="MondrianConfig" location="./WEB-INF/queries"/>
 	<property name="jackrabbit" location="./jackrabbit"/>
     <property name="ampTest" location="./WEB-INF/amp-test" />
 
@@ -332,6 +334,8 @@
 		<copy file="${dbConfigs}/${dbName}/jackrabbit-schema.xml" todir="${jackrabbit}" overwrite="true"/>
 		<copy file="${dbConfigs}/${dbName}/patches-dir.xml" todir="${repository}" overwrite="true"/>
 		<copy file="${dbConfigs}/${dbName}/quartz.properties" todir="${src}" overwrite="true"/>
+		<copy file="${dbConfigs}/${dbName}/refresh_mondrian_cache.sql" todir="${RefreshMondrian}" overwrite="true"/>
+		<copy file="${dbConfigs}/${dbName}/AMP.xml" todir="${MondrianConfig}" overwrite="true"/>
 	</target>	
 
 

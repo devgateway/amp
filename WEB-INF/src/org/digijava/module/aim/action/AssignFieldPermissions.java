@@ -86,8 +86,6 @@ public class AssignFieldPermissions extends Action {
 			    Object object = session.load(Permission.class, cp.getId());
 			session.delete(object);
 		    }
-		    Object object = session.load(PermissionMap.class, permissionMap.getId());
-		    session.delete(object);
 		    session.flush();
 		}
 	

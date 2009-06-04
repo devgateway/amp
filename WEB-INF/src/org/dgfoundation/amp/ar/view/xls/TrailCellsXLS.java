@@ -59,8 +59,6 @@ public class TrailCellsXLS extends XLSExporter {
 	public void generate() {
 		// generate totals:
 		ReportData grd = (ReportData) item;
-
-
 	
 		if (grd.getParent() != null) {
 			String indent = "";
@@ -72,41 +70,34 @@ public class TrailCellsXLS extends XLSExporter {
 			row=sheet.createRow(rowId.shortValue());
 			HSSFCell cell = this.getCell(this.getHighlightedStyle(true));
 			
-//			introducing the translaton issues
+			String modifiedName = (grd.getName()==null)?"":grd.getName();
+
+			int pos = modifiedName.indexOf(':'); 
+			if (pos >= 0)
+				modifiedName = modifiedName.substring(pos + 1);
 			
 			//requirements for translation purposes
-			TranslatorWorker translator=TranslatorWorker.getInstance();
 			Long siteId=new Long(this.getMetadata().getSiteId());
 			String locale=this.getMetadata().getLocale();
-			//String prefix="rep:pop:";
-			String translatedName=null;
-			try{
-				translatedName=TranslatorWorker.translateText(grd.getName(),locale,siteId);
-			}catch (WorkerException e)
-				{ 
-				e.printStackTrace();
-				}
-			
-			
-			String modified;
-			if(translatedName.compareTo("")==0)
-				modified = grd.getName();
-			else
-				modified = translatedName;
-			int pos = modified.indexOf(':'); 
-			if (pos >= 0)
-				modified = modified.substring(pos + 1);
+			//Translate already truncated string (AMP-5669)
+			try {
+				modifiedName = TranslatorWorker.translateText(modifiedName, locale, siteId);
+			} catch (WorkerException e) {
+				//We should never get here!
+				logger.warn("Error translating trial cell value, using value without translation. See error below.");
+				logger.error(e);
+			}
 			
 			if (grd.getParent().getParent() == null)
-				modified = "TOTAL";
+				modifiedName = "TOTAL";
 			if (grd.getReportMetadata().isHideActivities()!=null){
 				if (grd.getReportMetadata()!=null && grd.getReportMetadata().isHideActivities())
 					//cell.setCellValue(indent + modified);
-					cell.setCellValue(indent + modified+" ("+grd.getTotalUniqueRows()+")");
+					cell.setCellValue(indent + modifiedName+" ("+grd.getTotalUniqueRows()+")");
 				else
-					cell.setCellValue(indent + modified+" ("+grd.getTotalUniqueRows()+")");
+					cell.setCellValue(indent + modifiedName+" ("+grd.getTotalUniqueRows()+")");
 			}else{
-				cell.setCellValue(indent + modified+" ("+grd.getTotalUniqueRows()+")");
+				cell.setCellValue(indent + modifiedName+" ("+grd.getTotalUniqueRows()+")");
 			}
 			
 			makeColSpan(grd.getSourceColsCount().intValue(),false);

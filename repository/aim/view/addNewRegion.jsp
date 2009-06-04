@@ -419,7 +419,12 @@ function unload() {
                                                                                 </td>
                                                                                 
                                                                             </tr>
-                                                                            
+                                                                              <tr>
+                                                                                
+                                                                                <td width="30%" align="right"><digi:trn key="aim:lcCode">Code</digi:trn></td>
+                                                                                <td width="70%" align="left"><html:text property="code"
+                                                                                                                        size="10" /></td>
+                                                                            </tr>
                                                                             
                                                                             
                                                                             <tr>

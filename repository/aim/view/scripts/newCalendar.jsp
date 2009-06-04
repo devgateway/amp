@@ -189,6 +189,28 @@
 			calendarObjForForm.display();
 		}		
 	}
+
+
+	function pickDateById_divContent(buttonObj,objectId)
+	{
+		var	format=	dateFormat;
+		var div = document.getElementById('divContent');
+		var butt = document.getElementById(buttonObj);
+		var inputObject = document.getElementById(objectId);
+		
+		//alert(butt.y);
+		//alert(inputObject);
+		
+		calendarObjForForm.setCalendarPositionByHTMLElement(div,div.offsetWidth / 2, div.offsetHeight / 2);	// Position the calendar right below the form input
+		calendarObjForForm.setInitialDateFromInput(inputObject,format);	// Specify that the calendar should set it's initial date from the value of the input field.
+		calendarObjForForm.addHtmlElementReference('myDate',inputObject);	// Adding a reference to this element so that I can pick it up in the getDateFromCalendar below(myInput is a unique key)
+		if(calendarObjForForm.isVisible()){
+			calendarObjForForm.hide();
+		}else{
+			calendarObjForForm.resetViewDisplayedMonth();	// This line resets the view back to the inital display, i.e. it displays the inital month and not the month it displayed the last time it was open.
+			calendarObjForForm.display();
+		}		
+	}
 	
 	function pickDateCurrency(buttonObj,inputObject)
 	{

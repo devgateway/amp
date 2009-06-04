@@ -5,11 +5,13 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.dgfoundation.amp.ar.dimension.ARDimensionable;
+import org.dgfoundation.amp.ar.dimension.NPODimension;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
-public class AmpTheme implements Serializable, Identifiable
+public class AmpTheme implements Serializable, Identifiable, ARDimensionable
 {
 	private static final long serialVersionUID = 1L;
 	private AmpActivity activityId;
@@ -349,6 +351,11 @@ public class AmpTheme implements Serializable, Identifiable
 
 		public void setBudgetProgramCode(String budgetProgramCode) {
 			this.budgetProgramCode = budgetProgramCode;
+		}
+
+		@Override
+		public Class getDimensionClass() {
+			return NPODimension.class;
 		}
 
 }

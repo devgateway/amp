@@ -73,7 +73,7 @@
                           <html:option value="-1"><digi:trn key="aim:selectCountry">Select a country</digi:trn></html:option>
                           <c:if test="${!empty aimCurrencyForm.countries}">
                             <c:forEach var="country" items="${aimCurrencyForm.countries}">
-                              <html:option value="${country.id}">${country.name}</html:option>
+                              <html:option value="${country.id}"><digi:trn>${country.name}</digi:trn></html:option>
                             </c:forEach>
                           </c:if>
                         </html:select>

@@ -54,6 +54,7 @@ import org.digijava.module.aim.helper.TreeItem;
 import org.digijava.module.translation.util.DbUtil;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
+import org.hibernate.LazyInitializationException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -180,6 +181,18 @@ public class ProgramUtil {
 			}
 			return theme;
 		}
+        
+        public static Collection<AmpTheme> getAncestorThemes(AmpTheme theme) throws DgException {
+        	HashSet<AmpTheme> returnSet		= new HashSet<AmpTheme>();
+        	AmpTheme temp							= getThemeById(theme.getAmpThemeId());
+        	if (temp != null)
+        			temp										= temp.getParentThemeId();
+        	while ( temp!=null ) {
+        		returnSet.add(temp);
+        		temp		= temp.getParentThemeId();
+        	}
+        	return returnSet;
+        }
 
         /**
          * Retrieves top level themes.
@@ -1671,7 +1684,7 @@ public class ProgramUtil {
             try {
                     session = PersistenceManager.getRequestDBSession();
                     String queryString = "select ap from "
-                                    + AmpActivityProgramSettings.class.getName()+ " ap ";
+                                    + AmpActivityProgramSettings.class.getName()+ " ap";
 
                     Query qry = session.createQuery(queryString);
                     programSettings=qry.list();
@@ -1770,18 +1783,14 @@ public class ProgramUtil {
                             Iterator settingsIter = settings.iterator();
                             tx = session.beginTransaction();
                             while (settingsIter.hasNext()) {
-                                    AmpActivityProgramSettings setting = (
-                                        AmpActivityProgramSettings)
-                                        settingsIter.next();
-                                    AmpActivityProgramSettings oldSetting = (
-                                        AmpActivityProgramSettings) session.
-                                        get(AmpActivityProgramSettings.class,
-                                            setting.getAmpProgramSettingsId());
-                                    oldSetting.setAllowMultiple(setting.
-                                        isAllowMultiple());
-                                    oldSetting.setDefaultHierarchy(setting.
-                                        getDefaultHierarchy());
-                                    session.update(oldSetting);
+                                    AmpActivityProgramSettings setting = (AmpActivityProgramSettings)settingsIter.next();
+                                    if(setting.getDefaultHierarchy() != null && setting.getDefaultHierarchy().getAmpThemeId() != null && setting.getDefaultHierarchy().getAmpThemeId() != -1 )
+                                    {
+                                    	AmpActivityProgramSettings oldSetting = (AmpActivityProgramSettings) session.get(AmpActivityProgramSettings.class,setting.getAmpProgramSettingsId());
+	                                    oldSetting.setAllowMultiple(setting.isAllowMultiple());
+	                                    oldSetting.setDefaultHierarchy(setting.getDefaultHierarchy());
+	                                    session.update(oldSetting);
+                                    }
 
                             } 
                             tx.commit();
@@ -2012,6 +2021,26 @@ public class ProgramUtil {
 		}
 	}
     
+    /**
+     * 
+     * @param userSelection collection of AmpTheme objects corresponding to the filters selected by the user
+     * @param activityFilterCol this collection will contain the selected objects and their descendants (this collection will be used to filter the activities) 
+     * @param columnDataCol this collection will contain the selected objects, their descendants and their ancestors (this collection will be used to filter out column data).
+     * One needs the information about ancestors in multi-level hierarchy reports otherwise the report engine won't know to which higher level hierarchy an activity belongs to.
+     *  
+     * @throws DgException
+     */
+    public static void collectFilteringInformation(Collection<AmpTheme> userSelection, Collection<AmpTheme> activityFilterCol, 
+    																					Set<AmpTheme> columnDataCol) throws DgException {
+    	Iterator<AmpTheme> progIter	= userSelection.iterator();
+		while ( progIter.hasNext()  ) {
+			AmpTheme program		= progIter.next();
+			Collection<AmpTheme> descendentPrograms	= ProgramUtil.getRelatedThemes( program.getAmpThemeId() );
+			activityFilterCol.addAll( descendentPrograms );
+			columnDataCol.addAll(  descendentPrograms );
+			columnDataCol.addAll( ProgramUtil.getAncestorThemes(program) );
+		}
+    }
         /**
          * Hierarchy member factory.
          * Used to create XML enabled members.

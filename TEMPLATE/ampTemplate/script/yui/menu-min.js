@@ -4420,7 +4420,7 @@ configMaxHeight: function (p_sType, p_aArgs, p_oMenu) {
     if (nHeight > 0 && (oBody.offsetHeight > nMaxHeight)) {
 
         Dom.addClass(oBody, "yuiamp-menu-body-scrolled");
-        Dom.setStyle(oBody, "height", (nHeight + "px"));
+        Dom.setStyle(oBody, "height", ((nHeight - 100) + "px"));
 
         Event.on(oHeader, "mouseover", fnMouseOver, this, true);
         Event.on(oHeader, "mouseout", fnMouseOut, this, true);

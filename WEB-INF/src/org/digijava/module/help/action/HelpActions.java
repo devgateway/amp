@@ -93,7 +93,8 @@ public class HelpActions extends DispatchAction {
 				HelpTopic key = HelpUtil.getHelpTopic(new Long(id));
 	            String bodyKey =  key.getBodyEditKey();
 	            String article = HelpUtil.getTrn(key.getTopicKey(),request);
-	            out.println("<b>"+article+"</b>");
+	            String encodedArticle = HelpUtil.HTMLEntityEncode(article);
+	            out.println("<b>"+encodedArticle+"</b>");
 	            List editor = HelpUtil.getEditor(bodyKey, lang);
 	            helpForm.setTopicKey(bodyKey);
 	
@@ -728,10 +729,14 @@ public class HelpActions extends DispatchAction {
                 throws Exception{
 
           String siteId=RequestUtils.getSite(request).getSiteId();
-          String moduleInstance=RequestUtils.getRealModuleInstance(request).getInstanceName();
+          
+         // String moduleInstance=RequestUtils.getRealModuleInstance(request).getInstanceName();
 
           String xmlString = request.getParameter("changedXml");
           String replacedXmlString =  xmlString.replaceAll("&", "&amp;");
+          
+          String moduleInstance = request.getParameter("Request");
+          
           
           org.w3c.dom.Element e;
           org.w3c.dom.NamedNodeMap nnm;

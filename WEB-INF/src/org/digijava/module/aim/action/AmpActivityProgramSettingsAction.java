@@ -45,17 +45,14 @@ public class AmpActivityProgramSettingsAction
 
                 
                 if (request.getParameter("save")!=null) {
-                        ProgramUtil.saveAmpActivityProgramSettings(
-                            ampActivityProgramSettingsForm.getSettingsList());
+                        ProgramUtil.saveAmpActivityProgramSettings(ampActivityProgramSettingsForm.getSettingsList());
                         ampActivityProgramSettingsForm.setEvent(null);
                         return mapping.findForward("forward");
                 }
                 else {
                         //Load programs settings
-                        ampActivityProgramSettingsForm.setProgramList(
-                            ProgramUtil.getAllThemes());
-                        ampActivityProgramSettingsForm.setSettingsList(
-                            ProgramUtil.getAmpActivityProgramSettingsList());
+                        ampActivityProgramSettingsForm.setProgramList(ProgramUtil.getAllThemes());
+                        ampActivityProgramSettingsForm.setSettingsList(ProgramUtil.getAmpActivityProgramSettingsList());
                         return mapping.findForward("forward");
 
                 }

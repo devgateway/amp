@@ -122,6 +122,10 @@ public final class ArConstants {
 	public final static String COLUMN_REGION="Region";
 	public final static String COLUMN_SECTOR_GROUP="Sector Group";
 	
+	public final static String COLUMN_ANY_NATPROG					= "National Planning Objectives";
+	public final static String COLUMN_ANY_PRIMARYPROG			= "Primary Program";
+	public final static String COLUMN_ANY_SECONDARYPROG	= "Secondary Program";
+	
 	//additional measures
 	public final static String UNDISBURSED_BALANCE="Undisbursed Balance";
 	public final static String UNCOMMITTED_BALANCE="Uncommitted Balance";
@@ -167,4 +171,10 @@ public final class ArConstants {
 	public static final String DISBURSEMENT_ORDERS = "Disbursement Orders";
 	
 	public static final String INITIALIZE_FILTER_FROM_DB	= "Initialize filter from db";
+
+	public static final String COLUMN_PROJECT_TITLE						 		= "Project Title";
+	public static final String COLUMN_CUMULATIVE_COMMITMENT			= "Cumulative Commitment";
+	public static final String COLUMN_CUMULATIVE_DISBURSEMENT		= "Cumulative Disbursement";
+	public static final String COLUMN_UNDISB_CUMULATIVE_BALANCE		= "Undisbursed Cumulative Balance";
+	public static final String COLUMN_UNCOMM_CUMULATIVE_BALANCE	= "Uncommitted Cumulative Balance";
 }

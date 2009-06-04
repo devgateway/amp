@@ -1684,7 +1684,11 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
       }
 
       if (fp.getFiscalCalId() == null) {
-        fp.setFiscalCalId(apps.getFisCalId());
+    	  if (apps.getFisCalId() !=null){
+				fp.setFiscalCalId(apps.getFisCalId());
+			}else{
+				fp.setFiscalCalId(FeaturesUtil.getGlobalSettingValueLong("Default Calendar"));
+		}
       }
 
 //      if (fp.getFromYear() == 0 || fp.getToYear() == 0) {

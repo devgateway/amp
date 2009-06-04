@@ -166,7 +166,7 @@ var isAlreadySubmitted = false;
 	}
 
 	function isTotDisbIsBiggerThanTotCom() {
-		var Warn="<digi:trn key="aim:addFunding:warn:disbSupCom">Sum of Disbursments is bigger than sum of commitments. Do you wish to proceed?</digi:trn>";
+		var Warn="<digi:trn key="aim:addFunding:warn:disbSupCom">Sum of Disbursments is bigger than sum of commitments.</digi:trn>";
 		if(document.getElementById("totDisbIsBiggerThanTotCom").value == "true") {
 			if(confirm(Warn))
 			{
@@ -175,6 +175,8 @@ var isAlreadySubmitted = false;
 			} else {
 				return true;	
 			}							
+			alert(Warn)
+			return true;					
 		} else {
 			return false;
 		}
@@ -430,7 +432,7 @@ var isAlreadySubmitted = false;
 						</field:display>
 
 											<td>
-												<a href="javascript:removeMTEFProjection(<bean:write name="mtefProjection" property="indexId"/>,0)">
+												<a href="javascript:removeMTEFProjection(${indexMTEF})">
 												 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this projection"/>
 												</a>
 											</td>
@@ -445,6 +447,10 @@ var isAlreadySubmitted = false;
 						<table cellPadding=3>
 							<tr>
 								<td>
+									<html:select property="funding.selectedMTEFProjectionYear" name="aimEditActivityForm">
+										<html:optionsCollection name="aimEditActivityForm" property="funding.availableMTEFProjectionYears" 
+												label="value" value="key"/>
+									</html:select>
 									<input class="dr-menu" type="button" name="addMTEFProj" value="<digi:trn key='aim:addMTEFProjection'>Add Projection</digi:trn>"
 								   onclick="addMTEFProjection()">
 								</td>

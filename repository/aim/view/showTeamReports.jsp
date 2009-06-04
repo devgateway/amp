@@ -340,13 +340,25 @@ function confirmFunc() {
                             <% } %>
                           </tr>                          
                           <c:if test="${reportNumber == 0}">
-                          <tr>
-                            <td colspan="4">
-                            <digi:trn key="aim:noreportspresent">
-                            No reports present
-                            </digi:trn>
-                            </td>
-                          </tr>
+								<c:if test="${!aimTeamReportsForm.showTabs}">
+		                          <tr>
+		                            <td colspan="4">
+		                            <digi:trn key="aim:noreportspresent">
+		                            	No reports present
+		                            </digi:trn>
+		                            </td>
+		                          </tr>
+								</c:if>
+								<c:if test="${aimTeamReportsForm.showTabs}">
+		                          <tr>
+		                            <td colspan="4">
+		                            <digi:trn key="aim:notabspresent">
+		                            	No tabs present
+		                            </digi:trn>
+		                            </td>
+		                          </tr>
+								</c:if>
+
                           </c:if>
                           <logic:iterate name="aimTeamReportsForm"  property="reportsList" id="report" indexId="idx"
                             type="org.digijava.module.aim.dbentity.AmpReports">
@@ -551,13 +563,31 @@ function confirmFunc() {
 	                                <logic:equal name="teamLeadFlag" scope="session" value="false">
 	                                  <logic:present name="report" property="ownerId">
 	                                    <logic:equal  name="report" property="ownerId.ampTeamMemId" value="${aimTeamReportsForm.currentMemberId}"> 
-	                                        | <digi:link href="/reportWizard.do?editReportId=${report.ampReportId}">
-	                                          <digi:trn key="aim:reportEdit">Edit</digi:trn>
-	                                        </digi:link> 
-	                                      | <digi:link href="/deleteAllReports.do" name="urlParams" onclick="return confirmFunc()" >
-	                                        <digi:trn key="aim:reportDelete">Delete</digi:trn>
-	                                      </digi:link> 
-	                                      
+	                                        <c:set var="translation">
+	                                      		<c:if test="${aimTeamReportsForm.showTabs}">
+		                                       		<digi:trn key="aim:ClickEditTab">Click on this icon to edit tab&nbsp;</digi:trn>
+	                                      		</c:if>
+	                                      		<c:if test="${!aimTeamReportsForm.showTabs}">
+	    	                                    	<digi:trn key="aim:ClickEditReport">Click on this icon to edit report&nbsp;</digi:trn>
+	                                      		</c:if>
+                                        	</c:set>
+	                                    	<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}" title="${translation}">
+	                                      		<img src= "/repository/message/view/images/edit.gif" vspace="2" border="0" align="absmiddle" />
+	                                    	</digi:link>
+
+		                                    <c:set var="translation">
+	                                      		<c:if test="${aimTeamReportsForm.showTabs}">
+		                                        	<digi:trn key="aim:ClickDeleteTab">Click on this icon to delete tab&nbsp;</digi:trn>
+													<c:set target="${urlParams}" property="isTab" value="1" />
+	                                      		</c:if>
+	                                      		<c:if test="${!aimTeamReportsForm.showTabs}">
+		                                        	<digi:trn key="aim:ClickDeleteReport">Click on this icon to delete report&nbsp;</digi:trn>
+													<c:set target="${urlParams}" property="isTab" value="0" />
+	                                      		</c:if>
+	                                       	</c:set>
+	                                       	<digi:link href="/deleteAllReports.do" name="urlParams" onclick="return confirmFunc()" title="${translation}">
+												<img src= "/repository/message/view/images/trash_12.gif" vspace="2" border="0" align="absmiddle" />
+		                                  	</digi:link>
 	                                    </logic:equal>    
 	                                  </logic:present>                                                                                                
 	                                </logic:equal>                              

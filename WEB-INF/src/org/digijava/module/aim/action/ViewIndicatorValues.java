@@ -12,6 +12,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
@@ -30,34 +32,38 @@ public class ViewIndicatorValues extends TilesAction {
 
 		ViewIndicatorForm viForm = (ViewIndicatorForm) form;
 		viForm.setIndicators(new ArrayList());
-
 		String ind =request.getParameter("ind");
 		String risk = request.getParameter("risk");
 
 		AmpActivity activity = ActivityUtil.loadActivity(viForm.getAmpActivityId());
 		//Collection col = MEIndicatorsUtil.getIndicatorsForActivity(new Long(viForm.getAmpActivityId()));
 		Collection<IndicatorActivity> indicators=activity.getIndicators();
-		
-		
+
+
 		if (indicators!=null){
 			for (IndicatorActivity connection : indicators) {
 				if (ind != null){
 					if (connection.getIndicator().getName().equals(ind)){
 						// :( because have no time to change JSP let's use old helper bean.
 						ActivityIndicator bean = IndicatorUtil.createIndicatorHelperBean(connection);
-						
+
 						//add indicator helper bean to form
 						viForm.getIndicators().add(bean);
 					}
 				}else if (risk!=null){
 					AmpIndicatorRiskRatings riskValue=IndicatorUtil.getRisk(connection);
-					if (riskValue!=null && riskValue.getRatingName().equalsIgnoreCase(risk)){
-						ActivityIndicator bean=IndicatorUtil.createIndicatorHelperBean(connection);
-						viForm.getIndicators().add(bean);
-					}
+
+					if (riskValue != null) {
+                        if (riskValue.getRatingName().equalsIgnoreCase(risk)) {
+                            ActivityIndicator bean = IndicatorUtil.createIndicatorHelperBean(connection);
+                            viForm.getIndicators().add(bean);
+
+                        }
+
+                    }
 				}
 			}
-			
+
 		}
 
 		return null;

@@ -8,6 +8,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -146,7 +147,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 			selectedDonor = Long.parseLong(request.getParameter("selectedDonor"));
 		}
 		if (request.getParameter("selectedDonorName") != null && !request.getParameter("selectedDonorName").equals("-1")) {
-			selectedDonorName = request.getParameter("selectedDonorName");
+			selectedDonorName = URLDecoder.decode(request.getParameter("selectedDonorName"),"UTF-8");
 		}
 		if (request.getParameter("selectedFromYear") != null && !request.getParameter("selectedFromYear").equals("-1")) {
 			selectedFromYear = Integer.parseInt(request.getParameter("selectedFromYear"));
@@ -310,22 +311,23 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 			ISO = ampG.getGlobalSettingsValue();
 		}
 
-		if (ISO != null && !ISO.equals("")) {
-			Country cntry = DbUtil.getDgCountry(ISO);
-			countryName = cntry.getCountryName();
-		} else {
-			countryName = "";
-		}
-		// Translation for Result Matrix
-		// Paragraph title = new
-		// Paragraph(TranslatorWorker.translate("gis:resultsmatrix", locale,
-		// siteId) + countryName, new Font(Font.HELVETICA, 24, Font.BOLD));
-		Paragraph title = new Paragraph(TranslatorWorker.translateText("Results Matrix:", locale, siteId) + countryName, new Font(Font.HELVETICA, 24, Font.BOLD));
+        if(ISO != null && !ISO.equals("")){
+            Country cntry = DbUtil.getDgCountry(ISO);
+            countryName = cntry.getCountryName();
+        }
+        else
+        {
+        	countryName = "";
+        }
+        //Translation for Result Matrix
+        //Paragraph title = new Paragraph(TranslatorWorker.translate("gis:resultsmatrix", locale, siteId) + countryName, new Font(Font.HELVETICA, 24, Font.BOLD));
+        Paragraph title = new Paragraph(TranslatorWorker.translateText("Results Matrix:", locale, siteId) + countryName, new Font(Font.HELVETICA, 24, Font.BOLD));
 
-		String generatedOnTranslation = TranslatorWorker.translateText("gis:generatedon", locale, siteId);
-		if (generatedOnTranslation == null || generatedOnTranslation.equals(""))
-			generatedOnTranslation = "Generated on: ";
+        String generatedOnTranslation = TranslatorWorker.translateText("gis:generatedon", locale, siteId);
+        if(generatedOnTranslation == null || generatedOnTranslation.equals(""))
+        	generatedOnTranslation = "Generated on: ";
 
+		
 		Paragraph updateDate = new Paragraph(generatedOnTranslation + FormatHelper.formatDate(new Date(System.currentTimeMillis())) + "\n\n", new Font(Font.HELVETICA, 6, Font.BOLDITALIC));
 
 		document.add(title);
@@ -529,10 +531,14 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 		PdfPTable table1AEIndicators = getWidgetTable("table_place1");
 		PdfPTable table2AEIndicators = getWidgetTable("table_place2");
+		PdfPTable table3AEIndicators = getWidgetTable("table_place3");
 
 		layoutAEIndicators.addCell(table1AEIndicators);
 		layoutAEIndicators.addCell(table2AEIndicators);
-		layoutAEIndicators.addCell(new Paragraph(TranslatorWorker.translateText("Source: 2006 Paris Declaration Survey", locale, siteId), new Font(Font.HELVETICA, 6)));
+
+		layoutAEIndicators.addCell(table3AEIndicators);
+		layoutAEIndicators.addCell(" ");
+		layoutAEIndicators.addCell(new Paragraph(TranslatorWorker.translateText("Source: 2006 Paris Declaration Survey", locale, siteId) , new Font(Font.HELVETICA, 6)));
 		layoutAEIndicators.addCell(" ");
 
 		layoutCell.addElement(layoutAEIndicators);
@@ -751,11 +757,11 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		if (selectedIndicatorTranslation == null || selectedIndicatorTranslation.equals(""))
 			selectedIndicatorTranslation = "Selected Indicator";
 
-		String defaultMinMaxMessage = "Regions with the lowest (MIN) values for the selected indicator are shaded dark green. " + "Regions with the highest (MAX) value are shaded light green. "
-				+ "For some indicators (such as mortality rates), having the MAX value indicates the lowest performance";
+		String defaultMinMaxMessage="Regions with the lowest (MIN) values for the selected indicator are shaded dark green. "
+				+"Regions with the highest (MAX) value are shaded light green. "
+				+"For some indicators (such as mortality rates), having the MAX value indicates the lowest performance";
 
-		textCell.addElement(new Paragraph(TranslatorWorker.translateText(defaultMinMaxMessage, locale, siteId) + "\n" + selectedSectorTranslation + ": " + sectorName + "\n"
-				+ selectedIndicatorTranslation + ": " + indicatorName + "\n\n" + TranslatorWorker.translateText("Data Source: Dev Info", locale, siteId), new Font(Font.HELVETICA, 6)));
+		textCell.addElement(new Paragraph(TranslatorWorker.translateText(defaultMinMaxMessage, locale, siteId) + "\n" + selectedSectorTranslation + ": " + sectorName + "\n" + selectedIndicatorTranslation + ": " + indicatorName + "\n\n"+TranslatorWorker.translateText("Data Source: Dev Info", locale, siteId), new Font(Font.HELVETICA, 6)));
 		PdfPCell legendCell = new PdfPCell();
 		legendCell.setPadding(0);
 		legendCell.setBorder(Rectangle.NO_BORDER);
@@ -1254,16 +1260,18 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 		g2d.clearRect(0, 0, canvasWidth, canvasHeight);
 
+
                 if (map != null) {
                     gisUtil.addDataToImage(g2d, map.getSegments(), -1, canvasWidth,
                                            canvasHeight, rect.getLeft(), rect.getRight(),
-                                           rect.getTop(), rect.getBottom(), true, false);
+                                           rect.getTop(),
+                                           rect.getBottom(), true, false);
 
                     gisUtil.addCaptionsToImage(g2d, map.getSegments(), canvasWidth,
                                                canvasHeight, rect.getLeft(), rect.getRight(),
-                                               rect.getTop(), rect.getBottom());
+                                               rect.getTop(),
+                                               rect.getBottom());
                 }
-
 		g2d.dispose();
 
 		RenderedImage ri = graph;
@@ -1380,7 +1388,8 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 		AmpDaWidgetPlace place = WidgetUtil.getPlace(code);
 		AmpWidget widget = place.getAssignedWidget();
-		AmpWidgetIndicatorChart cWidget = (AmpWidgetIndicatorChart) widget;
+		//AmpWidgetIndicatorChart cWidget = ChartWidgetUtil.getIndicatorChartWidget(place.getId());
+		AmpWidgetIndicatorChart cWidget = ChartWidgetUtil.getIndicatorChartWidget(widget.getId());
 		if (widget == null)
 			return null;
 

@@ -79,7 +79,7 @@
     function addPropFunding() {
         	myAddPropFunding();
         	/*
-            openNewWindow(450, 148);
+            openNewWindow(480, 250);
             <digi:context name="addProposedFunding" property="context/module/moduleinstance/editProposedFunding.do" />
             document.aimEditActivityForm.action = "<%= addProposedFunding %>";
             document.aimEditActivityForm.target = popupPointer.name;
@@ -600,7 +600,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                 <td width="1">:</td>
                                                                                 <td bgcolor="#FFFFFF" align="left">
                                                                                   <logic:notEmpty name="funding" property="typeOfAssistance">
-                                                                                    <bean:write name="funding"	property="typeOfAssistance.value"/>
+                                                                                  	<category:getoptionvalue categoryValueId="${funding.typeOfAssistance.id}"/>
                                                                                   </logic:notEmpty>
                                                                                 </td>
                                                                               </tr>
@@ -616,7 +616,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                 <td width="1">:</td>
                                                                                 <td bgcolor="#FFFFFF" align="left">
                                                                                   <logic:notEmpty name="funding" property="financingInstrument">
-                                                                                    <bean:write name="funding"	property="financingInstrument.value"/>
+                                                                                  	<category:getoptionvalue categoryValueId="${funding.financingInstrument.id}"/>
                                                                                   </logic:notEmpty>
                                                                                 </td>
                                                                               </tr>
@@ -624,9 +624,10 @@ ${fn:replace(message,quote,escapedQuote)}
 																			<field:display name="Conditions for Fund Release" feature="Funding Information">
                                                                               <tr>
                                                                                 <td bgcolor="#FFFFFF" align="left" width="150">
-                                                                                  <a title="<digi:trn key="aim:ConditionsforFundRelease">Enter the conditions attached to the release of the funds</digi:trn>">		 <digi:trn key="aim:conditions"> Conditions
-                                                                                  </digi:trn>
-</a>
+                                                                                  <a title="<digi:trn key="aim:ConditionsforFundRelease">Enter the conditions attached to the release of the funds</digi:trn>">		 
+                                                                                  	<digi:trn key="aim:conditions"> Conditions
+                                                                                  	</digi:trn>
+																				  </a>
                                                                                 </td>
                                                                                 <td width="1">:</td>
                                                                                 <td bgcolor="#FFFFFF" align="left">

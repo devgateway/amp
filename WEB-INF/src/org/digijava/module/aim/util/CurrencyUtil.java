@@ -304,7 +304,7 @@ public class CurrencyUtil {
 		Query qry = null;
 		String qryStr = null;
 		try {
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 			if (active == CurrencyUtil.ORDER_BY_CURRENCY_CODE) {
 				qryStr = "select curr from " + AmpCurrency.class.getName() + " curr " +
 					"order by curr.currencyCode";
@@ -314,7 +314,7 @@ public class CurrencyUtil {
 				"order by curr.currencyName";
 			qry = session.createQuery(qryStr);
 			}else if(active == CurrencyUtil.ORDER_BY_CURRENCY_COUNTRY_NAME){
-				qryStr = "select curr from " + AmpCurrency.class.getName() + " as curr left outer join curr.countryId dg order by dg.countryName";
+				qryStr = "select curr from " + AmpCurrency.class.getName() + " as curr left outer join curr.countryLocation dg order by dg.name";
 			qry = session.createQuery(qryStr);
 			}else {
 				qryStr = "select curr from " + AmpCurrency.class.getName() + " curr " +
@@ -327,13 +327,13 @@ public class CurrencyUtil {
 			logger.error("Exception from getAllCurrencies()");
 			e.printStackTrace(System.out);
 		} finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release session failed");
-				}
-			}
+//			if (session != null) {
+//				try {
+//					PersistenceManager.releaseSession(session);
+//				} catch (Exception rsf) {
+//					logger.error("Release session failed");
+//				}
+//			}
 		}
 
 		return col;
@@ -510,7 +510,7 @@ public class CurrencyUtil {
 				curr.setCountryName(currency.getCountryName());
 				curr.setCurrencyCode(currency.getCurrencyCode());
 				curr.setCurrencyName(currency.getCurrencyName());
-                curr.setCountryId(currency.getCountryId());
+                curr.setCountryLocation(currency.getCountryLocation());
 				tx = session.beginTransaction();
 				session.update(curr);
 				tx.commit();

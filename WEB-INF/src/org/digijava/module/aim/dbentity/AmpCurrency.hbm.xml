@@ -13,8 +13,8 @@
 		<property name="currencyName" column="currency_name" type="java.lang.String" />
 		<property name="countryName" column="country_name" type="java.lang.String" /><!-- defunct -->
 		<property name="activeFlag" column="active_flag" type="java.lang.Integer" />
-		<many-to-one name="countryId" column="country_id"
-			class="org.digijava.kernel.dbentity.Country" cascade="none" />
+		<many-to-one name="countryLocation" column="country_location_id"
+			class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" cascade="none" />
 
 	</class>
 </hibernate-mapping>

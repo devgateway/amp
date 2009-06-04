@@ -130,7 +130,7 @@
         if (isVoid(password)||isVoid(passwordConfirmation))
         {
 			<c:set var="translation">
-			<digi:trn key="error.registration.passwordBlank">Password field is Blank</digi:trn>
+			<digi:trn key="error.registration.passwordOneChar">Please use at least one letter in the password field.</digi:trn>
     		</c:set>
 			alert("${translation}");
         	return false;

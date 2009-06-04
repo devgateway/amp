@@ -42,7 +42,7 @@ public class FundingAdded extends Action {
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
-	throws Exception {
+			throws Exception {
 
 		EditActivityForm eaForm = (EditActivityForm) form;
 
@@ -78,7 +78,7 @@ public class FundingAdded extends Action {
 		BigDecimal totalComms	= new BigDecimal(0);
 		BigDecimal totalDisbs	= new BigDecimal(0);
 		BigDecimal totalExps	= new BigDecimal(0);
-		boolean isBigger = false;
+		boolean isBigger = false;	
 		//
 		if (eaForm.getFunding().getFundingDetails() != null) {
 			Iterator itr = eaForm.getFunding().getFundingDetails().iterator();
@@ -108,8 +108,7 @@ public class FundingAdded extends Action {
 			}
 		}
 		EditActivityForm.Funding currentFunding = null;
-		//if ((!isBigger) || (eaForm.isIgnoreDistBiggerThanComm())) {
-			eaForm.setIgnoreDistBiggerThanComm(false);
+		if (!isBigger) {
 			currentFunding = eaForm.getFunding();
 			//
 			Funding newFund = new Funding();
@@ -135,9 +134,9 @@ public class FundingAdded extends Action {
 				Iterator itr = currentFunding.getFundingMTEFProjections().iterator();
 				while (itr.hasNext()) {
 					MTEFProjection mtef = (MTEFProjection) itr.next();
-
+				
 					if ( mtef.getAmount() == null ) //This MTEFProjection has been created in AddFunding action 
-						continue;				// but if projections are disabled then the amount will be empty so this shouldn't be taken into consideration
+							continue;				// but if projections are disabled then the amount will be empty so this shouldn't be taken into consideration
 					String formattedAmt = CurrencyWorker.formatAmount(
 							mtef.getAmount());
 					mtef.setAmount(formattedAmt);
@@ -151,7 +150,7 @@ public class FundingAdded extends Action {
 						AmpOrganisation org = DbUtil.getOrganisation(mtef
 								.getReportingOrganizationId());
 						mtef.setReportingOrganizationName(org.getName());
-
+					
 					}
 					mtefProjections.add(mtef);
 				}
@@ -216,10 +215,10 @@ public class FundingAdded extends Action {
 						if(j>i)
 						{
 							if((fundDetItr2.getAdjustmentTypeName().equalsIgnoreCase(fundDetItr1.getAdjustmentTypeName()))&&
-									(fundDetItr2.getCurrencyCode().equalsIgnoreCase(fundDetItr1.getCurrencyCode()))&&
-									(fundDetItr2.getTransactionAmount().equalsIgnoreCase(fundDetItr1.getTransactionAmount()))&&
-									(fundDetItr2.getTransactionDate().equalsIgnoreCase(fundDetItr1.getTransactionDate()))&&
-									(fundDetItr2.getTransactionType()==fundDetItr1.getTransactionType()))
+							(fundDetItr2.getCurrencyCode().equalsIgnoreCase(fundDetItr1.getCurrencyCode()))&&
+							(fundDetItr2.getTransactionAmount().equalsIgnoreCase(fundDetItr1.getTransactionAmount()))&&
+							(fundDetItr2.getTransactionDate().equalsIgnoreCase(fundDetItr1.getTransactionDate()))&&
+							(fundDetItr2.getTransactionType()==fundDetItr1.getTransactionType()))
 							{
 								currentFunding.setDupFunding(true);
 								currentFunding.setFirstSubmit(true);
@@ -244,7 +243,7 @@ public class FundingAdded extends Action {
 			}
 			//
 			this.updateTotals(eaForm, tm);
-		//}
+		}	
 		//
 		String currCode = CurrencyUtil.getAmpcurrency( tm.getAppSettings().getCurrencyId() ).getCurrencyCode();
 		eaForm.setCurrCode( currCode );

@@ -25,6 +25,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -576,8 +577,7 @@ public class ChartWidgetUtil {
 	 */
 	public static JFreeChart getSectorByDonorChart(Long[] donors,Integer fromYear,Integer toYear,ChartOption opt)throws DgException,WorkerException{
 		JFreeChart result = null;
-		PieDataset ds = getSectorByDonorDataset(donors,fromYear,toYear);
-
+		PieDataset ds = getSectorByDonorDataset(donors,fromYear,toYear,opt);		
         String titleMsg= TranslatorWorker.translateText("Breakdown by Sector", opt.getLangCode(), opt.getSiteId());
 		String title = (opt.isShowTitle())? titleMsg:null;
 		boolean tooltips = false;
@@ -684,7 +684,7 @@ public class ChartWidgetUtil {
 	 * @return
 	 * @throws DgException
 	 */
-	public static PieDataset getSectorByDonorDataset(Long[] donors, Integer fromYear, Integer toYear) throws DgException{
+	public static PieDataset getSectorByDonorDataset(Long[] donors, Integer fromYear, Integer toYear,ChartOption opt) throws DgException{
 		DefaultPieDataset ds = new DefaultPieDataset();
 		Date fromDate = null;
 		Date toDate = null;
@@ -715,7 +715,13 @@ public class ChartWidgetUtil {
                 }
 			}
             if(otherFunfing!=0){
-            	ds.setValue("Other Sectors",Math.round(otherFunfing));
+            	String otherSectors="Other Sectors";
+            	try {
+					otherSectors=TranslatorWorker.translateText("Other Sectors", opt.getLangCode(), opt.getSiteId());
+				} catch (WorkerException e) {					
+					e.printStackTrace();
+				}
+            	ds.setValue(otherSectors,Math.round(otherFunfing));
             }		
 		}
 		return ds;
@@ -862,7 +868,7 @@ public class ChartWidgetUtil {
                 " as fd inner join fd.ampFundingId f ";
         oql += "   inner join f.ampActivityId act ";
 
-        oql += " inner join act.locations loc inner join loc.location.ampRegion reg where " +
+        oql += " inner join act.locations loc inner join loc.location.regionLocation reg where " +
                 " reg is not null  and fd.transactionType =:transactionType and  fd.adjustmentType = 1";
            if (orgID == null || orgID == -1) {
                if (orgGroupId != null && orgGroupId != -1) {
@@ -875,7 +881,7 @@ public class ChartWidgetUtil {
         oql += getTeamQuery(teamMember);
         Session session = PersistenceManager.getRequestDBSession();
         @SuppressWarnings("unchecked")
-        List<AmpRegion> regions = null;
+        List<AmpCategoryValueLocations> regions = null;
         try {
             Query query = session.createQuery(oql);
             query.setDate("startDate", startDate);
@@ -893,10 +899,10 @@ public class ChartWidgetUtil {
 
             }
             regions = query.list();
-            Iterator<AmpRegion> regionIter = regions.iterator();
+            Iterator<AmpCategoryValueLocations> regionIter = regions.iterator();
             while (regionIter.hasNext()) {
                 //calculating funding for each region
-                AmpRegion region = regionIter.next();
+                AmpCategoryValueLocations region = regionIter.next();
 
                 /* query that creates new  AmpFundingDetail objects
                 which amounts are calculated by multiplication
@@ -907,7 +913,7 @@ public class ChartWidgetUtil {
                 oql += AmpFundingDetail.class.getName() +
                         " as fd inner join fd.ampFundingId f ";
                 oql += "   inner join f.ampActivityId act inner join act.locations loc inner join " +
-                        " loc.location.ampRegion reg ";
+                        " loc.location.regionLocation reg ";
 
                 oql += " where  fd.transactionType =:transactionType and  fd.adjustmentType = 1 ";
                 if (orgID == null || orgID == -1) {
@@ -919,7 +925,7 @@ public class ChartWidgetUtil {
                     oql += getOrganizationQuery(false);
                 }
 
-                oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  and reg is not null and reg.ampRegionId=  " + region.getAmpRegionId();
+                oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  and reg is not null and reg.id=  " + region.getId();
                 oql += getTeamQuery(teamMember);
                 query = session.createQuery(oql);
                 query.setDate("startDate", startDate);

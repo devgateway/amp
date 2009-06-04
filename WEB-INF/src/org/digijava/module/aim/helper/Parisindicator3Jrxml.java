@@ -181,7 +181,7 @@ public class Parisindicator3Jrxml extends ParisIndicatorJrxml {
             p2.println("						isPrintInFirstWholeBand='false'");
             p2.println("						isPrintWhenDetailOverflows='false'/>");
             p2.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
-            p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
+            p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='8' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
             p2.println("					</textElement>");
             p2.println("				<text><![CDATA[  "+ TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Aid flows to the government sector reported on the government's budget", this.getLangCode(), this.getSite().getId())) + "]]></text>");
             p2.println("				</staticText>");

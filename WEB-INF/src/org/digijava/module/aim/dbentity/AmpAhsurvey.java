@@ -8,6 +8,8 @@ package org.digijava.module.aim.dbentity;
 
 import java.util.Set;
 
+import org.digijava.module.aim.form.EditActivityForm.Survey;
+
 public class AmpAhsurvey {
 
 	private Long ampAHSurveyId;
@@ -77,4 +79,27 @@ public class AmpAhsurvey {
     public void setPointOfDeliveryDonor(AmpOrganisation pointOfDeliveryDonor) {
         this.pointOfDeliveryDonor = pointOfDeliveryDonor;
     }
+    
+    @Override
+	public boolean equals(Object obj) {
+		if(obj instanceof AmpAhsurvey) {
+			AmpAhsurvey aux = (AmpAhsurvey) obj;
+			if(aux.getAmpAHSurveyId() == this.getAmpAHSurveyId()) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+	
+	@Override
+	public int hashCode() {
+		if(this.ampAHSurveyId != null) {
+			return this.ampAHSurveyId.intValue();
+		} else {
+			return 0;
+		}
+	}
 }

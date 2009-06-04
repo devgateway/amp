@@ -89,10 +89,14 @@ public class AmpARFilter extends PropertyListable {
 	@PropertyListableIgnore
 	private Set secondarySectors = null;
 	private Set selectedSecondarySectors = null;
+	@PropertyListableIgnore
+	private Set relatedSecondaryProgs;
 
 	@PropertyListableIgnore
 	private List nationalPlanningObjectives;
 	private Set selectedNatPlanObj;
+	@PropertyListableIgnore
+	private Set relatedNatPlanObjs;
 
 	@PropertyListableIgnore
 	private String teamAccessType;
@@ -100,6 +104,8 @@ public class AmpARFilter extends PropertyListable {
 	@PropertyListableIgnore
 	private List primaryPrograms;
 	private Set selectedPrimaryPrograms;
+	@PropertyListableIgnore
+	private Set relatedPrimaryProgs;
 
 	@PropertyListableIgnore
 	private List secondaryPrograms;
@@ -112,6 +118,34 @@ public class AmpARFilter extends PropertyListable {
 
 	public void setNationalPlanningObjectives(List nationalPlanningObjectives) {
 		this.nationalPlanningObjectives = nationalPlanningObjectives;
+	}
+	
+	
+
+	@PropertyListableIgnore
+	public Set getRelatedNatPlanObjs() {
+		return relatedNatPlanObjs;
+	}
+
+	public void setRelatedNatPlanObjs(Set relatedNatPlanObjs) {
+		this.relatedNatPlanObjs = relatedNatPlanObjs;
+	}
+	@PropertyListableIgnore
+	public Set getRelatedSecondaryProgs() {
+		return relatedSecondaryProgs;
+	}
+
+	public void setRelatedSecondaryProgs(Set relatedSecondaryProgs) {
+		this.relatedSecondaryProgs = relatedSecondaryProgs;
+	}
+
+	@PropertyListableIgnore
+	public Set getRelatedPrimaryProgs() {
+		return relatedPrimaryProgs;
+	}
+
+	public void setRelatedPrimaryProgs(Set relatedPrimaryProgs) {
+		this.relatedPrimaryProgs = relatedPrimaryProgs;
 	}
 
 	@PropertyListableIgnore
@@ -307,7 +341,7 @@ public class AmpARFilter extends PropertyListable {
 		///Set the range depending of workspase setup / global setting and selected calendar
 		ICalendarWorker worker = null;
 		Date checkDate = null;
-		if (renderStartYear == null) {
+		if (renderStartYear == null || (request.getParameter("view") != null && "reset".compareTo(request.getParameter("view")) == 0)) {
 			// Check if there is value on workspace setting
 			if (tempSettings != null
 					&& tempSettings.getReportStartYear() != null
@@ -340,7 +374,7 @@ public class AmpARFilter extends PropertyListable {
 		
 		renderStartYear=(renderStartYear==null)?-1:renderStartYear;
 		
-		if (renderEndYear == null) {
+		if (renderEndYear == null || (request.getParameter("view") != null && "reset".compareTo(request.getParameter("view")) == 0)) {
 			// Check if there is value on workspace setting
 			if (tempSettings != null && tempSettings.getReportEndYear() != null
 					&& tempSettings.getReportEndYear().intValue() != 0) {

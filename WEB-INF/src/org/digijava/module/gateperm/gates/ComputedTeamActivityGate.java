@@ -19,6 +19,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.RelOrganization;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.gateperm.core.Gate;
 import org.digijava.module.gateperm.core.GatePermConst;
@@ -90,8 +91,10 @@ public class ComputedTeamActivityGate extends Gate {
 		TeamMember tm = (TeamMember) scope
 				.get(GatePermConst.ScopeKeys.CURRENT_MEMBER);
 
-		AmpTeamMember atm = (AmpTeamMember) session.get(AmpTeamMember.class, tm
-				.getMemberId());
+		//AmpTeamMember atm = (AmpTeamMember) session.get(AmpTeamMember.class, tm
+		//		.getMemberId());
+		
+		AmpTeamMember atm=TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
 		PersistenceManager.releaseSession(session);
 		User user = atm.getUser();
 

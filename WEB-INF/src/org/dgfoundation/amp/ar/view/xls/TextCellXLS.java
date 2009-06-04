@@ -70,6 +70,16 @@ public class TextCellXLS extends XLSExporter {
 		TextCell c=(TextCell) item;
 		HSSFCell cell=this.getRegularCell();
 		String indent = "";
+		
+		ReportData parent=(ReportData)c.getColumn().getParent();
+		while (parent.getReportMetadata()==null)
+		{
+			parent=parent.getParent();
+		}
+		Long siteId=parent.getReportMetadata().getSiteId();
+		String locale=parent.getReportMetadata().getLocale();
+		
+		
 		if (colId.value == 0)
 			for (int k = 0; k < ((ReportData)c.getColumn().getParent()).getLevelDepth(); k++)
 				indent = indent + Constants.excelIndexString;
@@ -78,7 +88,7 @@ public class TextCellXLS extends XLSExporter {
 		{
 			String actualStatus=c.toString();
 			
-			ReportData parent=(ReportData)c.getColumn().getParent();
+			//ReportData parent=(ReportData)c.getColumn().getParent();
 			while (parent.getReportMetadata()==null)
 			{
 				parent=parent.getParent();
@@ -86,9 +96,9 @@ public class TextCellXLS extends XLSExporter {
 			//when we get to the top of the hierarchy we have access to AmpReports
 			
 			//requirements for translation purposes
-			TranslatorWorker translator=TranslatorWorker.getInstance();
-			Long siteId=new Long (parent.getReportMetadata().getSiteId());
-			String locale=parent.getReportMetadata().getLocale();
+//			TranslatorWorker translator=TranslatorWorker.getInstance();
+//			String siteId=parent.getReportMetadata().getSiteId();
+//			String locale=parent.getReportMetadata().getLocale();
 			
 			String finalStatus=new String();//the actual text to be added to the column
 			
@@ -118,8 +128,18 @@ public class TextCellXLS extends XLSExporter {
 					cell.setCellValue(indent + c.toString());
 				}
 			}
-		else 
-			cell.setCellValue(indent + c.toString());
+		else {
+			/* Normal text cell generation*/
+			String translatedCellValue = c.toString();
+			try {
+				translatedCellValue = TranslatorWorker.translateText(c.toString(), locale, siteId);
+			} catch (WorkerException e) {
+				//TODO add some cell identification values in warning message to make easy to find it. 
+				logger.warn("Error translating text cell value, using value without translation. See error below.");
+				logger.error(e);
+			}
+			cell.setCellValue(indent + translatedCellValue);
+		}
 		
 		colId.inc();
 	}

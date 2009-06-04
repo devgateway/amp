@@ -345,8 +345,6 @@ public class Constants
     public static final String UNIFIED_JNDI_ALIAS="java:comp/env/ampDS";
     public static final String JNP_URL="jnp://localhost:1099";
     
-    public static final String COLUMN_PROJECT_TITLE = "Project Title";
-    
     //contact information 
     public static final String DONOR_CONTACT = "DONOR_CONT";
     public static final String MOFED_CONTACT = "MOFED_CONT";

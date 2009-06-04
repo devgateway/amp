@@ -2,6 +2,7 @@ package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,11 +16,13 @@ import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
+import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.helper.MTEFProjection;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.gateperm.core.GatePermConst;
 
 public class EditFunding extends Action {
 
@@ -31,6 +34,9 @@ public class EditFunding extends Action {
 
 		EditActivityForm formBean = (EditActivityForm) form;
 
+		//this is needed to aknowledge that we are still under EDIT ACTIVITY mode:
+        request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.EDIT);
+		
 		Long orgId = formBean.getFunding().getOrgId();
 		int offset = formBean.getFunding().getOffset();
 		int numComm = 0;
@@ -49,6 +55,7 @@ public class EditFunding extends Action {
 		formBean.getOldFunding().setSignatureDate("");
 		formBean.getOldFunding().setFundingDetails(null);
 		formBean.getOldFunding().setFundingMTEFProjections(null);
+		formBean.setTotDisbIsBiggerThanTotCom(false);
 		//
 		ArrayList<FundingOrganization> fundingOrganizations = new ArrayList<FundingOrganization>(formBean.getFunding().getFundingOrganizations());
 		if (fundingOrganizations != null) {
@@ -87,6 +94,15 @@ public class EditFunding extends Action {
 									formBean.getOldFunding().setFundingConditions(funding.getConditions());
 									formBean.getOldFunding().setFundingMTEFProjections( new ArrayList<MTEFProjection> (funding.getMtefProjections()) );
 									formBean.getOldFunding().setFundingDetails(new ArrayList<FundingDetail>());
+									
+									List<KeyValue> availableMTEFProjectionYears		= 
+										AddFunding.generateAvailableMTEFProjectionYears( formBean.getFunding().getFundingMTEFProjections() ); 
+									formBean.getFunding().setAvailableMTEFProjectionYears( availableMTEFProjectionYears );
+									
+									int defaultIndex				= availableMTEFProjectionYears.size() - 1 - AddMTEFProjection.ADDITIONAL_AVAILABLE_YEARS;
+									formBean.getFunding().setSelectedMTEFProjectionYear( Integer.parseInt( 
+											availableMTEFProjectionYears.get(defaultIndex).getKey() )
+									);
 								}
 
 								if (funding.getFundingDetails() != null) {

@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -14,10 +15,12 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.ReportsFilterPickerForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 
 public class FilterUtil {
@@ -60,24 +63,41 @@ public class FilterUtil {
 
 		if ( arf.getSelectedNatPlanObj() != null && arf.getSelectedNatPlanObj().size() > 0) {
 			arf.setNationalPlanningObjectives(new ArrayList( arf.getSelectedNatPlanObj() ));
+			
+			arf.setRelatedNatPlanObjs(new HashSet<AmpTheme>() );
+			ProgramUtil.collectFilteringInformation(arf.getSelectedNatPlanObj(), arf.getNationalPlanningObjectives(), arf.getRelatedNatPlanObjs() );
+			
 		} else {
 			arf.setSelectedNatPlanObj(null);
 			arf.setNationalPlanningObjectives(null);
+			arf.setRelatedNatPlanObjs(null);
 		}
 		
 		Set selectedPrimaryPrograms	= arf.getSelectedPrimaryPrograms();
 		
 		if (selectedPrimaryPrograms != null && selectedPrimaryPrograms.size() > 0) {
 			arf.setPrimaryPrograms(new ArrayList(selectedPrimaryPrograms));
+			
+			arf.setRelatedPrimaryProgs(new HashSet<AmpTheme>() );
+			ProgramUtil.collectFilteringInformation(selectedPrimaryPrograms, arf.getPrimaryPrograms(), arf.getRelatedPrimaryProgs() );
+			
 		} else {
 			arf.setPrimaryPrograms(null);
+			arf.setSelectedPrimaryPrograms(null);
+			arf.setRelatedPrimaryProgs(null);
 		}
 
 		Set selectedSecondaryPrograms	= arf.getSelectedSecondaryPrograms();
 		if (selectedSecondaryPrograms != null && selectedSecondaryPrograms.size() > 0) {
 			arf.setSecondaryPrograms(new ArrayList(selectedSecondaryPrograms));
+			
+			arf.setRelatedSecondaryProgs( new HashSet<AmpTheme>() );
+			ProgramUtil.collectFilteringInformation(selectedSecondaryPrograms, arf.getSecondaryPrograms(), arf.getRelatedSecondaryProgs() );
+			
 		} else {
 			arf.setSecondaryPrograms(null);
+			arf.setSelectedSecondaryPrograms(null);
+			arf.setRelatedSecondaryProgs(null);
 		}
 		
 		String name=null;

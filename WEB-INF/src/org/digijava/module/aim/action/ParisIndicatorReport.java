@@ -59,6 +59,10 @@ public class ParisIndicatorReport extends Action {
         logger.debug("In paris-indicator survey report action");
 
         ParisIndicatorReportForm svForm = (ParisIndicatorReportForm) form;
+        
+        svForm.setDonorsColl(null);
+        svForm.setDonorColl(null);
+        svForm.setIndicatorsColl(null);
 
         if (null == svForm.getIndicatorsColl() || svForm.getIndicatorsColl().size() < 1) {
             svForm.setIndicatorsColl(DbUtil.getAllAhSurveyIndicators());

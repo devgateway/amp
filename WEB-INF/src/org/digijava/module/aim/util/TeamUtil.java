@@ -2024,7 +2024,9 @@ public class TeamUtil {
         	   }
         	   
                session = PersistenceManager.getRequestDBSession();
+               Transaction transaction = session.beginTransaction();
                AmpTeam team = (AmpTeam) session.load(AmpTeam.class, teamId);
+               
                
                /*AMP-2685 Team leader should not see all reports*/
                AmpTeamMember ampteammember = TeamMemberUtil.getAmpTeamMember(memberId);
@@ -2099,7 +2101,7 @@ public class TeamUtil {
 
 
                }
-               
+               transaction.commit();
            } catch(Exception e) {
                logger.error("Exception from getAllTeamReports()", e);
                throw new RuntimeException(e);
@@ -2118,6 +2120,7 @@ public class TeamUtil {
 
        try {
             session = PersistenceManager.getRequestDBSession();
+            Transaction transaction = session.beginTransaction();
             String queryString = null;
             Query qry = null;
             //oracle doesn't support order by from a column that is not part of the distinct Statement  so we have to include the  m.lastView  in the select part 
@@ -2143,6 +2146,7 @@ public class TeamUtil {
              	qry.setLong("ampTeamMemId", memberId);
              	col = qry.list();
             }
+	       	transaction.commit();
         } catch(Exception e) {
             logger.error("Exception from getAllTeamReports()", e);
             throw new RuntimeException(e);

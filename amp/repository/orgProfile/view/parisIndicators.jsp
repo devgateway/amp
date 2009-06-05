@@ -38,7 +38,7 @@
         </c:set>
         <tr>
             <td>${indicator.prIndicator.indicatorCode}</td>
-            <td>${indicator.prIndicator.name}</td>
+            <td><digi:trn>${indicator.prIndicator.name}</digi:trn></td>
             <td>${indicator.allDonorBaseLineValue}${percent}</td>
             <td>${indicator.allCurrentValue}${percent}</td>
             <td>${indicator.allTargetValue}${percent}</td>

@@ -1500,11 +1500,11 @@ public class TeamMemberUtil {
             for (int i = 0; i < id.length; i++) {
                 if (id[i] != null) {
                     AmpTeamMember ampMember = (AmpTeamMember) session.load(AmpTeamMember.class, id[i]);
-                    if (isTeamLead(ampMember)) {
-                        AmpTeam team = ampMember.getAmpTeam();
-                        team.setTeamLead(null);
-                        session.update(team);
-                    }
+//                    if (isTeamLead(ampMember)) {
+//                        AmpTeam team = ampMember.getAmpTeam();
+//                        team.setTeamLead(null);
+//                        session.update(team);
+//                    }
                     
                     AmpTeamMember teamHead = getTeamHead(ampMember.getAmpTeam().getAmpTeamId());
                     
@@ -1629,34 +1629,34 @@ public class TeamMemberUtil {
         }
     }
 
-	private static boolean isTeamLead(AmpTeamMember member) {
-		Session session = null;
-
-		try {
-			session = PersistenceManager.getSession();
-			AmpTeam ampTeam = (AmpTeam) session.load(AmpTeam.class,
-					member.getAmpTeam().getAmpTeamId());
-			if(ampTeam!=null)
-				if(ampTeam.getTeamLead()!=null)
-					if(ampTeam.getTeamLead().getAmpTeamMemId()!=null)
-						if (ampTeam.getTeamLead().getAmpTeamMemId().
-									equals(member.getAmpTeamMemId())) {
-								return true;
-			}
-		} catch (Exception e) {
-			logger.error("Unable to update team page filters" + e.getMessage());
-			e.printStackTrace(System.out);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}
-		return false;
-	}
+//	private static boolean isTeamLead(AmpTeamMember member) {
+//		Session session = null;
+//
+//		try {
+//			session = PersistenceManager.getSession();
+//			AmpTeam ampTeam = (AmpTeam) session.load(AmpTeam.class,
+//					member.getAmpTeam().getAmpTeamId());
+//			if(ampTeam!=null)
+//				if(ampTeam.getTeamLead()!=null)
+//					if(ampTeam.getTeamLead().getAmpTeamMemId()!=null)
+//						if (ampTeam.getTeamLead().getAmpTeamMemId().
+//									equals(member.getAmpTeamMemId())) {
+//								return true;
+//			}
+//		} catch (Exception e) {
+//			logger.error("Unable to update team page filters" + e.getMessage());
+//			e.printStackTrace(System.out);
+//		} finally {
+//			try {
+//				if (session != null) {
+//					PersistenceManager.releaseSession(session);
+//				}
+//			} catch (Exception ex) {
+//				logger.error("releaseSession() failed");
+//			}
+//		}
+//		return false;
+//	}
 	/**
 	 * Retrieves current TeamMember from request
 	 * @param HttpServletRequest request

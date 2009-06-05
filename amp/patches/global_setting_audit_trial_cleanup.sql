@@ -1,0 +1,1 @@
+insert into amp_global_settings(settingsName,settingsValue,possibleValues, description) values('Automatic Audit Logger Cleanup','-1','t_audit_trial_clenaup','Component Type by default when Component Type is disabled in FM');

@@ -1,0 +1,2 @@
+INSERT INTO `amp_measures` (measureId,measureName,aliasName,type) VALUES (10,'Actual Disbursement Orders','Actual Disbursement Orders','A');
+INSERT INTO `amp_measures` (measureId,measureName,aliasName,type) VALUES (11,'Planned Disbursement Orders','Planned Disbursement Orders','A');

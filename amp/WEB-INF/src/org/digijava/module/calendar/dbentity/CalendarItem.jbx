@@ -1,0 +1,13 @@
+[PropertyInfo]
+calendarId,Long,false,false, , ,false,<default>
+creationIp,String,false,false, , ,false,<default>
+description,java.sql.Clob,false,false, , ,false,<default>
+id,Long,false,false, , ,false,<default>
+language,String,false,false, , ,false,<default>
+title,String,false,false, , ,false,<default>
+userId,Long,false,false, , ,false,<default>
+[IconNames]
+
+
+
+

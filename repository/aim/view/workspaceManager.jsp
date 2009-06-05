@@ -259,7 +259,8 @@
 															</c:set>
 															 <digi:link href="/getWorkspace.do" name="urlParams22" title="${translation}" >
 																<digi:trn key="aim:workspaceManagerEditLink">
-																<img src="/TEMPLATE/ampTemplate/images/application_edit.png" style="height: 13px; border:0px;"  />
+																
+																<img vspace="2" border="0" align="absmiddle" src="/repository/message/view/images/edit.gif"/>
 																	Edit
 																</digi:trn>
 															</digi:link> 
@@ -276,7 +277,8 @@
 															 <digi:link href="/deleteWorkspace.do" name="urlParams4"
 																title="${translation}" onclick="return onDelete()">
 																<digi:trn key="aim:workspaceManagerDeleteLink">
-																	<img src="/TEMPLATE/ampTemplate/images/deleteIcon.gif" style="height: 13px; border:0px;"  />
+															
+																	<img vspace="2" border="0" align="absmiddle" src="/repository/message/view/images/trash_12.gif"/>
 																	Delete
 																</digi:trn>
 																</digi:link> 

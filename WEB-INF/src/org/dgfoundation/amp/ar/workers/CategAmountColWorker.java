@@ -175,7 +175,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		Double fixedExchangeRate = null;;
 		
 		//the most important meta name, the source name (donor name, region name, component name)
-		String headMetaName=rsmd.getColumnName(4);
+		String headMetaName=rsmd.getColumnName(4).toLowerCase();
 
 
 		if (columnsMetaData.contains("fixed_exchange_rate")){

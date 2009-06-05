@@ -106,7 +106,7 @@ function setHoveredTable(tableId, hasHeaders) {
 						
 						
 						<digi:trn key="aim:categoryManager">
-							Category Manager
+							Category Manager  
 						</digi:trn>
 					</td>
 					<!-- End navigation -->
@@ -245,7 +245,7 @@ function setHoveredTable(tableId, hasHeaders) {
 								<div style="width:110px; ">
 									
 										<digi:link paramId="edit" style="text-decoration:none;" paramName="category" paramProperty="id"  href='/categoryManager.do'>
-											<img src="/TEMPLATE/ampTemplate/images/application_edit.png" style="height: 13px; border:0px;"  />
+											<img vspace="2" border="0" align="absmiddle" src="/repository/message/view/images/edit.gif"/>
 											<digi:trn key="aim:categoryManagerEditAction">
 												Edit     
 											</digi:trn>
@@ -256,7 +256,7 @@ function setHoveredTable(tableId, hasHeaders) {
 								<div style="width:110px; ">
 									
 										<digi:link paramId="delete" style="text-decoration:none;" paramName="category" paramProperty="id"  href='/categoryManager.do' onclick="return confirmDelete()">
-											<img src="/TEMPLATE/ampTemplate/images/deleteIcon.gif" style="height: 13px; border:0px;"  />
+											<img vspace="2" border="0" align="absmiddle" src="/repository/message/view/images/trash_12.gif"/>
 											<digi:trn key="aim:categoryManagerDeleteAction">
 												Delete 
 											</digi:trn>

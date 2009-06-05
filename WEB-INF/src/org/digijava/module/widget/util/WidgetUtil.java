@@ -10,11 +10,17 @@ import org.apache.struts.tiles.ComponentContext;
 import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyWorker;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.IndicatorSector;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpWidget;
 import org.digijava.module.widget.dbentity.AmpWidgetOrgProfile;
+import org.digijava.module.widget.helper.TopDonorGroupHelper;
 import org.digijava.module.widget.helper.WidgetPlaceHelper;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -38,6 +44,7 @@ public class WidgetUtil {
     public static final int ORG_PROFILE = 5;
     public static final int SECTOR_TABLE = 6;
     public static final int PARIS_INDICAROR_TABLE = 7;
+    public static final int TOP_TEN_DONORS = 8;
         
     // org profile pages
     public static final int ORG_PROFILE_SUMMARY = 1;
@@ -573,4 +580,51 @@ public class WidgetUtil {
             return exists;
             
         }
+
+      public static List<TopDonorGroupHelper> getTopTenDonorGroups(Integer fromYear,Integer toYear) throws DgException {
+        List<TopDonorGroupHelper> donorGroups = new ArrayList<TopDonorGroupHelper>();
+        Date fromDate = null;
+		Date toDate = null;
+		if (fromYear!=null && toYear!=null){
+			/**
+			 * we should get default calendar and from/to dates should be taken according to it.
+			 * So for example, if some calendar's startMonth is 1st of July, we should take an interval from
+			 * year's(parameter that is passed to function) 1st of July to the next year's 1st of July
+			 */
+			Long defaultCalendarId=new Long(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR));
+			AmpFiscalCalendar calendar=FiscalCalendarUtil.getAmpFiscalCalendar(defaultCalendarId);
+			fromDate=ChartWidgetUtil.getStartOfYear(fromYear.intValue(),calendar.getStartMonthNum()-1,calendar.getStartDayNum());
+			//we need data including the last day of toYear,this is till the first day of toYear+1
+			int MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
+			toDate =new Date(ChartWidgetUtil.getStartOfYear(toYear.intValue()+1,calendar.getStartMonthNum()-1,calendar.getStartDayNum()).getTime()-MILLISECONDS_IN_DAY);
+		}		
+        Session session = PersistenceManager.getRequestDBSession();
+        String queryString = " select new   org.digijava.module.widget.helper.TopDonorGroupHelper(orgGrp.orgGrpName, sum(fd.transactionAmountInUSD)) ";
+        queryString += " from ";
+        queryString += AmpFundingDetail.class.getName() +
+                " as fd  inner join fd.ampFundingId f ";
+        queryString += " inner join f.ampDonorOrgId org  ";
+        queryString += " inner join org.orgGrpId orgGrp ";
+        queryString += "  inner join f.ampActivityId act ";
+        queryString += " where  fd.transactionType = 0 and fd.adjustmentType = 1 ";
+        queryString += " and act.team is not null ";
+        queryString += " and  (fd.transactionDate>=:startDate and fd.transactionDate<:endDate)  ";
+        queryString += " group by orgGrp.ampOrgGrpId ";
+        queryString += " order by sum(fd.transactionAmountInUSD) desc ";
+        try {
+            Query query = session.createQuery(queryString);
+            query.setDate("startDate", fromDate);
+            query.setDate("endDate", toDate);
+            donorGroups = query.list();
+            if(donorGroups !=null&&donorGroups.size()>10){
+               //selected 10 donor groups
+               donorGroups=donorGroups.subList(0, 9);
+            }
+        } catch (Exception e) {
+            logger.error(e);
+            throw new DgException("cannot load SectorIndicators!", e);
+        }
+        return donorGroups;
+    }
+          
 }

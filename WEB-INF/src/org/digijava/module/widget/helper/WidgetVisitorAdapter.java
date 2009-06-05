@@ -6,6 +6,7 @@ import org.digijava.module.widget.dbentity.AmpParisIndicatorTableWidget;
 import org.digijava.module.widget.dbentity.AmpSectorTableWidget;
 import org.digijava.module.widget.dbentity.AmpWidgetIndicatorChart;
 import org.digijava.module.widget.dbentity.AmpWidgetOrgProfile;
+import org.digijava.module.widget.dbentity.AmpWidgetTopTenDonorGroups;
 
 /**
  *
@@ -31,5 +32,8 @@ public class WidgetVisitorAdapter implements WidgetVisitor {
     public void visit(AmpParisIndicatorTableWidget sectorTable) {
 
     }
+ 
+    public void visit(AmpWidgetTopTenDonorGroups topTenDonorsTb) {
 
+    }
 }

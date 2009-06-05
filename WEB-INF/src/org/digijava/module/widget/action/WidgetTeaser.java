@@ -17,6 +17,7 @@ import org.digijava.module.widget.dbentity.AmpSectorTableWidget;
 import org.digijava.module.widget.dbentity.AmpWidget;
 import org.digijava.module.widget.dbentity.AmpWidgetIndicatorChart;
 import org.digijava.module.widget.dbentity.AmpWidgetOrgProfile;
+import org.digijava.module.widget.dbentity.AmpWidgetTopTenDonorGroups;
 import org.digijava.module.widget.form.WidgetTeaserForm;
 import org.digijava.module.widget.helper.WidgetVisitor;
 import org.digijava.module.widget.helper.WidgetVisitorAdapter;
@@ -80,8 +81,12 @@ public class WidgetTeaser extends TilesAction {
                          rendertype.add(WidgetUtil.SECTOR_TABLE);
                     }
                     @Override
-                    public void visit(AmpParisIndicatorTableWidget sectorTable){
+                    public void visit(AmpParisIndicatorTableWidget table){
                          rendertype.add(WidgetUtil.PARIS_INDICAROR_TABLE);
+                    }
+                    @Override
+                    public void visit(AmpWidgetTopTenDonorGroups table) {
+                        rendertype.add(WidgetUtil.TOP_TEN_DONORS);
                     }
                 };
                 widget.accept(adapter);

@@ -11,6 +11,7 @@ import org.digijava.module.widget.dbentity.AmpWidget;
 import org.digijava.module.widget.dbentity.AmpWidgetIndicatorChart;
 import org.digijava.module.widget.dbentity.AmpWidgetOrgProfile;
 import org.digijava.module.widget.dbentity.AmpSectorTableWidget;
+import org.digijava.module.widget.dbentity.AmpWidgetTopTenDonorGroups;
 import org.digijava.module.widget.util.WidgetUtil;
 
 /**
@@ -100,6 +101,11 @@ public class WidgetPlaceHelper implements Serializable{
             public void visit(AmpParisIndicatorTableWidget table) {
                 rendertype.add(WidgetUtil.PARIS_INDICAROR_TABLE);
                 rendertypeName.add("Paris Indicator Table Widget");
+            }
+            @Override
+            public void visit(AmpWidgetTopTenDonorGroups table) {
+                rendertype.add(WidgetUtil.TOP_TEN_DONORS);
+                rendertypeName.add("Top Ten Donors Table Widget");
             }
         };
         widget.accept(adapter);

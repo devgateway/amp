@@ -301,20 +301,19 @@ public class AmpMessageUtil {
 		try {
 			session=PersistenceManager.getRequestDBSession();	
 			queryString="select state from "+AmpMessageState.class.getName()+" state, "+clazz.getName()+" msg where"+
-			" msg.id=state.message.id and state.receiver.ampTeamMemId=:tmId and msg.draft=false and (state.messageHidden=:hidden or state.messageHidden is null)";
+			" msg.id=state.message.id and state.receiver.ampTeamMemId=:tmId and msg.draft=false and (state.messageHidden=:hidden or state.messageHidden is null)";			
 		
-			queryString+=" order by msg.creationDate asc";
+			queryString+=" order by msg.creationDate desc";
 			query=session.createQuery(queryString);			 				
 			query.setParameter("tmId", memberId);
-                        query.setParameter("hidden", true );
-                        query.setMaxResults(limit);
-                        if(!query.list().isEmpty()){
-                            Iterator<AmpMessageState> iterState=query.list().iterator();
-                            while(iterState.hasNext()){
-                                unhideMessageState(iterState.next().getId());
-                            }
-                        }
-						
+            query.setParameter("hidden", true );
+            query.setMaxResults(limit);
+            if(!query.list().isEmpty()){
+            	Iterator<AmpMessageState> iterState=query.list().iterator();
+                while(iterState.hasNext()){
+                	unhideMessageState(iterState.next().getId());
+                }
+            }						
 		}catch(Exception ex) {			
 			ex.printStackTrace();
 			throw new DgException("Unable to unhide Messages", ex);
@@ -371,7 +370,7 @@ public class AmpMessageUtil {
 			messagesAmount=getInboxMessagesCount(clazz,teamMemberId,false,false,msgStoragePerMsgType);
 			session=PersistenceManager.getRequestDBSession();	
 			queryString="select state from "+AmpMessageState.class.getName()+" state, "+clazz.getName()+" msg where"+
-			" msg.id=state.message.id and state.receiver.ampTeamMemId=:tmId and msg.draft=false and state.messageHidden=false";	
+			" msg.id=state.message.id and state.receiver.ampTeamMemId=:tmId and msg.draft=false and state.messageHidden=false order by msg.creationDate";	
 			query=session.createQuery(queryString);
 			
 			//if max.storage is less then amount ,then we should not show extra messages. We must show the oldest(not newest) max.storage amount messages.
@@ -384,8 +383,8 @@ public class AmpMessageUtil {
 //			}
 			int fromIndex=messagesAmount-page[0]*MessageConstants.MESSAGES_PER_PAGE;			
 			if(fromIndex<0){
-				fromIndex=0;				
-			}	
+				fromIndex=0;
+			}
 			int toIndex;
 			if(messagesAmount-(page[0]-1)*MessageConstants.MESSAGES_PER_PAGE< MessageConstants.MESSAGES_PER_PAGE){
 				toIndex=messagesAmount-(page[0]-1)*MessageConstants.MESSAGES_PER_PAGE;
@@ -421,7 +420,7 @@ public class AmpMessageUtil {
 			messagesAmount=getSentOrDraftMessagesCount(clazz,teamMemberId,draft,false);
 			session=PersistenceManager.getRequestDBSession();	
 			queryString="select state from "+AmpMessageState.class.getName()+" state, "+clazz.getName()+" msg where "+
-			"msg.id=state.message.id and state.senderId=:tmId and msg.draft="+draft+" and state.messageHidden="+false;
+			"msg.id=state.message.id and state.senderId=:tmId and msg.draft="+draft+" and state.messageHidden="+false+" order by msg.creationDate ";
 			query=session.createQuery(queryString);
 			int fromIndex=messagesAmount-page[0]*MessageConstants.MESSAGES_PER_PAGE;			
 			if(fromIndex<0){

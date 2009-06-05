@@ -47,5 +47,6 @@
       </list>
       <property column="donor_group_year" name="donorGroupYear" type="java.lang.Long"/>
     </subclass>
+     <subclass discriminator-value="topTenDonors" name="org.digijava.module.widget.dbentity.AmpWidgetTopTenDonorGroups"/>
   </class>
 </hibernate-mapping>

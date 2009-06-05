@@ -33,6 +33,24 @@ public class WidgetTeaserForm extends ActionForm {
 	 */
 	private Long id;
 	private boolean showPlaceInfo;
+    private String selectedFromYear;
+	private String selectedToYear;
+
+    public String getSelectedFromYear() {
+        return selectedFromYear;
+    }
+
+    public void setSelectedFromYear(String selectedFromYear) {
+        this.selectedFromYear = selectedFromYear;
+    }
+
+    public String getSelectedToYear() {
+        return selectedToYear;
+    }
+
+    public void setSelectedToYear(String selectedToYear) {
+        this.selectedToYear = selectedToYear;
+    }
         
         // used for Org Profile to determine which chart/text render
         private Long type;

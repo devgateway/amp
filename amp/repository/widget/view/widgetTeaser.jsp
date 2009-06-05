@@ -161,6 +161,16 @@ if(myDiv.childNodes.length>1){
      <jsp:include page="/widget/showParisIndicatorTableWidget.do?widgetId=${gisWidgetTeaserForm.id}" flush="true"/>
 </c:if>
 
+<c:if test="${gisWidgetTeaserForm.rendertype==8}">
+       <div id="topTenDonorGroupsDiv">
+
+       </div>
+    	<script language="JavaScript">
+            getTopTenDonorTable();
+        </script>
+     
+</c:if>
+
 <c:if test="${gisWidgetTeaserForm.rendertype==1}">
 	<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.SHOW_WIDGET_PLACE_NAMES %>" compareWith="true" onTrueEvalBody="true">
 		<digi:trn key="gis:widgetTeaser:emptyPlace">empty teaser: </digi:trn>&nbsp;${gisWidgetTeaserForm.placeName}

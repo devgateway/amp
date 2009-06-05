@@ -12,7 +12,8 @@
         rechart();
     }
     function yearChanged(){
-        rechart()
+        rechart();
+        getTopTenDonorTable();
     }
     function rechart(){
         lastTimeStamp = new Date().getTime();
@@ -46,6 +47,57 @@
         }
     }
 
+    function getTopTenDonorTable(){
+        var topTenDonorTable=document.getElementById('topTenDonorGroupsDiv');
+        topTenDonorTable.innerHTML= '<digi:img src="images/amploading.gif"/>';
+        //from year
+        var fy=document.getElementsByName('selectedFromYear')[0].value;
+        //to year
+        var ty=document.getElementsByName('selectedToYear')[0].value;
+        var url='/widget/getTopTenDonorGroups.do?'+'selectedFromYear='+fy+'&selectedToYear='+ty;
+        var async=new Asynchronous();
+        async.complete=topTenDonorTableCallBack;
+        async.call(url);
+    }
+
+function topTenDonorTableCallBack(status, statusText, responseText, responseXML){
+    var root=responseXML.getElementsByTagName('DonorGroups')[0];
+    var donorGroups=root.childNodes;
+    //get div that should hold top donor groups
+    var divTopTen=document.getElementById('topTenDonorGroupsDiv');
+    //create top ten table
+    var table=document.createElement('TABLE');
+    var tbody=document.createElement('TBODY');
+    var trHead=document.createElement('TR');
+    var tdHeadEmpty=document.createElement('TD');
+    tdHeadEmpty.innerHTML="&nbsp;"
+    var tdHeadDonorGroup=document.createElement('TD');
+    tdHeadDonorGroup.innerHTML="<strong><digi:trn>Donor Group</digi:trn></strong>";
+    var tdHeadCom=document.createElement('TD');
+    tdHeadCom.innerHTML="<strong><digi:trn>Actual Commitments for</digi:trn> "+root.getAttribute("years")+"</strong>";
+    trHead.appendChild(tdHeadEmpty);
+    trHead.appendChild(tdHeadDonorGroup);
+    trHead.appendChild(tdHeadCom);
+    tbody.appendChild(trHead);
+    for(var i=0;i<donorGroups.length;i++){
+        var tr=document.createElement('TR');
+        var tdOrder=document.createElement('TD');
+        tdOrder.innerHTML=donorGroups[i].getAttribute("order");
+        var tdName=document.createElement('TD');
+        tdName.innerHTML=donorGroups[i].getAttribute("name");
+        var tdAmount=document.createElement('TD');
+        tdAmount.innerHTML=donorGroups[i].getAttribute("amount");
+        tr.appendChild(tdOrder);
+        tr.appendChild(tdName);
+        tr.appendChild(tdAmount);
+        tbody.appendChild(tr);
+    }
+    table.appendChild(tbody);
+    table.id="topTenDonorGroupsWidgetTable";  
+    divTopTen.innerHTML='';
+    divTopTen.appendChild(table);
+    applyStyle(table);
+}
     //-->
 </script>
 

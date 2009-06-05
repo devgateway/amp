@@ -103,6 +103,9 @@
          <action name="showParisIndicatorTableForm" path="/widget/showParisIndicatorTableWidget" scope="request" type="org.digijava.module.widget.action.ShowParisIndicatorTableWidget" validate="false">
 	      <forward name="forward" path="/showLayout.do?layout=widget_showParisIndicatorTableWidget" />
     	</action>
+
+       
+         <action name="gisWidgetTeaserForm" path="/widget/getTopTenDonorGroups" scope="request" type="org.digijava.module.widget.action.GetTopTenDonors" validate="false" />
 		
 		<!-- Teasers below this -->
 		<action name="gisWidgetTeaserForm" path="/widget/widgetTeaser" type="org.digijava.module.widget.action.WidgetTeaser"/>

@@ -13,6 +13,7 @@
 
     function validate(){
         if(document.piTableWidgetForm.name.value==''){
+        	
             alert("Please enter the name");
             return false;
         }
@@ -28,6 +29,10 @@
             alert("Please select year");
             return false;
         }
+       if(document.getElementById('tablePlaces').value == "-1"){
+    	  	 alert("Please choice the Place");
+    	   	 return false;
+           }
 
         return save();
     }
@@ -43,9 +48,6 @@
                document.piTableWidgetForm.action = "${addEditPiTable}";
                document.piTableWidgetForm.submit();
            }
-
-
-
 
 
            //-->
@@ -136,7 +138,7 @@
                                                 ${parisIndicators.parisIndicator.indicatorCode}
                                             </td>
                                             <td>
-                                                ${parisIndicators.parisIndicator.name}
+                                               <digi:trn>${parisIndicators.parisIndicator.name}</digi:trn>
                                             </td>
                                             <td>
                                                 <html:text name="parisIndicators" property="baseValue" indexed="true"/>
@@ -173,8 +175,10 @@
                     </tr>
                     <tr>
                         <td colspan="2">
+                   
                             <digi:trn>Places</digi:trn>:
-                            <html:select name="piTableWidgetForm" property="selPlaces" style="width: 300px">
+                            <html:select name="piTableWidgetForm" property="selPlaces" style="width: 300px" styleId="tablePlaces">
+                            	<option value="-1" selected="selected"><digi:trn>None</digi:trn></option>
                                 <html:optionsCollection name="piTableWidgetForm" property="places" value="id" label="name"/>
                             </html:select>
                         </td>
@@ -195,7 +199,7 @@
     </table>
 </digi:form>
 <script type="text/javascript">
-    $(document).ready(function() {
+    	$(document).ready(function() {
         $('table.tableElement thead tr td').css("font-weight","bold");
         $('table.tableElement tbody tr:odd').addClass('tableOdd');
         $('table.tableElement tbody tr:even').addClass('tableEven');});

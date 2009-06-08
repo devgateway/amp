@@ -769,7 +769,7 @@
     </action>
     <action name="aimTeamActivitiesForm" path="/aim/removeTeamActivity" scope="request" type="org.digijava.module.aim.action.RemoveTeamActivity" validate="false">
       <forward name="showRemoveActivity" path="/showLayout.do?layout=removeTeamActivities" />
-      <forward name="forward" path="/aim/workspaceManager.do" />
+    	 <forward name="forward" path="/aim/teamActivities.do" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     <action name="aimTeamActivitiesForm" path="/aim/teamActivityList" scope="request" type="org.digijava.module.aim.action.GetTeamActivities" validate="false">

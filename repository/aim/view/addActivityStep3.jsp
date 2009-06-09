@@ -219,16 +219,16 @@
 </tr>
 <tr>
 <td width="100%" vAlign="top" align="left">
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%" vAlign="top" align="center" border=0>
+<table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="100%" vAlign="top" align="center" border="0">
 	<tr>
-		<td class=r-dotted-lg width="10">&nbsp;</td>
-		<td align=left vAlign=top class=r-dotted-lg>
+		<td class="r-dotted-lg" width="10">&nbsp;</td>
+		<td align="left" valign="top" class="r-dotted-lg">
 			<table width="98%" cellSpacing="3" cellPadding="1" vAlign="top" align="left">
 				<tr><td>
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
 						<tr>
 							<td>
-								<span class=crumb>
+								<span class="crumb">
 								<c:if test="${aimEditActivityForm.pageId == 0}">
 									<c:set var="translation">
 										<digi:trn key="aim:clickToViewAdmin">Click here to go to Admin Home</digi:trn>
@@ -347,7 +347,7 @@ ${fn:replace(message,quote,escapedQuote)}
                   <td>
                     <table width="100%" cellSpacing="1" cellPadding="1" valign="top">
                       <tr>
-                        <td height=16 vAlign="middle" width="100%"><span class=subtitle-blue>
+                        <td height="16" vAlign="middle" width="100%"><span class="subtitle-blue">
                           <c:if test="${aimEditActivityForm.editAct == false}">
                             <digi:trn key="aim:addNewActivity">
                             Add New Activity
@@ -359,6 +359,7 @@ ${fn:replace(message,quote,escapedQuote)}
                             </digi:trn>:
                             <bean:write name="aimEditActivityForm" property="identification.title"/>
                           </c:if>
+                          </span>
                         </td>
                       </tr>
                     </table>
@@ -374,10 +375,10 @@ ${fn:replace(message,quote,escapedQuote)}
                     <table width="100%" cellSpacing="0" cellPadding="1" vAlign="top">
                       <tr>
                         <td width="75%" vAlign="top">
-                          <table cellPadding=0 cellSpacing=0 width="100%" vAlign="top">
+                          <table cellPadding="0" cellSpacing="0" width="100%" vAlign="top">
                             <tr>
                               <td width="100%">
-                                <table cellPadding=0 cellSpacing=0 width="100%" border=0>
+                                <table cellPadding="0" cellSpacing="0" width="100%" border="0">
                                   <tr>
                                     <td width="13" height="20" background="module/aim/images/left-side.gif">
                                     </td>
@@ -396,18 +397,18 @@ ${fn:replace(message,quote,escapedQuote)}
                               </td>
                             </tr>
                             <tr>
-                              <td bgColor=#f4f4f2 align="center" vAlign="top" width="100%">
+                              <td bgColor="#f4f4f2" align="center" vAlign="top" width="100%">
                                 <table width="100%" cellSpacing="0" vAlign="top" align="left" bgcolor="#006699">
                                   <tr>
                                     <td>
                                     	<bean:define name="aimEditActivityForm" id="myForm" type="org.digijava.module.aim.form.EditActivityForm"/>
                              	  	<feature:display name="Proposed Project Cost" module="Funding">
-                                        <table width="100%" bgcolor="#f4f4f2" border="0" cellSpacing=0 cellPadding=0>
+                                        <table width="100%" bgcolor="#f4f4f2" border="0" cellSpacing="0" cellPadding="0">
                                           <tr>
                                             <td>
                                             <br />
                                             &nbsp;&nbsp;&nbsp;&nbsp;
-                                              <IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15 />
+                                              <IMG alt="Link" height="10" src="../ampTemplate/images/arrow-014E86.gif" width="15" />
                                               <a title="<digi:trn key="aim:ProposedProjCost">Proposed Project Cost</digi:trn>">
                                               <b>
                                                 <digi:trn key="aim:proposedPrjectCost">Proposed Project Cost</digi:trn>
@@ -417,10 +418,10 @@ ${fn:replace(message,quote,escapedQuote)}
                                           </tr>
                                           <tr>
                                             <td align="left">
-                                            <table width="100%" cellSpacing=0 cellPadding=0 border=0>
+                                            <table width="100%" cellSpacing="0" cellPadding="0" border="0">
                                                 <tr>
                                                   <td>
-                                                    <table cellSpacing=8 cellPadding=0 border=0 width="95%" class="box-border-nopadding" align="center">
+                                                    <table cellSpacing="8" cellPadding="0" border="0" width="95%" class="box-border-nopadding" align="center">
                                                       <tr>
                                                         <td>                                         
                                                                                                                                                                                                                                  
@@ -503,12 +504,13 @@ ${fn:replace(message,quote,escapedQuote)}
                                         </table>
                                       </feature:display>
                                       <feature:display name="Funding Information" module="Funding">
-                                      <table width="100%" bgcolor="#f4f4f2" border="0" cellSpacing=0 cellPadding=0 >
+                                      
+                                      <table width="100%" bgcolor="#f4f4f2" border="0" cellSpacing="0" cellPadding="0" >
                                         <tr>
                                           <td>
                                           <br />
                                           &nbsp;&nbsp;&nbsp;&nbsp;
-                                            <IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+                                            <IMG alt="Link" height="10" src="../ampTemplate/images/arrow-014E86.gif" width="15">
                                               <a title="<digi:trn key="aim:FundingOrgs">The country or agency that financed the project</digi:trn>">
 	                                              <b>
 	                                                <digi:trn key="aim:fundingOrganizations">Funding Information</digi:trn>
@@ -519,49 +521,52 @@ ${fn:replace(message,quote,escapedQuote)}
 
                                         <tr>
                                           <td align="left">
-                                            <table width="95%" cellSpacing=1 cellPadding=0 border=0 align="center">
+                                            <table width="95%" cellSpacing="1" cellPadding="0" border="0" align="center">
                                               <tr>
                                                 <td>
-                                                  <table cellSpacing=8 cellPadding=0 border=0 width="100%" class="box-border-nopadding">
+                                                  <table cellSpacing="8" cellPadding="0" border="0" width="100%" class="box-border-nopadding">
                                                     <logic:notEmpty name="aimEditActivityForm" property="funding.fundingOrganizations">
                                                       <logic:iterate name="aimEditActivityForm" property="funding.fundingOrganizations" id="fundingOrganization" type="org.digijava.module.aim.helper.FundingOrganization">
                                                         <tr>
                                                           <td>
-                                                          	<field:display name="Organizations Selector" feature="Funding Information">
-                                                          	<table>
-                                                          	<tr>
-                                                          		<td colspan="3">
-                                                            	<html:multibox property="funding.selFundingOrgs" styleId="selFundingOrgs">
-	                                                              <bean:write name="fundingOrganization" property="ampOrgId"/>
-	                                                            </html:multibox>
-                                                            <bean:write name="fundingOrganization" property="orgName"/>
-															<aim:addOrganizationButton callBackFunction="doNothing();" aditionalRequestParameters="id=${fundingOrganization.ampOrgId}"  delegateClass="org.digijava.module.aim.uicomponents.ToFundingOrganizationDelegate"  property="fundingOrganizations" form="${aimEditActivityForm.funding}" refreshParentDocument="true" styleClass="dr-menu"> <digi:trn key="btn:changeOrganizations">Change Organization</digi:trn> </aim:addOrganizationButton>
-													        </td>
+	                                                          	<table>
+	                                                        	  <tr>
+		                                                          		<td colspan="3">
+		                                                          			<field:display name="Organizations Selector" feature="Funding Information">
+				                                                            	<html:multibox property="funding.selFundingOrgs" styleId="selFundingOrgs">
+					                                                          		<bean:write name="fundingOrganization" property="ampOrgId"/>
+					                                                        	</html:multibox>
+					                                                        </field:display>
+			                                                            	<bean:write name="fundingOrganization" property="orgName"/>
+				                                                            <field:display name="Organizations Selector" feature="Funding Information">
+																				<aim:addOrganizationButton callBackFunction="doNothing();" aditionalRequestParameters="id=${fundingOrganization.ampOrgId}"  delegateClass="org.digijava.module.aim.uicomponents.ToFundingOrganizationDelegate"  property="fundingOrganizations"  form="${aimEditActivityForm.funding}" refreshParentDocument="true" styleClass="dr-menu"> <digi:trn key="btn:changeOrganizations">Change Organization</digi:trn> </aim:addOrganizationButton>
+																			</field:display>
+															        	</td>
 
-                                                            <field:display name="Active Funding Organization" feature="Funding Information">
-                                                            <td> &nbsp;&nbsp;
-                          										<html:select property="fundingActive" indexed="true" name="fundingOrganization">
-                          											<html:option value="true">Active</html:option>
-                          											<html:option value="false">Inactive</html:option>
-                          										</html:select>
-                                                            </td>
-                                                            </field:display>
-                                                            <field:display name="Delegated Cooperation" feature="Funding Information">
-                                                            <td>
 
-                          									<digi:trn key="aim:DelegatedCooperation">Delegated Cooperation</digi:trn><html:checkbox name="fundingOrganization" property="delegatedCooperation" indexed="true" onclick="delegatedCooperationClick(this.name);"/>
-                          									<html:hidden name="fundingOrganization" property="delegatedCooperationString" indexed="true"/>
-                                                            </td>
-                                                            </field:display>
-                                                            <field:display name="Delegated Partner" feature="Funding Information">
-                                                            <td>
-                          									<digi:trn key="aim:DelegatedPartner">Delegated Partner</digi:trn><html:checkbox property="delegatedPartner" indexed="true" name="fundingOrganization" onclick="indexedCheckboxClick(this.name);"/>
-                          									<html:hidden name="fundingOrganization" property="delegatedPartnerString" indexed="true"/>
-                          							        </td>
-                                                            </field:display>
-															</tr>
-                                                            </table>
-                                                            </field:display>
+		                                                            <field:display name="Active Funding Organization" feature="Funding Information">
+		                                                            <td> &nbsp;&nbsp;
+		                          										<html:select property="fundingActive" indexed="true" name="fundingOrganization">
+		                          											<html:option value="true">Active</html:option>
+		                          											<html:option value="false">Inactive</html:option>
+		                          										</html:select>
+		                                                            </td>
+		                                                            </field:display>
+		                                                            
+		                                                            <field:display name="Delegated Cooperation" feature="Funding Information">
+			                                                            <td>
+				                          									<digi:trn key="aim:DelegatedCooperation">Delegated Cooperation</digi:trn><html:checkbox name="fundingOrganization" property="delegatedCooperation" indexed="true" onclick="delegatedCooperationClick(this.name);"/>
+										   									<html:hidden name="fundingOrganization" property="delegatedCooperationString" indexed="true"/>
+			                                                            </td>
+		                                                            </field:display>
+		                                                            <field:display name="Delegated Partner" feature="Funding Information">
+			                                                            <td>
+				                          									<digi:trn key="aim:DelegatedPartner">Delegated Partner</digi:trn><html:checkbox property="delegatedPartner" indexed="true" name="fundingOrganization" onclick="indexedCheckboxClick(this.name);"/>
+				                          									<html:hidden name="fundingOrganization" property="delegatedPartnerString" indexed="true"/>
+			                          							        </td>
+		                                                            </field:display>
+																</tr>
+	                                                         </table>
                                                           </td>
                                                         </tr>
 
@@ -569,14 +574,14 @@ ${fn:replace(message,quote,escapedQuote)}
                                                           <logic:iterate name="fundingOrganization"  indexId="index" property="fundings" id="funding" type="org.digijava.module.aim.helper.Funding">
                                                             <tr>
                                                               <td>
-                                                                <table cellSpacing=1 cellPadding=0 border=0 width="100%" class="box-border-nopadding">
+                                                                <table cellSpacing="1" cellPadding="0" border="0" width="100%" class="box-border-nopadding">
                                                                   <tr>
                                                                     <td>
-                                                                      <table cellSpacing=1 cellPadding=0 border=0 width="100%">
+                                                                      <table cellSpacing="1" cellPadding="0" border="0" width="100%">
                                                                         <tr>
                                                                           <td>
                                                                             <table width="100%" border="0" cellpadding="1" bgcolor="#ffffff" cellspacing="1">
-                                                                            <field:display name="Funding Organization Id" feature="Funding Information">
+                                                                            <field:display name="Funding Organization Id" feature="Funding Information"></field:display>
                                                                               <tr>
                                                                                 <td bgcolor="#FFFFFF" align="left" width="150">
                                                                                   <a title="<digi:trn key="aim:FundOrgId">This ID is specific to the financial operation. This item may be useful when one project has two or more different financial instruments. If the project has a unique financial operation, the ID can be the same as the project ID</digi:trn>">																																<digi:trn key="aim:fundingOrgId">
@@ -587,9 +592,9 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                   <bean:write name="funding"	property="orgFundingId"/>
                                                                                 </td>
                                                                               </tr>
-                                                                              </field:display>
+                                                                              
                                                                               <!-- type of assistance -->
-                                                                              <field:display name="Type Of Assistance" feature="Funding Information">
+                                                                              <field:display name="Type Of Assistance" feature="Funding Information"></field:display>
                                                                               <tr>
                                                                                 <td bgcolor="#FFFFFF" align="left" width="150">
                                                                                   <a title="<digi:trn key="aim:AssitanceType">Specify whether the project was financed through a grant, a loan or in kind</digi:trn>">
@@ -604,8 +609,9 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                   </logic:notEmpty>
                                                                                 </td>
                                                                               </tr>
-																			</field:display>
-																			<field:display name="Financing Instrument" feature="Funding Information">
+
+
+																			<field:display name="Financing Instrument" feature="Funding Information"></field:display>
                                                                               <tr>
                                                                                 <td bgcolor="#FFFFFF" align="left" width="150">
                                                                                   <a title="<digi:trn key="aim:Financing">Method by which aid is delivered to an activity</digi:trn>">
@@ -620,8 +626,9 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                   </logic:notEmpty>
                                                                                 </td>
                                                                               </tr>
-																			</field:display>
-																			<field:display name="Conditions for Fund Release" feature="Funding Information">
+
+
+																			<field:display name="Conditions for Fund Release" feature="Funding Information"></field:display>
                                                                               <tr>
                                                                                 <td bgcolor="#FFFFFF" align="left" width="150">
                                                                                   <a title="<digi:trn key="aim:ConditionsforFundRelease">Enter the conditions attached to the release of the funds</digi:trn>">		 
@@ -634,25 +641,25 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                   <bean:write name="funding"	property="conditions"/>
                                                                                 </td>
                                                                               </tr>
-                                                                              </field:display>
-                                                                            <field:display name="Donor Objective" feature="Funding Information">
+                                                                              
+                                                                              
+                                                                            <field:display name="Donor Objective" feature="Funding Information"></field:display>
                                                                               <tr>
                                                                                 <td bgcolor="#FFFFFF" align="left" width="150">
                                                                                   <a title="<digi:trn key="aim:DonorObjectiveforFundRelease">Enter the donor objective attached to the release of the funds</digi:trn>"><digi:trn key="aim:donorobjective">Donor Objective</digi:trn>
-</a>
+																				</a>
                                                                                 </td>
                                                                                 <td width="1">:</td>
                                                                                 <td bgcolor="#FFFFFF" align="left">
                                                                                   <bean:write name="funding"	property="donorObjective"/>
                                                                                 </td>
                                                                               </tr>
-                                                                              </field:display>
                                                                             </table>
-                                          </td>
+                                         								  </td>
                                                                         </tr>
                                                                       </table>
                                                                       
-                                    </td>
+                                   									 </td>
                                                                   </tr>
                                                                   <tr>
                                                                     <td>
@@ -671,27 +678,23 @@ ${fn:replace(message,quote,escapedQuote)}
 	                                                                                 <logic:notEmpty name="funding" property="mtefProjections">
 	                                                                                 <logic:iterate name="funding" property="mtefProjections" id="projection">
 	                                                                                 <tr bgcolor="#ffffff">
-	                                                                                 	<field:display name="Projection Name" feature="MTEF Projections">
+	                                                                                 	<field:display name="Projection Name" feature="MTEF Projections"></field:display>
 	                                                                                 	<td width="50">
 	                                                                                 		<category:getoptionvalue categoryValueId="${projection.projected}" />
 	                                                                                 	</td>
-	                                                                                 	</field:display>
-	                                                                                 	<field:display name="Projection Amount" feature="MTEF Projections">
+	                                                                                 	<field:display name="Projection Amount" feature="MTEF Projections"></field:display>
 	                                                                                 	<td width="120" align="right">
 	                                                                                 		<FONT color="blue">*</FONT>
 	                                                                                 		<bean:write name="projection" property="amount" />
 	                                                                                 	</td>
-	                                                                                 	</field:display>
-	                                                                                 	<field:display name="Projection Currency Code" feature="MTEF Projections">
+	                                                                                 	<field:display name="Projection Currency Code" feature="MTEF Projections"></field:display>
 	                                                                                 	<td>
 	                                                                                 		<bean:write name="projection" property="currencyCode" />
 	                                                                                 	</td>
-	                                                                                 	</field:display>
-	                                                                                 	<field:display name="Projection Date" feature	="MTEF Projections">
+	                                                                                 	<field:display name="Projection Date" feature	="MTEF Projections"></field:display>
 	                                                                                 	<td>
 	                                                                                 		<bean:write name="projection" property="projectionDateLabel" />
 	                                                                                 	</td>
-	                                                                                 	</field:display>
 	                                                                                 	<td>&nbsp;</td>
 	                                                                                 </tr>
 	                                                                                 </logic:iterate>
@@ -703,8 +706,8 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                  <td colspan="5">
                                                                                 	<b>
                                                                                   	<a title="<digi:trn key="aim:Commitmentsmade">A firm obligation expressed in writing and backed by the necessary funds, undertaken by an official donor to provide specified assistance to a recipient country</digi:trn>" >
-                                                                                  		<digi:trn key="aim:commitments">			Commitments </digi:trn></b>
-																					</a>
+                                                                                  		<digi:trn key="aim:commitments">			Commitments </digi:trn>
+																					</a></b>
                                                                                 </td>
                                                                               </tr>
                                                                               <c:if test="${!empty funding.fundingDetails}">
@@ -713,27 +716,23 @@ ${fn:replace(message,quote,escapedQuote)}
 
                                                                                       <tr bgcolor="#ffffff">
                                                                                         <td width="50">
-                                                                                        <field:display name="Adjustment Type Commitment" feature="Commitments">
+                                                                                        <field:display name="Adjustment Type Commitment" feature="Commitments"></field:display>
                                                                                           <digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 																								<bean:write name="fundingDetail" property="adjustmentTypeName"/>
 																							</digi:trn>
-																							</field:display>
                                                                                         </td>
                                                                                         <td width="120" align="right">
-                                                                                        <field:display name="Amount Commitment" feature="Commitments">
-                                                                                          <FONT color=blue>*</FONT>
+                                                                                        <field:display name="Amount Commitment" feature="Commitments"></field:display>
+                                                                                          <FONT color="blue">*</FONT>
                                                                                           <bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
-                                                                                          </field:display>
                                                                                         </td>
                                                                                         <td width="150">
-                                                                                        <field:display name="Currency Commitment" feature="Commitments">
+                                                                                        <field:display name="Currency Commitment" feature="Commitments"></field:display>
                                                                                           <bean:write name="fundingDetail" property="currencyCode"/>
-                                                                                          </field:display>
                                                                                         </td>
                                                                                         <td width="70">
-                                                                                       	 	<field:display name="Date Commitment" feature="Commitments">
+                                                                                       	 	<field:display name="Date Commitment" feature="Commitments"></field:display>
                                                                                           		<bean:write name="fundingDetail" property="transactionDate"/>
-                                                                                          	</field:display>
                                                                                         </td>
                                                                                         <td>
                                                                                         </td>
@@ -754,8 +753,8 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                  <td colspan="5">
                                                                                 	<b>
                                                                                   	<a title="<digi:trn key="aim:disbursementOrdersMade">A firm obligation expressed in writing and backed by the necessary funds, undertaken by an official donor to provide specified assistance to a recipient country</digi:trn>" >
-                                                                                  		<digi:trn key="aim:disbursementOrders">	Disbursement Orders </digi:trn></b>
-																					</a>
+                                                                                  		<digi:trn key="aim:disbursementOrders">	Disbursement Orders </digi:trn>
+																					</a></b>
                                                                                 </td>
                                                                               </tr>
                                                                               <c:if test="${!empty funding.fundingDetails}">
@@ -767,37 +766,32 @@ ${fn:replace(message,quote,escapedQuote)}
 
 
                                                                                     <td width="50">
-	                                                                                    <field:display name="Adjustment Type of Disbursement Order" feature="Disbursement Orders">
+	                                                                                    <field:display name="Adjustment Type of Disbursement Order" feature="Disbursement Orders"></field:display>
     	                                                                                	<digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
                                                                                                 <bean:write name="fundingDetail" property="adjustmentTypeName"/>
                                                                                                 </digi:trn>
-                                                                                              </field:display>
                                                                                     </td>
 
 
                                                                                     <td width="120" align="right">
-                                                                                      <field:display name="Amount of Disbursement Order" feature="Disbursement Orders">
-                                                                                      	<FONT color=blue>*</FONT>
+                                                                                      <field:display name="Amount of Disbursement Order" feature="Disbursement Orders"></field:display>
+                                                                                      	<FONT color="blue">*</FONT>
                                                                                       	<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
-                                                                                      </field:display>
                                                                                     </td>
 
                                                                                     <td width="150">
-	                                                                                    <field:display name="Currency of Disbursement Order" feature="Disbursement Orders">
+	                                                                                    <field:display name="Currency of Disbursement Order" feature="Disbursement Orders"></field:display>
     	                                                                                  <bean:write name="fundingDetail" property="currencyCode"/>
-        	                                                                             </field:display>
                                                                                     </td>
                                                                                     <td width="70">
-                                                                                    	<field:display name="Date of Disbursement Order" feature="Disbursement Orders">
+                                                                                    	<field:display name="Date of Disbursement Order" feature="Disbursement Orders"></field:display>
 		                                                                                      <bean:write name="fundingDetail" property="transactionDate"/>
-	                                                                                    </field:display>
                                                                                     </td>
                                                                                       <td>
-                                                                                          <field:display name="Contract of Disbursement Order" feature="Disbursement Orders">
+                                                                                          <field:display name="Contract of Disbursement Order" feature="Disbursement Orders"></field:display>
                                                                                               <c:if test="${not empty fundingDetail.contract}">
 		                                                                                     ${fundingDetail.contract.contractName}
                                                                                                    </c:if>
-	                                                                                    </field:display>
                                                                                       </td>
 
                                                                                       </tr>
@@ -822,35 +816,30 @@ ${fn:replace(message,quote,escapedQuote)}
 		                                                                              <logic:equal name="fundingDetail" property="transactionType" value="1">		
 																									<tr bgcolor="#ffffff">
 																										<td width="50">
-																											<field:display name="Adjustment Type Disbursement" feature="Disbursement">
+																											<field:display name="Adjustment Type Disbursement" feature="Disbursement"></field:display>
 																												<digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 																													<bean:write name="fundingDetail" property="adjustmentTypeName"/>
 																												</digi:trn>
-																											</field:display>
 																										</td>
 																										<td width="120" align="right">
-																											<field:display name="Amount Disbursement" feature="Disbursement">
-																												<FONT color=blue>*</FONT>
+																											<field:display name="Amount Disbursement" feature="Disbursement"></field:display>
+																												<FONT color="blue">*</FONT>
 																												<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
-																											</field:display>
 																										</td>
 																										<td width="150">
-																											<field:display name="Currency Disbursement" feature="Disbursement">
+																											<field:display name="Currency Disbursement" feature="Disbursement"></field:display>
 																												<bean:write name="fundingDetail" property="currencyCode"/>
-																											</field:display>
 																										</td>
 																										<td width="70">
-																											<field:display name="Date Disbursement" feature="Disbursement">
+																											<field:display name="Date Disbursement" feature="Disbursement"></field:display>
 																												<bean:write name="fundingDetail" property="transactionDate"/>
-																											</field:display>
 																										</td>
 																										<td>
 																										
-																										<field:display name="Contract of Disbursement Order" feature="Disbursement Orders">
+																										<field:display name="Contract of Disbursement Order" feature="Disbursement Orders"></field:display>
 			                                                                                             	 <c:if test="${not empty fundingDetail.contract}">
 					                                                                                     		${fundingDetail.contract.contractName}
 			                                                                                                   </c:if>
-				                                                                                    		</field:display>
 																										</td>																							
 																									</tr>
 																						</logic:equal>
@@ -874,34 +863,29 @@ ${fn:replace(message,quote,escapedQuote)}
 
 																								<tr bgcolor="#ffffff">
 																									<td width="50">
-																									<field:display name="Adjustment Type Expenditure" feature="Expenditures">
+																									<field:display name="Adjustment Type Expenditure" feature="Expenditures"></field:display>
 																										<digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 																											<bean:write name="fundingDetail" property="adjustmentTypeName"/>
 																										</digi:trn>
-																									</field:display>
 																									</td>
 																									<td width="120" align="right">
-																										<field:display name="Amount Expenditure" feature="Expenditures">
-																											<FONT color=blue>*</FONT>
+																										<field:display name="Amount Expenditure" feature="Expenditures"></field:display>
+																											<FONT color="blue">*</FONT>
 																											<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
-																										</field:display>
 																									</td>
 																									<td width="150">
-																										<field:display name="Currency Expenditure" feature="Expenditures">
+																										<field:display name="Currency Expenditure" feature="Expenditures"></field:display>
 																											<bean:write name="fundingDetail" property="currencyCode"/>
-																										</field:display>
 																									</td>
 																									<td width="70">
-																										<field:display name="Date Expenditure" feature="Expenditures">
+																										<field:display name="Date Expenditure" feature="Expenditures"></field:display>
 																											<bean:write name="fundingDetail" property="transactionDate"/>
-																										</field:display>
 																									</td>
 																								</tr>
 																								<tr>
-																									<td colspan=5 bgcolor="#ffffff">&nbsp;&nbsp;
-																										<field:display name="Classification Expenditure" feature="Funding Information">
+																									<td colspan="5" bgcolor="#ffffff">&nbsp;&nbsp;
+																										<field:display name="Classification Expenditure" feature="Funding Information"></field:display>
 																											<bean:write name="fundingDetail" property="classification"/>
-																										</field:display>
 																									</td>
 																								</tr>																						
 																						</logic:equal>
@@ -920,7 +904,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																			<td>
 																				<field:display name="Edit Funding Link - Donor Organization" feature="Funding Information">
 																					<a href='javascript:fnOnEditItem(<%= index %>,
-																										 <bean:write name="fundingOrganization" property="ampOrgId"/>,
+																									 <bean:write name="fundingOrganization" property="ampOrgId"/>,
 																									<bean:write name="funding" property="fundingId"/>)'>
 																					<B><digi:trn key="aim:editFundingItem">Edit Item</digi:trn></B>
 																					</a>
@@ -939,15 +923,17 @@ ${fn:replace(message,quote,escapedQuote)}
 																		</table>
 																	</td></tr>
 
-																	<tr><td bgcolor="#ffffff">
-<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
-																		<FONT color=blue>*
-																			<digi:trn key="aim:theAmountEnteredAreInThousands">
-																				The amount entered are in thousands (000)
-		  																	</digi:trn>
-																		</FONT>
-</gs:test>
-																	</td></tr>
+																	<tr>
+																		<td bgcolor="#ffffff">
+																			<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
+																					<FONT color="blue">*
+																						<digi:trn key="aim:theAmountEnteredAreInThousands">
+																							The amount entered are in thousands (000)
+					  																	</digi:trn>
+																					</FONT>
+																			</gs:test>
+																		</td>
+																	</tr>
 																	</table>
 																	</td></tr>
 																	</logic:iterate>
@@ -966,7 +952,7 @@ ${fn:replace(message,quote,escapedQuote)}
 
 																<tr>
 																	<td>
-																		<table cellSpacing=2 cellPadding=2>
+																		<table cellSpacing="2" cellPadding="2">
 																			<tr>
 																				<td>
 																					<field:display name="Add Donor Organization" feature="Funding Information">
@@ -1001,7 +987,7 @@ ${fn:replace(message,quote,escapedQuote)}
 
 																</logic:empty>
 															</table>
-															</feature:display>
+															
 														</td>
 													</tr>
 												</table>
@@ -1010,7 +996,7 @@ ${fn:replace(message,quote,escapedQuote)}
 											<tr><td>&nbsp;</td></tr>
 <!--
                                             <tr>
-                                              <td bgColor=#f4f4f2 align="center">
+                                              <td bgColor="#f4f4f2" align="center">
                                                 <table cellPadding=3>
                                                   <tr>
                                                       <td>
@@ -1036,7 +1022,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                               </td>
                                             </tr>
  -->
-                                      </table>
+                                      </table></feature:display>
                                       </td>
                                       </tr>
                                       </table>

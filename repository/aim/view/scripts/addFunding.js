@@ -146,22 +146,12 @@ function validateFunding() {
 
 
 
-	if (numComm == 0) {
 
-		//alert ("Please enter a commitment");
-		if(!confirm("No commitments entered. Do you wish to proceed?"))
-		{	
-			return false;
-		}
+		var noCommitsWarn = confirm("No commitments have been added. Continue?");		
+		if (noCommitsWarn==false) return false;
 	}
 
-	if (numExp > 0 && numDisb == 0) {
-
-		alert ("Expenditure entered without entering Disbursement");
-
-		return false;
-
-	}
+	
 
 	return validateFundingDetails(numComm,numDisb,numExp);
 
@@ -235,21 +225,11 @@ function validateFundingTrn(errmsg1,errmsg2,errmsg3,msgEnterAmount,msgInvalidAmo
 
 
 	if (numComm == 0) {
-
-		//alert ("Please enter a commitment");
-		if(!confirm("No commitments entered. Do you wish to proceed?"))
-		{	
-			return false;
-		}
+		var noCommitsWarn = confirm("No commitments have been added. Continue?");		
+		if (noCommitsWarn==false) return false;
 	}
 
-	if (numExp > 0 && numDisb == 0) {
-
-		alert ("Expenditure entered without entering Disbursement");
-
-		return false;
-
-	}
+	
 
 	return validateFundingDetails(numComm,numDisb,numExp,msgEnterAmount,msgInvalidAmount,msgEnterDate,msgConfirmFunding);
 

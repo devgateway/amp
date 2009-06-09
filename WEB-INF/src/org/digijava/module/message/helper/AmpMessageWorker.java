@@ -491,7 +491,9 @@ public class AmpMessageWorker {
             //team lead can't be null,because if team has no leader,then no trigger will be invoked
             String teamId=myMap.get(MessageConstants.OBJECT_TEAM);
             AmpTeamMember teamHead=TeamMemberUtil.getTeamHead(Long.parseLong(teamId));
-            receivers += ", " + teamHead.getUser().getFirstNames() + " " + teamHead.getUser().getLastName() + "<" + teamHead.getUser().getEmail() + ">;" + teamHead.getAmpTeam().getName() + ";";
+            if(teamHead!=null){
+            	receivers += ", " + teamHead.getUser().getFirstNames() + " " + teamHead.getUser().getLastName() + "<" + teamHead.getUser().getEmail() + ">;" + teamHead.getAmpTeam().getName() + ";";
+            }            
         }
         newApproval.setReceivers(receivers);
         return newApproval;

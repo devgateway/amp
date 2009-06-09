@@ -249,15 +249,15 @@ var isAlreadySubmitted = false;
 
 <input type="hidden" name="funding.isEditFunfing" value="true"/>
 
-<table width="100%" border="0" cellspacing="2" cellpadding="2" align="center" class=box-border-nopadding>
+<table width="100%" border="0" cellspacing="2" cellpadding="2" align="center" class="box-border-nopadding">
 	<!-- funding -->
 	<tr>
     	<td width="100%" vAlign="top">
 
-			<table width="100%" cellpadding=0 cellspacing=1 vAlign="top" align="left" bgcolor="#006699">
+			<table width="100%" cellpadding="0" cellspacing="1" vAlign="top" align="left" bgcolor="#006699">
 			<tr><td>
 
-			<table width="100%" cellpadding=1 cellspacing=0 bgcolor="#ffffff">
+			<table width="100%" cellPadding="1" cellspacing="0" bgcolor="#ffffff">
 				<tr>
 					<td width="100%" bgcolor="#006699" class="textalb" height="20" align="center">
 						<digi:trn key="aim:FundingItemEditor">Funding Item Editor</digi:trn>
@@ -265,17 +265,17 @@ var isAlreadySubmitted = false;
 				</tr>
 				<tr>
 					<td vAlign="top" align="center" width="100%">
-						<table cellpadding=4 cellspacing=1 bgcolor="#ffffff" width="100%">
+						<table cellpadding=4 cellspacing="1" bgcolor="#ffffff" width="100%">
 							<tr>
-								<td align="right" bgcolor=#ECF3FD width="50%">
+								<td align="right" bgcolor="#ECF3FD" width="50%">
 			                	<b><digi:trn key="aim:organization">Organization</digi:trn></b>
 								</td>
-								<td align="left" bgcolor=#ECF3FD width="50%">
+								<td align="left" bgcolor="#ECF3FD" width="50%">
 			                	<bean:write name="aimEditActivityForm" property="funding.orgName"/>
 								</td>
 							</tr>
 							<tr>
-								<td align="right" bgcolor=#ECF3FD>
+								<td align="right" bgcolor="#ECF3FD">
 			                	<FONT color=red>*</FONT><b>
 									<a title="<digi:trn key="aim:AssitanceType">Specify whether the project was financed through a grant, a loan or in kind</digi:trn>">
 			                	<font color=black>									
@@ -284,17 +284,28 @@ var isAlreadySubmitted = false;
 									</a>
 									</b>
 								</td>
-								<td align="left" bgcolor=#ECF3FD>
+								<td align="left" bgcolor="#ECF3FD">
 									<c:set var="translation">
 										<digi:trn key="aim:addActivityTypeOfAssistenceFirstLine">Please select from below</digi:trn>
 									</c:set>
-
-										<category:showoptions firstLine="${translation}" name="aimEditActivityForm"   property="funding.assistanceType"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.TYPE_OF_ASSISTENCE_KEY %>" styleClass="inp-text" />
-
+									
+									<bean:define id="contentDisabled">false</bean:define>
+									<c:set var="contentDisabled"><field:display name="Type Of Assistance" feature="Funding Information">false</field:display></c:set>
+									<c:if test="${contentDisabled==''}">
+										<c:set var="contentDisabled">true</c:set>
+									</c:if>
+									<c:if test="${contentDisabled=='false'}">
+										<category:showoptions firstLine="${translation}" name="aimEditActivityForm"   property="funding.assistanceType"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.TYPE_OF_ASSISTENCE_KEY %>" styleClass="inp-text"/>
+									</c:if>
+									
+									<c:if test="${contentDisabled=='true'}">
+										<category:showoptions firstLine="${translation}" name="aimEditActivityForm"   property="funding.assistanceType"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.TYPE_OF_ASSISTENCE_KEY %>" styleClass="inp-text" outerdisabled="true"/>
+									</c:if>
+									
 								</td>
 							</tr>
 							<tr>
-								<td align="right" bgcolor=#ECF3FD>
+								<td align="right" bgcolor="#ECF3FD">
 			                	<%-- FONT color=red>*</FONT--%><b>
 										<a title="<digi:trn key="aim:FundOrgId">This ID is specific to the financial operation. This item may be useful when one project has two or more different financial instruments. If the project has a unique financial operation, the ID can be the same as the project ID</digi:trn>">
 										<font color=black>
@@ -302,26 +313,42 @@ var isAlreadySubmitted = false;
 										Funding Organization Id</digi:trn></font></a>
 									</b>
 								</td>
-								<td align="left" bgcolor=#ECF3FD>
-
+								<td align="left" bgcolor="#ECF3FD">
+								
+								<c:set var="contentDisabled"><field:display name="Funding Organization Id" feature="Funding Information">false</field:display></c:set>
+								<c:if test="${contentDisabled==''}">
+									<c:set var="contentDisabled">true</c:set>
+								</c:if>
+								
 										<a title="<digi:trn key="aim:FundOrgId">This ID is specific to the financial operation.
 										This item may be useful when one project has two or more different financial instruments.
 										If the project has a unique financial operation, the ID can be the same as the project ID
 										</digi:trn>">
-			   	             	<html:text  styleId="orgFundingId" property="funding.orgFundingId" size="10"/>  </a>
+			   	             		<html:text  styleId="orgFundingId" property="funding.orgFundingId" size="10" disabled="${contentDisabled}"/>  </a>
+											   	             	
 
 								</td>
 							</tr>
 							<tr>
-								<td align="right" bgcolor=#ECF3FD>
+								<td align="right" bgcolor="#ECF3FD">
 								<FONT color=red>*</FONT><b>
 									<a title="<digi:trn key="aim:FinanceInstrument">Method by which aid is delivered to an activity</digi:trn>">
 									<b><font color=black><digi:trn key="aim:financingInstrument">Financing Instrument</digi:trn></font></b></a>
 								</td>
-								<td align="left" bgcolor=#ECF3FD>
-										<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="funding.modality"
-										keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" styleClass="inp-text" />
-
+								<td align="left" bgcolor="#ECF3FD">
+								
+								<c:set var="contentDisabled"><field:display name="Financing Instrument" feature="Funding Information">false</field:display></c:set>
+									<c:if test="${contentDisabled==''}">
+										<c:set var="contentDisabled">true</c:set>
+									</c:if>
+									<c:if test="${contentDisabled=='false'}">
+										<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="funding.modality" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" styleClass="inp-text" />
+									</c:if>
+									
+									<c:if test="${contentDisabled=='true'}">
+										<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="funding.modality" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" styleClass="inp-text"  outerdisabled="true"/>
+									</c:if>
+									
 								</td>
 							</tr>
 
@@ -337,7 +364,7 @@ var isAlreadySubmitted = false;
 	</tr>
 	<tr><td>
 <gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
-		<FONT color=blue><B><BIG>*</BIG>
+		<FONT color="blue"><B><BIG>*</BIG></B></FONT>
 			<digi:trn key="aim:pleaseEnterTheAmountInThousands">
 			Please enter amount in thousands (000)</digi:trn>
 </gs:test>
@@ -353,10 +380,10 @@ var isAlreadySubmitted = false;
 	<tr>
     	<td width="100%" vAlign="top">
 
-			<table width="100%" cellpadding=0 cellspacing=1 vAlign="top" align="left" bgcolor="#006699">
+			<table width="100%" cellpadding="0" cellspacing="1" vAlign="top" align="left" bgcolor="#006699">
 			<tr><td>
 
-			<table width="100%" cellpadding=1 cellspacing=0 bgcolor="#ffffff">
+			<table width="100%" cellPadding="1" cellspacing="0" bgcolor="#ffffff">
 				<tr>
 					<td width="100%" bgcolor="#006699" class="textalb" height="20" align="center" colspan="4">
 						<digi:trn key="aim:MTEF Projection">MTEF Projection</digi:trn>
@@ -379,8 +406,8 @@ var isAlreadySubmitted = false;
 					</field:display>
 					<field:display name="Projection Date" feature	="MTEF Projections">
 					<td><b><font color="white"><digi:trn key="aim:ProjectionDate">Projection Date</digi:trn></font></b>
-					</field:display>
 					</td>
+					</field:display>
 				</tr>
 
 
@@ -389,12 +416,15 @@ var isAlreadySubmitted = false;
 				<c:forEach var="mtefProjection" items="${aimEditActivityForm.funding.fundingMTEFProjections}">
 
 				 	<tr>
-						<field:display name="Projection Name" feature="MTEF Projections">
+				 	
+				 		<c:set var="contentDisabled"><field:display name="Projection Name" feature="MTEF Projections">false</field:display></c:set>
+						<c:if test="${contentDisabled==''}">
+							<c:set var="contentDisabled">true</c:set>
+						</c:if>
+						
 						<td valign="bottom">
 						<c:set var="indexMTEF" value="${indexMTEF+1}"/>
-
-
-						<html:select indexed="true" name="mtefProjection" property="projected">
+						<html:select indexed="true" name="mtefProjection" property="projected" disabled="${contentDisabled}">
 							<logic:iterate name="aimEditActivityForm" property="funding.projections" id="projection" type="org.digijava.module.categorymanager.dbentity.AmpCategoryValue">
 							<html:option value="${projection.id}" >
 								<digi:trn key="<%= org.digijava.module.categorymanager.util.CategoryManagerUtil.getTranslationKeyForCategoryValue(projection) %>">
@@ -404,61 +434,78 @@ var isAlreadySubmitted = false;
 							</logic:iterate>
 						</html:select>
 						</td>
-						</field:display>
-						<field:display name="Projection Amount" feature="MTEF Projections">
-							<td valign="bottom">
-								<html:text title="${tip}" name="mtefProjection" indexed="true" property="amount" size="17" onchange="this.value=trim(this.value)" styleClass="amt"/>
-							</td>
-						</field:display>
-						<field:display name="Projection Currency Code" feature="MTEF Projections">
-							<td valign="bottom">
-							<html:select name="mtefProjection" indexed="true" property="currencyCode" styleClass="inp-text">
+						
+				 		<c:set var="contentDisabled"><field:display name="Projection Amount" feature="MTEF Projections">false</field:display></c:set>
+						<c:if test="${contentDisabled==''}">
+							<c:set var="contentDisabled">true</c:set>
+						</c:if>
+						<td valign="bottom">
+							<html:text title="${tip}" name="mtefProjection" indexed="true" property="amount" size="17" onchange="this.value=trim(this.value)" styleClass="amt" disabled="${contentDisabled}"/>
+						</td>
+							
+				 		<c:set var="contentDisabled"><field:display name="Projection Currency Code" feature="MTEF Projections">false</field:display></c:set>
+						<c:if test="${contentDisabled==''}">
+							<c:set var="contentDisabled">true</c:set>
+						</c:if>
+						<td valign="bottom">
+							<html:select name="mtefProjection" indexed="true" property="currencyCode" styleClass="inp-text" disabled="${contentDisabled}">
 								<html:optionsCollection name="aimEditActivityForm" property="funding.validcurrencies" value="currencyCode"
 													label="currencyName"/>
 							</html:select>
-							</td>
-						</field:display>
-						<field:display name="Projection Date" feature	="MTEF Projections">
-						<td vAlign="bottom">
-							<table cellPadding=0 cellSpacing=0>
+						</td>
+						
+				 		<c:set var="contentDisabled"><field:display name="Projection Date" feature	="MTEF Projections">false</field:display></c:set>
+						<c:if test="${contentDisabled==''}">
+							<c:set var="contentDisabled">true</c:set>
+						</c:if>
+						<td valign="bottom">
+							<table cellPadding="0" cellSpacing="0">
 							<tr>
 								<td>
-								<html:hidden name="mtefProjection" indexed="true" property="projectionDate"/>
-								<html:text name="mtefProjection" indexed="true" property="projectionDateLabel" readonly="true" size="10"/>
+									<html:hidden name="mtefProjection" indexed="true" property="projectionDate"/>
+									<html:text name="mtefProjection" indexed="true" property="projectionDateLabel" readonly="true" size="10" disabled="${contentDisabled}"/>
 								</td>
 							</tr>
 							</table>
 						</td>
-						</field:display>
 
-											<td>
-												<a href="javascript:removeMTEFProjection(${indexMTEF})">
-												 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this projection"/>
-												</a>
+											<td>&nbsp;
+												<field:display name="Remove MTEF Projection" feature	="MTEF Projections">
+													<a href="javascript:removeMTEFProjection(${indexMTEF})">
+													 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this projection"/>
+													</a>
+												</field:display>
 											</td>
 										</tr>
 
 				</c:forEach>
 				</c:if>
 
-				<field:display name="Add Projection" feature	="MTEF Projections">
+				<c:set var="contentDisabled"><field:display name="Add Projection" feature	="MTEF Projections">false</field:display></c:set>
+				<c:if test="${contentDisabled==''}">
+					<c:set var="contentDisabled">true</c:set>
+				</c:if>
+
+				
 				<tr bgcolor="#ffffff">
 					<td align="center" colspan="4">
-						<table cellPadding=3>
+						<table cellPadding="3">
 							<tr>
 								<td>
-									<html:select property="funding.selectedMTEFProjectionYear" name="aimEditActivityForm">
-										<html:optionsCollection name="aimEditActivityForm" property="funding.availableMTEFProjectionYears" 
-												label="value" value="key"/>
+									<html:select property="funding.selectedMTEFProjectionYear" name="aimEditActivityForm" disabled="${contentDisabled}">
+										<html:optionsCollection name="aimEditActivityForm" property="funding.availableMTEFProjectionYears" label="value" value="key"/>
 									</html:select>
-									<input class="dr-menu" type="button" name="addMTEFProj" value="<digi:trn key='aim:addMTEFProjection'>Add Projection</digi:trn>"
-								   onclick="addMTEFProjection()">
+									<c:if test="${contentDisabled=='true'}">
+										<input class="dr-menu" type="button" disabled="disabled" name="addMTEFProj" value="<digi:trn key='aim:addMTEFProjection'>Add Projection</digi:trn>" onclick="addMTEFProjection()">
+									</c:if>
+									<c:if test="${contentDisabled=='false'}">
+										<input class="dr-menu" type="button" name="addMTEFProj" value="<digi:trn key='aim:addMTEFProjection'>Add Projection</digi:trn>" onclick="addMTEFProjection()">
+									</c:if>
 								</td>
 							</tr>
 						</table>
 					</td>
 				</tr>
-				</field:display>
 
 				</table>
 				</td>
@@ -474,9 +521,9 @@ var isAlreadySubmitted = false;
 	<tr>
 		<td width="100%" vAlign="top">
 
-			<table width="100%" cellpadding=0 cellspacing=1 vAlign="top" align="left" bgcolor="#006699">
+			<table width="100%" cellpadding="0" cellspacing="1" vAlign="top" align="left" bgcolor="#006699">
 			<tr><td>
-			<table width="100%" cellpadding=0 cellspacing=0 border="0">
+			<table width="100%" cellpadding="0" cellspacing="0" border="0">
 				<tr>
 					<td width="100%" bgcolor="#006699" class="textalb" height="20" align="center">
 					<a title="<digi:trn key="aim:Commitmentsmade">A firm obligation expressed in writing and backed by the necessary funds, undertaken by an official donor to provide specified assistance to a recipient 	</digi:trn>"><digi:trn key="aim:commitments">Commitments</digi:trn></a>
@@ -484,7 +531,7 @@ var isAlreadySubmitted = false;
 				</tr>
 				<tr>
 					<td>
-						<table width="100%" border="0" bgcolor="#f4f4f2" cellspacing="1" cellpadding="0" class=box-border-nopadding>
+						<table width="100%" border="0" bgcolor="#f4f4f2" cellspacing="1" cellpadding="0" class="box-border-nopadding">
 							<tr bgcolor="#003366" class="textalb">
 								<field:display name="Adjustment Type Commitment" feature="Commitments">
 								<td align="center" valign="middle" width="75">
@@ -523,33 +570,55 @@ var isAlreadySubmitted = false;
 						 	<c:forEach var="fundingDetail" items="${aimEditActivityForm.funding.fundingDetails}">
 						 	<c:if test="${fundingDetail.transactionType==0}">
 									 	<tr>
-											<td valign="bottom">
-												<c:set var="index" value="${index+1}"/>
-												<c:if test="${aimEditActivityForm.planning.statusId==1}">
-												<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text">
-													<html:option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
-												</html:select>
-                                                </c:if>
-
-											<c:if test="${aimEditActivityForm.planning.statusId!=1}">
-												<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text">
-													<html:option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>
-													<html:option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
-												</html:select>
+									 	
+									 		<c:set var="contentDisabled"><field:display name="Adjustment Type Commitment" feature="Commitments">false</field:display></c:set>
+											<c:if test="${contentDisabled==''}">
+												<c:set var="contentDisabled">true</c:set>
 											</c:if>
-												<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>
-											</td>
+												<td valign="bottom">
+													<c:set var="index" value="${index+1}"/>
+													<c:if test="${aimEditActivityForm.planning.statusId==1}">
+														<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text" disabled="${contentDisabled}">
+															<html:option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
+														</html:select>
+	                                                </c:if>
+	
+												<c:if test="${aimEditActivityForm.planning.statusId!=1}">
+													<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text"  disabled="${contentDisabled}">
+														<html:option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>
+														<html:option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
+													</html:select>
+												</c:if>
+													<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>
+												</td>
+										
+										
+									 		<c:set var="contentDisabled"><field:display name="Amount Commitment" feature="Commitments">false</field:display></c:set>
+											<c:if test="${contentDisabled==''}">
+												<c:set var="contentDisabled">true</c:set>
+											</c:if>
+												<td valign="bottom">
+														<html:text name="fundingDetail" title="${formatTip}"  disabled="${contentDisabled}" indexed="true" property="transactionAmount" onchange="this.value=trim(this.value)"  size="17" styleClass="amt"/>
+												</td>
+
+									 		<c:set var="contentDisabled"><field:display name="Currency Commitment" feature="Commitments">false</field:display></c:set>
+											<c:if test="${contentDisabled==''}">
+												<c:set var="contentDisabled">true</c:set>
+											</c:if>
+
+											
 											<td valign="bottom">
-												<html:text name="fundingDetail" title="${formatTip}"  indexed="true" property="transactionAmount" onchange="this.value=trim(this.value)"  size="17" styleClass="amt"/>
-											</td>
-											<td valign="bottom">
-												<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text">
+												<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text"  disabled="${contentDisabled}">
 													<html:optionsCollection name="aimEditActivityForm" property="funding.validcurrencies" value="currencyCode"
 													label="currencyName"/>
 												</html:select>
 											</td>
+											<c:set var="contentDisabled"><field:display name="Date Commitment" feature="Commitments">false</field:display></c:set>
+											<c:if test="${contentDisabled==''}">
+												<c:set var="contentDisabled">true</c:set>
+											</c:if>
 											<td align="left" vAlign="bottom">
-												<table cellPadding=0 cellSpacing=0>
+												<table cellPadding="0" cellSpacing="0">
 													<tr>
 														<td>
 															<% tempIndexStr = "" + tempIndex; tempIndex++;%>
@@ -557,18 +626,24 @@ var isAlreadySubmitted = false;
 															styleId="<%=tempIndexStr%>" readonly="true" size="10"/>
 														</td>
 														<td align="left" vAlign="center">&nbsp;
-															<a id="trans3Date<%=tempIndexStr%>" href='javascript:pickDateById("trans3Date<%=tempIndexStr%>",<%=tempIndexStr%>)'>
-																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
-															</a>
+															<c:if test="${contentDisabled=='false'}">
+																<a id="trans3Date<%=tempIndexStr%>" href='javascript:pickDateById("trans3Date<%=tempIndexStr%>",<%=tempIndexStr%>)'>
+																	<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
+																</a>
+															</c:if>
 														</td>														
 													</tr>
 												</table>												
 											</td>
-											<td align="right">
-													<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,0)">
-										 				<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
-													</a>
+
+
+											<field:display name="Remove Commitment Link" feature="Commitments">
+												<td align="right">
+														<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,0)">
+											 				<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+														</a>
 												</td>
+											</field:display>
 											</tr>	
 										<tr>
 											<td bgcolor="#ffff00">&nbsp;
@@ -606,12 +681,10 @@ var isAlreadySubmitted = false;
 											</td>
 											<td colspan="5">
 												<logic:equal name="fundingDetail" property="useFixedRate" value="true">
-													<html:text name="fundingDetail" indexed="true" property="fixedExchangeRate" styleClass="amt"
-													disabled="false" styleId="<%=exchRatefldId%>"/>
+													<html:text name="fundingDetail" indexed="true" property="fixedExchangeRate" styleClass="amt" disabled="false" styleId="<%=exchRatefldId%>"/>
 												</logic:equal>
 												<logic:equal name="fundingDetail" property="useFixedRate" value="false">
-													<html:text name="fundingDetail" indexed="true" property="fixedExchangeRate" styleClass="amt"
-													disabled="true" styleId="<%=exchRatefldId%>"/>
+													<html:text name="fundingDetail" indexed="true" property="fixedExchangeRate" styleClass="amt" disabled="true" styleId="<%=exchRatefldId%>"/>
 												</logic:equal>
 											</td>
 
@@ -624,19 +697,26 @@ var isAlreadySubmitted = false;
 				</tr>
 				<tr bgcolor="#ffffff">
 					<td align="center">
-						<table cellPadding=3>
+						<table cellPadding="3">
 							<tr>
 								<%--
 								<td>
 									<input class="dr-menu" type="button" name="xx1" value="Delete Commitments"
 									onclick="this.form.event.value='delCommitments';addFundingDetail();">
 								</td> --%>
-								<field:display name="Add Commitment Button" feature="Commitments">
+								
+								<c:set var="contentDisabled"><field:display name="Add Commitment Button" feature="Commitments">false</field:display></c:set>
+								<c:if test="${contentDisabled==''}">
+									<c:set var="contentDisabled">true</c:set>
+								</c:if>
 								<td>
-									<input class="dr-menu" type="button" name="xx1" value="<digi:trn key='aim:addCommitment'>Add Commitment</digi:trn>"
-								   onclick="addFundingDetail(0)">
+									<c:if test="${contentDisabled=='false'}">
+										<input class="dr-menu" type="button" name="xx1" value="<digi:trn key='aim:addCommitment'>Add Commitment</digi:trn>" onclick="addFundingDetail(0)">
+									</c:if>
+									<c:if test="${contentDisabled=='true'}">
+										<input class="dr-menu" type="button" disabled="disabled" name="xx1" value="<digi:trn key='aim:addCommitment'>Add Commitment</digi:trn>" onclick="addFundingDetail(0)">
+									</c:if>
 								</td>
-								</field:display>
 							</tr>
 						</table>
 					</td>
@@ -656,9 +736,9 @@ var isAlreadySubmitted = false;
 	<tr>
 		<td width="100%" vAlign="top">
 
-			<table width="100%" cellpadding=0 cellspacing=1 vAlign="top" align="left" bgcolor="#006699">
+			<table width="100%" cellpadding="0" cellspacing="1" vAlign="top" align="left" bgcolor="#006699">
 			<tr><td>
-			<table width="100%" cellpadding=0 cellspacing=0>
+			<table width="100%" cellpadding="0" cellspacing="0">
 				<tr>
 					<td width="100%" bgcolor="#006699" class="textalb" height="20" align="center">
 					<a title="<digi:trn key="aim:FundRelease">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor</digi:trn>"><digi:trn key="DisbursementOrdes">Disbursement Orders</digi:trn></a>
@@ -666,7 +746,7 @@ var isAlreadySubmitted = false;
 				</tr>
 				<tr>
 					<td>
-						<table width="100%" border="0" bgcolor="#f4f4f2" cellspacing="1" cellpadding="0" class=box-border-nopadding>
+						<table width="100%" border="0" bgcolor="#f4f4f2" cellspacing="1" cellpadding="0" class="box-border-nopadding">
 							<tr bgcolor="#003366" class="textalb">
 								<field:display name="Adjustment Type of Disbursement Order" feature="Disbursement Orders">
 								<td align="center" valign="middle" width="75">
@@ -723,33 +803,43 @@ var isAlreadySubmitted = false;
 
 
 										<tr>
+											<c:set var="contentDisabled"><field:display name="Adjustment Type of Disbursement Order" feature="Disbursement Orders">false</field:display></c:set>
+											<c:if test="${contentDisabled==''}">
+												<c:set var="contentDisabled">true</c:set>
+											</c:if>
+												<td valign="bottom">
+													<c:set var="index" value="${index+1}"/>
+													<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text" disabled="${contentDisabled}">
+														<html:option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>
+													</html:select>
+													<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>
+												</td>
 
-                                            <field:display name="Adjustment Type of Disbursement Order" feature="Disbursement Orders">
+											<c:set var="contentDisabled"><field:display name="Amount of Disbursement Order" feature="Disbursement Orders">false</field:display></c:set>
+											<c:if test="${contentDisabled==''}">
+												<c:set var="contentDisabled">true</c:set>
+											</c:if>
 											<td valign="bottom">
-												<c:set var="index" value="${index+1}"/>
-												<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text">
-													<html:option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>
-												</html:select>
-												<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>
+												<html:text name="fundingDetail" disabled="${contentDisabled}" title="${formatTip}"  indexed="true" property="transactionAmount" onchange="this.value=trim(this.value)" size="17" styleClass="amt"/>
 											</td>
-                                            </field:display>
-                                            <field:display name="Amount of Disbursement Order" feature="Disbursement Orders">
+
+											<c:set var="contentDisabled"><field:display name="Currency of Disbursement Order" feature="Disbursement Orders">false</field:display></c:set>
+											<c:if test="${contentDisabled==''}">
+												<c:set var="contentDisabled">true</c:set>
+											</c:if>
 											<td valign="bottom">
-												<html:text name="fundingDetail" title="${formatTip}"  indexed="true" property="transactionAmount" onchange="this.value=trim(this.value)" size="17" styleClass="amt"/>
-											</td>
-                                            </field:display>
-                                            <field:display name="Currency of Disbursement Order" feature="Disbursement Orders">
-											<td valign="bottom">
-												<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text" >
+												<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text" disabled="${contentDisabled}" >
 													<html:optionsCollection name="aimEditActivityForm" property="funding.validcurrencies" value="currencyCode"
 													label="currencyName"/>
 												</html:select>
 											</td>
-                                            </field:display>
 
-                                            <field:display name="Date of Disbursement Order" feature="Disbursement Orders">
+											<c:set var="contentDisabled"><field:display name="Date of Disbursement Order" feature="Disbursement Orders">false</field:display></c:set>
+											<c:if test="${contentDisabled==''}">
+												<c:set var="contentDisabled">true</c:set>
+											</c:if>
 											<td valign="bottom">
-												<table cellPadding=0 cellSpacing=0>
+												<table cellpadding="0" cellspacing="0">
 													<tr>
 
 														<td>
@@ -758,21 +848,32 @@ var isAlreadySubmitted = false;
 															styleId="<%=tempIndexStr%>" size="10"/>
 														</td>
 														<td align="left" vAlign="center">&nbsp;
-															<a id="trans4Date<%=tempIndexStr%>" href='javascript:pickDateById("trans4Date<%=tempIndexStr%>",<%=tempIndexStr%>)'>
-																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
-															</a>
+															<c:if test="${contentDisabled=='false'}">
+																<a id="trans4Date<%=tempIndexStr%>" href='javascript:pickDateById("trans4Date<%=tempIndexStr%>",<%=tempIndexStr%>)'>
+																	<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																</a>
+															</c:if>
 														</td>
 
 													</tr>
 												</table>
 											</td>
-                                            </field:display>
-                                            <field:display name="Disbursement Order Number" feature="Disbursement Orders">
+
+                                            
+											<c:set var="contentDisabled"><field:display name="Disbursement Order Number" feature="Disbursement Orders">false</field:display></c:set>
+											<c:if test="${contentDisabled==''}">
+												<c:set var="contentDisabled">true</c:set>
+											</c:if>
+                                            
                                              <td>
-												<html:text name="fundingDetail" property="disbOrderId" readonly="true"/>
+												<html:text name="fundingDetail" property="disbOrderId" readonly="true" disabled="${contentDisabled}"/>
 											</td>
-                                            </field:display>
-                                             <field:display name="Disbursement Order Contract ID" feature="Disbursement Orders">
+                                            
+                                            
+											<c:set var="contentDisabled"><field:display name="Disbursement Order Contract ID" feature="Disbursement Orders">false</field:display></c:set>
+											<c:if test="${contentDisabled==''}">
+												<c:set var="contentDisabled">true</c:set>
+											</c:if>
                                              <td align="center">
                                                  <c:if test="${empty fundingDetail.contract}">
 												 	<input type="text" value="" readonly="true"/>
@@ -782,19 +883,30 @@ var isAlreadySubmitted = false;
                                                  </c:if>
 											 </td>
                                              <td>
-                                               <input type="button" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
+                                             	<c:if test="${contentDisabled=='true'}">
+                                            	   <input type="submit" disabled="disabled" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
+                                            	</c:if>
+                                            	<c:if test="${contentDisabled=='false'}">
+                                            	   <input type="submit" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
+                                            	</c:if>
 											</td>
-											</field:display>
-                                            <field:display name="Rejected Disbursement Order" feature="Disbursement Orders">
+
+
+											<c:set var="contentDisabled"><field:display name="Rejected Disbursement Order" feature="Disbursement Orders">false</field:display></c:set>
+											<c:if test="${contentDisabled==''}">
+												<c:set var="contentDisabled">true</c:set>
+											</c:if>
                                             <td>
-												<html:checkbox name="fundingDetail" indexed="true" property="disbursementOrderRejected"/>
+												<html:checkbox name="fundingDetail" indexed="true" property="disbursementOrderRejected" disabled="${contentDisabled}"/>
 											</td>
-                                            </field:display>											
-											<td>
-												<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,4)">
-												 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
-												</a>
-											</td>
+                                            
+                                            <field:display name="Remove Disbursement Order Link" feature="Disbursement Orders">											
+												<td>
+													<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,4)">
+													 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+													</a>
+												</td>
+											</field:display>
 										</tr>
 
 								</c:if>
@@ -807,15 +919,21 @@ var isAlreadySubmitted = false;
 				</tr>
 				<tr bgcolor="#ffffff">
 					<td align="center">
-						<table cellPadding=3>
+						<table cellPadding="3">
 							<tr>
 
 
 								<td>
-                                   <field:display name="Add Disbursement Order Button" feature="Disbursement Orders">
-									<input class="dr-menu" type="button" name="xx1" value="<digi:trn key='aim:addDisbursementOrder'>Add Disbursement Order</digi:trn>"
-								   onclick="addFundingDetail(4)">
-                                   </field:display>
+									<c:set var="contentDisabled"><field:display name="Add Disbursement Order Button" feature="Disbursement Orders">false</field:display></c:set>
+									<c:if test="${contentDisabled==''}">
+										<c:set var="contentDisabled">true</c:set>
+									</c:if>
+									<c:if test="${contentDisabled=='false'}">
+										<input class="dr-menu" type="button" name="xx1" value="<digi:trn key='aim:addDisbursementOrder'>Add Disbursement Order</digi:trn>" onclick="addFundingDetail(4)">
+									</c:if>
+									<c:if test="${contentDisabled=='true'}">
+										<input class="dr-menu" type="button" disabled="disabled" name="xx1" value="<digi:trn key='aim:addDisbursementOrder'>Add Disbursement Order</digi:trn>" onclick="addFundingDetail(4)">
+									</c:if>
 								</td>
 
 							</tr>
@@ -838,9 +956,9 @@ var isAlreadySubmitted = false;
 	<tr>
 		<td width="100%" vAlign="top">
 
-			<table width="100%" cellpadding=0 cellspacing=1 vAlign="top" align="left" bgcolor="#006699">
+			<table width="100%" cellpadding="0" cellspacing="1" valign="top" align="left" bgcolor="#006699">
 			<tr><td>
-			<table width="100%" cellpadding=0 cellspacing=0>
+			<table width="100%" cellpadding="0" cellspacing="0">
 				<tr>
 					<td width="100%" bgcolor="#006699" class="textalb" height="20" align="center">
 					<a title="<digi:trn key="aim:FundRelease">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor</digi:trn>"><digi:trn key="Disbursements">Disbursements</digi:trn></a>
@@ -848,7 +966,7 @@ var isAlreadySubmitted = false;
 				</tr>
 				<tr>
 					<td>
-						<table width="100%" border="0" bgcolor="#f4f4f2" cellspacing="1" cellpadding="0" class=box-border-nopadding>
+						<table width="100%" border="0" bgcolor="#f4f4f2" cellspacing="1" cellpadding="0" class="box-border-nopadding">
 							<tr bgcolor="#003366" class="textalb">
 								<field:display name="Adjustment Type Disbursement" feature="Disbursement">
 								<td align="center" valign="middle" width="75">
@@ -897,7 +1015,11 @@ var isAlreadySubmitted = false;
 							<c:forEach var="fundingDetail" items="${aimEditActivityForm.funding.fundingDetails}">
 						 	<c:if test="${fundingDetail.transactionType==1}">
 										<tr>
-											<field:display name="Adjustment Type Disbursement" feature="Disbursement">
+										
+											<c:set var="contentDisabled"><field:display name="Adjustment Type Disbursement" feature="Disbursement">false</field:display></c:set>
+											<c:if test="${contentDisabled==''}">
+												<c:set var="contentDisabled">true</c:set>
+											</c:if>
 											<td valign="bottom">
 												<c:set var="index" value="${index+1}"/>
 											<c:if test="${aimEditActivityForm.planning.statusId==1}">
@@ -905,32 +1027,43 @@ var isAlreadySubmitted = false;
 													<html:option value="0">Planned</html:option>
 												</html:select>
 											</c:if>
-
 											<c:if test="${aimEditActivityForm.planning.statusId!=1}">
-												<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text">
+												<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text" disabled="${contentDisabled}">
 													<html:option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>
 													<html:option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
 												</html:select>
 											</c:if>
 												<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>
 											</td>
-											</field:display>
-											<field:display name="Amount Disbursement" feature="Disbursement">
+
+											<c:set var="contentDisabled"><field:display name="Amount Disbursement" feature="Disbursement">false</field:display></c:set>
+											<c:if test="${contentDisabled==''}">
+												<c:set var="contentDisabled">true</c:set>
+											</c:if>
 											<td valign="bottom">
-												<html:text name="fundingDetail" indexed="true" title="${formatTip}"  property="transactionAmount" onchange="this.value=trim(this.value)" size="17" styleClass="amt"/>
+												<html:text name="fundingDetail" disabled="${contentDisabled}" indexed="true" title="${formatTip}"  property="transactionAmount" onchange="this.value=trim(this.value)" size="17" styleClass="amt"/>
 											</td>
-											</field:display>
-											<field:display name="Currency Disbursement" feature="Disbursement">
+
+
+											<c:set var="contentDisabled"><field:display name="Currency Disbursement" feature="Disbursement">false</field:display></c:set>
+											<c:if test="${contentDisabled==''}">
+												<c:set var="contentDisabled">true</c:set>
+											</c:if>
 											<td valign="bottom">
-												<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text" >
+												<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text" disabled="${contentDisabled}">
 													<html:optionsCollection name="aimEditActivityForm" property="funding.validcurrencies" value="currencyCode"
 													label="currencyName"/>
 												</html:select>
 											</td>
-											</field:display>
-											<field:display name="Date Disbursement" feature="Disbursement">
+
+
+
+											<c:set var="contentDisabled"><field:display name="Date Disbursement" feature="Disbursement">false</field:display></c:set>
+											<c:if test="${contentDisabled==''}">
+												<c:set var="contentDisabled">true</c:set>
+											</c:if>
 											<td valign="bottom">
-												<table cellPadding=0 cellSpacing=0>
+												<table cellpadding="0" cellspacing="0">
 													<tr>
 														<td>
 															<% tempIndexStr = "" + tempIndex; tempIndex++;%>
@@ -938,29 +1071,35 @@ var isAlreadySubmitted = false;
 															styleId="<%=tempIndexStr%>" size="10"/>
 														</td>
 														<td align="left" vAlign="center">&nbsp;
-															<a id="transDate<%=tempIndexStr%>" href='javascript:pickDateById("transDate<%=tempIndexStr%>",<%=tempIndexStr%>)'>
-																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
-															</a>
+															<c:if test="${contentDisabled=='false'}">
+																<a id="transDate<%=tempIndexStr%>" href='javascript:pickDateById("transDate<%=tempIndexStr%>",<%=tempIndexStr%>)'>
+																	<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
+																</a>
+															</c:if>
 														</td>
 													</tr>
 												</table>
 											</td>
-											</field:display>
-
-                                                                                        <feature:display module="Funding" name="Disbursement Orders">
-  											<td valign="bottom" align="center">
-                                                                                        <c:if test="${aimEditActivityForm.funding.disbursementOrders}">
-												<html:select name="fundingDetail" indexed="true" property="disbOrderId" styleClass="inp-text">
-													<html:option value="">&nbsp;</html:option>
-		   										    <c:forEach var="funding" items="${aimEditActivityForm.funding.fundingDetails}">
-														<c:if test="${funding.transactionType==4}">
-															<html:option value="${funding.disbOrderId}">${funding.disbOrderId}</html:option>
-														</c:if>
-													</c:forEach>
-												</html:select>
-                                                                                           </c:if>&nbsp;
-											</td>
-                                                                                         </feature:display>
+											
+											
+											<c:set var="contentDisabled"><field:display name="Amount of Disbursement Order" feature="Disbursement Orders">false</field:display></c:set>
+											<c:if test="${contentDisabled==''}">
+												<c:set var="contentDisabled">true</c:set>
+											</c:if>
+                                           <feature:display module="Funding" name="Disbursement Orders">
+	  											<td valign="bottom" align="center">
+	                                                <c:if test="${aimEditActivityForm.funding.disbursementOrders}">
+													 <html:select name="fundingDetail" indexed="true" property="disbOrderId" styleClass="inp-text" disabled="${contentDisabled}">
+														<html:option value="">&nbsp;</html:option>
+			   										    <c:forEach var="funding" items="${aimEditActivityForm.funding.fundingDetails}">
+															<c:if test="${funding.transactionType==4}">
+																<html:option value="${funding.disbOrderId}">${funding.disbOrderId}</html:option>
+															</c:if>
+														</c:forEach>
+													</html:select>
+	                                               </c:if>&nbsp;
+												</td>
+                                           </feature:display>
         	
 											<!-- 
                                             <td>
@@ -970,31 +1109,41 @@ var isAlreadySubmitted = false;
 	                                            <input type="submit" value="<digi:trn key='aim:LinkDisbOrder'>Link to Disbursement Order</digi:trn>" onclick='return addDisbOrderToDisb("${fundingDetail.indexId}")'/>
 											</td>
 											 -->        
-											 <field:display name="Link to Disbursement Order ID" feature="Disbursement">
-											 <td align="center">
-                                                                                        
-                                                                                              <c:if test="${empty fundingDetail.contract}">
-                                                                                            
-												<input type="text" value="" readonly="true"/>
-                                                                                             </c:if>
-                                                                                            <c:if test="${not empty fundingDetail.contract}">
-                                                                                            
-												<input type="text" value="${fundingDetail.contract.contractName}" readonly="true"/>
-                                                                                             </c:if>
-											</td>
-											</field:display>
-											<field:display name="Contract of Disbursement" feature="Disbursement">
-                                            <td>
-                                               <input type="button" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
 
+											<c:set var="contentDisabled"><field:display name="Link to Disbursement Order ID" feature="Disbursement">false</field:display></c:set>
+											<c:if test="${contentDisabled==''}">
+												<c:set var="contentDisabled">true</c:set>
+											</c:if>
+											 	<td align="center">
+                                                	<c:if test="${empty fundingDetail.contract}">
+														<input type="text" value="" readonly="true"/>
+                                                    </c:if>
+                                                    <c:if test="${not empty fundingDetail.contract}">
+        												<input type="text" value="${fundingDetail.contract.contractName}" readonly="true"/>
+                                                    </c:if>
 											</td>
+
+
+											<c:set var="contentDisabled"><field:display name="Contract of Disbursement" feature="Disbursement">false</field:display></c:set>
+											<c:if test="${contentDisabled==''}">
+												<c:set var="contentDisabled">true</c:set>
+											</c:if>
+                                            <td>
+                                            	<c:if test="${contentDisabled=='false'}">
+                                               		<input type="submit" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
+												</c:if>
+                                            	<c:if test="${contentDisabled=='true'}">
+                                               		<input type="submit" disabled="disabled" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
+												</c:if>
+											</td>
+
+											<field:display name="Remove Disbursement Link" feature="Disbursement">
+												<td>
+													<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,1)">
+													 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+													</a>
+												</td>
 											</field:display>
-											 
-											<td>
-												<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,1)">
-												 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
-												</a>
-											</td>
 										</tr>
 							</c:if>
 						 	</c:forEach>
@@ -1004,19 +1153,25 @@ var isAlreadySubmitted = false;
 				</tr>
 				<tr bgcolor="#ffffff">
 					<td align="center">
-						<table cellPadding=3>
+						<table cellPadding="3">
 							<tr>
 								<%--
 								<td>
 									<input class="dr-menu" type="button" name="xx1" value="Delete Disbursements"
 								   onclick="this.form.event.value='delDisbursements';addFundingDetail();">
 								</td>--%>
-								<field:display name="Add Disbursement Button" feature="Disbursement">
+								<c:set var="contentDisabled"><field:display name="Add Disbursement Button" feature="Disbursement">false</field:display></c:set>
+								<c:if test="${contentDisabled==''}">
+									<c:set var="contentDisabled">true</c:set>
+								</c:if>
 								<td>
-									<input class="dr-menu" type="button" name="xx1" value="<digi:trn key='aim:addDisbursement'>Add Disbursement</digi:trn>"
-								   onclick="addFundingDetail(1)">
+									<c:if test="${contentDisabled=='false'}">
+										<input class="dr-menu" type="button" name="xx1" value="<digi:trn key='aim:addDisbursement'>Add Disbursement</digi:trn>" onclick="addFundingDetail(1)">
+									</c:if>
+									<c:if test="${contentDisabled=='true'}">
+										<input class="dr-menu" disabled="disabled" type="button" name="xx1" value="<digi:trn key='aim:addDisbursement'>Add Disbursement</digi:trn>" onclick="addFundingDetail(1)">
+									</c:if>
 								</td>
-								</field:display>
 							</tr>
 
 						</table>
@@ -1033,10 +1188,10 @@ var isAlreadySubmitted = false;
 	<feature:display module="Funding" name="Expenditures">
 	<tr>
 		<td width="100%" vAlign="top">
-			<table width="100%" cellpadding=0 cellspacing=1 vAlign="top" align="left" bgcolor="#006699">
+			<table width="100%" cellpadding="0" cellspacing="1" vAlign="top" align="left" bgcolor="#006699">
 			<tr><td>
 
-			<table width="100%" cellpadding=0 cellspacing=0 border="1">
+			<table width="100%" cellpadding="0" cellspacing="0" border="1">
 				<tr>
 					<td width="100%" bgcolor="#006699" class="textalb" height="20" align="center">
  						<a title="<digi:trn key='aim:ExpenditureofFund'>Amount effectively spent by the implementing agency</digi:trn>"><digi:trn key="aim:expenditures">Expenditures</digi:trn></a>
@@ -1044,7 +1199,7 @@ var isAlreadySubmitted = false;
 				</tr>
 				<tr>
 					<td>
-						<table width="100%" border="0" bgcolor="#f4f4f2" cellspacing="1" cellpadding="0" class=box-border-nopadding>
+						<table width="100%" border="0" bgcolor="#f4f4f2" cellspacing="1" cellpadding="0" class="box-border-nopadding">
 							<tr bgcolor="#003366" class="textalb">
 								<field:display name="Adjustment Type Expenditure" feature="Expenditures">
 								<td align="center" valign="middle" width="75">
@@ -1065,9 +1220,12 @@ var isAlreadySubmitted = false;
 								</field:display>
 								
 								<field:display name="Currency Expenditure" feature="Expenditures">
-								<td align="center" valign="middle" width="170">
-									<a title="<digi:trn key="aim:TransactionCurrency">Currency used in the project</digi:trn>">								   		  <b><font color="white"><digi:trn key="aim:CurrencyFIE">Currency</digi:trn></font></b></a>
-								    <img src= "../ampTemplate/images/help.gif" border="0" align="absmiddle" titl}" /></td>
+									<td align="center" valign="middle" width="170">
+										<a title="<digi:trn key="aim:TransactionCurrency">Currency used in the project</digi:trn>">								   		  
+											<b><font color="white"><digi:trn key="aim:CurrencyFIE">Currency</digi:trn></font></b>
+										</a>
+									    <img src= "../ampTemplate/images/help.gif" border="0" align="absmiddle"  title="${translation}" />
+									</td>
 								</field:display>
 								<field:display name="Date Expenditure" feature="Expenditures">
 								<td align="center" valign="middle" width="120">
@@ -1075,88 +1233,126 @@ var isAlreadySubmitted = false;
 									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<digi:trn key="aim:Actual">Actual</digi:trn><br><digi:trn key="aim:ExpenditureDateFIE">Expenditure Date</digi:trn></font></b></a>
 								</td>
 								</field:display>
+								<field:display name="Remove Expenditure Link" feature="Expenditures">
+											<td>&nbsp;</td>
+								</field:display>
 							</tr>
 							<c:if test="${ !empty aimEditActivityForm.funding.fundingDetails}">
 						 	<c:forEach var="fundingDetail" items="${aimEditActivityForm.funding.fundingDetails}">
 						 	<c:if test="${fundingDetail.transactionType==2}">
+							 	<tr bgcolor="#ffffff">
 
-									 	<tr bgcolor="#ffffff">
-														<td valign="bottom">
-															<c:set var="index" value="${index+1}"/>
-													<c:if test="${aimEditActivityForm.planning.statusId==1}">
+							 	
+									<c:set var="contentDisabled"><field:display name="Adjustment Type Expenditure" feature="Expenditures">false</field:display></c:set>
+									<c:if test="${contentDisabled==''}">
+										<c:set var="contentDisabled">true</c:set>
+									</c:if>
+										<td valign="bottom">
+											<c:set var="index" value="${index+1}"/>
+											<c:if test="${aimEditActivityForm.planning.statusId==1}">
 												<html:select name="fundingDetail" indexed="true" property="adjustmentType" disabled="true" styleClass="inp-text">
-																<html:option value="0">Planned</html:option>
-															</html:select>
-											</c:if>
-
-											<c:if test="${aimEditActivityForm.planning.statusId!=1}">
-												<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text">
-																<html:option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>
-																<html:option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
+													<html:option value="0">Planned</html:option>
 												</html:select>
 											</c:if>
-															<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>
-														</td>
-														<td valign="bottom">
-															<html:text name="fundingDetail" indexed="true" title="${formatTip}"  property="transactionAmount" onchange="this.value=trim(this.value)" size="17" styleClass="amt"/>
-														</td>
-														<td valign="bottom">
-															<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text" >
-																<html:optionsCollection name="aimEditActivityForm" property="funding.validcurrencies" value="currencyCode"
-																label="currencyName"/>
-															</html:select>
-														</td>
-														<td valign="bottom">
-															<table cellPadding=0 cellSpacing=0>
-																<tr>
-																	<td>
-																		<% tempIndexStr = "" + tempIndex; tempIndex++;%>
-																		<html:text name="fundingDetail" indexed="true" property="transactionDate"
-																		styleId="<%=tempIndexStr%>" readonly="true" size="10"/>
-																	</td>
-																	<td align="left" vAlign="center">&nbsp;
-																		<a id="trans6Date<%=tempIndexStr%>" href='javascript:pickDateById("trans6Date<%=tempIndexStr%>",<%=tempIndexStr%>)'>
-																			<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
-																		</a>
-																		<% tempIndex++; %>
-																	</td>
-																</tr>
-															</table>
-														</td>
-														<td valign="bottom">
-														</td>
-														<td>
-															<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,2)">
-															 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
-															</a>
-														</td>
-													</tr>
-													<tr bgcolor="#ffffff">
-														<td colspan="6">
-															<b><digi:trn key="aim:classification">Classification</digi:trn></b>&nbsp;
-															<html:text name="fundingDetail" indexed="true" property="classification"
-															size="75" styleClass="inp-text"/>
-														</td>
-													</tr>
-													<tr>
-														<td colspan="6" bgcolor="#dddddd"></td>
-													</tr>
+											<c:if test="${aimEditActivityForm.planning.statusId!=1}">
+												<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text" disabled="${contentDisabled}">
+													<html:option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>
+													<html:option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
+												</html:select>
+											</c:if>
+											<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>
+										</td>
 
+
+									<c:set var="contentDisabled"><field:display name="Amount Expenditure" feature="Expenditures">false</field:display></c:set>
+									<c:if test="${contentDisabled==''}">
+										<c:set var="contentDisabled">true</c:set>
+									</c:if>
+										<td valign="bottom">
+											<html:text name="fundingDetail" disabled="${contentDisabled}" indexed="true" title="${formatTip}"  property="transactionAmount" onchange="this.value=trim(this.value)" size="17" styleClass="amt"/>
+										</td>
+
+
+									<c:set var="contentDisabled"><field:display name="Currency Expenditure" feature="Expenditures">false</field:display></c:set>
+									<c:if test="${contentDisabled==''}">
+										<c:set var="contentDisabled">true</c:set>
+									</c:if>
+										<td valign="bottom">
+											<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text" disabled="${contentDisabled}">
+												<html:optionsCollection name="aimEditActivityForm" property="funding.validcurrencies" value="currencyCode" label="currencyName"/>
+											</html:select>
+										</td>
+
+
+									<c:set var="contentDisabled"><field:display name="Date Expenditure" feature="Expenditures">false</field:display></c:set>
+									<c:if test="${contentDisabled==''}">
+										<c:set var="contentDisabled">true</c:set>
+									</c:if>
+										<td valign="bottom">
+											<table cellpadding="0" cellspacing="0">
+												<tr>
+														<td>
+															<% tempIndexStr = "" + tempIndex; tempIndex++;%>
+															<html:text name="fundingDetail" indexed="true" property="transactionDate" styleId="<%=tempIndexStr%>" readonly="true" size="10"/>
+														</td>
+														<td align="left" vAlign="center">&nbsp;
+															<c:if test="${contentDisabled=='false'}">
+																<a id="trans6Date<%=tempIndexStr%>" href='javascript:pickDateById("trans6Date<%=tempIndexStr%>",<%=tempIndexStr%>)'>
+																	<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																</a>
+															</c:if>
+															<% tempIndex++; %>
+														</td>
+													
+												</tr>
+											</table>
+										</td>
+
+
+									<field:display name="Remove Expenditure Link" feature="Expenditures">
+											<td align="center"> 
+												<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,2)">
+								 					<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+												</a>
+											</td>
+									</field:display>
+									
+								</tr>
+									<c:set var="contentDisabled"><field:display name="Classification Expenditure" feature="Funding Information">false</field:display></c:set>
+									<c:if test="${contentDisabled==''}">
+										<c:set var="contentDisabled">true</c:set>
+									</c:if>
+								<tr bgcolor="#ffffff">
+									<td colspan="6">
+										<b><digi:trn key="aim:classification">Classification</digi:trn></b>&nbsp;
+										<html:text name="fundingDetail" indexed="true" property="classification" size="75" styleClass="inp-text" disabled="${contentDisabled}"/>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="6" bgcolor="#dddddd"></td>
+								</tr>
 							</c:if>
-						 	</c:forEach>
-						 	</c:if>
-						</table>
-					</td>
-				</tr>
+					 	</c:forEach>
+				 	</c:if>
+				</table>
+			</td>
+		</tr>
 				<tr bgcolor="#ffffff">
 					<td align="center">
-						<table cellPadding=3>
+						<table cellPadding="3">
 							<tr>
 								<td>
-								<field:display name="Add Expenditure Button" feature="Expenditures">
-									<input class="dr-menu" type="button" name="xx1" value="<digi:trn key='aim:addExpediture'>Add Expenditure</digi:trn>"
-				   				onclick="addFundingDetail(2)">
-				   				</field:display>
+									<c:set var="contentDisabled"><field:display name="Add Expenditure Button" feature="Expenditures">false</field:display></c:set>
+									<c:if test="${contentDisabled==''}">
+										<c:set var="contentDisabled">true</c:set>
+									</c:if>
+									
+									<c:if test="${contentDisabled=='false'}">
+										<input class="dr-menu" type="button" name="xx1" value="<digi:trn key='aim:addExpediture'>Add Expenditure</digi:trn>" onclick="addFundingDetail(2)">
+									</c:if>
+									<c:if test="${contentDisabled=='true'}">
+										<input class="dr-menu" disabled="disabled" type="button" name="xx1" value="<digi:trn key='aim:addExpediture'>Add Expenditure</digi:trn>" onclick="addFundingDetail(2)">
+									</c:if>
 								</td>
 							</tr>
 						</table>
@@ -1172,14 +1368,14 @@ var isAlreadySubmitted = false;
     <field:display name="Conditions for Fund Release" feature="Funding Information">
 	<tr>
 		<td>
-			<table width="100%" cellSpacing=1 cellPadding=1>
+			<table width="100%" cellspacing="1" cellPadding="1">
 				<tr>
-					<td align="left" bgcolor=#ECF3FD valign="top" width="80">
+					<td align="left" bgcolor="#ECF3FD" valign="top" width="80">
 						<b>
 						<a title="<digi:trn key="aim:ConditionsforFundRelease">Enter the conditions attached to the release of the funds</digi:trn>">
 						<font color=black>	<digi:trn key="aim:conditions">Conditions</digi:trn></font></a></b>
 					</td>
-					<td align="left" bgcolor=#ECF3FD>
+					<td align="left" bgcolor="#ECF3FD">
 					<a title="<digi:trn key="aim:ConditionsforFundRelease">Enter the conditions attached to the release of the funds</digi:trn>">
 						<html:textarea property="funding.fundingConditions" rows="3" cols="75" styleClass="inp-text"/>
 					</a>
@@ -1192,14 +1388,14 @@ var isAlreadySubmitted = false;
 	<field:display name="Donor Objective" feature="Funding Information">
 	<tr>
 		<td>
-			<table width="100%" cellSpacing=1 cellPadding=1>
+			<table width="100%" cellspacing="1" cellPadding="1">
 				<tr>
-					<td align="left" bgcolor=#ECF3FD valign="top" width="80">
+					<td align="left" bgcolor="#ECF3FD" valign="top" width="80">
 						<b>
 						<a title="<digi:trn key="aim:DonorObjectiveforFundRelease">Enter the donor objective attached to the release of the funds</digi:trn>">
 						<font color=black>	<digi:trn key="aim:donorobjective">Donor Objective</digi:trn></font></b></a>
 					</td>
-					<td align="left" bgcolor=#ECF3FD>
+					<td align="left" bgcolor="#ECF3FD">
 					<a title="<digi:trn key="aim:DonorObjectiveforFundRelease">Enter the donor objective attached to the release of the funds</digi:trn>">
 						<html:textarea property="funding.donorObjective" rows="3" cols="75" styleClass="inp-text"/>
 					</a>
@@ -1211,10 +1407,10 @@ var isAlreadySubmitted = false;
 	</field:display>
 	<tr>
 		<td width="100%" vAlign="top">
-			<table width="100%" cellpadding=0 cellspacing=0>
+			<table width="100%" cellpadding="0" cellspacing="0">
 				<tr>
 					<td align="center">
-						<table cellPadding=3>
+						<table cellPadding="3">
 							<tr>
 								<td>
 									<input type="button" value="<digi:trn key='btn:save'>Save</digi:trn>" class="inp-text" onClick="addNewFunding()">

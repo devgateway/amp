@@ -58,7 +58,7 @@
 
 									</c:set>
 
-									<c:set target="${url}" property="tabIndex" value="6"/>
+									<c:set target="${url}" property="tabIndex" value="7"/>
 
 									<c:set var="translation">
 

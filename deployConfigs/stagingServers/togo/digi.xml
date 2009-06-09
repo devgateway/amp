@@ -1,20 +1,19 @@
 <?xml version="1.0"?>
 <!DOCTYPE digi-common [
-        <!ENTITY commonEntities SYSTEM "digi-common.xml">
+       <!ENTITY commonEntities SYSTEM "digi-common.xml">
 ]>
 
 <digi-config>
     <smtp>
 		 <host>localhost</host>
 		 <from>system@digijava.org</from>
-	</smtp>
+	</smtp>	
 
 	
-     <logon-site id="dglogin" host="">http://madagascar-oracle.staging.ampdev.net/login</logon-site>
-     <site-domain id="dgDomain" host="">http://madagascar-oracle.staging.ampdev.net/</site-domain>
-
-     
-    <server-type caseSensitiveTranslatioKeys="false"/>
+     <logon-site id="dglogin" host="">http://togo.staging.ampdev.net/login</logon-site>
+     <site-domain id="dgDomain" host="">http://togo.staging.ampdev.net/</site-domain>
+      
+      <server-type caseSensitiveTranslatioKeys="false"/>
     
 	<server-type prefix="">development</server-type>
 
@@ -28,10 +27,11 @@
 	</exception-emails>
 	
 	<enable-autologin>true</enable-autologin>
- 	
- 	<service id="digiAutoPatcherService" class="org.digijava.module.autopatcher.core.AutopatcherService">
+
+	    
+    <service id="digiAutoPatcherService" class="org.digijava.module.autopatcher.core.AutopatcherService">
             <description>Advanced Database Patcher Module</description>
-            <property name="patchesDir">patches_oracle</property>
+            <property name="patchesDir">patches</property>
     </service>
 	
 	&commonEntities;

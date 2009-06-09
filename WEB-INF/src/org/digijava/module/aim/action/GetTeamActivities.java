@@ -65,8 +65,13 @@ public class GetTeamActivities
             
             RepairDbUtil.repairDb();
 
-            if(request.getParameter("id") != null) {
+            if(request.getParameter("id") != null){
                 id = new Long(Long.parseLong(request.getParameter("id")));
+            }else{
+            	id=taForm.getTeamId();
+            }
+            if (id!=null)
+             {
                 AmpApplicationSettings appSettings = DbUtil.getTeamAppSettings(id);
                 if(appSettings != null) {
                     numRecords = appSettings.getDefaultRecordsPerPage().intValue();

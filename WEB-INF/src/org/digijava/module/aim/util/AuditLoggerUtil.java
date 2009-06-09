@@ -35,6 +35,8 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+
+import com.lowagie.text.Row;
 /**
  * ActivityUtil is the persister class for all activity related
  * entities
@@ -344,12 +346,11 @@ public class AuditLoggerUtil {
 
 	} 
 	
-	private static String getDateRange(int interval) {
+	private static Date getDateRange(int interval) {
 		GregorianCalendar cal = new GregorianCalendar();
 		cal.add(Calendar.DATE, -interval);
 		//Logs don't take in account global setting format
-		SimpleDateFormat fd = new SimpleDateFormat("yyyy-MM-dd");
-        return fd.format(cal.getTime());
+		return  cal.getTime();
     }
 	/**
 	 * @author Diego Dimunzio
@@ -366,8 +367,9 @@ public class AuditLoggerUtil {
 			session = PersistenceManager.getSession();
 			qryStr = "select f from " + 
 				AmpAuditLogger.class.getName() 
-				+ " f where f.loggedDate < '" + getDateRange(interval) + "'";
+				+ " f where f.loggedDate <= :dateParam";
 			qry = session.createQuery(qryStr);
+			qry.setParameter("dateParam",getDateRange(interval),Hibernate.DATE);
 			col = qry.list();
 		} catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
@@ -392,15 +394,18 @@ public class AuditLoggerUtil {
 	public static void DeleteLogsByPeriod(String interval){
 		Session session = null;
 		String qryStr = null;
+		Query qry = null;
 		Transaction tx = null;
 		try {
 			session = PersistenceManager.getSession();
-			qryStr = "select f from "
+			qryStr = "delete from "
 				+ AmpAuditLogger.class.getName()
-				+ " f where f.loggedDate < '" + getDateRange(Integer.parseInt(interval)) + "'";
-			tx = session.beginTransaction();
-			session.delete(qryStr);
-			tx.commit();
+				+ " where loggedDate <= :dateParam";
+			
+			qry = session.createQuery(qryStr);
+			qry.setParameter("dateParam",getDateRange(Integer.parseInt(interval)),Hibernate.DATE);
+			int rowCount = qry.executeUpdate();
+			logger.info("Row deleted from audit logger = " + rowCount);
 		
 		} catch (HibernateException e) {
 			logger.error("HibernateException", e);

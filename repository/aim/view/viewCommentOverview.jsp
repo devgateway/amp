@@ -39,44 +39,44 @@
 							<tr>
 								<td align=left vAlign=top><b><font color="#FF0000">
 									<digi:trn key="aim:noCommentPresent">No comments found for this activity.</digi:trn></font></b>
-								<td>
+								</td>
 							</tr>
 						</logic:empty>
 						<logic:notEmpty name="aimEditActivityForm" property="comments.commentsCol">
 						<tr>
-							<td align=left vAlign=top>						
-							<table width="100%" cellPadding=3>
+							<td align="left" vAlign="top">						
+							<table width="100%" cellPadding="3">
 								<c:set value="1" var="sno" />
 								<logic:iterate name="aimEditActivityForm" id="comment" property="comments.commentsCol" 
 									type="org.digijava.module.aim.dbentity.AmpComments">
-									<c:if test="${comment.ampFieldId.ampFieldId == aimEditActivityForm.field.ampFieldId}"> 
-										<tr>
-											<td bgcolor=#ECF3FD width="5%">
-												<b><c:out value="${sno}"/></b>
-											</td>
-											<td bgcolor=#ECF3FD width="65%"><b>
-												<digi:trn key="aim:commentBy">Comment By</digi:trn>:</b>&nbsp;
-												<c:out value="${comment.memberId.user.firstNames}" />&nbsp;<c:out value="${comment.memberId.user.lastName}" />
-											</td>
-											<td bgcolor=#ECF3FD width="30%"><b>
-												<fmt:formatDate type="both" value="${comment.commentDate}" dateStyle="short" timeStyle="short"/></b>
-											</td>
-										</tr>
-										<TR bgcolor="#f4f4f2">
-											<TD colspan="3" width="90%">
-												<TABLE width="90%" cellPadding="5" cellSpacing="1" vAlign="top" align="center" bgcolor="#ffffff">
-													<TR>
-														<TD width="100%">
-															<c:out value="${comment.comment}" />
-														</TD>
-													</TR>
-												</TABLE>
-											</TD>
-										</TR>
-										<c:set value="${sno + 1}" var="sno"/>
-									</c:if>
+									
+									
+											<tr>
+												<td bgcolor="#ECF3FD" width="5%">
+													<b><c:out value="${sno}"/></b>
+												</td>
+												<td bgcolor="#ECF3FD" width="65%"><b>
+													<digi:trn key="aim:commentBy">Comment By</digi:trn>:</b>&nbsp;
+													<c:out value="${comment.memberId.user.firstNames}" />&nbsp;<c:out value="${comment.memberId.user.lastName}" />
+												</td>
+												<td bgcolor="#ECF3FD" width="30%"><b>
+													<fmt:formatDate type="both" value="${comment.commentDate}" dateStyle="short" timeStyle="short"/></b>
+												</td>
+											</tr>
+											<TR bgcolor="#f4f4f2">
+												<TD colspan="3" width="90%">
+													<TABLE width="90%" cellPadding="5" cellSpacing="1" vAlign="top" align="center" bgcolor="#ffffff">
+														<TR>
+															<TD width="100%">
+																<c:out value="${comment.comment}" />
+															</TD>
+														</TR>
+													</TABLE>
+												</TD>
+											</TR>
+											<c:set value="${sno + 1}" var="sno"/>
+										
 									</logic:iterate>
-								</logic:notEmpty>
 										<tr>
 											<td colspan="3" width="100%" align="center" height="20">
 												<input type="button" value="Close"  class="dr-menu" onclick="window.close()">
@@ -85,6 +85,7 @@
 									</table>
 							</td>
 						</tr>
+							</logic:notEmpty>
 						
 					</table>				
 				</td>

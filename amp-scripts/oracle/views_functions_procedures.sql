@@ -774,7 +774,7 @@ CREATE OR REPLACE FORCE VIEW  "V_FINANCING_INSTRUMENT" ("AMP_ACTIVITY_ID", "NAME
   order by
     amp_activity_id,name
 /
-CREATE OR REPLACE FORCE VIEW  "V_G _SETTINGS_COUNTRIES" ("ID", "VALUE") AS 
+CREATE OR REPLACE FORCE VIEW  "V_G_SETTINGS_COUNTRIES" ("ID", "VALUE") AS 
   select dg_countries.ISO AS id,
          dg_countries.COUNTRY_NAME AS "VALUE"
   from dg_countries

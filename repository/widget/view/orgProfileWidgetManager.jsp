@@ -48,7 +48,7 @@
 	if(validatePlaces()){
 			submitPlaces();
 		}else{
-			alert("already chosen");
+			alert("This position is already taken, please choose another position or modify the existing position.");
 	   }
  }
 
@@ -91,18 +91,19 @@
               <html:link  href="/aim/admin.do" styleClass="comment" title="${translation}" >
                 <digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
               </html:link>&nbsp;&gt;&nbsp;
-                <digi:trn key="admin:Navigation:orgProfileManager">Org Profile Manager</digi:trn>
+                <digi:trn key="admin:Navigation:orgProfileManager">Organization Profile Manager</digi:trn>
 			</span>
-		</td>
+		</td><!--
                 <tr>
                     <td>
                         <digi:errors/>
                     </td>
                 </tr>
+              -->
 	</tr>
 	<tr>
 		<td>
-			<span class="subtitle-blue"><digi:trn key="widget:orgProfileManager:pageHeader">Org Profile Manager</digi:trn></span>
+			<span class="subtitle-blue"><digi:trn key="widget:orgProfileManager:pageHeader">Organization Profile Manager</digi:trn></span>
 		</td>
 	</tr>
 	<tr>
@@ -117,21 +118,23 @@
 	<table border="0" width="100%" align="center" style="font-family:verdana;font-size:11px;">
 	<tr>
 		<td bgColor="#d7eafd"; colspan='3'>
-		 <input type="button" value='<digi:trn key="save">save</digi:trn>' onclick="save()">
+		 <a href=javascript:; style="text-decoration:none" onclick="save()">
+		  		<img border="0" height="16"  src='<digi:file src="/TEMPLATE/ampTemplate/images/save.png"/>'/>
+		  		<digi:trn>Save</digi:trn>
+		 </a>
 		</td>
 	</tr>
 	<tr>
 	 <td>		
-			<table border="0" width="60%" align="center" style="font-family:verdana;font-size:11px;">
+			<table border="0" width="100%" height="100%" align="center" style="font-family:verdana;font-size:11px;">
 				<tr>
-					
-					<td nowrap="nowrap" width="30%">
+					<td nowrap="nowrap" width="30%" align="center" height="20px">
 						<strong><digi:trn key="widget:orgProfileManager:profiletype">Profile Type</digi:trn></strong>
                      </td>
-                     <td nowrap="nowrap" width="60%">
+                     <td nowrap="nowrap" width="60%" align="center" height="20px">
 						<strong><digi:trn key="widget:orgProfileManager:type">Type</digi:trn></strong>
                      </td>
-                     <td nowrap="nowrap" width="50%">
+                     <td nowrap="nowrap" width="50%" align="center" height="20px">
 						<strong><digi:trn key="widget:orgProfileManager:position">Position</digi:trn></strong>
                      </td>
                      <!--
@@ -143,7 +146,7 @@
 				<c:forEach var="orgProfile" items="${widgetOrgProfileWidgetForm.orgProfilePages}" varStatus="stat">
 					<tr>
 			
-						<td nowrap="nowrap" >
+						<td nowrap="nowrap" height="35px">
                             <c:set var="widgetType">
                                 <c:choose>
                                     <c:when test="${orgProfile.type==1}">
@@ -173,11 +176,16 @@
                             ${widgetType} 
                              &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;                  
 						</td>
-                          <td nowrap="nowrap">
-                             <digi:trn>${orgProfile.widgetType}</digi:trn>
+                          <td nowrap="nowrap" align="center" height="35px">
+                          <c:if test="${orgProfile.type == 1 || orgProfile.type == 7}">
+                          		<digi:trn>Table</digi:trn>
+                          </c:if>
+                          <c:if test="${orgProfile.type == 2 || orgProfile.type == 4 || orgProfile.type == 3 || orgProfile.type == 6 || orgProfile.type == 5}">
+                          		 <digi:trn>Chart</digi:trn>
+                          </c:if>
                             &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
                           </td>                     
-                          <td width="50%">
+                          <td width="50%" height="35px">
                             <html:select name="widgetOrgProfileWidgetForm" property="selPlaces" styleId="place${orgProfile.type}">
                               <c:forEach var="places" items="${widgetOrgProfileWidgetForm.places}" >
                                 <c:if test="${places.assignedWidget.id == orgProfile.id}">
@@ -210,7 +218,7 @@
 			     <td>
 					<table width="100%" height="100%" align="center" style="font-family:verdana;font-size:11px;border: 1px solid black;">
 							<tr>
-							<td height="7%"><strong><digi:trn key="pdfop">Position Diagram For Org Profile</digi:trn></strong></td>
+							<td height="7%" align="center"><strong><digi:trn key="pdfop">Position Diagram For Org Profile</digi:trn></strong></td>
 							</tr>
 								<tr>
 								 <td>

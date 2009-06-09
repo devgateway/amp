@@ -266,7 +266,9 @@ public class AmpARFilter extends PropertyListable {
 		if (ampReportId == null) {
 			AmpReports ar = (AmpReports) request.getSession().getAttribute(
 			"reportMeta");
-			ampReportId = ar.getAmpReportId().toString();
+			if (ar!=null){
+				ampReportId = ar.getAmpReportId().toString();
+			}
 		}
 		
 		AmpApplicationSettings tempSettings = null;

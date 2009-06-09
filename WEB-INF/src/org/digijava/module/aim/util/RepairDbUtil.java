@@ -95,7 +95,7 @@ public class RepairDbUtil {
 				session				= PersistenceManager.getSession();
 				Connection	conn	= session.connection();
 				Statement st		= conn.createStatement();
-				qryStr 				= "UPDATE dg_user, amp_team_member SET dg_user.banned=0 WHERE banned=1 AND amp_team_member.user_=dg_user.id;" ;
+				qryStr 				= "UPDATE dg_user SET dg_user.banned=0 WHERE banned=1  AND dg_user.id in (select amp_team_member.user_ from amp_team_member)" ;
 				int result			=  st.executeUpdate(qryStr);
 				conn.close();
 				

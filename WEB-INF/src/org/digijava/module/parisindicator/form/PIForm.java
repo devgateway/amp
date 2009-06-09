@@ -10,6 +10,7 @@ import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpStatus;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.parisindicator.helper.PIReportAbstractRow;
 
 public class PIForm extends ActionForm {
@@ -27,22 +28,23 @@ public class PIForm extends ActionForm {
 	private int selectedStartYear;
 	private int selectedEndYear;
 	private AmpCurrency selectedCurrency;
-	private AmpFiscalCalendar selectedCalendar;
-	private Collection<AmpStatus> selectedStatuses;
+	private String selectedCalendar;
+	private Collection<AmpCategoryValue> selectedStatuses;
 	private Collection<AmpOrgGroup> selectedDonorGroups;
 	private Collection<AmpSector> selectedSectors;
 	private Collection<AmpOrganisation> selectedDonors;
+	private Collection<AmpCategoryValue> selectedFinancingIstruments;
 
 	/*
 	 * Available values in filters.
 	 */
 	private Collection<AmpCurrency> currencyTypes;
-	private Collection<AmpStatus> statuses;
+	private Collection<AmpCategoryValue> statuses;
 	private Collection<AmpFiscalCalendar> calendars;
 	private Collection<AmpOrganisation> donors;
 	private Collection<AmpOrgGroup> donorGroups;
 	private Collection<AmpSector> sectors;
-	private Collection financingInstruments;
+	private Collection<AmpCategoryValue> financingInstruments;
 
 	/*
 	 * Rows of the main table.
@@ -100,11 +102,11 @@ public class PIForm extends ActionForm {
 		this.currencyTypes = currencyTypes;
 	}
 
-	public void setStatuses(Collection<AmpStatus> statuses) {
+	public void setStatuses(Collection<AmpCategoryValue> statuses) {
 		this.statuses = statuses;
 	}
 
-	public Collection<AmpStatus> getStatuses() {
+	public Collection<AmpCategoryValue> getStatuses() {
 		return statuses;
 	}
 
@@ -132,11 +134,11 @@ public class PIForm extends ActionForm {
 		return sectors;
 	}
 
-	public void setFinancingInstruments(Collection financingInstruments) {
+	public void setFinancingInstruments(Collection<AmpCategoryValue> financingInstruments) {
 		this.financingInstruments = financingInstruments;
 	}
 
-	public Collection getFinancingInstruments() {
+	public Collection<AmpCategoryValue> getFinancingInstruments() {
 		return financingInstruments;
 	}
 
@@ -148,11 +150,11 @@ public class PIForm extends ActionForm {
 		return selectedCurrency;
 	}
 
-	public void setSelectedCalendar(AmpFiscalCalendar selectedCalendar) {
+	public void setSelectedCalendar(String selectedCalendar) {
 		this.selectedCalendar = selectedCalendar;
 	}
 
-	public AmpFiscalCalendar getSelectedCalendar() {
+	public String getSelectedCalendar() {
 		return selectedCalendar;
 	}
 
@@ -168,8 +170,7 @@ public class PIForm extends ActionForm {
 		return availablePIReports;
 	}
 
-	public void setAvailablePIReports(
-			Collection<AmpAhsurveyIndicator> availablePIReports) {
+	public void setAvailablePIReports(Collection<AmpAhsurveyIndicator> availablePIReports) {
 		this.availablePIReports = availablePIReports;
 	}
 
@@ -189,11 +190,11 @@ public class PIForm extends ActionForm {
 		this.reset = reset;
 	}
 
-	public Collection<AmpStatus> getSelectedStatuses() {
+	public Collection<AmpCategoryValue> getSelectedStatuses() {
 		return selectedStatuses;
 	}
 
-	public void setSelectedStatuses(Collection<AmpStatus> selectedStatuses) {
+	public void setSelectedStatuses(Collection<AmpCategoryValue> selectedStatuses) {
 		this.selectedStatuses = selectedStatuses;
 	}
 
@@ -217,8 +218,7 @@ public class PIForm extends ActionForm {
 		return selectedDonorGroups;
 	}
 
-	public void setSelectedDonorGroups(
-			Collection<AmpOrgGroup> selectedDonorGroups) {
+	public void setSelectedDonorGroups(Collection<AmpOrgGroup> selectedDonorGroups) {
 		this.selectedDonorGroups = selectedDonorGroups;
 	}
 
@@ -228,5 +228,14 @@ public class PIForm extends ActionForm {
 
 	public void setDonorGroups(Collection<AmpOrgGroup> donorGroups) {
 		this.donorGroups = donorGroups;
+	}
+
+	public Collection<AmpCategoryValue> getSelectedFinancingIstruments() {
+		return selectedFinancingIstruments;
+	}
+
+	public void setSelectedFinancingIstruments(
+			Collection<AmpCategoryValue> selectedFinancingIstruments) {
+		this.selectedFinancingIstruments = selectedFinancingIstruments;
 	}
 }

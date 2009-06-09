@@ -4,16 +4,18 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.helper.AmpDonors;
+import org.digijava.module.aim.helper.ApplicationSettings;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.SectorUtil;
-import org.digijava.module.parisindicator.action.PIAction;
 import org.digijava.module.parisindicator.form.PIForm;
 import org.digijava.module.parisindicator.helper.PIAbstractReport;
 import org.digijava.module.parisindicator.helper.PIReport3;
@@ -31,9 +33,9 @@ public class PIUseCase {
 	 * TODO: Replace the form variable for all collections to decouple the
 	 * Action from the UseCase, so this method can be used from elsewhere.
 	 */
-	public PIForm setupFiltersData(PIForm form) {
+	public PIForm setupFiltersData(PIForm form, HttpServletRequest request) {
 		if (form.getStatuses() == null || form.getStatuses().isEmpty()) {
-			form.setStatuses(DbUtil.getAllActivityStatus());
+			form.setStatuses(DbUtil.getAmpStatusFromCM(request));
 		}
 		if (form.getDonors() == null || form.getDonors().isEmpty()) {
 			form.setDonors(DbUtil.getAllDonorOrgs());
@@ -44,12 +46,25 @@ public class PIUseCase {
 		if (form.getDonorGroups() == null || form.getDonorGroups().isEmpty()) {
 			form.setDonorGroups(DbUtil.getAllOrgGroups());
 		}
+		if (form.getCalendars() == null || form.getCalendars().isEmpty()) {
+			form.setCalendars(DbUtil.getAllFisCalenders());
+		}
 		return form;
 	}
 
-	public void resetFilterSelections(PIForm form) {
-		form.setSelectedCalendar(null);
-		form.setSelectedCurrency(null);
+	/*
+	 * Resets all filters to their base values, some values must be null as
+	 * default and other needs always a value like the calendar, currency, etc.
+	 */
+	public void resetFilterSelections(PIForm form, ApplicationSettings appSettings) {
+
+		if (appSettings.getFisCalId() != null) {
+			form.setSelectedCalendar(appSettings.getFisCalId().toString());
+		} else {
+			form.setSelectedCalendar(DbUtil.getBaseFiscalCalendar().toString());
+		}
+
+		form.setSelectedCurrency(CurrencyUtil.getAmpcurrency(appSettings.getCurrencyId()));
 		form.setSelectedDonors(null);
 		form.setSelectedEndYear(0);
 		form.setSelectedDonorGroups(null);
@@ -118,28 +133,27 @@ public class PIUseCase {
 	public PIAbstractReport createReport(PIForm form) {
 		// Create the report.
 		PIAbstractReport report = null;
-		if (form.getPiReport().getIndicatorCode().equals(
-				PIConstants.PARIS_INDICATOR_REPORT_3)) {
+		if (form.getPiReport().getIndicatorCode().equals(PIConstants.PARIS_INDICATOR_REPORT_3)) {
 			report = new PIReport3();
 		}
 
 		// Get the common info from surveys and apply some filters.
-		Collection commonData = getCommonSurveyData(
-				form.getSelectedStartYear(), form.getSelectedEndYear(), form
-						.getSelectedDonors(), form.getSelectedDonorGroups());
+		Collection<AmpAhsurvey> commonData = getCommonSurveyData(form.getSelectedDonors(), form
+				.getSelectedDonorGroups());
 
-		report.generateReport();
+		// Execute the logic for generating each report.
+		report.generateReport(commonData, form.getSelectedStartYear(), form.getSelectedEndYear(), form
+				.getSelectedCalendar(), form.getSelectedCurrency(), form.getSelectedSectors(), form
+				.getSelectedStatuses(), form.getSelectedFinancingIstruments());
 
 		return report;
 	}
 
 	/*
-	 * Returns a collection that basically has AmpAhSurvey objects plus
-	 * organizations info, donor groups info, activities, fundings and fundings
-	 * details, for further analysis on each report.
+	 * Returns a collection of AmpAhSurvey objects filtered by donor and donor
+	 * group.
 	 */
-	public Collection<AmpAhsurvey> getCommonSurveyData(int startYear,
-			int endYear, Collection<AmpOrganisation> filterDonors,
+	public Collection<AmpAhsurvey> getCommonSurveyData(Collection<AmpOrganisation> filterDonors,
 			Collection<AmpOrgGroup> filterDonorGroups) {
 
 		Collection<AmpAhsurvey> commonData = null;
@@ -151,17 +165,14 @@ public class PIUseCase {
 			criteria.createAlias("pointOfDeliveryDonor", "podd1");
 			criteria.createAlias("pointOfDeliveryDonor.orgTypeId", "podd2");
 			// Set the filter for Multilateral and Bilateral PoDDs.
-			criteria.add(Restrictions.in("podd2.orgTypeCode", new String[] {
-					"MUL", "BIL" }));
+			criteria.add(Restrictions.in("podd2.orgTypeCode", new String[] { "MUL", "BIL" }));
 			// If needed, filter for organizations.
 			if (filterDonors != null) {
-				criteria.add(Restrictions.in("pointOfDeliveryDonor",
-						filterDonors));
+				criteria.add(Restrictions.in("pointOfDeliveryDonor", filterDonors));
 			}
-			// If needed, filter for organizations groups.
+			// If needed, filter for organization groups.
 			if (filterDonorGroups != null) {
-				criteria.add(Restrictions.in("podd1.orgGrpId",
-						filterDonorGroups));
+				criteria.add(Restrictions.in("podd1.orgGrpId", filterDonorGroups));
 			}
 			commonData = criteria.list();
 

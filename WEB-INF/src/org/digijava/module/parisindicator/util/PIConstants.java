@@ -11,4 +11,6 @@ public interface PIConstants {
 	public static final String PARIS_INDICATOR_REPORT_8_FAKE = "8";
 	public static final String PARIS_INDICATOR_REPORT_9 = "9";
 	public static final String PARIS_INDICATOR_REPORT_10a = "10a";
+
+	public static final String CURRENCY_USD = "USD";
 }

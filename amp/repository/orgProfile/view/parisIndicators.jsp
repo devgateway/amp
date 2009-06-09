@@ -32,7 +32,7 @@
     </tr>
     <c:forEach var="indicator" items="${orgProfilePIForm.indicators}">
                <c:set var="percent">
-             <c:if test="${indicator.prIndicator.indicatorCode!='5aii'&&indicator.prIndicator.indicatorCode!='6'}">
+             <c:if test="${indicator.prIndicator.indicatorCode!='5aii'&&indicator.prIndicator.indicatorCode!='5bii'&&indicator.prIndicator.indicatorCode!='6'}">
                 %
             </c:if>
         </c:set>

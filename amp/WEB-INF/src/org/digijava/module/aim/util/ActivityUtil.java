@@ -2073,6 +2073,21 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     }
     return sectors;
   }
+  
+    public static AmpActivitySector getAmpActivitySector(Long actSectorId) {
+        Session session = null;
+        AmpActivitySector activitySector = null;
+
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            activitySector = (AmpActivitySector)session.load(AmpActivitySector.class, actSectorId);
+        } catch (Exception ex) {
+            logger.error("Unable to get activity sectors :" + ex);
+        }
+        return activitySector;
+    }
+
 
   public static Collection getOrgRole(Long id) {
     Session session = null;

@@ -6,14 +6,55 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<script language="javascript">
+ function validate(){
+	if (document.aimAssignActivityForm.selectedActivities.type=="checkbox"){
+		if (document.aimAssignActivityForm.selectedActivities.checked==false){
+			alert("Please select activities to add");
+			return false;
+
+			}
+	}else{
+		var items = document.aimAssignActivityForm.selectedActivities;
+		var selected=false;
+			for(i=0;i<items.length;i++){
+		 		if (document.aimAssignActivityForm.selectedActivities[i].checked == true){
+		 			selected=true		
+				 }
+			}
+			if (!selected){
+			 	alert("Please select activities to add");
+				return false;
+			}
+	}
+}
+
+function checkall() {
+	var selectbox = document.aimAssignActivityForm.checkAll;
+	if (document.aimAssignActivityForm.selectedActivities.type=="checkbox"){
+		document.aimAssignActivityForm.selectedActivities.checked=selectbox.checked;
+	}else{
+		var items = document.aimAssignActivityForm.selectedActivities;
+		for(i=0;i<items.length;i++){
+		 	document.aimAssignActivityForm.selectedActivities[i].checked = selectbox.checked;
+		}
+	}
+  }
+
+</script>
+
+
 <digi:instance property="aimAssignActivityForm" />
-<digi:form action="/assignActivity.do" method="post">
+<digi:form action="/assignActivity.do" method="post" onsubmit="return validate()">
 
 <html:hidden property="teamId" />
 
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
+
+
+
 
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=872 border=0>
 	<tr>
@@ -69,8 +110,8 @@
 					<tr><td noWrap width=700 vAlign="top">
 						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%">
 							<tr bgColor=#f4f4f2>
-								<td vAlign="top" width="100%">
-									&nbsp;
+								<td vAlign="top" width="100%">&nbsp;
+									
 								</td>
 							</tr>
 							<tr bgColor=#f4f4f2>
@@ -80,21 +121,22 @@
 											<td bgColor=#f4f4f2>
 												<table border="0" cellPadding=0 cellSpacing=0 width="100%">
 													<tr bgColor=#f4f4f2>
-														<td bgColor=#c9c9c7 class=box-title height=20 align="center">
+														<td width="5%" height=20 align="center" bgColor=#d7eafd class=box-title>
 															<!-- Table title -->
-															<digi:trn key="aim:assignActivityTo">Assign Activities to</digi:trn>	
-															<bean:write name="aimAssignActivityForm" property="teamName" />
-															<!-- end table title -->
-														</td>
+													    <input type="checkbox" name="checkAll" onclick="checkall()">
+															<!-- end table title -->														</td>
+													    <td width="95%" align="center" bgColor=#d7eafd class=box-title><digi:trn key="aim:assignActivityTo">Assign Activities to</digi:trn>
+                                                          <bean:write name="aimAssignActivityForm" property="teamName" /></td>
 													</tr>
 												</table>
-											</td>
+										  </td>
 										</tr>
 										<tr>
-											<td bgColor=#ffffff class=box-border>
+											<td align="center" bgColor=#ffffff class=box-border>
 												<logic:empty name="aimAssignActivityForm" property="activities">
-													<b><digi:trn key="aim:noActivitiesToAssign">No activities to assign</digi:trn></b>
-												</logic:empty>
+													<b><digi:trn key="aim:noActivitiesToAssign">No activities to assign</digi:trn>
+													</b>
+											  </logic:empty>
 												<logic:notEmpty name="aimAssignActivityForm" property="activities">
 														<table width="100%" cellpadding=5 cellspacing=0 border=0>
 														<logic:iterate name="aimAssignActivityForm" property="activities" id="activities" 
@@ -118,12 +160,12 @@
 														</table>
 												</logic:notEmpty>
 											</td>
-										</tr>
+									  </tr>
 									</table>
 								</td>
 							</tr>
-							<tr><td bgColor=#f4f4f2>
-								&nbsp;
+							<tr><td bgColor=#f4f4f2>&nbsp;
+								
 							</td></tr>
 						</table>
 					</td>
@@ -139,8 +181,8 @@
 												Other links
 												</digi:trn>
 											</td>
-											<td background="module/aim/images/corner-r.gif" height="17" width=17>
-												&nbsp;
+											<td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;
+												
 											</td>
 										</tr>
 									</table>

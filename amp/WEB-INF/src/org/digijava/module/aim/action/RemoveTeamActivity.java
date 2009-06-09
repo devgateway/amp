@@ -24,7 +24,7 @@ public class RemoveTeamActivity extends Action {
         if (taForm.getSelActivities() != null) {
             TeamUtil.removeActivitiesFromTeam(taForm.getSelActivities(),taForm.getTeamId());
         }
- 
+        
         return mapping.findForward("forward");
     }
 }

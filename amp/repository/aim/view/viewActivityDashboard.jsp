@@ -108,7 +108,7 @@ function preview(id)
 
 
 
-	String url = "/aim/viewIndicatorValues.do?ampActivityId="+actId+"&tabIndex=6";
+	String url = "/aim/viewIndicatorValues.do?ampActivityId="+actId+"&tabIndex=7";
 
 
 

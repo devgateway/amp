@@ -27,23 +27,23 @@ public class OrgProfileParisIndicatorAction extends Action {
 
     private static Logger logger = Logger.getLogger(OrgProfileParisIndicatorAction.class);
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		OrgProfilePIForm piForm = (OrgProfilePIForm)form;
-		Collection<AmpAhsurveyIndicator> indicators=DbUtil.getAllAhSurveyIndicators();
-                HttpSession session=request.getSession();
-                FilterHelper filter= (FilterHelper)session.getAttribute("orgProfileFilter");
-                Iterator<AmpAhsurveyIndicator> iter=indicators.iterator();
-                List<ParisIndicatorHelper> indicatorHelpers=new ArrayList<ParisIndicatorHelper>();
-                while(iter.hasNext()){
-                    AmpAhsurveyIndicator piIndicator=iter.next();
-                    //AMP doesn't calculate the 8th indicator, but we need in the result matrix
-                    if( piIndicator.getIndicatorCode().equals("8")||piIndicator.getIndicatorCode().equals("10b")){
-                        continue;
-                    }
-                    ParisIndicatorHelper piHelper=new ParisIndicatorHelper(piIndicator,filter,true);
-                    indicatorHelpers.add(piHelper);
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        OrgProfilePIForm piForm = (OrgProfilePIForm) form;
+        Collection<AmpAhsurveyIndicator> indicators = DbUtil.getAllAhSurveyIndicators();
+        HttpSession session = request.getSession();
+        FilterHelper filter = (FilterHelper) session.getAttribute("orgProfileFilter");
+        Iterator<AmpAhsurveyIndicator> iter = indicators.iterator();
+        List<ParisIndicatorHelper> indicatorHelpers = new ArrayList<ParisIndicatorHelper>();
+        while (iter.hasNext()) {
+            AmpAhsurveyIndicator piIndicator = iter.next();
+            // currently the rules are undefined for indicator 10b
+            if(piIndicator.getIndicatorCode().equals("10b")){
+                continue;
+            }
+            ParisIndicatorHelper piHelper = new ParisIndicatorHelper(piIndicator, filter, true);
+            indicatorHelpers.add(piHelper);
 
             /* we should add indicator 5aii and indicator 5bii,
             these indicators don't exist in db so we add them manually*/

@@ -68,14 +68,14 @@ function removeSelOrgs(value) {
 
 
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left"  border=0>
-
+<tr><td width="100%" vAlign="top" align="left">
+<!--  AMP Admin Logo -->
+<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<!-- End of Logo -->
+</td></tr>
 <tr><td width="100%" vAlign="top" align="left">
 
-	<tr><td width="100%" vAlign="top" align="left">
-	<!--  AMP Admin Logo -->
-	<jsp:include page="teamPagesHeader.jsp" flush="true" />
-	<!-- End of Logo -->
-	</td></tr>
+	
 
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%" vAlign="top" align="center" border=0>
 	<tr>
@@ -87,113 +87,84 @@ function removeSelOrgs(value) {
 						<tr>
 							<td>
 								<span class=crumb>
-								<c:if test="${aimEditActivityForm.pageId == 0}">
-									<c:set var="translation">
-										<digi:trn key="aim:clickToViewAdmin">Click here to go to Admin Home</digi:trn>
-									</c:set>
-									<digi:link href="/admin.do" styleClass="comment" title="${translation}">
-										<digi:trn key="aim:AmpAdminHome">
-											Admin Home
-										</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;
-								</c:if>
-								<c:if test="${aimEditActivityForm.pageId == 1}">
-									<c:set var="translation">
-										<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
-									</c:set>
-									<c:set var="message">
-<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
-</c:set>
-<c:set var="quote">'</c:set>
-<c:set var="escapedQuote">\'</c:set>
-<c:set var="msg">
-${fn:replace(message,quote,escapedQuote)}
-</c:set>
-									<digi:link href="/viewMyDesktop.do" styleClass="comment" onclick="return quitRnot1('${msg}')" title="${translation}">
-										<digi:trn key="aim:portfolio">
-											Portfolio
-										</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;
-								</c:if>
+									<c:if test="${aimEditActivityForm.pageId == 0}">
+										<c:set var="translation">
+											<digi:trn key="aim:clickToViewAdmin">Click here to go to Admin Home</digi:trn>
+										</c:set>
+										<digi:link href="/admin.do" styleClass="comment" title="${translation}">
+											<digi:trn key="aim:AmpAdminHome">
+												Admin Home
+											</digi:trn>
+										</digi:link>&nbsp;&gt;&nbsp;
+									</c:if>
+									<c:if test="${aimEditActivityForm.pageId == 1}">
+										<c:set var="translation">
+											<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
+										</c:set>
+										<c:set var="message">
+											<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
+										</c:set>
+										<c:set var="quote">'</c:set>
+										<c:set var="escapedQuote">\'</c:set>
+										<c:set var="msg">
+											${fn:replace(message,quote,escapedQuote)}
+										</c:set>
+										<digi:link href="/viewMyDesktop.do" styleClass="comment" onclick="return quitRnot1('${msg}')" title="${translation}">
+											<digi:trn key="aim:portfolio">
+												Portfolio
+											</digi:trn>
+										</digi:link>&nbsp;&gt;&nbsp;
+									</c:if>
 								          
-                           <c:forEach var="step" items="${aimEditActivityForm.steps}" end="${stepNm-1}" varStatus="index">
-                               
-                               <c:set property="translation" var="trans">
-                                   <digi:trn key="aim:clickToViewAddActivityStep${step.stepActualNumber}">
-                                       Click here to goto Add Activity Step ${step.stepActualNumber}
-                                   </digi:trn>
-                               </c:set>
-                               
-                               
-                               
-                               <c:if test="${!index.last}">
-                                   
-                                   <c:if test="${index.first}">
-                                       <digi:link href="/addActivity.do?step=${step.stepNumber}&edit=true" styleClass="comment" title="${trans}">
-                                           
-                                           
-                                           <c:if test="${aimEditActivityForm.editAct == true}">
-                                               <digi:trn key="aim:editActivityStep1">
-                                                   Edit Activity - Step 1
-                                               </digi:trn>
-                                           </c:if>
-                                           <c:if test="${aimEditActivityForm.editAct == false}">
-                                               <digi:trn key="aim:addActivityStep1">
-                                                   Add Activity - Step 1
-                                               </digi:trn>
-                                           </c:if>
-                                           
-                                       </digi:link>
-                                        &nbsp;&gt;&nbsp;
-                                   </c:if>
-                                   <c:if test="${!index.first}">
-                                       <digi:link href="/addActivity.do?step=${step.stepNumber}&edit=true" styleClass="comment" title="${trans}">
-                                           <digi:trn key="aim:addActivityStep${step.stepActualNumber}">Step ${step.stepActualNumber}</digi:trn>
-                                       </digi:link>
-                                        &nbsp;&gt;&nbsp;
-                                   </c:if>
-                               </c:if>
-                               
-                               
-                               
-                               <c:if test="${index.last}">
-                                   
-                                   <c:if test="${index.first}">
-                                       
-                                       
-                                       
-                                       <c:if test="${aimEditActivityForm.editAct == true}">
-                                           <digi:trn key="aim:editActivityStep1">
-                                               Edit Activity - Step 1
-                                           </digi:trn>
-                                       </c:if>
-                                       <c:if test="${aimEditActivityForm.editAct == false}">
-                                           <digi:trn key="aim:addActivityStep1">
-                                               Add Activity - Step 1
-                                           </digi:trn>
-                                       </c:if>
-                                   </c:if>
-                                   
-                                   
-                                   <c:if test="${!index.first}">
-                                       <digi:trn key="aim:addActivityStep${step.stepActualNumber}"> Step ${step.stepActualNumber}</digi:trn>
-                                   </c:if>
-                                   
-                                   
-                                   
-                               </c:if>
-                               
-                               
-                               
-                               
-                               
-                               
-                               
-                           </c:forEach>
-                            
-                           
-					
-								</span>
+		                           <c:forEach var="step" items="${aimEditActivityForm.steps}" end="${stepNm-1}" varStatus="index">
+		                               
+		                               <c:set property="translation" var="trans">
+		                                   <digi:trn key="aim:clickToViewAddActivityStep${step.stepActualNumber}">
+		                                       Click here to goto Add Activity Step ${step.stepActualNumber}
+		                                   </digi:trn>
+		                               </c:set>
+		                               <c:if test="${!index.last}">
+		                                   <c:if test="${index.first}">
+		                                       <digi:link href="/addActivity.do?step=${step.stepNumber}&edit=true" styleClass="comment" title="${trans}">
+		                                             <c:if test="${aimEditActivityForm.editAct == true}">
+		                                               <digi:trn key="aim:editActivityStep1">
+		                                                   Edit Activity - Step 1
+		                                               </digi:trn>
+		                                           </c:if>
+		                                           <c:if test="${aimEditActivityForm.editAct == false}">
+		                                               <digi:trn key="aim:addActivityStep1">
+		                                                   Add Activity - Step 1
+		                                               </digi:trn>
+		                                           </c:if>
+		                                       </digi:link>
+		                                        &nbsp;&gt;&nbsp;
+		                                   </c:if>
+		                                   <c:if test="${!index.first}">
+		                                       <digi:link href="/addActivity.do?step=${step.stepNumber}&edit=true" styleClass="comment" title="${trans}">
+		                                           <digi:trn key="aim:addActivityStep${step.stepActualNumber}">Step ${step.stepActualNumber}</digi:trn>
+		                                       </digi:link>
+		                                        &nbsp;&gt;&nbsp;
+		                                   </c:if>
+		                               </c:if>
+		                               <c:if test="${index.last}">
+		                                   <c:if test="${index.first}">
+		                                       <c:if test="${aimEditActivityForm.editAct == true}">
+		                                           <digi:trn key="aim:editActivityStep1">
+		                                               Edit Activity - Step 1
+		                                           </digi:trn>
+		                                       </c:if>
+		                                       <c:if test="${aimEditActivityForm.editAct == false}">
+		                                           <digi:trn key="aim:addActivityStep1">
+		                                               Add Activity - Step 1
+		                                           </digi:trn>
+		                                       </c:if>
+		                                   </c:if>
+		                                   <c:if test="${!index.first}">
+		                                       <digi:trn key="aim:addActivityStep${step.stepActualNumber}"> Step ${step.stepActualNumber}</digi:trn>
+		                                   </c:if>
+		                               </c:if>
+		                            </c:forEach>
+                            	</span>
 							</td>
 						</tr>
 					</table>
@@ -246,17 +217,17 @@ ${fn:replace(message,quote,escapedQuote)}
 							
 							<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
 								<table width="95%" bgcolor="#f4f4f2">
-							<feature:display name="Responsible Organization" module="Organizations">
-								<jsp:include page="addActivityStep7ResponsibleOrganisation.jsp"/>
-							</feature:display>
-
-									<tr><td>
-										&nbsp;
-									</td></tr>
-							<feature:display name="Executing Agency" module="Organizations">
-							<jsp:include page="addActivityStep7ExecutingAgency.jsp"/>
-							</feature:display>
-
+									<feature:display name="Responsible Organization" module="Organizations">
+										<jsp:include page="addActivityStep7ResponsibleOrganisation.jsp"/>
+									</feature:display>
+		
+											<tr><td>
+												&nbsp;
+											</td></tr>
+									<feature:display name="Executing Agency" module="Organizations">
+									<jsp:include page="addActivityStep7ExecutingAgency.jsp"/>
+									</feature:display>
+	
 									<tr><td>
 										&nbsp;
 									</td></tr>
@@ -297,9 +268,6 @@ ${fn:replace(message,quote,escapedQuote)}
 									</feature:display>
 									
 									<tr><td>&nbsp;</td></tr>
-
-
-							
 								</table>
 
 								<!-- end contents -->

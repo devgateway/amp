@@ -170,7 +170,7 @@ public class TabManagerAction extends Action {
 			}
 			
 		}
-		Session dbSession 	= PersistenceManager.getSession();
+		Session dbSession 	= PersistenceManager.getRequestDBSession();
 		Transaction tr		= dbSession.beginTransaction();
 		try{
 			AmpTeamMember atm	= (AmpTeamMember)dbSession.load(AmpTeamMember.class, teamMember.getMemberId() );
@@ -181,6 +181,7 @@ public class TabManagerAction extends Action {
 			Iterator<AmpDesktopTabSelection> it	= selection.iterator();
 			while ( it.hasNext() ) {
 				AmpDesktopTabSelection dts	= it.next();
+				atm.getDesktopTabSelections().add(dts);
 				dbSession.save( dts );
 			}
 			tr.commit();
@@ -189,16 +190,8 @@ public class TabManagerAction extends Action {
 			e.printStackTrace();
 			tr.rollback();
 		}
-		finally {
-			try {
-				PersistenceManager.releaseSession(dbSession);
-				
-			} 
-			catch (Exception ex) {
-				logger.error("releaseSession() failed :" + ex);
-				ex.printStackTrace();
-			}
-		}
+		dbSession.flush();
+		
 		Collection<AmpReports> tabs				= new ArrayList<AmpReports>();
 		AmpApplicationSettings ampAppSettings 	= DbUtil.getTeamAppSettings(teamMember.getTeamId());
 		AmpReports defaultTeamReport 			= ampAppSettings.getDefaultTeamReport();

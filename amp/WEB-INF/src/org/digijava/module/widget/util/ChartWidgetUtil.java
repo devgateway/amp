@@ -25,6 +25,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -32,7 +33,6 @@ import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPledge;
-import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.IndicatorSector;
@@ -745,8 +745,8 @@ public class ChartWidgetUtil {
 	 */
 	public static Collection<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[],Date fromDate, Date toDate,Double[] wholeFunding,Long sectorIds[]) throws DgException {
     	Collection<DonorSectorFundingHelper> fundings=null;  
-		String oql ="select f.ampDonorOrgId, actSec.sectorId, "+
-                        " actSec.sectorPercentage, act.ampActivityId,  sum(fd.transactionAmountInUSD)";
+			String oql ="select  actSec, "+
+                        "  act.ampActivityId.ampActivityId, sum(fd.transactionAmountInUSD)";
 		oql += " from ";
 		oql += AmpFundingDetail.class.getName() +
                         " as fd inner join fd.ampFundingId f ";
@@ -755,24 +755,18 @@ public class ChartWidgetUtil {
                         " inner join actSec.sectorId sec "+
                         " inner join actSec.activityId act "+
                         " inner join actSec.classificationConfig config ";
-		
-		
-		oql += " where  fd.transactionType = 0 and fd.adjustmentType = 1 ";
+
+
+		oql += " where sec.parentSectorId is null  and fd.transactionType = 0 and fd.adjustmentType = 1 ";
 		if (donorIDs != null && donorIDs.length > 0) {
 			oql += " and (fd.ampFundingId.ampDonorOrgId in ("+ getInStatment(donorIDs) + ") ) ";
 		}
 		if (fromDate != null && toDate != null) {
 			oql += " and (fd.transactionDate between :fDate and  :eDate ) ";
 		}
-        if (sectorIds!=null) {
-			oql += " and actSec.sectorId in ("+ getInStatment(sectorIds) + ") ";
-		}
-        else{
-           oql +=" and sec.parentSectorId is null";
-        }
         oql +=" and config.name='Primary' and act.team is not null ";
-		oql += " group by f.ampDonorOrgId, actSec.sectorId,  fd.ampCurrencyId";
-		oql += " order by f.ampDonorOrgId, actSec.sectorId";
+		oql += " group by act.ampActivityId, actSec ";
+		oql += " order by actSec";
 
 		Session session = PersistenceManager.getRequestDBSession();
 
@@ -799,11 +793,12 @@ public class ChartWidgetUtil {
 			for (Object row : result) {
 				Object[] rowData = (Object[]) row;
 				//AmpOrganisation donor = (AmpOrganisation) rowData[0];
-				AmpSector sector = (AmpSector) rowData[1];
-				Float sectorPrcentage = (Float) rowData[2];    //This field is NULL sometimes !
+                AmpActivitySector activitySector=(AmpActivitySector)rowData[0];
+				AmpSector sector =activitySector.getSectorId() ;
+				Float sectorPrcentage =activitySector.getSectorPercentage();    //This field is NULL sometimes !
 				//AmpActivity activity = (AmpActivity) rowData[3];
 				//AmpCurrency currency = (AmpCurrency) rowData[4];
-				BigDecimal amt = (BigDecimal) rowData[4];
+				BigDecimal amt = (BigDecimal) rowData[2];
                 BigDecimal amount =FeaturesUtil.applyThousandsForVisibility(amt);
 				//calculate percentage
 				BigDecimal calculated = (sectorPrcentage.floatValue() == 100)?amount:calculatePercentage(amount,sectorPrcentage);

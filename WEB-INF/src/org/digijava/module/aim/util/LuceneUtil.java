@@ -794,8 +794,11 @@ public class LuceneUtil implements Serializable {
     			String titTrnKey = item.getTitleTrnKey();
     			String lang = item.getLang();
     			// Converts html formatted help topics body to plain text format.
-    			String newCode = article.replaceAll("\\<.*?\\>","");
-
+    			String newCode="";
+    			if (article!=null){
+    				newCode= article.replaceAll("\\<.*?\\>","");
+    			}
+    			
     			if(update){
     					if(item.getLastModDate().after(date)){
 	    					deleteHelp("title",title, sc);

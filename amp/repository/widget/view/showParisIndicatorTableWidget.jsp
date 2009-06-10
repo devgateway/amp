@@ -53,7 +53,7 @@
         <td style="font-weight:bold"><digi:trn>2005 Baseline</digi:trn></td>
         <td style="font-weight:bold"><digi:trn>2010 Target</digi:trn></td>
             <td>
-                <select id="parisIndicatorTableSelect_${showParisIndicatorTableForm.widgetId}" onchange="getDonorGroupValues('${showParisIndicatorTableForm.widgetId}')" AUTOCOMPLETE="OFF">
+                <select style="width: 200px;" id="parisIndicatorTableSelect_${showParisIndicatorTableForm.widgetId}" onchange="getDonorGroupValues('${showParisIndicatorTableForm.widgetId}')" AUTOCOMPLETE="OFF">
                     <option value="-1"><digi:trn>Select Donor Group</digi:trn></option>
                     <c:forEach items="${showParisIndicatorTableForm.donorGroups}" var="donorGroup">
                          <option value="${donorGroup.ampOrgGrpId}">${donorGroup.orgGrpName}</option>

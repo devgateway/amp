@@ -1,10 +1,13 @@
 package org.digijava.module.aim.util;
 
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -12,6 +15,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpIndicatorSector;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -1578,6 +1582,27 @@ public class SectorUtil {
 		}
 		
 		return generatedSectors;
+    }
+    
+    public static class HelperSectorNameComparator implements Comparator<AmpSector> {
+        Locale locale;
+        Collator collator;
+
+        public HelperSectorNameComparator(){
+            this.locale=new Locale("en", "EN");
+        }
+
+        public HelperSectorNameComparator(String iso) {
+            this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
+        }
+
+        public int compare(AmpSector o1, AmpSector o2) {
+            collator = Collator.getInstance(locale);
+            collator.setStrength(Collator.TERTIARY);
+
+            int result = collator.compare(o1.getName(), o2.getName());
+            return result;
+        }
     }
                 
 	/*

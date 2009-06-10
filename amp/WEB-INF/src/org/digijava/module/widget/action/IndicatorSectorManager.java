@@ -1,10 +1,11 @@
 package org.digijava.module.widget.action;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
-import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -31,6 +32,7 @@ import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.gis.helper.IndicatorSectorWithSubgroup;
 import org.digijava.module.gis.util.DbUtil;
 import org.digijava.module.widget.form.IndicatorSectorRegionForm;
 import org.digijava.module.widget.util.ChartWidgetUtil;
@@ -56,70 +58,162 @@ public class IndicatorSectorManager extends DispatchAction {
     /*
      * forwards to the page where user can view all sectorIndicators 
      */
-    public ActionForward viewAll(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request,
-            HttpServletResponse response) throws Exception {
+    public ActionForward viewAll(ActionMapping mapping, ActionForm form,HttpServletRequest request,HttpServletResponse response) throws Exception {
 		HttpSession session = request.getSession();
 		String str = (String) session.getAttribute("ampAdmin");
 
 		if (str == null || str.equals("no")) {
 			  SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
-
-			  String url = SiteUtils.getSiteURL(currentDomain, request
-									.getScheme(), request.getServerPort(), request
-									.getContextPath());
+			  String url = SiteUtils.getSiteURL(currentDomain, request.getScheme(), request.getServerPort(), request.getContextPath());
 			  url += "/aim/index.do";
 			  response.sendRedirect(url);
 			  return null;
 		} 
     	
     	IndicatorSectorRegionForm indSecForm = (IndicatorSectorRegionForm) form;
-        int pages;
-        int allRecords=DbUtil.getAllIndicatorSectorsSize();
-        if(allRecords==0){
-            pages=1;
-        }
-        else{
-             if(allRecords%RECORDS_PER_PAGE==0){
-                 pages=allRecords/RECORDS_PER_PAGE;
+    	if(request.getParameter("reset")!=null && request.getParameter("reset").equals("true")){
+    		indSecForm.setResultsPerPage(10);
+    		indSecForm.setKeyWord(null);
+    	}
+    	
+    	//get all sectors
+    	Collection allSectors = SectorUtil.getAllParentSectors();
+    	Collections.sort(new ArrayList(allSectors), new SectorUtil.HelperSectorNameComparator());
+    	indSecForm.setSectors(allSectors);
+    	//get all regions
+    	//List ampRegions=LocationUtil.getAllLocations("");
+    	List ampRegions= DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry();
+    	Collections.sort(ampRegions, new LocationUtil.HelperAmpCategoryValueLocationsNameComparator());
+    	indSecForm.setRegions(ampRegions);
+    	
+    	List<IndicatorSector> allIndSects=null;
+    	List<IndicatorSector> alphaIndSects=null;
+    	String alpha=indSecForm.getAlpha();
+    	if(alpha==null || alpha.equals("viewAll")){
+    		Long sectorId=indSecForm.getSectorId()==null || indSecForm.getSectorId().equals(new Long(-1)) ? null : indSecForm.getSectorId();
+    		Long regionId=indSecForm.getRegionId()==null || indSecForm.getRegionId().equals(new Long(-1)) ? null : indSecForm.getRegionId() ;
+    		allIndSects=DbUtil.searchIndicatorSectors(indSecForm.getSortBy(),indSecForm.getKeyWord(),sectorId,regionId);
+    		indSecForm.setAllIndSectList(allIndSects);
+    	}else{
+    		allIndSects=indSecForm.getAllIndSectList();
+    	}
+    	
+    	
+    	
+    	
+    	if(allIndSects!=null && allIndSects.size()>0){
+    		 if(alpha == null || alpha.trim().length() == 0){
+    			 if (indSecForm.getCurrentAlpha() != null) {
+    				 indSecForm.setCurrentAlpha(null);
+    			 } 
+             }else {
+            	 indSecForm.setCurrentAlpha(alpha);
              }
-             else{
-                 pages=allRecords/RECORDS_PER_PAGE+1;
+    		 
+    		 String[] alphaArray = new String[26];
+             int i = 0;
+             for (char c = 'A'; c <= 'Z'; c++) {
+            	 Iterator<IndicatorSector> itr = allIndSects.iterator();
+            	 while (itr.hasNext()) {
+            		 IndicatorSector indSec = itr.next();
+            		 if (indSec.getIndicator().getName().toUpperCase().indexOf(c) == 0) {
+            			 alphaArray[i++] = String.valueOf(c);
+            			 break;
+            		 }
+            	 }
              }
+             indSecForm.setAlphaPages(alphaArray);
+    	}else{
+    		indSecForm.setAlphaPages(null);
+    	}
+    	
+    	//any letter was selected
+    	if(alpha!=null && !alpha.equals("viewAll")){
+    		alphaIndSects=new ArrayList();
+    		Iterator<IndicatorSector> iter=allIndSects.iterator();
+    		while(iter.hasNext()){
+    			IndicatorSector indSec=iter.next();
+    			if(indSec.getIndicator().getName().toUpperCase().startsWith(alpha)){
+    				alphaIndSects.add(indSec);
+    			}
+    		}    		
+    	}
+    	
+    	//pagnation
+    	int stIndex = 0;
+        int endIndex = indSecForm.getResultsPerPage();
+       
+        List<IndicatorSector> myIndSects=alphaIndSects==null?allIndSects:alphaIndSects;
+        //If ALL was selected in pagination dropdown
+        if (endIndex < 0) {        	
+        	endIndex = myIndSects.size();
         }
-        if(indSecForm.getSelectedPage()==0){
-            indSecForm.setSelectedPage(1);
-        }
-        /* We need this wrapper array to navigate 
-           to the previous page if all records were deleted on current page
-         */
-        Integer[] selectedPage={indSecForm.getSelectedPage()};
-        List<IndicatorSector> indSectorList=null;
         
-        //filter indicator Sectors
-        String view=request.getParameter("view");
-        if(view!=null && view.equalsIgnoreCase("all")){
-        	indSecForm.setKeyWord(null);
-        	indSectorList=DbUtil.getIndicatorSectorsForCurrentPage(selectedPage,RECORDS_PER_PAGE,null);
-        }else{
-        	indSectorList=DbUtil.getIndicatorSectorsForCurrentPage(selectedPage,RECORDS_PER_PAGE,indSecForm.getKeyWord());
-        }
+        Collection pages = null;
+        int pagesNum=0;
+        if(indSecForm.getResultsPerPage().intValue()!=-1){        	
+        	if(myIndSects.size() % indSecForm.getResultsPerPage()==0){
+            	pagesNum=myIndSects.size()/indSecForm.getResultsPerPage();
+            }else{
+            	pagesNum=myIndSects.size()/indSecForm.getResultsPerPage()+1;
+            }
+        }        
         
-        
-        Collections.sort(indSectorList, new IndicatorUtil.HelperIndicatorSectorNameComparator());
-        indSecForm.setIndSectList(indSectorList);
-        indSecForm.setSelectedPage( selectedPage[0]);
-        indSecForm.setPages(pages);
-        return mapping.findForward("forward");
+    	if (pagesNum > 1) {
+	        pages = new ArrayList();
+	        for (int i = 0; i < pagesNum; i++) {
+	          Integer pageNum = new Integer(i + 1);
+	          pages.add(pageNum);
+	        }
+    	}
+	
+    	int page = 0; //selected page
+		if (indSecForm.getSelectedPage() == 0) {
+			page = 1;
+		} else {
+			page = indSecForm.getSelectedPage();
+		}
+		
+		if(page>1){
+			stIndex=(page - 1) * indSecForm.getResultsPerPage();			
+		}
+		if(indSecForm.getResultsPerPage().intValue()!=-1){
+			endIndex=(stIndex+indSecForm.getResultsPerPage())<=myIndSects.size()? stIndex+indSecForm.getResultsPerPage() : myIndSects.size();
+		}
+		
+		if(stIndex>endIndex){
+			stIndex=0;
+		}
+		List<IndicatorSector> tempCol = new ArrayList();
+	      for (int i = stIndex; i < endIndex; i++) {
+	        tempCol.add(myIndSects.get(i));
+	      }
 
+	      
+    	//build indicatorsectors with subgroups
+	      List<IndicatorSectorWithSubgroup> indSectsWithSubGroups=new ArrayList<IndicatorSectorWithSubgroup>();
+	      for (IndicatorSector indicatorSector : tempCol) {
+			List subgroups=DbUtil.getAvailSubgroupsForSectorIndicator(indicatorSector.getSector().getAmpSectorId(),indicatorSector.getIndicator().getIndicatorId());
+			IndicatorSectorWithSubgroup indSecWithSubGrp=new IndicatorSectorWithSubgroup(indicatorSector,subgroups);
+			indSectsWithSubGroups.add(indSecWithSubGrp);			
+		}
+	    indSecForm.setIndSectsWithSubGroups(indSectsWithSubGroups);
+    	indSecForm.setIndSectList(tempCol);		
+    	indSecForm.setSelectedPage(page);    	
+    	indSecForm.setPages(pages);
+    	if(pages!=null){
+    		indSecForm.setPagesSize(pages.size());
+    	}    	
+    	if(indSecForm.getSortBy()==null){
+    		indSecForm.setSortBy("nameAscending");
+    	}
+        return mapping.findForward("forward");
     }
     
     /*
      * saves modified SectorIndicator;
      */
-    public ActionForward save(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request,
-            HttpServletResponse response) throws Exception {
+    public ActionForward save(ActionMapping mapping, ActionForm form,HttpServletRequest request,HttpServletResponse response) throws Exception {
 
         IndicatorSectorRegionForm indSecForm = (IndicatorSectorRegionForm) form;
         ActionErrors errors = new ActionErrors();
@@ -172,7 +266,7 @@ public class IndicatorSectorManager extends DispatchAction {
                  * that is why we are removing it from list of regions
                  */
 
-                regions.remove(indSec.getLocation().getLocation());
+            	regions.remove(indSec.getLocation().getLocation());
                 IndicatorUtil.saveIndicatorConnection(indSec);
             } else if (nationalSelected) {
                 indSec.setLocation(locNational);
@@ -201,7 +295,7 @@ public class IndicatorSectorManager extends DispatchAction {
             ind.setIndicator(selectedIndicator);
             IndicatorUtil.saveIndicatorConnection(ind);
         } else {
-            for (AmpCategoryValueLocations  region : regions) {
+            for (AmpCategoryValueLocations   region : regions) {
 
                 IndicatorSector ind = new IndicatorSector();
                 AmpLocation ampLoc = getAmpLocation(region);
@@ -234,9 +328,7 @@ public class IndicatorSectorManager extends DispatchAction {
     /*
      * selects sector
      */
-    public ActionForward selectSector(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request,
-            HttpServletResponse response) throws Exception {
+    public ActionForward selectSector(ActionMapping mapping, ActionForm form,HttpServletRequest request,HttpServletResponse response) throws Exception {
         IndicatorSectorRegionForm indSecForm = (IndicatorSectorRegionForm) form;
         HttpSession session = request.getSession();
         Object sectorObject = session.getAttribute(
@@ -270,9 +362,7 @@ public class IndicatorSectorManager extends DispatchAction {
      * goes to page where you can create IndicatorSector object
      */
 
-    public ActionForward create(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request,
-            HttpServletResponse response) throws Exception {
+    public ActionForward create(ActionMapping mapping, ActionForm form,HttpServletRequest request,HttpServletResponse response) throws Exception {
         IndicatorSectorRegionForm indSecForm = (IndicatorSectorRegionForm) form;
         //sort indicators by Name
         List<AmpIndicator> allIndicators=IndicatorUtil.getAllIndicators();
@@ -294,9 +384,7 @@ public class IndicatorSectorManager extends DispatchAction {
      * goes to page where you can edit IndicatorSector object
      */
 
-    public ActionForward edit(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request,
-            HttpServletResponse response) throws Exception {
+    public ActionForward edit(ActionMapping mapping, ActionForm form,HttpServletRequest request,HttpServletResponse response) throws Exception {
         IndicatorSectorRegionForm indSecForm = (IndicatorSectorRegionForm) form;
         indSecForm.setIndicators(IndicatorUtil.getAllIndicators());
 
@@ -313,14 +401,16 @@ public class IndicatorSectorManager extends DispatchAction {
             indSecForm.setSelRegionId(null);
         } else {
           AmpCategoryValueLocations loc = indSec.getLocation().getLocation();
-          String parentCategoryName=loc.getParentCategoryValue().getValue();
-          if (CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey().equalsIgnoreCase(parentCategoryName) ){
-				//National is selected
-                    indSecForm.setSelRegionId(NATIONAL_SELECTED);
-			}
-          else{
-               indSecForm.setSelRegionId(indSec.getLocation().getLocation().getId());
-          }
+          if(loc!=null){
+        	  String parentCategoryName=loc.getParentCategoryValue().getValue();
+              if (CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey().equalsIgnoreCase(parentCategoryName) ){
+    				//National is selected
+                        indSecForm.setSelRegionId(NATIONAL_SELECTED);
+    			}
+              else{
+                   indSecForm.setSelRegionId(indSec.getLocation().getLocation().getId());
+              }  
+          }          
         }
 
         indSecForm.setSector(indSec.getSector());
@@ -331,9 +421,7 @@ public class IndicatorSectorManager extends DispatchAction {
      * deletes IndicatorSector objectt
      */
 
-    public ActionForward delete(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request,
-            HttpServletResponse response) throws Exception {
+    public ActionForward delete(ActionMapping mapping, ActionForm form,HttpServletRequest request,HttpServletResponse response) throws Exception {
         IndicatorSectorRegionForm indSecForm = (IndicatorSectorRegionForm) form;
         IndicatorSector indSec = IndicatorUtil.getConnectionToSector(indSecForm.getIndSectId());
         boolean widgetsExists = ChartWidgetUtil.isWidgetForIndicator(indSec);
@@ -350,9 +438,7 @@ public class IndicatorSectorManager extends DispatchAction {
     }
 
     /* loads page where you can add/edit values of the selected IndicatorSector*/
-    public ActionForward addEditValue(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request,
-            HttpServletResponse response) throws Exception {
+    public ActionForward addEditValue(ActionMapping mapping, ActionForm form,HttpServletRequest request,HttpServletResponse response) throws Exception {
         IndicatorSectorRegionForm indSecForm = (IndicatorSectorRegionForm) form;
         IndicatorSector indSec = IndicatorUtil.getConnectionToSector(indSecForm.getIndSectId());
         List<AmpIndicatorValue> values = new ArrayList(indSec.getValues());
@@ -385,9 +471,7 @@ public class IndicatorSectorManager extends DispatchAction {
      * note: changes are not saved until saveValue is not called 
      */
 
-    public ActionForward addValue(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request,
-            HttpServletResponse response) throws Exception {
+    public ActionForward addValue(ActionMapping mapping, ActionForm form,HttpServletRequest request,HttpServletResponse response) throws Exception {
         IndicatorSectorRegionForm indSecForm = (IndicatorSectorRegionForm) form;
         if (indSecForm.getValues() == null) {
             indSecForm.setValues(new ArrayList());
@@ -403,9 +487,7 @@ public class IndicatorSectorManager extends DispatchAction {
      *note: changes are not saved until saveValue is not called
      */
 
-    public ActionForward removeValue(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request,
-            HttpServletResponse response) throws Exception {
+    public ActionForward removeValue(ActionMapping mapping, ActionForm form,HttpServletRequest request,HttpServletResponse response) throws Exception {
         IndicatorSectorRegionForm indSecForm = (IndicatorSectorRegionForm) form;
         indSecForm.getValues().remove(indSecForm.getDeleteValIndex());
         indSecForm.setDeleteValIndex(-1);
@@ -416,9 +498,7 @@ public class IndicatorSectorManager extends DispatchAction {
     /*
      * saves modified  values of the selected SectorIndicator;
      */
-    public ActionForward saveValue(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request,
-            HttpServletResponse response) throws Exception {
+    public ActionForward saveValue(ActionMapping mapping, ActionForm form,HttpServletRequest request,HttpServletResponse response) throws Exception {
         IndicatorSectorRegionForm indSecForm = (IndicatorSectorRegionForm) form;
         IndicatorSector indSec = IndicatorUtil.getConnectionToSector(indSecForm.getIndSectId());
         List<AmpIndicatorValue> newlyAddedValues = new ArrayList();
@@ -446,9 +526,7 @@ public class IndicatorSectorManager extends DispatchAction {
      * cancel action, reset values;
      */
 
-    public ActionForward cancel(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request,
-            HttpServletResponse response) throws Exception {
+    public ActionForward cancel(ActionMapping mapping, ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
         IndicatorSectorRegionForm indSecForm = (IndicatorSectorRegionForm) form;
         indSecForm.setSelIndicator(-1l);
         indSecForm.setSelRegionId(-1l);
@@ -462,8 +540,24 @@ public class IndicatorSectorManager extends DispatchAction {
         indSecForm.setIndSectId(null);
         indSecForm.setSelectedPage(0);
         indSecForm.setKeyWord(null);
+        indSecForm.setResultsPerPage(new Integer(10));
+        indSecForm.setSortBy(null);
+        indSecForm.setAlpha(null);
+        indSecForm.setAlphaPages(null);
+        indSecForm.setRegionId(new Long (-1));
+        indSecForm.setSectorId(new Long (-1));
         return viewAll(mapping, form, request, response);
 
+    }
+    
+    public ActionForward resetSearch(ActionMapping mapping, ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
+    	IndicatorSectorRegionForm indSecForm = (IndicatorSectorRegionForm) form;
+    	indSecForm.setKeyWord(null);
+        indSecForm.setResultsPerPage(new Integer(10));
+        indSecForm.setSectorId(new Long(-1));
+        indSecForm.setRegionId(new Long(-1));
+        indSecForm.setAlpha(null);
+    	return viewAll(mapping, form, request, response);
     }
 
     private AmpLocation getAmpLocation(AmpCategoryValueLocations region) throws Exception {

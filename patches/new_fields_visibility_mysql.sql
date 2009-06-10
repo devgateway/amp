@@ -1,0 +1,2 @@
+insert into amp_global_settings (settingsName,settingsValue,possibleValues,description,section) 
+values("New fields Visibility","Off","v_g_settings_public_view","Not existing field visibility tag","general");

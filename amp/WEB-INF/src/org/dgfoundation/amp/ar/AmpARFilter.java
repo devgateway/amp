@@ -271,7 +271,13 @@ public class AmpARFilter extends PropertyListable {
 		if (ampReportId == null) {
 			AmpReports ar = (AmpReports) request.getSession().getAttribute(
 			"reportMeta");
-			ampReportId = ar.getAmpReportId().toString();
+			/* 
+			 * I am adding this check because mondrian use this class and when there is not report in the session object 
+			   a nullpointer exception is throw.
+			*/
+			if (ar != null){
+				ampReportId = ar.getAmpReportId().toString();
+			}
 		}
 		
 		AmpApplicationSettings tempSettings = null;

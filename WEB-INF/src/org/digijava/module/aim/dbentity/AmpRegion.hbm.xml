@@ -21,11 +21,11 @@
 
 		<many-to-one name="country" column="country_id" class="org.digijava.kernel.dbentity.Country"
 			cascade="none" />
-		<set name="zones" cascade="all-delete-orphan">
+		<set name="zones" cascade="all-delete-orphan" lazy="false">
 			<key column="region_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpZone" />
 		</set>
-		<set name="locations" cascade="all">
+		<set name="locations" cascade="all" lazy="false">
 			<key column="region_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpLocation" />
 		</set>

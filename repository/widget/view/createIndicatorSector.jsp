@@ -178,9 +178,7 @@
                                  </c:forEach>
                             </html:select>
                         </td>
-                        
                     </tr>
-                    
                     <tr>
                         <td colspan="3">
                             <hr>

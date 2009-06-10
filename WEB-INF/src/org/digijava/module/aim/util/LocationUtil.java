@@ -5,11 +5,13 @@ package org.digijava.module.aim.util;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARVRegions;
@@ -21,6 +23,7 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpSiteFlag;
@@ -934,14 +937,36 @@ public class LocationUtil {
 		return result;
 	}
 
-    public static class HelperAmpRegionNameComparator
-        implements Comparator {
+    public static class HelperAmpRegionNameComparator implements Comparator {
         public int compare(Object obj1, Object obj2) {
             AmpRegion indic1 = (AmpRegion) obj1;
             AmpRegion indic2 = (AmpRegion) obj2;
             return indic1.getName().compareTo(indic2.getName());
         }
+    }
+    
+    public static class HelperAmpCategoryValueLocationsNameComparator implements Comparator<AmpCategoryValueLocations> {
+        Locale locale;
+        Collator collator;
+
+        public HelperAmpCategoryValueLocationsNameComparator(){
+            this.locale=new Locale("en", "EN");
         }
+
+        public HelperAmpCategoryValueLocationsNameComparator(String iso) {
+            this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
+        }
+
+        public int compare(AmpCategoryValueLocations o1, AmpCategoryValueLocations o2) {
+            collator = Collator.getInstance(locale);
+            collator.setStrength(Collator.TERTIARY);
+
+            int result = collator.compare(o1.getName(), o2.getName());
+            return result;
+        }
+    }
+    
+    
         /**
          * Saves location into the database
          * @param AmpLocation bean

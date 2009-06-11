@@ -20,7 +20,7 @@ public class AmpAhsurvey {
 	private AmpActivity ampActivityId;
 	private AmpOrganisation ampDonorOrgId;
     private AmpOrganisation pointOfDeliveryDonor;
-	private Set responses;
+	private Set<AmpAhsurveyResponse> responses;
 
 	/**
 	 * @return Returns the ampAHSurveyId.
@@ -37,13 +37,13 @@ public class AmpAhsurvey {
 	/**
 	 * @return Returns the responses.
 	 */
-	public Set getResponses() {
+	public Set<AmpAhsurveyResponse> getResponses() {
 		return responses;
 	}
 	/**
 	 * @param responses The responses to set.
 	 */
-	public void setResponses(Set responses) {
+	public void setResponses(Set<AmpAhsurveyResponse> responses) {
 		this.responses = responses;
 	}
 	/**

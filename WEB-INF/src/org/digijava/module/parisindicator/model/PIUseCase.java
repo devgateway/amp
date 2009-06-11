@@ -19,6 +19,7 @@ import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.parisindicator.form.PIForm;
 import org.digijava.module.parisindicator.helper.PIAbstractReport;
 import org.digijava.module.parisindicator.helper.PIReport3;
+import org.digijava.module.parisindicator.helper.PIReportAbstractRow;
 import org.digijava.module.parisindicator.util.PIConstants;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -142,10 +143,15 @@ public class PIUseCase {
 				.getSelectedDonorGroups());
 
 		// Execute the logic for generating each report.
-		report.generateReport(commonData, form.getSelectedStartYear(), form.getSelectedEndYear(), form
-				.getSelectedCalendar(), form.getSelectedCurrency(), form.getSelectedSectors(), form
-				.getSelectedStatuses(), form.getSelectedFinancingIstruments());
+		Collection<PIReportAbstractRow> preMainReportRows = report.generateReport(commonData, form
+				.getSelectedStartYear(), form.getSelectedEndYear(), form.getSelectedCalendar(), form
+				.getSelectedCurrency(), form.getSelectedSectors(), form.getSelectedStatuses(), form
+				.getSelectedFinancingIstruments());
 
+		// Postprocess the report if needed.
+		Collection<PIReportAbstractRow> postMainReportRows = report.reportPostProcess(preMainReportRows);
+
+		report.setReportRows(postMainReportRows);
 		return report;
 	}
 

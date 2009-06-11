@@ -256,7 +256,7 @@ function ColorPicker_highLightColor(c) {
 								        <td>
 								            <html:text property="eventTypeColor" styleId="hexColorNum" style="width:155px;font-family:verdana;font-size:11px;"/>
 								            <input type="text" style="width:25px;font-family:verdana;font-size:11px;background:#FFF;" id="colorDisp" name="colorDisp" disabled="disabled"/>
-								            <a href="javascript:showColors('colorDisp','hexColorNum');">
+								            <a href="javascript:showPaleteContent('colorDisp','hexColorNum');">
 								              <img alt="" src="<digi:file src="module/calendar/images/colorImg.gif"/>" border="0" NAME="pick" ID="pick" width="15" height="15"/>
 								            </a>
 								        </td>

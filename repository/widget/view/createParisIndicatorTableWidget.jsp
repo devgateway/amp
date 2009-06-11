@@ -29,12 +29,7 @@
             alert("Please select year");
             return false;
         }
-       if(document.getElementById('tablePlaces').value == "-1"){
-    	  	 alert("Please choice the Place");
-    	   	 return false;
-           }
-
-        return save();
+           return save();
     }
 
     function cancel(){
@@ -178,7 +173,7 @@
                    
                             <digi:trn>Places</digi:trn>:
                             <html:select name="piTableWidgetForm" property="selPlaces" style="width: 300px" styleId="tablePlaces">
-                            	<option value="-1" selected="selected"><digi:trn>None</digi:trn></option>
+                            	<option selected="selected"><digi:trn>None</digi:trn></option>
                                 <html:optionsCollection name="piTableWidgetForm" property="places" value="id" label="name"/>
                             </html:select>
                         </td>

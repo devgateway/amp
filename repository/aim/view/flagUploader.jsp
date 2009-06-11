@@ -160,25 +160,14 @@ function deleteFlag(id) {
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 
 <!-- End of Logo -->
-
-
-
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
-
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0>
   <tr>
-
-    <td class=r-dotted-lg width=14>&nbsp;</td>
-
-    <td align=left class=r-dotted-lg vAlign=top width=750>
-
-      <table cellPadding=5 cellSpacing=0 width="100%" border=0>
-
+    <td  width=14>&nbsp;</td>
+    <td align=left  vAlign=top >
+      <table cellPadding=5 cellSpacing=0  border=0>
         <tr>
-
           <!-- Start Navigation -->
-
           <td height=33><span class=crumb>
-
             <c:set var="trnViewAdmin">
 
               <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
@@ -209,13 +198,13 @@ function deleteFlag(id) {
 
         <tr>
 
-          <td height=16 vAlign=center width=571>
+          <td height=16 vAlign=center >
 
             <span class=subtitle-blue>
 
               <digi:trn key="aim:flagUploaderSelector">
 
-              Flag uploader/selector
+              Flag uploader/selector 
 
               </digi:trn>
 
@@ -229,83 +218,8 @@ function deleteFlag(id) {
 
           <digi:form action="/uploadFlag.do" method="post" enctype="multipart/form-data">
 
-            <td noWrap width=100% vAlign="top">
-
-              <table width=730 cellpadding=1 cellSpacing=1 border=0>
-
-                <tr><td noWrap vAlign="top">
-
-                  <table cellPadding=4 cellSpacing=1 width="200" valign="top">
-
-                    <logic:iterate name="aimFlagUploaderForm" property="cntryFlags" id="flag"
-
-                    type="org.digijava.module.aim.helper.Flag">
-
-                    <tr bgColor=#ffffff>
-
-                      <td valign="top" align="center" width="60">
-
-                        <img src="<%=displayFlag%>?id=<bean:write name="flag" property="cntryId" />"
-
-                        border="0" height="34" width="50">
-
-                      </td>
-
-                      <td valign="top" align="left">
-
-                        <bean:write name="flag" property="cntryName" />&nbsp;
-
-                        <c:if test="${flag.defaultFlag == true}">
-
-                          <digi:img src="images/bullet_green.gif" border="0" height="9" width="9" align="center" />
-
-                        </c:if>
-
-                        <c:if test="${flag.defaultFlag == false}">
-
-                          <a href="javascript:setAsDefault('<bean:write name="flag" property="cntryId" />')"><digi:img src="images/bullet_grey.gif" border="0" height="9" width="9" align="center" /></a>
-
-                        </c:if>
-
-                        &nbsp;
-
-                        <a href="javascript:deleteFlag('<bean:write name="flag" property="cntryId" />')">
-
-                        <digi:img src="images/trash_12.gif" border="0" height="11" width="11" align="center" />
-
-</a>
-
-                      </td>
-
-                    </tr>
-
-                    </logic:iterate>
-
-                  </table>
-
-            </td>
-
-            <td noWrap vAlign="top">
-
-              <table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding>
-
-                <tr bgcolor="#aaaaaa">
-
-                  <td vAlign="center" width="100%" align ="center" class="textalb" height="20">
-
-                    <digi:trn key="aim:uploadFlag">
-
-                      Upload Flag</digi:trn>
-
-                  </td>
-
-                </tr>
-
-                <tr>
-
-                  <td align="center">
-
-                    <table width="100%" cellpadding="2" cellspacing="1">
+            <td  vAlign="top" style="border:#999 solid 1px; width:300px;" >
+					<table  cellpadding="2" cellspacing="1">
 
                       <tr>
 
@@ -330,8 +244,6 @@ function deleteFlag(id) {
                           <digi:trn key="aim:flagUploader:selectCountry">
                           Select Country
                         </digi:trn>
-
-
                           </c:set>
 
                           <html:select property="countryId" styleClass="inp-text">
@@ -376,13 +288,13 @@ function deleteFlag(id) {
 
                       <tr>
 
-                        <td colspan="2" align="center">
-
-                          <table cellPadding=3 cellSpacing=3>
+                        <td colspan="2" >
+							<br>
+                    <table cellPadding=3 cellSpacing=3>
 
                             <tr>
 
-                              <td>
+                              <td >
 
                                 <c:set var="trnUploadBtn">
 
@@ -390,7 +302,7 @@ function deleteFlag(id) {
 
                                 </c:set>
 
-                                <input type="submit" value="${trnUploadBtn}" class="dr-menu" onclick="return upload()">
+                                <input type="submit" value="${trnUploadBtn}" class="dr-menu" onClick="return upload()">
 
                               </td>
 
@@ -402,23 +314,114 @@ function deleteFlag(id) {
 
                                 </c:set>
 
-                                <input type="reset" value="${trnClearBtn}" class="dr-menu">
+                                <input type="reset" value="${trnClearBtn}" class="dr-menu"> 
 
                               </td>
 
                             </tr>
 
                           </table>
-
                         </td>
 
                       </tr>
 
                     </table>
 
+            </td>
+
+            <td noWrap vAlign="top">
+
+              <table cellPadding=0 cellSpacing=0 >
+
+
+                <tr>
+
+                  <td align="center">
+  <table  cellpadding=1 cellSpacing=1 border=0>
+
+                <tr>
+                  <td noWrap vAlign="top">
+
+                  <table cellPadding="4" cellSpacing="1" valign="top" >
+
+                    <logic:iterate name="aimFlagUploaderForm" property="cntryFlags" id="flag"
+
+                    type="org.digijava.module.aim.helper.Flag">
+
+                    <tr >  <!--  JAMALAMAL -->
+
+                      <td valign="top" align="center" width="60">
+
+                        <img src="<%=displayFlag%>?id=<bean:write name="flag" property="cntryId" />" border="0" height="34" width="50">
+						
+						
+
+                      </td>
+
+                      <td valign="top" align="left">
+						<div style = "width:150px;  float:left;" >   		
+                        	<bean:write name="flag" property="cntryName" />&nbsp;
+						</div>
+
+						<div style = "float:left;  width:50px;">
+		                        <c:if test="${flag.defaultFlag == true}">
+		
+		                          <digi:img src="images/bullet_green.gif" border="0" height="11" width="11" align="center" />
+		
+		                        </c:if>
+		
+		                        <c:if test="${flag.defaultFlag == false}">
+		
+		                          <a href="javascript:setAsDefault('<bean:write name="flag" property="cntryId" />')"><digi:img src="images/bullet_grey.gif" border="0" height="9" width="9" align="center" /></a>
+		
+		                        </c:if>
+		
+		                        &nbsp;
+		
+		                        <a href="javascript:deleteFlag('<bean:write name="flag" property="cntryId" />')">
+		
+		                      <!--   <digi:img src="images/trash_12.gif" border="0" height="11" width="11" align="center" /> -->
+								<img vspace="2" border="0" align="center" src="/TEMPLATE/ampTemplate/images/trash_16.gif"/>
+		                       </a>	
+
+					</div>					
+                      </td>
+
+                    </tr>
+
+                    </logic:iterate>
+
+                  </table>
+                    
+
                   </td>
 
                 </tr>
+				<tr>
+
+          <td>
+			<br> <br><br>
+            <digi:img src="images/bullet_green.gif" border="0" height="12" width="12" align="top" />&nbsp; -
+
+            <digi:trn key="aim:defaultFlag">Default Flag</digi:trn>
+			
+			&nbsp;&nbsp;&nbsp;
+			<img vspace="2" border="0" align="center" src="/TEMPLATE/ampTemplate/images/trash_16.gif"/> -
+			
+			<digi:trn key="aim:toDeleteflag">Delete Flag</digi:trn>				
+
+         <br> <br>
+
+
+            <digi:trn key="aim:flagUploadHelpPhrase1">Click the image</digi:trn>
+
+            <digi:img src="images/bullet_grey.gif" border="0" height="11" width="11" align="top" />			
+
+            <digi:trn key="aim:flagUploadHelpPhrase2">next to the flag to make it as the default for the site</digi:trn>
+			
+          </td>
+
+        </tr>
 
               </table>
 
@@ -431,32 +434,6 @@ function deleteFlag(id) {
     </td>
 
           </digi:form>
-
-        </tr>
-
-        <tr>
-
-          <td>
-
-            <digi:img src="images/bullet_green.gif" border="0" height="9" width="9" align="top" /> -
-
-            <digi:trn key="aim:defaultFlag">Default Flag</digi:trn>
-
-          </td>
-
-        </tr>
-
-        <tr>
-
-          <td>
-
-            <digi:trn key="aim:flagUploadHelpPhrase1">Click the image</digi:trn>
-
-            <digi:img src="images/bullet_grey.gif" border="0" height="9" width="9" align="top" />
-
-            <digi:trn key="aim:flagUploadHelpPhrase2">next to the flag to make it as the default for the site</digi:trn>
-
-          </td>
 
         </tr>
 

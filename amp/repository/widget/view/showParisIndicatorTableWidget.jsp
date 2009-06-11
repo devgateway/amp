@@ -64,7 +64,7 @@
     <c:forEach items="${showParisIndicatorTableForm.parisIndicators}"    var="parisIndicatorInfo">
         <tr>      
           <td><digi:trn>Indicator</digi:trn>&nbsp;${parisIndicatorInfo.parisIndicator.indicatorCode}</td>
-           <td>${parisIndicatorInfo.parisIndicator.name}</td>
+           <td><digi:trn>${parisIndicatorInfo.parisIndicator.name}</digi:trn></td>
            <c:choose>
                    <td>${parisIndicatorInfo.baseValue}</td>
                    <td>${parisIndicatorInfo.targetValue}</td>

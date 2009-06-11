@@ -48,6 +48,7 @@
 		    context: ["showbtn", "tl", "bl"]
 		    });
 	var panelStart=0;
+	var checkAndClose=false;
 	function initCurrencyScripts() {
 		var msg='\n<digi:trn key="aim:addCurrencyRate">Add Currency Rate</digi:trn>';
 		myPanel.setHeader(msg);
@@ -137,12 +138,23 @@
 			myPanel.show();
 			panelStart = 2;
 		}
-		load();
+		checkErrorAndClose();
 	}
+    function checkErrorAndClose(){
+    	if(checkAndClose==true){
+    		if(document.getElementsByName("someError")[0]==null || document.getElementsByName("someError")[0].value=="false"){
+    			//close the pop in
+    			myclose();
+    			//refresh parent page
+    			refreshPage();
+    		}
+    		checkAndClose=false;			
+    	}
+        }
 
 	function generateFields(type){
 		var ret="";
-		if(type==1){//add sector  or reload sectors
+		if(type==1){
 			ret=
 			"updateCRateId="   	+(document.getElementsByName("updateCRateId")[0].value==""?"\"\"":document.getElementsByName("updateCRateId")[0].value)+"&"+
 			"doAction="		    +(document.getElementsByName("doAction")[0].value==""?"\"\"":document.getElementsByName("doAction")[0].value)+"&"+
@@ -159,9 +171,10 @@
 		return ret;
 	}
 	function myclose(){
+		var content = document.getElementById("myContentContent");
+		content.innerHTML="";
 		myPanel.hide();	
 		panelStart=1;
-	
 	}
 
 	function myAddExchangeRate(){
@@ -229,13 +242,12 @@ function saveRate() {
 		var postString		= generateFields(2);
 		<digi:context name="addExchangeRate" property="context/module/moduleinstance/saveCurrencyRate.do" />
 		var url = "<%=addExchangeRate %>";
+		checkAndClose=true;
 		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
-		myclose();
-		reload();
 	}
 	return valid;
 }
-function reload() {
+function refreshPage() {
 	document.aimCurrencyRateForm.submit();
 }
 

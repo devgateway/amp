@@ -60,4 +60,50 @@ public class PIReport3Row extends PIReportAbstractRow {
 	public void setDonorGroup(AmpOrgGroup donorGroup) {
 		this.donorGroup = donorGroup;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((column1 == null) ? 0 : column1.hashCode());
+		result = prime * result + ((column2 == null) ? 0 : column2.hashCode());
+		result = prime * result + ((column3 == null) ? 0 : column3.hashCode());
+		result = prime * result + ((donorGroup == null) ? 0 : donorGroup.hashCode());
+		result = prime * result + year;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof PIReport3Row))
+			return false;
+		PIReport3Row other = (PIReport3Row) obj;
+		if (column1 == null) {
+			if (other.column1 != null)
+				return false;
+		} else if (!column1.equals(other.column1))
+			return false;
+		if (column2 == null) {
+			if (other.column2 != null)
+				return false;
+		} else if (!column2.equals(other.column2))
+			return false;
+		if (column3 == null) {
+			if (other.column3 != null)
+				return false;
+		} else if (!column3.equals(other.column3))
+			return false;
+		if (donorGroup == null) {
+			if (other.donorGroup != null)
+				return false;
+		} else if (!donorGroup.equals(other.donorGroup))
+			return false;
+		if (year != other.year)
+			return false;
+		return true;
+	}
 }

@@ -526,6 +526,8 @@
 			<module name="calendar">
 				<page>calendarOrgPopupLayout</page>
 				<page>recurringEventPopupLayout</page>
+				<page>colorPicker</page>
+				
             </module>
             <module name="message">
             	<page>viewSelectedMessage</page>

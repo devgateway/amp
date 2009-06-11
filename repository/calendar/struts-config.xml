@@ -10,6 +10,8 @@
     <form-bean name="calendarEventForm" type="org.digijava.module.calendar.form.CalendarEventForm" />
     <form-bean name="calendarEventTypeForm" type="org.digijava.module.calendar.form.EventTypeForm" />
     <form-bean name="calendarEditActivityForm" type="org.digijava.module.calendar.form.EditActivityForm" />
+    <form-bean name="calendarColorPaleteForm" type="org.digijava.module.calendar.form.ColorPaleteForm" />
+    
   </form-beans>
   <action-mappings>
     <action forward="/calendar/viewEvents.do" path="/calendar/index" />
@@ -94,6 +96,12 @@
       <forward name="forward" path="/showLayout.do?layout=calendarOrgPopupLayout" />
     </action>
     <action name="calendarEditActivityForm" path="/calendar/organisationSelected" scope="session" type="org.digijava.module.calendar.action.OrganisationSelected" />
+    
+    <action name="calendarColorPaleteForm" path="/calendar/showColorPalete" scope="session" type="org.digijava.module.calendar.action.ShowColorPalete">
+      <forward name="forward" path="/showLayout.do?layout=colorPicker" />
+    </action>
+    
+    
   </action-mappings>
 </struts-config>
 

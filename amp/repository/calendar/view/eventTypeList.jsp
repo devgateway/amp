@@ -61,8 +61,7 @@ function setHoveredTable(tableId, hasHeaders) {
 }
 </script>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/colorPicker.js"/>"></script>
-
+<jsp:include page="/repository/calendar/view/colorPickerPopin.jsp" />
 <script language="javaScript" type="">
 function setActionMethod(methodName) {
   document.getElementById("method").value=methodName;
@@ -100,28 +99,6 @@ function setDeleteId(id) {
   setActionMethod('delete');
   document.calendarEventTypeForm.submit();
   return true;
-}
-
-var cp = new ColorPicker("window");
-var objId=null;
-var hexColor=null;
-function pickColor(color) {
-  if(objId!=null){
-    document.getElementById(hexColor).value = color;
-    var cl=document.getElementById(objId);
-    cl.style.cssText ="width:25px;font-family:verdana;font-size:9pt;background:"+color+";";
-   
-  }
-}
-
-function showColors(objectId,hexColorObject){
-  objId=objectId;
-  hexColor=hexColorObject;
-  var rs=cp.show('pick');
-}
-
-function chooseColor(){
-
 }
 
 function setColorPalete() {
@@ -192,7 +169,7 @@ function setColorPalete() {
             cp_contents += "<TR>";
         }
         
-        cp_contents += "<TD BGCOLOR = '"+colors[i]+"' width=20 height=20 onClick= ColorPicker_highlightColor('"+colors[i]+"');>&nbsp;&nbsp;</TD>";
+        cp_contents += "<TD BGCOLOR = '"+colors[i]+"' width=20 height=20 onClick= ColorPicker_highLightColor('"+colors[i]+"');>&nbsp;&nbsp;</TD>";
             if(((i + 1) >= total) || (((i + 1) % width) == 0)){
             cp_contents += "</TR>";
         }
@@ -200,17 +177,17 @@ function setColorPalete() {
 	if(document.getElementById) {
         var width1 = Math.floor(width / 2);
         var width2 = width = width1;
-        cp_contents += "<TR><TD height=20 COLSPAN='" + width1 + "' BGCOLOR='#ffffff' ID='colorPickerSelectedColor'>&nbsp;</TD><TD height=20 COLSPAN='" + width2 + "' ALIGN='CENTER' ID='colorPickerSelectedColorValue'>#FFFFFF</TD></TR>";
+        cp_contents += "<TR><TD height=20 COLSPAN='" + width1 + "' BGCOLOR='#ffffff' ID='colorPickerSelectColor'>&nbsp;</TD><TD height=20 COLSPAN='" + width2 + "' ALIGN='CENTER' ID='colorPickerSelectColorValue'>#FFFFFF</TD></TR>";
     }
     cp_contents += "</TABLE>";
 	var displayColorPalete = document.getElementById('displayColorPalete');
 	displayColorPalete.innerHTML = cp_contents;
 }
 
-function ColorPicker_highlightColor(c) {
-    var d = document.getElementById("colorPickerSelectedColor");
+function ColorPicker_highLightColor(c) {
+    var d = document.getElementById("colorPickerSelectColor");
     d.style.backgroundColor = c;
-    d = document.getElementById("colorPickerSelectedColorValue");
+    d = document.getElementById("colorPickerSelectColorValue");
     d.innerHTML = c;
 }
 
@@ -226,7 +203,7 @@ function ColorPicker_highlightColor(c) {
 
 	<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=1100>
     	<tr>
-      		<td class=r-dotted-lg width=14>&nbsp;</td>
+      		
 			<td>
 				<table width=550>
 					<tr>
@@ -342,7 +319,7 @@ function ColorPicker_highlightColor(c) {
 											                        		<input type="text" style="width:25px;font-family:verdana;font-size:11px;background: ${eventType.color}" name="colorViwe${varSt.count}" id="colorViwe${varSt.count}" disabled="disabled" />
 											                        	</td>
 											                        	<td width="50" align="center">
-											                          		<a href=javascript:showColors("colorViwe${varSt.count}","eventTypeNameColor${varSt.count}"); >
+											                          		<a href=javascript:showPaleteContent("colorViwe${varSt.count}","eventTypeNameColor${varSt.count}"); >
 											                            		<img alt="" src="<digi:file src="module/calendar/images/colorImg.gif"/>" border="0" NAME="pick" ID="pick" width="15" height="15"/>
 											                          		</a>
 											                        	</td>

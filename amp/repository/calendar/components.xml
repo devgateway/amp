@@ -21,6 +21,7 @@
     <page page="previewAmpEvent" name="previewAmpEvent" title="Preview Amp Event" />
     <page page="eventTypesList" name="eventTypes" title="Event Types" />
     <page page="recurringEventPopupLayout" name="recurringEventPopupLayout" title="Recurring Event" />
+    <page page="colorPicker" name="colorPicker" title="Show Color Palete" />
 </secondary-pages>
 
 <module>
@@ -40,8 +41,11 @@
     <page name="showAmpEvent">showAmpEvent.jsp</page>
     <page name="previewAmpEvent">previewAmpEvent.jsp</page>
     <page name="eventTypesList">eventTypeList.jsp</page>
+    <page name="colorPicker">colorPicker.jsp</page>
+    
     <page name="calendarOrgPopupLayout">selectOrganisation.jsp</page>
     <page name="recurringEventPopupLayout">recurringEvent.jsp</page>
+    
 </module>
 
 </config>

@@ -85,6 +85,9 @@
 		
 		setBusy(true);
 		var mapLevel = getRadioValue("mapLevelRadio");
+		if (mapLevel == null) {
+			mapLevel = 2;
+		}
 		
 		var fromYear = document.getElementsByName('selectedFromYear')[0].value;
 		var toYear = document.getElementsByName('selectedToYear')[0].value;
@@ -109,6 +112,9 @@
 	
 		selIndicator = ind.value;
 		var mapLevel = getRadioValue("mapLevelRadio");
+		if (mapLevel == null) {
+			mapLevel = 2;
+		}
 		var sec = document.getElementById("sectorsMapCombo").value;
 		var fromYear = document.getElementsByName('selectedFromYear')[0].value;
 		var toYear = document.getElementsByName('selectedToYear')[0].value;
@@ -164,6 +170,9 @@
 		selSubgroup = sbgr.value;
 
 		var mapLevel = getRadioValue("mapLevelRadio");
+		if (mapLevel == null) {
+			mapLevel = 2;
+		}
 		var sec = document.getElementById("sectorsMapCombo").value;
 		var selIndicator = document.getElementById("indicatorsCombo").value;
 		var fromYear = document.getElementsByName('selectedFromYear')[0].value;
@@ -220,6 +229,10 @@
 		if (!imageMapLoaded) {
 			actionGetImageMap = true;
 			var mapLevel = getRadioValue("mapLevelRadio");
+			if (mapLevel == null) {
+			mapLevel = 2;
+			}
+			
 			var indYear = document.getElementById("indicatorYearCombo").value;
 			var uniqueStr = (new Date()).getTime();
 			xmlhttp.open("POST", "../../gis/getFoundingDetails.do?action=getImageMap&mapCode=TZA&mapLevel=" + mapLevel + "&indYear=" + indYear + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight, true);
@@ -245,6 +258,9 @@
 	
 	function getDataForSector(sec) {
 			var mapLevel = getRadioValue("mapLevelRadio");
+			if (mapLevel == null) {
+				mapLevel = 2;
+			}
 			var indYear = document.getElementById("indicatorYearCombo").value;
 			var fromYear = document.getElementsByName('selectedFromYear')[0].value;
 			var toYear = document.getElementsByName('selectedToYear')[0].value;
@@ -285,6 +301,9 @@
 
 	function getSectorIndicators(sec) {
 			var mapLevel = getRadioValue("mapLevelRadio");
+			if (mapLevel == null) {
+				mapLevel = 2;
+			}
 			var indYear = document.getElementById("indicatorYearCombo").value;
 			var selSector = document.getElementById("sectorsMapCombo").value;
 			var uniqueStr = (new Date()).getTime();
@@ -325,6 +344,9 @@
 	
 	function getIndicatorsValues() {
 			var mapLevel = getRadioValue("mapLevelRadio");
+			if (mapLevel == null) {
+				mapLevel = 2;
+			}
 			var indYear = document.getElementById("indicatorYearCombo").value;
 			var uniqueStr = (new Date()).getTime();
 			xmlhttp.open("POST", "../../gis/getFoundingDetails.do?action=getIndicatorValues&mapCode=TZA&mapLevel=" + mapLevel + "&indYear=" + indYear + "&uniqueStr=" + uniqueStr, true);
@@ -595,6 +617,9 @@
 	function yearSelected(year) {
 		setBusy(true);
 		var mapLevel = getRadioValue("mapLevelRadio");
+		if (mapLevel == null) {
+			mapLevel = 2;
+		}
 		var ind = document.getElementById("indicatorsCombo").value;
 		var subgroupId = document.getElementById("indicatorSubgroupCombo").value;
 		var fromYear = document.getElementsByName('selectedFromYear')[0].value;
@@ -732,9 +757,12 @@
 
 		if (busy) {
 			document.getElementById("busyIndicator").style.visibility = "visible";
-			
-			document.getElementsByName("mapLevelRadio")[0].disabled = true;
-			document.getElementsByName("mapLevelRadio")[1].disabled = true;
+
+			if (document.getElementsByName("mapLevelRadio")[0] != null) {
+				document.getElementsByName("mapLevelRadio")[0].disabled = true;
+				document.getElementsByName("mapLevelRadio")[1].disabled = true;
+			}
+
 			document.getElementById("sectorsMapCombo").disabled = true;
 			document.getElementById("indicatorsCombo").disabled = true;
 			document.getElementById("indicatorSubgroupCombo").disabled = true;
@@ -749,9 +777,11 @@
 				   !actionGetSubgroups &&
 				   !actionGetYears) {
 			document.getElementById("busyIndicator").style.visibility = "hidden";
-			
-			document.getElementsByName("mapLevelRadio")[0].disabled = false;
-			document.getElementsByName("mapLevelRadio")[1].disabled = false;
+
+			if (document.getElementsByName("mapLevelRadio")[0] != null) {
+				document.getElementsByName("mapLevelRadio")[0].disabled = false;
+				document.getElementsByName("mapLevelRadio")[1].disabled = false;
+			}
 			document.getElementById("sectorsMapCombo").disabled = false;
 			document.getElementById("indicatorsCombo").disabled = false;
 			document.getElementById("indicatorSubgroupCombo").disabled = false;
@@ -892,13 +922,15 @@
 	function getRadioValue(radioName) {
 		var retVal = null;
 		var radioGroup = document.getElementsByName(radioName);
-		var iterIndex = 0;
-		for (iterIndex = 0; iterIndex < radioGroup.length; iterIndex ++) {
-			if (radioGroup[iterIndex].checked) {
-				retVal = radioGroup[iterIndex].value;
-				break;
+		
+		if (radioGroup != null) {
+			var iterIndex = 0;
+			for (iterIndex = 0; iterIndex < radioGroup.length; iterIndex ++) {
+				if (radioGroup[iterIndex].checked) {
+					retVal = radioGroup[iterIndex].value;
+					break;
+				}
 			}
 		}
-		
 		return retVal;
 	}

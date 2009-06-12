@@ -436,7 +436,7 @@ public class ParisIndicatorReport extends Action {
                         	if(ans1[j].doubleValue()<0) {
                         		ans1[j] = new BigDecimal(0);
                         	}
-                            ans2[j].add(ans1[j]);
+                            ans2[j] = ans2[j].add(ans1[j]);
                         }
                     }
                 }

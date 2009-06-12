@@ -72,9 +72,9 @@ function topTenDonorTableCallBack(status, statusText, responseText, responseXML)
     var tdHeadEmpty=document.createElement('TD');
     tdHeadEmpty.innerHTML="&nbsp;"
     var tdHeadDonorGroup=document.createElement('TD');
-    tdHeadDonorGroup.innerHTML="<strong><digi:trn>Donor Group</digi:trn></strong>";
+    tdHeadDonorGroup.innerHTML="<strong><digi:trn>Top 10 Donors</digi:trn></strong>";
     var tdHeadCom=document.createElement('TD');
-    tdHeadCom.innerHTML="<strong><digi:trn>Actual Commitments for</digi:trn> "+root.getAttribute("years")+"</strong>";
+    tdHeadCom.innerHTML="<strong><digi:trn>Commitments in USD Millions for</digi:trn> "+root.getAttribute("years")+"</strong>";
     trHead.appendChild(tdHeadEmpty);
     trHead.appendChild(tdHeadDonorGroup);
     trHead.appendChild(tdHeadCom);

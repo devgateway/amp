@@ -10,6 +10,15 @@ public class HelpSearchData {
 	private String body;
 	private Date lastModDate;
 	private String lang;
+	private String bodyKey;
+	
+	
+	public String getBodyKey() {
+		return bodyKey;
+	}
+	public void setBodyKey(String bodyKey) {
+		this.bodyKey = bodyKey;
+	}
 	
 	public String getTitleTrnKey() {
 		return titleTrnKey;

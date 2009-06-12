@@ -120,7 +120,7 @@ function stChang(){
 		style="height: auto; font-size: 11px; font-family: Verdana, Arial, Helvetica, sans-serif;">
 	<div style="padding: 2; text-align: center">
 
-	  <input type="text" name="keywords" onkeyup="showHint(this.value)" id="selected"/>
+	  <input type="text" name="keywords" id="selected"/>
 			<div style="background-color:white;overflow:auto;display: block; text-align: left;" id="livesearch" >
 			</div>
 			 <c:set var="searchtpc">

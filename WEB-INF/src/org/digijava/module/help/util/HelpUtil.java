@@ -484,6 +484,7 @@ System.out.println("lang:"+lang);
 				helpsearch.setTitleTrnKey(getHelpTopic(edt.getEditorKey()).getTitleTrnKey());
 				helpsearch.setTopicKey(getHelpTopic(edt.getEditorKey()).getTopicKey());
 				helpsearch.setLang(edt.getLanguage());
+				helpsearch.setBodyKey(edt.getEditorKey());
 		
 				helpTopics.add(helpsearch);	  
 		}

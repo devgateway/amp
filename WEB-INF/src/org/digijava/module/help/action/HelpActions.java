@@ -118,7 +118,7 @@ public class HelpActions extends DispatchAction {
 		return null;
 	}
 
-
+/*
     public ActionForward vewSearchKey(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		  	OutputStreamWriter os = null;	
 		    PrintWriter out = null;
@@ -161,16 +161,22 @@ public class HelpActions extends DispatchAction {
 	 }
 	 return null;
  }
+	*/
 	
-	
-	public ActionForward searchHelpTopic(ActionMapping mapping,	ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
+ 	public ActionForward searchHelpTopic(ActionMapping mapping,	ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		 String key =request.getParameter("key");
 		 String keywords = HelpUtil.getTrn(key,request);
 		 String treKey = HelpUtil.getTrn("Topic Not Found", request);
 		 String locale=RequestUtils.getNavigationLanguage(request).getCode();
+		 String siteId = RequestUtils.getSite(request).getSiteId();
+        String	lange	= RequestUtils.getNavigationLanguage(request).getCode();
+        String moduleInstance = RequestUtils.getRealModuleInstance(request)
+			.getInstanceName();
 		 Object artidcle = "";
+		 List<Editor> wholeBody;
 		 OutputStreamWriter os = null;	
 		 PrintWriter out = null;
+		 String topicKey = null;
 		 
 		
 	try{	
@@ -201,6 +207,7 @@ public class HelpActions extends DispatchAction {
 			    		  	if(doc.get("lang").equals(locale)){  
 			    			  
 						   String title = doc.get("title");
+						   String titleKey = doc.get("titletrnKey");
 						   String art;
 					
 						      if (!artidcle.equals("")) {
@@ -222,11 +229,17 @@ public class HelpActions extends DispatchAction {
 						   Searched.add(new LabelValueBean(titlelink,art+"..."));
 						 
 						 for (LabelValueBean t : Searched){
+							 topicKey = t.getLabel();
 							   out.println("<div id=\"bodyTitle\" style=\"font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;\"><a class=\"link\" onclick=\"showBody()\"><b>"+t.getLabel()+"</b></a></div>");
 							   out.println("<div id=\"bodyShort\"  style=\"display:block;\">"+t.getValue()+"</div>");
 						   }
+						  HelpTopic bodykey = HelpUtil.getHelpTopic(topicKey, siteId, moduleInstance);
+						  if(bodykey !=null){
+							   wholeBody = HelpUtil.getEditor(bodykey.getBodyEditKey(), locale);
+						  }else{
+							  wholeBody = HelpUtil.getEditor(titleKey, locale);
+						  }
 						  
-						  List<Editor> wholeBody = HelpUtil.getEditor("help:topic:body:"+key, locale);
 						  for (Editor wb : wholeBody){
 							  out.println("<div id=\"bodyFull\"  style=\"display:none;\">"+wb.getBody()+"</div>");
 						  }
@@ -236,9 +249,9 @@ public class HelpActions extends DispatchAction {
 			    	}
 			      }
 			   	}
-     }catch (Exception e) {
-         e.printStackTrace();
-     }
+    }catch (Exception e) {
+        e.printStackTrace();
+    }
 		return null;
 		
 	}

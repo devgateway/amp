@@ -1,6 +1,7 @@
 package org.digijava.module.parisindicator.helper;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -96,8 +97,8 @@ public class PIReport3 extends PIAbstractReport {
 				while (iterFundings.hasNext()) {
 					AmpFunding auxFunding = iterFundings.next();
 
-					// Check if the funding belongs to the PoDD not the original
-					// organization.
+					// Check if the funding belongs to the original
+					// organization not the PoDD.
 					if (auxAmpAhsurvey.getAmpDonorOrgId().getAmpOrgId().equals(
 							auxFunding.getAmpDonorOrgId().getAmpOrgId())) {
 
@@ -136,38 +137,51 @@ public class PIReport3 extends PIAbstractReport {
 									boolean[] showColumn = PIUtils.getSurveyAnswers(
 											PIConstants.PARIS_INDICATOR_REPORT_3, auxAmpAhsurvey);
 
-									// Calculate exchange rates.
-									if (PIConstants.CURRENCY_USD.equalsIgnoreCase(auxFundingDetail.getAmpCurrencyId()
-											.getCurrencyCode())) {
-										fromExchangeRate = 1.0;
-									} else {
-										fromExchangeRate = Util.getExchange(auxFundingDetail.getAmpCurrencyId()
-												.getCurrencyCode(), new java.sql.Date(auxFundingDetail
-												.getTransactionDate().getTime()));
-									}
-									toExchangeRate = 0;
-									if (currency != null) {
-										if (currency.getCurrencyCode().equals(PIConstants.CURRENCY_USD)) {
-											toExchangeRate = 1.0;
-										} else {
-											toExchangeRate = Util.getExchange(currency.getCurrencyCode(),
-													new java.sql.Date(auxFundingDetail.getTransactionDate().getTime()));
-										}
-									}
-									BigDecimal amount = CurrencyWorker.convert1(
-											auxFundingDetail.getTransactionAmount(), fromExchangeRate, toExchangeRate);
+									// Ignore complete false responses.
+									// TODO: This could be a feature in the
+									// filters: show or not donor groups with no
+									// amounts because of the answers (or the
+									// lack of it).
+									if (showColumn[0] || showColumn[1]) {
 
-									// Setup row.
-									if (showColumn[0]) {
-										auxRow.setColumn1(amount);
+										// Calculate exchange rates.
+										if (PIConstants.CURRENCY_USD.equalsIgnoreCase(auxFundingDetail
+												.getAmpCurrencyId().getCurrencyCode())) {
+											fromExchangeRate = 1.0;
+										} else {
+											fromExchangeRate = Util.getExchange(auxFundingDetail.getAmpCurrencyId()
+													.getCurrencyCode(), new java.sql.Date(auxFundingDetail
+													.getTransactionDate().getTime()));
+										}
+										toExchangeRate = 0;
+										if (currency != null) {
+											if (currency.getCurrencyCode().equals(PIConstants.CURRENCY_USD)) {
+												toExchangeRate = 1.0;
+											} else {
+												toExchangeRate = Util.getExchange(currency.getCurrencyCode(),
+														new java.sql.Date(auxFundingDetail.getTransactionDate()
+																.getTime()));
+											}
+										}
+										BigDecimal amount = CurrencyWorker.convert1(auxFundingDetail
+												.getTransactionAmount(), fromExchangeRate, toExchangeRate);
+
+										// Setup row.
+										if (showColumn[0]) {
+											auxRow.setColumn1(amount);
+										} else {
+											auxRow.setColumn1(new BigDecimal(0));
+										}
+										if (showColumn[1]) {
+											auxRow.setColumn2(amount);
+										} else {
+											auxRow.setColumn2(new BigDecimal(0));
+										}
+										auxRow.setColumn3(null);
+										auxRow.setDonorGroup(auxPoDD.getOrgGrpId());
+										auxRow.setYear(transactionYear);
+										list.add(auxRow);
 									}
-									if (showColumn[1]) {
-										auxRow.setColumn2(amount);
-									}
-									auxRow.setColumn3(null);
-									auxRow.setDonorGroup(auxPoDD.getOrgGrpId());
-									auxRow.setYear(transactionYear);
-									list.add(auxRow);
 								}
 							}
 						}
@@ -182,7 +196,9 @@ public class PIReport3 extends PIAbstractReport {
 	}
 
 	@Override
-	public Collection<PIReportAbstractRow> reportPostProcess(Collection<PIReportAbstractRow> baseReport) {
+	public Collection<PIReportAbstractRow> reportPostProcess(Collection<PIReportAbstractRow> baseReport, int startYear,
+			int endYear) {
+		
 		Collection<PIReportAbstractRow> list = new ArrayList<PIReportAbstractRow>(baseReport);
 
 		// TODO: make a general comparator???
@@ -198,25 +214,66 @@ public class PIReport3 extends PIAbstractReport {
 				} else if (aux2 == null) {
 					return -1;
 				} else {
-					return aux1.getDonorGroup().getOrgGrpName().compareTo(aux2.getDonorGroup().getOrgGrpName());
+					return (aux1.getDonorGroup().getOrgGrpName() + aux1.getYear()).compareTo(aux2.getDonorGroup()
+							.getOrgGrpName()
+							+ aux2.getYear());
 				}
 			}
 		};
 
 		Collection<PIReportAbstractRow> newList = new ArrayList<PIReportAbstractRow>();
 		Collections.sort((ArrayList) list, compareRows);
+
+		AmpOrgGroup auxGroup2 = null;
 		Iterator iter = list.iterator();
-		AmpOrgGroup auxGroup = null;
-		BigDecimal column1 = null;
-		BigDecimal column2 = null;
+		BigDecimal auxColumn1 = new BigDecimal(0);
+		BigDecimal auxColumn2 = new BigDecimal(0);
+		int currentYear = 0;
 		while (iter.hasNext()) {
 			PIReport3Row row = (PIReport3Row) iter.next();
-			if (auxGroup == null) {
-				auxGroup = row.getDonorGroup();
+
+			if (auxGroup2 == null) {
+				auxGroup2 = row.getDonorGroup();
+				currentYear = row.getYear();
 			}
+			if (auxGroup2.getAmpOrgGrpId().equals(row.getDonorGroup().getAmpOrgGrpId())) {
+				if (row.getYear() == currentYear) {
+					auxColumn1 = auxColumn1.add(row.getColumn1());
+					auxColumn2 = auxColumn2.add(row.getColumn2());
+				} else {
+					PIReport3Row newRow = new PIReport3Row();
+					newRow.setColumn1(auxColumn1);
+					newRow.setColumn2(auxColumn2);
+					newRow.setDonorGroup(row.getDonorGroup());
+					newRow.setYear(currentYear);
+					newList.add(newRow);
 
+					currentYear = row.getYear();
+					auxColumn1 = row.getColumn1();
+					auxColumn2 = row.getColumn2();
+				}
+			} else {
+				PIReport3Row newRow = new PIReport3Row();
+				newRow.setColumn1(auxColumn1);
+				newRow.setColumn2(auxColumn2);
+				newRow.setDonorGroup(auxGroup2);
+				newRow.setYear(currentYear);
+				newList.add(newRow);
+
+				auxColumn1 = row.getColumn1();
+				auxColumn2 = row.getColumn2();
+				auxGroup2 = row.getDonorGroup();
+				currentYear = row.getYear();
+			}
+			if (!iter.hasNext()) {
+				PIReport3Row newRow = new PIReport3Row();
+				newRow.setColumn1(auxColumn1);
+				newRow.setColumn2(auxColumn2);
+				newRow.setDonorGroup(auxGroup2);
+				newRow.setYear(currentYear);
+				newList.add(newRow);
+			}
 		}
-
-		return list;
+		return newList;
 	}
 }

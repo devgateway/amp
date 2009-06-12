@@ -66,29 +66,22 @@ color:Black;
 	        				<feature:display name="Monthly View" module="Calendar">
 	        					<c:if test="${calendarViewForm.view == 'monthly'}">
 		        					<td align="center" width="20%" nowrap="nowrap" style="font-size:12px;font-weight:bold;font-family: Tahoma;">
-							        	<digi:trn key="aim:calendar:basemonthNameLong:${calendarViewForm.baseDateBreakDown.monthNameLong}">${calendarViewForm.baseDateBreakDown.monthNameLong}</digi:trn>,&nbsp;
-							            ${calendarViewForm.baseDateBreakDown.year}
+							        	${calendarViewForm.baseDateBreakDown.dateInLocaleMonth}
 			        				</td>
 		        				</c:if>
 	        				</feature:display>
 	        				<feature:display name="Weekly View" module="Calendar">
 	        					<c:if test="${calendarViewForm.view == 'weekly'}">
 		        					<td align="center" width="30%" nowrap="nowrap" style="font-size:12px;font-weight:bold;font-family: Tahoma;">
-		        						<digi:trn key="aim:calendar:startmonthNameShort:${calendarViewForm.startDateBreakDown.monthNameShort}">${calendarViewForm.startDateBreakDown.monthNameShort}</digi:trn>
-						                ${calendarViewForm.startDateBreakDown.dayOfMonth},&nbsp;
-						                ${calendarViewForm.startDateBreakDown.year}&nbsp;-&nbsp;
-						                <digi:trn key="aim:calendar:endmonthNameShort:${calendarViewForm.endDateBreakDown.monthNameShort}">${calendarViewForm.endDateBreakDown.monthNameShort}</digi:trn>
-						                ${calendarViewForm.endDateBreakDown.dayOfMonth},&nbsp;
-						                ${calendarViewForm.endDateBreakDown.year}
+		        						${calendarViewForm.startDateBreakDown.dateInLocaleWeek}&nbsp;-&nbsp;
+						                ${calendarViewForm.endDateBreakDown.dateInLocaleWeek}
 		        					</td>
 		        				</c:if>
 	        				</feature:display>
 	        				<feature:display name="Daily View" module="Calendar">
 	        					<c:if test="${calendarViewForm.view == 'daily'}">
 		        					<td align="center" width="20%" nowrap="nowrap" style="font-size:12px;font-weight:bold;font-family: Tahoma;">
-		        						<digi:trn key="aim:calendar:dailymonthNameLong:${calendarViewForm.baseDateBreakDown.monthNameLong}">${calendarViewForm.baseDateBreakDown.monthNameLong}</digi:trn>
-						                ${calendarViewForm.baseDateBreakDown.dayOfMonth},&nbsp;
-					                	${calendarViewForm.baseDateBreakDown.year}
+		        						 ${calendarViewForm.baseDateBreakDown.dateInLocaleDay}
 		        					</td>
 		        				</c:if>
 	        				</feature:display>

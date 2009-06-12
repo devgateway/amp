@@ -65,7 +65,7 @@ public class ShowCalendarView extends Action {
                 }
             }
         }
-
+        
         calendarViewForm.setCalendarTypes(calendarTypesList);
         // selected calendar type
         int selectedCalendarType = calendarViewForm.getSelectedCalendarType();
@@ -90,7 +90,7 @@ public class ShowCalendarView extends Action {
         GregorianCalendar currentDate = new GregorianCalendar();
         currentDate.setFirstDayOfWeek(currentDate.MONDAY);
         calendarViewForm.setCurrentDate(currentDate);
-        DateBreakDown currentDateBreakDown = new DateBreakDown(currentDate, selectedCalendarType);
+        DateBreakDown currentDateBreakDown = new DateBreakDown(currentDate, selectedCalendarType, request);
         calendarViewForm.setCurrentDateBreakDown(currentDateBreakDown);
         GregorianCalendar startDate;
         DateBreakDown startDateBreakDown;
@@ -109,32 +109,32 @@ public class ShowCalendarView extends Action {
             int currentStamp = (int) (currentDate.getTimeInMillis() / 1000);
             baseDate.add(baseDate.SECOND, timestamp - currentStamp);
             calendarViewForm.setBaseDate(baseDate);
-            DateBreakDown baseDateBreakDown = new DateBreakDown(baseDate,selectedCalendarType);
+            DateBreakDown baseDateBreakDown = new DateBreakDown(baseDate,selectedCalendarType, request);
             calendarViewForm.setBaseDateBreakDown(baseDateBreakDown);
             // date navigator
-            navigator = new DateNavigator(baseDate, selectedCalendarType,calendarViewForm.getView());
+            navigator = new DateNavigator(baseDate, selectedCalendarType,calendarViewForm.getView(), request);
             // start date
             startDate = DateNavigator.getStartDate(calendarViewForm.getView(),baseDate);
             calendarViewForm.setStartDate(startDate);
-            startDateBreakDown = new DateBreakDown(startDate,selectedCalendarType);
+            startDateBreakDown = new DateBreakDown(startDate,selectedCalendarType, request);
             calendarViewForm.setStartDateBreakDown(startDateBreakDown);
             // stop date
             endDate = DateNavigator.getEndDate(calendarViewForm.getView(),baseDate);
             calendarViewForm.setEndDate(endDate);
-            endDateBreakDown = new DateBreakDown(endDate, selectedCalendarType);
+            endDateBreakDown = new DateBreakDown(endDate, selectedCalendarType, request);
             calendarViewForm.setEndDateBreakDown(endDateBreakDown);
         } else {
             // start date
             startDate = DateBreakDown.createValidGregorianCalendar(selectedCalendarType, calendarViewForm.getCustomViewStartDate(),"00:00");
             calendarViewForm.setStartDate(startDate);
-            startDateBreakDown = new DateBreakDown(startDate,selectedCalendarType);
+            startDateBreakDown = new DateBreakDown(startDate,selectedCalendarType, request);
             calendarViewForm.setStartDateBreakDown(startDateBreakDown);
             calendarViewForm.setCustomViewStartDate(startDateBreakDown.formatDateString());
             // stop date
             endDate = DateBreakDown.createValidGregorianCalendar(selectedCalendarType, calendarViewForm.getCustomViewEndDate(),
                 "23:59");
             calendarViewForm.setEndDate(endDate);
-            endDateBreakDown = new DateBreakDown(endDate, selectedCalendarType);
+            endDateBreakDown = new DateBreakDown(endDate, selectedCalendarType, request);
             calendarViewForm.setEndDateBreakDown(endDateBreakDown);
             calendarViewForm.setCustomViewEndDate(endDateBreakDown.formatDateString());
             // date navigator

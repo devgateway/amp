@@ -4,7 +4,13 @@ import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.acegisecurity.adapters.HttpRequestIntegrationFilter;
 import org.apache.log4j.Logger;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.calendar.exception.CalendarException;
 
@@ -21,17 +27,27 @@ public class DateBreakDown {
     private String dayOfWeekName;
     private int hour;
     private int minute;
-
+    private String dateInLocaleWeek;
+    private String dateInLocaleMonth;
+    private String dateInLocaleDay;
+    
     public DateBreakDown() {
 
     }
 
-    public DateBreakDown(Date date, int type) throws CalendarException {
-        this(getGregorianCalendar(date), type);
+    public DateBreakDown(Date date, int type) throws CalendarException, WorkerException {
+        this(getGregorianCalendar(date), type, null);
+    }
+    
+    public DateBreakDown(Date date, int type, HttpServletRequest request) throws CalendarException, WorkerException {
+        this(getGregorianCalendar(date), type, request);
     }
 
-    public DateBreakDown(GregorianCalendar calendar, int type) throws
-        CalendarException {
+    public DateBreakDown(GregorianCalendar calendar, int type) throws CalendarException, WorkerException {
+    	this(calendar, type, null);
+    }
+    public DateBreakDown(GregorianCalendar calendar, int type, HttpServletRequest request) throws
+        CalendarException, WorkerException {
         if(type != CalendarOptions.CALENDAR_TYPE_GREGORIAN &&
            type != CalendarOptions.CALENDAR_TYPE_ETHIOPIAN &&
            type != CalendarOptions.CALENDAR_TYPE_ETHIOPIAN_FY) {
@@ -49,6 +65,23 @@ public class DateBreakDown {
         dayOfWeekName = getDayOfWeekName(dayOfWeek - 1, this.type);
         hour = calendar.get(calendar.HOUR_OF_DAY);
         minute = calendar.get(calendar.MINUTE);
+        //
+        String siteId = RequestUtils.getSite(request).getId()+"";
+        String locale =  RequestUtils.getNavigationLanguage(request).getCode().toLowerCase();
+        if ((locale != null) || (locale == "fr")) {
+        	String ms = TranslatorWorker.translateText(monthNameShort, locale, siteId);
+        	String ml = TranslatorWorker.translateText(monthNameLong, locale, siteId);
+        	dateInLocaleWeek = dayOfMonth + " " + ms + " " + year;
+        	dateInLocaleDay = dayOfMonth + " " + ml + " " + year;
+        	dateInLocaleMonth = ml + " " + year;
+        } else {
+        	// default to english
+        	String ms = TranslatorWorker.translateText(monthNameShort, locale, siteId);
+        	String ml = TranslatorWorker.translateText(monthNameLong, locale, siteId);
+        	dateInLocaleWeek = ms + " " + dayOfMonth + ", " + year;
+        	dateInLocaleDay = ml + " " + dayOfMonth + ", " + year;
+        	dateInLocaleMonth = ml + ", " + year;
+        }
     }
 
     private static GregorianCalendar getGregorianCalendar(Date date) {
@@ -373,4 +406,30 @@ public class DateBreakDown {
     public void setMinute(int minute) {
         this.minute = minute;
     }
+
+	
+	public String getDateInLocaleWeek() {
+		return this.dateInLocaleWeek;
+	}
+
+	public void setDateInLocaleWeek(String dateInLocaleWeek) {
+		this.dateInLocaleWeek = dateInLocaleWeek;
+	}
+
+	public String getDateInLocaleMonth() {
+		return this.dateInLocaleMonth;
+	}
+
+	public void setDateInLocaleMonth(String dateInLocaleMonth) {
+		this.dateInLocaleMonth = dateInLocaleMonth;
+	}
+
+	public String getDateInLocaleDay() {
+		return this.dateInLocaleDay;
+	}
+
+	public void setDateInLocaleDay(String dateInLocaleDay) {
+		this.dateInLocaleDay = dateInLocaleDay;
+	}
+
 }

@@ -77,11 +77,11 @@ public class PIUtils {
 	 */
 	public final static int getTransactionYear(Date transactionDate, Date[] startDates, Date[] endDates, int startYear) {
 		int ret = 0;
-		int auxYear = startYear;
+		int auxYear = startYear - 1;
 		for (int i = 0; i < startDates.length; i++) {
-			auxYear += i;
-			if ((transactionDate.after(startDates[i]) || transactionDate.equals(startDates[i]))
-					&& (chkEqualDates(transactionDate, endDates[i]) || chkEqualDates(transactionDate, endDates[i]))) {
+			auxYear++;
+			if ((transactionDate.after(startDates[i]) || chkEqualDates(transactionDate, startDates[i]))
+					&& (transactionDate.before(endDates[i]) || chkEqualDates(transactionDate, endDates[i]))) {
 				ret = auxYear;
 			}
 		}

@@ -138,9 +138,8 @@ function banUser(txt) {
 <!-- End of Logo -->
 
 <digi:form action="/viewAllUsers.do" method="post">
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=1200>
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=1100>
     <tr>
-      	<td class=r-dotted-lg width=14>&nbsp;</td>
       		<td align=left vAlign=top>
 		        <table cellPadding=5 cellSpacing=0 width="100%">
 		          	<tr>
@@ -260,16 +259,16 @@ function banUser(txt) {
 						</td>
 		        	</tr>
 		        	<tr>
-		            <td noWrap width=967 vAlign="top" colspan="7">
+		            <td noWrap width=917 vAlign="top" colspan="7">
 		            	<table width="100%" cellspacing=1 cellSpacing=1>
 							<tr>
-								<td noWrap width=950 vAlign="top"> 
+								<td noWrap width=900 vAlign="top"> 
 									<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%"  >
-										<tr bgColor=#f4f4f2>
+										<tr >
 											<td vAlign="top" width="100%">
 											</td>
 										</tr>
-										<tr bgColor=#f4f4f2>
+										<tr >
 											<td valign="top">
 												<table align=center bgColor=#ffffff cellPadding=0 cellSpacing=0  border=1 >
 													<tr>
@@ -289,7 +288,7 @@ function banUser(txt) {
 																		<table width="100%"BORDER=0 cellpadding="0" cellspacing="0"     >
 																			<c:if test="${empty umViewAllUsersForm.pagedUsers}">
 										                                         <tr style="background-color:#ffffff; color:#000;  " align="left" >
-																					<td height="30" width="950%" align="left">
+																					<td height="30" width="100%" align="left">
 						                                                   				<b><digi:trn key="um:viewAllUsers:NoUsers">No users present</digi:trn>
 						                                                       			</b>
 																					</td>
@@ -310,7 +309,7 @@ function banUser(txt) {
 																					<td height="30" width="400"><b>
 																							<digi:trn key="um:viewAllUsers:UserWorkspace">WORKSPACE</digi:trn></b>
 																					</td>
-																					<td height="30"width="150" colspan="3"><b>
+																					<td height="30"width="100" colspan="3"><b>
 																						<digi:trn key="aim:viewAllUsers:action">ACTIONS</digi:trn></b>
 																					</td>																		
 																				</tr>
@@ -340,26 +339,32 @@ function banUser(txt) {
 												                                                  	</c:if>
 												                                                </div>
 																							</td>
-																							<td height="30" width="65">
+																							<td height="30" width="45">
 																								<c:set var="translation">
 												                                                  <digi:trn key="um:viewAllUsers:EditUserLink">Edit user </digi:trn>
 												                                                </c:set>
-												                                                <digi:link href="/viewEditUser.do?id=${us.id}">${translation}</digi:link>
+												                                                <digi:link href="/viewEditUser.do?id=${us.id}" title="${translation}">
+											                          										<img src= "/repository/message/view/images/edit.gif" vspace="2" border="0" />
+																									</digi:link>
 																							</td>
-																							<td height="30" width="65">
+																							<td height="30" width="45">
 																								<c:choose>
 												                                                  <c:when test="${us.ban}">
 												                                                    <c:set var="translation">
 												                                                      <digi:trn key="um:viewAllUsers:unBanUserLink">Remove ban </digi:trn>
 												                                                    </c:set>
-												                                                    <digi:link href="/viewEditUser.do?id=${us.id}&ban=false" onclick="return unbanUser()"  >${translation}</digi:link>
+												                                                    <digi:link href="/viewEditUser.do?id=${us.id}&ban=false"  title="${translation}" onclick="return unbanUser()"  >
+																										<img src= "/TEMPLATE/ampTemplate/images/green_check_16.png" vspace="2" border="0" />
+																									</digi:link>
 												                                                  </c:when>
 												                                                  <c:otherwise>
 												                                                    <c:set var="translation">
-												                                                      <digi:trn key="um:viewAllUsers:banUsersLink">Ban user </digi:trn>
+												                                                      	<digi:trn key="um:viewAllUsers:banUsersLink">Ban User </digi:trn>
 												                                                    </c:set>
 												
-												                                                    <digi:link href="/viewEditUser.do?id=${us.id}&ban=true" onclick="return banUser()">${translation}</digi:link>
+												                                                    <digi:link href="/viewEditUser.do?id=${us.id}&ban=true" title="${translation}" onclick="return banUser()">
+																											<img src= "/TEMPLATE/ampTemplate/images/deleteIcon.gif" vspace="2" border="0" />
+																									</digi:link>
 												                                                  </c:otherwise>
 												                                                </c:choose>
 																							</td>
@@ -512,6 +517,39 @@ function banUser(txt) {
 												</table>
 											</td>
 										</tr>
+										<tr>
+									        <td>
+												<table>
+									             	<tr>
+									                 	<td colspan="2">
+									                 		<strong><digi:trn key="aim:IconReference">Icons Reference</digi:trn></strong>
+									       				</td>
+									       			</tr>
+									     			<tr>
+									           			<td nowrap="nowrap"><img src= "/repository/message/view/images/edit.gif" vspace="2" border="0" align="absmiddle" />
+									               			<digi:trn key="aim:ClickEditUser">Click on this icon to edit the user&nbsp;</digi:trn>
+									               			<br />
+									       				</td>
+									       			</tr>
+									        		<tr>
+														<c:choose>
+		                                                  <c:when test="${umViewAllUsersForm.showBanned}">
+															<td nowrap="nowrap"><img src= "/TEMPLATE/ampTemplate/images/green_check_16.png" vspace="2" border="0" align="absmiddle" />
+									               				<digi:trn key="aim:ClickUnbanUser">Click on this icon to unban the user&nbsp;</digi:trn>
+									                   			<br />
+															</td>
+		                                                  </c:when>
+		                                                  <c:otherwise>
+																<td nowrap="nowrap"><img src= "/TEMPLATE/ampTemplate/images/deleteIcon.gif" vspace="2" border="0" align="absmiddle" />
+									               					<digi:trn key="aim:ClickBanUser">Click on this icon to ban the user&nbsp;</digi:trn>
+									                   			<br />
+																</td>
+		                                                    </c:otherwise>
+		                                                </c:choose>	
+									           		</tr>
+									       		</table>
+									     	</td>
+									    </tr> 
 									</table>
 							    </td>
 								<td noWrap width="200" vAlign="top">

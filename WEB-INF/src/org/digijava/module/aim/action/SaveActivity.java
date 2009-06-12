@@ -2325,6 +2325,9 @@ public class SaveActivity extends Action {
 			rsp.setDidRecover(false);
 			//***
 			
+			//get member, who previously edited activity. Needed for approved activity trigger
+        	AmpTeamMember previouslyUpdatedBy=ActivityUtil.getActivityUpdator(eaForm.getActivityId());
+			
 			// update an existing activity
 			actId = recoverySave(rsp);
 			activity = rsp.getActivity();
@@ -2332,8 +2335,8 @@ public class SaveActivity extends Action {
                         AmpActivity aAct = ActivityUtil.getAmpActivity(actId);
                         if (aAct.getDraft() != null && !aAct.getDraft()) {
                             if (aAct.getApprovalStatus().equals(Constants.APPROVED_STATUS)) {
-                                if (!eaForm.getIdentification().getApprovalStatus().equals(Constants.APPROVED_STATUS)||(eaForm.getIdentification().getWasDraft()!=null&&eaForm.getIdentification().getWasDraft())) {
-                                    new ApprovedActivityTrigger(aAct);
+                                if (!eaForm.getIdentification().getApprovalStatus().equals(Constants.APPROVED_STATUS)||(eaForm.getIdentification().getWasDraft()!=null&&eaForm.getIdentification().getWasDraft())) {                                	
+                                    new ApprovedActivityTrigger(aAct, previouslyUpdatedBy);
                                 }
                             } else {
                                 new NotApprovedActivityTrigger(aAct);
@@ -2417,7 +2420,7 @@ public class SaveActivity extends Action {
                         AmpActivity aAct=ActivityUtil.getAmpActivity(actId);
                         if(activity.getDraft()!=null&&!activity.getDraft()){
 			if(activity.getApprovalStatus().equals(Constants.APPROVED_STATUS)){
-                                new ApprovedActivityTrigger(aAct);
+                                new ApprovedActivityTrigger(aAct,null);
 			}
                         else{
 				new NotApprovedActivityTrigger(aAct);

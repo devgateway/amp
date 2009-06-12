@@ -149,7 +149,8 @@ public class PIUseCase {
 				.getSelectedFinancingIstruments());
 
 		// Postprocess the report if needed.
-		Collection<PIReportAbstractRow> postMainReportRows = report.reportPostProcess(preMainReportRows);
+		Collection<PIReportAbstractRow> postMainReportRows = report.reportPostProcess(preMainReportRows, form
+				.getSelectedStartYear(), form.getSelectedEndYear());
 
 		report.setReportRows(postMainReportRows);
 		return report;

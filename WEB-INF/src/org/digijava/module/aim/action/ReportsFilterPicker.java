@@ -734,7 +734,7 @@ public class ReportsFilterPicker extends MultiAction {
 		
 		arf.setImplementingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedImplementingAgency(), AmpOrganisation.class));
 		arf.setExecutingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedExecutingAgency(), AmpOrganisation.class));
-		arf.setProjectCategory(ReportsUtil.processSelectedFilters(filterForm.getSelectedProjectCategory(), AmpOrganisation.class));
+		arf.setProjectCategory(ReportsUtil.processSelectedFilters(filterForm.getSelectedProjectCategory(), AmpCategoryValue.class));
 
 		if ( filterForm.getSourceIsReportWizard() != null && filterForm.getSourceIsReportWizard() ) {
 			httpSession.setAttribute(ReportWizardAction.SESSION_FILTER, arf);

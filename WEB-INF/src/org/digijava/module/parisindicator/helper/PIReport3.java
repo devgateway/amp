@@ -177,7 +177,7 @@ public class PIReport3 extends PIAbstractReport {
 										} else {
 											auxRow.setColumn2(new BigDecimal(0));
 										}
-										auxRow.setColumn3(null);
+										auxRow.setColumn3(0);
 										auxRow.setDonorGroup(auxPoDD.getOrgGrpId());
 										auxRow.setYear(transactionYear);
 										list.add(auxRow);
@@ -283,8 +283,63 @@ public class PIReport3 extends PIAbstractReport {
 			}
 		}
 
+		// Complete the list with the same number of years on each donor group.
 		newList = this.addMissingYears(newList, startYear, endYear);
+
+		// Calculate final percentajes and add 'All Donors' row.
+		newList = this.calculatePercentages(newList, startYear, endYear);
+
 		return newList;
+	}
+
+	private Collection<PIReportAbstractRow> calculatePercentages(Collection<PIReportAbstractRow> coll, int startYear,
+			int endYear) {
+
+		int range = endYear + 1 - startYear;
+		BigDecimal[] sumCol1 = new BigDecimal[range];
+		BigDecimal[] sumCol2 = new BigDecimal[range];
+		Iterator<PIReportAbstractRow> iterColl = coll.iterator();
+		while (iterColl.hasNext()) {
+			// Calculate percentages.
+			PIReport3Row auxRow = (PIReport3Row) iterColl.next();
+			if (auxRow.getColumn2().doubleValue() > 0) {
+				auxRow.setColumn3(auxRow.getColumn1().multiply(new BigDecimal(100)).divide(auxRow.getColumn2())
+						.floatValue());
+			} else {
+				auxRow.setColumn3(0);
+			}
+
+			// Accumulate totals for each year.
+			if (sumCol1[auxRow.getYear() - startYear] == null) {
+				sumCol1[auxRow.getYear() - startYear] = new BigDecimal(0);
+			}
+			if (sumCol2[auxRow.getYear() - startYear] == null) {
+				sumCol2[auxRow.getYear() - startYear] = new BigDecimal(0);
+			}
+			sumCol1[auxRow.getYear() - startYear] = sumCol1[auxRow.getYear() - startYear].add(auxRow.getColumn1());
+			sumCol2[auxRow.getYear() - startYear] = sumCol2[auxRow.getYear() - startYear].add(auxRow.getColumn2());
+		}
+
+		// Add "All Donors" record at the beginning with the total amounts.
+		int currentYear = startYear;
+		ArrayList auxList = new ArrayList(coll);
+		for (int i = 0; i < endYear + 1 - startYear; i++) {
+			PIReport3Row auxRow = new PIReport3Row();
+			AmpOrgGroup auxDonorGroup = new AmpOrgGroup();
+			auxDonorGroup.setOrgGrpName("All Donors");
+			auxRow.setDonorGroup(auxDonorGroup);
+			auxRow.setColumn1(sumCol1[i]);
+			auxRow.setColumn2(sumCol2[i]);
+			auxRow.setYear(startYear + i);
+			if (auxRow.getColumn2().doubleValue() > 0) {
+				auxRow.setColumn3(auxRow.getColumn1().multiply(new BigDecimal(100)).divide(auxRow.getColumn2())
+						.floatValue());
+			} else {
+				auxRow.setColumn3(0);
+			}
+			auxList.add(i, auxRow);
+		}
+		return auxList;
 	}
 
 	private Collection<PIReportAbstractRow> addMissingYears(Collection<PIReportAbstractRow> coll, int startYear,

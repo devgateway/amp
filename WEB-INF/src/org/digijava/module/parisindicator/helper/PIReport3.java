@@ -303,7 +303,7 @@ public class PIReport3 extends PIAbstractReport {
 			// Calculate percentages.
 			PIReport3Row auxRow = (PIReport3Row) iterColl.next();
 			if (auxRow.getColumn2().doubleValue() > 0) {
-				auxRow.setColumn3(auxRow.getColumn1().multiply(new BigDecimal(100)).divide(auxRow.getColumn2())
+				auxRow.setColumn3(auxRow.getColumn1().multiply(new BigDecimal(100)).divide(auxRow.getColumn2(), RoundingMode.HALF_UP)
 						.floatValue());
 			} else {
 				auxRow.setColumn3(0);
@@ -332,7 +332,7 @@ public class PIReport3 extends PIAbstractReport {
 			auxRow.setColumn2(sumCol2[i]);
 			auxRow.setYear(startYear + i);
 			if (auxRow.getColumn2().doubleValue() > 0) {
-				auxRow.setColumn3(auxRow.getColumn1().multiply(new BigDecimal(100)).divide(auxRow.getColumn2())
+				auxRow.setColumn3(auxRow.getColumn1().multiply(new BigDecimal(100)).divide(auxRow.getColumn2(), RoundingMode.HALF_UP)
 						.floatValue());
 			} else {
 				auxRow.setColumn3(0);

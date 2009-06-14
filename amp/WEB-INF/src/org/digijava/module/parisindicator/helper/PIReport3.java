@@ -198,7 +198,7 @@ public class PIReport3 extends PIAbstractReport {
 	@Override
 	public Collection<PIReportAbstractRow> reportPostProcess(Collection<PIReportAbstractRow> baseReport, int startYear,
 			int endYear) {
-		
+
 		Collection<PIReportAbstractRow> list = new ArrayList<PIReportAbstractRow>(baseReport);
 
 		// TODO: make a general comparator???
@@ -224,7 +224,8 @@ public class PIReport3 extends PIAbstractReport {
 		Collection<PIReportAbstractRow> newList = new ArrayList<PIReportAbstractRow>();
 		Collections.sort((ArrayList) list, compareRows);
 
-		AmpOrgGroup auxGroup2 = null;
+		// Format the list grouping by donor grp and year.
+		AmpOrgGroup auxGroup = null;
 		Iterator iter = list.iterator();
 		BigDecimal auxColumn1 = new BigDecimal(0);
 		BigDecimal auxColumn2 = new BigDecimal(0);
@@ -232,11 +233,17 @@ public class PIReport3 extends PIAbstractReport {
 		while (iter.hasNext()) {
 			PIReport3Row row = (PIReport3Row) iter.next();
 
-			if (auxGroup2 == null) {
-				auxGroup2 = row.getDonorGroup();
+			// Valid for the first row.
+			if (auxGroup == null) {
+				auxGroup = row.getDonorGroup();
 				currentYear = row.getYear();
 			}
-			if (auxGroup2.getAmpOrgGrpId().equals(row.getDonorGroup().getAmpOrgGrpId())) {
+			// True if the actual and previous donor are the same.
+			if (auxGroup.getAmpOrgGrpId().equals(row.getDonorGroup().getAmpOrgGrpId())) {
+				// If is the same year than the previous record then add the
+				// amounts, otherwise save the amounts added to this point and
+				// then update the current year and save the amounts in the
+				// auxiliary variables.
 				if (row.getYear() == currentYear) {
 					auxColumn1 = auxColumn1.add(row.getColumn1());
 					auxColumn2 = auxColumn2.add(row.getColumn2());
@@ -256,24 +263,70 @@ public class PIReport3 extends PIAbstractReport {
 				PIReport3Row newRow = new PIReport3Row();
 				newRow.setColumn1(auxColumn1);
 				newRow.setColumn2(auxColumn2);
-				newRow.setDonorGroup(auxGroup2);
+				newRow.setDonorGroup(auxGroup);
 				newRow.setYear(currentYear);
 				newList.add(newRow);
 
 				auxColumn1 = row.getColumn1();
 				auxColumn2 = row.getColumn2();
-				auxGroup2 = row.getDonorGroup();
+				auxGroup = row.getDonorGroup();
 				currentYear = row.getYear();
 			}
+			// If this is the last record then save the record.
 			if (!iter.hasNext()) {
 				PIReport3Row newRow = new PIReport3Row();
 				newRow.setColumn1(auxColumn1);
 				newRow.setColumn2(auxColumn2);
-				newRow.setDonorGroup(auxGroup2);
+				newRow.setDonorGroup(auxGroup);
 				newRow.setYear(currentYear);
 				newList.add(newRow);
 			}
 		}
+
+		newList = this.addMissingYears(newList, startYear, endYear);
 		return newList;
+	}
+
+	private Collection<PIReportAbstractRow> addMissingYears(Collection<PIReportAbstractRow> coll, int startYear,
+			int endYear) {
+		Collection ret = new ArrayList();
+		AmpOrgGroup auxGroup = null;
+		int j = 0;
+		Iterator iter = coll.iterator();
+		while (iter.hasNext()) {
+			PIReport3Row row = (PIReport3Row) iter.next();
+			if (auxGroup == null) {
+				auxGroup = row.getDonorGroup();
+			}
+			if (j == 0 || !auxGroup.getAmpOrgGrpId().equals(row.getDonorGroup().getAmpOrgGrpId())) {
+				auxGroup = row.getDonorGroup();
+				for (int i = startYear; i < endYear + 1; i++) {
+					PIReport3Row newRow = new PIReport3Row();
+					newRow.setColumn1(new BigDecimal(0));
+					newRow.setColumn2(new BigDecimal(0));
+					newRow.setDonorGroup(auxGroup);
+					newRow.setYear(i);
+					ret.add(newRow);
+				}
+			}
+			j++;
+		}
+
+		Iterator iterRet = ret.iterator();
+		while (iterRet.hasNext()) {
+			PIReport3Row rowRet = (PIReport3Row) iterRet.next();
+			Iterator iterOrigen = coll.iterator();
+			while (iterOrigen.hasNext()) {
+				PIReport3Row rowOrigen = (PIReport3Row) iterOrigen.next();
+				if (rowRet.getDonorGroup().getAmpOrgGrpId().equals(rowOrigen.getDonorGroup().getAmpOrgGrpId())
+						&& rowRet.getYear() == rowOrigen.getYear()) {
+					rowRet.setColumn1(rowOrigen.getColumn1());
+					rowRet.setColumn2(rowOrigen.getColumn2());
+					rowRet.setDonorGroup(rowOrigen.getDonorGroup());
+				}
+			}
+		}
+
+		return ret;
 	}
 }

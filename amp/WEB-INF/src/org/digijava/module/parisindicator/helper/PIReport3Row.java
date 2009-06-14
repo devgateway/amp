@@ -19,7 +19,7 @@ public class PIReport3Row extends PIReportAbstractRow {
 	private BigDecimal column2;
 	// Proportion of aid flows to the government sector reported on government
 	// budget
-	private BigDecimal column3;
+	private float column3;
 
 	public int getYear() {
 		return year;
@@ -45,11 +45,11 @@ public class PIReport3Row extends PIReportAbstractRow {
 		this.column2 = column2;
 	}
 
-	public BigDecimal getColumn3() {
+	public float getColumn3() {
 		return column3;
 	}
 
-	public void setColumn3(BigDecimal column3) {
+	public void setColumn3(float column3) {
 		this.column3 = column3;
 	}
 
@@ -67,7 +67,7 @@ public class PIReport3Row extends PIReportAbstractRow {
 		int result = 1;
 		result = prime * result + ((column1 == null) ? 0 : column1.hashCode());
 		result = prime * result + ((column2 == null) ? 0 : column2.hashCode());
-		result = prime * result + ((column3 == null) ? 0 : column3.hashCode());
+		result = prime * result + new Float(column3).intValue();
 		result = prime * result + ((donorGroup == null) ? 0 : donorGroup.hashCode());
 		result = prime * result + year;
 		return result;
@@ -91,11 +91,6 @@ public class PIReport3Row extends PIReportAbstractRow {
 			if (other.column2 != null)
 				return false;
 		} else if (!column2.equals(other.column2))
-			return false;
-		if (column3 == null) {
-			if (other.column3 != null)
-				return false;
-		} else if (!column3.equals(other.column3))
 			return false;
 		if (donorGroup == null) {
 			if (other.donorGroup != null)

@@ -14,6 +14,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs"%>
+<%@ taglib uri="/taglib/aim" prefix="aim" %>
 
 <%@ page import="java.util.*"%>
 <%@ page import="org.digijava.module.aim.dbentity.*"%>
@@ -164,7 +165,7 @@
 	                </tr>
 	                <tr>
 	                   <td>
-	                       contenido
+	                       <jsp:include page="parisindicator_3.jsp"></jsp:include>
 	                   </td>
 	                </tr>
 					<tr>

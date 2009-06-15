@@ -23,8 +23,8 @@ var helpBodyAct=' <digi:trn jsFriendly="true"> Please enter a number greater tha
 var helpTitle='<digi:trn jsFriendly="true">Report Sheet</digi:trn>';
 function validade(){
   var defReportsPerPage = document.getElementById("defRecsPerPage");
-  if(parseInt(defReportsPerPage.value)<0){
-	  alert("You cannot enter 0 for number of projects and activities per page.");
+  if(parseInt(defReportsPerPage.value)<1){
+	  alert(helpBodyAct);
 	  return false;
   }
   var startYear		= parseInt(aimUpdateAppSettingsForm.reportStartYear.value);

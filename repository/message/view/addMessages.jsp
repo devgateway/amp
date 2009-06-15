@@ -8,6 +8,7 @@
 <%@ taglib uri="/taglib/category" prefix="category" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <script type="text/javascript" language="JavaScript" src="<digi:file src="module/message/script/yahoo-dom-event.js"/>"></script>
 <script type="text/javascript" language="JavaScript" src="<digi:file src="module/message/script/animation-min.js"/>"></script>
@@ -80,10 +81,21 @@
   }
 	
   function validate(){
-            var titleSize=document.messageForm.messageName.value.length;
+	        var titleSize=document.messageForm.messageName.value.length;
             var descSize=document.messageForm.description.value.length;
+            <c:set var="message">
+        	<digi:trn>Please enter name </digi:trn>						
+            </c:set>
+            <c:set var="msg">
+        	${fn:replace(message,'\\n',' ')}
+            </c:set>
+            <c:set var="quote">'</c:set>
+            <c:set var="escapedQuote">\'</c:set>
+            <c:set var="msgsq">
+        	${fn:replace(msg,quote,escapedQuote)}
+            </c:set>
 		if(titleSize==0){
-			alert('Please Enter Name');
+			alert('${msgsq}');
 			return false;
 		}
                 else{
@@ -121,7 +133,18 @@
     	var list = document.getElementById('selreceivers');
     	if (event=='send') {
     		if (list == null || list.length==0) {
-        		alert('Please add receivers');
+    			<c:set var="message">
+            	<digi:trn>Please add receivers </digi:trn>						
+                </c:set>
+                <c:set var="msg">
+            	${fn:replace(message,'\\n',' ')}
+                </c:set>
+                <c:set var="quote">'</c:set>
+                <c:set var="escapedQuote">\'</c:set>
+                <c:set var="msgsq">
+            	${fn:replace(msg,quote,escapedQuote)}
+                </c:set>
+        		alert('${msgsq}');
         		return false ;
     		}
     	}    	

@@ -22,11 +22,12 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
  *
  */
 public class GetNPDFilterSettings extends Action{
-  
+
     public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
         response.setContentType("text/xml");
+        String rootTag = "Settings";
         ActivitiesForm actForm = (ActivitiesForm) form;
         String donorNames="";
         String statuses="";
@@ -74,27 +75,14 @@ public class GetNPDFilterSettings extends Action{
 
         OutputStreamWriter outputStream = new OutputStreamWriter( response.getOutputStream(),"UTF-8");
 		PrintWriter out = new PrintWriter(outputStream, true);
-        String html =" <tr> " +
-        " <td style=\"font-size:11px;font-family:Arial,Helvetica,sans-serif\" valign=\"top\">"
-         +"<strong>"
-         + "<digi:trn>Selected Filters:</digi:trn>"
-         + " </strong>"
-         +"</td>"
-         +"</tr>"
-         +"<tr>"
-         +"<td><b><digi:trn>Status</digi:trn></b>: "+statuses+" </td>"
-         + "</tr>"
-         + "<tr>"
-         + "<td><b><digi:trn>Donors</digi:trn></b>: "+donorNames+" </td>"
-         +" </tr>"
-         + "<tr>"
-         + "<td><b><digi:trn>From</digi:trn></b>: "+startYear +" </td>"
-         + "</tr>"
-         +"<tr>"
-          + "<td><b><digi:trn>To</digi:trn></b>: "+endYear +"</td>"
-         + "</tr>";
-       
-        out.println(html);
+        String result = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+		result += "<" + rootTag;
+        result += " status=\"" +DbUtil.filter(statuses) + "\" ";
+		result += " donor=\"" +DbUtil.filter(donorNames)+ "\" ";
+		result += " startYear=\"" + startYear + "\" ";
+		result += " endYear=\""+endYear+"\" ";
+		result += "/>";
+        out.println(result);
 		out.close();
         outputStream.close();
 		return null;

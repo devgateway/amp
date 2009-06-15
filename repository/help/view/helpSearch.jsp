@@ -73,7 +73,10 @@ function select(title){
 }   
 
 function search(){
+	alert("hi");
 	key = document.getElementById("selected").value;
+
+	alert(key);
 	
 	xmlHttp=GetXmlHttpObject()
 	if (xmlHttp==null){
@@ -100,7 +103,7 @@ function stChang(){
 </script>
 <style type="text/css">
 
-.silverThing {background-color:silver; }
+.silverThing {background-color:silver;}
 .whiteThing { background-color: #FFF; }
 
 </style>
@@ -127,7 +130,7 @@ function stChang(){
 			 <c:set var="searchtpc">
 				<digi:trn key="help:SearchText">Search Topic</digi:trn>
 			</c:set>
-	  		<input type="button" class="dr-menu" value="${searchtpc}" onclick="search()"/></div>
+	  		<input type="button" class="dr-menu" value="${searchtpc}" onclick="searc(alert('hi'));"/></div>
 		</div>
 	  </div>
 	</div>

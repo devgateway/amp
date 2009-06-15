@@ -86,6 +86,27 @@
                                                     <c:if test="${parisIndicatorForm.selectedDonorGroups != null}">
                                                         <digi:trn><bean:write name="parisIndicatorForm" property="selectedDonorGroups"/></digi:trn>&nbsp;|
                                                     </c:if>
+                                                <strong><digi:trn>Status:</digi:trn></strong>
+                                                    <c:if test="${parisIndicatorForm.selectedStatuses == null}">
+                                                        <digi:trn key="All">All</digi:trn>&nbsp;|
+                                                    </c:if>
+                                                    <c:if test="${parisIndicatorForm.selectedStatuses != null}">
+                                                        <digi:trn><bean:write name="parisIndicatorForm" property="selectedStatuses"/></digi:trn>&nbsp;|
+                                                    </c:if>
+                                                <strong><digi:trn>Financing Instrument:</digi:trn></strong>
+                                                    <c:if test="${parisIndicatorForm.selectedFinancingIstruments == null}">
+                                                        <digi:trn key="All">All</digi:trn>&nbsp;|
+                                                    </c:if>
+                                                    <c:if test="${parisIndicatorForm.selectedFinancingIstruments != null}">
+                                                        <digi:trn><bean:write name="parisIndicatorForm" property="selectedFinancingIstruments"/></digi:trn>&nbsp;|
+                                                    </c:if>                                              
+                                                <strong><digi:trn>Sectors:</digi:trn></strong>
+                                                    <c:if test="${parisIndicatorForm.selectedSectors == null}">
+                                                        <digi:trn key="All">All</digi:trn>&nbsp;|
+                                                    </c:if>
+                                                    <c:if test="${parisIndicatorForm.selectedSectors != null}">
+                                                        <digi:trn><bean:write name="parisIndicatorForm" property="selectedSectors"/></digi:trn>&nbsp;|
+                                                    </c:if>                                                
                                             </td>
                                         </tr>
                                     </table>
@@ -135,7 +156,7 @@
                                             <logic:iterate id="element" name="parisIndicatorForm" property="availablePIReports" indexId="index">
                                                 <LI>
                                                     <span>
-                                                        <digi:link href="/parisindicator/parisindicator.do" target="_self">
+                                                        <digi:link href="/parisindicator.do?reportId=${element.indicatorCode}&reset=true" target="_self">
                                                             <div style="max-width: 90px">
                                                                 <digi:trn key="Paris Indicator">Paris Indicator</digi:trn>&nbsp;<bean:write name="element" property="indicatorCode"/>
                                                             </div>

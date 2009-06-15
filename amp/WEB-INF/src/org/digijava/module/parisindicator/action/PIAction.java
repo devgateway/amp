@@ -1,16 +1,11 @@
 package org.digijava.module.parisindicator.action;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.parisindicator.form.PIForm;
 import org.digijava.module.parisindicator.helper.PIAbstractReport;
 import org.digijava.module.parisindicator.model.PIUseCase;
@@ -36,39 +31,6 @@ public class PIAction extends Action {
 		piForm.setAvailablePIReports(useCase.setupAvailablePIReports());
 		String piReportCode = request.getParameter("reportId");
 		piForm.setPiReport(useCase.getPIReport(piReportCode));
-
-		// SETUP FAKE DATA FOR TESTING PURPOSES.
-		/*Collection donors = new ArrayList();
-		Iterator iter = piForm.getDonors().iterator();
-		donors.add(iter.next());
-		donors.add(iter.next());
-		donors.add(iter.next());
-		donors.add(iter.next());
-		donors.add(iter.next());
-		donors.add(iter.next());
-		donors.add(iter.next());
-		donors.add(iter.next());
-		donors.add(iter.next());
-		donors.add(iter.next());
-		piForm.setSelectedDonors(donors);
-		Collection dng = new ArrayList();
-		Iterator iter2 = piForm.getDonorGroups().iterator();
-		dng.add(iter2.next());
-		dng.add(iter2.next());
-		dng.add(iter2.next());
-		dng.add(iter2.next());
-		dng.add(iter2.next());
-		dng.add(iter2.next());
-		dng.add(iter2.next());
-		dng.add(iter2.next());
-		piForm.setSelectedDonorGroups(dng);*/
-		Collection dng = new ArrayList();
-		dng.add(DbUtil.getAmpOrgGroup(new Long(12)));
-		//piForm.setSelectedDonorGroups(dng);
-		
-		piForm.setSelectedCalendar("1");
-		piForm.setStartYear(2007);
-		piForm.setEndYear(2009);
 
 		// Create report.
 		PIAbstractReport report = useCase.createReport(piForm);

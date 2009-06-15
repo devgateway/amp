@@ -1,6 +1,7 @@
 package org.digijava.module.parisindicator.model;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -60,17 +61,17 @@ public class PIUseCase {
 	public void resetFilterSelections(PIForm form, ApplicationSettings appSettings) {
 
 		if (appSettings.getFisCalId() != null) {
-			form.setSelectedCalendar(appSettings.getFisCalId().toString());
+			form.setSelectedCalendar(DbUtil.getAmpFiscalCalendar(appSettings.getFisCalId()));
 		} else {
-			form.setSelectedCalendar(DbUtil.getBaseFiscalCalendar().toString());
+			form.setSelectedCalendar(DbUtil.getAmpFiscalCalendar(DbUtil.getBaseFiscalCalendar()));
 		}
-
 		form.setSelectedCurrency(CurrencyUtil.getAmpcurrency(appSettings.getCurrencyId()));
+		form.setSelectedEndYear(Calendar.getInstance().get(Calendar.YEAR));
+		form.setSelectedStartYear(Calendar.getInstance().get(Calendar.YEAR) - 2);
+
 		form.setSelectedDonors(null);
-		form.setSelectedEndYear(0);
 		form.setSelectedDonorGroups(null);
 		form.setSelectedSectors(null);
-		form.setSelectedStartYear(0);
 		form.setSelectedStatuses(null);
 	}
 

@@ -12,7 +12,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 public interface PIOperations {
 
 	public abstract Collection<PIReportAbstractRow> generateReport(Collection<AmpAhsurvey> commonData, int startYear,
-			int endYear, String calendar, AmpCurrency currency, Collection<AmpSector> sectorsFilter,
+			int endYear, AmpFiscalCalendar calendar, AmpCurrency currency, Collection<AmpSector> sectorsFilter,
 			Collection<AmpCategoryValue> statusFilter, Collection<AmpCategoryValue> financingInstrumentFilter);
 
 	public abstract Collection<PIReportAbstractRow> reportPostProcess(Collection<PIReportAbstractRow> baseReport,

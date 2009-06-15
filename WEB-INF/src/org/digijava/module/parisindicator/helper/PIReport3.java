@@ -47,7 +47,7 @@ public class PIReport3 extends PIAbstractReport {
 
 	@Override
 	public Collection<PIReportAbstractRow> generateReport(Collection<AmpAhsurvey> commonData, int startYear,
-			int endYear, String calendar, AmpCurrency currency, Collection<AmpSector> sectorsFilter,
+			int endYear, AmpFiscalCalendar calendar, AmpCurrency currency, Collection<AmpSector> sectorsFilter,
 			Collection<AmpCategoryValue> statusFilter, Collection<AmpCategoryValue> financingInstrumentFilter) {
 
 		Collection<PIReportAbstractRow> list = new ArrayList<PIReportAbstractRow>();
@@ -60,11 +60,12 @@ public class PIReport3 extends PIAbstractReport {
 
 		try {
 			// Setup year ranges according the selected calendar.
-			AmpFiscalCalendar fCalendar = FiscalCalendarUtil.getAmpFiscalCalendar(Long.parseLong(calendar));
+			AmpFiscalCalendar fCalendar = FiscalCalendarUtil.getAmpFiscalCalendar(calendar.getAmpFiscalCalId());
 			if (!(fCalendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue()))) {
 				for (int i = 0; i < yearRange; i++) {
-					startDates[i] = FiscalCalendarUtil.getCalendarStartDate(new Long(calendar), startYear + i);
-					endDates[i] = FiscalCalendarUtil.getCalendarEndDate(new Long(calendar), startYear + i);
+					startDates[i] = FiscalCalendarUtil
+							.getCalendarStartDate(calendar.getAmpFiscalCalId(), startYear + i);
+					endDates[i] = FiscalCalendarUtil.getCalendarEndDate(calendar.getAmpFiscalCalId(), startYear + i);
 				}
 			}
 
@@ -272,7 +273,7 @@ public class PIReport3 extends PIAbstractReport {
 				auxGroup = row.getDonorGroup();
 				currentYear = row.getYear();
 			}
-			// If this is the last record then save the record.
+			// If this is the last record then save it.
 			if (!iter.hasNext()) {
 				PIReport3Row newRow = new PIReport3Row();
 				newRow.setColumn1(auxColumn1);
@@ -286,7 +287,7 @@ public class PIReport3 extends PIAbstractReport {
 		// Complete the list with the same number of years on each donor group.
 		newList = this.addMissingYears(newList, startYear, endYear);
 
-		// Calculate final percentajes and add 'All Donors' row.
+		// Calculate final percentages and add 'All Donors' row.
 		newList = this.calculatePercentages(newList, startYear, endYear);
 
 		return newList;

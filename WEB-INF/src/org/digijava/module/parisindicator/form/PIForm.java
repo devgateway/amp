@@ -28,7 +28,7 @@ public class PIForm extends ActionForm {
 	private int selectedStartYear;
 	private int selectedEndYear;
 	private AmpCurrency selectedCurrency;
-	private String selectedCalendar;
+	private AmpFiscalCalendar selectedCalendar;
 	private Collection<AmpCategoryValue> selectedStatuses;
 	private Collection<AmpOrgGroup> selectedDonorGroups;
 	private Collection<AmpSector> selectedSectors;
@@ -150,11 +150,11 @@ public class PIForm extends ActionForm {
 		return selectedCurrency;
 	}
 
-	public void setSelectedCalendar(String selectedCalendar) {
+	public void setSelectedCalendar(AmpFiscalCalendar selectedCalendar) {
 		this.selectedCalendar = selectedCalendar;
 	}
 
-	public String getSelectedCalendar() {
+	public AmpFiscalCalendar getSelectedCalendar() {
 		return selectedCalendar;
 	}
 
@@ -234,8 +234,7 @@ public class PIForm extends ActionForm {
 		return selectedFinancingIstruments;
 	}
 
-	public void setSelectedFinancingIstruments(
-			Collection<AmpCategoryValue> selectedFinancingIstruments) {
+	public void setSelectedFinancingIstruments(Collection<AmpCategoryValue> selectedFinancingIstruments) {
 		this.selectedFinancingIstruments = selectedFinancingIstruments;
 	}
 }

@@ -26,12 +26,13 @@
         var partialURL=fullURL.substring(0,lastSlash);
         return partialURL+"/"+actionName;
     }
+
     function changeCurrency(){
        var currency=document.getElementById("regFundCurrCode").value;
-       var url=addActionToURL('getFundingTotals.do')+'?regFundingPageCurrCode='+currency+'&isRegcurr=true'+'&isStepPage=false';
+       var url=addActionToURL('getFundingTotals.do')+'?edit=true&regFundingPageCurrCode='+currency+'&isRegcurr=true'+'&isStepPage=false';
        var async=new Asynchronous();
        async.complete=buildFundingTotals;
-       async.call(url);
+	   async.call(url);
     }
      function buildFundingTotals(status, statusText, responseText, responseXML){
         var root=responseXML.getElementsByTagName('total')[0];
@@ -56,6 +57,7 @@
  	EditActivityForm eaForm = (EditActivityForm) session.getAttribute("siteampdefaultaimEditActivityForm");
   	String defPers = (String) request.getAttribute("defPerspective"); 
   	String defCurr = (String) request.getAttribute("defCurrency"); %>
+
 
 <jsp:include page="scripts/newCalendar.jsp" flush="true" />
 

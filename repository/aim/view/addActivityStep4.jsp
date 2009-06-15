@@ -53,7 +53,7 @@
     }
         function totalsPage() {
        var currency=document.aimEditActivityForm.regFundingPageCurrCode.value;
-       var url=addActionToURL('getFundingTotals.do')+'?regFundingPageCurrCode='+currency+'&isRegcurr=true'+'&isStepPage=true';
+       var url=addActionToURL('getFundingTotals.do')+'?edit=true&regFundingPageCurrCode='+currency+'&isRegcurr=true'+'&isStepPage=true';
        var async=new Asynchronous();
        async.complete=buildFundingTotalsForPage;
        async.call(url);

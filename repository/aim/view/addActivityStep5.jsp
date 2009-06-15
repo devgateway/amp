@@ -359,7 +359,7 @@ function removeSelPhyProgress() {
     function changeCurrency(){
        var currency=document.getElementById("compFundCurr").value;
     	// the edit=true parameter needs to be added to each request so that AMPActionServlet knows the user hasn't left the Activity Wizard
-       var url=addActionToURL('getFundingTotals.do')+'?fundingCurrCode='+currency+'&isRegcurr=false'+'&isStepPage=false&edit=true';
+       var url=addActionToURL('getFundingTotals.do')+'?edit=true&fundingCurrCode='+currency+'&isRegcurr=false'+'&isStepPage=false&edit=true';
        var async=new Asynchronous();
        async.complete=buildFundingTotals;
        async.call(url);

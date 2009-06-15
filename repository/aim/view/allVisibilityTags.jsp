@@ -678,6 +678,9 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Remove Program Button - Primary Programs" feature="Program"></field:display> 
 <field:display name="Remove Program Button - Secondary Programs" feature="Program"></field:display> 
 <field:display name="Remove Sectors Button" feature="Sectors"></field:display> 
+
+<field:display name="Responsible Organization" feature="Responsible Organization"></field:display> 
+
 <field:display name="Responsible Organization Add Button" feature="Responsible Organization"></field:display> 
 <field:display name="Responsible Organization Groups" feature="Responsible Organization"></field:display> 
 <field:display name="Responsible Organization Organizations Button" feature="Responsible Organization"></field:display> 

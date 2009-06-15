@@ -49,22 +49,30 @@
 	        </tr>
 	    </logic:empty>
 	    <logic:notEmpty name="parisIndicatorForm" property="mainTableRows">
+	       <%int counter = 0; %>
+	       <bean:define id="color" value="" type="String"/>
 	       <logic:iterate id="element" name="parisIndicatorForm" property="mainTableRows" indexId="index" 
 	        type="org.digijava.module.parisindicator.helper.PIReport3Row">
-	           <tr>
-	               <td>
-	                   <digi:trn><bean:write name="element" property="donorGroup.orgGrpName"/></digi:trn>
-	               </td>
-	               <td>
+	           <logic:equal name="element" property="year" value="${parisIndicatorForm.selectedStartYear}">
+                   <%counter++;%>
+               </logic:equal>
+	           <%if(counter%2 == 0) color = "bgcolor=#EBEBEB"; else color = "";%>
+	           <tr <%=color%> >
+	               <logic:equal name="element" property="year" value="${parisIndicatorForm.selectedStartYear}">
+		               <td align="center" rowspan="${parisIndicatorForm.selectedEndYear + 1 - parisIndicatorForm.selectedStartYear}" height="65">
+		                   <strong><digi:trn><bean:write name="element" property="donorGroup.orgGrpName"/></digi:trn></strong>
+		               </td>
+	               </logic:equal>
+	               <td align="center">
 	                   <bean:write name="element" property="year"/>
 	               </td>
-	               <td>
+	               <td align="center">
                        <aim:formatNumber value="${element.column1}"/>
                    </td>
-                   <td>
+                   <td align="center">
                        <aim:formatNumber value="${element.column2}"/>
                    </td>
-                   <td>
+                   <td align="center">
                        <fmt:formatNumber type="number" value="${element.column3}" pattern="###" maxFractionDigits="0" />%
                    </td>
 	           </tr>

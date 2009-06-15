@@ -68,7 +68,7 @@ public class DateBreakDown {
         //
         String siteId = RequestUtils.getSite(request).getId()+"";
         String locale =  RequestUtils.getNavigationLanguage(request).getCode().toLowerCase();
-        if ((locale != null) && (locale == "fr")) {
+        if ((locale != null) && (locale.equals("fr"))) {
         	String ms = TranslatorWorker.translateText(monthNameShort, locale, siteId);
         	String ml = TranslatorWorker.translateText(monthNameLong, locale, siteId);
         	dateInLocaleWeek = dayOfMonth + " " + ms + " " + year;

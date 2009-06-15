@@ -73,10 +73,7 @@ function select(title){
 }   
 
 function search(){
-	alert("hi");
-	key = document.getElementById("selected").value;
-
-	alert(key);
+	var key = document.getElementById("selected").value;
 	
 	xmlHttp=GetXmlHttpObject()
 	if (xmlHttp==null){

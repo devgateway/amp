@@ -63,28 +63,28 @@
                                                         <digi:trn key="All">All</digi:trn>&nbsp;|
                                                     </c:if>
                                                     <c:if test="${parisIndicatorForm.selectedCalendar != null}">
-                                                        <bean:write name="parisIndicatorForm" property="selectedCalendar"/>&nbsp;|
+                                                        <digi:trn><bean:write name="parisIndicatorForm" property="selectedCalendar"/></digi:trn>&nbsp;|
                                                     </c:if>
                                                 <strong><digi:trn key="rep:pop:CurrencyType">Currency Type:</digi:trn></strong>
                                                     <c:if test="${parisIndicatorForm.selectedCurrency == null}">
                                                         <digi:trn key="All">All</digi:trn>&nbsp;|
                                                     </c:if>
                                                     <c:if test="${parisIndicatorForm.selectedCurrency != null}">
-                                                        <bean:write name="parisIndicatorForm" property="selectedCurrency"/>&nbsp;|
+                                                        <digi:trn><bean:write name="parisIndicatorForm" property="selectedCurrency"/></digi:trn>&nbsp;|
                                                     </c:if>
                                                 <strong><digi:trn key="rep:pop:DonorGroups">Donor Groups:</digi:trn></strong>
                                                     <c:if test="${parisIndicatorForm.selectedDonors == null}">
                                                         <digi:trn key="All">All</digi:trn>&nbsp;|
                                                     </c:if>
                                                     <c:if test="${parisIndicatorForm.selectedDonors != null}">
-                                                        <bean:write name="parisIndicatorForm" property="selectedDonors"/>&nbsp;|
+                                                        <digi:trn><bean:write name="parisIndicatorForm" property="selectedDonors"/></digi:trn>&nbsp;|
                                                     </c:if>
                                                 <strong><digi:trn key="rep:pop:Donors">Donors:</digi:trn></strong>
                                                     <c:if test="${parisIndicatorForm.selectedDonorGroups == null}">
                                                         <digi:trn key="All">All</digi:trn>&nbsp;|
                                                     </c:if>
                                                     <c:if test="${parisIndicatorForm.selectedDonorGroups != null}">
-                                                        <bean:write name="parisIndicatorForm" property="selectedDonorGroups"/>&nbsp;|
+                                                        <digi:trn><bean:write name="parisIndicatorForm" property="selectedDonorGroups"/></digi:trn>&nbsp;|
                                                     </c:if>
                                             </td>
                                         </tr>
@@ -164,7 +164,7 @@
 	                    </td>
 	                </tr>
 	                <tr>
-	                   <td>
+	                   <td class="td_right_left1">
 	                       <jsp:include page="parisindicator_3.jsp"></jsp:include>
 	                   </td>
 	                </tr>

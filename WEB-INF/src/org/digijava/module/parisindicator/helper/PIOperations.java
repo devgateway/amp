@@ -16,5 +16,5 @@ public interface PIOperations {
 			Collection<AmpCategoryValue> statusFilter, Collection<AmpCategoryValue> financingInstrumentFilter);
 
 	public abstract Collection<PIReportAbstractRow> reportPostProcess(Collection<PIReportAbstractRow> baseReport,
-			int startYear, int endYear);
+			int startYear, int endYear) throws Exception;
 }

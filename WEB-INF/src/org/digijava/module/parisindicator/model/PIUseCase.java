@@ -131,7 +131,7 @@ public class PIUseCase {
 	 * Executes part of the common logic for all reports and then creates the
 	 * concrete report.
 	 */
-	public PIAbstractReport createReport(PIForm form) {
+	public PIAbstractReport createReport(PIForm form) throws Exception {
 		// Create the report.
 		PIAbstractReport report = null;
 		if (form.getPiReport().getIndicatorCode().equals(PIConstants.PARIS_INDICATOR_REPORT_3)) {

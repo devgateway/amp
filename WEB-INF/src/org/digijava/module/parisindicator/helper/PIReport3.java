@@ -61,8 +61,8 @@ public class PIReport3 extends PIAbstractReport {
 		try {
 			// Setup year ranges according the selected calendar.
 			AmpFiscalCalendar fCalendar = FiscalCalendarUtil.getAmpFiscalCalendar(Long.parseLong(calendar));
-			for (int i = 0; i < yearRange; i++) {
-				if (!(fCalendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue()))) {
+			if (!(fCalendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue()))) {
+				for (int i = 0; i < yearRange; i++) {
 					startDates[i] = FiscalCalendarUtil.getCalendarStartDate(new Long(calendar), startYear + i);
 					endDates[i] = FiscalCalendarUtil.getCalendarEndDate(new Long(calendar), startYear + i);
 				}
@@ -121,7 +121,7 @@ public class PIReport3 extends PIAbstractReport {
 							// Filter by years. Check if the transaction date
 							// falls into one of the date ranges.
 							int transactionYear = PIUtils.getTransactionYear(auxFundingDetail.getTransactionDate(),
-									startDates, endDates, startYear);
+									startDates, endDates, startYear, endYear);
 							if (transactionYear == 0) {
 								// Ignore this funding detail.
 								continue;
@@ -197,7 +197,7 @@ public class PIReport3 extends PIAbstractReport {
 
 	@Override
 	public Collection<PIReportAbstractRow> reportPostProcess(Collection<PIReportAbstractRow> baseReport, int startYear,
-			int endYear) {
+			int endYear) throws Exception {
 
 		Collection<PIReportAbstractRow> list = new ArrayList<PIReportAbstractRow>(baseReport);
 
@@ -293,7 +293,7 @@ public class PIReport3 extends PIAbstractReport {
 	}
 
 	private Collection<PIReportAbstractRow> calculatePercentages(Collection<PIReportAbstractRow> coll, int startYear,
-			int endYear) {
+			int endYear) throws Exception {
 
 		int range = endYear + 1 - startYear;
 		BigDecimal[] sumCol1 = new BigDecimal[range];
@@ -344,7 +344,7 @@ public class PIReport3 extends PIAbstractReport {
 	}
 
 	private Collection<PIReportAbstractRow> addMissingYears(Collection<PIReportAbstractRow> coll, int startYear,
-			int endYear) {
+			int endYear) throws Exception {
 		Collection ret = new ArrayList();
 		AmpOrgGroup auxGroup = null;
 		int j = 0;

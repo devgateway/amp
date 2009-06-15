@@ -2,6 +2,7 @@ package org.digijava.module.parisindicator.util;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 
 import org.digijava.kernel.exception.DgException;
@@ -9,6 +10,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.helper.fiscalcalendar.EthiopianCalendar;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.hibernate.Session;
@@ -75,14 +77,24 @@ public class PIUtils {
 	 * @return The year of the transaction for the calendar represented by the
 	 *         Date ranges. Or 0 if not.
 	 */
-	public final static int getTransactionYear(Date transactionDate, Date[] startDates, Date[] endDates, int startYear) {
+	public final static int getTransactionYear(Date transactionDate, Date[] startDates, Date[] endDates, int startYear,
+			int endYear) throws Exception {
 		int ret = 0;
-		int auxYear = startYear - 1;
-		for (int i = 0; i < startDates.length; i++) {
-			auxYear++;
-			if ((transactionDate.after(startDates[i]) || chkEqualDates(transactionDate, startDates[i]))
-					&& (transactionDate.before(endDates[i]) || chkEqualDates(transactionDate, endDates[i]))) {
-				ret = auxYear;
+		if (startDates[0] == null || endDates[0] == null) {
+			GregorianCalendar gc = new GregorianCalendar();
+			gc.setTime(transactionDate);
+			EthiopianCalendar ethCal = new EthiopianCalendar().getEthiopianDate(gc);
+			if (ethCal.ethFiscalYear >= startYear && ethCal.ethFiscalYear <= endYear) {
+				ret = ethCal.ethFiscalYear;
+			}
+		} else {
+			int auxYear = startYear - 1;
+			for (int i = 0; i < startDates.length; i++) {
+				auxYear++;
+				if ((transactionDate.after(startDates[i]) || chkEqualDates(transactionDate, startDates[i]))
+						&& (transactionDate.before(endDates[i]) || chkEqualDates(transactionDate, endDates[i]))) {
+					ret = auxYear;
+				}
 			}
 		}
 		return ret;

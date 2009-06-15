@@ -390,7 +390,7 @@ target.style.cursor = "default"
 											<tr bgcolor="#ffffff">
 												<td valign="top" align="left">
 												
-										            <a title="<digi:trn key="aim:Project:Impact:activity">Project Impact title</digi:trn>">
+										            <a title="<digi:trn key="aim:EditProjectImpact">Edit Project Impact</digi:trn>">
 													     <digi:trn key="aim:${largeTextLabel}">${largeTextLabel}</digi:trn> 
 													</a>
 									            

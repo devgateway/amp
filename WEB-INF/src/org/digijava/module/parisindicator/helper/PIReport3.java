@@ -38,7 +38,7 @@ import edu.emory.mathcs.backport.java.util.Collections;
 
 public class PIReport3 extends PIAbstractReport {
 
-	private static Logger logger = Logger.getLogger(PIUseCase.class);
+	private static Logger logger = Logger.getLogger(PIReport3.class);
 	private final String reportCode = PIConstants.PARIS_INDICATOR_REPORT_3;
 
 	public String getReportCode() {

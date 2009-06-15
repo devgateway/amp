@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.StringTokenizer;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -1061,5 +1062,12 @@ System.out.println("lang:"+lang);
         }
         return buf.toString();
     }
+    
+    public  static String removeSpaces(String s) {
+  	  StringTokenizer st = new StringTokenizer(s,"&#32;",false);
+  	  String t="";
+  	  while (st.hasMoreElements()) t += st.nextElement();
+  	  return t;
+  	  }
 
 }

@@ -67,9 +67,10 @@ function GetXmlHttpObject()	{
 
 function select(title){
 
-		document.getElementById("selected").value=document.getElementById(title.innerHTML).innerHTML;
-		$("#livesearch").hide();
-}  
+	document.getElementById("selected").value=document.getElementById(title.id).innerHTML;
+	$("#livesearch").hide();
+
+}   
 
 function search(){
 	key = document.getElementById("selected").value;

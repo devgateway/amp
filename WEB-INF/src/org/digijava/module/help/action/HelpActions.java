@@ -117,14 +117,15 @@ public class HelpActions extends DispatchAction {
 	   }
 		return null;
 	}
-
-/*
-    public ActionForward vewSearchKey(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
+     
+   public ActionForward vewSearchKey(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		  	OutputStreamWriter os = null;	
 		    PrintWriter out = null;
 		    String loadStatus =request.getParameter("loadKey");
 		    Editor item = new Editor();
 		    String	lange	= RequestUtils.getNavigationLanguage(request).getCode();
+		    String siteId = RequestUtils.getSite(request).getSiteId();
+	         String moduleInstance = RequestUtils.getRealModuleInstance(request).getInstanceName();
 		    
 			 try {
 				 os = new OutputStreamWriter(response.getOutputStream());
@@ -137,16 +138,23 @@ public class HelpActions extends DispatchAction {
 				 			
 				           
 							  int editkey = item.getEditorKey().indexOf("body:");
-					          String title = item.getEditorKey().substring(editkey+5);
-				             if(title.length()>=loadStatus.length()){
-				             if(loadStatus.toLowerCase().equals(title.toLowerCase().substring(0,loadStatus.length()))){
+					          //String title = item.getEditorKey().substring(editkey+5);
+					          HelpTopic helptopic = HelpUtil.getHelpTopicByBodyEditKey(item.getEditorKey(), siteId, moduleInstance);
+					         if(!helptopic.equals(null)){
+				              String title = helptopic.getTopicKey();
+				              String xs = HelpUtil.getTrn(title,request);
+				              String encodeTitle = HelpUtil.HTMLEntityEncode(xs);
+					          if(encodeTitle.length()>=loadStatus.length()){
+				               if(loadStatus.toLowerCase().equals(encodeTitle.toLowerCase().substring(0,loadStatus.length()))){
 				            	
-				            	String xs = HelpUtil.getTrn(title,request);
-				                out.println("<div id="+title+" onclick=\"select("+title+")\" onmouseover=\"this.className='silverThing'\" onmouseout=\"this.className='whiteThing'\">"+title+"</div>");
+				            	String removerSpacedtitle = HelpUtil.removeSpaces(encodeTitle);
+				            	
+				                out.println("<div id="+removerSpacedtitle+" onclick=\"select("+removerSpacedtitle+")\" onmouseover=\"this.className='silverThing'\" onmouseout=\"this.className='whiteThing'\">"+encodeTitle+"</div>");
 				             }
 				           }
 						}
 					 }
+				 }
 			      if(out == null){
 			    	 
 			    	  out.println("<div onmouseover=\"this.className='silverThing'\" onmouseout=\"this.className='whiteThing'\">Not found</div>");
@@ -160,8 +168,9 @@ public class HelpActions extends DispatchAction {
 	     e.printStackTrace();
 	 }
 	 return null;
- }
-	*/
+}
+	
+	
 	
  	public ActionForward searchHelpTopic(ActionMapping mapping,	ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		 String key =request.getParameter("key");

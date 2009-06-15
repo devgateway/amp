@@ -222,7 +222,8 @@
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpLocation" column="amp_location_id"/>
 			</set-->
 
-		<set name="locations" lazy="true" cascade="all-delete-orphan" inverse="true">
+		<set name="locations" cascade="all-delete-orphan" inverse="true">
+			<cache usage="read-write"/>
 			<key column="amp_activity_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityLocation" />
 		</set>

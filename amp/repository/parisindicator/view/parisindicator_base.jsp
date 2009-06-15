@@ -30,7 +30,9 @@
 <digi:errors />
 
 <div id="myFilter2" style="display: none;"></div>
-<div id="myFilter" style="display: none;"></div>
+<div id="myFilter" style="display: none;">
+    <jsp:include page="viewParisIndicatorPopupFilter.jsp" />
+</div>
 
 <jsp:include page="/repository/aim/view/viewParisIndicatorPopupScripts.jsp" />
 <jsp:include page="/repository/aim/view/teamPagesHeader.jsp" flush="true" />
@@ -186,7 +188,12 @@
 	                </tr>
 	                <tr>
 	                   <td class="td_right_left1">
-	                       <jsp:include page="parisindicator_3.jsp"></jsp:include>
+	                       <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="3">
+	                           <jsp:include page="parisindicator_3.jsp"></jsp:include>
+	                       </logic:equal>
+	                       <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="4">
+                               <jsp:include page="parisindicator_4.jsp"></jsp:include>
+                           </logic:equal>
 	                   </td>
 	                </tr>
 					<tr>

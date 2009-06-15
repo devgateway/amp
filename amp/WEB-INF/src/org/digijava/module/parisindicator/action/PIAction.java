@@ -27,6 +27,7 @@ public class PIAction extends Action {
 			useCase.resetFilterSelections(piForm, ((TeamMember) request.getSession().getAttribute("currentMember"))
 					.getAppSettings());
 		}
+		
 		// Setup common data.
 		piForm.setAvailablePIReports(useCase.setupAvailablePIReports());
 		String piReportCode = request.getParameter("reportId");

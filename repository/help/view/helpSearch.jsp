@@ -127,7 +127,7 @@ function stChang(){
 			 <c:set var="searchtpc">
 				<digi:trn key="help:SearchText">Search Topic</digi:trn>
 			</c:set>
-	  		<input type="button" class="dr-menu" value="${searchtpc}" onclick="searc(alert('hi'));"/></div>
+	  		<input type="button" class="dr-menu" value="${searchtpc}" onclick="searc();"/></div>
 		</div>
 	  </div>
 	</div>

@@ -1518,16 +1518,16 @@ function showFilter(){
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>Status: ${aimNPDForm.selectedStatuses} </td>
+                                                <td><b><digi:trn>Status</digi:trn></b>: ${aimNPDForm.selectedStatuses} </td>
                                             </tr>
                                             <tr>
-                                                <td>Donors: ${aimNPDForm.selectedDonors} </td>
+                                                <td><b><digi:trn>Donors</digi:trn></b>: ${aimNPDForm.selectedDonors} </td>
                                             </tr>
                                             <tr>
-                                                <td>From: ${aimNPDForm.yearFrom} </td>
+                                                <td><b><digi:trn>From</digi:trn></b>: ${aimNPDForm.yearFrom} </td>
                                             </tr>
                                             <tr>
-                                                <td>To: ${aimNPDForm.yearTo} </td>
+                                                <td><b><digi:trn>To</digi:trn></b>: ${aimNPDForm.yearTo} </td>
                                             </tr>
                                             </tbody>
                                         </table>

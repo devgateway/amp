@@ -185,11 +185,15 @@ public class PIReport5a extends PIAbstractReport {
 									} else {
 										auxRow.setColumn5(new BigDecimal(0));
 									}
-									// recordar q la col6 se tiene q mostrar en
-									// ciertos casos nomas, podria poner un
-									// numero q sea una marca aca y luego hacer
-									// el calculo del porcentaje en el momento
-									// del calculo final de porcentaje.
+									// This column will not be shown in the
+									// report, its purpose is to calculate the
+									// first percentage (col 6) which can't be
+									// done by normal procedures.
+									if (showColumn[5]) {
+										auxRow.setColumn8(amount);
+									} else {
+										auxRow.setColumn8(new BigDecimal(0));
+									}
 									auxRow.setDonorGroup(auxPoDD.getOrgGrpId());
 									auxRow.setYear(transactionYear);
 
@@ -244,6 +248,7 @@ public class PIReport5a extends PIAbstractReport {
 		BigDecimal auxColumn3 = new BigDecimal(0);
 		BigDecimal auxColumn4 = new BigDecimal(0);
 		BigDecimal auxColumn5 = new BigDecimal(0);
+		BigDecimal auxColumn8 = new BigDecimal(0);
 		int currentYear = 0;
 		while (iter.hasNext()) {
 			PIReport5aRow row = (PIReport5aRow) iter.next();
@@ -265,6 +270,7 @@ public class PIReport5a extends PIAbstractReport {
 					auxColumn3 = auxColumn3.add(row.getColumn3());
 					auxColumn4 = auxColumn4.add(row.getColumn4());
 					auxColumn5 = auxColumn5.add(row.getColumn5());
+					auxColumn8 = auxColumn8.add(row.getColumn8());
 				} else {
 					PIReport5aRow newRow = new PIReport5aRow();
 					newRow.setColumn1(auxColumn1);
@@ -272,6 +278,7 @@ public class PIReport5a extends PIAbstractReport {
 					newRow.setColumn3(auxColumn3);
 					newRow.setColumn4(auxColumn4);
 					newRow.setColumn5(auxColumn5);
+					newRow.setColumn8(auxColumn8);
 					newRow.setDonorGroup(row.getDonorGroup());
 					newRow.setYear(currentYear);
 					newList.add(newRow);
@@ -282,6 +289,7 @@ public class PIReport5a extends PIAbstractReport {
 					auxColumn3 = row.getColumn3();
 					auxColumn4 = row.getColumn4();
 					auxColumn5 = row.getColumn5();
+					auxColumn8 = row.getColumn8();
 				}
 			} else {
 				PIReport5aRow newRow = new PIReport5aRow();
@@ -290,6 +298,7 @@ public class PIReport5a extends PIAbstractReport {
 				newRow.setColumn3(auxColumn3);
 				newRow.setColumn4(auxColumn4);
 				newRow.setColumn5(auxColumn5);
+				newRow.setColumn8(auxColumn8);
 				newRow.setDonorGroup(auxGroup);
 				newRow.setYear(currentYear);
 				newList.add(newRow);
@@ -299,6 +308,7 @@ public class PIReport5a extends PIAbstractReport {
 				auxColumn3 = row.getColumn3();
 				auxColumn4 = row.getColumn4();
 				auxColumn5 = row.getColumn5();
+				auxColumn8 = row.getColumn8();
 				auxGroup = row.getDonorGroup();
 				currentYear = row.getYear();
 			}
@@ -310,6 +320,7 @@ public class PIReport5a extends PIAbstractReport {
 				newRow.setColumn3(auxColumn3);
 				newRow.setColumn4(auxColumn4);
 				newRow.setColumn5(auxColumn5);
+				newRow.setColumn8(auxColumn8);
 				newRow.setDonorGroup(auxGroup);
 				newRow.setYear(currentYear);
 				newList.add(newRow);
@@ -334,6 +345,7 @@ public class PIReport5a extends PIAbstractReport {
 		BigDecimal[] sumCol3 = new BigDecimal[range];
 		BigDecimal[] sumCol4 = new BigDecimal[range];
 		BigDecimal[] sumCol5 = new BigDecimal[range];
+		BigDecimal[] sumCol8 = new BigDecimal[range];
 		Iterator<PIReportAbstractRow> iterColl = coll.iterator();
 		while (iterColl.hasNext()) {
 			// Calculate percentages.
@@ -343,6 +355,14 @@ public class PIReport5a extends PIAbstractReport {
 						RoundingMode.HALF_UP).floatValue());
 			} else {
 				auxRow.setColumn7(0);
+			}
+
+			// Calculate percentage for column 6.
+			if (auxRow.getColumn5().doubleValue() > 0) {
+				auxRow.setColumn6(auxRow.getColumn8().multiply(new BigDecimal(100)).divide(auxRow.getColumn5(),
+						RoundingMode.HALF_UP).floatValue());
+			} else {
+				auxRow.setColumn6(0);
 			}
 
 			// Accumulate totals for each year.
@@ -361,11 +381,15 @@ public class PIReport5a extends PIAbstractReport {
 			if (sumCol5[auxRow.getYear() - startYear] == null) {
 				sumCol5[auxRow.getYear() - startYear] = new BigDecimal(0);
 			}
+			if (sumCol8[auxRow.getYear() - startYear] == null) {
+				sumCol8[auxRow.getYear() - startYear] = new BigDecimal(0);
+			}
 			sumCol1[auxRow.getYear() - startYear] = sumCol1[auxRow.getYear() - startYear].add(auxRow.getColumn1());
 			sumCol2[auxRow.getYear() - startYear] = sumCol2[auxRow.getYear() - startYear].add(auxRow.getColumn2());
 			sumCol3[auxRow.getYear() - startYear] = sumCol3[auxRow.getYear() - startYear].add(auxRow.getColumn3());
 			sumCol4[auxRow.getYear() - startYear] = sumCol4[auxRow.getYear() - startYear].add(auxRow.getColumn4());
 			sumCol5[auxRow.getYear() - startYear] = sumCol5[auxRow.getYear() - startYear].add(auxRow.getColumn5());
+			sumCol8[auxRow.getYear() - startYear] = sumCol8[auxRow.getYear() - startYear].add(auxRow.getColumn8());
 		}
 
 		// Add "All Donors" record at the beginning with the total amounts.
@@ -382,12 +406,20 @@ public class PIReport5a extends PIAbstractReport {
 			auxRow.setColumn3(sumCol3[i]);
 			auxRow.setColumn4(sumCol4[i]);
 			auxRow.setColumn5(sumCol5[i]);
+			auxRow.setColumn8(sumCol8[i]);
 			auxRow.setYear(startYear + i);
 			if (auxRow.getColumn5().doubleValue() > 0) {
 				auxRow.setColumn7(auxRow.getColumn4().multiply(new BigDecimal(100)).divide(auxRow.getColumn5(),
 						RoundingMode.HALF_UP).floatValue());
 			} else {
 				auxRow.setColumn7(0);
+			}
+			// Calculate percentage for column 6.
+			if (auxRow.getColumn5().doubleValue() > 0) {
+				auxRow.setColumn6(auxRow.getColumn8().multiply(new BigDecimal(100)).divide(auxRow.getColumn5(),
+						RoundingMode.HALF_UP).floatValue());
+			} else {
+				auxRow.setColumn6(0);
 			}
 			auxList.add(i, auxRow);
 		}
@@ -414,6 +446,7 @@ public class PIReport5a extends PIAbstractReport {
 					newRow.setColumn3(new BigDecimal(0));
 					newRow.setColumn4(new BigDecimal(0));
 					newRow.setColumn5(new BigDecimal(0));
+					newRow.setColumn8(new BigDecimal(0));
 					newRow.setDonorGroup(auxGroup);
 					newRow.setYear(i);
 					ret.add(newRow);
@@ -435,6 +468,7 @@ public class PIReport5a extends PIAbstractReport {
 					rowRet.setColumn3(rowOrigen.getColumn3());
 					rowRet.setColumn4(rowOrigen.getColumn4());
 					rowRet.setColumn5(rowOrigen.getColumn5());
+					rowRet.setColumn8(rowOrigen.getColumn8());
 					rowRet.setDonorGroup(rowOrigen.getDonorGroup());
 				}
 			}

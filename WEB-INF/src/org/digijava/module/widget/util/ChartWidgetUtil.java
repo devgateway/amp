@@ -85,6 +85,7 @@ import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.ui.RectangleInsets;
+import org.jfree.chart.axis.NumberAxis;
 
 
 
@@ -169,6 +170,7 @@ public class ChartWidgetUtil {
 		Font font8 = new Font(null,Font.BOLD,12);
 		CategoryDataset dataset=getTypeOfAidDataset(opt,filter);
         String titleMsg= TranslatorWorker.translateText("Type of Aid", opt.getLangCode(), opt.getSiteId());
+        DecimalFormat format=FormatHelper.getDecimalFormat();
         String amount="";
         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
             amount = "Amounts in thousands";
@@ -181,10 +183,11 @@ public class ChartWidgetUtil {
 		if (opt.isShowLegend()){
 			chart.getLegend().setItemFont(font8);		
 		}
-
         CategoryPlot plot = chart.getCategoryPlot();
         CategoryItemRenderer renderer = plot.getRenderer();
-        CategoryItemLabelGenerator labelGenerator = new WidgetCategoryItemLabelGenerator();
+        NumberAxis numberAxis=(NumberAxis)plot.getRangeAxis();
+        numberAxis.setNumberFormatOverride(format);
+        CategoryItemLabelGenerator labelGenerator = new WidgetCategoryItemLabelGenerator("",format);
 		renderer.setBaseItemLabelsVisible(true);
         renderer.setBaseItemLabelGenerator(labelGenerator);
         return chart;
@@ -203,6 +206,7 @@ public class ChartWidgetUtil {
         JFreeChart chart = null;
         Font font8 = new Font(null, Font.BOLD, 12);
         CategoryDataset dataset = getPledgesCommDisbDataset(filter,opt);
+        DecimalFormat format=FormatHelper.getDecimalFormat();
         String amount="";
         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
             amount = "Amounts in thousands";
@@ -222,8 +226,9 @@ public class ChartWidgetUtil {
         renderer.setDrawBarOutline(false);
         renderer.setItemMargin(0);
 
-
-        CategoryItemLabelGenerator labelGenerator = new WidgetCategoryItemLabelGenerator("{2}", new DecimalFormat("#.######"));
+        NumberAxis numberAxis=(NumberAxis)plot.getRangeAxis();
+        numberAxis.setNumberFormatOverride(format);
+        CategoryItemLabelGenerator labelGenerator = new WidgetCategoryItemLabelGenerator("{2}", format);
         renderer.setBaseItemLabelsVisible(true);
         renderer.setBaseItemLabelGenerator(labelGenerator);
 
@@ -241,6 +246,7 @@ public class ChartWidgetUtil {
     public static JFreeChart getODAProfileChart(ChartOption opt, FilterHelper filter) throws DgException, WorkerException{
 		JFreeChart chart = null;
 		Font font8 = new Font(null,Font.BOLD,12);
+        DecimalFormat format=FormatHelper.getDecimalFormat();
 		CategoryDataset dataset=getODAProfileDataset(filter);
         String amount="";
         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
@@ -255,6 +261,10 @@ public class ChartWidgetUtil {
 		if (opt.isShowLegend()){
 			chart.getLegend().setItemFont(font8);		
 		}
+        // get a reference to the plot for further customisation...
+        CategoryPlot plot = chart.getCategoryPlot();
+        NumberAxis numberAxis = (NumberAxis) plot.getRangeAxis();
+        numberAxis.setNumberFormatOverride(format);
 
          
 		return chart;
@@ -645,6 +655,7 @@ public class ChartWidgetUtil {
         format.setMaximumFractionDigits(0);
         PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator(pattern, format, new DecimalFormat("0.0%"));
         plot.setLabelGenerator(gen);
+        plot.setLegendLabelGenerator(gen);
 
 
 
@@ -669,8 +680,15 @@ public class ChartWidgetUtil {
 		if (opt.isShowLegend()){
 			chart.getLegend().setItemFont(font8);		
 		}
-		
-		
+        PiePlot plot = (PiePlot) chart.getPlot();
+        String pattern = "{0} = {1} ({2})";
+        if (opt.getLabelPattern() != null) {
+            pattern = opt.getLabelPattern();
+        }
+        DecimalFormat format = FormatHelper.getDecimalFormat();
+		PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator(pattern, format, new DecimalFormat("0.0%"));
+        plot.setLegendLabelGenerator(gen);
+        plot.setLabelGenerator(gen);
 		return chart;
     }
 

@@ -180,14 +180,5 @@ public class ParisIndicatorHelper {
 
         return retSurvey;
     }
-    // all basevalue
-
-    public String getBaseLineValue() {
-        return getFormula().getBaseLineValue();
-    }
-    // all targetvalue
-
-    public String getTargetValue() {
-        return getFormula().getTargetValue();
-    }
+  
 }

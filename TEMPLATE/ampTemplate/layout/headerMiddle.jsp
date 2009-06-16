@@ -554,7 +554,7 @@ function adminHelp(){
                                        </feature:display>
                                         <module:display name="GIS DASHBOARD">
                                         <li class="yuiampmenuitem">
-                                            <a class="yuiampmenuitemlabel" href="/gis/showGisDashboard.do"  onclick="return canExit()">
+                                            <a class="yuiampmenuitemlabel" href="javascript:openGIS()"  onclick="return canExit()">
                                             <digi:trn key="aim:gis">GIS</digi:trn>
                                             </a>
                                         </li>

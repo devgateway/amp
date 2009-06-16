@@ -551,9 +551,12 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		PdfPTable table2AEIndicators = getWidgetTable("table_place2");
 		PdfPTable table3AEIndicators = getWidgetTable("table_place3");
 
-		layoutAEIndicators.addCell(table1AEIndicators);
-		layoutAEIndicators.addCell(table2AEIndicators);
-		layoutAEIndicators.addCell(table3AEIndicators);
+		if(table1AEIndicators != null)
+			layoutAEIndicators.addCell(table1AEIndicators);
+		if(table2AEIndicators != null)
+			layoutAEIndicators.addCell(table2AEIndicators);
+		if(table3AEIndicators != null)
+			layoutAEIndicators.addCell(table3AEIndicators);
 		layoutAEIndicators.addCell(" ");
 		layoutAEIndicators.addCell(new Paragraph(TranslatorWorker.translateText("Source: 2006 Paris Declaration Survey", locale, siteId) , new Font(Font.HELVETICA, 6)));
 		layoutAEIndicators.addCell(" ");
@@ -1069,70 +1072,76 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 			if (widget == null)
 				return null;
 
-			WiTable table = new WiTable.TableBuilder(widget.getId()).build();
-			WiColumnDropDownFilter filter = null;
-			int currentTableIdIndex = matchesId(table.getId());
-			if(currentTableIdIndex > -1)
-			{
-				table = new WiTable.TableBuilder(this.tableId[currentTableIdIndex]).build();
-				if (itemId != null && columnId != null && columnId[currentTableIdIndex]!=null && itemId[currentTableIdIndex]!=null && columnId[currentTableIdIndex].longValue()>0 && itemId[currentTableIdIndex].longValue()>0){
-					filter = (WiColumnDropDownFilter) table.getColumnById(columnId[currentTableIdIndex]);
-					//TODO this is not correct, check why columnId and itemId are not null when table is normal table.
-					if (filter!=null){
-						filter.setActiveItemId(itemId[currentTableIdIndex]);
+			try {
+				
+				WiTable table = new WiTable.TableBuilder(widget.getId()).build();
+				WiColumnDropDownFilter filter = null;
+				int currentTableIdIndex = matchesId(table.getId());
+				if(currentTableIdIndex > -1)
+				{
+					table = new WiTable.TableBuilder(this.tableId[currentTableIdIndex]).build();
+					if (itemId != null && columnId != null && columnId[currentTableIdIndex]!=null && itemId[currentTableIdIndex]!=null && columnId[currentTableIdIndex].longValue()>0 && itemId[currentTableIdIndex].longValue()>0){
+						filter = (WiColumnDropDownFilter) table.getColumnById(columnId[currentTableIdIndex]);
+						//TODO this is not correct, check why columnId and itemId are not null when table is normal table.
+						if (filter!=null){
+							filter.setActiveItemId(itemId[currentTableIdIndex]);
+						}
 					}
 				}
-			}
-			List<WiColumn> columns = table.getColumns();
-			List<WiRow> rows = table.getDataRows();
-
-			PdfPTable pdfTable = new PdfPTable(columns.size());
-			pdfTable.setExtendLastRow(false);
-			Font fontHeader = new Font();
-			fontHeader.setSize(5);
-			fontHeader.setStyle(Font.BOLD);
-			fontHeader.setColor(new Color(255, 255, 255));
-
-			Font fontCell = new Font();
-			fontCell.setSize(4);
-
-			for (WiColumn column : columns) {
-				String columnName = "";
-				if(filter != null && column.getId() == filter.getId())
-					column = filter;
-
-				if (column instanceof WiColumnDropDownFilter && filter != null)
-					columnName = filter.getProvider().getItem(filter.getActiveItemId()).getName();
-				else
-					columnName = column.getName();
-
-				PdfPCell cell = new PdfPCell(new Phrase(columnName,
-						fontHeader));
-				cell.setBackgroundColor(new Color(34, 46, 93));
-
-				pdfTable.addCell(cell);
-			}
-
-			int counter = 0;
-			for (WiRow row : rows) {
-				List<WiCell> cells = row.getCells();
-				Color cellColor;
-				if (counter % 2 == 0)
-					cellColor = new Color(255, 255, 255);
-				else
-					cellColor = new Color(219, 229, 241);
-				counter++;
-
-				for (WiCell cell : cells) {
-					PdfPCell cellPdf = new PdfPCell(new Phrase(cell.getValue(),
-							fontCell));
-					cellPdf.setBackgroundColor(cellColor);
-
-					pdfTable.addCell(cellPdf);
+				List<WiColumn> columns = table.getColumns();
+				List<WiRow> rows = table.getDataRows();
+	
+				PdfPTable pdfTable = new PdfPTable(columns.size());
+				pdfTable.setExtendLastRow(false);
+				Font fontHeader = new Font();
+				fontHeader.setSize(5);
+				fontHeader.setStyle(Font.BOLD);
+				fontHeader.setColor(new Color(255, 255, 255));
+	
+				Font fontCell = new Font();
+				fontCell.setSize(4);
+	
+				for (WiColumn column : columns) {
+					String columnName = "";
+					if(filter != null && column.getId() == filter.getId())
+						column = filter;
+	
+					if (column instanceof WiColumnDropDownFilter && filter != null)
+						columnName = filter.getProvider().getItem(filter.getActiveItemId()).getName();
+					else
+						columnName = column.getName();
+	
+					PdfPCell cell = new PdfPCell(new Phrase(columnName,
+							fontHeader));
+					cell.setBackgroundColor(new Color(34, 46, 93));
+	
+					pdfTable.addCell(cell);
 				}
-
+	
+				int counter = 0;
+				for (WiRow row : rows) {
+					List<WiCell> cells = row.getCells();
+					Color cellColor;
+					if (counter % 2 == 0)
+						cellColor = new Color(255, 255, 255);
+					else
+						cellColor = new Color(219, 229, 241);
+					counter++;
+	
+					for (WiCell cell : cells) {
+						PdfPCell cellPdf = new PdfPCell(new Phrase(cell.getValue(),
+								fontCell));
+						cellPdf.setBackgroundColor(cellColor);
+	
+						pdfTable.addCell(cellPdf);
+					}
+	
+				}
+				return pdfTable;
 			}
-			return pdfTable;
+			catch(Exception e){
+				e.printStackTrace();
+			}
 		} catch (DgException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1142,10 +1151,12 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 	}
 	private int matchesId(Long ptableId)
 	{
-		for(int a=0;a < this.tableId.length; a++)
-		{
-			if(this.tableId[a].equals(ptableId))
-				return a;
+		if (this.tableId != null) {
+			for(int a=0;a < this.tableId.length; a++)
+			{
+				if(this.tableId[a].equals(ptableId))
+					return a;
+			}
 		}
 		return -1;
 	}
@@ -1432,9 +1443,9 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		AmpDaWidgetPlace place = WidgetUtil.getPlace(code);
 		AmpWidget widget = place.getAssignedWidget();
 		//AmpWidgetIndicatorChart cWidget = ChartWidgetUtil.getIndicatorChartWidget(place.getId());
-		AmpWidgetIndicatorChart cWidget = ChartWidgetUtil.getIndicatorChartWidget(widget.getId());
 		if (widget == null)
 			return null;
+		AmpWidgetIndicatorChart cWidget = ChartWidgetUtil.getIndicatorChartWidget(widget.getId());
 
 		ChartOption opt = new ChartOption();
 

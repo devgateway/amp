@@ -127,14 +127,18 @@ public class ContactInfoUtil {
 		return retValue;
 	}
 	
-	public static int getContactsSize() throws Exception{
+	public static int getContactsSize(String keyword) throws Exception{
 		int retValue=0;
 		Session session=null;
 		String queryString =null;
 		Query query=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
-			queryString= "select count(*) from " + AmpContact.class.getName();
+			queryString= "select count(*) from " + AmpContact.class.getName()+ " cont";
+			if(keyword!=null){
+				queryString+=" where cont.name like '%"+keyword+"%' or cont.lastname like '%"+keyword
+				+"%' or cont.email like '%" + keyword + "%'";
+			}
 			query=session.createQuery(queryString);
 			retValue=(Integer)query.uniqueResult();
 		} catch (Exception e) {

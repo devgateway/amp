@@ -32,7 +32,7 @@ public class AddressBookActions extends DispatchAction {
     		myForm.setKeyword(null);
     	}
     	
-    	int contactsAmount=ContactInfoUtil.getContactsSize();    	
+    	int contactsAmount=ContactInfoUtil.getContactsSize(myForm.getKeyword());    	
     	//how many pages
     	Collection pages = null;
     	int pagesNum=0;

@@ -138,7 +138,7 @@ function banUser(txt) {
 <!-- End of Logo -->
 
 <digi:form action="/viewAllUsers.do" method="post">
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=1100>
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=980>
     <tr>
       		<td align=left vAlign=top>
 		        <table cellPadding=5 cellSpacing=0 width="100%">
@@ -259,10 +259,10 @@ function banUser(txt) {
 						</td>
 		        	</tr>
 		        	<tr>
-		            <td noWrap width=917 vAlign="top" colspan="7">
+		            <td noWrap width=817 vAlign="top" colspan="7">
 		            	<table width="100%" cellspacing=1 cellSpacing=1>
 							<tr>
-								<td noWrap width=900 vAlign="top"> 
+								<td noWrap width=800 vAlign="top"> 
 									<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%"  >
 										<tr >
 											<td vAlign="top" width="100%">
@@ -296,20 +296,20 @@ function banUser(txt) {
 									                                        </c:if>
 																			<c:if test="${not empty umViewAllUsersForm.pagedUsers}">
 																				<tr style="background-color:#999999; color:#000;  " >
-																					<td height="30" width="200"  >
+																					<td height="30" width="195"  >
 																						<digi:link href="/viewAllUsers.do?sortBy=name&reset=false" style="color:#000;"><b>
 																							<digi:trn key="um:viewAllUsers:UsersNames">NAME</digi:trn></b>
 																						</digi:link>
 																					</td>	
-																					<td height="30" width="200">
+																					<td height="30" width="195">
 																						<digi:link href="/viewAllUsers.do?sortBy=email&reset=false" style="color:#000;"><b>
 																							<digi:trn key="um:viewAllUsers:UsersEmails">EMAIL</digi:trn></b>
 																						</digi:link>
 																					</td>																	
-																					<td height="30" width="400"><b>
+																					<td height="30" width="340"><b>
 																							<digi:trn key="um:viewAllUsers:UserWorkspace">WORKSPACE</digi:trn></b>
 																					</td>
-																					<td height="30"width="100" colspan="3"><b>
+																					<td height="30"width="70" colspan="3"><b>
 																						<digi:trn key="aim:viewAllUsers:action">ACTIONS</digi:trn></b>
 																					</td>																		
 																				</tr>
@@ -321,13 +321,13 @@ function banUser(txt) {
 																				<table width="100%" BORDER=0 cellpadding="0" cellspacing="0" id="dataTable"    >
 																					<c:forEach var="us" items="${umViewAllUsersForm.pagedUsers}">
 			                                                           					<tr >
-						                                                           			<td height="30" width="200">
+						                                                           			<td height="30" width="195">
 																							  ${us.firstNames}&nbsp;${us.lastName}
 																							</td>
-																							<td height="30" width="200">
+																							<td height="30" width="195">
 																							  	${us.email}																		  
 																							</td>																	
-																							<td height="30" width="400">
+																							<td height="30" width="340">
 																								<div >
 												                                                  	<c:if test="${!empty us.teamMembers}">
 																									   	<c:forEach var="member" items="${us.teamMembers}">
@@ -339,7 +339,7 @@ function banUser(txt) {
 												                                                  	</c:if>
 												                                                </div>
 																							</td>
-																							<td height="30" width="45">
+																							<td height="30" width="30">
 																								<c:set var="translation">
 												                                                  <digi:trn key="um:viewAllUsers:EditUserLink">Edit user </digi:trn>
 												                                                </c:set>
@@ -347,7 +347,7 @@ function banUser(txt) {
 											                          										<img src= "/repository/message/view/images/edit.gif" vspace="2" border="0" />
 																									</digi:link>
 																							</td>
-																							<td height="30" width="45">
+																							<td height="30" width="30">
 																								<c:choose>
 												                                                  <c:when test="${us.ban}">
 												                                                    <c:set var="translation">
@@ -552,23 +552,13 @@ function banUser(txt) {
 									    </tr> 
 									</table>
 							    </td>
-								<td noWrap width="200" vAlign="top">
+								<td noWrap width="180" vAlign="top">
 									<table align=center cellPadding=0 cellSpacing=0 width="100%" border=0>
 										<tr>
-											<td>
-												<!-- Other Links -->
-												<table cellPadding=0 cellSpacing=0 width=100>
-													<tr>
-														<td bgColor=#c9c9c7 class=box-title>
-															<digi:trn key="aim:otherLinks">
-															Other links
-															</digi:trn>
-														</td>
-														<td background="module/aim/images/corner-r.gif" 	height="17" width=17>&nbsp;
-														
-														</td>
-													</tr>
-												</table>
+											<td bgColor=#c9c9c7 class=box-title height="20">
+												<digi:trn key="aim:Links">
+												Links
+												</digi:trn>
 											</td>
 										</tr>
 										<tr>

@@ -18,7 +18,6 @@ public class AmpLocation implements Serializable
 	private String region ;
 	private String zone;
 	private String woreda;
-	private Set aidlocation;
 	
 	private Set activities;
 	
@@ -108,12 +107,7 @@ public class AmpLocation implements Serializable
 			  this.ampWoreda = ampWoreda;
 	}
 	
-	/**
-	 * @return
-	 */
-	public Set getAidlocation() {
-		return aidlocation;
-	}
+
 
 	/**
 	 * @return
@@ -194,13 +188,6 @@ public class AmpLocation implements Serializable
 	 */
 	public String getVersion() {
 		return version;
-	}
-
-	/**
-	 * @param set
-	 */
-	public void setAidlocation(Set set) {
-		aidlocation = set;
 	}
 
 	/**

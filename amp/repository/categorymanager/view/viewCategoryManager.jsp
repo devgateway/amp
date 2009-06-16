@@ -251,9 +251,7 @@ function setHoveredTable(tableId, hasHeaders) {
 											</digi:trn>
 										</digi:link>
 									
-								</div>
-								<br>
-								<div style="width:110px; ">
+								
 									
 										<digi:link paramId="delete" style="text-decoration:none;" paramName="category" paramProperty="id"  href='/categoryManager.do' onclick="return confirmDelete()">
 											<img vspace="2" border="0" align="absmiddle" src="/repository/message/view/images/trash_12.gif"/>

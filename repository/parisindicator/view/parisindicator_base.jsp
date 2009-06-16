@@ -21,6 +21,7 @@
 <%@ page import="org.digijava.module.aim.helper.*"%>
 <%@ page import="org.digijava.module.categorymanager.util.*"%>
 <%@ page import="org.digijava.module.categorymanager.dbentity.*"%>
+<%@ page import="org.digijava.module.parisindicator.util.*"%>
 
 <link rel="stylesheet" href="<digi:file src="/repository/parisindicator/view/css/pi_styles.css"/>">
 
@@ -156,7 +157,11 @@
                                     <div id="demo" class="yui-navset">
                                         <ul id="MyTabs" class="yui-nav"">
                                             <logic:iterate id="element" name="parisIndicatorForm" property="availablePIReports" indexId="index">
-                                                <LI>
+                                                <%String selected = ""; %>
+                                                <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="${element.indicatorCode}">
+                                                    <%selected = "selected"; %>
+                                                </logic:equal>
+                                                <LI class="<%=selected%>">
                                                     <span>
                                                         <digi:link href="/parisindicator.do?reportId=${element.indicatorCode}&reset=true" target="_self">
                                                             <div style="max-width: 90px">

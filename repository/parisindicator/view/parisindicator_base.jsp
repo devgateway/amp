@@ -199,6 +199,24 @@
 	                       <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="4">
                                <jsp:include page="parisindicator_4.jsp"></jsp:include>
                            </logic:equal>
+                           <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="5a">
+                               <jsp:include page="parisindicator_5a.jsp"></jsp:include>
+                           </logic:equal>
+                           <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="5b">
+                               <jsp:include page="parisindicator_5b.jsp"></jsp:include>
+                           </logic:equal>
+                           <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="6">
+                               <jsp:include page="parisindicator_6.jsp"></jsp:include>
+                           </logic:equal>
+                           <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="7">
+                               <jsp:include page="parisindicator_7.jsp"></jsp:include>
+                           </logic:equal>
+                           <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="9">
+                               <jsp:include page="parisindicator_9.jsp"></jsp:include>
+                           </logic:equal>
+                           <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="10a">
+                               <jsp:include page="parisindicator_10a.jsp"></jsp:include>
+                           </logic:equal>
 	                   </td>
 	                </tr>
 					<tr>

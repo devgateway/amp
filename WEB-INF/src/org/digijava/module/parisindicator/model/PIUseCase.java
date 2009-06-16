@@ -21,6 +21,7 @@ import org.digijava.module.parisindicator.form.PIForm;
 import org.digijava.module.parisindicator.helper.PIAbstractReport;
 import org.digijava.module.parisindicator.helper.PIReport3;
 import org.digijava.module.parisindicator.helper.PIReport4;
+import org.digijava.module.parisindicator.helper.PIReport5a;
 import org.digijava.module.parisindicator.helper.PIReportAbstractRow;
 import org.digijava.module.parisindicator.util.PIConstants;
 import org.hibernate.Criteria;
@@ -140,6 +141,8 @@ public class PIUseCase {
 			report = new PIReport3();
 		} else if (form.getPiReport().getIndicatorCode().equals(PIConstants.PARIS_INDICATOR_REPORT_4)) {
 			report = new PIReport4();
+		} else if (form.getPiReport().getIndicatorCode().equals(PIConstants.PARIS_INDICATOR_REPORT_5a)) {
+			report = new PIReport5a();
 		}
 
 		// Get the common info from surveys and apply some filters.

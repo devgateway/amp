@@ -32,7 +32,9 @@ import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
+import org.digijava.module.aim.action.GetFundingTotals;
 import org.digijava.module.aim.action.RecoverySaveParameters;
+import org.digijava.module.aim.action.ShowAddComponent;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActivityComponente;
@@ -57,7 +59,6 @@ import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpMeasure;
-import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpNotes;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
@@ -4086,7 +4087,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 			query=session.createQuery(queryString);
 			updator=(AmpTeamMember)query.uniqueResult();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("couldn't load Activity Updator" + e.getMessage());			
 		}
     	  return updator;
       }

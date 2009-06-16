@@ -32,6 +32,8 @@ public class PIReport5aRow extends PIReportAbstractRow {
 	// Proportion of aid flows to the government sector using all the 3 country
 	// PFM systems
 	private float column7;
+	// This column is for calculating the first percentage (Col 6)
+	private BigDecimal column8;
 
 	public AmpOrgGroup getDonorGroup() {
 		return donorGroup;
@@ -103,5 +105,13 @@ public class PIReport5aRow extends PIReportAbstractRow {
 
 	public void setColumn7(float column7) {
 		this.column7 = column7;
+	}
+
+	public BigDecimal getColumn8() {
+		return column8;
+	}
+
+	public void setColumn8(BigDecimal column8) {
+		this.column8 = column8;
 	}
 }

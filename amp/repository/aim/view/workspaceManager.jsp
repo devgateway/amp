@@ -366,12 +366,12 @@
 									<!-- Other Links -->
 									<table cellPadding=0 cellSpacing=0 width=100>
 										<tr>
-											<td bgColor=#c9c9c7 class=box-title>
+											<td bgColor=#999999 class="box-title" style = "color:#000;"> 
 												<digi:trn key="aim:otherLinks">
-												Other links
+												Links
 												</digi:trn>
 											</td>
-											<td background="module/aim/images/corner-r.gif" height="17" width=17>
+											<td background="module/aim/images/corner-r2.gif" height="17" width=17>
 												&nbsp;
 											</td>
 										</tr>

@@ -116,16 +116,18 @@ import org.digijava.module.aim.util.LocationUtil;
                       }
 
                 }
-		   	    AmpLocation ampLoc = LocationUtil.getAmpLocationByCVLocation(id);
-                if (ampLoc == null) {
-                    AmpCategoryValueLocations selectedLoc=DynLocationManagerUtil.getLocation(id, false);
-                    ampLoc = new AmpLocation();
-                    ampLoc.setCountry(FeaturesUtil.getDefaultCountryIso());
-                    ampLoc.setRegionLocation(selectedLoc);
-                    ampLoc.setLocation(selectedLoc);
-                    LocationUtil.saveLocation(ampLoc);
-                }
-
+		   	    AmpLocation ampLoc = null;
+		   	    if ( id != null ) {
+			   	    ampLoc		= LocationUtil.getAmpLocationByCVLocation(id);
+	                if (ampLoc == null) {
+	                    AmpCategoryValueLocations selectedLoc=DynLocationManagerUtil.getLocation(id, false);
+	                    ampLoc = new AmpLocation();
+	                    ampLoc.setCountry(FeaturesUtil.getDefaultCountryIso());
+	                    ampLoc.setRegionLocation(selectedLoc);
+	                    ampLoc.setLocation(selectedLoc);
+	                    LocationUtil.saveLocation(ampLoc);
+	                }
+		   	    }
 	            
 	            indValue.setLocation(ampLoc);
 	            themeForm.setLocationLevelIndex(-1);

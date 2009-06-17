@@ -94,17 +94,32 @@ public class ParisIndicatorHelper {
 
     public long getAllTargetValue() throws DgException {
         long targetValue = 0;
-        AmpAhsurveyIndicatorCalcFormula formula = getFormula();
-        if (formula != null) {
-            if (formula.getEnabled() != null && formula.getEnabled()) {
+        String indicatorCode = prIndicator.getIndicatorCode();
 
-                String form = getFormulaText(formula, getAllDonorBaseLineValue());
+        /* for some indicators target values are fixed,
+         * others are calculating using formula.
+         * See  AMP-1680, for mo details*/
 
-                targetValue = AmpMath.calcExp(form);
-
+        if (indicatorCode.equals("4")) {
+            targetValue = 50;
+        } else {
+            if (indicatorCode.equals("5aii") || indicatorCode.equals("5bii")) {
+                targetValue = 90;
             } else {
-                if (formula.getTargetValue() != null && !formula.getTargetValue().equals("")) {
-                    targetValue = Long.parseLong(formula.getTargetValue());
+                if (indicatorCode.equals("9")) {
+                    targetValue = 66;
+                } else {
+                    if (indicatorCode.equals("10a")) {
+                        targetValue = 40;
+                    } else {
+                        AmpAhsurveyIndicatorCalcFormula formula = getFormula();
+                        if (formula != null) {
+                            if (formula.getEnabled() != null && formula.getEnabled()) {
+                                String form = getFormulaText(formula, getAllDonorBaseLineValue());
+                                targetValue = AmpMath.calcExp(form);
+                            }
+                        }
+                    }
                 }
             }
         }

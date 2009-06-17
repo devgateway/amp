@@ -139,7 +139,7 @@
 	<feature:display name="GIS DASHBOARD" module="GIS DASHBOARD">	
 		<field:display name="Map Level Switch" feature="GIS DASHBOARD">
 		<tr>
-	        <td nowrap width="200">
+	        <td width="200" nowrap style="font-size:12px">
 	                <digi:trn key="gis:selectMalLevel">Select Map Level</digi:trn>:
 	        </td>
 			<td width="90%">
@@ -153,11 +153,11 @@
 	<div id="imageMapContainer" style="visibility:hidden;"></div>	
 	
 	<tr>
-        <td nowrap width="200">
+        <td nowrap width="200" style="font-size:12px">
              <digi:trn>Select Sector</digi:trn>:
         </td>
 		<td>
-			<select id="sectorsMapCombo" onChange="sectorSelected(this)" style="width:350px">
+			<select id="sectorsMapCombo" onChange="sectorSelected(this.value)" style="width:350px">
 			<option value="-1"><digi:trn>Select sector</digi:trn></option>
 			<logic:iterate name="gisDashboardForm" property="sectorCollection" id="sec">
 				<option value="<bean:write name="sec" property="ampSectorId"/>"><bean:write name="sec" property="name"/></option>
@@ -166,7 +166,7 @@
 		</td>
 	</tr>
 	<tr>
-       <td nowrap width="200">
+       <td nowrap width="200" style="font-size:12px">
             <digi:trn>Select Indicator</digi:trn>:
 		<td>
 		<select id="indicatorsCombo" onchange="indicatorSelected(this)" style="width:350px">
@@ -175,8 +175,8 @@
 		</td>
 	</tr>
 	<tr>
-        <td width="200">
-            <digi:trn>Select subgroup for indicator data</digi:trn>:
+        <td width="200" style="font-size:12px">
+            <digi:trn>Select Subgroup</digi:trn>:
         </td>
 		<td>
 			<select id="indicatorSubgroupCombo" onChange="subgroupSelected(this)" style="width:350px">
@@ -185,12 +185,12 @@
 		</td>
 	</tr>
 	<tr>
-        <td nowrap width="200">
-            <digi:trn>Select year for indicator data</digi:trn>:
+        <td nowrap width="200" style="font-size:12px">
+            <digi:trn>Select Time Interval</digi:trn>:
         </td>
 		<td>
 			<select id="indicatorYearCombo" onChange="yearSelected(this)" style="width:350px">
-				<option value="-1"><digi:trn>Select year</digi:trn></option>
+				<option value="-1"><digi:trn>Select Time Interval</digi:trn></option>
 			</select>
 		</td>
 	</tr>

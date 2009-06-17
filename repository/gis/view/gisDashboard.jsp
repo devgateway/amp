@@ -48,6 +48,18 @@
 	
 </style>
 
+<script language="JavaScript">
+	var validatedRegPercentage = false;
+	<field:display name="Validate Mandatory Regional Percentage" feature="Location">
+		validatedRegPercentage = true;
+	</field:display>
+	
+	var displayeRegPercentage = false;
+	<field:display name="Regional Percentage" feature="Location">
+		displayeRegPercentage = true;
+	</field:display>
+</script>
+
 <div id="content" class="yui-skin-sam" style="width:600px;height:100%;max-width: 600x;">
   <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;width: 600;">
       <digi:img src="images/tabrightcorner.gif" align="right" hspace="0"/>
@@ -195,6 +207,14 @@
 		</td>
 	</tr>
 	
+	<script language="JavaScript">
+		if (!validatedRegPercentage || !displayeRegPercentage) {
+			document.write('<tr><td nowrap colspan="2"><font color="red">');
+			document.write('(*) Project funding is not disaggregated by region or district, and therefore reflect activity totals.');
+			document.write('</font></td></tr>');
+		}
+	</script>
+	
 </table>
     </div>
   </div>
@@ -252,6 +272,10 @@
 		<tr>
 			<td nowrap width="50%" id="tooltipIndVal"><digi:trn>value</digi:trn></td>
 			<td width="50%" id="tooltipIndUnit">&nbsp;</td>
+		</tr>
+		<tr>
+			<td nowrap width="50%">Source</td>
+			<td id="tooltipIndSrc" style="width:100px; overflow-x: hidden;">&nbsp;</td>
 		</tr>
 	</table>
 	</div>

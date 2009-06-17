@@ -412,6 +412,12 @@
       <forward name="added" path="/aim/sectorManager.do?sectorId=0" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
+    <action name="aimAddSectorForm" path="/aim/viewSchemeTree" scope="request" type="org.digijava.module.aim.action.ViewSchemeTree" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=viewSchemeTree" />
+      <forward name="back" path="/aim/sectorManager.do?sectorId=0" />
+      <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>
+
     <action name="aimAddSectorForm" path="/aim/editSector" scope="request" type="org.digijava.module.aim.action.EditSector" validate="false">
       <forward name="editedSecondLevelSector" path="/showLayout.do?layout=viewSectorSchemeLevel1" />
       <forward name="editedThirdLevelSector" path="/showLayout.do?layout=addNewLevel2Sector" />

@@ -263,6 +263,38 @@ public class SectorUtil {
 		return col;
 
 	}
+	
+	/**
+	 * Gets all sectors ordered by parentId
+	 * @param secSchemeId
+	 * @return
+	 */
+	public static List<AmpSector> treeBuildGetAllSectorsFromScheme(Long secSchemeId) {
+		Session session = null;
+		List<AmpSector> col = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			String queryString = "select s from " + AmpSector.class.getName()
+					+ " s " + "where amp_sec_scheme_id = " + secSchemeId + " order by parent_sector_id, amp_sector_id";
+			Query qry = session.createQuery(queryString);
+			col = qry.list();
+
+		} catch (Exception e) {
+			logger.error("Cannot get parent sectors, " + e);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+			}
+		}
+		return col;
+	}
+
+
 
 	public static Collection getAllSectorSchemes() {
 		Session session = null;

@@ -252,6 +252,8 @@
 	<page name="addNewLevel3Sector" title=" : Add New Level 3Sector "/>
 	<page name="editLevelEnough" title=" : Edit Level 3Sector "/>
 
+	<page name="viewSchemeTree" title=": View Sector Scheme Tree" />
+
 	<!-- for Components Manager -->
 	<page name="viewComponentTypes" title=": - AMP Component Types"/>
 

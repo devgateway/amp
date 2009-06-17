@@ -29,6 +29,16 @@
 	}
 </script>
 
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+
+<script type="text/javascript">
+	var idOfFolderTrees = ['dhtmlgoodies_tree'];
+</script>
+<link rel="stylesheet" href="<digi:file src="module/aim/css/css_dhtmlsuite/folder-tree-static.css" />" />
+<link rel="stylesheet" href="<digi:file src="module/aim/css/css_dhtmlsuite/context-menu.css" />" />
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/dhtml-suite-for-applications.js"/>"></script>
+
+
 <digi:instance property="aimAddSectorForm" />
 <digi:context name="digiContext" property="context" />
 <digi:form action="/viewSectorDetails.do" method="post">
@@ -66,7 +76,7 @@
 				</tr>
 				<tr>
 					<td height=16 vAlign=center width=571><span class=subtitle-blue>
-					<digi:trn key="aim:sectorManager">Sector Manager</digi:trn></span>
+					<digi:trn key="aim:sectorSchemeTree">Sector Scheme Tree</digi:trn></span>
 					</td>
 				</tr>
 				<tr>
@@ -84,52 +94,15 @@
 									
 									<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left>	
 										
-										<tr>
-											<td>	
-												<table width="100%">
-													<tr>
-														<td>
-															<digi:trn key="aim:SchemeName">Scheme Name</digi:trn><font color="red">*</font>:
-														</td>
-														<td>
-															<html:textarea  name ="aimAddSectorForm" property="secSchemeName" rows="1" cols= "35"/> 
-														</td>
-													</tr>
-													<tr>
-														<td>
-															<digi:trn key="aim:SchemeCode">Scheme Code</digi:trn><font color="red">*</font>:
-														</td>
-														<td>
-															<html:text name ="aimAddSectorForm" property="secSchemeCode" size="5"/> 
-														</td>
-													</tr>
-
-
-													
-													<tr>
-														<td>
-															&nbsp;
-														</td>
-														<td >&nbsp;&nbsp;
-								<input  type="button" class="dr-menu" name="addBtn" value='<digi:trn key="btn:save">Save</digi:trn>' onclick="updateScheme('<bean:write name="aimAddSectorForm" property="secSchemeId" />')"/>
-														<td>
-													</tr>
-											</table>
-											</td>
-											
-										</tr>	
-										
 										<field:display name="Level 1 Sectors List" feature="Sectors">
 										<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
 											<!-- Table title -->
-											<digi:trn key="aim:LeveloneSectors">
-												Level One Sectors
-											</digi:trn>
+											<bean:write  name ="aimAddSectorForm" property="secSchemeName"/>
 											<!-- end table title -->										
 										</td></tr>
 										<tr><td>
 											<table width="100%" cellspacing=1 cellpadding=4 valign=top align=left bgcolor="#d7eafd">
-													<logic:empty name="aimAddSectorForm" property="formFirstLevelSectors">
+													<logic:empty name="aimAddSectorForm" property="schemeTree">
 													<tr bgcolor="#ffffff">
 														<td colspan="5" align="center"><b>
 															<digi:trn key="aim:noSectorPresent">
@@ -139,66 +112,80 @@
 													</tr>
 													</logic:empty>
 
-													<logic:notEmpty name="aimAddSectorForm" property="formFirstLevelSectors">
-													<logic:iterate name="aimAddSectorForm" property="formFirstLevelSectors" id="sectorSchemeLevelOne"
-																	type="org.digijava.module.aim.dbentity.AmpSector	">
-													<tr> 
-														<td bgcolor="#ffffff">
-															<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
-															<c:set target="${urlParams2}" property="ampSectorId">
-															<bean:write name="sectorSchemeLevelOne" property="ampSectorId" />
-															</c:set>
-															<c:set target="${urlParams2}" property="event" value="edit" />
-															<c:set target="${urlParams2}" property="level" value="two" />
-															<c:set var="clickToViewSector">
-															<digi:trn key="aim:clickToViewSector">Click here to view Sector</digi:trn>
-															</c:set>
-															<digi:link href="/viewSectorDetails.do" name="urlParams2" title="${clickToViewSector}" >
-															<bean:write name="sectorSchemeLevelOne" property="name"/></digi:link>
-														</td>
-														
-														<td bgcolor="#ffffff" width="75" align="center">
-														<c:set var="clickToEditSector">
-															<digi:trn key="aim:clickToEditSector">Click here to Edit Sector</digi:trn>
-														</c:set>
-														<c:set var="edittext">
-															<digi:trn key="aim:edit">Edit</digi:trn>
-														</c:set>
-														
-															[ <digi:link href="/viewSectorDetails.do" name="urlParams2" title="${clickToEditSector}">${edittext}</digi:link> ]
-														</td>
-														<td bgcolor="#ffffff" width="55" align="center">
-															<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
-															<c:set target="${urlParams4}" property="ampSectorId">
-																<bean:write name="sectorSchemeLevelOne" property="ampSectorId" />
-																
-															</c:set>
-															<c:set target="${urlParams4}" property="schemeId">
-					
-																<bean:write name="aimAddSectorForm" property="parentId" />
-															</c:set>
-
-															<c:set target="${urlParams4}" property="event" value="delete"/>
-															<c:set var="clickToDeleteSector">
-															<digi:trn key="aim:clickToDeleteSector">Click here to Delete Sector</digi:trn>
-															</c:set>
-															<c:set var="deletetext">
-															<digi:trn key="aim:delete">Delete</digi:trn>
-															</c:set>
-															
-															[ <digi:link href="/deleteSector.do" name="urlParams4" 
-																title="${clickToDeleteSector}" onclick="return onDelete()">${deletetext}</digi:link> ]
-																
-														</td>
-													</tr>
-													</logic:iterate>
-
-																									
-													
-													</logic:notEmpty>
 													<!-- end page logic -->													
 											</table>
 										</td></tr>
+										<logic:notEmpty name="aimAddSectorForm" property="schemeTree">
+										<tr><td>
+											 <font size="2">
+										 		<ul id="dhtmlgoodies_tree" class="dhtmlgoodies_tree">
+										 			<li id="rootnode" noDrag="true" noSiblings="true" noDelete="true" noRename="true">
+										 				<a>Root node</a>
+										 				<ul id = "rootNod">
+										 				</ul>
+										 			</li>
+										 		</ul>
+											 	<script type="text/javascript">
+											 		function insertRoot(id, name){
+												 		var parent = document.getElementById("rootNod");
+														var newItem = document.createElement('li');
+														newItem.setAttribute("id","nod" + id);
+														newItem.setAttribute("noDelete", "true");
+														var newA = document.createElement('a');
+													    newItem.appendChild(newA);
+														var newTxt=document.createTextNode(name);
+														newA.appendChild(newTxt);
+												 		
+												 		parent.appendChild(newItem);
+											 		}
+													function insertChild(pid, id, name){
+														var parent = document.getElementById("nod" + pid);
+														var newItem = document.createElement('li');
+														newItem.setAttribute("id","nod" + id);
+														newItem.setAttribute("noDelete", "true");
+														var newA = document.createElement('a');
+													    newItem.appendChild(newA);
+														var newTxt=document.createTextNode(name);
+														newA.appendChild(newTxt);
+
+														var parentBody = parent.getElementsByTagName("ul");
+																		
+														if (parentBody.length == 0){
+															var newUl = document.createElement("ul");
+															parent.appendChild(newUl);
+															parentBody = parent.getElementsByTagName("ul");
+														}
+														var ulBody = parentBody[0];
+														ulBody.appendChild(newItem);
+													}
+											 		
+											 		<logic:notEmpty name="aimAddSectorForm" property="schemeTree">
+														<logic:iterate name="aimAddSectorForm" property="schemeTree" id="sector"
+																		type="org.digijava.module.aim.dbentity.AmpSector	">
+															<logic:empty name="sector" property="parentSectorId">
+																insertRoot('<bean:write name="sector" property="ampSectorId"/>','<bean:write name="sector" property="name"/>');
+															</logic:empty>
+															<logic:notEmpty name="sector" property="parentSectorId">
+																insertChild('<bean:write name="sector" property="parentSectorId.ampSectorId"/>','<bean:write name="sector" property="ampSectorId"/>','<bean:write name="sector" property="name"/>');
+															</logic:notEmpty>
+														</logic:iterate>
+													</logic:notEmpty>
+												</script>
+										 		
+
+												<script type="text/javascript">
+													treeObj = new DHTMLSuite.JSDragDropTree();
+													treeObj.setTreeId('dhtmlgoodies_tree');
+													treeObj.setMaximumDepth(7);
+													treeObj.setMessageMaximumDepthReached('Maximum depth reached');
+													treeObj.init();
+												</script>
+												
+											</font>
+										</td></tr>
+										<tr><td>
+										</td></tr>
+										</logic:notEmpty>
 									</field:display>									
 										</table>
 									

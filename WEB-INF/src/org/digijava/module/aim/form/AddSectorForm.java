@@ -18,6 +18,8 @@ public class AddSectorForm extends ActionForm {
 	//poi
 	
 	Collection formFirstLevelSectors;
+	Collection schemeTree;
+	
 	Long secSchemeId;
 	String secSchemeName;
 	String secSchemeCode;
@@ -42,7 +44,14 @@ public class AddSectorForm extends ActionForm {
 	private String sectorCodeOfficial = null;
 
 
-
+	public Collection getSchemeTree() {
+		return schemeTree;
+	}
+	
+	public void setSchemeTree(Collection schemeTree) {
+		this.schemeTree = schemeTree;
+	}
+	
 	public String getSectorCodeOfficial() {
 		return sectorCodeOfficial;
 	}

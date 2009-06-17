@@ -404,15 +404,19 @@
 	                                                <c:if test="${contentDisabled=='false'}">
 	                                                	<category:showoptions   firstLine="${translation}" name="aimEditActivityForm" property="planning.statusId"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.ACTIVITY_STATUS_KEY %>" styleClass="inp-text" />
 	                                                </c:if>
-                                                    <br/><br/>
+												</td>
+											</tr>
+											<tr>
+												<td bgcolor="#ffffff">
+												</td>
+												<td bgcolor="#ffffff">
 													<digi:trn key="aim:reasonsToChangeStatus">If there have been some changes in the status, explain below the reasons</digi:trn> :
 													<a title="<digi:trn key="aim:ReasonforStatusofProject">Use this space to provide explanations as to why that status was selected. Used primarily in the case of cancelled and suspended projects</digi:trn>">
                                                     <br/>
 													<html:textarea name="aimEditActivityForm" property="planning.statusReason" cols="50" rows="3" styleClass="inp-text"   disabled="${contentDisabled}"/>
-													</a>
+													</a>												
 												</td>
 											</tr>
-											
 										</table>
 									</td></tr>
 

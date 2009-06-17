@@ -341,6 +341,8 @@ public class ReportsFilterPickerForm extends ActionForm {
 				this.selectedSecondaryPrograms = null;
 				this.selectedresponsibleorg=null;
 				this.approvalStatusSelected = null;
+				this.lineMinRank=null;
+				this.planMinRank=null;
 			}
 		}
 		

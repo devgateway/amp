@@ -787,9 +787,9 @@ public class AmpARFilter extends PropertyListable {
 			queryAppend(FINANCING_INSTR_FILTER);
 		if (risks != null && risks.size() > 0)
 			queryAppend(RISK_FILTER);
-		if (lineMinRank != null)
+		if ((lineMinRank != null) && (lineMinRank !=-1))
 			queryAppend(LINE_MIN_RANK_FILTER);
-		if (planMinRank != null)
+		if ((planMinRank != null)&&(planMinRank!=-1))
 			queryAppend(PLAN_MIN_RANK_FILTER);
 		if (regionSelected != null)
 			queryAppend(REGION_SELECTED_FILTER);

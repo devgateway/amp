@@ -449,7 +449,7 @@
 			<digi:trn key="aim:categoryManagerSubmit">
 					Submit
 			</digi:trn>
-		<button>
+		</button>
 	</digi:form>
 				</td>
 				</tr>

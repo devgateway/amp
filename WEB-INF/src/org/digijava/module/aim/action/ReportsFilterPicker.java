@@ -596,10 +596,11 @@ public class ReportsFilterPicker extends MultiAction {
 		String name = "- " + currency.getCurrencyName();
 		httpSession.setAttribute(ArConstants.SELECTED_CURRENCY, name);
 		Integer all = new Integer(-1);
-		if (!all.equals(filterForm.getLineMinRank()))
-			arf.setLineMinRank(filterForm.getLineMinRank());
-		if (!all.equals(filterForm.getPlanMinRank()))
-			arf.setPlanMinRank(filterForm.getPlanMinRank());
+		
+		arf.setLineMinRank(filterForm.getLineMinRank());
+		
+		arf.setPlanMinRank(filterForm.getPlanMinRank());
+		
 		if (!all.equals(filterForm.getRegionSelected()))
 			arf.setRegionSelected(filterForm.getRegionSelected() == null || filterForm.getRegionSelected() == -1 ? 
 							null : DynLocationManagerUtil.getLocation(filterForm.getRegionSelected(),false) );

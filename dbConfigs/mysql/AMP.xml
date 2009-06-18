@@ -16,50 +16,12 @@
 				<Level name="Month" column="month" uniqueMembers="false" ordinalColumn="month" nameColumn="month_name" levelType="TimeMonths" type="Numeric"/>
 		</Hierarchy>
 	</Dimension>
-	<Dimension name="Regions">
-		<Hierarchy hasAll="true" allMemberCaption="#All_Regions#" allMemberName="All Regions" primaryKey="amp_activity_id" caption="#Regions#">
-			<Table name="cached_v_regions" />
-			<Level name="Region" column="region" table="cached_v_regions">
-				<NameExpression>
-					<SQL dialect="mysql">
-						IFNULL(region,'#No_Data#')
-					</SQL>
-				</NameExpression>
-			</Level>
-		</Hierarchy>
-	</Dimension>
-	<Dimension name="Primary Program">
-		<Hierarchy hasAll="true" allMemberCaption="#All_Programs#" allMemberName="All Programs" primaryKey="amp_activity_id" caption="#Primary_Program#">
-			<Table name="cached_v_primary_program">
-			</Table>
-			<Level name="name" column="name" table="cached_v_primary_program">
-				<NameExpression>
-					<SQL dialect="mysql">
-						IFNULL(cached_v_primary_program.name,'#No_Data#')
-					</SQL>
-				</NameExpression>
-			</Level>
-		</Hierarchy>
-	</Dimension>
-	<Dimension name="Secundary Program">
-		<Hierarchy hasAll="true" allMemberCaption="#All_Programs#" allMemberName="All Programs" primaryKey="amp_activity_id" caption="#Secundary_Program#">
-			<Table name="cached_v_secunday_program" />
-			<Level name="name" column="name" table="cached_v_secunday_program">
-				<NameExpression>
-					<SQL dialect="mysql">
-						IFNULL(cached_v_secunday_program.name,'#No_Data#')
-					</SQL>
-				</NameExpression>
-			</Level>
-		</Hierarchy>
-	</Dimension>
 	<Dimension name="Status">
 		<Hierarchy hasAll="true" allMemberCaption="#All_Status#" allMemberName="All Status" primaryKey="amp_activity_id" caption="#Status#">
 			<Table name="cached_v_status" />
 			<Level name="name" column="name" table="cached_v_status" />
 		</Hierarchy>
 	</Dimension>
-	
 	<Cube name="Donor Funding">
 		<Table name="cached_v_donor_funding">
 			<SQL dialect="mysql"><![CDATA[cached_v_donor_funding.amp_activity_id IN (@donorquery)]]> </SQL>
@@ -101,18 +63,52 @@
 				<Level name="Primary Sector" column="sectorname" />
 			</Hierarchy>
 		</Dimension>
-		<Dimension name="Currency" foreignKey="amp_activity_id">
-			<Hierarchy hasAll="true" allMemberName="All" primaryKey="amp_activity_id">
-				<Level name="Currency Code" column="currency_code"/>
-				<Level name="Amount" column="transaction_amount"/>
-			</Hierarchy>
-		</Dimension>
-		
+		<Dimension name="Regions">
+		<Hierarchy hasAll="true" allMemberCaption="#All_Regions#" allMemberName="All Regions" primaryKey="amp_activity_id" caption="#Regions#">
+			<Level name="Region" column="region">
+				<NameExpression>
+					<SQL dialect="mysql">
+						IFNULL(region,'#No_Data#')
+					</SQL>
+				</NameExpression>
+			</Level>
+		</Hierarchy>
+	  </Dimension>
+	  <Dimension name="Primary Program">
+		<Hierarchy hasAll="true" allMemberCaption="#All_Programs#" allMemberName="All Programs" primaryKey="amp_activity_id" caption="#Primary_Program#">
+			<Level name="Primary Program" column="primary_program_name">
+				<NameExpression>
+					<SQL dialect="mysql">
+						IFNULL(primary_program_name,'#No_Data#')
+					</SQL>
+				</NameExpression>
+			</Level>
+		</Hierarchy>
+	  </Dimension>
+	  <Dimension name="Secundary Program">
+		<Hierarchy hasAll="true" allMemberCaption="#All_Programs#" allMemberName="All Programs" primaryKey="amp_activity_id" caption="#Secundary_Program#">
+			<Level name="Secundary Program" column="secundary_program_name">
+				<NameExpression>
+					<SQL dialect="mysql">
+						IFNULL(secundary_program_name,'#No_Data#')
+					</SQL>
+				</NameExpression>
+			</Level>
+		</Hierarchy>
+	</Dimension>
+	<Dimension name="National Program">
+		<Hierarchy hasAll="true" allMemberCaption="#All_Programs#" allMemberName="All Programs" primaryKey="amp_activity_id" caption="#National_Program#">
+			<Level name="National Program" column="national_program_name">
+				<NameExpression>
+					<SQL dialect="mysql">
+						IFNULL(national_program_name,'#No_Data#')
+					</SQL>
+				</NameExpression>
+			</Level>
+		</Hierarchy>
+	</Dimension>
 		<DimensionUsage name="Activity" source="Activity" foreignKey="amp_activity_id" />
 		<DimensionUsage name="Donor Dates" source="Donor Dates" foreignKey="amp_fund_detail_id" />
-		<DimensionUsage name="Regions" source="Regions" foreignKey="amp_activity_id" />
-		<DimensionUsage name="Primary Program" source="Primary Program" foreignKey="amp_activity_id" />
-		<DimensionUsage name="Secundary Program" source="Secundary Program" foreignKey="amp_activity_id" />
 		<DimensionUsage name="Status" source="Status" foreignKey="amp_activity_id" />
 	    
 	    <Measure name="Actual Commitments" aggregator="sum" caption="#Actual_Commitments#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter">

@@ -78,6 +78,7 @@ public class SchemaManager extends FilterDynamicSchemaProcessor implements
 			shema = shema.replaceAll("#Donors_types#", TranslatorWorker.translateText(MoConstants.DONOR_TYPES, locale, siteId));
 			shema = shema.replaceAll("#Financing_Instrument#", TranslatorWorker.translateText(MoConstants.FINANCING_INTRUMENT, locale, siteId));
 			shema = shema.replaceAll("#Terms_of_Assistance#", TranslatorWorker.translateText(MoConstants.TERMS_OF_ASSISTANCE, locale, siteId));
+			shema = shema.replaceAll("#National_Program#", TranslatorWorker.translateText(MoConstants.NATIONAL_PROGRAM, locale, siteId));
 
 			shema = shema.replaceAll("#All_Activities#", TranslatorWorker.translateText(MoConstants.ALL_ACTIVITIES, locale, siteId));
 			shema = shema.replaceAll("#All_Programs#", TranslatorWorker.translateText(MoConstants.ALL_PROGRAMS, locale, siteId));
@@ -105,6 +106,7 @@ public class SchemaManager extends FilterDynamicSchemaProcessor implements
 			shema = shema.replaceAll("#Planned_Commitments#", TranslatorWorker.translateText(MoConstants.PLANNED_COMMITMENTS, locale, siteId));
 			shema = shema.replaceAll("#Planned_Disbursements#", TranslatorWorker.translateText(MoConstants.PLANNED_DISBURSEMENTS, locale, siteId));
 			shema = shema.replaceAll("#Planned_Expenditures#", TranslatorWorker.translateText(MoConstants.PLANNED_EXPENDITURES, locale, siteId));
+			
 			
 			shema = shema.replaceAll("#No_Data#", TranslatorWorker.translateText(ArConstants.UNALLOCATED, locale, siteId));
 			

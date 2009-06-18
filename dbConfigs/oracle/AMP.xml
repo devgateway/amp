@@ -29,31 +29,6 @@
 			</Level> 
 		</Hierarchy>
 	</Dimension>
-	
-	<Dimension name="Primary Program">
-		<Hierarchy hasAll="true" allMemberCaption="#All_Programs#" allMemberName="All Programs" primaryKey="AMP_ACTIVITY_ID" caption="#Primary_Program#">
-			<Table name="CACHED_V_PRIMARY_PROGRAM"/>
-			<Level name="name" column="NAME" >
-				<NameExpression>
-					<SQL dialect="oracle">
-						nvl(CACHED_V_PRIMARY_PROGRAM.NAME,'#No_Data#')
-					</SQL>
-				</NameExpression>
-			</Level>
-		</Hierarchy>
-	</Dimension>
-	<Dimension name="Secundary Program">
-		<Hierarchy hasAll="true" allMemberCaption="#All_Programs#" allMemberName="All Programs" primaryKey="AMP_ACTIVITY_ID" caption="#Secundary_Program#">
-			<Table name="CACHED_V_SECUNDARY_PROGRAM" />
-			<Level name="name" column="NAME">
-				<NameExpression>
-					<SQL dialect="oracle">
-						nvl(CACHED_V_SECUNDARY_PROGRAM.NAME,'#No_Data#')
-					</SQL>
-				</NameExpression>
-			</Level>
-		</Hierarchy>
-	</Dimension>
 	<Dimension name="Status">
 		<Hierarchy hasAll="true" allMemberCaption="#All_Status#" allMemberName="All Status" primaryKey="AMP_ACTIVITY_ID" caption="#Status#">
 			<Table name="CACHED_V_STATUS" />
@@ -103,12 +78,41 @@
 				<Level name="Primary Sector" column="SECTORNAME" />
 			</Hierarchy>
 		</Dimension>
-		
+		<Dimension name="Primary Program">
+		<Hierarchy hasAll="true" allMemberCaption="#All_Programs#" allMemberName="All Programs" primaryKey="amp_activity_id" caption="#Primary_Program#">
+			<Level name="Primary Program" column="primary_program_name">
+				<NameExpression>
+					<SQL dialect="mysql">
+						COALESCE(primary_program_name,'#No_Data#')
+					</SQL>
+				</NameExpression>
+			</Level>
+		</Hierarchy>
+	  </Dimension>
+	  <Dimension name="Secundary Program">
+		<Hierarchy hasAll="true" allMemberCaption="#All_Programs#" allMemberName="All Programs" primaryKey="amp_activity_id" caption="#Secundary_Program#">
+			<Level name="Secundary Program" column="secundary_program_name">
+				<NameExpression>
+					<SQL dialect="mysql">
+						COALESCE(secundary_program_name,'#No_Data#')
+					</SQL>
+				</NameExpression>
+			</Level>
+		</Hierarchy>
+	</Dimension>
+	<Dimension name="National Program">
+		<Hierarchy hasAll="true" allMemberCaption="#All_Programs#" allMemberName="All Programs" primaryKey="amp_activity_id" caption="#National_Program#">
+			<Level name="National Program" column="national_program_name">
+				<NameExpression>
+					<SQL dialect="mysql">
+						COALESCE(national_program_name,'#No_Data#')
+					</SQL>
+				</NameExpression>
+			</Level>
+		</Hierarchy>
+	</Dimension>
 		<DimensionUsage name="Activity" source="Activity" foreignKey="AMP_ACTIVITY_ID" />
 		<DimensionUsage name="Donor Dates" source="Donor Dates" foreignKey="AMP_FUND_DETAIL_ID"/>
-		<DimensionUsage name="Regions" source="Regions" foreignKey="AMP_ACTIVITY_ID"  />
-		<DimensionUsage name="Primary Program" source="Primary Program" foreignKey="AMP_ACTIVITY_ID"/>
-		<DimensionUsage name="Secundary Program" source="Secundary Program" foreignKey="AMP_ACTIVITY_ID"/>
 		<DimensionUsage name="Status" source="Status" foreignKey="AMP_ACTIVITY_ID"/>
 		
 		<Measure name="Actual Commitments" aggregator="sum" caption="#Actual_Commitments#">

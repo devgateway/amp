@@ -791,7 +791,7 @@ public class LuceneUtil implements Serializable {
 
     			String article =  item.getBody();
     			//String title = item.getTopicKey();
-    			String titTrnKey = item.getTitleTrnKey();
+    			String titTrnKey = item.getBodyKey();
     			String lang = item.getLang();
     			String title =HelpUtil.getTrn(item.getTopicKey(), lang,new Long(3));
     			// Converts html formatted help topics body to plain text format.

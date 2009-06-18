@@ -327,7 +327,7 @@ public class PIReport3 extends PIAbstractReport {
 		for (int i = 0; i < endYear + 1 - startYear; i++) {
 			PIReport3Row auxRow = new PIReport3Row();
 			AmpOrgGroup auxDonorGroup = new AmpOrgGroup();
-			auxDonorGroup.setOrgGrpName("All Donors");
+			auxDonorGroup.setOrgGrpName(PIConstants.ALL_DONORS);
 			auxDonorGroup.setAmpOrgGrpId(new Long(0));
 			auxRow.setDonorGroup(auxDonorGroup);
 			auxRow.setColumn1(sumCol1[i]);

@@ -9,10 +9,11 @@
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <digi:instance property="helpForm" />
 
+
 <script language="JavaScript">
 
-function showHint(str){
-
+function showHint(str,event){
+if(event.keyCode != 13){
   if (str.length==0){ 
 		 	document.getElementById("livesearch").innerHTML="";
 		 	
@@ -32,7 +33,7 @@ function showHint(str){
 	xmlHttp.onreadystatechange=stateChanging
 	xmlHttp.send(null)
 }
-
+}
 function stateChanging(){
 	 if (xmlHttp.readyState==4)
   {
@@ -64,14 +65,18 @@ function GetXmlHttpObject()	{
 	return xmlHttp;
 }
 
+
+
+
 function select(title){
 
 	document.getElementById("selected").value=document.getElementById(title.id).innerHTML;
 	$("#livesearch").hide();
 
-}   
+}  
 
 function search(){
+ 
 	var key = document.getElementById("selected").value;
 	
 	xmlHttp=GetXmlHttpObject()
@@ -92,18 +97,22 @@ function stChang(){
 	 if (xmlHttp.readyState==4)
  {
     document.getElementById("bodyhelp").innerHTML=xmlHttp.responseText;
-	 document.getElementById("bodyhelp").style.border="1px solid #A5ACB2";
+	 document.getElementById("bodyhelp").style.border="1px solid #white";
   } 
 }
+function enter(event) {
+	if(event.keyCode == 13){
+		search();	
+		}
+	  }
 
 </script>
 <style type="text/css">
 
 .silverThing {background-color:silver;}
-.whiteThing { background-color: #FFF; }
+.whiteThing { background-color: #FFF;}
 
 </style>
-
 
 	<div id="content" class="yui-skin-sam" style="width: 100%;">
 	<div id="demo" class="yui-navset"
@@ -120,13 +129,13 @@ function stChang(){
 		style="height: auto; font-size: 11px; font-family: Verdana, Arial, Helvetica, sans-serif;">
 	<div style="padding: 2; text-align: center">
 
-	  <input type="text" name="keywords" onkeyup="showHint(this.value)" onkeydown="search();" id="selected"/>
-			<div style="background-color:white;overflow:auto;display: block; text-align: left;" id="livesearch" >
+	  <input type="text" name="keywords" onkeyup="showHint(this.value,event);" onkeypress="enter(event);" id="selected" />
+			<div style="background-color:white;overflow:auto;display: block; text-align: left;" id="livesearch">
 			</div>
 			 <c:set var="searchtpc">
 				<digi:trn key="help:SearchText">Search Topic</digi:trn>
 			</c:set>
-	  		<input type="button" class="dr-menu" value="${searchtpc}" onclick="search();"/></div>
+	  		<input type="button" class="dr-menu"  value="${searchtpc}" onclick="search();"/></div>
 		</div>
 	  </div>
 	</div>

@@ -36,7 +36,7 @@ import org.hibernate.Session;
 
 import edu.emory.mathcs.backport.java.util.Collections;
 
-public class PIReport5a extends PIAbstractReport {
+public class PIReport5a extends PIAbstractReport implements PIOperationsFor5 {
 
 	private static Logger logger = Logger.getLogger(PIReport4.class);
 	private final String reportCode = PIConstants.PARIS_INDICATOR_REPORT_5a;
@@ -209,6 +209,49 @@ public class PIReport5a extends PIAbstractReport {
 			e.printStackTrace();
 		}
 		return list;
+	}
+
+	public int[][] createMiniTable(Collection<PIReportAbstractRow> collection, int startYear, int endYear) {
+		int[][] ret = new int[4][endYear - startYear + 1];
+		for (int i = 0; i < 4; i++) {
+			ret[i] = new int[endYear - startYear + 1];
+			for (int j = 0; j < endYear - startYear + 1; j++) {
+				ret[i][j] = 0;
+			}
+		}
+		int j = 0;
+		int[] counter = new int[endYear - startYear + 1];
+		Iterator iter = collection.iterator();
+		while (iter.hasNext()) {
+			PIReport5aRow auxRow = (PIReport5aRow) iter.next();
+			if (!auxRow.getDonorGroup().getOrgGrpName().equalsIgnoreCase(PIConstants.ALL_DONORS)) {
+				if (auxRow.getYear() == startYear) {
+					j = 0;
+				}
+				if (auxRow.getColumn7() > 0) {
+					if (auxRow.getColumn7() <= 10) {
+						ret[0][j]++;
+					} else if (auxRow.getColumn7() > 10 && auxRow.getColumn7() <= 50) {
+						ret[1][j]++;
+					} else if (auxRow.getColumn7() > 50 && auxRow.getColumn7() <= 90) {
+						ret[2][j]++;
+					} else if (auxRow.getColumn7() > 90) {
+						ret[3][j]++;
+					}
+					counter[j]++;
+				}
+				j++;
+			}
+		}
+		for (int i = 0; i < 4; i++) {
+			for (int k = 0; k < endYear - startYear + 1; k++) {
+				if (counter[k] > 0) {
+					ret[i][k] = ret[i][k] * 100 / counter[k];
+				}
+			}
+		}
+
+		return ret;
 	}
 
 	@Override
@@ -398,7 +441,7 @@ public class PIReport5a extends PIAbstractReport {
 		for (int i = 0; i < endYear + 1 - startYear; i++) {
 			PIReport5aRow auxRow = new PIReport5aRow();
 			AmpOrgGroup auxDonorGroup = new AmpOrgGroup();
-			auxDonorGroup.setOrgGrpName("All Donors");
+			auxDonorGroup.setOrgGrpName(PIConstants.ALL_DONORS);
 			auxDonorGroup.setAmpOrgGrpId(new Long(0));
 			auxRow.setDonorGroup(auxDonorGroup);
 			auxRow.setColumn1(sumCol1[i]);

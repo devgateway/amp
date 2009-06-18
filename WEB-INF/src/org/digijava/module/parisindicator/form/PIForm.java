@@ -56,6 +56,11 @@ public class PIForm extends ActionForm {
 	 */
 	private Collection<AmpAhsurveyIndicator> availablePIReports;
 
+	/*
+	 * Mini tables for reports 5a and 5b.
+	 */
+	private int[][] miniTable;
+
 	private boolean reset;
 
 	public int getSelectedStartYear() {
@@ -236,5 +241,13 @@ public class PIForm extends ActionForm {
 
 	public void setSelectedFinancingIstruments(Collection<AmpCategoryValue> selectedFinancingIstruments) {
 		this.selectedFinancingIstruments = selectedFinancingIstruments;
+	}
+
+	public int[][] getMiniTable() {
+		return miniTable;
+	}
+
+	public void setMiniTable(int[][] miniTable) {
+		this.miniTable = miniTable;
 	}
 }

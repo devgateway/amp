@@ -8,11 +8,16 @@ public abstract class PIAbstractReport implements PIOperations {
 	 * This field is changed by each report.
 	 */
 	private final String reportCode = "";
-	
+
 	/*
 	 * This collection has all the rows to generate the report.
 	 */
 	private Collection<PIReportAbstractRow> reportRows;
+
+	/*
+	 * Mini tables for reports 5a and 5b.
+	 */
+	private int[][] miniTable;
 
 	public String getReportCode() {
 		return reportCode;
@@ -24,5 +29,13 @@ public abstract class PIAbstractReport implements PIOperations {
 
 	public void setReportRows(Collection<PIReportAbstractRow> reportRows) {
 		this.reportRows = reportRows;
+	}
+
+	public int[][] getMiniTable() {
+		return miniTable;
+	}
+
+	public void setMiniTable(int[][] miniTable) {
+		this.miniTable = miniTable;
 	}
 }

@@ -140,18 +140,20 @@ public class HelpActions extends DispatchAction {
 							  int editkey = item.getEditorKey().indexOf("body:");
 					          //String title = item.getEditorKey().substring(editkey+5);
 					          HelpTopic helptopic = HelpUtil.getHelpTopicByBodyEditKey(item.getEditorKey(), siteId, moduleInstance);
-					         if(!helptopic.equals(null)){
-				              String title = helptopic.getTopicKey();
-				              String xs = HelpUtil.getTrn(title,request);
-				              String encodeTitle = HelpUtil.HTMLEntityEncode(xs);
-					          if(encodeTitle.length()>=loadStatus.length()){
-				               if(loadStatus.toLowerCase().equals(encodeTitle.toLowerCase().substring(0,loadStatus.length()))){
-				            	
-				            	String removerSpacedtitle = HelpUtil.removeSpaces(encodeTitle);
-				            	
-				                out.println("<div id="+removerSpacedtitle+" onclick=\"select("+removerSpacedtitle+")\" onmouseover=\"this.className='silverThing'\" onmouseout=\"this.className='whiteThing'\">"+encodeTitle+"</div>");
-				             }
-				           }
+					          if(helptopic!=null){
+					              String title = helptopic.getTopicKey();
+					              String xs = HelpUtil.getTrn(title,request);
+					              String encodeTitle = HelpUtil.HTMLEntityEncode(xs);
+						           if(encodeTitle.length()>=loadStatus.length()){
+					                if(loadStatus.toLowerCase().equals(encodeTitle.toLowerCase().substring(0,loadStatus.length()))){
+					            	
+					            	String removerSpacedtitle = HelpUtil.removeSpaces(encodeTitle);
+					            	
+					                out.println("<div id="+removerSpacedtitle+" onclick=\"select("+removerSpacedtitle+")\" onmouseover=\"this.className='silverThing'\" onmouseout=\"this.className='whiteThing'\">"+encodeTitle+"</div>");
+					             }
+					          }
+						}else{
+							break;
 						}
 					 }
 				 }
@@ -174,7 +176,7 @@ public class HelpActions extends DispatchAction {
 	
  	public ActionForward searchHelpTopic(ActionMapping mapping,	ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		 String key =request.getParameter("key");
-		 String keywords = HelpUtil.getTrn(key,request);
+		 //String keywords = HelpUtil.getTrn(key,request);
 		 String treKey = HelpUtil.getTrn("Topic Not Found", request);
 		 String locale=RequestUtils.getNavigationLanguage(request).getCode();
 		 String siteId = RequestUtils.getSite(request).getSiteId();
@@ -191,14 +193,15 @@ public class HelpActions extends DispatchAction {
 	try{	
 	     os = new OutputStreamWriter(response.getOutputStream());
 	     out = new PrintWriter(os, true);	 
-				if(key != null){
+				if(key.length() != null){
 					 Collection<LabelValueBean> Searched = new ArrayList<LabelValueBean>();
-					 Hits hits =  LuceneUtil.helpSearch("title", keywords, request.getSession().getServletContext());
+					 System.out.println("Key:"+key);
+					 Hits hits =  LuceneUtil.helpSearch("title", key, request.getSession().getServletContext());
 			
 			         String artikleTitle;
 					 
 					 HelpForm help = (HelpForm) form;	
-					 
+					 System.out.println("hits.length():"+hits.length());
 					  int hitCount = hits.length();   
 			    	   
 			    	  if(hitCount == 0){

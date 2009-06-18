@@ -8,7 +8,6 @@
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <digi:instance property="helpForm" />
-<digi:form action="/helpActions.do?actionType=searchHelpTopic">
 
 <script language="JavaScript">
 
@@ -121,7 +120,7 @@ function stChang(){
 		style="height: auto; font-size: 11px; font-family: Verdana, Arial, Helvetica, sans-serif;">
 	<div style="padding: 2; text-align: center">
 
-	  <input type="text" name="keywords" onkeyup="showHint(this.value)" id="selected"/>
+	  <input type="text" name="keywords" onkeyup="showHint(this.value)" onkeydown="search();" id="selected"/>
 			<div style="background-color:white;overflow:auto;display: block; text-align: left;" id="livesearch" >
 			</div>
 			 <c:set var="searchtpc">
@@ -131,4 +130,3 @@ function stChang(){
 		</div>
 	  </div>
 	</div>
-</digi:form>

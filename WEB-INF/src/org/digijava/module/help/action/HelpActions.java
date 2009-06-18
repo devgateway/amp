@@ -81,8 +81,7 @@ public class HelpActions extends DispatchAction {
 		OutputStreamWriter os = null;
 	    PrintWriter out = null;
 	    String loadStatus = request.getParameter("body");
-         String siteId = RequestUtils.getSite(request).getSiteId();
-         String	lange	= RequestUtils.getNavigationLanguage(request).getCode();
+        
 
         try {
 			if(loadStatus != null){
@@ -128,6 +127,8 @@ public class HelpActions extends DispatchAction {
 		    String loadStatus =request.getParameter("loadKey");
 		    Editor item = new Editor();
 		    String	lange	= RequestUtils.getNavigationLanguage(request).getCode();
+		    String siteId = RequestUtils.getSite(request).getSiteId();
+	         String moduleInstance = RequestUtils.getRealModuleInstance(request).getInstanceName();
 		    
 			 try {
 				 os = new OutputStreamWriter(response.getOutputStream());
@@ -140,16 +141,26 @@ public class HelpActions extends DispatchAction {
 				 			
 				           
 							  int editkey = item.getEditorKey().indexOf("body:");
-					          String title = item.getEditorKey().substring(editkey+5);
-				             if(title.length()>=loadStatus.length()){
-				             if(loadStatus.toLowerCase().equals(title.toLowerCase().substring(0,loadStatus.length()))){
+					          //String title = item.getEditorKey().substring(editkey+5);
+					          HelpTopic helptopic = HelpUtil.getHelpTopicByBodyEditKey(item.getEditorKey(), siteId, moduleInstance);
+					         if(helptopic!=null){
+					        	 
+				              String title = helptopic.getTopicKey();
+				              String xs = HelpUtil.getTrn(title,request);
+				              String encodeTitle = HelpUtil.HTMLEntityEncode(xs);
+					          if(encodeTitle.length()>=loadStatus.length()){
+				               if(loadStatus.toLowerCase().equals(encodeTitle.toLowerCase().substring(0,loadStatus.length()))){
 				            	
-				            	String xs = HelpUtil.getTrn(title,request);
-				                out.println("<div id="+title+" onclick=\"select("+title+")\" onmouseover=\"this.className='silverThing'\" onmouseout=\"this.className='whiteThing'\">"+title+"</div>");
+				            	String removerSpacedtitle = HelpUtil.removeSpaces(encodeTitle);
+				            	
+				                out.println("<div id="+removerSpacedtitle+" onclick=\"select("+removerSpacedtitle+")\" onmouseover=\"this.className='silverThing'\" onmouseout=\"this.className='whiteThing'\">"+encodeTitle+"</div>");
 				             }
 				           }
+						}else{
+							break;
 						}
 					 }
+				 }
 			      if(out == null){
 			    	 
 			    	  out.println("<div onmouseover=\"this.className='silverThing'\" onmouseout=\"this.className='whiteThing'\">Not found</div>");
@@ -171,24 +182,30 @@ public class HelpActions extends DispatchAction {
 		 String keywords = HelpUtil.getTrn(key,request);
 		 String treKey = HelpUtil.getTrn("Topic Not Found", request);
 		 String locale=RequestUtils.getNavigationLanguage(request).getCode();
+		 String siteId = RequestUtils.getSite(request).getSiteId();
+         String	lange	= RequestUtils.getNavigationLanguage(request).getCode();
+         String moduleInstance = RequestUtils.getRealModuleInstance(request)
+			.getInstanceName();
 		 Object artidcle = "";
+		 List<Editor> wholeBody;
 		 OutputStreamWriter os = null;	
 		 PrintWriter out = null;
+		 String topicKey = null;
 		 
 		
 	try{	
 	     os = new OutputStreamWriter(response.getOutputStream());
 	     out = new PrintWriter(os, true);	 
-				if(key != null){
+				if(key.length() != 0){
 					 Collection<LabelValueBean> Searched = new ArrayList<LabelValueBean>();
-					 Hits hits =  LuceneUtil.helpSearch("title", keywords, request.getSession().getServletContext());
-			
+					 Hits hits =  LuceneUtil.helpSearch("title", key, request.getSession().getServletContext());
+					 
 			         String artikleTitle;
 					 
 					 HelpForm help = (HelpForm) form;	
 					 
 					  int hitCount = hits.length();   
-			    	   
+					  System.out.println("hits.length():"+hits.length());
 			    	  if(hitCount == 0){
 			    		
 						  out.println("<div style=\"font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;\"><a class=\"link\"><b>"+key+"</b></a></div>");
@@ -204,6 +221,7 @@ public class HelpActions extends DispatchAction {
 			    		  	if(doc.get("lang").equals(locale)){  
 			    			  
 						   String title = doc.get("title");
+						   String titleKey = doc.get("titletrnKey");
 						   String art;
 					
 						      if (!artidcle.equals("")) {
@@ -225,11 +243,17 @@ public class HelpActions extends DispatchAction {
 						   Searched.add(new LabelValueBean(titlelink,art+"..."));
 						 
 						 for (LabelValueBean t : Searched){
+							 topicKey = t.getLabel();
 							   out.println("<div id=\"bodyTitle\" style=\"font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;\"><a class=\"link\" onclick=\"showBody()\"><b>"+t.getLabel()+"</b></a></div>");
 							   out.println("<div id=\"bodyShort\"  style=\"display:block;\">"+t.getValue()+"</div>");
 						   }
+						  HelpTopic bodykey = HelpUtil.getHelpTopic(topicKey, siteId, moduleInstance);
+						  if(bodykey !=null){
+							   wholeBody = HelpUtil.getEditor(bodykey.getBodyEditKey(), locale);
+						  }else{
+							  wholeBody = HelpUtil.getEditor(titleKey, locale);
+						  }
 						  
-						  List<Editor> wholeBody = HelpUtil.getEditor("help:topic:body:"+key, locale);
 						  for (Editor wb : wholeBody){
 							  out.println("<div id=\"bodyFull\"  style=\"display:none;\">"+wb.getBody()+"</div>");
 						  }

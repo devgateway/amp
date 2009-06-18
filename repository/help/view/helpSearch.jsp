@@ -8,7 +8,7 @@
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <digi:instance property="helpForm" />
-<digi:form action="/helpActions.do?actionType=searchHelpTopic">
+
 
 <script language="JavaScript">
 
@@ -65,14 +65,20 @@ function GetXmlHttpObject()	{
 	return xmlHttp;
 }
 
+
+
+
 function select(title){
 
-		document.getElementById("selected").value=document.getElementById(title.innerHTML).innerHTML;
+	document.getElementById("selected").value=document.getElementById(title.id).innerHTML;
 		$("#livesearch").hide();
+
 }  
 
 function search(){
-	key = document.getElementById("selected").value;
+
+	var key = document.getElementById("selected").value;
+
 	
 	xmlHttp=GetXmlHttpObject()
 	if (xmlHttp==null){
@@ -99,8 +105,8 @@ function stChang(){
 </script>
 <style type="text/css">
 
-.silverThing {background-color:silver; }
-.whiteThing { background-color: #FFF; }
+.silverThing {background-color:silver;}
+.whiteThing { background-color: #FFF;}
 
 </style>
 
@@ -120,14 +126,13 @@ function stChang(){
 		style="height: auto; font-size: 11px; font-family: Verdana, Arial, Helvetica, sans-serif;">
 	<div style="padding: 2; text-align: center">
 
-	  <input type="text" name="keywords" onkeyup="showHint(this.value)" id="selected"/>
-			<div style="background-color:white;overflow:auto;display: block; text-align: left;" id="livesearch" >
+	  <input type="text" name="keywords" onkeyup="showHint(this.value);" onkeydown="search();"  id="selected"/>
+			<div style="background-color:white;overflow:auto;display: block; text-align: left;" id="livesearch"  >
 			</div>
 			 <c:set var="searchtpc">
 				<digi:trn key="help:SearchText">Search Topic</digi:trn>
 			</c:set>
-	  		<input type="button" class="dr-menu" value="${searchtpc}" onclick="search()"/></div>
+	  		<input type="button" class="dr-menu"  value="${searchtpc}" onclick="search();"/></div>
 		</div>
 	  </div>
 	</div>
-</digi:form>

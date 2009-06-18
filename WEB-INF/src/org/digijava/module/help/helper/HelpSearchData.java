@@ -4,13 +4,21 @@ import java.util.Date;
 
 public class HelpSearchData {
 
-	
+
 	private String titleTrnKey=null;
 	private String topicKey;
 	private String body;
 	private Date lastModDate;
 	private String lang;
+	private String bodyKey;
 	
+	
+	public String getBodyKey() {
+		return bodyKey;
+	}
+	public void setBodyKey(String bodyKey) {
+		this.bodyKey = bodyKey;
+	}
 	public String getTitleTrnKey() {
 		return titleTrnKey;
 	}

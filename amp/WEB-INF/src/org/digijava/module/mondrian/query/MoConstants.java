@@ -21,6 +21,7 @@ public final class MoConstants {
 	public static String DONOR_GROUP = "Donor Group";
 	public static String FINANCING_INTRUMENT= "Financing Instrument";
 	public static  String TERMS_OF_ASSISTANCE= "Terms of Assistance";
+	public static  String NATIONAL_PROGRAM= "National Program";
 	public static String SECTORS= "Sectors";
 	
 	public static String ALL_PRIMARY_SECTOR = "All Primary Sectors";

@@ -173,7 +173,7 @@ function validateForm(){
     || !validateProgramsPercentage(spSize,"secondaryPrograms")
     </field:display>  
     ){
-        alert("false");
+        //alert("false");
       return false;
     }
   }

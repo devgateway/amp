@@ -193,7 +193,7 @@ public class HelpActions extends DispatchAction {
 	try{	
 	     os = new OutputStreamWriter(response.getOutputStream());
 	     out = new PrintWriter(os, true);	 
-				if(key.length() != null){
+				if(key.length() != 0){
 					 Collection<LabelValueBean> Searched = new ArrayList<LabelValueBean>();
 					 System.out.println("Key:"+key);
 					 Hits hits =  LuceneUtil.helpSearch("title", key, request.getSession().getServletContext());

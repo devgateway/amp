@@ -111,4 +111,68 @@
            </logic:iterate>
         </logic:notEmpty>
     </table>
+    <br>
+    <table width="100%">
+        <tr align="center">
+            <td align="center">
+			    <table border="1" width="50%" cellspacing="0" cellpadding="0" align="center">
+			        <tr>
+			            <td align="center" rowspan="2" bgcolor="#CCCCFF">
+			                <strong><digi:trn key="aim:percentOfODAUsingAll">Percent of ODA using all three partner's PFM procedures</digi:trn></strong>
+			            </td>
+			            <td align="center" colspan="${parisIndicatorForm.selectedEndYear + 1 - parisIndicatorForm.selectedStartYear}" bgcolor="#CCCCFF">
+			                <strong><digi:trn key="aim:percentOfDonorsThatUseAllThree">Percent of donors that use all three partner's PFM procedures</digi:trn></strong>    
+			            </td>
+			        </tr>
+			        <bean:define id="years" value="${parisIndicatorForm.selectedEndYear + 1 - parisIndicatorForm.selectedStartYear}"/>
+			        <bean:define id="miForm" name="parisIndicatorForm" type="org.digijava.module.parisindicator.form.PIForm"/>
+			        <tr>
+			        <%for(int jj = 0; jj < Integer.valueOf(years).intValue(); jj++) {%>
+			            <td><strong><%=miForm.getSelectedStartYear()+jj%></strong></td>
+			        <%}%>
+			        </tr>
+			        <tr>
+			            <td>
+			                <strong><digi:trn>Less than 10%</digi:trn></strong>
+			            </td>
+			            <nested:iterate name="parisIndicatorForm" property="miniTable[0]" id="element">
+			                <td>
+			                    <bean:write name="element"/>
+			                </td>
+			            </nested:iterate>
+			        </tr>
+			        <tr>
+			            <td>
+			                <strong><digi:trn>From 10 to 50%</digi:trn></strong>
+			            </td>
+			            <nested:iterate name="parisIndicatorForm" property="miniTable[1]" id="element">
+			                <td>
+			                    <bean:write name="element"/>
+			                </td>
+			            </nested:iterate>
+			        </tr>
+			        <tr>
+			            <td>
+			                <strong><digi:trn>From 50 to 90%</digi:trn></strong>
+			            </td>
+			            <nested:iterate name="parisIndicatorForm" property="miniTable[2]" id="element">
+			                <td>
+			                    <bean:write name="element"/>
+			                </td>
+			            </nested:iterate>
+			        </tr>
+			        <tr>
+			            <td>
+			                <strong><digi:trn>More than 90%</digi:trn></strong>
+			            </td>
+			            <nested:iterate name="parisIndicatorForm" property="miniTable[3]" id="element">
+			                <td>
+			                    <bean:write name="element"/>
+			                </td>
+			            </nested:iterate>
+			        </tr>
+			    </table>
+            </td>
+        </tr>
+    </table>
 </digi:form>

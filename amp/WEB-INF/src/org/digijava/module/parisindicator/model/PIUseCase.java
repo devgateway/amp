@@ -159,6 +159,13 @@ public class PIUseCase {
 		Collection<PIReportAbstractRow> postMainReportRows = report.reportPostProcess(preMainReportRows, form
 				.getSelectedStartYear(), form.getSelectedEndYear());
 
+		if (form.getPiReport().getIndicatorCode().equals(PIConstants.PARIS_INDICATOR_REPORT_5a)) {
+			PIReport5a auxReport = new PIReport5a();
+			int[][] miniTable = auxReport.createMiniTable(postMainReportRows, form.getSelectedStartYear(), form
+					.getSelectedEndYear());
+			report.setMiniTable(miniTable);
+		}
+
 		report.setReportRows(postMainReportRows);
 		return report;
 	}

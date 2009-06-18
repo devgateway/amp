@@ -27,7 +27,7 @@ public class PIAction extends Action {
 			useCase.resetFilterSelections(piForm, ((TeamMember) request.getSession().getAttribute("currentMember"))
 					.getAppSettings());
 		}
-		
+
 		// Setup common data.
 		piForm.setAvailablePIReports(useCase.setupAvailablePIReports());
 		String piReportCode = request.getParameter("reportId");
@@ -36,6 +36,7 @@ public class PIAction extends Action {
 		// Create report.
 		PIAbstractReport report = useCase.createReport(piForm);
 		piForm.setMainTableRows(report.getReportRows());
+		piForm.setMiniTable(report.getMiniTable());
 
 		return mapping.findForward("forward");
 	}

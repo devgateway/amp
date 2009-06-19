@@ -1,0 +1,1 @@
+update amp_sector set sector_code_official=sector_code where sector_code_official is NULL;

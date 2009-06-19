@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<!--
+- Acegi managed beans.
+-->
+<beans>
+  <bean id="digiUserDetailsService" class="org.digijava.kernel.security.auth.DigiUserDetailsService">
+    <property name="populateGroupAuthorities">
+	<value>false</value>
+    </property>
+  </bean>
+
+  <bean id="daoAuthenticationProvider" class="org.digijava.kernel.security.auth.DigiDaoAuthenticationProvider">
+    <property name="userDetailsService">
+      <ref bean="digiUserDetailsService" />
+    </property>
+  </bean>
+
+  <bean id="authenticationManager" class="org.acegisecurity.providers.ProviderManager">
+    <property name="providers">
+      <list>
+        <ref bean="daoAuthenticationProvider" />
+      </list>
+    </property>
+  </bean>
+
+  <bean id="roleVoter" class="org.acegisecurity.vote.RoleVoter" />
+
+  <bean id="accessDecisionManager" class="org.acegisecurity.vote.UnanimousBased">
+    <property name="decisionVoters">
+      <list>
+        <ref bean="roleVoter" />
+      </list>
+    </property>
+  </bean>
+
+<!--
+  <bean id="securityInterceptor" class="org.acegisecurity.intercept.web.FilterSecurityInterceptor">
+    <property name="authenticationManager">
+      <ref bean="authenticationManager" />
+    </property>
+    <property name="accessDecisionManager">
+      <ref bean="accessDecisionManager" />
+    </property>
+    <property name="objectDefinitionSource">
+      <value>
+      CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISION
+      PATTERN_TYPE_APACHE_ANT
+      /faces/**=ROLE_EXPERT
+      </value>
+    </property>
+  </bean>
+-->
+
+  <bean id="digiAuthenticationProcessingFilterEntryPoint" class="org.acegisecurity.ui.webapp.AuthenticationProcessingFilterEntryPoint">
+    <property name="loginFormUrl">
+      <value>/showLayout.do?layout=login</value>
+    </property>
+  </bean>
+  <!--
+  <bean id="rememberMeServices" class="org.acegisecurity.ui.rememberme.NullRememberMeServices" />
+  -->
+<!--
+  <bean id="authenticationProcessingFilter" class="org.acegisecurity.ui.webapp.AuthenticationProcessingFilter">
+    <property name="filterProcessesUrl">
+      <value>/j_acegi_security_check</value>
+    </property>
+    <property name="authenticationFailureUrl">
+      <value>/showLayout.do?layout=login</value>
+    </property>
+    <property name="defaultTargetUrl">
+      <value>/showMyDesktop.do</value>
+    </property>
+    <property name="authenticationManager">
+      <ref bean="authenticationManager" />
+    </property>
+  </bean>
+-->
+  <bean id="authenticationProcessingFilter" class="org.digijava.module.aim.auth.AmpAuthenticationProcessingFilter">
+    <property name="filterProcessesUrl">
+      <value>/j_acegi_security_check</value>
+    </property>
+    <property name="authenticationFailureUrl">
+      <value>/showLayout.do?layout=login&amp;loginError=invalidLogin</value>
+    </property>
+   <property name="exceptionMappings">
+     <props>
+       <prop key="org.digijava.module.aim.auth.InvalidUserException">/showLayout.do?layout=login&amp;loginError=invalidUser</prop>
+       <prop key="org.digijava.module.aim.auth.NotTeamMemberException">/showLayout.do?layout=login&amp;loginError=noTeamMember</prop>
+     </props>
+    </property>
+    <property name="defaultTargetUrl">
+      <value>/index.do</value>
+    </property>
+    <property name="alwaysUseDefaultTargetUrl">
+      <value>true</value>
+    </property>
+    <property name="authenticationManager">
+      <ref bean="authenticationManager" />
+    </property>
+  </bean>
+
+  <bean id="logoutFilter" class="org.acegisecurity.ui.logout.LogoutFilter">
+    <!-- URL redirected to after logout -->
+    <constructor-arg value="/aim/logout.do"/> 
+    <constructor-arg>
+      <list>
+        <bean class="org.acegisecurity.ui.logout.SecurityContextLogoutHandler"/>
+        <bean class="org.digijava.module.aim.auth.AmpLogoutHandler" />
+      </list>
+    </constructor-arg>
+    <property name="filterProcessesUrl">
+      <value>/j_acegi_logout</value>
+    </property>
+</bean>
+
+<bean id="filterChainProxy" class="org.acegisecurity.util.FilterChainProxy">
+  <property name="filterInvocationDefinitionSource">
+    <value>
+    CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
+    PATTERN_TYPE_APACHE_ANT
+    /**=httpSessionContextIntegrationFilter, logoutFilter, exceptionTranslationFilter, authenticationProcessingFilter
+    </value>
+  </property>
+</bean>
+
+<bean id="httpSessionContextIntegrationFilter" class="org.acegisecurity.context.HttpSessionContextIntegrationFilter">
+  <property name="allowSessionCreation"><value>true</value></property>
+  <property name="context">
+    <value>org.acegisecurity.context.SecurityContextImpl</value>
+  </property>
+</bean>
+
+<bean id="exceptionTranslationFilter" class="org.acegisecurity.ui.ExceptionTranslationFilter">
+  <property name="authenticationEntryPoint"><ref
+    local="digiAuthenticationProcessingFilterEntryPoint"/></property>
+    <property name="accessDeniedHandler">
+      <bean class="org.acegisecurity.ui.AccessDeniedHandlerImpl">
+        <property name="errorPage">
+           <value>/showLayout.do?layout=login&amp;loginError=noTeamMember</value>
+        </property>
+      </bean>
+</property>
+</bean>
+
+</beans>

@@ -607,20 +607,27 @@ var isAlreadySubmitted = false;
 												<c:set var="contentDisabled">true</c:set>
 											</c:if>
 											<td align="left" vAlign="bottom">
-												
+												<table cellPadding="0" cellSpacing="0">
+													<tr>
+														<td>
 															<% tempIndexStr = "" + tempIndex; tempIndex++;%>
 															<html:text name="fundingDetail" indexed="true" property="transactionDate"
 															styleId="<%=tempIndexStr%>" readonly="true" size="10"/>
-														&nbsp;
+														</td>
+														<td align="left" vAlign="center">&nbsp;
 															<c:if test="${contentDisabled=='false'}">
 																<a id="trans3Date<%=tempIndexStr%>" href='javascript:pickDateById("trans3Date<%=tempIndexStr%>",<%=tempIndexStr%>)'>
 																	<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 																</a>
 															</c:if>
-																									
+														</td>														
+													</tr>
+												</table>												
 											</td>
+
+
 											<field:display name="Remove Commitment Link" feature="Commitments">
-												<td >
+												<td align="right">
 														<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,0)">
 											 				<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 														</a>
@@ -864,22 +871,27 @@ var isAlreadySubmitted = false;
 											</td>
                                             
                                             
-										
-											
-											 <td align="center">
-											 	<field:display name="Disbursement Order Contract ID" feature="Disbursement Orders">
+											<c:set var="contentDisabled"><field:display name="Disbursement Order Contract ID" feature="Disbursement Orders">false</field:display></c:set>
+											<c:if test="${contentDisabled==''}">
+												<c:set var="contentDisabled">true</c:set>
+											</c:if>
+                                             <td align="center">
                                                  <c:if test="${empty fundingDetail.contract}">
 												 	<input type="text" value="" readonly="true"/>
                                                  </c:if>
                                                  <c:if test="${not empty fundingDetail.contract}">
 													<input type="text" value="${fundingDetail.contract.contractName}" readonly="true"/>
                                                  </c:if>
-                                                 </field:display>
 											 </td>
                                              <td>
-                                             	<field:display name="Disbursement Order Contract ID" feature="Disbursement Orders">
+                                             	<!-- 
+                                             	<c:if test="${contentDisabled=='true'}">
+                                            	   <input type="submit" disabled="disabled" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
+                                            	</c:if>
+                                            	-->
+                                            	<c:if test="${contentDisabled=='false'}">
                                             	   <input type="submit" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
-                                            	 </field:display>
+                                            	</c:if>
 											</td>
 
 
@@ -983,7 +995,7 @@ var isAlreadySubmitted = false;
 								    <img src= "../ampTemplate/images/help.gif" border="0" align="absmiddle" title="${translation}" /></td>
                                 </field:display>
 								<field:display name="Date Disbursement" feature="Disbursement">
-								<td align="center" valign="middle" width="200">
+								<td align="center" valign="middle" width="120">
 								<a title="<digi:trn key="aim:DateofDisbursement">Date of actual international transfer of financial resources</digi:trn>">
 								<b><font color="white">
                                   <digi:trn key="aim:Planned">Planned</digi:trn>/<digi:trn key="aim:Actual">Actual</digi:trn><br><digi:trn key="aim:DisbursementDateFIE">Disbursement Date</digi:trn></font></b></a>
@@ -1101,27 +1113,31 @@ var isAlreadySubmitted = false;
 											</td>
 											 -->        
 
-											
+											<c:set var="contentDisabled"><field:display name="Link to Disbursement Order ID" feature="Disbursement">false</field:display></c:set>
+											<c:if test="${contentDisabled==''}">
+												<c:set var="contentDisabled">true</c:set>
+											</c:if>
 											 	<td align="center">
-                                         		   <field:display name="Link to Disbursement Order ID" feature="Disbursement">
-											
                                                 	<c:if test="${empty fundingDetail.contract}">
 														<input type="text" value="" readonly="true"/>
                                                     </c:if>
                                                     <c:if test="${not empty fundingDetail.contract}">
         												<input type="text" value="${fundingDetail.contract.contractName}" readonly="true"/>
                                                     </c:if>
-                                                    
-                                                    </field:display>
-												</td>
+											</td>
 
 
+											<c:set var="contentDisabled"><field:display name="Contract of Disbursement" feature="Disbursement">false</field:display></c:set>
+											<c:if test="${contentDisabled==''}">
+												<c:set var="contentDisabled">true</c:set>
+											</c:if>
                                             <td>
-                                            
-                                            
-											<field:display name="Contract of Disbursement" feature="Disbursement">
-											   		<input type="submit" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
-											</field:display>
+                                            	<c:if test="${contentDisabled=='false'}">
+                                               		<input type="submit" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
+												</c:if>
+                                            	<c:if test="${contentDisabled=='true'}">
+                                               		<input type="submit" disabled="disabled" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
+												</c:if>
 											</td>
 
 											<field:display name="Remove Disbursement Link" feature="Disbursement">
@@ -1214,9 +1230,8 @@ var isAlreadySubmitted = false;
 									    <img src= "../ampTemplate/images/help.gif" border="0" align="absmiddle"  title="${translation}" />
 									</td>
 								</field:display>
-								
 								<field:display name="Date Expenditure" feature="Expenditures">
-								<td align="center" valign="middle" width="200">
+								<td align="center" valign="middle" width="120">
 									<a title="<digi:trn key="aim:DateofExpenditure">Date of actual expenditure</digi:trn>">
 									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<digi:trn key="aim:Actual">Actual</digi:trn><br><digi:trn key="aim:ExpenditureDateFIE">Expenditure Date</digi:trn></font></b></a>
 								</td>
@@ -1298,7 +1313,7 @@ var isAlreadySubmitted = false;
 
 
 									<field:display name="Remove Expenditure Link" feature="Expenditures">
-											<td > 
+											<td align="center"> 
 												<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,2)">
 								 					<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 												</a>

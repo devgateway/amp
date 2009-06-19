@@ -120,9 +120,17 @@ function scrollableTable(tableId,height){
 			
 			//this is the normal setbodyWidthFUnction
 			 this.setBodyWidth=function(){
-			 	var maxRowNum	= this.maxRowDepth;
-			 	if ( this.maxRowDepth > this.tbody.rows.length ) 
-			 		maxRowNum	= this.tbody.rows.length;
+//			 	var maxRowNum	= this.maxRowDepth;
+//			 	if ( this.maxRowDepth > this.tbody.rows.length ) 
+				//longestCellCount is used to stop this process in the longest cell, in case is a hierarchy
+				longestCellCount = 0;
+				for(i=0;i<this.tbody.rows.length;i++)
+				{
+					if(longestCellCount < this.tbody.rows[i].cells.length)
+						longestCellCount = this.tbody.rows[i].cells.length
+				}
+			 	var	maxRowNum	= this.tbody.rows.length;
+
 				for (i=0; i<maxRowNum  ;i++){
 						//set cells widths
 						for (j=0; j<this.tbody.rows[i].cells.length ;j++){
@@ -172,7 +180,11 @@ function scrollableTable(tableId,height){
 						
 							this.tbody.rows[i].cells[j].style.overflow="hidden";
 						
-						}		
+						}	
+						//Stop this process in the longest cell, that should be inside a hierarchy
+						if(longestCellCount == this.tbody.rows[i].cells.length) {
+							break;
+						}
 					//end for cells	
 			}	
 				///end for rows

@@ -605,9 +605,11 @@ public class ChartWidgetUtil {
 		
 		//plot.setSectionOutlinesVisible(false);
         LegendTitle lt = result.getLegend();
-        Font labelFont = new Font(null, Font.PLAIN, 9);
-        lt.setItemFont(labelFont);
-        plot.setLabelFont(labelFont);
+        if (lt != null) {
+            Font labelFont = new Font(null, Font.PLAIN, 9);
+            lt.setItemFont(labelFont);
+            plot.setLabelFont(labelFont);
+        }
 		plot.setIgnoreNullValues(true);
 		plot.setIgnoreZeroValues(true);
 		return result;

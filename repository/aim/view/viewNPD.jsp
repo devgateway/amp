@@ -60,8 +60,8 @@
 		    context: ["showbtn", "tl", "bl"]
 		    });
 	var panelStart
-	var checkAndClose=false, extraActions = false;	    
-	    
+	var checkAndClose=false, extraActions = false;
+
 	function initPopinScript() {
 		var msg='\n<digi:trn>Title</digi:trn>';
 		myPanel.setHeader(msg);
@@ -102,24 +102,23 @@
 </style>
 
 <script language="JavaScript">
-    <!--
-  
+
     function mapCallBack(status, statusText, responseText, responseXML){
        window.location.reload();
     }
     var responseSuccess = function(o){
-		var response = o.responseText; 
+		var response = o.responseText;
 		var content = document.getElementById("popinContent");
 		content.innerHTML = response;
 		showContent();
 	}
-	var responseFailure = function(o){ 
-		alert("Connection Failure!"); 
-	}  
-	var callback = 
-	{ 
-		success:responseSuccess, 
-		failure:responseFailure 
+	var responseFailure = function(o){
+		alert("Connection Failure!");
+	}
+	var callback =
+	{
+		success:responseSuccess,
+		failure:responseFailure
 	};
 	function showContent(){
 		var element = document.getElementById("popin");
@@ -140,32 +139,32 @@
 				myclose();
 				refreshPage();
 			}
-			checkAndClose=false;			
+			checkAndClose=false;
 		}
 		if(extraActions == true){
 			setUpWin();
-			extraActions = false;	
+			extraActions = false;
 		}
 	}
 	function refreshPage(){
-		
+
 	}
 
 	function myclose(){
 		var content = document.getElementById("popinContent");
 		content.innerHTML="";
-		myPanel.hide();	
+		myPanel.hide();
 		panelStart=1;
-	
+
 	}
 	function closeWindow() {
 		myclose();
 	}
 	function showPanelLoading(msg){
-		myPanel.setHeader(msg);		
+		myPanel.setHeader(msg);
 		var content = document.getElementById("popinContent");
-		content.innerHTML = "<div style='text-align: center'>" + "Loading..." + 
-			"... <br /> <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>";		
+		content.innerHTML = "<div style='text-align: center'>" + "Loading..." +
+			"... <br /> <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>";
 		showContent();
 	}
 
@@ -385,7 +384,7 @@ function showFilter(){
 		return url;
 	}
 
-	function mapCallBack(status, statusText, responseText, responseXML){
+	function updateMapCallBack(status, statusText, responseText, responseXML){
 		updateMap(responseText);
 	}
 
@@ -408,7 +407,7 @@ function showFilter(){
 		var url=constructMapUrl(timestamp);
 
 		var async=new Asynchronous();
-		async.complete=mapCallBack;
+		async.complete=updateMapCallBack;
 		async.call(url);
 	}
 
@@ -1335,7 +1334,6 @@ function showFilter(){
 	}
 
 	function loadInitial(){
-
 		setupYears();
 		initTree();
 		initPopinScript();

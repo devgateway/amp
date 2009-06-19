@@ -17,6 +17,8 @@ DROP TABLE IF EXISTS `cached_v_national_program`;
 CREATE TABLE cached_v_national_program AS SELECT * FROM `v_nationalobjectives`;
 DROP TABLE IF EXISTS cached_v_donor_funding;
 CREATE TABLE cached_v_donor_funding AS SELECT * FROM `v_donor_funding_cached`;
+DROP TABLE IF EXISTS `cached_v_sub_sector`;
+CREATE TABLE cached_v_sub_sector AS SELECT * FROM `v_sub_sectors`;
 
 CREATE INDEX idx_amp_activity ON cached_v_donor_date_hierarchy(amp_activity_id);
 CREATE INDEX idx_fund_det_id ON cached_v_donor_date_hierarchy(amp_fund_detail_id);

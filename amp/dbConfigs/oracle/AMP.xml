@@ -16,26 +16,24 @@
 			<Level name="Month" column="month" uniqueMembers="false" ordinalColumn="month" nameColumn="MONTH_NAME" levelType="TimeMonths" type="Numeric" />
 		</Hierarchy>
 	</Dimension>
-	
-	<Dimension name="Regions">
-		<Hierarchy hasAll="true" allMemberCaption="#All_Regions#" allMemberName="All Regions" primaryKey="AMP_ACTIVITY_ID" caption="#Regions#">
-			<Table name="CACHED_V_REGIONS"/>
-			<Level name="Region" column="REGION">
-				<NameExpression>
-					<SQL dialect="oracle">
-						nvl(REGION,'#No_Data#')
-					</SQL>
-				</NameExpression>
-			</Level> 
-		</Hierarchy>
-	</Dimension>
 	<Dimension name="Status">
 		<Hierarchy hasAll="true" allMemberCaption="#All_Status#" allMemberName="All Status" primaryKey="AMP_ACTIVITY_ID" caption="#Status#">
 			<Table name="CACHED_V_STATUS" />
 			<Level name="name" column="NAME"/>
 		</Hierarchy>
 	</Dimension>
-	
+	<Dimension name="Sub-Sector">
+		<Hierarchy hasAll="true" allMemberCaption="#All Sub-Sectors#" allMemberName="All Sub-Sectors" primaryKey="AMP_ACTIVITY_ID" caption="#Sub-Sectors#">
+			<Table name="cached_v_sub_sector" />
+			<Level name="sub-sector" column="NAME">
+				<NameExpression>
+					<SQL dialect="mysql">
+						IFNULL(NAME,'#No_Data#')
+					</SQL>
+				</NameExpression>
+			</Level>
+		</Hierarchy>
+	</Dimension>
 	<Cube name="Donor Funding">
 		<Table name="CACHED_V_DONOR_FUNDING" >
 			<SQL dialect="oracle"><![CDATA[CACHED_V_DONOR_FUNDING.AMP_ACTIVITY_ID IN (@donorquery)]]> </SQL>
@@ -111,6 +109,18 @@
 			</Level>
 		</Hierarchy>
 	</Dimension>
+	<Dimension name="Regions">
+		<Hierarchy hasAll="true" allMemberCaption="#All_Regions#" allMemberName="All Regions" primaryKey="AMP_ACTIVITY_ID" caption="#Regions#">
+			<Level name="Region" column="REGION">
+				<NameExpression>
+					<SQL dialect="oracle">
+						nvl(REGION,'#No_Data#')
+					</SQL>
+				</NameExpression>
+			</Level> 
+		</Hierarchy>
+	</Dimension>
+		<DimensionUsage name="Sub-Sector" source="Sub-Sector" foreignKey="AMP_ACTIVITY_ID" />
 		<DimensionUsage name="Activity" source="Activity" foreignKey="AMP_ACTIVITY_ID" />
 		<DimensionUsage name="Donor Dates" source="Donor Dates" foreignKey="AMP_FUND_DETAIL_ID"/>
 		<DimensionUsage name="Status" source="Status" foreignKey="AMP_ACTIVITY_ID"/>

@@ -9,11 +9,15 @@ CREATE TABLE cached_v_donor_funding AS SELECT * FROM v_donor_funding_cached;
 call drop_table_if_exist ('cached_v_regions');
 CREATE TABLE cached_v_regions AS SELECT * FROM v_regions_cached;
 call drop_table_if_exist ('cached_v_primary_program');
-CREATE TABLE cached_v_primary_program AS SELECT * FROM v_primaryprogram_cached;
+CREATE TABLE cached_v_primary_program AS SELECT * FROM v_primaryprogram;
 call drop_table_if_exist ('cached_v_secundary_program'); 
-CREATE TABLE cached_v_secundary_program AS SELECT * FROM v_secondaryprogram_cached;
+CREATE TABLE cached_v_secundary_program AS SELECT * FROM v_secondaryprogram;
 call drop_table_if_exist ('cached_v_status'); 
 CREATE TABLE cached_v_status AS SELECT * FROM v_status;
+call drop_table_if_exist ('cached_v_sub_sector'); 
+CREATE TABLE cached_v_sub_sector AS SELECT * FROM v_sub_sectors;
+call drop_table_if_exist ('cached_v_national_program');
+CREATE TABLE cached_v_national_program AS SELECT * FROM V_NATIONALOBJECTIVES;
 
 CREATE INDEX idx_amp_activity_dd ON CACHED_V_DONOR_DATE_HIERARCHY(AMP_ACTIVITY_ID);
 CREATE INDEX idx_fund_det_id_dd ON CACHED_V_DONOR_DATE_HIERARCHY(AMP_FUND_DETAIL_ID);

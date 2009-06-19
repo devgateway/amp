@@ -1769,7 +1769,7 @@ function showFilter(){
                 </tr>
                 <tr>
                     <td>
-                        <div id="filter" style="visibility:hidden;display:none">
+                        <div id="filter" style="visibility:hidden;display:none;width:400px">
                             <table width="100%" border="0" cellpadding="5" cellspacing="0">
                                 <tr>
                                     <td>

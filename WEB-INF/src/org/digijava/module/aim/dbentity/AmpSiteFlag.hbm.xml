@@ -5,7 +5,7 @@
 		<id name="countryId" column="COUNTRY_ID" type="java.lang.Long" unsaved-value="null">
 			<generator class="assigned" />
 		</id>
-		<property name="flag" column="FLAG" type="binary" />
+		<property name="flag" column="FLAG" type="binary" length="50000"/>
 		<property name="contentType" column="CONTENT_TYPE" type="java.lang.String" />
 
 		<property name="defaultFlag" column="DEF_FLAG" type="java.lang.Boolean" />

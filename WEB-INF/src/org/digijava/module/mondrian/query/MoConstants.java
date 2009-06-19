@@ -23,6 +23,7 @@ public final class MoConstants {
 	public static  String TERMS_OF_ASSISTANCE= "Terms of Assistance";
 	public static  String NATIONAL_PROGRAM= "National Program";
 	public static String SECTORS= "Sectors";
+	public static String SUB_SECTORS = "Sub-Sectors";
 	
 	public static String ALL_PRIMARY_SECTOR = "All Primary Sectors";
 	public static String ALL_ACTIVITIES = "All Activities";
@@ -35,6 +36,7 @@ public final class MoConstants {
 	public static String ALL_DONOR_GROUP = "All Donors Group";
 	public static String ALL_FINANCING_INTRUMENT= "All Financing Instruments";
 	public static String ALL_TERMS_OF_ASSISTANCE= "All Terms of Assistance";
+	public static String ALL_SUB_SECTORS = "All Sub-Sectors";
 	//Measures
 	public static String RAW_ACTUAL_COMMITMENTS = "Raw Actual Commitments";
 	public static String RAW_ACTUAL_DISBURSEMENTS = "Raw Actual Disbursements";

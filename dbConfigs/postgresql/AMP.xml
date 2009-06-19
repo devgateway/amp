@@ -22,7 +22,18 @@
 			<Level name="name" column="name" table="cached_v_status" />
 		</Hierarchy>
 	</Dimension>
-	
+	<Dimension name="Sub-Sector">
+		<Hierarchy hasAll="true" allMemberCaption="#All Sub-Sectors#" allMemberName="All Sub-Sectors" primaryKey="amp_activity_id" caption="#Sub-Sectors#">
+			<Table name="cached_v_sub_sector" />
+			<Level name="sub-sector" column="name">
+				<NameExpression>
+					<SQL dialect="mysql">
+						COALESCE(sectorname,'#No_Data#')
+					</SQL>
+				</NameExpression>
+			</Level>
+		</Hierarchy>
+	</Dimension>
 	<Cube name="Donor Funding">
 		<Table name="cached_v_donor_funding">
 			<SQL dialect="postgres"><![CDATA[cached_v_donor_funding.amp_activity_id IN (@donorquery)]]> </SQL>
@@ -61,7 +72,7 @@
 		<Dimension name="Primary Sector" foreignKey="amp_activity_id">
 			<Hierarchy hasAll="true" allMemberName="All Primary Sectors" primaryKey="amp_activity_id">
 				<Level name="Primary Sector Scheme" column="sec_scheme_name"/>
-				<Level name="Primary Sector" column="sectorname" />
+				<Level name="Primary Sector" column="p_sectorname" />
 			</Hierarchy>
 		</Dimension>
 		<Dimension name="Primary Program">
@@ -97,6 +108,7 @@
 			</Level>
 		</Hierarchy>
 	</Dimension>
+		<DimensionUsage name="Sub-Sector" source="Sub-Sector" foreignKey="amp_activity_id" />
 		<DimensionUsage name="Activity" source="Activity" foreignKey="amp_activity_id" />
 		<DimensionUsage name="Donor Dates" source="Donor Dates" foreignKey="amp_fund_detail_id" />
 		<DimensionUsage name="Status" source="Status" foreignKey="amp_activity_id" />

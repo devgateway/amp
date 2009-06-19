@@ -46,7 +46,7 @@ public class ViewAllUsersForm
 	        setReset("false");
 	       
 		}	
-		 setTempNumResults(10);
+		 //setTempNumResults(10);
       }
 	
 	public String getReset() {

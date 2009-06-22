@@ -117,6 +117,8 @@ public class PIUtils {
 			columns = new boolean[6];
 		} else if (PIConstants.PARIS_INDICATOR_REPORT_5b.equals(reportCode)) {
 			columns = new boolean[2];
+		} else if (PIConstants.PARIS_INDICATOR_REPORT_6.equals(reportCode)) {
+			columns = new boolean[1];
 		}
 
 		// Prepare an array with all the responses (no problem if its not
@@ -151,6 +153,8 @@ public class PIUtils {
 		} else if (PIConstants.PARIS_INDICATOR_REPORT_5b.equals(reportCode)) {
 			columns[0] = ("Yes".equalsIgnoreCase(answers[0]) && "Yes".equalsIgnoreCase(answers[7]));
 			columns[1] = ("Yes".equalsIgnoreCase(answers[0]));
+		} else if (PIConstants.PARIS_INDICATOR_REPORT_6.equals(reportCode)) {
+			columns[0] = ("Yes".equalsIgnoreCase(answers[8]));
 		}
 		return columns;
 	}

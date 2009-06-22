@@ -52,7 +52,7 @@
     </tr>
 	<tr>
 		<td width="90%">
-			<html:select name="gisSectorByDonorTeaserForm" property="selectedDonor" onchange="donorChanged()">
+			<html:select style="width:420px;" name="gisSectorByDonorTeaserForm" property="selectedDonor" onchange="donorChanged()">
 				<html:option value="-1"><digi:trn key="widget:piechart:allDonorsItem">All Donors</digi:trn></html:option>
 				<html:optionsCollection name="gisSectorByDonorTeaserForm" property="donors" label="name" value="ampOrgId"/>
 			</html:select>
@@ -65,9 +65,35 @@
 		</td>
 		--%>		
 		<td nowrap="nowrap" align="right">
-			<input type="checkbox" title="Show Labels" name="showLabels" onclick="rechart()" checked="checked">
-			&nbsp;
-			<input type="checkbox" title="Show Legends" name="showLegends" onclick="rechart()" checked="checked">
+			<table>
+				<tr>
+					<td align="center" colspan="3">
+						Show/Hide
+					</td>
+				</tr>
+				<tr>
+					<td align="center">
+						Labels
+					</td>
+					<td align="center">
+						&nbsp;
+					</td>
+					<td align="center">
+						Legends
+					</td>
+				</tr>
+				<tr>
+					<td align="center">
+						<input type="checkbox" title="Show Labels" name="showLabels" onchange="rechart()" checked="checked">
+					</td>
+					<td align="center">
+						&nbsp;
+					</td>
+					<td align="center">
+						<input type="checkbox" title="Show Legends" name="showLegends" onchange="rechart()" checked="checked">
+					</td>
+				</tr>
+			</table>
 		</td>
 	</tr>
 	<tr>

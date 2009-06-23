@@ -21,10 +21,7 @@
 				class="org.digijava.module.aim.dbentity.IndicatorSector" cascade="none" />
 		</subclass>
 
-		<subclass name="org.digijava.module.widget.dbentity.AmpWidgetOrgProfile"
-			discriminator-value="orgprofile">
-			<property name="type" column="chart_type" type="java.lang.Long" />
-		</subclass>
+	
 
 		<subclass name="org.digijava.module.widget.dbentity.AmpDaTable" discriminator-value="tbl">
 			<property name="cssClass" column="css_class" type="java.lang.String" />
@@ -37,6 +34,10 @@
 			</set>
 		</subclass>
 
+		<subclass name="org.digijava.module.widget.dbentity.AmpWidgetOrgProfile"
+			discriminator-value="orgprofile">
+			<property name="type" column="chart_type" type="java.lang.Long" />
+		</subclass>
 
 	</class>
 </hibernate-mapping>

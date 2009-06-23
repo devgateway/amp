@@ -436,7 +436,7 @@
 				<transaction src="tmp_${clean.db}_ddl_copy.sql"/> 
 			</sql>
 		
-		
+		<delete file="tmp_${clean.db}_ddl_copy.sql"/>
 	</target>
 	
 	<target name="deployForServer" description="deploys the project for use with a given database">

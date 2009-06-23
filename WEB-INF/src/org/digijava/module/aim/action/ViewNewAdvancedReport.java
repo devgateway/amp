@@ -63,6 +63,7 @@ public class ViewNewAdvancedReport extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
 			{
+
 		AdvancedReportForm arf=(AdvancedReportForm) form;
 		HttpSession httpSession = request.getSession();
 
@@ -97,10 +98,17 @@ public class ViewNewAdvancedReport extends Action {
 			ampAppSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
 		
 		if (ampAppSettings != null){
+
 			if( ampAppSettings.getDefaultRecordsPerPage().intValue() != 0){
 				request.setAttribute("recordsPerPage", ampAppSettings.getDefaultRecordsPerPage());
 			}else{
 				request.setAttribute("recordsPerPage", Integer.MAX_VALUE);
+			}
+
+			if( ampAppSettings.getDefaultViewablePages() != null && ampAppSettings.getDefaultViewablePages().intValue() != 0){
+				request.setAttribute("viewablePages", ampAppSettings.getDefaultViewablePages()-1);
+			}else{
+				request.setAttribute("viewablePages", Constants.VIEWABLE_PAGES);
 			}
 		}else{
 			request.setAttribute("recordsPerPage", new Integer(25));
@@ -283,6 +291,14 @@ public class ViewNewAdvancedReport extends Action {
 		if(viewFormat==null) viewFormat=GenericViews.HTML;
 		request.setAttribute("viewFormat",viewFormat);
 	
+		Integer currentPage = 0;
+
+		if(request.getParameter("currentPage") != null){
+			currentPage = Integer.parseInt(request.getParameter("currentPage"));
+		}
+
+		request.setAttribute("currentPage", currentPage);
+		
 		if(startRow==null && endRow==null) {
 		    startRow="0";
 		    Integer rpp = (Integer)request.getAttribute("recordsPerPage");

@@ -353,4 +353,6 @@ public class Constants
     //contact information pagination elements
     public static final int CONTACTS_PER_PAGE=15;
     public static final int PAGES_TO_SHOW=5;
+    //Pagination for Reports and Tabs
+	public static final Integer VIEWABLE_PAGES = 9;
 }

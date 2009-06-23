@@ -11,10 +11,11 @@
 
 <script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript"  src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
-<script langauage="JavaScript">
-    var helpBody="<digi:trn key='orgProfile:helpBpdy'>Sector Breakdown,5 Largest Projects,Regional Breakdown, Paris Declaration are rendering  data of the previous fiscal year</digi:trn>";
-    var helpTitle="<digi:trn key='orgProfile:helpTitle'>Organization Profile Help</digi:trn>";
-</script>
+
+   <c:set var="helpBody">
+       <digi:trn key='orgProfile:helpBpdy'>Sector Breakdown,5 Largest Projects,Regional Breakdown, Paris Declaration are rendering  data of the previous fiscal year</digi:trn>
+   </c:set>
+  
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 
@@ -158,7 +159,6 @@
 <digi:form action="/showOrgProfile.do">
 
     <!-- this is for the nice tooltip widgets -->
-    <DIV id="TipLayer"  style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
     <table border="0" align="left" width="100%">
         <tr>
             <td>
@@ -294,7 +294,7 @@
             <tr>
                 <td align="center" colspan="2">
                     <html:submit styleClass="button" property="apply"><digi:trn key="orgProfile:filer:Apply">Apply</digi:trn></html:submit>
-                    <digi:img  src="module/widget/images/help1.gif" onmouseover="stm([helpTitle,helpBody],Style[13])" onmouseout="htm()"/>
+                    <digi:img  src="module/widget/images/help1.gif" title="${helpBody}"/>
                 </td>
             </tr>
         </table>

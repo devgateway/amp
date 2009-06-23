@@ -27,6 +27,13 @@ function validade(){
 	  alert("You cannot enter 0 for number of projects and activities per page.");
 	  return false;
   }
+
+  var defaultReportViewablePages = document.getElementById("defaultReportViewablePages");
+  if(parseInt(defaultReportViewablePages.value)<0){
+	  alert("<digi:trn>You cannot enter 0 for number of pages per Report or Tab.</digi:trn>");
+	  return false;
+  }
+
   var startYear		= parseInt(aimUpdateAppSettingsForm.reportStartYear.value);
   var endYear		= parseInt(aimUpdateAppSettingsForm.reportEndYear.value);
    
@@ -174,6 +181,18 @@ function checkYear( year, base, range ) {
 														</td>
 														<td align="left" width="70%" bgcolor="#f4f4f2">
 															<html:text property="defRecsPerPage" size="5"  styleClass="inp-text" styleId="defRecsPerPage"/>
+                                                            <a style="cursor:pointer;color:#006699" onmouseover="stm([helpTitle,helpBodyAct],Style[15])" onmouseout="htm()">
+														    	<img src="../ampTemplate/images/help.gif" alt="Click to get help on Status" width=10 height=10 border=0>
+                                                            </a>
+														</td>
+													</tr>
+													<tr>
+														<td bgcolor="#f4f4f2" align="right" width="30%">
+															<digi:trn key="aim:numberofpagesperreport">
+															Number of pages per report/tab</digi:trn>
+														</td>
+														<td align="left" width="70%" bgcolor="#f4f4f2">
+															<html:text property="defaultReportViewablePages" size="5"  styleClass="inp-text" styleId="defaultReportViewablePages"/>
                                                             <a style="cursor:pointer;color:#006699" onmouseover="stm([helpTitle,helpBodyAct],Style[15])" onmouseout="htm()">
 														    	<img src="../ampTemplate/images/help.gif" alt="Click to get help on Status" width=10 height=10 border=0>
                                                             </a>

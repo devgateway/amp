@@ -14,6 +14,7 @@ public class ApplicationSettings {
 		  private Integer reportEndYear;
 		  private AmpReports defaultAmpReport;
           private int defReportsPerPage;
+          private int defViewablePages;
           private String validation;
 
   public String getValidation() {
@@ -94,5 +95,13 @@ public Long getAppSettingsId() {
 
 		public void setReportEndYear(Integer reportEndYear) {
 		    this.reportEndYear = reportEndYear;
+		}
+
+		public void setDefViewablePages(int defViewablePages) {
+			this.defViewablePages = defViewablePages;
+		}
+
+		public int getDefViewablePages() {
+			return defViewablePages;
 		}
 }

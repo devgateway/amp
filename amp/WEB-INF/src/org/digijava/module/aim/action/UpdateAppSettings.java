@@ -129,7 +129,14 @@ public class UpdateAppSettings extends Action {
 				if (reportEndYear == null) {
 					reportEndYear = 0;
 				}
+				
+				Integer reportViewablePages = ampAppSettings.getDefaultViewablePages();
+				if (reportViewablePages == null) {
+					reportViewablePages = 0;
+				}
+				
 				uForm.setDefReportsPerPage(reportsPerPage);
+				uForm.setDefaultReportViewablePages(reportViewablePages);
 				uForm.setReportStartYear(reportStartYear);
 				uForm.setReportEndYear(reportEndYear);
 				uForm.setLanguage(ampAppSettings.getLanguage());
@@ -251,6 +258,7 @@ public class UpdateAppSettings extends Action {
 				ampAppSettings.setReportStartYear((new Integer(uForm.getReportStartYear())));
 				ampAppSettings.setReportEndYear((new Integer(uForm.getReportEndYear())));
 				ampAppSettings.setDefaultReportsPerPage(uForm.getDefReportsPerPage());
+				ampAppSettings.setDefaultViewablePages(uForm.getDefaultReportViewablePages());
 				ampAppSettings.setCurrency(CurrencyUtil.getAmpcurrency(uForm.getCurrencyId()));
 				ampAppSettings.setFiscalCalendar(DbUtil.getAmpFiscalCalendar(uForm.getFisCalendarId()));
 				ampAppSettings.setLanguage(uForm.getLanguage());
@@ -358,6 +366,8 @@ public class UpdateAppSettings extends Action {
 				.getDefaultRecordsPerPage());
 		oldSettings.setDefaultReportsPerPage(newSettings
 				.getDefaultReportsPerPage());
+		oldSettings.setDefaultViewablePages(newSettings
+				.getDefaultViewablePages());
 		oldSettings.setCurrency(newSettings.getCurrency());
 		oldSettings.setFiscalCalendar(newSettings.getFiscalCalendar());
 		oldSettings.setLanguage(newSettings.getLanguage());
@@ -383,6 +393,8 @@ public class UpdateAppSettings extends Action {
 
 		appSettings.setDefReportsPerPage(ampAppSettings
 				.getDefaultReportsPerPage());
+		appSettings.setDefViewablePages(ampAppSettings
+				.getDefaultViewablePages());
 		appSettings.setCurrencyId(ampAppSettings.getCurrency()
 				.getAmpCurrencyId());
 		appSettings.setFisCalId(ampAppSettings.getFiscalCalendar()

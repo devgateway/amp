@@ -11,6 +11,8 @@
     var helpTitle="<digi:trn>Project Title Full Text</digi:trn>";
 </script>
 
+ <!-- this is for the nice tooltip widgets -->
+ <DIV id="TipLayer"  style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
 <digi:instance property="orgProfLargestProjectsForm"/>
 <table width="100%">
 <tr>

@@ -410,6 +410,10 @@ session.setAttribute("progressValue", counter);
                     <c:set var="startPage" value="${(visibleRows/recordsPerPage)-viewablePages}" />
                     <c:set var="endPage" value="${(visibleRows/recordsPerPage)}" />
                 </c:if>
+                <c:if test="${(visibleRows/recordsPerPage) < viewablePages}">
+                    <c:set var="startPage" value="0" />
+                    <c:set var="endPage" value="${totalPages}" />
+                </c:if>
                 <c:forEach var="i" begin="${startPage}" end="${endPage}">
                     <logic:equal name="viewFormat" value="html">
                         <a style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=true~startRow=<c:out value="${recordsPerPage*i}"/>~endRow=<c:out value="${(recordsPerPage*i)+recordsPerPage-1}"/>~currentPage=<c:out value="${i}"/>';">
@@ -581,6 +585,12 @@ session.setAttribute("progressValue", counter);
                     <c:set var="startPage" value="${(visibleRows/recordsPerPage)-viewablePages}" />
                     <c:set var="endPage" value="${(visibleRows/recordsPerPage)}" />
                 </c:if>
+
+                <c:if test="${(visibleRows/recordsPerPage) < viewablePages}">
+                    <c:set var="startPage" value="0" />
+                    <c:set var="endPage" value="${totalPages}" />
+                </c:if>
+
                 <c:forEach var="i" begin="${startPage}" end="${endPage}">
                     <logic:equal name="viewFormat" value="html">
                         <a style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=true~startRow=<c:out value="${recordsPerPage*i}"/>~endRow=<c:out value="${(recordsPerPage*i)+recordsPerPage-1}"/>~currentPage=<c:out value="${i}"/>';">
@@ -598,6 +608,7 @@ session.setAttribute("progressValue", counter);
                     </c:if>
                     </a>
                 </c:forEach>
+
 
                 <logic:equal name="viewFormat" value="foldable">
 					<c:if  test="${(report.startRow+recordsPerPage+1) < report.visibleRows}">

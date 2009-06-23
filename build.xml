@@ -31,11 +31,20 @@
 
 
 	<!-- amp_clean specific -->
-	<property name="mysql.password" value=""/>
-	<property name="mysql.url" value="jdbc:mysql://localhost"/>
-	<property name="mysql.user" value="root"/>
-	<property name="clean.db" value="amp_clean"/>
+	<condition property="mysql.password" value="">
+	 	<not>
+	 		<isset property="mysql.password"/>                              
+	 	</not>
+	 </condition>
 
+	<condition property="mysql.user" value="root">
+	 	<not>
+	 		<isset property="mysql.user"/>                              
+	 	</not>
+	 </condition>
+
+	<property name="mysql.url" value="jdbc:mysql://localhost"/>
+	<property name="clean.db" value="amp_clean"/>
 	
     <!-- Path settings -->
     <property name="doc.path" value="./doc/api"/>

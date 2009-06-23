@@ -76,6 +76,7 @@ public class CategoryManager extends Action {
 			myForm.setCategoryName(null);
 			myForm.setDescription(null);
 			myForm.setKeyName(null);
+			myForm.setUsedCategories(null);
 			myForm.setIsMultiselect(false);
 			myForm.setIsOrdered(false);
 			List<PossibleValue> possibleVals = new ArrayList();

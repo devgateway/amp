@@ -618,14 +618,20 @@ System.out.println("lang:"+lang);
 		 //CategoryManagerUtil cat = new CategoryManagerUtil();
 			String retVal = "";
 			Iterator iter = topics.iterator();
-	                String instanceName=RequestUtils.getModuleInstance(request).getInstanceName();
+			String instanceName=RequestUtils.getModuleInstance(request).getInstanceName();
+	        int rc = 0;
+	                
 			while (iter.hasNext()) {
 				HelpTopicsTreeItem item = (HelpTopicsTreeItem) iter.next();
 				HelpTopic topic = (HelpTopic) item.getMember();
 						// visible div start
-				retVal += " <div onmouseover=\"this.className='silverThing'\" onmouseout=\"this.className='whiteThing'\">";
+				retVal += " <div>";
 				retVal += "<table width=\"100%\"  border=\"1\" style=\"border-collapse: collapse;border-color: #ffffff\">";
-				retVal += "<tr>";
+				if(rc++%2 == 0)
+					retVal += " <tr class=\"tableEven\" onmouseover=\"this.className='Hovered'\" onmouseout=\"this.className='tableEven'\">";
+				else
+					retVal += " <tr class=\"tableOdd\" onmouseover=\"this.className='Hovered'\" onmouseout=\"this.className='tableOdd'\">";
+				
 				retVal += "<td>";
 				if(item.getChildren().isEmpty()){
 					retVal += "<img src=\"../ampTemplate/images/tree_minus.gif\";\">\n";
@@ -666,7 +672,7 @@ System.out.println("lang:"+lang);
 				retVal += " </tr></table>";
 				retVal += "</div>\n";
 				// hidden div start
-				retVal += "<div id=\"div_theme_"+ topic.getHelpTopicId()+ "\" style=\"display:none;padding:4px;\">\n";
+				retVal += "<div id=\"div_theme_"+ topic.getHelpTopicId()+ "\" style=\"display:none;padding:10px;\">\n";
 				if (item.getChildren() != null || item.getChildren().size() > 0) {
 					retVal += renderSelectTopicTree(item.getChildren(),helpType,request);
 				}

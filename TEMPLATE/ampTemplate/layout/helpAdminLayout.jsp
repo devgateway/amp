@@ -43,11 +43,10 @@
 				<TD width="100%" vAlign="top" align="left">
 					<TABLE bgColor=#ffffff cellPadding=0 cellSpacing=0 width="99%" vAlign="top" align="left" border=0>
 						<TR>
-							<TD class=r-dotted-lg width="10">&nbsp;</td>
 							<TD align=center vAlign=top>
 								<TABLE width="100%" cellPadding=0 cellSpacing=0 vAlign="top" align="left" border="0">
 									<TR>
-										<TD vAlign="top" align="left" width="75%" class=r-dotted-lg>
+										<TD vAlign="top" align="left" width="75%" >
 											<digi:insert attribute="body" />
 										</TD>										
 									</TR>

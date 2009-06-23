@@ -58,6 +58,23 @@ div.fakefile2 {
 div.fakefile2 input{
 	width: 83px;
 }
+.tableEven {
+			background-color:#dbe5f1;
+			font-size:8pt;
+			padding:2px;
+		}
+
+		.tableOdd {
+			background-color:#FFFFFF;
+			font-size:8pt;
+			padding:2px;
+		}
+		 
+		.Hovered {
+			background-color:#a5bcf2;
+			font-size:8pt;
+			padding:2px;
+		}
 -->
 </style>
 
@@ -95,6 +112,7 @@ div.fakefile2 input{
 			}
 		}
 	}
+	
 </script>
 
 <digi:instance property="helpForm" />
@@ -299,10 +317,10 @@ function IsEmpty(){
 
 </style>
 <digi:form action="/helpActions.do" method="post" enctype="multipart/form-data">
-<table bgColor=#ffffff cellPadding=2 cellSpacing=2 width=772 border="0">
+<table bgColor=#ffffff cellPadding=2 cellSpacing=0 width=900 border="0">
 	<tr>
 	<!-- Start Navigation -->
-		<td  height=33 colspan="2" ><span class=crumb>
+		<td  height=33 colspan="2" >
 			<c:set var="translation">
 				<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 			</c:set>
@@ -328,79 +346,66 @@ function IsEmpty(){
 		</tr>
 		<tr><td>&nbsp;</td></tr>&nbsp;
 	<tr>
-		<td align="left"  colspan="2" >
-				<input type="button" onclick="exp()" value='<digi:trn key="aim:translationmanagerexportbutton">Export</digi:trn>'/>
-				<hr>
-		</td>
-	</tr>
-	<tr>
-		<td width="100%">
+		<td >
 		 <c:if test="${not empty helpForm.helpErrors}">
                 <c:forEach var="error" items="${helpForm.helpErrors}"> <font color="red">${error}</font><br />
                 </c:forEach>
               </c:if>
        </td>
     </tr>
-	<tr align="left"><td>
-		<a title="<digi:trn key="aim:FileLocation">Location of the document to be attached</digi:trn>">
-				<div class="fileinputs">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
-					<input id="fileUploaded" name="fileUploaded" type="file" class="file"/>
-				</div>
-			</a>
-	</td></tr>
-	<tr>
-		<td align="left">
-  			<input type="button" onclick="imp()" value='<digi:trn key="aim:translationmanagerimportbutton">Import</digi:trn>'/>
-<!--		<input id="fileUploaded" name="fileUploaded" type="file" class="file"/>-->
-	    </td>
-	</tr>
-	 <tr id="img_-1" onclick="expandHelp(-1);"  src="/ampTemplate/images/tree_plus.gif"/>
-		<td colspan="2" bgcolor="silver">
-			<digi:trn key="aim:amphelp">AMP Help</digi:trn>
+	
+	<tr height="50">
+		<td>
+			<fieldset>
+				<legend><digi:trn key="aim:translationmanagerimportbutton">Import</digi:trn></legend>
+				<a title="<digi:trn key="aim:FileLocation">Location of the document to be attached</digi:trn>">
+					<div class="fileinputs">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
+						<input id="fileUploaded" name="fileUploaded" type="file" class="file"/>
+					</div>
+					<input type="button" onclick="imp()" value='<digi:trn key="aim:translationmanagerimportbutton">Import</digi:trn>'/>
+				</a>
+			</fieldset>
 		</td>
-	</tr>
-	<tr>
-		<td colspan="2">
-			<table id="imgh_-1"  width="772"  style="display: none;" border="0">
-				<tr>
-					<td colspan="2" bgcolor="silver" onclick="collapseHelp(-1)">
-							<digi:trn key="aim:amphelp">AMP Help</digi:trn>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="2">
-								<bean:define id="tree" name="helpForm" property="topicTree" type="java.util.Collection"/>
-								<%= HelpUtil.renderSelectTopicTree(tree,"default",request) %>		
-					</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-	<tr id="img_-2" onclick="expandHelp(-2);"  src="/ampTemplate/images/tree_plus.gif"/>
-		<td colspan="2" bgcolor="silver">
-			<digi:trn key="aim:ampadminhelp">AMP Admin Help</digi:trn>
-		</td>
-	</tr>
-	<tr>
-		<td colspan="2">
-			<table id="imgh_-2"  width="772"  style="display: none;" border="0">
-				<tr>
-					<td colspan="2" bgcolor="silver" onclick="collapseHelp(-2)">
-							<digi:trn key="aim:ampadminhelp">AMP Admin Help</digi:trn>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="2">
-								<bean:define id="tree" name="helpForm" property="adminTopicTree" type="java.util.Collection"/>
-								<%= HelpUtil.renderSelectTopicTree(tree,"admin",request) %>		
-					</td>
-				</tr>
-			</table>
+	
+		<td height="50">
+			<fieldset>
+				<legend><digi:trn key="aim:translationmanagerexportbutton">Export</digi:trn></legend>
+				<input type="button" onclick="exp()" value='<digi:trn key="aim:translationmanagerexportbutton">Export</digi:trn>'/>
+			</fieldset>	
 		</td>
 	</tr>
 	
 	<tr>
-		<td colspan="2" align="right">
+	 
+		<td >
+			<digi:trn key="aim:amphelp"> <b> AMP Help </b> </digi:trn>
+			<div  style="overflow:auto;width:100%;height:180px;max-height:180px;"  >
+				<table id="imgh_-1"  width="420"  style="" border="0">
+					<tr>
+						<td colspan="2">
+							<bean:define id="tree" name="helpForm" property="topicTree" type="java.util.Collection"/>
+							<%= HelpUtil.renderSelectTopicTree(tree,"default",request) %>		
+						</td>
+					</tr>
+				</table>
+			</div>
+		</td>
+		<td >
+			<digi:trn key="aim:ampadminhelp"> <b> AMP Admin Help </b> </digi:trn>
+			<div  style="overflow:auto;width:100%;height:180px;max-height:180px;"  >
+				<table id="imgh_-2"  width="420"  style="" border="0">
+					<tr>
+						<td colspan="2">
+							<bean:define id="tree" name="helpForm" property="adminTopicTree" type="java.util.Collection"/>
+							<%= HelpUtil.renderSelectTopicTree(tree,"admin",request) %>		
+						</td>
+					</tr>
+				</table>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2" align="left">
 			<input type="button" onclick="selectAll()" value="<digi:trn>Select All</digi:trn>" class="dr-menu" />
 			<input type="button" onclick="deselectAll()" value="<digi:trn>Deselect All</digi:trn>" class="dr-menu" />
 			<input type="button" onclick="deleteMessages()" value="<digi:trn>Delete Selected Messages</digi:trn>" class="dr-menu" />
@@ -412,8 +417,5 @@ function IsEmpty(){
  
  <script type="text/javascript">
 	initFileUploads();
-	if ( document.crDocumentManagerForm.pageCloseFlag.value == "true" ) {
-			window.opener.location.replace(window.opener.location.href); 
-			window.close();
-		}
+	
 </script>

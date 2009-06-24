@@ -419,7 +419,8 @@
 				}
 				retVal += "\"";
 				retVal += " onMouseOut=\"hideRegionTooltip()\"";
-				retVal += " onMouseOver=\"showRegionTooltip('" + segment.attributes.getNamedItem("code").value + "','" + segment.attributes.getNamedItem("name").value + "')\">";
+				retVal += " onMouseOver=\"showRegionTooltip('" + segment.attributes.getNamedItem("code").value + "','" + segment.attributes.getNamedItem("name").value + "')\"";
+				retVal += " onClick=\"showRegionReport('" + segment.attributes.getNamedItem("code").value + "','" + segment.attributes.getNamedItem("name").value + "')\">";
 			}
 		}
 		retVal += "</map>";
@@ -933,4 +934,20 @@
 			}
 		}
 		return retVal;
+	}
+	
+	
+	//Region popup report
+	function showRegionReport(regCode, regName) {
+		var mapLevel = getRadioValue("mapLevelRadio");
+		if (mapLevel == null) {
+			mapLevel = 2;
+		}
+		var sec = document.getElementById("sectorsMapCombo").value;
+		var fromYear = document.getElementsByName('selectedFromYear')[0].value;
+		var toYear = document.getElementsByName('selectedToYear')[0].value;
+		
+		var regRepUrl = "/gis/ShowRegionReport.do?regCode=" + regCode + "&regName=" + regName + "&mapLevel=" + mapLevel + "&sectorId=" + sec + "&startYear=" + fromYear + "&endYear=" + toYear;
+		
+		window.open(regRepUrl, null, "height=200,width=400,status=yes,toolbar=no,menubar=no,location=no");
 	}

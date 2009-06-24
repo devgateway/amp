@@ -370,13 +370,6 @@
 			<transaction>INSERT INTO amp_org_type (SELECT * from ${clean.source}.amp_org_type)</transaction>
 			<transaction>INSERT INTO amp_quartz_job_class (SELECT * from ${clean.source}.amp_quartz_job_class)</transaction>
 			<transaction>INSERT INTO amp_role (SELECT * from ${clean.source}.amp_role)</transaction>
-			<!-- 
-			<transaction>INSERT INTO amp_indicator_connection (SELECT * from ${clean.source}.amp_indicator_connection WHERE sub_clazz='s')</transaction> 
-			<transaction>INSERT INTO amp_widget (SELECT * from ${clean.source}.amp_widget WHERE ind_connect_id IN (select id from amp_indicator_connection where sub_clazz='s'))</transaction>
-			<transaction>INSERT INTO amp_widget_column (SELECT * from ${clean.source}.amp_widget_column WHERE table_widget_id IN (select id from amp_widget))</transaction>
-			<transaction>INSERT INTO amp_widget_place (SELECT * from ${clean.source}.amp_widget_place WHERE assigned_widget_id IN (select id from amp_widget))</transaction>
-			<transaction>INSERT INTO amp_widget_value (SELECT * from ${clean.source}.amp_widget_value)</transaction>
-			-->
 			<transaction>INSERT INTO dg_countries (SELECT * from ${clean.source}.dg_countries)</transaction>
 			<transaction>INSERT INTO dg_item_status (SELECT * from ${clean.source}.dg_item_status)</transaction>
 			<transaction>INSERT INTO dg_locale (SELECT * from ${clean.source}.dg_locale)</transaction>
@@ -427,7 +420,13 @@
 			<transaction>CREATE TABLE qrtz_simple_triggers LIKE ${clean.source}.qrtz_simple_triggers</transaction><transaction>INSERT INTO qrtz_simple_triggers (SELECT * from ${clean.source}.qrtz_simple_triggers)</transaction>
 			<transaction>CREATE TABLE qrtz_trigger_listeners LIKE ${clean.source}.qrtz_trigger_listeners</transaction><transaction>INSERT INTO qrtz_trigger_listeners (SELECT * from ${clean.source}.qrtz_trigger_listeners)</transaction>
 			<transaction>CREATE TABLE qrtz_triggers LIKE ${clean.source}.qrtz_triggers</transaction><transaction>INSERT INTO qrtz_triggers (SELECT * from ${clean.source}.qrtz_triggers)</transaction>
-								
+			
+			<!-- mandatory custom indexes -->
+			<transaction>ALTER TABLE amp_category_value ADD INDEX cv_index(category_value)</transaction>
+			<transaction>CREATE INDEX amp_currency_to_currency_code ON amp_currency_rate(to_currency_code)</transaction>
+			<transaction>CREATE INDEX amp_currency_exchange_rate_date ON amp_currency_rate(exchange_rate_date)</transaction>
+			<transaction>CREATE INDEX amp_currency_exchange_rate_date_to_currency_idx ON amp_currency_rate(exchange_rate_date, to_currency_code)</transaction>
+			
 		</sql>
 		
 		<echo message="Importing functions and views into ${clean.db}..."/>

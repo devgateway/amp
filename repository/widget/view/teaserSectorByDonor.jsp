@@ -84,13 +84,13 @@
 				</tr>
 				<tr>
 					<td align="center">
-						<input type="checkbox" title="Show Labels" name="showLabels" onchange="rechart()" checked="checked">
+						<input type="checkbox" title="Show Labels" name="showLabels" onclick="rechart()" checked="checked">
 					</td>
 					<td align="center">
 						&nbsp;
 					</td>
 					<td align="center">
-						<input type="checkbox" title="Show Legends" name="showLegends" onchange="rechart()" checked="checked">
+						<input type="checkbox" title="Show Legends" name="showLegends"  onclick="rechart()" checked="checked">
 					</td>
 				</tr>
 			</table>

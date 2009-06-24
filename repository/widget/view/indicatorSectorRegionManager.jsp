@@ -195,11 +195,11 @@
 						<c:if test="${stat.index%2==1}">#d7eafd</c:if>
 					</c:set>
 					<tr bgcolor="${background}">
-						<td nowrap="nowrap" width="30%">
-							${indSecRegWithSubGrp.indSector.indicator.name}
+						<td nowrap="nowrap" width="30%" title="${indSecRegWithSubGrp.indSector.indicator.name}">
+							${indSecRegWithSubGrp.shortIndName}
 						</td>
-						<td nowrap="nowrap" width="30%">
-						 	${indSecRegWithSubGrp.indSector.sector.name}
+						<td nowrap="nowrap" width="30%" title="${indSecRegWithSubGrp.indSector.sector.name}">
+						 	${indSecRegWithSubGrp.shortSectName}
 						</td>
                         <td nowrap="nowrap" width="20%">
                         	<c:choose>
@@ -207,7 +207,9 @@
                                 	National
                                 </c:when>
                                 <c:otherwise>
-                                	${indSecRegWithSubGrp.indSector.location.location.name}
+                                	<div title="${indSecRegWithSubGrp.indSector.location.location.name}">
+                                		${indSecRegWithSubGrp.shortRegionName}
+                                	</div>                                	
                                 </c:otherwise>
                             </c:choose>
 						</td>

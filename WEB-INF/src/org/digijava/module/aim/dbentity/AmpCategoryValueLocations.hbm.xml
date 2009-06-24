@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.module.aim.dbentity.AmpCategoryValueLocations"
-		table="AMP_CATEGORY_VALUE_LOCATION">
+	<class name="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" table="AMP_CATEGORY_VALUE_LOCATION"  lazy="false">
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
 			<generator class="native">

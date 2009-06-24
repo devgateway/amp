@@ -13,7 +13,28 @@ import org.digijava.module.aim.dbentity.IndicatorSector;
 public class IndicatorSectorWithSubgroup {
 	private IndicatorSector indSector;
 	private List<String> subGroups;
+	private String shortIndName;
+	private String shortSectName;
+	private String shortRegionName;
 	
+	public String getShortIndName() {
+		return shortIndName;
+	}
+	public void setShortIndName(String shortIndName) {
+		this.shortIndName = shortIndName;
+	}
+	public String getShortSectName() {
+		return shortSectName;
+	}
+	public void setShortSectName(String shortSectName) {
+		this.shortSectName = shortSectName;
+	}
+	public String getShortRegionName() {
+		return shortRegionName;
+	}
+	public void setShortRegionName(String shortRegionName) {
+		this.shortRegionName = shortRegionName;
+	}
 	public IndicatorSector getIndSector() {
 		return indSector;
 	}

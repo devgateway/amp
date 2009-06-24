@@ -1,9 +1,12 @@
 package org.digijava.module.gis.util;
 
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
@@ -13,6 +16,7 @@ import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
+import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.IndicatorConnection;
 import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.util.SectorUtil;
@@ -416,7 +420,7 @@ public class DbUtil {
 		Query query=null;
     	try{
     		session = PersistenceManager.getRequestDBSession();
-            queryString="select indsec from " + IndicatorSector.class.getName() + " indsec inner join indsec.location loc inner join loc.regionLocation reg";
+            queryString="select indsec from " + IndicatorSector.class.getName() + " indsec inner join indsec.location loc inner join loc.location reg";
             if((keyword!=null && keyword.length()>0) || sectorId!=null || regionId != null ) {
             	queryString+=" where ";
             }
@@ -434,7 +438,7 @@ public class DbUtil {
             	if((keyword!=null && keyword.length()>0) || sectorId!=null){
             		queryString += " and ";
             	}
-            	queryString+= " indsec.location.regionLocation.id="+regionId;
+            	queryString+= " indsec.location.location.id="+regionId;
             }
             //sort
             if(sortBy==null || sortBy.equals("nameAscending")){
@@ -446,9 +450,9 @@ public class DbUtil {
 			}else if(sortBy.equals("sectNameDescending")){
 				queryString += " order by indsec.sector.name desc" ;
 			}else if(sortBy.equals("regionNameAscending")){
-				queryString += " order by indsec.location.regionLocation.name" ;
+				queryString += " order by indsec.location.location.name" ;
 			}else if(sortBy.equals("regionNameDescending")){
-				queryString += " order by indsec.location.regionLocation.name desc" ;
+				queryString += " order by indsec.location.location.name desc" ;
 			}
             query=session.createQuery(queryString);
 			retVal=query.list();
@@ -637,5 +641,131 @@ public class DbUtil {
 			e.printStackTrace();
 		}
        return retVal;
+   }
+   
+   public static class HelperIndicatorNameAscComparator implements Comparator<IndicatorSector> {
+       Locale locale;
+       Collator collator;
+
+       public HelperIndicatorNameAscComparator(){
+           this.locale=new Locale("en", "EN");
+       }
+
+       public HelperIndicatorNameAscComparator(String iso) {
+           this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
+       }
+
+       public int compare(IndicatorSector o1, IndicatorSector o2) {
+           collator = Collator.getInstance(locale);
+           collator.setStrength(Collator.TERTIARY);
+
+           int result = collator.compare(o1.getIndicator().getName(), o2.getIndicator().getName());
+           return result;
+       }
+   }
+   
+   public static class HelperIndicatorNameDescComparator implements Comparator<IndicatorSector> {
+       Locale locale;
+       Collator collator;
+
+       public HelperIndicatorNameDescComparator(){
+           this.locale=new Locale("en", "EN");
+       }
+
+       public HelperIndicatorNameDescComparator(String iso) {
+           this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
+       }
+
+       public int compare(IndicatorSector o1, IndicatorSector o2) {
+           collator = Collator.getInstance(locale);
+           collator.setStrength(Collator.TERTIARY);
+
+           int result = -collator.compare(o1.getIndicator().getName(), o2.getIndicator().getName());
+           return result;
+       }
+   }
+   
+   public static class HelperSectorNameAscComparator implements Comparator<IndicatorSector> {
+       Locale locale;
+       Collator collator;
+
+       public HelperSectorNameAscComparator(){
+           this.locale=new Locale("en", "EN");
+       }
+
+       public HelperSectorNameAscComparator(String iso) {
+           this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
+       }
+
+       public int compare(IndicatorSector o1, IndicatorSector o2) {
+           collator = Collator.getInstance(locale);
+           collator.setStrength(Collator.TERTIARY);
+
+           int result = collator.compare(o1.getSector().getName(), o2.getSector().getName());
+           return result;
+       }
+   }
+   
+   public static class HelperSectorNameDescComparator implements Comparator<IndicatorSector> {
+       Locale locale;
+       Collator collator;
+
+       public HelperSectorNameDescComparator(){
+           this.locale=new Locale("en", "EN");
+       }
+
+       public HelperSectorNameDescComparator(String iso) {
+           this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
+       }
+
+       public int compare(IndicatorSector o1, IndicatorSector o2) {
+           collator = Collator.getInstance(locale);
+           collator.setStrength(Collator.TERTIARY);
+
+           int result = - collator.compare(o1.getSector().getName(), o2.getSector().getName());
+           return result;
+       }
+   }
+   
+   public static class HelperRegionNameAscComparator implements Comparator<IndicatorSector> {
+       Locale locale;
+       Collator collator;
+
+       public HelperRegionNameAscComparator(){
+           this.locale=new Locale("en", "EN");
+       }
+
+       public HelperRegionNameAscComparator(String iso) {
+           this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
+       }
+
+       public int compare(IndicatorSector o1, IndicatorSector o2) {
+           collator = Collator.getInstance(locale);
+           collator.setStrength(Collator.TERTIARY);
+
+           int result = collator.compare(o1.getLocation().getLocation().getName(), o2.getLocation().getLocation().getName());
+           return result;
+       }
+   }
+   
+   public static class HelperRegionNameDescComparator implements Comparator<IndicatorSector> {
+       Locale locale;
+       Collator collator;
+
+       public HelperRegionNameDescComparator(){
+           this.locale=new Locale("en", "EN");
+       }
+
+       public HelperRegionNameDescComparator(String iso) {
+           this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
+       }
+
+       public int compare(IndicatorSector o1, IndicatorSector o2) {
+           collator = Collator.getInstance(locale);
+           collator.setStrength(Collator.TERTIARY);
+
+           int result = - collator.compare(o1.getLocation().getLocation().getName(), o2.getLocation().getLocation().getName());
+           return result;
+       }
    }
 }

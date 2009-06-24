@@ -96,9 +96,43 @@ public class IndicatorSectorManager extends DispatchAction {
     		indSecForm.setAllIndSectList(allIndSects);
     	}else{
     		allIndSects=indSecForm.getAllIndSectList();
+    		List<IndicatorSector> myList=new ArrayList<IndicatorSector>();
+    		if(!indSecForm.getSectorId().equals(new Long(-1))){
+    			Long sectorId=indSecForm.getSectorId();
+    			for (IndicatorSector indicatorSector : allIndSects) {
+					if(indicatorSector.getSector().getAmpSectorId().longValue()==sectorId.longValue()){
+						myList.add(indicatorSector);
+					}
+				}
+    			allIndSects=myList;
+    		}
+    		
+    		if(!indSecForm.getRegionId().equals(new Long(-1))){
+    			myList=new ArrayList<IndicatorSector>();
+    			Long regionId=indSecForm.getRegionId();
+    			for (IndicatorSector indicatorSector : allIndSects) {
+    				if(indicatorSector.getLocation().getLocation().getId().equals(regionId)){
+    					myList.add(indicatorSector);
+    				}
+    			}
+    			allIndSects=myList;
+    		}
+    		String sortBy=indSecForm.getSortBy();
+    		 if(sortBy==null || sortBy.equals("nameAscending")){
+ 				Collections.sort(allIndSects, new DbUtil.HelperIndicatorNameAscComparator());
+ 			}else if(sortBy.equals("nameDescending")){
+ 				Collections.sort(allIndSects, new DbUtil.HelperIndicatorNameDescComparator());
+ 			}else if(sortBy.equals("sectNameAscending")){
+ 				Collections.sort(allIndSects, new DbUtil.HelperSectorNameAscComparator());
+ 			}else if(sortBy.equals("sectNameDescending")){
+ 				Collections.sort(allIndSects, new DbUtil.HelperSectorNameDescComparator());
+ 			}else if(sortBy.equals("regionNameAscending")){
+ 				Collections.sort(allIndSects, new DbUtil.HelperRegionNameAscComparator());
+ 			}else if(sortBy.equals("regionNameDescending")){
+ 				Collections.sort(allIndSects, new DbUtil.HelperRegionNameDescComparator());
+ 			}
+    		
     	}
-    	
-    	
     	
     	
     	if(allIndSects!=null && allIndSects.size()>0){
@@ -195,6 +229,21 @@ public class IndicatorSectorManager extends DispatchAction {
 	      for (IndicatorSector indicatorSector : tempCol) {
 			List subgroups=DbUtil.getAvailSubgroupsForSectorIndicator(indicatorSector.getSector().getAmpSectorId(),indicatorSector.getIndicator().getIndicatorId());
 			IndicatorSectorWithSubgroup indSecWithSubGrp=new IndicatorSectorWithSubgroup(indicatorSector,subgroups);
+			if(indicatorSector.getIndicator().getName().length()>40){
+				indSecWithSubGrp.setShortIndName(indicatorSector.getIndicator().getName().substring(0, 40));
+			}else{
+				indSecWithSubGrp.setShortIndName(indicatorSector.getIndicator().getName());
+			}
+			if(indicatorSector.getSector().getName().length()>40){
+				indSecWithSubGrp.setShortSectName(indicatorSector.getSector().getName().substring(0,40));
+			}else{
+				indSecWithSubGrp.setShortSectName(indicatorSector.getSector().getName());
+			}
+			if(indicatorSector.getLocation().getLocation().getName().length()>40){
+				indSecWithSubGrp.setShortRegionName(indicatorSector.getLocation().getLocation().getName().substring(0,40));
+			}else{
+				indSecWithSubGrp.setShortRegionName(indicatorSector.getLocation().getLocation().getName());
+			}
 			indSectsWithSubGroups.add(indSecWithSubGrp);			
 		}
 	    indSecForm.setIndSectsWithSubGroups(indSectsWithSubGroups);

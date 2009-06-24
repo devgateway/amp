@@ -792,7 +792,7 @@ public class GetFoundingDetails extends Action {
         return retVal;
     }
 
-    private Object[] getFundingsByLocations(List activityList, int level,
+    public static Object[] getFundingsByLocations(List activityList, int level,
                                             Date start, Date end) throws
             Exception {
 
@@ -900,7 +900,7 @@ public class GetFoundingDetails extends Action {
         return retVal;
     }
 
-    private FundingData getActivityTotalFundingInUSD(AmpActivity activity,
+    public static FundingData getActivityTotalFundingInUSD(AmpActivity activity,
             Date start, Date end) {
         FundingData retVal = null;
         Set fundSet = activity.getFunding();

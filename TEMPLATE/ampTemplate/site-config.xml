@@ -39,6 +39,12 @@
 			<put-item name="pieChart" module="widget" instance="default" teaser="teaserOfSectorByDonor"/>
 			<put-item name="body" module="gis" page="gisDashboard"/>
 		</layout>
+
+		<layout name="gisRegReportLayout" extends="default" file="gisRegReportLayout.jsp">
+			<put name="title">GIS Regional Report</put>
+			<put-item name="body" module="gis" page="gisRegionReport"/>
+		</layout>
+
 		<layout name="helpLayout" file="helpLayout.jsp">
 			<put name="title">Help</put>
 			<put-item name="headerTop" file="headerTop.jsp"/>

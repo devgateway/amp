@@ -2,6 +2,9 @@
 <config>
 	<secondary-pages>
 		<page page="gisDashboard" name="gis_dashboard" title="GIS dashboard"/>
+		<page page="gisRegionReport" name="gisRegionReport" title="GIS region report"/>
+
+
 		<page page="mapLoader" name="mapLoader" title="AMP GIS map loader"/>
 
 		<page page="gisDemo" name="gisDemo" title="AMP GIS demo page"/>

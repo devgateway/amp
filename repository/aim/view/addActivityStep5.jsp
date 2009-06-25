@@ -1009,7 +1009,6 @@ YAHOOAmp.namespace("YAHOOAmp.amptab");
 			<digi:context name="addPhyProg" property="context/module/moduleinstance/phyProgSelected.do?edit=true"/>
 		   document.addPhysicalProgressForm.action = "<%= addPhyProg %>";
 		   document.addPhysicalProgressForm.submit();
-			window.close();
 		}
 	}
 		

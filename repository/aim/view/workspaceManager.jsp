@@ -294,8 +294,7 @@
 													</tr>
 													</logic:iterate>
 
-													<tr><td>&nbsp;</td></tr>
-
+													
 													</logic:notEmpty>
 													<!-- end page logic -->
 											</table>

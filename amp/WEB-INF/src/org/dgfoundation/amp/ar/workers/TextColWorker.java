@@ -6,8 +6,13 @@
  */
 package org.dgfoundation.amp.ar.workers;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.Reader;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import javax.sql.rowset.serial.SerialClob;
 
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ReportGenerator;
@@ -34,8 +39,34 @@ public class TextColWorker extends ColumnWorker {
 	 * @see org.dgfoundation.amp.ar.ColumnExtractor#getCellFromRow(java.sql.ResultSet)
 	 */
 	protected Cell getCellFromRow(ResultSet rs) throws SQLException {
-		Long ownerId=new Long(rs.getLong(1));
-		String value=rs.getString(2);
+		Long ownerId = new Long(rs.getLong(1));
+		// added Clob support
+		String value = "";
+
+		Object objValue = rs.getObject(2);
+		if (objValue!=null){
+			if (objValue instanceof SerialClob) {
+				SerialClob clobValue = (SerialClob) objValue;
+				String line;
+				String str = "";
+				BufferedReader b = new BufferedReader(clobValue.getCharacterStream());
+				try {
+					while ((line = b.readLine()) != null) {
+						str += line;
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				value = str;
+	
+			} else {
+				value = objValue.toString();
+
+		}
+		}
+		
+		
+		
 		Long id=null;
 		if (rsmd.getColumnCount()>2) {
 			id=new Long(rs.getLong(3));

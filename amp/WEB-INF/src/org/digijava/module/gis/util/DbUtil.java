@@ -2,6 +2,8 @@ package org.digijava.module.gis.util;
 
 import java.text.Collator;
 import java.util.ArrayList;
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -187,7 +189,6 @@ public class DbUtil {
            querySrc.append(" (ds.location.regionLocation.parentCategoryValue.value='Region' or");
            querySrc.append(" ds.location.regionLocation.parentCategoryValue.value='District')");
            querySrc.append(" group by ds.indicator.indicatorId order by ds.indicator.name");
-
            Query q = session.createQuery(querySrc.toString());
            q.setParameter("sectorId", sectorId, Hibernate.LONG);
            List allIndicatorList = q.list();
@@ -491,11 +492,24 @@ public class DbUtil {
        List retVal = null;
        Session session = null;
         try {
+        	
+        	//oracle compatibility changes
             session = PersistenceManager.getRequestDBSession();
-            String query = "select distinct year(indval.valueDate) from " +
-                    AmpIndicatorValue.class.getName() + " indval where year(indval.valueDate) is not null order by indval.valueDate desc";
-            Query q = session.createQuery(query);
-            retVal = q.list();
+            String query = "select distinct indval.valueDate from " +
+                    AmpIndicatorValue.class.getName() +
+                    " indval where indval.valueDate is not null order by indval.valueDate desc";
+             Query q = session.createQuery(query);
+
+             retVal=new ArrayList();
+            
+            Collection dates=q.list();
+            for (Iterator iterator = dates.iterator(); iterator.hasNext();) {
+            	Timestamp tmpDate = (Timestamp) iterator.next();
+            	retVal.add(tmpDate.getYear());
+			}
+            
+            return retVal;
+            //retVal = q.list();
 
         } catch (Exception ex) {
             logger.debug("Unable to get indicators from DB", ex);

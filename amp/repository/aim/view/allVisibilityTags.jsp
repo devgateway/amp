@@ -483,7 +483,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Donor Email" feature="Donor Contact Information"></field:display> 
 <field:display name="Donor Fax Number" feature="Donor Contact Information"></field:display> 
 <field:display name="Donor First Name" feature="Donor Contact Information"></field:display> 
-<field:display name="Donor Group" feature="Funding Information"></field:display> 
+<field:display name="Donor Group" feature="Funding Information"></field:display>
+<field:display name="Donor Type" feature="Funding Information"></field:display> 
 <field:display name="Donor Last Name" feature="Donor Contact Information"></field:display> 
 <field:display name="Donor Objective" feature="Funding Information"></field:display> 
 <field:display name="Donor Organization" feature="Donor Contact Information"></field:display> 
@@ -677,6 +678,9 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Remove Program Button - Primary Programs" feature="Program"></field:display> 
 <field:display name="Remove Program Button - Secondary Programs" feature="Program"></field:display> 
 <field:display name="Remove Sectors Button" feature="Sectors"></field:display> 
+
+<field:display name="Responsible Organization" feature="Responsible Organization"></field:display> 
+
 <field:display name="Responsible Organization Add Button" feature="Responsible Organization"></field:display> 
 <field:display name="Responsible Organization Groups" feature="Responsible Organization"></field:display> 
 <field:display name="Responsible Organization Organizations Button" feature="Responsible Organization"></field:display> 

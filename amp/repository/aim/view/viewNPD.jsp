@@ -857,7 +857,39 @@ function showFilter(){
 
      function filterSettingsCallBack(status, statusText, responseText, responseXML){
        var tblBody= document.getElementById('filterSettingsTable');
-        tblBody.innerHTML=responseText;
+       var root=responseXML.getElementsByTagName('Settings')[0];
+       while (tblBody.firstChild){
+            tblBody.removeChild(tblBody.firstChild);
+        }
+        var newTRTitle=document.createElement('TR');
+        var newTDTitle=document.createElement('TD');
+        newTDTitle.innerHTML= '<strong><digi:trn>Selected Filters:</digi:trn></strong>';
+        newTRTitle.appendChild(newTDTitle);
+        tblBody.appendChild(newTRTitle);
+
+        var newTRStatus=document.createElement('TR');
+        var newTDStatus=document.createElement('TD');
+        newTDStatus.innerHTML='<b><digi:trn>Status</digi:trn></b>:'+' '+root.getAttribute('status');
+        newTRStatus.appendChild(newTDStatus);
+        tblBody.appendChild(newTRStatus);
+
+        var newTRDonor=document.createElement('TR');
+        var newTDDonor=document.createElement('TD');
+        newTDDonor.innerHTML='<b><digi:trn>Donor</digi:trn></b>:'+' '+root.getAttribute('donor');
+        newTRDonor.appendChild(newTDDonor);
+        tblBody.appendChild(newTRDonor);
+
+        var newTRFrom=document.createElement('TR');
+        var newTDFrom=document.createElement('TD');
+        newTDFrom.innerHTML='<b><digi:trn>From</digi:trn></b>:'+' '+root.getAttribute('startYear');
+        newTRFrom.appendChild(newTDFrom);
+        tblBody.appendChild(newTRFrom);
+        
+        var newTREndYear=document.createElement('TR');
+        var newTDEndYear=document.createElement('TD');
+        newTDEndYear.innerHTML='<b><digi:trn>To</digi:trn></b>:'+' '+root.getAttribute('endYear');
+        newTREndYear.appendChild(newTDEndYear);
+        tblBody.appendChild(newTREndYear);
 
 	}
 
@@ -917,7 +949,10 @@ function showFilter(){
 		var actList = root.childNodes;
 		if (actList == null || actList.length == 0){
 			var newTR=document.createElement('TR');
-			newTR.innerHTML='<td colspan="8">'+strNoActivities+'</td>';
+            var newTD=document.createElement('TD');
+            newTD.innerHTML=strNoActivities;
+            newTD.setAttribute("colSpan","8");
+            newTR.appendChild(newTD);
 			tr.parentNode.appendChild(newTR);
             var spn=document.getElementById("spnAmountText");
             if(spn!=null){
@@ -1738,16 +1773,16 @@ function showFilter(){
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>Status: ${aimNPDForm.selectedStatuses} </td>
+                                                <td><b><digi:trn>Status</digi:trn></b>: ${aimNPDForm.selectedStatuses} </td>
                                             </tr>
                                             <tr>
-                                                <td>Donors: ${aimNPDForm.selectedDonors} </td>
+                                                <td><b><digi:trn>Donors</digi:trn></b>: ${aimNPDForm.selectedDonors} </td>
                                             </tr>
                                             <tr>
-                                                <td>From: ${aimNPDForm.yearFrom} </td>
+                                                <td><b><digi:trn>From</digi:trn></b>: ${aimNPDForm.yearFrom} </td>
                                             </tr>
                                             <tr>
-                                                <td>To: ${aimNPDForm.yearTo} </td>
+                                                <td><b><digi:trn>To</digi:trn></b>: ${aimNPDForm.yearTo} </td>
                                             </tr>
                                             </tbody>
                                         </table>

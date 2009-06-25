@@ -98,11 +98,11 @@ background-color:yellow;
 <script langauage="JavaScript">
 
     var  selectedMessagePanel;
-	var noMsgs="<digi:trn key="message:noMessages">No Messages Present</digi:trn>";
+    var noMsgs="<digi:trn key="message:noMessages">No Messages Present</digi:trn>";
     var noAlerts="<digi:trn key="message:noAlerts">No Alerts Present</digi:trn>";
     var noApprovals="<digi:trn key='message:noPendingApprovals'>No Pending Approvals</digi:trn>";
     var noEvents="<digi:trn key='message:noUpcomingEvents'>No Upcoming Events</digi:trn>";
-	var from='<digi:trn key="message:from">From</digi:trn>';
+   	var from='<digi:trn key="message:from">From</digi:trn>';
     var to='<digi:trn key="message:to">To</digi:trn>';
 	var date='<digi:trn key="message:date">Date</digi:trn>';
 	var prLevel='<digi:trn key="message:priority">Priority</digi:trn>';
@@ -111,6 +111,7 @@ background-color:yellow;
 	var fwdBtn='<digi:trn key="message:Forward">Forward</digi:trn>';
 	var deleteBtn='<digi:trn key="message:delete">Delete</digi:trn>';
 	var pagesTrn='<digi:trn key="message:pages">Pages</digi:trn>';
+	var ofTrn='<digi:trn key="message:of">of</digi:trn>';
 	var firstPage='<digi:trn key="message:firstPage">click here to go to first page</digi:trn>';
 	var prevPage='<digi:trn key="message:previousPage">click here to go to previous page</digi:trn>';
 	var nextPage='<digi:trn key="aim:clickToGoToNext">Click here to go to next page</digi:trn>';
@@ -658,7 +659,7 @@ background-color:yellow;
 						paginationTDContent+='<a href="javascript:goToPage('+nextPg+')" title="'+nextPage+'">&gt;</a>';
 						paginationTDContent+='<a href="javascript:goToPage('+allPages+')" title="'+lastPg+'">&gt;&gt;</a>|';
 					}	
-					paginationTDContent+='&nbsp;'+page+'of'+allPages;
+					paginationTDContent+='&nbsp;'+page+ ofTrn +allPages;
 				paginationTD.innerHTML=	paginationTDContent;						
 				paginationTR.appendChild(paginationTD);						
 			}

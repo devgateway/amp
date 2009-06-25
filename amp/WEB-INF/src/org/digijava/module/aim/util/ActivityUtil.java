@@ -4056,6 +4056,22 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         }
         return ampFundDets;
     }
+      
+      public static AmpTeamMember getActivityUpdator(Long actId){
+    	  AmpTeamMember updator=null;
+    	  String queryString;
+    	  Query query;
+    	  Session session=null;
+    	  try {
+			session=PersistenceManager.getRequestDBSession();
+			queryString=" select act.updatedBy from " + AmpActivity.class.getName()+" act where act.ampActivityId="+actId;
+			query=session.createQuery(queryString);
+			updator=(AmpTeamMember)query.uniqueResult();
+		} catch (Exception e) {
+			logger.error("couldn't load Activity Updator" + e.getMessage());			
+		}
+    	  return updator;
+      }
 
 
 	

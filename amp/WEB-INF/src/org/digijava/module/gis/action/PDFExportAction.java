@@ -533,9 +533,11 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		PdfPTable table2AEIndicators = getWidgetTable("table_place2");
 		PdfPTable table3AEIndicators = getWidgetTable("table_place3");
 
+		if(table1AEIndicators != null)
 		layoutAEIndicators.addCell(table1AEIndicators);
+		if(table2AEIndicators != null)
 		layoutAEIndicators.addCell(table2AEIndicators);
-
+		if(table3AEIndicators != null)
 		layoutAEIndicators.addCell(table3AEIndicators);
 		layoutAEIndicators.addCell(" ");
 		layoutAEIndicators.addCell(new Paragraph(TranslatorWorker.translateText("Source: 2006 Paris Declaration Survey", locale, siteId) , new Font(Font.HELVETICA, 6)));
@@ -1036,6 +1038,8 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 			if (widget == null)
 				return null;
 
+			try {
+				
 			WiTable table = new WiTable.TableBuilder(widget.getId()).build();
 			WiColumnDropDownFilter filter = null;
                         if (table == null)
@@ -1101,6 +1105,10 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 			}
 			return pdfTable;
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
 		} catch (DgException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1108,8 +1116,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 		return null;
 	}
-
-	private int matchesId(Long ptableId) {
+private int matchesId(Long ptableId) {
             if (ptableId != null && this.tableId != null) {
                 for (int a = 0; a < this.tableId.length; a++) {
                     if (this.tableId[a].equals(ptableId))
@@ -1389,9 +1396,9 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		AmpDaWidgetPlace place = WidgetUtil.getPlace(code);
 		AmpWidget widget = place.getAssignedWidget();
 		//AmpWidgetIndicatorChart cWidget = ChartWidgetUtil.getIndicatorChartWidget(place.getId());
-		AmpWidgetIndicatorChart cWidget = ChartWidgetUtil.getIndicatorChartWidget(widget.getId());
 		if (widget == null)
 			return null;
+		AmpWidgetIndicatorChart cWidget = ChartWidgetUtil.getIndicatorChartWidget(widget.getId());
 
 		ChartOption opt = new ChartOption();
 

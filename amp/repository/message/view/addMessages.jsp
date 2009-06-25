@@ -8,6 +8,7 @@
 <%@ taglib uri="/taglib/category" prefix="category" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <digi:instance property="messageForm" />
 <html:hidden name="messageForm" property="tabIndex"/>
@@ -85,15 +86,21 @@
   }
 	
   function validate(){
-  	var titleSize=document.messageForm.messageName.value.length;
-    var descSize=document.messageForm.description.value.length;
-	if(titleSize==0){
-		alert('Please Enter Name');
-		return false;
-	}
-    else{
-    	if(titleSize>50){
-        	alert(' You have entered '+titleSize+' symblos but maximum allowed are 50');
+	        var titleSize=document.messageForm.messageName.value.length;
+            var descSize=document.messageForm.description.value.length;
+            <c:set var="message">
+        	<digi:trn>Please enter name </digi:trn>						
+            </c:set>
+            <c:set var="msg">
+        	${fn:replace(message,'\\n',' ')}
+            </c:set>
+            <c:set var="quote">'</c:set>
+            <c:set var="escapedQuote">\'</c:set>
+            <c:set var="msgsq">
+        	${fn:replace(msg,quote,escapedQuote)}
+            </c:set>
+		if(titleSize==0){
+			alert('${msgsq}');
 			return false;
         }
         if(descSize>500){
@@ -132,7 +139,18 @@
     	var list = document.getElementById('selreceivers');
     	if (event=='send') {
     		if (list == null || list.length==0) {
-        		alert('Please add receivers');
+    			<c:set var="message">
+            	<digi:trn>Please add receivers </digi:trn>						
+                </c:set>
+                <c:set var="msg">
+            	${fn:replace(message,'\\n',' ')}
+                </c:set>
+                <c:set var="quote">'</c:set>
+                <c:set var="escapedQuote">\'</c:set>
+                <c:set var="msgsq">
+            	${fn:replace(msg,quote,escapedQuote)}
+                </c:set>
+        		alert('${msgsq}');
         		return false ;
     		}
     	}    	

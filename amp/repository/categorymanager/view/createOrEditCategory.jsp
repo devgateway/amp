@@ -522,8 +522,29 @@
 					</digi:form></td>
 				</tr>
 			</table>
-		</td>
-	</tr>
+
+                                                
+ 
+					</div>
+					
+					<button type="button" title="<digi:trn key='cm:categoryManagerAddValues'>Add value(s)</digi:trn>" onclick="addNewValue(-1)" class="buton" 
+						style="vertical-align:bottom; padding: 1px;">
+						<img src="/TEMPLATE/ampTemplate/images/green_plus.png" style="height: 16px; vertical-align: text-bottom;"  />
+						<digi:trn key='cm:categoryManagerAddValues'>Add value(s)</digi:trn>
+					</button>
+				</td>
+			</tr>
+		</table>
+		<br />
+		<button type="submit" onclick="return doSubmit()" style="vertical-align:bottom; padding: 1px;" class="buton">
+			<img src="/TEMPLATE/ampTemplate/images/green_check.png" style="height: 16px; vertical-align: text-bottom;"  />
+			<digi:trn key="aim:categoryManagerSubmit">
+					Submit
+			</digi:trn>
+		</button>
+	</digi:form>
+				</td>
+				</tr>
 </table>
 <script language="javascript">
 	setStripsTable("dataTable", "tableEven", "tableOdd");

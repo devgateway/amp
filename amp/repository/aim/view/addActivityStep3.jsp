@@ -628,7 +628,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                               </tr>
 
 
-																			<field:display name="Conditions for Fund Release" feature="Funding Information"></field:display>
+																			<field:display name="Conditions for Fund Release" feature="Funding Information">
                                                                               <tr>
                                                                                 <td bgcolor="#FFFFFF" align="left" width="150">
                                                                                   <a title="<digi:trn key="aim:ConditionsforFundRelease">Enter the conditions attached to the release of the funds</digi:trn>">		 
@@ -641,9 +641,9 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                   <bean:write name="funding"	property="conditions"/>
                                                                                 </td>
                                                                               </tr>
+                                                                            </field:display>
                                                                               
-                                                                              
-                                                                            <field:display name="Donor Objective" feature="Funding Information"></field:display>
+                                                                            <field:display name="Donor Objective" feature="Funding Information">
                                                                               <tr>
                                                                                 <td bgcolor="#FFFFFF" align="left" width="150">
                                                                                   <a title="<digi:trn key="aim:DonorObjectiveforFundRelease">Enter the donor objective attached to the release of the funds</digi:trn>"><digi:trn key="aim:donorobjective">Donor Objective</digi:trn>
@@ -654,6 +654,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                   <bean:write name="funding"	property="donorObjective"/>
                                                                                 </td>
                                                                               </tr>
+                                                                            </field:display>
                                                                             </table>
                                          								  </td>
                                                                         </tr>

@@ -20,20 +20,20 @@
 	</digi:form>
 			<logic:equal name="modeSwitchForm" property="translationMode" value="false">
 				<li>
-                    <a onclick="return quitRnot1('${msg}')" href="javascript:switchTranslation(true)">
+                    <a onclick="return canExit()" href="javascript:switchTranslation(true)">
                         <digi:trn key="trn:transview1">Translator View</digi:trn>
                     </a>
 				</li>
             </logic:equal>
 			<logic:equal name="modeSwitchForm" property="translationMode" value="true">
 				<li>
-                	<a onclick="return quitRnot1('${msg}')" href="javascript:switchTranslation(false)">
+                	<a onclick="return canExit()" href="javascript:switchTranslation(false)">
                     	<i><digi:trn key="trn:nontrans1">Non-translator View</digi:trn></i>
                     </a>
 				</li>
             </logic:equal>
             <li>
-				<a onclick="return quitRnot1('${msg}')" href="/translation/showAdvancedTranslation.do">
+				<a onclick="return canExit()" href="/translation/showAdvancedTranslation.do">
 		        <digi:trn key="trn:AdvancedMode">Advanced Mode</digi:trn>
                 </a>
 			</li>         

@@ -348,14 +348,14 @@ public class AmpReportGenerator extends ReportGenerator {
 		reportMetadata.getOrderedColumns().add(arc);
 
 		// ugly but useful :) get cummulative columns right before funding:
-		/*Iterator i = reportMetadata.getOrderedColumns().iterator();
+		Iterator i = reportMetadata.getOrderedColumns().iterator();
 		while (i.hasNext()) {
 			AmpReportColumn element = (AmpReportColumn) i.next();
 			if (element.getColumn().getColumnName().indexOf("Cumulative") != -1)
-				element.setOrderId(Integer.toString(reportMetadata
+				element.setOrderId(new Long(reportMetadata
 						.getOrderedColumns().size() - 1));
 		}
-		*/
+		
 		
 		// attach funding coming from extra sources ... inject funding from
 		// proposed project cost, but with isShow=false so it won't be taken

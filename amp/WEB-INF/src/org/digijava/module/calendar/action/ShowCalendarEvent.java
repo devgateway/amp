@@ -25,6 +25,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.kernel.entity.ModuleInstance;
+import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -386,7 +387,7 @@ public class ShowCalendarEvent extends Action {
 
     }
 
-    private void loadAmpCalendar(CalendarEventForm ceform, HttpServletRequest request) throws CalendarException {
+    private void loadAmpCalendar(CalendarEventForm ceform, HttpServletRequest request) throws CalendarException, WorkerException {
         if (ceform.getAmpCalendarId() != null &&
             ceform.getAmpCalendarId() > 0 &&
             ceform.isResetForm()) {

@@ -135,6 +135,9 @@ import org.digijava.module.um.util.AmpUserUtil;
 	        
 	        vwForm.setNumResults(vwForm.getTempNumResults());
 	        
+	        if (vwForm.getNumResults() == 0) {
+	        	  vwForm.setNumResults(10);
+	        }
 	        int stIndex = 1;
 	        int edIndex = vwForm.getNumResults();
 	

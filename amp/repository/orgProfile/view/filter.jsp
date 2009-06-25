@@ -226,8 +226,8 @@
                 <td nowrap align="left" colspan="2">
                     <html:checkbox  property="workspaceOnly"><b><digi:trn>From Workspace Only</digi:trn> </b></html:checkbox>
                     <html:select property="transactionType" styleClass="inp-text">
-                        <html:option value="0">Comm</html:option>
-                        <html:option value="1">Disb</html:option>
+                        <html:option value="0"><digi:trn>Comm</digi:trn></html:option>
+                        <html:option value="1"><digi:trn>Disb</digi:trn></html:option>
                     </html:select>
 
                 </td>

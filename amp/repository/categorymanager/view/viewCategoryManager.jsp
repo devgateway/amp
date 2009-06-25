@@ -119,13 +119,7 @@ function setHoveredTable(tableId, hasHeaders) {
 							</digi:trn> 
 						</span>
                         <br><br>
-						<c:set var="translation">
-						<digi:trn key="aim:categoryManagerAddNewCategoryTitle">Click here to add a new category with specified values</digi:trn>
-						</c:set>
-						<digi:link href="/categoryManager.do?new=true" title="${translation}">
-						   <img src="/TEMPLATE/ampTemplate/images/green_plus.png" style="height:16px; vertical-align: text-bottom; border:0px;"  />
-						   <digi:trn key="aim:categoryManagerAddNewCategory"> Add New Category</digi:trn>
-						</digi:link>
+						
 					</td>
 					
 					
@@ -138,9 +132,9 @@ function setHoveredTable(tableId, hasHeaders) {
 					</td>
 				</tr>
 			</table>
-
+			<div style = "float:left; margin-right:10px;">
 				<logic:notEmpty name="myForm" property="categories">
-					<div style="width:830px;padding-left:7px;">
+					<div style="width:830px;padding-left:7px; ">
 					<table border="0px" cellPadding="0px" cellSpacing="0px" style=" width:830px; _width:822px;" >
 						<tr align="center" style="background-color:#999999; color:#000; height:30px; font-size:10px; font-weight:normal; ">
 							<td  align="center" class="jtabletitle" width="170px;" style="" >
@@ -268,8 +262,9 @@ function setHoveredTable(tableId, hasHeaders) {
 					</table>
 					</div>
 				</div>
+				
 				</logic:notEmpty>
-
+				
 <script language="javascript">
 	setStripsTable("dataTable", "tableEven", "tableOdd");
 	setHoveredTable("dataTable", false);
@@ -286,4 +281,56 @@ function setHoveredTable(tableId, hasHeaders) {
 <digi:trn key="aim:tabledisable">
 	Disable 
 </digi:trn>
+</div>
+<div style = "float:left;">
+	<table align=center cellPadding=0 cellSpacing=0  border=0>
+							<tr>
+								<td bgColor=#999999 class="box-title" style = "color:#000; height:16px;">
+									<!-- Other Links -->
+									
+												<digi:trn key="aim:otherLinks">
+												Links
+												</digi:trn>
+									
+								</td>
+							</tr>
+							<tr>
+								<td bgColor=#ffffff class=box-border>
+									<table cellPadding=5 cellSpacing=1 width="100%">
+										<tr>
+											<td>
+												<div style="width:100px; ">
+												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<c:set var="translation">
+												<digi:trn key="aim:categoryManagerAddNewCategoryTitle">Click here to add a new category with specified values</digi:trn>
+												</c:set>
+												<digi:link href="/categoryManager.do?new=true" title="${translation}">
+												   
+												   <digi:trn key="aim:categoryManagerAddNewCategory">Add New Category</digi:trn>
+												</digi:link>
+												</div>
+											</td>
+										</tr>
+																				
+										<tr>
+											<td>
+												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<c:set var="translation">
+													<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
+												</c:set>
+												<digi:link href="/admin.do" title="${translation}" >
+												<digi:trn key="aim:AmpAdminHome">
+												Admin Home
+												</digi:trn>
+												</digi:link>
+											</td>
+										</tr>
+										<!-- end of other links -->
+									</table>
+								</td>
+							</tr>
+						</table>
+
+</div>
+<br><br>
 

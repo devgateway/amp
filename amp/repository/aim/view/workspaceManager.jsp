@@ -5,7 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 
 <script langauage="JavaScript">
@@ -83,6 +83,9 @@
 		.Hovered {
 			background-color:#a5bcf2;
 		}
+        .pagination {
+            float:left;   padding:3px;border:1px solid #999999;
+        }
 		
 		
 		
@@ -303,19 +306,33 @@
 									</tr>
 									<tr><td>
 										<digi:form action="/workspaceManager.do" method="post" >
-										<div style=" width:752px;  ">
-											<div style= " float:left; width:600px;" >
+											<div style= " float:left; width:752px;" >
 											<!-- page logic for pagination -->
-													
-													
-														
-															<digi:trn key="aim:workspaceManagerPages">
-																<!-- Pages : -->
-															</digi:trn>
-															
-															<div style=" width:300px; ">&nbsp;
-															<logic:notEmpty name="aimWorkspaceForm" property="pages">
+																									
 															<jsp:useBean id="urlParams3" type="java.util.Map" class="java.util.HashMap"/>
+                                                            <c:set target="${urlParams3}" property="page">1</c:set>
+                                                            <c:set target="${urlParams3}" property="numPerPage">${aimWorkspaceForm.numPerPage}</c:set>
+                                                             <c:set var="translation">
+                                                                <digi:trn key="aim:lastpage">First Page</digi:trn>
+                                                            </c:set>
+															&nbsp;
+                                                            <c:set var="pagesSize">
+                                                                ${fn:length(aimWorkspaceForm.pages)}
+                                                            </c:set>
+                                                                <c:if test="${pagesSize>0}">
+                                                                    <div class="pagination">
+                                                                        <c:if test="${aimWorkspaceForm.page != 1}">
+                                                                            <digi:link href="/workspaceManager.do" name="urlParams3" title="${translation}" >
+                                                                                &lt;&lt;
+                                                                            </digi:link>
+                                                                        </c:if>
+                                                                        <c:if test="${aimWorkspaceForm.page == 1}">
+                                                                            &lt;&lt;
+                                                                        </c:if>
+                                                                    </div>
+                                                                    <div style="float:left;">&nbsp;</div>
+                                                                </c:if>
+															<logic:notEmpty name="aimWorkspaceForm" property="pages">			
 															<logic:iterate name="aimWorkspaceForm" property="pages" id="pages"
 															type="java.lang.Integer">
 															
@@ -325,30 +342,56 @@
 															<c:set var="translation">
 																<digi:trn key="aim:clickToViewAllPages">Click here to view All pages</digi:trn>
 															</c:set>
-															<digi:link href="/workspaceManager.do" name="urlParams3"
+                                                            <c:if test="${aimWorkspaceForm.page == pages}">
+                                                                <font color="#FF0000"><%=pages%></font>
+                                                            </c:if>
+                                                            <c:if test="${aimWorkspaceForm.page != pages}">
+                                                                <c:set var="translation">
+                                                                    <digi:trn key="aim:clickToViewNextPage">Click here to go to Next Page</digi:trn>
+                                                                </c:set>
+                                                                	<digi:link href="/workspaceManager.do" name="urlParams3"
 															title="${translation}" ><%=pages%></digi:link>
+                                                            </c:if>
 															</div>
 															<div style="float:left;">&nbsp;</div>		
 															
 															</logic:iterate>
 																</logic:notEmpty>
-															</div>
-														
-													
-													
-													<!-- end page logic for pagination -->
-												 </div>
-											<div style= " float:left; width:100px;" >
-											<digi:trn key="aim:results">Results</digi:trn>:&nbsp;
-													<html:select property="numPerPage" styleClass="inp-text" onchange="submit()" >
-														<html:option value="-1"><digi:trn key="aim:all">All</digi:trn></html:option>
-														<html:option value="5">5</html:option>
-														<html:option value="10">10</html:option>
-														<html:option value="20">20</html:option>
-														<html:option value="50">50</html:option>
-												</html:select>
-											</div>
-										</div>
+                                                                <c:set var="translation">
+                                                                    <digi:trn key="aim:lastpage">Last Page</digi:trn>
+                                                                </c:set>
+                                                                <c:if test="${pages>0}">
+                                                                    <div class="pagination">
+                                                                        <c:if test="${aimWorkspaceForm.page != pages}">
+                                                                            <digi:link href="/workspaceManager.do" name="urlParams3" title="${translation}" >
+                                                                                &gt;&gt;
+                                                                            </digi:link>
+                                                                        </c:if>
+                                                                        <c:if test="${aimWorkspaceForm.page == pages}">
+                                                                            &gt;&gt;
+                                                                        </c:if>
+                                                                    </div>
+                                                                    <div style="float:left;">&nbsp;</div>
+                                                                    <div class="pagination">
+                                                                        ${aimWorkspaceForm.page} <digi:trn>of</digi:trn> ${pages}  <digi:trn>pages</digi:trn>
+                                                                    </div>
+                                                                </c:if>
+                                                                <!-- end page logic for pagination -->
+                                                                <div style= " float:right;" >
+                                                                    <digi:trn key="aim:results">Results</digi:trn>:&nbsp;
+                                                                    <html:select property="numPerPage" styleClass="inp-text" onchange="submit()" >
+                                                                        <html:option value="-1"><digi:trn key="aim:all">All</digi:trn></html:option>
+                                                                        <html:option value="5">5</html:option>
+                                                                        <html:option value="10">10</html:option>
+                                                                        <html:option value="20">20</html:option>
+                                                                        <html:option value="50">50</html:option>
+                                                                    </html:select>
+                                                                </div>
+                                                                  
+                                                         
+
+                                                        </div>
+											
 										</digi:form>
 										</td>
 									</tr>	

@@ -433,5 +433,4 @@
 	clearDisplay(document.aimEditActivityForm.proposedCompDate, "clear7");
 	clearDisplay(document.aimEditActivityForm.currentCompDate, "clear8");
 	
-</script>
-									
+</script>							

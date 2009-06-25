@@ -438,7 +438,7 @@ public class AmpARFilter extends PropertyListable {
 		indexedParams=new ArrayList<FilterParam>();
 		
 		String BUDGET_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE budget="
-				+ (budget != null ? budget.toString() : "null")
+				+ (budget != null ? (budget)?"1":"0" : "null")
 				+ (budget != null && budget.booleanValue() == false ? " OR budget is null"
 						: "");
 		String TEAM_FILTER = "";
@@ -808,9 +808,9 @@ public class AmpARFilter extends PropertyListable {
 			queryAppend(FINANCING_INSTR_FILTER);
 		if (risks != null && risks.size() > 0)
 			queryAppend(RISK_FILTER);
-		if (lineMinRank != null)
+		if ((lineMinRank != null) && (lineMinRank !=-1))
 			queryAppend(LINE_MIN_RANK_FILTER);
-		if (planMinRank != null)
+		if ((planMinRank != null)&&(planMinRank!=-1))
 			queryAppend(PLAN_MIN_RANK_FILTER);
 		if (regionSelected != null)
 			queryAppend(REGION_SELECTED_FILTER);
@@ -847,12 +847,12 @@ public class AmpARFilter extends PropertyListable {
 		
 		if (governmentApprovalProcedures != null) {
 			String GOVERNMENT_APPROVAL_FILTER = "SELECT a.amp_activity_id from amp_activity a where governmentApprovalProcedures="
-					+ governmentApprovalProcedures.toString();
+					+ ((governmentApprovalProcedures)?"1":"0");
 			queryAppend(GOVERNMENT_APPROVAL_FILTER);
 		}
 		if (jointCriteria != null) {
 			String JOINT_CRITERIA_FILTER = "SELECT a.amp_activity_id from amp_activity a where jointCriteria="
-					+ jointCriteria.toString();
+					+ ((jointCriteria)?"1":"0");;
 			queryAppend(JOINT_CRITERIA_FILTER);
 		}
 		DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams);

@@ -189,21 +189,23 @@ function confirmFunc() {
                         <c:set var="length" value="${aimTeamReportsForm.pagesToShow}"></c:set>
                         <c:set var="start" value="${aimTeamReportsForm.offset}"/>
                         
-                        <logic:iterate name="pagelist" id="pageidx" type="java.lang.Integer" offset="${start}" length="${length}">
-                          <c:set target="${urlParamsPagination}" property="page" value="${pageidx - 1}"/>                         
-                            <c:if test="${(pageidx - 1) eq actualPage}"> 
-                                <bean:write name="pageidx"/>
-                            </c:if>
-                            <c:if test="${(pageidx - 1) ne actualPage}"> 
-	                          <c:if test="${aimTeamReportsForm.showTabs}">
-	                          	<c:set target="${urlParamsPagination}" property="tabs" value="true"/>
-	                          </c:if>
-                              <digi:link href="/viewTeamReports.do"  name="urlParamsPagination" >
-                                <bean:write name="pageidx"/>
-                              </digi:link>
-                            </c:if>
-                          <c:if test="${pageidx < maxpages}"> | </c:if>
-                        </logic:iterate>
+                        <c:if test="${maxpages > 1}">
+	                        <logic:iterate name="pagelist" id="pageidx" type="java.lang.Integer" offset="${start}" length="${length}">
+	                          <c:set target="${urlParamsPagination}" property="page" value="${pageidx - 1}"/>                         
+	                            <c:if test="${(pageidx - 1) eq actualPage}"> 
+	                                <bean:write name="pageidx"/>
+	                            </c:if>
+	                            <c:if test="${(pageidx - 1) ne actualPage}"> 
+		                          <c:if test="${aimTeamReportsForm.showTabs}">
+		                          	<c:set target="${urlParamsPagination}" property="tabs" value="true"/>
+		                          </c:if>
+	                              <digi:link href="/viewTeamReports.do"  name="urlParamsPagination" >
+	                                <bean:write name="pageidx"/>
+	                              </digi:link>
+	                            </c:if>
+	                          <c:if test="${pageidx < maxpages}"> | </c:if>
+	                        </logic:iterate>
+	                       </c:if>
                         <c:if test="${aimTeamReportsForm.currentPage+1 != aimTeamReportsForm.totalPages}">
                           <jsp:useBean id="urlParamsNext" type="java.util.Map" class="java.util.HashMap"/>
                           <c:if test="${aimTeamReportsForm.currentPage+1 > aimTeamReportsForm.totalPages}">
@@ -642,21 +644,23 @@ function confirmFunc() {
                         <c:set var="length" value="${aimTeamReportsForm.pagesToShow}"></c:set>
                         <c:set var="start" value="${aimTeamReportsForm.offset}"/>
                         
-                        <logic:iterate name="pagelist" id="pageidx" type="java.lang.Integer" offset="${start}" length="${length}">
-                          <c:set target="${urlParamsPagination}" property="page" value="${pageidx - 1}"/>                         
-                            <c:if test="${(pageidx - 1) eq actualPage}"> 
-                                <bean:write name="pageidx"/>
-                            </c:if>
-                            <c:if test="${(pageidx - 1) ne actualPage}"> 
-	                          <c:if test="${aimTeamReportsForm.showTabs}">
-	                          	<c:set target="${urlParamsPagination}" property="tabs" value="true"/>
-	                          </c:if>
-                              <digi:link href="/viewTeamReports.do"  name="urlParamsPagination" >
-                                <bean:write name="pageidx"/>
-                              </digi:link>
-                            </c:if>
-                          <c:if test="${pageidx < maxpages}"> | </c:if>
-                        </logic:iterate>
+                        <c:if test="${maxpages > 1}">
+	                        <logic:iterate name="pagelist" id="pageidx" type="java.lang.Integer" offset="${start}" length="${length}">
+	                          <c:set target="${urlParamsPagination}" property="page" value="${pageidx - 1}"/>                         
+	                            <c:if test="${(pageidx - 1) eq actualPage}"> 
+	                                <bean:write name="pageidx"/>
+	                            </c:if>
+	                            <c:if test="${(pageidx - 1) ne actualPage}"> 
+		                          <c:if test="${aimTeamReportsForm.showTabs}">
+		                          	<c:set target="${urlParamsPagination}" property="tabs" value="true"/>
+		                          </c:if>
+	                              <digi:link href="/viewTeamReports.do"  name="urlParamsPagination" >
+	                                <bean:write name="pageidx"/>
+	                              </digi:link>
+	                            </c:if>
+	                          <c:if test="${pageidx < maxpages}"> | </c:if>
+	                        </logic:iterate>
+                        </c:if>
                         <c:if test="${aimTeamReportsForm.currentPage+1 != aimTeamReportsForm.totalPages}">
                           <c:if test="${aimTeamReportsForm.currentPage+1 > aimTeamReportsForm.totalPages}">
                             <c:set target="${urlParamsNext}" property="page" value="${aimTeamReportsForm.currentPage}"/>

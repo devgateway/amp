@@ -383,14 +383,34 @@ target.style.cursor = "default"
 											</bean:define>
 											<jsp:include page="largeTextPropertyEdit.jsp"/>
 			
-			
-			
-			
 											<bean:define id="largeTextLabel" value="Project Impact" toScope="request"/>
 											<bean:define id="largeTextKey" toScope="request">
 												<c:out value="${aimEditActivityForm.identification.projectImpact}"/>
 											</bean:define>
-											<jsp:include page="largeTextPropertyEdit.jsp"/>
+											<tr bgcolor="#ffffff">
+												<td valign="top" align="left">
+												
+										            <a title="<digi:trn key="aim:EditProjectImpact">Edit Project Impact</digi:trn>">
+													     <digi:trn key="aim:${largeTextLabel}">${largeTextLabel}</digi:trn> 
+													</a>
+									            
+												</td>
+												<td valign="top" align="left">
+												<table cellPadding=0 cellSpacing=0>
+													<tr>
+														<td><digi:edit key="${largeTextKey}" /></td>
+													</tr>
+													<tr>
+														<td><a href="javascript:edit('${largeTextKey}')"><digi:trn key="aim:edit">Edit</digi:trn></a></td>
+													</tr>
+												</table>
+												</td>
+											</tr>
+											
+
+
+
+
 
 											<bean:define id="largeTextLabel" value="Activity Summary" toScope="request"/>
 											<bean:define id="largeTextKey" toScope="request">

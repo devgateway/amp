@@ -336,12 +336,15 @@ public class ReportsFilterPickerForm extends ActionForm {
 				this.selectedImplementingAgency = null;
 				this.selectedProjectCategory = null;
 				this.selectedBudget = null;
+				this.governmentApprovalProcedures = null;
 				this.justSearch=false;
 				this.selectedNatPlanObj = null;
 				this.selectedPrimaryPrograms = null;
 				this.selectedSecondaryPrograms = null;
 				this.selectedresponsibleorg=null;
 				this.approvalStatusSelected = null;
+				this.lineMinRank=null;
+				this.planMinRank=null;
 			}
 		}
 		

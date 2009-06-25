@@ -279,7 +279,7 @@ public class AddRegionalFunding extends Action {
 		
 		} catch (Exception e) {
 			logger.debug("Exception");
-			e.printStackTrace(System.out);
+			logger.error(e);
 		}
 		return null;
 	}

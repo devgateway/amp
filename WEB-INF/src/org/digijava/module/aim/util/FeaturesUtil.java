@@ -1977,11 +1977,15 @@ public class FeaturesUtil {
 			else field.setHasLevel(false);
 			session.save(field);
 			tx.commit();
-			tx = session.beginTransaction();
-			template = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,
-					templateId);
-			template.getFields().add(field);
-			tx.commit();
+			
+       		String gsValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NEW_FIELDS_VISIBILITY);
+       		if (gsValue != null && gsValue.equalsIgnoreCase("on")){
+    			tx = session.beginTransaction();
+    			template = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class, templateId);
+    			template.getFields().add(field);
+    			tx.commit();
+       		}
+			
 			//session.saveOrUpdate(template);
 			//tx.commit();
 

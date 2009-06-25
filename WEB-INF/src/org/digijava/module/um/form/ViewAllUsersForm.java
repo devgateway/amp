@@ -47,7 +47,7 @@ public class ViewAllUsersForm   extends ActionForm {
 	        setReset("false");
 	       
 		}	
-		 setTempNumResults(10);
+		 //setTempNumResults(10);
       }
 	
 	public String getReset() {

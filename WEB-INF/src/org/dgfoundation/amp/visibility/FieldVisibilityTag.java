@@ -80,19 +80,19 @@ public class FieldVisibilityTag extends BodyTagSupport {
 		                    {
 		                        id = featureByNameFromRoot.getId();
 			   			        try {//extra verification...
-			   			        	if(FeaturesUtil.getFieldVisibility(this.getName())!=null)
-			   			        	{
+			   			        	if(FeaturesUtil.getFieldVisibility(this.getName())!=null){
 			   			        		FeaturesUtil.updateFieldWithFeatureVisibility(ampTreeVisibility.getFeatureByNameFromRoot(this.getFeature()).getId(),this.getName());
+			   			        	} else {
+			   			        		FeaturesUtil.insertFieldWithFeatureVisibility(ampTreeVisibility.getRoot().getId(),id, this.getName(),this.getHasLevel());
 			   			        	}
-			   			        	else FeaturesUtil.insertFieldWithFeatureVisibility(ampTreeVisibility.getRoot().getId(),id, this.getName(),this.getHasLevel());
 		                             
 		                             AmpTemplatesVisibility  currentTemplate = (AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
 		                             ampTreeVisibility. buildAmpTreeVisibility(currentTemplate);
 		                             ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
+		                          } catch (DgException ex) {
+		                          	throw new JspException(ex);	
 		                           	}
-		                         catch (DgException ex) {throw new JspException(ex);	}
-		                     }
-		                     else {
+		                     } else {
 		                    	 logger.info("Field: "+this.getName() + " has the parent: "+this.getFeature()+ " which doesn't exist in DB");
 			                    return SKIP_BODY;
 		                     }

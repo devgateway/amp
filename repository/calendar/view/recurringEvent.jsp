@@ -100,7 +100,11 @@ function eventType(){
 		}
 	}
 
-	if(Daily){
+	if(Dailly){
+        var rec = document.getElementById("recurrDailly").value;
+        if(rec < occurance_duration){
+            var err = "<digi:trn>The duration of appointment should be shorter than how often it recurs. Modify the duration of appointment or change the recurrence</digi:trn>";
+         alert(err);
 
 		
         var rec = document.getElementById("recurrDaily").value;
@@ -173,7 +177,7 @@ function eventType(){
 			 		<table  border="0" width="100%">
 					 		<tr bgcolor="white">
 					 			<td colspan="3">
-					 				<html:radio property="typeofOccurrence" value="Daily" styleId="Daily"/>
+					 				<input type="radio" name="typeofOccurrence" value="Dailly" id="Dailly"/><digi:trn>Dailly</digi:trn>
 					 			</td>
 					 		</tr>
 					 		<tr>
@@ -195,9 +199,7 @@ function eventType(){
 							 			<table border="0" cellPadding=1 cellSpacing=1>
 									 		<tr bgcolor="white">
 										 		<td colspan="5">
-										 			<html:radio property="typeofOccurrence" value="Monthly" styleId="Monthly"/>
-										 			<digi:trn>Monthly</digi:trn>
-										 			
+										 			<input type="radio"  name="typeofOccurrence" value="Monthly" id="Monthly"/><digi:trn>Monthly</digi:trn>
 										 		</td>
 									 		</tr>
 							 		 </table>
@@ -208,7 +210,7 @@ function eventType(){
 				 				<table bgcolor="#F5F5F5" cellpadding="3" align="center" width="320px" style="border-style:solid;border-color:#1C5180;border-width: 1px">
 				 				<!-- 	
 				 					<tr>
-							 	 		<td width="95px">Recover Every Day</td>
+							 	 		<td width="95px"><digi:trn>Recover Every Day</digi:trn></td>
 							 	 		<td><input type="text" size="9px" name="recurrPeriod" id="recurrMonthly" value=""/></td>
 							 	 	</tr>
 							 	-->
@@ -235,10 +237,7 @@ function eventType(){
 			 		<td>
 				 		<table  bgcolor="#F5F5F5">
 						 		<tr bgcolor="white">
-						 			<td>
-						 					<html:radio property="typeofOccurrence" value="Weekly" styleId="Weekly"/>
-						 			
-						 			<digi:trn>Weekly</digi:trn></td>
+						 			<td><input type="radio" name="typeofOccurrence" value="Weekly" id="Weekly"/><digi:trn>Weekly</digi:trn></td>
 						 			<td></td>
 						 			
 						 			<td></td>
@@ -251,24 +250,22 @@ function eventType(){
 									  <table cellpadding="2" width="240px" style="border-style:solid;border-color:#1C5180;border-width: 1px">		
 									 		<tr>
 									 	 		<td><digi:trn>Recurr every</digi:trn></td>
-									 	 		<td>
-									 	 		<html:text name="calendarEventForm" property="recurrPeriod" size="7px"  styleId="recurrWeekly" /> 
-									 	 		</td>
+									 	 		<td><input type="text"  size="7px" name="recurrPeriod" id="recurrWeekly" value=""/></td>
 									 	 		<td><digi:trn>Week (s)</digi:trn></td>
 									 		</tr>
 									 		<tr> 
-									 			<td><input type="checkbox" name="weekDays" value="1"/><digi:trn>Sun</digi:trn></td>
-									 			<td><input type="checkbox" name="weekDays" value="2"/><digi:trn>Wed</digi:trn></td>
-									 			<td><input type="checkbox" name="weekDays" value="3"/><digi:trn>Saturday</digi:trn></td>
+									 			<td><input type="checkbox" name="occurrWeekDays" value="Sun"/><digi:trn>Sun</digi:trn></td>
+									 			<td><input type="checkbox" name="occurrWeekDays" value="Wednesday"/><digi:trn>Wed</digi:trn></td>
+									 			<td><input type="checkbox" name="occurrWeekDays" value="Saturday"/><digi:trn>Saturday</digi:trn></td>
 									 		</tr>
 									 		<tr>
-									 			<td><input  type="checkbox" name="weekDays" value="4"/><digi:trn>Monday</digi:trn></td>
-									 			<td><input type="checkbox" name="weekDays" value="5"/><digi:trn>Thur</digi:trn></td>
+									 			<td><input type="checkbox" name="occurrWeekDays" value="Monday"/><digi:trn>Monday</digi:trn></td>
+									 			<td><input type="checkbox" name="occurrWeekDays" value="Thur"/><digi:trn>Thur</digi:trn></td>
 									 			<td>
 									 		</tr>
 									 		<tr>
-									 			<td><input  type="checkbox" name="weekDays" value="6"/><digi:trn>Tuesday</digi:trn></td>
-									 			<td><input  type="checkbox" name="weekDays" value="7"/><digi:trn>Friday</digi:trn></td>
+									 			<td><input type="checkbox" name="occurrWeekDays" value="Tuesday"/><digi:trn>Tuesday</digi:trn></td>
+									 			<td><input type="checkbox" name="occurrWeekDays" value="Friday"/><digi:trn>Friday</digi:trn></td>
 									 		</tr>
 								 		</table>
 						 			</td>
@@ -315,7 +312,8 @@ function eventType(){
 		 	    <td>
 			 	    <table border="0" bgcolor="#F5F5F5" >
 					 		<tr bgcolor="white">
-					 			<td colspan="4"><digi:trn>Yearly</digi:trn><html:radio property="typeofOccurrence" value="Yearly" styleId="Yearly"/>
+					 			<td colspan="4">
+					 				<input type="radio" name="typeofOccurrence" value="Yearly" id="Yearly"/><digi:trn>Yearly</digi:trn>
 					 			</td>
 					 		</tr>
 					 		<tr>
@@ -341,7 +339,7 @@ function eventType(){
 						 	 		    	</td>
 							 	 			<!-- 
 							 	 			<td><input type="text"  size="7px" name="recurrPeriod" id="recurrYearly" value=""/></td>
-							 	 			<td> Day(s) </td>
+							 	 			<td><digi:trn>Day(s)</digi:trn></td>
 							 	 			 -->
 							 	 	    </tr>
 							  	   </table>
@@ -360,7 +358,7 @@ function eventType(){
 			<table bgcolor="#F5F5F5" border="0" cellPadding=2 cellSpacing=2 width="340px" style="border-style:solid;border-color:#1C5180;border-width: 1px">
 				 		<tr><td><digi:trn>Time</digi:trn></td></tr>
 				 		<tr>
-				 	 		<td><digi:trn>Start TIme</digi:trn></td>
+				 	 		<td><digi:trn>Start Time</digi:trn></td>
 				 	 		<td>
 				 	 				<select id="selectedStartHour" onchange="updateTime(document.getElementById('selectedStartTime'), 'hour', this.value)">
                                        <c:forEach var="hour" begin="0" end="23">
@@ -373,7 +371,7 @@ function eventType(){
                                    </script>
 							</td>
 				 	 		
-				 	 		<td><digi:trn>End Time</digi:trn></td>
+				 	 		<td><digi:trn>End TIme</digi:trn></td>
 				 	 		<td>
 				 	 			<select id="selectedStartHour" onchange="updateTime(document.getElementById('selectedStartTime'), 'hour', this.value)">
                                                     <c:forEach var="hour" begin="0" end="23">
@@ -441,6 +439,7 @@ function eventType(){
                                                  <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
                                                </a>
                                              </td>
+                                           </tr>
                                       </table>
                                  </c:if>
 				 	 		</td>
@@ -451,7 +450,7 @@ function eventType(){
 	</tr>
 	<tr>
 		<td align="center">
-			<input type="button" onclick="eventType();" value="Save An CLose"/>
+			<input type="button" onclick="eventType();" value="<digi:trn>Save And CLose</digi:trn>"/>
 		</td>
 	</tr>
 </table>

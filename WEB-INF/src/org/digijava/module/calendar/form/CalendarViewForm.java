@@ -43,7 +43,7 @@ public class CalendarViewForm  extends ActionForm {
     private Collection ampCalendarGraphs;
     private Boolean resetFilter;
     private Boolean resetDonors;
-    private Boolean resetEventTypes;   
+    private Boolean resetEventTypes;       
 
   public GregorianCalendar getCurrentDate() {
         return currentDate;
@@ -254,6 +254,7 @@ public Boolean getResetEventTypes() {
 public void setResetEventTypes(Boolean resetEventTypes) {
 	this.resetEventTypes = resetEventTypes;
 }
+
 
 
 }

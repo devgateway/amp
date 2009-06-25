@@ -119,9 +119,8 @@ public class HelpActions extends DispatchAction {
 	   }
 		return null;
 	}
-
-
-    public ActionForward vewSearchKey(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
+     
+   public ActionForward vewSearchKey(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		  	OutputStreamWriter os = null;	
 		    PrintWriter out = null;
 		    String loadStatus =request.getParameter("loadKey");
@@ -174,12 +173,13 @@ public class HelpActions extends DispatchAction {
 	     e.printStackTrace();
 	 }
 	 return null;
- }
+}
 	
 	
-	public ActionForward searchHelpTopic(ActionMapping mapping,	ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
+	
+ 	public ActionForward searchHelpTopic(ActionMapping mapping,	ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		 String key =request.getParameter("key");
-		 String keywords = HelpUtil.getTrn(key,request);
+		 //String keywords = HelpUtil.getTrn(key,request);
 		 String treKey = HelpUtil.getTrn("Topic Not Found", request);
 		 String locale=RequestUtils.getNavigationLanguage(request).getCode();
 		 String siteId = RequestUtils.getSite(request).getSiteId();
@@ -203,9 +203,8 @@ public class HelpActions extends DispatchAction {
 			         String artikleTitle;
 					 
 					 HelpForm help = (HelpForm) form;	
-					 
+					 System.out.println("hits.length():"+hits.length());
 					  int hitCount = hits.length();   
-					  System.out.println("hits.length():"+hits.length());
 			    	  if(hitCount == 0){
 			    		
 						  out.println("<div style=\"font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;\"><a class=\"link\"><b>"+key+"</b></a></div>");
@@ -263,9 +262,9 @@ public class HelpActions extends DispatchAction {
 			    	}
 			      }
 			   	}
-     }catch (Exception e) {
-         e.printStackTrace();
-     }
+    }catch (Exception e) {
+        e.printStackTrace();
+    }
 		return null;
 		
 	}

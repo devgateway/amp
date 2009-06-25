@@ -9,6 +9,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.helper.DateConversion;
 import org.hibernate.Session;
+import java.text.SimpleDateFormat;
 
 public class FiscalCalendarUtil {
 	
@@ -26,7 +27,11 @@ public class FiscalCalendarUtil {
 			year += fisCal.getYearOffset().intValue();
 			
 			String stDate = fisCal.getStartDayNum() + "/" + fisCal.getStartMonthNum() + "/" + year;
-			d = DateConversion.getDate(stDate);
+
+            // quick fix, because of Global settings  date format...
+            String pattern = "dd/MM/yyyy";
+			d = new SimpleDateFormat(pattern).parse(stDate);
+
 		} catch (Exception e) {
 			logger.error("Exception from getAmpFiscalCalendar() :" + e.getMessage());
 			e.printStackTrace(System.out);
@@ -58,7 +63,9 @@ public class FiscalCalendarUtil {
 				stDate = fisCal.getStartDayNum() + "/" + fisCal.getStartMonthNum() + "/" + (year);
 				addYear = true;
 			}
-			d = DateConversion.getDate(stDate);
+             // quick fix, because of Global settings  date format...
+            String pattern = "dd/MM/yyyy";
+			d = new SimpleDateFormat(pattern).parse(stDate);
 			GregorianCalendar gc = new GregorianCalendar();
 			gc.setTime(d);
 			if (addYear == true) {

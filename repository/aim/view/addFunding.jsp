@@ -665,14 +665,26 @@ var isAlreadySubmitted = false;
 												
 											</td>
 											<td align="right">
-													<% String exchRatefldId = "exchFld"+(t++);
-													String exchCurrfldId = "exchCurr"+(t++);
-													String exchHidden = "useFixedRate"+(t++);
-													String jsUrl = "useFixedRateClicked('" + exchRatefldId + "','" + exchHidden + "')";
-												%>	<html:hidden styleId="<%=exchHidden%>" name="fundingDetail"  property="useFixedRate" indexed="true" />
-														
+								
+								
+								
+								<c:set var="contentDisabled"><field:display name="Exchange Rate" feature="Funding Information">false</field:display></c:set>
+								<c:if test="${contentDisabled==''}">
+									<c:set var="contentDisabled">true</c:set>
+								</c:if>
+											
+									<% String exchRatefldId = "exchFld"+(t++);
+										String exchCurrfldId = "exchCurr"+(t++);
+										String exchHidden = "useFixedRate"+(t++);
+										String jsUrl = "useFixedRateClicked('" + exchRatefldId + "','" + exchHidden + "')";
+									%>	
+									
+												<html:hidden  styleId="<%=exchHidden%>" name="fundingDetail"  property="useFixedRate" indexed="true" />
 														
 														<input type="checkbox" onclick="<%=jsUrl%>" 
+														<c:if test="${contentDisabled}">
+															disabled 
+														</c:if>
 														<c:if test="${fundingDetail.useFixedRate}">
 															checked="true"
 														</c:if>
@@ -883,9 +895,11 @@ var isAlreadySubmitted = false;
                                                  </c:if>
 											 </td>
                                              <td>
+                                             	<!-- 
                                              	<c:if test="${contentDisabled=='true'}">
                                             	   <input type="submit" disabled="disabled" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
                                             	</c:if>
+                                            	-->
                                             	<c:if test="${contentDisabled=='false'}">
                                             	   <input type="submit" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
                                             	</c:if>
@@ -1322,12 +1336,17 @@ var isAlreadySubmitted = false;
 									<c:if test="${contentDisabled==''}">
 										<c:set var="contentDisabled">true</c:set>
 									</c:if>
+								
+								<field:display name="Classification Expenditure" feature="Funding Information">
 								<tr bgcolor="#ffffff">
 									<td colspan="6">
 										<b><digi:trn key="aim:classification">Classification</digi:trn></b>&nbsp;
+									
 										<html:text name="fundingDetail" indexed="true" property="classification" size="75" styleClass="inp-text" disabled="${contentDisabled}"/>
 									</td>
 								</tr>
+								
+								</field:display>
 								<tr>
 									<td colspan="6" bgcolor="#dddddd"></td>
 								</tr>

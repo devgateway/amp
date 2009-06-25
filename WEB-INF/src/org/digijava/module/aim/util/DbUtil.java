@@ -1027,11 +1027,11 @@ public class DbUtil {
            try {
                session = PersistenceManager.getRequestDBSession();
                String queryString = new String();
-               queryString = "select from "
+               queryString = "select f from "
                    + AmpFundingDetail.class.getName()
-                   + " f where (f.ampFundingId=:ampFundingId) "
-                   + " and (f.transactionType=:transactionType) "
-                   + " and (f.adjustmentType=:adjustmentType)";
+                   + " f where f.ampFundingId=:ampFundingId "
+                   + " and  f.transactionType=:transactionType  "
+                   + " and  f.adjustmentType=:adjustmentType ";
                q = session.createQuery(queryString);
                q.setParameter("ampFundingId", ampFundingId, Hibernate.LONG);
                q.setParameter("transactionType", transactionType,

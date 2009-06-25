@@ -88,6 +88,7 @@ import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.ui.RectangleInsets;
+import org.jfree.chart.axis.NumberAxis;
 
 
 
@@ -97,7 +98,6 @@ import org.jfree.ui.RectangleInsets;
  *
  */
 public class ChartWidgetUtil {
-
     private static Logger logger = Logger.getLogger(ChartWidgetUtil.class);
     
 
@@ -170,8 +170,9 @@ public class ChartWidgetUtil {
     public static JFreeChart getTypeOfAidChart(ChartOption opt, FilterHelper filter) throws DgException, WorkerException{
 		JFreeChart chart = null;
 		Font font8 = new Font(null,Font.BOLD,12);
-		CategoryDataset dataset=getTypeOfAidDataset(filter);
+		CategoryDataset dataset=getTypeOfAidDataset(opt,filter);
         String titleMsg= TranslatorWorker.translateText("Type of Aid", opt.getLangCode(), opt.getSiteId());
+        DecimalFormat format=FormatHelper.getDecimalFormat();
         String amount="";
         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
             amount = "Amounts in thousands";
@@ -207,6 +208,7 @@ public class ChartWidgetUtil {
         JFreeChart chart = null;
         Font font8 = new Font(null, Font.BOLD, 12);
         CategoryDataset dataset = getPledgesCommDisbDataset(filter,opt);
+        DecimalFormat format=FormatHelper.getDecimalFormat();
         String amount="";
         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
             amount = "Amounts in thousands";
@@ -245,6 +247,7 @@ public class ChartWidgetUtil {
     public static JFreeChart getODAProfileChart(ChartOption opt, FilterHelper filter) throws DgException, WorkerException{
 		JFreeChart chart = null;
 		Font font8 = new Font(null,Font.BOLD,12);
+        DecimalFormat format=FormatHelper.getDecimalFormat();
 		CategoryDataset dataset=getODAProfileDataset(filter);
         String amount="";
         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
@@ -270,7 +273,7 @@ public class ChartWidgetUtil {
      */
     
     
-    private static CategoryDataset getTypeOfAidDataset(FilterHelper filter) throws DgException {
+    private static CategoryDataset getTypeOfAidDataset(ChartOption opt,FilterHelper filter) throws DgException {
         boolean nodata=true; // for displaying no data message
         DefaultCategoryDataset result = new DefaultCategoryDataset();
         Long year = filter.getYear();
@@ -293,7 +296,15 @@ public class ChartWidgetUtil {
             Collection<AmpCategoryValue> typeOfAids = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
             for (AmpCategoryValue aid : typeOfAids) {
                 DecimalWraper funding = getFunding(filter.getOrgId(), filter.getOrgGroupId(), startDate, endDate, aid.getId(), currCode, filter.getTransactionType(), filter.getTeamMember());
-                result.addValue(funding.doubleValue(), aid.getValue(), new Long(i));
+                try{
+                String aidName= TranslatorWorker.translateText(aid.getValue(), opt.getLangCode(), opt.getSiteId());
+                result.addValue(funding.doubleValue(),aidName , new Long(i));
+                }
+                catch(WorkerException ex){
+                    logger.error(ex);
+                    throw new DgException(ex);
+                    
+                }
                 if (funding.doubleValue() != 0) {
                     nodata = false;
                 }

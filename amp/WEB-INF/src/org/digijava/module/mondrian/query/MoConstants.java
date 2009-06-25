@@ -14,7 +14,7 @@ public final class MoConstants {
 	public static String DONOR_DATES = "Donor Dates";
 	public static String REGIONS = "Regions";
 	public static String PRIMARY_PROGRAMS = "Primary Programs";
-	public static String SECUNDARY_PROGRAMS = "Secondary Program";
+	public static String SECONDARY_PROGRAMS = "Secondary Program";
 	public static String STATUS = "Status";
 	public static String DONOR = "Donor";
 	public static String DONOR_TYPES = "Donor Types";
@@ -26,6 +26,7 @@ public final class MoConstants {
 	public static String SUB_SECTORS = "Sub-Sectors";
 	
 	public static String ALL_PRIMARY_SECTOR = "All Primary Sectors";
+	public static String ALL_SECONDARY_SECTOR = "All Secondary Sectors";
 	public static String ALL_ACTIVITIES = "All Activities";
 	public static String ALL_PERIODS = "All Periods";
 	public static String ALL_REGIONS = "All Regions";

@@ -193,9 +193,9 @@ function showFilter(){
     var filterDiv = document.getElementById('filter');
     filterDiv.style.display="block";
     filterDiv.stytelvisibility="visible";
-    filter=new YAHOO.widget.Panel("filter",{
-            x:"20",
-            y:"20",
+    filter=new YAHOO.widget.Panel("filter",{    		
+            width:"650px",
+            fixedcenter: true,
             constraintoviewport: true,
             Underlay:"shadow",
             modal: true,

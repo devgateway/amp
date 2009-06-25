@@ -402,22 +402,15 @@
 					</td>
 
 					<td noWrap width="100%" vAlign="top" style="padding-top:52px; _padding-top:63px;">
-						<table align=center cellPadding=0 cellSpacing=0 width="90%" border=0>
+<table align=center cellPadding=0 cellSpacing=0 width="90%" border=0>
 							<tr>
-								<td>
+								<td bgColor=#999999 class="box-title" style = "color:#000; height:16px;">
 									<!-- Other Links -->
-									<table cellPadding=0 cellSpacing=0 width=100>
-										<tr>
-											<td bgColor=#999999 class="box-title" style = "color:#000;"> 
+									
 												<digi:trn key="aim:otherLinks">
 												Links
 												</digi:trn>
-											</td>
-											<td background="module/aim/images/corner-r2.gif" height="17" width=17>
-												&nbsp;
-											</td>
-										</tr>
-									</table>
+									
 								</td>
 							</tr>
 							<tr>

@@ -863,15 +863,15 @@ function removeSelComponents() {
 
 
 <script language="javascript">
-function editFunding(id)
-
-{
-
+function editFunding(id){
 	reusableDialog.setHeader("<digi:trn key="aim:components">Components</digi:trn>");
 
 	<digi:context name="addComp" property="context/module/moduleinstance/showAddComponent.do?edit=true&compFundAct=showEdit" />
 	var connectionObject =YAHOOAmp.util.Connect.asyncRequest('GET', "<%= addComp %>&fundId="+id,callbackDialog);
 
+	//IE 7 BUG :S
+	<digi:context name="addComp" property="context/module/moduleinstance/showAddComponent.do?edit=true&compFundAct=showEdit" />
+	var cObj = YAHOOAmp.util.Connect.asyncRequest('POST', "<%= addComp %>&fundId="+id, callbackPost);
 }
 
 
@@ -907,6 +907,12 @@ function addComponent(){
 	}
 	</feature:display>
 	postComponentForm("<%= addNewComponent%>");
+
+	//alert('A');
+	//if (document.getElementById('newCompoenentName').value!=''){
+	//	alert('B');	
+	//	document.switchComponent();
+	//}
 }
 
 function validateEnter(e) {

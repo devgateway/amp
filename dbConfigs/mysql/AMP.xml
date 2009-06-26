@@ -100,6 +100,7 @@
 				</Level>
 			</Hierarchy>
 		</Dimension>
+		<!-- 
 		<Dimension name="Secondary Sector" foreignKey="amp_activity_id">
 			<Hierarchy hasAll="true" allMemberCaption="#All_Secondary_Sectors#" allMemberName="All Secondary Sectors" primaryKey="amp_activity_id">
 				<Level name="Secondary Sector" column="secondary_sector_name">
@@ -111,6 +112,7 @@
 				</Level>
 			</Hierarchy>
 		</Dimension>
+		 -->
 		<Dimension name="Regions">
 		<Hierarchy hasAll="true" allMemberCaption="#All_Regions#" allMemberName="All Regions" primaryKey="amp_activity_id" caption="#Regions#">
 			<Level name="Region" column="region">
@@ -155,7 +157,6 @@
 			</Level>
 		</Hierarchy>
 	</Dimension>
-	
 	<Dimension name="Sub-Sector">
 		<Hierarchy hasAll="true" allMemberCaption="#All Sub-Sectors#" allMemberName="All Sub-Sectors" primaryKey="amp_activity_id" caption="#Sub-Sectors#">
 			<Level name="sub-sector" column="p_sub_sector_name">
@@ -167,6 +168,18 @@
 			</Level>
 		</Hierarchy>
 	</Dimension>
+	<Dimension name="Currency">
+		<Hierarchy hasAll="true" allMemberCaption="#All Currencies#" allMemberName="All Currencies" primaryKey="amp_activity_id" caption="#Currency#">
+			<Level name="currency" column="currency_code">
+				<NameExpression>
+					<SQL dialect="mysql">
+						IFNULL(currency_code,'#No_Data#')
+					</SQL>
+				</NameExpression>
+			</Level>
+		</Hierarchy>
+	</Dimension>
+	
 		<DimensionUsage name="Activity" source="Activity" foreignKey="amp_activity_id" />
 		<DimensionUsage name="Donor Dates" source="Donor Dates" foreignKey="amp_fund_detail_id" />
 		<DimensionUsage name="Status" source="Status" foreignKey="amp_activity_id" />

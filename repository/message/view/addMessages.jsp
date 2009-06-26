@@ -85,29 +85,18 @@
 
   }
 	
-  function validate(){
-	        var titleSize=document.messageForm.messageName.value.length;
-            var descSize=document.messageForm.description.value.length;
-            <c:set var="message">
-        	<digi:trn>Please enter name </digi:trn>						
-            </c:set>
-            <c:set var="msg">
-        	${fn:replace(message,'\\n',' ')}
-            </c:set>
-            <c:set var="quote">'</c:set>
-            <c:set var="escapedQuote">\'</c:set>
-            <c:set var="msgsq">
-        	${fn:replace(msg,quote,escapedQuote)}
-            </c:set>
-		if(titleSize==0){
-			alert('${msgsq}');
-			return false;
+    function validate(){
+        var titleSize=document.messageForm.messageName.value.length;
+        var descSize=document.messageForm.description.value.length;
+        var msg='<digi:trn jsFriendly="true">Please enter name </digi:trn>';
+        if(titleSize==0){
+            alert(msg);
+            return false;
         }
         if(descSize>500){
-        	alert(' You have entered '+descSize+' symblos but maximum allowed are 500');
-			return false;
+            alert(' You have entered '+descSize+' symblos but maximum allowed are 500');
+            return false;
         }
-    }
 	var hiddenField=document.getElementById('myHidden');
 	var relActName=document.getElementById('myInput');
 	if(relActName.value!=null && relActName.value!='' && (hiddenField.value==null || hiddenField.value=='')){
@@ -334,9 +323,9 @@
 																	<tr>
 																	  <field:display name="Related Activity Dropdown" feature="Create Message Form">
 																		<td align="right" nowrap="nowrap" valign="top"><digi:trn key="message:relatedActivity">Related Activity</digi:trn></td>
-																		<td align="left" nowrap="nowrap">																			
+																		<td align="left" nowrap="nowrap">
 																			<div id="myAutoComplete">
-																				<html:text property="relatedActivityName" name="messageForm" styleId="myInput" style="width:320px;font-size:100%"></html:text>																				
+																				<html:text property="relatedActivityName" name="messageForm" styleId="myInput" style="width:320px;font-size:100%"></html:text>
 																				<img src="../ampTemplate/images/help.gif" onmouseover="stm([messageHelp,relatedActs],Style[15])" onmouseout="htm()" align="top" id="myImage"/>
 																		    	<div id="myContainer" style="width:315px;"></div>																		    	
 																		   	</div>

@@ -425,16 +425,7 @@ function banUser(txt) {
 																							&lt;&lt;
 																						</digi:link>
 																					</td>
-																					<jsp:useBean id="urlParamsPrevious" type="java.util.Map" class="java.util.HashMap"/>
-																					<c:set target="${urlParamsPrevious}" property="page" value="${umViewAllUsersForm.currentPage -1}"/>
-																					<c:set var="translation">
-																						<digi:trn key="aim:previouspage">Previous Page</digi:trn>
-																					</c:set>
-																					<!--<td style="padding:3px;border:1px solid #999999;" nowrap="nowrap">
-																					<digi:link href="/userSearch.do" name="urlParamsPrevious" style="text-decoration=none" title="${translation}" >
-																						&lt; Previous
-																					</digi:link>
-																					</td>-->
+																					
 																				</c:if>
 																				<c:set var="length" value="${umViewAllUsersForm.pagesToShow}"></c:set>
 																				<c:set var="start" value="${umViewAllUsersForm.offset}"/>
@@ -461,24 +452,9 @@ function banUser(txt) {
 																				</logic:iterate>	
 																				
 																				<c:if test="${umViewAllUsersForm.currentPage != umViewAllUsersForm.pagesSize}">
-																					<jsp:useBean id="urlParamsNext" type="java.util.Map" class="java.util.HashMap"/>
-																					<c:set target="${urlParamsNext}" property="page" value="${umViewAllUsersForm.currentPage+1}"/>
-																					<c:set target="${urlParamsNext}" property="orgSelReset" value="false"/>
-																					<c:set var="translation">
-																						<digi:trn key="aim:nextpage">Next Page</digi:trn>
-																					</c:set>
-																					<!--<td style="padding:3px;border:1px solid #999999;" nowrap="nowrap" >
-																					<digi:link href="/userSearch.do"  style="text-decoration=none" name="urlParamsNext" title="${translation}"  >
-																						&gt; Next
-																					</digi:link>
-																					</td>-->
+																					
 																					<jsp:useBean id="urlParamsLast" type="java.util.Map" class="java.util.HashMap"/>
-																					<c:if test="${umViewAllUsersForm.pagesSize > aimOrgManagerForm.pagesToShow}">
-																						<c:set target="${urlParamsLast}" property="page" value="${umViewAllUsersForm.pagesSize-1}"/>
-																					</c:if>
-																					<c:if test="${umViewAllUsersForm.pagesSize <umViewAllUsersForm.pagesToShow}">
-																						<c:set target="${urlParamsLast}" property="page" value="${umViewAllUsersForm.pagesSize}"/>
-																					</c:if>
+																					<c:set target="${urlParamsLast}" property="page" value="${umViewAllUsersForm.pagesSize}"/>
 																					<c:set target="${urlParamsLast}" property="orgSelReset" value="false"/>
 																					<c:set var="translation">
 																						<digi:trn key="aim:lastpage">Last Page</digi:trn>

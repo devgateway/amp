@@ -10,7 +10,7 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 
-
+<jsp:include page="previewLogframeUtil.jsp" flush="true" />
 <div id="mySave" style="display: none">
 	<div id="mySaveContent" class="content">
 		<table width="100%" border="0" cellspacing="2" cellpadding="2" align="center" class="box-border-nopadding">

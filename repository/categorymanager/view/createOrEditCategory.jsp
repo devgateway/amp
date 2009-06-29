@@ -42,33 +42,33 @@
 </style>
 
 <c:set var="translation1">
-		<digi:trn key="aim:categoryManagerPlsEnterName">You need to enter a name for the category</digi:trn>
+		<digi:trn>You need to enter a name for the category</digi:trn>
 </c:set>
 
 <c:set var="translation2">
-	<digi:trn key="aim:categoryManagerPlsEnterKey">You need to enter a key for the category</digi:trn>
+	<digi:trn>You need to enter a key for the category</digi:trn>
 </c:set>
 
 <c:set var="translation3">
-	<digi:trn key="aim:categoryManagerMoreThan2Values">Category must have at least two possible values</digi:trn>
+	<digi:trn>Category must have at least two possible values</digi:trn>
 </c:set>
 
 <c:set var="translation4">
-	<digi:trn key="aim:CategoryOnlyOneCountryValue">Category must have one country value</digi:trn>
+	<digi:trn>Category must have one country value</digi:trn>
 </c:set>
 
 <c:set var="translation5">
-	<digi:trn key="aim:CategoryOnlyOneRegionValue">Category must have one region value</digi:trn>
+	<digi:trn>Category must have one region value</digi:trn>
 </c:set>
 <c:set var="translation6">
-	<digi:trn key="cm:correctNumberOfFields">Please specify a number of fields to add that is above zero and below 30</digi:trn>
+	<digi:trn>Please specify a number of fields to add that is above zero and below 30</digi:trn>
 </c:set>
 <c:set var="translation7">
-	<digi:trn key="cm:warningDeleteCategoryValue">Please proceed only if you are sure that the value you are trying to delete is not used by the system anymore.  Are you sure you want to delete it ?</digi:trn>
+	<digi:trn>Please proceed only if you are sure that the value you are trying to delete is not used by the system anymore.  Are you sure you want to delete it ?</digi:trn>
 </c:set>
 
 <c:set var="translation8">
-	<digi:trn key="cm:warningDeleteLabelCategory">Are you sure you want to remove this label category ?</digi:trn>
+	<digi:trn>Are you sure you want to remove this label category ?</digi:trn>
 </c:set>
 
 <script type="text/javascript">
@@ -205,40 +205,38 @@
 	}
 </script>
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=900>
+<table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="900">
 	<tr>
 		<td>
-			<table cellPadding=5 cellSpacing=0 width="100%" border=0>
+			<table cellPadding="5" cellSpacing="0" width="100%" border="0">
 				<tr>
 					<!-- Start Navigation -->
-					<td height=33><span class=crumb> <c:set
-						var="translation">
-						<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-					</c:set> <digi:link href="/admin.do" styleClass="comment"
-						title="${translation}" contextPath="/aim">
-						<digi:trn key="aim:AmpAdminHome">
-							Admin Home
-							</digi:trn>
-					</digi:link>&nbsp;&gt;&nbsp; <c:set var="translation">
-						<digi:trn key="aim:clickToViewCategoryManager">Click here to goto Category Manager</digi:trn>
-					</c:set> <digi:link href="/categoryManager.do" styleClass="comment"
-						title="${translation}">
-						<digi:trn key="aim:categoryManager">
-									Category Manager
-								</digi:trn>
-					</digi:link>&nbsp;&gt;&nbsp; <digi:trn key="aim:categoryManagerCreator">
-								Category Manager Creator
-							</digi:trn></td>
+					<td height="33"><span class="crumb"> 
+						<c:set	var="translation">
+							<digi:trn>Click here to goto Admin Home</digi:trn>
+						</c:set> 
+						<digi:link href="/admin.do" styleClass="comment" title="${translation}" contextPath="/aim">
+							<digi:trn>Admin Home</digi:trn>
+						</digi:link>&nbsp;&gt;&nbsp; 
+						<c:set var="translation">
+							<digi:trn>Click here to goto Category Manager</digi:trn>
+						</c:set> 
+						<digi:link href="/categoryManager.do" styleClass="comment"title="${translation}">
+							<digi:trn>Category Manager</digi:trn>
+						</digi:link>&nbsp;&gt;&nbsp; 
+						<digi:trn>Category Manager Creator</digi:trn>
+					</td>
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571><span class=subtitle-blue>
-					<digi:trn key="aim:categoryManagerCreator">
-									Category Manager Creator
-								</digi:trn> </span></td>
+					<td height="16" vAlign="middle" width="571">
+						<span class="subtitle-blue">
+							<digi:trn>Category Manager Creator</digi:trn>
+						</span>
+					</td>
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571><digi:errors /></td>
+					<td height="16" vAlign="middle" width="571"><digi:errors /></td>
 				</tr>
 				<tr>
 					<td><digi:form action="/categoryManager.do" method="post">
@@ -290,9 +288,7 @@
 											</td>
 										</tr>
 										<tr>
-											<td align="right">
-												
-											</td>
+											<td align="right"/>
 											<td >
 												<button type="submit" onclick="return doSubmit()" style="vertical-align:bottom; padding: 1px;" class="buton">
 													<img src="/TEMPLATE/ampTemplate/images/green_check.png" style="height: 16px; vertical-align: text-bottom;"  />
@@ -519,13 +515,13 @@
 								</td>
 							</tr>
 						</table>
-					</digi:form></td>
+						</digi:form>
+					</td>
 				</tr>
 			</table>
-
-                                                
- 
-					</div>
+		<%-- 
+		
+		</div>
 					
 					<button type="button" title="<digi:trn key='cm:categoryManagerAddValues'>Add value(s)</digi:trn>" onclick="addNewValue(-1)" class="buton" 
 						style="vertical-align:bottom; padding: 1px;">
@@ -543,8 +539,9 @@
 			</digi:trn>
 		</button>
 	</digi:form>
-				</td>
-				</tr>
+		--%>					
+		</td>
+	</tr>
 </table>
 <script language="javascript">
 	setStripsTable("dataTable", "tableEven", "tableOdd");

@@ -949,5 +949,5 @@
 		
 		var regRepUrl = "/gis/ShowRegionReport.do?regCode=" + regCode + "&regName=" + regName + "&mapLevel=" + mapLevel + "&sectorId=" + sec + "&startYear=" + fromYear + "&endYear=" + toYear;
 		
-		window.open(regRepUrl, null, "height=200,width=400,status=yes,toolbar=no,menubar=no,location=no");
+		window.open(regRepUrl, null, "height=250,width=400,status=yes,toolbar=no,menubar=no,location=no");
 	}

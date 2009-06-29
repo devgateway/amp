@@ -72,6 +72,9 @@
 		myPanel.setBody("");
 		myPanel.beforeHideEvent.subscribe(function() {
 			panelStart=1;
+			if(calendarObjForForm.isVisible()){
+				calendarObjForForm.hide();
+			}
 		}); 
 		myPanel.render(document.body);
 		panelStart = 0;

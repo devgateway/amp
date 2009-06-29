@@ -74,6 +74,11 @@ function checkallIssues() {
 		    modal:true,
 		    draggable:true} 
 		    );
+		myPanel1.beforeHideEvent.subscribe(function() {
+			if(calendarObjForForm.isVisible()){
+				calendarObjForForm.hide();
+			}
+		});		
 	
 	
 
@@ -941,6 +946,9 @@ YAHOOAmp.namespace("YAHOOAmp.amptab");
 	if (div!=null){
 		div.parentNode.removeChild(div)
 	}
+	if(calendarObjForForm.isVisible()){
+		calendarObjForForm.hide();
+	}	
 }); 
 
 	var divDialog=null;

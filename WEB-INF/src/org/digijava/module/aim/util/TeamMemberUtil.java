@@ -1739,7 +1739,12 @@ public class TeamMemberUtil {
     			act.setActivityCreator(null);
     		}
     		if ( act.getApprovedBy() != null && act.getApprovedBy().getAmpTeamMemId().equals(atm.getAmpTeamMemId()) ) {
-    			act.setApprovedBy(teamHead);
+    			//if we are deleting the team leader we shouldn't set him as TL
+    			if ((teamHead!=null) && (!atm.equals(teamHead))){
+    				act.setApprovedBy(teamHead);
+    			}else{
+    				act.setApprovedBy(null);
+    			}
     		}
     		if ( act.getMember() != null ) {
     			Iterator iterMem	= act.getMember().iterator();

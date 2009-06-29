@@ -52,3 +52,41 @@
 		<td><bean:write name="gisRegReportForm" property="actualExpendituresStr"/></td>
 	</tr>
 </table> 
+
+<br>
+
+<div style="height:100px; overflow-y:scroll;">
+<table width="100%">
+	<tr>
+			<td>Activity</td>
+			<td>Commitment</td>
+			<td>Disbursement</td>
+			<td>Expenditure</td>
+	</tr>
+	<logic:iterate name="gisRegReportForm" property="activityLocationFundingList" id="activityLocationFunding">
+		<tr>
+			<td>
+			<a href="javascript:showSelActivity(<bean:write name="activityLocationFunding" property="activity.ampActivityId"/>);"><bean:write name="activityLocationFunding" property="activity.ampActivityId"/></a>
+			</td>
+			<td><bean:write name="activityLocationFunding" property="fmtCommitment"/></td>
+			<td><bean:write name="activityLocationFunding" property="fmtDisbursement"/></td>
+			<td><bean:write name="activityLocationFunding" property="fmtExpenditure"/></td>
+		</tr>
+	</logic:iterate>
+</table>
+</div>
+
+<script language="JavaScript">
+function showSelActivity(activityId) {
+		var actUrl = "/aim/selectActivityTabs.do~ampActivityId=" + activityId;
+
+		alert (window.opener.opener);
+		
+	if (window.opener.opener == null) {
+		window.open(actUrl, null, null);
+	} else {
+		window.opener.opener.location.href = actUrl;
+	}
+	
+}
+</script>

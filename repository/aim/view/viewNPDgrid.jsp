@@ -21,10 +21,12 @@
 									<td valign="top">
 										<table cellPadding="5" cellSpacing="5" width="100%">
 										<td align="left">
-											<digi:link styleId="export2xsl" href="/exportIndicators2xsl.do~programId=${aimNPDForm.programId}">
-											<digi:trn key="rep:tool:exporttoexcel">Export to Excel</digi:trn>
-											 &nbsp;<digi:img src="images/xls_icon.jpg" border="0"/></digi:link>
-														&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+											<jsp:useBean id="urlParamsSort" type="java.util.Map" class="java.util.HashMap"/>
+											<c:set target="${urlParamsSort}" property="selYears" value="${aimNPDForm.selYears}"/>			
+											<digi:link styleId="export2xsl" href="/exportIndicators2xsl.do~programId=${aimNPDForm.programId}" name="urlParamsSort">
+												<digi:trn >Export to Excel</digi:trn>&nbsp;<digi:img src="images/xls_icon.jpg" border="0"/>
+											</digi:link>
+											&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 										 	<digi:link styleId="printWin" href="#" onclick="window.print(); return false;">
 											<digi:trn key="aim:print">Print</digi:trn>
 											&nbsp;<digi:img src="images/print_icon.gif" border="0"/></digi:link>
@@ -52,11 +54,16 @@
 						</c:if>
 					
 					<c:if test="${aimNPDForm.mode != 1}">
-					<td align="left">
-									<digi:link styleId="export2xsl" href="/exportIndicators2xsl.do~programId=${aimNPDForm.programId}"><digi:trn key="rep:tool:exporttoexcel">Export to Excel</digi:trn>&nbsp;<digi:img src="images/xls_icon.jpg" border="0"/></digi:link>
-									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-									<digi:link styleId="printWin" href="#" onclick="window.print(); return false;"><digi:trn key="aim:print">Print</digi:trn> &nbsp;<digi:img src="images/print_icon.gif" border="0"/></digi:link>
-								</td>
+					<td align="left">										
+						<jsp:useBean id="urlParamsSort1" type="java.util.Map" class="java.util.HashMap"/>
+						<c:set target="${urlParamsSort1}" property="selYears" value="${aimNPDForm.selYears}"/>								
+													
+						<digi:link styleId="export2xsl" href="/exportIndicators2xsl.do~programId=${aimNPDForm.programId}" name="urlParamsSort1">
+							<digi:trn >Export to Excel</digi:trn>&nbsp;<digi:img src="images/xls_icon.jpg" border="0"/>
+						</digi:link>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<digi:link styleId="printWin" href="#" onclick="window.print(); return false;"><digi:trn key="aim:print">Print</digi:trn> &nbsp;<digi:img src="images/print_icon.gif" border="0"/></digi:link>
+					</td>
 					</c:if>
 						<table bgcolor="#f4f4f2" cellPadding="0" cellSpacing="0" width="100%" class="box-border-nopadding">
 							<tr bgcolor="#006699">
@@ -82,9 +89,9 @@
 												<strong><digi:trn key="aim:indGrid:indicname">Indicator Name</digi:trn></strong>
 											</td>
 											<c:forEach  var="year" items="${aimNPDForm.selYears}">
-                                                                                                <td align="center">
-                                                                                                    <strong><digi:trn key="aim:indGrid:baseVal">Base</digi:trn></strong>
-                                                                                                </td>
+                                               <td align="center">
+                                               		<strong><digi:trn key="aim:indGrid:baseVal">Base</digi:trn></strong>
+                                               </td>
 												<td align="center">
 													<strong><digi:trn key="aim:indGrid:actualVal">Actual</digi:trn></strong>
 												</td>
@@ -102,7 +109,7 @@
 														<span title="${indRow.description}">${indRow.name}</span>
 													</td>
 													<c:forEach  var="val" items="${indRow.values}">
-                                                                                                                 <td align="right">
+                                                        <td align="right">
 															${val.baseValue}
 														</td>
 														<td align="right">

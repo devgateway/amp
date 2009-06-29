@@ -94,8 +94,7 @@ public class ExportIndicators2XSLAction extends Action {
 
 		cell.setCellValue(TranslatorWorker.translateText("Indicators for ", locale, site.getId()));
 		cell.setCellStyle(csHeader);
-
-
+		
 		if (npdForm.getSelYears() != null && npdForm.getSelYears().length > 0) {
 
 			// table header 1

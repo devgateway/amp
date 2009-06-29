@@ -144,8 +144,26 @@ div.fakefile2 {
 div.fakefile2 input{
 	width: 83px;
 }
+
+	.tableEven {
+		background-color:#dbe5f1;
+		font-size:8pt;
+		padding:2px;
+	}
+
+	.tableOdd {
+		background-color:#FFFFFF;
+		font-size:8pt;
+		padding:2px;
+	}
+	 
+	.Hovered {
+		background-color:#a5bcf2;
+	}
+		
 -->
 </style>
+
 
 <script type="text/javascript">
 	var W3CDOM = (document.createElement && document.getElementsByTagName);
@@ -233,6 +251,38 @@ div.fakefile2 input{
 		}
 	}
 
+	function setStripsTable(tableId, classOdd, classEven) {
+		var tableElement = document.getElementById(tableId);
+		rows = tableElement.getElementsByTagName('tr');
+		for(var i = 0, n = rows.length; i < n; ++i) {
+			if(i%2 == 0)
+				rows[i].className = classEven;
+			else
+				rows[i].className = classOdd;
+		}
+		rows = null;
+	}
+	function setHoveredTable(tableId, hasHeaders) {
+
+		var tableElement = document.getElementById(tableId);
+		if(tableElement){
+	    	var className = 'Hovered',
+	        pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
+	        rows      = tableElement.getElementsByTagName('tr');
+
+			for(var i = 0, n = rows.length; i < n; ++i) {
+				rows[i].onmouseover = function() {
+					this.className += ' ' + className;
+				};
+				rows[i].onmouseout = function() {
+					this.className = this.className.replace(pattern, ' ');
+
+				};
+			}
+			rows = null;
+		}
+	}
+	
 </script>
 
 <digi:instance property="aimTranslatorManagerForm" />
@@ -243,8 +293,7 @@ div.fakefile2 input{
 
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750>
+		<td align=left vAlign=top width=750>
 			<table cellPadding=5 cellSpacing=0 width="100%" border=0>
 				<tr>
 					<!-- Start Navigation -->
@@ -271,182 +320,226 @@ div.fakefile2 input{
 						<digi:errors />
 					</td>
 				</tr>
-				<tr>
-					<td noWrap width=100% vAlign="top">
-					<table width="100%" cellspacing=1 cellSpacing=1 border=0>
-					<logic:empty name="aimTranslatorManagerForm" property="importedLanguages">
-					<logic:notEmpty name="aimTranslatorManagerForm" property="languages">
-					<digi:form action="/translationManager.do" method="post" >
+				
 							<tr>
-								<td>
-									<digi:trn key="aim:translationManagerLangFoundMsg">
-									The following languages where found on this site:
-									</digi:trn>
-								</td>
-							</tr>
-						<c:forEach items="${aimTranslatorManagerForm.languages}" var="lang">
-							<tr>
-								<td>
-									<html:checkbox property="selectedLanguages" value="${lang}"/>
-                                    <digi:trn key="aim:TranslationManagerLangiage${lang}">
-                                    ${lang}
-                                    </digi:trn>
-									<br/>
- 								</td>
-	 						</tr>
-						 </c:forEach>
-							 <tr>
-							 	<td>
-                                  <c:set var="translation">
-                                    <digi:trn>Export</digi:trn>
-                                  </c:set>
-                                  <html:submit style="dr-menu" value="${translation}" property="export"/>
-                                </td>
-							 </tr>
-							 <td>
-									<br/>
-									<digi:trn>Please select the languages you want to export</digi:trn>
-							</td>
-					 </digi:form>
-					</logic:notEmpty>
-
-					<tr>
-						<td><br/><br/><br/></td>
-					</tr>
-
-					<digi:form action="/translationManager.do" method="post" enctype="multipart/form-data">
-						<tr>
-							<td>
-								<!-- <html:file property="fileUploaded"></html:file> -->
-								<div class="fileinputs">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
-									<!-- CSS content must be put in a separated file and a class must be generated -->
-									<input id="fileUploaded" name="fileUploaded" type="file" class="file">
-								</div>
-							</td>
-						</tr>
-							 <tr>
-							 	<td>
-                                  <c:set var="translation">
-                                    <digi:trn >Import</digi:trn>
-                                  </c:set>
-                                  <html:submit style="dr-menu" value="${translation}" property="import"/></td>
-							 </tr>
-					</digi:form>
-
-					</logic:empty>
-					<logic:notEmpty name="aimTranslatorManagerForm" property="importedLanguages">
-						<digi:form action="/translationManager.do" method="post" >							
-							<tr>
-								<td colspan="2">
-									<digi:trn key="aim:translationManagerLangFoundImportMsg">
-									The following languages where found in the file you imported:
-									</digi:trn>
-									<br/>
-								</td>
-							</tr>
-							<logic:iterate name="aimTranslatorManagerForm" property="importedLanguages" id="lang" type="java.lang.String">
-								<tr>
-									<td width="30%">
-										<html:hidden property="selectedImportedLanguages" value="<%=lang %>" />
-										<bean:write name="lang" />
-										</td>										
+								<td noWrap width=100% vAlign="top">
+								<table width="100%" cellspacing=1 cellSpacing=1 border=0>
+									<logic:empty name="aimTranslatorManagerForm" property="importedLanguages">
+									<tr>
 										<td>
-										<select name='<%="LANG:"+lang%>' class="inp-text" id="firstSelect" onchange="changeDivsVisibility()">
-											<option value="-1" selected>
-												<digi:trn key="aim:translationManagerImportPleaseSelect">
-													-- Please select --
+											<fieldset>
+												<legend><digi:trn key="aim:translationManagerAvailableLanguage">Available translations</digi:trn></legend>
+												<table>
+													<logic:notEmpty name="aimTranslatorManagerForm" property="languages">
+														<digi:form action="/translationManager.do" method="post" >
+															<tr>
+																<td>
+																	<digi:trn key="aim:translationManagerLangFoundMsg">
+																	<b>The following languages are currently available:</b>
+																	</digi:trn>
+																</td>
+															</tr>
+															<tr>
+																<td>
+																	<div  style="overflow:auto;width:100%;height:auto;max-height:220px;"  >
+																		<table width="100%" BORDER=0 cellpadding="0" cellspacing="0" id="dataTable"    >
+																			<c:forEach items="${aimTranslatorManagerForm.languages}" var="lang">
+																				<tr>
+																					<td>
+																						<html:checkbox property="selectedLanguages" value="${lang}"/>
+													                                    <digi:trn key="aim:TranslationManagerLangiage${lang}">
+													                                    ${lang}
+													                                    </digi:trn>
+																						<br/>
+													 								</td>
+														 						</tr>
+																			</c:forEach>
+																		</table>
+																	</div>
+																</td>
+															</tr>
+															<tr>
+																 <td>
+																	<br/>
+																	<digi:trn>To export a language or languages, please select them above.</digi:trn>
+																</td>
+															</tr>
+															<tr>
+															 	<td>
+								                                  <c:set var="translation">
+								                                    <digi:trn>Export</digi:trn>
+								                                  </c:set>
+								                                  <html:submit style="dr-menu" value="${translation}" property="export"/>
+								                            	</td>
+															</tr>
+														</digi:form>
+													</logic:notEmpty>
+												</table>
+											</fieldset>
+										</td>
+										<td valign="top">
+											<fieldset>
+												<legend><digi:trn key="aim:translationManagerImportLanguage">Import translations</digi:trn></legend>
+												<table>
+													<digi:form action="/translationManager.do" method="post" enctype="multipart/form-data">
+														<tr>
+														 	<td>
+							                                	<digi:trn>To import a language please select it below and then import it into the Admin Section.</digi:trn>
+															</td>
+														</tr>
+														<tr>
+															<td>
+																<!-- <html:file property="fileUploaded"></html:file> -->
+																<div class="fileinputs">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
+																	<!-- CSS content must be put in a separated file and a class must be generated -->
+																	<input id="fileUploaded" name="fileUploaded" type="file" class="file">
+																</div>
+															</td>
+														</tr>
+														<tr>
+														 	<td>
+							                                  <c:set var="translation">
+							                                  	<digi:trn >Import</digi:trn>
+							                                  </c:set>
+							                                  <html:submit style="dr-menu" value="${translation}" property="import"/>
+															</td>
+														</tr>
+													</digi:form>
+												</table>
+											</fieldset>
+										</td>
+									</tr>
+								</logic:empty>
+								<logic:notEmpty name="aimTranslatorManagerForm" property="importedLanguages">
+									<digi:form action="/translationManager.do" method="post" >							
+										<tr>
+											<td colspan="2">
+												<digi:trn key="aim:translationManagerLangFoundImportMsg">
+													<b>The following languages where found in the file you imported:</b>
 												</digi:trn>
-											</option>
-											<option value="update">
-												<digi:trn key="aim:translationManagerImportUpdateLocal">
-													Update local translations
+												<br/>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div  style="overflow:auto;width:400;height:auto;max-height:220px;"  >
+													<table width="100%" BORDER=0 cellpadding="0" cellspacing="0" id="dataTable"    >
+														<logic:iterate name="aimTranslatorManagerForm" property="importedLanguages" id="lang" type="java.lang.String">
+															<tr>
+																<td width="30%">
+																	<html:hidden property="selectedImportedLanguages" value="<%=lang %>" />
+																	<bean:write name="lang" />
+																</td>										
+																<td align="center">
+																	<select name='<%="LANG:"+lang%>' class="inp-text" id="firstSelect" onchange="changeDivsVisibility()">
+																		<option value="-1" selected>
+																			<digi:trn key="aim:translationManagerImportPleaseSelect">
+																				-- Please select --
+																			</digi:trn>
+																		</option>
+																		<option value="update">
+																			<digi:trn key="aim:translationManagerImportUpdateLocal">
+																				Update local translations
+																			</digi:trn>
+																		</option>
+																		<option value="overwrite">
+																			<digi:trn key="aim:translationManagerImportOverwriteLocal">
+																				Overwrite local translations
+																			</digi:trn>
+																		</option>
+																		<option value="nonexisting">
+																			<digi:trn key="aim:translationManagerImportNonExistingLocal">
+																				Insert the non existing translations
+																			</digi:trn>
+																		</option>
+																	</select>
+								 								</td>
+									 						</tr>
+														 </logic:iterate>
+													</table>
+												</div>
+											</td>
+										</tr>
+					
+										<tr height="5px"><td colspan="2">&nbsp;</td></tr>
+										<tr>
+										 	<td colspan="2">
+										 		<div style="visibility: visible" id="mySelectsTextDiv">
+										 			<digi:trn>
+														<b>Please Select what to do with translations</b>
+													</digi:trn>
+										 		</div>							 		 
+										 	</td>
+										</tr>
+										<tr>
+										 	<td>
+										 		<html:select name="aimTranslatorManagerForm" property="skipOrUpdateTrnsWithKeywords" onchange="changeDivsVisibility()" styleId="mySelect" styleClass="inp-text">
+										 			<html:option value="skip"><digi:trn>skip all marked with this keyword </digi:trn></html:option>
+										 			<html:option value="update"><digi:trn>skip all except those marked with this keyword </digi:trn></html:option>
+										 			<html:option value="updateEverything"><digi:trn>do not skip any translations </digi:trn></html:option>
+										 		</html:select>
+										 	</td>
+										</tr>
+										
+										<tr height="5px"><td colspan="2">&nbsp;</td></tr>							 
+										<tr>
+										 	<td colspan="2">
+										 		<div style="visibility: visible" id="textDiv">
+										 			<digi:trn>
+														<b>Please enter here keywords of the translations you want to be skipped/updated during import</b>
+													</digi:trn>
+										 			&nbsp;
+										 			<img src="../ampTemplate/images/help.gif" onmouseover="stm([importHelp,separateKeywords],Style[15])" onmouseout="htm()"/>
+										 		</div>									 		 
+										 	</td>
+										</tr>
+										<tr>
+										 	<td>
+										 		<div style="visibility: visible;" id="keywordsDiv">
+										 			<input id="keyword" type="text" style="width:250px;height: 20px" align="top">
+											 		<input type="button" style="width:100px;vertical-align: top;" onclick="addKeyword(document.getElementById('keyword'))" value="<digi:trn key="message:addUsBtn">Add >></digi:trn>">
+													<br>
+													<html:select multiple="multiple" styleId="keywords" name="aimTranslatorManagerForm" property="keywords" size="11" styleClass="inp-text" style="width: 250px;height: 50px;">
+													</html:select>
+													<input type="button" style="width:100px;vertical-align: top;" onclick="removeKeyword()" value="<<<digi:trn key="message:rmbtn">Remove</digi:trn>" >
+										 		</div>
+										 	</td>
+										</tr>												 
+										 
+										<tr height="5px"><td colspan="2">&nbsp;</td></tr>
+										<tr>
+											<c:set var="translation">
+												<digi:trn key="btn:translationManagerImport">
+											 		Import
+											 	</digi:trn>
+											</c:set>
+											<td colspan="2"><br/><html:submit style="dr-menu" value="${translation}" property="importLang" onclick="return markAllKeywords()"/></td>
+										</tr>
+										<tr>
+											<td colspan="2">
+												<br/>
+												<digi:trn key="aim:translationManagerLangSelectImportMsg">
+													<b>Please select the languages you want to update or to insert</b>
 												</digi:trn>
-											</option>
-											<option value="overwrite">
-												<digi:trn key="aim:translationManagerImportOverwriteLocal">
-													Overwrite local translations
-												</digi:trn>
-											</option>
-											<option value="nonexisting">
-												<digi:trn key="aim:translationManagerImportNonExistingLocal">
-													Insert the non existing translations
-												</digi:trn>
-											</option>
-										</select>
-	 								</td>
-		 						</tr>
-							 </logic:iterate>
-							 <tr height="5px"><td colspan="2">&nbsp;</td></tr>
-							 <tr>
-							 	<td colspan="2">
-							 		<div style="visibility: visible" id="mySelectsTextDiv">
-							 			<digi:trn>Please Select what to do with translations</digi:trn>
-							 		</div>							 		 
-							 	</td>
-							 </tr>
-							 <tr>
-							 	<td>&nbsp;</td>
-							 	<td>
-							 		<html:select name="aimTranslatorManagerForm" property="skipOrUpdateTrnsWithKeywords" onchange="changeDivsVisibility()" styleId="mySelect" styleClass="inp-text">
-							 			<html:option value="skip"><digi:trn>skip all marked with this keyword </digi:trn></html:option>
-							 			<html:option value="update"><digi:trn>skip all except those marked with this keyword </digi:trn></html:option>
-							 			<html:option value="updateEverything"><digi:trn>do not skip any translations </digi:trn></html:option>
-							 		</html:select>
-							 	</td>
-							 </tr>
-							 <tr height="5px"><td colspan="2">&nbsp;</td></tr>							 
-							 
-							<tr>
-							 	<td colspan="2">
-							 		<div style="visibility: visible" id="textDiv">
-							 			<digi:trn>Please enter here keywords of the translations you want to be skipped/updated during import</digi:trn>
-							 			&nbsp;
-							 			<img src="../ampTemplate/images/help.gif" onmouseover="stm([importHelp,separateKeywords],Style[15])" onmouseout="htm()"/>
-							 		</div>									 		 
-							 	</td>
-							</tr>
-							<tr>
-							 	<td>&nbsp;</td>
-							 	<td>
-							 		<div style="visibility: visible;" id="keywordsDiv">
-							 			<input id="keyword" type="text" style="width:250px;height: 20px" align="top">
-								 		<input type="button" style="width:100px;vertical-align: top;" onclick="addKeyword(document.getElementById('keyword'))" value="<digi:trn key="message:addUsBtn">Add >></digi:trn>">
-										<br>
-										<html:select multiple="multiple" styleId="keywords" name="aimTranslatorManagerForm" property="keywords" size="11" styleClass="inp-text" style="width: 250px;height: 50px;">
-										</html:select>
-										<input type="button" style="width:100px;font-family:tahoma;font-size:11px;vertical-align: top;" onclick="removeKeyword()" value="<<<digi:trn key="message:rmbtn">Remove</digi:trn>" >
-							 		</div>
-							 	</td>
-							</tr>												 
-							 
-							 <tr height="5px"><td colspan="2">&nbsp;</td></tr>
-							 <tr>
-								<c:set var="translation">
-									<digi:trn key="btn:translationManagerImport">
-								 		Import
-								 	</digi:trn>
-								</c:set>
-								<td colspan="2"><br/><html:submit style="dr-menu" value="${translation}" property="importLang" onclick="return markAllKeywords()"/></td>
-							 </tr>
-							 <tr>
-								<td colspan="2">
-									<br/>
-									<digi:trn key="aim:translationManagerLangSelectImportMsg">
-									Please select the languages you want to update or to insert
-									</digi:trn>
+											</td>
+										</tr>
+									 </digi:form>
+								</logic:notEmpty>
+								</table>
+								</td>
+								<td>
+
 								</td>
 							</tr>
-						 </digi:form>
-					</logic:notEmpty>
-					</table>
+						</table>
 					</td>
 				</tr>
-			</table>
-		</td>
-	</tr>
+			
 </table>
 <script type="text/javascript">
 	initFileUploads();
+	setStripsTable("dataTable", "tableEven", "tableOdd");
+	setHoveredTable("dataTable", false);
 </script>
 
 

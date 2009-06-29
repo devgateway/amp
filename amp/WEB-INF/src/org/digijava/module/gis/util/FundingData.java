@@ -1,6 +1,7 @@
 package org.digijava.module.gis.util;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * <p>Title: </p>
@@ -19,6 +20,8 @@ public class FundingData {
     private BigDecimal commitment;
     private BigDecimal disbursement;
     private BigDecimal expenditure;
+
+    List activityLocationFundingList;
 
 
 
@@ -47,6 +50,10 @@ public class FundingData {
         return expenditure;
     }
 
+    public List getActivityLocationFundingList() {
+        return activityLocationFundingList;
+    }
+
     public void setCommitment(BigDecimal commitment) {
         this.commitment = commitment;
     }
@@ -58,4 +65,9 @@ public class FundingData {
     public void setExpenditure(BigDecimal expenditure) {
         this.expenditure = expenditure;
     }
+
+    public void setActivityLocationFundingList(List activityLocationFundingList) {
+        this.activityLocationFundingList = activityLocationFundingList;
+    }
+
 }

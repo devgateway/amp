@@ -80,6 +80,9 @@
 		myPanel5.setBody("");
 		myPanel5.beforeHideEvent.subscribe(function() {
 			panelStart=1;
+			if(calendarObjForForm.isVisible()){
+				calendarObjForForm.hide();
+			}
 		});		
 		
 		myPanel5.render(document.body);

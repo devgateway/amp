@@ -1,5 +1,7 @@
 package org.digijava.module.gis.form;
 
+import java.util.List;
+
 import org.apache.struts.action.ActionForm;
 
 
@@ -27,6 +29,8 @@ public class GisRegReportForm extends ActionForm {
     private String actualExpendituresStr;
 
     private String selSectorName;
+
+    private List activityLocationFundingList;
 
 
     public String getActualCommitmentsStr() {
@@ -77,6 +81,10 @@ public class GisRegReportForm extends ActionForm {
         return selSectorName;
     }
 
+    public List getActivityLocationFundingList() {
+        return activityLocationFundingList;
+    }
+
     public void setActualCommitmentsStr(String actualCommitmentsStr) {
         this.actualCommitmentsStr = actualCommitmentsStr;
     }
@@ -123,6 +131,10 @@ public class GisRegReportForm extends ActionForm {
 
     public void setSelSectorName(String selSectorName) {
         this.selSectorName = selSectorName;
+    }
+
+    public void setActivityLocationFundingList(List activityLocationFundingList) {
+        this.activityLocationFundingList = activityLocationFundingList;
     }
 
 

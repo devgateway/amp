@@ -25,10 +25,10 @@
 <c:if test="${!(reportData.name == reportMeta.name)}">		
 		<img id="toggleImage" name="<bean:write name="reportData" property="absoluteReportName"/>" style="cursor:pointer" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif" alt='hidden' onclick="document.getElementById(&quot;<bean:write name="reportData" property="absoluteReportName"/>&quot;).title='${depthRelatVar}';toggleRows(this,&quot;<bean:write name="reportData" property="absoluteReportName"/>&quot;)" title='<digi:trn key="aim:report:expandcollapse">Expand/Collapse</digi:trn>' border="0"/>
 </c:if>		
-  
+
 <b>
 <% if(reportData.getName().indexOf(':')!=-1) { %>
-<%=reportData.getName().substring(reportData.getName().indexOf(':')+1,reportData.getName().length())%>
+<digi:trn><%=reportData.getName().substring(reportData.getName().indexOf(':')+1,reportData.getName().length())%></digi:trn>
 
 <% } else { %>
 <bean:write name="reportData" property="name"/>
@@ -48,7 +48,7 @@
 		
 		<bean:define id="viewable" name="cell" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 		<bean:define id="caller" name="reportData" type="org.dgfoundation.amp.ar.ReportData" scope="page" toScope="request" />	
-		<jsp:include page="<%=viewable.getViewerPath()%>"/>	
+		<jsp:include page="<%=viewable.getViewerPath()%>"/>
 		</td>
 	</logic:iterate>
 </tr>

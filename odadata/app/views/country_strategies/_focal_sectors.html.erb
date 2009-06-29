@@ -1,6 +1,6 @@
 <% @country_strategy.sector_details.sort.each do |details| %>
 	<div style="margin-bottom: 10px; margin-top: 10px; border: 1px solid #999">
-		<%= details.focal_sector.name_with_code %><br />
+		<%= details.focal_sector.andand.name_with_code %><br />
 		&nbsp;&nbsp;<%= ll(:terms, :amount) %>: <%= null_to_na(details.amount) %>
 		<% if details.provinces.empty? %>	
 		<br />&nbsp;&nbsp;<%= ll(:terms, :national_sector) %>.<br />

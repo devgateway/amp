@@ -38,7 +38,7 @@ import edu.emory.mathcs.backport.java.util.Collections;
 
 public class PIReport5b extends PIAbstractReport implements PIOperationsFor5 {
 
-	private static Logger logger = Logger.getLogger(PIReport4.class);
+	private static Logger logger = Logger.getLogger(PIReport5b.class);
 	private final String reportCode = PIConstants.PARIS_INDICATOR_REPORT_5b;
 
 	public String getReportCode() {
@@ -423,5 +423,13 @@ public class PIReport5b extends PIAbstractReport implements PIOperationsFor5 {
 		}
 
 		return ret;
+	}
+
+	@Override
+	public Collection<PIReportAbstractRow> generateReport10a(Collection<AmpOrganisation> commonData, int startYear,
+			int endYear, AmpFiscalCalendar calendar, AmpCurrency currency, Collection<AmpSector> sectorsFilter,
+			Collection<AmpCategoryValue> statusFilter, Collection<AmpCategoryValue> financingInstrumentFilter) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

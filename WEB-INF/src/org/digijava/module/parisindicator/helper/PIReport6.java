@@ -211,4 +211,12 @@ public class PIReport6 extends PIAbstractReport {
 
 		return list;
 	}
+
+	@Override
+	public Collection<PIReportAbstractRow> generateReport10a(Collection<AmpOrganisation> commonData, int startYear,
+			int endYear, AmpFiscalCalendar calendar, AmpCurrency currency, Collection<AmpSector> sectorsFilter,
+			Collection<AmpCategoryValue> statusFilter, Collection<AmpCategoryValue> financingInstrumentFilter) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

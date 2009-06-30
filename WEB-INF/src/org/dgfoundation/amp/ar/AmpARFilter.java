@@ -227,7 +227,7 @@ public class AmpARFilter extends PropertyListable {
 	private Collection<String> approvalStatusSelected=null;
 	private boolean approved = false;
 	private boolean draft = false;
-
+	private Boolean unallocatedLocation = null;
 	private Integer renderStartYear = null; // the range of dates columns that
 											// has to be render, years not in
 											// range will be computables for
@@ -559,6 +559,12 @@ public class AmpARFilter extends PropertyListable {
 		//		+ (regionSelected==null?null:regionSelected.getIdentifier());
 		
 		String REGION_SELECTED_FILTER = "";
+		if (unallocatedLocation != null) {
+			if (unallocatedLocation == true) {
+				REGION_SELECTED_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_activity_id NOT IN(SELECT amp_activity_id FROM amp_activity_location)";
+			}
+		}
+		
 		if (regionSelected!=null) {
 			Set<AmpCategoryValueLocations> allSelectedLocations = new HashSet<AmpCategoryValueLocations>();
 			Iterator<AmpCategoryValueLocations> iter = regionSelected.iterator();
@@ -566,8 +572,17 @@ public class AmpARFilter extends PropertyListable {
 				AmpCategoryValueLocations cvl = DynLocationManagerUtil.getLocation(iter.next().getId(), true);
 				fillAllLocationWithChild(cvl, allSelectedLocations);
 			}
-			REGION_SELECTED_FILTER = "SELECT amp_activity_id FROM v_regions WHERE location_id IN (" + Util.toCSString(allSelectedLocations) + ")";
+			if (REGION_SELECTED_FILTER.equals("")) {
+				REGION_SELECTED_FILTER = "SELECT amp_activity_id FROM v_regions WHERE location_id IN (" + Util.toCSString(allSelectedLocations) + ")";
+			} else {
+				REGION_SELECTED_FILTER += " OR amp_activity_id IN (SELECT amp_activity_id FROM v_regions WHERE location_id IN (" + Util.toCSString(allSelectedLocations) + "))"; 
+			}			
 		}
+		
+		if (!REGION_SELECTED_FILTER.equals("")) {
+			queryAppend(REGION_SELECTED_FILTER);
+		}
+		
 		
 		StringBuffer actStatusValue = new StringBuffer("");
 		if(approvalStatusSelected!=null){
@@ -812,8 +827,8 @@ public class AmpARFilter extends PropertyListable {
 			queryAppend(LINE_MIN_RANK_FILTER);
 		if ((planMinRank != null)&&(planMinRank!=-1))
 			queryAppend(PLAN_MIN_RANK_FILTER);
-		if (regionSelected != null)
-			queryAppend(REGION_SELECTED_FILTER);
+		//if (regionSelected != null)
+		//	queryAppend(REGION_SELECTED_FILTER);
 		if(approvalStatusSelected!=null)
 			queryAppend(ACTIVITY_STATUS);
 		if (approved == true)
@@ -1473,5 +1488,13 @@ public class AmpARFilter extends PropertyListable {
 	
 	public Boolean getDisbursementOrderRejected() {
 		return this.disbursementOrderRejected;
+	}
+
+	public Boolean getUnallocatedLocation() {
+		return unallocatedLocation;
+	}
+
+	public void setUnallocatedLocation(Boolean unallocatedLocation) {
+		this.unallocatedLocation = unallocatedLocation;
 	}
 }

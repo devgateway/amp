@@ -306,7 +306,11 @@
 						</html:option>
 						<html:optionsCollection property="regionSelectedCollection"
 							label="name" value="id" />
-					</html:select></td>
+					</html:select>
+					<br/>
+					<html:checkbox property="unallocatedLocation" value="true" />
+						<digi:trn key="rep:filer:Unallocated">Unallocated</digi:trn>
+					</td>
 				</tr>
 				<field:display name="Project Category" feature="Identification">
 				<tr bgcolor="#EEEEEE"><td colspan="5">&nbsp;</td></tr>

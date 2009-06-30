@@ -606,8 +606,13 @@ public class ReportsFilterPicker extends MultiAction {
 //			arf.setRegionSelected(filterForm.getRegionSelected() == null || filterForm.getRegionSelected() == -1 ? 
 //					null : DynLocationManagerUtil.getLocation(filterForm.getRegionSelected(),false) );
 		
-		Set selectedRegions = Util.getSelectedObjects(AmpCategoryValueLocations.class, filterForm.getRegionSelected());
-
+		Set selectedRegions = null;
+		if (filterForm.getRegionSelected() != null){
+			if (!filterForm.getRegionSelected()[0].toString().equals("-1")) {
+				selectedRegions = Util.getSelectedObjects(AmpCategoryValueLocations.class, filterForm.getRegionSelected());
+			}
+		}
+		
 		if (selectedRegions != null && selectedRegions.size() > 0) {
 			arf.setRegionSelected(new HashSet());
 			arf.getRegionSelected().addAll(selectedRegions);
@@ -682,6 +687,7 @@ public class ReportsFilterPicker extends MultiAction {
 		arf.setRisks(Util.getSelectedObjects(AmpIndicatorRiskRatings.class, filterForm.getSelectedRisks()));
 
 		arf.setGovernmentApprovalProcedures(filterForm.getGovernmentApprovalProcedures());
+		arf.setUnallocatedLocation(filterForm.getUnallocatedLocation());
 		arf.setJointCriteria(filterForm.getJointCriteria());
 
 		if (filterForm.getSelectedDonorTypes() != null && filterForm.getSelectedDonorTypes().length > 0) {

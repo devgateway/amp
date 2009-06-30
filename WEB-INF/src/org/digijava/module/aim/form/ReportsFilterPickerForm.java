@@ -87,6 +87,8 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Boolean jointCriteria;
 	private Integer selectedBudget = null;
 	private Boolean justSearch = null;
+	
+	private Boolean unallocatedLocation = null;
 
 	// to keep the default currency after user changues
 	private Long defaultCurrency;
@@ -337,6 +339,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 				this.selectedProjectCategory = null;
 				this.selectedBudget = null;
 				this.governmentApprovalProcedures = null;
+				this.unallocatedLocation = null;
 				this.justSearch=false;
 				this.selectedNatPlanObj = null;
 				this.selectedPrimaryPrograms = null;
@@ -845,6 +848,14 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public Integer getDisbursementOrder() {
 		return disbursementOrder;
+	}
+
+	public Boolean getUnallocatedLocation() {
+		return unallocatedLocation;
+	}
+
+	public void setUnallocatedLocation(Boolean unallocatedLocation) {
+		this.unallocatedLocation = unallocatedLocation;
 	}
 
 	

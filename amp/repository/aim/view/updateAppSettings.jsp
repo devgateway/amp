@@ -29,8 +29,9 @@ function validade(){
   }
 
   var defaultReportViewablePages = document.getElementById("defaultReportViewablePages");
-  if(parseInt(defaultReportViewablePages.value)<0){
-	  alert("<digi:trn>You cannot enter 0 for number of pages per Report or Tab.</digi:trn>");
+  if(parseInt(defaultReportViewablePages.value)<1){
+	  var msg='<digi:trn>Please enter a number greater then 1 for number of pages per Report or Tab.</digi:trn>';
+	  alert(msg);
 	  return false;
   }
 
@@ -89,45 +90,40 @@ function checkYear( year, base, range ) {
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 </td></tr>
 <tr><td>
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=780>
+<table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="780">
 	<tr>
-		<td width=14>&nbsp;</td>
-		<td align=left vAlign=top width=750>
-			<table cellPadding=5 cellSpacing=0 width="100%">
+		<td width="14">&nbsp;</td>
+		<td align="left" vAlign="top" width="750">
+			<table cellPadding="5" cellSpacing="0" width="100%">
 				<tr>
-					<td height=33>
-                    <span class=crumb>
+					<td height="33">
+                    <span class="crumb">
 						<c:set var="translation">
-							<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
+							<digi:trn>Click here to view MyDesktop</digi:trn>
 						</c:set>
 						<digi:link href="/viewMyDesktop.do" styleClass="comment" title="${translation}" >
-						<digi:trn key="aim:portfolio">
-						Portfolio
-						</digi:trn>
+							<digi:trn>Portfolio</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
 						<c:set var="translation">
-							<digi:trn key="aim:clickToViewTeamWorkspaceSetup">Click here to view Team Workspace Setup</digi:trn>
+							<digi:trn>Click here to view Team Workspace Setup</digi:trn>
 						</c:set>
 						<digi:link href="/workspaceOverview.do" name="bcparams" styleClass="comment" title="${translation}" >
-						<digi:trn key="aim:teamWorkspaceSetup">
-						Team Workspace Setup
-						</digi:trn>
+							<digi:trn>Team Workspace Setup</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<digi:trn key="aim:customizeTeamSettings">
-						Customize Team Settings
-						</digi:trn>
+						<digi:trn>Customize Team Settings</digi:trn>
                     </span>
 					</td>
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571>
-                    	<span class=subtitle-blue><digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn></span>
+					<td height="16" vAlign="middle" width="571">
+                    	<span class="subtitle-blue">
+                    		<digi:trn>Team Workspace Setup</digi:trn>
+                    	</span>
 					</td>
 				</tr>
 				<tr>
 					<td noWrap vAlign="top">
-						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%"
-						valign="top" border=0 align="left">
+						<table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="100%" valign="top" border="0" align="left">
 							<tr>
 								<td vAlign="top" width="100%">
 									<c:set var="selectedTab" value="0" scope="request"/>
@@ -147,9 +143,7 @@ function checkYear( year, base, range ) {
 														<td colspan="2" align="center">
 															<b>
                                                             <font color="blue">
-															<digi:trn key="aim:updateToAMPComplete">
-																Update to AMP Complete
-															</digi:trn>
+															<digi:trn>Update to AMP Complete</digi:trn>
 															</font>
                                                             </b>
 														</td>
@@ -165,9 +159,7 @@ function checkYear( year, base, range ) {
 														<td colspan="2" align="center">
 															<b>
                                                             <font color="red">
-															<digi:trn key="aim:wrongNumberOfActivitiesProjectsPerPage">
-																Wrong number of Activities/Projects per page. The number should be greater than 1.
-															</digi:trn>
+															<digi:trn>Wrong number of Activities/Projects per page. The number should be greater than 1.</digi:trn>
 															</font>
                                                             </b>
 														</td>
@@ -176,8 +168,7 @@ function checkYear( year, base, range ) {
                                                     
 													<tr>
 														<td bgcolor="#f4f4f2" align="right" width="30%">
-															<digi:trn key="aim:numberactivitiesprojectsperpage">
-															Number of activities/projects per page</digi:trn>
+															<digi:trn>Number of activities/projects per page</digi:trn>
 														</td>
 														<td align="left" width="70%" bgcolor="#f4f4f2">
 															<html:text property="defRecsPerPage" size="5"  styleClass="inp-text" styleId="defRecsPerPage"/>
@@ -188,8 +179,7 @@ function checkYear( year, base, range ) {
 													</tr>
 													<tr>
 														<td bgcolor="#f4f4f2" align="right" width="30%">
-															<digi:trn key="aim:numberofpagesperreport">
-															Number of pages per report/tab</digi:trn>
+															<digi:trn>Number of pages per report/tab</digi:trn>
 														</td>
 														<td align="left" width="70%" bgcolor="#f4f4f2">
 															<html:text property="defaultReportViewablePages" size="5"  styleClass="inp-text" styleId="defaultReportViewablePages"/>
@@ -200,8 +190,7 @@ function checkYear( year, base, range ) {
 													</tr>
 													<tr>
 														<td bgcolor="#f4f4f2" align="right" width="50%">
-															<digi:trn key="aim:numberreportsperpage">
-															Number of reports per page</digi:trn>
+															<digi:trn>Number of reports per page</digi:trn>
 														</td>
 														<td align="left" width="50%" bgcolor="#f4f4f2">
 															<html:text property="defReportsPerPage" size="5"  styleClass="inp-text"/>
@@ -213,34 +202,29 @@ function checkYear( year, base, range ) {
 													</tr>
 													<tr>
 														<td bgcolor="#f4f4f2"  align="right" width="50%">
-															<digi:trn key="aim:defLanguage">
-															Language</digi:trn>
+															<digi:trn>Language</digi:trn>
 														</td>
 														<td align="left" width="50%" bgcolor="#f4f4f2">
 															<html:select property="language" styleClass="inp-text">
-										                <bean:define id="languages" name="aimUpdateAppSettingsForm"
-															 property="languages" type="java.util.Collection" />
-										                <html:options collection="languages" property="code" labelProperty="name" />
+												                <bean:define id="languages" name="aimUpdateAppSettingsForm" property="languages" type="java.util.Collection" />
+												                <html:options collection="languages" property="code" labelProperty="name" />
 															</html:select>
 														</td>
 													</tr>
 													<tr>
 														<td bgcolor="#f4f4f2"  align="right" width="50%">
-															<digi:trn key="aim:defCurrency">
-															Currency</digi:trn>
+															<digi:trn>Currency</digi:trn>
 														</td>
 														<td align="left" width="50%" bgcolor="#f4f4f2">
 															<html:select property="currencyId" styleClass="inp-text">
-															<html:option value="">------ <digi:trn key="aim:selDefCurrency">Select Currency</digi:trn> ------</html:option>
-															<html:optionsCollection name="aimUpdateAppSettingsForm"
-															property="currencies" value="ampCurrencyId" label="currencyCode" />
+																<html:option value="">------ <digi:trn>Select Currency</digi:trn> ------</html:option>
+																<html:optionsCollection name="aimUpdateAppSettingsForm"	property="currencies" value="ampCurrencyId" label="currencyCode" />
 															</html:select>
 														</td>
 													</tr>
  													<tr>
 														<td bgcolor="#f4f4f2"  align="right" width="50%">
-															<digi:trn key="aim:defValidation">
-															Validation</digi:trn>
+															<digi:trn>Validation</digi:trn>
 														</td>
 														<td align="left" width="50%" bgcolor="#f4f4f2">
 															<bean:define id="newOnly" value=""/>
@@ -252,53 +236,50 @@ function checkYear( year, base, range ) {
 																<bean:define id="allEdits" value="selected"/>
 															</c:if>
 															<html:select property="validation" styleClass="inp-text">
-																<option value="newOnly" <c:out  value="${newOnly}"></c:out> ><digi:trn key="aim:defValidationNewOnly">Validate New Only</digi:trn></option>
-																<option value="allEdits" <c:out  value="${allEdits }"></c:out> ><digi:trn key="aim:defValidationAll">Validate All</digi:trn></option>
+																<option value="newOnly" <c:out  value="${newOnly}"></c:out> ><digi:trn>Validate New Only</digi:trn></option>
+																<option value="allEdits" <c:out  value="${allEdits }"></c:out> ><digi:trn>Validate All</digi:trn></option>
 															</html:select>
 														</td>
 													</tr>
 													<tr>
 														<td bgcolor="#f4f4f2" align="right" width="50%">
-															<digi:trn key="aim:reportsDefaultStartYear">Reports Default Start Year</digi:trn>
+															<digi:trn>Reports Default Start Year</digi:trn>
 														</td>
 														<td align="left" width="50%" bgcolor="#f4f4f2">
 															<html:text property="reportStartYear" size="5"  styleClass="inp-text"/>
 														</td>
 													</tr>
- <tr>
+ 													<tr>
 														<td bgcolor="#f4f4f2" align="right" width="50%">
-															<digi:trn key="aim:reportsDefaultEndYear">Reports Default End Year</digi:trn>
+															<digi:trn>Reports Default End Year</digi:trn>
 														</td>
 														<td align="left" width="50%" bgcolor="#f4f4f2">
 															<html:text property="reportEndYear" size="5"  styleClass="inp-text"/>
 														</td>
 													</tr>
-
-
 													<tr>
 														<td bgcolor="#f4f4f2"  align="right" width="50%">
-															<digi:trn key="aim:defFisCalendar">Fiscal Calendar</digi:trn>
+															<digi:trn>Fiscal Calendar</digi:trn>
 														</td>
 														<td align="left" width="50%" bgcolor="#f4f4f2">
 															<html:select property="fisCalendarId" styleClass="inp-text">
-															<html:option value="">------ <digi:trn key="aim:selFisCalendar">Select Fiscal Calendar</digi:trn> ------</html:option>
-															<html:optionsCollection name="aimUpdateAppSettingsForm"
-															property="fisCalendars" value="ampFiscalCalId" label="name" />
+															<html:option value="">------ <digi:trn>Select Fiscal Calendar</digi:trn> ------</html:option>
+															<html:optionsCollection name="aimUpdateAppSettingsForm" property="fisCalendars" value="ampFiscalCalId" label="name" />
 															</html:select>
 														</td>
 													</tr>
 													<tr>
 														<td bgcolor="#f4f4f2"  align="right" width="50%">
-															<digi:trn key="aim:defaultTeamTab">Default Team Tab</digi:trn>
+															<digi:trn>Default Team Tab</digi:trn>
 														</td>
 														<td align="left" width="50%" bgcolor="#f4f4f2">
 															<html:select property="defaultReportForTeamId" styleClass="inp-text" onchange="changePanel()" styleId="defaultReport">
 															<html:option value="0">
-															------ <digi:trn key="aim:selDefTeamTab">Select Default Team Tab</digi:trn> ------
+															------ <digi:trn>Select Default Team Tab</digi:trn> ------
 															</html:option>
 															<c:forEach var="reports" items="${aimUpdateAppSettingsForm.reports}">
 															<c:set var="trn">
-																<digi:trn key="aim:settings:${reports.name}">${reports.name}</digi:trn>
+																<digi:trn>${reports.name}</digi:trn>
 															</c:set>
 																<html:option value="${reports.ampReportId}">
 																	${trn}
@@ -315,7 +296,7 @@ function checkYear( year, base, range ) {
 																<tr>
 																	<td align="right" colspan="2">
                                                                       <c:set var="caption">
-                                                                        <digi:trn key="aim:btnSave">Save</digi:trn>
+                                                                        <digi:trn>Save</digi:trn>
                                                                       </c:set>
                                                                       <input type="button"  class="dr-menu" value="${caption}" onclick="validade();" />
 																	</td>
@@ -330,9 +311,7 @@ function checkYear( year, base, range ) {
                                 </div>
 								</td>
 							</tr>
-							<tr><td bgColor=#f4f4f2>&nbsp;
-								
-							</td></tr>
+							<tr><td bgColor=#f4f4f2>&nbsp;</td></tr>
 						</table>
 					</td>
 				</tr>

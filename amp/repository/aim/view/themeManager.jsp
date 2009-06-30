@@ -16,15 +16,7 @@
 
 
 		
-		function editProgram(id)
-		{
-			openNewWindow(600,500);
-			<digi:context name="editTh" property="context/module/moduleinstance/addTheme.do?event=edit"/>
-			document.aimThemeForm.action = "<%= editTh %>&themeId=" + id;
-			document.aimThemeForm.target = popupPointer.name;
-			document.aimThemeForm.submit();
-
-		}
+	
 		function assignIndicators(id)
 		{
 

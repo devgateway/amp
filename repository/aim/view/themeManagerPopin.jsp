@@ -192,6 +192,12 @@
 		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
 		return true;
 	}
+    function editProgram(id){
+      var msg='\n<digi:trn>Edit Program</digi:trn>';
+      <digi:context name="editTh" property="context/module/moduleinstance/addTheme.do?event=edit"/>
+      var url = "<%= editTh%>&themeId=" + id;;
+      YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+}
 	function addSubProgram(rutId,id,level,name)
 	{
 		<digi:context name="subProgram" property="context/module/moduleinstance/addTheme.do?event=addSubProgram"/>

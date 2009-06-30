@@ -1119,10 +1119,10 @@ var isAlreadySubmitted = false;
 											</c:if>
 											 	<td align="center">
                                                 	<c:if test="${empty fundingDetail.contract}">
-														<input type="text" value="" readonly="true"/>
+														<input type="text" value=""/>
                                                     </c:if>
                                                     <c:if test="${not empty fundingDetail.contract}">
-        												<input type="text" value="${fundingDetail.contract.contractName}" readonly="true"/>
+        												<input type="text" value="${fundingDetail.contract.contractName}"/>
                                                     </c:if>
 											</td>
 

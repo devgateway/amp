@@ -1,14 +1,24 @@
 class Bluebook::DonorProfilesController < BluebookController
-  def show
+def show
     @donors = Donor.main
     @donor = Donor.main.find(params[:id])
       
     # Total amount of money spent on all projects of a specific donor
     # Also checks whether funding information for the last year is available at all. If it is not, an error message will be shown.
-    unless @total_payments = @donor.annual_payments[year]
+    #
+    # FFerreyra: Changed the way the total payments are calculated, because there was a loss of precision when the exchange rates
+    # were higher than expected i.e. with JPY there's a difference of 300 mil
+    # Old formula:
+    # @total_payments = @donor.annual_payments[year]
+    # Maybe there's a better workaround for this
+
+    @currency = params[:currency].nil? ? Prefs.default_currency : params[:currency]
+
+    unless @total_payments = @donor.total_grant_payments(year).in(@currency) + @donor.total_loan_payments(year).in(@currency)
       render :action => 'data_missing'
       return
     end
+
     
     # TODO: Replace by country_strategies.current (i.e. current named scope) that returns
     # the currently applicable strategy, based on the start and end dates.
@@ -19,22 +29,23 @@ class Bluebook::DonorProfilesController < BluebookController
     @projects_multilaterals = @projects.select { |p| p.type_of_implementation == 2 }
                
     # Total amount of money spent on all projects by all donors in the country
-    @eu_total_payments = @donors.inject(0.to_currency("EUR")) do |total, donor|
+    @eu_total_payments = @donors.inject(0.to_currency(@currency)) do |total, donor|
       total + donor.annual_payments[year]
     end
-          
-    # Total payments by grant/loan
-    @total_payments_grants = @donor.total_grant_payments(year)
-    @total_payments_loans = @donor.total_loan_payments(year)
+    
+    # Total payments by grant/loan (in donor's currency)
+
+    @total_payments_grants = @donor.total_grant_payments(year).in(@currency)
+    @total_payments_loans = @donor.total_loan_payments(year).in(@currency)
    
-    @total_forecasts_grants = @donor.total_grant_forecasts(year + 1)
-    @total_forecasts_loans = @donor.total_loan_forecasts(year + 1)
+    @total_forecasts_grants = @donor.total_grant_forecasts(year + 1).in(@currency)
+    @total_forecasts_loans = @donor.total_loan_forecasts(year + 1).in(@currency)
        
     # Disbursment percentage of the donors projects relative to the total spent in the country
-    @disbursement = @total_payments.in("EUR").to_f * 100 / @eu_total_payments.to_f
+    @disbursement =  @donor.annual_payments[year].in(@currency).to_f * 100 / @eu_total_payments.to_f
    
     # Specific donor's grant projects disbursements
-    @disbursement_grants = @total_payments_grants.to_f * 100 / @total_payments.to_f
+    @disbursement_grants = @total_payments_grants.to_f * 100 / @total_payments.in(@currency).to_f
     #TODO: Check why sometimes @total_payments is zero, I had to add this not NaN validations because there were errors in the page.
     if(@disbursement_grants.nan?)
       @disbursement_grants = 0

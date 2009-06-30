@@ -4,7 +4,7 @@
 <% query_options.delete("currency") %>
 
 
-<% form_tag request.path do -%>
+<% form_tag request.path, :method => :get do -%>
 	<% query_options.each do |option| %>
 		<% if option[1].is_a?(Hash) %>
 			<% option[1].each do |key, value| %>

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,8 +19,10 @@ import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.parisindicator.form.PIForm;
 import org.digijava.module.parisindicator.helper.PIAbstractReport;
+import org.digijava.module.parisindicator.helper.PIReport10a;
 import org.digijava.module.parisindicator.helper.PIReport3;
 import org.digijava.module.parisindicator.helper.PIReport4;
 import org.digijava.module.parisindicator.helper.PIReport5a;
@@ -28,6 +32,7 @@ import org.digijava.module.parisindicator.helper.PIReport7;
 import org.digijava.module.parisindicator.helper.PIReport9;
 import org.digijava.module.parisindicator.helper.PIReportAbstractRow;
 import org.digijava.module.parisindicator.util.PIConstants;
+import org.digijava.module.parisindicator.util.PIUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -155,28 +160,40 @@ public class PIUseCase {
 			report = new PIReport7();
 		} else if (form.getPiReport().getIndicatorCode().equals(PIConstants.PARIS_INDICATOR_REPORT_9)) {
 			report = new PIReport9();
+		} else if (form.getPiReport().getIndicatorCode().equals(PIConstants.PARIS_INDICATOR_REPORT_10a)) {
+			report = new PIReport10a();
 		}
 
 		// Get the common info from surveys and apply some filters.
-		Collection<AmpAhsurvey> commonData = getCommonSurveyData(form.getSelectedDonors(), form
-				.getSelectedDonorGroups());
+		Collection<PIReportAbstractRow> preMainReportRows = null;
+		if (!report.getReportCode().equals(PIConstants.PARIS_INDICATOR_REPORT_10a)) {
+			Collection<AmpAhsurvey> commonData = getCommonSurveyData(form.getSelectedDonors(), form
+					.getSelectedDonorGroups());
 
-		// Execute the logic for generating each report.
-		Collection<PIReportAbstractRow> preMainReportRows = report.generateReport(commonData, form
-				.getSelectedStartYear(), form.getSelectedEndYear(), form.getSelectedCalendar(), form
-				.getSelectedCurrency(), form.getSelectedSectors(), form.getSelectedStatuses(), form
-				.getSelectedFinancingIstruments());
+			// Execute the logic for generating each report.
+			preMainReportRows = report.generateReport(commonData, form.getSelectedStartYear(), form
+					.getSelectedEndYear(), form.getSelectedCalendar(), form.getSelectedCurrency(), form
+					.getSelectedSectors(), form.getSelectedStatuses(), form.getSelectedFinancingIstruments());
+		} else {
+			Collection<AmpOrganisation> commonData10a = getCommonSurveyDataForPI10a(form.getSelectedDonors(), form
+					.getSelectedDonorGroups());
+
+			// Execute the logic for generating each report.
+			preMainReportRows = report.generateReport10a(commonData10a, form.getSelectedStartYear(), form
+					.getSelectedEndYear(), form.getSelectedCalendar(), form.getSelectedCurrency(), form
+					.getSelectedSectors(), form.getSelectedStatuses(), form.getSelectedFinancingIstruments());
+		}
 
 		// Postprocess the report if needed.
 		Collection<PIReportAbstractRow> postMainReportRows = report.reportPostProcess(preMainReportRows, form
 				.getSelectedStartYear(), form.getSelectedEndYear());
 
-		if (form.getPiReport().getIndicatorCode().equals(PIConstants.PARIS_INDICATOR_REPORT_5a)) {
+		if (report.getReportCode().equals(PIConstants.PARIS_INDICATOR_REPORT_5a)) {
 			PIReport5a auxReport = new PIReport5a();
 			int[][] miniTable = auxReport.createMiniTable(postMainReportRows, form.getSelectedStartYear(), form
 					.getSelectedEndYear());
 			report.setMiniTable(miniTable);
-		} else if (form.getPiReport().getIndicatorCode().equals(PIConstants.PARIS_INDICATOR_REPORT_5b)) {
+		} else if (report.getReportCode().equals(PIConstants.PARIS_INDICATOR_REPORT_5b)) {
 			PIReport5b auxReport = new PIReport5b();
 			int[][] miniTable = auxReport.createMiniTable(postMainReportRows, form.getSelectedStartYear(), form
 					.getSelectedEndYear());
@@ -184,6 +201,7 @@ public class PIUseCase {
 		}
 
 		report.setReportRows(postMainReportRows);
+
 		return report;
 	}
 
@@ -203,7 +221,8 @@ public class PIUseCase {
 			criteria.createAlias("pointOfDeliveryDonor", "podd1");
 			criteria.createAlias("pointOfDeliveryDonor.orgTypeId", "podd2");
 			// Set the filter for Multilateral and Bilateral PoDDs.
-			criteria.add(Restrictions.in("podd2.orgTypeCode", new String[] { "MUL", "BIL" }));
+			criteria.add(Restrictions.in("podd2.orgTypeCode", new String[] { PIConstants.ORG_GRP_MULTILATERAL,
+					PIConstants.ORG_GRP_BILATERAL }));
 			// If needed, filter for organizations.
 			if (filterDonors != null) {
 				criteria.add(Restrictions.in("pointOfDeliveryDonor", filterDonors));
@@ -213,6 +232,54 @@ public class PIUseCase {
 				criteria.add(Restrictions.in("podd1.orgGrpId", filterDonorGroups));
 			}
 			commonData = criteria.list();
+		} catch (Exception e) {
+			logger.error(e);
+		}
+		return commonData;
+	}
+
+	public Collection<AmpOrganisation> getCommonSurveyDataForPI10a(Collection<AmpOrganisation> filterDonors,
+			Collection<AmpOrgGroup> filterDonorGroups) {
+
+		Collection<AmpOrganisation> commonData = new ArrayList<AmpOrganisation>();
+		Session session = null;
+		try {
+			// TODO: change this code to use restrictions like the
+			// getCommonSurveyData() method.
+			session = PersistenceManager.getRequestDBSession();
+			List<AmpCalendar> calendars = session.createCriteria(AmpCalendar.class).list();
+			Iterator<AmpCalendar> iterCalendar = calendars.iterator();
+			while (iterCalendar.hasNext()) {
+				AmpCalendar auxCalendar = iterCalendar.next();
+				Set<AmpOrganisation> auxOrganisations = auxCalendar.getOrganisations();
+				if (auxOrganisations != null) {
+					Iterator<AmpOrganisation> iterOrganisations = auxOrganisations.iterator();
+					while (iterOrganisations.hasNext()) {
+						AmpOrganisation auxOrganisation = iterOrganisations.next();
+						AmpOrgGroup auxOrgGrp = auxOrganisation.getOrgGrpId();
+						// Filter for Multilateral and Bilateral PoDDs.
+						if (auxOrgGrp.getOrgType().equals(PIConstants.ORG_GRP_BILATERAL)
+								|| auxOrgGrp.getOrgType().equals(PIConstants.ORG_GRP_MULTILATERAL)) {
+							boolean add = true;
+							// If needed, filter for organizations.
+							if (filterDonors != null) {
+								if (!PIUtils.containOrganisations(filterDonors, auxOrganisation)) {
+									add = false;
+								}
+							}
+							// If needed, filter for organization groups.
+							if (filterDonorGroups != null) {
+								if (!PIUtils.containOrgGrps(filterDonorGroups, auxOrgGrp)) {
+									add = false;
+								}
+							}
+							if (add) {
+								commonData.add(auxOrganisation);
+							}
+						}
+					}
+				}
+			}
 		} catch (Exception e) {
 			logger.error(e);
 		}

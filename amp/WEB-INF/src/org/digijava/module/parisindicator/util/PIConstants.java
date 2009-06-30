@@ -15,4 +15,7 @@ public interface PIConstants {
 	public static final String CURRENCY_USD = "USD";
 	public static final int NUMBER_OF_SURVEY_QUESTIONS = 13;
 	public static final String ALL_DONORS = "All Donors";
+	public static final String ORG_GRP_MULTILATERAL = "MUL";
+	public static final String ORG_GRP_BILATERAL = "BIL";
+	public static final String MISSION = "Mission";
 }

@@ -9,6 +9,8 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.fiscalcalendar.EthiopianCalendar;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -54,6 +56,32 @@ public class PIUtils {
 		while (iter2.hasNext()) {
 			AmpCategoryValue aux1 = iter2.next();
 			if (aux1.getId().equals(financing1.getId())) {
+				ret = true;
+				break;
+			}
+		}
+		return ret;
+	}
+
+	public final static boolean containOrganisations(Collection<AmpOrganisation> orgs1, AmpOrganisation org2) {
+		boolean ret = false;
+		Iterator<AmpOrganisation> iter1 = orgs1.iterator();
+		while (iter1.hasNext()) {
+			AmpOrganisation aux1 = iter1.next();
+			if (aux1.getAmpOrgId().equals(org2.getAmpOrgId())) {
+				ret = true;
+				break;
+			}
+		}
+		return ret;
+	}
+
+	public final static boolean containOrgGrps(Collection<AmpOrgGroup> orgs1, AmpOrgGroup org2) {
+		boolean ret = false;
+		Iterator<AmpOrgGroup> iter1 = orgs1.iterator();
+		while (iter1.hasNext()) {
+			AmpOrgGroup aux1 = iter1.next();
+			if (aux1.getAmpOrgGrpId().equals(org2.getAmpOrgGrpId())) {
 				ret = true;
 				break;
 			}

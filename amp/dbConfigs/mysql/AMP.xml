@@ -115,7 +115,7 @@
 		<DimensionUsage name="Secundary Program" source="Secundary Program" foreignKey="amp_activity_id" />
 		<DimensionUsage name="Status" source="Status" foreignKey="amp_activity_id" />
 	    
-	    <Measure name="Actual Commitments" aggregator="sum" caption="#Actual_Commitments#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter">
+	    <Measure name="Actual Commitments" aggregator="sum" caption="#Actual_Commitments#" >
 			<MeasureExpression>
 				<SQL dialect="mysql">
 					case when cached_v_donor_funding.transaction_type=0
@@ -125,7 +125,7 @@
 				</SQL>
 			</MeasureExpression>
 		</Measure>
-		<Measure name="Actual Disbursements" aggregator="sum" caption="Actual_Disbursements" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter">
+		<Measure name="Actual Disbursements" aggregator="sum" caption="Actual_Disbursements" >
 			<MeasureExpression>
 				<SQL dialect="mysql">
 					case when cached_v_donor_funding.transaction_type=1
@@ -135,7 +135,7 @@
 				</SQL>
 			</MeasureExpression>
 		</Measure>
-		<Measure name="Activity Count" aggregator="distinct-count" column="amp_activity_id" caption="#Activity_Count#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter" />
+		<Measure name="Activity Count" aggregator="distinct-count" column="amp_activity_id" caption="#Activity_Count#"  />
 		<Measure name="Actual Expenditures" aggregator="sum" caption="#Actual_Expenditures#">
 			<MeasureExpression>
 				<SQL dialect="mysql">
@@ -146,7 +146,7 @@
 				</SQL>
 			</MeasureExpression>
 		</Measure>
-		<Measure name="Planned Commitments" aggregator="sum" caption="#Planned_Commitments#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter">
+		<Measure name="Planned Commitments" aggregator="sum" caption="#Planned_Commitments#" >
 			<MeasureExpression>
 				<SQL dialect="mysql">
 					case when cached_v_donor_funding.transaction_type=0
@@ -156,7 +156,7 @@
 				</SQL>
 			</MeasureExpression>
 		</Measure>
-		<Measure name="Planned Disbursements" aggregator="sum" caption="#Planned_Disbursements#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter">
+		<Measure name="Planned Disbursements" aggregator="sum" caption="#Planned_Disbursements#" >
 			<MeasureExpression>
 				<SQL dialect="mysql">
 					case when cached_v_donor_funding.transaction_type=1
@@ -166,7 +166,7 @@
 				</SQL>
 			</MeasureExpression>
 		</Measure>
-		<Measure name="Planned Expenditures" aggregator="sum" caption="#Planned_Expenditures#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter">
+		<Measure name="Planned Expenditures" aggregator="sum" caption="#Planned_Expenditures#" >
 			<MeasureExpression>
 				<SQL dialect="mysql">
 					case when cached_v_donor_funding.transaction_type=2

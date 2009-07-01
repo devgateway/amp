@@ -46,7 +46,7 @@ div.fakefile2 {
 	position: absolute;
 	top: 0px;
 	left: 217px;
-	width: 300px;
+	width: 100px;
 	padding: 0;
 	margin: 0;
 	z-index: 1;
@@ -106,7 +106,7 @@ div.fakefile2 input{
 </script>
 
 <digi:instance property="addressbookForm" />
-<table width="100%" cellspacing="2" cellpadding="2" valign="top" align="center" border="0">
+<table width=750 cellspacing="2" cellpadding="2" valign="top" align="left" border="0">
 	<tr>
 	<!-- Start Navigation -->
 		<td height="33"><span class="crumb">
@@ -121,35 +121,37 @@ div.fakefile2 input{
 	<!-- End navigation -->
 	</tr>
 	<tr>
-		<th width="50%"><digi:trn>Import</digi:trn></th>
-		<th width="50%"><digi:trn>Export</digi:trn></th>
-	</tr>
-	<tr>
-		<td align="center">
-			<digi:form action="/exportImportContacts.do?actionType=importContacts" method="post" enctype="multipart/form-data">
-				<table cellpadding="3" cellspacing="3">
-					<tr>
-						<td><digi:trn>Path:</digi:trn><font color="red">*</font></td>
-						<td>
-						  	<div class="fileinputs">
-								<input id="fileUploaded" name="fileUploaded" type="file" class="file">
-						    </div>
-						</td>						
-					</tr>
-					<tr><td></td></tr>
-					<tr>
-						<td>&nbsp;</td>
-						<td>
-							<html:submit style="dr-menu" value="Import"/>				
-						</td>
-					</tr>
-				</table>
-			</digi:form>	
+		<td colspan="2" >
+			 <span class=subtitle-blue>
+                       <digi:trn key="aim:ContactManagerHeader">
+                     		 Contact Manager
+                       </digi:trn>
+               </span>
 		</td>
-		<td align="center">
+	</tr>
+	<tr><td>&nbsp;</td></tr>
+	
+	<tr>
+		<td align="left" width="50%" valign="top">
+			<digi:form action="/exportImportContacts.do?actionType=importContacts" method="post" enctype="multipart/form-data">
+				<fieldset>
+					<legend><digi:trn key="aim:contactmanagerimportbutton">Import</digi:trn></legend>
+					<a title="<digi:trn key="aim:FileLocation">Location of the document to be attached</digi:trn>">
+						<div class="fileinputs">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
+							<input id="fileUploaded" name="fileUploaded" type="file" class="file"/>
+						</div>
+						<input type="button" onclick="submit()" value='<digi:trn key="aim:contactmanagerimportbutton">Import</digi:trn>'/>
+					</a>
+				</fieldset>
+			</digi:form>
+		</td>
+		<td align="left" width="50%" valign="top">
 			<digi:form action="/exportImportContacts.do?actionType=exportContacts">
-				<html:submit style="dr-menu" value="Export"/>
-			</digi:form>	
+				<fieldset>
+					<legend><digi:trn key="aim:contactmanagerexportbutton">Export</digi:trn></legend>
+					<input type="button" onclick="submit()" value='<digi:trn key="aim:contactmanagerexportbutton">Export</digi:trn>'/>
+				</fieldset>	
+			</digi:form>
 		</td>
 	</tr>
 </table>

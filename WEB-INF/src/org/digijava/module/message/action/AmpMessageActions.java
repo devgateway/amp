@@ -377,30 +377,55 @@ public class AmpMessageActions extends DispatchAction {
     public ActionForward makeMsgRead(ActionMapping mapping,	ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 
     	AmpMessageState state=null;
-    	Long msgStateId=null;
+    	//Long msgStateId=null;
     	if(request.getParameter("msgStateId")!=null){
-    		msgStateId=new Long(request.getParameter("msgStateId"));
-    		state=AmpMessageUtil.getMessageState(msgStateId);
-    		if(state.getSenderId()==null){
-    			state.setRead(true);
-    		}
-    		AmpMessageUtil.saveOrUpdateMessageState(state);
-
+    		String[] messageIds=request.getParameter("msgStateId").split(",");
     		//creating xml that will be returned
     		response.setContentType("text/xml");
     		OutputStreamWriter outputStream = new OutputStreamWriter(response.getOutputStream());
     		PrintWriter out = new PrintWriter(outputStream, true);
     		String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
     		xml += "<" + ROOT_TAG +">";
-    		xml+="<"+"message id=\""+msgStateId+"\" ";
-    		xml+="read=\""+state.getRead()+"\" ";
-                xml+="msgId=\""+state.getMessage().getId()+"\" ";
-    		xml+="/>";
+    		
+    		for (String msgStateId : messageIds) {
+    			state=AmpMessageUtil.getMessageState(new Long(msgStateId));
+        		if(state.getSenderId()==null){
+        			state.setRead(true);
+        		}
+        		AmpMessageUtil.saveOrUpdateMessageState(state);
+        		
+        		xml+="<"+"message id=\""+msgStateId+"\" ";
+        		xml+="read=\""+state.getRead()+"\" ";
+                    xml+="msgId=\""+state.getMessage().getId()+"\" ";
+        		xml+="/>";
+			}    		
     		xml+="</"+ROOT_TAG+">";
     		out.println(xml);
 			out.close();
 			// return xml
 			outputStream.close();
+//    		msgStateId=new Long(request.getParameter("msgStateId"));
+//    		state=AmpMessageUtil.getMessageState(msgStateId);
+//    		if(state.getSenderId()==null){
+//    			state.setRead(true);
+//    		}
+//    		AmpMessageUtil.saveOrUpdateMessageState(state);
+//
+//    		//creating xml that will be returned
+//    		response.setContentType("text/xml");
+//    		OutputStreamWriter outputStream = new OutputStreamWriter(response.getOutputStream());
+//    		PrintWriter out = new PrintWriter(outputStream, true);
+//    		String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+//    		xml += "<" + ROOT_TAG +">";
+//    		xml+="<"+"message id=\""+msgStateId+"\" ";
+//    		xml+="read=\""+state.getRead()+"\" ";
+//                xml+="msgId=\""+state.getMessage().getId()+"\" ";
+//    		xml+="/>";
+//    		xml+="</"+ROOT_TAG+">";
+//    		out.println(xml);
+//			out.close();
+//			// return xml
+//			outputStream.close();
     	}
     	return null;
     }

@@ -1,9 +1,7 @@
 <table class="bluebook">
 	<tr>
 		<td width=20% valign=top>
-			<% if @donor.profile_picture.url(:regular).include?('missing.png') %>
-				<img src="/flags/missing/avatar/missing.png" alt="missing.png" width="30" height="30"/>
-			<% else %>
+			<% unless @donor.profile_picture.url(:regular).include?('missing.png') %>
 				<%= image_tag @donor.profile_picture.url(:regular) %>
 			<% end%>
 			

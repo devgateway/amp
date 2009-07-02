@@ -10,7 +10,7 @@ class CreatePaymentsPerSectorView < ActiveRecord::Migration
       	  AND project_dac_sector_shares.dac_sector_id IS DISTINCT FROM NULL 
       		AND project_payment_totals.total IS DISTINCT FROM NULL
         GROUP BY project_dac_sector_shares.dac_sector_id, project_payment_totals."year", project_payment_totals."currency", 
-          project_payment_totals.data_status, project_payment_totals.donor_id, project_dac_sector_shares.amount
+          project_payment_totals.data_status, project_payment_totals.donor_id
         ORDER BY payments DESC;
     END_SQL
   end

@@ -1237,7 +1237,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       session = PersistenceManager.getRequestDBSession();
       String queryString = "select ac.* from amp_components ac " +
       		"inner join amp_activity_components aac on (aac.amp_component_id = ac.amp_component_id) " +
-      		"where (ac.amp_activity_id=:actId)";
+      		"where (aac.amp_activity_id=:actId)";
       Query qry = session.createSQLQuery(queryString).addEntity(AmpComponent.class);
       qry.setParameter("actId", actId, Hibernate.LONG);
       col = qry.list();

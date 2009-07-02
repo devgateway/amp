@@ -134,9 +134,9 @@
     
   <legend>                                                    <!-- LEGEND -->
     <enabled></enabled>                                       <!-- [true] (true / false) -->
-    <x>800</x>                                                   <!-- [] (Number) if empty, will be equal to left margin -->
+    <x>730</x>                                                   <!-- [] (Number) if empty, will be equal to left margin -->
     <y>20</y>                                                   <!-- [] (Number) if empty, will be below plot area -->
-    <width>200</width>                                        <!-- [] (Number) if empty, will be equal to plot area width -->
+    <width>100</width>                                        <!-- [] (Number) if empty, will be equal to plot area width -->
     <max_columns>1</max_columns>                               <!-- [] (Number) the maximum number of columns in the legend -->    
     <color></color>                                           <!-- [#FFFFFF] (hex color code) background color -->
     <alpha></alpha>                                           <!-- [0] (0 - 100) background alpha -->

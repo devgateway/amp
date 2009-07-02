@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -273,6 +274,19 @@ public class ViewNewAdvancedReport extends Action {
 		}
 		
 //		apply pagination if exists
+		boolean pagination=true;
+		Cookie[] cookies=request.getCookies();
+		for (int i = 0; i < cookies.length; i++) {
+			if ("report_scrolling".equalsIgnoreCase(cookies[i].getName())){
+				pagination=false;
+			}
+		}
+		
+		if (!pagination){
+			endRow=Integer.MAX_VALUE+"";
+			request.setAttribute("recordsPerPage", Integer.MAX_VALUE);
+		}
+		
 		if(startRow!=null) rd.setStartRow(Integer.parseInt(startRow));
 		if(endRow!=null) rd.setEndRow(Integer.parseInt(endRow));
 		rd.setCurrentRowNumber(0);

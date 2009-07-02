@@ -288,7 +288,7 @@ session.setAttribute("progressValue", counter);
            	  <logic:notEqual name="viewFormat" value="foldable">
            	  |
            	  	<a  id="frezzlink" class="settingsLinkDisable">
-               		<script language="javascript">
+               		<script language="	">
 						document.write((scrolling)?msg2:msg1);
 					</script>
                 </a>

@@ -43,7 +43,7 @@
 	</action>
     	
 
-	<action name="gisRegReportForm" path="/gis/ShowRegionReport" scope="session"  type="org.digijava.module.gis.action.ShowRegionReport" validate="false" >
+	<action name="gisRegReportForm" path="/gis/ShowRegionReport" scope="request"  type="org.digijava.module.gis.action.ShowRegionReport" validate="false" >
 		<forward name="forward" path="/showLayout.do?layout=gisRegReportLayout" />
 	</action>
 		

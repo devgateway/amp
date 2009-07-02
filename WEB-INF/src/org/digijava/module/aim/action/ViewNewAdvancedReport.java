@@ -283,6 +283,7 @@ public class ViewNewAdvancedReport extends Action {
 		}
 		
 		if (!pagination){
+			startRow=null;
 			endRow=Integer.MAX_VALUE+"";
 			request.setAttribute("recordsPerPage", Integer.MAX_VALUE);
 		}

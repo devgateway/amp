@@ -611,6 +611,14 @@ function validateFormat(){
 				hiddeScroll();
 	}
 	//END	
+	
+	
+	function sendCookieAndReload (){
+		createCookie('report_scrolling',currentReportId,1);
+		document.location=document.location;
+	}
+	
+	
 	function makeScroll (){
 		var freezeLink	= new YAHOOAmp.util.Element( "frezzlink" );
 		createCookie('report_scrolling',currentReportId,1);
@@ -621,8 +629,7 @@ function validateFormat(){
 			freezeLink.removeClass("settingsLinkDisable");
 		freezeLink.addClass( "settingsLink" );
 		canMakeScroll	= false;
-		document.getElementById("frezzlink").innerHTML=msg2;
-		
+		//document.getElementById("frezzlink").innerHTML=msg2;
 	}
 	function hiddeScroll(){
 		eraseCookie('report_scrolling');
@@ -650,7 +657,7 @@ function validateFormat(){
 			if ( freezeLink.hasClass("settingsLinkDisable") )
 				freezeLink.removeClass("settingsLinkDisable");
 			freezeLink.addClass( "settingsLink" );
-			freezeLink.on("click", scrollCallback);
+			freezeLink.on("click", sendCookieAndReload);
 			freezeLink.setStyle("cursor", "pointer");
 			canMakeScroll	= true;
 			//document.getElementById("frezzlink").setAttribute("style","cursor: hand;");

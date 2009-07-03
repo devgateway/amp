@@ -1818,7 +1818,7 @@ public class ProgramUtil {
     }
 
 
-    
+     static int rc = 0;
 	 public static String renderLevel(Collection themes,int level,HttpServletRequest request) {
 		 //CategoryManagerUtil cat = new CategoryManagerUtil();
 		 //String noProgPresent = "aim:noProgramsPresent"; not used any more cos hash key translation
@@ -1839,8 +1839,11 @@ public class ProgramUtil {
 		 if (themes == null || themes.size() == 0)
 			return "<center><b>"+translatedText+"</b></<center>";		
 		 String retVal;
-		retVal = "<table width=\"100%\" cellPadding=\"0\" cellSpacing=\"1\" valign=\"top\" align=\"left\" bgcolor=\"#ffffff\" border=\"0\" style=\"border-collapse: collapse;\">\n";
+		retVal = "<table width=\"100%\" cellPadding=\"0\" cellSpacing=\"0\" valign=\"top\" align=\"left\" bgcolor=\"#ffffff\" border=\"0\" style=\"border-collapse: collapse;\">\n";
 		Iterator iter = themes.iterator();
+		if (level == 0){
+			rc = 0;
+		}
 		while (iter.hasNext()) {
 			TreeItem item = (TreeItem) iter.next();
 			AmpTheme theme = (AmpTheme) item.getMember();
@@ -1850,14 +1853,14 @@ public class ProgramUtil {
 			// visible div start
 			retVal += "<div>";// id=\"div_theme_"+theme.getAmpThemeId()+"\"";
 			retVal += " <table width=\"100%\"  border=\"1\" style=\"border-collapse: collapse;border-color: #ffffff\">";
-			if (level == 1){
-			retVal += "<tr bgcolor=\"#ffcccc\" width=\"100%\">";
+			if (rc++%2 == 0){
+				retVal += "<tr class=\"tableEven\" onmouseover=\"this.className='Hovered'\" onmouseout=\"this.className='tableEven'\">";
 			}else{
-			retVal += "<tr bgcolor=\"#f4f4f2\">";
+				retVal += "<tr class=\"tableOdd\" onmouseover=\"this.className='Hovered'\" onmouseout=\"this.className='tableOdd'\">";
 			}
 			retVal += "   <td width=\"1%\" >";
-			retVal += "     <img id=\"img_" + theme.getAmpThemeId()+ "\" onclick=\"expandProgram(" + theme.getAmpThemeId()+ ")\" src=\"../ampTemplate/images/arrow_right.gif\"/>\n";
-			retVal += "     <img id=\"imgh_"+ theme.getAmpThemeId()+ "\" onclick=\"collapseProgram("+ theme.getAmpThemeId()+ ")\" src=\"../ampTemplate/images/arrow_down.gif\"  style=\"display : none;\"/>\n";
+			retVal += "     <img id=\"img_" + theme.getAmpThemeId()+ "\" onclick=\"expandProgram(" + theme.getAmpThemeId()+ ")\" src=\"../ampTemplate/images/tree_plus.gif\"/>\n";
+			retVal += "     <img id=\"imgh_"+ theme.getAmpThemeId()+ "\" onclick=\"collapseProgram("+ theme.getAmpThemeId()+ ")\" src=\"../ampTemplate/images/tree_minus.gif\"  style=\"display : none;\"/>\n";
 			retVal += "   </td>";
 			if (level>1){
 				retVal += "   <td width=\"1%\">";

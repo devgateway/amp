@@ -12,6 +12,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <jsp:include page="themeManagerPopin.jsp" flush="true"/>
 <script language="JavaScript">
+
 	<!--
 
 
@@ -74,6 +75,27 @@
 	-->
 </script>
 
+<style type="text/css">
+<!--
+.tableEven {
+	background-color:#dbe5f1;
+	font-size:8pt;
+	padding:2px;
+}
+
+.tableOdd {
+	background-color:#FFFFFF;
+	font-size:8pt;
+	padding:2px;
+}
+ 
+.Hovered {
+	background-color:#a5bcf2;
+	font-size:8pt;
+	padding:2px;
+}
+-->
+</style>
 <digi:errors/>
 
 <digi:form action="/themeManager.do" method="post">
@@ -85,10 +107,9 @@
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <%-- End of Logo--%>
 
-	<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772 border="1">
+	<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772 border="0">
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750 border="0">
+		<td align=left vAlign=top width=750 border="0">
 			<table cellPadding=5 cellSpacing=0 width="100%" border="0">
 				<tr><%-- Start Navigation --%>
 					<td height=33><span class=crumb>
@@ -101,7 +122,7 @@
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
 						<digi:trn key="aim:multiprogramanmanager">
-							Multi Program Manage
+							Multi Program Manager
 						</digi:trn>
 					</td>
 				</tr><%-- End navigation --%>
@@ -109,7 +130,7 @@
 					<td height=16 vAlign=center width=571>
 						<span class=subtitle-blue>
 						<digi:trn key="aim:multiprogramanmanager">
-							Multi Program Manage
+							Multi Program Manager
 						</digi:trn>
 						</span>
 					</td>
@@ -132,7 +153,7 @@
 										<!-- AMP-1655 -->
 				<tr>
 					<td noWrap width=100% vAlign="top">
-					<table width="100%" cellspacing=1 cellSpacing=1 border="0" class="r-dotted-lg">
+					<table width="100%" cellspacing=1 cellSpacing=1 border="0">
 					<tr><td noWrap width=600 vAlign="top">
 							<table bgColor=#d7eafd cellPadding=1 cellSpacing=1 width="100%" valign="top">
 								<tr bgColor=#ffffff>
@@ -141,7 +162,7 @@
 												<tr><td>
 													<digi:errors/>
 												</td></tr>
-												<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
+												<tr><td bgColor=#cccccc class=box-title height="20" align="center">
 														<digi:trn key="aim:listofPrograms">
 																List of Programs
 														</digi:trn>
@@ -199,10 +220,11 @@
 													</tr>
 											<tr>
 												<td>
-												
+												<div  style="overflow:auto;width:100%;height:220px;max-height:220px;"  >
 												<!-- AMP-2204 -->
 														<bean:define id="firstLevel" name="aimThemeForm" property="themes" type="java.util.Collection"/>
 														<%= ProgramUtil.renderLevel(firstLevel,0,request) %>
+												</div>
 												</td>											
 											
 											<tr align="center" bgcolor="#ffffff">

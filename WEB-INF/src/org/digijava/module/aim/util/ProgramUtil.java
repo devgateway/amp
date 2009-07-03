@@ -1818,7 +1818,7 @@ public class ProgramUtil {
     }
 
 
-     static int rc = 0;
+    
 	 public static String renderLevel(Collection themes,int level,HttpServletRequest request) {
 		 //CategoryManagerUtil cat = new CategoryManagerUtil();
 		 //String noProgPresent = "aim:noProgramsPresent"; not used any more cos hash key translation
@@ -1841,9 +1841,7 @@ public class ProgramUtil {
 		 String retVal;
 		retVal = "<table width=\"100%\" cellPadding=\"0\" cellSpacing=\"0\" valign=\"top\" align=\"left\" bgcolor=\"#ffffff\" border=\"0\" style=\"border-collapse: collapse;\">\n";
 		Iterator iter = themes.iterator();
-		if (level == 0){
-			rc = 0;
-		}
+		int rc = 0;
 		while (iter.hasNext()) {
 			TreeItem item = (TreeItem) iter.next();
 			AmpTheme theme = (AmpTheme) item.getMember();

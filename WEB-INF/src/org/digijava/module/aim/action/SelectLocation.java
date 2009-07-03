@@ -35,7 +35,7 @@ public class SelectLocation extends Action {
 			throws java.lang.Exception {
 
 		EditActivityForm eaForm = (EditActivityForm) form;
-
+		eaForm.getLocation().setNoMoreRecords(false);
 		Location location = eaForm.getLocation();
 		
 		if (location.isLocationReset()) {
@@ -107,6 +107,7 @@ public class SelectLocation extends Action {
         	
         	parentLocId											= null;
         	Collection<AmpCategoryValueLocations> childrenLocs 	= parentLoc.getChildLocations();
+        	int lastLayer=0;
         	if ( childrenLocs != null && childrenLocs.size() > 0 ) {
         		Integer currentLayer							= 
         			((AmpCategoryValueLocations)childrenLocs.toArray()[0]).getParentCategoryValue().getIndex();
@@ -130,7 +131,7 @@ public class SelectLocation extends Action {
 	        			if ( addLocationAllowed )
 	        				childrenKV.add( new KeyValue(child.getId().toString(), child.getName() ) );
 	        		}
-	        		
+	        		lastLayer=currentLayer;
 	        		locationByLayers.put(currentLayer, childrenKV);
 	        		
 	        		if ( childrenLocs.size() == 1 ) {
@@ -139,7 +140,15 @@ public class SelectLocation extends Action {
 	        		}
         		}
      
+        	} else{
+        		if (lastLayer < implLocValue.getIndex()){
+        			eaForm.getLocation().setNoMoreRecords(true);
+        		}
+        		
+        		
+        		
         	}
+        	
         }
 		/* END - Region Manager changes */
 /*

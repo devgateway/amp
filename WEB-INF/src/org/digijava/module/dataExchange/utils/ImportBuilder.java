@@ -211,6 +211,8 @@ public class ImportBuilder {
 		}
 		
 		//implementation levels
+		//changes for Senegal : goto to step3
+		/*
 		if( actType.getImplementationLevels()!=null ){
 			
 			AmpCategoryValue acv=addCategValueForCodeValueType(actType.getImplementationLevels(), hm, Constants.IDML_IMPLEMENTATION_LEVELS, Constants.CATEG_VALUE_IMPLEMENTATION_LEVEL);
@@ -218,7 +220,7 @@ public class ImportBuilder {
 				activity.getCategories().add(acv);
 			
 		}
-		
+		*/
 		//approval status Senegal change
 		
 		activity.setApprovalStatus(org.digijava.module.aim.helper.Constants.STARTED_STATUS);
@@ -482,23 +484,52 @@ public class ImportBuilder {
 				AmpCategoryValueLocations ampCVLoc		= null;
 				AmpCategoryValue acv= null;
 				CodeValueType cvt = new CodeValueType();
-				
+				boolean isCountry = false;
+				boolean isZone = false;
+				boolean isDistrict = false;
 				if("001".equals(location.getLocationName().getCode()) || "0000".equals(location.getLocationName().getCode()) ){
 					ampCVLoc = DynLocationManagerUtil.getLocationByCode("87274", (AmpCategoryValue)null );
 
 					cvt.setCode("001");
 					cvt.setValue("Country");
 					acv = addCategValueForCodeValueType(cvt, hm, Constants.IDML_IMPLEMENTATION_LOCATION, Constants.CATEG_VALUE_IMPLEMENTATION_LOCATION);
+					isCountry = true;
 				}
 				else {
-						ampCVLoc = DynLocationManagerUtil.getLocationByIso(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBAL_DEFAULT_COUNTRY), (AmpCategoryValue)null );
+						ampCVLoc = DynLocationManagerUtil.getLocationByCode(location.getLocationName().getCode(), (AmpCategoryValue)null );
 						
 						cvt.setCode(location.getLocationName().getCode());
 						if(location.getLocationName().getCode().length() <=3)
-							cvt.setValue("Zone");
-						else cvt.setValue("District");
+							{
+								cvt.setValue("Zone");
+								isZone = true;
+							}
+						else {
+							cvt.setValue("District");
+							isDistrict = true;
+						}
 						acv = addCategValueForCodeValueType(cvt, hm, Constants.IDML_IMPLEMENTATION_LOCATION, Constants.CATEG_VALUE_IMPLEMENTATION_LOCATION);
 				}
+				
+				//implementation levels
+				//added here for Senegal
+				AmpCategoryValue acv1= new AmpCategoryValue();
+				if( actType.getImplementationLevels()!=null ){
+					
+					if(actType.getImplementationLevels().getValue().compareTo("National") == 0 && (isZone || isDistrict))
+					{
+						CodeValueType cvt1 = new CodeValueType();
+						cvt1.setCode("Both");
+						cvt1.setValue("Both");
+						acv1 = addCategValueForCodeValueType(cvt1, hm, Constants.IDML_IMPLEMENTATION_LEVELS, Constants.CATEG_VALUE_IMPLEMENTATION_LEVEL);
+					}
+					else
+						acv1 = addCategValueForCodeValueType(actType.getImplementationLevels(), hm, Constants.IDML_IMPLEMENTATION_LEVELS, Constants.CATEG_VALUE_IMPLEMENTATION_LEVEL);
+					if(acv1!=null)
+						activity.getCategories().add(acv1);
+					
+				}
+				
 				AmpLocation ampLoc		= DynLocationManagerUtil.getAmpLocation(ampCVLoc);
 				AmpActivityLocation actLoc=new AmpActivityLocation();
 				actLoc.setActivity(activity);//activity);
@@ -510,6 +541,7 @@ public class ImportBuilder {
 
 				if(acv!=null)
 					activity.getCategories().add(acv);
+				
 				
 			}
 			activity.setLocations(locations);

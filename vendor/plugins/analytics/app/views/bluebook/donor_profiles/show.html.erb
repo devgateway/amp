@@ -133,8 +133,9 @@
 			<b><%= lc(:priorities) %></b>
 			<table style="width: 100%">
 				<tr>
-					<td><%= ll(:country_strategy, :paper) %></td>
-					<td><%= @country_strategy.strategy_paper ? ll(:yes) : ll(:no) %></td>			
+					<td><%= ll(:country_strategy, :paper) %>
+                    </td>
+					<td><%= @country_strategy.strategy_paper ? lc(:yes_answer) : lc(:no_answer) %></td>
 				</tr>
 				<tr>
 					<td><%= ll(:country_strategy, :period) %></td>

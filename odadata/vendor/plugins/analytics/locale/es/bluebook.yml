@@ -1,6 +1,9 @@
 es:
   bluebook:
       title: EU Blue Book
+      charts:
+        settings:
+          others: Otros
 
       # Old structure:
       pages:
@@ -580,6 +583,8 @@ es:
           loan: Préstamo
           data_missing_header: Falta datos de {{donor}} por {{year}}
           data_missing_info: Lo sentimos pero este donante todavía no ha actualizado y/o publicado sus financiamientos de proyecto por {{year}}.
+          yes_answer: "Si"
+          no_answer: "No"
           
       explanatory_note:
           management_system: 'Por ejemplo: Ministerio de Relaciones Exteriores / Dirección de Cooperación para el Desarrollo dentro del Ministerio de Relaciones Exteriores/ Agencia Autónoma de Asistencia / otro (favor especifique)'

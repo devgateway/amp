@@ -9,6 +9,9 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
+
+
+
 <digi:instance property="gisRegReportForm"/>
 
 <%
@@ -27,6 +30,13 @@
             countryName = "";
         }
 %>
+
+<digi:ref href="/repository/gis/view/css/gisReport.css" type="text/css" rel="stylesheet" />
+
+
+
+
+
 
 <div class="yui-skin-sam" style="width:100%;height:100%;">
   <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;width:100%;">
@@ -70,65 +80,202 @@
 		
 		<br>
 		
-		<div style="height:300px; overflow-y:scroll;">
-		<table width="100%" style="border-collapse:collapse;" border="1" bordercolor="#000000">
-			<tr>
-					<td colspan="3" style="background-color: #4A5A80; color:#FFFFFF; font-weight:bold">Overall information</td>
-					<td colspan="3" style="background-color: #4A5A80; color:#FFFFFF; font-weight:bold">For selected sector/region</td>
-			</tr>
-			<tr>
-					<td style="color:#FFFFFF;font-weight:bold" class="tableHeader">Activity</td>
-					<td style="color:#FFFFFF;font-weight:bold" class="tableHeader">Region(s)</td>
-					<td style="color:#FFFFFF;font-weight:bold" class="tableHeader">Sector(s)</td>
-					<td style="color:#FFFFFF;font-weight:bold" class="tableHeader">Actual Commitments</td>
-					<td style="color:#FFFFFF;font-weight:bold" class="tableHeader">Actual Disbursements</td>
-					<td style="color:#FFFFFF;font-weight:bold" class="tableHeader">Actual Expenditures</td>
-			</tr>
-			<logic:iterate name="gisRegReportForm" property="activityLocationFundingList" id="activityLocationFunding">
-				<tr>
-					<td valign="top">
-						<a href="javascript:showSelActivity(<bean:write name="activityLocationFunding" property="activity.ampActivityId"/>);">
-							<bean:write name="activityLocationFunding" property="activity.description"/>
-							<br>
-							(<bean:write name="activityLocationFunding" property="activity.ampId"/>)
-						</a>
-					</td>
-					<td>
-						<logic:present name="activityLocationFunding" property="activity.locations">
-							<logic:notEmpty name="activityLocationFunding" property="activity.locations">
-								<ul>
-								<logic:iterate name="activityLocationFunding" property="activity.locations" id="iterLocation">
-									<li>
-									<bean:define id="ampLoc" name="iterLocation" property="location" type="org.digijava.module.aim.dbentity.AmpLocation"/>
-									<bean:write name="ampLoc" property="name"/>
-									</li>
-								</logic:iterate>
-								</ul>
-							</logic:notEmpty>
-						</logic:present>
-					</td>
-					<td>
-						<logic:present name="activityLocationFunding" property="activity.sectors">
-							<logic:notEmpty name="activityLocationFunding" property="activity.sectors">
-								<ul>
-								<logic:iterate name="activityLocationFunding" property="activity.sectors" id="iterSector">
-									<li>
-									<bean:define id="ampSec" name="iterSector" property="sectorId" type="org.digijava.module.aim.dbentity.AmpSector"/>
-									<bean:write name="ampSec" property="name"/>
-									</li>
-								</logic:iterate>
-								</ul>
-							</logic:notEmpty>
-						</logic:present>
-					
-					</td>
-					<td><bean:write name="activityLocationFunding" property="fmtCommitment"/></td>
-					<td><bean:write name="activityLocationFunding" property="fmtDisbursement"/></td>
-					<td><bean:write name="activityLocationFunding" property="fmtExpenditure"/></td>
-				</tr>
-			</logic:iterate>
-		</table>
-		</div>
+		
+		<logic:present name="gisRegReportForm" property="activityLocationFundingList">
+			<logic:notEmpty name="gisRegReportForm" property="activityLocationFundingList">
+		
+		
+				<div style="widhth:100%; padding: 10px;">
+					<table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;" border="0">
+						<thead>
+			
+						<tr>
+								<td colspan="4" style="overflow-x:hidden; background-color: #4A5A80; color:#FFFFFF;" >
+									<div class="gisReportTableBevelCellContainer">
+										<div class="gisReportTableBevelCell">
+											Overall information
+										</div>
+									</div>
+								</td>
+								<td colspan="3" style="overflow-x:hidden; background-color: #4A5A80; color:#FFFFFF;">
+									<div class="gisReportTableBevelCellContainer">
+										<div class="gisReportTableBevelCell">
+											For selected sector/region
+										</div>
+									</div>
+								</td>
+						</tr>
+			
+						
+						<tr>
+								<td width="20%" style="overflow-x:hidden; color:#FFFFFF;" class="tableHeader">
+			
+										<div class="gisReportTableBevelCell">
+											Activity
+										</div>
+			
+								</td>
+								<td width="20%" style="overflow-x:hidden; color:#FFFFFF;" class="tableHeader">
+			
+										<div class="gisReportTableBevelCell">
+											Region(s)
+										</div>
+			
+								</td>
+								<td width="20%" style="overflow-x:hidden; color:#FFFFFF;" class="tableHeader">
+			
+										<div class="gisReportTableBevelCell">
+											Sector(s)
+										</div>
+			
+								</td>
+								<td width="10%" style="overflow-x:hidden; color:#FFFFFF;" class="tableHeader">
+			
+										<div class="gisReportTableBevelCell">
+											Donor(s)
+										</div>
+			
+								</td>
+								<td width="10%" style="overflow-x:hidden; color:#FFFFFF;" class="tableHeader">
+			
+										<div class="gisReportTableBevelCell">
+											Commitments
+										</div>
+			
+								</td>
+								<td width="10%" style="overflow-x:hidden; color:#FFFFFF;" class="tableHeader">
+			
+										<div class="gisReportTableBevelCell">
+											Disbursements
+										</div>
+			
+								</td>
+								<td width="10%" style="overflow-x:hidden; color:#FFFFFF;" class="tableHeader">
+			
+										<div class="gisReportTableBevelCell">
+											Expenditures
+										</div>
+			
+								</td>
+						</tr>
+						</thead>
+						<tbody style="overflow-y:scroll; overflow-x: hidden;" height="250">
+						<logic:iterate name="gisRegReportForm" property="activityLocationFundingList" id="activityLocationFunding">
+							<tr>
+								<td width="30%" valign="top" style="overflow-x:hidden;" height="20">
+									<div class="gisReportTableBevelCellContainer">
+										<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal">
+											<a title="<bean:write name="activityLocationFunding" property="activity.name"/>" href="javascript:showSelActivity(<bean:write name="activityLocationFunding" property="activity.ampActivityId"/>);">
+												<bean:write name="activityLocationFunding" property="activity.name"/>
+											</a>
+										</div>
+									</div>
+								</td>
+								<td width="20%" align="left" style="overflow-x:hidden;">
+									<div class="gisReportTableBevelCellContainer">
+										<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal">
+											<logic:present name="activityLocationFunding" property="activity.locations">
+												<logic:notEmpty name="activityLocationFunding" property="activity.locations">
+													<ul style="margin:0 0 0 20px; padding:0;">
+														<logic:iterate name="activityLocationFunding" property="activity.locations" id="iterLocation">
+															<li>
+																<bean:define id="ampLoc" name="iterLocation" property="location" type="org.digijava.module.aim.dbentity.AmpLocation"/>
+																<bean:write name="ampLoc" property="name"/>
+															</li>
+														</logic:iterate>
+													</ul>
+												</logic:notEmpty>
+											</logic:present>
+										</div>
+									</div>
+								</td>
+								<td width="20%" align="left" style="overflow-x:hidden;">
+									<div class="gisReportTableBevelCellContainer">
+										<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal">
+											<logic:present name="activityLocationFunding" property="activity.sectors">
+												<logic:notEmpty name="activityLocationFunding" property="activity.sectors">
+													<ul style="margin:0 0 0 20px; padding:0;">
+													<logic:iterate name="activityLocationFunding" property="activity.sectors" id="iterSector">
+														<li>
+														<bean:define id="ampSec" name="iterSector" property="sectorId" type="org.digijava.module.aim.dbentity.AmpSector"/>
+														<bean:write name="ampSec" property="name"/>
+														</li>
+													</logic:iterate>
+													</ul>
+												</logic:notEmpty>
+											</logic:present>
+										</div>
+									</div>
+								</td>
+								<td width="20%" align="left" style="overflow-x:hidden;">
+									<div class="gisReportTableBevelCellContainer">
+										<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal">
+											<bean:write name="activityLocationFunding" property="activity.donors"/>
+										</div>
+									</div>
+								</td>
+								<td width="10%" style="overflow-x:hidden;">
+									<div class="gisReportTableBevelCellContainer">
+									<div class="gisReportTableBevelCell 
+									<logic:present name="activityLocationFunding" property="fmtCommitment">
+									gisReportTableBevelCellBgNormal
+									</logic:present>
+									<logic:notPresent name="activityLocationFunding" property="fmtCommitment">
+									gisReportTableBevelCellBgDash
+									</logic:notPresent>
+									">
+										<bean:write name="activityLocationFunding" property="fmtCommitment"/>
+									</div>
+		
+									</div>
+								</td>
+								<td width="10%" style="overflow-x:hidden;">
+									<div class="gisReportTableBevelCellContainer">
+									<div class="gisReportTableBevelCell 
+									<logic:present  name="activityLocationFunding" property="fmtDisbursement">
+									gisReportTableBevelCellBgNormal
+									</logic:present>
+									<logic:notPresent  name="activityLocationFunding" property="fmtDisbursement">
+									gisReportTableBevelCellBgDash
+									</logic:notPresent>
+									">
+										<bean:write name="activityLocationFunding" property="fmtDisbursement"/>
+									</div>
+									</div>
+								</td>
+								<td width="10%" style="overflow-x:hidden;">
+									<div class="gisReportTableBevelCellContainer">
+									<div class="gisReportTableBevelCell 
+									<logic:present name="activityLocationFunding" property="fmtExpenditure">
+									gisReportTableBevelCellBgNormal
+									</logic:present>
+									<logic:notPresent name="activityLocationFunding" property="fmtExpenditure">
+									gisReportTableBevelCellBgDash
+									</logic:notPresent>
+									">
+										<bean:write name="activityLocationFunding" property="fmtExpenditure"/>
+									</div>
+									</div>
+								</td>
+							</tr>
+						</logic:iterate>
+						<tr>
+							<td colspan="7" height="100%" style="border-top:1px solid black;">
+									&nbsp;
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+		
+			</logic:notEmpty>
+		</logic:present>
+		<logic:notPresent name="gisRegReportForm" property="activityLocationFundingList">
+			<div style="width:100%" align="center">
+				<div class="gisReportWarning" style="width:85%">There is no funding data for filters selected</div>
+			</div>
+		</logic:notPresent>
+		
 		
 		<script language="JavaScript">
 		function showSelActivity(activityId) {
@@ -137,10 +284,10 @@
 				window.open(actUrl, null, null);
 			} else {
 				window.opener.opener.location.href = actUrl;
+				window.opener.opener.focus();
 			}
 			
 		}
 		</script>
 
-	</div>
-</div>
+

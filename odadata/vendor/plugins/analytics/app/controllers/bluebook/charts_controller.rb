@@ -1,5 +1,5 @@
 class Bluebook::ChartsController < BluebookController
-  
+  unloadable
   # Renders chart_name.xml.erb template from settings/ directory
   def settings
     render :action => "settings/#{params[:id]}", :layout => false
@@ -91,20 +91,21 @@ class Bluebook::ChartsController < BluebookController
   
   def eu_cooperation_aid_modality_percentages_data
     @aid_payments = []
+    @aid_payments2 = []
     @donors = Donor.main.ordered
     
     @donors.each do |d|
       @aid_payments[d.id] ||= []
       
-      res = Funding.find(:all, 
-        :select => "SUM((payments_q1 + payments_q2 + payments_q3 + payments_q4)) AS payments, year, currency, projects.aid_modality_id AS aid_modality",
+      res = Funding.find(:all,
+        :select => "SUM((payments_q1 + payments_q2 + payments_q3 + payments_q4)) AS payments_query, year, currency, projects.aid_modality_id AS aid_modality",
         :joins => "LEFT OUTER JOIN projects ON fundings.project_id = projects.id",
         :conditions => ["fundings.year = ? AND projects.data_status = ? AND projects.donor_id = ?", year, Project::PUBLISHED, d.id],
         :group => "projects.aid_modality_id, year, currency")
-      
+
       res.each do |r|
-        @aid_payments[d.id][r.aid_modality.to_i] ||= 0.to_currency(Prefs.default_currency)
-        @aid_payments[d.id][r.aid_modality.to_i] += r.payments.to_currency(d.currency, r.year)
+        @aid_payments[d.id][r.aid_modality.to_i] ||= 0.to_currency(Prefs.default_currency, r.year)
+        @aid_payments[d.id][r.aid_modality.to_i] += r.payments_query.to_currency(d.currency, r.year)
       end
     end
     

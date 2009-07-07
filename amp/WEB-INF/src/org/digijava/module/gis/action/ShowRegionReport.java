@@ -97,14 +97,12 @@ public class ShowRegionReport extends Action {
 
 
 
-            gisRegReportForm.setActualCommitmentsStr(formatter.format(ammount.
-                    getCommitment().intValue()));
-
-            gisRegReportForm.setActualDisbursementsStr(formatter.format(ammount.
-                    getDisbursement().intValue()));
-
-            gisRegReportForm.setActualExpendituresStr(formatter.format(ammount.
-                    getExpenditure().intValue()));
+                gisRegReportForm.setActualCommitmentsStr(formatter.format(ammount.
+                        getCommitment().intValue()));
+                gisRegReportForm.setActualDisbursementsStr(formatter.format(ammount.
+                        getDisbursement().intValue()));
+                gisRegReportForm.setActualExpendituresStr(formatter.format(ammount.
+                        getExpenditure().intValue()));
 
             gisRegReportForm.setActivityLocationFundingList(ammount.
                     getActivityLocationFundingList());
@@ -222,19 +220,35 @@ public class ShowRegionReport extends Action {
                                     newVal.getActivityLocationFundingList().add(
                                             activityLocationFunding);
 
-                                    activityLocationFunding.setFmtCommitment(
-                                            formatter.format(
-                                            activityLocationFunding.
-                                            getCommitment().intValue()));
-                                    activityLocationFunding.setFmtDisbursement(
-                                            formatter.format(
-                                            activityLocationFunding.
-                                            getDisbursement().intValue()));
-                                    activityLocationFunding.setFmtExpenditure(
-                                            formatter.format(
-                                            activityLocationFunding.
-                                            getExpenditure().intValue()));
+                                    if (activityLocationFunding.
+                                            getCommitment().intValue()!= 0) {
+                                        activityLocationFunding.setFmtCommitment(
+                                                formatter.format(
+                                                        activityLocationFunding.
+                                                        getCommitment().intValue()));
+                                    } else {
+                                           activityLocationFunding.setFmtCommitment(null);
+                                    }
 
+                                    if (activityLocationFunding.
+                                            getDisbursement().intValue() != 0) {
+                                        activityLocationFunding.setFmtDisbursement(
+                                                formatter.format(
+                                                        activityLocationFunding.
+                                                        getDisbursement().intValue()));
+                                    } else {
+                                        activityLocationFunding.setFmtDisbursement(null);
+                                    }
+
+                                    if (activityLocationFunding.
+                                            getExpenditure().intValue() != 0) {
+                                        activityLocationFunding.setFmtExpenditure(
+                                                formatter.format(
+                                                        activityLocationFunding.
+                                                        getExpenditure().intValue()));
+                                    } else {
+                                        activityLocationFunding.setFmtExpenditure(null);
+                                    }
                                     locationFundingMap.put(regCode, newVal);
                                 } else {
                                     if (fundingForSector.getCommitment().
@@ -270,18 +284,38 @@ public class ShowRegionReport extends Action {
                                         newVal.getActivityLocationFundingList().
                                                 add(activityLocationFunding);
 
-                                        activityLocationFunding.
-                                                setFmtCommitment(formatter.
-                                                format(activityLocationFunding.
-                                                getCommitment().intValue()));
-                                        activityLocationFunding.
-                                                setFmtDisbursement(formatter.
-                                                format(activityLocationFunding.
-                                                getDisbursement().intValue()));
-                                        activityLocationFunding.
-                                                setFmtExpenditure(formatter.
-                                                format(activityLocationFunding.
-                                                getExpenditure().intValue()));
+                                        if (activityLocationFunding.
+                                                getCommitment().intValue() != 0) {
+                                            activityLocationFunding.
+                                                    setFmtCommitment(formatter.
+                                                                     format(activityLocationFunding.
+                                                                            getCommitment().intValue()));
+                                        } else {
+                                            activityLocationFunding.
+                                                    setFmtCommitment(null);
+                                        }
+
+                                        if (activityLocationFunding.
+                                                getDisbursement().intValue() != 0) {
+                                            activityLocationFunding.
+                                                    setFmtDisbursement(formatter.
+                                                                       format(activityLocationFunding.
+                                                                              getDisbursement().intValue()));
+                                        } else {
+                                            activityLocationFunding.
+                                                    setFmtDisbursement(null);
+                                        }
+
+                                        if (activityLocationFunding.
+                                                getExpenditure().intValue() != 0) {
+                                            activityLocationFunding.
+                                                    setFmtExpenditure(formatter.
+                                                                      format(activityLocationFunding.
+                                                                             getExpenditure().intValue()));
+                                        } else {
+                                            activityLocationFunding.
+                                                    setFmtExpenditure(null);
+                                        }
 
                                         locationFundingMap.put(regCode, newVal);
                                     }
@@ -338,18 +372,38 @@ public class ShowRegionReport extends Action {
                                     newVal.getActivityLocationFundingList().add(
                                             activityLocationFunding);
 
-                                    activityLocationFunding.setFmtCommitment(
-                                            formatter.format(
-                                            activityLocationFunding.
-                                            getCommitment().intValue()));
-                                    activityLocationFunding.setFmtDisbursement(
-                                            formatter.format(
-                                            activityLocationFunding.
-                                            getDisbursement().intValue()));
-                                    activityLocationFunding.setFmtExpenditure(
-                                            formatter.format(
-                                            activityLocationFunding.
-                                            getExpenditure().intValue()));
+                                    if (activityLocationFunding.
+                                            getCommitment().intValue() != 0) {
+                                        activityLocationFunding.setFmtCommitment(
+                                                formatter.format(
+                                                        activityLocationFunding.
+                                                        getCommitment().intValue()));
+                                    } else {
+                                        activityLocationFunding.
+                                                setFmtCommitment(null);
+                                    }
+
+                                    if (activityLocationFunding.
+                                            getDisbursement().intValue() != 0) {
+                                        activityLocationFunding.setFmtDisbursement(
+                                                formatter.format(
+                                                        activityLocationFunding.
+                                                        getDisbursement().intValue()));
+                                    } else {
+                                        activityLocationFunding.
+                                                setFmtDisbursement(null);
+                                    }
+
+                                    if (activityLocationFunding.
+                                            getExpenditure().intValue() != 0) {
+                                        activityLocationFunding.setFmtExpenditure(
+                                                formatter.format(
+                                                        activityLocationFunding.
+                                                        getExpenditure().intValue()));
+                                    } else {
+                                        activityLocationFunding.
+                                                setFmtExpenditure(null);
+                                    }
 
                                     locationFundingMap.put(regCode, newVal);
                                 } else {
@@ -393,19 +447,38 @@ public class ShowRegionReport extends Action {
                                                 getLocationPercentage() / 100f)),
                                                 activity);
 
-                                        activityLocationFunding.
-                                                setFmtCommitment(formatter.
-                                                format(activityLocationFunding.
-                                                getCommitment().intValue()));
-                                        activityLocationFunding.
-                                                setFmtDisbursement(formatter.
-                                                format(activityLocationFunding.
-                                                getDisbursement().intValue()));
-                                        activityLocationFunding.
-                                                setFmtExpenditure(formatter.
-                                                format(activityLocationFunding.
-                                                getExpenditure().intValue()));
+                                        if (activityLocationFunding.
+                                                getCommitment().intValue() != 0) {
+                                            activityLocationFunding.
+                                                    setFmtCommitment(formatter.
+                                                                     format(activityLocationFunding.
+                                                                            getCommitment().intValue()));
+                                        } else {
+                                            activityLocationFunding.
+                                                    setFmtCommitment(null);
+                                        }
 
+                                        if (activityLocationFunding.
+                                                getDisbursement().intValue() != 0) {
+                                            activityLocationFunding.
+                                                    setFmtDisbursement(formatter.
+                                                                       format(activityLocationFunding.
+                                                                              getDisbursement().intValue()));
+                                        } else {
+                                            activityLocationFunding.
+                                                    setFmtDisbursement(null);
+                                        }
+
+                                        if (activityLocationFunding.
+                                                getExpenditure().intValue() != 0) {
+                                            activityLocationFunding.
+                                                    setFmtExpenditure(formatter.
+                                                                      format(activityLocationFunding.
+                                                                             getExpenditure().intValue()));
+                                        } else {
+                                            activityLocationFunding.
+                                                    setFmtExpenditure(null);
+                                        }
                                         newVal.getActivityLocationFundingList().
                                                 add(activityLocationFunding);
 

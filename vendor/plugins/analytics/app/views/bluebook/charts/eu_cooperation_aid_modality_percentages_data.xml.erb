@@ -11,7 +11,7 @@
 		<% AidModality.all.each do |toa| %>
 			<graph gid="<%= toa.id %>" title="<%= toa.name %>" color="<%= Settings::COLOR_SCHEME[toa.id] %>">
 				<% @donors.each do |donor| %>
-					<value xid="<%= donor.id %>"><%= @aid_payments[donor.id][toa.id].in_millions(2) rescue 0 %></value>
+					<value xid="<%= donor.id %>"><%= (@aid_payments[donor.id][toa.id].to_f/1000000).round(2) rescue 0 %></value>
 				<% end %>
 			</graph>
 		<% end %>

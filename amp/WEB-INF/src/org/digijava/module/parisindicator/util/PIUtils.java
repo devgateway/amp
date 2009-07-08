@@ -1,33 +1,36 @@
 package org.digijava.module.parisindicator.util;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 
-import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.fiscalcalendar.EthiopianCalendar;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.common.util.DateTimeUtil;
-import org.hibernate.Session;
 
 public class PIUtils {
 
-	public final static boolean containSectors(Collection<AmpSector> sectors1, Collection<AmpSector> sectors2) {
+	public final static boolean containSectors(Collection<AmpSector> sectors1, Collection<AmpActivitySector> sectors2)
+			throws Exception {
 		boolean ret = false;
 		Iterator<AmpSector> iter1 = sectors1.iterator();
-		Iterator<AmpSector> iter2 = sectors2.iterator();
+		Iterator<AmpActivitySector> iter2 = sectors2.iterator();
 		while (iter1.hasNext()) {
 			AmpSector aux1 = iter1.next();
 			while (iter2.hasNext()) {
-				AmpSector aux2 = iter2.next();
-				if (aux1.getAmpSectorId().equals(aux2.getAmpSectorId())) {
+				AmpActivitySector aux2 = iter2.next();
+				if (aux1.getAmpSectorId().equals(aux2.getSectorId().getAmpSectorId())) {
 					ret = true;
 					break;
 				}
@@ -36,7 +39,8 @@ public class PIUtils {
 		return ret;
 	}
 
-	public final static boolean containStatus(Collection<AmpCategoryValue> statuses, AmpCategoryValue status) {
+	public final static boolean containStatus(Collection<AmpCategoryValue> statuses, AmpCategoryValue status)
+			throws Exception {
 		boolean ret = false;
 		Iterator<AmpCategoryValue> iterStatus = statuses.iterator();
 		while (iterStatus.hasNext()) {
@@ -50,7 +54,7 @@ public class PIUtils {
 	}
 
 	public final static boolean containFinancingInstrument(AmpCategoryValue financing1,
-			Collection<AmpCategoryValue> financing2) {
+			Collection<AmpCategoryValue> financing2) throws Exception {
 		boolean ret = false;
 		Iterator<AmpCategoryValue> iter2 = financing2.iterator();
 		while (iter2.hasNext()) {
@@ -63,7 +67,8 @@ public class PIUtils {
 		return ret;
 	}
 
-	public final static boolean containOrganisations(Collection<AmpOrganisation> orgs1, AmpOrganisation org2) {
+	public final static boolean containOrganisations(Collection<AmpOrganisation> orgs1, AmpOrganisation org2)
+			throws Exception {
 		boolean ret = false;
 		Iterator<AmpOrganisation> iter1 = orgs1.iterator();
 		while (iter1.hasNext()) {
@@ -76,7 +81,7 @@ public class PIUtils {
 		return ret;
 	}
 
-	public final static boolean containOrgGrps(Collection<AmpOrgGroup> orgs1, AmpOrgGroup org2) {
+	public final static boolean containOrgGrps(Collection<AmpOrgGroup> orgs1, AmpOrgGroup org2) throws Exception {
 		boolean ret = false;
 		Iterator<AmpOrgGroup> iter1 = orgs1.iterator();
 		while (iter1.hasNext()) {
@@ -87,6 +92,54 @@ public class PIUtils {
 			}
 		}
 		return ret;
+	}
+
+	public final static Collection<AmpOrganisation> getDonorsCollection(String[] donors) throws Exception {
+		Collection<AmpOrganisation> retDonors = null;
+		if (donors != null && donors.length > 0) {
+			retDonors = new ArrayList<AmpOrganisation>();
+			for (int i = 0; i < donors.length; i++) {
+				String donorId = donors[i];
+				retDonors.add(DbUtil.getOrganisation(new Long(donorId)));
+			}
+		}
+		return retDonors;
+	}
+
+	public final static Collection<AmpCategoryValue> getStatuses(String[] statuses) throws Exception {
+		Collection<AmpCategoryValue> retStatus = null;
+		if (statuses != null && statuses.length > 0) {
+			retStatus = new ArrayList<AmpCategoryValue>();
+			for (int i = 0; i < statuses.length; i++) {
+				String statusId = statuses[i];
+				retStatus.add(CategoryManagerUtil.getAmpCategoryValueFromDb(new Long(statusId)));
+			}
+		}
+		return retStatus;
+	}
+
+	public final static Collection<AmpOrgGroup> getDonorGroups(String[] groups) throws Exception {
+		Collection<AmpOrgGroup> retGrp = null;
+		if (groups != null && groups.length > 0) {
+			retGrp = new ArrayList<AmpOrgGroup>();
+			for (int i = 0; i < groups.length; i++) {
+				String grpId = groups[i];
+				retGrp.add(DbUtil.getAmpOrgGroup(new Long(grpId)));
+			}
+		}
+		return retGrp;
+	}
+
+	public final static Collection<AmpSector> getSectors(String[] sectors) throws Exception {
+		Collection<AmpSector> retGrp = null;
+		if (sectors != null && sectors.length > 0) {
+			retGrp = new ArrayList<AmpSector>();
+			for (int i = 0; i < sectors.length; i++) {
+				String grpId = sectors[i];
+				retGrp.add(SectorUtil.getAmpSector((new Long(grpId))));
+			}
+		}
+		return retGrp;
 	}
 
 	/**
@@ -128,7 +181,7 @@ public class PIUtils {
 		return ret;
 	}
 
-	public static boolean chkEqualDates(Date d1, Date d2) {
+	public static boolean chkEqualDates(Date d1, Date d2) throws Exception {
 		boolean result = false;
 		result = (DateTimeUtil.formatDate(d1).equalsIgnoreCase(DateTimeUtil.formatDate(d2))) ? true : false;
 		return result;

@@ -257,28 +257,80 @@
 	}
 
 	function submitFilters() {
-		var filterForm = document
-				.getElementsByName("aimReportsFilterPickerForm")[0];
-		filterForm.action = "/aim/reportsFilterPicker.do?apply=true"
-		alert(filterForm.action);
-		filterForm.submit();
+		//alert('submitfilters');
+        var filterForm = document.getElementsByName("parisIndicatorForm")[0];
+        filterForm.selectedStartYear.value = document.getElementsByName("auxStartYear")[0].value;
+        filterForm.selectedEndYear.value = document.getElementsByName("auxEndYear")[0].value;
+        filterForm.selectedCalendar.value = document.getElementsByName("selectedCalendar")[0].value;
+        filterForm.selectedCurrency.value = document.getElementsByName("selectedCurrency")[0].value;
+        //filterForm.selectedDonorGroups.value = document.getElementsByName("selectedDonorGroups")[0].value;
+        //alert(document.getElementsByName("selectedDonorGroups")[0].value);
+        //filterForm.selectedSectors.value = document.getElementsByName("selectedSectors")[0].value;
+        
+        //Donors
+        var txtSelectedValuesObj = filterForm.selectedDonors;
+        var selectedArray = new Array();
+        var selObj = document.getElementsByName("selectedDonors")[0];
+        var i;
+        var count = 0;
+        for (i=0; i<selObj.options.length; i++) {
+            if (selObj.options[i].selected) {
+            	  selectedArray[count] = selObj.options[i].value;
+            	  count++;
+            }
+        }
+        txtSelectedValuesObj.value = selectedArray;
+
+        //groups
+        var txtSelectedValuesObj = filterForm.selectedDonorGroups;
+        var selectedArray = new Array();
+        var selObj = document.getElementsByName("selectedDonorGroups")[0];
+        var i;
+        var count = 0;
+        for (i=0; i<selObj.options.length; i++) {
+            if (selObj.options[i].selected) {
+                  selectedArray[count] = selObj.options[i].value;
+                  count++;
+            }
+        }
+        txtSelectedValuesObj.value = selectedArray;
+
+        //status
+        var txtSelectedValuesObj = filterForm.selectedStatuses;
+        var selectedArray = new Array();
+        var selObj = document.getElementsByName("selectedStatuses")[0];
+        var i;
+        var count = 0;
+        for (i=0; i<selObj.options.length; i++) {
+            if (selObj.options[i].selected) {
+                  selectedArray[count] = selObj.options[i].value;
+                  count++;
+            }
+        }
+        txtSelectedValuesObj.value = selectedArray;
+
+        //sectors
+        var txtSelectedValuesObj = filterForm.selectedSectors;
+        var selectedArray = new Array();
+        var selObj = document.getElementsByName("selectedSectors")[0];
+        var i;
+        var count = 0;
+        for (i=0; i<selObj.options.length; i++) {
+            if (selObj.options[i].selected) {
+                  selectedArray[count] = selObj.options[i].value;
+                  count++;
+            }
+        }
+        txtSelectedValuesObj.value = selectedArray;
+
+        //filterForm.selectedFinancingIstruments.value = document.getElementsByName("selectedFinancingIstruments")[0].value;
+        filterForm.submit();
 	}
 
 	function showFilter() {
 		//alert('showFilter');
 		YAHOOAmp.amptab.init();
 		var element = document.getElementById("myFilter");
-		element.style.display = "inline";
-		//alert(element.innerHTML);
-		myPanel1.setBody(element);
-		myPanel1.center();
-		myPanel1.show();
-	}
-
-	function showFilter2() {
-		//alert('showFilter2');
-		YAHOOAmp.amptab.init();
-		var element = document.getElementById("myFilter2");
 		element.style.display = "inline";
 		//alert(element.innerHTML);
 		myPanel1.setBody(element);

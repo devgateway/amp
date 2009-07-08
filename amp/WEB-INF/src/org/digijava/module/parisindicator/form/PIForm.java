@@ -9,7 +9,6 @@ import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpStatus;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.parisindicator.helper.PIReportAbstractRow;
 
@@ -27,13 +26,13 @@ public class PIForm extends ActionForm {
 	 */
 	private int selectedStartYear;
 	private int selectedEndYear;
-	private AmpCurrency selectedCurrency;
-	private AmpFiscalCalendar selectedCalendar;
-	private Collection<AmpCategoryValue> selectedStatuses;
-	private Collection<AmpOrgGroup> selectedDonorGroups;
-	private Collection<AmpSector> selectedSectors;
-	private Collection<AmpOrganisation> selectedDonors;
-	private Collection<AmpCategoryValue> selectedFinancingIstruments;
+	private String selectedCurrency;
+	private String selectedCalendar;
+	private String[] selectedStatuses;
+	private String[] selectedDonorGroups;
+	private String[] selectedSectors;
+	private String[] selectedDonors;
+	private String[] selectedFinancingIstruments;
 
 	/*
 	 * Available values in filters.
@@ -147,19 +146,19 @@ public class PIForm extends ActionForm {
 		return financingInstruments;
 	}
 
-	public void setSelectedCurrency(AmpCurrency selectedCurrency) {
+	public void setSelectedCurrency(String selectedCurrency) {
 		this.selectedCurrency = selectedCurrency;
 	}
 
-	public AmpCurrency getSelectedCurrency() {
+	public String getSelectedCurrency() {
 		return selectedCurrency;
 	}
 
-	public void setSelectedCalendar(AmpFiscalCalendar selectedCalendar) {
+	public void setSelectedCalendar(String selectedCalendar) {
 		this.selectedCalendar = selectedCalendar;
 	}
 
-	public AmpFiscalCalendar getSelectedCalendar() {
+	public String getSelectedCalendar() {
 		return selectedCalendar;
 	}
 
@@ -195,38 +194,6 @@ public class PIForm extends ActionForm {
 		this.reset = reset;
 	}
 
-	public Collection<AmpCategoryValue> getSelectedStatuses() {
-		return selectedStatuses;
-	}
-
-	public void setSelectedStatuses(Collection<AmpCategoryValue> selectedStatuses) {
-		this.selectedStatuses = selectedStatuses;
-	}
-
-	public Collection<AmpSector> getSelectedSectors() {
-		return selectedSectors;
-	}
-
-	public void setSelectedSectors(Collection<AmpSector> selectedSectors) {
-		this.selectedSectors = selectedSectors;
-	}
-
-	public Collection<AmpOrganisation> getSelectedDonors() {
-		return selectedDonors;
-	}
-
-	public void setSelectedDonors(Collection<AmpOrganisation> selectedDonors) {
-		this.selectedDonors = selectedDonors;
-	}
-
-	public Collection<AmpOrgGroup> getSelectedDonorGroups() {
-		return selectedDonorGroups;
-	}
-
-	public void setSelectedDonorGroups(Collection<AmpOrgGroup> selectedDonorGroups) {
-		this.selectedDonorGroups = selectedDonorGroups;
-	}
-
 	public Collection<AmpOrgGroup> getDonorGroups() {
 		return donorGroups;
 	}
@@ -235,19 +202,51 @@ public class PIForm extends ActionForm {
 		this.donorGroups = donorGroups;
 	}
 
-	public Collection<AmpCategoryValue> getSelectedFinancingIstruments() {
-		return selectedFinancingIstruments;
-	}
-
-	public void setSelectedFinancingIstruments(Collection<AmpCategoryValue> selectedFinancingIstruments) {
-		this.selectedFinancingIstruments = selectedFinancingIstruments;
-	}
-
 	public int[][] getMiniTable() {
 		return miniTable;
 	}
 
 	public void setMiniTable(int[][] miniTable) {
 		this.miniTable = miniTable;
+	}
+
+	public String[] getSelectedStatuses() {
+		return selectedStatuses;
+	}
+
+	public void setSelectedStatuses(String[] selectedStatuses) {
+		this.selectedStatuses = selectedStatuses;
+	}
+
+	public String[] getSelectedDonorGroups() {
+		return selectedDonorGroups;
+	}
+
+	public void setSelectedDonorGroups(String[] selectedDonorGroups) {
+		this.selectedDonorGroups = selectedDonorGroups;
+	}
+
+	public String[] getSelectedSectors() {
+		return selectedSectors;
+	}
+
+	public void setSelectedSectors(String[] selectedSectors) {
+		this.selectedSectors = selectedSectors;
+	}
+
+	public String[] getSelectedDonors() {
+		return selectedDonors;
+	}
+
+	public void setSelectedDonors(String[] selectedDonors) {
+		this.selectedDonors = selectedDonors;
+	}
+
+	public String[] getSelectedFinancingIstruments() {
+		return selectedFinancingIstruments;
+	}
+
+	public void setSelectedFinancingIstruments(String[] selectedFinancingIstruments) {
+		this.selectedFinancingIstruments = selectedFinancingIstruments;
 	}
 }

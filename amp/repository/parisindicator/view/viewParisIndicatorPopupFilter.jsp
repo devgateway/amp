@@ -9,7 +9,7 @@
 
 <digi:instance property="parisIndicatorForm" />
 
-<digi:form action="/parisindicator.do?reportId=${parisIndicatorForm.piReport.indicatorCode}">
+
 	<html:hidden property="piReport.indicatorCode"/>
 	<div id="tabview_container" class="yui-navset">
 		<ul class="yui-nav">
@@ -55,9 +55,11 @@
 										</td>
 										<td colspan="4">
 											<bean:define id="syear" property="selectedStartYear" name="parisIndicatorForm" />
-											<select name="startYear" value="<%=syear%>" class="dr-menu" onchange="chkYear('start')">
-
-											</select>
+											<html:select name="parisIndicatorForm" property="selectedStartYear">
+                                                <html:option value="2007">2007</html:option>
+                                                <html:option value="2008">2008</html:option>
+                                                <html:option value="2009">2009</html:option>
+											</html:select>
 										</td>
 									</tr>
 									<tr><td>&nbsp;</td></tr>
@@ -67,9 +69,11 @@
 										</td>
 										<td colspan="4">
 											<bean:define id="cyear" property="selectedEndYear" name="parisIndicatorForm"/>
-											<select name="closeYear" value="<%=cyear%>" class="dr-menu" onchange="chkYear('close')">
-
-											</select>
+											<html:select name="parisIndicatorForm" property="selectedEndYear">
+                                                <html:option value="2007">2007</html:option>
+                                                <html:option value="2008">2008</html:option>
+                                                <html:option value="2009">2009</html:option>
+											</html:select>
 										</td>
 									</tr>
 								</table>
@@ -191,9 +195,8 @@
 		<table width="100%">
 			<tr>
 				<td align="center" colspan="5">
-					<input type="submit" value="<digi:trn key="rep:filer:ApplyFiltersToReport">Apply Filters to the Report</digi:trn>" class="dr-menu" onclick="hideFilter();clearFilter();submit();">
+					<input type="submit" value="<digi:trn key="rep:filer:ApplyFiltersToReport">Apply Filters to the Report</digi:trn>" class="dr-menu" onclick="hideFilter();submitFilters();">
 				</td>
 			</tr>
 		</table>
 	</div>
-<!--</digi:form>-->

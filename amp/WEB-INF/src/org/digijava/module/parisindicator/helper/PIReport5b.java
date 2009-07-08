@@ -326,7 +326,9 @@ public class PIReport5b extends PIAbstractReport implements PIOperationsFor5 {
 		newList = this.addMissingYears(newList, startYear, endYear);
 
 		// Calculate final percentages and add 'All Donors' row.
-		newList = this.calculatePercentages(newList, startYear, endYear);
+		if (!newList.isEmpty()) {
+			newList = this.calculatePercentages(newList, startYear, endYear);
+		}
 
 		return newList;
 	}

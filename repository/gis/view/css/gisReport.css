@@ -16,12 +16,12 @@ div.gisReportTableBevelCell{
 
 div.gisReportTableBevelCellBgNormal{
 	background-color : #D4D0C8;
-	padding: 2px;
+	padding: 0px;
 }
 
 div.gisReportTableBevelCellBgDash{
 	background-color : #D4D0C8;
-	padding: 2px;
+	padding: 0px;
 	background-image : url(../images/dashPatern.gif);
 }
 
@@ -30,5 +30,5 @@ div.gisReportWarning {
 	border : 1px solid #FD0000;
 	color : #FD0000;
 	text-align : center;
-	padding: 5px;
+	padding: 0px;
 }

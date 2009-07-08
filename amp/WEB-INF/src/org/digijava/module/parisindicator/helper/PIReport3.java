@@ -10,7 +10,6 @@ import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -20,7 +19,6 @@ import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpStatus;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
@@ -28,11 +26,8 @@ import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.digijava.module.parisindicator.model.PIUseCase;
 import org.digijava.module.parisindicator.util.PIConstants;
 import org.digijava.module.parisindicator.util.PIUtils;
-import org.hibernate.Query;
-import org.hibernate.Session;
 
 import edu.emory.mathcs.backport.java.util.Collections;
 

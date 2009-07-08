@@ -69,6 +69,9 @@ public class PIUseCase {
 		if (form.getCurrencyTypes() == null || form.getCurrencyTypes().isEmpty()) {
 			form.setCurrencyTypes(CurrencyUtil.getAllCurrencies(CurrencyUtil.ALL_ACTIVE));
 		}
+		if (form.getFinancingInstruments() == null || form.getFinancingInstruments().isEmpty()) {
+			form.setFinancingInstruments(null);
+		}
 		return form;
 	}
 
@@ -88,6 +91,13 @@ public class PIUseCase {
 		form.setSelectedCurrency(CurrencyUtil.getAmpcurrency(appSettings.getCurrencyId()).getCurrencyCode());
 		form.setSelectedEndYear(Calendar.getInstance().get(Calendar.YEAR));
 		form.setSelectedStartYear(Calendar.getInstance().get(Calendar.YEAR) - 2);
+		form.setStartYears(new int[10]);
+		form.setEndYears(new int[10]);
+		int auxYear = form.getSelectedEndYear() - 5;
+		for (int i = 0; i < 10; i++) {
+			form.getStartYears()[i] = auxYear + i;
+			form.getEndYears()[i] = auxYear + i;
+		}
 
 		form.setSelectedDonors(null);
 		form.setSelectedDonorGroups(null);

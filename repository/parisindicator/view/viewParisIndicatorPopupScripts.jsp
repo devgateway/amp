@@ -259,13 +259,10 @@
 	function submitFilters() {
 		//alert('submitfilters');
         var filterForm = document.getElementsByName("parisIndicatorForm")[0];
-        filterForm.selectedStartYear.value = document.getElementsByName("auxStartYear")[0].value;
-        filterForm.selectedEndYear.value = document.getElementsByName("auxEndYear")[0].value;
+        filterForm.selectedStartYear.value = document.getElementsByName("selectedStartYear")[0].value;
+        filterForm.selectedEndYear.value = document.getElementsByName("selectedEndYear")[0].value;
         filterForm.selectedCalendar.value = document.getElementsByName("selectedCalendar")[0].value;
         filterForm.selectedCurrency.value = document.getElementsByName("selectedCurrency")[0].value;
-        //filterForm.selectedDonorGroups.value = document.getElementsByName("selectedDonorGroups")[0].value;
-        //alert(document.getElementsByName("selectedDonorGroups")[0].value);
-        //filterForm.selectedSectors.value = document.getElementsByName("selectedSectors")[0].value;
         
         //Donors
         var txtSelectedValuesObj = filterForm.selectedDonors;

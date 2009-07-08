@@ -7,7 +7,6 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpStatus;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 public interface PIOperations {

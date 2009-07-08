@@ -44,6 +44,8 @@ public class PIForm extends ActionForm {
 	private Collection<AmpOrgGroup> donorGroups;
 	private Collection<AmpSector> sectors;
 	private Collection<AmpCategoryValue> financingInstruments;
+	private int[] startYears;
+	private int[] endYears;
 
 	/*
 	 * Rows of the main table.
@@ -248,5 +250,21 @@ public class PIForm extends ActionForm {
 
 	public void setSelectedFinancingIstruments(String[] selectedFinancingIstruments) {
 		this.selectedFinancingIstruments = selectedFinancingIstruments;
+	}
+
+	public int[] getStartYears() {
+		return startYears;
+	}
+
+	public void setStartYears(int[] startYears) {
+		this.startYears = startYears;
+	}
+
+	public int[] getEndYears() {
+		return endYears;
+	}
+
+	public void setEndYears(int[] endYears) {
+		this.endYears = endYears;
 	}
 }

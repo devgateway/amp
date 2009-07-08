@@ -286,7 +286,9 @@ public class PIReport7 extends PIAbstractReport {
 		newList = this.addMissingYears(newList, startYear, endYear);
 
 		// Calculate final percentages and add 'All Donors' row.
-		newList = this.calculatePercentages(newList, startYear, endYear);
+		if (!newList.isEmpty()) {
+			newList = this.calculatePercentages(newList, startYear, endYear);
+		}
 
 		return newList;
 	}

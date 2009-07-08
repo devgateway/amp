@@ -21,6 +21,32 @@ public class PIAction extends Action {
 		PIForm piForm = (PIForm) form;
 		PIUseCase useCase = new PIUseCase();
 
+		// Reformat some data.
+		if (piForm.getSelectedDonors() != null && piForm.getSelectedDonors().length > 0
+				&& !piForm.getSelectedDonors()[0].isEmpty()) {
+			piForm.setSelectedDonors(piForm.getSelectedDonors()[0].split(","));
+		} else {
+			piForm.setSelectedDonors(null);
+		}
+		if (piForm.getSelectedDonorGroups() != null && piForm.getSelectedDonorGroups().length > 0
+				&& !piForm.getSelectedDonorGroups()[0].isEmpty()) {
+			piForm.setSelectedDonorGroups(piForm.getSelectedDonorGroups()[0].split(","));
+		} else {
+			piForm.setSelectedDonorGroups(null);
+		}
+		if (piForm.getSelectedStatuses() != null && piForm.getSelectedStatuses().length > 0
+				&& !piForm.getSelectedStatuses()[0].isEmpty()) {
+			piForm.setSelectedStatuses(piForm.getSelectedStatuses()[0].split(","));
+		} else {
+			piForm.setSelectedStatuses(null);
+		}
+		if (piForm.getSelectedSectors() != null && piForm.getSelectedSectors().length > 0
+				&& !piForm.getSelectedSectors()[0].isEmpty()) {
+			piForm.setSelectedSectors(piForm.getSelectedSectors()[0].split(","));
+		} else {
+			piForm.setSelectedSectors(null);
+		}
+
 		// Setup filters.
 		useCase.setupFiltersData(piForm, request);
 		if (piForm.isReset()) {

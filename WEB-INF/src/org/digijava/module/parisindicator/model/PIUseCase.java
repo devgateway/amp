@@ -13,13 +13,17 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
+import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.parisindicator.form.PIForm;
 import org.digijava.module.parisindicator.helper.PIAbstractReport;
 import org.digijava.module.parisindicator.helper.PIReport10a;
@@ -62,6 +66,9 @@ public class PIUseCase {
 		if (form.getCalendars() == null || form.getCalendars().isEmpty()) {
 			form.setCalendars(DbUtil.getAllFisCalenders());
 		}
+		if (form.getCurrencyTypes() == null || form.getCurrencyTypes().isEmpty()) {
+			form.setCurrencyTypes(CurrencyUtil.getAllCurrencies(CurrencyUtil.ALL_ACTIVE));
+		}
 		return form;
 	}
 
@@ -72,11 +79,13 @@ public class PIUseCase {
 	public void resetFilterSelections(PIForm form, ApplicationSettings appSettings) {
 
 		if (appSettings.getFisCalId() != null) {
-			form.setSelectedCalendar(DbUtil.getAmpFiscalCalendar(appSettings.getFisCalId()));
+			form.setSelectedCalendar(DbUtil.getAmpFiscalCalendar(appSettings.getFisCalId()).getAmpFiscalCalId()
+					.toString());
 		} else {
-			form.setSelectedCalendar(DbUtil.getAmpFiscalCalendar(DbUtil.getBaseFiscalCalendar()));
+			form.setSelectedCalendar(DbUtil.getAmpFiscalCalendar(DbUtil.getBaseFiscalCalendar()).getAmpFiscalCalId()
+					.toString());
 		}
-		form.setSelectedCurrency(CurrencyUtil.getAmpcurrency(appSettings.getCurrencyId()));
+		form.setSelectedCurrency(CurrencyUtil.getAmpcurrency(appSettings.getCurrencyId()).getCurrencyCode());
 		form.setSelectedEndYear(Calendar.getInstance().get(Calendar.YEAR));
 		form.setSelectedStartYear(Calendar.getInstance().get(Calendar.YEAR) - 2);
 
@@ -166,22 +175,25 @@ public class PIUseCase {
 
 		// Get the common info from surveys and apply some filters.
 		Collection<PIReportAbstractRow> preMainReportRows = null;
+		AmpFiscalCalendar auxCalendar = DbUtil.getAmpFiscalCalendar(new Long(form.getSelectedCalendar()));
+		AmpCurrency auxCurrency = CurrencyUtil.getAmpcurrency(form.getSelectedCurrency());
+		Collection<AmpOrganisation> auxDonors = PIUtils.getDonorsCollection(form.getSelectedDonors());
+		Collection<AmpOrgGroup> auxDonorGroups = PIUtils.getDonorGroups(form.getSelectedDonorGroups());
+		Collection<AmpSector> auxSectors = PIUtils.getSectors(form.getSelectedSectors());
+		Collection<AmpCategoryValue> auxStatuses = PIUtils.getStatuses(form.getSelectedStatuses());
+		Collection<AmpCategoryValue> auxFinancingInstruments = null;
 		if (!report.getReportCode().equals(PIConstants.PARIS_INDICATOR_REPORT_10a)) {
-			Collection<AmpAhsurvey> commonData = getCommonSurveyData(form.getSelectedDonors(), form
-					.getSelectedDonorGroups());
+			Collection<AmpAhsurvey> commonData = getCommonSurveyData(auxDonors, auxDonorGroups);
 
 			// Execute the logic for generating each report.
 			preMainReportRows = report.generateReport(commonData, form.getSelectedStartYear(), form
-					.getSelectedEndYear(), form.getSelectedCalendar(), form.getSelectedCurrency(), form
-					.getSelectedSectors(), form.getSelectedStatuses(), form.getSelectedFinancingIstruments());
+					.getSelectedEndYear(), auxCalendar, auxCurrency, auxSectors, auxStatuses, auxFinancingInstruments);
 		} else {
-			Collection<AmpOrganisation> commonData10a = getCommonSurveyDataForPI10a(form.getSelectedDonors(), form
-					.getSelectedDonorGroups());
+			Collection<AmpOrganisation> commonData10a = getCommonSurveyDataForPI10a(auxDonors, auxDonorGroups);
 
 			// Execute the logic for generating each report.
 			preMainReportRows = report.generateReport10a(commonData10a, form.getSelectedStartYear(), form
-					.getSelectedEndYear(), form.getSelectedCalendar(), form.getSelectedCurrency(), form
-					.getSelectedSectors(), form.getSelectedStatuses(), form.getSelectedFinancingIstruments());
+					.getSelectedEndYear(), auxCalendar, auxCurrency, auxSectors, auxStatuses, auxFinancingInstruments);
 		}
 
 		// Postprocess the report if needed.

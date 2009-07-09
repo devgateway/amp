@@ -20,6 +20,8 @@ public class ActivityForm extends ActionForm implements Serializable {
 	private String keyword;
 	private String lastKeyword;
 	
+	private int type = -1;
+	
 	private int tempNumResults = 10;
 	
 	private int page;
@@ -172,6 +174,14 @@ public class ActivityForm extends ActionForm implements Serializable {
 
 	public void setLastKeyword(String lastKeyword) {
 		this.lastKeyword = lastKeyword;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
 	}
 
 

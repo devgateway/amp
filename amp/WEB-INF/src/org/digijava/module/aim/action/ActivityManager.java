@@ -19,6 +19,8 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.form.ActivityForm;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.AuditLoggerUtil;
+import org.digijava.module.help.dbentity.HelpTopic;
+import org.digijava.module.help.util.HelpUtil;
 
 public class ActivityManager extends Action {
 	private static Logger logger = Logger.getLogger(ActivityManager.class);
@@ -39,13 +41,36 @@ public class ActivityManager extends Action {
 
 		ActivityForm actForm = (ActivityForm) form;
 		
+		List<AmpActivity> allActivities = ActivityUtil.getAllActivitiesList();
+		
+		if (actForm.getType() == 0){
+			for (Iterator iterator = allActivities.iterator(); iterator.hasNext();) {
+				AmpActivity ampActivity = (AmpActivity) iterator.next();
+				if (ampActivity.getTeam() == null) {
+					iterator.remove();
+				}
+				
+			}
+		}		
+		
+		if (actForm.getType() == 1){
+			for (Iterator iterator = allActivities.iterator(); iterator.hasNext();) {
+				AmpActivity ampActivity = (AmpActivity) iterator.next();
+				if (ampActivity.getTeam() != null) {
+					iterator.remove();
+				}
+				
+			}
+		}	
+		
+		actForm.setAllActivityList(allActivities);
 		//AMP-5518
 		if ((action != null) && (action.equals("search")) && (actForm.getKeyword() != null) && (actForm.getLastKeyword() != null) && (!actForm.getKeyword().equals(actForm.getLastKeyword())) && ("".equals(actForm.getKeyword().replaceAll(" ", "")))){
 			action="reset";
 		}
 
 		if (action == null) {
-			reset(actForm, request);
+			//reset(actForm, request);
 		} else if (action.equals("delete")) {
 			deleteActivity(actForm, request);
 		} else if (action.equals("sort")) {
@@ -63,6 +88,7 @@ public class ActivityManager extends Action {
 		} else {
 			page = Integer.parseInt(request.getParameter("page"));
 		}
+		
 		actForm.setCurrentPage(new Integer (page));
 		actForm.setPagesToShow(10);
 		
@@ -214,11 +240,26 @@ public class ActivityManager extends Action {
 	 */
 	private void deleteActivity(ActivityForm actForm, HttpServletRequest request) {
 		HttpSession session = request.getSession();
-		Long ampActId = new Long(Long.parseLong(request.getParameter("id")));
-		AmpActivity activity = ActivityUtil.getAmpActivity(ampActId);
-		AuditLoggerUtil.logObject(session, request, activity, "delete");
-		ActivityUtil.deleteActivity(ampActId);
+		//Long ampActId = new Long(Long.parseLong(request.getParameter("id")));
+		String tIds=request.getParameter("tIds");
+		List<Long> topicsIds=getActsIds(tIds.trim());
+		for (Long id : topicsIds) {
+			AmpActivity activity = ActivityUtil.getAmpActivity(id);
+			AuditLoggerUtil.logObject(session, request, activity, "delete");
+			ActivityUtil.deleteActivity(id);
+		}		
 		actForm.setAllActivityList(ActivityUtil.getAllActivitiesList());
+	}
+	
+	private List<Long> getActsIds(String ids){
+		List<Long> actsIds=new ArrayList<Long>();
+		while(ids.indexOf(",")!= -1){
+			Long id= new Long(ids.substring(0,ids.indexOf(",")).trim());
+			actsIds.add(id);
+			ids=ids.substring(ids.indexOf(",")+1);
+		}
+		actsIds.add(new Long(ids.trim()));
+		return actsIds;
 	}
 }
 

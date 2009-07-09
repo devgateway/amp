@@ -612,6 +612,7 @@ public class ImportBuilder {
 			if (activity.getOrgrole() == null || activity.getOrgrole().size() == 0 ){
 				activity.setOrgrole(orgRole);
 			}
+			else activity.getOrgrole().addAll(orgRole);
 		}
 		
 		
@@ -922,7 +923,12 @@ public class ImportBuilder {
 
 	private Collection getFundingXMLtoAMP(ActivityType actType, AmpActivity activity, HashMap hm) throws Exception{
 		ArrayList<AmpFunding> fundings= null;
+		Set orgRole = new HashSet();
 		for (Iterator<FundingType> it = actType.getFunding().iterator(); it.hasNext();) {
+			AmpRole role = DbUtil.getAmpRole(org.digijava.module.aim.helper.Constants.FUNDING_AGENCY);
+			
+			
+			
 			FundingType funding = (FundingType) it.next();
 			CodeValueType fundingOrg=funding.getFundingOrg();
 			AmpFunding ampFunding = new AmpFunding();
@@ -954,7 +960,19 @@ public class ImportBuilder {
 			//TODO: the language - lang attribute
 			if(funding.getConditions() != null) ampFunding.setConditions(funding.getConditions().getValue());
 			fundings.add(ampFunding);
+
+			AmpOrgRole ampOrgRole = new AmpOrgRole();
+			ampOrgRole.setActivity(activity);
+			ampOrgRole.setRole(role);
+			ampOrgRole.setOrganisation(ampOrg);
+			orgRole.add(ampOrgRole);
 		}
+		
+		if (activity.getOrgrole() == null || activity.getOrgrole().size() == 0 ){
+			activity.setOrgrole(orgRole);
+		}
+		else activity.getOrgrole().addAll(orgRole);
+		
 		return fundings;
 	}
 	

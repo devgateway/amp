@@ -24,6 +24,82 @@ function deleteType(id){
 }
 </script>
 
+<style type="text/css">
+		.jlien{
+			text-decoration:none;
+		}
+		.jtextfont{
+		font-family:verdana;font-size:11px;
+		}
+		
+		.tableEven {
+			background-color:#dbe5f1;
+			font-size:8pt;
+			padding:2px;
+		}
+
+		.tableOdd {
+			background-color:#FFFFFF;
+			font-size:8pt;!important
+			padding:2px;
+		}
+		 
+		.Hovered {
+			background-color:#a5bcf2;
+		}
+		.jtabletitle{
+		  font-size:10px; font-weight:bold;
+		}
+		
+		
+		
+</style>
+
+<script type="text/javascript">
+function confirmDelete() {
+	var ret		= confirm('${translation}');
+	return ret;
+}
+
+
+function setStripsTable(tableId, classOdd, classEven) {
+	var tableElement = document.getElementById(tableId);
+	rows = tableElement.getElementsByTagName('tr');
+	for(var i = 0, n = rows.length; i < n; ++i) {
+		if(i%2 == 0)
+			rows[i].className = classEven;
+		else
+			rows[i].className = classOdd;
+	}
+	rows = null;
+}
+function setHoveredTable(tableId, hasHeaders) {
+
+	var tableElement = document.getElementById(tableId);
+	if(tableElement){
+    	var className = 'Hovered',
+        pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
+        rows      = tableElement.getElementsByTagName('tr');
+
+		for(var i = 0, n = rows.length; i < n; ++i) {
+			rows[i].onmouseover = function() {
+				this.className += ' ' + className;
+			};
+			rows[i].onmouseout = function() {
+				this.className = this.className.replace(pattern, ' ');
+
+			};
+		}
+		rows = null;
+	}
+}
+
+
+
+</script>
+
+
+
 <digi:instance property="aimComponentsTypeForm" />
 <digi:form action="/updateComponentType.do" method="post">
  
@@ -36,12 +112,12 @@ function deleteType(id){
 
   <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
     <tr>
-      <td class=r-dotted-lg width=14>&nbsp;</td>
-      <td align=left class=r-dotted-lg vAlign=top width=750>
+      <td  width=14>&nbsp;</td>
+      <td align=left  vAlign=top width=750>
         <table cellPadding=5 cellSpacing=0 width="100%" border=0>
           <tr>
             <!-- Start Navigation -->
-            <td height=33><span class="crumb">
+            <td ><span class="crumb">
               <c:set var="ToViewAdmin">
                 <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
               </c:set>
@@ -61,11 +137,11 @@ function deleteType(id){
            <digi:trn key="aim:componentTypesTitle">Component Types Manager</digi:trn>
           </c:set>
 
-            <td height=16 vAlign=center width=571><span class=subtitle-blue><c:out value="${componentTypesTitle}"/></span>
+            <td vAlign=center width=571><span class=subtitle-blue><c:out value="${componentTypesTitle}"/></span>
       </td>
           </tr>
           <tr>
-            <td height=16 vAlign=center width=571>
+            <tdvAlign=center width=571>
               <digi:errors />
             </td>
           </tr>
@@ -77,16 +153,24 @@ function deleteType(id){
               <tr bgcolor="#ffffff">
                 <td valign="top" width="100%"><table width="100%" cellspacing="1" cellpadding="1" valign="top" align="left">
                     <tr>
-                      <td bgcolor="#d7eafd" class="box-title" height="20"><!-- Table title -->
-                          <digi:trn key="aim:componentTypes">
-                            <h3>Component Types </h3>
+                      <td ><!-- Table title bgColor=#999999 class="box-title" style = "color:#000; height:20px;"  -->
+                         <!--  <digi:trn key="aim:componentTypes">
+                            <center>Component Types </center>
                           </digi:trn>
-                          <!-- end table title -->                      </td>
+                          end table title -->                      </td>
                     </tr>
                     <tr>
-                      <td><table width="100%" cellspacing="2" cellpadding="2" valign="top" align="left" bgcolor="#d7eafd">
+                      <td>
+					<div style = "color:#000; height:20px; background-color:#999999;" class="box-title">
+					<digi:trn key="aim:componentTypes">
+                            <center>Component Types </center>
+                          </digi:trn>
+
+					</div>
+                     <div style="overflow:auto; height:180px; border:#999999 1px solid; ">
+                     <table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left" id="dataTable">
                           <logic:empty name="aimComponentsTypeForm" property="componentTypesList">
-                            <tr bgcolor="#ffffff">
+                            <tr >
                               <td colspan="5" align="center"><b>
                                 <digi:trn key="aim:noTypes"> No types present </digi:trn>
                               </b></td>
@@ -96,23 +180,26 @@ function deleteType(id){
                             <logic:iterate name="aimComponentsTypeForm" property="componentTypesList" id="componentTypesList"
                             type="org.digijava.module.aim.dbentity.AmpComponentType">
                               <tr>
-                                <td height="20" bgcolor="#ffffff">
+                                <td height="20" >
                                 
                             <jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
 	                                    <c:set var="ToEditComponents">
 	                                      <digi:trn key="aim:clickToEdit">Click here to Edit</digi:trn>
 	                                    </c:set>
 	                                    <bean:write  name="componentTypesList" property="code"/>                                     </td>
-                                <td height="20" bgcolor="#ffffff" td>
+                                <td height="20" >
                                 <bean:write  name="componentTypesList" property="name"/>                                </td>
-                                <td width="100" height="20" align="center" nowrap="nowrap" bgcolor="#ffffff">
+                                <td width="100" height="20" align="center" nowrap="nowrap" >
                                   <c:set var="ToEditType">
                                   <digi:trn key="aim:clickToEditType">Click here to Edit Type</digi:trn>
                                 </c:set>
                                 <c:set var="edit">
                                   <digi:trn key="aim:edit">Edit</digi:trn>
                                 </c:set>
-                                [ <a href="javascript:editType(<bean:write name="componentTypesList" property="type_id"/>)"> <c:out value="${edit}"/></a> ]
+                                <a href="javascript:editType(<bean:write name="componentTypesList" property="type_id"/>)" style="text-decoration:none;" >
+									<img border="0" align="absmiddle" vspace="2" src="/repository/message/view/images/edit.gif"/>
+									<c:out value="${edit}"/>
+							    </a>
 								<c:set var="delete">
                                     <digi:trn key="aim:deleteType">Delete</digi:trn>
                                   </c:set>
@@ -120,72 +207,100 @@ function deleteType(id){
                                     <digi:trn key="aim:cantDeleteType">Can't delete type because it's assigned to an Compoenent</digi:trn>
                                   </c:set>
                                   <c:if test="${!empty componentTypesList.components}">
-                                    [<a title="${ForDelete}"  style="text-decoration:none;color:#999999">${delete}</a>]
+                                   <a title="${ForDelete}"  style="text-decoration:none;color:#999999">
+									<img border="0" align="absmiddle" vspace="2" src="/repository/message/view/images/trash_12.gif"/>
+										${delete}
+									</a>
                                   </c:if>
                                  <c:set var="ForDelete">
                                    <digi:trn key="aim:clickToDeleteType">Click here to delete Type</digi:trn>
                                  </c:set>
                                   <c:if test="${empty componentTypesList.components}">
-                                    [<a title="${ForDeleteComponent}"  href="javascript:deleteType(${componentTypesList.type_id});">${delete}</a>]                                  </c:if>                                
+                                    <a title="${ForDeleteComponent}"  href="javascript:deleteType(${componentTypesList.type_id});" style="text-decoration:none;">
+                                    <img border="0" align="absmiddle" vspace="2" src="/repository/message/view/images/trash_12.gif"/>
+										<c:out value="${delete}"/>
+									</a></c:if>                                
                                  </td>
                               </tr>
                             </logic:iterate>
                           </logic:notEmpty>
                           <!-- end page logic -->
-                      </table></td>
+                      </table>
+						<script language="javascript">
+							setStripsTable("dataTable", "tableEven", "tableOdd");
+							setHoveredTable("dataTable", false);
+						</script>
+
+
+
+					</div>
+					</td>
                     </tr>
                 </table></td>
               </tr>
-              <tr>
-                <td height="20" bgcolor="#d7eafd" class="box-title" align="center"><B>
-                    <c:set var="translation">
-                      <digi:trn key="btn:componentTypeManagerAddType">Add Type</digi:trn>
-                    </c:set>
-                    <html:button styleClass="dr-menu" value="${translation}" property="submitButton"  onclick="addType()">
-                      <digi:trn key="aim:clickToAddComponent">Click here to add a type</digi:trn>
-                    </html:button></td>
-              </tr>
+              
             </table></td>
 
-<td noWrap vAlign="top">
-  <table align=center cellPadding=0 cellSpacing=0 width="90%" border=0>
-    <tr>
-      <td>
-        <!-- Other Links -->
-        <table cellPadding=0 cellSpacing=0 width=100>
-          <tr>
-            <td bgColor=#c9c9c7 class=box-title>
-              <digi:trn key="aim:otherLinks">
-              Other links
-              </digi:trn>
-            </td>
-            <td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;
-            
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-    <tr>
-      <td bgColor=#ffffff class=box-border>
-        <table cellPadding=5 cellSpacing=1 width="100%">
-          <tr>
-            <td nowrap="nowrap">
-              <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-              <c:set var="ToViewAdmin">
-                <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-              </c:set>
+<td noWrap vAlign="top" >&nbsp;
+  
 
-              <digi:link href="/admin.do" title="${ToViewAdmin}" >
-                <digi:trn key="aim:AmpAdminHome">
-                Admin Home                </digi:trn>
-              </digi:link>            </td>
-          </tr>
-          <!-- end of other links -->
-        </table>
-      </td>
-    </tr>
-  </table>
+
+<table align=center cellPadding=0 cellSpacing=0 width="90%" border=0>
+							<tr>
+								<td bgColor=#999999 class="box-title" style = "color:#000; height:16px;">
+									<!-- Other Links -->
+									
+												<digi:trn key="aim:otherLinks">
+												Links
+												</digi:trn>
+									
+								</td>
+							</tr>
+							<tr>
+								<td bgColor=#ffffff class=box-border>
+									<table cellPadding=5 cellSpacing=1 width="100%">
+										<tr>
+											<td>
+												<div style="width:100px; ">
+												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												
+												
+												
+											     
+											     <c:set var="translation">
+							                      <digi:trn key="btn:componentTypeManagerAddTypeTitle">Add Type</digi:trn>
+							                    </c:set>
+							                    <digi:link href="#" onclick="javascript:addType(); return false;" title="${translation}" styleClass="dr-menu" property="submitButton"   >
+													<digi:trn key="btn:componentTypeManagerAddType">Add Type</digi:trn>
+												</digi:link>
+							                    
+							             
+												</div>
+											</td>
+										</tr>
+																				
+										<tr>
+											<td>
+												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<c:set var="translation">
+													<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
+												</c:set>
+												<digi:link href="/admin.do" title="${translation}" >
+												<digi:trn key="aim:AmpAdminHome">
+												Admin Home
+												</digi:trn>
+												</digi:link>
+											</td>
+										</tr>
+										<!-- end of other links -->
+									</table>
+</td></tr></table>
+
+
+
+
+
+
 </td></tr>
               </table>
 </td>

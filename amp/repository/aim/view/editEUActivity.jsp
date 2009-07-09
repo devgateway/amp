@@ -45,16 +45,16 @@ function selectOrganisation1() {
 
 <script type="text/javascript">
 	var myCalendarModel = new DHTMLSuite.calendarModel();
-	
-	myCalendarModel.setLanguageCode('<bean:write name="lang" />'); 
-	calendarObjForForm = new DHTMLSuite.calendar({callbackFunctionOnDayClick:'getDateFromCalendar',isDragable:false,displayTimeBar:false,calendarModelReference:myCalendarModel}); 
-		
+
+	myCalendarModel.setLanguageCode('<bean:write name="lang" />');
+	calendarObjForForm = new DHTMLSuite.calendar({callbackFunctionOnDayClick:'getDateFromCalendar',isDragable:false,displayTimeBar:false,calendarModelReference:myCalendarModel});
+
 	function getDateFromCalendar(inputArray)
 	{
 		var references = calendarObjForForm.getHtmlElementReferences(); // Get back reference to form field.
 		references.dueDate.value = inputArray.year + '-' + inputArray.month + '-' + inputArray.day;
-		calendarObjForForm.hide();			
-	}	
+		calendarObjForForm.hide();
+	}
 
 	function pickDate(buttonObj,inputObject)
 	{
@@ -66,9 +66,9 @@ function selectOrganisation1() {
 		}else{
 			calendarObjForForm.resetViewDisplayedMonth();	// This line resets the view back to the inital display, i.e. it displays the inital month and not the month it displayed the last time it was open.
 			calendarObjForForm.display();
-		}		
+		}
 	}
-</script>		
+</script>
 
 <body onLoad="load()">
 <digi:instance property="aimEUActivityForm" />
@@ -231,10 +231,13 @@ function selectOrganisation1() {
 		<b><digi:trn key="aim:addEditActivityDueDate">Due Date:</digi:trn></b>
 		</td>
 		<td>
-			<html:text readonly="true" property="dueDate" styleClass="inp-text"/>
-				<a onClick="pickDate(this,document.aimEUActivityForm.dueDate)">
-				  <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
-				</a>
+			<html:text readonly="true" name="aimEUActivityForm" property="dueDate" styleClass="inp-text" styleId="dueDate"/>
+            <a id="clear1" href='javascript:clearDate(document.getElementById("dueDate"),"clear1")'>
+                <digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete "/>
+            </a>
+            <a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("dueDate"),"clear1")'>
+                <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+            </a>
 		</td>
 	</tr>	
 

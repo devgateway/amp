@@ -16,11 +16,12 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
-import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.form.DesktopForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.aim.util.IndicatorUtil;
 
 /**
  * Loads all desktop activities for the user
@@ -52,20 +53,20 @@ public class GetDesktopActivities extends Action {
 				if(arf.getRisks()!=null)
 				{
 					arf.getRisks().clear();
-					AmpIndicatorRiskRatings airr=FeaturesUtil.getFilter(risk);
+					AmpCategoryValue airr=FeaturesUtil.getFilter(risk);
 					arf.getRisks().add(airr);
 					session.setAttribute(ArConstants.REPORTS_FILTER, arf);
 				}
 				else{
 					arf.setRisks(new HashSet());
-					AmpIndicatorRiskRatings airr=FeaturesUtil.getFilter(risk);
+					AmpCategoryValue airr=FeaturesUtil.getFilter(risk);
 					arf.getRisks().add(airr);
 					session.setAttribute(ArConstants.REPORTS_FILTER, arf);
 				}
 			else{
 				arf=new AmpARFilter();
 				arf.setRisks(new HashSet());
-				AmpIndicatorRiskRatings airr=FeaturesUtil.getFilter(risk);
+				AmpCategoryValue airr=FeaturesUtil.getFilter(risk);
 				arf.getRisks().add(airr);
 				session.setAttribute(ArConstants.REPORTS_FILTER, arf);
 			}

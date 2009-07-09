@@ -31,7 +31,7 @@ public class GetActivityIndicators extends Action {
 		//TODO INDIC this should be investigated, why is this list required, and how this can be changed with IndicatorUtil.
 		uIndValForm.setIndicators(MEIndicatorsUtil.getActivityIndicators(
 				uIndValForm.getActivityId()));
-		
+	
 		uIndValForm.setIndicatorId(null);
 		uIndValForm.setIndicatorValId(null);
 		uIndValForm.setExpIndicatorId(new Long(-1));

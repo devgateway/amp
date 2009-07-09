@@ -23,11 +23,11 @@ import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
@@ -98,7 +98,7 @@ public class ChartGenerator {
         Long siteId=RequestUtils.getSiteDomain(request).getSite().getId();
         String langCode= RequestUtils.getNavigationLanguage(request).getCode();
 
-		ArrayList<AmpIndicatorRiskRatings> risks=new ArrayList<AmpIndicatorRiskRatings>();
+		ArrayList<AmpCategoryValue> risks=new ArrayList<AmpCategoryValue>();
 		Set<IndicatorActivity> valuesActivity=ActivityUtil.loadActivity(actId).getIndicators();
 		if(valuesActivity!=null && valuesActivity.size()>0){
 			Iterator<IndicatorActivity> it=valuesActivity.iterator();
@@ -107,15 +107,15 @@ public class ChartGenerator {
 				 Set<AmpIndicatorValue> values=indActivity.getValues();
 				 for(Iterator<AmpIndicatorValue> valuesIter=values.iterator();valuesIter.hasNext();){
 					 AmpIndicatorValue val=valuesIter.next();
-					 if(val.getRisk()!=null){
-						 risks.add(val.getRisk());
+					 if(val.getRiskValue()!=null){
+						 risks.add(val.getRiskValue());
 						 break;//TODO INDIC because this is stupid! all values have same risk and this risk should go to connection.
 					 }
 				}
 			}
 		}
 
-		//ArrayList meRisks = (ArrayList) MEIndicatorsUtil.getMEIndicatorRisks(actId);
+		/*ArrayList meRisks = (ArrayList) MEIndicatorsUtil.getMEIndicatorRisks(actId);
         for (Iterator<AmpIndicatorRiskRatings> riskIter = risks.iterator(); riskIter.hasNext(); ) {
         	AmpIndicatorRiskRatings item = (AmpIndicatorRiskRatings) riskIter.next();
             String value = item.getRatingName();
@@ -123,7 +123,7 @@ public class ChartGenerator {
             key = key.replaceAll(" ", "");
             String msg = TranslatorWorker.translateText(key, langCode, siteId);
             item.setTranslatedRatingName(msg);
-        }
+        }*/
 
         //Collections.sort((List)risks);
 
@@ -248,10 +248,10 @@ public class ChartGenerator {
 		String fileName = null;
         Long siteId=RequestUtils.getSiteDomain(request).getSite().getId();
         String langCode= RequestUtils.getNavigationLanguage(request).getCode();
-		Collection<AmpIndicatorRiskRatings> col = cp.getData();
+		Collection<AmpCategoryValue> col = cp.getData();
 		try {
 			if (col != null && col.size() > 0) {
-				Iterator<AmpIndicatorRiskRatings> itr = col.iterator();
+				Iterator<AmpCategoryValue> itr = col.iterator();
 
 				DefaultPieDataset ds = new DefaultPieDataset();
 
@@ -260,8 +260,8 @@ public class ChartGenerator {
 				//what is value of each risk name
 				Map<String,Integer> riskValues=new HashMap<String, Integer> ();
 
-				for (AmpIndicatorRiskRatings risk : col) {
-					Integer count=riskCount.get(risk.getRatingName());
+				for (AmpCategoryValue risk : col) {
+					Integer count=riskCount.get(risk.getValue());
 					if (count==null){
 						//this is first one o the type
 						count=new Integer(1);
@@ -269,8 +269,8 @@ public class ChartGenerator {
 						//this is not first one so increment
 						count=new Integer(count+1);
 					}
-					riskCount.put(risk.getRatingName(), count);
-					riskValues.put(risk.getRatingName(), risk.getRatingValue());
+					riskCount.put(risk.getValue(), count);
+					riskValues.put(risk.getValue(), risk.getIndex());
 				}
 
 

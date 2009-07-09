@@ -9,7 +9,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -38,7 +37,6 @@ import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -56,11 +54,10 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
-import org.digijava.module.aim.util.LocationUtil;
-import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.Session;
 import org.springframework.beans.BeanWrapperImpl;
@@ -223,25 +220,16 @@ public class ReportsFilterPicker extends MultiAction {
 		// donors = DbUtil.getAllOrgGroups();
 		donors = DbUtil.getAllOrgGrpBeeingUsed();
 		
-		Collection meRisks = MEIndicatorsUtil.getAllIndicatorRisks();
-		for (Iterator iter = meRisks.iterator(); iter.hasNext();) {
-			AmpIndicatorRiskRatings element = (AmpIndicatorRiskRatings) iter.next();
-			String value = element.getRatingName();
-			String key = KEY_RISK_PREFIX + value.toLowerCase();
-			key = key.replaceAll(" ", "");
-			String msg = CategoryManagerUtil.translate(key, request, value);
-			element.setRatingName(msg);
-		}
+		Collection<AmpCategoryValue> risks=CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.INDICATOR_RISK_TYPE_KEY);
 		Collection donorTypes = DbUtil.getAllOrgTypesOfPortfolio();
 		Collection donorGroups = ARUtil.filterDonorGroups(DbUtil.getAllOrgGroupsOfPortfolio());
 
-		Collection allIndicatorRisks = meRisks;
 		Collection regions = DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry();
 		// Collection regions=LocationUtil.getAllVRegions();
 		//filterForm.setCurrencies(currency);
 		filterForm.setCalendars(allFisCalenders);
 		// filterForm.setDonors(donors);
-		filterForm.setRisks(allIndicatorRisks);
+		filterForm.setRisks(risks);
 		filterForm.setSectors(ampSectors);
 		filterForm.setNationalPlanningObjectives(nationalPlanningObjectives);
 		filterForm.setPrimaryPrograms(primaryPrograms);
@@ -684,7 +672,7 @@ public class ReportsFilterPicker extends MultiAction {
 			// ARF filter
 		}
 
-		arf.setRisks(Util.getSelectedObjects(AmpIndicatorRiskRatings.class, filterForm.getSelectedRisks()));
+		arf.setRisks(Util.getSelectedObjects(AmpCategoryValue.class, filterForm.getSelectedRisks()));
 
 		arf.setGovernmentApprovalProcedures(filterForm.getGovernmentApprovalProcedures());
 		arf.setUnallocatedLocation(filterForm.getUnallocatedLocation());

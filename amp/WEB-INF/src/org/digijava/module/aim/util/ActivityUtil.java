@@ -57,7 +57,6 @@ import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpLocation;
@@ -872,12 +871,12 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         while (itr.hasNext()) {
           ActivityIndicator actInd = (ActivityIndicator) itr.next();
           
-          AmpIndicatorRiskRatings risk=null;
+          AmpCategoryValue risk=null;
                     
           AmpIndicator ind=(AmpIndicator)session.get(AmpIndicator.class,actInd.getIndicatorId());
           //if actInd.getRisk()==0 , than no Risk is selected
           if(actInd.getRisk()!=null && actInd.getRisk().longValue()>0){
-        	  risk=(AmpIndicatorRiskRatings)session.load(AmpIndicatorRiskRatings.class, actInd.getRisk());  
+        	  risk=CategoryManagerUtil.getAmpCategoryValueFromDb(actInd.getRisk());
           }          
 
           AmpCategoryValue categoryValue = null;
@@ -912,7 +911,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         	  indValActual.setValue(new Double(actInd.getCurrentVal()));
         	  indValActual.setComment(actInd.getCurrentValComments());
         	  indValActual.setValueDate(DateConversion.getDate(actInd.getCurrentValDate()));
-        	  indValActual.setRisk(risk);
+        	  indValActual.setRiskValue(risk);
         	  indValActual.setLogFrame(categoryValue);
         	  indValActual.setIndicatorConnection(indConn);
         	  indConn.getValues().add(indValActual);
@@ -924,7 +923,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         	  indValTarget.setValue(new Double(actInd.getTargetVal()));
         	  indValTarget.setComment(actInd.getTargetValComments());
         	  indValTarget.setValueDate(DateConversion.getDate(actInd.getTargetValDate()));
-        	  indValTarget.setRisk(risk);
+        	  indValTarget.setRiskValue(risk);
         	  indValTarget.setLogFrame(categoryValue);
         	  indValTarget.setIndicatorConnection(indConn);
         	  indConn.getValues().add(indValTarget);
@@ -936,7 +935,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         	  indValBase.setValue(new Double(actInd.getBaseVal()));
         	  indValBase.setComment(actInd.getBaseValComments());
         	  indValBase.setValueDate(DateConversion.getDate(actInd.getBaseValDate()));
-        	  indValBase.setRisk(risk);
+        	  indValBase.setRiskValue(risk);
         	  indValBase.setLogFrame(categoryValue);
         	  indValBase.setIndicatorConnection(indConn);
         	  indConn.getValues().add(indValBase);
@@ -948,7 +947,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         	  indValRevised.setValue(new Double(actInd.getRevisedTargetVal()));
         	  indValRevised.setComment(actInd.getRevisedTargetValComments());
         	  indValRevised.setValueDate(DateConversion.getDate(actInd.getRevisedTargetValDate()));
-        	  indValRevised.setRisk(risk);
+        	  indValRevised.setRiskValue(risk);
         	  indValRevised.setLogFrame(categoryValue);
         	  indValRevised.setIndicatorConnection(indConn);
         	  indConn.getValues().add(indValRevised);

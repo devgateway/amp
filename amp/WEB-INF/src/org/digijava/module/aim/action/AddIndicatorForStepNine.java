@@ -14,23 +14,25 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.ActivityIndicator;
-import org.digijava.module.aim.util.MEIndicatorsUtil;
+import org.digijava.module.aim.helper.AmpMEIndicatorValue;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 
 public class AddIndicatorForStepNine extends Action{
-	
+
 private static Logger logger = Logger.getLogger(AddIndicatorForStepNine.class);
-	
+
 	public ActionForward execute(ActionMapping mapping,ActionForm form,
 			HttpServletRequest request,HttpServletResponse response) throws Exception {
-	
+
 		EditActivityForm eaForm = (EditActivityForm) form;
 		HttpSession session = request.getSession();
-		
-		
+
+
 		Collection<AmpMEIndicatorValue> colampMEIndValbox = (Collection)session.getAttribute("ampMEIndValbox");
 		session.setAttribute("ampMEIndValbox",null);
 		String name=null,code=null;
@@ -39,7 +41,7 @@ private static Logger logger = Logger.getLogger(AddIndicatorForStepNine.class);
 			tmpActivityIndicator=new ArrayList();
 		}
 
-		
+
 	 if(colampMEIndValbox!=null && !colampMEIndValbox.isEmpty()){
 		Iterator<AmpMEIndicatorValue> itr = colampMEIndValbox.iterator();
 		while(itr.hasNext()){
@@ -72,9 +74,11 @@ private static Logger logger = Logger.getLogger(AddIndicatorForStepNine.class);
 		}
 		eaForm.getIndicator().setIndicatorsME(tmpActivityIndicator);
 		}
-	
-		if(!eaForm.getIndicator().getIndicatorsME().isEmpty())
-			eaForm.getIndicator().setRiskCollection(MEIndicatorsUtil.getAllIndicatorRisks());
+
+		if(!eaForm.getIndicator().getIndicatorsME().isEmpty()){
+            Collection<AmpCategoryValue> risks=CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.INDICATOR_RISK_TYPE_KEY);
+			eaForm.getIndicator().setRiskCollection(risks);
+        }
 		eaForm.getIndicator().setIndicatorRisk(null);
 		return mapping.findForward("successfull");
 	}

@@ -486,13 +486,6 @@
       <forward name="gotoMultiProgram" path="/aim/themeManager.do" redirect="true" />
       <forward name="gotoMEIndicators" path="/aim/indicatorManager.do" redirect="true" />
     </action>
-    <action name="aimThemeForm" path="/aim/editAllIndicator" scope="request" type="org.digijava.module.aim.action.EditAllIndicators" validate="false">
-      <forward name="forward" path="/showLayout.do?layout=aim_editAllIndicator" />
-      <forward name="saving" path="/aim/overallIndicatorManager.do" redirect="true" />
-      <forward name="deleted" path="/aim/viewIndicators.do" />
-      <forward name="assign" path="/showLayout.do?layout=aim_assignThemeIndicator" />
-      <forward name="index" path="/aim/index.do" redirect="true" />
-    </action>
     <action name="aimThemeForm" path="/aim/assignThemeIndicator" scope="request" type="org.digijava.module.aim.action.AssignThemeIndicator" validate="false">
       <forward name="forward" path="/aim/overallIndicatorManager.do" redirect="true" />
     </action>
@@ -1028,20 +1021,9 @@
       <forward name="gotoIndicators" path="/aim/overallIndicatorManager.do" redirect="true" />
       <forward name="gotoMultiProgram" path="/aim/themeManager.do" redirect="true" />
     </action>
-		<action name="aimIndicatorForm" path="/aim/deleteIndicator" scope="session" type="org.digijava.module.aim.action.DeleteMEIndicator" validate="false">
-			<forward name="deleteWindow" path="/showLayout.do?layout=aim_deleteIndicator"/>
-			<forward name="forward" path="/aim/indicatorManager.do" redirect="true"/>
-      <forward name="index" path="/aim/index.do" redirect="true" />
-		</action>
-    <action input="/showLayout.do?layout=aim_addMEIndicator" name="aimIndicatorForm" path="/aim/addIndicator" scope="session" type="org.digijava.module.aim.action.AddIndicator" validate="false">
-      <forward name="forward" path="/showLayout.do?layout=aim_addMEIndicator" />
-       <forward name="save" path="/aim/indicatorManager.do" />
-    </action>
+		
     <action name="aimIndicatorForm" path="/aim/saveIndicator" scope="request" type="org.digijava.module.aim.action.SaveIndicator" validate="false">
       <forward name="forward" path="/aim/indicatorManager.do" />
-    </action>
-    <action name="aimIndicatorForm" path="/aim/indicatorValues" scope="request" type="org.digijava.module.aim.action.IndicatorValues" validate="false">
-      <forward name="forward" path="/showLayout.do?layout=aim_indicatorValues" />
     </action>
     <action name="aimTeamPagesForm" path="/aim/configureTeamPage" scope="request" type="org.digijava.module.aim.action.ShowConfigureTeamPage">
       <forward name="showConfigurePages" path="/showLayout.do?layout=teamPagesConfigure" />

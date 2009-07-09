@@ -40,7 +40,7 @@ public class AmpIndicator implements Serializable
 
 	private AmpCategoryValue indicatorsCategory;
 
-	private AmpIndicatorRiskRatings risk;
+	private AmpCategoryValue risk;
 
 
 	public Long getIndicatorId() {
@@ -104,10 +104,10 @@ public class AmpIndicator implements Serializable
 	public void setIndicatorsCategory(AmpCategoryValue indicatorsCategory) {
 		this.indicatorsCategory = indicatorsCategory;
 	}
-	public AmpIndicatorRiskRatings getRisk() {
+	public AmpCategoryValue getRisk() {
 		return risk;
 	}
-	public void setRisk(AmpIndicatorRiskRatings risk) {
+	public void setRisk(AmpCategoryValue risk) {
 		this.risk = risk;
 	}
 	public String getComments() {

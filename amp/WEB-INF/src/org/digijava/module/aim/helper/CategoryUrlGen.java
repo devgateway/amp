@@ -1,6 +1,6 @@
 package org.digijava.module.aim.helper;
 
-import org.digijava.module.aim.util.MEIndicatorsUtil;
+import org.digijava.module.aim.util.IndicatorUtil;
 import org.jfree.chart.urls.CategoryURLGenerator;
 import org.jfree.data.category.CategoryDataset;
 
@@ -34,7 +34,7 @@ public class CategoryUrlGen
                 String[] activityIds = urls[1].split("&");
 
                 //get indicator id using activity id and category name
-                Long meInd = MEIndicatorsUtil.getIndicatorsForActivity(Long.
+                Long meInd = IndicatorUtil.getIndicatorsForActivity(Long.
                     parseLong(activityIds[0]), categoryKey.toString());
 
                 try {

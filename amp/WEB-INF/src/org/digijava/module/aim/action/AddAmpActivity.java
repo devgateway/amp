@@ -7,6 +7,7 @@ package org.digijava.module.aim.action;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -75,6 +76,7 @@ import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -956,7 +958,7 @@ private ActionForward showStep9(ActionMapping mapping,
 	        // EUActivities = same as Costs
 	        request.setAttribute("costs", euActs);
 	        request.setAttribute("actId", eaForm.getActivityId());
-	        int risk = MEIndicatorsUtil.getOverallRisk(eaForm.getActivityId());
+	        int risk = IndicatorUtil.getOverallRisk(eaForm.getActivityId());
 	        String riskName = MEIndicatorsUtil.getRiskRatingName(risk);
 	        String rskColor = MEIndicatorsUtil.getRiskColor(risk);
 	        request.setAttribute("overallRisk", riskName);
@@ -1073,8 +1075,10 @@ private ActionForward showStep9(ActionMapping mapping,
 		        		allCosts=allCosts.add(euAct.getTotalCostConverted());
 		        	}
 	            eaForm.getCosting().setAllCosts(allCosts);
-	            if ((eaForm.getIndicator().getIndicatorsME() != null) && (!eaForm.getIndicator().getIndicatorsME().isEmpty()))
-	              eaForm.getIndicator().setRiskCollection(MEIndicatorsUtil.getAllIndicatorRisks());
+	                 if ((eaForm.getIndicator().getIndicatorsME() != null) && (!eaForm.getIndicator().getIndicatorsME().isEmpty())) {
+                      Collection<AmpCategoryValue> risks = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.INDICATOR_RISK_TYPE_KEY);
+                      eaForm.getIndicator().setRiskCollection(risks);
+                  }
 	            request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.VIEW);
 	            return mapping.findForward("previewLogframe");
 	          }
@@ -1118,8 +1122,10 @@ private ActionForward showStep10(ActionMapping mapping, EditActivityForm eaForm)
 	          }
 	
 	          //get the levels of risks
-	          if (eaForm.getIndicator().getIndicatorsME()!=null && !eaForm.getIndicator().getIndicatorsME().isEmpty())
-	            eaForm.getIndicator().setRiskCollection(MEIndicatorsUtil.getAllIndicatorRisks());
+    if (eaForm.getIndicator().getIndicatorsME() != null && !eaForm.getIndicator().getIndicatorsME().isEmpty()) {
+        Collection<AmpCategoryValue> risks = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.INDICATOR_RISK_TYPE_KEY);
+        eaForm.getIndicator().setRiskCollection(risks);
+    }
 	
 	          return mapping.findForward("addActivityStep10");
 }

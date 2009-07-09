@@ -17,8 +17,8 @@
 		<property name="valueType" column="value_type" type="int" />
 		<many-to-one name="logFrame" column="ind_val_category"
 			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
-		<many-to-one name="risk" column="risk"
-			class="org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings" cascade="none" />
+		<many-to-one name="riskValue" column="risk_value"
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 
 		<many-to-one name="indicatorConnection" column="ind_connect_id"
 			class="org.digijava.module.aim.dbentity.IndicatorConnection" cascade="none" not-null="true" />

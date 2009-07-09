@@ -11,7 +11,6 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -38,13 +37,6 @@ public class GetActivityIndicatorValues extends Action
 			try
 			{
 				indValId = new Long(Long.parseLong(temp));
-				if(eaForm.getIndicator().getRiskCollection()!=null){
-					Iterator iter=eaForm.getIndicator().getRiskCollection().iterator();
-	            	 while (iter.hasNext()){
-	    	       		 AmpIndicatorRiskRatings ampIndRisc=(AmpIndicatorRiskRatings) iter.next();
-	    	       		 ampIndRisc.setTranslatedRatingName(ampIndRisc.getRatingName().replace(" ",""));
-	    	       	 }
-				} 
 				if (eaForm.getIndicator().getIndicatorsME() != null) 
 				{
 					Iterator itr = eaForm.getIndicator().getIndicatorsME().iterator();

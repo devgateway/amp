@@ -5,8 +5,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.util.IndicatorUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.jfree.chart.urls.PieURLGenerator;
 import org.jfree.data.general.PieDataset;
 
@@ -49,14 +49,14 @@ public class PieChartURLGenerator implements PieURLGenerator, Serializable {
         String keyEng = "";
         try {
             // get risks associated with this activity
-            Collection<AmpIndicatorRiskRatings> risks = IndicatorUtil.getRisks(ampActivityId);
-            Iterator<AmpIndicatorRiskRatings> riskIterator = risks.iterator();
+            Collection<AmpCategoryValue> risks = IndicatorUtil.getRisks(ampActivityId);
+            Iterator<AmpCategoryValue> riskIterator = risks.iterator();
             while (riskIterator.hasNext()) {
-                AmpIndicatorRiskRatings risk = riskIterator.next();
-                String translatedName = TranslatorWorker.translateText(risk.getRatingName(), languageCode, siteId);
+                AmpCategoryValue risk = riskIterator.next();
+                String translatedName = TranslatorWorker.translateText(risk.getValue(), languageCode, siteId);
                 if (translatedName.equals(key.toString())) {
                     //get risk name in English, this is how we get rid of  the accents  problem
-                    keyEng = risk.getRatingName();
+                    keyEng = risk.getValue();
                     break;
                 }
             }

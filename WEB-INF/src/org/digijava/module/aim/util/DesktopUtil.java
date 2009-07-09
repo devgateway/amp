@@ -135,7 +135,7 @@ public class DesktopUtil {
 						AmpCategoryValue statusValue	= CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, act.getCategories());
 						if (statusValue != null)
 							project.setStatusId(statusValue.getId());
-						project.setActivityRisk(MEIndicatorsUtil.getOverallRisk(act.getAmpActivityId()));
+						project.setActivityRisk(IndicatorUtil.getOverallRisk(act.getAmpActivityId()));
 						project.setLineMinRank(act.getLineMinRank());
 						project.setPlanMinRank(act.getPlanMinRank());
 
@@ -243,7 +243,7 @@ public class DesktopUtil {
 						AmpCategoryValue statusValue	= CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, act.getCategories());
 						if (statusValue != null)
 							project.setStatusId(statusValue.getId());
-						project.setActivityRisk(MEIndicatorsUtil.getOverallRisk(act.getAmpActivityId()));
+						project.setActivityRisk(IndicatorUtil.getOverallRisk(act.getAmpActivityId()));
 
 						project.setSector(new ArrayList());
 						Set sectSect = act.getSectors();

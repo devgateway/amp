@@ -1,3 +1,4 @@
+
 package org.digijava.module.categorymanager.util;
 
 
@@ -67,6 +68,10 @@ public class CategoryConstants {
 	public static final String IPA_ACTIVITY_TYPE_NAME="IPA Activity Type";
 	public static final String IPA_ACTIVITY_TYPE_KEY="ipa_activity_type";
 	//---
+
+    //activity indicator risk
+	public static final String INDICATOR_RISK_TYPE_NAME="Indicator Risk";
+	public static final String INDICATOR_RISK_TYPE_KEY="indicator_risk";
 
 	public static final long NONE_TYPE		= 0;
 	public static final long COUNTRY_TYPE	= 1;

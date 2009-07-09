@@ -465,9 +465,9 @@
 
 																	<c:set target="${urlParams1}" property="event" value="delete" />
 
-																	<c:set target="${urlParams1}" property="indicatorValId">
+																	<c:set target="${urlParams1}" property="indicatorConId">
 
-																		<bean:write name="indicator" property="indicatorValId" />
+																		<bean:write name="indicator" property="connectionId" />
 
 																	</c:set>
 
@@ -741,13 +741,13 @@
 
 																<tr><td valign="center" align="center" bgcolor="#dddddd" height="20">
 
-<!-- the following will be uncommented further -->																	
+<!-- the following will be uncommented further -->
 <!--																	<input class="dr-menu" type="button" name="addIndicator" value="<digi:trn key="aim:addIndicator">Add Indicator</digi:trn>"-->
 <!---->
 <!--																	property="activityId"-->
 <!---->
 <!--																	onclick="return addIndicators()">-->
-
+																
 																</td></tr>
 
 															</table>

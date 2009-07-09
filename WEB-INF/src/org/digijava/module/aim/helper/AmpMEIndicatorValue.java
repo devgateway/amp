@@ -1,10 +1,17 @@
-package org.digijava.module.aim.dbentity;
+
+package org.digijava.module.aim.helper;
+
+
 
 import java.util.Date;
 
+import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpIndicator;
+import org.digijava.module.aim.dbentity.AmpMEIndicators;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
-@Deprecated
+// moved from db entity to helper until entire code refactoring
+
 public class AmpMEIndicatorValue {
 	private Long ampMeIndValId;
 	private AmpActivity activityId;
@@ -24,10 +31,10 @@ public class AmpMEIndicatorValue {
 	private String comments;
 	private AmpIndicator indicator;
 	//private Long logframeValueId;
-	
+
 	private AmpCategoryValue indicatorsCategory;
-	
-	private AmpIndicatorRiskRatings risk;
+
+	private AmpCategoryValue risk;
 	/**
 	 * @return Returns the activityId.
 	 */
@@ -79,13 +86,13 @@ public class AmpMEIndicatorValue {
 	/**
 	 * @return Returns the risk.
 	 */
-	public AmpIndicatorRiskRatings getRisk() {
+	public AmpCategoryValue getRisk() {
 		return risk;
 	}
 	/**
 	 * @param risk The risk to set.
 	 */
-	public void setRisk(AmpIndicatorRiskRatings risk) {
+	public void setRisk(AmpCategoryValue risk) {
 		this.risk = risk;
 	}
 	/**

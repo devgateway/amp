@@ -16,7 +16,6 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpFilters;
-import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpPages;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamPageFilters;
@@ -180,34 +179,7 @@ public class DBPatcher {
 				 session.flush();				 
 			 }
 			 			 
-			 qryStr = "select r from " + AmpIndicatorRiskRatings.class.getName() + " r";
-			 qry = session.createQuery(qryStr);
-			 itr = qry.list().iterator();
-			 while (itr.hasNext()) {
-				 AmpIndicatorRiskRatings rr = (AmpIndicatorRiskRatings) itr.next();
-				 switch (rr.getRatingValue()) {
-				case RATING_CRITICAL_KEY:
-					rr.setRatingName(RATING_CRITICAL_VALUE);
-					break;
-				case RATING_VHIGH_KEY:
-					rr.setRatingName(RATING_VHIGH_VALUE);
-					break;
-				case RATING_HIGH_KEY:
-					rr.setRatingName(RATING_HIGH_VALUE);
-					break;
-				case RATING_MEDIUM_KEY:
-					rr.setRatingName(RATING_MEDIUM_VALUE);
-					break;
-				case RATING_LOW_KEY:
-					rr.setRatingName(RATING_LOW_VALUE);
-					break;
-				case RATING_VLOW_KEY:
-					rr.setRatingName(RATING_VLOW_VALUE);
-				}
-				 session.update(rr);
-				 session.flush();
-				 
-			 }
+			
 		} catch (Exception e) {
 			logger.error("Exception from patchAMPDB :" + e.getMessage());
 			e.printStackTrace(System.out);

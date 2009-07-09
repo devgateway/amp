@@ -791,7 +791,8 @@ public class AmpARFilter extends PropertyListable {
 				queryAppend(LUCENE_ID_LIST);
 			}
 
-		String RISK_FILTER = "SELECT v.activity_id from AMP_ME_INDICATOR_VALUE v, AMP_INDICATOR_RISK_RATINGS r where v.risk=r.amp_ind_risk_ratings_id and r.amp_ind_risk_ratings_id in ("
+		String RISK_FILTER = "SELECT con.activity_id from amp_indicator_connection con inner join amp_indicator_values v on v.ind_connect_id =con.id "+
+                "where v.risk_value in ("
 				+ Util.toCSString(risks) + ")";
 
 		if (budget != null)

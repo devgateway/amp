@@ -44,7 +44,6 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.EUActivityUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -58,6 +57,7 @@ import com.lowagie.text.Paragraph;
 import com.lowagie.text.Table;
 import com.lowagie.text.rtf.RtfWriter2;
 import com.lowagie.text.rtf.style.RtfFont;
+import org.digijava.module.aim.util.IndicatorUtil;
 
 /**
  * @author mihai
@@ -568,7 +568,7 @@ public class ProjectFicheExport extends Action {
 		
 		
 		
-		Collection indicatorsMe=MEIndicatorsUtil.getActivityIndicators(act.getAmpActivityId());
+		Collection indicatorsMe=IndicatorUtil.getActivityIndicators(act.getAmpActivityId());
 
 		
 		//fische objectives:

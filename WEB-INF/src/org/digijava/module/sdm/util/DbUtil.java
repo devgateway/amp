@@ -145,7 +145,7 @@ public class DbUtil {
 
             queryString =
                 "select new org.digijava.module.sdm.form.SdmInfo(h.id,h.name) from  " +
-                Sdm.class.getName() + " h, " +
+                Sdm.class.getName() + " h " +
                 " where (h.siteId=:siteId) and (h.instanceId=:instanceId)";
 
             q = session.createQuery(queryString);

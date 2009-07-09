@@ -24,7 +24,6 @@ import org.digijava.module.aim.dbentity.AmpFeature;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
-import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpSiteFlag;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
@@ -33,6 +32,9 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Flag;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.logic.Logic;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
@@ -2577,34 +2579,21 @@ public class FeaturesUtil {
 	/**
 	 * @author dan
 	 */
-	public static AmpIndicatorRiskRatings getFilter(String ratingName) {
-		Session session = null;
-		Collection col = new ArrayList();
-		String qryStr = null;
-		Query qry = null;
-		AmpIndicatorRiskRatings airr = null;
-
+	public static AmpCategoryValue getFilter(String ratingName) {
+		AmpCategoryValue airr = null;
 		try {
-			session = PersistenceManager.getSession();
-			qryStr = "select f from " + AmpIndicatorRiskRatings.class.getName() +
-			" f" +
-			" where f.ratingName = '" + ratingName + "'";
-			qry = session.createQuery(qryStr);
-			col = qry.list();
-			airr = (AmpIndicatorRiskRatings) col.iterator().next();
+            Collection<AmpCategoryValue> risks=CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.INDICATOR_RISK_TYPE_KEY);
+			Iterator<AmpCategoryValue> itr = risks.iterator();
+			if (itr.hasNext()) {
+				AmpCategoryValue temp =  itr.next();
+                if(temp.getValue().equals(ratingName)){
+                    airr = temp;
+                }
+			}
+		
 		}
 		catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
-		}
-		finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				}
-				catch (Exception rsf) {
-					logger.error("Release session failed :" + rsf.getMessage());
-				}
-			}
 		}
 		return airr;
 	}

@@ -15,6 +15,10 @@
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript">
+	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
+</script>
+<jsp:include page="scripts/newCalendar.jsp" flush="true" />
 
 <script language="JavaScript">
 	<!--

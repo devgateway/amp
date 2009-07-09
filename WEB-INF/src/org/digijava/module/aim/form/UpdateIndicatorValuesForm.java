@@ -25,6 +25,15 @@ public class UpdateIndicatorValuesForm extends ActionForm {
 	
 	private Collection indicators;
 	private Long expIndicatorId;
+    private Long indicatorConId;
+
+    public Long getIndicatorConId() {
+        return indicatorConId;
+    }
+
+    public void setIndicatorConId(Long indicatorConId) {
+        this.indicatorConId = indicatorConId;
+    }
 	
 	/**
 	 * @return Returns the activityId.

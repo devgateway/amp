@@ -684,20 +684,15 @@ ${fn:replace(message,quote,escapedQuote)}
 														<field:display name="Risk" feature="Activity">
 														<tr>
 															<td>&nbsp;&nbsp;&nbsp;</td>
-															<td><b>
-															<digi:trn key="aim:meRisk">Risk</digi:trn>
-															</b></td>
-															<td>
-																<html:select property="indicator.indicatorRisk" styleClass="inp-text">
-																<option value="0"><digi:trn key="help:selectRisk">Select Risk</digi:trn></option>
-																	<logic:iterate id="currRisk" name="aimEditActivityForm" property="indicator.riskCollection">
-																		<c:set var="trn">
-																			<digi:trn key="aim:risk:${currRisk.translatedRatingName}">${currRisk.ratingName}</digi:trn>
-																		</c:set>
-																		<html:option value="${currRisk.ampIndRiskRatingsId}">${trn}</html:option>
-																	</logic:iterate>
-																</html:select>
-															</td>
+                                                            <td colspan="2">
+                                                                <b>
+                                                                    <digi:trn key="aim:meRisk">Risk</digi:trn>
+                                                                </b>
+                                                                <c:set var="translation">
+                                                                    <digi:trn key="aim:addActivityStatusFirstLine">Please select a risk from below</digi:trn>
+                                                                </c:set>
+                                                                <category:showoptions   firstLine="${translation}" name="aimEditActivityForm" property="indicator.indicatorRisk"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.INDICATOR_RISK_TYPE_KEY%>" styleClass="inp-text"  />
+                                                            </td>
 														</tr>
 														</field:display>
 														<tr><td>&nbsp;</td></tr>

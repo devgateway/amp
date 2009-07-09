@@ -660,13 +660,14 @@
 				<field:display name="Risk" feature="Activity">
 				<tr>
 						<td>
-							<b><digi:trn key="rep:filer:RisksTitle">Risks</digi:trn></b> <br />
-							<html:select multiple="true" style="width: 300px"
-								property="selectedRisks" size="3" styleClass="inp-text">
-								<html:optionsCollection property="risks"
-									value="ampIndRiskRatingsId" label="ratingName" />
-							</html:select>
-														
+                            <b>
+                                <digi:trn key="aim:meRisk">Risk</digi:trn>
+                            </b>
+                            <c:set var="translation">
+                                <digi:trn key="aim:addActivityStatusFirstLine">Please select a risk from below</digi:trn>
+                            </c:set>
+                            <category:showoptions   firstLine="${translation}" name="aimReportsFilterPickerForm" property="selectedRisks"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.INDICATOR_RISK_TYPE_KEY%>" styleClass="inp-text" multiselect="true" />
+							
 						</td>
 				</tr>
 				</field:display>

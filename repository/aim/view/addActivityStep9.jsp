@@ -277,8 +277,8 @@ ${fn:replace(message,quote,escapedQuote)}
 											<td width="13" height="20" background="module/aim/images/left-side.gif">
 											</td>
 											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
-												<digi:trn key="aim:step9of">
-													Step 9 of  </digi:trn> ${fn:length(aimEditActivityForm.steps)}:
+												  <digi:trn>Step</digi:trn> ${stepNm} <digi:trn>of  </digi:trn>
+                                                                         ${fn:length(aimEditActivityForm.steps)}:
                                                                                                  <digi:trn key="aim:activity:MonitoringAndEvaluation">
                                                                                                          Monitoring and Evaluation
 												</digi:trn>
@@ -636,12 +636,12 @@ ${fn:replace(message,quote,escapedQuote)}
 															<td>&nbsp;&nbsp;&nbsp;</td>
 															<td><b>Risk</b></td>
 															<td>
-																<html:select property="indicatorRisk" styleClass="inp-text">
-																	<option value="-1">Select Risk</option>
-																	<c:if test="${not empty aimEditActivityForm.riskCollection}">
-																		<html:optionsCollection name="aimEditActivityForm" property="riskCollection" value="ampIndRiskRatingsId" label="ratingName" />
-																	</c:if>
-																</html:select>
+                                                                <c:set var="translation">
+                                                                    <digi:trn key="aim:addActivityStatusFirstLine">Please select a risk from below</digi:trn>
+                                                                </c:set>
+                                                                <c:if test="${contentDisabled=='true'}">
+                                                                    <category:showoptions   firstLine="${translation}" name="aimEditActivityForm" property="riskCollection"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.INDICATOR_RISK_TYPE_KEY%>" styleClass="inp-text" outerdisabled="disabled" />
+                                                                </c:if>
 															</td>
 														</tr>
 														<tr><td>&nbsp;</td></tr>

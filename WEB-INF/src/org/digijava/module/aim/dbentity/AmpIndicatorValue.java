@@ -32,7 +32,7 @@ public class AmpIndicatorValue implements Serializable{
 	private Double value;
 	private int valueType;
 	private AmpCategoryValue logFrame;
-	private AmpIndicatorRiskRatings risk;
+	private AmpCategoryValue riskValue;
 	private Boolean defaultInd;
 	private IndicatorConnection indicatorConnection;
 	private AmpLocation location;
@@ -93,11 +93,11 @@ public class AmpIndicatorValue implements Serializable{
 	public void setLogFrame(AmpCategoryValue logFrame) {
 		this.logFrame = logFrame;
 	}
-	public AmpIndicatorRiskRatings getRisk() {
-		return risk;
+	public AmpCategoryValue getRiskValue() {
+		return riskValue;
 	}
-	public void setRisk(AmpIndicatorRiskRatings risk) {
-		this.risk = risk;
+	public void setRiskValue(AmpCategoryValue risk) {
+		this.riskValue = risk;
 	}
 	public IndicatorConnection getIndicatorConnection() {
 		return indicatorConnection;

@@ -24,6 +24,7 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.parisindicator.form.PIForm;
 import org.digijava.module.parisindicator.helper.PIAbstractReport;
 import org.digijava.module.parisindicator.helper.PIReport10a;
@@ -70,7 +71,7 @@ public class PIUseCase {
 			form.setCurrencyTypes(CurrencyUtil.getAllCurrencies(CurrencyUtil.ALL_ACTIVE));
 		}
 		if (form.getFinancingInstruments() == null || form.getFinancingInstruments().isEmpty()) {
-			form.setFinancingInstruments(null);
+			form.setFinancingInstruments(DbUtil.getAllFinancingInstruments());
 		}
 		return form;
 	}
@@ -191,7 +192,8 @@ public class PIUseCase {
 		Collection<AmpOrgGroup> auxDonorGroups = PIUtils.getDonorGroups(form.getSelectedDonorGroups());
 		Collection<AmpSector> auxSectors = PIUtils.getSectors(form.getSelectedSectors());
 		Collection<AmpCategoryValue> auxStatuses = PIUtils.getStatuses(form.getSelectedStatuses());
-		Collection<AmpCategoryValue> auxFinancingInstruments = null;
+		Collection<AmpCategoryValue> auxFinancingInstruments = PIUtils.getFinancingInstruments(form
+				.getSelectedFinancingIstruments());
 		if (!report.getReportCode().equals(PIConstants.PARIS_INDICATOR_REPORT_10a)) {
 			Collection<AmpAhsurvey> commonData = getCommonSurveyData(auxDonors, auxDonorGroups);
 

@@ -1,6 +1,7 @@
 package org.digijava.module.gis.util;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 import org.digijava.module.aim.dbentity.AmpActivity;
 
@@ -31,6 +32,8 @@ public class ActivityLocationFunding {
     private BigDecimal expenditure;
     private AmpActivity activity;
 
+    private Set donorOrgs;
+
     public AmpActivity getActivity() {
         return activity;
     }
@@ -59,6 +62,10 @@ public class ActivityLocationFunding {
         return fmtExpenditure;
     }
 
+    public Set getDonorOrgs() {
+        return donorOrgs;
+    }
+
     public void setActivity(AmpActivity activity) {
         this.activity = activity;
     }
@@ -85,6 +92,10 @@ public class ActivityLocationFunding {
 
     public void setFmtExpenditure(String fmtExpenditure) {
         this.fmtExpenditure = fmtExpenditure;
+    }
+
+    public void setDonorOrgs(Set donorOrgs) {
+        this.donorOrgs = donorOrgs;
     }
 
 }

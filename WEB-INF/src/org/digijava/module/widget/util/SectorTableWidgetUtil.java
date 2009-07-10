@@ -126,13 +126,8 @@ public class SectorTableWidgetUtil {
         for (DonorSectorFundingHelper funding : fundings) {
         result+=funding.getFounding();
         }
-        // we need to show amount in millions
-		if("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))){
-			result/=1000;
-        }
-		else{
-            result/=1000000;
-        }
+       
+        result/=1000000;
         return Math.round(result);
     }
 

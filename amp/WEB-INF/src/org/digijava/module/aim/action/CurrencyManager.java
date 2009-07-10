@@ -112,26 +112,34 @@ public class CurrencyManager extends Action {
 				crForm.setNumRecords(Constants.NUM_RECORDS);
 			}
 
-			crForm.setCurrency(new ArrayList());
-			int numPages = tempList.size() / crForm.getNumRecords();
-			numPages += (tempList.size() % crForm.getNumRecords() != 0) ? 1 : 0;
-			if (page > numPages) page = numPages;
-
-			int stIndex = (page - 1) * crForm.getNumRecords();
-			int edIndex = page * crForm.getNumRecords();
-			if (edIndex > tempList.size()) {
-				edIndex = tempList.size();
-			}
-			Collection pages = null;
-			if (numPages > 1) {
-				pages = new ArrayList();
-			 	for (int i = 0;i < numPages;i ++) {
-			 		Integer pageNum = new Integer(i+1);
-			 		pages.add(pageNum);
+			int stIndex = 0;
+			int edIndex = tempList.size();
+			Collection pages = new ArrayList();
+			if (crForm.getNumRecords() != -1) {
+				crForm.setCurrency(new ArrayList());
+				int numPages = tempList.size() / crForm.getNumRecords();
+				numPages += (tempList.size() % crForm.getNumRecords() != 0) ? 1 : 0;
+				if (page > numPages) page = numPages;
+	
+				stIndex = (page - 1) * crForm.getNumRecords();
+				edIndex = page * crForm.getNumRecords();
+				if (edIndex > tempList.size()) {
+					edIndex = tempList.size();
 				}
+				if (numPages > 1) {
+					//pages = new ArrayList();
+				 	for (int i = 0;i < numPages;i ++) {
+				 		Integer pageNum = new Integer(i+1);
+				 		pages.add(pageNum);
+					}
+				}
+				crForm.setPages(pages);				
+			} else {
+				//pages.add(new Integer(1));
+				crForm.setPages(pages);
 			}
-			crForm.setPages(pages);
 
+			
 			logger.debug("templist size = " + tempList.size());
 			logger.debug(stIndex + "," + edIndex);
 			for (int i = stIndex;i < edIndex;i ++) {

@@ -220,9 +220,9 @@
 											<logic:present name="activityLocationFunding" property="activity.orgrole">
 												<logic:notEmpty name="activityLocationFunding" property="activity.orgrole">
 													<ul style="margin:0 0 0 20px; padding:0;">
-													<logic:iterate name="activityLocationFunding" property="activity.orgrole" id="iterOrgrole">
+													<logic:iterate name="activityLocationFunding" property="donorOrgs" id="iterOrgrole">
 														<li>
-														<bean:write name="iterOrgrole" property="organisation.acronymAndName"/>
+														<bean:write name="iterOrgrole"/>
 														</li>
 													</logic:iterate>
 													</ul>

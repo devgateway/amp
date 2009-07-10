@@ -618,7 +618,7 @@ public class WidgetUtil {
             donorGroups = query.list();
             if(donorGroups !=null&&donorGroups.size()>10){
                //selected 10 donor groups
-               donorGroups=donorGroups.subList(0, 9);
+               donorGroups=donorGroups.subList(0, 10);
             }
         } catch (Exception e) {
             logger.error(e);

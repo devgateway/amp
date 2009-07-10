@@ -44,11 +44,11 @@
     <tr>
         <td style="color:#FFFFFF;font-weight:bold"><digi:trn>Sector</digi:trn></td>
         <c:forEach items="${showSectorTableForm.years}"    var="year">
-            <td style="color:#FFFFFF;font-weight:bold;text-align:center">${year}</td>
+            <td style="color:#FFFFFF;font-weight:bold;text-align:center;width:50px">${year}</td>
         </c:forEach>
         <c:if test="${showSectorTableForm.donorColumnAdded}">
             <td>
-                <select id="sectorTableSelect_${showSectorTableForm.widgetId}" onchange="getDonorValues('${showSectorTableForm.widgetId}')" AUTOCOMPLETE="OFF">
+                <select id="sectorTableSelect_${showSectorTableForm.widgetId}" onchange="getDonorValues('${showSectorTableForm.widgetId}')" AUTOCOMPLETE="OFF" style="width:200px">
                     <option value="-1">Select Donor</option>
                     <c:forEach items="${showSectorTableForm.donors}" var="donor">
                          <option value="${donor.ampOrgId}">${donor.name}</option>

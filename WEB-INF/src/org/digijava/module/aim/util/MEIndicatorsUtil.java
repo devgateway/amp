@@ -312,6 +312,9 @@ public class MEIndicatorsUtil
             }
         }
     }
+    /* TODO this method is written for old indicator structure,
+     * should be rewritten when dashboard will be rewritten...
+     */
 	public static Collection getPortfolioMEIndicatorValues(Collection actIds,
 			Long indId,boolean includeBaseLine, HttpServletRequest request) {
 

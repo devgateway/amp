@@ -30,6 +30,9 @@ import org.digijava.module.gis.dbentity.GisMap;
 import java.util.Set;
 import java.util.ArrayList;
 import org.digijava.module.gis.util.ActivityLocationFunding;
+import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import java.util.HashSet;
 
 
 /**
@@ -172,6 +175,17 @@ public class ShowRegionReport extends Action {
                                              getRegionLocation().getName();
                             if (regCode.equals(locationCode)) {
 
+                                Set donorOrg = new HashSet();
+
+                                if (activity.getFunding() != null) {
+                                    Iterator acFIt = activity.getFunding().iterator();
+                                    while (acFIt.hasNext()) {
+                                        AmpFunding fnd = (AmpFunding) acFIt.next();
+                                        donorOrg.add(fnd.getAmpDonorOrgId().getName());
+                                    }
+                                }
+
+
                         if (level == GisMap.MAP_LEVEL_REGION &&
                             loc.getLocation().getRegionLocation().
                             getParentCategoryValue().getEncodedValue().equals(
@@ -215,6 +229,9 @@ public class ShowRegionReport extends Action {
             fundingForSector.getDisbursement().multiply(new BigDecimal(loc.getLocationPercentage() / 100f)),
             fundingForSector.getExpenditure().multiply(new BigDecimal(loc.getLocationPercentage() / 100f)),
                                             activity);
+
+                                    activityLocationFunding.setDonorOrgs(donorOrg);
+
 
 
                                     newVal.getActivityLocationFundingList().add(
@@ -280,7 +297,7 @@ public class ShowRegionReport extends Action {
             fundingForSector.getDisbursement().multiply(new BigDecimal(loc.getLocationPercentage() / 100f)),
             fundingForSector.getExpenditure().multiply(new BigDecimal(loc.getLocationPercentage() / 100f)),
                                             activity);
-
+                                        activityLocationFunding.setDonorOrgs(donorOrg);
                                         newVal.getActivityLocationFundingList().
                                                 add(activityLocationFunding);
 
@@ -368,6 +385,7 @@ public class ShowRegionReport extends Action {
                                             multiply(new BigDecimal(loc.
                                             getLocationPercentage() / 100f)),
                                             activity);
+                                    activityLocationFunding.setDonorOrgs(donorOrg);
 
                                     newVal.getActivityLocationFundingList().add(
                                             activityLocationFunding);
@@ -446,6 +464,7 @@ public class ShowRegionReport extends Action {
                                                 multiply(new BigDecimal(loc.
                                                 getLocationPercentage() / 100f)),
                                                 activity);
+                                        activityLocationFunding.setDonorOrgs(donorOrg);
 
                                         if (activityLocationFunding.
                                                 getCommitment().intValue() != 0) {

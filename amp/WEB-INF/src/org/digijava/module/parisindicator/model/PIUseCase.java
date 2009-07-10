@@ -104,6 +104,7 @@ public class PIUseCase {
 		form.setSelectedDonorGroups(null);
 		form.setSelectedSectors(null);
 		form.setSelectedStatuses(null);
+		form.setSelectedFinancingIstruments(null);
 	}
 
 	/*

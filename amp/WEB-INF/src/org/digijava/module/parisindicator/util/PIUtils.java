@@ -118,6 +118,18 @@ public class PIUtils {
 		return retStatus;
 	}
 
+	public final static Collection<AmpCategoryValue> getFinancingInstruments(String[] instruments) throws Exception {
+		Collection<AmpCategoryValue> retInstrument = null;
+		if (instruments != null && instruments.length > 0) {
+			retInstrument = new ArrayList<AmpCategoryValue>();
+			for (int i = 0; i < instruments.length; i++) {
+				String instrId = instruments[i];
+				retInstrument.add(CategoryManagerUtil.getAmpCategoryValueFromDb(new Long(instrId)));
+			}
+		}
+		return retInstrument;
+	}
+
 	public final static Collection<AmpOrgGroup> getDonorGroups(String[] groups) throws Exception {
 		Collection<AmpOrgGroup> retGrp = null;
 		if (groups != null && groups.length > 0) {

@@ -106,7 +106,7 @@
                                                     </c:if>
                                                     <c:if test="${parisIndicatorForm.selectedFinancingIstruments != null}">
                                                         <logic:iterate id="idFunding" property="selectedFinancingIstruments" name="parisIndicatorForm">
-                                                            <%= (new Long(idFunding.toString()))%>&nbsp;|
+                                                            <%=org.digijava.module.categorymanager.util.CategoryManagerUtil.getAmpCategoryValueFromDb(new Long(idFunding.toString()))%>&nbsp;|
                                                         </logic:iterate>
                                                     </c:if>                                              
                                                 <strong><digi:trn>Sectors:</digi:trn></strong>

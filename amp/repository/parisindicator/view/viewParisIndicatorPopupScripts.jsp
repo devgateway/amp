@@ -306,6 +306,20 @@
         }
         txtSelectedValuesObj.value = selectedArray;
 
+        //instruments
+        var txtSelectedValuesObj = filterForm.selectedFinancingIstruments;
+        var selectedArray = new Array();
+        var selObj = document.getElementsByName("selectedFinancingIstruments")[0];
+        var i;
+        var count = 0;
+        for (i=0; i<selObj.options.length; i++) {
+            if (selObj.options[i].selected) {
+                  selectedArray[count] = selObj.options[i].value;
+                  count++;
+            }
+        }
+        txtSelectedValuesObj.value = selectedArray;
+
         //sectors
         var txtSelectedValuesObj = filterForm.selectedSectors;
         var selectedArray = new Array();
@@ -323,6 +337,15 @@
         //filterForm.selectedFinancingIstruments.value = document.getElementsByName("selectedFinancingIstruments")[0].value;
         filterForm.submit();
 	}
+
+	function change_donor() {
+        var selObj = document.getElementsByName("selectedDonorGroups")[0];
+        if(selObj.options[0].selected) {
+            for (i = 1; i < selObj.options.length; i++) {
+                selObj.options[i].selected = false;
+            }
+        }
+    }
 
 	function showFilter() {
 		//alert('showFilter');

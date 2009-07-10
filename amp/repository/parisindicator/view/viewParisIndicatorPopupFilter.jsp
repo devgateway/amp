@@ -113,7 +113,8 @@
                                     </tr>
                                     <tr bgcolor="#EEEEEE">
                                         <td colspan="5">
-
+                                            <category:showoptions firstLine="All" styleClass="dr-menu" property="selectedFinancingIstruments" name="parisIndicatorForm"
+                                                keyName="<%=org.digijava.module.categorymanager.util.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" multiselect="true" size="6"/>
                                         </td>
                                     </tr>
                                 </table>

@@ -777,6 +777,12 @@ public class ChartWidgetUtil {
 		if (fromDate != null && toDate != null) {
 			oql += " and (fd.transactionDate between :fDate and  :eDate ) ";
 		}
+        if (sectorIds!=null) {
+			oql += " and actSec.sectorId in ("+ getInStatment(sectorIds) + ") ";
+		}
+        else{
+           oql +=" and sec.parentSectorId is null";
+        }
         oql +=" and config.name='Primary' and act.team is not null ";
 		oql += " group by act.ampActivityId, actSec ";
 		oql += " order by actSec";

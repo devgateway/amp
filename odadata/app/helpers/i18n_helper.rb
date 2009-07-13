@@ -15,6 +15,16 @@ module I18nHelper
     scope = params[:controller].split('/') << normalize_action(params[:action])
     ll(*(scope + args))
   end
+
+  def lc_bb(*args)
+    if not params[:page_name].nil?
+      scope = params[:controller].split('/') << params[:year] << normalize_action(params[:page_name])
+    else
+      scope = params[:controller].split('/') << params[:year]
+    end
+
+    ll(*(scope + args))
+  end
   
   def ll(*args)
     options = args.extract_options!

@@ -1,36 +1,36 @@
 <table class="bluebook">
 	<tr>
-		<td colspan=4 class="head"><center><%= ll(:bluebook, :pages, :contents, :eu_at_a_glance, :title) %></center></td>
+		<td colspan=4 class="head"><center><%= ll(:bluebook, :pages, "2007", :index, :eu_at_a_glance, :title) %></center></td>
 	</tr>
 	<tr>
-		<td colspan=4 class="title"><%= ll(:bluebook, :pages, :contents, :eu_at_a_glance, :building_europe) %></td>
+		<td colspan=4 class="title"><%= lc_bb(:title) %></td>
 	</tr>
 	<tr>
 		<td colspan=4>
-			<b><%= lc(:introduction) %></b>
+			<b><%= lc_bb(:introduction) %></b>
 		</td>
 	</tr>
 	<tr>
 		<td colspan=2 width=50% valign=top>
 			<p><center><img src="/images/001_50_Anniversary.jpg" width="221" height="72" alt="50 Anniversary"></center></p>
-			<%= lc(:content_left) %>
+			<%= lc_bb(:content_left) %>
 			<p>
 				<table>
 					<tr>
 						<td valign="top">
 							<img src="/images/002_signing_of_treaties.jpg" width="180" height="140" alt="Signing Of Treaties">
-							<font size = 1><%= lc(:treaties_image_sub) %></font>
+							<font size = 1><%= lc_bb(:treaties_image_sub) %></font>
 						</td>
 						<td>
 							<img src="/images/003_Europe_day.jpg" width="180" height="140" alt="Europe Day">
-							<font size=1><%= lc(:europe_day_image_sub) %></font>
+							<font size=1><%= lc_bb(:europe_day_image_sub) %></font>
 						</td>
 					</tr>
 				</table>
 			</p>
 		</td>
 		<td colspan=2 width=50% valign=top class="steps">
-			<%= lc(:content_right) %>
+			<%= lc_bb(:content_right) %>
 		</td>
 	</tr>
 </table>

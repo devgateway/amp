@@ -1,0 +1,108 @@
+<table class="bluebook">
+	<tr>
+		<td class="head"><center><%= lc_bb(:title) %> - <%= ll(:countries, :nicaragua) %> 2007</center></td>
+	</tr>
+	<tr>
+		<td class="title"><%= lc_bb(:toc) %></td>
+	</tr>
+	<tr>
+		<td><%= link_to lc_bb(:index, :foreword), bluebook_pages_path(:page_name => "foreword") %></td>
+	</tr>
+	<tr>
+		<td class="sub_title"><%= lc_bb(:index, :eu_at_a_glance, :title) %></td>
+	</tr>
+	<tr>
+		<td><%= link_to lc_bb(:index, :eu_at_a_glance, :building_europe),
+					bluebook_pages_path(:page_name => "eu_at_a_glance_50_years") %></td>
+	</tr>
+	<tr>
+		<td><%= link_to lc_bb(:index, :eu_at_a_glance, :member_states),
+					bluebook_pages_path(:page_name => "eu_at_a_glance_member_states") %></td>
+	</tr>
+	<tr>
+		<td><%= link_to lc_bb(:index, :eu_at_a_glance, :institutions),
+					bluebook_pages_path(:page_name => "eu_at_a_glance_institutions") %></td>
+	</tr>
+	<tr>
+		<td><%= link_to lc_bb(:index, :eu_at_a_glance, :consensus),
+					bluebook_pages_path(:page_name => "eu_at_a_glance_consensus_on_development") %></td>
+	</tr>
+	<tr>
+		<td><%= link_to lc_bb(:index, :eu_at_a_glance, :code_of_conduct),
+					bluebook_pages_path(:page_name => "eu_at_a_glance_code_of_conduct") %></td>
+	</tr>
+	<tr>
+		<td><%= link_to lc_bb(:index, :eu_at_a_glance, :eu_aid),
+					bluebook_pages_path(:page_name => "eu_at_a_glance_aid") %></td>
+	</tr>
+	
+	<tr>
+		<td class="sub_title"><%= lc_bb(:index, :eu_cooperation, :policy) %></td>
+	</tr>
+	<tr>
+		<td><%= link_to lc_bb(:index, :eu_cooperation, :process),
+					bluebook_pages_path(:page_name => "eu_at_a_glance_h_and_a_process") %>
+		</td>
+	</tr>
+	<tr>
+		<td class="sub_title"><%= lc_bb(:index, :eu_cooperation, :facts) %></td>
+	</tr>
+	<tr>
+		<td><%= link_to lc_bb(:index, :eu_cooperation, :achievement_in, :year => year),
+					bluebook_pages_path(:page_name => "eu_cooperation_achievements"),
+					:popup => ['new_window', 'height=700,width=920,scrollbars=yes,resizable=yes'] %>
+		</td>
+	</tr>
+	<tr>
+		<td><%= link_to lc_bb(:index, :eu_cooperation, :forecasts_for, :year => year + 1),
+					bluebook_pages_path(:page_name => "eu_cooperation_forecasts"),
+					:popup => ['new_window', 'height=700,width=920,scrollbars=yes,resizable=yes'] %>
+		</td>
+	</tr>
+	<tr>
+		<td><%= link_to lc_bb(:index, :eu_cooperation, :trend, :from => year, :to => year + 1),
+					bluebook_pages_path(:page_name => "eu_cooperation_trend"),
+					:popup => ['new_window', 'height=700,width=920,scrollbars=yes,resizable=yes'] %>
+		</td>
+	</tr>
+	<tr>
+		<td><%= link_to lc_bb(:index, :eu_cooperation, :by_sector_in, :year => year),
+					bluebook_pages_path(:page_name => "eu_cooperation_dac_sector_column_chart"),
+					:popup => ['new_window', 'height=700,width=920,scrollbars=yes,resizable=yes'] %>
+		</td>
+	</tr>
+	<tr>
+		<td><%= link_to lc_bb(:index, :eu_cooperation, :by_region_in, :year => year),
+					bluebook_pages_path(:page_name => "eu_cooperation_region_column_chart"),
+					:popup => ['new_window', 'height=700,width=920,scrollbars=yes,resizable=yes'] %>
+		</td>
+	</tr>
+	<tr>
+		<td><%= link_to lc_bb(:index, :eu_cooperation, :by_toa_in, :year => year, :forecasts => year + 1),
+					bluebook_pages_path(:page_name => "eu_cooperation_aid_modality"),
+					:popup => ['new_window', 'height=700,width=920,scrollbars=yes,resizable=yes'] %>
+		</td>
+	</tr>
+	<tr>
+		<td><%= link_to lc_bb(:index, :eu_cooperation, :in_percent_by_toa, :year => year),
+					bluebook_pages_path(:page_name => "eu_cooperation_aid_modality"),
+					:popup => ['new_window', 'height=700,width=920,scrollbars=yes,resizable=yes'] %>
+		</td>
+	</tr>
+	<tr>
+		<td class="sub_title"><%= lc_bb(:index, :profiles, :title) %></td>
+	</tr>
+	
+	<% Donor.main.ordered.each do |d| %>
+		<tr>
+			<td><%= link_to(d.name.titleize, bluebook_donor_profile_path(year, d.id)) %></a></td>
+		</tr>
+	<% end %>
+	<tr>
+		<td class="sub_title"><%= lc_bb(:index, :note, :title) %></td>
+	</tr>
+	<tr>
+		<td><%= link_to lc_bb(:index, :note, :explanatory_note),
+					bluebook_pages_path(:page_name => "explanatory_note") %></td>
+	</tr>
+</table>

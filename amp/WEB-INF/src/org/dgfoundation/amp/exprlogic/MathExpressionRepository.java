@@ -18,6 +18,8 @@ public class MathExpressionRepository {
 	public static final String AVERAGE_SIZE_OF_PROJECT_KEY = "averageSizeofProjects";
 	public static final String VARIANCE_ACTUAL_COMMITMENTS_KEY = "actualCommitmentsVariance";
 	public static final String VARIANCE_ACTUAL_DISBURSEMENTS_KEY = "actualDisbursmentVariance";
+	public static final String CUMULATIVE_COMMITMENT = "cumulativeCommitment";
+	public static final String CUMULATIVE_DISBURSMENT = "cumulativeDisbursement";
 
 	private static Hashtable<String, MathExpression> expresions = new Hashtable<String, MathExpression>();
 
@@ -33,6 +35,8 @@ public class MathExpressionRepository {
 		buildAverageSizeofProjects();
 		buildActualDisbursementVariance();
 		buildActualCommitmentsVariance();
+		buildCumulativeCommitment();
+		buildCumulativeDisbursment();
 	}
 
 	/**
@@ -111,6 +115,24 @@ public class MathExpressionRepository {
 			MathExpression variance = new MathExpression(MathExpression.Operation.SUBTRACT, ArConstants.MAX_ACTUAL_DISBURSEMENT, ArConstants.MIN_ACTUAL_DISBURSEMENT);
 			expresions.put(VARIANCE_ACTUAL_DISBURSEMENTS_KEY, variance);
 
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+
+	private static void buildCumulativeCommitment() {
+		try {
+			MathExpression variance = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.ACTUAL_COMMITMENT, new BigDecimal(1));
+			expresions.put(CUMULATIVE_COMMITMENT, variance);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+
+	private static void buildCumulativeDisbursment() {
+		try {
+			MathExpression variance = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.ACTUAL_DISBURSEMENT, new BigDecimal(1));
+			expresions.put(CUMULATIVE_DISBURSMENT, variance);
 		} catch (Exception e) {
 			logger.error(e);
 		}

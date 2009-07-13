@@ -888,9 +888,9 @@ public class TeamMemberUtil {
 		try {
 			session = PersistenceManager.getSession();
 			String queryString = "select tm from " + AmpTeamMember.class.getName() +
-			  " tm where (tm.user=:user)";
+			  " tm where (tm.user.id=:user)";
 			qry = session.createQuery(queryString);
-			qry.setParameter("user",user.getId(),Hibernate.LONG);
+			qry.setLong("user",user.getId());
 			col = qry.list();
 		} catch (Exception e) {
 			logger.error("Unable to get TeamMembers" + e.getMessage());

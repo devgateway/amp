@@ -233,14 +233,14 @@ function banUser(txt) {
 								                                                  </c:if>
 								                                                </div>
 																			</td>
-																			<td height="30" >
+																			<td height="30" nowrap="nowrap" >
 																				<c:set var="translation">
 								                                                  <digi:trn key="um:viewAllUsers:EditUserLink">Edit user </digi:trn>
 								                                                </c:set>
 								                                                <digi:link href="/viewEditUser.do?id=${us.id}">${translation}</digi:link>
 																			</td>
 																			
-																			<td height="30">
+																			<td height="30" nowrap="nowrap">
 																				<c:choose>
 								                                                  <c:when test="${us.ban}">
 								                                                    <c:set var="translation">

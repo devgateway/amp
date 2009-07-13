@@ -268,49 +268,26 @@ function validatePhyProg() {
 
 
 function validateComponents() {
-
-	if (document.getElementById('selComp').checked != null) {
-
-		if (document.getElementById('selComp').checked == false) {
-
-			alert("Please choose a component to remove");
-
-			return false;
-
-		}
-
-	} else {
-
-		var length = document.getElementById('selComp').length;
-
-		var flag = 0;
-
-		for (i = 0;i < length;i ++) {
-
-			if (document.getElementById('selComp')[i].checked == true) {
-
-				flag = 1;
-
-				break;
-
-			}
-
-		}
-
-
-
-		if (flag == 0) {
-
-			alert("Please choose a component to remove");
-
-			return false;
-
-		}
-
+	var anyChecked		= false;
+	var checkboxes	= document.forms["aimEditActivityForm"]["components.selComp"];
+	if ( checkboxes.length != null && checkboxes.length >= 2 ) {
+			for (var i=0; i< checkboxes.length; i++) {
+				if ( checkboxes[i].checked ) {
+					anyChecked		= true;
+					break;
+				}
+			}		
 	}
-
+	else {
+		if ( checkboxes.checked )
+			anyChecked		= true;
+	}
+	
+	if ( !anyChecked ) {
+		alert("<digi:trn>Please choose a component to remove</digi:trn>");
+		return false;
+	}
 	return true;
-
 }
 
 
@@ -923,8 +900,8 @@ function validateEnter(e) {
 
 YAHOOAmp.namespace("YAHOOAmp.amptab");
 	var reusableDialog = new YAHOOAmp.widget.Dialog("new", {
-	width:"750px",
-	height:"400px",
+	width:"100%",
+	height:"450px",
 	fixedcenter: true,
 	constraintoviewport: true,
 	underlay:"none",

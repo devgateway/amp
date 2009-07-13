@@ -88,15 +88,79 @@ a.itr:hover {
 	    document.aimViewIndicatorsForm.submit();
 	  
 	}
+
+	function setStripsTable(tableId, classOdd, classEven) {
+		var tableElement = document.getElementById(tableId);
+		rows = tableElement.getElementsByTagName('tr');
+		for(var i = 0, n = rows.length; i < n; ++i) {
+			if(i%2 == 0)
+				rows[i].className = classEven;
+			else
+				rows[i].className = classOdd;
+		}
+		rows = null;
+	}
+	
+	function setHoveredTable(tableId, hasHeaders) {
+
+		var tableElement = document.getElementById(tableId);
+		if(tableElement){
+	    	var className = 'Hovered',
+	        pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
+	        rows      = tableElement.getElementsByTagName('tr');
+
+			for(var i = 0, n = rows.length; i < n; ++i) {
+				rows[i].onmouseover = function() {
+					this.className += ' ' + className;
+				};
+				rows[i].onmouseout = function() {
+					this.className = this.className.replace(pattern, ' ');
+
+				};
+			}
+			rows = null;
+		}
+	}
+	
 </script>
+
+<style type="text/css">
+		.jcol{												
+		padding-left:10px;												 
+		}
+		.jlien{
+			text-decoration:none;
+		}
+		.tableEven {
+			background-color:#dbe5f1;
+			font-size:8pt;
+			padding:2px;
+		}
+
+		.tableOdd {
+			background-color:#FFFFFF;
+			font-size:8pt;
+			padding:2px;
+		}
+		 
+		.Hovered {
+			background-color:#a5bcf2;
+		}
+		
+		.notHovered {
+			background-color:#FFFFFF;
+		}
+		
+		
+</style>
+
 <digi:instance property="aimViewIndicatorsForm" />
 
 <digi:form action="/viewIndicators.do" method="post">
   <html:hidden property="sortBy" styleId="sortBy"/>
   <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=800 border=0>
     <tr>
-      <td class=r-dotted-lg width=14>&nbsp;</td>
-      <td align=left class=r-dotted-lg vAlign=top width=800>
+      <td align=left vAlign=top width=800>
         <table cellPadding=5 cellSpacing=0 width="100%" border=0>
           <tr>
             <td height=33><span class=crumb>
@@ -150,19 +214,19 @@ a.itr:hover {
                                 <table style="font-family:verdana;font-size:11px;" border="0" width="100%">
                                   <tr>
                                     <td>
-                                      <b><digi:trn key="aim:indsector">Sector</digi:trn>:</b>
+                                      <digi:trn key="aim:indsector">Sector</digi:trn>:
                                     </td>
                                     <td>
-                                      <html:select property="sectorId" styleClass="inp-text">
-                                      			<html:option value="-1">-<digi:trn key="aim:selsector">Select sector-</digi:trn></html:option>
-												<c:if test="${!empty aimViewIndicatorsForm.sectors}">
-														<html:optionsCollection name="aimViewIndicatorsForm" property="sectors" 
-													value="ampSectorId" label="name" />						
-												</c:if>
+                                      <html:select property="sectorId" styleClass="inp-text" onchange="document.aimViewIndicatorsForm.submit()">
+                                    	<html:option value="-1">-<digi:trn key="aim:selsector">Select sector-</digi:trn></html:option>
+										<c:if test="${!empty aimViewIndicatorsForm.sectors}">
+												<html:optionsCollection name="aimViewIndicatorsForm" property="sectors" 
+											value="ampSectorId" label="name" />						
+										</c:if>
 									 </html:select>
                                     </td>
                                 	<td nowrap="nowrap">
-                                      <b><digi:trn key="aim:indsearchkey">Keyword</digi:trn>:</b>
+                                      <digi:trn key="aim:indsearchkey">Keyword</digi:trn>:
                                     </td>
                                     <td>
                                       <html:text property="keyword" style="width:120px;font-family:verdana;font-size:11px;" />
@@ -183,69 +247,69 @@ a.itr:hover {
                                   <tr>
                                     <td colspan="6" width="100%" align="center">
                                       <table width="100%" align="center"  border="0" style="font-family:verdana;font-size:11px;">
-                                        <tr bgColor="#d7eafd">
-                                          <td width="80%">
-                                            <c:if test="${aimViewIndicatorsForm.sortBy=='0'}">
-                                              <b><digi:trn key="aim:indicator">Indicator Name
-                                                </digi:trn></b><!-- <img alt="" src="../ampTemplate/images/arrow_up_down.gif" border="0" height="10" />-->
-                                            </c:if>
-                                            <c:if test="${aimViewIndicatorsForm.sortBy!='0'}">
-                                              <a href="javascript:sortByVal('0')">
-                                                <b><digi:trn key="aim:indicator">Indicator Name
-                                                </digi:trn></b> <img alt="" src="../ampTemplate/images/arrow_up_down.gif" border="0" height="10" />
-                                              </a>
-                                            </c:if>
-                                          </td>
-                                          <td width="18%" align="center">
-                                            <c:if test="${aimViewIndicatorsForm.sortBy=='1'}">
-                                              <b><digi:trn key="aim:indsector">Sector
-                                                </digi:trn></b><!-- <img alt="" src="../ampTemplate/images/arrow_up_down.gif" border="0" height="10" />-->
-                                            </c:if>
-                                            <c:if test="${aimViewIndicatorsForm.sortBy!='1'}">
-                                              <a href="javascript:sortByVal('1')">
-                                                <b><digi:trn key="aim:indsector">Sector
-                                                </digi:trn></b> <img alt="" src="../ampTemplate/images/arrow_up_down.gif" border="0" height="10" />
-                                              </a>
-                                            </c:if>
-                                          </td>
-                                          <td width="2%">
-                                          &nbsp;
-                                          </td>
-                                        </tr>
-                                        <c:if test="${!empty aimViewIndicatorsForm.allIndicators}">
-                                          <c:forEach var="indItr" items="${aimViewIndicatorsForm.allIndicators}">
-                                            <tr onmouseover="style.backgroundColor='#dddddd';" onmouseout="style.backgroundColor='white'">
-                                              <td width="80%">
-	                                            <a class="itr" href="javascript:editIndicator('${indItr.id}');">
-                                                ${indItr.name}</a>
-                                               </td>
-                                               <td width="18%" nowrap="nowrap">
-	                                                <c:if test="${!empty indItr.sectorNames}">
-	                                            	<c:forEach var="indsectname" items="${indItr.sectorNames}">
-	                                            	   ${indsectname}<br>
-	                                            	</c:forEach>
-	                                            	</c:if>
-	                                          </td>
-                                              <td align="right" width="2%">
-                                              <jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
-														<c:set target="${urlParams}" property="indicatorId">
-																${indItr.id}
-														</c:set>
-														
-					                         		<c:set var="translation">
-														<digi:trn key="aim:clickToDeleteIndicator">
-																 Click here to Delete Indicator
-														</digi:trn>
-													</c:set>
-														<digi:link href="/viewIndicators.do~indicator=delete${tIndType}" name="urlParams" title="${translation}" onclick="return deletePrgIndicator()">
-															<img src= "../ampTemplate/images/trash_12.gif" border=0>
-														</digi:link>
-											</td>
-				                           </tr>
-                                          </c:forEach>
-                                        </c:if>
                                         <tr>
-                                          <td colspan="6" align="center">
+											<td>
+												<table width="100%" BORDER=0 cellpadding="2" cellspacing="0">
+													<tr height="30" style="background-color:#999999; color:#000000;">
+			                                          	<td width="60%">
+			                                            	<a href="javascript:sortByVal('0')" style="background-color:#999999;color:#000000;">
+			                                                	<b><digi:trn key="aim:indicator">Indicator Name
+			                                                	</digi:trn></b> <img alt="" src="../ampTemplate/images/arrow_up_down.gif" border="0" height="10" />
+			                                             	</a>
+			                                          	</td>
+			                                          	<td width="33%" align="left">
+			                                        		<a href="javascript:sortByVal('1')" style="background-color:#999999;color:#000000;">
+			                                               		<b><digi:trn key="aim:indsector">Sector
+			                                                	</digi:trn></b> <img alt="" src="../ampTemplate/images/arrow_up_down.gif" border="0" height="10" />
+			                                              	</a>
+			                                            </td>
+				                                        <td width="7%">
+				                                          	&nbsp;
+				                                        </td>
+			                                        </tr>
+												</table>
+											</td>	
+										</tr>
+										<tr>
+											<td>
+												<div  style="overflow:auto;width:100%;height:220px;max-height:220px;"  >
+													<table width="100%" BORDER=0 cellpadding="2" cellspacing="0" id="dataTable">
+				                                        <c:if test="${!empty aimViewIndicatorsForm.allIndicators}">
+				                                         	<c:forEach var="indItr" items="${aimViewIndicatorsForm.allIndicators}">
+				                                            	<tr height="25">
+						                                            <td width="60%">
+							                                            <a class="itr" href="javascript:editIndicator('${indItr.id}');">${indItr.name}</a>
+						                                            </td>
+					                                               	<td width="33%" nowrap="nowrap">
+						                                                <c:if test="${!empty indItr.sectorNames}">
+						                                            	<c:forEach var="indsectname" items="${indItr.sectorNames}">
+						                                            	   ${indsectname}<br>
+						                                            	</c:forEach>
+						                                            	</c:if>
+						                                         	</td>
+				                                              		<td align="center" width="7%">
+				                                              			<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
+																		<c:set target="${urlParams}" property="indicatorId">
+																				${indItr.id}
+																		</c:set>
+																		<c:set var="translation">
+																			<digi:trn key="aim:clickToDeleteIndicator">Click here to Delete Indicator</digi:trn>
+																		</c:set>
+																		<digi:link href="/viewIndicators.do~indicator=delete${tIndType}" name="urlParams" title="${translation}" onclick="return deletePrgIndicator()">
+																			<img src= "../ampTemplate/images/trash_12.gif" border="0">
+																		</digi:link>
+																	</td>
+								                           		</tr>
+				                                          	</c:forEach>
+				                                        </c:if>
+													</table>
+												</div>
+											</td>
+										</tr>
+										<tr height="10">
+										</tr>
+                                        <tr>
+                                          <td colspan="6" align="left">
                                           	<field:display name="Add New Indicator" feature="Admin">
                                             	<input type="button" value="<digi:trn key='btn:addIndicator'>Add Indicators</digi:trn>" id="addBtn" onclick="addIndicator();" style="font-family:verdana;font-size:11px;"/>
                                             </field:display>
@@ -270,4 +334,8 @@ a.itr:hover {
       </td>
     </tr>
   </table>
+<script language="javascript">
+	setStripsTable("dataTable", "tableEven", "tableOdd");
+	setHoveredTable("dataTable", false);
+</script>
 </digi:form>

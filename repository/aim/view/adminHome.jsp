@@ -73,6 +73,7 @@
                               </digi:link>
                             </td>
                           </tr>
+                          <module:display name="Flag uploader" parentModule="ADMINISTRATIVE SECTION"> 
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -86,7 +87,7 @@
                               </digi:link>
                             </td>
                           </tr>
-                          
+                          </module:display>
                           <tr>
                           <module:display name="Global Permission Manager" parentModule="ADMINISTRATIVE SECTION"> 
                             <td class="f-names" nowrap="nowrap">
@@ -126,6 +127,7 @@
                             </td>
                           </tr>
                           </feature:display>
+                          <module:display name="Admin Translation Manager" parentModule="ADMINISTRATIVE SECTION"> 
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -137,7 +139,7 @@
                               </digi:link>
                             </td>
                           </tr>
-
+						</module:display>
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -209,6 +211,8 @@
                               </td>
                           	</tr>
                           	</feature:display>
+                          	
+                          	 <module:display name="Quartz Job Manager" parentModule="ADMINISTRATIVE SECTION"> 
                             <tr>
                                 <td class="f-names" nowrap="nowrap">
                                     <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -220,7 +224,7 @@
                                     </digi:link>
                                 </td>
                             </tr>
-                           
+                           </module:display>
                             <!-- 
                             
                             <tr>
@@ -281,6 +285,8 @@
                     <tr align="center" bgcolor="#f4f4f2" height="120" valign="top">
                       <td class="f-names">
                         <table cellPadding="0" cellSpacing="0" width="320px">
+                        
+                         <module:display name="Fiscal Calendar Manager" parentModule="ADMINISTRATIVE SECTION"> 
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -292,6 +298,8 @@
                               </digi:link>
                             </td>
                           </tr>
+                          </module:display>
+                          
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>

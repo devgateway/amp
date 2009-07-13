@@ -46,14 +46,14 @@
 
 
 <digi:instance property="showParisIndicatorTableForm"/>
-<table  id="parisIndicatorTable${showParisIndicatorTableForm.widgetId}" width="100%">
+<table  id="parisIndicatorTable${showParisIndicatorTableForm.widgetId}">
     <tr>
         <td>&nbsp;</td>
-        <td style="font-weight:bold"><digi:trn>Paris Declaration Indicators: Donors</digi:trn></td>
-        <td style="font-weight:bold"><digi:trn>2005 Baseline</digi:trn></td>
-        <td style="font-weight:bold"><digi:trn>2010 Target</digi:trn></td>
+        <td style="font-weight:bold;width:495px;"><digi:trn>Paris Declaration Indicators: Donors</digi:trn></td>
+        <td style="font-weight:bold;width:120px;"><digi:trn>2005 Baseline</digi:trn></td>
+        <td style="font-weight:bold;width:110px;"><digi:trn>2010 Target</digi:trn></td>
             <td>
-                <select style="width: 200px;" id="parisIndicatorTableSelect_${showParisIndicatorTableForm.widgetId}" onchange="getDonorGroupValues('${showParisIndicatorTableForm.widgetId}')" AUTOCOMPLETE="OFF">
+                <select style="width: 150px;" id="parisIndicatorTableSelect_${showParisIndicatorTableForm.widgetId}" onchange="getDonorGroupValues('${showParisIndicatorTableForm.widgetId}')" AUTOCOMPLETE="OFF">
                     <option value="-1"><digi:trn>Select Donor Group</digi:trn></option>
                     <c:forEach items="${showParisIndicatorTableForm.donorGroups}" var="donorGroup">
                          <option value="${donorGroup.ampOrgGrpId}">${donorGroup.orgGrpName}</option>

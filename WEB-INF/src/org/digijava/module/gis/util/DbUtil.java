@@ -166,7 +166,7 @@ public class DbUtil {
                 q = session.createQuery("select sec.activityId, sec.sectorPercentage from " +AmpActivitySector.class.getName() + " sec where sec.sectorId=:sectorId");
                 q.setParameter("sectorId", sectorId, Hibernate.LONG);
             } else {
-                q = session.createQuery("select sec.activityId, sec.sectorPercentage from " +AmpActivitySector.class.getName() + " sec");
+                q = session.createQuery("select distinct sec.activityId, sec.sectorPercentage from " +AmpActivitySector.class.getName() + " sec");
             }
             retVal = q.list();
         } catch (Exception ex) {
@@ -413,7 +413,7 @@ public class DbUtil {
         }
         return retVal;
     }
-    
+
     public static List<IndicatorSector> searchIndicatorSectors(String sortBy,String keyword,Long sectorId , Long regionId){
     	List<IndicatorSector> retVal = null;
     	Session session = null;
@@ -428,7 +428,7 @@ public class DbUtil {
             //filter
             if(keyword!=null && keyword.length()>0){
             	queryString+=" indsec.indicator.name like '%" +keyword+ "%'";
-            }            
+            }
             if(sectorId!=null){
             	if(keyword!=null && keyword.length()>0){
             		queryString += " and ";
@@ -639,7 +639,7 @@ public class DbUtil {
           }
           return retVal;
    }
-   
+
    public static List<String> getAvailSubgroupsForSectorIndicator(Long sectorId,Long indicatorId) {
 	   List<String> retVal = null;
        Session session = null;

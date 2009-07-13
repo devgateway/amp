@@ -1,10 +1,10 @@
 <table class="bluebook">
 	<tr>
-		<td colspan=2 class="head"><center><%= ll(:bluebook, :pages, :contents, :eu_at_a_glance, :title) %></center></td>
+		<td colspan=2 class="head"><center><%= lc_bb(:title) %></center></td>
 	</tr>
 	<tr>
 		<td colspan=2>
-			<h3><%= ll(:bluebook, :pages, :contents, :eu_at_a_glance, :eu_aid_short) %></h3>
+			<h3><%= lc_bb(:title_long) %></h3>
 		</td>
 	</tr>
 	<tr>
@@ -30,7 +30,7 @@
 	
 	<tr>
 		<td colspan=2>
-			<font size=0.4><%= lc(:image_source) %></font>
+			<font size=0.4><%= lc_bb(:image_source) %></font>
 		</td>
 	</tr>
 </table>

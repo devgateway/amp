@@ -1,0 +1,98 @@
+<table class="bluebook">
+	<tr>
+		<td colspan=4 class="head"><center><%= lc_bb(:title) %></center></td>
+	</tr>	
+	<tr>
+		<td class="eu_title" colspan=4>
+			<strong><%= lc_bb(:summary) %></strong>
+		</td>
+	</tr>
+	<tr>
+		<td class="eu_title" colspan=2 width=60% valign=top>
+			<%= lc_bb(:council) %>
+		</td>
+		<td>
+			<th rowspan=6 width=40%>
+				<table>
+					<tr>
+						<td class="eu_sub_title">
+							<%= lc_bb(:committee) %>
+						</td>
+					</tr>
+					<tr>
+						<td style="font-weight:normal;">					
+							<%= lc_bb(:committee_contents) %>
+						</td>
+					</tr>
+					<tr>
+						<td class="eu_sub_title">
+							<%= lc_bb(:committee_of_regions) %>
+						</td>
+					</tr>
+					<tr>
+						<td style="font-weight:normal;">
+							<%= lc_bb(:cor_contents) %>
+						</td>
+					</tr>
+					<tr>
+						<td class="eu_sub_title">
+							<%= lc_bb(:central_bank) %>
+						</td>
+					<tr>
+						<td style="font-weight:normal;">
+							<%= lc_bb(:ecb_contents) %>
+						</td>
+					</tr>
+					<tr>
+						<td class="eu_sub_title">
+							<%= lc_bb(:investment_bank) %>
+						</td>
+					</tr>
+					<tr>
+						<td style="font-weight:normal;">
+							<%= lc_bb(:eib_contents) %>
+						</td>
+					</tr>
+				</table>
+			</th>
+		</td>
+	</tr>
+	<tr>
+		<td valign=top colspan=2>
+			<%= lc_bb(:council_contents) %>
+		</td>
+	</tr>
+	<tr>
+		<td class="eu_title" width=30% valign=top>
+			<%= ll(:terms, :ec) %>
+		</td>
+		<td class="eu_title" width=30% valign=top>
+			<%= ll(:terms, :ep) %>
+		</td>
+	</tr>
+	<tr>
+		<td valign=top>
+			<%= lc_bb(:ec_contents) %>
+		</td>		
+		<td valign=top>
+			<%= lc_bb(:ep_contents) %>
+		</td>
+	</tr>
+	
+	<tr>
+		<td class="eu_title" width=30% valign=top>
+			<%= lc_bb(:court_of_justice) %>
+		</td>
+		<td class="eu_title" width=30% valign=top>
+			<%= lc_bb(:court_of_auditors) %>
+		</td>
+	</tr>
+	<tr>
+		<td valign=top>
+			<%= lc_bb(:coj_contents) %>
+		</td>		
+		<td valign=top>
+			<%= lc_bb(:coa_contents) %>
+		</td>
+	</tr>
+</table>

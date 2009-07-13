@@ -38,7 +38,7 @@ ActionController::Routing::Routes.draw do |map|
   map.namespace :bluebook do |bluebook|
     bluebook.with_options :path_prefix => '/bluebook/:year', :year => /\d{4}/ do |bb|
       bb.root :controller => 'pages', :action => 'contents'
-      bb.pages '/pages/:action', :controller => 'pages'
+      bb.pages '/pages/:page_name', :controller => 'pages'
   
       bb.resources :donor_profiles, :only => [:show], :formatted => :none
   

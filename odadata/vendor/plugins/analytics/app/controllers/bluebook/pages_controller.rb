@@ -4,6 +4,6 @@ class Bluebook::PagesController < BluebookController
   end
 
   def index
-    render :file => "bluebook/pages/#{year}/#{params[:page_name]}", :layout => "#{year}/bluebook"
+    render :file => "bluebook/pages/#{year}/#{params[:page_name]}", :layout => "bluebook"
   end
 end

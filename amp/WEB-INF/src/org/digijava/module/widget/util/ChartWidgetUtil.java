@@ -715,7 +715,7 @@ public class ChartWidgetUtil {
 			toDate =new Date(getStartOfYear(toYear.intValue()+1,calendar.getStartMonthNum()-1,calendar.getStartDayNum()).getTime()-MILLISECONDS_IN_DAY);
 		}		
         Double[] allFundingWrapper={new Double(0)};// to hold whole funding value
-		Collection<DonorSectorFundingHelper> fundings=getDonorSectorFunding(donors, fromDate, toDate,allFundingWrapper,null);
+		Collection<DonorSectorFundingHelper> fundings=getDonorSectorFunding(donors, fromDate, toDate,allFundingWrapper,null,true);
 		if (fundings!=null){
             double otherFunfing=0;
 			for (DonorSectorFundingHelper funding : fundings) {
@@ -756,7 +756,7 @@ public class ChartWidgetUtil {
 	 * @return
 	 * @throws DgException
 	 */
-	public static Collection<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[],Date fromDate, Date toDate,Double[] wholeFunding,Long sectorIds[]) throws DgException {
+	public static Collection<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[],Date fromDate, Date toDate,Double[] wholeFunding,Long sectorIds[], boolean parentSectOnly) throws DgException {
     	Collection<DonorSectorFundingHelper> fundings=null;  
 			String oql ="select  actSec, "+
                         "  act.ampActivityId.ampActivityId, sum(fd.transactionAmountInUSD)";
@@ -770,7 +770,7 @@ public class ChartWidgetUtil {
                         " inner join actSec.classificationConfig config ";
 
 
-		oql += " where sec.parentSectorId is null  and fd.transactionType = 0 and fd.adjustmentType = 1 ";
+		oql += " where   fd.transactionType = 0 and fd.adjustmentType = 1 ";
 		if (donorIDs != null && donorIDs.length > 0) {
 			oql += " and (fd.ampFundingId.ampDonorOrgId in ("+ getInStatment(donorIDs) + ") ) ";
 		}
@@ -780,8 +780,8 @@ public class ChartWidgetUtil {
         if (sectorIds!=null) {
 			oql += " and actSec.sectorId in ("+ getInStatment(sectorIds) + ") ";
 		}
-        else{
-           oql +=" and sec.parentSectorId is null";
+        if(parentSectOnly){
+           oql +=  " and sec.parentSectorId is null ";
         }
         oql +=" and config.name='Primary' and act.team is not null ";
 		oql += " group by act.ampActivityId, actSec ";

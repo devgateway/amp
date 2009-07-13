@@ -152,13 +152,14 @@
 				document.crDocumentManagerForm.docTitle.focus();
 				return false;
 			}
-			
+
+			/*
 			if ( !usesAllowedCharacters(document.crDocumentManagerForm.docTitle.value) ) {
 				alert(" ${translation_validation_title_chars} ");
 				document.crDocumentManagerForm.docTitle.focus();
 				return false;
 			}
-			
+			*/
 			if(fileFlag == true)
 			{
 				alert(" ${translation_validation_filedata} ");

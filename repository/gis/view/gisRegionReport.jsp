@@ -76,6 +76,9 @@
 				<td style="color:#FFFFFF;font-weight:bold" class="tableHeader">Actual Expenditures</td>
 				<td>&nbsp;<bean:write name="gisRegReportForm" property="actualExpendituresStr"/></td>
 			</tr>
+			<tr>
+				<td colspan="2" align="center"><font color="red">Note: all numbers are in USD</font></td>
+			</tr>
 		</table> 
 	</div>
 </div>

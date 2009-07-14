@@ -836,8 +836,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		
 		private Long parentLocId;
 		
-		private Long [] userSelectedLocs;
-		
 		@Deprecated
 		private Long impRegion; // Implementation region
 		@Deprecated
@@ -1135,14 +1133,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 		public void setParentLocId(Long parentLocId) {
 			this.parentLocId = parentLocId;
-		}
-
-		public Long[] getUserSelectedLocs() {
-			return userSelectedLocs;
-		}
-
-		public void setUserSelectedLocs(Long[] userSelectedLocs) {
-			this.userSelectedLocs = userSelectedLocs;
 		}
 
 		public void reset(ActionMapping mapping, HttpServletRequest request) {

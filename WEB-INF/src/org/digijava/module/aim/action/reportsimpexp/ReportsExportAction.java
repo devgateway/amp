@@ -171,8 +171,12 @@ public class ReportsExportAction extends MultiAction {
 			HttpServletRequest request, HttpServletResponse response)
 	throws Exception {
 		ImpExpForm myForm					= (ImpExpForm) form;
+		String filename								= "reportsExport.xml";
+		if ( myForm.getShowTabs() )
+			filename									= "tabsExport.xml";
+		
 		response.setContentType("text/xml");
-		response.setHeader("content-disposition", "attachment; filename=exportReports.xml");
+		response.setHeader("content-disposition", "attachment; filename=" + filename);
 		if ( myForm.getSelectedReports() != null && myForm.getSelectedReports().size() > 0 ) {
 			ReportsExpTransformerMain mainTransformer	= new ReportsExpTransformerMain();
 			mainTransformer.transform( myForm.getSelectedReports().keySet() );

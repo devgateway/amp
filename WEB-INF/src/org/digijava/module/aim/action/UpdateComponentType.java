@@ -56,12 +56,14 @@ public class UpdateComponentType extends Action {
 			type.setName(compForm.getName());
 			type.setCode(compForm.getCode());
 			type.setEnable(compForm.getEnable());
+			type.setSelectable(compForm.getSelectable());
 			ComponentsUtil.addNewComponentType(type);
 		} else {
 			AmpComponentType type = ComponentsUtil.getComponentTypeById(compForm.getId());
 			type.setName(compForm.getName());
 			type.setCode(compForm.getCode());
 			type.setEnable(compForm.getEnable());
+			type.setSelectable(compForm.getSelectable());
 			ComponentsUtil.addNewComponentType(type);
 
 		}
@@ -87,6 +89,7 @@ public class UpdateComponentType extends Action {
 			compForm.setName(type.getName());
 			compForm.setCode(type.getCode());
 			compForm.setEnable(type.getEnable());
+			compForm.setSelectable(type.getSelectable());
 			
 		}
 		return mapping.findForward("edit");

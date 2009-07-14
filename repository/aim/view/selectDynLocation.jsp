@@ -11,12 +11,11 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
-<digi:instance property="aimEditActivityForm" />
-<bean:define id="location" name="aimEditActivityForm" property="location"></bean:define>
+<digi:instance property="selectLocationForm" />
 
-<digi:form action="/locationSelected.do" name="aimEditActivityFormPop" type="aimEditActivityForm" method="post">
-<html:hidden styleId="locationReset" property="location.locationReset" value="false" />
-<html:hidden styleId="parentLocId" property="location.parentLocId" />
+<digi:form action="/locationSelected.do">
+<html:hidden styleId="locationReset" property="locationReset" value="false" />
+<html:hidden styleId="parentLocId" property="parentLocId" />
 
 
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
@@ -34,16 +33,16 @@
 						<tr>
 							<td align="center" bgcolor=#ECF3FD>
 								<table cellPadding=2 cellSpacing=2>
-									<logic:notEmpty name="aimEditActivityForm" property="location.locationByLayers">
-										<logic:iterate name="aimEditActivityForm" property="location.locationByLayers" id="entry">
+									<logic:notEmpty name="selectLocationForm" property="locationByLayers">
+										<logic:iterate name="selectLocationForm" property="locationByLayers" id="entry">
 											<bean:define id="myCollection" type="java.util.Collection" name="entry" property="value" />
 											<% pageContext.setAttribute("colSize", myCollection.size() ) ;%>
 											<c:choose>
-												<c:when test="${entry.key==(aimEditActivityForm.location.impLevelValue -1) }">
+												<c:when test="${entry.key==(selectLocationForm.impLevelValue -1) }">
 													<c:set var="sizeString">5</c:set>
 													<c:set var="multipleString">multiple="multiple"</c:set>
 													<c:set var="changeString"> </c:set>
-													<c:set var="nameString">name="location.userSelectedLocs"</c:set>
+													<c:set var="nameString">name="userSelectedLocs"</c:set>
 												</c:when>
 												<c:otherwise>
 													<c:set var="sizeString">1</c:set>
@@ -64,7 +63,7 @@
 													<logic:notEmpty name="entry" property="value">
 														<logic:iterate name="entry" property="value" id="locationEntry">
 															<c:choose>
-															<c:when test="${locationEntry.key == aimEditActivityForm.location.selectedLayers[entry.key]}">
+															<c:when test="${locationEntry.key == selectLocationForm.selectedLayers[entry.key]}">
 																<option selected="selected" value="${locationEntry.key}">${locationEntry.value}</option>
 															</c:when>
 															<c:otherwise>

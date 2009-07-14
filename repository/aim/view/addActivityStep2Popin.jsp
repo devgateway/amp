@@ -211,14 +211,14 @@
 	}
 	function generateFieldsLocation(){
 		
-		var ret="location.locationReset=" + document.getElementsByName("location.locationReset")[0].value+"&"+
-		"location.parentLocId=" + document.getElementsByName("location.parentLocId")[0].value;
+		var ret="locationReset=" + document.getElementsByName("locationReset")[0].value+"&"+
+		"parentLocId=" + document.getElementsByName("parentLocId")[0].value;
 
-		if (document.getElementsByName('location.userSelectedLocs').length > 0){
-			var opt = document.getElementsByName('location.userSelectedLocs')[0].length;
+		if (document.getElementsByName('userSelectedLocs').length > 0){
+			var opt = document.getElementsByName('userSelectedLocs')[0].length;
 			for(var i=0; i< opt; i++){
-				if(document.getElementsByName('location.userSelectedLocs')[0].options[i].selected==true){
-					ret += "&location.userSelectedLocs=" + document.getElementsByName('location.userSelectedLocs')[0].options[i].value;
+				if(document.getElementsByName('userSelectedLocs')[0].options[i].selected==true){
+					ret += "&userSelectedLocs=" + document.getElementsByName('userSelectedLocs')[0].options[i].value;
 				}
 			}
 		}

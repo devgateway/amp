@@ -157,6 +157,8 @@
 	
     <form-bean name="addressbookForm" type="org.digijava.module.aim.form.AddressBookForm"/>
     
+    <form-bean name="selectLocationForm" type="org.digijava.module.aim.form.SelectLocationForm"/>
+    
 </form-beans>
 
   <global-forwards>
@@ -1122,8 +1124,8 @@
       <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
-    <action name="aimEditActivityForm" path="/aim/selectLocation" scope="session" type="org.digijava.module.aim.action.SelectLocation">
-      <forward name="forward" path="/showLayout.do?layout=aim_locPopupLayout" />
+    <action name="selectLocationForm" path="/aim/selectLocation" scope="session" type="org.digijava.module.aim.action.SelectLocation">
+      <forward name="forward" path="/aim/locationSelected.do" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     <action name="aimEditActivityForm" path="/aim/removeSelLocations" scope="session" type="org.digijava.module.aim.action.RemoveSelLocations">
@@ -1183,8 +1185,10 @@
       <forward name="index" path="/aim/index.do" redirect="true" />
       <forward name="selorg" path="/aim/selectOrganization.do?edit=true&amp;orgSelReset=false" />
     </action>
-    <action name="aimEditActivityForm" path="/aim/locationSelected" scope="session" type="org.digijava.module.aim.action.DynLocationSelected">
-      <forward name="forward" path="/aim/addActivity.do?edit=true" />
+    <action name="selectLocationForm" path="/aim/locationSelected" scope="session" type="org.digijava.module.aim.action.DynLocationSelected" parameter="forward">
+      <forward name="forward" path="/showLayout.do?layout=aim_locPopupLayout" />
+      <forward name="forward1" path="/aim/addActivity.do?edit=true" />
+	  <forward name="/aim/selectLocation" path="/aim/selectLocation.do" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     <action name="aimSelectSectorForm" path="/aim/selectSectors" scope="session" type="org.digijava.module.aim.action.SelectSector">

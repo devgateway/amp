@@ -76,16 +76,16 @@
 					<tr>
 						<td style="text-align: center; padding: 5px;">
 							<span style="vertical-align: middle; font-weight: bold"><digi:trn>Teams</digi:trn>:</span>
-							<html:select property="selectedTeamIds" multiple="true" size="4" style="vertical-align: middle;">
-								<html:optionsCollection property="availableTeams" label="value" value="key"/>
+							<html:select styleClass="inp-text" property="selectedTeamIds" multiple="true" size="4" style="vertical-align: middle;">
+								<html:optionsCollection style=" font-size: 11px;" property="availableTeams" label="value" value="key"/>
 							</html:select>
 							&nbsp;&nbsp;
 							<span style="vertical-align: middle; font-weight: bold"><digi:trn>Users</digi:trn>:</span>
-							<html:select style="vertical-align: middle;" property="selectedUserIds" multiple="true" size="4">
-								<html:optionsCollection property="availableUsers" label="value" value="key"/>
+							<html:select styleClass="inp-text" style="vertical-align: middle; " property="selectedUserIds" multiple="true" size="4">
+								<html:optionsCollection style=" font-size: 11px;" property="availableUsers" label="value" value="key"/>
 							</html:select>
 							&nbsp;&nbsp;
-							<button style="vertical-align: middle;" type="button" onclick="changePage(${aimImpExpForm.showTabs}, '<%=ReportsImpExpConstants.ACTION_SELECTION_STEP %>')">
+							<button style="vertical-align: middle;" type="button" class="buton" onclick="changePage(${aimImpExpForm.showTabs}, '<%=ReportsImpExpConstants.ACTION_SELECTION_STEP %>')">
 								<digi:trn>Filter</digi:trn> 
 							</button>
 						</td>
@@ -319,7 +319,7 @@
                     </tr>      
                     <tr>
                    	    <td>
-                   	    	<button style="vertical-align: middle;" type="button" onclick="changePage(${aimImpExpForm.showTabs}, '<%=ReportsImpExpConstants.ACTION_ADD_STEP %>')">
+                   	    	<button style="vertical-align: middle;" type="button" class="buton" onclick="changePage(${aimImpExpForm.showTabs}, '<%=ReportsImpExpConstants.ACTION_ADD_STEP %>')">
 								<digi:trn>Add</digi:trn> 
 							</button>
                    	    	<hr />
@@ -331,7 +331,7 @@
 		                      	<c:set var="exportDisabledStr"> </c:set>
 		                      	<c:set var="exportColorStr"> </c:set>
 	                      	</logic:notEmpty>
-							<button ${exportDisabledStr } style="vertical-align: middle; ${exportColorStr }" type="button" onclick="changePage(${aimImpExpForm.showTabs}, '<%=ReportsImpExpConstants.ACTION_EXPORT %>')">
+							<button ${exportDisabledStr } style="vertical-align: middle; ${exportColorStr }" type="button" class="buton" onclick="changePage(${aimImpExpForm.showTabs}, '<%=ReportsImpExpConstants.ACTION_EXPORT %>')">
 								<digi:trn>Export</digi:trn> 
 							</button>	                      	
 	                      </td>

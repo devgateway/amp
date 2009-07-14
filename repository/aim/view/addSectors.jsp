@@ -31,7 +31,7 @@
 		YAHOOAmp.namespace("YAHOOAmp.amp");
 
 		var myPanel = new YAHOOAmp.widget.Panel("newmySectors", {
-			width:"600px",
+			width:"100%",
 			fixedcenter: true,
 		    constraintoviewport: false,
 		    underlay:"none",

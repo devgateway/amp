@@ -123,7 +123,8 @@ public class AddFunding extends Action {
 			formBean.getFunding().setAssistanceType( grantCV.getId() );
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.warn("Grant value was not found in database. This could be an error. Make  sure it is not needed: " + e.getMessage());
 		}
 		formBean.getFunding().setOrganizations(DbUtil.getAllOrganisation());
 		formBean.getFunding().setEvent(null);

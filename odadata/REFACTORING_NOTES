@@ -1,0 +1,5 @@
+Possible ways to refactor reports:
+	- Use namespaced controllers for each report, each having an index and a list action (at least), e.g.
+		/reports/donors showing current ReportsController::donor and /reports/donors/1 showing ReportsController::project_list
+	- The general report builder should stay abstract
+	- A common base class among the reporting controllers could simplify things and make them DRY

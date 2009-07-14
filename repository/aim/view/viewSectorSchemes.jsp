@@ -18,7 +18,71 @@
 		var flag = confirm("${translation}");
 		return flag;
 	}
+	function setStripsTable(tableId, classOdd, classEven) {
+		var tableElement = document.getElementById(tableId);
+		rows = tableElement.getElementsByTagName('tr');
+		for(var i = 0, n = rows.length; i < n; ++i) {
+			if(i%2 == 0)
+				rows[i].className = classEven;
+			else
+				rows[i].className = classOdd;
+		}
+		rows = null;
+	}
+
+	function setHoveredTable(tableId, hasHeaders) {
+
+		var tableElement = document.getElementById(tableId);
+		if(tableElement){
+	    	var className = 'Hovered',
+	        pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
+	        rows      = tableElement.getElementsByTagName('tr');
+
+			for(var i = 0, n = rows.length; i < n; ++i) {
+				rows[i].onmouseover = function() {
+					this.className += ' ' + className;
+				};
+				rows[i].onmouseout = function() {
+					this.className = this.className.replace(pattern, ' ');
+
+				};
+			}
+			rows = null;
+		}
+	}
 </script>
+
+<style type="text/css">
+.jcol {
+	padding-left: 10px;
+}
+
+.jlien {
+	text-decoration: none;
+}
+
+.tableEven {
+	background-color: #dbe5f1;
+	font-size: 8pt;
+	padding: 2px;
+}
+
+.tableOdd {
+	background-color: #FFFFFF;
+	font-size: 8pt;
+	padding: 2px;
+}
+
+.Hovered {
+	background-color: #a5bcf2;
+}
+
+.notHovered {
+	background-color: #FFFFFF;
+}
+</style>
+
+
 <digi:instance property="aimAddSectorForm" />
 <digi:context name="digiContext" property="context" />
 <!--  AMP Admin Logo -->
@@ -27,8 +91,7 @@
 <html:hidden property="event" value="view"/>
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750>
+		<td align=left vAlign=top width=750>
 			<table cellPadding=5 cellSpacing=0 width="100%" border=0>
 				<tr>
 					<!-- Start Navigation -->
@@ -64,95 +127,84 @@
 							<tr bgColor=#ffffff>
 								<td vAlign="top" width="100%">
 
-									<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left>
-										<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
-											<!-- Table title -->
-											<digi:trn key="aim:schemes">Schemes</digi:trn>
-											<!-- end table title -->
-										</td></tr>
-										<tr><td>
-											<table width="100%" cellspacing=1 cellpadding=4 valign=top align=left bgcolor="#d7eafd">
-													<logic:empty name="aimAddSectorForm" property="formSectorSchemes">
-													<tr bgcolor="#ffffff">
-														<td colspan="5" align="center"><b>
-															<digi:trn key="aim:noSchemes">
-															No Schemes present
-															</digi:trn>
-														</b></td>
+									<table cellSpacing="0" cellPadding="0" vAlign="top" align="left" width="100%">
+										<tr>
+											<td>
+												<table width="100%" height="30" cellpadding="2" cellspacing="0">
+													<tr style="background-color: #999999; color: #000000;" align="center">
+														<td width="80%" align="left">
+															<b><digi:trn key="aim:schemes">Schemes </digi:trn></b>
+														</td>
+														<td width="20%" rowspan="2">
+														</td>
 													</tr>
-													</logic:empty>
-													<logic:notEmpty name="aimAddSectorForm" property="formSectorSchemes">
-													<logic:iterate name="aimAddSectorForm" property="formSectorSchemes" id="sectorScheme"
-																	type="org.digijava.module.aim.dbentity.AmpSectorScheme	">
-													<tr>
-														<td width="256" bgcolor="#ffffff">
-															<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
-															<c:set target="${urlParams2}" property="ampSecSchemeId">
-															<bean:write name="sectorScheme" property="ampSecSchemeId" />
-															</c:set>
-															<c:set target="${urlParams2}" property="event" value="edit" />
-															<c:set target="${urlParams2}" property="dest" value="admin" />
-															<c:set var="clickToViewSchemes">
-															<digi:trn key="aim:clickToViewSchemes">Click here to view Schemes</digi:trn>
-															</c:set>
-															<c:set var="edittext">
-															<digi:trn key="aim:edit">Edit</digi:trn>
-															</c:set>
-															<digi:link href="/updateSectorSchemes.do" name="urlParams2" title="${clickToViewSchemes}" >
-															<bean:write name="sectorScheme" property="secSchemeName"/></digi:link>
-													  </td>
-
-														<td bgcolor="#ffffff" width="97" align="right">
-															<c:set var="trnEditScheme">
-																<digi:trn key="aim:clickToEditScheme">Click here to Edit Scheme</digi:trn>
-															</c:set>
-
-
-
-															[ <digi:link href="/updateSectorSchemes.do" name="urlParams2" title="${trnEditScheme}" >
-															 ${edittext} 
-															</digi:link>
-															]													  </td>
-
-														<%--<logic:equal name="aimAddSectorForm" property="deleteSchemeFlag" value="true">--%>
-                                                                                                               
-														<td bgcolor="#ffffff" width="75" align="left">
-                                                           <c:if test="${!sectorScheme.used}">
-															<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
-															<c:set target="${urlParams4}" property="ampSecSchemeId">
-																<bean:write name="sectorScheme" property="ampSecSchemeId" />
-															</c:set>
-															<c:set target="${urlParams4}" property="event" value="deleteScheme"/>
-															<c:set var="trnDeleteScheme">
-																<digi:trn key="aim:clickToDeleteScheme">Click here to Delete Scheme</digi:trn>
-															</c:set>
-															[ <digi:link href="/updateSectorSchemes.do" name="urlParams4"
-																title="${trnDeleteScheme}" onclick="return onDelete()">
-																 <digi:trn key="aim:delete">Delete</digi:trn>
-															</digi:link>
-                                                             ]</c:if>&nbsp;</td>
-                                                                                                                        
-
-
-														<%--<logic:equal name="aimAddSectorForm" property="deleteSchemeFlag" value="false">
-															<td colspan="2" align="center">
-																<b><digi:trn key="aim:cannotDeleteSectorMsg2">
-																	Cannot Delete the sector since activity exist
-																</digi:trn></b>
-															</td>
-
-														</logic:equal>--%>
-													</tr>
-													</logic:iterate>
-
-
-
-													</logic:notEmpty>
-													<!-- end page logic -->
-											</table>
-										</td></tr>
+												</table>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div style="overflow: auto; width: 100%; height: 180px; max-height: 180px;">
+													<table width="100%" cellspacing="0" cellpadding="2" id="dataTable">
+														<logic:empty name="aimAddSectorForm" property="formSectorSchemes">
+															<tr bgcolor="#ffffff">
+																<td colspan="5" align="center"><b>
+																	<digi:trn key="aim:noSchemes">
+																	No Schemes present
+																	</digi:trn>
+																</b></td>
+															</tr>
+														</logic:empty>
+														<logic:notEmpty name="aimAddSectorForm" property="formSectorSchemes">
+															<logic:iterate name="aimAddSectorForm" property="formSectorSchemes" id="sectorScheme" type="org.digijava.module.aim.dbentity.AmpSectorScheme	">
+																<tr height="25">
+																	<td align="left" width="80%">
+																		<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
+																		<c:set target="${urlParams2}" property="ampSecSchemeId">
+																		<bean:write name="sectorScheme" property="ampSecSchemeId" />
+																		</c:set>
+																		<c:set target="${urlParams2}" property="event" value="edit" />
+																		<c:set target="${urlParams2}" property="dest" value="admin" />
+																		<c:set var="clickToViewSchemes">
+																		<digi:trn key="aim:clickToViewSchemes">Click here to view Schemes</digi:trn>
+																		</c:set>
+																		<c:set var="edittext">
+																		<digi:trn key="aim:edit">Edit</digi:trn>
+																		</c:set>
+																		<digi:link href="/updateSectorSchemes.do" name="urlParams2" title="${clickToViewSchemes}" >
+																		<bean:write name="sectorScheme" property="secSchemeName"/></digi:link>
+																  	</td>
+																	<td align="center" width="10%">
+																		<c:set var="trnEditScheme">
+																			<digi:trn key="aim:clickToEditScheme">Click here to Edit Scheme</digi:trn>
+																		</c:set>
+																		<digi:link href="/updateSectorSchemes.do" name="urlParams2" title="${trnEditScheme}" >
+																		 	<digi:img src="../ampTemplate/images/application_edit.png" border="0"/>
+																		</digi:link>
+																	</td>
+																	<td align="center" width="10%">
+			                                                           	<c:if test="${!sectorScheme.used}">
+																			<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
+																			<c:set target="${urlParams4}" property="ampSecSchemeId">
+																				<bean:write name="sectorScheme" property="ampSecSchemeId" />
+																			</c:set>
+																			<c:set target="${urlParams4}" property="event" value="deleteScheme"/>
+																			<c:set var="trnDeleteScheme">
+																				<digi:trn key="aim:clickToDeleteScheme">Click here to Delete Scheme</digi:trn>
+																			</c:set>
+																			<digi:link href="/updateSectorSchemes.do" name="urlParams4"
+																				title="${trnDeleteScheme}" onclick="return onDelete()">
+																				 <digi:img src="../ampTemplate/images/trash_16.gif" border="0"/>
+																			</digi:link>
+			                                                            </c:if>
+																	</td>
+			                                                    </tr>
+															</logic:iterate>
+														</logic:notEmpty>
+													</table>
+												</div>
+											</td>
+										</tr>
 									</table>
-
 								</td>
 							</tr>
 						</table>
@@ -163,16 +215,13 @@
 							<tr>
 								<td>
 									<!-- Other Links -->
-									<table cellPadding=0 cellSpacing=0 width=200>
+									<table cellPadding=0 cellSpacing=0 width=200 height="20">
 										<tr>
 											<td bgColor=#c9c9c7 class=box-title>
 												<digi:trn key="aim:otherLinks">
 												Other links
 												</digi:trn>
-											</td>
-											<td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;
-												
-											</td>
+											</td>	
 										</tr>
 									</table>
 								</td>
@@ -181,37 +230,36 @@
 								<td bgColor=#ffffff class=box-border>
 									<table cellPadding=5 cellSpacing=1 width="100%">
 										<field:display name="Add Scheme Link" feature="Sectors">
-										<tr>
-											<td>
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<c:set var="trnAddScheme">
-													<digi:trn key="aim:clickToAddScheme">Click here to Add a Scheme</digi:trn>
-												</c:set>
-												<digi:link href="/updateSectorSchemes.do?dest=admin&event=addscheme" title="${trnAddScheme}" >
-                                                  <digi:trn key="aim:addScheme">
-                                                  Add Scheme
-                                                  </digi:trn>
-												</digi:link>
-											</td>
-										</tr>
+											<tr>
+												<td>
+													<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+													<c:set var="trnAddScheme">
+														<digi:trn key="aim:clickToAddScheme">Click here to Add a Scheme</digi:trn>
+													</c:set>
+													<digi:link href="/updateSectorSchemes.do?dest=admin&event=addscheme" title="${trnAddScheme}" >
+	                                                  <digi:trn key="aim:addScheme">
+	                                                  Add Scheme
+	                                                  </digi:trn>
+													</digi:link>
+												</td>
+											</tr>
 										</field:display>
-                                                                             	<field:display name="Multi Sector Configuration" feature="Sectors">
-                                                                                     <tr>
-                                                                                         <td>
-                                                                                             <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-                                                                                             <c:set var="trnViewConfigurations">
-                                                                                                 <digi:trn key="aim:ClickToConfigureClassifications">Click here to see the Configuration of Classifications</digi:trn>
-                                                                                             </c:set>
-                                                                                             <digi:link href="/getSectorClassConfig.do" title="${trnViewConfigurations}" >
-                                                                                                 <digi:trn key="aim:MultiSectorConfiguration">
-                                                                                                     Multi Sector Configuration
-                                                                                                 </digi:trn>
-                                                                                             </digi:link>
-                                                                                         </td>
-                                                                                     </tr>
-																				</field:display>
-                                                                         
-										<tr>
+                                      	<field:display name="Multi Sector Configuration" feature="Sectors">
+                                              <tr>
+                                                  <td>
+                                                      <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+                                                      <c:set var="trnViewConfigurations">
+                                                          <digi:trn key="aim:ClickToConfigureClassifications">Click here to see the Configuration of Classifications</digi:trn>
+                                                      </c:set>
+                                                      <digi:link href="/getSectorClassConfig.do" title="${trnViewConfigurations}" >
+                                                          <digi:trn key="aim:MultiSectorConfiguration">
+                                                              Multi Sector Configuration
+                                                          </digi:trn>
+                                                      </digi:link>
+                                                  </td>
+                                              </tr>
+										</field:display>
+                                        <tr>
 											<td>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="trnViewAdmin">
@@ -230,6 +278,35 @@
 							</tr>
 						</table>
 					</td></tr>
+					<tr>
+				        <td>
+							<table>
+				             	<tr>
+				                 	<td colspan="2">
+				                 		<strong><digi:trn key="aim:IconReference">Icons Reference</digi:trn></strong>
+				       				</td>
+				       			</tr>
+				     			<tr>
+				           			<td width="15" height="20" align="center">
+										<img src= "../ampTemplate/images/application_edit.png" vspace="2" border="0" align="absmiddle" />
+									</td>
+									<td nowrap="nowrap">
+				               			<digi:trn key="aim:clickToInactiveCurrency">Click on this icon to edit Scheme</digi:trn>
+				               			<br />
+				       				</td>
+				       			</tr>
+				        		<tr>
+				           			<td width="15" height="20" align="center">
+										<img src= "../ampTemplate/images/trash_16.gif" vspace="2" border="0" align="absmiddle" />
+				               		</td>
+									<td nowrap="nowrap">
+									<digi:trn key="aim:clickToDeleteCurrency">Click on this icon to delete Scheme</digi:trn>
+				               			<br />
+				       				</td>
+				       			</tr>
+				       		</table>
+				     	</td>
+				    </tr>
 					</table>
 					</td>
 				</tr>
@@ -237,5 +314,8 @@
 		</td>
 	</tr>
 </table>
-
+<script language="javascript">
+	setStripsTable("dataTable", "tableEven", "tableOdd");
+	setHoveredTable("dataTable", false);
+</script> 
 

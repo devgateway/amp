@@ -39,6 +39,17 @@
 		reporTable.scroll();
 	};  
 
+	function disableOptions (optionsList ) {
+		if ( optionsList != null ) {
+			for (var i=0; i<optionsList.length; i++) {
+				optionsList[i].selected	= false;
+			}
+		}
+	}
+	function resetFilters () {
+		disableOptions (document.forms["aimImpExpForm"].selectedTeamIds.options);
+		disableOptions (document.forms["aimImpExpForm"].selectedUserIds.options);
+	}
   </script>
 <digi:form action="/reportsExport.do" method="post">
 	<html:hidden name="aimImpExpForm" property="showTabs"/>
@@ -85,8 +96,12 @@
 								<html:optionsCollection style=" font-size: 11px;" property="availableUsers" label="value" value="key"/>
 							</html:select>
 							&nbsp;&nbsp;
+							<button style="vertical-align: middle;" type="button" class="buton" onclick="resetFilters()">
+								<digi:trn>Reset Selection</digi:trn> 
+							</button>
+							&nbsp;&nbsp;
 							<button style="vertical-align: middle;" type="button" class="buton" onclick="changePage(${aimImpExpForm.showTabs}, '<%=ReportsImpExpConstants.ACTION_SELECTION_STEP %>')">
-								<digi:trn>Filter</digi:trn> 
+								<digi:trn>Apply Filters</digi:trn> 
 							</button>
 						</td>
 					</tr>

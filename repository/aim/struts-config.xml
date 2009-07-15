@@ -1124,7 +1124,7 @@
       <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
-    <action name="selectLocationForm" path="/aim/selectLocation" scope="session" type="org.digijava.module.aim.action.SelectLocation">
+    <action name="selectLocationForm" path="/aim/selectLocation" scope="session" type="org.digijava.module.aim.action.SelectLocation" parameter="forward">
       <forward name="forward" path="/aim/locationSelected.do" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>

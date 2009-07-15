@@ -9,13 +9,15 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.config.ActionConfig;
-import org.apache.struts.config.ForwardConfig;
 import org.apache.struts.tiles.ComponentContext;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.request.SiteDomain;
 
 public class SelectorAction extends Action{
+	
+	public static String ATTRIBUTE_START = SelectorAction.class.getCanonicalName() + ".START";
+	public static String ATTRIBUTE_END = SelectorAction.class.getCanonicalName() + ".END";
+	
 	private static Logger logger = Logger.getLogger(SelectorAction.class);
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
@@ -24,29 +26,31 @@ public class SelectorAction extends Action{
 		
 		ActionForward forward = null;		
 		
-		Object endSelection = request.getAttribute("EndSelection");
-		if(endSelection != null &&  endSelection instanceof Boolean && (Boolean)endSelection){
-			forward = endSelect(mapping,form,request,response);
+		Object endSelection = request.getAttribute(ATTRIBUTE_END);
+		if(endSelection != null && endSelection instanceof Boolean && (Boolean)endSelection){
+			forward = selectorEnd(mapping,form,request,response);
 		}else{
-			request.setAttribute("StartSelection", mapping.getPath());
-			forward = startSelect(mapping,form,request,response);
+			request.setAttribute(ATTRIBUTE_START, mapping.getPath());
+			forward = selectorStart(mapping,form,request,response);
+			if(forward == null) 
+				forward = mapping.findForward(mapping.getParameter());			
 		}
 		return forward;
 	}
 	
-	public ActionForward startSelect(ActionMapping mapping, ActionForm form,
+	public ActionForward selectorStart(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception{	
 		return null;
 	}
 	
-	public ActionForward endSelect(ActionMapping mapping, ActionForm form,
+	public ActionForward selectorEnd(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception{	
 		return null;
 	}
 	
-	protected ActionForm getForm(HttpServletRequest request,
+	public ActionForm getForm(HttpServletRequest request,
 			String actionFormName) {
         SiteDomain currentSite = (SiteDomain) request.getAttribute(
                 Constants.

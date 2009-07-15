@@ -2,7 +2,9 @@ class Donor < ActiveRecord::Base
   translates :name
   
   has_many :users
-    
+
+  has_many :donor_details, :class_name => "DonorDetails"
+  accepts_nested_attributes_for :donor_details
   has_many :projects
   has_many :country_strategies, :dependent => :delete_all
   has_many :agencies, :class_name => "DonorAgency", :dependent => :delete_all
@@ -29,6 +31,8 @@ class Donor < ActiveRecord::Base
   # TODO: This is a hack to order by the translated donor name
   # This should better be done in the globalization plugin directly but joining in the translation
   named_scope :ordered, :order => "name ASC"
+  FIRST_YEAR_OF_RELEVANCE   = 2007
+
 end
 
 # Bluebook

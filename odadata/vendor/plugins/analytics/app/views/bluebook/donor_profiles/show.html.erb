@@ -24,15 +24,15 @@
 				</tr>
 				<tr>
 					<td><%= lc(:total_staff) %></td>
-					<td><%= @donor.total_staff_in_country %></td>
+					<td><%= @donor.donor_details.find_by_year(year).total_staff_in_country %></td>
 				</tr>
 				<tr>
 					<td><%= lc(:expatriate_staff) %></td>
-					<td><%= @donor.total_expatriate_staff %></td>
+					<td><%= @donor.donor_details.find_by_year(year).total_expatriate_staff %></td>
 				</tr>
 				<tr>
 					<td><%= lc(:local_staff) %></td>
-					<td><%= @donor.total_local_staff %></td>
+					<td><%= @donor.donor_details.find_by_year(year).total_local_staff %></td>
 				</tr>
 				<tr>
 					<td colspan=2>

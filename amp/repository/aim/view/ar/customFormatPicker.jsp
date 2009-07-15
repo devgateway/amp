@@ -29,6 +29,7 @@ function myReset() {
 	aimReportsFilterPickerForm3.customGroupCharacter.value = ".";
 	aimReportsFilterPickerForm3.customGroupCharacterTxt.value = "";
 	aimReportsFilterPickerForm3.customGroupSize.value = 3;
+	aimReportsFilterPickerForm3.amountinthousands.value = "false";
 	initFormatPopup();
 }
 </script>
@@ -98,6 +99,13 @@ function myReset() {
 		  <td height="18" align="right" nowrap="nowrap"><digi:trn key="aim:formatPicket:GroupSize">Group Size</digi:trn>&nbsp;</td>
 		  <td height="18" colspan="2" nowrap="nowrap"><html:text disabled="true" property="customGroupSize" size="2" maxlength="1" onchange="initFormatPopup();"/></td>
 	  </tr>
+	  <tr>
+		<td height="18" align="right" nowrap="nowrap">Amount in thousands &nbsp;</td>
+		<td height="18" colspan="2" nowrap="nowrap">
+		 	<html:checkbox property="amountinthousands" styleId="customUseGrouping"  onchange ="initFormatPopup();" />
+		 </td>
+	  </tr>
+	<tr>
 		<tr>
 			<td width="40%" height="18" align="right" nowrap="nowrap" ><digi:trn key="aim:formatPicket:Example">Example</digi:trn>
 		  &nbsp;</td>

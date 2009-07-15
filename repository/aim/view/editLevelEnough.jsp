@@ -48,8 +48,7 @@
 
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750>
+		<td align=left vAlign=top width=750>
 			<table cellPadding=5 cellSpacing=0 width="100%" border=0>
 				<tr>
 					<!-- Start Navigation -->
@@ -90,9 +89,7 @@
 						<table bgColor=#d7eafd cellPadding=1 cellSpacing=1 width="100%" valign="top">
 							<tr bgColor=#ffffff>
 								<td vAlign="top" width="100%">
-									
 									<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left>	
-										
 										<tr>
 											<td>	
 												<table width="100%">
@@ -103,7 +100,7 @@
 														</digi:trn>	
 														</td>
 														<td>
-															<html:textarea  name ="aimAddSectorForm" property="sectorName" rows="1" cols= "35"/> 
+															<html:text  name ="aimAddSectorForm" property="sectorName" size="75"/> 
 														</td>
 													</tr>
 													<tr>
@@ -113,7 +110,7 @@
 														</digi:trn>
 														</td>
 														<td>
-															<html:text name ="aimAddSectorForm" property="sectorCodeOfficial" size="5"/> 
+															<html:text name ="aimAddSectorForm" property="sectorCodeOfficial" styleClass="inp-text" size="5"/> 
 														</td>
 													</tr>
 													<tr>
@@ -123,26 +120,15 @@
 														</digi:trn>
 														</td>
 														<td>
-														<html:textarea name="aimAddSectorForm" cols="60" rows="3" styleClass="inp-text" property="description"/>															 
+														<html:textarea name="aimAddSectorForm" cols="75" rows="3" styleClass="inp-text" property="description"/>															 
 														</td>
 													</tr>
-
-													<%--<tr>
-														<td>
-															Scheme Code :
-														</td>
-														<td>
-															<html:text name ="aimSectorSchemeForm" property="secSchemeId" size="5"/> 
-														</td>
-													</tr>--%>
-
-													
 													<tr>
 														<td>
 															&nbsp;
 														</td>
 														<td >&nbsp;&nbsp;
-								<input  type="button" name="addBtn" value="Save" onclick="updateScheme('<bean:write name="aimAddSectorForm" property="sectorId" />','<bean:write name="aimAddSectorForm" property="jspFlag" />')"/>
+															<input  type="button" name="addBtn" value="Save" onclick="updateScheme('<bean:write name="aimAddSectorForm" property="sectorId" />','<bean:write name="aimAddSectorForm" property="jspFlag" />')"/>
 														<td>
 													</tr>
 											</table>
@@ -232,16 +218,13 @@
 							<tr>
 								<td>
 									<!-- Other Links -->
-									<table cellPadding=0 cellSpacing=0 width=100>
+									<table cellPadding=0 cellSpacing=0 width=100% height="20">
 										<tr>
 											<td bgColor=#c9c9c7 class=box-title>
 												<digi:trn key="aim:otherLinks">
 												Other links
 												</digi:trn>
-											</td>
-											<td background="module/aim/images/corner-r.gif" height="17" width=17>
-												&nbsp;
-											</td>
+											</td>											
 										</tr>
 									</table>
 								</td>

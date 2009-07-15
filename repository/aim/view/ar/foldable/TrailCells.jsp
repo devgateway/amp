@@ -18,9 +18,9 @@
 </c:set>
 <tr id='<bean:write name="reportData" property="absoluteReportName"/>' title="${depthRelatVar}" style="<%=display%>;" onmouseover='this.title="${reportDataNameVar}"' onmouseout='this.title="${depthRelatVar}"'>	
 	<% if (reportData.getLevelDepth() < 3) { %>		
-		<td style=" padding-left:<%=10*(reportData.getLevelDepth()-1)%>; background-color:#BFD2DF;border-bottom:1px solid white;" colspan='<bean:write name="reportData" property="sourceColsCount"/>' class="reportsBorderTD" nowrap>
+		<td style=" padding-left:<%=10*(reportData.getLevelDepth()-1)%>; background-color:#BFD2DF;border-bottom:1px solid white;"  class="reportsBorderTD" nowrap>
 	<% } else { %>	
-		<td style=" padding-left:<%=10*(reportData.getLevelDepth()-1)%>; background-color:#dddddd;border-bottom:1px solid white" colspan='<bean:write name="reportData" property="sourceColsCount"/>' class="reportsBorderTD" nowrap>
+		<td style=" padding-left:<%=10*(reportData.getLevelDepth()-1)%>; background-color:#dddddd;border-bottom:1px solid white"  class="reportsBorderTD" nowrap>
 	<% } %>	
 <c:if test="${!(reportData.name == reportMeta.name)}">		
 		<img id="toggleImage" name="<bean:write name="reportData" property="absoluteReportName"/>" style="cursor:pointer" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif" alt='hidden' onclick="document.getElementById(&quot;<bean:write name="reportData" property="absoluteReportName"/>&quot;).title='${depthRelatVar}';toggleRows(this,&quot;<bean:write name="reportData" property="absoluteReportName"/>&quot;)" title='<digi:trn key="aim:report:expandcollapse">Expand/Collapse</digi:trn>' border="0"/>
@@ -39,16 +39,31 @@
 )
 </b>
 	</td>
-	<logic:iterate name="reportData" property="trailCells" id="cell" scope="page">
-	<% if (reportData.getLevelDepth() < 3) { %>
-		<td style="background-color:#BFD2DF;border-bottom:1px solid white" class="reportsBorderTD">
-	<% } else { %>	
-		<td style="background-color:#dddddd;border-bottom:1px solid white" class="reportsBorderTD">
-	<% } %>
-		
-		<bean:define id="viewable" name="cell" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
-		<bean:define id="caller" name="reportData" type="org.dgfoundation.amp.ar.ReportData" scope="page" toScope="request" />	
-		<jsp:include page="<%=viewable.getViewerPath()%>"/>
-		</td>
-	</logic:iterate>
+	<c:set var="firstCell" value="${true}"></c:set>
+		<logic:iterate name="reportData" property="trailCells" id="cell" scope="page">
+		<c:if test="${cell!=null}">
+		<% if (reportData.getLevelDepth() < 3) { %>
+			<td style="background-color:#BFD2DF;border-bottom:1px solid white" class="reportsBorderTD">
+		<% } else { %>	
+			<td style="background-color:#dddddd;border-bottom:1px solid white" class="reportsBorderTD">
+		<% } %>
+			
+			<bean:define id="viewable" name="cell" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
+			<bean:define id="caller" name="reportData" type="org.dgfoundation.amp.ar.ReportData" scope="page" toScope="request" />	
+			<jsp:include page="<%=viewable.getViewerPath()%>"/>
+			</td>
+		</c:if>
+			<c:if test="${cell==null}">
+			<c:if test="${firstCell==false}">
+					<% if (reportData.getLevelDepth() < 3) { %>
+						<td style="background-color:#BFD2DF;border-bottom:1px solid white" class="reportsBorderTD">
+					<% } else { %>	
+						<td style="background-color:#dddddd;border-bottom:1px solid white" class="reportsBorderTD">
+					<% } %>
+					&nbsp;
+					</td>
+			</c:if>
+		</c:if>
+		<c:set var="firstCell" value="${false}"></c:set>
+		</logic:iterate>
 </tr>

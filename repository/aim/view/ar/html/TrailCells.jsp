@@ -12,14 +12,15 @@
 <!-- generate total row -->
 <tr>
 	<c:if test="${reportData.levelDepth == 1}">
-		<td nowrap="nowrap" style="border-bottom:#E2E2E2 1px solid;border-right:#E2E2E2 1px solid;" height="18px" colspan='<bean:write name="reportData" property="sourceColsCount"/>'>
+		<td nowrap="nowrap" style="border-bottom:#E2E2E2 1px solid;border-right:#E2E2E2 1px solid;" height="18px" >
 		<span style="font-family: Arial;color:black; font-weight: bold;font-size: 12px;margin-left: 2px">
 				<digi:trn key="rep:popup:reporttotals">Report Totals:</digi:trn>
 			</span>
 	</c:if>
 	
+	
 	<c:if test="${reportData.levelDepth == 2}">
-		<td nowrap="nowrap" style="background:#99CCFF; border-bottom: #E2E2E2 1px solid;" height="15px" title='<bean:write name="reportData" property="repName"/>' colspan='<bean:write name="reportData" property="sourceColsCount"/>'>
+		<td nowrap="nowrap" style="background:#99CCFF; border-bottom: #E2E2E2 1px solid;" height="15px" title='<bean:write name="reportData" property="repName"/>' >
 			<span style="font-family: Arial;font-weight: bold;font-size: 10px;padding-left: 5px;padding-right: 3px;">
 				<%if(reportData.getRepName().length()<40){ %>
 					<% if (!("".equals(reportData.getRepName()))){ %>
@@ -33,7 +34,7 @@
 		</c:if>
 	
 	<c:if test="${reportData.levelDepth == 3}">
-		<td nowrap="nowrap" style="border-bottom:#E2E2E2 1px solid;border-right:#E2E2E2 1px solid" height="13px" colspan='<bean:write name="reportData" property="sourceColsCount"/>'>
+		<td nowrap="nowrap" style="border-bottom:#E2E2E2 1px solid;border-right:#E2E2E2 1px solid" height="13px" >
 			<span style="font-family: Arial;font-size: 9px;font-weight: bold;padding-left: 15px;padding-right: 3px">
 				<img src="module/aim/images/hierarchies.gif" align="top">
 			<% if (!("".equals(reportData.getRepName()))){ %>
@@ -43,7 +44,7 @@
 		</c:if>
 	
 	<c:if test="${reportData.levelDepth == 4}">
-		<td nowrap="nowrap" style="border-bottom:#E2E2E2 1px solid;border-right:#E2E2E2 1px solid" height="13px" colspan='<bean:write name="reportData" property="sourceColsCount"/>'>
+		<td nowrap="nowrap" style="border-bottom:#E2E2E2 1px solid;border-right:#E2E2E2 1px solid" height="13px" >
 		<span style="font-family: Arial;font-size: 9px;font-weight: bold;padding-left: 25px;padding-right: 3px">
 			<img src="module/aim/images/hierarchies.gif" align="top">
 			<% if (!("".equals(reportData.getRepName()))){ %>
@@ -54,7 +55,9 @@
 	
 	
 	</td>
+	<c:set var="firstCell" value="${true}"></c:set>
 	<logic:iterate name="reportData" property="trailCells" id="cell" scope="page">
+		<c:if test="${cell!=null}">
 		<c:if test="${reportData.levelDepth == 1}">
 			<td align="center" style="border-bottom: #E0E0E0 1px solid;border-right: #E0E0E0 1px solid;font-family: Arial;font-weight: bold">
 		</c:if>
@@ -68,5 +71,22 @@
 			<bean:define id="caller" name="reportData" type="org.dgfoundation.amp.ar.ReportData" scope="page" toScope="request" />			
 			<jsp:include page="<%=viewable.getViewerPath()%>"/>	
 		</td>
+		</c:if>
+		<c:if test="${cell==null}">
+		<c:if test="${firstCell==false}">
+			<c:if test="${reportData.levelDepth == 1}">
+			<td align="center" style="border-bottom: #E0E0E0 1px solid;border-right: #E0E0E0 1px solid;font-family: Arial;font-weight: bold">
+		</c:if>
+		<c:if test="${reportData.levelDepth == 2}">
+			<td style="border-bottom: #E0E0E0 1px solid;background:#99CCFF;font-weight: bold;font-family: Arial;">
+		</c:if>  
+		<c:if test="${reportData.levelDepth > 2}">
+			<td style="border-bottom: #E2E2E2 1px solid;border-right: #E2E2E2 1px solid">
+		</c:if>  
+		&nbsp;</td>
+		</c:if>
+		</c:if>
+		<c:set var="firstCell" value="${false}"></c:set>
+		
 	</logic:iterate>
 </tr>

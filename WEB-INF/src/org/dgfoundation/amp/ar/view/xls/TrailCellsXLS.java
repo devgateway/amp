@@ -6,6 +6,7 @@
  */
 package org.dgfoundation.amp.ar.view.xls;
 
+import java.math.BigDecimal;
 import java.util.Iterator;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -15,6 +16,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.Viewable;
+import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -90,6 +92,7 @@ public class TrailCellsXLS extends XLSExporter {
 			
 			if (grd.getParent().getParent() == null)
 				modifiedName = "TOTAL";
+			
 			if (grd.getReportMetadata().isHideActivities()!=null){
 				if (grd.getReportMetadata()!=null && grd.getReportMetadata().isHideActivities())
 					//cell.setCellValue(indent + modified);
@@ -99,15 +102,23 @@ public class TrailCellsXLS extends XLSExporter {
 			}else{
 				cell.setCellValue(indent + modifiedName+" ("+grd.getTotalUniqueRows()+")");
 			}
-			
-			makeColSpan(grd.getSourceColsCount().intValue(),false);
-			//colId.inc();
+			colId.inc();
 			Iterator i = grd.getTrailCells().iterator();
+			boolean first=true;
 			while (i.hasNext()) {
 				Cell element = (Cell) i.next();
-				element.invokeExporter(this);
+				if (element!=null){
+					element.invokeExporter(this);
+				}else{
+					if (!first){
+					HSSFCell cell2=this.getCell(getRegularStyle());
+					cell2.setCellType(HSSFCell.CELL_TYPE_STRING);
+					cell2.setCellValue("");
+					colId.inc();
+					}
+				}
+			first=false;
 			}
-
 			colId.reset();
 			rowId.inc();
 			colId.reset();

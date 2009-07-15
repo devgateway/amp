@@ -100,7 +100,8 @@ public class TrailCellsPDF extends PDFExporter {
 			Iterator i=grd.getTrailCells().iterator();
 			while (i.hasNext()) {
 				Cell element = (Cell) i.next();
-				element.invokeExporter(this);
+				if (element!=null)
+					element.invokeExporter(this);
 			}
 			
 			currentBackColor=null;

@@ -183,8 +183,12 @@ public class ColumnReportData extends ReportData {
 		while (i.hasNext()) {
 			Column element = (Column) i.next();
 			List l = element.getTrailCells();
-			if (l != null)
+			if (l != null){
 				trailCells.addAll(l);
+			}else{
+				//add just to keep the space
+				trailCells.add(null);
+			}
 		}
 		
 		//remove columns to be removed		

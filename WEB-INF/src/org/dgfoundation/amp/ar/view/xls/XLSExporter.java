@@ -142,15 +142,13 @@ public abstract class XLSExporter extends Exporter {
 	public void makeColSpan(int size,Boolean border) {
 		size--;
 		if(size<0) size=0;
-		Region r=new Region(rowId.intValue(), colId.shortValue(),
-				rowId.intValue(), (short) (colId.shortValue() + size));
+		Region r=new Region(rowId.intValue(), colId.shortValue(),rowId.intValue(), (short) (colId.shortValue() + size));
 		try {
 			if (border){
 				HSSFRegionUtil.setBorderBottom(HSSFCellStyle.BORDER_MEDIUM,r,sheet,wb);
 				HSSFRegionUtil.setBorderLeft(HSSFCellStyle.BORDER_MEDIUM,r,sheet,wb);
 				HSSFRegionUtil.setBorderRight(HSSFCellStyle.BORDER_MEDIUM,r,sheet,wb);
 				HSSFRegionUtil.setBorderTop(HSSFCellStyle.BORDER_MEDIUM,r,sheet,wb);
-			
 			}else{
 				HSSFRegionUtil.setBorderBottom(HSSFCellStyle.BORDER_NONE,r,sheet,wb);
 				HSSFRegionUtil.setBorderLeft(HSSFCellStyle.BORDER_NONE,r,sheet,wb);
@@ -161,7 +159,6 @@ public abstract class XLSExporter extends Exporter {
 			logger.error(e);
 			e.printStackTrace();
 		}
-			
 		try{
 			sheet.addMergedRegion(r);
 		} catch(Exception e) {

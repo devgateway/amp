@@ -31,7 +31,7 @@
 	var revisedTargetValueDateNotEntered="<digi:trn key='aim:revisedTargetValueDateNotEntered'>Revised target value date not entered</digi:trn>";
 	var deleteThisIndicator="<digi:trn key='aim:deleteThisIndicator'>Are you sure you want to delete this Indicator?</digi:trn>";
 
-	var numericValueNeeded="<digi:trn>Veuillez entrer une valeur numérique</digi:trn>";
+	var numericValueNeeded="<digi:trn>Please enter a numeric value</digi:trn>";
 	
 	function validateForm() {
 		return true;

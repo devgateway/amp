@@ -291,7 +291,7 @@
 										<img src= "../ampTemplate/images/application_edit.png" vspace="2" border="0" align="absmiddle" />
 									</td>
 									<td nowrap="nowrap">
-				               			<digi:trn key="aim:clickToInactiveCurrency">Click on this icon to edit Scheme</digi:trn>
+				               			<digi:trn key="aim:clickToEditScheme">Click on this icon to edit Scheme</digi:trn>
 				               			<br />
 				       				</td>
 				       			</tr>
@@ -300,7 +300,7 @@
 										<img src= "../ampTemplate/images/trash_16.gif" vspace="2" border="0" align="absmiddle" />
 				               		</td>
 									<td nowrap="nowrap">
-									<digi:trn key="aim:clickToDeleteCurrency">Click on this icon to delete Scheme</digi:trn>
+									<digi:trn key="aim:clickToDeleteScheme">Click on this icon to delete Scheme</digi:trn>
 				               			<br />
 				       				</td>
 				       			</tr>

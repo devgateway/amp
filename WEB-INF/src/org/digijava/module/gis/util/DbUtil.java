@@ -163,7 +163,7 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
             Query q = null;
             if (sectorId > -1) {
-                q = session.createQuery("select sec.activityId, sec.sectorPercentage from " +AmpActivitySector.class.getName() + " sec where sec.sectorId=:sectorId");
+                q = session.createQuery("select sec.activityId, sec.sectorPercentage from " +AmpActivitySector.class.getName() + " sec where sec.sectorId.ampSectorId=:sectorId or sec.sectorId.parentSectorId.ampSectorId=:sectorId");
                 q.setParameter("sectorId", sectorId, Hibernate.LONG);
             } else {
                 q = session.createQuery("select distinct sec.activityId, sec.sectorPercentage from " +AmpActivitySector.class.getName() + " sec");
@@ -492,7 +492,7 @@ public class DbUtil {
        List retVal = null;
        Session session = null;
         try {
-        	
+
         	//oracle compatibility changes
             session = PersistenceManager.getRequestDBSession();
             String query = "select distinct indval.valueDate from " +
@@ -501,13 +501,13 @@ public class DbUtil {
              Query q = session.createQuery(query);
 
              retVal=new ArrayList();
-            
+
             Collection dates=q.list();
             for (Iterator iterator = dates.iterator(); iterator.hasNext();) {
             	Timestamp tmpDate = (Timestamp) iterator.next();
             	retVal.add(tmpDate.getYear());
 			}
-            
+
             return retVal;
             //retVal = q.list();
 
@@ -656,7 +656,7 @@ public class DbUtil {
 		}
        return retVal;
    }
-   
+
    public static class HelperIndicatorNameAscComparator implements Comparator<IndicatorSector> {
        Locale locale;
        Collator collator;
@@ -677,7 +677,7 @@ public class DbUtil {
            return result;
        }
    }
-   
+
    public static class HelperIndicatorNameDescComparator implements Comparator<IndicatorSector> {
        Locale locale;
        Collator collator;
@@ -698,7 +698,7 @@ public class DbUtil {
            return result;
        }
    }
-   
+
    public static class HelperSectorNameAscComparator implements Comparator<IndicatorSector> {
        Locale locale;
        Collator collator;
@@ -719,7 +719,7 @@ public class DbUtil {
            return result;
        }
    }
-   
+
    public static class HelperSectorNameDescComparator implements Comparator<IndicatorSector> {
        Locale locale;
        Collator collator;
@@ -740,7 +740,7 @@ public class DbUtil {
            return result;
        }
    }
-   
+
    public static class HelperRegionNameAscComparator implements Comparator<IndicatorSector> {
        Locale locale;
        Collator collator;
@@ -761,7 +761,7 @@ public class DbUtil {
            return result;
        }
    }
-   
+
    public static class HelperRegionNameDescComparator implements Comparator<IndicatorSector> {
        Locale locale;
        Collator collator;

@@ -460,8 +460,6 @@ function resetFormat(){
 
 
 function initFormatPopup(){
-		
-		
 		var decimalSymbol=document.aimReportsFilterPickerForm3.customDecimalSymbol.value;
 		
 		if (decimalSymbol=="CUSTOM"){
@@ -484,7 +482,11 @@ function initFormatPopup(){
 	
 		var customUseGrouping=document.aimReportsFilterPickerForm3.customUseGrouping.checked;
 	
-		document.aimReportsFilterPickerForm3.customGroupCharacter.disabled=!customUseGrouping;
+		if (!customUseGrouping){
+			document.aimReportsFilterPickerForm3.customGroupCharacter.disabled=true;
+		}else{
+			document.aimReportsFilterPickerForm3.customGroupCharacter.disabled=false;
+			}
 		var customGroupCharacter=document.aimReportsFilterPickerForm3.customGroupCharacter.value;
 		document.aimReportsFilterPickerForm3.customGroupSize.disabled=!customUseGrouping;
 		document.aimReportsFilterPickerForm3.customGroupCharacterTxt.disabled=((!customUseGrouping) || ("CUSTOM"!=customGroupCharacter));
@@ -508,11 +510,12 @@ function changeFormat(){
 	
 	var customGroupSize=document.aimReportsFilterPickerForm3.customGroupSize.value;
 	
+	var amountinthousands=document.aimReportsFilterPickerForm3.amountinthousands.checked;
 	
 	var num=Number(123456789.928);
 
 
-	var format=new Format(decimalSymbol,customDecimalPlaces,customUseGrouping,customGroupCharacter,customGroupSize);
+	var format=new Format(decimalSymbol,customDecimalPlaces,customUseGrouping,customGroupCharacter,customGroupSize,amountinthousands);
 	document.getElementById("number").innerHTML="<B>"+num.format(format)+"</B>";
 	//alert(num.format(format));
 	return true;

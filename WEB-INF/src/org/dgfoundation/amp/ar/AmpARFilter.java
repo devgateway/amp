@@ -235,6 +235,7 @@ public class AmpARFilter extends PropertyListable {
 	private Integer renderEndYear = null;
 
 	private DecimalFormat currentFormat = null;
+	private boolean amountinthousand;
 	private Boolean governmentApprovalProcedures;
 	private Boolean jointCriteria;
 	private String accessType=null;
@@ -1497,5 +1498,13 @@ public class AmpARFilter extends PropertyListable {
 
 	public void setUnallocatedLocation(Boolean unallocatedLocation) {
 		this.unallocatedLocation = unallocatedLocation;
+	}
+
+	public boolean isAmountinthousand() {
+		return amountinthousand;
+	}
+
+	public void setAmountinthousand(boolean amountinthousand) {
+		this.amountinthousand = amountinthousand;
 	}
 }

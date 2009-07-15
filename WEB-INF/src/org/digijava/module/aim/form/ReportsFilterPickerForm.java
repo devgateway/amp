@@ -124,6 +124,8 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Integer customDecimalPlacesTxt;
 	private String customGroupCharacterTxt;
 	private Integer customGroupSize;
+	private Boolean amountinthousands;
+	
 	private String resetFormat;
 	
 	private Boolean sourceIsReportWizard;
@@ -321,9 +323,10 @@ public class ReportsFilterPickerForm extends ActionForm {
 			// this.selectedDonors = null;
 			// if applyFormat is clicked, the content of the filter was deleting not only the sectors...
 			//AMP-5249
-			if (request.getParameter("applyFormat")!=null)
+			if (request.getParameter("applyFormat")!=null){
 				this.customUseGrouping=false;
-			else{
+				this.amountinthousands=false;
+			}else{
 				this.selectedDonnorAgency=null;
 				this.selectedRisks = null;
 				this.selectedSectors = null;
@@ -858,7 +861,12 @@ public class ReportsFilterPickerForm extends ActionForm {
 		this.unallocatedLocation = unallocatedLocation;
 	}
 
-	
+	public Boolean getAmountinthousands() {
+		return amountinthousands;
+	}
 
-	
+	public void setAmountinthousands(Boolean amountinthousands) {
+		this.amountinthousands = amountinthousands;
+	}
+
 }

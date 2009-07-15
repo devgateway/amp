@@ -252,9 +252,15 @@ public class CategAmountColWorker extends ColumnWorker {
 			String donorName = rs.getString("donor_name");
 			headMeta= this.getCachedMetaInfo(ArConstants.DONOR, donorName);			
 		}
-
 		
-		acc.setAmount(FeaturesUtil.applyThousandsForVisibility(tr_amount));
+		if (filter.isAmountinthousand()){
+			if (tr_amount !=null){
+				acc.setAmount(tr_amount.multiply(new BigDecimal(0.001d)));
+			}
+		}
+		else{
+			acc.setAmount(FeaturesUtil.applyThousandsForVisibility(tr_amount));
+		}
 		
 		//use fixed exchange rate only if it has been entered. Else use Agency
 		if (fixedExchangeRate != null && fixedExchangeRate != 0) {

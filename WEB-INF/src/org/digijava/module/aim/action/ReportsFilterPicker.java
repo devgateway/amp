@@ -731,6 +731,7 @@ public class ReportsFilterPicker extends MultiAction {
 		custom.setGroupingUsed(filterForm.getCustomUseGrouping());
 		custom.setGroupingSize(filterForm.getCustomGroupSize());
 		custom.setDecimalFormatSymbols(ds);
+		arf.setAmountinthousand(filterForm.getAmountinthousands());
 		arf.setCurrentFormat(custom);
 
 		arf.setBeneficiaryAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedBeneficiaryAgency(), AmpOrganisation.class));
@@ -825,6 +826,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setCustomUseGrouping(null);
 		filterForm.setCustomGroupSize(null);
 		filterForm.setResetFormat(null);
+		filterForm.setAmountinthousands(null);
 	}
 
 	private Integer getDefaultStartYear(HttpServletRequest request) {

@@ -9,7 +9,6 @@
 <%@ page import="java.util.List"%>
 
 
-<link href="css/global.css" rel="stylesheet" type="text/css">
 <link href="css/tabview.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/reportWizard/reportWizard.css'/>">
 
@@ -47,7 +46,8 @@
 			<table cellPadding=5 cellSpacing=0 width="100%" border=0>
 				<tr>
 					<!-- Start Navigation -->
-					<td height=33><span class=crumb>
+					<td height=33>
+					<span class="crumb">
 						<c:set var="translation">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 						</c:set>
@@ -56,10 +56,10 @@
 						Admin Home
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						
 						<digi:trn>
 							Reports Import - Export
 						</digi:trn>
+						</span>
 					</td>
 					<!-- End navigation -->
 				</tr>
@@ -83,7 +83,7 @@
 							<ul class="yui-nav">
 								<li  class="${aimImpExpForm.exportReportsClass}"><a onclick="changePage(false,'${aimImpExpForm.exportReportsAction }')"><div><digi:trn>Export Reports</digi:trn></div></a> </li>
 								<li  class="${aimImpExpForm.exportTabsClass}"><a onclick="changePage(true,'${aimImpExpForm.exportTabsAction }')""><div><digi:trn>Export Tabs</digi:trn></div></a> </li>
-								<li  class="${aimImpExpForm.importClass }"><a href="/aim/reportsImport.do~action=new"><div><digi:trn>Import</digi:trn></div></a> </li>
+								<li  class="${aimImpExpForm.importClass }"><a href="/aim/reportsImport.do~action=new"><div><digi:trn>Import Reports And Tabs</digi:trn></div></a> </li>
 							</ul>
 							<div class="yui-content" style="background-color: #EEEEEE">
 								<div id="hierarchies_step_div" class="yui-tab-content" style="padding: 0px 0px 1px 0px; " >

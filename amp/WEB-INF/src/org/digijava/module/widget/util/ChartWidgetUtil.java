@@ -602,7 +602,7 @@ public class ChartWidgetUtil {
 		}
 		
 		if (opt.isShowLabels()){
-			String pattern = "{0} = {1} ({2})";
+			String pattern = "{0} = {2}";
 			if (opt.getLabelPattern()!=null){
 				pattern=opt.getLabelPattern();
 			}

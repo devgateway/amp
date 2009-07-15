@@ -49,6 +49,7 @@ en:
       submit: Update Donor
       
   donor_details:
+    details_title: Staff Information for {{year}}
     edit: 
       title: Edit Donor Contact Details
       submit: Save

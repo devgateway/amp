@@ -1,6 +1,10 @@
 en:
   activerecord:
     attributes:
+      donor_details:
+        total_staff_in_country: Total Staff in Country
+        total_expatriate_staff: Total Expatriate Staff
+        total_local_staff: Total Local Staff
       project:
         donor: Donor
         donor_agency: Donor Agency

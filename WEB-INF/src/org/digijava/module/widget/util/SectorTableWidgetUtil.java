@@ -121,8 +121,7 @@ public class SectorTableWidgetUtil {
      */
     public static Long calculateFunding(Long[] donorId, Long[] sectorId,Date startDate,Date endDate) throws DgException {
         double result = 0;
-        Double[] allFundingWrapper = {new Double(0)};// to hold whole funding value
-        Collection<DonorSectorFundingHelper> fundings = ChartWidgetUtil.getDonorSectorFunding(donorId, startDate, endDate, allFundingWrapper, sectorId,false);
+        Collection<DonorSectorFundingHelper> fundings = ChartWidgetUtil.getDonorSectorFunding(donorId, startDate, endDate, sectorId);
         for (DonorSectorFundingHelper funding : fundings) {
         result+=funding.getFounding();
         }
@@ -150,6 +149,23 @@ public class SectorTableWidgetUtil {
             throw new DgException("Cannot get Sector Table Widget!", e);
         }
         return result;
+    }
+
+    public static List<Long> getAmpSectorIds(Long id) throws DgException {
+        List<Long> sectorIds=new ArrayList<Long>();
+        Session session = PersistenceManager.getRequestDBSession();
+      
+        try {
+            String oql = "select sec.ampSectorId  from " + AmpSectorTableWidget.class.getName() + " secTable " +
+                    " inner join secTable.sectorsColumns secOrder inner join secOrder.sector sec "+
+                    " where  secTable.id=:id order by secOrder.order";
+            Query query = session.createQuery(oql);
+            query.setLong("id", id);
+            sectorIds = query.list();
+        } catch (Exception e) {
+            throw new DgException("Cannot get Sector Table Widget!", e);
+        }
+        return sectorIds;
     }
 
 }

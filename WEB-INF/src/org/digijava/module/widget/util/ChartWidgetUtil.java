@@ -46,6 +46,7 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
+import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -88,7 +89,6 @@ import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.ui.RectangleInsets;
-import org.jfree.chart.axis.NumberAxis;
 
 
 
@@ -99,8 +99,8 @@ import org.jfree.chart.axis.NumberAxis;
  */
 public class ChartWidgetUtil {
     private static Logger logger = Logger.getLogger(ChartWidgetUtil.class);
-    
 
+  
     /**
      * Generates chart object from specified indicator and options.
      * This chart then can be rendered as image or pdf or file.
@@ -715,7 +715,7 @@ public class ChartWidgetUtil {
 			toDate =new Date(getStartOfYear(toYear.intValue()+1,calendar.getStartMonthNum()-1,calendar.getStartDayNum()).getTime()-MILLISECONDS_IN_DAY);
 		}		
         Double[] allFundingWrapper={new Double(0)};// to hold whole funding value
-		Collection<DonorSectorFundingHelper> fundings=getDonorSectorFunding(donors, fromDate, toDate,allFundingWrapper,null,true);
+		Collection<DonorSectorFundingHelper> fundings=getDonorSectorFunding(donors, fromDate, toDate,allFundingWrapper);
 		if (fundings!=null){
             double otherFunfing=0;
 			for (DonorSectorFundingHelper funding : fundings) {
@@ -756,89 +756,135 @@ public class ChartWidgetUtil {
 	 * @return
 	 * @throws DgException
 	 */
-	public static Collection<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[],Date fromDate, Date toDate,Double[] wholeFunding,Long sectorIds[], boolean parentSectOnly) throws DgException {
-    	Collection<DonorSectorFundingHelper> fundings=null;  
-			String oql ="select  actSec, "+
-                        "  act.ampActivityId.ampActivityId, sum(fd.transactionAmountInUSD)";
-		oql += " from ";
-		oql += AmpFundingDetail.class.getName() +
-                        " as fd inner join fd.ampFundingId f ";
-                oql +=  "   inner join f.ampActivityId act "+
-                        " inner join act.sectors actSec "+
-                        " inner join actSec.sectorId sec "+
-                        " inner join actSec.activityId act "+
-                        " inner join actSec.classificationConfig config ";
-
-
-		oql += " where   fd.transactionType = 0 and fd.adjustmentType = 1 ";
-		if (donorIDs != null && donorIDs.length > 0) {
-			oql += " and (fd.ampFundingId.ampDonorOrgId in ("+ getInStatment(donorIDs) + ") ) ";
-		}
-		if (fromDate != null && toDate != null) {
-			oql += " and (fd.transactionDate between :fDate and  :eDate ) ";
-		}
-        if (sectorIds!=null) {
-			oql += " and actSec.sectorId in ("+ getInStatment(sectorIds) + ") ";
-		}
-        if(parentSectOnly){
-           oql +=  " and sec.parentSectorId is null ";
-        }
-        oql +=" and config.name='Primary' and act.team is not null ";
-		oql += " group by act.ampActivityId, actSec ";
-		oql += " order by actSec";
-
-		Session session = PersistenceManager.getRequestDBSession();
-
-		//search for grouped data
-	    @SuppressWarnings("unchecked")
-		List result = null;
-		try {
-			Query query = session.createQuery(oql);
-			if (fromDate!=null && toDate!=null){
-				query.setDate("fDate", fromDate);
-				query.setDate("eDate", toDate);
-				SimpleDateFormat df = new SimpleDateFormat("yyyy-MMMM-dd hh:mm:ss");
-				logger.debug("Filtering from "+df.format(fromDate)+" to "+df.format(toDate));
-			}
-			result = query.list();
-		} catch (Exception e) {
-			throw new DgException(
-					"Cannot load sector fundings by donors from db", e);
-		}	
-		
-		//Process grouped data
-		if (result != null) {
+	public static Collection<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[],Date fromDate, Date toDate,Double[] wholeFunding) throws DgException {
+    	Collection<DonorSectorFundingHelper> fundings=null;
+              List result = getFunding(donorIDs, fromDate, toDate, null);
+                //Process grouped data
+                if (result != null) {
 			Map<Long, DonorSectorFundingHelper> donors = new HashMap<Long, DonorSectorFundingHelper>();
-			for (Object row : result) {
-				Object[] rowData = (Object[]) row;
-				//AmpOrganisation donor = (AmpOrganisation) rowData[0];
+                    for (Object row : result) {
+                        Object[] rowData = (Object[]) row;
+                        //AmpOrganisation donor = (AmpOrganisation) rowData[0];
                 AmpActivitySector activitySector=(AmpActivitySector)rowData[0];
 				AmpSector sector =activitySector.getSectorId() ;
 				Float sectorPrcentage =activitySector.getSectorPercentage();    //This field is NULL sometimes !
-				//AmpActivity activity = (AmpActivity) rowData[3];
-				//AmpCurrency currency = (AmpCurrency) rowData[4];
-				BigDecimal amt = (BigDecimal) rowData[2];
+                        //AmpActivity activity = (AmpActivity) rowData[3];
+                        //AmpCurrency currency = (AmpCurrency) rowData[4];
+                        BigDecimal amt = (BigDecimal) rowData[2];
                 BigDecimal amount =FeaturesUtil.applyThousandsForVisibility(amt);
-				//calculate percentage
+                        //calculate percentage
 				BigDecimal calculated = (sectorPrcentage.floatValue() == 100)?amount:calculatePercentage(amount,sectorPrcentage);
-				//convert to
-				//Double converted = convert(calculated, currency);
-				//search if we already have such sector data
+                        //convert to
+                        //Double converted = convert(calculated, currency);
+                        //search if we already have such sector data
+                if (sector.getParentSectorId() != null) {
+                            sector = SectorUtil.getAmpParentSector(sector.getAmpSectorId());
+                }
 				DonorSectorFundingHelper sectorFundngObj = donors.get(sector.getAmpSectorId());
-				//if not create and add to map
+                        //if not create and add to map
 				if (sectorFundngObj == null){
-					sectorFundngObj = new DonorSectorFundingHelper(sector);
+                            sectorFundngObj = new DonorSectorFundingHelper(sector);
 					donors.put(sector.getAmpSectorId(), sectorFundngObj);
-				}
-				//add amount to sector
-				sectorFundngObj.addFunding(calculated.doubleValue());
-                                //calculate whole funding information
+                        }
+                        //add amount to sector
+                        sectorFundngObj.addFunding(calculated.doubleValue());
+                        //calculate whole funding information
                                 wholeFunding[0]+=calculated.doubleValue();
-			}
-			fundings = donors.values(); 
-		}
-		return fundings;
-	}
+                    }
+             fundings = donors.values();
+        }
+        return fundings;
+    }
+     public static Collection<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[], Date fromDate, Date toDate, Long sectorIds[]) throws DgException {
+        Collection<DonorSectorFundingHelper> fundings = null;
+         Map<Long, DonorSectorFundingHelper> donors=null;
+        if (sectorIds != null) {
+            for (Long sectId : sectorIds) {
+                List<Long>ids=new ArrayList<Long>();
+                ids.add(sectId);
+                List<AmpSector> sectors = SectorUtil.getAllDescendants(sectId);
+                for(AmpSector sector:sectors){
+                    ids.add(sector.getAmpSectorId());
+                }
+                Long[] sectIds=new Long[ids.size()];
+                ids.toArray(sectIds);
+                List result = getFunding(donorIDs, fromDate, toDate, sectIds);
+                //Process grouped data
+                if (result != null) {
+                  donors  = new HashMap<Long, DonorSectorFundingHelper>();
+                    for (Object row : result) {
+                        Object[] rowData = (Object[]) row;
+                        AmpActivitySector activitySector = (AmpActivitySector) rowData[0];
+                        AmpSector sector = activitySector.getSectorId();
+                        Float sectorPrcentage = activitySector.getSectorPercentage();    //This field is NULL sometimes !
+                        BigDecimal amt = (BigDecimal) rowData[2];
+                        BigDecimal amount = FeaturesUtil.applyThousandsForVisibility(amt);
+                        //calculate percentage
+                        BigDecimal calculated = (sectorPrcentage.floatValue() == 100) ? amount : calculatePercentage(amount, sectorPrcentage);
+                        //convert to
+                        //Double converted = convert(calculated, currency);
+                        //search if we already have such sector data           
+                        DonorSectorFundingHelper sectorFundngObj = donors.get(sectId);
+                        //if not create and add to map
+                        if (sectorFundngObj == null) {
+                            sectorFundngObj = new DonorSectorFundingHelper(sector);
+                            donors.put(sectId, sectorFundngObj);
+                        }
+                        //add amount to sector
+                        sectorFundngObj.addFunding(calculated.doubleValue());
+
+                    }
+                    fundings = donors.values();
+                }
+
+            }
+
+        }
+        else{
+             Double[] wholeFunding = {new Double(0)};// to hold whole funding value
+             fundings=getDonorSectorFunding(donorIDs,fromDate, toDate, wholeFunding);
+        }
+        return fundings;
+
+    }
+
+       public static List getFunding(Long[] donorIDs, Date fromDate, Date toDate, Long[] sectorIds) throws DgException {
+        String oql = "select  actSec, " + "  act.ampActivityId.ampActivityId, sum(fd.transactionAmountInUSD)";
+        oql += " from ";
+        oql += AmpFundingDetail.class.getName() + " as fd inner join fd.ampFundingId f ";
+        oql += "   inner join f.ampActivityId act " + " inner join act.sectors actSec " + " inner join actSec.sectorId sec " + " inner join actSec.activityId act " + " inner join actSec.classificationConfig config ";
+        oql += " where   fd.transactionType = 0 and fd.adjustmentType = 1 ";
+        if (donorIDs != null && donorIDs.length > 0) {
+            oql += " and (fd.ampFundingId.ampDonorOrgId in (" + getInStatment(donorIDs) + ") ) ";
+        }
+        if (fromDate != null && toDate != null) {
+            oql += " and (fd.transactionDate between :fDate and  :eDate ) ";
+        }
+        if(sectorIds!=null){
+              oql += " and actSec.sectorId in (" + getInStatment(sectorIds) + ") ";
+        }
+        oql += " and config.name='Primary' and act.team is not null ";
+        oql += " group by act.ampActivityId, actSec ";
+        oql += " order by actSec";
+        Session session = PersistenceManager.getRequestDBSession();
+        //search for grouped data
+        @SuppressWarnings(value = "unchecked")
+        List result = null;
+        try {
+            Query query = session.createQuery(oql);
+            if (fromDate != null && toDate != null) {
+                query.setDate("fDate", fromDate);
+                query.setDate("eDate", toDate);
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MMMM-dd hh:mm:ss");
+                logger.debug("Filtering from " + df.format(fromDate) + " to " + df.format(toDate));
+            }
+            result = query.list();
+        } catch (Exception e) {
+            throw new DgException("Cannot load sector fundings by donors from db", e);
+        }
+        return result;
+    }
+    
 
      /**
      * Generates Pie dataset using  filters .

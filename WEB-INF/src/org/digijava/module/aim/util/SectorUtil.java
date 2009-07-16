@@ -1687,4 +1687,16 @@ public class SectorUtil {
 			}
 		}
                 */
+
+    public static List<AmpSector> getAllDescendants(Long parentId) {
+        List<AmpSector> sectors = new ArrayList<AmpSector>();
+        sectors.add(getAmpSector(parentId));
+        List<AmpSector> childrenSectors = getAmpSubSectors(parentId);
+        if (childrenSectors != null) {
+            for (AmpSector sector : childrenSectors) {
+                sectors.addAll(getAllDescendants(sector.getAmpSectorId()));
+            }
+        }
+        return sectors;
+    }
 }

@@ -45,13 +45,12 @@ function eraseCookie(name) {
 
 
 
-function Format(decimalSymbol,decimalPlaces,useGroupSymbol,groupSymbol,groupSize,amountinthousands){
+function Format(decimalSymbol,decimalPlaces,useGroupSymbol,groupSymbol,groupSize){
 	this.decimalSymbol=decimalSymbol;
 	this.decimalPlaces=decimalPlaces;
 	this.useGroupSymbol=useGroupSymbol;
 	this.groupSymbol=groupSymbol;
 	this.groupSize=groupSize;
-	this.amountinthousands = amountinthousands;
 }
 
 Number.prototype.format=function(f){
@@ -64,10 +63,6 @@ Number.prototype.format=function(f){
 		decPart=splitedSource[1];
 	}
 	//now are try to apply grouping format
-	if (f.amountinthousands){
-		return (parseFloat(Number)/1000);
-	}
-	
 	var newEntPart="";
 	if (f.useGroupSymbol){
 		

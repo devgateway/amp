@@ -458,6 +458,20 @@ function resetFormat(){
 	document.aimReportsFilterPickerForm3.submit();
 }
 
+function ResetCustom() {
+	aimReportsFilterPickerForm3.customDecimalSymbol.value = ",";
+	aimReportsFilterPickerForm3.customDecimalSymbolTxt.value = "";
+	aimReportsFilterPickerForm3.customDecimalSymbolTxt.disabled = "true";
+	aimReportsFilterPickerForm3.customDecimalPlaces.value = <%=org.digijava.module.aim.helper.FormatHelper.getDefaultFormat().getMaximumFractionDigits()%>
+	aimReportsFilterPickerForm3.customDecimalPlacesTxt.value = "";
+	aimReportsFilterPickerForm3.customDecimalPlacesTxt.disabled = "true"
+	aimReportsFilterPickerForm3.customUseGrouping.checked = "true";
+	aimReportsFilterPickerForm3.customGroupCharacter.value = ".";
+	aimReportsFilterPickerForm3.customGroupCharacterTxt.value = "";
+	aimReportsFilterPickerForm3.customGroupSize.value = 3;
+	aimReportsFilterPickerForm3.amountinthousands.checked = "false";
+	initFormatPopup();
+}
 
 function initFormatPopup(){
 		var decimalSymbol=document.aimReportsFilterPickerForm3.customDecimalSymbol.value;
@@ -515,7 +529,7 @@ function changeFormat(){
 	var num=Number(123456789.928);
 
 
-	var format=new Format(decimalSymbol,customDecimalPlaces,customUseGrouping,customGroupCharacter,customGroupSize,amountinthousands);
+	var format=new Format(decimalSymbol,customDecimalPlaces,customUseGrouping,customGroupCharacter,customGroupSize);
 	document.getElementById("number").innerHTML="<B>"+num.format(format)+"</B>";
 	//alert(num.format(format));
 	return true;

@@ -140,7 +140,7 @@ div.fakefile2 input{
 						<div class="fileinputs">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
 							<input id="fileUploaded" name="fileUploaded" type="file" class="file"/>
 						</div>
-						<input type="button" onclick="submit()" value='<digi:trn key="aim:contactmanagerimportbutton">Import</digi:trn>'/>
+						<input type="button" onclick="submit()" value='<digi:trn>Import</digi:trn>'/>
 					</a>
 				</fieldset>
 			</digi:form>

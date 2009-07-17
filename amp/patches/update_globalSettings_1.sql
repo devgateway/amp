@@ -1,0 +1,1 @@
+INSERT INTO amp_global_settings(`settingsName`,`settingsValue`,`possibleValues`)VALUES("NPD Default Program",1,"v_amp_theme");

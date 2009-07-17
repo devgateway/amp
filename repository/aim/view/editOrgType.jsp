@@ -43,7 +43,6 @@
 		}
 		else {
 			document.aimAddOrgTypeForm.orgType.value = str;
-            document.aimAddOrgTypeForm.action.value = 'edit';
 			document.aimAddOrgTypeForm.submit();
 		}
 	}

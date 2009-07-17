@@ -542,7 +542,7 @@ color:Black;
 															                        				<c:set var="eventEndDate">
 															                        					${endDay}/${endMonth}/${endYear} ${endHours}:<c:if test="${endMinute<10}">0</c:if>${endMinute}
 															                        				</c:set>
-																										<c:set var="drawTD">
+															                        					<c:set var="drawTD">
 																										<c:choose>
 																											<c:when test="${startYear==endYear && startMonth<=monthIndex && monthIndex<=endMonth}">1</c:when>
 																											<c:when test="${startYear!=endYear}">
@@ -561,8 +561,8 @@ color:Black;
 																					           	   			<c:if test="${startYear==currentYear || currentYear==endYear}">
 																					           	   			<script type="text/javascript">
 														                              							var msg = stDate+":${eventStartDate}<br>"+endDate+":${eventEndDate}";														                              											                              													                              					
-														                              						</script>														                              						
-	                                                                                                        <div style="margin:2px;padding:2px;height:15px;text-align: center;background-color:${ampCalendarGraph.ampCalendar.eventType.color};text-align:center;"  onmouseover="stm(['${eventName}', msg],Style[14]);" onmouseout="htm()">
+														                              						</script>
+														                              						<div style="margin:2px;padding:2px;height:15px;text-align: center;background-color:${ampCalendarGraph.ampCalendar.eventType.color};text-align:center;"  onmouseover="stm(['${eventName}','Start Date:${eventStartDate}<br>End Date:${eventEndDate}'],Style[14]);" onmouseout="htm()">
 																						                   		<digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~method=preview~resetForm=true">
 																						                    		<digi:img src="module/calendar/images/lookglass2.gif" border="0" alt="" align="left" style="vertical-align:middle"/>
 																						                   		</digi:link>	
@@ -575,7 +575,7 @@ color:Black;
 																							                   	<c:if test='${ampCalendarEventItem.typeofOccurrence == "Dailly"}'>
 																							                   	 <c:set var="Month">${ampCalendarEventItem.recurrPeriod}</c:set>
 																							        	           <c:forEach begin="1" end="${30/Month-1}">
-																														<div style="margin:2px;padding:2px;text-align: center;background-color:${ampCalendarGraph.ampCalendar.eventType.color};height:15px;text-align:center;"  onmouseover="stm([evnt,'recurr:every ${ampCalendarEventItem.recurrPeriod} day <br>name:${eventName}<br>stDate:${eventStartDate}<br>endDate:${eventEndDate}'],Style[14])" onmouseout="htm()">
+																							        	            	<div style="margin:2px;padding:2px;text-align: center;background-color:${ampCalendarGraph.ampCalendar.eventType.color};height:15px;text-align:center;"  onmouseover="stm([evnt,'recurr:every ${ampCalendarEventItem.recurrPeriod} day <br>name:${eventName}<br>stDate:${eventStartDate}<br>endDate:${eventEndDate}'],Style[14])" onmouseout="htm()">
 																									                   		<digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~method=preview~resetForm=true">
 																									                       		<digi:img src="module/calendar/images/lookglass2.gif" border="0" alt="" align="left" style="vertical-align:middle"/>
 																									                   		</digi:link>

@@ -10,6 +10,7 @@ import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.message.helper.RelatedActivity;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -127,7 +128,7 @@ public class ContactInfoUtil {
 		return retValue;
 	}
 	
-	public static int getContactsSize(String keyword) throws Exception{
+	public static int getContactsSize(String keyword,String alpha) throws Exception{
 		int retValue=0;
 		Session session=null;
 		String queryString =null;
@@ -135,10 +136,13 @@ public class ContactInfoUtil {
 		try {
 			session=PersistenceManager.getRequestDBSession();
 			queryString= "select count(*) from " + AmpContact.class.getName()+ " cont";
-			if(keyword!=null){
-				queryString+=" where cont.name like '%"+keyword+"%' or cont.lastname like '%"+keyword
-				+"%' or cont.email like '%" + keyword + "%'";
-			}
+			if(keyword!=null && alpha!=null){
+				queryString+=" where cont.name like '"+alpha+"%' and concat(cont.name,"+"' ',"+"cont.lastname) like '%"+keyword+"%'";
+			}else if(keyword!=null && alpha == null){
+				queryString+=" where concat(cont.name,"+"' ',"+"cont.lastname) like '%"+keyword+"%'";
+			}else if (keyword==null && alpha!=null){
+				queryString+=" where cont.name like '"+alpha+"%'";
+			}			
 			query=session.createQuery(queryString);
 			retValue=(Integer)query.uniqueResult();
 		} catch (Exception e) {
@@ -147,7 +151,7 @@ public class ContactInfoUtil {
 		return retValue;
 	}
 	
-	public static List<AmpContact> getPagedContacts(int fromRecord,int resultsNum,String sortBy,String keyword) throws Exception{
+	public static List<AmpContact> getPagedContacts(int fromRecord,int resultsNum,String sortBy,String keyword,String alpha) throws Exception{
 		List<AmpContact> contacts=null;
 		Session session=null;
 		String queryString =null;
@@ -156,9 +160,12 @@ public class ContactInfoUtil {
 			session=PersistenceManager.getRequestDBSession();
 			queryString="select cont from " + AmpContact.class.getName() +" cont ";
 			//filter
-			if(keyword != null && keyword.length()>0){
-				queryString+=" where cont.name like '%"+keyword+"%' or cont.lastname like '%"+keyword
-							+"%' or cont.email like '%" + keyword + "%'";
+			if(keyword!=null && alpha!=null){
+				queryString+=" where cont.name like '"+alpha+"%' and concat(cont.name,"+"' ',"+"cont.lastname) like '%"+keyword+"%'";
+			}else if(keyword!=null && alpha == null){
+				queryString+=" where concat(cont.name,"+"' ',"+"cont.lastname) like '%"+keyword+"%'";
+			}else if (keyword==null && alpha!=null){
+				queryString+=" where cont.name like '"+alpha+"%'";
 			}
 			//sort
 			if(sortBy==null || sortBy.equals("nameAscending")){
@@ -188,6 +195,53 @@ public class ContactInfoUtil {
 			e.printStackTrace();
 		}
 		return contacts;
+	}
+	
+	/**
+	 * get contact name and lastname for autocomplete box 
+	 * @return
+	 * @throws Exception
+	 */
+	public static String[] getContactNames () throws Exception {
+		String[] retValue=null;
+		Session session=null;
+		String queryString =null;
+		Query query=null;
+		List contactNames=null;
+		try{
+			session=PersistenceManager.getRequestDBSession();
+			queryString="select cont.name,cont.lastname from " +AmpContact.class.getName()+" cont " ;
+			query=session.createQuery(queryString);
+			contactNames=query.list();
+		}catch (Exception e) {
+			logger.error("...Failed to get contacts");
+			throw new AimException("Can't get Contacts", e);
+		}
+		
+		if(contactNames!=null){
+			retValue=new String[contactNames.size()];    		
+			int i=0;
+			for (Object rawRow : contactNames) {
+				Object[] row = (Object[])rawRow; //:)
+				String nameRow=(String)row[0];
+				String lastnameRow=(String)row[1];
+				if(nameRow != null){
+					nameRow = nameRow.replace('\n', ' ');
+					nameRow = nameRow.replace('\r', ' ');
+					nameRow = nameRow.replace("\\", "");
+				}
+				if(lastnameRow!=null){
+					lastnameRow = lastnameRow.replace('\n', ' ');
+					lastnameRow = lastnameRow.replace('\r', ' ');
+					lastnameRow = lastnameRow.replace("\\", "");
+				}
+				
+				//System.out.println(nameRow);
+				retValue[i]=new String(nameRow + " " + lastnameRow);					
+				i++;
+			}
+		}
+		return retValue;
 	}
 	
 	public static void saveOrUpdateActivityContact(AmpActivityContact activityContact) throws Exception{

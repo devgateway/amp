@@ -29,10 +29,16 @@ public class AddressBookActions extends DispatchAction {
     	
     	if(request.getParameter("reset")!=null && request.getParameter("reset").equals("true")){
     		myForm.setResultsPerPage(10);
+    		myForm.setCurrentAlpha(null);
+    		myForm.setCurrentPage(1);
     		myForm.setKeyword(null);
     	}
+    	String alpha=null;
+    	if(myForm.getCurrentAlpha()!=null && ! myForm.getCurrentAlpha().equals("viewAll")){
+    		alpha=myForm.getCurrentAlpha();
+    	}    	
     	
-    	int contactsAmount=ContactInfoUtil.getContactsSize(myForm.getKeyword());    	
+    	int contactsAmount=ContactInfoUtil.getContactsSize(myForm.getKeyword(),alpha);
     	//how many pages
     	Collection pages = null;
     	int pagesNum=0;
@@ -41,7 +47,7 @@ public class AddressBookActions extends DispatchAction {
     	}else{
     		pagesNum=contactsAmount/myForm.getResultsPerPage() +1;
     	}
-    	if (pagesNum > 1) {
+    	if (pagesNum >= 1) {
 	          pages = new ArrayList();
 	          for (int i = 0; i < pagesNum; i++) {
 	            Integer pageNum = new Integer(i + 1);
@@ -54,11 +60,30 @@ public class AddressBookActions extends DispatchAction {
     	}
     	
     	List<AmpContact> pagedContacts=null;
-    	pagedContacts=ContactInfoUtil.getPagedContacts(0, myForm.getResultsPerPage(), myForm.getSortBy(),myForm.getKeyword());
+    	pagedContacts=ContactInfoUtil.getPagedContacts(0, myForm.getResultsPerPage(), myForm.getSortBy(),myForm.getKeyword(),alpha);
+    	
+    	//alpha pages
+    	if(alpha==null){
+    		String[] contactNames=ContactInfoUtil.getContactNames();
+    		String[] alphaArray = new String[26];
+            int i = 0;
+            for (char c = 'A'; c <= 'Z'; c++) {
+            	for(int j=0;j<contactNames.length;j++){
+            		if (contactNames[j].toUpperCase().indexOf(c) == 0) {
+                        alphaArray[i++] = String.valueOf(c);
+                        break;
+                     }
+            	}
+            }
+            myForm.setAlphaPages(alphaArray);
+    	}else{
+    		myForm.setAlphaPages(null);
+    	}
     	
     	myForm.setContactsForPage(pagedContacts);
     	myForm.setCurrentPage(new Integer(1));
     	myForm.setPages(pages);
+    	myForm.setContactNames(ContactInfoUtil.getContactNames());
 		return mapping.findForward("showAllContacts");
 	}
 	
@@ -79,8 +104,13 @@ public class AddressBookActions extends DispatchAction {
 				stIndex=(page - 1) * myForm.getResultsPerPage();
 			}					
 			
+			String alpha=null;
+	    	if(myForm.getCurrentAlpha()!=null && ! myForm.getCurrentAlpha().equals("viewAll")){
+	    		alpha=myForm.getCurrentAlpha();
+	    	}
+	    	
 			List<AmpContact> pagedContacts=null;
-	    	pagedContacts=ContactInfoUtil.getPagedContacts(stIndex, myForm.getResultsPerPage(), myForm.getSortBy(),myForm.getKeyword());
+	    	pagedContacts=ContactInfoUtil.getPagedContacts(stIndex, myForm.getResultsPerPage(), myForm.getSortBy(),myForm.getKeyword(),alpha);
 	    	
 	    	myForm.setContactsForPage(pagedContacts);			
 			myForm.setCurrentPage(new Integer(page));
@@ -188,5 +218,8 @@ public class AddressBookActions extends DispatchAction {
 		form.setOrganisationName(null);
 		form.setPhone(null);
 		form.setTitle(null);
+		form.setAlphaPages(null);
+		form.setCurrentAlpha(null);
+		form.setContactNames(null);
 	}
 }

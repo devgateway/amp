@@ -21,11 +21,15 @@ public class AddressBookForm   extends ActionForm {
 	private String title;
 	private String organisationName;
 	private String phone;
-	private String fax;
+	private String fax;	
 	//filter elements
 	private String keyword;
 	private Integer resultsPerPage;	
 	private String sortBy;
+	private String[] contactNames;
+	 //selected letter
+    private String currentAlpha;
+    private String[] alphaPages = null; //massive of letters 
 	//pagination
 	private Collection pages = null;
 	private Integer currentPage;
@@ -149,5 +153,23 @@ public class AddressBookForm   extends ActionForm {
 	}
 	public void setFileUploaded(FormFile fileUploaded) {
 		this.fileUploaded = fileUploaded;
+	}
+	public String[] getContactNames() {
+		return contactNames;
+	}
+	public void setContactNames(String[] contactNames) {
+		this.contactNames = contactNames;
+	}
+	public String getCurrentAlpha() {
+		return currentAlpha;
+	}
+	public void setCurrentAlpha(String currentAlpha) {
+		this.currentAlpha = currentAlpha;
+	}
+	public String[] getAlphaPages() {
+		return alphaPages;
+	}
+	public void setAlphaPages(String[] alphaPages) {
+		this.alphaPages = alphaPages;
 	}	
 }

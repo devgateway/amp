@@ -81,8 +81,8 @@ public class EditOrgType extends DispatchAction {
 			  		if (null == editForm.getOrgType()) {
 			  			editForm.setOrgType(otype.getOrgType());
 					  	editForm.setOrgTypeCode(otype.getOrgTypeCode());
-					  	editForm.setOrgTypeIsGovernmental( 
-					  			(otype.getOrgTypeIsGovernmental()==null)?false:otype.getOrgTypeIsGovernmental() 
+					  	editForm.setOrgTypeIsGovernmental(
+					  			(otype.getOrgTypeIsGovernmental()==null)?false:otype.getOrgTypeIsGovernmental()
 					  	);
 					  	return mapping.findForward("forward");
 			  		}
@@ -105,7 +105,8 @@ public class EditOrgType extends DispatchAction {
 					 
 					AddOrgTypeForm editForm = (AddOrgTypeForm) form;
 					try {
-						editForm.setAmpOrgTypeId(new Long(Integer.parseInt(request.getParameter("ampOrgTypeId")))); 
+						editForm.setAmpOrgTypeId(new Long(Integer.parseInt(request.getParameter("ampOrgTypeId"))));
+                        editForm.setAction("edit");
 				  	}
 				  	catch (NumberFormatException nex) {
 				  		logger.debug("Invalid org type-id in request scope");

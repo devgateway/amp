@@ -1502,7 +1502,6 @@ public class ImportBuilder {
         			aux2 = aux1[1].split("</title>");
         		else aux2 = aux1[0].split("</title>");
         		ilog.setObjectNameLogged(i+". "+aux2[0]);
-        		System.out.println(i+". "+aux2[0]);
         		this.getActivityList().add(aux2[0]);
         	}
 
@@ -1746,62 +1745,5 @@ public class ImportBuilder {
 
 
 
-
-
-
-
 	
 }
-		//changes for Senegal : goto to step3
-		/*
-		*/
-				boolean isCountry = false;
-				boolean isZone = false;
-				boolean isDistrict = false;
-					isCountry = true;
-						ampCVLoc = DynLocationManagerUtil.getLocationByCode(location.getLocationName().getCode(), (AmpCategoryValue)null );
-							{
-								isZone = true;
-							}
-						else {
-							cvt.setValue("District");
-							isDistrict = true;
-						}
-				
-				//implementation levels
-				//added here for Senegal
-				AmpCategoryValue acv1= new AmpCategoryValue();
-				if( actType.getImplementationLevels()!=null ){
-					
-					if(actType.getImplementationLevels().getValue().compareTo("National") == 0 && (isZone || isDistrict))
-					{
-						CodeValueType cvt1 = new CodeValueType();
-						cvt1.setCode("Both");
-						cvt1.setValue("Both");
-						acv1 = addCategValueForCodeValueType(cvt1, hm, Constants.IDML_IMPLEMENTATION_LEVELS, Constants.CATEG_VALUE_IMPLEMENTATION_LEVEL);
-					}
-					else
-						acv1 = addCategValueForCodeValueType(actType.getImplementationLevels(), hm, Constants.IDML_IMPLEMENTATION_LEVELS, Constants.CATEG_VALUE_IMPLEMENTATION_LEVEL);
-					if(acv1!=null)
-						activity.getCategories().add(acv1);
-					
-				}
-				
-			else activity.getOrgrole().addAll(orgRole);
-		Set orgRole = new HashSet();
-			AmpRole role = DbUtil.getAmpRole(org.digijava.module.aim.helper.Constants.FUNDING_AGENCY);
-			
-			
-			
-
-			AmpOrgRole ampOrgRole = new AmpOrgRole();
-			ampOrgRole.setActivity(activity);
-			ampOrgRole.setRole(role);
-			ampOrgRole.setOrganisation(ampOrg);
-			orgRole.add(ampOrgRole);
-		
-		if (activity.getOrgrole() == null || activity.getOrgrole().size() == 0 ){
-			activity.setOrgrole(orgRole);
-		}
-		else activity.getOrgrole().addAll(orgRole);
-		

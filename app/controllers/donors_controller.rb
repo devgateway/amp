@@ -22,6 +22,7 @@ class DonorsController < ApplicationController
     @donor.code             = params[:donor][:code]
     @donor.currency         = params[:donor][:currency]
     @donor.cofunding_only   = params[:donor][:cofunding_only]
+    @donor.bluebook_donor   = params[:donor][:bluebook_donor]
     @donor.flag             = params[:donor][:flag]
     @donor.profile_picture  = params[:donor][:profile_picture]
     
@@ -47,8 +48,9 @@ class DonorsController < ApplicationController
     @donor.code             = params[:donor][:code]
     @donor.currency         = params[:donor][:currency]
     @donor.cofunding_only   = params[:donor][:cofunding_only]
-    @donor.flag             = params[:donor][:flag]
-    @donor.profile_picture  = params[:donor][:profile_picture]
+    @donor.bluebook_donor   = params[:donor][:bluebook_donor]
+    @donor.flag             = params[:donor][:flag] unless params[:donor][:flag].nil?
+    @donor.profile_picture  = params[:donor][:profile_picture] unless params[:donor][:profile_picture].nil?
      
     if @donor.save
       flash[:notice] = 'Donor was successfully updated.'

@@ -59,6 +59,7 @@ en:
         name: English Name
         name_es: Spanish Name
         cofunding_only: Co-Funding Donor Only
+        bluebook_donor: Applies to Bluebook
         code: Donor Code
         currency: Currency
         field_office_address: Field Office Address
@@ -130,6 +131,7 @@ en:
         delegating_agency: Delegating Agency
         
       country_strategy:
+        bluebook_year: Applies to Bluebook
         donor: Donor
         strategy_number: English Name/Title
         strategy_number_es: Spanish Name/Title

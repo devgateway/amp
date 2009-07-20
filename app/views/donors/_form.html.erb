@@ -1,13 +1,26 @@
 <% labeled_form_for @donor, :html => { :multipart => true } do |f| %>
 	<% f.field_set do %>
 		<li><%= f.check_box :cofunding_only %></li>
+		<li><%= f.check_box :bluebook_donor %></li>
 		
 		<li><%= f.text_field :code %></li>
 		<li class="fifty"><%= f.text_field :name %></li>
 		<li class="fifty"><%= f.text_field :name_es %></li>
 		
-		<li class="fifty"><%= f.file_field :flag %></li>
-		<li class="fifty"><%= f.file_field :profile_picture %></li>
+		<li>
+            <%= f.file_field :flag %>
+			<% if @donor.flag.url(:regular).include?('missing.png') %>
+				<img src="/flags/missing/regular/missing.png" alt="missing.png" width="80" height="54"/>
+			<% else %>
+				<div align="center"><%= image_tag @donor.flag.url(:regular) %></div>
+			<% end%>
+        </li>
+		<li>
+            <%= f.file_field :profile_picture %>
+			<% unless @donor.profile_picture.url(:regular).include?('missing.png') %>
+				<div align="center"><%= image_tag @donor.profile_picture.url(:regular) %></div>
+			<% end%>
+        </li>
 		
 		<li><%= f.select :currency, ExchangeRate.available_currencies.map { |c| [c, c] } %></li>
 	<% end %>

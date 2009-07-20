@@ -93,7 +93,7 @@
 		<td class="sub_title"><%= lc_bb(:index, :profiles, :title) %></td>
 	</tr>
 	
-	<% Donor.main.ordered.each do |d| %>
+	<% Donor.bluebook.ordered.each do |d| %>
 		<tr>
 			<td><%= link_to(d.name.titleize, bluebook_donor_profile_path(year, d.id)) %></a></td>
 		</tr>

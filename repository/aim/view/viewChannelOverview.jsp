@@ -9,6 +9,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 <%@ taglib uri="/taglib/category" prefix="category"%>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ page import="org.digijava.module.categorymanager.util.CategoryConstants" %>
 <%@ page import="org.digijava.module.aim.util.DynLocationManagerUtil" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
@@ -892,10 +893,10 @@ function commentWin(val) {
 																			<TR>
 																				<TD bgcolor="#ffffff">
 																					<i><b><digi:trn key="aim:Lessons Learned">Lessons Learned</digi:trn></b></i>:
-																					<c:if test="${not empty activity.lessonsLearned}">
+																					<c:if test="${not empty activity.lessonsLearned && fn:trim(activity.lessonsLearned) ne ''}">
 																						<bean:define id="lessonsLearnedKey">
-																						<c:out value="${activity.lessonsLearned}"/>
-																					</bean:define>
+																							<c:out value="${activity.lessonsLearned}"/>
+																						</bean:define>
 																						<digi:edit key="<%=lessonsLearnedKey%>"/>
 																					 </c:if>
 																				</TD>
@@ -906,57 +907,43 @@ function commentWin(val) {
 											<bean:define id="largeTextFeature" value="Identification" toScope="request"/>																		
 											<c:if test="${not empty activity.projectImpact}">			
 											<bean:define id="largeTextLabel" value="Project Impact" toScope="request"/>
-											<bean:define id="largeTextKey" toScope="request">
-												<c:out value="${activity.projectImpact}"/>
-											</bean:define>
+											<bean:define id="largeTextKey" toScope="request" name="activity" property="projectImpact"/>
 											<jsp:include page="largeTextPropertyPopup.jsp"/>
 											</c:if>
 
 											<c:if test="${not empty activity.activitySummary}">			
 											<bean:define id="largeTextLabel" value="Activity Summary" toScope="request"/>
-											<bean:define id="largeTextKey" toScope="request">
-												<c:out value="${activity.activitySummary}"/>
-											</bean:define>
+											<bean:define id="largeTextKey" toScope="request" name="activity" property="activitySummary"/>
 											<jsp:include page="largeTextPropertyPopup.jsp"/>
 											</c:if>
 
 											<c:if test="${not empty activity.contractingArrangements}">						
 											<bean:define id="largeTextLabel" value="Contracting Arrangements" toScope="request"/>
-											<bean:define id="largeTextKey" toScope="request">
-												<c:out value="${activity.contractingArrangements}"/>
-											</bean:define>
+											<bean:define id="largeTextKey" toScope="request" name="activity" property="contractingArrangements"/>
 											<jsp:include page="largeTextPropertyPopup.jsp"/>
 											</c:if>
 
 											<c:if test="${not empty activity.condSeq}">									
 											<bean:define id="largeTextLabel" value="Conditionality and Sequencing" toScope="request"/>
-											<bean:define id="largeTextKey" toScope="request">
-												<c:out value="${activity.condSeq}"/>
-											</bean:define>
+											<bean:define id="largeTextKey" toScope="request" name="activity" property="condSeq"/>
 											<jsp:include page="largeTextPropertyPopup.jsp"/>
 											</c:if>
 			
 											<c:if test="${not empty activity.linkedActivities}">												
 											<bean:define id="largeTextLabel" value="Linked Activities" toScope="request"/>
-											<bean:define id="largeTextKey" toScope="request">
-												<c:out value="${activity.linkedActivities}"/>
-											</bean:define>
+											<bean:define id="largeTextKey" toScope="request" name="activity" property="linkedActivities"/>
 											<jsp:include page="largeTextPropertyPopup.jsp"/>
 											</c:if>
 			
 											<c:if test="${not empty activity.conditionality}">									
 											<bean:define id="largeTextLabel" value="Conditionalities" toScope="request"/>
-											<bean:define id="largeTextKey" toScope="request">
-												<c:out value="${activity.conditionality}"/>
-											</bean:define>
+											<bean:define id="largeTextKey" toScope="request" name="activity" property="conditionality"/>
 											<jsp:include page="largeTextPropertyPopup.jsp"/>
 											</c:if>
 			
 											<c:if test="${not empty activity.projectManagement}">												
 											<bean:define id="largeTextLabel" value="Project Management" toScope="request"/>
-											<bean:define id="largeTextKey" toScope="request">
-												<c:out value="${activity.projectManagement}"/>
-											</bean:define>
+											<bean:define id="largeTextKey" toScope="request" name="activity" property="projectManagement"/>
 											<jsp:include page="largeTextPropertyPopup.jsp"/>
 											</c:if>
 

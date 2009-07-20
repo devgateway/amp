@@ -929,7 +929,18 @@ function collapseAll() {
 											<div id="act_location" style="display: none;">
 											<c:if test="${!empty aimEditActivityForm.location.selectedLocs}">
 												<table width="100%" cellSpacing="2" cellPadding="1">
+													<c:forEach var="selectedLocs" items="${aimEditActivityForm.location.selectedLocs}">
+                                                          <tr>
+                                                              <td width="100%">
+																	<c:forEach var="ancestorLoc" items="${selectedLocs.ancestorLocationNames}">
+                                                                    	[${ancestorLoc}] 
+                                                                    </c:forEach>
+                                                    			</td>
+                                                    		</tr>
+                                                    	</c:forEach>
+                                                 <!-- 
 												<c:forEach var="locations" items="${aimEditActivityForm.location.selectedLocs}">
+													
 													<tr>
 														<td>
 															<c:if test="${!empty locations.country}">
@@ -947,6 +958,7 @@ function collapseAll() {
 														</td>
 													</tr>
 												</c:forEach>
+												 -->
 												</table>
 											</c:if>
 											</div>										</td>

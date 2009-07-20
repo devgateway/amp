@@ -72,8 +72,8 @@ es:
       mdgs: ODM
       mdg: ODM
       map: Mapa
-      region: 'Región'
-      regions: Regiones
+      region: 'Departamento'
+      regions: Departamentos
       markers: Indicadores
       grant: 'Donación'
       loan: 'Préstamo'

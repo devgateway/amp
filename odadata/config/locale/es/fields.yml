@@ -42,7 +42,7 @@ es:
         amount: Cantidad en %
         
       geo_relevance:
-        province: Región
+        province: Departamento
         district: Municipios
           
       user:

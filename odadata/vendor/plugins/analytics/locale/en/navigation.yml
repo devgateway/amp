@@ -19,7 +19,7 @@ en:
         forecasts_for: EU Cooperation Forecasts for {{year}}
         trend: EU Cooperation Trend from {{from}} to {{to}}
         by_sector_in: EU Cooperation by DAC Sector in {{year}}
-        by_region_in: EU Cooperation by Region in {{year}}
+        by_region_in: EU Cooperation by Department in {{year}}
         by_toa_in: EU Cooperation by Aid Modality in {{year}}, Forecasts for {{forecasts}}
       note:
         title: Note to Reader

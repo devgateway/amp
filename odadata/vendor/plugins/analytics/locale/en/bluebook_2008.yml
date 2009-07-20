@@ -30,11 +30,11 @@ en:
                   forecasts: EU Cooperation Forecasts
                   trend: EU Cooperation Trend from {{from}} to {{to}}
                   by_sector_in: EU Cooperation by DAC Sector in {{year}}
-                  by_region_in: EU Cooperation by Region in {{year}}
+                  by_region_in: EU Cooperation by Department in {{year}}
                   by_toa_in: EU Cooperation by Aid Modality in {{year}}, Forecasts for {{forecasts}}
                   by_sector: EU Cooperation by DAC Sector
                   by_sector_bar_subtitle: EU ODA disbursements by DAC Sector in {{year}}
-                  by_region: EU Cooperation by Region
+                  by_region: EU Cooperation by Department
                   by_toa: EU Cooperation by Aid Modality
                   in_percent_by_toa: EU Cooperation in % by Aid Modality in {{year}}
                   in_percent_by_toa_subtitle: EU ODA disbursements in % by aid modality per EU Member State in {{year}}

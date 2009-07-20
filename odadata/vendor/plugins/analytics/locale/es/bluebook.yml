@@ -34,11 +34,11 @@ es:
                 forecasts: Proyecciones de la Cooperación UE
                 trend: Tendencia de la Cooperación UE de {{from}} para {{to}}
                 by_sector_in: Cooperación de UE por Sector CAD en {{year}}
-                by_region_in: Cooperación de UE por Región en {{year}}
+                by_region_in: Cooperación de UE por Departamento en {{year}}
                 by_toa_in: Cooperación de UE por modalidad de ayuda en {{year}}, Proyecciones de {{forecasts}}
                 by_sector: Cooperación de UE por Sector CAD
                 by_sector_bar_subtitle: Desembolsos de AOD de la UE por Sector CAD Sector en {{year}}
-                by_region: Cooperación de UE por Región
+                by_region: Cooperación de UE por Departamento
                 by_toa: Cooperación de UE por modalidad de ayuda
                 in_percent_by_toa: Cooperación de UE en % por modalidad de ayuda en {{year}}
                 in_percent_by_toa_subtitle: Desembolsos de ODA UE en % por modalidad de ayuda en el 2007 por cada Estado Miembro de la UE
@@ -577,7 +577,7 @@ es:
           centralization: Grado de Centralización
           preferred_approaches: Enfoques preferenciales en la distribución de la ayuda
           priorities: Prioridades de Programación
-          distribution_by_sector: Sectores clave priorizados por región
+          distribution_by_sector: Sectores clave priorizados por departamento
           enlarged_chart: Haga click aquí para agrandar la imagen
           grant: Donación
           loan: Préstamo

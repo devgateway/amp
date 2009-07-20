@@ -24,7 +24,7 @@ class Bluebook::ChartsController < BluebookController
   end
   
   def sectors_column_data
-    @donors = Donor.main.ordered
+    @donors = Donor.bluebook.ordered
     @donor_payments = OrderedHash.new
     @donors.each { |d| @donor_payments[d.name] = d.annual_payments[year].andand.in("EUR") }
     @donor_commitments = OrderedHash.new
@@ -34,7 +34,7 @@ class Bluebook::ChartsController < BluebookController
   end
  
   def forecasts_column_data
-    @donors = Donor.main.ordered
+    @donors = Donor.bluebook.ordered
     @donor_payments_forecast = OrderedHash.new
     @donors.each { |d| @donor_payments_forecast[d.name] = d.annual_payments_forecasts[year + 1].andand.in("EUR") }
     @donor_commitments_forecast = OrderedHash.new
@@ -44,7 +44,7 @@ class Bluebook::ChartsController < BluebookController
   end
  
   def eu_cooperation_trends_column_data
-    @donors = Donor.main.ordered
+    @donors = Donor.bluebook.ordered
     @donor_payments_forecast = OrderedHash.new
     @donors.each { |d| @donor_payments_forecast[d.name] = d.annual_payments_forecasts[year + 1].andand.in("EUR") }
     @donor_payments = OrderedHash.new
@@ -60,7 +60,7 @@ class Bluebook::ChartsController < BluebookController
   def eu_cooperation_aid_modality_data
     @aid_payments, @aid_forecasts = [], []
     
-    Donor.main.each do |d|
+    Donor.bluebook.each do |d|
       res = Funding.find(:all, 
         :select => "SUM((payments_q1 + payments_q2 + payments_q3 + payments_q4)) AS total_payments, year, projects.aid_modality_id AS aid_modality",
         :joins => "LEFT OUTER JOIN projects ON fundings.project_id = projects.id",
@@ -73,7 +73,7 @@ class Bluebook::ChartsController < BluebookController
       end
     end
     
-    Donor.main.each do |d|
+    Donor.bluebook.each do |d|
       res = FundingForecast.find(:all, 
         :select => "SUM(payments) AS forecasts, year, projects.aid_modality_id AS aid_modality",
         :joins => "LEFT OUTER JOIN projects ON funding_forecasts.project_id = projects.id",
@@ -92,7 +92,7 @@ class Bluebook::ChartsController < BluebookController
   def eu_cooperation_aid_modality_percentages_data
     @aid_payments = []
     @aid_payments2 = []
-    @donors = Donor.main.ordered
+    @donors = Donor.bluebook.ordered
     
     @donors.each do |d|
       @aid_payments[d.id] ||= []

@@ -23,10 +23,11 @@ class Donor < ActiveRecord::Base
   validates_presence_of :name, :name_es
   
   # Protect attributes that can only be modified by admin
-  attr_protected :name, :name_es, :code, :currency, :cofunding_only, :flag, :profile_picture
+  attr_protected :name, :name_es, :code, :currency, :cofunding_only, :bluebook_donor, :flag, :profile_picture
   
   # List of main donors (not cofunding only!)
   named_scope :main, :conditions => "cofunding_only IS DISTINCT FROM true"
+  named_scope :bluebook, :conditions => "cofunding_only IS DISTINCT FROM true AND bluebook_donor IS DISTINCT FROM false "
   
   # TODO: This is a hack to order by the translated donor name
   # This should better be done in the globalization plugin directly but joining in the translation

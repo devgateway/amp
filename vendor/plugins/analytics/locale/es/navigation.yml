@@ -19,7 +19,7 @@ es:
         forecasts_for: Proyecciones de la Cooperación UE para {{year}}
         trend: Tendencia de la Cooperación UE de {{from}} para {{to}}
         by_sector_in: Cooperación de UE por Sector CAD en {{year}}
-        by_region_in: Cooperación de UE por Región en {{year}}
+        by_region_in: Cooperación de UE por Departamento en {{year}}
         by_toa_in: Cooperación de UE por modalidad de ayuda en {{year}}, Proyecciones de {{forecasts}}
       note:
         title: Nota al Lector

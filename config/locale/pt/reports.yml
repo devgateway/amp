@@ -59,7 +59,7 @@ pt:
     sectors:
         title: Projects by Sector
     locations:
-        title: Projects by Region
+        title: Projects by Department
         show_municipalities: Show Municipalities
         all_districts: All Municipalities
         national_project: National

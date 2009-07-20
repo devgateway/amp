@@ -59,7 +59,7 @@ es:
       sectors:
           title: Proyectos por Sector
       locations:
-          title: Proyectos por Región
+          title: Proyectos por Departamento
           show_municipalities: Mostrar Municipios
           all_districts: Todos los municipios
           national_project: Nacional

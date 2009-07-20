@@ -691,7 +691,7 @@ public class AmpARFilter extends PropertyListable {
 		if (toDate != null)
 			if (toDate.trim().length() > 0){
 				String TO_FUNDING_DATE_FILTER = "SELECT DISTINCT(f.amp_activity_id) FROM amp_funding f, amp_funding_detail fd "
-					+ "WHERE f.amp_funding_id=fd.amp_funding_id AND DATEDIFF(?, fd.transaction_date) <= 0";
+					+ "WHERE f.amp_funding_id=fd.amp_funding_id AND DATEDIFF(?, fd.transaction_date) >= 0";
 				queryAppend(TO_FUNDING_DATE_FILTER);
 				//add to the params list that will be used on the prepared statment
 				indexedParams.add(new FilterParam(new java.sql.Date(FormatHelper.parseDate2(this.getToDate()).getTime()),java.sql.Types.DATE));

@@ -86,6 +86,7 @@ import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.chart.axis.NumberAxis;
+import org.digijava.module.aim.util.SectorUtil;
 
 
 
@@ -780,7 +781,7 @@ public class ChartWidgetUtil {
                         " inner join actSec.classificationConfig config ";
 		
 		
-		oql += " where sec.parentSectorId is null  and fd.transactionType = 0 and fd.adjustmentType = 1 ";
+		oql += " where  fd.transactionType = 0 and fd.adjustmentType = 1 ";
 		if (donorIDs != null && donorIDs.length > 0) {
 			oql += " and (fd.ampFundingId.ampDonorOrgId in ("+ getInStatment(donorIDs) + ") ) ";
 		}
@@ -830,6 +831,7 @@ public class ChartWidgetUtil {
 				//convert to
 				//Double converted = convert(calculated, currency);
 				//search if we already have such sector data
+                                sector = SectorUtil.getAmpParentSector(sector.getAmpSectorId());
 				DonorSectorFundingHelper sectorFundngObj = donors.get(sector.getAmpSectorId());
 				//if not create and add to map
 				if (sectorFundngObj == null){

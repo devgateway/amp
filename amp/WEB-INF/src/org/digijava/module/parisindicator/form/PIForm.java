@@ -63,6 +63,7 @@ public class PIForm extends ActionForm {
 	private int[][] miniTable;
 
 	private boolean reset;
+	private boolean print;
 
 	public int getSelectedStartYear() {
 		return selectedStartYear;
@@ -266,5 +267,13 @@ public class PIForm extends ActionForm {
 
 	public void setEndYears(int[] endYears) {
 		this.endYears = endYears;
+	}
+
+	public boolean isPrint() {
+		return print;
+	}
+
+	public void setPrint(boolean print) {
+		this.print = print;
 	}
 }

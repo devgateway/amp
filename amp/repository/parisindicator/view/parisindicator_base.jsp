@@ -141,7 +141,7 @@
 									       </a>
 									    </td>
 										<td noWrap="nowrap" align="left" valign="center">
-										   <a href="#" paramName="indcId" paramId="indcId" onclick="javascript:openPrinter(); return false;" paramName="indcId" paramId="indcId" target="_blank">
+										   <a href="#" paramName="indcId" paramId="indcId" onclick="openPrinter(); return false;" paramName="indcId" paramId="indcId" target="_blank">
 										      <digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/printer.gif" border="0" alt="Printer Friendly" /> 
 										   </a>
 										</td>
@@ -171,7 +171,7 @@
                                                 </logic:equal>
                                                 <LI class="<%=selected%>">
                                                     <span>
-                                                        <digi:link href="/parisindicator.do?reportId=${element.indicatorCode}&reset=true" target="_self">
+                                                        <digi:link href="/parisindicator.do?reportId=${element.indicatorCode}&reset=true&header=true" target="_self">
                                                             <div style="max-width: 90px">
                                                                 <digi:trn key="Paris Indicator">Paris Indicator</digi:trn>&nbsp;<bean:write name="element" property="indicatorCode"/>
                                                             </div>
@@ -200,32 +200,34 @@
 	                    </td>
 	                </tr>
 	                <tr>
-	                   <td class="td_right_left1">
-	                       <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="3">
-	                           <jsp:include page="parisindicator_3.jsp"></jsp:include>
-	                       </logic:equal>
-	                       <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="4">
-                               <jsp:include page="parisindicator_4.jsp"></jsp:include>
-                           </logic:equal>
-                           <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="5a">
-                               <jsp:include page="parisindicator_5a.jsp"></jsp:include>
-                           </logic:equal>
-                           <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="5b">
-                               <jsp:include page="parisindicator_5b.jsp"></jsp:include>
-                           </logic:equal>
-                           <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="6">
-                               <jsp:include page="parisindicator_6.jsp"></jsp:include>
-                           </logic:equal>
-                           <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="7">
-                               <jsp:include page="parisindicator_7.jsp"></jsp:include>
-                           </logic:equal>
-                           <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="9">
-                               <jsp:include page="parisindicator_9.jsp"></jsp:include>
-                           </logic:equal>
-                           <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="10a">
-                               <jsp:include page="parisindicator_10a.jsp"></jsp:include>
-                           </logic:equal>
-	                   </td>
+                        <td class="td_right_left1">
+	                       <div id="reportContent">
+		                       <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="3">
+		                           <jsp:include page="parisindicator_3.jsp"></jsp:include>
+		                       </logic:equal>
+		                       <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="4">
+	                               <jsp:include page="parisindicator_4.jsp"></jsp:include>
+	                           </logic:equal>
+	                           <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="5a">
+	                               <jsp:include page="parisindicator_5a.jsp"></jsp:include>
+	                           </logic:equal>
+	                           <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="5b">
+	                               <jsp:include page="parisindicator_5b.jsp"></jsp:include>
+	                           </logic:equal>
+	                           <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="6">
+	                               <jsp:include page="parisindicator_6.jsp"></jsp:include>
+	                           </logic:equal>
+	                           <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="7">
+	                               <jsp:include page="parisindicator_7.jsp"></jsp:include>
+	                           </logic:equal>
+	                           <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="9">
+	                               <jsp:include page="parisindicator_9.jsp"></jsp:include>
+	                           </logic:equal>
+	                           <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="10a">
+	                               <jsp:include page="parisindicator_10a.jsp"></jsp:include>
+	                           </logic:equal>
+                           </div>
+	                    </td>
 	                </tr>
 					<tr>
 						<td class="td_bottom1">&nbsp;</td>

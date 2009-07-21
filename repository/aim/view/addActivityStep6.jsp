@@ -138,7 +138,7 @@ function validate(field) {
 
 function addDocuments() {
 
-		openNewWindow(600, 400);
+		openNewWindow(740, 400);
 		
 		document.getElementById('docFileOrLink').value = "file";
 
@@ -180,7 +180,7 @@ function addManagedDocuments() {
 
 function addLinks() {
 
-		openNewWindow(600, 225);
+		openNewWindow(600, 350);
 
 		document.getElementById('docFileOrLink').value = "link";
 

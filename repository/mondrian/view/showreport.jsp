@@ -26,7 +26,7 @@ function sendForm(){
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 </head>
 <body bgcolor=white>
-
+<digi:instance property="ShowReportForm" />
 <digi:form action="/showreport.do"  method="post">
 <%-- include query and title, so this jsp may be used with different queries --%>
 <wcf:include id="include01" httpParam="pagename" prefix="/WEB-INF/queries/" suffix=".jsp"/>
@@ -116,11 +116,13 @@ function sendForm(){
 <p>
 	<wcf:render  ref="chart01" xslUri="/WEB-INF/jpivot/chart/chart.xsl"   xslCache="true"/>
 <p>
-<!-- 
-<input type="text" name="reportname">
-<input type="hidden" name="action"> 
-<input type="button" onclick="sendForm();" value="Save"/>
- -->
+<table>
+	<tr>
+    	<td style="white-space:nowrap;background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:120px;border-left:solid 1px #000000;">
+    		<b><digi:trn key="aim:mondrian:datalastrefresedon">Data last refreshed on</digi:trn> <c:out value="${ShowReportForm.lastdate}"/></b>
+        </td>
+     </tr>
+</table>
 </digi:form>
 </body>
 </html>

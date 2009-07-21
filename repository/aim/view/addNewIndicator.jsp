@@ -180,7 +180,7 @@ function closeWindow() {
     
 <script language="javascript">
 <c:if test="${aimNewIndicatorForm.action=='added'}">
-    window.opener.location.reload(true);
+    window.opener.location.href = window.opener.location.href;
     window.opener.focus();
     window.close();
 </c:if>

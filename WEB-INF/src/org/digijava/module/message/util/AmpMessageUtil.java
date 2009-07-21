@@ -570,7 +570,7 @@ public class AmpMessageUtil {
 		List<Long> memIds=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();			
-			queryString= "select s.memberId from " + AmpMessageState.class.getName()+ " s, "+clazz.getName()+
+			queryString= "select s.receiver.ampTeamMemId from " + AmpMessageState.class.getName()+ " s, "+clazz.getName()+
 			" msg  where msg.id=s.message.id and s.receiver.ampTeamMemId is not null group by s.receiver.ampTeamMemId having count(s.id)>"+limit;
 			query=session.createQuery(queryString);
 			memIds=query.list();

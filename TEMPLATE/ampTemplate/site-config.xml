@@ -17,6 +17,12 @@
 			<put-item name="chart7" module="widget" instance="default" teaser="teaserOfWidget"/>
 			
 		</layout>
+		
+		<layout name="parisIndicatorLayout" extends="default" file="noLayout.jsp">
+		  <put name="title">Paris Indicator Reports</put>
+		  <put-item name="body" file="parisindicator_N.jsp"/>
+		</layout>
+		
 		<layout name="gisDashboardLayout" extends="default" file="gisDashboardlayout.jsp">
 			<put name="title">Results Matrix</put>
 <!--			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>-->

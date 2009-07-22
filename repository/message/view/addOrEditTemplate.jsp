@@ -50,6 +50,10 @@
 			alert('Please Enter Name');
 			return false;
 		}
+		if(document.getElementById('triggerSelect').value== -1 ){
+			alert('Please Select Related Trigger');
+			return false;
+		}
 		return true;
 	}
 
@@ -145,12 +149,10 @@
 												<!-- Start Navigation -->
 												<td height=33><span class=crumb>
 													<c:set var="translation">
-														<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
+														<digi:trn>Click here to goto Admin Home</digi:trn>
 													</c:set>
 							                        <digi:link module="aim" href="/admin.do" styleClass="comment" title="${translation}" >
-														<digi:trn key="aim:AmpAdminHome">
-															Admin Home
-														</digi:trn>
+														<digi:trn>Admin Home</digi:trn>
 													</digi:link>&nbsp;&gt;&nbsp;													
 													<c:set var="gotoTemplateAlertsPage">
 														<digi:trn>Click here to goto Template Alert Page</digi:trn>
@@ -165,7 +167,7 @@
 											<tr>
 								               <td height=16 vAlign=center width=571>
 									              <span class=subtitle-blue>							
-											        <digi:trn key="aim:pagetitle:add/edittemplateWizard">Add/Edit Template Wizard</digi:trn>						
+											        <digi:trn>Add/Edit Template Wizard</digi:trn>						
 									              </span>
 								               </td>
 							                </tr>
@@ -189,29 +191,26 @@
 																		<td valign="top" bgcolor="#f4f4f2" align="center">
 																			<table width="100%" cellspacing="3" cellpadding="5">																				
 																				<tr>
-																					<td align="right" width="25%"><digi:trn key="messages:templateName">Template Name</digi:trn><font color="red">*</font> </td>
+																					<td align="right" width="25%"><digi:trn>Template Name</digi:trn><font color="red">*</font> </td>
 																					<td align="left" width="90%"><html:text property="messageName" styleClass="inp-text" style="width:600px;"/></td>
 																				</tr>																																				
 																				<tr>
-																					<td align="right"><digi:trn key="messages:text">Text</digi:trn></td>
+																					<td align="right"><digi:trn>Text</digi:trn></td>
 																					<td align="left"> <html:textarea name="messageForm" property="description" rows="3" cols="75" styleClass="inp-text"/></td>
 																				</tr>																				
 																				<tr>
-																					<td align="right"><digi:trn key="messages:relatedTriggers">related trigger</digi:trn></td>
+																					<td align="right"><digi:trn>related trigger</digi:trn><font color="red">*</font></td>
 																					<td align="left"> 
-																						<html:select property="selectedTrigger" name="messageForm" styleClass="inp-text">
-																							<html:option value="-1"><digi:trn key="message:selectRelatedTrigger">Select from below</digi:trn></html:option>
-<!--																							<html:optionsCollection name="messageForm" property="availableTriggersList" label="label" value="value"/>-->
-
-																								<logic:iterate id="trigger" name="messageForm" property="availableTriggersList">																																															
-																									<html:option value="${trigger.value}"><digi:trn key="message:selectRelatedTrigger:${trigger.label}">${trigger.label}</digi:trn></html:option>																		
-																								</logic:iterate>
- 
+																						<html:select property="selectedTrigger" name="messageForm" styleClass="inp-text" styleId="triggerSelect">
+																							<html:option value="-1"><digi:trn>Select from below</digi:trn></html:option>
+																							<logic:iterate id="trigger" name="messageForm" property="availableTriggersList">																																															
+																								<html:option value="${trigger.value}"><digi:trn>${trigger.label}</digi:trn></html:option>																		
+																							</logic:iterate>
 																						</html:select> 
 																					</td>
 																				</tr>													
 																				<tr>
-																					<td nowrap="nowrap" valign="top" align="right"><digi:trn key="message:Receevers">Receivers</digi:trn></td>
+																					<td nowrap="nowrap" valign="top" align="right"><digi:trn>Receivers</digi:trn><font color="red">*</font></td>
 																                    <td>
 																                        <table border="0" >
 																                            <tr>
@@ -224,7 +223,7 @@
 																													<option value="-1">No receivers</option>
 																												</logic:empty>
 																												<logic:notEmpty name="messageForm"  property="teamMapValues" >
-																												    <option value="all" ><digi:trn key="message:AllTeams">All</digi:trn></option>																								
+																												    <option value="all" ><digi:trn key="message:AllTeams">All</digi:trn></option>
 																													<c:forEach var="team" items="${messageForm.teamMapValues}">
 																														<logic:notEmpty name="team" property="members">
 																															<option value="t:${team.id}" style="font-weight: bold;background:#CCDBFF;font-size:11px;">---${team.name}---</option>
@@ -240,9 +239,9 @@
 																                                    </table>
 																                                </td>
 																                                <td>
-																                                  <input type="button" onclick="MyaddUserOrTeam();" style="width:80px;font-family:tahoma;font-size:11px;" value="<digi:trn key="message:addUsBtn">Add >></digi:trn>">
+																                                  <input type="button" onclick="MyaddUserOrTeam();" style="width:80px;font-family:tahoma;font-size:11px;" value="<digi:trn>Add >></digi:trn>">
 																                                  <br><br>
-																                       			  <input type="button" style="width:80px;font-family:tahoma;font-size:11px;" onclick="MyremoveUserOrTeam()" value="<<<digi:trn key="message:rmbtn">Remove</digi:trn>" >	
+																                       			  <input type="button" style="width:80px;font-family:tahoma;font-size:11px;" onclick="MyremoveUserOrTeam()" value="<<<digi:trn>Remove</digi:trn>" >	
 																                                </td>
 																                                <td valign="top">
 																                                    <table border="0" width="100%" cellpadding="0">																                                       
@@ -273,17 +272,17 @@
 																							<tr>
 																								<td align="right" width="47%">
 																									<c:set var="trnSavetBtn">
-																										<digi:trn key="message:btn:save">save</digi:trn>
+																										<digi:trn>save</digi:trn>
 																									</c:set> 
 																									<input type="button" value="${trnSavetBtn }" onclick="save();" />
 																								</td>																									
 																								<td align="left" width="47%">
 																									<c:set var="trnCancelBtn">
-																										<digi:trn key="message:btn:cancel">Cancel</digi:trn>
+																										<digi:trn>Cancel</digi:trn>
 																									</c:set>
 																									<input type="button" value="${trnCancelBtn}" onclick="cancel();">																																							
 																								</td>
-																							</tr>																							
+																							</tr>
 																						</table>
 																					</td>
 																				</tr>
@@ -299,7 +298,7 @@
 													</table>
 												</td>
 											</tr>
-										</table>	
+										</table>
 									</td>
 								</tr>
 							</table>

@@ -20,10 +20,14 @@ def show
     end
 
     
-    # TODO: Replace by country_strategies.current (i.e. current named scope) that returns
-    # the currently applicable strategy, based on the start and end dates.
-    @country_strategy = @donor.country_strategies.first(:order => "id DESC")
-   
+    # The country strategy is selected from all available strategies from the donor
+    # that apply to the bluebook, based on the start/end dates
+
+    @country_strategy = @donor.country_strategies.find(:first, :conditions => [
+        "applies_to_bluebook = true AND (( 'end' >= :startYear AND 'end' <= :endYear) OR (start >= :startYear AND start <= :endYear) OR (start < :startYear AND 'end' > :endYear))",
+        {:startYear => "#{year}-01-01", :endYear => "#{year}-12-31" }
+       ])
+
     @projects = @donor.projects.published.all(:include => [:fundings, :funding_forecasts, :historic_funding])
     @projects_bilaterals = @projects.select { |p| p.type_of_implementation == 1 }
     @projects_multilaterals = @projects.select { |p| p.type_of_implementation == 2 }

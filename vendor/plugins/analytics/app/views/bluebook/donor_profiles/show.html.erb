@@ -96,38 +96,38 @@
 			<table>
 				<tr>
 					<td><%= ll(:country_strategy, :programming_responsibility) %></td>
-					<td><%= option_text_by_id(CountryStrategy::RESPONSIBILITY_OPTIONS, @country_strategy.programming_responsibility) %></td>
+					<td><%= option_text_by_id(CountryStrategy::RESPONSIBILITY_OPTIONS, @country_strategy.andand.programming_responsibility) %></td>
 				<tr>
 				<tr>
 					<td><%= ll(:country_strategy, :project_appraisal_responsibility) %></td>
-					<td><%= option_text_by_id(CountryStrategy::RESPONSIBILITY_OPTIONS, @country_strategy.project_appraisal_responsibility) %></td>
+					<td><%= option_text_by_id(CountryStrategy::RESPONSIBILITY_OPTIONS, @country_strategy.andand.project_appraisal_responsibility) %></td>
 				</tr>
 				<tr>
 					<td><%= ll(:country_strategy, :tenders_responsibility) %></td>
-					<td><%= option_text_by_id(CountryStrategy::RESPONSIBILITY_OPTIONS, @country_strategy.tenders_responsibility) %></td>
+					<td><%= option_text_by_id(CountryStrategy::RESPONSIBILITY_OPTIONS, @country_strategy.andand.tenders_responsibility) %></td>
 				</tr>
 				<tr>
 					<td><%= ll(:country_strategy, :commitments_and_payments_responsibility) %></td>
-					<td><%= option_text_by_id(CountryStrategy::RESPONSIBILITY_OPTIONS, @country_strategy.commitments_and_payments_responsibility) %></td>
+					<td><%= option_text_by_id(CountryStrategy::RESPONSIBILITY_OPTIONS, @country_strategy.andand.commitments_and_payments_responsibility) %></td>
 				</tr>
 				<tr>
 					<td><%= ll(:country_strategy, :monitoring_and_evaluation_responsibility) %></td>
-					<td><%= option_text_by_id(CountryStrategy::RESPONSIBILITY_OPTIONS, @country_strategy.monitoring_and_evaluation_responsibility) %></td>
+					<td><%= option_text_by_id(CountryStrategy::RESPONSIBILITY_OPTIONS, @country_strategy.andand.monitoring_and_evaluation_responsibility) %></td>
 				</tr>
 			</table>
 			<b><%= lc(:preferred_approaches) %></b>
 			<table>
 				<tr>
 					<td><%= ll(:country_strategy, :budget_support) %></td>
-					<td><%= @country_strategy.commitment_to_budget_support %> %</td>
+					<td><%= @country_strategy.andand.commitment_to_budget_support %> %</td>
 				</tr>
 				<tr>
 					<td><%= ll(:country_strategy, :sector_wide) %></td>
-					<td><%= @country_strategy.commitment_to_sectorwide_approaches_and_common_funds %> %</td>
+					<td><%= @country_strategy.andand.commitment_to_sectorwide_approaches_and_common_funds %> %</td>
 				</tr>
 				<tr>
 					<td><%= ll(:country_strategy, :projects) %></td>
-					<td><%= @country_strategy.commitment_to_projects %> %</td>
+					<td><%= @country_strategy.andand.commitment_to_projects %> %</td>
 				</tr>
 			</table>
 			<b><%= lc(:priorities) %></b>
@@ -135,19 +135,19 @@
 				<tr>
 					<td><%= ll(:country_strategy, :paper) %>
                     </td>
-					<td><%= @country_strategy.strategy_paper ? lc(:yes_answer) : lc(:no_answer) %></td>
+					<td><%= @country_strategy.andand.strategy_paper ? lc(:yes_answer) : lc(:no_answer) %></td>
 				</tr>
 				<tr>
 					<td><%= ll(:country_strategy, :period) %></td>
-					<td><%= @country_strategy.start.year %>-<%= @country_strategy.end.year %></td>
+					<td><%= @country_strategy.andand.start.andand.year %>-<%= @country_strategy.andand.end.andand.year %></td>
 				</tr>
 				<tr>
 					<td><%= ll(:country_strategy, :amount_foreseen) %></td>
-					<td><%= null_to_na(@country_strategy.total_amount_foreseen) %></td>
+					<td><%= null_to_na(@country_strategy.andand.total_amount_foreseen) %></td>
 				</tr>
 				<tr>
 					<td><%= ll(:terms, :internet_link) %></td>
-					<td><%= @country_strategy.website.to_link(:target => "_blank") %></td>
+					<td><%= @country_strategy.andand.website.andand.to_link(:target => "_blank") %></td>
 				</tr>
 				<tr>
 					<td valign="top"><%= ll(:country_strategy, :sectors_and_regions) %></td>
@@ -221,9 +221,9 @@
 		<td class="sub_title"><b><%= @donor.name %></b> - <%= ll(:country_strategy, :current) %></td>
 	</tr>
 	<tr>
-		<td><b><%= @country_strategy.strategy_number %></b></td>
+		<td><b><%= @country_strategy.andand.strategy_number %></b></td>
 	</tr>
 	<tr>
-		<td><%= markdown(@country_strategy.description) %></td>
+		<td><%= markdown(@country_strategy.description) unless @country_strategy.nil? %></td>
 	</tr>
 </table>

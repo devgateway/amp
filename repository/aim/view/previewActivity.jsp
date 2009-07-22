@@ -931,11 +931,16 @@ function collapseAll() {
 												<table width="100%" cellSpacing="2" cellPadding="1">
 													<c:forEach var="selectedLocs" items="${aimEditActivityForm.location.selectedLocs}">
                                                           <tr>
-                                                              <td width="100%">
+                                                              <td width="85%">
 																	<c:forEach var="ancestorLoc" items="${selectedLocs.ancestorLocationNames}">
                                                                     	[${ancestorLoc}] 
                                                                     </c:forEach>
-                                                    			</td>
+                                                    		  </td>
+                                                    		  <td width="15%" align="right">
+                                                    		  	<c:if test="${selectedLocs.showPercent}">
+																	<c:out value="${selectedLocs.percent}"/>%
+																</c:if>
+                                                    		  </td>
                                                     		</tr>
                                                     	</c:forEach>
                                                  <!-- 

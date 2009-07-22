@@ -71,7 +71,8 @@ public class PIAction extends Action {
 		piForm.setMainTableRows(report.getReportRows());
 		piForm.setMiniTable(report.getMiniTable());
 
-		if (piForm.isPrint()) {
+		if (piForm.isPrintPreview()) {
+			piForm.setPrintPreview(false);
 			return mapping.findForward("print");
 		} else {
 			return mapping.findForward("forward");

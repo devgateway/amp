@@ -416,9 +416,11 @@
 		window.setTimeout(call, 200);
 	}
 
-    function openPrinter() {
-        alert('print');
-        
+	function openPrinter() {
+		window.open('about:blank','Popup_Window','width=800,height=600,Resizable=yes,Menubar=yes,Scrollbars=yes');
+        document.parisIndicatorForm.target = 'Popup_Window';
+        document.parisIndicatorForm.printPreview.value = true;
+        document.parisIndicatorForm.submit();
     }
 </script>
 

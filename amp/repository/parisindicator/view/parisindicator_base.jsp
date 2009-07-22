@@ -38,6 +38,20 @@
     <jsp:include page="viewParisIndicatorPopupFilter.jsp" />
     <jsp:include page="viewParisIndicatorPopupScripts.jsp" />
     
+    <html:hidden property="selectedEndYear"/>
+    <html:hidden property="selectedStartYear"/>
+    <html:hidden property="selectedCalendar"/>
+    <html:hidden property="selectedCurrency"/>
+    <html:hidden property="selectedDonors"/>
+    <html:hidden property="selectedDonorGroups"/>
+    <html:hidden property="selectedStatuses"/>
+    <html:hidden property="selectedSectors"/>
+    <html:hidden property="selectedFinancingIstruments"/>
+    
+    <html:hidden property="reset" value="false"/>
+    <html:hidden property="printPreview" value="false"/>
+    <html:hidden property="reportId" value="<%=reportId%>"/>
+    
 	<table border="0" cellpadding="10" cellspacing="0" bgcolor="#FFFFFF">
 		<tr>
 			<td width="1000" align="left" valign="top" border="1" style="padding-left: 5px;">
@@ -141,7 +155,7 @@
 									       </a>
 									    </td>
 										<td noWrap="nowrap" align="left" valign="center">
-										   <a href="#" paramName="indcId" paramId="indcId" onclick="openPrinter(); return false;" paramName="indcId" paramId="indcId" target="_blank">
+										   <a onclick="javascript:openPrinter(); return false;" target="_blank">
 										      <digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/printer.gif" border="0" alt="Printer Friendly" /> 
 										   </a>
 										</td>
@@ -236,16 +250,4 @@
 			</td>
 		</tr>
 	</table>
-	<html:hidden property="selectedEndYear"/>
-	<html:hidden property="selectedStartYear"/>
-	<html:hidden property="selectedCalendar"/>
-	<html:hidden property="selectedCurrency"/>
-	<html:hidden property="selectedDonors"/>
-	<html:hidden property="selectedDonorGroups"/>
-	<html:hidden property="selectedStatuses"/>
-	<html:hidden property="selectedSectors"/>
-	<html:hidden property="selectedFinancingIstruments"/>
-	
-	<html:hidden property="reset" value="false"/>
-	<html:hidden property="reportId" value="<%=reportId%>"/>
 </digi:form>

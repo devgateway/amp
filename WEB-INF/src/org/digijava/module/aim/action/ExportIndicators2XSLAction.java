@@ -91,8 +91,9 @@ public class ExportIndicators2XSLAction extends Action {
 
 		HSSFCell cell = row.createCell(cellNum);
                 String hierarchyName=ProgramUtil.getHierarchyName(mainProg);
+                String header=TranslatorWorker.translateText("Indicators for", locale, siteId);
 
-		cell.setCellValue(TranslatorWorker.translateText("Indicators for", locale, siteId)+"  "+hierarchyName);
+		cell.setCellValue(header+"  "+hierarchyName);
 		cell.setCellStyle(csHeader);
 
 

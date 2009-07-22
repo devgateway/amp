@@ -5980,7 +5980,11 @@ public class DbUtil {
                                     AmpAhsurveyResponse resp = (AmpAhsurveyResponse) iter.next();
                                     if (4 == resp.getAmpQuestionId().getQuestionNumber().intValue()) {
                                         try {
-                                            ansToQues4 = Double.parseDouble(resp.getResponse());
+                                        	if(resp.getResponse() != null) {
+                                            	ansToQues4 = Double.parseDouble(resp.getResponse());
+                                        	} else {
+                                        		ansToQues4 = 0;
+                                        	}
                                             ansToQues4 /= 100;
                                             //logger.debug("ansToQues4 : " + ansToQues4);
                                         } catch (NumberFormatException nex) {

@@ -6140,7 +6140,7 @@ public class DbUtil {
                                 if (indcFlag == 5)
                                     percent = new Double( (100 * answersRow[NUM_ANSWER_COLUMNS - 4]) / answersRow[NUM_ANSWER_COLUMNS - 3]);
                                 else if (indcFlag == 7)
-                                    percent = new Double( (100 * answersRow[NUM_ANSWER_COLUMNS - 2]) / answersRow[NUM_ANSWER_COLUMNS - 3]);
+                                    percent = new Double( (100 * answersRow[NUM_ANSWER_COLUMNS - 3]) / answersRow[NUM_ANSWER_COLUMNS - 2]);
                                 else if (indcFlag == 9) {
                                     sum = answersRow[NUM_ANSWER_COLUMNS - 4] + answersRow[NUM_ANSWER_COLUMNS - 3];
                                     percent = new Double( (100 * sum) / answersRow[NUM_ANSWER_COLUMNS - 2]);
@@ -6201,7 +6201,7 @@ public class DbUtil {
                                 if (indcFlag == 5)
                                     percent = new Double( (100 * allDnRow[NUM_ANSWER_COLUMNS - 4]) / allDnRow[NUM_ANSWER_COLUMNS - 3]);
                                 else if (indcFlag == 7)
-                                    percent = new Double( (100 * allDnRow[NUM_ANSWER_COLUMNS - 2]) / allDnRow[NUM_ANSWER_COLUMNS - 3]);
+                                    percent = new Double( (100 * allDnRow[NUM_ANSWER_COLUMNS - 3]) / allDnRow[NUM_ANSWER_COLUMNS - 2]);
                                 else if (indcFlag == 9) {
                                     sum = allDnRow[NUM_ANSWER_COLUMNS - 4] + allDnRow[NUM_ANSWER_COLUMNS - 3];
                                     percent = new Double( (100 * sum) / allDnRow[NUM_ANSWER_COLUMNS - 2]);

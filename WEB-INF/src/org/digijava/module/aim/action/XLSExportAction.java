@@ -70,7 +70,7 @@ public class XLSExportAction extends Action {
 		HttpSession session = request.getSession();
 		AmpARFilter arf=(AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
 		
-		if (session.getAttribute("currentMember")!=null && !arf.isPublicView()){
+		if (session.getAttribute("currentMember")!=null || arf.isPublicView()){
 	     response.setContentType("application/msexcel");
 	        response.setHeader("Content-Disposition",
 	                "inline; filename=data.xls");

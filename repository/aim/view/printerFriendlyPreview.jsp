@@ -811,7 +811,9 @@
                                                                                 <td width="10">:</td>
                                                                                 <td align="left">
                                                                                   <logic:notEmpty name="funding" property="typeOfAssistance">
-                                                                                    <bean:write name="funding"	property="typeOfAssistance.value"/>
+                                                                                    <digi:trn>
+                                                                                    	<bean:write name="funding" property="typeOfAssistance.value"/>
+                                                                                    </digi:trn>
                                                                                   </logic:notEmpty>                                                                                </td>
                                                                               </tr>
 																			</field:display>
@@ -824,7 +826,9 @@
                                                                                 <td width="10">:</td>
                                                                                 <td align="left">
                                                                                   <logic:notEmpty name="funding" property="financingInstrument">
-                                                                                    <bean:write name="funding"	property="financingInstrument.value"/>
+                                                                                    <digi:trn>
+                                                                                    	<bean:write name="funding"	property="financingInstrument.value"/>
+                                                                                    </digi:trn>
                                                                                   </logic:notEmpty>                                                                                </td>
                                                                               </tr>
                                                                            <tr>

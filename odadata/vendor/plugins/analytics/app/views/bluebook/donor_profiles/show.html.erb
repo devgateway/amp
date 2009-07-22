@@ -164,23 +164,48 @@
 					<td><b><%= ll(:terms, :disbursements) %> (<%= "#{MultiCurrency.output_currency}, #{ll(:terms, :in_millions)}" %>)</b>
 						<table>
 							<tr>
-								<td class="title"></td>
-								<td class="title"><%= year %></td>
-								<td class="title"><%= year + 1 %> *</td>
+								<td class="title" value="fleco">
+                                </td>
+  <%
+  (Project::FIRST_YEAR_OF_RELEVANCE..year).to_a.map do |y|
+  %>
+								<td class="title"><%=y%></td>
+  <%
+  end
+  %>
+								<td class="title"><%=year+1%> * </td>
 							</tr>
 							<tr>
 								<td class="sub_title"><%= lc(:grant) %></td>
-								<td><%= in_millions(@total_payments_grants) %></td>
+  <%
+  (Project::FIRST_YEAR_OF_RELEVANCE..year).to_a.map do |y|
+  %>
+								<td><%= in_millions(@total_payments_grants[y]) %></td>
+  <%
+  end
+  %>
 								<td><%= in_millions(@total_forecasts_grants) %></td>
 							</tr>
 							<tr>
 								<td class="sub_title"><%= lc(:loan) %></td>
-								<td><%= in_millions(@total_payments_loans)  %></td>
+  <%
+  (Project::FIRST_YEAR_OF_RELEVANCE..year).to_a.map do |y|
+  %>
+								<td><%= in_millions(@total_payments_loans[y])  %></td>
+  <%
+  end
+  %>
 								<td><%= in_millions(@total_forecasts_loans)  %></td>
 							</tr>
-							<tr>
+                            <tr>
 								<td class="sub_title">Total</td>
-								<td><%= in_millions(@total_payments_grants + @total_payments_loans) %></td>
+  <%
+  (Project::FIRST_YEAR_OF_RELEVANCE..year).to_a.map do |y|
+  %>
+								<td><%= in_millions(@total_payments_grants[y] + @total_payments_loans[y]) %></td>
+  <%
+  end
+  %>
 								<td><%= in_millions(@total_forecasts_grants + @total_forecasts_loans) %></td>
 							</tr>
 						</table>

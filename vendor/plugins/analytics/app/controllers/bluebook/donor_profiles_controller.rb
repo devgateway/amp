@@ -38,9 +38,15 @@ def show
     end
     
     # Total payments by grant/loan (in donor's currency)
+    @total_payments_grants = Hash.new
+    (Project::FIRST_YEAR_OF_RELEVANCE..year).to_a.map do |y|
+      @total_payments_grants[y] = @donor.total_grant_payments(y).in(@currency)
+    end
 
-    @total_payments_grants = @donor.total_grant_payments(year).in(@currency)
-    @total_payments_loans = @donor.total_loan_payments(year).in(@currency)
+    @total_payments_loans = Hash.new
+    (Project::FIRST_YEAR_OF_RELEVANCE..year).to_a.map do |y|
+      @total_payments_loans[y] = @donor.total_loan_payments(y).in(@currency)
+    end
    
     @total_forecasts_grants = @donor.total_grant_forecasts(year + 1).in(@currency)
     @total_forecasts_loans = @donor.total_loan_forecasts(year + 1).in(@currency)
@@ -49,7 +55,7 @@ def show
     @disbursement =  @donor.annual_payments[year].in(@currency).to_f * 100 / @eu_total_payments.to_f
    
     # Specific donor's grant projects disbursements
-    @disbursement_grants = @total_payments_grants.to_f * 100 / @total_payments.in(@currency).to_f
+    @disbursement_grants = @total_payments_grants[year].to_f * 100 / @total_payments.in(@currency).to_f
     #TODO: Check why sometimes @total_payments is zero, I had to add this not NaN validations because there were errors in the page.
     if(@disbursement_grants.nan?)
       @disbursement_grants = 0

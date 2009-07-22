@@ -67,8 +67,8 @@ function showFilter(){
     filterDiv.style.display="block";
     filterDiv.stytelvisibility="visible";
     filter=new YAHOO.widget.Panel("filter",{
-            x:"20",
-            y:"20",
+            width:"400px",
+            fixedcenter: true,
             constraintoviewport: true,
             Underlay:"shadow",
             modal: true,
@@ -1549,7 +1549,7 @@ function showFilter(){
                 </tr>
                 <tr>
                     <td>
-                        <div id="filter" style="visibility:hidden;display:none">
+                        <div id="filter" style="visibility:hidden;display:none;">
                             <table width="100%" border="0" cellpadding="5" cellspacing="0">
                                 <tr>
                                     <td>

@@ -448,6 +448,11 @@ function adminHelp(){
                                                         <b><digi:trn key="aim:parisIndicator">Paris Indicator</digi:trn></b>
                                                     </a>
                                                 </li>
+                                                <li class="yuiampmenuitem" title='<digi:trn >Click here to view NEW Paris Indicator Reports</digi:trn>'>
+                                                    <a class="yuiampmenuitemlabel" href="/parisindicator/parisindicator.do~reportId=3~reset=true~header=true"  onclick="return canExit()">
+                                                        <b><digi:trn>NEW Paris Indicator</digi:trn></b>
+                                                    </a>
+                                                </li>
                                         </feature:display>
                                       </ul>
                                   </div>

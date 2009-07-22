@@ -90,7 +90,10 @@
 		}
 		function deleteProgram()
 		{
-			return confirm("Are you sure you want to delete this Program and its Sub-Program(s)?");
+			<c:set var="translation">
+				<digi:trn>Are you sure you want to delete this Program and its Sub-Program(s)?</digi:trn>
+			</c:set>			
+			return confirm("${translation}");
 		}
 		function load()
 		{

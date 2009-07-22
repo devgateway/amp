@@ -133,7 +133,7 @@ public class TemplateAlertActions extends DispatchAction {
 			 templateAlert=AmpMessageUtil.getMessage(msgForm.getTemplateId());
 			 states=AmpMessageUtil.loadMessageStates(templateAlert.getId());
 			 for (AmpMessageState state : states) {
-				 AmpMessageUtil.removeMessageState(state.getId());
+				 AmpMessageUtil.removeMessageState(state);
 			}
 			 AmpMessageUtil.removeMessage(templateAlert.getId());
 		 }

@@ -3,6 +3,7 @@ package org.digijava.module.message.helper;
 import org.digijava.module.message.triggers.ActivitySaveTrigger;
 import org.digijava.module.message.triggers.ActivityDisbursementDateTrigger;
 import org.digijava.module.message.triggers.CalendarEventSaveTrigger;
+import org.digijava.module.message.triggers.RemoveCalendarEventTrigger;
 import org.digijava.module.message.triggers.UserRegistrationTrigger;
 import org.digijava.module.message.triggers.ApprovedActivityTrigger;
 import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
@@ -32,6 +33,7 @@ public class MessageConstants {
                                                                 NotApprovedActivityTrigger.class,
                                                                 CalendarEventTrigger.class, 
                                                                 CalendarEventSaveTrigger.class,
+                                                                RemoveCalendarEventTrigger.class,
                                                                 ActivityActualStartDateTrigger.class,
                                                                 ActivityCurrentCompletionDateTrigger.class,
                                                                 ActivityFinalDateForContractingTrigger.class,
@@ -47,6 +49,7 @@ public class MessageConstants {
                                                             "Activity Not Approved",
                                                             "Calendar Event", 
                                                             "Save Calendar Event",
+                                                            "Remove Calendar Event",
                                                             "Activity Actual Start Date",
                                                             "Activity Current Completion Date",
                                                             "Activity Final Date For Contracting",

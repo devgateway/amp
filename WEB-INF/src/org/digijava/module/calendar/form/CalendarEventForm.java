@@ -64,6 +64,8 @@ public class CalendarEventForm
     private Long selOrganizations[];
 	private Collection<AmpOrganisation> organizations;
 	private String description;
+	private Long eventCreatorId;
+	private Boolean actionButtonsVisible;
 	
 
 	public Long[] getSelOrganizations() {
@@ -441,4 +443,21 @@ public class CalendarEventForm
     public void setRecurrEndDate(String recurrEndDate) {
         this.recurrEndDate = recurrEndDate;
     }
+
+	public Long getEventCreatorId() {
+		return eventCreatorId;
+	}
+
+	public void setEventCreatorId(Long eventCreatorId) {
+		this.eventCreatorId = eventCreatorId;
+	}
+
+	public Boolean getActionButtonsVisible() {
+		return actionButtonsVisible;
+	}
+
+	public void setActionButtonsVisible(Boolean actionButtonsVisible) {
+		this.actionButtonsVisible = actionButtonsVisible;
+	}
+    
 }

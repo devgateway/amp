@@ -19,7 +19,7 @@ public class CalendarEventSaveTrigger extends Trigger {
 	 public static final String EVENT_START_DATE="start date";
 	 public static final String EVENT_END_DATE="end date";
 	 
-	 public static final String [] parameterNames=new String[]{PARAM_ID,PARAM_NAME,PARAM_URL};
+	 public static final String [] parameterNames=new String[]{PARAM_ID,PARAM_NAME,PARAM_URL,SENDER,EVENT_START_DATE,EVENT_END_DATE};
 
 	 public CalendarEventSaveTrigger(Object source) {
 	        if(!(source instanceof AmpCalendar)) throw new RuntimeException("Incompatible object. Source must be an AmpCalendar!");

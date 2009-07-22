@@ -97,12 +97,16 @@ div.fakefile2 input{
 					<!-- Start Navigation -->
 					<td height="33"><span class="crumb">
 						<c:set var="translation">
-							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
+							<digi:trn>Click here to goto Admin Home</digi:trn>
 						</c:set>
-                                                <digi:link module="aim" href="/admin.do" styleClass="comment" title="${translation}" >
-							<digi:trn key="aim:AmpAdminHome">
-								Admin Home
-							</digi:trn>
+                         <digi:link module="aim" href="/admin.do" styleClass="comment" title="${translation}" >
+							<digi:trn>Admin Home</digi:trn>
+						</digi:link>&nbsp;&gt;&nbsp;
+						<c:set var="trn">
+							<digi:trn>Click here to goto Message Manager</digi:trn>
+						</c:set>
+                         <digi:link module="message" href="/msgSettings.do~actionType=getSettings" styleClass="comment" title="${translation}" >
+							<digi:trn>Message Manager</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
 						<digi:trn key="message:templatesManager">Templates Manager</digi:trn>
 					</td>

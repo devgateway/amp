@@ -11,6 +11,7 @@ function Asynchronous_call(url){
          var instance=this;
          //changed POST by get for AMP-6044
           this._xmlhttp.open('GET',url,true);
+          this._xmlhttp.setRequestHeader("If-Modified-Since", "Thu, 1 Jan 1970 00:00:00 GMT");
        
             if (url.indexOf("?") > 0){
 	         	this._xmlhttp.setRequestHeader("Content-length",url.substr(url.indexOf("?")+1,url.length).length);

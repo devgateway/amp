@@ -303,6 +303,7 @@ target.style.cursor = "default"
 											
 											<td valign="top" align="left">
 												<table cellPadding=0 cellSpacing=0>
+												
 													<tr>
 														<td>
 															<bean:define id="purpKey">
@@ -316,16 +317,20 @@ target.style.cursor = "default"
 														<td>
 															<%--
 															<a href="<c:out value="${aimEditActivityForm.context}"/>/editor/showEditText.do?id=<%=descKey%>&referrer=<c:out value="${aimEditActivityForm.context}"/>/aim/addActivity.do?edit=true">Edit</a>--%>
-			
-															<a href="javascript:edit('<%=purpKey%>')">
-															<digi:trn key="aim:edit">Edit</digi:trn></a>
+																<a href="javascript:edit('<%=purpKey%>')">
+																<digi:trn key="aim:edit">Edit</digi:trn></a>
 																&nbsp;
-															<a href="javascript:commentWin('purpObjVerIndicators')" id="CommentPurpObjVerInd"><digi:trn key="aim:addEditObjVerIndicators">Add/Edit Objectively Verifiable Indicators</digi:trn></a>
-														
-															&nbsp;
-															<a href="javascript:commentWin('purpAssumption')" id="CommentPurpAssumption"><digi:trn key="aim:addEditAssumption">Add/Edit Assumption</digi:trn></a>
-															&nbsp;
-															<a href="javascript:commentWin('purpVerification')" id="CommentPurpVerification"><digi:trn key="aim:addEditVerification">Add/Edit Verification</digi:trn></a>
+															<field:display name="Purpose Verifiable Indicators" feature="Identification">
+																<a href="javascript:commentWin('purpObjVerIndicators')" id="CommentPurpObjVerInd"><digi:trn key="aim:addEditObjVerIndicators">Add/Edit Objectively Verifiable Indicators</digi:trn></a>
+																&nbsp;
+															</field:display>
+															<field:display name="Purpose Assumptions" feature="Identification">
+																<a href="javascript:commentWin('purpAssumption')" id="CommentPurpAssumption"><digi:trn key="aim:addEditAssumption">Add/Edit Assumption</digi:trn></a>
+																&nbsp;
+															</field:display>
+															<field:display name="Purpose Verifications" feature="Identification">
+																<a href="javascript:commentWin('purpVerification')" id="CommentPurpVerification"><digi:trn key="aim:addEditVerification">Add/Edit Verification</digi:trn></a>
+															</field:display>
 														</td>
 													</tr>
 												</table>
@@ -361,12 +366,17 @@ target.style.cursor = "default"
 															<a href="javascript:edit('<%=resKey%>')">
 															<digi:trn key="aim:edit">Edit</digi:trn></a>
 																&nbsp;
-															<a href="javascript:commentWin('resObjVerIndicators')" id="CommentResObjVerInd"><digi:trn key="aim:addEditObjVerIndicators">Add/Edit Objectively Verifiable Indicators</digi:trn></a>
-															
+															<field:display name="Results Verifiable Indicators" feature="Identification">
+																<a href="javascript:commentWin('resObjVerIndicators')" id="CommentResObjVerInd"><digi:trn key="aim:addEditObjVerIndicators">Add/Edit Objectively Verifiable Indicators</digi:trn></a>
 															&nbsp;
-															<a href="javascript:commentWin('resAssumption')" id="CommentResAssumption"><digi:trn key="aim:addEditAssumption">Add/Edit Assumption</digi:trn></a>
-															&nbsp;
-															<a href="javascript:commentWin('resVerification')" id="CommentResVerification"><digi:trn key="aim:addEditVerification">Add/Edit Verification</digi:trn></a>
+															</field:display>
+															<field:display name="Results Assumptions" feature="Identification">
+																<a href="javascript:commentWin('resAssumption')" id="CommentResAssumption"><digi:trn key="aim:addEditAssumption">Add/Edit Assumption</digi:trn></a>
+																&nbsp;
+															</field:display>
+															<field:display name="Results Verifications" feature="Identification">
+																<a href="javascript:commentWin('resVerification')" id="CommentResVerification"><digi:trn key="aim:addEditVerification">Add/Edit Verification</digi:trn></a>
+															</field:display>
 														</td>
 													</tr>
 												</table>

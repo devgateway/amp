@@ -22,9 +22,9 @@ def show
     
     # The country strategy is selected from all available strategies from the donor
     # that apply to the bluebook, based on the start/end dates
-
+    # This clause wasn't working: OR (start < :startYear AND 'end' > :endYear)
     @country_strategy = @donor.country_strategies.find(:first, :conditions => [
-        "applies_to_bluebook = true AND (( 'end' >= :startYear AND 'end' <= :endYear) OR (start >= :startYear AND start <= :endYear) OR (start < :startYear AND 'end' > :endYear))",
+        "applies_to_bluebook = true AND (( 'end' >= :startYear AND 'end' <= :endYear) OR (start >= :startYear AND start <= :endYear) )",
         {:startYear => "#{year}-01-01", :endYear => "#{year}-12-31" }
        ])
 

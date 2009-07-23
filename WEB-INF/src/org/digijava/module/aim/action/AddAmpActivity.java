@@ -361,7 +361,7 @@ public class AddAmpActivity extends Action {
 
       boolean activityApprovalStatusProcess=false;
 
-      if (!eaForm.isEditAct() || logframepr.compareTo("true") == 0 || request.getParameter("logframe") != null) {
+      if (eaForm.getIsPreview()==1 || !eaForm.isEditAct() || logframepr.compareTo("true") == 0 || request.getParameter("logframe") != null) {
        if (teamMember != null)
         if ("true".compareTo((String) session.getAttribute("teamLeadFlag"))==0)
             eaForm.getIdentification().setApprovalStatus(org.digijava.module.aim.helper.Constants.APPROVED_STATUS);

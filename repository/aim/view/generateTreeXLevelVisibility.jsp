@@ -32,14 +32,14 @@
     
                         <logic:equal name="aimVisibilityManagerForm" property="mode" value="addNew">
                             <input onclick="toggleChildrenVisibility('limodule:<bean:write name="moduleAux" property="root.id"/>')"
-                             type=checkbox id="moduleVis:<bean:write name="moduleAux" property="root.id"/>" 
+                             type="checkbox" id="moduleVis:<bean:write name="moduleAux" property="root.id"/>" 
                              name="moduleVis:<bean:write name="moduleAux" property="root.id"/>" 
                              value="moduleVis:<bean:write name="moduleAux" property="root.id"/>"
                             />
                         </logic:equal>
                         <logic:equal name="aimVisibilityManagerForm" property="mode" value="editTemplateTree">
                             <input onclick="toggleChildrenVisibility('limodule:<bean:write name="moduleAux" property="root.id"/>')" 
-                            type=checkbox id="moduleVis:<bean:write name="moduleAux" property="root.id"/>" 
+                            type="checkbox" id="moduleVis:<bean:write name="moduleAux" property="root.id"/>" 
                             name="moduleVis:<bean:write name="moduleAux" property="root.id"/>" 
                             value="moduleVis:<bean:write name="moduleAux" property="root.id"/>" 
                             <%= moduleAux2.isVisibleTemplateObj(currentTemplate)?"checked":"" %>
@@ -81,7 +81,7 @@
 									<li id="lifeature:<bean:write name="featureAux" property="root.id"/>" title="<digi:trn key="<%="fm:tooltip:"+featureAux.getRoot().getNameTrimmed()%>"><bean:write name="featureAux" property="root.description"/></digi:trn>">
 										<logic:equal name="aimVisibilityManagerForm" property="mode" value="addNew">
 											<input onclick="toggleChildrenVisibility('lifeature:<bean:write name="featureAux" property="root.id"/>')" 
-												type=checkbox id="featureVis:<bean:write name="featureAux" property="root.id"/>" 
+												type="checkbox" id="featureVis:<bean:write name="featureAux" property="root.id"/>" 
 												name="featureVis:<bean:write name="featureAux" property="root.id"/>" 
 											value="featureVis:<bean:write name="featureAux" property="root.id"/>"
 											/>
@@ -89,7 +89,7 @@
 
 										<logic:equal name="aimVisibilityManagerForm" property="mode" value="editTemplateTree">
 											<input onclick="toggleChildrenVisibility('lifeature:<bean:write name="featureAux" property="root.id"/>')" 
-												type=checkbox id="featureVis:<bean:write name="featureAux" property="root.id"/>" 
+												type="checkbox" id="featureVis:<bean:write name="featureAux" property="root.id"/>" 
 												name="featureVis:<bean:write name="featureAux" property="root.id"/>" 
 												value="featureVis:<bean:write name="featureAux" property="root.id"/>"
 												<%= featureAux2.isVisibleTemplateObj(currentTemplate)?"checked":"" %>
@@ -104,13 +104,13 @@
 											<bean:define id="fieldAux2" name="fieldAux" property="root" type="org.digijava.module.aim.dbentity.AmpFieldsVisibility" scope="page"/>
 											<li class="dhtmlgoodies_sheet.gif" title="<digi:trn key="<%="fm:tooltip:"+fieldAux.getRoot().getNameTrimmed()%>"><bean:write name="fieldAux" property="root.description"/></digi:trn>">
 												<logic:equal name="aimVisibilityManagerForm" property="mode" value="addNew">
-													<input type=checkbox id="fieldVis:<bean:write name="fieldAux" property="root.id"/>" 
+													<input type="checkbox" id="fieldVis:<bean:write name="fieldAux" property="root.id"/>" 
 													name="fieldVis:<bean:write name="fieldAux" property="root.id"/>" 
 													value="fieldVis:<bean:write name="fieldAux" property="root.id"/>" 
 													/>
 												</logic:equal>
 												<logic:equal name="aimVisibilityManagerForm" property="mode" value="editTemplateTree">
-													<input type=checkbox id="fieldVis:<bean:write name="fieldAux" property="root.id"/>" 
+													<input type="checkbox" id="fieldVis:<bean:write name="fieldAux" property="root.id"/>" 
 													name="fieldVis:<bean:write name="fieldAux" property="root.id"/>" 
 													value="fieldVis:<bean:write name="fieldAux" property="root.id"/>" 
 													<%= fieldAux2.isVisibleTemplateObj(currentTemplate)?"checked":"" %>

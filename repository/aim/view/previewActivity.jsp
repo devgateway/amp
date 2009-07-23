@@ -484,15 +484,15 @@ function collapseAll() {
 									</field:display>
 
 											<bean:define id="largeTextFeature" value="Identification" toScope="request"/>
-									
-											<logic:present name="aimEditActivityForm" property="identification.projectImpact">
-											<bean:define id="largeTextLabel" value="Project Impact" toScope="request"/>
-											<bean:define id="largeTextKey" toScope="request">
-												<c:out value="${aimEditActivityForm.identification.projectImpact}"/>
-											</bean:define>
-											<jsp:include page="largeTextPropertyView.jsp"/>
-											</logic:present>
-											
+											<field:display name="Project Impact" feature="Identification">
+												<logic:present name="aimEditActivityForm" property="identification.projectImpact">
+												<bean:define id="largeTextLabel" value="Project Impact" toScope="request"/>
+												<bean:define id="largeTextKey" toScope="request">
+													<c:out value="${aimEditActivityForm.identification.projectImpact}"/>
+												</bean:define>
+												<jsp:include page="largeTextPropertyView.jsp"/>
+												</logic:present>
+											</field:display>
 											<logic:present name="aimEditActivityForm" property="identification.activitySummary">
 											<bean:define id="largeTextLabel" value="Activity Summary" toScope="request"/>
 											<bean:define id="largeTextKey" toScope="request">

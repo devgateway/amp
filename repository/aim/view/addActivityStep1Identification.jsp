@@ -382,9 +382,11 @@ target.style.cursor = "default"
 											<jsp:include page="largeTextPropertyEdit.jsp"/>
 			
 											<bean:define id="largeTextLabel" value="Project Impact" toScope="request"/>
-											<bean:define id="largeTextKey" toScope="request">
-												<c:out value="${aimEditActivityForm.identification.projectImpact}"/>
-											</bean:define>
+											
+												<bean:define id="largeTextKey" toScope="request">
+													<c:out value="${aimEditActivityForm.identification.projectImpact}"/>
+												</bean:define>
+											<field:display name="Project Impact" feature="Identification">
 											<tr bgcolor="#ffffff">
 												<td valign="top" align="left">
 												
@@ -404,7 +406,7 @@ target.style.cursor = "default"
 												</table>
 												</td>
 											</tr>
-											
+											</field:display>											
 
 
 
@@ -605,7 +607,7 @@ target.style.cursor = "default"
 												</a>
 									</td>
 								</field:display>	
-									
+									<field:display name="Code Chapitre" feature="Budget"></field:display>
 									</tr>
 										<tr>
 											<field:display name="FY" feature="Budget">

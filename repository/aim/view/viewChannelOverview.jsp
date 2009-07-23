@@ -904,13 +904,14 @@ function commentWin(val) {
 
 																		</field:display>
 																		
-											<bean:define id="largeTextFeature" value="Identification" toScope="request"/>																		
-											<c:if test="${not empty activity.projectImpact}">			
-											<bean:define id="largeTextLabel" value="Project Impact" toScope="request"/>
-											<bean:define id="largeTextKey" toScope="request" name="activity" property="projectImpact"/>
-											<jsp:include page="largeTextPropertyPopup.jsp"/>
-											</c:if>
-
+											<bean:define id="largeTextFeature" value="Identification" toScope="request"/>
+											<field:display name="Project Impact" feature="Identification">																		
+												<c:if test="${not empty activity.projectImpact}">			
+												<bean:define id="largeTextLabel" value="Project Impact" toScope="request"/>
+												<bean:define id="largeTextKey" toScope="request" name="activity" property="projectImpact"/>
+												<jsp:include page="largeTextPropertyPopup.jsp"/>
+												</c:if>
+											</field:display>
 											<c:if test="${not empty activity.activitySummary}">			
 											<bean:define id="largeTextLabel" value="Activity Summary" toScope="request"/>
 											<bean:define id="largeTextKey" toScope="request" name="activity" property="activitySummary"/>

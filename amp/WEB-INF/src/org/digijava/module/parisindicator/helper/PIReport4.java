@@ -198,6 +198,9 @@ public class PIReport4 extends PIAbstractReport {
 			AmpAhsurveyResponse auxResponse = iter.next();
 			if (auxResponse.getAmpQuestionId().getQuestionNumber().intValue() == 4) {
 				if (auxResponse.getResponse() != null && !auxResponse.getResponse().equals("")) {
+					// TODO: catch for numericexceptions, in that case save
+					// the error to show it in the report page as a warning for
+					// the user, also could be a JUnit test.
 					ret = Integer.valueOf(auxResponse.getResponse()).doubleValue();
 				}
 			}
@@ -299,7 +302,7 @@ public class PIReport4 extends PIAbstractReport {
 
 		// Calculate final percentages and add 'All Donors' row.
 		if (!newList.isEmpty()) {
-			newList = this.calculatePercentages(newList, startYear, endYear); 
+			newList = this.calculatePercentages(newList, startYear, endYear);
 		}
 
 		return newList;

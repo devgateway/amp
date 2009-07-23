@@ -279,9 +279,7 @@ function closeWindow() {
             </digi:trn>
             </td>
             <td>
-               <html:text property="date" styleId="date" readonly="true" style="font-family:verdana;font-size:11px;width:80px;"/>
-                  <a href="javascript:calendar('date')">
-              <img src="../ampTemplate/images/show-calendar.gif" border="1" alt="" />
+               <html:text property="date" styleId="date" disabled="true" readonly="true" style="font-family:verdana;font-size:11px;width:80px;"/>
             </a>
             </td>
           </tr>

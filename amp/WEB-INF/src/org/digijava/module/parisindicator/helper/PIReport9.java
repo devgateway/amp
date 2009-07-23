@@ -177,7 +177,13 @@ public class PIReport9 extends PIAbstractReport {
 								} else {
 									auxRow.setColumn2(new BigDecimal(0));
 								}
-								auxRow.setColumn3(amount);
+								// Note: this check is explained in
+								// PIUtils.getSurveyAnswers();
+								if (showColumn[2]) {
+									auxRow.setColumn3(amount);
+								} else {
+									auxRow.setColumn3(new BigDecimal(0));
+								}
 								auxRow.setDonorGroup(auxPoDD.getOrgGrpId());
 								auxRow.setYear(transactionYear);
 								list.add(auxRow);

@@ -215,7 +215,9 @@ public class PIUtils {
 		} else if (PIConstants.PARIS_INDICATOR_REPORT_7.equals(reportCode)) {
 			columns = new boolean[2];
 		} else if (PIConstants.PARIS_INDICATOR_REPORT_9.equals(reportCode)) {
-			columns = new boolean[2];
+			// I added one more column to avoid showing in the report surveys
+			// with all null values (created by ActivityForm but never taken).
+			columns = new boolean[3];
 		}
 
 		// Prepare an array with all the responses (no problem if its not
@@ -258,6 +260,17 @@ public class PIUtils {
 		} else if (PIConstants.PARIS_INDICATOR_REPORT_9.equals(reportCode)) {
 			columns[0] = ("Yes".equalsIgnoreCase(answers[10]));
 			columns[1] = ("Yes".equalsIgnoreCase(answers[10]));
+			// Check if this survey has been filled in, if all answers are null
+			// then ignore the survey. This is not needed on other PI because
+			// only PI 9 has a column without answers (YES/NO) validation.
+			boolean addValue = false;
+			for (int i = 0; i < PIConstants.NUMBER_OF_SURVEY_QUESTIONS - 1; i++) {
+				if (answers[i] != null && !answers[i].equalsIgnoreCase("")) {
+					addValue = true;
+					break;
+				}
+			}
+			columns[2] = addValue;
 		}
 		return columns;
 	}

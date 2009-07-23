@@ -781,7 +781,7 @@ function showFilter(){
 	function getActivitiesURL(){
 		var result = addActionToURL('getActivities.do');
 		result+=getURL();
-		result+= pd + 'currentPage='+actCurrPage;
+		result+= pd + 'currentPage='+actCurrPage+'&timestamp=' +new Date().getTime();  ;
 		return result;
 	}
 

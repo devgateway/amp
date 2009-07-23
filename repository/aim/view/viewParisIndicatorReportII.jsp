@@ -680,10 +680,10 @@ function toggleSettings(){
 																					<c:if test="${index1 == index2}">
 																						<c:if test="${rowVal == -1}">n.a.</c:if>
 					                                                                    <c:if test="${rowVal != -1}">
-					                                                                       <c:if test="${secondVal != 0}">
-					                                                                           <fmt:formatNumber type="number" value="${firstVal*100/secondVal}" pattern="###" maxFractionDigits="0" />%
+					                                                                       <c:if test="${firstVal != 0}">
+					                                                                           <fmt:formatNumber type="number" value="${secondVal*100/firstVal}" pattern="###" maxFractionDigits="0" />%
                                                                                            </c:if>
-                                                                                           <c:if test="${secondVal == 0}">n.a.</c:if>
+                                                                                           <c:if test="${firstVal == 0}">n.a.</c:if>
 					                                                                    </c:if>
 																					</c:if>
 																					<c:if test="${index1 != index2}">

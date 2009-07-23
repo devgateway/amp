@@ -187,9 +187,9 @@ public class DbUtil {
            session = PersistenceManager.getRequestDBSession();
 
            StringBuffer querySrc = new StringBuffer();
-           querySrc.append("select ds.indicator.indicatorId, ds.indicator.name from ");
+           querySrc.append("select distinct ds.indicator.indicatorId, ds.indicator.name from ");
            querySrc.append(IndicatorSector.class.getName());
-           querySrc.append(" ds where ds.sector.ampSectorId=:sectorId  order by ds.indicator.name");
+           querySrc.append(" ds where ds.sector.ampSectorId=:sectorId order by ds.indicator.name");
 
            /*
            Query q = session.createQuery("select ds.indicator.indicatorId, ds.indicator.name from " +
@@ -456,22 +456,22 @@ public class DbUtil {
        List retVal = null;
        Session session = null;
         try {
-        	
+
         	//oracle compatibility changes
             session = PersistenceManager.getRequestDBSession();
             String query = "select distinct indval.valueDate from " +
                     AmpIndicatorValue.class.getName() +
                     " indval where indval.valueDate is not null order by indval.valueDate desc";
             Query q = session.createQuery(query);
-             
+
              retVal=new ArrayList();
-            
+
             Collection dates=q.list();
             for (Iterator iterator = dates.iterator(); iterator.hasNext();) {
             	Timestamp tmpDate = (Timestamp) iterator.next();
             	retVal.add(tmpDate.getYear());
 			}
-            
+
             return retVal;
             //retVal = q.list();
 

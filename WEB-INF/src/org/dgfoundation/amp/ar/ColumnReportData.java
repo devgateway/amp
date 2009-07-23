@@ -19,6 +19,7 @@ import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.dimension.ARDimension;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 
 /**
  * 
@@ -84,6 +85,25 @@ public class ColumnReportData extends ReportData {
 	@Override
 	public GroupReportData horizSplitByCateg(String columnName)
 			throws UnidentifiedItemException, IncompatibleColumnException {
+		
+		/** 
+		 * activitiesInColReport contains all activity ids in this report (ColumnReportData). 
+		 * While we find activities that need to me moved to a category, we remove their ID from activitiesInColReport. (check below)
+		 * At the end, if we still have activities in activitiesInColReport, they will be moved to the unallocated hierarchy.
+		 * This can happen, for example, if you do a report with hierarchy Sector and Sub-Sector and you have an activity
+		 * which belongs to Sector A (no sub-sector) and Sub-Sector b1 (which is a sub-sector of B). Since our activity would have 
+		 * information on the Sub-Sector column (b1) the engine does not that it should also appear in hierachy A in the 
+		 * 'Unallocated' sub-hierarchy. Check AmpReportGenerator.createHierachies() for more info. 
+		 */
+		Collection<Long> activitiesInColReport		= this.getOwnerIds();
+		Cell fakeCell												= AmpReportGenerator.generateFakeCell(this, null);
+		
+		/* map where we hold for each new ReportData the activities that it will contain. */
+		HashMap<ColumnReportData, Set<Long>> catToIds			= new HashMap<ColumnReportData, Set<Long>> ();
+		
+		/* flag to see if there are Cells with value unallocated */
+		boolean existsUnallocatedCateg					= false;
+		
 		GroupReportData dest = new GroupReportData(this.getName());
 		dest.setSplitterCell(this.getSplitterCell());
 
@@ -112,6 +132,10 @@ public class ColumnReportData extends ReportData {
 		while (i.hasNext()) {
 			Cell cat = (Cell) i.next();
 			
+			if ( cat.compareTo(fakeCell) == 0 ) {
+				existsUnallocatedCateg = true;
+			}
+			
 			//we check the dimension of this cell. if this cell and the current report
 			
 			if(!ARDimension.isLinkedWith(this, cat)) continue;
@@ -130,18 +154,57 @@ public class ColumnReportData extends ReportData {
 			Iterator ii = keyCol.iterator();
 			while (ii.hasNext()) {
 				Cell element = (Cell) ii.next();
-				if (element.compareTo(cat) == 0)
-					ids.add(element.getOwnerId());
+				if (element.compareTo(cat) == 0){
+					Long id		= element.getOwnerId();
+					ids.add( id );
+					
+					/* We remove the ids that appear in a category */
+					activitiesInColReport.remove( id );
+				}
 			}
-
+			
+			catToIds.put(crd, ids);
 			// now we get each column and get the dest column by applying the
 			// filter
-			ii = this.getItems().iterator();
+			/*ii = this.getItems().iterator();
 			while (ii.hasNext()) {
 				Column col = (Column) ii.next();
 				crd.addColumn(col.filterCopy(cat, ids));
+			}*/
+		}
+		
+		/* We create fake cells for all activities that would otherwise just disappear in the newly create GroupReportData */
+		for ( Long id: activitiesInColReport ){
+			logger.info("The following activity needs to be added to the Unallocated category: " + id );
+			fakeCell	= AmpReportGenerator.generateFakeCell(this, id);
+			( (CellColumn)keyCol ).addCell(fakeCell);
+		}
+		/* If the unallocated category doesn't already exist we need to create it */
+		if ( activitiesInColReport.size() > 0 && !existsUnallocatedCateg  ) {
+			logger.info("Unallocated category was not created for " + keyCol.getColumnId() + ". Adding it now.");
+			ColumnReportData crd	= new ColumnReportData( (String) keyCol.getColumnId() + ": " + fakeCell.toString() );
+			crd.setSplitterCell(fakeCell);
+			dest.addReport(crd);
+			catToIds.put(crd, new TreeSet<Long>()) ;
+		}
+		
+		/* Now that we have everything set we can filter-copy all the columns in the new ColumnReportDatas*/
+		Iterator<ColumnReportData> cellIter			= catToIds.keySet().iterator();
+		while ( cellIter.hasNext() ) {
+			ColumnReportData crd		= cellIter.next();
+			Set ids								= catToIds.get(crd);
+			Cell cat								= crd.getSplitterCell();
+			
+			/* If this is the Unallocated category we add all remaining activity IDs to it*/
+			if ( crd.getSplitterCell().compareTo(fakeCell) == 0 ) {
+				ids.addAll( activitiesInColReport );
 			}
-
+			
+			Iterator<Column> ii = this.getItems().iterator();
+			while (ii.hasNext()) {
+				Column col =  ii.next();
+				crd.addColumn(col.filterCopy(cat, ids));
+			}
 		}
 
 		return dest;

@@ -739,5 +739,28 @@ public class AmpReportGenerator extends ReportGenerator {
 
 		attachFundingMeta();
 	}
+	
+	public static Cell generateFakeCell (ColumnReportData rd, Long activityId) {
+		Cell fakeC = new TextCell();
+		fakeC.setValue(ArConstants.UNALLOCATED);
+		fakeC.setOwnerId( activityId );
+		
+		// requirements for translation purposes
+		String siteId = rd.getParent().getReportMetadata().getSiteId();
+		String locale = rd.getParent().getReportMetadata().getLocale();
+		String text = fakeC.getValue().toString();
+		String translatedText = null;
+		//String prefix = "aim:reportGenerator:"; not used cos hash keys
+		try {
+			translatedText = TranslatorWorker.translateText(text, locale, siteId);
+		} catch (WorkerException e) {
+			e.printStackTrace();
+		}
+		if (translatedText.compareTo("") == 0)
+			translatedText = text;
+		//
+		fakeC.setValue(translatedText);
+		return fakeC;
+	}
 
 }

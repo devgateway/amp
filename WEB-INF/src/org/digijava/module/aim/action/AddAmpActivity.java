@@ -417,11 +417,9 @@ public class AddAmpActivity extends Action {
         eaForm.setStep("1");
         // When the contents are saved the editor module redirects to the url specified in the 'referrer' parameter
         session.setAttribute("activityName", eaForm.getIdentification().getTitle());
-        String url = "/editor/showEditText.do?id=" + eaForm.getEditKey() +"&lang="+RequestUtils.
-                        getNavigationLanguage(request).
-                        getCode()+
-            "&referrer=" + eaForm.getContext() +
-            "/aim/addActivity.do?edit=true";
+        session.setAttribute("activityFieldName", request.getParameter("fieldName"));
+        String url = "/editor/showEditText.do?id=" + eaForm.getEditKey() +"&lang="+RequestUtils.getNavigationLanguage(request).getCode()+
+            "&referrer=" + eaForm.getContext() +"/aim/addActivity.do?edit=true";
         response.sendRedirect(eaForm.getContext() + url);
       }
       else if (eaForm.getStep().equals("1_5")) { // show the 'Refernces' step page.

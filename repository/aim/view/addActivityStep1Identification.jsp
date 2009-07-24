@@ -209,7 +209,7 @@ target.style.cursor = "default"
 													</tr>
 													<tr>
 														<td>
-															<a href="javascript:edit('${projcomKey}')">
+															<a href="javascript:edit('${projcomKey}','Project Comments')">
 															<digi:trn key="aim:edit">Edit</digi:trn></a>															
 														</td>
 													</tr>
@@ -240,7 +240,7 @@ target.style.cursor = "default"
 															<a href="<c:out value="${aimEditActivityForm.context}"/>/editor/showEditText.do?id=<%=objKey%>&referrer=<c:out value="${aimEditActivityForm.context}"/>/aim/addActivity.do?edit=true">Edit</a>
 															--%>
 															
-																<a href="javascript:edit('<%=objKey%>')">
+																<a href="javascript:edit('<%=objKey%>','objective')">
 																<digi:trn key="aim:edit">Edit</digi:trn></a>	
 																&nbsp;
 															
@@ -283,7 +283,7 @@ target.style.cursor = "default"
 															<%--
 															<a href="<c:out value="${aimEditActivityForm.context}"/>/editor/showEditText.do?id=<%=descKey%>&referrer=<c:out value="${aimEditActivityForm.context}"/>/aim/addActivity.do?edit=true">Edit</a>
 															--%>
-																<a href="javascript:edit('<%=descKey%>')">
+																<a href="javascript:edit('<%=descKey%>','Project Description')">
 																<digi:trn key="aim:edit">Edit</digi:trn></a>															
 														</td>
 													</tr>
@@ -317,7 +317,7 @@ target.style.cursor = "default"
 														<td>
 															<%--
 															<a href="<c:out value="${aimEditActivityForm.context}"/>/editor/showEditText.do?id=<%=descKey%>&referrer=<c:out value="${aimEditActivityForm.context}"/>/aim/addActivity.do?edit=true">Edit</a>--%>
-																<a href="javascript:edit('<%=purpKey%>')">
+																<a href="javascript:edit('<%=purpKey%>','Purpose')">
 																<digi:trn key="aim:edit">Edit</digi:trn></a>
 																&nbsp;
 															<field:display name="Purpose Verifiable Indicators" feature="Identification">
@@ -363,7 +363,7 @@ target.style.cursor = "default"
 															<%--
 															<a href="<c:out value="${aimEditActivityForm.context}"/>/editor/showEditText.do?id=<%=descKey%>&referrer=<c:out value="${aimEditActivityForm.context}"/>/aim/addActivity.do?edit=true">Edit</a>--%>
 			
-															<a href="javascript:edit('<%=resKey%>')">
+															<a href="javascript:edit('<%=resKey%>','Results')">
 															<digi:trn key="aim:edit">Edit</digi:trn></a>
 																&nbsp;
 															<field:display name="Results Verifiable Indicators" feature="Identification">
@@ -411,7 +411,7 @@ target.style.cursor = "default"
 														<td><digi:edit key="${largeTextKey}" /></td>
 													</tr>
 													<tr>
-														<td><a href="javascript:edit('${largeTextKey}')"><digi:trn key="aim:edit">Edit</digi:trn></a></td>
+														<td><a href="javascript:edit('${largeTextKey}','Project Impact')"><digi:trn key="aim:edit">Edit</digi:trn></a></td>
 													</tr>
 												</table>
 												</td>

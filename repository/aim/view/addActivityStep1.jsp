@@ -241,9 +241,9 @@ function selectOrganisation() {
 	document.aimEditActivityForm.submit();
 }
 
-function edit(key) {
-    <digi:context name="nextSetp" property="context/module/moduleinstance/addActivity.do" />
-    document.aimEditActivityForm.action = "<%= nextSetp %>";
+function edit(key,fieldName) {
+    <digi:context name="nextSetp" property="context/module/moduleinstance/addActivity.do"/>
+    document.aimEditActivityForm.action = "<%= nextSetp %>?fieldName="+fieldName;
     document.aimEditActivityForm.target = "_self"
 
   document.aimEditActivityForm.editKey.value = key;

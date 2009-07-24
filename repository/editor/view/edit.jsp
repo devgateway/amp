@@ -65,34 +65,40 @@ function validate(){
 	<digi:form  onsubmit="return validate()" action="/saveText.do" method="post">
 
 	<html:hidden name="editorForm" property="key"/>
-
 	<html:hidden name="editorForm" property="lang"/>
-
 	<html:hidden name="editorForm" property="returnUrl"/>
-        <html:hidden name="editorForm" property="title"/>
-        <c:if test="${not empty editorForm.activityName}">
+    <html:hidden name="editorForm" property="title"/>
+    
+    <c:if test="${not empty editorForm.activityName}">
             <table width="80%">
                 <tr><td><br/></td></tr>
                 <tr>
-                    
-                    <td noWrap width="7%" align="right"><B><digi:trn key="editor:title">Title</digi:trn>:</B>
-                        
+                    <td noWrap width="7%" align="right">
+                    	<B><digi:trn>Title</digi:trn>:</B>                       
                     </td>
-                        
                     <td width="93%">
-                        
                         <html:text name="editorForm" property="activityName" size="70"  readonly="true"/>
-                            
                     </td>
-                        
-                </tr>
-                    
-            </table><BR></c:if>
-            <FCK:editor id="content"   basePath="/FCKeditor/"
-            width="80%"
-            height="500" toolbarSet="AMP" defaultLanguage="${editorForm.lang}">
-          ${editorForm.content}
-           </FCK:editor>
+                </tr>                    
+            </table>
+    </c:if>
+    <c:if test="${not empty editorForm.activityFieldName}">
+            <table width="80%">
+                <tr><td><br/></td></tr>
+                <tr>
+                    <td noWrap width="7%" align="right">
+                    	<B><digi:trn>Field</digi:trn>:</B>                       
+                    </td>
+                    <td width="93%">
+                        <html:text name="editorForm" property="activityFieldName" size="70"  readonly="true"/>
+                    </td>
+                </tr>                    
+            </table>
+    </c:if>
+    <br>        
+       <FCK:editor id="content"   basePath="/FCKeditor/" width="80%" height="500" toolbarSet="AMP" defaultLanguage="${editorForm.lang}">
+       		${editorForm.content}
+       </FCK:editor>
 
 
 	<b><span style="color: #cc4000">

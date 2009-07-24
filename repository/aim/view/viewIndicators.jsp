@@ -70,7 +70,7 @@ a.itr:hover {
 	}
 	
 	function addIndicator(){
-	  <digi:context name="addIndicator" property="context/module/moduleinstance/addNewIndicator.do" />
+	  <digi:context name="addIndicator" property="context/module/moduleinstance/addNewIndicator.do?indicator=new" />
 	  openURLinWindow("<%= addIndicator %>",500, 300);
 	}
 	
@@ -243,7 +243,7 @@ a.itr:hover {
 																 Click here to Delete Indicator
 														</digi:trn>
 													</c:set>
-														<digi:link href="/viewIndicators.do~indicator=delete${tIndType}" name="urlParams" title="${translation}" onclick="return deletePrgIndicator()">
+														<digi:link href="/removeIndicator.do" name="urlParams" title="${translation}" onclick="return deletePrgIndicator()">
 															<img src= "../ampTemplate/images/trash_12.gif" border=0>
 														</digi:link>
 											</td>

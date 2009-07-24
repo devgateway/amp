@@ -33,9 +33,6 @@ public class ViewIndicators
       
         ViewIndicatorsForm allIndForm = (ViewIndicatorsForm) form;
         allIndForm.setThemeName("");
-        
-        String types = request.getParameter("indicator");
-        String id = request.getParameter("indicatorId");
         String view = request.getParameter("sector");
     
         if(view!=null){
@@ -45,14 +42,6 @@ public class ViewIndicators
         	
          }
         }
-  
-        if (types != null && id != null){
-            if(types.equals("delete")){
-  
-            	IndicatorUtil.deleteIndicator(new Long(id));
-            	
-             }
-            }
         
         List<AmpIndicator>  searchResult = IndicatorUtil.getAllIndicators();
         Collection allSectors = SectorUtil.getAllParentSectors();

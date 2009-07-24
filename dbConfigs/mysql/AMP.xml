@@ -177,6 +177,7 @@
 					</SQL>
 				</NameExpression>
 			</Level>
+			<level name="Amounts" column="raw_amount" formatter="org.digijava.module.mondrian.Formatter.CurrencyFormatter"/>
 		</Hierarchy>
 	</Dimension>
 	

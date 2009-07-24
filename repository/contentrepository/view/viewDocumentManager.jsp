@@ -205,7 +205,7 @@ function setHoveredTable(tableId, hasHeaders) {
 	</tr>
 	<tr>
 		<td align=left vAlign=top>
-				
+			<div id="menuContainerDiv"></div>	
 			<span class="subtitle-blue"> &nbsp;&nbsp; 
 				<digi:trn key="contentrepository:contentRepository">
 							Content Repository

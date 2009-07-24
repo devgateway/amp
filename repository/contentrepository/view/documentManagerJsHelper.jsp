@@ -27,16 +27,16 @@
 .versions_markup .yui-dt-sortedbydesc .yui-dt-headcontainer {background: url('/repository/contentrepository/view/images/down.gif') no-repeat right;}/*arrow down*/
 .versions_markup .yui-dt-sortedbyasc, .versions_markup .yui-dt-sortedbydesc {background-color: rgb(153, 153, 153); color: black;}
 
-#otherDocumentsDiv .yuimenu {z-index: 101;}
-#otherDocumentsDiv ul.first-of-type { background: transparent; z-index: 300000;} 
-#otherDocumentsDiv ul.first-of-type li  {
+#menuContainerDiv .yuimenu {z-index: 101;}
+#menuContainerDiv ul.first-of-type { background: transparent; z-index: 300000;} 
+#menuContainerDiv ul.first-of-type li  {
 	background: transparent; z-index: 300001
 }
-#otherDocumentsDiv ul.first-of-type li.selected  {
+#menuContainerDiv ul.first-of-type li.selected  {
 	background: #8c8ad0;
 }
-#otherDocumentsDiv ul.first-of-type a{float: none; background: transparent; color: #000000; font-size: 10px; text-decoration: none; font-style: normal;}
-#otherDocumentsDiv ul.first-of-type li.selected a.selected{ 
+#menuContainerDiv ul.first-of-type a{float: none; background: transparent; color: #000000; font-size: 10px; text-decoration: none; font-style: normal;}
+#menuContainerDiv ul.first-of-type li.selected a.selected{ 
 	color: #ffffff; text-decoration: underline; font-size: 10px; font-style: normal;
 }
 </style>
@@ -508,7 +508,7 @@ function newWindow(title, showSelectButton, otherDocumentsDiv) {
 	
 	var menuObj						= null;
 	if (showSelectButton) {
-				menuObj	= addMenuToDocumentList(YAHOO.amp.num_of_tables, newDiv, windowController);
+				menuObj	= addMenuToDocumentList(YAHOO.amp.num_of_tables, document.getElementById("menuContainerDiv"), windowController);
 				YAHOO.util.Event.addListener(otherDocumentsButtonElement, "click", showMenu, menuObj, true);
 	}
 	

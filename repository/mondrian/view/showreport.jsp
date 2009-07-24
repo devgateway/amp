@@ -12,21 +12,13 @@
   <link rel="stylesheet" type="text/css" href="../../../wcf/table/xtable.css">
   <link rel="stylesheet" type="text/css" href="../../../wcf/tree/xtree.css">
   
- <script type="text/javascript">
-
-function sendForm(){
-	document.ShowReportForm.action.value= "save"
-	document.ShowReportForm.submit();	
-}
-
-</script>
-
 <html>
+ <jsp:include page="saveReport.jsp" flush="true" />
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 </head>
 <body bgcolor=white>
-<digi:instance property="ShowReportForm" />
+
 <digi:form action="/showreport.do"  method="post">
 <%-- include query and title, so this jsp may be used with different queries --%>
 <wcf:include id="include01" httpParam="pagename" prefix="/WEB-INF/queries/" suffix=".jsp"/>
@@ -52,7 +44,7 @@ function sendForm(){
 <%-- define a toolbar --%>
 <wcf:toolbar  id="toolbar01" bundle="com.tonbeller.jpivot.toolbar.resources">
   <wcf:scriptbutton id="cubeNaviButton" tooltip="toolb.cube" img="cube" model="#{navi01.visible}"/>
-  <wcf:scriptbutton id="mdxEditButton" tooltip="toolb.mdx.edit" img="mdx-edit" model="#{mdxedit01.visible}" visibleRef="false"/>
+  <wcf:scriptbutton id="mdxEditButton" tooltip="toolb.mdx.edit" img="mdx-edit" model="#{mdxedit01.visible}"/>
   <wcf:scriptbutton id="sortConfigButton" tooltip="toolb.table.config" img="sort-asc" model="#{sortform01.visible}"/>
   <wcf:separator/>
   <wcf:scriptbutton id="levelStyle" tooltip="toolb.level.style" img="level-style" model="#{table01.extensions.axisStyle.levelStyle}"/>
@@ -72,7 +64,9 @@ function sendForm(){
   <wcf:scriptbutton  id="printPropertiesButton01" tooltip="toolb.print.config" img="print-config" model="#{printform01.visible}"/>
   <wcf:imgbutton id="printpdf" tooltip="toolb.print" img="print" href="../../../Print.out?cube=01&type=1"/>
   <wcf:imgbutton id="printxls" tooltip="toolb.excel" img="excel" href="../../../Print.out?cube=01&type=0"/>
-</wcf:toolbar>
+  <wcf:separator/>
+  <wcf:imgbutton id="save" tooltip="save report" img="save" href="javascript:mainSaveReports()"/>
+ </wcf:toolbar>
 
 <%-- render toolbar --%>
 <wcf:render ref="toolbar01" xslUri="/WEB-INF/jpivot/toolbar/htoolbar.xsl" xslCache="false"/>

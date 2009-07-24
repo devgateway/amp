@@ -49,9 +49,6 @@ public class ShowReport extends Action {
 			throws java.lang.Exception {
 		ShowReportForm tf = (ShowReportForm) form;
 		HttpSession session = request.getSession();
-		String action = request.getParameter("action");
-		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-		String currentmdx = null;
 		String id = request.getParameter("id");
 		if (id!=null){
 			OffLineReports report = EntityHelper.LoadReport(Long.parseLong(id));

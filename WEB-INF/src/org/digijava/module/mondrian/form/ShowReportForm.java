@@ -8,7 +8,9 @@ public class ShowReportForm extends ActionForm{
 
 	
 	private static final long serialVersionUID = 1L;
+	private String reportname;
 	private String lastdate;
+
 	public String getLastdate() {
 		return lastdate;
 	}
@@ -16,4 +18,12 @@ public class ShowReportForm extends ActionForm{
 		this.lastdate = lastdate;
 	}
 	
+	
+	public String getReportname() {
+		return reportname;
+	}
+
+	public void setReportname(String reportname) {
+		this.reportname = reportname;
+	}
 }

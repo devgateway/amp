@@ -4,6 +4,7 @@
   <form-beans>
   	<form-bean name="MainReportsForm" type="org.digijava.module.mondrian.form.MainReportsForm"/>
   	<form-bean name="ShowReportForm" type="org.digijava.module.mondrian.form.ShowReportForm"/>
+  	<form-bean name="SaveHtmlForm" type="org.digijava.module.mondrian.form.SaveHtmlForm"/>
   </form-beans>
   
   <action-mappings>
@@ -12,6 +13,10 @@
     </action>
     <action name="ShowReportForm" path="/mondrian/showreport" scope="session" type="org.digijava.module.mondrian.action.ShowReport">
     	<forward name="forward" path="/showLayout.do?layout=showreport"/>
+    </action>
+    <action name="SaveHtmlForm" path="/mondrian/SaveHtml" scope="session" type="org.digijava.module.mondrian.action.SaveHtml">
+    	<forward name="forward" path="/showLayout.do?layout=savehtml"/>
+    	<forward name="mainreport" path="/mondrian/mainreports.do" redirect="true"/>
     </action>
    </action-mappings>
 </struts-config>

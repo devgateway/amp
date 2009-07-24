@@ -140,7 +140,7 @@ public class AmpReportGenerator extends ReportGenerator {
 			AmpReportHierarchy element = (AmpReportHierarchy) ii.next();
 			AmpReportColumn arc = new AmpReportColumn();
 			arc.setColumn(element.getColumn());
-			arc.setOrderId(new String("1"));
+			arc.setOrderId(1L);
 			extractable.add(arc);
 		}
 		if(!filter.isJustSearch()){
@@ -246,7 +246,7 @@ public class AmpReportGenerator extends ReportGenerator {
 					older.addCell(o);
 				    
 				} else {
-				    rawColumns.addColumn(new Integer(rcol.getOrderId()), column);
+					rawColumns.addColumn(rcol.getOrderId().intValue(), column);
 				    rawColumnsByName.put(column.getName(), (CellColumn) column);
 				}
 			}
@@ -331,7 +331,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		AmpReportColumn arc = new AmpReportColumn();
 		AmpColumns ac = new AmpColumns();
 		arc.setColumn(ac);
-		arc.setOrderId(new String("0"));
+		arc.setOrderId(0L);
 		ac.setCellType("org.dgfoundation.amp.ar.cell.CategAmountCell");
 		ac.setColumnName(ArConstants.COLUMN_FUNDING);
 		if (reportMetadata.getType().intValue() == ArConstants.DONOR_TYPE)
@@ -355,7 +355,7 @@ public class AmpReportGenerator extends ReportGenerator {
 			AmpReportColumn arcProp = new AmpReportColumn();
 			AmpColumns acProp = new AmpColumns();
 			arcProp.setColumn(acProp);
-			arcProp.setOrderId(new String("0"));
+			arcProp.setOrderId(0L);
 			acProp.setCellType("org.dgfoundation.amp.ar.cell.CategAmountCell");
 			acProp.setColumnName(ArConstants.COLUMN_FUNDING);
 			acProp.setExtractorView(ArConstants.VIEW_PROPOSED_COST);

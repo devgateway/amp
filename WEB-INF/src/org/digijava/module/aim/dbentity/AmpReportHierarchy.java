@@ -15,7 +15,7 @@ public class AmpReportHierarchy implements Serializable, Comparable
 	@ColumnLike
 	private AmpColumns column;
 	@Order
-	private String levelId;
+	private Long levelId;
 	@Level
 	private AmpCategoryValue level;
 	
@@ -33,10 +33,10 @@ public class AmpReportHierarchy implements Serializable, Comparable
 	public void setColumn(AmpColumns column) {
 		this.column = column;
 	}
-	public String getLevelId() {
+	public Long getLevelId() {
 		return levelId;
 	}
-	public void setLevelId(String levelId) {
+	public void setLevelId(Long levelId) {
 		this.levelId = levelId;
 	}
 	public AmpCategoryValue getLevel() {
@@ -48,9 +48,9 @@ public class AmpReportHierarchy implements Serializable, Comparable
 	
 	public int compareTo(Object o) {
 		try {
-			int myOrder	= Integer.parseInt(levelId);
-			int oOrder	= Integer.parseInt( ((AmpReportHierarchy)o).getLevelId() );
-			return myOrder-oOrder;
+			Long myOrder	= levelId;
+			Long oOrder	=  ((AmpReportHierarchy)o).getLevelId() ;
+			return myOrder.intValue()-oOrder.intValue();
 		}
 		catch (NumberFormatException e) {
 			e.printStackTrace();

@@ -60,6 +60,7 @@ public class GroupReportDataXLS extends XLSExporter {
 		
 		//show Headings:		
 		ReportHeadingsXLS headings=new ReportHeadingsXLS(this,grd.getFirstColumnReport());
+		headings.setAutoSize(this.isAutoSize());
 		headings.generate();
 
 		//		trail cells:

@@ -28,15 +28,17 @@ function resetFilter(){
 		
 		if (aimReportsFilterPickerForm.selectedSectors)
 			aimReportsFilterPickerForm.selectedSectors.selectedIndex=-1;
+		
 		if (aimReportsFilterPickerForm.selectedSecondarySectors)
 			aimReportsFilterPickerForm.selectedSecondarySectors.selectedIndex=-1;
-                    
           
-          if (aimReportsFilterPickerForm.selectedNatPlanObj)
+        if (aimReportsFilterPickerForm.selectedNatPlanObj)
               aimReportsFilterPickerForm.selectedNatPlanObj.selectedIndex=-1;
-          if (aimReportsFilterPickerForm.selectedPrimaryPrograms)
+        
+        if (aimReportsFilterPickerForm.selectedPrimaryPrograms)
               aimReportsFilterPickerForm.selectedPrimaryPrograms.selectedIndex=-1;
-          if (aimReportsFilterPickerForm.selectedSecondaryPrograms)
+        
+        if (aimReportsFilterPickerForm.selectedSecondaryPrograms)
               aimReportsFilterPickerForm.selectedSecondaryPrograms.selectedIndex=-1;
 			
 		if (aimReportsFilterPickerForm.selectedBudget)
@@ -68,6 +70,7 @@ function resetFilter(){
 		
 		if (aimReportsFilterPickerForm.selectedFinancingInstruments)
 			aimReportsFilterPickerForm.selectedFinancingInstruments.selectedIndex=-1;
+		
 		if (aimReportsFilterPickerForm.selectedTypeOfAssistance)
 			aimReportsFilterPickerForm.selectedTypeOfAssistance.selectedIndex=-1;
 			
@@ -82,15 +85,16 @@ function resetFilter(){
 
 		if (aimReportsFilterPickerForm.selectedBeneficiaryAgency)
 			aimReportsFilterPickerForm.selectedBeneficiaryAgency.selectedIndex=-1;
+
 		if (aimReportsFilterPickerForm.selectedExecutingAgency)
 			aimReportsFilterPickerForm.selectedExecutingAgency.selectedIndex=-1;
+		
 		if (aimReportsFilterPickerForm.selectedImplementingAgency)
 			aimReportsFilterPickerForm.selectedImplementingAgency.selectedIndex=-1;
 		
 		if (aimReportsFilterPickerForm.selectedDonnorAgency)
 			aimReportsFilterPickerForm.selectedDonnorAgency.selectedIndex=-1;
-		
-		
+	
 		if (aimReportsFilterPickerForm.jointCriteria){
 			aimReportsFilterPickerForm.jointCriteria.checked=false;
 		}

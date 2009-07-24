@@ -31,11 +31,12 @@ public abstract class XLSExporter extends Exporter {
 	protected static Logger logger = Logger.getLogger(XLSExporter.class);
 
 	public static void resetStyles() {
-		regularStyle=null;
-		amountStyle=null;
-		highlightedStyle=null;
+        regularStyle = null;
+        amountStyle = null;
+        highlightedStyle = null;
 	}
 	
+	private boolean autoSize = true;
 	protected static HSSFCellStyle regularStyle = null;
 	protected static HSSFCellStyle amountStyle = null;
 	protected static HSSFCellStyle highlightedStyle = null;
@@ -54,7 +55,7 @@ public abstract class XLSExporter extends Exporter {
 
 	protected HSSFCell getRegularCell(HSSFRow row) {
 		HSSFCell cell = row.createCell(colId.shortValue());
-		cell.setCellStyle(this.getRegularStyle());
+		cell.setCellStyle(this.getAmountStyle());
 		return cell;
 	}
 
@@ -101,7 +102,6 @@ public abstract class XLSExporter extends Exporter {
 			cs.setBorderTop(HSSFCellStyle.BORDER_NONE);
 			HSSFDataFormat df = wb.createDataFormat();
 			cs.setDataFormat(df.getFormat("General"));
-			//cs.setDataFormat(df.getFormat("_(*###,###,###,###);_(*###,###,###,###.##)"));
 		
 			cs.setFont(font);
 			cs.setWrapText(true);
@@ -113,29 +113,29 @@ public abstract class XLSExporter extends Exporter {
 
 	
 	protected HSSFCellStyle getHighlightedStyle(boolean border) {
-		if(highlightedStyle==null) {
-		HSSFCellStyle cs = wb.createCellStyle();
-		cs.setFillForegroundColor(HSSFColor.WHITE.index);
-		cs.setFillPattern((short) HSSFCellStyle.SOLID_FOREGROUND);
-		HSSFFont font = wb.createFont();
-		font.setFontName(HSSFFont.FONT_ARIAL);
-		font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-		cs.setAlignment(HSSFCellStyle.ALIGN_LEFT);
-		if (border){
-			cs.setBorderBottom(HSSFCellStyle.BORDER_MEDIUM);
-			cs.setBorderLeft(HSSFCellStyle.BORDER_MEDIUM);
-			cs.setBorderRight(HSSFCellStyle.BORDER_MEDIUM);
-			cs.setBorderTop(HSSFCellStyle.BORDER_MEDIUM);
-			
-		}else{
-			cs.setBorderBottom(HSSFCellStyle.BORDER_NONE);
-			cs.setBorderLeft(HSSFCellStyle.BORDER_NONE);
-			cs.setBorderRight(HSSFCellStyle.BORDER_NONE);
-			cs.setBorderTop(HSSFCellStyle.BORDER_NONE);
-		}
-			cs.setFont(font);		
-		highlightedStyle=cs;
-		}
+        if (highlightedStyle == null) {
+            HSSFCellStyle cs = wb.createCellStyle();
+            cs.setFillForegroundColor(HSSFColor.WHITE.index);
+            cs.setFillPattern((short) HSSFCellStyle.SOLID_FOREGROUND);
+            HSSFFont font = wb.createFont();
+            font.setFontName(HSSFFont.FONT_ARIAL);
+            font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+            cs.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+            if (border) {
+                      cs.setBorderBottom(HSSFCellStyle.BORDER_MEDIUM);
+                      cs.setBorderLeft(HSSFCellStyle.BORDER_MEDIUM);
+                      cs.setBorderRight(HSSFCellStyle.BORDER_MEDIUM);
+                      cs.setBorderTop(HSSFCellStyle.BORDER_MEDIUM);
+            } else {
+                      cs.setBorderBottom(HSSFCellStyle.BORDER_NONE);
+                      cs.setBorderLeft(HSSFCellStyle.BORDER_NONE);
+                      cs.setBorderRight(HSSFCellStyle.BORDER_NONE);
+                      cs.setBorderTop(HSSFCellStyle.BORDER_NONE);
+            }
+            cs.setFont(font);
+            highlightedStyle = cs;
+        }
+		
 		return highlightedStyle;
 	}
 
@@ -172,12 +172,16 @@ public abstract class XLSExporter extends Exporter {
 			e.printStackTrace();
 		}
 	
+        if (this.autoSize) {
+            sheet.autoSizeColumn(r.getColumnFrom());
+        }
 		colId.inc(++size);
 	}
 
 	public void makeRowSpan(int size) {
 		sheet.addMergedRegion(new Region(rowId.intValue(), colId.shortValue(),
 				rowId.intValue() + size, colId.shortValue()));
+	
 	}
 
 	/**
@@ -295,5 +299,10 @@ public abstract class XLSExporter extends Exporter {
 	public void setWb(HSSFWorkbook wb) {
 		this.wb = wb;
 	}
-
+    public boolean isAutoSize() {
+        return autoSize;
+}
+public void setAutoSize(boolean autoSize) {
+        this.autoSize = autoSize;
+}
 }

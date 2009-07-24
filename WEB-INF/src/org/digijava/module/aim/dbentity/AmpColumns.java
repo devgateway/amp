@@ -18,13 +18,22 @@ public class AmpColumns  implements Serializable, Comparable
 	private Set filters;
 	private String tokenExpression;
 	private String relatedContentPersisterClass;
-	
+	private String description;
 	/**
 	 * true if the column data is needed in order for correct filtering to be applied
 	 * @see http://bugs.digijava.org/jira/browse/AMP-3454?focusedCommentId=39811#action_39811
 	 */
 	private Boolean filterRetrievable;
 	
+
+
+    public String getDescription() {
+        return description;
+    }
+    
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
 	public Boolean getFilterRetrievable() {
 		return filterRetrievable;

@@ -68,7 +68,41 @@ public final class ArConstants {
 	public final static String COMMITMENT="Commitments";
 	public final static String DISBURSEMENT="Disbursements";
 	public final static String EXPENDITURE="Expenditures";
-	
+    
+	//Computed Field Constants
+    //
+    public final static String MAX_ACTUAL_COMMITMENT="MAX_ACTUAL_COMMITMENT";
+    public final static String MAX_ACTUAL_DISBURSEMENT="MAX_ACTUAL_DISBURSEMENT";
+    
+    public final static String MAX_PLANNED_COMMITMENT="MAX_PLANNED_COMMITMENT";
+    public final static String MAX_PLANNED_DISBURSEMENT="MAX_PLANNED_DISBURSEMENT";
+    
+    public final static String MIN_ACTUAL_COMMITMENT="MIN_ACTUAL_COMMITMENT";
+    public final static String MIN_ACTUAL_DISBURSEMENT="MIN_ACTUAL_DISBURSEMENT";
+    
+    public final static String MIN_PLANNED_COMMITMENT="MIN_PLANNED_COMMITMENT";
+    public final static String MIN_PLANNED_DISBURSEMENT="MIN_PLANNED_DISBURSEMENT";
+    public final static String COUNT_PROJECTS="COUNT_PROJECTS";
+    
+    //funding variable  names
+    public final static String ACTUAL_COMMITMENT="ACTUAL_COMMITMENT";
+    public final static String ACTUAL_DISBURSEMENT="ACTUAL_DISBURSEMENT";
+    public final static String ACTUAL_EXPENDITURET="ACTUAL_EXPENDITURET";
+    public final static String PLANNED_COMMITMENT="PLANNED_COMMITMENT";
+    public final static String PLANNED_DISBURSEMENT="PLANNED_DISBURSEMENT";
+    public final static String PLANNED_EXPENDITURE="PLANNED_EXPENDITURE";
+    
+    //dates variable names
+    public final static String ACTIVITY_CLOSE_DATE_VALUE = "ACTIVITY_CLOSE_DATE_VALUE";
+    public final static String ACTUAL_START_DATE_VALUE = "ACTUAL_START_DATE_VALUE";
+    public final static String ACTUAL_APPROVAL_DATE_VALUE = "ACTUAL_APPROVAL_DATE_VALUE";
+    public final static String ACTIVITY_APPROVAL_DATE_VALUE = "ACTIVITY_APPROVAL_DATE_VALUE";
+    public final static String PROPOSED_START_DATE_VALUE = "PROPOSED_START_DATE_VALUE";
+    public final static String ACTUAL_COMPLETION_DATE_VALUE = "ACTUAL_COMPLETION_DATE_VALUE";
+    public final static String PROPOSED_COMPLETION_DATE_VALUE = "PROPOSED_COMPLETION_DATE_VALUE";
+    public final static String CURRENT_DATE_VALUE="CURRENT_DATE_VALUE";
+    //end computed filds 
+    
 	public final static String PLANNED="Planned";
 	public final static String ACTUAL="Actual";
 	

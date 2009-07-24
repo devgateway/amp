@@ -315,7 +315,7 @@ public class ReportWizardAction extends MultiAction {
 					if ( ArConstants.COLUMN_PROJECT_TITLE.equals(tempCol.getColumnName()) ) {
 						AmpReportColumn titleCol			= new AmpReportColumn();
 						titleCol.setLevel(level1);
-						titleCol.setOrderId( (ampReport.getColumns().size()+1) + "" );
+						titleCol.setOrderId( new Long((ampReport.getColumns().size()+1)));
 						titleCol.setColumn(tempCol); 
 						
 						ampReport.getColumns().add(titleCol);
@@ -410,7 +410,7 @@ public class ReportWizardAction extends MultiAction {
 			invokeSetterForBeanPropertyWithAnnotation(reportField, Level.class, param1 );
 			//rc.setLevel(level);
 			Object [] param2			= new Object[1];
-			param2[0]					= "" + (i+1);
+			param2[0]					=  new Long(i+1);
 			invokeSetterForBeanPropertyWithAnnotation(reportField, Order.class, param2 );
 			//rc.setOrderId(""+i);
 			
@@ -600,12 +600,9 @@ public class ReportWizardAction extends MultiAction {
 
 		public int compare(Object o1, Object o2) {
 			try{
-				String order1Str		= (String)invokeGetterForBeanPropertyWithAnnotation(o1, Order.class, new Object[0]);
-				String order2Str		= (String)invokeGetterForBeanPropertyWithAnnotation(o2, Order.class, new Object[0]);
-				
-				Long order1				= Long.parseLong(order1Str);
-				Long order2				= Long.parseLong(order2Str);
-				return order1.compareTo(order2);
+				Long order1                   = (Long)invokeGetterForBeanPropertyWithAnnotation(o1, Order.class, new Object[0]);
+                Long order2                   = (Long)invokeGetterForBeanPropertyWithAnnotation(o2, Order.class, new Object[0]);
+                return order1.compareTo(order2);
 			}
 			catch (RuntimeException e) {
 				e.printStackTrace();

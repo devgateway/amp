@@ -20,7 +20,7 @@ public class AmpReportColumn  implements Serializable, Comparable
 	@ColumnLike
 	private AmpColumns column;
 	@Order
-	private String orderId;
+	private Long  orderId;
 	@Level
 	private AmpCategoryValue level;
 	
@@ -50,10 +50,10 @@ public class AmpReportColumn  implements Serializable, Comparable
 	public void setColumn(AmpColumns column) {
 		this.column = column;
 	}
-	public String getOrderId() {
+	public Long  getOrderId() {
 		return orderId;
 	}
-	public void setOrderId(String orderId) {
+	public void setOrderId(Long orderId) {
 		this.orderId = orderId;
 	}
 	public AmpCategoryValue getLevel() {
@@ -64,9 +64,9 @@ public class AmpReportColumn  implements Serializable, Comparable
 	}
 	public int compareTo(Object o) {
 		try {
-			int myOrder	= Integer.parseInt(orderId);
-			int oOrder	= Integer.parseInt( ((AmpReportColumn)o).getOrderId() );
-			return myOrder-oOrder;
+			 int myOrder         =orderId.intValue();
+			 int oOrder          = ((AmpReportColumn)o).getOrderId().intValue();
+			 return myOrder-oOrder;
 		}
 		catch (NumberFormatException e) {
 			e.printStackTrace();

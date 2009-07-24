@@ -343,7 +343,10 @@ public abstract class ReportData extends Viewable {
 		Iterator i=this.getTrailCells().iterator();
 		while (i.hasNext()) {
 			Cell element = (Cell) i.next();
-			if(columnName.equals(element.getColumn().getAbsoluteColumnName())) return element; 
+			if (element!=null){
+				if(columnName.equals(element.getColumn().getAbsoluteColumnName())) 
+					return element; 
+			}
 		}
 		logger.error(this.getName()+":Could not find appropriate trail cell for column name "+columnName);
 		return null;

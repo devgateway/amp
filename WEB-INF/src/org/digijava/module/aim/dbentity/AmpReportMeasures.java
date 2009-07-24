@@ -17,7 +17,7 @@ public class AmpReportMeasures  implements Serializable, Comparable<AmpReportMea
 	@ColumnLike
 	private AmpMeasures measure;
 	@Order
-	private String orderId;
+	private Long orderId;
 	@Level
 	private AmpCategoryValue level;
 	
@@ -38,10 +38,10 @@ public class AmpReportMeasures  implements Serializable, Comparable<AmpReportMea
 	}
 
 	
-	public String getOrderId() {
+	public Long getOrderId() {
 		return orderId;
 	}
-	public void setOrderId(String orderId) {
+	public void setOrderId(Long orderId) {
 		this.orderId = orderId;
 	}
 	public AmpCategoryValue getLevel() {
@@ -69,7 +69,7 @@ public class AmpReportMeasures  implements Serializable, Comparable<AmpReportMea
 	public Integer getOrder() {
 		try{
 			if(orderId==null) return new Integer(0);
-			return 	Integer.parseInt(orderId);
+			return 	orderId.intValue();
 		}catch (NumberFormatException e) {
 			logger.error("NumberFormatException:"+orderId+":", e);
 			return 0;

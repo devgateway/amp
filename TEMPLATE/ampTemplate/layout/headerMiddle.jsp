@@ -40,12 +40,14 @@
         <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
 
 <c:set var="message">
-<c:if test="${sessionScope.currentMember.addActivity == 'true'}">
-<digi:trn key="aim:activityNotSaved">You did not save your activity. Do you want proceed without saving it ?</digi:trn>
-</c:if>
-<c:if test="${sessionScope.currentMember.addActivity == 'false'}">
-<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
-</c:if>
+    <c:choose>
+      <c:when test="${sessionScope.currentMember.addActivity == 'true'}">
+      	<digi:trn key="aim:activityNotSaved">You did not save your activity. Do you want proceed without saving it ?</digi:trn>
+      </c:when>
+      <c:otherwise>
+      	<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
+      </c:otherwise>
+    </c:choose>
 </c:set>
 <c:set var="quote">'</c:set>
 <c:set var="escapedQuote">\'</c:set>
@@ -290,7 +292,7 @@ function adminHelp(){
 		<logic:equal name="ampAdmin" value="no">
 	
 <script language="JavaScript">
-
+	//'${msg}'
 	function canExit(){
 	    if(typeof quitRnot1 == 'function') {
 	        return quitRnot1('${msg}');

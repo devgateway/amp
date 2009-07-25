@@ -242,6 +242,9 @@ public class ColumnReportData extends ReportData {
 
 		// create trail cells...
 		trailCells = new ArrayList();
+		
+		List<String> ctbr = this.getColumnsToBeRemoved();
+		
 		i = items.iterator();
 		while (i.hasNext()) {
 			Column element = (Column) i.next();
@@ -249,13 +252,15 @@ public class ColumnReportData extends ReportData {
 			if (l != null){
 				trailCells.addAll(l);
 			}else{
+				if ((ctbr!=null)&& (!ctbr.contains(element.getName()))){
 				//add just to keep the space
-				trailCells.add(null);
+					trailCells.add(null);
+				}
 			}
 		}
 		
 		//remove columns to be removed		
-		List<String> ctbr = this.getColumnsToBeRemoved();
+		
 		if(ctbr!=null) {
 		    i=ctbr.iterator();
 		while (i.hasNext()) {

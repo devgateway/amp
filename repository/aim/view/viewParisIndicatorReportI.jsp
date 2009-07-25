@@ -493,9 +493,11 @@ function toggleSettings(){
 										</a>
 									</td>				
 									<td noWrap align=left valign="center">
+										<!-- 
 										<a href="#" paramName="indcId" paramId="indcId" onclick="javascript:openPrinter(); return false;" paramName="indcId" paramId="indcId" target="_blank">
 											<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/printer.gif" border="0" alt="Printer Friendly" />
 										</a>
+										 -->
 									</td>
 								</tr>
 							</table>

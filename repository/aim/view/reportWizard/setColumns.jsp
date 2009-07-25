@@ -83,6 +83,10 @@
 																											<logic:equal name="ampColumnFromTree" property="columnName" value="Undisbursed Cumulative Balance">
 																												<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:report:UndisbursedCumulativeBalanceToolip">Cumulative Commitment - Cumulative Disbursement (independent of filters)</digi:trn>">
 																											</logic:equal>
+																											
+																											<logic:notEmpty name="ampColumnFromTree" property="description">
+																												<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:report:${ampColumnFromTree.columnName}_toolip">${ampColumnFromTree.description}</digi:trn>">
+																											</logic:notEmpty>
 																										</span>
 																									
 																									</li>

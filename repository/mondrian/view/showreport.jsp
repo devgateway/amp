@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 
   <link rel="stylesheet" type="text/css" href="../../../jpivot/table/mdxtable.css">
   <link rel="stylesheet" type="text/css" href="../../../navi/mdxnavi.css">
@@ -18,7 +19,6 @@
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 </head>
 <body bgcolor=white>
-
 <digi:form action="/showreport.do"  method="post">
 <%-- include query and title, so this jsp may be used with different queries --%>
 <wcf:include id="include01" httpParam="pagename" prefix="/WEB-INF/queries/" suffix=".jsp"/>
@@ -68,6 +68,7 @@
   <wcf:imgbutton id="save" tooltip="save report" img="save" href="javascript:mainSaveReports()"/>
  </wcf:toolbar>
 
+
 <%-- render toolbar --%>
 <wcf:render ref="toolbar01" xslUri="/WEB-INF/jpivot/toolbar/htoolbar.xsl" xslCache="false"/>
 <p>
@@ -97,7 +98,18 @@
 <%-- print properties --%>
 <wcf:render ref="printform01" xslUri="/WEB-INF/wcf/wcf.xsl" xslCache="false"/>
 
-<!-- render the table -->
+<!-- Errors-->
+<span style="text-align: center;color: red;"> 
+<logic:iterate id="element" name="ShowReportForm" property="errors">
+	<digi:trn key="${element.key}"><bean:write name="element" property="value"/></digi:trn>
+</logic:iterate>
+
+<logic:iterate id="element" name="ShowReportForm" property="messages">
+	<digi:trn key="${element.key}"><bean:write name="element" property="value"/> </digi:trn>
+</logic:iterate>
+</span>
+
+
 <p>
 <wcf:render ref="table01" xslUri="/WEB-INF/jpivot/table/mdxtable.xsl" xslCache="true"/>
 <p>

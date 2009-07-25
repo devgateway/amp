@@ -40,7 +40,7 @@
 		    });
 	var panelStart=0;
 
-	function initCurrencyScripts() {
+	function initSaveScript() {
 		var msg='\n<digi:trn>Save New Multi-dimensional Report</digi:trn>';
 		myPanel.setHeader(msg);
 		myPanel.setBody("");
@@ -51,7 +51,7 @@
 		myPanel.render(document.body);
 	}
 	//this is called from editActivityMenu.jsp
-	window.onload=initCurrencyScripts();
+	window.onload=initSaveScript();
 -->	
 </script>
 <style type="text/css">
@@ -163,7 +163,7 @@ function validate() {
 		document.SaveHtmlForm.reportname.focus();
 		return false;
 	}
-
+	
 	return true;
 }
 

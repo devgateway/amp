@@ -17,6 +17,7 @@
     <action name="SaveHtmlForm" path="/mondrian/SaveHtml" scope="session" type="org.digijava.module.mondrian.action.SaveHtml">
     	<forward name="forward" path="/showLayout.do?layout=savehtml"/>
     	<forward name="mainreport" path="/mondrian/mainreports.do" redirect="true"/>
+    	<forward name="report" path="/mondrian/showreport.do" redirect="true"/>
     </action>
    </action-mappings>
 </struts-config>

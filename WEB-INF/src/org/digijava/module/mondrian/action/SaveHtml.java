@@ -13,11 +13,13 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.exception.reportwizard.DuplicateReportNameException;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.mondrian.dbentity.EntityHelper;
 import org.digijava.module.mondrian.dbentity.OffLineReports;
 import org.digijava.module.mondrian.form.SaveHtmlForm;
+import org.digijava.module.mondrian.form.ShowReportForm;
 import org.digijava.module.mondrian.query.MoConstants;
 import org.digijava.module.mondrian.query.QueryThread;
 
@@ -70,16 +72,20 @@ public class SaveHtml extends Action {
 					}
 				}
 			}
-			
-			OffLineReports newreport = new OffLineReports();
-			newreport.setName(sf.getReportname());
-			newreport.setQuery(currentmdx);
-			newreport.setTeamid(tm.getTeamId());
-			newreport.setMeasures(measures);
-			newreport.setColumns(dimensions);
-			newreport.setCreationdate(new Timestamp(new java.util.Date().getTime()));
-			newreport.setOwnerId(TeamUtil.getAmpTeamMember(tm.getMemberId()));
-			EntityHelper.SaveReport(newreport);
+			if (EntityHelper.isDuplicated(sf.getReportname())){
+				OffLineReports newreport = new OffLineReports();
+				newreport.setName(sf.getReportname());
+				newreport.setQuery(currentmdx);
+				newreport.setTeamid(tm.getTeamId());
+				newreport.setMeasures(measures);
+				newreport.setColumns(dimensions);
+				newreport.setCreationdate(new Timestamp(new java.util.Date().getTime()));
+				newreport.setOwnerId(TeamUtil.getAmpTeamMember(tm.getMemberId()));
+				EntityHelper.SaveReport(newreport);
+			}else{
+				session.setAttribute("DuplicateName", true);
+				return mapping.findForward("report");
+			}
 			
 			return mapping.findForward("mainreport");
 			}

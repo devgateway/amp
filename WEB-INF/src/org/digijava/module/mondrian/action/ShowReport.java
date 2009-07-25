@@ -49,6 +49,10 @@ public class ShowReport extends Action {
 			throws java.lang.Exception {
 		ShowReportForm tf = (ShowReportForm) form;
 		HttpSession session = request.getSession();
+		if (session.getAttribute("DuplicateName")!=null && (Boolean) session.getAttribute("DuplicateName")==true){
+			tf.addError("aim:reportwizard:duplicateName", "There is already a report with the same name. Please choose a different one.");
+			session.removeAttribute("DuplicateName");
+		}
 		String id = request.getParameter("id");
 		if (id!=null){
 			OffLineReports report = EntityHelper.LoadReport(Long.parseLong(id));

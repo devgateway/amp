@@ -479,7 +479,7 @@ function toggleSettings(){
 				</tr>
 				<tr>
 					<td>
-						<div class="toolbar" align="center">
+						<div class="toolbar" align="center" style="width:50px">
 							<table border="0" align="center" bgcolor="#addadd" class="toolbartable">
 								<tr>
 									<td noWrap align=left valign="center">

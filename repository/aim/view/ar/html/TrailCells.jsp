@@ -77,7 +77,7 @@
 						<jsp:include page="<%=viewable.getViewerPath()%>"/>	
 					</c:if>
 					<c:if test="${cell==null}">
-					&nbsp;NULL
+					&nbsp;
 					</c:if>		
 				</td>
 		</c:if>

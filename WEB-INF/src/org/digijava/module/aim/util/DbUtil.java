@@ -6483,6 +6483,7 @@ public class DbUtil {
         int quesNum = 0;
         Iterator itr1 = null;
         Iterator itr2 = null;
+        int NUMBER_OF_QUESTIONS = 13;
 
         if ("5a".equalsIgnoreCase(indCode))
             NUM_COLUMNS_CALCULATED = 5;
@@ -6605,7 +6606,16 @@ public class DbUtil {
                     if ("9".equalsIgnoreCase(indCode)) {
                         if (quesNum == 11) {
                             answers[0] = answers[1] = ("Yes".equalsIgnoreCase(resp.getResponse())) ? true : false;
-                            answers[2] = true;
+                            
+                            //Check if the survey has been filled by the user or just created with null values by the activityform.
+                            boolean addValue = false;
+                			for (int i = 0; i < NUMBER_OF_QUESTIONS; i++) {
+                				if (resp.getResponse() != null && !resp.getResponse().equalsIgnoreCase("")) {
+                					addValue = true;
+                					break;
+                				}
+                			}
+                            answers[2] = addValue;
                             //logger.debug("indCode: " + indCode + " q#: " + 11 + " - answers[0]=answers[1] : " + answers[0]);
                             //logger.debug("indCode: " + indCode + " q#: " + 11 + " - answers[2] : " + answers[2]);
                             break;

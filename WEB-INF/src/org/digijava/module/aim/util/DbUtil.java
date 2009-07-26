@@ -6020,6 +6020,29 @@ public class DbUtil {
                                          break;
                                                   }
                                          */
+                                    	
+                                    	//Now the indicator 6 is based on start and end year of the activity (not disbursements or fundings).
+                                    	if (indcFlag == 6) {
+                                    		/*session = PersistenceManager.getRequestDBSession();
+                                            qry = "select act from " + AmpActivity.class.getName() + " act where act.ampActivityId=:id";
+                                            Query query = session.createQuery(qry);
+                                            query.setParameter("id", svy.getAmpActivityId().getAmpActivityId(), Hibernate.LONG);
+                                            AmpActivity auxAct = (AmpActivity)query.uniqueResult();*/
+                                    		//AmpActivity auxAct = (AmpActivity) session.get(AmpActivity.class, svy.getAmpActivityId().getAmpActivityId());
+                                    		AmpActivity auxAct = svy.getAmpActivityId();
+                                    		int activityStartYear = getTransactionYear(auxAct.getActualStartDate(), startDates,
+                            						endDates, startYear, closeYear);
+                            				int activityEndYear = getTransactionYear(auxAct.getActualCompletionDate(), startDates,
+                            						endDates, startYear, closeYear);
+                            				if (activityStartYear != 0 && activityEndYear != 0) {
+                            					//If start or end year is equals to actual year in the for cycle.
+                            					if(activityStartYear == i+startYear || activityEndYear == i+startYear) {
+                            						answersRow[i] += 1;
+                            					}
+                            				}
+                                    		continue;
+                                    	}
+                                    	
                                         itr3 = svy.getAmpActivityId().getFunding().iterator();
                                         while (itr3.hasNext()) {
                                             AmpFunding fund = (AmpFunding) itr3.next();
@@ -6063,6 +6086,7 @@ public class DbUtil {
                                                                       // Filtering by disbursement-year here
                                                                       if (convYr == (startYear + i)) {
                                                          */
+                                                    
                                                         if (isValidTransactionDate(startYear + i, fundtl.getTransactionDate(), startDates[i], endDates[i])) {
                                                             // Filtering by AdjustmentType & TransactionType here -
                                                             // only 'Actual Disbursement' is considered except for indicator-7.
@@ -6073,10 +6097,10 @@ public class DbUtil {
                                                                 continue;
                                                             }
                                                             // For indc-6: (Q9 = yes) & there is an actual-disb in the year
-                                                            if (indcFlag == 6) {
+                                                            /*if (indcFlag == 6) {
                                                                 answersRow[i] += 1;
                                                                 break indc6Break;
-                                                            }
+                                                            }*/
                                                             // Filtering by currency here
                                                             if ("USD".equalsIgnoreCase(fundtl.getAmpCurrencyId().getCurrencyCode()))
                                                                 fromExchangeRate = 1.0;
@@ -6227,6 +6251,32 @@ public class DbUtil {
         //logger.debug("responses.size[getAidSurveyReportByIndicator()] : " + responses.size());
         return responses;
     }
+    
+    public final static int getTransactionYear(Date transactionDate, Date[] startDates, Date[] endDates, int startYear,
+			int endYear) throws Exception {
+		int ret = 0;
+		if(transactionDate != null) {
+			if (startDates[0] == null || endDates[0] == null) {
+				GregorianCalendar gc = new GregorianCalendar();
+				gc.setTime(transactionDate);
+				EthiopianCalendar ethCal = new EthiopianCalendar().getEthiopianDate(gc);
+				if (ethCal.ethFiscalYear >= startYear && ethCal.ethFiscalYear <= endYear) {
+					ret = ethCal.ethFiscalYear;
+				}
+			} else {
+				int auxYear = startYear - 1;
+				for (int i = 0; i < startDates.length; i++) {
+					auxYear++;
+					if ((transactionDate.after(startDates[i]) || chkEqualDates(transactionDate, startDates[i]))
+							&& (transactionDate.before(endDates[i]) || chkEqualDates(transactionDate, endDates[i]))) {
+						ret = auxYear;
+					}
+				}
+			}
+		}
+		return ret;
+	}
+
 
     public static boolean isValidTransactionDate(int year, Date transactionDate, Date startDate, Date endDate) {
         boolean result = false;

@@ -12,16 +12,17 @@ import org.dgfoundation.amp.ar.ArConstants;
  */
 public class MathExpressionRepository {
 	private static Logger logger = Logger.getLogger(MathExpressionRepository.class);
-	public static final String OVERAGE_PROJECT_KEY = "overageProjects";
-	public static final String AGE_OF_PROJECT_KEY = "ageOfProject";
-	public static final String PREDICTABILITY_OF_FUNDING_KEY = "predictabilityOfFunding";
-	public static final String AVERAGE_SIZE_OF_PROJECT_KEY = "averageSizeofProjects";
-	public static final String VARIANCE_ACTUAL_COMMITMENTS_KEY = "actualCommitmentsVariance";
-	public static final String VARIANCE_ACTUAL_DISBURSEMENTS_KEY = "actualDisbursmentVariance";
+	public static final String OVERAGE_PROJECT = "overageProjects";
+	public static final String AGE_OF_PROJECT = "ageOfProject";
+	public static final String PREDICTABILITY_OF_FUNDING = "predictabilityOfFunding";
+	public static final String AVERAGE_SIZE_OF_PROJECT = "averageSizeofProjects";
+	public static final String VARIANCE_ACTUAL_COMMITMENTS = "actualCommitmentsVariance";
+	public static final String VARIANCE_ACTUAL_DISBURSEMENTS = "actualDisbursmentVariance";
 	public static final String CUMULATIVE_COMMITMENT = "cumulativeCommitment";
 	public static final String CUMULATIVE_DISBURSMENT = "cumulativeDisbursement";
 	public static final String EXECUTION_RATE = "buildExecutionRate";
 	public static final String PROJECT_PERIOD = "projectPeriod";
+	public static final String OVERAGE = "overage";
 	
 	private static Hashtable<String, MathExpression> expresions = new Hashtable<String, MathExpression>();
 
@@ -40,7 +41,8 @@ public class MathExpressionRepository {
 		buildCumulativeCommitment();
 		buildCumulativeDisbursment();
 		buildExecutionRate();
-	//	buildProjectPeriod();
+		buildProjectPeriod();
+		buildOverage();
 	}
 
 	/**
@@ -52,7 +54,7 @@ public class MathExpressionRepository {
 			MathExpression oper = new MathExpression(MathExpression.Operation.SUBTRACT, ArConstants.CURRENT_DATE_VALUE, ArConstants.PROPOSED_COMPLETION_DATE_VALUE);
 			// get the result in days
 			MathExpression oper2 = new MathExpression(MathExpression.Operation.DIVIDE_ROUND_DOWN, oper, new BigDecimal(1000 * 60 * 60 * 24));
-			expresions.put(OVERAGE_PROJECT_KEY, oper2);
+			expresions.put(OVERAGE_PROJECT, oper2);
 		} catch (Exception e) {
 			logger.error(e);
 		}
@@ -63,9 +65,8 @@ public class MathExpressionRepository {
 	 */
 	private static void buildAgeOfProject() {
 		try {
-			MathExpression oper = new MathExpression(MathExpression.Operation.SUBTRACT, ArConstants.CURRENT_DATE_VALUE, ArConstants.ACTUAL_START_DATE_VALUE);
-			MathExpression oper2 = new MathExpression(MathExpression.Operation.DIVIDE_ROUND_DOWN, oper, new BigDecimal(1000 * 60 * 60 * 24));
-			expresions.put(AGE_OF_PROJECT_KEY, oper2);
+			MathExpression oper = new MathExpression(MathExpression.Operation.DATE_MONTH_DIFF, ArConstants.CURRENT_DATE_VALUE, ArConstants.ACTUAL_START_DATE_VALUE);
+		 expresions.put(AGE_OF_PROJECT, oper);
 		} catch (Exception e) {
 			logger.error(e);
 		}
@@ -83,7 +84,7 @@ public class MathExpressionRepository {
 
 			MathExpression multiResultPannedBy100 = new MathExpression(MathExpression.Operation.MULTIPLY, divideOper1ByPLanned, new BigDecimal(100));
 
-			expresions.put(PREDICTABILITY_OF_FUNDING_KEY, multiResultPannedBy100);
+			expresions.put(PREDICTABILITY_OF_FUNDING, multiResultPannedBy100);
 
 		} catch (Exception e) {
 			logger.error(e);
@@ -96,7 +97,7 @@ public class MathExpressionRepository {
 	private static void buildAverageSizeofProjects() {
 		try {
 			MathExpression divide = new MathExpression(MathExpression.Operation.DIVIDE, ArConstants.TOTAL_COMMITMENTS, ArConstants.COUNT_PROJECTS);
-			expresions.put(AVERAGE_SIZE_OF_PROJECT_KEY, divide);
+			expresions.put(AVERAGE_SIZE_OF_PROJECT, divide);
 		} catch (Exception e) {
 			logger.error(e);
 		}
@@ -107,7 +108,7 @@ public class MathExpressionRepository {
 	private static void buildActualCommitmentsVariance() {
 		try {
 			MathExpression variance = new MathExpression(MathExpression.Operation.SUBTRACT, ArConstants.MAX_ACTUAL_COMMITMENT, ArConstants.MIN_ACTUAL_COMMITMENT);
-			expresions.put(VARIANCE_ACTUAL_COMMITMENTS_KEY, variance);
+			expresions.put(VARIANCE_ACTUAL_COMMITMENTS, variance);
 
 		} catch (Exception e) {
 			logger.error(e);
@@ -117,7 +118,7 @@ public class MathExpressionRepository {
 	private static void buildActualDisbursementVariance() {
 		try {
 			MathExpression variance = new MathExpression(MathExpression.Operation.SUBTRACT, ArConstants.MAX_ACTUAL_DISBURSEMENT, ArConstants.MIN_ACTUAL_DISBURSEMENT);
-			expresions.put(VARIANCE_ACTUAL_DISBURSEMENTS_KEY, variance);
+			expresions.put(VARIANCE_ACTUAL_DISBURSEMENTS, variance);
 
 		} catch (Exception e) {
 			logger.error(e);
@@ -153,20 +154,30 @@ public class MathExpressionRepository {
 		}
 	}
 	
-	/*/Project Period (months) = Proposed Completion Date - Actual Start date 
+	/**
+	 * Project Period (months) = Proposed Completion Date - Actual Start date 
+	 */
 	private static void  buildProjectPeriod() {
 		try {
-			MathExpression substract=new MathExpression(MathExpression.Operation.SUBTRACT,ArConstants.PROPOSED_COMPLETION_DATE_VALUE,ArConstants.ACTUAL_START_DATE_VALUE);
-			MathExpression converToMonths
-			expresions.put(PROJECT_PERIOD, substract);
+			MathExpression dateDiff=new MathExpression(MathExpression.Operation.DATE_MONTH_DIFF, ArConstants.PROPOSED_COMPLETION_DATE_VALUE,ArConstants.ACTUAL_START_DATE_VALUE);
+			expresions.put(PROJECT_PERIOD, dateDiff);
 		} catch (Exception e) {
 			logger.error(e);
 		}
 	}
- */
+
+	/**
+	 * Overage (months) = Age of project - Project period
+	 */
 	private static void  buildOverage() {
-		
+		try {
+			MathExpression subsract=new MathExpression(MathExpression.Operation.SUBTRACT,expresions.get(AGE_OF_PROJECT) ,expresions.get(PROJECT_PERIOD));
+			expresions.put(OVERAGE, subsract);
+		} catch (Exception e) {
+			logger.error(e);
+		}
 	}
+
 	
 	/**
 	 * Get The expression by Key

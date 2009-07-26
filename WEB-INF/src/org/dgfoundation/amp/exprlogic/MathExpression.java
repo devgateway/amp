@@ -2,6 +2,8 @@ package org.dgfoundation.amp.exprlogic;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 
 /**
@@ -14,7 +16,7 @@ public class MathExpression {
 	 * @author Sebastian Dimunzio Apr 27, 2009
 	 */
 	public enum Operation {
-		ADD, SUBTRACT, DIVIDE, MULTIPLY, DIVIDE_ROUND_DOWN, DIVIDE_ROUND_UP;
+		ADD, SUBTRACT, DIVIDE, MULTIPLY, DIVIDE_ROUND_DOWN, DIVIDE_ROUND_UP, DATE_MONTH_DIFF;
 	}
 
 	private Operation operation = null;
@@ -142,6 +144,8 @@ public class MathExpression {
 
 			case MULTIPLY:
 				return oper1.multiply(oper2);
+			case DATE_MONTH_DIFF:
+				return getMonthDifference(oper1,oper2);
 			}
 		} catch (Exception e) {
 			throw new Exception(e);
@@ -155,5 +159,30 @@ public class MathExpression {
 
 	public void setScale(int scale) {
 		this.scale = scale;
+	}
+	
+	/**
+	 * 
+	 * @param date1
+	 * @param date2
+	 * @return
+	 */
+	public static BigDecimal getMonthDifference(BigDecimal date1, BigDecimal date2) {
+		int count = 0;
+		GregorianCalendar fromCalendar =new GregorianCalendar(),toCalendar =new GregorianCalendar();
+		fromCalendar.setTimeInMillis(date2.longValue());
+		toCalendar.setTimeInMillis(date1.longValue());
+	
+		boolean negaitveResult=false;
+		if (fromCalendar.after(toCalendar)){
+			negaitveResult=true;
+			fromCalendar.setTimeInMillis(date1.longValue());
+			toCalendar.setTimeInMillis(date2.longValue());
+		}
+		for(fromCalendar.add(Calendar.MONTH, 1); fromCalendar.compareTo(toCalendar) <= 0; fromCalendar.add(Calendar.MONTH, 1)){
+			count++;
+		}
+		
+		return new BigDecimal(count * ((negaitveResult)?-1:1));
 	}
 }

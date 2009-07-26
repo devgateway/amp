@@ -62,7 +62,6 @@
 				<c:if test="${reportData.levelDepth == 1}">
 					<td align="center" style="border-bottom: #E0E0E0 1px solid;border-right: #E0E0E0 1px solid;font-family: Arial;font-weight: bold">
 				</c:if>
-			
 				<c:if test="${reportData.levelDepth == 2}">
 					<td style="border-bottom: #E0E0E0 1px solid;background:#99CCFF;font-weight: bold;font-family: Arial;">
 				</c:if>  

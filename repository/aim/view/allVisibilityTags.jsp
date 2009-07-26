@@ -792,4 +792,5 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Variance Of Disbursements" feature="Computed Fields"></field:display>
 <field:display name="Variance Of Disbursements" feature="Computed Fields"></field:display>
 <field:display name="Execution Rate" feature="Computed Fields"></field:display>
-
+<field:display name="Project Period" feature="Computed Fields"></field:display>
+<field:display name="Overage" feature="Computed Fields"></field:display>

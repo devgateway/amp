@@ -85,7 +85,14 @@ class Bluebook::ChartsController < BluebookController
         @aid_forecasts[r.aid_modality.to_i] += r.forecasts.to_currency(d.currency, r.year)
       end
     end
-    
+
+    #FFerreyra: Done to avoid nil exceptions when formatting the amounts
+    @aid_payments.each_with_index do |payment,index|
+      @aid_payments[index] = 0.to_currency(Prefs.default_currency) if payment.nil?
+    end
+    @aid_forecasts.each_with_index do |payment,index|
+      @aid_forecasts[index] = 0.to_currency(Prefs.default_currency) if payment.nil?
+    end
     render :layout => false
   end
   

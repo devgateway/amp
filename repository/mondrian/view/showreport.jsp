@@ -34,7 +34,7 @@
 <jp:print id="print01"/>
 <wcf:form id="printform01" xmlUri="/WEB-INF/jpivot/print/printpropertiesform.xml" model="#{print01}" visible="false"/>
 
-<jp:chart baseDisplayURL="/aim/DisplayChart.img" id="chart01" query="#{query01}" visible="false"/>
+<jp:chart baseDisplayURL="/aim/DisplayChart.img" id="chart01" query="#{query01}" visible="false" controllerURL="/mondrian/showreport.do"/>
 
 
 <wcf:form id="chartform01" xmlUri="/WEB-INF/jpivot/chart/chartpropertiesform.xml" model="#{chart01}" visible="false"/>
@@ -124,7 +124,7 @@
 
 <!-- Chart -->
 <p>
-	<wcf:render  ref="chart01" xslUri="/WEB-INF/jpivot/chart/chart.xsl"   xslCache="true"/>
+	<wcf:render  ref="chart01" xslUri="/WEB-INF/jpivot/chart/chart.xsl" xslCache="true"/>
 <p>
 <table>
 	<tr>

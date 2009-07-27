@@ -56,12 +56,14 @@ public class PIUtils {
 	public final static boolean containFinancingInstrument(AmpCategoryValue financing1,
 			Collection<AmpCategoryValue> financing2) throws Exception {
 		boolean ret = false;
-		Iterator<AmpCategoryValue> iter2 = financing2.iterator();
-		while (iter2.hasNext()) {
-			AmpCategoryValue aux1 = iter2.next();
-			if (aux1.getId().equals(financing1.getId())) {
-				ret = true;
-				break;
+		if (financing1 != null) {
+			Iterator<AmpCategoryValue> iter2 = financing2.iterator();
+			while (iter2.hasNext()) {
+				AmpCategoryValue aux1 = iter2.next();
+				if (aux1.getId().equals(financing1.getId())) {
+					ret = true;
+					break;
+				}
 			}
 		}
 		return ret;

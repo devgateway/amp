@@ -64,20 +64,20 @@ def show
     @disbursement_loans = 100 - @disbursement_grants
    
     # Total amount of money spent on 'bilateral' projects of a specific donor
-    @total_payments_bilaterals = @projects_bilaterals.inject(0.to_currency(@donor.currency)) do |total, prj|
-      total + prj.fundings.find_by_year(year).andand.payments.to_currency
+    @total_payments_bilaterals = @projects_bilaterals.inject(0.to_currency(@currency)) do |total, prj|
+      total + prj.fundings.find_by_year(year).andand.payments.to_currency(@currency)
     end
    
     # Total amount of money spent on 'multilateral' projects of a specific donor
-    @total_payments_multilaterals = @projects_multilaterals.inject(0.to_currency(@donor.currency)) do |total, prj|
-      total + prj.fundings.find_by_year(year).andand.payments.to_currency
+    @total_payments_multilaterals = @projects_multilaterals.inject(0.to_currency(@currency)) do |total, prj|
+      total + prj.fundings.find_by_year(year).andand.payments.to_currency(@currency)
     end
    
     # Specific donor's bilaterals projects disbursements (percentage)
-    @disbursement_bilaterals = @total_payments_bilaterals.to_f * 100 / @total_payments.to_f 
+    @disbursement_bilaterals = @total_payments_bilaterals.in(@currency).to_f * 100 / @total_payments.in(@currency).to_f
 
     # Specific donor's multilaterals projects disbursements (percentage)
-    @disbursement_multilaterals = @total_payments_multilaterals.to_f * 100 / @total_payments.to_f 
+    @disbursement_multilaterals = @total_payments_multilaterals.in(@currency).to_f * 100 / @total_payments.in(@currency).to_f
 
     # Specific donor's NGO Implemented projects disbursements (percentage)
     #TODO: Check why sometimes @total_payments is zero, I had to add this not NaN validations because there were errors in the page.

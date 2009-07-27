@@ -24,7 +24,7 @@
 			 var chk=document.getElementsByTagName('input');
 	         var tIds='';
 	         for(var i=0;i<chk.length;i++){
-	             if(chk[i].type == 'checkbox'&&chk[i].checked){
+	        	 if(chk[i].type == 'checkbox' && chk[i].checked && chk[i].id != 'chkAll'){
 	            	 tIds+=chk[i].value+',';
 	             }
 	         }
@@ -66,8 +66,6 @@
 		}
 	}
 
-
-
 	function searchAlpha(val) {
 		if (document.aimActivityForm.tempNumResults.value == 0) {
 			  alert ("Invalid value at 'Number of results per page'");
@@ -82,7 +80,19 @@
 		}
 	}
 
-
+	function selectAll(){
+		var chkAll = document.getElementById('chkAll');
+		var chk = document.getElementsByTagName('input');
+		for(var i=0;i<chk.length;i++){
+            if(chk[i].type == 'checkbox'){
+				if (chkAll.checked) {
+					chk[i].checked = true;
+				}else{
+					chk[i].checked = false;
+           		}
+            }
+		}
+    }
 
 	function resetSearch() {
 		<digi:context name="searchOrg" property="context/module/moduleinstance/activityManager.do"/>     
@@ -290,7 +300,7 @@
 																		</digi:link>
 																	</b>
 																</td>
-																<td width="17%" align="center">
+																<td width="15%" align="center">
 																	<b> 
 																		<c:set target="${urlParamsSort}" property="sortByColumn" value="activityId" /> 
 																		<digi:link href="/activityManager.do" name="urlParamsSort" style="color:#000000;">
@@ -298,7 +308,12 @@
 																		</digi:link> 
 																	</b>
 																</td>
-																<td width="3%" align="center" />
+																<td width="5%" align="center">
+																	<c:set var="trnSelectAll">
+																		<digi:trn key="aim:selectAll">Select All</digi:trn>
+																	</c:set> 
+																	<input type="checkbox" id="chkAll" onclick="javascript:selectAll()" title="${trnSelectAll}"/>
+																</td>
 															</tr>
 														</table>
 														</td>

@@ -6052,8 +6052,13 @@ public class DbUtil {
                                             		dnOrgOriginalOrganization.getAmpOrgId().equals(fund.getAmpDonorOrgId().getAmpOrgId())*/) {
                                             	// Filtering by financing-instrument here
                                                 if (null != financingInstr) {
-                                                    if (!financingInstr.getId().equals(fund.getFinancingInstrument().getId()))
-                                                        continue;
+                                                	if(fund.getFinancingInstrument() != null) {
+                                                		if (!financingInstr.getId().equals(fund.getFinancingInstrument().getId())) {
+                                                			continue;
+                                                		}
+                                                	} else {
+                                                		continue;
+                                                	}
                                                 }
                                                 //TODO: get rid of hardcoded values and check for the french string "Support Budgétaire Direct".
                                                 if ("9".equalsIgnoreCase(indcCode)) {

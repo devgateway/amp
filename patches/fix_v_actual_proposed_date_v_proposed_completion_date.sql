@@ -15,3 +15,4 @@ CREATE  OR REPLACE VIEW `v_actual_proposed_date` AS
     `amp_activity`
   order by
     `amp_activity`.`amp_activity_id`;
+    

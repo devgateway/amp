@@ -2,6 +2,7 @@ package org.digijava.module.search.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -9,6 +10,8 @@ import java.util.TreeSet;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.Property;
+import javax.jcr.PropertyIterator;
 import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletRequest;
 
@@ -32,6 +35,7 @@ import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.search.helper.Resource;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.digijava.module.contentrepository.dbentity.*;
 
 public class SearchUtil {
 
@@ -259,6 +263,23 @@ public class SearchUtil {
 						resource.setWebLink(nw.getWebLink());
 						resultList.add(resource);
 					}
+				}
+				
+				HashMap<String, CrDocumentNodeAttributes> pd = CrDocumentNodeAttributes.getPublicDocumentsMap(false);
+				Set<String> keySet = pd.keySet();
+				for (Iterator iterator = keySet.iterator(); iterator.hasNext();) {
+					String uuid = (String) iterator.next();
+					Node lastVersion = DocumentManagerUtil.getReadNode(uuid, request);
+					NodeWrapper nw = new NodeWrapper(lastVersion);
+					if (keywordMatches(nw, keyword)) {
+						Resource resource = new Resource();
+						resource.setName(nw.getTitle());
+						resource.setUuid(nw.getUuid());
+						resource.setWebLink(nw.getWebLink());
+						if(!resultList.contains(resource)){
+							resultList.add(resource);
+						}
+					}					
 				}
 
 			} catch (Exception e) {

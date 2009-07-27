@@ -4,7 +4,12 @@ en:
         "2008":
           title: EU Blue Book
           toc: Table of Contents
+          eu_retrospective:
+            title: Retrospective
+            introduction: Retrospective text
           index: # Table of Contents, todo el menú
+              eu_retrospective:
+                title: Retrospective
               foreword: Foreword
               eu_at_a_glance: # European Union at a Glance
                   title: The European Union at a Glance

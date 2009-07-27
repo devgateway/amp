@@ -79,11 +79,11 @@
 																												<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:report:UndisbursedCumulativeBalanceToolip">Cumulative Commitment - Cumulative Disbursement (independent of filters)</digi:trn>">
 																											</logic:equal>
 																											
+																											
 																											<logic:notEmpty name="ampColumnFromTree" property="description">
-																												<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:report:${ampColumnFromTree.columnName}_toolip">${ampColumnFromTree.description}</digi:trn>">
+																												<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:report:tip:${ampColumnFromTree.columnName}:${ampColumnFromTree.description}">${ampColumnFromTree.description}</digi:trn>">
 																											</logic:notEmpty>
 																										</span>
-																									
 																									</li>
 																								</logic:iterate>
 																								</ul>

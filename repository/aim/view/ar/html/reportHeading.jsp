@@ -58,7 +58,7 @@
                               if (subColumn.getWorker()!=null && subColumn.getWorker().getRelatedColumn()!=null){
                               String text=subColumn.getWorker().getRelatedColumn().getDescription();
                               if (text!=null){ %> 
-                       			<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:report:${reportHeading}_toolip"><%=text%></digi:trn>">
+                       			<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn  key="aim:report:tip:${ampColumnFromTree.columnName}:${ampColumnFromTree.description}"><%=text%></digi:trn>">
                      <%
                    			 }
                      		}

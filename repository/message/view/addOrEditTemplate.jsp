@@ -285,8 +285,49 @@
 																							</tr>
 																						</table>
 																					</td>
-																				</tr>
+																				</tr>																				
 																			</table>
+																		</td>
+																	</tr>
+																	<tr>
+																		<td>
+																			<TABLE width="100%">
+																				<TR>
+																					<TD COLSPAN="2">
+																						<strong><digi:trn>Patterns Reference</digi:trn></strong>
+																					</TD>
+																				</TR>
+																				<TR>
+																					<TD nowrap="nowrap" bgcolor="#E9E9E9">
+																						<digi:trn> {name} - Stands for the name of the activity &nbsp;</digi:trn>
+																						<br />
+																					</TD>
+																				</TR>
+																				<TR>
+																					<TD nowrap="nowrap" bgcolor="#E9E9E9">
+																						<digi:trn> {Created By} - Stands for the name of the creator of the activity &nbsp;</digi:trn>
+																						<br />
+																					</TD>
+																				</TR>
+																				<TR>
+																					<TD nowrap="nowrap" bgcolor="#E9E9E9">
+																						<digi:trn> {url} - This will enable you to resolve the URL related to actvity or the new user registeration &nbsp;</digi:trn>
+																						<br />
+																					</TD>
+																				</TR>
+																				<TR>
+																					<TD nowrap="nowrap" bgcolor="#E9E9E9">
+																						<digi:trn> {start date} - Stands for Calendar Event's Start Date &nbsp;</digi:trn>
+																						<br />
+																					</TD>
+																				</TR>
+																				<TR>
+																					<TD nowrap="nowrap" bgcolor="#E9E9E9">
+																						<digi:trn> {end date} - Stands for Calendar Event's End Date &nbsp; &nbsp;</digi:trn>
+																						<br />
+																					</TD>
+																				</TR>
+																			</TABLE>
 																		</td>
 																	</tr>																							
 																	<tr>
@@ -308,5 +349,5 @@
 					</td>
 					<td width="10"/>
 				</tr>
-			</table>
+			</table>			
 </digi:form>

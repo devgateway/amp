@@ -8,6 +8,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 <%@ taglib uri="/taglib/fmt" prefix="fmt" %>
+<%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 <digi:form action="/parisindicator" type="org.digijava.module.parisindicator.form.PIForm" name="parisIndicatorForm">
     <table cellspacing="0" cellpadding="0" border="1" 
@@ -80,6 +81,17 @@
         </logic:notEmpty>
     </table>
     <br>
+	<table>
+		<tr><td>
+			<font color="blue"> * 
+				<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
+					<digi:trn key="aim:allTheAmounts">All the amounts are in thousands (000) </digi:trn>
+				</gs:test>
+				<digi:trn><bean:write name="parisIndicatorForm" property="selectedCurrency"/></digi:trn>
+			</font>
+		</td></tr>
+	</table>		
+	<br>
     <table width="100%">
         <tr align="center">
             <td align="center">

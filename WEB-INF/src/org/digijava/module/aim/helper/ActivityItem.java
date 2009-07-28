@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -13,6 +15,11 @@ import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.util.*;
+import org.digijava.kernel.translator.*;
 
 /**
  * Activity helper bean.
@@ -106,12 +113,12 @@ public class ActivityItem implements Comparable<ActivityItem>{
 	 * @param entity AmpActivity bean
 	 * @see ActivityItem#ActivityItem(AmpActivity, DateFormat)
 	 */
-	public ActivityItem(AmpActivity entity) throws Exception{
-		this(entity,new SimpleDateFormat(Constants.CALENDAR_DATE_FORMAT),"USD",null);
+	public ActivityItem(AmpActivity entity, HttpServletRequest request) throws Exception{
+		this(entity,new SimpleDateFormat(Constants.CALENDAR_DATE_FORMAT),"USD",null, request);
 	}
 
-    public ActivityItem(AmpActivity entity,String curenncyCode,Long percent) throws Exception{
-        this(entity,new SimpleDateFormat(Constants.CALENDAR_DATE_FORMAT),curenncyCode,percent);
+    public ActivityItem(AmpActivity entity,String curenncyCode,Long percent, HttpServletRequest request) throws Exception{
+        this(entity,new SimpleDateFormat(Constants.CALENDAR_DATE_FORMAT),curenncyCode,percent, request);
 	}
 
 	/**
@@ -120,12 +127,18 @@ public class ActivityItem implements Comparable<ActivityItem>{
 	 * @param entity AmpActivity db entity to construct helper from
 	 * @param frmt date formatter
 	 */
-	public ActivityItem(AmpActivity entity,DateFormat frmt,String curenncyCode,Long percent) throws Exception {
+	public ActivityItem(AmpActivity entity,DateFormat frmt,String curenncyCode,Long percent, HttpServletRequest request) throws Exception {
+		Site site = RequestUtils.getSite(request);
+		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+				
+		String siteId=site.getId().toString();
+		String locale=navigationLanguage.getCode();			
 		if (entity != null) {
 			AmpCategoryValue statusValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, entity.getCategories());
 //			statusValue.setValue("fake status");
-			if (statusValue != null)
-				status		= statusValue.getValue();
+			if (statusValue != null){
+				status		= TranslatorWorker.translateText(statusValue.getValue(), locale,siteId);
+			}
 			id = entity.getAmpActivityId();
 			name = entity.getName();
 			name = name.replaceAll("&","&amp;");
@@ -160,7 +173,7 @@ public class ActivityItem implements Comparable<ActivityItem>{
                                 startDate="";
                             }
 			}
-			donors = getDonorsFromFundings(entity.getFunding());
+			donors = getDonorsFromFundings(entity.getFunding(),request);
 		}
 	}
 
@@ -209,12 +222,18 @@ public class ActivityItem implements Comparable<ActivityItem>{
 	 * Organizations name is label, and org Id is value of the bean.
 	 * @param donors Set of funding orgs from AmpActivity
 	 * @return list of LabelValueBean objects
+	 * @throws WorkerException 
 	 */
-	private List<LabelValueBean> getDonorsFromFundings(Set<AmpFunding> donors){
+	private List<LabelValueBean> getDonorsFromFundings(Set<AmpFunding> donors, HttpServletRequest request) throws WorkerException{
+		Site site = RequestUtils.getSite(request);
+		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+				
+		String siteId=site.getId().toString();
+		String locale=navigationLanguage.getCode();		
 		List<LabelValueBean> result = new ArrayList<LabelValueBean>();
 		if (donors != null && donors.size() > 0){
 			for (AmpFunding donor: donors) {
-				String donorName = donor.getAmpDonorOrgId().getName();
+				String donorName = TranslatorWorker.translateText(donor.getAmpDonorOrgId().getName(), locale,siteId); 
 				Long donorId = donor.getAmpDonorOrgId().getAmpOrgId();
 				LabelValueBean lvb = new LabelValueBean(donorName,donorId.toString());
 				result.add(lvb);

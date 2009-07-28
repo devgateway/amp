@@ -21,7 +21,7 @@
 	        <bean:define id="piForm" name="parisIndicatorForm" type="org.digijava.module.parisindicator.form.PIForm"></bean:define>
 	        <bean:define id="auxRow" name="parisIndicatorForm" property="mainTableRows[0]" type="org.digijava.module.parisindicator.helper.PIReport6Row"></bean:define>
 	        <%for(int i = 0; i < auxRow.getYears().length; i++) {%>
-	           <td width="25%" height="33">
+	           <td width="10%" height="33">
                     <div align="center">
                         <strong><%=piForm.getSelectedStartYear() + i%></strong>
                     </div>
@@ -48,7 +48,7 @@
                         <strong><bean:write name="element" property="donorGroup.orgGrpName"/></strong>
                     </td>
                     <%for(int i = 0; i < auxRow.getYears().length; i++) {%>
-                        <td align="center" height="55">
+                        <td align="center">
                             <div align="center">
                                 <%=element.getYears()[i]%>
                             </div>

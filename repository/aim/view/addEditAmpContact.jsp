@@ -217,15 +217,15 @@ html>body #mainEmpty {
 </script>
 
 <digi:form action="/addressBook.do?actionType=saveContact" method="post">	
-	<table bgColor=#ffffff cellPadding=5 cellSpacing=1 >
+	<table bgColor="#ffffff" cellPadding="5" cellSpacing="1" >
 		<tr>
-			<td class=r-dotted-lg width=14>&nbsp;</td>
-			<td align=left class=r-dotted-lg vAlign=top width=752>
+			<td width="14">&nbsp;</td>
+			<td align="left" vAlign="top" width="752">
 				<table bgcolor="#ffffff" cellPadding="0" cellSpacing="0" width="100%">
 					<tr>
 						<!-- Start Navigation -->
-						<td height=33>
-							<span class=crumb>
+						<td height="33">
+							<span class="crumb">
 					           <c:set var="translation">
 									<digi:trn>Click here to view MyDesktop</digi:trn>
 								</c:set>

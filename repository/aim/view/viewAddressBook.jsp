@@ -241,7 +241,7 @@
 	padding: 2px 4px 2px 4px;
 }
 html>body #main {
-	width:742px;
+	width:867px;
 }
 
 #mainEmpty {
@@ -289,6 +289,27 @@ html>body #mainEmpty {
 		addressbookForm.submit();
 	}
 
+	function setHoveredTable(tableId, hasHeaders) {
+
+		var tableElement = document.getElementById(tableId);
+		if(tableElement){
+	    var className = 'Hovered',
+	        pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
+	        rows      = tableElement.getElementsByTagName('tr');
+
+			for(var i = 0, n = rows.length; i < n; ++i) {
+				rows[i].onmouseover = function() {
+					this.className += ' ' + className;
+				};
+				rows[i].onmouseout = function() {
+					this.className = this.className.replace(pattern, ' ');
+
+				};
+			}
+			rows = null;
+		}
+	}
+
 	// don't remove or change this line!!!
 	document.getElementsByTagName('body')[0].className='yui-skin-sam';
 </script>
@@ -297,8 +318,8 @@ html>body #mainEmpty {
 <digi:form action="/addressBook.do?actionType=viewAddressBook" method="post">	
 	<table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="772">
 		<tr>
-			<td class="r-dotted-lg" width="14">&nbsp;</td>
-			<td align="left" class="r-dotted-lg" vAlign="top" width="750">
+			<td width="14">&nbsp;</td>
+			<td align="left"vAlign="top" width="750">
 				<table cellPadding="0" cellSpacing="0" width="879">
 					<tr>
 						<!-- Start Navigation -->
@@ -342,21 +363,20 @@ html>body #mainEmpty {
 							        </LI>
 								</UL>					
 							</DIV>
+							
 						</td>
 					</tr>					
 					<tr>
 						<td noWrap width=100% vAlign="top" height="100%">
-							<table width="100%" cellpadding="1" cellSpacing="1" border="1" bordercolor="#ffffff" height="100%">
-								<tr>
-									<td noWrap width="750" vAlign="top">
-										<table bgColor="#ffffff" cellPadding="1" cellSpacing="1" width="100%" valign="top">
+							<div id="main">
+								<table bgColor="#ffffff" cellPadding="1" cellSpacing="1" width="100%" valign="top">
 											<tr bgColor="#ffffff">
 												<td vAlign="top" width="100%">
 													<table width="100%" cellspacing="1" cellpadding="1" valign="top" align="left">
 														<tr><td>&nbsp;</td></tr>
 														<tr><td class="box-title" >
 															<!-- Table title -->
-															<div style="width:752px;">
+															<div style="width:867px;">
 																<table width="100%">
 																	<tr>
 																		<td width="5%">
@@ -399,11 +419,11 @@ html>body #mainEmpty {
 														<tr><td>&nbsp;</td></tr>
 														<tr>
 															<td>
-																<div style="border:1px solid #999999;width: 752px" >
-																	<div style= "background-color:#999999; color:#000; font-weight:bold; padding-top:5px; height:15px; width:752px;">
+																<div style="border:1px solid #999999;width: 865px" >
+																	<div style= "background-color:#999999; color:#000; font-weight:bold; padding-top:5px; height:15px; width:865px;">
 																		<center>Contact List</center>
 																	</div>										
-																	<div style="overflow:auto;width:752px;height:250px;max-height:220px; " >																		
+																	<div style="overflow:auto;width:865px;height:250px;max-height:220px; " >																		
 																		<table width="100%" id="dataTable" cellspacing="0" cellpadding="4" valign="top"  align="left">
 																			<c:if test="${empty addressbookForm.contactsForPage}">
 													                        	<tr>
@@ -442,7 +462,8 @@ html>body #mainEmpty {
 																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='emailAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
 																						<c:if test="${not empty addressbookForm.sortBy && addressbookForm.sortBy=='emailDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>
 																					</td>
-																					<td width="100">
+																					<td width="5px">&nbsp;</td>
+																					<td width="150">
 																						<c:if test="${empty addressbookForm.sortBy || addressbookForm.sortBy!='orgNameAscending'}">
 																							<digi:link href="/addressBook.do?actionType=searchContacts&sortBy=orgNameAscending&reset=false">
 																								<b><digi:trn >Organisation Name</digi:trn></b>
@@ -482,8 +503,8 @@ html>body #mainEmpty {
 																				</tr>
 												                            	<c:forEach var="cont" items="${addressbookForm.contactsForPage}" varStatus="stat">
 					                                                           		<c:set var="background">
-																						<c:if test="${stat.index%2==0}">#cccccc</c:if>
-																						<c:if test="${stat.index%2==1}">#f4f4f2</c:if>
+																						<c:if test="${stat.index%2==0}">#dbe5f1</c:if>
+																						<c:if test="${stat.index%2==1}">#ffffff</c:if>
 																					</c:set>
 																					<tr bgcolor="${background}">
 						                                                           		<td height="30" width="152">
@@ -491,7 +512,8 @@ html>body #mainEmpty {
 																						</td>
 																						<td height="30" width="100">
 																						  	${cont.email}
-																						</td>																	
+																						</td>
+																						<td width="5px">&nbsp;</td>																	
 																						<td height="30" width="100">
 																							${cont.organisationName}
 																						</td>
@@ -522,9 +544,8 @@ html>body #mainEmpty {
 															</td>
 														</tr>
 														<tr>
-															<td>																
-																	
-																	<div style= " float:left; width:752px;" >
+															<td>	
+																<div style= " float:left; width:865px;" >
 																		<!-- page logic for pagination -->
 																		<jsp:useBean id="urlParams3" type="java.util.Map" class="java.util.HashMap"/>
                                                             			<c:set target="${urlParams3}" property="page">1</c:set>
@@ -620,9 +641,8 @@ html>body #mainEmpty {
 												</td>
 											</tr>
 										</table>
-									</td>
-								</tr>
-							</table>
+								</div>
+							
 						</td>
 					</tr>
 				</table>
@@ -666,6 +686,8 @@ html>body #mainEmpty {
 	    };
 	}();    
 
+
+	setHoveredTable("dataTable", false);
 </script>
 </digi:form>
 

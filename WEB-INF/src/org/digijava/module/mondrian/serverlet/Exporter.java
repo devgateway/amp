@@ -199,7 +199,7 @@ public class Exporter extends com.tonbeller.jpivot.print.PrintServlet {
 										rowspan = Integer.parseInt(currentnode.getAttributes().getNamedItem("rowspan").getNodeValue());
 										colspan = Integer.parseInt(currentnode.getAttributes().getNamedItem("colspan").getNodeValue());
 										if (colspan >1){
-											helper.addMerge(i, j, rowspan-1, colspan-1);
+											helper.addMerge(i, j, rowspan, colspan);
 										}
 										int colid =j;
 										if(currentnode.getAttributes().getNamedItem("offset")!=null){
@@ -241,6 +241,9 @@ public class Exporter extends com.tonbeller.jpivot.print.PrintServlet {
 										if(currentnode.getAttributes().getNamedItem("offset")!=null){
 											colid = Integer.parseInt(currentnode.getAttributes().getNamedItem("offset").getNodeValue())+j;
 										}
+										rowspan = Integer.parseInt(currentnode.getAttributes().getNamedItem("rowspan").getNodeValue());
+										colspan = Integer.parseInt(currentnode.getAttributes().getNamedItem("colspan").getNodeValue());
+										
 										String text = currentnode.getFirstChild().getAttributes().getNamedItem("caption").getNodeValue();
 										helper.addCaption(text, colid, row);
 										

@@ -141,13 +141,12 @@ public class AuditLoggerManager extends MultiAction {
 			}
 		 }
 		
-		Collection pages = null;
+		Collection pages = new ArrayList();
 		int numpages;
 		numpages = logs.size() / totalrecords;
 		numpages += (logs.size()  % totalrecords != 0) ? 1 : 0;
 		
 		if ((numpages) >= 1) {
-	        pages = new ArrayList();
 	        for (int i = 0; i < (numpages); i++) {
 	          Integer pageNum = new Integer(i + 1);
 	          pages.add(pageNum);

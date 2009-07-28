@@ -809,12 +809,14 @@ function configPanel(panelNum, title, description, optionId, uuid, isAUrl) {
 		myForm.webResource[0].disabled				= true;
 		
 		myForm.docTitle.readOnly					= true;
-		myForm.docTitle.style.background			= "#eeeeee"; 
+		myForm.docTitle.style.background			= "#D4D0C8"; 
 		myForm.docTitle.style.color					= "darkgray";
 		
 		myForm.docDescription.readOnly				= true;
-		myForm.docDescription.style.backgroundColor	= "#eeeeee";
+		myForm.docDescription.style.backgroundColor	= "#D4D0C8";
 		myForm.docDescription.style.color			= "darkgray";
+		myForm.docType.style.backgroundColor	    = "#D4D0C8";
+		myForm.docType.style.color		            = "darkgray";
 		
 		setPanelHeader(0, "${translation_add_new_version}");
 		
@@ -838,7 +840,9 @@ function configPanel(panelNum, title, description, optionId, uuid, isAUrl) {
 		myForm.docDescription.readOnly				= false;
 		myForm.docDescription.style.backgroundColor	= "";
 		myForm.docDescription.style.color			= "";
-		
+
+	
+			
 		myForm.docType.selectedIndex				= 0;
 		
 		setPanelHeader(0, "${translation_add_new_content}");

@@ -92,6 +92,18 @@ public final class ArConstants {
     public final static String PLANNED_DISBURSEMENT="PLANNED_DISBURSEMENT";
     public final static String PLANNED_EXPENDITURE="PLANNED_EXPENDITURE";
     
+    public final static String ACTUAL_COMMITMENT_NF="ACTUAL_COMMITMENT_NF";
+    public final static String ACTUAL_DISBURSEMENT_NF="ACTUAL_DISBURSEMENT_NF";
+    public final static String PLANNED_COMMITMENT_NF="PLANNED_COMMITMENT_NF";
+    public final static String PLANNED_DISBURSEMENT_NF="PLANNED_DISBURSEMENT_NF";
+  
+    
+    public final static String ACTUAL_COMMITMENT_COUNT="ACTUAL_COMMITMENT_COUNT";
+    public final static String ACTUAL_DISBURSEMENT_COUNT="ACTUAL_DISBURSEMENT_COUNT";
+    
+    public final static String PLANNED_COMMITMENT_COUNT="PLANNED_COMMITMENT_COUNT";
+    public final static String PLANNED_DISBURSEMENT_COUNT="PLANNED_DISBURSEMENT_COUNT";
+    
     //dates variable names
     public final static String ACTIVITY_CLOSE_DATE_VALUE = "ACTIVITY_CLOSE_DATE_VALUE";
     public final static String ACTUAL_START_DATE_VALUE = "ACTUAL_START_DATE_VALUE";

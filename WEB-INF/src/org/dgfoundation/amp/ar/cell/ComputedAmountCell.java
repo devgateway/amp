@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.workers.ComputedAmountColWorker;
+import org.dgfoundation.amp.exprlogic.MathExpression;
 import org.dgfoundation.amp.exprlogic.MathExpressionRepository;
 import org.dgfoundation.amp.exprlogic.TokenRepository;
 
@@ -32,6 +33,12 @@ public class ComputedAmountCell extends CategAmountCell {
 		BigDecimal plannedCommitments = new BigDecimal(0);
 		BigDecimal plannedDisburments = new BigDecimal(0);
 		BigDecimal plannedExpenditures = new BigDecimal(0);
+		
+		BigDecimal countActualCommitments = new BigDecimal(0);
+		BigDecimal countActualDisburments = new BigDecimal(0);
+		BigDecimal countPlanedCommitments = new BigDecimal(0);
+		BigDecimal countPlanedDisburments = new BigDecimal(0);
+
 
 		//for each element get each funding type
 		while (i.hasNext()) {
@@ -42,6 +49,25 @@ public class ComputedAmountCell extends CategAmountCell {
 			actualDisburments = actualDisburments.add(new BigDecimal(TokenRepository.buildActualDisbursementsLogicalToken().evaluate(element)));
 			plannedCommitments = plannedCommitments.add(new BigDecimal(TokenRepository.buildPLannedCommitmentsLogicalToken().evaluate(element)));
 			plannedDisburments = plannedDisburments.add(new BigDecimal(TokenRepository.buildPLannedDisbursementsLogicalToken().evaluate(element)));
+
+			if (element.getMetaValueString(ArConstants.ADJUSTMENT_TYPE).equalsIgnoreCase(ArConstants.ACTUAL)) {
+				if (element.getMetaValueString(ArConstants.TRANSACTION_TYPE).equalsIgnoreCase(ArConstants.COMMITMENT)) {
+					countActualCommitments = countActualCommitments.add(new BigDecimal(1));
+				}
+				if (element.getMetaValueString(ArConstants.TRANSACTION_TYPE).equalsIgnoreCase(ArConstants.DISBURSEMENT)) {
+					countActualDisburments = countActualDisburments.add(new BigDecimal(1));
+				}
+
+			}
+
+			if (element.getMetaValueString(ArConstants.ADJUSTMENT_TYPE).equalsIgnoreCase(ArConstants.PLANNED)) {
+				if (element.getMetaValueString(ArConstants.TRANSACTION_TYPE).equalsIgnoreCase(ArConstants.COMMITMENT)) {
+					countPlanedCommitments = countPlanedCommitments.add(new BigDecimal(1));
+				}
+				if (element.getMetaValueString(ArConstants.TRANSACTION_TYPE).equalsIgnoreCase(ArConstants.DISBURSEMENT)) {
+					countPlanedDisburments = countPlanedDisburments.add(new BigDecimal(1));
+				}
+			}
 		}
 		// crate variable values map
 		values.put(ArConstants.TOTAL_COMMITMENTS, totalCommitments);
@@ -51,6 +77,11 @@ public class ComputedAmountCell extends CategAmountCell {
 		values.put(ArConstants.PLANNED_COMMITMENT, plannedCommitments);
 		values.put(ArConstants.PLANNED_DISBURSEMENT, plannedDisburments);
 		// values.put(ArConstants.PLANNED_EXPENDITURE, total_commitments);
+		values.put(ArConstants.ACTUAL_COMMITMENT_COUNT, countActualCommitments);
+		values.put(ArConstants.ACTUAL_DISBURSEMENT_COUNT, countActualDisburments);
+
+		values.put(ArConstants.PLANNED_COMMITMENT_COUNT, countPlanedCommitments);
+		values.put(ArConstants.PLANNED_DISBURSEMENT_COUNT, countPlanedDisburments);
 	}
 
 	public double getAmount() {
@@ -58,8 +89,15 @@ public class ComputedAmountCell extends CategAmountCell {
 		if (id != null)
 			return (convert() * (getPercentage() / 100));
 		collectValues();
-
-		return MathExpressionRepository.get(this.getColumn().getWorker().getRelatedColumn().getTokenExpression()).result(values).doubleValue();
+		
+		MathExpression math=null;
+		
+		if (this.getColumn().getExpression()!=null){
+			math=MathExpressionRepository.get(this.getColumn().getExpression());
+		}else{
+			math=MathExpressionRepository.get(this.getColumn().getWorker().getRelatedColumn().getTokenExpression());
+		}
+		return math.result(values).doubleValue();
 	}
 
 	public ComputedAmountCell(Long ownerId) {
@@ -111,4 +149,26 @@ public class ComputedAmountCell extends CategAmountCell {
 		}
 		return ret;
 	}
+
+	public void setValuesFromCell(CategAmountCell categ){
+		ComputedAmountCell cell = new ComputedAmountCell();
+		
+		this.setId(categ.getId());
+		this.setOwnerId(categ.getOwnerId());
+		this.setValue(categ.getValue());
+		this.setFromExchangeRate(categ.getFromExchangeRate());
+		this.setCurrencyDate(categ.getCurrencyDate());
+		this.setCurrencyCode(categ.getCurrencyCode());
+		this.setToExchangeRate(categ.getToExchangeRate());
+		this.setColumn(categ.getColumn());
+		this.setColumnCellValue(categ.getColumnCellValue());
+		this.setColumnPercent(categ.getColumnPercent());
+		this.setCummulativeShow(categ.isCummulativeShow());
+		this.setShow(categ.isShow());
+		this.setRenderizable(categ.isRenderizable());
+		this.setCummulativeShow(categ.isCummulativeShow());
+		this.setMetaData(categ.getMetaData());
+		
+	}
+	
 }

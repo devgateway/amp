@@ -30,6 +30,8 @@ public class AmountCell extends Cell {
 
 	protected double amount;
 
+	protected double originalAmount;
+	
 	protected double percentage = 100;
 
 	protected Set mergedCells;
@@ -184,8 +186,11 @@ public class AmountCell extends Cell {
 	 */
 	public double getAmount() {
 		double ret = 0;
-		if (id != null)
-			return convert() * getPercentage() / 100;
+		if (id != null){
+			//I need the original amount without %
+			this.originalAmount=convert();
+			return  originalAmount * getPercentage() / 100;
+		}
 		Iterator i = mergedCells.iterator();
 		while (i.hasNext()) {
 			AmountCell element = (AmountCell) i.next();
@@ -414,6 +419,14 @@ public class AmountCell extends Cell {
 				this.getMergedCells().add(ac2);
 		}
 
+	}
+
+	public double getOriginalAmount() {
+		return originalAmount;
+	}
+
+	public void setOriginalAmount(double originalAmount) {
+		this.originalAmount = originalAmount;
 	}
 
 }

@@ -24,6 +24,19 @@ public class MathExpressionRepository {
 	public static final String PROJECT_PERIOD = "projectPeriod";
 	public static final String OVERAGE = "overage";
 	
+	
+	public static final String DISBURSEMENT_RADIO = "disbursmentRatio";
+
+	public static final String AVERAGE_SIZE_DISBURSMENT = "averageSizeofDisbursements";
+
+	
+	
+	public static final String COUNT_ACTUAL_COMMITMENT = "countsActualCommitments";
+	public static final String COUNT_ACTUAL_DISBURSEMENT = "countActualDisbursment";
+	
+	public static final String COUNT_PLANNED_COMMITMENT = "countsPlannedCommitments";
+	public static final String COUNT_PLANNED_DISBURSEMENT = "countPlannedDisbursment";
+	
 	private static Hashtable<String, MathExpression> expresions = new Hashtable<String, MathExpression>();
 
 	/**
@@ -43,6 +56,15 @@ public class MathExpressionRepository {
 		buildExecutionRate();
 		buildProjectPeriod();
 		buildOverage();
+		buildDisbursmentRatio();
+		
+		buildCountActualCommitments();
+		buildCountActualDisbursment();
+		
+		buildCountPlannedCommitments();
+		buildCountPlannedDisbursment();
+		
+		buildAverageSizeofDisbursements();
 	}
 
 	/**
@@ -178,6 +200,72 @@ public class MathExpressionRepository {
 		}
 	}
 
+	
+	private static void  buildDisbursmentRatio () {
+		try {
+			MathExpression x1=new MathExpression(MathExpression.Operation.DIVIDE,ArConstants.ACTUAL_DISBURSEMENT,ArConstants.ACTUAL_DISBURSEMENT_NF);
+			MathExpression x2=new MathExpression(MathExpression.Operation.MULTIPLY,x1,new BigDecimal(100d));
+			expresions.put(DISBURSEMENT_RADIO, x2);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+	
+	
+	private static void  buildCountActualCommitments() {
+		try {
+			MathExpression x1=new MathExpression(MathExpression.Operation.MULTIPLY,ArConstants.ACTUAL_COMMITMENT_COUNT,new BigDecimal(1));
+			expresions.put(COUNT_ACTUAL_COMMITMENT, x1);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+	
+	private static void  buildCountPlannedCommitments() {
+		try {
+			MathExpression x1=new MathExpression(MathExpression.Operation.MULTIPLY,ArConstants.PLANNED_COMMITMENT_COUNT,new BigDecimal(1));
+		
+			expresions.put(COUNT_PLANNED_COMMITMENT, x1);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+	
+	
+	
+	private static void  buildCountPlannedDisbursment() {
+		try {
+			MathExpression x1=new MathExpression(MathExpression.Operation.MULTIPLY,ArConstants.PLANNED_DISBURSEMENT_COUNT,new BigDecimal(1));
+		
+			expresions.put(COUNT_PLANNED_DISBURSEMENT, x1);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+	
+	private static void  buildCountActualDisbursment() {
+		try {
+			MathExpression x1=new MathExpression(MathExpression.Operation.MULTIPLY,ArConstants.ACTUAL_DISBURSEMENT_COUNT,new BigDecimal(1));
+		
+			expresions.put(COUNT_ACTUAL_DISBURSEMENT, x1);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+	
+	
+	
+	private static void  buildAverageSizeofDisbursements() {
+		try {
+			MathExpression x1=new MathExpression(MathExpression.Operation.DIVIDE,ArConstants.ACTUAL_DISBURSEMENT,ArConstants.ACTUAL_DISBURSEMENT_COUNT);
+			expresions.put(AVERAGE_SIZE_DISBURSMENT, x1);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+	
+	
+	
 	
 	/**
 	 * Get The expression by Key

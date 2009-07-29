@@ -27,6 +27,8 @@ import org.dgfoundation.amp.ar.workers.ColumnWorker;
  */
 public abstract class Column extends Viewable implements ColumnIdentifiable {
 	
+	private String expression;
+	
 	protected int maxNameDisplayLength=0;
 	
 	protected int spanCount = 0;
@@ -415,6 +417,15 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 	    Column c=(Column) o;
 	    return this.getName().equals(c.getName());
 	}
+
+	public String getExpression() {
+		return expression;
+	}
+
+	public void setExpression(String expression) {
+		this.expression = expression;
+	}
+	
 	
 }
 

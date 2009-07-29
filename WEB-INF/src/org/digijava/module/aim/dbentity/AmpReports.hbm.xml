@@ -70,6 +70,9 @@
 				<many-to-one name="measure" class="org.digijava.module.aim.dbentity.AmpMeasures"
 					column="measureId" />
 				<property name="orderId" column="order_id" type="java.lang.Long" />
+				
+				
+		
 			</composite-element>
 		</set>
 

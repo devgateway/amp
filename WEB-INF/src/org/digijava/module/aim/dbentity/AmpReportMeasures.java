@@ -23,6 +23,8 @@ public class AmpReportMeasures  implements Serializable, Comparable<AmpReportMea
 	
 	private static AmpCategoryValue defaultLevel = null;
 	
+	
+
 	public AmpReportMeasures() {
 		if (defaultLevel == null)
 	    	defaultLevel=CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.ACTIVITY_LEVEL_KEY, (long)0);
@@ -75,4 +77,6 @@ public class AmpReportMeasures  implements Serializable, Comparable<AmpReportMea
 			return 0;
 		}		
 	}
+	
+
 }

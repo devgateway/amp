@@ -80,29 +80,12 @@ public class ComputedAmountColWorker extends ColumnWorker {
 
 	protected Cell getCellFromCell(Cell src) {
 		CategAmountCell categ = (CategAmountCell) src;
-
 		ComputedAmountCell cell = new ComputedAmountCell();
-
-		cell.setId(categ.getId());
-
-		cell.setOwnerId(categ.getOwnerId());
-		cell.setValue(categ.getValue());
-		cell.setFromExchangeRate(categ.getFromExchangeRate());
-		cell.setCurrencyDate(categ.getCurrencyDate());
-		cell.setCurrencyCode(categ.getCurrencyCode());
-		cell.setToExchangeRate(categ.getToExchangeRate());
-		cell.setColumn(categ.getColumn());
-		cell.setColumnCellValue(categ.getColumnCellValue());
-		cell.setColumnPercent(categ.getColumnPercent());
-		cell.setCummulativeShow(categ.isCummulativeShow());
-
-		cell.setShow(categ.isShow());
-		cell.setRenderizable(categ.isRenderizable());
-		cell.setCummulativeShow(categ.isCummulativeShow());
-		cell.setMetaData(categ.getMetaData());
+		cell.setValuesFromCell((CategAmountCell)src);
 		return cell;
 	}
-
+	
+	
 	public Cell newCellInstance() {
 		return new ComputedAmountCell();
 

@@ -22,6 +22,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
+import org.dgfoundation.amp.ar.cell.ComputedAmountCell;
 import org.dgfoundation.amp.ar.cell.TextCell;
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
@@ -350,8 +351,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		// attach funding coming from extra sources ... inject funding from
 		// proposed project cost, but with isShow=false so it won't be taken
 		// into calculations
-		if (ARUtil.containsMeasure(ArConstants.UNCOMMITTED_BALANCE,
-				reportMetadata.getMeasures())) {
+		if (ARUtil.containsMeasure(ArConstants.UNCOMMITTED_BALANCE,reportMetadata.getMeasures())) {
 			AmpReportColumn arcProp = new AmpReportColumn();
 			AmpColumns acProp = new AmpColumns();
 			arcProp.setColumn(acProp);
@@ -376,8 +376,7 @@ public class AmpReportGenerator extends ReportGenerator {
 			categorizeByFundingType = true;
 
 		// get the funding column
-		AmountCellColumn funding = (AmountCellColumn) rawColumns
-				.getColumn(ArConstants.COLUMN_FUNDING);
+		AmountCellColumn funding = (AmountCellColumn) rawColumns.getColumn(ArConstants.COLUMN_FUNDING);
 
 		Column newcol = new GroupColumn();
 		if (categorizeByFundingType) {
@@ -389,21 +388,15 @@ public class AmpReportGenerator extends ReportGenerator {
 			while (ii.hasNext()) {
 				AmpReportMeasures ampReportMeasurement = ii.next();
 				AmpMeasures element = ampReportMeasurement.getMeasure();
-				if (element.getMeasureName().equals(
-						ArConstants.UNDISBURSED_BALANCE)
-						|| element.getMeasureName().equals(
-								ArConstants.TOTAL_COMMITMENTS)
-						|| element.getMeasureName().equals(
-								ArConstants.UNCOMMITTED_BALANCE))
+				
+				if (element.getMeasureName().equals(ArConstants.UNDISBURSED_BALANCE) || 
+						element.getMeasureName().equals(ArConstants.TOTAL_COMMITMENTS) || 
+						element.getMeasureName().equals(ArConstants.UNCOMMITTED_BALANCE) || element.getExpression()!=null
+						)
 					continue;
 
-				MetaInfo<FundingTypeSortedString> metaInfo = new MetaInfo<FundingTypeSortedString>(
-						ArConstants.FUNDING_TYPE, new FundingTypeSortedString(
-								element.getMeasureName(), reportMetadata
-										.getMeasureOrder(element
-												.getMeasureName())));
-				CellColumn cc = new TotalAmountColumn(metaInfo.getValue()
-						.toString(), true);
+				MetaInfo<FundingTypeSortedString> metaInfo = new MetaInfo<FundingTypeSortedString>(ArConstants.FUNDING_TYPE, new FundingTypeSortedString(element.getMeasureName(), reportMetadata.getMeasureOrder(element.getMeasureName())));
+				CellColumn cc = new TotalAmountColumn(metaInfo.getValue().toString(), true);
 				newcol.getItems().add(cc);
 				cc.setParent(newcol);
 
@@ -419,16 +412,51 @@ public class AmpReportGenerator extends ReportGenerator {
 				}
 			}
 		}
+		
+		/**
+		 * Iterare all measure and add a column for each computed measure
+		 */
 
+		Set<AmpReportMeasures> xmeasures = reportMetadata.getMeasures();
+		List<AmpReportMeasures> xmeasuresList = new ArrayList<AmpReportMeasures>(
+				xmeasures);
+		Collections.sort(xmeasuresList);
+		Iterator<AmpReportMeasures> ii = xmeasuresList.iterator();
+		for (AmpReportMeasures ampReportMeasures : xmeasuresList) {
+			if (ampReportMeasures.getMeasure().getExpression()!=null){
+				AmpMeasures m=ampReportMeasures.getMeasure();
+				TotalComputedMeasureColumn cTac=new TotalComputedMeasureColumn(m.getMeasureName());
+				cTac.setExpression(m.getExpression());
+				Iterator i = funding.iterator();
+				while (i.hasNext()) {
+					AmountCell element = (AmountCell) i.next();
+					cTac.addCell(element);
+				}
+
+				newcol.getItems().add(cTac);
+			}
+		}
+		
+		//end computted measures
+		if (ARUtil.containsMeasure(ArConstants.UNDISBURSED_BALANCE,reportMetadata.getMeasures())) {
+			UndisbursedTotalAmountColumn tac = new UndisbursedTotalAmountColumn( ArConstants.UNDISBURSED_BALANCE);
+			Iterator i = funding.iterator();
+			while (i.hasNext()) {
+				AmountCell element = (AmountCell) i.next();
+				// we do not care here about filtering commitments, that is done
+				// at UndisbursedAmountCell level
+				tac.addCell(element);
+			}
+
+			newcol.getItems().add(tac);
+		}
+		
 		// we create the cummulative balance (undisbursed) = act commitment -
 		// act disbursement
 		// iterate each owner
 
-		if (ARUtil.containsMeasure(ArConstants.UNDISBURSED_BALANCE,
-				reportMetadata.getMeasures())) {
-
-			UndisbursedTotalAmountColumn tac = new UndisbursedTotalAmountColumn(
-					ArConstants.UNDISBURSED_BALANCE);
+		if (ARUtil.containsMeasure(ArConstants.UNDISBURSED_BALANCE,reportMetadata.getMeasures())) {
+			UndisbursedTotalAmountColumn tac = new UndisbursedTotalAmountColumn( ArConstants.UNDISBURSED_BALANCE);
 			Iterator i = funding.iterator();
 			while (i.hasNext()) {
 				AmountCell element = (AmountCell) i.next();
@@ -441,11 +469,8 @@ public class AmpReportGenerator extends ReportGenerator {
 		}
 
 		// uncommitted balance
-		if (ARUtil.containsMeasure(ArConstants.UNCOMMITTED_BALANCE,
-				reportMetadata.getMeasures())) {
-
-			UncommittedTotalAmountColumn tac = new UncommittedTotalAmountColumn(
-					ArConstants.UNCOMMITTED_BALANCE);
+		if (ARUtil.containsMeasure(ArConstants.UNCOMMITTED_BALANCE, reportMetadata.getMeasures())) {
+			UncommittedTotalAmountColumn tac = new UncommittedTotalAmountColumn(ArConstants.UNCOMMITTED_BALANCE);
 			Iterator i = funding.iterator();
 			while (i.hasNext()) {
 				AmountCell element = (AmountCell) i.next();
@@ -459,11 +484,8 @@ public class AmpReportGenerator extends ReportGenerator {
 
 		// we create the total commitments column
 
-		if (ARUtil.containsMeasure(ArConstants.TOTAL_COMMITMENTS,
-				reportMetadata.getMeasures())) {
-
-			TotalCommitmentsAmountColumn tac = new TotalCommitmentsAmountColumn(
-					ArConstants.TOTAL_COMMITMENTS);
+		if (ARUtil.containsMeasure(ArConstants.TOTAL_COMMITMENTS,reportMetadata.getMeasures())) {
+			TotalCommitmentsAmountColumn tac = new TotalCommitmentsAmountColumn(ArConstants.TOTAL_COMMITMENTS);
 			Iterator i = funding.iterator();
 			while (i.hasNext()) {
 				AmountCell element = (AmountCell) i.next();
@@ -475,13 +497,10 @@ public class AmpReportGenerator extends ReportGenerator {
 			newcol.getItems().add(tac);
 		}
 
-		newcol
-				.setName(reportMetadata.getType().intValue() == 4 ? ArConstants.COLUMN_CONTRIBUTION_TOTAL
-						: ArConstants.COLUMN_TOTAL);
+		newcol.setName(reportMetadata.getType().intValue() == 4 ? ArConstants.COLUMN_CONTRIBUTION_TOTAL: ArConstants.COLUMN_TOTAL);
 
 		// make order to measurements
-		List<AmpReportMeasures> listMeasurement = new ArrayList<AmpReportMeasures>(
-				reportMetadata.getMeasures());
+		List<AmpReportMeasures> listMeasurement = new ArrayList<AmpReportMeasures>( reportMetadata.getMeasures());
 		Collections.sort(listMeasurement);
 
 		List<Column> columnlist = newcol.getItems();
@@ -525,6 +544,7 @@ public class AmpReportGenerator extends ReportGenerator {
 	protected void prepareData() {
 
 		try {
+			
 			applyPercentagesToFilterColumns();
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
@@ -581,12 +601,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		// perform removal of funding column if no measure except undisbursed
 		// balance is selected. in such case,we just need totals
 		// or if widget mode is true...
-		if ((reportMetadata.getMeasures().size() == 1 && (ARUtil
-				.containsMeasure(ArConstants.UNDISBURSED_BALANCE,
-						reportMetadata.getMeasures()) || ARUtil
-				.containsMeasure(ArConstants.UNCOMMITTED_BALANCE,
-						reportMetadata.getMeasures())))
-				|| arf.isWidget())
+		if ((reportMetadata.getMeasures().size() == 1 && (ARUtil.containsMeasure(ArConstants.UNDISBURSED_BALANCE, reportMetadata.getMeasures()) || ARUtil.containsMeasure(ArConstants.UNCOMMITTED_BALANCE,reportMetadata.getMeasures())))|| arf.isWidget())
 			reportChild.removeColumnsByName(ArConstants.COLUMN_FUNDING);
 
 		// find out if this is a hierarchical report or not:

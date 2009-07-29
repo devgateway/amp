@@ -13,7 +13,7 @@
 <table id="team_table" bgcolor="white">
 						<thead>
 							<tr>
-								<th><digi:trn key="contentrepository:TableHeader:Select">Select</digi:trn></th>
+								<!-- th><digi:trn key="contentrepository:TableHeader:Select">Select</digi:trn></th -->
 								<th><digi:trn key="contentrepository:TableHeader:Title">Title</digi:trn></th>
 								<th><digi:trn key="contentrepository:TableHeader:Type">Type</digi:trn></th>
 								<th>
@@ -54,9 +54,9 @@
 								</c:set>
 							</logic:equal>
 							<tr>
-								<td>
-									&nbsp;
-								</td>
+								<!-- td>
+                                    &nbsp;                                                          
+                              </td -->
 								<td>
 									<bean:write name='documentData' property='title'/>
 									<%-- <script type="text/javascript">

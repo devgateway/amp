@@ -182,7 +182,7 @@ exclude-result-prefixes="fo">
                             font-weight="bold"
                             font-size="8pt"
                             text-align="center">
-                    <fo:inline font-style="italic"> INSERT FOOTER TEXT HERE</fo:inline>
+                    <fo:inline font-style="italic"> <!--INSERT FOOTER TEXT HERE --></fo:inline>
                   </fo:block>
                 </fo:static-content>
 
@@ -200,7 +200,7 @@ exclude-result-prefixes="fo">
                                     <fo:table-row>
                                       <fo:table-cell>
                                         <fo:block text-align="left">
-                                           HEADER TEXT (e.g Company Name)
+                                           <!--HEADER TEXT (e.g Company Name)-->
                                         </fo:block>
                                       </fo:table-cell>
                                       <fo:table-cell>
@@ -426,7 +426,6 @@ exclude-result-prefixes="fo">
 
 </xsl:template>
 
-
 <xsl:template match="column-heading[@indent]">
   <!--<th nowrap="nowrap" class="column-heading-{@style}" colspan="{@colspan}" rowspan="{@rowspan}">-->
   <fo:table-cell number-columns-spanned="{@colspan}" number-rows-spanned="{@rowspan}" border-style="solid" border-width="0.2mm" background-color="#FFFFFF">
@@ -468,7 +467,7 @@ exclude-result-prefixes="fo">
   </fo:table-cell>
 </xsl:template>
 
-
+<!-- Measures -->
 <xsl:template match="column-heading">
 <!--  <th nowrap="nowrap" class="column-heading-{@style}" colspan="{@colspan}" rowspan="{@rowspan}">-->
 <fo:table-cell number-columns-spanned="{@colspan}" number-rows-spanned="{@rowspan}" border-style="solid" border-width="0.2mm" background-color="#FFFFFF">
@@ -477,7 +476,7 @@ exclude-result-prefixes="fo">
                 <xsl:value-of select="@style" />
             </xsl:with-param>
      </xsl:call-template>
-<fo:block text-align="left" font-size="10pt" font-family="serif" line-height="14pt" space-before="0.5mm" space-after="0.5mm">
+<fo:block text-align="center" font-size="10pt" font-family="serif" line-height="14pt" space-before="0.5mm" space-after="0.5mm">
     <xsl:if test="@indent">
         <xsl:attribute name= "text-indent">
         <xsl:value-of select  = "concat(@indent,'mm')"/>

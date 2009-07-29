@@ -107,7 +107,7 @@ public class GetActivities extends Action {
             }
 			//convert activities to xml
 			logger.debug("Converting activities to XML");
-			String xml = activities2XML(activities,maxPages,currCode,request);
+			String xml = activities2XML(activities,maxPages,currCode);
 
 			out.println(xml);
 //			outputStream.write(xml.getBytes());
@@ -287,7 +287,7 @@ public class GetActivities extends Action {
 	 * @see AmpActivity
 	 * @see ActivityItem
 	 */
-	private String activities2XML(Collection<ActivityItem> acts,int maxPages, String currencyCode, HttpServletRequest request) throws Exception {
+	private String activities2XML(Collection<ActivityItem> acts,int maxPages, String currencyCode) throws Exception {
         double proposedSum = 0;
 		double actualSum = 0;
 		double actualDisbSum = 0;
@@ -298,7 +298,7 @@ public class GetActivities extends Action {
 			for(ActivityItem activity : acts) {
 //                activity.
                 //create helper bean from activity and program percent
-				ActivityItem item = new ActivityItem(activity.getAct(),currencyCode,activity.getPercent(), request);
+				ActivityItem item = new ActivityItem(activity.getAct(),currencyCode,activity.getPercent());
 				//get already calculated amounts from helper
 				ActivityUtil.ActivityAmounts amounts = item.getAmounts();
 				//calculate totals

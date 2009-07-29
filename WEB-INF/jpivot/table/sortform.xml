@@ -13,10 +13,10 @@
   <listItem value="5" label="fmt:sortform.topcount"/>
   <listItem value="6" label="fmt:sortform.bottomcount"/>
   </listBox1>
-  <!--
+
   <textField type="posint" bookmark="false" modelReference="extensions(sortRank).topBottomCount" label="fmt:sortform.rowcount" title="fmt:sortform.enternumber"/>
-  <checkBox modelReference="rowAxisBuilder.axisConfig.propertyConfig.showProperties" label="fmt:sortform.showprops"/>
-	-->
+  <!--<checkBox modelReference="rowAxisBuilder.axisConfig.propertyConfig.showProperties" label="fmt:sortform.showprops"/> -->
+
   <buttons>
     <button action="validate" label="fmt:sortform.ok" handler="com.tonbeller.wcf.form.ButtonHandler" hide="true"/>
     <button action="revert" label="fmt:sortform.cancel" handler="com.tonbeller.wcf.form.ButtonHandler" hide="true"/>

@@ -25,6 +25,7 @@ import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.gis.dbentity.GisMap;
 import org.digijava.module.aim.action.IndicatorValues;
 import java.util.ArrayList;
+import org.digijava.module.aim.dbentity.AmpSector;
 
 /**
  * <p>Title: </p>
@@ -155,30 +156,85 @@ public class DbUtil {
     }
 
     public static List getSectorFoundings(Long sectorId) {
-        List retVal = null;
-        Session session = null;
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            Query q = null;
-            if (sectorId > -1) {
-                q = session.createQuery(
-                        "select sec.activityId, sec.sectorPercentage from " +
-                        AmpActivitySector.class.getName() +
-                        " sec where sec.sectorId=:sectorId");
-                q.setParameter("sectorId", sectorId, Hibernate.LONG);
-            } else {
-                q = session.createQuery(
-                        "select sec.activityId, sec.sectorPercentage from " +
-                        AmpActivitySector.class.getName() + " sec");
 
+       List subSectorIds = null;
+       if (sectorId > -1) {
+           subSectorIds = getSubSectorIdsWhereclause(sectorId);
+       }
+       List retVal = null;
+       Session session = null;
+       try {
+           session = PersistenceManager.getRequestDBSession();
+           Query q = null;
+           if (sectorId > -1) {
 
-            }
-            retVal = q.list();
-        } catch (Exception ex) {
-            logger.debug("Unable to get map from DB", ex);
-        }
-        return retVal;
-    }
+               StringBuffer whereCaluse = new StringBuffer();
+               Iterator parentIt = subSectorIds.iterator();
+               while (parentIt.hasNext()) {
+                   Long parSecId = (Long) parentIt.next();
+                   whereCaluse.append(parSecId.longValue());
+                   if (parentIt.hasNext()) {
+                       whereCaluse.append(",");
+                   }
+               }
+               StringBuffer qs = new StringBuffer("select sec.activityId, sec.sectorPercentage from ");
+               qs.append(AmpActivitySector.class.getName());
+               qs.append(" sec where sec.sectorId in (");
+               qs.append(whereCaluse);
+               qs.append(")");
+               q = session.createQuery(qs.toString());
+          } else {
+               q = session.createQuery("select distinct sec.activityId, sec.sectorPercentage from " +AmpActivitySector.class.getName() + " sec");
+           }
+           retVal = q.list();
+       } catch (Exception ex) {
+           logger.debug("Unable to get sector fundings from DB", ex);
+       }
+       return retVal;
+   }
+
+   public static List getSubSectorIdsWhereclause(Long sectorId) {
+       List param = new ArrayList();
+       param.add(sectorId);
+       List childIds = new ArrayList();
+       getSubSectorIds(param, childIds);
+       childIds.add(sectorId);
+       return childIds;
+   }
+
+   public static void getSubSectorIds(List sectorIds, List childIds) {
+           Session session = null;
+           StringBuffer whereCaluse = new StringBuffer();
+           Iterator parentIt = sectorIds.iterator();
+           while (parentIt.hasNext()) {
+               Long parSecId = (Long) parentIt.next();
+               whereCaluse.append(parSecId.longValue());
+               if (parentIt.hasNext()) {
+                   whereCaluse.append(",");
+               }
+           }
+           List local = null;
+           try {
+               session = PersistenceManager.getRequestDBSession();
+               Query q = null;
+               StringBuffer qs = new StringBuffer("select sec.ampSectorId from ");
+               qs.append(AmpSector.class.getName());
+               qs.append(" sec where sec.parentSectorId.ampSectorId in ");
+               qs.append("(");
+               qs.append(whereCaluse);
+               qs.append(")");
+               q = session.createQuery(qs.toString());
+               local = q.list();
+           } catch (Exception ex) {
+               logger.debug("Unable to get sector IDs from DB", ex);
+           }
+
+           if (!local.isEmpty()) {
+               childIds.addAll(local);
+               getSubSectorIds(local, childIds);
+           }
+   }
+
 
     public static List getIndicatorsForSector(Long sectorId, int mapLevel) {
        List retVal = null;

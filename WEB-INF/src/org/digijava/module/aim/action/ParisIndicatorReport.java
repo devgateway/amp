@@ -352,23 +352,27 @@ public class ParisIndicatorReport extends Action {
     }
 
     private String clacTargetValue(AmpAhsurveyIndicatorCalcFormula fl, List donorCol, boolean lastColumn) {
-        if (donorCol != null && fl != null && fl.getCalcFormula() != null) {
-            if(donorCol.size() == 0) {
-            	return null;
-            }
-        	ParisIndicator donor = (ParisIndicator) donorCol.get(0);
-            ArrayList answ1 = donor.getAnswers();
-            double ans1[] = (double[]) answ1.get(0);
-            if (ans1 != null) {
-                String formula = null;
-                if (lastColumn) {
-                    formula = getFormulaText(fl, ans1[ans1.length - 1]);
-                } else {
-                    formula = getFormulaText(fl, ans1[0]);
-                }
-
-                return String.valueOf(AmpMath.calcExp(formula));
-            }
+        try {
+	    	if (donorCol != null && fl != null && fl.getCalcFormula() != null) {
+	            if(donorCol.size() == 0) {
+	            	return null;
+	            }
+	        	ParisIndicator donor = (ParisIndicator) donorCol.get(0);
+	            ArrayList answ1 = donor.getAnswers();
+	            double ans1[] = (double[]) answ1.get(0);
+	            if (ans1 != null) {
+	                String formula = null;
+	                if (lastColumn) {
+	                    formula = getFormulaText(fl, ans1[ans1.length - 1]);
+	                } else {
+	                    formula = getFormulaText(fl, ans1[0]);
+	                }
+	
+	                return String.valueOf(AmpMath.calcExp(formula));
+	            }
+	        }
+        } catch (NumberFormatException e){
+        	logger.error(e);
         }
         return null;
     }

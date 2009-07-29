@@ -13,6 +13,7 @@
 	<page name="viewPublicDocuments" page="viewPublicDocuments"/>
 	<page name="nondhtmlAddDocument" page="nondhtmlAddDocument"/>
 	<page name="amp_deleteDocumentResponse" page="deleteDocumentResponse"/>
+	<page name="viewSupportDocument" page="viewSupportDocument" title ="- Support Documents" />
 </secondary-pages>
 
 

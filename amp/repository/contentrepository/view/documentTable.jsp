@@ -14,7 +14,7 @@
 						<thead>
 							<tr>
 								<!-- th><digi:trn key="contentrepository:TableHeader:Select">Select</digi:trn></th -->
-								<th><digi:trn key="contentrepository:TableHeader:Title">Title</digi:trn></th>
+								<th>dsds<digi:trn key="contentrepository:TableHeader:Title">Title</digi:trn></th>
 								<th><digi:trn key="contentrepository:TableHeader:Type">Type</digi:trn></th>
 								<th>
                                 	<digi:trn key="contentrepository:TableHeader:ResourceName">Resource Name</digi:trn>   

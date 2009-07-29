@@ -5,6 +5,7 @@ package org.digijava.module.contentrepository.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -81,6 +82,11 @@ public class DocumentManager extends Action {
 		showContentRepository(request, myForm, errors);
 		
 		this.saveErrors(request, errors);
+		
+		String fwd = request.getParameter("fwd");
+		if ((fwd != null) && (fwd.equals("support"))) {
+			return mapping.findForward(fwd);
+		}
 		
 		return mapping.findForward("forward");
 	}
@@ -192,12 +198,28 @@ public class DocumentManager extends Action {
 					}
 				}
 			}
+			if ( myForm.getType() != null && myForm.getType().equals("support") && myForm.getUuid() != null ) {
+				if (myForm.getFileData() != null || myForm.getWebLink() != null) {
+					Node sNode		= DocumentManagerUtil.getSupportDocumentNode(jcrWriteSession, teamMember);
+					NodeWrapper nodeWrapper		= new NodeWrapper(myForm, request, sNode , false, errors);
+					if ( nodeWrapper != null && !nodeWrapper.isErrorAppeared() ) {
+						nodeWrapper.saveNode(jcrWriteSession);
+					}
+				}
+			}
 			
-			myForm.setMyPersonalDocuments(  this.getPrivateDocuments(teamMember, jcrWriteSession.getRootNode(), request)  );
-			myForm.setMyTeamDocuments( this.getTeamDocuments(teamMember, jcrWriteSession.getRootNode(), request) );
+			String fwd = request.getParameter("fwd");
+			if ((fwd != null) && (fwd.equals("support"))) {
+				myForm.setSupportDocuments(this.getSupportDocuments(teamMember, jcrWriteSession.getRootNode(), request));
+				myForm.setMyPersonalDocuments(Collections.EMPTY_LIST);
+				myForm.setMyTeamDocuments(Collections.EMPTY_LIST);
+			} else {
+				myForm.setSupportDocuments(Collections.EMPTY_LIST);
+				myForm.setMyPersonalDocuments(  this.getPrivateDocuments(teamMember, jcrWriteSession.getRootNode(), request)  );
+				myForm.setMyTeamDocuments( this.getTeamDocuments(teamMember, jcrWriteSession.getRootNode(), request) );
+			}					
 		}catch (Exception e) {
 			// TODO Auto-generated catch block
-			
 			e.printStackTrace();
 			return false;
 		}
@@ -344,6 +366,17 @@ public class DocumentManager extends Action {
 		}
 		return getDocuments(teamNode, request);
 	}
+	private Collection getSupportDocuments(TeamMember teamMember, Node rootNode, HttpServletRequest request) {
+		Node teamNode;
+		try {
+			//teamNode = rootNode.getNode("team/" + teamMember.getTeamId() );
+			teamNode	= DocumentManagerUtil.getSupportDocumentNode(rootNode.getSession(), teamMember);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		return getDocuments(teamNode, request);
+	}
 	
 	private Collection getDocuments(Node node, HttpServletRequest request) {
 		try {
@@ -415,12 +448,15 @@ public class DocumentManager extends Action {
 				String uuid						= documentNode.getUUID();
 				boolean isPublicVersion		= uuidMapVer.containsKey(uuid);
 				
-				if ( isPublicVersion ) { // This document is public and exactly this version is the public one
+				String fwd = myRequest.getParameter("fwd");
+				if ((fwd != null) && (fwd.equals("support"))) {
+					hasViewRights = true;
+				} else {
+					if ( isPublicVersion ) { // This document is public and exactly this version is the public one
 						hasViewRights			= true;
+					} else hasViewRights		= DocumentManagerRights.hasViewRights(documentNode, myRequest);
 				}
-				else
-						hasViewRights			= DocumentManagerRights.hasViewRights(documentNode, myRequest);
-				
+								
 				if ( hasViewRights == null || !hasViewRights.booleanValue() ) {
 					continue;
 				}

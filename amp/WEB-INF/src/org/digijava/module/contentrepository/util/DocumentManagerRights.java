@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
 public class DocumentManagerRights {
@@ -16,6 +17,7 @@ public class DocumentManagerRights {
 		Node node	= DocumentManagerUtil.getWriteNode(uuid, request);
 		return hasDeleteRights(node, request);
 	}
+	
 	public static Boolean hasDeleteRights(Node node, HttpServletRequest request) {
 		boolean result						= true;
 		Boolean manuallySetNoDeleteFlag	= isManuallySetNoDeleteFlag(request);
@@ -64,6 +66,7 @@ public class DocumentManagerRights {
 			manuallySetNoMakePublicFlag = true;
 		return true && manuallySetNoMakePublicFlag && isLeaderOfManagementWorkspace( request ) ;
 	}
+	
 	public static Boolean hasDeleteRightsOnPublicVersion(Node node, HttpServletRequest request) {
 		return true && isOwnerOrTeamLeader(node, request);
 	}
@@ -84,12 +87,18 @@ public class DocumentManagerRights {
 			 */
 			if ( path.contains(userPath) ) {
 				return new Boolean(true);
-			}
-			
+			}			
 			/**
 			 * If team leader of the team
 			 */
 			if ( teamMember.getTeamHead() && path.contains("/" + teamId + "/") ) {
+				return new Boolean(true);
+			}
+			/**
+			 * If it is the admin (for support document)
+			 */
+			String ampAdmin = (String) request.getSession().getAttribute("ampAdmin");
+			if (ampAdmin.equals("yes")) {// admin is not related to a special team ...
 				return new Boolean(true);
 			}
 			return new Boolean(false);
@@ -100,6 +109,7 @@ public class DocumentManagerRights {
 			return null;
 		}
 	}
+	
 	private static Boolean isTeamDocument(Node node, HttpServletRequest request) {
 		HttpSession httpSession		= request.getSession(); 
 		TeamMember teamMember		= (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
@@ -130,9 +140,14 @@ public class DocumentManagerRights {
 	private static Boolean isLeaderOfManagementWorkspace( HttpServletRequest request ) {
 		HttpSession httpSession		= request.getSession(); 
 		TeamMember teamMember		= (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
-		AmpTeam ampTeam = TeamUtil.getAmpTeam(teamMember.getTeamId());
-		if("Management".equals(ampTeam.getAccessType()) && teamMember.getTeamHead()) return true;
-		return false;
+		String ampAdmin = (String) request.getSession().getAttribute("ampAdmin");
+		if (ampAdmin.equals("yes")) {// admin is not related to a special team ...
+			return false; // im not sure but we should not be able to make support document public
+		} else {
+			AmpTeam ampTeam = TeamUtil.getAmpTeam(teamMember.getTeamId());
+			if ("Management".equals(ampTeam.getAccessType()) && teamMember.getTeamHead()) return true;
+			else return false; 
+		}				
 	}
 	
 	private static Boolean isManuallySetNoShowVersionsFlag(HttpServletRequest request) {
@@ -166,6 +181,7 @@ public class DocumentManagerRights {
 		}
 		return null;
 	}
+	
 	private static Boolean isManuallySetViewAllFlag(HttpServletRequest request) {
 		if ( request.getParameter("viewAllRights") != null ) {
 			Boolean result	= Boolean.parseBoolean( request.getParameter("viewAllRights") );

@@ -1,0 +1,1 @@
+update amp_comments set member_name=(select concat(FIRST_NAMES," ",LAST_NAME) from dg_user u inner join amp_team_member tm on tm.user_ =id where member_id=tm.amp_team_mem_id);

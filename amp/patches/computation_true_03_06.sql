@@ -1,0 +1,1 @@
+update amp_team set computation=true where access_type="Computed"; update amp_team set access_type="Team" where computation=true;

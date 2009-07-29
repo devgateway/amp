@@ -197,6 +197,7 @@
 <feature:display name="Total Commitments" module="Measures"></feature:display> 
 <feature:display name="Undisbursed Balance" module="Measures"></feature:display> 
 <feature:display name="User Help" module="HELP"></feature:display> 
+<feature:display name="Support Documents" module="HELP"></feature:display> 
 <feature:display name="Web Resources" module="Document"></feature:display> 
 <feature:display name="Widget Places" module="WIDGETS"></feature:display> 
 <feature:display name="yuiampmenuitemlabel" module="Document Management"></feature:display>

@@ -30,6 +30,7 @@
     	<forward name="forward" path="/showLayout.do?layout=viewDocumentManager" />
     	<forward name="publicView" path="/showLayout.do?layout=viewPublicDocuments" />
     	<forward name="ajaxDocumentList" path="/showLayout.do?layout=amp_getDocumentList" />
+    	<forward name="support" path="/showLayout.do?layout=viewSupportDocument" />
     </action>
     <action path="/contentrepository/setAttributes" type="org.digijava.module.contentrepository.action.SetAttributes" name="crSetAttributesForm" validate="false" />
    </action-mappings>

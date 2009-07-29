@@ -48,6 +48,24 @@
 	%>
 	</logic:notPresent>
 </logic:present>
+
+<script language="JavaScript">
+function toggleSettings(){
+	var currentDisplaySettings = document.getElementById('currentDisplaySettings');
+	var displaySettingsButton = document.getElementById('displaySettingsButton');
+	if(currentDisplaySettings.style.display == "block"){
+		currentDisplaySettings.style.display = "none";
+		displaySettingsButton.innerHTML = "${showCurrSettings} &gt;&gt;";
+	}
+	else
+	{
+		currentDisplaySettings.style.display = "block";
+		displaySettingsButton.innerHTML = "${hideCurrSettings} &lt;&lt;";
+	}
+}
+	
+</script>
+
 <div id="content"  class="yui-skin-sam" style="padding-left:10px;width:98%;min-width:680px;"> 
 <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;font-size:10px;">
 

@@ -33,7 +33,7 @@
 
 
 
-</style>
+
 <style>
 .link{
 	text-decoration: none;
@@ -110,65 +110,66 @@ session.setAttribute("progressValue", counter);
 %>
 
 <logic:notEqual name="widget" scope="request" value="true">
-<logic:notEqual name="viewFormat" scope="request" value="print">
-<jsp:include page="/repository/aim/view/ar/toolBar.jsp" />
-
-<c:set var="rowIdx" value="<%=new Integer(0)%>" scope="request"/>
-<bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page" />
-
-<logic:notEqual name="widget" scope="request" value="true">
-	<div class="reportname" style="background: #222E5D">
-		<table width="100%" border="0" cellpadding="0" cellspacing="0">
-  			<tr>
-    			<td align="left">
-    				<img src="images/tableftcorner.gif"/>
-    			</td>
-    			<td align="center" nowrap="nowrap" style="background:#222E5D; font-family: Arial;color:white;font-weight: bold;">
-    				<bean:write scope="session" name="reportMeta" property="name" />
-    			</td>
-    			<td align="right">
-    				<img src="images/tabrightcorner.gif" />
-    			</td>
-  			</tr>
-		</table>
-	</div>
-</logic:notEqual>
-
-<table width="100%" cellpadding="3" cellspacing="1" rules="rows" frame="box" style="margin-left: 5px;border-color:#999999;">
-	<logic:notEmpty property="reportDescription" name="reportMeta">
-	<tr style="border-top:#222E5D 3px solid;">
-		<td style="padding-left: 5px;padding-left: 5px;">
-			<digi:trn key="rep:pop:Description">Description:</digi:trn><br>
-				<span style="font-weight: bold;font-size: 13px;margin-left: 5px;margin-top: 3px; font-family: Arial">
-					<bean:write scope="session" name="reportMeta" property="reportDescription" />
-				</span>
-		</td>
-	</tr>
-	</logic:notEmpty>
-	<logic:empty property="reportDescription" name="reportMeta">
-		<tr style="border-top:#222E5D 3px solid;">
-	</logic:empty>
-	<logic:notEmpty property="reportDescription" name="reportMeta">
-	<tr>
-	</logic:notEmpty> 
-		<td align="left" height="20px" style="padding-left: 5px;padding-left: 5px;">
-			<span  style="color: red;font-family: Arial;font-size: 10px;">
-				<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
-					<c:set var="AllAmount">
-						<%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%>
-					</c:set>
-					<digi:trn key="rep:pop:AllAmount">
-						<%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%>
-					</digi:trn>
-				</gs:test>			
-				<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY%>">
-					<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />
-					<digi:trn key="<%="aim:currency:" + ((String)selCurrency).toLowerCase().replaceAll(" ", "") %>"><%=selCurrency %></digi:trn>
-				</logic:present>
-			</span>
-		</td>
-	</tr>
-</logic:notEqual>
+	<logic:notEqual name="viewFormat" scope="request" value="print">
+		<jsp:include page="/repository/aim/view/ar/toolBar.jsp" />
+		
+		<c:set var="rowIdx" value="<%=new Integer(0)%>" scope="request"/>
+		<bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page" />
+		
+		<logic:notEqual name="widget" scope="request" value="true">
+			<div class="reportname" style="background: #222E5D">
+				<table width="100%" border="0" cellpadding="0" cellspacing="0">
+		  			<tr>
+		    			<td align="left">
+		    				<img src="images/tableftcorner.gif"/>
+		    			</td>
+		    			<td align="center" nowrap="nowrap" style="background:#222E5D; font-family: Arial;color:white;font-weight: bold;">
+		    				<bean:write scope="session" name="reportMeta" property="name" />
+		    			</td>
+		    			<td align="right">
+		    				<img src="images/tabrightcorner.gif" />
+		    			</td>
+		  			</tr>
+				</table>
+			</div>
+		</logic:notEqual>
+		
+		<table width="100%" cellpadding="3" cellspacing="1" rules="rows" frame="box" style="margin-left: 5px;border-color:#999999;">
+			<logic:notEmpty property="reportDescription" name="reportMeta">
+			<tr style="border-top:#222E5D 3px solid;">
+				<td style="padding-left: 5px;padding-left: 5px;">
+					<digi:trn key="rep:pop:Description">Description:</digi:trn><br>
+						<span style="font-weight: bold;font-size: 13px;margin-left: 5px;margin-top: 3px; font-family: Arial">
+							<bean:write scope="session" name="reportMeta" property="reportDescription" />
+						</span>
+				</td>
+			</tr>
+			</logic:notEmpty>
+			<logic:empty property="reportDescription" name="reportMeta">
+				<tr style="border-top:#222E5D 3px solid;">
+			</logic:empty>
+			<logic:notEmpty property="reportDescription" name="reportMeta">
+			<tr>
+			</logic:notEmpty> 
+				<td align="left" height="20px" style="padding-left: 5px;padding-left: 5px;">
+					<span  style="color: red;font-family: Arial;font-size: 10px;">
+						<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
+							<c:set var="AllAmount">
+								<%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%>
+							</c:set>
+							<digi:trn key="rep:pop:AllAmount">
+								<%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%>
+							</digi:trn>
+						</gs:test>			
+						<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY%>">
+							<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />
+							<digi:trn key="<%="aim:currency:" + ((String)selCurrency).toLowerCase().replaceAll(" ", "") %>"><%=selCurrency %></digi:trn>
+						</logic:present>
+					</span>
+				</td>
+			</tr>
+			</table>
+	</logic:notEqual>
 </logic:notEqual>
 	<logic:equal name="viewFormat" scope="request" value="print">
 	<script language="JavaScript">
@@ -259,13 +260,15 @@ session.setAttribute("progressValue", counter);
 	</tr>
 	</logic:notEqual>
 	</logic:notEqual>
- 
+
 	<logic:equal name="widget" scope="request" value="true">
+
 	<table width="100%"> 
 		<tr>
 		<td style="padding-left:-2px;">
 		<div style="width:99%;background-color:#ccdbff;padding:2px 2px 2px 2px;Font-size:8pt;font-family:Arial,Helvetica,sans-serif;">
 	        <span style="cursor:pointer;font-style: italic;float:right;" onClick="toggleSettings();" id="displaySettingsButton">${showCurrSettings} &gt;&gt;</span>
+
             <span style="cursor:pointer;float:left;">
             <logic:notEmpty name="reportMeta" property="hierarchies">
                 <a class="settingsLink" onClick="showSorter();">
@@ -329,7 +332,6 @@ session.setAttribute("progressValue", counter);
                 <digi:trn key="rep:pop:SelectedRangeEndYear">End Year:</digi:trn> <%=(arf.getRenderEndYear() > 0)?arf.getRenderEndYear():pageContext.getAttribute("all")%> |
               </td>
              </tr>
-             <tr>
            </table>
            </div>
     	</div>

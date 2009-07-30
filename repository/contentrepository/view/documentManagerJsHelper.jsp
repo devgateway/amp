@@ -818,6 +818,11 @@ function configPanel(panelNum, title, description, optionId, uuid, isAUrl) {
 		myForm.docDescription.readOnly				= true;
 		myForm.docDescription.style.backgroundColor	= "#eeeeee";
 		myForm.docDescription.style.color			= "darkgray";
+
+		myForm.docType.style.backgroundColor	= "#eeeeee";
+		myForm.docType.style.color			= "darkgray";
+
+
 		
 		setPanelHeader(0, "${translation_add_new_version}");
 		

@@ -820,7 +820,8 @@ public class GetFoundingDetails extends Action {
                     //Region level
                     //if (loc.getLocation().getAmpRegion() != null && loc.getLocation().getZone()==null && loc.getLocationPercentage().floatValue() > 0.0f) {
 
-                    if (loc.getLocationPercentage().floatValue() > 0.0f) {
+                    if (loc.getLocationPercentage() != null &&
+                        loc.getLocationPercentage().floatValue() > 0.0f) {
                         if (level == GisMap.MAP_LEVEL_REGION &&
                             loc.getLocation().getAmpRegion() != null) {
 

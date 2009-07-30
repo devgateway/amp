@@ -7,15 +7,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyWorker;
-import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.util.DbUtil;
@@ -201,12 +198,18 @@ public final class TableWidgetUtil {
 	 * @param col
 	 * @return
 	 */
-	public static FilterItemProvider getFilterItemProvider(AmpDaColumnFilter col){
+	public static FilterItemProvider getFilterItemProvider(AmpDaColumnFilter col, String siteId, String locale){
 		//TODO this may return different providers depending on col.filterItemProvider
               if (col.getFilterItemProvider().equals(new Long(FilterItemProvider.DONORS_FILTER))) {
-                return new DonorFilter();
+            	DonorFilter df = new DonorFilter();
+            	df.setSiteId(siteId);
+            	df.setLocale(locale);
+            	return df;
             } else {
-                return new OrgGroupFilter();
+            	OrgGroupFilter ogf = new OrgGroupFilter();
+            	ogf.setSiteId(siteId);
+            	ogf.setLocale(locale);
+                return ogf;
             }
 	}
 	
@@ -219,6 +222,8 @@ public final class TableWidgetUtil {
 		
 		private Map<Long, FilterItem> itemsById = new HashMap<Long, FilterItem>();
 		private List<FilterItem> items = new ArrayList<FilterItem>();
+		private String siteId;
+		private String locale;
 		
 		@SuppressWarnings({ "unchecked", "deprecation" })
 		public DonorFilter(){
@@ -229,7 +234,15 @@ public final class TableWidgetUtil {
 			//AMP-4097 start. Ugly !
 			AmpOrganisation dummyGrp = new AmpOrganisation();
 			dummyGrp.setAmpOrgId(new Long(-1));
-			dummyGrp.setName("Select Donor");
+			String dName;
+			try {
+				dName = TranslatorWorker.translateText("Select Donor",locale,siteId);
+			} catch (WorkerException e) {
+				dName = "Select Donor";
+				Logger.getLogger(this.getClass()).warn("Exception occured while preforming translation.");
+				e.printStackTrace();
+			}
+			dummyGrp.setName(dName);
 			FilterItem dummyItem = new DonorFilterItem(dummyGrp);
 			items.add(dummyItem);
 			itemsById.put(getId(), dummyItem);
@@ -253,6 +266,17 @@ public final class TableWidgetUtil {
 		public Long getId() {
 			return new Long(FilterItemProvider.DONORS_FILTER);
 		}
+
+		
+
+		public void setSiteId(String siteId) {
+			this.siteId = siteId;
+		}
+
+
+		public void setLocale(String locale) {
+			this.locale = locale;
+		}
 		
 	}
         
@@ -266,6 +290,8 @@ public final class TableWidgetUtil {
 		
 		private Map<Long, FilterItem> itemsById = new HashMap<Long, FilterItem>();
 		private List<FilterItem> items = new ArrayList<FilterItem>();
+		private String siteId;
+		private String locale;
 		
 		public OrgGroupFilter(){
 			Collection<AmpOrgGroup> groups = DbUtil.getAllNonGovOrgGroups();
@@ -275,7 +301,15 @@ public final class TableWidgetUtil {
 			//AMP-4097 start. Ugly !
 			AmpOrgGroup dummyGrp = new AmpOrgGroup();
 			dummyGrp.setAmpOrgGrpId(new Long(-1));
-			dummyGrp.setOrgGrpName("Select Donor Group");
+			String dOrgGrpName;
+			try {
+				dOrgGrpName = TranslatorWorker.translateText("Select Donor Group",locale,siteId);
+			} catch (WorkerException e) {
+				dOrgGrpName = "Select Donor Group";
+				Logger.getLogger(this.getClass()).warn("Exception occured while preforming translation.");
+				e.printStackTrace();
+			}
+			dummyGrp.setOrgGrpName(dOrgGrpName);
 			FilterItem dummyItem = new OrgGroupFilterItem(dummyGrp);
 			items.add(dummyItem);
 			itemsById.put(getId(), dummyItem);
@@ -301,6 +335,13 @@ public final class TableWidgetUtil {
 			return new Long(FilterItemProvider.ORG_GROUPS);
 		}
 		
+		public void setSiteId(String siteId) {
+			this.siteId = siteId;
+		}
+		
+		public void setLocale(String locale) {
+			this.locale = locale;
+		}
 	}
 	
 	/**

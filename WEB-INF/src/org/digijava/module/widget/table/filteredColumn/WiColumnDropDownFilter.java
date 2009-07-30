@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.widget.dbentity.AmpDaColumnFilter;
 import org.digijava.module.widget.dbentity.AmpDaValue;
 import org.digijava.module.widget.dbentity.AmpDaValueFiltered;
@@ -27,8 +30,12 @@ public class WiColumnDropDownFilter extends WiColumn {
 
 	public WiColumnDropDownFilter(AmpDaColumnFilter dbColumn) {
 		super(dbColumn);
+		Site site = RequestUtils.getSite(this.getTableProxy().getTable().getHttpReqest());
+		Locale navigationLanguage = RequestUtils.getNavigationLanguage(this.getTableProxy().getTable().getHttpReqest());	 
+		String siteId = site.getId()+"";
+		String locale = navigationLanguage.getCode();
 		//get provider of the drop down filter items. current donors.
-		provider = TableWidgetUtil.getFilterItemProvider(dbColumn);
+		provider = TableWidgetUtil.getFilterItemProvider(dbColumn, siteId, locale);
 		//create map from filter items.
 		Map<Long, WiColumnFilterSubColumn> columnMap = createColumnsFromProvider(provider, this);
 		//setup currently selected item in drop down

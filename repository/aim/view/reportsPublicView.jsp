@@ -40,9 +40,7 @@
 	<% 
 	} else { 
 	%>	
-	<digi:trn key="amp:showallBudget">
-		Showing all public activities...
-	</digi:trn>
+	<digi:trn>Showing all public activities...</digi:trn>
 	<% 
 	} 
 	%>

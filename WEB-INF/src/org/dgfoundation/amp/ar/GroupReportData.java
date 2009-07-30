@@ -316,7 +316,8 @@ public class GroupReportData extends ReportData {
 		for(int k=0;k<levels;k++) levelSorters.add(null);
 		Iterator i=sorterMap.keySet().iterator();
 		while (i.hasNext()) {
-			Long element = (Long) i.next();
+			String src = (String) i.next();
+			Long element =Long.parseLong(src);
 			if(element==null || element -1>=levels) i.remove(); else
 			levelSorters.set(element.intValue() -1,sorterMap.get(element));
 			

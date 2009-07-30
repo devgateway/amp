@@ -60,11 +60,11 @@
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
                 <tr>
                   <td width="100%" vAlign="top">
-						<table width="100%" cellSpacing=1 cellPadding=2 vAlign="top" align="left" border=0>
+						<table width="100%" cellSpacing=1 cellPadding="2" vAlign="top" align="left" border=0>
 
                       <tr>
                         <td width="100%">
-								<table width="98%" cellSpacing=1 cellpadding=2>
+								<table width="98%" cellSpacing=1 cellPadding="2">
 								<field:display feature="Identification" name="Project Title">
 									<tr>
 										<td class="head2-name" width="100%" align="left" bgcolor="#ffffff">
@@ -81,12 +81,12 @@
                             <tr>
                               <td align="center" vAlign="top">
 								<table width="98%" cellSpacing=0 cellpadding=4 style="border-collapse: collapse" border=1>
-<tr bgcolor="#f4f4f2">
+									<tr bgcolor="#f4f4f2">
 										<td  align="center" colspan="2">
 											<b><digi:trn key="aim:activityDetail">Activity Details</digi:trn></b>										
 										</td>
 									</tr>								
-<feature:display name="Identification" module="Project ID and Planning">
+								<feature:display name="Identification" module="Project ID and Planning">
 
 									<field:display feature="Identification" name="Project Comments">
                                     	
@@ -95,12 +95,14 @@
 											<b>
 											<digi:trn key="aim:projectcomments">
 										    Project Comments</digi:trn>
-											</b>								</td>
-<td bgcolor="#ffffff">
-                                          <c:if test="${aimEditActivityForm.identification.projectComments!=null}">
-											<c:set var="objKey" value="${aimEditActivityForm.identification.projectComments}" />
-											<digi:edit key="${objKey}"></digi:edit>
-                                         </c:if>										</td>
+											</b>
+										</td>
+										<td bgcolor="#ffffff">
+	                                          <c:if test="${aimEditActivityForm.identification.projectComments!=null}">
+												<c:set var="objKey" value="${aimEditActivityForm.identification.projectComments}" />
+												<digi:edit key="${objKey}"></digi:edit>
+	                                         </c:if>										
+                                         </td>
 									</tr>    
 									</field:display>
 									
@@ -111,21 +113,21 @@
 											<b>
 											<digi:trn key="aim:objectives">
 										    Objectives</digi:trn>
-											</b>								</td>
-<td bgcolor="#ffffff">
+											</b>
+										</td>
+										<td bgcolor="#ffffff">
                                           <c:if test="${aimEditActivityForm.identification.objectives!=null}">
 											<c:set var="objKey" value="${aimEditActivityForm.identification.objectives}" />
 											<digi:edit key="${objKey}"></digi:edit>
-                                         </c:if>										</td>
+                                         </c:if>										
+                                         </td>
 									</tr>    
 										<logic:present name="currentMember" scope="session">
 										<tr>
 											<td width="27%" align="right" valign="top" nowrap="nowrap" >
-											<b>	
-<digi:trn key="aim:objectiveComments">
-											    Objective Comments</digi:trn>
-	</b>									</td>
-<td bgcolor="#ffffff">
+												<b><digi:trn key="aim:objectiveComments">Objective Comments</digi:trn></b>	
+											</td>
+											<td bgcolor="#ffffff">
 											 <logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 											 	<logic:equal name="comments" property="key" value="Objective Assumption">
 													<logic:iterate name="comments" id="comment" property="value"
@@ -148,7 +150,8 @@
 														<bean:write name="comment" property="comment"/><br/>
 	                                        		</logic:iterate>
 	                                        	</logic:equal>
-											</logic:iterate>										</td>
+											</logic:iterate>										
+											</td>
 										</tr>
 										</logic:present>
 									</field:display>
@@ -387,7 +390,7 @@
 												  </b>												</td>
 										  <td width="73%" bgcolor="#ffffff">
 <c:if test="${!empty aimEditActivityForm.identification.selectedOrganizations}">
-														<table cellSpacing=2 cellPadding=2 border=0>
+														<table cellSpacing="2" cellPadding="2" border=0>
 															<c:forEach var="selectedOrganizations" items="${aimEditActivityForm.identification.selectedOrganizations}" >
 																<c:if test="${not empty selectedOrganizations}">
 																	<tr><td>
@@ -408,7 +411,7 @@
 					            <digi:trn key="aim:planning">Planning</digi:trn>		</b>
 											</td>
 <td bgcolor="#ffffff">
-												<table width="100%" cellSpacing=2 cellPadding=1>
+												<table width="100%" cellSpacing="2" cellPadding="1">
 												<field:display feature="Planning" name="Line Ministry Rank">
 												<tr>
 													<td width="32%"><digi:trn key="aim:lineMinRank">
@@ -577,9 +580,13 @@
 										<td bgcolor="#ffffff">
 											<c:if test="${!empty aimEditActivityForm.location.selectedLocs}">
 												<table width="100%" cellSpacing="2" cellPadding="1">
-												<c:forEach var="locations" items="${aimEditActivityForm.location.selectedLocs}">
+												<c:forEach var="selectedLocs" items="${aimEditActivityForm.location.selectedLocs}">
 													<tr>
 													<td>
+														<c:forEach var="ancestorLoc" items="${selectedLocs.ancestorLocationNames}">
+	                                                                    	[${ancestorLoc}] 
+	                                                    </c:forEach>
+													<!--  
 													<c:if test="${!empty locations.country}">
 														[<c:out value="${locations.country}"/>]													
 													</c:if>
@@ -591,10 +598,16 @@
 													</c:if>
 													<c:if test="${!empty locations.woreda}">
 														[<c:out value="${locations.woreda}"/>]													
-													</c:if>													
+													</c:if>
+													-->													
 													</td>
 													<td align="right">
-														<c:out value="${locations.percent}"/>%												
+														<!-- <c:out value="${locations.percent}"/>% -->
+														<field:display name="Regional Percentage" feature="Location">
+														<c:if test="${selectedLocs.showPercent}">
+																	<c:out value="${selectedLocs.percent}"/>%
+														</c:if>												
+														</field:display>
 													</td>
 													</tr>
 												</c:forEach>

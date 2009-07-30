@@ -737,12 +737,13 @@ function commentWin(val) {
 																								</td>
 																							</c:forEach>
 																							<td align="center" bgcolor="#ffffff">
+																								<field:display name="Regional Percentage" feature="Location">&nbsp;
 																								<c:choose>
                                                                                             		<c:when test='${actLoc.locationPercentage > 0}'>
 																										<fmt:formatNumber type="number" value="${actLoc.locationPercentage}" />
                                              														</c:when>
-                                             														<c:otherwise>&nbsp;</c:otherwise>
                                              													</c:choose>
+                                             													</field:display>
 																							</td>
 																							</tr>
 																						</c:forEach>

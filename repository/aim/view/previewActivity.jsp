@@ -937,9 +937,11 @@ function collapseAll() {
                                                                     </c:forEach>
                                                     		  </td>
                                                     		  <td width="15%" align="right">
+                                                    		  	<field:display name="Regional Percentage" feature="Location">
                                                     		  	<c:if test="${selectedLocs.showPercent}">
 																	<c:out value="${selectedLocs.percent}"/>%
 																</c:if>
+																</field:display>
                                                     		  </td>
                                                     		</tr>
                                                     	</c:forEach>

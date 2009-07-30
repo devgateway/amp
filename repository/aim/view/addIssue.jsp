@@ -30,6 +30,12 @@
 		</field:display>
 	return true;
 	}
+
+	function clearField(){
+		document.getElementById('issue').value="";
+		return true;
+	}
+	
 </script>
 
 <html:hidden property="issues.issueId"/>
@@ -83,7 +89,7 @@
 														</c:if>
 													</td>
 													<td>
-														<input type="reset" value="<digi:trn key='btn:clear'>Clear</digi:trn>" class="dr-menu">													
+														<input type="button" value="<digi:trn key='btn:clear'>Clear</digi:trn>" class="dr-menu" onclick="javascript:return clearField()">													
 													</td>
 												</tr>
 											</table>										

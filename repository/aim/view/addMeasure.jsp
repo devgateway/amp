@@ -15,7 +15,7 @@
 <!--
 
 	function validate() {
-		var meas = document.getElementsByName("measure")[0];
+		var meas = document.getElementsByName("issues.measure")[0];
 		if(isEmpty(meas.value) == true) {
 			alert("Please enter the measure");
 			meas.focus();
@@ -38,6 +38,11 @@
 	function load() {}
 
 	function unload() {}
+
+	function clearField(){
+		document.getElementsByName("issues.measure")[0].value="";
+		return true;
+	}
 
 -->
 </script>
@@ -81,7 +86,7 @@
 														
 													</td>
 													<td>
-														<input type="reset" value="<digi:trn key='btn:clear'>Clear</digi:trn>" class="dr-menu">
+														<input type="button" value="<digi:trn key='btn:clear'>Clear</digi:trn>" class="dr-menu" onclick="javascript:return clearField()">
 													</td>
 												
 												</tr>

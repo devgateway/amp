@@ -62,9 +62,26 @@ public class ExportIndicators2XSLAction extends Action {
 
 		HSSFWorkbook wb = new HSSFWorkbook();
 		String sheetName = mainProg.getName();
-		if (sheetName.length() > 31)
+		if (sheetName.length() > 31){
 			sheetName = sheetName.substring(0, 31);
-		HSSFSheet sheet = wb.createSheet( sheetName.replace(":", "-"));
+                }
+                else {
+                if (sheetName.length() == 0) {
+                    // should not be possible, but still...
+                    sheetName = "blank";
+                }
+               }
+                 
+                // replacing odd symbols for sheet name...
+                sheetName=sheetName.replace("/","|");
+                sheetName=sheetName.replace("*","+");
+                sheetName=sheetName.replace("?", " ");
+                sheetName=sheetName.replace("\\", "|");
+                sheetName=sheetName.replace("[", "(");
+                sheetName=sheetName.replace("]", ")");
+                sheetName =sheetName.replace(":", "-");
+          
+		HSSFSheet sheet = wb.createSheet(sheetName);
 
 		
 		HSSFCellStyle csHeader = wb.createCellStyle();

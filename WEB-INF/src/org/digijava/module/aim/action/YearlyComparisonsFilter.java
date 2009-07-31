@@ -15,6 +15,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.actions.TilesAction;
 import org.digijava.module.aim.form.YearlyComparisonsForm;
+import org.digijava.module.aim.helper.AllTotals;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Currency;
@@ -72,15 +73,31 @@ public class YearlyComparisonsFilter extends TilesAction	{
 				fp.setToYear(formBean.getToYear());
 				fp.setFromYear(formBean.getFromYear());
 			}
+			formBean.setCurrency(fp.getCurrencyCode());
+			formBean.setFiscalCalId(fp.getFiscalCalId().longValue());
+			formBean.setFromYear(fp.getFromYear());
+			formBean.setToYear(fp.getToYear());
 			session.setAttribute("filterParams",fp);
 			formBean.setYears(YearUtil.getYears());
+
+
+			Collection c = YearlyComparisonsWorker.getYearlyComparisons(fp) ;
+			if ( c.size() != 0 ){
+				formBean.setYearlyComparisons(c);
+				AllTotals allTotals = YearlyComparisonsWorker.getAllTotals(c);
+				formBean.setTotalActualCommitment(allTotals.getTotalActualCommitment());
+				formBean.setTotalPlannedDisbursement(allTotals.getTotalPlannedDisbursement());
+				formBean.setTotalActualDisbursement(allTotals.getTotalActualDisbursement());
+				formBean.setTotalActualExpenditure(allTotals.getTotalActualExpenditure());
+				formBean.setTotalDisbOrder(allTotals.getTotalDisbOrder());
+			}
+			
+
+
+			
 			formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
 			formBean.setFiscalYears(new ArrayList());
 			formBean.setFiscalYears(DbUtil.getAllFisCalenders());
-
-			Collection c = YearlyComparisonsWorker.getYearlyComparisons(fp) ;
-			if ( c.size() != 0 )
-				formBean.setYearlyComparisons(c);
 			
 		}
 		return null;

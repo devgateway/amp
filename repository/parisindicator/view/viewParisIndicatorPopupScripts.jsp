@@ -422,6 +422,11 @@
         document.parisIndicatorForm.printPreview.value = true;
         document.parisIndicatorForm.submit();
     }
+
+	function exportPDF() {
+        document.parisIndicatorForm.exportPDF.value = true;
+        document.parisIndicatorForm.submit();
+    }
 </script>
 
 

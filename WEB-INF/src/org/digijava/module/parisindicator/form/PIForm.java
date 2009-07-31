@@ -64,6 +64,24 @@ public class PIForm extends ActionForm {
 
 	private boolean reset;
 	private boolean printPreview;
+	private boolean exportPDF;
+	private boolean exportXLS;
+
+	public boolean isExportPDF() {
+		return exportPDF;
+	}
+
+	public void setExportPDF(boolean exportPDF) {
+		this.exportPDF = exportPDF;
+	}
+
+	public boolean isExportXLS() {
+		return exportXLS;
+	}
+
+	public void setExportXLS(boolean exportXLS) {
+		this.exportXLS = exportXLS;
+	}
 
 	public int getSelectedStartYear() {
 		return selectedStartYear;

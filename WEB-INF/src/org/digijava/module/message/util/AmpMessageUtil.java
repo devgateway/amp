@@ -1,5 +1,7 @@
 package org.digijava.module.message.util;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -10,6 +12,8 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.aim.exception.AimException;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.message.dbentity.AmpMessage;
 import org.digijava.module.message.dbentity.AmpMessageSettings;
 import org.digijava.module.message.dbentity.AmpMessageState;
@@ -788,5 +792,17 @@ public class AmpMessageUtil {
 			throw new AimException("Unable to Load Message", ex);			
 		}
 		return states;
+	}
+	
+	public static String buildDateFromEvent(Date date){
+        String pattern = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+        if (pattern == null) {
+            pattern = "dd/MM/yyyy";
+        }
+        pattern+=" HH:mm";
+        
+        SimpleDateFormat formater=new SimpleDateFormat(pattern);
+		String result = formater.format(date);
+		return result;	
 	}
 }

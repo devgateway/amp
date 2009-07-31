@@ -267,7 +267,8 @@ html>body #mainEmpty {
 					</tr>
 					<tr>
 						<td height="100%" width="100%">
-							<table bgcolor="#ffffff" cellPadding="1" cellSpacing="0" width="100%" border="1">
+							<div id="main">
+								<table bgcolor="#ffffff" cellPadding="1" cellSpacing="0" width="100%">
 								<tr height="100%">
 									<td height="100%" width="100%">
 										<table bgcolor="#ffffff" cellPadding="5" cellSpacing="0" width="100%" border="0">
@@ -365,6 +366,8 @@ html>body #mainEmpty {
 									</td>
 								</tr>
 							</table>
+							</div>
+							
 						</td>
 					</tr>
 				</table>

@@ -795,5 +795,5 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Overage" feature="Computed Fields"></field:display>
 <field:display name="Disbursment Ratio" feature="Computed Fields"></field:display> 
 <field:display name="Average Size of Disbursements" feature="Computed Fields"></field:display> 
-
-
+<field:display name="Average Disbursement Rate" feature="Computed Fields"></field:display>
+<field:display name="Project Age Ratio" feature="Computed Fields"></field:display>

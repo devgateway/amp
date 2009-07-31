@@ -58,14 +58,19 @@ public class ComputedMeasureCell extends AmountCell {
 			// NO CUMULATIVE VALUES
 			if (element.isShow()) {
 				totalCommitments = totalCommitments.add(new BigDecimal(TokenRepository.buildTotalCommitmentsLogicalToken().evaluate(element)));
+				
 				actualCommitments = actualCommitments.add(new BigDecimal(TokenRepository.buildActualCommitmentsLogicalToken().evaluate(element)));
 				actualDisburments = actualDisburments.add(new BigDecimal(TokenRepository.buildActualDisbursementsLogicalToken().evaluate(element)));
+				
 				plannedCommitments = plannedCommitments.add(new BigDecimal(TokenRepository.buildPLannedCommitmentsLogicalToken().evaluate(element)));
 				plannedDisburments = plannedDisburments.add(new BigDecimal(TokenRepository.buildPLannedDisbursementsLogicalToken().evaluate(element)));
 			}
+			
 			totalCommitmentsNF = totalCommitmentsNF.add(new BigDecimal(TokenRepository.buildTotalCommitmentsLogicalToken().evaluateOriginalvalue(element)));
+			
 			actualCommitmentsNF = actualCommitmentsNF.add(new BigDecimal(TokenRepository.buildActualCommitmentsLogicalToken().evaluateOriginalvalue(element)));
 			actualDisburmentsNF = actualDisburmentsNF.add(new BigDecimal(TokenRepository.buildActualDisbursementsLogicalToken().evaluateOriginalvalue(element)));
+			
 			plannedCommitmentsNF = plannedCommitmentsNF.add(new BigDecimal(TokenRepository.buildPLannedCommitmentsLogicalToken().evaluateOriginalvalue(element)));
 			plannedDisburmentsNF = plannedDisburmentsNF.add(new BigDecimal(TokenRepository.buildPLannedDisbursementsLogicalToken().evaluateOriginalvalue(element)));
 

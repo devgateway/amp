@@ -187,9 +187,7 @@ public class AmountCell extends Cell {
 	public double getAmount() {
 		double ret = 0;
 		if (id != null){
-			//I need the original amount without %
-			this.originalAmount=convert();
-			return  originalAmount * getPercentage() / 100;
+			return  convert() * getPercentage() / 100;
 		}
 		Iterator i = mergedCells.iterator();
 		while (i.hasNext()) {
@@ -216,6 +214,8 @@ public class AmountCell extends Cell {
 	 */
 	public void setAmount(double amount) {
 		this.amount = amount;
+		this.originalAmount=amount;
+		
 	}
 
 	public Class getWorker() {
@@ -267,6 +267,18 @@ public class AmountCell extends Cell {
 			resultDbl = inter * toExchangeRate;
 		} else {
 			resultDbl = amount;
+		}
+		return resultDbl;// Math.round(resultDbl);
+	}
+	
+	public double convert(double mnt) {
+		double resultDbl = 0.0;
+		if (fromExchangeRate != toExchangeRate) {
+			double inter = 1 / fromExchangeRate;
+			inter = inter * mnt;
+			resultDbl = inter * toExchangeRate;
+		} else {
+			resultDbl = mnt;
 		}
 		return resultDbl;// Math.round(resultDbl);
 	}
@@ -424,11 +436,7 @@ public class AmountCell extends Cell {
 	}
 
 	public double getOriginalAmount() {
-		return originalAmount;
-	}
-
-	public void setOriginalAmount(double originalAmount) {
-		this.originalAmount = originalAmount;
+		return convert(this.originalAmount);
 	}
 
 }

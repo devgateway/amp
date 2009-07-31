@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.cell.Cell;
-import org.dgfoundation.amp.ar.cell.TextCell;
+import org.dgfoundation.amp.ar.cell.ComputedDateCell;
 import org.dgfoundation.amp.exprlogic.MathExpressionRepository;
 
 public class ComputedDateColWorker extends ColumnWorker {
@@ -74,7 +74,7 @@ public class ComputedDateColWorker extends ColumnWorker {
 		Long id = new Long(rs.getLong(AMP_ACTIVITY_ID));
 		String expression = this.getRelatedColumn().getTokenExpression();
 		BigDecimal days = MathExpressionRepository.get(expression).result(values);
-		TextCell ret = new TextCell(id);
+		ComputedDateCell ret = new ComputedDateCell(id);
 		if (days != null) {
 			ret.setValue(days.toString());
 		} else {
@@ -90,7 +90,7 @@ public class ComputedDateColWorker extends ColumnWorker {
 	}
 
 	public Cell newCellInstance() {
-		return new TextCell();
+		return new ComputedDateCell();
 	}
 
 }

@@ -23,20 +23,21 @@ public class MathExpressionRepository {
 	public static final String EXECUTION_RATE = "buildExecutionRate";
 	public static final String PROJECT_PERIOD = "projectPeriod";
 	public static final String OVERAGE = "overage";
-	
-	
+
 	public static final String DISBURSEMENT_RADIO = "disbursmentRatio";
 
 	public static final String AVERAGE_SIZE_DISBURSMENT = "averageSizeofDisbursements";
 
-	
-	
+	public static final String AVERAGE_DISBURSMENT_RATE = "averageDisbursementRate";
+
+	public static final String PROJECT_AGE_RATIO = "projectAgeRatio";
+
 	public static final String COUNT_ACTUAL_COMMITMENT = "countsActualCommitments";
 	public static final String COUNT_ACTUAL_DISBURSEMENT = "countActualDisbursment";
-	
+
 	public static final String COUNT_PLANNED_COMMITMENT = "countsPlannedCommitments";
 	public static final String COUNT_PLANNED_DISBURSEMENT = "countPlannedDisbursment";
-	
+
 	private static Hashtable<String, MathExpression> expresions = new Hashtable<String, MathExpression>();
 
 	/**
@@ -57,14 +58,13 @@ public class MathExpressionRepository {
 		buildProjectPeriod();
 		buildOverage();
 		buildDisbursmentRatio();
-		
 		buildCountActualCommitments();
 		buildCountActualDisbursment();
-		
 		buildCountPlannedCommitments();
 		buildCountPlannedDisbursment();
-		
 		buildAverageSizeofDisbursements();
+		buildAverageDisbursementRate();
+		buildProjectAgeRatio();
 	}
 
 	/**
@@ -88,7 +88,7 @@ public class MathExpressionRepository {
 	private static void buildAgeOfProject() {
 		try {
 			MathExpression oper = new MathExpression(MathExpression.Operation.DATE_MONTH_DIFF, ArConstants.CURRENT_DATE_VALUE, ArConstants.ACTUAL_START_DATE_VALUE);
-		 expresions.put(AGE_OF_PROJECT, oper);
+			expresions.put(AGE_OF_PROJECT, oper);
 		} catch (Exception e) {
 			logger.error(e);
 		}
@@ -164,24 +164,24 @@ public class MathExpressionRepository {
 			logger.error(e);
 		}
 	}
-	
-	 // Execution rate =	(Cumulative Disbursement/ Cumulative Commitment)*100 
-	private static void  buildExecutionRate() {
+
+	// Execution rate = (Cumulative Disbursement/ Cumulative Commitment)*100
+	private static void buildExecutionRate() {
 		try {
-			MathExpression divideDisbursementByCommitment=new MathExpression(MathExpression.Operation.DIVIDE,ArConstants.ACTUAL_DISBURSEMENT,ArConstants.ACTUAL_COMMITMENT);
-			MathExpression multiplyBy100=new MathExpression(MathExpression.Operation.MULTIPLY,divideDisbursementByCommitment,new BigDecimal(100));
+			MathExpression divideDisbursementByCommitment = new MathExpression(MathExpression.Operation.DIVIDE, ArConstants.ACTUAL_DISBURSEMENT, ArConstants.ACTUAL_COMMITMENT);
+			MathExpression multiplyBy100 = new MathExpression(MathExpression.Operation.MULTIPLY, divideDisbursementByCommitment, new BigDecimal(100));
 			expresions.put(EXECUTION_RATE, multiplyBy100);
 		} catch (Exception e) {
 			logger.error(e);
 		}
 	}
-	
+
 	/**
-	 * Project Period (months) = Proposed Completion Date - Actual Start date 
+	 * Project Period (months) = Proposed Completion Date - Actual Start date
 	 */
-	private static void  buildProjectPeriod() {
+	private static void buildProjectPeriod() {
 		try {
-			MathExpression dateDiff=new MathExpression(MathExpression.Operation.DATE_MONTH_DIFF, ArConstants.PROPOSED_COMPLETION_DATE_VALUE,ArConstants.ACTUAL_START_DATE_VALUE);
+			MathExpression dateDiff = new MathExpression(MathExpression.Operation.DATE_MONTH_DIFF, ArConstants.PROPOSED_COMPLETION_DATE_VALUE, ArConstants.ACTUAL_START_DATE_VALUE);
 			expresions.put(PROJECT_PERIOD, dateDiff);
 		} catch (Exception e) {
 			logger.error(e);
@@ -191,82 +191,98 @@ public class MathExpressionRepository {
 	/**
 	 * Overage (months) = Age of project - Project period
 	 */
-	private static void  buildOverage() {
+	private static void buildOverage() {
 		try {
-			MathExpression subsract=new MathExpression(MathExpression.Operation.SUBTRACT,expresions.get(AGE_OF_PROJECT) ,expresions.get(PROJECT_PERIOD));
+			MathExpression subsract = new MathExpression(MathExpression.Operation.SUBTRACT, expresions.get(AGE_OF_PROJECT), expresions.get(PROJECT_PERIOD));
 			expresions.put(OVERAGE, subsract);
 		} catch (Exception e) {
 			logger.error(e);
 		}
 	}
 
-	
-	private static void  buildDisbursmentRatio () {
+	private static void buildDisbursmentRatio() {
 		try {
-			MathExpression x1=new MathExpression(MathExpression.Operation.DIVIDE,ArConstants.ACTUAL_DISBURSEMENT,ArConstants.ACTUAL_DISBURSEMENT_NF);
-			MathExpression x2=new MathExpression(MathExpression.Operation.MULTIPLY,x1,new BigDecimal(100d));
+			MathExpression x1 = new MathExpression(MathExpression.Operation.DIVIDE, ArConstants.ACTUAL_DISBURSEMENT, ArConstants.ACTUAL_DISBURSEMENT_NF);
+			MathExpression x2 = new MathExpression(MathExpression.Operation.MULTIPLY, x1, new BigDecimal(100d));
 			expresions.put(DISBURSEMENT_RADIO, x2);
 		} catch (Exception e) {
 			logger.error(e);
 		}
 	}
-	
-	
-	private static void  buildCountActualCommitments() {
+
+	private static void buildCountActualCommitments() {
 		try {
-			MathExpression x1=new MathExpression(MathExpression.Operation.MULTIPLY,ArConstants.ACTUAL_COMMITMENT_COUNT,new BigDecimal(1));
+			MathExpression x1 = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.ACTUAL_COMMITMENT_COUNT, new BigDecimal(1));
 			expresions.put(COUNT_ACTUAL_COMMITMENT, x1);
 		} catch (Exception e) {
 			logger.error(e);
 		}
 	}
-	
-	private static void  buildCountPlannedCommitments() {
+
+	private static void buildCountPlannedCommitments() {
 		try {
-			MathExpression x1=new MathExpression(MathExpression.Operation.MULTIPLY,ArConstants.PLANNED_COMMITMENT_COUNT,new BigDecimal(1));
-		
+			MathExpression x1 = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.PLANNED_COMMITMENT_COUNT, new BigDecimal(1));
+
 			expresions.put(COUNT_PLANNED_COMMITMENT, x1);
 		} catch (Exception e) {
 			logger.error(e);
 		}
 	}
-	
-	
-	
-	private static void  buildCountPlannedDisbursment() {
+
+	private static void buildCountPlannedDisbursment() {
 		try {
-			MathExpression x1=new MathExpression(MathExpression.Operation.MULTIPLY,ArConstants.PLANNED_DISBURSEMENT_COUNT,new BigDecimal(1));
-		
+			MathExpression x1 = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.PLANNED_DISBURSEMENT_COUNT, new BigDecimal(1));
+
 			expresions.put(COUNT_PLANNED_DISBURSEMENT, x1);
 		} catch (Exception e) {
 			logger.error(e);
 		}
 	}
-	
-	private static void  buildCountActualDisbursment() {
+
+	private static void buildCountActualDisbursment() {
 		try {
-			MathExpression x1=new MathExpression(MathExpression.Operation.MULTIPLY,ArConstants.ACTUAL_DISBURSEMENT_COUNT,new BigDecimal(1));
-		
+			MathExpression x1 = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.ACTUAL_DISBURSEMENT_COUNT, new BigDecimal(1));
+
 			expresions.put(COUNT_ACTUAL_DISBURSEMENT, x1);
 		} catch (Exception e) {
 			logger.error(e);
 		}
 	}
-	
-	
-	
-	private static void  buildAverageSizeofDisbursements() {
+
+	private static void buildAverageSizeofDisbursements() {
 		try {
-			MathExpression x1=new MathExpression(MathExpression.Operation.DIVIDE,ArConstants.ACTUAL_DISBURSEMENT,ArConstants.ACTUAL_DISBURSEMENT_COUNT);
+			MathExpression x1 = new MathExpression(MathExpression.Operation.DIVIDE, ArConstants.ACTUAL_DISBURSEMENT, ArConstants.ACTUAL_DISBURSEMENT_COUNT);
 			expresions.put(AVERAGE_SIZE_DISBURSMENT, x1);
 		} catch (Exception e) {
 			logger.error(e);
 		}
 	}
-	
-	
-	
-	
+
+	/**
+	 * Project Age Ratio = Age of project / Project Period
+	 */
+	private static void buildProjectAgeRatio() {
+		try {
+			MathExpression x1 = new MathExpression(MathExpression.Operation.DIVIDE, expresions.get(AGE_OF_PROJECT), expresions.get(PROJECT_PERIOD));
+			expresions.put(PROJECT_AGE_RATIO, x1);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+
+	/**
+	 * Average disbursement rate = Execution rate / Number of activities
+	 * (filtered)
+	 */
+	private static void buildAverageDisbursementRate() {
+		try {
+			MathExpression x1 = new MathExpression(MathExpression.Operation.DIVIDE, ArConstants.SUM_OFF_RESULTS, ArConstants.COUNT_PROJECTS);
+			expresions.put(AVERAGE_DISBURSMENT_RATE, x1);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+
 	/**
 	 * Get The expression by Key
 	 * 

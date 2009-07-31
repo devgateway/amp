@@ -17,6 +17,11 @@ public class AmpColumns  implements Serializable, Comparable
 	private String extractorView;
 	private Set filters;
 	private String tokenExpression;
+	
+	// header calculations
+	private String totalExpression;
+	private Boolean showRowCalculations;
+	
 	private String relatedContentPersisterClass;
 	private String description;
 	/**
@@ -125,4 +130,21 @@ public class AmpColumns  implements Serializable, Comparable
 	public void setTokenExpression(String tokenExpression) {
 		this.tokenExpression = tokenExpression;
 	}
+
+	public String getTotalExpression() {
+		return totalExpression;
+	}
+
+	public void setTotalExpression(String totalExpression) {
+		this.totalExpression = totalExpression;
+	}
+
+	public Boolean isShowRowCalculations() {
+		return showRowCalculations;
+	}
+
+	public void setShowRowCalculations(Boolean showRowCalculations) {
+		this.showRowCalculations = showRowCalculations;
+	}
+	
 }

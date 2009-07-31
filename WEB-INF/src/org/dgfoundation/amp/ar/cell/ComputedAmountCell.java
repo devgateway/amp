@@ -2,102 +2,71 @@ package org.dgfoundation.amp.ar.cell;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Set;
 
-import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.workers.ComputedAmountColWorker;
+import org.dgfoundation.amp.exprlogic.ExpressionHelper;
 import org.dgfoundation.amp.exprlogic.MathExpression;
 import org.dgfoundation.amp.exprlogic.MathExpressionRepository;
-import org.dgfoundation.amp.exprlogic.TokenRepository;
 
 public class ComputedAmountCell extends CategAmountCell {
 
 	HashMap<String, BigDecimal> values = new HashMap<String, BigDecimal>();
 
-	public Class getWorker() {
-		return ComputedAmountColWorker.class;
+	private static String COMPUTED_VALUE = "COMPUTED_VALUE";
+	private boolean computedVaule = false;
+
+	// if is a trail cell the value will be set by the Column
+	public void setComputedVaule(BigDecimal value) {
+		computedVaule = true;
+		values.put(COMPUTED_VALUE, value);
 	}
 
-	public void collectValues() {
-		
-		Iterator<CategAmountCell> i = mergedCells.iterator();
-		// total
-		BigDecimal totalCommitments = new BigDecimal(0);
-		// planed
-		BigDecimal actualCommitments = new BigDecimal(0);
-		BigDecimal actualDisburments = new BigDecimal(0);
-		BigDecimal actualExpenditures = new BigDecimal(0);
-
-		// actual
-		BigDecimal plannedCommitments = new BigDecimal(0);
-		BigDecimal plannedDisburments = new BigDecimal(0);
-		BigDecimal plannedExpenditures = new BigDecimal(0);
-		
-		BigDecimal countActualCommitments = new BigDecimal(0);
-		BigDecimal countActualDisburments = new BigDecimal(0);
-		BigDecimal countPlanedCommitments = new BigDecimal(0);
-		BigDecimal countPlanedDisburments = new BigDecimal(0);
-
-
-		//for each element get each funding type
-		while (i.hasNext()) {
-			ComputedAmountCell element = (ComputedAmountCell) i.next();
-			//using the logicExpression we will get the result of each funding type
-			totalCommitments = totalCommitments.add(new BigDecimal(TokenRepository.buildTotalCommitmentsLogicalToken().evaluate(element)));
-			actualCommitments = actualCommitments.add(new BigDecimal(TokenRepository.buildActualCommitmentsLogicalToken().evaluate(element)));
-			actualDisburments = actualDisburments.add(new BigDecimal(TokenRepository.buildActualDisbursementsLogicalToken().evaluate(element)));
-			plannedCommitments = plannedCommitments.add(new BigDecimal(TokenRepository.buildPLannedCommitmentsLogicalToken().evaluate(element)));
-			plannedDisburments = plannedDisburments.add(new BigDecimal(TokenRepository.buildPLannedDisbursementsLogicalToken().evaluate(element)));
-
-			if (element.getMetaValueString(ArConstants.ADJUSTMENT_TYPE).equalsIgnoreCase(ArConstants.ACTUAL)) {
-				if (element.getMetaValueString(ArConstants.TRANSACTION_TYPE).equalsIgnoreCase(ArConstants.COMMITMENT)) {
-					countActualCommitments = countActualCommitments.add(new BigDecimal(1));
-				}
-				if (element.getMetaValueString(ArConstants.TRANSACTION_TYPE).equalsIgnoreCase(ArConstants.DISBURSEMENT)) {
-					countActualDisburments = countActualDisburments.add(new BigDecimal(1));
-				}
-
-			}
-
-			if (element.getMetaValueString(ArConstants.ADJUSTMENT_TYPE).equalsIgnoreCase(ArConstants.PLANNED)) {
-				if (element.getMetaValueString(ArConstants.TRANSACTION_TYPE).equalsIgnoreCase(ArConstants.COMMITMENT)) {
-					countPlanedCommitments = countPlanedCommitments.add(new BigDecimal(1));
-				}
-				if (element.getMetaValueString(ArConstants.TRANSACTION_TYPE).equalsIgnoreCase(ArConstants.DISBURSEMENT)) {
-					countPlanedDisburments = countPlanedDisburments.add(new BigDecimal(1));
-				}
-			}
-		}
-		// crate variable values map
-		values.put(ArConstants.TOTAL_COMMITMENTS, totalCommitments);
-		values.put(ArConstants.ACTUAL_COMMITMENT, actualCommitments);
-		values.put(ArConstants.ACTUAL_DISBURSEMENT, actualDisburments);
-		// values.put(ArConstants.ACTUAL_EXPENDITURET, total_commitments);
-		values.put(ArConstants.PLANNED_COMMITMENT, plannedCommitments);
-		values.put(ArConstants.PLANNED_DISBURSEMENT, plannedDisburments);
-		// values.put(ArConstants.PLANNED_EXPENDITURE, total_commitments);
-		values.put(ArConstants.ACTUAL_COMMITMENT_COUNT, countActualCommitments);
-		values.put(ArConstants.ACTUAL_DISBURSEMENT_COUNT, countActualDisburments);
-
-		values.put(ArConstants.PLANNED_COMMITMENT_COUNT, countPlanedCommitments);
-		values.put(ArConstants.PLANNED_DISBURSEMENT_COUNT, countPlanedDisburments);
+	public Class getWorker() {
+		return ComputedAmountColWorker.class;
 	}
 
 	public double getAmount() {
 		BigDecimal ret = new BigDecimal(0);
 		if (id != null)
 			return (convert() * (getPercentage() / 100));
-		collectValues();
-		
-		MathExpression math=null;
-		
-		if (this.getColumn().getExpression()!=null){
-			math=MathExpressionRepository.get(this.getColumn().getExpression());
-		}else{
-			math=MathExpressionRepository.get(this.getColumn().getWorker().getRelatedColumn().getTokenExpression());
+
+		// get values from mergedCells
+		values.putAll(ExpressionHelper.getRowVariables(mergedCells));
+		MathExpression expression = null;
+
+		// if the value was set by the column just return this
+		if (computedVaule) {
+			return values.get(COMPUTED_VALUE).doubleValue();
+		} else {
+			// if the cell should return the value, do it only if the row
+			// expression is set
+			
+			if (this.getColumn().getExpression() != null) {
+				expression = MathExpressionRepository.get(this.getColumn().getExpression());
+			} else if (this.getColumn().getWorker().getRelatedColumn().getTokenExpression()!=null){
+				expression = MathExpressionRepository.get(this.getColumn().getWorker().getRelatedColumn().getTokenExpression());
+			}
+			
+			String totalExpression=null;
+			if (this.getColumn().getWorker().getRelatedColumn().getTotalExpression()!=null){
+				totalExpression=this.getColumn().getWorker().getRelatedColumn().getTotalExpression();
+			}
+			Boolean showRowCalculation=false;
+			if(this.getColumn().getWorker().getRelatedColumn().isShowRowCalculations()!=null){
+				showRowCalculation=this.getColumn().getWorker().getRelatedColumn().isShowRowCalculations();
+			}
+			
+			// if rowsExpression is present so return the expression result
+			// value
+			if ((expression != null)&&(totalExpression==null || showRowCalculation )) {
+				return expression.result(values).doubleValue();
+			} else {
+				// if not this is a header result
+				return 0d;
+			}
+
 		}
-		return math.result(values).doubleValue();
 	}
 
 	public ComputedAmountCell(Long ownerId) {
@@ -150,9 +119,9 @@ public class ComputedAmountCell extends CategAmountCell {
 		return ret;
 	}
 
-	public void setValuesFromCell(CategAmountCell categ){
+	public void setValuesFromCell(CategAmountCell categ) {
 		ComputedAmountCell cell = new ComputedAmountCell();
-		
+
 		this.setId(categ.getId());
 		this.setOwnerId(categ.getOwnerId());
 		this.setValue(categ.getValue());
@@ -168,7 +137,11 @@ public class ComputedAmountCell extends CategAmountCell {
 		this.setRenderizable(categ.isRenderizable());
 		this.setCummulativeShow(categ.isCummulativeShow());
 		this.setMetaData(categ.getMetaData());
-		
+
 	}
-	
+
+	public HashMap<String, BigDecimal> getValues() {
+		return values;
+	}
+
 }

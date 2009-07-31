@@ -16,7 +16,7 @@ public class MathExpression {
 	 * @author Sebastian Dimunzio Apr 27, 2009
 	 */
 	public enum Operation {
-		ADD, SUBTRACT, DIVIDE, MULTIPLY, DIVIDE_ROUND_DOWN, DIVIDE_ROUND_UP, DATE_MONTH_DIFF;
+		ADD, SUBTRACT, DIVIDE, MULTIPLY, DIVIDE_ROUND_DOWN, DIVIDE_ROUND_UP, DATE_MONTH_DIFF, SUM;
 	}
 
 	private Operation operation = null;

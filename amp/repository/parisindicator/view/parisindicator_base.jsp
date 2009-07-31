@@ -50,6 +50,8 @@
     
     <html:hidden property="reset" value="false"/>
     <html:hidden property="printPreview" value="false"/>
+	<html:hidden property="exportPDF" value="false"/>
+	<html:hidden property="exportXLS" value="false"/>
     <html:hidden property="reportId" value="<%=reportId%>"/>
     
 	<table border="0" cellpadding="10" cellspacing="0" bgcolor="#FFFFFF">
@@ -145,12 +147,12 @@
 								<table border="0" align="center" bgcolor="#addadd" class="toolbartable">
 									<tr>
                                         <td noWrap="nowrap" align="left" valign="center">
-									       <a href="" onclick="javascript:popup_pdf(''); return false;" paramName="indcId" paramId="indcId" target="_blank">
+									       <a onclick="javascript:exportPDF(); return false;" target="_blank">
 									           <digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/pdf.gif" border="0" alt="Export to PDF" />
                                            </a>
                                         </td>
 										<td noWrap="nowrap" align="left" valign="center">
-									       <a href="" onclick="javascript:popup_xls(''); return false;" paramName="indcId" paramId="indcId" target="_blank">
+									       <a onclick="javascript:popup_xls(''); return false;" paramName="indcId" paramId="indcId" target="_blank">
 									           <digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/excel.gif" border="0" alt="Export to Excel" />
 									       </a>
 									    </td>

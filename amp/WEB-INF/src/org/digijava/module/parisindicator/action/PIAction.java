@@ -8,6 +8,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.parisindicator.form.PIForm;
 import org.digijava.module.parisindicator.helper.PIAbstractReport;
+import org.digijava.module.parisindicator.model.PIExportUseCase;
 import org.digijava.module.parisindicator.model.PIUseCase;
 
 public class PIAction extends Action {
@@ -71,9 +72,18 @@ public class PIAction extends Action {
 		piForm.setMainTableRows(report.getReportRows());
 		piForm.setMiniTable(report.getMiniTable());
 
+		// Set output.
 		if (piForm.isPrintPreview()) {
 			piForm.setPrintPreview(false);
 			return mapping.findForward("print");
+		} else if (piForm.isExportPDF()) {
+			piForm.setExportPDF(false);
+
+			PIExportUseCase pdfUseCase = new PIExportUseCase();
+			pdfUseCase.createPDFReport(getServlet(), response, request, piForm.getPiReport().getIndicatorCode(), piForm
+					.getMainTableRows(), piForm.getMiniTable(), piForm.getEndYear());
+
+			return null;
 		} else {
 			return mapping.findForward("forward");
 		}

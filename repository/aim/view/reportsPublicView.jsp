@@ -11,11 +11,14 @@
 
 <jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
 
+<bean:define id="firstReportFound"  value="false" toScope="page"/>
+
 <logic:iterate name="publicReports" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports" indexId="position"> 
-	<logic:equal name="report" property="publicReport" value="true">
+	<logic:equal name="report" property="publicReport" value="true"> 
 		<logic:equal name="report" property="drilldownTab" value="true">
-			<logic:equal name="position" value="0">
+			<logic:equal name="firstReportFound" value="false">
 				<bean:define id="firstReportName" name="report" property="name" toScope="Page"/>
+				<bean:define id="firstReportFound" value="true" toScope="page"/>
 			</logic:equal>
 		</logic:equal>
 	</logic:equal>

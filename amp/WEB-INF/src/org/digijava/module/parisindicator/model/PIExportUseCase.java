@@ -19,6 +19,7 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.parisindicator.helper.*;
 import org.digijava.module.parisindicator.helper.export.PIAbstractExport;
 import org.digijava.module.parisindicator.helper.export.PIReport3Export;
+import org.digijava.module.parisindicator.helper.export.PIReport4Export;
 import org.digijava.module.parisindicator.util.*;
 
 public class PIExportUseCase {
@@ -42,6 +43,9 @@ public class PIExportUseCase {
 		PIAbstractExport export = null;
 		if (PIConstants.PARIS_INDICATOR_REPORT_3.equalsIgnoreCase(reportCode)) {
 			export = new PIReport3Export(RequestUtils.getSite(request), RequestUtils.getNavigationLanguage(request)
+					.getCode());
+		} else if (PIConstants.PARIS_INDICATOR_REPORT_4.equalsIgnoreCase(reportCode)) {
+			export = new PIReport4Export(RequestUtils.getSite(request), RequestUtils.getNavigationLanguage(request)
 					.getCode());
 		}
 

@@ -8,8 +8,6 @@ import org.digijava.module.parisindicator.helper.PIReportAbstractRow;
 
 public abstract class PIAbstractExport {
 
-	// Change this value in the constructor of each report.
-	int NUMBER_OF_CELLS = 0;
 	private Site site;
 	private String langCode;
 

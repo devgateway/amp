@@ -172,7 +172,7 @@ public class FilterUtil {
 		form.setToMonth( filter.getToMonth() );
 		form.setFromDate( filter.getFromDate() );
 		form.setToDate( filter.getToDate() );
-
+		
 		if (filter.getCurrency() != null)
 			form.setCurrency( filter.getCurrency().getAmpCurrencyId() );
 		
@@ -213,7 +213,7 @@ public class FilterUtil {
 		form.setSelectedDonnorAgency( FilterUtil.getObjectsIds(filter.getDonnorgAgency()) );
 		form.setSelectedImplementingAgency( FilterUtil.getObjectsIds(filter.getImplementingAgency()) );
 		form.setSelectedExecutingAgency( FilterUtil.getObjectsIds(filter.getExecutingAgency()) );
-		
+		form.setAmountinthousands(filter.isAmountinthousand());
 	}
 	
 }

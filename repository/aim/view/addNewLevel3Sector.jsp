@@ -197,11 +197,12 @@ function setStripsTable(tableId, classOdd, classEven) {
 											</td>
 										</tr>	
 										<field:display name="Level 3 Sectors List" feature="Sectors">
+										<jsp:useBean id="urlParamsSort" type="java.util.Map" class="java.util.HashMap" />
 										<c:if test="${aimAddSectorForm.jspFlag == false}">
 										<tr>
 											<td>
 												<table  width="100%" height="30" cellpadding="2" cellspacing="0">
-													<tr style="background-color: #999999; color: #000000;" align="center">
+													<tr style="color: #000000;" align="center">
 														<td width="80%" align="left">
 														<!-- Table title -->
 															<b><digi:trn key="aim:LevelThreeSectors">Level Three Sectors</digi:trn></b>
@@ -211,6 +212,44 @@ function setStripsTable(tableId, classOdd, classEven) {
 												</table>
 											</td>
 										</tr>
+										<tr>
+											<td>
+												<table  width="100%" height="30" cellpadding="2" cellspacing="0">
+										
+													<tr style="background-color: #999999; color: #000000;" align="center">
+														<td width="10%" align="left">
+														<b> 
+															<c:set target="${urlParamsSort}" property="sortByColumn" value="sectorCode" /> 
+															<c:set target="${urlParamsSort}" property="ampSectorId">
+																<bean:write name="aimAddSectorForm" property="sectorId" />
+															</c:set>
+															<c:set target="${urlParamsSort}" property="event" value="edit" />
+															<c:set target="${urlParamsSort}" property="level" value="three" />
+															<digi:link href="/viewSectorDetails.do" name="urlParamsSort" style="color:#000000;">
+																<digi:trn key="aim:SectorCode">Code</digi:trn>
+															</digi:link> 
+														</b>
+														</td>
+													
+													    <td width="90%" align="left">
+														<b> 
+															<c:set target="${urlParamsSort}" property="sortByColumn" value="sectorName" /> 
+															<c:set target="${urlParamsSort}" property="ampSectorId">
+																<bean:write name="aimAddSectorForm" property="sectorId" />
+															</c:set>
+															<c:set target="${urlParamsSort}" property="event" value="edit" />
+															<c:set target="${urlParamsSort}" property="level" value="three" />
+															<digi:link href="/viewSectorDetails.do" name="urlParamsSort" style="color:#000000;">
+																<digi:trn key="aim:SectorNameCol">Description</digi:trn>
+															</digi:link> 
+														</b>
+													</td>
+													
+													</tr>
+										</table>
+										</td>
+										</tr>
+										
 										<tr>
 											<td>
 												<div style="overflow: auto; width: 100%; height: 180px; max-height: 180px;">
@@ -227,7 +266,10 @@ function setStripsTable(tableId, classOdd, classEven) {
 														<logic:notEmpty name="aimAddSectorForm" property="subSectors">
 															<logic:iterate name="aimAddSectorForm" property="subSectors" id="sectorLevelTwo" type="org.digijava.module.aim.dbentity.AmpSector	">
 															<tr height="25">
-																<td align="left" width="80%">
+																<td align="left" width="10%">
+																	<bean:write name="sectorLevelTwo" property="sectorCodeOfficial"/>
+																</td>
+																<td align="left" width="70%">
 																	<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
 																	<c:set target="${urlParams2}" property="ampSectorId">
 																	<bean:write name="sectorLevelTwo" property="ampSectorId" />

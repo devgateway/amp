@@ -167,10 +167,12 @@
 														</td>
 													</tr>	
 													<field:display name="Level 1 Sectors List" feature="Sectors">
+													<jsp:useBean id="urlParamsSort" type="java.util.Map" class="java.util.HashMap" />
+													
 													<tr>
 														<td>
 															<table  width="100%" height="30" cellpadding="2" cellspacing="0">
-																<tr style="background-color: #999999; color: #000000;" align="center">
+																<tr style="color: #000000;" align="center">
 																	<td width="80%" align="left">
 																	<!-- Table title -->
 																		<b><digi:trn key="aim:LeveloneSectors">Level One Sectors</digi:trn></b>
@@ -179,6 +181,49 @@
 																</tr>
 															</table>
 														</td>
+													</tr>
+													<tr>
+														<td>
+															<table  width="100%" height="30" cellpadding="2" cellspacing="0">
+													
+																<tr style="background-color: #999999; color: #000000;" align="center">
+																	<td width="10%" align="left">
+																	<b> 
+																		<c:set target="${urlParamsSort}" property="event" value="edit" />
+																		<c:set target="${urlParamsSort}" property="level" value="two" />
+																		<c:set target="${urlParamsSort}" property="sortByColumn" value="sectorCode" /> 
+																		<c:set target="${urlParamsSort}" property="ampSecSchemeId">
+																			<bean:write name="aimAddSectorForm" property="secSchemeId" />
+																		</c:set>
+																		<c:set target="${urlParamsSort}" property="event" value="edit" />
+																		<c:set target="${urlParamsSort}" property="dest" value="admin" />
+																																				
+																		<digi:link href="/updateSectorSchemes.do" name="urlParamsSort" style="color:#000000;">
+																			<digi:trn key="aim:SectorCode">Code</digi:trn>
+																		</digi:link> 
+																	</b>
+																	</td>
+																
+																    <td width="90%" align="left">
+																	<b> 
+																		<c:set target="${urlParamsSort}" property="event" value="edit" />
+																		<c:set target="${urlParamsSort}" property="level" value="two" />
+																		<c:set target="${urlParamsSort}" property="sortByColumn" value="sectorName" /> 
+																		<c:set target="${urlParamsSort}" property="ampSecSchemeId">
+																			<bean:write name="aimAddSectorForm" property="secSchemeId" />
+																		</c:set>
+																		<c:set target="${urlParamsSort}" property="event" value="edit" />
+																		<c:set target="${urlParamsSort}" property="dest" value="admin" />
+																																				
+																		<digi:link href="/updateSectorSchemes.do" name="urlParamsSort" style="color:#000000;">
+																			<digi:trn key="aim:SectorNameCol">Description</digi:trn>
+																		</digi:link> 
+																	</b>
+																</td>
+																
+																</tr>
+													</table>
+													</td>
 													</tr>
 													<tr>
 														<td>
@@ -197,7 +242,11 @@
 																	<logic:notEmpty name="aimAddSectorForm" property="formFirstLevelSectors">
 																		<logic:iterate name="aimAddSectorForm" property="formFirstLevelSectors" id="sectorSchemeLevelOne" type="org.digijava.module.aim.dbentity.AmpSector	">
 																			<tr height="25"> 
-																				<td align="left" width="80%">
+																				<td align="left" width="10%">
+																					<bean:write name="sectorSchemeLevelOne" property="sectorCodeOfficial"/>
+																				</td>
+
+																				<td align="left" width="70%">
 																					<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
 																					<c:set target="${urlParams2}" property="ampSectorId">
 																					<bean:write name="sectorSchemeLevelOne" property="ampSectorId" />

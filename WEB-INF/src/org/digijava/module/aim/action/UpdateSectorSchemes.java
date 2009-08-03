@@ -1,7 +1,10 @@
 
 package org.digijava.module.aim.action;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -16,13 +19,12 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.form.AddSectorForm;
 import org.digijava.module.aim.util.DbUtil;
@@ -59,68 +61,34 @@ public class UpdateSectorSchemes extends Action {
 		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
 		Long siteId = site.getId();
 		String locale = navigationLanguage.getCode();
-		/*Collection scheme = null;
-		
-		
-		
-		scheme = SectorUtil.getSectorSchemes();
-		//String Sevent = (String)session.getAttribute("Event");
-		boolean case1,case2,case3,case4;
-		case1=case2=case3=case4=false;
-		if (event!=null)
-			if(event.equalsIgnoreCase("Edit") && Sevent==null)
-				case1=true;
-		
-		 if(Sevent!=null)
-				if(Sevent.equalsIgnoreCase("Edit")&& event==null)
-					case2=true;
-		 
-		 if(Sevent!=null)
-			 if(Sevent.equalsIgnoreCase("Edit"))
-				 if(event!=null)
-					 if(event.equalsIgnoreCase("Edit"))
-						 case4 = true;
-		 if(event!=null)
-			 if(event.equalsIgnoreCase("Delete") && Sevent!=null)
-				 case3 = true;	
-		 String resetId = (String)session.getAttribute("resetId");
-		 Integer id = new Integer(0);
-		 
-		if (case1 || case2 || case4 || case3)
-			
-			{
-				
-				boolean flag = false;
-				if(resetId!=null)
-					if(resetId.equalsIgnoreCase("no"))
-						flag = true;
-						
-				 if((session.getAttribute("Id"))==null && request.getParameter("ampSecSchemeId")!=null ){
-				 id = new Integer(request.getParameter("ampSecSchemeId"));
-				 session.setAttribute("moreThanLevelOne",null);
-				}
-				 if (session.getAttribute("Id")!=null){
-				 id = new Integer((String)session.getAttribute("Id"));
-				 if(session.getAttribute("moreThanLevelOne")!=null)
-				 return mapping.findForward("toViewSectorDetails");
-				}
-				if(flag){
-					if(request.getParameter("ampSecSchemeId")!=null)
-					id = new Integer(request.getParameter("ampSecSchemeId"));
-					session.setAttribute("Id",null);
-				}
-				else
-				{
-					if(request.getParameter("ampSecSchemeId")!=null)
-						id = new Integer(request.getParameter("ampSecSchemeId"));
-						session.setAttribute("Id",null);
-				}
-				*/
-				logger.info("FinalID=============================="+id);
-if(event!=null){
-					if(event.equalsIgnoreCase("edit")){
+		logger.info("FinalID=============================="+id);
+		String sortByColumn = request.getParameter("sortByColumn");		
+		if(event!=null){
+			if(event.equalsIgnoreCase("edit")){
 				Collection schemeGot = SectorUtil.getEditScheme(id);
-				sectorsForm.setFormFirstLevelSectors(SectorUtil.getSectorLevel1(id));
+	
+				Collection sectors = SectorUtil.getSectorLevel1(id);
+				if(sortByColumn==null || sortByColumn.compareTo("sectorCode")==0){
+					List<AmpSector> sec = new ArrayList<AmpSector>(sectors);
+					Collections.sort(sec, new Comparator<AmpSector>(){
+						public int compare(AmpSector a1, AmpSector a2) {
+							String s1	= a1.getSectorCodeOfficial();
+							String s2	= a2.getSectorCodeOfficial();
+							if ( s1 == null )
+								s1	= "";
+							if ( s2 == null )
+								s2	= "";
+						
+							return s1.toUpperCase().trim().compareTo(s2.toUpperCase().trim());
+						}
+					});
+				
+					sectorsForm.setFormFirstLevelSectors(sec);
+				}
+				else if(sortByColumn!=null && sortByColumn.compareTo("sectorName")==0){
+					sectorsForm.setFormFirstLevelSectors(sectors);
+				}
+				
 				Iterator itr = schemeGot.iterator();
 				while (itr.hasNext()) {
 					AmpSectorScheme ampScheme = (AmpSectorScheme) itr.next();
@@ -129,16 +97,16 @@ if(event!=null){
 					sectorsForm.setSecSchemeCode(ampScheme.getSecSchemeCode());
 					sectorsForm.setParentId(ampScheme.getAmpSecSchemeId());
 				}
-
+	
 				//session.setAttribute("Id",null);
 				return mapping.findForward("viewSectorSchemeLevel1");
 			}
 			
-		else if (event.equals("addscheme")) {
+			else if (event.equals("addscheme")) {
 				logger.debug("now add a new  scheme");
 				return mapping.findForward("addSectorScheme");
 			}
-		else if (event.equals("saveScheme")) {
+			else if (event.equals("saveScheme")) {
 				logger.debug("saving the scheme");
 				AmpSectorScheme ampscheme = new AmpSectorScheme();
 				logger.debug(" the name is...."	+ sectorsForm.getSecSchemeName());
@@ -220,7 +188,7 @@ if(event!=null){
 					
 				return mapping.findForward("viewSectorSchemes");
 			}
-		else if (event.equals("updateScheme")) {
+			else if (event.equals("updateScheme")) {
 				logger.debug(" updating Scheme");
 				String editId = (String) request.getParameter("editSchemeId");
 				Long Id;
@@ -275,26 +243,25 @@ if(event!=null){
 				logger.debug(" updated!!");
 				return mapping.findForward("viewSectorSchemes");
 			}
-		else if(event.equalsIgnoreCase("deleteScheme"))
-		{
-			logger.debug("in the delete Scheme");
-			Long id1 = new Long(request.getParameter("ampSecSchemeId"));
-			Integer a = new Integer(request.getParameter("ampSecSchemeId"));
-			sectorsForm.setFormFirstLevelSectors(SectorUtil.getSectorLevel1(a));
-			if (sectorsForm.getFormFirstLevelSectors().size() >= 1) {
-				logger.debug("no deletion");
-				//ActionErrors errors = new ActionErrors();
-				//errors.add("title", new ActionError("error.aim.deleteScheme.schemeSelected"));
-				//saveErrors(request, errors);
-				session.setAttribute("schemeDeletedError", "true");
-				return mapping.findForward("viewSectorSchemes");
-			}
-			else
-				SectorUtil.deleteScheme(id1);
+			else if(event.equalsIgnoreCase("deleteScheme"))	{
+				logger.debug("in the delete Scheme");
+				Long id1 = new Long(request.getParameter("ampSecSchemeId"));
+				Integer a = new Integer(request.getParameter("ampSecSchemeId"));
+				sectorsForm.setFormFirstLevelSectors(SectorUtil.getSectorLevel1(a));
+				if (sectorsForm.getFormFirstLevelSectors().size() >= 1) {
+					logger.debug("no deletion");
+					//ActionErrors errors = new ActionErrors();
+					//errors.add("title", new ActionError("error.aim.deleteScheme.schemeSelected"));
+					//saveErrors(request, errors);
+					session.setAttribute("schemeDeletedError", "true");
+					return mapping.findForward("viewSectorSchemes");
+				}
+				else
+					SectorUtil.deleteScheme(id1);
 				return mapping.findForward("viewSectorSchemes");
 				
+			}
 		}
-}
 		
 
 		//scheme = SectorUtil.getSectorSchemes();

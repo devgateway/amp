@@ -1636,7 +1636,7 @@ public class ProgramUtil {
 		}
 
 
-        public static String getThemesHierarchyXML(Collection<AmpTheme> allAmpThemes, HttpServletRequest request) {
+        public static String getThemesHierarchyXML(Collection<AmpTheme> allAmpThemes, HttpServletRequest request) throws Exception {
             String result = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
             result += "<progTree>\n";
             if (allAmpThemes != null && allAmpThemes.size() > 0) {

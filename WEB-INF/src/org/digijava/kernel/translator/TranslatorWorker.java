@@ -170,7 +170,7 @@ public class TranslatorWorker {
         return retVal;
     }
     
-    public static String translateText(String text,HttpServletRequest request) {
+    public static String translateText(String text,HttpServletRequest request) throws WorkerException {
  	 	Site site = RequestUtils.getSite(request);
  	 	Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
  	 	                  
@@ -181,8 +181,8 @@ public class TranslatorWorker {
  	 	try {
 			translatedText = TranslatorWorker.translateText(text, locale,siteId);
 		} catch (WorkerException e) {
-			// TODO Auto-generated catch block
-			translatedText = "";
+			logger.error("Error:", e);
+			throw new WorkerException(e);
 		}
  	 	return translatedText;
     }

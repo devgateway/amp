@@ -20,6 +20,8 @@ import org.digijava.module.parisindicator.helper.*;
 import org.digijava.module.parisindicator.helper.export.PIAbstractExport;
 import org.digijava.module.parisindicator.helper.export.PIReport3Export;
 import org.digijava.module.parisindicator.helper.export.PIReport4Export;
+import org.digijava.module.parisindicator.helper.export.PIReport7Export;
+import org.digijava.module.parisindicator.helper.export.PIReport9Export;
 import org.digijava.module.parisindicator.util.*;
 
 public class PIExportUseCase {
@@ -46,6 +48,12 @@ public class PIExportUseCase {
 					.getCode());
 		} else if (PIConstants.PARIS_INDICATOR_REPORT_4.equalsIgnoreCase(reportCode)) {
 			export = new PIReport4Export(RequestUtils.getSite(request), RequestUtils.getNavigationLanguage(request)
+					.getCode());
+		} else if (PIConstants.PARIS_INDICATOR_REPORT_7.equalsIgnoreCase(reportCode)) {
+			export = new PIReport7Export(RequestUtils.getSite(request), RequestUtils.getNavigationLanguage(request)
+					.getCode());
+		} else if (PIConstants.PARIS_INDICATOR_REPORT_9.equalsIgnoreCase(reportCode)) {
+			export = new PIReport9Export(RequestUtils.getSite(request), RequestUtils.getNavigationLanguage(request)
 					.getCode());
 		}
 

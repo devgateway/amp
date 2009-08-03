@@ -241,7 +241,7 @@ html>body #mainEmpty {
 
 	function openPrinter(){
 		var val = document.getElementsByName('indicatorId')[0].value;
-		window.open('/aim/parisIndicatorReport.do~indcId='+val+'~reset=true~print2=true','mywindow','toolbar=no,location=no,directories=no,status=no,menubar=yes,scrollbars=yes,copyhistory=yes,resizable=yes');
+		window.open('/aim/parisIndicatorReport.do~indcId='+val+'~reset=false~print2=true','mywindow','toolbar=no,location=no,directories=no,status=no,menubar=yes,scrollbars=yes,copyhistory=yes,resizable=yes');
 		document.getElementsByName('print2')[0].value = 'false';
 	}
 	

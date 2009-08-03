@@ -8,7 +8,7 @@ import org.dgfoundation.amp.ar.dimension.SectorDimension;
 import org.digijava.module.aim.util.Identifiable;
 
 
-public class AmpSector implements Serializable, Comparable, Identifiable, ARDimensionable
+public class AmpSector implements Serializable, Comparable<AmpSector>, Identifiable, ARDimensionable
 {
 	private Long ampSectorId ;
 	private AmpSector parentSectorId ;
@@ -196,8 +196,8 @@ public void setAmpOrgId(AmpOrganisation org) {
 	}
 
 
-	public int compareTo(Object o) {
-		return ampSectorId.compareTo(((AmpSector)o).getAmpSectorId());
+	public int compareTo(AmpSector o) {
+		return ampSectorId.compareTo(o.getAmpSectorId());
 	}
 	
 	public String toString() {

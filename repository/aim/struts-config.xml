@@ -581,6 +581,8 @@
       <forward name="report2" path="/showLayout.do?layout=viewParisIndicatorReportII" />
       <forward name="index" path="/aim/index.do" redirect="true" />
       <forward name="viewMyDesktop" path="/aim/viewMyDesktop.do" redirect="true" />
+      <forward name="print" path="/showLayout.do?layout=parisIndicatorLayout" />
+      <forward name="print2" path="/showLayout.do?layout=parisIndicatorLayout2" />
     </action>
     
     <action name="aimParisIndicatorReportForm" path="/aim/parisIndicatorPopupAction" scope="session" type="org.digijava.module.aim.action.ParisIndicatorPopupAction" validate="false">

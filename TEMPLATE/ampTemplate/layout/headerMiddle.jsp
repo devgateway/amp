@@ -446,7 +446,7 @@ function adminHelp(){
                                         </module:display>
                                         <feature:display name="Paris Indicators Reports" module="Portfolio">
                                                 <li class="yuiampmenuitem" title='<digi:trn key="aim:clickToViewParisIndcReports">Click here to view Paris Indicator Reports</digi:trn>'>
-                                                    <a class="yuiampmenuitemlabel" href="/aim/parisIndicatorReport.do~indcId=1~reset=true"  onclick="return canExit()">
+                                                    <a class="yuiampmenuitemlabel" href="/aim/parisIndicatorReport.do~indcId=1~reset=true~print2=false~print=false"  onclick="return canExit()">
                                                         <b><digi:trn key="aim:parisIndicator">Paris Indicator</digi:trn></b>
                                                     </a>
                                                 </li>

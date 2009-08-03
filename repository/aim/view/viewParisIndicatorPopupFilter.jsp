@@ -12,6 +12,8 @@
 <digi:form action="/parisIndicatorReport.do?indcId=${aimParisIndicatorReportForm.indicatorId}">
 	<html:hidden property="filterFlag" />
 	<html:hidden property="indicatorId"/>
+	<html:hidden property="print" value="false"/>
+	<html:hidden property="print2" value="false"/>
 	<div id="tabview_container" class="yui-navset">
 		<ul class="yui-nav">
 			<li class="selected">

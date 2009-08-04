@@ -37,6 +37,12 @@ public class MathExpressionRepository {
 
 	public static final String COUNT_PLANNED_COMMITMENT = "countsPlannedCommitments";
 	public static final String COUNT_PLANNED_DISBURSEMENT = "countPlannedDisbursment";
+	
+	
+	//Undisbursed Cumulative Balance = Cumulative Commitment - Cumulative Disbursement
+	public static final String UNDISBURSED_CUMULATIVE_BALANCE = "undisbursedCumulativeBalance";
+	public static final String UNCOMMITED_CUMULATIVE_BALANCE = "uncommitedCumulativeBalance";
+	
 
 	private static Hashtable<String, MathExpression> expresions = new Hashtable<String, MathExpression>();
 
@@ -65,6 +71,8 @@ public class MathExpressionRepository {
 		buildAverageSizeofDisbursements();
 		buildAverageDisbursementRate();
 		buildProjectAgeRatio();
+		buildUndisbursedCumulativeBalance();
+		buildUncommitedCumulativeBalance();
 	}
 
 	/**
@@ -202,7 +210,7 @@ public class MathExpressionRepository {
 
 	private static void buildDisbursmentRatio() {
 		try {
-			MathExpression x1 = new MathExpression(MathExpression.Operation.DIVIDE, ArConstants.ACTUAL_DISBURSEMENT, ArConstants.ACTUAL_DISBURSEMENT_NF);
+			MathExpression x1 = new MathExpression(MathExpression.Operation.DIVIDE, ArConstants.ACTUAL_DISBURSEMENT_FILTERED, ArConstants.TOTAL_ACTUAL_DISBURSEMENT);
 			MathExpression x2 = new MathExpression(MathExpression.Operation.MULTIPLY, x1, new BigDecimal(100d));
 			expresions.put(DISBURSEMENT_RADIO, x2);
 		} catch (Exception e) {
@@ -280,6 +288,31 @@ public class MathExpressionRepository {
 			expresions.put(AVERAGE_DISBURSMENT_RATE, x1);
 		} catch (Exception e) {
 			logger.error(e);
+		}
+	}
+	
+	
+	/**
+	 * Undisbursed Cumulative Balance = Cumulative Commitment - Cumulative Disbursement
+	 */
+	private static void buildUndisbursedCumulativeBalance(){
+		try {
+			MathExpression m1=new MathExpression(MathExpression.Operation.SUBTRACT,ArConstants.ACTUAL_COMMITMENT,ArConstants.ACTUAL_DISBURSEMENT);
+			expresions.put(UNDISBURSED_CUMULATIVE_BALANCE, m1);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+	
+	/**
+	 * Uncommited Cumulative Balance = Cumulative Commitment - Cumulative Disbursement
+	 */
+	private static void buildUncommitedCumulativeBalance(){
+		try {
+			MathExpression m1=new MathExpression(MathExpression.Operation.SUBTRACT,ArConstants.PROPOSED_COST,ArConstants.ACTUAL_COMMITMENT);
+			expresions.put(UNCOMMITED_CUMULATIVE_BALANCE, m1);
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
 	}
 

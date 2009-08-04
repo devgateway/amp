@@ -155,7 +155,7 @@ public class ExpressionHelper {
 		BigDecimal countActualDisburments = new BigDecimal(0);
 		BigDecimal countPlanedCommitments = new BigDecimal(0);
 		BigDecimal countPlanedDisburments = new BigDecimal(0);
-
+		BigDecimal proposedProjectCost = new BigDecimal(0);
 		// for each element get each funding type
 		while (i.hasNext()) {
 			ComputedAmountCell element = (ComputedAmountCell) i.next();
@@ -166,26 +166,31 @@ public class ExpressionHelper {
 			actualDisburments = actualDisburments.add(new BigDecimal(TokenRepository.buildActualDisbursementsLogicalToken().evaluate(element)));
 			plannedCommitments = plannedCommitments.add(new BigDecimal(TokenRepository.buildPLannedCommitmentsLogicalToken().evaluate(element)));
 			plannedDisburments = plannedDisburments.add(new BigDecimal(TokenRepository.buildPLannedDisbursementsLogicalToken().evaluate(element)));
+			if (element.getMetaValueString(ArConstants.ADJUSTMENT_TYPE) != null) {
+				if (element.getMetaValueString(ArConstants.ADJUSTMENT_TYPE).equalsIgnoreCase(ArConstants.ACTUAL)) {
+					if (element.getMetaValueString(ArConstants.TRANSACTION_TYPE).equalsIgnoreCase(ArConstants.COMMITMENT)) {
+						countActualCommitments = countActualCommitments.add(new BigDecimal(1));
+					}
+					if (element.getMetaValueString(ArConstants.TRANSACTION_TYPE).equalsIgnoreCase(ArConstants.DISBURSEMENT)) {
+						countActualDisburments = countActualDisburments.add(new BigDecimal(1));
+					}
 
-			if (element.getMetaValueString(ArConstants.ADJUSTMENT_TYPE).equalsIgnoreCase(ArConstants.ACTUAL)) {
-				if (element.getMetaValueString(ArConstants.TRANSACTION_TYPE).equalsIgnoreCase(ArConstants.COMMITMENT)) {
-					countActualCommitments = countActualCommitments.add(new BigDecimal(1));
-				}
-				if (element.getMetaValueString(ArConstants.TRANSACTION_TYPE).equalsIgnoreCase(ArConstants.DISBURSEMENT)) {
-					countActualDisburments = countActualDisburments.add(new BigDecimal(1));
 				}
 
+				if (element.getMetaValueString(ArConstants.ADJUSTMENT_TYPE).equalsIgnoreCase(ArConstants.PLANNED)) {
+					if (element.getMetaValueString(ArConstants.TRANSACTION_TYPE).equalsIgnoreCase(ArConstants.COMMITMENT)) {
+						countPlanedCommitments = countPlanedCommitments.add(new BigDecimal(1));
+					}
+					if (element.getMetaValueString(ArConstants.TRANSACTION_TYPE).equalsIgnoreCase(ArConstants.DISBURSEMENT)) {
+						countPlanedDisburments = countPlanedDisburments.add(new BigDecimal(1));
+					}
+				}
+			} else if (element.existsMetaString(ArConstants.PROPOSED_COST)) {
+				proposedProjectCost = proposedProjectCost.add(new BigDecimal(TokenRepository.buildUncommittedLogicalToken().evaluate(element)));
 			}
 
-			if (element.getMetaValueString(ArConstants.ADJUSTMENT_TYPE).equalsIgnoreCase(ArConstants.PLANNED)) {
-				if (element.getMetaValueString(ArConstants.TRANSACTION_TYPE).equalsIgnoreCase(ArConstants.COMMITMENT)) {
-					countPlanedCommitments = countPlanedCommitments.add(new BigDecimal(1));
-				}
-				if (element.getMetaValueString(ArConstants.TRANSACTION_TYPE).equalsIgnoreCase(ArConstants.DISBURSEMENT)) {
-					countPlanedDisburments = countPlanedDisburments.add(new BigDecimal(1));
-				}
-			}
 		}
+
 		// crate variable values map
 		values.put(ArConstants.TOTAL_COMMITMENTS, totalCommitments);
 		values.put(ArConstants.ACTUAL_COMMITMENT, actualCommitments);
@@ -202,4 +207,110 @@ public class ExpressionHelper {
 		return values;
 	}
 
+	/**
+	 * 
+	 * @param items
+	 * @return
+	 */
+	public static HashMap<String, BigDecimal> getMeasuresVariables(Collection<ComputedAmountCell> items) {
+		HashMap<String, BigDecimal> values = new HashMap<String, BigDecimal>();
+		Iterator<ComputedAmountCell> i = items.iterator();
+
+		// total
+		BigDecimal totalCommitmentsFiltered = new BigDecimal(0);
+		BigDecimal plannedCommitmentsFiltered = new BigDecimal(0);
+		BigDecimal plannedDisburmentsFiltered = new BigDecimal(0);
+		BigDecimal actualCommitmentsFiltered = new BigDecimal(0);
+		BigDecimal actualDisburmentsFiltered = new BigDecimal(0);
+
+		BigDecimal totalActualCommitments = new BigDecimal(0);
+		BigDecimal totalActualDisburments = new BigDecimal(0);
+		BigDecimal totalPlannedCommitments = new BigDecimal(0);
+		BigDecimal totalPlannedDisburments = new BigDecimal(0);
+
+		BigDecimal actualCommitments = new BigDecimal(0);
+		BigDecimal actualDisburments = new BigDecimal(0);
+		BigDecimal plannedCommitments = new BigDecimal(0);
+		BigDecimal plannedDisburments = new BigDecimal(0);
+
+		BigDecimal countActualCommitments = new BigDecimal(0);
+		BigDecimal countActualDisburments = new BigDecimal(0);
+		BigDecimal countPlanedCommitments = new BigDecimal(0);
+		BigDecimal countPlanedDisburments = new BigDecimal(0);
+
+		BigDecimal proposedProjectCost = new BigDecimal(0);
+
+		// for each element get each funding type
+		while (i.hasNext()) {
+			CategAmountCell element = (CategAmountCell) i.next();
+
+			// NO CUMULATIVE VALUES
+			if (element.isShow()) {
+				totalCommitmentsFiltered = totalCommitmentsFiltered.add(new BigDecimal(TokenRepository.buildTotalCommitmentsLogicalToken().evaluate(element)));
+				actualCommitmentsFiltered = actualCommitmentsFiltered.add(new BigDecimal(TokenRepository.buildActualCommitmentsLogicalToken().evaluate(element)));
+				actualDisburmentsFiltered = actualDisburmentsFiltered.add(new BigDecimal(TokenRepository.buildActualDisbursementsLogicalToken().evaluate(element)));
+				plannedCommitmentsFiltered = plannedCommitmentsFiltered.add(new BigDecimal(TokenRepository.buildPLannedCommitmentsLogicalToken().evaluate(element)));
+				plannedDisburmentsFiltered = plannedDisburmentsFiltered.add(new BigDecimal(TokenRepository.buildPLannedDisbursementsLogicalToken().evaluate(element)));
+			}
+
+			totalActualCommitments = totalActualCommitments.add(new BigDecimal(TokenRepository.buildActualCommitmentsLogicalToken().evaluateOriginalvalue(element)));
+			totalActualDisburments = totalActualDisburments.add(new BigDecimal(TokenRepository.buildActualDisbursementsLogicalToken().evaluateOriginalvalue(element)));
+			totalPlannedCommitments = totalPlannedCommitments.add(new BigDecimal(TokenRepository.buildPLannedCommitmentsLogicalToken().evaluateOriginalvalue(element)));
+			totalPlannedDisburments = totalPlannedDisburments.add(new BigDecimal(TokenRepository.buildPLannedDisbursementsLogicalToken().evaluateOriginalvalue(element)));
+
+			actualCommitments = actualCommitments.add(new BigDecimal(TokenRepository.buildActualCommitmentsLogicalToken().evaluate(element)));
+			actualDisburments = actualDisburments.add(new BigDecimal(TokenRepository.buildActualDisbursementsLogicalToken().evaluate(element)));
+			plannedCommitments = plannedCommitments.add(new BigDecimal(TokenRepository.buildPLannedCommitmentsLogicalToken().evaluate(element)));
+			plannedDisburments = plannedDisburments.add(new BigDecimal(TokenRepository.buildPLannedDisbursementsLogicalToken().evaluate(element)));
+
+			if (element.existsMetaString(ArConstants.ADJUSTMENT_TYPE)) {
+
+				if (element.getMetaValueString(ArConstants.ADJUSTMENT_TYPE).equalsIgnoreCase(ArConstants.ACTUAL)) {
+					if (element.getMetaValueString(ArConstants.TRANSACTION_TYPE).equalsIgnoreCase(ArConstants.COMMITMENT)) {
+						countActualCommitments = countActualCommitments.add(new BigDecimal(1));
+					}
+					if (element.getMetaValueString(ArConstants.TRANSACTION_TYPE).equalsIgnoreCase(ArConstants.DISBURSEMENT)) {
+						countActualDisburments = countActualDisburments.add(new BigDecimal(1));
+					}
+
+				}
+
+				if (element.getMetaValueString(ArConstants.ADJUSTMENT_TYPE).equalsIgnoreCase(ArConstants.PLANNED)) {
+					if (element.getMetaValueString(ArConstants.TRANSACTION_TYPE).equalsIgnoreCase(ArConstants.COMMITMENT)) {
+						countPlanedCommitments = countPlanedCommitments.add(new BigDecimal(1));
+					}
+					if (element.getMetaValueString(ArConstants.TRANSACTION_TYPE).equalsIgnoreCase(ArConstants.DISBURSEMENT)) {
+						countPlanedDisburments = countPlanedDisburments.add(new BigDecimal(1));
+					}
+				}
+			} else if (element.existsMetaString(ArConstants.PROPOSED_COST)) {
+				proposedProjectCost = proposedProjectCost.add(new BigDecimal(TokenRepository.buildUncommittedLogicalToken().evaluate(element)));
+			}
+
+		}
+		// NO CUMULATIVE VALUES (affected by filters an %)
+		values.put(ArConstants.ACTUAL_COMMITMENT_FILTERED, actualCommitmentsFiltered);
+		values.put(ArConstants.ACTUAL_DISBURSEMENT_FILTERED, actualDisburmentsFiltered);
+		values.put(ArConstants.PLANNED_COMMITMENT_FILTERED, plannedCommitmentsFiltered);
+		values.put(ArConstants.PLANNED_DISBURSEMENT_FILTERED, plannedDisburmentsFiltered);
+		// cumulative values all transactions and original values
+
+		values.put(ArConstants.TOTAL_ACTUAL_COMMITMENT, totalActualCommitments);
+		values.put(ArConstants.TOTAL_ACTUAL_DISBURSEMENT, totalActualDisburments);
+		values.put(ArConstants.TOTAL_PLANNED_COMMITMENT, totalPlannedCommitments);
+		values.put(ArConstants.TOTAL_PLANNED_DISBURSEMENT, totalPlannedDisburments);
+
+		values.put(ArConstants.ACTUAL_COMMITMENT, actualCommitments);
+		values.put(ArConstants.ACTUAL_DISBURSEMENT, actualDisburments);
+		values.put(ArConstants.PLANNED_COMMITMENT, plannedCommitments);
+		values.put(ArConstants.PLANNED_DISBURSEMENT, plannedDisburments);
+
+		values.put(ArConstants.ACTUAL_COMMITMENT_COUNT, countActualCommitments);
+		values.put(ArConstants.ACTUAL_DISBURSEMENT_COUNT, countActualDisburments);
+
+		values.put(ArConstants.PLANNED_COMMITMENT_COUNT, countPlanedCommitments);
+		values.put(ArConstants.PLANNED_DISBURSEMENT_COUNT, countPlanedDisburments);
+		values.put(ArConstants.PROPOSED_COST, proposedProjectCost);
+		return values;
+	}
 }

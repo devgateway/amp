@@ -427,6 +427,7 @@ public class AmpReportGenerator extends ReportGenerator {
 				AmpMeasures m=ampReportMeasures.getMeasure();
 				TotalComputedMeasureColumn cTac=new TotalComputedMeasureColumn(m.getMeasureName());
 				cTac.setExpression(m.getExpression());
+				cTac.setDescription(m.getDescription());
 				Iterator i = funding.iterator();
 				while (i.hasNext()) {
 					AmountCell element = (AmountCell) i.next();
@@ -438,50 +439,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		}
 		
 		//end computted measures
-		if (ARUtil.containsMeasure(ArConstants.UNDISBURSED_BALANCE,reportMetadata.getMeasures())) {
-			UndisbursedTotalAmountColumn tac = new UndisbursedTotalAmountColumn( ArConstants.UNDISBURSED_BALANCE);
-			Iterator i = funding.iterator();
-			while (i.hasNext()) {
-				AmountCell element = (AmountCell) i.next();
-				// we do not care here about filtering commitments, that is done
-				// at UndisbursedAmountCell level
-				tac.addCell(element);
-			}
-
-			newcol.getItems().add(tac);
-		}
 		
-		// we create the cummulative balance (undisbursed) = act commitment -
-		// act disbursement
-		// iterate each owner
-
-		if (ARUtil.containsMeasure(ArConstants.UNDISBURSED_BALANCE,reportMetadata.getMeasures())) {
-			UndisbursedTotalAmountColumn tac = new UndisbursedTotalAmountColumn( ArConstants.UNDISBURSED_BALANCE);
-			Iterator i = funding.iterator();
-			while (i.hasNext()) {
-				AmountCell element = (AmountCell) i.next();
-				// we do not care here about filtering commitments, that is done
-				// at UndisbursedAmountCell level
-				tac.addCell(element);
-			}
-
-			newcol.getItems().add(tac);
-		}
-
-		// uncommitted balance
-		if (ARUtil.containsMeasure(ArConstants.UNCOMMITTED_BALANCE, reportMetadata.getMeasures())) {
-			UncommittedTotalAmountColumn tac = new UncommittedTotalAmountColumn(ArConstants.UNCOMMITTED_BALANCE);
-			Iterator i = funding.iterator();
-			while (i.hasNext()) {
-				AmountCell element = (AmountCell) i.next();
-				// we do not care here about filtering commitments, that is done
-				// at UndisbursedAmountCell level
-				tac.addCell(element);
-			}
-
-			newcol.getItems().add(tac);
-		}
-
 		// we create the total commitments column
 
 		if (ARUtil.containsMeasure(ArConstants.TOTAL_COMMITMENTS,reportMetadata.getMeasures())) {

@@ -62,7 +62,13 @@ public class CellColumn extends Column {
 		this.contentCategory = source.getContentCategory();
 		this.dimensionClass = source.getDimensionClass();
 		this.relatedContentPersisterClass = source.getRelatedContentPersisterClass();
+		
 		this.worker=source.getWorker();
+		
+		this.setDescription(source.getDescription());
+		this.setExpression(source.getExpression());
+		this.setTotalExpression(source.getTotalExpression());	
+		
 		itemsMap = new HashMap();
 	}
 

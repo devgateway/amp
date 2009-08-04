@@ -55,14 +55,12 @@
                               	<c:out value="${reportHeading}"/>
                               </digi:trn>
                               <%
-                              if (subColumn.getWorker()!=null && subColumn.getWorker().getRelatedColumn()!=null){
-                              String text=subColumn.getWorker().getRelatedColumn().getDescription();
+                              if (subColumn.getDescription()!=null){
+                              String text=subColumn.getDescription();
                               if (text!=null){ %> 
                        			<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn  key="aim:report:tip:${ampColumnFromTree.columnName}:${ampColumnFromTree.description}"><%=text%></digi:trn>">
-                     <%
-                   			 }
-                     		}
-                    %>
+                    		 	<%}
+                     		  }%>
 	              	</html:link>
 	            </logic:notEqual>
             
@@ -108,6 +106,13 @@
 	       			</c:if>
 	     		</c:otherwise>
 	     		</c:choose>
+	     	 <%
+                              if (subColumn.getDescription()!=null){
+                              String text=subColumn.getDescription();
+                              if (text!=null){ %> 
+                       			<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn  key="aim:report:tip:${ampColumnFromTree.columnName}:${ampColumnFromTree.description}"><%=text%></digi:trn>">
+                    		 	<%}
+                     		  }%>
 	     	</td>	            
         	</logic:notEqual>
     	

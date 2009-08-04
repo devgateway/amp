@@ -94,6 +94,7 @@ public abstract class ColumnWorker {
 		if(extractor) c= extractCellColumn(); else
 			c=generateCellColumn();
 		c.setWorker(this);
+		c.setDescription(this.getRelatedColumn().getDescription());
 		return c;
 	}
 	

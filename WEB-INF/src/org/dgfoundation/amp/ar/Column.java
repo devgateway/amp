@@ -28,7 +28,25 @@ import org.dgfoundation.amp.ar.workers.ColumnWorker;
 public abstract class Column extends Viewable implements ColumnIdentifiable {
 	
 	private String expression;
+	private String totalExpression;
+	public String getTotalExpression() {
+		return totalExpression;
+	}
+
+	public void setTotalExpression(String totalExpression) {
+		this.totalExpression = totalExpression;
+	}
+
+	private String description;
 	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	protected int maxNameDisplayLength=0;
 	
 	protected int spanCount = 0;

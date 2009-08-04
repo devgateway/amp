@@ -10,7 +10,6 @@ import java.util.List;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.ComputedMeasureCell;
-import org.dgfoundation.amp.ar.cell.UndisbursedAmountCell;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
 
 /**

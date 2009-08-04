@@ -18,10 +18,6 @@
 								<digi:trn key="aim:reportBuilder:${ampMeasures.aliasName}">
 									<c:out value="${ampMeasures.aliasName}"/>
 								</digi:trn>
-								<logic:equal name="ampMeasures" property="aliasName" value="Undisbursed Balance">
-										<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:report:UndisbursedBalanceToolip">Cumulative Commitment - Cumulative Disbursement (independent of filters)</digi:trn>">
-								</logic:equal>
-							
 								<logic:notEmpty name="ampMeasures" property="description" >
 										<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:report:tip:${ampMeasures.measureName}">${ampMeasures.description}</digi:trn>">
 								</logic:notEmpty>

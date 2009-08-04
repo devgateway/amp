@@ -43,6 +43,9 @@ public class ComputedAmountColWorker extends ColumnWorker {
 	public CellColumn newColumnInstance(int initialCapacity) {
 		TotalComputedAmountColumn cc = new TotalComputedAmountColumn(columnName, false, initialCapacity);
 		cc.setWorker(this);
+		cc.setDescription(this.getRelatedColumn().getDescription());
+		cc.setExpression(this.getRelatedColumn().getTokenExpression());
+		cc.setTotalExpression(this.getRelatedColumn().getTokenExpression());
 		return cc;
 	}
 

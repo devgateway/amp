@@ -70,15 +70,15 @@ public abstract class ReportData extends Viewable {
 	    int visibleRows=this.getVisibleRows();
 	    int rowNum = getCurrentRowNumber();
 	    //if the object is before the page window, or after the page window, ignore it
-	    if(rowNum+visibleRows<startRow || rowNum>endRow) {
-		incCurrentRowNumberBy(visibleRows);
-		return false;
+	    if(rowNum+visibleRows<=startRow || rowNum>endRow) {
+	    	incCurrentRowNumberBy(visibleRows);
+	    	return false;
 	    }
 	    return true;	    
 	}
 	
 	protected int startRow;
-	protected int endRow;
+	protected int endRow; 
 	
 	public int getStartRow() {
 		if(this.getParent()!=null) return this.getParent().getStartRow();

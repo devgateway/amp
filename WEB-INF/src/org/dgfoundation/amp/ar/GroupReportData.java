@@ -33,7 +33,7 @@ public class GroupReportData extends ReportData {
 	@Override
 	public int getVisibleRows() {
     	    Iterator i=items.iterator();
-    	    int ret=1;
+    	    int ret=0;
     	if(this.getReportMetadata().getHideActivities()!=null && this.getReportMetadata().getHideActivities())
 			return ret;
 		

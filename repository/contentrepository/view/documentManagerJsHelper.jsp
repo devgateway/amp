@@ -511,7 +511,10 @@ function newWindow(title, showSelectButton, otherDocumentsDiv) {
 	
 	var menuObj						= null;
 	if (showSelectButton) {
-				menuObj	= addMenuToDocumentList(YAHOO.amp.num_of_tables, document.getElementById("menuContainerDiv"), windowController);
+				var divForRenderingMenu		= document.getElementById("menuContainerDiv");
+				if ( divForRenderingMenu == null )
+					divForRenderingMenu		= newDiv;
+				menuObj	= addMenuToDocumentList(YAHOO.amp.num_of_tables, divForRenderingMenu, windowController);
 				YAHOO.util.Event.addListener(otherDocumentsButtonElement, "click", showMenu, menuObj, true);
 	}
 	
@@ -702,7 +705,7 @@ function addMenuToDocumentList (menuNum, containerElement, windowController) {
 	menu.addItem(  new YAHOO.widget.MenuItem("${trans_teamMemberDocuments}", {submenu: membersMenu})   );
 	</logic:notEmpty>
 	
-	/*<logic:notEmpty name="meTeamMember">
+	<logic:notEmpty name="meTeamMember">
 		var scopeObj	= {
 			teamId				: '<bean:write name="meTeamMember" property="teamId" />'
 		};
@@ -715,7 +718,7 @@ function addMenuToDocumentList (menuNum, containerElement, windowController) {
 		
 	menu.addItem(  new YAHOO.widget.MenuItem("${trans_teamDocuments}", {onclick: onclickObj} )   );
 	</logic:notEmpty>
-	
+	/*
 		var onclickObj 	= {
 			fn					: windowController.populateWithPublicDocs,
 			scope				: windowController

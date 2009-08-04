@@ -421,6 +421,20 @@
 			<transaction>CREATE TABLE qrtz_trigger_listeners LIKE ${clean.source}.qrtz_trigger_listeners</transaction><transaction>INSERT IGNORE qrtz_trigger_listeners (SELECT * from ${clean.source}.qrtz_trigger_listeners)</transaction>
 			<transaction>CREATE TABLE qrtz_triggers LIKE ${clean.source}.qrtz_triggers</transaction><transaction>INSERT IGNORE qrtz_triggers (SELECT * from ${clean.source}.qrtz_triggers)</transaction>
 			
+			<!-- create cached table mockups -->
+			<transaction>CREATE TABLE cached_amp_activity LIKE ${clean.source}.cached_amp_activity</transaction>
+			<transaction>CREATE TABLE cached_v_donor_date_hierarchy LIKE ${clean.source}.cached_v_donor_date_hierarchy</transaction>
+			<transaction>CREATE TABLE cached_v_donor_funding LIKE ${clean.source}.cached_v_donor_funding</transaction>
+			<transaction>CREATE TABLE cached_v_national_program LIKE ${clean.source}.cached_v_national_program</transaction>
+			<transaction>CREATE TABLE cached_v_primary_program LIKE ${clean.source}.cached_v_primary_program</transaction>	
+			<transaction>CREATE TABLE cached_v_primary_sector LIKE ${clean.source}.cached_v_primary_sector</transaction>
+			<transaction>CREATE TABLE cached_v_regions LIKE ${clean.source}.cached_v_regions</transaction>
+			<transaction>CREATE TABLE cached_v_sec_sub_sector LIKE ${clean.source}.cached_v_sec_sub_sector</transaction>
+			<transaction>CREATE TABLE cached_v_secondary_program LIKE ${clean.source}.cached_v_secondary_program</transaction>
+			<transaction>CREATE TABLE cached_v_secondary_sector LIKE ${clean.source}.cached_v_secondary_sector</transaction>
+			<transaction>CREATE TABLE cached_v_status LIKE ${clean.source}.cached_v_status</transaction>
+			<transaction>CREATE TABLE cached_v_sub_sector LIKE ${clean.source}.cached_v_sub_sector</transaction>
+			
 			<!-- mandatory custom indexes -->
 			<transaction>ALTER TABLE amp_category_value ADD INDEX cv_index(category_value)</transaction>
 			<transaction>CREATE INDEX amp_currency_to_currency_code ON amp_currency_rate(to_currency_code)</transaction>

@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyWorker;
 import org.digijava.kernel.exception.DgException;
@@ -88,7 +90,27 @@ public final class TableWidgetUtil {
 		column.setTableProxy(tableProxy);
 		return column;
 	}
-	
+
+	/**
+	 * Creates new column. Exact type of the result depends on the parameter.
+	 * @param dbColumn
+	 * @param table
+	 * @return
+	 */
+	public static WiColumn newColumn(AmpDaColumn dbColumn, TableProxy tableProxy, HttpServletRequest request){
+		int type = (dbColumn.getColumnType()==null)?WiColumn.STANDARD:dbColumn.getColumnType();
+		WiColumn column = null;
+		if (type == WiColumn.STANDARD){
+			column = new WiColumnStandard(dbColumn);
+		}else if (type == WiColumn.CALCULATED){
+			column =new WiColumnCalculated();
+		}else if (type == WiColumn.FILTER && (dbColumn instanceof AmpDaColumnFilter)){
+			column = new WiColumnDropDownFilter((AmpDaColumnFilter)dbColumn, request);
+		}
+		column.setTableProxy(tableProxy);
+		return column;
+	}
+
 	/**
 	 * Creates new widget table cell.
 	 * Exact type depends on value object.
@@ -201,14 +223,10 @@ public final class TableWidgetUtil {
 	public static FilterItemProvider getFilterItemProvider(AmpDaColumnFilter col, String siteId, String locale){
 		//TODO this may return different providers depending on col.filterItemProvider
               if (col.getFilterItemProvider().equals(new Long(FilterItemProvider.DONORS_FILTER))) {
-            	DonorFilter df = new DonorFilter();
-            	df.setSiteId(siteId);
-            	df.setLocale(locale);
+            	DonorFilter df = new DonorFilter(siteId, locale);
             	return df;
             } else {
-            	OrgGroupFilter ogf = new OrgGroupFilter();
-            	ogf.setSiteId(siteId);
-            	ogf.setLocale(locale);
+            	OrgGroupFilter ogf = new OrgGroupFilter(siteId, locale);
                 return ogf;
             }
 	}
@@ -224,6 +242,36 @@ public final class TableWidgetUtil {
 		private List<FilterItem> items = new ArrayList<FilterItem>();
 		private String siteId;
 		private String locale;
+		
+		@SuppressWarnings({ "unchecked", "deprecation" })
+		public DonorFilter(String siteId, String locale){
+			Collection<AmpOrganisation> donors = DbUtil.getAllDonorOrgs();
+			if (donors==null){
+				donors = new ArrayList<AmpOrganisation>();
+			}
+			//AMP-4097 start. Ugly !
+			AmpOrganisation dummyGrp = new AmpOrganisation();
+			dummyGrp.setAmpOrgId(new Long(-1));
+			String dName;
+			try {
+				dName = TranslatorWorker.translateText("Select Donor",locale,siteId);
+			} catch (WorkerException e) {
+				dName = "Select Donor";
+				Logger.getLogger(this.getClass()).warn("Exception occured while preforming translation.");
+				e.printStackTrace();
+			}
+			dummyGrp.setName(dName);
+			FilterItem dummyItem = new DonorFilterItem(dummyGrp);
+			items.add(dummyItem);
+			itemsById.put(getId(), dummyItem);
+			//AMP-4097 end
+			for (AmpOrganisation org : donors) {
+				FilterItem item= new DonorFilterItem(org);
+				items.add(item);
+				itemsById.put(item.getId(), item);
+			}
+			
+		}
 		
 		@SuppressWarnings({ "unchecked", "deprecation" })
 		public DonorFilter(){
@@ -268,16 +316,6 @@ public final class TableWidgetUtil {
 		}
 
 		
-
-		public void setSiteId(String siteId) {
-			this.siteId = siteId;
-		}
-
-
-		public void setLocale(String locale) {
-			this.locale = locale;
-		}
-		
 	}
         
         /**
@@ -290,10 +328,8 @@ public final class TableWidgetUtil {
 		
 		private Map<Long, FilterItem> itemsById = new HashMap<Long, FilterItem>();
 		private List<FilterItem> items = new ArrayList<FilterItem>();
-		private String siteId;
-		private String locale;
 		
-		public OrgGroupFilter(){
+		public OrgGroupFilter(String siteId, String locale){
 			Collection<AmpOrgGroup> groups = DbUtil.getAllNonGovOrgGroups();
 			if (groups==null){
 				groups = new ArrayList<AmpOrgGroup>();
@@ -323,6 +359,29 @@ public final class TableWidgetUtil {
 			
 		}
 		
+		public OrgGroupFilter(){
+			Collection<AmpOrgGroup> groups = DbUtil.getAllNonGovOrgGroups();
+			if (groups==null){
+				groups = new ArrayList<AmpOrgGroup>();
+			}
+			//AMP-4097 start. Ugly !
+			AmpOrgGroup dummyGrp = new AmpOrgGroup();
+			dummyGrp.setAmpOrgGrpId(new Long(-1));
+			String dOrgGrpName = "Select Donor Group";
+			dummyGrp.setOrgGrpName(dOrgGrpName);
+			FilterItem dummyItem = new OrgGroupFilterItem(dummyGrp);
+			items.add(dummyItem);
+			itemsById.put(getId(), dummyItem);
+			//AMP-4097 end
+
+			for (AmpOrgGroup orgGr : groups) {
+				FilterItem item= new OrgGroupFilterItem(orgGr);
+				items.add(item);
+				itemsById.put(item.getId(), item);
+			}
+			
+		}
+		
 		public FilterItem getItem(Long id) {
 			return itemsById.get(id);
 		}
@@ -335,13 +394,6 @@ public final class TableWidgetUtil {
 			return new Long(FilterItemProvider.ORG_GROUPS);
 		}
 		
-		public void setSiteId(String siteId) {
-			this.siteId = siteId;
-		}
-		
-		public void setLocale(String locale) {
-			this.locale = locale;
-		}
 	}
 	
 	/**

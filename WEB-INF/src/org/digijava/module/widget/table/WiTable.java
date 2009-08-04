@@ -131,6 +131,18 @@ public class WiTable extends Widget{
 			this.tableId = tableId;
 			buildFromDbTable(LoadFromDb(tableId));
 		}
+		
+		/**
+		 * Use this one to build from db.
+		 * @param tableId
+		 * @throws DgException
+		 */
+		public TableBuilder(Long tableId, HttpServletRequest request) throws DgException{
+			this.tableProxy = new TableProxy();
+			this.tableId = tableId;
+			this.httpReqest = request;
+			buildFromDbTable(LoadFromDb(tableId));
+		}
 
 		/**
 		 * Loads table from db. Change this to change method of retrieving table from db. 
@@ -156,7 +168,7 @@ public class WiTable extends Widget{
 			this.width = dbTable.getWidth();
 			Set<AmpDaColumn> dbColumns = dbTable.getColumns();
 			for (AmpDaColumn dbColumn : dbColumns) {
-				WiColumn column = TableWidgetUtil.newColumn(dbColumn,this.tableProxy);
+				WiColumn column = TableWidgetUtil.newColumn(dbColumn,this.tableProxy,this.httpReqest);
 				this.columns.add(column);
 				this.columnsById.put(column.getId(), column);
 			}

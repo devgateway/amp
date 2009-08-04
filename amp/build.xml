@@ -356,70 +356,70 @@
 		<echo message="Copying mandatory data from  ${clean.source} into ${clean.db}..."/>
 		<sql driver="com.mysql.jdbc.Driver" password="${mysql.password}" url="${mysql.url}/${clean.db}" userid="${mysql.user}" print="true">
 			<classpath refid="compile.classpath"/>
-			<transaction>INSERT INTO AMP_INDICATOR_RISK_RATINGS (SELECT * from ${clean.source}.AMP_INDICATOR_RISK_RATINGS)</transaction>
-			<transaction>INSERT INTO amp_category_class (SELECT * from ${clean.source}.amp_category_class)</transaction>
-			<transaction>INSERT INTO amp_category_value (SELECT * from ${clean.source}.amp_category_value)</transaction>
-			<transaction>INSERT INTO amp_category_value_location (SELECT * from ${clean.source}.amp_category_value_location)</transaction>
-			<transaction>INSERT INTO amp_columns (SELECT * from ${clean.source}.amp_columns)</transaction>
-			<transaction>INSERT INTO amp_columns_order (SELECT * from ${clean.source}.amp_columns_order)</transaction>
-			<transaction>INSERT INTO amp_columns_filters (SELECT * from ${clean.source}.amp_columns_filters)</transaction>
-			<transaction>INSERT INTO amp_currency (SELECT * from ${clean.source}.amp_currency)</transaction>
-			<transaction>INSERT INTO amp_global_settings (SELECT * from ${clean.source}.amp_global_settings)</transaction>
-			<transaction>INSERT INTO amp_level (SELECT * from ${clean.source}.amp_level)</transaction>
-			<transaction>INSERT INTO amp_measures (SELECT * from ${clean.source}.amp_measures)</transaction>
-			<transaction>INSERT INTO amp_org_type (SELECT * from ${clean.source}.amp_org_type)</transaction>
-			<transaction>INSERT INTO amp_quartz_job_class (SELECT * from ${clean.source}.amp_quartz_job_class)</transaction>
-			<transaction>INSERT INTO amp_role (SELECT * from ${clean.source}.amp_role)</transaction>
-			<transaction>INSERT INTO dg_countries (SELECT * from ${clean.source}.dg_countries)</transaction>
-			<transaction>INSERT INTO dg_item_status (SELECT * from ${clean.source}.dg_item_status)</transaction>
-			<transaction>INSERT INTO dg_locale (SELECT * from ${clean.source}.dg_locale)</transaction>
+			<transaction>INSERT IGNORE AMP_INDICATOR_RISK_RATINGS (SELECT * from ${clean.source}.AMP_INDICATOR_RISK_RATINGS)</transaction>
+			<transaction>INSERT IGNORE amp_category_class (SELECT * from ${clean.source}.amp_category_class)</transaction>
+			<transaction>INSERT IGNORE amp_category_value (SELECT * from ${clean.source}.amp_category_value)</transaction>
+			<transaction>INSERT IGNORE amp_category_value_location (SELECT * from ${clean.source}.amp_category_value_location)</transaction>
+			<transaction>INSERT IGNORE amp_columns (SELECT * from ${clean.source}.amp_columns)</transaction>
+			<transaction>INSERT IGNORE amp_columns_order (SELECT * from ${clean.source}.amp_columns_order)</transaction>
+			<transaction>INSERT IGNORE amp_columns_filters (SELECT * from ${clean.source}.amp_columns_filters)</transaction>
+			<transaction>INSERT IGNORE amp_currency (SELECT * from ${clean.source}.amp_currency)</transaction>
+			<transaction>INSERT IGNORE amp_global_settings (SELECT * from ${clean.source}.amp_global_settings)</transaction>
+			<transaction>INSERT IGNORE amp_level (SELECT * from ${clean.source}.amp_level)</transaction>
+			<transaction>INSERT IGNORE amp_measures (SELECT * from ${clean.source}.amp_measures)</transaction>
+			<transaction>INSERT IGNORE amp_org_type (SELECT * from ${clean.source}.amp_org_type)</transaction>
+			<transaction>INSERT IGNORE amp_quartz_job_class (SELECT * from ${clean.source}.amp_quartz_job_class)</transaction>
+			<transaction>INSERT IGNORE amp_role (SELECT * from ${clean.source}.amp_role)</transaction>
+			<transaction>INSERT IGNORE dg_countries (SELECT * from ${clean.source}.dg_countries)</transaction>
+			<transaction>INSERT IGNORE dg_item_status (SELECT * from ${clean.source}.dg_item_status)</transaction>
+			<transaction>INSERT IGNORE dg_locale (SELECT * from ${clean.source}.dg_locale)</transaction>
 			<transaction>SET FOREIGN_KEY_CHECKS=0</transaction>
-			<transaction>INSERT INTO dg_site (SELECT * from ${clean.source}.dg_site)</transaction>
-			<transaction>INSERT INTO dg_module_instance (SELECT * from ${clean.source}.dg_module_instance)</transaction>
+			<transaction>INSERT IGNORE dg_site (SELECT * from ${clean.source}.dg_site)</transaction>
+			<transaction>INSERT IGNORE dg_module_instance (SELECT * from ${clean.source}.dg_module_instance)</transaction>
 			<transaction>SET FOREIGN_KEY_CHECKS=1</transaction>
-			<transaction>INSERT INTO dg_site_domain (SELECT * from ${clean.source}.dg_site_domain WHERE site_domain NOT LIKE '192.168%')</transaction>
+			<transaction>INSERT IGNORE dg_site_domain (SELECT * from ${clean.source}.dg_site_domain WHERE site_domain NOT LIKE '192.168%')</transaction>
 			<transaction>UPDATE dg_site_domain SET site_domain='${clean.host}'</transaction>
-			<transaction>INSERT INTO dg_principal_permission (SELECT * from ${clean.source}.dg_principal_permission)</transaction>
-			<transaction>INSERT INTO dg_principal_permission_param (SELECT * from ${clean.source}.dg_principal_permission_param)</transaction>
-			<transaction>INSERT INTO patch_file (SELECT * from ${clean.source}.patch_file)</transaction>
-			<transaction>INSERT INTO amp_currency_rate (SELECT * from ${clean.source}.amp_currency_rate)</transaction>
-			<transaction>INSERT INTO dg_message (SELECT * from ${clean.source}.dg_message)</transaction>
-			<transaction>INSERT INTO amp_templates_visibility (SELECT * from ${clean.source}.amp_templates_visibility)</transaction>
+			<transaction>INSERT IGNORE dg_principal_permission (SELECT * from ${clean.source}.dg_principal_permission)</transaction>
+			<transaction>INSERT IGNORE dg_principal_permission_param (SELECT * from ${clean.source}.dg_principal_permission_param)</transaction>
+			<transaction>INSERT IGNORE patch_file (SELECT * from ${clean.source}.patch_file)</transaction>
+			<transaction>INSERT IGNORE amp_currency_rate (SELECT * from ${clean.source}.amp_currency_rate)</transaction>
+			<transaction>INSERT IGNORE dg_message (SELECT * from ${clean.source}.dg_message)</transaction>
+			<transaction>INSERT IGNORE amp_templates_visibility (SELECT * from ${clean.source}.amp_templates_visibility)</transaction>
 			<transaction>SET FOREIGN_KEY_CHECKS=0</transaction>
-			<transaction>INSERT INTO amp_modules_visibility (SELECT * from ${clean.source}.amp_modules_visibility)</transaction>
+			<transaction>INSERT IGNORE amp_modules_visibility (SELECT * from ${clean.source}.amp_modules_visibility)</transaction>
 			<transaction>SET FOREIGN_KEY_CHECKS=1</transaction>
-			<transaction>INSERT INTO amp_features_visibility (SELECT * from ${clean.source}.amp_features_visibility)</transaction>
-			<transaction>INSERT INTO amp_fields_visibility (SELECT * from ${clean.source}.amp_fields_visibility)</transaction>
-			<transaction>INSERT INTO dg_site_trans_lang_map (SELECT * from ${clean.source}.dg_site_trans_lang_map)</transaction>
-			<transaction>INSERT INTO dg_site_user_lang_map (SELECT * from ${clean.source}.dg_site_user_lang_map)</transaction>
-			<transaction>INSERT INTO amp_team_member_roles (SELECT * from ${clean.source}.amp_team_member_roles)</transaction>
-			<transaction>INSERT INTO amp_fields_templates (SELECT * from ${clean.source}.amp_fields_templates)</transaction>
-			<transaction>INSERT INTO amp_features_templates (SELECT * from ${clean.source}.amp_features_templates)</transaction>
-			<transaction>INSERT INTO amp_modules_templates (SELECT * from ${clean.source}.amp_modules_templates)</transaction>
-			<transaction>INSERT INTO amp_sector_scheme (SELECT * from ${clean.source}.amp_sector_scheme)</transaction>
-			<transaction>INSERT INTO AMP_CLASSIFICATION_CONFIG (SELECT * from ${clean.source}.AMP_CLASSIFICATION_CONFIG)</transaction>
-			<transaction>INSERT INTO dg_user (SELECT * from ${clean.source}.dg_user WHERE email='admin@amp.org')</transaction>
-			<transaction>INSERT INTO dg_group (SELECT * from ${clean.source}.dg_group WHERE id IN (SELECT ug.group_id FROM  ${clean.source}.dg_user_group ug,  ${clean.source}.dg_user u WHERE u.id=ug.user_id and u.email='admin@amp.org'))</transaction>
-			<transaction>INSERT INTO dg_user_group (SELECT * from ${clean.source}.dg_user_group WHERE user_id IN (SELECT ug.user_id FROM  ${clean.source}.dg_user_group ug,  ${clean.source}.dg_user u WHERE u.id=ug.user_id and u.email='admin@amp.org'))</transaction>
-			<transaction>INSERT INTO dg_user_preferences (SELECT * from ${clean.source}.dg_user_preferences WHERE user_id IN (SELECT up.user_id FROM  ${clean.source}.dg_user_preferences up,  ${clean.source}.dg_user u where u.id=up.user_id and u.email="admin@amp.org"))</transaction>
-			<transaction>INSERT INTO dg_user_lang_preferences (SELECT * from ${clean.source}.dg_user_lang_preferences WHERE user_id IN (SELECT up.user_id FROM ${clean.source}.dg_user_lang_preferences up, ${clean.source}.dg_user u where u.id=up.user_id and u.email="admin@amp.org"))</transaction>
-			<transaction>INSERT INTO amp_fiscal_calendar (SELECT * from ${clean.source}.amp_fiscal_calendar WHERE amp_fiscal_cal_id IN (SELECT settingsValue FROM  ${clean.source}.amp_global_settings WHERE settingsName="Default Calendar"))</transaction>
-			<transaction>INSERT INTO amp_application_settings (SELECT * from ${clean.source}.amp_application_settings WHERE fis_cal_id IN (SELECT id FROM  ${clean.source}.amp_global_settings WHERE settingsName="Default Calendar"))</transaction>
-			<transaction>INSERT INTO amp_program_settings (SELECT * from ${clean.source}.amp_program_settings WHERE default_hierarchy=2)</transaction>
-			<transaction>INSERT INTO amp_theme (SELECT * from ${clean.source}.amp_theme WHERE amp_theme_id IN (SELECT at.amp_theme_id FROM  ${clean.source}.amp_theme at,  ${clean.source}.amp_program_settings aps WHERE at.amp_theme_id=aps.default_hierarchy AND aps.default_hierarchy=2))</transaction>
-			<transaction>CREATE TABLE util_global_settings_possible_ LIKE ${clean.source}.util_global_settings_possible_</transaction><transaction>INSERT INTO util_global_settings_possible_ (SELECT * from ${clean.source}.util_global_settings_possible_)</transaction>
-			<transaction>CREATE TABLE qrtz_blob_triggers LIKE ${clean.source}.qrtz_blob_triggers</transaction><transaction>INSERT INTO qrtz_blob_triggers (SELECT * from ${clean.source}.qrtz_blob_triggers)</transaction>
-			<transaction>CREATE TABLE qrtz_calendars LIKE ${clean.source}.qrtz_calendars</transaction><transaction> INSERT INTO qrtz_calendars (SELECT * from ${clean.source}.qrtz_calendars)</transaction>
-			<transaction>CREATE TABLE qrtz_cron_triggers LIKE ${clean.source}.qrtz_cron_triggers</transaction><transaction>  INSERT INTO qrtz_cron_triggers (SELECT * from ${clean.source}.qrtz_cron_triggers)</transaction>
-			<transaction>CREATE TABLE qrtz_fired_triggers  LIKE ${clean.source}.qrtz_fired_triggers</transaction><transaction> INSERT INTO qrtz_fired_triggers (SELECT * from ${clean.source}.qrtz_fired_triggers)</transaction>
-			<transaction>CREATE TABLE qrtz_job_details LIKE ${clean.source}.qrtz_job_details</transaction><transaction> INSERT INTO qrtz_job_details (SELECT * from ${clean.source}.qrtz_job_details)</transaction>
-			<transaction>CREATE TABLE qrtz_job_listeners LIKE ${clean.source}.qrtz_job_listeners</transaction><transaction> INSERT INTO  qrtz_job_listeners(SELECT * from ${clean.source}.qrtz_job_listeners)</transaction>
-			<transaction>CREATE TABLE qrtz_locks LIKE ${clean.source}.qrtz_locks</transaction><transaction>INSERT INTO qrtz_locks (SELECT * from ${clean.source}.qrtz_locks)</transaction>
-			<transaction>CREATE TABLE qrtz_paused_trigger_grps LIKE ${clean.source}.qrtz_paused_trigger_grps</transaction><transaction> INSERT INTO qrtz_paused_trigger_grps (SELECT * from ${clean.source}.qrtz_paused_trigger_grps)</transaction>																									
-			<transaction>CREATE TABLE qrtz_scheduler_state LIKE ${clean.source}.qrtz_scheduler_state</transaction><transaction>INSERT INTO qrtz_scheduler_state (SELECT * from ${clean.source}.qrtz_scheduler_state)</transaction>
-			<transaction>CREATE TABLE qrtz_simple_triggers LIKE ${clean.source}.qrtz_simple_triggers</transaction><transaction>INSERT INTO qrtz_simple_triggers (SELECT * from ${clean.source}.qrtz_simple_triggers)</transaction>
-			<transaction>CREATE TABLE qrtz_trigger_listeners LIKE ${clean.source}.qrtz_trigger_listeners</transaction><transaction>INSERT INTO qrtz_trigger_listeners (SELECT * from ${clean.source}.qrtz_trigger_listeners)</transaction>
-			<transaction>CREATE TABLE qrtz_triggers LIKE ${clean.source}.qrtz_triggers</transaction><transaction>INSERT INTO qrtz_triggers (SELECT * from ${clean.source}.qrtz_triggers)</transaction>
+			<transaction>INSERT IGNORE amp_features_visibility (SELECT * from ${clean.source}.amp_features_visibility)</transaction>
+			<transaction>INSERT IGNORE amp_fields_visibility (SELECT * from ${clean.source}.amp_fields_visibility)</transaction>
+			<transaction>INSERT IGNORE dg_site_trans_lang_map (SELECT * from ${clean.source}.dg_site_trans_lang_map)</transaction>
+			<transaction>INSERT IGNORE dg_site_user_lang_map (SELECT * from ${clean.source}.dg_site_user_lang_map)</transaction>
+			<transaction>INSERT IGNORE amp_team_member_roles (SELECT * from ${clean.source}.amp_team_member_roles)</transaction>
+			<transaction>INSERT IGNORE amp_fields_templates (SELECT * from ${clean.source}.amp_fields_templates)</transaction>
+			<transaction>INSERT IGNORE amp_features_templates (SELECT * from ${clean.source}.amp_features_templates)</transaction>
+			<transaction>INSERT IGNORE amp_modules_templates (SELECT * from ${clean.source}.amp_modules_templates)</transaction>
+			<transaction>INSERT IGNORE amp_sector_scheme (SELECT * from ${clean.source}.amp_sector_scheme)</transaction>
+			<transaction>INSERT IGNORE AMP_CLASSIFICATION_CONFIG (SELECT * from ${clean.source}.AMP_CLASSIFICATION_CONFIG)</transaction>
+			<transaction>INSERT IGNORE dg_user (SELECT * from ${clean.source}.dg_user WHERE email='admin@amp.org')</transaction>
+			<transaction>INSERT IGNORE dg_group (SELECT * from ${clean.source}.dg_group WHERE id IN (SELECT ug.group_id FROM  ${clean.source}.dg_user_group ug,  ${clean.source}.dg_user u WHERE u.id=ug.user_id and u.email='admin@amp.org'))</transaction>
+			<transaction>INSERT IGNORE dg_user_group (SELECT * from ${clean.source}.dg_user_group WHERE user_id IN (SELECT ug.user_id FROM  ${clean.source}.dg_user_group ug,  ${clean.source}.dg_user u WHERE u.id=ug.user_id and u.email='admin@amp.org'))</transaction>
+			<transaction>INSERT IGNORE dg_user_preferences (SELECT * from ${clean.source}.dg_user_preferences WHERE user_id IN (SELECT up.user_id FROM  ${clean.source}.dg_user_preferences up,  ${clean.source}.dg_user u where u.id=up.user_id and u.email="admin@amp.org"))</transaction>
+			<transaction>INSERT IGNORE dg_user_lang_preferences (SELECT * from ${clean.source}.dg_user_lang_preferences WHERE user_id IN (SELECT up.user_id FROM ${clean.source}.dg_user_lang_preferences up, ${clean.source}.dg_user u where u.id=up.user_id and u.email="admin@amp.org"))</transaction>
+			<transaction>INSERT IGNORE amp_fiscal_calendar (SELECT * from ${clean.source}.amp_fiscal_calendar WHERE amp_fiscal_cal_id IN (SELECT settingsValue FROM  ${clean.source}.amp_global_settings WHERE settingsName="Default Calendar"))</transaction>
+			<transaction>INSERT IGNORE amp_application_settings (SELECT * from ${clean.source}.amp_application_settings WHERE fis_cal_id IN (SELECT id FROM  ${clean.source}.amp_global_settings WHERE settingsName="Default Calendar"))</transaction>
+			<transaction>INSERT IGNORE amp_program_settings (SELECT * from ${clean.source}.amp_program_settings WHERE default_hierarchy=2)</transaction>
+			<transaction>INSERT IGNORE amp_theme (SELECT * from ${clean.source}.amp_theme WHERE amp_theme_id IN (SELECT at.amp_theme_id FROM  ${clean.source}.amp_theme at,  ${clean.source}.amp_program_settings aps WHERE at.amp_theme_id=aps.default_hierarchy AND aps.default_hierarchy=2))</transaction>
+			<transaction>CREATE TABLE util_global_settings_possible_ LIKE ${clean.source}.util_global_settings_possible_</transaction><transaction>INSERT IGNORE util_global_settings_possible_ (SELECT * from ${clean.source}.util_global_settings_possible_)</transaction>
+			<transaction>CREATE TABLE qrtz_blob_triggers LIKE ${clean.source}.qrtz_blob_triggers</transaction><transaction>INSERT IGNORE qrtz_blob_triggers (SELECT * from ${clean.source}.qrtz_blob_triggers)</transaction>
+			<transaction>CREATE TABLE qrtz_calendars LIKE ${clean.source}.qrtz_calendars</transaction><transaction> INSERT IGNORE qrtz_calendars (SELECT * from ${clean.source}.qrtz_calendars)</transaction>
+			<transaction>CREATE TABLE qrtz_cron_triggers LIKE ${clean.source}.qrtz_cron_triggers</transaction><transaction>  INSERT IGNORE qrtz_cron_triggers (SELECT * from ${clean.source}.qrtz_cron_triggers)</transaction>
+			<transaction>CREATE TABLE qrtz_fired_triggers  LIKE ${clean.source}.qrtz_fired_triggers</transaction><transaction> INSERT IGNORE qrtz_fired_triggers (SELECT * from ${clean.source}.qrtz_fired_triggers)</transaction>
+			<transaction>CREATE TABLE qrtz_job_details LIKE ${clean.source}.qrtz_job_details</transaction><transaction> INSERT IGNORE qrtz_job_details (SELECT * from ${clean.source}.qrtz_job_details)</transaction>
+			<transaction>CREATE TABLE qrtz_job_listeners LIKE ${clean.source}.qrtz_job_listeners</transaction><transaction> INSERT IGNORE  qrtz_job_listeners(SELECT * from ${clean.source}.qrtz_job_listeners)</transaction>
+			<transaction>CREATE TABLE qrtz_locks LIKE ${clean.source}.qrtz_locks</transaction><transaction>INSERT IGNORE qrtz_locks (SELECT * from ${clean.source}.qrtz_locks)</transaction>
+			<transaction>CREATE TABLE qrtz_paused_trigger_grps LIKE ${clean.source}.qrtz_paused_trigger_grps</transaction><transaction> INSERT IGNORE qrtz_paused_trigger_grps (SELECT * from ${clean.source}.qrtz_paused_trigger_grps)</transaction>																									
+			<transaction>CREATE TABLE qrtz_scheduler_state LIKE ${clean.source}.qrtz_scheduler_state</transaction><transaction>INSERT IGNORE qrtz_scheduler_state (SELECT * from ${clean.source}.qrtz_scheduler_state)</transaction>
+			<transaction>CREATE TABLE qrtz_simple_triggers LIKE ${clean.source}.qrtz_simple_triggers</transaction><transaction>INSERT IGNORE qrtz_simple_triggers (SELECT * from ${clean.source}.qrtz_simple_triggers)</transaction>
+			<transaction>CREATE TABLE qrtz_trigger_listeners LIKE ${clean.source}.qrtz_trigger_listeners</transaction><transaction>INSERT IGNORE qrtz_trigger_listeners (SELECT * from ${clean.source}.qrtz_trigger_listeners)</transaction>
+			<transaction>CREATE TABLE qrtz_triggers LIKE ${clean.source}.qrtz_triggers</transaction><transaction>INSERT IGNORE qrtz_triggers (SELECT * from ${clean.source}.qrtz_triggers)</transaction>
 			
 			<!-- mandatory custom indexes -->
 			<transaction>ALTER TABLE amp_category_value ADD INDEX cv_index(category_value)</transaction>

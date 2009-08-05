@@ -718,7 +718,8 @@ function addMenuToDocumentList (menuNum, containerElement, windowController) {
 		membersMenu.addItem(menuItem); 
 
 	</logic:iterate>
-	menu.addItem(  new YAHOO.widget.MenuItem("${trans_teamMemberDocuments}", {submenu: membersMenu})   );
+	var mItem1="${trans_teamMemberDocuments}";
+	 menu.addItem(  new YAHOO.widget.MenuItem("${trans_teamMemberDocuments}", {submenu: membersMenu, id:mItem1})   );
 	</logic:notEmpty>
 	
 	<logic:notEmpty name="meTeamMember">
@@ -731,8 +732,8 @@ function addMenuToDocumentList (menuNum, containerElement, windowController) {
 			scope				: windowController
 			
 		};
-		
-	menu.addItem(  new YAHOO.widget.MenuItem("${trans_teamDocuments}", {onclick: onclickObj} )   );
+		var mItem2="${trans_teamDocuments}";
+	menu.addItem(  new YAHOO.widget.MenuItem("${trans_teamDocuments}", {onclick: onclickObj, id:mItem2} )   );
 	</logic:notEmpty>
 	/*
 		var onclickObj 	= {

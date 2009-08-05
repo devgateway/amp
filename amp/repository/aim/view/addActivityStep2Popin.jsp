@@ -199,7 +199,7 @@
 	function buttonAdd(){
 		if(document.aimSelectSectorForm.sector.value != -1){
 			var postString		= "edit=true&" + generateFields(1);
-			<digi:context name="commentUrl" property="context/aim/selectSectors.do"/>
+			<digi:context name="commentUrl" property="context/aim/selectSectorSwitch.do"/>  
 			var url = "<%=commentUrl %>";
 			YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
 			myclose();
@@ -409,7 +409,7 @@
 		//alert(params);
 		var msg='\n<digi:trn key="aim:addLocation">Add Sectors</digi:trn>';
 		showPanelLoading(msg);
-		<digi:context name="commentUrl" property="context/aim/selectSectors.do" />
+		<digi:context name="commentUrl" property="context/aim/selectSectorAF.do" />
 		var url = "<%=commentUrl %>";
 		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, params);
 	}

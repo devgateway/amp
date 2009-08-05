@@ -18,8 +18,8 @@
     function addSector(param)
     {
         
-        <digi:context name="addSec" property="context/addActivity.do?addSector=true&edit=param" />
-        document.aimEditActivityForm.action = "<%= addSec %>";
+        <digi:context name="addSec" property="context/addActivity.do" />
+        document.aimEditActivityForm.action = "<%= addSec %>?step=2";
         document.aimEditActivityForm.target = "_self";
         document.aimEditActivityForm.submit();
     }

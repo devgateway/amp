@@ -1191,6 +1191,13 @@
 	  <forward name="/aim/selectLocation" path="/aim/selectLocation.do" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
+    <action name="aimSelectSectorForm" path="/aim/selectSectorAF" scope="session" type="org.digijava.module.aim.action.SelectSectorAF" parameter="forward">
+      <forward name="forward" path="/aim/selectSectorSwitch.do"/>
+    </action>
+    <action name="aimSelectSectorForm" path="/aim/selectSectorSwitch" scope="session" type="org.digijava.module.aim.action.SelectorSwitchAction" parameter="forward">
+      <forward name="forward" path="/aim/selectSectors.do"/>
+      <forward name="/aim/selectSectorAF" path="/aim/selectSectorAF.do"/>
+    </action>
     <action name="aimSelectSectorForm" path="/aim/selectSectors" scope="session" type="org.digijava.module.aim.action.SelectSector">
       <forward name="forward" path="/showLayout.do?layout=aim_selSectorPopupLayout"/>
       <forward name="index" path="/aim/index.do" redirect="true" />

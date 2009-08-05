@@ -535,7 +535,7 @@ function toggleSettings(){
 										<logic:iterate id="report" name="aimParisIndicatorReportForm"  property="indicatorsColl" type="org.digijava.module.aim.dbentity.AmpAhsurveyIndicator" indexId="tabIndex">
 											<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 											<c:if test="${report.indicatorCode != '10b'}">
-								            	<feature:display  name="PI report ${report.indicatorCode}" module="PI Reports">
+<!--								            	<feature:display  name="PI report ${report.indicatorCode}" module="PI Reports">-->
 													<c:set target="${urlParams}" property="indcId" value="${report.ampIndicatorId}" />
 													<c:set target="${urlParams}" property="reset" value="true" />
 													<c:set target="${urlParams}" property="print2" value="false" />
@@ -555,7 +555,7 @@ function toggleSettings(){
 															</digi:link>
 								                    	</span>
 													</LI>
-								          		</feature:display>
+<!--								          		</feature:display>-->
 											</c:if>
 										</logic:iterate>
 									</UL>

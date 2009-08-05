@@ -81,7 +81,7 @@ public class PIAction extends Action {
 
 			PIExportUseCase pdfUseCase = new PIExportUseCase();
 			pdfUseCase.createPDFReport(getServlet(), response, request, piForm.getPiReport().getIndicatorCode(), piForm
-					.getMainTableRows(), piForm.getMiniTable(), piForm.getEndYear());
+					.getMainTableRows(), piForm.getMiniTable(), piForm.getStartYear(), piForm.getEndYear());
 
 			return null;
 		} else {

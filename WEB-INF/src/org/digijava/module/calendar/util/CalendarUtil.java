@@ -24,11 +24,24 @@ package org.digijava.module.calendar.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendarPK;
+import org.digijava.module.calendar.dbentity.AmpEventType;
+import org.digijava.module.calendar.dbentity.CalendarItem;
 import org.digijava.module.calendar.dbentity.Calendar.TBD;
+import org.digijava.module.calendar.entity.EventsFilter;
+import org.digijava.module.calendar.exception.CalendarException;
 import org.digijava.module.calendar.form.CalendarItemForm;
+import org.digijava.module.help.dbentity.HelpTopic;
+import org.digijava.module.help.helper.HelpTopicsTreeItem;
 
 /**
  * Class with static methods used for Data convertion and form population 
@@ -158,5 +171,76 @@ public class CalendarUtil {
     	//iteration's date(current)
 		CalDate.set(year, month, day, hour, minute);		
 		return CalDate;
+	}
+	
+	public static String getCalendarEventsXml(AmpTeamMember member,boolean filter,String siteId,String[] selectedDonorIds,String instanceId,Long userId){
+		 String xml="";
+					try {
+						
+						     Collection ampCalendarEvents = AmpDbUtil.getAmpCalendarEventsByMember(member, filter,selectedDonorIds, null, null);
+						
+							//List events = DbUtil.getCalendarEvents(siteId, instanceId, userId);
+							if(!ampCalendarEvents.isEmpty()){
+								
+						Iterator iter = ampCalendarEvents.iterator();
+						while (iter.hasNext()) {
+							 AmpCalendar ampCalendar = (AmpCalendar) iter.next();
+							 ampCalendar.getCalendarPK().getCalendar().getId();
+								
+							 xml+="<event id=\"" +ampCalendar.getCalendarPK().getCalendar().getId()+"\">";
+					         xml+="<start_date>"+ampCalendar.getCalendarPK().getCalendar().getStartDate()+"</start_date>";
+					         xml+="<end_date>"+ampCalendar.getCalendarPK().getCalendar().getEndDate()+"</end_date>";
+					       
+									Iterator itritm = ampCalendar.getCalendarPK().getCalendar().getCalendarItem().iterator();
+										while(itritm.hasNext()){
+											CalendarItem calItme = (CalendarItem) itritm.next();
+											 xml+="<text>"+calItme.getTitle()+"</text>";
+											 	if(calItme.getDescription() != null){
+											 		xml+="<details>"+calItme.getDescription()+"</details>";
+											 }else{
+												 	xml+="<details>"+"No Description"+"</details>";
+											 }
+										}
+										AmpCalendar id = AmpDbUtil.getAmpCalendar(ampCalendar.getCalendarPK().getCalendar().getId());
+										id.getEventType().getId();
+										xml+="<type>"+id.getEventType().getId()+"</type>";
+										
+								xml+="</event>";	
+								}
+								
+							}
+							
+					} catch (CalendarException e) {
+						e.printStackTrace();
+					}
+			 return xml;
+	}
+	
+	
+	public static String getEventTypesCss() throws CalendarException{
+		String css = "";
+			List cs =  AmpDbUtil.getAmpCalendarEventsType();
+			if(!cs.isEmpty()){
+				
+			Iterator iter = cs.iterator();		
+				while(iter.hasNext()){
+					
+					AmpEventType item = (AmpEventType) iter.next();
+					
+					css+=".dhx_cal_event_line.event_"+item.getId()+"{";
+					css+="background-color:"+item.getColor()+";";
+					css+="color:white;}";
+					
+					css+=".dhx_cal_event.event_"+item.getId()+" div{";
+					css+="background-color:"+item.getColor()+";";
+					css+="color:white;}";
+					
+					css+=".dhx_cal_event_clear.event_"+item.getId()+"{";
+					css+="color:"+item.getColor()+";}";
+				}
+				
+				
+			}
+		return css;
 	}
 }

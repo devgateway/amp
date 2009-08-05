@@ -101,6 +101,7 @@
       <forward name="forward" path="/showLayout.do?layout=colorPicker" />
     </action>
     
+    <action name="calendarViewForm" path="/calendar/showEvents" scope="request" type="org.digijava.module.calendar.action.ShowEvents" validate="false"/>
     
   </action-mappings>
 </struts-config>

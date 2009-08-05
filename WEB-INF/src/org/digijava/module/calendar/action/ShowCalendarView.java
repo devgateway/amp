@@ -223,7 +223,14 @@ public class ShowCalendarView extends Action {
             member, filter.isShowPublicEvents(), null, null);
         Collection<AmpCalendarGraph> ampCalendarGraphs = AmpUtil.getAmpCalendarGraphs(ampCalendarEvents,navigator, view);
         calendarViewForm.setAmpCalendarGraphs(ampCalendarGraphs);
-
+      
+         ses.setAttribute("mode",calendarViewForm.getView().length());
+         ses.setAttribute("publicEvent", filter.isShowPublicEvents());
+         ses.setAttribute("donor", filter.getSelectedDonors());
+         ses.setAttribute("year", calendarViewForm.getStartDateBreakDown().getYear());
+         ses.setAttribute("month", calendarViewForm.getBaseDateBreakDown().getMonth() - 1);
+         ses.setAttribute("day", calendarViewForm.getBaseDateBreakDown().getDayOfMonth());
+         
         return mapping.findForward("success");
     }
 }

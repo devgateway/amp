@@ -9,6 +9,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -526,6 +527,128 @@ public class AmpDbUtil {
       }
   }
 
+  
+  public static Collection<AmpCalendar> getAmpCalendarEventsByMember(AmpTeamMember curMember,
+		  boolean showPublicEvents, 
+		  String[] selectedDonorIds,
+		  String instanceId, 
+		  String siteId)
+		  throws CalendarException {
+
+	  try{
+
+
+		  Hashtable<Long, AmpCalendar> retEvents=new Hashtable<Long,AmpCalendar>();
+		
+	List events = getAmpCalendarEvents(selectedDonorIds, curMember.getUser().getId(), showPublicEvents, instanceId, siteId);
+	if (events != null) {
+		for (Iterator eventItr = events.iterator(); eventItr.hasNext(); ) {
+			AmpCalendar ampCal = (AmpCalendar) eventItr.next();
+			if (ampCal.getMember() != null) {
+
+				if(ampCal.getMember().getAmpTeamMemId().equals(curMember.getAmpTeamMemId())){
+					retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
+				}
+
+
+				boolean isCurrentMemberEventAttendee=false;                	 
+					if(ampCal.getAttendees()!=null && ampCal.getAttendees().size()>0){
+						for (Object attendee : ampCal.getAttendees()) {
+							AmpCalendarAttendee att=(AmpCalendarAttendee)attendee;
+							if(att.getMember()!=null && att.getMember().getAmpTeamMemId().equals(curMember.getAmpTeamMemId())){
+								isCurrentMemberEventAttendee=true;
+								break;
+							}                      		
+						}
+					}
+
+				if(showPublicEvents && !ampCal.isPrivateEvent()){
+					retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
+					continue;
+				}
+				if(!showPublicEvents || (showPublicEvents && ampCal.isPrivateEvent())){
+					if(isCurrentMemberEventAttendee){
+						retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
+						continue;
+					}
+				}
+			}
+		}
+	}
+		return retEvents.values();
+	  	} catch (Exception ex) {
+	  		throw new RuntimeException(ex);
+	  	}
+  }
+  
+  public static List getAmpCalendarEvents(String[] selectedDonorIds,
+		  Long userId,boolean showPublicEvents,String instanceId, String siteId) throws CalendarException {
+	  try {
+		  Session session = PersistenceManager.getRequestDBSession();
+
+		  StringBuffer queryString = new StringBuffer();
+		  	queryString.append("select ac from ").append(AmpCalendar.class.getName());
+		  	queryString.append(" ac left join ac.organisations org, ").append(Calendar.class.getName()).append(" c ");
+
+			queryString.append(" where c.id=ac.calendarPK.calendar.id ");
+
+
+			if(!showPublicEvents){
+			queryString.append("and ac.privateEvent=true ");
+			}
+	
+			List <Long> selectedDonors = new ArrayList<Long>();
+			if(selectedDonorIds != null && selectedDonorIds.length != 0) {
+			boolean includeNullOrganizations = false;
+			for(int index = 0; index < selectedDonorIds.length; index++){
+				if(selectedDonorIds[index].equals("None")){
+				includeNullOrganizations = true;
+			} else {
+				selectedDonors.add(Long.parseLong(selectedDonorIds[index]));
+			}
+			}
+
+				queryString.append(" and (");
+			if (selectedDonors.size() > 0) {
+				queryString.append("org.id in (:selectedDonorIds)");
+			}
+			if (includeNullOrganizations) {
+			if (selectedDonors.size() > 0) {
+				queryString.append(" or ");
+			}
+				queryString.append("org is null");
+			}
+				queryString.append(")");
+			}
+			
+			if (instanceId != null) {
+				queryString.append(" and c.instanceId = :instanceId");
+			}
+			if (siteId != null) {
+				queryString.append(" and c.siteId = :siteId");
+			}
+			Query query = session.createQuery(queryString.toString());
+			
+			if (selectedDonorIds != null && selectedDonorIds.length != 0 && selectedDonors.size()>0) {
+				query.setParameterList("selectedDonorIds", selectedDonors);
+			}
+			
+			if (instanceId != null) {
+				query.setString("instanceId", instanceId);
+			}
+			if (siteId != null) {
+				query.setString("siteId", siteId);
+			}
+			
+				return query.list();
+			} catch (Exception ex) {
+				logger.debug("Unable to get amp calendar events", ex);
+			throw new CalendarException("Unable to get amp calendar events", ex);
+	}
+}
+  
+  
+  
   public static List getAmpCalendarEvents(GregorianCalendar startDate,GregorianCalendar endDate,String[] selectedEventTypeIds,String[] selectedDonorIds,
                                           Long userId,boolean showPublicEvents,String instanceId, String siteId) throws CalendarException {
       try {
@@ -533,16 +656,12 @@ public class AmpDbUtil {
 
           StringBuffer queryString = new StringBuffer();
           queryString.append("select ac from ").append(AmpCalendar.class.getName());
-          queryString.append(" ac left join ac.organisations org, ").append(Calendar.class.getName()).append(" r ");
-          queryString.append(" inner join r.recurrCalEvent recc, ").append(Calendar.class.getName()).append(" c ");
+          queryString.append(" ac left join ac.organisations org, ").append(Calendar.class.getName()).append(" c ");
 
           queryString.append("where c.id=ac.calendarPK.calendar.id and ").
           				append ("((:startDate <= c.startDate and c.startDate <= :endDate) or ").
           				append("(:startDate <= c.endDate and c.endDate <= :endDate) or ").
-          				append("(c.startDate <= :startDate and :endDate <= c.endDate) or ").
-                        append("(recc.recurrStartDate <= :startDate and :endDate <= recc.recurrEndDate) or ").
-                        append("(:startDate <= recc.recurrStartDate and recc.recurrStartDate <= :endDate) or ").
-                        append("(:startDate <= recc.recurrEndDate and recc.recurrEndDate <= :endDate))");
+          				append("(c.startDate <= :startDate and :endDate <= c.endDate))");
        
 
 //          if(showPublicEvents){
@@ -619,4 +738,50 @@ public class AmpDbUtil {
           throw new CalendarException("Unable to get amp calendar events", ex);
       }
   }
-          }
+  
+  public static List getAmpCalendarEventsType() throws CalendarException {
+		List events = null;
+		Session session = null;
+	try {
+		session = PersistenceManager.getRequestDBSession();
+
+		 String queryString = "from " + AmpEventType.class.getName();
+	     Query q = session.createQuery(queryString);
+		 events = q.list();
+		 
+	}
+	catch (Exception ex) {
+		logger.debug("Unable to get event list from database", ex);
+		throw new CalendarException(
+				"Unable to get event list from database", ex);
+	}
+
+	return events;
+}
+
+	  public static List getAmpEventTypeIdByCalendarID(Long calendarId) throws CalendarException {
+			List id = null;
+			Session session = null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+
+			Query q = session.createQuery("select c from " +
+		     AmpCalendar.class.getName() +
+			 " c where (c.id=:calendarId)");
+	
+			q.setParameter("calendarId", calendarId, Hibernate.LONG);
+			//q.setParameter("userId", userId, Hibernate.LONG);
+			id = q.list();
+
+		}
+		catch (Exception ex) {
+			logger.debug("Unable to get event list from database", ex);
+			throw new CalendarException(
+					"Unable to get event list from database", ex);
+		}
+
+		return id;
+	}
+  }
+  
+

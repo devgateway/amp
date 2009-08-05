@@ -11,9 +11,6 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -36,10 +33,6 @@ public class ShowSectorByDonorChart extends Action {
         Integer fromYear = null;
         Integer toYear = null;
         Long[] donorIDs = null;
-    	Site site = RequestUtils.getSite(request);
-		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);				
-		String siteId = site.getId()+"";
-		String locale = navigationLanguage.getCode();
         ChartOption opt=createChartOption(cForm,request);
         //from year
         if (cForm.getSelectedFromYear()!=null && !cForm.getSelectedFromYear().equals("-1")){
@@ -65,8 +58,7 @@ public class ShowSectorByDonorChart extends Action {
         JFreeChart chart = ChartWidgetUtil.getSectorByDonorChart(donorIDs, fromYear,toYear, opt);
         //if no data is available,user should get a message about it.
         Plot plot = chart.getPlot();
-        String noDatamessage = TranslatorWorker.translateText("There is no data available for the selected filters. Please adjust the date and/or donor filters",locale,siteId);
-        plot.setNoDataMessage(noDatamessage);
+        plot.setNoDataMessage("There is no data available for the selected filters. Please adjust the date and/or donor filters");
         Font font= new Font(null,0,15);
         plot.setNoDataMessageFont(font);
         

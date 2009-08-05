@@ -66,12 +66,8 @@ public class DateBreakDown {
         hour = calendar.get(calendar.HOUR_OF_DAY);
         minute = calendar.get(calendar.MINUTE);
         //
-        String siteId = null;
-        String locale = null;
-        if (request != null){
-	       siteId = RequestUtils.getSite(request).getId()+"";
-	       locale =  RequestUtils.getNavigationLanguage(request).getCode().toLowerCase();
-        }
+        String siteId = RequestUtils.getSite(request).getId()+"";
+        String locale =  RequestUtils.getNavigationLanguage(request).getCode().toLowerCase();
         if ((locale != null) && (locale.equals("fr"))) {
         	String ms = TranslatorWorker.translateText(monthNameShort, locale, siteId);
         	String ml = TranslatorWorker.translateText(monthNameLong, locale, siteId);

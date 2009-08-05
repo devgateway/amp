@@ -504,7 +504,6 @@ public class ShowCalendarEvent extends Action {
                     ceform.setSelectedEndDate(endDateBreakDown.formatDateString());
                     ceform.setSelectedEndTime(endDateBreakDown.formatTimeString());
                 } catch (Exception ex) {
-                	ex.printStackTrace();
                 }
 
                 ceform.setPrivateEvent(ampCalendar.isPrivateEvent());

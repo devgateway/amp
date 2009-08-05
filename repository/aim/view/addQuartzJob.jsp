@@ -34,7 +34,7 @@ function saveJob(){
     if(txt==null || txt.value==""){
 
     	<c:set var="enterClassName">
-			<digi:trn>Please enter Class Fullname</digi:trn>
+			<digi:trn key="aim:job:EnterClassName">Please enter Class Fullname</digi:trn>
 		</c:set>   	
 	
       alert("${enterClassName}");
@@ -46,7 +46,7 @@ function saveJob(){
   txt=document.getElementById("txtName");
   if(txt==null || txt.value==""){
 	  	<c:set var="name">
-			<digi:trn>Please enter Name</digi:trn>
+			<digi:trn key="aim:job:name">Please enter Name</digi:trn>
 		</c:set>   	
 
 		
@@ -58,7 +58,7 @@ function saveJob(){
   txt=document.getElementById("txtStartDateTime");
   if(txt==null || txt.value==""){
 		<c:set var="datetime">
-			<digi:trn>Please enter Start Date/Time!</digi:trn>
+			<digi:trn key="aim:job:datetime">Please enter Start Date/Time!</digi:trn>
 		</c:set> 
     alert("${datetime}");
     txt.focus();
@@ -76,7 +76,7 @@ function saveJob(){
     }
     if(flag==-1){
     	<c:set var="jobType">
-			<digi:trn>Please select Job typee</digi:trn>
+			<digi:trn key="aim:job:jobType">Please select Job typee</digi:trn>
 		</c:set> 
       alert("${jobType}");
       return false;
@@ -86,7 +86,7 @@ function saveJob(){
 	if (type==1){
 		if (document.getElementById("exeTimeM").value=="00"){
 			<c:set var="invalidRepeatTime">
-				<digi:trn>Repeat time can't be 0</digi:trn>
+				<digi:trn key="aim:job:invalidRepeatTime">Repeat time can't be 0</digi:trn>
 			</c:set> 
 			alert("${invalidRepeatTime}")
 			document.getElementById("exeTimeM").focus();
@@ -96,7 +96,7 @@ function saveJob(){
 	if (type==2){
 		if (document.getElementById("exeTimeH").value=="00"){
 			<c:set var="invalidRepeatTime">
-				<digi:trn>Repeat time can't be 0</digi:trn>
+				<digi:trn key="aim:job:invalidRepeatTime">Repeat time can't be 0</digi:trn>
 			</c:set> 
 			alert("${invalidRepeatTime}")
 			document.getElementById("exeTimeH").focus();
@@ -167,7 +167,7 @@ function typeChanged(value){
 		function shoValidationmsg(){
 		<logic:equal name="quartzJobManagerForm" property="invalidTrigger" value="true">
 			<c:set var="invalidTrigger">
-				<digi:trn>The trigeer will never be fired</digi:trn>
+				<digi:trn key="aim:job:invalidTrigger">The trigeer will never be fired</digi:trn>
 			</c:set> 
 			
 			alert("${invalidTrigger}");
@@ -175,7 +175,7 @@ function typeChanged(value){
 
 		<logic:equal name="quartzJobManagerForm" property="invalidEndDate" value="true">
 		<c:set var="invalidEndDate">
-			<digi:trn>End Date should be after Start Date</digi:trn>
+			<digi:trn key="aim:job:invalidEndDate">End Date should be after Start Date</digi:trn>
 		</c:set> 
 
 			alert("${invalidEndDate}");
@@ -200,16 +200,16 @@ function typeChanged(value){
             <td>
               <span class="crumb">
                 <c:set var="translation">
-                  <digi:trn>Click here to goto Admin Home</digi:trn>
+                  <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
                 </c:set>
                 <digi:link module="aim" href="/admin.do" styleClass="comment" title="${translation}" >
                   <digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
                 </digi:link>&nbsp;&gt;&nbsp;
                 <digi:link href="/quartzJobManager.do?action=all" styleClass="comment" title="${translation}" >
-                  <digi:trn>Job Manager</digi:trn>
+                  <digi:trn key="aim:jobManager">Job Manager</digi:trn>
                 </digi:link>
                 &nbsp;&gt;&nbsp;
-                <digi:trn>Add new job</digi:trn>
+                <digi:trn key="aim:addJob">Add new job</digi:trn>
               </span>
             </td>
             <!-- End navigation -->
@@ -217,7 +217,7 @@ function typeChanged(value){
           <tr>
             <td style="height:53px;">
               <span class="subtitle-blue">
-                <digi:trn>Add New Job</digi:trn>
+                <digi:trn key="aim:addJob">Add New Job</digi:trn>
               </span>
             </td>
           </tr>
@@ -228,17 +228,17 @@ function typeChanged(value){
                   <td align="right">
                     <c:if test="${empty quartzJobManagerForm.jcCol}">
                       <span style="color:red;">*</span>
-                      <digi:trn>Class fullname:</digi:trn>
+                      <digi:trn key="aim:job:classFullname">Class fullname:</digi:trn>
                     </c:if>
                     <c:if test="${!empty quartzJobManagerForm.jcCol}">
-                      <digi:trn>Class:</digi:trn>
+                      <digi:trn key="aim:job:class">Class:</digi:trn>
                     </c:if>
                   </td>
                 <td>
                       <c:if test="${!empty quartzJobManagerForm.jcCol}">
                               <html:select name="quartzJobManagerForm" property="classFullname"  styleId="cmbJc" style="font-family:Verdana;font-size:10px;width:250px;">
                                   <c:forEach var="jc" items="${quartzJobManagerForm.jcCol}">
-                                      <html:option value="${jc.classFullname}"><digi:trn>${jc.name}</digi:trn></html:option>
+                                      <html:option value="${jc.classFullname}"><digi:trn key="aim:job:${jc.name}">${jc.name}</digi:trn></html:option>
                                   </c:forEach>
                               </html:select>
                     </c:if>
@@ -250,7 +250,7 @@ function typeChanged(value){
                 <tr>
                   <td align="right">
                     <span style="color:red;">*</span>
-                    <digi:trn>Name</digi:trn>
+                    <digi:trn key="aim:job:name">Name</digi:trn>
                   </td>
                   <td>
                     <html:text name="quartzJobManagerForm" property="name" styleId="txtName" style="font-family:Verdana;font-size:10px;width:250px;" />
@@ -270,7 +270,7 @@ function typeChanged(value){
                 <tr>
                   <td width="96" align="right">
                     <span style="color:red;">*</span>
-                  <digi:trn>Start date/time</digi:trn>                  </td>
+                  <digi:trn key="aim:job:startDateTime">Start date/time</digi:trn>                  </td>
                   <td width="288">
                 
                 
@@ -322,7 +322,7 @@ function typeChanged(value){
                 </tr>
                 <tr>
                   <td align="right">
-                  <digi:trn>End date/time</digi:trn>                  </td>
+                  <digi:trn key="aim:job:endDateTime">End date/time</digi:trn>                  </td>
                   <td>
                  
      
@@ -383,19 +383,19 @@ function typeChanged(value){
           <tr>
             <td colspan="2">
             <span style="color:red;">*</span>
-            <digi:trn>Job Type</digi:trn>
+            <digi:trn key="aim:job:jobType">Job Type</digi:trn>
             <table width="439" cellpadding="2" cellspacing="1" style="border:dashed 1px;width:400px;">
               <tr>
                 <td colspan="2">
-               	  <html:radio name="quartzJobManagerForm" property="triggerType" value="1" onclick="typeChanged(1);" /><digi:trn>Minutely</digi:trn>
-                  <html:radio name="quartzJobManagerForm" property="triggerType" value="2" onclick="typeChanged(2);" /><digi:trn>Hourly</digi:trn>
-                  <html:radio name="quartzJobManagerForm" property="triggerType" value="3" onclick="typeChanged(3);" /><digi:trn>Daily</digi:trn>
-                  <html:radio name="quartzJobManagerForm" property="triggerType" value="4" onclick="typeChanged(4);" /><digi:trn>Weekly</digi:trn>
-                  <html:radio name="quartzJobManagerForm" property="triggerType" value="5" onclick="typeChanged(5);" /><digi:trn>Monthly</digi:trn>                </td>
+               	  <html:radio name="quartzJobManagerForm" property="triggerType" value="1" onclick="typeChanged(1);" /><digi:trn key="qMinutely">Minutely</digi:trn>
+                  <html:radio name="quartzJobManagerForm" property="triggerType" value="2" onclick="typeChanged(2);" /><digi:trn key="qHourly">Hourly</digi:trn>
+                  <html:radio name="quartzJobManagerForm" property="triggerType" value="3" onclick="typeChanged(3);" /><digi:trn key="qDaily">Daily</digi:trn>
+                  <html:radio name="quartzJobManagerForm" property="triggerType" value="4" onclick="typeChanged(4);" /><digi:trn key="qWeekly">Weekly</digi:trn>
+                  <html:radio name="quartzJobManagerForm" property="triggerType" value="5" onclick="typeChanged(5);" /><digi:trn key="qMonthly">Monthly</digi:trn>                </td>
               </tr>
               <tr>
                   <td colspan="2">
-                  <digi:trn>Select Day of week</digi:trn>
+                  <digi:trn key="aim:job:jobDayOfWeek">Select Day of week</digi:trn>
                   	<html:select name="quartzJobManagerForm" property="selectedDay"  styleId="cmbWeekDays" style="font-family:Verdana;font-size:10px;" disabled="true">
 	                    <html:option value="1">1</html:option>
 	                    <html:option value="2">2</html:option>
@@ -417,17 +417,21 @@ function typeChanged(value){
               </tr>
               <tr>
               <td colspan="2">
-              		    <span id="selectTime" style="color: red;display: none"> <digi:trn>Select trigger time</digi:trn></span>                       
+              		    <span id="selectTime" style="color: red;display: none"> <digi:trn key="aim:job:selectTime">Select trigger time</digi:trn></span>                       
         
               </td>
               </tr>
               <tr>
                   <td width="60">
-                       <digi:trn>Hour</digi:trn>          
+                
+              
+                 
+                   <digi:trn key="aim:job:hour">Hour</digi:trn>  
+                                                          
                   <td>
                   
-                  <span id="txtRepeatH" style="color: red;display: none"> <digi:trn>Select repeat interval</digi:trn></span>                       
-    				<html:select name="quartzJobManagerForm" property="exeTimeH"  styleId="exeTimeH" styleClass="inp-text">
+                  <span id="txtRepeatH" style="color: red;display: none"> <digi:trn key="aim:job:selectRepeat">Select repeat interval</digi:trn></span>                       
+    	<html:select name="quartzJobManagerForm" property="exeTimeH"  styleId="exeTimeH" styleClass="inp-text">
 				   <html:option value="00">00</html:option>
                	   <html:option value="01">01</html:option>
 				   <html:option value="02">02</html:option>
@@ -456,11 +460,11 @@ function typeChanged(value){
 	          </tr>
               <tr>
                 <td width="60">            
-                    <digi:trn>Minute</digi:trn>           
+                    <digi:trn key="aim:job:Minute">Minute</digi:trn>           
                 <td>  
                 
                 
-                 <span id="txtRepeatM" style="color: red;display: none"> <digi:trn>Select repeat interval</digi:trn></span>
+                 <span id="txtRepeatM" style="color: red;display: none"> <digi:trn key="aim:job:selectRepeat">Select repeat interval</digi:trn></span>
 			      
                 <html:select name="quartzJobManagerForm" property="exeTimeM"  styleId="exeTimeM" styleClass="inp-text">
 					<html:option value="00">00</html:option>
@@ -483,11 +487,11 @@ function typeChanged(value){
           <tr>
             <td>
               <c:set var="trn">
-                <digi:trn>Save</digi:trn>
+                <digi:trn key="aim:job:btnSave">Save</digi:trn>
               </c:set>
               <input type="button" value="${trn}" onclick="saveJob()"/>
               <c:set var="trnCan">
-                <digi:trn>Cancel</digi:trn>
+                <digi:trn key="aim:job:btnCancel">Cancel</digi:trn>
               </c:set>
               <input type="button" value="${trnCan}" onclick="cancel()"/>
             </td>

@@ -109,9 +109,9 @@ public class AddSector extends Action {
 						}
 						ActionErrors errors = new ActionErrors();
 		        		errors.add("title", new ActionError("error.aim.addSector.wrongTitle", TranslatorWorker.translateText("The name of the sector already exist for this scheme. Please enter another title",locale,siteId)));
-		        		if (errors.size() > 0) 
+		        		if (errors.size() > 0)
 		        			saveErrors(request, errors);
-
+						
 						return mapping.findForward("levelFirstSectorAdded");
 					}
 					if(sectorStatus == 2){
@@ -128,9 +128,9 @@ public class AddSector extends Action {
 						}
 						ActionErrors errors = new ActionErrors();
 		        		errors.add("title", new ActionError("error.aim.addSector.wrongCode", TranslatorWorker.translateText("The code of the sector already exist for this scheme. Please enter another code",locale,siteId)));
-		        		if (errors.size() > 0) 
+		        		if (errors.size() > 0)
 		        			saveErrors(request, errors);
-		        		
+						
 						return mapping.findForward("levelFirstSectorAdded");
 					}
 					addSectorForm.setParentId(new Long(schemeId));
@@ -202,10 +202,8 @@ public class AddSector extends Action {
 						}
 						ActionErrors errors = new ActionErrors();
 		        		errors.add("title", new ActionError("error.aim.addSubSector.wrongTitle", TranslatorWorker.translateText("The name of the sub sector already exist for this scheme. Please enter another title",locale,siteId)));
-		        		if (errors.size() > 0){
+		        		if (errors.size() > 0)
 		        			saveErrors(request, errors);
-		        			return mapping.findForward("forwardSector");
-		        		}
 						
 						return mapping.findForward("levelSecondSectorAdded");
 					}
@@ -223,10 +221,8 @@ public class AddSector extends Action {
 						}
 						ActionErrors errors = new ActionErrors();
 		        		errors.add("title", new ActionError("error.aim.addSubSector.wrongCode", TranslatorWorker.translateText("The code of the sub sector already exist for this scheme. Please enter another title",locale,siteId)));
-		        		if (errors.size() > 0) {
+		        		if (errors.size() > 0)
 		        			saveErrors(request, errors);
-		        			return mapping.findForward("forwardSector");
-		        		}
 						
 						return mapping.findForward("levelSecondSectorAdded");
 					}
@@ -310,10 +306,8 @@ public class AddSector extends Action {
 						}
 						ActionErrors errors = new ActionErrors();
 		        		errors.add("title", new ActionError("error.aim.addSubSubSector.wrongTitle", TranslatorWorker.translateText("The name of the sub sub sector already exist for this scheme. Please enter another title",locale,siteId)));
-		        		if (errors.size() > 0){
+		        		if (errors.size() > 0)
 		        			saveErrors(request, errors);
-		        			return mapping.findForward("forwardSector");
-		        		}
 						
 						return mapping.findForward("levelThirdSectorAdded");
 					}
@@ -331,10 +325,8 @@ public class AddSector extends Action {
 						}
 						ActionErrors errors = new ActionErrors();
 		        		errors.add("title", new ActionError("error.aim.addSubSubSector.wrongCode", TranslatorWorker.translateText("The code of the sub sub sector already exist for this scheme. Please enter another title",locale,siteId)));
-		        		if (errors.size() > 0) {
+		        		if (errors.size() > 0)
 		        			saveErrors(request, errors);
-		        			return mapping.findForward("forwardSector");
-		        		}
 						
 						return mapping.findForward("levelThirdSectorAdded");
 					}

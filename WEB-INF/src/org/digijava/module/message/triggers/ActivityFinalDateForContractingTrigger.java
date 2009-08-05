@@ -24,6 +24,7 @@ public class ActivityFinalDateForContractingTrigger extends Trigger {
         Event e=new Event(ActivityFinalDateForContractingTrigger.class);
         AmpActivity activity=(AmpActivity) source;
         e.getParameters().put(PARAM_NAME,activity.getName());
+        e.getParameters().put(PARAM_TEAM_ID,activity.getTeam().getAmpTeamId());
         e.getParameters().put(PARAM_TRIGGER_SENDER,MessageConstants.SENDER_TYPE_SYSTEM);
         e.getParameters().put(PARAM_URL, "aim/selectActivityTabs.do~ampActivityId="+activity.getAmpActivityId());
         e.getParameters().put(PARAM_CREATED_BY, activity.getActivityCreator());

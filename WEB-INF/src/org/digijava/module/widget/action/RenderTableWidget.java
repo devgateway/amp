@@ -35,7 +35,7 @@ public class RenderTableWidget extends Action {
 		Long columnId 	= fTable.getColumnId();
 		Long itemId 	= fTable.getItemId();
 		try{
-			WiTable table = new WiTable.TableBuilder(tableId, request).build();
+			WiTable table = new WiTable.TableBuilder(tableId).build();
 			if (columnId!=null && itemId!=null && columnId.longValue()>0 && itemId.longValue()>0){
 				WiColumnDropDownFilter filter = (WiColumnDropDownFilter) table.getColumnById(columnId);
 				//TODO this is not correct, check why columnId and itemId are not null when table is normal table.

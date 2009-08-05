@@ -56,12 +56,8 @@
 	            </table>
 	            </digi:form>
 	        </td>
-	        <td valign="top" width="85%">
-	            <table width="100%">
-	                <tr>
-	                    <td valign="top" style="padding:10px;height: 100%;"><jsp:include page="viewEventsBody.jsp" flush="true"/></td>
-	                </tr>
-	            </table>
+	        <td valign="top" width="100%">
+	               <jsp:include page="viewEventsBody.jsp" flush="true"/>
 	        </td>
     	</tr>
 </table>

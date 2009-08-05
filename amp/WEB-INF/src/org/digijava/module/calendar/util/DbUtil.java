@@ -42,11 +42,14 @@ import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.calendar.dbentity.AmpCalendar;
+import org.digijava.module.calendar.dbentity.AmpEventType;
 import org.digijava.module.calendar.dbentity.Calendar;
 import org.digijava.module.calendar.dbentity.CalendarItem;
 import org.digijava.module.calendar.dbentity.CalendarSettings;
 import org.digijava.module.calendar.exception.CalendarException;
 import org.digijava.module.common.dbentity.ItemStatus;
+import org.digijava.module.message.dbentity.CalendarEvent;
 
 public class DbUtil {
 
@@ -802,9 +805,7 @@ public class DbUtil {
 				q.setParameter("status", status, Hibernate.STRING);
 			}
 			else {
-				q = session.createQuery("select c from " +
-						CalendarItem.class.getName() +
-						" ci, " + Calendar.class.getName() +
+				q = session.createQuery("select c from " + CalendarItem.class.getName() + " ci, " + Calendar.class.getName() +
 						" c where (ci.calendar.id=c.id) and (ci.userId = :userId) and " +
 				"(c.startDate <=:curDate1 and c.endDate >=:curDate2) order by c.startDate desc");
 
@@ -1405,5 +1406,34 @@ public class DbUtil {
 
 		return result;
 	}
+	
+	
+	public static List getCalendarEvents(String siteId, String instanceId,Long userId) throws CalendarException {
+			List events = null;
+			Session session = null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
 
+			Query q = session.createQuery("select c from " +
+			CalendarItem.class.getName() +
+			" ci, " + Calendar.class.getName() +
+			" c where (ci.id=c.id) and (c.siteId=:siteId) and (c.instanceId=:instanceId) order by c.startDate desc");
+	
+			q.setParameter("siteId", siteId, Hibernate.STRING);
+			q.setParameter("instanceId", instanceId, Hibernate.STRING);
+			//q.setParameter("userId", userId, Hibernate.LONG);
+			events = q.list();
+
+		}
+		catch (Exception ex) {
+			logger.debug("Unable to get event list from database", ex);
+			throw new CalendarException(
+					"Unable to get event list from database", ex);
+		}
+
+		return events;
+	}
+	
+	
+	
 }

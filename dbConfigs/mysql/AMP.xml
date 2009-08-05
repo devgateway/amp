@@ -195,7 +195,7 @@
 				</SQL>
 			</MeasureExpression>
 		</Measure>
-		<Measure name="Actual Disbursements" aggregator="sum" caption="Actual_Disbursements" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter">
+		<Measure name="Actual Disbursements" aggregator="sum" caption="#Actual_Disbursements#" formatter="org.digijava.module.mondrian.Formatter.TotalCellFormatter">
 			<MeasureExpression>
 				<SQL dialect="mysql">
 					case when cached_v_donor_funding.transaction_type=1

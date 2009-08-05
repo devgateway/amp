@@ -51,6 +51,8 @@ public class PIExportUseCase {
 			export = new PIReport4Export(site, langCode);
 		} else if (PIConstants.PARIS_INDICATOR_REPORT_5a.equalsIgnoreCase(reportCode)) {
 			export = new PIReport5aExport(site, langCode);
+		} else if (PIConstants.PARIS_INDICATOR_REPORT_5b.equalsIgnoreCase(reportCode)) {
+			export = new PIReport5bExport(site, langCode);
 		} else if (PIConstants.PARIS_INDICATOR_REPORT_6.equalsIgnoreCase(reportCode)) {
 			export = new PIReport6Export(site, langCode);
 

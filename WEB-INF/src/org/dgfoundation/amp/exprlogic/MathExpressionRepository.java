@@ -123,13 +123,10 @@ public class MathExpressionRepository {
 	 */
 	private static void buildPredictabilityOfFunding() {
 		try {
-			MathExpression substractActualPlanned = new MathExpression(MathExpression.Operation.SUBTRACT, ArConstants.ACTUAL_DISBURSEMENT, ArConstants.PLANNED_DISBURSEMENT);
+			MathExpression substractActualPlanned = new MathExpression(MathExpression.Operation.SUBTRACT, ArConstants.PLANNED_DISBURSEMENT, ArConstants.ACTUAL_DISBURSEMENT);
 			MathExpression divideOper1ByPLanned = new MathExpression(MathExpression.Operation.DIVIDE, substractActualPlanned, ArConstants.PLANNED_DISBURSEMENT);
-
 			MathExpression multiResultPannedBy100 = new MathExpression(MathExpression.Operation.MULTIPLY, divideOper1ByPLanned, new BigDecimal(100));
-
 			expresions.put(PREDICTABILITY_OF_FUNDING, multiResultPannedBy100);
-
 		} catch (Exception e) {
 			logger.error(e);
 		}

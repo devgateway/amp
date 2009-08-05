@@ -12,37 +12,50 @@ import org.dgfoundation.amp.ar.ArConstants;
  */
 public class MathExpressionRepository {
 	private static Logger logger = Logger.getLogger(MathExpressionRepository.class);
+
 	public static final String OVERAGE_PROJECT = "overageProjects";
+
 	public static final String AGE_OF_PROJECT = "ageOfProject";
+
 	public static final String PREDICTABILITY_OF_FUNDING = "predictabilityOfFunding";
+
 	public static final String AVERAGE_SIZE_OF_PROJECT = "averageSizeofProjects";
+
 	public static final String VARIANCE_ACTUAL_COMMITMENTS = "actualCommitmentsVariance";
+
 	public static final String VARIANCE_ACTUAL_DISBURSEMENTS = "actualDisbursmentVariance";
+
 	public static final String CUMULATIVE_COMMITMENT = "cumulativeCommitment";
-	public static final String CUMULATIVE_DISBURSMENT = "cumulativeDisbursement";
+
+	public static final String CUMULATIVE_DISBURSEMENT = "cumulativeDisbursement";
+
 	public static final String EXECUTION_RATE = "buildExecutionRate";
+
 	public static final String PROJECT_PERIOD = "projectPeriod";
+
 	public static final String OVERAGE = "overage";
 
 	public static final String DISBURSEMENT_RADIO = "disbursmentRatio";
 
-	public static final String AVERAGE_SIZE_DISBURSMENT = "averageSizeofDisbursements";
+	public static final String AVERAGE_SIZE_DISBURSEMENT = "averageSizeofDisbursements";
 
-	public static final String AVERAGE_DISBURSMENT_RATE = "averageDisbursementRate";
+	public static final String AVERAGE_DISBURSEMENT_RATE = "averageDisbursementRate";
 
 	public static final String PROJECT_AGE_RATIO = "projectAgeRatio";
 
 	public static final String COUNT_ACTUAL_COMMITMENT = "countsActualCommitments";
+
 	public static final String COUNT_ACTUAL_DISBURSEMENT = "countActualDisbursment";
 
 	public static final String COUNT_PLANNED_COMMITMENT = "countsPlannedCommitments";
+
 	public static final String COUNT_PLANNED_DISBURSEMENT = "countPlannedDisbursment";
-	
-	
-	//Undisbursed Cumulative Balance = Cumulative Commitment - Cumulative Disbursement
+
 	public static final String UNDISBURSED_CUMULATIVE_BALANCE = "undisbursedCumulativeBalance";
+
 	public static final String UNCOMMITED_CUMULATIVE_BALANCE = "uncommitedCumulativeBalance";
-	
+
+	public static final String NUMBER_OF_PROJECTS = "numberOfProjects";
 
 	private static Hashtable<String, MathExpression> expresions = new Hashtable<String, MathExpression>();
 
@@ -59,20 +72,21 @@ public class MathExpressionRepository {
 		buildActualDisbursementVariance();
 		buildActualCommitmentsVariance();
 		buildCumulativeCommitment();
-		buildCumulativeDisbursment();
+		buildCumulativeDisbursement();
 		buildExecutionRate();
 		buildProjectPeriod();
 		buildOverage();
-		buildDisbursmentRatio();
+		buildDisbursementRatio();
 		buildCountActualCommitments();
-		buildCountActualDisbursment();
+		buildCountActualDisbursement();
 		buildCountPlannedCommitments();
-		buildCountPlannedDisbursment();
+		buildCountPlannedDisbursement();
 		buildAverageSizeofDisbursements();
 		buildAverageDisbursementRate();
 		buildProjectAgeRatio();
 		buildUndisbursedCumulativeBalance();
 		buildUncommitedCumulativeBalance();
+		buildNumberOfProject();
 	}
 
 	/**
@@ -134,7 +148,9 @@ public class MathExpressionRepository {
 	}
 
 	// variances
-
+	/**
+	 * Actual Commitments Variance MAX_ACTUAL_COMMITMENT - MIN_ACTUAL_COMMITMENT
+	 */
 	private static void buildActualCommitmentsVariance() {
 		try {
 			MathExpression variance = new MathExpression(MathExpression.Operation.SUBTRACT, ArConstants.MAX_ACTUAL_COMMITMENT, ArConstants.MIN_ACTUAL_COMMITMENT);
@@ -145,6 +161,10 @@ public class MathExpressionRepository {
 		}
 	}
 
+	/**
+	 * Actual Disbursement Variance MAX_ACTUAL_DISBURSEMENT -
+	 * MIN_ACTUAL_DISBURSEMENT
+	 */
 	private static void buildActualDisbursementVariance() {
 		try {
 			MathExpression variance = new MathExpression(MathExpression.Operation.SUBTRACT, ArConstants.MAX_ACTUAL_DISBURSEMENT, ArConstants.MIN_ACTUAL_DISBURSEMENT);
@@ -155,6 +175,10 @@ public class MathExpressionRepository {
 		}
 	}
 
+	/**
+	 * Cumulative Commitment Sum of Actual Commitment only affected by the
+	 * hierarchy percentage and filters percentage
+	 */
 	private static void buildCumulativeCommitment() {
 		try {
 			MathExpression variance = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.ACTUAL_COMMITMENT, new BigDecimal(1));
@@ -164,16 +188,22 @@ public class MathExpressionRepository {
 		}
 	}
 
-	private static void buildCumulativeDisbursment() {
+	/**
+	 * Cumulative Disbursement Sum of Actual Disbursement only affected by the
+	 * hierarchy percentage and filters percentage
+	 */
+	private static void buildCumulativeDisbursement() {
 		try {
 			MathExpression variance = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.ACTUAL_DISBURSEMENT, new BigDecimal(1));
-			expresions.put(CUMULATIVE_DISBURSMENT, variance);
+			expresions.put(CUMULATIVE_DISBURSEMENT, variance);
 		} catch (Exception e) {
 			logger.error(e);
 		}
 	}
 
-	// Execution rate = (Cumulative Disbursement/ Cumulative Commitment)*100
+	/**
+	 * Execution rate = (Cumulative Disbursement/ Cumulative Commitment)*100
+	 */
 	private static void buildExecutionRate() {
 		try {
 			MathExpression divideDisbursementByCommitment = new MathExpression(MathExpression.Operation.DIVIDE, ArConstants.ACTUAL_DISBURSEMENT, ArConstants.ACTUAL_COMMITMENT);
@@ -208,7 +238,11 @@ public class MathExpressionRepository {
 		}
 	}
 
-	private static void buildDisbursmentRatio() {
+	/**
+	 * (Actual Disbursement affected by all filters / Actual Disbursement of the
+	 * activity no affected by filters and percentages (overall total)) * 100
+	 */
+	private static void buildDisbursementRatio() {
 		try {
 			MathExpression x1 = new MathExpression(MathExpression.Operation.DIVIDE, ArConstants.ACTUAL_DISBURSEMENT_FILTERED, ArConstants.TOTAL_ACTUAL_DISBURSEMENT);
 			MathExpression x2 = new MathExpression(MathExpression.Operation.MULTIPLY, x1, new BigDecimal(100d));
@@ -218,6 +252,10 @@ public class MathExpressionRepository {
 		}
 	}
 
+	/**
+	 * Count Actual Commitments Number of Actual Commitments for the current
+	 * activity
+	 */
 	private static void buildCountActualCommitments() {
 		try {
 			MathExpression x1 = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.ACTUAL_COMMITMENT_COUNT, new BigDecimal(1));
@@ -227,6 +265,10 @@ public class MathExpressionRepository {
 		}
 	}
 
+	/**
+	 * Count Planned Commitments Number of Planned Commitment for the current
+	 * activity
+	 */
 	private static void buildCountPlannedCommitments() {
 		try {
 			MathExpression x1 = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.PLANNED_COMMITMENT_COUNT, new BigDecimal(1));
@@ -237,7 +279,11 @@ public class MathExpressionRepository {
 		}
 	}
 
-	private static void buildCountPlannedDisbursment() {
+	/**
+	 * Count Planned Disbursement Number of Planned Disbursement for the current
+	 * activity
+	 */
+	private static void buildCountPlannedDisbursement() {
 		try {
 			MathExpression x1 = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.PLANNED_DISBURSEMENT_COUNT, new BigDecimal(1));
 
@@ -247,7 +293,11 @@ public class MathExpressionRepository {
 		}
 	}
 
-	private static void buildCountActualDisbursment() {
+	/**
+	 * Count Actual Disbursement Number of Actual Disbursement for the current
+	 * activity
+	 */
+	private static void buildCountActualDisbursement() {
 		try {
 			MathExpression x1 = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.ACTUAL_DISBURSEMENT_COUNT, new BigDecimal(1));
 
@@ -257,10 +307,14 @@ public class MathExpressionRepository {
 		}
 	}
 
+	/**
+	 * Average Size of Disbursements Cumulative Disbursements / Count Actual
+	 * Disbursement
+	 */
 	private static void buildAverageSizeofDisbursements() {
 		try {
 			MathExpression x1 = new MathExpression(MathExpression.Operation.DIVIDE, ArConstants.ACTUAL_DISBURSEMENT, ArConstants.ACTUAL_DISBURSEMENT_COUNT);
-			expresions.put(AVERAGE_SIZE_DISBURSMENT, x1);
+			expresions.put(AVERAGE_SIZE_DISBURSEMENT, x1);
 		} catch (Exception e) {
 			logger.error(e);
 		}
@@ -285,34 +339,48 @@ public class MathExpressionRepository {
 	private static void buildAverageDisbursementRate() {
 		try {
 			MathExpression x1 = new MathExpression(MathExpression.Operation.DIVIDE, ArConstants.SUM_OFF_RESULTS, ArConstants.COUNT_PROJECTS);
-			expresions.put(AVERAGE_DISBURSMENT_RATE, x1);
+			expresions.put(AVERAGE_DISBURSEMENT_RATE, x1);
 		} catch (Exception e) {
 			logger.error(e);
 		}
 	}
-	
-	
+
 	/**
-	 * Undisbursed Cumulative Balance = Cumulative Commitment - Cumulative Disbursement
+	 * Undisbursed Cumulative Balance = Cumulative Commitment - Cumulative
+	 * Disbursement
 	 */
-	private static void buildUndisbursedCumulativeBalance(){
+	private static void buildUndisbursedCumulativeBalance() {
 		try {
-			MathExpression m1=new MathExpression(MathExpression.Operation.SUBTRACT,ArConstants.ACTUAL_COMMITMENT,ArConstants.ACTUAL_DISBURSEMENT);
+			MathExpression m1 = new MathExpression(MathExpression.Operation.SUBTRACT, ArConstants.ACTUAL_COMMITMENT, ArConstants.ACTUAL_DISBURSEMENT);
 			expresions.put(UNDISBURSED_CUMULATIVE_BALANCE, m1);
 		} catch (Exception e) {
-			// TODO: handle exception
+			logger.error(e);
 		}
 	}
-	
+
 	/**
-	 * Uncommited Cumulative Balance = Cumulative Commitment - Cumulative Disbursement
+	 * Uncommited Cumulative Balance = Cumulative Commitment - Cumulative
+	 * Disbursement
 	 */
-	private static void buildUncommitedCumulativeBalance(){
+	private static void buildUncommitedCumulativeBalance() {
 		try {
-			MathExpression m1=new MathExpression(MathExpression.Operation.SUBTRACT,ArConstants.PROPOSED_COST,ArConstants.ACTUAL_COMMITMENT);
+			MathExpression m1 = new MathExpression(MathExpression.Operation.SUBTRACT, ArConstants.PROPOSED_COST, ArConstants.ACTUAL_COMMITMENT);
 			expresions.put(UNCOMMITED_CUMULATIVE_BALANCE, m1);
 		} catch (Exception e) {
-			// TODO: handle exception
+			logger.error(e);
+		}
+	}
+
+	/**
+	 * Number Of Projects = Count Of Activities under the current hierarchy
+	 * 
+	 */
+	private static void buildNumberOfProject() {
+		try {
+			MathExpression m1 = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.COUNT_PROJECTS, new BigDecimal(1));
+			expresions.put(NUMBER_OF_PROJECTS, m1);
+		} catch (Exception e) {
+			logger.error(e);
 		}
 	}
 

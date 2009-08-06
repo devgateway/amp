@@ -6,6 +6,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.jasperreports.engine.JRAbstractExporter;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -13,6 +14,7 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 
 import org.apache.struts.action.ActionServlet;
@@ -24,9 +26,9 @@ import org.digijava.module.parisindicator.util.*;
 
 public class PIExportUseCase {
 
-	public synchronized void createPDFReport(ActionServlet servlet, HttpServletResponse response,
+	public synchronized void exportReport(ActionServlet servlet, HttpServletResponse response,
 			HttpServletRequest request, String reportCode, Collection<PIReportAbstractRow> mainTableRows,
-			int[][] miniTable, int startYear, int endYear) throws Exception {
+			int[][] miniTable, int startYear, int endYear, String type) throws Exception {
 
 		String reportsFolderPath = servlet.getServletContext().getRealPath(
 				"/WEB-INF/classes/org/digijava/module/parisindicator/jasperreports");
@@ -87,9 +89,17 @@ public class PIExportUseCase {
 				dataSource = new JRBeanArrayDataSource(export.generateDataSource(mainTableRows).toArray());
 			}
 			jasperPrint = JasperFillManager.fillReport(jasperFile, export.getParameters(endYear), dataSource);
-			response.setHeader("Content-Disposition", "attachment; filename=ParisIndicator" + reportCode + ".pdf");
-			response.setContentType("application/pdf");
-			JRPdfExporter exporter = new JRPdfExporter();
+			JRAbstractExporter exporter = null;
+			if (type.equalsIgnoreCase("PDF")) {
+				response.setHeader("Content-Disposition", "attachment; filename=ParisIndicator" + reportCode + ".pdf");
+				response.setContentType("application/pdf");
+				exporter = new JRPdfExporter();
+			}
+			if (type.equalsIgnoreCase("XLS")) {
+				response.setHeader("Content-Disposition", "attachment; filename=ParisIndicator" + reportCode + ".xls");
+				response.setContentType("application/vnd.ms-excel");
+				exporter = new JRXlsExporter();
+			}
 			exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
 			ServletOutputStream servletOutputStream = response.getOutputStream();
 			exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, servletOutputStream);

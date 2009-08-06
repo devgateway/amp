@@ -14,6 +14,8 @@
 	<parameter name="PI_COL4" class="java.lang.String"/>
 	<parameter name="PI_COL5" class="java.lang.String"/>
 	<parameter name="PI_LAST_YEAR" class="java.lang.String"/>
+	<parameter name="PI_SUBREPORT_DIR" class="java.lang.String"/>
+	<parameter name="PI_MINI_DATASOURCE" class="java.lang.Object[][]"/>
 	<queryString>
 		<![CDATA[$P!{qu}]]>
 	</queryString>
@@ -217,9 +219,15 @@
 		<band/>
 	</columnFooter>
 	<pageFooter>
-		<band height="20"/>
+		<band/>
 	</pageFooter>
 	<summary>
-		<band/>
+		<band height="123">
+			<subreport>
+				<reportElement x="2" y="8" width="529" height="106"/>
+				<dataSourceExpression><![CDATA[new org.digijava.module.parisindicator.helper.export.PIJasperDataSource($P{PI_MINI_DATASOURCE})]]></dataSourceExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{PI_SUBREPORT_DIR}]]></subreportExpression>
+			</subreport>
+		</band>
 	</summary>
 </jasperReport>

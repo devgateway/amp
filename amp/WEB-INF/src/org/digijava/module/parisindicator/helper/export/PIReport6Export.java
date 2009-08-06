@@ -457,4 +457,10 @@ public class PIReport6Export extends PIAbstractExport implements PIExportExtraOp
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public Object[][] generateDataSource(int[][] rows, int startYear, int endYear) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

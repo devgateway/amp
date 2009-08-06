@@ -41,7 +41,9 @@ public class PIExportUseCase {
 		String jasperFile = reportPath + ".jasper";
 
 		PIAbstractExport export = null;
-		PIExportExtraOperations export6 = null;
+		PIExportExtraOperations auxiliaryExport = null;
+		JRDataSource dataSource = null;
+		JasperPrint jasperPrint = null;
 
 		Site site = RequestUtils.getSite(request);
 		String langCode = RequestUtils.getNavigationLanguage(request).getCode();
@@ -51,14 +53,20 @@ public class PIExportUseCase {
 			export = new PIReport4Export(site, langCode);
 		} else if (PIConstants.PARIS_INDICATOR_REPORT_5a.equalsIgnoreCase(reportCode)) {
 			export = new PIReport5aExport(site, langCode);
+			// Dynamically generate the .jrxml file.
+			auxiliaryExport = new PIReport5aExport(site, langCode);
+			auxiliaryExport.createJrxmlFromClass(reportPath + "_sub.jrxml", startYear, endYear);
+			JasperCompileManager.compileReportToFile(reportPath + "_sub.jrxml");
+			((PIReport5aExport) export).setSubReportDirectory(reportPath + "_sub.jasper");
+			((PIReport5aExport) export).setMiniReportData(auxiliaryExport.generateDataSource(miniTable, startYear, endYear));
+			
 		} else if (PIConstants.PARIS_INDICATOR_REPORT_5b.equalsIgnoreCase(reportCode)) {
 			export = new PIReport5bExport(site, langCode);
 		} else if (PIConstants.PARIS_INDICATOR_REPORT_6.equalsIgnoreCase(reportCode)) {
 			export = new PIReport6Export(site, langCode);
-
 			// Dynamically generate the .jrxml file.
-			export6 = new PIReport6Export(site, langCode);
-			export6.createJrxmlFromClass(realPathJrxml, startYear, endYear);
+			auxiliaryExport = new PIReport6Export(site, langCode);
+			auxiliaryExport.createJrxmlFromClass(realPathJrxml, startYear, endYear);
 		} else if (PIConstants.PARIS_INDICATOR_REPORT_7.equalsIgnoreCase(reportCode)) {
 			export = new PIReport7Export(site, langCode);
 		} else if (PIConstants.PARIS_INDICATOR_REPORT_9.equalsIgnoreCase(reportCode)) {
@@ -69,14 +77,13 @@ public class PIExportUseCase {
 
 		try {
 			JasperCompileManager.compileReportToFile(realPathJrxml);
-			JRDataSource dataSource = null;
 			if (PIConstants.PARIS_INDICATOR_REPORT_6.equalsIgnoreCase(reportCode)) {
-				dataSource = new PIJasperDataSource(export6.generateDataSource(mainTableRows, startYear, endYear));
+				dataSource = new PIJasperDataSource(auxiliaryExport.generateDataSource(mainTableRows, startYear,
+						endYear));
 			} else {
 				dataSource = new JRBeanArrayDataSource(export.generateDataSource(mainTableRows).toArray());
-			}
-			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperFile, export.getParameters(endYear),
-					dataSource);
+			}		
+			jasperPrint = JasperFillManager.fillReport(jasperFile, export.getParameters(endYear), dataSource);
 			response.setHeader("Content-Disposition", "attachment; filename=ParisIndicator" + reportCode + ".pdf");
 			response.setContentType("application/pdf");
 			JRPdfExporter exporter = new JRPdfExporter();

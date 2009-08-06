@@ -10,4 +10,6 @@ public interface PIExportExtraOperations {
 
 	public Object[][] generateDataSource(Collection<PIReportAbstractRow> rows, int startYear, int endYear)
 			throws Exception;
+
+	public Object[][] generateDataSource(int[][] rows, int startYear, int endYear) throws Exception;
 }

@@ -1497,8 +1497,7 @@
 											<digi:trn key="aim:relatedDocuments">
 										    Related Documents</digi:trn>
 											</b>									</td>
-<td bgcolor="#ffffff">											
-											<c:if test="${!empty aimEditActivityForm.documents.documentList}">
+<td bgcolor="#ffffff">						<c:if test="${ (!empty aimEditActivityForm.documents.documentList) || (!empty aimEditActivityForm.documents.crDocuments)}">
 												<table width="100%" cellSpacing="0" cellPadding="0">
 												 <logic:iterate name="aimEditActivityForm"  property="documents.documents"
 													id="docs" type="org.digijava.module.aim.helper.Documents">
@@ -1509,24 +1508,58 @@
 															<td vAlign="center" align="left">
 																&nbsp;<b><c:out value="${docs.title}"/></b> -
 																&nbsp;&nbsp;&nbsp;<i><c:out value="${docs.fileName}"/></i>
+																
 																<logic:notEqual name="docs" property="docDescription" value=" ">
 																	<br />&nbsp;
-																	<b>Description:</b>&nbsp;<bean:write name="docs" property="docDescription" />
+																	<b><digi:trn key="aim:description">Description</digi:trn>:</b>
+																	&nbsp;<bean:write name="docs" property="docDescription" />
 																</logic:notEqual>
 																<logic:notEmpty name="docs" property="date">
 																	<br />&nbsp;
-																	<b>Date:</b>&nbsp;<c:out value="${docs.date}"/>
+																	<b><digi:trn key="aim:date">Date</digi:trn>:</b>
+																	&nbsp;<c:out value="${docs.date}"/>
 																</logic:notEmpty>
 																<logic:notEmpty name="docs" property="docType">
 																	<br />&nbsp;
-																	<b>Document Type:</b>&nbsp;
+																	<b><digi:trn key="aim:documentType">Document Type</digi:trn>:</b>&nbsp;
 																	<bean:write name="docs" property="docType"/>
-																</logic:notEmpty>															</td>
+																</logic:notEmpty>															
+															</td>
 														</tr>
 													 </table>
 													</td></tr>
 													</c:if>
 													</logic:iterate>
+													<logic:notEmpty name="aimEditActivityForm" property="documents.crDocuments">
+														<tr>
+														<td>
+														<logic:iterate name="aimEditActivityForm" property="documents.crDocuments" id="crDoc">
+															<table width="100%" class="box-border-nopadding">
+															 	<tr bgcolor="#ffffff">
+																	<td vAlign="center" align="left">
+																		&nbsp;<b><c:out value="${crDoc.title}"/></b> -
+																		&nbsp;&nbsp;&nbsp;<i><c:out value="${crDoc.name}"/></i>
+																		<c:set var="translation">
+																			<digi:trn key="contentrepository:documentManagerDownloadHint">Click here to download document</digi:trn>
+																		</c:set>																		
+																		<a style="cursor: pointer; text-decoration: underline; color: blue;" id="<c:out value="${crDoc.uuid}"/>" onclick="window.location='/contentrepository/downloadFile.do?uuid=<c:out value="${crDoc.uuid}"/>'" title="${translation}"><img src="/repository/contentrepository/view/images/check_out.gif" border="0"></a>									
+																		<logic:notEmpty name="crDoc" property="description">
+																			<br />&nbsp;
+																			<b><digi:trn key="aim:description">Description</digi:trn>:</b>&nbsp;
+																			<bean:write name="crDoc" property="description" />
+																		</logic:notEmpty>
+																		<logic:notEmpty name="crDoc" property="calendar">
+																			<br />&nbsp;
+																			<b><digi:trn key="aim:date">Date</digi:trn>:</b>
+																			&nbsp;<c:out value="${crDoc.calendar}"/>
+																		</logic:notEmpty>
+																	</td>
+																</tr>
+															 </table>
+														</logic:iterate>
+														</td>
+														</tr>
+													</logic:notEmpty>
 												</table>
 											</c:if>
 											<c:if test="${!empty aimEditActivityForm.documents.linksList}">

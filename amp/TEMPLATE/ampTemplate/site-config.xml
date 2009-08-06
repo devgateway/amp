@@ -583,7 +583,7 @@
 				<page>aim_editComponents</page>
 				<page>aim_addComponentType</page>
 				<page>aim_orgComponentPopUp</page>
-				
+				<page>aim_contactComponentPopIn</page>
 				<page>aim_addComponentIndicator</page>
 				<page>aim_reviseCloseDate</page>
 				<page>aim_addIssue</page>

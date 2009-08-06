@@ -133,6 +133,8 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpQuartzJobClass</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpContact</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityContact</hibernate-class>
+                <hibernate-class>org.digijava.module.aim.dbentity.AmpOrgStaffInformation</hibernate-class>
+                <hibernate-class>org.digijava.module.aim.dbentity.AmpOrgLocation</hibernate-class>
 	</hibernate-classes>
 	<!-- AIM classes End-->
 

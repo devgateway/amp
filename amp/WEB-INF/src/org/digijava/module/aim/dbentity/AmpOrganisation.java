@@ -1,6 +1,7 @@
 package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -8,6 +9,7 @@ import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.DonorDimension;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 public class AmpOrganisation implements Comparable, Serializable, Identifiable, ARDimensionable
 {
@@ -23,6 +25,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	private String orgCode;
 	private String orgGroup;  // defunct
 	private AmpFiscalCalendar ampFiscalCalId;
+        @Deprecated
 	private AmpSectorScheme ampSecSchemeId;
 	
 	private String budgetOrgCode;
@@ -36,6 +39,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	private AmpOrgType orgTypeId;
 	private AmpOrgGroup orgGrpId;
 	private String address;
+        @Deprecated
 	private Country countryId;
 	private String contactPersonName;
 	private String contactPersonTitle;
@@ -45,7 +49,170 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	private String orgUrl;
 	private String acronym;
 	private AmpLevel levelId;
-	private AmpRegion regionId;
+	private AmpCategoryValueLocations region;
+        private AmpCategoryValue implemLocationLevel;
+        private Set<AmpOrgLocation> locations;
+        private Set<AmpOrgStaffInformation> staffInfos;
+        private AmpCategoryValueLocations country;
+        private Set<AmpOrganisation> recipients;
+        private Set<AmpContact> contacts;
+        private String addressAbroad;
+        private Double programAnnualBudget;
+        private AmpCurrency programAnnualBudgetCurr;
+        private Double adminAnnualBudget;
+        private AmpCurrency adminAnnualBudgetCurr;
+        private Double programAnnualPercent;
+        private Long taxNumber;
+        private String primaryPurpose;
+        private Long minPlanRegNumb;
+        private Long legalPersonNum;
+        private Date legalPersonRegDate;
+        private Date minPlanRegDate;
+
+        public AmpCategoryValue getImplemLocationLevel() {
+            return implemLocationLevel;
+        }
+
+        public void setImplemLocationLevel(AmpCategoryValue implemLocationLevel) {
+            this.implemLocationLevel = implemLocationLevel;
+        }
+
+        public String getPrimaryPurpose() {
+            return primaryPurpose;
+        }
+
+        public void setPrimaryPurpose(String primaryPurpose) {
+            this.primaryPurpose = primaryPurpose;
+        }
+
+        public String getAddressAbroad() {
+            return addressAbroad;
+        }
+
+        public void setAddressAbroad(String addressAbroad) {
+            this.addressAbroad = addressAbroad;
+        }
+
+        public Double getAdminAnnualBudget() {
+            return adminAnnualBudget;
+        }
+
+        public void setAdminAnnualBudget(Double adminAnnualBudget) {
+            this.adminAnnualBudget = adminAnnualBudget;
+        }
+
+        public AmpCurrency getAdminAnnualBudgetCurr() {
+            return adminAnnualBudgetCurr;
+        }
+
+        public void setAdminAnnualBudgetCurr(AmpCurrency adminAnnualBudgetCurr) {
+            this.adminAnnualBudgetCurr = adminAnnualBudgetCurr;
+        }
+
+        public Set<AmpContact> getContacts() {
+            return contacts;
+        }
+
+        public void setContacts(Set<AmpContact> contacts) {
+            this.contacts = contacts;
+        }
+
+        public AmpCategoryValueLocations getCountry() {
+            return country;
+        }
+
+        public void setCountry(AmpCategoryValueLocations country) {
+            this.country = country;
+        }
+
+        public Long getLegalPersonNum() {
+            return legalPersonNum;
+        }
+
+        public void setLegalPersonNum(Long legalPersonNum) {
+            this.legalPersonNum = legalPersonNum;
+        }
+
+        public Date getLegalPersonRegDate() {
+            return legalPersonRegDate;
+        }
+
+        public void setLegalPersonRegDate(Date legalPersonRegDate) {
+            this.legalPersonRegDate = legalPersonRegDate;
+        }
+
+        public Set<AmpOrgLocation> getLocations() {
+            return locations;
+        }
+
+        public void setLocations(Set<AmpOrgLocation> locations) {
+            this.locations = locations;
+        }
+
+        public Date getMinPlanRegDate() {
+            return minPlanRegDate;
+        }
+
+        public void setMinPlanRegDate(Date minPlanRegDate) {
+            this.minPlanRegDate = minPlanRegDate;
+        }
+
+        public Double getProgramAnnualBudget() {
+            return programAnnualBudget;
+        }
+
+        public void setProgramAnnualBudget(Double programAnnualBudget) {
+            this.programAnnualBudget = programAnnualBudget;
+        }
+
+        public AmpCurrency getProgramAnnualBudgetCurr() {
+            return programAnnualBudgetCurr;
+        }
+
+        public void setProgramAnnualBudgetCurr(AmpCurrency programAnnualBudgetCurr) {
+            this.programAnnualBudgetCurr = programAnnualBudgetCurr;
+        }
+
+        public Double getProgramAnnualPercent() {
+            return programAnnualPercent;
+        }
+
+        public void setProgramAnnualPercent(Double programAnnualPercent) {
+            this.programAnnualPercent = programAnnualPercent;
+        }
+
+        public Set<AmpOrganisation> getRecipients() {
+            return recipients;
+        }
+
+        public void setRecipients(Set<AmpOrganisation> recipients) {
+            this.recipients = recipients;
+        }
+
+        public Long getMinPlanRegNumb() {
+            return minPlanRegNumb;
+        }
+
+        public void setMinPlanRegNumb(Long regNumbMinPlan) {
+            this.minPlanRegNumb = regNumbMinPlan;
+        }
+
+        public Set<AmpOrgStaffInformation> getStaffInfos() {
+            return staffInfos;
+        }
+
+        public void setStaffInfos(Set<AmpOrgStaffInformation> staffInfos) {
+            this.staffInfos = staffInfos;
+        }
+
+        public Long getTaxNumber() {
+            return taxNumber;
+        }
+
+        public void setTaxNumber(Long taxNumber) {
+            this.taxNumber = taxNumber;
+        }
+       
 	
 	private Set survey;	// Collection of AmpAhsurvey dbentity objects 
 	
@@ -414,14 +581,14 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	/**
 	 * @return Returns the regionId.
 	 */
-	public AmpRegion getRegionId() {
-		return regionId;
+	public AmpCategoryValueLocations getRegion() {
+		return region;
 	}
 	/**
 	 * @param regionId The regionId to set.
 	 */
-	public void setRegionId(AmpRegion regionId) {
-		this.regionId = regionId;
+	public void setRegion(AmpCategoryValueLocations region) {
+		this.region = region;
 	}
 	/**
 	 * @return Returns the survey.

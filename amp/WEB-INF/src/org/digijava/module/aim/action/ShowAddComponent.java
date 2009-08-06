@@ -53,7 +53,7 @@ public class ShowAddComponent extends Action {
 
 	private static Logger logger = Logger.getLogger(ShowAddComponent.class);
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
+	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)  throws Exception{
 		try {
 			
 			HttpSession session = request.getSession();
@@ -220,7 +220,7 @@ public class ShowAddComponent extends Action {
 		return mapping.findForward("forward");
 	}
 
-	public ActionForward addNewComponent(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
+	public ActionForward addNewComponent(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)  throws Exception {
 		EditActivityForm eaForm = (EditActivityForm) form;
 		String name = eaForm.getComponents().getNewCompoenentName();
 		AmpComponentType type = ComponentsUtil.getComponentTypeById(eaForm.getComponents().getSelectedType());

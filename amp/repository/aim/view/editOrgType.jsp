@@ -160,12 +160,12 @@
 																		</td>
 																	</tr>
 																	<tr>
-																		<td width="30%" align="right">
-																	        <digi:trn key="aim:orgTypeIsGovernmental">Is Governmental</digi:trn>
+																		<td colspan="2" align="center">
+                                                                            <html:radio property="classification" value="GOVERNMENTAL"><digi:trn>Governmental</digi:trn></html:radio>
+                                                                            <html:radio property="classification" value="NGO"><digi:trn>NGO</digi:trn></html:radio>
+                                                                            <html:radio property="classification" value="REGIONAL"><digi:trn>Regional</digi:trn></html:radio>
 																		</td>
-																		<td width="30%">
-																           <html:checkbox property="orgTypeIsGovernmental"/>
-																		</td>
+																		
 																	</tr>
 																	<tr>
 																		<td colspan="2" width="60%"  align="center">

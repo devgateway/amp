@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -643,7 +644,7 @@ public class CurrencyUtil {
 	}
 
 	public static void addCurrency(AmpCurrency ampCurr,
-			AmpCurrencyRate ampCurrRate) throws AimException {
+			AmpCurrencyRate ampCurrRate) throws DgException {
 		DbUtil.add(ampCurr);
 		DbUtil.add(ampCurrRate);
 	}

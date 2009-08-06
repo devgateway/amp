@@ -12,7 +12,19 @@ public class AmpOrgType implements Serializable,Comparable,Identifiable, ARDimen
 	private Long ampOrgTypeId;
 	private String orgType;
 	private String orgTypeCode;
+    @Deprecated
 	private Boolean orgTypeIsGovernmental;
+
+    // NGO, Governmental etc.
+    private String classification;
+
+    public String getClassification() {
+        return classification;
+    }
+
+    public void setClassification(String classification) {
+        this.classification = classification;
+    }
 	//private Set organizations;
 	
 	/**

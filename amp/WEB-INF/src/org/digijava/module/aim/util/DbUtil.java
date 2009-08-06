@@ -700,19 +700,12 @@ public class DbUtil {
         Object o = null;
 
         try {
-            session = PersistenceManager.getSession();
+            session = PersistenceManager.getRequestDBSession();
             o = session.load(c, id);
 
         } catch (Exception e) {
             logger.error("Uanble to get object of class " + c.getName() + " width id=" + id + ". Error was:" + e);
-        } finally {
-
-            try {
-                PersistenceManager.releaseSession(session);
-            } catch (Exception ex) {
-                logger.error("releaseSession() failed " + ex);
-            }
-        }
+        } 
         return o;
     }
 
@@ -2615,8 +2608,9 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select distinct gr from " + AmpOrgGroup.class.getName()
                     +" gr "
-                + " inner join gr.orgType t where t.orgTypeIsGovernmental is NULL or t.orgTypeIsGovernmental=false order by gr.orgGrpName asc";
+                + " inner join gr.orgType t where t.classification is NULL or t.classification!=:gov order by gr.orgGrpName asc";
             qry = session.createQuery(queryString);
+            qry.setString("gov", Constants.ORG_TYPE_GOVERNMENTAL);
             groups = qry.list();
         } catch (Exception e) {
             logger.error("Unable to get all organisation groups", e);
@@ -2742,7 +2736,7 @@ public class DbUtil {
         return col;
     }
 
-    public static void add(Object object) {
+    public static void add(Object object) throws DgException {
         logger.debug("In add " + object.getClass().getName());
         Session sess = null;
         Transaction tx = null;
@@ -2753,7 +2747,7 @@ public class DbUtil {
             sess.save(object);
             tx.commit();
         } catch (Exception e) {
-            logger.error("Unable to add "+object.getClass().getName());
+            logger.error(e);
             e.printStackTrace();
             if (tx != null) {
                 try {
@@ -2762,6 +2756,7 @@ public class DbUtil {
                     logger.error("rollback() failed", ex);
                 }
             }
+            throw new DgException(e);
         }
     }
 
@@ -2791,7 +2786,7 @@ public class DbUtil {
         }
     }
 
-    public static void updateOrg(Object object) {
+    public static void updateOrg(Object object) throws DgException{
         Session sess = null;
         Transaction tx = null;
 
@@ -2819,6 +2814,7 @@ public class DbUtil {
                     logger.error("rollback() failed", ex);
                 }
             }
+              throw new DgException(e);
         }
     }
 

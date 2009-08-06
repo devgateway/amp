@@ -355,4 +355,10 @@ public class Constants
     public static final int PAGES_TO_SHOW=5;
     //Pagination for Reports and Tabs
 	public static final Integer VIEWABLE_PAGES = 9;
+
+    // Organization type 
+    public static final String ORG_TYPE_GOVERNMENTAL = "GOVERNMENTAL";
+    public static final String ORG_TYPE_NGO = "NGO";
+    public static final String ORG_TYPE_REGIONAL = "REGIONAL";
+
 }

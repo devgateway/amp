@@ -437,13 +437,13 @@
 	function myAddProgram(params){
 		var msg='\n<digi:trn key="aim:addProgram">Add Program</digi:trn>';
 		showPanelLoading(msg);
-		<digi:context name="selPrg" property="context/module/moduleinstance/addProgram.do" />	  
+		<digi:context name="selPrg" property="context/module/moduleinstance/selectProgramAF.do" />	  
 		var url = "<%=selPrg %>";
 		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, params);
 	}
 	
     function addNewProgram(pType) {
-        var prgSels=document.getElementsByName("programs.selPrograms");
+        var prgSels=document.getElementsByName("selPrograms");
         var urlParams;
         var flag=false;
 
@@ -452,7 +452,7 @@
             var i=0;
             for(i=prgSels.length-1;i>-1;i--){
                if(prgSels[i].value!=-1){
-                 urlParams="edit=true&themeid="+prgSels[i].value+"&op=add&programType="+pType+"&programs.selPrograms="+prgSels.value;
+                 urlParams="edit=true&themeid="+prgSels[i].value+"&op=add&programType="+pType+"&selPrograms="+prgSels.value;
                  flag=true;
                  break;
                }
@@ -464,7 +464,7 @@
             urlParams="edit=true&themeid="+prgSels[prgSels.length-1].value+"&op=add&programType="+pType;
           }
         }
-		<digi:context name="selPrg" property="context/module/moduleinstance/addProgram.do" />	  
+		<digi:context name="selPrg" property="context/module/moduleinstance/selectProgramSwitch.do" />	  
 		checkAndClose=true;
 		var url = "<%=selPrg %>";
 		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, urlParams);
@@ -473,7 +473,7 @@
     function reloadProgram(selectedProgram) {
        	<digi:context name="selProgram" property="context/module/moduleinstance/addProgram.do?edit=true"/>
 
-        var prgSels=document.getElementsByName("programs.selPrograms");
+        var prgSels=document.getElementsByName("selPrograms");
         var flag=false;
         var i=0;
         //alert(selectedProgram.value);
@@ -490,7 +490,7 @@
         if(!flag){
         	var urlParams="<%=selProgram%>&themeid="+selectedProgram.value;  
             for(var i=0; i<prgSels.length; i++){
-            	urlParams+="&programs.selPrograms="+prgSels[i].value;
+            	urlParams+="&selPrograms="+prgSels[i].value;
             }
 
         }

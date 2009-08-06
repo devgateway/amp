@@ -76,12 +76,14 @@ public class PIAction extends Action {
 		if (piForm.isPrintPreview()) {
 			piForm.setPrintPreview(false);
 			return mapping.findForward("print");
-		} else if (piForm.isExportPDF()) {
+		} else if (piForm.isExportPDF() || piForm.isExportXLS()) {
 			piForm.setExportPDF(false);
+			piForm.setExportXLS(false);
 
 			PIExportUseCase pdfUseCase = new PIExportUseCase();
-			pdfUseCase.createPDFReport(getServlet(), response, request, piForm.getPiReport().getIndicatorCode(), piForm
-					.getMainTableRows(), piForm.getMiniTable(), piForm.getStartYear(), piForm.getEndYear());
+			pdfUseCase.exportReport(getServlet(), response, request, piForm.getPiReport().getIndicatorCode(), piForm
+					.getMainTableRows(), piForm.getMiniTable(), piForm.getStartYear(), piForm.getEndYear(), (piForm
+					.isExportPDF()) ? "PDF" : "XLS");
 
 			return null;
 		} else {

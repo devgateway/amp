@@ -145,7 +145,7 @@
 		scheduler.createUnitsView("unit","section_id",sections);
 		scheduler.templates.event_bar_text=function(start_date,end_date,ev){
 	        var text = ev.text.substr(0,20);
-	        var img = '<digi:img src="module/calendar/images/magnifier.png" height="13" width="13" align="left"/>';
+	        var img = '<digi:img src="module/calendar/images/magnifier.png" height="12" width="12" align="left"/>';
 	        return "<span title='"+"Title:"+text+" "+"StartDate:"+start_date+"EndDate:"+end_date+"'>"+img+""+text+"</span>";
 		}
 		scheduler.config.dblclick_create = false;
@@ -165,7 +165,13 @@
 </script>	
 
 <div id="css" style="display:block;"></div>
-<body onload="init();">
+<body>
+<script type="text/javascript">
+window.onload = function(){
+	init();
+	};
+
+</script>
 	<div id="scheduler_here" class="dhx_cal_container"  style='padding:1% 0% 1% 0%; width:100%; height:100%; position:relative'>
 		<div class="dhx_cal_navline">
 			<div class="dhx_cal_prev_button">&nbsp;</div>

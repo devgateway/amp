@@ -44,6 +44,24 @@ public abstract class Cell extends Viewable implements RowIdentifiable, ColumnId
 		public final int compare (Object o1, Object o2) {
 			Cell c1=(Cell) o1;
 			Cell c2=(Cell) o2;
+			if (c1 instanceof ComputedDateCell && c2 instanceof ComputedDateCell) {
+				Double v1 = 0d, v2 = 0d;
+
+				if (c1.getValue() != null) {
+					String value = (String) c1.getValue();
+					if (!value.equalsIgnoreCase("")) {
+						v1 = Double.parseDouble((String) c1.getValue());
+					}
+				}
+				if (c2.getValue() != null) {
+					String value = (String) c2.getValue();
+					if (!value.equalsIgnoreCase("")) {
+						v2 = Double.parseDouble((String) c2.getValue());
+					}
+				}
+				return Double.compare(v1, v2);
+			}
+			
 	        if(c1 instanceof TextCell && c2 instanceof TextCell){
 	            String c1Value=c1.comparableToken().toString();
 	            String c2Value=c2.comparableToken().toString();

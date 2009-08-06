@@ -12,8 +12,14 @@ module MultiCurrency
   
       case value
       when String
-        #Removed first regexp to allow for sign usage, this could be improved to only accept (-)
-        @base_value = value.gsub(/\D(\d{3})/, '\1').sub(/\D(\d{1,2})$/, '.\1').to_f
+        #TODO: Improve this hack to get the regexp to do the right replacement for negative numbers with = 3.n digits
+        if value.to_f < 0 #negative
+          @base_value = value.gsub(/\D(\d{3})/, '\1').sub(/\D(\d{1,2})$/, '.\1').to_f
+          @base_value = @base_value * (-1) if @base_value > 0
+        else
+          @base_value = value.gsub(/\D(\d{3})/, '\1').sub(/\D(\d{1,2})$/, '.\1').to_f
+        end
+
 #        @base_value = value.gsub(/\D(\d{1,2})$/, '.\1').to_f
       else
         @base_value = value.to_f

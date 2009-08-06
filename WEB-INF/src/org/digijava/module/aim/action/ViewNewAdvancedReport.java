@@ -31,6 +31,7 @@ import org.dgfoundation.amp.ar.GenericViews;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.cell.AmountCell;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
@@ -330,7 +331,7 @@ public class ViewNewAdvancedReport extends Action {
 	}
 
 
-	private void saveOrUpdateReportLog(TeamMember tm, AmpReports ar) {
+	private void saveOrUpdateReportLog(TeamMember tm, AmpReports ar) throws DgException{
 		AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
 		AmpReportLog reportlog = DbUtil.getAmpReportLog(ar.getAmpReportId(), ampTeamMember.getAmpTeamMemId());
 		if(reportlog!=null){

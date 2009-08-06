@@ -1,0 +1,1 @@
+UPDATE amp_org_type set  org_type_classification ='GOVERNMENTAL' where org_type_is_governmental =true;

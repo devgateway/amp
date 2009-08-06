@@ -151,6 +151,8 @@
 	<!-- new organization Component -->
 	<form-bean name="aimSelectOrganizationForm" type="org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm"/>
 	<!-- End new organization Component -->
+        <!-- contact Component -->
+	<form-bean name="aimAddContactForm" type="org.digijava.module.aim.uicomponents.form.AddContactComponentForm"/>
     <form-bean name="quartzJobManagerForm" type="org.digijava.module.aim.form.QuartzJobManagerForm" />
     <form-bean name="quartzJobClassManagerForm" type="org.digijava.module.aim.form.QuartzJobClassManagerForm" />
     <form-bean name="invalidDataList" type="org.digijava.module.aim.form.InvalidDataListsForm"/>
@@ -534,7 +536,7 @@
       <forward name="forward" path="/showLayout.do?layout=organisationManager" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
-    <action name="aimAddOrgForm" path="/aim/editOrganisation" scope="session" type="org.digijava.module.aim.action.EditOrganisation" validate="false">
+    <action name="aimAddOrgForm" path="/aim/editOrganisation" scope="session" type="org.digijava.module.aim.action.EditOrganisation" validate="false" parameter="actionFlag">
       <forward name="forward" path="/showLayout.do?layout=editOrganisation" />
       <forward name="index" path="/aim/index.do" redirect="true" />
       <forward name="added" path="/aim/organisationManager.do?added=true" redirect="true" />
@@ -1145,6 +1147,9 @@
   	<!--new Organization component-->
   	<action name="aimSelectOrganizationForm" path="/aim/selectOrganizationComponent" scope="session" type="org.digijava.module.aim.uicomponents.action.selectOrganizationComponent">
       <forward name="forward" path="/showLayout.do?layout=aim_orgComponentPopUp" />
+    </action>
+    <action name="aimAddContactForm" path="/aim/addAmpContactInfo" scope="session" type="org.digijava.module.aim.uicomponents.action.AddContactComponent"  parameter="action">
+      <forward name="forward" path="/showLayout.do?layout=aim_contactComponentPopIn" />
     </action>
     
 

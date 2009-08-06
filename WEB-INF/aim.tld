@@ -173,5 +173,30 @@
 		
 		<bodycontent>JSP</bodycontent>
 	</tag>
+        <tag>
+		<name>addContactButton</name>
+		<tagclass>
+			org.digijava.module.aim.uicomponents.AddContact
+		</tagclass>
+		<info>Add Contact  tag</info>
+		<attribute>
+			<name>collection</name>
+			<required>true</required>
+			<description>
+				Collection where the selcted contacts will be added
+			</description>
+		</attribute>
+
+	<attribute>
+			<rtexprvalue>true</rtexprvalue>
+			<name>form</name>
+			<required>true</required>
+		</attribute>
+		<description>
+			The name of the form on any scope that will be used to set
+			the selected contact
+		</description>
+		<bodycontent>JSP</bodycontent>
+	</tag>
 
 </taglib>

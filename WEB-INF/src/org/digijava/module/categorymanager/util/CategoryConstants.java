@@ -73,6 +73,10 @@ public class CategoryConstants {
 	public static final String INDICATOR_RISK_TYPE_NAME="Indicator Risk";
 	public static final String INDICATOR_RISK_TYPE_KEY="indicator_risk";
 
+     //organization staff Information type
+	public static final String ORGANIZATION_STAFF_INFO_NAME="Staff Information Type";
+	public static final String ORGANIZATION_STAFF_INFO_KEY="staff_information_type";
+
 	public static final long NONE_TYPE		= 0;
 	public static final long COUNTRY_TYPE	= 1;
 	public static final long REGION_TYPE	= 2;

@@ -48,10 +48,10 @@
 
 		<many-to-one name="levelId" column="level_id"
 			class="org.digijava.module.aim.dbentity.AmpLevel" cascade="none" />
+                <many-to-one name="implemLocationLevel" column="imp_level_id"
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 
-		<many-to-one name="regionId" column="region_id"
-			class="org.digijava.module.aim.dbentity.AmpRegion" cascade="none" />
-
+	
 		<many-to-one name="countryId" column="country_id"
 			class="org.digijava.kernel.dbentity.Country" cascade="none" />
 
@@ -83,6 +83,42 @@
 			<key column="amp_org_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpOrganisationDocument" />
 		</set>
+
+                <set name="locations" cascade="all-delete-orphan" inverse="true" >
+                    <key column="amp_org_id" />
+                    <one-to-many class="org.digijava.module.aim.dbentity.AmpOrgLocation" />
+                </set>
+
+                <set name="staffInfos" cascade="all-delete-orphan" inverse="true">
+                    <key column="amp_org_id" />
+                    <one-to-many class="org.digijava.module.aim.dbentity.AmpOrgStaffInformation" />
+                </set>
+
+                <many-to-one name="country" column="amp_country_id" class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" cascade="none" />
+
+                <set name="recipients" table="AMP_ORG_RECIPIENTS" lazy="true">
+                    <key column="amp_org_id"/>
+                    <many-to-many class="org.digijava.module.aim.dbentity.AmpOrganisation" column="amp_org_recipient_id" />
+                </set>
+
+                <set name="contacts" table="AMP_ORG_CONTACTS" lazy="true">
+                    <key column="amp_org_id"/>
+                    <many-to-many class="org.digijava.module.aim.dbentity.AmpContact" />
+                </set>
+
+                <property name="addressAbroad" column="address_abroad" type="java.lang.String" />
+                <property name="programAnnualBudget" column="prog_annual_budget" type="java.lang.Double" />
+                <many-to-one name="programAnnualBudgetCurr" column="prog_budget_currency_id" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
+                <property name="adminAnnualBudget" column="admin_annual_budget" type="java.lang.Double" />
+                <many-to-one name="adminAnnualBudgetCurr" column="admin_budgetcurrency_id" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
+                <property name="programAnnualPercent" column="program_annual_percent" type="java.lang.Double" />
+                <property name="taxNumber" column="tax_number" type="java.lang.Long" />
+                <property name="minPlanRegNumb" column="regist_num_min_plan" type="java.lang.Long" />
+                <property name="legalPersonNum" column="legal_personality_number" type="java.lang.Long" />
+                <property name="legalPersonRegDate" column="legal_personality_reg_date" type="java.util.Date" />
+                <property name="minPlanRegDate" column="min_plan_reg_date" type="java.util.Date" />
+                <property name="primaryPurpose" column="org_primary_purpose" type="java.lang.String" />
+                <many-to-one name="region" column="cat_val_loc_region_id" class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" cascade="none" />
 
 	</class>
 

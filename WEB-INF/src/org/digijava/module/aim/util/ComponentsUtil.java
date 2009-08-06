@@ -17,6 +17,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
@@ -144,7 +145,7 @@ public class ComponentsUtil {
     /*
      * add a new Component
      */
-    public static void addNewComponentType(AmpComponentType type) {
+    public static void addNewComponentType(AmpComponentType type) throws DgException {
         DbUtil.add(type);
 
     }
@@ -211,7 +212,7 @@ public class ComponentsUtil {
     /*
 	 * add a new Component
 	 */
-    public static void addNewComponent(AmpComponent ampComp) {
+    public static void addNewComponent(AmpComponent ampComp) throws DgException{
         DbUtil.add(ampComp);
 
     }

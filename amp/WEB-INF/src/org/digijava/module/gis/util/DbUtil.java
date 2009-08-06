@@ -183,6 +183,7 @@ public class DbUtil {
                 qs.append(" sec where sec.sectorId in (");
                 qs.append(whereCaluse);
                 qs.append(")");
+                qs.append(" and sec.activityId.team is not null");
                 q = session.createQuery(qs.toString());
            } else {
                 q = session.createQuery("select distinct sec.activityId, sec.sectorPercentage from " +AmpActivitySector.class.getName() + " sec");

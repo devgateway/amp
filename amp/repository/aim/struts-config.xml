@@ -160,6 +160,7 @@
     <form-bean name="addressbookForm" type="org.digijava.module.aim.form.AddressBookForm"/>
     
     <form-bean name="selectLocationForm" type="org.digijava.module.aim.form.SelectLocationForm"/>
+    <form-bean name="selectProgramForm" type="org.digijava.module.aim.form.ProgramsForm"/>
     
 </form-beans>
 
@@ -1610,7 +1611,16 @@
     </action>
     <action name="aimNPDForm" parameter="actionMethod" path="/aim/exportIndicators2xsl" scope="request" type="org.digijava.module.aim.action.ExportIndicators2XSLAction" validate="false" />
 
-    <action name="aimEditActivityForm" path="/aim/addProgram" scope="session" type="org.digijava.module.aim.action.AddProgram" validate="false">
+    <action name="selectProgramForm" path="/aim/selectProgramAF" scope="session" type="org.digijava.module.aim.action.SelectProgramAF" parameter="forward">
+		<forward name="forward" path="/aim/selectProgramSwitch.do"/>
+		<forward name="addProgram" path="/aim/addProgram.do"/>
+    </action>
+	<action name="selectProgramForm" path="/aim/selectProgramSwitch" scope="session" type="org.digijava.module.aim.action.SelectorSwitchAction" parameter="forward">
+		<forward name="forward" path="/aim/addProgram.do"/>
+ 	 	<forward name="/aim/selectProgramAF" path="/aim/selectProgramAF.do"/>
+	</action>
+
+    <action name="selectProgramForm" path="/aim/addProgram" scope="session" type="org.digijava.module.aim.action.AddProgram" validate="false">
       <forward name="forward" path="/showLayout.do?layout=aim_addActivityProgram" />
       <forward name="added" path="/aim/addActivity.do?edit=true" />
     </action>

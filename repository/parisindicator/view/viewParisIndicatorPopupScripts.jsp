@@ -423,9 +423,20 @@
         document.parisIndicatorForm.submit();
     }
 
-	function exportPDF() {
-        document.parisIndicatorForm.exportPDF.value = true;
+	function exportPDFs() {
+        document.getElementsByName('exportPDF')[0].value = true;
+        document.getElementsByName('parisIndicatorForm')[0].submit();
+    }
+
+	function exportXLSs() {
+        document.parisIndicatorForm.exportXLS.value = true;
         document.parisIndicatorForm.submit();
+    }
+
+    function resetExport() {
+    	document.parisIndicatorForm.exportPDF.value = false;
+    	document.parisIndicatorForm.exportXLS.value = false;
+    	document.parisIndicatorForm.printPreview.value = false;
     }
 </script>
 

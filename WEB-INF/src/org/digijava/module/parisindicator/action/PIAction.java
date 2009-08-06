@@ -77,14 +77,12 @@ public class PIAction extends Action {
 			piForm.setPrintPreview(false);
 			return mapping.findForward("print");
 		} else if (piForm.isExportPDF() || piForm.isExportXLS()) {
-			piForm.setExportPDF(false);
-			piForm.setExportXLS(false);
-
 			PIExportUseCase pdfUseCase = new PIExportUseCase();
 			pdfUseCase.exportReport(getServlet(), response, request, piForm.getPiReport().getIndicatorCode(), piForm
 					.getMainTableRows(), piForm.getMiniTable(), piForm.getStartYear(), piForm.getEndYear(), (piForm
 					.isExportPDF()) ? "PDF" : "XLS");
-
+			piForm.setExportPDF(false);
+			piForm.setExportXLS(false);
 			return null;
 		} else {
 			return mapping.findForward("forward");

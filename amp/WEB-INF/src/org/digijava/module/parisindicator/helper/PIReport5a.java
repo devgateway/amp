@@ -197,7 +197,13 @@ public class PIReport5a extends PIAbstractReport implements PIOperationsFor5 {
 									auxRow.setDonorGroup(auxPoDD.getOrgGrpId());
 									auxRow.setYear(transactionYear);
 
-									list.add(auxRow);
+									if (auxRow.getColumn1().doubleValue() != 0
+											|| auxRow.getColumn2().doubleValue() != 0
+											|| auxRow.getColumn3().doubleValue() != 0
+											|| auxRow.getColumn4().doubleValue() != 0
+											|| auxRow.getColumn5().doubleValue() != 0) {
+										list.add(auxRow);
+									}
 								}
 							}
 						}

@@ -174,8 +174,8 @@ public class PIReport4 extends PIAbstractReport {
 									auxRow.setDonorGroup(auxPoDD.getOrgGrpId());
 									auxRow.setYear(transactionYear);
 
-									if (!auxRow.getColumn1().equals(new BigDecimal(0))
-											|| !auxRow.getColumn2().equals(new BigDecimal(0))) {
+									if (auxRow.getColumn1().doubleValue() != 0
+											|| auxRow.getColumn2().doubleValue() != 0) {
 										list.add(auxRow);
 									}
 								}

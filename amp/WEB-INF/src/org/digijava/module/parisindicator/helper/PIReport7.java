@@ -180,7 +180,11 @@ public class PIReport7 extends PIAbstractReport {
 									auxRow.setColumn3(0);
 									auxRow.setDonorGroup(auxPoDD.getOrgGrpId());
 									auxRow.setYear(transactionYear);
-									list.add(auxRow);
+									
+									if (auxRow.getColumn1().doubleValue() != 0
+											|| auxRow.getColumn2().doubleValue() != 0) {
+										list.add(auxRow);
+									}
 								}
 							}
 						}

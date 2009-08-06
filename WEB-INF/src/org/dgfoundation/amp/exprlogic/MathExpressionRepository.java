@@ -95,10 +95,8 @@ public class MathExpressionRepository {
 	private static void buildOverageProjects() {
 		try {
 			// subtract PROPOSED_COMPLETION_DATE_VALUE to CURRENT_DATE_VALUE
-			MathExpression oper = new MathExpression(MathExpression.Operation.SUBTRACT, ArConstants.CURRENT_DATE_VALUE, ArConstants.PROPOSED_COMPLETION_DATE_VALUE);
-			// get the result in days
-			MathExpression oper2 = new MathExpression(MathExpression.Operation.DIVIDE_ROUND_DOWN, oper, new BigDecimal(1000 * 60 * 60 * 24));
-			expresions.put(OVERAGE_PROJECT, oper2);
+			MathExpression oper = new MathExpression(MathExpression.Operation.DATE_MONTH_DIFF, ArConstants.CURRENT_DATE_VALUE, ArConstants.PROPOSED_COMPLETION_DATE_VALUE);
+			expresions.put(OVERAGE_PROJECT, oper);
 		} catch (Exception e) {
 			logger.error(e);
 		}

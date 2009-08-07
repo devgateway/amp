@@ -1,5 +1,3 @@
---- headerMiddle.jsp
-+++ headerMiddle.jsp
 @@ -308,7 +308,7 @@
  
  	function openGIS() {

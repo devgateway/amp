@@ -499,4 +499,9 @@
 			 />
 	</target>
 
+	<target name="patchDemo" description="Patch for applying GIS PDF to Demo Site">
+		<touch file="${deployConfigs}/${serverName}/gisMenu.jsp"/>
+		<copy file="${deployConfigs}/${serverName}/gisMenu.jsp" todir="TEMPLATE/ampTemplate/layout"/>
+	</target>
+
 </project>

@@ -486,7 +486,6 @@
 	</target>
 
 	<target name="patchDemo" description="Patch for applying GIS PDF to Demo Site">
-		<touch file="${deployConfigs}/${serverName}/headermiddle_gis_pdf.patch"/>
 		<patch patchfile="${deployConfigs}/${serverName}/headermiddle_gis_pdf.patch" originalfile="TEMPLATE/ampTemplate/layout/headerMiddle.jsp"/>
 	</target>
 

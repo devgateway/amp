@@ -446,7 +446,7 @@ public class ShowActivityPrintPreview
 //                        }
 
                         if(actLoc.getLocationPercentage()!=null)
-                        location.setPercent(FormatHelper.formatNumber( actLoc.getLocationPercentage().doubleValue()));
+                        location.setPercent(actLoc.getLocationPercentage().floatValue());
 
                         locs.add(location);
                       }

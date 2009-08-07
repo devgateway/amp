@@ -644,7 +644,7 @@ public class SaveActivity extends Action {
 						Double totalPercentage = 0d;
 						while (itr.hasNext()) {
 							Location loc = itr.next();
-							Double percentage=FormatHelper.parseDouble(loc.getPercent());
+							Double percentage=new Double(loc.getPercent());
 							if(percentage != null)
 								totalPercentage += percentage;
 						}
@@ -846,7 +846,7 @@ public class SaveActivity extends Action {
 				actLoc.setActivity(activity);//activity);
 				actLoc.getActivity().setAmpActivityId(eaForm.getActivityId());
 				actLoc.setLocation(ampLoc);
-				float percent=Float.parseFloat(loc.getPercent());
+				float percent=loc.getPercent();
                 //if(percent==0){
                 //	percent=new Double(0);
                 //}

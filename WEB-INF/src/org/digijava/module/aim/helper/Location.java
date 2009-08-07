@@ -27,7 +27,7 @@ public class Location implements Serializable
 	private String zone;
 	private Long woredaId;
 	private String woreda;
-	private String percent;//AMP-2250 
+	private float percent;//AMP-2250 
 	private boolean showPercent;
 	
 	private String locationName;
@@ -223,16 +223,17 @@ public class Location implements Serializable
 		return ampCVLocation.equals( l.getAmpCVLocation() );
 	}
 
-	public String getPercent() {
+	public float getPercent() {
 		return percent;
 	}
 
-	public void setPercent(String percent) {
+	public void setPercent(float percent) {
+		/*
 		if(FormatHelper.parseDouble(percent) >0 )
 			this.setShowPercent(true);
 		else
 			this.setShowPercent(false);
-
+		*/
 		this.percent = percent;
 	}
 

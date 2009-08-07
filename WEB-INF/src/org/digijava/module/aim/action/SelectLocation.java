@@ -34,7 +34,7 @@ public class SelectLocation extends SelectorAction{
 				location.setAncestorLocationNames( DynLocationManagerUtil.getParents(ampCVLocation) );
 				location.setLocationName(ampCVLocation.getName());
 				location.setLocId( ampCVLocation.getId() );
-				location.setPercent("");
+				location.setPercent(0);
                              if (eaForm != null) {
                                 if (eaForm.getLocation().getSelectedLocs() == null) {
                                     eaForm.getLocation().setSelectedLocs(new ArrayList<Location>());

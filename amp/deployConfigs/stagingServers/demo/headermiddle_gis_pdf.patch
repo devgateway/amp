@@ -1,10 +1,6 @@
-### Eclipse Workspace Patch 1.0
-#P amp_2
-Index: TEMPLATE/ampTemplate/layout/headerMiddle.jsp
-===================================================================
---- TEMPLATE/ampTemplate/layout/headerMiddle.jsp	(revision 10102)
-+++ TEMPLATE/ampTemplate/layout/headerMiddle.jsp	(working copy)
-@@ -310,7 +310,7 @@
+--- headerMiddle.jsp	2009-08-07 18:33:24.000000000 +0300
++++ headerMiddle3.jsp	2009-08-07 18:51:45.000000000 +0300
+@@ -308,7 +308,7 @@
  
  	function openGIS() {
  		openNewWindowWithMenubar(1000, 600);

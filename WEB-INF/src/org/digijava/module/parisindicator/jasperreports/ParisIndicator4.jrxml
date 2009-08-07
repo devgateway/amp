@@ -14,6 +14,7 @@
 	<parameter name="PI_COL4" class="java.lang.String"/>
 	<parameter name="PI_COL5" class="java.lang.String"/>
 	<parameter name="PI_LAST_YEAR" class="java.lang.String"/>
+	<parameter name="PI_CURRENCY_MSG" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[$P!{qu}]]>
 	</queryString>
@@ -46,7 +47,7 @@
 		<band height="3"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="45">
+		<band height="54">
 			<line>
 				<reportElement key="line-5" mode="Opaque" x="0" y="1" width="701" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
 				<graphicElement fill="Solid">
@@ -54,77 +55,77 @@
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement key="line-9" mode="Opaque" x="169" y="2" width="1" height="42" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="line-9" mode="Opaque" x="169" y="2" width="1" height="51" forecolor="#000000" backcolor="#FFFFFF"/>
 				<graphicElement fill="Solid">
 					<pen lineWidth="0.5" lineStyle="Solid"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement key="line-10" mode="Opaque" x="226" y="2" width="1" height="42" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="line-10" mode="Opaque" x="226" y="2" width="1" height="51" forecolor="#000000" backcolor="#FFFFFF"/>
 				<graphicElement fill="Solid">
 					<pen lineWidth="0.5" lineStyle="Solid"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement key="line-11" mode="Opaque" x="382" y="2" width="1" height="42" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="line-11" mode="Opaque" x="382" y="2" width="1" height="51" forecolor="#000000" backcolor="#FFFFFF"/>
 				<graphicElement fill="Solid">
 					<pen lineWidth="0.5" lineStyle="Solid"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement key="line-12" mode="Opaque" x="539" y="2" width="1" height="42" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="line-12" mode="Opaque" x="539" y="2" width="1" height="51" forecolor="#000000" backcolor="#FFFFFF"/>
 				<graphicElement fill="Solid">
 					<pen lineWidth="0.5" lineStyle="Solid"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement key="line-13" mode="Opaque" x="701" y="2" width="1" height="42" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="line-13" mode="Opaque" x="701" y="2" width="1" height="51" forecolor="#000000" backcolor="#FFFFFF"/>
 				<graphicElement fill="Solid">
 					<pen lineWidth="0.5" lineStyle="Solid"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement key="line-16" mode="Opaque" x="0" y="2" width="1" height="42" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="line-16" mode="Opaque" x="0" y="2" width="1" height="51" forecolor="#000000" backcolor="#FFFFFF"/>
 				<graphicElement fill="Solid">
 					<pen lineWidth="0.5" lineStyle="Solid"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement key="line-5" mode="Opaque" x="0" y="44" width="701" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="line-5" mode="Opaque" x="0" y="53" width="701" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
 				<graphicElement fill="Solid">
 					<pen lineWidth="0.5" lineStyle="Solid"/>
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement mode="Opaque" x="1" y="2" width="168" height="42" backcolor="#CCCCCC"/>
+				<reportElement mode="Opaque" x="1" y="2" width="168" height="51" backcolor="#CCCCCC"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true" pdfEncoding="Cp1250"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{PI_COL1}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement mode="Opaque" x="170" y="2" width="56" height="42" backcolor="#CCCCCC"/>
+				<reportElement mode="Opaque" x="170" y="2" width="56" height="51" backcolor="#CCCCCC"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true" pdfEncoding="Cp1250"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{PI_COL2}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement mode="Opaque" x="227" y="2" width="155" height="42" backcolor="#CCCCCC"/>
+				<reportElement mode="Opaque" x="227" y="2" width="155" height="51" backcolor="#CCCCCC"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="false" pdfEncoding="Cp1250"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{PI_COL3}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement mode="Opaque" x="383" y="2" width="156" height="42" backcolor="#CCCCCC"/>
+				<reportElement mode="Opaque" x="383" y="2" width="156" height="51" backcolor="#CCCCCC"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="false" pdfEncoding="Cp1250"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{PI_COL4}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement mode="Opaque" x="540" y="2" width="161" height="42" backcolor="#CCCCCC"/>
+				<reportElement mode="Opaque" x="540" y="2" width="161" height="51" backcolor="#CCCCCC"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="false" pdfEncoding="Cp1250"/>
 				</textElement>
@@ -217,7 +218,15 @@
 		<band/>
 	</columnFooter>
 	<pageFooter>
-		<band height="20"/>
+		<band height="21">
+			<textField>
+				<reportElement x="1" y="6" width="606" height="15" forecolor="#003399"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{PI_CURRENCY_MSG}]]></textFieldExpression>
+			</textField>
+		</band>
 	</pageFooter>
 	<summary>
 		<band/>

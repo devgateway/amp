@@ -15,8 +15,8 @@ import org.digijava.module.parisindicator.util.PIConstants;
 
 public class PIReport4Export extends PIAbstractExport {
 
-	public PIReport4Export(Site site, String langcode) {
-		super(site, langcode);
+	public PIReport4Export(Site site, String langcode, String currency) {
+		super(site, langcode, currency);
 	}
 
 	@Override
@@ -51,9 +51,8 @@ public class PIReport4Export extends PIAbstractExport {
 		parameters.put("PI_COL3", TranslatorWorker.translateText(
 				"Volume of technical co-operation for capacity development provided through co-ordinated programmes",
 				this.getLangCode(), this.getSite().getId()));
-		parameters.put("PI_COL4", TranslatorWorker.translateText(
-				"Total volume of technical co-operation provided", this.getLangCode(), this
-						.getSite().getId()));
+		parameters.put("PI_COL4", TranslatorWorker.translateText("Total volume of technical co-operation provided",
+				this.getLangCode(), this.getSite().getId()));
 		parameters
 				.put(
 						"PI_COL5",
@@ -62,6 +61,9 @@ public class PIReport4Export extends PIAbstractExport {
 										"% of TC for capacity development provided through coordinated programmes consistent with national development strategies",
 										this.getLangCode(), this.getSite().getId()));
 		parameters.put("PI_LAST_YEAR", new Integer(year).toString());
+		parameters.put("PI_CURRENCY_MSG", TranslatorWorker.translateText("All the amounts are in thousands (000) ",
+				this.getLangCode(), this.getSite().getId())
+				+ " " + this.getCurrency());
 		return parameters;
 	}
 

@@ -16,6 +16,7 @@
 	<parameter name="PI_LAST_YEAR" class="java.lang.String"/>
 	<parameter name="PI_SUBREPORT_DIR" class="java.lang.String"/>
 	<parameter name="PI_MINI_DATASOURCE" class="java.lang.Object[][]"/>
+	<parameter name="PI_CURRENCY_MSG" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[$P!{qu}]]>
 	</queryString>
@@ -219,7 +220,15 @@
 		<band/>
 	</columnFooter>
 	<pageFooter>
-		<band/>
+		<band height="21">
+			<textField>
+				<reportElement x="1" y="6" width="606" height="15" forecolor="#003399"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{PI_CURRENCY_MSG}]]></textFieldExpression>
+			</textField>
+		</band>
 	</pageFooter>
 	<summary>
 		<band height="123">

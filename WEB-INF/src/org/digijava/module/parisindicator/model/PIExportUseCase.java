@@ -28,7 +28,7 @@ public class PIExportUseCase {
 
 	public synchronized void exportReport(ActionServlet servlet, HttpServletResponse response,
 			HttpServletRequest request, String reportCode, Collection<PIReportAbstractRow> mainTableRows,
-			int[][] miniTable, int startYear, int endYear, String type) throws Exception {
+			int[][] miniTable, int startYear, int endYear, String type, String currency) throws Exception {
 
 		String reportsFolderPath = servlet.getServletContext().getRealPath(
 				"/WEB-INF/classes/org/digijava/module/parisindicator/jasperreports");
@@ -49,11 +49,11 @@ public class PIExportUseCase {
 		Site site = RequestUtils.getSite(request);
 		String langCode = RequestUtils.getNavigationLanguage(request).getCode();
 		if (PIConstants.PARIS_INDICATOR_REPORT_3.equalsIgnoreCase(reportCode)) {
-			export = new PIReport3Export(site, langCode);
+			export = new PIReport3Export(site, langCode, currency);
 		} else if (PIConstants.PARIS_INDICATOR_REPORT_4.equalsIgnoreCase(reportCode)) {
-			export = new PIReport4Export(site, langCode);
+			export = new PIReport4Export(site, langCode, currency);
 		} else if (PIConstants.PARIS_INDICATOR_REPORT_5a.equalsIgnoreCase(reportCode)) {
-			export = new PIReport5aExport(site, langCode);
+			export = new PIReport5aExport(site, langCode, currency);
 			// Dynamically generate the .jrxml file.
 			((PIReport5aExport) export).createJrxmlFromClass(reportPath + "_sub.jrxml", startYear, endYear);
 			JasperCompileManager.compileReportToFile(reportPath + "_sub.jrxml");
@@ -61,7 +61,7 @@ public class PIExportUseCase {
 			((PIReport5aExport) export).setMiniReportData(((PIReport5aExport) export).generateDataSource(miniTable,
 					startYear, endYear));
 		} else if (PIConstants.PARIS_INDICATOR_REPORT_5b.equalsIgnoreCase(reportCode)) {
-			export = new PIReport5bExport(site, langCode);
+			export = new PIReport5bExport(site, langCode, currency);
 			// Dynamically generate the .jrxml file.
 			((PIReport5bExport) export).createJrxmlFromClass(reportPath + "_sub.jrxml", startYear, endYear);
 			JasperCompileManager.compileReportToFile(reportPath + "_sub.jrxml");
@@ -73,9 +73,9 @@ public class PIExportUseCase {
 			// Dynamically generate the .jrxml file.
 			((PIReport6Export) export).createJrxmlFromClass(realPathJrxml, startYear, endYear);
 		} else if (PIConstants.PARIS_INDICATOR_REPORT_7.equalsIgnoreCase(reportCode)) {
-			export = new PIReport7Export(site, langCode);
+			export = new PIReport7Export(site, langCode, currency);
 		} else if (PIConstants.PARIS_INDICATOR_REPORT_9.equalsIgnoreCase(reportCode)) {
-			export = new PIReport9Export(site, langCode);
+			export = new PIReport9Export(site, langCode, currency);
 		} else if (PIConstants.PARIS_INDICATOR_REPORT_10a.equalsIgnoreCase(reportCode)) {
 			export = new PIReport10aExport(site, langCode);
 		}

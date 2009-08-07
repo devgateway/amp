@@ -126,6 +126,8 @@ public class GisUtil {
         int xOffset = (int) ( -mapLeftX * scale) + border + centerXOffset;
         int yOffset = (int) ( -mapLowY * scale) + centerYOffset;
 
+        List captionRects = new ArrayList();
+
         for (int segmentId = 0; segmentId < mapData.size();
                              segmentId++) {
 
@@ -137,28 +139,48 @@ public class GisUtil {
             CoordinateRect ccRect = gms.getSegmentRect();
 
             g2d.setColor(new Color(0, 0, 0));
-            g2d.drawString(gms.getSegmentName(),
-                           xOffset +
-                           (ccRect.getLeft() +
-                            (ccRect.getRight() - ccRect.getLeft()) / 2) * scale -
-                           (int) (glv.getVisualBounds().getWidth() / 2) + 1,
-                           canvasHeight -
-                           (yOffset +
-                            (ccRect.getBottom() +
-                             (ccRect.getTop() - ccRect.getBottom()) / 2) *
-                            scale) + 1);
+
+            float xPos = xOffset + (ccRect.getLeft() +
+                                    (ccRect.getRight() - ccRect.getLeft()) / 2)
+                         * scale - (int) (glv.getVisualBounds().getWidth() / 2);
+
+            float yPos = canvasHeight - (yOffset + (ccRect.getBottom() +
+                         (ccRect.getTop() - ccRect.getBottom()) / 2) * scale);
+
+
+            CoordinateRect captionRect =
+            new CoordinateRect((int)xPos, (int)(xPos + glv.getVisualBounds().getWidth()),
+                               (int)yPos, (int)(yPos + glv.getVisualBounds().getHeight()));
+
+
+            for (int existingCaptIdx = 0; existingCaptIdx < captionRects.size(); existingCaptIdx ++) {
+               CoordinateRect exRect =  (CoordinateRect) captionRects.get(existingCaptIdx);
+               if ((((captionRect.getLeft() > exRect.getLeft() && captionRect.getLeft() < exRect.getRight()) ||
+                      (captionRect.getRight() > exRect.getLeft() && captionRect.getRight() < exRect.getRight())) &&
+                   ((captionRect.getTop() > exRect.getTop() && captionRect.getTop() < exRect.getBottom()) ||
+                      (captionRect.getBottom() > exRect.getTop() && captionRect.getBottom() < exRect.getBottom())))
+               ||
+
+                       (((exRect.getLeft() > captionRect.getLeft() && exRect.getLeft() < captionRect.getRight()) ||
+                                  (exRect.getRight() > captionRect.getLeft() && exRect.getRight() < captionRect.getRight())) &&
+                               ((exRect.getTop() > captionRect.getTop() && exRect.getTop() < captionRect.getBottom()) ||
+                                  (exRect.getBottom() > captionRect.getTop() && exRect.getBottom() < captionRect.getBottom()))))
+
+               {
+
+                   float moveUpPx = captionRect.getBottom() - exRect.getTop() + 2;
+                   captionRect.setTop(captionRect.getTop() - moveUpPx);
+                   captionRect.setBottom(captionRect.getBottom() - moveUpPx);
+               }
+            }
+
+
+            captionRects.add(captionRect);
+
+            g2d.drawString(gms.getSegmentName(),captionRect.getLeft() + 1, captionRect.getTop() + 1);
 
             g2d.setColor(new Color(255, 255, 255));
-            g2d.drawString(gms.getSegmentName(),
-                           xOffset +
-                           (ccRect.getLeft() +
-                            (ccRect.getRight() - ccRect.getLeft()) / 2) * scale -
-                           (int) (glv.getVisualBounds().getWidth() / 2),
-                           canvasHeight -
-                           (yOffset +
-                            (ccRect.getBottom() +
-                             (ccRect.getTop() - ccRect.getBottom()) / 2) *
-                            scale));
+            g2d.drawString(gms.getSegmentName(), captionRect.getLeft(), captionRect.getTop());
 
         }
 

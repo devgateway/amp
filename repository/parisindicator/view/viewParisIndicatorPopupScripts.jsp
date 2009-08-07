@@ -437,6 +437,7 @@
     	document.parisIndicatorForm.exportPDF.value = false;
     	document.parisIndicatorForm.exportXLS.value = false;
     	document.parisIndicatorForm.printPreview.value = false;
+    	document.parisIndicatorForm.target = '_self';
     }
 </script>
 

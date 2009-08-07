@@ -1,0 +1,15 @@
+### Eclipse Workspace Patch 1.0
+#P amp_2
+Index: TEMPLATE/ampTemplate/layout/headerMiddle.jsp
+===================================================================
+--- TEMPLATE/ampTemplate/layout/headerMiddle.jsp	(revision 10102)
++++ TEMPLATE/ampTemplate/layout/headerMiddle.jsp	(working copy)
+@@ -310,7 +310,7 @@
+ 
+ 	function openGIS() {
+ 		openNewWindowWithMenubar(1000, 600);
+-		popupPointer.location.href = "/gis/showGisDashboard.do";
++		popupPointer.location.href = "http://files.ampdev.net/client/public/rm/result_matrix_<%=((org.digijava.kernel.entity.Locale)request.getAttribute("org.digijava.kernel.navigation_language")).getCode()%>.pdf";
+ 	}
+ 	
+ 	function teamWorkspaceSetup(a) {

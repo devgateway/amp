@@ -12,9 +12,9 @@ import java.util.Map;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.parisindicator.helper.PIReport5aRow;
-import org.digijava.module.parisindicator.helper.PIReport6Row;
-import org.digijava.module.parisindicator.helper.PIReportAbstractRow;
+import org.digijava.module.parisindicator.helper.row.PIReport5aRow;
+import org.digijava.module.parisindicator.helper.row.PIReport6Row;
+import org.digijava.module.parisindicator.helper.row.PIReportAbstractRow;
 import org.digijava.module.parisindicator.util.PIConstants;
 
 public class PIReport5aExport extends PIAbstractExport implements PIExportExtraOperations {

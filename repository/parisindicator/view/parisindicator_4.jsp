@@ -53,7 +53,7 @@
            <%int counter = 0; %>
            <bean:define id="color" value="" type="String"/>
            <logic:iterate id="element" name="parisIndicatorForm" property="mainTableRows" indexId="index" 
-            type="org.digijava.module.parisindicator.helper.PIReport4Row">
+            type="org.digijava.module.parisindicator.helper.row.PIReport4Row">
                <logic:equal name="element" property="year" value="${parisIndicatorForm.selectedStartYear}">
                    <%counter++;%>
                </logic:equal>

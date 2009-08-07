@@ -8,6 +8,7 @@ import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.parisindicator.helper.row.PIReportAbstractRow;
 
 public interface PIOperations {
 

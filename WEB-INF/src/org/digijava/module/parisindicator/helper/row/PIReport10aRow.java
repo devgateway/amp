@@ -1,4 +1,4 @@
-package org.digijava.module.parisindicator.helper;
+package org.digijava.module.parisindicator.helper.row;
 
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 

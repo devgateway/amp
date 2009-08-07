@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.digijava.kernel.request.Site;
-import org.digijava.module.parisindicator.helper.PIReportAbstractRow;
+import org.digijava.module.parisindicator.helper.row.PIReportAbstractRow;
 
 public abstract class PIAbstractExport {
 

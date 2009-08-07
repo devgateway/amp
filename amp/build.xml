@@ -486,7 +486,8 @@
 	</target>
 
 	<target name="patchDemo" description="Patch for applying GIS PDF to Demo Site">
-		<copy file="${deployConfigs}/${serverName}/headerMiddle.jsp" tofile="TEMPLATE/ampTemplate/layout/headerMiddle.jsp"/>
+		<touch file="${deployConfigs}/${serverName}/headerMiddle.jsp"/>
+		<copy file="${deployConfigs}/${serverName}/headerMiddle.jsp" todir="TEMPLATE/ampTemplate/layout"/>
 	</target>
 
 </project>

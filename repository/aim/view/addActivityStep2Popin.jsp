@@ -271,7 +271,7 @@
 
 	function addSelectedSectors(){
 		var postString		= generateFields(3);
-		<digi:context name="Url" property="context/aim/addSelectedSectors.do"/>
+		<digi:context name="Url" property="context/aim/selectSectorSwitch.do"/>
 		var url = "<%=Url %>";
 		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
 		checkAndClose=true;

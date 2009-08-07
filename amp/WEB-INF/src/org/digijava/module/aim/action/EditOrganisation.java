@@ -217,7 +217,7 @@ public class EditOrganisation extends DispatchAction {
                     Location loc = new Location();
                     AmpCategoryValueLocations catValLoc = location.getLocation();
                     loc.setAmpCVLocation(catValLoc);
-                    loc.setPercent(String.valueOf(location.getPercent()));
+                    loc.setPercent(location.getPercent().floatValue());
                     loc.setAncestorLocationNames(DynLocationManagerUtil.getParents(catValLoc));
                     loc.setLocationName(catValLoc.getName());
                     loc.setLocId(catValLoc.getId());
@@ -839,7 +839,7 @@ public class EditOrganisation extends DispatchAction {
                 while (iter.hasNext()) {
                     AmpOrgLocation orgLoc = iter.next();
                     if (orgLoc.getLocation().getId().equals(location.getAmpCVLocation().getId())) {
-                        orgLoc.setPercent(Double.parseDouble(location.getPercent()));
+                        orgLoc.setPercent(Float.valueOf(location.getPercent()).doubleValue());
                         newLoc = orgLoc;
                         locations.add(newLoc);
                         break;
@@ -849,7 +849,7 @@ public class EditOrganisation extends DispatchAction {
                     newLoc = new AmpOrgLocation();
                 }
                 newLoc.setOrganization(organization);
-                newLoc.setPercent(Double.parseDouble(location.getPercent()));
+                newLoc.setPercent(Float.valueOf(location.getPercent()).doubleValue());
                 newLoc.setLocation(location.getAmpCVLocation());
                 locations.add(newLoc);
             }

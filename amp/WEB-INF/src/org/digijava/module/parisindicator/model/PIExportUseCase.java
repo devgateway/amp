@@ -22,6 +22,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.parisindicator.helper.*;
 import org.digijava.module.parisindicator.helper.export.*;
+import org.digijava.module.parisindicator.helper.row.PIReportAbstractRow;
 import org.digijava.module.parisindicator.util.*;
 
 public class PIExportUseCase {

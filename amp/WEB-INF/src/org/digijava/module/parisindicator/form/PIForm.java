@@ -10,7 +10,7 @@ import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.parisindicator.helper.PIReportAbstractRow;
+import org.digijava.module.parisindicator.helper.row.PIReportAbstractRow;
 
 public class PIForm extends ActionForm {
 

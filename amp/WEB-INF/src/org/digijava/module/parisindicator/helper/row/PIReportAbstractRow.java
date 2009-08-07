@@ -1,4 +1,4 @@
-package org.digijava.module.parisindicator.helper;
+package org.digijava.module.parisindicator.helper.row;
 
 /**
  * This class represents the basic row information for each report.

@@ -35,7 +35,7 @@ import org.digijava.module.parisindicator.helper.PIReport5b;
 import org.digijava.module.parisindicator.helper.PIReport6;
 import org.digijava.module.parisindicator.helper.PIReport7;
 import org.digijava.module.parisindicator.helper.PIReport9;
-import org.digijava.module.parisindicator.helper.PIReportAbstractRow;
+import org.digijava.module.parisindicator.helper.row.PIReportAbstractRow;
 import org.digijava.module.parisindicator.util.PIConstants;
 import org.digijava.module.parisindicator.util.PIUtils;
 import org.hibernate.Criteria;

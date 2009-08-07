@@ -2,7 +2,7 @@ package org.digijava.module.parisindicator.helper.export;
 
 import java.util.Collection;
 
-import org.digijava.module.parisindicator.helper.PIReportAbstractRow;
+import org.digijava.module.parisindicator.helper.row.PIReportAbstractRow;
 
 public interface PIExportExtraOperations {
 

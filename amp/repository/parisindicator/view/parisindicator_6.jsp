@@ -19,7 +19,7 @@
 	            </div>
 	        </td>
 	        <bean:define id="piForm" name="parisIndicatorForm" type="org.digijava.module.parisindicator.form.PIForm"></bean:define>
-	        <bean:define id="auxRow" name="parisIndicatorForm" property="mainTableRows[0]" type="org.digijava.module.parisindicator.helper.PIReport6Row"></bean:define>
+	        <bean:define id="auxRow" name="parisIndicatorForm" property="mainTableRows[0]" type="org.digijava.module.parisindicator.helper.row.PIReport6Row"></bean:define>
 	        <%for(int i = 0; i < auxRow.getYears().length; i++) {%>
 	           <td width="10%" height="33">
                     <div align="center">
@@ -41,7 +41,7 @@
             <%int counter = 0; %>
             <bean:define id="color" value="" type="String"/>
             <logic:iterate id="element" name="parisIndicatorForm" property="mainTableRows" indexId="index" 
-             type="org.digijava.module.parisindicator.helper.PIReport6Row">
+             type="org.digijava.module.parisindicator.helper.row.PIReport6Row">
                 <%if(index%2 == 0) color = "bgcolor=#EBEBEB"; else color = "";%>
                 <tr <%=color%> >
                     <td align="center" height="55">

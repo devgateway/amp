@@ -16,7 +16,7 @@ import org.digijava.module.parisindicator.util.PIConstants;
 public class PIReport10aExport extends PIAbstractExport {
 
 	public PIReport10aExport(Site site, String langcode) {
-		super(site, langcode);
+		super(site, langcode, null);
 	}
 
 	@Override

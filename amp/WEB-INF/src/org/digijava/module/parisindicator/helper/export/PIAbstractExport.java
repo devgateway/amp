@@ -10,14 +10,16 @@ public abstract class PIAbstractExport {
 
 	private Site site;
 	private String langCode;
+	private String currency;
 
 	public abstract Collection generateDataSource(Collection<PIReportAbstractRow> rows) throws Exception;
 
 	public abstract Map<String, String> getParameters(int yearSeparator) throws Exception;
 
-	public PIAbstractExport(Site site, String langcode) {
+	public PIAbstractExport(Site site, String langcode, String currency) {
 		this.site = site;
 		this.langCode = langcode;
+		this.currency = currency;
 	}
 
 	public Site getSite() {
@@ -34,5 +36,13 @@ public abstract class PIAbstractExport {
 
 	public void setLangCode(String langCode) {
 		this.langCode = langCode;
+	}
+
+	public String getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(String currency) {
+		this.currency = currency;
 	}
 }

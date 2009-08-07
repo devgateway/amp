@@ -80,7 +80,7 @@ public class PIAction extends Action {
 			PIExportUseCase pdfUseCase = new PIExportUseCase();
 			pdfUseCase.exportReport(getServlet(), response, request, piForm.getPiReport().getIndicatorCode(), piForm
 					.getMainTableRows(), piForm.getMiniTable(), piForm.getStartYear(), piForm.getEndYear(), (piForm
-					.isExportPDF()) ? "PDF" : "XLS");
+					.isExportPDF()) ? "PDF" : "XLS", piForm.getSelectedCurrency());
 			piForm.setExportPDF(false);
 			piForm.setExportXLS(false);
 			return null;

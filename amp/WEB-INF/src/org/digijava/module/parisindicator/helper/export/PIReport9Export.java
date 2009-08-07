@@ -15,8 +15,8 @@ import org.digijava.module.parisindicator.util.PIConstants;
 
 public class PIReport9Export extends PIAbstractExport {
 
-	public PIReport9Export(Site site, String langcode) {
-		super(site, langcode);
+	public PIReport9Export(Site site, String langcode, String currency) {
+		super(site, langcode, currency);
 	}
 
 	@Override
@@ -60,6 +60,9 @@ public class PIReport9Export extends PIAbstractExport {
 				"Proportion of aid flows provided in the context of programme based approach", this.getLangCode(), this
 						.getSite().getId()));
 		parameters.put("PI_LAST_YEAR", new Integer(year).toString());
+		parameters.put("PI_CURRENCY_MSG", TranslatorWorker.translateText("All the amounts are in thousands (000) ",
+				this.getLangCode(), this.getSite().getId())
+				+ " " + this.getCurrency());
 		return parameters;
 	}
 

@@ -22,8 +22,8 @@ public class PIReport5aExport extends PIAbstractExport implements PIExportExtraO
 	private String subReportDirectory;
 	private Object[][] miniReportData;
 	
-	public PIReport5aExport(Site site, String langcode) {
-		super(site, langcode);
+	public PIReport5aExport(Site site, String langcode, String currency) {
+		super(site, langcode, currency);
 	}
 
 	@Override
@@ -67,19 +67,22 @@ public class PIReport5aExport extends PIAbstractExport implements PIExportExtraO
 		parameters.put("PI_COL5", TranslatorWorker.translateText(
 				"Aid flows to the goverment sector that use national financial auditing procedures",
 				this.getLangCode(), this.getSite().getId()));
-		parameters.put("PI_COL6", TranslatorWorker.translateText("ODA that uses all 3 national PFM",
-				this.getLangCode(), this.getSite().getId()));
+		parameters.put("PI_COL6", TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("ODA that uses all 3 national PFM",
+				this.getLangCode(), this.getSite().getId())));
 		parameters.put("PI_COL7", TranslatorWorker.translateText("Total Aid flows disbursed to the government sector",
 				this.getLangCode(), this.getSite().getId()));
 		parameters.put("PI_COL8", TranslatorWorker.translateText(
 				"Proportion of aid flows to the government sector using one of the 3 country PFM systems", this
 						.getLangCode(), this.getSite().getId()));
-		parameters.put("PI_COL9", TranslatorWorker.translateText(
+		parameters.put("PI_COL9", TranslatorWorker.unicodeToUTF8((TranslatorWorker.translateText(
 				"Proportion of aid flows to the government sector using all the 3 country PFM systems", this
-						.getLangCode(), this.getSite().getId()));
+						.getLangCode(), this.getSite().getId()))));
 		parameters.put("PI_LAST_YEAR", new Integer(year).toString());
 		parameters.put("PI_SUBREPORT_DIR", this.subReportDirectory);
 		parameters.put("PI_MINI_DATASOURCE", this.miniReportData);
+		parameters.put("PI_CURRENCY_MSG", TranslatorWorker.translateText("All the amounts are in thousands (000) ",
+				this.getLangCode(), this.getSite().getId())
+				+ " " + this.getCurrency());
 		return parameters;
 	}
 
@@ -250,7 +253,7 @@ public class PIReport5aExport extends PIAbstractExport implements PIExportExtraO
         ps.println("					<textElement textAlignment='Center'>");
         ps.println("						<font isBold='true'/>");
         ps.println("					</textElement>");
-        ps.println("					<text><![CDATA["+TranslatorWorker.translateText("Percent of ODA using all three partner's PFM procedures", this.getLangCode(), this.getSite().getId())+"]]></text>");
+        ps.println("					<text><![CDATA["+TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Percent of ODA using all three partner's PFM procedures", this.getLangCode(), this.getSite().getId()))+"]]></text>");
         ps.println("				</staticText>");
         ps.println("				<staticText>");
         ps.println("					<reportElement");
@@ -272,7 +275,7 @@ public class PIReport5aExport extends PIAbstractExport implements PIExportExtraO
         ps.println("					<textElement textAlignment='Center'>");
         ps.println("						<font isBold='true'/>");
         ps.println("					</textElement>");
-        ps.println("					<text><![CDATA["+ TranslatorWorker.translateText("Percent of donors that use all three partner's PFM procedures", this.getLangCode(), this.getSite().getId()) + "]]></text>");
+        ps.println("					<text><![CDATA["+ TranslatorWorker.unicodeToUTF8(TranslatorWorker.translateText("Percent of donors that use all three partner's PFM procedures", this.getLangCode(), this.getSite().getId())) + "]]></text>");
         ps.println("				</staticText>");
         //Build header for each year.
         int k = 2;
@@ -393,7 +396,7 @@ public class PIReport5aExport extends PIAbstractExport implements PIExportExtraO
 				rowTitle = "More than 90%";
 				break;
 			}
-			data[i][0] = rowTitle;
+			data[i][0] = TranslatorWorker.translateText(rowTitle, this.getLangCode(), this.getSite().getId());
 			int k = 1;
 			for (int j = 0; j < rows[i].length; j++) {
 				if (k % 2 == 0) {

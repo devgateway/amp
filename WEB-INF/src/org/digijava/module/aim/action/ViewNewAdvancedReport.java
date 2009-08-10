@@ -208,7 +208,7 @@ public class ViewNewAdvancedReport extends Action {
 			if ( filter.getHierarchySorters() != null && filter.getHierarchySorters().size() > 0 ) {
 				for(String str : filter.getHierarchySorters() ) {
 					String [] sortingInfo		= str.split("_");
-					sorters.put(sortingInfo[0], new MetaInfo(sortingInfo[1], sortingInfo[2]) );
+					sorters.put(Long.parseLong(sortingInfo[0]), new MetaInfo(sortingInfo[1], sortingInfo[2]) );
 				}
 				rd.importLevelSorters(sorters,ar.getHierarchies().size());
 				rd.applyLevelSorter();
@@ -219,12 +219,12 @@ public class ViewNewAdvancedReport extends Action {
 		//test if the request was for hierarchy sorting purposes:
 		if(applySorter!=null) {
 			if(request.getParameter("levelPicked")!=null && request.getParameter("levelSorter")!=null) {
-				sorters.put(request.getParameter("levelPicked"),new MetaInfo(request.getParameter("levelSorter"),request.getParameter("levelSortOrder")));
+				sorters.put(Long.parseLong(request.getParameter("levelPicked")),new MetaInfo(request.getParameter("levelSorter"),request.getParameter("levelSortOrder")));
 				filter.getHierarchySorters().add(request.getParameter("levelPicked") + "_" + request.getParameter("levelSorter") 
 										+ "_" + request.getParameter("levelSortOrder") );
 			}
 			else{ 	
-				sorters.put(arf.getLevelPicked(),new MetaInfo(arf.getLevelSorter(),arf.getLevelSortOrder()));
+				sorters.put(Long.parseLong(arf.getLevelPicked()),new MetaInfo(arf.getLevelSorter(),arf.getLevelSortOrder()));
 				filter.getHierarchySorters().add( arf.getLevelPicked() + "_" + arf.getLevelSorter() + "_" + arf.getLevelSortOrder() );
 			}
 			

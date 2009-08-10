@@ -40,13 +40,14 @@
 
 				
 					<logic:iterate name="report" property="trailCells"  id="iter1">
-						
+						<c:if test="${not empty iter1.column.absoluteColumnName}">
 						<html:option value="${iter1.column.absoluteColumnName}">
 							<c:set var="key1" value="aim:popsort:hierarchy:${iter1.column.absoluteColumnName}"/>
 							<digi:trn key="${key1}">
 							${iter1.column.absoluteColumnName}
 						</digi:trn>
 						</html:option>
+						</c:if>
 					</logic:iterate>
 
 				

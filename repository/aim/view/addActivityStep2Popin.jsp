@@ -116,15 +116,15 @@
 		//alert("Connection Failure!"); 
 	} 
     var specialResponseSuccess = function(o){
-		myclose();
-		addSector();
+    	myclose();
+    	document.aimEditActivityForm.submit();
    	}
+
 	var specialCallback =
 	{
 			success:specialResponseSuccess, 
 			failure:responseFailure 
 	}
-	 
 	var callback = 
 	{ 
 		success:responseSuccess, 
@@ -211,7 +211,8 @@
 			var postString		= "edit=true&" + generateFields(1);
 			<digi:context name="commentUrl" property="context/aim/selectSectorSwitch.do"/>  
 			var url = "<%=commentUrl %>";
-			YAHOOAmp.util.Connect.asyncRequest("POST", url, specialCallback, postString);
+			checkAndClose=true;
+			YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
 		}
 		else{
 			alert("Please, select a sector firts!");
@@ -237,9 +238,8 @@
 		var postString		= generateFieldsLocation();
 		<digi:context name="commentUrl" property="context/aim/locationSelected.do"/>
 		var url = "<%=commentUrl %>";
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
-		checkAndClose=true;
-		document.aimEditActivityForm.submit();
+		YAHOOAmp.util.Connect.asyncRequest("POST", url, specialCallback, postString);
+		//document.aimEditActivityForm.submit();
 	}
 
 	function resetSectors(){
@@ -273,7 +273,7 @@
 		<digi:context name="commentUrl" property="context/aim/selectSectors.do"/>
 		var url = "<%=commentUrl %>";
 		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
-		//YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+
   											
 	}	
 
@@ -281,8 +281,8 @@
 		var postString		= generateFields(3);
 		<digi:context name="Url" property="context/aim/selectSectorSwitch.do"/>
 		var url = "<%=Url %>";
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
 		checkAndClose=true;
+		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);		
 	}
 	function checkErrorAndClose(){
 		if(checkAndClose==true){
@@ -473,10 +473,8 @@
           }
         }
 		<digi:context name="selPrg" property="context/module/moduleinstance/selectProgramSwitch.do" />	  
-		checkAndClose=true;
 		var url = "<%=selPrg %>";
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, urlParams);
-        document.aimEditActivityForm.submit();
+		YAHOOAmp.util.Connect.asyncRequest("POST", url, specialCallback, urlParams);
       }
     function reloadProgram(selectedProgram) {
        	<digi:context name="selProgram" property="context/module/moduleinstance/addProgram.do?edit=true"/>
@@ -515,8 +513,8 @@
         var defaultProgramId = document.getElementsByName("defaultProgramId")[0];
 
         urlParams="<%=selPrg%>&themeid="+defaultProgramId.value+"&op=add";
-        YAHOOAmp.util.Connect.asyncRequest("POST", urlParams, callback);
-        document.aimEditActivityForm.submit();
+        YAHOOAmp.util.Connect.asyncRequest("POST", urlParams, specialCallback);
+        //document.aimEditActivityForm.submit();
       }
 
 	-->

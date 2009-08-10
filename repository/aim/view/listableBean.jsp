@@ -70,7 +70,7 @@
 	<I>${listable.beanName}</I>
 	<logic:iterate id="prop" name="pMap">
     	<c:if test="${prop.key != 'renderEndYear' && prop.key != 'renderStartYear' }">
-            <digi:trn key="${prefix}:${prop.key}">${prop.key}</digi:trn>:
+            <digi:trn key="${prefix}:${prop.key}"><i>${prop.key}</i></digi:trn>:
             <c:if test="${prop.key == 'teamAssignedOrgs'}">
             	${prop.value}
             </c:if>

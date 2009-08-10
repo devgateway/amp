@@ -202,7 +202,9 @@ public class EditOrganisation extends DispatchAction {
                 editForm.setLegalPersonRegDate(FormatHelper.formatDate(organization.getLegalPersonRegDate()));
             }
             editForm.setRecipients(new ArrayList(organization.getRecipients()));
-            editForm.setCountryId(organization.getCountry().getId());
+            if (organization.getCountry() != null) {
+                editForm.setCountryId(organization.getCountry().getId());
+            }
             if (organization.getTaxNumber() != null) {
                 editForm.setTaxNumber(organization.getTaxNumber().toString());
             }

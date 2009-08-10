@@ -32,8 +32,11 @@ public class GroupReportData extends ReportData {
     	
 	@Override
 	public int getVisibleRows() {
-    	    Iterator i=items.iterator();
-    	    int ret=1;
+    	Iterator i=items.iterator();
+    	int ret;
+    	//for summary report we have to return at least 1 row because there are not activities in hierarchy
+    	if(isSummaryReport()) ret = 1;
+    		else ret = 0;
     	if(this.getReportMetadata().getHideActivities()!=null && this.getReportMetadata().getHideActivities())
 			return ret;
 		
@@ -44,7 +47,10 @@ public class GroupReportData extends ReportData {
     	    return ret;
 	}
     
-
+	public boolean isSummaryReport() {
+		if(this.getParent()!=null) return this.getParent().getReportMetadata().getHideActivities();
+		return this.getReportMetadata().getHideActivities();
+	}
 
 		 	
 	/**

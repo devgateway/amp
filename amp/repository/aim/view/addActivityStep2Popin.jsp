@@ -114,7 +114,17 @@
 	// Communication Error sub-section for more details on the 
 	// response object's properties.
 		//alert("Connection Failure!"); 
-	}  
+	} 
+    var specialResponseSuccess = function(o){
+		myclose();
+		addSector();
+   	}
+	var specialCallback =
+	{
+			success:specialResponseSuccess, 
+			failure:responseFailure 
+	}
+	 
 	var callback = 
 	{ 
 		success:responseSuccess, 
@@ -201,9 +211,7 @@
 			var postString		= "edit=true&" + generateFields(1);
 			<digi:context name="commentUrl" property="context/aim/selectSectorSwitch.do"/>  
 			var url = "<%=commentUrl %>";
-			YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
-			myclose();
-			addSector();
+			YAHOOAmp.util.Connect.asyncRequest("POST", url, specialCallback, postString);
 		}
 		else{
 			alert("Please, select a sector firts!");

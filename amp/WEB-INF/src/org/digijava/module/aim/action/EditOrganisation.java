@@ -62,16 +62,35 @@ public class EditOrganisation extends DispatchAction {
 
     private static Logger logger = Logger.getLogger(EditOrganisation.class);
 
+    private boolean sessionChk(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        if (session.getAttribute("ampAdmin") == null) {
+            return true;
+        } else {
+            String str = (String) session.getAttribute("ampAdmin");
+            if ("no".equals(str)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     protected ActionForward unspecified(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
+        if (sessionChk(request)) {
+            return mapping.findForward("index");
+        }
         return create(mapping, form, request, response);
     }
 
     public ActionForward create(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
+         if (sessionChk(request)) {
+            return mapping.findForward("index");
+        }
         AddOrgForm editForm = (AddOrgForm) form;
         clean(editForm);
         this.putDocumentsInSession(request, new AmpOrganisation());
@@ -81,6 +100,9 @@ public class EditOrganisation extends DispatchAction {
     public ActionForward edit(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
+        if (sessionChk(request)) {
+            return mapping.findForward("index");
+        }
         AddOrgForm editForm = (AddOrgForm) form;
         Long orgId = editForm.getAmpOrgId();
         clean(editForm);
@@ -267,6 +289,9 @@ public class EditOrganisation extends DispatchAction {
     public ActionForward delete(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
+         if (sessionChk(request)) {
+            return mapping.findForward("index");
+        }
         AddOrgForm editForm = (AddOrgForm) form;
         ActionErrors errors = new ActionErrors();
         if (DbUtil.isUsed(editForm.getAmpOrgId(), false)) {
@@ -361,6 +386,9 @@ public class EditOrganisation extends DispatchAction {
     public ActionForward addPledge(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
+         if (sessionChk(request)) {
+            return mapping.findForward("index");
+        }
         AddOrgForm editForm = (AddOrgForm) form;
         Pledge det = new Pledge();
         det.setIndexId(System.currentTimeMillis());
@@ -380,6 +408,9 @@ public class EditOrganisation extends DispatchAction {
     public ActionForward deletePledge(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
+        if (sessionChk(request)) {
+            return mapping.findForward("index");
+        }
         AddOrgForm editForm = (AddOrgForm) form;
         long index = editForm.getTransIndexId();
         ArrayList<Pledge> list = (ArrayList<Pledge>) editForm.getFundingDetails();
@@ -398,6 +429,9 @@ public class EditOrganisation extends DispatchAction {
     public ActionForward addStaffInfo(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
+         if (sessionChk(request)) {
+            return mapping.findForward("index");
+        }
         AddOrgForm editForm = (AddOrgForm) form;
         List<AmpOrgStaffInformation> staff = editForm.getStaff();
         if (staff == null) {
@@ -422,6 +456,9 @@ public class EditOrganisation extends DispatchAction {
     public ActionForward deleteStaffInfo(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
+         if (sessionChk(request)) {
+            return mapping.findForward("index");
+        }
         AddOrgForm editForm = (AddOrgForm) form;
         Long ids[] = null;
         Long staffId = editForm.getSelectedStaffId();
@@ -452,6 +489,9 @@ public class EditOrganisation extends DispatchAction {
     public ActionForward addSector(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
+         if (sessionChk(request)) {
+            return mapping.findForward("index");
+        }
         HttpSession session = request.getSession();
         AddOrgForm editForm = (AddOrgForm) form;
         Collection<ActivitySector> prevSelSectors = editForm.getSectors();
@@ -478,6 +518,9 @@ public class EditOrganisation extends DispatchAction {
     public ActionForward removeSector(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
+         if (sessionChk(request)) {
+            return mapping.findForward("index");
+        }
         AddOrgForm editForm = (AddOrgForm) form;
         Long selSectors[] = editForm.getSelSectors();
         Collection<ActivitySector> prevSelSectors = editForm.getSectors();
@@ -513,6 +556,9 @@ public class EditOrganisation extends DispatchAction {
     public ActionForward removeRecipient(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
+         if (sessionChk(request)) {
+            return mapping.findForward("index");
+        }
         AddOrgForm editForm = (AddOrgForm) form;
         Long[] selRecipients = editForm.getSelRecipients();
         List<AmpOrganisation> oldRecipients = editForm.getRecipients();
@@ -537,6 +583,9 @@ public class EditOrganisation extends DispatchAction {
     public ActionForward deleteLocation(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
+         if (sessionChk(request)) {
+            return mapping.findForward("index");
+        }
         AddOrgForm editForm = (AddOrgForm) form;
         Long[] selLocations = editForm.getSelLocs();
         Collection<Location> oldLocs = editForm.getSelectedLocs();
@@ -561,6 +610,9 @@ public class EditOrganisation extends DispatchAction {
     public ActionForward deleteContact(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
+         if (sessionChk(request)) {
+            return mapping.findForward("index");
+        }
         AddOrgForm editForm = (AddOrgForm) form;
         Long selContactId = editForm.getSelContactId();
         List<AmpContact> oldContacts = editForm.getContacts();
@@ -584,6 +636,9 @@ public class EditOrganisation extends DispatchAction {
     public ActionForward typeChanged(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
+         if (sessionChk(request)) {
+            return mapping.findForward("index");
+        }
         AddOrgForm editForm = (AddOrgForm) form;
         Long orgTypeId = editForm.getAmpOrgTypeId();
         editForm.setAmpOrgGrpId(null);
@@ -626,6 +681,9 @@ public class EditOrganisation extends DispatchAction {
     public ActionForward save(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
+         if (sessionChk(request)) {
+            return mapping.findForward("index");
+        }
         AddOrgForm editForm = (AddOrgForm) form;
         AmpOrganisation organization = null;
         Long orgId = editForm.getAmpOrgId();

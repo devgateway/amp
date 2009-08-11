@@ -31,6 +31,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.action.reportwizard.ReportWizardAction;
 import org.digijava.module.aim.ar.util.FilterUtil;
+import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
@@ -229,6 +230,18 @@ public final class ARUtil {
 		while (i.hasNext()) {
 			AmpMeasures element = ((AmpReportMeasures) i.next()).getMeasure();
 			if (element.getMeasureName().indexOf(measureName) != -1)
+				return true;
+		}
+		return false;
+	}
+	
+	public static boolean containsColumn(String columName, Set columns) {
+		if (columName == null)
+			return false;
+		Iterator i = columns.iterator();
+		while (i.hasNext()) {
+			AmpReportColumn element = (AmpReportColumn) i.next();
+			if (element.getColumn().getColumnName().indexOf(columName) != -1)
 				return true;
 		}
 		return false;

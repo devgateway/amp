@@ -137,11 +137,16 @@ public class ComputedAmountCell extends CategAmountCell {
 		this.setRenderizable(categ.isRenderizable());
 		this.setCummulativeShow(categ.isCummulativeShow());
 		this.setMetaData(categ.getMetaData());
-
+		
+		
 	}
 
 	public HashMap<String, BigDecimal> getValues() {
 		return values;
+	}
+
+	public void setValues(HashMap<String, BigDecimal> values) {
+		this.values = values;
 	}
 
 }

@@ -57,6 +57,8 @@ public class MathExpressionRepository {
 
 	public static final String NUMBER_OF_PROJECTS = "numberOfProjects";
 
+	public static final String COSTING_GRAND_TOTAL = "grandTotalCost";
+
 	private static Hashtable<String, MathExpression> expresions = new Hashtable<String, MathExpression>();
 
 	/**
@@ -87,6 +89,8 @@ public class MathExpressionRepository {
 		buildUndisbursedCumulativeBalance();
 		buildUncommitedCumulativeBalance();
 		buildNumberOfProject();
+		buildCostingGrandTotal();
+
 	}
 
 	/**
@@ -374,6 +378,19 @@ public class MathExpressionRepository {
 		try {
 			MathExpression m1 = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.COUNT_PROJECTS, new BigDecimal(1));
 			expresions.put(NUMBER_OF_PROJECTS, m1);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+
+	/**
+	 * Costing Grand Total value
+	 * 
+	 */
+	private static void buildCostingGrandTotal() {
+		try {
+			MathExpression m1 = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.COSTING_GRAND_TOTAL, new BigDecimal(1));
+			expresions.put(COSTING_GRAND_TOTAL, m1);
 		} catch (Exception e) {
 			logger.error(e);
 		}

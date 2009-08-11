@@ -319,6 +319,7 @@ public class AmountCell extends Cell {
 		Iterator i = ret.getMergedCells().iterator();
 		while (i.hasNext()) {
 			AmountCell element = (AmountCell) i.next();
+			if (element.getColumn()==null) element.setColumn(ret.getColumn());
 			AmountCell filtered = (AmountCell) element.filter(metaCell, ids);
 			if (filtered != null)
 				realRet.merge(realRet, filtered);

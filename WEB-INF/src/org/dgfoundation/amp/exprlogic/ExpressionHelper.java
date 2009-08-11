@@ -156,6 +156,8 @@ public class ExpressionHelper {
 		BigDecimal countPlanedCommitments = new BigDecimal(0);
 		BigDecimal countPlanedDisburments = new BigDecimal(0);
 		BigDecimal proposedProjectCost = new BigDecimal(0);
+		BigDecimal grandTotalCost = new BigDecimal(0);
+		
 		// for each element get each funding type
 		while (i.hasNext()) {
 			ComputedAmountCell element = (ComputedAmountCell) i.next();
@@ -187,6 +189,8 @@ public class ExpressionHelper {
 				}
 			} else if (element.existsMetaString(ArConstants.PROPOSED_COST)) {
 				proposedProjectCost = proposedProjectCost.add(new BigDecimal(TokenRepository.buildUncommittedLogicalToken().evaluate(element)));
+			}else if(element.existsMetaString(ArConstants.COSTING_GRAND_TOTAL)){
+				grandTotalCost=grandTotalCost.add(new BigDecimal(TokenRepository.buildCostingGrandTotalToken().evaluate(element)));
 			}
 
 		}
@@ -204,6 +208,10 @@ public class ExpressionHelper {
 
 		values.put(ArConstants.PLANNED_COMMITMENT_COUNT, countPlanedCommitments);
 		values.put(ArConstants.PLANNED_DISBURSEMENT_COUNT, countPlanedDisburments);
+		
+		values.put(ArConstants.PROPOSED_COST, proposedProjectCost);
+		values.put(ArConstants.COSTING_GRAND_TOTAL, grandTotalCost);
+		
 		return values;
 	}
 
@@ -239,7 +247,7 @@ public class ExpressionHelper {
 		BigDecimal countPlanedDisburments = new BigDecimal(0);
 
 		BigDecimal proposedProjectCost = new BigDecimal(0);
-
+		BigDecimal grandTotalCost = new BigDecimal(0);
 		// for each element get each funding type
 		while (i.hasNext()) {
 			CategAmountCell element = (CategAmountCell) i.next();
@@ -285,6 +293,8 @@ public class ExpressionHelper {
 				}
 			} else if (element.existsMetaString(ArConstants.PROPOSED_COST)) {
 				proposedProjectCost = proposedProjectCost.add(new BigDecimal(TokenRepository.buildUncommittedLogicalToken().evaluate(element)));
+			}else if(element.existsMetaString(ArConstants.COSTING_GRAND_TOTAL)){
+				grandTotalCost=grandTotalCost.add(new BigDecimal(TokenRepository.buildCostingGrandTotalToken().evaluate(element)));
 			}
 
 		}
@@ -311,6 +321,9 @@ public class ExpressionHelper {
 		values.put(ArConstants.PLANNED_COMMITMENT_COUNT, countPlanedCommitments);
 		values.put(ArConstants.PLANNED_DISBURSEMENT_COUNT, countPlanedDisburments);
 		values.put(ArConstants.PROPOSED_COST, proposedProjectCost);
+		values.put(ArConstants.COSTING_GRAND_TOTAL, grandTotalCost);
+		
+		
 		return values;
 	}
 }

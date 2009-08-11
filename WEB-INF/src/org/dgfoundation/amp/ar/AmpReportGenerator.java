@@ -125,8 +125,7 @@ public class AmpReportGenerator extends ReportGenerator {
 
 			if (element.getExtractorView() != null) {
 				extractable.add(element2);
-				if (!element.getColumnName().equals(
-						ArConstants.COLUMN_PROPOSED_COST))
+				if ((!element.getColumnName().equals(ArConstants.COLUMN_PROPOSED_COST) || (!element.getColumnName().equals(ArConstants.COSTING_GRAND_TOTAL))))
 					extractableNames.add(element.getColumnName());
 			} else
 				generated.add(element2);
@@ -158,6 +157,11 @@ public class AmpReportGenerator extends ReportGenerator {
 		if (generated.size() > 0) {
 			createDataForColumns(generated);
 		}
+		
+		if (ARUtil.containsColumn(ArConstants.COSTING_GRAND_TOTAL,reportMetadata.getColumns())){
+			rawColumns.getItems().remove(rawColumns.getColumn(ArConstants.COSTING_GRAND_TOTAL));
+		}
+		
 	}
 
 	/**
@@ -348,9 +352,9 @@ public class AmpReportGenerator extends ReportGenerator {
 
 		reportMetadata.getOrderedColumns().add(arc);
 
-		// attach funding coming from extra sources ... inject funding from
-		// proposed project cost, but with isShow=false so it won't be taken
-		// into calculations
+		
+	
+		
 		if (ARUtil.containsMeasure(ArConstants.UNCOMMITTED_BALANCE,reportMetadata.getMeasures())) {
 			AmpReportColumn arcProp = new AmpReportColumn();
 			AmpColumns acProp = new AmpColumns();
@@ -709,6 +713,20 @@ public class AmpReportGenerator extends ReportGenerator {
 
 		reportMetadata.setOrderedColumns(ARUtil.createOrderedColumns(
 				reportMetadata.getColumns(), reportMetadata.getHierarchies()));
+
+		// attach funding coming from extra sources ... inject funding from
+		if (ARUtil.containsColumn(ArConstants.COSTING_GRAND_TOTAL,reportMetadata.getColumns())) {
+			AmpReportColumn grandTotal = new AmpReportColumn();
+			AmpColumns grandTotalColumn = new AmpColumns();
+			grandTotal.setColumn(grandTotalColumn);
+			grandTotal.setOrderId(0L);
+			grandTotalColumn.setCellType("org.dgfoundation.amp.ar.cell.ComputedAmountCell");
+			grandTotalColumn.setColumnName(ArConstants.COSTING_GRAND_TOTAL);
+			grandTotalColumn.setExtractorView(ArConstants.VIEW_COST);
+			ColumnFilterGenerator.attachHardcodedFilters(grandTotalColumn);
+			reportMetadata.getOrderedColumns().add(grandTotal);
+		}
+
 
 		attachFundingMeta();
 	}

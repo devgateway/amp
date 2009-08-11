@@ -46,6 +46,8 @@ public final class ArConstants {
 	public final static String MONTH="Month";
 	public final static String PROPOSED_COST="Proposed Cost";
 	
+	public final static String SOURCE_FUNDING="Source Funding";
+	
 	public final static String PERSPECTIVE="Perspective";
 
 	
@@ -132,6 +134,7 @@ public final class ArConstants {
 	public final static String COLUMN_RAW_DATA="RAW DATA";
 	public final static String COLUMN_FUNDING="Funding";
 	public final static String COLUMN_PROPOSED_COST="Proposed Project Cost";
+	public final static String COSTING_GRAND_TOTAL="Grand Total";
 	
 	public final static String COLUMN_ANY_SECTOR="Sector";
 	public final static String COLUMN_SUB_SECTOR="Sub-Sector";
@@ -172,6 +175,7 @@ public final class ArConstants {
 	public final static String HIERARCHY_SORTER_TITLE="Title";
 	
 	public static final String VIEW_PROPOSED_COST="v_proposed_cost";	
+	public static final String VIEW_COST="v_costs";	
 	public static final String VIEW_DONOR_FUNDING="v_donor_funding";
 	public static final String VIEW_COMPONENT_FUNDING="v_component_funding";
 	public static final String VIEW_REGIONAL_FUNDING="v_regional_funding";

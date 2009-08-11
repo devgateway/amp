@@ -8,6 +8,7 @@ import org.dgfoundation.amp.test.customfields.AllCustomFieldsTest;
 import org.dgfoundation.amp.test.database.AllDataBaseManagerTests;
 import org.dgfoundation.amp.test.jobs.AllJobsTest;
 import org.dgfoundation.amp.test.messages.AllMessagesTest;
+import org.dgfoundation.amp.test.ngomodule.AllNGOModuleTest;
 import org.dgfoundation.amp.test.orgProfile.AllOrgProfileTest;
 import org.dgfoundation.amp.test.parisindicator.AllParisIndicatorsManagerTest;
 import org.dgfoundation.amp.test.reports.AllReportTest;
@@ -33,6 +34,7 @@ public class AllTest {
         suite.addTest(AllMessagesTest.suite());
         suite.addTest(AllDataBaseManagerTests.suite());
 		suite.addTest(AllWorkspaceManagerTests.suite());
+                suite.addTest(AllNGOModuleTest.suite());
 		return suite;
 	}
 

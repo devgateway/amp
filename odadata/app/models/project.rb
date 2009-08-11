@@ -145,7 +145,7 @@ class Project < ActiveRecord::Base
     if year
       fundings.find_by_year(year).commitments rescue 0.to_currency(donor.currency)
     else
-      (historic_funding.commitments rescue 0.to_currency(donor.currency)) +
+#      (historic_funding.commitments rescue 0.to_currency(donor.currency)) +
         fundings.total_commitments
     end
   end
@@ -154,7 +154,7 @@ class Project < ActiveRecord::Base
     if year
       fundings.find_by_year(year).payments rescue 0.to_currency(donor.currency)
     else
-      (historic_funding.payments rescue 0.to_currency(donor.currency)) +
+#      (historic_funding.payments rescue 0.to_currency(donor.currency)) +
         fundings.total_payments
     end
   end

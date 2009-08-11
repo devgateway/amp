@@ -380,6 +380,7 @@ public class AddAmpActivity extends Action {
             }
       }
       else {
+    	  /*
         String sessId = session.getId();
         ArrayList sessList = (ArrayList) ampContext.getAttribute(
             org.digijava.module.aim.helper.Constants.SESSION_LIST);
@@ -394,7 +395,7 @@ public class AddAmpActivity extends Action {
           RequestDispatcher rd = getServlet().getServletContext()
               .getRequestDispatcher(url);
           rd.forward(request, response);
-        }
+        }*/
 
         synchronized (ampContext) {
           HashMap tsList = (HashMap) ampContext.getAttribute(org.digijava.

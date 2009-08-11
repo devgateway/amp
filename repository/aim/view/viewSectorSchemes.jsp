@@ -11,6 +11,7 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <script langauage="JavaScript">
+<!--
 	<c:set var="translation">
 		<digi:trn key="aim:ConfirmDelete">Delete this Scheme ?</digi:trn>
 	</c:set>
@@ -50,6 +51,33 @@
 			rows = null;
 		}
 	}
+	function saveSchemes(){
+       //var chk=document.getElementsByTagName('input');
+       var ret='pepe=pepe';
+		/*if(document.getElementsByName("secSchemeShowName")!=null){
+			var sectors = document.getElementsByName("secSchemeShowName").length;
+			for(var i=0; i< sectors; i++){
+				if(document.getElementsByName("secSchemeShowName")[i].checked){
+					ret+="&"+document.getElementsByName("secSchemeShowName")[i].name+"="+document.getElementsByName("secSchemeShowName")[i].value;
+				}
+			}
+		}*/
+       
+       if(ret.length>0){
+       	  //tIds=tIds.substring(0,tIds.length-1);
+       	  <digi:context name="updateSchemes" property="context/module/moduleinstance/getSectorSchemes.do?action=update"/>
+          var url="<%=updateSchemes%>";
+          url+="&"+ret;
+          document.aimAddSectorForm.action = url;
+          //document.aimActivityForm.target = "_self";
+   	      document.aimAddSectorForm.submit();	
+       }else{
+       	  var translation = "<digi:trn >Please select at least one scheme to be updated</digi:trn>"; 
+          alert(translation);
+          return false;
+       }
+	}
+-->	
 </script>
 
 <style type="text/css">
@@ -89,6 +117,7 @@
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
 <html:hidden property="event" value="view"/>
+<digi:form action="/getSectorSchemes.do" method="post">
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
 	<tr>
 		<td align=left vAlign=top width=750>
@@ -132,7 +161,7 @@
 											<td>
 												<table width="100%" height="30" cellpadding="2" cellspacing="0">
 													<tr style="background-color: #999999; color: #000000;" align="center">
-														<td width="80%" align="left">
+														<td width="100%" align="center">
 															<b><digi:trn key="aim:schemes">Schemes </digi:trn></b>
 														</td>
 														<td width="20%" rowspan="2">
@@ -157,7 +186,7 @@
 														<logic:notEmpty name="aimAddSectorForm" property="formSectorSchemes">
 															<logic:iterate name="aimAddSectorForm" property="formSectorSchemes" id="sectorScheme" type="org.digijava.module.aim.dbentity.AmpSectorScheme	">
 																<tr height="25">
-																	<td align="left" width="80%">
+																	<td align="left" width="50%">
 																		<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
 																		<c:set target="${urlParams2}" property="ampSecSchemeId">
 																		<bean:write name="sectorScheme" property="ampSecSchemeId" />
@@ -197,12 +226,31 @@
 																			</digi:link>
 			                                                            </c:if>
 																	</td>
+																	<td width="30%" align="left">
+																		<c:set var="trnShowSectorCode">
+																			<digi:trn>Show Sector Code with name</digi:trn>
+																		</c:set>
+																		<c:set var="schId">
+																			<bean:write name="sectorScheme" property="ampSecSchemeId"/>
+																		</c:set> 
+																		<html:checkbox name="sectorScheme" property="secSchemeShowName" value="${schId}">${trnShowSectorCode}</html:checkbox>
+<!--																		<input type="checkbox" value="${schId}"/>${trnShowSectorCode}-->
+																	</td>
 			                                                    </tr>
 															</logic:iterate>
 														</logic:notEmpty>
 													</table>
 												</div>
 											</td>
+										</tr>
+										<tr>
+											<td width="100%" align="right">
+												<c:set var="trnSaveBtn">
+													<digi:trn>Save</digi:trn>
+												</c:set> 
+												<input type="button" value="${trnSaveBtn}" class="dr-menu" onclick="return saveSchemes();">
+											</td>
+										
 										</tr>
 									</table>
 								</td>
@@ -314,6 +362,7 @@
 		</td>
 	</tr>
 </table>
+</digi:form>
 <script language="javascript">
 	setStripsTable("dataTable", "tableEven", "tableOdd");
 	setHoveredTable("dataTable", false);

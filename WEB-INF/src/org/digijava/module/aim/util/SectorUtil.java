@@ -319,7 +319,34 @@ public class SectorUtil {
 		}
 		return col;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public static Collection<AmpSector> getAllParentSectorsSortedByCode(Long secSchemeId) {
+		Session session = null;
+		Collection<AmpSector> col = null;
 
+		try {
+			session = PersistenceManager.getSession();//TODO why not use thread session?
+			String queryString = "select s from " + AmpSector.class.getName()
+					+ " s " + "where amp_sec_scheme_id = " + secSchemeId
+					+ " and parent_sector_id is null " + "order by s.sectorCodeOfficial";
+			Query qry = session.createQuery(queryString);
+			col = qry.list();
+
+		} catch (Exception e) {
+			logger.error("Cannot get parent sectors, " + e);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+			}
+		}
+		return col;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public static Collection<AmpSector> getAllParentSectors(Long secSchemeId) {
 		Session session = null;
@@ -420,7 +447,31 @@ public class SectorUtil {
 		} 
 		return col;
 	}
-	
+	public static Collection<AmpSector> getAllChildSectorsSortBySectorCode(Long parSecId) {
+		Session session = null;
+		Collection col = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			String queryString = "select s from " + AmpSector.class.getName()
+					+ " s " + "where parent_sector_id = " + parSecId
+					+ " order by s.sectorCodeOfficial";
+			Query qry = session.createQuery(queryString);
+			col = qry.list();
+
+		} catch (Exception e) {
+			logger.error("Cannot get child sectors, " + e);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+			}
+		}
+		return col;
+	}
 	public static Collection<AmpSector> getAllChildSectors(Long parSecId) {
 		Session session = null;
 		Collection col = null;
@@ -1092,6 +1143,44 @@ public class SectorUtil {
 			queryString ="select pi from "+AmpSectorScheme.class.getName()+" pi ";
 			qry = session.createQuery(queryString);
 			col = qry.list();
+		}
+		catch(Exception ex)
+		{
+			logger.error("Unable to get report names  from database " + ex.getMessage());
+			ex.printStackTrace(System.out);
+		}
+		finally
+		{
+			try
+			{
+				PersistenceManager.releaseSession(session);
+			}
+			catch (Exception ex2)
+			{
+				logger.error("releaseSession() failed ");
+			}
+		}
+		return col;
+	}
+	/*
+	 * this is to get the level one sectors from the AmpSector table sorted by officialCode
+	 */
+	
+	public static Collection getSectorLevel1SortBySectorCode(Integer schemeId)
+	{
+		String queryString = null;
+		Session session = null;
+		Collection col = null;
+		Query qry = null;
+
+		try
+		{
+			session = PersistenceManager.getSession();
+			queryString ="select pi from "+AmpSector.class.getName()+" pi where pi.ampSecSchemeId=:schemeId and pi.parentSectorId IS null order by pi.sectorCodeOfficial ";
+			qry = session.createQuery(queryString);
+			qry.setParameter("schemeId",schemeId,Hibernate.INTEGER);
+			col = qry.list();
+			session.flush();
 		}
 		catch(Exception ex)
 		{

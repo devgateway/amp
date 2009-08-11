@@ -17,8 +17,10 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.form.AddSectorForm;
 import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.aim.util.DbUtil;
 
 public class GetSectorSchemes extends Action {
 
@@ -40,6 +42,27 @@ public class GetSectorSchemes extends Action {
 			String str = (String)session.getAttribute("ampAdmin");
 			if (str.equals("no")) {
 				return mapping.findForward("index");
+			}
+		}
+		String action = request.getParameter("action");
+		if(action!=null && action.equals("update")){
+			String secUpdate[]=request.getParameterValues("secSchemeShowName");			
+			Collection<AmpSectorScheme> schemes = SectorUtil.getSectorSchemes();
+			for(AmpSectorScheme mysch:schemes){
+				boolean showName = mysch.getSecSchemeShowName()==null?false:mysch.getSecSchemeShowName();
+				if(showName){
+					if(!isInList(secUpdate, mysch.getAmpSecSchemeId())){
+						mysch.setSecSchemeShowName(false);
+						DbUtil.update(mysch);
+					}
+				}
+				else{
+					if(isInList(secUpdate, mysch.getAmpSecSchemeId())){
+						mysch.setSecSchemeShowName(true);
+						DbUtil.update(mysch);
+					}
+					
+				}
 			}
 		}
 					 logger.info("came into the sector schemes manager");
@@ -74,6 +97,16 @@ public class GetSectorSchemes extends Action {
 					 
 					 return mapping.findForward("viewSectorSchemes");
 		  }
+
+		private boolean isInList(String[] secUpdate, Long ampSecSchemeId) {
+			if(secUpdate!=null){
+				for(String st : secUpdate){
+					if(Long.parseLong(st)==ampSecSchemeId)
+						return true;
+				}
+			}
+			return false;
+		}
 }
 
 

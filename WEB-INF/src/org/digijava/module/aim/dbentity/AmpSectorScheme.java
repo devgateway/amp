@@ -10,7 +10,18 @@ public class AmpSectorScheme implements Serializable
 	private Long ampSecSchemeId ;
 	private String secSchemeCode ;
 	private String secSchemeName ;
+	private Boolean secSchemeShowName;
 	
+
+
+	public Boolean getSecSchemeShowName() {
+		return secSchemeShowName;
+	}
+
+	public void setSecSchemeShowName(Boolean secSchemeShowName) {
+		this.secSchemeShowName = secSchemeShowName;
+	}
+
 	/**
 	 * @return
 	 */

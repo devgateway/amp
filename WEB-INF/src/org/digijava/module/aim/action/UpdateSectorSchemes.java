@@ -67,28 +67,14 @@ public class UpdateSectorSchemes extends Action {
 			if(event.equalsIgnoreCase("edit")){
 				Collection schemeGot = SectorUtil.getEditScheme(id);
 	
-				Collection sectors = SectorUtil.getSectorLevel1(id);
+				Collection sectors = null;
 				if(sortByColumn==null || sortByColumn.compareTo("sectorCode")==0){
-					List<AmpSector> sec = new ArrayList<AmpSector>(sectors);
-					Collections.sort(sec, new Comparator<AmpSector>(){
-						public int compare(AmpSector a1, AmpSector a2) {
-							String s1	= a1.getSectorCodeOfficial();
-							String s2	= a2.getSectorCodeOfficial();
-							if ( s1 == null )
-								s1	= "";
-							if ( s2 == null )
-								s2	= "";
-						
-							return s1.toUpperCase().trim().compareTo(s2.toUpperCase().trim());
-						}
-					});
-				
-					sectorsForm.setFormFirstLevelSectors(sec);
+					sectors=SectorUtil.getSectorLevel1SortBySectorCode(id);
 				}
 				else if(sortByColumn!=null && sortByColumn.compareTo("sectorName")==0){
-					sectorsForm.setFormFirstLevelSectors(sectors);
+					sectors=SectorUtil.getSectorLevel1(id);
 				}
-				
+				sectorsForm.setFormFirstLevelSectors(sectors);
 				Iterator itr = schemeGot.iterator();
 				while (itr.hasNext()) {
 					AmpSectorScheme ampScheme = (AmpSectorScheme) itr.next();

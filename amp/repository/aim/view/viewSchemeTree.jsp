@@ -163,10 +163,10 @@
 														<logic:iterate name="aimAddSectorForm" property="schemeTree" id="sector"
 																		type="org.digijava.module.aim.dbentity.AmpSector	">
 															<logic:empty name="sector" property="parentSectorId">
-																insertRoot('<bean:write name="sector" property="ampSectorId"/>','<bean:write name="sector" property="name"/>');
+																insertRoot('<bean:write name="sector" property="ampSectorId"/>','<bean:write name="sector" property="name"/>'+' ['+'<bean:write name="sector" property="sectorCodeOfficial"/>'+']');
 															</logic:empty>
 															<logic:notEmpty name="sector" property="parentSectorId">
-																insertChild('<bean:write name="sector" property="parentSectorId.ampSectorId"/>','<bean:write name="sector" property="ampSectorId"/>','<bean:write name="sector" property="name"/>');
+																insertChild('<bean:write name="sector" property="parentSectorId.ampSectorId"/>','<bean:write name="sector" property="ampSectorId"/>','<bean:write name="sector" property="name"/>'+' ['+'<bean:write name="sector" property="sectorCodeOfficial"/>'+']');
 															</logic:notEmpty>
 														</logic:iterate>
 													</logic:notEmpty>

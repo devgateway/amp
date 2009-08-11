@@ -60,28 +60,14 @@ public class ViewSectorDetails extends Action {
 					 	String sortByColumn = request.getParameter("sortByColumn");
 						Long parentId = new Long(secId);
 
-						Collection<AmpSector> sectors = SectorUtil.getAllChildSectors(parentId);
+						Collection<AmpSector> sectors=null;
 						if(sortByColumn==null || sortByColumn.compareTo("sectorCode")==0){
-							List<AmpSector> sec = new ArrayList<AmpSector>(sectors);
-							Collections.sort(sec, new Comparator<AmpSector>(){
-								public int compare(AmpSector a1, AmpSector a2) {
-									String s1	= a1.getSectorCodeOfficial();
-									String s2	= a2.getSectorCodeOfficial();
-									if ( s1 == null )
-										s1	= "";
-									if ( s2 == null )
-										s2	= "";
-								
-									return s1.toUpperCase().trim().compareTo(s2.toUpperCase().trim());
-								}
-							});
-						
-							viewSectorForm.setSubSectors(sec);
+							sectors = SectorUtil.getAllChildSectorsSortBySectorCode(parentId);
 						}
 						else if(sortByColumn!=null && sortByColumn.compareTo("sectorName")==0){
-							viewSectorForm.setSubSectors(sectors);
+							sectors = SectorUtil.getAllChildSectors(parentId);
 						}
-						
+						viewSectorForm.setSubSectors(sectors);
 						Collection _subSectors = viewSectorForm.getSubSectors();
 						Iterator itr = _subSectors.iterator();
 						while (itr.hasNext()) {

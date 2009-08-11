@@ -11,6 +11,6 @@
 
 		<property name="secSchemeCode" column="sec_scheme_code" type="java.lang.String" />
 		<property name="secSchemeName" column="sec_scheme_name" type="java.lang.String" />
-
+		<property name="secSchemeShowName" column="sec_scheme_show_name" type="java.lang.Boolean"/>
 	</class>
 </hibernate-mapping>

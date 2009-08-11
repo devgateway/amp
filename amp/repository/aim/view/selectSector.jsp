@@ -218,8 +218,17 @@ function checkNumeric(objName,comma,period,hyphen)
 													<digi:trn key="aim:addActivitySelectSector">Select Sector</digi:trn>
 												</html:option>
 												<logic:notEmpty name="aimSelectSectorForm" property="parentSectors">
-													<html:optionsCollection name="aimSelectSectorForm" property="parentSectors" 
-													value="ampSectorId" label="name" />												
+												<c:if test="${aimSelectSectorForm.showCodeBesideName}">
+												<c:forEach var="sector" items="${aimSelectSectorForm.parentSectors}">  
+    												<html:option value="${sector.ampSectorId}">${sector.sectorCodeOfficial}-${sector.name}</html:option>
+  												</c:forEach>
+  												</c:if>
+												<c:if test="${aimSelectSectorForm.showCodeBesideName==false}">
+												<c:forEach var="sector" items="${aimSelectSectorForm.parentSectors}">  
+    												<html:option value="${sector.ampSectorId}">${sector.name}</html:option>
+  												</c:forEach>
+  												</c:if>
+  												
 												</logic:notEmpty>												
 											</html:select>
 										</td>
@@ -236,8 +245,16 @@ function checkNumeric(objName,comma,period,hyphen)
 													<digi:trn key="aim:addActivitySelectSubSector1">Select sub-sector</digi:trn>
 												</html:option>
 												<logic:notEmpty name="aimSelectSectorForm" property="childSectorsLevel1">
-													<html:optionsCollection name="aimSelectSectorForm" property="childSectorsLevel1" 
-													value="ampSectorId" label="name" />												
+												<c:if test="${aimSelectSectorForm.showCodeBesideName}">
+												<c:forEach var="sector" items="${aimSelectSectorForm.childSectorsLevel1}">  
+    												<html:option value="${sector.ampSectorId}">${sector.sectorCodeOfficial}-${sector.name}</html:option>
+  												</c:forEach>
+  												</c:if>
+												<c:if test="${aimSelectSectorForm.showCodeBesideName==false}">
+												<c:forEach var="sector" items="${aimSelectSectorForm.childSectorsLevel1}">  
+    												<html:option value="${sector.ampSectorId}">${sector.name}</html:option>
+  												</c:forEach>
+  												</c:if>
 												</logic:notEmpty>													
 											</html:select>
 										</td>
@@ -253,8 +270,16 @@ function checkNumeric(objName,comma,period,hyphen)
 															<digi:trn key="aim:addActivitySelectSubSector2">Select sub-sector</digi:trn>
 													</html:option>
 													<logic:notEmpty name="aimSelectSectorForm" property="childSectorsLevel2">
-														<html:optionsCollection name="aimSelectSectorForm" property="childSectorsLevel2" 
-														value="ampSectorId" label="name" />												
+													<c:if test="${aimSelectSectorForm.showCodeBesideName}">
+													<c:forEach var="sector" items="${aimSelectSectorForm.childSectorsLevel2}">  
+    													<html:option value="${sector.ampSectorId}">${sector.sectorCodeOfficial}-${sector.name}</html:option>
+  													</c:forEach>
+  													</c:if>
+													<c:if test="${aimSelectSectorForm.showCodeBesideName==false}">
+													<c:forEach var="sector" items="${aimSelectSectorForm.childSectorsLevel2}">  
+    													<html:option value="${sector.ampSectorId}">${sector.name}</html:option>
+  													</c:forEach>
+  													</c:if>
 													</logic:notEmpty>													
 												</html:select>
 											</td>
@@ -275,8 +300,16 @@ function checkNumeric(objName,comma,period,hyphen)
 													<digi:trn key="aim:addActivitySelectSubSector1">Select sub-sector</digi:trn>
 												</html:option>
 												<logic:notEmpty name="aimSelectSectorForm" property="childSectorsLevel1">
-													<html:optionsCollection name="aimSelectSectorForm" property="childSectorsLevel1" 
-													value="ampSectorId" label="name" />												
+												<c:if test="${aimSelectSectorForm.showCodeBesideName}">
+												<c:forEach var="sector" items="${aimSelectSectorForm.childSectorsLevel1}">  
+    												<html:option value="${sector.ampSectorId}">${sector.sectorCodeOfficial}-${sector.name}</html:option>
+  												</c:forEach>
+  												</c:if>
+												<c:if test="${aimSelectSectorForm.showCodeBesideName==false}">
+												<c:forEach var="sector" items="${aimSelectSectorForm.childSectorsLevel1}">  
+    												<html:option value="${sector.ampSectorId}">${sector.name}</html:option>
+  												</c:forEach>
+  												</c:if>
 												</logic:notEmpty>													
 											</html:select>
 										</td>
@@ -292,8 +325,16 @@ function checkNumeric(objName,comma,period,hyphen)
 															<digi:trn key="aim:addActivitySelectSubSector2">Select sub-sector</digi:trn>
 													</html:option>
 													<logic:notEmpty name="aimSelectSectorForm" property="childSectorsLevel2">
-														<html:optionsCollection name="aimSelectSectorForm" property="childSectorsLevel2" 
-														value="ampSectorId" label="name" />												
+													<c:if test="${aimSelectSectorForm.showCodeBesideName}">
+													<c:forEach var="sector" items="${aimSelectSectorForm.childSectorsLevel2}">  
+    													<html:option value="${sector.ampSectorId}">${sector.sectorCodeOfficial}-${sector.name}</html:option>
+  													</c:forEach>
+  													</c:if>
+													<c:if test="${aimSelectSectorForm.showCodeBesideName==false}">
+													<c:forEach var="sector" items="${aimSelectSectorForm.childSectorsLevel2}">  
+    													<html:option value="${sector.ampSectorId}">${sector.name}</html:option>
+  													</c:forEach>
+  													</c:if>
 													</logic:notEmpty>													
 												</html:select>
 											</td>

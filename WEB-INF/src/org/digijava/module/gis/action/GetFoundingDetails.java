@@ -46,6 +46,7 @@ import java.util.Calendar;
 import org.digijava.module.aim.util.FeaturesUtil;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.sql.Timestamp;
 
 /**
  * <p>Title: </p>
@@ -972,6 +973,10 @@ public class GetFoundingDetails extends Action {
         Double disbursement = null;
         Double expenditure = null;
 
+        Timestamp startTs = new Timestamp(start.getTime());
+        startTs.setNanos(0);
+        Timestamp endTs = new Timestamp(end.getTime());
+        endTs.setNanos(0);
         FundingCalculationsHelper fch = new FundingCalculationsHelper();
 //        fch.doCalculations();
 
@@ -985,8 +990,8 @@ public class GetFoundingDetails extends Action {
                 Iterator fdIt = fundDetaiuls.iterator();
                 while (fdIt.hasNext()) {
                     AmpFundingDetail fd = (AmpFundingDetail) fdIt.next();
-                    if (fd.getTransactionDate().after(start) &&
-                        fd.getTransactionDate().before(end)) {
+                    if ((fd.getTransactionDate().after(startTs) || fd.getTransactionDate().equals(startTs)) &&
+                        (fd.getTransactionDate().before(endTs)) || fd.getTransactionDate().equals(endTs)){
                         fundDetSet.add(fd);
                     }
                 }

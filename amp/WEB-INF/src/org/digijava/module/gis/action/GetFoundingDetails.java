@@ -49,6 +49,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import org.digijava.module.aim.dbentity.AmpIndicatorSource;
+import java.sql.Timestamp;
 
 /**
  * <p>Title: </p>
@@ -910,10 +911,16 @@ public class GetFoundingDetails extends Action {
         BigDecimal disbursement = null;
         BigDecimal expenditure = null;
 
+        Timestamp startTs = new Timestamp(start.getTime());
+        startTs.setNanos(0);
+        Timestamp endTs = new Timestamp(end.getTime());
+        endTs.setNanos(0);
+
         FundingCalculationsHelper fch = new FundingCalculationsHelper();
 //        fch.doCalculations();
 
         Set fundDetSet = new HashSet();
+
 
         try {
             while (fundIt.hasNext()) {
@@ -923,8 +930,8 @@ public class GetFoundingDetails extends Action {
                 Iterator fdIt = fundDetaiuls.iterator();
                 while (fdIt.hasNext()) {
                     AmpFundingDetail fd = (AmpFundingDetail) fdIt.next();
-                    if (fd.getTransactionDate().after(start) &&
-                        fd.getTransactionDate().before(end)) {
+                    if ((fd.getTransactionDate().after(startTs) || fd.getTransactionDate().equals(startTs)) &&
+                        (fd.getTransactionDate().before(endTs)) || fd.getTransactionDate().equals(endTs)) {
                         fundDetSet.add(fd);
                     }
                 }

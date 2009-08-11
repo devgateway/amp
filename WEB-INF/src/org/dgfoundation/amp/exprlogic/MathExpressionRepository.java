@@ -29,13 +29,13 @@ public class MathExpressionRepository {
 
 	public static final String CUMULATIVE_DISBURSEMENT = "cumulativeDisbursement";
 
-	public static final String EXECUTION_RATE = "buildExecutionRate";
+	public static final String CUMULATIVE_EXECUTION_RATE = "cumulativeExecutionRate";
 
 	public static final String PROJECT_PERIOD = "projectPeriod";
 
 	public static final String OVERAGE = "overage";
 
-	public static final String DISBURSEMENT_RADIO = "disbursmentRatio";
+	public static final String PERCENTAGE_DISBURSEMENT = "percentageDisbursements";
 
 	public static final String AVERAGE_SIZE_DISBURSEMENT = "averageSizeofDisbursements";
 
@@ -59,6 +59,8 @@ public class MathExpressionRepository {
 
 	public static final String COSTING_GRAND_TOTAL = "grandTotalCost";
 
+	public static final String EXECUTION_RATE = "executionRate";
+
 	private static Hashtable<String, MathExpression> expresions = new Hashtable<String, MathExpression>();
 
 	/**
@@ -75,10 +77,10 @@ public class MathExpressionRepository {
 		buildActualCommitmentsVariance();
 		buildCumulativeCommitment();
 		buildCumulativeDisbursement();
-		buildExecutionRate();
+		buildCumulativeExecutionRate();
 		buildProjectPeriod();
 		buildOverage();
-		buildDisbursementRatio();
+		buildPercentageDisbursement();
 		buildCountActualCommitments();
 		buildCountActualDisbursement();
 		buildCountPlannedCommitments();
@@ -90,6 +92,7 @@ public class MathExpressionRepository {
 		buildUncommitedCumulativeBalance();
 		buildNumberOfProject();
 		buildCostingGrandTotal();
+		buildExecutionRate();
 
 	}
 
@@ -201,13 +204,14 @@ public class MathExpressionRepository {
 	}
 
 	/**
-	 * Execution rate = (Cumulative Disbursement/ Cumulative Commitment)*100
+	 * Cumulative Execution Rate = (Cumulative Disbursement / Cumulative
+	 * Commitment) * 100
 	 */
-	private static void buildExecutionRate() {
+	private static void buildCumulativeExecutionRate() {
 		try {
 			MathExpression divideDisbursementByCommitment = new MathExpression(MathExpression.Operation.DIVIDE, ArConstants.ACTUAL_DISBURSEMENT, ArConstants.ACTUAL_COMMITMENT);
 			MathExpression multiplyBy100 = new MathExpression(MathExpression.Operation.MULTIPLY, divideDisbursementByCommitment, new BigDecimal(100));
-			expresions.put(EXECUTION_RATE, multiplyBy100);
+			expresions.put(CUMULATIVE_EXECUTION_RATE, multiplyBy100);
 		} catch (Exception e) {
 			logger.error(e);
 		}
@@ -238,14 +242,15 @@ public class MathExpressionRepository {
 	}
 
 	/**
-	 * (Actual Disbursement affected by all filters / Actual Disbursement of the
-	 * activity no affected by filters and percentages (overall total)) * 100
+	 * Percentage Of Total Disbursements (Actual Disbursement affected by all
+	 * filters / Actual Disbursement of the activity no affected by filters and
+	 * percentages (overall total)) * 100
 	 */
-	private static void buildDisbursementRatio() {
+	private static void buildPercentageDisbursement() {
 		try {
 			MathExpression x1 = new MathExpression(MathExpression.Operation.DIVIDE, ArConstants.ACTUAL_DISBURSEMENT_FILTERED, ArConstants.TOTAL_ACTUAL_DISBURSEMENT);
 			MathExpression x2 = new MathExpression(MathExpression.Operation.MULTIPLY, x1, new BigDecimal(100d));
-			expresions.put(DISBURSEMENT_RADIO, x2);
+			expresions.put(PERCENTAGE_DISBURSEMENT, x2);
 		} catch (Exception e) {
 			logger.error(e);
 		}
@@ -396,6 +401,16 @@ public class MathExpressionRepository {
 		}
 	}
 
+	private static void buildExecutionRate() {
+		try {
+			MathExpression m1 = new MathExpression(MathExpression.Operation.DIVIDE, ArConstants.ACTUAL_DISBURSEMENT, ArConstants.PLANNED_DISBURSEMENT_FILTERED);
+			MathExpression m2 = new MathExpression(MathExpression.Operation.MULTIPLY, m1, new BigDecimal(100));
+			expresions.put(EXECUTION_RATE, m2);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+
 	/**
 	 * Get The expression by Key
 	 * 
@@ -403,6 +418,9 @@ public class MathExpressionRepository {
 	 * @return
 	 */
 	public static MathExpression get(String key) {
+		if (expresions.get(key)==null){
+			logger.error("Invalid Expression Key :"+key);
+		}
 		return expresions.get(key);
 	}
 }

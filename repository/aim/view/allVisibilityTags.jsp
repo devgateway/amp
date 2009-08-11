@@ -790,10 +790,10 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Average Size of Projects" feature="Computed Fields"></field:display>
 <field:display name="Variance Of Commitments" feature="Computed Fields"></field:display>
 <field:display name="Variance Of Disbursements" feature="Computed Fields"></field:display>
-<field:display name="Execution Rate" feature="Computed Fields"></field:display>
+<field:display name="Cumulative Execution Rate" feature="Computed Fields"></field:display>
 <field:display name="Project Period" feature="Computed Fields"></field:display>
 <field:display name="Overage" feature="Computed Fields"></field:display>
-<field:display name="Disbursment Ratio" feature="Computed Fields"></field:display> 
+<field:display name="Percentage Of Total Disbursements" feature="Computed Fields"></field:display> 
 <field:display name="Average Size of Disbursements" feature="Computed Fields"></field:display> 
 <field:display name="Average Disbursement Rate" feature="Computed Fields"></field:display>
 <field:display name="Project Age Ratio" feature="Computed Fields"></field:display>

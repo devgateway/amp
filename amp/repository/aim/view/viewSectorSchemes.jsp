@@ -52,30 +52,9 @@
 		}
 	}
 	function saveSchemes(){
-       //var chk=document.getElementsByTagName('input');
-       var ret='pepe=pepe';
-		/*if(document.getElementsByName("secSchemeShowName")!=null){
-			var sectors = document.getElementsByName("secSchemeShowName").length;
-			for(var i=0; i< sectors; i++){
-				if(document.getElementsByName("secSchemeShowName")[i].checked){
-					ret+="&"+document.getElementsByName("secSchemeShowName")[i].name+"="+document.getElementsByName("secSchemeShowName")[i].value;
-				}
-			}
-		}*/
-       
-       if(ret.length>0){
-       	  //tIds=tIds.substring(0,tIds.length-1);
-       	  <digi:context name="updateSchemes" property="context/module/moduleinstance/getSectorSchemes.do?action=update"/>
-          var url="<%=updateSchemes%>";
-          url+="&"+ret;
-          document.aimAddSectorForm.action = url;
-          //document.aimActivityForm.target = "_self";
-   	      document.aimAddSectorForm.submit();	
-       }else{
-       	  var translation = "<digi:trn >Please select at least one scheme to be updated</digi:trn>"; 
-          alert(translation);
-          return false;
-       }
+		<digi:context name="updateSchemes" property="context/module/moduleinstance/getSectorSchemes.do?action=update"/>
+		document.aimAddSectorForm.action = "<%=updateSchemes%>";
+		document.aimAddSectorForm.submit();	
 	}
 -->	
 </script>

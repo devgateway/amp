@@ -16,6 +16,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.form.AddSectorForm;
@@ -25,11 +26,20 @@ import org.digijava.module.aim.util.DbUtil;
 public class GetSectorSchemes extends Action {
 
 		  private static Logger logger = Logger.getLogger(GetSectorSchemes.class);
+		  private Long siteId;
+		  private String locale;
+
 
 		  public ActionForward execute(ActionMapping mapping,
 								ActionForm form,
 								HttpServletRequest request,
 								HttpServletResponse response) throws java.lang.Exception {
+		
+		Site site = RequestUtils.getSite(request);
+		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+						
+		siteId = site.getId();
+		locale = navigationLanguage.getCode();	
 
 		HttpSession session = request.getSession();
 		//session.setAttribute("moreThanLevelOne",null);
@@ -48,21 +58,29 @@ public class GetSectorSchemes extends Action {
 		if(action!=null && action.equals("update")){
 			String secUpdate[]=request.getParameterValues("secSchemeShowName");			
 			Collection<AmpSectorScheme> schemes = SectorUtil.getSectorSchemes();
+			boolean ok=false;
 			for(AmpSectorScheme mysch:schemes){
 				boolean showName = mysch.getSecSchemeShowName()==null?false:mysch.getSecSchemeShowName();
 				if(showName){
 					if(!isInList(secUpdate, mysch.getAmpSecSchemeId())){
 						mysch.setSecSchemeShowName(false);
 						DbUtil.update(mysch);
+						ok=true;						
 					}
 				}
 				else{
 					if(isInList(secUpdate, mysch.getAmpSecSchemeId())){
 						mysch.setSecSchemeShowName(true);
 						DbUtil.update(mysch);
+						ok=true;
 					}
 					
 				}
+			}
+			if(ok){
+			 	ActionErrors errors = new ActionErrors();
+			 	errors.add("title", new ActionError("error.aim.changes.saved.successfully", TranslatorWorker.translateText("Your changes have been saved successfully",locale,siteId)));
+			 	saveErrors(request, errors);
 			}
 		}
 					 logger.info("came into the sector schemes manager");

@@ -103,6 +103,13 @@ function viewChanges()
 
 }
 
+function exportToPdf (actId) {
+	<digi:context name="export" property="context/module/moduleinstance/exportActToPDF.do" />
+	document.aimEditActivityForm.action = "<%= export %>~activityid="+actId;
+	document.aimEditActivityForm.target = "_self";
+	document.aimEditActivityForm.submit();
+}
+
 function expandAll() {
    
 	$("img[@id$='_minus']").show();
@@ -312,6 +319,10 @@ function collapseAll() {
 										</td>
 										<td height=16 vAlign=bottom align="right">
 												<input type="button" class="dr-menu" onclick="window.open('/showPrinterFriendlyPage.do?edit=true', '_blank', '');" value="<digi:trn key="aim:print">Print</digi:trn>"> 
+										</td>
+										<td>
+											<c:set var="trn"><digi:trn>Export To PDF</digi:trn> </c:set>
+											<input type="button" class="dr-menu" onclick="javascript:exportToPdf(${actId})" value="${trn}"/>
 										</td>
 									</tr>
 								</table>
@@ -2537,15 +2548,19 @@ function collapseAll() {
 									</field:display>
 									<logic:notEmpty name="aimEditActivityForm" property="identification.team">
 									<field:display name="Data Team Leader" feature="Identification">
-									<tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
-											<digi:trn key="aim:activityTeamLeader">
-											 Data Team Leader</digi:trn>										</td>
-										<td bgcolor="#ffffff">
+										<tr>
+											<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
+												<digi:trn key="aim:activityTeamLeader">
+												 Data Team Leader</digi:trn>										
+											</td>											
+											<td bgcolor="#ffffff">											
+												<%--- 
 											<c:out value="${aimEditActivityForm.identification.team.teamLead.user.firstNames}"/>
-											<c:out value="${aimEditActivityForm.identification.team.teamLead.user.lastName}"/>	-
-											<c:out value="${aimEditActivityForm.identification.team.teamLead.user.email}"/>										</td>
-									</tr>
+												<c:out value="${aimEditActivityForm.identification.team.teamLead.user.lastName}"/>	-
+												<c:out value="${aimEditActivityForm.identification.team.teamLead.user.email}"/>
+											--%>
+											</td>
+										</tr>
 									</field:display>
 									</logic:notEmpty>
 									

@@ -58,11 +58,8 @@ function openEUActivityDetails(euActivityId) {
 	<logic:notPresent name="currentMember" scope="session">
 		<bean:define id="defaultCurrency" value="USD" toScope="page" />
 	</logic:notPresent>
-	<logic:iterate name="costs" id="cost"
-		type="org.digijava.module.aim.dbentity.EUActivity" indexId="idx">
-		<bean:define id="euActivity" name="cost"
-			type="org.digijava.module.aim.dbentity.EUActivity" scope="page"
-			toScope="request" />
+	<logic:iterate name="costs" id="cost"	type="org.digijava.module.aim.dbentity.EUActivity" indexId="idx">
+		<bean:define id="euActivity" name="cost"type="org.digijava.module.aim.dbentity.EUActivity" scope="page"	toScope="request" />
 		
 		<c:set target="${euActivity}" property="desktopCurrencyId" value="${defaultCurrency}" />
 		<%grandCost = euActivity.getTotalCostConverted().add(grandCost);%>
@@ -70,31 +67,26 @@ function openEUActivityDetails(euActivityId) {
 
 		<tr bgcolor="#FFFFFF" align="right">
 			<td align="left"><b>
-
-			<logic:equal name="mode" value="form">
-			<c:set var="translation"><digi:trn key="aim:viewcostsummary:remove">Remove</digi:trn>
-			</c:set>
-
-			<a style="cursor:pointer;color:#006699"
-				title="Click to edit the activity"
-				onClick='editEUActivity(<bean:write name="idx"/>)'> <bean:write
-				name="euActivity" property="name" /> </a> &nbsp;&nbsp; </b> [<a
-				style="cursor:pointer;color:#006699"
-				title="Click to remove the activity"
-				onClick='deleteEUActivity(<bean:write name="idx"/>)'>${translation}</a>]
-			</logic:equal>
-			<logic:equal name="mode" value="view">
-			<a style="cursor:pointer;color:#006699"
-				title="Click to view the activity"
-				onClick='openEUActivityDetails(<bean:write name="euActivity" property="id"/>)'> <bean:write
-				name="euActivity" property="name" /> </a> &nbsp;&nbsp; </b>
-			</logic:equal>
-			<field:display name="Costing Activity Name" feature="Costing">
-			<logic:equal name="mode" value="preview">
-				<bean:write name="euActivity" property="name"/>
-			</logic:equal>
-			</field:display>
-				</td>
+				<logic:equal name="mode" value="form">
+				<c:set var="translation"><digi:trn key="aim:viewcostsummary:remove">Remove</digi:trn>
+				</c:set>
+	
+				<a style="cursor:pointer;color:#006699"	title="Click to edit the activity"	onClick='editEUActivity(<bean:write name="idx"/>)'> 
+					<bean:write	name="euActivity" property="name" />
+				</a> &nbsp;&nbsp; </b> 
+				[<a	style="cursor:pointer;color:#006699"title="Click to remove the activity"onClick='deleteEUActivity(<bean:write name="idx"/>)'>${translation}</a>]
+				</logic:equal>
+				
+				<logic:equal name="mode" value="view">
+					<a style="cursor:pointer;color:#006699"	title="Click to view the activity"	onClick='openEUActivityDetails(<bean:write name="euActivity" property="id"/>)'> 
+						<bean:write	name="euActivity" property="name" /> </a> &nbsp;&nbsp; </b>
+				</logic:equal>
+				<field:display name="Costing Activity Name" feature="Costing">
+					<logic:equal name="mode" value="preview">
+						<bean:write name="euActivity" property="name"/>
+					</logic:equal>
+				</field:display>
+			</td>
 			<field:display name="Costing Total Cost" feature="Costing">
 				<td>
 					<aim:formatNumber value="${euActivity.totalCostConverted}"/>
@@ -108,28 +100,40 @@ function openEUActivityDetails(euActivityId) {
 		</tr>
 		<tr bgcolor="#FFFFFF">
 			<td colspan="3">
-			<table>
-			<field:display name="Costing Inputs" feature="Costing">
-			<logic:notEmpty name="euActivity" property="inputs">
-			<tr><td align="right"><i><digi:trn key="aim:viewcostssummary:inputs">Inputs:</digi:trn></i></td><td width="400"><bean:write name="euActivity" property="inputs" /></td></tr>
-			</logic:notEmpty>
-			</field:display>
-			<field:display name="Costing Assumptions" feature="Costing">
-			<logic:notEmpty name="euActivity" property="assumptions">
-			<tr><td align="right"><i><digi:trn key="aim:viewcostssummary:assumptions">Assumptions:</digi:trn></i></td><td width="400"><bean:write name="euActivity" property="assumptions" /></td></tr>
-			</logic:notEmpty>
-			</field:display>
-			<field:display name="Costing Progress" feature="Costing">
-			<logic:notEmpty name="euActivity" property="progress">
-			<tr><td align="right"><i><digi:trn key="aim:viewcostssummary:progress">Progress:</digi:trn></i></td><td width="400"><bean:write name="euActivity" property="progress" /></td></tr>
-			</logic:notEmpty>
-			</field:display>
-			<field:display name="Costing Due Date" feature="Costing">
-			<logic:notEmpty name="euActivity" property="dueDate">
-			<tr><td align="right"><i><digi:trn key="aim:viewcostssummary:dueDate">Due Date:</digi:trn></i></td><td width="400"><bean:write name="euActivity" property="dueDate" format="MM/dd/yyyy" /></td></tr>
-			</logic:notEmpty>
-			</field:display>
-			</table>
+				<table>
+					<field:display name="Costing Inputs" feature="Costing">
+						<logic:notEmpty name="euActivity" property="inputs">
+							<tr>
+								<td align="right"><i><digi:trn key="aim:viewcostssummary:inputs">Inputs:</digi:trn></i></td>
+								<td width="400"><bean:write name="euActivity" property="inputs" /></td>
+							</tr>
+						</logic:notEmpty>
+					</field:display>
+					<field:display name="Costing Assumptions" feature="Costing">
+						<logic:notEmpty name="euActivity" property="assumptions">
+							<tr>
+								<td align="right"><i><digi:trn key="aim:viewcostssummary:assumptions">Assumptions:</digi:trn></i></td>
+								<td width="400"><bean:write name="euActivity" property="assumptions" /></td>
+							</tr>
+						</logic:notEmpty>
+					</field:display>
+					<field:display name="Costing Progress" feature="Costing">
+						<logic:notEmpty name="euActivity" property="progress">
+							<tr>
+								<td align="right"><i><digi:trn key="aim:viewcostssummary:progress">Progress:</digi:trn></i></td>
+								<td width="400"><bean:write name="euActivity" property="progress" /></td>
+							</tr>
+						</logic:notEmpty>
+					</field:display>
+					<field:display name="Costing Due Date" feature="Costing">
+						<logic:notEmpty name="euActivity" property="dueDate">
+							<tr>
+								<td align="right"><i><digi:trn key="aim:viewcostssummary:dueDate">Due Date:</digi:trn></i></td>
+								<td width="400"><bean:write name="euActivity" property="dueDate" format="MM/dd/yyyy" /></td>
+							</tr>
+						</logic:notEmpty>
+					</field:display>
+				</table>
 			</td>
 		</tr>
 	</logic:iterate>
@@ -151,7 +155,7 @@ function openEUActivityDetails(euActivityId) {
 		<field:display name="Grand Total Cost" feature="Costing">
 		<td align="right">
 	
-		<aim:formatNumber value="<%=grandContribution%>"/> 
+		<aim:formatNumber value="<%=grandContribution%>" /> 
 		
 		</td>
 		</field:display>

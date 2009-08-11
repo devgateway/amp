@@ -1732,6 +1732,8 @@
      	<forward name="gotoPage" path="/showLayout.do?layout=exportImportContacts" />
      	<forward name="forward" path="/aim/admin.do" redirect="true"/>
    </action>
+   
+   <action name="aimEditActivityForm" path="/aim/exportActToPDF" type="org.digijava.module.aim.action.ExportActivityToPDF"/>
     
   </action-mappings>
 </struts-config>

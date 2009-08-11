@@ -5,7 +5,7 @@ import java.util.Collection;
 
 import javax.servlet.http.HttpSession;
 
-class ChartParams {
+public class ChartParams {
 	
 	private Collection data;
 	private String title;

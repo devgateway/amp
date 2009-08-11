@@ -128,8 +128,7 @@
 <td bgcolor="#ffffff">
 											 <logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 											 	<logic:equal name="comments" property="key" value="Objective Assumption">
-													<logic:iterate name="comments" id="comment" property="value"
-														type="org.digijava.module.aim.dbentity.AmpComments"><b>
+													<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments"><b>
 														<digi:trn key="aim:objectiveAssumption">Objective Assumption</digi:trn>:</b>
 														<bean:write name="comment" property="comment"/><br/>
 	                                        		</logic:iterate>
@@ -397,7 +396,8 @@
 																</c:if>
 															</c:forEach>
 														</table>
-													</c:if>										</td>
+													</c:if>	
+												</td>
 										  </tr>
 										</field:display>
                                         
@@ -1541,26 +1541,22 @@
 								<module:display name="Organizations" parentModule="PROJECT MANAGEMENT">
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap" >
-											<b>
-											<digi:trn key="aim:relatedOrganizations">
-										    Related Organizations</digi:trn>
-									  </b>									</td>
-
-										<td bgcolor="#ffffff">
-										
-										<feature:display name="Responsible Organization" module="Organizations">
-											<b><digi:trn key="aim:responsibleOrganisation">Responsible Organization</digi:trn></b><br/>
-											<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrganisations">
-												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
-													<tr><td>
-													<logic:iterate name="aimEditActivityForm" property="agencies.respOrganisations"
-													id="respOrg" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-															<ul><li> <bean:write name="respOrg" property="name" /></li></ul>
-													</logic:iterate>
-													</td></tr>
-												</table>
-											</logic:notEmpty>
-											<br/>
+											<b><digi:trn>Related Organizations</digi:trn></b>
+										</td>
+										<td bgcolor="#ffffff">										
+											<feature:display name="Responsible Organization" module="Organizations">
+												<b><digi:trn key="aim:responsibleOrganisation">Responsible Organization</digi:trn></b><br/>
+												<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrganisations">
+													<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
+														<tr><td>
+														<logic:iterate name="aimEditActivityForm" property="agencies.respOrganisations"
+														id="respOrg" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+																<ul><li> <bean:write name="respOrg" property="name" /></li></ul>
+														</logic:iterate>
+														</td></tr>
+													</table>
+												</logic:notEmpty>
+												<br/>
 											</feature:display>
 										
                                            <feature:display name="Executing Agency" module="Organizations">
@@ -1568,8 +1564,7 @@
 											<logic:notEmpty name="aimEditActivityForm" property="agencies.executingAgencies">
 												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 													<tr><td>
-													<logic:iterate name="aimEditActivityForm" property="agencies.executingAgencies"
-													id="execAgencies" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+													<logic:iterate name="aimEditActivityForm" property="agencies.executingAgencies" id="execAgencies" type="org.digijava.module.aim.dbentity.AmpOrganisation">
 															<ul><li> <bean:write name="execAgencies" property="name" /></li></ul>
 													</logic:iterate>
 													</td></tr>
@@ -1783,7 +1778,7 @@
 											<b>
 									  <digi:trn key="aim:proposedPrjectCost">Proposed Project Cost</digi:trn></b>
 									  </td>
-									<td bgcolor="#ffffff">
+										<td bgcolor="#ffffff">
 											<c:if test="${aimEditActivityForm.funding.proProjCost!=null}">
                                                   <table cellSpacing=1 cellPadding="3" bgcolor="#aaaaaa" width="100%">
                                                       <tr bgcolor="#ffffff">
@@ -1809,7 +1804,8 @@
                                                          </td>
                                                        </tr>
                                               		</table>
-                            				</c:if>										</td>
+                            				</c:if>
+                            			</td>
 									</tr>
 								  </feature:display>
 								
@@ -1826,11 +1822,11 @@
                                               <tr>
                                                 <td>
                                                 	<bean:define id="mode" value="preview" type="java.lang.String" toScope="request" />
-                                                    <jsp:include page="viewCostsSummary.jsp" flush="" />                                              
+                                                    <jsp:include page="viewCostsSummary.jsp" flush="" />
                                                 </td>
                                               </tr>
-                                            </table> 
-                                            </td>										
+                                            </table>
+                                            </td>
                                       </tr>
 									</feature:display>
 								  </logic:present>
@@ -1916,10 +1912,10 @@
 											</b>
 										</td>
 
-										<td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.identification.team.teamLead.user.firstNames}"/>
+										<td bgcolor="#ffffff">											
+												<c:out value="${aimEditActivityForm.identification.team.teamLead.user.firstNames}"/>
 											<c:out value="${aimEditActivityForm.identification.team.teamLead.user.lastName}"/>	-
-											<c:out value="${aimEditActivityForm.identification.team.teamLead.user.email}"/>											
+											<c:out value="${aimEditActivityForm.identification.team.teamLead.user.email}"/>
 										</td>
 									</tr>
 									</field:display>

@@ -86,14 +86,14 @@ public class MathExpressionRepository {
 		buildCountPlannedCommitments();
 		buildCountPlannedDisbursement();
 		buildAverageSizeofDisbursements();
-		buildAverageDisbursementRate();
+
 		buildProjectAgeRatio();
 		buildUndisbursedCumulativeBalance();
 		buildUncommitedCumulativeBalance();
 		buildNumberOfProject();
 		buildCostingGrandTotal();
 		buildExecutionRate();
-
+		buildAverageDisbursementRate();
 	}
 
 	/**
@@ -337,13 +337,15 @@ public class MathExpressionRepository {
 	}
 
 	/**
-	 * Average disbursement rate = Execution rate / Number of activities
+	 * Average Disbursement Cumulative Disb/Cumulative Commit * 100 / Number of Activities
 	 * (filtered)
 	 */
 	private static void buildAverageDisbursementRate() {
 		try {
-			MathExpression x1 = new MathExpression(MathExpression.Operation.DIVIDE, ArConstants.SUM_OFF_RESULTS, ArConstants.COUNT_PROJECTS);
-			expresions.put(AVERAGE_DISBURSEMENT_RATE, x1);
+			MathExpression x1 = new MathExpression(MathExpression.Operation.DIVIDE, ArConstants.ACTUAL_DISBURSEMENT, ArConstants.ACTUAL_COMMITMENT);
+			MathExpression x2 = new MathExpression(MathExpression.Operation.MULTIPLY, x1, new BigDecimal(100));
+			MathExpression x3 = new MathExpression(MathExpression.Operation.DIVIDE, x2, ArConstants.COUNT_PROJECTS);
+			expresions.put(AVERAGE_DISBURSEMENT_RATE, x3);
 		} catch (Exception e) {
 			logger.error(e);
 		}
@@ -418,8 +420,8 @@ public class MathExpressionRepository {
 	 * @return
 	 */
 	public static MathExpression get(String key) {
-		if (expresions.get(key)==null){
-			logger.error("Invalid Expression Key :"+key);
+		if (expresions.get(key) == null) {
+			logger.error("Invalid Expression Key :" + key);
 		}
 		return expresions.get(key);
 	}

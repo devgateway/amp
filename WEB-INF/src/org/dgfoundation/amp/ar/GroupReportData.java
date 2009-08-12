@@ -48,8 +48,18 @@ public class GroupReportData extends ReportData {
 	}
     
 	public boolean isSummaryReport() {
-		if(this.getParent()!=null) return this.getParent().getReportMetadata().getHideActivities();
-		return this.getReportMetadata().getHideActivities();
+		if(this.getParent()!=null){
+			if (this.getParent().getReportMetadata().getHideActivities()==null){ 
+				return false;
+			}else{
+				return this.getParent().getReportMetadata().getHideActivities();
+			}
+		}
+		if (this.getReportMetadata().getHideActivities()==null){
+			return false;
+		}else{
+			return this.getReportMetadata().getHideActivities();
+		}
 	}
 
 		 	

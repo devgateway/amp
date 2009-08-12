@@ -66,6 +66,11 @@ module Report
   protected
     # Parse and order query options from input form
     def parse_query_options
+      if @params[:on_off_budget].fetch("true") == "1"
+        $on_budget = true
+      else
+        $on_budget = false
+      end
       options = @params[:query_options]
       options.delete_if {|k,v| v.to_i == 0 if v.respond_to?(:to_i)}
       options.sort_by {|k, v| v.to_i}.map { |e| e[0] }

@@ -141,18 +141,30 @@ class Project < ActiveRecord::Base
   
   ##
   # Funding Aggregates
-  def total_commitments(year = nil)
+  def total_commitments(year = nil, on_budget = nil)
     if year
-      fundings.find_by_year(year).commitments rescue 0.to_currency(donor.currency)
+      if on_budget.nil?
+        fundings.find_by_year(year, nil).commitments rescue 0.to_currency(donor.currency)
+      else
+        fundings.find_by_year_and_on_budget(year, on_budget).commitments rescue 0.to_currency(donor.currency)
+      end
     else
-#      (historic_funding.commitments rescue 0.to_currency(donor.currency)) +
+      if on_budget.nil?
+      (historic_funding.commitments rescue 0.to_currency(donor.currency)) +
         fundings.total_commitments
+      else
+        fundings.total_commitments
+      end
     end
   end
   
-  def total_payments(year = nil)
+  def total_payments(year = nil, on_budget = nil)
     if year
-      fundings.find_by_year(year).payments rescue 0.to_currency(donor.currency)
+      if on_budget.nil?
+        fundings.find_by_year(year, nil).payments rescue 0.to_currency(donor.currency)
+      else
+        fundings.find_by_year_and_on_budget(year, on_budget).payments rescue 0.to_currency(donor.currency)
+      end
     else
 #      (historic_funding.payments rescue 0.to_currency(donor.currency)) +
         fundings.total_payments

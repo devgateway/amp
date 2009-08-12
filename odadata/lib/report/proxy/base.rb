@@ -22,7 +22,7 @@ module Report
         # If match was positive, call appropriate method with year as first argument (total_payments(2007))
         if method.to_s =~ /^(.*)_(\d{4})$/
           receiver = self.respond_to?($1) ? self : @target
-          receiver.send($1, $2.to_i)
+          receiver.send($1, $2.to_i, $on_budget)
         else  
           if @target.respond_to?(method) 
             [heading_from_query_options(method), @target.send(method, *args)]

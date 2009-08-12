@@ -2,6 +2,8 @@ package org.digijava.module.calendar.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
@@ -23,6 +25,8 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.calendar.dbentity.AmpCalendar;
+import org.digijava.module.calendar.dbentity.AmpCalendarPK;
 import org.digijava.module.calendar.dbentity.AmpEventType;
 import org.digijava.module.calendar.entity.AmpCalendarGraph;
 import org.digijava.module.calendar.entity.CalendarOptions;
@@ -221,6 +225,33 @@ public class ShowCalendarView extends Action {
         Collection ampCalendarEvents = AmpDbUtil.getAmpCalendarEventsByMember(startDate,
             endDate, filter.getSelectedEventTypes(), filter.getSelectedDonors(),
             member, filter.isShowPublicEvents(), null, null);
+            
+              List l = new ArrayList(ampCalendarEvents);
+        Comparator c = new Comparator<AmpCalendar>(){
+        	@Override
+			public int compare(AmpCalendar o1, AmpCalendar o2) {
+        		AmpCalendarPK d1 = o1.getCalendarPK();
+        		AmpCalendarPK d2 = o2.getCalendarPK();
+        		if (d1.getStartYear() != d2.getStartYear())
+        			return d1.getStartYear() - d2.getStartYear();
+        		else
+        			if (d1.getStartMonth() != d2.getStartMonth())
+        				return d1.getStartMonth() - d2.getStartMonth();
+        			else
+        				if (d1.getStartDay() != d2.getStartDay())
+        					return d1.getStartDay() - d2.getStartDay();
+        				else
+        					if (d1.getStartHour() != d2.getStartHour())
+        						return d1.getStartHour() - d2.getStartHour();
+        					else
+        						if (d1.getStartMinute() != d2.getStartMinute())
+        							return d1.getStartMinute() - d2.getStartMinute();
+        						else
+        							return 0;
+			}
+        };
+        Collections.sort(l, c);    
+            
         Collection<AmpCalendarGraph> ampCalendarGraphs = AmpUtil.getAmpCalendarGraphs(ampCalendarEvents,navigator, view);
         calendarViewForm.setAmpCalendarGraphs(ampCalendarGraphs);
       

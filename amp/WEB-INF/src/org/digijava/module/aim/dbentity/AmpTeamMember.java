@@ -129,7 +129,7 @@ public class AmpTeamMember implements Serializable {
 		this.activities = activities;
 	}
 
-/*
+
 	public boolean equals(Object obj) {
 		if (obj == null) return false;
 
@@ -140,7 +140,7 @@ public class AmpTeamMember implements Serializable {
 		AmpTeamMember temp = (AmpTeamMember) obj;
 		return temp.getAmpTeamMemId().equals(ampTeamMemId);
 	}
-    */
+  
 
     /**
      * @return Returns the links.
@@ -203,7 +203,7 @@ public class AmpTeamMember implements Serializable {
 	/* (non-Javadoc)
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
-
+	
 	
 
 }

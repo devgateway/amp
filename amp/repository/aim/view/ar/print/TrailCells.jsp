@@ -21,6 +21,7 @@
 			</b>
 		</td>
 		<logic:iterate name="reportData" property="trailCells" id="cell" 	scope="page">
+		<c:if test="${cell!=null}">
 			<bean:define id="viewable" name="cell" 	type="org.dgfoundation.amp.ar.cell.AmountCell" scope="page"  toScope="request" />
 			<logic:notEqual name="viewable" property="amount" value="0">
 				<tr>
@@ -38,6 +39,7 @@
 					<td width="50%" style="text-align: right;text-transform: uppercase;border-bottom: 1px dotted;padding: 2px;font-size: 8pt;padding-left: 10px"><jsp:include page="<%=viewable.getViewerPath()%>" /></td>
 				</tr>
 			</logic:notEqual>
+			</c:if>
 		</logic:iterate>
 	</tr>
 </table>

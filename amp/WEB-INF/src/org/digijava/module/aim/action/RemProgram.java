@@ -28,8 +28,24 @@ public class RemProgram extends Action
     {
         EditActivityForm eaform=(EditActivityForm)form;
         int settingsId = eaform.getPrograms().getProgramType();
-        if (settingsId == 0)
-        	settingsId = Integer.parseInt(request.getParameter("programType"));
+        
+        /* Added in Niger because of bug when removing program when u add both NPO and Priomary Program */
+        
+        /* END -  Added in Niger because of bug when removing program when u add both NPO and Priomary Program */
+        String progTypeReqParam		= request.getParameter("programType");
+        Integer parsedProgType			= null;
+        if ( progTypeReqParam != null ) {
+        	try {
+        		parsedProgType				= Integer.parseInt(progTypeReqParam);
+        	}
+        	catch (NumberFormatException e) {
+				logger.warn( "There was a problem parsing programType parameter: " + e.getMessage() );
+			}
+        }
+        if ( parsedProgType != null )
+        	settingsId	= parsedProgType;
+//        if (settingsId == 0)
+//        	settingsId = Integer.parseInt(request.getParameter("programType"));
          List prgLst=new ArrayList(); 
          Long prgIds[]=null;
          switch (settingsId) {

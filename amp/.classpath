@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="WEB-INF/src"/>
-	<classpathentry kind="src" path="gen-src"/>
-	<classpathentry kind="src" path="WEB-INF/amp-test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/acegi-security-1.0.1.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/acegi-security-cas-1.0.1.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/activation.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/aggregates.dtd"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/antlr-2.7.6.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/asm-attrs.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/asm.jar"/>
@@ -34,14 +33,17 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/concurrent.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/connector.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/CordaEmbedder.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/datasourcesconfig.dtd"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/digi-commons.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/displaytag-1.0.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/dom4j-1.6.1.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/ecs-1.4.2.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/ehcache-1.4.1.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/eigenbase-properties.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/eigenbase-resgen.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/eigenbase-xom.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/ELJTagLib.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/ezmorph-1.0.6.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/FCKeditor-2.3.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/flexjson.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/fop.jar"/>
@@ -60,6 +62,7 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/jakarta-regexp-1.2.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jasperreports-3.1.2.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/javacup.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/javassist-3.4.GA.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jaxb-api.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jaxb-impl.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jaxb-libs.jar"/>
@@ -80,14 +83,17 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/jfreechart-1.0.4.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jpivot.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jsf-api.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/json-lib-2.2.3-jdk15.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jsr173_1.0_api.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jstl.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/junit.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/logdigger-0.2.2.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/logdigger-0.4.0.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/lucene_highlight.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/lucene-core-2.0.0.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/mail.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/mondrian-jdk14.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/mondrian.dtd"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/mondrian.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/odmg.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/olap4j-jdk14.jar"/>
@@ -95,6 +101,8 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/poi-3.0.2-FINAL-20080204.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/poi-contrib-3.0.2-FINAL-20080204.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/poi-scratchpad-3.0.2-FINAL-20080204.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/quartz-1.6.5.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/README.txt"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/relaxngDatatype.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/retroweaver-rt.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/rowset.jar"/>
@@ -108,6 +116,7 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/standard.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/struts-el.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/struts.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/swizzle-confluence-1.1.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/tbutils-wcf.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/unittest-mockrunner-ejb.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/unittest-mockrunner-jca.jar"/>
@@ -123,31 +132,12 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/wsdl4j-1.5.1.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/xalan.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/xmlrpc-2.0.1.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/xmlsec.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/xmlunit.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/xsdlib.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/jboss/jboss-client.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/jboss/jboss-common-client.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/jboss/jboss-remoting.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/jboss/jboss-serialization.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/jboss/jbosssx-client.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/jboss/jnp-client.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/jboss/jta-1.1.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/swizzle-confluence-1.1.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/xmlrpc-2.0.1.jar"/>
-	<classpathentry kind="var" path="JBOSS-LIB/commons-collections.jar"/>
-	<classpathentry kind="var" path="JBOSS-LIB/commons-logging.jar"/>
-	<classpathentry kind="var" path="JBOSS-LIB/jsp-api.jar"/>
 	<classpathentry kind="var" path="JBOSS-LIB/log4j.jar"/>
-	<classpathentry kind="var" path="JBOSS-LIB/mysql-connector-java-5.0.8-bin.jar"/>
 	<classpathentry kind="var" path="JBOSS-LIB/servlet-api.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/dom4j-1.6.1.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/javassist-3.4.GA.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/logdigger-0.4.0.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/jboss/jboss-common-jdbc-wrapper.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/jboss/jboss-j2ee.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/ezmorph-1.0.6.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/json-lib-2.2.3-jdk15.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/quartz-1.6.5.jar"/>
-	<classpathentry kind="output" path="WEB-INF/classes"/>
+	<classpathentry kind="var" path="JBOSS-LIB/jsp-api.jar"/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>

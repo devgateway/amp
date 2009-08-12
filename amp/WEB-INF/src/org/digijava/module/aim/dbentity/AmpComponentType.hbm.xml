@@ -11,6 +11,7 @@
 		<property name="name" column="name" type="java.lang.String" />
 		<property name="code" column="code" type="java.lang.String" />
 		<property name="enable" column="enable" type="java.lang.Boolean" />
+		<property name="selectable" column="selectable" type="java.lang.Boolean" />
 		<set name="components" table="AMP_COMPONENTS">
 			<key column="type" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpComponent" />

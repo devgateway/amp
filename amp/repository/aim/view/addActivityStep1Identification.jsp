@@ -263,10 +263,8 @@ target.style.cursor = "default"
 											
 											<field:display name="Description" feature="Identification">
 											<tr bgcolor="#ffffff"><td valign="top" align="left">
-												<a title="<digi:trn key="aim:DescriptionofProject">Summary information describing the project</digi:trn>">
-												<digi:trn key="aim:description">
-												Description
-												</digi:trn>
+												<a title="<digi:trn key="aim:DescriptionofProject">Information describing the project</digi:trn>">
+												<digi:trn key="aim:description">Project Description</digi:trn>
 												</a>
 											</td>
 											<td valign="top" align="left">

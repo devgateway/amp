@@ -31,7 +31,8 @@
 	var revisedTargetValueDateNotEntered="<digi:trn key='aim:revisedTargetValueDateNotEntered'>Revised target value date not entered</digi:trn>";
 	var deleteThisIndicator="<digi:trn key='aim:deleteThisIndicator'>Are you sure you want to delete this Indicator?</digi:trn>";
 
-
+	var numericValueNeeded="<digi:trn>Please enter a numeric value</digi:trn>";
+	
 	function validateForm() {
 		return true;
 	}
@@ -46,10 +47,23 @@
 	}
 
 	function validateEntryByLeader() {
+		//
+		var baseVal = document.getElementsByName('indicator.baseVal')[0];
+		var targetVal = document.getElementsByName('indicator.targetVal')[0];
+		var revTargetVal = null;
+		if (document.getElementsByName('indicator.revTargetValDate')[0] != null) {
+			revTargetVal = document.getElementsByName('indicator.revTargetVal')[0];
+		}
+		var currentVal = document.getElementsByName('indicator.currentVal')[0];
 
-		if (isEmpty(document.getElementsByName('indicator.baseVal')[0].value) == true) {
+		//
+		if (isEmpty(baseVal.value) == true) {
 			alert(invalidBaseValue);
-			document.getElementsByName('indicator.baseVal')[0].focus();
+			baseVal.focus();
+			return false;
+		} else if (!containsValidNumericValue(baseVal)) {
+			alert(numericValueNeeded);
+			baseVal.focus();
 			return false;
 		}
 		if (isEmpty(document.getElementsByName('indicator.baseValDate')[0].value) == true) {
@@ -57,9 +71,13 @@
 			document.getElementsByName('indicator.baseValDate')[0].focus();
 			return false;
 		}
-		if (isEmpty(document.getElementsByName('indicator.targetVal')[0].value) == true) {
+		if (isEmpty(targetVal.value) == true) {
 			alert(targetValueNotEntered);
-			document.getElementsByName('indicator.targetVal')[0].focus();
+			targetVal.focus();
+			return false;
+		} else if (!containsValidNumericValue(targetVal)) {
+			alert(numericValueNeeded);
+			targetVal.focus();
 			return false;
 		}
 		if (isEmpty(document.getElementsByName('indicator.targetValDate')[0].value) == true) {
@@ -67,27 +85,31 @@
 			document.getElementsByName('indicator.targetValDate')[0].focus();
 			return false;
 		}
-
 		if (document.getElementsByName('indicator.revTargetValDate')[0] != null) {
-
-			if (isEmpty(document.getElementsByName('indicator.revTargetVal')[0].value) == true) {
+			if (isEmpty(revTargetVal.value) == true) {
 				alert(invalidRevisedTargetValue);
-				document.getElementsByName('indicator.revTargetVal')[0].focus();
+				revTargetVal.focus();
+				return false;
+			} else if (!containsValidNumericValue(revTargetVal)) {
+				alert(numericValueNeeded);
+				revTargetVal.focus();
 				return false;
 			}
-
 			if (isEmpty(document.getElementsByName('indicator.revTargetValDate')[0].value) == true) {
 				alert(revisedTargetValueDateNotEntered);
 				document.getElementsByName('indicator.revTargetValDate')[0].focus();
 				return false;
 			}
 		}
-		if (isEmpty(document.getElementsByName('indicator.currentVal')[0].value) == true) {
+		if (isEmpty(currentVal.value) == true) {
 			alert(currValueNotEntered);
 			document.getElementsByName('indicator.currentVal')[0].focus();
 			return false;
+		} else if (!containsValidNumericValue(currentVal)) {
+			alert(numericValueNeeded);
+			currentVal.focus();
+			return false;
 		}
-
 		if (isEmpty(document.getElementsByName('indicator.currentValDate')[0].value) == true) {
 			alert(currValueDateNotEntered);
 			document.getElementsByName('indicator.currentValDate')[0].focus();

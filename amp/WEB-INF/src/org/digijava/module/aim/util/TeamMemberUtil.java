@@ -771,7 +771,7 @@ public class TeamMemberUtil {
 			session = PersistenceManager.getSession();
 			String queryString = "select r from "
 					+ AmpTeamMemberRoles.class.getName()
-					+ " r where r.teamHead = true";
+					+ " r where r.teamHead = 1";
 			qry = session.createQuery(queryString);
 			Iterator itr = qry.list().iterator();
 			if (itr.hasNext()) {
@@ -890,7 +890,7 @@ public class TeamMemberUtil {
 			String queryString = "select tm from " + AmpTeamMember.class.getName() +
 			  " tm where (tm.user=:user) order by ampTeam.name";
 			qry = session.createQuery(queryString);
-			qry.setParameter("user",user.getId(),Hibernate.LONG);
+			qry.setLong("user",user.getId());
 			col = qry.list();
 		} catch (Exception e) {
 			logger.error("Unable to get TeamMembers" + e.getMessage());
@@ -1739,7 +1739,12 @@ public class TeamMemberUtil {
     			act.setActivityCreator(null);
     		}
     		if ( act.getApprovedBy() != null && act.getApprovedBy().getAmpTeamMemId().equals(atm.getAmpTeamMemId()) ) {
+    			//if we are deleting the team leader we shouldn't set him as TL
+    			if ((teamHead!=null) && (!atm.equals(teamHead))){
     			act.setApprovedBy(teamHead);
+    			}else{
+    				act.setApprovedBy(null);
+    			}
     		}
     		if ( act.getMember() != null ) {
     			Iterator iterMem	= act.getMember().iterator();

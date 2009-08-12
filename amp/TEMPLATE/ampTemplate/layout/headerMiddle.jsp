@@ -313,10 +313,8 @@ function adminHelp(){
 		window.location.href="/aim/addActivity.do~pageId=1~reset=true~action=create~activityLevelId="+selectedLevelId;	
 	}
 
-	function openGIS() {
-		openNewWindowWithMenubar(1000, 600);
-		popupPointer.location.href = "/gis/showGisDashboard.do";
-	}
+
+<jsp:include page="gisMenu.jsp" />
 	
 	function teamWorkspaceSetup(a) {
 		if (canExit()) window.location.href="/aim/workspaceOverview.do~tId="+a+"~dest=teamLead";

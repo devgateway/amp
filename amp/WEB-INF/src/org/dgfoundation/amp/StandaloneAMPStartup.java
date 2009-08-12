@@ -3,6 +3,8 @@
  */
 package org.dgfoundation.amp;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.SQLException;
 
 import javax.naming.NamingException;
@@ -17,6 +19,9 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
+
+import bsh.EvalError;
+import bsh.Interpreter;
 
 /**
  * @author mihai
@@ -97,7 +102,22 @@ public class StandaloneAMPStartup {
 			try {
 				//EXAMPLE OF A WORKING HIBERNATE SESSION OBJECT:
 				Session session = PersistenceManager.getSession();
-				
+			//	session.createQuery("xx").list()
+	
+				Interpreter i=new Interpreter();
+				try {
+					i.set("session", session);
+					System.out.println(i.source("/home/mihai/bshtest.bsh"));
+				} catch (EvalError e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		 
 				//generate200k((long)9,session);
 				

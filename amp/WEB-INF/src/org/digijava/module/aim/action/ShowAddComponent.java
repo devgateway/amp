@@ -7,7 +7,6 @@ package org.digijava.module.aim.action;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -27,7 +26,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.module.aim.dbentity.AmpComponentType;
-import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
@@ -36,11 +34,9 @@ import org.digijava.module.aim.helper.AmpComponent;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
-import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingValidator;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.ActivityUtil;
@@ -244,9 +240,18 @@ public class ShowAddComponent extends Action {
 
 			List<org.digijava.module.aim.dbentity.AmpComponent> ampComponents = new ArrayList<org.digijava.module.aim.dbentity.AmpComponent>();
 			eaForm.setStep("5");
-
-			Components<FundingDetail> compFund = new Components<FundingDetail>();
 			
+			String name 							= eaForm.getComponents().getNewCompoenentName();
+			AmpComponentType type		= ComponentsUtil.getComponentTypeById(eaForm.getComponents().getSelectedType());
+			org.digijava.module.aim.dbentity.AmpComponent ampComp 	= ComponentsUtil.getComponentById( eaForm.getComponents().getComponentId() );
+			ampComp.setTitle( name );
+			ampComp.setType( type );
+			eaForm.getComponents().setComponentTitle(ampComp.getTitle());
+			eaForm.getComponents().setNewCompoenentName(null);
+			ComponentsUtil.updateComponents(ampComp);
+			
+			
+			Components<FundingDetail> compFund = new Components<FundingDetail>();
 			compFund.setType_Id(eaForm.getComponents().getSelectedType());
 			compFund.setComponentId(eaForm.getComponents().getComponentId());
 				
@@ -254,6 +259,7 @@ public class ShowAddComponent extends Action {
 			compFund.setAmount(eaForm.getComponents().getComponentAmount());
 			compFund.setDescription(eaForm.getComponents().getComponentDesc());
 			compFund.setType_Id(eaForm.getComponents().getSelectedType());
+			
 			
 			Enumeration<Object> paramNames = request.getParameterNames();
 			String param = "";

@@ -198,7 +198,11 @@ public class HelpActions extends DispatchAction {
 	     out = new PrintWriter(os, true);	 
 				if(key.length() != 0){
 					 Collection<LabelValueBean> Searched = new ArrayList<LabelValueBean>();
-					 Hits hits =  LuceneUtil.helpSearch("title", key, request.getSession().getServletContext());
+					 
+					 String dd = HelpUtil.HTMLEntityEncode(key);
+					 String rep = dd.replaceAll("&#195;&#169;", "?").replaceAll("&#32;", " ");
+					 
+					 Hits hits =  LuceneUtil.helpSearch("title", rep, request.getSession().getServletContext());
 					 
 			         String artikleTitle;
 					 

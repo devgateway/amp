@@ -44,12 +44,12 @@ module Report
         end
       end
       
-      def funds(year)
+      def funds(year, on_budget)
         cols = []
         
         if year <= Time.now.year
-          cols << ["#{I18n.t('reports.commitments_td')} #{year}", @target.total_commitments(year)]
-          cols << ["#{I18n.t('reports.disbursements_td')} #{year}", @target.total_payments(year)]
+          cols << ["#{I18n.t('reports.commitments_td')} #{year}", @target.total_commitments(year, on_budget)]
+          cols << ["#{I18n.t('reports.disbursements_td')} #{year}", @target.total_payments(year, on_budget)]
           cols << ["#{I18n.t('reports.quarterly_disbursements')} #{year}", quarterly_payments(@target, year)]
         end
         

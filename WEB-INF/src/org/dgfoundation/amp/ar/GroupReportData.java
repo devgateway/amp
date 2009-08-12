@@ -177,9 +177,13 @@ public class GroupReportData extends ReportData {
 				ReportData firstRd = (ReportData) items.iterator().next();
 				for (int k = 0; k < firstRd.getTrailCells().size(); k++) {
 					Cell c=(Cell) firstRd.getTrailCells().get(k);
+					if (c!=null){
 					Cell newc=c.newInstance();
 					newc.setColumn(c.getColumn());
 					trailCells.add(newc);
+					}else{
+						trailCells.add(null);
+					}
 				}
 					
 				logger.debug("GroupTrail.size=" + trailCells.size());
@@ -197,10 +201,14 @@ public class GroupReportData extends ReportData {
 								+ element.getTrailCells().size());
 					} else
 						for (int j = 0; j < trailCells.size(); j++) {
+							Cell newc =null;
+							
 							Cell c = (Cell) trailCells.get(j);
 							Cell c2 = (Cell) element.getTrailCells().get(j);
-							Cell newc = c.merge(c2);
-							newc.setColumn(c2.getColumn());
+							if (c!=null){
+								newc = c.merge(c2);
+								newc.setColumn(c2.getColumn());
+							}
 							trailCells.remove(j);
 							trailCells.add(j, newc);
 						}

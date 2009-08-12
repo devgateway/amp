@@ -14,6 +14,8 @@ public class AmpComponentType implements ARDimensionable{
 	private String code;
 	
 	private Boolean enable;
+	
+	private Boolean selectable;
 
 	private Set<AmpComponent> components;
 
@@ -56,6 +58,22 @@ public class AmpComponentType implements ARDimensionable{
 	
 	public void setEnable(Boolean enable) {
 		this.enable = enable;
+	}
+	
+	
+
+	/**
+	 * @return the selectable
+	 */
+	public Boolean getSelectable() {
+		return selectable;
+	}
+
+	/**
+	 * @param selectable the selectable to set
+	 */
+	public void setSelectable(Boolean selectable) {
+		this.selectable = selectable;
 	}
 
 	@Override

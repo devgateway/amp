@@ -867,6 +867,17 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private boolean defaultCountryIsSet;
 		private int pagesSize;
 		
+		private boolean noMoreRecords=false;
+		
+		
+		public boolean isNoMoreRecords() {
+			return noMoreRecords;
+		}
+
+		public void setNoMoreRecords(boolean noMoreRecords) {
+			this.noMoreRecords = noMoreRecords;
+		}
+
 		public Long getLevelId() {
 			return levelId;
 		}

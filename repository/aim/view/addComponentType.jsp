@@ -71,6 +71,13 @@ body {
 								  <td width="65%"><html:checkbox property="enable" /></td>
 								</tr>
 								</field:display>
+								<field:display name="Admin - Component Type Selectable checkbox" feature="Admin - Component Type">
+								<tr>
+									<td width="35%" height="22" align="right"><digi:trn key="aim:typeEbable">Selectable</digi:trn>
+&nbsp;									</td>
+								  <td width="65%"><html:checkbox property="selectable" /></td>
+								</tr>
+								</field:display>
 								<tr>
 									<td width=35% height="22" align="right"><font color=red>* 
 								    <digi:trn

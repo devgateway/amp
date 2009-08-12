@@ -82,13 +82,25 @@
 								</table>
 							</td>
 						</tr>
-
+						<c:if test="${aimEditActivityForm.location.noMoreRecords}">
+								<tr bgcolor="#ECF3FD">
+									<td colspan="2" align="center" height="20"> 
+									<digi:trn key="location:norcords:found">No records found</digi:trn>
+									</td>	
+								</tr>
+						</c:if>
 						<tr bgcolor="#ECF3FD">
 							<td align="center">
 								<table cellPadding=3 cellSpacing=3>
 									<tr>
-										<td>
-											<input type="button" value="<digi:trn key='btn:add'>Add</digi:trn>" class="dr-menu"
+										<td>	
+											
+											<input 
+											<c:if test="${aimEditActivityForm.location.noMoreRecords}">
+												disabled="true"
+											</c:if> 
+											
+											type="button" value="<digi:trn key='btn:add'>Add</digi:trn>" class="dr-menu"
 											onclick="buttonAddLocation()">
 										</td>
 										<td>

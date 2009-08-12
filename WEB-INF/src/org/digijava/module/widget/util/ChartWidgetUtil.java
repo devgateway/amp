@@ -248,7 +248,7 @@ public class ChartWidgetUtil {
 		JFreeChart chart = null;
 		Font font8 = new Font(null,Font.BOLD,12);
         DecimalFormat format=FormatHelper.getDecimalFormat();
-		CategoryDataset dataset=getODAProfileDataset(filter);
+		CategoryDataset dataset=getODAProfileDataset(filter,opt);
         String amount="";
         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
             amount = "Amounts in thousands";
@@ -325,7 +325,7 @@ public class ChartWidgetUtil {
      * @throws DgException
      */
     
-    private static CategoryDataset getODAProfileDataset(FilterHelper filter) throws DgException {
+    private static CategoryDataset getODAProfileDataset(FilterHelper filter,ChartOption opt) throws DgException {
         boolean nodata = true; // for displaying no data message
         DefaultCategoryDataset result = new DefaultCategoryDataset();
         Long year = filter.getYear();
@@ -341,17 +341,25 @@ public class ChartWidgetUtil {
             currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
         }
         Long fiscalCalendarId = filter.getFiscalCalendarId();
-        for (int i = year.intValue() - 4; i <= year.intValue(); i++) {
+        for (int yearVal = year.intValue() - 4; yearVal <= year.intValue(); yearVal++) {
             // apply calendar filter
-            Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, i);
-            Date endDate =OrgProfileUtil.getEndDate(fiscalCalendarId, i);
+            Date startDate = OrgProfileUtil.getStartDate(fiscalCalendarId, yearVal);
+            Date endDate =OrgProfileUtil.getEndDate(fiscalCalendarId, yearVal);
             Collection<AmpCategoryValue> financingInstruments = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY);
             for (AmpCategoryValue financingInstrument : financingInstruments) {
                 DecimalWraper funding = getFundingByFinancingInstrument(filter.getOrgId(), filter.getOrgGroupId(), startDate, endDate, financingInstrument.getId(), currCode, filter.getTransactionType(), filter.getTeamMember());
                 if (funding.doubleValue() != 0) {
                     nodata = false;
                 }
-                result.addValue(funding.doubleValue(), financingInstrument.getValue(), new Long(i));
+                try{
+                String value= TranslatorWorker.translateText(financingInstrument.getValue(), opt.getLangCode(), opt.getSiteId());
+                result.addValue(funding.doubleValue(), value, new Long(yearVal));
+                }
+                 catch(WorkerException ex){
+                    logger.error(ex);
+                    throw new DgException(ex);
+
+                }
             }
 
         }

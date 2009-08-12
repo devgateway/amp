@@ -41,8 +41,8 @@
                                          is 120 seconds.
         -->
 
-    <defaultCache
-        maxElementsInMemory="1000"
+   <defaultCache
+        maxElementsInMemory="5000"
         eternal="false"
         overflowToDisk="false"
         timeToIdleSeconds="1800"

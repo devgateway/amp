@@ -15,6 +15,7 @@ import java.util.TreeSet;
 
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.ListCell;
+import org.dgfoundation.amp.ar.cell.TextCell;
 import org.dgfoundation.amp.ar.exception.IncompatibleCellException;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
 
@@ -267,7 +268,7 @@ public class CellColumn extends Column {
 		newCell.setColumn(this);
 	}
 
-	/*
+	/*;
 	 * (non-Javadoc)
 	 * 
 	 * @see org.dgfoundation.amp.ar.Column#cellCount()

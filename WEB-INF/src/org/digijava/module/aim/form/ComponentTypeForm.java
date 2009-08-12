@@ -16,6 +16,7 @@ public class ComponentTypeForm extends ActionForm implements Serializable {
 	String code = null;
 
 	Boolean enable;
+	Boolean selectable;
 	String check;
 	ArrayList<AmpComponentType> componentTypesList;
 
@@ -26,6 +27,7 @@ public class ComponentTypeForm extends ActionForm implements Serializable {
 		this.name = null;
 		this.code = null;
 		this.enable = false;
+		this.selectable = false;
 		this.check=null;
 	}
 
@@ -76,5 +78,20 @@ public class ComponentTypeForm extends ActionForm implements Serializable {
 	public void setCheck(String check) {
 		this.check = check;
 	}
+
+	/**
+	 * @return the selectable
+	 */
+	public Boolean getSelectable() {
+		return selectable;
+	}
+
+	/**
+	 * @param selectable the selectable to set
+	 */
+	public void setSelectable(Boolean selectable) {
+		this.selectable = selectable;
+	}
+	
 
 }

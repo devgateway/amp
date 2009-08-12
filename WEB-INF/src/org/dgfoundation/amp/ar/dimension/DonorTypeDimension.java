@@ -20,6 +20,14 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
  * @author mihai
  *
  */
+@Deprecated
+/**
+ * the dimension is gave by the child. the type can not be a child, so this class will never be called in a normal report!
+ * the right hierarchy is type->group > organization
+ * if we want to have organization -> type an idea is to put another map as values, because in AMP we will have only 4-6 types as keys 
+ * and >150 organizations.
+ */
+
 public class DonorTypeDimension extends ARDimension {
 
 	/**

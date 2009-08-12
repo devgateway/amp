@@ -75,8 +75,8 @@ function validate(field) {
 
 
 function selectLocation() {
-	var params="location.levelId="+document.getElementsByName("location.levelId")[0].value;
-	params+="&location.implemLocationLevel="+document.getElementsByName("location.implemLocationLevel")[0].value;
+	var params="levelId="+document.getElementsByName("location.levelId")[0].value;
+	params+="&implemLocationLevel="+document.getElementsByName("location.implemLocationLevel")[0].value;
 	params+="&edit=false";
 	myAddLocation(params);
 }

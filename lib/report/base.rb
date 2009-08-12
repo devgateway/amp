@@ -67,9 +67,11 @@ module Report
     # Parse and order query options from input form
     def parse_query_options
       if @params[:on_off_budget].fetch("true") == "1"
-        $on_budget = true
+        $on_budget = "true"
+      elsif @params[:on_off_budget].fetch("false") == "1"
+        $on_budget = "false"
       else
-        $on_budget = false
+        $on_budget = nil
       end
       options = @params[:query_options]
       options.delete_if {|k,v| v.to_i == 0 if v.respond_to?(:to_i)}

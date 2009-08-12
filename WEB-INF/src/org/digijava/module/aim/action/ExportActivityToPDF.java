@@ -31,7 +31,6 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
-import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
@@ -107,6 +106,7 @@ public class ExportActivityToPDF extends Action {
 	private Long siteId;
 	private String locale;
 	private com.lowagie.text.Font plainFont = new com.lowagie.text.Font(com.lowagie.text.Font.COURIER, 11,Font.NORMAL);
+	private com.lowagie.text.Font titleFont = new com.lowagie.text.Font(com.lowagie.text.Font.COURIER, 11,Font.BOLD);
 	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)	throws Exception {
 		EditActivityForm myForm=(EditActivityForm)form;
@@ -126,7 +126,7 @@ public class ExportActivityToPDF extends Action {
 		mainLayout.setWidths(new float[]{1f,2f});
 		PdfPTableEvents event = new PdfPTableEvents();
 		mainLayout.setTableEvent(event);
-
+		mainLayout.getDefaultCell().setBorder(0);
         try {
 			activity=ActivityUtil.loadActivity(actId);
 			Site site = RequestUtils.getSite(request);
@@ -151,7 +151,7 @@ public class ExportActivityToPDF extends Action {
 			mainLayout.addCell(titleCell);			
 			//activity name cells
 			PdfPCell nameCell1=new PdfPCell();
-			p1=new Paragraph(TranslatorWorker.translateText("Activity Name",locale,siteId));
+			p1=new Paragraph(TranslatorWorker.translateText("Activity Name",locale,siteId),titleFont);
 			p1.setAlignment(Element.ALIGN_RIGHT);
 			nameCell1.addElement(p1);			
 			nameCell1.setBackgroundColor(new Color(244,244,242));
@@ -166,7 +166,7 @@ public class ExportActivityToPDF extends Action {
 			
 			//project comments
 			PdfPCell projCommentsCell1=new PdfPCell();
-			p1=new Paragraph(TranslatorWorker.translateText("Project Comments",locale,siteId));
+			p1=new Paragraph(TranslatorWorker.translateText("Project Comments",locale,siteId),titleFont);
 			p1.setAlignment(Element.ALIGN_RIGHT);
 			projCommentsCell1.addElement(p1);
 			projCommentsCell1.setBackgroundColor(new Color(244,244,242));
@@ -174,14 +174,15 @@ public class ExportActivityToPDF extends Action {
 			mainLayout.addCell(projCommentsCell1);
 			
 			PdfPCell projCommentsCell2=new PdfPCell();
-			p1=new Paragraph(getEditTagValue(request,activity.getProjectComments()),plainFont);
+			String projectComments = processEditTagValue(request, activity.getProjectComments());
+			p1=new Paragraph(projectComments,plainFont);
 			projCommentsCell2.addElement(p1);
 			projCommentsCell2.setBorder(0);
-			mainLayout.addCell(projCommentsCell2);			
+			mainLayout.addCell(projCommentsCell2);
 			
 			//objective
 			PdfPCell objectiveCell1=new PdfPCell();
-			p1=new Paragraph(TranslatorWorker.translateText("Objectives",locale,siteId));
+			p1=new Paragraph(TranslatorWorker.translateText("Objectives",locale,siteId),titleFont);
 			p1.setAlignment(Element.ALIGN_RIGHT);
 			objectiveCell1.addElement(p1);
 			objectiveCell1.setBackgroundColor(new Color(244,244,242));
@@ -189,7 +190,8 @@ public class ExportActivityToPDF extends Action {
 			mainLayout.addCell(objectiveCell1);
 			
 			PdfPCell objectiveCell2=new PdfPCell();
-			p1=new Paragraph(getEditTagValue(request,activity.getObjective()),plainFont);
+			String ongComments = processEditTagValue(request, activity.getObjective());
+			p1=new Paragraph(ongComments,plainFont);
 			objectiveCell2.addElement(p1);
 			objectiveCell2.setBorder(0);
 			mainLayout.addCell(objectiveCell2);
@@ -209,34 +211,44 @@ public class ExportActivityToPDF extends Action {
                   }
             }
             
-            for (Object commentKey : allComments.keySet()) {
+            PdfPTable objTable=new PdfPTable(2);
+            objTable.getDefaultCell().setBorder(0);
+            for (Object commentKey : allComments.keySet()) {            	
 				String key=(String)commentKey;
+				List<AmpComments> values=(List<AmpComments>)allComments.get(key);
 				if(key.equalsIgnoreCase("Objective Assumption")){
-					objectiveComments+=TranslatorWorker.translateText("Objective Assumption", locale, siteId)+"\n";
+					for (AmpComments value : values) {
+						objTable.addCell(new Paragraph(TranslatorWorker.translateText("Objective Assumption", locale, siteId)+" :",titleFont));
+						objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));
+					}					
 				}else if(key.equalsIgnoreCase("Objective Verification")){
-					objectiveComments+=TranslatorWorker.translateText("Objective Verification", locale, siteId)+"\n";
+					for (AmpComments value : values) {
+						objTable.addCell(new Paragraph(TranslatorWorker.translateText("Objective Verification", locale, siteId)+" :",titleFont));
+						objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));
+					}					
 				}else if (key.equalsIgnoreCase("Objective Objectively Verifiable Indicators")) {
-					objectiveComments+=TranslatorWorker.translateText("Objective Objectively Verifiable Indicators", locale, siteId)+"\n";
+					for (AmpComments value : values) {
+						objTable.addCell(new Paragraph(TranslatorWorker.translateText("Objective Objectively Verifiable Indicators", locale, siteId)+" :",titleFont));
+						objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));						
+					}
 				}
 			}
             
             PdfPCell objectiveCommentsCell1=new PdfPCell();
-            p1=new Paragraph(TranslatorWorker.translateText("Objective Comments",locale,siteId));
+            p1=new Paragraph(TranslatorWorker.translateText("Objective Comments",locale,siteId),titleFont);
             p1.setAlignment(Element.ALIGN_RIGHT);
 			objectiveCommentsCell1.addElement(p1);
 			objectiveCommentsCell1.setBackgroundColor(new Color(244,244,242));
 			objectiveCommentsCell1.setBorder(0);		
 			mainLayout.addCell(objectiveCommentsCell1);
 			
-			PdfPCell objectiveCommentsCell2=new PdfPCell();
-			p1=new Paragraph(objectiveComments,plainFont);
-			objectiveCommentsCell2.addElement(p1);
+			PdfPCell objectiveCommentsCell2=new PdfPCell(objTable);
 			objectiveCommentsCell2.setBorder(0);
 			mainLayout.addCell(objectiveCommentsCell2);
 			
 			//AMPID cells
 			PdfPCell ampIdCell1=new PdfPCell();
-			p1=new Paragraph(TranslatorWorker.translateText("AMP ID",locale,siteId));
+			p1=new Paragraph(TranslatorWorker.translateText("AMP ID",locale,siteId),titleFont);
 			p1.setAlignment(Element.ALIGN_RIGHT);
 			ampIdCell1.addElement(p1);
 			ampIdCell1.setBackgroundColor(new Color(244,244,242));
@@ -251,7 +263,7 @@ public class ExportActivityToPDF extends Action {
 			
 			//contract Number
 			PdfPCell contractNumCell1=new PdfPCell();
-			p1=new Paragraph(TranslatorWorker.translateText("Contract Number",locale,siteId));
+			p1=new Paragraph(TranslatorWorker.translateText("Contract Number",locale,siteId),titleFont);
 			p1.setAlignment(Element.ALIGN_RIGHT);
 			contractNumCell1.addElement(p1);
 			contractNumCell1.setBackgroundColor(new Color(244,244,242));
@@ -266,7 +278,7 @@ public class ExportActivityToPDF extends Action {
 			
 			//Description cell
 			PdfPCell descCell1=new PdfPCell();
-			p1=new Paragraph(TranslatorWorker.translateText("Description",locale,siteId));
+			p1=new Paragraph(TranslatorWorker.translateText("Description",locale,siteId),titleFont);
 			p1.setAlignment(Element.ALIGN_RIGHT);
 			descCell1.addElement(p1);
 			descCell1.setBackgroundColor(new Color(244,244,242));
@@ -274,14 +286,15 @@ public class ExportActivityToPDF extends Action {
 			mainLayout.addCell(descCell1);
 			
 			PdfPCell descCell2=new PdfPCell();
-			p1=new Paragraph(getEditTagValue(request,activity.getDescription()),plainFont);
+			String actDesc = processEditTagValue(request, activity.getDescription());
+			p1=new Paragraph(actDesc,plainFont);
 			descCell2.addElement(p1);
 			descCell2.setBorder(0);
 			mainLayout.addCell(descCell2);
 			
 			//Purpose cell
 			PdfPCell purposeCell1=new PdfPCell();
-			p1=new Paragraph(TranslatorWorker.translateText("Purpose",locale,siteId));
+			p1=new Paragraph(TranslatorWorker.translateText("Purpose",locale,siteId),titleFont);
 			p1.setAlignment(Element.ALIGN_RIGHT);
 			purposeCell1.addElement(p1);
 			purposeCell1.setBackgroundColor(new Color(244,244,242));
@@ -289,41 +302,51 @@ public class ExportActivityToPDF extends Action {
 			mainLayout.addCell(purposeCell1);
 			
 			PdfPCell purposeCell2=new PdfPCell();
-			p1=new Paragraph(getEditTagValue(request,activity.getPurpose()),plainFont);
+			String actPurpose = processEditTagValue(request, activity.getPurpose());
+			p1=new Paragraph(actPurpose,plainFont);
 			purposeCell2.addElement(p1);
 			purposeCell2.setBorder(0);
 			mainLayout.addCell(purposeCell2);
 			
 			//purpose comments
 			PdfPCell purposeCommentsCell1=new PdfPCell();
-			p1=new Paragraph(TranslatorWorker.translateText("Purpose Comments",locale,siteId));
+			p1=new Paragraph(TranslatorWorker.translateText("Purpose Comments",locale,siteId),titleFont);
 			p1.setAlignment(Element.ALIGN_RIGHT);
 			purposeCommentsCell1.addElement(p1);
 			purposeCommentsCell1.setBackgroundColor(new Color(244,244,242));
 			purposeCommentsCell1.setBorder(0);
 			mainLayout.addCell(purposeCommentsCell1);
 			
-			String purposeComments="";
-			for (Object commentKey : allComments.keySet()) {
+			PdfPTable purposeTable=new PdfPTable(2);
+            purposeTable.getDefaultCell().setBorder(0);
+            for (Object commentKey : allComments.keySet()) {            	
 				String key=(String)commentKey;
+				List<AmpComments> values=(List<AmpComments>)allComments.get(key);
 				if(key.equalsIgnoreCase("Purpose Assumption")){
-					purposeComments+=TranslatorWorker.translateText("Purpose Assumption", locale, siteId)+"\n";
+					for (AmpComments value : values) {
+						purposeTable.addCell(new Paragraph(TranslatorWorker.translateText("Purpose Assumption", locale, siteId)+" :",titleFont));
+						purposeTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));
+					}					
 				}else if(key.equalsIgnoreCase("Purpose Verification")){
-					purposeComments+=TranslatorWorker.translateText("Purpose Verification", locale, siteId)+"\n";
+					for (AmpComments value : values) {
+						purposeTable.addCell(new Paragraph(TranslatorWorker.translateText("Purpose Verification", locale, siteId)+" :",titleFont));
+						purposeTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));
+					}					
 				}else if (key.equalsIgnoreCase("Purpose Objectively Verifiable Indicators")) {
-					purposeComments+=TranslatorWorker.translateText("Purpose Objectively Verifiable Indicators", locale, siteId)+"\n";
+					for (AmpComments value : values) {
+						purposeTable.addCell(new Paragraph(TranslatorWorker.translateText("Purpose Objectively Verifiable Indicators", locale, siteId)+" :",titleFont));
+						purposeTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));						
+					}
 				}
 			}
 			
-			PdfPCell purposeCommentsCell2=new PdfPCell();
-			p1=new Paragraph(purposeComments,plainFont);
-			purposeCommentsCell2.addElement(p1);
+			PdfPCell purposeCommentsCell2=new PdfPCell(purposeTable);
 			purposeCommentsCell2.setBorder(0);
 			mainLayout.addCell(purposeCommentsCell2);
 			
 			// results cell
 			PdfPCell resultsCell1=new PdfPCell();			
-			p1=new Paragraph(TranslatorWorker.translateText("Results",locale,siteId));
+			p1=new Paragraph(TranslatorWorker.translateText("Results",locale,siteId),titleFont);
 			p1.setAlignment(Element.ALIGN_RIGHT);
 			resultsCell1.addElement(p1);
 			resultsCell1.setBackgroundColor(new Color(244,244,242));
@@ -331,7 +354,8 @@ public class ExportActivityToPDF extends Action {
 			mainLayout.addCell(resultsCell1);
 			
 			PdfPCell resultsCell2=new PdfPCell();
-			p1=new Paragraph(getEditTagValue(request,activity.getResults()),plainFont);
+			String actResults = processEditTagValue(request, activity.getResults());
+			p1=new Paragraph(actResults,plainFont);
 			resultsCell2.addElement(p1);
 			resultsCell2.setBorder(0);
 			mainLayout.addCell(resultsCell2);
@@ -339,43 +363,47 @@ public class ExportActivityToPDF extends Action {
 			/**
 			 *  Results Comments
 			 */
-			String resultsComments="";
-			for (Object commentKey : allComments.keySet()) {
+			PdfPTable resultsCommentsTable=new PdfPTable(2);
+            resultsCommentsTable.getDefaultCell().setBorder(0);
+            for (Object commentKey : allComments.keySet()) {            	
 				String key=(String)commentKey;
+				List<AmpComments> values=(List<AmpComments>)allComments.get(key);
 				if(key.equalsIgnoreCase("Results Assumption")){
-					resultsComments+=TranslatorWorker.translateText("Results Assumption", locale, siteId)+"\n";
+					for (AmpComments value : values) {
+						resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText("Results Assumption", locale, siteId)+" :",titleFont));
+						resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));
+					}					
 				}else if(key.equalsIgnoreCase("Results Verification")){
-					resultsComments+=TranslatorWorker.translateText("Results Verification", locale, siteId)+"\n";
+					for (AmpComments value : values) {
+						resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText("Results Verification", locale, siteId)+" :",titleFont));
+						resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));
+					}					
 				}else if (key.equalsIgnoreCase("Results Objectively Verifiable Indicators")) {
-					resultsComments+=TranslatorWorker.translateText("Results Objectively Verifiable Indicators", locale, siteId)+"\n";
+					for (AmpComments value : values) {
+						resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText("Results Objectively Verifiable Indicators", locale, siteId)+" :",titleFont));
+						resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));						
+					}
 				}
 			}
-			
 			PdfPCell resultsCommentsCell1=new PdfPCell();
-			p1=new Paragraph(TranslatorWorker.translateText("Results Comments",locale,siteId));
+			p1=new Paragraph(TranslatorWorker.translateText("Results Comments",locale,siteId),titleFont);
 			p1.setAlignment(Element.ALIGN_RIGHT);
 			resultsCommentsCell1.addElement(p1);
 			resultsCommentsCell1.setBackgroundColor(new Color(244,244,242));
 			resultsCommentsCell1.setBorder(0);
 			mainLayout.addCell(resultsCommentsCell1);
 			
-			PdfPCell resultsCommentsCell2=new PdfPCell();
-			p1=new Paragraph(resultsComments,plainFont);
-			resultsCommentsCell2.addElement(p1);
+			PdfPCell resultsCommentsCell2=new PdfPCell(resultsCommentsTable);
 			resultsCommentsCell2.setBorder(0);
 			mainLayout.addCell(resultsCommentsCell2);
 			
 			/**
 			 * Accession Instrument cell
 			 */
-			AmpCategoryValue ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromList(CategoryConstants.ACCESSION_INSTRUMENT_NAME, activity.getCategories());
-			Long accessionInstrument=null;
-            if (ampCategoryValue != null) {
-              	accessionInstrument=ampCategoryValue.getId();
-            }
-			if(accessionInstrument!=null){
+			AmpCategoryValue catVal=null;
+			if(myForm.getIdentification().getAccessionInstrument()!=null && myForm.getIdentification().getAccessionInstrument().longValue()>0){
 				PdfPCell accessionInstrumentCell1=new PdfPCell();
-				p1=new Paragraph(TranslatorWorker.translateText("Accession Instrument",locale,siteId));
+				p1=new Paragraph(TranslatorWorker.translateText("Accession Instrument",locale,siteId),titleFont);
 				p1.setAlignment(Element.ALIGN_RIGHT);
 				accessionInstrumentCell1.addElement(p1);
 				accessionInstrumentCell1.setBackgroundColor(new Color(244,244,242));
@@ -383,17 +411,20 @@ public class ExportActivityToPDF extends Action {
 				mainLayout.addCell(accessionInstrumentCell1);
 				
 				PdfPCell accessionInstrumentCell2=new PdfPCell();
-				p1=new Paragraph(accessionInstrument.toString(),plainFont);
+				catVal=CategoryManagerUtil.getAmpCategoryValueFromDb(myForm.getIdentification().getAccessionInstrument());
+				if(catVal!=null){
+					String translatedValue	= CategoryManagerUtil.translateAmpCategoryValue(catVal, request);
+					p1=new Paragraph(translatedValue,plainFont);
+				}				
 				accessionInstrumentCell2.addElement(p1);
 				accessionInstrumentCell2.setBorder(0);
 				mainLayout.addCell(accessionInstrumentCell2);
 			}
 			
-			// A.C. Chapter cell
-			ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromList(CategoryConstants.ACCHAPTER_NAME,activity.getCategories());
-			if(ampCategoryValue!=null){
+			// A.C. Chapter cell			
+			if(myForm.getIdentification().getAcChapter()!=null && myForm.getIdentification().getAcChapter().longValue()>0){
 				PdfPCell chapterCell1=new PdfPCell();
-				p1=new Paragraph(TranslatorWorker.translateText("A.C. Chapter",locale,siteId),new Font(Font.BOLD));
+				p1=new Paragraph(TranslatorWorker.translateText("A.C. Chapter",locale,siteId),titleFont);
 				p1.setAlignment(Element.ALIGN_RIGHT);
 				chapterCell1.addElement(p1);
 				chapterCell1.setBackgroundColor(new Color(244,244,242));
@@ -401,7 +432,11 @@ public class ExportActivityToPDF extends Action {
 				mainLayout.addCell(chapterCell1);
 				
 				PdfPCell chapterCell2=new PdfPCell();
-				p1=new Paragraph(ampCategoryValue.getId().toString(),plainFont);
+				catVal=CategoryManagerUtil.getAmpCategoryValueFromDb(myForm.getIdentification().getAcChapter());
+				if(catVal!=null){
+					String translatedValue	= CategoryManagerUtil.translateAmpCategoryValue(catVal, request);
+					p1=new Paragraph(translatedValue,plainFont);
+				}				
 				chapterCell2.addElement(p1);
 				chapterCell2.setBorder(0);
 				mainLayout.addCell(chapterCell2);
@@ -409,7 +444,7 @@ public class ExportActivityToPDF extends Action {
 			
 			//Cris Number
 			PdfPCell crisNumberCell1=new PdfPCell();
-			p1=new Paragraph(TranslatorWorker.translateText("Cris Number",locale,siteId));
+			p1=new Paragraph(TranslatorWorker.translateText("Cris Number",locale,siteId),titleFont);
 			p1.setAlignment(Element.ALIGN_RIGHT);
 			crisNumberCell1.addElement(p1);
 			crisNumberCell1.setBackgroundColor(new Color(244,244,242));
@@ -422,11 +457,10 @@ public class ExportActivityToPDF extends Action {
 			crisNumberCell2.setBorder(0);
 			mainLayout.addCell(crisNumberCell2);
 			
-			//Project Category
-			ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromList(CategoryConstants.PROJECT_CATEGORY_NAME, activity.getCategories());
-			if(ampCategoryValue!=null){
+			//Project Category			
+			if(myForm.getIdentification().getProjectCategory()!=null && myForm.getIdentification().getProjectCategory().longValue()>0){
 				PdfPCell projCatCell1=new PdfPCell();
-				p1=new Paragraph(TranslatorWorker.translateText("Project Category",locale,siteId));
+				p1=new Paragraph(TranslatorWorker.translateText("Project Category",locale,siteId),titleFont);
 				p1.setAlignment(Element.ALIGN_RIGHT);
 				projCatCell1.addElement(p1);
 				projCatCell1.setBackgroundColor(new Color(244,244,242));
@@ -434,7 +468,11 @@ public class ExportActivityToPDF extends Action {
 				mainLayout.addCell(projCatCell1);
 				
 				PdfPCell projCatCell2=new PdfPCell();
-				p1=new Paragraph(ampCategoryValue.getId().toString(), plainFont);
+				catVal=CategoryManagerUtil.getAmpCategoryValueFromDb(myForm.getIdentification().getProjectCategory());
+				if(catVal!=null){
+					String translatedValue	= CategoryManagerUtil.translateAmpCategoryValue(catVal, request);
+					p1=new Paragraph(translatedValue,plainFont);
+				}
 				projCatCell2.addElement(p1);
 				projCatCell2.setBorder(0);
 				mainLayout.addCell(projCatCell2);
@@ -450,7 +488,7 @@ public class ExportActivityToPDF extends Action {
 			
 			if(budget.length()>0){
 				PdfPCell budgetCell1=new PdfPCell();
-				p1=new Paragraph(TranslatorWorker.translateText("Budget",locale,siteId));
+				p1=new Paragraph(TranslatorWorker.translateText("Budget",locale,siteId),titleFont);
 				budgetCell1.addElement(p1);
 				p1.setAlignment(Element.ALIGN_RIGHT);
 				budgetCell1.setBackgroundColor(new Color(244,244,242));
@@ -476,7 +514,7 @@ public class ExportActivityToPDF extends Action {
 			
 			if(value.length()>0){
 				PdfPCell humAinCell1=new PdfPCell();
-				p1=new Paragraph(TranslatorWorker.translateText("Humanitarian Aid",locale,siteId));
+				p1=new Paragraph(TranslatorWorker.translateText("Humanitarian Aid",locale,siteId),titleFont);
 				p1.setAlignment(Element.ALIGN_RIGHT);
 				humAinCell1.addElement(p1);
 				humAinCell1.setBackgroundColor(new Color(244,244,242));
@@ -490,54 +528,33 @@ public class ExportActivityToPDF extends Action {
 				mainLayout.addCell(humAinCell2);
 			}
 			
-			//Organizations and Project IDs
-			OrgProjectId orgProjectIds[]=null;
+			//Organizations and Project IDs			
+			PdfPCell orgProjCell1=new PdfPCell();
+        	p1=new Paragraph(TranslatorWorker.translateText("Organizations and Project IDs",locale,siteId),titleFont);
+        	p1.setAlignment(Element.ALIGN_RIGHT);
+			orgProjCell1.addElement(p1);
+			orgProjCell1.setBackgroundColor(new Color(244,244,242));
+			orgProjCell1.setBorder(0);
+			mainLayout.addCell(orgProjCell1);
 			
-			Collection orgProjIdsSet = DbUtil.getActivityInternalId(activity.getAmpActivityId());
-            if(orgProjIdsSet != null) {
-                Iterator projIdItr = orgProjIdsSet.iterator();
-                Collection temp = new ArrayList();
-                while(projIdItr.hasNext()) {
-                    AmpActivityInternalId actIntId = (AmpActivityInternalId) projIdItr.next();
-                    OrgProjectId projId = new OrgProjectId();
-                    projId.setId(actIntId.getId());
-                     projId.setProjectId(actIntId.getInternalId());
-                    temp.add(projId);
-                }
-                if(temp != null && temp.size() > 0) {
-                    orgProjectIds = new OrgProjectId[temp.size()];
-                    Object arr[] = temp.toArray();
-                    for(int i = 0; i < arr.length; i++) {
-                        orgProjectIds[i] = (OrgProjectId) arr[i];
-                    }                    
-                }
-                
-                if(orgProjectIds!=null){
-                	String resultString="";
-                	for (int i=0;i<orgProjectIds.length;i++) {
-						resultString+=orgProjectIds[i].getOrganisation().getName()+" "+orgProjectIds[i].getProjectId()+"\n";
+			com.lowagie.text.List orgsList=new com.lowagie.text.List(false,20);  //is not numbered list
+			orgsList.setListSymbol(new Chunk("\u2022"));
+			if(myForm.getIdentification().getSelectedOrganizations()!=null){
+				for (OrgProjectId selectedOrgForPopup : myForm.getIdentification().getSelectedOrganizations()) {
+					if(selectedOrgForPopup!=null && selectedOrgForPopup.getOrganisation()!=null){
+						ListItem orgItem=new ListItem(new Phrase("["+selectedOrgForPopup.getOrganisation().getName()+"]",plainFont));
+						orgsList.add(orgItem);
 					}
-                	
-                	//create cells
-                	PdfPCell orgProjCell1=new PdfPCell();
-                	p1=new Paragraph(TranslatorWorker.translateText("Organizations and Project IDs",locale,siteId));
-                	p1.setAlignment(Element.ALIGN_RIGHT);
-    				orgProjCell1.addElement(p1);
-    				orgProjCell1.setBackgroundColor(new Color(244,244,242));
-    				orgProjCell1.setBorder(0);
-    				mainLayout.addCell(orgProjCell1);
-    				
-    				PdfPCell orgProjCell2=new PdfPCell();
-    				p1=new Paragraph(resultString,plainFont);
-    				orgProjCell2.addElement(p1);
-    				orgProjCell2.setBorder(0);
-    				mainLayout.addCell(orgProjCell2);
-                }
-            }
-            
+				}
+			}
+			 
+			PdfPCell orgProjCell2=new PdfPCell();			
+			orgProjCell2.addElement(orgsList);
+			orgProjCell2.setBorder(0);
+			mainLayout.addCell(orgProjCell2);
             //Planning
         	PdfPCell planningCell1=new PdfPCell();
-        	p1=new Paragraph(TranslatorWorker.translateText("Planning",locale,siteId));
+        	p1=new Paragraph(TranslatorWorker.translateText("Planning",locale,siteId),titleFont);
         	p1.setAlignment(Element.ALIGN_RIGHT);
 			planningCell1.addElement(p1);
 			planningCell1.setBackgroundColor(new Color(244,244,242));
@@ -574,7 +591,7 @@ public class ExportActivityToPDF extends Action {
 			
 			//status
 			PdfPCell statusCell1=new PdfPCell();
-			p1=new Paragraph(TranslatorWorker.translateText("Status",locale,siteId));
+			p1=new Paragraph(TranslatorWorker.translateText("Status",locale,siteId),titleFont);
 			p1.setAlignment(Element.ALIGN_RIGHT);
 			statusCell1.addElement(p1);
 			statusCell1.setBackgroundColor(new Color(244,244,242));
@@ -583,11 +600,11 @@ public class ExportActivityToPDF extends Action {
 			
 			PdfPCell statusCell2=new PdfPCell();
 			String translatedValue="";
-			AmpCategoryValue catVal=CategoryManagerUtil.getAmpCategoryValueFromDb(myForm.getPlanning().getStatusId());
+			catVal=CategoryManagerUtil.getAmpCategoryValueFromDb(myForm.getPlanning().getStatusId());
 			if(catVal!=null){
 				translatedValue	= CategoryManagerUtil.translateAmpCategoryValue(catVal, request);
 			}
-			p1=new Paragraph(translatedValue+myForm.getPlanning().getStatusReason()!=null && myForm.getPlanning().getStatusReason().length()>0?"\n"+myForm.getPlanning().getStatusReason():"",plainFont);
+			p1=new Paragraph(translatedValue+"\n"+myForm.getPlanning().getStatusReason(),plainFont);
 			statusCell2.addElement(p1);
 			statusCell2.setBorder(0);
 			mainLayout.addCell(statusCell2);
@@ -597,7 +614,7 @@ public class ExportActivityToPDF extends Action {
 
         	if (catValues!=null){
         		PdfPCell referenceCell1=new PdfPCell();
-        		p1=new Paragraph(TranslatorWorker.translateText("References",locale,siteId));
+        		p1=new Paragraph(TranslatorWorker.translateText("References",locale,siteId),titleFont);
         		p1.setAlignment(Element.ALIGN_RIGHT);
         		referenceCell1.addElement(p1);
         		referenceCell1.setBackgroundColor(new Color(244,244,242));
@@ -624,7 +641,7 @@ public class ExportActivityToPDF extends Action {
         	//locations
         	if(myForm.getLocation().getSelectedLocs()!=null){
         		PdfPCell locationsCell1=new PdfPCell();
-        		p1=new Paragraph(TranslatorWorker.translateText("Locations",locale,siteId));
+        		p1=new Paragraph(TranslatorWorker.translateText("Locations",locale,siteId),titleFont);
         		p1.setAlignment(Element.ALIGN_RIGHT);
     			locationsCell1.addElement(p1);
     			locationsCell1.setBackgroundColor(new Color(244,244,242));
@@ -658,7 +675,7 @@ public class ExportActivityToPDF extends Action {
         	//level
         	if(myForm.getLocation()!=null && myForm.getLocation().getLevelId()!=null && myForm.getLocation().getLevelId()>0){
         		PdfPCell levelCell1=new PdfPCell();
-        		p1=new Paragraph(TranslatorWorker.translateText("Level",locale,siteId));
+        		p1=new Paragraph(TranslatorWorker.translateText("Level",locale,siteId),titleFont);
         		p1.setAlignment(Element.ALIGN_RIGHT);
     			levelCell1.addElement(p1);
     			levelCell1.setBackgroundColor(new Color(244,244,242));
@@ -679,7 +696,7 @@ public class ExportActivityToPDF extends Action {
         	
         	//Sector
         	PdfPCell sectorCell1=new PdfPCell();
-        	p1=new Paragraph(TranslatorWorker.translateText("Sectors",locale,siteId));
+        	p1=new Paragraph(TranslatorWorker.translateText("Sectors",locale,siteId),titleFont);
         	p1.setAlignment(Element.ALIGN_RIGHT);
 			sectorCell1.addElement(p1);
 			sectorCell1.setBackgroundColor(new Color(244,244,242));
@@ -725,7 +742,7 @@ public class ExportActivityToPDF extends Action {
 			Collection<ActivitySector> components=myForm.getComponents().getActivityComponentes();
 			if(components!=null){
 				PdfPCell componentsCell1=new PdfPCell();
-				p1=new Paragraph(TranslatorWorker.translateText("Components",locale,siteId));
+				p1=new Paragraph(TranslatorWorker.translateText("Components",locale,siteId),titleFont);
 				p1.setAlignment(Element.ALIGN_RIGHT);
 				componentsCell1.addElement(p1);
 				componentsCell1.setBackgroundColor(new Color(244,244,242));
@@ -747,7 +764,7 @@ public class ExportActivityToPDF extends Action {
 			//National Plan Objective
 			if(myForm.getPrograms().getNationalPlanObjectivePrograms()!=null){
 				PdfPCell natPlanObjCell1=new PdfPCell();
-				p1=new Paragraph(TranslatorWorker.translateText("National Plan Objective",locale,siteId));
+				p1=new Paragraph(TranslatorWorker.translateText("National Plan Objective",locale,siteId),titleFont);
 				p1.setAlignment(Element.ALIGN_RIGHT);
 				natPlanObjCell1.addElement(p1);
 				natPlanObjCell1.setBackgroundColor(new Color(244,244,242));
@@ -766,7 +783,7 @@ public class ExportActivityToPDF extends Action {
 			//Primary Programs
 			if(myForm.getPrograms().getPrimaryPrograms()!=null){
 				PdfPCell primaryProgCell1=new PdfPCell();
-				p1=new Paragraph(TranslatorWorker.translateText("Primary Programs",locale,siteId));
+				p1=new Paragraph(TranslatorWorker.translateText("Primary Programs",locale,siteId),titleFont);
 				p1.setAlignment(Element.ALIGN_RIGHT);
 				primaryProgCell1.addElement(p1);
 				primaryProgCell1.setBackgroundColor(new Color(244,244,242));
@@ -785,7 +802,7 @@ public class ExportActivityToPDF extends Action {
 			//secondary Programs
 			if(myForm.getPrograms().getSecondaryPrograms()!=null){
 				PdfPCell secondaryProgCell1=new PdfPCell();
-				p1=new Paragraph(TranslatorWorker.translateText("Secondary Programs",locale,siteId));
+				p1=new Paragraph(TranslatorWorker.translateText("Secondary Programs",locale,siteId),titleFont);
 				p1.setAlignment(Element.ALIGN_RIGHT);
 				secondaryProgCell1.addElement(p1);
 				secondaryProgCell1.setBackgroundColor(new Color(244,244,242));
@@ -810,7 +827,7 @@ public class ExportActivityToPDF extends Action {
 			 * Regional Funding
 			 */
 			PdfPCell regFundingCell1=new PdfPCell();
-			p1=new Paragraph(TranslatorWorker.translateText("Regional Funding",locale,siteId));
+			p1=new Paragraph(TranslatorWorker.translateText("Regional Funding",locale,siteId),titleFont);
 			p1.setAlignment(Element.ALIGN_RIGHT);
 			regFundingCell1.addElement(p1);
 			regFundingCell1.setBackgroundColor(new Color(244,244,242));
@@ -867,7 +884,7 @@ public class ExportActivityToPDF extends Action {
 			 * Related organizations
 			 */
 			PdfPCell relOrgCell1=new PdfPCell();
-			p1=new Paragraph(TranslatorWorker.translateText("Related Organizations", locale, siteId)+":");
+			p1=new Paragraph(TranslatorWorker.translateText("Related Organizations", locale, siteId)+":",titleFont);
 			p1.setAlignment(Element.ALIGN_RIGHT);
 			relOrgCell1.setBorder(0);
 			relOrgCell1.addElement(p1);
@@ -911,7 +928,7 @@ public class ExportActivityToPDF extends Action {
 			 */
 			PdfPCell costCell1=new PdfPCell();
 			costCell1.setBorder(0);
-			p1=new Paragraph(TranslatorWorker.translateText("Proposed Project Cost", locale, siteId));
+			p1=new Paragraph(TranslatorWorker.translateText("Proposed Project Cost", locale, siteId),titleFont);
 			p1.setAlignment(Element.ALIGN_RIGHT);
 			costCell1.addElement(p1);
 			costCell1.setBackgroundColor(new Color(244,244,242));			
@@ -946,7 +963,7 @@ public class ExportActivityToPDF extends Action {
 			PdfPCell createdBy1=new PdfPCell();
 			createdBy1.setBorder(0);
 			createdBy1.setBackgroundColor(new Color(244,244,242));
-			Paragraph createdBy1P=new Paragraph(TranslatorWorker.translateText("Activity created by", locale, siteId));
+			Paragraph createdBy1P=new Paragraph(TranslatorWorker.translateText("Activity created by", locale, siteId),titleFont);
 			createdBy1P.setAlignment(Element.ALIGN_RIGHT);
 			createdBy1.addElement(createdBy1P);
 			mainLayout.addCell(createdBy1);
@@ -963,7 +980,7 @@ public class ExportActivityToPDF extends Action {
 			PdfPCell dataSource1=new PdfPCell();
 			dataSource1.setBorder(0);
 			dataSource1.setBackgroundColor(new Color(244,244,242));
-			Paragraph dataSource1P=new Paragraph(TranslatorWorker.translateText("Data Source", locale, siteId));
+			Paragraph dataSource1P=new Paragraph(TranslatorWorker.translateText("Data Source", locale, siteId),titleFont);
 			dataSource1P.setAlignment(Element.ALIGN_RIGHT);
 			dataSource1.addElement(dataSource1P);
 			mainLayout.addCell(dataSource1);
@@ -980,7 +997,7 @@ public class ExportActivityToPDF extends Action {
 			PdfPCell updatedOn1=new PdfPCell();
 			updatedOn1.setBorder(0);
 			updatedOn1.setBackgroundColor(new Color(244,244,242));
-			Paragraph updatedOn1P=new Paragraph(TranslatorWorker.translateText("Updated On", locale, siteId));
+			Paragraph updatedOn1P=new Paragraph(TranslatorWorker.translateText("Updated On", locale, siteId),titleFont);
 			updatedOn1P.setAlignment(Element.ALIGN_RIGHT);
 			updatedOn1.addElement(updatedOn1P);
 			mainLayout.addCell(updatedOn1);
@@ -997,15 +1014,17 @@ public class ExportActivityToPDF extends Action {
 			PdfPCell updatedBy1=new PdfPCell();
 			updatedBy1.setBorder(0);
 			updatedBy1.setBackgroundColor(new Color(244,244,242));
-			Paragraph updatedBy1P=new Paragraph(TranslatorWorker.translateText("Activity updated by", locale, siteId));
+			Paragraph updatedBy1P=new Paragraph(TranslatorWorker.translateText("Activity updated by", locale, siteId),titleFont);
 			updatedBy1P.setAlignment(Element.ALIGN_RIGHT);
 			updatedBy1.addElement(updatedBy1P);
 			mainLayout.addCell(updatedBy1);
 			
 			PdfPCell updatedBy2=new PdfPCell();
 			updatedBy2.setBorder(0);
-			Paragraph updatedBy2P=new Paragraph(myForm.getIdentification().getUpdatedBy().getUser().getFirstNames()+" "+myForm.getIdentification().getUpdatedBy().getUser().getLastName()+"-"+myForm.getIdentification().getUpdatedBy().getUser().getEmail(),plainFont);
-			updatedBy2.addElement(updatedBy2P);
+			if(myForm.getIdentification().getUpdatedBy()!=null){
+				Paragraph updatedBy2P=new Paragraph(myForm.getIdentification().getUpdatedBy().getUser().getFirstNames()+" "+myForm.getIdentification().getUpdatedBy().getUser().getLastName()+"-"+myForm.getIdentification().getUpdatedBy().getUser().getEmail(),plainFont);
+				updatedBy2.addElement(updatedBy2P);
+			}			
 			mainLayout.addCell(updatedBy2);
 			
 			/**
@@ -1014,7 +1033,7 @@ public class ExportActivityToPDF extends Action {
 			PdfPCell createdOn1=new PdfPCell();
 			createdOn1.setBorder(0);
 			createdOn1.setBackgroundColor(new Color(244,244,242));
-			Paragraph createdOn1P=new Paragraph(TranslatorWorker.translateText("Created On", locale, siteId));
+			Paragraph createdOn1P=new Paragraph(TranslatorWorker.translateText("Created On", locale, siteId),titleFont);
 			createdOn1P.setAlignment(Element.ALIGN_RIGHT);
 			createdOn1.addElement(createdOn1P);
 			mainLayout.addCell(createdOn1);
@@ -1033,7 +1052,7 @@ public class ExportActivityToPDF extends Action {
 					PdfPCell customFields1=new PdfPCell();
 					customFields1.setBorder(0);
 					customFields1.setBackgroundColor(new Color(244,244,242));
-					Paragraph customFields1P=new Paragraph(TranslatorWorker.translateText(customField.getName(), locale, siteId));
+					Paragraph customFields1P=new Paragraph(TranslatorWorker.translateText(customField.getName(), locale, siteId),titleFont);
 					customFields1P.setAlignment(Element.ALIGN_RIGHT);
 					customFields1.addElement(customFields1P);
 					mainLayout.addCell(customFields1);
@@ -1062,9 +1081,9 @@ public class ExportActivityToPDF extends Action {
 						}
 						customFields2P=new Paragraph(outputVal,plainFont);
 					}else if(customField instanceof CheckCustomField){
-						if(customField.getValue().equals("true")){
+						if(((CheckCustomField)customField).getValue()){
 							customFields2P=new Paragraph(((CheckCustomField)customField).getLabelTrue(),plainFont);
-						}else if(customField.getValue().equals("false")){
+						}else if(!((CheckCustomField)customField).getValue()){
 							customFields2P=new Paragraph(((CheckCustomField)customField).getLabelFalse(),plainFont);
 						}
 					}else{
@@ -1084,7 +1103,7 @@ public class ExportActivityToPDF extends Action {
 			PdfPCell actPerformanceCell1=new PdfPCell();
 			actPerformanceCell1.setBorder(0);
 			actPerformanceCell1.setBackgroundColor(new Color(244,244,242));
-			p1=new Paragraph(TranslatorWorker.translateText("Activity Performance", locale, siteId));
+			p1=new Paragraph(TranslatorWorker.translateText("Activity Performance", locale, siteId),titleFont);
 			p1.setAlignment(Element.ALIGN_RIGHT);
 			actPerformanceCell1.addElement(p1);			
 			mainLayout.addCell(actPerformanceCell1);
@@ -1129,7 +1148,7 @@ public class ExportActivityToPDF extends Action {
 			PdfPCell riskCell1=new PdfPCell();
 			riskCell1.setBorder(0);
 			riskCell1.setBackgroundColor(new Color(244,244,242));
-			p1=new Paragraph(TranslatorWorker.translateText("Activity Risk", locale, siteId));
+			p1=new Paragraph(TranslatorWorker.translateText("Activity Risk", locale, siteId),titleFont);
 			p1.setAlignment(Element.ALIGN_RIGHT);
 			riskCell1.addElement(p1);
 			mainLayout.addCell(riskCell1);
@@ -1171,13 +1190,26 @@ public class ExportActivityToPDF extends Action {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	//cuts <p> and </p> tags from editTag value
+	private String processEditTagValue(HttpServletRequest request,String editTagKey) throws Exception {
+		int startInex;
+		int endIndex;
+		String projectComments=getEditTagValue(request,editTagKey);
+		startInex=projectComments.indexOf("<p>");
+		endIndex=projectComments.indexOf("</p>");
+		if(startInex!=-1 && endIndex!=-1 && startInex<endIndex){
+			projectComments=projectComments.substring(startInex+3, endIndex);
+		}
+		return projectComments;
+	}
 
 	private void buildIssuesPart(EditActivityForm myForm, PdfPTable mainLayout)	throws WorkerException {
 		Paragraph p1;
 		PdfPCell issuesCell1=new PdfPCell();
 		issuesCell1.setBackgroundColor(new Color(244,244,242));
 		issuesCell1.setBorder(0);
-		p1=new Paragraph(TranslatorWorker.translateText("Issues", locale, siteId));
+		p1=new Paragraph(TranslatorWorker.translateText("Issues", locale, siteId),titleFont);
 		p1.setAlignment(Element.ALIGN_RIGHT);
 		issuesCell1.addElement(p1);			
 		mainLayout.addCell(issuesCell1);
@@ -1220,7 +1252,7 @@ public class ExportActivityToPDF extends Action {
 		PdfPCell costingCell1=new PdfPCell();
 		costingCell1.setBorder(0);
 		costingCell1.setBackgroundColor(new Color(244,244,242));
-		p1=new Paragraph(TranslatorWorker.translateText("Costing", locale, siteId));
+		p1=new Paragraph(TranslatorWorker.translateText("Costing", locale, siteId),titleFont);
 		p1.setAlignment(Element.ALIGN_RIGHT);
 		costingCell1.addElement(p1);			
 		mainLayout.addCell(costingCell1);
@@ -1231,17 +1263,17 @@ public class ExportActivityToPDF extends Action {
 		PdfPTable costingInnerTable=new PdfPTable(3); //table with 3 cells
 		BigDecimal grandCost = new BigDecimal(0);
 		BigDecimal grandContribution = new BigDecimal(0);
-			PdfPCell nameCell=new PdfPCell(new Paragraph(TranslatorWorker.translateText("name", locale, siteId)));
+			PdfPCell nameCell=new PdfPCell(new Paragraph(TranslatorWorker.translateText("name", locale, siteId),titleFont));
 			nameCell.setBorder(0);
 			nameCell.setBackgroundColor(new Color(244,244,242));
 			costingInnerTable.addCell(nameCell);
 			
-			PdfPCell totalCostCell=new PdfPCell(new Paragraph(TranslatorWorker.translateText("Total Cost", locale, siteId)));
+			PdfPCell totalCostCell=new PdfPCell(new Paragraph(TranslatorWorker.translateText("Total Cost", locale, siteId),titleFont));
 			totalCostCell.setBorder(0);
 			totalCostCell.setBackgroundColor(new Color(244,244,242));
 			costingInnerTable.addCell(totalCostCell);
 			
-			PdfPCell totalContrCell=new PdfPCell(new Paragraph(TranslatorWorker.translateText("Total Contribution", locale, siteId)));
+			PdfPCell totalContrCell=new PdfPCell(new Paragraph(TranslatorWorker.translateText("Total Contribution", locale, siteId),titleFont));
 			totalContrCell.setBorder(0);
 			totalContrCell.setBackgroundColor(new Color(244,244,242));
 			costingInnerTable.addCell(totalContrCell);
@@ -1266,7 +1298,7 @@ public class ExportActivityToPDF extends Action {
 					if(euActivity.getTotalContributionsConverted()!=null){
 						grandContribution=grandContribution.add(euActivity.getTotalContributionsConverted());
 					}						
-					PdfPCell name=new PdfPCell(new Paragraph(euActivity.getName()));
+					PdfPCell name=new PdfPCell(new Paragraph(euActivity.getName(),titleFont));
 					name.setBorder(0);
 					name.setBackgroundColor(new Color(255,255,255));
 					costingInnerTable.addCell(name);
@@ -1328,7 +1360,7 @@ public class ExportActivityToPDF extends Action {
 			if(euActs!=null && euActs.size()>0){
 				PdfPCell totals=new PdfPCell();
 				totals.setBorder(0);
-				Paragraph total1=new Paragraph(TranslatorWorker.translateText("Totals", locale, siteId)+": ");
+				Paragraph total1=new Paragraph(TranslatorWorker.translateText("Totals", locale, siteId)+": ",titleFont);
 				total1.setAlignment(Element.ALIGN_RIGHT);
 				totals.addElement(total1);
 				costingInnerTable.addCell(totals);
@@ -1351,7 +1383,7 @@ public class ExportActivityToPDF extends Action {
 				
 				PdfPCell contGap=new PdfPCell();
 				contGap.setBorder(0);
-				Paragraph contGap1=new Paragraph(TranslatorWorker.translateText("Contribution Gap", locale, siteId)+": ");
+				Paragraph contGap1=new Paragraph(TranslatorWorker.translateText("Contribution Gap", locale, siteId)+": ",titleFont);
 				contGap1.setAlignment(Element.ALIGN_RIGHT);
 				contGap.addElement(contGap1);
 				costingInnerTable.addCell(contGap);
@@ -1381,7 +1413,7 @@ public class ExportActivityToPDF extends Action {
 		PdfPCell relDocCell1=new PdfPCell();
 		relDocCell1.setBackgroundColor(new Color(244,244,242));
 		relDocCell1.setBorder(0);
-		p1=new Paragraph(TranslatorWorker.translateText("Related Documents", locale, siteId));
+		p1=new Paragraph(TranslatorWorker.translateText("Related Documents", locale, siteId),titleFont);
 		p1.setAlignment(Element.ALIGN_RIGHT);
 		relDocCell1.addElement(p1);
 		mainLayout.addCell(relDocCell1);
@@ -1400,35 +1432,35 @@ public class ExportActivityToPDF extends Action {
 					docTableNameCell1.setBackgroundColor(new Color(255,255,255));
 					docTableNameCell1.setBorder(0);
 					relatedDocnested.addCell(docTableNameCell1);
-					PdfPCell docTableNameCell2=new PdfPCell(new Paragraph(new Phrase(doc.getFileName(), new Font(Font.ITALIC))));
+					PdfPCell docTableNameCell2=new PdfPCell(new Paragraph(new Phrase(doc.getFileName(),titleFont)));
 					docTableNameCell2.setBackgroundColor(new Color(255,255,255));
 					docTableNameCell2.setBorder(0);
 					relatedDocnested.addCell(docTableNameCell2);
 					
-					PdfPCell docTableDescCell1=new PdfPCell(new Paragraph(new Phrase(TranslatorWorker.translateText("Description", locale, siteId)+":",plainFont)));
+					PdfPCell docTableDescCell1=new PdfPCell(new Paragraph(new Phrase(TranslatorWorker.translateText("Description", locale, siteId)+":",titleFont)));
 					docTableDescCell1.setBackgroundColor(new Color(255,255,255));
 					docTableDescCell1.setBorder(0);
 					relatedDocnested.addCell(docTableDescCell1);
-					PdfPCell docTableDescCell2=new PdfPCell(new Paragraph(doc.getDocDescription(), new Font(Font.ITALIC)));
+					PdfPCell docTableDescCell2=new PdfPCell(new Paragraph(doc.getDocDescription(),plainFont));
 					docTableDescCell2.setBackgroundColor(new Color(255,255,255));
 					docTableDescCell2.setBorder(0);
 					relatedDocnested.addCell(docTableDescCell2);
 					
-					PdfPCell docTableDateCell1=new PdfPCell(new Paragraph(TranslatorWorker.translateText("Date", locale, siteId)+":",plainFont));
+					PdfPCell docTableDateCell1=new PdfPCell(new Paragraph(TranslatorWorker.translateText("Date", locale, siteId)+":",titleFont));
 					docTableDateCell1.setBackgroundColor(new Color(255,255,255));
 					docTableDateCell1.setBorder(0);
 					relatedDocnested.addCell(docTableDateCell1);
-					PdfPCell docTableDateCell2=new PdfPCell(new Paragraph(new Phrase(doc.getDate(), new Font(Font.ITALIC))));
+					PdfPCell docTableDateCell2=new PdfPCell(new Paragraph(new Phrase(doc.getDate(), plainFont)));
 					docTableDateCell2.setBackgroundColor(new Color(255,255,255));
 					docTableDateCell2.setBorder(0);
 					relatedDocnested.addCell(docTableDateCell2);
 					
 					if(doc.getDocType()!=null){
-						PdfPCell docTabletypeCell1=new PdfPCell(new Paragraph(TranslatorWorker.translateText("Document Type", locale, siteId)+":",plainFont));
+						PdfPCell docTabletypeCell1=new PdfPCell(new Paragraph(TranslatorWorker.translateText("Document Type", locale, siteId)+":",titleFont));
 						docTabletypeCell1.setBackgroundColor(new Color(255,255,255));
 						docTabletypeCell1.setBorder(0);
 						relatedDocnested.addCell(docTabletypeCell1);
-						PdfPCell docTabletypeCell2=new PdfPCell(new Paragraph(new Phrase(doc.getDocType(), new Font(Font.ITALIC))));
+						PdfPCell docTabletypeCell2=new PdfPCell(new Paragraph(new Phrase(doc.getDocType(), plainFont)));
 						docTabletypeCell2.setBackgroundColor(new Color(255,255,255));
 						docTabletypeCell2.setBorder(0);
 						relatedDocnested.addCell(docTabletypeCell2);
@@ -1439,7 +1471,7 @@ public class ExportActivityToPDF extends Action {
 			if(myForm.getDocuments().getCrDocuments()!=null && myForm.getDocuments().getCrDocuments().size()>0){
 				for (DocumentData crDoc : myForm.getDocuments().getCrDocuments()) {
 					//title
-					PdfPCell docTableNameCell1=new PdfPCell(new Paragraph(new Phrase(crDoc.getTitle())+"- \t"));
+					PdfPCell docTableNameCell1=new PdfPCell(new Paragraph(new Phrase(crDoc.getTitle())+"- \t",titleFont));
 					docTableNameCell1.setBackgroundColor(new Color(255,255,255));
 					docTableNameCell1.setBorder(1);
 					docTableNameCell1.setBorderColorLeft(Color.BLACK);
@@ -1450,7 +1482,7 @@ public class ExportActivityToPDF extends Action {
 					docTableNameCell2.setBorderColorRight(Color.BLACK);
 					relatedDocnested.addCell(docTableNameCell2);
 					//description
-					PdfPCell docTableDescCell1=new PdfPCell(new Paragraph(new Phrase(TranslatorWorker.translateText("Description", locale, siteId)+":")));
+					PdfPCell docTableDescCell1=new PdfPCell(new Paragraph(new Phrase(TranslatorWorker.translateText("Description", locale, siteId)+":",titleFont)));
 					docTableDescCell1.setBackgroundColor(new Color(255,255,255));
 					docTableDescCell1.setBorder(0);
 					relatedDocnested.addCell(docTableDescCell1);
@@ -1460,7 +1492,7 @@ public class ExportActivityToPDF extends Action {
 					relatedDocnested.addCell(docTableDescCell2);
 					//date
 					if(crDoc.getCalendar()!=null){
-						PdfPCell docTableDateCell1=new PdfPCell(new Paragraph(TranslatorWorker.translateText("Date", locale, siteId)+":"));
+						PdfPCell docTableDateCell1=new PdfPCell(new Paragraph(TranslatorWorker.translateText("Date", locale, siteId)+":",titleFont));
 						docTableDateCell1.setBackgroundColor(new Color(255,255,255));
 						docTableDateCell1.setBorder(0);
 						relatedDocnested.addCell(docTableDateCell1);
@@ -1477,29 +1509,29 @@ public class ExportActivityToPDF extends Action {
 		if(myForm.getDocuments().getLinksList()!=null && myForm.getDocuments().getLinksList().size()>0){				
 			for (RelatedLinks doc : (Collection<RelatedLinks>)myForm.getDocuments().getLinksList()) {	
 					//document fields						
-					PdfPCell docTableNameCell1=new PdfPCell(new Paragraph(new Phrase(doc.getRelLink().getTitle())+"- \t"));
+					PdfPCell docTableNameCell1=new PdfPCell(new Paragraph(new Phrase(doc.getRelLink().getTitle())+"- \t",titleFont));
 					docTableNameCell1.setBackgroundColor(new Color(255,255,255));
 					docTableNameCell1.setBorder(0);
 					relatedDocnested.addCell(docTableNameCell1);
-					PdfPCell docTableNameCell2=new PdfPCell(new Paragraph(new Phrase(doc.getRelLink().getUrl(), new Font(Font.ITALIC))));
+					PdfPCell docTableNameCell2=new PdfPCell(new Paragraph(new Phrase(doc.getRelLink().getUrl(),plainFont)));
 					docTableNameCell2.setBackgroundColor(new Color(255,255,255));
 					docTableNameCell2.setBorder(0);
 					relatedDocnested.addCell(docTableNameCell2);
 					
-					PdfPCell docTableDescCell1=new PdfPCell(new Phrase(TranslatorWorker.translateText("Description", locale, siteId)+":",plainFont));
+					PdfPCell docTableDescCell1=new PdfPCell(new Phrase(TranslatorWorker.translateText("Description", locale, siteId)+":",titleFont));
 					docTableDescCell1.setBackgroundColor(new Color(255,255,255));
 					docTableDescCell1.setBorder(0);
 					relatedDocnested.addCell(docTableDescCell1);
-					PdfPCell docTableDescCell2=new PdfPCell(new Paragraph(doc.getRelLink().getDescription(), new Font(Font.ITALIC)));
+					PdfPCell docTableDescCell2=new PdfPCell(new Paragraph(doc.getRelLink().getDescription(),plainFont));
 					docTableDescCell2.setBackgroundColor(new Color(255,255,255));
 					docTableDescCell2.setBorder(0);
 					relatedDocnested.addCell(docTableDescCell2);
 					
-					PdfPCell docTableDateCell1=new PdfPCell(new Paragraph(TranslatorWorker.translateText("Date", locale, siteId)+":",plainFont));
+					PdfPCell docTableDateCell1=new PdfPCell(new Paragraph(TranslatorWorker.translateText("Date", locale, siteId)+":",titleFont));
 					docTableDateCell1.setBackgroundColor(new Color(255,255,255));
 					docTableDateCell1.setBorder(0);
 					relatedDocnested.addCell(docTableDateCell1);
-					PdfPCell docTableDateCell2=new PdfPCell(new Paragraph(new Phrase(doc.getRelLink().getDate(), new Font(Font.ITALIC))));
+					PdfPCell docTableDateCell2=new PdfPCell(new Paragraph(new Phrase(doc.getRelLink().getDate(), plainFont)));
 					docTableDateCell2.setBackgroundColor(new Color(255,255,255));
 					docTableDateCell2.setBorder(0);
 					relatedDocnested.addCell(docTableDateCell2);				
@@ -1513,7 +1545,7 @@ public class ExportActivityToPDF extends Action {
 		Paragraph p1;
 		if(GlobalSettings.getInstance().getShowComponentFundingByYear()!=null){
 			PdfPCell compCell1=new PdfPCell();
-			p1=new Paragraph(TranslatorWorker.translateText("Components",locale,siteId));
+			p1=new Paragraph(TranslatorWorker.translateText("Components",locale,siteId),titleFont);
 			p1.setAlignment(Element.ALIGN_RIGHT);
 			compCell1.addElement(p1);
 			compCell1.setBackgroundColor(new Color(244,244,242));
@@ -1521,6 +1553,7 @@ public class ExportActivityToPDF extends Action {
 			mainLayout.addCell(compCell1);
 			//now we should create nested table and add it as second cell in mainLayout
 			PdfPTable componentsNestedTable = new PdfPTable(2);
+			componentsNestedTable.getDefaultCell().setBorder(1);
 			if(myForm.getComponents().getSelectedComponents()!=null){					
 				for (Components<FundingDetail> comp : myForm.getComponents().getSelectedComponents()) {
 					//first row- title
@@ -1528,7 +1561,7 @@ public class ExportActivityToPDF extends Action {
 					nestedCell1.setBackgroundColor(new Color(255,255,255));
 					nestedCell1.setBorder(0);
 					nestedCell1.setColspan(2);
-					p1=new Paragraph(TranslatorWorker.translateText(comp.getTitle(),locale,siteId));
+					p1=new Paragraph(TranslatorWorker.translateText(comp.getTitle(),locale,siteId),titleFont);
 					nestedCell1.addElement(p1);						
 					componentsNestedTable.addCell(nestedCell1);
 					
@@ -1553,7 +1586,7 @@ public class ExportActivityToPDF extends Action {
 						financeCompNestedCell.setBackgroundColor(new Color(244,244,242));
 						financeCompNestedCell.setBorder(0);
 						financeCompNestedCell.setColspan(2);
-						p1=new Paragraph(TranslatorWorker.translateText("Finance of the component",locale,siteId));
+						p1=new Paragraph(TranslatorWorker.translateText("Finance of the component",locale,siteId),titleFont);
 						p1.setAlignment(Element.ALIGN_LEFT);
 						financeCompNestedCell.addElement(p1);						
 						componentsNestedTable.addCell(financeCompNestedCell);
@@ -1562,8 +1595,8 @@ public class ExportActivityToPDF extends Action {
 							PdfPCell financeCell=new PdfPCell();
 							financeCell.setBorder(0);
 							financeCell.setColspan(2);
-							PdfPTable financeTable=new PdfPTable(5);
-							financeTable.setWidths(new float[]{2f,2f,2f,2f,1f});
+							PdfPTable financeTable=new PdfPTable(2);
+							financeTable.setWidths(new float[]{1f,4f});
 							buildFinanceInfoOutput(financeTable, TranslatorWorker.translateText("Commitment",locale,siteId),(List) comp.getCommitments());
 							financeCell.addElement(financeTable);
 							componentsNestedTable.addCell(financeCell);
@@ -1573,8 +1606,8 @@ public class ExportActivityToPDF extends Action {
 							PdfPCell financeCell=new PdfPCell();
 							financeCell.setBorder(0);
 							financeCell.setColspan(2);
-							PdfPTable financeTable=new PdfPTable(5);
-							financeTable.setWidths(new float[]{2f,2f,2f,2f,1f});
+							PdfPTable financeTable=new PdfPTable(2);
+							financeTable.setWidths(new float[]{1f,4f});
 							buildFinanceInfoOutput(financeTable, TranslatorWorker.translateText("Disbursment",locale,siteId),(List) comp.getDisbursements());
 							financeCell.addElement(financeTable);
 							componentsNestedTable.addCell(financeCell);
@@ -1584,8 +1617,8 @@ public class ExportActivityToPDF extends Action {
 							PdfPCell financeCell=new PdfPCell();
 							financeCell.setBorder(0);
 							financeCell.setColspan(2);
-							PdfPTable financeTable=new PdfPTable(5);
-							financeTable.setWidths(new float[]{2f,2f,2f,2f,1f});
+							PdfPTable financeTable=new PdfPTable(2);
+							financeTable.setWidths(new float[]{1f,4f});
 							buildFinanceInfoOutput(financeTable, TranslatorWorker.translateText("Expenditures",locale,siteId),(List) comp.getExpenditures());
 							financeCell.addElement(financeTable);
 							componentsNestedTable.addCell(financeCell);														
@@ -1621,7 +1654,7 @@ public class ExportActivityToPDF extends Action {
 								PdfPCell phProgressCell=new PdfPCell();
 								phProgressCell.setBackgroundColor(new Color(255,255,255));
 								phProgressCell.setBorder(0);
-								p1=new Paragraph(TranslatorWorker.translateText(phy.getTitle(),locale,siteId)+"-");									
+								p1=new Paragraph(TranslatorWorker.translateText(phy.getTitle(),locale,siteId)+"-",titleFont);									
 								phProgressCell.addElement(p1);									
 								componentsNestedTable.addCell(phProgressCell);
 								
@@ -1653,7 +1686,7 @@ public class ExportActivityToPDF extends Action {
 					}else if(GlobalSettings.getInstance().getShowComponentFundingByYear() ){ //true case
 						//comp code
 						PdfPCell compNestedCell=new PdfPCell();
-						p1=new Paragraph(TranslatorWorker.translateText("Component Code",locale,siteId)+":");
+						p1=new Paragraph(TranslatorWorker.translateText("Component Code",locale,siteId)+":",titleFont);
 						compNestedCell.addElement(p1);
 						compNestedCell.setBackgroundColor(new Color(255,255,255));
 						compNestedCell.setBorder(0);
@@ -1748,7 +1781,7 @@ public class ExportActivityToPDF extends Action {
 		Paragraph p1;
 		String output;
 		PdfPCell fundingCell1=new PdfPCell();
-		p1=new Paragraph(TranslatorWorker.translateText("Funding",locale,siteId));
+		p1=new Paragraph(TranslatorWorker.translateText("Funding",locale,siteId),titleFont);
 		p1.setAlignment(Element.ALIGN_RIGHT);
 		fundingCell1.addElement(p1);
 		fundingCell1.setBackgroundColor(new Color(244,244,242));
@@ -1758,9 +1791,11 @@ public class ExportActivityToPDF extends Action {
 		
 		PdfPTable fundingTable=new PdfPTable(3);
 		fundingTable.setWidths(new float[]{2f,2f,1f});
+		boolean drawTotals=false; //draw total planned commitment,total actual commitments e.t.c.
 		if(myForm.getFunding().getFundingOrganizations()!=null){				
 			for (FundingOrganization fundingOrganisation : myForm.getFunding().getFundingOrganizations()) {
 				if(fundingOrganisation.getFundings()!=null){
+					drawTotals=true;
 					for (Funding funding : (Collection<Funding>)fundingOrganisation.getFundings()) {
 						//general info rows
 						//funding org id 
@@ -2079,7 +2114,7 @@ public class ExportActivityToPDF extends Action {
 				
 			}
 			//totals
-			if(myForm.getFunding().getFundingOrganizations()!=null){
+			if(myForm.getFunding().getFundingOrganizations()!=null && drawTotals){
 				PdfPCell empty=new PdfPCell(new Paragraph("\n\n"));
 				empty.setBorder(0);
 				empty.setBackgroundColor(new Color(255,255,255));
@@ -2255,7 +2290,7 @@ public class ExportActivityToPDF extends Action {
 		PdfPCell cell1=new PdfPCell();
 		cell1.setBorder(0);
 		cell1.setBackgroundColor(new Color(244,244,242));
-		Paragraph paragraph=new Paragraph(TranslatorWorker.translateText(contactType, locale, siteId));
+		Paragraph paragraph=new Paragraph(TranslatorWorker.translateText(contactType, locale, siteId),titleFont);
 		paragraph.setAlignment(Element.ALIGN_RIGHT);
 		cell1.addElement(paragraph);
 		mainLayout.addCell(cell1);
@@ -2279,7 +2314,7 @@ public class ExportActivityToPDF extends Action {
 	 * builds all related organisations Info that should be exported to PDF
 	 */
 	private void buildRelatedOrganisationsOutput(PdfPTable relatedOrgsTable, String orgType , Collection<AmpOrganisation> orgs) throws WorkerException{
-		Paragraph paragraph=new Paragraph(new Paragraph(new Phrase(TranslatorWorker.translateText(orgType, locale, siteId)+":")));
+		Paragraph paragraph=new Paragraph(new Paragraph(new Phrase(TranslatorWorker.translateText(orgType, locale, siteId)+":",titleFont)));
 		PdfPCell orgTypeCell=new PdfPCell(paragraph);
 		orgTypeCell.setBorder(0);
 		orgTypeCell.setBackgroundColor(new Color(255,255,255));
@@ -2306,10 +2341,9 @@ public class ExportActivityToPDF extends Action {
 	/**
 	 * builds commitments, expenditures, disbursement data output
 	 */
-	private void buildFinanceInfoOutput(PdfPTable nestedTable,String elemntName, List<FundingDetail> listToIterate) throws WorkerException{
+	private void buildFinanceInfoOutput(PdfPTable nestedTable,String elemntName, List<FundingDetail> listToIterate) throws WorkerException,DocumentException{
 		PdfPCell cell=new PdfPCell();
 		cell.setBorder(0);
-		//cell.setBorderColor(Color.gray);
 		Paragraph paragraph=new Paragraph(elemntName,plainFont);
 		paragraph.setAlignment(Element.ALIGN_LEFT);
 		cell.addElement(paragraph);
@@ -2317,31 +2351,34 @@ public class ExportActivityToPDF extends Action {
 		cell.setBorder(0);
 		nestedTable.addCell(cell);
 		
-		for (FundingDetail fd : listToIterate) {
+		PdfPTable fdTable=new PdfPTable(4);
+		fdTable.setWidths(new float[]{2f,2f,2f,1f});
+		for (FundingDetail fd : listToIterate) {			
 			cell=new PdfPCell();
 			paragraph=new Paragraph(TranslatorWorker.translateText(fd.getAdjustmentTypeName(),locale,siteId),plainFont);
 			cell.addElement(paragraph);
 			cell.setBorder(0);
-			nestedTable.addCell(cell);
+			fdTable.addCell(cell);
 			
 			cell=new PdfPCell();
 			paragraph=new Paragraph(fd.getTransactionDate(),plainFont);
 			cell.addElement(paragraph);
 			cell.setBorder(0);
-			nestedTable.addCell(cell);
+			fdTable.addCell(cell);
 			
 			cell=new PdfPCell();
 			paragraph=new Paragraph(fd.getTransactionAmount()+fd.getCurrencyCode(),plainFont);
 			cell.addElement(paragraph);
 			cell.setBorder(0);
-			nestedTable.addCell(cell);
+			fdTable.addCell(cell);
 			
 			cell=new PdfPCell();
 			paragraph=new Paragraph(fd.getFormattedRate()!=null?fd.getFormattedRate():" ",plainFont);
 			cell.addElement(paragraph);
 			cell.setBorder(0);
-			nestedTable.addCell(cell);
+			fdTable.addCell(cell);
 		}
+		nestedTable.addCell(fdTable);
 	}
 
 	private String buildProgramsOutput(List<AmpActivityProgram> programs) {

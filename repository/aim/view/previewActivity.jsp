@@ -104,10 +104,7 @@ function viewChanges()
 }
 
 function exportToPdf (actId) {
-	<digi:context name="export" property="context/module/moduleinstance/exportActToPDF.do" />
-	document.aimEditActivityForm.action = "<%= export %>~activityid="+actId;
-	document.aimEditActivityForm.target = "_self";
-	document.aimEditActivityForm.submit();
+	openURLinResizableWindow("/exportActToPDF.do?activityid="+actId, 780, 500);
 }
 
 function expandAll() {
@@ -436,27 +433,30 @@ function collapseAll() {
 										 <logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 										 <field:display feature="Identification" name="Objective Assumption">
 										 	<logic:equal name="comments" property="key" value="Objective Assumption">
-												<logic:iterate name="comments" id="comment" property="value"
-													type="org.digijava.module.aim.dbentity.AmpComments"><b>
-													<digi:trn key="aim:objectiveAssumption">Objective Assumption</digi:trn>:</b>
+												<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
+													<b>
+														<digi:trn key="aim:objectiveAssumption">Objective Assumption</digi:trn>:
+													</b>
 													<bean:write name="comment" property="comment"/><br/>
                                         		</logic:iterate>
                                         	</logic:equal>
                                          </field:display>
                                          <field:display feature="Identification" name="Objective Verification">
                                         	<logic:equal name="comments" property="key" value="Objective Verification">
-												<logic:iterate name="comments" id="comment" property="value"
-													type="org.digijava.module.aim.dbentity.AmpComments"><b>
-													<digi:trn key="aim:objectiveVerification">Objective Verification</digi:trn>:</b>
+												<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
+													<b>
+														<digi:trn key="aim:objectiveVerification">Objective Verification</digi:trn>:
+													</b>
 													<bean:write name="comment" property="comment"/><br/>
                                         		</logic:iterate>
                                         	</logic:equal>
                                           </field:display>
                                         	<field:display feature="Identification" name="Objective Objectively Verifiable Indicators">
                                         	<logic:equal name="comments" property="key" value="Objective Objectively Verifiable Indicators">
-												<logic:iterate name="comments" id="comment" property="value"
-													type="org.digijava.module.aim.dbentity.AmpComments"><b>
-													<digi:trn key="aim:objectivelyVerificationIndicators">Objective Objectively Verifiable Indicators</digi:trn>:</b>
+												<logic:iterate name="comments" id="comment" property="value"type="org.digijava.module.aim.dbentity.AmpComments">
+													<b>
+														<digi:trn key="aim:objectivelyVerificationIndicators">Objective Objectively Verifiable Indicators</digi:trn>:
+													</b>
 													<bean:write name="comment" property="comment"/><br/>
                                         		</logic:iterate>
                                         	</logic:equal>

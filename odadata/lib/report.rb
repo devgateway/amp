@@ -20,9 +20,9 @@ module Report
       v.map { |name| "projects.#{name}_marker >= 1"}.join(" OR ") 
     },
     [:prj_status, :grant_loan, :aid_modality_id, :type_of_implementation] => 
-      lambda { |m, v| ["#{m} IN (?)", v] },
-    [:on_off_budget] =>
-      lambda { |m, v| ["fundings.on_budget IN (?)", v] }
+      lambda { |m, v| ["#{m} IN (?)", v] }#,
+    #[:on_off_budget] =>
+    #  lambda { |m, v| ["fundings.on_budget IN (?)", v] }
   }
   
   # Options for custom reports (fields available) => [field, caption, checked?]

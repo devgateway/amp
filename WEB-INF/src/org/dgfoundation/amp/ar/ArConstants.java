@@ -149,8 +149,9 @@ public final class ArConstants {
 	public final static String UNDISBURSED_BALANCE="Undisbursed Balance";
 	public final static String UNCOMMITTED_BALANCE="Uncommitted Balance";
 	public final static String TOTAL_COMMITMENTS="Total Commitments";
-	
-	//maldives only:
+	public final static String TOTAL_PERCENTAGE_OF_TOTAL_DISBURSEMENTS="Percentage Of Total Disbursements";
+
+//maldives only:
 //	public final static String SECTOR_PERCENTAGE="Sector Percentage";
 	
 	public final static String PERCENTAGE="Percentage";

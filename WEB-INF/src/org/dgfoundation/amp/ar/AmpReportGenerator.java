@@ -563,7 +563,8 @@ public class AmpReportGenerator extends ReportGenerator {
 		// perform removal of funding column if no measure except undisbursed
 		// balance is selected. in such case,we just need totals
 		// or if widget mode is true...
-		if ((reportMetadata.getMeasures().size() == 1 && (ARUtil.containsMeasure(ArConstants.UNDISBURSED_BALANCE, reportMetadata.getMeasures()) || ARUtil.containsMeasure(ArConstants.UNCOMMITTED_BALANCE,reportMetadata.getMeasures())))|| arf.isWidget())
+		if ((reportMetadata.getMeasures().size() == 1 && (ARUtil.containsMeasure(ArConstants.UNDISBURSED_BALANCE, reportMetadata.getMeasures()) 
+				|| ARUtil.containsMeasure(ArConstants.TOTAL_PERCENTAGE_OF_TOTAL_DISBURSEMENTS, reportMetadata.getMeasures()) || ARUtil.containsMeasure(ArConstants.UNCOMMITTED_BALANCE,reportMetadata.getMeasures())))|| arf.isWidget())
 			reportChild.removeColumnsByName(ArConstants.COLUMN_FUNDING);
 
 		// find out if this is a hierarchical report or not:

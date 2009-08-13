@@ -42,43 +42,11 @@ public class TextCellPDF extends PDFExporter {
 	/* (non-Javadoc)
 	 * @see org.dgfoundation.amp.ar.view.pdf.PDFExporter#generate()
 	 */
+	@Override
 	public void generate() {
 		TextCell c=(TextCell) item;
 		PdfPCell pdfc=null;
-		if(c.getColumn().getName().compareTo("Status")==0)
-		{
-			String actualStatus=c.toString();
-			
-			ReportData parent=(ReportData)c.getColumn().getParent();
-			while (parent.getReportMetadata()==null)
-			{
-				parent=parent.getParent();
-			}
-			//when we get to the top of the hierarchy we have access to AmpReports
-			
-			//requirements for translation purposes
-			TranslatorWorker translator=TranslatorWorker.getInstance();
-			String siteId=parent.getReportMetadata().getSiteId();
-			String locale=parent.getReportMetadata().getLocale();
-			
-			String finalStatus=new String();//the actual text to be added to the column
-			
-			String translatedStatus=null;
-			//String prefix="aim:";
-			try{
-				translatedStatus=TranslatorWorker.translateText(actualStatus,locale,siteId);
-			}catch (WorkerException e)
-				{e.printStackTrace();}
-			if (translatedStatus.compareTo("")==0)
-				translatedStatus=actualStatus;
-			finalStatus+=translatedStatus;
-
-			pdfc = new PdfPCell(new Paragraph(finalStatus,new Font(Font.COURIER, 9)));
-			
-		}
-		else 
-			pdfc = new PdfPCell(new Paragraph(c.toString(),new Font(Font.COURIER, 9)));
-		
+		pdfc = new PdfPCell(new Paragraph(c.toString(),new Font(Font.COURIER, 9)));
 		
 		table.addCell(pdfc);
 	}

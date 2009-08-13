@@ -17,8 +17,6 @@ import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.TextCell;
-import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.Html2TextCallback;
 
@@ -66,6 +64,7 @@ public class TextCellXLS extends XLSExporter {
 		return false;
 	}
 	
+	@Override
 	public void generate() {
 		TextCell c=(TextCell) item;
 		HSSFCell cell=this.getRegularCell();
@@ -76,71 +75,28 @@ public class TextCellXLS extends XLSExporter {
 		{
 			parent=parent.getParent();
 		}
-		String siteId=parent.getReportMetadata().getSiteId();
-		String locale=parent.getReportMetadata().getLocale();
-		
+	
+		//PLEASE USE TRNTEXTCELL.JAVA IF YOU NEED A TRANSLATION-ENABLED CELL.
+		//PLEASE DO NOT PUT ANY TranslatorWorker INVOCATIONS HERE, OR ANYWHRE ELSE IN THE EXPORTS, IT WILL BE ROLLED BACK
 		
 		if (colId.value == 0)
 			for (int k = 0; k < ((ReportData)c.getColumn().getParent()).getLevelDepth(); k++)
 				indent = indent + Constants.excelIndexString;
 		
-		if(c.getColumn().getName().compareTo("Status")==0)
-		{
-			String actualStatus=c.toString();
-			
-			//ReportData parent=(ReportData)c.getColumn().getParent();
-			while (parent.getReportMetadata()==null)
-			{
-				parent=parent.getParent();
-			}
-			//when we get to the top of the hierarchy we have access to AmpReports
-			
-			//requirements for translation purposes
-//			TranslatorWorker translator=TranslatorWorker.getInstance();
-//			String siteId=parent.getReportMetadata().getSiteId();
-//			String locale=parent.getReportMetadata().getLocale();
-			
-			String finalStatus=new String();//the actual text to be added to the column
-			
-			String translatedStatus=null;
-			//String prefix="aim:";
-			try{
-				translatedStatus=TranslatorWorker.translateText(actualStatus,locale,siteId);
-			}catch (WorkerException e)
-				{
-				e.printStackTrace();
-				}
-			if (translatedStatus.compareTo("")==0)
-				translatedStatus=actualStatus;
-			finalStatus+=translatedStatus;
-
-			cell.setCellValue(indent + finalStatus);
-		}
-		else
-			if (columnNeedsHTMLStripping(c.getColumn().getName())){
-				StringReader sr = new StringReader(c.toString());
-				Html2TextCallback h2t = new Html2TextCallback();
-				try {
-					h2t.parse(sr);
-					cell.setCellValue(indent + h2t.getText());
-				} catch (IOException e) {
-					e.printStackTrace();
-					cell.setCellValue(indent + c.toString());
-				}
-			}
-		else {
-			/* Normal text cell generation*/
-			String translatedCellValue = c.toString();
+		if (columnNeedsHTMLStripping(c.getColumn().getName())){
+			StringReader sr = new StringReader(c.toString());
+			Html2TextCallback h2t = new Html2TextCallback();
 			try {
-				translatedCellValue = TranslatorWorker.translateText(c.toString(), locale, siteId);
-			} catch (WorkerException e) {
-				//TODO add some cell identification values in warning message to make easy to find it. 
-				logger.warn("Error translating text cell value, using value without translation. See error below.");
-				logger.error(e);
+				h2t.parse(sr);
+				cell.setCellValue(indent + h2t.getText());
+			} catch (IOException e) {
+				e.printStackTrace();
+				cell.setCellValue(indent + c.toString());
 			}
-			cell.setCellValue(indent + translatedCellValue);
+		} else {
+			cell.setCellValue(indent + c.toString());
 		}
-		
+ 		
 		colId.inc();
 	}
 

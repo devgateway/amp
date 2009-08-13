@@ -3829,6 +3829,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
             this.fundingCurrCode=null;
             this.regFundingPageCurrCode=null;
             this.funding=null;
+            this.issues=null;
 			step = "1";
 			reset = false;
 			steps = null;

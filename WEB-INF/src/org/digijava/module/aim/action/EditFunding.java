@@ -105,7 +105,12 @@ public class EditFunding extends Action {
 									formBean.getOldFunding().setFundingMTEFProjections( new ArrayList<MTEFProjection> (funding.getMtefProjections()) );
 									formBean.getOldFunding().setFundingDetails(new ArrayList<FundingDetail>());
 								}
-
+								
+								formBean.getFunding().setDonorObjective(funding.getDonorObjective());
+								formBean.getOldFunding().setDonorObjective(funding.getDonorObjective());
+								formBean.getFunding().setFundingConditions(funding.getConditions());
+								formBean.getOldFunding().setFundingConditions(funding.getConditions());
+								
 								if (funding.getFundingDetails() != null) {
 									//
 									formBean.getFunding().getFundingDetails().addAll(funding.getFundingDetails());

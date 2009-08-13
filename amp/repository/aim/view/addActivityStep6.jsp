@@ -590,6 +590,7 @@ ${fn:replace(message,quote,escapedQuote)}
 												<bean:define toScope="request" id="showVersionsRights" value="false" />
 												<bean:define toScope="request" id="deleteRights" value="false" />
 												<bean:define toScope="request" id="crRights" value="true" />
+												<bean:define toScope="request" id="checkBoxToHide" value="false" />
 												<jsp:include page="/repository/contentrepository/view/showSelectedDocumentsDM.jsp"/>
 											</td>
 										</tr>

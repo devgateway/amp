@@ -21,12 +21,14 @@
 <!--
 
 	function validate() {
-		if(isEmpty(document.addActorForm.actor.value) == true) {
+	var meas = document.getElementsByName("issues.actor")[0];
+	if(isEmpty(meas.value) == true) {
 			alert("Please enter the actor");
-			document.addActorForm.actor.focus();
+			meas.focus();
 			return false;
 		}
 		return true;
+
 	}
 
 	function addActor() {
@@ -42,6 +44,11 @@
 	function load() {}
 
 	function unload() {}
+
+	function clearField(){
+		document.getElementsByName("issues.actor")[0].value="";
+		return true;
+	}
 
 -->
 </script>
@@ -69,7 +76,7 @@
 										</td>
 										<td valign="top">
 											 <a title="<digi:trn key="aim:actorsForTheMeasures">Actors</digi:trn>">
-												<html:textarea property="issues.actor" styleClass="inp-text" rows="3" cols="60"/>
+												<html:textarea property="issues.actor" styleClass="inp-text" rows="3" cols="60" />
 											 </a>
 										</td>
 									</tr>
@@ -87,7 +94,7 @@
 														</c:if>
 													</td>
 													<td>
-														<input type="reset" value="<digi:trn key='btn:clear'>Clear</digi:trn>" class="dr-menu">
+														<input type="button" value="<digi:trn key='btn:clear'>Clear</digi:trn>" class="dr-menu" onclick="javascript:return clearField()">
 													</td>
 													
 												</tr>

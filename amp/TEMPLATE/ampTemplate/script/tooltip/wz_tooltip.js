@@ -491,7 +491,8 @@ function tt_HideSrcTags()
 }
 function tt_HideSrcTagsRecurs(dad)
 {
-	var ovr, asT2t;
+	//changes made for AMP-6397
+	/*var ovr, asT2t;
 	// Walk the DOM tree for tags that have an onmouseover or onclick attribute
 	// containing a TagToTip('...') call.
 	// (.childNodes first since .children is bugous in Safari)
@@ -513,7 +514,7 @@ function tt_HideSrcTagsRecurs(dad)
 					return false;
 			}
 		}
-	}
+	}*/
 	return true;
 }
 function tt_HideSrcTag(sT2t)

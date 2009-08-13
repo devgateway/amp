@@ -31,6 +31,8 @@ public class AmountCell extends Cell {
 
 	protected BigDecimal amount;
 
+	protected double originalAmount;
+	
 	protected double percentage = 100;
 
 	protected Set mergedCells;
@@ -263,6 +265,18 @@ public class AmountCell extends Cell {
 		return resultDbl;// Math.round(resultDbl);
 	}
 
+	public double convert(double mnt) {
+		double resultDbl = 0.0;
+		if (fromExchangeRate != toExchangeRate) {
+			double inter = 1 / fromExchangeRate;
+			inter = inter * mnt;
+			resultDbl = inter * toExchangeRate;
+		} else {
+			resultDbl = mnt;
+		}
+		return resultDbl;// Math.round(resultDbl);
+	}
+
 	/**
 	 * Adds amount directly to the amount property. Do not use this to perform
 	 * horizontal totals, use merge() instead !
@@ -285,11 +299,13 @@ public class AmountCell extends Cell {
 	public Cell filter(Cell metaCell, Set ids) {
 		AmountCell ret = (AmountCell) super.filter(metaCell, ids);
 		
+		if (ret == null || ret.getMergedCells().size() == 0)
+			return ret;
+		
 		if(this.getColumnCellValue()!=null) ret.setColumnCellValue(new HashMap<String, Comparable>(this.getColumnCellValue()));
 		if(this.getColumnPercent()!=null) ret.setColumnPercent(new HashMap<String, Double>(this.getColumnPercent()));
 		
-		if (ret == null || ret.getMergedCells().size() == 0)
-			return ret;
+		
 		// we need to filter the merged cells too...
 		AmountCell realRet = (AmountCell) this.newInstance();
 		realRet.setOwnerId(ret.getOwnerId());
@@ -411,6 +427,10 @@ public class AmountCell extends Cell {
 				this.getMergedCells().add(ac2);
 		}
 
+	}
+
+	public double getOriginalAmount() {
+		return convert(this.originalAmount);
 	}
 
 }

@@ -27,6 +27,26 @@ import org.dgfoundation.amp.ar.workers.ColumnWorker;
  */
 public abstract class Column extends Viewable implements ColumnIdentifiable {
 	
+	private String expression;
+	private String totalExpression;
+	public String getTotalExpression() {
+		return totalExpression;
+	}
+
+	public void setTotalExpression(String totalExpression) {
+		this.totalExpression = totalExpression;
+	}
+
+	private String description;
+	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	protected int maxNameDisplayLength=0;
 	
 	protected int spanCount = 0;
@@ -415,6 +435,15 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 	    Column c=(Column) o;
 	    return this.getName().equals(c.getName());
 	}
+
+	public String getExpression() {
+		return expression;
+	}
+
+	public void setExpression(String expression) {
+		this.expression = expression;
+	}
+	
 	
 }
 

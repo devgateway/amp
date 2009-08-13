@@ -5850,7 +5850,11 @@ public class DbUtil {
                                     AmpAhsurveyResponse resp = (AmpAhsurveyResponse) iter.next();
                                     if (4 == resp.getAmpQuestionId().getQuestionNumber().intValue()) {
                                         try {
-                                            ansToQues4 = Double.parseDouble(resp.getResponse());
+                                        	if(resp.getResponse() != null) {
+                                            	ansToQues4 = Double.parseDouble(resp.getResponse());
+                                        	} else {
+                                        		ansToQues4 = 0;
+                                        	}
                                             ansToQues4 /= 100;
                                             //logger.debug("ansToQues4 : " + ansToQues4);
                                         } catch (NumberFormatException nex) {
@@ -5886,6 +5890,29 @@ public class DbUtil {
                                          break;
                                                   }
                                          */
+                                    	
+                                    	//Now the indicator 6 is based on start and end year of the activity (not disbursements or fundings).
+                                    	if (indcFlag == 6) {
+                                    		/*session = PersistenceManager.getRequestDBSession();
+                                            qry = "select act from " + AmpActivity.class.getName() + " act where act.ampActivityId=:id";
+                                            Query query = session.createQuery(qry);
+                                            query.setParameter("id", svy.getAmpActivityId().getAmpActivityId(), Hibernate.LONG);
+                                            AmpActivity auxAct = (AmpActivity)query.uniqueResult();*/
+                                    		//AmpActivity auxAct = (AmpActivity) session.get(AmpActivity.class, svy.getAmpActivityId().getAmpActivityId());
+                                    		AmpActivity auxAct = svy.getAmpActivityId();
+                                    		int activityStartYear = getTransactionYear(auxAct.getActualStartDate(), startDates,
+                            						endDates, startYear, closeYear);
+                            				int activityEndYear = getTransactionYear(auxAct.getActualCompletionDate(), startDates,
+                            						endDates, startYear, closeYear);
+                            				if (activityStartYear != 0 && activityEndYear != 0) {
+                            					//If start or end year is equals to actual year in the for cycle.
+                            					if(activityStartYear == i+startYear || activityEndYear == i+startYear) {
+                            						answersRow[i].add(new BigDecimal(1));
+                            					}
+                            				}
+                                    		continue;
+                                    	}
+                                    	
                                         itr3 = svy.getAmpActivityId().getFunding().iterator();
                                         while (itr3.hasNext()) {
                                             AmpFunding fund = (AmpFunding) itr3.next();
@@ -5895,8 +5922,13 @@ public class DbUtil {
                                             		dnOrgOriginalOrganization.getAmpOrgId().equals(fund.getAmpDonorOrgId().getAmpOrgId())*/) {
                                             	// Filtering by financing-instrument here
                                                 if (null != financingInstr) {
-                                                    if (!financingInstr.getId().equals(fund.getFinancingInstrument().getId()))
-                                                        continue;
+                                                	if(fund.getFinancingInstrument() != null) {
+                                                		if (!financingInstr.getId().equals(fund.getFinancingInstrument().getId())) {
+                                                			continue;
+                                                		}
+                                                	} else {
+                                                		continue;
+                                                	}
                                                 }
                                                 //TODO: get rid of hardcoded values and check for the french string "Support Budg�taire Direct".
                                                 if ("9".equalsIgnoreCase(indcCode)) {
@@ -5929,6 +5961,7 @@ public class DbUtil {
                                                                       // Filtering by disbursement-year here
                                                                       if (convYr == (startYear + i)) {
                                                          */
+                                                    
                                                         if (isValidTransactionDate(startYear + i, fundtl.getTransactionDate(), startDates[i], endDates[i])) {
                                                             // Filtering by AdjustmentType & TransactionType here -
                                                             // only 'Actual Disbursement' is considered except for indicator-7.
@@ -5939,10 +5972,10 @@ public class DbUtil {
                                                                 continue;
                                                             }
                                                             // For indc-6: (Q9 = yes) & there is an actual-disb in the year
-                                                            if (indcFlag == 6) {
+                                                            /*if (indcFlag == 6) {
                                                                 answersRow[i]=  answersRow[i].add(new BigDecimal(1));
                                                                 break indc6Break;
-                                                            }
+                                                            }*/
                                                             // Filtering by currency here
                                                             if ("USD".equalsIgnoreCase(fundtl.getAmpCurrencyId().getCurrencyCode()))
                                                                 fromExchangeRate = 1.0;
@@ -6089,6 +6122,32 @@ public class DbUtil {
         //logger.debug("responses.size[getAidSurveyReportByIndicator()] : " + responses.size());
         return responses;
     }
+    
+    public final static int getTransactionYear(Date transactionDate, Date[] startDates, Date[] endDates, int startYear,
+			int endYear) throws Exception {
+		int ret = 0;
+		if(transactionDate != null) {
+			if (startDates[0] == null || endDates[0] == null) {
+				GregorianCalendar gc = new GregorianCalendar();
+				gc.setTime(transactionDate);
+				EthiopianCalendar ethCal = new EthiopianCalendar().getEthiopianDate(gc);
+				if (ethCal.ethFiscalYear >= startYear && ethCal.ethFiscalYear <= endYear) {
+					ret = ethCal.ethFiscalYear;
+				}
+			} else {
+				int auxYear = startYear - 1;
+				for (int i = 0; i < startDates.length; i++) {
+					auxYear++;
+					if ((transactionDate.after(startDates[i]) || chkEqualDates(transactionDate, startDates[i]))
+							&& (transactionDate.before(endDates[i]) || chkEqualDates(transactionDate, endDates[i]))) {
+						ret = auxYear;
+					}
+				}
+			}
+		}
+		return ret;
+	}
+
 
     public static boolean isValidTransactionDate(int year, Date transactionDate, Date startDate, Date endDate) {
         boolean result = false;
@@ -6330,6 +6389,7 @@ public class DbUtil {
             query.setParameter("surveyId", ahs.getAmpAHSurveyId(), Hibernate.LONG);
             List response = query.list();
             
+            boolean showCol3Report9 = false;
             if (response != null /* null != ahs.getResponses()*//* && ahs.getResponses().size() > 0*/) {
                 //logger.debug("ahs.getResponses().size() : " + ahs.getResponses().size());
                 for (int i = 0; i < NUM_COLUMNS_CALCULATED; i++)
@@ -6340,6 +6400,11 @@ public class DbUtil {
                     AmpAhsurveyResponse resp = (AmpAhsurveyResponse) itr2.next();
                     quesNum = resp.getAmpQuestionId().getQuestionNumber().intValue();
                     //logger.debug("quesNum : " + quesNum);
+                    
+                    if(resp.getResponse() != null && !resp.getResponse().trim().equals("")) {
+                    	showCol3Report9 = true;
+                    }
+                    
                     if ("3".equalsIgnoreCase(indCode)) {
                         if (quesNum == 2) {
                             flag[0] = true;
@@ -6423,12 +6488,12 @@ public class DbUtil {
                     if ("9".equalsIgnoreCase(indCode)) {
                         if (quesNum == 11) {
                             answers[0] = answers[1] = ("Yes".equalsIgnoreCase(resp.getResponse())) ? true : false;
-                            answers[2] = true;
-                            //logger.debug("indCode: " + indCode + " q#: " + 11 + " - answers[0]=answers[1] : " + answers[0]);
-                            //logger.debug("indCode: " + indCode + " q#: " + 11 + " - answers[2] : " + answers[2]);
-                            break;
                         }
                     }
+                }
+                // To avoid showing: surveys withouth responses and surveys with all responses equals null. 
+                if("9".equalsIgnoreCase(indCode) && showCol3Report9 == true) {
+                	answers[2] = true;
                 }
                 answersColl[index++] = answers;
             } else {

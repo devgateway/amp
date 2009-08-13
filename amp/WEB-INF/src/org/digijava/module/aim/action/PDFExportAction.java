@@ -116,7 +116,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		 * String pageSize=formBean.getPdfPageSize();
 		 */
 		//use the session to get the existing filters
-		if (session.getAttribute("currentMember")!=null && !arf.isPublicView()){
+		if (session.getAttribute("currentMember")!=null || arf.isPublicView()){
 			String pageSize=null;
 			if(arf!=null)
 				pageSize=arf.getPageSize();//use the page size set in the filters 
@@ -150,7 +150,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 				
 				//
                 response.setContentType("application/pdf");
-				response.setHeader("Content-Disposition","attachment; filename="+r.getName().replaceAll(" ","_"));	   	       
+				response.setHeader("Content-Disposition","attachment; filename="+r.getName().replaceAll(" ","_") + ".pdf");	   	       
                 //
 				PdfWriter writer=PdfWriter.getInstance(document,response.getOutputStream());										                                
                 //

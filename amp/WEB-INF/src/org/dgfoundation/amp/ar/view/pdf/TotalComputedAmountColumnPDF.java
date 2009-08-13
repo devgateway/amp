@@ -3,21 +3,8 @@
  */
 package org.dgfoundation.amp.ar.view.pdf;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.Viewable;
-import org.dgfoundation.amp.ar.cell.AmountCell;
-import org.dgfoundation.amp.ar.cell.CategAmountCell;
-import org.dgfoundation.amp.ar.cell.Cell;
-import org.dgfoundation.amp.ar.cell.ComputedAmountCell;
-import org.dgfoundation.amp.ar.cell.UndisbursedAmountCell;
-import org.dgfoundation.amp.ar.workers.ColumnWorker;
 
 import com.lowagie.text.pdf.PdfPTable;
 

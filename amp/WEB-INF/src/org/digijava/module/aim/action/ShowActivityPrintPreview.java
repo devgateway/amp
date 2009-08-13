@@ -374,20 +374,20 @@ public class ShowActivityPrintPreview
                     	if (actLoc == null)
                     		continue;
                     	AmpLocation loc=actLoc.getLocation();								//AMP-2250
-                      if (!maxLevel) {
-                        if (loc.getAmpWoreda() != null) {
-                          impLevel = 3;
-                          maxLevel = true;
-                        }
-                        else if (loc.getAmpZone() != null
-                                 && impLevel < 2) {
-                          impLevel = 2;
-                        }
-                        else if (loc.getAmpRegion() != null
-                                 && impLevel < 1) {
-                          impLevel = 1;
-                        }
-                      }
+//                      if (!maxLevel) {
+//                        if (loc.getAmpWoreda() != null) {
+//                          impLevel = 3;
+//                          maxLevel = true;
+//                        }
+//                        else if (loc.getAmpZone() != null
+//                                 && impLevel < 2) {
+//                          impLevel = 2;
+//                        }
+//                        else if (loc.getAmpRegion() != null
+//                                 && impLevel < 1) {
+//                          impLevel = 1;
+//                        }
+//                      }
 
                       if (loc != null) {
                         Location location = new Location();
@@ -407,6 +407,11 @@ public class ShowActivityPrintPreview
                         location.setNewCountryId(cntry.getIso());
                         
                         location.setAmpCVLocation( loc.getLocation() );
+                        if ( loc.getLocation() != null ){
+        	                location.setAncestorLocationNames( DynLocationManagerUtil.getParents( loc.getLocation()) );
+        					location.setLocationName(loc.getLocation().getName());
+        					location.setLocId( loc.getLocation().getId() );
+                        }
                         AmpCategoryValueLocations ampCVRegion	= 
                 			DynLocationManagerUtil.getAncestorByLayer(loc.getLocation(), CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
 						if ( ampCVRegion != null ) {

@@ -252,8 +252,8 @@ public class ShowCalendarView extends Action {
         };
         Collections.sort(l, c);    
             
-        Collection<AmpCalendarGraph> ampCalendarGraphs = AmpUtil.getAmpCalendarGraphs(ampCalendarEvents,navigator, view);
-        calendarViewForm.setAmpCalendarGraphs(ampCalendarGraphs);
+       Collection<AmpCalendarGraph> ampCalendarGraphs = AmpUtil.getAmpCalendarGraphs(l,navigator, view);
+       calendarViewForm.setAmpCalendarGraphs(ampCalendarGraphs);
       
          ses.setAttribute("mode",calendarViewForm.getView().length());
          ses.setAttribute("publicEvent", filter.isShowPublicEvents());

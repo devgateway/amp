@@ -24,12 +24,9 @@
 <script language="JavaScript">
 
 	<!--
-
 	function useFixedRateClicked(field1,field2) {
-		
 		var fld1 = document.getElementById(field1);
 		var fld2 = document.getElementById(field2);
-		
 		
 		if (fld1.disabled == true) {
 			fld1.disabled = false;
@@ -38,13 +35,30 @@
 			fld1.disabled = true;
 			fld2.value=false;
 		}
-		}
-
+	}
 	function trim(s) {
 		return s.replace( /^\s*/, "" ).replace( /\s*$/, "" );
   }
 
-
+	function checkCurrency(element){
+		var prefix = element.substring(0,element.indexOf(".")+1);
+		var textbox = prefix+"fixedExchangeRate";
+		var select = prefix+"currencyCode";
+		var selObj = document.getElementsByName(select);
+		var textboxobj = document.getElementsByName(textbox);
+		var selIndex = selObj[0].selectedIndex;
+		var index = element.substring(element.indexOf("[")+1,element.indexOf("[")+2);
+		//alert (index);
+		var check = document.getElementById("fixedcheck"+index);
+		if (selObj[0].options[selIndex].value == 'USD'){
+			 check.disabled =true;
+			 textboxobj.disabled =true;
+		}else {
+			 check.disabled =false;
+			 textboxobj.disabled =false;
+			}
+		}
+	
 var isAlreadySubmitted = false;
 
 	function addFunding() {
@@ -448,7 +462,7 @@ var isAlreadySubmitted = false;
 							<c:set var="contentDisabled">true</c:set>
 						</c:if>
 						<td valign="bottom">
-							<html:select name="mtefProjection" indexed="true" property="currencyCode" styleClass="inp-text" disabled="${contentDisabled}">
+							<html:select name="mtefProjection" indexed="true" property="currencyCode" styleClass="inp-text" disabled="${contentDisabled}" onchange="checkCurrency(this.name);">
 								<html:optionsCollection name="aimEditActivityForm" property="funding.validcurrencies" value="currencyCode"
 													label="currencyName"/>
 							</html:select>
@@ -566,8 +580,7 @@ var isAlreadySubmitted = false;
 
 							<c:if test="${ !empty aimEditActivityForm.funding.fundingDetails}">
 							<c:set var="index" value="-1"/>
-						 
-						 	<c:forEach var="fundingDetail" items="${aimEditActivityForm.funding.fundingDetails}">
+						    <c:forEach var="fundingDetail" items="${aimEditActivityForm.funding.fundingDetails}" varStatus="status">
 						 	<c:if test="${fundingDetail.transactionType==0}">
 									 	<tr>
 									 	
@@ -598,7 +611,7 @@ var isAlreadySubmitted = false;
 												<c:set var="contentDisabled">true</c:set>
 											</c:if>
 												<td valign="bottom">
-														<html:text name="fundingDetail" title="${formatTip}"  disabled="${contentDisabled}" indexed="true" property="transactionAmount" onchange="this.value=trim(this.value)"  size="17" styleClass="amt"/>
+														<html:text name="fundingDetail" title="${formatTip}"  disabled="${contentDisabled}" indexed="true" property="transactionAmount" onchange="this.value=trim(this.value);" onclick="checkCurrency(this.name);" size="17" styleClass="amt"/>
 												</td>
 
 									 		<c:set var="contentDisabled"><field:display name="Currency Commitment" feature="Commitments">false</field:display></c:set>
@@ -608,7 +621,7 @@ var isAlreadySubmitted = false;
 
 											
 											<td valign="bottom">
-												<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text"  disabled="${contentDisabled}">
+												<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text"  disabled="${contentDisabled}" onchange="checkCurrency(this.name);" onfocus="checkCurrency(this.name);">
 													<html:optionsCollection name="aimEditActivityForm" property="funding.validcurrencies" value="currencyCode"
 													label="currencyName"/>
 												</html:select>
@@ -677,11 +690,11 @@ var isAlreadySubmitted = false;
 										String exchCurrfldId = "exchCurr"+(t++);
 										String exchHidden = "useFixedRate"+(t++);
 										String jsUrl = "useFixedRateClicked('" + exchRatefldId + "','" + exchHidden + "')";
+										
 									%>	
 									
 												<html:hidden  styleId="<%=exchHidden%>" name="fundingDetail"  property="useFixedRate" indexed="true" />
-														
-														<input type="checkbox" onclick="<%=jsUrl%>" 
+														<input type="checkbox" id="fixedcheck${status.index}" onclick="<%=jsUrl%>" 
 														<c:if test="${contentDisabled}">
 															disabled 
 														</c:if>
@@ -840,7 +853,7 @@ var isAlreadySubmitted = false;
 												<c:set var="contentDisabled">true</c:set>
 											</c:if>
 											<td valign="bottom">
-												<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text" disabled="${contentDisabled}" >
+												<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text" disabled="${contentDisabled}" onchange="checkCurrency(this.name);" >
 													<html:optionsCollection name="aimEditActivityForm" property="funding.validcurrencies" value="currencyCode"
 													label="currencyName"/>
 												</html:select>
@@ -1064,7 +1077,7 @@ var isAlreadySubmitted = false;
 												<c:set var="contentDisabled">true</c:set>
 											</c:if>
 											<td valign="bottom">
-												<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text" disabled="${contentDisabled}">
+												<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text" disabled="${contentDisabled}" onchange="checkCurrency(this.name);">
 													<html:optionsCollection name="aimEditActivityForm" property="funding.validcurrencies" value="currencyCode"
 													label="currencyName"/>
 												</html:select>
@@ -1292,7 +1305,7 @@ var isAlreadySubmitted = false;
 										<c:set var="contentDisabled">true</c:set>
 									</c:if>
 										<td valign="bottom">
-											<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text" disabled="${contentDisabled}">
+											<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text" disabled="${contentDisabled}" onchange="checkCurrency(this.name);">
 												<html:optionsCollection name="aimEditActivityForm" property="funding.validcurrencies" value="currencyCode" label="currencyName"/>
 											</html:select>
 										</td>

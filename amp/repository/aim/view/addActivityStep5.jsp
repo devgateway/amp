@@ -65,7 +65,7 @@ function checkallIssues() {
 		//POPIN DEFINITION
 		YAHOOAmp.namespace("YAHOOAmp.amptab");
 			var myPanel1 = new YAHOOAmp.widget.Panel("new", {
-			width:"500px",
+			width:"550px",
 		    fixedcenter: true,
 		    constraintoviewport: true,
 		    underlay:"none",

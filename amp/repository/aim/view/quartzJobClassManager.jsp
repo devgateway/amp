@@ -65,12 +65,18 @@ function addJc(){
             <td colspan="6">
               <span class="crumb">
                 <c:set var="translation">
-                  <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
+                  <digi:trn>Click here to goto Admin Home</digi:trn>
                 </c:set>
                 <digi:link module="aim" href="/admin.do" styleClass="comment" title="${translation}" >
-                  <digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
+                  <digi:trn>Admin Home</digi:trn>
                 </digi:link>&nbsp;&gt;&nbsp;
-                <digi:trn key="aim:jc:jobClassManager">Job Class Manager</digi:trn>
+                <c:set var="trn">
+                  <digi:trn>Click here to goto Job Manager</digi:trn>
+                </c:set>
+                <digi:link module="aim" href="/quartzJobManager.do~action=all" styleClass="comment" title="${trn}" >
+                  <digi:trn>Job Manager</digi:trn>
+                </digi:link>&nbsp;&gt;&nbsp;
+                <digi:trn>Job Class Manager</digi:trn>
               </span>
             </td>
             <!-- End navigation -->
@@ -78,7 +84,7 @@ function addJc(){
           <tr>
             <td style="height:53px;" colspan="6">
               <span class="subtitle-blue">
-                <digi:trn key="aim:jobClassManager">Job Class Manager</digi:trn>
+                <digi:trn>Job Class Manager</digi:trn>
               </span>
             </td>
           </tr>

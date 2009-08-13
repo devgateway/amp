@@ -55,8 +55,19 @@ public class ParisIndicatorReportForm extends ActionForm {
 
     private Boolean reset = Boolean.FALSE;
     private Boolean filterFlag = Boolean.FALSE;
+    
+    private String print;
+    private String print2;
 
-    public void reset(ActionMapping mapping, HttpServletRequest request) {
+    public String getPrint2() {
+		return print2;
+	}
+
+	public void setPrint2(String print2) {
+		this.print2 = print2;
+	}
+
+	public void reset(ActionMapping mapping, HttpServletRequest request) {
         if (reset.booleanValue()) {
             startYear = null;
             closeYear = null;
@@ -73,6 +84,7 @@ public class ParisIndicatorReportForm extends ActionForm {
             filterFlag = Boolean.FALSE;
             targetValue=null;
             calcResult=null;
+            //print = "false";
         }
     }
 
@@ -416,4 +428,12 @@ public class ParisIndicatorReportForm extends ActionForm {
     public void setCalcResult(String calcResult) {
         this.calcResult = calcResult;
     }
+
+	public String getPrint() {
+		return print;
+	}
+
+	public void setPrint(String print) {
+		this.print = print;
+	}
 }

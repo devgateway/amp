@@ -15,7 +15,15 @@ public class AmpMeasures  implements Serializable, Comparable
 	private String aliasName;
 	private String type;
 	private Set reports;
+	private String expression;
+	private String description;
 
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
 	public String getType() {
 		return type;
 	}
@@ -58,5 +66,13 @@ public class AmpMeasures  implements Serializable, Comparable
 	}
 	public String toString(){
 		return this.measureName;
+	}
+	
+	public String getExpression() {
+		return expression;
+	}
+	
+	public void setExpression(String expression) {
+		this.expression = expression;
 	}
 }

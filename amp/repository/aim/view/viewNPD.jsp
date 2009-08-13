@@ -194,7 +194,7 @@ function showFilter(){
     filterDiv.style.display="block";
     filterDiv.stytelvisibility="visible";
     filter=new YAHOO.widget.Panel("filter",{    		
-            width:"650px",
+            width:"400px",
             fixedcenter: true,
             constraintoviewport: true,
             Underlay:"shadow",
@@ -915,7 +915,7 @@ function showFilter(){
 	function getActivitiesURL(){
 		var result = addActionToURL('getActivities.do');
 		result+=getURL();
-		result+= pd + 'currentPage='+actCurrPage;
+		result+= pd + 'currentPage='+actCurrPage+'&timestamp=' +new Date().getTime();  ;
 		return result;
 	}
 
@@ -1804,7 +1804,7 @@ function showFilter(){
                 </tr>
                 <tr>
                     <td>
-                        <div id="filter" style="visibility:hidden;display:none;width:400px">
+                        <div id="filter" style="visibility:hidden;display:none;">
                             <table width="100%" border="0" cellpadding="5" cellspacing="0">
                                 <tr>
                                     <td>

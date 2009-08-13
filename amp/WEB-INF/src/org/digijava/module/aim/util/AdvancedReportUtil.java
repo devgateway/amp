@@ -16,6 +16,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpColumns;
+import org.digijava.module.aim.dbentity.AmpDesktopTabSelection;
 import org.digijava.module.aim.dbentity.AmpFilters;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpPages;
@@ -30,6 +31,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.digijava.module.aim.dbentity.*;
 
 /**
  * AdvancedReportUtil.java
@@ -462,6 +464,30 @@ public final class AdvancedReportUtil {
 		            }
 	            }
 	            ampReports.getMembers().clear();
+	            
+	            for (AmpDesktopTabSelection adts : ampReports.getDesktopTabSelections()) {
+	            	adts.getOwner().getDesktopTabSelections().remove(adts);
+	            	adts.setOwner(null);
+	            	adts.setReport(null);
+				}
+	            ampReports.getDesktopTabSelections().clear();
+	            
+	            //queryString = "select adt from " + AmpDesktopTabSelection.class.getName() + " adt " +
+                //"where adt.report=:qid ";
+	            //qry = session.createQuery(queryString);
+	            //qry.setParameter("qid", qid, Hibernate.LONG);
+	            //List list	= qry.list();
+	            //Iterator iter = list.iterator();
+	            //AmpDesktopTabSelection adts = null;
+	            //while (iter.hasNext()) {
+	            //	adts = (AmpDesktopTabSelection) iter.next();
+	            //	adts.setReport(null);
+	            //	adts.setOwner(null);
+	            //    session.delete(adts);
+	            //};
+	                       
+	            
+	            
 	            session.delete(ampReports);
 	            session.flush();
 	            logger.info("SESSION HAS BEEN FLUSHED OUT !!!!!!!!!!!!!!!!!!");

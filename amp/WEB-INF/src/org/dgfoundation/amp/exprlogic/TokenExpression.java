@@ -28,4 +28,12 @@ public class TokenExpression {
 		ac.setAmount(evaluate);
 		return ac;
 	}
+	
+	//The value stored with no %
+	public double evaluateOriginalvalue(CategAmountCell c){
+		for (int i = 0; i < tokens.length; i++) {
+			if(tokens[i].evaluate(c)) return tokens[i].getSign()*c.getOriginalAmount();
+		}
+		return 0;	
+	}
 }

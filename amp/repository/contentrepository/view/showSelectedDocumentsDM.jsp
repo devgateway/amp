@@ -9,7 +9,13 @@
 <%@ page import="org.digijava.module.contentrepository.action.SelectDocumentDM"%>
 <%@ page import="org.digijava.module.aim.helper.ActivityDocumentsConstants"%>
 
-<%@include file="addDocumentPanel.jsp" %> 
+<%@include file="addDocumentPanel.jsp" %>
+<logic:notEmpty name="checkBoxToHide" scope="request">
+	<html:hidden property="checkBoxToHide" value="true" styleId="checkBoxToHide"/>
+</logic:notEmpty> 
+<logic:empty name="checkBoxToHide" scope="request">
+	<html:hidden property="checkBoxToHide" value="false" styleId="checkBoxToHide"/>
+</logic:empty> 
 
 <%@include file="documentManagerJsHelper.jsp" %>
 

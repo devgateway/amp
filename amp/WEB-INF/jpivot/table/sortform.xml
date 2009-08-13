@@ -15,7 +15,7 @@
   </listBox1>
 
   <textField type="posint" bookmark="false" modelReference="extensions(sortRank).topBottomCount" label="fmt:sortform.rowcount" title="fmt:sortform.enternumber"/>
-  <checkBox modelReference="rowAxisBuilder.axisConfig.propertyConfig.showProperties" label="fmt:sortform.showprops"/>
+  <!--<checkBox modelReference="rowAxisBuilder.axisConfig.propertyConfig.showProperties" label="fmt:sortform.showprops"/> -->
 
   <buttons>
     <button action="validate" label="fmt:sortform.ok" handler="com.tonbeller.wcf.form.ButtonHandler" hide="true"/>

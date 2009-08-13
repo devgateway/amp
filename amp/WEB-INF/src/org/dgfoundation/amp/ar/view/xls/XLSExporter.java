@@ -102,7 +102,6 @@ public abstract class XLSExporter extends Exporter {
 			cs.setBorderTop(HSSFCellStyle.BORDER_NONE);
 			HSSFDataFormat df = wb.createDataFormat();
 			cs.setDataFormat(df.getFormat("General"));
-			// cs.setDataFormat(df.getFormat("_(*###,###,###,###);_(*###,###,###,###.##)"));
 
 			cs.setFont(font);
 			cs.setWrapText(true);
@@ -177,6 +176,9 @@ public abstract class XLSExporter extends Exporter {
 			//	e.printStackTrace();
 			//}
 
+        if (this.autoSize) {
+            sheet.autoSizeColumn(r.getColumnFrom());
+        }
 		colId.inc(++size);
 	}
 

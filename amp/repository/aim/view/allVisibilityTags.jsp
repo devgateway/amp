@@ -240,6 +240,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display feature="Identification" name="Data Source"></field:display> 
 <field:display feature="Identification" name="Computation"></field:display>
 <field:display feature="Identification" name="Description"></field:display> 
+<field:display name="Project Impact" feature="Identification"></field:display> 
 <field:display feature="Identification" name="Project Comments"></field:display> 
 <field:display feature="Identification" name="Objective Assumption"></field:display> 
 <field:display feature="Identification" name="Objective Comments"></field:display> 
@@ -724,6 +725,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Sub Program Level 8" feature="NPD Dashboard"></field:display> 
 <field:display name="Sub-Program" feature="Budget"></field:display> 
 <field:display name="Sub-Vote" feature="Budget"></field:display> 
+<field:display name="Code Chapitre" feature="Budget"></field:display>
 <field:display name="Table CSS class" feature="Table Widgets"></field:display> 
 <field:display name="Table Code" feature="Table Widgets"></field:display> 
 <field:display name="Table Column CSS class" feature="Table Widgets"></field:display> 
@@ -782,8 +784,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Reset Filter Button" feature="Filter"></field:display>
 <field:display name="Add Donor Button" feature="Donors"></field:display>
 <field:display name="Remove Donor Button" feature="Donors"></field:display>
-
-
 <feature:display name="Computed Fields"  module="Report Generator"></feature:display>
 <field:display name="Overage Project" feature="Computed Fields"></field:display>
 <field:display name="Age of Project" feature="Computed Fields"></field:display>
@@ -791,3 +791,11 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Average Size of Projects" feature="Computed Fields"></field:display>
 <field:display name="Variance Of Commitments" feature="Computed Fields"></field:display>
 <field:display name="Variance Of Disbursements" feature="Computed Fields"></field:display>
+<field:display name="Execution Rate" feature="Computed Fields"></field:display>
+<field:display name="Project Period" feature="Computed Fields"></field:display>
+<field:display name="Overage" feature="Computed Fields"></field:display>
+<field:display name="Disbursment Ratio" feature="Computed Fields"></field:display> 
+<field:display name="Average Size of Disbursements" feature="Computed Fields"></field:display> 
+<field:display name="Average Disbursement Rate" feature="Computed Fields"></field:display>
+<field:display name="Project Age Ratio" feature="Computed Fields"></field:display>
+<field:display name="Activity Count" feature="Computed Fields"></field:display>

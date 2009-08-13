@@ -1770,8 +1770,7 @@ public class SaveActivity extends Action {
 			activity.setActivityCreator(eaForm.getIdentification().getCreatedBy());
 		}
 		else{
-			AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(tm
-					.getMemberId());
+			AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
 			activity.setActivityCreator(teamMember);
 			Calendar cal = Calendar.getInstance();
 			activity.setCreatedDate(cal.getTime());
@@ -2419,16 +2418,18 @@ public class SaveActivity extends Action {
 
 			actId = recoverySave(rsp);			
 			activity = rsp.getActivity();
-                        AmpActivity aAct=ActivityUtil.getAmpActivity(actId);
-                        if(activity.getDraft()!=null&&!activity.getDraft()){
-			if(activity.getApprovalStatus().equals(Constants.APPROVED_STATUS)){
-                                new ApprovedActivityTrigger(aAct,null);
-			}
-                        else{
-				new NotApprovedActivityTrigger(aAct);
-			
-                        }
-                        }
+                        
+			AmpActivity aAct=ActivityUtil.getAmpActivity(actId);
+            if(activity.getDraft()!=null && !activity.getDraft()){
+            	if(activity.getApprovalStatus().equals(Constants.APPROVED_STATUS)){
+            		if(TeamMemberUtil.getTeamHead(aAct.getActivityCreator().getAmpTeam().getAmpTeamId())!=null && 
+            				! TeamMemberUtil.getTeamHead(aAct.getActivityCreator().getAmpTeam().getAmpTeamId()).getAmpTeamMemId().equals(aAct.getActivityCreator().getAmpTeamMemId())){
+            			new ApprovedActivityTrigger(aAct,null); //if TL created activity, then no Trigger is needed
+            		}
+            	}else{
+            		new NotApprovedActivityTrigger(aAct);
+            	}
+            }
 			/*actId = ActivityUtil.saveActivity(activity, null, false, eaForm.getCommentsCol(), eaForm.isSerializeFlag(),
 					field, relatedLinks,tm.getMemberId() , eaForm.getIndicatorsME(), tempComp, eaForm.getContracts());
 			*/

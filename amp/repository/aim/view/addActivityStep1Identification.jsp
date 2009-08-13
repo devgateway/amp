@@ -209,7 +209,7 @@ target.style.cursor = "default"
 													</tr>
 													<tr>
 														<td>
-															<a href="javascript:edit('${projcomKey}')">
+															<a href="javascript:edit('${projcomKey}','Project Comments')">
 															<digi:trn key="aim:edit">Edit</digi:trn></a>															
 														</td>
 													</tr>
@@ -240,7 +240,7 @@ target.style.cursor = "default"
 															<a href="<c:out value="${aimEditActivityForm.context}"/>/editor/showEditText.do?id=<%=objKey%>&referrer=<c:out value="${aimEditActivityForm.context}"/>/aim/addActivity.do?edit=true">Edit</a>
 															--%>
 															
-																<a href="javascript:edit('<%=objKey%>')">
+																<a href="javascript:edit('<%=objKey%>','objective')">
 																<digi:trn key="aim:edit">Edit</digi:trn></a>	
 																&nbsp;
 															
@@ -283,7 +283,7 @@ target.style.cursor = "default"
 															<%--
 															<a href="<c:out value="${aimEditActivityForm.context}"/>/editor/showEditText.do?id=<%=descKey%>&referrer=<c:out value="${aimEditActivityForm.context}"/>/aim/addActivity.do?edit=true">Edit</a>
 															--%>
-																<a href="javascript:edit('<%=descKey%>')">
+																<a href="javascript:edit('<%=descKey%>','Project Description')">
 																<digi:trn key="aim:edit">Edit</digi:trn></a>															
 														</td>
 													</tr>
@@ -303,6 +303,7 @@ target.style.cursor = "default"
 											
 											<td valign="top" align="left">
 												<table cellPadding=0 cellSpacing=0>
+												
 													<tr>
 														<td>
 															<bean:define id="purpKey">
@@ -316,16 +317,20 @@ target.style.cursor = "default"
 														<td>
 															<%--
 															<a href="<c:out value="${aimEditActivityForm.context}"/>/editor/showEditText.do?id=<%=descKey%>&referrer=<c:out value="${aimEditActivityForm.context}"/>/aim/addActivity.do?edit=true">Edit</a>--%>
-			
-															<a href="javascript:edit('<%=purpKey%>')">
-															<digi:trn key="aim:edit">Edit</digi:trn></a>
+																<a href="javascript:edit('<%=purpKey%>','Purpose')">
+																<digi:trn key="aim:edit">Edit</digi:trn></a>
 																&nbsp;
-															<a href="javascript:commentWin('purpObjVerIndicators')" id="CommentPurpObjVerInd"><digi:trn key="aim:addEditObjVerIndicators">Add/Edit Objectively Verifiable Indicators</digi:trn></a>
-														
-															&nbsp;
-															<a href="javascript:commentWin('purpAssumption')" id="CommentPurpAssumption"><digi:trn key="aim:addEditAssumption">Add/Edit Assumption</digi:trn></a>
-															&nbsp;
-															<a href="javascript:commentWin('purpVerification')" id="CommentPurpVerification"><digi:trn key="aim:addEditVerification">Add/Edit Verification</digi:trn></a>
+															<field:display name="Purpose Verifiable Indicators" feature="Identification">
+																<a href="javascript:commentWin('purpObjVerIndicators')" id="CommentPurpObjVerInd"><digi:trn key="aim:addEditObjVerIndicators">Add/Edit Objectively Verifiable Indicators</digi:trn></a>
+																&nbsp;
+															</field:display>
+															<field:display name="Purpose Assumptions" feature="Identification">
+																<a href="javascript:commentWin('purpAssumption')" id="CommentPurpAssumption"><digi:trn key="aim:addEditAssumption">Add/Edit Assumption</digi:trn></a>
+																&nbsp;
+															</field:display>
+															<field:display name="Purpose Verifications" feature="Identification">
+																<a href="javascript:commentWin('purpVerification')" id="CommentPurpVerification"><digi:trn key="aim:addEditVerification">Add/Edit Verification</digi:trn></a>
+															</field:display>
 														</td>
 													</tr>
 												</table>
@@ -358,15 +363,20 @@ target.style.cursor = "default"
 															<%--
 															<a href="<c:out value="${aimEditActivityForm.context}"/>/editor/showEditText.do?id=<%=descKey%>&referrer=<c:out value="${aimEditActivityForm.context}"/>/aim/addActivity.do?edit=true">Edit</a>--%>
 			
-															<a href="javascript:edit('<%=resKey%>')">
+															<a href="javascript:edit('<%=resKey%>','Results')">
 															<digi:trn key="aim:edit">Edit</digi:trn></a>
 																&nbsp;
-															<a href="javascript:commentWin('resObjVerIndicators')" id="CommentResObjVerInd"><digi:trn key="aim:addEditObjVerIndicators">Add/Edit Objectively Verifiable Indicators</digi:trn></a>
-															
+															<field:display name="Results Verifiable Indicators" feature="Identification">
+																<a href="javascript:commentWin('resObjVerIndicators')" id="CommentResObjVerInd"><digi:trn key="aim:addEditObjVerIndicators">Add/Edit Objectively Verifiable Indicators</digi:trn></a>
 															&nbsp;
-															<a href="javascript:commentWin('resAssumption')" id="CommentResAssumption"><digi:trn key="aim:addEditAssumption">Add/Edit Assumption</digi:trn></a>
-															&nbsp;
-															<a href="javascript:commentWin('resVerification')" id="CommentResVerification"><digi:trn key="aim:addEditVerification">Add/Edit Verification</digi:trn></a>
+															</field:display>
+															<field:display name="Results Assumptions" feature="Identification">
+																<a href="javascript:commentWin('resAssumption')" id="CommentResAssumption"><digi:trn key="aim:addEditAssumption">Add/Edit Assumption</digi:trn></a>
+																&nbsp;
+															</field:display>
+															<field:display name="Results Verifications" feature="Identification">
+																<a href="javascript:commentWin('resVerification')" id="CommentResVerification"><digi:trn key="aim:addEditVerification">Add/Edit Verification</digi:trn></a>
+															</field:display>
 														</td>
 													</tr>
 												</table>
@@ -382,9 +392,11 @@ target.style.cursor = "default"
 											<jsp:include page="largeTextPropertyEdit.jsp"/>
 			
 											<bean:define id="largeTextLabel" value="Project Impact" toScope="request"/>
-											<bean:define id="largeTextKey" toScope="request">
-												<c:out value="${aimEditActivityForm.identification.projectImpact}"/>
-											</bean:define>
+											
+												<bean:define id="largeTextKey" toScope="request">
+													<c:out value="${aimEditActivityForm.identification.projectImpact}"/>
+												</bean:define>
+											<field:display name="Project Impact" feature="Identification">
 											<tr bgcolor="#ffffff">
 												<td valign="top" align="left">
 												
@@ -399,12 +411,12 @@ target.style.cursor = "default"
 														<td><digi:edit key="${largeTextKey}" /></td>
 													</tr>
 													<tr>
-														<td><a href="javascript:edit('${largeTextKey}')"><digi:trn key="aim:edit">Edit</digi:trn></a></td>
+														<td><a href="javascript:edit('${largeTextKey}','Project Impact')"><digi:trn key="aim:edit">Edit</digi:trn></a></td>
 													</tr>
 												</table>
 												</td>
 											</tr>
-											
+											</field:display>											
 
 
 
@@ -605,7 +617,7 @@ target.style.cursor = "default"
 												</a>
 									</td>
 								</field:display>	
-									
+									<field:display name="Code Chapitre" feature="Budget"></field:display>
 									</tr>
 										<tr>
 											<field:display name="FY" feature="Budget">

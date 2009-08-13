@@ -145,12 +145,10 @@
 											<td>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="translation">
-													<digi:trn key="aim:clickToAddScheme">Click here to Add a Scheme</digi:trn>
-												</c:set>
-												<digi:link href="/createWorkspace.do?dest=admin" title="${translation}" >
-												<digi:trn key="aim:addScheme">
-												Add Scheme
-												</digi:trn>
+					                            	<digi:trn key="aim:clickToViewSectorManager">Click here to view Sector Manager</digi:trn>
+					                            </c:set>
+												<digi:link href="/getSectorSchemes.do" title="${translation}" >
+					                            	<digi:trn key="aim:sectorManager">Sector Manager</digi:trn>
 												</digi:link>
 											</td>
 										</tr>

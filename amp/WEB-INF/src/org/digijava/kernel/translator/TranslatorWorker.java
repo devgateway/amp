@@ -39,6 +39,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -51,8 +52,10 @@ import org.digijava.kernel.translator.util.TrnAccessUpdateQueue;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.I18NHelper;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.util.SiteUtils;
+import org.digijava.module.aim.util.DbUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
@@ -165,6 +168,23 @@ public class TranslatorWorker {
             retVal = "";
         }
         return retVal;
+    }
+    
+    public static String translateText(String text,HttpServletRequest request) throws WorkerException {
+ 	 	Site site = RequestUtils.getSite(request);
+ 	 	Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+ 	 	                  
+ 	 	Long siteId=site.getId();
+ 	 	String locale=navigationLanguage.getCode();
+ 	 	
+ 	 	String translatedText= null;
+ 	 	try {
+			translatedText = TranslatorWorker.translateText(text, locale,siteId);
+		} catch (WorkerException e) {
+			logger.error("Error:", e);
+			throw new WorkerException(e);
+		}
+ 	 	return translatedText;
     }
     
     /**

@@ -51,19 +51,16 @@
 	        		<% ((HashMap)pageContext.getAttribute("linkMap")).put("sortBy", column.getName() ); %>
 	        	<logic:notEqual name="widget" scope="request" value="true">
 	            	<html:link  style="font-family: Arial;font-size: 11px;text-decoration: none;color: black;cursor:pointer;" page="/viewNewAdvancedReport.do" name="linkMap">
-	              		<digi:trn key="aim:reportBuilder:${reportHeading}">
-	              			<c:out value="${reportHeading}"/>
-	              		</digi:trn>
-	              	
-	              	<%
-	              	if (subColumn.getWorker()!=null && subColumn.getWorker().getRelatedColumn()!=null){
-	              	String text=subColumn.getWorker().getRelatedColumn().getDescription();
-	              	if (text!=null){ %>	
-                 	   <img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:report:${reportHeading}_toolip"><%=text%></digi:trn>">
-                  	<%
-                  	}
-	              	}
-                  	%>
+	              		      <digi:trn key="aim:reportBuilder:${reportHeading}">
+                              	<c:out value="${reportHeading}"/>
+                              </digi:trn>
+                              <%
+                              if (subColumn.getDescription()!=null){
+                              String text=subColumn.getDescription();
+                              if (text!=null){ %> 
+                       			<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn  key="aim:report:tip:${ampColumnFromTree.columnName}:${ampColumnFromTree.description}"><%=text%></digi:trn>">
+                    		 	<%}
+                     		  }%>
 	              	</html:link>
 	            </logic:notEqual>
             
@@ -109,6 +106,13 @@
 	       			</c:if>
 	     		</c:otherwise>
 	     		</c:choose>
+	     	 <%
+                              if (subColumn.getDescription()!=null){
+                              String text=subColumn.getDescription();
+                              if (text!=null){ %> 
+                       			<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn  key="aim:report:tip:${ampColumnFromTree.columnName}:${ampColumnFromTree.description}"><%=text%></digi:trn>">
+                    		 	<%}
+                     		  }%>
 	     	</td>	            
         	</logic:notEqual>
     	

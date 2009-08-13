@@ -72,11 +72,23 @@ public class TrailCellsPDF extends PDFExporter {
 			String locale=parent.getReportMetadata().getLocale();
 			String totalsFor="Totals For";
 			String translatedName=grd.getName();
+			
+			//AMP-6253 grd.getName()is (field : Name) for report hierarchies simplename hold only the field name until it's translated 
+			String simplename ="";
+			if (grd.getName().indexOf(":")>0){
+				simplename = grd.getName().substring(0,grd.getName().indexOf(":"));
+			}else{
+				simplename = grd.getName();
+			}
+			
 			try{
 				//TODO TRN: no record for this key. its all right to have key here but it is better to replace with default text
 				totalsFor=TranslatorWorker.translateText(totalsFor,locale,siteId);
 				//String namePrefix="rep:pop:";
-				translatedName=TranslatorWorker.translateText(grd.getName(),locale,siteId );
+				translatedName=TranslatorWorker.translateText(simplename,locale,siteId);
+				if (grd.getName().indexOf(":")>0){
+					translatedName += grd.getName().substring(grd.getName().indexOf(":"));
+				}
 			}
 			catch (WorkerException e){;}
 			String result;

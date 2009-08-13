@@ -45,6 +45,7 @@ import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
 import org.digijava.module.message.triggers.RemoveCalendarEventTrigger;
 import org.digijava.module.message.triggers.UserRegistrationTrigger;
 import org.digijava.module.message.util.AmpMessageUtil;
+import org.digijava.module.message.triggers.RemoveCalendarEventTrigger;
 
 public class AmpMessageWorker {
 
@@ -166,6 +167,8 @@ public class AmpMessageWorker {
         	myHashMap.put(MessageConstants.START_DATE, (String) e.getParameters().get(CalendarEventSaveTrigger.EVENT_START_DATE));
         	myHashMap.put(MessageConstants.END_DATE, (String) e.getParameters().get(CalendarEventSaveTrigger.EVENT_END_DATE));
         }else{
+        	myHashMap.put(MessageConstants.START_DATE, (String) e.getParameters().get(CalendarEventTrigger.EVENT_START_DATE));
+        	myHashMap.put(MessageConstants.END_DATE, (String) e.getParameters().get(CalendarEventTrigger.EVENT_END_DATE));
         	event.setSenderType(MessageConstants.SENDER_TYPE_USER_MANAGER);
         }
         

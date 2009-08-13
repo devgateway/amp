@@ -223,12 +223,12 @@ function deleteEvent(){
 				              <td>
 				              </td>
 				              <td>
-				                <input type="submit" style="width: 100px;" value="<digi:trn key="calendar:savebutton">Save</digi:trn>" onclick="document.getElementById('hdnMethod').value = 'save'">
+				                <input type="submit" style="width: 100px;" value="<digi:trn>Save</digi:trn>" onclick="document.getElementById('hdnMethod').value = 'save'">
 				                &nbsp;				               
-				                <c:if test="${calendarEventForm.actionButtonsVisible!=false}">
-				                	<input type="submit" style="width: 100px;" value="<digi:trn key="calendar:editbutton">Edit</digi:trn>" onclick="document.getElementById('hdnMethod').value = ''">
+								<c:if test="${calendarEventForm.actionButtonsVisible!=false}">
+				                	<input type="submit" style="width: 100px;" value="<digi:trn>Edit</digi:trn>" onclick="document.getElementById('hdnMethod').value = ''">
 				                	&nbsp;
-				                	<input type="submit" value="<digi:trn key="calendar:deletebutton">Delete</digi:trn>" style="width: 100px;" onclick="deleteEvent();" />
+				                	<input type="submit" value="<digi:trn>Delete</digi:trn>" style="width: 100px;" onclick="deleteEvent();" />
 				                </c:if>
 				              </td>
 				            </tr>

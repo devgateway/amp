@@ -98,12 +98,14 @@ public class SchemaManager extends FilterDynamicSchemaProcessor implements
 			shema = shema.replaceAll("#All Sub-Sectors#", TranslatorWorker.translateText(MoConstants.ALL_SUB_SECTORS, locale, siteId));
 			shema = shema.replaceAll("#All Currencies#", TranslatorWorker.translateText(MoConstants.ALL_CURRENCIES, locale, siteId));
 			
+			/*
 			shema = shema.replaceAll("#Raw_Actual_Commitments#", TranslatorWorker.translateText(MoConstants.RAW_ACTUAL_COMMITMENTS, locale, siteId));
 			shema = shema.replaceAll("#Raw_Actual_Disbursements#", TranslatorWorker.translateText(MoConstants.RAW_ACTUAL_DISBURSEMENTS, locale, siteId));
 			shema = shema.replaceAll("#Raw_Actual_Expenditures#", TranslatorWorker.translateText(MoConstants.RAW_ACTUAL_EXPENDITURES, locale, siteId));
 			shema = shema.replaceAll("#Raw_Planned_Commitments#", TranslatorWorker.translateText(MoConstants.RAW_PLANNED_COMMITMENTS, locale, siteId));
 			shema = shema.replaceAll("#Raw_Planned_Disbursements#", TranslatorWorker.translateText(MoConstants.RAW_PLANNED_DISBURSEMENTS, locale, siteId));
 			shema = shema.replaceAll("#Raw_Planned_Expenditures#", TranslatorWorker.translateText(MoConstants.RAW_PLANNED_EXPENDITURES, locale, siteId));
+			*/
 			shema = shema.replaceAll("#Activity_Count#", TranslatorWorker.translateText(MoConstants.ACTIVITY_COUNT, locale, siteId));
 			shema = shema.replaceAll("#Actual_Commitments#", TranslatorWorker.translateText(MoConstants.ACTUAL_COMMITMENTS, locale, siteId));
 			shema = shema.replaceAll("#Actual_Disbursements#", TranslatorWorker.translateText(MoConstants.ACTUAL_DISBURSEMENTS, locale, siteId));

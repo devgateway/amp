@@ -241,7 +241,8 @@ html>body #mainEmpty {
 
 	function openPrinter(){
 		var val = document.getElementsByName('indicatorId')[0].value;
-		window.open('/aim/parisIndicatorReport.do~indcId='+val+'~reset=true','mywindow','toolbar=no,location=no,directories=no,status=no,menubar=yes,scrollbars=yes,copyhistory=yes,resizable=yes');
+		window.open('/aim/parisIndicatorReport.do~indcId='+val+'~reset=false~print2=true','mywindow','toolbar=no,location=no,directories=no,status=no,menubar=yes,scrollbars=yes,copyhistory=yes,resizable=yes');
+		document.getElementsByName('print2')[0].value = 'false';
 	}
 	
 	function popup_pdf(val) {
@@ -290,6 +291,11 @@ html>body #mainEmpty {
 
 <digi:instance property="aimParisIndicatorReportForm" />
 
+<logic:equal name="aimParisIndicatorReportForm" property="print" value="false">
+	<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
+	<link rel="stylesheet" href="<digi:file src="/repository/parisindicator/view/css/pi_styles.css"/>">
+</logic:equal>
+
 <c:set var="showCurrSettings">
 	<digi:trn key="rep:showCurrSettings">Show current settings</digi:trn> 
 </c:set>
@@ -330,6 +336,7 @@ function toggleSettings(){
 		<td width="1000" align="left" valign="top" BORDER="1" style="padding-left:5px;">
 			<table width="100%"  border="0" cellpadding="5" cellspacing="0">
 				<tr><td>&nbsp;</td></tr>
+				<logic:equal name="aimParisIndicatorReportForm" property="print2" value="false">
 				<tr>
 					<td>
 						<div style="margin-left:5px;margin-right:5px;background-color:#ccdbff;padding:2px 2px 2px 2px;Font-size:8pt;font-family:Arial,Helvetica,sans-serif; ">
@@ -495,6 +502,7 @@ function toggleSettings(){
 						</div>
 					</td>
 				</tr>
+				</logic:equal>
 				<tr>
 			    	<td>
 			        	<table align="left">
@@ -516,6 +524,7 @@ function toggleSettings(){
 				<tr>
 					<td colspan=3 class=box-title align=center></td>
 				</tr>
+				<logic:equal name="aimParisIndicatorReportForm" property="print2" value="false">
 				<tr>
 					<td>
 						<logic:notEmpty name="aimParisIndicatorReportForm"  property="indicatorsColl">
@@ -526,9 +535,11 @@ function toggleSettings(){
 										<logic:iterate id="report" name="aimParisIndicatorReportForm"  property="indicatorsColl" type="org.digijava.module.aim.dbentity.AmpAhsurveyIndicator" indexId="tabIndex">
 											<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 											<c:if test="${report.indicatorCode != '10b'&&report.indicatorCode != '8'}">
-								            	<feature:display  name="PI report ${report.indicatorCode}" module="PI Reports">
+<!--								            	<feature:display  name="PI report ${report.indicatorCode}" module="PI Reports">-->
 													<c:set target="${urlParams}" property="indcId" value="${report.ampIndicatorId}" />
 													<c:set target="${urlParams}" property="reset" value="true" />
+													<c:set target="${urlParams}" property="print2" value="false" />
+													<c:set target="${urlParams}" property="print" value="false" />
 													<!--<LI>-->
 													<!--<a name="node"><div>-->
 													<!--<digi:trn key="aim:parisIndicator:${report.indicatorCode}"><c:out value="Paris Indicator ${report.indicatorCode}"/></digi:trn>-->
@@ -544,7 +555,7 @@ function toggleSettings(){
 															</digi:link>
 								                    	</span>
 													</LI>
-								          		</feature:display>
+<!--								          		</feature:display>-->
 											</c:if>
 										</logic:iterate>
 									</UL>
@@ -552,7 +563,8 @@ function toggleSettings(){
 							</div>
 						</logic:notEmpty>
 					</td>
-				</tr>		
+				</tr>
+				</logic:equal>		
 				<tr>
 					<td width="90%" class="td_top1" style="padding-left:2px;" >
 						<table border="0" cellpadding="0" cellspacing="0" width="100%" height="169">
@@ -680,10 +692,10 @@ function toggleSettings(){
 																					<c:if test="${index1 == index2}">
 																						<c:if test="${rowVal == -1}">n.a.</c:if>
 					                                                                    <c:if test="${rowVal != -1}">
-					                                                                       <c:if test="${secondVal != 0}">
-					                                                                           <fmt:formatNumber type="number" value="${firstVal*100/secondVal}" pattern="###" maxFractionDigits="0" />%
+					                                                                       <c:if test="${firstVal != 0}">
+					                                                                           <fmt:formatNumber type="number" value="${secondVal*100/firstVal}" pattern="###" maxFractionDigits="0" />%
                                                                                            </c:if>
-                                                                                           <c:if test="${secondVal == 0}">n.a.</c:if>
+                                                                                           <c:if test="${firstVal == 0}">n.a.</c:if>
 					                                                                    </c:if>
 																					</c:if>
 																					<c:if test="${index1 != index2}">

@@ -127,6 +127,7 @@ background-color:yellow;
 	var currentPage=1;
     var messages;
 	var slMsgId;
+	var lastTimeStamp;
 	//used to hold already rendered messages
 	var myArray=new Array();
 	
@@ -175,7 +176,8 @@ background-color:yellow;
 
 
 	 function checkForNewMessages(){
-		var url=addActionToURL('messageActions.do?actionType=viewAllMessages&page='+currentPage);			
+		lastTimeStamp = new Date().getTime(); 
+		var url=addActionToURL('messageActions.do?actionType=viewAllMessages&page='+currentPage+'&timeStamp='+lastTimeStamp);			
 		var async=new Asynchronous();
 		async.complete=buildMessagesList;
 		async.call(url);
@@ -348,7 +350,9 @@ background-color:yellow;
 				url+='~actionType=removeSelectedMessage';
 				url+='~editingMessage=false';
 				url+='~removeStateIds='+msgId;
-				url+='~page='+currentPage;			
+				url+='~page='+currentPage;
+				lastTimeStamp = new Date().getTime();
+				url+='~timeStamp='+lastTimeStamp;
 				var async=new Asynchronous();
 				async.complete=buildMessagesList;
 				async.call(url);				
@@ -473,10 +477,12 @@ background-color:yellow;
 		async.call(url);                
    }
 	
-	function getUrl(url,group_id){				
+	function getUrl(url,group_id){
+		lastTimeStamp = new Date().getTime();
 		var result=url;
 		result+='~actionType=makeMsgRead';
 		result+='~msgStateId='+group_id;
+		result+='~timeStamp='+lastTimeStamp;
 		return result;
 	}
 
@@ -507,7 +513,8 @@ background-color:yellow;
 	}
 	
 	function getMessages(){
-		var url=addActionToURL('messageActions.do?actionType=viewAllMessages&page='+currentPage);			
+		lastTimeStamp = new Date().getTime();
+		var url=addActionToURL('messageActions.do?actionType=viewAllMessages&page='+currentPage+'&timeStamp='+lastTimeStamp);			
 		var async=new Asynchronous();
 		async.complete=buildMessagesList;
 		async.call(url);

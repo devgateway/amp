@@ -33,7 +33,7 @@
 
 
 
-</style>
+
 <style>
 .link{
 	text-decoration: none;
@@ -168,6 +168,7 @@ session.setAttribute("progressValue", counter);
 			</span>
 		</td>
 	</tr>
+			</table>
 </logic:notEqual>
 </logic:notEqual>
 	<logic:equal name="viewFormat" scope="request" value="print">
@@ -329,7 +330,6 @@ session.setAttribute("progressValue", counter);
                 <digi:trn key="rep:pop:SelectedRangeEndYear">End Year:</digi:trn> <%=(arf.getRenderEndYear() > 0)?arf.getRenderEndYear():pageContext.getAttribute("all")%> |
               </td>
              </tr>
-             <tr>
            </table>
            </div>
     	</div>

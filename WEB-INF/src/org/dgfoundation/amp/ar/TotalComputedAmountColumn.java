@@ -3,16 +3,18 @@
  */
 package org.dgfoundation.amp.ar;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
 import org.dgfoundation.amp.ar.cell.AmountCell;
-import org.dgfoundation.amp.ar.cell.CategAmountCell;
-import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.ComputedAmountCell;
-import org.dgfoundation.amp.ar.cell.UndisbursedAmountCell;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
+import org.dgfoundation.amp.exprlogic.ExpressionHelper;
+import org.dgfoundation.amp.exprlogic.MathExpression;
+import org.dgfoundation.amp.exprlogic.MathExpressionRepository;
 
 /**
  * 
@@ -87,17 +89,36 @@ public class TotalComputedAmountColumn extends TotalAmountColumn {
 	}
 
 	public List getTrailCells() {
-		ArrayList ar = new ArrayList();
-		Cell ac = new ComputedAmountCell();
+		ArrayList<ComputedAmountCell> ar = new ArrayList<ComputedAmountCell>();
+		ComputedAmountCell ac = new ComputedAmountCell();
 		Iterator i = items.iterator();
-		while (i.hasNext()) {
-			Object el = i.next();
-			CategAmountCell element = (CategAmountCell) el;
-			ac.merge(element, ac);
+		
+		String totalExpression=this.getWorker().getRelatedColumn().getTotalExpression();
+		String rowExpression=this.getWorker().getRelatedColumn().getTokenExpression();
+		
+		//if totaExpression is null sum  the items
+		if(totalExpression==null){
+			
+			while (i.hasNext()) {
+				Object el = i.next();
+				ComputedAmountCell element = (ComputedAmountCell) el;
+				ac.merge(element, ac);
+			}
+		}else{
+			HashMap<String, BigDecimal> variables =ExpressionHelper.getGroupVariable(items, ac,rowExpression);
+			 MathExpression expression =MathExpressionRepository.get(getWorker().getRelatedColumn ().getTotalExpression());
+			 ac.setComputedVaule(expression.result(variables)); ac.setColumn(this);
 		}
+		
 		ac.setColumn(this);
 		ar.add(ac);
 		return ar;
 	}
+
+	   
+	   
+	 
+	  
+	 
 
 }

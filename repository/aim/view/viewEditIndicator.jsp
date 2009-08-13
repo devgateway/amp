@@ -12,7 +12,22 @@
 <jsp:include page="scripts/newCalendar.jsp" flush="true" />
 <digi:instance property="aimNewIndicatorForm" />
 <script language="javascript">
+
+<%--	function validete (){
 	
+	if(document.getElementById("radioProgramIndicator").checked){
+	   alert("ok");
+	}else{
+	      alert("no");  }  
+	
+	if(document.getElementById("radioProjectSpecific").checked){
+	   alert("ok1");
+	 }else{
+	 alert("no1");
+	 }
+	 
+	}
+--%>	
 
 function removeActivity(id) {
 	<c:set var="translation">
@@ -31,6 +46,68 @@ function removeActivity(id) {
 	    document.aimNewIndicatorForm.submit();
 	    return true;		  
     }
+}
+
+
+function saveIndicator(){
+
+ if(document.getElementById("txtName").value==""){
+    <c:set var="translation">
+		<digi:trn key="admin:enterName">Please enter name</digi:trn>
+	</c:set>
+	alert("${translation}");
+    return false;
+  }
+
+  if(document.getElementById("txtCode").value==""){
+    <c:set var="translation">
+		<digi:trn key="admin:enterCode">Please enter code</digi:trn>
+	</c:set>
+	alert("${translation}");
+    return false;
+  }
+ 
+ <%-- 
+  if(!document.getElementById("radioProgramIndicator").checked){
+		 var indStatus = "prgUnchecked"
+		 document.getElementById("programStatus").value = indStatus;
+	}	
+	
+	if(!document.getElementById("radioProjectSpecific").checked){
+		var indStatus = "prjUnchecked"		
+		document.getElementById("projectStatus").value = indStatus;		
+	}
+	--%>   
+		
+	  
+		var length = document.aimNewIndicatorForm.selActivitySector.length;		
+		var Sector;
+		
+		if(!length){
+			<c:set var="translation">
+				<digi:trn key="admin:addSector">Please add Sectors</digi:trn>
+			</c:set>
+			alert("${translation}");
+			return false;
+		}else{
+			for(i = 0; i<length; i++){
+				Sector = document.aimNewIndicatorForm.selActivitySector[i].value;
+				document.getElementById("hdnselActivitySectors").value = Sector;
+			}
+		} 
+
+  
+  <digi:context name="addInd" property="context/module/moduleinstance/viewEditIndicator.do?action=save" />
+  
+  //document.forms[0].action="<%=addInd%>";
+  //document.forms[0].submit();
+  //window.close();
+  //window.opener.document.forms[0].submit();
+  
+  document.aimNewIndicatorForm.action = "<%=addInd%>";
+  document.aimNewIndicatorForm.target="_self";
+  document.aimNewIndicatorForm.submit(); 
+ 
 }
 
 function selectProgram(){
@@ -119,7 +196,7 @@ function selectActivity(){
             </digi:trn>
             </td>
             <td>
-               <html:text property="date" styleId="date" readonly="true" style="font-family:verdana;font-size:11px;width:80px;"/>
+               <html:text property="date" styleId="date" disabled="true" readonly="true" style="font-family:verdana;font-size:11px;width:80px;"/>
 			<a id="date0" href='javascript:pickDateById("date0","date")'>
 				<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0> 
 			</a> 
@@ -182,6 +259,11 @@ function selectActivity(){
 	     </html:button>
       </td>
     </tr>
+    <tr>
+      <td bgcolor="#006699">
+       
+      </td>
+    </tr>    
   </table>
 </digi:form>
 

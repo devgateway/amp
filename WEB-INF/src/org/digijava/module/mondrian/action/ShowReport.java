@@ -8,7 +8,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import javax.servlet.http.HttpSession;
 import javax.xml.bind.JAXBContext;
@@ -22,7 +24,10 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.helper.QuartzJobForm;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.QuartzJobClassUtils;
+import org.digijava.module.aim.util.QuartzJobUtils;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.mondrian.dbentity.EntityHelper;
 import org.digijava.module.mondrian.dbentity.OffLineReports;
@@ -44,12 +49,22 @@ public class ShowReport extends Action {
 			throws java.lang.Exception {
 		ShowReportForm tf = (ShowReportForm) form;
 		HttpSession session = request.getSession();
+		if (session.getAttribute("DuplicateName")!=null && (Boolean) session.getAttribute("DuplicateName")==true){
+			tf.addError("aim:reportwizard:duplicateName", "There is already a report with the same name. Please choose a different one.");
+			session.removeAttribute("DuplicateName");
+		}
 		String id = request.getParameter("id");
 		if (id!=null){
 			OffLineReports report = EntityHelper.LoadReport(Long.parseLong(id));
 			session.setAttribute("querystring", report.getQuery());
 		}
-
+		ArrayList<QuartzJobForm> jobs = QuartzJobUtils.getAllJobs();
+		for (Iterator iterator = jobs.iterator(); iterator.hasNext();) {
+			QuartzJobForm job = (QuartzJobForm) iterator.next();
+			if (job.getClassFullname().equalsIgnoreCase("org.digijava.module.mondrian.job.RefreshMondrianCacheJob")){
+				tf.setLastdate(job.getPrevFireDateTime());
+			}
+		}
 		return mapping.findForward("forward");
 	}
 }

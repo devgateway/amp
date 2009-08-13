@@ -205,7 +205,7 @@ function setHoveredTable(tableId, hasHeaders) {
 	</tr>
 	<tr>
 		<td align=left vAlign=top>
-				
+			<div id="menuContainerDiv"></div>	
 			<span class="subtitle-blue"> &nbsp;&nbsp; 
 				<digi:trn key="contentrepository:contentRepository">
 							Content Repository
@@ -262,8 +262,9 @@ function setHoveredTable(tableId, hasHeaders) {
 								<td colspan="3">
 									<br />
 									<div id="my_markup" align="left" class="all_markup">
-									<bean:define name="crDocumentManagerForm" property="myPersonalDocuments" id="documentDataCollection" type="java.util.Collection" toScope="request" />
-									<jsp:include page="documentTable.jsp" flush="true" />
+										<bean:define name="crDocumentManagerForm" property="myPersonalDocuments" id="documentDataCollection" type="java.util.Collection" toScope="request" />
+										<bean:define toScope="request" id="checkBoxToHide" value="true" />
+										<jsp:include page="documentTable.jsp" flush="true" />
 									</div>
 									<br />
 								</td>

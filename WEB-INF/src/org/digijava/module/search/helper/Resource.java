@@ -48,5 +48,20 @@ public class Resource implements LoggerIdentifiable {
 	public String getWebLink(){
 		return this.webLink;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof Resource))
+				return false;
+		Resource r = (Resource) obj;
+		if(this.name != null && !this.name.equals(r.name) || r.name != null && !r.name.equals(this.name))
+			return false;
+		if(this.uuid != null && !this.uuid.equals(r.uuid) || r.uuid != null && !r.uuid.equals(this.uuid))
+			return false;
+		if(this.webLink != null && !this.webLink.equals(r.webLink) || r.webLink != null && !r.webLink.equals(this.webLink))
+			return false;
+		
+		return true;
+	}
 
 }

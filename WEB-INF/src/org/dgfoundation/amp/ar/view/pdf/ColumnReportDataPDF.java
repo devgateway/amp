@@ -83,7 +83,20 @@ public class ColumnReportDataPDF extends PDFExporter {
 			String translatedName=null;
 			try{
 				//translatedName=TranslatorWorker.translate(prefix+columnReport.getName(),locale,siteId);
-				translatedName=TranslatorWorker.translateText(columnReport.getName(),locale,new Long(siteId));
+								
+				//AMP-6253  
+				String simplename ="";
+				if (columnReport.getName().indexOf(":")>0){
+					simplename = columnReport.getName().substring(0,columnReport.getName().indexOf(":"));
+				}else{
+					simplename = columnReport.getName();
+				}
+				
+				
+				translatedName=TranslatorWorker.translateText(simplename,locale,siteId);
+				if (columnReport.getName().indexOf(":")>0){
+					translatedName += columnReport.getName().substring(columnReport.getName().indexOf(":"));
+				}
 			}catch (WorkerException e)
 				{////System.out.println(e);
 				

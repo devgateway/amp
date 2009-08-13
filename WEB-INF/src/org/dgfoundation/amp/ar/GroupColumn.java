@@ -188,7 +188,7 @@ public class GroupColumn extends Column {
 				if (element.getMeasureName().equals(
 						ArConstants.UNDISBURSED_BALANCE)
 						|| element.getMeasureName().equals(ArConstants.TOTAL_COMMITMENTS) 
-							|| element.getMeasureName().equals(ArConstants.UNCOMMITTED_BALANCE)
+							|| element.getMeasureName().equals(ArConstants.UNCOMMITTED_BALANCE) || (element.getExpression()!=null)
 					) continue;
 				
 				MetaInfo<FundingTypeSortedString> metaInfo = new MetaInfo<FundingTypeSortedString>(

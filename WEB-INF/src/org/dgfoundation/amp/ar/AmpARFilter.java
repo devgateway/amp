@@ -267,8 +267,11 @@ public class AmpARFilter extends PropertyListable {
 				Constants.CURRENT_MEMBER);
 		this.setAmpTeams(new TreeSet());
 		
-		
-		String ampReportId = request.getParameter("ampReportId");
+		String ampReportId = null ;
+		//Check if the reportid is not nut for public mondrian reports
+		if (request.getParameter("ampReportId")!=null){
+			ampReportId = request.getParameter("ampReportId");
+		}
 		if (ampReportId == null) {
 			AmpReports ar = (AmpReports) request.getSession().getAttribute(
 			"reportMeta");
@@ -304,20 +307,22 @@ public class AmpARFilter extends PropertyListable {
 
 		}
 		else {
-			AmpReports ampReport=DbUtil.getAmpReport(Long.parseLong(ampReportId));
+			//Check if the reportid is not nut for public mondrian reports
+			if (ampReportId !=null){
+				AmpReports ampReport=DbUtil.getAmpReport(Long.parseLong(ampReportId));
 			
-			//TreeSet allManagementTeams=(TreeSet) TeamUtil.getAllRelatedTeamsByAccessType("Management");
-			TreeSet teams=new TreeSet();
-			this.setAccessType("team");
-			if (ampReport.getOwnerId()!=null){
-				teams.add(ampReport.getOwnerId().getAmpTeam());
-				teams.addAll(TeamUtil.getAmpLevel0Teams(ampReport.getOwnerId().getAmpTeam().getAmpTeamId()));
-				this.setAmpTeams(teams);
-			}else{
-				teams.add(-1);
-				this.setAmpTeams(teams);
-				logger.error("Error getOwnerId() is null setting team to -1");
-				
+				//TreeSet allManagementTeams=(TreeSet) TeamUtil.getAllRelatedTeamsByAccessType("Management");
+				TreeSet teams=new TreeSet();
+				this.setAccessType("team");
+				if (ampReport.getOwnerId()!=null){
+					teams.add(ampReport.getOwnerId().getAmpTeam());
+					teams.addAll(TeamUtil.getAmpLevel0Teams(ampReport.getOwnerId().getAmpTeam().getAmpTeamId()));
+					this.setAmpTeams(teams);
+				}else{
+					teams.add(-1);
+					this.setAmpTeams(teams);
+					logger.error("Error getOwnerId() is null setting team to -1");
+				}
 			}
 		}
 		

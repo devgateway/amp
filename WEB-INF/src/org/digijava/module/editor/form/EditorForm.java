@@ -120,6 +120,7 @@ public class EditorForm
     private String returnUrl;
     
     private String activityName;
+    private String activityFieldName;
 
     public String getActivityName() {
         return activityName;
@@ -243,4 +244,12 @@ public class EditorForm
     public void setReturnUrl(String returnUrl) {
         this.returnUrl = returnUrl;
     }
+
+	public String getActivityFieldName() {
+		return activityFieldName;
+	}
+
+	public void setActivityFieldName(String activityFieldName) {
+		this.activityFieldName = activityFieldName;
+	}
 }

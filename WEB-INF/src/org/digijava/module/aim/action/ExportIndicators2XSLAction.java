@@ -63,9 +63,26 @@ public class ExportIndicators2XSLAction extends Action {
 
 		HSSFWorkbook wb = new HSSFWorkbook();
 		String sheetName = mainProg.getName();
-		if (sheetName.length() > 31)
+		if (sheetName.length() > 31){
 			sheetName = sheetName.substring(0, 31);
-		HSSFSheet sheet = wb.createSheet( sheetName.replace(":", "-"));
+                }
+                else {
+                if (sheetName.length() == 0) {
+                    // should not be possible, but still...
+                    sheetName = "blank";
+                }
+               }
+                 
+                // replacing odd symbols for sheet name...
+                sheetName=sheetName.replace("/","|");
+                sheetName=sheetName.replace("*","+");
+                sheetName=sheetName.replace("?", " ");
+                sheetName=sheetName.replace("\\", "|");
+                sheetName=sheetName.replace("[", "(");
+                sheetName=sheetName.replace("]", ")");
+                sheetName =sheetName.replace(":", "-");
+          
+		HSSFSheet sheet = wb.createSheet(sheetName);
 
 		
 		HSSFCellStyle csHeader = wb.createCellStyle();
@@ -87,10 +104,12 @@ public class ExportIndicators2XSLAction extends Action {
 		
 		short rowNum = 0;
 		short cellNum = 0;
-
+		Long siteId=site.getId();
 		HSSFRow row = sheet.createRow(rowNum++);
 
 		HSSFCell cell = row.createCell(cellNum);
+                String hierarchyName=ProgramUtil.getHierarchyName(mainProg);
+                String header=TranslatorWorker.translateText("Indicators for", locale, siteId);
 
 		cell.setCellValue(TranslatorWorker.translateText("Indicators for ", locale, site.getId()));
 		cell.setCellStyle(csHeader);

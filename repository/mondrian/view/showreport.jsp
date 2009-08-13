@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 
   <link rel="stylesheet" type="text/css" href="../../../jpivot/table/mdxtable.css">
   <link rel="stylesheet" type="text/css" href="../../../navi/mdxnavi.css">
@@ -34,7 +35,7 @@
 <jp:print id="print01"/>
 <wcf:form id="printform01" xmlUri="/WEB-INF/jpivot/print/printpropertiesform.xml" model="#{print01}" visible="false"/>
 
-<jp:chart baseDisplayURL="/aim/DisplayChart.img" id="chart01" query="#{query01}" visible="false"/>
+<jp:chart baseDisplayURL="/aim/DisplayChart.img" id="chart01" query="#{query01}" visible="false" controllerURL="/mondrian/showreport.do"/>
 
 
 <wcf:form id="chartform01" xmlUri="/WEB-INF/jpivot/chart/chartpropertiesform.xml" model="#{chart01}" visible="false"/>
@@ -82,12 +83,14 @@
 <%-- render navigator --%>
 <wcf:render ref="navi01" xslUri="/WEB-INF/jpivot/navi/navigator.xsl" xslCache="false"/>
 <%-- edit mdx --%>
+<%-- 
 <logic:present name="currentMember" scope="session">
 	<c:if test="${mdxedit01.visible}">
   	<h3>MDX Query Editor</h3>
   	<wcf:render ref="mdxedit01" xslUri="/WEB-INF/wcf/wcf.xsl" xslCache="false"/>
 </c:if>
 </logic:present>
+ --%>
 <%-- sort properties --%>
 <wcf:render ref="sortform01" xslUri="/WEB-INF/wcf/wcf.xsl" xslCache="false"/>
 
@@ -97,7 +100,18 @@
 <%-- print properties --%>
 <wcf:render ref="printform01" xslUri="/WEB-INF/wcf/wcf.xsl" xslCache="false"/>
 
-<!-- render the table -->
+<!-- Errors-->
+<span style="text-align: center;color: red;"> 
+<logic:iterate id="element" name="ShowReportForm" property="errors">
+	<digi:trn key="${element.key}"><bean:write name="element" property="value"/></digi:trn>
+</logic:iterate>
+
+<logic:iterate id="element" name="ShowReportForm" property="messages">
+	<digi:trn key="${element.key}"><bean:write name="element" property="value"/> </digi:trn>
+</logic:iterate>
+</span>
+
+
 <p>
 <wcf:render ref="table01" xslUri="/WEB-INF/jpivot/table/mdxtable.xsl" xslCache="true"/>
 <p>
@@ -110,6 +124,13 @@
 <p>
 	<wcf:render  ref="chart01" xslUri="/WEB-INF/jpivot/chart/chart.xsl"   xslCache="true"/>
 <p>
+<table>
+	<tr>
+    	<td style="white-space:nowrap;background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:120px;border-left:solid 1px #000000;">
+    		<b><digi:trn key="aim:mondrian:datalastrefresedon">Data last refreshed on</digi:trn> <c:out value="${ShowReportForm.lastdate}"/></b>
+        </td>
+     </tr>
+</table>
 </digi:form>
 </body>
 </html>

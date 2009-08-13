@@ -75,6 +75,7 @@ public class ParisIndicatorReport extends Action {
         }
 
         String indcId = request.getParameter("indcId");
+        //String print = request.getParameter("print");
 
         // Populating indicator-report filters here
         if ( (null != indcId && indcId.trim().length() > 0) || svForm.getFilterFlag().booleanValue()) {
@@ -183,6 +184,10 @@ public class ParisIndicatorReport extends Action {
                     svForm.setDonorsColl(DbUtil.getAidSurveyReportByIndicator10a(svForm.getOrgGroup(), svForm.getDonor(),
                         svForm.getStartYear().intValue(), svForm.getCloseYear().intValue(), RequestUtils.getSite(request).getId(), RequestUtils.getNavigationLanguage(request).getCode()));
                     svForm.setDonorsColl(filterDonors(svForm.getDonorsColl(), 1));
+                    if(svForm.getPrint() != null && svForm.getPrint().equals("true")){
+                    	svForm.setPrint("false");
+                    	return mapping.findForward("print");
+                    }
                     return mapping.findForward("report1");
                 }
                 if ("5a".equalsIgnoreCase(svForm.getIndicatorCode()))
@@ -300,6 +305,14 @@ public class ParisIndicatorReport extends Action {
                 flDonorCol = filterDonors(svForm.getDonorsColl(), 0);
             }
 
+            if(svForm.getPrint() != null && svForm.getPrint().equals("true")){
+            	svForm.setPrint("false");
+            	return mapping.findForward("print");
+            }
+            if(svForm.getPrint2() != null && svForm.getPrint2().equals("true")){
+            	svForm.setPrint2("false");
+            	return mapping.findForward("print2");
+            }
             if (svForm.getIndicatorCode().equalsIgnoreCase("3")) {
                 svForm.setCalcResult(clacTargetValue(fl, flDonorCol, true));
                 if (fl != null &&
@@ -353,6 +366,7 @@ public class ParisIndicatorReport extends Action {
     }
 
     private String clacTargetValue(AmpAhsurveyIndicatorCalcFormula fl, List donorCol, boolean lastColumn) {
+        try {
         if (donorCol != null && fl != null && fl.getCalcFormula() != null) {
             if(donorCol.size() == 0) {
             	return null;
@@ -370,6 +384,9 @@ public class ParisIndicatorReport extends Action {
 
                 return String.valueOf(AmpMath.calcExp(formula));
             }
+        }
+        } catch (NumberFormatException e){
+        	logger.error(e);
         }
         return null;
     }

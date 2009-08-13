@@ -148,5 +148,25 @@ public class EntityHelper {
 
 		return result;
 	}
+	public static boolean isDuplicated(String name) {
+		String queryString = null;
+		Query qry = null;
+		List<OffLineReports> result = null;
+		try {
+			Session session = PersistenceManager.getSession();
+			queryString = " select r from " + OffLineReports.class.getName() + " r where r.name=:pname";
+			qry = session.createQuery(queryString);
+			qry.setParameter("pname",name);
+			result = qry.list();
+			if (!result.isEmpty()){
+				return false;
+			}
+		} catch (HibernateException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
+		return true;
+	}
 }

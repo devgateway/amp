@@ -160,6 +160,8 @@ public class AmpTreeVisibility {
 							AmpFieldsVisibility field = (AmpFieldsVisibility) kt
 									.next();
 							AmpTreeVisibility fieldNode = new AmpTreeVisibility();
+							if(field.getDescription()==null || "".equals(field.getDescription()))
+								field.setDescription(field.getName());
 							fieldNode.setRoot(field);
 							fieldNode.setItems(null);
 							featureNode.getItems().put(field.getName(),

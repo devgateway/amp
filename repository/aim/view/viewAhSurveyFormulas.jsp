@@ -34,6 +34,9 @@ function resetFormula(){
   var textBox=document.getElementById("txtBaseLineValue");
   textBox.value="";
 
+  var textBox=document.getElementById("txtTargetValue");
+  textBox.value="";
+  
   textBox=document.getElementById("txtConstant");
   textBox.value="";
 

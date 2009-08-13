@@ -10,6 +10,7 @@ import java.util.Iterator;
 
 import javax.jcr.Node;
 import javax.jcr.Property;
+import javax.jcr.PropertyIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.UnsupportedRepositoryOperationException;
@@ -52,12 +53,16 @@ public class NodeWrapper {
 		try {
 			TeamMember teamMember		= (TeamMember)myRequest.getSession().getAttribute(Constants.CURRENT_MEMBER);
 			Node newNode 	= null;
+			long docType = 0;
 			if (isANewVersion){
+				Property docTypeProp = parentNode.getProperty(CrConstants.PROPERTY_CM_DOCUMENT_TYPE);
+				docType = docTypeProp.getLong();
 				newNode		= parentNode;
 				newNode.checkout();
 			}
 			else{
 				String encTitle	= URLEncoder.encode(myForm.getDocTitle(), "UTF-8");
+				docType = myForm.getDocType();
 				newNode	= parentNode.addNode( encTitle );
 				newNode.addMixin("mix:versionable");
 			}
@@ -100,7 +105,7 @@ public class NodeWrapper {
 			
 			if ( !errorAppeared ) {			
 				populateNode(newNode, myForm.getDocTitle(), myForm.getDocDescription(), myForm.getDocNotes(), 
-					contentType, myForm.getDocType() , teamMember.getEmail() );
+					contentType, docType , teamMember.getEmail() );
 			} 
 			
 			this.node		= newNode;

@@ -26,6 +26,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryPoolMXBean;
+import java.lang.management.MemoryUsage;
 import java.security.Policy;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -54,8 +57,8 @@ import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.viewmanager.ViewConfigFactory;
-import org.hibernate.engine.SessionFactoryImplementor;
 import org.digijava.module.translation.util.HashKeyPatch;
+import org.hibernate.engine.SessionFactoryImplementor;
 
 /**
  * Parses digi.xml configuration file,
@@ -65,12 +68,16 @@ import org.digijava.module.translation.util.HashKeyPatch;
  */
 
 public class ConfigLoaderListener
+
     extends HttpServlet implements ServletContextListener {
+
+	private static final long  MB = 1024L * 1024L;
 
     private static Logger logger = Logger.getLogger(ConfigLoaderListener.class);
 
     private static final String  ORACLE_DB = "ORACLE";
 
+    private static final String  DISABLE_MEM_PARAM=". To disable checking for development purposes, add -Damp.disableMemCheck=true to the VM arguments.";
     
     private static String MODULE_LISTENERS = ConfigLoaderListener.class.
         getName() + ".moduleContextListeners";
@@ -117,7 +124,11 @@ public class ConfigLoaderListener
             PersistenceManager.initialize(true);
 
             checkDatabaseCompatibility( sce.getServletContext().getRealPath("/compat.properties"));
+
+            checkMemoryAllocation( sce.getServletContext().getRealPath("/compat.properties"));
             
+            checkOtherVMParameters();
+          
             SiteCache.getInstance();
             DigiPolicy policy = new DigiPolicy();
             policy.install();
@@ -135,6 +146,7 @@ public class ConfigLoaderListener
                 item.contextInitialized(sce);
             }
             sce.getServletContext().setAttribute(MODULE_LISTENERS, listeners);
+            
 
             // Initialize services
             ServiceManager.getInstance().init(serviceContext, 1);
@@ -156,7 +168,53 @@ public class ConfigLoaderListener
 
     }
 
-    private void checkDatabaseCompatibility(String propertiesFileName) throws FileNotFoundException, IOException, SQLException, IncompatibleEnvironmentException {
+    /**
+     * Uses Memory pool MXBeans to check if AMP has the right amount of memory allocated
+     * @param propertiesFileName path to the compat.properties
+     * @throws FileNotFoundException
+     * @throws IOException
+     * @throws NumberFormatException
+     * @throws IncompatibleEnvironmentException
+     */
+    private void checkMemoryAllocation(String propertiesFileName) throws FileNotFoundException, IOException, NumberFormatException, IncompatibleEnvironmentException {
+    	Properties compat=new Properties();
+		File compatFile=new File(propertiesFileName);
+		compat.load(new FileInputStream(compatFile));
+		boolean verify=true;
+		String disableMemCheck=System.getProperty("amp.disableMemCheck");
+		if(disableMemCheck!=null && "true".equalsIgnoreCase(disableMemCheck)) {
+			verify=false;
+			logger.warn("Memory Allocation Check Disabled! THIS SHOULD ONLY BE USED IN DEVELOPMENT ENVIRONMENTS !!");
+		}
+             
+        Iterator iter = ManagementFactory.getMemoryPoolMXBeans().iterator();  
+        while(iter.hasNext()){  
+           MemoryPoolMXBean item = (MemoryPoolMXBean) iter.next();  
+               MemoryUsage mu = item.getUsage();  
+               long used      = mu.getUsed()/MB;  
+               long committed = mu.getCommitted()/MB;  
+               long max       = mu.getMax()/MB;  
+               logger.info("MEMORY Type "+item.getName()+": Used="+used+"m; Committed="+committed+"m; Max="+max+"m");
+               String setting=compat.getProperty("jvm."+item.getName().replaceAll(" ","").toLowerCase());
+               if(verify && setting!=null && Long.parseLong(setting)>max) throw new IncompatibleEnvironmentException("The JVM does not have enough memory allocated. Memory Type "+item.getName()+"; Max available="+max+"m; Max required="+Long.parseLong(setting)+"m"+DISABLE_MEM_PARAM); 
+        }
+        long maxMemAvaiable=Runtime.getRuntime().maxMemory()/MB;
+        logger.info("MEMORY Total Max: "+maxMemAvaiable+"m");
+        long maxMemRequired=Long.parseLong(compat.getProperty("jvm.maxmem"));
+        if(verify &&  maxMemRequired>maxMemAvaiable) throw new IncompatibleEnvironmentException("The JVM does not have enough TOTAL memory allocated; Max available="+maxMemAvaiable+"m; Max required="+maxMemRequired+"m"+DISABLE_MEM_PARAM); 
+        logger.info("Memory Allocation Check OK.");
+		
+	}
+
+    /**
+     * Checks if the database server to which AMP connects as well as the JDBC driver used are compatible with the testing environment that AMP is using.
+     * @param propertiesFileName path to the compat.properties file
+     * @throws FileNotFoundException
+     * @throws IOException
+     * @throws SQLException
+     * @throws IncompatibleEnvironmentException
+     */
+	private void checkDatabaseCompatibility(String propertiesFileName) throws FileNotFoundException, IOException, SQLException, IncompatibleEnvironmentException {
     	SessionFactoryImplementor sfi=(SessionFactoryImplementor) PersistenceManager.getSessionFactory();
 		Connection connection = sfi.getConnectionProvider().getConnection();
 		DatabaseMetaData metaData = connection.getMetaData();
@@ -198,6 +256,15 @@ public class ConfigLoaderListener
 		logger.info("Database compatibility OK"); 
     }
     
+	/**
+	 * Checks other properties that have to be set in order for AMP to work properly
+	 * @throws IncompatibleEnvironmentException
+	 */
+	private void checkOtherVMParameters() throws IncompatibleEnvironmentException {
+		String awtHeadless=System.getProperty("java.awt.headless");
+		if(awtHeadless==null || !"true".equalsIgnoreCase(awtHeadless)) throw new IncompatibleEnvironmentException("Please add -Djava.awt.headless=true to the VM parameters. This is required in order to get the charts work properly");
+	}
+	
     private Map getModuleContextInitializers() throws ClassNotFoundException,
         InstantiationException, IllegalAccessException, InstantiationException,
         ClassCastException {

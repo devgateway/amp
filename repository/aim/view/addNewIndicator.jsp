@@ -15,6 +15,131 @@
 
 <script language="javascript">
 
+function validate(field) {
+//    alert(field);
+	<c:set var="translation">
+		<digi:trn key="admin:chooseSectorToRemove">Please choose a sector to remove</digi:trn>
+	</c:set>
+	if (field == 2) { // validate sector
+		if (document.aimNewIndicatorForm.selActivitySector.checked != null) {
+			if (document.aimNewIndicatorForm.selActivitySector.checked == false) {
+				alert("${translation}");
+				return false;
+			}
+		} else {
+			var length = document.aimNewIndicatorForm.selActivitySector.length;
+			var flag = 0;
+			for (i = 0;i < length;i ++) {
+				if (document.aimNewIndicatorForm.selActivitySector[i].checked == true) {
+					flag = 1;
+					break;
+				}
+			}
+
+			if (flag == 0) {
+				alert("${translation}");
+				return false;
+			}
+		}
+		return true;
+	}
+}
+
+
+function addNewIndicator(){
+		
+ if(document.getElementById("txtName").value==""){
+    <c:set var="translation">
+		<digi:trn key="admin:enterName">Please enter name</digi:trn>
+	</c:set>
+	alert("${translation}");
+    return false;
+  }
+
+  if(document.getElementById("txtCode").value==""){
+    <c:set var="translation">
+		<digi:trn key="admin:enterCode">Please enter code</digi:trn>
+	</c:set>
+	alert("${translation}");
+    return false;
+  }
+   if(document.aimNewIndicatorForm.type.value!="A"&&document.aimNewIndicatorForm.type.value!="D"){
+       <c:set var="translation">
+                <digi:trn key="admin:selectIndicatorType">Please Select Indicator Type</digi:trn>
+        </c:set>
+	alert("${translation}");
+    return false;
+  }
+<%-- 
+	if(!document.aimNewIndicatorForm.IndType.checked && !document.aimNewIndicatorForm.IndicatorType.checked){
+	   alert("Please select indicator type(s).!");
+	   return false;
+	   
+ }
+  if(!document.aimNewIndicatorForm.IndicatorType.checked)
+      {  var valind = 1;
+         document.getElementById("IndicatorTypChecke").value = valind;
+      }
+      
+      if(!document.aimNewIndicatorForm.IndType.checked)
+      {
+         var valind = 1;
+         document.getElementById("IndTypChecke").value = valind;
+      }
+      	var checkbox = document.aimNewIndicatorForm.IndicatorType.checked
+--%>
+		var length = document.aimNewIndicatorForm.selActivitySector.length;		
+		var Sector;
+		
+		if(!length){
+			<c:set var="translation">
+				<digi:trn key="admin:addSector">Please add Sectors</digi:trn>
+			</c:set>
+			alert("${translation}");
+			return false;
+		}else{
+			for(i = 0; i<length; i++){
+				Sector = document.aimNewIndicatorForm.selActivitySector[i].value;
+				document.getElementById("hdnselActivitySectors").value = Sector;
+			}
+		} 
+		
+	<digi:context name="addInd" property="context/module/moduleinstance/addNewIndicator.do?action=add" />	
+	document.aimNewIndicatorForm.action = "<%= addInd %>";
+	document.aimNewIndicatorForm.target = "_self";
+	document.aimNewIndicatorForm.submit();
+	
+
+  
+  //document.forms[0].action="<%=addInd%>";
+  //document.forms[0].submit();
+ // window.opener.location.reload(true);
+ // window.opener.focus();
+  //window.close();
+  //window.opener.viewall();
+}
+
+function addSectors() {
+
+ 		openNewWindow(600, 450);
+		<digi:context name="addSector" property="context/module/moduleinstance/selectSectorForind.do?edit=true" />
+	  	document.aimNewIndicatorForm.action = "<%= addSector %>";
+		document.aimNewIndicatorForm.target = popupPointer.name;
+		document.aimNewIndicatorForm.submit();
+}
+
+function removeSelSectors() {
+		  var flag = validate(2);
+		  if (flag == false) return false;
+		  
+          <digi:context name="remSec" property="context/module/moduleinstance/removeIndicatorSelSectors.do?edit=true" />
+          document.aimNewIndicatorForm.action = "<%= remSec %>";
+          document.aimNewIndicatorForm.target = "_self"
+          document.aimNewIndicatorForm.submit();
+          return true;
+}
+
+
 function selectProgram(){
 
   <digi:context name="selPrg" property="context/module/moduleinstance/selectProgramForIndicator.do" />
@@ -26,6 +151,10 @@ function selectActivity(){
   openURLinWindow("<%= selAct %>",700, 500);
   
 }
+
+function closeWindow() {
+		window.close();
+	}
 function removeActivity(id) {
 	<c:set var="translation">
 		<digi:trn key="admin:deleteThisActivity">Do you want to delete this Activity?</digi:trn>
@@ -49,7 +178,15 @@ function removeActivity(id) {
 </script>
 <digi:instance property="aimNewIndicatorForm" />
 <digi:form action="/addNewIndicator.do" method="post">
-    
+
+<script language="javascript">
+<c:if test="${aimNewIndicatorForm.action=='added'}">
+    window.opener.location.href = window.opener.location.href;
+    window.opener.focus();
+    window.close();
+</c:if>
+  
+</script>    
  <!-- <html:hidden property="type" value="3"/> --> 
   <html:hidden property="trType" value="3"/>
   <html:hidden property="category" value="-1"/> 
@@ -212,6 +349,11 @@ function removeActivity(id) {
  	 <html:button  styleClass="dr-menu" property="submitButton"  onclick="closeWindow()">
 			<digi:trn key="btn:close">Close</digi:trn> 
 	 </html:button>
+      </td>
+    </tr>
+    <tr>
+      <td bgcolor="#006699">
+       
       </td>
     </tr>
   </table>

@@ -10,7 +10,6 @@
 .all_markup .yui-dt-even {background-color:#FFFFFF;} 
 .all_markup .yui-dt-odd {background-color:#CCDBFF;} /* a light blue color */ 
 .all_markup .yui-dt-selected {background-color:#A7CC25;} /*green*/
-
 .all_markup .yui-dt-headtext {background-color: rgb(153, 153, 153); color: black;margin-right:5px;padding-right:15px;font-size: 10px;font: bold 7.5pt "Verdana"; color:black;}
 .all_markup .yui-dt-headcontainer {background-color: rgb(153, 153, 153); color: black;}
 .all_markup .yui-dt-sortedbyasc .yui-dt-headcontainer {color: black;background: url('/repository/contentrepository/view/images/up.gif') no-repeat right;}/*arrow up*/
@@ -29,16 +28,16 @@
 .versions_markup .yui-dt-sortedbydesc .yui-dt-headcontainer {background: url('/repository/contentrepository/view/images/down.gif') no-repeat right;}/*arrow down*/
 .versions_markup .yui-dt-sortedbyasc, .versions_markup .yui-dt-sortedbydesc {background-color: rgb(153, 153, 153); color: black;}
 
-#otherDocumentsDiv .yuimenu {z-index: 101;}
-#otherDocumentsDiv ul.first-of-type { background: transparent; z-index: 300000;} 
-#otherDocumentsDiv ul.first-of-type li  {
+#menuContainerDiv .yuimenu {z-index: 101;}
+#menuContainerDiv ul.first-of-type { background: transparent; z-index: 300000;} 
+#menuContainerDiv ul.first-of-type li  {
 	background: transparent; z-index: 300001
 }
-#otherDocumentsDiv ul.first-of-type li.selected  {
+#menuContainerDiv ul.first-of-type li.selected  {
 	background: #8c8ad0;
 }
-#otherDocumentsDiv ul.first-of-type a{float: none; background: transparent; color: #000000; font-size: 10px; text-decoration: none; font-style: normal;}
-#otherDocumentsDiv ul.first-of-type li.selected a.selected{ 
+#menuContainerDiv ul.first-of-type a{float: none; background: transparent; color: #000000; font-size: 10px; text-decoration: none; font-style: normal;}
+#menuContainerDiv ul.first-of-type li.selected a.selected{ 
 	color: #ffffff; text-decoration: underline; font-size: 10px; font-style: normal;
 }
 </style>
@@ -251,6 +250,7 @@ YAHOO.namespace("YAHOO.amp.table");
 YAHOO.amp.table.enhanceMarkup = function(markupName) {
 	//var cb = {key:"select",type:"checkbox", text:"${trans_headerSelect}",sortable:false,width:10};
 	
+	if(checkBoxToHide != null && checkBoxToHide.value == "true"){
     this.columnHeaders = [
 		{key:"resource_title",text:"${trans_headerResourceTitle}",sortable:true,width:150},
 	    {key:"type",text:"${trans_headerType}",sortable:true},
@@ -261,6 +261,19 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
         {key:"description",text:"${trans_headerDescription}",sortable:false,width:100},
         {key:"actions",text:"${trans_headerActions}",sortable:false,width:150}
     ];
+	}
+	else{
+	    this.columnHeaders = [
+      			{key:"resource_title",text:"${trans_headerResourceTitle}",sortable:true,width:150},
+       		    {key:"type",text:"${trans_headerType}",sortable:true},
+       	        {key:"file_name",text:"${trans_headerFileName}",sortable:true,width:150},
+        	    {key:"date",type:"Date",text:"${trans_headerDate}",sortable:true},
+	   	        {key:"size",type:"number",text:"${trans_fileSize}",sortable:true},
+            	{key:"cm_doc_type",text:"${trans_cmDocType}",sortable:true},
+	            {key:"description",text:"${trans_headerDescription}",sortable:false,width:100},
+	            {key:"actions",text:"${trans_headerActions}",sortable:false,width:150}
+	    ];
+	}
     this.columnSet 	= new YAHOO.widget.ColumnSet(this.columnHeaders);
 
     var markup	 				= YAHOO.util.Dom.get(markupName);
@@ -274,6 +287,9 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
 	var dataTable 				= new YAHOO.widget.DataTable(markupName, this.columnSet, null, options);
 	dataTable.subscribe("cellClickEvent", dataTable.onEventSelectRow);
 
+	// this is for document in activity form, to be able to select them, since the checbox is removed
+	dataTable.subscribe("cellClickEvent", dataTable.onEventSelectRow);
+	
 	if ( dataTable.getRecordSet().getLength() == null || dataTable.getRecordSet().getLength() == 0 ) {
 		dataTable.showEmptyMessage();
 	}
@@ -511,7 +527,10 @@ function newWindow(title, showSelectButton, otherDocumentsDiv) {
 	
 	var menuObj						= null;
 	if (showSelectButton) {
-				menuObj	= addMenuToDocumentList(YAHOO.amp.num_of_tables, newDiv, windowController);
+				var divForRenderingMenu		= document.getElementById("menuContainerDiv");
+				if ( divForRenderingMenu == null )
+					divForRenderingMenu		= newDiv;
+				menuObj	= addMenuToDocumentList(YAHOO.amp.num_of_tables, divForRenderingMenu, windowController);
 				YAHOO.util.Event.addListener(otherDocumentsButtonElement, "click", showMenu, menuObj, true);
 	}
 	
@@ -699,10 +718,11 @@ function addMenuToDocumentList (menuNum, containerElement, windowController) {
 		membersMenu.addItem(menuItem); 
 
 	</logic:iterate>
-	menu.addItem(  new YAHOO.widget.MenuItem("${trans_teamMemberDocuments}", {submenu: membersMenu})   );
+	var mItem1="${trans_teamMemberDocuments}";
+	 menu.addItem(  new YAHOO.widget.MenuItem("${trans_teamMemberDocuments}", {submenu: membersMenu, id:mItem1})   );
 	</logic:notEmpty>
 	
-	/*<logic:notEmpty name="meTeamMember">
+	<logic:notEmpty name="meTeamMember">
 		var scopeObj	= {
 			teamId				: '<bean:write name="meTeamMember" property="teamId" />'
 		};
@@ -712,10 +732,10 @@ function addMenuToDocumentList (menuNum, containerElement, windowController) {
 			scope				: windowController
 			
 		};
-		
-	menu.addItem(  new YAHOO.widget.MenuItem("${trans_teamDocuments}", {onclick: onclickObj} )   );
+		var mItem2="${trans_teamDocuments}";
+	menu.addItem(  new YAHOO.widget.MenuItem("${trans_teamDocuments}", {onclick: onclickObj, id:mItem2} )   );
 	</logic:notEmpty>
-	
+	/*
 		var onclickObj 	= {
 			fn					: windowController.populateWithPublicDocs,
 			scope				: windowController
@@ -818,6 +838,11 @@ function configPanel(panelNum, title, description, optionId, uuid, isAUrl) {
 		myForm.docDescription.readOnly				= true;
 		myForm.docDescription.style.backgroundColor	= "#eeeeee";
 		myForm.docDescription.style.color			= "darkgray";
+		
+		myForm.docType.style.backgroundColor	= "#eeeeee";
+		myForm.docType.style.color			= "darkgray";
+
+
 		
 		setPanelHeader(0, "${translation_add_new_version}");
 		

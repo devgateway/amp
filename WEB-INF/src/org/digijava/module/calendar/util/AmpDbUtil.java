@@ -316,6 +316,27 @@ public class AmpDbUtil {
         return null;
     }
   }
+  public static void deleteAmpCalendarAttendee(AmpCalendarAttendee attendee) throws  CalendarException {
+		Transaction tx = null;
+		try {
+		  Session session = PersistenceManager.getRequestDBSession();
+		  tx = session.beginTransaction();  
+		  session.delete(attendee);
+		  tx.commit();
+		}
+		catch (Exception ex) {
+		  if (tx != null) {
+		    try {
+		      tx.rollback();
+		    }
+		    catch (Exception ex1) {
+		      throw new CalendarException(
+		          "Cannot rollback delete AMPCalendar", ex1);
+		    }
+		  }
+		  throw new CalendarException("Canot delete AMPCalendar", ex);
+		}
+  }
 
   public static void deleteAmpCalendar(Long ampCalendarId) throws
       CalendarException {
@@ -343,28 +364,7 @@ public class AmpDbUtil {
     }
   }
   
-  public static void deleteAmpCalendarAttendee(AmpCalendarAttendee attendee) throws  CalendarException {
-	Transaction tx = null;
-	try {
-	  Session session = PersistenceManager.getRequestDBSession();
-	  tx = session.beginTransaction();  
-	  session.delete(attendee);
-	  tx.commit();
-	}
-	catch (Exception ex) {
-	  if (tx != null) {
-	    try {
-	      tx.rollback();
-	    }
-	    catch (Exception ex1) {
-	      throw new CalendarException(
-	          "Cannot rollback delete AMPCalendar", ex1);
-	    }
-	  }
-	  throw new CalendarException("Canot delete AMPCalendar", ex);
-	}
-  }
-  
+ 
   public static void updateAmpCalendarAttendee(AmpCalendarAttendee attendee) throws CalendarException{
 	  Transaction tx = null;
 	  try {

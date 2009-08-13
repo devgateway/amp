@@ -20,7 +20,11 @@
 		
 		<layout name="parisIndicatorLayout" extends="default" file="noLayout.jsp">
 		  <put name="title">Paris Indicator Reports</put>
-		  <put-item name="body" file="parisindicator_N.jsp"/>
+		  <put-item name="body" file="/repository/aim/view/viewParisIndicatorReportI.jsp"/>
+		</layout>
+		<layout name="parisIndicatorLayout2" extends="default" file="noLayout.jsp">
+		  <put name="title">Paris Indicator Reports</put>
+		  <put-item name="body" file="/repository/aim/view/viewParisIndicatorReportII.jsp"/>
 		</layout>
 		
 		<layout name="gisDashboardLayout" extends="default" file="gisDashboardlayout.jsp">

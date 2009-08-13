@@ -588,6 +588,8 @@
       <forward name="report2" path="/showLayout.do?layout=viewParisIndicatorReportII" />
       <forward name="index" path="/aim/index.do" redirect="true" />
       <forward name="viewMyDesktop" path="/aim/viewMyDesktop.do" redirect="true" />
+      <forward name="print" path="/showLayout.do?layout=parisIndicatorLayout" />
+      <forward name="print2" path="/showLayout.do?layout=parisIndicatorLayout2" />
     </action>
     
     <action name="aimParisIndicatorReportForm" path="/aim/parisIndicatorPopupAction" scope="session" type="org.digijava.module.aim.action.ParisIndicatorPopupAction" validate="false">
@@ -1660,12 +1662,15 @@
 
     </action>
     <action name="aimViewIndicatorsForm" path="/aim/viewIndicators" scope="session" type="org.digijava.module.aim.action.ViewIndicators" validate="false">
-      <forward name="forward" path="/showLayout.do?layout=viewIndicators" />
+      <forward name="forward" path="/showLayout.do?layout=viewIndicators"/>
       <forward name="deleted" path="/aim/viewIndicators.do?indicator=deleted" />
     </action>
 	<action name="aimNewIndicatorForm" path="/aim/addNewIndicator" scope="session" type="org.digijava.module.aim.action.AddNewIndicator" validate="false">
      <forward name="forward" path="/showLayout.do?layout=addNewIndicator" />
      <forward name="added" path="/aim/viewIndicators.do" redirect="true"/>
+    </action>
+    <action name="aimViewIndicatorsForm" path="/aim/removeIndicator" scope="session" type="org.digijava.module.aim.action.RemoveIndicator" validate="false">     
+     <forward name="viewAll" path="/aim/viewIndicators.do" redirect="true"/>
     </action>
     <action name="aimNewIndicatorForm" path="/aim/selectProgramForIndicator" scope="session" type="org.digijava.module.aim.action.SelectProgramForIndicator" validate="false">
       <forward name="edit" path="/showLayout.do?layout=viewEditIndicator" />

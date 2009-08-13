@@ -43,6 +43,9 @@ public class ComputedAmountColWorker extends ColumnWorker {
 	public CellColumn newColumnInstance(int initialCapacity) {
 		TotalComputedAmountColumn cc = new TotalComputedAmountColumn(columnName, false, initialCapacity);
 		cc.setWorker(this);
+		cc.setDescription(this.getRelatedColumn().getDescription());
+		cc.setExpression(this.getRelatedColumn().getTokenExpression());
+		cc.setTotalExpression(this.getRelatedColumn().getTokenExpression());
 		return cc;
 	}
 
@@ -80,29 +83,12 @@ public class ComputedAmountColWorker extends ColumnWorker {
 
 	protected Cell getCellFromCell(Cell src) {
 		CategAmountCell categ = (CategAmountCell) src;
-
 		ComputedAmountCell cell = new ComputedAmountCell();
-
-		cell.setId(categ.getId());
-
-		cell.setOwnerId(categ.getOwnerId());
-		cell.setValue(categ.getValue());
-		cell.setFromExchangeRate(categ.getFromExchangeRate());
-		cell.setCurrencyDate(categ.getCurrencyDate());
-		cell.setCurrencyCode(categ.getCurrencyCode());
-		cell.setToExchangeRate(categ.getToExchangeRate());
-		cell.setColumn(categ.getColumn());
-		cell.setColumnCellValue(categ.getColumnCellValue());
-		cell.setColumnPercent(categ.getColumnPercent());
-		cell.setCummulativeShow(categ.isCummulativeShow());
-
-		cell.setShow(categ.isShow());
-		cell.setRenderizable(categ.isRenderizable());
-		cell.setCummulativeShow(categ.isCummulativeShow());
-		cell.setMetaData(categ.getMetaData());
+		cell.setValuesFromCell((CategAmountCell)src);
 		return cell;
 	}
-
+	
+	
 	public Cell newCellInstance() {
 		return new ComputedAmountCell();
 

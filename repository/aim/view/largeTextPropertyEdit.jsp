@@ -23,7 +23,7 @@
 					<td><digi:edit key="${largeTextKey}" /></td>
 				</tr>
 				<tr>
-					<td><a href="javascript:edit('${largeTextKey}')"> <digi:trn
+					<td><a href="javascript:edit('${largeTextKey}','${largeTextLabel}')"> <digi:trn
 						key="aim:edit">Edit</digi:trn></a></td>
 				</tr>
 			</table>

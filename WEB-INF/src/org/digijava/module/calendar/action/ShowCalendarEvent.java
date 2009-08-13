@@ -55,6 +55,7 @@ import org.digijava.module.message.dbentity.AmpMessageSettings;
 import org.digijava.module.message.triggers.CalendarEventSaveTrigger;
 import org.digijava.module.message.triggers.RemoveCalendarEventTrigger;
 import org.digijava.module.message.util.AmpMessageUtil;
+import org.digijava.module.message.triggers.RemoveCalendarEventTrigger;
 
 
 public class ShowCalendarEvent extends Action {
@@ -67,6 +68,7 @@ public class ShowCalendarEvent extends Action {
             ceform.reset(mapping, request);
             ceform.setOrganizations(null);
             ceform.setSelOrganizations(null);
+            ceform.setActionButtonsVisible(true);
         }
         else if(ceform.getMethod().equalsIgnoreCase("removeOrg")) 
         {
@@ -552,6 +554,7 @@ public class ShowCalendarEvent extends Action {
                     ceform.setSelectedEndTime(endDateBreakDown.formatTimeString());
                     
                 } catch (Exception ex) {
+                	ex.printStackTrace();
                 }
 
                 ceform.setPrivateEvent(ampCalendar.isPrivateEvent());

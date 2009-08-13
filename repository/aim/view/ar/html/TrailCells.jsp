@@ -56,37 +56,33 @@
 	
 	</td>
 	<c:set var="firstCell" value="${true}"></c:set>
+	
 	<logic:iterate name="reportData" property="trailCells" id="cell" scope="page">
-		<c:if test="${cell!=null}">
-		<c:if test="${reportData.levelDepth == 1}">
-			<td align="center" style="border-bottom: #E0E0E0 1px solid;border-right: #E0E0E0 1px solid;font-family: Arial;font-weight: bold">
-		</c:if>
-		<c:if test="${reportData.levelDepth == 2}">
-			<td style="border-bottom: #E0E0E0 1px solid;background:#99CCFF;font-weight: bold;font-family: Arial;">
-		</c:if>  
-		<c:if test="${reportData.levelDepth > 2}">
-			<td style="border-bottom: #E2E2E2 1px solid;border-right: #E2E2E2 1px solid">
-		</c:if>  
-			<bean:define id="viewable" name="cell" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
-			<bean:define id="caller" name="reportData" type="org.dgfoundation.amp.ar.ReportData" scope="page" toScope="request" />			
-			<jsp:include page="<%=viewable.getViewerPath()%>"/>	
-		</td>
-		</c:if>
-		<c:if test="${cell==null}">
-		<c:if test="${firstCell==false}">
-			<c:if test="${reportData.levelDepth == 1}">
-			<td align="center" style="border-bottom: #E0E0E0 1px solid;border-right: #E0E0E0 1px solid;font-family: Arial;font-weight: bold">
-		</c:if>
-		<c:if test="${reportData.levelDepth == 2}">
-			<td style="border-bottom: #E0E0E0 1px solid;background:#99CCFF;font-weight: bold;font-family: Arial;">
-		</c:if>  
-		<c:if test="${reportData.levelDepth > 2}">
-			<td style="border-bottom: #E2E2E2 1px solid;border-right: #E2E2E2 1px solid">
-		</c:if>  
-		&nbsp;</td>
-		</c:if>
+		<c:if test="${firstCell == false}">
+				<c:if test="${reportData.levelDepth == 1}">
+					<td align="center" style="border-bottom: #E0E0E0 1px solid;border-right: #E0E0E0 1px solid;font-family: Arial;font-weight: bold">
+				</c:if>
+				<c:if test="${reportData.levelDepth == 2}">
+					<td style="border-bottom: #E0E0E0 1px solid;background:#99CCFF;font-weight: bold;font-family: Arial;">
+				</c:if>  
+			
+				<c:if test="${reportData.levelDepth > 2}">
+					<td style="border-bottom: #E2E2E2 1px solid;border-right: #E2E2E2 1px solid">
+				</c:if>  
+			
+					<c:if test="${cell!=null}">
+						<bean:define id="viewable" name="cell" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
+						<bean:define id="caller" name="reportData" type="org.dgfoundation.amp.ar.ReportData" scope="page" toScope="request" />	 		
+						<jsp:include page="<%=viewable.getViewerPath()%>"/>	
+					</c:if>
+					<c:if test="${cell==null}">
+					&nbsp;
+					</c:if>		
+				</td>
 		</c:if>
 		<c:set var="firstCell" value="${false}"></c:set>
-		
 	</logic:iterate>
 </tr>
+
+
+

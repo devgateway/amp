@@ -361,7 +361,7 @@ public class AddAmpActivity extends Action {
 
       boolean activityApprovalStatusProcess=false;
 
-      if (!eaForm.isEditAct() || logframepr.compareTo("true") == 0 || request.getParameter("logframe") != null) {
+      if (eaForm.getIsPreview()==1 || !eaForm.isEditAct() || logframepr.compareTo("true") == 0 || request.getParameter("logframe") != null) {
        if (teamMember != null)
         if ("true".compareTo((String) session.getAttribute("teamLeadFlag"))==0)
             eaForm.getIdentification().setApprovalStatus(org.digijava.module.aim.helper.Constants.APPROVED_STATUS);
@@ -418,11 +418,9 @@ public class AddAmpActivity extends Action {
         eaForm.setStep("1");
         // When the contents are saved the editor module redirects to the url specified in the 'referrer' parameter
         session.setAttribute("activityName", eaForm.getIdentification().getTitle());
-        String url = "/editor/showEditText.do?id=" + eaForm.getEditKey() +"&lang="+RequestUtils.
-                        getNavigationLanguage(request).
-                        getCode()+
-            "&referrer=" + eaForm.getContext() +
-            "/aim/addActivity.do?edit=true";
+        session.setAttribute("activityFieldName", request.getParameter("fieldName"));
+        String url = "/editor/showEditText.do?id=" + eaForm.getEditKey() +"&lang="+RequestUtils.getNavigationLanguage(request).getCode()+
+            "&referrer=" + eaForm.getContext() +"/aim/addActivity.do?edit=true";
         response.sendRedirect(eaForm.getContext() + url);
       }
       else if (eaForm.getStep().equals("1_5")) { // show the 'Refernces' step page.

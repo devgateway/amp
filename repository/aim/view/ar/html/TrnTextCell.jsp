@@ -10,7 +10,7 @@
 	<bean:define id="starFlagLocal" name="starFlag" scope="request" toScope="page" />
 </logic:present>
 
-<div align="left" style="padding-left:<%=request.getAttribute("pading")%>" 
+<div align="left" style="padding-left:<%=request.getAttribute("pading")%>">
 	<%
 		if (trnTextCell.getTrasnlatedValue(request).length() > 39){ 
 	%>

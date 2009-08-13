@@ -244,7 +244,7 @@ public class DbUtil {
            session = PersistenceManager.getRequestDBSession();
 
            StringBuffer querySrc = new StringBuffer();
-           querySrc.append("select ds.indicator.indicatorId, ds.indicator.name from ");
+           querySrc.append("select distinct ds.indicator.indicatorId, ds.indicator.name from ");
            querySrc.append(IndicatorConnection.class.getName());
            querySrc.append(" ds");
            querySrc.append(" where ds.sector.ampSectorId=:sectorId and");

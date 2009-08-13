@@ -66,6 +66,8 @@ public class AddFunding extends Action {
 		formBean.getFunding().setNumExp(0);
         formBean.getFunding().setNumDisb(0);
         formBean.getFunding().setFundingMTEFProjections( new ArrayList<MTEFProjection>() );
+        formBean.getFunding().setModality(null);
+        formBean.getFunding().setDonorObjective(null);
 
         boolean afterFiscalYearStart	= isAfterFiscalYearStart(null);
         MTEFProjection me	= null;

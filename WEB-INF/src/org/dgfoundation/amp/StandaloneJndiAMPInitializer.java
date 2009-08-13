@@ -58,10 +58,9 @@ public class StandaloneJndiAMPInitializer {
 		public Object lookup(String name) throws NamingException {
 			try {
 				if (Constants.UNIFIED_JNDI_ALIAS.equals(name)) {
-					Object lookup = super.lookup(realJNDI);
 					logger.info("JNDI lookup for " + name
-							+ " has been translated into " + realJNDI +" of type "+lookup.getClass().getName());
-					return lookup;
+							+ " has been translated into " + realJNDI);
+					return super.lookup(realJNDI);
 				}
 				return super.lookup(name);
 			} catch (CommunicationException e) {
@@ -76,10 +75,9 @@ public class StandaloneJndiAMPInitializer {
 		public Object lookup(Name name) throws NamingException {
 			try {
 				if (Constants.UNIFIED_JNDI_ALIAS.equals(name.toString())) {
-					Object lookup = super.lookup(realJNDI);
-					logger.info("JNDI lookup for " + name
-							+ " has been translated into " + realJNDI +" of type "+lookup.getClass().getName());
-					return lookup;
+					logger.info("JNDI lookup for " + name.toString()
+							+ " has been translated into " + realJNDI);
+					return super.lookup(realJNDI);
 				}
 				return super.lookup(name);
 			} catch (CommunicationException e) {

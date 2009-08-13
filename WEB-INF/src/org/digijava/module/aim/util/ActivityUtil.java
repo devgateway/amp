@@ -2454,7 +2454,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	    try {
 	      session = PersistenceManager.getRequestDBSession();
 	      String qryStr = "select a from " + AmpIssues.class.getName() +
-	          " a where a.amp_activity_id=:actId ";
+	          " a where a.activity.ampActivityId=:actId ";
 	      Query qry = session.createQuery(qryStr);
 	      qry.setParameter("actId", actId, Hibernate.LONG);
 	      issues = qry.list();

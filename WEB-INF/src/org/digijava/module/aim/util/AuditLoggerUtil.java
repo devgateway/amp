@@ -204,7 +204,7 @@ public class AuditLoggerUtil {
 		
 		try {
 			session = PersistenceManager.getSession();
-			qryStr = "select f from " + AmpAuditLogger.class.getName() + " f";
+			qryStr = "select f from " + AmpAuditLogger.class.getName() + " f order by loggedDate desc";
 			qry = session.createQuery(qryStr);
 			col = qry.list();
 		} catch (Exception ex) {

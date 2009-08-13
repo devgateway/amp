@@ -65,8 +65,10 @@ public class ShowEditText
         HttpSession session = request.getSession();
 
         String name=(String)session.getAttribute("activityName");
+        String fieldName=(String)session.getAttribute("activityFieldName");
         EditorForm formBean = (EditorForm) form;
         formBean.setActivityName(name);
+        formBean.setActivityFieldName(fieldName);
         List dbEditorList = null;
         Editor editor = null;
 

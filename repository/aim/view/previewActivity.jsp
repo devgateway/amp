@@ -495,15 +495,15 @@ function collapseAll() {
 									</field:display>
 
 											<bean:define id="largeTextFeature" value="Identification" toScope="request"/>
-									
-											<logic:present name="aimEditActivityForm" property="identification.projectImpact">
-											<bean:define id="largeTextLabel" value="Project Impact" toScope="request"/>
-											<bean:define id="largeTextKey" toScope="request">
-												<c:out value="${aimEditActivityForm.identification.projectImpact}"/>
-											</bean:define>
-											<jsp:include page="largeTextPropertyView.jsp"/>
-											</logic:present>
-											
+											<field:display name="Project Impact" feature="Identification">
+												<logic:present name="aimEditActivityForm" property="identification.projectImpact">
+												<bean:define id="largeTextLabel" value="Project Impact" toScope="request"/>
+												<bean:define id="largeTextKey" toScope="request">
+													<c:out value="${aimEditActivityForm.identification.projectImpact}"/>
+												</bean:define>
+												<jsp:include page="largeTextPropertyView.jsp"/>
+												</logic:present>
+											</field:display>
 											<logic:present name="aimEditActivityForm" property="identification.activitySummary">
 											<bean:define id="largeTextLabel" value="Activity Summary" toScope="request"/>
 											<bean:define id="largeTextKey" toScope="request">
@@ -940,7 +940,25 @@ function collapseAll() {
 											<div id="act_location" style="display: none;">
 											<c:if test="${!empty aimEditActivityForm.location.selectedLocs}">
 												<table width="100%" cellSpacing="2" cellPadding="1">
+													<c:forEach var="selectedLocs" items="${aimEditActivityForm.location.selectedLocs}">
+                                                          <tr>
+                                                              <td width="85%">
+																	<c:forEach var="ancestorLoc" items="${selectedLocs.ancestorLocationNames}">
+                                                                    	[${ancestorLoc}] 
+                                                                    </c:forEach>
+                                                    		  </td>
+                                                    		  <td width="15%" align="right">
+                                                    		  	<field:display name="Regional Percentage" feature="Location">
+                                                    		  	<c:if test="${selectedLocs.showPercent}">
+																	<c:out value="${selectedLocs.percent}"/>%
+																</c:if>
+																</field:display>
+                                                    		  </td>
+                                                    		</tr>
+                                                    	</c:forEach>
+                                                 <!-- 
 												<c:forEach var="locations" items="${aimEditActivityForm.location.selectedLocs}">
+													
 													<tr>
 														<td>
 															<c:if test="${!empty locations.country}">
@@ -958,6 +976,7 @@ function collapseAll() {
 														</td>
 													</tr>
 												</c:forEach>
+												 -->
 												</table>
 											</c:if>
 											</div>										</td>

@@ -271,6 +271,7 @@ public class ViewNewAdvancedReport extends Action {
 					&& !ar.getHierarchies().isEmpty()) {
 				List<AmountCell> trailCells = rd.getTrailCells();
 				for (AmountCell cell : trailCells) {
+					if (cell!=null){
 					if (sortBy.equals(cell.getColumn().getName())) {
 						Set<AmpReportHierarchy> hierarchies = ar.getHierarchies();
 						for (AmpReportHierarchy hierarchy : hierarchies) {
@@ -278,9 +279,11 @@ public class ViewNewAdvancedReport extends Action {
 									cell.getColumn().getAbsoluteColumnName(),
 									rd.getSortAscending() ? "ascending": "descending"));
 						}
+						
 						rd.importLevelSorters(sorters, ar.getHierarchies().size());
 						rd.applyLevelSorter();
 						break;
+					}
 					}
 				}
 			}

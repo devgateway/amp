@@ -1,0 +1,1 @@
+INSERT INTO `amp_columns` (`columnName`, `aliasName`, `cellType`, `extractorView`, `relatedContentPersisterClass`, `tokenExpression`, `filterRetrievable`, description)  VALUES ('Execution Rate', NULL, 'org.dgfoundation.amp.ar.cell.ComputedAmountCell', null, NULL, 'buildExecutionRate', NULL,'(Cumulative Disbursement/ Cumulative Commitment) * 100 ');

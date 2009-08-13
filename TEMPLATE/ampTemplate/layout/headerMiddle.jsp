@@ -40,12 +40,14 @@
         <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
 
 <c:set var="message">
-<c:if test="${sessionScope.currentMember.addActivity == 'true'}">
-<digi:trn key="aim:activityNotSaved">You did not save your activity. Do you want proceed without saving it ?</digi:trn>
-</c:if>
-<c:if test="${sessionScope.currentMember.addActivity == 'false'}">
-<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
-</c:if>
+    <c:choose>
+      <c:when test="${sessionScope.currentMember.addActivity == 'true'}">
+      	<digi:trn key="aim:activityNotSaved">You did not save your activity. Do you want proceed without saving it ?</digi:trn>
+      </c:when>
+      <c:otherwise>
+      	<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
+      </c:otherwise>
+    </c:choose>
 </c:set>
 <c:set var="quote">'</c:set>
 <c:set var="escapedQuote">\'</c:set>
@@ -297,7 +299,7 @@ function adminHelp(){
 		<logic:equal name="ampAdmin" value="no">
 	
 <script language="JavaScript">
-
+	//'${msg}'
 	function canExit(){
 	    if(typeof quitRnot1 == 'function') {
 	        return quitRnot1('${msg}');
@@ -313,8 +315,10 @@ function adminHelp(){
 		window.location.href="/aim/addActivity.do~pageId=1~reset=true~action=create~activityLevelId="+selectedLevelId;	
 	}
 
-
-<jsp:include page="gisMenu.jsp" />
+	function openGIS() {
+		openNewWindowWithMenubar(1000, 600);
+		popupPointer.location.href = "/gis/showGisDashboard.do";
+	}
 	
 	function teamWorkspaceSetup(a) {
 		if (canExit()) window.location.href="/aim/workspaceOverview.do~tId="+a+"~dest=teamLead";
@@ -449,7 +453,7 @@ function adminHelp(){
                                         </module:display>
                                         <feature:display name="Paris Indicators Reports" module="Portfolio">
                                                 <li class="yuiampmenuitem" title='<digi:trn key="aim:clickToViewParisIndcReports">Click here to view Paris Indicator Reports</digi:trn>'>
-                                                    <a class="yuiampmenuitemlabel" href="/aim/parisIndicatorReport.do~indcId=1~reset=true"  onclick="return canExit()">
+                                                    <a class="yuiampmenuitemlabel" href="/aim/parisIndicatorReport.do~indcId=1~reset=true~print2=false~print=false"  onclick="return canExit()">
                                                         <b><digi:trn key="aim:parisIndicator">Paris Indicator</digi:trn></b>
                                                     </a>
                                                 </li>

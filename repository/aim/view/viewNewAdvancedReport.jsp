@@ -109,6 +109,9 @@ counter++;
 session.setAttribute("progressValue", counter);
 %>
 
+<table width="100%">
+<tr>
+	<td>
 <logic:notEqual name="widget" scope="request" value="true">
 	<logic:notEqual name="viewFormat" scope="request" value="print">
 		<jsp:include page="/repository/aim/view/ar/toolBar.jsp" />
@@ -629,7 +632,9 @@ session.setAttribute("progressValue", counter);
 
 
 </table>
-
+	</td>
+</tr>
+</table>
 
 <%
 	session.setAttribute(" ", null);

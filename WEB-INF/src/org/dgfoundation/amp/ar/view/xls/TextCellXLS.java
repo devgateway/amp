@@ -69,12 +69,6 @@ public class TextCellXLS extends XLSExporter {
 		TextCell c=(TextCell) item;
 		HSSFCell cell=this.getRegularCell();
 		String indent = "";
-		
-		ReportData parent=(ReportData)c.getColumn().getParent();
-		while (parent.getReportMetadata()==null)
-		{
-			parent=parent.getParent();
-		}
 	
 		//PLEASE USE TRNTEXTCELL.JAVA IF YOU NEED A TRANSLATION-ENABLED CELL.
 		//PLEASE DO NOT PUT ANY TranslatorWorker INVOCATIONS HERE, OR ANYWHRE ELSE IN THE EXPORTS, IT WILL BE ROLLED BACK

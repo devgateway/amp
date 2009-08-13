@@ -30,6 +30,9 @@ import org.digijava.module.aim.util.FeaturesUtil;
  */
 public class GroupColumn extends Column {
 
+	/**
+	 * Returns the max of the underlying visible rows of the subcolumns
+	 */
     	@Override
 	public int getVisibleRows() {
     	 Iterator i=items.iterator();

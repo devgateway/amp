@@ -29,13 +29,19 @@ import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
 public class GroupReportData extends ReportData {
 
     
-    	
+	/**
+	 * Returns the visible rows for the sub-report. 
+	 * Calculates the sum number of visible rows for each report of the group report
+	 * 
+	 */
 	@Override
 	public int getVisibleRows() {
     	Iterator i=items.iterator();
-    	int ret=1;
+    	int ret=0; //one was for the title/totals. now we are counting the title/totals only for summary report
+
+    	//if the report is summary then stop the processing here and return 1;
     	if(this.getReportMetadata().getHideActivities()!=null && this.getReportMetadata().getHideActivities())
-			return ret;
+			return 1; // consider the subtotals/titles as rows 
 		
     	    while (i.hasNext()) {
 				ReportData element = (ReportData) i.next();

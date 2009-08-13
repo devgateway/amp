@@ -26,6 +26,10 @@ import org.dgfoundation.amp.ar.workers.ColumnWorker;
  */
 public class CellColumn extends Column {
 
+	/**
+	 * Returns the number of items in the column as the visible rows (they are already unique) so this means
+	 * the number activities that have data for this column
+	 */
 	@Override
 	public int getVisibleRows() {
 		return items.size();

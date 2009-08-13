@@ -33,10 +33,7 @@ public class GroupReportData extends ReportData {
 	@Override
 	public int getVisibleRows() {
     	Iterator i=items.iterator();
-    	int ret;
-    	//for summary report we have to return at least 1 row because there are not activities in hierarchy
-    	if(isSummaryReport()) ret = 1;
-    		else ret = 0;
+    	int ret=1;
     	if(this.getReportMetadata().getHideActivities()!=null && this.getReportMetadata().getHideActivities())
 			return ret;
 		
@@ -46,22 +43,6 @@ public class GroupReportData extends ReportData {
     	    }
     	    return ret;
 	}
-    
-	public boolean isSummaryReport() {
-		if(this.getParent()!=null){
-			if (this.getParent().getReportMetadata().getHideActivities()==null){ 
-				return false;
-			}else{
-				return this.getParent().getReportMetadata().getHideActivities();
-			}
-		}
-		if (this.getReportMetadata().getHideActivities()==null){
-			return false;
-		}else{
-			return this.getReportMetadata().getHideActivities();
-		}
-	}
-
 		 	
 	/**
 	 * GroupReportData comparator class. This class implements reportData comparison. 

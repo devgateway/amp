@@ -13,6 +13,7 @@
 <script language="JavaScript">
 
 function showHint(str,event){
+	
 if(event.keyCode != 13){
   if (str.length==0){ 
 		 	document.getElementById("livesearch").innerHTML="";
@@ -85,8 +86,62 @@ function search(){
  		return
  	} 
  	
-	var urls="/help/helpActions.do?actionType=searchHelpTopic"
-	url=urls+"&key="+key
+	var baseChars = new Array("Ï ","%cf",
+			"Ð","%d0",
+			"Ñ","%d1",
+			"Ò","%d2",
+			"Ó","%d3",
+			"Ô","%d4",
+			"Õ","%d5",
+			"Ö","%d6",
+			"Ø","%d8",
+			"Ù","%d9",
+			"Ú","%da",
+			"Û","%db",
+			"Ü","%dc",
+			"Ý","%dd",
+			"Þ","%de",
+			"ß","%df",
+			"à","%e0",
+			"á","%e1",
+			"â","%e2",
+			"ã","%e3",
+			"ä","%e4",
+			"å","%e5",
+			"æ","%e6",
+			"ç","%e7",
+			"è","%e8",
+			"é","%e9",
+			"ê","%ea",
+			"ë","%eb",
+			"ì","%ec",
+			"í","%ed",
+			"î","%ee",
+			"ï","%ef",
+			"ð","%f0",
+			"ñ","%f1",
+			"ò","%f2",
+			"ó","%f3",
+			"ô","%f4",
+			"õ","%f5",
+			"ö","%f6",
+			"÷","%f7",
+			"ø","%f8",
+			"ù","%f9",
+			"ú","%fa",
+			"û","%fb",
+			"ü","%fc",
+			"ý","%fd",
+			"þ","%fe",
+			"ÿ","%ff");
+ 	
+	var urls="/help/helpActions.do?actionType=searchHelpTopic";
+	url=urls+"&key="+key;
+	
+	for( i=0; i<baseChars.length; i+=2){
+		url = url.replace(baseChars[i],baseChars[i+1]);	
+	}
+
     xmlHttp.open("GET",url,true)
 	xmlHttp.onreadystatechange=stChang
 	xmlHttp.send(null)

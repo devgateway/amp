@@ -52,8 +52,12 @@ public class MathExpressionRepository {
 	public static final String COUNT_PLANNED_DISBURSEMENT = "countPlannedDisbursment";
 
 	public static final String UNDISBURSED_CUMULATIVE_BALANCE = "undisbursedCumulativeBalance";
-
+	
 	public static final String UNCOMMITED_CUMULATIVE_BALANCE = "uncommitedCumulativeBalance";
+
+	public static final String UNDISBURSED_BALANCE = "undisbursedBalance";
+	
+	public static final String UNCOMMITED_BALANCE = "uncommitedBalance";
 
 	public static final String NUMBER_OF_PROJECTS = "numberOfProjects";
 
@@ -94,6 +98,9 @@ public class MathExpressionRepository {
 		buildCostingGrandTotal();
 		buildExecutionRate();
 		buildAverageDisbursementRate();
+
+		buildUncommitedBalance();
+		buildUndisbursedBalance();
 	}
 
 	/**
@@ -337,8 +344,8 @@ public class MathExpressionRepository {
 	}
 
 	/**
-	 * Average Disbursement Cumulative Disb/Cumulative Commit * 100 / Number of Activities
-	 * (filtered)
+	 * Average Disbursement Cumulative Disb/Cumulative Commit * 100 / Number of
+	 * Activities (filtered)
 	 */
 	private static void buildAverageDisbursementRate() {
 		try {
@@ -365,8 +372,7 @@ public class MathExpressionRepository {
 	}
 
 	/**
-	 * Uncommited Cumulative Balance = Cumulative Commitment - Cumulative
-	 * Disbursement
+	 * Proposed project cost - Cummalative Commitments
 	 */
 	private static void buildUncommitedCumulativeBalance() {
 		try {
@@ -378,8 +384,35 @@ public class MathExpressionRepository {
 	}
 
 	/**
-	 * Number Of Projects = Count Of Activities under the current hierarchy
+	 * Undisbursed Balance = Actual Commitments (depending on filter) - Actual
+	 * Disbursements (dependent on filter).
 	 * 
+	 */
+	private static void buildUndisbursedBalance() {
+		try {
+			MathExpression m1 = new MathExpression(MathExpression.Operation.SUBTRACT, ArConstants.ACTUAL_COMMITMENT_FILTERED, ArConstants.ACTUAL_DISBURSEMENT_FILTERED);
+			expresions.put(UNDISBURSED_BALANCE, m1);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+
+	/**
+	 * Uncommitted Balance = Proposed project cost - Actual Commitments
+	 * (dependent on the filter)
+	 * 
+	 */
+	private static void buildUncommitedBalance() {
+		try {
+			MathExpression m1 = new MathExpression(MathExpression.Operation.SUBTRACT, ArConstants.PROPOSED_COST, ArConstants.ACTUAL_COMMITMENT_FILTERED);
+			expresions.put(UNCOMMITED_BALANCE, m1);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+
+	/**
+	 * Number Of Projects = Count Of Activities under the current hierarchy
 	 */
 	private static void buildNumberOfProject() {
 		try {
@@ -392,7 +425,6 @@ public class MathExpressionRepository {
 
 	/**
 	 * Costing Grand Total value
-	 * 
 	 */
 	private static void buildCostingGrandTotal() {
 		try {
@@ -403,6 +435,9 @@ public class MathExpressionRepository {
 		}
 	}
 
+	/**
+	 * (ACTUAL_DISBURSEMENT / PLANNED_DISBURSEMENT_FILTERED) * 100
+	 */
 	private static void buildExecutionRate() {
 		try {
 			MathExpression m1 = new MathExpression(MathExpression.Operation.DIVIDE, ArConstants.ACTUAL_DISBURSEMENT, ArConstants.PLANNED_DISBURSEMENT_FILTERED);

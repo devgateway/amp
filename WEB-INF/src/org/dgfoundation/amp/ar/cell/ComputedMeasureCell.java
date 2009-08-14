@@ -9,6 +9,7 @@ import org.dgfoundation.amp.exprlogic.ExpressionHelper;
 import org.dgfoundation.amp.exprlogic.MathExpression;
 import org.dgfoundation.amp.exprlogic.MathExpressionRepository;
 import org.dgfoundation.amp.exprlogic.TokenRepository;
+import org.digijava.module.aim.helper.FormatHelper;
 
 public class ComputedMeasureCell extends AmountCell {
 
@@ -29,7 +30,6 @@ public class ComputedMeasureCell extends AmountCell {
 	public ComputedMeasureCell(Long id) {
 		super(id);
 	}
-
 
 	/**
 	 * Overrider of the normal behavior of AmountCell.getAmount. This will take
@@ -66,4 +66,7 @@ public class ComputedMeasureCell extends AmountCell {
 		return new ComputedMeasureCell();
 	}
 
+	public String toString() {
+		return FormatHelper.formatNumberUsingCustomFormat(getAmount());
+	}
 }

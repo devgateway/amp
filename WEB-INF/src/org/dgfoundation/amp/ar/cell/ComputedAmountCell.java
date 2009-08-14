@@ -8,6 +8,7 @@ import org.dgfoundation.amp.ar.workers.ComputedAmountColWorker;
 import org.dgfoundation.amp.exprlogic.ExpressionHelper;
 import org.dgfoundation.amp.exprlogic.MathExpression;
 import org.dgfoundation.amp.exprlogic.MathExpressionRepository;
+import org.digijava.module.aim.helper.FormatHelper;
 
 public class ComputedAmountCell extends CategAmountCell {
 
@@ -74,11 +75,7 @@ public class ComputedAmountCell extends CategAmountCell {
 		// TODO Auto-generated constructor stub
 	}
 
-	public String toString() {
-		// TODO Auto-generated method stub
-		return super.toString();
-	}
-
+	
 	public ComputedAmountCell(AmountCell ac) {
 		super(ac.getOwnerId());
 		this.setColumn(ac.getColumn());
@@ -148,5 +145,8 @@ public class ComputedAmountCell extends CategAmountCell {
 	public void setValues(HashMap<String, BigDecimal> values) {
 		this.values = values;
 	}
-
+  
+	public String toString() {
+		return FormatHelper.formatNumberUsingCustomFormat(getAmount());
+	}
 }

@@ -356,7 +356,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		
 	
 		
-		if (ARUtil.containsMeasure(ArConstants.UNCOMMITTED_BALANCE,reportMetadata.getMeasures())) {
+		if (ARUtil.containsMeasure(ArConstants.UNCOMMITTED_BALANCE,reportMetadata.getMeasures())||ARUtil.containsColumn(ArConstants.COLUMN_UNCOMM_CUMULATIVE_BALANCE,reportMetadata.getColumns())) {
 			AmpReportColumn arcProp = new AmpReportColumn();
 			AmpColumns acProp = new AmpColumns();
 			arcProp.setColumn(acProp);

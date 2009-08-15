@@ -44,6 +44,10 @@ public abstract class Cell extends Viewable implements RowIdentifiable, ColumnId
 		public final int compare (Object o1, Object o2) {
 			Cell c1=(Cell) o1;
 			Cell c2=(Cell) o2;
+			//AMP-6574
+			if (c1 == null && c2 ==null){
+				return 0;
+			}
 			if (c1 instanceof ComputedDateCell && c2 instanceof ComputedDateCell) {
 				Double v1 = 0d, v2 = 0d;
 

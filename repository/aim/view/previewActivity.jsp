@@ -29,8 +29,10 @@
 
 
 <digi:instance property="aimEditActivityForm" />
-
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
+<%//Quick fix AMP-6573 please check it
+if (request.getParameter("currentlyEditing")!= null){%>
+	<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
+<%} %>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 
@@ -124,7 +126,6 @@ function collapseAll() {
 
 <%
 	Long actId = (Long) request.getAttribute("actId");
-
 	String url = "/aim/viewIndicatorValues.do?ampActivityId="+actId+"&tabIndex=6";
 	String actPerfChartFileName=null;
     try{
@@ -675,18 +676,7 @@ function collapseAll() {
 									
                               <!--END 11 12  -->        
 
-                                <field:display name="Government Agreement Number" feature="Identification">
-									<tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
-											<digi:trn key="aim:step1:GovernmentAgreementNumTitle">Budget</digi:trn>
-										</td>
-										<td bgcolor="#ffffff">
-											${aimEditActivityForm.identification.govAgreementNumber}
-										</td>
-									</tr>
-								</field:display>
-
-                               <feature:display name="Budget" module="Project ID and Planning">
+								<feature:display name="Budget" module="Project ID and Planning">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:actBudget">Budget</digi:trn>										</td>
 										<td bgcolor="#ffffff">

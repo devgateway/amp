@@ -325,6 +325,29 @@
 &nbsp;										</td>
 									</tr>
 									</field:display>
+									<feature:display name="Budget" module="Project ID and Planning">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap">
+										<b>
+											<digi:trn key="aim:actBudget">Budget</digi:trn>
+										</b>										
+										</td>
+										<td bgcolor="#ffffff">
+										<field:display name="On/Off Budget" feature="Budget">	
+
+										<logic:equal name="aimEditActivityForm" property="identification.budgetCheckbox" value="true">
+										<digi:trn key="aim:actBudgeton">
+												Activity is On Budget										</digi:trn>
+										</logic:equal>
+										<logic:equal name="aimEditActivityForm" property="identification.budgetCheckbox" value="false">
+										<digi:trn key="aim:actBudgetoff">
+												Activity is Off Budget										</digi:trn>
+										</logic:equal>
+										</field:display>
+										</td>
+									</tr>
+									</feature:display>
+ 
 									<field:display name="Project Category" feature="Identification">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap"><b>

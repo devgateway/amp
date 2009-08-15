@@ -31,9 +31,6 @@ class LabeledFormBuilder < ActionView::Helpers::FormBuilder
   
   def date_select(method, options = {}, html_options = {})
     label_opts = extract_label_options!(options)
-    # Change default order
-    options.reverse_merge!(:order => [:day, :month, :year])
-    
     wrap_in_label_row(method, @template.date_select(@object_name, method, objectify_options(options), html_options), label_opts)
   end
   

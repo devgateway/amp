@@ -29,7 +29,7 @@
 <b>
 <% if(reportData.getName().indexOf(':')!=-1) { %>
 <digi:trn><%=reportData.getName().substring(reportData.getName().indexOf(':')+1,reportData.getName().length())%></digi:trn>
-!!<%=reportData.getVisibleRows()%>
+<%=reportData.getVisibleRows()%>
 <% } else { %>
 <bean:write name="reportData" property="name"/>!!<%=reportData.getVisibleRows()%>
 <% } %>

@@ -739,8 +739,7 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 			      	   		                 			 	</logic:equal>
 
 			         	      		           			 	<logic:equal name="qtr" property="fiscalQuarter" value="1">
-			         	      		           			 	sdas
-																<digi:trn key="aim:1st_quarter">1st quarter</digi:trn>
+			         	      		           			 	<digi:trn key="aim:1st_quarter">1st quarter</digi:trn>
 			            	         		     			 </logic:equal>
 
 			                  	         				 	<logic:equal name="qtr" property="fiscalQuarter" value="2">

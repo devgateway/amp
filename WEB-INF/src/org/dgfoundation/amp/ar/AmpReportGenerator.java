@@ -560,11 +560,14 @@ public class AmpReportGenerator extends ReportGenerator {
 
 		reportChild.addColumns(rawColumns.getItems());
 		report.addReport(reportChild);
-
-		// perform removal of funding column when report has only Computed measures , or it a tab report
 		
-		Set<AmpReportMeasures> ccmeasures = new HashSet<AmpReportMeasures>();
-		for (Iterator iterator = reportMetadata.getMeasures().iterator(); iterator.hasNext();) {
+		// if it's a tab reports just remove funding
+		if (arf.isWidget()){
+			reportChild.removeColumnsByName(ArConstants.COLUMN_FUNDING);	
+		}else {
+			// perform removal of funding column when report has only Computed measures , or it a tab report
+			Set<AmpReportMeasures> ccmeasures = new HashSet<AmpReportMeasures>();
+			for (Iterator iterator = reportMetadata.getMeasures().iterator(); iterator.hasNext();) {
 			AmpReportMeasures measure = (AmpReportMeasures) iterator.next();
 			if (measure.getMeasure().getMeasureName().equalsIgnoreCase(ArConstants.UNDISBURSED_BALANCE)
 					||measure.getMeasure().getMeasureName().equalsIgnoreCase(ArConstants.TOTAL_PERCENTAGE_OF_TOTAL_DISBURSEMENTS)
@@ -573,9 +576,10 @@ public class AmpReportGenerator extends ReportGenerator {
 				ccmeasures.add(measure);
 			}
 		}
-		if (ccmeasures != null && ccmeasures.size() > 0 || arf.isWidget()){
-			if (ccmeasures.size() == reportMetadata.getMeasures().size()){
-				reportChild.removeColumnsByName(ArConstants.COLUMN_FUNDING);
+			if (ccmeasures != null && ccmeasures.size() > 0){
+				if (ccmeasures.size() == reportMetadata.getMeasures().size()){
+					reportChild.removeColumnsByName(ArConstants.COLUMN_FUNDING);
+				}
 			}
 		}
 		

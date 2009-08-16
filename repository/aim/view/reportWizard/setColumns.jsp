@@ -75,11 +75,6 @@
 																										<span style="font-size: 12px;color:#0e69b3;text-decoration:none">
 																											<digi:trn key="aim:report:${ampColumnFromTree.columnName}"><bean:write name="ampColumnFromTree" property="columnName"/></digi:trn>
 																											
-																											<logic:equal name="ampColumnFromTree" property="columnName" value="Undisbursed Cumulative Balance">
-																												<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:report:UndisbursedCumulativeBalanceToolip">Cumulative Commitment - Cumulative Disbursement (independent of filters)</digi:trn>">
-																											</logic:equal>
-																											
-																											
 																											<logic:notEmpty name="ampColumnFromTree" property="description">
 																												<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:report:tip:${ampColumnFromTree.columnName}:${ampColumnFromTree.description}">${ampColumnFromTree.description}</digi:trn>">
 																											</logic:notEmpty>

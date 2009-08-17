@@ -357,10 +357,16 @@ public class CategAmountColWorker extends ColumnWorker {
 		
 		
 		//UGLY get exchage rate if cross-rates are needed (if we need to convert from X to USD and then to Y)
-		if(filter.getCurrency()!=null && !"USD".equals(filter.getCurrency().getCurrencyCode()))  
-			acc.setToExchangeRate(Util.getExchange(filter.getCurrency().getCurrencyCode(),td));
-						
-		
+		if(filter.getCurrency()!=null ) {
+			/* If source and destination currency are the same we need to set exactly the same exchange rate for 'toExchangeRate' and 'fromExchangeRate.
+			 * That way, AmountCell.convert won't do any computation' */
+			if ( currencyCode.equals(filter.getCurrency().getCurrencyCode())   ) 
+				acc.setToExchangeRate( acc.getFromExchangeRate() );
+			else if ( !"USD".equals(filter.getCurrency().getCurrencyCode()))  
+				acc.setToExchangeRate(Util.getExchange(filter.getCurrency().getCurrencyCode(),td));
+		}
+		else 
+			logger.error("The filter.currency property should not be null !");
 		
 		return acc;
 	}

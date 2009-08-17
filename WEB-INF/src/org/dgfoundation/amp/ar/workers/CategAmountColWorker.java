@@ -73,10 +73,10 @@ public class CategAmountColWorker extends ColumnWorker {
 	/**filter.getFromYear()!=null
 	 * Decides if the CategAmountCell is showable or not, based on the measures selected
 	 * in the report wizard.
-	 * @param cac the given CategAmountCell
+	 * @param td the sql transaction date for the cell
 	 * @return true if showable
 	 */
-	public boolean isShowable(CategAmountCell cac) {
+	public boolean isShowable(Date td) {
 		boolean showable=true;
 		
 		//proposed cost is by default not showable and should not appear in any funding totals. it is used to ease the use of destination post processed columns
@@ -88,8 +88,8 @@ public class CategAmountColWorker extends ColumnWorker {
 		//now this is null due we have one field 
 		try {
 			if(filter.getFromDate()!=null || filter.getToDate()!=null) {
-				java.util.Date tDate=(java.util.Date) MetaInfo.getMetaInfo(cac.getMetaData(),ArConstants.TRANSACTION_DATE).getValue();
-				
+			//	java.util.Date tDate=(java.util.Date) MetaInfo.getMetaInfo(td.getMetaData(),ArConstants.TRANSACTION_DATE).getValue();
+				java.util.Date tDate=new Date(td.getTime());
 				
 				if (filter.getFromDate()!=null  && !("".equalsIgnoreCase(filter.getFromDate()))){
 					java.util.Date sDate=FormatHelper.parseDate2(filter.getFromDate());
@@ -350,7 +350,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		
 		//set the showable flag, based on selected measures - THIS NEEDS TO BE MOVED OUT
 		//TODO: move this to postProcess!!
-		acc.setShow(isShowable(acc));
+		acc.setShow(isShowable(td));
 		acc.setRenderizable(isRenderizable(acc));
 		acc.setCummulativeShow(isCummulativeShowable(acc));
 		
@@ -363,10 +363,12 @@ public class CategAmountColWorker extends ColumnWorker {
 			if ( currencyCode.equals(filter.getCurrency().getCurrencyCode())   ) 
 				acc.setToExchangeRate( acc.getFromExchangeRate() );
 			else if ( !"USD".equals(filter.getCurrency().getCurrencyCode()))  
-				acc.setToExchangeRate(Util.getExchange(filter.getCurrency().getCurrencyCode(),td));
+			acc.setToExchangeRate(Util.getExchange(filter.getCurrency().getCurrencyCode(),td));
 		}
 		else 
 			logger.error("The filter.currency property should not be null !");
+						
+		
 		
 		return acc;
 	}

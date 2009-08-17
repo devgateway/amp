@@ -11,6 +11,7 @@ import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
@@ -19,6 +20,7 @@ import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.ar.impexp.impl.ReportsExpTransformerMain;
 import org.digijava.module.aim.ar.util.ReportsAccess;
 import org.digijava.module.aim.dbentity.AmpReports;
@@ -36,6 +38,11 @@ public class ReportsExportAction extends MultiAction {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 			
+		HttpSession session = request.getSession();
+		if (!RequestUtils.isAdmin(response, session, request)) {
+			return null;
+		}
+		
 		ImpExpForm myForm					= (ImpExpForm) form;
 		String action		= request.getParameter(ReportsImpExpConstants.ACTION);
 		if ( ReportsImpExpConstants.ACTION_NEW.equals(action) ) {
@@ -49,6 +56,11 @@ public class ReportsExportAction extends MultiAction {
 	public ActionForward modeSelect(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
+		
+		HttpSession session = request.getSession();
+		if (!RequestUtils.isAdmin(response, session, request)) {
+			return null;
+		}
 		
 		String action		= request.getParameter(ReportsImpExpConstants.ACTION);
 		
@@ -64,6 +76,12 @@ public class ReportsExportAction extends MultiAction {
 	public ActionForward modeShow(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
+		
+		HttpSession session = request.getSession();
+		if (!RequestUtils.isAdmin(response, session, request)) {
+			return null;
+		}
+		
 		String action		= request.getParameter(ReportsImpExpConstants.ACTION);
 		
 		ImpExpForm myForm					= (ImpExpForm) form;
@@ -139,6 +157,11 @@ public class ReportsExportAction extends MultiAction {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		
+		HttpSession session = request.getSession();
+		if (!RequestUtils.isAdmin(response, session, request)) {
+			return null;
+		}
+		
 		ImpExpForm myForm					= (ImpExpForm) form;
 		if ( myForm.getSelectedReportIds() != null && myForm.getSelectedReportIds().length > 0 ) {
 			if ( myForm.getSelectedReports()  == null )
@@ -170,6 +193,12 @@ public class ReportsExportAction extends MultiAction {
 	public ActionForward modeExport(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 	throws Exception {
+		
+		HttpSession session = request.getSession();
+		if (!RequestUtils.isAdmin(response, session, request)) {
+			return null;
+		}
+		
 		ImpExpForm myForm					= (ImpExpForm) form;
 		String filename								= "reportsExport.xml";
 		if ( myForm.getShowTabs() )

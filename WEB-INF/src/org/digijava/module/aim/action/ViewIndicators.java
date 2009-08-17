@@ -32,18 +32,11 @@ public class ViewIndicators
     public ActionForward execute(ActionMapping mapping, ActionForm form,
                                  HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
 		HttpSession session = request.getSession();
-		String str = (String) session.getAttribute("ampAdmin");
-
-		if (str == null || str.equals("no")) {
-			  SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
-
-			  String url = SiteUtils.getSiteURL(currentDomain, request
-									.getScheme(), request.getServerPort(), request
-									.getContextPath());
-			  url += "/aim/index.do";
-			  response.sendRedirect(url);
-			  return null;
-		}   
+		
+		if (!RequestUtils.isAdmin(response, session, request)) {
+			return null;
+		}
+		
     	List<IndicatorsBean> allInds = new ArrayList<IndicatorsBean>();
     	Collection sectorsName = new ArrayList();
       

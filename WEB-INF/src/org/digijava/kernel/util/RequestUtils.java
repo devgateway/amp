@@ -24,6 +24,10 @@ package org.digijava.kernel.util;
 
 import org.apache.struts.tiles.ComponentContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import java.io.IOException;
 import java.util.Map;
 import org.digijava.kernel.Constants;
 import java.util.HashMap;
@@ -546,4 +550,29 @@ public class RequestUtils {
         return siteDomain;
 
     }
+    
+    /**
+	 * Check if the current user is an Admin, if not then the response is
+	 * redirected to the index page and the method returns false.
+	 * 
+	 * @param response
+	 * @param session
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	public static boolean isAdmin(HttpServletResponse response, HttpSession session, HttpServletRequest request)
+			throws IOException {
+		boolean ret = true;
+		String str = (String) session.getAttribute("ampAdmin");
+		if (str == null || str.equalsIgnoreCase("no")) {
+			SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
+			String url = SiteUtils.getSiteURL(currentDomain, request.getScheme(), request.getServerPort(), request
+					.getContextPath());
+			url += "/aim/index.do";
+			response.sendRedirect(url);
+			ret = false;
+		}
+		return ret;
+	}
 }

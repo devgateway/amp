@@ -30,7 +30,7 @@ module Report
     def projects
       @projects ||= 
         Project.published.ordered.all(
-          :include => [:donor, :mdg_relevances, :geo_relevances, :sector_relevances, :fundings],
+          :include => [:donor, :mdg_relevances, :geo_relevances, :sector_relevances, :fundings], 
           :conditions => build_sql_conditions
         ).map { |p| @proxy.new(p) }
     end
@@ -66,13 +66,6 @@ module Report
   protected
     # Parse and order query options from input form
     def parse_query_options
-      if @params[:on_off_budget].fetch("true") == "1"
-        $on_budget = "true"
-      elsif @params[:on_off_budget].fetch("false") == "1"
-        $on_budget = "false"
-      else
-        $on_budget = nil
-      end
       options = @params[:query_options]
       options.delete_if {|k,v| v.to_i == 0 if v.respond_to?(:to_i)}
       options.sort_by {|k, v| v.to_i}.map { |e| e[0] }

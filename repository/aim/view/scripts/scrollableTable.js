@@ -1,5 +1,6 @@
 
 function scrollableTable(tableId,height){
+	//Global Variables
 	this.debug=false;
 	this.usePercentage=false;
 	this.table=document.getElementById(tableId);
@@ -9,8 +10,11 @@ function scrollableTable(tableId,height){
 	this.maxRowDepth=-1;
 	this.headerValues=new Array();
 	this.useFixForDisplayNoneRows=false;
+
+	//Main Function
 	this.scroll=function(){
-	var isIE=navigator.appName.indexOf("Microsoft")!=-1;
+
+		var isIE=navigator.appName.indexOf("Microsoft")!=-1;
 		try{
 			this.table.style.visibility="hidden";
 			//find header rows
@@ -31,7 +35,7 @@ function scrollableTable(tableId,height){
 			}
 			
 			
-				//check scroll % or px
+			//check scroll % or px
 			var scrollSize=(this.usePercentage)?(16*100)/this.table.offsetWidth:16;
 			//set the body cells width =offsetWidth  set the last one =offsetWidth-scrollSize
 		
@@ -39,45 +43,49 @@ function scrollableTable(tableId,height){
 			this.maxRowDepth=(this.maxRowDepth==-1)?this.tbody.rows.length:this.maxRowDepth;
 			
 			
-			 this.setHeaderWidth=function(){
-			//set header width = offsetwidth
+			this.setHeaderWidth=function(){
+			
+
+				cellWidths = []
+				counter = 0;
 				for (i=0;i < this.theader.rows.length;i++){
-						var padding=0;
-						var border=0;
-						var perBorder=0;
-						var perPadding=0;
-						
+					var padding=0;
+					var border=0;
+					
+					for (j=0;j < this.theader.rows[i].cells.length  ;j++){
+						var thisCell = this.theader.rows[i].cells[j]
+						if(!isIE){
+							var paddingRight = parseInt(thisCell.style.paddingLeft)
+							var paddingLeft = parseInt(thisCell.style.paddingRight)
+							if (isNaN(paddingRight)) paddingRight = 0;
+							if (isNaN(paddingLeft)) paddingLeft = 0;
+							padding = paddingRight + paddingLeft;
+							perPadding = (padding * 100)/this.table.offsetWidth;
+	
+							var borderRight = parseInt(thisCell.style.borderRightWidth)
+							if (isNaN(borderRight)) borderRight = 0;
+							var borderLeft = parseInt(thisCell.style.borderLeftWidth)
+							if (isNaN(borderLeft)) borderLeft = 0;
+							border = borderRight + borderLeft
+							perBorder=(border*100)/this.table.offsetWidth;
+						} 
+						var ow = thisCell.offsetWidth;
+						var pxValue = ow - padding - border;
+						var perValue = ((ow*100)/this.table.offsetWidth) - perPadding - perBorder;
+						cellWidths[counter] = (this.usePercentage)?(perValue+"%") : pxValue;
+						counter++;
+					}
+					counter++;
+				}
+	
+					counter = 0;
+					for (i=0;i < this.theader.rows.length;i++){
 						for (j=0;j < this.theader.rows[i].cells.length  ;j++){
-							if(!isIE){
-								var str=this.theader.rows[i].cells[j].style.paddingLeft.substr(0,this.theader.rows[i].cells[j].style.paddingLeft.length-2);
-								if (str==""){str="0"};
-								
-								var padding=parseInt(str);
-								str=this.theader.rows[i].cells[j].style.paddingRight.substr(0,this.theader.rows[i].cells[j].style.paddingRight.length-2);
-								if (str==""){str="0"};
-								 padding+=parseInt(str);
-								 var perPadding=(padding*100)/this.table.offsetWidth;
-							
-								
-								str=this.theader.rows[i].cells[j].style.borderRightWidth.substr(0,this.theader.rows[i].cells[j].style.borderRightWidth.length-2);
-								if (str==""){str="0"};	
-								var border=parseInt(str);
-							
-								str=this.theader.rows[i].cells[j].style.borderLeftWidth.substr(0,this.theader.rows[i].cells[j].style.borderLeftWidth.length-2);
-								if (str==""){str="0"};	
-								 border+=parseInt(str);
-								 var perBorder=(border*100)/this.table.offsetWidth;
-							} 
-							 				
-							var perValue=((this.theader.rows[i].cells[j].offsetWidth*100)/this.table.offsetWidth) -perPadding -perBorder;
-							var pxValue=this.theader.rows[i].cells[j].offsetWidth-padding-border;
-							if(pxValue >0){
-								this.theader.rows[i].cells[j].width=(this.usePercentage)?(perValue+"%"):pxValue;
-							}
-							if (this.debug){
-								this.theader.rows[i].cells[j].innerHTML=this.theader.rows[i].cells[j].width
-							}
+							var thisCell = this.theader.rows[i].cells[j]
+							thisCell.width = cellWidths[counter];
+							counter++;
 						}
+						counter++;
 					}
 			}	
 				
@@ -131,6 +139,8 @@ function scrollableTable(tableId,height){
 				}
 			 	var	maxRowNum	= this.tbody.rows.length;
 
+				counter = 0;
+				cellWidths = []
 				for (i=0; i<maxRowNum  ;i++){
 						//set cells widths
 						for (j=0; j<this.tbody.rows[i].cells.length ;j++){
@@ -160,10 +170,26 @@ function scrollableTable(tableId,height){
 								
 							var perValue=((this.tbody.rows[i].cells[j].offsetWidth*100)/this.table.offsetWidth) - perPadding -perBorder;
 							var pxValue=this.tbody.rows[i].cells[j].offsetWidth - padding -border;
-							
+							cellWidths[counter] =  this.usePercentage ? (perValue+"%") : pxValue;
+							counter++;
+						
+						}	
+						//Stop this process in the longest cell, that should be inside a hierarchy
+						if(longestCellCount == this.tbody.rows[i].cells.length) {
+							break;
+						}
+					//end for cells	
+			}	
+				///end for rows
+				counter = 0
+				for (i=0; i<maxRowNum  ;i++){
+						//set cells widths
+						for (j=0; j<this.tbody.rows[i].cells.length ;j++){
+							perValue = pxValue = cellWidths[counter];
+							counter++;
 							//last row
 							if (j==this.tbody.rows[i].cells.length -1){
-								if(pxValue >0){
+								if(pxValue > 0){
 									this.tbody.rows[i].cells[j].width=(this.usePercentage)?((perValue-scrollSize)+"%"):pxValue-scrollSize;
 								}
 								if (this.debug){
@@ -179,15 +205,15 @@ function scrollableTable(tableId,height){
 							}				
 						
 							this.tbody.rows[i].cells[j].style.overflow="hidden";
-						
-						}	
+						}
 						//Stop this process in the longest cell, that should be inside a hierarchy
 						if(longestCellCount == this.tbody.rows[i].cells.length) {
 							break;
 						}
 					//end for cells	
 			}	
-				///end for rows
+				
+				
 			}		
 		//end function	
 		

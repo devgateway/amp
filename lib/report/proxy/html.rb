@@ -44,7 +44,7 @@ module Report
         end
       end
       
-      def funds(year, on_budget)
+      def funds(year)
         cols = []
         
         if year <= Time.now.year

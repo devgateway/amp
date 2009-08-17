@@ -143,43 +143,19 @@ class Project < ActiveRecord::Base
   # Funding Aggregates
   def total_commitments(year = nil)
     if year
-      unless $on_budget.nil?
-        fundings.find_by_year_and_on_budget(year, $on_budget).commitments rescue 0.to_currency(donor.currency)
-      else
-        fundings.find_by_year(year).commitments rescue 0.to_currency(donor.currency)
-      end
+      fundings.find_by_year(year).commitments rescue 0.to_currency(donor.currency)
     else
-      unless $on_budget.nil?
-        if $on_budget == "true"
-          fundings.total_commitments_on_budget.to_currency(donor.currency)
-        else
-          fundings.total_commitments_off_budget.to_currency(donor.currency)
-        end
-      else
-        (historic_funding.commitments rescue 0.to_currency(donor.currency)) +
+      (historic_funding.commitments rescue 0.to_currency(donor.currency)) +
         fundings.total_commitments
-      end
     end
   end
   
   def total_payments(year = nil)
     if year
-      unless $on_budget.nil?
-        fundings.find_by_year_and_on_budget(year, $on_budget).payments rescue 0.to_currency(donor.currency)
-      else
-        fundings.find_by_year(year).payments rescue 0.to_currency(donor.currency)
-      end
+      fundings.find_by_year(year).payments rescue 0.to_currency(donor.currency)
     else
-      unless $on_budget.nil?
-        if $on_budget == "true"
-          fundings.total_payments_on_budget.to_currency(donor.currency)
-        else
-          fundings.total_payments_off_budget.to_currency(donor.currency)
-        end
-      else
-        (historic_funding.total_payments rescue 0.to_currency(donor.currency)) +
+      (historic_funding.payments rescue 0.to_currency(donor.currency)) +
         fundings.total_payments
-      end
     end
   end
 

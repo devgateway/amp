@@ -6,12 +6,14 @@ import java.util.Iterator;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.dgfoundation.amp.utils.AmpCollectionUtils;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -28,12 +30,24 @@ public class AdminParisIndicatorTableWidgets extends DispatchAction {
     public ActionForward unspecified(ActionMapping mapping,
             ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception {
+    	
+    	HttpSession session = request.getSession();
+		if (!RequestUtils.isAdmin(response, session, request)) {
+			return null;
+		}
+		
         return viewAll(mapping, form, request, response);
     }
 
     public ActionForward create(ActionMapping mapping,
             ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception {
+    	
+    	HttpSession session = request.getSession();
+		if (!RequestUtils.isAdmin(response, session, request)) {
+			return null;
+		}
+		
         AdminParisIndicatorTableWidgetForm tableForm = (AdminParisIndicatorTableWidgetForm) form;
         List<AmpParisIndicatorBaseTargetValues> indicators = new ArrayList<AmpParisIndicatorBaseTargetValues>();
         Collection<AmpAhsurveyIndicator> parisIndicators = DbUtil.getAllAhSurveyIndicators();
@@ -63,6 +77,12 @@ public class AdminParisIndicatorTableWidgets extends DispatchAction {
     public ActionForward viewAll(ActionMapping mapping,
             ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception {
+    	
+    	HttpSession session = request.getSession();
+		if (!RequestUtils.isAdmin(response, session, request)) {
+			return null;
+		}
+		
         AdminParisIndicatorTableWidgetForm tableForm = (AdminParisIndicatorTableWidgetForm) form;
         tableForm.setPiTableWidgets(ParisIndicatorTableWidgetUtil.getAllSectorTableWidgets());
         return mapping.findForward("forward");
@@ -71,6 +91,12 @@ public class AdminParisIndicatorTableWidgets extends DispatchAction {
     public ActionForward edit(ActionMapping mapping,
             ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception {
+    	
+    	HttpSession session = request.getSession();
+		if (!RequestUtils.isAdmin(response, session, request)) {
+			return null;
+		}
+		
         AdminParisIndicatorTableWidgetForm tableForm = (AdminParisIndicatorTableWidgetForm) form;
         AmpParisIndicatorTableWidget piTbWidget = ParisIndicatorTableWidgetUtil.getAmpParisIndicatorTableWidget(tableForm.getPiTableWidgetId());
         tableForm.setName(piTbWidget.getName());
@@ -101,6 +127,12 @@ public class AdminParisIndicatorTableWidgets extends DispatchAction {
     public ActionForward delete(ActionMapping mapping,
             ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception {
+    	
+    	HttpSession session = request.getSession();
+		if (!RequestUtils.isAdmin(response, session, request)) {
+			return null;
+		}
+		
         AdminParisIndicatorTableWidgetForm tableForm = (AdminParisIndicatorTableWidgetForm) form;
         AmpParisIndicatorTableWidget piTbWidget = ParisIndicatorTableWidgetUtil.getAmpParisIndicatorTableWidget(tableForm.getPiTableWidgetId());
         List<AmpDaWidgetPlace> places = WidgetUtil.getWidgetPlaces(piTbWidget.getId());
@@ -115,6 +147,12 @@ public class AdminParisIndicatorTableWidgets extends DispatchAction {
     public ActionForward save(ActionMapping mapping,
             ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception {
+    	
+    	HttpSession session = request.getSession();
+		if (!RequestUtils.isAdmin(response, session, request)) {
+			return null;
+		}
+		
         AdminParisIndicatorTableWidgetForm tableForm = (AdminParisIndicatorTableWidgetForm) form;
         boolean isNew = true;
         AmpParisIndicatorTableWidget piTbWidget = null;

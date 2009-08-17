@@ -52,16 +52,10 @@ public class ExportWizardAction extends DispatchAction {
 		HttpSession session = request.getSession();
 		String str = (String) session.getAttribute("ampAdmin");
 
-		if (str == null || str.equals("no")) {
-			  SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
-
-			  String url = SiteUtils.getSiteURL(currentDomain, request
-									.getScheme(), request.getServerPort(), request
-									.getContextPath());
-			  url += "/aim/index.do";
-			  response.sendRedirect(url);
-			  return null;
+		if (!RequestUtils.isAdmin(response, session, request)) {
+			return null;
 		}
+		
 		ExportForm eForm = (ExportForm)form;
 		eForm.logStatus = LogStatus.IS_NULL;
 		eForm.setActivityTree(ExportHelper.getActivityStruct("activity","activityTree","activity",ActivityType.class,true));

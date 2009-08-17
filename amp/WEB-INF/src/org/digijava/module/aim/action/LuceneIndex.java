@@ -70,18 +70,10 @@ public class LuceneIndex extends Action {
 							HttpServletResponse response) throws java.lang.Exception {
 
 		  HttpSession session = request.getSession();
-		  
-		  String str = (String) session.getAttribute("ampAdmin");
-		  if (str == null || str.equals("no")) {
-			  SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
-			
-			  String url = SiteUtils.getSiteURL(currentDomain, request
-									.getScheme(), request.getServerPort(), request
-									.getContextPath());
-			  url += "/aim/index.do";
-			  response.sendRedirect(url);
+		  if (!RequestUtils.isAdmin(response, session, request)) {
 			  return null;
 		  }
+		  
 		  ServletContext ampContext = session.getServletContext();
 		  
 		  String action = request.getParameter("action");

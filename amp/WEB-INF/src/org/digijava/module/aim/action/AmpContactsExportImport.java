@@ -7,6 +7,7 @@ import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
@@ -16,6 +17,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.apache.struts.upload.FormFile;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.form.AddressBookForm;
 import org.digijava.module.aim.util.ContactInfoUtil;
@@ -26,10 +28,22 @@ import org.digijava.module.contacts.jaxb.ObjectFactory;
 public class AmpContactsExportImport extends DispatchAction{
 	
 	public ActionForward gotoExportImportPage (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
+		
+		HttpSession session = request.getSession();
+		if (!RequestUtils.isAdmin(response, session, request)) {
+			return null;
+		}
+		
 		return mapping.findForward("gotoPage");
 	}
 	
-	public ActionForward exportContacts (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {		
+	public ActionForward exportContacts (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
+		
+		HttpSession session = request.getSession();
+		if (!RequestUtils.isAdmin(response, session, request)) {
+			return null;
+		}
+		
 		JAXBContext jc = JAXBContext.newInstance("org.digijava.module.contacts.jaxb");
 		Marshaller m = jc.createMarshaller();
 		response.setContentType("text/xml");
@@ -47,6 +61,12 @@ public class AmpContactsExportImport extends DispatchAction{
 	}
 	
 	public ActionForward importContacts (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
+		
+		HttpSession session = request.getSession();
+		if (!RequestUtils.isAdmin(response, session, request)) {
+			return null;
+		}
+		
 		AddressBookForm myForm=(AddressBookForm)form;
 		FormFile myFile = myForm.getFileUploaded();
         byte[] fileData    = myFile.getFileData();

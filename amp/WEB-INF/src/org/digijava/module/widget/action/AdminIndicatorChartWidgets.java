@@ -43,17 +43,8 @@ public class AdminIndicatorChartWidgets extends DispatchAction {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		HttpSession session = request.getSession();
-		String str = (String) session.getAttribute("ampAdmin");
-
-		if (str == null || str.equals("no")) {
-			  SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
-
-			  String url = SiteUtils.getSiteURL(currentDomain, request
-									.getScheme(), request.getServerPort(), request
-									.getContextPath());
-			  url += "/aim/index.do";
-			  response.sendRedirect(url);
-			  return null;
+		if (!RequestUtils.isAdmin(response, session, request)) {
+			return null;
 		}   
 
 		AdminIndicatorChartsForm cForm = (AdminIndicatorChartsForm)form;

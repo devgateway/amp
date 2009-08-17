@@ -47,13 +47,9 @@ public class OrgProfileManager  extends DispatchAction {
             HttpServletResponse response) throws Exception {
         
        
-		HttpSession session = request.getSession();
-		String str = (String) session.getAttribute("ampAdmin");
-
-		if (str == null || str.equals("no")) {
-			  String url = "/aim/index.do";
-			  response.sendRedirect(url);
-			  return null;
+    	HttpSession session = request.getSession();
+		if (!RequestUtils.isAdmin(response, session, request)) {
+			return null;
 		}   
 
     	OrgProfileWidgetForm orgForm = (OrgProfileWidgetForm) form;

@@ -10,7 +10,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.dgfoundation.amp.ar.cell.AmountCell;
+import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.ComputedAmountCell;
+import org.dgfoundation.amp.ar.cell.TotalCommitmentsAmountCell;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
 import org.dgfoundation.amp.exprlogic.ExpressionHelper;
 import org.dgfoundation.amp.exprlogic.MathExpression;
@@ -89,36 +91,25 @@ public class TotalComputedAmountColumn extends TotalAmountColumn {
 	}
 
 	public List getTrailCells() {
-		ArrayList<ComputedAmountCell> ar = new ArrayList<ComputedAmountCell>();
-		ComputedAmountCell ac = new ComputedAmountCell();
-		Iterator i = items.iterator();
+		ArrayList ar=new ArrayList();
+		ComputedAmountCell ac=new ComputedAmountCell();		
+		Iterator i=items.iterator();
 		
-		String totalExpression=this.getWorker().getRelatedColumn().getTotalExpression();
-		String rowExpression=this.getWorker().getRelatedColumn().getTokenExpression();
-		
-		//if totaExpression is null sum  the items
-		if(totalExpression==null){
-			
-			while (i.hasNext()) {
-				Object el = i.next();
-				ComputedAmountCell element = (ComputedAmountCell) el;
-				ac.merge(element, ac);
-			}
-		}else{
-			HashMap<String, BigDecimal> variables =ExpressionHelper.getGroupVariable(items, ac,rowExpression);
-			 MathExpression expression =MathExpressionRepository.get(getWorker().getRelatedColumn ().getTotalExpression());
-			 ac.setComputedVaule(expression.result(variables)); ac.setColumn(this);
+		while (i.hasNext()) {
+			ComputedAmountCell element = (ComputedAmountCell) i.next();
+			ac.merge(element,ac);
 		}
 		
+		HashMap<String, BigDecimal> grupValues=ExpressionHelper.getGroupVariables(items);
 		ac.setColumn(this);
+		ac.getValues().put(ArConstants.COUNT_PROJECTS, new BigDecimal(this.getParent().getVisibleRows()));
+		ac.getValues().putAll(grupValues);
+		if (this.getWorker().getRelatedColumn().getTotalExpression()!=null){
+			ac.setComputedVaule(MathExpressionRepository.get(this.getWorker().getRelatedColumn().getTotalExpression()).result(ac.getValues()));
+		}
+		
 		ar.add(ac);
 		return ar;
 	}
-
-	   
-	   
-	 
-	  
-	 
-
+	
 }

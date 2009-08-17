@@ -6,10 +6,12 @@
  */
 package org.dgfoundation.amp.ar;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -17,8 +19,13 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.dgfoundation.amp.ar.cell.Cell;
+import org.dgfoundation.amp.ar.cell.ComputedAmountCell;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
+import org.dgfoundation.amp.exprlogic.ExpressionHelper;
+import org.dgfoundation.amp.exprlogic.MathExpressionRepository;
+
+import sun.nio.cs.ext.MacHebrew;
 
 /**
  * 
@@ -211,12 +218,32 @@ public class GroupReportData extends ReportData {
 							if (c!=null){
 								newc = c.merge(c2);
 								newc.setColumn(c2.getColumn());
+								if (newc instanceof ComputedAmountCell) {
+								((ComputedAmountCell)newc).getValues().putAll(ExpressionHelper.mergeGroupVaules((ComputedAmountCell)c,(ComputedAmountCell)c2));
+								}
 							}
 							trailCells.remove(j);
 							trailCells.add(j, newc);
 						}
 				}
 			}
+			//have to find a better place where put it
+			Iterator iter=trailCells.iterator();
+			while (iter.hasNext()) {
+				Object cell=iter.next();
+				if (cell instanceof ComputedAmountCell) {
+					String totalExpression=((ComputedAmountCell) cell).getColumn().getWorker().getRelatedColumn().getTotalExpression();
+					String rowExpression=((ComputedAmountCell) cell).getColumn().getWorker().getRelatedColumn().getTokenExpression();
+					((ComputedAmountCell) cell).getValues().put(ArConstants.COUNT_PROJECTS, new BigDecimal(this.getTotalUniqueRows()));
+					if (totalExpression!=null){
+						((ComputedAmountCell) cell).setComputedVaule(MathExpressionRepository.get(totalExpression).result(((ComputedAmountCell) cell).getValues()));
+					}
+				}
+				
+			}
+			
+			
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

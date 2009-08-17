@@ -1,9 +1,15 @@
 package org.dgfoundation.amp.exprlogic;
 
+import java.io.File;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import mondrian.util.Bug;
 
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
@@ -14,20 +20,12 @@ public class ExpressionHelper {
 	/**
 	 * 
 	 * @param items
-	 * @param ac
-	 * @param rowExpression
 	 * @return
 	 */
-	public static HashMap<String, BigDecimal> getGroupVariable(Collection<ComputedAmountCell> items, ComputedAmountCell ac, String rowExpression) {
 
-		BigDecimal sumOfResults = new BigDecimal(0);
-
-		BigDecimal trail_total_commitments = new BigDecimal(0);
-		BigDecimal trail_acutal_commitments = new BigDecimal(0);
-		BigDecimal trail_planned_commitments = new BigDecimal(0);
-		BigDecimal trail_acutal_disburments = new BigDecimal(0);
-		BigDecimal trail_planned_disburments = new BigDecimal(0);
-
+	public static HashMap<String, BigDecimal> getGroupVariables(Collection<CategAmountCell> items) {
+		HashMap<String, BigDecimal> values = new HashMap<String, BigDecimal>();
+		Iterator<CategAmountCell> i = items.iterator();
 		BigDecimal max_acutal_commitments = new BigDecimal(0);
 		BigDecimal min_acutal_commitments = new BigDecimal(0);
 
@@ -40,59 +38,58 @@ public class ExpressionHelper {
 		BigDecimal max_planned_disburments = new BigDecimal(0);
 		BigDecimal min_planned_disburments = new BigDecimal(0);
 
-		Iterator i = items.iterator();
-
 		while (i.hasNext()) {
-			Object el = i.next();
-			ComputedAmountCell element = (ComputedAmountCell) el;
-			ac.merge(element, ac);
-			// collect values
-			element.getAmount();
+			ComputedAmountCell element = (ComputedAmountCell) i.next();
+			BigDecimal tc = element.getValues().get(ArConstants.TOTAL_COMMITMENTS);
 
-			if (rowExpression != null) {
-				sumOfResults = sumOfResults.add(MathExpressionRepository.get(rowExpression).result(element.getValues()));
-			}
+			BigDecimal ac = element.getValues().get(ArConstants.ACTUAL_COMMITMENT);
+			BigDecimal ad = element.getValues().get(ArConstants.ACTUAL_DISBURSEMENT);
 
-			BigDecimal tmpValue = element.getValues().get(ArConstants.TOTAL_COMMITMENTS);
-			BigDecimal tmpMinValue;
-			trail_total_commitments = trail_total_commitments.add(tmpValue);
-			tmpValue = null;
+			BigDecimal pc = element.getValues().get(ArConstants.PLANNED_COMMITMENT);
+			BigDecimal pd = element.getValues().get(ArConstants.PLANNED_DISBURSEMENT);
+
+			BigDecimal tmpValue = null;
+			BigDecimal tmpMinValue = null;
 
 			// ACTUAL_COMMITMENT
-			tmpValue = element.getValues().get(ArConstants.ACTUAL_COMMITMENT);
-			trail_acutal_commitments = trail_acutal_commitments.add(tmpValue);
+			tmpValue = ac;
 			max_acutal_commitments = (max_acutal_commitments.compareTo(tmpValue) < 0) ? tmpValue : max_acutal_commitments;
 			if (min_acutal_commitments.intValue() == 0) {
 				min_acutal_commitments = max_acutal_commitments;
 			}
-			min_acutal_commitments = (min_acutal_commitments.compareTo(tmpValue) > 0) ? tmpValue : min_acutal_commitments;
+			if (ac.doubleValue()!=0d){
+				min_acutal_commitments = (min_acutal_commitments.compareTo(tmpValue) > 0) ? tmpValue : min_acutal_commitments;
+			}
 			tmpValue = null;
 
 			// ACTUAL_DISBURSEMENT
-			tmpValue = element.getValues().get(ArConstants.ACTUAL_DISBURSEMENT);
-			trail_acutal_disburments = trail_acutal_disburments.add(tmpValue);
+			tmpValue = ad;
 			max_acutal_disburments = (max_acutal_disburments.compareTo(tmpValue) < 0) ? tmpValue : max_acutal_disburments;
 			if (min_acutal_disburments.intValue() == 0) {
 				min_acutal_disburments = max_acutal_disburments;
 			}
-			min_acutal_disburments = (min_acutal_disburments.compareTo(tmpValue) > 0) ? tmpValue : min_acutal_disburments;
+			if (ad.doubleValue()!=0d){
+				min_acutal_disburments = (min_acutal_disburments.compareTo(tmpValue) > 0 ) ? tmpValue : min_acutal_disburments;
+			}
 			tmpValue = null;
 
 			// PLANNED_COMMITMENT
-			tmpValue = element.getValues().get(ArConstants.PLANNED_COMMITMENT);
+			tmpValue = pc;
 			// planned_commitments
-			trail_planned_commitments = trail_planned_commitments.add(tmpValue);
+
 			max_planned_commitments = (max_planned_commitments.compareTo(tmpValue) < 0) ? tmpValue : max_planned_commitments;
 
 			if (min_planned_commitments.intValue() == 0) {
 				min_planned_commitments = max_planned_commitments;
 			}
-			min_planned_commitments = (min_planned_commitments.compareTo(tmpValue) > 0) ? tmpValue : min_planned_commitments;
+			if (pc.doubleValue()!=0d){
+				min_planned_commitments = (min_planned_commitments.compareTo(tmpValue) > 0) ? tmpValue : min_planned_commitments;
+			}
 			tmpValue = null;
 
 			// PLANNED_DISBURSEMENT
-			tmpValue = element.getValues().get(ArConstants.PLANNED_DISBURSEMENT);
-			trail_planned_disburments = trail_planned_disburments.add(tmpValue);
+			tmpValue = pd;
+
 			// max_acutal_commitments compare to value if -1 max is less if 1
 			// max is greater
 			max_planned_disburments = (max_planned_disburments.compareTo(tmpValue) < 0) ? tmpValue : max_planned_disburments;
@@ -101,46 +98,29 @@ public class ExpressionHelper {
 			if (min_planned_disburments.intValue() == 0) {
 				min_planned_disburments = max_planned_disburments;
 			}
-			min_planned_disburments = (min_planned_disburments.compareTo(tmpValue) > 0) ? tmpValue : min_planned_disburments;
-
+			if(pd.doubleValue()!=0){
+				min_planned_disburments = (min_planned_disburments.compareTo(tmpValue) > 0) ? tmpValue : min_planned_disburments;
+			}
 		}
 
-		HashMap<String, BigDecimal> variables = new HashMap<String, BigDecimal>();
+		values.put(ArConstants.MAX_ACTUAL_COMMITMENT, max_acutal_commitments);
+		values.put(ArConstants.MIN_ACTUAL_COMMITMENT, min_acutal_commitments);
 
-		variables.put(ArConstants.TOTAL_COMMITMENTS, trail_total_commitments);
-		variables.put(ArConstants.ACTUAL_COMMITMENT, trail_acutal_commitments);
-		variables.put(ArConstants.ACTUAL_DISBURSEMENT, trail_acutal_disburments);
+		values.put(ArConstants.MAX_ACTUAL_DISBURSEMENT, max_acutal_disburments);
+		values.put(ArConstants.MIN_ACTUAL_DISBURSEMENT, min_acutal_disburments);
 
-		variables.put(ArConstants.PLANNED_COMMITMENT, trail_planned_commitments);
-		variables.put(ArConstants.PLANNED_DISBURSEMENT, trail_planned_disburments);
+		values.put(ArConstants.MAX_PLANNED_COMMITMENT, max_planned_commitments);
+		values.put(ArConstants.MIN_PLANNED_COMMITMENT, min_planned_commitments);
 
-		variables.put(ArConstants.COUNT_PROJECTS, new BigDecimal(items.size()));
-
-		variables.put(ArConstants.MAX_ACTUAL_COMMITMENT, max_acutal_commitments);
-		variables.put(ArConstants.MIN_ACTUAL_COMMITMENT, min_acutal_commitments);
-
-		variables.put(ArConstants.MAX_ACTUAL_DISBURSEMENT, max_acutal_disburments);
-		variables.put(ArConstants.MIN_ACTUAL_DISBURSEMENT, min_acutal_disburments);
-
-		variables.put(ArConstants.MAX_PLANNED_COMMITMENT, max_planned_commitments);
-		variables.put(ArConstants.MIN_PLANNED_COMMITMENT, min_planned_commitments);
-
-		variables.put(ArConstants.MAX_PLANNED_DISBURSEMENT, max_planned_disburments);
-		variables.put(ArConstants.MIN_PLANNED_DISBURSEMENT, min_planned_disburments);
-
-		variables.put(ArConstants.SUM_OFF_RESULTS, sumOfResults);
-
-		return variables;
+		values.put(ArConstants.MAX_PLANNED_DISBURSEMENT, max_planned_disburments);
+		values.put(ArConstants.MIN_PLANNED_DISBURSEMENT, min_planned_disburments);
+		return values;
 	}
 
-	/**
-	 * 
-	 * @param items
-	 * @return
-	 */
 	public static HashMap<String, BigDecimal> getRowVariables(Collection<CategAmountCell> items) {
 		HashMap<String, BigDecimal> values = new HashMap<String, BigDecimal>();
 		Iterator<CategAmountCell> i = items.iterator();
+
 		// total
 		BigDecimal totalCommitments = new BigDecimal(0);
 		// planed
@@ -157,17 +137,28 @@ public class ExpressionHelper {
 		BigDecimal countPlanedDisburments = new BigDecimal(0);
 		BigDecimal proposedProjectCost = new BigDecimal(0);
 		BigDecimal grandTotalCost = new BigDecimal(0);
-		
+
 		// for each element get each funding type
 		while (i.hasNext()) {
 			ComputedAmountCell element = (ComputedAmountCell) i.next();
 			// using the logicExpression we will get the result of each funding
 			// type
-			totalCommitments = totalCommitments.add(new BigDecimal(TokenRepository.buildTotalCommitmentsLogicalToken().evaluate(element)));
-			actualCommitments = actualCommitments.add(new BigDecimal(TokenRepository.buildActualCommitmentsLogicalToken().evaluate(element)));
-			actualDisburments = actualDisburments.add(new BigDecimal(TokenRepository.buildActualDisbursementsLogicalToken().evaluate(element)));
-			plannedCommitments = plannedCommitments.add(new BigDecimal(TokenRepository.buildPLannedCommitmentsLogicalToken().evaluate(element)));
-			plannedDisburments = plannedDisburments.add(new BigDecimal(TokenRepository.buildPLannedDisbursementsLogicalToken().evaluate(element)));
+
+			BigDecimal tc = new BigDecimal(TokenRepository.buildTotalCommitmentsLogicalToken().evaluate(element));
+
+			BigDecimal ac = new BigDecimal(TokenRepository.buildActualCommitmentsLogicalToken().evaluate(element));
+			BigDecimal ad = new BigDecimal(TokenRepository.buildActualDisbursementsLogicalToken().evaluate(element));
+
+			BigDecimal pc = new BigDecimal(TokenRepository.buildPLannedCommitmentsLogicalToken().evaluate(element));
+			BigDecimal pd = new BigDecimal(TokenRepository.buildPLannedDisbursementsLogicalToken().evaluate(element));
+
+			totalCommitments = totalCommitments.add(tc);
+			actualCommitments = actualCommitments.add(ac);
+
+			actualDisburments = actualDisburments.add(ad);
+			plannedCommitments = plannedCommitments.add(pc);
+			plannedDisburments = plannedDisburments.add(pd);
+
 			if (element.getMetaValueString(ArConstants.ADJUSTMENT_TYPE) != null) {
 				if (element.getMetaValueString(ArConstants.ADJUSTMENT_TYPE).equalsIgnoreCase(ArConstants.ACTUAL)) {
 					if (element.getMetaValueString(ArConstants.TRANSACTION_TYPE).equalsIgnoreCase(ArConstants.COMMITMENT)) {
@@ -189,12 +180,11 @@ public class ExpressionHelper {
 				}
 			} else if (element.existsMetaString(ArConstants.PROPOSED_COST)) {
 				proposedProjectCost = proposedProjectCost.add(new BigDecimal(TokenRepository.buildUncommittedLogicalToken().evaluate(element)));
-			}else if(element.existsMetaString(ArConstants.COSTING_GRAND_TOTAL)){
-				grandTotalCost=grandTotalCost.add(new BigDecimal(TokenRepository.buildCostingGrandTotalToken().evaluate(element)));
+			} else if (element.existsMetaString(ArConstants.COSTING_GRAND_TOTAL)) {
+				grandTotalCost = grandTotalCost.add(new BigDecimal(TokenRepository.buildCostingGrandTotalToken().evaluate(element)));
 			}
 
 		}
-
 		// crate variable values map
 		values.put(ArConstants.TOTAL_COMMITMENTS, totalCommitments);
 		values.put(ArConstants.ACTUAL_COMMITMENT, actualCommitments);
@@ -208,10 +198,10 @@ public class ExpressionHelper {
 
 		values.put(ArConstants.PLANNED_COMMITMENT_COUNT, countPlanedCommitments);
 		values.put(ArConstants.PLANNED_DISBURSEMENT_COUNT, countPlanedDisburments);
-		
+
 		values.put(ArConstants.PROPOSED_COST, proposedProjectCost);
 		values.put(ArConstants.COSTING_GRAND_TOTAL, grandTotalCost);
-		
+
 		return values;
 	}
 
@@ -293,8 +283,8 @@ public class ExpressionHelper {
 				}
 			} else if (element.existsMetaString(ArConstants.PROPOSED_COST)) {
 				proposedProjectCost = proposedProjectCost.add(new BigDecimal(TokenRepository.buildUncommittedLogicalToken().evaluate(element)));
-			}else if(element.existsMetaString(ArConstants.COSTING_GRAND_TOTAL)){
-				grandTotalCost=grandTotalCost.add(new BigDecimal(TokenRepository.buildCostingGrandTotalToken().evaluate(element)));
+			} else if (element.existsMetaString(ArConstants.COSTING_GRAND_TOTAL)) {
+				grandTotalCost = grandTotalCost.add(new BigDecimal(TokenRepository.buildCostingGrandTotalToken().evaluate(element)));
 			}
 
 		}
@@ -322,8 +312,73 @@ public class ExpressionHelper {
 		values.put(ArConstants.PLANNED_DISBURSEMENT_COUNT, countPlanedDisburments);
 		values.put(ArConstants.PROPOSED_COST, proposedProjectCost);
 		values.put(ArConstants.COSTING_GRAND_TOTAL, grandTotalCost);
-		
-		
+
 		return values;
+	}
+
+	public static HashMap<String, BigDecimal> mergeGroupVaules(ComputedAmountCell c1, ComputedAmountCell c2) {
+		HashMap<String, BigDecimal> values = new HashMap<String, BigDecimal>();
+
+		values.put(ArConstants.MAX_ACTUAL_COMMITMENT, c1.getValues().get(ArConstants.MAX_ACTUAL_COMMITMENT));
+		if (c1.getValues().get(ArConstants.MAX_ACTUAL_COMMITMENT)==null){
+			values.put(ArConstants.MAX_ACTUAL_COMMITMENT, c2.getValues().get(ArConstants.MAX_ACTUAL_COMMITMENT));
+		}else if (c1.getValues().get(ArConstants.MAX_ACTUAL_COMMITMENT).compareTo(c2.getValues().get(ArConstants.MAX_ACTUAL_COMMITMENT)) < 0) {
+			values.put(ArConstants.MAX_ACTUAL_COMMITMENT, c2.getValues().get(ArConstants.MAX_ACTUAL_COMMITMENT));
+		}
+
+		values.put(ArConstants.MAX_ACTUAL_DISBURSEMENT, c1.getValues().get(ArConstants.MAX_ACTUAL_DISBURSEMENT));
+		
+		if (c1.getValues().get(ArConstants.MAX_ACTUAL_DISBURSEMENT)==null){
+			values.put(ArConstants.MAX_ACTUAL_DISBURSEMENT, c2.getValues().get(ArConstants.MAX_ACTUAL_DISBURSEMENT));
+		}else if (c1.getValues().get(ArConstants.MAX_ACTUAL_COMMITMENT).compareTo(c2.getValues().get(ArConstants.MAX_ACTUAL_DISBURSEMENT)) < 0) {
+			values.put(ArConstants.MAX_ACTUAL_DISBURSEMENT, c2.getValues().get(ArConstants.MAX_ACTUAL_DISBURSEMENT));
+		}
+		values.put(ArConstants.MAX_PLANNED_COMMITMENT, c1.getValues().get(ArConstants.MAX_PLANNED_COMMITMENT));
+		if (c1.getValues().get(ArConstants.MAX_PLANNED_COMMITMENT)==null){
+			values.put(ArConstants.MAX_PLANNED_COMMITMENT, c2.getValues().get(ArConstants.MAX_PLANNED_COMMITMENT));
+		}else if (c1.getValues().get(ArConstants.MAX_PLANNED_COMMITMENT).compareTo(c2.getValues().get(ArConstants.MAX_PLANNED_COMMITMENT)) < 0) {
+			values.put(ArConstants.MAX_PLANNED_COMMITMENT, c2.getValues().get(ArConstants.MAX_PLANNED_COMMITMENT));
+		}
+
+		values.put(ArConstants.MAX_PLANNED_DISBURSEMENT, c1.getValues().get(ArConstants.MAX_PLANNED_DISBURSEMENT));
+		if (c1.getValues().get(ArConstants.MAX_PLANNED_DISBURSEMENT)==null){
+			values.put(ArConstants.MAX_PLANNED_DISBURSEMENT, c2.getValues().get(ArConstants.MAX_PLANNED_DISBURSEMENT));
+		}else if (c1.getValues().get(ArConstants.MAX_PLANNED_COMMITMENT).compareTo(c2.getValues().get(ArConstants.MAX_PLANNED_DISBURSEMENT)) < 0) {
+			values.put(ArConstants.MAX_PLANNED_DISBURSEMENT, c2.getValues().get(ArConstants.MAX_PLANNED_DISBURSEMENT));
+		}
+
+		values.put(ArConstants.MIN_ACTUAL_COMMITMENT, c1.getValues().get(ArConstants.MIN_ACTUAL_COMMITMENT));
+		if (c1.getValues().get(ArConstants.MIN_ACTUAL_COMMITMENT)==null){
+			values.put(ArConstants.MIN_ACTUAL_COMMITMENT, c2.getValues().get(ArConstants.MIN_ACTUAL_COMMITMENT));
+		}else if (c1.getValues().get(ArConstants.MIN_ACTUAL_COMMITMENT).compareTo(c2.getValues().get(ArConstants.MIN_ACTUAL_COMMITMENT)) > 0) {
+			values.put(ArConstants.MIN_ACTUAL_COMMITMENT, c2.getValues().get(ArConstants.MIN_ACTUAL_COMMITMENT));
+		}
+
+		values.put(ArConstants.MIN_ACTUAL_DISBURSEMENT, c1.getValues().get(ArConstants.MIN_ACTUAL_DISBURSEMENT));
+		if (c1.getValues().get(ArConstants.MIN_ACTUAL_DISBURSEMENT)==null){
+			values.put(ArConstants.MIN_ACTUAL_DISBURSEMENT, c2.getValues().get(ArConstants.MIN_ACTUAL_DISBURSEMENT));
+		}else if (c1.getValues().get(ArConstants.MIN_ACTUAL_DISBURSEMENT).compareTo(c2.getValues().get(ArConstants.MIN_ACTUAL_DISBURSEMENT)) > 0) {
+			values.put(ArConstants.MIN_ACTUAL_DISBURSEMENT, c2.getValues().get(ArConstants.MIN_ACTUAL_DISBURSEMENT));
+		}
+
+		values.put(ArConstants.MIN_PLANNED_COMMITMENT, c1.getValues().get(ArConstants.MIN_PLANNED_COMMITMENT));
+		if (c1.getValues().get(ArConstants.MIN_PLANNED_COMMITMENT)==null){
+			values.put(ArConstants.MIN_PLANNED_COMMITMENT, c2.getValues().get(ArConstants.MIN_PLANNED_COMMITMENT));
+		}else if (c1.getValues().get(ArConstants.MIN_ACTUAL_DISBURSEMENT).compareTo(c2.getValues().get(ArConstants.MIN_PLANNED_COMMITMENT)) > 0) {
+			values.put(ArConstants.MIN_PLANNED_COMMITMENT, c2.getValues().get(ArConstants.MIN_PLANNED_COMMITMENT));
+		}
+
+		values.put(ArConstants.MIN_PLANNED_DISBURSEMENT, c1.getValues().get(ArConstants.MIN_PLANNED_DISBURSEMENT));
+		if (c1.getValues().get(ArConstants.MIN_PLANNED_DISBURSEMENT)==null){
+			values.put(ArConstants.MIN_PLANNED_DISBURSEMENT, c2.getValues().get(ArConstants.MIN_PLANNED_DISBURSEMENT));
+		}else if (c1.getValues().get(ArConstants.MIN_ACTUAL_DISBURSEMENT).compareTo(c2.getValues().get(ArConstants.MIN_PLANNED_DISBURSEMENT)) > 0) {
+			values.put(ArConstants.MIN_PLANNED_DISBURSEMENT, c2.getValues().get(ArConstants.MIN_PLANNED_DISBURSEMENT));
+		}
+	if (c1.getValues().get(ArConstants.COUNT_PROJECTS)==null){
+		values.put(ArConstants.COUNT_PROJECTS, c2.getValues().get(ArConstants.COUNT_PROJECTS));
+	}else{
+		values.put(ArConstants.COUNT_PROJECTS, c1.getValues().get(ArConstants.COUNT_PROJECTS).add(c2.getValues().get(ArConstants.COUNT_PROJECTS)));
+	}
+	return values;
 	}
 }

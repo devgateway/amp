@@ -15,11 +15,9 @@ public class ComputedAmountCell extends CategAmountCell {
 	HashMap<String, BigDecimal> values = new HashMap<String, BigDecimal>();
 
 	private static String COMPUTED_VALUE = "COMPUTED_VALUE";
-	private boolean computedVaule = false;
 
 	// if is a trail cell the value will be set by the Column
 	public void setComputedVaule(BigDecimal value) {
-		computedVaule = true;
 		values.put(COMPUTED_VALUE, value);
 	}
 
@@ -37,30 +35,30 @@ public class ComputedAmountCell extends CategAmountCell {
 		MathExpression expression = null;
 
 		// if the value was set by the column just return this
-		if (computedVaule) {
+		if (values.containsKey(COMPUTED_VALUE)) {
 			return values.get(COMPUTED_VALUE).doubleValue();
 		} else {
 			// if the cell should return the value, do it only if the row
 			// expression is set
-			
+
 			if (this.getColumn().getExpression() != null) {
 				expression = MathExpressionRepository.get(this.getColumn().getExpression());
-			} else if (this.getColumn().getWorker().getRelatedColumn().getTokenExpression()!=null){
+			} else if (this.getColumn().getWorker().getRelatedColumn().getTokenExpression() != null) {
 				expression = MathExpressionRepository.get(this.getColumn().getWorker().getRelatedColumn().getTokenExpression());
 			}
-			
-			String totalExpression=null;
-			if (this.getColumn().getWorker().getRelatedColumn().getTotalExpression()!=null){
-				totalExpression=this.getColumn().getWorker().getRelatedColumn().getTotalExpression();
+
+			String totalExpression = null;
+			if (this.getColumn().getWorker().getRelatedColumn().getTotalExpression() != null) {
+				totalExpression = this.getColumn().getWorker().getRelatedColumn().getTotalExpression();
 			}
-			Boolean showRowCalculation=false;
-			if(this.getColumn().getWorker().getRelatedColumn().isShowRowCalculations()!=null){
-				showRowCalculation=this.getColumn().getWorker().getRelatedColumn().isShowRowCalculations();
+			Boolean showRowCalculation = false;
+			if (this.getColumn().getWorker().getRelatedColumn().isShowRowCalculations() != null) {
+				showRowCalculation = this.getColumn().getWorker().getRelatedColumn().isShowRowCalculations();
 			}
-			
+
 			// if rowsExpression is present so return the expression result
 			// value
-			if ((expression != null)&&(totalExpression==null || showRowCalculation )) {
+			if ((expression != null) && (totalExpression == null || showRowCalculation)) {
 				return expression.result(values).doubleValue();
 			} else {
 				// if not this is a header result
@@ -75,7 +73,6 @@ public class ComputedAmountCell extends CategAmountCell {
 		// TODO Auto-generated constructor stub
 	}
 
-	
 	public ComputedAmountCell(AmountCell ac) {
 		super(ac.getOwnerId());
 		this.setColumn(ac.getColumn());
@@ -134,19 +131,26 @@ public class ComputedAmountCell extends CategAmountCell {
 		this.setRenderizable(categ.isRenderizable());
 		this.setCummulativeShow(categ.isCummulativeShow());
 		this.setMetaData(categ.getMetaData());
-		
-		
+
 	}
 
 	public HashMap<String, BigDecimal> getValues() {
+		if (values.size() == 0) {
+			getAmount();
+		}
 		return values;
 	}
 
 	public void setValues(HashMap<String, BigDecimal> values) {
+
 		this.values = values;
 	}
-  
+
 	public String toString() {
+		if ((this.getAmount() == 0d) && (this.getColumn().getWorker().getRelatedColumn().getTotalExpression() != null)) {
+			return "";
+		}
+
 		return FormatHelper.formatNumberUsingCustomFormat(getAmount());
 	}
 }

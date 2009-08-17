@@ -526,8 +526,8 @@ public class GroupColumn extends Column {
 		while (i.hasNext()) {
 			Column element = (Column) i.next();
 			count+=element.getVisibleCellCount(ownerId);
-		}
-		return count;
+			}
+			return count;
 	}
 
 	

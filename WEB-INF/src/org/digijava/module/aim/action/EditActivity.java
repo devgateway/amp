@@ -741,7 +741,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
     	eaForm.getIdentification().setProjectManagement(activity.getProjectManagement());
   
   
-  	eaForm.getContracts().setContractDetails(activity.getContractDetails());
+    	eaForm.getContracts().setContractDetails(activity.getContractDetails());
   	
 
   		eaForm.getIdentification().setConvenioNumcont(activity.getConvenioNumcont());

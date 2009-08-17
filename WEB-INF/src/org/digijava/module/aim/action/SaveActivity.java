@@ -156,7 +156,7 @@ public class SaveActivity extends Action {
 		if(!eaForm.isEditAct()){
 			activity.setCreatedAsDraft(eaForm.getIdentification().getDraft());
 			createdAsDraft[0]=eaForm.getIdentification().getDraft();
-	}
+		}
 		else{
 			if(eaForm.getIdentification().getWasDraft()&&!eaForm.getIdentification().getDraft()){
 				activity.setCreatedAsDraft(false);
@@ -2437,14 +2437,9 @@ public class SaveActivity extends Action {
 		}
 
 		//If we're adding an activity, create system/admin message
-		if(!createdAsDraft[0]) {
+		if(activity.getDraft()!=null && !activity.getDraft()) {
 			ActivitySaveTrigger ast=new ActivitySaveTrigger(activity);
-		}
-
-		
-
-		
-	
+		}	
 	
 		
 		

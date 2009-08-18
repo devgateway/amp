@@ -2,11 +2,12 @@ package org.digijava.module.calendar.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Collections;
+import java.util.Comparator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -228,8 +229,7 @@ public class ShowCalendarView extends Action {
             
               List l = new ArrayList(ampCalendarEvents);
         Comparator c = new Comparator<AmpCalendar>(){
-        	@Override
-			public int compare(AmpCalendar o1, AmpCalendar o2) {
+       	public int compare(AmpCalendar o1, AmpCalendar o2) {
         		AmpCalendarPK d1 = o1.getCalendarPK();
         		AmpCalendarPK d2 = o2.getCalendarPK();
         		if (d1.getStartYear() != d2.getStartYear())
@@ -258,9 +258,12 @@ public class ShowCalendarView extends Action {
          ses.setAttribute("mode",calendarViewForm.getView().length());
          ses.setAttribute("publicEvent", filter.isShowPublicEvents());
          ses.setAttribute("donor", filter.getSelectedDonors());
-         ses.setAttribute("year", calendarViewForm.getStartDateBreakDown().getYear());
-         ses.setAttribute("month", calendarViewForm.getBaseDateBreakDown().getMonth() - 1);
+         ses.setAttribute("year", calendarViewForm.getBaseDateBreakDown().getYear());
+         ses.setAttribute("month", calendarViewForm.getBaseDateBreakDown().getMonth());
          ses.setAttribute("day", calendarViewForm.getBaseDateBreakDown().getDayOfMonth());
+         ses.setAttribute("type", calendarViewForm.getBaseDateBreakDown().getType());
+         
+         
          
         return mapping.findForward("success");
     }

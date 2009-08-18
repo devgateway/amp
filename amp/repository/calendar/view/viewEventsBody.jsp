@@ -7,7 +7,6 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@page import="java.util.*"%>
 <%@ taglib uri="/taglib/struts-nested" prefix="nested"%>
 <%@ taglib uri="/taglib/fmt" prefix="fmt"%>
 <%@ taglib uri="/taglib/category" prefix="category"%>
@@ -18,11 +17,12 @@
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
+<%@page import="java.util.*"%>
 <%@page import="org.digijava.module.calendar.form.CalendarViewForm" %>
 <%@page import="org.digijava.module.calendar.util.CalendarUtil"%>
 
 <script type="text/javascript" charset="utf-8">
- var trn_today_button ='<digi:trn>Today</digi:trn>';
+    var trn_today_button ='<digi:trn>Today</digi:trn>';
 	var trn_day_tab ='<digi:trn>Day</digi:trn>';
 	var trn_week_tab='<digi:trn>Week</digi:trn>';
 	var trn_month_tab='<digi:trn>Month</digi:trn>';
@@ -100,7 +100,7 @@
 <%=CalendarUtil.getEventTypesCss()%>
 </style>
 
-<script type="text/javascript" charset="utf-8">
+<script type="text/javascript" charset="utf-8"><!--
 
 	function init() {
 		 
@@ -122,10 +122,15 @@
 		
 		scheduler.config.xml_date="%Y-%m-%d %H:%i";
 		scheduler.config.multi_day = true;
-		var myDate=new Date();
-		var currentDate = myDate.setFullYear(<%=request.getSession().getAttribute("year")%>,<%=request.getSession().getAttribute("month")%>,<%=request.getSession().getAttribute("day")%>);
-		scheduler.init('scheduler_here',currentDate,'month');
-		scheduler.templates.event_text=function(start_date,end_date,ev){
+	
+		var eth = getEthiopianCalendarDate(<%=request.getSession().getAttribute("year")%>,<%=request.getSession().getAttribute("month")%>,<%=request.getSession().getAttribute("day")%>);
+		var myDate = new Date(eth);
+		var ehtMonth = <%=request.getSession().getAttribute("month")%>;
+		var type = calType(<%=request.getSession().getAttribute("type")%>);
+		
+		
+		scheduler.init('scheduler_here',myDate,'month',type, ehtMonth);
+			scheduler.templates.event_text=function(start_date,end_date,ev){
 			return "Text:<b> "+ev.text+"</b><br>"+"Descr."+ev.details;
 		}
 		scheduler.load("/calendar/showEvents.do");
@@ -150,19 +155,66 @@
 		}
 		scheduler.config.dblclick_create = false;
 		scheduler.config.multi_days = true;
-		
-	//		scheduler.attachEvent("onViewChange",function(mode,date){
-			//alert(mode);
-		//		if(mode == "month"){
-			//		submitFilterForm('monthly',date); return(false);
-				//}else{
-					//submitFilterForm('yearly',date); return(false);
-			//	}
-		//})
+		/*
+		scheduler.attachEvent("onViewChange",function(mode,date){
+
+			if(mode == "month"){
+						submitFilterForm('monthly',date.getTime()/1000); 
+						
+						return true;
+					}
+			});
+*/		
+	
+
 
 	
 	} 
-</script>	
+
+function calType(type){
+	switch (type){
+	case 0:
+		return "GRE";
+		break;
+	case 1:
+		return "ETH";
+		break;	
+
+		}
+}	
+	
+function getEthiopianCalendarDate(yyyy,mm,dd)
+{
+   var months = new Array(13);
+   months[1]  = "jan";
+   months[2]  = "feb";
+   months[3]  = "mar";
+   months[4]  = "apr";
+   months[5]  = "may";
+   months[6]  = "jun";
+   months[7]  = "jul";
+   months[8]  = "aug";
+   months[9]  = "sep";
+   months[10] = "oct";
+   months[11] = "nov";
+   months[12] = "dec";
+   months[13] = "dec";
+   var now = new Date(yyyy,mm,dd);
+
+   if(now.getMonth()==0 || mm == 13){
+   		var monthnumber = now.getMonth()+12;
+   }else{
+	   var monthnumber = now.getMonth();
+	   }
+   var monthname   = months[monthnumber];
+   var monthday    = now.getDate();
+ 
+   var dateString = monthname +
+                    ' ' + monthday +
+                	' ' + yyyy;
+  return dateString;
+}	
+--></script>	
 
 <div id="css" style="display:block;"></div>
 <body>
@@ -178,7 +230,7 @@ window.onload = function(){
 			<div class="dhx_cal_next_button">&nbsp;</div>
 			<div class="dhx_cal_today_button"></div>
 			<div class="dhx_cal_date"></div>
-			<div  class="dhx_cal_tab" name="unit_tab" style="right:270px; display: none"></div>
+<!-- 			<div  class="dhx_cal_tab" name="unit_tab" style="right:270px;"></div> -->
 			<div class="dhx_cal_tab" name="month_tab" style="right:205px;"></div>
 			<div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>
 			<div class="dhx_cal_tab" name="day_tab" style="right:76px;"></div>

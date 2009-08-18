@@ -6,10 +6,10 @@ To use it on other terms or get Professional edition of the component please con
 */
 window.dhtmlXScheduler=window.scheduler={};
 dhtmlxEventable(scheduler);
-scheduler.init=function(id,date,mode){
+scheduler.init=function(id,date,mode,type,ehtMonth){
 	date=date||(new Date());
 	mode=mode||"week";
-	
+	console.log("Date"+date);
 	this._obj=(typeof id == "string")?document.getElementById(id):id;
 	this._els=[];
 	this._scroll=true;
@@ -27,7 +27,7 @@ scheduler.init=function(id,date,mode){
 	})
 	
 	this.set_sizes();
-	this.setCurrentView(date,mode);
+	this.setCurrentView(date,mode,type,ehtMonth);
 }
 scheduler.xy={
 	nav_height:22,
@@ -117,12 +117,14 @@ scheduler._click={
 			scheduler._close_not_saved();
 	},
 	dhx_cal_prev_button:function(){
+		console.log("Sche: "+scheduler._type);
 		scheduler.setCurrentView(scheduler.date.add(scheduler._date,-1,scheduler._mode));
 	},
 	dhx_cal_next_button:function(){
 		scheduler.setCurrentView(scheduler.date.add(scheduler._date,1,scheduler._mode));
 	},
 	dhx_cal_today_button:function(){
+		console.log("Sche: "+scheduler._type);
 		scheduler.setCurrentView(new Date());
 	},
 	dhx_cal_tab:function(){
@@ -343,7 +345,7 @@ scheduler.update_view=function(){
 	if (this._load_mode && this._load()) return;
 	this.render_view_data();
 }
-scheduler.setCurrentView=function(date,mode){
+scheduler.setCurrentView=function(date,mode,type,ehtMonth){
 	
 	if (!this.callEvent("onBeforeViewChange",[this._mode,this._date,mode,date])) return;
 	//hide old custom view
@@ -353,9 +355,12 @@ scheduler.setCurrentView=function(date,mode){
 	this._close_not_saved();
 	
 	this._mode=mode||this._mode;
+	this._type=type||this._type;
+	this._ehtMonth=ehtMonth||this._ehtMonth;
 	this._date=date;
 	this._table_view=(this._mode=="month");
 	
+	console.log(this._date+":thisdate");
 	var tabs=this._els["dhx_cal_tab"];
 	for (var i=0; i < tabs.length; i++) {
 		tabs[i].className="dhx_cal_tab"+((tabs[i].getAttribute("name")==this._mode+"_tab")?" active":"");
@@ -388,12 +393,12 @@ scheduler._reset_scale=function(){
 	var summ=parseInt(h.style.width); //border delta
 	var left=0;
 	
-	var d,dd,sd,today;
-	dd=this.date[this._mode+"_start"](new Date(this._date.valueOf()));
+	var d,dd,sd,today,ehtMonth;
 	
+	dd=this.date[this._mode+"_start"](new Date(this._date.valueOf()));
 	d=sd=this._table_view?scheduler.date.week_start(dd):dd;
-//	alert(d);
 	today=this.date.date_part(new Date());
+	ehtMonth = this._ehtMonth;
 	
 	//reset date in header
 	var ed=scheduler.date.add(dd,1,this._mode);
@@ -415,18 +420,50 @@ scheduler._reset_scale=function(){
 		//header scale	
 		var head=document.createElement("DIV"); head.className="dhx_scale_bar";
 		this.set_xy(head,this._cols[i]-1,this.xy.scale_height-2,left,0);//-1 for border
-		head.innerHTML=this.templates[this._mode+"_scale_date"](d,this._mode); //TODO - move in separate method
+		
+		if(ehtMonth!=13){
+		
+			if(d.getDate() != "31" || this._type != "ETH"){
+					head.innerHTML=this.templates[this._mode+"_scale_date"](d,this._mode); //TODO - move in separate method
+			}else{
+					d=this.date.add(d,1,"day");
+					head.innerHTML=this.templates[this._mode+"_scale_date"](d,this._mode); //TODO - move in separate method
+			}
+		}else{
+			console.log("rthMonth:"+ehtMonth+"Month:"+d.getMonth());
+			if(d.getDate() !="7" || d.getMonth()!="11"){
+				
+			
+				if(d.getDate() != "31" || this._type != "ETH"){
+					head.innerHTML=this.templates[this._mode+"_scale_date"](d,this._mode); //TODO - move in separate method
+				}else{
+					d=this.date.add(d,1,"day");
+					head.innerHTML=this.templates[this._mode+"_scale_date"](d,this._mode); //TODO - move in separate method
+				}
+
+		
+			}else{
+						console.log("else_rthMonth:"+ehtMonth+"Month:"+d.getMonth());
+		
+			d=this.date.add(d,25,"day");
+			head.innerHTML=this.templates[this._mode+"_scale_date"](d,this._mode); //TODO - move in separate method
+			
+		 	}
+		}
+		
+		
 		h.appendChild(head);
 		
 		if (!this._table_view){
+			if(d.getDate() != "31" || this._type != "ETH" || this._mode != "week"){
 			var scales=document.createElement("DIV");
 			var cls = "dhx_scale_holder"
 			if (d.valueOf()==today.valueOf()) cls = "dhx_scale_holder_now";
 			scales.className=cls+" "+this.templates.week_date_class(d,today);
 			this.set_xy(scales,this._cols[i]-1,c.hour_size_px*(c.last_hour-c.first_hour),left+this.xy.scale_width+1,0);//-1 for border
 			b.appendChild(scales);
+		 }
 		}
-		
 		d=this.date.add(d,1,"day")
 		summ-=this._cols[i];
 		left+=this._cols[i];
@@ -436,7 +473,7 @@ scheduler._reset_scale=function(){
 	this._colsS[count]=this._cols[count-1]+this._colsS[count-1];
 	
 	if (this._table_view)
-		this._reset_month_scale(b,dd,sd);
+		this._reset_month_scale(b,dd,sd,this._type,this._ehtMonth);
 	else{
 		this._reset_hours_scale(b,dd,sd);
 		if (c.multi_day){
@@ -458,7 +495,7 @@ scheduler._reset_hours_scale=function(b,dd,sd){
 	c.className="dhx_scale_holder";
 	
 	var date = new Date(1980,1,1,this.config.first_hour,0,0);
-	for (var i=this.config.first_hour*1000; i < this.config.last_hour; i++) {
+	for (var i=this.config.first_hour*1; i < this.config.last_hour; i++) {
 		var cc=document.createElement("DIV");
 		cc.className="dhx_scale_hour";
 		cc.style.height=this.config.hour_size_px-(this._quirks?0:1)+"px";
@@ -472,10 +509,13 @@ scheduler._reset_hours_scale=function(b,dd,sd){
 	if (this.config.scroll_hour)
 		b.scrollTop = this.config.hour_size_px*(this.config.scroll_hour-this.config.first_hour);
 }
-scheduler._reset_month_scale=function(b,dd,sd){
-	//alert(b+" dd:"+dd+" sd:"+sd)
-	var ed=scheduler.date.add(dd,1,"month");
+
+
+
+scheduler._reset_month_scale=function(b,dd,sd,type,ehtMonth){
 	
+	var ed=scheduler.date.add(dd,1,"month");
+	console.log(" b:"+b+" ed:"+ed+" sd:"+sd);
 	//trim time part for comparation reasons
 	var cd=new Date();
 	this.date.date_part(cd);
@@ -488,27 +528,52 @@ scheduler._reset_month_scale=function(b,dd,sd){
 	this._colsS.height=height+22;
 	for (var i=0; i<=7; i++)
 		tdcss[i]=" style='height:"+height+"px; width:"+((this._cols[i]||0)-1)+"px;' "
-
 	
-	
-	
+	if(sd.getDate() == "31"){
+		sd.setDate("30");
+	}
 	this._min_date=sd;
+	
 	var html="<table cellpadding='0' cellspacing='0'>";
+	
 	for (var i=0; i<rows; i++){
+		
 		html+="<tr>";
 			for (var j=0; j<7; j++){
 				html+="<td";
 				var cls = "";
-				if (sd<dd)
+				
+				 if (sd<dd)
 					cls='dhx_before';
 				else if (sd>=ed)
 					cls='dhx_after';
 				else if (sd.valueOf()==cd.valueOf())
 					cls='dhx_now';
-				html+=" class='"+cls+" "+this.templates.month_date_class(sd,cd)+"' ";
-				//alert(sd+" cd:"+cd);
+				 html+=" class='"+cls+" "+this.templates.month_date_class(sd,cd)+"' ";
 				html+="><div class='dhx_month_head'>"+this.templates.month_day(sd)+"</div><div class='dhx_month_body' "+tdcss[j]+"></div></td>"
-				sd=this.date.add(sd,1,"day");
+				var ff = this.date.add(sd,1,"day");
+				if(ehtMonth!=13){
+						
+						if(ff.getDate() != "31" | type != "ETH"){
+							sd=this.date.add(sd,1,"day");
+						}else{
+					    	sd=this.date.add(sd,2,"day");
+					    	}
+				}else{
+					
+					if(ff.getDate() != "7" || ff.getMonth() != "11"){
+						
+						if(ff.getDate() != "31" | type != "ETH"){
+							sd=this.date.add(sd,1,"day");
+						}else{
+					    	sd=this.date.add(sd,2,"day");
+					    	}
+					    	
+					}else{
+							sd=this.date.add(sd,26,"day");
+					}
+				}
+				
 			}
 		html+="</tr>";
 	}

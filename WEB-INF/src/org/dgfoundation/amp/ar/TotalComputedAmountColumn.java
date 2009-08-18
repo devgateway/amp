@@ -102,7 +102,14 @@ public class TotalComputedAmountColumn extends TotalAmountColumn {
 		
 		HashMap<String, BigDecimal> grupValues=ExpressionHelper.getGroupVariables(items);
 		ac.setColumn(this);
-		ac.getValues().put(ArConstants.COUNT_PROJECTS, new BigDecimal(this.getParent().getVisibleRows()));
+		
+		int totalUniqueRows=0;
+		
+		if (this.getParent() instanceof org.dgfoundation.amp.ar.ColumnReportData) {
+			totalUniqueRows=((ColumnReportData)this.getParent()).getTotalUniqueRows();
+		}
+		
+		ac.getValues().put(ArConstants.COUNT_PROJECTS, new BigDecimal(totalUniqueRows));
 		ac.getValues().putAll(grupValues);
 		if (this.getWorker().getRelatedColumn().getTotalExpression()!=null){
 			ac.setComputedVaule(MathExpressionRepository.get(this.getWorker().getRelatedColumn().getTotalExpression()).result(ac.getValues()));

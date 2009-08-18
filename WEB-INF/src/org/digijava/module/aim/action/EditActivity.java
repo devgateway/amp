@@ -1622,30 +1622,21 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
     if (teamMember != null) {
       apps = teamMember.getAppSettings();
     }
+    
     if (apps != null) {
-
-      if (fp.getCurrencyCode() == null) {
-
         Currency curr = CurrencyUtil.getCurrency(apps.getCurrencyId());
-        if (curr != null) {
-          fp.setCurrencyCode(curr.getCurrencyCode());
-        }
+			if (curr != null) {
+				fp.setCurrencyCode(curr.getCurrencyCode());
+			}
 
-      }
-
-      if (fp.getFiscalCalId() == null) {
-    	  if (apps.getFisCalId() !=null){
-				fp.setFiscalCalId(apps.getFisCalId());
-			}else{
-				fp.setFiscalCalId(FeaturesUtil.getGlobalSettingValueLong("Default Calendar"));
-		}
-      }
-
-//      if (fp.getFromYear() == 0 || fp.getToYear() == 0) {
-//        int year = new GregorianCalendar().get(Calendar.YEAR);
-//        fp.setFromYear(year - Constants.FROM_YEAR_RANGE);
-//        fp.setToYear(year + Constants.TO_YEAR_RANGE);
-//      }
+			if (fp.getFiscalCalId() == null) {
+				if (apps.getFisCalId() != null) {
+					fp.setFiscalCalId(apps.getFisCalId());
+				} else {
+					fp.setFiscalCalId(FeaturesUtil
+							.getGlobalSettingValueLong("Default Calendar"));
+				}
+			}
 
       Collection<FinancingBreakdown> fb = FinancingBreakdownWorker.getFinancingBreakdownList(
           activityId, ampFundingsAux, fp,debug);

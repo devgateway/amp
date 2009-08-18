@@ -1,7 +1,7 @@
 class Bluebook::DonorProfilesController < BluebookController
 def show
-    @donors = Donor.main
-    @donor = Donor.main.find(params[:id])
+    @donors = Donor.bluebook
+    @donor = Donor.bluebook.find(params[:id])
       
     # Total amount of money spent on all projects of a specific donor
     # Also checks whether funding information for the last year is available at all. If it is not, an error message will be shown.

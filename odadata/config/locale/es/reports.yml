@@ -52,7 +52,7 @@ es:
       payments_forecast: Proyección de Desembolsos {{year}}
       commitments_forecast: Proyección de Compromisos {{year}}
       no_results_message: Su búsqueda no ha encontrado resultados. Por favor, intente buscar de nuevo con diferente criterio.
-      disclaimer: Los reportes en ODAnic versión 2.6b reflejan los montos totales de los proyectos individuales, por lo tanto no dividen por sector, ubicación, o Objetivo de Desarrollo del Milenio. 
+      disclaimer: Los reportes en ODAnic versión 2.6c reflejan los montos totales de los proyectos individuales, por lo tanto no dividen por sector, ubicación, o Objetivo de Desarrollo del Milenio.
         
       donors:
           title: Proyectos por Donantes

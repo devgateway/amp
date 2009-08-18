@@ -52,7 +52,7 @@ en-mz:
     payments_forecast: Disbursements Forecast {{year}}
     commitments_forecast: Commitments Forecast {{year}}
     no_results_message: Your search has returned no results. Please try expanding the query.
-    disclaimer: Reports in ODAdata version 2.6b reflect project totals and thus are not disaggregated by sector, location, or Millennium Development Goal.
+    disclaimer: Reports in ODAdata version 2.6c reflect project totals and thus are not disaggregated by sector, location, or Millennium Development Goal.
     
     donors:
         title: Projects by Donor

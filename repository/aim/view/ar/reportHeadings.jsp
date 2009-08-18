@@ -22,11 +22,27 @@
   <%for (int curDepth = 0; curDepth <= columnReport
   .getMaxColumnDepth(); curDepth++, rowIdx++) {%>
   <tr title="Report Headings">
+  <%boolean first=true; %>
     <logic:iterate name="columnReport" property="items" id="column" scope="page" type="org.dgfoundation.amp.ar.Column">
-      <%
-      	column.setCurrentDepth(curDepth);
+     <%
+      column.setCurrentDepth(curDepth);
       	int rowsp = column.getCurrentRowSpan();
-      %>
+      	String token=null;
+      	String total=null;
+      	if (((org.dgfoundation.amp.ar.Column)column).getWorker()!=null){
+      	 token=((org.dgfoundation.amp.ar.Column)column).getWorker().getRelatedColumn().getTokenExpression();
+      	 total=((org.dgfoundation.amp.ar.Column)column).getWorker().getRelatedColumn().getTotalExpression();
+      	}
+        
+      
+      	if(first && (token!=null || total!=null)){%>
+      	
+      	
+      	<c:set var="addFakeColumn" value="${true}" scope="request"></c:set>
+      	  <td style="background-color:#999999;color:black;">&nbsp;</td>	
+        <%}
+        first=false;
+        %>
 
 
       <logic:iterate name="column" property="subColumnList" id="subColumn" scope="page" type="org.dgfoundation.amp.ar.Column">

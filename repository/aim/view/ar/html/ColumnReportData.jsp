@@ -44,6 +44,9 @@
 <%}else{%>
 	<tr bgcolor="#DBE5F1" height="16px" onmousedown="setPointerhtml(this, <%=rowIdx%>, 'click', '#DBE5F1', '#DBE5F1', '#A5BCF2');" onMouseover="this.style.backgroundColor='#A5BCF2'" onMouseout="this.style.background='#DBE5F1'">
 <%}%>
+	<c:if test="${addFakeColumn}">
+			<td></td>
+		</c:if>
 	<logic:iterate name="columnReport" property="items" id="column" scope="page">
 		<bean:define id="viewable" name="column" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 		<bean:define id="ownerId" name="ownerId" type="java.lang.Long" scope="page" toScope="request"/>

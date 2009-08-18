@@ -16,7 +16,6 @@
 
 <% String display=columnReport.getLevelDepth()>1?"display:none":"";%>
 
-
 <!-- generate total row -->
 <bean:define id="viewable" name="columnReport" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 <jsp:include page="TrailCells.jsp"/>
@@ -39,8 +38,12 @@
 <% 
 		if(bckColor.equals("true")) {
 %>
+
 <bean:define id="bckColor" value="false" toScope="page"/>
 <tr onmouseout="setPointer(this, <%=rowIdx%>, 'out', '#ffffff', '#a5bcf2', '#FFFF00');" onmouseover="setPointer(this, <%=rowIdx%>, 'over', '#ffffff', '#a5bcf2', '#FFFF00');" style="<%=display%>">
+	<c:if test="${addFakeColumn}">
+			<td bgcolor="<%= bckColor.equals("true")?"dbe5f1":"ffffff" %>" class="reportsBorderTD" ></td>
+		</c:if>
 	<logic:iterate name="columnReport" property="items" id="column" scope="page" indexId="columnNo">
 		<bean:define id="viewable" name="column" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 		<bean:define id="ownerId" name="ownerId" type="java.lang.Long" scope="page" toScope="request"/>
@@ -49,10 +52,13 @@
 		<jsp:include page="<%=viewable.getViewerPath()%>"/>	
 	</logic:iterate>
 </tr>
-
 <% } else { %>
 <bean:define id="bckColor" value="true" toScope="page"/>
 <tr onmouseout="setPointer(this, <%=rowIdx%>, 'out', '#dbe5f1', '#a5bcf2', '#FFFF00');" onmouseover="setPointer(this, <%=rowIdx%>, 'over', '#dbe5f1', '#a5bcf2', '#FFFF00');" style="<%=display%>">
+		<c:if test="${addFakeColumn}">
+				<td bgcolor="<%= bckColor.equals("true")?"dbe5f1":"ffffff" %>" class="reportsBorderTD" ></td>
+		</c:if>
+		
 		<logic:iterate name="columnReport" property="items" id="column" scope="page" indexId="columnNo">
 		<bean:define id="viewable" name="column" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 		<bean:define id="ownerId" name="ownerId" type="java.lang.Long" scope="page" toScope="request"/>

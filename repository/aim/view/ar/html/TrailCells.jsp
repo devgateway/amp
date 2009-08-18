@@ -52,13 +52,24 @@
 			<% } %>
 		</span>
 	</c:if>
-	
-	
 	</td>
 	<c:set var="firstCell" value="${true}"></c:set>
+	<c:set var="t3" value="${false}"></c:set>
 	
-	<logic:iterate name="reportData" property="trailCells" id="cell" scope="page">
-		<c:if test="${firstCell == false}">
+	<logic:iterate name="reportData" property="trailCells"  id="cell" type="org.dgfoundation.amp.ar.cell.Cell" scope="page">
+			<c:if test="${cell!=null}">
+				<bean:define id="column" scope="page" toScope="page"  name="cell" property="column"/>
+				<c:if test="${column.worker!=null}">
+					<bean:define id="worker" name="column" property="worker" scope="page"></bean:define>
+					<bean:define id="ampColumn" name="worker" property="relatedColumn" scope="page"></bean:define>
+					<c:set var="total" scope="page" value="${ampColumn.totalExpression}"/>
+					<c:set var="token" scope="page" value="${ampColumn.tokenExpression}"/>
+					<c:set var="t1" value="${total!=null}"/>
+					<c:set var="t2" value="${token!=null}"/>
+					<c:set var="t3" value="${t1||t2}"/>
+			</c:if>	
+			</c:if>
+		<c:if test="${firstCell == false || t3}">
 				<c:if test="${reportData.levelDepth == 1}">
 					<td align="center" style="border-bottom: #E0E0E0 1px solid;border-right: #E0E0E0 1px solid;font-family: Arial;font-weight: bold">
 				</c:if>
@@ -77,10 +88,12 @@
 					</c:if>
 					<c:if test="${cell==null}">
 					&nbsp;
-					</c:if>		
+					</c:if>	
 				</td>
 		</c:if>
 		<c:set var="firstCell" value="${false}"></c:set>
+		<c:set var="total" scope="page" value=""/>
+		<c:set var="token" scope="page" value=""/>
 	</logic:iterate>
 </tr>
 

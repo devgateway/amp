@@ -8,12 +8,14 @@ package org.dgfoundation.amp.visibility;
 import java.util.Iterator;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
 import org.apache.log4j.Logger;
+import org.apache.struts.tiles.ComponentContext;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
@@ -58,8 +60,14 @@ public class FeatureVisibilityTag extends BodyTagSupport {
 	}
 	
 	public int doStartTag() throws JspException {
+
+		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();		
+		String source = (String) request.getAttribute("org.apache.catalina.core.DISPATCHER_REQUEST_PATH");
+		
 		// TODO Auto-generated method stub
 		ServletContext ampContext=pageContext.getServletContext();
+		
+		
  	   AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
  try{
 	 String cache=(String) ampContext.getAttribute("FMcache");
@@ -69,7 +77,8 @@ public class FeatureVisibilityTag extends BodyTagSupport {
 //	   {
 		   //logger.info("	Feature visibility: cache is in writing mode...");
 		   if(ampTreeVisibility!=null){
-				 if(!existModule(ampTreeVisibility)) return SKIP_BODY;
+
+			   if(!existModule(ampTreeVisibility)) return SKIP_BODY;
 
 	 		   if(!existFeatureinDB(ampTreeVisibility)){
 	 			  synchronized (this) {
@@ -78,6 +87,8 @@ public class FeatureVisibilityTag extends BodyTagSupport {
 	                    AmpModulesVisibility moduleByNameFromRoot = ampTreeVisibility.getModuleByNameFromRoot(this.getModule());
 	                    Long id=null;
 	                    if(moduleByNameFromRoot!=null){
+	                    	
+	                    	
 	                       id = moduleByNameFromRoot.getId();
 	                       try {	
 	                    	   if(FeaturesUtil.getFeatureVisibility(this.getName())!=null)
@@ -99,8 +110,14 @@ public class FeatureVisibilityTag extends BodyTagSupport {
 	 				  }
 	 			  }
 	 		   }
+	 		   
+				synchronized (this) {
+					FeaturesUtil.updateFeatureVisibilitySource(name, source);
+				}
+	 		   
 		   }
 		   ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+
 		   if(ampTreeVisibility!=null)
 	   		   if(!isModuleTheParent(ampTreeVisibility)){
 	   			   //update(featureId, fieldname);

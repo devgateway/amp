@@ -8,12 +8,14 @@ package org.dgfoundation.amp.visibility;
 import java.util.Iterator;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
 import org.apache.log4j.Logger;
+import org.apache.struts.tiles.ComponentContext;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -68,6 +70,8 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 	}
 	public int doStartTag() throws JspException {
 		// TODO Auto-generated method stub
+		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();		
+		String source = (String) request.getAttribute("org.apache.catalina.core.DISPATCHER_REQUEST_PATH");
 		
 		ServletContext ampContext=pageContext.getServletContext();
 		AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
@@ -88,7 +92,7 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 							synchronized (this) {
 								if(FeaturesUtil.getModuleVisibility(name)==null){
 									FeaturesUtil.insertModuleVisibility(ampTreeVisibility.getRoot().getId(),this.getName(),this.getHasLevel());
-									logger.info("Inserting module: " + this.getName());
+									logger.debug("Inserting module: " + this.getName());
 									AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
 									ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
 									ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
@@ -103,13 +107,13 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 									//logger.info("Updating module: "+this.getName() +" with  id:"+ ampTreeVisibility.getModuleByNameFromRoot(this.getName()).getId() +"and his parent "+parentModule);
 									synchronized (this) {
 										if(!checkTypeAndParentOfModule2(FeaturesUtil.getModuleVisibility(name))){
-											logger.info("Trying to update module: "+this.getName() +" with  id:" +"and his parent "+parentModule);
+											logger.debug("Trying to update module: "+this.getName() +" with  id:" +"and his parent "+parentModule);
 											AmpModulesVisibility moduleAux= ampTreeVisibility.getModuleByNameFromRoot(this.getName());
 											if(moduleAux!=null)
 												if(moduleAux.getId()!=null)
 												{
 													FeaturesUtil.updateModuleVisibility(moduleAux.getId(), parentModule);
-													logger.info(".........updating module: "+this.getName() +" with  id:" +"and his parent "+parentModule);
+													logger.debug(".........updating module: "+this.getName() +" with  id:" +"and his parent "+parentModule);
 												}
 										}
 									}
@@ -122,6 +126,10 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 									ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
 									ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
 							}
+
+						synchronized (this) {
+							FeaturesUtil.updateModuleVisibilitySource(name, source);
+						}
 						
 					}
 //					else return SKIP_BODY;

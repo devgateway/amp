@@ -7,10 +7,13 @@ package org.dgfoundation.amp.visibility;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
+import org.digijava.module.aim.fmtool.dbentity.AmpFeatureSource;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.gateperm.core.ClusterIdentifiable;
 import org.digijava.module.gateperm.core.Permissible;
@@ -34,6 +37,8 @@ public abstract class AmpObjectVisibility  extends Permissible implements Serial
 	protected Boolean hasLevel;
 	protected String description;
 
+	private Set sources = null;
+	
 	public String getDescription() {
 		return description;
 	}
@@ -133,6 +138,47 @@ public abstract class AmpObjectVisibility  extends Permissible implements Serial
 	public String getClusterIdentifier() { 
 		return name;
 	}
+
+	public Set getSources() {
+		return sources;
+	}
+
+	public void setSources(Set sources) {
+		this.sources = sources;
+	}
 	
+	public boolean addAmpFeatureSource(AmpFeatureSource fmSource ){
+		if (fmSource ==null)
+			return false;
+		if (this.sources == null){
+			this.sources = new HashSet();
+			this.sources.add(fmSource);
+			return true;
+		}
+		
+		for (Iterator iterator = this.sources.iterator(); iterator.hasNext();) {
+			AmpFeatureSource item = (AmpFeatureSource) iterator.next();
+			if (item.getName().equalsIgnoreCase(fmSource.getName())){
+				return false;
+			}
+		}
+		this.sources.add(fmSource);
+		return true;
+	}
+	
+	public boolean containsSource(String sourcePath){
+		boolean retValue = false;
+		
+		if (this.sources != null && sourcePath != null){
+			for (Iterator iterator = this.sources.iterator(); iterator.hasNext();) {
+				AmpFeatureSource src = (AmpFeatureSource) iterator.next();
+				if (sourcePath.equalsIgnoreCase(src.getName())){
+					retValue = true;
+					break;
+				}
+			}
+		}
+		return retValue;
+	}
 		
 }

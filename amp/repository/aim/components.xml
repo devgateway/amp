@@ -428,7 +428,8 @@
 	<page name="allContacts" page="viewAddressBook" title="Address Book"/>
 	<page name="addContact" page="addEditAmpContact" title="Add/Edit Contact"/>
 	<page name="exportImportContacts" page="exportImportContacts" title="Contacts Export/Import"/>
-        <page page="components/addContactPopin" name="aim_contactComponentPopIn" title="AMP - Select Organization" />
+	<page page="components/addContactPopin" name="aim_contactComponentPopIn" title="AMP - Select Organization" />
+	<page name="fmCheck" title="Feature Manager check tool"/>
 
 </secondary-pages>
 <module>

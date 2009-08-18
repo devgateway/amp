@@ -15,26 +15,28 @@
 		<property name="hasLevel" column="hasLevel" type="java.lang.Boolean" />
 
 
-		<set name="items" table="AMP_FEATURES_VISIBILITY" cascade="all" lazy="false">
-			<cache usage="read-write" />
+		<set name="items" table="AMP_FEATURES_VISIBILITY" cascade="all-delete-orphan" lazy="false" >
 			<key column="parent" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpFeaturesVisibility" />
 		</set>
 
-		<many-to-one name="parent" column="parent"
-			class="org.digijava.module.aim.dbentity.AmpModulesVisibility" />
+		<many-to-one name="parent" column="parent" class="org.digijava.module.aim.dbentity.AmpModulesVisibility"/>
 
 
-		<set name="submodules" cascade="all" inverse="true" lazy="false">
+		<set name="submodules" cascade="all-delete-orphan" lazy="false" >
 			<key column="parent" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpModulesVisibility" />
 		</set>
 
-		<set name="templates" table="amp_modules_templates" inverse="true" lazy="false">
-			<cache usage="read-write" />
-			<key column="module" />
-			<many-to-many column="template"
-				class="org.digijava.module.aim.dbentity.AmpTemplatesVisibility" />
+		<set name="templates" table="amp_modules_templates" lazy="false" cascade="save-update">
+			<key column="module"/>
+			<many-to-many column="template" class="org.digijava.module.aim.dbentity.AmpTemplatesVisibility" />
+		</set>
+
+
+		<set name="sources" cascade="all-delete-orphan" lazy="false">
+			<key column="module_id" />
+			<one-to-many class="org.digijava.module.aim.fmtool.dbentity.AmpFeatureSourceModule" />
 		</set>
 
 	</class>

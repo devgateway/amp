@@ -11,12 +11,14 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
 import org.apache.log4j.Logger;
+import org.apache.struts.tiles.ComponentContext;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
@@ -65,11 +67,15 @@ public class FieldVisibilityTag extends BodyTagSupport {
 	}
 		public int doStartTag() throws JspException {
 	
+			HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();		
+			String source = (String) request.getAttribute("org.apache.catalina.core.DISPATCHER_REQUEST_PATH");
+			
  	   ServletContext ampContext=pageContext.getServletContext();
  try{
 	   AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
 
-		   if(ampTreeVisibility!=null)
+		   if(ampTreeVisibility!=null){
+			   
 			   if(!existFieldinDB(ampTreeVisibility)){
 				   synchronized (this) {
 					   if(FeaturesUtil.getFieldVisibility(name)==null)
@@ -78,6 +84,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
 		                    Long id=null;
 		                    if(featureByNameFromRoot!=null)
 		                    {
+		                    	
 		                        id = featureByNameFromRoot.getId();
 			   			        try {//extra verification...
 			   			        	if(FeaturesUtil.getFieldVisibility(this.getName())!=null){
@@ -93,13 +100,18 @@ public class FieldVisibilityTag extends BodyTagSupport {
 		                          	throw new JspException(ex);	
 		                           	}
 		                     } else {
-		                    	 logger.info("Field: "+this.getName() + " has the parent: "+this.getFeature()+ " which doesn't exist in DB");
+		                    	 logger.debug("Field: "+this.getName() + " has the parent: "+this.getFeature()+ " which doesn't exist in DB");
 			                    return SKIP_BODY;
 		                     }
 					  }
 				  }
 		   		}
+				synchronized (this) {
+					FeaturesUtil.updateFieldVisibilitySource(name, source);
+				}			   
+		   }
 		   		ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+
 		   		if(ampTreeVisibility!=null)
 		   		   if(!isFeatureTheParent(ampTreeVisibility)){
 					   FeaturesUtil.updateFieldWithFeatureVisibility(ampTreeVisibility.getFeatureByNameFromRoot(this.getFeature()).getId(),this.getName());
@@ -111,7 +123,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
 //	   }
 	   
  	}catch (Exception e) {
- 		System.out.println("error in field visibility. pls check the field: "+this.getName() +" or its parent: "+this.getFeature());
+ 		logger.error("error in field visibility. pls check the field: "+this.getName() +" or its parent: "+this.getFeature(), e);
  		e.printStackTrace();}
 	   	
  	return EVAL_BODY_BUFFERED;//super.doStartTag();

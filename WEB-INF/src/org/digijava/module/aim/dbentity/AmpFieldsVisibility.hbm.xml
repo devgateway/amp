@@ -13,15 +13,16 @@
 		<property name="description" column="description" type="java.lang.String" />
 		<property name="hasLevel" column="hasLevel" type="java.lang.Boolean" />
 
-		<many-to-one name="parent" column="parent"
-			class="org.digijava.module.aim.dbentity.AmpFeaturesVisibility" />
+		<many-to-one name="parent" column="parent" class="org.digijava.module.aim.dbentity.AmpFeaturesVisibility" />
 
-		<set name="templates" table="amp_fields_templates" inverse="true">
-			<cache usage="read-write" />
+		<set name="templates" table="amp_fields_templates" lazy="false" cascade="save-update">
 			<key column="field" />
-			<many-to-many column="template"
-				class="org.digijava.module.aim.dbentity.AmpTemplatesVisibility" />
+			<many-to-many column="template" class="org.digijava.module.aim.dbentity.AmpTemplatesVisibility" />
 		</set>
 
+		<set name="sources" cascade="all-delete-orphan" lazy="false">
+			<key column="field_id"/>
+			<one-to-many class="org.digijava.module.aim.fmtool.dbentity.AmpFeatureSourceField" />
+		</set>
 	</class>
 </hibernate-mapping>

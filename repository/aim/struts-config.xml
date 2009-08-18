@@ -158,6 +158,7 @@
     <form-bean name="invalidDataList" type="org.digijava.module.aim.form.InvalidDataListsForm"/>
 	
     <form-bean name="addressbookForm" type="org.digijava.module.aim.form.AddressBookForm"/>
+    <form-bean name="fmCheckForm" type="org.digijava.module.aim.fmtool.form.FeatureManagerCheckForm"/>
     
     <form-bean name="selectLocationForm" type="org.digijava.module.aim.form.SelectLocationForm"/>
     <form-bean name="selectProgramForm" type="org.digijava.module.aim.form.ProgramsForm"/>
@@ -1737,8 +1738,13 @@
      	<forward name="gotoPage" path="/showLayout.do?layout=exportImportContacts" />
      	<forward name="forward" path="/aim/admin.do" redirect="true"/>
    </action>
-   
+
    <action name="aimEditActivityForm" path="/aim/exportActToPDF" type="org.digijava.module.aim.action.ExportActivityToPDF"/>
+
+	<action path="/aim/fmCheck" scope="session" type="org.digijava.module.aim.fmtool.action.FeatureManagerCheckAction" name="fmCheckForm" validate="false" parameter="method">
+		<forward name="default" path="/showLayout.do?layout=fmCheck"/>
+		<forward name="show" path="/aim/fmCheck.do?method=show" redirect="true"/>
+	</action> 
     
   </action-mappings>
 </struts-config>

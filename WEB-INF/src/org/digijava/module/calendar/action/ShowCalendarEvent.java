@@ -165,10 +165,12 @@ public class ShowCalendarEvent extends Action {
         
         if (ceform.getMethod().equalsIgnoreCase("new")) {
             ceform.setAmpCalendarId(null);
-
         } else if (ceform.getMethod().equalsIgnoreCase("edit")) {
             loadAmpCalendar(ceform, request);
-        } else if (ceform.getMethod().equalsIgnoreCase("save")) {
+        } else if(ceform.getMethod().equalsIgnoreCase("ok")){
+        	ceform.setMethod("");
+        	return mapping.findForward("forward");
+        }else if (ceform.getMethod().equalsIgnoreCase("save")) {
         	String stDate=ceform.getSelectedStartDate() + " " + ceform.getSelectedStartTime();
         	String endDate=ceform.getSelectedEndDate()+ " " + ceform.getSelectedEndTime();
         	ActionErrors errors=validateDate(stDate,endDate);

@@ -250,12 +250,11 @@ public class MathExpressionRepository {
 
 	/**
 	 * Percentage Of Total Disbursements (Actual Disbursement affected by all
-	 * filters / Actual Disbursement of the activity no affected by filters and
-	 * percentages (overall total)) * 100
+	 * filters / Actual Disbursement o affected by  percentages 
 	 */
 	private static void buildPercentageDisbursement() {
 		try {
-			MathExpression x1 = new MathExpression(MathExpression.Operation.DIVIDE, ArConstants.ACTUAL_DISBURSEMENT_FILTERED, ArConstants.TOTAL_ACTUAL_DISBURSEMENT);
+			MathExpression x1 = new MathExpression(MathExpression.Operation.DIVIDE, ArConstants.ACTUAL_DISBURSEMENT_FILTERED, ArConstants.ACTUAL_DISBURSEMENT);
 			MathExpression x2 = new MathExpression(MathExpression.Operation.MULTIPLY, x1, new BigDecimal(100d));
 			expresions.put(PERCENTAGE_DISBURSEMENT, x2);
 		} catch (Exception e) {

@@ -100,7 +100,8 @@
 <%=CalendarUtil.getEventTypesCss()%>
 </style>
 
-<script type="text/javascript" charset="utf-8"><!--
+<script type="text/javascript" charset="utf-8">
+<!--
 
 	function init() {
 		 
@@ -130,7 +131,7 @@
 		
 		
 		scheduler.init('scheduler_here',myDate,'month',type, ehtMonth);
-			scheduler.templates.event_text=function(start_date,end_date,ev){
+		scheduler.templates.event_text=function(start_date,end_date,ev){
 			return "Text:<b> "+ev.text+"</b><br>"+"Descr."+ev.details;
 		}
 		scheduler.load("/calendar/showEvents.do");
@@ -214,9 +215,9 @@ function getEthiopianCalendarDate(yyyy,mm,dd)
                 	' ' + yyyy;
   return dateString;
 }	
---></script>	
+-->
+</script>	
 
-<div id="css" style="display:block;"></div>
 <body>
 <script type="text/javascript">
 window.onload = function(){

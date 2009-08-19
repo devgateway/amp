@@ -305,12 +305,13 @@ public class AmountCell extends Cell {
 	public Cell filter(Cell metaCell, Set ids) {
 		AmountCell ret = (AmountCell) super.filter(metaCell, ids);
 		
-		if (ret == null || ret.getMergedCells().size() == 0)
-			return ret;
+		if (ret == null)	return ret;
 		
 		if(this.getColumnCellValue()!=null) ret.setColumnCellValue(new HashMap<String, Comparable>(this.getColumnCellValue()));
 		if(this.getColumnPercent()!=null) ret.setColumnPercent(new HashMap<String, Double>(this.getColumnPercent()));
 		
+		if (ret.getMergedCells() == null || ret.getMergedCells().size() == 0)
+			return ret;
 		
 		// we need to filter the merged cells too...
 		AmountCell realRet = (AmountCell) this.newInstance();

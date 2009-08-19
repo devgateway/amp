@@ -105,7 +105,6 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/quartz-1.6.0.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/relaxngDatatype.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/retroweaver-rt.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/rowset.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/saaj-api.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/saaj-ri.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/saaj.jar"/>

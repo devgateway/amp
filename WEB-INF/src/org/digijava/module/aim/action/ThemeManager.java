@@ -19,6 +19,8 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.ARUtil;
+import org.dgfoundation.amp.ar.dimension.NPODimension;
 import org.digijava.kernel.util.collections.CollectionUtils;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.exception.AimException;
@@ -150,6 +152,7 @@ public class ThemeManager extends Action {
 				Long id = new Long(Long.parseLong(request.getParameter("themeId")));
 				
 				try {
+					ARUtil.clearDimension(NPODimension.class);
 					ProgramUtil.deleteTheme(id);
 				} catch (AimException e) {
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.theme.cannotDeleteTheme"));

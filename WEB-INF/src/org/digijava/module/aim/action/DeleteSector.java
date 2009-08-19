@@ -15,6 +15,8 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.ARUtil;
+import org.dgfoundation.amp.ar.dimension.SectorDimension;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.form.AddSectorForm;
@@ -72,6 +74,7 @@ public class DeleteSector extends Action {
       id = deleteSectorForm.getAmpSectorId();
       if(SectorUtil.getAllChildSectors(aSector.getAmpSectorId()).isEmpty()){
     	  logger.debug("Sector dont have any child sector:");
+    	  ARUtil.clearDimension(SectorDimension.class);
     	  SectorUtil.deleteSector(id);
     	  Collection schemeGot = SectorUtil.getEditScheme(_schemeId);
     	  if(aSector.getParentSectorId()==null){

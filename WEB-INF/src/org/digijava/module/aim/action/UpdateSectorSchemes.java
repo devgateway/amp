@@ -15,6 +15,8 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.ARUtil;
+import org.dgfoundation.amp.ar.dimension.SectorDimension;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -178,6 +180,7 @@ if(event!=null){
 				
 				ampscheme.setSecSchemeCode(sectorsForm.getSecSchemeCode());
 				ampscheme.setSecSchemeName(sectorsForm.getSecSchemeName());
+				ARUtil.clearDimension(SectorDimension.class);
 				DbUtil.add(ampscheme);
 				request.setAttribute("event", "view");
 				session.setAttribute("managingSchemes",null);
@@ -237,6 +240,7 @@ if(event!=null){
 				ampscheme.setSecSchemeCode(sectorsForm.getSecSchemeCode());
 				ampscheme.setSecSchemeName(sectorsForm.getSecSchemeName());
 				ampscheme.setAmpSecSchemeId(Id);
+				ARUtil.clearDimension(SectorDimension.class);
 				DbUtil.update(ampscheme);
 				logger.debug(" updated!!");
 				return mapping.findForward("viewSectorSchemes");
@@ -255,8 +259,10 @@ if(event!=null){
 				session.setAttribute("schemeDeletedError", "true");
 				return mapping.findForward("viewSectorSchemes");
 			}
-			else
+			else{
+				ARUtil.clearDimension(SectorDimension.class);
 				SectorUtil.deleteScheme(id1);
+			}
 				return mapping.findForward("viewSectorSchemes");
 				
 		}

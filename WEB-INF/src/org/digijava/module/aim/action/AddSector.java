@@ -15,6 +15,8 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.ARUtil;
+import org.dgfoundation.amp.ar.dimension.SectorDimension;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -152,6 +154,7 @@ public class AddSector extends Action {
 					}
 					newSector.setLanguage(null);
 					newSector.setVersion(null);
+					ARUtil.clearDimension(SectorDimension.class);
 					DbUtil.add(newSector);
 					Collection schemeGot = SectorUtil.getEditScheme(new Integer((String)session.getAttribute("Id")));
 					addSectorForm.setFormFirstLevelSectors(SectorUtil.getSectorLevel1(new Integer((String)session.getAttribute("Id"))));
@@ -252,6 +255,7 @@ public class AddSector extends Action {
 					}
 					newSector.setLanguage(null);
 					newSector.setVersion(null);
+					ARUtil.clearDimension(SectorDimension.class);
 					DbUtil.add(newSector);
 					
 					//Long parentId = id;//new Long(id);
@@ -360,6 +364,7 @@ public class AddSector extends Action {
 					newSector.setLanguage(null);
 					newSector.setVersion(null);
 					
+					ARUtil.clearDimension(SectorDimension.class);
 					DbUtil.add(newSector);
 					
 					//Long parentId = id;//new Long(id);

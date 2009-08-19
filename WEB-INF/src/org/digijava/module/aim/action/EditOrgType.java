@@ -9,6 +9,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
+import org.dgfoundation.amp.ar.ARUtil;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.form.AddOrgTypeForm;
 import org.digijava.module.aim.util.DbUtil;
@@ -54,6 +55,7 @@ public class EditOrgType extends DispatchAction {
 					 DbUtil.add(otype);
 					 removeSessAttribute(request);
 					 editForm.setReset(Boolean.TRUE);
+					 ARUtil.clearOrgGroupTypeDimensions();
 					 return mapping.findForward("added");
 				}
 		  
@@ -92,6 +94,7 @@ public class EditOrgType extends DispatchAction {
 			  		DbUtil.update(otype);
 			  		removeSessAttribute(request);
 					editForm.setReset(Boolean.TRUE); 
+					ARUtil.clearOrgGroupTypeDimensions();
 					return mapping.findForward("added");
 		  		}
 		  
@@ -119,6 +122,7 @@ public class EditOrgType extends DispatchAction {
 			  			AmpOrgType otype = DbUtil.getAmpOrgType(editForm.getAmpOrgTypeId());
 			  			if (null != otype) {
 			  				DbUtil.delete(otype);
+			  				ARUtil.clearOrgGroupTypeDimensions();
 			  				removeSessAttribute(request);
 			  			}
 			  			else

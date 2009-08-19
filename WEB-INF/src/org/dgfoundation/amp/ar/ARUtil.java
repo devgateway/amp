@@ -25,6 +25,10 @@ import org.hibernate.Session;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.dimension.ARDimension;
+import org.dgfoundation.amp.ar.dimension.DonorDimension;
+import org.dgfoundation.amp.ar.dimension.DonorGroupDimension;
+import org.dgfoundation.amp.ar.dimension.DonorTypeDimension;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
@@ -427,4 +431,17 @@ public final class ARUtil {
 			periods.add( new ComparableMonth(12, "") );
 		}
 	}
+	
+	//AMP-6541
+	public static void clearDimension(Class c){
+		logger.info("removing dimension: "+c.toString());
+		ARDimension.DIMENSIONS.remove(c);
+	}
+	
+	public static void clearOrgGroupTypeDimensions(){
+        clearDimension(DonorDimension.class);
+        clearDimension(DonorGroupDimension.class);
+        clearDimension(DonorTypeDimension.class);
+	}
+	
 }

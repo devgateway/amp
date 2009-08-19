@@ -701,7 +701,7 @@
                                                                         <table width="100%" cellspacing="0" cellpadding="0" id="staffTable">
                                                                             <c:forEach var="info" items="${aimAddOrgForm.staff}" >
                                                                                 <tr>
-                                                                                    <td  style="width:40px;text-align:center;">
+                                                                                    <td  style="width:40px;text-align:left;">
                                                                                         <html:multibox property="selectedStaff" styleClass="staffInfo">
                                                                                             ${info.id}
                                                                                         </html:multibox>
@@ -717,10 +717,9 @@
                                                                         </div>
                                                                     </c:if>
                                                                 </td>
-                                                            </tr>
-
+                                                            </tr>                             
                                                             <tr>
-                                                                <td colspan="5"><input type="checkbox"  onclick="selectAll()"><digi:trn>Select All</digi:trn><input type="button" onclick="deleteStaff()" value="<digi:trn>Delete</digi:trn>"></td>
+                                                                <td colspan="5" style="text-align:left;"><input type="checkbox"  onclick="selectAll()"><digi:trn>Select All</digi:trn>&nbsp;&nbsp;<input type="button" onclick="deleteStaff()" value="<digi:trn>Delete</digi:trn>"></td>
                                                             </tr>
                                                         </c:if>
 
@@ -1243,7 +1242,7 @@
 </c:otherwise>
 
 <tr>
-    <td colspan="2"><aim:addContactButton collection="contacts" form="${aimAddOrgForm}"><digi:trn>Add conatct</digi:trn></aim:addContactButton></td>
+    <td colspan="2"><aim:addContactButton collection="contacts" form="${aimAddOrgForm}"><digi:trn>Add contact</digi:trn></aim:addContactButton></td>
 
 </tr>
 

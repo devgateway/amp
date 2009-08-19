@@ -9,7 +9,6 @@ dhtmlxEventable(scheduler);
 scheduler.init=function(id,date,mode,type,ehtMonth){
 	date=date||(new Date());
 	mode=mode||"week";
-	console.log("Date"+date);
 	this._obj=(typeof id == "string")?document.getElementById(id):id;
 	this._els=[];
 	this._scroll=true;
@@ -117,14 +116,12 @@ scheduler._click={
 			scheduler._close_not_saved();
 	},
 	dhx_cal_prev_button:function(){
-		console.log("Sche: "+scheduler._type);
 		scheduler.setCurrentView(scheduler.date.add(scheduler._date,-1,scheduler._mode));
 	},
 	dhx_cal_next_button:function(){
 		scheduler.setCurrentView(scheduler.date.add(scheduler._date,1,scheduler._mode));
 	},
 	dhx_cal_today_button:function(){
-		console.log("Sche: "+scheduler._type);
 		scheduler.setCurrentView(new Date());
 	},
 	dhx_cal_tab:function(){
@@ -360,7 +357,6 @@ scheduler.setCurrentView=function(date,mode,type,ehtMonth){
 	this._date=date;
 	this._table_view=(this._mode=="month");
 	
-	console.log(this._date+":thisdate");
 	var tabs=this._els["dhx_cal_tab"];
 	for (var i=0; i < tabs.length; i++) {
 		tabs[i].className="dhx_cal_tab"+((tabs[i].getAttribute("name")==this._mode+"_tab")?" active":"");
@@ -430,7 +426,6 @@ scheduler._reset_scale=function(){
 					head.innerHTML=this.templates[this._mode+"_scale_date"](d,this._mode); //TODO - move in separate method
 			}
 		}else{
-			console.log("rthMonth:"+ehtMonth+"Month:"+d.getMonth());
 			if(d.getDate() !="7" || d.getMonth()!="11"){
 				
 			
@@ -443,7 +438,6 @@ scheduler._reset_scale=function(){
 
 		
 			}else{
-						console.log("else_rthMonth:"+ehtMonth+"Month:"+d.getMonth());
 		
 			d=this.date.add(d,25,"day");
 			head.innerHTML=this.templates[this._mode+"_scale_date"](d,this._mode); //TODO - move in separate method
@@ -515,7 +509,6 @@ scheduler._reset_hours_scale=function(b,dd,sd){
 scheduler._reset_month_scale=function(b,dd,sd,type,ehtMonth){
 	
 	var ed=scheduler.date.add(dd,1,"month");
-	console.log(" b:"+b+" ed:"+ed+" sd:"+sd);
 	//trim time part for comparation reasons
 	var cd=new Date();
 	this.date.date_part(cd);

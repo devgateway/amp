@@ -1,0 +1,1 @@
+update amp_component_funding set amp_activity_id=null;

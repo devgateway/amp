@@ -488,6 +488,14 @@ public class ReportsFilterPicker extends MultiAction {
 			arf.setSectors(null);
 			arf.setSelectedSectors(null);
 		}
+		
+		if (filterForm.getSelectedHistory() != null && filterForm.getSelectedHistory().length > 0) {
+			ArrayList<String> histories = new ArrayList();
+			for (int i = 0; i < filterForm.getSelectedHistory().length; i++) {
+				histories.add(filterForm.getSelectedHistory()[i].toString());
+			}
+			arf.setHistory(histories);
+		}
 
 		if (selectedSecondarySectors != null && selectedSecondarySectors.size() > 0) {
 			arf.setSelectedSecondarySectors(new HashSet());

@@ -197,4 +197,8 @@ public final class ArConstants {
 	public static final String COLUMN_UNCOMM_CUMULATIVE_BALANCE	= "Uncommitted Cumulative Balance";
 
 	public static final String SUM_OFF_RESULTS = "SUM_OFF_RESULTS";
+	
+	public static final String ACTIVITY_HISTORY_VIEWED = "1";
+	public static final String ACTIVITY_HISTORY_UPDATED = "3";
+	public static final String ACTIVITY_HISTORY_CREATED = "2";
 }

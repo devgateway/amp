@@ -24,7 +24,7 @@ def show
     # that apply to the bluebook, based on the start/end dates
     # This clause wasn't working: OR (start < :startYear AND 'end' > :endYear)
     @country_strategy = @donor.country_strategies.find(:first, :conditions => [
-        "applies_to_bluebook = true AND (( 'end' >= :startYear AND 'end' <= :endYear) OR (start >= :startYear AND start <= :endYear) )",
+        "applies_to_bluebook = true AND (( 'end' >= :startYear AND 'end' <= :endYear) OR (start >= :startYear AND start <= :endYear) OR (start >= :startYear AND start <= :endYear AND 'end' >= :startYear AND 'end' <= :endYear) OR (start <= :startYear AND 'end' >= :endYear))",
         {:startYear => "#{year}-01-01", :endYear => "#{year}-12-31" }
        ])
 

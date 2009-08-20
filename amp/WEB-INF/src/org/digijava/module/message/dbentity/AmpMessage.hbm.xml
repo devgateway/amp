@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.module.message.dbentity.AmpMessage" table="AMP_MESSAGE"
-		discriminator-value="m">
+	<class name="org.digijava.module.message.dbentity.AmpMessage" table="AMP_MESSAGE"	discriminator-value="m" lazy="false">
 
 		<id name="id" column="amp_message_Id" type="java.lang.Long">
 			<generator class="native">
@@ -22,8 +21,9 @@
 		<property name="emailable" column="is_emailable" type="java.lang.Boolean" />
 		<property name="draft" column="is_draft" type="java.lang.Boolean" />
 
-		<many-to-one name="forwardedMessage" column="forwarded_message_Id"
-			class="org.digijava.module.message.dbentity.AmpMessage" cascade="none" />
+		<many-to-one name="forwardedMessage" column="forwarded_message_Id"	class="org.digijava.module.message.dbentity.AmpMessage" cascade="none" />
+		
+		<many-to-one name="attachedDocs" class="org.digijava.module.sdm.dbentity.Sdm" cascade="delete" column="attached_doc_id" unique="true"/>
 
 		<property name="receivers" column="receivers" type="text" />
 		<property name="senderName" column="sender_name" type="text" />
@@ -43,6 +43,7 @@
 			<property name="relatedTriggerName" column="related_trigger_name"
 				type="java.lang.String" />
 		</subclass>
+		
 
 	</class>
 </hibernate-mapping>

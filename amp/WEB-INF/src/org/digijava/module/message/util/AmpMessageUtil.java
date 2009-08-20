@@ -97,11 +97,11 @@ public class AmpMessageUtil {
 		} catch (Exception ex) {
 			if(trans!=null) {
 				try {
-					trans.rollback();					
+					trans.rollback();
 				}catch(Exception e ) {
 					logger.error("...Rollback failed");
 					throw new AimException("Can't rollback", e);
-				}			
+				}
 			}
 			throw new AimException("delete failed",ex);
 		}

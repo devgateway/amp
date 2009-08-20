@@ -116,7 +116,8 @@ background-color:yellow;
 	var prevPage='<digi:trn>click here to go to previous page</digi:trn>';
 	var nextPage='<digi:trn>Click here to go to next page</digi:trn>';
 	var lastPg='<digi:trn>click here to go to last page</digi:trn>';
-	var referenceURL='<digi:trn>Reference URL</digi:trn>';
+	var referenceURL='<digi:trn>Reference URL</digi:trn>'; 
+	var attachmedFiles='<digi:trn>Attached Files</digi:trn>';
     var forwardClick='<digi:trn> Click on this icon to forward message&nbsp;</digi:trn>';
     var editClick='<digi:trn> Click on this icon to edit message&nbsp;</digi:trn>';
     var deleteClick='<digi:trn> Click on this icon to delete message&nbsp;</digi:trn>';
@@ -858,21 +859,41 @@ background-color:yellow;
 					else if(priority==3){priorityTD2.innerHTML='Critical';}
 					else if(priority==0){priorityTD2.innerHTML='None';}
 				priorityTR.appendChild(priorityTD2);
-			divTblBody.appendChild(priorityTR);	
-				
+			divTblBody.appendChild(priorityTR);
+					//getting attachments
+					var attachments=message.getAttribute('attachments');
+					if(attachments!=null){
+						var attachmentsTR=document.createElement('TR');
+						var attachmentsTD1=document.createElement('TD');
+						attachmentsTD1.innerHTML='<strong>'+attachmedFiles+'</strong>';
+						attachmentsTR.appendChild(attachmentsTD1);
+
+						var attachmentsTD2=document.createElement('TD');
+						var innerHTMLString='';
+						var attachmentLinks=attachments.split(",");
+						for(var i=0;i<attachmentLinks.length;i++){							
+							innerHTMLString+=attachmentLinks[i];								
+						}
+						attachmentsTD2.innerHTML=innerHTMLString;
+						
+						attachmentsTR.appendChild(attachmentsTD2);
+						divTblBody.appendChild(attachmentsTR);
+					}
+					
 					//getting URL
 					var objectURL=message.getAttribute('objURL');
-                                        if(objectURL!='null'){
-				var objURLTR=document.createElement('TR');
-					var objURLTD1=document.createElement('TD');
-                                        objURLTD1.innerHTML='<strong>'+referenceURL+'</strong>';
-				objURLTR.appendChild(objURLTD1);
-					var objURLTD2=document.createElement('TD');
-                    objURLTD2.innerHTML='<A href="javascript:openObjectURL(\''+objectURL+'\')";> '+viewDetails+'</A>';
+                    if(objectURL!='null'){
+						var objURLTR=document.createElement('TR');
+						var objURLTD1=document.createElement('TD');
+                        objURLTD1.innerHTML='<strong>'+referenceURL+'</strong>';
+						objURLTR.appendChild(objURLTD1);
 
-				objURLTR.appendChild(objURLTD2);
-			divTblBody.appendChild(objURLTR);
-                                    }	
+						var objURLTD2=document.createElement('TD');
+                    	objURLTD2.innerHTML='<A href="javascript:openObjectURL(\''+objectURL+'\')";> '+viewDetails+'</A>';
+
+						objURLTR.appendChild(objURLTD2);
+						divTblBody.appendChild(objURLTR);
+                    }	
 				
 				var detailsTR=document.createElement('TR');
 					var detailsTD1=document.createElement('TD');
@@ -1024,14 +1045,14 @@ $(document).ready(function(){
 		                    <c:when test="${messageForm.tabIndex==2}">
 		                    	<digi:trn>Alerts</digi:trn>
 		                    </c:when>
-		                    <c:when test="${messageForm.tabIndex==3&&sessionScope.currentMember.teamAccessType != 'Management'}">
+		                    <c:when test="${messageForm.tabIndex==3 && sessionScope.currentMember.teamAccessType != 'Management'}">
 		                    	<digi:trn>Approvals</digi:trn>
 		                    </c:when>
 	                        <c:otherwise>
 	                        	<digi:trn>Calendar Events</digi:trn>
 	                        </c:otherwise>
                         </c:choose>
-                        <c:if test="${messageForm.tabIndex!=3 && messageForm.tabIndex!=4}">
+                        <c:if test="${messageForm.tabIndex!=4}">
 	                    	&nbsp;&gt;&nbsp;
 	                    	<c:choose>
 		                    	<c:when test="${messageForm.childTab=='inbox'}">
@@ -1160,130 +1181,194 @@ $(document).ready(function(){
 	                        	<UL>
 	                        	<feature:display name="Message tab" module="Messages">
 	                        	<c:if test="${messageForm.tabIndex==1}">    
-	                        	<field:display name="Inbox Message" feature="Message tab">                                                                
-									<c:if test="${messageForm.childTab=='inbox'}">
-                                    	<LI>
-                                        	<span>
-                                        		<digi:trn>Inbox</digi:trn>&nbsp;&nbsp;|					
-                                             </span>
-                                         </LI>
+		                        	<field:display name="Inbox Message" feature="Message tab">                                                                
+										<c:if test="${messageForm.childTab=='inbox'}">
+	                                    	<LI>
+	                                        	<span>
+	                                        		<digi:trn>Inbox</digi:trn>&nbsp;&nbsp;|					
+	                                             </span>
+	                                         </LI>
+										</c:if>
+										<c:if test="${empty messageForm.childTab || messageForm.childTab!='inbox'}">
+	                                    	<LI>
+	                                        	<div>
+	                                            	<span>
+	                                                	<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=inbox&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
+	                                                    	<digi:trn>Inbox</digi:trn>
+	                                                     </a>&nbsp;&nbsp;|							
+	                                                 </span>
+	                                             </div>	
+	                                        </LI>
+	                                    </c:if>
+									</field:display>
+									<field:display name="Sent Message" feature="Message tab">		
+									<c:if test="${messageForm.childTab=='sent'}">
+	                             		<LI>
+	                                		<span>
+	                                			<digi:trn>Sent</digi:trn>&nbsp;&nbsp;|					
+	                                		</span>
+	                                	</LI>
 									</c:if>
-									<c:if test="${empty messageForm.childTab || messageForm.childTab!='inbox'}">
-                                    	<LI>
-                                        	<div>
-                                            	<span>
-                                                	<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=inbox&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
-                                                    	<digi:trn>Inbox</digi:trn>
-                                                     </a>&nbsp;&nbsp;|							
-                                                 </span>
-                                             </div>	
-                                        </LI>
-                                    </c:if>
-								</field:display>
-								<field:display name="Sent Message" feature="Message tab">		
-								<c:if test="${messageForm.childTab=='sent'}">
-                             		<LI>
-                                		<span>
-                                			<digi:trn>Sent</digi:trn>&nbsp;&nbsp;|					
-                                		</span>
-                                	</LI>
-								</c:if>
-								<c:if test="${empty messageForm.childTab || messageForm.childTab!='sent'}">
-                                	<LI>
-                                    	<div>
-                                         	<span>
-                                            	<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=sent&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
-                                                 	<digi:trn>Sent</digi:trn>
-                                                 </a>&nbsp;&nbsp;|							
-                                             </span>
-                                        </div>	
-                                    </LI>
-								</c:if>
-								</field:display>		 
-								<field:display name="Draft Message" feature="Message tab">		
-									<c:if test="${messageForm.childTab=='draft'}">
-                                    	<LI>
-                                        	<span>
-                                            	<digi:trn>Draft</digi:trn>					
-                                            </span>
-                                        </LI>
+									<c:if test="${empty messageForm.childTab || messageForm.childTab!='sent'}">
+	                                	<LI>
+	                                    	<div>
+	                                         	<span>
+	                                            	<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=sent&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
+	                                                 	<digi:trn>Sent</digi:trn>
+	                                                 </a>&nbsp;&nbsp;|							
+	                                             </span>
+	                                        </div>	
+	                                    </LI>
 									</c:if>
-									<c:if test="${empty messageForm.childTab || messageForm.childTab!='draft'}">
-                                    	<LI>
-                                        	<div>
-                                            	<span>
-                                                	<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=draft&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
-                                                    	<digi:trn>Draft</digi:trn>
-                                                     </a>							
-                                                 </span>
-                                              </div>	
-                                        </LI>
-									</c:if>
-								</field:display>
+									</field:display>		 
+									<field:display name="Draft Message" feature="Message tab">		
+										<c:if test="${messageForm.childTab=='draft'}">
+	                                    	<LI>
+	                                        	<span>
+	                                            	<digi:trn>Draft</digi:trn>					
+	                                            </span>
+	                                        </LI>
+										</c:if>
+										<c:if test="${empty messageForm.childTab || messageForm.childTab!='draft'}">
+	                                    	<LI>
+	                                        	<div>
+	                                            	<span>
+	                                                	<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=draft&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
+	                                                    	<digi:trn>Draft</digi:trn>
+	                                                     </a>							
+	                                                 </span>
+	                                              </div>	
+	                                        </LI>
+										</c:if>
+									</field:display>
 								</c:if>
 								</feature:display>
 								<feature:display name="Alert tab" module="Messages">
 	                        	<c:if test="${messageForm.tabIndex==2}">    
-	                        	<field:display name="Inbox Alert" feature="Alert tab">                                                                
-									<c:if test="${messageForm.childTab=='inbox'}">
-                                    	<LI>
-                                        	<span>
-                                        		<digi:trn>Inbox</digi:trn>&nbsp;&nbsp;|					
-                                             </span>
-                                         </LI>
+		                        	<field:display name="Inbox Alert" feature="Alert tab">                                                                
+										<c:if test="${messageForm.childTab=='inbox'}">
+	                                    	<LI>
+	                                        	<span>
+	                                        		<digi:trn>Inbox</digi:trn>&nbsp;&nbsp;|					
+	                                             </span>
+	                                         </LI>
+										</c:if>
+										<c:if test="${empty messageForm.childTab || messageForm.childTab!='inbox'}">
+	                                    	<LI>
+	                                        	<div>
+	                                            	<span>
+	                                                	<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=inbox&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
+	                                                    	<digi:trn>Inbox</digi:trn>
+	                                                     </a>&nbsp;&nbsp;|							
+	                                                 </span>
+	                                             </div>	
+	                                        </LI>
+	                                    </c:if>
+									</field:display>
+									<field:display name="Sent Alert" feature="Alert tab">		
+									<c:if test="${messageForm.childTab=='sent'}">
+	                             		<LI>
+	                                		<span>
+	                                			<digi:trn>Sent</digi:trn>&nbsp;&nbsp;|					
+	                                		</span>
+	                                	</LI>
 									</c:if>
-									<c:if test="${empty messageForm.childTab || messageForm.childTab!='inbox'}">
-                                    	<LI>
-                                        	<div>
-                                            	<span>
-                                                	<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=inbox&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
-                                                    	<digi:trn>Inbox</digi:trn>
-                                                     </a>&nbsp;&nbsp;|							
-                                                 </span>
-                                             </div>	
-                                        </LI>
-                                    </c:if>
-								</field:display>
-								<field:display name="Sent Alert" feature="Alert tab">		
-								<c:if test="${messageForm.childTab=='sent'}">
-                             		<LI>
-                                		<span>
-                                			<digi:trn>Sent</digi:trn>&nbsp;&nbsp;|					
-                                		</span>
-                                	</LI>
+									<c:if test="${empty messageForm.childTab || messageForm.childTab!='sent'}">
+	                                	<LI>
+	                                    	<div>
+	                                         	<span>
+	                                            	<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=sent&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
+	                                                 	<digi:trn>Sent</digi:trn>
+	                                                 </a>&nbsp;&nbsp;|							
+	                                             </span>
+	                                        </div>	
+	                                    </LI>
+									</c:if>
+									</field:display>		 
+									<field:display name="Draft Alert" feature="Alert tab">		
+										<c:if test="${messageForm.childTab=='draft'}">
+	                                    	<LI>
+	                                        	<span>
+	                                            	<digi:trn>Draft</digi:trn>					
+	                                            </span>
+	                                        </LI>
+										</c:if>
+										<c:if test="${empty messageForm.childTab || messageForm.childTab!='draft'}">
+	                                    	<LI>
+	                                        	<div>
+	                                            	<span>
+	                                                	<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=draft&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
+	                                                    	<digi:trn>Draft</digi:trn>
+	                                                     </a>							
+	                                                 </span>
+	                                              </div>	
+	                                        </LI>
+										</c:if>
+									</field:display>
 								</c:if>
-								<c:if test="${empty messageForm.childTab || messageForm.childTab!='sent'}">
-                                	<LI>
-                                    	<div>
-                                         	<span>
-                                            	<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=sent&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
-                                                 	<digi:trn>Sent</digi:trn>
-                                                 </a>&nbsp;&nbsp;|							
-                                             </span>
-                                        </div>	
-                                    </LI>
-								</c:if>
-								</field:display>		 
-								<field:display name="Draft Alert" feature="Alert tab">		
-									<c:if test="${messageForm.childTab=='draft'}">
-                                    	<LI>
-                                        	<span>
-                                            	<digi:trn>Draft</digi:trn>					
-                                            </span>
-                                        </LI>
-									</c:if>
-									<c:if test="${empty messageForm.childTab || messageForm.childTab!='draft'}">
-                                    	<LI>
-                                        	<div>
-                                            	<span>
-                                                	<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=draft&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
-                                                    	<digi:trn>Draft</digi:trn>
-                                                     </a>							
-                                                 </span>
-                                              </div>	
-                                        </LI>
-									</c:if>
-								</field:display>
+								</feature:display>
+								<feature:display name="Approval Tab" module="Messages">
+	                        	<c:if test="${messageForm.tabIndex==3 && sessionScope.currentMember.teamAccessType != 'Management'}">    
+		                        	<field:display name="Inbox Approval" feature="Approval Tab">                                                                
+										<c:if test="${messageForm.childTab=='inbox'}">
+	                                    	<LI>
+	                                        	<span>
+	                                        		<digi:trn>Inbox</digi:trn>&nbsp;&nbsp;|					
+	                                             </span>
+	                                         </LI>
+										</c:if>
+										<c:if test="${empty messageForm.childTab || messageForm.childTab!='inbox'}">
+	                                    	<LI>
+	                                        	<div>
+	                                            	<span>
+	                                                	<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=inbox&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
+	                                                    	<digi:trn>Inbox</digi:trn>
+	                                                     </a>&nbsp;&nbsp;|							
+	                                                 </span>
+	                                             </div>	
+	                                        </LI>
+	                                    </c:if>
+									</field:display>
+									<field:display name="Sent Approval" feature="Approval Tab">		
+										<c:if test="${messageForm.childTab=='sent'}">
+		                             		<LI>
+		                                		<span>
+		                                			<digi:trn>Sent</digi:trn>&nbsp;&nbsp;|					
+		                                		</span>
+		                                	</LI>
+										</c:if>
+										<c:if test="${empty messageForm.childTab || messageForm.childTab!='sent'}">
+		                                	<LI>
+		                                    	<div>
+		                                         	<span>
+		                                            	<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=sent&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
+		                                                 	<digi:trn>Sent</digi:trn>
+		                                                 </a>&nbsp;&nbsp;|							
+		                                             </span>
+		                                        </div>	
+		                                    </LI>
+										</c:if>
+									</field:display>		 
+									<field:display name="Draft Approval" feature="Approval Tab">		
+										<c:if test="${messageForm.childTab=='draft'}">
+	                                    	<LI>
+	                                        	<span>
+	                                            	<digi:trn>Draft</digi:trn>					
+	                                            </span>
+	                                        </LI>
+										</c:if>
+										<c:if test="${empty messageForm.childTab || messageForm.childTab!='draft'}">
+	                                    	<LI>
+	                                        	<div>
+	                                            	<span>
+	                                                	<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=draft&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
+	                                                    	<digi:trn>Draft</digi:trn>
+	                                                     </a>							
+	                                                 </span>
+	                                              </div>	
+	                                        </LI>
+										</c:if>
+									</field:display>
 								</c:if>
 								</feature:display>
 								<LI style="float: right;">

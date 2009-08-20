@@ -22,30 +22,26 @@
 
 package org.digijava.kernel.util;
 
-import org.apache.struts.tiles.ComponentContext;
+import java.io.IOException;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.security.auth.Subject;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import java.io.IOException;
-import java.util.Map;
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
+import org.apache.log4j.Logger;
+import org.apache.struts.tiles.ComponentContext;
 import org.digijava.kernel.Constants;
-import java.util.HashMap;
+import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
-import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.user.User;
-import org.digijava.kernel.entity.Locale;
-import org.hibernate.Session;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.exception.DgException;
-import javax.security.auth.Subject;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import javax.servlet.http.Cookie;
-import java.util.Enumeration;
-import org.apache.commons.lang.builder.ReflectionToStringBuilder;
-import java.util.*;
 
 /**
  * This class containts user-related utillity functions. User must be

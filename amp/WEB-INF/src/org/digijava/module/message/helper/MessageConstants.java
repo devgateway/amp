@@ -63,6 +63,8 @@ public class MessageConstants {
 
 	public static final String MESSAGE_TYPE_NAME= "Message Type";
 	public static final String MESSAGE_TYPE_KEY= "message_type";
+	
+	public static final int ATTACHMENTS_MAX_SIZE=10*1024*1024; //max limit is 10Mb
 
 	/**
 	 * What or who sends the message

@@ -22,6 +22,9 @@
 
 package org.digijava.module.sdm.action;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
@@ -34,14 +37,9 @@ import org.digijava.module.sdm.util.DbUtil;
 import org.digijava.module.sdm.util.SdmCommon;
 import org.digijava.module.sdm.util.SdmParagraph;
 
-public class SavePicture
-    extends Action {
+public class SavePicture extends Action {
 
-    public ActionForward execute(ActionMapping mapping,
-                                 ActionForm form,
-                                 javax.servlet.http.HttpServletRequest request,
-                                 javax.servlet.http.HttpServletResponse
-                                 response) throws java.lang.Exception {
+    public ActionForward execute(ActionMapping mapping,ActionForm form,HttpServletRequest request,HttpServletResponse response) throws Exception {
         SdmForm formBean = (SdmForm) form;
 
         if (formBean.getContentTitle() == null || formBean.getContentTitle().trim().length() == 0) {
@@ -62,8 +60,7 @@ public class SavePicture
 
             if (formBean.getFormFile() != null) {
                 if (formBean.getFormFile().getFileSize() != 0) {
-                    sdmItem.setContentType(formBean.getFormFile().
-                                           getContentType());
+                    sdmItem.setContentType(formBean.getFormFile().getContentType());
                     sdmItem.setRealType(SdmItem.TYPE_IMG);
                     sdmItem.setContent(formBean.getFormFile().getFileData());
                 }
@@ -90,10 +87,8 @@ public class SavePicture
 
             DbUtil.addUpdateItem(formBean.getSdmDocument(), sdmItem);
 
-            formBean.setSdmDocument(DbUtil.getDocument(formBean.getSdmDocument().
-                getId()));
-            formBean.setDocumentItemsList(SdmCommon.loadDocumentItemsList(
-                formBean.getSdmDocument()));
+            formBean.setSdmDocument(DbUtil.getDocument(formBean.getSdmDocument().getId()));
+            formBean.setDocumentItemsList(SdmCommon.loadDocumentItemsList(formBean.getSdmDocument()));
         }
 
         return mapping.findForward("forward");

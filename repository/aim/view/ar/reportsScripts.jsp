@@ -615,7 +615,7 @@ function validateFormat(){
 	
 	function sendCookieAndReload (){
 		createCookie('report_scrolling',currentReportId,1);
-		document.location=document.location;
+		submitFilters();
 	}
 	
 	
@@ -633,7 +633,7 @@ function validateFormat(){
 	}
 	function hiddeScroll(){
 		eraseCookie('report_scrolling');
-		document.location=document.location;
+		submitFilters();
 	}
 	
 	var enableLink=function(){

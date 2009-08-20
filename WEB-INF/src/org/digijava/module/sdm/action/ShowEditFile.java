@@ -22,6 +22,9 @@
 
 package org.digijava.module.sdm.action;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -34,24 +37,18 @@ import org.digijava.module.sdm.util.SdmParagraph;
 public class ShowEditFile
     extends Action {
 
-    public ActionForward execute(ActionMapping mapping,
-                                 ActionForm form,
-                                 javax.servlet.http.HttpServletRequest request,
-                                 javax.servlet.http.HttpServletResponse
-                                 response) throws java.lang.Exception {
+    public ActionForward execute(ActionMapping mapping,ActionForm form,HttpServletRequest request,HttpServletResponse response) throws java.lang.Exception {
         SdmForm formBean = (SdmForm) form;
         formBean.setSdmItem(null);
 
-        if ( (formBean.getActiveParagraphOrder() != null) ||
-            (formBean.getSdmDocument() != null)) {
+        if ( (formBean.getActiveParagraphOrder() != null) || (formBean.getSdmDocument() != null)) {
 
             if (formBean.getSdmDocument() != null) {
                 formBean.setDocumentTitle(formBean.getSdmDocument().getName());
             }
             if (formBean.getActiveParagraphOrder() != null) {
 
-                SdmItem itemEdit = formBean.getSdmDocument().getItemByIndex(
-                    formBean.getActiveParagraphOrder());
+                SdmItem itemEdit = formBean.getSdmDocument().getItemByIndex(formBean.getActiveParagraphOrder());
 
                 formBean.setSdmItem(itemEdit);
 

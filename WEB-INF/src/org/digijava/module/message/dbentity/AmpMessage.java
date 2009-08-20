@@ -3,6 +3,8 @@ package org.digijava.module.message.dbentity;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.digijava.module.sdm.dbentity.Sdm;
+
 /**
  * General AMP Message.
  * @author Dare Roinishvili
@@ -46,16 +48,18 @@ public abstract class AmpMessage implements Serializable {
 	/**
 	 * this field holds list of receivers
 	 */
-        private String receivers; // name and surnames of receivers separeted by comma
-
-        public String getReceivers() {
-            return receivers;
-        }
-
-        public void setReceivers(String receivers) {
-            this.receivers = receivers;
-        }
+    private String receivers; // name and surnames of receivers separeted by comma
+    
+    private Sdm attachedDocs; //for attaching files
         
+
+    public String getReceivers() {
+    	return receivers;
+    }
+
+    public void setReceivers(String receivers) {
+        this.receivers = receivers;
+    }       
     
 
 	/**
@@ -162,6 +166,13 @@ public abstract class AmpMessage implements Serializable {
 	public void setRelatedActivityId(Long relatedActivityId) {
 		this.relatedActivityId = relatedActivityId;
 	}
-        
 
-        }
+	public Sdm getAttachedDocs() {
+		return attachedDocs;
+	}
+
+	public void setAttachedDocs(Sdm attachedDocs) {
+		this.attachedDocs = attachedDocs;
+	}        
+
+    }

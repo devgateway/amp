@@ -20,7 +20,7 @@
  * USA.
  */
 
-package org.digijava.module.sdm.form;
+package org.digijava.module.sdm.helper;
 
 
 public class SdmInfo {

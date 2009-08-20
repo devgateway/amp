@@ -492,7 +492,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Donor Organization" feature="Donor Contact Information"></field:display> 
 <field:display name="Donor Phone Number" feature="Donor Contact Information"></field:display> 
 <field:display name="Donor Title" feature="Donor Contact Information"></field:display> 
-<field:display name="Draft Alert" feature="Alert tab"></field:display> 
+<field:display name="Draft Alert" feature="Alert tab"></field:display>
+<field:display name="Draft Approval" feature="Approval Tab"></field:display> 
 <field:display name="Draft Message" feature="Message tab"></field:display> 
 <field:display name="Draft" feature="Identification"></field:display> 
 <field:display name="Edit Components Link" feature="Activity - Component Step"></field:display> 
@@ -538,7 +539,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Implementing Agency Remove Button" feature="Implementing Agency"></field:display> 
 <field:display name="Implementing Agency" feature="Implementing Agency"></field:display> 
 <field:display name="Inbox Alert" feature="Alert tab"></field:display> 
-<field:display name="Inbox Message" feature="Message tab"></field:display> 
+<field:display name="Inbox Message" feature="Message tab"></field:display>
+<field:display name="Inbox Approval" feature="Approval Tab"></field:display> 
 <field:display name="Indicator Base Value" feature="Activity"></field:display> 
 <field:display name="Indicator Current Value" feature="Activity"></field:display> 
 <field:display name="Indicator Description" feature="Activity"></field:display> 
@@ -710,7 +712,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Sector" feature="Sectors"></field:display> 
 <field:display name="Sectors" feature="Admin"></field:display> 
 <field:display name="Send button" feature="Create Message Form"></field:display> 
-<field:display name="Sent Alert" feature="Alert tab"></field:display> 
+<field:display name="Sent Alert" feature="Alert tab"></field:display>
+<field:display name="Sent Approval" feature="Approval Tab"></field:display>
 <field:display name="Sent Message" feature="Message tab"></field:display> 
 <field:display name="Set Alert Drop down" feature="Create Message Form"></field:display> 
 <field:display name="Signature of Contract" feature="Contracting"></field:display> 

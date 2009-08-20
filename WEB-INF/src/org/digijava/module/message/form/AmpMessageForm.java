@@ -13,6 +13,7 @@ import org.digijava.module.message.dbentity.TemplateAlert;
 import org.digijava.module.message.helper.MessageHelper;
 import org.digijava.module.message.helper.ReciverName;
 import org.digijava.module.message.helper.RelatedActivity;
+import org.digijava.module.sdm.dbentity.Sdm;
 
 public class AmpMessageForm extends ActionForm {
 	/**
@@ -42,8 +43,12 @@ public class AmpMessageForm extends ActionForm {
 	private int allmsg;
 	private List<ReciverName> receivesrsNameMail;
 	private List<ReciverName> receivesrsTheamName;
+	//holds attached files	
+	private Sdm sdmDocument;
+	private int attachmentsSize;
 	
-	private int setAsAlert;
+	//private int setAsAlert;
+	private String setAs; //normal message, alert or approval
 	private boolean deleteActionWasCalled;
 	
 	private RelatedActivity[] relatedActivities;
@@ -57,11 +62,9 @@ public class AmpMessageForm extends ActionForm {
 	private String lastPage;
 	private int pagesToShow;
 	private int offset;
-        private String removeStateIds;
+    private String removeStateIds;
         
-        private int hiddenMsgCount;
-
-      
+    private int hiddenMsgCount;      
 	
 	/**
 	 * used to separate different kinds of messages
@@ -319,7 +322,7 @@ public class AmpMessageForm extends ActionForm {
 	
 	public Collection<Team> getTeamMapValues(){
 		return (Collection<Team>)teamsMap.values();
-	}
+	}	
 
 	public List<LabelValueBean> getReceivers() {
 		return receivers;
@@ -393,13 +396,6 @@ public class AmpMessageForm extends ActionForm {
 		this.childTab = childTab;
 	}
 
-	public int getSetAsAlert() {
-		return setAsAlert;
-	}
-
-	public void setSetAsAlert(int setAsAlert) {
-		this.setAsAlert = setAsAlert;
-	}
 
 	public MessageHelper getForwardedMsg() {
 		return forwardedMsg;
@@ -572,5 +568,29 @@ public class AmpMessageForm extends ActionForm {
 
 				public void setRelatedActivityName(String relatedActivityName) {
 					this.relatedActivityName = relatedActivityName;
+				}
+
+				public Sdm getSdmDocument() {
+					return sdmDocument;
+				}
+
+				public void setSdmDocument(Sdm sdmDocument) {
+					this.sdmDocument = sdmDocument;
+				}
+
+				public int getAttachmentsSize() {
+					return attachmentsSize;
+				}
+
+				public void setAttachmentsSize(int attachmentsSize) {
+					this.attachmentsSize = attachmentsSize;
+				}
+
+				public String getSetAs() {
+					return setAs;
+				}
+
+				public void setSetAs(String setAs) {
+					this.setAs = setAs;
 				}	
 	}

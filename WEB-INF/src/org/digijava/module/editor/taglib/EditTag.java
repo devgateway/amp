@@ -34,8 +34,7 @@ import org.digijava.module.editor.util.DbUtil;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.request.Site;
 
-public class EditTag
-    extends javax.servlet.jsp.tagext.BodyTagSupport {
+public class EditTag extends BodyTagSupport {
 
     private static Logger logger = Logger.getLogger(EditTag.class);
 

@@ -22,6 +22,9 @@
 
 package org.digijava.module.sdm.action;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -31,30 +34,20 @@ import org.digijava.module.sdm.form.SdmForm;
 import org.digijava.module.sdm.util.DbUtil;
 import org.digijava.module.sdm.util.SdmCommon;
 
-public class MoveUpItem
-    extends Action {
+public class MoveUpItem extends Action {
 
-    public ActionForward execute(ActionMapping mapping,
-                                 ActionForm form,
-                                 javax.servlet.http.HttpServletRequest request,
-                                 javax.servlet.http.HttpServletResponse
-                                 response) throws java.lang.Exception {
+    public ActionForward execute(ActionMapping mapping,ActionForm form,HttpServletRequest request,HttpServletResponse response) throws Exception {
         SdmForm formBean = (SdmForm) form;
 
         if (formBean.getActiveParagraphOrder() != null) {
             if (formBean.getSdmDocument() != null) {
+            	
+                SdmItem itemMove = formBean.getSdmDocument().getItemByIndex(formBean.getActiveParagraphOrder());
 
-                SdmItem itemMove = formBean.getSdmDocument().getItemByIndex(
-                    formBean.getActiveParagraphOrder());
-
-                DbUtil.moveItemUp(formBean.getSdmDocument(),
-                                  itemMove.getParagraphOrder());
-
+                DbUtil.moveItemUp(formBean.getSdmDocument(),itemMove.getParagraphOrder());
+                
                 formBean.setSdmDocument( DbUtil.getDocument(formBean.getSdmDocument().getId()));
-
-                formBean.setDocumentItemsList(SdmCommon.loadDocumentItemsList(
-                    formBean.getSdmDocument()));
-
+                formBean.setDocumentItemsList(SdmCommon.loadDocumentItemsList(formBean.getSdmDocument()));
             }
         }
 

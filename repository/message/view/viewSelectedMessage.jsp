@@ -71,38 +71,54 @@ background: #FFF;
 																				</tr>
 																				<tr><td colspan="4"></td></tr>
 																				<tr>
-																					<td align="left"><b><digi:trn key="message:from">From</digi:trn></b></td>
+																					<td align="left"><b><digi:trn>From</digi:trn></b></td>
 																					<td align="left" bgcolor="#ffffff" >
-																					<c:set var="senderInfo" value="${fn:split(messageForm.sender,';')}"/>
-																								<a  title='<c:out value="${senderInfo[1]}"/>' style="color: #05528B; text-decoration:underline;"><c:out value="${senderInfo[0]}"/></a>
+																						<c:set var="senderInfo" value="${fn:split(messageForm.sender,';')}"/>
+																						<a  title='<c:out value="${senderInfo[1]}"/>' style="color: #05528B; text-decoration:underline;"><c:out value="${senderInfo[0]}"/></a>
 																					</td>
 																					<td colspan="2"></td>
 																				</tr>
                                                                                 <tr><td colspan="5"></td></tr>	
                                                                                 <tr>
-																					<td align="left"><b><digi:trn key="message:to">to</digi:trn></b></td>
+																					<td align="left"><b><digi:trn>to</digi:trn></b></td>
 																					<td align="left" bgcolor="#ffffff">
-                                                                                                                                                                            <c:if test="${!empty messageForm.receivesrsNameMail}">
-                                                                                                                                                                                
-                                                                                                                                                                                  <logic:iterate id="nameMail"  name="messageForm" property="receivesrsNameMail" >
-                                                                                                                                                                                      
-                                                                                                                                                                                    <a title="${nameMail.teamName}" style="color: #05528B; text-decoration:underline;"><c:out value="${nameMail.userNeme}"/></a>
-                                                                                                                                                                                        
-                                                                                                                                                                                </logic:iterate>
-                                                                                                                                                                            </c:if>
+                                                                                    	<c:if test="${!empty messageForm.receivesrsNameMail}">
+                                                                                        	<logic:iterate id="nameMail"  name="messageForm" property="receivesrsNameMail" >
+                                                                                          		<a title="${nameMail.teamName}" style="color: #05528B; text-decoration:underline;"><c:out value="${nameMail.userNeme}"/></a>
+                                                                                          	</logic:iterate>
+                                                                                        </c:if>
 																					</td>
 																					<td colspan="2"></td>
 																				</tr>
 																				<tr><td colspan="4"></td></tr>		
 																				<tr>
-																					<td align="left"><b><digi:trn key="message:date">Date</digi:trn></b></td>
+																					<td align="left"><b><digi:trn>Date</digi:trn></b></td>
 																					<td align="left" bgcolor="#ffffff">${messageForm.creationDate}</td>
                                                                                     <td colspan="2"></td>
 																				</tr>
+																				<c:if test="${not empty messageForm.sdmDocument}">
+																					<tr><td colspan="5"></td></tr>
+																					<tr>
+																						<td align="left" nowrap width="10%"><b><digi:trn>Attachments:</digi:trn></b></td>
+																						<td align="left" bgcolor="#ffffff">
+																							<c:forEach var="item" items="${messageForm.sdmDocument.items}">
+																								<div>
+																									<jsp:useBean id="urlParamsSort" type="java.util.Map" class="java.util.HashMap"/>
+																									<c:set target="${urlParamsSort}" property="documentId" value="${messageForm.sdmDocument.id}"/>																																														
+																									<digi:link module="sdm" href="/showFile.do~activeParagraphOrder=${item.paragraphOrder}" name="urlParamsSort">
+																										<img src="/repository/message/view/images/attachment.png" border="0" />
+																										${item.contentTitle}
+																									</digi:link>
+																								</div>
+																							</c:forEach>
+																						</td>
+																						<td colspan="2"></td>
+																					</tr>
+																				</c:if>
 																				<tr><td colspan="5"></td></tr>
 																				<c:if test="${not empty messageForm.objectURL}">
 																					<tr>
-																						<td align="left" nowrap width="10%"><b><digi:trn key="message:objURL">object URL</digi:trn></b></td>
+																						<td align="left" nowrap width="10%"><b><digi:trn>object URL</digi:trn></b></td>
 																						<td align="left" bgcolor="#ffffff"><a href="${messageForm.objectURL}"><digi:trn key="message:ClickViewDetails">Click here to view details</digi:trn></a></td>
                                                                                         <td colspan="2"></td>
 																					</tr>	

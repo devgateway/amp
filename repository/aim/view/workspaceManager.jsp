@@ -295,9 +295,9 @@
 											<div style= " float:left; width:752px;" >
 											<!-- page logic for pagination -->
 																									
-															<jsp:useBean id="urlParams3" type="java.util.Map" class="java.util.HashMap"/>
-                                                            <c:set target="${urlParams3}" property="page">1</c:set>
-                                                            <c:set target="${urlParams3}" property="numPerPage">${aimWorkspaceForm.numPerPage}</c:set>
+															<jsp:useBean id="urlParams6" type="java.util.Map" class="java.util.HashMap"/>
+                                                            <c:set target="${urlParams6}" property="page">1</c:set>
+                                                            <c:set target="${urlParams6}" property="numPerPage">${aimWorkspaceForm.numPerPage}</c:set>
                                                              <c:set var="translation">
                                                                 <digi:trn key="aim:lastpage">First Page</digi:trn>
                                                             </c:set>
@@ -308,7 +308,7 @@
                                                                 <c:if test="${pagesSize>0}">
                                                                     <div class="pagination">
                                                                         <c:if test="${aimWorkspaceForm.page != 1}">
-                                                                            <digi:link href="/workspaceManager.do" name="urlParams3" title="${translation}" >
+                                                                            <digi:link href="/workspaceManager.do" name="urlParams6" title="${translation}" >
                                                                                 &lt;&lt;
                                                                             </digi:link>
                                                                         </c:if>
@@ -321,7 +321,7 @@
 															<logic:notEmpty name="aimWorkspaceForm" property="pages">			
 															<logic:iterate name="aimWorkspaceForm" property="pages" id="pages"
 															type="java.lang.Integer">
-															<c:set target="${urlParams3}" property="page"><%=pages%></c:set>
+															<c:set target="${urlParams5}" property="page"><%=pages%></c:set>
 															<c:set var="translation">
 																<digi:trn key="aim:clickToViewAllPages">Click here to view All pages</digi:trn>
 															</c:set>
@@ -332,7 +332,7 @@
                                                                 <c:set var="translation">
                                                                     <digi:trn key="aim:clickToViewNextPage">Click here to go to Next Page</digi:trn>
                                                                 </c:set>
-                                                                	<digi:link href="/workspaceManager.do" name="urlParams3"
+                                                                	<digi:link href="/workspaceManager.do" name="urlParams5"
 															title="${translation}" ><%=pages%></digi:link>
                                                             </c:if>
 															</div>

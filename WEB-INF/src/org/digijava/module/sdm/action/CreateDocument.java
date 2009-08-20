@@ -24,31 +24,26 @@ package org.digijava.module.sdm.action;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.entity.ModuleInstance;
-import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.sdm.form.SdmForm;
 import org.digijava.module.sdm.util.DbUtil;
 
-public class CreateDocument
-    extends Action {
+public class CreateDocument extends Action {
 
-    public ActionForward execute(ActionMapping mapping,
-                                 ActionForm form,
-                                 javax.servlet.http.HttpServletRequest request,
-                                 javax.servlet.http.HttpServletResponse
-                                 response) throws java.lang.Exception {
+    public ActionForward execute(ActionMapping mapping,ActionForm form,HttpServletRequest request,HttpServletResponse response) throws Exception {
         SdmForm formBean = (SdmForm) form;
 
-        ModuleInstance moduleInstance = DgUtil.getRealModuleInstance(request);
-
+        ModuleInstance moduleInstance =RequestUtils.getRealModuleInstance(request);
         //create new sdm_document
-        DbUtil.createNewDocument(formBean.getDocumentTitle(),
-                                 moduleInstance.getSite().getSiteId(),
-                                 moduleInstance.getInstanceName());
+        DbUtil.createNewDocument(formBean.getDocumentTitle(),moduleInstance.getSite().getSiteId(),moduleInstance.getInstanceName());
 
         List documentsList = DbUtil.getDocuments(request);
 

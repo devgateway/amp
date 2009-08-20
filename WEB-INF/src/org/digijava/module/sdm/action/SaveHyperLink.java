@@ -22,6 +22,9 @@
 
 package org.digijava.module.sdm.action;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -32,14 +35,9 @@ import org.digijava.module.sdm.util.DbUtil;
 import org.digijava.module.sdm.util.SdmCommon;
 import org.digijava.module.sdm.util.SdmParagraph;
 
-public class SaveHyperLink
-    extends Action {
+public class SaveHyperLink extends Action {
 
-    public ActionForward execute(ActionMapping mapping,
-                                 ActionForm form,
-                                 javax.servlet.http.HttpServletRequest request,
-                                 javax.servlet.http.HttpServletResponse
-                                 response) throws java.lang.Exception {
+    public ActionForward execute(ActionMapping mapping,ActionForm form,HttpServletRequest request,HttpServletResponse response) throws Exception {
         SdmForm formBean = (SdmForm) form;
 
         if (formBean.getContentTitle() == null || formBean.getContentTitle().trim().length() == 0) {
@@ -65,14 +63,13 @@ public class SaveHyperLink
             sdmItem.setContentTitle(paragraph.getContent());
 //            sdmItem.setContentTitle(SdmCommon.createParagraph(paragraph));
             sdmItem.setContentText(formBean.getContent());
-	    sdmItem.setContent(sdmItem.getContentText().getBytes());
+            sdmItem.setContent(sdmItem.getContentText().getBytes());
 
             //@todo@ set content
             DbUtil.addUpdateItem(formBean.getSdmDocument(),sdmItem);
 
             formBean.setSdmDocument(DbUtil.getDocument(formBean.getSdmDocument().getId()));
-            formBean.setDocumentItemsList(SdmCommon.loadDocumentItemsList(
-                formBean.getSdmDocument()));
+            formBean.setDocumentItemsList(SdmCommon.loadDocumentItemsList(formBean.getSdmDocument()));
         }
 
         return mapping.findForward("forward");

@@ -22,32 +22,24 @@
 
 package org.digijava.module.sdm.action;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.entity.ModuleInstance;
-import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.sdm.dbentity.Sdm;
 import org.digijava.module.sdm.form.SdmForm;
 import org.digijava.module.sdm.util.DbUtil;
 import org.digijava.module.sdm.util.SdmCommon;
 
-public class ShowEditDocument
-    extends Action {
+public class ShowEditDocument extends Action {
 
-    public ActionForward execute(ActionMapping mapping,
-                                 ActionForm form,
-                                 javax.servlet.http.HttpServletRequest request,
-                                 javax.servlet.http.HttpServletResponse
-                                 response) throws java.lang.Exception {
+    public ActionForward execute(ActionMapping mapping,ActionForm form,HttpServletRequest request,HttpServletResponse response) throws java.lang.Exception {
         SdmForm formBean = (SdmForm) form;
 
         if ((formBean.getActiveDocumentId() != null) || (formBean.getSdmDocument() != null)) {
-
-            // get documents List from data base
-            ModuleInstance moduleInstance = DgUtil.getRealModuleInstance(
-                request);
 
             Sdm sdmDocument = null;
 
@@ -59,7 +51,6 @@ public class ShowEditDocument
                 }
                 else {
                     formBean.setSdmDocument(null);
-
                     return mapping.findForward("forward");
                 }
             }
@@ -72,7 +63,6 @@ public class ShowEditDocument
 
             formBean.setDocumentItemsList(SdmCommon.loadDocumentItemsList(sdmDocument));
         }
-
 
         return mapping.findForward("forward");
     }

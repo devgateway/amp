@@ -24,9 +24,13 @@ package org.digijava.module.sdm.exception;
 
 import org.digijava.kernel.exception.DgException;
 
-public class SDMException
-    extends DgException {
-    public SDMException() {
+public class SDMException extends DgException {
+    /**
+	 * default serial version ID
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public SDMException() {
     }
 
     public SDMException(String message) {

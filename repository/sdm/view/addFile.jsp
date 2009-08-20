@@ -1,4 +1,3 @@
-
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
@@ -7,9 +6,20 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %> 
 
+<script langauage="JavaScript">
+	function checkEmpty(){
+		var title=document.getElementById('title').value;
+		if(title==0){
+			var msg='<digi:trn jsFriendly="true">Please enter name </digi:trn>';
+			alert(msg);
+			return false;
+		}
+		return true;
+	}
+</script>
+<digi:form action="/saveFile.do" method="post" enctype="multipart/form-data">
 <p align="center"><b><font size="4" color="#00008B">
-	<digi:errors/>
-	<digi:form action="/saveFile.do" method="post" enctype="multipart/form-data">
+	<digi:errors/>	
 	<div align="center">
 		<table width="60%">
 			<tr>
@@ -86,20 +96,23 @@
 	</table>
 	<table width="70%">
 		<tr>
-			<td noWrap><font size="2">
-				<digi:trn key="sdm:fileTitle">Title of the File:</digi:trn></font><BR>
-				<html:text name="sdmForm" property="contentTitle" size="50"/>
+			<td noWrap>
+			<font size="2">
+				<digi:trn>Title of the File:</digi:trn>
+			</font>
+			<BR>
+			<html:text name="sdmForm" property="contentTitle" size="50" styleId="title"/>
 			</td>
 		</tr>
 		<tr>
 			<td noWrap><font size="2">
-				<digi:trn key="sdm:chooseFile">Choose the file:</digi:trn></font><BR>
+				<digi:trn>Choose the file:</digi:trn></font><BR>
 				<html:file name="sdmForm" property="formFile" size="30"/>
 			</td>
 		</tr>
 		<tr>
 			<td>
-				<html:submit value="Submit"/>
+				<html:submit value="Submit" onclick="return checkEmpty()"/>
 			</td>
 		</tr>
 	</table></digi:form>

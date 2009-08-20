@@ -29,7 +29,7 @@ public class Configuration {
 			String path = this.getClass().getResource("/").getPath().replaceAll("/WEB-INF/classes/", repository);
 
 			DigiConfigManager.initialize(path);
-			PersistenceManager.initialize(true, null);
+			PersistenceManager.initialize(false);
 		} catch (Exception e) {
 			log.error(e);
 		}

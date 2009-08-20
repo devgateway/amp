@@ -3,6 +3,7 @@ package org.digijava.module.orgProfile.util;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 
@@ -23,6 +24,7 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -503,8 +505,8 @@ public class OrgProfileUtil {
     public static Date getStartDate(Long fiscalCalendarId, int year) {
         Date startDate = null;
         if (fiscalCalendarId != null && fiscalCalendarId != -1) {
-            startDate = FiscalCalendarUtil.getCalendarStartDate(fiscalCalendarId, year);
-
+            AmpFiscalCalendar calendar = FiscalCalendarUtil.getAmpFiscalCalendar(fiscalCalendarId);
+            startDate = getStartOfYear(year, calendar.getStartMonthNum() - 1, calendar.getStartDayNum());
         } else {
             Calendar cal = Calendar.getInstance();
             cal.set(Calendar.MONTH, Calendar.JANUARY);
@@ -516,18 +518,27 @@ public class OrgProfileUtil {
     }
 
     public static Date getEndDate(Long fiscalCalendarId, int year) {
-        Date startDate = null;
+        Date endDate = null;
         if (fiscalCalendarId != null && fiscalCalendarId != -1) {
-            startDate = FiscalCalendarUtil.getCalendarEndDate(fiscalCalendarId, year);
+            AmpFiscalCalendar calendar = FiscalCalendarUtil.getAmpFiscalCalendar(fiscalCalendarId);
+            //we need data including the last day of toYear,this is till the first day of toYear+1
+            int MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
+            endDate = new Date(getStartOfYear(year + 1, calendar.getStartMonthNum() - 1, calendar.getStartDayNum()).getTime() - MILLISECONDS_IN_DAY);
 
         } else {
             Calendar cal = Calendar.getInstance();
             cal.set(Calendar.MONTH, Calendar.DECEMBER);
             cal.set(Calendar.DAY_OF_MONTH, 31);
             cal.set(Calendar.YEAR, year);
-            startDate = cal.getTime();
+            endDate = cal.getTime();
         }
-        return startDate;
+        return endDate;
+    }
+
+    public static Date getStartOfYear(int year, int month, int day) {
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.set(year, month, day, 0, 0, 0);
+        return cal.getTime();
     }
 
     /**

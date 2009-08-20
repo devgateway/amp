@@ -89,7 +89,7 @@ public class LuceneUtil implements Serializable {
 	 * saved on the disk, if versions mismatch then we need to increment
 	 * the index
 	 */
-	private static final long serialVersionUID = 4L;
+	private static final long serialVersionUID = 5L;
 												
 	private static Logger logger = Logger.getLogger(LuceneUtil.class);
     /**
@@ -649,10 +649,7 @@ public class LuceneUtil implements Serializable {
 		//Util.getEditorBody(site,act.getDescription(),navigationLanguage);
 		Document doc = null;
 		try {
-			String projectid=null;
-			if (act.getInternalIds().size()>0){
-				projectid= String.valueOf(((AmpActivityInternalId)act.getInternalIds().iterator().next()).getInternalId());
-			}
+			String projectid = act.getAmpId();
 			
 			ArrayList<String> componentsCode=new ArrayList<String>();
 		 	Collection<AmpComponent> componentsList=act.getComponents();

@@ -5,6 +5,7 @@ package org.digijava.module.aim.form;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,6 +26,17 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Collection calendars;
 	private Collection sectors;
 	private Collection secondarySectors;
+	
+	private Object[] selectedHistory;
+	
+	public Object[] getSelectedHistory() {
+		return selectedHistory;
+	}
+
+	public void setSelectedHistory(Object[] selectedHistory) {
+		this.selectedHistory = selectedHistory;
+	}
+
 	// private Collection donors;
 	private Collection risks;
 	private Collection<BeanWrapperImpl> fromYears;

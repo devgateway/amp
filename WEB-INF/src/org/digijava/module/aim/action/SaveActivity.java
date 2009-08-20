@@ -38,6 +38,7 @@ import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
@@ -2266,6 +2267,10 @@ public class SaveActivity extends Action {
 			}
 			stepNumber++;
 		}
+		
+		// AMP-4660: Add filters for viewed, created and updated activities.
+		ActivityUtil.updateActivityAccess((User) request.getSession().getAttribute("org.digijava.kernel.user"),
+				eaForm.getActivityId(), true);
 
 		if(eaForm.getCustomFields()!=null){
 			List<CustomField<?>> customFields = eaForm.getCustomFields();

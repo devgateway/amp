@@ -13,6 +13,7 @@
 <%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
 <%@page import="org.digijava.module.aim.dbentity.AmpGlobalSettings"%>
 <%@page import="java.util.Collections"%>
+<%@page import="org.dgfoundation.amp.ar.ArConstants"%>
 
 <%-- <bean:define id="reportMeta" name="reportMeta"
 	type="org.digijava.module.aim.dbentity.AmpReports" scope="session"
@@ -187,6 +188,29 @@
 					</a>
 					</td>
 				</tr>
+                    <tr bgcolor="#EEEEEE"><td colspan="5">&nbsp;</td></tr>
+	                <tr bgcolor="#EEEEEE">
+	                    <td colspan="5"><b><digi:trn key="rep:filter:History">History</digi:trn></b><br/>
+	                    </td>
+	                </tr>
+                    <tr bgcolor="#EEEEEE">
+                    <td colspan="4" align="left">
+                        <html:select property="selectedHistory" multiple="false" style="width: 300px" styleClass="inp-text">
+                        <html:option value="0">
+                            <digi:trn key="rep:filer:All">All</digi:trn>
+                        </html:option>
+                        <html:option value="<%=ArConstants.ACTIVITY_HISTORY_VIEWED%>">
+                            <digi:trn key="rep:filer:Viewed">Viewed</digi:trn>
+                        </html:option>
+                        <html:option value="<%=ArConstants.ACTIVITY_HISTORY_CREATED%>">
+                            <digi:trn key="rep:filter:Created">Created</digi:trn>
+                        </html:option>
+                        <html:option value="<%=ArConstants.ACTIVITY_HISTORY_UPDATED%>">
+                            <digi:trn key="rep:filter:Updated">Updated</digi:trn>
+                        </html:option>
+                    </html:select>
+                    </td>
+                </tr>
 		</table>
 			</td> 
 				</tr>

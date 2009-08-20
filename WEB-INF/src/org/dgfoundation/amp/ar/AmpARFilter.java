@@ -34,6 +34,7 @@ import org.apache.lucene.search.Hits;
 import org.apache.lucene.store.Directory;
 import org.dgfoundation.amp.PropertyListable;
 import org.dgfoundation.amp.Util;
+import org.digijava.kernel.user.User;
 import org.digijava.module.aim.annotations.reports.IgnorePersistence;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
@@ -79,6 +80,27 @@ public class AmpARFilter extends PropertyListable {
 	private Set sectors = null;
 	private Set selectedSectors = null;
 	
+	@PropertyListableIgnore
+	private Collection history = null;
+	@PropertyListableIgnore
+	private Set selectedHistory = null;
+	@PropertyListableIgnore
+	public Set getSelectedHistory() {
+		return selectedHistory;
+	}
+
+	public void setSelectedHistory(Set selectedHistory) {
+		this.selectedHistory = selectedHistory;
+	}
+
+	public Collection getHistory() {
+		return history;
+	}
+
+	public void setHistory(Collection history) {
+		this.history = history;
+	}
+
 	@PropertyListableIgnore
 	private ArrayList<FilterParam> indexedParams=null;
 
@@ -539,6 +561,25 @@ public class AmpARFilter extends PropertyListable {
 				+ "inner join  AMP_PROGRAM_SETTINGS ps on ps.amp_program_settings_id=aap.program_setting where ps.name='Secondary Program' AND "
 				+ " aap.amp_program_id in ("
 				+ Util.toCSString(secondaryPrograms) + ")";
+		
+		String HISTORY_FILTER_CREATED = null;
+		String HISTORY_FILTER_UPDATED = null;
+		String HISTORY_FILTER_VIEWED = null;
+		// Long userId = ((org.digijava.module.aim.helper.TeamMember)
+		// request.getSession().getAttribute("currentMember")).getMemberId();
+		User user = (User) request.getSession().getAttribute("org.digijava.kernel.user");
+		if (this.history != null && this.history.contains((ArConstants.ACTIVITY_HISTORY_CREATED))) {
+			HISTORY_FILTER_CREATED = "SELECT aa.amp_activity_id FROM amp_activity aa, amp_team_member atm, dg_user du WHERE atm.amp_team_mem_id=aa.activity_creator AND atm.user_=du.id AND du.id = "
+					+ user.getId().toString();
+		} 
+		if (this.history != null && this.history.contains((ArConstants.ACTIVITY_HISTORY_UPDATED))) {
+			HISTORY_FILTER_UPDATED = "SELECT aa.amp_activity_id FROM amp_activity a, dg_user u, amp_activity_access aa WHERE a.amp_activity_id = aa.amp_activity_id AND aa.updated = 1 AND u.id = "
+					+ user.getId().toString();
+		} 
+		if (this.history != null && this.history.contains((ArConstants.ACTIVITY_HISTORY_VIEWED))) {
+			HISTORY_FILTER_VIEWED = "SELECT aa.amp_activity_id FROM amp_activity a, dg_user u, amp_activity_access aa WHERE a.amp_activity_id = aa.amp_activity_id AND aa.viewed = 1 AND u.id = "
+				+ user.getId().toString();
+		}
 
 		// String SECONDARY_PARENT_SECTOR_FILTER=
 		// "SELECT amp_activity_id FROM v_secondary_sectors WHERE amp_sector_id
@@ -823,6 +864,15 @@ public class AmpARFilter extends PropertyListable {
 		}
 		if (secondaryPrograms != null && secondaryPrograms.size() != 0) {
 			queryAppend(SECONDARY_PROGRAM_FILTER);
+		}
+		if (HISTORY_FILTER_CREATED != null) {
+			queryAppend(HISTORY_FILTER_CREATED);
+		}
+		if (HISTORY_FILTER_UPDATED != null) {
+			queryAppend(HISTORY_FILTER_UPDATED);
+		}
+		if (HISTORY_FILTER_VIEWED != null) {
+			queryAppend(HISTORY_FILTER_VIEWED);
 		}
 		if (regions != null && regions.size() > 0)
 			queryAppend(REGION_FILTER);

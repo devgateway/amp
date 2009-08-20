@@ -4072,6 +4072,29 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     	  return updator;
       }
 
-
+      /**
+       * Insert into table 'amp_activity_access' a new record to keep track of user´s access to activities.
+       * Related to AMP-4660.
+       * @param user Currently logged user.
+       * @param activityId Accessed activity´s id.
+       * @param isUpdate True if user saved changes on the activity, false if the user accessed Activity Overview.
+       */
+      public static void updateActivityAccess(User user, Long activityId, boolean isUpdate) {
+		try {
+			Session session = PersistenceManager.getRequestDBSession();
+			String sqry = "INSERT INTO amp_activity_access(viewed, updated, change_date, dg_user_id, amp_activity_id) VALUES(?,?,?,?,?)";
+			Query qry = session.createSQLQuery(sqry);
+			qry.setParameter(0, (isUpdate) ? 0 : 1);
+			qry.setParameter(1, (isUpdate) ? 1 : 0);
+			qry.setParameter(2, new Date(System.currentTimeMillis()));
+			qry.setParameter(3, user.getId().intValue());
+			qry.setParameter(4, activityId);
+			qry.executeUpdate();
+			logger.info("Access logued for activity: " + activityId + " - User: " + user.getId());
+		} catch (Exception e) {
+			logger.error(e);
+			e.printStackTrace();
+		}
+	}
 	
 } // End

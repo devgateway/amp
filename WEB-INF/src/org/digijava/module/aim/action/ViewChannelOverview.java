@@ -28,6 +28,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
@@ -431,6 +432,9 @@ public class ViewChannelOverview extends TilesAction {
           
 		
 		}
+		//AMP-4660: Add filters for viewed, created and updated activities.
+		ActivityUtil.updateActivityAccess((User) request.getSession().getAttribute("org.digijava.kernel.user"),
+				formBean.getId(), false);
 		
 		return null;
 	}

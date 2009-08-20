@@ -1176,7 +1176,7 @@
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     <action name="aimSelectSectorForm" path="/aim/addSelectedSectors" scope="session" type="org.digijava.module.aim.action.AddSelectedSectors" validate="false">
-      <forward name="forward" path="/showLayout.do?layout=aim_searchSectorPopupLayout"/>
+      <forward name="forward" path="/aim/selectSectorSwitch.do"/>
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     <action name="aimEditActivityForm" path="/aim/addSelectedSectorsForind" scope="session" type="org.digijava.module.aim.action.AddSelectedSectorsForInd" validate="false">

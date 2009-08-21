@@ -150,7 +150,8 @@
             }
             ret+=
                 "addButton="		+document.getElementsByName("addButton")[0].value+"&"+
-                "keyword="          +document.getElementsByName("keyword")[0].value;
+                "keyword="          +document.getElementsByName("keyword")[0].value+"&"+
+                 "configId=" +1;
         }
         else if (type==2){
             ret=

@@ -10,7 +10,7 @@
 <script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
-<div style='position:relative;display:none;' id='legendPopupTitle'><digi:trn key="aim:Legend">Legend</digi:trn></div>
+<div style='position:relative;display:none;' id='legendPopupTitle'><digi:trn key="aim:Legend">Legend</digi:trn></div> 
 <div style='position:relative;display:none;' id='legendPopup'> 
 	<ul>
 		<li>

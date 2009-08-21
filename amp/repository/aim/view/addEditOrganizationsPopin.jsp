@@ -19,6 +19,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop-min.js'/>" >.</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 
 <div id="popin" style="display: none">
     <div id="popinContent" class="content">
@@ -201,19 +202,25 @@
 
         }
     }
+    function addSectorBtnPushed(){
+            var postString		= "edit=true&" + generateFields(1);
+    <digi:context name="url" property="context/aim/selectSectors.do"/>
+            var url="${url}?"+postString;
+            var async=new Asynchronous();
+            async.complete=addSector;
+            async.call(url);
+            myclose();
+        }
+
+
     function buttonAdd(){
         if(document.aimSelectSectorForm.sector.value != -1){
-            var postString		= "edit=true&" + generateFields(1);
-    <digi:context name="commentUrl" property="context/aim/selectSectors.do"/>
-                                    var url = "<%=commentUrl%>";
-                                    YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
-                                    myclose();
-                                    addSector();
-                                }
-                                else{
-                                    alert("Please, select a sector firts!");
-                                }
-                            }
+            addSectorBtnPushed();
+        }
+        else{
+            alert("Please, select a sector first!");
+        }
+    }
                             function generateFieldsLocation(){
 
                                 var ret="locationReset=" + document.getElementsByName("locationReset")[0].value+"&"+

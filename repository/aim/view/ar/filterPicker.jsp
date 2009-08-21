@@ -79,13 +79,6 @@
 						<html:option value="-1">
 							<digi:trn key="rep:filer:All">All</digi:trn>
 						</html:option>
-						<html:option value="0" style="color:green">
-							<digi:trn key="rep:filter:ExistingUnvalidated">Existing Un-validated</digi:trn>
-						</html:option>
-						<logic:notEqual name="aimReportsFilterPickerForm" property="teamAccessType" value="Management">
-						<html:option value="3" style="color:red">
-							<digi:trn key="rep:filter:ExistingDraft">Existing Draft</digi:trn>
-						</html:option>
 						<html:option value="1" style="color:red">
 							*&nbsp;<digi:trn key="rep:filter:NewDraft">New Draft</digi:trn>
 						</html:option>
@@ -95,7 +88,14 @@
 						<html:option value="4" style="color:blue">
 							&nbsp;<digi:trn key="rep:filter:ValidatedActivities" >Validated Activities</digi:trn>
 						</html:option>
+						<logic:notEqual name="aimReportsFilterPickerForm" property="teamAccessType" value="Management">
+						<html:option value="3" style="color:red">
+							<digi:trn key="rep:filter:ExistingDraft">Existing Draft</digi:trn>
+						</html:option>
 						</logic:notEqual>
+						<html:option value="0" style="color:green">
+							<digi:trn key="rep:filter:ExistingUnvalidated">Existing Un-validated</digi:trn>
+						</html:option>
 					</html:select>
 					</td>
 				</tr>

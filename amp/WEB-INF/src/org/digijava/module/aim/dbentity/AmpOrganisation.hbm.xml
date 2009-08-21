@@ -113,8 +113,8 @@
                 <many-to-one name="adminAnnualBudgetCurr" column="admin_budgetcurrency_id" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
                 <property name="programAnnualPercent" column="program_annual_percent" type="java.lang.Double" />
                 <property name="taxNumber" column="tax_number" type="java.lang.Long" />
-                <property name="minPlanRegNumb" column="regist_num_min_plan" type="java.lang.Long" />
-                <property name="legalPersonNum" column="legal_personality_number" type="java.lang.Long" />
+                <property name="minPlanRegNumb" column="regist_num_min_plan" type="java.lang.String" />
+                <property name="legalPersonNum" column="legal_personality_number" type="java.lang.String" />
                 <property name="legalPersonRegDate" column="legal_personality_reg_date" type="java.util.Date" />
                 <property name="minPlanRegDate" column="min_plan_reg_date" type="java.util.Date" />
                 <property name="primaryPurpose" column="org_primary_purpose" type="java.lang.String" />

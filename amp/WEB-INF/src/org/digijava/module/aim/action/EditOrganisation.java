@@ -748,7 +748,7 @@ public class EditOrganisation extends DispatchAction {
         organization.setDacOrgCode(editForm.getDacOrgCode());
 
         if (editForm.getLegalPersonNum()!=null&&!editForm.getLegalPersonNum().equals("")) {
-            organization.setLegalPersonNum(Long.parseLong(editForm.getLegalPersonNum()));
+            organization.setLegalPersonNum(editForm.getLegalPersonNum());
 
         } else {
             organization.setLegalPersonNum(null);
@@ -770,7 +770,7 @@ public class EditOrganisation extends DispatchAction {
             organization.setMinPlanRegDate(null);
         }
         if(editForm.getRegNumbMinPlan()!=null&&!editForm.getRegNumbMinPlan().equals("")){
-            organization.setMinPlanRegNumb(Long.parseLong(editForm.getRegNumbMinPlan()));
+            organization.setMinPlanRegNumb(editForm.getRegNumbMinPlan());
         }
         else{
              organization.setMinPlanRegNumb(null);

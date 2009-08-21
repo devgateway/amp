@@ -64,8 +64,8 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
         private Double programAnnualPercent;
         private Long taxNumber;
         private String primaryPurpose;
-        private Long minPlanRegNumb;
-        private Long legalPersonNum;
+        private String minPlanRegNumb;
+        private String legalPersonNum;
         private Date legalPersonRegDate;
         private Date minPlanRegDate;
 
@@ -125,11 +125,11 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
             this.country = country;
         }
 
-        public Long getLegalPersonNum() {
+        public String getLegalPersonNum() {
             return legalPersonNum;
         }
 
-        public void setLegalPersonNum(Long legalPersonNum) {
+        public void setLegalPersonNum(String legalPersonNum) {
             this.legalPersonNum = legalPersonNum;
         }
 
@@ -189,11 +189,11 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
             this.recipients = recipients;
         }
 
-        public Long getMinPlanRegNumb() {
+        public String getMinPlanRegNumb() {
             return minPlanRegNumb;
         }
 
-        public void setMinPlanRegNumb(Long regNumbMinPlan) {
+        public void setMinPlanRegNumb(String regNumbMinPlan) {
             this.minPlanRegNumb = regNumbMinPlan;
         }
 

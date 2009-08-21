@@ -256,13 +256,13 @@
 
             var type=document.aimAddOrgForm.type;
             var name = document.aimAddOrgForm.name.value;
-            if (name.length == 0 || name == null) {
+            if ( name == null||name.length == 0) {
                 alert('<digi:trn  jsFriendly="true">Please enter name for this Organization.</digi:trn>');
                 document.aimAddOrgForm.name.focus();
                 return false;
             }
             var acronym = document.aimAddOrgForm.acronym.value;
-            if (acronym.length == 0 || acronym == null) {
+            if (acronym == null||acronym.length == 0) {
                 alert('<digi:trn  jsFriendly="true">Please enter acronym for this Organization.</digi:trn>');
                 document.aimAddOrgForm.acronym.focus();
                 return false;
@@ -282,61 +282,56 @@
             // We have different mandatory fields for NGOs and others....
             if(type.value=='NGO'){
                 var orgPrimaryPurpose= document.aimAddOrgForm.orgPrimaryPurpose.value;
-                if (orgPrimaryPurpose.length == 0 || orgPrimaryPurpose == null) {
+                if (orgPrimaryPurpose == null||orgPrimaryPurpose.length == 0 ) {
                     alert('<digi:trn  jsFriendly="true">Please enter primary purpose for this Organization.</digi:trn>');
                     document.aimAddOrgForm.orgPrimaryPurpose.focus();
                     return false;
                 }
                 var regNumbMinPlan= document.aimAddOrgForm.regNumbMinPlan.value;
-                if (regNumbMinPlan.length == 0 || regNumbMinPlan == null) {
+                if (regNumbMinPlan == null||regNumbMinPlan.length == 0 ) {
                     alert('<digi:trn  jsFriendly="true">Please enter Registration Number in MinPlan for this Organization.</digi:trn>');
                     document.aimAddOrgForm.regNumbMinPlan.focus();
                     return false;
                 }
                 var minPlanRegDate= document.aimAddOrgForm.minPlanRegDate.value;
-                if (minPlanRegDate.length == 0 || minPlanRegDate == null) {
+                if (minPlanRegDate == null||minPlanRegDate.length == 0 ) {
                     alert('<digi:trn  jsFriendly="true">Please enter Registration Date in MinPlan for this Organization.</digi:trn>');
                     document.aimAddOrgForm.minPlanRegDate.focus();
                     return false;
                 }
                 var fiscalCalId= document.aimAddOrgForm.fiscalCalId.value;
-                if (fiscalCalId == '-1' ||fiscalCalId == null) {
+                if (fiscalCalId == null||fiscalCalId == '-1') {
                     alert('<digi:trn  jsFriendly="true">Please Select Fiscal Calendar.</digi:trn>');
                     document.aimAddOrgForm.fiscalCalId.focus();
                     return false;
                 }
 
                 var selSectors= document.getElementsByName("selSectors");
-                if (selSectors.length == 0 || selSectors == null) {
+                if ( selSectors == null||selSectors.length == 0 ) {
                     alert('<digi:trn  jsFriendly="true">Please Select Sectors for this Organization.</digi:trn>');
                     return false;
                 }
                 var selRecipients= document.getElementsByName("selRecipients");
-                if (selRecipients.length == 0 || selRecipients == null) {
+                if ( selRecipients == null||selRecipients.length == 0) {
                     alert('<digi:trn  jsFriendly="true">Please Select Recipients for this Organization.</digi:trn>');
                     return false;
                 }
 
                 var countryId= document.aimAddOrgForm.countryId.value;
-                if (countryId == '-1' ||countryId == null) {
+                if (countryId == null||countryId == '-1') {
                     alert('<digi:trn  jsFriendly="true">Please Select Country of Origin.</digi:trn>');
                     document.aimAddOrgForm.countryId.focus();
                     return false;
                 }
-                var selRecipients= document.getElementsByName("selRecipients");
-                if (selRecipients.length == 0 || selRecipients == null) {
-                    alert('<digi:trn  jsFriendly="true">Please Select Recipients for this Organization.</digi:trn>');
-                    return false;
-                }
-
+     
                 var adminAnnualBudget= document.aimAddOrgForm.adminAnnualBudget.value;
-                if (adminAnnualBudget.length == 0 ||adminAnnualBudget == null) {
+                if (adminAnnualBudget == null||adminAnnualBudget.length == 0) {
                     alert('<digi:trn  jsFriendly="true">Please Enter Annual Budget of internal/administrative functioning for this Organization.</digi:trn>');
                     document.aimAddOrgForm.adminAnnualBudget.focus();
                     return false;
                 }
                 var programAnnualBudget= document.aimAddOrgForm.programAnnualBudget.value;
-                if (programAnnualBudget.length == 0 ||programAnnualBudget == null) {
+                if (programAnnualBudget == null||programAnnualBudget.length == 0 ) {
                     alert('<digi:trn  jsFriendly="true">Please Enter Program Annual Budget for this Organization.</digi:trn>');
                     document.aimAddOrgForm.programAnnualBudget.focus();
                     return false;
@@ -354,25 +349,25 @@
                     return false;
                 }
                 var programAnnualPercent= document.aimAddOrgForm.programAnnualPercent.value;
-                if (programAnnualPercent.length == 0 ||programAnnualPercent == null) {
+                if (programAnnualPercent == null||programAnnualPercent.length == 0 ) {
                     alert('<digi:trn  jsFriendly="true">Please Enter Program Annual Budget Percent for this Organization.</digi:trn>');
                     document.aimAddOrgForm.programAnnualPercent.focus();
                     return false;
                 }
                 var orgUrl= document.aimAddOrgForm.orgUrl.value;
-                if (orgUrl.length == 0 ||orgUrl == null) {
+                if (orgUrl == null||orgUrl.length == 0 ) {
                     alert('<digi:trn  jsFriendly="true">Please Enter URL for this Organization.</digi:trn>');
                     document.aimAddOrgForm.orgUrl.focus();
                     return false;
                 }
                 var address= document.aimAddOrgForm.address.value;
-                if (address.length == 0 ||address == null) {
+                if (address == null||address.length == 0 ) {
                     alert('<digi:trn  jsFriendly="true">Please Enter Address for this Organization.</digi:trn>');
                     document.aimAddOrgForm.address.focus();
                     return false;
                 }
                 var selLocs= document.getElementsByName("selLocs");
-                if (selLocs.length == 0 || selLocs == null) {
+                if ( selLocs == null||selLocs.length == 0 ) {
                     alert('<digi:trn  jsFriendly="true">Please Select Locations for this Organization.</digi:trn>');
                     return false;
                 }
@@ -393,13 +388,13 @@
             }
             else{
                 var orgCode= document.aimAddOrgForm.orgCode.value;
-                if (orgCode.length == 0 || orgCode == null) {
+                if (orgCode == null||orgCode.length == 0 ) {
                     alert('<digi:trn  jsFriendly="true">Please enter code for this Organization.</digi:trn>');
                     document.aimAddOrgForm.orgCode.focus();
                     return false;
                 }
                 var budgetOrgCode= document.aimAddOrgForm.budgetOrgCode.value;
-                if (budgetOrgCode.length == 0  || budgetOrgCode == null) {
+                if (budgetOrgCode == null||budgetOrgCode.length == 0 ) {
                     alert('<digi:trn  jsFriendly="true">Please enter Budget Code for this Organization.</digi:trn>');
                     document.aimAddOrgForm.budgetOrgCode.focus();
                     return false;
@@ -735,7 +730,7 @@
                                                             <table>
                                                                 <tr>
                                                                     <td><digi:trn>Registration Number in MinPlan</digi:trn><font color="red">*</font></td>
-                                                                    <td><html:text property="regNumbMinPlan"  onkeyup="fnChk(this,true)"/></td>
+                                                                    <td><html:text property="regNumbMinPlan" /></td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td><digi:trn>Registration Date in MinPlan</digi:trn><font color="red">*</font></td>
@@ -896,7 +891,7 @@
                                                     <tr>
                                                         <td><digi:trn>Legal Personality Number</digi:trn></td>
                                                         <td>
-                                                            <html:text property="legalPersonNum"  onkeyup="fnChk(this,true)"/>
+                                                            <html:text property="legalPersonNum" />
                                                         </td>
                                                     </tr>
                                                     <tr>

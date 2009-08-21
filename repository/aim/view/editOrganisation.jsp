@@ -128,7 +128,7 @@
                 alert("Please select sector scheme");
             }
             else{
-                myAddSectors("sectorScheme="+sectorSchemeId.value);
+                myAddSectors("sectorScheme="+sectorSchemeId.value+"&configId=1");
             }
         }
         function removeSectors() {

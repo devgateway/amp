@@ -6,8 +6,7 @@ ActionController::Routing::Routes.draw do |map|
     static.downloads  "/downloads",       :action => "downloads"
   end
   
-  map.resources :agencies                                          
-  map.resources :glossaries              
+  map.resources :agencies                                                       
   map.resources :exchange_rates          
   map.resources :projects,                :member => { :update_status => :get, :map => :get }
                                           
@@ -48,6 +47,9 @@ ActionController::Routing::Routes.draw do |map|
       bb.connect 'charts/:action/:id', :controller => 'charts'
     end
   end
+  
+  # Route for AJAX glossary tooltip requests
+  map.glossary '/glossary/:model/:method', :controller => 'glossaries', :action => 'show'
   
   # Install the default route as the lowest priority.
   map.connect ':controller/:action/:id.:format'

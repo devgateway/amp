@@ -1,0 +1,107 @@
+en:
+  glossary:
+    attributes:
+      project:
+        donor: "Nombre del Donante, tales como Francia o la CE "
+        donor_agency: "Nombre de la Agencia Donante. Para Alemania p.e. KFW, GTZ, etc. "
+        donor_project_number: "Número del Proyecto Específico. Ejemplo CE: 9ACPMOZ001 "
+        oecd_number: "Número único de proyecto asignado por la Organización para la Cooperación y el Desarrollo Económico – Comité de Asistencia para el Desarrollo (OCDE – CAD) al ser reportado por primera vez el proyecto a la OCDE"
+        recipient_country_budget_nr: "Número específico de Proyecto que aparece en el Presupuesto General de la República de Nicaragua en caso de estar incluido"
+        title: "Título Oficial del Proyecto usado internamente por el Donante "
+        
+        description: |
+          La descripción del proyecto preferiblemente consiste de la siguiente 
+          información: 
+
+          Contexto: Información básica que ayuda (al público en general) a entender la 
+          descripción del proyecto descripción. 
+          - Problema que será manejado 
+          - Explicación del marco legal e institucional nacional 
+          - Referencia a hallazgos de evaluaciones y revisiones relevantes. 
+
+          Metas/Objetivos: El propósito u objetivo que representa el resultado deseado 
+          que se quiere lograr con el proyecto o programa. Puede ser escrito en un 
+          enunciado corto que abarque los principales objetivos del proyecto, o en una 
+          lista de objetivos descritos en palabras claves. Incluye grupos y números de 
+          beneficiarios en caso de tener información disponible y si esta ayuda a 
+          entender el ámbito del proyecto. Si las metas son descritas usando gráficos de 
+          %, hay que asegurarse de conocer tanto la línea base (100%) como de tiempo. 
+
+          Implementación: 
+          - Actividades clave (principales acciones para lograr los objetivos descritos 
+          anteriormente) 
+          - Explicaciones sobre la cooperación y los socios (contexto específico de 
+            información sobre el socio involucrado, información adicional para la 
+            sección de socios) 
+           
+        
+        country_strategy: "Enlace a la estrategia o política de país incluida en la sección de Perfiles de Donantes "
+        prj_status: "El estado de un proyecto puede ser seleccionado como en ejecución, en planificación o completado."
+        start: ""   
+        end: "" 
+        implementing_agencies: "La Agencia de Implementación puede ser una ONG, un ministerio o cualquier otra organización encargada de implementar/ejecutar la actividad. Puede ser introducida más de una de ellas en el proyecto."
+        
+        contracted_agencies: |
+          En algunos casos, el donante puede contratar a terceros fuera de las agencias 
+          implementadoras para servir como intermediarios entre el donante y la agencia 
+          implementadota. Al igual que la Agencia Implementadora, esta puede ser una ONG, un 
+          ministerio o cualquier otra organización contratada para el proyecto. Puede ser 
+          introducida más de una. 
+          
+          Las agencias implementadoras y contratadas pueden ser la misma.
+        
+        national_regional: |
+          Este campo está destinado a dar información de si el proyecto es parte de una 
+          Estrategia Nacional o una Regional y en caso de ser Regional, si el componente 
+          nacional o de país es claramente identificable financieramente.
+        
+        
+        type_of_implementation: |
+          Existen las siguientes posibilidades para este campo: 
+
+          Multilateral: si el Proyecto/Programa es implementado por una Agencia de la 
+          ONU/otra Multilateral, tales como el BM, PNUD, BID 
+          Bilateral: si el Proyecto/Programa es implementado como un acuerdo directo entre 
+          Donante y Gobierno de Nicaragua, lo cual significa que no hay participación de 
+          ninguna agencia multilateral u ONG 
+          NGO: si el Proyecto/Programa es implementado a través de ONG
+    
+        aid_modality: |  
+          Following possibilities exist: 
+
+          Technical Assistance, Project/Programme, Budget Support (JFA), Multi Donor Common 
+          Fund for Civil Society (for Governance), FC - PRORURAL, FC - PRO SALUD, FC - 
+          FONDO FED, FC - PROMIPYME, FC -  FONIM etc..
+            
+        grant_loan: "Este campo define el tipo de financiamiento de la actividad, si es Donación o Préstamo " 
+        delegated_cooperation: |
+          
+        
+        website: "El enlace en Internet a un sitio específico sobre la actividad o el proyecto."
+        comments: "Cualquier otra información no cubierta por los campos de datos relevantes para la mejor comprensión de la actividad"
+        officer_responsible: |
+          Nombre y detalles del contacto de la persona encargada de la actividad del Donante. 
+          En la mayoría de los casos el Oficial de Proyectos.
+
+        markers: |
+          ODAnic incluye el seguimiento a los siguientes Indicadores de las Convenciones de
+          Rio y de Políticas tal y como han sido definidos por la OCDE: 
+
+          Indicador de Política Ambiental: No aplicable, Significante, Principal 
+          Indicador de Política de Género: No aplicable, Significante, Principal 
+          Indicador de Bio Diversidad: No aplicable, Significante, Principal 
+          Indicador de Cambio Climático: No aplicable, Significante, Principal 
+          Desertificación: No aplicable, Significante, Principal 
+
+          Este sistema de Indicadores de las convenciones de Río y de Políticas, fue introducido 
+          por la OCDE-CAD a fin de establecer un método de monitoreo la AOD en 
+          correspondencia con los diferentes acuerdos internacionales tales como el referido al 
+          medioambiente.  
+          
+      
+
+        sectors: |
+          Junto al Código de Sector de los 3 dígitos principales CAD, el Sector CAD CRS es el 
+          código más específico de 5 dígitos que identifica el subsector como 11110 Política 
+          Educativa y Gestión Administrativa. Ver Apéndice 2 
+          

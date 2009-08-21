@@ -97,8 +97,9 @@ class LabeledFormBuilder < ActionView::Helpers::FormBuilder
     options.delete(:glossary)
     
     caption ||= localized_caption(method)
+    glossary = glossary_tooltip(method, caption).to_s
     caption += " *" if field_required?(method)
-    @template.label(@object_name, method, caption, options)
+    @template.label(@object_name, method, glossary + caption, options)
   end
   
   # Creates a link for removing an associated element from the form, by removing its containing element from the DOM.
@@ -198,15 +199,27 @@ class LabeledFormBuilder < ActionView::Helpers::FormBuilder
   end
   
 private
-  def field_required?(field_name)
+  def field_required?(method)
     return false unless object.class.respond_to?(:reflect_on_validations_for)
-    object.class.reflect_on_validations_for(field_name).map(&:macro).include?(:validates_presence_of)
+    object.class.reflect_on_validations_for(method).map(&:macro).include?(:validates_presence_of)
+  end
+  
+  # Returns a glossary tooltip icon if an attribute description can be found in the localization file
+  def glossary_tooltip(method, caption = "")
+    underscore_class_name = @object ? @object.class.name.underscore : @object_name
+    method_or_association_name = method.to_s.sub(/_id$/, '')
+    begin
+      I18n.translate("#{underscore_class_name}.#{method_or_association_name}", :scope => [:glossary, :attributes], :raise => true)
+      @template.glossary_icon_for("#{underscore_class_name}/#{method_or_association_name}", caption)
+    rescue I18n::MissingTranslationData
+      nil
+    end
   end
   
   def localized_caption(method)
     underscore_class_name = @object ? @object.class.name.underscore : @object_name
     method_or_association_name = method.to_s.sub(/_id$/, '')
-
+    
     I18n.translate("#{underscore_class_name}.#{method_or_association_name}", :scope => [:activerecord, :attributes])
   end
 

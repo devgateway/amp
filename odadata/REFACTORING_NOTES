@@ -3,3 +3,4 @@ Possible ways to refactor reports:
 		/reports/donors showing current ReportsController::donor and /reports/donors/1 showing ReportsController::project_list
 	- The general report builder should stay abstract
 	- A common base class among the reporting controllers could simplify things and make them DRY
+	- Possible interface for middleware classes to provide the filtering in each step of the report generation via hooks (SQL generation, postprocessing of the reports table etc.)

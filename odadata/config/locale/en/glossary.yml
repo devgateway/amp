@@ -1,0 +1,99 @@
+en:
+  glossary:
+    attributes:
+      project:
+        donor: "Name of Donor such as France or EC"
+        donor_agency: "Name of Donor Agency. For Germany e.g. KFW, GTZ etc."
+        donor_project_number: "Specific Project Number. EC Example: 9ACPMOZ001"
+        oecd_number: "Unique Project Number given by the OECD DAC on first reporting of the project to the OECD."
+        recipient_country_budget_nr: "Specific Project Number that appears in the Nicaraguan State Budget if On-Budget"
+        title: "Official Title of the Project used internally by the Donor"
+        
+        description: |
+          The project description preferably consists of the following information: 
+          
+          Context: Basic background information which helps (the general public) to understand 
+          the project description. 
+            - Problem to be addressed 
+            - Explanation on the national institutional and legal framework 
+            - Reference to findings of relevant reviews or evaluations. 
+          
+          Goals/objectives: The purpose or goal representing the desired result that a project or 
+          programme seeks to achieve. This can be written in a short statement covering the main 
+          objectives pursued by the project, or in a list of objectives, described in keywords. Include 
+          target groups and number of beneficiaries if the data is available and if it helps to 
+          understand the scope of the project. If goals are described by using % figures, make sure 
+          that the respective basis (100%) and the time frame are known. 
+          
+          Implementation: 
+            - Key activities (main actions to achieve above described goals) 
+            - Explanations on cooperation and partnerships (context specific information on partner involvement; additional information to the 'partners' section) 
+        
+        country_strategy: "Link to the country strategy or policy included in the Donor Profile section"
+        prj_status: "The status of a project can be selected to be either pipeline, ongoing or completed."
+        start: "The time from the actual project start- to the actual anticipated project end date, which means that delays are taken into consideration."   
+        end: "The time from the actual project start- to the actual anticipated project end date, which means that delays are taken into consideration." 
+        implementing_agencies: "The Implementing Agency can be an NGO, a ministry or any other organization in charge of implementing/executing the activity. More than one can be entered"
+        
+        contracted_agencies: |
+          As with the Implementing Agency, this can be an NGO, a ministry or any other 
+          organization that was contracted for the project. More than one can be entered. 
+          Implementing and Contracted Agencies can per se be the same. However there are 
+          many cases of an intermediary contracted agency that implements the activity via another 
+          organization.
+        
+        national_regional: |
+          This field is meant to give information on whether the project is part of a National or 
+          Regional Strategy and if it is Regional whether the national or country component is 
+          financially clearly distinguishable
+        
+        type_of_implementation: |
+          Following possibilities exist: 
+          
+          Multilateral: if the Project/Program is implemented via a UN Agency/Multilateral such as 
+          e.g. the World Bank / ADB/ UNDP 
+          Bilateral: if the Project/Program is implemented as direct agreement between Donor and 
+          GoN meaning not via UN Agency/Multilateral or NGO 
+          NGO: if the Project/Program is implemented via NGOs 
+    
+        aid_modality: |
+          Following possibilities exist: 
+          
+          Technical Assistance, Project/Programme, Budget Support (JFA), Multi Donor Common 
+          Fund for Civil Society (for Governance), FC - PRORURAL, FC - PRO SALUD, FC - 
+          FONDO FED, FC - PROMIPYME, FC -  FONIM etc..  
+            
+        grant_loan: This field defines the type of financing of the activity. Whether it is a Grant or a Loan 
+        delegated_cooperation:  
+        website: "If available the internet link to a specific site on the activity or project."
+        comments: "Any other information not covered by the data fields relevant to the understanding of the activity "
+        officer_responsible: |
+          Name and contact details of the person in charge of the activity at the Donor. In most 
+          cases the Project Officer.
+
+        markers: |
+          ODAnic includes following Policy and Rio Conventions Markers as per OECD definition: 
+          
+          Environment Policy Marker: Non applicable, Significant, Principal 
+          Gender Policy Marker: Non applicable, Significant, Principal 
+          Bio Diversity Marker: Non applicable, Significant, Principal 
+          Climate Change Marker: Non applicable, Significant, Principal 
+          Desertification: Non applicable, Significant, Principal 
+          
+          This system of Policy and Rio Convention Markers was introduced by OECD/DAC in 
+          order to establish a method to monitor ODA according the different international 
+          agreements such as for Environment.
+
+        sectors: |
+          Area(s) of core activity of a project. 
+          
+          As the DAC/CRS Sector codification is the only international standard useable for 
+          interagency or inter-donor statistical comparability, it is necessary to use only this type of 
+          codification. See Appendix 2  
+          
+          The selection of only one sector is allowed. It is extremely important, that the selection 
+          reflects the official DAC/CRS codification used by the member State for reporting to the 
+          OECD. Member States should therefore request this information from their Head 
+          Quarters in case this information is not available in their Field Office. 
+          
+          The DAC Sector is the 3 digit code such as 111000 Education, 12100 Health General

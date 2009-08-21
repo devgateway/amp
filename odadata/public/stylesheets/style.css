@@ -284,9 +284,8 @@ PRE {
 
 A { color: #000; }
 A:visited { color: #666; }
-A:hover { color: #fff; background-color:#000; }
+A:hover { color: #fff; background-color: #000; }
 A IMG { border: 0; }
-
 
 /* Start GENERAL CLASSES */
 

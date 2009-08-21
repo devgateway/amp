@@ -36,6 +36,9 @@ public class ReportsFilterPickerForm extends ActionForm {
 	public void setSelectedHistory(Object[] selectedHistory) {
 		this.selectedHistory = selectedHistory;
 	}
+	
+	private String CRISNumber;
+	private String budgetNumber;
 
 	// private Collection donors;
 	private Collection risks;
@@ -363,6 +366,8 @@ public class ReportsFilterPickerForm extends ActionForm {
 				this.approvalStatusSelected = null;
 				this.lineMinRank=null;
 				this.planMinRank=null;
+				this.CRISNumber=null;
+				this.budgetNumber=null;
 			}
 		}
 		
@@ -879,6 +884,22 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public void setAmountinthousands(Boolean amountinthousands) {
 		this.amountinthousands = amountinthousands;
+	}
+
+	public String getCRISNumber() {
+		return CRISNumber;
+	}
+
+	public void setCRISNumber(String CRISNumber) {
+		this.CRISNumber = CRISNumber;
+	}
+
+	public String getBudgetNumber() {
+		return budgetNumber;
+	}
+
+	public void setBudgetNumber(String budgetNumber) {
+		this.budgetNumber = budgetNumber;
 	}
 
 }

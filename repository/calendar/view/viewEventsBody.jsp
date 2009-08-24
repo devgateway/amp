@@ -89,9 +89,11 @@
  <script src="<digi:file src="module/calendar/dhtmlxScheduler/lightbox.js"/>" language="JavaScript" type="text/javascript"></script>
  <script src="<digi:file src="module/calendar/dhtmlxScheduler/dhtmlxdataprocessor.js"/>" language="JavaScript" type="text/javascript"></script>
  <script src="<digi:file src="module/calendar/dhtmlxScheduler/property.js"/>" language="JavaScript" type="text/javascript"></script>
+  <script src="<digi:file src="module/calendar/dhtmlxScheduler/recurring.js"/>" language="JavaScript" type="text/javascript"></script>
 
  <link rel="stylesheet" href="<digi:file src="module/calendar/css/layout.css"/>"> 
  <link rel="stylesheet" href="<digi:file src="module/calendar/css/note.css"/>"> 
+ <link rel="stylesheet" href="<digi:file src="module/calendar/css/recurring.css"/>"> 
  <link rel="stylesheet" href="<digi:file src="module/calendar/css/lightbox.css"/>"> 
  
 <div style="display: none"><jsp:include page="viewEventsFilter.jsp" flush="true"/></div>
@@ -109,15 +111,15 @@
 		  			{key:1, label:"Section A"},
 		  			{key:2, label:"Section B"},
 		  			{key:3, label:"Section C"},
-		  			{key:4, label:"Section A"},
-		  			{key:5, label:"Section B"},
-		  			{key:6, label:"Section C"},
-		  			{key:7, label:"Section D"},
-		  			{key:8, label:"Section A"},
-		  			{key:9, label:"Section B"},
-		  			{key:10, label:"Section C"},
-		  			{key:11, label:"Section A"},
-		  			{key:12, label:"Section B"}
+		  			{key:4, label:"Section D"},
+		  			{key:5, label:"Section E"},
+		  			{key:6, label:"Section F"},
+		  			{key:7, label:"Section G"},
+		  			{key:8, label:"Section H"},
+		  			{key:9, label:"Section I"},
+		  			{key:10, label:"Section G"},
+		  			{key:11, label:"Section K"},
+		  			{key:12, label:"Section L"}
 		  			
 		  		];		
 		
@@ -143,11 +145,14 @@
 		scheduler.attachEvent("onClick",function(id){
 		    var ev = scheduler.getEvent(id);
 			var eventId = ev.id;
-		    <digi:context name="previewEvent" property="context/module/moduleinstance/showCalendarEvent.do" />
-		      document.forms[0].action = "<%= previewEvent%>~ampCalendarId="+eventId+"~method=preview~resetForm=true";
-		      document.forms[0].submit();
+			if(eventId.indexOf("#") != "-1"){
+			var	eventId = eventId.slice(0,eventId.indexOf("#"));
+			}
+			<digi:context name="previewEvent" property="context/module/moduleinstance/showCalendarEvent.do" />
+		        document.forms[0].action = "<%= previewEvent%>~ampCalendarId="+eventId+"~method=preview~resetForm=true";
+		       document.forms[0].submit();
 		    return true;
-		})
+		});
 		scheduler.createUnitsView("unit","section_id",sections);
 		scheduler.templates.event_bar_text=function(start_date,end_date,ev){
 	        var text = ev.text.substr(0,20);
@@ -156,7 +161,7 @@
 		}
 		scheduler.config.dblclick_create = false;
 		scheduler.config.multi_days = true;
-		/*
+	/*
 		scheduler.attachEvent("onViewChange",function(mode,date){
 
 			if(mode == "month"){
@@ -165,8 +170,8 @@
 						return true;
 					}
 			});
-*/		
-	
+		
+	*/
 
 
 	
@@ -231,7 +236,7 @@ window.onload = function(){
 			<div class="dhx_cal_next_button">&nbsp;</div>
 			<div class="dhx_cal_today_button"></div>
 			<div class="dhx_cal_date"></div>
-<!-- 			<div  class="dhx_cal_tab" name="unit_tab" style="right:270px;"></div> -->
+	<!-- <div  class="dhx_cal_tab" name="unit_tab" style="right:270px;"></div>  -->	 
 			<div class="dhx_cal_tab" name="month_tab" style="right:205px;"></div>
 			<div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>
 			<div class="dhx_cal_tab" name="day_tab" style="right:76px;"></div>

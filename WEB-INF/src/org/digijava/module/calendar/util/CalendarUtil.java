@@ -28,6 +28,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -36,6 +37,7 @@ import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendarPK;
 import org.digijava.module.calendar.dbentity.AmpEventType;
 import org.digijava.module.calendar.dbentity.CalendarItem;
+import org.digijava.module.calendar.dbentity.RecurrCalEvent;
 import org.digijava.module.calendar.dbentity.Calendar.TBD;
 import org.digijava.module.calendar.entity.EventsFilter;
 import org.digijava.module.calendar.exception.CalendarException;
@@ -185,10 +187,14 @@ public class CalendarUtil {
 						Iterator iter = ampCalendarEvents.iterator();
 						while (iter.hasNext()) {
 							 AmpCalendar ampCalendar = (AmpCalendar) iter.next();
-							 ampCalendar.getCalendarPK().getCalendar().getId();
+							 
+							 Iterable recc = ampCalendar.getCalendarPK().getCalendar().getRecurrCalEvent();
+							 
+								
+						
 								
 							 xml+="<event id=\"" +ampCalendar.getCalendarPK().getCalendar().getId()+"\">";
-					         xml+="<start_date>"+ampCalendar.getCalendarPK().getCalendar().getStartDate()+"</start_date>";
+							 xml+="<start_date>"+ampCalendar.getCalendarPK().getCalendar().getStartDate()+"</start_date>";
 					         xml+="<end_date>"+ampCalendar.getCalendarPK().getCalendar().getEndDate()+"</end_date>";
 					       
 									Iterator itritm = ampCalendar.getCalendarPK().getCalendar().getCalendarItem().iterator();
@@ -204,10 +210,32 @@ public class CalendarUtil {
 										AmpCalendar id = AmpDbUtil.getAmpCalendar(ampCalendar.getCalendarPK().getCalendar().getId());
 										id.getEventType().getId();
 										xml+="<type>"+id.getEventType().getId()+"</type>";
-										
-								xml+="</event>";	
-								}
 								
+										 if(!ampCalendar.getCalendarPK().getCalendar().getRecurrCalEvent().isEmpty()){
+											 Iterator itrrecc = ampCalendar.getCalendarPK().getCalendar().getRecurrCalEvent().iterator();
+											 while(itrrecc.hasNext()){
+												 RecurrCalEvent recurrCalEvent = (RecurrCalEvent) itrrecc.next(); 
+												 if(recurrCalEvent.getTypeofOccurrence().equals("day")){
+												 xml+="<rec_type>"+recurrCalEvent.getTypeofOccurrence()+"_"+recurrCalEvent.getRecurrPeriod() +"</rec_type>";
+												 }else if(recurrCalEvent.getTypeofOccurrence().equals("month")){
+													 
+													 xml+="<rec_type>"+recurrCalEvent.getTypeofOccurrence()+"_"+recurrCalEvent.getSelectedStartMonth()+"</rec_type>";
+															 
+												 }else if(recurrCalEvent.getTypeofOccurrence().equals("week")){
+													 
+													String weekdays = sortingWeekDays(recurrCalEvent.getOccurrWeekDays().toCharArray());
+													   
+													 xml+="<rec_type>"+recurrCalEvent.getTypeofOccurrence()+"_"+recurrCalEvent.getRecurrPeriod()+"___"+weekdays+"</rec_type>";
+														
+												 }
+												xml+="<event_length>"+"1"+"</event_length>";
+											  }
+											}	
+										
+										
+										xml+="</event>";	
+								}
+						
 							}
 							
 					} catch (CalendarException e) {
@@ -216,7 +244,8 @@ public class CalendarUtil {
 			 return xml;
 	}
 	
-	
+
+
 	public static String getEventTypesCss() throws CalendarException{
 		String css = "";
 			List cs =  AmpDbUtil.getAmpCalendarEventsType();
@@ -242,5 +271,17 @@ public class CalendarUtil {
 				
 			}
 		return css;
+	}
+	public static String sortingWeekDays(char[] sortableWeekDays) {
+	    String result = "";
+	    char[] content = sortableWeekDays;
+	    java.util.Arrays.sort(content);
+	    for (int i=0; i<content.length; i++) {
+	    	if(i!=0)
+	    	result+= ","+content[i];
+	    	else
+	    		result+=content[i];
+	    }
+	    return result;
 	}
 }

@@ -1,24 +1,24 @@
 package org.dgfoundation.amp.ar.cell;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.workers.ComputedAmountColWorker;
-import org.dgfoundation.amp.exprlogic.ExpressionHelper;
 import org.dgfoundation.amp.exprlogic.MathExpression;
 import org.dgfoundation.amp.exprlogic.MathExpressionRepository;
+import org.dgfoundation.amp.exprlogic.Values;
 import org.digijava.module.aim.helper.FormatHelper;
 
 public class ComputedAmountCell extends CategAmountCell {
 
-	HashMap<String, BigDecimal> values = new HashMap<String, BigDecimal>();
+	Values values = null;
 
 	private static String COMPUTED_VALUE = "COMPUTED_VALUE";
 
 	// if is a trail cell the value will be set by the Column
 	public void setComputedVaule(BigDecimal value) {
-		values.put(COMPUTED_VALUE, value);
+		getValues().put(COMPUTED_VALUE, value);
 	}
 
 	public Class getWorker() {
@@ -31,12 +31,17 @@ public class ComputedAmountCell extends CategAmountCell {
 			return (convert() * (getPercentage() / 100));
 
 		// get values from mergedCells
-		values.putAll(ExpressionHelper.getRowVariables(mergedCells));
-		MathExpression expression = null;
 
-		// if the value was set by the column just return this
-		if (values.containsKey(COMPUTED_VALUE)) {
-			return values.get(COMPUTED_VALUE).doubleValue();
+		MathExpression expression = null;
+		
+		if (getValues().containsKey(COMPUTED_VALUE)) {
+			BigDecimal val = getValues().get(COMPUTED_VALUE);
+			if (val != null) {
+				return val.doubleValue();
+			} else {
+				return 0d;
+			}
+
 		} else {
 			// if the cell should return the value, do it only if the row
 			// expression is set
@@ -59,11 +64,16 @@ public class ComputedAmountCell extends CategAmountCell {
 			// if rowsExpression is present so return the expression result
 			// value
 			if ((expression != null) && (totalExpression == null || showRowCalculation)) {
-				return expression.result(values).doubleValue();
-			} else {
-				// if not this is a header result
-				return 0d;
+				
+				getValues().prepareCountValues();
+				BigDecimal result = expression.result(getValues());
+				if (result != null) {
+					return result.doubleValue();
+				}
+
 			}
+
+			return 0d;
 
 		}
 	}
@@ -96,6 +106,8 @@ public class ComputedAmountCell extends CategAmountCell {
 		realRet.getMergedCells().addAll(ret.getMergedCells());
 		CategAmountCell categ = (CategAmountCell) c;
 		realRet.getMetaData().addAll(categ.getMetaData());
+		this.getValues().mergeTrailValues(((ComputedAmountCell) c).getValues());
+		realRet.setValues(this.getValues());
 		return realRet;
 
 	}
@@ -134,15 +146,20 @@ public class ComputedAmountCell extends CategAmountCell {
 
 	}
 
-	public HashMap<String, BigDecimal> getValues() {
-		if (values.size() == 0) {
-			getAmount();
+	public Values getValues() {
+		if (values == null) {
+			values = new Values(ownerId); // getAmount();
+			Iterator<CategAmountCell> i = mergedCells.iterator();
+			while (i.hasNext()) {
+				values.collectCellVariables((CategAmountCell) i.next());
+			}
 		}
+		
+		
 		return values;
 	}
 
-	public void setValues(HashMap<String, BigDecimal> values) {
-
+	public void setValues(Values values) {
 		this.values = values;
 	}
 

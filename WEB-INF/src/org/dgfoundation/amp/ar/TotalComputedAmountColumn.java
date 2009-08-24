@@ -5,18 +5,14 @@ package org.dgfoundation.amp.ar;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
 import org.dgfoundation.amp.ar.cell.AmountCell;
-import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.ComputedAmountCell;
-import org.dgfoundation.amp.ar.cell.TotalCommitmentsAmountCell;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
-import org.dgfoundation.amp.exprlogic.ExpressionHelper;
-import org.dgfoundation.amp.exprlogic.MathExpression;
 import org.dgfoundation.amp.exprlogic.MathExpressionRepository;
+import org.dgfoundation.amp.exprlogic.Values;
 
 /**
  * 
@@ -95,28 +91,33 @@ public class TotalComputedAmountColumn extends TotalAmountColumn {
 		ComputedAmountCell ac=new ComputedAmountCell();		
 		Iterator i=items.iterator();
 		
+		
+		Values groupValues=new Values();
+		
 		while (i.hasNext()) {
 			ComputedAmountCell element = (ComputedAmountCell) i.next();
 			ac.merge(element,ac);
+			groupValues.collectTrailVariables(element.getValues());
 		}
 		
-		HashMap<String, BigDecimal> grupValues=ExpressionHelper.getGroupVariables(items);
+		///ac=new trail cell 
 		ac.setColumn(this);
-		
 		int totalUniqueRows=0;
-		
 		if (this.getParent() instanceof org.dgfoundation.amp.ar.ColumnReportData) {
 			totalUniqueRows=((ColumnReportData)this.getParent()).getTotalUniqueRows();
 		}
-		
-		ac.getValues().put(ArConstants.COUNT_PROJECTS, new BigDecimal(totalUniqueRows));
-		ac.getValues().putAll(grupValues);
+		groupValues.put(ArConstants.COUNT_PROJECTS, new BigDecimal(totalUniqueRows));
+		ac.setValues(groupValues);
+		//set the collected values to ac
+		//set the computed value to ac
 		if (this.getWorker().getRelatedColumn().getTotalExpression()!=null){
-			ac.setComputedVaule(MathExpressionRepository.get(this.getWorker().getRelatedColumn().getTotalExpression()).result(ac.getValues()));
+			BigDecimal computedValue=MathExpressionRepository.get(this.getWorker().getRelatedColumn().getTotalExpression()).result(groupValues);
+			ac.setComputedVaule(computedValue);
 		}
 		
 		ar.add(ac);
 		return ar;
 	}
+
 	
 }

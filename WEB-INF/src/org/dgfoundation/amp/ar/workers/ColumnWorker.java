@@ -7,7 +7,6 @@
 package org.dgfoundation.amp.ar.workers;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -16,9 +15,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
-
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.CellColumn;
@@ -29,7 +25,8 @@ import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpColumns;
-import org.digijava.module.aim.helper.FormatHelper;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 
 import com.sun.rowset.CachedRowSetImpl;
 

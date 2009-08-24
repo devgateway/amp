@@ -90,7 +90,8 @@ function validate(){
                     	<B><digi:trn>Field</digi:trn>:</B>                       
                     </td>
                     <td width="93%">
-                        <html:text name="editorForm" property="activityFieldName" size="70"  readonly="true"/>
+                    <input value="<digi:trn>${editorForm.activityFieldName}</digi:trn>" type="text" size="70"  readonly="true"/>
+                      <!--   <html:text name="editorForm" property="activityFieldName" size="70"  readonly="true"/>   -->
                     </td>
                 </tr>                    
             </table>

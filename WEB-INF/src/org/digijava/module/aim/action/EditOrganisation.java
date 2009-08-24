@@ -908,6 +908,7 @@ public class EditOrganisation
 
         while (itr2.hasNext()) {
           AmpOrgRole test = (AmpOrgRole) itr2.next();
+          if(test!=null && test.getOrganisation()!=null && test.getOrganisation().getAmpOrgId()!=null && editForm.getAmpOrgId()!=null)
           if (test.getOrganisation().getAmpOrgId().equals(editForm.getAmpOrgId())) {
             flag = true;
             break;

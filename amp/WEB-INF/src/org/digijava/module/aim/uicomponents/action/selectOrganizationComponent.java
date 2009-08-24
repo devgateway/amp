@@ -13,10 +13,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.ecs.xhtml.param;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.uicomponents.AddOrganizationButton;
@@ -137,8 +139,14 @@ public class selectOrganizationComponent extends Action {
 		}
 
 		Collection<AmpOrgType> types;
-		types = DbUtil.getAllOrgTypes();
-		oForm.setOrgTypes(types);
+		if (request.getParameter(AddOrganizationButton.PARAM_DONOR_GROUP_LIST) != null
+				&& !request.getParameter(AddOrganizationButton.PARAM_DONOR_GROUP_LIST).equals("")) {		
+			oForm.setOrgTypes(this.getOrgGroupList(request.getParameter(AddOrganizationButton.PARAM_DONOR_GROUP_LIST)));
+			oForm.setFilterDonorGroups(true);
+		} else {
+			oForm.setOrgTypes(DbUtil.getAllOrgTypes());
+			oForm.setFilterDonorGroups(false);
+		}
 		oForm.setTempNumResults(10);
 		return mapping.findForward("forward");
 
@@ -293,7 +301,14 @@ public class selectOrganizationComponent extends Action {
 
 		if (eaForm.getNumResults() == 0) {
 			eaForm.setTempNumResults(10);
-			eaForm.setOrgTypes(DbUtil.getAllOrgTypes());
+			if (request.getParameter(AddOrganizationButton.PARAM_DONOR_GROUP_LIST) != null
+					&& !request.getParameter(AddOrganizationButton.PARAM_DONOR_GROUP_LIST).equals("")) {
+				eaForm.setOrgTypes(this.getOrgGroupList(request
+						.getParameter(AddOrganizationButton.PARAM_DONOR_GROUP_LIST)));
+				eaForm.setFilterDonorGroups(true);
+			} else {
+				eaForm.setFilterDonorGroups(false);
+			}
 			if (eaForm.getAlphaPages() != null)
 				eaForm.setAlphaPages(null);
 		} else {
@@ -388,4 +403,18 @@ public class selectOrganizationComponent extends Action {
 		return processor.execute(mapping, form, request, response);
 	}
 
+	private Collection<AmpOrgType> getOrgGroupList(String donorGroups) {
+		Collection<AmpOrgType> list = new ArrayList<AmpOrgType>();
+		Collection<AmpOrgType> auxList = new ArrayList<AmpOrgType>();
+		if (donorGroups != null && !donorGroups.equals("")) {
+			String[] paramString = donorGroups.split(",");
+			for (int i = 0; i < paramString.length; i++) {
+				AmpOrgType type = DbUtil.getAmpOrgTypeByCode(paramString[i]);
+				if (type != null) {
+					list.add(type);
+				}
+			}
+		}
+		return list;
+	}
 };

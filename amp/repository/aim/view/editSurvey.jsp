@@ -458,7 +458,7 @@
                                           ${aimEditActivityForm.survey.ahsurvey.pointOfDeliveryDonor.name}
                                           </td>
                                           <td align="right">
-										  	 <aim:addOrganizationButton useClient="false" aditionalRequestParameters="removeAddButton=true" form="${aimEditActivityForm.survey.ahsurvey}"  property="pointOfDeliveryDonor" refreshParentDocument="true" styleClass="dr-menu"><digi:trn key="aim:editactivity:selectorganization">Select organization</digi:trn></aim:addOrganizationButton>                                          </td>
+										  	 <aim:addOrganizationButton donorGroupTypes="MUL,BIL" useClient="false" aditionalRequestParameters="removeAddButton=true" form="${aimEditActivityForm.survey.ahsurvey}"  property="pointOfDeliveryDonor" refreshParentDocument="true" styleClass="dr-menu"><digi:trn key="aim:editactivity:selectorganization">Select organization</digi:trn></aim:addOrganizationButton>                                          </td>
                                         </tr>
                                       </TABLE>
                                      </td>

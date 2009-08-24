@@ -271,7 +271,9 @@
 									<td><c:set var="translation">
 										<digi:trn key="aim:addActivityAllOrganizationTypes">All</digi:trn>
 									</c:set> <html:select property="ampOrgTypeId" styleClass="inp-text">
-										<html:option value="-1">${translation}</html:option>
+										<logic:equal value="false" name="aimSelectOrganizationForm" property="filterDonorGroups">
+											<html:option value="-1">${translation}</html:option>
+										</logic:equal>
 										<logic:notEmpty name="aimSelectOrganizationForm"
 											property="orgTypes">
 											<html:optionsCollection name="aimSelectOrganizationForm"

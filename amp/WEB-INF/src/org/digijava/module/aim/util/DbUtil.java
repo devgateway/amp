@@ -5119,7 +5119,12 @@ public class DbUtil {
     						Funding fund = (Funding) itr2.next();
     						AmpFunding ampFunding = new AmpFunding();
     						ampFunding.setAmpDonorOrgId(DbUtil.getOrganisation(fOrg.getAmpOrgId()));
-    						fundingSet.add(ampFunding);
+    						if (ampFunding.getAmpDonorOrgId().getOrgGrpId().getOrgType().getOrgTypeCode()
+									.equalsIgnoreCase("BIL")
+									|| ampFunding.getAmpDonorOrgId().getOrgGrpId().getOrgType().getOrgTypeCode()
+											.equalsIgnoreCase("MUL")) {
+								fundingSet.add(ampFunding);
+							}
     					}
     				}
     			}

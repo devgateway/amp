@@ -41,6 +41,7 @@ public class selectOrganizationComponentForm extends ActionForm {
 	boolean refreshParent;
 	private String delegateClass;
 	private HashMap<String, String> aditionalParameters=new HashMap<String, String>();
+	private boolean filterDonorGroups;
 	
 	String styleClass="";
 	
@@ -338,5 +339,13 @@ public class selectOrganizationComponentForm extends ActionForm {
 
 	public void setStyleClass(String styleClass) {
 		this.styleClass = styleClass;
+	}
+
+	public boolean isFilterDonorGroups() {
+		return filterDonorGroups;
+	}
+
+	public void setFilterDonorGroups(boolean filterDonorGroups) {
+		this.filterDonorGroups = filterDonorGroups;
 	}
 }

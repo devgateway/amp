@@ -171,6 +171,14 @@
 			</description>
 		</attribute>
 		
+		<attribute>
+			<name>donorGroupTypes</name>
+			<required>false</required>
+			<description>
+				List of donor group types separated by commas, only organizations from those groups will be shown. 
+			</description>
+		</attribute>
+		
 		<bodycontent>JSP</bodycontent>
 	</tag>
         <tag>

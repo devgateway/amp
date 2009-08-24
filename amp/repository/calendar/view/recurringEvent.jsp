@@ -17,12 +17,11 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/main.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 
-<script language="JavaScript" type="text/javascript"><!--
-
+<script type="text/javascript">
 
 function validateDuration(rec,duration){
 
-     if(rec < duration){
+     if(rec > duration){
 	
      	alert("The duration of appointment should be shorter than how often it recurs. Modify the duration of appointment or change the recurrence");
 
@@ -35,16 +34,18 @@ function validateDuration(rec,duration){
 
 
 function eventType(){
-    
+	
         var Daily = document.getElementById("Daily").checked;
 		var Weekly = document.getElementById("Weekly").checked;
 		var Monthly = document.getElementById("Monthly").checked;
 		var Yearly = document.getElementById("Yearly").checked;
-        var recStartDate = document.getElementById("recurrSelectedStartDate").value;
+
+/*
+	    var recStartDate = document.getElementById("recurrSelectedStartDate").value;
         var recEndDate = document.getElementById("recurrSelectedEndDate").value;
         document.getElementById("recurrStrDate").value = recStartDate;
         document.getElementById("recurrEndDate").value = recEndDate;
-
+*/
         var occStartDate = document.getElementById("selectedStartDate").value;
         var occEndDate = document.getElementById("selectedEndDate").value;
     
@@ -64,7 +65,7 @@ function eventType(){
 
 
     if(!Daily && !Weekly && !Monthly && !Yearly){
-		alert("please choose");
+   		alert("please choose");
 		return false;
 	}
     
@@ -88,26 +89,23 @@ function eventType(){
 	
 	if(Monthly){
 		 var month = document.getElementById("selectedStartMonth").value;
-
 		if(!validateDuration(month,month_occurance_duration)){
             return false;
    		}else{
-			alert(month_occurance_duration);
+
 	   		var rec = document.getElementById("Monthly").value;
-	        document.getElementById("type").value = 'Monthly';
+
+
+	        document.getElementById("type").value = 'month';
 	        document.getElementById("hiddenMonth").value = month;
 			document.getElementById("hidden").value = rec;
+			document.getElementById("weekDays").value = '';
+			
 		}
 	}
 
-	if(Dailly){
-        var rec = document.getElementById("recurrDailly").value;
-        if(rec < occurance_duration){
-            var err = "<digi:trn>The duration of appointment should be shorter than how often it recurs. Modify the duration of appointment or change the recurrence</digi:trn>";
-         alert(err);
-
-		
-        var rec = document.getElementById("recurrDaily").value;
+	if(Daily){
+        var rec = document.getElementById("recurrDaily").value; 
        
         if(!validateDuration(rec,daily_occurance_duration)){
 
@@ -116,7 +114,9 @@ function eventType(){
         }else{
 
         document.getElementById("hidden").value = rec;
-        document.getElementById("type").value = 'Daily';
+        document.getElementById("type").value = 'day';
+        document.getElementById("hiddenMonth").value = '';
+        document.getElementById("weekDays").value = '';
         }
     }
 
@@ -124,6 +124,7 @@ function eventType(){
 
 		 var rec = document.getElementById("recurrWeekly").value;
 		   
+
 	        if(!validateDuration(rec,daily_occurance_duration)){
 	            return false;
 	            
@@ -132,29 +133,30 @@ function eventType(){
 		var result = "";
 		
 	
-	    document.getElementById("type").value = 'Weekly';
+	    document.getElementById("type").value = 'week';
         document.getElementById("hidden").value = rec;
-        document.getElementById("selectedStartMonth").value = "";
-        
-        for(i=0; i<document.getElementsByName("weekDays").length; i++){
+        document.getElementById("hiddenMonth").value = '';
 
-				if(document.getElementsByName("weekDays")[i].checked == true){
+   
+        for(i=0; i<document.getElementsByName("occurrWeekDays").length; i++){
+
+				if(document.getElementsByName("occurrWeekDays")[i].checked == true){
 						
-					var day = document.getElementsByName("weekDays")[i].value;
+					var day = document.getElementsByName("occurrWeekDays")[i].value;
 
-							result += ","+day;
+							result += day;
 							}
 
 					}
 
-				document.getElementById("weekDays").value = result.slice(1);
+				document.getElementById("weekDays").value = result;
 	    	}
 	}
 	
-   submit();
-}
+   		submit();
+	}
 
---></script>
+</script>
 
 <digi:form action="/showCalendarEvent.do">
 <table border="0" cellPadding=2 cellSpacing=0 width="100%" >
@@ -177,7 +179,7 @@ function eventType(){
 			 		<table  border="0" width="100%">
 					 		<tr bgcolor="white">
 					 			<td colspan="3">
-					 				<input type="radio" name="typeofOccurrence" value="Dailly" id="Dailly"/><digi:trn>Dailly</digi:trn>
+					 				<input type="radio" name="typeofOccurrence" value="Daily" id="Daily"/><digi:trn>Dailly</digi:trn>
 					 			</td>
 					 		</tr>
 					 		<tr>
@@ -254,18 +256,18 @@ function eventType(){
 									 	 		<td><digi:trn>Week (s)</digi:trn></td>
 									 		</tr>
 									 		<tr> 
-									 			<td><input type="checkbox" name="occurrWeekDays" value="Sun"/><digi:trn>Sun</digi:trn></td>
-									 			<td><input type="checkbox" name="occurrWeekDays" value="Wednesday"/><digi:trn>Wed</digi:trn></td>
-									 			<td><input type="checkbox" name="occurrWeekDays" value="Saturday"/><digi:trn>Saturday</digi:trn></td>
+									 			<td><input type="checkbox" name="occurrWeekDays" value="7"/><digi:trn>Sun</digi:trn></td>
+									 			<td><input type="checkbox" name="occurrWeekDays" value="3"/><digi:trn>Wed</digi:trn></td>
+									 			<td><input type="checkbox" name="occurrWeekDays" value="6"/><digi:trn>Saturday</digi:trn></td>
 									 		</tr>
 									 		<tr>
-									 			<td><input type="checkbox" name="occurrWeekDays" value="Monday"/><digi:trn>Monday</digi:trn></td>
-									 			<td><input type="checkbox" name="occurrWeekDays" value="Thur"/><digi:trn>Thur</digi:trn></td>
+									 			<td><input type="checkbox" name="occurrWeekDays" value="1"/><digi:trn>Monday</digi:trn></td>
+									 			<td><input type="checkbox" name="occurrWeekDays" value="4"/><digi:trn>Thur</digi:trn></td>
 									 			<td>
 									 		</tr>
 									 		<tr>
-									 			<td><input type="checkbox" name="occurrWeekDays" value="Tuesday"/><digi:trn>Tuesday</digi:trn></td>
-									 			<td><input type="checkbox" name="occurrWeekDays" value="Friday"/><digi:trn>Friday</digi:trn></td>
+									 			<td><input type="checkbox" name="occurrWeekDays" value="2"/><digi:trn>Tuesday</digi:trn></td>
+									 			<td><input type="checkbox" name="occurrWeekDays" value="5"/><digi:trn>Friday</digi:trn></td>
 									 		</tr>
 								 		</table>
 						 			</td>
@@ -282,16 +284,16 @@ function eventType(){
 						
 						
 						var allselectedDays = document.getElementById("daysOfWeek").value;
-						array = allselectedDays.split(",");
 						
-						for(i=0; i<document.getElementsByName("weekDays").length; i++){
+						array = allselectedDays.split(",");
+											for(i=0; i<document.getElementsByName("weekDays").length; i++){
 
 							var allDays = document.getElementsByName("weekDays")[i].value;
 								
 								   for(j=0; j<array.length; j++){
 
 									   var selectedWeekDays = array[j];
-
+									
 										if(allDays == selectedWeekDays){
 												document.getElementsByName("weekDays")[selectedWeekDays].checked = true;
 											
@@ -353,7 +355,7 @@ function eventType(){
 	</tr>
 
 
-<tr>
+<tr><!--
 		<td>
 			<table bgcolor="#F5F5F5" border="0" cellPadding=2 cellSpacing=2 width="340px" style="border-style:solid;border-color:#1C5180;border-width: 1px">
 				 		<tr><td><digi:trn>Time</digi:trn></td></tr>
@@ -446,7 +448,9 @@ function eventType(){
 				 	 		
 				 	 	</tr>
 			 	</table>
-		</td>	
+			 	
+		</td>
+		-->	
 	</tr>
 	<tr>
 		<td align="center">

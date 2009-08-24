@@ -9,7 +9,7 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ page import="org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm" %>
-<jsp:include page="/repository/calendar/view/scripts/calendarEventScript.jsp"/>
+
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.charcounter.js"/>"></script>
 <!-- Dependencies -->        
@@ -227,8 +227,10 @@ function submitForm()
 </script>
 
 <jsp:include page="../../aim/view/scripts/newCalendar.jsp" flush="true" />
-
+<jsp:include page="/repository/calendar/view/scripts/calendarEventScript.jsp"/>
 <link rel="stylesheet" href="<digi:file src="module/calendar/css/main.css"/>">
+
+
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/message/script/messages.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/calendar.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/main.js"/>"></script>
@@ -1012,7 +1014,7 @@ function recurEvent(){
 			                            	&nbsp;
 			                            </feature:display>
 			                            <feature:display name="Recurring Event Button" module="Calendar">
-			                            	<input type="button" style="min-width: 110px" onclick="showRecEvent();" value="<digi:trn key="calendar:recurrinEventBtn">Recurring Event</digi:trn>">
+			                            	<input type="button" style="min-width: 110px" onclick="showRecEvent();" value="<digi:trn key="calendar:recurrinEventBtn">Recurring Event</digi:trn>"/>
 			                            </feature:display>
 			                          </td>
 			                        </tr>

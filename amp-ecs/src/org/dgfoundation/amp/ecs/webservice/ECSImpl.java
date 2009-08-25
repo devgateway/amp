@@ -29,7 +29,7 @@ public class ECSImpl {
 		
 		try{
 			c = DriverManager.getConnection("jdbc:postgresql://localhost/amp_ecs",
-		                                    "alexandru", "");
+		                                    "ecs", "");
 		}catch (SQLException s) {
 			logger.info("Can't connect to database:", s);
 			RuntimeException re = new RuntimeException("Can't connect to database:", s);

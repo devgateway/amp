@@ -22,7 +22,7 @@ public class ECSServiceLocator extends org.apache.axis.client.Service implements
     }
 
     // Use to get a proxy class for ECS
-    private java.lang.String ECS_address = "http://localhost:8080/axis/services/ECS";
+    private java.lang.String ECS_address = "http://ecs.ampdev.net/axis/services/ECS";
 
     public java.lang.String getECSAddress() {
         return ECS_address;

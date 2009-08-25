@@ -1,87 +1,75 @@
-<project name="AMP ECS-Server" default="build" basedir=".">
-	<property name="src" location="src"/>
-	<property name="classes" location="bin"/>
-	<property name="logs" location="logs"/>
-	<property name="lib" location="lib"/>
+<?xml version="1.0" ?>
+<project name="ECS Server" default="build">
+	<property name="src" value="src"/>
+	<property name="classes" value="bin"/>	
+	<property name="lib" value="lib"/>
+	<!-- EDIT HERE -->
+	<property name="deployDir" value="/home/alexandru/Lucru/tomcat/webapps/axis"/>
+	<property name="auxDir" value="/home/alexandru/Lucru/workspace3.4/amp1.14/WEB-INF/classes"/>
+	<!-- END -->
+	<property environment="env"/>
 	
-	<!-- Start configuration -->
-	<property name="hostname" value="82.77.15.251" />
-	<property name="webServDir" value="/var/www/ecs.prorad.ro" />
-	<!-- End configuration -->
+	<path id="classpath">	
+		<pathelement location="${classes}"/>
+		<!-- 
+		<pathelement location="${lib}/mysql-connector-java-5.1.7-bin.jar"/>		
+		 -->
+	</path>	
 
-	<property name="serverHost" value="${hostname}" />
-
-	<target name="mkdirs">
-		<mkdir dir="${classes}"/>
-		<mkdir dir="${logs}"/>
-		<mkdir dir="${webServDir}/ecs" />
+	<path id="runclasspath">	
+		<pathelement location="${classes}"/>
+		<pathelement location="${lib}/axis-ant.jar"/>		
+		<pathelement location="${lib}/axis.jar"/>
+		<pathelement location="${lib}/commons-discovery.jar"/>		
+		<pathelement location="${lib}/commons-logging.jar"/>
+		<pathelement location="${lib}/jaxrpc.jar"/>
+		<pathelement location="${lib}/log4j-1.2.8.jar"/>
+		<pathelement location="${lib}/saaj.jar"/>		
+		<pathelement location="${lib}/wsdl4j.jar"/>
+	</path>	
+	
+	<target name="init">
+	     <mkdir dir="${classes}"/>
 	</target>
 
-	<target name="compile" depends="mkdirs" description="compile the source code">
-		<javac srcdir="${src}" destdir="${classes}">
-			<classpath>
-				<pathelement path="${classpath}:${classes}"/>
-				<pathelement location="${lib}/log4j-1.2.15.jar"/>
-			</classpath>
+	<target name="build" depends="init">
+		<javac destdir="${classes}">
+			<src path="${src}" />
+			<classpath refid="classpath" />
+			<classpath path="${env.AXISCLASSPATH}"/>
 		</javac>
 	</target>
-
-	<target name="build" depends="compile" description="build!">
-		<delete file="ecs-server.jar"/>
-
-		<jar destfile="ecs-server.jar" 
-			 basedir="${classes}" 
-			 includes="**/server/*.class **/common/*.class"
-			 />
-
-		<copy todir="${webServDir}/ecs">
-			<fileset dir="${classes}" includes="**/*.class" />
-		</copy>
-	</target>
-
-	<target name="runServer" depends="build">
-		<java classname="org.dgfoundation.amp.ecs.server.Server" fork="true">
-			<jvmarg
-			value="-Djava.rmi.server.codebase=http://${hostname}/ecs/"/>
-			<jvmarg
-			value="-Djava.rmi.server.hostname=${hostname}"/>
-			<jvmarg
-			value="-Djava.security.policy=ecsServer.policy"/>
-
-			<classpath>
-				<pathelement location="ecs-server.jar" />
-				<pathelement location="ecs-client.jar" />
-				<pathelement location="${lib}/log4j-1.2.15.jar"/>
-			</classpath>
-			<arg value="start"/>
-		 </java>
+	
+	<target name="runAdmin" depends="build">
+		<java classname="Admin" failonerror="true" fork="true">
+			<classpath refid="classpath" />			
+		</java>
 	</target>
 	
-	<target name="stopServer" depends="build">
-		<java classname="org.dgfoundation.amp.ecs.server.Server" fork="true">
-			<jvmarg
-			value="-Djava.rmi.server.codebase=http://${hostname}/ecs/"/>
-			<jvmarg
-			value="-Djava.rmi.server.hostname=${hostname}"/>
-			<jvmarg
-			value="-Djava.security.policy=ecsServer.policy"/>
-
-			<classpath>
-				<pathelement location="ecs-server.jar"/>
-				<pathelement location="ecs-client.jar" />
-				<pathelement location="${lib}/log4j-1.2.15.jar"/>
-			</classpath>
-			<arg value="stop"/>
-		 </java>
+	<target name="runClient" depends="build">
+		<java classname="Client" failonerror="true" fork="true">
+			<classpath refid="runclasspath" />
+		</java>
 	</target>
 	
-	<target name="clean_light" description="clean up" >
-		<delete dir="${logs}"/>
+	<target name="deployWebService">
+		<copyfile  dest="${deployDir}/ECS.jws" 
+				  src="${src}/ECS.java"/>
+		<copyfile dest="${deployDir}/WEB-INF/classes/org/dgfoundation/amp/ecs/common/ErrorKeeperItem.class" 
+				  src="${auxDir}/org/dgfoundation/amp/ecs/common/ErrorKeeperItem.class"/>
+		<copyfile dest="${deployDir}/WEB-INF/classes/org/dgfoundation/amp/ecs/common/ErrorUser.class" 
+				  src="${auxDir}/org/dgfoundation/amp/ecs/common/ErrorUser.class"/>
+		<copyfile dest="${deployDir}/WEB-INF/classes/org/dgfoundation/amp/ecs/common/ErrorScene.class" 
+				  src="${auxDir}/org/dgfoundation/amp/ecs/common/ErrorScene.class"/>
+				  
+		<!-- 
+		<copyfile dest="${deployDir}/WEB-INF/classes/Flight.class" 
+				  src="${classes}/Flight.class"/>
+		 -->				  
 	</target>
-
-	<target name="clean" description="clean up" >
-		<delete dir="${classes}"/>
-		<delete dir="${logs}"/>
-		<delete file="ecs-server.jar"/>
-	</target>
+	
+	<!-- build for all components -->
+	<target name="clean">
+		<delete dir="${classes}" />
+	</target>	
 </project>

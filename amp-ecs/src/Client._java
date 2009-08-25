@@ -1,0 +1,48 @@
+import java.util.HashMap;
+import java.util.LinkedList;
+
+import org.dgfoundation.amp.ecs.common.ErrorKeeperItem;
+import org.dgfoundation.amp.ecs.common.ErrorScene;
+import org.dgfoundation.amp.ecs.common.ErrorUser;
+
+import org.dgfoundation.amp.ecs.common.ECSService;
+import org.dgfoundation.amp.ecs.common.ECSServiceLocator;
+import org.dgfoundation.amp.ecs.common.ECS_PortType;
+
+
+public class Client {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		ECSService es = new ECSServiceLocator();
+		try {
+			ECS_PortType ecs = es.getECS();
+			if (ecs == null){
+				System.exit(0);
+			}
+			ecs.getParameters("ClientuTau", "Raportez!");
+			ErrorUser eu = new ErrorUser();
+			eu.setFullName("Alex Art");
+			eu.setLogin("alex@art.org");
+			eu.setPassword("MareBaro$$$$an");
+			ErrorScene scene = new ErrorScene();
+			scene.setBrowser("Godzilla VulpeBatrana");
+			
+			ErrorKeeperItem eki = new ErrorKeeperItem();
+			eki.setCount(4);
+			eki.setException("mare Exceptie mare");
+			HashMap<ErrorUser, LinkedList<ErrorScene>> list = new HashMap<ErrorUser, LinkedList<ErrorScene>>();
+			LinkedList<ErrorScene> l2 = new LinkedList<ErrorScene>();
+			l2.add(scene);
+			list.put(eu, l2);
+			eki.setUsers(list);
+			ecs.sendError("NumeServer", eki);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+}

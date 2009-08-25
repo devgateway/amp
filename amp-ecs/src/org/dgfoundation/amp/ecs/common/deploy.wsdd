@@ -1,0 +1,95 @@
+<!-- Use this file to deploy some handlers/chains and services      -->
+<!-- Two ways to do this:                                           -->
+<!--   java org.apache.axis.client.AdminClient deploy.wsdd          -->
+<!--      after the axis server is running                          -->
+<!-- or                                                             -->
+<!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   -->
+<!--      from the same directory that the Axis engine runs         -->
+
+<deployment
+    xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from ECSService WSDL service -->
+
+  <service name="ECS" provider="java:RPC" style="rpc" use="encoded">
+      <parameter name="wsdlTargetNamespace" value="urn:org.dgfoundation.amp.ecs"/>
+      <parameter name="wsdlServiceElement" value="ECSService"/>
+      <parameter name="schemaUnqualified" value="urn:org.dgfoundation.amp.ecs"/>
+      <parameter name="wsdlServicePort" value="ECS"/>
+      <parameter name="className" value="org.dgfoundation.amp.ecs.common.ECSSoapBindingImpl"/>
+      <parameter name="wsdlPortType" value="ECS"/>
+      <parameter name="typeMappingVersion" value="1.2"/>
+      <operation name="getParameters" qname="operNS:getParameters" xmlns:operNS="urn:org.dgfoundation.amp.ecs" returnQName="getParametersReturn" returnType="rtns:ArrayOf_soapenc_string" xmlns:rtns="urn:org.dgfoundation.amp.ecs" returnItemType="tns2:string" xmlns:tns2="http://schemas.xmlsoap.org/soap/encoding/" soapAction="" >
+        <parameter qname="in0" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+        <parameter qname="in1" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </operation>
+      <operation name="sendError" qname="operNS:sendError" xmlns:operNS="urn:org.dgfoundation.amp.ecs" returnQName="sendErrorReturn" returnType="rtns:boolean" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="in0" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+        <parameter qname="in1" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="in2" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+        <parameter qname="in3" type="tns:ArrayOfErrorUser" xmlns:tns="urn:org.dgfoundation.amp.ecs"/>
+        <parameter qname="in4" type="tns:ArrayOfArrayOfErrorScene" xmlns:tns="urn:org.dgfoundation.amp.ecs"/>
+      </operation>
+      <operation name="getUser" qname="operNS:getUser" xmlns:operNS="urn:org.dgfoundation.amp.ecs" returnQName="getUserReturn" returnType="rtns:ErrorUser" xmlns:rtns="urn:org.dgfoundation.amp.ecs" soapAction="" >
+      </operation>
+      <operation name="getScene" qname="operNS:getScene" xmlns:operNS="urn:org.dgfoundation.amp.ecs" returnQName="getSceneReturn" returnType="rtns:ErrorScene" xmlns:rtns="urn:org.dgfoundation.amp.ecs" soapAction="" >
+      </operation>
+      <operation name="getUserScenes" qname="operNS:getUserScenes" xmlns:operNS="urn:org.dgfoundation.amp.ecs" returnQName="getUserScenesReturn" returnType="rtns:UserScenes" xmlns:rtns="urn:org.dgfoundation.amp.ecs" soapAction="" >
+      </operation>
+      <parameter name="allowedMethods" value="getScene getParameters getUser getUserScenes sendError"/>
+
+      <typeMapping
+        xmlns:ns="urn:org.dgfoundation.amp.ecs"
+        qname="ns:UserScenes"
+        type="java:org.dgfoundation.amp.ecs.common.UserScenes"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <arrayMapping
+        xmlns:ns="urn:org.dgfoundation.amp.ecs"
+        qname="ns:ArrayOf_soapenc_string"
+        type="java:java.lang.String[]"
+        innerType="cmp-ns:string" xmlns:cmp-ns="http://schemas.xmlsoap.org/soap/encoding/"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <arrayMapping
+        xmlns:ns="urn:org.dgfoundation.amp.ecs"
+        qname="ns:ArrayOfErrorUser"
+        type="java:org.dgfoundation.amp.ecs.common.ErrorUser[]"
+        innerType="cmp-ns:ErrorUser" xmlns:cmp-ns="urn:org.dgfoundation.amp.ecs"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="urn:org.dgfoundation.amp.ecs"
+        qname="ns:ErrorScene"
+        type="java:org.dgfoundation.amp.ecs.common.ErrorScene"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <arrayMapping
+        xmlns:ns="urn:org.dgfoundation.amp.ecs"
+        qname="ns:ArrayOf_xsd_anyType"
+        type="java:java.lang.Object[]"
+        innerType="cmp-ns:anyType" xmlns:cmp-ns="http://www.w3.org/2001/XMLSchema"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <arrayMapping
+        xmlns:ns="urn:org.dgfoundation.amp.ecs"
+        qname="ns:ArrayOfArrayOfErrorScene"
+        type="java:org.dgfoundation.amp.ecs.common.ErrorScene[][]"
+        innerType="cmp-ns:ErrorScene" xmlns:cmp-ns="urn:org.dgfoundation.amp.ecs"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="urn:org.dgfoundation.amp.ecs"
+        qname="ns:ErrorUser"
+        type="java:org.dgfoundation.amp.ecs.common.ErrorUser"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+  </service>
+</deployment>

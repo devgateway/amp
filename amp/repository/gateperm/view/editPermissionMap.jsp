@@ -39,7 +39,7 @@ function submitForm(mode) {
 						<!-- End navigation -->
 				</tr>
 			</table>
-			<h2><digi:trn key="aim:globalperms"></digi:trn></h2>
+			<h2><digi:trn key="aim:permissionsDot">Permissions:</digi:trn></h2>
 			
 			<digi:context name="exportperm" property="context/module/moduleinstance/exchangePermission.do?export" />
 			<digi:context name="importperm" property="context/module/moduleinstance/exchangePermission.do?import" />

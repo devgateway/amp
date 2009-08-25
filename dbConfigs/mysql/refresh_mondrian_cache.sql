@@ -20,7 +20,7 @@ DROP TABLE IF EXISTS `cached_v_secondary_program`;
 CREATE TABLE cached_v_secondary_program AS SELECT * FROM `v_secondaryprogram`;
 
 DROP TABLE IF EXISTS `cached_v_national_program`;
-CREATE TABLE cached_v_national_program AS SELECT * FROM `v_nationalobjectives`;
+CREATE TABLE cached_v_national_program AS SELECT * FROM `v_nationalobjectives_level_1`;
 
 DROP TABLE IF EXISTS `cached_v_sub_sector`;
 CREATE TABLE cached_v_sub_sector AS SELECT * FROM `v_sub_sectors`;

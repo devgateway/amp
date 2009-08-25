@@ -75,6 +75,9 @@ public class AmpARFilter extends PropertyListable {
 	private Set sectors = null;
 	private Set selectedSectors = null;
 	
+	private String CRISNumber;
+	private String budgetNumber;
+	
 	@PropertyListableIgnore
 	private ArrayList<FilterParam> indexedParams=null;
 
@@ -840,6 +843,7 @@ public class AmpARFilter extends PropertyListable {
 			queryAppend(JOINT_CRITERIA_FILTER);
 		}
 		DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams);
+		logger.info(this.generatedFilterQuery);
 		
 		if(draft){
 			c= Math.abs( DbUtil.countActivitiesByQuery(this.generatedFilterQuery + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = 0) )",indexedParams )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,indexedParams) );
@@ -1435,6 +1439,22 @@ public class AmpARFilter extends PropertyListable {
 
 	public void setHierarchySorters(Collection<String> hierarchySorters) {
 		this.hierarchySorters = hierarchySorters;
+	}
+
+	public String getCRISNumber() {
+		return CRISNumber;
+	}
+
+	public void setCRISNumber(String number) {
+		CRISNumber = number;
+	}
+
+	public String getBudgetNumber() {
+		return budgetNumber;
+	}
+
+	public void setBudgetNumber(String budgetNumber) {
+		this.budgetNumber = budgetNumber;
 	}
 	
 

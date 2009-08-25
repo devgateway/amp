@@ -126,6 +126,9 @@ public class ReportsFilterPickerForm extends ActionForm {
 	
 	private Boolean sourceIsReportWizard;
 	
+	private String CRISNumber;
+	private String budgetNumber;
+	
 	public String getResetFormat() {
 		return resetFormat;
 	}
@@ -343,6 +346,8 @@ public class ReportsFilterPickerForm extends ActionForm {
 				this.approvalStatusSelected = null;
 				this.lineMinRank=null;
 				this.planMinRank=null;
+				this.CRISNumber=null;
+				this.budgetNumber=null;
 			}
 		}
 		
@@ -835,6 +840,22 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public void setSourceIsReportWizard(Boolean sourceIsReportWizard) {
 		this.sourceIsReportWizard = sourceIsReportWizard;
+	}
+
+	public String getCRISNumber() {
+		return CRISNumber;
+	}
+
+	public void setCRISNumber(String number) {
+		CRISNumber = number;
+	}
+
+	public String getBudgetNumber() {
+		return budgetNumber;
+	}
+
+	public void setBudgetNumber(String budgetNumber) {
+		this.budgetNumber = budgetNumber;
 	}
 
 	

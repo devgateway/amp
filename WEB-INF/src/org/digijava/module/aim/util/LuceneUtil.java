@@ -383,8 +383,6 @@ public class LuceneUtil implements Serializable {
 				String purpose;
 				String results;
 				String numcont;
-				String CRIS;
-				String budgetNumber;
 				ArrayList<String> componentcode=new ArrayList<String>();
 			};
 			
@@ -515,20 +513,6 @@ public class LuceneUtil implements Serializable {
 				isNext = rs.next();
 			}
 			
-			//New fields for Senegal.
-			qryStr = "select * from v_senegal_cris_budget where amp_activity_id >= " + chunkStart + " and amp_activity_id < " + chunkEnd + " ";
-			rs = st.executeQuery(qryStr);
-			rs.last();
-			logger.info("Starting iteration of " + rs.getRow() + " amp_activity_components!");
-			isNext = rs.first();
-				
-			while (isNext){
-		    	int currActId = rs.getInt("amp_activity_id");
-		    	x = (Items) list.get(currActId);
-		    	x.CRIS = rs.getString("cris_number");
-		    	x.budgetNumber = rs.getString("budget_number");
-				isNext = rs.next();
-			}
 			
 			conn.close();
 
@@ -536,7 +520,7 @@ public class LuceneUtil implements Serializable {
 			Iterator it = list.values().iterator();
 			while (it.hasNext()) {
 				Items el = (Items) it.next();
-				Document doc = activity2Document(String.valueOf(el.id),el.amp_id, el.title, el.description, el.objective, el.purpose, el.results,el.numcont,el.componentcode, el.CRIS, el.budgetNumber);
+				Document doc = activity2Document(String.valueOf(el.id),el.amp_id, el.title, el.description, el.objective, el.purpose, el.results,el.numcont,el.componentcode);
 				if (doc != null)
 					indexWriter.addDocument(doc);
 			}
@@ -571,7 +555,7 @@ public class LuceneUtil implements Serializable {
 	 * @param request is used to retreive curent site and navigation language
 	 * @param act the activity that will be added
 	 */
-	public static Document activity2Document(String actId, String projectId, String title, String description, String objective, String purpose, String results,String numcont,ArrayList<String> componentcodes, String CRIS, String budgetNumber){
+	public static Document activity2Document(String actId, String projectId, String title, String description, String objective, String purpose, String results,String numcont,ArrayList<String> componentcodes){
 		Document doc = new Document();
 		String all = new String("");
 		if (actId != null){
@@ -607,15 +591,6 @@ public class LuceneUtil implements Serializable {
 		if (numcont != null && numcont.length()>0){
 			doc.add(new Field("numcont", numcont, Field.Store.NO, Field.Index.TOKENIZED));
 			all = all.concat(" " + numcont);
-		}
-		
-		if (CRIS != null && CRIS.length() > 0) {
-			doc.add(new Field("CRIS", CRIS, Field.Store.NO, Field.Index.TOKENIZED));
-			all = all.concat(" " + CRIS);
-		}
-		if (budgetNumber != null && budgetNumber.length() > 0) {
-			doc.add(new Field("budgetNumber", budgetNumber, Field.Store.NO, Field.Index.TOKENIZED));
-			all = all.concat(" " + budgetNumber);
 		}
 		
 		int i =0;
@@ -697,10 +672,7 @@ public class LuceneUtil implements Serializable {
 					Util.getEditorBody(site,act.getObjective(),navigationLanguage), 
 					Util.getEditorBody(site,act.getPurpose(),navigationLanguage), 
 					Util.getEditorBody(site,act.getResults(),navigationLanguage),
-					Util.getEditorBody(site,act.getContactName(),navigationLanguage),
-					componentsCode,
-					act.getCrisNumber(),
-					act.getBudgetCodeProjectID()					
+					Util.getEditorBody(site,act.getContactName(),navigationLanguage),componentsCode
 			);
 		} catch (EditorException e1) {
 			// TODO Auto-generated catch block

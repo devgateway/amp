@@ -13,6 +13,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.ChartUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.widget.form.SectorByDonorTeaserForm;
 import org.digijava.module.widget.helper.ChartOption;
@@ -63,14 +64,23 @@ public class ShowSectorByDonorChart extends Action {
         plot.setNoDataMessageFont(font);
         
         ChartRenderingInfo info = new ChartRenderingInfo();
-        
+
         //write image in response
 		ChartUtilities.writeChartAsPNG(response.getOutputStream(),chart,opt.getWidth().intValue(),opt.getHeight().intValue(), info);
-		
+
 		//fill from years' drop-down
 		cForm.setYearsFrom(ChartWidgetUtil.getYears(true));
 		//fill to years' drop-down
 		cForm.setYearsTo(ChartWidgetUtil.getYears(false));
+
+                //generate map for this graph
+                String map = ChartUtilities.getImageMap("sectorByDonorChartImageMap", info);
+                //String map = getImageMap("npdChartMap", info, new StandardToolTipTagFragmentGenerator(), new StandardURLTagFragmentGenerator());
+                ////System.out.println(map);
+
+                //save map with timestamp from request for later use
+                //timestemp is generated with javascript before sending ajax request.
+                ChartUtil.saveMap(map, cForm.getTimestamp(), request.getSession());
 		boolean amountsInThousands=FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS).equals("true");
 		cForm.setAmountsInThousands(amountsInThousands);
 		return null;
@@ -78,6 +88,11 @@ public class ShowSectorByDonorChart extends Action {
 	
 	private ChartOption createChartOption(SectorByDonorTeaserForm form,HttpServletRequest request){
 		ChartOption opt= new ChartOption();
+
+                // URL
+                String url=RequestUtils.getFullModuleUrl(request);
+                url+="showSectorDonorReport.do";
+                opt.setUrl(url);
 		
 		//TITLE
 		if (form.getShowTitle()==null){

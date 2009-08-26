@@ -30,6 +30,7 @@
         <page page="parisIndicatorTableWidgetAdmin" name="widget_parisIndicatorTableManager" title="Paris Indicator Table Manager"/>
         <page page="createParisIndicatorTableWidget" name="widget_createParisIndicatorTableWidget" title="Paris Indicator Table"/>
         <page page="showParisIndicatorTableWidget" name="widget_showParisIndicatorTableWidget" title="Paris Indicator Table"/>
+        <page page="sectorDonorWidgetReport" name="showSectorDonorReport" title="Show Sector Donor Report"/>
                 
 		
 	</secondary-pages>

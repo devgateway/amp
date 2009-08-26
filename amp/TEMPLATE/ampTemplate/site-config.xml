@@ -553,6 +553,7 @@
             	<page>preview_tableWidget</page>
                 <page>widget_showSectorTable</page>
                 <page>widget_showParisIndicatorTableWidget</page>
+                <page>showSectorDonorReport</page>
             </module>
 			<module name="aim">
 				<page>aim_showDocumentsInPopup</page>

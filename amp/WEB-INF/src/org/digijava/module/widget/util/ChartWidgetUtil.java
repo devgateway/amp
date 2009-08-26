@@ -59,6 +59,7 @@ import org.digijava.module.widget.dbentity.AmpWidget;
 import org.digijava.module.widget.dbentity.AmpWidgetIndicatorChart;
 import org.digijava.module.widget.helper.ChartOption;
 import org.digijava.module.widget.helper.DonorSectorFundingHelper;
+import org.digijava.module.widget.helper.DonorSectorPieChartURLGenerator;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -90,6 +91,7 @@ import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.ui.RectangleInsets;
+import org.digijava.module.widget.helper.SectorHelper;
 
 
 /**
@@ -600,8 +602,13 @@ public class ChartWidgetUtil {
         String titleMsg= TranslatorWorker.translateText("Breakdown by Sector", opt.getLangCode(), opt.getSiteId());
 		String title = (opt.isShowTitle())? titleMsg:null;
 		boolean tooltips = false;
-		boolean urls = false;
+		boolean urls = true;
 		result = ChartFactory.createPieChart(title, ds, opt.isShowLegend(), tooltips, urls);
+                String donorString="";
+                if(donors!=null){
+                    donorString+="~donorId="+getInStatment(donors);
+                }
+                String url=opt.getUrl()+"~startYear="+fromYear+"~endYear="+toYear+donorString;
 		PiePlot plot = (PiePlot)result.getPlot();
 
 		if (opt.isShowTitle()){
@@ -629,6 +636,8 @@ public class ChartWidgetUtil {
             lt.setItemFont(labelFont);
             plot.setLabelFont(labelFont);
         }
+                DonorSectorPieChartURLGenerator urlGen=new DonorSectorPieChartURLGenerator(url);
+                plot.setURLGenerator(urlGen);
 		plot.setIgnoreNullValues(true);
 		plot.setIgnoreZeroValues(true);
 		return result;
@@ -726,24 +735,34 @@ public class ChartWidgetUtil {
 		Collection<DonorSectorFundingHelper> fundings=getDonorSectorFunding(donors, fromDate, toDate,allFundingWrapper);
 		if (fundings!=null){
             double otherFunfing=0;
+            String otherIds="";
 			for (DonorSectorFundingHelper funding : fundings) {
 				Double percent = funding.getFounding() / allFundingWrapper[0];
                 // the sectors which percent is less then 5% should be group in "Other"
+                AmpSector sector = funding.getSector();
+
                 if (percent > 0.05) {
-                	ds.setValue(funding.getSector().getName(), Math.round(funding.getFounding()));
+                    SectorHelper secHelper=new SectorHelper();
+                    secHelper.setName(sector.getName());
+                    secHelper.setIds(sector.getAmpSectorId().toString());
+                    ds.setValue(secHelper, Math.round(funding.getFounding()));
                 } else {
                 	otherFunfing += funding.getFounding();
+                        otherIds+=sector.getAmpSectorId()+",";
                 }
 			}
-            if(otherFunfing!=0){
-            	String otherSectors="Other Sectors";
-            	try {
-					otherSectors=TranslatorWorker.translateText("Other Sectors", opt.getLangCode(), opt.getSiteId());
-				} catch (WorkerException e) {					
-					e.printStackTrace();
-				}
-            	ds.setValue(otherSectors,Math.round(otherFunfing));
-            }		
+                    if (otherFunfing != 0) {
+                        String otherSectors = "Other Sectors";
+                        try {
+                            otherSectors = TranslatorWorker.translateText("Other Sectors", opt.getLangCode(), opt.getSiteId());
+                        } catch (WorkerException e) {
+                            e.printStackTrace();
+                        }
+                        SectorHelper secHelper = new SectorHelper();
+                        secHelper.setName(otherSectors);
+                        secHelper.setIds(otherIds.substring(0,otherIds.length()-1));
+                        ds.setValue(secHelper, Math.round(otherFunfing));
+                    }
 		}
 		return ds;
 	}
@@ -821,7 +840,7 @@ public class ChartWidgetUtil {
 				Float sectorPrcentage =activitySector.getSectorPercentage();    //This field is NULL sometimes !
 				//AmpActivity activity = (AmpActivity) rowData[3];
 				//AmpCurrency currency = (AmpCurrency) rowData[4];
-				BigDecimal amt = new BigDecimal((Double)rowData[2]);
+				BigDecimal amt = (BigDecimal)rowData[2];
 				BigDecimal amount =FeaturesUtil.applyThousandsForVisibility(amt);
 				//calculate percentage
 				BigDecimal calculated = (sectorPrcentage.floatValue() == 100)?amount:calculatePercentage(amount,sectorPrcentage);

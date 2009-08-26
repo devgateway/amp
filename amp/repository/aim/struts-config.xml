@@ -162,7 +162,7 @@
     
     <form-bean name="selectLocationForm" type="org.digijava.module.aim.form.SelectLocationForm"/>
     <form-bean name="selectProgramForm" type="org.digijava.module.aim.form.ProgramsForm"/>
-    
+ 
 </form-beans>
 
   <global-forwards>
@@ -1744,8 +1744,8 @@
 	<action path="/aim/fmCheck" scope="session" type="org.digijava.module.aim.fmtool.action.FeatureManagerCheckAction" name="fmCheckForm" validate="false" parameter="method">
 		<forward name="default" path="/showLayout.do?layout=fmCheck"/>
 		<forward name="show" path="/aim/fmCheck.do?method=show" redirect="true"/>
-	</action> 
-    
+	</action>
+
   </action-mappings>
 </struts-config>
 

@@ -2838,10 +2838,10 @@ public class DbUtil {
             } catch (HibernateException ex) {
                 logger.error("rollback() failed");
                 logger.error(ex.toString());
-            }
+    }
         }
     }
-
+   
     public static void deleteStatus(Long id) {
         AmpStatus oldStatusItem = new AmpStatus();
         Session sess = null;

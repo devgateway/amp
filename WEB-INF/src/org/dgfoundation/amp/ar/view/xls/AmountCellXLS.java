@@ -63,11 +63,8 @@ public class AmountCellXLS extends XLSExporter {
 		//mf.setMaximumFractionDigits(2);
 		double tempAm = ac.getAmount();
 		BigDecimal bd = new BigDecimal(tempAm);
-		 bd = bd.setScale(2, BigDecimal.ROUND_UP);
-		if (tempAm == 0)
-			cell.setCellValue("");
-		else
-		    	cell.setCellValue(new Double(bd.doubleValue()));
+		bd = bd.setScale(2, BigDecimal.ROUND_UP);
+		cell.setCellValue(new Double(bd.doubleValue()));
 		colId.inc();
 	}
 

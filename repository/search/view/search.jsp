@@ -148,7 +148,7 @@ $(document).ready(function(){
                         <digi:trn>My Desktop</digi:trn>
 						</digi:link>
                         &nbsp;&gt;&nbsp;
-						Tools
+						<digi:trn>Tools</digi:trn>
                         &nbsp;&gt;&nbsp;
                         <digi:trn>Search</digi:trn>
 						</span>

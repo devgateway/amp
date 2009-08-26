@@ -53,6 +53,18 @@ function removeSelOrgs(value) {
 -->
 </script>
 
+<script type="text/javascript">
+	function  submitAfterSelectingOrg()
+	{
+		<digi:context name="nextTarget" property="context/module/moduleinstance/addActivity.do" />
+    	document.aimEditActivityForm.action = "<%= nextTarget %>?edit=true";
+    	document.aimEditActivityForm.target = "_self";
+  		document.aimEditActivityForm.step.value = "${aimEditActivityForm.step}";
+    	document.aimEditActivityForm.submit();
+    	return true;
+	}
+</script>
+
 <digi:form action="/addActivity.do" method="post">
 <html:hidden property="step" />
 <html:hidden property="agencies.item" />

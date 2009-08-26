@@ -31,14 +31,19 @@
 												<tr><td>
 													<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left" bgcolor="#ffffff">
 														<tr>
-															<td width="3">
+															<td  width="10%">
 																<html:multibox property="agencies.selExAgencies">
 																	<bean:write name="exAgency" property="ampOrgId" />
 																</html:multibox>
 															</td>
-															<td align="left">
+															<td align="left" width="45%">
 																<bean:write name="exAgency" property="name" />
 															</td>
+															<field:display name="Executing Agency Additional Info"  feature="Executing Agency">
+																<td width="45%">
+																	<digi:trn>Additional Info: </digi:trn><html:text property="agencies.executingOrgToInfo(${exAgency.ampOrgId})"></html:text>
+																</td>
+															</field:display>
 														</tr>
 													</table>
 												</td></tr>

@@ -29,14 +29,19 @@
 												<tr><td>
 													<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
 														<tr>
-															<td width="3">
+															<td width="10%">
 																<html:multibox property="agencies.selConAgencies">
 																	<bean:write name="conAgency" property="ampOrgId" />
 																</html:multibox>
 															</td>
-															<td align="left">
+															<td align="left" width="45%">
 																<bean:write name="conAgency" property="name" />
 															</td>
+															<field:display name="Contracting Agency Additional Info"  feature="Contracting Agency">
+																<td width="45%">
+																	<digi:trn>Additional Info: </digi:trn><html:text property="agencies.conOrgToInfo(${conAgency.ampOrgId})"></html:text>
+																</td>
+															</field:display>
 														</tr>
 													</table>
 												</td></tr>

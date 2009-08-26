@@ -1356,6 +1356,15 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
           eaForm.getAgencies().setRegGroups(new ArrayList<AmpOrganisation>());
           eaForm.getAgencies().setRespOrganisations(new ArrayList<AmpOrganisation>());
           
+          eaForm.getAgencies().setExecutingOrgToInfo(new HashMap<String, String>());
+          eaForm.getAgencies().setImpOrgToInfo(new HashMap<String, String>());
+          eaForm.getAgencies().setBenOrgToInfo(new HashMap<String, String>());
+          eaForm.getAgencies().setConOrgToInfo(new HashMap<String, String>());
+          eaForm.getAgencies().setRepOrgToInfo(new HashMap<String, String>());
+          eaForm.getAgencies().setSectOrgToInfo(new HashMap<String, String>());
+          eaForm.getAgencies().setRegOrgToInfo(new HashMap<String, String>());
+          eaForm.getAgencies().setRespOrgToInfo(new HashMap<String, String>());
+          
           Set relOrgs = activity.getOrgrole();
           if (relOrgs != null) {
             Iterator relOrgsItr = relOrgs.iterator();
@@ -1369,11 +1378,15 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
                       Constants.RESPONSIBLE_ORGANISATION)
                       && (!eaForm.getAgencies().getRespOrganisations().contains(organisation))) {
                 	  eaForm.getAgencies().getRespOrganisations().add(organisation);
+                	  if ( orgRole.getAdditionalInfo() != null && orgRole.getAdditionalInfo().length() > 0 )
+                		  eaForm.getAgencies().getRespOrgToInfo().put(organisation.getAmpOrgId().toString(), orgRole.getAdditionalInfo() );
                  }          
               if (orgRole.getRole().getRoleCode().equals(
                   Constants.EXECUTING_AGENCY)
                   && (!eaForm.getAgencies().getExecutingAgencies().contains(organisation))) {
             	  eaForm.getAgencies().getExecutingAgencies().add(organisation);
+            	  if ( orgRole.getAdditionalInfo() != null && orgRole.getAdditionalInfo().length() > 0 )
+            		  eaForm.getAgencies().getExecutingOrgToInfo().put(organisation.getAmpOrgId().toString(), orgRole.getAdditionalInfo() );
              }
               else if (orgRole.getRole().getRoleCode().equals(
                   Constants.IMPLEMENTING_AGENCY)
@@ -1381,6 +1394,8 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
                            organisation))) {
                 eaForm.getAgencies().getImpAgencies().add(
                     organisation);
+                if ( orgRole.getAdditionalInfo() != null && orgRole.getAdditionalInfo().length() > 0 )
+                	eaForm.getAgencies().getImpOrgToInfo().put(organisation.getAmpOrgId().toString(), orgRole.getAdditionalInfo() );
               }
               else if (orgRole.getRole().getRoleCode().equals(
                   Constants.BENEFICIARY_AGENCY)
@@ -1388,6 +1403,8 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
                            organisation))) {
                 eaForm.getAgencies().getBenAgencies().add(
                     organisation);
+                if ( orgRole.getAdditionalInfo() != null && orgRole.getAdditionalInfo().length() > 0 )
+          		  eaForm.getAgencies().getBenOrgToInfo().put(organisation.getAmpOrgId().toString(), orgRole.getAdditionalInfo() );
               }
               else if (orgRole.getRole().getRoleCode().equals(
                   Constants.CONTRACTING_AGENCY)
@@ -1395,6 +1412,8 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
                            organisation))) {
                 eaForm.getAgencies().getConAgencies().add(
                     organisation);
+                if ( orgRole.getAdditionalInfo() != null && orgRole.getAdditionalInfo().length() > 0 )
+          		  eaForm.getAgencies().getConOrgToInfo().put(organisation.getAmpOrgId().toString(), orgRole.getAdditionalInfo() );
               }
               else if (orgRole.getRole().getRoleCode().equals(
                   Constants.REPORTING_AGENCY)
@@ -1402,18 +1421,24 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
                            organisation))) {
                 eaForm.getAgencies().getReportingOrgs().add(
                     organisation);
+                if ( orgRole.getAdditionalInfo() != null && orgRole.getAdditionalInfo().length() > 0 )
+          		  eaForm.getAgencies().getRepOrgToInfo().put(organisation.getAmpOrgId().toString(), orgRole.getAdditionalInfo() );
               } else if (orgRole.getRole().getRoleCode().equals(
                       Constants.SECTOR_GROUP)
                       && (!eaForm.getAgencies().getSectGroups().contains(
                           organisation))) {
                eaForm.getAgencies().getSectGroups().add(
                    organisation);
+               if ( orgRole.getAdditionalInfo() != null && orgRole.getAdditionalInfo().length() > 0 )
+         		  eaForm.getAgencies().getSectOrgToInfo().put(organisation.getAmpOrgId().toString(), orgRole.getAdditionalInfo() );
              } else if (orgRole.getRole().getRoleCode().equals(
                      Constants.REGIONAL_GROUP)
                      && (!eaForm.getAgencies().getRegGroups().contains(
                          organisation))) {
               eaForm.getAgencies().getRegGroups().add(
                   organisation);
+              if ( orgRole.getAdditionalInfo() != null && orgRole.getAdditionalInfo().length() > 0 )
+        		  eaForm.getAgencies().getRegOrgToInfo().put(organisation.getAmpOrgId().toString(), orgRole.getAdditionalInfo() );
             }
 
             }

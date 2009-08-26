@@ -3324,27 +3324,35 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 		private Long selConAgencies[];
 		private Collection<AmpOrganisation> conAgencies;
+		private HashMap<String, String> conOrgToInfo;
 
 		private Collection<AmpOrganisation> executingAgencies;
 		private Long selExAgencies[];
+		private HashMap<String, String> executingOrgToInfo;
 
 		private Collection<AmpOrganisation> impAgencies;
 		private Long selImpAgencies[];
+		private HashMap<String, String> impOrgToInfo;
 
 		private Collection<AmpOrganisation> regGroups;
 		private Long selRegGroups[];
+		private HashMap<String, String> regOrgToInfo;
 
 		private Collection<AmpOrganisation> reportingOrgs;
 		private Long selReportingOrgs[];
+		private HashMap<String, String> repOrgToInfo;
 
 		private Collection<AmpOrganisation> sectGroups;
 		private Long selSectGroups[];
+		private HashMap<String, String> sectOrgToInfo;
 
 		private Collection<AmpOrganisation> benAgencies;
 		private Long selBenAgencies[];
+		private HashMap<String, String> benOrgToInfo;
 
 		private Collection<AmpOrganisation> respOrganisations;
 		private Long selRespOrganisations[];
+		private HashMap<String, String> respOrgToInfo;
 
 		private int item;
 
@@ -3484,6 +3492,72 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.selRespOrganisations = selRespOrganisations;
 		}
 
+		public HashMap<String, String> getConOrgToInfo() {
+			return conOrgToInfo;
+		}
+
+		public void setConOrgToInfo(HashMap<String, String> conOrgToInfo) {
+			this.conOrgToInfo = conOrgToInfo;
+		}
+
+		public HashMap<String, String> getExecutingOrgToInfo() {
+			return executingOrgToInfo;
+		}
+
+		public void setExecutingOrgToInfo(HashMap<String, String> executingOrgToInfo) {
+			this.executingOrgToInfo = executingOrgToInfo;
+		}
+
+		public HashMap<String, String> getImpOrgToInfo() {
+			return impOrgToInfo;
+		}
+
+		public void setImpOrgToInfo(HashMap<String, String> impOrgToInfo) {
+			this.impOrgToInfo = impOrgToInfo;
+		}
+
+		public HashMap<String, String> getRegOrgToInfo() {
+			return regOrgToInfo;
+		}
+
+		public void setRegOrgToInfo(HashMap<String, String> regOrgToInfo) {
+			this.regOrgToInfo = regOrgToInfo;
+		}
+
+		public HashMap<String, String> getRepOrgToInfo() {
+			return repOrgToInfo;
+		}
+
+		public void setRepOrgToInfo(HashMap<String, String> repOrgToInfo) {
+			this.repOrgToInfo = repOrgToInfo;
+		}
+
+		public HashMap<String, String> getSectOrgToInfo() {
+			return sectOrgToInfo;
+		}
+
+		public void setSectOrgToInfo(HashMap<String, String> sectOrgToInfo) {
+			this.sectOrgToInfo = sectOrgToInfo;
+		}
+
+		public HashMap<String, String> getBenOrgToInfo() {
+			return benOrgToInfo;
+		}
+
+		public void setBenOrgToInfo(HashMap<String, String> benOrgToInfo) {
+			this.benOrgToInfo = benOrgToInfo;
+		}
+
+		public HashMap<String, String> getRespOrgToInfo() {
+			return respOrgToInfo;
+		}
+
+		public void setRespOrgToInfo(HashMap<String, String> respOrgToInfo) {
+			this.respOrgToInfo = respOrgToInfo;
+		}
+
+		
+		
 	}
 
 	public class IndicatorME implements Serializable {

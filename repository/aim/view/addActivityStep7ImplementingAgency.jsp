@@ -29,14 +29,19 @@
 												<tr><td>
 													<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
 														<tr>
-															<td width="3">
+															<td width="10%">
 																<html:multibox property="agencies.selImpAgencies">
 																	<bean:write name="impAgency" property="ampOrgId" />
 																</html:multibox>
 															</td>
-															<td align="left">
+															<td align="left" width="45%" >
 																<bean:write name="impAgency" property="name" />
 															</td>
+															<field:display name="Implementing Agency Additional Info"  feature="Implementing Agency">
+																<td width="45%">
+																	<digi:trn>Additional Info: </digi:trn><html:text property="agencies.impOrgToInfo(${impAgency.ampOrgId})"></html:text>
+																</td>
+															</field:display>
 														</tr>
 													</table>
 												</td></tr>

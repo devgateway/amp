@@ -29,14 +29,19 @@
 												<tr><td>
 													<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
 														<tr>
-															<td width="3">
+															<td width="10%">
 																<html:multibox property="agencies.selRegGroups">
 																	<bean:write name="regGroups" property="ampOrgId" />
 																</html:multibox>
 															</td>
-															<td align="left">
+															<td align="left" width="45%">
 																<bean:write name="regGroups" property="name" />
 															</td>
+															<field:display name="Regional Group Additional Info"  feature="Regional Group">
+																<td width="45%">
+																	<digi:trn>Additional Info: </digi:trn><html:text property="agencies.regOrgToInfo(${regGroups.ampOrgId})"></html:text>
+																</td>
+															</field:display>
 														</tr>
 													</table>
 												</td></tr>
@@ -45,7 +50,7 @@
 													<table cellSpacing=1 cellPadding=1>
 														<tr>
 															<td>
-																<field:display name="Regional Group Add Button" feature="Regional Group">
+																<field:display name="Regional Group Add Button"  feature="Regional Group">
 																	<aim:addOrganizationButton form="${aimEditActivityForm.agencies}" collection="regGroups" refreshParentDocument="true" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 																</field:display>
 															</td>

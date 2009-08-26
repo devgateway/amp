@@ -10,6 +10,8 @@ public class AmpOrgRole implements Serializable
 	private AmpOrganisation organisation;
 	private AmpRole role;
 	private Double 	percentage;
+	private String additionalInfo;
+	
     public Double getPercentage() {
 		return percentage;
 	}
@@ -65,6 +67,19 @@ public class AmpOrgRole implements Serializable
         this.role = role;
     }
     
+        
+	/**
+	 * @return the additionalInfo
+	 */
+	public String getAdditionalInfo() {
+		return additionalInfo;
+	}
+	/**
+	 * @param additionalInfo the additionalInfo to set
+	 */
+	public void setAdditionalInfo(String additionalInfo) {
+		this.additionalInfo = additionalInfo;
+	}
 	public boolean equals(Object obj) {
 		if (obj == null)
 			throw new NullPointerException();

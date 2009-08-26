@@ -29,14 +29,19 @@
 												<tr><td>
 													<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
 														<tr>
-															<td width="3">
+															<td width="10%">
 																<html:multibox property="agencies.selSectGroups">
 																	<bean:write name="impAgency" property="ampOrgId" />
 																</html:multibox>
 															</td>
-															<td align="left">
+															<td align="left" width="45%">
 																<bean:write name="impAgency" property="name" />
 															</td>
+															<field:display name="Sector Group Additional Info"  feature="Sector Group">
+																<td width="45%">
+																	<digi:trn>Additional Info: </digi:trn><html:text property="agencies.sectOrgToInfo(${impAgency.ampOrgId})"></html:text>
+																</td>
+															</field:display>
 														</tr>
 													</table>
 												</td></tr>
@@ -46,7 +51,7 @@
 														<tr>
 															<td>
 																<field:display name="Sector Group Add Button" feature="Sector Group">
-																	<aim:addOrganizationButton refreshParentDocument="true" collection="sectGroups" form="${aimEditActivityForm.agencies}" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>			
+																	<aim:addOrganizationButton refreshParentDocument="false" callBackFunction="submitAfterSelectingOrg();"  collection="sectGroups" form="${aimEditActivityForm.agencies}" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>			
 																	<%
 																	selectOrganizationComponentForm compForm1 = (selectOrganizationComponentForm) session.getAttribute("aimSelectOrganizationForm");
 																	selectOrganizationComponentForm compForm2 = (selectOrganizationComponentForm) session.getAttribute("siteampdefaultaimSelectOrganizationForm");

@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import javax.jcr.Node;
 import javax.servlet.ServletContext;
@@ -1453,6 +1454,9 @@ public class SaveActivity extends Action {
 				ampOrgRole.setActivity(activity);
 				ampOrgRole.setRole(role);
 				ampOrgRole.setOrganisation(tmp);
+				String additionalInfo			= eaForm.getAgencies().getExecutingOrgToInfo().get( tmp.getAmpOrgId().toString() );
+				if ( additionalInfo != null && additionalInfo.length() > 0 )
+					ampOrgRole.setAdditionalInfo(additionalInfo);
 				orgRole.add(ampOrgRole);
 			}
 		}
@@ -1465,6 +1469,9 @@ public class SaveActivity extends Action {
 				ampOrgRole.setActivity(activity);
 				ampOrgRole.setRole(role);
 				ampOrgRole.setOrganisation(org);
+				String additionalInfo			= eaForm.getAgencies().getImpOrgToInfo().get( org.getAmpOrgId().toString() );
+				if ( additionalInfo != null && additionalInfo.length() > 0 )
+					ampOrgRole.setAdditionalInfo(additionalInfo);
 				orgRole.add(ampOrgRole);
 			}
 		}
@@ -1477,6 +1484,9 @@ public class SaveActivity extends Action {
 				ampOrgRole.setActivity(activity);
 				ampOrgRole.setRole(role);
 				ampOrgRole.setOrganisation(org);
+				String additionalInfo			= eaForm.getAgencies().getBenOrgToInfo().get( org.getAmpOrgId().toString() );
+				if ( additionalInfo != null && additionalInfo.length() > 0 )
+					ampOrgRole.setAdditionalInfo(additionalInfo);
 				orgRole.add(ampOrgRole);
 			}
 		}
@@ -1489,6 +1499,9 @@ public class SaveActivity extends Action {
 				ampOrgRole.setActivity(activity);
 				ampOrgRole.setRole(role);
 				ampOrgRole.setOrganisation(org);
+				String additionalInfo			= eaForm.getAgencies().getConOrgToInfo().get( org.getAmpOrgId().toString() );
+				if ( additionalInfo != null && additionalInfo.length() > 0 )
+					ampOrgRole.setAdditionalInfo(additionalInfo);
 				orgRole.add(ampOrgRole);
 			}
 		}
@@ -1501,6 +1514,9 @@ public class SaveActivity extends Action {
 				ampOrgRole.setActivity(activity);
 				ampOrgRole.setRole(role);
 				ampOrgRole.setOrganisation(org);
+				String additionalInfo			= eaForm.getAgencies().getRegOrgToInfo().get( org.getAmpOrgId().toString() );
+				if ( additionalInfo != null && additionalInfo.length() > 0 )
+					ampOrgRole.setAdditionalInfo(additionalInfo);
 				orgRole.add(ampOrgRole);
 			}
 		}
@@ -1513,6 +1529,9 @@ public class SaveActivity extends Action {
 				ampOrgRole.setActivity(activity);
 				ampOrgRole.setRole(role);
 				ampOrgRole.setOrganisation(org);
+				String additionalInfo			= eaForm.getAgencies().getSectOrgToInfo().get( org.getAmpOrgId().toString() );
+				if ( additionalInfo != null && additionalInfo.length() > 0 )
+					ampOrgRole.setAdditionalInfo(additionalInfo);
 				orgRole.add(ampOrgRole);
 			}
 		}
@@ -1526,6 +1545,9 @@ public class SaveActivity extends Action {
 				ampOrgRole.setActivity(activity);
 				ampOrgRole.setRole(role);
 				ampOrgRole.setOrganisation(org);
+				String additionalInfo			= eaForm.getAgencies().getRepOrgToInfo().get( org.getAmpOrgId().toString() );
+				if ( additionalInfo != null && additionalInfo.length() > 0 )
+					ampOrgRole.setAdditionalInfo(additionalInfo);
 				orgRole.add(ampOrgRole);
 			}
 		}
@@ -1538,6 +1560,9 @@ public class SaveActivity extends Action {
 				ampOrgRole.setActivity(activity);
 				ampOrgRole.setRole(role);
 				ampOrgRole.setOrganisation(org);
+				String additionalInfo			= eaForm.getAgencies().getRespOrgToInfo().get( org.getAmpOrgId().toString() );
+				if ( additionalInfo != null && additionalInfo.length() > 0 )
+					ampOrgRole.setAdditionalInfo(additionalInfo);
 				orgRole.add(ampOrgRole);
 			}
 		}
@@ -2260,6 +2285,7 @@ public class SaveActivity extends Action {
 					logger.error(">>> Error that is not continuable on step:" + stepText[stepNumber]);
 				}
 			} catch (Exception e) {
+				e.printStackTrace();
 				logger.error(">>> Unknown error on step:" + stepText[stepNumber]);
 			}
 			stepNumber++;

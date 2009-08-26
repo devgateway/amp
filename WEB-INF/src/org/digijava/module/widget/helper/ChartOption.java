@@ -16,6 +16,15 @@ public class ChartOption {
 	private String title;
         private String langCode;
         private Long siteId;
+        private String url;
+
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
 
         public String getLangCode() {
             return langCode;

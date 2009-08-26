@@ -32,7 +32,16 @@ public class SectorByDonorTeaserForm extends ActionForm {
 	private Collection<LabelValueBean> yearsTo;
 	//indicates whether amounts are in thousands or not.
 	private Boolean amountsInThousands;
-	
+        private Long timestamp;
+
+        public Long getTimestamp() {
+            return timestamp;
+        }
+
+        public void setTimestamp(Long timestamp) {
+            this.timestamp = timestamp;
+        }
+
 	public Collection<AmpOrganisation> getDonors() {
 		return donors;
 	}

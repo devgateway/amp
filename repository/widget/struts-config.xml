@@ -17,6 +17,7 @@
        <form-bean name="showSectorTableForm" type="org.digijava.module.widget.form.ShowSectorTableForm" />
        <form-bean name="piTableWidgetForm" type="org.digijava.module.widget.form.AdminParisIndicatorTableWidgetForm" />
        <form-bean name="showParisIndicatorTableForm" type="org.digijava.module.widget.form.ShowParisIndicatorTableForm" />
+          <form-bean name="sectorDonorWidgetReportForm" type="org.digijava.module.widget.form.SectorDonorWidgetReportForm"/>
 	</form-beans>
 	
 	<global-forwards>
@@ -56,6 +57,7 @@
          <action name="gisWidgetTeaserForm" path="/widget/getWidgetMap" scope="request" type="org.digijava.module.widget.action.GetWidgetMap" validate="false" />
          <action name="gisWidgetTeaserForm" path="/widget/getSectorDonorAmounts" scope="request" type="org.digijava.module.widget.action.GetSectorDonorAmounts" validate="false" />
          <action name="gisWidgetTeaserForm" path="/widget/getParisIndicatorDonorGroupValues" scope="request" type="org.digijava.module.widget.action.GetParisIndicatorValues" validate="false" />
+         <action name="gisSectorByDonorTeaserForm" path="/widget/getDonorSectorMap" scope="request" type="org.digijava.module.widget.action.GetSectoByDonorWidgetMap" validate="false" />
 		  <action name="gisIndicatorChartForm" parameter="actType"
 		   path="/widget/indicatorchartwidgets" scope="session"
 		   type="org.digijava.module.widget.action.AdminIndicatorChartWidgets" validate="false">
@@ -103,6 +105,10 @@
          <action name="showParisIndicatorTableForm" path="/widget/showParisIndicatorTableWidget" scope="request" type="org.digijava.module.widget.action.ShowParisIndicatorTableWidget" validate="false">
 	      <forward name="forward" path="/showLayout.do?layout=widget_showParisIndicatorTableWidget" />
     	</action>
+        
+        <action path="/widget/showSectorDonorReport" name="sectorDonorWidgetReportForm" scope="request" type="org.digijava.module.widget.action.ShowSectorDonorWidgetReport" validate="false">
+            <forward name="forward" path="/showLayout.do?layout=showSectorDonorReport" />
+        </action>
 
        
          <action name="gisWidgetTeaserForm" path="/widget/getTopTenDonorGroups" scope="request" type="org.digijava.module.widget.action.GetTopTenDonors" validate="false" />

@@ -98,7 +98,14 @@
 	</tr>
 	<tr>
 		<td colspan="3">
-			<img id="sectorByDonorChartImage" src="/widget/showSectorByDonorChart.do">
+                    <div id="sectorByDonorChartImageDiv" style="display:none">
+
+                    </div>
+                    <div id="sectorByDonorChartImageDivLoad">
+                        <img src='<digi:file src="images/amploading.gif"/>' alt="">
+                    </div>
+                    <MAP name="sectorByDonorChartImageMap" id="sectorByDonorChartImageMap">
+                    </MAP>
 		</td>
 	</tr>
         <tr>

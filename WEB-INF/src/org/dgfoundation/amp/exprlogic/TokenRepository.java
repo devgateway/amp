@@ -335,10 +335,21 @@ public class TokenRepository {
 		GregorianCalendar c1=new GregorianCalendar();
 		c1.set(Calendar.DAY_OF_MONTH,1);
 		c1.set(Calendar.MONTH,0);
+	
+		c1.set(Calendar.HOUR, 0);
+		c1.set(Calendar.MINUTE, 0);
+		c1.set(Calendar.SECOND, 0);
+		c1.set(Calendar.MILLISECOND, 0);
 		
 		GregorianCalendar c2=new GregorianCalendar();
 		c2.set(Calendar.DAY_OF_MONTH,1);
 		c2.add(Calendar.DAY_OF_MONTH,-1);
+		c2.set(Calendar.MONTH,0);
+		
+		c2.set(Calendar.HOUR, 0);
+		c2.set(Calendar.MINUTE, 0);
+		c2.set(Calendar.SECOND, 0);
+		c2.set(Calendar.MILLISECOND, 0);
 		
 		DateRangeLogicalToken token=new DateRangeLogicalToken(c1.getTime(),c2.getTime(),ArConstants.TRANSACTION_DATE);
 		
@@ -377,11 +388,20 @@ public class TokenRepository {
 		GregorianCalendar c1=new GregorianCalendar();
 		c1.set(Calendar.DAY_OF_MONTH,1);
 		
+		c1.set(Calendar.HOUR, 0);
+		c1.set(Calendar.MINUTE, 0);
+		c1.set(Calendar.SECOND, 0);
+		c1.set(Calendar.MILLISECOND, 0);
 		
 		GregorianCalendar c2=new GregorianCalendar();
 		c2.set(Calendar.DAY_OF_MONTH,1);
 		c2.add(Calendar.MONTH,1);
 		c2.add(Calendar.DAY_OF_MONTH,-1);
+		
+		c2.set(Calendar.HOUR, 0);
+		c2.set(Calendar.MINUTE, 0);
+		c2.set(Calendar.SECOND, 0);
+		c2.set(Calendar.MILLISECOND, 0);
 		
 		DateRangeLogicalToken token=new DateRangeLogicalToken(c1.getTime(),c2.getTime(),ArConstants.TRANSACTION_DATE);
 		

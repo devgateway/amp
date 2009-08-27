@@ -61,11 +61,11 @@ module Report
       end
       
       def markers
-        markers = Markers.content_columns.map(&:name)
-        
-        markers.map do |marker|
-          [marker.titleize, option_text_by_id(Markers::OPTIONS, @target.markers.send(marker))]
+        rows = Project::AVAILABLE_MARKERS.map do |marker|
+          column_name = "#{marker[0]}_marker"
+          "#{Project.human_attribute_name(column_name)}:" + option_text_by_id(Project::MARKER_OPTIONS, @target.send(column_name))
         end
+        [I18n.t('terms.markers'), rows.join(", ")]
       end
       
       def website

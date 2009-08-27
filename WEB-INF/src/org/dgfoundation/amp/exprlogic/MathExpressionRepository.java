@@ -52,11 +52,11 @@ public class MathExpressionRepository {
 	public static final String COUNT_PLANNED_DISBURSEMENT = "countPlannedDisbursment";
 
 	public static final String UNDISBURSED_CUMULATIVE_BALANCE = "undisbursedCumulativeBalance";
-	
+
 	public static final String UNCOMMITED_CUMULATIVE_BALANCE = "uncommitedCumulativeBalance";
 
 	public static final String UNDISBURSED_BALANCE = "undisbursedBalance";
-	
+
 	public static final String UNCOMMITED_BALANCE = "uncommitedBalance";
 
 	public static final String NUMBER_OF_PROJECTS = "numberOfProjects";
@@ -64,6 +64,22 @@ public class MathExpressionRepository {
 	public static final String COSTING_GRAND_TOTAL = "grandTotalCost";
 
 	public static final String EXECUTION_RATE = "executionRate";
+
+	/** NIGER COLUMNS */
+
+	public static final String PRIOR_ACTUAL_DISBURSEMENT = "priorActualDisbursements";
+
+	public static final String CURRENT_MONTH_DISBURSEMENT = "currentMonthDisbursements";
+
+	public static final String CUMULATED_DISBURSEMENT = "cumulatedDisbursements";
+
+	public static final String CONSUMPTION_RATE = "consumptionRate";
+
+	public static final String LAST_YEAR_PLANNED_DISBURSEMENT = "lastYearPlannedDisbursements";
+
+	public static final String LAST_2YEAR_PLANNED_DISBURSEMENT = "last2YearPlannedDisbursements";
+
+	public static final String LAST_3YEAR_PLANNED_DISBURSEMENT = "last3YearPlannedDisbursements";
 
 	private static Hashtable<String, MathExpression> expresions = new Hashtable<String, MathExpression>();
 
@@ -101,6 +117,15 @@ public class MathExpressionRepository {
 
 		buildUncommitedBalance();
 		buildUndisbursedBalance();
+		
+		/**Niger Columns**/
+		buildPriorActualDisbursements();
+		buildCurrentMonthDisbursements();
+		buildCumulatedDisbursements();
+		buildConsumptionRate();
+		buildLastYearOfPlannedDisbursements();
+		buildLast2YearOfPlannedDisbursements();
+		buildLast3YearOfPlannedDisbursements();
 	}
 
 	/**
@@ -250,7 +275,7 @@ public class MathExpressionRepository {
 
 	/**
 	 * Percentage Of Total Disbursements (Actual Disbursement affected by all
-	 * filters / Actual Disbursement o affected by  percentages 
+	 * filters / Actual Disbursement o affected by percentages
 	 */
 	private static void buildPercentageDisbursement() {
 		try {
@@ -442,6 +467,101 @@ public class MathExpressionRepository {
 			MathExpression m1 = new MathExpression(MathExpression.Operation.DIVIDE, ArConstants.ACTUAL_DISBURSEMENT, ArConstants.PLANNED_DISBURSEMENT_FILTERED);
 			MathExpression m2 = new MathExpression(MathExpression.Operation.MULTIPLY, m1, new BigDecimal(100));
 			expresions.put(EXECUTION_RATE, m2);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+
+	/**
+	 * Sum of Actual Disbursements of the current year (Not including the
+	 * current month)
+	 */
+	private static void buildPriorActualDisbursements() {
+		try {
+			MathExpression m = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.TOTAL_ACTUAL_DISBURSEMENT_PREV_MONTHS, new BigDecimal(1));
+			expresions.put(PRIOR_ACTUAL_DISBURSEMENT, m);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+
+	/**
+	 * Sum of Actual Disbursements of the current month
+	 */
+	private static void buildCurrentMonthDisbursements() {
+		try {
+			MathExpression m = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.TOTAL_ACTUAL_DISBURSEMENT_CUR_MONTH, new BigDecimal(1));
+			expresions.put(CURRENT_MONTH_DISBURSEMENT, m);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+
+	/**
+	 * Cumulated Disbursements: Prior Actual Disbursements + Current Month
+	 * Disbursements
+	 */
+	private static void buildCumulatedDisbursements() {
+		try {
+
+			MathExpression m = new MathExpression(MathExpression.Operation.ADD, ArConstants.TOTAL_ACTUAL_DISBURSEMENT_PREV_MONTHS, ArConstants.TOTAL_ACTUAL_DISBURSEMENT_CUR_MONTH);
+			expresions.put(CUMULATED_DISBURSEMENT, m);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+
+	/**
+	 *Consumption Rate (Cumulated Disbursements / Last Year of Planned
+	 * Disbursements) * 100
+	 */
+	private static void buildConsumptionRate() {
+		try {
+
+			MathExpression m = new MathExpression(MathExpression.Operation.ADD, ArConstants.TOTAL_ACTUAL_DISBURSEMENT_PREV_MONTHS, ArConstants.TOTAL_ACTUAL_DISBURSEMENT_CUR_MONTH);
+			MathExpression m1 = new MathExpression(MathExpression.Operation.DIVIDE, m, ArConstants.TOTAL_PLANNED_DISBURSEMENT_LAST_YEAR);
+			MathExpression m2 = new MathExpression(MathExpression.Operation.MULTIPLY, m1, new BigDecimal(100));
+
+			expresions.put(CONSUMPTION_RATE, m2);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+
+	/**
+	 * Previous Year Planned Disbursements
+	 */
+	private static void buildLastYearOfPlannedDisbursements() {
+		try {
+
+			MathExpression m = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.TOTAL_PLANNED_DISBURSEMENT_LAST_YEAR, new BigDecimal(1));
+			expresions.put(LAST_YEAR_PLANNED_DISBURSEMENT, m);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+
+	/**
+	 * Previous 2 Year Planned Disbursements
+	 */
+	private static void buildLast2YearOfPlannedDisbursements() {
+		try {
+
+			MathExpression m = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.TOTAL_PLANNED_DISBURSEMENT_LAST_2YEAR, new BigDecimal(1));
+			expresions.put(LAST_2YEAR_PLANNED_DISBURSEMENT, m);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+
+	/**
+	 * Previous 3 Year Planned Disbursements
+	 */
+	private static void buildLast3YearOfPlannedDisbursements() {
+		try {
+
+			MathExpression m = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.TOTAL_PLANNED_DISBURSEMENT_LAST_3YEAR, new BigDecimal(1));
+			expresions.put(LAST_3YEAR_PLANNED_DISBURSEMENT, m);
 		} catch (Exception e) {
 			logger.error(e);
 		}

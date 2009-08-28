@@ -139,6 +139,8 @@ public final class ArConstants {
 	public final static String COLUMN_SUB_SECTOR="Sub-Sector";
 	public final static String COLUMN_REGION="Region";
 	public final static String COLUMN_SECTOR_GROUP="Sector Group";
+	public final static String COLUMN_SECTOR_MINISTRY_CONTACT="Sector Ministry Contact";
+	
 	
 	public final static String COLUMN_ANY_NATPROG					= "National Planning Objectives";
 	public final static String COLUMN_ANY_PRIMARYPROG			= "Primary Program";

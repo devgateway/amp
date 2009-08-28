@@ -37,11 +37,12 @@
 															<td align="left" width="45%">
 																<bean:write name="impAgency" property="name" />
 															</td>
-															<field:display name="Sector Group Additional Info"  feature="Sector Group">
-																<td width="45%">
+															<td width="45%">
+																<field:display name="Sector Group Additional Info"  feature="Sector Group">
 																	<digi:trn>Additional Info: </digi:trn><html:text property="agencies.sectOrgToInfo(${impAgency.ampOrgId})"></html:text>
-																</td>
-															</field:display>
+																</field:display>
+																&nbsp;
+															</td>
 														</tr>
 													</table>
 												</td></tr>
@@ -82,7 +83,7 @@
 												<tr>
 													<td bgcolor="#ffffff">
 													<field:display name="Sector Group Add Button" feature="Sector Group">
-														<aim:addOrganizationButton refreshParentDocument="true" collection="sectGroups" form="${aimEditActivityForm.agencies}" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>			
+														<aim:addOrganizationButton refreshParentDocument="false" callBackFunction="submitAfterSelectingOrg();"  collection="sectGroups" form="${aimEditActivityForm.agencies}" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>			
 													</field:display>
 													</td>
 												</tr>

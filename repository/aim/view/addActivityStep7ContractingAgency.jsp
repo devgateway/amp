@@ -37,11 +37,12 @@
 															<td align="left" width="45%">
 																<bean:write name="conAgency" property="name" />
 															</td>
-															<field:display name="Contracting Agency Additional Info"  feature="Contracting Agency">
-																<td width="45%">
+															<td width="45%">
+																<field:display name="Contracting Agency Additional Info"  feature="Contracting Agency">
 																	<digi:trn>Additional Info: </digi:trn><html:text property="agencies.conOrgToInfo(${conAgency.ampOrgId})"></html:text>
-																</td>
-															</field:display>
+																</field:display>
+																&nbsp;
+															</td>
 														</tr>
 													</table>
 												</td></tr>
@@ -51,7 +52,7 @@
 														<tr>
 															<td>
 															<field:display name="Contracting Agency Add Button" feature="Contracting Agency">
-															<aim:addOrganizationButton refreshParentDocument="true" collection="conAgencies" form="${aimEditActivityForm.agencies}" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>			
+															<aim:addOrganizationButton callBackFunction="submitAfterSelectingOrg();"  refreshParentDocument="false" collection="conAgencies" form="${aimEditActivityForm.agencies}" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>			
 															</field:display>
 															</td>
 															<td>
@@ -72,7 +73,7 @@
 												<tr>
 													<td bgcolor="#ffffff">
 													<field:display name="Contracting Agency Add Button" feature="Contracting Agency">
-															<aim:addOrganizationButton refreshParentDocument="true" collection="conAgencies" form="${aimEditActivityForm.agencies}" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>			
+															<aim:addOrganizationButton callBackFunction="submitAfterSelectingOrg();"  refreshParentDocument="false" collection="conAgencies" form="${aimEditActivityForm.agencies}" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>			
 															<%
 															selectOrganizationComponentForm compForm1 = (selectOrganizationComponentForm) session.getAttribute("aimSelectOrganizationForm");
 															selectOrganizationComponentForm compForm2 = (selectOrganizationComponentForm) session.getAttribute("siteampdefaultaimSelectOrganizationForm");

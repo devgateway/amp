@@ -37,11 +37,12 @@
 															<td align="left" width="45%">
 																<bean:write name="regGroups" property="name" />
 															</td>
-															<field:display name="Regional Group Additional Info"  feature="Regional Group">
-																<td width="45%">
+															<td width="45%">
+																<field:display name="Regional Group Additional Info"  feature="Regional Group">
 																	<digi:trn>Additional Info: </digi:trn><html:text property="agencies.regOrgToInfo(${regGroups.ampOrgId})"></html:text>
-																</td>
-															</field:display>
+																</field:display>
+																&nbsp;
+															</td>
 														</tr>
 													</table>
 												</td></tr>
@@ -51,7 +52,7 @@
 														<tr>
 															<td>
 																<field:display name="Regional Group Add Button"  feature="Regional Group">
-																	<aim:addOrganizationButton form="${aimEditActivityForm.agencies}" collection="regGroups" refreshParentDocument="true" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
+																	<aim:addOrganizationButton callBackFunction="submitAfterSelectingOrg();"  form="${aimEditActivityForm.agencies}" collection="regGroups" refreshParentDocument="false" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 																</field:display>
 															</td>
 															<td>
@@ -72,7 +73,7 @@
 												<tr>
 													<td bgcolor="#ffffff">
 													<field:display name="Regional Group Add Button" feature="Regional Group">
-														<aim:addOrganizationButton form="${aimEditActivityForm.agencies}" collection="regGroups" refreshParentDocument="true" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
+														<aim:addOrganizationButton callBackFunction="submitAfterSelectingOrg();"  form="${aimEditActivityForm.agencies}" collection="regGroups" refreshParentDocument="false" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 														<%
 															selectOrganizationComponentForm compForm1 = (selectOrganizationComponentForm) session.getAttribute("aimSelectOrganizationForm");
 															selectOrganizationComponentForm compForm2 = (selectOrganizationComponentForm) session.getAttribute("siteampdefaultaimSelectOrganizationForm");

@@ -37,11 +37,12 @@
 															<td align="left" width="45%" >
 																<bean:write name="impAgency" property="name" />
 															</td>
-															<field:display name="Implementing Agency Additional Info"  feature="Implementing Agency">
-																<td width="45%">
+															<td width="45%">
+																<field:display name="Implementing Agency Additional Info"  feature="Implementing Agency">
 																	<digi:trn>Additional Info: </digi:trn><html:text property="agencies.impOrgToInfo(${impAgency.ampOrgId})"></html:text>
-																</td>
-															</field:display>
+																</field:display>
+																&nbsp;
+															</td>
 														</tr>
 													</table>
 												</td></tr>
@@ -51,7 +52,7 @@
 														<tr>
 															<td>
 																<field:display name="Implementing Agency Add Button" feature="Implementing Agency">
-																	<aim:addOrganizationButton form="${aimEditActivityForm.agencies}" collection="impAgencies" refreshParentDocument="true" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
+																	<aim:addOrganizationButton callBackFunction="submitAfterSelectingOrg();"  form="${aimEditActivityForm.agencies}" collection="impAgencies" refreshParentDocument="false" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 																	<%
 																	selectOrganizationComponentForm compForm1 = (selectOrganizationComponentForm) session.getAttribute("aimSelectOrganizationForm");
 																	selectOrganizationComponentForm compForm2 = (selectOrganizationComponentForm) session.getAttribute("siteampdefaultaimSelectOrganizationForm");
@@ -82,7 +83,7 @@
 												<tr>
 													<td bgcolor="#ffffff">
 													<field:display name="Implementing Agency Add Button" feature="Implementing Agency">
-															<aim:addOrganizationButton form="${aimEditActivityForm.agencies}" collection="impAgencies" refreshParentDocument="true" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
+															<aim:addOrganizationButton callBackFunction="submitAfterSelectingOrg();"  form="${aimEditActivityForm.agencies}" collection="impAgencies" refreshParentDocument="false" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 													</field:display>
 													</td>
 												</tr>

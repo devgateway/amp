@@ -85,6 +85,7 @@ import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Issues;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.MTEFProjection;
@@ -1010,6 +1011,7 @@ public class SaveActivity extends Action {
 									ampFundDet.setTransactionAmount(transAmt);
 									ampFundDet.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet.getCurrencyCode()));
 									ampFundDet.setFixedExchangeRate(null);
+									ampFundDet.setFixedRateBaseCurrency(null);
 								} else {
 									// Use the fixed exchange rate
 									double transAmt = FormatHelper.parseDouble(fundDet.getTransactionAmount());
@@ -1021,8 +1023,13 @@ public class SaveActivity extends Action {
 									// frmExRt,1);
 									// amt *=
 									// fundDet.getFixedExchangeRate();
+									String currCode		= FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY ) ;
+									if ( currCode == null ) {
+										currCode = "USD";
+									}
 									ampFundDet.setTransactionAmount(new Double(transAmt));
 									ampFundDet.setFixedExchangeRate(fundDet.getFixedExchangeRate());
+									ampFundDet.setFixedRateBaseCurrency( CurrencyUtil.getCurrencyByCode(currCode) );
 									ampFundDet.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet
 															.getCurrencyCode()));
 								}
@@ -2552,6 +2559,26 @@ public class SaveActivity extends Action {
 
 				}
 		return false;
+	}
+	
+	private boolean isFieldEnabled(String fieldName) {
+		ServletContext ampContext = getServlet().getServletContext();
+
+		   AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+
+			AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) ampTreeVisibility.getRoot();
+			if(currentTemplate!=null)
+				if(currentTemplate.getFields()!=null)
+					for(Iterator it=currentTemplate.getFields().iterator();it.hasNext();)
+					{
+						AmpFieldsVisibility field=(AmpFieldsVisibility) it.next();
+						if(field.getName().equals(fieldName))
+						{
+							return true;
+						}
+
+					}
+			return false;
 	}
 
 	/**

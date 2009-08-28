@@ -150,6 +150,11 @@ public class CategAmountColWorker extends ColumnWorker {
 	 *      java.lang.String)
 	 */
 	protected Cell getCellFromRow(ResultSet rs) throws SQLException {
+		
+		String baseCurrCode		= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+		if ( baseCurrCode == null ) 
+			baseCurrCode	= "USD";
+		
 		Long ownerId = rs.getLong(1);
 		Long id = rs.getLong(3);
 		CategAmountCell acc = new CategAmountCell(ownerId);
@@ -356,14 +361,14 @@ public class CategAmountColWorker extends ColumnWorker {
 		
 		
 		
-		//UGLY get exchage rate if cross-rates are needed (if we need to convert from X to USD and then to Y)
+		//UGLY get exchage rate if cross-rates are needed (if we need to convert from X to base currency and then to Y)
 		if(filter.getCurrency()!=null ) {
 			/* If source and destination currency are the same we need to set exactly the same exchange rate for 'toExchangeRate' and 'fromExchangeRate.
 			 * That way, AmountCell.convert won't do any computation' */
 			if ( currencyCode.equals(filter.getCurrency().getCurrencyCode())   ) 
 				acc.setToExchangeRate( acc.getFromExchangeRate() );
-			else if ( !"USD".equals(filter.getCurrency().getCurrencyCode()))  
-			acc.setToExchangeRate(Util.getExchange(filter.getCurrency().getCurrencyCode(),td));
+			else if ( !baseCurrCode.equals(filter.getCurrency().getCurrencyCode()))  
+				acc.setToExchangeRate(Util.getExchange(filter.getCurrency().getCurrencyCode(),td));
 		}
 		else 
 			logger.error("The filter.currency property should not be null !");

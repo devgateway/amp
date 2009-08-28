@@ -770,7 +770,7 @@ public class ChartWidgetUtil {
 	public static Collection<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[],Date fromDate, Date toDate,Double[] wholeFunding) throws DgException {
     	Collection<DonorSectorFundingHelper> fundings=null;  
 		String oql ="select  actSec.ampActivitySectorId, "+
-                        "  act.ampActivityId.ampActivityId, sum(fd.transactionAmountInUSD)";
+                        "  act.ampActivityId.ampActivityId, sum(fd.transactionAmountInBaseCurrency)";
 		oql += " from ";
 		oql += AmpFundingDetail.class.getName() +
                         " as fd inner join fd.ampFundingId f ";

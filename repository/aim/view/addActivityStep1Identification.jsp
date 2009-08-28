@@ -10,7 +10,8 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
-<script type="text/javascript" language="JavaScript" src="<digi:file src="module/message/script/yahoo-dom-event.js"/>"></script>
+
+<%@page import="org.digijava.module.aim.helper.Constants"%><script type="text/javascript" language="JavaScript" src="<digi:file src="module/message/script/yahoo-dom-event.js"/>"></script>
 <script type="text/javascript" language="JavaScript" src="<digi:file src="module/message/script/animation-min.js"/>"></script>
 <script type="text/javascript" language="JavaScript" src="<digi:file src="module/message/script/autocomplete-min.js"/>"></script>
 
@@ -55,6 +56,41 @@
 
 <script language="JavaScript">
 
+function OnBudgetRules ( textboxId,  messageElId, numOfCharsNeeded) {
+	this.textboxEl		= null;
+	this.messageEl		= null;
+	this.textboxId					= textboxId;
+	this.messageElId				= messageElId;
+	this.numOfCharsNeeded	= numOfCharsNeeded;
+}
+OnBudgetRules.prototype.init		= function () {
+	this.textboxEl		= document.getElementById( this.textboxId );
+	this.messageEl		= document.getElementById( this.messageElId );
+}
+OnBudgetRules.prototype.check		= function () {
+	if ( this.textboxEl == null ) {
+		this.init();
+	}
+	var numOfChars		= this.textboxEl.value.length;
+	if ( numOfChars < this.numOfCharsNeeded ){
+		this.messageEl.innerHTML	= "<font color='red'> <digi:trn>Characters to add</digi:trn>: " + (this.numOfCharsNeeded-numOfChars) + "</font>" ;
+	}
+	else{
+		this.textboxEl.value				= this.textboxEl.value.substr(0, this.numOfCharsNeeded);
+		this.messageEl.innerHTML	= "<font color='green'><digi:trn>Ok</digi:trn></font>";
+	}
+}
+
+imputationRules				= new OnBudgetRules ( "ImputationField", "ImputationSpan", <%= Constants.NUM_OF_CHARS_IMPUTATION%> );
+codeChapitreRules			= new OnBudgetRules ( "CodeChapitreField", "CodeChapitreSpan", <%= Constants.NUM_OF_CHARS_CODE_CHAPITRE %> );
+
+function doBudgetRulesCheck() {
+	imputationRules	.check();
+	codeChapitreRules.check();
+}
+
+YAHOOAmp.util.Event.addListener(window, "load", doBudgetRulesCheck ) ;
+
 
 function toggleElement ( elementId, show ) {
 	var displayValue;
@@ -70,17 +106,30 @@ function toggleElement ( elementId, show ) {
 
 function toggleBudgetFields( show ) {
 
+	toggleElement("Imputation", show);
+	toggleElement("CodeChapitre", show);
 	toggleElement("FY", show);
 	toggleElement("Vote", show);
 	toggleElement("Sub-Vote", show);
 	toggleElement("Sub-Program", show);
 	toggleElement("ProjectCode", show);
 	toggleElement("financial", show);
+
+	toggleElement("Imputation1", show);
+	toggleElement("CodeChapitre1", show);
 	toggleElement("FY1", show);
 	toggleElement("Vote1", show);
 	toggleElement("Sub-Vote1", show);
 	toggleElement("Sub-Program1", show);
 	toggleElement("ProjectCode1", show);
+
+	toggleElement("Imputation2", show);
+	toggleElement("CodeChapitre2", show);
+	toggleElement("FY2", show);
+	toggleElement("Vote2", show);
+	toggleElement("Sub-Vote2", show);
+	toggleElement("Sub-Program2", show);
+	toggleElement("ProjectCode2", show);
 }
 
 document.getElementsByTagName('body')[0].className='yui-skin-sam';
@@ -566,6 +615,26 @@ target.style.cursor = "default"
 											</tr>
 											 <tr>
 											
+											<field:display name="Imputation" feature="Budget">
+											<td valign="top" id="Imputation" align="center" width="50%" >
+												<a title="<digi:trn>Imputation</digi:trn>">
+												<digi:trn>
+													Imputation
+												</digi:trn>
+												</a>
+											</td>
+											</field:display>
+											
+											<field:display name="Code Chapitre" feature="Budget">
+											<td valign="top" id="FY" align="center" width="50%" >
+												<a title="<digi:trn>Code Chapitre</digi:trn>">
+												<digi:trn>
+													Code Chapitre
+												</digi:trn>
+												</a>
+											</td>
+											</field:display>
+											
 											<field:display name="FY" feature="Budget">
 											<td valign="top" id="FY" align="center" width="20%" >
 												<a title="<digi:trn key="aim:FY">FY</digi:trn>">
@@ -620,6 +689,18 @@ target.style.cursor = "default"
 									<field:display name="Code Chapitre" feature="Budget"></field:display>
 									</tr>
 										<tr>
+											<field:display name="Imputation" feature="Budget">
+												<td valign="top"  id="Imputation1" align="center"  width="50%">
+														<html:text property="identification.FY" size="22" styleId="ImputationField" onkeyup="imputationRules.check();"/>
+												</td>
+											</field:display>
+										
+											<field:display name="Code Chapitre" feature="Budget">
+												<td valign="top"  id="CodeChapitre1" align="center"  width="50%">
+														<html:text property="identification.projectCode" size="11" styleId="CodeChapitreField" onkeyup="codeChapitreRules.check();"/>
+												</td>
+											</field:display>
+										
 											<field:display name="FY" feature="Budget">
 												<td valign="top"  id="FY1" align="center"  width="20%">
 														<html:text property="identification.FY" size="12"/>
@@ -646,7 +727,46 @@ target.style.cursor = "default"
 													<html:text property="identification.projectCode" size="12"/>
 												</td>
 											</field:display>	
-									
+										</tr>
+										<tr>
+											<field:display name="Imputation" feature="Budget">
+												<td valign="top"  id="Imputation2" align="center"  width="50%">
+														<span id="ImputationSpan">&nbsp;</span>
+												</td>
+											</field:display>
+											
+											<field:display name="Code Chapitre" feature="Budget">
+												<td valign="top"  id="CodeChapitre2" align="center" width="50%">
+													<span id="CodeChapitreSpan">&nbsp;</span>
+												</td>	
+											</field:display>
+											
+											<field:display name="FY" feature="Budget">
+												<td valign="top"  id="FY2" align="center"  width="20%">
+														<span id="FYSpan">&nbsp;</span>
+												</td>
+											</field:display>
+											
+											<field:display name="Vote" feature="Budget">
+												<td valign="top"  id="Vote2" align="center" width="20%">
+													<span id="VoteSpan">&nbsp;</span>
+												</td>	
+											</field:display>
+											<field:display name="Sub-Vote" feature="Budget">
+											<td valign="top"  id="Sub-Vote2" align="center" width="20%">
+												<span id="SubVoteSpan">&nbsp;</span>
+											</td>
+											</field:display>
+											<field:display name="Sub-Program" feature="Budget">
+												<td valign="top" id="Sub-Program2" align="center" width="20%">
+													<span id="SubProgramSpan">&nbsp;</span>
+												</td>
+											</field:display>
+											<field:display name="Project Code" feature="Budget">
+												<td valign="top" id="ProjectCode2" align="center" width="20%">
+													<span id="ProjectCodeSpan">&nbsp;</span>
+												</td>
+											</field:display>	
 										</tr>
 								</table>
 								</td></tr>	

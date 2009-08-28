@@ -94,6 +94,7 @@
 	<page name="deleteCurrency" title=" - Delete Currency" />
 	<page name="currencyManager" title=" - Currency Manager" />
 	<page name="currencyRates" title=" - Currency Rates" />
+	<page name="selectFilteredRates" title=" - Select Filtered Currency Rates" />
 	<page name="searchSector" title=" - Search Sector" />
 	<page name="searchSectResults" title=" - Search Sector Results" />
 	<page name="workspaceManager" title=" - Workspace Manager" />

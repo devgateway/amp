@@ -10,12 +10,15 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DigiCacheManager;
+import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpCurrencyRate;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -24,6 +27,7 @@ import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.Currency;
 import org.digijava.module.aim.helper.CurrencyRates;
 import org.digijava.module.aim.helper.DateConversion;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.hibernate.Hibernate;
 import org.hibernate.JDBCException;
 import org.hibernate.Query;
@@ -60,41 +64,36 @@ public class CurrencyUtil {
 			Collection res = qry.list();
 			if (res.size() > 0) {
 				logger.debug("Active currencies found");
-				Iterator itr = res.iterator();
-				AmpCurrency currencies[] = new AmpCurrency[res.size()];
-				int index = 0;
+				Iterator<AmpCurrency> itr = res.iterator();
+				HashMap<String, String> currencies = new HashMap<String, String>( res.size() );
 				while (itr.hasNext()) {
-					currencies[index++] = (AmpCurrency) itr.next();
-					logger.debug(currencies[index-1].getCurrencyName());
+					AmpCurrency curr		= itr.next();
+					currencies.put( curr.getCurrencyCode(), curr.getCurrencyName() ) ;
 				}
 				qryStr = "select cRate from " + AmpCurrencyRate.class.getName() + " cRate " +
-				"where cRate.toCurrencyCode in ('";
-
-				for (int i = 0;i < index;i ++) {
-					qryStr += currencies[i].getCurrencyCode() + "'";
-					if ((i+1) < index) {
-						qryStr += ",'";
+				"where cRate.toCurrencyCode in (";
+				Set<String> currencyCodes	= currencies.keySet();
+				if ( currencyCodes != null && currencyCodes.size() > 0 ) {
+					for ( String currencyCode: currencyCodes) {
+						qryStr += "'" + currencyCode + "'" + ",";
 					}
+					qryStr	= qryStr.substring(0, qryStr.length()-1) ;
 				}
+				
 				qryStr += ") order by cRate.exchangeRateDate desc,cRate.toCurrencyCode";
 				qry = session.createQuery(qryStr);
-				itr = qry.list().iterator();
+				Iterator<AmpCurrencyRate> itr2 = qry.list().iterator();
 				AmpCurrencyRate cRate = null;
 
 				CurrencyRates currencyRates = null;
-				while (itr.hasNext()) {
+				while (itr2.hasNext()) {
 					currencyRates = new CurrencyRates();
-					cRate = (AmpCurrencyRate) itr.next();
+					cRate = (AmpCurrencyRate) itr2.next();
 
 					currencyRates.setCurrencyCode(cRate.getToCurrencyCode());
-					for (int i = 0;i < currencies.length;i ++) {
-						if (currencies[i].getCurrencyCode().equals(
-								cRate.getToCurrencyCode())) {
-							currencyRates.setCurrencyName(currencies[i].
-									getCurrencyName());
-							break;
-						}
-					}
+					currencyRates.setFromCurrencyCode(cRate.getFromCurrencyCode());
+					currencyRates.setCurrencyName( currencies.get(cRate.getToCurrencyCode()) );
+					currencyRates.setFromCurrencyName( currencies.get(cRate.getFromCurrencyCode()) );
 					currencyRates.setExchangeRate(cRate.getExchangeRate());
 					currencyRates.setExchangeRateDate(DateConversion.
 							ConvertDateToString(cRate.getExchangeRateDate()));
@@ -135,21 +134,20 @@ public class CurrencyUtil {
 			Collection res = qry.list();
 			if (res.size() > 0) {
 				logger.debug("Active currencies found");
-				Iterator itr = res.iterator();
-				AmpCurrency currencies[] = new AmpCurrency[res.size()];
-				int index = 0;
+				Iterator<AmpCurrency> itr = res.iterator();
+				HashMap<String, String> currencies = new HashMap<String, String>( res.size() );
 				while (itr.hasNext()) {
-					currencies[index++] = (AmpCurrency) itr.next();
-					logger.debug(currencies[index-1].getCurrencyName());
+					AmpCurrency curr		= itr.next();
+					currencies.put( curr.getCurrencyCode(), curr.getCurrencyName() ) ;
 				}
 				qryStr = "select cRate from " + AmpCurrencyRate.class.getName() + " cRate " +
-				"where cRate.toCurrencyCode in ('";
-
-				for (int i = 0;i < index;i ++) {
-					qryStr += currencies[i].getCurrencyCode() + "'";
-					if ((i+1) < index) {
-						qryStr += ",'";
+				"where cRate.toCurrencyCode in (";
+				Set<String> currencyCodes	= currencies.keySet();
+				if ( currencyCodes != null && currencyCodes.size() > 0 ) {
+					for ( String currencyCode: currencyCodes) {
+						qryStr += "'" + currencyCode + "'" + ",";
 					}
+					qryStr	= qryStr.substring(0, qryStr.length()-1) ;
 				}
 				qryStr += ") and cRate.exchangeRateDate between :fromDate and :toDate order by " +
 						"cRate.exchangeRateDate desc,cRate.toCurrencyCode";
@@ -157,24 +155,19 @@ public class CurrencyUtil {
 				qry.setParameter("fromDate",fromDate,Hibernate.DATE);
 				qry.setParameter("toDate",toDate,Hibernate.DATE);
 
-				itr = qry.list().iterator();
+				Iterator <AmpCurrencyRate> itr2 = qry.list().iterator();
 				AmpCurrencyRate cRate = null;
 
 				CurrencyRates currencyRates = null;
-				while (itr.hasNext()) {
+				while (itr2.hasNext()) {
 					currencyRates = new CurrencyRates();
-					cRate = (AmpCurrencyRate) itr.next();
+					cRate = (AmpCurrencyRate) itr2.next();
 
 					currencyRates.setId(cRate.getAmpCurrencyRateId());
 					currencyRates.setCurrencyCode(cRate.getToCurrencyCode());
-					for (int i = 0;i < currencies.length;i ++) {
-						if (currencies[i].getCurrencyCode().equals(
-								cRate.getToCurrencyCode())) {
-							currencyRates.setCurrencyName(currencies[i].
-									getCurrencyName());
-							break;
-						}
-					}
+					currencyRates.setFromCurrencyCode(cRate.getFromCurrencyCode());
+					currencyRates.setCurrencyName( currencies.get(cRate.getToCurrencyCode()) );
+					currencyRates.setFromCurrencyName( currencies.get(cRate.getFromCurrencyCode()) );
 					currencyRates.setExchangeRate(cRate.getExchangeRate());
 					currencyRates.setExchangeRateDate(DateConversion.
 							ConvertDateToString(cRate.getExchangeRateDate()));
@@ -257,10 +250,11 @@ public class CurrencyUtil {
 			tx = session.beginTransaction();
 
 			qryStr = "select cRate from " + AmpCurrencyRate.class.getName() + " cRate " +
-					"where (cRate.toCurrencyCode=:code) and " +
+					"where (cRate.toCurrencyCode=:code) and (cRate.fromCurrencyCode=:fromCode) and" +
 					"(cRate.exchangeRateDate=:date)";
 			qry = session.createQuery(qryStr);
 			qry.setParameter("code",cRate.getToCurrencyCode(),Hibernate.STRING);
+			qry.setParameter("fromCode",cRate.getFromCurrencyCode(),Hibernate.STRING);
 			qry.setParameter("date",cRate.getExchangeRateDate(),Hibernate.DATE);
 
 			Iterator itr = qry.list().iterator();
@@ -1005,51 +999,59 @@ public class CurrencyUtil {
 	}
 
 	public static double getExchangeRate(String currencyCode) {
+		
+		try {
+			return CurrencyUtil.getLatestExchangeRate(currencyCode);
+		} catch (AimException e) {
+			e.printStackTrace();
+			return 1.0;
+		}
+		
 		//if (logger.isDebugEnabled())
 			//logger.debug("getExchangeRate with currencyCode" + currencyCode);
 
-		Session session = null;
-		Query q = null;
-		Collection c = null;
-		Iterator iter = null;
-		Double exchangeRate = null;
-
-		try {
-			session = PersistenceManager.getSession();
-			String queryString = new String();
-			queryString = "select f.exchangeRate from "
-					+ AmpCurrencyRate.class.getName()
-					+ " f where (f.toCurrencyCode=:currencyCode) order by f.exchangeRateDate desc";
-			q = session.createQuery(queryString);
-			q.setParameter("currencyCode", currencyCode, Hibernate.STRING);
-			c = q.list();
-			if (c.size() != 0) {
-				iter = c.iterator();
-				if (iter.hasNext()) {
-					exchangeRate = (Double) iter.next();
-				}
-			} else {
-				if (logger.isDebugEnabled())
-					logger
-							.debug("Unable to get exchange rate for currency code :"
-									+ currencyCode);
-				exchangeRate = new Double(1.0);
-			}
-		} catch (Exception ex) {
-			logger.debug("Unable to get exchange rate from database", ex);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}
-/*		if (logger.isDebugEnabled())
-			logger.debug("getExchangeRate() for currency code :" + currencyCode
-					+ "returns " + exchangeRate); */
-		return exchangeRate.doubleValue();
+//		Session session = null;
+//		Query q = null;
+//		Collection c = null;
+//		Iterator iter = null;
+//		Double exchangeRate = null;
+//
+//		try {
+//			session = PersistenceManager.getSession();
+//			String queryString = new String();
+//			queryString = "select f.exchangeRate from "
+//					+ AmpCurrencyRate.class.getName()
+//					+ " f where (f.toCurrencyCode=:currencyCode) order by f.exchangeRateDate desc";
+//			q = session.createQuery(queryString);
+//			q.setParameter("currencyCode", currencyCode, Hibernate.STRING);
+//			c = q.list();
+//			if (c.size() != 0) {
+//				iter = c.iterator();
+//				if (iter.hasNext()) {
+//					exchangeRate = (Double) iter.next();
+//				}
+//			} else {
+//				if (logger.isDebugEnabled())
+//					logger
+//							.debug("Unable to get exchange rate for currency code :"
+//									+ currencyCode);
+//				exchangeRate = new Double(1.0);
+//			}
+//		} catch (Exception ex) {
+//			logger.debug("Unable to get exchange rate from database", ex);
+//		} finally {
+//			try {
+//				if (session != null) {
+//					PersistenceManager.releaseSession(session);
+//				}
+//			} catch (Exception ex) {
+//				logger.error("releaseSession() failed");
+//			}
+//		}
+///*		if (logger.isDebugEnabled())
+//			logger.debug("getExchangeRate() for currency code :" + currencyCode
+//					+ "returns " + exchangeRate); */
+//		return exchangeRate.doubleValue();
 	}
 
 	/**
@@ -1112,6 +1114,10 @@ public class CurrencyUtil {
 	 * @author Irakli Kobiashvili
 	 */
         public static double getLatestExchangeRate(String currencyCode) throws AimException {
+	        	String baseCurrCode		= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+	    		if ( baseCurrCode == null ) 
+	    			baseCurrCode	= "USD";
+	    		
                 Session session = null;
                 Query q = null;
                 try {
@@ -1119,9 +1125,10 @@ public class CurrencyUtil {
                         session = PersistenceManager.getRequestDBSession();
                         String queryString = "select f.exchangeRate from "
                                         + AmpCurrencyRate.class.getName()
-                                        + " f where (f.toCurrencyCode=:currencyCode) order by f.exchangeRateDate desc limit 1";
+                                        + " f where (f.toCurrencyCode=:currencyCode and f.fromCurrencyCode=:baseCurrencyCode) order by f.exchangeRateDate desc limit 1";
                         q = session.createQuery(queryString);
                         q.setString("currencyCode", currencyCode);
+                        q.setString("baseCurrencyCode", baseCurrCode);
                         List rates = q.list();
                         Double result = null;
                         if (rates == null || rates.isEmpty()){

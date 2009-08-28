@@ -16,6 +16,7 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpCurrencyRate;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.FilteredCurrencyRateUtil;
 import org.digijava.module.calendar.exception.CalendarException;
 import org.digijava.module.calendar.util.AmpDbUtil;
 import org.digijava.module.common.util.DateTimeUtil;
@@ -64,6 +65,23 @@ public class CurrencyRatesQuartzJob implements Job {
 
 		String[] ampCurrencies = this.getCurrencies(currencies);
 		HashMap<String, Double> wsCurrencyValues=null;
+		
+		/* Remove currencies that need to skipped in automatic update */
+		if ( ampCurrencies != null ) {
+				FilteredCurrencyRateUtil filteredCurrencyUtil		= new FilteredCurrencyRateUtil();
+				List<String> remainingCurrencies								= new ArrayList<String>();
+				for (int i=0; i<ampCurrencies.length; i++) {
+					if ( filteredCurrencyUtil.checkPairExistanceUsingCache(ampCurrencies[i], this.baseCurrency) || 
+							filteredCurrencyUtil.checkPairExistanceUsingCache(this.baseCurrency, ampCurrencies[i]) ) {
+						logger.info("Skipping update for currency " + ampCurrencies[i] + ". Base currency beeing: " + this.baseCurrency );
+						continue;
+					}
+					else
+						remainingCurrencies.add( ampCurrencies[i] );
+				}
+				ampCurrencies				= remainingCurrencies.toArray( new String[0] );
+		}
+		/* END - Remove currencies that need to skipped in automatic update */
 
 		try {
 			
@@ -143,6 +161,7 @@ public class CurrencyRatesQuartzJob implements Job {
 			
 			currRate.setExchangeRateDate(aDate);
 			currRate.setToCurrencyCode(currencies[i]);
+			currRate.setFromCurrencyCode(baseCurrency);
 			currRate.setDataSource(CurrencyUtil.RATE_FROM_WEB_SERVICE);
 			CurrencyUtil.saveCurrencyRate(currRate);
 		}
@@ -177,6 +196,7 @@ public class CurrencyRatesQuartzJob implements Job {
 			}
 			currRate.setExchangeRateDate(aDate);
 			currRate.setToCurrencyCode(ampCurrency.getCurrencyCode().trim());
+			currRate.setFromCurrencyCode(baseCurrency);
 			currRate.setDataSource(CurrencyUtil.RATE_FROM_WEB_SERVICE);
 			CurrencyUtil.saveCurrencyRate(currRate);
 		}

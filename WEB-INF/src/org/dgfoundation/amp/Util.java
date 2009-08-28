@@ -17,11 +17,6 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.workers.CategAmountColWorker;
@@ -34,6 +29,7 @@ import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 import org.digijava.module.aim.helper.fiscalcalendar.EthiopianCalendar;
@@ -41,7 +37,12 @@ import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.springframework.beans.BeanWrapperImpl;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 public final class Util {
 
@@ -335,8 +336,10 @@ public final class Util {
 	public static double getExchange(String currency, java.sql.Date currencyDate) {
 		Connection conn = null;
 		double ret = 1;
-
-		if("USD".equals(currency)) return 1;
+		String baseCurrency	= FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY );
+		if ( baseCurrency == null )
+			baseCurrency = "USD";
+		if( baseCurrency.equals(currency)) return 1;
 		// we try the digi cache:
 		AbstractCache ratesCache = DigiCacheManager.getInstance().getCache("EXCHANGE_RATES_CACHE");
 
@@ -387,7 +390,7 @@ public final class Util {
 			e.printStackTrace();
 		}
 
-		logger.info("rate for " + currency + " to USD on " + currencyDate
+		logger.info("rate for " + currency + " to " + baseCurrency + " on " + currencyDate
 				+ " is " + ret);
 		if (ret != 1)
 			ratesCache

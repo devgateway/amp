@@ -4,10 +4,12 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/globalsettings" prefix="gs"%>
 
 <%@page import="org.digijava.module.aim.helper.FormatHelper"%>
 <%@page import="org.digijava.module.aim.util.CurrencyUtil"%>
-<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
+
+<%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%><digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <digi:instance property="aimCurrencyRateForm" />
 
 
@@ -132,7 +134,7 @@ function closePopup() {
 							<tr bgcolor="#f4f4f2">
 								<td align="right" valign="middle" width="50%">
 									<FONT color=red>*</FONT>
-									<digi:trn key="admin:currencyRates:editPopup:ExchangeRateDescr">Exchange rate (value of 1 USD in selected currency)</digi:trn>&nbsp;
+									<digi:trn key="admin:currencyRates:editPopup:ExchangeRateDescr">Exchange rate (value of 1 <gs:value name="<%=GlobalSettingsConstants.BASE_CURRENCY %>" /> in selected currency)</digi:trn>&nbsp;
 								</td>
 								<td align="left" valign="middle">
 								<table cellPadding=0 cellSpacing=0>

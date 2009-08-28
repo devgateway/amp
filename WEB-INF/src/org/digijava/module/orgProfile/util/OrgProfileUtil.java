@@ -427,7 +427,7 @@ public class OrgProfileUtil {
             }
             queryString += " and fd.transactionDate>=:startDate and  fd.transactionDate<=:endDate  ";
             queryString+=ChartWidgetUtil.getTeamQuery(teamMember);
-            queryString +=" group by act.ampActivityId order by sum(fd.transactionAmountInUSD) desc ";
+            queryString +=" group by act.ampActivityId order by sum(fd.transactionAmountInBaseCurrency) desc ";
 
             Query query = session.createQuery(queryString);
             query.setDate("startDate", startDate);

@@ -42,8 +42,10 @@
 			class="org.digijava.module.aim.dbentity.AmpFunding" />
 		<many-to-one name="contract" column="ipa_contract_id"
 			class="org.digijava.module.aim.dbentity.IPAContract" cascade="none" />
-		<property name="transactionAmountInUSD" type="java.lang.Double"
+		<property name="transactionAmountInBaseCurrency" type="java.lang.Double"
 			formula="getTransactionAmmountUSD(amp_fund_detail_id)" />
 
+		<many-to-one name="fixedRateBaseCurrency" column="fixed_base_currency_id"
+			class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" not-found="ignore" not-null="false"  />
 	</class>
 </hibernate-mapping>

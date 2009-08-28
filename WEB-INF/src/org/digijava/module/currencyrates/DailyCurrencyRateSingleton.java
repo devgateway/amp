@@ -7,6 +7,7 @@ import java.util.Date;
 
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.dbentity.AmpCurrencyRate;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 
@@ -31,7 +32,9 @@ public final class DailyCurrencyRateSingleton {
 
 	private DailyCurrencyRateSingleton() {
 		myWSCurrencyClient = new WSCurrencyClientImp();
-		baseCurrency = "USD";		
+		baseCurrency = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+		if ( baseCurrency == null )
+			baseCurrency	= "USD";
 	}
 
 	public static synchronized DailyCurrencyRateSingleton getInstance() {

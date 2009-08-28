@@ -12,14 +12,20 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 <%@page import="org.digijava.module.aim.helper.FormatHelper"%>
+
+<%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
+<%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addFunding.js"/>"></script>
+
+<c:set var="baseCurrencyGS" value="<%= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY) %>" scope="request" />
 
 <script language="JavaScript" type="text/javascript">
 	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
 </script>
 
 <jsp:include page="scripts/newCalendar.jsp" flush="true" />
+
 
 <script language="JavaScript">
 
@@ -50,7 +56,7 @@
 		var index = element.substring(element.indexOf("[")+1,element.indexOf("[")+2);
 		//alert (index);
 		var check = document.getElementById("fixedcheck"+index);
-		if (selObj[0].options[selIndex].value == 'USD'){
+		if (selObj[0].options[selIndex].value == '${baseCurrencyGS}'){
 			 check.disabled =true;
 			 textboxobj.disabled =true;
 		}else {
@@ -654,11 +660,12 @@ var isAlreadySubmitted = false;
 											<td align="left"  bgcolor="#ffff00">
 												<b>
 													<digi:trn key="aim:fixedRate">Fixed Rate</digi:trn>
+													( <digi:trn>compared to</digi:trn> <gs:value name="<%=GlobalSettingsConstants.BASE_CURRENCY %>" /> )
 												</b>
 											</td>
 											<td colspan="5"  bgcolor="#ffff00">
 												<b>
-													<digi:trn key="aim:fixedExchangeRate">Exchange Rate</digi:trn>
+													<digi:trn key="aim:fixedExchangeRate">Exchange Rate</digi:trn> 
 												</b>
 											</td>
 										</tr>

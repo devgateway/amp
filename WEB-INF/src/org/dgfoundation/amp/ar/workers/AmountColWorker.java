@@ -14,6 +14,8 @@ import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.TotalAmountColumn;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * @author mihai
@@ -73,10 +75,19 @@ public class AmountColWorker extends ColumnWorker {
 		ac.setCurrencyCode(currency);
 		ac.setFromExchangeRate(Util.getExchange(currency, date));
 		
-		if(filter.getCurrency()!=null && !"USD".equals(filter.getCurrency().getCurrencyCode()))  
-			ac.setToExchangeRate(Util.getExchange(filter.getCurrency().getCurrencyCode(),date));
+		String baseCurrCode		= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+		if ( baseCurrCode == null ) 
+			baseCurrCode	= "USD";
+		if(filter.getCurrency()!=null ) {
+			/* If source and destination currency are the same we need to set exactly the same exchange rate for 'toExchangeRate' and 'fromExchangeRate.
+			 * That way, AmountCell.convert won't do any computation' */
+			if ( currency.equals(filter.getCurrency().getCurrencyCode())   ) 
+				ac.setToExchangeRate( ac.getFromExchangeRate() );
+			else if ( !baseCurrCode.equals(filter.getCurrency().getCurrencyCode()))  
+				ac.setToExchangeRate(Util.getExchange(filter.getCurrency().getCurrencyCode(),date));
+		}
 		else 
-			ac.setToExchangeRate(1);
+			logger.error("The filter.currency property should not be null !");
 		
 		return ac;
 	}

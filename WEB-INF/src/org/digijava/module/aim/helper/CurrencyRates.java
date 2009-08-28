@@ -10,6 +10,8 @@ public class CurrencyRates {
 	private Long id;
 	private String currencyCode;
 	private String currencyName;
+	private String fromCurrencyCode;
+	private String fromCurrencyName;
 	private String exchangeRateDate;
 	private Double exchangeRate;
 	
@@ -76,6 +78,36 @@ public class CurrencyRates {
 		this.id = id;
 	}
 	
+	
+	
+	/**
+	 * @return the fromCurrencyCode
+	 */
+	public String getFromCurrencyCode() {
+		return fromCurrencyCode;
+	}
+
+	/**
+	 * @param fromCurrencyCode the fromCurrencyCode to set
+	 */
+	public void setFromCurrencyCode(String fromCurrencyCode) {
+		this.fromCurrencyCode = fromCurrencyCode;
+	}
+
+	/**
+	 * @return the fromCurrencyName
+	 */
+	public String getFromCurrencyName() {
+		return fromCurrencyName;
+	}
+
+	/**
+	 * @param fromCurrencyName the fromCurrencyName to set
+	 */
+	public void setFromCurrencyName(String fromCurrencyName) {
+		this.fromCurrencyName = fromCurrencyName;
+	}
+
 	public String getformattedRate(){
 	    
 	    if (this.exchangeRate!=null){

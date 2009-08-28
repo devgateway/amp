@@ -196,7 +196,7 @@ function fnSubmit() {
 			<table cellPadding=5 cellSpacing=3 width="100%">
 				<tr>
 					<!-- Start Navigation -->
-					<td><span class=crumb>
+					<td colspan="2"><span class=crumb>
 						<digi:link href="/admin.do" styleClass="comment" title="Click here to goto Admin Home">
 						<digi:trn key="aim:AmpAdminHome">
 						Admin Home
@@ -208,15 +208,15 @@ function fnSubmit() {
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571><span class=subtitle-blue>
-						<digi:trn key="aim:exchangeRatesfor1USDollars">
-							Exchange Rates for 1 US Dollars(USD)
+					<td colspan="2" height=16 vAlign=center width=571><span class=subtitle-blue>
+						<digi:trn>
+							Exchange Rates
 						</digi:trn>
 						</span>
 					</td>
 				</tr>
 				<tr>
-					<td noWrap width=100% vAlign="top">
+					<td noWrap width="75%" vAlign="top">
 						<table width="100%" cellspacing="2" cellPadding="2" vAlign="top" align="left">
 							<tr><td>
 								<!-- Filters -->
@@ -353,6 +353,14 @@ function fnSubmit() {
 										onMouseOut="this.className='colHeaderLink'">
 											<b><digi:trn key="aim:currencyName">Currency Name</digi:trn></b>
 										</td>
+										<td align="center" width="40" onMouseOver="this.className='colHeaderOver'"
+										onMouseOut="this.className='colHeaderLink'">
+											<b><digi:trn> Source Currency Code</digi:trn></b>
+										</td>
+										<td align="center" width="200" onMouseOver="this.className='colHeaderOver'"
+										onMouseOut="this.className='colHeaderLink'">
+											<b><digi:trn>Source Currency Name</digi:trn></b>
+										</td>
 										<td align="center" width="80" onMouseOver="this.className='colHeaderOver'"
 										onMouseOut="this.className='colHeaderLink'">
 											<b><digi:trn key="aim:exchangeRateDate">Date</digi:trn></b>
@@ -385,10 +393,16 @@ function fnSubmit() {
 											</html:multibox>
 										</td>
 										<td align="left">
-                                          <digi:trn key='aim:currency:${fn:replace(cRates.currencyCode, " ", "_")}'>${cRates.currencyCode}</digi:trn>
+                                          <digi:trn>${cRates.currencyCode}</digi:trn>
 										</td>
 										<td align="left">
 											<c:out value="${cRates.currencyName}"/>
+										</td>
+										<td align="left">
+                                         	${cRates.fromCurrencyCode}
+										</td>
+										<td align="left">
+											<c:out value="${cRates.fromCurrencyName}"/>
 										</td>
 										<td align="center">
 											<a href="javascript:editExchangeRate('<c:out value="${cRates.exchangeRateDate}"/>','<c:out value="${cRates.currencyCode}"/>')">
@@ -510,6 +524,68 @@ function fnSubmit() {
 							--%>
 						</table>
 					</td>
+					
+					<td valign="top">
+									<table align=center cellPadding=0 cellSpacing=0 width="90%"
+												border=0>
+												<tr>
+													<td><!-- Other Links -->
+													<table cellPadding=0 cellSpacing=0 width=100>
+														<tr>
+															<td bgColor=#c9c9c7 class=box-title><digi:trn
+																key="aim:otherLinks">
+															Other links
+															</digi:trn></td>
+															<td background="module/aim/images/corner-r.gif" height="17"
+																width=17>&nbsp;</td>
+														</tr>
+													</table>
+													</td>
+												</tr>
+												<tr>
+													<td bgColor="#ffffff" class="box-border">
+													<table cellPadding=5 cellSpacing=1 width="100%">
+														<tr>
+															<td><digi:img src="module/aim/images/arrow-014E86.gif"
+																width="15" height="10" /> <c:set var="translation">
+																<digi:trn >Click here to go back to admin home page</digi:trn>
+															</c:set> <digi:link href="/admin.do"
+																title="${translation}">
+																<digi:trn>Admin Home</digi:trn>
+															</digi:link></td>
+														</tr>
+														<tr>
+															<td>
+																	<digi:img src="module/aim/images/arrow-014E86.gif"
+																		width="15" height="10" /> 
+																	<c:set var="translation">
+																		<digi:trn>Click here to go to the Currency Manager</digi:trn>
+																	</c:set> 
+																	<digi:link href="/currencyManager.do" title="${translation}">
+																			<digi:trn>Currency Manager</digi:trn>
+																	</digi:link>
+															</td>
+														</tr>
+														<tr>
+															<td>
+																	<digi:img src="module/aim/images/arrow-014E86.gif"
+																		width="15" height="10" /> 
+																	<c:set var="translation">
+																		<digi:trn>Click here to go to Select Filteres Currency Rates</digi:trn>
+																	</c:set> 
+																	<digi:link href="/selectFilteredRates.do" title="${translation}">
+																			<digi:trn>Select Filtered Rates</digi:trn>
+																	</digi:link>
+															</td>
+														</tr>
+		
+														<!-- end of other links -->
+													</table>
+													</td>
+												</tr>
+											</table>
+					</td>
+					
 				</tr>
 			</table>
 		</td>

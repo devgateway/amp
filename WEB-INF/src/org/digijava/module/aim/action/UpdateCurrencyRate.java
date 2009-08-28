@@ -29,6 +29,7 @@ import org.digijava.module.aim.form.CurrencyRateForm;
 import org.digijava.module.aim.helper.CurrencyRates;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.common.util.DateTimeUtil;
@@ -153,6 +154,10 @@ public class UpdateCurrencyRate extends Action {
                       }
 
                       cRate.setToCurrencyCode(crForm.getUpdateCRateCode());
+                      String baseCurrency				= FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY );
+                      if ( baseCurrency == null )
+                    	  baseCurrency			= "USD";
+                      cRate.setFromCurrencyCode(baseCurrency);
                       cRate.setDataSource(CurrencyUtil.RATE_BY_HAND);
                       if(cRate.getExchangeRate()!=null && cRate.getExchangeRateDate()!=null && crForm.getDoAction().equalsIgnoreCase("saveRate"))
                     	  CurrencyUtil.saveCurrencyRate(cRate);

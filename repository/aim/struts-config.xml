@@ -76,6 +76,7 @@
     <form-bean name="aimUserEmailForm" type="org.digijava.module.um.form.UserEmailForm" />
     <form-bean name="aimViewSectorForm" type="org.digijava.module.aim.form.AddSectorForm" />
     <form-bean name="aimCurrencyForm" type="org.digijava.module.aim.form.CurrencyForm" />
+    <form-bean name="aimSelectFilteredCurrencyRatesForm" type="org.digijava.module.aim.form.SelectFilteredCurrencyRatesForm" />
     <form-bean name="aimAddCurrencyForm" type="org.digijava.module.aim.form.AddCurrencyForm" />
     <form-bean name="aimSearchSectorForm" type="org.digijava.module.aim.form.SearchSectorForm" />
     <form-bean name="aimWorkspaceForm" type="org.digijava.module.aim.form.WorkspaceForm" />
@@ -590,6 +591,9 @@
 		<forward name="forward" path="/showLayout.do?layout=view/viewParisIndicatorPopupFilter" />
     </action>
     
+    <action name="aimSelectFilteredCurrencyRatesForm" path="/aim/selectFilteredRates" scope="request" type="org.digijava.module.aim.action.SelectFilteredCurrencyRates" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=selectFilteredRates" />
+    </action>
     <action name="aimCurrencyForm" path="/aim/changeCurrencyStatus" scope="session" type="org.digijava.module.aim.action.ChangeCurrencyStatus" validate="false">
       <forward name="forward" path="/currencyManager.do" redirect="true" />
     </action>

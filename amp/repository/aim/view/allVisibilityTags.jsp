@@ -376,7 +376,11 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Components Grand Total Expenditures" feature="Activity - Component Step"></field:display> 
 <field:display name="Components Physical Progress" feature="Activity - Component Step"></field:display> 
 <field:display name="Conditions for Fund Release" feature="Funding Information"></field:display> 
-<field:display name="Contact Name" feature="Reports Contact Information"></field:display> 
+<field:display name="Contact Name" feature="Reports Contact Information"></field:display>
+<field:display name="Donor Contact" feature="Reports Contact Information"></field:display>
+<field:display name="Ministry of Finance Contact" feature="Reports Contact Information"></field:display>
+<field:display name="Project Coordinator" feature="Reports Contact Information"></field:display>
+<field:display name="Sector Ministry Contact" feature="Reports Contact Information"></field:display> 
 <field:display name="Contract Completion" feature="Contracting"></field:display> 
 <field:display name="Contract Description" feature="Contracting"></field:display> 
 <field:display name="Contract Donor Disbursements" feature="Contracting"></field:display> 

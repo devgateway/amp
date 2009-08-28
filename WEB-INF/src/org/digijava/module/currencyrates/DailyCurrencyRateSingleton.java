@@ -26,15 +26,12 @@ public final class DailyCurrencyRateSingleton {
 	private CurrencyRatesRunner currencyRunner;
 
 	private WSCurrencyClient myWSCurrencyClient;
-	private String baseCurrency; 
+	//private String baseCurrency; 
 	private Date lastExcecution;
 	private int minutesTimeout=4;
 
 	private DailyCurrencyRateSingleton() {
 		myWSCurrencyClient = new WSCurrencyClientImp();
-		baseCurrency = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
-		if ( baseCurrency == null )
-			baseCurrency	= "USD";
 	}
 
 	public static synchronized DailyCurrencyRateSingleton getInstance() {
@@ -119,11 +116,10 @@ public final class DailyCurrencyRateSingleton {
 	}
 
 	public String getBaseCurrency() {
+		String baseCurrency = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+		if ( baseCurrency == null )
+			baseCurrency	= "USD";
 		return baseCurrency;
-	}
-
-	public void setBaseCurrency(String baseCurrency) {
-		this.baseCurrency = baseCurrency;
 	}
 
 	public void setMyWSCurrencyClient(WSCurrencyClient myWSCurrencyClient) {

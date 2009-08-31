@@ -569,10 +569,7 @@ public class AmpReportGenerator extends ReportGenerator {
 			Set<AmpReportMeasures> ccmeasures = new HashSet<AmpReportMeasures>();
 			for (Iterator iterator = reportMetadata.getMeasures().iterator(); iterator.hasNext();) {
 			AmpReportMeasures measure = (AmpReportMeasures) iterator.next();
-			if (measure.getMeasure().getMeasureName().equalsIgnoreCase(ArConstants.UNDISBURSED_BALANCE)
-					||measure.getMeasure().getMeasureName().equalsIgnoreCase(ArConstants.TOTAL_PERCENTAGE_OF_TOTAL_DISBURSEMENTS)
-					||measure.getMeasure().getMeasureName().equalsIgnoreCase(ArConstants.UNCOMMITTED_BALANCE)
-					||measure.getMeasure().getMeasureName().equalsIgnoreCase(ArConstants.EXECUTION_RATE)){
+			if (measure.getMeasure().getExpression() != null){
 				ccmeasures.add(measure);
 			}
 		}

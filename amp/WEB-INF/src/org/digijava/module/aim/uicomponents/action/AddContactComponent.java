@@ -49,6 +49,9 @@ public class AddContactComponent extends DispatchAction{
          createForm.setOrganisationName(null);
          createForm.setSelContactIds(null);
          createForm.setTitle(null);
+         createForm.setFunction(null);
+         createForm.setMobilephone(null);
+         createForm.setOfficeaddress(null);
          Object targetForm = session.getAttribute(AddContact.PARAM_PARAM_FORM_NAME);
          createForm.setTargetForm(targetForm);
          String collection = request.getParameter(AddContact.PARAM_COLLECTION_NAME);
@@ -148,6 +151,21 @@ public class AddContactComponent extends DispatchAction{
 			contact.setFax(createForm.getFax().trim());
 		}else{
 			contact.setFax(null);
+		}
+		if(createForm.getFunction()!=null){
+			contact.setFunction(createForm.getFunction().trim());
+		}else{
+			contact.setFunction(null);
+		}
+		if(createForm.getMobilephone()!=null){
+			contact.setMobilephone(createForm.getMobilephone().trim());
+		}else{
+			contact.setMobilephone(null);
+		}
+		if(createForm.getOfficeaddress()!=null){
+			contact.setOfficeaddress(createForm.getOfficeaddress().trim());
+		}else{
+			contact.setOfficeaddress(null);
 		}
                 ContactInfoUtil.saveOrUpdateContact(contact);
                 createForm.setSelContactIds(new Long[]{contact.getId()});

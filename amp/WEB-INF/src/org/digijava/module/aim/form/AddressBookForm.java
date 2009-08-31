@@ -22,6 +22,9 @@ public class AddressBookForm   extends ActionForm {
 	private String organisationName;
 	private String phone;
 	private String fax;	
+	private String function;	
+	private String mobilephone;	
+	private String officeaddress;	
 	//filter elements
 	private String keyword;
 	private Integer resultsPerPage;	
@@ -171,5 +174,23 @@ public class AddressBookForm   extends ActionForm {
 	}
 	public void setAlphaPages(String[] alphaPages) {
 		this.alphaPages = alphaPages;
+	}
+	public String getFunction() {
+		return function;
+	}
+	public void setFunction(String function) {
+		this.function = function;
+	}
+	public String getMobilephone() {
+		return mobilephone;
+	}
+	public void setMobilephone(String mobilephone) {
+		this.mobilephone = mobilephone;
+	}
+	public String getOfficeaddress() {
+		return officeaddress;
+	}
+	public void setOfficeaddress(String officeaddress) {
+		this.officeaddress = officeaddress;
 	}	
 }

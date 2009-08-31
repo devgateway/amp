@@ -18,6 +18,9 @@ public class AmpContact {
 	private String organisationName;
 	private String phone;
 	private String fax;
+	private String function;
+	private String mobilephone;
+	private String officeaddress;
 	private String temporaryId;
 	
 	/**
@@ -104,6 +107,24 @@ public class AmpContact {
 		this.temporaryId = temporaryId;
 	}
 	
+	public String getFunction() {
+		return function;
+	}
+	public void setFunction(String function) {
+		this.function = function;
+	}
+	public String getMobilephone() {
+		return mobilephone;
+	}
+	public void setMobilephone(String mobilephone) {
+		this.mobilephone = mobilephone;
+	}
+	public String getOfficeaddress() {
+		return officeaddress;
+	}
+	public void setOfficeaddress(String officeaddress) {
+		this.officeaddress = officeaddress;
+	}
 	//for export
 	public Contact createContact(){
 		ObjectFactory of= new ObjectFactory();
@@ -115,6 +136,9 @@ public class AmpContact {
 		cont.setOrganisationName(this.getOrganisationName());
 		cont.setPhone(this.getPhone());
 		cont.setFax(this.getFax());
+		cont.setFunction(this.getFunction());
+		cont.setMobilephone(this.getMobilephone());
+		cont.setOfficeaddress(this.getOfficeaddress());
 		return cont;
 	}	
 }

@@ -41,6 +41,14 @@
                         <td align="left"><html:text property="title"  styleId="contactTitle"/></td>
                     </tr>
                     <tr>
+						<td align="right"><strong><digi:trn>Function</digi:trn></strong></td>
+						<td align="left"><html:text property="function" styleId="contactFunction"/></td>
+					</tr>	
+                    <tr>
+						<td align="right"><strong><digi:trn>Office Address</digi:trn></strong></td>
+						<td align="left"><html:text property="officeaddress" styleId="contactOfficeaddress"/></td>
+					</tr>	
+                    <tr>
                         <td align="right"><strong><digi:trn>Organization</digi:trn></strong></td>
                         <td align="left"><html:text property="organisationName" styleId="contactOrgName"/></td>
                     </tr>
@@ -52,6 +60,10 @@
                         <td align="right"><strong><digi:trn>Fax</digi:trn></strong></td>
                         <td align="left"><html:text property="fax" styleId="contactFax" onkeyup="checkNumber('fax')"/></td>
                     </tr>
+                    <tr>
+						<td align="right"><strong><digi:trn>Mobile phone</digi:trn></strong></td>
+						<td align="left"><html:text property="mobilephone" styleId="contactMobilephone" onkeyup="checkNumber('mobilephone')"/></td>
+					</tr>	
                     <tr height="5px"><td colspan="2"/></tr>
                     <tr>
                         <td colspan="6" align="center"><html:button property="" styleClass="dr-menu" onclick="saveContact()">Save</html:button> </td>

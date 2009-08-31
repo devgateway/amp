@@ -165,6 +165,9 @@ public class ActivityContactInformationAction extends Action {
 		eaForm.getContactInformation().setOrganisationName(contact.getOrganisationName());
 		eaForm.getContactInformation().setPhone(contact.getPhone());
 		eaForm.getContactInformation().setFax(contact.getFax());
+		eaForm.getContactInformation().setFunction(contact.getFunction());
+		eaForm.getContactInformation().setMobilephone(contact.getMobilephone());
+		eaForm.getContactInformation().setOfficeaddress(contact.getOfficeaddress());
 		//get activity contact
 		AmpActivityContact actContact=getActivityContactFromList(tempId,eaForm.getContactInformation().getActivityContacts());
 		if(actContact.getPrimaryContact()!=null && actContact.getPrimaryContact()){
@@ -219,6 +222,21 @@ public class ActivityContactInformationAction extends Action {
 			contact.setFax(eaForm.getContactInformation().getFax().trim());
 		}else{
 			contact.setFax(null);
+		}	
+		if(eaForm.getContactInformation().getFunction()!=null){
+			contact.setFunction(eaForm.getContactInformation().getFunction().trim());
+		}else{
+			contact.setFunction(null);
+		}	
+		if(eaForm.getContactInformation().getMobilephone()!=null){
+			contact.setMobilephone(eaForm.getContactInformation().getMobilephone().trim());
+		}else{
+			contact.setMobilephone(null);
+		}	
+		if(eaForm.getContactInformation().getOfficeaddress()!=null){
+			contact.setOfficeaddress(eaForm.getContactInformation().getOfficeaddress().trim());
+		}else{
+			contact.setOfficeaddress(null);
 		}		
 		
 		if(tempId==null || tempId.equals("")){ // we are adding contact,not editing. So we should put it in the list of all contacts
@@ -278,5 +296,8 @@ public class ActivityContactInformationAction extends Action {
 		form.getContactInformation().setKeyword(null);
 		form.getContactInformation().setPrimaryContact("n");
 		form.getContactInformation().setContacts(null);		
+		form.getContactInformation().setFunction(null);		
+		form.getContactInformation().setMobilephone(null);
+		form.getContactInformation().setOfficeaddress(null);
 	}
 }

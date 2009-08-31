@@ -16,6 +16,9 @@ public class AddContactComponentForm extends ActionForm {
     private String organisationName;
     private String phone;
     private String fax;
+    private String function;
+    private String mobilephone;
+    private String officeaddress;
     private String keyword;
     private String action;
     private String targetCollection = "";
@@ -138,5 +141,30 @@ public class AddContactComponentForm extends ActionForm {
     public void setTitle(String title) {
         this.title = title;
     }
-    private String temporaryId; //contact's temporary id
+    
+    public String getFunction() {
+		return function;
+	}
+
+	public void setFunction(String function) {
+		this.function = function;
+	}
+
+	public String getMobilephone() {
+		return mobilephone;
+	}
+
+	public void setMobilephone(String mobilephone) {
+		this.mobilephone = mobilephone;
+	}
+
+	public String getOfficeaddress() {
+		return officeaddress;
+	}
+
+	public void setOfficeaddress(String officeaddress) {
+		this.officeaddress = officeaddress;
+	}
+
+	private String temporaryId; //contact's temporary id
 }

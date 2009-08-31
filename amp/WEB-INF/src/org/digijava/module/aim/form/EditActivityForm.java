@@ -2509,6 +2509,9 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private String organisationName;
 		private String phone;
 		private String fax;
+		private String function;
+		private String mobilephone;
+		private String officeaddress;
 		private String temporaryId; //contact's temporary id
 		
 		private String keyword;
@@ -2686,7 +2689,26 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		}
 		public void setResetSecMinIds(Boolean resetSecMinIds) {
 			this.resetSecMinIds = resetSecMinIds;
+		}
+		public String getFunction() {
+			return function;
+		}
+		public void setFunction(String function) {
+			this.function = function;
+		}
+		public String getMobilephone() {
+			return mobilephone;
+		}
+		public void setMobilephone(String mobilephone) {
+			this.mobilephone = mobilephone;
+		}
+		public String getOfficeaddress() {
+			return officeaddress;
+		}
+		public void setOfficeaddress(String officeaddress) {
+			this.officeaddress = officeaddress;
 		}		
+		
 	}
 
 	public class Comments {

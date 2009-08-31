@@ -38,6 +38,14 @@
 					<tr>
 						<td align="right"><strong><digi:trn>Title</digi:trn></strong> </td>
 						<td align="left"><html:text property="contactInformation.title"/></td>
+					</tr>	
+					<tr>
+						<td align="right"><strong><digi:trn>Function</digi:trn></strong></td>
+						<td align="left"><html:text property="contactInformation.function"/></td>
+					</tr>		
+					<tr>
+						<td align="right"><strong><digi:trn>Office Address</digi:trn></strong></td>
+						<td align="left"><html:text property="contactInformation.officeaddress"/></td>
 					</tr>
 					<tr>
 						<td align="right"><strong><digi:trn>Organization</digi:trn></strong></td>
@@ -46,7 +54,11 @@
 					<tr>
 						<td align="right"><strong><digi:trn>Phone Number</digi:trn></strong></td>
 						<td align="left"><html:text property="contactInformation.phone" styleId="phone" onkeyup="checkNumber('phone')"/></td>
-					</tr>
+					</tr>		
+					<tr>
+						<td align="right"><strong><digi:trn>Mobile phone</digi:trn></strong></td>
+						<td align="left"><html:text property="contactInformation.mobilephone" styleId="mobilephone" onkeyup="checkNumber('mobilephone')"/></td>
+					</tr>	
 					<tr>
 						<td align="right"><strong><digi:trn>Fax</digi:trn></strong></td>
 						<td align="left"><html:text property="contactInformation.fax" styleId="fax" onkeyup="checkNumber('fax')"/></td>

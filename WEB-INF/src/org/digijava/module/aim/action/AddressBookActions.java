@@ -137,6 +137,9 @@ public class AddressBookActions extends DispatchAction {
 				myForm.setOrganisationName(contact.getOrganisationName());
 				myForm.setPhone(contact.getPhone());
 				myForm.setFax(contact.getFax());
+				myForm.setFunction(contact.getFunction());
+				myForm.setMobilephone(contact.getMobilephone());
+				myForm.setOfficeaddress(contact.getOfficeaddress());
 			}
 		}
 		return mapping.findForward("addOrEditContact");
@@ -189,6 +192,9 @@ public class AddressBookActions extends DispatchAction {
 		contact.setName(myForm.getName().trim());
 		contact.setLastname(myForm.getLastname().trim());
 		contact.setEmail(myForm.getEmail().trim());
+		contact.setFunction(myForm.getFunction().trim());
+		contact.setMobilephone(myForm.getMobilephone().trim());
+		contact.setOfficeaddress(myForm.getOfficeaddress().trim());
 		if(myForm.getTitle()!=null){
 			contact.setTitle(myForm.getTitle().trim());
 		}
@@ -221,5 +227,8 @@ public class AddressBookActions extends DispatchAction {
 		form.setAlphaPages(null);
 		form.setCurrentAlpha(null);
 		form.setContactNames(null);
+		form.setFunction(null);
+		form.setMobilephone(null);
+		form.setOfficeaddress(null);
 	}
 }

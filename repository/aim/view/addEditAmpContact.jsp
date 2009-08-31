@@ -212,6 +212,9 @@ html>body #mainEmpty {
 		if(checkNumber('fax')==false){
 			return false;
 		}		
+		if(checkNumber('mobilephone')==false){
+			return false;
+		}		
 		return true;
 	}
 </script>
@@ -307,7 +310,7 @@ html>body #mainEmpty {
 																												<table border="0" bgColor="#f4f4f2" width="100%">
 																													<tr height="5"><td>&nbsp;</td></tr>
 																													<tr>
-																														<td rowspan="9" width="10%"/>
+																														<td rowspan="10" width="10%"/>
 																														<td align="right"><strong><digi:trn>First Name</digi:trn></strong><font color="red">*</font></td>
 																														<td align="left"><html:text property="name" styleId="name"/></td>
 																													</tr>
@@ -322,6 +325,14 @@ html>body #mainEmpty {
 																													<tr>
 																														<td align="right"><strong><digi:trn>Title</digi:trn></strong> </td>
 																														<td align="left"><html:text property="title"/></td>
+																													</tr>	
+																													<tr>
+																														<td align="right"><strong><digi:trn>Function</digi:trn></strong></td>
+																														<td align="left"><html:text property="function"/></td>
+																													</tr>	
+																													<tr>
+																														<td align="right"><strong><digi:trn>Office Address</digi:trn></strong></td>
+																														<td align="left"><html:text property="officeaddress"/></td>
 																													</tr>
 																													<tr>
 																														<td align="right"><strong><digi:trn>Organization</digi:trn></strong></td>
@@ -330,11 +341,15 @@ html>body #mainEmpty {
 																													<tr>
 																														<td align="right"><strong><digi:trn>Phone Number</digi:trn></strong></td>
 																														<td align="left"><html:text property="phone" styleId="phone" onkeyup="checkNumber('phone')"/></td>
-																													</tr>
+																													</tr>		
+																													<tr>
+																														<td align="right"><strong><digi:trn>Mobile phone</digi:trn></strong></td>
+																														<td align="left"><html:text property="mobilephone" styleId="mobilephone" onkeyup="checkNumber('mobilephone')"/></td>
+																													</tr>	
 																													<tr>
 																														<td align="right"><strong><digi:trn>Fax</digi:trn></strong></td>
 																														<td align="left"><html:text property="fax" styleId="fax" onkeyup="checkNumber('fax')"/></td>
-																													</tr>		
+																													</tr>
 																													<tr height="5px"><td colspan="2"/></tr>
 																													<tr>
 																														<td colspan="4" align="center"><html:button property="" styleClass="dr-menu" onclick="saveContact()">Save</html:button> </td>			

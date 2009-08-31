@@ -191,6 +191,9 @@
 		if(checkNumber('fax')==false){
 			return false;
 		}		
+		if(checkNumber('mobilephone')==false){
+			return false;
+		}		
 		return true;
 	}
 

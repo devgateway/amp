@@ -18,6 +18,9 @@
 	<property name="phone" column="phone" type="java.lang.String" />
 	<property name="fax" column="fax" type="java.lang.String" />
 	<property name="shared" column="is_shared" type="java.lang.Boolean" />
+	<property name="function" column="function" type="java.lang.String" />
+	<property name="mobilephone" column="mobilephone" type="java.lang.String" />
+	<property name="officeaddress" column="officeaddress" type="java.lang.String" />
 	
 	<many-to-one name="creator" column="creator_id"	class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none" />
 

@@ -152,9 +152,13 @@
                       "&lastname="+document.getElementById('contactLastname').value +
                       "&email="+document.getElementById('contactEmail').value+
                       "&title="+document.getElementById('contactTitle').value+
+                      "&function="+document.getElementById('contactFunction').value+
+                      "&officeaddress="+document.getElementById('contactOfficeaddress').value+
+                      "&title="+document.getElementById('contactTitle').value+
                       "&organisationName="+document.getElementById('contactOrgName').value+
                       "&phone="+document.getElementById('contactPhone').value+
-                      "&fax="+document.getElementById('contactFax').value;
+                      "&fax="+document.getElementById('contactFax').value+
+                      "&mobilephone="+document.getElementById('contactMobilephone').value;
                   return params;
               }
         function getSelectedContactsParams(){

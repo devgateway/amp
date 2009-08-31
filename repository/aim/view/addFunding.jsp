@@ -187,7 +187,7 @@ var isAlreadySubmitted = false;
 	}
 
 	function isTotDisbIsBiggerThanTotCom() {
-		var Warn="<digi:trn key="aim:addFunding:warn:disbSupCom">Sum of Disbursments is bigger than sum of commitments.</digi:trn>";
+		var Warn="<digi:trn key="aim:addFunding:warn:disbSupCom">The Sum of Actual Disbursement is greater than the Sum of actual commitments.</digi:trn>";
 		if(document.getElementById("totDisbIsBiggerThanTotCom").value == "true") {
 			alert(Warn)
 			return true;					

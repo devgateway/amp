@@ -1,0 +1,1 @@
+update amp_fields_visibility a set a.description=a.name;

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE locale PUBLIC "-//Digijava Project//DTD Locale Configuration 1.0//EN" "http://digi.sourceforge.net/dtds/LocaleData_1_0.dtd">
+<locale>
+  <months>
+    <month>იანვარი</month>
+    <month>თებერვალი</month>
+    <month>მარტი</month>
+    <month>აპრილი</month>
+    <month>მაისი</month>
+    <month>ივნისი</month>
+    <month>ივლისი</month>
+    <month>აგვისტო</month>
+    <month>სექტემბერი</month>
+    <month>ოქტომბერი</month>
+    <month>ნოემბერი</month>
+    <month>დეკემბერი</month>
+  </months>
+  <short-months>
+    <short-month>იან</short-month>
+    <short-month>თებ</short-month>
+    <short-month>მარ</short-month>
+    <short-month>აპრ</short-month>
+    <short-month>მაი</short-month>
+    <short-month>ივნ</short-month>
+    <short-month>ივლ</short-month>
+    <short-month>აგვი</short-month>
+    <short-month>სექტ</short-month>
+    <short-month>ოქტ</short-month>
+    <short-month>ნოე</short-month>
+    <short-month>დეკ</short-month>
+  </short-months>
+  <days>
+    <day>კვირა</day>
+    <day>ორშაბათი</day>
+    <day>სამშაბათი</day>
+    <day>ოთხშაბათი</day>
+    <day>ხუთშაბათი</day>
+    <day>პარასკევი</day>
+    <day>შაბათი</day>
+  </days>
+  <short-days>
+    <short-day>კვი</short-day>
+    <short-day>ორშ</short-day>
+    <short-day>სამშ</short-day>
+    <short-day>ოთხ</short-day>
+    <short-day>ხუთ</short-day>
+    <short-day>პარ</short-day>
+    <short-day>შაბ</short-day>
+  </short-days>
+  <eras>
+    <era>ძვ.წ.</era>
+    <era>ახ.წ.</era>
+  </eras>
+  <ampms>
+    <ampm>დილ</ampm>
+    <ampm>საღ</ampm>
+  </ampms>
+  <date-patterns default="2">
+    <date-pattern>EEEE, d MMMM, yyyy</date-pattern>
+    <date-pattern>d MMMM, yyyy</date-pattern>
+    <date-pattern>d MMM, yyyy</date-pattern>
+    <date-pattern>d/M/yy</date-pattern>
+  </date-patterns>
+  <time-patterns default="2">
+    <time-pattern>H:mm:ss z</time-pattern>
+    <time-pattern>H:mm:ss z</time-pattern>
+    <time-pattern>H:mm:ss </time-pattern>
+    <time-pattern>H:mm</time-pattern>
+  </time-patterns>
+  <date-time-pattern>{1} {0}</date-time-pattern>
+</locale>

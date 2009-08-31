@@ -300,6 +300,7 @@
 <field:display name="Beneficiary Agency Groups" feature="Beneficiary Agency"></field:display> 
 <field:display name="Beneficiary Agency Remove Button" feature="Beneficiary Agency"></field:display> 
 <field:display name="Beneficiary Agency" feature="Beneficiary Agency"></field:display> 
+<field:display name="Beneficiary Agency  Additional Info"  feature="Beneficiary Agency"></field:display>
 <field:display name="Cancel Button" feature="Admin - Component Type"></field:display> 
 <field:display name="Cancel Button" feature="Admin - Component"></field:display> 
 <field:display name="Cancel button" feature="Create Message Form"></field:display> 
@@ -351,6 +352,7 @@
 <field:display name="Contracting Agency Add Button" feature="Contracting Agency"></field:display> 
 <field:display name="Contracting Agency Remove Button" feature="Contracting Agency"></field:display> 
 <field:display name="Contracting Agency" feature="Contracting Agency"></field:display> 
+<field:display name="Contracting Agency Additional Info"  feature="Contracting Agency"></field:display>
 <field:display name="Contracting Cancel Saving" feature="Contracting"></field:display> 
 <field:display name="Contracting Central Amount" feature="Contracting"></field:display> 
 <field:display name="Contracting Contractor Name" feature="Contracting"></field:display> 
@@ -463,6 +465,7 @@
 <field:display name="Executing Agency Groups" feature="Executing Agency"></field:display> 
 <field:display name="Executing Agency Remove Button" feature="Executing Agency"></field:display> 
 <field:display name="Executing Agency" feature="Executing Agency"></field:display> 
+<field:display name="Executing Agency Additional Info"  feature="Executing Agency"></field:display>
 <field:display name="External Financing" feature="Admin NPD"></field:display> 
 <field:display name="FY" feature="Budget"></field:display> 
 <field:display name="Final Date for Contracting" feature="Planning"></field:display> 
@@ -472,7 +475,8 @@
 <field:display name="Funding Organization Id" feature="Funding Information"></field:display> 
 <field:display name="Funding Organization Name" feature="Funding Information"></field:display> 
 <field:display name="Funding Organization" feature="Funding Information"></field:display> 
-<field:display name="Funding Organizations Tab" feature="Funding Information"></field:display> 
+<field:display name="Funding Organizations Tab" feature="Funding Information"></field:display>
+<field:display name="Funding Status" feature="Funding Information"></field:display>  
 <field:display name="Government Agreement Number" feature="Identification"></field:display> 
 <field:display name="Government Approval Procedures" feature="Budget"></field:display> 
 <field:display name="Government Email" feature="Government Contact Information"></field:display> 
@@ -492,6 +496,7 @@
 <field:display name="Implementing Agency Groups" feature="Implementing Agency"></field:display> 
 <field:display name="Implementing Agency Remove Button" feature="Implementing Agency"></field:display> 
 <field:display name="Implementing Agency" feature="Implementing Agency"></field:display> 
+<field:display name="Implementing Agency Additional Info"  feature="Implementing Agency"></field:display>
 <field:display name="Inbox Alert" feature="Alert tab"></field:display> 
 <field:display name="Inbox Message" feature="Message tab"></field:display> 
 <field:display name="Indicator Base Value" feature="Activity"></field:display> 
@@ -590,6 +595,7 @@
 <field:display name="Regional Group Add Button" feature="Regional Group"></field:display> 
 <field:display name="Regional Group Remove Button" feature="Regional Group"></field:display> 
 <field:display name="Regional Group" feature="Regional Group"></field:display> 
+<field:display name="Regional Group Additional Info"  feature="Regional Group"></field:display>
 <field:display name="Regional Percentage" feature="Location"></field:display> 
 <field:display name="Related Activity Dropdown" feature="Create Message Form"></field:display> 
 <field:display name="Remove Actors Button" feature="Issues"></field:display> 
@@ -609,6 +615,7 @@
 <field:display name="Responsible Organization Add Button" feature="Responsible Organization"></field:display> 
 <field:display name="Responsible Organization Groups" feature="Responsible Organization"></field:display> 
 <field:display name="Responsible Organization Organizations Button" feature="Responsible Organization"></field:display> 
+<field:display name="Responsible Organization Additional Info"  feature="Responsible Organization"></field:display>
 <field:display name="Results" feature="Identification"></field:display> 
 <field:display name="Revised Target Value" feature="Activity"></field:display> 
 <field:display name="Risk" feature="Activity"></field:display> 
@@ -624,6 +631,7 @@
 <field:display name="Sector Group Add Button" feature="Sector Group"></field:display> 
 <field:display name="Sector Group Remove Button" feature="Sector Group"></field:display> 
 <field:display name="Sector Group" feature="Sector Group"></field:display> 
+<field:display name="Sector Group Additional Info"  feature="Sector Group"></field:display>
 <field:display name="Sector Ministry Contact Email" feature="Sector Ministry Contact Information"></field:display> 
 <field:display name="Sector Ministry Contact Fax Number" feature="Sector Ministry Contact Information"></field:display> 
 <field:display name="Sector Ministry Contact First Name" feature="Sector Ministry Contact Information"></field:display> 

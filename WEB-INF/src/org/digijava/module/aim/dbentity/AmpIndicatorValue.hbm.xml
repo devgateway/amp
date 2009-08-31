@@ -32,6 +32,8 @@
                 <many-to-one name="source" column="source"
 			class="org.digijava.module.aim.dbentity.AmpIndicatorSource" cascade="none" />
 
+                <many-to-one name="indicatorSource" column="indicator_source"
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 
 
 	</class>

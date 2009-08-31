@@ -23,6 +23,8 @@ import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.IndicatorValuesComparator;
 import org.digijava.module.aim.util.IndicatorUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class AddEditData
     extends Action {
@@ -55,6 +57,9 @@ public class AddEditData
 					bean.setValueType(value.getValueType());
 					bean.setIndicatorValueId(value.getIndValId());
 					bean.setLocation(value.getLocation());
+                                        if(value.getIndicatorSource()!=null){
+                                            bean.setSourceId(value.getIndicatorSource().getId());
+                                        }
 					indValuesList.add(bean);
 				}
             	
@@ -73,6 +78,7 @@ public class AddEditData
             themeForm.setCreationDate(null);
             themeForm.setValAmount(null);
             themeForm.setValueType(null);
+            themeForm.setSourceId(null);
         }
         String event = request.getParameter("event");
         String action=request.getParameter("action");
@@ -91,7 +97,9 @@ public class AddEditData
                 item.setCreationDate(themeForm.getCreationDate()[iter.nextIndex() - 1]);
                 item.setValAmount(themeForm.getValAmount()[iter.nextIndex() - 1].doubleValue());
                 item.setValueType(themeForm.getValueType()[iter.nextIndex() - 1]);
-               
+                if(themeForm.getSourceId()!=null){
+                     item.setSourceId(themeForm.getSourceId()[iter.nextIndex() - 1]);
+                }
             }
         }
 
@@ -146,6 +154,11 @@ public class AddEditData
 						value.setValueDate(DateConversion.getDateForIndicator(prgValue.getCreationDate()));
 						value.setValueType(prgValue.getValueType());
 						value.setLocation(prgValue.getLocation());
+                                                Long sourceId = prgValue.getSourceId();
+                                                if(sourceId!=null&&sourceId!=0){
+                                                    AmpCategoryValue source=CategoryManagerUtil.getAmpCategoryValueFromDb(sourceId);
+                                                    value.setIndicatorSource(source);
+                                                }
 						value.setIndicatorConnection(connection);
 						connection.getValues().add(value);
 					}					

@@ -77,6 +77,10 @@ public class CategoryConstants {
 	public static final String ORGANIZATION_STAFF_INFO_NAME="Staff Information Type";
 	public static final String ORGANIZATION_STAFF_INFO_KEY="staff_information_type";
 
+        //indicator source
+	public static final String INDICATOR_SOURCE_NAME="Indicator Source";
+	public static final String INDICATOR_SOURCE_KEY="indicator_source";
+
 	public static final long NONE_TYPE		= 0;
 	public static final long COUNTRY_TYPE	= 1;
 	public static final long REGION_TYPE	= 2;

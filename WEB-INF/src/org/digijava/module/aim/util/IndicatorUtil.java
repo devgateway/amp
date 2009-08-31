@@ -1,7 +1,6 @@
 package org.digijava.module.aim.util;
 		
 import java.text.Collator;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -1519,7 +1518,7 @@ public class IndicatorUtil {
         return id;
     }
 
-	 
+
 	 /**
 	     * This class is used for sorting IndicatorSector onjects by name
 	     * @author Dare Roinishvili

@@ -192,6 +192,9 @@ public class AddThemeIndicator extends Action {
 					bean.setValueType(value.getValueType());
 					bean.setIndicatorValueId(value.getIndValId());
 					bean.setLocation(value.getLocation());
+                                        if (value.getIndicatorSource() != null) {
+                                            bean.setSourceId(value.getIndicatorSource().getId());
+                                        }
 					indValuesList.add(bean);
 				}			
 			}			

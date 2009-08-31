@@ -126,9 +126,16 @@ public class ThemeForm extends ActionForm {
       	
       	private String activitiesUsingTheme	= null;
       	private String settingsUsedByTheme	= null;
-      	
-      	
-				
+        private Long sourceId[];
+
+        public Long[] getSourceId() {
+            return sourceId;
+        }
+
+        public void setSourceId(Long[] sourceId) {
+            this.sourceId = sourceId;
+        }
+
 		public String getFill() {
 			return fill;
 		}

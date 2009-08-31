@@ -364,7 +364,8 @@ public class AddAmpActivity extends Action {
       if (eaForm.getIsPreview()==1 || !eaForm.isEditAct() || logframepr.compareTo("true") == 0 || request.getParameter("logframe") != null) {
        if (teamMember != null)
         if ("true".compareTo((String) session.getAttribute("teamLeadFlag"))==0){
-      	  	AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+        	synchronized (ampContext){
+        	AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
       	  	AmpModulesVisibility moduleToTest=ampTreeVisibility.getModuleByNameFromRoot("Activity Approval Process");
       	  if(moduleToTest!=null){
         	  	activityApprovalStatusProcess= moduleToTest.isVisibleTemplateObj(ampTreeVisibility.getRoot());
@@ -374,6 +375,7 @@ public class AddAmpActivity extends Action {
       	  }else{
             eaForm.getIdentification().setApprovalStatus(org.digijava.module.aim.helper.Constants.APPROVED_STATUS);
       	  }
+        }
         }
           else
             {

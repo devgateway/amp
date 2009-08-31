@@ -113,7 +113,7 @@
                     -->
 </script>
 
-<digi:form action="/selectCreateIndicators.do">
+<digi:form action="/selectCreateIndicators.do" type="aimIndicatorForm" name="aimIndicatorFormIndicator">
     <digi:errors/>
     <html:hidden property="activityId" />
     <html:hidden property="addswitch" />

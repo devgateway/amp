@@ -5,6 +5,8 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/category" prefix="category" %>
+<%@ page import="org.digijava.module.categorymanager.util.CategoryConstants" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/calendar.js"/>"></script>
@@ -107,9 +109,9 @@ function validation(){
 <digi:form action="/addEditData.do" method="post" type="aimThemeForm" name="aimThemeFormDataPopin">
 <digi:context name="digiContext" property="context"/>
 <input type="hidden" name="event">
-<table  width=572 cellPadding=4 cellSpacing=1 valign=top align=left bgcolor="#ffffff" border="0">
+<table  width=692 cellPadding=4 cellSpacing=1 valign=top align=left bgcolor="#ffffff" border="0">
   <tr>
-    <td bgColor=#d7eafd class=box-title height="10" align="center" colspan="7">
+    <td bgColor=#d7eafd class=box-title height="10" align="center" colspan="9">
     <digi:trn key="aim:addIndicator:add">Add/Edit data</digi:trn>: ${aimThemeForm.indicatorName}
     </td>
   </tr>
@@ -123,8 +125,11 @@ function validation(){
     <td align="center" valign="middle" width="120">
       <b><font color="white"><digi:trn key="aim:addData:creationdate">Date</digi:trn></font></b>
     </td>
-    <td align="center" valign="middle" width="120" colspan="3">
+    <td align="center" valign="middle" width="120" colspan="2">
       <b><font color="white"><digi:trn key="aim:addeditdata:addlocation">Add Location</digi:trn></font></b>
+    </td>
+    <td align="center" valign="middle" width="120" colspan="2">
+      <b><font color="white"><digi:trn>Add Source</digi:trn></font></b>
     </td>
   </tr>
   <c:if test="${!empty aimThemeForm.prgIndValues}">
@@ -165,7 +170,13 @@ function validation(){
               <!-- <img src="../ampTemplate/images/closed.gif" border="0" alt="Select location" /> -->
             </a>]
           </td>
-
+           <td bgColor=#d7eafd nowrap="nowrap">
+      
+               <c:set var="translation">
+                   <digi:trn key="aim:addActivityStatusFirstLine">Please select source from below</digi:trn>
+               </c:set>
+             <category:showoptions  name="ind" firstLine="${translation}" property="sourceId" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.INDICATOR_SOURCE_KEY%>" styleClass="inp-text" />
+          </td>
           <td bgColor=#d7eafd>
             <a href="javascript:deleteData('${index.count-1}')">
               <img src="../ampTemplate/images/trash_16.gif" border="0" alt="Delete indicator value" />

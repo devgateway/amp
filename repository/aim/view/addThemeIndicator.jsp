@@ -9,6 +9,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<%@ taglib uri="/taglib/category" prefix="category" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/calendar.js"/>"></script>
@@ -396,8 +397,11 @@ function unload(){}
 													     <td align="center" valign="middle" width="120">
 													       <b><font color="white"><digi:trn key="aim:addtheme:creationdate">Creation Date</digi:trn></font></b>
 													     </td>
-													     <td align="center" valign="middle" width="120" colspan="3">
+													     <td align="center" valign="middle" width="120">
 													       <b><font color="white"><digi:trn key="aim:addtheme:location">Location</digi:trn></font></b>
+													     </td>
+                                                                                                              <td align="center" valign="middle" width="120">
+													       <b><font color="white"><digi:trn key="aim:addtheme:location">Source</digi:trn></font></b>
 													     </td>
 													</tr>
 														<logic:notEmpty name="prgIndicatorItr" property="programIndicatorValues">
@@ -431,7 +435,11 @@ function unload(){}
 															                	[${loc.woreda}]
 															                </c:if> 
 																		</c:if>
+                                                                                                                                                &nbsp;
 																	</td>
+                                                                                                                                        <td bgcolor="#f4f4f2" align="center">
+                                                                                                                                                <category:getoptionvalue  categoryValueId="${prgIndicatorValues.sourceId}" categoryKey="<%= org.digijava.module.categorymanager.util.CategoryConstants.INDICATOR_SOURCE_KEY%>"  />
+                                                                                                                                        </td>
 																</tr>
 															</logic:iterate>
 														</logic:notEmpty>

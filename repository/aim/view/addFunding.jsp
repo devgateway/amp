@@ -73,6 +73,7 @@ var isAlreadySubmitted = false;
 		var errmsg1="<digi:trn key="aim:addFunding:errmsg:assitanceType">Type Of Assistance not selected</digi:trn>";
 		var errmsg2="\n<digi:trn key="aim:addFunding:errmsg:fundOrgId">Funding Id not entered</digi:trn>";
 		var errmsg3="\n<digi:trn key="aim:addFunding:errmsg:financeInstrument">Financing Instrument not selected</digi:trn>";
+		var errmsg4="\n<digi:trn>Funding status not selected</digi:trn>";
         var msgEnterAmount="\n<digi:trn key="aim:addFunding:errmsg:enterAmount">Please enter the amount for the transaction</digi:trn>";
 		var msgInvalidAmount="\n<digi:trn key="aim:addFunding:errmsg:invalidAmount">Invalid amount entered for the transaction</digi:trn>";
 <gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
@@ -85,7 +86,7 @@ var isAlreadySubmitted = false;
 		var msgEnterDate="\n<digi:trn key="aim:addFunding:errmsg:enterDate">Please enter the transaction date for the transaction</digi:trn>";
 		//var msgEnterDate="qsfgqsg";
 
-		var flag = validateFundingTrn(errmsg1,errmsg2,errmsg3,msgEnterAmount,msgInvalidAmount,msgEnterDate,"<%=FormatHelper.getDecimalSymbol()%>","<%=FormatHelper.getGroupSymbol()%>",msgConfirmFunding);
+		var flag = validateFundingTrn(errmsg1,errmsg2,errmsg3,errmsg4,msgEnterAmount,msgInvalidAmount,msgEnterDate,"<%=FormatHelper.getDecimalSymbol()%>","<%=FormatHelper.getGroupSymbol()%>",msgConfirmFunding);
 		
 		if (flag == false) return false;
 		<digi:context name="fundAdded" property="context/module/moduleinstance/fundingAdded.do?edit=true" />;
@@ -361,6 +362,26 @@ var isAlreadySubmitted = false;
 								</td>
 							</tr>
 
+							<field:display name="Funding Status" feature="Funding Information">
+							<tr>
+								<td align="right" bgcolor="#ECF3FD">
+			                	<FONT color=red>*</FONT><b>
+									<a title="<digi:trn>The status of the funding</digi:trn>">
+									<digi:trn>Funding Status</digi:trn></a>
+									</b>
+								</td>
+								<td align="left" bgcolor="#ECF3FD">
+									<c:set var="translation">
+										<digi:trn>Please select from below</digi:trn>
+									</c:set>
+									
+										<category:showoptions firstLine="${translation}" name="aimEditActivityForm"   property="funding.fundingStatus"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.FUNDING_STATUS_KEY %>" styleClass="inp-text"/>
+									
+								</td>
+							</tr>
+							</field:display>
+							<tr>
+							
 						</table>
 					</td>
 				</tr>

@@ -1877,8 +1877,11 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private Collection<AmpCurrency> validcurrencies;
 		private boolean dupFunding;
 		private String orgName;
-		private Long assistanceType = null;
-		private Long modality = null;
+		
+		private Long assistanceType = null;  // this is id of a category value from category Type Of Assistance
+		private Long modality = null; // this is id of a category value from category Financing Instrument
+		private Long fundingStatus = null; // this is id of a category value from category Funding Status
+		
 		private List<MTEFProjection> fundingMTEFProjections;
 		private List<KeyValue> availableMTEFProjectionYears;
 		private Collection projections;
@@ -2225,6 +2228,20 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 		public void setModality(Long modality) {
 			this.modality = modality;
+		}
+
+		/**
+		 * @return the fundingStatus
+		 */
+		public Long getFundingStatus() {
+			return fundingStatus;
+		}
+
+		/**
+		 * @param fundingStatus the fundingStatus to set
+		 */
+		public void setFundingStatus(Long fundingStatus) {
+			this.fundingStatus = fundingStatus;
 		}
 
 		public List<MTEFProjection> getFundingMTEFProjections() {

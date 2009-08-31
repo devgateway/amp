@@ -1721,6 +1721,39 @@ function commentWin(val) {
 														</feature:display>
 													</module:display>
 
+													<module:display name="Funding"
+														parentModule="PROJECT MANAGEMENT">
+														<feature:display name="Funding Information"
+															module="Funding">
+															<field:display name="Funding Status" feature="Funding Information">
+																<TR>
+																	<TD>
+																	<TABLE width="100%" cellPadding=2 cellSpacing=1
+																		vAlign="top" align="left" bgcolor="#aaaaaa">
+																		<TR>
+																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
+																				height=10
+																				src="../ampTemplate/images/arrow-014E86.gif"
+																				width=15> <b><digi:trn>
+																				Funding Status</digi:trn></b></TD>
+																		</TR>
+																		<c:if test="${!empty aimChannelOverviewForm.fundingStatuses}">
+
+																			<c:forEach var="fundingStatus"
+																				items="${aimChannelOverviewForm.fundingStatuses}">
+																				<TR>
+																					<TD bgcolor="#ffffff">
+																						<category:getoptionvalue categoryValueId="${fundingStatus.id}"/>
+																					</TD>
+																				</TR>
+																			</c:forEach>
+																		</c:if>
+																	</TABLE>
+																	</TD>
+																</TR>
+															</field:display>
+														</feature:display>
+													</module:display>
 
 													<TR>
 														<TD>

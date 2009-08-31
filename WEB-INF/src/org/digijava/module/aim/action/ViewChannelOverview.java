@@ -318,6 +318,8 @@ public class ViewChannelOverview extends TilesAction {
                 		formBean=setSectorsToForm(formBean, activity);
                 		formBean=setTypesOfAssistanceToForm(formBean, activity);
                 		formBean=setUniqueModalitiesToForm(formBean, activity);
+                		setFundingStatusesToForm(formBean, activity);
+                		
                                 AmpCategoryValue impLocation=CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.IMPLEMENTATION_LOCATION_KEY,activity.getCategories());
                                 if(impLocation!=null){
                                     formBean.setImpLocation(impLocation.getId());
@@ -447,6 +449,21 @@ public class ViewChannelOverview extends TilesAction {
 		
 		return formBean;
 	}
+	
+	private ChannelOverviewForm setFundingStatusesToForm(
+			ChannelOverviewForm formBean, AmpActivity activity) {
+		Set<AmpFunding> fundings = activity.getFunding();
+		Iterator<AmpFunding> fundingsIterator = fundings.iterator();
+		ArrayList<AmpCategoryValue> fundingStatuses = new ArrayList<AmpCategoryValue>();
+		while(fundingsIterator.hasNext()){
+			AmpFunding ampFunding = fundingsIterator.next();
+			if(!fundingStatuses.contains(ampFunding.getFundingStatus()))
+				fundingStatuses.add(ampFunding.getFundingStatus());
+		}
+		formBean.setFundingStatuses(fundingStatuses);
+		return formBean;
+	}
+
 
 	private ChannelOverviewForm setTypesOfAssistanceToForm(
 			ChannelOverviewForm formBean, AmpActivity activity) {

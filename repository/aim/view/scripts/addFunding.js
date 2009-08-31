@@ -161,7 +161,7 @@ function validateFunding() {
 
 
 
-function validateFundingTrn(errmsg1,errmsg2,errmsg3,msgEnterAmount,msgInvalidAmount,msgEnterDate, decimalSymbol,groupSymbol,msgConfirmFunding) {
+function validateFundingTrn(errmsg1,errmsg2,errmsg3, errmsg4,msgEnterAmount,msgInvalidAmount,msgEnterDate, decimalSymbol,groupSymbol,msgConfirmFunding) {
 	
 	this.decimalSymbol=decimalSymbol;
 	
@@ -173,6 +173,14 @@ function validateFundingTrn(errmsg1,errmsg2,errmsg3,msgEnterAmount,msgInvalidAmo
 	var assistType = trim(document.getElementsByName("funding.assistanceType")[0].value);
 
 	var mod=trim(document.getElementsByName("funding.modality")[0].value);
+	
+	var fundStatus		= -1;
+	
+	var fundStatusTemp	= document.getElementsByName("funding.fundingStatus");
+	
+	if ( fundStatusTemp != null && fundStatusTemp.length != null && fundStatusTemp.length > 0 ) {
+		fundStatus	= fundStatusTemp[0].value;
+	}
 
 	var errmsg='';
 
@@ -193,6 +201,9 @@ function validateFundingTrn(errmsg1,errmsg2,errmsg3,msgEnterAmount,msgInvalidAmo
 		errmsg+=errmsg3;
 
 	}
+	
+	if (fundStatus == 0) 
+		errmsg+=errmsg4;
 
 	if (errmsg!=''){
 

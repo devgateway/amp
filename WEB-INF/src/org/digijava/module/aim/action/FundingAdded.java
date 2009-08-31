@@ -112,14 +112,15 @@ public class FundingAdded extends Action {
 				newFund.setFundingId(System.currentTimeMillis());
 			}
 			//newFund.setAmpTermsAssist(DbUtil.getAssistanceType(eaForm.getAssistanceType()));
-			newFund.setTypeOfAssistance( CategoryManagerUtil.getAmpCategoryValueFromDb(currentFunding.getAssistanceType()) );
-			newFund.setOrgFundingId(currentFunding.getOrgFundingId());
-			newFund.setFinancingInstrument(CategoryManagerUtil.getAmpCategoryValueFromDb(currentFunding.getModality()));
-			newFund.setConditions(currentFunding.getFundingConditions());
+			//newFund.setTypeOfAssistance( CategoryManagerUtil.getAmpCategoryValueFromDb(currentFunding.getAssistanceType()) );
+			//newFund.setOrgFundingId(currentFunding.getOrgFundingId());
+			//newFund.setFinancingInstrument(CategoryManagerUtil.getAmpCategoryValueFromDb(currentFunding.getModality()));
+			//newFund.setConditions(currentFunding.getFundingConditions());
 			newFund.setDonorObjective(currentFunding.getDonorObjective());
 			newFund.setTypeOfAssistance( CategoryManagerUtil.getAmpCategoryValueFromDb(currentFunding.getAssistanceType()) );
+			newFund.setFinancingInstrument( CategoryManagerUtil.getAmpCategoryValueFromDb(currentFunding.getModality()) );
+			newFund.setFundingStatus( CategoryManagerUtil.getAmpCategoryValueFromDb(currentFunding.getFundingStatus()) );
 			newFund.setOrgFundingId(currentFunding.getOrgFundingId());
-			newFund.setFinancingInstrument(CategoryManagerUtil.getAmpCategoryValueFromDb(currentFunding.getModality()));
 			newFund.setConditions(currentFunding.getFundingConditions());
 			//
 			Collection mtefProjections=new ArrayList();

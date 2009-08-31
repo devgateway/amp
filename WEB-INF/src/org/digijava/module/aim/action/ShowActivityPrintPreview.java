@@ -585,11 +585,13 @@ public class ShowActivityPrintPreview
                         Funding fund = new Funding();
                         //fund.setAmpTermsAssist(ampFunding.getAmpTermsAssistId());
                         fund.setTypeOfAssistance( ampFunding.getTypeOfAssistance() );
+                        fund.setFinancingInstrument(ampFunding.getFinancingInstrument());
+                        fund.setFundingStatus( ampFunding.getFundingStatus() );
+                        
                         fund.setFundingId(ampFunding.getAmpFundingId().
                                           longValue());
                         fund.setOrgFundingId(ampFunding.getFinancingId());
                         //fund.setModality(ampFunding.getModalityId());
-                        fund.setFinancingInstrument(ampFunding.getFinancingInstrument());
                         fund.setConditions(ampFunding.getConditions());
                         Collection<AmpFundingDetail> fundDetails = ampFunding.getFundingDetails();
                        

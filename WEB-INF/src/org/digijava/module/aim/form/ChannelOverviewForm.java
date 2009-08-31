@@ -161,6 +161,8 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	private boolean add;  // added by Priyajith
 	private ArrayList<AmpCategoryValue> typesOfAssistance;
 	private ArrayList<AmpCategoryValue> modalities;
+	private ArrayList<AmpCategoryValue> fundingStatuses;
+	
 
 	private Collection relOrgs;
 
@@ -691,6 +693,14 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 		 */
 		public void setCountryIndex(Integer countryIndex) {
 			this.countryIndex = countryIndex;
+		}
+
+		public ArrayList<AmpCategoryValue> getFundingStatuses() {
+			return fundingStatuses;
+		}
+
+		public void setFundingStatuses(ArrayList<AmpCategoryValue> fundingStatuses) {
+			this.fundingStatuses = fundingStatuses;
 		}
 	  
 

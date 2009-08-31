@@ -972,7 +972,6 @@ public class SaveActivity extends Action {
 						 * .getDate(fund.getSignatureDate()));
 						 */
 						//ampFunding.setModalityId(fund.getModality());
-						ampFunding.setFinancingInstrument(fund.getFinancingInstrument());
 						if (fund.getConditions() != null
 								&& fund.getConditions().trim().length() != 0) {
 							ampFunding.setConditions(fund.getConditions());
@@ -981,7 +980,11 @@ public class SaveActivity extends Action {
 						}
 						ampFunding.setComments(new String(" "));
 						/*ampFunding.setAmpTermsAssistId(fund.getAmpTermsAssist());*/
+						
+						ampFunding.setFinancingInstrument( fund.getFinancingInstrument() );
 						ampFunding.setTypeOfAssistance( fund.getTypeOfAssistance() );
+						ampFunding.setFundingStatus( fund.getFundingStatus() );
+						
 						ampFunding.setAmpActivityId(activity);
 
 						// add funding details for each funding

@@ -853,7 +853,7 @@
                                                                                   </logic:notEmpty>                                                                                </td>
                                                                               </tr>
 																			</field:display>
-																			<field:display name="Type Of Assistance" feature="Funding Information">
+																			<field:display name="Financing Instrument" feature="Funding Information">
                                                                               <tr>
                                                                                 <td align="left" width="339">
                                                                                   <a title="<digi:trn key="aim:financialInst">Financial Instrument</digi:trn>">
@@ -890,6 +890,23 @@
 										                                        	                                                                               </td>
                                                                               </tr>
                                                                               
+																			</field:display>
+																			  <field:display name="Funding Status" feature="Funding Information">
+                                                                              <tr>
+                                                                                <td align="left" width="339">
+                                                                                  <a>
+                                                                                  	<digi:trn >Funding Status </digi:trn>
+																				  </a>                                                                                
+																				 </td>
+                                                                                <td width="10">:</td>
+                                                                                <td align="left">
+                                                                                  <logic:notEmpty name="funding" property="fundingStatus">
+                                                                                    <digi:trn>
+                                                                                    	<bean:write name="funding" property="fundingStatus.value"/>
+                                                                                    </digi:trn>
+                                                                                  </logic:notEmpty>                                                                                
+                                                                                  </td>
+                                                                              </tr>
 																			</field:display>
 				                                                            </table>
                                                                            </td>

@@ -43,6 +43,11 @@ public class AddUser extends Action {
 			javax.servlet.http.HttpServletRequest request,
 			javax.servlet.http.HttpServletResponse response) throws java.lang.Exception {
 
+		HttpSession session = request.getSession();
+		if (!RequestUtils.isAdmin(response, session, request)) {
+			return null;
+		}
+		
 		AddUserForm registerForm = (AddUserForm) form;
 
 		try {

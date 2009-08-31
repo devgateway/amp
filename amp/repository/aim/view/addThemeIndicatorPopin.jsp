@@ -592,7 +592,8 @@ function getParamsData(){
 		for(var i=0; i<elem; i++){
 			ret +="&valueType="+document.getElementsByName('valueType')[i].value+
 				"&valAmount="+(document.getElementsByName('valAmount')[i].value==""?0:document.getElementsByName('valAmount')[i].value)+
-				"&creationDate="+document.getElementsByName('creationDate')[i].value;
+				"&creationDate="+document.getElementsByName('creationDate')[i].value
+                          +"&sourceId="+document.getElementsByName('sourceId')[i].value;
 		} 
 	}
 	return ret;	

@@ -185,6 +185,41 @@ function saveAllSettings(){
 function setIndex(index){
 		document.aimGlobalSettingsForm[document.aimGlobalSettingsForm.length -1].indexTab.value=index;
 	}
+
+var seconds, minutes, hour, ampm
+function InitClock(){
+	<% Date date = new java.util.Date();%> 
+    hour = <%=date.getHours()>12?date.getHours()-12:date.getHours()%>
+    minutes = <%=date.getMinutes()%>
+    seconds = <%=date.getSeconds()%>
+    ampm = '<%=date.getHours()>12?"PM":"AM"%>'
+    
+}
+function runClock(){
+	seconds++
+	if ( seconds > 59 ) {
+		seconds = 0
+		minutes++
+		if ( minutes > 59 ) {
+			minutes = 0	
+			hour++
+			if ( hour > 12 ) {
+				hour = 1	
+			}
+		}
+	}
+	var clockValue = ""
+		clockValue += (hour < 10)? "0" + hour : hour
+		clockValue += (minutes < 10) ? ":0" + minutes : ":" + minutes
+		clockValue += (seconds < 10) ? ":0" + seconds : ":" + seconds
+		clockValue += "  "+ampm
+    document.getElementsByName('serverClock')[0].value = clockValue
+    setTimeout("runClock()",1000)
+}
+function startClock(){
+	InitClock();
+	runClock();	
+}
 --></script>
 
 
@@ -439,11 +474,7 @@ function setIndex(index){
 				                                    		</select>
 				                                    		<br/>
 				                                    		<digi:trn key="aim:globalSettings:ServerTime">Server Time</digi:trn>:&nbsp; 
-				                                    		<% java.text.DateFormat formatter = new java.text.SimpleDateFormat("hh:mm:ss a"); 
-				                                    		   String sdate = org.digijava.module.common.util.DateTimeUtil.formatDate(new java.util.Date());
-						                                    %> 
-						                                    <%= sdate +" "+formatter.format( new java.util.Date() ) %>  
-				                                    	
+				                                    	     <input type="text" name="serverClock" size="10" readonly="readonly">
 				                                    	</c:when>
 				                                    	<c:when test='${type == "t_timeout_currency_update"}'>
 				                                            <% 
@@ -675,5 +706,6 @@ function setHoveredTable(tableId, hasHeaders) {
 	<logic:iterate name="sections"  id="sectionName">
 		setStripsTable("${sectionName}", "tableEven", "tableOdd");
 	</logic:iterate>
+	startClock();
 	
 </script>

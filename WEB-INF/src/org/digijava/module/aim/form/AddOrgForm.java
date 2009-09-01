@@ -15,6 +15,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpOrganisationDocument;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.Pledge;
+import org.digijava.module.aim.dbentity.AmpOrganizationInformation;
 
 public class AddOrgForm extends ActionForm {
 
@@ -71,6 +72,7 @@ public class AddOrgForm extends ActionForm {
     private long transIndexId;
     private String orgPrimaryPurpose;
     private List<AmpOrgStaffInformation> staff = null;
+    private List<AmpOrganizationInformation> orgInfos = null;
     private List<LabelValueBean> years;
     private Long typeOfStaff;
     private String numberOfStaff;
@@ -86,17 +88,86 @@ public class AddOrgForm extends ActionForm {
     private Long selContactId;
     private String type;
     private String addressAbroad;
-    private String programAnnualBudget;
-    private Long programAnnualBudgetCurrId;
-    private String adminAnnualBudget;
-    private Long adminAnnualBudgetCurrId;
-    private String programAnnualPercent;
     private String taxNumber;
     private String regNumbMinPlan;
     private String legalPersonNum;
     private String legalPersonRegDate;
     private String minPlanRegDate;
     private List<AmpOrganisationDocument> documents;
+    private String orgInfoSelectedYear;
+    private Long orgInfoCurrId;
+    private Integer orgInfoType;
+    private String orgInfoPercent;
+    private Long[] selectedOrgInfoIds;
+    private Long selectedOrgInfoId;
+    private String orgInfoAmount;
+
+    public String getOrgInfoAmount() {
+        return orgInfoAmount;
+    }
+
+    public void setOrgInfoAmount(String orgInfoAmount) {
+        this.orgInfoAmount = orgInfoAmount;
+    }
+
+  
+    public Long getSelectedOrgInfoId() {
+        return selectedOrgInfoId;
+    }
+
+    public void setSelectedOrgInfoId(Long selectedOrgInfoId) {
+        this.selectedOrgInfoId = selectedOrgInfoId;
+    }
+
+    public Long[] getSelectedOrgInfoIds() {
+        return selectedOrgInfoIds;
+    }
+
+    public void setSelectedOrgInfoIds(Long[] selectedOrgInfoIds) {
+        this.selectedOrgInfoIds = selectedOrgInfoIds;
+    }
+
+
+    public Long getOrgInfoCurrId() {
+        return orgInfoCurrId;
+    }
+
+    public void setOrgInfoCurrId(Long orgInfoCurrId) {
+        this.orgInfoCurrId = orgInfoCurrId;
+    }
+
+    public String getOrgInfoPercent() {
+        return orgInfoPercent;
+    }
+
+    public void setOrgInfoPercent(String orgInfoPercent) {
+        this.orgInfoPercent = orgInfoPercent;
+    }
+
+    public String getOrgInfoSelectedYear() {
+        return orgInfoSelectedYear;
+    }
+
+    public void setOrgInfoSelectedYear(String orgInfoSelectedYear) {
+        this.orgInfoSelectedYear = orgInfoSelectedYear;
+    }
+
+    public Integer getOrgInfoType() {
+        return orgInfoType;
+    }
+
+    public void setOrgInfoType(Integer orgInfoType) {
+        this.orgInfoType = orgInfoType;
+    }
+
+
+    public List<AmpOrganizationInformation> getOrgInfos() {
+        return orgInfos;
+    }
+
+    public void setOrgInfos(List<AmpOrganizationInformation> orgInfos) {
+        this.orgInfos = orgInfos;
+    }
 
     public List<AmpOrganisationDocument> getDocuments() {
         return documents;
@@ -114,14 +185,7 @@ public class AddOrgForm extends ActionForm {
         this.addressAbroad = addressAbroad;
     }
 
-    public Long getAdminAnnualBudgetCurrId() {
-        return adminAnnualBudgetCurrId;
-    }
-
-    public void setAdminAnnualBudgetCurrId(Long adminAnnualBudgetCurrId) {
-        this.adminAnnualBudgetCurrId = adminAnnualBudgetCurrId;
-    }
-
+ 
     public String getLegalPersonRegDate() {
         return legalPersonRegDate;
     }
@@ -138,14 +202,7 @@ public class AddOrgForm extends ActionForm {
         this.minPlanRegDate = minPlanRegDate;
     }
 
-    public Long getProgramAnnualBudgetCurrId() {
-        return programAnnualBudgetCurrId;
-    }
-
-    public void setProgramAnnualBudgetCurrId(Long programAnnualBudgetCurrId) {
-        this.programAnnualBudgetCurrId = programAnnualBudgetCurrId;
-    }
-
+ 
     public Long getSelContactId() {
         return selContactId;
     }
@@ -251,14 +308,6 @@ public class AddOrgForm extends ActionForm {
         this.selectedYear = selectedYear;
     }
 
-    public String getAdminAnnualBudget() {
-        return adminAnnualBudget;
-    }
-
-    public void setAdminAnnualBudget(String adminAnnualBudget) {
-        this.adminAnnualBudget = adminAnnualBudget;
-    }
-
     public String getLegalPersonNum() {
         return legalPersonNum;
     }
@@ -273,22 +322,6 @@ public class AddOrgForm extends ActionForm {
 
     public void setNumberOfStaff(String numberOfStaff) {
         this.numberOfStaff = numberOfStaff;
-    }
-
-    public String getProgramAnnualBudget() {
-        return programAnnualBudget;
-    }
-
-    public void setProgramAnnualBudget(String programAnnualBudget) {
-        this.programAnnualBudget = programAnnualBudget;
-    }
-
-    public String getProgramAnnualPercent() {
-        return programAnnualPercent;
-    }
-
-    public void setProgramAnnualPercent(String programAnnualPercent) {
-        this.programAnnualPercent = programAnnualPercent;
     }
 
     public String getRegNumbMinPlan() {

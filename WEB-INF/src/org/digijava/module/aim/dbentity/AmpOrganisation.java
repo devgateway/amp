@@ -57,18 +57,21 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
         private Set<AmpOrganisation> recipients;
         private Set<AmpContact> contacts;
         private String addressAbroad;
-        private Double programAnnualBudget;
-        private AmpCurrency programAnnualBudgetCurr;
-        private Double adminAnnualBudget;
-        private AmpCurrency adminAnnualBudgetCurr;
-        private Double programAnnualPercent;
         private Long taxNumber;
         private String primaryPurpose;
         private String minPlanRegNumb;
         private String legalPersonNum;
         private Date legalPersonRegDate;
         private Date minPlanRegDate;
+        private Set<AmpOrganizationInformation> organizationInfos;
 
+        public Set<AmpOrganizationInformation> getOrganizationInfos() {
+            return organizationInfos;
+        }
+
+        public void setOrganizationInfos(Set<AmpOrganizationInformation> organizationInfos) {
+            this.organizationInfos = organizationInfos;
+        }
         public AmpCategoryValue getImplemLocationLevel() {
             return implemLocationLevel;
         }
@@ -92,23 +95,6 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
         public void setAddressAbroad(String addressAbroad) {
             this.addressAbroad = addressAbroad;
         }
-
-        public Double getAdminAnnualBudget() {
-            return adminAnnualBudget;
-        }
-
-        public void setAdminAnnualBudget(Double adminAnnualBudget) {
-            this.adminAnnualBudget = adminAnnualBudget;
-        }
-
-        public AmpCurrency getAdminAnnualBudgetCurr() {
-            return adminAnnualBudgetCurr;
-        }
-
-        public void setAdminAnnualBudgetCurr(AmpCurrency adminAnnualBudgetCurr) {
-            this.adminAnnualBudgetCurr = adminAnnualBudgetCurr;
-        }
-
         public Set<AmpContact> getContacts() {
             return contacts;
         }
@@ -156,31 +142,6 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
         public void setMinPlanRegDate(Date minPlanRegDate) {
             this.minPlanRegDate = minPlanRegDate;
         }
-
-        public Double getProgramAnnualBudget() {
-            return programAnnualBudget;
-        }
-
-        public void setProgramAnnualBudget(Double programAnnualBudget) {
-            this.programAnnualBudget = programAnnualBudget;
-        }
-
-        public AmpCurrency getProgramAnnualBudgetCurr() {
-            return programAnnualBudgetCurr;
-        }
-
-        public void setProgramAnnualBudgetCurr(AmpCurrency programAnnualBudgetCurr) {
-            this.programAnnualBudgetCurr = programAnnualBudgetCurr;
-        }
-
-        public Double getProgramAnnualPercent() {
-            return programAnnualPercent;
-        }
-
-        public void setProgramAnnualPercent(Double programAnnualPercent) {
-            this.programAnnualPercent = programAnnualPercent;
-        }
-
         public Set<AmpOrganisation> getRecipients() {
             return recipients;
         }

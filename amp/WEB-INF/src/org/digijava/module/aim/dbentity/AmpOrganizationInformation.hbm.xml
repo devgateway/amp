@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.AmpOrganizationInformation" table="AMP_ORG_INFO">
+		<id name="id" column="id" type="java.lang.Long">
+			<generator class="native">
+				<param name="sequence">AMP_ORG_INFO_seq</param>
+			</generator>
+		</id>
+
+		<property name="amount" column="amount" type="java.lang.Double"  />
+                <property name="percent" column="percent" type="java.lang.Double"  />
+		<property name="year" column="year" type="java.lang.Long"  />
+                <property name="type" column="org_type" type="java.lang.Integer"  />
+		<many-to-one name="currency" column="amp_currency_id" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
+                <many-to-one name="organization" column="amp_org_id" class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />
+
+	</class>
+</hibernate-mapping>

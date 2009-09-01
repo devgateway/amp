@@ -361,4 +361,8 @@ public class Constants
     public static final String ORG_TYPE_NGO = "NGO";
     public static final String ORG_TYPE_REGIONAL = "REGIONAL";
 
+    // Organization information
+    public static final int ORG_INFO_TYPE_ANNUAL_BUDGET_ADMIN= 1;
+    public static final int ORG_INFO_TYPE_ANNUAL_BUDGET_PROGRAM = 2;
+
 }

@@ -108,6 +108,70 @@
             document.aimAddOrgForm.target = "_self";
             document.aimAddOrgForm.submit();
         }
+        function addOrgInfo(){
+            var year=document.aimAddOrgForm.orgInfoSelectedYear;
+            var type=document.aimAddOrgForm.orgInfoType;
+            var percent=document.aimAddOrgForm.orgInfoPercent;
+            var amount=document.aimAddOrgForm.orgInfoAmount;
+            var currId=document.aimAddOrgForm.orgInfoCurrId;
+            var regExpPercent="^\\d*\\.?\\d+%?$";
+            var regExpAmount="^\\d+\\.?\\d*$";
+            var errorMsg;
+          
+
+            if(year.value=='-1'){
+                errorMsg='<digi:trn jsFriendly="true">Please select year!</digi:trn>';
+                alert(errorMsg);
+                return false;
+            }
+            if(currId.value=='-1'){
+                errorMsg='<digi:trn jsFriendly="true">Please select currency!</digi:trn>';
+                alert(errorMsg);
+                return false;
+            }
+            if(type.value=='-1'){
+                errorMsg='<digi:trn jsFriendly="true">Please select type!</digi:trn>';
+                alert(errorMsg);
+                return false;
+            }
+
+            if(type.value=='2'&&percent.value.trim()==''){
+                errorMsg='<digi:trn jsFriendly="true">Please enter percent!</digi:trn>';
+                alert(errorMsg);
+                return false;
+            }
+            if (!(/^\d*\.?\d*%?$/.test(percent.value))) {
+                errorMsg='<digi:trn jsFriendly="true">Please enter correct percent value!</digi:trn>';
+                alert(errorMsg);
+                percent.value = "";
+                return false;
+            }
+            if (!(/^\d+\.?\d*$/.test(amount.value))) {
+                errorMsg='<digi:trn jsFriendly="true">Please enter correct amount value!</digi:trn>';
+                alert(errorMsg);
+                amount.value = "";
+                return false;
+            }
+
+    <digi:context name="addOrgInfo" property="context/module/moduleinstance/editOrganisation.do" />
+            document.aimAddOrgForm.actionFlag.value="addOrgInfo";
+            document.aimAddOrgForm.action = "${addOrgInfo}";
+            document.aimAddOrgForm.target = "_self";
+            document.aimAddOrgForm.submit();
+        }
+        function deleteOrgInfo(orginfoId){
+            if(orginfoId!=null&&orginfoId!=""&&typeof(orginfoId)!='undefined'){
+                document.aimAddOrgForm.selectedOrgInfoId.value=orginfoId;
+            }
+            else{
+                document.aimAddOrgForm.selectedOrgInfoId.value=null;
+            }
+    <digi:context name="deleteOrgInfo" property="context/module/moduleinstance/editOrganisation.do" />
+            document.aimAddOrgForm.actionFlag.value="deleteOrgInfo";
+            document.aimAddOrgForm.action = "${deleteOrgInfo}";
+            document.aimAddOrgForm.target = "_self";
+            document.aimAddOrgForm.submit();
+        }
         function setStyle(table,hasTitle){
             if(table!=null){
                 table.className += " tableElement";
@@ -116,8 +180,8 @@
             }
 
         }
-        function selectAll(){
-            $(".staffInfo").each(function () {
+        function selectAll(className){
+            $("."+className).each(function () {
                 this.checked=true;
             });
 
@@ -324,36 +388,6 @@
                     return false;
                 }
      
-                var adminAnnualBudget= document.aimAddOrgForm.adminAnnualBudget.value;
-                if (adminAnnualBudget == null||adminAnnualBudget.length == 0) {
-                    alert('<digi:trn  jsFriendly="true">Please Enter Annual Budget of internal/administrative functioning for this Organization.</digi:trn>');
-                    document.aimAddOrgForm.adminAnnualBudget.focus();
-                    return false;
-                }
-                var programAnnualBudget= document.aimAddOrgForm.programAnnualBudget.value;
-                if (programAnnualBudget == null||programAnnualBudget.length == 0 ) {
-                    alert('<digi:trn  jsFriendly="true">Please Enter Program Annual Budget for this Organization.</digi:trn>');
-                    document.aimAddOrgForm.programAnnualBudget.focus();
-                    return false;
-                }
-                var adminAnnualBudgetCurrId= document.aimAddOrgForm.adminAnnualBudgetCurrId.value;
-                if (adminAnnualBudgetCurrId == '-1' ||adminAnnualBudgetCurrId == null) {
-                    alert('<digi:trn  jsFriendly="true">Please Select Currency.</digi:trn>');
-                    document.aimAddOrgForm.adminAnnualBudgetCurrId.focus();
-                    return false;
-                }
-                var programAnnualBudgetCurrId= document.aimAddOrgForm.programAnnualBudgetCurrId.value;
-                if (programAnnualBudgetCurrId == '-1' ||programAnnualBudgetCurrId== null) {
-                    alert('<digi:trn  jsFriendly="true">Please Select Currency.</digi:trn>');
-                    document.aimAddOrgForm.programAnnualBudgetCurrId.focus();
-                    return false;
-                }
-                var programAnnualPercent= document.aimAddOrgForm.programAnnualPercent.value;
-                if (programAnnualPercent == null||programAnnualPercent.length == 0 ) {
-                    alert('<digi:trn  jsFriendly="true">Please Enter Program Annual Budget Percent for this Organization.</digi:trn>');
-                    document.aimAddOrgForm.programAnnualPercent.focus();
-                    return false;
-                }
                 var orgUrl= document.aimAddOrgForm.orgUrl.value;
                 if (orgUrl == null||orgUrl.length == 0 ) {
                     alert('<digi:trn  jsFriendly="true">Please Enter URL for this Organization.</digi:trn>');
@@ -494,6 +528,7 @@
     <html:hidden name="aimAddOrgForm"  property="type" />
     <html:hidden name="aimAddOrgForm"  property="ampOrgId" />
     <html:hidden name="aimAddOrgForm"  property="transIndexId" />
+    <html:hidden name="aimAddOrgForm" property="selectedOrgInfoId"/>
 
     <table bgColor=#ffffff cellPadding=5 cellSpacing=1 >
         <tr>
@@ -538,19 +573,19 @@
                     <tr>
                         <td>
                             <digi:link styleId="printWin" href="#" onclick="window.print(); return false;">
-                               
-                             <digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/printer.gif" border="0" alt="Print"/>
+
+                                <digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/printer.gif" border="0" alt="Print"/>
                             </digi:link>
 
-                            </td>
+                        </td>
 
-                        </tr>
-                        <tr>
-                            <td>
-                                <table border=0 bgColor=#f4f4f2>
-                                    <tr>
-                                        <td bgColor=#dddddb height="20" align="center"
-                                            colspan="2"> <c:if test="${empty aimAddOrgForm.ampOrgId||aimAddOrgForm.ampOrgId==0}">
+                    </tr>
+                    <tr>
+                        <td>
+                            <table border=0 bgColor=#f4f4f2>
+                                <tr>
+                                    <td bgColor=#dddddb height="20" align="center"
+                                        colspan="2"> <c:if test="${empty aimAddOrgForm.ampOrgId||aimAddOrgForm.ampOrgId==0}">
                                             <digi:trn key="aim:addOrganization">Add Organization</digi:trn>
                                         </c:if> <c:if test="${not empty aimAddOrgForm.ampOrgId&&aimAddOrgForm.ampOrgId!=0}">
                                             <digi:trn key="aim:editOrganization">Edit Organization</digi:trn>
@@ -714,7 +749,7 @@
                                                                 </td>
                                                             </tr>                             
                                                             <tr>
-                                                                <td colspan="5" style="text-align:left;"><input type="checkbox"  onclick="selectAll()"><digi:trn>Select All</digi:trn>&nbsp;&nbsp;<input type="button" onclick="deleteStaff()" value="<digi:trn>Delete</digi:trn>"></td>
+                                                                <td colspan="5" style="text-align:left;"><input type="checkbox"  onclick="selectAll('staffInfo')"><digi:trn>Select All</digi:trn>&nbsp;&nbsp;<input type="button" onclick="deleteStaff()" value="<digi:trn>Delete</digi:trn>"></td>
                                                             </tr>
                                                         </c:if>
 
@@ -823,196 +858,268 @@
                                                                         </table>
                                                                     </td>
                                                                 </tr>
+
                                                                 <tr>
-                                                                    <td><digi:trn>Organization Intervention Level</digi:trn><font color="red">*</font></td>
+                                                                    <td><digi:trn>Organization website</digi:trn><font color="red">*</font></td>
                                                                     <td>
-                                                                        <c:set var="translation">
-                                                                            <digi:trn>Please select from below</digi:trn>
-                                                                        </c:set>
-                                                                <category:showoptions multiselect="false" firstLine="${translation}" name="aimAddOrgForm" property="implemLocationLevel"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>" styleClass="selectStyle" />
-                                                                <script language="Javascript">
-                                                                    var implemLocationLevelSelect = document.getElementsByName("implemLocationLevel")[0];
-                                                                    if(implemLocationLevelSelect!=null){
-                                                                        implemLocationLevelSelect.onchange=function() {
-                                                                            removeAllLocations();
-                                                                        }
-                                                                    }
-                                                                </script>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><digi:trn>Organization Intervention Location</digi:trn><font color="red">*</font></td>
-                                                        <td>
-
-                                                            <c:if test="${empty aimAddOrgForm.selectedLocs}">
-                                                                <input type="button" class="dr-menu" onclick="javascript:selectLocation();" value='<digi:trn>Add Location</digi:trn>' />
-                                                            </c:if>
-
-                                                            <c:if test="${not empty aimAddOrgForm.selectedLocs}">
-                                                                <table width="100%" cellSpacing="0" cellPadding="0" align="left">
-
-                                                                    <c:forEach var="selectedLocs" items="${aimAddOrgForm.selectedLocs}">
-
-                                                                        <tr>
-                                                                            <td width="5px" vAlign="center">
-                                                                                <html:multibox property="selLocs" styleId="selLocs">
-                                                                                    <bean:write name="selectedLocs" property="locId" />
-                                                                                </html:multibox>
-                                                                            </td>
-                                                                            <td>
-                                                                                <c:forEach var="ancestorLoc" items="${selectedLocs.ancestorLocationNames}">
-                                                                    	[${ancestorLoc}]
-                                                                                </c:forEach>
-                                                                            </td>
-
-                                                                            <td align="right" nowrap="nowrap">
-                                                                                <digi:trn>Percentage</digi:trn>:&nbsp;
-                                                                                <html:text name="selectedLocs" indexed="true" property="percent" size="2"  maxlength="5" onkeyup="fnChk(this,false)"/>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </c:forEach>
-                                                                    <tr>
-                                                                        <td colspan="3">
-                                                                            <input type="button" class="dr-menu" onclick="javascript:selectLocation();" value='<digi:trn>Add Location</digi:trn>' />
-
-                                                                            <input type="button" class="dr-menu" onclick="javascript:removeSelLocations();" value='<digi:trn>Remove Location</digi:trn>' />
-
-                                                                        </td>
-                                                                    </tr>
-                                                                </table>
-                                                            </c:if>
-                                                            &nbsp;
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                            </td>
-                                            <td>
-                                                <table>
-                                                    <tr>
-                                                        <td><digi:trn>Legal Personality Number</digi:trn></td>
-                                                        <td>
-                                                            <html:text property="legalPersonNum" />
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><digi:trn>Legal Personality Registration Date</digi:trn></td>
-                                                        <td>
-                                                            <html:text property="legalPersonRegDate" size="10" styleId="legalPersonRegDate" styleClass="inp-text" readonly="true" />
-                                                            <a id="clear2" href='javascript:clearDate(document.getElementById("legalPersonRegDate"), "clear2")'>
-                                                                <digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
-                                                            </a>
-                                                            <a id="date2" href='javascript:pickDateWithClear("date2",document.getElementById("legalPersonRegDate"),"clear2")'>
-                                                                <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
-                                                            </a>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><digi:trn>Recipients</digi:trn><font color="red">*</font></td>
-                                                        <td>
-                                                            <c:if test="${empty aimAddOrgForm.recipients}">
-                                                        <aim:addOrganizationButton refreshParentDocument="true" collection="recipients"  form="${aimAddOrgForm}" styleClass="dr-menu"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
-                                                    </c:if>
-                                                    <c:if test="${not empty aimAddOrgForm.recipients}">
-                                                        <table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
-                                                            <c:forEach var="organization" items="${aimAddOrgForm.recipients}">
-                                                                <tr>
-
-                                                                    <td width="3">
-                                                                        <html:multibox property="selRecipients">
-                                                                            <bean:write name="organization" property="ampOrgId" />
-                                                                        </html:multibox>
+                                                                        <html:text property="orgUrl"/>
                                                                     </td>
-                                                                    <td align="left">
-                                                                        <bean:write name="organization" property="name" />
-                                                                    </td>
-
                                                                 </tr>
-                                                            </c:forEach>
+                                                                <tr>
+                                                                    <td><digi:trn>Organization Headquarters Address</digi:trn><font color="red">*</font></td>
+                                                                    <td>
+                                                                        <html:textarea property="address"  cols="40"/>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><digi:trn>Organization Address Abroad(Internation NGO)</digi:trn></td>
+                                                                    <td>
+                                                                        <html:textarea property="addressAbroad" cols="40"/>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+
+
+                                                        </td>
+                                                        <td valign="top">
+                                                            <table>
+                                                                <tr>
+                                                                    <td><digi:trn>Legal Personality Number</digi:trn></td>
+                                                                    <td>
+                                                                        <html:text property="legalPersonNum" />
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><digi:trn>Legal Personality Registration Date</digi:trn></td>
+                                                                    <td>
+                                                                        <html:text property="legalPersonRegDate" size="10" styleId="legalPersonRegDate" styleClass="inp-text" readonly="true" />
+                                                                        <a id="clear2" href='javascript:clearDate(document.getElementById("legalPersonRegDate"), "clear2")'>
+                                                                            <digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+                                                                        </a>
+                                                                        <a id="date2" href='javascript:pickDateWithClear("date2",document.getElementById("legalPersonRegDate"),"clear2")'>
+                                                                            <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+                                                                        </a>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><digi:trn>Recipients</digi:trn><font color="red">*</font></td>
+                                                                    <td>
+                                                                        <c:if test="${empty aimAddOrgForm.recipients}">
+                                                                    <aim:addOrganizationButton refreshParentDocument="true" collection="recipients"  form="${aimAddOrgForm}" styleClass="dr-menu"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
+                                                                </c:if>
+                                                                <c:if test="${not empty aimAddOrgForm.recipients}">
+                                                                    <table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
+                                                                        <c:forEach var="organization" items="${aimAddOrgForm.recipients}">
+                                                                            <tr>
+
+                                                                                <td width="3">
+                                                                                    <html:multibox property="selRecipients">
+                                                                                        <bean:write name="organization" property="ampOrgId" />
+                                                                                    </html:multibox>
+                                                                                </td>
+                                                                                <td align="left">
+                                                                                    <bean:write name="organization" property="name" />
+                                                                                </td>
+
+                                                                            </tr>
+                                                                        </c:forEach>
+                                                                        <tr>
+                                                                            <td colspan="2">
+                                                                        <aim:addOrganizationButton refreshParentDocument="true" collection="recipients"  form="${aimAddOrgForm}" styleClass="dr-menu"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
+                                                                        <input type="button" class="dr-menu" onclick="javascript:removeOrgs();" value='<digi:trn>Remove Organization(s)</digi:trn>' />
+                                                                        </td>
+                                                                        </tr>
+
+                                                                    </table>
+                                                                </c:if>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><digi:trn>Country Of Origin</digi:trn><font color="red">*</font></td>
+                                                        <td>
+                                                            <c:set var="translation">
+                                                                <digi:trn>Select Country</digi:trn>
+                                                            </c:set>
+                                                            <html:select property="countryId" styleClass="selectStyle">
+                                                                <html:option value="-1">-- ${translation} --</html:option>
+                                                                <html:optionsCollection property="countries" label="name" value="id"/>
+                                                            </html:select>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><digi:trn>Tax Number</digi:trn></td>
+                                                        <td>
+                                                            <html:text property="taxNumber" onkeyup="fnChk(this,true)"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><digi:trn>Organization Intervention Level</digi:trn><font color="red">*</font></td>
+                                                        <td>
+                                                            <c:set var="translation">
+                                                                <digi:trn>Please select from below</digi:trn>
+                                                            </c:set>
+                                                    <category:showoptions multiselect="false" firstLine="${translation}" name="aimAddOrgForm" property="implemLocationLevel"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>" styleClass="selectStyle" />
+                                                    <script language="Javascript">
+                                                        var implemLocationLevelSelect = document.getElementsByName("implemLocationLevel")[0];
+                                                        if(implemLocationLevelSelect!=null){
+                                                            implemLocationLevelSelect.onchange=function() {
+                                                                removeAllLocations();
+                                                            }
+                                                        }
+                                                    </script>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><digi:trn>Organization Intervention Location</digi:trn><font color="red">*</font></td>
+                                            <td>
+
+                                                <c:if test="${empty aimAddOrgForm.selectedLocs}">
+                                                    <input type="button" class="dr-menu" onclick="javascript:selectLocation();" value='<digi:trn>Add Location</digi:trn>' />
+                                                </c:if>
+
+                                                <c:if test="${not empty aimAddOrgForm.selectedLocs}">
+                                                    <table width="100%" cellSpacing="0" cellPadding="0" align="left">
+
+                                                        <c:forEach var="selectedLocs" items="${aimAddOrgForm.selectedLocs}">
+
                                                             <tr>
-                                                                <td colspan="2">
-                                                            <aim:addOrganizationButton refreshParentDocument="true" collection="recipients"  form="${aimAddOrgForm}" styleClass="dr-menu"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
-                                                            <input type="button" class="dr-menu" onclick="javascript:removeOrgs();" value='<digi:trn>Remove Organization(s)</digi:trn>' />
-                                                            </td>
+                                                                <td width="5px" vAlign="center">
+                                                                    <html:multibox property="selLocs" styleId="selLocs">
+                                                                        <bean:write name="selectedLocs" property="locId" />
+                                                                    </html:multibox>
+                                                                </td>
+                                                                <td>
+                                                                    <c:forEach var="ancestorLoc" items="${selectedLocs.ancestorLocationNames}">
+                                                                    	[${ancestorLoc}]
+                                                                    </c:forEach>
+                                                                </td>
+
+                                                                <td align="right" nowrap="nowrap">
+                                                                    <digi:trn>Percentage</digi:trn>:&nbsp;
+                                                                    <html:text name="selectedLocs" indexed="true" property="percent" size="2"  maxlength="5" onkeyup="fnChk(this,false)"/>
+                                                                </td>
                                                             </tr>
+                                                        </c:forEach>
+                                                        <tr>
+                                                            <td colspan="3">
+                                                                <input type="button" class="dr-menu" onclick="javascript:selectLocation();" value='<digi:trn>Add Location</digi:trn>' />
 
-                                                        </table>
-                                                    </c:if>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><digi:trn>Country Of Origin</digi:trn><font color="red">*</font></td>
-                                            <td>
-                                                <c:set var="translation">
-                                                    <digi:trn>Select Country</digi:trn>
-                                                </c:set>
-                                                <html:select property="countryId" styleClass="selectStyle">
-                                                    <html:option value="-1">-- ${translation} --</html:option>
-                                                    <html:optionsCollection property="countries" label="name" value="id"/>
-                                                </html:select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><digi:trn>Tax Number</digi:trn></td>
-                                            <td>
-                                                <html:text property="taxNumber" onkeyup="fnChk(this,true)"/>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><digi:trn>Annual Budget of internal/administrative functioning</digi:trn><font color="red">*</font></td>
-                                            <td>
-                                                <c:set var="translation">
-                                                    <digi:trn>Select Currency</digi:trn>
-                                                </c:set>
-                                                <html:text property="adminAnnualBudget" onkeyup="fnChk(this,true)"/>
-                                                <html:select property="adminAnnualBudgetCurrId" styleClass="selectStyle" style="width:150px">
-                                                    <html:option value="-1">-- ${translation} --</html:option>
-                                                    <html:optionsCollection property="currencies" label="currencyName" value="ampCurrencyId"/>
-                                                </html:select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><digi:trn>Program Annual Budget</digi:trn><font color="red">*</font></td>
-                                            <td>
-                                                <html:text property="programAnnualBudget"  onkeyup="fnChk(this,true)"/>
+                                                                <input type="button" class="dr-menu" onclick="javascript:removeSelLocations();" value='<digi:trn>Remove Location</digi:trn>' />
 
-                                                <html:select property="programAnnualBudgetCurrId" styleClass="selectStyle"  style="width:150px">
-                                                    <html:option value="-1">-- ${translation} --</html:option>
-                                                    <html:optionsCollection property="currencies" label="currencyName" value="ampCurrencyId"/>
-                                                </html:select>
+                                                            </td>
+                                                        </tr>
 
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><digi:trn>Percentage of Program Annual Budget</digi:trn><font color="red">*</font></td>
-                                            <td>
-                                                <html:text property="programAnnualPercent"  onkeyup="fnChk(this,true)"/>
-                                            </td>
-                                        </tr>
+                                                    </table>
+                                                </c:if>
+                                                &nbsp;
 
-                                        <tr>
-                                            <td><digi:trn>Organization website</digi:trn><font color="red">*</font></td>
-                                            <td>
-                                                <html:text property="orgUrl"/>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><digi:trn>Organization Headquarters Address</digi:trn><font color="red">*</font></td>
-                                            <td>
-                                                <html:textarea property="address"  cols="40"/>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><digi:trn>Organization Address Abroad(Internation NGO)</digi:trn></td>
-                                            <td>
-                                                <html:textarea property="addressAbroad" cols="40"/>
                                             </td>
                                         </tr>
                                     </table>
 
                                 </td>
                             </tr>
-                        </table>
 
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <fieldset>
+                            <legend align="left"><digi:trn>Organization Infomation</digi:trn></legend>
+                            <table cellpadding="2" cellspacing="0" border="0">
+                                <tr>
+                                    <td style="width:40px;text-align:center;font-weight:bold">
+                                        &nbsp;
+                                    </td>
+                                    <td style="width:130px;text-align:center;font-weight:bold">
+                                        <digi:trn>Year</digi:trn>
+                                    </td>
+                                    <td style="width:210px;text-align:center;font-weight:bold">
+                                        <digi:trn>Type of Organization</digi:trn>
+                                    </td>
+                                    <td style="width:150px;text-align:center;font-weight:bold">
+                                        <digi:trn>Percent</digi:trn>
+                                    </td>
+                                    <td style="width:150px;text-align:center;font-weight:bold">
+                                        <digi:trn>Amount</digi:trn>
+                                    </td>
+
+                                    <td style="width:90px;text-align:center;font-weight:bold" colspan="2">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td> &nbsp;</td>
+                                    <td>
+                                        <c:set var="translation">
+                                            <digi:trn> Select Year</digi:trn>
+                                        </c:set>
+
+                                        <html:select name="aimAddOrgForm" property="orgInfoSelectedYear" styleClass="selectStyle" style="width:120px;">
+                                            <html:option value="-1">-- ${translation} --</html:option>
+                                            <html:optionsCollection name="aimAddOrgForm"  property="years" label="label" value="value"/>
+                                        </html:select>
+                                    </td>
+                                    <td style="text-align:center">
+
+                                        <html:select property="orgInfoType" name="aimAddOrgForm" styleClass="selectStyle">
+                                            <html:option value="-1">-<digi:trn>Select Type</digi:trn>-</html:option>
+                                            <html:option value="1"><digi:trn>Annual Budget of internal/administrative functioning</digi:trn></html:option>
+                                            <html:option value="2"><digi:trn>Program Annual Budget</digi:trn></html:option>
+                                        </html:select>
+                                    </td>
+                                    <td style="text-align:center"><html:text name="aimAddOrgForm" property="orgInfoPercent"  styleClass="inp-text"/></td>
+                                    <td style="text-align:center"><html:text name="aimAddOrgForm" property="orgInfoAmount"  styleClass="inp-text"/></td>
+                                    <td style="text-align:center">
+                                        <c:set var="translation">
+                                            <digi:trn>Select Currency</digi:trn>
+                                        </c:set>
+                                        <html:select property="orgInfoCurrId" styleClass="selectStyle"  style="width:150px">
+                                            <html:option value="-1">-- ${translation} --</html:option>
+                                            <html:optionsCollection property="currencies" label="currencyName" value="ampCurrencyId"/>
+                                        </html:select>
+
+                                    </td>
+
+                                    <td style="text-align:center"><input type="button" style="width:80px" onclick="addOrgInfo()" value="<digi:trn>Add</digi:trn>" /></td>
+                                </tr>
+                                <c:if test="${not empty aimAddOrgForm.orgInfos}">
+
+                                    <tr>
+                                        <td colspan="7">
+                                            <c:if test="${fn:length(aimAddOrgForm.orgInfos)>9}">
+                                                <div style="overflow: auto; width: 100%; height: 180px;">
+                                                </c:if>
+                                                <table width="100%" cellspacing="0" cellpadding="0" id="orgInfosTable">
+                                                    <c:forEach var="orgInfo" items="${aimAddOrgForm.orgInfos}" >
+                                                        <tr>
+                                                            <td  style="width:40px;text-align:left;">
+                                                                <html:multibox property="selectedOrgInfoIds" styleClass="selectedOrgInfoIds">
+                                                                    ${orgInfo.id}
+                                                                </html:multibox>
+                                                            </td>
+                                                            <td style="width:100px;text-align:center;">${orgInfo.year}</td>
+                                                            <td style="width:205px;text-align:center;" ><digi:trn>${orgInfo.name}</digi:trn></td>
+                                                            <td style="width:150px;text-align:center;">${orgInfo.percent}<c:if test="${not empty orgInfo.percent}">%</c:if></td>
+                                                            <td style="width:150px;text-align:center;">${orgInfo.amount}</td>
+                                                            <td style="width:205px;text-align:center;">${orgInfo.currency.currencyCode}</td>
+                                                            <td style="width:70px;text-align:center;"><a href="javascript:deleteOrgInfo('${orgInfo.id}')"> <img alt="delete" src= "../ampTemplate/images/trash_12.gif" border="0"></a></td>
+                                                        </tr>
+                                                    </c:forEach>
+                                                </table>
+                                                <c:if test="${fn:length(aimAddOrgForm.staff)>9}">
+                                                </div>
+                                            </c:if>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="7" style="text-align:left;"><input type="checkbox"  onclick="selectAll('selectedOrgInfoIds')"><digi:trn>Select All</digi:trn>&nbsp;&nbsp;<input type="button" onclick="deleteOrgInfo()" value="<digi:trn>Delete</digi:trn>"></td>
+                                    </tr>
+                                </c:if>
+
+                            </table>
+                        </fieldset>
                     </td>
                 </tr>
             </c:when>
@@ -1376,5 +1483,6 @@
 </digi:form>
 <script language="javascript"  type="text/javascript">
     setStyle(document.getElementById("staffTable"),false);
+    setStyle(document.getElementById("orgInfosTable"),false);
     setStyle(document.getElementById("contactsTable"),true);
 </script>

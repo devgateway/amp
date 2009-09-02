@@ -349,7 +349,7 @@ public class AuditLoggerUtil {
 	private static Date getDateRange(int interval) {
 		GregorianCalendar cal = new GregorianCalendar();
 		cal.add(Calendar.DATE, -interval);
-		//Logs doesn't take in account global setting format
+		//Logs doesn't take in account global setting format.
 		return  cal.getTime();
     }
 	/**

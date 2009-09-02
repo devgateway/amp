@@ -31,6 +31,7 @@ import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.NpdUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.jfree.chart.ChartRenderingInfo;
@@ -124,6 +125,9 @@ public class getNPDgraph extends Action {
             throws AimException {
 
         CustomCategoryDataset dataset = new CustomCategoryDataset();
+        String baseValueSource="";
+        String actualValueSource="";
+        String targetValueSource="";
 
         if (selectedIndicators != null && currentTheme.getIndicators() != null) {
             Arrays.sort(selectedIndicators);
@@ -236,7 +240,7 @@ public class getNPDgraph extends Action {
                             Double actualValue = null;
                             Integer targetYear=null;
                             Integer baseYear=null;
-                            
+                            AmpCategoryValue indicatorSource = null;
                             for (Integer year : years) {
                                 if (Integer.parseInt(selectedYear) <= year) {
                                     ArrayList<AmpIndicatorValue> targValues = targetVals.get(year);
@@ -250,6 +254,10 @@ public class getNPDgraph extends Action {
                                                 if (value.getValueDate().after(actValue.getValueDate()) || value.getValueDate().equals(actValue.getValueDate())) {
                                                     targValue = value;
                                                     actualValue = actValue.getValue();
+                                                    indicatorSource=actValue.getIndicatorSource();
+                                                    if(indicatorSource!=null){
+                                                        actualValueSource=indicatorSource.getValue();
+                                                    }
                                                     targetYear=year;
                                                 }
                                             }
@@ -290,22 +298,29 @@ public class getNPDgraph extends Action {
                                     }
                                 }
                             }
-                         
-                        
-                            if(basValue==null){
-                                baseValue=new Double(0);
+
+
+
+                            if (basValue == null) {
+                                baseValue = new Double(0);
+                            } else {
+                                indicatorSource = basValue.getIndicatorSource();
+                                baseValue = basValue.getValue();
+                                if (indicatorSource != null) {
+                                    baseValueSource = indicatorSource.getValue();
+                                }
                             }
-                            else{
-                                baseValue=basValue.getValue();
-                            }
-                               if(targValue==null){
-                                targetValue=new Double(0);
-                            }
-                            else{
-                                targetValue=targValue.getValue();
+                            if (targValue == null) {
+                                targetValue = new Double(0);
+                            } else {
+                                indicatorSource = targValue.getIndicatorSource();
+                                targetValue = targValue.getValue();
+                                if (targValue.getIndicatorSource() != null) {
+                                    targetValueSource = indicatorSource.getValue();
+                                }
                             }
                          // create dataset for graph
-                            dataset.addCustomTooltipValue(new String[]{formatValue(baseValue,baseYear, selectedYear), formatValue(actualValue,Integer.parseInt(selectedYear), selectedYear), formatValue(actualValue,Integer.parseInt(selectedYear), selectedYear), formatValue(targetValue,targetYear, selectedYear)});
+                            dataset.addCustomTooltipValue(new String[]{formatValue(baseValue,baseYear, selectedYear,baseValueSource), formatValue(actualValue,Integer.parseInt(selectedYear), selectedYear,actualValueSource), formatValue(actualValue,Integer.parseInt(selectedYear), selectedYear,actualValueSource), formatValue(targetValue,targetYear, selectedYear,targetValueSource)});
                              Double realActual = computePercent(indicator, targetValue, actualValue, baseValue);
                              dataset.addValue(realActual.doubleValue(), selectedYear, displayLabel);
 
@@ -323,19 +338,19 @@ public class getNPDgraph extends Action {
     }
 
 
-    public String formatValue(Double val,Integer year,String selctedYear) {
+    public String formatValue(Double val,Integer year,String selctedYear,String source) {
         String retVal="0";
         if (val != null) {
             retVal=val.toString();
             if(year!=null){
-                retVal+=" ("+year.toString()+") ";
+                retVal+=" ("+year.toString()+", Source:"+ source+") ";
             }
             else{
-                retVal+=" ("+selctedYear+") ";
+                retVal+=" ("+selctedYear+", Source:"+ source+") ";
             }
         }
         else{
-            retVal+=" ("+selctedYear+") ";
+            retVal+=" ("+selctedYear+", Source:"+ source+") ";
         }
         return retVal;
     }

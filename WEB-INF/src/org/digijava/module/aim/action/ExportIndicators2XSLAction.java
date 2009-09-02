@@ -111,7 +111,7 @@ public class ExportIndicators2XSLAction extends Action {
                 String hierarchyName=ProgramUtil.getHierarchyName(mainProg);
                 String header=TranslatorWorker.translateText("Indicators for", locale, siteId);
 
-		cell.setCellValue(TranslatorWorker.translateText("Indicators for ", locale, site.getId()));
+		cell.setCellValue(header+"  "+hierarchyName);
 		cell.setCellStyle(csHeader);
 		
 		if (npdForm.getSelYears() != null && npdForm.getSelYears().length > 0) {
@@ -165,29 +165,37 @@ public class ExportIndicators2XSLAction extends Action {
 					cellNum = 0;
 
 					row = sheet.createRow(rowNum++);
-					
+                                        HSSFRow rowIndSource = sheet.createRow(rowNum++);
+                                        HSSFCell cellIndSource =  rowIndSource.createCell(cellNum);
 					cell = row.createCell(cellNum++);
 					cell.setCellValue(indic.getName());
-					
-					
+					cellIndSource.setCellValue(TranslatorWorker.translateText("Source", locale, site.getId()));
+					cellIndSource =  rowIndSource.createCell(cellNum);
 					cell = row.createCell(cellNum++);
 					cell.setCellValue(indic.getDescription());
+                                        cellIndSource.setCellValue(" ");
 					
 					
 					List<IndicatorGridItem> values = indic.getValues();
 					if (values!=null){
 						for (IndicatorGridItem item: values) {
+                                                        cellIndSource = rowIndSource.createCell(cellNum);
                                                         cell = row.createCell(cellNum++);
 							cell.setCellValue(item.getBaseValue());
+                                                        cellIndSource.setCellValue(item.getBaseValueSource());
+                                                        cellIndSource = rowIndSource.createCell(cellNum);
 							cell = row.createCell(cellNum++);
+                                                        cellIndSource.setCellValue(item.getActualValueSource());
 							cell.setCellValue(item.getActualValue());
+                                                        cellIndSource = rowIndSource.createCell(cellNum);
 							cell = row.createCell(cellNum++);
+                                                        cellIndSource.setCellValue(item.getTargetValueSource());
 							cell.setCellValue(item.getTargetValue());
+						}
 						}
 					}
 				}
 			}
-		}
 
 		wb.write(response.getOutputStream());
 

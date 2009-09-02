@@ -109,7 +109,7 @@
 														<span title="${indRow.description}">${indRow.name}</span>
 													</td>
 													<c:forEach  var="val" items="${indRow.values}">
-                                                        <td align="right">
+                                                                                                                <td align="right">
 															${val.baseValue}
 														</td>
 														<td align="right">
@@ -121,6 +121,22 @@
 															
 												</c:forEach>
 												</tr>
+                                                                                                <tr>
+                                                                                                    <td>
+                                                                                                        <digi:trn>Source</digi:trn>
+                                                                                                    </td>
+                                                                                                <c:forEach  var="valSource" items="${indRow.values}">
+                                                                                                    <td align="right">
+                                                                                                        ${valSource.baseValueSource}
+                                                                                                    </td>
+                                                                                                    <td align="right">
+                                                                                                        ${valSource.actualValueSource}
+                                                                                                    </td>
+                                                                                                    <td align="right">
+                                                                                                        ${valSource.targetValueSource}
+                                                                                                    </td>
+                                                                                                </c:forEach>
+                                                                                             </tr>
 											</c:forEach>
 										</c:if>
 									</table>

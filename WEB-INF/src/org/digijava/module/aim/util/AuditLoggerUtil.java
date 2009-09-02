@@ -349,7 +349,7 @@ public class AuditLoggerUtil {
 	private static Date getDateRange(int interval) {
 		GregorianCalendar cal = new GregorianCalendar();
 		cal.add(Calendar.DATE, -interval);
-		//Logs don't take in account global setting format
+		//Logs doesn't take in account global setting format
 		return  cal.getTime();
     }
 	/**
@@ -367,7 +367,7 @@ public class AuditLoggerUtil {
 			session = PersistenceManager.getSession();
 			qryStr = "select f from " + 
 				AmpAuditLogger.class.getName() 
-				+ " f where f.loggedDate <= :dateParam";
+				+ " f where f.loggedDate >= :dateParam";
 			qry = session.createQuery(qryStr);
 			qry.setParameter("dateParam",getDateRange(interval),Hibernate.DATE);
 			col = qry.list();

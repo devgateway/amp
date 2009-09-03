@@ -28,9 +28,6 @@ import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpSiteFlag;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.dbentity.FeatureTemplates;
-import org.digijava.module.aim.fmtool.dbentity.AmpFeatureSourceFeature;
-import org.digijava.module.aim.fmtool.dbentity.AmpFeatureSourceField;
-import org.digijava.module.aim.fmtool.dbentity.AmpFeatureSourceModule;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Flag;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -1979,9 +1976,7 @@ public class FeaturesUtil {
 			field.setName(fieldName);
 			if(hasLevel!=null && "no".compareTo(hasLevel)==0)
 				field.setHasLevel(false);
-			else 
-				field.setHasLevel(false);
-			
+			else field.setHasLevel(false);
 			session.save(field);
 			tx.commit();
 			
@@ -2042,9 +2037,7 @@ public class FeaturesUtil {
 			feature.setName(featureName);
 			if(hasLevel!=null && "no".compareTo(hasLevel)==0)
 				feature.setHasLevel(false);
-			else 
-				feature.setHasLevel(true);
-		
+			else feature.setHasLevel(true);
 			session.save(feature);
 			tx.commit();
 			tx = session.beginTransaction();
@@ -2089,10 +2082,7 @@ public class FeaturesUtil {
 			module.setName(moduleName);
 			if(hasLevel!=null && "no".compareTo(hasLevel)==0)
 				module.setHasLevel(false);
-			else 
-				module.setHasLevel(true);
-			
-
+			else module.setHasLevel(true);
 			session.save(module);
 			tx.commit();
 			tx = session.beginTransaction();
@@ -2118,41 +2108,6 @@ public class FeaturesUtil {
 		return;
 	}
 
-	public static void updateModuleVisibilitySource(String name, String source) {
-		Session session = null;
-		Transaction tx = null;
-		
-		if (source != null)
-		try {
-			session = PersistenceManager.getRequestDBSession();
-
-			String sql = "select a from " + AmpModulesVisibility.class.getName() + " a where (a.name=:name) ";
-			Query q = session.createQuery(sql);
-			q.setParameter("name", name, Hibernate.STRING);
-			List<AmpModulesVisibility> module = q.list();
-
-			if (module != null && !module.isEmpty()){
-				tx = session.beginTransaction();
-				module.get(0).addAmpFeatureSource(new AmpFeatureSourceModule(source));
-				session.update(module.get(0));
-				tx.commit();
-			}
-		}
-		catch (Exception ex) {
-			logger.error("Exception : " + ex.getMessage());
-			ex.printStackTrace();
-		} finally{ 
-            if (tx != null && !tx.wasCommitted()) {
-                try {
-                    tx.rollback();
-                } catch (HibernateException ex) {
-                    logger.error("rollback() failed", ex);
-                }
-            }				
-		}
-	}
-	
-	
 	/**
 	 * @author dan
 	 */
@@ -2160,7 +2115,6 @@ public class FeaturesUtil {
 		Session session = null;
 		AmpModulesVisibility module ;//= new AmpModulesVisibility();
 		AmpModulesVisibility moduleParent;
-		
 		Transaction tx;
 		try {
 			session = PersistenceManager.getSession();
@@ -2168,7 +2122,7 @@ public class FeaturesUtil {
 			module = (AmpModulesVisibility) session.load(AmpModulesVisibility.class,id);
 			moduleParent = getModuleVisibility(moduleParentName);
 			module.setParent(moduleParent);
-			session.update(module);
+			session.save(module);
 			tx.commit();
 		}
 		catch (Exception ex) {
@@ -2188,45 +2142,12 @@ public class FeaturesUtil {
 		return;
 	}
 
-	
-	public static void updateFieldVisibilitySource(String name, String source) {
-		Session session = null;
-		Transaction tx = null;
-		
-		if (source != null)
-		try {
-			session = PersistenceManager.getRequestDBSession();
 
-			String sql = "select a from " + AmpFieldsVisibility.class.getName() + " a where (a.name=:name) ";
-			Query q = session.createQuery(sql);
-			q.setParameter("name", name, Hibernate.STRING);
-			List<AmpFieldsVisibility> field = q.list();
-
-			if (field != null && !field.isEmpty()){
-				tx = session.beginTransaction();
-				field.get(0).addAmpFeatureSource(new AmpFeatureSourceField(source));
-				session.update(field.get(0));
-				tx.commit();
-			}
-		}
-		catch (Exception ex) {
-			logger.error("Exception : " + ex.getMessage());
-			ex.printStackTrace();
-		} finally{ 
-            if (tx != null && !tx.wasCommitted()) {
-                try {
-                    tx.rollback();
-                } catch (HibernateException ex) {
-                    logger.error("rollback() failed", ex);
-                }
-            }				
-		}
-	}	
-	
 	/**
 	 * @author dan
 	 */
-	public static void updateFieldWithFeatureVisibility(Long featureId, String fieldName) {
+	public static void updateFieldWithFeatureVisibility(Long featureId,
+			String fieldName) {
 		Session session = null;
 		AmpFeaturesVisibility feature = new AmpFeaturesVisibility();
 		AmpFieldsVisibility field = new AmpFieldsVisibility();
@@ -2266,41 +2187,6 @@ public class FeaturesUtil {
 		return;
 	}
 
-	public static void updateFeatureVisibilitySource(String name, String source) {
-		Session session = null;
-		Transaction tx = null;
-		
-		if (source != null)
-		try {
-			session = PersistenceManager.getRequestDBSession();
-
-			String sql = "select a from " + AmpFeaturesVisibility.class.getName() + " a where (a.name=:name) ";
-			Query q = session.createQuery(sql);
-			q.setParameter("name", name, Hibernate.STRING);
-			List<AmpFeaturesVisibility> feature = q.list();
-
-			if (feature != null && !feature.isEmpty()){
-				tx = session.beginTransaction();
-				feature.get(0).addAmpFeatureSource(new AmpFeatureSourceFeature(source));
-				session.update(feature.get(0));
-				tx.commit();
-			}
-		}
-		catch (Exception ex) {
-			logger.error("Exception : " + ex.getMessage());
-			ex.printStackTrace();
-		} finally{ 
-            if (tx != null && !tx.wasCommitted()) {
-                try {
-                    tx.rollback();
-                } catch (HibernateException ex) {
-                    logger.error("rollback() failed", ex);
-                }
-            }				
-		}
-	}	
-	
-	
 	/**
 	 * @author dan
 	 */

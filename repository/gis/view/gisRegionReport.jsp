@@ -202,6 +202,7 @@
 									</div>
 								</td>
 								<td width="20%" align="left" style="overflow-x:hidden;">
+								<%--
 									<div class="gisReportTableBevelCellContainer">
 										<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal">
 											<logic:present name="activityLocationFunding" property="activity.sectors">
@@ -214,6 +215,22 @@
 															<bean:write name="ampSec" property="name"/>
 															</li>
 														</logic:equal>
+													</logic:iterate>
+													</ul>
+												</logic:notEmpty>
+											</logic:present>
+										</div>
+									</div>
+								--%>
+								<div class="gisReportTableBevelCellContainer">
+										<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal">
+											<logic:present name="activityLocationFunding" property="activity.orgrole">
+												<logic:notEmpty name="activityLocationFunding" property="activity.orgrole">
+													<ul style="margin:0 0 0 20px; padding:0;">
+													<logic:iterate name="activityLocationFunding" property="topSectors" id="iterTopSectors">
+														<li>
+														<bean:write name="iterTopSectors"/>
+														</li>
 													</logic:iterate>
 													</ul>
 												</logic:notEmpty>

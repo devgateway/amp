@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="WEB-INF/src"/>
+	<classpathentry kind="src" path="gen-src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/acegi-security-1.0.1.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/acegi-security-cas-1.0.1.jar"/>
@@ -18,8 +19,6 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/bsh-2.0b4.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/casclient.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/castor-0.9.5.3-xml.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/commons-beanutils-1.6.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/commons-beanutils-bean-collections.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/commons-collections-3.1.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/commons-dbcp-1.2.1.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/commons-digester-1.8.jar"/>
@@ -139,5 +138,7 @@
 	<classpathentry kind="var" path="JBOSS-LIB/log4j.jar"/>
 	<classpathentry kind="var" path="JBOSS-LIB/servlet-api.jar"/>
 	<classpathentry kind="var" path="JBOSS-LIB/jsp-api.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/commons-beanutils-1.8.0.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/commons-beanutils-bean-collections-1.8.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

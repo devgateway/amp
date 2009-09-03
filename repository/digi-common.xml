@@ -51,8 +51,11 @@
             <description>Digi's feed publishing service</description>
      </service>
 
-	
-
+<!-- 
+	 <service id="XmlPatcherService" class="org.digijava.module.xmlpatcher.core.XmlPatcherService">
+            <description>XML Patcher Module</description>
+   	 </service>
+ -->
 
     <service id="ignoredAgentsService" class="org.digijava.kernel.request.service.IgnoredAgentsService">
         <description>Service to determine which agents will use SSO</description> 

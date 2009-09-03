@@ -33,6 +33,7 @@ import org.digijava.module.gis.util.ActivityLocationFunding;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import java.util.HashSet;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
 
 
 /**
@@ -87,6 +88,7 @@ public class ShowRegionReport extends Action {
         FundingData ammount = (FundingData) fundingLocationMap.
                               get(gisRegReportForm.getRegCode());
 
+        Long primarySectorClasId = SectorUtil.getPrimaryConfigClassificationId();
         AmpSector selSector = SectorUtil.getAmpSector(gisRegReportForm.
                 getSectorId());
 
@@ -111,7 +113,7 @@ public class ShowRegionReport extends Action {
                     getActivityLocationFundingList());
         }
 
-        Long primarySectorClasId = SectorUtil.getPrimaryConfigClassificationId();
+
         gisRegReportForm.setPrimarySectorSchemeId(primarySectorClasId);
 
         return mapping.findForward("forward");
@@ -124,12 +126,23 @@ public class ShowRegionReport extends Action {
 
         Map locationFundingMap = new HashMap();
         FundingData totalFundingForSector = new FundingData();
+        Long primarySectorClasId = SectorUtil.getPrimaryConfigClassificationId();
         //Calculate total funding
         if (activityList != null) {
             Iterator<Object[]> actIt = activityList.iterator();
             while (actIt.hasNext()) {
                 Object[] actData = actIt.next();
                 AmpActivity activity = (AmpActivity) actData[0];
+
+                Set topLevelSectorNames = new HashSet();
+                Iterator secIt = activity.getSectors().iterator();
+                while (secIt.hasNext()) {
+                    AmpSector sec = ((AmpActivitySector) secIt.next()).getSectorId();
+                    if (sec.getAmpSecSchemeId().getAmpSecSchemeId().equals(primarySectorClasId)) {
+                        topLevelSectorNames.add(getTopLevelSector(sec).getName());
+                    }
+                }
+
                 Float percentsForSectorSelected = (Float) actData[1];
                 FundingData totalFunding = GetFoundingDetails.
                                            getActivityTotalFundingInUSD(
@@ -234,6 +247,7 @@ public class ShowRegionReport extends Action {
                                             activity);
 
                                     activityLocationFunding.setDonorOrgs(donorOrg);
+                                    activityLocationFunding.setTopSectors(topLevelSectorNames);
 
 
 
@@ -301,6 +315,7 @@ public class ShowRegionReport extends Action {
             fundingForSector.getExpenditure().multiply(new BigDecimal(loc.getLocationPercentage() / 100f)),
                                             activity);
                                         activityLocationFunding.setDonorOrgs(donorOrg);
+                                        activityLocationFunding.setTopSectors(topLevelSectorNames);
                                         newVal.getActivityLocationFundingList().
                                                 add(activityLocationFunding);
 
@@ -389,6 +404,8 @@ public class ShowRegionReport extends Action {
                                             getLocationPercentage() / 100f)),
                                             activity);
                                     activityLocationFunding.setDonorOrgs(donorOrg);
+                                    activityLocationFunding.setTopSectors(topLevelSectorNames);
+
 
                                     newVal.getActivityLocationFundingList().add(
                                             activityLocationFunding);
@@ -468,6 +485,7 @@ public class ShowRegionReport extends Action {
                                                 getLocationPercentage() / 100f)),
                                                 activity);
                                         activityLocationFunding.setDonorOrgs(donorOrg);
+                                        activityLocationFunding.setTopSectors(topLevelSectorNames);
 
                                         if (activityLocationFunding.
                                                 getCommitment().intValue() != 0) {
@@ -518,6 +536,14 @@ public class ShowRegionReport extends Action {
         Object[] retVal = new Object[2];
         retVal[0] = locationFundingMap;
         retVal[1] = totalFundingForSector;
+        return retVal;
+    }
+
+    private AmpSector getTopLevelSector(AmpSector sector) {
+        AmpSector retVal = sector;
+        while (retVal.getParentSectorId() != null) {
+           retVal = retVal.getParentSectorId();
+        }
         return retVal;
     }
 

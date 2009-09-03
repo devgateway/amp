@@ -33,6 +33,7 @@ public class ActivityLocationFunding {
     private AmpActivity activity;
 
     private Set donorOrgs;
+    private Set topSectors;
 
     public AmpActivity getActivity() {
         return activity;
@@ -66,6 +67,10 @@ public class ActivityLocationFunding {
         return donorOrgs;
     }
 
+    public Set getTopSectors() {
+        return topSectors;
+    }
+
     public void setActivity(AmpActivity activity) {
         this.activity = activity;
     }
@@ -96,6 +101,10 @@ public class ActivityLocationFunding {
 
     public void setDonorOrgs(Set donorOrgs) {
         this.donorOrgs = donorOrgs;
+    }
+
+    public void setTopSectors(Set topSectors) {
+        this.topSectors = topSectors;
     }
 
 }

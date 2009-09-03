@@ -111,6 +111,9 @@ public class ShowRegionReport extends Action {
                     getActivityLocationFundingList());
         }
 
+        Long primarySectorClasId = SectorUtil.getPrimaryConfigClassificationId();
+        gisRegReportForm.setPrimarySectorSchemeId(primarySectorClasId);
+
         return mapping.findForward("forward");
     }
 

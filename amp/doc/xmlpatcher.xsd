@@ -6,8 +6,8 @@
 <!-- author Mihai Postelnicu - mpostelnicu@dgfoundation.org	-->
 <!-- *******************************************************-->
 
-<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://docs.ampdev.net/schemas/patcher2"
-	targetNamespace="http://docs.ampdev.net/schemas/patcher2">
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher"
+	targetNamespace="http://docs.ampdev.net/schemas/xmlpatcher">
 	<element name="patches" type="tns:patch"/>
 
 
@@ -119,7 +119,7 @@
 		<attribute name="closeOnSuccess" type="boolean" use="optional" default="true">
 			<annotation>
 				<documentation>Defaults to true. If false, this patch will be re-applied even if it succeeded. This is needed in order to produce "cleanup" patches. In such case, the trigger will kick in
-whenver some re-ocurring garbage data has been found using condition entities, and that requires immediate correction</documentation>
+whenever some re-occurring garbage data has been found using condition entities, and that requires immediate correction</documentation>
 			</annotation></attribute>
 	</complexType>
 
@@ -131,7 +131,7 @@ whenver some re-ocurring garbage data has been found using condition entities, a
 				trigger per patch, if any, and this trigger can hold an
 				arbitrary number of conditions (more than 1). The
 				trigger of type ALL will return true if all the
-				underlying conditions are true, a trigger of type ANY
+				underlying conditions are true, a trigger of type webANY
 				will return true if at least one condition is met. A
 				trigger's result may be inverted using inverted
 				attribute, so a false trigger becomes true.
@@ -198,28 +198,34 @@ whenver some re-ocurring garbage data has been found using condition entities, a
 
 	<complexType name="script">
 		<sequence>
-			<element name="lang" type="tns:lang"></element>
+			<element name="lang" type="tns:lang" minOccurs="1" maxOccurs="unbounded"></element>
 		</sequence>
 		<attribute name="returnVar" type="string"></attribute>
 	</complexType>
 
 	<complexType name="lang">
-		<attribute name="type" type="tns:langType"></attribute>
+		<simpleContent>
+			<extension base="string">
+				<attribute name="type" type="tns:langType"></attribute>
+				<attribute name="delimiter" type="string" default=";"></attribute>
+			</extension>
+		</simpleContent>
 	</complexType>
 
-    <simpleType name="langType">
-    	<restriction base="string">
-    		<enumeration value="sql"></enumeration>
-    		<enumeration value="hql"></enumeration>
-    		<enumeration value="mysql"></enumeration>
-    		<enumeration value="oracle"></enumeration>
-    		<enumeration value="postgres"></enumeration>
-    		<enumeration value="bsh"></enumeration>
-    	</restriction>
-    </simpleType>
+	<simpleType name="langType">
+		<restriction base="string">
+			<enumeration value="sql"></enumeration>
+			<enumeration value="hql"></enumeration>
+			<enumeration value="mysql"></enumeration>
+			<enumeration value="oracle"></enumeration>
+			<enumeration value="postgres"></enumeration>
+			<enumeration value="bsh"></enumeration>
+			<whiteSpace value="collapse"></whiteSpace>
+		</restriction>
+	</simpleType>
 
 
-    <complexType name="scriptGroup">
+	<complexType name="scriptGroup">
     	<sequence>
     		<element name="script" type="tns:script" minOccurs="1" maxOccurs="unbounded"></element>
     	</sequence>

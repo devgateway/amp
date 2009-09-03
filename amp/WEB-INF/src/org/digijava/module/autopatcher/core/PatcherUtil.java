@@ -7,29 +7,18 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-
+import org.apache.log4j.Logger;
+import org.digijava.module.autopatcher.exceptions.InvalidPatchRepositoryException;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-
-import org.apache.log4j.Logger;
-import org.digijava.module.autopatcher.dbentity.AmpPatch;
-import org.digijava.module.autopatcher.exceptions.InvalidPatchRepositoryException;
-import org.digijava.module.autopatcher.schema.Patch;
 
 public class PatcherUtil {
 
@@ -43,19 +32,6 @@ public class PatcherUtil {
 	
 	private static Logger logger = Logger.getLogger(PatcherUtil.class);
 
-	public static Map<String, AmpPatch> getAllRecordedPatches(Session hs) throws HibernateException,
-			SQLException {
-		Query query = hs.createQuery("select p from "
-				+ AmpPatch.class.getName() + " p");
-		List col = query.list();
-		Map<String, AmpPatch> ret=new HashMap<String, AmpPatch>();
-		Iterator i=col.iterator();
-		while (i.hasNext()) {
-			AmpPatch element = (AmpPatch) i.next();
-			ret.put(element.getAbstractLocation(), element);
-		}
-		return ret;
-	}
 
 	public static Set getAllAppliedPatches(Session session) throws HibernateException {
 		
@@ -107,18 +83,7 @@ public class PatcherUtil {
 		return patchFiles;
 	}
 
-	public static Patch getUnmarshalledPatch(File patchFile)
-			throws JAXBException {
-		JAXBContext jc = JAXBContext
-				.newInstance("org.digijava.module.autopatcher.schema");
-		Unmarshaller m = jc.createUnmarshaller();
-		m.setValidating(true);
-
-		Patch p = (Patch) m.unmarshal(patchFile);
-		
-		return p;
-	}
-
+	
 	/*
 	 
 	public static Collection<File> getAllXMLPatchFiles(String abstractPatchesLocation)

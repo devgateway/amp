@@ -28,6 +28,8 @@ public class GisRegReportForm extends ActionForm {
     private String actualDisbursementsStr;
     private String actualExpendituresStr;
 
+    private Long primarySectorSchemeId;
+
     private String selSectorName;
 
     private List activityLocationFundingList;
@@ -85,6 +87,10 @@ public class GisRegReportForm extends ActionForm {
         return activityLocationFundingList;
     }
 
+    public Long getPrimarySectorSchemeId() {
+        return primarySectorSchemeId;
+    }
+
     public void setActualCommitmentsStr(String actualCommitmentsStr) {
         this.actualCommitmentsStr = actualCommitmentsStr;
     }
@@ -135,6 +141,10 @@ public class GisRegReportForm extends ActionForm {
 
     public void setActivityLocationFundingList(List activityLocationFundingList) {
         this.activityLocationFundingList = activityLocationFundingList;
+    }
+
+    public void setPrimarySectorSchemeId(Long primarySectorSchemeId) {
+        this.primarySectorSchemeId = primarySectorSchemeId;
     }
 
 

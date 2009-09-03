@@ -170,6 +170,8 @@
 						
 						<tbody style="overflow-y:scroll; overflow-x: hidden;" height="250">
 						
+						<bean:define name="gisRegReportForm" property="primarySectorSchemeId" id="primarySectorScheme"/>
+						
 						<logic:iterate name="gisRegReportForm" property="activityLocationFundingList" id="activityLocationFunding">
 							<tr>
 								<td width="30%" valign="top" style="overflow-x:hidden;" height="20">
@@ -206,10 +208,12 @@
 												<logic:notEmpty name="activityLocationFunding" property="activity.sectors">
 													<ul style="margin:0 0 0 20px; padding:0;">
 													<logic:iterate name="activityLocationFunding" property="activity.sectors" id="iterSector">
-														<li>
 														<bean:define id="ampSec" name="iterSector" property="sectorId" type="org.digijava.module.aim.dbentity.AmpSector"/>
-														<bean:write name="ampSec" property="name"/>
-														</li>
+														<logic:equal name="ampSec" property="ampSecSchemeId.ampSecSchemeId" value="<%=primarySectorScheme.toString()%>">
+															<li>
+															<bean:write name="ampSec" property="name"/>
+															</li>
+														</logic:equal>
 													</logic:iterate>
 													</ul>
 												</logic:notEmpty>

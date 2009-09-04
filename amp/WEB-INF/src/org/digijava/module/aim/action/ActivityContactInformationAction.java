@@ -80,7 +80,7 @@ public class ActivityContactInformationAction extends Action {
 		}
 		if(action!=null && action.equalsIgnoreCase("checkDulicateEmail")){
 			String email=request.getParameter("email").trim();
-			int emailCount=ContactInfoUtil.getContactsCount(email);
+			int emailCount=ContactInfoUtil.getContactsCount(email,null);
 			String contactEmail=null;
 			if(emailCount>0){
 				contactEmail="exists";

@@ -344,6 +344,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Beneficiary Agency Groups" feature="Beneficiary Agency"></field:display> 
 <field:display name="Beneficiary Agency Remove Button" feature="Beneficiary Agency"></field:display> 
 <field:display name="Beneficiary Agency" feature="Beneficiary Agency"></field:display> 
+<field:display name="Beneficiary Agency  Department/Division"  feature="Beneficiary Agency"></field:display>
 <field:display name="Cancel button" feature="Create Message Form"></field:display> 
 <field:display name="Channel Overview Tab" feature="Channel Overview"></field:display> 
 <field:display name="Classification Expenditure" feature="Funding Information"></field:display> 
@@ -394,6 +395,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Contracting Agency Add Button" feature="Contracting Agency"></field:display> 
 <field:display name="Contracting Agency Remove Button" feature="Contracting Agency"></field:display> 
 <field:display name="Contracting Agency" feature="Contracting Agency"></field:display> 
+<field:display name="Contracting Agency Department/Division"  feature="Contracting Agency"></field:display>
 <field:display name="Contracting Cancel Saving" feature="Contracting"></field:display> 
 <field:display name="Contracting Central Amount" feature="Contracting"></field:display> 
 <field:display name="Contracting Contractor Name" feature="Contracting"></field:display> 
@@ -507,6 +509,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Executing Agency Groups" feature="Executing Agency"></field:display> 
 <field:display name="Executing Agency Remove Button" feature="Executing Agency"></field:display> 
 <field:display name="Executing Agency" feature="Executing Agency"></field:display> 
+<field:display name="Executing Agency Department/Division"  feature="Executing Agency"></field:display>
 <field:display name="External Financing" feature="Admin NPD"></field:display> 
 <field:display name="FY" feature="Budget"></field:display> 
 <field:display name="Final Date for Contracting" feature="Planning"></field:display> 
@@ -535,7 +538,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Implementing Agency Add Button" feature="Implementing Agency"></field:display> 
 <field:display name="Implementing Agency Groups" feature="Implementing Agency"></field:display> 
 <field:display name="Implementing Agency Remove Button" feature="Implementing Agency"></field:display> 
-<field:display name="Implementing Agency" feature="Implementing Agency"></field:display> 
+<field:display name="Implementing Agency" feature="Implementing Agency"></field:display>
+<field:display name="Implementing Agency Department/Division"  feature="Implementing Agency"></field:display> 
 <field:display name="Inbox Alert" feature="Alert tab"></field:display> 
 <field:display name="Inbox Message" feature="Message tab"></field:display> 
 <field:display name="Indicator Base Value" feature="Activity"></field:display> 
@@ -662,7 +666,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Regional Funding Tab" feature="Regional Funding"></field:display> 
 <field:display name="Regional Group Add Button" feature="Regional Group"></field:display> 
 <field:display name="Regional Group Remove Button" feature="Regional Group"></field:display> 
-<field:display name="Regional Group" feature="Regional Group"></field:display> 
+<field:display name="Regional Group" feature="Regional Group"></field:display>
+<field:display name="Regional Group Department/Division"  feature="Regional Group"></field:display> 
 <field:display name="Regional Percentage" feature="Location"></field:display> 
 <field:display name="Related Activity Dropdown" feature="Create Message Form"></field:display> 
 <field:display name="Remove Actors Button" feature="Issues"></field:display> 
@@ -685,6 +690,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Responsible Organization Add Button" feature="Responsible Organization"></field:display> 
 <field:display name="Responsible Organization Groups" feature="Responsible Organization"></field:display> 
 <field:display name="Responsible Organization Organizations Button" feature="Responsible Organization"></field:display> 
+<field:display name="Responsible Organization Department/Division"  feature="Responsible Organization"></field:display>
+
 <field:display name="Results" feature="Identification"></field:display> 
 <field:display name="Revised Target Value" feature="Activity"></field:display> 
 <field:display name="Risk" feature="Activity"></field:display> 
@@ -698,6 +705,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Sector Group Add Button" feature="Sector Group"></field:display> 
 <field:display name="Sector Group Remove Button" feature="Sector Group"></field:display> 
 <field:display name="Sector Group" feature="Sector Group"></field:display> 
+<field:display name="Sector Group Department/Division"  feature="Sector Group"></field:display>
 <field:display name="Sector Ministry Contact Email" feature="Sector Ministry Contact Information"></field:display> 
 <field:display name="Sector Ministry Contact Fax Number" feature="Sector Ministry Contact Information"></field:display> 
 <field:display name="Sector Ministry Contact First Name" feature="Sector Ministry Contact Information"></field:display> 

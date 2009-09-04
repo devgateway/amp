@@ -28,20 +28,20 @@
 												<logic:iterate name="aimEditActivityForm" property="agencies.benAgencies"
 												id="benAgency" type="org.digijava.module.aim.dbentity.AmpOrganisation">
 												<tr><td>
-													<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
+													<table width="80%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
 														<tr>
-															<td width="10%">
+															<td width="2%">
 																<html:multibox property="agencies.selBenAgencies">
 																	<bean:write name="benAgency" property="ampOrgId" />
 																</html:multibox>
 															</td>
-															<td align="left" width="45%">
+															<td align="left" width="49%">
 															
 																<bean:write name="benAgency" property="name" />
 															</td>
-															<td width="45%">
-																<field:display name="Beneficiary Agency  Additional Info"  feature="Beneficiary Agency">
-																	<digi:trn>Additional Info: </digi:trn><html:text property="agencies.benOrgToInfo(${benAgency.ampOrgId})"></html:text>
+															<td width="49%">
+																<field:display name="Beneficiary Agency  Department/Division"  feature="Beneficiary Agency">
+																	<digi:trn>Department/Division: </digi:trn><html:text property="agencies.benOrgToInfo(${benAgency.ampOrgId})"></html:text>
 																</field:display>
 																&nbsp;
 															</td>

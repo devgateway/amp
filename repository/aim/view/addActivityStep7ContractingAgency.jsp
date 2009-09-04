@@ -27,19 +27,19 @@
 												<logic:iterate name="aimEditActivityForm" property="agencies.conAgencies"
 												id="conAgency" type="org.digijava.module.aim.dbentity.AmpOrganisation">
 												<tr><td>
-													<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
+													<table width="80%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
 														<tr>
-															<td width="10%">
+															<td width="2%">
 																<html:multibox property="agencies.selConAgencies">
 																	<bean:write name="conAgency" property="ampOrgId" />
 																</html:multibox>
 															</td>
-															<td align="left" width="45%">
+															<td align="left" width="49%">
 																<bean:write name="conAgency" property="name" />
 															</td>
-															<td width="45%">
-																<field:display name="Contracting Agency Additional Info"  feature="Contracting Agency">
-																	<digi:trn>Additional Info: </digi:trn><html:text property="agencies.conOrgToInfo(${conAgency.ampOrgId})"></html:text>
+															<td width="49%">
+																<field:display name="Contracting Agency Department/Division"  feature="Contracting Agency">
+																	<digi:trn>Department/Division: </digi:trn><html:text property="agencies.conOrgToInfo(${conAgency.ampOrgId})"></html:text>
 																</field:display>
 																&nbsp;
 															</td>

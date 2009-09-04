@@ -28,7 +28,8 @@
 
     function checkForduplicateEmail(){ //checks whether such email already exists in db
         var email=document.getElementById('contactEmail').value;
-        var url=addActionToURL('addAmpContactInfo.do?action=checkDulicateEmail&email='+email);
+        var id=document.getElementById('contactId').value;
+        var url=addActionToURL('addAmpContactInfo.do?action=checkDulicateEmail&email='+email+"&contactId="+id);
         var async=new Asynchronous();
         async.complete=showErrorOrSaveContact;
         async.call(url);
@@ -114,7 +115,7 @@
 		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
                 
             }
-
+         
         function searchContact(){
             var flg=checkEmptyKeywordContact();
             if(flg){
@@ -158,7 +159,8 @@
                       "&organisationName="+document.getElementById('contactOrgName').value+
                       "&phone="+document.getElementById('contactPhone').value+
                       "&fax="+document.getElementById('contactFax').value+
-                      "&mobilephone="+document.getElementById('contactMobilephone').value;
+                      "&mobilephone="+document.getElementById('contactMobilephone').value+
+                      "&contactId="+document.getElementById('contactId').value;
                   return params;
               }
         function getSelectedContactsParams(){

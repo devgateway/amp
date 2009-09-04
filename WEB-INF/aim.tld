@@ -207,4 +207,37 @@
 		<bodycontent>JSP</bodycontent>
 	</tag>
 
+        <tag>
+            <name>editContactLink</name>
+            <tagclass>
+			org.digijava.module.aim.uicomponents.EditContactLink
+            </tagclass>
+            <info>Edit Contact  tag</info>
+            <attribute>
+                <name>collection</name>
+                <required>true</required>
+                <description>
+				Collection where the selcted contacts will be added
+                </description>
+            </attribute>
+
+            <attribute>
+                <rtexprvalue>true</rtexprvalue>
+                <name>form</name>
+                <required>true</required>
+            </attribute>
+            <description>
+			The name of the form on any scope that will be used to edit
+			the selected contact
+            </description>
+            <attribute>
+                <name>contactId</name>
+                <required>true</required>
+                <rtexprvalue>true</rtexprvalue>
+                <description>
+                    contactId is id of contact which is going to be updated
+                </description>
+            </attribute>
+            <bodycontent>JSP</bodycontent>
+        </tag>
 </taglib>

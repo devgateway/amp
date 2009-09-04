@@ -112,22 +112,29 @@ public class ContactInfoUtil {
 		return contacts;
 	}
 	
-	public static int getContactsCount(String email) throws Exception{
+	public static int getContactsCount(String email,Long id) throws Exception{
 		int retValue=0;
 		Session session=null;
 		String queryString =null;
 		Query query=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
-			queryString="select count(cont) from " +AmpContact.class.getName() + " cont where cont.email like '" + email + "'";
+			queryString="select count(cont) from " +AmpContact.class.getName() + " cont where cont.email=:email  ";
+                        if(id!=null){
+                            queryString+=" and cont.id!=:id";
+                        }
 			query=session.createQuery(queryString);
-			retValue=(Integer)query.uniqueResult();			
+                        if(id!=null){
+                            query.setLong("id", id);
+                        }
+                        query.setString("email", email);
+			retValue=(Integer)query.uniqueResult();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return retValue;
 	}
-	
+
 	public static int getContactsSize(String keyword,String alpha) throws Exception{
 		int retValue=0;
 		Session session=null;

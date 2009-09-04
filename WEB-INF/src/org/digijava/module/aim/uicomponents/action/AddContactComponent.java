@@ -5,9 +5,11 @@ package org.digijava.module.aim.uicomponents.action;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,6 +21,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.uicomponents.AddContact;
+import org.digijava.module.aim.uicomponents.EditContactLink;
 import org.digijava.module.aim.uicomponents.form.AddContactComponentForm;
 import org.digijava.module.aim.util.ContactInfoUtil;
 
@@ -52,9 +55,39 @@ public class AddContactComponent extends DispatchAction{
          createForm.setFunction(null);
          createForm.setMobilephone(null);
          createForm.setOfficeaddress(null);
+         createForm.setContactId(null);
          Object targetForm = session.getAttribute(AddContact.PARAM_PARAM_FORM_NAME);
          createForm.setTargetForm(targetForm);
          String collection = request.getParameter(AddContact.PARAM_COLLECTION_NAME);
+         createForm.setTargetCollection(collection);
+         return mapping.findForward("forward");
+    }
+
+       public  ActionForward edit(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+         AddContactComponentForm createForm = (AddContactComponentForm) form;
+         String contId =request.getParameter(EditContactLink.PARAM_CONTACT_ID);
+         Long contactId=Long.valueOf(contId);
+         AmpContact contact= ContactInfoUtil.getContact(contactId);
+         HttpSession session = request.getSession();
+         createForm.setKeyword(null);
+         createForm.setContacts(null);
+         createForm.setContactId(contact.getId());
+         createForm.setEmail(contact.getEmail());
+         createForm.setFax(contact.getFax());
+         createForm.setLastname(contact.getLastname());
+         createForm.setPhone(contact.getPhone());
+         createForm.setName(contact.getName());
+         createForm.setOrganisationName(contact.getOrganisationName());
+         createForm.setSelContactIds(null);
+         createForm.setTitle(contact.getTitle());
+         createForm.setFunction(contact.getFunction());
+         createForm.setMobilephone(contact.getMobilephone());
+         createForm.setOfficeaddress(contact.getOfficeaddress());
+         Object targetForm = session.getAttribute(EditContactLink.PARAM_PARAM_FORM_NAME);
+         createForm.setTargetForm(targetForm);
+         String collection = request.getParameter(EditContactLink.PARAM_COLLECTION_NAME);
          createForm.setTargetCollection(collection);
          return mapping.findForward("forward");
     }
@@ -76,7 +109,7 @@ public class AddContactComponent extends DispatchAction{
             throws Exception {
         AddContactComponentForm createForm = (AddContactComponentForm) form;
         String email = createForm.getEmail();
-        int emailCount = ContactInfoUtil.getContactsCount(email);
+        int emailCount = ContactInfoUtil.getContactsCount(email,createForm.getContactId());
         String contactEmail = null;
         if (emailCount > 0) {
             contactEmail = "exists";
@@ -104,26 +137,28 @@ public class AddContactComponent extends DispatchAction{
         AddContactComponentForm createForm = (AddContactComponentForm) form;
         Field target = createForm.getTargetForm().getClass().getDeclaredField(createForm.getTargetCollection());
         target.setAccessible(true);
+        Collection<AmpContact> sortedtargetCollecion = new TreeSet<AmpContact>(new AmpContactCompare());
         Collection<AmpContact> targetCollecion = (Collection<AmpContact>) target.get(createForm.getTargetForm());
-
-        if (targetCollecion == null) {
-            targetCollecion = new ArrayList<AmpContact>();
+        if (targetCollecion != null) {
+            sortedtargetCollecion.addAll(targetCollecion);
         }
-
         Long[] contIds = createForm.getSelContactIds();
-
         if (contIds != null && contIds.length > 0) {
             for (int i = 0; i < contIds.length; i++) {
                 AmpContact contact = ContactInfoUtil.getContact(contIds[i]);
-                if (!targetCollecion.contains(contact)) {
-                    targetCollecion.add(contact);
+                if (!sortedtargetCollecion.contains(contact)) {
+                    sortedtargetCollecion.add(contact);
+                } else {
+                    sortedtargetCollecion.remove(contact);
+                    sortedtargetCollecion.add(contact);
                 }
             }
 
         }
-
+        targetCollecion.clear();
+        targetCollecion.addAll(sortedtargetCollecion);
         target.set(createForm.getTargetForm(), targetCollecion);
-   
+
         return mapping.findForward("forward");
 
     }
@@ -131,7 +166,13 @@ public class AddContactComponent extends DispatchAction{
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
           AddContactComponentForm createForm = (AddContactComponentForm) form;
-         AmpContact contact=new AmpContact();
+          AmpContact contact=null;
+          if(createForm.getContactId()==null||createForm.getContactId()==0){
+               contact=new AmpContact();
+          }
+          else{
+               contact=ContactInfoUtil.getContact(createForm.getContactId());
+          }
 		contact.setName(createForm.getName().trim());
 		contact.setLastname(createForm.getLastname().trim());
 		contact.setEmail(createForm.getEmail().trim());
@@ -173,5 +214,9 @@ public class AddContactComponent extends DispatchAction{
 
      }
 
-
+    class AmpContactCompare implements Comparator<AmpContact> {
+        public int compare(AmpContact cont1, AmpContact cont2) {
+            return cont1.getId().compareTo(cont2.getId());
+        }
+    }
 }

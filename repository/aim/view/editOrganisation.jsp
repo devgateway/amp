@@ -114,8 +114,6 @@
             var percent=document.aimAddOrgForm.orgInfoPercent;
             var amount=document.aimAddOrgForm.orgInfoAmount;
             var currId=document.aimAddOrgForm.orgInfoCurrId;
-            var regExpPercent="^\\d*\\.?\\d+%?$";
-            var regExpAmount="^\\d+\\.?\\d*$";
             var errorMsg;
           
 
@@ -1373,7 +1371,7 @@
                     <td>
                         <digi:trn>TITLE </digi:trn>
                     </td>
-                    <td>
+                    <td colspan="2">
                         &nbsp;
                     </td>
                 </tr>
@@ -1399,7 +1397,13 @@
                             ${contact.title}
                         </td>
                         <td>
-                            <a href="javascript:removeContact('${info.id}')">
+                     
+                           <aim:editContactLink collection="contacts" form="${aimAddOrgForm}" contactId="${contact.id}">
+                                <img alt="edit" src= "../ampTemplate/images/application_edit.png" border="0"/>
+                            </aim:editContactLink>
+                        </td>
+                        <td>
+                            <a href="javascript:removeContact('${contact.id}')">
                                 <img alt="delete" src= "../ampTemplate/images/trash_12.gif" border="0"/>
                             </a>
                         </td>

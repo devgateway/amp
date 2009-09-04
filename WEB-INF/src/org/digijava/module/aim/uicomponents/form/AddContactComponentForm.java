@@ -23,9 +23,16 @@ public class AddContactComponentForm extends ActionForm {
     private String action;
     private String targetCollection = "";
     private Object targetForm;
+    private Long contactId;
+
+    public Long getContactId() {
+        return contactId;
+    }
+
+    public void setContactId(Long contactId) {
+        this.contactId = contactId;
+    }
   
-
-
 
     public String getAction() {
         return action;

@@ -14,9 +14,8 @@
 			<td><%= donor.name %></td>
 			<td><%= projects.size %></td>
 			<td>
-				<%= reports_link_to(image_tag("/images/list.gif", :size => "14x15", :border => 0), 
-					:controller => "reports", :action => "project_list", :query => "donor", 
-					:value => donor.id) %>
+				<%= reports_link_to image_tag("/images/list.gif", :size => "14x15", :border => 0), 
+					reports_donor_path(donor) %>
 			</td>
 		</tr>
 	<% end %>

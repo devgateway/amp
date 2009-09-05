@@ -38,6 +38,7 @@ en:
         gender_policy_marker: Gender Policy
         environment_policy_marker: Environment Policy
         sector_relevances: Project's Focal Sectors
+        geo_relevances: Project's Focal Regions
         sectors: Sectors
         
       sector_relevance:
@@ -48,6 +49,7 @@ en:
       geo_relevance:
         province: Region
         district: Municipalities
+        amount: Amount in %
         
       user:
         name: Name

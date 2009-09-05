@@ -99,12 +99,6 @@ module ReportsHelper
   # Use this helper to create links which open in new windows with the report_window layout
   # win_caption: DEPRECATED
   def reports_link_to(text, url, win_caption = nil)
-    if url.respond_to?(:merge)
-      url = url.merge({ :report => true })
-    else
-      url += "?report=true"
-    end
-    
     link_to(text, url, :popup => ["_blank", 'height=700,width=800,scrollbars=yes,resizable=yes'])
   end
   

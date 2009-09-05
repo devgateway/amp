@@ -7,7 +7,6 @@ class ApplicationController < ActionController::Base
   helper :all
   before_filter :set_output_currency
   before_filter :set_locale
-  layout :smart_layout
   
   filter_parameter_logging :password, :password_confirmation
   
@@ -22,14 +21,6 @@ protected
     
   def set_output_currency
     MultiCurrency.output_currency = params[:currency]
-  end
-  
-  def smart_layout
-    if params[:report]
-      "report_window"
-    else
-      "application"
-    end
   end
   
   def ensure_open_data_input

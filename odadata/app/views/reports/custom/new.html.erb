@@ -1,6 +1,7 @@
 <% js_behavior 'checkboxes' %>
 
-<% form_tag({:action => 'custom'}, 
+<% form_tag(
+	{ :action => 'create', :method => :put, },
 	:id => 'custom_report_conditions', 
 	:target => "Results", 
 	:onsubmit => "window.open('',this.target,'resizable=1,scrollbars=1,height=600,width=800');return true;") do 
@@ -22,21 +23,10 @@
 		<h2><%= lc(:output) %></h2>
 		
 		<ul class="checkbox_container">
-			<h3><%= lc(:output_format) %></h3>
-			<li><%= radio_button "output", "format", "web", :checked => true %><%= lc(:web) %></li>
-			<li><%= radio_button "output", "format", "excel" %><%= lc(:excel) %></li>
-			<!--<li><%= check_box "output", "map", :disabled => true %><%= lc(:map) %></li>-->
-			<li>
-				<%= lc(:output_in) %>: 
-					<%= select_tag "currency", options_from_collection_for_select(ExchangeRate.available_currencies, :to_s, :to_s, Prefs.default_currency) %>
-			</li>
-		</ul>
-		
-		<ul class="checkbox_container">
 			<h3><span style="float:left"><%= lc(:fields) %></span><span class="link" onclick="toggleAll('query_options', '<%= lc(:select_all) %>', '<%= lc(:deselect_all) %>')" id="query_options_toggle" selected="false"><%= lc(:select_all) %></span></h3>
 			<input type="hidden" value="1" name="query_options[factsheet_link]" />
             
-			<%= render :partial => "reports/query_options/query_option", :collection => Report.query_options %>
+			<%= render :partial => "reports/query_options/query_option" %>
 		</ul>
 	</div>
 	
@@ -115,6 +105,12 @@
 		<ul class="checkbox_container">
 			<h3><span style="float:left"><%= ll(:reports, :status) %></span><span class="link" onclick="toggleAll('prj_status', '<%= lc(:select_all) %>', '<%= lc(:deselect_all) %>')" id="prj_status_toggle" selected="false"><%= lc(:select_all) %></span></h3>
 			<%= render :partial => "reports/query_options/status", :collection => translate_options(Project::STATUS_OPTIONS) %>
+		</ul>
+		
+		<ul class="checkbox_container">
+			<h3><span style="float:left"><%= ll(:reports, :disaggregation) %></span><span class="link" onclick="toggleAll('disaggregation', '<%= lc(:select_all) %>', '<%= lc(:deselect_all) %>')" id="disaggregation_toggle" selected="false"><%= lc(:select_all) %></span></h3>
+			<li><%= check_box "disaggregation", "sector", :checked => false %><%= I18n.t('reports.disaggregation.by_sector') %></li>
+			<li><%= check_box "disaggregation", "location", :checked => false %><%= I18n.t('reports.disaggregation.by_location') %></li>
 		</ul>
 		
 	</div>	

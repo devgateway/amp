@@ -1,3 +1,121 @@
 <li>
-	<%= check_box "query_options", query_option[0], { :checked => !!query_option[2] }, query_option_counter+2 %><%= query_option[1] %>
+	<%= check_box "query_options", "donor", { :checked => true }, 3 %><%= I18n.t('terms.donor') %>
+</li>
+
+<li>
+	<%= check_box "query_options", "agency", { :checked => true }, 4 %><%= I18n.t('reports.donor_agency') %>
+</li>
+
+<li>
+	<%= check_box "query_options", "donor_project_number", { :checked => true }, 5 %><%= I18n.t('reports.project_number') %>
+</li>
+
+<li>
+	<%= check_box "query_options", "oecd_number", { :checked => false }, 6 %><%= I18n.t('reports.oecd_id') %>
+</li>
+
+<li>
+	<%= check_box "query_options", "recipient_country_budget_nr", { :checked => false }, 7 %><%= I18n.t('reports.budget_number') %>
+</li>
+
+<li>
+	<%= check_box "query_options", "title", { :checked => true }, 8 %><%= I18n.t('reports.project_title') %>
+</li>
+
+<li>
+	<%= check_box "query_options", "description", { :checked => false }, 9 %><%= I18n.t('reports.project_desc') %>
+</li>
+
+<li>
+	<%= check_box "query_options", "strategy_link", { :checked => false }, 10 %><%= I18n.t('reports.cs_link') %>
+</li>
+
+<li>
+	<%= check_box "query_options", "prj_status", { :checked => false }, 11 %><%= I18n.t('reports.project_status') %>
+</li>
+
+<li>
+	<%= check_box "query_options", "start", { :checked => true }, 12 %><%= I18n.t('reports.start') %>
+</li>
+
+<li>
+	<%= check_box "query_options", "end", { :checked => true }, 13 %><%= I18n.t('reports.end') %>
+</li>
+
+<li>
+	<%= check_box "query_options", "total_commitments", { :checked => true }, 14 %><%= I18n.t('reports.commitments_td') %>
+</li>
+
+<li>
+	<%= check_box "query_options", "total_payments", { :checked => true }, 15 %><%= I18n.t('reports.disbursements_td') %>
+</li>
+
+<% Project::FIRST_YEAR_OF_RELEVANCE.upto(Time.now.year+3) do |year| %>
+	<li>
+		<%# check_box "query_options", "funds_for[#{year}]", { :checked => false }, 16 %><%= I18n.t('reports.funds_for', :year => year) %>
+	</li>
+<% end %>
+
+<li>
+	<%= check_box "query_options", "total_cofunding", { :checked => false }, 16 %><%= I18n.t('reports.total_cofunding') %>
+</li>
+
+<li>
+	<%= check_box "query_options", "cofunding_donors", { :checked => false }, 17 %><%= I18n.t('reports.cofunding_donors') %>
+</li>
+
+<li>
+	<%= check_box "query_options", "national_regional", { :checked => false }, 18 %><%= I18n.t('reports.national_regional') %>
+</li>
+
+<li>
+	<%= check_box "query_options", "type_of_implementation", { :checked => false }, 19 %><%= I18n.t('reports.toi') %>
+</li>
+
+<li>
+	<%= check_box "query_options", "sectors", { :checked => false }, 20 %><%= I18n.t('terms.dac_sector') %>
+</li>
+
+<li>
+	<%= check_box "query_options", "aid_modality", { :checked => false }, 21 %><%= I18n.t('reports.toa') %>
+</li>
+
+<li>
+	<%= check_box "query_options", "grant_loan", { :checked => false }, 22 %><%= I18n.t('reports.grant_loan') %>
+</li>
+
+<li>
+	<%= check_box "query_options", "impl_agencies", { :checked => false }, 23 %><%= I18n.t('reports.impl_agencies') %>
+</li>
+
+<li>
+	<%= check_box "query_options", "contr_agencies", { :checked => false }, 24 %><%= I18n.t('reports.contr_agencies') %>
+</li>
+
+<li>
+	<%= check_box "query_options", "markers", { :checked => false }, 25 %><%= I18n.t('terms.markers') %>
+</li>
+
+<li>
+	<%= check_box "query_options", "mdg_goals", { :checked => false }, 26 %><%= I18n.t('reports.mdg_goals') %>
+</li>
+
+<li>
+	<%= check_box "query_options", "focal_regions", { :checked => false }, 27 %><%= I18n.t('reports.focal_regions') %>
+</li>
+
+<li>
+	<%= check_box "query_options", "officer_responsible_name", { :checked => false }, 28 %><%= I18n.t('reports.officer_responsible') %>
+</li>
+
+<li>
+	<%= check_box "query_options", "website", { :checked => false }, 29 %><%= I18n.t('terms.internet_link') %>
+</li>
+
+<li>
+	<%= check_box "query_options", "comments", { :checked => false }, 30 %><%= I18n.t('reports.comments') %>
+</li>
+
+<li>
+	<%= check_box "query_options", "updated_at", { :checked => false }, 31 %><%= I18n.t('reports.last_update') %>
 </li>

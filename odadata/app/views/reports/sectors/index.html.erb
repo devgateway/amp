@@ -14,9 +14,8 @@
 			<td><%= sector.name_with_code %></td>
 			<td><%= projects.size %></td>
 			<td>
-				<%= reports_link_to(image_tag("/images/list.gif", :size => "14x15", :border => 0), 
-					:controller => "reports", :action => "project_list", :query => "sector", 
-					:value => sector.id) %>
+				<%= reports_link_to image_tag("/images/list.gif", :size => "14x15", :border => 0), 
+					reports_sector_path(sector) %>
 			</td>
 		</tr>
 	<% end %>

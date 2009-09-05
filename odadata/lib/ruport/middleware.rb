@@ -1,0 +1,3 @@
+class Ruport::Middleware
+  
+end

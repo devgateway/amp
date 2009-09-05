@@ -1,4 +1,4 @@
-<h2><%= lc(:title, :province_name => @province.name) %></h2>
+<h2><%= header lc(:title, :province_name => @province.name) %></h2>
 
 <table>
 	<tr>
@@ -13,9 +13,8 @@
 			<td><%= district.name %></td>
 			<td><%= projects.size %></td>
 			<td>
-				<%= reports_link_to(image_tag("/images/list.gif", :size => "14x15", :border => 0), 
-						{ :controller => "reports", :action => "project_list", :query => "sub_location", :value => district.id }, 
-						"Projects in #{district.name}") %>
+				<%= reports_link_to image_tag("/images/list.gif", :size => "14x15", :border => 0), 
+						reports_district_path(district) %>
 			</td>
 		</tr>
 	<% end %>

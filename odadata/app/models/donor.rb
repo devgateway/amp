@@ -1,4 +1,6 @@
 class Donor < ActiveRecord::Base
+  acts_as_reportable
+  
   translates :name
   
   has_many :users

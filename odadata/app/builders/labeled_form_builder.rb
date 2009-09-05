@@ -119,7 +119,7 @@ class LabeledFormBuilder < ActionView::Helpers::FormBuilder
 
     css_selector = options.delete(:selector) || ".#{@object.class.name.split("::").last.underscore}"
     function     = options.delete(:function) || ""
-    function    << "$(this).parent('#{css_selector}').hide(); $(this).prev('input').value = '1'"
+    function    << "$(this).parent('#{css_selector}').hide(); $(this).prev('input').val('1')"
     
     out = ''
     out << hidden_field(:_delete)
@@ -155,6 +155,22 @@ class LabeledFormBuilder < ActionView::Helpers::FormBuilder
     form_builder     = self # because the value of self changes in the block
     
     @template.link_to_function(name, opts) do |page|
+      tmpl = form_builder.render_associated_form(object, :partial => partial)        
+      page << %{$('#{container}').append("#{escape_javascript(tmpl)}".replace(/new_\\d+/g, "new_" + (new Date().getTime())))}
+    end
+  end
+  
+  # Sames as add_associated_link, but returns a button instead of an anchor element
+  def add_associated_button(name, object, opts = {})
+    associated_name  = extract_option_or_class_name(opts, :name, object)
+    
+    opts.symbolize_keys!
+    partial          = opts.delete(:partial)    || associated_name
+    container        = opts.delete(:expression) || "##{opts.delete(:container) || associated_name.pluralize}"
+    
+    form_builder     = self # because the value of self changes in the block
+    
+    @template.button_to_function(name, opts) do |page|
       tmpl = form_builder.render_associated_form(object, :partial => partial)        
       page << %{$('#{container}').append("#{escape_javascript(tmpl)}".replace(/new_\\d+/g, "new_" + (new Date().getTime())))}
     end

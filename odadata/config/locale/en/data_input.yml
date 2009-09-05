@@ -103,6 +103,7 @@ en:
     zero_provinces_warning: Please select at least one province!
     add_cofunding_donor: Add another Donor
     add_sector: Add another Sector
+    add_location: Add another Location
     cofunding_title: Co-Funding Donors and Amounts
     historic_funding: Historic Funding (up to the end of {{year}})
     funding_title: Finances {{year}}

@@ -8,7 +8,7 @@ require 'jcode'
 # ENV['RAILS_ENV'] ||= 'production'
 
 # Specifies gem version of Rails to use when vendor/rails is not present
-RAILS_GEM_VERSION = '2.3.2' unless defined? RAILS_GEM_VERSION
+#RAILS_GEM_VERSION = '2.3.2' unless defined? RAILS_GEM_VERSION
 
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
@@ -25,12 +25,13 @@ Rails::Initializer.run do |config|
   config.gem "ruby-tilecache",          :lib => 'tile_cache'
   config.gem 'mislav-will_paginate',    :lib => 'will_paginate', :source => 'http://gems.github.com'
   config.gem "giraffesoft-enum_field",  :lib => "enum_field", :source => "http://gems.github.com"
-  
+  config.gem "ruport"  
+  config.gem "spreadsheet"
 
   # Add additional load paths for your own custom dirs
   config.load_paths += Dir["#{RAILS_ROOT}/app/models/*[^.rb]"]
-  config.load_paths << "#{RAILS_ROOT}/app/reports"
   config.load_paths << "#{RAILS_ROOT}/app/builders"
+  config.load_paths << "#{RAILS_ROOT}/app/reports"
   
   # Make Time.zone default to the specified zone, and make Active Record store time values
   # in the database in UTC, and return them converted to the specified local zone.
@@ -63,3 +64,6 @@ Rails::Initializer.run do |config|
   # Please note that observers generated using script/generate observer need to have an _observer suffix
   # config.active_record.observers = :cacher, :garbage_collector, :forum_observer
 end
+
+# Register additional mime types
+Mime::Type.register "application/vnd.ms-excel", :xls

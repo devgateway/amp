@@ -3,11 +3,12 @@ class SectorRelevance < ActiveRecord::Base
   belongs_to  :dac_sector
   belongs_to  :crs_sector
   
-  # If only a subsector is specified, this is to ensure, that 
+  # If only a subsector is specified, this is to ensure, that the proper parent sector id is added to the record
   before_validation :set_proper_parent_sector_id
   
   validate                :subsector_matches_parent
   validates_presence_of   :dac_sector_id
+  # TODO: Proper error message
   validates_inclusion_of  :amount, :in => 1..100
   
   named_scope :ordered, :joins => [:dac_sector], :order => 'dac_sectors.code ASC'

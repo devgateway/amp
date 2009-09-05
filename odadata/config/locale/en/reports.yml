@@ -37,8 +37,7 @@ en:
     officer_responsible: Officer Responsible
     comments: Comments
     last_update: Last Update
-    # becomes e.g. Funds for 2007
-    funds_for: Funds for 
+    funds_for: Funds for {{year}}
     country_strategy: Country Strategy
     recipient_code: Recipient Code
     region_code: Region Code
@@ -55,19 +54,33 @@ en:
     disclaimer: Reports in ODAnic version 2.6c reflect project totals and thus are not disaggregated by sector, location, or Millennium Development Goal.
     
     donors:
+      index:
         title: Projects by Donor
+      show:
+        title: Projects of {{donor}}
     sectors:
+      index:
         title: Projects by Sector
-    locations:
+      show:
+        title: Projects of {{sector}}
+    provinces:
+      index:
         title: Projects by Department
         show_municipalities: Show Municipalities
         all_districts: All Municipalities
         national_project: National
-    location_detail:
-        title: Projects of <i>{{province_name}}</i> by Municipality
+      show:
+        title: Projects in {{province}}
+    districts:
+      index:
+        title: "Projects of <i>{{province}}</i> by Municipality"
     mdgs:
+      index:
         title: Projects by MDG
+      show:
+        title: Projects of {{mdg}}
     custom:
+      new:
         title: Custom Report
         output: Output
         output_format: Output Format

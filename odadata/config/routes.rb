@@ -20,7 +20,7 @@ ActionController::Routing::Routes.draw do |map|
     d.resources :country_strategies      
     d.resource  :details,                 :controller => 'donor_details'
   end
-  
+
   map.resource :consistency,              :only => [:index, :show]
   
   map.resource :user_session,             :as => 'session'
@@ -31,6 +31,18 @@ ActionController::Routing::Routes.draw do |map|
                                           
   # Authentication                        
   map.logout    '/logout',                :controller => 'user_sessions', :action => 'destroy'
+  
+  ##
+  # Reports
+  map.namespace :reports do |reports|
+    reports.resources :donors
+    reports.resources :sectors
+    reports.resources :mdgs
+    reports.resources :provinces do |p|
+      p.resources :districts, :shallow => true
+    end
+    reports.resources :custom
+  end
   
   ##
   # EU Blue Book routes

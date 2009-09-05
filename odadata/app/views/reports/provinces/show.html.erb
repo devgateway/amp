@@ -1,0 +1,6 @@
+<h2><%= header lc(:title, :province => @province) %></h2>
+
+<%= ProjectReport.render_html(
+		:projects => @projects, 
+		:fields => [:factsheet_link, :donor, :donor_project_number, :title, :total_commitments, :total_disbursements, :commitments_forecast, :disbursements_forecast, :start_date, :end_date],
+		:middleware => LocationDisaggregator.new(:province, @province.id)) %>

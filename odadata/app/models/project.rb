@@ -1,4 +1,6 @@
 class Project < ActiveRecord::Base
+  acts_as_reportable
+  
   include ActionView::Helpers::TextHelper
   extend AttributeDecorator
   
@@ -74,7 +76,7 @@ class Project < ActiveRecord::Base
   # Nested attributes
   accepts_nested_attributes_for :sector_relevances, :reject_if => lambda { |a| a['dac_sector_id'].blank? }, :allow_destroy => true
   accepts_nested_attributes_for :cofundings, :reject_if => lambda { |a| a['donor_id'].blank? }, :allow_destroy => true
-  accepts_nested_attributes_for :geo_relevances, :allow_destroy => true
+  accepts_nested_attributes_for :geo_relevances, :reject_if => lambda { |a| a['province_id'].blank? }, :allow_destroy => true
   accepts_nested_attributes_for :fundings, :funding_forecasts, :historic_funding, :allow_destroy => true
   accepts_nested_attributes_for :delegated_cooperation, :allow_destroy => true
   
@@ -120,6 +122,7 @@ class Project < ActiveRecord::Base
   validates_associated      :fundings, :funding_forecasts, :historic_funding
   
   validate                  :total_sector_amount_is_100
+  validate                  :total_location_amount_is_100
   validate                  :dates_consistency
   
   # This gives us nicer URLs with the project number in it instead of just the id
@@ -174,22 +177,22 @@ protected
   
   ##
   # Validation methods
-  # Validate that the total amount per project is 100%
+  # Validate that the total sector amount per project is 100%
   def total_sector_amount_is_100
-    incorrect_number = false
-    for x in self.sector_relevances.map(&:amount)
-      if x == nil
-        incorrect_number = true
-      end
+    if self.sector_relevances.any? && self.sector_relevances.reject(&:marked_for_destruction?).map(&:amount).compact.sum != 100
+      # FIXME: Translation missing
+      errors.add('sector_relevances', 'The sum of the sector percentages should be 100%')
     end
-    if incorrect_number == false
-      unless self.sector_relevances.map(&:amount).sum == 100
-        # FIXME: Translation missing
-        errors.add('sector_relevances', 'The sum of the sector percentages should be 100%')
-      end
-    end  
+  end  
+  
+  # Validate that the total location amount per project is 100%
+  def total_location_amount_is_100
+    if self.geo_relevances.any? && self.geo_relevances.reject(&:marked_for_destruction?).map(&:amount).compact.sum != 100
+      # FIXME: Translation missing
+      errors.add('geo_relevances', 'The sum of the location percentages should be 100%')
+    end
   end
-
+  
   def dates_consistency
     unless self.start <= self.end
       # FIXME: Translation missing & errors.add_to_base should be used here after views are fixed

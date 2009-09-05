@@ -1,7 +1,7 @@
 <% f.field_set do %>
 	<li>
 		<%= f.label :sector_relevances %>
-		<%= f.add_associated_link(t('projects.add_sector'), @project.sector_relevances.build, :style => "display: block; float: right; margin-top: -20px; width: 170") %>
+		<%= f.add_associated_button(t('projects.add_sector'), @project.sector_relevances.build, :style => "display: block; float: right; margin-top: -20px; width: 170") %>
 		
         <%= error_message_on(:project, :sector_relevances, "","", "error_message" ) %>
 		<div id="sector_relevances">

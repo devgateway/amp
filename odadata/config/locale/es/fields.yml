@@ -34,6 +34,8 @@ es:
         gender_policy_marker: Política de Género
         environment_policy_marker: Política del Medio Ambiente	
         sector_relevances: Sectores Focales del Proyecto
+        # TODO: Verify
+        geo_relevances: Departamentos Focales del Proyecto
         sectors: Sectores
         
       sector_relevance:
@@ -44,6 +46,7 @@ es:
       geo_relevance:
         province: Departamento
         district: Municipios
+        amount: Cantidad en %
           
       user:
         name: Nombre
@@ -52,7 +55,6 @@ es:
         password_confirmation: Confirma clave de acceso
         
       donor:
-        # TODO:
         name: Nombre en Inglés
         name_es: Nombre en Español
         cofunding_only: Sólo donante de co-financiamiento

@@ -37,8 +37,7 @@ es:
       officer_responsible: Funcionario Responsible
       comments: Comentarios
       last_update: 'Última Actualización'
-      # becomes e.g. Funds for 2007
-      funds_for: Fondos para
+      funds_for: Fondos para {{year}}
       country_strategy: Estrategia del País
       recipient_code: Código del Receptor
       region_code: Código de la Región
@@ -55,19 +54,35 @@ es:
       disclaimer: Los reportes en ODAnic versión 2.6c reflejan los montos totales de los proyectos individuales, por lo tanto no dividen por sector, ubicación, o Objetivo de Desarrollo del Milenio.
         
       donors:
+        index:
           title: Proyectos por Donantes
+        show:
+          title: Proyectos de {{donor}}
       sectors:
+        index:
           title: Proyectos por Sector
-      locations:
+        show:
+          title: Proyectos de {{sector}}
+      provinces:
+        index:
           title: Proyectos por Departamento
           show_municipalities: Mostrar Municipios
           all_districts: Todos los municipios
           national_project: Nacional
-      location_detail:
-          title: Proyectos de <i>{{province_name}}</i> por Municipios
+        show:
+          title: Proyectos de {{province}}
+      districts:
+        index:
+          title: "Proyectos de <i>{{province_name}}</i> por Municipios"
+        show:
+          title: Proyectos de {{district}}
       mdgs:
+        index:
           title: Proyectos por ODM
+        show:
+          title: Proyectos de {{mdg}}
       custom:
+        new:
           title: Reporte Personalizado
           output: Salida
           output_format: Formato de Salida
@@ -82,7 +97,6 @@ es:
           query_database: Consultar
           totals: Total Anual
           output_in: Salida en 
-          # TODO:
           select_all: Seleccionar Todos
           deselect_all: Deseleccionar Todos
       totals:

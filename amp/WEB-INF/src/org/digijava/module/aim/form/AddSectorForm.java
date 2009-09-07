@@ -42,6 +42,8 @@ public class AddSectorForm extends ActionForm {
 	private HashMap organisationList = null;
 	private String flag = null;
 	private String sectorCodeOfficial = null;
+	private String treeView = null;
+	private String rootId = null;
 
 
 	public Collection getSchemeTree() {
@@ -283,4 +285,20 @@ public Collection getSubSectors() {
   public void setAmpSectorId(Long ampSectorId) {
     this.ampSectorId = ampSectorId;
   }
+
+public String getTreeView() {
+	return treeView;
+}
+
+public void setTreeView(String treeView) {
+	this.treeView = treeView;
+}
+
+public String getRootId() {
+	return rootId;
+}
+
+public void setRootId(String rootId) {
+	this.rootId = rootId;
+}
 }

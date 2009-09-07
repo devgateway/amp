@@ -47,6 +47,7 @@ public class DeleteSector extends Action {
     String event = request.getParameter("event");
     String ampSectorId = request.getParameter("ampSectorId");
     String schemeId = request.getParameter("schemeId");
+    String rootId = request.getParameter("rootId");
     logger.debug(
     		"Event================"+event+
     		"\nampSectorId=================="+ampSectorId+
@@ -97,7 +98,13 @@ public class DeleteSector extends Action {
     		    }
     		    */
 			logger.debug("level 1 deleted");
-			forward = "levelOneSectorDeleted";
+			if (deleteSectorForm.getTreeView() != null
+							&& deleteSectorForm.getTreeView().equalsIgnoreCase("true")) {
+						//request.setAttribute("ampSecSchemeIdFromTree", rootId);
+						forward = "levelOneSectorDeletedTree";
+					} else {
+						forward = "levelOneSectorDeleted";
+					}
     	  }
     	  else if(aSector.getParentSectorId().getParentSectorId() == null){
     		//  if(SectorUtil.getAllChildSectors(aSector.getAmpSectorId()).isEmpty()){
@@ -124,8 +131,14 @@ public class DeleteSector extends Action {
 		    	//forward="cantDelete";
 		    }
 		    */
-  				logger.debug("level 2 deleted");
-    		  forward = "levelTwoSectorDeleted";
+  					logger.debug("level 2 deleted");
+  					if (deleteSectorForm.getTreeView() != null
+							&& deleteSectorForm.getTreeView().equalsIgnoreCase("true")) {
+  						//request.setAttribute("ampSecSchemeIdFromTree", rootId);
+						forward = "levelTwoSectorDeletedTree";
+					} else {
+						forward = "levelTwoSectorDeleted";
+					}
     	  }
     	  else if(aSector.getParentSectorId().getParentSectorId().getParentSectorId() == null){
     		//  if(SectorUtil.getAllChildSectors(aSector.getAmpSectorId()).isEmpty()){
@@ -153,7 +166,13 @@ public class DeleteSector extends Action {
     		    }
     		    */
   			logger.debug("level 3 deleted");
-    	  forward="levelThreeSectorDeleted";
+  			if (deleteSectorForm.getTreeView() != null
+					&& deleteSectorForm.getTreeView().equalsIgnoreCase("true")) {
+  				//request.setAttribute("ampSecSchemeIdFromTree", rootId);
+  				forward = "levelThreeSectorDeletedTree";
+  			} else {
+  				forward = "levelThreeSectorDeleted";
+  			}
     	  }
     	  /*
 			Iterator itr = schemeGot.iterator();
@@ -173,7 +192,13 @@ public class DeleteSector extends Action {
     	ActionErrors errors = new ActionErrors();
 		errors.add("title", new ActionError("error.aim.deleteScheme.sectorSelected"));
 		saveErrors(request, errors);
-    	forward="cantDelete";
+		if (deleteSectorForm.getTreeView() != null
+				&& deleteSectorForm.getTreeView().equalsIgnoreCase("true")) {
+			//request.setAttribute("ampSecSchemeIdFromTree", rootId);
+			forward="cantDeleteTree";
+		} else {
+			forward="cantDelete";
+		}
     }
     }
     return mapping.findForward(forward);

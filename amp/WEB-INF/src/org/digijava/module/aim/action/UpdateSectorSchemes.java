@@ -227,7 +227,13 @@ public class UpdateSectorSchemes extends Action {
 				ampscheme.setAmpSecSchemeId(Id);
 				DbUtil.update(ampscheme);
 				logger.debug(" updated!!");
-				return mapping.findForward("viewSectorSchemes");
+				if (sectorsForm.getTreeView() != null
+						&& sectorsForm.getTreeView().equalsIgnoreCase("true")) {
+					//request.setAttribute("ampSecSchemeIdFromTree", rootId);
+					return mapping.findForward("viewSectorSchemeLevel1Tree");
+				} else {
+					return mapping.findForward("viewSectorSchemes");
+				}
 			}
 			else if(event.equalsIgnoreCase("deleteScheme"))	{
 				logger.debug("in the delete Scheme");

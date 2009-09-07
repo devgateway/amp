@@ -26,6 +26,9 @@ public class AmpSector implements Serializable, Comparable<AmpSector>, Identifia
 	
 	private String segmentCode;
 	
+	private transient int level;
+	private transient boolean hasChildren;
+	
 	public String getSegmentCode() {
 		return segmentCode;
 	}
@@ -226,6 +229,22 @@ public void setAmpOrgId(AmpOrganisation org) {
 
 	public void setSectorCodeOfficial(String sectorCodeOfficial) {
 		this.sectorCodeOfficial = sectorCodeOfficial;
+	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
+	}
+
+	public boolean isHasChildren() {
+		return hasChildren;
+	}
+
+	public void setHasChildren(boolean hasChildren) {
+		this.hasChildren = hasChildren;
 	}
 	
 }

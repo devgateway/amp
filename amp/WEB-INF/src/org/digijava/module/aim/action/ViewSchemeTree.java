@@ -49,7 +49,10 @@ public class ViewSchemeTree extends Action {
 
 		String event = request.getParameter("event");
 		String parent = request.getParameter("parent");
-		String schemeId = request.getParameter("ampSecSchemeId");
+		String schemeId = addSectorForm.getRootId();
+		if(schemeId == null) {
+			schemeId = (String) request.getAttribute("ampSecSchemeIdFromTree");
+		}
 		logger.debug(request.getParameter("ampSecSchemeId"));
 
 		Long schId = Long.parseLong(schemeId);
@@ -57,9 +60,13 @@ public class ViewSchemeTree extends Action {
 			return mapping.findForward("back");
 		
 		List<AmpSector> sectors = SectorUtil.treeBuildGetAllSectorsFromScheme(schId);
+		sectors = SectorUtil.generateLevelHierarchy(sectors);
+		sectors = SectorUtil.generateChildHierarchy(sectors);
 		addSectorForm.setSchemeTree(sectors);
 		
 		return mapping.findForward("forward");
 	}
+	
+	
 	
 }

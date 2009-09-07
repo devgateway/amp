@@ -85,7 +85,11 @@ public class AmpIndicatorValue implements Serializable{
 		this.valueDate = valueDate;
 	}
 	public Double getValue() {
-		return FeaturesUtil.applyThousandsForVisibility(new BigDecimal(value)).doubleValue();
+            Double valVisibility=null;
+            if (value != null) {
+                valVisibility=FeaturesUtil.applyThousandsForVisibility(new BigDecimal(value)).doubleValue();
+            }
+            return valVisibility;
 	}
 	public void setValue(Double value) {
 		this.value = FeaturesUtil.applyThousandsForEntry(new BigDecimal(value)).doubleValue();

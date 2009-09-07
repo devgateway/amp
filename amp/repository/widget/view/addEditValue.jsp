@@ -143,7 +143,6 @@
                             &nbsp;
                         </td>
                     </tr>
-                    <tr>
                     <c:if test="${!empty gisIndicatorSectorRegionForm.values}">
                         <c:forEach var="values" varStatus="index" items="${gisIndicatorSectorRegionForm.values}">
                             <tr>

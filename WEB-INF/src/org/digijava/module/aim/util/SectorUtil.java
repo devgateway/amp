@@ -293,8 +293,51 @@ public class SectorUtil {
 		}
 		return col;
 	}
+	
+	/**
+	 * Using a list of AmpSector objects as source will calculate the fields "level" and "hasChildren".
+	 * @param list
+	 * @return
+	 */
+	public static List<AmpSector> generateLevelHierarchy(List<AmpSector> list) {
+		int level;
+		Iterator<AmpSector> iter = list.iterator();
+		while (iter.hasNext()) {
+			level = 0;
+			AmpSector auxSector = iter.next();
+			if (auxSector.getParentSectorId() == null) {
+				auxSector.setLevel(++level);
+			} else {
+				level = getParent(auxSector, level);
+				auxSector.setLevel(level);
+			}
+		}
+		return list;
+	}
 
+	// This recursive method helps the generateLevelHierarchy method.
+	private static int getParent(AmpSector auxSector, int level) {
+		if (auxSector.getParentSectorId() != null) {
+			level = getParent(auxSector.getParentSectorId(), level);
+		}
+		return ++level;
+	}
 
+	public static List<AmpSector> generateChildHierarchy(List<AmpSector> list) {
+		Iterator<AmpSector> iter = list.iterator();
+		while (iter.hasNext()) {
+			AmpSector auxSector = iter.next();
+			Iterator<AmpSector> iter2 = list.iterator();
+			while (iter2.hasNext()) {
+				AmpSector auxSector2 = iter2.next();
+				if (auxSector2.getParentSectorId() != null
+						&& auxSector.getAmpSectorId().equals(auxSector2.getParentSectorId().getAmpSectorId())) {
+					auxSector.setHasChildren(true);
+				}
+			}
+		}
+		return list;
+	}
 
 	public static Collection getAllSectorSchemes() {
 		Session session = null;

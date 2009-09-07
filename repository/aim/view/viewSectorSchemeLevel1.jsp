@@ -96,6 +96,8 @@
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
 <html:hidden property="idGot"/>
+<html:hidden property="treeView" />
+<html:hidden property="rootId" />
 
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
 		<tr>
@@ -323,6 +325,9 @@
 														<td>
 														<jsp:useBean id="urlParams5" type="java.util.Map" class="java.util.HashMap"/>
 															<c:set target="${urlParams5}" property="ampSecSchemeId">
+																<bean:write name="aimAddSectorForm" property="secSchemeId" />
+															</c:set>
+															<c:set target="${urlParams5}" property="rootId">
 																<bean:write name="aimAddSectorForm" property="secSchemeId" />
 															</c:set>
 															<c:set target="${urlParams5}" property="parent" value="scheme"/>

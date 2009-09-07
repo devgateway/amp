@@ -107,6 +107,8 @@ function setStripsTable(tableId, classOdd, classEven) {
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
 
+<html:hidden property="treeView" />
+<html:hidden property="rootId" />
 
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
 	<tr>

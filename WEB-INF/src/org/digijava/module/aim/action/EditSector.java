@@ -89,7 +89,13 @@ public class EditSector extends Action {
 												saveErrors(request, errors);
 											}
 											refreshFirstLevelSectors(editSectorForm, sectors, ampSector);
-											return mapping.findForward("editedSecondLevelSector");
+											if (editSectorForm.getTreeView() != null
+													&& editSectorForm.getTreeView().equalsIgnoreCase("true")) {
+												//request.setAttribute("ampSecSchemeIdFromTree", rootId);
+												return mapping.findForward("editedSecondLevelSectorTree");
+											} else {
+												return mapping.findForward("editedSecondLevelSector");
+											}
 										}
 										if(existSectorForUpdate(editSectorForm,secId, sectors) == 1){
 											request.setAttribute("event", "view");
@@ -100,7 +106,13 @@ public class EditSector extends Action {
 						        				saveErrors(request, errors);
 						        			}
 							        		refreshFirstLevelSectors(editSectorForm, sectors, ampSector);
-											return mapping.findForward("editedSecondLevelSector");
+							        		if (editSectorForm.getTreeView() != null
+													&& editSectorForm.getTreeView().equalsIgnoreCase("true")) {
+												//request.setAttribute("ampSecSchemeIdFromTree", rootId);
+												return mapping.findForward("editedSecondLevelSectorTree");
+											} else {
+												return mapping.findForward("editedSecondLevelSector");
+											}
 										}
 										
 										if(existSectorForUpdate(editSectorForm, secId, sectors) == 2){
@@ -112,7 +124,13 @@ public class EditSector extends Action {
 						        				saveErrors(request, errors);
 						        			}
 							        		refreshFirstLevelSectors(editSectorForm, sectors, ampSector);
-											return mapping.findForward("editedSecondLevelSector");
+							        		if (editSectorForm.getTreeView() != null
+													&& editSectorForm.getTreeView().equalsIgnoreCase("true")) {
+												//request.setAttribute("ampSecSchemeIdFromTree", rootId);
+												return mapping.findForward("editedSecondLevelSectorTree");
+											} else {
+												return mapping.findForward("editedSecondLevelSector");
+											}
 										}
 										
 										logger.debug("Updating.............................................");
@@ -123,7 +141,13 @@ public class EditSector extends Action {
 										editSectorForm.setSecSchemeCode(secSchemeCode);
 										editSectorForm.setSecSchemeName(secSchemename);
 										logger.debug(" update sector1 Complete");
-										return mapping.findForward("editedSecondLevelSector");
+										if (editSectorForm.getTreeView() != null
+												&& editSectorForm.getTreeView().equalsIgnoreCase("true")) {
+											//request.setAttribute("ampSecSchemeIdFromTree", rootId);
+											return mapping.findForward("editedSecondLevelSectorTree");
+										} else {
+											return mapping.findForward("editedSecondLevelSector");
+										}
 								}
 								else if(event.equalsIgnoreCase("update3LevelSector"))
 								 {
@@ -144,7 +168,13 @@ public class EditSector extends Action {
 											//session.setAttribute("managingSchemes",errors);
 										}
 										refreshSubSectors(ampSector, sectors, editSectorForm);
-										return mapping.findForward("editedThirdLevelSector");
+										if (editSectorForm.getTreeView() != null
+												&& editSectorForm.getTreeView().equalsIgnoreCase("true")) {
+											//request.setAttribute("ampSecSchemeIdFromTree", rootId);
+											return mapping.findForward("editedThirdLevelSectorTree");
+										} else {
+											return mapping.findForward("editedThirdLevelSector");
+										}
 									}
 									if(existSectorForUpdate(editSectorForm,secId, sectors) == 1){
 										request.setAttribute("event", "view");
@@ -155,7 +185,13 @@ public class EditSector extends Action {
 					        				saveErrors(request, errors);
 					        			}
 						        		refreshSubSectors(ampSector, sectors, editSectorForm);
-										return mapping.findForward("editedThirdLevelSector");
+						        		if (editSectorForm.getTreeView() != null
+												&& editSectorForm.getTreeView().equalsIgnoreCase("true")) {
+											//request.setAttribute("ampSecSchemeIdFromTree", rootId);
+											return mapping.findForward("editedThirdLevelSectorTree");
+										} else {
+											return mapping.findForward("editedThirdLevelSector");
+										}
 									}
 									
 									if(existSectorForUpdate(editSectorForm, secId, sectors) == 2){
@@ -167,7 +203,13 @@ public class EditSector extends Action {
 					        				saveErrors(request, errors);
 					        			}
 						        		refreshSubSectors(ampSector, sectors,editSectorForm);
-										return mapping.findForward("editedThirdLevelSector");
+						        		if (editSectorForm.getTreeView() != null
+												&& editSectorForm.getTreeView().equalsIgnoreCase("true")) {
+											//request.setAttribute("ampSecSchemeIdFromTree", rootId);
+											return mapping.findForward("editedThirdLevelSectorTree");
+										} else {
+											return mapping.findForward("editedThirdLevelSector");
+										}
 									}
 									
 									logger.debug("Updating.............................................");
@@ -183,7 +225,13 @@ public class EditSector extends Action {
 									editSectorForm.setSectorId(ampSector.getParentSectorId().getAmpSectorId());
 									editSectorForm.setDescription(ampSector.getParentSectorId().getDescription());
 									logger.debug(" update sector2 Complete");
-									return mapping.findForward("editedThirdLevelSector");
+									if (editSectorForm.getTreeView() != null
+											&& editSectorForm.getTreeView().equalsIgnoreCase("true")) {
+										//request.setAttribute("ampSecSchemeIdFromTree", rootId);
+										return mapping.findForward("editedThirdLevelSectorTree");
+									} else {
+										return mapping.findForward("editedThirdLevelSector");
+									}
 								}
 					 
 							  }
@@ -211,7 +259,13 @@ public class EditSector extends Action {
 											//session.setAttribute("managingSchemes",errors);
 										}
 										refreshSubSectors1(ampSector, sectors,editSectorForm);
-										return mapping.findForward("editedThirdLevelSectorPlusOne");
+										if (editSectorForm.getTreeView() != null
+												&& editSectorForm.getTreeView().equalsIgnoreCase("true")) {
+											//request.setAttribute("ampSecSchemeIdFromTree", rootId);
+											return mapping.findForward("editedThirdLevelSectorPlusOneTree");
+										} else {
+											return mapping.findForward("editedThirdLevelSectorPlusOne");
+										}
 									}
 									if(existSectorForUpdate(editSectorForm,secId, sectors) == 1){
 										request.setAttribute("event", "view");
@@ -222,7 +276,13 @@ public class EditSector extends Action {
 					        				saveErrors(request, errors);
 					        			}
 						        		refreshSubSectors1(ampSector, sectors,editSectorForm);
-										return mapping.findForward("editedThirdLevelSectorPlusOne");
+						        		if (editSectorForm.getTreeView() != null
+												&& editSectorForm.getTreeView().equalsIgnoreCase("true")) {
+											//request.setAttribute("ampSecSchemeIdFromTree", rootId);
+											return mapping.findForward("editedThirdLevelSectorPlusOneTree");
+										} else {
+											return mapping.findForward("editedThirdLevelSectorPlusOne");
+										}
 									}
 									
 									if(existSectorForUpdate(editSectorForm, secId, sectors) == 2){
@@ -234,7 +294,13 @@ public class EditSector extends Action {
 					        				saveErrors(request, errors);
 					        			}
 						        		refreshSubSectors1(ampSector, sectors,editSectorForm);
-										return mapping.findForward("editedThirdLevelSectorPlusOne");
+						        		if (editSectorForm.getTreeView() != null
+												&& editSectorForm.getTreeView().equalsIgnoreCase("true")) {
+											//request.setAttribute("ampSecSchemeIdFromTree", rootId);
+											return mapping.findForward("editedThirdLevelSectorPlusOneTree");
+										} else {
+											return mapping.findForward("editedThirdLevelSectorPlusOne");
+										}
 									}
 									
 									logger.debug("Updating.............................................");
@@ -251,7 +317,13 @@ public class EditSector extends Action {
 									editSectorForm.setDescription(ampSector.getParentSectorId().getDescription());
 									logger.debug(" update sector3 Complete");
 									editSectorForm.setJspFlag(false);
-									return mapping.findForward("editedThirdLevelSectorPlusOne");
+									if (editSectorForm.getTreeView() != null
+											&& editSectorForm.getTreeView().equalsIgnoreCase("true")) {
+										//request.setAttribute("ampSecSchemeIdFromTree", rootId);
+										return mapping.findForward("editedThirdLevelSectorPlusOneTree");
+									} else {
+										return mapping.findForward("editedThirdLevelSectorPlusOne");
+									}
 						 }
 						 }
 					}

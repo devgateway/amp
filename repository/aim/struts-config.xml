@@ -414,6 +414,9 @@
       <forward name="levelFirstSectorAdded" path="/showLayout.do?layout=viewSectorSchemeLevel1" />
       <forward name="levelSecondSectorAdded" path="/showLayout.do?layout=addNewLevel2Sector" />
       <forward name="levelThirdSectorAdded" path="/showLayout.do?layout=addNewLevel3Sector" />
+      <forward name="levelFirstSectorAddedTree" path="/aim/viewSchemeTree.do" />
+      <forward name="levelSecondSectorAddedTree" path="/aim/viewSchemeTree.do" />
+      <forward name="levelThirdSectorAddedTree" path="/aim/viewSchemeTree.do" />
       <forward name="added" path="/aim/sectorManager.do?sectorId=0" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
@@ -427,6 +430,9 @@
       <forward name="editedSecondLevelSector" path="/showLayout.do?layout=viewSectorSchemeLevel1" />
       <forward name="editedThirdLevelSector" path="/showLayout.do?layout=addNewLevel2Sector" />
       <forward name="editedThirdLevelSectorPlusOne" path="/showLayout.do?layout=addNewLevel3Sector" />
+      <forward name="editedSecondLevelSectorTree" path="/aim/viewSchemeTree.do" />
+      <forward name="editedThirdLevelSectorTree" path="/aim/viewSchemeTree.do" />
+      <forward name="editedThirdLevelSectorPlusOneTree" path="/aim/viewSchemeTree.do"/>
       <forward name="forward" path="/aim/viewSectorDetails.do" redirect="true" />
       <forward name="edited" path="/aim/sectorManager.do?sectorId=0" />
       <forward name="index" path="/aim/index.do" redirect="true" />
@@ -437,6 +443,11 @@
       <forward name="levelThreeSectorDeleted" path="/showLayout.do?layout=addNewLevel3Sector" />
       <forward name="cantDelete" path="/aim/getSectorSchemes.do" />
       <forward name="deleted" path="/aim/getSectorSchemes.do" />
+      <forward name="levelOneSectorDeletedTree" path="/aim/viewSchemeTree.do" />
+      <forward name="levelTwoSectorDeletedTree" path="/aim/viewSchemeTree.do" />
+      <forward name="levelThreeSectorDeletedTree" path="/aim/viewSchemeTree.do" />
+      <forward name="cantDeleteTree" path="/aim/viewSchemeTree.do" />
+      <forward name="deletedTree" path="/aim/getSectorSchemes.do" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     <action name="aimAddSectorForm" path="/aim/viewSectorDetails" scope="request" type="org.digijava.module.aim.action.ViewSectorDetails" validate="false">
@@ -460,6 +471,7 @@
       <forward name="viewSectorSchemes" path="/aim/getSectorSchemes.do" redirect="true" />
       <forward name="addSectorScheme" path="/showLayout.do?layout=addSectorScheme" />
       <forward name="viewSectorSchemeLevel1" path="/showLayout.do?layout=viewSectorSchemeLevel1" />
+      <forward name="viewSectorSchemeLevel1Tree" path="/aim/viewSchemeTree.do" />
       <forward name="toViewSectorDetails" path="/aim/viewSectorDetails.do" />
     </action>
     <action name="aimThemeForm" path="/aim/themeManager" scope="request" type="org.digijava.module.aim.action.ThemeManager" validate="false">

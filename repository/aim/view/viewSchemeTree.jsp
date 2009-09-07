@@ -27,6 +27,63 @@
 			document.aimAddSectorForm.submit();
 	
 	}
+	function newNode(id, pId) {
+		var parent = ""; 
+		if(pId==0){
+			parent = "scheme";
+		}
+		if(pId==1){
+			parent = "sector";
+		} 
+		if(pId==2){
+			parent = "sector3";
+		}
+		document.getElementsByName('aimAddSectorForm')[0].action = '/aim/addSector.do~parent='+parent+'~treeView=true~ampSecSchemeId='+id+'~rootId='+<%=request.getParameter("rootId")%>;
+		//alert(document.getElementsByName('aimAddSectorForm')[0].action);
+		document.getElementsByName('aimAddSectorForm')[0].submit();
+	}
+	function editRootNode(id) {
+		document.getElementsByName('aimAddSectorForm')[0].action = '/aim/updateSectorSchemes.do~dest=admin~event=edit~treeView=true~ampSecSchemeId='+id+'~rootId='+<%=request.getParameter("rootId")%>;
+		//alert(document.getElementsByName('aimAddSectorForm')[0].action);
+		document.getElementsByName('aimAddSectorForm')[0].submit();
+	}
+	function editNode(id, level) {
+		var url = "";
+		if(level==1){
+			url = 'level=two~event=edit';
+		}
+		if(level==2){
+			url = 'level=three~event=edit';
+		}
+		if(level==3){
+			url = 'level=three~event=enough';
+		}
+		document.getElementsByName('aimAddSectorForm')[0].action = '/aim/viewSectorDetails.do~treeView=true~'+url+'~ampSectorId='+id+'~rootId='+<%=request.getParameter("rootId")%>;
+		//alert(document.getElementsByName('aimAddSectorForm')[0].action);
+		document.getElementsByName('aimAddSectorForm')[0].submit();
+	}
+	function deleteNode(id, parent) {
+		<c:set var="translation">
+		   <digi:trn key="aim:ConfirmDelete">Delete this Scheme?</digi:trn>
+		</c:set>
+        var flag = confirm("${translation}");
+        if(flag) {
+        	document.getElementsByName('aimAddSectorForm')[0].action = '/aim/deleteSector.do~schemeId='+parent+'~event=delete~treeView=true~ampSectorId='+id+'~rootId='+<%=request.getParameter("rootId")%>;
+        	//alert(document.getElementsByName('aimAddSectorForm')[0].action);
+            document.getElementsByName('aimAddSectorForm')[0].submit();
+        }
+	}
+	function deleteRootNode(id) {
+		<c:set var="translation">
+		   <digi:trn key="aim:ConfirmDelete">Delete this Scheme?</digi:trn>
+		</c:set>
+     	var flag = confirm("${translation}");
+     	if(flag) {
+     		document.getElementsByName('aimAddSectorForm')[0].action = '/aim/updateSectorSchemes.do~event=deleteScheme~ampSecSchemeId='+id;
+     		//alert(document.getElementsByName('aimAddSectorForm')[0].action);
+         	document.getElementsByName('aimAddSectorForm')[0].submit();
+     	}
+	}
 </script>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -115,38 +172,90 @@
 													<!-- end page logic -->													
 											</table>
 										</td></tr>
+										<tr>
+										<td>
+											<p>
+												&nbsp;&nbsp;[<a onclick="treeObj.expandAll();"><digi:trn>Expand</digi:trn></a>]
+												&nbsp;&nbsp;[<a onclick="treeObj.collapseAll();treeObj.showHideNode(false, 'DHTMLSuite_treeNode1');"><digi:trn>Collapse</digi:trn></a>]
+											</p>
+										</td>
+										</tr>
+										<tr><td>&nbsp;</td></tr>
 										<logic:notEmpty name="aimAddSectorForm" property="schemeTree">
 										<tr><td>
 											 <font size="2">
 										 		<ul id="dhtmlgoodies_tree" class="dhtmlgoodies_tree">
-										 			<li id="rootnode" noDrag="true" noSiblings="true" noDelete="true" noRename="true">
-										 				<a>Root node</a>
+										 			<li id="rootnode" noDrag="true" noSiblings="true" noDelete="true" noRename="true" >
+										 				<a>Root
+															<img src="/TEMPLATE/ampTemplate/images/green_plus.png" style="height: 14px; cursor: pointer;" onclick='newNode(<%=request.getParameter("rootId")%>, 0)'/>
+															<img src="/TEMPLATE/ampTemplate/images/application_edit.png" style="height: 14px; cursor: pointer;" onclick="editRootNode(<%=request.getParameter("rootId")%>)"/>
+															<img src="/TEMPLATE/ampTemplate/images/deleteIcon.gif" style="height: 14px; cursor: pointer;" onclick="deleteRootNode(<%=request.getParameter("rootId")%>)"/>
+														</a>
 										 				<ul id = "rootNod">
 										 				</ul>
 										 			</li>
 										 		</ul>
 											 	<script type="text/javascript">
-											 		function insertRoot(id, name){
-												 		var parent = document.getElementById("rootNod");
+											 		function insertRoot(id, name, level){
+											 			var parent = document.getElementById("rootNod");
 														var newItem = document.createElement('li');
 														newItem.setAttribute("id","nod" + id);
 														newItem.setAttribute("noDelete", "true");
+														newItem.setAttribute("noDrag", "true");
+														
 														var newA = document.createElement('a');
-													    newItem.appendChild(newA);
+													  	newItem.appendChild(newA);
 														var newTxt=document.createTextNode(name);
 														newA.appendChild(newTxt);
+														var newImgAdd=document.createElement('img');
+														newImgAdd.setAttribute("src","/TEMPLATE/ampTemplate/images/green_plus.png");
+														newImgAdd.setAttribute("style","height: 14px; cursor: pointer;");
+														newImgAdd.setAttribute("onclick",'newNode('+id+',1)');
+														newA.appendChild(newImgAdd);
+														var newImgEdit=document.createElement('img');
+														newImgEdit.setAttribute("src","/TEMPLATE/ampTemplate/images/application_edit.png");
+														newImgEdit.setAttribute("style","height: 14px; cursor: pointer;");
+														newImgEdit.setAttribute("onclick",'editNode('+id+','+level+')');
+														newA.appendChild(newImgEdit);
+														var newImgDel=document.createElement('img');
+														newImgDel.setAttribute("src","/TEMPLATE/ampTemplate/images/deleteIcon.gif");
+														newImgDel.setAttribute("style","height: 14px; cursor: pointer;");
+														newImgDel.setAttribute("onclick",'deleteNode('+id+',<%=request.getParameter("rootId")%>)');
+														newA.appendChild(newImgDel);
 												 		
 												 		parent.appendChild(newItem);
 											 		}
-													function insertChild(pid, id, name){
+													function insertChild(pid, id, name, children, level){
 														var parent = document.getElementById("nod" + pid);
 														var newItem = document.createElement('li');
 														newItem.setAttribute("id","nod" + id);
 														newItem.setAttribute("noDelete", "true");
+														newItem.setAttribute("noDrag", "true");
+														if(level == 3){
+															newItem.setAttribute("class","dhtmlgoodies_sheet.gif");	
+														}
 														var newA = document.createElement('a');
 													    newItem.appendChild(newA);
 														var newTxt=document.createTextNode(name);
 														newA.appendChild(newTxt);
+
+														if(level<3) {
+															var newImgAdd=document.createElement('img');
+															newImgAdd.setAttribute("src","/TEMPLATE/ampTemplate/images/green_plus.png");
+															newImgAdd.setAttribute("style","height: 14px; cursor: pointer;");
+															newImgAdd.setAttribute("onclick",'newNode('+id+','+level+')');
+															newA.appendChild(newImgAdd);
+														}
+														var newImgEdit=document.createElement('img');
+														newImgEdit.setAttribute("src","/TEMPLATE/ampTemplate/images/application_edit.png");
+														newImgEdit.setAttribute("style","height: 14px; cursor: pointer;");
+														newImgEdit.setAttribute("onclick",'editNode('+id+','+level+')');
+														newA.appendChild(newImgEdit);
+														var newImgDel=document.createElement('img');
+														newImgDel.setAttribute("src","/TEMPLATE/ampTemplate/images/deleteIcon.gif");
+														newImgDel.setAttribute("style","height: 14px; cursor: pointer;");
+														newImgDel.setAttribute("onclick",'deleteNode('+id+','+pid+')');
+														newA.appendChild(newImgDel);
 
 														var parentBody = parent.getElementsByTagName("ul");
 																		
@@ -163,10 +272,10 @@
 														<logic:iterate name="aimAddSectorForm" property="schemeTree" id="sector"
 																		type="org.digijava.module.aim.dbentity.AmpSector	">
 															<logic:empty name="sector" property="parentSectorId">
-																insertRoot('<bean:write name="sector" property="ampSectorId"/>','<bean:write name="sector" property="name"/>'+' ['+'<bean:write name="sector" property="sectorCodeOfficial"/>'+']');
+																insertRoot('<bean:write name="sector" property="ampSectorId"/>','<bean:write name="sector" property="name"/>'+' ['+'<bean:write name="sector" property="sectorCodeOfficial"/>'+']','<bean:write name="sector" property="level"/>');
 															</logic:empty>
 															<logic:notEmpty name="sector" property="parentSectorId">
-																insertChild('<bean:write name="sector" property="parentSectorId.ampSectorId"/>','<bean:write name="sector" property="ampSectorId"/>','<bean:write name="sector" property="name"/>'+' ['+'<bean:write name="sector" property="sectorCodeOfficial"/>'+']');
+																insertChild('<bean:write name="sector" property="parentSectorId.ampSectorId"/>','<bean:write name="sector" property="ampSectorId"/>','<bean:write name="sector" property="name"/>'+' ['+'<bean:write name="sector" property="sectorCodeOfficial"/>'+'] ',<bean:write name="sector" property="hasChildren"/>,'<bean:write name="sector" property="level"/>');
 															</logic:notEmpty>
 														</logic:iterate>
 													</logic:notEmpty>
@@ -179,6 +288,7 @@
 													treeObj.setMaximumDepth(7);
 													treeObj.setMessageMaximumDepthReached('Maximum depth reached');
 													treeObj.init();
+													treeObj.expandAll();
 												</script>
 												
 											</font>
@@ -251,19 +361,6 @@
 											</td>
 										</tr>
 										</field:display>
-										<tr>
-											<td>
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<c:set var="clickToViewTree">
-													<digi:trn key="aim:clickToViewTree">Click here to view sector Tree</digi:trn>
-												</c:set>
-												<digi:link href="/viewSchemeTree.do" name="urlParams5" title="${clickToViewTree}" >
-													<digi:trn key="aim:AmpAdminHome">
-														Tree View
-													</digi:trn>
-												</digi:link>
-											</td>
-										</tr>
 										<tr>
 											<td>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>

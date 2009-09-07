@@ -112,9 +112,13 @@ public class Values extends HashMap<String, BigDecimal> {
 		this.addValue(ArConstants.TOTAL_PLANNED_DISBURSEMENT, TokenRepository.buildPLannedDisbursementsLogicalToken().evaluateOriginalvalue(cell));
 		
 		//no filtered affected by %
+		
+		
+		this.addValue(ArConstants.TOTAL_PLANNED_DISBURSEMENT_CURRENT_YEAR,  TokenRepository.buildCurrentYearPlannedDisbursementsLogicalToken().evaluate(cell));
 		this.addValue(ArConstants.TOTAL_PLANNED_DISBURSEMENT_LAST_YEAR,  TokenRepository.buildLastYearPlannedDisbursementsLogicalToken().evaluate(cell));
 		this.addValue(ArConstants.TOTAL_PLANNED_DISBURSEMENT_LAST_2YEAR,  TokenRepository.buildLast2YearPlannedDisbursementsLogicalToken().evaluate(cell));
 		this.addValue(ArConstants.TOTAL_PLANNED_DISBURSEMENT_LAST_3YEAR,  TokenRepository.buildLast3YearPlannedDisbursementsLogicalToken().evaluate(cell));
+
 		this.addValue(ArConstants.TOTAL_ACTUAL_DISBURSEMENT_PREV_MONTHS,  TokenRepository.buildPreviousMonthsActualDisbursementsLogicalToken().evaluate(cell));
 		this.addValue(ArConstants.TOTAL_ACTUAL_DISBURSEMENT_CUR_MONTH,  TokenRepository.buildCurrentMonthsActualDisbursementsLogicalToken().evaluate(cell));
 		

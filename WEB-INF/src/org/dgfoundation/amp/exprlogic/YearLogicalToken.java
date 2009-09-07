@@ -11,11 +11,15 @@ import org.dgfoundation.amp.ar.cell.CategAmountCell;
 public class YearLogicalToken extends LogicalToken {
 
 	private String type;
-	private int yearsAgo;
+	private int startYear;
+	private int endYear;
+	
+	
 
-	public YearLogicalToken(int yearsAgo, String type) {
+	public YearLogicalToken(int startYear, int endYear,String type) {
+		this.startYear=startYear;
 		this.type = type;
-		this.yearsAgo = yearsAgo;
+		this.endYear = endYear;
 	}
 
 	@Override
@@ -24,13 +28,10 @@ public class YearLogicalToken extends LogicalToken {
 		Date date = (Date) m.getValue();
 		GregorianCalendar gCell = new GregorianCalendar();
 		gCell.setTime(date);
-		GregorianCalendar current = new GregorianCalendar();
 		Integer cellYear = gCell.get(Calendar.YEAR);
-		Integer currentYear = current.get(Calendar.YEAR);
-		Integer year = currentYear - yearsAgo;
+	
 		
-		
-		ret = (cellYear.compareTo(year) > -1)&& (cellYear.compareTo(currentYear) < 0) ;
+		ret = (cellYear.compareTo(startYear) > -1)&& (cellYear.compareTo(endYear) < 1) ;
 		return super.evaluate(c);
 	}
 }

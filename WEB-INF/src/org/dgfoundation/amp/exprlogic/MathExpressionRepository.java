@@ -75,6 +75,8 @@ public class MathExpressionRepository {
 
 	public static final String CONSUMPTION_RATE = "consumptionRate";
 
+	public static final String CUR_YEAR_PLANNED_DISBURSEMENT = "currYearPlannedDisbursement";
+
 	public static final String LAST_YEAR_PLANNED_DISBURSEMENT = "lastYearPlannedDisbursements";
 
 	public static final String LAST_2YEAR_PLANNED_DISBURSEMENT = "last2YearPlannedDisbursements";
@@ -123,6 +125,7 @@ public class MathExpressionRepository {
 		buildCurrentMonthDisbursements();
 		buildCumulatedDisbursements();
 		buildConsumptionRate();
+		buildCurrentYearOfPlannedDisbursements();
 		buildLastYearOfPlannedDisbursements();
 		buildLast2YearOfPlannedDisbursements();
 		buildLast3YearOfPlannedDisbursements();
@@ -523,6 +526,20 @@ public class MathExpressionRepository {
 			MathExpression m2 = new MathExpression(MathExpression.Operation.MULTIPLY, m1, new BigDecimal(100));
 
 			expresions.put(CONSUMPTION_RATE, m2);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+
+	
+	/**
+	 * Current Year Planned Disbursements
+	 */
+	private static void buildCurrentYearOfPlannedDisbursements() {
+		try {
+
+			MathExpression m = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.TOTAL_PLANNED_DISBURSEMENT_CURRENT_YEAR, new BigDecimal(1));
+			expresions.put(CUR_YEAR_PLANNED_DISBURSEMENT, m);
 		} catch (Exception e) {
 			logger.error(e);
 		}

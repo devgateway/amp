@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.exprlogic;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Hashtable;
 
@@ -218,7 +219,36 @@ public class TokenRepository {
 		tokens.put(TokenNames.COSTING_GRAND_TOTAL, te);
 		return te;
 	}
+	public static TokenExpression buildCurrentYearPlannedDisbursementsLogicalToken() {
+		PresentLogicalToken proposedCost = new PresentLogicalToken(ArConstants.PROPOSED_COST, true);
+		PresentLogicalToken grandTotaldCost = new PresentLogicalToken(ArConstants.COSTING_GRAND_TOTAL, true);
 
+		// Filter no Disbursement funding
+		EqualsLogicalToken NotCommitments = new EqualsLogicalToken(ArConstants.COMMITMENT, ArConstants.TRANSACTION_TYPE, true);
+		EqualsLogicalToken NotExpenditureTrType = new EqualsLogicalToken(ArConstants.EXPENDITURE, ArConstants.TRANSACTION_TYPE, true);
+		EqualsLogicalToken NotDisbursedOrderTrType = new EqualsLogicalToken(ArConstants.DISBURSEMENT_ORDERS, ArConstants.TRANSACTION_TYPE, true);
+
+		// Only Planned
+		EqualsLogicalToken plannedAdjType = new EqualsLogicalToken(ArConstants.PLANNED, ArConstants.ADJUSTMENT_TYPE, false);
+		EqualsLogicalToken NotactualAdjType = new EqualsLogicalToken(ArConstants.ACTUAL, ArConstants.ADJUSTMENT_TYPE, true);
+
+		ANDBinaryLogicalToken and0 = new ANDBinaryLogicalToken(NotCommitments, NotExpenditureTrType, false);
+		ANDBinaryLogicalToken and1 = new ANDBinaryLogicalToken(NotDisbursedOrderTrType, and0, false);
+		ORBinaryLogicalToken or1 = new ORBinaryLogicalToken(NotactualAdjType, plannedAdjType, false);
+		ANDBinaryLogicalToken and2 = new ANDBinaryLogicalToken(or1, and1, false);
+		ANDBinaryLogicalToken and3 = new ANDBinaryLogicalToken(and2, proposedCost, false);
+		ANDBinaryLogicalToken and4 = new ANDBinaryLogicalToken(and3, grandTotaldCost, false);
+		
+		GregorianCalendar curDate=new GregorianCalendar();
+		YearLogicalToken year = new YearLogicalToken(curDate.get(Calendar.YEAR),curDate.get(Calendar.YEAR), ArConstants.TRANSACTION_DATE);
+		ANDBinaryLogicalToken and5 = new ANDBinaryLogicalToken(and4, year, false);
+
+		TokenExpression te = new TokenExpression(new LogicalToken[] { and5 });
+		if (tokens == null)
+			tokens = new Hashtable<String, TokenExpression>();
+		tokens.put(TokenNames.LAST_YEAR_PLANNED_DISBURSEMENT, te);
+		return te;
+	}
 	public static TokenExpression buildLastYearPlannedDisbursementsLogicalToken() {
 		PresentLogicalToken proposedCost = new PresentLogicalToken(ArConstants.PROPOSED_COST, true);
 		PresentLogicalToken grandTotaldCost = new PresentLogicalToken(ArConstants.COSTING_GRAND_TOTAL, true);
@@ -238,8 +268,8 @@ public class TokenRepository {
 		ANDBinaryLogicalToken and2 = new ANDBinaryLogicalToken(or1, and1, false);
 		ANDBinaryLogicalToken and3 = new ANDBinaryLogicalToken(and2, proposedCost, false);
 		ANDBinaryLogicalToken and4 = new ANDBinaryLogicalToken(and3, grandTotaldCost, false);
-
-		YearLogicalToken year = new YearLogicalToken(1, ArConstants.TRANSACTION_DATE);
+		GregorianCalendar curDate=new GregorianCalendar();
+		YearLogicalToken year = new YearLogicalToken(curDate.get(Calendar.YEAR)-1,curDate.get(Calendar.YEAR)-1, ArConstants.TRANSACTION_DATE);
 		ANDBinaryLogicalToken and5 = new ANDBinaryLogicalToken(and4, year, false);
 
 		TokenExpression te = new TokenExpression(new LogicalToken[] { and5 });
@@ -270,7 +300,10 @@ public class TokenRepository {
 		ANDBinaryLogicalToken and3 = new ANDBinaryLogicalToken(and2, proposedCost, false);
 		ANDBinaryLogicalToken and4 = new ANDBinaryLogicalToken(and3, grandTotaldCost, false);
 
-		YearLogicalToken year = new YearLogicalToken(2, ArConstants.TRANSACTION_DATE);
+		//YearLogicalToken year = new YearLogicalToken(2, ArConstants.TRANSACTION_DATE);
+		GregorianCalendar curDate=new GregorianCalendar();
+		YearLogicalToken year = new YearLogicalToken(curDate.get(Calendar.YEAR)-2,curDate.get(Calendar.YEAR)-1, ArConstants.TRANSACTION_DATE);
+	
 		ANDBinaryLogicalToken and5 = new ANDBinaryLogicalToken(and4, year, false);
 
 		TokenExpression te = new TokenExpression(new LogicalToken[] { and5 });
@@ -300,7 +333,10 @@ public class TokenRepository {
 		ANDBinaryLogicalToken and3 = new ANDBinaryLogicalToken(and2, proposedCost, false);
 		ANDBinaryLogicalToken and4 = new ANDBinaryLogicalToken(and3, grandTotaldCost, false);
 
-		YearLogicalToken year = new YearLogicalToken(3, ArConstants.TRANSACTION_DATE);
+		//YearLogicalToken year = new YearLogicalToken(2, ArConstants.TRANSACTION_DATE);
+		GregorianCalendar curDate=new GregorianCalendar();
+		YearLogicalToken year = new YearLogicalToken(curDate.get(Calendar.YEAR)-3,curDate.get(Calendar.YEAR)-1, ArConstants.TRANSACTION_DATE);
+	
 		ANDBinaryLogicalToken and5 = new ANDBinaryLogicalToken(and4, year, false);
 
 		TokenExpression te = new TokenExpression(new LogicalToken[] { and5 });
@@ -310,48 +346,51 @@ public class TokenRepository {
 		return te;
 	}
 
+	/**
+	 * 
+	 * 
+	 * Current month should be understood as the current month that has been already close.
+	 * @return
+	 */
 	public static TokenExpression buildPreviousMonthsActualDisbursementsLogicalToken() {
-
 		PresentLogicalToken proposedCost = new PresentLogicalToken(ArConstants.PROPOSED_COST, true);
 		PresentLogicalToken grandTotaldCost = new PresentLogicalToken(ArConstants.COSTING_GRAND_TOTAL, true);
-
 		EqualsLogicalToken NotCommitments = new EqualsLogicalToken(ArConstants.COMMITMENT, ArConstants.TRANSACTION_TYPE, true);
 		EqualsLogicalToken NotExpenditureTrType = new EqualsLogicalToken(ArConstants.EXPENDITURE, ArConstants.TRANSACTION_TYPE, true);
 		EqualsLogicalToken NotDisbursedOrderTrType = new EqualsLogicalToken(ArConstants.DISBURSEMENT_ORDERS, ArConstants.TRANSACTION_TYPE, true);
-
 		// only actual
 		EqualsLogicalToken NotPlannedAdjType = new EqualsLogicalToken(ArConstants.PLANNED, ArConstants.ADJUSTMENT_TYPE, true);
 		EqualsLogicalToken actualAdjType = new EqualsLogicalToken(ArConstants.ACTUAL, ArConstants.ADJUSTMENT_TYPE, false);
-
 		ANDBinaryLogicalToken and0 = new ANDBinaryLogicalToken(NotCommitments, NotExpenditureTrType, false);
 		ANDBinaryLogicalToken and1 = new ANDBinaryLogicalToken(NotDisbursedOrderTrType, and0, false);
 		ORBinaryLogicalToken or1 = new ORBinaryLogicalToken(actualAdjType, NotPlannedAdjType, false);
 		ANDBinaryLogicalToken and2 = new ANDBinaryLogicalToken(or1, and1, false);
-
 		ANDBinaryLogicalToken and3 = new ANDBinaryLogicalToken(and2, proposedCost, false);
-
 		ANDBinaryLogicalToken and4 = new ANDBinaryLogicalToken(and3, grandTotaldCost, false);
 		
-		GregorianCalendar c1=new GregorianCalendar();
+		// if today =  09/2009  period should be 01/2009 to /08/2009
+		GregorianCalendar c1=new GregorianCalendar(); 
 		c1.set(Calendar.DAY_OF_MONTH,1);
-		c1.set(Calendar.MONTH,0);
-	
+		c1.set(Calendar.MONTH,Calendar.JANUARY);
 		c1.set(Calendar.HOUR, 0);
 		c1.set(Calendar.MINUTE, 0);
 		c1.set(Calendar.SECOND, 0);
-		c1.set(Calendar.MILLISECOND, 0);
+		c1.set(Calendar.AM_PM,Calendar.AM);
+		c1.set(Calendar.MILLISECOND, 0); //01.01.2009 00:00:00
+		Date d1=c1.getTime();
 		
 		GregorianCalendar c2=new GregorianCalendar();
 		c2.set(Calendar.DAY_OF_MONTH,1);
-		c2.add(Calendar.DAY_OF_MONTH,-1);
-		c2.set(Calendar.MONTH,0);
-		
+		c2.add(Calendar.MONTH,-1); //01.08.2009
+		c2.add(Calendar.DAY_OF_MONTH,-1);//31/07/2009
 		c2.set(Calendar.HOUR, 0);
 		c2.set(Calendar.MINUTE, 0);
 		c2.set(Calendar.SECOND, 0);
 		c2.set(Calendar.MILLISECOND, 0);
+		c2.set(Calendar.AM_PM,Calendar.PM);
+		Date d2=c2.getTime();
 		
-		DateRangeLogicalToken token=new DateRangeLogicalToken(c1.getTime(),c2.getTime(),ArConstants.TRANSACTION_DATE);
+		DateRangeLogicalToken token=new DateRangeLogicalToken(d1,d2,ArConstants.TRANSACTION_DATE);
 		
 		ANDBinaryLogicalToken and5 = new ANDBinaryLogicalToken(and4, token, false);
 		
@@ -362,7 +401,10 @@ public class TokenRepository {
 		return te;
 	}
 	
-	
+	/**
+	 * Current month should be understood as the current month that has been already closedo.
+	 * @return
+	 */
 	public static TokenExpression buildCurrentMonthsActualDisbursementsLogicalToken() {
 
 		PresentLogicalToken proposedCost = new PresentLogicalToken(ArConstants.PROPOSED_COST, true);
@@ -387,23 +429,25 @@ public class TokenRepository {
 		
 		GregorianCalendar c1=new GregorianCalendar();
 		c1.set(Calendar.DAY_OF_MONTH,1);
-		
+		c1.add(Calendar.MONTH,-1);
 		c1.set(Calendar.HOUR, 0);
 		c1.set(Calendar.MINUTE, 0);
 		c1.set(Calendar.SECOND, 0);
 		c1.set(Calendar.MILLISECOND, 0);
+		c1.set(Calendar.AM_PM,Calendar.AM);
+		Date d1=c1.getTime();
 		
 		GregorianCalendar c2=new GregorianCalendar();
 		c2.set(Calendar.DAY_OF_MONTH,1);
-		c2.add(Calendar.MONTH,1);
 		c2.add(Calendar.DAY_OF_MONTH,-1);
-		
 		c2.set(Calendar.HOUR, 0);
 		c2.set(Calendar.MINUTE, 0);
 		c2.set(Calendar.SECOND, 0);
 		c2.set(Calendar.MILLISECOND, 0);
+		c2.set(Calendar.AM_PM,Calendar.PM);
+		Date d2=c2.getTime();
 		
-		DateRangeLogicalToken token=new DateRangeLogicalToken(c1.getTime(),c2.getTime(),ArConstants.TRANSACTION_DATE);
+		DateRangeLogicalToken token=new DateRangeLogicalToken(d1,d2,ArConstants.TRANSACTION_DATE);
 		
 		ANDBinaryLogicalToken and5 = new ANDBinaryLogicalToken(and4, token, false);
 		

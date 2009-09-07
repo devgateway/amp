@@ -54,7 +54,7 @@ public final class XmlPatcherConstants {
 	}
 
 	/**
-	 * @see org.digijava.module.xmlpatcher.workers.XmlPatcherScriptWorker
+	 * @see org.digijava.module.xmlpatcher.worker.XmlPatcherScriptWorker
 	 */
 	public static final class ScriptLangs {
 		/**

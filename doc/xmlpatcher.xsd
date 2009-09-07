@@ -8,7 +8,7 @@
 
 <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher"
 	targetNamespace="http://docs.ampdev.net/schemas/xmlpatcher">
-	<element name="patches" type="tns:patch"/>
+	<element name="patch" type="tns:patch"/>
 
 
 	<complexType name="patch">

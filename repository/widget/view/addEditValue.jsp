@@ -23,7 +23,7 @@
     	var amount=num.value;
     	var validChars= "0123456789.";
     	var dotsAmount=0; //there should be only one '.' character and not at the beggining like .3 or 0.2.6
-    	var errorMsg="<digi:trn>Please enter numeric value only</digi:trn>";
+    	var errorMsg='<digi:trn jsFriendly="true">Please enter numeric value only</digi:trn>';
     	var errorAppeared=false;
     	for (var i = 0;  i < amount.length;  i++) {
     		var ch = amount.charAt(i);
@@ -86,11 +86,30 @@
               }	
           }
           //for every actual value we should have base and target values
+          var msg='';
           if(baseValue==0||targetValue==0){
-              var msg='<digi:trn key="gis:addEditValue:enterBaseAndTargetValues">Please ensure that you enter at least 1 base and 1 target value</digi:trn>';
+              msg='<digi:trn key="gis:addEditValue:enterBaseAndTargetValues">Please ensure that you enter at least 1 base and 1 target value</digi:trn>';
               alert(msg);
               return false;	
           }
+        var dates=$("input[@id^='txtDate']");
+        var amounts=$("input[@id^='val_']");
+        for(var j=0;j<dates.length;j++){
+            if(amounts[j].value.trim()==''||amounts[j].value=='0.0'){
+                msg='<digi:trn jsFriendly="true">Please enter amounts</digi:trn>';
+                alert(msg);
+                amounts[j].focus();
+                return false;
+
+            }
+            if(dates[j].value.trim()==''){
+                msg='<digi:trn jsFriendly="true">Please choose date</digi:trn>';
+                alert(msg);
+                dates[j].focus();
+                return false;
+
+            }
+        }
           return true;
       }
 </script>

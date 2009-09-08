@@ -2,6 +2,7 @@ package org.dgfoundation.amp.ar.cell;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.workers.TrnTextColWorker;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.WorkerException;
@@ -29,6 +30,11 @@ public class TrnTextCell extends TextCell{
 		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
 		String siteId = site.getId()+"";
 		String locale = navigationLanguage.getCode();
+		
+		return this.getTrasnlatedValue(siteId, locale);
+	}
+	public String getTrasnlatedValue(String siteId, String locale){
+		
 		String text;
 		try {
 			text = TranslatorWorker.translateText((String) super.getValue(),locale,siteId);
@@ -39,4 +45,13 @@ public class TrnTextCell extends TextCell{
 		return getValue()!=null?getValue().toString().replaceAll("\\<.*?>",""):"";
 	}
 	
+	@Override
+	public String toString() {
+		ReportData parent=(ReportData) this.getNearestReportData().getParent();
+		while (parent.getReportMetadata()==null)
+		{
+			parent=parent.getParent();
+		}
+		return this.getTrasnlatedValue(parent.getReportMetadata().getSiteId(), parent.getReportMetadata().getLocale()) ;
+	}
 }

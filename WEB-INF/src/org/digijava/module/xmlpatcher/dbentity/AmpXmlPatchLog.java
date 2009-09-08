@@ -1,5 +1,5 @@
 /**
- * XmlPatchLog.java
+ * AmpXmlPatchLog.java
  * (c) 2009 Development Gateway Foundation
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
  */
@@ -14,14 +14,14 @@ import java.util.Date;
  *         several invocations. A log contains the date of execution, the output
  *         of the invocation (possible errors) and the status of the execution
  */
-public class XmlPatchLog implements Serializable {
+public class AmpXmlPatchLog implements Serializable {
 
 	protected Long id;
 
 	/**
 	 * The patch reference to this log
 	 */
-	protected XmlPatch patch;
+	protected AmpXmlPatch patch;
 
 	/**
 	 * The log text
@@ -71,15 +71,20 @@ public class XmlPatchLog implements Serializable {
 		log.append(e.getStackTrace().toString());
 	}
 
-	public XmlPatchLog() {
+	public AmpXmlPatchLog() {
 		this.log = new StringBuffer();
 	}
+	
+	public AmpXmlPatchLog(AmpXmlPatch p) {
+		this.log = new StringBuffer();
+		this.patch=p;
+	}
 
-	public XmlPatch getPatch() {
+	public AmpXmlPatch getPatch() {
 		return patch;
 	}
 
-	public void setPatch(XmlPatch patch) {
+	public void setPatch(AmpXmlPatch patch) {
 		this.patch = patch;
 	}
 

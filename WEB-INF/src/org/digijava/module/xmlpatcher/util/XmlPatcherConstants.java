@@ -19,7 +19,7 @@ public final class XmlPatcherConstants {
 	 * Describes states of the patch execution.
 	 * 
 	 * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
-	 * @see org.digijava.module.xmlpatcher.dbentity.XmlPatch#getState()
+	 * @see org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch#getState()
 	 */
 	public static final class PatchStates {
 		/**

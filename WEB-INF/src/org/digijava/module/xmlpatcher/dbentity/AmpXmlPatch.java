@@ -1,5 +1,5 @@
 /**
- * XmlPatch.java
+ * AmpXmlPatch.java
  * (c) 2009 Development Gateway Foundation
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
  */
@@ -16,7 +16,7 @@ import org.digijava.module.xmlpatcher.util.XmlPatcherConstants;
  *         reference of an XML patch file. It holds key information about the
  *         execution and state of the patch
  */
-public class XmlPatch implements Serializable, Comparable<XmlPatch> {
+public class AmpXmlPatch implements Serializable, Comparable<AmpXmlPatch> {
 
 	/**
 	 * This is the id of the patch. This is the actual name of the XML file,
@@ -45,9 +45,9 @@ public class XmlPatch implements Serializable, Comparable<XmlPatch> {
 	/**
 	 * The execution logs for this patch, if any
 	 */
-	protected List<XmlPatchLog> logs;
+	protected List<AmpXmlPatchLog> logs;
 
-	public XmlPatch() {
+	public AmpXmlPatch() {
 
 	}
 
@@ -61,7 +61,7 @@ public class XmlPatch implements Serializable, Comparable<XmlPatch> {
 	 * @param location
 	 *            the directory of the patch file relative to AMP root
 	 */
-	public XmlPatch(String patchId, String location) {
+	public AmpXmlPatch(String patchId, String location) {
 		this.patchId = patchId;
 		this.location = location;
 		this.setState(XmlPatcherConstants.PatchStates.OPEN);
@@ -100,16 +100,16 @@ public class XmlPatch implements Serializable, Comparable<XmlPatch> {
 		this.state = state;
 	}
 
-	public List<XmlPatchLog> getLogs() {
+	public List<AmpXmlPatchLog> getLogs() {
 		return logs;
 	}
 
-	public void setLogs(List<XmlPatchLog> logs) {
+	public void setLogs(List<AmpXmlPatchLog> logs) {
 		this.logs = logs;
 	}
 
 	@Override
-	public int compareTo(XmlPatch o) {
+	public int compareTo(AmpXmlPatch o) {
 		return this.getPatchId().compareTo(o.getPatchId());
 	}
 

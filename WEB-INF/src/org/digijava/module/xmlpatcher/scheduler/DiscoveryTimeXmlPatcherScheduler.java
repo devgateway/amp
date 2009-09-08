@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.digijava.module.xmlpatcher.dbentity.XmlPatch;
+import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch;
 
 /**
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org Sample scheduler,
@@ -24,16 +24,16 @@ import org.digijava.module.xmlpatcher.dbentity.XmlPatch;
 public class DiscoveryTimeXmlPatcherScheduler extends XmlPatcherScheduler {
 
 	/**
-	 * Comparator designed to query the discovered property of XmlPatch
+	 * Comparator designed to query the discovered property of AmpXmlPatch
 	 * 
-	 * @see org.digijava.module.xmlpatcher.dbentity.XmlPatch#getDiscovered()
+	 * @see org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch#getDiscovered()
 	 * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
 	 * 
 	 */
 	public static class DiscoveryTimeXmlPatchComparator implements
-			Comparator<XmlPatch> {
+			Comparator<AmpXmlPatch> {
 		@Override
-		public int compare(XmlPatch arg0, XmlPatch arg1) {
+		public int compare(AmpXmlPatch arg0, AmpXmlPatch arg1) {
 			return arg0.getDiscovered().compareTo(arg1.getDiscovered());
 		}
 
@@ -45,7 +45,7 @@ public class DiscoveryTimeXmlPatcherScheduler extends XmlPatcherScheduler {
 	 * @param patches
 	 */
 	public DiscoveryTimeXmlPatcherScheduler(Map<String, Object> properties,
-			List<XmlPatch> patches) {
+			List<AmpXmlPatch> patches) {
 		super(properties, patches);
 		// TODO Auto-generated constructor stub
 	}
@@ -57,8 +57,8 @@ public class DiscoveryTimeXmlPatcherScheduler extends XmlPatcherScheduler {
 	 * getScheduledPatchCollection()
 	 */
 	@Override
-	public Collection<XmlPatch> getScheduledPatchCollection() {
-		Collection<XmlPatch> ret = new TreeSet<XmlPatch>(
+	public Collection<AmpXmlPatch> getScheduledPatchCollection() {
+		Collection<AmpXmlPatch> ret = new TreeSet<AmpXmlPatch>(
 				new DiscoveryTimeXmlPatchComparator());
 		ret.addAll(patches);
 		return ret;

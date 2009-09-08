@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="false" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+  <jira>jira</jira>
+  <keyword>keyword</keyword>
+  <author>author</author>
+  <description>description</description>
+  <deprecate>deprecate</deprecate>
+  <trigger inverted="false" type="all"/>
+  <apply>
+    <script returnVar="">
+      <lang delimiter=";" type="sql">lang</lang>
+    </script>
+  </apply>
+  <rollback>
+    <prepare>
+      <script returnVar="">
+        <lang delimiter=";" type="sql">lang</lang>
+      </script>
+    </prepare>
+    <apply>
+      <script returnVar="">
+        <lang delimiter=";" type="sql">lang</lang>
+      </script>
+    </apply>
+    <cleanup>
+      <script returnVar="">
+        <lang delimiter=";" type="sql">lang</lang>
+      </script>
+    </cleanup>
+  </rollback>
+</tns:patch>

@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.digijava.module.xmlpatcher.dbentity.XmlPatch;
+import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch;
 
 /**
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org Provides natural
@@ -25,7 +25,7 @@ public class NaturalOrderXmlPatcherScheduler extends XmlPatcherScheduler {
 	 * @param patches
 	 */
 	public NaturalOrderXmlPatcherScheduler(Map<String, Object> properties,
-			List<XmlPatch> patches) {
+			List<AmpXmlPatch> patches) {
 		super(properties, patches);
 		// TODO Auto-generated constructor stub
 	}
@@ -37,9 +37,9 @@ public class NaturalOrderXmlPatcherScheduler extends XmlPatcherScheduler {
 	 * getScheduledPatchCollection()
 	 */
 	@Override
-	public Collection<XmlPatch> getScheduledPatchCollection() {
+	public Collection<AmpXmlPatch> getScheduledPatchCollection() {
 		// TODO Auto-generated method stub
-		Set<XmlPatch> naturalSet = new TreeSet<XmlPatch>();
+		Set<AmpXmlPatch> naturalSet = new TreeSet<AmpXmlPatch>();
 		naturalSet.addAll(patches);
 		return naturalSet;
 	}

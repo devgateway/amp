@@ -10,7 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.digijava.module.xmlpatcher.core.XmlPatcherWorkerFactory;
-import org.digijava.module.xmlpatcher.dbentity.XmlPatchLog;
+import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatchLog;
 import org.digijava.module.xmlpatcher.exception.XmlPatcherScriptWorkerException;
 import org.digijava.module.xmlpatcher.exception.XmlPatcherWorkerException;
 import org.digijava.module.xmlpatcher.jaxb.Lang;
@@ -24,7 +24,7 @@ import org.digijava.module.xmlpatcher.util.XmlPatcherConstants;
 public class XmlPatcherScriptWorker extends XmlPatcherWorker<Script> {
 	private Lang generic;
 
-	public XmlPatcherScriptWorker(Script script, XmlPatchLog log) {
+	public XmlPatcherScriptWorker(Script script, AmpXmlPatchLog log) {
 		super(script, log);
 		generic = null;
 	}

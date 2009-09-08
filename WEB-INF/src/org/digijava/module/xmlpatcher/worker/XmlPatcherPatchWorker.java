@@ -6,9 +6,14 @@
  */
 package org.digijava.module.xmlpatcher.worker;
 
-import org.digijava.module.xmlpatcher.dbentity.XmlPatchLog;
+import java.util.Iterator;
+
+import org.digijava.module.xmlpatcher.core.XmlPatcherWorkerFactory;
+import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatchLog;
 import org.digijava.module.xmlpatcher.exception.XmlPatcherWorkerException;
 import org.digijava.module.xmlpatcher.jaxb.Patch;
+import org.digijava.module.xmlpatcher.jaxb.Script;
+import org.digijava.module.xmlpatcher.jaxb.ScriptGroup;
 
 /**
  * XmlPatcherPatchWorker
@@ -22,18 +27,26 @@ public class XmlPatcherPatchWorker extends XmlPatcherWorker<Patch> {
 	 * @param entity
 	 * @param log
 	 */
-	public XmlPatcherPatchWorker(Patch entity, XmlPatchLog log) {
+	public XmlPatcherPatchWorker(Patch entity, AmpXmlPatchLog log) {
 		super(entity, log);
 		// TODO Auto-generated constructor stub
 	}
 
 	/**
-	 * Get all script entities inside apply entities and invoke workers for them
+	 * Get all script entities inside apply entity and invoke workers for them.
+	 * If any of the workers fail, then then entire apply entity fails
 	 * @see org.digijava.module.xmlpatcher.worker.XmlPatcherWorker#process()
 	 */
 	@Override
 	protected boolean process() throws XmlPatcherWorkerException {
-		return true;
+		ScriptGroup apply = entity.getApply();
+		Iterator<Script> i=apply.getScript().iterator();
+		while(i.hasNext()) {
+			Script script = i.next();
+			XmlPatcherWorker<?> worker = XmlPatcherWorkerFactory.createWorker(script, log);
+			if(!worker.run()) return false;
+		}
+	return true;	
 	}
 
 	/**

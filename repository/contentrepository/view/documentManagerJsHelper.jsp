@@ -249,7 +249,10 @@ YAHOO.namespace("YAHOO.amp.table");
 /* Function for creating YAHOO datatable for all documents*/
 YAHOO.amp.table.enhanceMarkup = function(markupName) {
 	var checkBoxToHide = document.getElementById("checkBoxToHide");
-	
+	<%
+    	String dt = request.getParameter("documentsType");		
+	%>
+	var dt = "<%= dt %>";	
 	if(checkBoxToHide != null && checkBoxToHide.value == "true"){
 	    this.columnHeaders = [
 			{key:"select",type:"checkbox", text:"${trans_headerSelect}",sortable:false,width:10},
@@ -263,7 +266,19 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
 	        {key:"actions",text:"${trans_headerActions}",sortable:false,width:150}
 	    ];
 	}
-	else{
+	else if ((checkBoxToHide == null) && (dt == "Related Documents")) {
+		this.columnHeaders = [
+    			{key:"select",type:"checkbox", text:"${trans_headerSelect}",sortable:false,width:10},
+    			{key:"resource_title",text:"${trans_headerResourceTitle}",sortable:true,width:150},
+    		    {key:"type",text:"${trans_headerType}",sortable:true},
+    	        {key:"file_name",text:"${trans_headerFileName}",sortable:true,width:150},
+    	        {key:"date",type:"Date",text:"${trans_headerDate}",sortable:true},
+    	        {key:"size",type:"number",text:"${trans_fileSize}",sortable:true},
+    	        {key:"cm_doc_type",text:"${trans_cmDocType}",sortable:true},
+    	        {key:"description",text:"${trans_headerDescription}",sortable:false,width:100},
+    	        {key:"actions",text:"${trans_headerActions}",sortable:false,width:150}
+    	    ];
+	}else {
 	    this.columnHeaders = [
       			{key:"resource_title",text:"${trans_headerResourceTitle}",sortable:true,width:150},
        		    {key:"type",text:"${trans_headerType}",sortable:true},

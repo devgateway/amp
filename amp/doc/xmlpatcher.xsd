@@ -80,7 +80,7 @@
 				maxOccurs="1">
 			</element>
 			<element name="apply" type="tns:scriptGroup" minOccurs="1"
-				maxOccurs="unbounded">
+				maxOccurs="1">
 				<annotation>
 					<documentation>
 						The functional part of the patch goes here.

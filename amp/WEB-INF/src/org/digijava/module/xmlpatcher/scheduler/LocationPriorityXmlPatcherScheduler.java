@@ -12,7 +12,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-import org.digijava.module.xmlpatcher.dbentity.XmlPatch;
+import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch;
 import org.digijava.module.xmlpatcher.util.XmlPatcherConstants;
 
 /**
@@ -23,16 +23,16 @@ import org.digijava.module.xmlpatcher.util.XmlPatcherConstants;
  *         list of locations, in the order of the execution priority. As location you may enter
  *         any part of the URI (the path) to the patch file. For eg. a valid location string is:
  *         categorymanager,repository/admin,gateperm
- * @see org.digijava.module.xmlpatcher.dbentity.XmlPatch#getLocation()
+ * @see org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch#getLocation()
  */
 public class LocationPriorityXmlPatcherScheduler extends XmlPatcherScheduler {
 
 	protected List<String> locationPriority;
 
 	public class LocationPriorityXmlPatchComparator implements
-			Comparator<XmlPatch> {
+			Comparator<AmpXmlPatch> {
 
-		protected Integer getLocationKeyIndex(XmlPatch patch) {
+		protected Integer getLocationKeyIndex(AmpXmlPatch patch) {
 			for (int i = 0; i < locationPriority.size(); i++)
 				if (patch.getLocation().contains(locationPriority.get(i)))
 					return new Integer(i);
@@ -40,7 +40,7 @@ public class LocationPriorityXmlPatcherScheduler extends XmlPatcherScheduler {
 		}
 
 		@Override
-		public int compare(XmlPatch arg0, XmlPatch arg1) {
+		public int compare(AmpXmlPatch arg0, AmpXmlPatch arg1) {
 			return getLocationKeyIndex(arg0).compareTo(
 					getLocationKeyIndex(arg1));
 		}
@@ -52,7 +52,7 @@ public class LocationPriorityXmlPatcherScheduler extends XmlPatcherScheduler {
 	 * @param naturalOrderedPatches
 	 */
 	public LocationPriorityXmlPatcherScheduler(Map<String, Object> properties,
-			List<XmlPatch> patches) {
+			List<AmpXmlPatch> patches) {
 		super(properties, patches);
 		String locationPriorityString = (String) properties
 				.get(XmlPatcherConstants.SchedulerProperties.LOCATION_PRIORITY);
@@ -67,7 +67,7 @@ public class LocationPriorityXmlPatcherScheduler extends XmlPatcherScheduler {
 	 * getScheduledPatchCollection()
 	 */
 	@Override
-	public Collection<XmlPatch> getScheduledPatchCollection() {
+	public Collection<AmpXmlPatch> getScheduledPatchCollection() {
 		Collections.sort(patches, new LocationPriorityXmlPatchComparator());
 		return patches;
 	}

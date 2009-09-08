@@ -6,6 +6,7 @@
 package org.digijava.module.xmlpatcher.util;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
@@ -14,10 +15,18 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.Unmarshaller;
+
+import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.service.ServiceContext;
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.xmlpatcher.dbentity.XmlPatch;
+import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch;
+import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatchLog;
+import org.digijava.module.xmlpatcher.jaxb.Patch;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -28,7 +37,8 @@ import org.hibernate.engine.SessionFactoryImplementor;
  * 
  */
 public final class XmlPatcherUtil {
-
+	private static Logger logger = Logger.getLogger(XmlPatcherUtil.class);
+	
 	/**
 	 * Finds and saves to db all new patch names and locations, that were not
 	 * recorded previously.
@@ -58,7 +68,7 @@ public final class XmlPatcherUtil {
 				String location = f.getAbsolutePath().substring(
 						appPath.length(),
 						f.getAbsolutePath().length() - f.getName().length());
-				XmlPatch patch = new XmlPatch(f.getName(), location);
+				AmpXmlPatch patch = new AmpXmlPatch(f.getName(), location);
 				DbUtil.add(patch);
 				patchNames.add(f.getName());
 			}
@@ -135,12 +145,38 @@ public final class XmlPatcherUtil {
 			HibernateException, SQLException {
 		Session session = PersistenceManager.getRequestDBSession();
 		Query query = session.createQuery("select p.patchId from "
-				+ XmlPatch.class.getName() + " p");
+				+ AmpXmlPatch.class.getName() + " p");
 		List list = query.list();
 		Set<String> ret = new TreeSet<String>();
 		ret.addAll(list);
 		PersistenceManager.releaseSession(session);
 		return ret;
+	}
+	
+	/**
+	 * Unmarshalls using JAXB the xml file that the AmpXmlPatch object points to
+	 * @param serviceContext 
+	 * @param p the patch file metaobject that holds the location URI
+	 * @param log the patch log file that will be written in the end to the db
+	 * @return the Patch object, unmarshalled
+	 */
+	public static Patch getUnmarshalledPatch(ServiceContext serviceContext, AmpXmlPatch p, AmpXmlPatchLog log) {
+		FileInputStream inputStream;
+		try {
+			String filePath=serviceContext.getRealPath("/")+p.getLocation()+p.getPatchId();
+			logger.info("Unmarshalling "+filePath);
+			inputStream = new FileInputStream(filePath);
+			JAXBContext jc = JAXBContext.newInstance("org.digijava.module.xmlpatcher.jaxb");
+			Unmarshaller m = jc.createUnmarshaller();
+			JAXBElement<Patch> enclosing =  (JAXBElement<Patch>) m.unmarshal(inputStream);
+			inputStream.close();
+			return enclosing.getValue();
+		} catch (Exception e) {
+			logger.error(e);
+			e.printStackTrace();
+			log.appendToLog(e);
+			return null;
+		}
 	}
 
 	/**
@@ -152,14 +188,14 @@ public final class XmlPatcherUtil {
 	 * @throws HibernateException
 	 * @throws SQLException
 	 */
-	public static List<XmlPatch> getAllDiscoveredUnclosedPatches()
+	public static List<AmpXmlPatch> getAllDiscoveredUnclosedPatches()
 			throws DgException, HibernateException, SQLException {
 		Session session = PersistenceManager.getRequestDBSession();
 		Query query = session
-				.createQuery("from " + XmlPatch.class.getName()
+				.createQuery("from " + AmpXmlPatch.class.getName()
 						+ " p WHERE p.state!="
 						+ XmlPatcherConstants.PatchStates.CLOSED);
-		List<XmlPatch> list = query.list();
+		List<AmpXmlPatch> list = query.list();
 		PersistenceManager.releaseSession(session);
 		return list;
 	}

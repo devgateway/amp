@@ -6,7 +6,7 @@
  */
 package org.digijava.module.xmlpatcher.worker;
 
-import org.digijava.module.xmlpatcher.dbentity.XmlPatchLog;
+import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatchLog;
 import org.digijava.module.xmlpatcher.exception.XmlPatcherLangWorkerException;
 import org.digijava.module.xmlpatcher.exception.XmlPatcherWorkerException;
 import org.digijava.module.xmlpatcher.jaxb.Lang;
@@ -22,7 +22,7 @@ public abstract class XmlPatcherLangWorker extends XmlPatcherWorker<Lang> {
 	 * @param entity
 	 * @param log
 	 */
-	public XmlPatcherLangWorker(Lang entity, XmlPatchLog log) {
+	public XmlPatcherLangWorker(Lang entity, AmpXmlPatchLog log) {
 		super(entity, log);
 		// TODO Auto-generated constructor stub
 	}

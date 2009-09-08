@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.digijava.module.xmlpatcher.dbentity.XmlPatch;
+import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch;
 
 /**
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org Provides support for
@@ -37,7 +37,7 @@ import org.digijava.module.xmlpatcher.dbentity.XmlPatch;
  *         by {@link #getScheduledPatchCollection()}.
  */
 public abstract class XmlPatcherScheduler {
-	List<XmlPatch> patches;
+	List<AmpXmlPatch> patches;
 	Map<String, Object> properties;
 
 	/**
@@ -50,7 +50,7 @@ public abstract class XmlPatcherScheduler {
 	 *            schedulers may receive properties from the digi.xml file
 	 */
 	public XmlPatcherScheduler(Map<String, Object> properties,
-			List<XmlPatch> patches) {
+			List<AmpXmlPatch> patches) {
 		this.patches = patches;
 		this.properties = properties;
 	}
@@ -61,5 +61,5 @@ public abstract class XmlPatcherScheduler {
 	 * 
 	 * @return the scheduled patch collection
 	 */
-	public abstract Collection<XmlPatch> getScheduledPatchCollection();
+	public abstract Collection<AmpXmlPatch> getScheduledPatchCollection();
 }

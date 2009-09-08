@@ -5,13 +5,15 @@
  */
 package org.digijava.module.xmlpatcher.core;
 
-import org.digijava.module.xmlpatcher.dbentity.XmlPatchLog;
+import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatchLog;
 import org.digijava.module.xmlpatcher.jaxb.Lang;
+import org.digijava.module.xmlpatcher.jaxb.Patch;
 import org.digijava.module.xmlpatcher.jaxb.Script;
 import org.digijava.module.xmlpatcher.util.XmlPatcherConstants;
 import org.digijava.module.xmlpatcher.worker.XmlPatcherBSHLangWorker;
 import org.digijava.module.xmlpatcher.worker.XmlPatcherHQLLangWorker;
 import org.digijava.module.xmlpatcher.worker.XmlPatcherNativeLangWorker;
+import org.digijava.module.xmlpatcher.worker.XmlPatcherPatchWorker;
 import org.digijava.module.xmlpatcher.worker.XmlPatcherSQLLangWorker;
 import org.digijava.module.xmlpatcher.worker.XmlPatcherScriptWorker;
 import org.digijava.module.xmlpatcher.worker.XmlPatcherWorker;
@@ -22,9 +24,11 @@ import org.digijava.module.xmlpatcher.worker.XmlPatcherWorker;
  */
 public class XmlPatcherWorkerFactory {
 	public static XmlPatcherWorker createWorker(Object xmlEntity,
-			XmlPatchLog log) {
+			AmpXmlPatchLog log) {
 		if (xmlEntity instanceof Script)
 			return new XmlPatcherScriptWorker((Script) xmlEntity, log);
+		if (xmlEntity instanceof Patch)
+			return new XmlPatcherPatchWorker((Patch) xmlEntity, log);
 		if (xmlEntity instanceof Lang) {
 			Lang lang = (Lang) xmlEntity;
 

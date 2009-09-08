@@ -6,7 +6,7 @@
 package org.digijava.module.xmlpatcher.worker;
 
 import org.apache.log4j.Logger;
-import org.digijava.module.xmlpatcher.dbentity.XmlPatchLog;
+import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatchLog;
 import org.digijava.module.xmlpatcher.exception.XmlPatcherWorkerException;
 
 /**
@@ -17,7 +17,7 @@ import org.digijava.module.xmlpatcher.exception.XmlPatcherWorkerException;
  */
 public abstract class XmlPatcherWorker<T> {
 	protected static Logger logger = Logger.getLogger(XmlPatcherWorker.class);
-	protected XmlPatchLog log;
+	protected AmpXmlPatchLog log;
 	protected T entity;
 	protected Object returnValue;
 	
@@ -29,7 +29,7 @@ public abstract class XmlPatcherWorker<T> {
 		return entity;
 	}
 	
-	public XmlPatcherWorker(T entity, XmlPatchLog log) {
+	public XmlPatcherWorker(T entity, AmpXmlPatchLog log) {
 		this.log = log;
 		this.entity = entity;
 		logger.debug("Worker initialized for " + entity);

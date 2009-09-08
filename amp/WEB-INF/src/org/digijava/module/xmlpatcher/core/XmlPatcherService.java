@@ -20,11 +20,15 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.service.AbstractServiceImpl;
 import org.digijava.kernel.service.ServiceContext;
 import org.digijava.kernel.service.ServiceException;
-import org.digijava.module.xmlpatcher.dbentity.XmlPatch;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch;
+import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatchLog;
+import org.digijava.module.xmlpatcher.jaxb.Patch;
 import org.digijava.module.xmlpatcher.scheduler.NaturalOrderXmlPatcherScheduler;
 import org.digijava.module.xmlpatcher.scheduler.XmlPatcherScheduler;
 import org.digijava.module.xmlpatcher.util.XmlPatcherConstants;
 import org.digijava.module.xmlpatcher.util.XmlPatcherUtil;
+import org.digijava.module.xmlpatcher.worker.XmlPatcherWorker;
 import org.hibernate.HibernateException;
 
 /**
@@ -68,15 +72,28 @@ public class XmlPatcherService extends AbstractServiceImpl {
 			throws ServiceException {
 		try {
 			performPatchDiscovery(serviceContext.getRealPath("/"));
-			List<XmlPatch> rawPatches = XmlPatcherUtil
+			List<AmpXmlPatch> rawPatches = XmlPatcherUtil
 					.getAllDiscoveredUnclosedPatches();
 			scheduler = (XmlPatcherScheduler) Class.forName(
 					XmlPatcherConstants.schedulersPackage + schedulerName)
 					.getConstructors()[0].newInstance(new Object[] {
 					schedulerProperties, rawPatches });
-			Collection<XmlPatch> scheduledPatches = scheduler
+			Collection<AmpXmlPatch> scheduledPatches = scheduler
 					.getScheduledPatchCollection();
-
+			Iterator<AmpXmlPatch> iterator=scheduledPatches.iterator();
+			while(iterator.hasNext()) {
+				AmpXmlPatch ampPatch = iterator.next();
+				AmpXmlPatchLog log=new AmpXmlPatchLog(ampPatch);
+				Patch patch = XmlPatcherUtil.getUnmarshalledPatch(serviceContext,ampPatch, log);
+				XmlPatcherWorker<?>patcherWorker = XmlPatcherWorkerFactory.createWorker(patch, log);
+				boolean success = patcherWorker.run();
+				DbUtil.add(log);
+				if(success) ampPatch.setState(XmlPatcherConstants.PatchStates.CLOSED); else
+					ampPatch.setState(XmlPatcherConstants.PatchStates.FAILED);
+				DbUtil.update(ampPatch);
+			}
+			
+			
 		} catch (DgException e) {
 			logger.error(e);
 			e.printStackTrace();

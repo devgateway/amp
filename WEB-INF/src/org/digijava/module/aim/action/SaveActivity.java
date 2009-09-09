@@ -1783,7 +1783,7 @@ public class SaveActivity extends Action {
 
 				if("allEdits".equals(DbUtil.getTeamAppSettingsMemberNotNull(aAct.getTeam().getAmpTeamId()).getValidation())){
 					if(!tm.getTeamHead()){
-						if(Constants.APPROVED_STATUS.equals(aAct.getApprovalStatus())) activity.setApprovalStatus(Constants.EDITED_STATUS);
+						if(Constants.APPROVED_STATUS.equals(aAct.getApprovalStatus()) || Constants.STARTED_APPROVED_STATUS.equals(aAct.getApprovalStatus())) activity.setApprovalStatus(Constants.EDITED_STATUS);
 						else activity.setApprovalStatus(aAct.getApprovalStatus());
 					}
 				}

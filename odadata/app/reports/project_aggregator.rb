@@ -4,7 +4,7 @@ class Reports::ProjectAggregator < Ruport::Aggregator
   end
   
   provides :factsheet_link do |p|
-    %{<a href="/projects/#{p.id}"><img src="/images/details.gif" width="10" height="14" alt="Factsheet" /></a>}
+    p.id
   end
   
   provides :donor do |p|
@@ -16,19 +16,19 @@ class Reports::ProjectAggregator < Ruport::Aggregator
   end
   
   provides :sectors do |p|
-    sector_names_with_percentages = p.sector_relevances.ordered_by_relevance.map do |sr|
-      "#{sr.sector.name_with_code} (#{sr.amount}%)"
-    end
-  
-    sector_names_with_percentages.join(', ')
+    p.sector_relevances.ordered_by_relevance
   end
   
-  provides :grant_loan do |p|
-    option_text_by_id(Project::GRANT_LOAN_OPTIONS, p.grant_loan)
-  end 
+  provides :markers do |p|
+    Project::AVAILABLE_MARKERS.inject({}) do |list, marker|
+      column_name = "#{marker[0]}_marker"
+      list[marker[0]] = p.send(column_name)
+      list
+    end
+  end
   
-  provides :prj_status do |p|
-    option_text_by_id(Project::STATUS_OPTIONS, p.prj_status)
+  provides :focal_regions do |p|
+    p.provinces
   end
   
   provides :total_commitments do |p|

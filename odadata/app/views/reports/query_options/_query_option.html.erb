@@ -27,7 +27,7 @@
 </li>
 
 <li>
-	<%= check_box "query_options", "strategy_link", { :checked => false }, 10 %><%= I18n.t('reports.cs_link') %>
+	<%= check_box "query_options", "country_strategy", { :checked => false }, 10 %><%= I18n.t('reports.cs_link') %>
 </li>
 
 <li>
@@ -50,72 +50,66 @@
 	<%= check_box "query_options", "total_payments", { :checked => true }, 15 %><%= I18n.t('reports.disbursements_td') %>
 </li>
 
-<% Project::FIRST_YEAR_OF_RELEVANCE.upto(Time.now.year+3) do |year| %>
-	<li>
-		<%# check_box "query_options", "funds_for[#{year}]", { :checked => false }, 16 %><%= I18n.t('reports.funds_for', :year => year) %>
-	</li>
-<% end %>
-
 <li>
-	<%= check_box "query_options", "total_cofunding", { :checked => false }, 16 %><%= I18n.t('reports.total_cofunding') %>
+	<%= check_box "query_options", "total_cofunding", { :checked => false }, 116 %><%= I18n.t('reports.total_cofunding') %>
 </li>
 
 <li>
-	<%= check_box "query_options", "cofunding_donors", { :checked => false }, 17 %><%= I18n.t('reports.cofunding_donors') %>
+	<%= check_box "query_options", "cofunding_donors", { :checked => false }, 117 %><%= I18n.t('reports.cofunding_donors') %>
 </li>
 
 <li>
-	<%= check_box "query_options", "national_regional", { :checked => false }, 18 %><%= I18n.t('reports.national_regional') %>
+	<%= check_box "query_options", "national_regional", { :checked => false }, 118 %><%= I18n.t('reports.national_regional') %>
 </li>
 
 <li>
-	<%= check_box "query_options", "type_of_implementation", { :checked => false }, 19 %><%= I18n.t('reports.toi') %>
+	<%= check_box "query_options", "type_of_implementation", { :checked => false }, 119 %><%= I18n.t('reports.toi') %>
 </li>
 
 <li>
-	<%= check_box "query_options", "sectors", { :checked => false }, 20 %><%= I18n.t('terms.dac_sector') %>
+	<%= check_box "query_options", "sectors", { :checked => false }, 120 %><%= I18n.t('terms.dac_sector') %>
 </li>
 
 <li>
-	<%= check_box "query_options", "aid_modality", { :checked => false }, 21 %><%= I18n.t('reports.toa') %>
+	<%= check_box "query_options", "aid_modality", { :checked => false }, 121 %><%= I18n.t('reports.toa') %>
 </li>
 
 <li>
-	<%= check_box "query_options", "grant_loan", { :checked => false }, 22 %><%= I18n.t('reports.grant_loan') %>
+	<%= check_box "query_options", "grant_loan", { :checked => false }, 122 %><%= I18n.t('reports.grant_loan') %>
 </li>
 
 <li>
-	<%= check_box "query_options", "impl_agencies", { :checked => false }, 23 %><%= I18n.t('reports.impl_agencies') %>
+	<%= check_box "query_options", "implementing_agencies", { :checked => false }, 123 %><%= I18n.t('reports.impl_agencies') %>
 </li>
 
 <li>
-	<%= check_box "query_options", "contr_agencies", { :checked => false }, 24 %><%= I18n.t('reports.contr_agencies') %>
+	<%= check_box "query_options", "contracted_agencies", { :checked => false }, 124 %><%= I18n.t('reports.contr_agencies') %>
 </li>
 
 <li>
-	<%= check_box "query_options", "markers", { :checked => false }, 25 %><%= I18n.t('terms.markers') %>
+	<%= check_box "query_options", "markers", { :checked => false }, 125 %><%= I18n.t('terms.markers') %>
 </li>
 
 <li>
-	<%= check_box "query_options", "mdg_goals", { :checked => false }, 26 %><%= I18n.t('reports.mdg_goals') %>
+	<%= check_box "query_options", "mdgs", { :checked => false }, 126 %><%= I18n.t('reports.mdg_goals') %>
 </li>
 
 <li>
-	<%= check_box "query_options", "focal_regions", { :checked => false }, 27 %><%= I18n.t('reports.focal_regions') %>
+	<%= check_box "query_options", "focal_regions", { :checked => false }, 127 %><%= I18n.t('reports.focal_regions') %>
 </li>
 
 <li>
-	<%= check_box "query_options", "officer_responsible_name", { :checked => false }, 28 %><%= I18n.t('reports.officer_responsible') %>
+	<%= check_box "query_options", "officer_responsible_name", { :checked => false }, 128 %><%= I18n.t('reports.officer_responsible') %>
 </li>
 
 <li>
-	<%= check_box "query_options", "website", { :checked => false }, 29 %><%= I18n.t('terms.internet_link') %>
+	<%= check_box "query_options", "website", { :checked => false }, 129 %><%= I18n.t('terms.internet_link') %>
 </li>
 
 <li>
-	<%= check_box "query_options", "comments", { :checked => false }, 30 %><%= I18n.t('reports.comments') %>
+	<%= check_box "query_options", "comments", { :checked => false }, 130 %><%= I18n.t('reports.comments') %>
 </li>
 
 <li>
-	<%= check_box "query_options", "updated_at", { :checked => false }, 31 %><%= I18n.t('reports.last_update') %>
+	<%= check_box "query_options", "updated_at", { :checked => false }, 131 %><%= I18n.t('reports.last_update') %>
 </li>

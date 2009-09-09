@@ -57,8 +57,8 @@ protected
   # Parse required disaggregation middleware
   def disaggregators_from_params
     disaggregators = []
-    disaggregators << SectorDisaggregator if params[:disaggregation][:sector]
-    disaggregators << LocationDisaggregator if params[:disaggregation][:location]
+    disaggregators << Reports::SectorDisaggregator if params[:disaggregation][:sector]
+    disaggregators << Reports::LocationDisaggregator if params[:disaggregation][:location]
     
     disaggregators
   end

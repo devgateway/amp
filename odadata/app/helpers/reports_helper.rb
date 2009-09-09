@@ -23,16 +23,15 @@ module ReportsHelper
     content_tag("table", out, options)
   end
     
-  def markers_list(record, html_options = {})
-    rows = Project::AVAILABLE_MARKERS.map do |marker|
-      column_name = "#{marker[0]}_marker"
-      
+  def markers_list(markers, html_options = {})
+    rows = markers.map do |marker, significance|
+      column_name = "#{marker}_marker"
       content_tag("tr", 
         content_tag("td", "#{Project.human_attribute_name(column_name)}:") + 
-        content_tag("td", option_text_by_id(Project::MARKER_OPTIONS, record.send(column_name))),
+        content_tag("td", option_text_by_id(Project::MARKER_OPTIONS, significance)),
         :class => "simple")
-        
     end
+    
     content_tag("table", rows, html_options)
   end
   

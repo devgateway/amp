@@ -1,6 +1,6 @@
 <h2><%= header lc(:title, :sector => @sector.name_with_code) %></h2>
 
-<%= ProjectReport.render_html(
+<%= Reports::ProjectReport.render_html(
 		:projects => @projects, 
 		:fields => [:factsheet_link, :donor, :donor_project_number, :title, :total_commitments, :total_disbursements, :commitments_forecast, :disbursements_forecast, :start_date, :end_date],
-		:middleware => SectorDisaggregator.new(@sector.id)) %>
+		:middleware => Reports::SectorDisaggregator.new([@sector])) %>

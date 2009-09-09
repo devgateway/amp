@@ -2,11 +2,11 @@ class Ruport::AggregationError < RuntimeError; end
 
 class Ruport::Aggregator
   class_inheritable_accessor :ra_providers
+  self.ra_providers = {}
   
   class << self
     def provides(field, &block)
-      self.ra_providers ||= {}
-      self.ra_providers[field] = block
+      self.ra_providers[field.to_sym] = block
     end
   end
     

@@ -1,5 +1,5 @@
 <h2><%= header lc(:title, :donor => @donor.name) %></h2>
 
-<%= ProjectReport.render_html(
+<%= Reports::ProjectReport.render_html(
 		:projects => @projects, 
 		:fields => [:factsheet_link, :donor, :donor_project_number, :title, :total_commitments, :total_disbursements, :commitments_forecast, :disbursements_forecast, :start_date, :end_date]) %>

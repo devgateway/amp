@@ -276,7 +276,7 @@ html>body #mainEmpty {
 	}
 
 	function clearKeyword (){
-		document.getElementById('myInput').value=null;
+		document.getElementById('myInput').value='';
 		addressbookForm.action="${contextPath}/aim/addressBook.do?actionType=viewAddressBook&currentPage=1";
 		addressbookForm.target = "_self";
 		addressbookForm.submit();

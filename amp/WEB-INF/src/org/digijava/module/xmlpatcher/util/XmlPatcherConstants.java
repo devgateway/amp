@@ -12,6 +12,8 @@ package org.digijava.module.xmlpatcher.util;
  */
 public final class XmlPatcherConstants {
 
+	public static final String xsdLocation="/doc/xmlpatcher.xsd";
+	
 	public static final String patchDirName = "xmlpatches";
 	public static final String schedulersPackage = "org.digijava.module.xmlpatcher.scheduler.";
 

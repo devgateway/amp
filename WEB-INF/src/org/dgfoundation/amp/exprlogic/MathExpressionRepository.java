@@ -522,7 +522,7 @@ public class MathExpressionRepository {
 		try {
 
 			MathExpression m = new MathExpression(MathExpression.Operation.ADD, ArConstants.TOTAL_ACTUAL_DISBURSEMENT_PREV_MONTHS, ArConstants.TOTAL_ACTUAL_DISBURSEMENT_CUR_MONTH);
-			MathExpression m1 = new MathExpression(MathExpression.Operation.DIVIDE, m, ArConstants.TOTAL_PLANNED_DISBURSEMENT_LAST_YEAR);
+			MathExpression m1 = new MathExpression(MathExpression.Operation.DIVIDE, m, ArConstants.TOTAL_PLANNED_DISBURSEMENT_CURRENT_YEAR);
 			MathExpression m2 = new MathExpression(MathExpression.Operation.MULTIPLY, m1, new BigDecimal(100));
 
 			expresions.put(CONSUMPTION_RATE, m2);

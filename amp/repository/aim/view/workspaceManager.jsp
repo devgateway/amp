@@ -173,7 +173,11 @@
 										</digi:form>
 										<tr><td>&nbsp;</td></tr>
 										<tr><td>
-											<table width="100%" cellspacing=1 cellpadding=4 valign=top align=left bgcolor="#d7eafd">
+											<div style="border:1px solid #999999;" >
+										<div style= "background-color:#999999; color:#000; font-weight:bold; padding-top:5px; height:15px; width:752px;">
+										<center>	TEAMS </center></div>
+										<div style="overflow:auto;width:752px;height:250px;max-height:220px; " >
+											<table width="100%" id="dataTable" cellspacing=0 cellpadding=4 valign=top  align=left >
 													<logic:empty name="aimWorkspaceForm" property="workspaces">
 													<tr bgcolor="#ffffff">
 														<td colspan="5" align="center"><b>
@@ -260,27 +264,6 @@
 													</tr>
 													</logic:iterate>
 
-													<!-- page logic for pagination -->
-													<logic:notEmpty name="aimWorkspaceForm" property="pages">
-													<tr bgcolor="#ffffff">
-														<td colspan="5">
-															<digi:trn key="aim:workspaceManagerPages">
-																Pages :
-															</digi:trn>
-															<jsp:useBean id="urlParams3" type="java.util.Map" class="java.util.HashMap"/>
-															<logic:iterate name="aimWorkspaceForm" property="pages" id="pages"
-															type="java.lang.Integer">
-															<c:set target="${urlParams3}" property="page"><%=pages%></c:set>
-															<c:set var="translation">
-																<digi:trn key="aim:clickToViewAllPages">Click here to view All pages</digi:trn>
-															</c:set>
-															<digi:link href="/workspaceManager.do" name="urlParams3"
-															title="${translation}" ><%=pages%></digi:link> |&nbsp;
-															</logic:iterate>
-														</td>
-													</tr>
-													</logic:notEmpty>
-													<!-- end page logic for pagination -->
 													
 													</logic:notEmpty>
 													<!-- end page logic -->
@@ -294,10 +277,10 @@
 										<digi:form action="/workspaceManager.do" method="post" >
 											<div style= " float:left; width:752px;" >
 											<!-- page logic for pagination -->
-																									
-															<jsp:useBean id="urlParams6" type="java.util.Map" class="java.util.HashMap"/>
-                                                            <c:set target="${urlParams6}" property="page">1</c:set>
-                                                            <c:set target="${urlParams6}" property="numPerPage">${aimWorkspaceForm.numPerPage}</c:set>
+
+															<jsp:useBean id="urlParams3" type="java.util.Map" class="java.util.HashMap"/>
+                                                            <c:set target="${urlParams3}" property="page">1</c:set>
+                                                            <c:set target="${urlParams3}" property="numPerPage">${aimWorkspaceForm.numPerPage}</c:set>
                                                              <c:set var="translation">
                                                                 <digi:trn key="aim:lastpage">First Page</digi:trn>
                                                             </c:set>
@@ -308,7 +291,7 @@
                                                                 <c:if test="${pagesSize>0}">
                                                                     <div class="pagination">
                                                                         <c:if test="${aimWorkspaceForm.page != 1}">
-                                                                            <digi:link href="/workspaceManager.do" name="urlParams6" title="${translation}" >
+                                                                            <digi:link href="/workspaceManager.do" name="urlParams3" title="${translation}" >
                                                                                 &lt;&lt;
                                                                             </digi:link>
                                                                         </c:if>
@@ -318,10 +301,13 @@
                                                                     </div>
                                                                     <div style="float:left;">&nbsp;</div>
                                                                 </c:if>
-															<logic:notEmpty name="aimWorkspaceForm" property="pages">			
+															<logic:notEmpty name="aimWorkspaceForm" property="pages">
 															<logic:iterate name="aimWorkspaceForm" property="pages" id="pages"
 															type="java.lang.Integer">
-															<c:set target="${urlParams5}" property="page"><%=pages%></c:set>
+
+
+															<div style="float:left; width:10px;  padding:3px;border:1px solid #999999; ">
+															<c:set target="${urlParams3}" property="page"><%=pages%></c:set>
 															<c:set var="translation">
 																<digi:trn key="aim:clickToViewAllPages">Click here to view All pages</digi:trn>
 															</c:set>
@@ -332,15 +318,13 @@
                                                                 <c:set var="translation">
                                                                     <digi:trn key="aim:clickToViewNextPage">Click here to go to Next Page</digi:trn>
                                                                 </c:set>
-                                                                	<digi:link href="/workspaceManager.do" name="urlParams5"
+                                                                	<digi:link href="/workspaceManager.do" name="urlParams3"
 															title="${translation}" ><%=pages%></digi:link>
                                                             </c:if>
 															</div>
-															<div style="float:left;">&nbsp;</div>		
-															
+															<div style="float:left;">&nbsp;</div>
+
 															</logic:iterate>
-														</td>
-													</tr>
 																</logic:notEmpty>
                                                                 <c:set var="translation">
                                                                     <digi:trn key="aim:lastpage">Last Page</digi:trn>
@@ -372,10 +356,11 @@
                                                                         <html:option value="50">50</html:option>
                                                                     </html:select>
                                                                 </div>
-                                                                  
-                                                         
+
+
 
                                                         </div>
+								
 											
 										</digi:form>
 										</td>

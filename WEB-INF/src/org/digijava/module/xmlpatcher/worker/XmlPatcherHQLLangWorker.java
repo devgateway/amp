@@ -10,8 +10,10 @@ import org.digijava.module.xmlpatcher.exception.XmlPatcherWorkerException;
 import org.digijava.module.xmlpatcher.jaxb.Lang;
 
 /**
- * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org Provides support to
- *         execute Hibernte Query Language (HQL) lang-type scripts.
+ * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
+ *         <p>
+ *         Provides support to execute Hibernte Query Language (HQL) lang-type
+ *         scripts.
  * @see https://www.hibernate.org/hib_docs/nhibernate/html/queryhql.html
  */
 public class XmlPatcherHQLLangWorker extends XmlPatcherLangWorker {

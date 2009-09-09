@@ -5,16 +5,22 @@
  */
 package org.digijava.module.xmlpatcher.dbentity;
 
+import java.io.PrintWriter;
 import java.io.Serializable;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.Date;
 
 /**
- * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org Provides logging
- *         information invocations of this patch. One patch can have one or
- *         several invocations. A log contains the date of execution, the output
- *         of the invocation (possible errors) and the status of the execution
+ * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
+ *         <p>
+ *         Provides logging information invocations of this patch. One patch can
+ *         have one or several invocations. A log contains the date of
+ *         execution, the output of the invocation (possible errors) and the
+ *         status of the execution
  */
 public class AmpXmlPatchLog implements Serializable {
+
 
 	protected Long id;
 
@@ -34,11 +40,9 @@ public class AmpXmlPatchLog implements Serializable {
 	protected Date date;
 
 	/**
-	 * True if the execution was successful
-	 * 
-	 * @see org.digijava.module.xmlpatcher.util.XmlPatcherConstants
+	 * True if the execution has encountered errors
 	 */
-	protected Boolean successful;
+	protected Boolean error;
 
 	/**
 	 * The MD5 checksum of the patch file. May be used to find if the patch file
@@ -68,16 +72,22 @@ public class AmpXmlPatchLog implements Serializable {
 	 *            the exception
 	 */
 	public void appendToLog(Exception e) {
-		log.append(e.getStackTrace().toString());
+		error=true;
+		Writer writer = new StringWriter();
+		PrintWriter printWriter = new PrintWriter(writer);
+		e.printStackTrace(printWriter);
+		log.append(writer.toString());
 	}
 
 	public AmpXmlPatchLog() {
 		this.log = new StringBuffer();
+		error=false;
 	}
-	
+
 	public AmpXmlPatchLog(AmpXmlPatch p) {
 		this.log = new StringBuffer();
-		this.patch=p;
+		this.patch = p;
+		error=false;
 	}
 
 	public AmpXmlPatch getPatch() {
@@ -128,11 +138,18 @@ public class AmpXmlPatchLog implements Serializable {
 		this.elapsed = elapsed;
 	}
 
-	public Boolean getSuccessful() {
-		return successful;
+	/**
+	 * @return the error
+	 */
+	public Boolean getError() {
+		return error;
 	}
 
-	public void setSuccessful(Boolean successful) {
-		this.successful = successful;
+	/**
+	 * @param error the error to set
+	 */
+	public void setError(Boolean error) {
+		this.error = error;
 	}
+
 }

@@ -10,25 +10,40 @@ import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatchLog;
 import org.digijava.module.xmlpatcher.exception.XmlPatcherWorkerException;
 
 /**
- * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org The worker
- *         abstraction for all patcher worker entities. Each worker has the log
- *         object passed around. There is only one log object at a time in the
- *         patcher.
+ * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
+ *         <p>
+ *         The worker abstraction for all patcher worker entities. Each worker
+ *         has the log object passed around. There is only one log object at a
+ *         time in the patcher which gathers all log information for the entire
+ *         patch execution. The log is later persisted to the db. All functional
+ *         patch entities have workers of their own, descendants of
+ *         XmlPatcherWorker The execution of a worker is split into two
+ *         functional steps
+ *         <p>
+ *         <li>
+ *         <ul>
+ *         the runtime check that verifies if the worker can proceed @see
+ *         {@link #runTimeCheck()}
+ *         <ul>
+ *         the processing method that actually does the job @see
+ *         {@link #process()}</li>
  */
 public abstract class XmlPatcherWorker<T> {
 	protected static Logger logger = Logger.getLogger(XmlPatcherWorker.class);
 	protected AmpXmlPatchLog log;
 	protected T entity;
 	protected Object returnValue;
-	
+
 	/**
-	 * Gets the entity that this worker wraps. This is the entity that the worker will process
+	 * Gets the entity that this worker wraps. This is the entity that the
+	 * worker will process
+	 * 
 	 * @return the entity provided in the constructor.
 	 */
 	public T getEntity() {
 		return entity;
 	}
-	
+
 	public XmlPatcherWorker(T entity, AmpXmlPatchLog log) {
 		this.log = log;
 		this.entity = entity;

@@ -18,6 +18,9 @@ import java.util.TreeSet;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.helpers.DefaultValidationEventHandler;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
@@ -38,7 +41,7 @@ import org.hibernate.engine.SessionFactoryImplementor;
  */
 public final class XmlPatcherUtil {
 	private static Logger logger = Logger.getLogger(XmlPatcherUtil.class);
-	
+
 	/**
 	 * Finds and saves to db all new patch names and locations, that were not
 	 * recorded previously.
@@ -74,29 +77,40 @@ public final class XmlPatcherUtil {
 			}
 		}
 	}
-	
+
 	/**
-	 * Checks if the jdbc connection is compatible with the given language type. 
-	 * This will check if the language type is part of the URL of the connection.
-	 * Example language type "oracle". The oracle string should always be part of the jdbc URL
+	 * Checks if the jdbc connection is compatible with the given language type.
+	 * This will check if the language type is part of the URL of the
+	 * connection. Example language type "oracle". The oracle string should
+	 * always be part of the jdbc URL
+	 * 
 	 * @return true if the langType is compatible with the connection
-	 * @throws SQLException 
 	 */
-	public static boolean isSQLCompatible(String langType) throws SQLException {
-		Connection con=getConnection();	
-		DatabaseMetaData metaData = con.getMetaData();
-		if(metaData.getURL().toLowerCase().indexOf(langType.toLowerCase())>-1) return true;
+	public static boolean isSQLCompatible(String langType) {
+		Connection con;
+		try {
+			con = getConnection();
+			DatabaseMetaData metaData = con.getMetaData();
+			if (metaData.getURL().toLowerCase().indexOf(langType.toLowerCase()) > -1)
+				return true;
+		} catch (SQLException e) {
+			logger.error(e);
+			e.printStackTrace();
+		}
 		return false;
 	}
-	
+
 	/**
-	 * Gets the JDBC connection out of the Session Factory.
-	 * Do not get the connection directly from the session (org.hibernate.session.Session#connection is deprecated)
+	 * Gets the JDBC connection out of the Session Factory. Do not get the
+	 * connection directly from the session
+	 * (org.hibernate.session.Session#connection is deprecated)
+	 * 
 	 * @return the connection object
 	 * @throws SQLException
 	 */
 	public static Connection getConnection() throws SQLException {
-		SessionFactoryImplementor sfi=(SessionFactoryImplementor) PersistenceManager.getSessionFactory();
+		SessionFactoryImplementor sfi = (SessionFactoryImplementor) PersistenceManager
+				.getSessionFactory();
 		return sfi.getConnectionProvider().getConnection();
 	}
 
@@ -152,28 +166,47 @@ public final class XmlPatcherUtil {
 		PersistenceManager.releaseSession(session);
 		return ret;
 	}
-	
+
 	/**
 	 * Unmarshalls using JAXB the xml file that the AmpXmlPatch object points to
-	 * @param serviceContext 
-	 * @param p the patch file metaobject that holds the location URI
-	 * @param log the patch log file that will be written in the end to the db
+	 * 
+	 * @param serviceContext
+	 * @param p
+	 *            the patch file metaobject that holds the location URI
+	 * @param log
+	 * @param serviceContext the service context of the caller servlet, used to get the real application path
+	 *            the patch log file that will be written in the end to the db
 	 * @return the Patch object, unmarshalled
 	 */
-	public static Patch getUnmarshalledPatch(ServiceContext serviceContext, AmpXmlPatch p, AmpXmlPatchLog log) {
+	public static Patch getUnmarshalledPatch(ServiceContext serviceContext,
+			AmpXmlPatch p, AmpXmlPatchLog log) {
 		FileInputStream inputStream;
 		try {
-			String filePath=serviceContext.getRealPath("/")+p.getLocation()+p.getPatchId();
-			logger.info("Unmarshalling "+filePath);
+			String filePath = serviceContext.getRealPath("/") + p.getLocation()
+					+ p.getPatchId();
+
+			logger.info("Unmarshalling " + filePath);
 			inputStream = new FileInputStream(filePath);
-			JAXBContext jc = JAXBContext.newInstance("org.digijava.module.xmlpatcher.jaxb");
+
+			JAXBContext jc = JAXBContext
+					.newInstance("org.digijava.module.xmlpatcher.jaxb");
 			Unmarshaller m = jc.createUnmarshaller();
-			JAXBElement<Patch> enclosing =  (JAXBElement<Patch>) m.unmarshal(inputStream);
+
+			// initialize JAXB 2.0 validation
+			SchemaFactory sf = SchemaFactory
+					.newInstance(javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI);
+			Schema schema = sf.newSchema(new File(serviceContext
+					.getRealPath("/")
+					+ XmlPatcherConstants.xsdLocation));
+			m.setSchema(schema);
+			m.setEventHandler(new DefaultValidationEventHandler());
+
+			JAXBElement<Patch> enclosing = (JAXBElement<Patch>) m
+					.unmarshal(inputStream);
 			inputStream.close();
 			return enclosing.getValue();
 		} catch (Exception e) {
 			logger.error(e);
-			e.printStackTrace();
 			log.appendToLog(e);
 			return null;
 		}

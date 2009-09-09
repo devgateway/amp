@@ -67,11 +67,42 @@ public class XmlPatcherService extends AbstractServiceImpl {
 		schedulerName = NaturalOrderXmlPatcherScheduler.class.getSimpleName();
 	}
 
+	/**
+	 * Attempts to execute the given collection of unclosed patches. The collection is ordered using a scheduler that was given as a parameter
+	 * in digi.xml. If the scheduler is missing then the default scheduler is used.
+	 * <p> The collection is iterated and each patch is invoked. If the patch worker will return false it means the patch was not applied.
+	 * 
+	 * @param scheduledPatches
+	 * @param serviceContext
+	 * @throws DgException
+	 */
+	private void processUnclosedPatches(Collection<AmpXmlPatch> scheduledPatches,ServiceContext serviceContext ) throws DgException {
+		Iterator<AmpXmlPatch> iterator=scheduledPatches.iterator();
+		while(iterator.hasNext()) {
+			AmpXmlPatch ampPatch = iterator.next();
+			AmpXmlPatchLog log=new AmpXmlPatchLog(ampPatch);
+			Patch patch = XmlPatcherUtil.getUnmarshalledPatch(serviceContext,ampPatch, log);
+			boolean success=false; 
+			if (patch!=null) {
+				XmlPatcherWorker<?>patcherWorker = XmlPatcherWorkerFactory.createWorker(patch, log);
+				success= patcherWorker.run();
+			}
+			if(success) {
+				ampPatch.setState(XmlPatcherConstants.PatchStates.CLOSED); 
+			} else 
+				if(log.getError()) ampPatch.setState(XmlPatcherConstants.PatchStates.FAILED);
+			
+			DbUtil.add(log);
+			DbUtil.update(ampPatch);
+		}
+	}
+	
 	@Override
 	public void processInitEvent(ServiceContext serviceContext)
 			throws ServiceException {
 		try {
 			performPatchDiscovery(serviceContext.getRealPath("/"));
+			
 			List<AmpXmlPatch> rawPatches = XmlPatcherUtil
 					.getAllDiscoveredUnclosedPatches();
 			scheduler = (XmlPatcherScheduler) Class.forName(
@@ -80,19 +111,8 @@ public class XmlPatcherService extends AbstractServiceImpl {
 					schedulerProperties, rawPatches });
 			Collection<AmpXmlPatch> scheduledPatches = scheduler
 					.getScheduledPatchCollection();
-			Iterator<AmpXmlPatch> iterator=scheduledPatches.iterator();
-			while(iterator.hasNext()) {
-				AmpXmlPatch ampPatch = iterator.next();
-				AmpXmlPatchLog log=new AmpXmlPatchLog(ampPatch);
-				Patch patch = XmlPatcherUtil.getUnmarshalledPatch(serviceContext,ampPatch, log);
-				XmlPatcherWorker<?>patcherWorker = XmlPatcherWorkerFactory.createWorker(patch, log);
-				boolean success = patcherWorker.run();
-				DbUtil.add(log);
-				if(success) ampPatch.setState(XmlPatcherConstants.PatchStates.CLOSED); else
-					ampPatch.setState(XmlPatcherConstants.PatchStates.FAILED);
-				DbUtil.update(ampPatch);
-			}
-			
+		
+			processUnclosedPatches(scheduledPatches,serviceContext);
 			
 		} catch (DgException e) {
 			logger.error(e);
@@ -100,36 +120,29 @@ public class XmlPatcherService extends AbstractServiceImpl {
 		} catch (InstantiationException e) {
 			logger
 					.error("Cannot instantiate the specified scheduler. Please check digi.xml and specify a valid scheduler name");
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
+			logger.error(e);
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			logger
 					.error("Cannot find the specified scheduler. Please check digi.xml and specify a valid class name");
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (HibernateException e) {
 			logger.error(e);
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SQLException e) {
 			logger.error(e);
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
 			logger
 					.error("Use only one constructor in the scheduler, with the same signature as its superclass");
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SecurityException e) {
 			logger.error(e);
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
 			logger.error(e);
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

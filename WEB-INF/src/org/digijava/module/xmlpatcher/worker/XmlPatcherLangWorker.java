@@ -14,10 +14,13 @@ import org.digijava.module.xmlpatcher.util.XmlPatcherConstants;
 
 /**
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
+ *         <p>
+ *         Worker for all lang entities inside the patch entity. This will be
+ *         extended by all lang entities that require special processing. The
+ *         runtime check will ensure the language is supported by the system
  */
 public abstract class XmlPatcherLangWorker extends XmlPatcherWorker<Lang> {
 
-	
 	/**
 	 * @param entity
 	 * @param log
@@ -27,7 +30,6 @@ public abstract class XmlPatcherLangWorker extends XmlPatcherWorker<Lang> {
 		// TODO Auto-generated constructor stub
 	}
 
-	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -36,13 +38,17 @@ public abstract class XmlPatcherLangWorker extends XmlPatcherWorker<Lang> {
 	 */
 	@Override
 	protected boolean runTimeCheck() throws XmlPatcherWorkerException {
-		//check if the language type is supported by the xmlpatcher
-		boolean langFound=false;
-		for(int i=0;i<XmlPatcherConstants.ScriptLangs.all.length;i++) {
-			if(XmlPatcherConstants.ScriptLangs.all[i].equals(getEntity().getType().value())) return langFound=true;
+		// check if the language type is supported by the xmlpatcher
+		boolean langFound = false;
+		for (int i = 0; i < XmlPatcherConstants.ScriptLangs.all.length; i++) {
+			if (XmlPatcherConstants.ScriptLangs.all[i].equals(getEntity()
+					.getType().value()))
+				return langFound = true;
 		}
-		if(!langFound) throw new XmlPatcherLangWorkerException("Unsupported language "+getEntity().getType());
-		
+		if (!langFound)
+			throw new XmlPatcherLangWorkerException("Unsupported language "
+					+ getEntity().getType());
+
 		return true;
 	}
 }

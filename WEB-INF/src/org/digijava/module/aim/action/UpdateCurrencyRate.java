@@ -161,6 +161,8 @@ public class UpdateCurrencyRate extends Action {
                       cRate.setDataSource(CurrencyUtil.RATE_BY_HAND);
                       if(cRate.getExchangeRate()!=null && cRate.getExchangeRateDate()!=null && crForm.getDoAction().equalsIgnoreCase("saveRate"))
                     	  CurrencyUtil.saveCurrencyRate(cRate);
+                      else 
+                    	  logger.warn("Either exchange rate or exchange rate date is null");
                       AbstractCache ratesCache = DigiCacheManager.getInstance().getCache("EXCHANGE_RATES_CACHE");
                       ratesCache.clear();
 

@@ -228,14 +228,23 @@ function validate() {
 
 function saveRate() {
 	var valid = validate();
+
+	var callbackImpl	= {
+		success: function () {
+			myclose();
+			reload();
+		},
+		failure: function() {
+			alert ("<digi:trn>There was a connection error. Please try again.</digi:trn>");
+		}
+	};
+	
 	if (valid == true) {
 		var postString		= generateFields(2);
 
 		<digi:context name="addExchangeRate" property="context/module/moduleinstance/saveCurrencyRate.do" />
 		var url = "<%=addExchangeRate %>";
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
-		myclose();
-		reload();
+		YAHOOAmp.util.Connect.asyncRequest("POST", url, callbackImpl, postString);
 	}
 	return valid;
 }

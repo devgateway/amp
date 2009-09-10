@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="false" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+  <jira>jira-3333</jira>
+  <keyword>keyword</keyword>
+  <author>author</author>
+  <description>description</description>
+  <apply>
+    <script>
+   		<lang type="bsh">
+   		import org.digijava.module.aim.dbentity.AmpActivity;
+		result = (AmpActivity) session.get(AmpActivity.class, new Long(100898));
+   		return result.getName();
+   		</lang>   
+</script>
+  </apply>
+
+</tns:patch>

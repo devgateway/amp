@@ -20,15 +20,15 @@ import org.digijava.module.xmlpatcher.jaxb.ScriptGroup;
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
  * @since Sep 4, 2009
  */
-public class XmlPatcherPatchWorker extends XmlPatcherWorker<Patch> {
+public class XmlPatcherPatchWorker extends XmlPatcherWorker<Patch,Object> {
 	
 	
 	/**
 	 * @param entity
 	 * @param log
 	 */
-	public XmlPatcherPatchWorker(Patch entity, AmpXmlPatchLog log) {
-		super(entity, log);
+	public XmlPatcherPatchWorker(Patch entity,  Object parentEntity,AmpXmlPatchLog log) {
+		super(entity, parentEntity, log);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -43,7 +43,7 @@ public class XmlPatcherPatchWorker extends XmlPatcherWorker<Patch> {
 		Iterator<Script> i=apply.getScript().iterator();
 		while(i.hasNext()) {
 			Script script = i.next();
-			XmlPatcherWorker<?> worker = XmlPatcherWorkerFactory.createWorker(script, log);
+			XmlPatcherWorker<?,?> worker = XmlPatcherWorkerFactory.createWorker(script,entity, log);
 			if(!worker.run()) return false;
 		}
 	return true;	

@@ -1,0 +1,71 @@
+/**
+ * XmlPatcherConditionWorker.java
+ * (c) 2009 Development Gateway Foundation
+ * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
+ */
+package org.digijava.module.xmlpatcher.worker;
+
+import java.util.List;
+
+import org.digijava.module.xmlpatcher.core.XmlPatcherWorkerFactory;
+import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatchLog;
+import org.digijava.module.xmlpatcher.exception.XmlPatcherConditionWorkerException;
+import org.digijava.module.xmlpatcher.exception.XmlPatcherWorkerException;
+import org.digijava.module.xmlpatcher.jaxb.Condition;
+import org.digijava.module.xmlpatcher.jaxb.Script;
+import org.digijava.module.xmlpatcher.jaxb.Trigger;
+import org.digijava.module.xmlpatcher.util.XmlPatcherConstants;
+
+import bsh.EvalError;
+import bsh.Interpreter;
+
+/**
+ * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org Processes a condition
+ *         entity. A condition entity is a collection of scripts that define
+ *         variables plus a test section. The test body is a bsh script that can
+ *         be fed directly to the BSH interpreter along with the variables
+ *         defined by script entities
+ * @see org.digijava.module.xmlpatcher.jaxb.Condition
+ */
+public class XmlPatcherConditionWorker extends
+		XmlPatcherWorker<Condition, Trigger> {
+
+	public XmlPatcherConditionWorker(Condition entity, Trigger parentEntity,
+			AmpXmlPatchLog log) {
+		super(entity, parentEntity, log);
+	}
+
+	@Override
+	protected boolean process() throws XmlPatcherWorkerException {
+		Interpreter it = new Interpreter();
+		List<Script> scripts = getEntity().getScript();
+		try {
+			for (Script script : scripts) {
+				XmlPatcherWorker<?, ?> worker = XmlPatcherWorkerFactory
+						.createWorker(script, entity, log);
+				if (!worker.run())
+					return false;
+				if (script.getReturnVar() != null)
+					it.set(script.getReturnVar(), worker.getReturnValue());
+			}
+			return (Boolean) it.eval(getEntity().getTest());
+		} catch (EvalError e) {
+			throw new XmlPatcherConditionWorkerException(e.getCause());
+		}
+	}
+
+	@Override
+	/**
+	 * Will not execute anything but conditions of type "custom". Please use XSLT transformations
+	 * to produce only custom type conditions. XSD allows non custom conditions but they need to be transformed
+	 * into custom, before fed into the worker
+	 */
+	protected boolean runTimeCheck() throws XmlPatcherWorkerException {
+		if (!XmlPatcherConstants.CONDITION_CUSTOM.equals(entity.getType()
+				.value()))
+			throw new XmlPatcherConditionWorkerException(
+					"Condition entity must always be of type 'custom' while processing!");
+		return true;
+	}
+
+}

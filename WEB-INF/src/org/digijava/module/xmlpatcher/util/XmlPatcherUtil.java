@@ -88,16 +88,18 @@ public final class XmlPatcherUtil {
 	 */
 	public static boolean isSQLCompatible(String langType) {
 		Connection con;
+		boolean ret=false;
 		try {
 			con = getConnection();
 			DatabaseMetaData metaData = con.getMetaData();
 			if (metaData.getURL().toLowerCase().indexOf(langType.toLowerCase()) > -1)
-				return true;
+				ret=true;
+			con.close();
+			return ret;
 		} catch (SQLException e) {
 			logger.error(e);
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
-		return false;
 	}
 
 	/**
@@ -106,12 +108,16 @@ public final class XmlPatcherUtil {
 	 * (org.hibernate.session.Session#connection is deprecated)
 	 * 
 	 * @return the connection object
-	 * @throws SQLException
 	 */
-	public static Connection getConnection() throws SQLException {
+	public static Connection getConnection() {
 		SessionFactoryImplementor sfi = (SessionFactoryImplementor) PersistenceManager
 				.getSessionFactory();
-		return sfi.getConnectionProvider().getConnection();
+		try {
+			return sfi.getConnectionProvider().getConnection();
+		} catch (SQLException e) {
+			logger.error(e);
+			throw new RuntimeException(e);
+		}
 	}
 
 	/**
@@ -231,5 +237,26 @@ public final class XmlPatcherUtil {
 		List<AmpXmlPatch> list = query.list();
 		PersistenceManager.releaseSession(session);
 		return list;
+	}
+	
+	public static Session getHibernateSession() {
+		try {
+			return PersistenceManager.getSession();
+		} catch (HibernateException e1) {
+			logger.error(e1);
+			throw new RuntimeException(e1);
+		} catch (SQLException e1) {
+			logger.error(e1);
+			throw new RuntimeException(e1);
+		}
+	}
+
+	public static void closeHibernateSession(Session session) {
+		try {
+			PersistenceManager.releaseSession(session);
+		} catch (SQLException e1) {
+			logger.error(e1);
+			throw new RuntimeException(e1);
+		}
 	}
 }

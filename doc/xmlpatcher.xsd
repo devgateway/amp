@@ -137,14 +137,26 @@ whenever some re-occurring garbage data has been found using condition entities,
 				attribute, so a false trigger becomes true.
 			</documentation>
 		</annotation>
+		<sequence>
+			<element name="condition" type="tns:condition" minOccurs="1" maxOccurs="unbounded"></element>
+		</sequence>
 		<attribute name="type" type="tns:triggerType" default="all">
 			<annotation>
-				<documentation>use any if this trigger needs to have at least one valid condition, or all if this trigger has to match all its conditions</documentation>
-			</annotation></attribute>
+				<documentation>
+					use any if this trigger needs to have at least one
+					valid condition, or all if this trigger has to match
+					all its conditions
+				</documentation>
+			</annotation>
+		</attribute>
 		<attribute name="inverted" type="boolean" default="false">
 			<annotation>
-				<documentation>defaults to false. When true, the trigger is inverted (allowed becomes unallowed and vice-versa)</documentation>
-			</annotation></attribute>
+				<documentation>
+					defaults to false. When true, the trigger is
+					inverted (allowed becomes unallowed and vice-versa)
+				</documentation>
+			</annotation>
+		</attribute>
 	</complexType>
 
 	<simpleType name="triggerType">
@@ -158,7 +170,16 @@ whenever some re-occurring garbage data has been found using condition entities,
 	</simpleType>
 
 	<complexType name="condition">
-		<attribute name="type" type="tns:conditionType" default="custom"></attribute>
+		<sequence>
+			<element name="script" type="tns:script" minOccurs="0"
+				maxOccurs="unbounded">
+			</element>
+			<element name="test" type="string">
+			</element>
+		</sequence>
+		<attribute name="type" type="tns:conditionType"
+			default="custom">
+		</attribute>
 		<attribute name="inverted" type="boolean" default="false"></attribute>
 	</complexType>
 

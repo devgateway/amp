@@ -754,7 +754,7 @@ ${fn:replace(message,quote,escapedQuote)}
 											</tr>
 											</field:display>
 											<tr>
-												<td width="32%" align="center" colspan="2">
+												<td width="32%" align="center" colspan="6">
 													&nbsp;
 												</td>
 											</tr>

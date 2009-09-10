@@ -2226,17 +2226,27 @@ public class ProgramUtil {
                 return indic1.getName().toLowerCase().compareTo(indic2.getName().toLowerCase());
             }
         }
+        
+        public static class HelperAllIndicatorBeanNameDescendingComparator implements Comparator<IndicatorsBean> {
+	        public int compare(IndicatorsBean obj1, IndicatorsBean obj2) {
+	            return -obj1.getName().toLowerCase().compareTo(obj2.getName().toLowerCase());
+	        }
+        }
 
-        public static class HelperAllIndicatorBeanSectorComparator
-            implements Comparator {
+        public static class HelperAllIndicatorBeanSectorComparator implements Comparator {
             public int compare(Object obj1, Object obj2) {
                 IndicatorsBean indic1 = (IndicatorsBean) obj1;
                 IndicatorsBean indic2 = (IndicatorsBean) obj2;
                 return indic1.getSectorName().toLowerCase().compareTo(indic2.getSectorName().toLowerCase());
-            	}
-
+            }
         }
 
+        public static class HelperAllIndicatorBeanSectorDescendingComparator implements Comparator<IndicatorsBean> {
+	        public int compare(IndicatorsBean obj1, IndicatorsBean obj2) {
+	            return -obj1.getSectorName().toLowerCase().compareTo(obj2.getSectorName().toLowerCase());
+	        }
+        }
+        
         public static class HelperAllIndicatorBeanTypeComparator
             implements Comparator {
             public int compare(Object obj1, Object obj2) {

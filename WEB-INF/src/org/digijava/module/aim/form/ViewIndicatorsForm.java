@@ -5,13 +5,12 @@ import java.util.Collection;
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.helper.IndicatorsBean;
 
-public class ViewIndicatorsForm
-    extends ActionForm {
+public class ViewIndicatorsForm  extends ActionForm {
 
     private int category = -1;
     private int type = -1;
     private Long sectorId = new Long(-1);
-    private int sortBy = 0;
+    private String sortBy;
     private String keyword;
     private Long indid[]; // list of ind selected from
     private Long themeid;
@@ -34,11 +33,6 @@ public class ViewIndicatorsForm
     public void setCategory(int category) {
         this.category = category;
     }
-
-    public void setSortBy(int sortBy) {
-        this.sortBy = sortBy;
-    }
-
     public void setKeyword(String keyword) {
         this.keyword = keyword;
     }
@@ -53,10 +47,6 @@ public class ViewIndicatorsForm
 
     public int getType() {
         return type;
-    }
-
-    public int getSortBy() {
-        return sortBy;
     }
 
     public String getKeyword() {
@@ -120,5 +110,13 @@ public class ViewIndicatorsForm
 
 	public void setFlag(String flag) {
 		this.flag = flag;
+	}
+
+	public String getSortBy() {
+		return sortBy;
+	}
+
+	public void setSortBy(String sortBy) {
+		this.sortBy = sortBy;
 	}
 }

@@ -191,26 +191,32 @@ a.itr:hover {
                                       <table width="100%" align="center"  border="0" style="font-family:verdana;font-size:11px;">
                                         <tr bgColor="#d7eafd">
                                           <td width="80%">
-                                            <c:if test="${aimViewIndicatorsForm.sortBy=='0'}">
-                                              <b><digi:trn key="aim:indicator">Indicator Name
-                                                </digi:trn></b><!-- <img alt="" src="../ampTemplate/images/arrow_up_down.gif" border="0" height="10" />-->
+                                            <c:if test="${empty aimViewIndicatorsForm.sortBy || aimViewIndicatorsForm.sortBy=='nameAsc'}">
+                                            	 <a href="javascript:sortByVal('nameDesc')">
+	                                                <b><digi:trn>Indicator Name</digi:trn></b> <img  src="/repository/aim/images/up.gif" border="0"/>
+	                                              </a>                                              
                                             </c:if>
-                                            <c:if test="${aimViewIndicatorsForm.sortBy!='0'}">
-                                              <a href="javascript:sortByVal('0')">
+                                            <c:if test="${not empty aimViewIndicatorsForm.sortBy && aimViewIndicatorsForm.sortBy!='nameAsc'}">
+                                              <a href="javascript:sortByVal('nameAsc')">
                                                 <b><digi:trn key="aim:indicator">Indicator Name
-                                                </digi:trn></b> <img alt="" src="../ampTemplate/images/arrow_up_down.gif" border="0" height="10" />
+                                                </digi:trn></b><c:if test="${aimViewIndicatorsForm.sortBy=='nameDesc'}">
+                                                	<img src="/repository/aim/images/down.gif" border="0"/>
+                                                </c:if>
                                               </a>
                                             </c:if>
                                           </td>
                                           <td width="18%" align="center">
-                                            <c:if test="${aimViewIndicatorsForm.sortBy=='1'}">
-                                              <b><digi:trn key="aim:indsector">Sector
-                                                </digi:trn></b><!-- <img alt="" src="../ampTemplate/images/arrow_up_down.gif" border="0" height="10" />-->
+                                            <c:if test="${aimViewIndicatorsForm.sortBy=='sectAsc'}">
+                                              <a href="javascript:sortByVal('sectDesc')">
+                                                <b><digi:trn>Sector</digi:trn></b><img  src="/repository/aim/images/up.gif" border="0"/>
+                                              </a>
                                             </c:if>
-                                            <c:if test="${aimViewIndicatorsForm.sortBy!='1'}">
-                                              <a href="javascript:sortByVal('1')">
-                                                <b><digi:trn key="aim:indsector">Sector
-                                                </digi:trn></b> <img alt="" src="../ampTemplate/images/arrow_up_down.gif" border="0" height="10" />
+                                            <c:if test="${aimViewIndicatorsForm.sortBy!='sectAsc'}">
+                                              <a href="javascript:sortByVal('sectAsc')">
+                                                <b><digi:trn>Sector</digi:trn></b> 
+                                                <c:if test="${aimViewIndicatorsForm.sortBy=='sectDesc'}">
+                                                	<img src="/repository/aim/images/down.gif" border="0"/>
+                                                </c:if>                                                
                                               </a>
                                             </c:if>
                                           </td>

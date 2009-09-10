@@ -71,12 +71,9 @@ a.itr:hover {
 	    document.aimViewIndicatorsForm.submit();
 	  }
 	}
-	
-	function addIndicator(){
-	  <digi:context name="addIndicator" property="context/module/moduleinstance/addNewIndicator.do?indicator=new" />
-	  openURLinWindow("<%= addIndicator %>",500, 300);
-	}
-	
+
+	// please don't add addIndicator() function again, it has conflict with popin...
+
 	function deletePrgIndicator(){  
 		<c:set var="translation"> 
 			<digi:trn key="aim:doYouWantToDelIndicatorCheckProgramFirst">Do you want to delete the Indicator ? Please check whether the indicator is being used by some Program.</digi:trn>

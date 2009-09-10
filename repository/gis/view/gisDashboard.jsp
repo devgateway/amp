@@ -3,6 +3,7 @@
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 
 <digi:instance property="gisDashboardForm"/>
 
@@ -135,17 +136,21 @@
 		</td>
 	</tr>
 	
-	<tr>
-        <td nowrap width="200">
-                <digi:trn key="gis:selectMalLevel">Select Map Level</digi:trn>:
-        </td>
-		<td width="90%">
-			<input title="Region view" type="Radio" value="2" name="mapLevelRadio" checked onClick="mapLevelChanged(this.value)"><digi:trn>Region view</digi:trn>&nbsp;
-			<input title="District view" type="Radio" value="3" name="mapLevelRadio" onClick="mapLevelChanged(this.value)"><digi:trn>District view</digi:trn> 
-			<div id="imageMapContainer" style="visibility:hidden;"></div>
-		</td>
-	</tr>
+	<feature:display name="GIS DASHBOARD" module="GIS DASHBOARD">	
+		<field:display name="Map Level Switch" feature="GIS DASHBOARD">
+			<tr>
+		        <td nowrap width="200">
+		                <digi:trn key="gis:selectMalLevel">Select Map Level</digi:trn>:
+		        </td>
+				<td width="90%">
+					<input title="Region view" type="Radio" value="2" name="mapLevelRadio" checked onClick="mapLevelChanged(this.value)"><digi:trn>Region view</digi:trn>&nbsp;
+					<input title="District view" type="Radio" value="3" name="mapLevelRadio" onClick="mapLevelChanged(this.value)"><digi:trn>District view</digi:trn> 
+				</td>
+			</tr>
+		</field:display>
+	</feature:display>
 	
+	<div id="imageMapContainer" style="visibility:hidden;"></div>	
 	<tr>
         <td nowrap width="200">
              <digi:trn>Select Sector</digi:trn>:

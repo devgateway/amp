@@ -51,6 +51,8 @@ function scrollableTable(tableId,height){
 				for (i=0;i < this.theader.rows.length;i++){
 					var padding=0;
 					var border=0;
+					var perPadding=0;
+					var perBorder=0;
 					
 					for (j=0;j < this.theader.rows[i].cells.length  ;j++){
 						var thisCell = this.theader.rows[i].cells[j]

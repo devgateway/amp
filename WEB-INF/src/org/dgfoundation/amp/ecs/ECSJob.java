@@ -1,30 +1,15 @@
-package org.dgfoundation.amp.error.quartz;
+package org.dgfoundation.amp.ecs;
 
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.ecs.xhtml.param;
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.ecs.client.ECSClient;
-import org.dgfoundation.amp.ecs.common.ECSCustom;
-import org.dgfoundation.amp.ecs.common.ECSParameters;
-import org.dgfoundation.amp.ecs.common.ErrorKeeperItem;
 import org.dgfoundation.amp.error.AMPException;
-import org.dgfoundation.amp.error.keeper.ErrorKeeper;
+import org.dgfoundation.amp.error.keeper.ErrorKeeperItem;
 import org.dgfoundation.amp.error.keeper.ErrorKeeperRAM;
-import org.dgfoundation.amp.error.keeper.ErrorKeeperRetryThread;
-import org.dgfoundation.amp.error.keeper.ErrorReporting;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.util.AuditLoggerUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.quartz.Job;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 
 /**
  * 
@@ -82,7 +67,9 @@ public class ECSJob{
 			}
 			logger.info("Updates sent!");
 			
-			logger.info("Get custom parameters ...");
+			logger.info("Get custom parameters ... DISABLED NOW");
+
+			/*
 			try {
 				
 				ECSParameters param = new ECSParameters();
@@ -131,7 +118,7 @@ public class ECSJob{
 				logger.error("Couldn't get parameters", e);
 				return;
 			}
-
+			*/
 			logger.info("Synchronize with ECS Server finished...................................................");
 		} catch (Exception e) {
 			e.printStackTrace();

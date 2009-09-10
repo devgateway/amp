@@ -80,7 +80,7 @@
             <description>This service will delete the audit log</description>
     </service>
 
-	<service id="ampSyncECSService" class="org.dgfoundation.amp.error.quartz.ECSService">
+	<service id="ECSService" class="org.dgfoundation.amp.ecs.ECSService">
             <description>This service will sync error log with ECS Server</description>
     </service>
 

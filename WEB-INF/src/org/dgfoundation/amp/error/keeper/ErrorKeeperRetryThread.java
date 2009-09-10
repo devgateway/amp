@@ -2,8 +2,8 @@ package org.dgfoundation.amp.error.keeper;
 
 import java.util.LinkedList;
 
-import org.dgfoundation.amp.ecs.client.ECSClient;
-import org.dgfoundation.amp.ecs.common.ErrorKeeperItem;
+import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ecs.ECSClient;
 import org.dgfoundation.amp.error.AMPException;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -15,6 +15,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
  *
  */
 public class ErrorKeeperRetryThread extends Thread {
+	private static Logger logger = Logger.getLogger(ErrorKeeperRetryThread.class);
 	public static final long EKR_MIN_RETRY_TIME = 15000; //15 seconds
 	public static long EKR_RETRY_TIME = 15000; //15 seconds -- this will auto-adjust
 	public static final long EKR_MAX_RETRY_TIME = 60*60*1000; //1 hour
@@ -81,6 +82,7 @@ public class ErrorKeeperRetryThread extends Thread {
 						queue.wait();
 					}
 				} catch (AMPException ex){
+					logger.info("Error received while retrying (it's being handled):", ex);
 					//communication to the server failed we wait
 					ecs = null; //any communication failure will invalidate the client object
 					//we must put back the error in the queue

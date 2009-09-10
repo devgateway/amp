@@ -1,4 +1,4 @@
-package org.dgfoundation.amp.error.quartz;
+package org.dgfoundation.amp.ecs;
 
 import java.util.Date;
 
@@ -14,6 +14,7 @@ public final class ECS {
 	private static Logger logger = Logger.getLogger(ECS.class);
 	private final static long ONE_DAY = 1000 * 60 * 60 * 24;
 	private static volatile ECS instance;
+	
 	private boolean status = false;
 	private Date lastcleanup;
 	private Date nextcleanup;
@@ -24,6 +25,7 @@ public final class ECS {
 	public static synchronized ECS getInstance() {
 		if (instance == null)
 			instance = new ECS();
+		
 		return instance;
 	}
 

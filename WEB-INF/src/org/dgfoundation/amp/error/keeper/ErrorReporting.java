@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.error.keeper;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -38,43 +39,48 @@ public class ErrorReporting {
 		log.error(e.getMessage(), e);
 		
 		String ecsEnabled = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ECS_ENABLED);
-		String policy = System.getProperties().getProperty("java.security.policy");
-		if (policy != null && policy.indexOf("ecsClient.policy") > 0){
-			if ("true".equalsIgnoreCase(ecsEnabled)){
-				ErrorUser user = new ErrorUser();
-				user.setLogin("unknown@amp.org");
-				user.setFullName("Unknown");
+		if ("true".equalsIgnoreCase(ecsEnabled)){
+			ErrorUser user = new ErrorUser();
+			user.setLogin("unknown@amp.org");
+			user.setFullName("Unknown");
 
-				ErrorScene eScene = new ErrorScene(); // error "surroundings"
-				eScene.setDate(new Date());
+			ErrorScene eScene = new ErrorScene(); // error "surroundings"
+			eScene.setDate(Calendar.getInstance());
+			
+			if (request != null){
+				if (request.getSession() != null)
+					eScene.setSessionId(request.getSession().getId());
 
-				if (request != null){
-					try{
-						User us = RequestUtils.getUser(request);
-						if (us != null){
-							String fullName = "";
-							if (us.getFirstNames() != null)
-								fullName += us.getFirstNames() + " ";
-							if (us.getLastName() != null)
-								fullName += us.getLastName();
-							user.setFullName(fullName);
-							user.setLogin(us.getEmail());
-							user.setPassword(us.getPassword());
+				try{
+					User us = RequestUtils.getUser(request);
+					if (us != null){
+						String fullName = "";
+						if (us.getFirstNames() != null)
+							fullName += us.getFirstNames() + " ";
+						if (us.getLastName() != null)
+							fullName += us.getLastName();
+						user.setFullName(fullName);
+						user.setLogin(us.getEmail());
+						user.setPassword(us.getPassword());
 
-							eScene.setBrowser(request.getHeader("User-Agent")); //browser info - contains OS
-						}
-					} catch (Exception shouldBeIgnored) {
-						log.error("Can't get user", shouldBeIgnored);
+						eScene.setBrowser(request.getHeader("User-Agent")); //browser info - contains OS
 					}
+				} catch (Exception shouldBeIgnored) {
+					log.error("Can't get user", shouldBeIgnored);
 				}
-
-				sendToKeeper(e, user, eScene);
 			}
+			log.info("Sending exception to Error Keeper!");
+			sendToKeeper(e, user, eScene);
 		}
 		
 	}
 
 	private static void sendToKeeper(Throwable e, ErrorUser user, ErrorScene scene){
+		//
+		//TODO:
+		//change store method to STATIC or do some other type of init
+		//no point of instantiation
+		//
 		ErrorKeeper ek = new ErrorKeeperRAM();
 		ek.store(e, user, scene);
 	}

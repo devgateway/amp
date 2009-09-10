@@ -1,6 +1,7 @@
 package org.digijava.module.aim.action;
 
 import java.net.URL;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -131,8 +132,15 @@ public class LuceneIndex extends Action {
 							  //throw new RuntimeException("manual test of unchecked exception");
 						  }
 						  else
-							  if ("confluence".compareTo(action) == 0){
+							  if ("random".compareTo(action) == 0){
+								  Date date = new Date();
+								  AMPException ae = new AMPException(Constants.AMP_ERROR_LEVEL_ERROR, false, new Exception("symulated random error:" + date.toString()));
+								  ae.addTag("random");
+								  throw ae;
 							  }
+							  else
+								  if ("confluence".compareTo(action) == 0){
+								  }
 					  }
 				  }
 		  }

@@ -23,29 +23,29 @@ import org.digijava.module.xmlpatcher.worker.XmlPatcherWorker;
  * 
  */
 public class XmlPatcherWorkerFactory {
-	public static XmlPatcherWorker createWorker(Object xmlEntity,
+	public static XmlPatcherWorker<?, ?> createWorker(Object xmlEntity,Object parentEntity,
 			AmpXmlPatchLog log) {
 		if (xmlEntity instanceof Script)
-			return new XmlPatcherScriptWorker((Script) xmlEntity, log);
+			return new XmlPatcherScriptWorker((Script) xmlEntity,parentEntity, log);
 		if (xmlEntity instanceof Patch)
-			return new XmlPatcherPatchWorker((Patch) xmlEntity, log);
+			return new XmlPatcherPatchWorker((Patch) xmlEntity,parentEntity, log);
 		if (xmlEntity instanceof Lang) {
 			Lang lang = (Lang) xmlEntity;
-
+			Script parentScript=(Script) parentEntity;
 			// try to identify generic langs and invoke specific workers
 			if (XmlPatcherConstants.ScriptLangs.BSH.equals(lang.getType()
 					.value()))
-				return new XmlPatcherBSHLangWorker(lang, log);
+				return new XmlPatcherBSHLangWorker(lang, parentScript, log);
 			if (XmlPatcherConstants.ScriptLangs.SQL.equals(lang.getType()
 					.value()))
-				return new XmlPatcherSQLLangWorker(lang, log);
+				return new XmlPatcherSQLLangWorker(lang,parentScript, log);
 			if (XmlPatcherConstants.ScriptLangs.HQL.equals(lang.getType()
 					.value()))
-				return new XmlPatcherHQLLangWorker(lang, log);
+				return new XmlPatcherHQLLangWorker(lang,parentScript, log);
 
 			// no generic language found, it means it uses native SQL, invoking
 			// the native worker
-			return new XmlPatcherNativeLangWorker(lang, log);
+			return new XmlPatcherNativeLangWorker(lang,parentScript, log);
 		}
 		throw new RuntimeException("No worker associated with class "
 				+ xmlEntity.getClass());

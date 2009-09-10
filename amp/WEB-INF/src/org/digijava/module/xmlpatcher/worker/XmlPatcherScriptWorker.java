@@ -21,11 +21,11 @@ import org.digijava.module.xmlpatcher.util.XmlPatcherConstants;
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org Responsible for
  *         processing patch script entities
  */
-public class XmlPatcherScriptWorker extends XmlPatcherWorker<Script> {
+public class XmlPatcherScriptWorker extends XmlPatcherWorker<Script,Object> {
 	private Lang generic;
 
-	public XmlPatcherScriptWorker(Script script, AmpXmlPatchLog log) {
-		super(script, log);
+	public XmlPatcherScriptWorker(Script script,  Object parentEntity, AmpXmlPatchLog log) {
+		super(script, parentEntity, log);
 		generic = null;
 	}
 
@@ -39,8 +39,8 @@ public class XmlPatcherScriptWorker extends XmlPatcherWorker<Script> {
 			Lang next = iterator.next();
 			if (next.equals(generic))
 				continue;
-			XmlPatcherWorker worker = XmlPatcherWorkerFactory.createWorker(
-					next, log);
+			XmlPatcherWorker<?, ?> worker = XmlPatcherWorkerFactory.createWorker(
+					next, entity, log);
 			if (worker.run())
 				return true;
 		}
@@ -49,8 +49,9 @@ public class XmlPatcherScriptWorker extends XmlPatcherWorker<Script> {
 		// so we proceed with the generic, if any
 		if (generic == null)
 			return false;
-		XmlPatcherWorker worker = XmlPatcherWorkerFactory.createWorker(generic,
+		XmlPatcherWorker<?,?> worker = XmlPatcherWorkerFactory.createWorker(generic, entity,
 				log);
+		
 		return worker.run();
 	}
 

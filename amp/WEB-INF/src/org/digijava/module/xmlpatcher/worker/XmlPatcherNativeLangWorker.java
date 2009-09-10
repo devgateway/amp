@@ -9,6 +9,7 @@ import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatchLog;
 import org.digijava.module.xmlpatcher.exception.XmlPatcherLangWorkerException;
 import org.digijava.module.xmlpatcher.exception.XmlPatcherWorkerException;
 import org.digijava.module.xmlpatcher.jaxb.Lang;
+import org.digijava.module.xmlpatcher.jaxb.Script;
 import org.digijava.module.xmlpatcher.util.XmlPatcherConstants;
 import org.digijava.module.xmlpatcher.util.XmlPatcherUtil;
 
@@ -23,8 +24,8 @@ public class XmlPatcherNativeLangWorker extends XmlPatcherSQLLangWorker {
 	 * @param entity
 	 * @param log
 	 */
-	public XmlPatcherNativeLangWorker(Lang entity, AmpXmlPatchLog log) {
-		super(entity, log);
+	public XmlPatcherNativeLangWorker(Lang entity, Script parentEntity, AmpXmlPatchLog log) {
+		super(entity, parentEntity,log);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -42,14 +43,14 @@ public class XmlPatcherNativeLangWorker extends XmlPatcherSQLLangWorker {
 		for (int i = 0; i < XmlPatcherConstants.ScriptLangs.natives.length; i++) {
 			if (XmlPatcherConstants.ScriptLangs.natives[i].equals(getEntity()
 					.getType().value()))
-				return langFound = true;
+			langFound = true;
 		}
 		if (!langFound)
 			throw new XmlPatcherLangWorkerException(
 					"Unsupported native language " + getEntity().getType());
 
 		// checks if the SQL is compatible with the server
-		if (!XmlPatcherUtil.isSQLCompatible(getEntity().getValue()))
+		if (!XmlPatcherUtil.isSQLCompatible(getEntity().getType().value()))
 			return false;
 
 		return true;

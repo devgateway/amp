@@ -7,14 +7,15 @@ package org.digijava.module.xmlpatcher.worker;
 
 import java.sql.BatchUpdateException;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.StringTokenizer;
 
 import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatchLog;
 import org.digijava.module.xmlpatcher.exception.XmlPatcherLangWorkerException;
-import org.digijava.module.xmlpatcher.exception.XmlPatcherWorkerException;
 import org.digijava.module.xmlpatcher.jaxb.Lang;
+import org.digijava.module.xmlpatcher.jaxb.Script;
 import org.digijava.module.xmlpatcher.util.XmlPatcherUtil;
 import org.hibernate.HibernateException;
 
@@ -31,18 +32,43 @@ public class XmlPatcherSQLLangWorker extends XmlPatcherLangWorker {
 	 * @param entity
 	 * @param log
 	 */
-	public XmlPatcherSQLLangWorker(Lang entity, AmpXmlPatchLog log) {
-		super(entity, log);
-		// TODO Auto-generated constructor stub
+	public XmlPatcherSQLLangWorker(Lang entity, Script parentEntity,
+			AmpXmlPatchLog log) {
+		super(entity, parentEntity, log);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.digijava.module.xmlpatcher.worker.XmlPatcherWorker#process()
-	 */
+	
 	@Override
-	protected boolean process() throws XmlPatcherWorkerException {
+	protected boolean processSelectStatement()
+			throws XmlPatcherLangWorkerException {
+		Connection con = null;
+		try {
+			con = XmlPatcherUtil.getConnection();
+			Statement statement = con.createStatement();
+			ResultSet resultSet = statement.executeQuery(getEntity().getValue());
+			//ugly hard coded, get only the 1st object of the SELECT
+			returnValue=resultSet.getObject(1);
+			return true;
+		} catch (SQLException e) {
+			throw new XmlPatcherLangWorkerException(e.getCause());
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				throw new XmlPatcherLangWorkerException(e.getCause());
+			}
+		}
+	}
+
+	@Override
+	/**
+	 * Invoked only if the updateQueryType is true (query is an update query).
+	 * 
+	 * @return true if execution is successful
+	 * @throws XmlPatcherLangWorkerException
+	 */
+	protected boolean processUpdateStatement()
+			throws XmlPatcherLangWorkerException {
 		try {
 
 			// get the jdbc connection from the Session Factory
@@ -84,11 +110,6 @@ public class XmlPatcherSQLLangWorker extends XmlPatcherLangWorker {
 		} catch (SQLException e) {
 			throw new XmlPatcherLangWorkerException(e);
 		}
-	}
-
-	@Override
-	protected boolean runTimeCheck() throws XmlPatcherWorkerException {
-		return true;
 	}
 
 }

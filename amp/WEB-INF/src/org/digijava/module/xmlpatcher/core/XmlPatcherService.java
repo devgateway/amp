@@ -84,7 +84,11 @@ public class XmlPatcherService extends AbstractServiceImpl {
 			Patch patch = XmlPatcherUtil.getUnmarshalledPatch(serviceContext,ampPatch, log);
 			boolean success=false; 
 			if (patch!=null) {
-				XmlPatcherWorker<?>patcherWorker = XmlPatcherWorkerFactory.createWorker(patch, log);
+				if(ampPatch.getState().equals(XmlPatcherConstants.PatchStates.FAILED) && !patch.isRetryOnFail()) {
+					logger.info("Skipping failed patch "+ampPatch.getPatchId());
+					continue;
+				}
+				XmlPatcherWorker<?,?>patcherWorker = XmlPatcherWorkerFactory.createWorker(patch,null, log);
 				success= patcherWorker.run();
 			}
 			if(success) {

@@ -27,11 +27,14 @@ import org.digijava.module.xmlpatcher.exception.XmlPatcherWorkerException;
  *         <ul>
  *         the processing method that actually does the job @see
  *         {@link #process()}</li>
+ *         @param <T> the type of the processed entity
+ *         @param <P> the parent type of the processed entity
  */
-public abstract class XmlPatcherWorker<T> {
+public abstract class XmlPatcherWorker<T,P> {
 	protected static Logger logger = Logger.getLogger(XmlPatcherWorker.class);
 	protected AmpXmlPatchLog log;
 	protected T entity;
+	protected P parentEntity;
 	protected Object returnValue;
 
 	/**
@@ -43,10 +46,15 @@ public abstract class XmlPatcherWorker<T> {
 	public T getEntity() {
 		return entity;
 	}
+	
+	public P getParentEntity() {
+		return parentEntity;
+	}
 
-	public XmlPatcherWorker(T entity, AmpXmlPatchLog log) {
+	public XmlPatcherWorker(T entity, P parentEntity, AmpXmlPatchLog log) {
 		this.log = log;
 		this.entity = entity;
+		this.parentEntity=parentEntity;
 		logger.debug("Worker initialized for " + entity);
 	}
 
@@ -79,4 +87,13 @@ public abstract class XmlPatcherWorker<T> {
 		}
 		return false;
 	}
+
+	/**
+	 * @return the returnValue
+	 */
+	public Object getReturnValue() {
+		return returnValue;
+	}
+	
+
 }

@@ -23,18 +23,7 @@
         document.aimEditActivityForm.target = "_self";
         document.aimEditActivityForm.submit();
     }
-    
-    function removeSelSectors(configId) {
-        var flag = validate(2);
-        if (flag == false) return false;
-        
- 
-        document.aimEditActivityForm.action = "/addActivity.do?remSectors=true&configId="+configId;
-        document.aimEditActivityForm.target = "_self";
-        document.aimEditActivityForm.submit();
-        return true;
-    }
-    </script>
+</script>
 
 <digi:instance property="aimEditActivityForm" />
 <tr>

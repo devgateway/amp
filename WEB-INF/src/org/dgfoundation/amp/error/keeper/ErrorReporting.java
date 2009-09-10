@@ -45,11 +45,11 @@ public class ErrorReporting {
 			user.setFullName("Unknown");
 
 			ErrorScene eScene = new ErrorScene(); // error "surroundings"
-			eScene.setDate(Calendar.getInstance());
+			//eScene.setDate(Calendar.getInstance());
 			
 			if (request != null){
 				if (request.getSession() != null)
-					eScene.setSessionId(request.getSession().getId());
+				//	eScene.setSessionId(request.getSession().getId());
 
 				try{
 					User us = RequestUtils.getUser(request);

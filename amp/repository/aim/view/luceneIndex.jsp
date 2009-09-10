@@ -55,6 +55,10 @@
 							Generate Un-Checked Ex
 						</digi:link>
 						|
+						<digi:link href="/luceneIndex.do?action=random">
+							Generate Random Exception
+						</digi:link>
+						|
 						<digi:link href="/luceneIndex.do?action=confluence">
 							Confluence
 						</digi:link>

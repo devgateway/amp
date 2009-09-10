@@ -140,5 +140,6 @@
 	<classpathentry kind="var" path="JBOSS-LIB/jsp-api.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/commons-beanutils-1.8.0.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/commons-beanutils-bean-collections-1.8.0.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/ecsClientSide.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

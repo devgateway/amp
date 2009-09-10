@@ -907,7 +907,13 @@ public class AmpMessageActions extends DispatchAction {
         result+="<" + MESSAGES_TAG +">";
         if (states != null && states.size() > 0) {
             for (AmpMessageState state : states) {
-                result += "<" + "message name=\"" + org.digijava.module.aim.util.DbUtil.filter(state.getMessage().getName(),request) + "\" ";
+            	String messageName;
+            	if("c".equals(state.getMessage().getClassName())){
+            		messageName = org.digijava.module.aim.util.DbUtil.filter(state.getMessage().getName(),request) ;
+            	}else{
+            		messageName = org.digijava.module.aim.util.DbUtil.filter(state.getMessage().getName()) ;
+            	}
+                result += "<" + "message name=\"" + messageName  + "\" ";
                 result += " id=\"" + state.getId() + "\"";
                 result += " msgId=\"" + state.getMessage().getId() + "\"";
                 if(state.getMessage().getSenderType()!=null && state.getMessage().getSenderType().equalsIgnoreCase(MessageConstants.SENDER_TYPE_USER)){

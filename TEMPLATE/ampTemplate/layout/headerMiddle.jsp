@@ -560,7 +560,7 @@ function adminHelp(){
                                         </module:display>
                                         <module:display name="Org Profile" >
                                             <li class="yuiampmenuitem">
-                                                <a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/orgProfile/showOrgProfile.do"  onclick="return canExit()">
+                                                <a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/orgProfile/showOrgProfile.do?reset=true"  onclick="return canExit()">
                                                     <digi:trn key="fm:orgProfile">Org. Profile</digi:trn>
                                                 </a> 
                                        

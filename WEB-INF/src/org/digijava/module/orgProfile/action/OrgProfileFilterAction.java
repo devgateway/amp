@@ -41,6 +41,14 @@ public class OrgProfileFilterAction extends Action {
         HttpSession session = request.getSession();
         TeamMember tm =(TeamMember) session.getAttribute("currentMember");
         OrgProfileFilterForm orgForm = (OrgProfileFilterForm) form;
+        String reset=request.getParameter("reset");
+        if(reset!=null&&reset.equals("true")){
+            orgForm.setCurrencyId(null);
+            orgForm.setOrgId(null);
+            orgForm.setOrgGroupId(null);
+            orgForm.setFiscalCalendarId(null);
+            orgForm.setYear(null);
+        }
 
         // create filter dropdowns
         Collection currency = CurrencyUtil.getAmpCurrency();

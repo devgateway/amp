@@ -143,16 +143,35 @@ function search(){
 	}
 
     xmlHttp.open("GET",url,true)
+    
 	xmlHttp.onreadystatechange=stChang
 	xmlHttp.send(null)
+	
+}
+
+function ParsBody (String){
+	var result = "";
+	var indexf = String.indexOf("<!--[if gte mso 10]>");
+	var indexof = String.indexOf("display:bl");
+	result += String.slice(0,indexof+17);
+	result +="...</div><div id=\"bodyFull\" style=\"display:none;\"><p> ";
+	if(indexf !=0){
+		var slicedString = String.slice(indexf);
+		var slicedStringindexOf = slicedString.indexOf("<![endif]-->");
+		if(slicedStringindexOf !=0){
+			result  += slicedString.slice(slicedStringindexOf+12);
+			return result;
+			}
+	}	
 	
 }
 
 function stChang(){
 	 if (xmlHttp.readyState==4)
  {
-    document.getElementById("bodyhelp").innerHTML=xmlHttp.responseText;
-	 document.getElementById("bodyhelp").style.border="1px solid #white";
+	
+    document.getElementById("bodyhelp").innerHTML = xmlHttp.responseText.replace(/�/g,"&#233;");
+	document.getElementById("bodyhelp").style.border="1px solid #white";
   } 
 }
 function enter(event) {

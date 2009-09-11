@@ -28,46 +28,46 @@
         <table cellpadding="2" cellspacing="1" width="100%" height="100%" class="box-border-nopadding" >
             <tr height="5px"><td colspan="2"/></tr>
             <tr>
-                <td align="right"><strong><digi:trn>Firstname</digi:trn></strong><font color="red">*</font></td>
-                <td align="left"><html:text property="name" styleId="contactName"/></td>
+                <td align="right"><strong><digi:trn>Title</digi:trn></strong> </td>
+                <td align="left"><html:text property="title" size="40" styleId="contactTitle"/></td>
             </tr>
             <tr>
                 <td align="right"><strong><digi:trn>Lastname</digi:trn></strong><font color="red">*</font></td>
-                <td align="left"><html:text property="lastname" styleId="contactLastname"/></td>
+                <td align="left"><html:text property="lastname" size="40" styleId="contactLastname"/></td>
+            </tr>
+            <tr>
+                <td align="right"><strong><digi:trn>Firstname</digi:trn></strong><font color="red">*</font></td>
+                <td align="left"><html:text property="name" size="40" styleId="contactName"/></td>
             </tr>
             <tr>
                 <td align="right"><strong><digi:trn>Email</digi:trn></strong><font color="red">*</font></td>
                 <td align="left" nowrap="nowrap">
-                    <html:text property="email" styleId="contactEmail"/>
+                    <html:text property="email" size="40" styleId="contactEmail"/>
                 </td>
             </tr>
             <tr>
-                <td align="right"><strong><digi:trn>Title</digi:trn></strong> </td>
-                <td align="left"><html:text property="title"  styleId="contactTitle"/></td>
-            </tr>
-            <tr>
                 <td align="right"><strong><digi:trn>Function</digi:trn></strong></td>
-                <td align="left"><html:text property="function" styleId="contactFunction"/></td>
-            </tr>
-            <tr>
-                <td align="right"><strong><digi:trn>Office Address</digi:trn></strong></td>
-                <td align="left"><html:text property="officeaddress" styleId="contactOfficeaddress"/></td>
+                <td align="left"><html:text property="function" size="40" styleId="contactFunction"/></td>
             </tr>
             <tr>
                 <td align="right"><strong><digi:trn>Organization</digi:trn></strong></td>
-                <td align="left"><html:text property="organisationName" styleId="contactOrgName"/></td>
+                <td align="left"><html:text property="organisationName" size="40" styleId="contactOrgName"/></td>
             </tr>
             <tr>
                 <td align="right"><strong><digi:trn>Phone Number</digi:trn></strong></td>
-                <td align="left"><html:text property="phone" styleId="contactPhone" onkeyup="checkNumber('phone')"/></td>
-            </tr>
-            <tr>
-                <td align="right"><strong><digi:trn>Fax</digi:trn></strong></td>
-                <td align="left"><html:text property="fax" styleId="contactFax" onkeyup="checkNumber('fax')"/></td>
+                <td align="left"><html:text property="phone" size="40" styleId="contactPhone" onkeyup="checkNumber('phone')"/></td>
             </tr>
             <tr>
                 <td align="right"><strong><digi:trn>Mobile phone</digi:trn></strong></td>
-                <td align="left"><html:text property="mobilephone" styleId="contactMobilephone" onkeyup="checkNumber('mobilephone')"/></td>
+                <td align="left"><html:text property="mobilephone" size="40" styleId="contactMobilephone" onkeyup="checkNumber('mobilephone')"/></td>
+            </tr>
+            <tr>
+                <td align="right"><strong><digi:trn>Fax</digi:trn></strong></td>
+                <td align="left"><html:text property="fax" size="40" styleId="contactFax" onkeyup="checkNumber('fax')"/></td>
+            </tr>
+            <tr>
+                <td align="right"><strong><digi:trn>Office Address</digi:trn></strong></td>
+                <td align="left"><html:textarea property="officeaddress" cols="46" rows="3" styleId="contactOfficeaddress"/></td>
             </tr>
             <tr height="5px"><td colspan="2"/></tr>
             <tr>

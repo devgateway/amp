@@ -2456,7 +2456,7 @@ public class SaveActivity extends Action {
                         
 			AmpActivity aAct=ActivityUtil.getAmpActivity(actId);
             if(activity.getDraft()!=null && !activity.getDraft()){
-            	if(activity.getApprovalStatus().equals(Constants.APPROVED_STATUS)){
+            	if(activity.getApprovalStatus().equals(Constants.APPROVED_STATUS)||activity.getApprovalStatus().equals(Constants.STARTED_APPROVED_STATUS)){
             		if(aAct.getActivityCreator().getAmpTeam().getTeamLead()!=null && ! aAct.getActivityCreator().getAmpTeam().getTeamLead().getAmpTeamMemId().equals(aAct.getActivityCreator().getAmpTeamMemId())){
             			new ApprovedActivityTrigger(aAct,null); //if TL created activity, then no Trigger is needed
             		}

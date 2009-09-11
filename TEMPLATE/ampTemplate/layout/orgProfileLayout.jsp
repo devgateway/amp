@@ -68,6 +68,12 @@
                                         <TD>&nbsp;</TD>
                                     </TR>
                                     <TR>
+                                        <TD><digi:trn>All the amounts are in </digi:trn>  ${sessionScope.orgProfileFilter.currName} </TD>
+                                    </TR>
+                                     <TR>
+                                        <TD>&nbsp;</TD>
+                                    </TR>
+                                    <TR>
                                         <TD>
                                             <TABLE cellpadding="5" border="0" width="80%">
                                                 <TR>

@@ -2,9 +2,11 @@
 package org.digijava.module.orgProfile.helper;
 
 import java.io.Serializable;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.orgProfile.form.OrgProfileFilterForm;
 
@@ -113,6 +115,12 @@ public class FilterHelper implements Serializable{
              orgGroup=new AmpOrgGroup();
         }
         return orgGroup;
+
+    }
+    public String getCurrName() {
+        AmpCurrency curr=CurrencyUtil.getAmpcurrency(this.currId);
+        String currName=curr.getCurrencyName();
+        return currName;
 
     }
 }

@@ -38,7 +38,8 @@ public class OrgProfileFilterAction extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
-
+        HttpSession session = request.getSession();
+        TeamMember tm =(TeamMember) session.getAttribute("currentMember");
         OrgProfileFilterForm orgForm = (OrgProfileFilterForm) form;
 
         // create filter dropdowns
@@ -53,7 +54,13 @@ public class OrgProfileFilterAction extends Action {
             }
         }
         if(orgForm.getCurrencyId()==null){
-            orgForm.setCurrencyId(CurrencyUtil.getAmpcurrency("USD").getAmpCurrencyId());
+            Long currId =tm.getAppSettings().getCurrencyId();
+            if(currId!=null){
+                orgForm.setCurrencyId(currId);
+            }
+            else{
+                orgForm.setCurrencyId(CurrencyUtil.getAmpcurrency("USD").getAmpCurrencyId());
+            }
         }
         // Org profile is only for Mul and Bil organizations
         List<AmpOrgGroup> orgGroups=new ArrayList(DbUtil.getBilMulOrgGroups());
@@ -94,9 +101,7 @@ public class OrgProfileFilterAction extends Action {
 				}
         }
         FilterHelper filter=null;
-        HttpSession session = request.getSession();
         if(orgForm.getWorkspaceOnly()!=null&&orgForm.getWorkspaceOnly()){
-            TeamMember tm =(TeamMember) session.getAttribute("currentMember");
             filter=new FilterHelper(orgForm,tm);
         }
         else{

@@ -301,7 +301,7 @@ html>body #mainEmpty {
 																									<table border="0" class="box-border" width="100%">
 																										<tr bgColor="#dddddb">
 																											<td bgColor="#dddddb" height="20" align="center"colspan="5">
-																												<digi:trn>Add/Edit Contact</digi:trn>
+																												<STRONG><digi:trn>Add/Edit Contact</digi:trn></STRONG>
 																											</td>
 																										</tr>
 																										<!-- Page Logic -->
@@ -310,45 +310,44 @@ html>body #mainEmpty {
 																												<table border="0" bgColor="#f4f4f2" width="100%">
 																													<tr height="5"><td>&nbsp;</td></tr>
 																													<tr>
-																														<td rowspan="10" width="10%"/>
-																														<td align="right"><strong><digi:trn>First Name</digi:trn></strong><font color="red">*</font></td>
-																														<td align="left"><html:text property="name" styleId="name"/></td>
-																													</tr>
+																														<td align="right"><strong><digi:trn>Title</digi:trn></strong> </td>
+																														<td align="left"><html:text property="title" size="40"/></td>
+																													</tr>	
 																													<tr>
 																														<td align="right"><strong><digi:trn>Last Name</digi:trn></strong><font color="red">*</font></td>
-																														<td align="left"><html:text property="lastname" styleId="lastname"/></td>
+																														<td align="left"><html:text property="lastname" styleId="lastname" size="40"/></td>
+																													</tr>
+																													<tr>
+																														<td align="right"><strong><digi:trn>First Name</digi:trn></strong><font color="red">*</font></td>
+																														<td align="left"><html:text property="name" styleId="name" size="40"/></td>
 																													</tr>
 																													<tr>
 																														<td align="right"><strong><digi:trn>Email</digi:trn></strong><font color="red">*</font></td>
-																														<td align="left"><html:text property="email" styleId="email"/></td>
+																														<td align="left"><html:text property="email" styleId="email" size="40"/></td>
 																													</tr>
-																													<tr>
-																														<td align="right"><strong><digi:trn>Title</digi:trn></strong> </td>
-																														<td align="left"><html:text property="title"/></td>
-																													</tr>	
 																													<tr>
 																														<td align="right"><strong><digi:trn>Function</digi:trn></strong></td>
-																														<td align="left"><html:text property="function"/></td>
+																														<td align="left"><html:text property="function" size="40"/></td>
 																													</tr>	
 																													<tr>
-																														<td align="right"><strong><digi:trn>Office Address</digi:trn></strong></td>
-																														<td align="left"><html:text property="officeaddress"/></td>
-																													</tr>
-																													<tr>
 																														<td align="right"><strong><digi:trn>Organization</digi:trn></strong></td>
-																														<td align="left"><html:text property="organisationName"/></td>
+																														<td align="left"><html:text property="organisationName" size="40"/></td>
 																													</tr>
 																													<tr>
 																														<td align="right"><strong><digi:trn>Phone Number</digi:trn></strong></td>
-																														<td align="left"><html:text property="phone" styleId="phone" onkeyup="checkNumber('phone')"/></td>
+																														<td align="left"><html:text property="phone" styleId="phone" size="40" onkeyup="checkNumber('phone')"/></td>
 																													</tr>		
 																													<tr>
 																														<td align="right"><strong><digi:trn>Mobile phone</digi:trn></strong></td>
-																														<td align="left"><html:text property="mobilephone" styleId="mobilephone" onkeyup="checkNumber('mobilephone')"/></td>
+																														<td align="left"><html:text property="mobilephone" styleId="mobilephone" size="40" onkeyup="checkNumber('mobilephone')"/></td>
 																													</tr>	
 																													<tr>
 																														<td align="right"><strong><digi:trn>Fax</digi:trn></strong></td>
-																														<td align="left"><html:text property="fax" styleId="fax" onkeyup="checkNumber('fax')"/></td>
+																														<td align="left"><html:text property="fax" styleId="fax" size="40" onkeyup="checkNumber('fax')"/></td>
+																													</tr>
+																													<tr>
+																														<td align="right" valign="top"><strong><digi:trn>Office Address</digi:trn></strong></td>
+																														<td align="left"><html:textarea property="officeaddress" cols="46" rows="3"/></td>
 																													</tr>
 																													<tr height="5px"><td colspan="2"/></tr>
 																													<tr>

@@ -49,7 +49,7 @@
 		YAHOOAmp.namespace("YAHOOAmp.amp");
 
 		var myPanel = new YAHOOAmp.widget.Panel("newpopins", {
-			width:"650px",
+			width:"800px",
 			fixedcenter: true,
 		    constraintoviewport: true,
 		    underlay:"none",

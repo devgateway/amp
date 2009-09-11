@@ -12,7 +12,7 @@
 <digi:instance property="aimEditActivityForm"/>
 
 <digi:form name="contactForm" type="aimEditActivityForm" action="/activityContactInfo.do" method="post">
-	<table cellpadding="2" cellspacing="5" width="100%">
+	<table cellpadding="2" cellspacing="5" width="100%" border="1" height="100%">
 		<tr height="5px"><td colspan="2"/></tr>
 		<!-- page logic row start -->
 		<tr>
@@ -21,48 +21,47 @@
 				<table cellpadding="2" cellspacing="5" width="100%" height="100%" class="box-border-nopadding" >
 					<tr height="5px"><td colspan="2"/></tr>		
 					<tr>
-						<td rowspan="10" width="20%"/>
-						<td align="right"><strong><digi:trn>Firstname</digi:trn></strong><font color="red">*</font></td>
-						<td align="left"><html:text property="contactInformation.name" styleId="name"/></td>
-					</tr>
+						<td align="right"><strong><digi:trn>Title</digi:trn></strong> </td>
+						<td align="left"><html:text property="contactInformation.title" size="30"/></td>
+					</tr>	
 					<tr>
 						<td align="right"><strong><digi:trn>Lastname</digi:trn></strong><font color="red">*</font></td>
-						<td align="left"><html:text property="contactInformation.lastname" styleId="lastname"/></td>
+						<td align="left"><html:text property="contactInformation.lastname" size="30" styleId="lastname"/></td>
+					</tr>
+					<tr>						
+						<td align="right"><strong><digi:trn>Firstname</digi:trn></strong><font color="red">*</font></td>
+						<td align="left"><html:text property="contactInformation.name" size="30" styleId="name"/></td>
 					</tr>
 					<tr>
 						<td align="right"><strong><digi:trn>Email</digi:trn></strong><font color="red">*</font></td>
 						<td align="left" nowrap="nowrap">
-							<html:text property="contactInformation.email" styleId="email"/>				
+							<html:text property="contactInformation.email" styleId="email" size="30"/>				
 						</td>					
 					</tr>
 					<tr>
-						<td align="right"><strong><digi:trn>Title</digi:trn></strong> </td>
-						<td align="left"><html:text property="contactInformation.title"/></td>
+						<td align="right"><strong><digi:trn>Function</digi:trn></strong></td>
+						<td align="left"><html:text property="contactInformation.function" size="30"/></td>
 					</tr>	
 					<tr>
-						<td align="right"><strong><digi:trn>Function</digi:trn></strong></td>
-						<td align="left"><html:text property="contactInformation.function"/></td>
-					</tr>		
-					<tr>
-						<td align="right"><strong><digi:trn>Office Address</digi:trn></strong></td>
-						<td align="left"><html:text property="contactInformation.officeaddress"/></td>
-					</tr>
-					<tr>
 						<td align="right"><strong><digi:trn>Organization</digi:trn></strong></td>
-						<td align="left"><html:text property="contactInformation.organisationName"/></td>
+						<td align="left"><html:text property="contactInformation.organisationName" size="30"/></td>
 					</tr>
 					<tr>
 						<td align="right"><strong><digi:trn>Phone Number</digi:trn></strong></td>
-						<td align="left"><html:text property="contactInformation.phone" styleId="phone" onkeyup="checkNumber('phone')"/></td>
+						<td align="left"><html:text property="contactInformation.phone" size="30" styleId="phone" onkeyup="checkNumber('phone')"/></td>
 					</tr>		
 					<tr>
 						<td align="right"><strong><digi:trn>Mobile phone</digi:trn></strong></td>
-						<td align="left"><html:text property="contactInformation.mobilephone" styleId="mobilephone" onkeyup="checkNumber('mobilephone')"/></td>
+						<td align="left"><html:text property="contactInformation.mobilephone" size="30" styleId="mobilephone" onkeyup="checkNumber('mobilephone')"/></td>
 					</tr>	
 					<tr>
 						<td align="right"><strong><digi:trn>Fax</digi:trn></strong></td>
-						<td align="left"><html:text property="contactInformation.fax" styleId="fax" onkeyup="checkNumber('fax')"/></td>
+						<td align="left"><html:text property="contactInformation.fax" size="30" styleId="fax" onkeyup="checkNumber('fax')"/></td>
 					</tr>			
+					<tr>
+						<td align="right" valign="top"><strong><digi:trn>Office Address</digi:trn></strong></td>
+						<td align="left"><html:textarea property="contactInformation.officeaddress" cols="36" rows="3"/></td>
+					</tr>	
 					<tr height="5px"><td colspan="2"/></tr>
 					<tr>
 						<td colspan="6" align="center"><html:button property="" styleClass="dr-menu" onclick="saveContact()">Save</html:button> </td>			

@@ -187,32 +187,35 @@ public class ShowCalendarEvent extends Action {
 
         } else if (ceform.getMethod().equalsIgnoreCase("delete")) {
         	AmpCalendar ampCalendar=AmpDbUtil.getAmpCalendar(ceform.getAmpCalendarId());
-        	//get current member
-        	HttpSession ses = request.getSession();
-            TeamMember mem = (TeamMember) ses.getAttribute("currentMember");
-            /**
-        	 * if event belongs to several users,then deleting event should delete only link between the user that clicked delete button and event,
-        	 * but for other users that event should remain,unless creator decides to remove it.   
-        	 */
-            if(ampCalendar.getMember()!=null && mem.getMemberId().equals(ampCalendar.getMember().getAmpTeamMemId())){
-            	AmpDbUtil.deleteAmpCalendar(ceform.getAmpCalendarId());
-            	new RemoveCalendarEventTrigger(ampCalendar);
-            }else{
-            	if(ampCalendar.getAttendees()!=null && ampCalendar.getAttendees().size()>0){        		
-            		for (Object obj : ampCalendar.getAttendees()) {
-            			AmpCalendarAttendee attendee=(AmpCalendarAttendee)obj;
-            			if(attendee.getMember()!=null && attendee.getMember().getAmpTeamMemId().equals(mem.getMemberId())){
-            				ampCalendar.getAttendees().remove(attendee);
-            				AmpDbUtil.updateAmpCalendar(ampCalendar);
-                			//delete that Attendee
-                			AmpDbUtil.deleteAmpCalendarAttendee(attendee);
-            				break;
-            			}
-    				}
-            	}else{
-            		AmpDbUtil.deleteAmpCalendar(ceform.getAmpCalendarId());
-            	}
-            }
+        	if(ampCalendar!=null){
+        		//get current member
+            	HttpSession ses = request.getSession();
+                TeamMember mem = (TeamMember) ses.getAttribute("currentMember");
+                /**
+            	 * if event belongs to several users,then deleting event should delete only link between the user that clicked delete button and event,
+            	 * but for other users that event should remain,unless creator decides to remove it.   
+            	 */
+                if(ampCalendar.getMember()!=null && mem.getMemberId().equals(ampCalendar.getMember().getAmpTeamMemId())){
+                	AmpDbUtil.deleteAmpCalendar(ceform.getAmpCalendarId());
+                	new RemoveCalendarEventTrigger(ampCalendar);
+                }else{
+                	if(ampCalendar.getAttendees()!=null && ampCalendar.getAttendees().size()>0){        		
+                		for (Object obj : ampCalendar.getAttendees()) {
+                			AmpCalendarAttendee attendee=(AmpCalendarAttendee)obj;
+                			if(attendee.getMember()!=null && attendee.getMember().getAmpTeamMemId().equals(mem.getMemberId())){
+                				ampCalendar.getAttendees().remove(attendee);
+                				AmpDbUtil.updateAmpCalendar(ampCalendar);
+                    			//delete that Attendee
+                    			AmpDbUtil.deleteAmpCalendarAttendee(attendee);
+                				break;
+                			}
+        				}
+                	}else{
+                		AmpDbUtil.deleteAmpCalendar(ceform.getAmpCalendarId());
+                	}
+                }
+        	}
+        	
             ceform.setMethod("");
             return mapping.findForward("forward");
 
@@ -288,6 +291,9 @@ public class ShowCalendarEvent extends Action {
                         att.setMember(member);
                         atts.add(att);
                     } else if (slAtts[i].startsWith("g:")) {
+                    	if(slAtts[i].lastIndexOf("g:")!=-1){
+                    		slAtts[i]=slAtts[i].substring(slAtts[i].lastIndexOf("g:")+2);
+                    	}
                         att.setGuest(slAtts[i]);
                         atts.add(att);
                     }                    
@@ -452,6 +458,9 @@ public class ShowCalendarEvent extends Action {
     			}
                 
                 for(String guest: guests){
+                	if(guest.indexOf("g:")!=-1){
+                		guest=guest.substring(guest.lastIndexOf("g:")+2);
+                	}                	
                 	selectedAttsCol.add(new LabelValueBean(guest, "g:" + guest));
                 	selAtts.add("g:" + guest);
                 }

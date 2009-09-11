@@ -1,3 +1,4 @@
+<%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
 <div id="myPLogframe" style="display: none">
 	<div id="myPLogframeContent" class="content">

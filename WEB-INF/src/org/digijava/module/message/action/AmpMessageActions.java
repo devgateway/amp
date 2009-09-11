@@ -318,7 +318,7 @@ public class AmpMessageActions extends DispatchAction {
            OutputStreamWriter outputStream = new OutputStreamWriter(response.
                                             getOutputStream(), "UTF-8");
 		PrintWriter out = new PrintWriter(outputStream, true);
-		String xml = messages2XML(messageForm.getPagedMessagesForTm(),messageForm,request);
+		String xml = messages2XML(messageForm.getPagedMessagesForTm(),messageForm);
 
 		out.println(xml);
 		out.close();
@@ -900,20 +900,14 @@ public class AmpMessageActions extends DispatchAction {
 	 /**
 	 * Constructs XML from Messages
 	 */
-    private String messages2XML(List<AmpMessageState> states,AmpMessageForm form, HttpServletRequest request) throws AimException {
+    private String messages2XML(List<AmpMessageState> states,AmpMessageForm form) throws AimException {
 
         String result = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
         result += "<" + ROOT_TAG + ">";
         result+="<" + MESSAGES_TAG +">";
         if (states != null && states.size() > 0) {
             for (AmpMessageState state : states) {
-            	String messageName;
-            	if("c".equals(state.getMessage().getClassName())){
-            		messageName = org.digijava.module.aim.util.DbUtil.filter(state.getMessage().getName(),request) ;
-            	}else{
-            		messageName = org.digijava.module.aim.util.DbUtil.filter(state.getMessage().getName()) ;
-            	}
-                result += "<" + "message name=\"" + messageName  + "\" ";
+                result += "<" + "message name=\"" + org.digijava.module.aim.util.DbUtil.filter(state.getMessage().getName()) + "\" ";
                 result += " id=\"" + state.getId() + "\"";
                 result += " msgId=\"" + state.getMessage().getId() + "\"";
                 if(state.getMessage().getSenderType()!=null && state.getMessage().getSenderType().equalsIgnoreCase(MessageConstants.SENDER_TYPE_USER)){

@@ -35,7 +35,6 @@ import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.Group;
@@ -123,7 +122,7 @@ import org.hibernate.Transaction;
 public class DbUtil {
 	private static Logger logger = Logger.getLogger(DbUtil.class);
         
-	public static String filter(String text) {
+           public static String filter(String text) {
 
 		String result = null;
              
@@ -140,17 +139,6 @@ public class DbUtil {
 		return result;
 
 	}
-	public static String filter(String text,HttpServletRequest request) {
-		try {
-			String trnText = TranslatorWorker.translateText(text, request);
-			return filter(trnText);
-		} catch (WorkerException e) {
-			logger.error(e.getMessage(), e);
-		}
-		return text;
-	}	
-           
-                      
 	public static String getDescParsed(String str)
 	{
 		StringBuffer strbuff = new StringBuffer();

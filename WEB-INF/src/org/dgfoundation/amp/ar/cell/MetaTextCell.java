@@ -9,6 +9,7 @@ package org.dgfoundation.amp.ar.cell;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.ecs.vxml.Return;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.workers.MetaTextColWorker;
@@ -47,6 +48,7 @@ public class MetaTextCell extends TextCell {
 		if( !getDraftFlag() && "started".equals(getStatusFlag()) ) return "GREEN";
 		if( !getDraftFlag() && "edited".equals(getStatusFlag()) ) return "GREEN";
 		if( getDraftFlag()) return "RED";
+		if (!getDraftFlag() && "approved".equals(getStatusFlag())) return "BLUE";
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}

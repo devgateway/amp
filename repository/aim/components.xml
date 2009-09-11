@@ -169,7 +169,8 @@
 	<page name="addActivityStep10" title=" - Add Activity - Monitoring and Evaluation" />
 	<page name="addActivityStep11" title=" - Add Activity - Project Costs" />
 	<page name="addActivityStep12" title=" - Add Activity - Level Linker" />
-        <page name="addActivityStep13" title=" - Add Activity -IPA Contracting" />
+    <page name="addActivityStep13" title=" - Add Activity -IPA Contracting" />
+    <page name="addActivityStep17" title=" - Add Activity -Paris Indicators" />
 	<page name="activityExist" title=" - Add Activity - Activity Already Exist" />
 	<page name="locationManager" title=" - Region Manager" />
         <page name="newLocationManager" title=" - Region Manager" />

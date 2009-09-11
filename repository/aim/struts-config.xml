@@ -564,12 +564,12 @@
     </action>
     <action name="aimSurveyForm" path="/aim/getSurveyList" scope="request" type="org.digijava.module.aim.action.GetSurveyList" validate="false" />
     <action name="aimEditSurveyForm" path="/aim/getSurvey" scope="session" type="org.digijava.module.aim.action.GetSurvey" validate="false" />
-    <action name="aimEditActivityForm" path="/aim/editSurveyList" scope="session" type="org.digijava.module.aim.action.EditSurveyList" validate="false">
-      <forward name="forward" path="/showLayout.do?layout=editSurveyList" />
-      <forward name="edit" path="/aim/editSurvey.do" />
-      <forward name="index" path="/aim/index.do" redirect="true" />
-      <forward name="viewMyDesktop" path="/aim/viewMyDesktop.do" redirect="true" />
-    </action>
+<!--    <action name="aimEditActivityForm" path="/aim/editSurveyList" scope="session" type="org.digijava.module.aim.action.EditSurveyList" validate="false">-->
+<!--      <forward name="forward" path="/showLayout.do?layout=editSurveyList" />-->
+<!--      <forward name="edit" path="/aim/editSurvey.do" />-->
+<!--      <forward name="index" path="/aim/index.do" redirect="true" />-->
+<!--      <forward name="viewMyDesktop" path="/aim/viewMyDesktop.do" redirect="true" />-->
+<!--    </action>-->
     <action name="aimEditActivityForm" path="/aim/editSurvey" scope="session" type="org.digijava.module.aim.action.EditSurvey" validate="false">
       <forward name="forward" path="/showLayout.do?layout=editSurvey" />
       <forward name="index" path="/aim/index.do" redirect="true" />
@@ -1096,6 +1096,7 @@
       <forward name="addActivityStep11" path="/showLayout.do?layout=addActivityStep11" />
       <forward name="addActivityStep12" path="/showLayout.do?layout=addActivityStep12" />
       <forward name="addActivityStep13" path="/showLayout.do?layout=addActivityStep13" />
+      <forward name="addActivityStep17" path="/showLayout.do?layout=editSurveyList" />
       <forward name="preview" path="/showLayout.do?layout=previewActivity" />
       <forward name="added" path="/aim/addActivity.do?edit=true" redirect="true" />
       <forward name="index" path="/aim/index.do" redirect="true" />

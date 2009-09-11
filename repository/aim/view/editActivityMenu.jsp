@@ -174,7 +174,8 @@ var draftStatus=document.getElementById("draftFlag");
   }
   if (flag == true) {
   	document.aimEditActivityForm.step.value = value;
-	<digi:context name="step" property="context/module/moduleinstance/editSurveyList.do?edit=true" />
+	//<digi:context name="step" property="context/module/moduleinstance/editSurveyList.do?edit=true" />
+	<digi:context name="step" property="context/module/moduleinstance/addActivity.do?edit=true" />
 	document.aimEditActivityForm.action = "<%= step %>";
 	document.aimEditActivityForm.target = "_self";
 	document.aimEditActivityForm.submit();

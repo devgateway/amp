@@ -27,6 +27,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 
+@Deprecated
 public class EditSurveyList extends Action {
 
     private static Logger logger = Logger.getLogger(EditSurveyList.class);

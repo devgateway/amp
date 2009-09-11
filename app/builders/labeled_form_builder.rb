@@ -155,7 +155,7 @@ class LabeledFormBuilder < ActionView::Helpers::FormBuilder
     
     @template.link_to_function(name, opts) do |page|
       tmpl = form_builder.render_associated_form(object, :partial => partial)        
-      page << %{$('#{container}').append("#{escape_javascript(tmpl)}".replace(/new_\\d+/g, "new_" + (new Date().getTime())))}
+      page << %{$('#{container}').append("#{escape_javascript(tmpl)}".replace(/(\\[|_)\\d+(\\]|_)/g, "$1" +  (new Date().getTime()) + "$2"))}
     end
   end
   

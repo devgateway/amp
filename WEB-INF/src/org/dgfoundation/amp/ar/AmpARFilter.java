@@ -79,6 +79,9 @@ public class AmpARFilter extends PropertyListable {
 	private String budgetNumber;
 	
 	@PropertyListableIgnore
+	private Integer computedYear;
+	
+	@PropertyListableIgnore
 	private ArrayList<FilterParam> indexedParams=null;
 
 	
@@ -1455,6 +1458,14 @@ public class AmpARFilter extends PropertyListable {
 
 	public void setBudgetNumber(String budgetNumber) {
 		this.budgetNumber = budgetNumber;
+	}
+
+	public Integer getComputedYear() {
+		return computedYear;
+	}
+
+	public void setComputedYear(Integer computedYear) {
+		this.computedYear = computedYear;
 	}
 	
 

@@ -24,7 +24,16 @@ public class DateRangeLogicalToken extends LogicalToken {
 	public boolean evaluate(CategAmountCell c) {
 		MetaInfo m = MetaInfo.getMetaInfo(c.getMetaData(), ArConstants.TRANSACTION_DATE);
 		Date date = (Date) m.getValue();
-		ret = (date.compareTo(d1) > -1 && date.compareTo(d2) < 0);
+		if ((d1 != null) && (d2 != null)) {
+			ret = (date.compareTo(d1) > -1 && date.compareTo(d2) < 0);
+		}
+		if ((d1 == null) && (d2 != null)) {
+			ret = date.compareTo(d2) < 0;
+		}
+
+		if ((d1 != null) && (d2 == null)) {
+			ret = date.compareTo(d1) > -1;
+		}
 		return super.evaluate(c);
 	}
 }

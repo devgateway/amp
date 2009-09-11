@@ -1,15 +1,11 @@
 package org.dgfoundation.amp.exprlogic;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
 
 public class Values extends HashMap<String, BigDecimal> {
@@ -110,20 +106,13 @@ public class Values extends HashMap<String, BigDecimal> {
 
 		this.addValue(ArConstants.TOTAL_PLANNED_COMMITMENT, TokenRepository.buildPLannedCommitmentsLogicalToken().evaluateOriginalvalue(cell));
 		this.addValue(ArConstants.TOTAL_PLANNED_DISBURSEMENT, TokenRepository.buildPLannedDisbursementsLogicalToken().evaluateOriginalvalue(cell));
-		
-		//no filtered affected by %
-		
-		
-		this.addValue(ArConstants.TOTAL_PLANNED_DISBURSEMENT_CURRENT_YEAR,  TokenRepository.buildCurrentYearPlannedDisbursementsLogicalToken().evaluate(cell));
-		this.addValue(ArConstants.TOTAL_PLANNED_DISBURSEMENT_LAST_YEAR,  TokenRepository.buildLastYearPlannedDisbursementsLogicalToken().evaluate(cell));
-		this.addValue(ArConstants.TOTAL_PLANNED_DISBURSEMENT_LAST_2YEAR,  TokenRepository.buildLast2YearPlannedDisbursementsLogicalToken().evaluate(cell));
-		this.addValue(ArConstants.TOTAL_PLANNED_DISBURSEMENT_LAST_3YEAR,  TokenRepository.buildLast3YearPlannedDisbursementsLogicalToken().evaluate(cell));
 
-		this.addValue(ArConstants.TOTAL_ACTUAL_DISBURSEMENT_PREV_MONTHS,  TokenRepository.buildPreviousMonthsActualDisbursementsLogicalToken().evaluate(cell));
-		this.addValue(ArConstants.TOTAL_ACTUAL_DISBURSEMENT_CUR_MONTH,  TokenRepository.buildCurrentMonthsActualDisbursementsLogicalToken().evaluate(cell));
+		// no filtered, affected by %
+		this.addValue(ArConstants.TOTAL_PLANNED_DISBURSEMENT_SELECTED_YEAR, TokenRepository.buildSelectedYearPlannedDisbursementsLogicalToken().evaluate(cell));
+		this.addValue(ArConstants.CUMULATED_DISBURSEMENT_SELECTED_YEAR, TokenRepository.buildCumulatedDisursementsLogicalToken().evaluate(cell));
+		this.addValue(ArConstants.TOTAL_ACTUAL_DISBURSEMENT_LAST_CLOSED_MONTH, TokenRepository.buildColsedMonthActualDisbursementsLogicalToken().evaluate(cell));
+		this.addValue(ArConstants.TOTAL_PRIOR_ACTUAL_DISBURSEMENT, TokenRepository.buildPriorActualDisbursementsLogicalToken().evaluate(cell));
 		
-		
-
 		if (cell.isShow()) {
 			this.addValue(ArConstants.ACTUAL_COMMITMENT_FILTERED, TokenRepository.buildActualCommitmentsLogicalToken().evaluate(cell));
 			this.addValue(ArConstants.ACTUAL_DISBURSEMENT_FILTERED, TokenRepository.buildActualDisbursementsLogicalToken().evaluate(cell));
@@ -263,6 +252,5 @@ public class Values extends HashMap<String, BigDecimal> {
 			this.put(ArConstants.PLANNED_DISBURSEMENT_COUNT, pd);
 		}
 	}
-	
 
 }

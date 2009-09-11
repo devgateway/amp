@@ -3,7 +3,9 @@
  */
 package org.digijava.module.aim.form;
 
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +34,8 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Collection<BeanWrapperImpl> fromMonths;
 	private Collection<BeanWrapperImpl> toMonths;
 	private Collection<BeanWrapperImpl> countYears;
+	private Collection<BeanWrapperImpl> computedYearsRange;
+	
 	private Collection actRankCollection;
 	private Collection pageSizes; // A0,A1,A2,A3,A4
 	private Collection donorTypes; // Ex: Multilateral, Bilateral, Regional
@@ -129,6 +133,19 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private String CRISNumber;
 	private String budgetNumber;
 	
+	private Integer computedYear=-1;
+	
+	
+
+
+	public Integer getComputedYear() {
+		return computedYear;
+	}
+
+	public void setComputedYear(Integer computedYear) {
+		this.computedYear = computedYear;
+	}
+
 	public String getResetFormat() {
 		return resetFormat;
 	}
@@ -354,6 +371,15 @@ public class ReportsFilterPickerForm extends ActionForm {
 			
 		
 	
+	}
+
+	
+	public Collection<BeanWrapperImpl> getComputedYearsRange() {
+		return computedYearsRange;
+	}
+	
+	public void setComputedYearsRange(Collection<BeanWrapperImpl> computedYearsRange) {
+		this.computedYearsRange = computedYearsRange;
 	}
 
 	public Collection<BeanWrapperImpl> getCountYears() {

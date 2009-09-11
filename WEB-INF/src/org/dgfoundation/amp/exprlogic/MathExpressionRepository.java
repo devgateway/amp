@@ -75,13 +75,7 @@ public class MathExpressionRepository {
 
 	public static final String CONSUMPTION_RATE = "consumptionRate";
 
-	public static final String CUR_YEAR_PLANNED_DISBURSEMENT = "currYearPlannedDisbursement";
-
-	public static final String LAST_YEAR_PLANNED_DISBURSEMENT = "lastYearPlannedDisbursements";
-
-	public static final String LAST_2YEAR_PLANNED_DISBURSEMENT = "last2YearPlannedDisbursements";
-
-	public static final String LAST_3YEAR_PLANNED_DISBURSEMENT = "last3YearPlannedDisbursements";
+	public static final String SELECTED_YEAR_PLANNED_DISBURSEMENT = "selectedYearPlannedDisbursement";
 
 	private static Hashtable<String, MathExpression> expresions = new Hashtable<String, MathExpression>();
 
@@ -119,16 +113,13 @@ public class MathExpressionRepository {
 
 		buildUncommitedBalance();
 		buildUndisbursedBalance();
-		
-		/**Niger Columns**/
+
+		/** Niger Columns **/
 		buildPriorActualDisbursements();
 		buildCurrentMonthDisbursements();
 		buildCumulatedDisbursements();
 		buildConsumptionRate();
-		buildCurrentYearOfPlannedDisbursements();
-		buildLastYearOfPlannedDisbursements();
-		buildLast2YearOfPlannedDisbursements();
-		buildLast3YearOfPlannedDisbursements();
+		buildSelectdYearOfPlannedDisbursements();
 	}
 
 	/**
@@ -481,7 +472,7 @@ public class MathExpressionRepository {
 	 */
 	private static void buildPriorActualDisbursements() {
 		try {
-			MathExpression m = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.TOTAL_ACTUAL_DISBURSEMENT_PREV_MONTHS, new BigDecimal(1));
+			MathExpression m = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.TOTAL_PRIOR_ACTUAL_DISBURSEMENT, new BigDecimal(1));
 			expresions.put(PRIOR_ACTUAL_DISBURSEMENT, m);
 		} catch (Exception e) {
 			logger.error(e);
@@ -493,7 +484,7 @@ public class MathExpressionRepository {
 	 */
 	private static void buildCurrentMonthDisbursements() {
 		try {
-			MathExpression m = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.TOTAL_ACTUAL_DISBURSEMENT_CUR_MONTH, new BigDecimal(1));
+			MathExpression m = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.TOTAL_ACTUAL_DISBURSEMENT_LAST_CLOSED_MONTH, new BigDecimal(1));
 			expresions.put(CURRENT_MONTH_DISBURSEMENT, m);
 		} catch (Exception e) {
 			logger.error(e);
@@ -507,7 +498,7 @@ public class MathExpressionRepository {
 	private static void buildCumulatedDisbursements() {
 		try {
 
-			MathExpression m = new MathExpression(MathExpression.Operation.ADD, ArConstants.TOTAL_ACTUAL_DISBURSEMENT_PREV_MONTHS, ArConstants.TOTAL_ACTUAL_DISBURSEMENT_CUR_MONTH);
+			MathExpression m = new MathExpression(MathExpression.Operation.ADD, ArConstants.TOTAL_PRIOR_ACTUAL_DISBURSEMENT, ArConstants.TOTAL_ACTUAL_DISBURSEMENT_LAST_CLOSED_MONTH);
 			expresions.put(CUMULATED_DISBURSEMENT, m);
 		} catch (Exception e) {
 			logger.error(e);
@@ -515,70 +506,27 @@ public class MathExpressionRepository {
 	}
 
 	/**
-	 *Consumption Rate (Cumulated Disbursements / Last Year of Planned
-	 * Disbursements) * 100
+	 *Consumption Rate (Cumulated Disbursements of Selected year / Selected Year of Planned Disbursements) * 100
 	 */
 	private static void buildConsumptionRate() {
 		try {
 
-			MathExpression m = new MathExpression(MathExpression.Operation.ADD, ArConstants.TOTAL_ACTUAL_DISBURSEMENT_PREV_MONTHS, ArConstants.TOTAL_ACTUAL_DISBURSEMENT_CUR_MONTH);
-			MathExpression m1 = new MathExpression(MathExpression.Operation.DIVIDE, m, ArConstants.TOTAL_PLANNED_DISBURSEMENT_CURRENT_YEAR);
+			MathExpression m1 = new MathExpression(MathExpression.Operation.DIVIDE, ArConstants.CUMULATED_DISBURSEMENT_SELECTED_YEAR, ArConstants.TOTAL_PLANNED_DISBURSEMENT_SELECTED_YEAR);
 			MathExpression m2 = new MathExpression(MathExpression.Operation.MULTIPLY, m1, new BigDecimal(100));
-
 			expresions.put(CONSUMPTION_RATE, m2);
 		} catch (Exception e) {
 			logger.error(e);
 		}
 	}
 
-	
 	/**
 	 * Current Year Planned Disbursements
 	 */
-	private static void buildCurrentYearOfPlannedDisbursements() {
+	private static void buildSelectdYearOfPlannedDisbursements() {
 		try {
 
-			MathExpression m = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.TOTAL_PLANNED_DISBURSEMENT_CURRENT_YEAR, new BigDecimal(1));
-			expresions.put(CUR_YEAR_PLANNED_DISBURSEMENT, m);
-		} catch (Exception e) {
-			logger.error(e);
-		}
-	}
-
-	/**
-	 * Previous Year Planned Disbursements
-	 */
-	private static void buildLastYearOfPlannedDisbursements() {
-		try {
-
-			MathExpression m = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.TOTAL_PLANNED_DISBURSEMENT_LAST_YEAR, new BigDecimal(1));
-			expresions.put(LAST_YEAR_PLANNED_DISBURSEMENT, m);
-		} catch (Exception e) {
-			logger.error(e);
-		}
-	}
-
-	/**
-	 * Previous 2 Year Planned Disbursements
-	 */
-	private static void buildLast2YearOfPlannedDisbursements() {
-		try {
-
-			MathExpression m = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.TOTAL_PLANNED_DISBURSEMENT_LAST_2YEAR, new BigDecimal(1));
-			expresions.put(LAST_2YEAR_PLANNED_DISBURSEMENT, m);
-		} catch (Exception e) {
-			logger.error(e);
-		}
-	}
-
-	/**
-	 * Previous 3 Year Planned Disbursements
-	 */
-	private static void buildLast3YearOfPlannedDisbursements() {
-		try {
-
-			MathExpression m = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.TOTAL_PLANNED_DISBURSEMENT_LAST_3YEAR, new BigDecimal(1));
-			expresions.put(LAST_3YEAR_PLANNED_DISBURSEMENT, m);
+			MathExpression m = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.TOTAL_PLANNED_DISBURSEMENT_SELECTED_YEAR, new BigDecimal(1));
+			expresions.put(SELECTED_YEAR_PLANNED_DISBURSEMENT, m);
 		} catch (Exception e) {
 			logger.error(e);
 		}

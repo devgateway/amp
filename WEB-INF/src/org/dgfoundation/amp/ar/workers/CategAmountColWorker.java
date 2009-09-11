@@ -9,6 +9,7 @@ package org.dgfoundation.amp.ar.workers;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -84,6 +85,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		    return false;
 		AmpARFilter filter=(AmpARFilter) generator.getFilter();
 		
+	
 		//we now check if the year filtering is used - we do not want items from other years to be shown
 		//now this is null due we have one field 
 		try {
@@ -101,11 +103,9 @@ public class CategAmountColWorker extends ColumnWorker {
 					if (tDate.after(toDate)) showable=false;
 				}
 		}
-		/* if(filter.getYearFrom()!=null || filter.getYearTo()!=null) {
-			Integer itemYear=(Integer) MetaInfo.getMetaInfo(cac.getMetaData(),ArConstants.YEAR).getValue();
-			if(filter.getYearFrom()!=null && filter.getYearFrom().intValue()>itemYear.intValue()) showable=false;
-			if(filter.getYearTo()!=null && filter.getYearTo().intValue()<itemYear.intValue()) showable=false;
-		}*/
+	
+		
+			
 		} catch (Exception e) {
 			logger.error("Can't define if cell is Showable possible parse error detected",e );
 		}
@@ -295,7 +295,6 @@ public class CategAmountColWorker extends ColumnWorker {
 			acc.getMetaData().add(fundMs);
 			acc.getMetaData().add(adjMs);			
 		}	
-		//Date handling..
 		
 		
 		if (td==null) 
@@ -322,7 +321,16 @@ public class CategAmountColWorker extends ColumnWorker {
 			}
 		}
 
-		
+		//Date handling..
+		Integer computedYear=new GregorianCalendar().get(Calendar.YEAR);
+		  if (filter.getComputedYear()!=null){
+			  computedYear=filter.getComputedYear();
+		  }
+		  if (year.compareTo(computedYear)==0){
+			  MetaInfo computedOnYear = this.getCachedMetaInfo(ArConstants.COMPUTE_ON_YEAR, null);
+			  acc.getMetaData().add(computedOnYear);
+		  }
+		  
 		MetaInfo qMs = this.getCachedMetaInfo(ArConstants.QUARTER,quarter);
 		MetaInfo mMs = this.getCachedMetaInfo(ArConstants.MONTH,month);
 		MetaInfo aMs = this.getCachedMetaInfo(ArConstants.YEAR, year);

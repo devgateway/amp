@@ -50,8 +50,7 @@ public class AmpReportGenerator extends ReportGenerator {
 	List<AmpReportColumn> extractable;
 	protected int extractableCount;
 	private List<String> columnsToBeRemoved;
-	
-	
+	private boolean debugMode=false;
 	
 
 	/**
@@ -230,7 +229,10 @@ public class AmpReportGenerator extends ReportGenerator {
 
 				ce.setRelatedColumn(col);
 				ce.setInternalCondition(columnFilterSQLClause);
-
+				
+				
+				ce.setDebugMode(debugMode);
+				
 				Column column = ce.populateCellColumn();
 
 				if (relatedContentPersisterClass != null) {
@@ -708,6 +710,10 @@ public class AmpReportGenerator extends ReportGenerator {
 		extractableCount = 0;
 
 		filter.generateFilterQuery(request);
+		
+		debugMode=(request.getParameter("debugMode")!=null);
+
+
 
 		logger.info("Master report query:" + filter.getGeneratedFilterQuery());
 

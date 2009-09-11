@@ -32,6 +32,7 @@
                 <li><a href="#sectorsprograms"><div><digi:trn key="rep:filer:tab:sectorsAndPrograms">Sectors & Programs</digi:trn></div></a> </li>
 		<li><a href="#donors"><div><digi:trn key="rep:filer:tab:DonorsAndAgencies">Donors & Agencies</digi:trn></div></a> </li>
 		<li><a href="#status"><div><digi:trn key="rep:filer:tab:StatusAndMinistryRank">Status & Ministry Rank</digi:trn></div></a> </li>
+		<li><a href="#CCSettings"><div><digi:trn>Computed Column Settings</digi:trn></div></a> </li>
 	</ul>
 	<div class="yui-content" style="background-color: #EEEEEE">
 		<div id="keyword" >
@@ -700,10 +701,27 @@
 		</tr>
 		</table>
 		</div>
+		<div id="CCSettings" >
+			<br>
+			<br>
+			<table width="100%" cellpadding="1" cellspacing="1" >
+					<tr bgcolor="#EEEEEE">
+						<td colspan="5" align="right"><b>
+				      <digi:trn>Computed Year</digi:trn>
+						</b>&nbsp;&nbsp;</td>
+					  <td width="79%" colspan="5">
+							<html:select property="computedYear"  style="width: 100px" styleClass="inp-text">
+							<option value="-1">Current Year</option>
+                         	<html:optionsCollection property="computedYearsRange" label="wrappedInstance" value="wrappedInstance" />
+						</html:select>						
+					  </td>
+			  </tr>
+				</table>
+				<br>
+				<br><br>
+		</div>
 	</div>
 	
-
-
 </div>
 <div style="background-color: #EEEEEE; ">
 	<br />

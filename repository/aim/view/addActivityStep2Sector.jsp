@@ -30,19 +30,13 @@
     <td>
         <!-- contents -->
         <table width="100%" bgcolor="#f4f4f2">
-            
-            
-            <tr>
-                <td>
-                    <IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15 />
-                    <b>
-                        <FONT color="red">
-                            *
-                        </FONT>
-                        <digi:trn key="aim:sector">
-                            Sector
-                        </digi:trn>
-                    </b>
+           <tr>
+           	<td>
+            	<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15 />
+                <b>
+                	<FONT color="red">*</FONT>
+					<digi:trn key="aim:sector">Sector</digi:trn>
+				</b>
                     <a href="javascript:popupwin()">
                         <img src="../ampTemplate/images/help.gif" alt="Click to get help on Status" width=10 height=10 border=0/>
                     </a>
@@ -50,12 +44,8 @@
             </tr>
             <tr>
                 <td>
-                    <FONT color=red>
-                        *
-                    </FONT>
-                    <digi:trn	key="aim:chooseSector">
-                    Choose the sector.
-                    </digi:trn>
+                    <FONT color=red>*</FONT>
+                    <digi:trn key="aim:chooseSector">Choose the sector.</digi:trn>
                 </td>
             </tr>
             <tr>
@@ -66,7 +56,7 @@
             <tr>
                 <td>
                     <table cellPadding=5 cellSpacing=1 border=0 width="100%"	bgcolor="#d7eafd">
-                        <tr>
+                    	<tr>
                             <td align="left">
                                 <b>
                                     <digi:trn key="aim:sector">
@@ -78,32 +68,15 @@
                         <tr>
                             <td bgcolor="#ffffff" width="100%">
                                 <table cellPadding=1 cellSpacing=1 border=0	bgcolor="#ffffff" width="100%">
-                                   
-                                    <c:forEach var="config" items="${aimEditActivityForm.sectors.classificationConfigs}" varStatus="ind">
+                                	<c:forEach var="config" items="${aimEditActivityForm.sectors.classificationConfigs}" varStatus="ind">
                                     <bean:define id="generalSector" value="false"/>
-									<c:if test="${config.name== 'Primary' }">
-										<bean:define id="auxSectorType" value="Primary Sector" />
+									<bean:define id="auxSectorType" value="${config.name}" />
 										<logic:equal name="aimEditActivityForm" property="sectors.primarySectorVisible" value="true">
 											<bean:define id="generalSector" value="true"/>
 										</logic:equal>
-									</c:if>
-									<c:if test="${config.name== 'Secondary' }">
-										<bean:define id="auxSectorType" value="Secondary Sector" />
-										<logic:equal name="aimEditActivityForm" property="sectors.secondarySectorVisible" value="true">
-											<bean:define id="generalSector" value="true"/>
-										</logic:equal>
-									</c:if>
-									<bean:define id="contentDisabled">false</bean:define>
-									<c:set var="contentDisabled"><field:display name="${auxSectorType}" feature="Sectors">false</field:display>
-									</c:set>
-									
-									<c:if test="${contentDisabled==''}">
-										<c:set var="contentDisabled">true</c:set>
-									</c:if>
-									<logic:equal name="generalSector" value="true">
-                                         <c:set var="sectorAdded">
-                                              false
-                                          </c:set>
+									<field:display name="${auxSectorType}" feature="Sectors">
+										<logic:equal name="generalSector" value="true">
+                                        	<c:set var="sectorAdded" value="false"/>
                                          <tr>
                                              <td  align="left"> 
                                                      <FONT color="red">
@@ -129,7 +102,7 @@
                                                             <c:if test="${activitySectors.configId==config.id}">
                                                                 <tr> 
                                                                     <td width="3%" vAlign="middle">
-                                                                        <html:multibox property="sectors.selActivitySectors" styleId="selActivitySectors" disabled="${contentDisabled}">
+                                                                        <html:multibox property="sectors.selActivitySectors" styleId="selActivitySectors">
                                                                             <c:if test="${activitySectors.subsectorLevel1Id == -1}">
                                                                             ${activitySectors.sectorId}
                                                                             </c:if>
@@ -164,66 +137,48 @@
                                                                        
                                                                     <FONT color="red">*</FONT><digi:trn key="aim:percentage">Percentage</digi:trn>:&nbsp;</td>
                                                                     <td width="5%" valign="middle" align="left">
-                                                                        <html:text name="activitySectors" indexed="true" property="sectorPercentage"
-                                                                                   size="2" onkeyup="fnChk(this, 'sector')" disabled="${contentDisabled}"/>
+                                                                        <html:text name="activitySectors" indexed="true" property="sectorPercentage"size="2" onkeyup="fnChk(this, 'sector')"/>
                                                                     </td>
                                                                 </tr>
-                                                                <c:set var="sectorAdded">
-                                                                   true
-                                                                </c:set>
+                                                                <c:set var="sectorAdded" value="true"/>
                                                             </c:if>
                                                         </c:forEach>
                                                     </tbody>
                                                     </table>
-                                                    <c:if test="${config.primary}">
-                                                      </div>
-                                                    </c:if>
+                                                   </div>
                                                 </div>
-                                                    
-                                                  
                                                 </td>
                                             </tr>
                                         </c:if>
-                                     
-                                      
-                                        <tr>
+                                     	<tr>
                                             <td>
                                                 <table cellSpacing=2 cellPadding=2>
                                                     <tr>
-                                                        
-                                                        
                                                         <td> &nbsp;
                                                             <c:if test="${config.multisector||sectorAdded==false}">
                                                                 <field:display name="Add Sectors Button" feature="Sectors">
                                                                     <html:hidden name="aimEditActivityForm" property="editAct"/>
-                                                                    <html:button styleClass="dr-menu" disabled="${contentDisabled}" 
+                                                                    <html:button styleClass="dr-menu"  
                                                                                  property="submitButton" onclick="addSectors(${aimEditActivityForm.editAct},${config.id});">
                                                                         <digi:trn key="btn:addSectors">Add Sectors</digi:trn>
                                                                     </html:button>
                                                                 </field:display> 
                                                             </c:if>
                                                         </td>
-                                                        
-                                                        
-                                                        
                                                         <td>
                                                             <field:display name="Remove Sectors Button" feature="Sectors">&nbsp;
-                                                                <html:button styleClass="dr-menu" disabled="${contentDisabled}" 
-                                                                             property="submitButton" onclick="return removeSelSectors(${config.id})">
+                                                                <html:button styleClass="dr-menu" property="submitButton" onclick="return removeSelSectors(${config.id})">
                                                                     <digi:trn key="btn:removeSector">Remove Sector</digi:trn>
                                                                 </html:button>
                                                             </field:display>
                                                         </td>
-                                                        
-                                                        
                                                     </tr>
                                                 </table>
                                             </td>
                                         </tr>
-                                        
-                                        </logic:equal>
+                                       </logic:equal>
+                                       </field:display>
                                     </c:forEach>
-                                    
                                 </table>
                             </td>
                         </tr>

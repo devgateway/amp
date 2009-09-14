@@ -5,8 +5,13 @@
  */
 package org.digijava.module.xmlpatcher.util;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
@@ -33,6 +38,7 @@ import org.digijava.module.xmlpatcher.jaxb.Patch;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.engine.SessionFactoryImplementor;
 
 /**
@@ -88,12 +94,12 @@ public final class XmlPatcherUtil {
 	 */
 	public static boolean isSQLCompatible(String langType) {
 		Connection con;
-		boolean ret=false;
+		boolean ret = false;
 		try {
 			con = getConnection();
 			DatabaseMetaData metaData = con.getMetaData();
 			if (metaData.getURL().toLowerCase().indexOf(langType.toLowerCase()) > -1)
-				ret=true;
+				ret = true;
 			con.close();
 			return ret;
 		} catch (SQLException e) {
@@ -180,16 +186,17 @@ public final class XmlPatcherUtil {
 	 * @param p
 	 *            the patch file metaobject that holds the location URI
 	 * @param log
-	 * @param serviceContext the service context of the caller servlet, used to get the real application path
-	 *            the patch log file that will be written in the end to the db
+	 * @param serviceContext
+	 *            the service context of the caller servlet, used to get the
+	 *            real application path the patch log file that will be written
+	 *            in the end to the db
 	 * @return the Patch object, unmarshalled
 	 */
 	public static Patch getUnmarshalledPatch(ServiceContext serviceContext,
 			AmpXmlPatch p, AmpXmlPatchLog log) {
 		FileInputStream inputStream;
 		try {
-			String filePath = serviceContext.getRealPath("/") + p.getLocation()
-					+ p.getPatchId();
+			String filePath = getXmlPatchAbsoluteFileName(p, serviceContext);
 
 			logger.info("Unmarshalling " + filePath);
 			inputStream = new FileInputStream(filePath);
@@ -219,6 +226,56 @@ public final class XmlPatcherUtil {
 	}
 
 	/**
+	 * Adds a new log object to an existing patch object
+	 * @param p the existing patch object, this will be re-fetched from db to get a lazy version
+	 * @param log the log object
+	 */
+	public static void addLogToPatch(AmpXmlPatch p, AmpXmlPatchLog log) {
+		Session sess = null;
+		Transaction tx = null;
+
+		try {
+			sess = PersistenceManager.getSession();
+			tx = sess.beginTransaction();
+			AmpXmlPatch lazyPatch = (AmpXmlPatch) sess.load(AmpXmlPatch.class,
+					p.getPatchId());
+			log.setPatch(lazyPatch);
+			lazyPatch.getLogs().add(log);
+			sess.saveOrUpdate(lazyPatch);
+			tx.commit();
+		} catch (Exception e) {
+			logger.error(e);
+			throw new RuntimeException(e);
+		} finally {
+			try {
+				PersistenceManager.releaseSession(sess);
+			} catch (HibernateException e) {
+				logger.error(e);
+				throw new RuntimeException(e);
+			} catch (SQLException e) {
+				;
+				logger.error(e);
+				throw new RuntimeException(e);
+			}
+		}
+	}
+
+	/**
+	 * Reconstructs the absolute location of the patch file on the disk based on
+	 * the patch name, the relative path inside the WAR plus the absolute WAR
+	 * path
+	 * 
+	 * @param p
+	 * @param serviceContext
+	 * @return
+	 */
+	public static String getXmlPatchAbsoluteFileName(AmpXmlPatch p,
+			ServiceContext serviceContext) {
+		return serviceContext.getRealPath("/") + p.getLocation()
+				+ p.getPatchId();
+	}
+
+	/**
 	 * Returns the list of XmlPatches that are not in close state
 	 * 
 	 * @see XmlPatcherConstants.PatchStates
@@ -238,7 +295,7 @@ public final class XmlPatcherUtil {
 		PersistenceManager.releaseSession(session);
 		return list;
 	}
-	
+
 	public static Session getHibernateSession() {
 		try {
 			return PersistenceManager.getSession();
@@ -258,5 +315,34 @@ public final class XmlPatcherUtil {
 			logger.error(e1);
 			throw new RuntimeException(e1);
 		}
+	}
+
+	/**
+	 * Digests the file contents and produces its MD5 as output
+	 * 
+	 * @param f
+	 *            the file to digest the contents
+	 * @return the MD5 for the file
+	 * @throws NoSuchAlgorithmException
+	 * @throws IOException
+	 */
+	public static String getFileMD5(File f) throws NoSuchAlgorithmException,
+			IOException {
+		MessageDigest algorithm = MessageDigest.getInstance("MD5");
+		algorithm.reset();
+
+		BufferedInputStream bis = new BufferedInputStream(
+				new FileInputStream(f));
+
+		byte[] buffer = new byte[8192];
+		int read = 0;
+		while ((read = bis.read(buffer)) > 0) {
+			algorithm.update(buffer, 0, read);
+		}
+		bis.close();
+		byte[] md5sum = algorithm.digest();
+		BigInteger bigInt = new BigInteger(1, md5sum);
+		String md5 = bigInt.toString(16);
+		return md5;
 	}
 }

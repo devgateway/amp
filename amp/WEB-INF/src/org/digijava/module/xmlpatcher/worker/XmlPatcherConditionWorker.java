@@ -20,11 +20,12 @@ import bsh.EvalError;
 import bsh.Interpreter;
 
 /**
- * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org Processes a condition
- *         entity. A condition entity is a collection of scripts that define
- *         variables plus a test section. The test body is a bsh script that can
- *         be fed directly to the BSH interpreter along with the variables
- *         defined by script entities
+ * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
+ *         <p>
+ *         Processes a condition entity. A condition entity is a collection of
+ *         scripts that define variables plus a test section. The test body is a
+ *         bsh script that can be fed directly to the BSH interpreter along with
+ *         the variables defined by script entities
  * @see org.digijava.module.xmlpatcher.jaxb.Condition
  */
 public class XmlPatcherConditionWorker extends
@@ -48,9 +49,10 @@ public class XmlPatcherConditionWorker extends
 				if (script.getReturnVar() != null)
 					it.set(script.getReturnVar(), worker.getReturnValue());
 			}
-			return (Boolean) it.eval(getEntity().getTest());
+			returnValue = it.eval(getEntity().getTest());
+			return true;
 		} catch (EvalError e) {
-			throw new XmlPatcherConditionWorkerException(e.getCause());
+			throw new XmlPatcherConditionWorkerException(e);
 		}
 	}
 

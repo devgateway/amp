@@ -18,7 +18,11 @@ public final class XmlPatcherConstants {
 	public static final String schedulersPackage = "org.digijava.module.xmlpatcher.scheduler.";
 
 	public static final String CONDITION_CUSTOM = "custom";
-
+	
+	public static final class TriggerTypes {
+		public static final String ALL="all";
+		public static final String ANY="any";
+	}
 	
 	/**
 	 * Describes states of the patch execution.

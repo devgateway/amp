@@ -50,12 +50,12 @@ public class XmlPatcherSQLLangWorker extends XmlPatcherLangWorker {
 			returnValue=resultSet.getObject(1);
 			return true;
 		} catch (SQLException e) {
-			throw new XmlPatcherLangWorkerException(e.getCause());
+			throw new XmlPatcherLangWorkerException(e);
 		} finally {
 			try {
 				con.close();
 			} catch (SQLException e) {
-				throw new XmlPatcherLangWorkerException(e.getCause());
+				throw new XmlPatcherLangWorkerException(e);
 			}
 		}
 	}

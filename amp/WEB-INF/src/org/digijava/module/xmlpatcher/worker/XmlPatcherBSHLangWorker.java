@@ -43,7 +43,7 @@ public class XmlPatcherBSHLangWorker extends XmlPatcherLangWorker {
 			returnValue=it.eval(entity.getValue());
 			return true;
 		} catch (EvalError e) {
-			throw new XmlPatcherLangWorkerException(e.getCause());
+			throw new XmlPatcherLangWorkerException(e);
 		} finally {
 			XmlPatcherUtil.closeHibernateSession(session);
 		}
@@ -60,7 +60,7 @@ public class XmlPatcherBSHLangWorker extends XmlPatcherLangWorker {
 			it.eval(entity.getValue());
 			return true;
 		} catch (EvalError e) {
-			throw new XmlPatcherLangWorkerException(e.getCause());
+			throw new XmlPatcherLangWorkerException(e);
 		} finally {
 			XmlPatcherUtil.closeHibernateSession(session);
 		}

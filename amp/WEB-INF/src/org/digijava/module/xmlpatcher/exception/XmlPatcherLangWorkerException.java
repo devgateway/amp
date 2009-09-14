@@ -18,10 +18,6 @@ public class XmlPatcherLangWorkerException extends XmlPatcherWorkerException {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public XmlPatcherLangWorkerException(Exception e) {
-		super(e.getCause());
-	}
-	
 
 	/**
 	 * @param arg0

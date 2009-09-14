@@ -79,15 +79,17 @@ public class AmpXmlPatchLog implements Serializable {
 		log.append(writer.toString());
 	}
 
+
 	public AmpXmlPatchLog() {
-		this.log = new StringBuffer();
-		error=false;
 	}
 
+	
+	
 	public AmpXmlPatchLog(AmpXmlPatch p) {
 		this.log = new StringBuffer();
 		this.patch = p;
 		error=false;
+		this.date=new Date(System.currentTimeMillis());
 	}
 
 	public AmpXmlPatch getPatch() {

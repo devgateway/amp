@@ -6,6 +6,7 @@
 package org.digijava.module.xmlpatcher.dbentity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class AmpXmlPatch implements Serializable, Comparable<AmpXmlPatch> {
 	protected List<AmpXmlPatchLog> logs;
 
 	public AmpXmlPatch() {
-
+		logs=new ArrayList<AmpXmlPatchLog>();
 	}
 
 	/**

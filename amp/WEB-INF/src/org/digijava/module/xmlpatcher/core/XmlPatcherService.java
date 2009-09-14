@@ -6,7 +6,8 @@
 package org.digijava.module.xmlpatcher.core;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashMap;
@@ -68,45 +69,74 @@ public class XmlPatcherService extends AbstractServiceImpl {
 	}
 
 	/**
-	 * Attempts to execute the given collection of unclosed patches. The collection is ordered using a scheduler that was given as a parameter
-	 * in digi.xml. If the scheduler is missing then the default scheduler is used.
-	 * <p> The collection is iterated and each patch is invoked. If the patch worker will return false it means the patch was not applied.
+	 * Attempts to execute the given collection of unclosed patches. The
+	 * collection is ordered using a scheduler that was given as a parameter in
+	 * digi.xml. If the scheduler is missing then the default scheduler is used.
+	 * <p>
+	 * The collection is iterated and each patch is invoked. If the patch worker
+	 * will return false it means the patch was not applied.
 	 * 
 	 * @param scheduledPatches
 	 * @param serviceContext
 	 * @throws DgException
 	 */
-	private void processUnclosedPatches(Collection<AmpXmlPatch> scheduledPatches,ServiceContext serviceContext ) throws DgException {
-		Iterator<AmpXmlPatch> iterator=scheduledPatches.iterator();
-		while(iterator.hasNext()) {
+	private void processUnclosedPatches(
+			Collection<AmpXmlPatch> scheduledPatches,
+			ServiceContext serviceContext) throws DgException {
+		Iterator<AmpXmlPatch> iterator = scheduledPatches.iterator();
+		while (iterator.hasNext()) {
 			AmpXmlPatch ampPatch = iterator.next();
-			AmpXmlPatchLog log=new AmpXmlPatchLog(ampPatch);
-			Patch patch = XmlPatcherUtil.getUnmarshalledPatch(serviceContext,ampPatch, log);
-			boolean success=false; 
-			if (patch!=null) {
-				if(ampPatch.getState().equals(XmlPatcherConstants.PatchStates.FAILED) && !patch.isRetryOnFail()) {
-					logger.info("Skipping failed patch "+ampPatch.getPatchId());
+			long timeStart = System.currentTimeMillis();
+			AmpXmlPatchLog log = new AmpXmlPatchLog(ampPatch);
+			try {
+				log.setFileChecksum(XmlPatcherUtil.getFileMD5(new File(
+						XmlPatcherUtil.getXmlPatchAbsoluteFileName(ampPatch,
+								serviceContext))));
+			} catch (NoSuchAlgorithmException e) {
+				logger.error(e);
+				throw new RuntimeException(e);
+			} catch (IOException e) {
+				logger.error(e);
+				throw new RuntimeException(e);
+			}
+			Patch patch = XmlPatcherUtil.getUnmarshalledPatch(serviceContext,
+					ampPatch, log);
+			boolean success = false;
+			if (patch != null) {
+				if (ampPatch.getState().equals(
+						XmlPatcherConstants.PatchStates.FAILED)
+						&& !patch.isRetryOnFail()) {
+					logger.info("Skipping failed patch "
+							+ ampPatch.getPatchId());
 					continue;
 				}
-				XmlPatcherWorker<?,?>patcherWorker = XmlPatcherWorkerFactory.createWorker(patch,null, log);
-				success= patcherWorker.run();
+				XmlPatcherWorker<?, ?> patcherWorker = XmlPatcherWorkerFactory
+						.createWorker(patch, null, log);
+				success = patcherWorker.run();
 			}
-			if(success) {
-				ampPatch.setState(XmlPatcherConstants.PatchStates.CLOSED); 
-			} else 
-				if(log.getError()) ampPatch.setState(XmlPatcherConstants.PatchStates.FAILED);
-			
-			DbUtil.add(log);
+			if (success) {
+				logger.info("Succesfully applied patch "
+						+ ampPatch.getPatchId());
+				ampPatch.setState(XmlPatcherConstants.PatchStates.CLOSED);
+			} else if (log.getError()) {
+				logger.info("Failed to apply patch " + ampPatch.getPatchId());
+				ampPatch.setState(XmlPatcherConstants.PatchStates.FAILED);
+			} else
+				logger.info("Will not apply " + ampPatch.getPatchId()
+						+ " due to conditions not met.");
+
+			log.setElapsed(System.currentTimeMillis() - timeStart);
+			XmlPatcherUtil.addLogToPatch(ampPatch, log);
 			DbUtil.update(ampPatch);
 		}
 	}
-	
+
 	@Override
 	public void processInitEvent(ServiceContext serviceContext)
 			throws ServiceException {
 		try {
 			performPatchDiscovery(serviceContext.getRealPath("/"));
-			
+
 			List<AmpXmlPatch> rawPatches = XmlPatcherUtil
 					.getAllDiscoveredUnclosedPatches();
 			scheduler = (XmlPatcherScheduler) Class.forName(
@@ -115,39 +145,12 @@ public class XmlPatcherService extends AbstractServiceImpl {
 					schedulerProperties, rawPatches });
 			Collection<AmpXmlPatch> scheduledPatches = scheduler
 					.getScheduledPatchCollection();
-		
-			processUnclosedPatches(scheduledPatches,serviceContext);
-			
-		} catch (DgException e) {
+
+			processUnclosedPatches(scheduledPatches, serviceContext);
+
+		} catch(Exception e) {
 			logger.error(e);
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			logger
-					.error("Cannot instantiate the specified scheduler. Please check digi.xml and specify a valid scheduler name");
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			logger.error(e);
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			logger
-					.error("Cannot find the specified scheduler. Please check digi.xml and specify a valid class name");
-			e.printStackTrace();
-		} catch (HibernateException e) {
-			logger.error(e);
-			e.printStackTrace();
-		} catch (SQLException e) {
-			logger.error(e);
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			logger
-					.error("Use only one constructor in the scheduler, with the same signature as its superclass");
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			logger.error(e);
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			logger.error(e);
-			e.printStackTrace();
+			throw new ServiceException(e);
 		}
 	}
 

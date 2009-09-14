@@ -14,7 +14,6 @@ public class AllReportTest {
 		TestSuite suite = new TestSuite();
 		suite.addTestSuite(TestReportWizard.class);
 		suite.addTestSuite(ExpressionsTest.class);
-		suite.addTestSuite(ComputedColumnsTest.class);
 		return suite;
 	}
 

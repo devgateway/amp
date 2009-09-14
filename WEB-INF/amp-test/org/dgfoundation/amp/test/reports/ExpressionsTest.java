@@ -21,7 +21,7 @@ public class ExpressionsTest extends TestCase {
 		values.put(ArConstants.PROPOSED_COMPLETION_DATE_VALUE, new BigDecimal(nowminus10days));
 		values.put(ArConstants.CURRENT_DATE_VALUE, new BigDecimal(now));
 
-		assertEquals(new BigDecimal(10), MathExpressionRepository.get(MathExpressionRepository.OVERAGE_PROJECT_KEY).result(values));
+		assertEquals(new BigDecimal(10), MathExpressionRepository.get(MathExpressionRepository.OVERAGE_PROJECT).result(values));
 	}
 
 	// Current Date - Actual Start Date
@@ -35,7 +35,7 @@ public class ExpressionsTest extends TestCase {
 		values.put(ArConstants.ACTUAL_START_DATE_VALUE, new BigDecimal(nowminus10days));
 		values.put(ArConstants.CURRENT_DATE_VALUE, new BigDecimal(now));
 
-		assertEquals(new BigDecimal(10), MathExpressionRepository.get(MathExpressionRepository.AGE_OF_PROJECT_KEY).result(values));
+		assertEquals(new BigDecimal(10), MathExpressionRepository.get(MathExpressionRepository.AGE_OF_PROJECT).result(values));
 	}
 
 	// ((Actual Disbursements - planned Disbursements)/planned disbursements) X
@@ -46,7 +46,7 @@ public class ExpressionsTest extends TestCase {
 		values.put(ArConstants.ACTUAL_DISBURSEMENT, new BigDecimal(100000));
 		values.put(ArConstants.PLANNED_DISBURSEMENT, new BigDecimal(500000));
 
-		assertEquals(-80L, MathExpressionRepository.get(MathExpressionRepository.PREDICTABILITY_OF_FUNDING_KEY).result(values).longValue());
+		assertEquals(-80L, MathExpressionRepository.get(MathExpressionRepository.PREDICTABILITY_OF_FUNDING).result(values).longValue());
 	}
 
 	public void testAverageSizeofProjects() {
@@ -55,7 +55,7 @@ public class ExpressionsTest extends TestCase {
 		values.put(ArConstants.TOTAL_COMMITMENTS, new BigDecimal(100000));
 		values.put(ArConstants.COUNT_PROJECTS, new BigDecimal(10));
 		// Total commitments/Count Of Activities
-		assertEquals(10000L, MathExpressionRepository.get(MathExpressionRepository.AVERAGE_SIZE_OF_PROJECT_KEY).result(values).longValue());
+		assertEquals(10000L, MathExpressionRepository.get(MathExpressionRepository.AVERAGE_SIZE_OF_PROJECT).result(values).longValue());
 	}
 
 	public void testActualCommitmentsVariance() {
@@ -64,7 +64,7 @@ public class ExpressionsTest extends TestCase {
 		values.put(ArConstants.MAX_ACTUAL_COMMITMENT, new BigDecimal(100000));
 		values.put(ArConstants.MIN_ACTUAL_COMMITMENT, new BigDecimal(50000));
 		// Total commitments/Count Of Activities
-		assertEquals(50000L, MathExpressionRepository.get(MathExpressionRepository.VARIANCE_ACTUAL_COMMITMENTS_KEY).result(values).longValue());
+		assertEquals(50000L, MathExpressionRepository.get(MathExpressionRepository.VARIANCE_ACTUAL_COMMITMENTS).result(values).longValue());
 	}
 
 	public void testActualDisbursmentVariance() {
@@ -73,6 +73,6 @@ public class ExpressionsTest extends TestCase {
 		values.put(ArConstants.MAX_ACTUAL_DISBURSEMENT, new BigDecimal(100000));
 		values.put(ArConstants.MIN_ACTUAL_DISBURSEMENT, new BigDecimal(50000));
 		// Total commitments/Count Of Activities
-		assertEquals(50000L, MathExpressionRepository.get(MathExpressionRepository.VARIANCE_ACTUAL_DISBURSEMENTS_KEY).result(values).longValue());
+		assertEquals(50000L, MathExpressionRepository.get(MathExpressionRepository.VARIANCE_ACTUAL_DISBURSEMENTS).result(values).longValue());
 	}
 }

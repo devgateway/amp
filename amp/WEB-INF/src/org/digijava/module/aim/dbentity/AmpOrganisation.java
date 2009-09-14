@@ -57,20 +57,20 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
         private Set<AmpOrganisation> recipients;
         private Set<AmpContact> contacts;
         private String addressAbroad;
-        private Long taxNumber;
+        private String taxNumber;
         private String primaryPurpose;
         private String minPlanRegNumb;
         private String legalPersonNum;
         private Date legalPersonRegDate;
         private Date minPlanRegDate;
-        private Set<AmpOrganizationInformation> organizationInfos;
+        private Set<AmpOrganizationBudgetInformation> organizationBudgetInfos;
 
-        public Set<AmpOrganizationInformation> getOrganizationInfos() {
-            return organizationInfos;
+        public Set<AmpOrganizationBudgetInformation> getOrganizationBudgetInfos() {
+            return organizationBudgetInfos;
         }
 
-        public void setOrganizationInfos(Set<AmpOrganizationInformation> organizationInfos) {
-            this.organizationInfos = organizationInfos;
+        public void setOrganizationBudgetInfos(Set<AmpOrganizationBudgetInformation> organizationBudgetInfos) {
+            this.organizationBudgetInfos = organizationBudgetInfos;
         }
         public AmpCategoryValue getImplemLocationLevel() {
             return implemLocationLevel;
@@ -166,11 +166,11 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
             this.staffInfos = staffInfos;
         }
 
-        public Long getTaxNumber() {
+        public String getTaxNumber() {
             return taxNumber;
         }
 
-        public void setTaxNumber(Long taxNumber) {
+        public void setTaxNumber(String taxNumber) {
             this.taxNumber = taxNumber;
         }
        

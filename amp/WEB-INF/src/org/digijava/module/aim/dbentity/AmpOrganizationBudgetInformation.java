@@ -6,7 +6,7 @@ import java.io.Serializable;
 import org.digijava.module.aim.helper.Constants;
 
 
-public class AmpOrganizationInformation implements Serializable{
+public class AmpOrganizationBudgetInformation implements Serializable{
     private Long id;
     private Integer type;
     private Long year;
@@ -80,7 +80,7 @@ public class AmpOrganizationInformation implements Serializable{
     public void setYear(Long year) {
         this.year = year;
     }
-    
+
     public String getName() {
         String name = "";
         if (type == Constants.ORG_INFO_TYPE_ANNUAL_BUDGET_ADMIN) {

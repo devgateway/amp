@@ -57,7 +57,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.hibernate.JDBCException;
-import org.digijava.module.aim.dbentity.AmpOrganizationInformation;
+import org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation;
 
 public class EditOrganisation extends DispatchAction {
 
@@ -189,8 +189,8 @@ public class EditOrganisation extends DispatchAction {
             if (organization.getStaffInfos() != null) {
                 editForm.setStaff(new ArrayList(organization.getStaffInfos()));
             }
-            if (organization.getOrganizationInfos() != null) {
-                editForm.setOrgInfos(new ArrayList(organization.getOrganizationInfos()));
+            if (organization.getOrganizationBudgetInfos() != null) {
+                editForm.setOrgInfos(new ArrayList(organization.getOrganizationBudgetInfos()));
             }
             editForm.setOrgPrimaryPurpose(organization.getPrimaryPurpose());
             if (organization.getMinPlanRegNumb() != null) {
@@ -209,9 +209,9 @@ public class EditOrganisation extends DispatchAction {
             if (organization.getCountry() != null) {
                 editForm.setCountryId(organization.getCountry().getId());
             }
-            if (organization.getTaxNumber() != null) {
-                editForm.setTaxNumber(organization.getTaxNumber().toString());
-            }
+          
+            editForm.setTaxNumber(organization.getTaxNumber());
+            
             editForm.setAddressAbroad(organization.getAddressAbroad());
             if (organization.getImplemLocationLevel() != null) {
                 editForm.setImplemLocationLevel(organization.getImplemLocationLevel().getId());
@@ -482,11 +482,11 @@ public class EditOrganisation extends DispatchAction {
             return mapping.findForward("index");
         }
         AddOrgForm editForm = (AddOrgForm) form;
-        List<AmpOrganizationInformation> orgInfos = editForm.getOrgInfos();
+        List<AmpOrganizationBudgetInformation> orgInfos = editForm.getOrgInfos();
         if (orgInfos == null) {
-            orgInfos = new ArrayList<AmpOrganizationInformation>();
+            orgInfos = new ArrayList<AmpOrganizationBudgetInformation>();
         }
-        AmpOrganizationInformation info = new AmpOrganizationInformation();
+        AmpOrganizationBudgetInformation info = new AmpOrganizationBudgetInformation();
         info.setYear(Long.parseLong(editForm.getOrgInfoSelectedYear()));
         info.setType(editForm.getOrgInfoType());
         String percent=editForm.getOrgInfoPercent();
@@ -525,12 +525,12 @@ public class EditOrganisation extends DispatchAction {
         } else {
             ids = editForm.getSelectedOrgInfoIds();
         }
-        List<AmpOrganizationInformation> orgInfos = editForm.getOrgInfos();
-        List<AmpOrganizationInformation> orgInfosToDelete = new ArrayList<AmpOrganizationInformation>();
+        List<AmpOrganizationBudgetInformation> orgInfos = editForm.getOrgInfos();
+        List<AmpOrganizationBudgetInformation> orgInfosToDelete = new ArrayList<AmpOrganizationBudgetInformation>();
         for (Long id : ids) {
-            Iterator<AmpOrganizationInformation> orgInfoIter = orgInfos.iterator();
+            Iterator<AmpOrganizationBudgetInformation> orgInfoIter = orgInfos.iterator();
             while (orgInfoIter.hasNext()) {
-                AmpOrganizationInformation info = orgInfoIter.next();
+                AmpOrganizationBudgetInformation info = orgInfoIter.next();
                 if (info.getId().equals(id)) {
                     orgInfosToDelete.add(info);
                     break;
@@ -837,7 +837,7 @@ public class EditOrganisation extends DispatchAction {
         }
 
         if (editForm.getTaxNumber() != null && !editForm.getTaxNumber().equals("")) {
-            organization.setTaxNumber(Long.parseLong(editForm.getTaxNumber()));
+            organization.setTaxNumber(editForm.getTaxNumber());
         }
 
         // contacts
@@ -890,22 +890,22 @@ public class EditOrganisation extends DispatchAction {
         }
 
          // organization information
-        if (organization.getOrganizationInfos() == null) {
-            organization.setOrganizationInfos(new HashSet<AmpOrganizationInformation>());
+        if (organization.getOrganizationBudgetInfos() == null) {
+            organization.setOrganizationBudgetInfos(new HashSet<AmpOrganizationBudgetInformation>());
         }
 
         if (editForm.getOrgInfos() != null) {
-            Iterator<AmpOrganizationInformation> infoIter = editForm.getOrgInfos().iterator();
-            Set<AmpOrganizationInformation> infosOrg = new HashSet<AmpOrganizationInformation>();
-            Set<AmpOrganizationInformation> infosOrgToRetain = new HashSet<AmpOrganizationInformation>();
+            Iterator<AmpOrganizationBudgetInformation> infoIter = editForm.getOrgInfos().iterator();
+            Set<AmpOrganizationBudgetInformation> infosOrg = new HashSet<AmpOrganizationBudgetInformation>();
+            Set<AmpOrganizationBudgetInformation> infosOrgToRetain = new HashSet<AmpOrganizationBudgetInformation>();
             while (infoIter.hasNext()) {
-                AmpOrganizationInformation info = infoIter.next();
+                AmpOrganizationBudgetInformation info = infoIter.next();
                 if (!info.isNewlyCreated()) {
-                    AmpOrganizationInformation newInfo = (AmpOrganizationInformation) DbUtil.get(AmpOrganizationInformation.class, info.getId());
+                    AmpOrganizationBudgetInformation newInfo = (AmpOrganizationBudgetInformation) DbUtil.get(AmpOrganizationBudgetInformation.class, info.getId());
                     infosOrgToRetain.add(newInfo);
                     continue;
                 }
-                AmpOrganizationInformation newInfo = new AmpOrganizationInformation();
+                AmpOrganizationBudgetInformation newInfo = new AmpOrganizationBudgetInformation();
                 newInfo.setOrganization(organization);
                 newInfo.setYear(info.getYear());
                 newInfo.setType(info.getType());
@@ -914,8 +914,8 @@ public class EditOrganisation extends DispatchAction {
                 newInfo.setAmount(info.getAmount());
                 infosOrg.add(newInfo);
             }
-            organization.getOrganizationInfos().retainAll(infosOrgToRetain);
-            organization.getOrganizationInfos().addAll(infosOrg);
+            organization.getOrganizationBudgetInfos().retainAll(infosOrgToRetain);
+            organization.getOrganizationBudgetInfos().addAll(infosOrg);
         }
 
         //Sectors

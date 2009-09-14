@@ -13,9 +13,9 @@ import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpOrgStaffInformation;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpOrganisationDocument;
+import org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.Pledge;
-import org.digijava.module.aim.dbentity.AmpOrganizationInformation;
 
 public class AddOrgForm extends ActionForm {
 
@@ -72,7 +72,7 @@ public class AddOrgForm extends ActionForm {
     private long transIndexId;
     private String orgPrimaryPurpose;
     private List<AmpOrgStaffInformation> staff = null;
-    private List<AmpOrganizationInformation> orgInfos = null;
+    private List<AmpOrganizationBudgetInformation> orgInfos = null;
     private List<LabelValueBean> years;
     private Long typeOfStaff;
     private String numberOfStaff;
@@ -161,11 +161,11 @@ public class AddOrgForm extends ActionForm {
     }
 
 
-    public List<AmpOrganizationInformation> getOrgInfos() {
+    public List<AmpOrganizationBudgetInformation> getOrgInfos() {
         return orgInfos;
     }
 
-    public void setOrgInfos(List<AmpOrganizationInformation> orgInfos) {
+    public void setOrgInfos(List<AmpOrganizationBudgetInformation> orgInfos) {
         this.orgInfos = orgInfos;
     }
 

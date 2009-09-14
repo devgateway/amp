@@ -52,7 +52,12 @@ es:
       commitments_forecast: Proyección de Compromisos {{year}}
       no_results_message: Su búsqueda no ha encontrado resultados. Por favor, intente buscar de nuevo con diferente criterio.
       disclaimer: Los reportes en ODAnic versión 2.6c reflejan los montos totales de los proyectos individuales, por lo tanto no dividen por sector, ubicación, o Objetivo de Desarrollo del Milenio.
-        
+      # TODO: Translation
+      disaggregation:
+        title: Disaggregation
+        by_sector: Disaggregate Fundings by DAC-CRS Sector
+        by_location: Disaggregate Fundings by Location
+          
       donors:
         index:
           title: Proyectos por Donantes
@@ -99,6 +104,8 @@ es:
           output_in: Salida en 
           select_all: Seleccionar Todos
           deselect_all: Deseleccionar Todos
+        show:
+          title: Reporte Personalizado
       totals:
           payments: Desembolsos totales por Donantes
           commitments: Compromisos totales por Donantes

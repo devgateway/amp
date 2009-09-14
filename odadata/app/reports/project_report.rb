@@ -1,13 +1,15 @@
 module Reports  
   class ProjectReport < Ruport::Controller::Table
+    AGGREGATEABLE_COLS = [:total_commitments, :total_disbursements, :commitments_forecast, :disbursements_forecast, :total_cofunding]
+    
     prepare :columns
-    stage :format_columns, :table_header, :table_body, :table_footer
+    stage :format_columns, :table_structure, :table_header, :table_body, :table_footer, :output
     
     def setup
       self.data ||= ProjectAggregator.new(options).data
     end
     
-    class HTML < Ruport::Formatter::HTML
+    class ProjectFormatter < Ruport::Formatter
       include Ruport::Extras::ColumnFormatter
       extend ActionView::Helpers::TagHelper
       extend ActionView::Helpers::UrlHelper
@@ -16,6 +18,30 @@ module Reports
       extend ReportsHelper
       extend I18nHelper
       
+      format_column(:grant_loan) { |r| option_text_by_id(Project::GRANT_LOAN_OPTIONS, r) }
+      format_column(:prj_status) { |r| option_text_by_id(Project::STATUS_OPTIONS, r) }
+      format_column(:national_regional) { |r| option_text_by_id(Project::NATIONAL_REGIONAL_OPTIONS, r) }
+      format_column(:type_of_implementation) { |r| option_text_by_id(Project::IMPLEMENTATION_TYPES, r) }
+      
+    protected
+      def localized_heading_for(column)
+        I18n.t(column.to_s, :scope => 'reports.project', :default => Project.human_attribute_name(column.to_s))
+      end
+      
+      def build_totals
+        fields = AGGREGATEABLE_COLS.select { |f| data.column_names.include?(f) }
+        totals_rec = Ruport::Data::Record.new([], :attributes => data.column_names)
+        # TODO: Translation
+        totals_rec[data.column_names.first] = "TOTAL"
+        fields.each do |f|
+          totals_rec[f] = data.column(f).sum
+        end
+                
+        totals_rec
+      end
+    end
+      
+    class HTML < ProjectFormatter
       renders :html, :for => [ProjectReport]
       
       format_column(:factsheet_link) { |r| %{<a href="/projects/#{r}"><img src="/images/details.gif" width="10" height="14" alt="Factsheet" /></a>} }
@@ -26,10 +52,6 @@ module Reports
       format_column(:contracted_agencies) { |r| format_as_html_list(r.map(&:name)) }
       format_column(:mdgs) { |r| format_as_html_list(r.map(&:name), :class => 'fatlist') }
       format_column(:website) { |r| r.to_link }
-      format_column(:grant_loan) { |r| option_text_by_id(Project::GRANT_LOAN_OPTIONS, r) }
-      format_column(:prj_status) { |r| option_text_by_id(Project::STATUS_OPTIONS, r) }
-      format_column(:national_regional) { |r| option_text_by_id(Project::NATIONAL_REGIONAL_OPTIONS, r) }
-      format_column(:type_of_implementation) { |r| option_text_by_id(Project::IMPLEMENTATION_TYPES, r) }
       # TODO: Translation
       format_column(:focal_regions) { |r| r.empty? ? I18n.t('options.national') :  r.map(&:name).sort.join("<br />") }
       format_column(:country_strategy) do |r| 
@@ -44,14 +66,15 @@ module Reports
       end
       
       build :table_header do
-        output << "<table><tr>"
+        output << '<table class="sortable"><thead><tr>'
         data.column_names.each do |c|
-          output << "<th>" + Project.human_attribute_name(c.to_s) + "</th>"
+          output << "<th>" + localized_heading_for(c) + "</th>"
         end
-        output << "</tr>"
+        output << "</thead></tr>"
       end
 
       build :table_body do
+        output << "<tbody>"
         data.each do |record|
           output << "<tr>"
           record.each do |c|
@@ -63,16 +86,18 @@ module Reports
           end
           output << "</tr>"
         end
+        output << "</tbody>"
       end
-
+       
       build :table_footer do
+        output << '<tr class="totals">' 
+        output << build_totals.map { |t| %{<td class="currency right">#{t}</td>} }.join
+        output << '</tr>'
         output << "</table>"
-      end
+      end      
     end
 
-    class Excel < Ruport::Formatter
-      include Ruport::Extras::ColumnFormatter
-      
+    class Excel < ProjectFormatter
       renders :xls, :for => [ProjectReport]
       OFFSET_TOP = 0
       OFFSET_LEFT = 0
@@ -80,62 +105,47 @@ module Reports
       format_column(:implementing_agencies) { |r| r.map(&:name).join(', ') }
       format_column(:contracted_agencies) { |r| r.map(&:name).join(', ') }
       format_column(:mdgs) { |r| r.map(&:name).join(', ') }
-      format_column(:grant_loan) { |r| option_text_by_id(Project::GRANT_LOAN_OPTIONS, r) }
-      format_column(:prj_status) { |r| option_text_by_id(Project::STATUS_OPTIONS, r) }
-      format_column(:national_regional) { |r| option_text_by_id(Project::NATIONAL_REGIONAL_OPTIONS, r) }
-      format_column(:type_of_implementation) { |r| option_text_by_id(Project::IMPLEMENTATION_TYPES, r) }
       format_column(:country_strategy) { |r| r.strategy_number }
-      format_column(:focal_regions) { |r| r.empty? ? I18n.t('options.national') :  r.map(&:name).sort.join("<br />") }
+      format_column(:focal_regions) { |r| r.empty? ? I18n.t('options.national') :  r.map(&:name).sort.join(", ") }
       format_column(:sectors) do |r| 
-        r.map { |sr| "#{sr.sector.name_with_code} (#{sr.amount}%)" }.join('\n')
-      end
-      
-      def setup_excel
-        @workbook = Spreadsheet::Workbook.new
-        @worksheet = @workbook.add_worksheet(Spreadsheet::Worksheet.new(:name => "ODAnic Custom Report"))
+        r.map { |sr| "#{sr.sector.name_with_code} (#{sr.amount}%)" }.join(', ')
       end
       
       def prepare_columns
         # Remove factsheet link
         data.remove_column(:factsheet_link)
       end
-
+      
+      build :table_structure do 
+        @workbook = Spreadsheet::Workbook.new
+        @worksheet = @workbook.add_worksheet(Spreadsheet::Worksheet.new(:name => "ODAnic Custom Report"))
+      end
+      
       build :table_header do   
-        headings = data.column_names
-        @worksheet.write_row(OFFSET_TOP, OFFSET_LEFT, encode_row_for_excel(headings), @workbook.add_format(:color => "blue", :bold => 1))
+        headings = data.column_names.map { |h| localized_heading_for(h) }
+        @worksheet.insert_row(OFFSET_TOP, encode_row_for_excel(headings))
       end
 
       build :table_body do
-        data.each_row_with_offset do |row, offset|
-          @worksheet.write_row(OFFSET_TOP + 1 + offset, OFFSET_LEFT, encode_row_for_excel(row))
+        data.each_with_index do |row, offset|
+          @worksheet.insert_row(OFFSET_TOP + 1 + offset, encode_row_for_excel(row))
         end
       end
-
-      def output_totals
-        totals = []
-        data.each_column do |col|
-          totals << (col.has_total? ? col.total.to_s(false) : "")
-        end
-
-        @worksheet.write_row(OFFSET_TOP  + 1 + data.length, OFFSET_LEFT, encode_row_for_excel(totals), @workbook.add_format(:bold => 1))
+      
+      build :table_footer do
+        @worksheet.insert_row(OFFSET_TOP + 1 + data.length, encode_row_for_excel(build_totals))
       end
-
-      def output    
-        setup_excel
-        output_head
-        output_body
-        output_totals
-
-        @workbook.close
-        return @file
+      
+      build :output do 
+        buffer = StringIO.new
+        @workbook.write(buffer)
+        
+        output << buffer.string
       end
-
-    protected
+      
+    private
       # Changes encoding to ISO-8859-1, the only compatible encoding for our spreadsheet generator
       def encode_row_for_excel(row)
-        # Strip characters that are not encodeable with ISO-8859-1 first
-        allowed =/[^#{Regexp.escape(Iconv.iconv('utf-8', 'iso-8859-1', [*0..255].pack("C*")).first)}]/u
-
         # Convert
         row.map do |cell| 
           # If this is a currency object convert to string without unit identifier
@@ -144,10 +154,10 @@ module Reports
           else
             str_repr = cell.to_s
             #str_repr = cell.is_a?(MultiCurrency::ConvertibleCurrency) ? cell.to_s(false) : cell.to_s
-            Iconv.iconv('ISO-8859-1', 'utf-8', str_repr.gsub(allowed, "")).first
           end
         end
       end
     end
+
   end
 end

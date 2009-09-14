@@ -29,12 +29,13 @@ class Reports::CustomController < ReportsController
     projects = Project.published.ordered.all(
       :include => [:mdg_relevances, :donor, :sector_relevances, :geo_relevances, :fundings], 
       :conditions => sql_conditions_from_params)
+      
     fields = output_fields_from_params
     disaggregators = disaggregators_from_params
     data = Reports::ProjectAggregator.new(:fields => fields, :projects => projects, :middleware => disaggregators_from_params).data
     
     report = ComplexReport.create!(:data => data)
-    redirect_to formatted_reports_custom_path(report)
+    redirect_to reports_custom_path(report, :format => params[:format], :currency => "EUR")
   end
   
   def show
@@ -42,7 +43,10 @@ class Reports::CustomController < ReportsController
     
     respond_to do |wants|
       wants.html { render :layout => 'report_window' }
-      wants.xls { Reports::ProjectReport.render_xls(:data => @data) }
+      wants.xls do
+        buffer = Reports::ProjectReport.render_xls(:data => @data)
+        send_data buffer, :filename => "custom-report-#{params[:id]}.xls"
+      end
     end
   end
   
@@ -51,7 +55,7 @@ protected
   def output_fields_from_params
     options = params[:query_options]
     options.delete_if {|k,v| v.to_i == 0 if v.respond_to?(:to_i)}
-    options.sort_by {|k,v| v.to_i }.map { |e| e[0] }
+    options.sort_by {|k,v| v.to_i }.map { |e| e[0].to_sym }
   end
   
   # Parse required disaggregation middleware

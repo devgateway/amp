@@ -108,7 +108,7 @@
 		</ul>
 		
 		<ul class="checkbox_container">
-			<h3><span style="float:left"><%= ll(:reports, :disaggregation) %></span><span class="link" onclick="toggleAll('disaggregation', '<%= lc(:select_all) %>', '<%= lc(:deselect_all) %>')" id="disaggregation_toggle" selected="false"><%= lc(:select_all) %></span></h3>
+			<h3><span style="float:left"><%= I18n.t('reports.disaggregation.title') %></span><span class="link" onclick="toggleAll('disaggregation', '<%= lc(:select_all) %>', '<%= lc(:deselect_all) %>')" id="disaggregation_toggle" selected="false"><%= lc(:select_all) %></span></h3>
 			<li><%= check_box "disaggregation", "sector", :checked => false %><%= I18n.t('reports.disaggregation.by_sector') %></li>
 			<li><%= check_box "disaggregation", "location", :checked => false %><%= I18n.t('reports.disaggregation.by_location') %></li>
 		</ul>

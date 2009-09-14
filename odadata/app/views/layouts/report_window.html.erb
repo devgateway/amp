@@ -16,9 +16,12 @@
 	</head>
 
 	<body class="public">
-		<div style="text-align: right; margin-top: 10px; margin-bottom: 5px;width:892px;"></div>
+		<div style="position: absolute; right: 30px; top: 13px">
+    		<%= render :partial => '/layouts/currency_selector' %>
+  		</div>
+
 		<div id="content">
-				<%= yield %>
+			<%= yield %>
 		</div>
 		
 		<%= render :partial => 'layouts/footer' %>		

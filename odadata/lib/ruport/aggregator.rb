@@ -21,7 +21,9 @@ class Ruport::Aggregator
   end
   
   def data
-    Table(@fields) do |t|
+    prepare if self.respond_to?(:prepare)
+    
+    @table = Table(@fields) do |t|
       @records.each do |r|
         record = {}
         @fields.each { |f| record[f] = get_value(r, f) }
@@ -29,6 +31,9 @@ class Ruport::Aggregator
         t << record
       end
     end
+    
+    finalize if self.respond_to?(:finalize)
+    @table
   end
   
 protected

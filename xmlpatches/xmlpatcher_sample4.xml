@@ -9,7 +9,7 @@
 	<author>author</author>
 	<description>description</description>
 	<trigger type="all">
-		<condition type="appliedPatch"/>
+		<condition type="appliedPatch">xmlpatcher_sample2.xml</condition>
 		<condition type="custom">
 			<script returnVar="y">
 			<lang type="sql">SELECT count(*) from amp_activity</lang>

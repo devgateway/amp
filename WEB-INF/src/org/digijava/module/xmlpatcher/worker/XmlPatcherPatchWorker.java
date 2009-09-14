@@ -14,6 +14,7 @@ import org.digijava.module.xmlpatcher.exception.XmlPatcherWorkerException;
 import org.digijava.module.xmlpatcher.jaxb.Patch;
 import org.digijava.module.xmlpatcher.jaxb.Script;
 import org.digijava.module.xmlpatcher.jaxb.ScriptGroup;
+import org.digijava.module.xmlpatcher.jaxb.Trigger;
 
 /**
  * XmlPatcherPatchWorker
@@ -55,8 +56,11 @@ public class XmlPatcherPatchWorker extends XmlPatcherWorker<Patch,Object> {
 	 */
 	@Override
 	protected boolean runTimeCheck() throws XmlPatcherWorkerException {
-		// TODO Auto-generated method stub
-		return true;
+		Trigger trigger = getEntity().getTrigger();
+		if(trigger==null) return true;
+		XmlPatcherWorker<?,?> worker = XmlPatcherWorkerFactory.createWorker(trigger,entity, log);
+		if(!worker.run()) return false;
+		return (Boolean) worker.getReturnValue();
 	}
 
 }

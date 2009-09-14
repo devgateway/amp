@@ -17,11 +17,10 @@
         <property name="state" type="java.lang.Short">
             <column name="state" />
         </property>
-        <list name="logs" inverse="false" table="AMP_XML_PATCH_LOG" lazy="true">
-            <key>
-                <column name="id" />
-            </key>
-            <index />
+        <list name="logs" inverse="false" table="AMP_XML_PATCH_LOG" lazy="true" cascade="all">
+        	<cache usage="read-write"/>
+            <key column="patch_id"/>
+            <index column="idx"/>
             <one-to-many class="org.digijava.module.xmlpatcher.dbentity.AmpXmlPatchLog" />
         </list>
     </class>

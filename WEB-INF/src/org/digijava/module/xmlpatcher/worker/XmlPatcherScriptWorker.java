@@ -41,8 +41,9 @@ public class XmlPatcherScriptWorker extends XmlPatcherWorker<Script,Object> {
 				continue;
 			XmlPatcherWorker<?, ?> worker = XmlPatcherWorkerFactory.createWorker(
 					next, entity, log);
-			if (worker.run())
-				return true;
+			if (!worker.run())
+				return false;
+			returnValue=worker.getReturnValue();
 		}
 		// if we reached here, it means we were unable to find any non-generic
 		// language to execute
@@ -52,7 +53,9 @@ public class XmlPatcherScriptWorker extends XmlPatcherWorker<Script,Object> {
 		XmlPatcherWorker<?,?> worker = XmlPatcherWorkerFactory.createWorker(generic, entity,
 				log);
 		
-		return worker.run();
+		if(!worker.run()) return false;
+		returnValue=worker.getReturnValue();
+		return true;
 	}
 
 	@Override

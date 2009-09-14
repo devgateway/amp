@@ -1,11 +1,7 @@
 package org.digijava.module.autopatcher.core;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.math.BigInteger;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,6 +12,7 @@ import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.digijava.module.autopatcher.exceptions.InvalidPatchRepositoryException;
+import org.digijava.module.xmlpatcher.util.XmlPatcherUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -44,25 +41,13 @@ public class PatcherUtil {
 	
 	}
 	
+	/**
+	 * @deprecated Use {@link XmlPatcherUtil#getFileMD5(File)} instead
+	 */
 	public static String getFileMD5(File f) throws NoSuchAlgorithmException,
 			IOException {
-		MessageDigest algorithm = MessageDigest.getInstance("MD5");
-		algorithm.reset();
-
-		BufferedInputStream bis = new BufferedInputStream(
-				new FileInputStream(f));
-
-		byte[] buffer = new byte[8192];
-		int read = 0;
-		while ((read = bis.read(buffer)) > 0) {
-			algorithm.update(buffer, 0, read);
-		}
-		bis.close();
-		byte[] md5sum = algorithm.digest();
-		BigInteger bigInt = new BigInteger(1, md5sum);
-		String md5 = bigInt.toString(16);
-		return md5;
-	}
+				return XmlPatcherUtil.getFileMD5(f);
+			}
 
 	public static Collection<File> getAllPatchesFiles(String abstractPatchesLocation)
 			throws InvalidPatchRepositoryException {

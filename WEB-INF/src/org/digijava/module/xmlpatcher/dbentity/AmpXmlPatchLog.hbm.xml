@@ -5,8 +5,7 @@
 <hibernate-mapping>
     <class name="org.digijava.module.xmlpatcher.dbentity.AmpXmlPatchLog" table="AMP_XML_PATCH_LOG">
     <cache usage="read-write" />
-        <id name="id" type="java.lang.Long">
-            <column name="id" />
+        <id name="id" type="java.lang.Long" unsaved-value="null" column="id">
             <generator class="native">
             	<param name="sequence">AMP_XML_PATCH_LOG_seq</param>
             </generator>

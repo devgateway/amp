@@ -6,7 +6,6 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/acegi-security-1.0.1.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/acegi-security-cas-1.0.1.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/activation.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/aggregates.dtd"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/antlr-2.7.6.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/asm-attrs.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/asm.jar"/>
@@ -92,7 +91,6 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/lucene-core-2.0.0.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/mail.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/mondrian-jdk14.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/mondrian.dtd"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/mondrian.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/odmg.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/olap4j-jdk14.jar"/>
@@ -101,7 +99,6 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/poi-contrib-3.0.2-FINAL-20080204.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/poi-scratchpad-3.0.2-FINAL-20080204.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/quartz-1.6.5.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/README.txt"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/relaxngDatatype.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/retroweaver-rt.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/rowset.jar"/>

@@ -723,8 +723,8 @@
 
                                                             <tr>
                                                                 <td colspan="5">
-                                                                    <c:if test="${fn:length(aimAddOrgForm.staff)>9}">
-                                                                        <div style="overflow: auto; width: 100%; height: 180px;">
+                                                                    <c:if test="${fn:length(aimAddOrgForm.staff)>1}">
+                                                                        <div style="overflow: scroll; width: 100%; height: 100px;">
                                                                         </c:if>
                                                                         <table width="100%" cellspacing="0" cellpadding="0" id="staffTable">
                                                                             <c:forEach var="info" items="${aimAddOrgForm.staff}" >
@@ -741,7 +741,7 @@
                                                                                 </tr>
                                                                             </c:forEach>
                                                                         </table>
-                                                                        <c:if test="${fn:length(aimAddOrgForm.staff)>9}">
+                                                                        <c:if test="${fn:length(aimAddOrgForm.staff)>1}">
                                                                         </div>
                                                                     </c:if>
                                                                 </td>
@@ -947,7 +947,7 @@
                                                     <tr>
                                                         <td><digi:trn>Tax Number</digi:trn></td>
                                                         <td>
-                                                            <html:text property="taxNumber" onkeyup="fnChk(this,true)"/>
+                                                            <html:text property="taxNumber"/>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -1024,7 +1024,7 @@
                 <tr>
                     <td colspan="2">
                         <fieldset>
-                            <legend align="left"><digi:trn>Organization Infomation</digi:trn></legend>
+                            <legend align="left"><digi:trn>Budget Information</digi:trn></legend>
                             <table cellpadding="2" cellspacing="0" border="0">
                                 <tr>
                                     <td style="width:40px;text-align:center;font-weight:bold">
@@ -1086,8 +1086,8 @@
 
                                     <tr>
                                         <td colspan="7">
-                                            <c:if test="${fn:length(aimAddOrgForm.orgInfos)>9}">
-                                                <div style="overflow: auto; width: 100%; height: 180px;">
+                                            <c:if test="${fn:length(aimAddOrgForm.orgInfos)>1}">
+                                                <div style="overflow: scroll; width: 100%; height: 100px;">
                                                 </c:if>
                                                 <table width="100%" cellspacing="0" cellpadding="0" id="orgInfosTable">
                                                     <c:forEach var="orgInfo" items="${aimAddOrgForm.orgInfos}" >
@@ -1106,7 +1106,7 @@
                                                         </tr>
                                                     </c:forEach>
                                                 </table>
-                                                <c:if test="${fn:length(aimAddOrgForm.staff)>9}">
+                                                <c:if test="${fn:length(aimAddOrgForm.staff)>1}">
                                                 </div>
                                             </c:if>
                                         </td>
@@ -1340,80 +1340,93 @@
         </td>
     </tr>
 </c:otherwise>
-
-<tr>
-    <td colspan="2"><aim:addContactButton collection="contacts" form="${aimAddOrgForm}"><digi:trn>Add contact</digi:trn></aim:addContactButton></td>
-
-</tr>
-
 </c:choose>
-<c:if test="${not empty aimAddOrgForm.contacts}">
-    <tr>
-        <td colspan="2">
-
-            <table width="100%" cellSpacing="1" cellPadding="1" align="left" id="contactsTable">
-                <tr>
-                    <td>
-                        <digi:trn>LASTNAME</digi:trn>
-                    </td>
-                    <td>
-                        <digi:trn> FIRSTNAME </digi:trn>
-                    </td>
-                    <td>
-                        <digi:trn>EMAIL </digi:trn>
-                    </td>
-                    <td>
-                        <digi:trn> TELEPHONE </digi:trn>
-                    </td>
-                    <td>
-                        <digi:trn> FAX </digi:trn>
-                    </td>
-                    <td>
-                        <digi:trn>TITLE </digi:trn>
-                    </td>
-                    <td colspan="2">
-                        &nbsp;
-                    </td>
-                </tr>
-                <c:forEach var="contact" items="${aimAddOrgForm.contacts}">
-
+<tr>
+    <td colspan="2">
+        <fieldset>
+            <legend align="left"><digi:trn>Contact Infomation</digi:trn></legend>
+            <table cellpadding="2" cellspacing="0" border="0" width="100%">
+                <c:if test="${not empty aimAddOrgForm.contacts}">
                     <tr>
-                        <td>
-                            ${contact.lastname}
-                        </td>
-                        <td>
-                            ${contact.name}
-                        </td>
-                        <td>
-                            ${contact.email}
-                        </td>
-                        <td>
-                            ${contact.phone}
-                        </td>
-                        <td>
-                            ${contact.fax}
-                        </td>
-                        <td>
-                            ${contact.title}
-                        </td>
-                        <td>
-                     
-                           <aim:editContactLink collection="contacts" form="${aimAddOrgForm}" contactId="${contact.id}">
-                                <img alt="edit" src= "../ampTemplate/images/application_edit.png" border="0"/>
-                            </aim:editContactLink>
-                        </td>
-                        <td>
-                            <a href="javascript:removeContact('${contact.id}')">
-                                <img alt="delete" src= "../ampTemplate/images/trash_12.gif" border="0"/>
-                            </a>
-                        </td>
-                    </tr>
-                </c:forEach>
+                        <td colspan="2">
+                            <c:if test="${fn:length(aimAddOrgForm.contacts)>1}">
+                                <div style="overflow: scroll; width: 100%; height: 100px;">
+                                </c:if>
+                            <table width="100%" cellSpacing="1" cellPadding="1" align="left" id="contactsTable">
+                                <tr>
+                                    <td>
+                                        <digi:trn>LASTNAME</digi:trn>
+                                    </td>
+                                    <td>
+                                        <digi:trn> FIRSTNAME </digi:trn>
+                                    </td>
+                                    <td>
+                                        <digi:trn>EMAIL </digi:trn>
+                                    </td>
+                                    <td>
+                                        <digi:trn> TELEPHONE </digi:trn>
+                                    </td>
+                                    <td>
+                                        <digi:trn> FAX </digi:trn>
+                                    </td>
+                                    <td>
+                                        <digi:trn>TITLE </digi:trn>
+                                    </td>
+                                    <td colspan="2">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <c:forEach var="contact" items="${aimAddOrgForm.contacts}">
 
-            </table>
+                                    <tr>
+                                        <td>
+                                            ${contact.lastname}
+                                        </td>
+                                        <td>
+                                            ${contact.name}
+                                        </td>
+                                        <td>
+                                            ${contact.email}
+                                        </td>
+                                        <td>
+                                            ${contact.phone}
+                                        </td>
+                                        <td>
+                                            ${contact.fax}
+                                        </td>
+                                        <td>
+                                            ${contact.title}
+                                        </td>
+                                        <td>
+
+                                    <aim:editContactLink collection="contacts" form="${aimAddOrgForm}" contactId="${contact.id}">
+                                        <img alt="edit" src= "../ampTemplate/images/application_edit.png" border="0"/>
+                                    </aim:editContactLink>
+                            </td>
+                            <td>
+                                <a href="javascript:removeContact('${contact.id}')">
+                                    <img alt="delete" src= "../ampTemplate/images/trash_12.gif" border="0"/>
+                                </a>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                       
+                 
+                </table>
+                                     <c:if test="${fn:length(aimAddOrgForm.contacts)>1}">
+                                </div>
+                                </c:if>
         </td>
     </tr>
-</c:if>
+     </c:if>
+             <tr>
+                    <td colspan="2"><aim:addContactButton collection="contacts" form="${aimAddOrgForm}"><digi:trn>Add contact</digi:trn></aim:addContactButton></td>
+                </tr>
+
+    </table>
+</fieldset>
+</td>
+</tr>
 <c:if test="${aimAddOrgForm.type!='NGO'}">
     <tr>
         <td width="169px" align="right" height="30px"><digi:trn>Organization URL</digi:trn></td>

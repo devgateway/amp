@@ -47,6 +47,7 @@ public class XmlPatcherSQLLangWorker extends XmlPatcherLangWorker {
 			Statement statement = con.createStatement();
 			ResultSet resultSet = statement.executeQuery(getEntity().getValue());
 			//ugly hard coded, get only the 1st object of the SELECT
+			if(!resultSet.next()) return true;
 			returnValue=resultSet.getObject(1);
 			return true;
 		} catch (SQLException e) {

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet href="xmlpatcher.xsl" type="text/xsl"?>
 <tns:patch closeOnSuccess="true" retryOnFail="true"
 	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
@@ -10,11 +9,12 @@
 	<description>description</description>
 	<trigger type="all">
 		<condition type="appliedPatch">xmlpatcher_sample2.xml</condition>
+		<condition type="dbName">amp_generic</condition>
 		<condition type="custom">
 			<script returnVar="y">
 			<lang type="sql">SELECT count(*) from amp_activity</lang>
 			</script>
-			<test>y==0</test>
+			<test>y.intValue()==645</test>
 		</condition>
 		<condition type="custom">
 			<script returnVar="x">
@@ -24,7 +24,7 @@
    		return new Integer(result.getName());
   		</lang>
 			</script>
-			<test>x.equals(100898)</test>
+			<test>x.intValue()==100898</test>
 		</condition>
 	</trigger>
 	<apply>

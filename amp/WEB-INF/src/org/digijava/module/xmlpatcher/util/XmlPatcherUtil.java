@@ -24,6 +24,9 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.helpers.DefaultValidationEventHandler;
+import javax.xml.bind.util.JAXBResult;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
@@ -147,7 +150,7 @@ public final class XmlPatcherUtil {
 		String[] files = dir.list();
 		for (int i = 0; i < files.length; i++) {
 			File f = new File(dir, files[i]);
-			if (f.isDirectory()) {
+			if (f.isDirectory() && !f.getName().equals("CVS") && !f.getName().equals(".svn")) {
 				if (f.getName().equals(XmlPatcherConstants.patchDirName))
 					patchDirs.add(f);
 				else
@@ -194,16 +197,18 @@ public final class XmlPatcherUtil {
 	 */
 	public static Patch getUnmarshalledPatch(ServiceContext serviceContext,
 			AmpXmlPatch p, AmpXmlPatchLog log) {
-		FileInputStream inputStream;
 		try {
-			String filePath = getXmlPatchAbsoluteFileName(p, serviceContext);
+		
 
-			logger.info("Unmarshalling " + filePath);
-			inputStream = new FileInputStream(filePath);
+			//perform XSLT transformation. See xmlpatcher.xsl
+			javax.xml.transform.TransformerFactory transFact = javax.xml.transform.TransformerFactory.newInstance( );
+			javax.xml.transform.Transformer trans = transFact.newTransformer(new StreamSource(serviceContext.getRealPath("/")+XmlPatcherConstants.xslLocation));
 
+			
 			JAXBContext jc = JAXBContext
-					.newInstance("org.digijava.module.xmlpatcher.jaxb");
-			Unmarshaller m = jc.createUnmarshaller();
+					.newInstance(XmlPatcherConstants.jaxbPackage);
+			Unmarshaller um = jc.createUnmarshaller();
+			JAXBResult result = new JAXBResult(um);
 
 			// initialize JAXB 2.0 validation
 			SchemaFactory sf = SchemaFactory
@@ -211,12 +216,14 @@ public final class XmlPatcherUtil {
 			Schema schema = sf.newSchema(new File(serviceContext
 					.getRealPath("/")
 					+ XmlPatcherConstants.xsdLocation));
-			m.setSchema(schema);
-			m.setEventHandler(new DefaultValidationEventHandler());
+			um.setSchema(schema);
+			um.setEventHandler(new DefaultValidationEventHandler());
 
-			JAXBElement<Patch> enclosing = (JAXBElement<Patch>) m
-					.unmarshal(inputStream);
-			inputStream.close();
+			
+			trans.transform(new StreamSource(getXmlPatchAbsoluteFileName(p, serviceContext)), result);
+			Object tree=result.getResult();
+			
+			JAXBElement<Patch> enclosing = (JAXBElement<Patch>) tree;
 			return enclosing.getValue();
 		} catch (Exception e) {
 			logger.error(e);

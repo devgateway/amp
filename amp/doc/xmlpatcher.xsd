@@ -196,7 +196,7 @@ whenever some re-occurring garbage data has been found using condition entities,
     				</documentation>
 				</annotation>
 			</enumeration>
-			<enumeration value="schemaName">
+			<enumeration value="dbName">
 				<annotation>
 					<documentation>This condition type tests if the current schema
 						(database) name equals the specify value. This condition works for

@@ -5,7 +5,10 @@
  */
 package org.digijava.module.xmlpatcher.worker;
 
+import java.io.Serializable;
 import java.util.List;
+
+import javax.xml.bind.JAXBElement;
 
 import org.digijava.module.xmlpatcher.core.XmlPatcherWorkerFactory;
 import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatchLog;
@@ -38,25 +41,34 @@ public class XmlPatcherConditionWorker extends
 
 	@Override
 	protected boolean process() throws XmlPatcherWorkerException {
-		return true;
-		//		Interpreter it = new Interpreter();
-//		List<Script> scripts = getEntity().
-//		try {
-//			for (Script script : scripts) {
-//				XmlPatcherWorker<?, ?> worker = XmlPatcherWorkerFactory
-//						.createWorker(script, entity, log);
-//				if (!worker.run())
-//					return false;
-//				if (script.getReturnVar() != null)
-//					it.set(script.getReturnVar(), worker.getReturnValue());
-//			}
-//			returnValue = it.eval(getEntity().getTest());
-//			return true;
-//		} catch (EvalError e) {
-//			throw new XmlPatcherConditionWorkerException(e);
-//		}
-//
+		Interpreter it = new Interpreter();
+		List<Serializable> scripts = getEntity().getContent();
+		try {
+			String test = null;
+			for (Object obj : scripts) {
+				//ignore white spaces
+				if(obj instanceof String) continue;
+				
+				JAXBElement element = (JAXBElement) obj;
+				if (element.getDeclaredType().equals(String.class)) {
+					test = (String) element.getValue();
+					continue;
+				}
+				Script script = (Script) element.getValue();
+				XmlPatcherWorker<?, ?> worker = XmlPatcherWorkerFactory
+						.createWorker(script, entity, log);
+				if (!worker.run())
+					return false;
+				if (script.getReturnVar() != null)
+					it.set(script.getReturnVar(), worker.getReturnValue());
+			}
+			returnValue = it.eval(test);
+			return true;
+		} catch (EvalError e) {
+			throw new XmlPatcherConditionWorkerException(e);
+		}
 	}
+
 	@Override
 	/**
 	 * Will not execute anything but conditions of type "custom". Please use XSLT transformations

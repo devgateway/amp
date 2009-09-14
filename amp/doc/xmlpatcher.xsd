@@ -169,12 +169,12 @@ whenever some re-occurring garbage data has been found using condition entities,
 		</restriction>
 	</simpleType>
 
-	<complexType name="condition">
+	<complexType name="condition" mixed="true">
 		<sequence>
 			<element name="script" type="tns:script" minOccurs="0"
 				maxOccurs="unbounded">
 			</element>
-			<element name="test" type="string">
+			<element name="test" minOccurs="0" maxOccurs="1" type="string">
 			</element>
 		</sequence>
 		<attribute name="type" type="tns:conditionType"

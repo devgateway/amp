@@ -88,6 +88,7 @@ public class XmlPatcherService extends AbstractServiceImpl {
 			AmpXmlPatch ampPatch = iterator.next();
 			long timeStart = System.currentTimeMillis();
 			AmpXmlPatchLog log = new AmpXmlPatchLog(ampPatch);
+			logger.info("Reading patch: "+ampPatch.getPatchId());
 			try {
 				log.setFileChecksum(XmlPatcherUtil.getFileMD5(new File(
 						XmlPatcherUtil.getXmlPatchAbsoluteFileName(ampPatch,

@@ -100,6 +100,7 @@ public class selectOrganizationComponentForm extends ActionForm {
 		this.organizations=null;
 		this.alphaPages =  null;
 		this.keyword="";
+		this.ampOrgTypeId = null;
 		delegateClass ="";
 		callbackFunction = null;
 	}

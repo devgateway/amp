@@ -38,24 +38,25 @@ public class XmlPatcherConditionWorker extends
 
 	@Override
 	protected boolean process() throws XmlPatcherWorkerException {
-		Interpreter it = new Interpreter();
-		List<Script> scripts = getEntity().getScript();
-		try {
-			for (Script script : scripts) {
-				XmlPatcherWorker<?, ?> worker = XmlPatcherWorkerFactory
-						.createWorker(script, entity, log);
-				if (!worker.run())
-					return false;
-				if (script.getReturnVar() != null)
-					it.set(script.getReturnVar(), worker.getReturnValue());
-			}
-			returnValue = it.eval(getEntity().getTest());
-			return true;
-		} catch (EvalError e) {
-			throw new XmlPatcherConditionWorkerException(e);
-		}
+		return true;
+		//		Interpreter it = new Interpreter();
+//		List<Script> scripts = getEntity().
+//		try {
+//			for (Script script : scripts) {
+//				XmlPatcherWorker<?, ?> worker = XmlPatcherWorkerFactory
+//						.createWorker(script, entity, log);
+//				if (!worker.run())
+//					return false;
+//				if (script.getReturnVar() != null)
+//					it.set(script.getReturnVar(), worker.getReturnValue());
+//			}
+//			returnValue = it.eval(getEntity().getTest());
+//			return true;
+//		} catch (EvalError e) {
+//			throw new XmlPatcherConditionWorkerException(e);
+//		}
+//
 	}
-
 	@Override
 	/**
 	 * Will not execute anything but conditions of type "custom". Please use XSLT transformations

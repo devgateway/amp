@@ -15,6 +15,8 @@ import org.dgfoundation.amp.test.reports.AllReportTest;
 import org.dgfoundation.amp.test.sectormanager.AllSectorManagerTests;
 import org.dgfoundation.amp.test.widget.AllWidgetTest;
 import org.dgfoundation.amp.test.workspacemanager.AllWorkspaceManagerTests;
+import org.dgfoundation.amp.test.location.AllSelectLocationTest;
+import org.dgfoundation.amp.test.location.SelectDynLocationTest;
 /**
  * This suite include all test suite modules 
  * @author Sebas
@@ -37,6 +39,7 @@ public class AllTest {
 		suite.addTest(AllWorkspaceManagerTests.suite());
         suite.addTest(AllNGOModuleTest.suite());
         suite.addTest(AllSectorManagerTests.suite());
+        suite.addTest(AllSelectLocationTest.suite());
 		return suite;
 	}
 

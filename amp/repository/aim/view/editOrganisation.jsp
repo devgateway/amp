@@ -22,22 +22,24 @@
 <style type="text/css">
     .selectStyle {
         Font-size:10px;
-        font-family:Verdana,Arial,Helvetica,sans-serif;
+        font-family:Arial;
         width:210px;
     }
     .tableEven {
         background-color:#dbe5f1;
-        font-size:8pt;
         border-left:none;
         border-right:none;
-
+        font-size: 10px;
+        font-family:Arial;
     }
 
     .tableOdd {
         background-color:#FFFFFF;
         border-left:none;
         border-right:none;
-        font-size:8pt;!important
+        font-size: 10px;
+        font-family:Arial;
+       !important
 
     }
     .tableHeader {
@@ -48,6 +50,10 @@
     .Hovered {
         background-color:#a5bcf2;
     }
+    input,textArea {
+        font-family:Arial;
+        font-size: 10px;
+    }
 </style>
 
 <jsp:include page="/repository/aim/view/addEditOrganizationsPopin.jsp" flush="true" />
@@ -56,7 +62,7 @@
 <script language="JavaScript" type="text/javascript">
     function initScripts() {
         initSectorScript();
-    }
+        }
     window.onload=initScripts();
 
 
@@ -513,8 +519,34 @@
 
 
         }
+        function expand(suffix){
+		var imgId='#img_'+suffix;
+		var imghId='#imgh_'+suffix;
+		var divId='#div_container_'+suffix;
+		$(imghId).show();
+		$(imgId).hide();
+		$(divId).show('fast');
+	}
 
+	function collapse(suffix){
+		var imgId='#img_'+suffix;
+		var imghId='#imgh_'+suffix;
+		var divId='#div_container_'+suffix;
+		$(imghId).hide();
+		$(imgId).show();
+		$(divId).hide('fast');
+	}
+        function expandAll(){
+                $("img[@id^='img_']"+':visible').slideUp('fast');
+		$("img[@id^='imgh_']"+':hidden').slideDown('fast');;
+		$("div[@id^='div_container_']").slideDown('fast');
 
+         }
+         function collapseAll(){
+              $("img[@id^='imgh_']"+':visible').slideUp('fast');
+              $("img[@id^='img_']"+':hidden').slideDown('fast');
+	      $("div[@id^='div_container_']"+':visible').slideUp('fast');
+         }
 </script>
 <digi:instance property="aimAddOrgForm" />
 <digi:context name="digiContext" property="context" />
@@ -591,65 +623,72 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td width="169px" align="right" height="30px">
-                                        <digi:trn>Organization Name</digi:trn>
-                                        <font size="2" color="#FF0000">*</font></td>
-                                    <td width="500px" height="30px">
-                                        <html:text name="aimAddOrgForm" property="name" size="54" />
+                                    <td colspan="2">
+                                        <table cellpadding="2" cellspacing="2" border="0" width="100%">
+                                            <tr>
+                                                <td style="text-align:left;font-weight:bold" nowrap>
+                                                    <digi:trn>Organization Name</digi:trn>
+                                                    <font size="2" color="#FF0000">*</font>
+                                                </td>
+                                                <td align="left">
+                                                    <html:text name="aimAddOrgForm" property="name" size="54" />
+                                                </td>
+                                                <td style="text-align:left;font-weight:bold" nowrap>
+                                                    <digi:trn>Organization Acronym</digi:trn>
+                                                    <font size="2" color="#FF0000">*</font>
+                                                </td>
+                                                <td>    
+                                                    <html:text name="aimAddOrgForm" property="acronym" size="20"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:left;font-weight:bold">
+                                                    <digi:trn>Organization Type</digi:trn>
+                                                    <font size="2" color="#FF0000">*</font>
+                                                </td>
+                                                <td>
+                                                    <html:select property="ampOrgTypeId" onchange="return orgTypeChanged()" styleClass="selectStyle">
+                                                        <c:set var="translation">
+                                                            <digi:trn>Select Organization Type</digi:trn>
+                                                        </c:set>
+                                                        <html:option value="-1">-- ${translation} --</html:option>
+                                                        <logic:notEmpty name="aimAddOrgForm"
+                                                                        property="orgType">
+                                                            <html:optionsCollection name="aimAddOrgForm" property="orgType" value="ampOrgTypeId" label="orgType" />
+                                                        </logic:notEmpty>
+                                                    </html:select>
+                                                </td>
+                                                <td style="text-align:left;font-weight:bold"><digi:trn>Organization Group</digi:trn>
+                                                    <font size="2" color="#FF0000">*</font>
+                                                </td>
+                                                <td>
+                                                    <html:select property="ampOrgGrpId" styleClass="selectStyle">
+                                                        <c:set var="translation">
+                                                            <digi:trn>Select Group</digi:trn>
+                                                        </c:set>
+                                                        <html:option value="-1">-- ${translation} --</html:option>
+                                                        <logic:notEmpty name="aimAddOrgForm" property="orgGroup" >
+                                                            <html:optionsCollection name="aimAddOrgForm" property="orgGroup" value="ampOrgGrpId" label="orgGrpName" />
+                                                        </logic:notEmpty>
+                                                    </html:select></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" height="2" colspan="2">&nbsp;</td>
+                                                <td height="1" align="center" colspan="2"><digi:img
+                                                        src="module/aim/images/arrow-014E86.gif" width="15"
+                                                        height="10" /> <a href="javascript:addGroup()"> <digi:trn
+                                                            key="aim:addOrganizationGroup">Add a Group</digi:trn>
+                                                    </a></td>
+                                            </tr>
+                                        </table>
                                     </td>
+
                                 </tr>
-                                <tr>
-                                    <td width="169px" align="right" height="30px">
-                                        <digi:trn>Organization Acronym</digi:trn>
-                                        <font size="2" color="#FF0000">*</font>
-                                    </td>
-                                    <td width="500px" height="30px">
-                                        <html:text name="aimAddOrgForm" property="acronym" size="54" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="169px" align="right" height="30px">
-                                        <digi:trn>Organization Type</digi:trn>
-                                        <font size="2" color="#FF0000">*</font></td>
-                                    <td>
-                                        <html:select property="ampOrgTypeId" onchange="return orgTypeChanged()" styleClass="selectStyle">
-                                            <c:set var="translation">
-                                                <digi:trn>Select Organization Type</digi:trn>
-                                            </c:set>
-                                            <html:option value="-1">-- ${translation} --</html:option>
-                                            <logic:notEmpty name="aimAddOrgForm"
-                                                            property="orgType">
-                                                <html:optionsCollection name="aimAddOrgForm" property="orgType" value="ampOrgTypeId" label="orgType" />
-                                            </logic:notEmpty>
-                                        </html:select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="169px" align="right" height="30px"><digi:trn>Organization Group</digi:trn>
-                                        <font size="2" color="#FF0000">*</font></td>
-                                    <td width="500px" height="30px">
-                                        <html:select property="ampOrgGrpId" styleClass="selectStyle">
-                                            <c:set var="translation">
-                                                <digi:trn>Select Group</digi:trn>
-                                            </c:set>
-                                            <html:option value="-1">-- ${translation} --</html:option>
-                                            <logic:notEmpty name="aimAddOrgForm" property="orgGroup" >
-                                                <html:optionsCollection name="aimAddOrgForm" property="orgGroup" value="ampOrgGrpId" label="orgGrpName" />
-                                            </logic:notEmpty>
-                                        </html:select></td>
-                                </tr>
-                                <tr>
-                                    <td width="169" align="right" height="2">&nbsp;</td>
-                                    <td width="500" height="1"><digi:img
-                                            src="module/aim/images/arrow-014E86.gif" width="15"
-                                            height="10" /> <a href="javascript:addGroup()"> <digi:trn
-                                                key="aim:addOrganizationGroup">Add a Group</digi:trn>
-                                        </a></td>
-                                </tr>
+
                                 <c:if test="${aimAddOrgForm.type=='REGIONAL'}">
                                     <tr>
-                                        <td width="169" align="right" height="30px"><digi:trn>Region</digi:trn></td>
-                                        <td  width="500px" height="30px" >
+                                        <td style="font-weight:bold;text-align:right"><digi:trn>Region</digi:trn></td>
+                                        <td  height="30px" >
                                             <html:select property="regionId" >
                                                 <c:set var="translation">
                                                     <digi:trn
@@ -667,106 +706,27 @@
                                 <c:choose>
                                     <c:when test="${aimAddOrgForm.type=='NGO'}">
                                         <tr>
-                                            <td>
+                                            <td style="font-size:13px;font-weight:bold;color:#0000FF;text-align:right">
                                                 <digi:trn>Organization Primary Purpose</digi:trn>
                                                 <font size="2" color="#FF0000">*</font>
                                             </td>
                                             <td>
-                                                <html:textarea name="aimAddOrgForm" property="orgPrimaryPurpose" cols="40" rows="4"/>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2">
-                                                <fieldset>
-                                                    <legend align="left"><digi:trn>Staff Infomation</digi:trn></legend>
-                                                    <table cellpadding="0" cellspacing="0" border="0">
-                                                        <tr>
-                                                            <td style="width:40px;text-align:center;font-weight:bold">
-                                                                &nbsp;
-                                                            </td>
-                                                            <td style="width:130px;text-align:center;font-weight:bold">
-                                                                <digi:trn>Year</digi:trn>
-                                                            </td>
-                                                            <td style="width:210px;text-align:center;font-weight:bold">
-                                                                <digi:trn>Type of staff</digi:trn>
-                                                            </td>
-                                                            <td style="width:150px;text-align:center;font-weight:bold">
-                                                                <digi:trn>Number of Staff</digi:trn>
-                                                            </td>
-                                                            <td style="width:90px;text-align:center;font-weight:bold">
-                                                                &nbsp;
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td> &nbsp;</td>
-                                                            <td>
-                                                                <c:set var="translation">
-                                                                    <digi:trn> Select Year</digi:trn>
-                                                                </c:set>
-
-                                                                <html:select name="aimAddOrgForm" property="selectedYear" styleClass="selectStyle" style="width:120px;">
-                                                                    <html:option value="-1">-- ${translation} --</html:option>
-                                                                    <html:optionsCollection name="aimAddOrgForm"  property="years" label="label" value="value"/>
-                                                                </html:select>
-                                                            </td>
-                                                            <td style="text-align:center">
-                                                                <c:set var="translation">
-                                                                    <digi:trn>Please select a status from below</digi:trn>
-                                                                </c:set>
-                                                        <category:showoptions firstLine="${translation}" name="aimAddOrgForm" property="typeOfStaff"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.ORGANIZATION_STAFF_INFO_KEY%>" styleClass="selectStyle" />
-                                                        </td>
-                                                        <td style="text-align:center"><html:text name="aimAddOrgForm" property="numberOfStaff"  onkeyup="fnChk(this,true)" styleClass="inp-text"/></td>
-
-                                                        <td style="text-align:center"><input type="button" style="width:80px" onclick="addStaff()" value="<digi:trn>Add</digi:trn>" /></td>
-                                                        </tr>
-                                                        <c:if test="${not empty aimAddOrgForm.staff}">
-
-                                                            <tr>
-                                                                <td colspan="5">
-                                                                    <c:if test="${fn:length(aimAddOrgForm.staff)>1}">
-                                                                        <div style="overflow: scroll; width: 100%; height: 100px;">
-                                                                        </c:if>
-                                                                        <table width="100%" cellspacing="0" cellpadding="0" id="staffTable">
-                                                                            <c:forEach var="info" items="${aimAddOrgForm.staff}" >
-                                                                                <tr>
-                                                                                    <td  style="width:40px;text-align:left;">
-                                                                                        <html:multibox property="selectedStaff" styleClass="staffInfo">
-                                                                                            ${info.id}
-                                                                                        </html:multibox>
-                                                                                    </td>
-                                                                                    <td style="width:125px;text-align:center;">${info.year}</td>
-                                                                                    <td style="width:205px;text-align:center;" >${info.type.value}</td>
-                                                                                    <td style="width:125px;text-align:center;">${info.staffNumber}</td>
-                                                                                    <td style="width:70px;text-align:center;"><a href="javascript:deleteStaff('${info.id}')"> <img alt="delete" src= "../ampTemplate/images/trash_12.gif" border="0"></a></td>
-                                                                                </tr>
-                                                                            </c:forEach>
-                                                                        </table>
-                                                                        <c:if test="${fn:length(aimAddOrgForm.staff)>1}">
-                                                                        </div>
-                                                                    </c:if>
-                                                                </td>
-                                                            </tr>                             
-                                                            <tr>
-                                                                <td colspan="5" style="text-align:left;"><input type="checkbox"  onclick="selectAll('staffInfo')"><digi:trn>Select All</digi:trn>&nbsp;&nbsp;<input type="button" onclick="deleteStaff()" value="<digi:trn>Delete</digi:trn>"></td>
-                                                            </tr>
-                                                        </c:if>
-
-                                                    </table>
-                                                </fieldset>
+                                                <html:textarea name="aimAddOrgForm" property="orgPrimaryPurpose" cols="60" rows="4" />
                                             </td>
                                         </tr>
                                         <tr>
                                             <td width="100%" colspan="2">
+                                                <fieldset><legend style="font-size:13px;font-weight:bold;color:#0000FF;"><digi:trn>General Infomation</digi:trn></legend>
                                                 <table width="100%">
                                                     <tr>
                                                         <td valign="top" width="50%">
                                                             <table>
                                                                 <tr>
-                                                                    <td><digi:trn>Registration Number in MinPlan</digi:trn><font color="red">*</font></td>
+                                                                    <td nowrap style="font-weight:bold;text-align:right"><digi:trn>Registration Number in MinPlan</digi:trn><font color="red">*</font></td>
                                                                     <td><html:text property="regNumbMinPlan" /></td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td><digi:trn>Registration Date in MinPlan</digi:trn><font color="red">*</font></td>
+                                                                    <td style="font-weight:bold;text-align:right"><digi:trn>Registration Date in MinPlan</digi:trn><font color="red">*</font></td>
                                                                     <td>
                                                                         <html:text property="minPlanRegDate" size="10" styleId="minPlanRegDate" styleClass="inp-text" readonly="true" />
                                                                         <a id="clear1" href='javascript:clearDate(document.getElementById("minPlanRegDate"), "clear1")'>
@@ -778,7 +738,7 @@
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td><digi:trn>Fiscal Calendar</digi:trn><font color="red">*</font></td>
+                                                                    <td  style="font-weight:bold;text-align:right"><digi:trn>Fiscal Calendar</digi:trn><font color="red">*</font></td>
                                                                     <td>
                                                                         <c:set var="translation">
                                                                             <digi:trn>Select the Fiscal Calendar</digi:trn>
@@ -791,7 +751,7 @@
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td ><digi:trn>Sectors Scheme</digi:trn><font color="red">*</font></td>
+                                                                    <td  style="font-weight:bold;text-align:right"><digi:trn>Sectors Scheme</digi:trn><font color="red">*</font></td>
                                                                     <td>
                                                                         <html:select property="ampSecSchemeId" styleClass="selectStyle">
                                                                             <c:set var="translation">
@@ -805,9 +765,9 @@
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td><digi:trn>Sectors Prefernce</digi:trn><font color="red">*</font></td>
+                                                                    <td style="font-weight:bold;text-align:right"><digi:trn>Sectors Prefernce</digi:trn><font color="red">*</font></td>
                                                                     <td>
-                                                                        <table cellSpacing=0 cellPadding=0 border=0 bgcolor="#ffffff" width="100%">
+                                                                        <table cellSpacing="1" cellPadding="5" class="box-border-nopadding">
                                                                             <c:if test="${aimAddOrgForm.sectors != null}">
                                                                                 <c:forEach var="sector" items="${aimAddOrgForm.sectors}">
                                                                                     <tr>
@@ -858,19 +818,19 @@
                                                                 </tr>
 
                                                                 <tr>
-                                                                    <td><digi:trn>Organization website</digi:trn><font color="red">*</font></td>
+                                                                    <td  style="font-weight:bold;text-align:right"><digi:trn>Organization website</digi:trn><font color="red">*</font></td>
                                                                     <td>
                                                                         <html:text property="orgUrl"/>
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td><digi:trn>Organization Headquarters Address</digi:trn><font color="red">*</font></td>
+                                                                    <td  style="font-weight:bold;text-align:right"><digi:trn>Organization Headquarters Address</digi:trn><font color="red">*</font></td>
                                                                     <td>
                                                                         <html:textarea property="address"  cols="40"/>
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td><digi:trn>Organization Address Abroad(Internation NGO)</digi:trn></td>
+                                                                    <td  style="font-weight:bold;text-align:right"><digi:trn>Organization Address Abroad(Internation NGO)</digi:trn></td>
                                                                     <td>
                                                                         <html:textarea property="addressAbroad" cols="40"/>
                                                                     </td>
@@ -882,13 +842,13 @@
                                                         <td valign="top">
                                                             <table>
                                                                 <tr>
-                                                                    <td><digi:trn>Legal Personality Number</digi:trn></td>
+                                                                    <td nowrap style="font-weight:bold;text-align:right"><digi:trn>Legal Personality Number</digi:trn></td>
                                                                     <td>
                                                                         <html:text property="legalPersonNum" />
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td><digi:trn>Legal Personality Registration Date</digi:trn></td>
+                                                                    <td nowrap style="font-weight:bold;text-align:right"><digi:trn>Legal Personality Registration Date</digi:trn></td>
                                                                     <td>
                                                                         <html:text property="legalPersonRegDate" size="10" styleId="legalPersonRegDate" styleClass="inp-text" readonly="true" />
                                                                         <a id="clear2" href='javascript:clearDate(document.getElementById("legalPersonRegDate"), "clear2")'>
@@ -900,7 +860,7 @@
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td><digi:trn>Recipients</digi:trn><font color="red">*</font></td>
+                                                                    <td style="font-weight:bold;text-align:right"><digi:trn>Recipients</digi:trn><font color="red">*</font></td>
                                                                     <td>
                                                                         <c:if test="${empty aimAddOrgForm.recipients}">
                                                                     <aim:addOrganizationButton refreshParentDocument="true" collection="recipients"  form="${aimAddOrgForm}" styleClass="dr-menu"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
@@ -933,7 +893,7 @@
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td><digi:trn>Country Of Origin</digi:trn><font color="red">*</font></td>
+                                                        <td style="font-weight:bold;text-align:right"><digi:trn>Country Of Origin</digi:trn><font color="red">*</font></td>
                                                         <td>
                                                             <c:set var="translation">
                                                                 <digi:trn>Select Country</digi:trn>
@@ -945,13 +905,13 @@
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td><digi:trn>Tax Number</digi:trn></td>
+                                                        <td style="font-weight:bold;text-align:right"><digi:trn>Tax Number</digi:trn></td>
                                                         <td>
                                                             <html:text property="taxNumber"/>
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td><digi:trn>Organization Intervention Level</digi:trn><font color="red">*</font></td>
+                                                        <td style="font-weight:bold;text-align:right"><digi:trn>Organization Intervention Level</digi:trn><font color="red">*</font></td>
                                                         <td>
                                                             <c:set var="translation">
                                                                 <digi:trn>Please select from below</digi:trn>
@@ -968,7 +928,7 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td><digi:trn>Organization Intervention Location</digi:trn><font color="red">*</font></td>
+                                            <td style="font-weight:bold;text-align:right"><digi:trn>Organization Intervention Location</digi:trn><font color="red">*</font></td>
                                             <td>
 
                                                 <c:if test="${empty aimAddOrgForm.selectedLocs}">
@@ -976,7 +936,7 @@
                                                 </c:if>
 
                                                 <c:if test="${not empty aimAddOrgForm.selectedLocs}">
-                                                    <table width="100%" cellSpacing="0" cellPadding="0" align="left">
+                                                    <table cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 
                                                         <c:forEach var="selectedLocs" items="${aimAddOrgForm.selectedLocs}">
 
@@ -1019,13 +979,102 @@
                             </tr>
 
                         </table>
+                      </fieldset>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="2">
                         <fieldset>
-                            <legend align="left"><digi:trn>Budget Information</digi:trn></legend>
-                            <table cellpadding="2" cellspacing="0" border="0">
+                            <legend align="left" style="font-size:13px;font-weight:bold;color:#0000FF; "><digi:trn>Staff Infomation</digi:trn></legend>
+                            <img id="img_staff" alt="" src="../ampTemplate/images/arrow_right.gif"  style="display : none;"  onclick="expand('staff')"/>
+                            <img id="imgh_staff" alt="" src="../ampTemplate/images/arrow_down.gif"   onclick="collapse('staff')"/>
+                            <div id="div_container_staff">
+                            <table cellpadding="0" cellspacing="5" border="0" width="100%">
+                                <tr>
+                                    <td style="width:90px;text-align:center;font-weight:bold">
+                                        &nbsp;
+                                    </td>
+                                    <td style="width:130px;text-align:center;font-weight:bold;">                   
+                                            <digi:trn>Year</digi:trn>
+                                    </td>
+                                    <td style="width:210px;text-align:center;font-weight:bold;">
+                                        <digi:trn>Type of staff</digi:trn>
+                                    </td>
+                                    <td style="width:150px;text-align:center;font-weight:bold;">
+                                        <digi:trn>Number of Staff</digi:trn>
+                                    </td>
+                                    <td style="width:90px;text-align:center;font-weight:bold">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td> &nbsp;</td>
+                                    <td align="center">
+                                        <c:set var="translation">
+                                            <digi:trn> Select Year</digi:trn>
+                                        </c:set>
+
+                                        <html:select name="aimAddOrgForm" property="selectedYear" styleClass="selectStyle" style="width:120px;">
+                                            <html:option value="-1">-- ${translation} --</html:option>
+                                            <html:optionsCollection name="aimAddOrgForm"  property="years" label="label" value="value"/>
+                                        </html:select>
+                                    </td>
+                                    <td style="text-align:center">
+                                        <c:set var="translation">
+                                            <digi:trn>Please select a status from below</digi:trn>
+                                        </c:set>
+                                <category:showoptions firstLine="${translation}" name="aimAddOrgForm" property="typeOfStaff"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.ORGANIZATION_STAFF_INFO_KEY%>" styleClass="selectStyle" />
+                                </td>
+                                <td style="text-align:center"><html:text name="aimAddOrgForm" property="numberOfStaff"  onkeyup="fnChk(this,true)" styleClass="inp-text"/></td>
+
+                                <td style="text-align:center"><input type="button" style="width:80px" onclick="addStaff()" value="<digi:trn>Add</digi:trn>" /></td>
+                                </tr>
+                                <c:if test="${not empty aimAddOrgForm.staff}">
+
+                                    <tr>
+                                        <td colspan="5">
+                                            <c:if test="${fn:length(aimAddOrgForm.staff)>1}">
+                                                <div style="overflow: scroll; width: 100%; height: 100px;">
+                                                </c:if>
+                                                <table width="100%" cellspacing="0" cellpadding="0" id="staffTable">
+                                                    <c:forEach var="info" items="${aimAddOrgForm.staff}" >
+                                                        <tr>
+                                                            <td  style="width:80px;text-align:left;">
+                                                                <html:multibox property="selectedStaff" styleClass="staffInfo">
+                                                                    ${info.id}
+                                                                </html:multibox>
+                                                            </td>
+                                                            <td style="width:125px;text-align:center;">${info.year}</td>
+                                                            <td style="width:205px;text-align:center;" >${info.type.value}</td>
+                                                            <td style="width:125px;text-align:center;">${info.staffNumber}</td>
+                                                            <td style="width:70px;text-align:center;"><a href="javascript:deleteStaff('${info.id}')"> <img alt="delete" src= "../ampTemplate/images/trash_12.gif" border="0"></a></td>
+                                                        </tr>
+                                                    </c:forEach>
+                                                </table>
+                                                <c:if test="${fn:length(aimAddOrgForm.staff)>1}">
+                                                </div>
+                                            </c:if>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5" style="font-weight:bold;text-align:left;"><input type="checkbox"  onclick="selectAll('staffInfo')"><digi:trn>Select All</digi:trn>&nbsp;&nbsp;<input type="button" onclick="deleteStaff()" value="<digi:trn>Delete</digi:trn>"></td>
+                                    </tr>
+                                </c:if>
+
+                            </table>
+                            </div>
+                        </fieldset>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2">
+                        <fieldset>
+                            <legend align="left" style="font-size:13px;font-weight:bold;color:#0000FF;"><digi:trn>Budget Information</digi:trn></legend>
+                                <img id="img_budget" alt="" src="../ampTemplate/images/arrow_right.gif"  style="display : none;" onclick="expand('budget')"/>
+                                <img id="imgh_budget" alt="" src="../ampTemplate/images/arrow_down.gif"  onclick="collapse('budget')"/>
+                                <div id="div_container_budget">
+                                <table cellpadding="2" cellspacing="0" border="0">
                                 <tr>
                                     <td style="width:40px;text-align:center;font-weight:bold">
                                         &nbsp;
@@ -1117,26 +1166,27 @@
                                 </c:if>
 
                             </table>
+                            </div>
                         </fieldset>
                     </td>
                 </tr>
             </c:when>
             <c:otherwise>
                 <tr>
-                    <td width="169px" align="right" height="30px"><digi:trn
+                    <td style="font-weight:bold;text-align:right;"><digi:trn
                             key="aim:organizationDac">DAC Code</digi:trn></td>
                     <td width="500px" height="30px"><html:text
                         property="dacOrgCode" size="15" /></td>
                 </tr>
                 <tr>
-                    <td width="169px" align="right" height="30px"><digi:trn
+                    <td style="font-weight:bold;text-align:right;"><digi:trn
                             key="aim:organizationIsoCode">ISO Code</digi:trn></td>
                     <td width="500px" height="30px" ><html:text
                             name="aimAddOrgForm" property="orgIsoCode" size="15" />
                     </td>
                 </tr>
                 <tr>
-                    <td width="169px" align="right" height="30px"><digi:trn
+                    <td style="font-weight:bold;text-align:right;"><digi:trn
                             key="aim:organizationCode">Organization Code</digi:trn><font
                             size="2" color="#FF0000">*</font></td>
                     <td width="500px" height="30px"><html:text
@@ -1144,14 +1194,14 @@
                 </tr>
 
                 <tr>
-                    <td width="169px" align="right" height="30px"><digi:trn
+                    <td style="font-weight:bold;text-align:right;"><digi:trn
                             key="aim:budgetOrganizationCode">Budget Organization Code</digi:trn><font
                             size="2" color="#FF0000">*</font></td>
                     <td width="500px" height="30px"><html:text
                         property="budgetOrgCode" size="15" /></td>
                 </tr>
                 <tr>
-                    <td width="169px" align="right" height="30px"><digi:trn
+                    <td style="font-weight:bold;text-align:right;"><digi:trn
                             key="aim:fiscalCalendar">Fiscal Calendar</digi:trn></td>
                     <td width="500px" height="30px"><html:select
                             property="fiscalCalId" styleClass="selectStyle">
@@ -1169,7 +1219,7 @@
                         </html:select>
                 </tr>
                 <tr>
-                    <td width="169px" align="right" height="30px"><digi:trn>Sectors Scheme</digi:trn></td>
+                    <td style="font-weight:bold;text-align:right;"><digi:trn>Sectors Scheme</digi:trn></td>
                     <td>
                         <html:select property="ampSecSchemeId" styleClass="selectStyle">
                             <c:set var="translation">
@@ -1183,9 +1233,9 @@
                     </td>
                 </tr>
                 <tr>
-                    <td width="169px" align="right" height="30px"><digi:trn>Sectors Prefernce</digi:trn></td>
+                    <td style="font-weight:bold;text-align:right"><digi:trn>Sectors Prefernce</digi:trn></td>
                     <td>
-                        <table cellSpacing=0 cellPadding=0 border=0 bgcolor="#ffffff" width="100%">
+                        <table cellSpacing="1" cellPadding="5" class="box-border-nopadding">
                             <c:forEach var="sector" items="${aimAddOrgForm.sectors}">
                                 <tr>
                                     <td width="5px" align="right">
@@ -1238,7 +1288,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td width="169px" align="right" height="30px">
+                    <td style="font-weight:bold;text-align:right;">
                         <digi:trn>
                             Pledges
                         </digi:trn>
@@ -1344,104 +1394,108 @@
 <tr>
     <td colspan="2">
         <fieldset>
-            <legend align="left"><digi:trn>Contact Infomation</digi:trn></legend>
-            <table cellpadding="2" cellspacing="0" border="0" width="100%">
+            <legend align="left" style="font-size:13px;font-weight:bold;color:#0000FF;"><digi:trn>Contact Infomation</digi:trn></legend>
+                <img id="img_contact" alt="" src="../ampTemplate/images/arrow_right.gif"  style="display : none;" onclick="expand('contact')"/>
+                <img id="imgh_contact" alt="" src="../ampTemplate/images/arrow_down.gif"   onclick="collapse('contact')"/>
+                <div id="div_container_contact">
+                <table cellpadding="2" cellspacing="0" border="0" width="100%">
                 <c:if test="${not empty aimAddOrgForm.contacts}">
                     <tr>
                         <td colspan="2">
                             <c:if test="${fn:length(aimAddOrgForm.contacts)>1}">
                                 <div style="overflow: scroll; width: 100%; height: 100px;">
                                 </c:if>
-                            <table width="100%" cellSpacing="1" cellPadding="1" align="left" id="contactsTable">
-                                <tr>
-                                    <td>
-                                        <digi:trn>LASTNAME</digi:trn>
-                                    </td>
-                                    <td>
-                                        <digi:trn> FIRSTNAME </digi:trn>
-                                    </td>
-                                    <td>
-                                        <digi:trn>EMAIL </digi:trn>
-                                    </td>
-                                    <td>
-                                        <digi:trn> TELEPHONE </digi:trn>
-                                    </td>
-                                    <td>
-                                        <digi:trn> FAX </digi:trn>
-                                    </td>
-                                    <td>
-                                        <digi:trn>TITLE </digi:trn>
-                                    </td>
-                                    <td colspan="2">
-                                        &nbsp;
-                                    </td>
-                                </tr>
-                                <c:forEach var="contact" items="${aimAddOrgForm.contacts}">
-
+                                    <table width="100%" cellSpacing="1" cellPadding="1" align="left" id="table_contact_content">
                                     <tr>
                                         <td>
-                                            ${contact.lastname}
+                                            <digi:trn>LASTNAME</digi:trn>
                                         </td>
                                         <td>
-                                            ${contact.name}
+                                            <digi:trn> FIRSTNAME </digi:trn>
                                         </td>
                                         <td>
-                                            ${contact.email}
+                                            <digi:trn>EMAIL </digi:trn>
                                         </td>
                                         <td>
-                                            ${contact.phone}
+                                            <digi:trn> TELEPHONE </digi:trn>
                                         </td>
                                         <td>
-                                            ${contact.fax}
+                                            <digi:trn> FAX </digi:trn>
                                         </td>
                                         <td>
-                                            ${contact.title}
+                                            <digi:trn>TITLE </digi:trn>
                                         </td>
-                                        <td>
+                                        <td colspan="2">
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                    <c:forEach var="contact" items="${aimAddOrgForm.contacts}">
 
-                                    <aim:editContactLink collection="contacts" form="${aimAddOrgForm}" contactId="${contact.id}">
-                                        <img alt="edit" src= "../ampTemplate/images/application_edit.png" border="0"/>
-                                    </aim:editContactLink>
-                            </td>
-                            <td>
-                                <a href="javascript:removeContact('${contact.id}')">
-                                    <img alt="delete" src= "../ampTemplate/images/trash_12.gif" border="0"/>
-                                </a>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                       
-                 
-                </table>
-                                     <c:if test="${fn:length(aimAddOrgForm.contacts)>1}">
+                                        <tr>
+                                            <td>
+                                                ${contact.lastname}
+                                            </td>
+                                            <td>
+                                                ${contact.name}
+                                            </td>
+                                            <td>
+                                                ${contact.email}
+                                            </td>
+                                            <td>
+                                                ${contact.phone}
+                                            </td>
+                                            <td>
+                                                ${contact.fax}
+                                            </td>
+                                            <td>
+                                                ${contact.title}
+                                            </td>
+                                            <td>
+
+                                        <aim:editContactLink collection="contacts" form="${aimAddOrgForm}" contactId="${contact.id}">
+                                            <img alt="edit" src= "../ampTemplate/images/application_edit.png" border="0"/>
+                                        </aim:editContactLink>
+                                        </td>
+                                        <td>
+                                            <a href="javascript:removeContact('${contact.id}')">
+                                                <img alt="delete" src= "../ampTemplate/images/trash_12.gif" border="0"/>
+                                            </a>
+                                        </td>
+                                        </tr>
+                                    </c:forEach>
+
+
+                                </table>
+                                <c:if test="${fn:length(aimAddOrgForm.contacts)>1}">
                                 </div>
-                                </c:if>
-        </td>
-    </tr>
-     </c:if>
-             <tr>
+                            </c:if>
+                        </td>
+                    </tr>
+                </c:if>
+                <tr>
                     <td colspan="2"><aim:addContactButton collection="contacts" form="${aimAddOrgForm}"><digi:trn>Add contact</digi:trn></aim:addContactButton></td>
                 </tr>
 
-    </table>
-</fieldset>
-</td>
+            </table>
+                </div>
+        </fieldset>
+    </td>
 </tr>
 <c:if test="${aimAddOrgForm.type!='NGO'}">
     <tr>
-        <td width="169px" align="right" height="30px"><digi:trn>Organization URL</digi:trn></td>
+        <td style="font-weight:bold;text-align:right"><digi:trn>Organization URL</digi:trn></td>
         <td>
             <html:text property="orgUrl"/>
         </td>
     </tr>
     <tr>
-        <td width="169px" align="right" height="30px"><digi:trn>Address</digi:trn></td>
+        <td style="font-weight:bold;text-align:right"><digi:trn>Address</digi:trn></td>
         <td width="500px" height="30px">
             <html:textarea property="address"/>
         </td>
     </tr>
     <tr>
-        <td width="169px" align="right" height="30px"><digi:trn>Description</digi:trn></td>
+        <td style="font-weight:bold;text-align:right"><digi:trn>Description</digi:trn></td>
         <td width="500px" height="30px">
             <html:textarea property="description"/>
         </td>
@@ -1461,32 +1515,37 @@
 
 <tr>
     <td colspan="2" width="555" align="center" height="30">
-        <table width="100%" cellspacing="5">
+        <table width="100%" >
             <tr>
-                <td width="42%" align="right"><html:button
+                <td align="center"><html:button
                         styleClass="dr-menu" property="submitButton"
                         onclick="return validateSaveOrg()">
                         <digi:trn key="btn:save">Save</digi:trn>
-                </html:button></td>
-                <td width="8%" align="left"><input type="reset"
+                </html:button><input type="reset"
                                                    value='<digi:trn key="btn:reset">Reset</digi:trn>'
-                                                   class="dr-menu"></td>
-                <td width="45%" align="left"><input
+                                                   class="dr-menu">
+                <input
                         type="button"
                         value="<digi:trn key="btn:cancel">Cancel</digi:trn>"
                         class="dr-menu" onclick="move()"></td>
             </tr>
+             <tr>
+                 <td  align="center">
+                    <input  class="dr-menu" type="button" name="expandBtn" value="<digi:trn>Expand All</digi:trn>" onclick="expandAll()">
+                    <input  class="dr-menu" type="button" name="collapseBtn" value="<digi:trn>Collapse All</digi:trn>" onclick="collapseAll()">
+                </td>
+              
+            </tr>
+            <c:if test="${not empty aimAddOrgForm.ampOrgId&&aimAddOrgForm.ampOrgId!=0}">
+                <tr>
+                    <td align="center">
+                        <input type="button" value="<digi:trn key="btn:deleteThisOrganization">Delete this Organization</digi:trn>" onclick="return msg()">
+                    </td>
+                </tr>
+            </c:if>
         </table>
     </td>
 </tr>
-<c:if test="${not empty aimAddOrgForm.ampOrgId&&aimAddOrgForm.ampOrgId!=0}">
-    <tr>
-        <td colspan="2" align="center">
-            <input type="button" value="<digi:trn key="btn:deleteThisOrganization">Delete this Organization</digi:trn>" onclick="return msg()">
-        </td>
-    </tr>
-</c:if>
-
 
 </table>
 </td>
@@ -1501,5 +1560,5 @@
 <script language="javascript"  type="text/javascript">
     setStyle(document.getElementById("staffTable"),false);
     setStyle(document.getElementById("orgInfosTable"),false);
-    setStyle(document.getElementById("contactsTable"),true);
+    setStyle(document.getElementById("table_contact_content"),true);
 </script>

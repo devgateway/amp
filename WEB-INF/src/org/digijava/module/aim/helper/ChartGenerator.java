@@ -249,18 +249,18 @@ public class ChartGenerator {
 		Collection<AmpCategoryValue> col = cp.getData();
 		try {
 			JFreeChart chart = generateRiskChart(cp,siteId,langCode);
+			if(chart!=null){
+				String url = cp.getUrl(); 
+				if (url != null && url.trim().length() > 0) {
+					((PiePlot)chart.getPlot()).setURLGenerator(new PieChartURLGenerator(url,"risk",langCode,siteId));
+				}
+				ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
 
-			String url = cp.getUrl();
-			if (url != null && url.trim().length() > 0) {
-				((PiePlot)chart.getPlot()).setURLGenerator(new PieChartURLGenerator(url,"risk",langCode,siteId));
+				fileName = ServletUtilities.saveChartAsPNG(chart,cp.getChartWidth(),cp.getChartHeight(),info,cp.getSession());
+				ChartUtilities.writeImageMap(cp.getWriter(),fileName,info,false);
+
+				cp.getWriter().flush();
 			}
-			ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
-
-			fileName = ServletUtilities.saveChartAsPNG(chart,cp.getChartWidth(),cp.getChartHeight(),info,cp.getSession());
-			ChartUtilities.writeImageMap(cp.getWriter(),fileName,info,false);
-
-			cp.getWriter().flush();
-			
 		} catch (Exception e) {
 			logger.error("Exception from generateRisk() :" + e.getMessage());
 			e.printStackTrace(System.out);

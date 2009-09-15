@@ -835,33 +835,38 @@ public class ExportActivityToPDF extends Action {
 			mainLayout.addCell(regFundingCell1);
 			
 			//now we should create nested table and add it as second cell in mainLayout
-			PdfPTable nested1 = new PdfPTable(2);
+			PdfPTable regFundingNested = new PdfPTable(1);
+			regFundingNested.setWidthPercentage(80);
+			regFundingNested.setHorizontalAlignment(Element.ALIGN_CENTER);
 			if(myForm.getFunding().getRegionalFundings()!=null){
 				for (RegionalFunding regFunf : (Collection<RegionalFunding>)myForm.getFunding().getRegionalFundings()) {
 					//create first row (Region Name)
 					PdfPCell nestedCell1=new PdfPCell();
 					nestedCell1.setBorder(0);
-					p1=new Paragraph(TranslatorWorker.translateText(regFunf.getRegionName(),locale,siteId),plainFont);
+					p1=new Paragraph(TranslatorWorker.translateText(regFunf.getRegionName(),locale,siteId),titleFont);
 					p1.setAlignment(Element.ALIGN_LEFT);
 					nestedCell1.addElement(p1);
 					regFundingCell1.setBackgroundColor(new Color(255,255,255));
 					regFundingCell1.setBorder(0);
-					nested1.addCell(nestedCell1);
+					regFundingNested.addCell(nestedCell1);
 					
 					if(regFunf.getCommitments()!=null){ //create commitment row
-						buildFinanceInfoOutput(nested1, TranslatorWorker.translateText("Commitment",locale,siteId),(List<FundingDetail>)regFunf.getCommitments());
+						PdfPTable commitmentsTable=buildRegionalFundingInfoOutput(TranslatorWorker.translateText("Commitment",locale,siteId),(List<FundingDetail>)regFunf.getCommitments());
+						regFundingNested.addCell(commitmentsTable);						
 					}
 					
 					if(regFunf.getDisbursements()!=null){ //create disbursments row 
-						buildFinanceInfoOutput(nested1, TranslatorWorker.translateText("Disbursment",locale,siteId),(List<FundingDetail>)regFunf.getDisbursements());
+						PdfPTable disbTable=buildRegionalFundingInfoOutput( TranslatorWorker.translateText("Disbursment",locale,siteId),(List<FundingDetail>)regFunf.getDisbursements());
+						regFundingNested.addCell(disbTable);
 					}
 					
 					if(regFunf.getExpenditures()!=null){ //create expenditure row
-						buildFinanceInfoOutput(nested1, TranslatorWorker.translateText("Expenditures",locale,siteId), (List<FundingDetail>)regFunf.getExpenditures());
+						PdfPTable expTable=buildRegionalFundingInfoOutput( TranslatorWorker.translateText("Expenditures",locale,siteId), (List<FundingDetail>)regFunf.getExpenditures());
+						regFundingNested.addCell(expTable);
 					}
 				}				
 			}
-			PdfPCell regFundCell=new PdfPCell(nested1);
+			PdfPCell regFundCell=new PdfPCell(regFundingNested);
 			regFundCell.setBorder(0);
 			mainLayout.addCell(regFundCell);
 
@@ -1063,7 +1068,7 @@ public class ExportActivityToPDF extends Action {
 					if(customField instanceof ComboBoxCustomField){
 						customFields2P=new Paragraph(((ComboBoxCustomField) customField).getOptions().get(customField.getValue()),plainFont);
 					}else if(customField instanceof CategoryCustomField){
-						if(((CategoryCustomField)customField).getValue()>0){
+						if(((CategoryCustomField)customField).getValue()!=null && ((CategoryCustomField)customField).getValue()>0){
 							catVal=CategoryManagerUtil.getAmpCategoryValueFromDb(((CategoryCustomField)customField).getValue());
 							if(catVal!=null){
 								translatedValue	= CategoryManagerUtil.translateAmpCategoryValue(catVal, request);
@@ -1081,9 +1086,9 @@ public class ExportActivityToPDF extends Action {
 						}
 						customFields2P=new Paragraph(outputVal,plainFont);
 					}else if(customField instanceof CheckCustomField){
-						if(((CheckCustomField)customField).getValue()){
+						if(((CheckCustomField)customField).getValue()!=null && ((CheckCustomField)customField).getValue()){
 							customFields2P=new Paragraph(((CheckCustomField)customField).getLabelTrue(),plainFont);
-						}else if(!((CheckCustomField)customField).getValue()){
+						}else if(((CheckCustomField)customField).getValue()!=null && !((CheckCustomField)customField).getValue()){
 							customFields2P=new Paragraph(((CheckCustomField)customField).getLabelFalse(),plainFont);
 						}
 					}else{
@@ -1196,11 +1201,13 @@ public class ExportActivityToPDF extends Action {
 		int startInex;
 		int endIndex;
 		String projectComments=getEditTagValue(request,editTagKey);
-		startInex=projectComments.indexOf("<p>");
-		endIndex=projectComments.indexOf("</p>");
-		if(startInex!=-1 && endIndex!=-1 && startInex<endIndex){
-			projectComments=projectComments.substring(startInex+3, endIndex);
-		}
+		if(projectComments!=null){
+			startInex=projectComments.indexOf("<p>");
+			endIndex=projectComments.indexOf("</p>");
+			if(startInex!=-1 && endIndex!=-1 && startInex<endIndex){
+				projectComments=projectComments.substring(startInex+3, endIndex);
+			}
+		}		
 		return projectComments;
 	}
 
@@ -1640,7 +1647,7 @@ public class ExportActivityToPDF extends Action {
 						}
 						//physical progress
 						PdfPCell phProgressNestedCell=new PdfPCell();
-						p1=new Paragraph(TranslatorWorker.translateText("Physical progress of the component",locale,siteId),plainFont);
+						p1=new Paragraph(TranslatorWorker.translateText("Physical progress of the component",locale,siteId),titleFont);
 						p1.setAlignment(Element.ALIGN_LEFT);
 						phProgressNestedCell.addElement(p1);
 						phProgressNestedCell.setBackgroundColor(new Color(244,244,242));
@@ -2379,6 +2386,46 @@ public class ExportActivityToPDF extends Action {
 			fdTable.addCell(cell);
 		}
 		nestedTable.addCell(fdTable);
+	}
+	
+	private PdfPTable buildRegionalFundingInfoOutput(String elementName,List<FundingDetail> listToIterate) throws Exception{
+		PdfPTable regFundTable=new PdfPTable(2);
+		regFundTable.getDefaultCell().setBorder(0);
+		regFundTable.setWidths(new float[] {1f,3f});
+		
+		//commitment,disbursement,expenditure
+		PdfPCell cell=new PdfPCell();
+		cell.setBorder(0);
+		Paragraph paragraph=new Paragraph(elementName,plainFont);
+		paragraph.setAlignment(Element.ALIGN_LEFT);
+		cell.addElement(paragraph);		
+		cell.setBorder(0);
+		regFundTable.addCell(cell);
+		
+		//second cell for actual/planned
+		PdfPTable fdTable=new PdfPTable(3);
+		fdTable.getDefaultCell().setBorder(0);
+		for (FundingDetail fd : listToIterate) {			
+			cell=new PdfPCell();
+			paragraph=new Paragraph(TranslatorWorker.translateText(fd.getAdjustmentTypeName(),locale,siteId),plainFont);
+			cell.addElement(paragraph);
+			cell.setBorder(0);
+			fdTable.addCell(cell);
+			
+			cell=new PdfPCell();
+			paragraph=new Paragraph(fd.getTransactionAmount()+" "+fd.getCurrencyCode(),plainFont);
+			cell.addElement(paragraph);
+			cell.setBorder(0);
+			fdTable.addCell(cell);
+			
+			cell=new PdfPCell();
+			paragraph=new Paragraph(fd.getTransactionDate(),plainFont);
+			cell.addElement(paragraph);
+			cell.setBorder(0);
+			fdTable.addCell(cell);
+		}
+		regFundTable.addCell(fdTable);
+		return regFundTable;
 	}
 
 	private String buildProgramsOutput(List<AmpActivityProgram> programs) {

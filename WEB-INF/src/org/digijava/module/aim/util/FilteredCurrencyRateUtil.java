@@ -178,10 +178,11 @@ public class FilteredCurrencyRateUtil {
 				for (AmpFilteredCurrencyRate f: allFilteredCurrencyRates ) {
 					this.allFilteredRates.add( f.getToCurrency().getCurrencyCode() + "-" + f.getFromCurrency().getCurrencyCode() );
 				}
+				return this.allFilteredRates.contains( toCurrencyCode + "-" + fromCurrencyCode );
 			}
 		}
+		return false;
 		
-		return this.allFilteredRates.contains( toCurrencyCode + "-" + fromCurrencyCode );
 		
 	}
 	

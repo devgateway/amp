@@ -48,6 +48,10 @@ public class UpdateCurrencyRate extends Action {
 		CurrencyRateForm crForm = (CurrencyRateForm) form;
 		CurrencyRates currencyRates = null;
 		Collection<CurrencyRates> col = new ArrayList<CurrencyRates>();
+		
+		String baseCurrency				= FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY );
+        if ( baseCurrency == null )
+      	  baseCurrency			= "USD";
 
 		logger.debug("Reset :" + crForm.isReset());
 
@@ -90,7 +94,7 @@ public class UpdateCurrencyRate extends Action {
 					col.add(currencyRates);
 				}
 			}
-			CurrencyUtil.saveCurrencyRates(col);
+			CurrencyUtil.saveCurrencyRates(col, baseCurrency);
 
 			Date toDate = DateConversion.getDate(crForm.getFilterByDateFrom());
 			long stDt = toDate.getTime();
@@ -154,9 +158,6 @@ public class UpdateCurrencyRate extends Action {
                       }
 
                       cRate.setToCurrencyCode(crForm.getUpdateCRateCode());
-                      String baseCurrency				= FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY );
-                      if ( baseCurrency == null )
-                    	  baseCurrency			= "USD";
                       cRate.setFromCurrencyCode(baseCurrency);
                       cRate.setDataSource(CurrencyUtil.RATE_BY_HAND);
                       if(cRate.getExchangeRate()!=null && cRate.getExchangeRateDate()!=null && crForm.getDoAction().equalsIgnoreCase("saveRate"))

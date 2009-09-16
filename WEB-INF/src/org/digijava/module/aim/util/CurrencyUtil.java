@@ -576,7 +576,7 @@ public class CurrencyUtil {
 	 * @param currRates Collection of CurrencyRates object which need
 	 * to be saved
 	 */
-	public static void saveCurrencyRates(Collection currRates) {
+	public static void saveCurrencyRates(Collection currRates, String baseCurrencyCode) {
 		Session session = null;
 		Query qry = null;
 		String qryStr = null;
@@ -591,10 +591,11 @@ public class CurrencyUtil {
 			while (itr.hasNext()) {
 				CurrencyRates cr = (CurrencyRates) itr.next();
 				qryStr = "select crate from " + AmpCurrencyRate.class.getName() +
-					" crate where (crate.toCurrencyCode=:code) and " +
+					" crate where (crate.toCurrencyCode=:code) and (crate.fromCurrencyCode=:fromCurrencyCode) and " +
 					"(crate.exchangeRateDate=:date)";
 				qry = session.createQuery(qryStr);
 				qry.setParameter("code",cr.getCurrencyCode(),Hibernate.STRING);
+				qry.setParameter("fromCurrencyCode", baseCurrencyCode, Hibernate.STRING);
 				Date exRtDate = DateConversion.getDate(cr.getExchangeRateDate());
 				qry.setParameter("date",exRtDate,Hibernate.DATE);
 				Iterator tmpItr = qry.list().iterator();
@@ -608,6 +609,7 @@ public class CurrencyUtil {
 					currencyRate.setExchangeRate(cr.getExchangeRate());
 					currencyRate.setExchangeRateDate(exRtDate);
 					currencyRate.setToCurrencyCode(cr.getCurrencyCode());
+					currencyRate.setFromCurrencyCode( baseCurrencyCode );
 					currencyRate.setDataSource(CurrencyUtil.RATE_FROM_FILE);
 					logger.debug("Saving " + currencyRate.getToCurrencyCode());
 					session.save(currencyRate);

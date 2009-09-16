@@ -68,7 +68,11 @@
 						<td nowrap="nowrap">
 						 	${widgetTable.code}
 						</td>
-						<td nowrap="nowrap">
+						<td nowrap="nowrap">							
+						 	<digi:link href="/tableWidgetData.do~actType=startEdit~widgetId=${widgetTable.id}">
+						 		Add/Edit Data
+						 	</digi:link>
+						 	&nbsp;&nbsp;
 							<c:set var="titleEdit"><digi:trn key="gis:titleEdit">Edit</digi:trn></c:set>
 						 	<digi:link href="/adminTableWidgets.do~actType=startEdit~id=${widgetTable.id}" title="titleEdit">
 						 		<img border="0" src="/repository/message/view/images/edit.gif" title="${titleEdit}">
@@ -77,7 +81,7 @@
 							<c:set var="titleDelete"><digi:trn key="gis:titleDelete">Delete</digi:trn></c:set>
 						 	<digi:link onclick="return askToDelete()" href="/adminTableWidgets.do~actType=delete~id=${widgetTable.id}">
 						 		<img border="0" src='<digi:file src="images/deleteIcon.gif"/>' title="${titleDelete}">
-						 	</digi:link>
+						 	</digi:link>				
 						</td>
 					</tr>
 				</c:forEach>

@@ -50,7 +50,7 @@
     .Hovered {
         background-color:#a5bcf2;
     }
-    input,textArea {
+    input,textArea,td {
         font-family:Arial;
         font-size: 10px;
     }
@@ -613,9 +613,26 @@
                     <tr>
                         <td>
                             <table border=0 bgColor=#f4f4f2>
+                                 <tr>
+                                    <td  align="right" colspan="2">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td  align="right" colspan="2">
+                                        <input  class="dr-menu" type="button" name="expandBtn" value="<digi:trn>Expand All</digi:trn>" onclick="expandAll()">
+                                        <input  class="dr-menu" type="button" name="collapseBtn" value="<digi:trn>Collapse All</digi:trn>" onclick="collapseAll()">
+                                    </td>
+
+                                </tr>
+                                 <tr>
+                                    <td  align="right" colspan="2">
+                                        &nbsp;
+                                    </td>
+                                </tr>
                                 <tr>
                                     <td bgColor=#dddddb height="20" align="center"
-                                        colspan="2"> <c:if test="${empty aimAddOrgForm.ampOrgId||aimAddOrgForm.ampOrgId==0}">
+                                        colspan="2" style="font-weight:bold;font-size:13px"> <c:if test="${empty aimAddOrgForm.ampOrgId||aimAddOrgForm.ampOrgId==0}">
                                             <digi:trn key="aim:addOrganization">Add Organization</digi:trn>
                                         </c:if> <c:if test="${not empty aimAddOrgForm.ampOrgId&&aimAddOrgForm.ampOrgId!=0}">
                                             <digi:trn key="aim:editOrganization">Edit Organization</digi:trn>
@@ -706,21 +723,24 @@
                                 <c:choose>
                                     <c:when test="${aimAddOrgForm.type=='NGO'}">
                                         <tr>
-                                            <td style="font-size:13px;font-weight:bold;color:#0000FF;text-align:right">
+                                            <td style="font-size:13px;font-weight:bold;text-align:left" nowrap>
                                                 <digi:trn>Organization Primary Purpose</digi:trn>
                                                 <font size="2" color="#FF0000">*</font>
                                             </td>
                                             <td>
-                                                <html:textarea name="aimAddOrgForm" property="orgPrimaryPurpose" cols="60" rows="4" />
+                                                <html:textarea name="aimAddOrgForm" property="orgPrimaryPurpose" cols="160" rows="4" />
                                             </td>
                                         </tr>
                                         <tr>
                                             <td width="100%" colspan="2">
                                                 <fieldset><legend style="font-size:13px;font-weight:bold;color:#0000FF;"><digi:trn>General Infomation</digi:trn></legend>
-                                                <table width="100%">
+                                                      <img id="img_general" alt="" src="../ampTemplate/images/arrow_right.gif"  style="display : none;" onclick="expand('general')"/>
+                                <img id="imgh_general" alt="" src="../ampTemplate/images/arrow_down.gif"  onclick="collapse('general')"/>
+                                <div id="div_container_general">
+                                    <table width="100%" cellpadding="5" cellspacing="5">
                                                     <tr>
                                                         <td valign="top" width="50%">
-                                                            <table>
+                                                            <table cellpadding="5" cellspacing="5">
                                                                 <tr>
                                                                     <td nowrap style="font-weight:bold;text-align:right"><digi:trn>Registration Number in MinPlan</digi:trn><font color="red">*</font></td>
                                                                     <td><html:text property="regNumbMinPlan" /></td>
@@ -840,7 +860,7 @@
 
                                                         </td>
                                                         <td valign="top">
-                                                            <table>
+                                                            <table cellpadding="5" cellspacing="5">
                                                                 <tr>
                                                                     <td nowrap style="font-weight:bold;text-align:right"><digi:trn>Legal Personality Number</digi:trn></td>
                                                                     <td>
@@ -979,6 +999,7 @@
                             </tr>
 
                         </table>
+                         </div>
                       </fieldset>
                     </td>
                 </tr>
@@ -1034,7 +1055,7 @@
                                     <tr>
                                         <td colspan="5">
                                             <c:if test="${fn:length(aimAddOrgForm.staff)>1}">
-                                                <div style="overflow: scroll; width: 100%; height: 100px;">
+                                                <div style="overflow-y: scroll; overflow-x: hidden; width: 100%; height: 100px;">
                                                 </c:if>
                                                 <table width="100%" cellspacing="0" cellpadding="0" id="staffTable">
                                                     <c:forEach var="info" items="${aimAddOrgForm.staff}" >
@@ -1136,7 +1157,7 @@
                                     <tr>
                                         <td colspan="7">
                                             <c:if test="${fn:length(aimAddOrgForm.orgInfos)>1}">
-                                                <div style="overflow: scroll; width: 100%; height: 100px;">
+                                                <div style="overflow-y: scroll; overflow-x: hidden; width: 100%; height: 100px; min-height:100px">
                                                 </c:if>
                                                 <table width="100%" cellspacing="0" cellpadding="0" id="orgInfosTable">
                                                     <c:forEach var="orgInfo" items="${aimAddOrgForm.orgInfos}" >
@@ -1403,7 +1424,7 @@
                     <tr>
                         <td colspan="2">
                             <c:if test="${fn:length(aimAddOrgForm.contacts)>1}">
-                                <div style="overflow: scroll; width: 100%; height: 100px;">
+                                <div style="overflow-y: scroll; overflow-x: hidden;width: 100%; height: 100px;">
                                 </c:if>
                                     <table width="100%" cellSpacing="1" cellPadding="1" align="left" id="table_contact_content">
                                     <tr>
@@ -1528,13 +1549,6 @@
                         type="button"
                         value="<digi:trn key="btn:cancel">Cancel</digi:trn>"
                         class="dr-menu" onclick="move()"></td>
-            </tr>
-             <tr>
-                 <td  align="center">
-                    <input  class="dr-menu" type="button" name="expandBtn" value="<digi:trn>Expand All</digi:trn>" onclick="expandAll()">
-                    <input  class="dr-menu" type="button" name="collapseBtn" value="<digi:trn>Collapse All</digi:trn>" onclick="collapseAll()">
-                </td>
-              
             </tr>
             <c:if test="${not empty aimAddOrgForm.ampOrgId&&aimAddOrgForm.ampOrgId!=0}">
                 <tr>

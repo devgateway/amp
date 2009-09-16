@@ -83,16 +83,19 @@
 	}
 
 	function selectUuids() {
-		var length = document.aimTeamActivitiesForm.selActDocuments.length;
-		alert(length);
-		for (i = 0; i < length; i++) {			
-			document.aimTeamActivitiesForm.uuid[i].checked = document.aimTeamActivitiesForm.selActDocuments[i].checked;			
+		if (document.aimTeamActivitiesForm.selActDocuments.checked != null) {
+			document.aimTeamActivitiesForm.uuid.checked = document.aimTeamActivitiesForm.selActDocuments.checked;
+		} else {
+			var length = document.aimTeamActivitiesForm.selActDocuments.length;
+			for (i = 0; i < length; i++) {			
+				document.aimTeamActivitiesForm.uuid[i].checked = document.aimTeamActivitiesForm.selActDocuments[i].checked;			
+			}
 		}
 	}
 	
 	function sortMe(val) {
 		<digi:context name="sel" property="context/module/moduleinstance/teamActivityDocumentList.do" />
-			url = "<%= sel %>" ;
+			url = "<%=sel %>" ;
 
 			var sval = document.aimTeamActivitiesForm.sort.value;
 			var soval = document.aimTeamActivitiesForm.sortOrder.value;

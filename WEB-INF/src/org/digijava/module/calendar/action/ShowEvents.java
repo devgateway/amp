@@ -66,6 +66,8 @@ public class ShowEvents extends Action {
 		        ses.removeAttribute("day");
 		        ses.removeAttribute("mode");
 		        ses.removeAttribute("type");
+		        ses.removeAttribute("print");
+		        
 		        
 		        
 		} catch (Exception e) {

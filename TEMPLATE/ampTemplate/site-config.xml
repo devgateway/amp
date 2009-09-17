@@ -543,6 +543,8 @@
 				<page>calendarOrgPopupLayout</page>
 				<page>recurringEventPopupLayout</page>
 				<page>colorPicker</page>
+				<page>printViewPopupLayout</page>
+				<page>printPreviewPopupLayout</page>
 				
             </module>
             <module name="message">

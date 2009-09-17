@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <digi:instance  property="calendarViewForm"/>
-
+<c:if test="${!calendarViewForm.print}">			
 <table border="0"  width="100%" height="100%">
        <tr>
           <td colspan="2" valign="top"><jsp:include page="../../aim/view/teamPagesHeader.jsp" flush="true"/><td>
@@ -56,8 +56,20 @@
 	            </table>
 	            </digi:form>
 	        </td>
+    
 	        <td valign="top" width="100%">
 	               <jsp:include page="viewEventsBody.jsp" flush="true"/>
 	        </td>
     	</tr>
 </table>
+</c:if>	    
+<c:if test="${calendarViewForm.print}">
+<table border="0" align="center" width="100%" height="500px">
+<tr  align="center">
+	<td  align="center" width="800" height="500px" > 
+		<jsp:include page="viewEventsBody.jsp" flush="true"/>
+	</td>
+</tr>
+
+</table>
+</c:if>

@@ -97,7 +97,23 @@
  <link rel="stylesheet" href="<digi:file src="module/calendar/css/lightbox.css"/>"> 
  
 <div style="display: none"><jsp:include page="viewEventsFilter.jsp" flush="true"/></div>
- 
+
+<c:set var="printButon"><%=request.getSession().getAttribute("print")%></c:set>
+ <c:if test="${printButon}">
+
+  <table width="200px" height="40px">
+  	<tr>
+  		<td>	
+ 	
+ 	<a target="_blank" title="Printing" onclick="window.print();" style="cursor: pointer">
+ 		<img width="20" vspace="2" hspace="2" height="30" border="0" alt="Printer Friendly" src="/TEMPLATE/ampTemplate/module/aim/images/printer.gif"/>
+ 	</a>
+ 		<input type="button" value="close" onClick="window.close()" width="20" height="30"/>
+ 		</td>
+ 	</tr>
+  </table>
+ </c:if>
+
 <style>
 <%=CalendarUtil.getEventTypesCss()%>
 </style>
@@ -130,9 +146,27 @@
 		var myDate = new Date(eth);
 		var ehtMonth = <%=request.getSession().getAttribute("month")%>;
 		var type = calType(<%=request.getSession().getAttribute("type")%>);
-		
-		
-		scheduler.init('scheduler_here',myDate,'month',type, ehtMonth);
+		var printView = <%=request.getSession().getAttribute("view")%>;
+		var printDate = <%=request.getSession().getAttribute("date")%>;
+		var defoultView = "month";
+		if(printView!=null){
+			if(printView == 1){
+				defoultView = "day"
+
+				}else if(printView == 2){
+					defoultView = "week"
+
+				}
+
+			}
+		scheduler._click.dhx_cal_tab=function(){
+			   
+			  var mode = this.getAttribute("name").split("_")[0];
+			  scheduler.setCurrentView(scheduler._date,mode);
+			  if(mode=="week"||mode=="day")
+			  scheduler._els["dhx_cal_data"][0].scrollTop=scheduler.config.hour_size_px*21;
+			}
+		scheduler.init('scheduler_here',printDate,defoultView,type, ehtMonth);
 		scheduler.templates.event_text=function(start_date,end_date,ev){
 			return "Text:<b> "+ev.text+"</b><br>"+"Descr."+ev.details;
 		}
@@ -142,6 +176,19 @@
 						return "event_"+ev.type;
 				}
 		  }
+		scheduler.templates.week_date_class=function(d){
+			if(ev.type != 0){
+				return "event_"+ev.type;
+		}
+  }
+		 
+		scheduler.attachEvent("onViewChange", function (mode , date){
+			   console.log(mode+": "+date);
+			   document.getElementById("printView").value = mode;
+			   document.getElementById("printDate").value = date;
+				
+			   
+			});
 		scheduler.attachEvent("onClick",function(id){
 		    var ev = scheduler.getEvent(id);
 			var eventId = ev.id;
@@ -222,7 +269,9 @@ function getEthiopianCalendarDate(yyyy,mm,dd)
 }	
 -->
 </script>	
+<style> 
 
+</style>
 <body>
 <script type="text/javascript">
 window.onload = function(){
@@ -230,6 +279,8 @@ window.onload = function(){
 	};
 
 </script>
+<input type="hidden" value=""  id="printView"/>
+<input type="hidden" value=""  id="printDate"/>
 	<div id="scheduler_here" class="dhx_cal_container"  style='padding:1% 0% 1% 0%; width:100%; height:100%; position:relative'>
 		<div class="dhx_cal_navline">
 			<div class="dhx_cal_prev_button">&nbsp;</div>

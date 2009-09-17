@@ -36,6 +36,17 @@ function changeDonorsAndEventTypesState(){
 	changeEventTypesState();
 }
 
+function openPrinter(){
+var view = document.getElementById("printView").value;
+var date = document.getElementById("printDate").value;
+var myDate = new Date(date)
+
+if(view!= null)
+     {
+ 		window.open('/calendar/showCalendarView.do~filterInUse=false~view='+view+'~date='+myDate.valueOf()+'~print=true','mywindow','toolbar=no,location=no, width=1010,height=600", directories=no,status=no,menubar=yes,scrollbars=yes,copyhistory=yes,resizable=yes');
+	}
+}
+
 function changeDonorsState(){	
 	var donors= $("input[@id^='donors_']");
 	var resetDonors=true;
@@ -154,6 +165,7 @@ function changeEventTypesState(){
 	    <field:display name="Reset Filter Button" feature="Filter">
 	    	<input type="reset" value="<digi:trn key="aim:btnreset">Reset</digi:trn>" style="width:88px;" />
 	    </field:display>
+	    <input type="button" value="<digi:trn key="print">Print</digi:trn>" style="width:88px;" onclick="openPrinter();" />
 	</div>
 </feature:display>
 

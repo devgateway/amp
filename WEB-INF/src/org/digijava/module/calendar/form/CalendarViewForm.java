@@ -15,7 +15,8 @@ import org.digijava.module.calendar.entity.EventsFilter;
 
 public class CalendarViewForm  extends ActionForm {
 	
-    /**
+   
+	/**
 	 * default serial version id
 	 */
 	private static final long serialVersionUID = 1L;
@@ -43,7 +44,10 @@ public class CalendarViewForm  extends ActionForm {
     private Collection ampCalendarGraphs;
     private Boolean resetFilter;
     private Boolean resetDonors;
-    private Boolean resetEventTypes;       
+    private Boolean resetEventTypes;
+    private Boolean print = false;
+    private int printMode;
+    private int printData;
 
   public GregorianCalendar getCurrentDate() {
         return currentDate;
@@ -196,7 +200,7 @@ public class CalendarViewForm  extends ActionForm {
         this.siteId = siteId;
     }
 
-    public void setFilterInUse(boolean filterInUse) {
+    public void setFilterInUse(boolean filterInUse){
         this.filterInUse = filterInUse;
     }
 
@@ -238,6 +242,31 @@ public class CalendarViewForm  extends ActionForm {
      }
     */
   }
+  
+  public Boolean getPrint() {
+		return print;
+	}
+
+	public void setPrint(Boolean print) {
+		this.print = print;
+	}
+
+	public int getPrintMode() {
+		return printMode;
+	}
+
+	public void setPrintMode(int printMode) {
+		this.printMode = printMode;
+	}
+
+	public int getprintData() {
+		return printData;
+	}
+
+	public void setprintData(int printData) {
+		this.printData = printData;
+	}
+
 
 public Boolean getResetDonors() {
 	return resetDonors;

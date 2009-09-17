@@ -64,6 +64,12 @@ public class ShowCalendarEvent extends Action {
 	
     public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request,HttpServletResponse response) throws Exception {
         CalendarEventForm ceform = (CalendarEventForm) form;
+        String print = request.getParameter("method");
+        String ampCalendarId = request.getParameter("calendarId");
+        if(!print.isEmpty() && print.equals("print")){
+        	ceform.setAmpCalendarId(new Long(ampCalendarId));
+        	ceform.setMethod(print);
+        }
         if (ceform.getMethod().equalsIgnoreCase("new")) {
             ceform.reset(mapping, request);
             ceform.setOrganizations(null);
@@ -219,7 +225,7 @@ public class ShowCalendarEvent extends Action {
             ceform.setMethod("");
             return mapping.findForward("forward");
 
-        } else if (ceform.getMethod().equalsIgnoreCase("preview")) {
+        } else if (ceform.getMethod().equalsIgnoreCase("preview") || ceform.getMethod().equalsIgnoreCase("print")) {
         	String stDate=ceform.getSelectedStartDate() + " " + ceform.getSelectedStartTime();
         	String endDate=ceform.getSelectedEndDate()+ " " + ceform.getSelectedEndTime();
         	ActionErrors errors=new ActionErrors();
@@ -237,6 +243,7 @@ public class ShowCalendarEvent extends Action {
             		//get current member
             		HttpSession ses = request.getSession();
                     TeamMember mem = (TeamMember) ses.getAttribute("currentMember");
+                    ceform.setEventCreator(mem.getMemberName());
             		String[] selattendeess=ceform.getSelectedAtts();
             		if(ceform.getEventCreatorId()!=null && ceform.getEventCreatorId().equals(mem.getMemberId())){
             			ceform.setActionButtonsVisible(true);
@@ -249,8 +256,14 @@ public class ShowCalendarEvent extends Action {
     					}
             		}
         		}        		
-                ceform.setMethod("");
-                return mapping.findForward("preview");
+        		if(!ceform.getMethod().equalsIgnoreCase("print")){
+        			ceform.setMethod("");
+                	return mapping.findForward("preview");
+        		}else{
+        			
+        			 return mapping.findForward("print");
+             		
+        		}
         	}
         }
 

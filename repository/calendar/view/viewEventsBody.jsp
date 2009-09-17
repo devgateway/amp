@@ -159,6 +159,7 @@
 				}
 
 			}
+		/*
 		scheduler._click.dhx_cal_tab=function(){
 			   
 			  var mode = this.getAttribute("name").split("_")[0];
@@ -166,6 +167,7 @@
 			  if(mode=="week"||mode=="day")
 			  scheduler._els["dhx_cal_data"][0].scrollTop=scheduler.config.hour_size_px*21;
 			}
+		*/
 		scheduler.init('scheduler_here',printDate,defoultView,type, ehtMonth);
 		scheduler.templates.event_text=function(start_date,end_date,ev){
 			return "Text:<b> "+ev.text+"</b><br>"+"Descr."+ev.details;
@@ -179,11 +181,9 @@
 		
 		 
 		scheduler.attachEvent("onViewChange", function (mode , date){
-			   console.log(mode+": "+date);
+			
 			   document.getElementById("printView").value = mode;
 			   document.getElementById("printDate").value = date;
-				
-			   
 			});
 		scheduler.attachEvent("onClick",function(id){
 		    var ev = scheduler.getEvent(id);

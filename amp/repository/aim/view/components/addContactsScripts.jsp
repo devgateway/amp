@@ -10,7 +10,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 <script type="text/javascript">
     function selectContact(params1) {
-        myPanel.cfg.setProperty("width","600px");
+        myPanel.cfg.setProperty("width","800px");
         myPanel.cfg.setProperty("height","500px");
         var msg='\n<digi:trn >Add Contact Information</digi:trn>';
         showPanelLoading(msg);

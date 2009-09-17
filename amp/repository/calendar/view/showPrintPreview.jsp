@@ -34,14 +34,6 @@ function deleteEvent(){
 }
 
 
-function openPrinter(){
-	var id = document.getElementById('id').value;
-
-	//<digi:context name="rev" property="/calendar/showCalendarEvent.do~method=print~resetForm=true" />
-		//openURLinWindow("<%=rev%>",1024,768);
-	window.open('/calendar/showCalendarEvent.do~method=print~resetForm=true~calendarId='+id+'','mywindow','toolbar=no,location=no, width=540,height=500, directories=no,status=no,menubar=yes,scrollbars=yes,copyhistory=yes,resizable=yes');
-		
-	}
 </script>
 
 <digi:form action="/showCalendarEvent.do">
@@ -50,29 +42,20 @@ function openPrinter(){
   <html:hidden styleId="id" name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
 
   <table width="520">
-  	 <tr>
-		<td width=14>&nbsp;</td>
-		<td align=left vAlign=top width=750>
-			<table cellPadding=5 cellSpacing=0 width="100%">
-				<tr>
-		<td height=33>
-			<span class=crumb>&nbsp;
-				<c:set var="translation">
-					<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
-				</c:set>
-				<digi:link href="/../aim/showDesktop.do" styleClass="comment" title="${translation}" >
-					<digi:trn key="aim:portfolio">Portfolio</digi:trn>
-				</digi:link>&nbsp;&gt;&nbsp;
-				<digi:link href="/../calendar/showCalendarView.do" styleClass="comment" title="${translation}">
-					<digi:trn key="calendar:Calendar">Calendar</digi:trn>
-				</digi:link>&nbsp;&gt;&nbsp;
-				<digi:trn key="calendar:previewEvent">Preview Event</digi:trn>
-			</span>
-		</td>
-	</tr>	
+ 	
 	<tr>
+	<td>
+	<a target="_blank" title="Printing" onclick="window.print();" style="cursor: pointer">
+ 		<img width="20" vspace="2" hspace="2" height="30" border="0" alt="Printer Friendly" src="/TEMPLATE/ampTemplate/module/aim/images/printer.gif"/>
+ 	</a>
+ 	<a target="_blank"  title="Printing" onclick="window.close();" style="cursor: pointer" height="30">
+				               Close
+	 </a>
+	</td>
 		<td height="16" vAlign="middle" width="520">
 			<span class=subtitle-blue>	<digi:trn key="calendar:previewEvent">Preview  Event</digi:trn> </span>
+	
+ 	
 		</td>
 	</tr>
 	<tr>				
@@ -103,13 +86,23 @@ function openPrinter(){
 				      <td style="font-family: Tahoma; font-size: 12px;">        
 				        <div style="padding: 20px; background-color: #F5F5F5;">
 				          <table>
+<tr>
+<td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;" nowrap="nowrap">
+				                <digi:trn key="calendar:evntTitle">Creator Member</digi:trn>
+				              </td>
+				              <td style="font-family: Tahoma;font-size: 12px;">
+				                 ${calendarEventForm.eventCreator}
+				              </td>
+</tr>
 				            <tr>
+				            
 				              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;" nowrap="nowrap">
 				                <digi:trn key="calendar:evntTitle">Event title</digi:trn>
 				              </td>
 				              <td style="font-family: Tahoma;font-size: 12px;">
 				                <html:hidden name="calendarEventForm" property="eventTitle" value="${calendarEventForm.eventTitle}"/>
 				                ${calendarEventForm.eventTitle}
+				             
 				              </td>
 				            </tr>
 				           <tr height="3px"><td colspan="2"></td></tr>
@@ -233,16 +226,7 @@ function openPrinter(){
 				              <td>
 				              </td>
 				              <td>
-				                <input type="submit" style="width: 100px;" value="<digi:trn>Save</digi:trn>" onclick="document.getElementById('hdnMethod').value = 'save'">
-				                &nbsp;				               
-								<c:if test="${calendarEventForm.actionButtonsVisible!=false}">
-				                	<input type="submit" style="width: 100px;" value="<digi:trn>Edit</digi:trn>" onclick="document.getElementById('hdnMethod').value = ''">
-				                	&nbsp;
-				                	<input type="submit" value="<digi:trn>Delete</digi:trn>" style="width: 100px;" onclick="deleteEvent();" />
-				                	
-				                </c:if>
-				                	&nbsp;
-				                <input type="button" value="<digi:trn>Print</digi:trn>" style="width: 100px;" onclick="openPrinter();" />
+				              
 				              </td>
 				            </tr>
 				          </table>
@@ -253,6 +237,7 @@ function openPrinter(){
              </table>
        		</td>
     	</tr>
+    	
     </table>
 	</td>
 </tr>

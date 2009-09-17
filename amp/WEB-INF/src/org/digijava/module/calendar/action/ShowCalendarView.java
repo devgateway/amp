@@ -48,8 +48,34 @@ public class ShowCalendarView extends Action {
         CalendarViewForm calendarViewForm = (CalendarViewForm) form;
         HttpSession ses = request.getSession();
         TeamMember mem = (TeamMember) ses.getAttribute("currentMember");
+        String printView =  request.getParameter("view");
+        String printDate =  request.getParameter("date");
+        int numDays = 0;
+        
+        if(printView != null){
+        	if(printView.equals("day")){
+        		numDays = 1;
+        	}else if (printView.equals("week")){
+        		numDays = 2;
+        	}else{
+        		
+        		numDays = 3;
+        	}
+        }
+        String print =  request.getParameter("print");
+        
         Boolean showPublicEvents = calendarViewForm.getResetFilter();
         
+        calendarViewForm.setPrintMode(numDays);
+        if(print != null){
+         if(print.equals("true")){
+        	calendarViewForm.setPrint(true);
+         }else{
+        	 calendarViewForm.setPrint(false);
+         }
+        }else{
+        	calendarViewForm.setPrint(false);
+        }
         if (showPublicEvents == null)
         	showPublicEvents = new Boolean(true);
         
@@ -256,6 +282,9 @@ public class ShowCalendarView extends Action {
        calendarViewForm.setAmpCalendarGraphs(ampCalendarGraphs);
       
          ses.setAttribute("mode",calendarViewForm.getView().length());
+         ses.setAttribute("view",calendarViewForm.getPrintMode());
+         ses.setAttribute("print",calendarViewForm.getPrint());
+         ses.setAttribute("date",printDate);
          ses.setAttribute("publicEvent", filter.isShowPublicEvents());
          ses.setAttribute("donor", filter.getSelectedDonors());
          ses.setAttribute("year", calendarViewForm.getBaseDateBreakDown().getYear());
@@ -264,7 +293,9 @@ public class ShowCalendarView extends Action {
          ses.setAttribute("type", calendarViewForm.getBaseDateBreakDown().getType());
          
          
-         
+         if(calendarViewForm.getPrint()){
+        	 return mapping.findForward("print");
+         }
         return mapping.findForward("success");
     }
 }

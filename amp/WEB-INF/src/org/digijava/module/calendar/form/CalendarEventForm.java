@@ -18,6 +18,9 @@ import org.digijava.module.aim.helper.Constants;
 
 public class CalendarEventForm
     extends ActionForm {
+	
+
+
 	private Long ampCalendarId;
     private String eventTitle;
     private String method;
@@ -67,6 +70,7 @@ public class CalendarEventForm
 	private Collection<AmpOrganisation> organizations;
 	private String description;
 	private Long eventCreatorId;
+	private String eventCreator;
 	private Boolean actionButtonsVisible;
 	
 
@@ -469,6 +473,14 @@ public class CalendarEventForm
 
 	public void setEventCreatorId(Long eventCreatorId) {
 		this.eventCreatorId = eventCreatorId;
+	}
+	
+	public String getEventCreator() {
+		return eventCreator;
+	}
+
+	public void setEventCreator(String eventCreator) {
+		this.eventCreator = eventCreator;
 	}
 
 	public Boolean getActionButtonsVisible() {

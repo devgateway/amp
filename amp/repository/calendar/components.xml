@@ -22,6 +22,8 @@
     <page page="eventTypesList" name="eventTypes" title="Event Types" />
     <page page="recurringEventPopupLayout" name="recurringEventPopupLayout" title="Recurring Event" />
     <page page="colorPicker" name="colorPicker" title="Show Color Palete" />
+    <page page="printViewPopupLayout" name="printViewPopupLayout" title="Print Preview" />
+    <page page="printPreviewPopupLayout" name="printPreviewPopupLayout" title="Print Preview" />
 </secondary-pages>
 
 <module>
@@ -45,6 +47,9 @@
     
     <page name="calendarOrgPopupLayout">selectOrganisation.jsp</page>
     <page name="recurringEventPopupLayout">recurringEvent.jsp</page>
+    <page name="printViewPopupLayout">showCalendarPrintView.jsp</page>
+    <page name="printPreviewPopupLayout">showPrintPreview.jsp</page>
+    
     
 </module>
 

@@ -176,11 +176,7 @@
 						return "event_"+ev.type;
 				}
 		  }
-		scheduler.templates.week_date_class=function(d){
-			if(ev.type != 0){
-				return "event_"+ev.type;
-		}
-  }
+		
 		 
 		scheduler.attachEvent("onViewChange", function (mode , date){
 			   console.log(mode+": "+date);

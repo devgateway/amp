@@ -343,6 +343,53 @@ public class DynLocationManagerUtil {
 		}
 		return null;
 	}
+	
+	public static AmpCategoryValueLocations getLocationByIso3(String locationIso3, HardCodedCategoryValue hcLocationLayer) {
+		try {
+			AmpCategoryValue layer	= CategoryManagerUtil.getAmpCategoryValueFromDB(hcLocationLayer);
+			return getLocationByIso3(locationIso3, layer);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	/**
+	 * 
+	 * @param locationIso
+	 * @param cvLocationLayer the AmpCategoryValue specifying the layer (level) of the location...like Country or Region
+	 * @return
+	 */
+	public static AmpCategoryValueLocations getLocationByIso3(String locationIso3, AmpCategoryValue cvLocationLayer) {
+		Session dbSession										= null;
+		
+		
+		try {
+			dbSession			= PersistenceManager.getSession();
+			String queryString 	= "select loc from "
+				+ AmpCategoryValueLocations.class.getName()
+				+ " loc where (loc.iso3=:iso3)" ;
+			if ( cvLocationLayer != null ) {
+				queryString		+= " AND (loc.parentCategoryValue=:cvId) ";
+			}
+			Query qry			= dbSession.createQuery(queryString);
+			if ( cvLocationLayer != null) {
+				qry.setLong("cvId", cvLocationLayer.getId() );
+			}
+			qry.setString("iso3", locationIso3);
+			AmpCategoryValueLocations loc		= (AmpCategoryValueLocations) qry.uniqueResult();
+			return loc;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				PersistenceManager.releaseSession(dbSession);
+			} catch (Exception ex2) {
+				logger.error("releaseSession() failed :" + ex2);
+			}
+		}
+		return null;
+	}
+	
 	public static AmpCategoryValueLocations getLocationByIso(String locationIso, HardCodedCategoryValue hcLocationLayer) {
 		try {
 			AmpCategoryValue layer	= CategoryManagerUtil.getAmpCategoryValueFromDB(hcLocationLayer);

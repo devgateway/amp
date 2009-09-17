@@ -20,7 +20,7 @@
 		<property name="gsLong" column="gs_long" type="java.lang.String" />
 		<property name="geoCode" column="geo_code" type="java.lang.String" />
 		<property name="code" column="code" type="java.lang.String" />
-		<property column="ISO3" length="3" name="iso3" type="java.lang.String" />
+		<property column="ISO3" length="3" name="iso3" type="java.lang.String" unique-key="iso3_key" />
 		<property column="ISO" length="3" name="iso" type="java.lang.String" unique-key="iso_key" />
 		
 		<set name="childLocations" inverse="true" lazy="true" cascade="all-delete-orphan" order-by="location_name">

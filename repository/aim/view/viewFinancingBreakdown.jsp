@@ -253,7 +253,7 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 											<TD width="100%" bgcolor="#F4F4F2" align="center" class="box-border-nopadding">
 												<TABLE width="100%"  border="0" cellpadding="4" cellspacing="1" id="dataTable">
                					  <TR bgcolor="#999999" >
- 
+    									<TD bgcolor="#999999" style="color:black;font-weight:bold;">&nbsp;</TD>
 		    	                    	<field:display name="Funding Organization Id" feature="Funding Information">
 		    	                    		<TD bgcolor="#999999" style="color:black;font-weight:bold;"><digi:trn key="aim:orgFundingId">Org Funding ID</digi:trn></TD>
 		    	                    	</field:display>
@@ -304,6 +304,7 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 								<logic:iterate name="aimFinancingBreakdownForm" property="financingBreakdown" id="breakdown"
 			  	                   type="org.digijava.module.aim.helper.FinancingBreakdown">
 															<TR valign="top" bgcolor="#f4f4f2">
+															<TD>&nbsp;</TD>
 												<field:display name="Funding Organization Id" feature="Funding Information">
 					    	           			<TD>
 						               				<jsp:useBean id="urlFinancialOverview" type="java.util.Map" class="java.util.HashMap"/>
@@ -375,9 +376,14 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 													</logic:notEmpty>
 				                  <TR valign="top">
 														<TD class="note" style="background-color:#FFFFFF;"><digi:trn key="aim:total">Total</digi:trn></TD>
-				                    <TD class="note" style="background-color:#FFFFFF;"></TD>
-				                    				
-                                                    <feature:display module="Funding" name="MTEF Projections">
+				                     	<field:display name="Funding Organization Id" feature="Funding Information">
+		    	                    <TD class="note" style="background-color:#FFFFFF;"></TD>
+		    	                    	</field:display>
+		    	                    	<field:display name="Funding Organization" feature="Funding Information">
+						                <TD class="note" style="background-color:#FFFFFF;"></TD>
+						                </field:display>
+				                
+				                                        <feature:display module="Funding" name="MTEF Projections">
                                                     	<field:display feature="MTEF Projections" name="MTEFProjections"><TD align="right" class="note" style="background-color:#FFFFFF;"><bean:write name="aimFinancingBreakdownForm" property="totalProjections"/></TD>
 				                    					</field:display>
                                                         </feature:display>

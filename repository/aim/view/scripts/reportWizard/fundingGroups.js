@@ -58,10 +58,10 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]			= new Array(
 				,'Funding Status'
 			);
 YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(
-				'Region'
+				'Region','Status'
 			);
 YAHOO.amp.reportwizard.fundingGroups["component"]		= new Array(
-				 'Component Type'
+				 'Component Type','Status'
 			);
 YAHOO.amp.reportwizard.fundingGroups["contribution"]	= new Array(
 				'Costing Donor','Parent National Planning Objectives', 'National Planning Objectives', 'Primary Program', 

@@ -850,7 +850,7 @@
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td style=" text-align:right" class="tdBoldClass"><digi:trn>Sectors Prefernce</digi:trn><font color="red">*</font></td>
+                                                                    <td style=" text-align:right" class="tdBoldClass"><digi:trn>Sector Preferences</digi:trn><font color="red">*</font></td>
                                                                     <td>
                                                                         <table cellSpacing="1" cellPadding="5" class="box-border-nopadding">
                                                                             <c:if test="${aimAddOrgForm.sectors != null}">
@@ -1327,7 +1327,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td style=" text-align:right" class="tdBoldClass"><digi:trn>Sectors Prefernce</digi:trn></td>
+                    <td style=" text-align:right" class="tdBoldClass"><digi:trn>Sector Preferences</digi:trn></td>
                     <td>
                         <table cellSpacing="1" cellPadding="5" class="box-border-nopadding">
                             <c:forEach var="sector" items="${aimAddOrgForm.sectors}">
@@ -1502,26 +1502,29 @@
                     <tr>
                         <td colspan="2">
                             <c:if test="${fn:length(aimAddOrgForm.contacts)>1}">
-                                <div style="overflow-y: scroll; overflow-x: hidden;width: 100%; height: 100px;">
+                                <div style="overflow-y: scroll; overflow-x: hidden;width: 95%; height: 100px;">
                                 </c:if>
                                     <table width="100%" cellSpacing="1" cellPadding="1" align="left" id="table_contact_content">
                                     <tr>
-                                        <td class="tdClass">
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td class="tdBoldClass">
                                             <digi:trn>LAST NAME</digi:trn>
                                         </td>
-                                        <td class="tdClass">
+                                        <td class="tdBoldClass">
                                             <digi:trn>FIRST NAME</digi:trn>
                                         </td>
-                                        <td class="tdClass">
+                                        <td class="tdBoldClass">
                                             <digi:trn>EMAIL </digi:trn>
                                         </td>
-                                        <td class="tdClass">
+                                        <td class="tdBoldClass">
                                             <digi:trn> TELEPHONE </digi:trn>
                                         </td>
-                                        <td class="tdClass">
+                                        <td class="tdBoldClass">
                                             <digi:trn> FAX </digi:trn>
                                         </td>
-                                        <td class="tdClass">
+                                        <td class="tdBoldClass">
                                             <digi:trn>TITLE </digi:trn>
                                         </td>
                                         <td colspan="2">
@@ -1529,15 +1532,19 @@
                                         </td>
                                     </tr>
                                     <c:forEach var="contact" items="${aimAddOrgForm.contacts}">
-
                                         <tr>
-                                            <td class="tdClass">
+                                            <td style="width:40px">
+                                                <html:multibox property="selectedContactInfoIds" styleClass="selectedContactInfoIds">
+                                                    ${contact.id}
+                                                </html:multibox>
+                                            </td>
+                                            <td class="tdClass" nowrap>
                                                 ${contact.lastname}
                                             </td>
-                                            <td class="tdClass">
+                                            <td class="tdClass" nowrap>
                                                 ${contact.name}
                                             </td>
-                                            <td class="tdClass">
+                                            <td class="tdClass" nowrap>
                                                 ${contact.email}
                                             </td>
                                             <td class="tdClass">
@@ -1562,13 +1569,16 @@
                                         </td>
                                         </tr>
                                     </c:forEach>
-
+                                 
 
                                 </table>
                                 <c:if test="${fn:length(aimAddOrgForm.contacts)>1}">
                                 </div>
                             </c:if>
                         </td>
+                    </tr>
+                      <tr>
+                        <td colspan="2" class="tdBoldClass" style="text-align:left;"><input type="checkbox"  onclick="selectAll('selectedContactInfoIds')"><digi:trn>Select All</digi:trn>&nbsp;&nbsp;<input type="button" onclick="removeContact()" value="<digi:trn>Delete</digi:trn>"></td>
                     </tr>
                 </c:if>
                 <tr>

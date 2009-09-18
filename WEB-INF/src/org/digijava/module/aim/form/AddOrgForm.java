@@ -101,6 +101,15 @@ public class AddOrgForm extends ActionForm {
     private Long[] selectedOrgInfoIds;
     private Long selectedOrgInfoId;
     private String orgInfoAmount;
+    private Long[] selectedContactInfoIds;
+
+    public Long[] getSelectedContactInfoIds() {
+        return selectedContactInfoIds;
+    }
+
+    public void setSelectedContactInfoIds(Long[] selectedContactInfoIds) {
+        this.selectedContactInfoIds = selectedContactInfoIds;
+    }
 
     public String getOrgInfoAmount() {
         return orgInfoAmount;

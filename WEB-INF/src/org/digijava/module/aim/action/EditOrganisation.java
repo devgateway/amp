@@ -674,20 +674,35 @@ public class EditOrganisation extends DispatchAction {
         }
         AddOrgForm editForm = (AddOrgForm) form;
         Long selContactId = editForm.getSelContactId();
+        Long[] selectedContactInfoIds = editForm.getSelectedContactInfoIds();
         List<AmpContact> oldContacts = editForm.getContacts();
+        List<AmpContact> contactsForRemove = new ArrayList<AmpContact>();
         Iterator<AmpContact> contactIter = oldContacts.iterator();
-        AmpContact contact = null;
         while (contactIter.hasNext()) {
-            contact = contactIter.next();
-            if (contact.getId().equals(selContactId)) {
-                break;
+            AmpContact contact = contactIter.next();
+            if (selContactId != null&&selContactId!=0) {
+                if (contact.getId().equals(selContactId)) {
+                    contactsForRemove.add(contact);
+                    break;
+                }
+            } else {
+
+                if (selectedContactInfoIds != null) {
+                    for (Long contactId : selectedContactInfoIds) {
+                        if (contact.getId().equals(contactId)) {
+                            contactsForRemove.add(contact);
+                        }
+                    }
+
+                }
             }
 
         }
 
-        oldContacts.remove(contact);
+        oldContacts.removeAll(contactsForRemove);
         editForm.setContacts(oldContacts);
         editForm.setSelContactId(null);
+        editForm.setSelectedContactInfoIds(null);
 
         return mapping.findForward("forward");
     }
@@ -1123,6 +1138,8 @@ public class EditOrganisation extends DispatchAction {
             form.setYears(getYearsBeanList());
             form.setContacts(null);
             form.setOrgInfoAmount(null);
+            form.setSelectedContactInfoIds(null);
+            form.setSelectedOrgInfoIds(null);
         } catch (Exception ex) {
             logger.error(ex.getMessage());
             new DgException(ex);

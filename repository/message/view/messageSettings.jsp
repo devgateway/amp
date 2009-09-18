@@ -23,15 +23,15 @@
 
 <script langauage="JavaScript">
 
-	var help="<digi:trn key='message:msgHelp'>Message Settings Help</digi:trn>"
-	var helpForRefreshTime="<digi:trn key='message:helpForMsgRefreshTime'>This indicates the time in minutes the messages count on the user\'s desktop is refreshed.</digi:trn>"
-	var helpForStorage="<digi:trn key='message:helpForStorage'>This indicates the total number of messages that are permissible per type of message <br>i.e. Messages , Alerts , Approvals and Events. Within Messages and Alerts this setting <br>indicates the total number of messages permissible in the Inbox , Sent and Draft messages.</digi:trn>"
-	var helpForAdvanceAlerts='<digi:trn key="message:helpForAdvAlerts">This indicates the number of days in advance an Alert will be recieved by a user<br> for all alerts that are time sensitive and for upcoming events.</digi:trn>'
-	var helpForEmailable="<digi:trn key='message:helpForEmailables'>Set this to true to allow all alerts to be forwarded to the user\'s email address</digi:trn>"
+	var help='<digi:trn jsFriendly="true">Message Settings Help</digi:trn>';
+	var helpForRefreshTime='<digi:trn jsFriendly="true">This indicates the time in minutes the messages count on the user\'s desktop is refreshed.</digi:trn>';
+	var helpForStorage='<digi:trn jsFriendly="true">This indicates the total number of messages that are permissible per type of message <br>i.e. Messages , Alerts , Approvals and Events. Within Messages and Alerts this setting <br>indicates the total number of messages permissible in the Inbox , Sent and Draft messages.</digi:trn>';
+	var helpForAdvanceAlerts='<digi:trn jsFriendly="true">This indicates the number of days in advance an Alert will be recieved by a user<br> for all alerts that are time sensitive and for upcoming events.</digi:trn>';
+	var helpForEmailable='<digi:trn jsFriendly="true">Set this to true to allow all alerts to be forwarded to the user\'s email address</digi:trn>';
 	
 	function validate(record,action,minusAccepted){
 		if(action=='save' && (record==null || record=="" || record=="-1")){
-			alert('<digi:trn key="message:pleaseenterdata">Please enter data to save</digi:trn>');
+			alert('<digi:trn>Please enter data to save</digi:trn>');
 			return false;
 		}
 		if(record.length>0){
@@ -98,44 +98,43 @@
 								<tr><%-- Start Navigation --%>
 									<td height=33><span class=crumb>
 										<c:set var="translation">
-											<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
+											<digi:trn>Click here to goto Admin Home</digi:trn>
 										</c:set>
 										<digi:link href="/admin.do" styleClass="comment" title="${translation}" module="aim">
-											<digi:trn key="aim:AmpAdminHome">
+											<digi:trn>
 												Admin Home
 											</digi:trn>
 										</digi:link>&nbsp;&gt;&nbsp;
-										<digi:trn key="aim:messagemanager">Message Manager</digi:trn>
+										<digi:trn>Message Manager</digi:trn>
 									</td>
 								</tr><%-- End navigation --%>
 								<TR>
 									<TD>
-										<TABLE border="1" cellPadding="3" cellSpacing="3" width="100%" bordercolor="#ccecff" rules="all">
-											
+										<TABLE border="1" cellPadding="3" cellSpacing="3" width="100%" bordercolor="#ccecff" rules="all">											
 											<tr>
-												<td colspan="4" align="center" bgcolor="#ccecff"><digi:trn key="message:msgSettings">Message Settings</digi:trn> </td>
+												<td colspan="4" align="center" bgcolor="#ccecff"><digi:trn>Message Settings</digi:trn> </td>
 											</tr>
 											<tr>
-												<td align="center"><digi:trn key="message:setting">Setting</digi:trn> </td>
-												<td align="center"><digi:trn key="message:currentValue">Current Value</digi:trn></td>
-												<td align="center"><digi:trn key="message:newValue">New Value</digi:trn></td>
+												<td align="center"><digi:trn>Setting</digi:trn> </td>
+												<td align="center"><digi:trn>Current Value</digi:trn></td>
+												<td align="center"><digi:trn>New Value</digi:trn></td>
 												<td>&nbsp;</td>
 											</tr>
 											<tr>
 												<td align="center" >
-													<digi:trn key="message:refreshTime">Message Refresh Time(minutes)</digi:trn> &nbsp;
+													<digi:trn>Message Refresh Time(minutes)</digi:trn> &nbsp;
 													<img src="../ampTemplate/images/help.gif" onmouseover="stm([help,helpForRefreshTime],Style[13])" onmouseout="htm()"/>
 												</td>
 												<td align="center">${messageForm.msgRefreshTimeCurr}</td>
 												<td align="center"><html:text name="messageForm" property="msgRefreshTimeNew"/></td>
 												<td align="center">
-													<c:set var="saveBtn"><digi:trn key="message:btn:save">Save</digi:trn></c:set>
+													<c:set var="saveBtn"><digi:trn>Save</digi:trn></c:set>
 													<input type="button" value="${saveBtn}" onclick="saveRecord('refreshTime')"/>
 												</td>
 											</tr>
 											<tr>
 												<td align="center">
-													<digi:trn key="message:msgStorage">Message Storage Per Message Type</digi:trn>
+													<digi:trn>Message Storage Per Message Type</digi:trn>
 													<img src="../ampTemplate/images/help.gif" onmouseover="stm([help,helpForStorage],Style[13])" onmouseout="htm()"/>
 												</td>
 												<td align="center">${messageForm.msgStoragePerMsgTypeCurr} </td>
@@ -144,7 +143,7 @@
 											</tr>
 											<tr>
 												<td align="center">
-													<digi:trn key="message:advanceAlertWarnings">Days of Advance Alert Warnings</digi:trn>
+													<digi:trn>Days of Advance Alert Warnings</digi:trn>
 													<img src="../ampTemplate/images/help.gif" onmouseover="stm([help,helpForAdvanceAlerts],Style[13])" onmouseout="htm()"/>
 												</td>
 												<td align="center">${messageForm.daysForAdvanceAlertsWarningsCurr}</td>
@@ -153,7 +152,7 @@
 											</tr>
 											<tr>
 												<td align="center">
-													<digi:trn key="message:emailAlerts">Email Alerts</digi:trn>
+													<digi:trn>Email Alerts</digi:trn>
 													<img src="../ampTemplate/images/help.gif" onmouseover="stm([help,helpForEmailable],Style[13])" onmouseout="htm()"/>
 												</td>
 												<td align="center">
@@ -161,24 +160,24 @@
 														&nbsp;
 													</c:if>
 													<c:if test="${messageForm.emailMsgsCurrent==0}">
-														<digi:trn key="message:No">No</digi:trn>
+														<digi:trn>No</digi:trn>
 													</c:if>
 													<c:if test="${messageForm.emailMsgsCurrent==1}">
-														<digi:trn key="message:yes">Yes</digi:trn>
+														<digi:trn>Yes</digi:trn>
 													</c:if>
 												</td>
 												<td align="center">
 													<html:select property="emailMsgsNew" name="messageForm">
-														<html:option value="-1"><digi:trn key="aim:pleaseselectemail">please select</digi:trn></html:option>
-														<html:option value="0"><digi:trn key="message:No">No</digi:trn></html:option>
-														<html:option value="1"><digi:trn key="message:yes">Yes</digi:trn></html:option>
+														<html:option value="-1"><digi:trn>please select</digi:trn></html:option>
+														<html:option value="0"><digi:trn>No</digi:trn></html:option>
+														<html:option value="1"><digi:trn>Yes</digi:trn></html:option>
 													</html:select>
 												</td>
 												<td align="center"><input type="button" value="${saveBtn}" onclick="saveRecord('emailAlerts')" /></td>
 											</tr>
 											<tr>
 												<td colspan="4" align="right">
-													<c:set var="saveAllBtn"><digi:trn key="message:btn:saveAll">Save All</digi:trn></c:set>
+													<c:set var="saveAllBtn"><digi:trn>Save All</digi:trn></c:set>
 													<input type="button" value="${saveAllBtn}" onclick="saveAll()" />
 												</td>
 											</tr>
@@ -193,7 +192,7 @@
 													<table cellPadding=0 cellSpacing=0 width=100>
 														<tr>
 															<td bgColor=#c9c9c7 class=box-title>
-																<digi:trn key="aim:otherLinks">
+																<digi:trn>
 																Other links
 																</digi:trn>
 															</td>
@@ -211,10 +210,10 @@
 															<td>
 																<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 																<c:set var="translation">
-																	<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
+																	<digi:trn>Click here to goto Admin Home</digi:trn>
 																</c:set>
 																<digi:link href="/admin.do" title="${translation}" module="aim">
-																	<digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
+																	<digi:trn>Admin Home</digi:trn>
 																</digi:link>
 															</td>
 														</tr>
@@ -222,10 +221,10 @@
 															<td>
 																<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 																<c:set var="trn">
-								                                  <digi:trn key="message:viewSettings">Click here to view TemplateAlerts Manager</digi:trn>
+								                                  <digi:trn>Click here to view TemplateAlerts Manager</digi:trn>
 								                                </c:set>
 								                                <digi:link module="message" href="/templatesManager.do?actionType=viewTemplates" title="${trn}">
-								                                  <digi:trn key="message:templatesManager">TemplateAlerts Manager</digi:trn>
+								                                  <digi:trn>TemplateAlerts Manager</digi:trn>
 								                                </digi:link>
 															</td>
 														</tr>

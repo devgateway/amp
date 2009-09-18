@@ -390,7 +390,7 @@ public final class Util {
 			e.printStackTrace();
 		}
 
-		logger.info("rate for " + currency + " to " + baseCurrency + " on " + currencyDate
+		logger.debug("rate for " + currency + " to " + baseCurrency + " on " + currencyDate
 				+ " is " + ret);
 		if (ret != 1)
 			ratesCache

@@ -353,14 +353,14 @@ public class ExportOrganizationToExcel extends DispatchAction {
             row = sheet.createRow(rowNum++);
 
             cell = row.createCell(cellNum++);
-            headerPrefix = TranslatorWorker.translateText("LASTNAME", locale, siteId);
+            headerPrefix = TranslatorWorker.translateText("LAST NAME", locale, siteId);
             HSSFRichTextString headerlLastname = new HSSFRichTextString(headerPrefix);
             headerlLastname.applyFont(fontSubHeader);
             cell.setCellValue(headerlLastname);
             cell.setCellStyle(style);
 
             cell = row.createCell(cellNum++);
-            headerPrefix = TranslatorWorker.translateText("FIRSTNAME", locale, siteId);
+            headerPrefix = TranslatorWorker.translateText("FIRST NAME", locale, siteId);
             HSSFRichTextString headerFirstName = new HSSFRichTextString(headerPrefix);
             headerFirstName.applyFont(fontSubHeader);
             cell.setCellValue(headerFirstName);

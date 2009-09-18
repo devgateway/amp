@@ -1089,7 +1089,7 @@
                                                                 </html:multibox>
                                                             </td>
                                                             <td class="tdClass" style="width:125px;text-align:center;">${info.year}</td>
-                                                            <td class="tdClass" style="width:205px;text-align:center;" >${info.type.value}</td>
+                                                            <td class="tdClass" style="width:205px;text-align:center;" ><digi:trn>${info.type.value}</digi:trn></td>
                                                             <td class="tdClass" style="width:200px;text-align:center;">${info.staffNumber}</td>
                                                             <td class="tdClass" style="width:70px;text-align:center;"><a href="javascript:deleteStaff('${info.id}')"> <img alt="delete" src= "../ampTemplate/images/trash_12.gif" border="0"></a></td>
                                                         </tr>
@@ -1190,7 +1190,7 @@
                                                         </tr>
                                                     </c:forEach>
                                                 </table>
-                                                <c:if test="${fn:length(aimAddOrgForm.staff)>1}">
+                                                <c:if test="${fn:length(aimAddOrgForm.orgInfos)>1}">
                                                 </div>
                                             </c:if>
                                         </td>

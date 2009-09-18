@@ -1983,17 +1983,10 @@ function collapseAll() {
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:meActivityRisk">
-										    Activity - Risk</digi:trn>										</td>
+										    Activity - Risk</digi:trn> <br /><digi:trn key="aim:overallActivityRisk">Overall Risk</digi:trn></td>
 										<td bgcolor="#ffffff">
 											<% if (actRiskChartUrl != null) { %>
-												<bean:define id="riskColor" name="riskColor" scope="request" toScope="page" type="java.lang.String"/>
-												<bean:define id="riskName" name="overallRisk" scope="request" toScope="page" type="java.lang.String"/>
-												<digi:trn key="aim:overallActivityRisk">Overall Risk</digi:trn>:
-												<font color="${riskColor}"/>
-
-												<b><digi:trn key="<%=riskName%>"><%=riskName%></digi:trn></b>
-
-												<img src="<%= actRiskChartUrl %>" width="370" height="350" border="0" usemap="#<%= actRiskChartFileName %>">
+												<img src="<%= actRiskChartUrl %>"  align="bottom" width="370" height="350" border="0" usemap="#<%= actRiskChartFileName %>">
 												<br><br>
 											<% } else { %>
 												<br><span class="red-log"><digi:trn key="aim:noDataPresentFor">No data present for</digi:trn>

@@ -1509,22 +1509,22 @@
                                         <td>
                                             &nbsp;
                                         </td>
-                                        <td class="tdBoldClass">
+                                        <td class="tdBoldClass" style="color:#FFFFFF">
                                             <digi:trn>LAST NAME</digi:trn>
                                         </td>
-                                        <td class="tdBoldClass">
+                                        <td class="tdBoldClass" style="color:#FFFFFF">
                                             <digi:trn>FIRST NAME</digi:trn>
                                         </td>
-                                        <td class="tdBoldClass">
+                                        <td class="tdBoldClass" style="color:#FFFFFF">
                                             <digi:trn>EMAIL </digi:trn>
                                         </td>
-                                        <td class="tdBoldClass">
+                                        <td class="tdBoldClass" style="color:#FFFFFF">
                                             <digi:trn> TELEPHONE </digi:trn>
                                         </td>
-                                        <td class="tdBoldClass">
+                                        <td class="tdBoldClass" style="color:#FFFFFF">
                                             <digi:trn> FAX </digi:trn>
                                         </td>
-                                        <td class="tdBoldClass">
+                                        <td class="tdBoldClass" style="color:#FFFFFF">
                                             <digi:trn>TITLE </digi:trn>
                                         </td>
                                         <td colspan="2">

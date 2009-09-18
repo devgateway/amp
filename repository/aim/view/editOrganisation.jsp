@@ -1100,6 +1100,9 @@
                                             </c:if>
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td colspan="5" style="text-align:left;" class="tdBoldClass"><input type="checkbox"  onclick="selectAll('staffInfo')"><digi:trn>Select All</digi:trn>&nbsp;&nbsp;<input type="button" onclick="deleteStaff()" value="<digi:trn>Delete</digi:trn>"></td>
+                                    </tr>
                                     </c:if>
                                      <tr>
                                     <td style="width:40px;text-align:center;font-weight:bold">
@@ -1140,12 +1143,6 @@
 
                                 <td style="text-align:center"><input type="button" style="width:80px" onclick="addStaff()" value="<digi:trn>Add</digi:trn>" /></td>
                                 </tr>
-                                <c:if test="${fn:length(aimAddOrgForm.staff)>0}">
-                                <tr>
-                                        <td>&nbsp;</td>
-                                        <td colspan="4" style="text-align:left;" class="tdBoldClass"><input type="checkbox"  onclick="selectAll('staffInfo')"><digi:trn>Select All</digi:trn>&nbsp;&nbsp;<input type="button" onclick="deleteStaff()" value="<digi:trn>Delete</digi:trn>"></td>
-                                </tr>
-                                </c:if>
                             </table>
                             </div>
                         </fieldset>
@@ -1194,6 +1191,9 @@
                                                 </div>
                                             </c:if>
                                         </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="7" class="tdBoldClass" style="text-align:left;"><input type="checkbox"  onclick="selectAll('selectedOrgInfoIds')"><digi:trn>Select All</digi:trn>&nbsp;&nbsp;<input type="button" onclick="deleteOrgInfo()" value="<digi:trn>Delete</digi:trn>"></td>
                                     </tr>
                                 </c:if>
                                      <tr>
@@ -1252,12 +1252,6 @@
 
                                     <td style="text-align:center"><input type="button" style="width:80px" onclick="addOrgInfo()" value="<digi:trn>Add</digi:trn>" /></td>
                                 </tr>
-                                <c:if test="${fn:length(aimAddOrgForm.orgInfos)>0}">
-                                <tr>
-                                    <td>&nbsp;</td>
-                                     <td colspan="6" class="tdBoldClass" style="text-align:left;"><input type="checkbox"  onclick="selectAll('selectedOrgInfoIds')"><digi:trn>Select All</digi:trn>&nbsp;&nbsp;<input type="button" onclick="deleteOrgInfo()" value="<digi:trn>Delete</digi:trn>"></td>
-                                  </tr>
-                                 </c:if>
                             </table>
                             </div>
                         </fieldset>

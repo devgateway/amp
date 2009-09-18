@@ -424,14 +424,21 @@
                     return false;
                 }
                 else{
+                    var sum=0;
                     for(var i=0;i<selLocs.length;i++){
                         var locName="selectedLocs["+i+"].percent"
                         var location= document.getElementsByName(locName)[0];
-                        if(location.value==null||location.value==""){
+                        if(location.value==null||parseFloat(location.value)==0){
                             alert('<digi:trn  jsFriendly="true">Please Enter Percent for Location.</digi:trn>');
                             location.focus();
                             return false;
+                        }else{
+                            sum+=parseFloat(location.value);
                         }
+                    }
+                    if(sum!=100){
+                           alert('<digi:trn  jsFriendly="true">The sum Of percents must equal 100</digi:trn>');
+                            return false;
                     }
                 }
 

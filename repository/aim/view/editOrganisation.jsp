@@ -1155,9 +1155,9 @@
                 <tr>
                     <td colspan="2">
                         <div style="float:right">
-                        <digi:link href="javascript:exportInfo('exportBudgetInfo')" >
+                        <a href="javascript:exportInfo('exportBudgetInfo')" >
 				<digi:img src="images/xls_icon.jpg" border="0"/>
-                        </digi:link>
+                        </a>
                          </div>
                         <fieldset>
                             <legend align="left" class="legendClass"><digi:trn>Budget Information</digi:trn></legend>

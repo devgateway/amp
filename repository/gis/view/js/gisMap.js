@@ -86,7 +86,8 @@
 		var selSector = sec.value;
 		
 		setBusy(true);
-		var mapLevel = getRadioValue("mapLevelRadio");
+		var mapLevel = getRadioValue("mapLevelRadio")
+		mapLevel = (mapLevel != null ? mapLevel : 2);
 		
 		var fromYear = document.getElementsByName('selectedFromYear')[0].value;
 		var toYear = document.getElementsByName('selectedToYear')[0].value;
@@ -111,6 +112,8 @@
 	
 		selIndicator = ind.value;
 		var mapLevel = getRadioValue("mapLevelRadio");
+		mapLevel = (mapLevel != null ? mapLevel : 2);
+		
 		var sec = document.getElementById("sectorsMapCombo").value;
 		var fromYear = document.getElementsByName('selectedFromYear')[0].value;
 		var toYear = document.getElementsByName('selectedToYear')[0].value;
@@ -162,6 +165,8 @@
 		selSubgroup = sbgr.value;
 
 		var mapLevel = getRadioValue("mapLevelRadio");
+		mapLevel = (mapLevel != null ? mapLevel : 2);
+		
 		var sec = document.getElementById("sectorsMapCombo").value;
 		var selIndicator = document.getElementById("indicatorsCombo").value;
 		var fromYear = document.getElementsByName('selectedFromYear')[0].value;
@@ -217,6 +222,8 @@
 		if (!imageMapLoaded) {
 			actionGetImageMap = true;
 			var mapLevel = getRadioValue("mapLevelRadio");
+			mapLevel = (mapLevel != null ? mapLevel : 2);
+			
 			var indYear = document.getElementById("indicatorYearCombo").value;
 			var uniqueStr = (new Date()).getTime();
 			xmlhttp.open("POST", "../../gis/getFoundingDetails.do?action=getImageMap&mapCode=TZA&mapLevel=" + mapLevel + "&indYear=" + indYear + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight, true);
@@ -243,6 +250,8 @@
 	function getDataForSector(sec) {
 			selSector = sec.value;
 			var mapLevel = getRadioValue("mapLevelRadio");
+			mapLevel = (mapLevel != null ? mapLevel : 2);
+			
 			var indYear = document.getElementById("indicatorYearCombo").value;
 			var fromYear = document.getElementsByName('selectedFromYear')[0].value;
 			var toYear = document.getElementsByName('selectedToYear')[0].value;
@@ -284,6 +293,8 @@
 
 	function getSectorIndicators(sec) {
 			var mapLevel = getRadioValue("mapLevelRadio");
+			mapLevel = (mapLevel != null ? mapLevel : 2);
+			
 			var indYear = document.getElementById("indicatorYearCombo").value;
 			var uniqueStr = (new Date()).getTime();
 			xmlhttp.open("POST", "../../gis/getFoundingDetails.do?action=getIndicatorNamesXML&mapCode=TZA&mapLevel=" + mapLevel + "&indYear=" + indYear + "&sectorId=" + selSector + "&uniqueStr=" + uniqueStr, true);
@@ -323,6 +334,8 @@
 	
 	function getIndicatorsValues() {
 			var mapLevel = getRadioValue("mapLevelRadio");
+			mapLevel = (mapLevel != null ? mapLevel : 2);
+			
 			var indYear = document.getElementById("indicatorYearCombo").value;
 			var uniqueStr = (new Date()).getTime();
 			xmlhttp.open("POST", "../../gis/getFoundingDetails.do?action=getIndicatorValues&mapCode=TZA&mapLevel=" + mapLevel + "&indYear=" + indYear + "&uniqueStr=" + uniqueStr, true);
@@ -556,6 +569,8 @@
 	function yearSelected(year) {
 		setBusy(true);
 		var mapLevel = getRadioValue("mapLevelRadio");
+		mapLevel = (mapLevel != null ? mapLevel : 2);
+		
 		var ind = document.getElementById("indicatorsCombo").value;
 		var subgroupId = document.getElementById("indicatorSubgroupCombo").value;
 		var fromYear = document.getElementsByName('selectedFromYear')[0].value;
@@ -851,11 +866,13 @@
 	function getRadioValue(radioName) {
 		var retVal = null;
 		var radioGroup = document.getElementsByName(radioName);
+		if (radioGroup != null) {
 		var iterIndex = 0;
-		for (iterIndex = 0; iterIndex < radioGroup.length; iterIndex ++) {
-			if (radioGroup[iterIndex].checked) {
-				retVal = radioGroup[iterIndex].value;
-				break;
+			for (iterIndex = 0; iterIndex < radioGroup.length; iterIndex ++) {
+				if (radioGroup[iterIndex].checked) {
+					retVal = radioGroup[iterIndex].value;
+					break;
+				}
 			}
 		}
 		

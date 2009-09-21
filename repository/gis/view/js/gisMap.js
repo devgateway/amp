@@ -312,7 +312,7 @@
 			selectCmb.innerHTML = null;
 			var noneOpt = document.createElement("OPTION");
 			noneOpt.value="-1";
-			noneOpt.text="Select indicator";
+			noneOpt.text = selectIndicatorTxt;
 			selectCmb.options.add(noneOpt);
 			
 			for (indIndex = 0; indIndex < indicators.length; indIndex ++) {

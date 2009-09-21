@@ -258,9 +258,9 @@
 </div>
 
 <script language="JavaScript" type="text/javascript">
-	var selectIndicatorTxt = '<digi:trn>Select indicator</digi:trn>';
-	var selectSubgroupTxt = '<digi:trn>Select subgroup</digi:trn>';
-	var selectYearTxt = '<digi:trn>Select year</digi:trn>';
+	var selectIndicatorTxt = "<digi:trn>Select indicator</digi:trn>";
+	var selectSubgroupTxt = "<digi:trn>Select subgroup</digi:trn>";
+	var selectYearTxt = "<digi:trn>Select year</digi:trn>";
 	
 </script>
 

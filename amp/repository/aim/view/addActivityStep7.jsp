@@ -45,14 +45,55 @@ function resetAll()
 }
 
 function removeSelOrgs(value) {
-	document.getElementsByName("agencies.item")[0].value = value;
-	<digi:context name="remOrgs" property="context/module/moduleinstance/removeSelRelOrgs.do?edit=true" />
-	document.aimEditActivityForm.action = "<%= remOrgs %>";
-	document.aimEditActivityForm.target = "_self"
-	document.aimEditActivityForm.submit();
-	return true;
+	if (isOrganisationSelectedForDeletion(value)) {
+		document.getElementsByName("agencies.item")[0].value = value;
+		<digi:context name="remOrgs" property="context/module/moduleinstance/removeSelRelOrgs.do?edit=true" />
+		document.aimEditActivityForm.action = "<%= remOrgs %>";
+		document.aimEditActivityForm.target = "_self"
+		document.aimEditActivityForm.submit();
+		return true;
+	}
+	return false;
 }
 
+
+function isOrganisationSelectedForDeletion(val) {
+	//alert(val);
+	var sel;
+	var selected = true;
+	var count = 0;
+	if (val == '1') {// executing agency
+		sel = document.getElementsByName("agencies.selExAgencies");		
+	} else if (val == '2') {// implementing agency
+		sel = document.getElementsByName("agencies.selImpAgencies");
+	} else if (val == '5') {// beneficiary agency
+		sel = document.getElementsByName("agencies.selBenAgencies");
+	} else if (val == '6') {// contracting agency
+		sel = document.getElementsByName("agencies.selConAgencies");
+	} else if (val == '7') {// regional group
+		sel = document.getElementsByName("agencies.selRegGroups");
+	} else if (val == '8') {//sector group
+		sel = document.getElementsByName("agencies.selSectGroups");
+	} else if (val == '9') {//responsible organisation
+		sel = document.getElementsByName("agencies.selRespOrganisations");
+	}
+	for (var i = 0; i<sel.length; i++) {
+		if (!sel[i].checked) {
+			count++;
+		}
+	}
+	//alert(sel.length);
+	//alert(count);
+	if (count == sel.length) {
+		selected = false;
+		<c:set var="errMsg">
+	   		<digi:trn>Please select an organization to remove</digi:trn>
+	    </c:set>
+	    alert("${errMsg}");
+	}
+	//alert(selected);
+	return selected;
+}
 -->
 </script>
 

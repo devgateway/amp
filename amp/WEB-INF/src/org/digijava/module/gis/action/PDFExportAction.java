@@ -44,6 +44,8 @@ import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpIndicator;
+import org.digijava.module.aim.dbentity.AmpIndicatorSubgroup;
+import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
@@ -55,6 +57,7 @@ import org.digijava.module.gis.dbentity.GisMap;
 import org.digijava.module.gis.dbentity.GisMapSegment;
 import org.digijava.module.gis.util.ColorRGB;
 import org.digijava.module.gis.util.CoordinateRect;
+import org.digijava.module.gis.util.DateInterval;
 import org.digijava.module.gis.util.FundingData;
 import org.digijava.module.gis.util.GisUtil;
 import org.digijava.module.gis.util.HilightData;
@@ -73,6 +76,7 @@ import org.digijava.module.widget.util.WidgetUtil;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.Plot;
 
 import com.lowagie.text.BadElementException;
 import com.lowagie.text.Document;
@@ -214,19 +218,60 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 		// Check for sector and indicator
 		ByteArrayOutputStream outMapByteArray;
-		String indicatorName = "None";
-		String sectorName = "None";
+		String translatedNone = TranslatorWorker.translateText("None", locale, siteId);
+		String indicatorName = translatedNone;
+		String sectorName = translatedNone;
+		String subGroupName = translatedNone;
+		String timeInterval = translatedNone;
+		
+		String subGroup = request.getParameter("subgroupId");
+		if (subGroup != null) {
+			Long subGroupId = new Long(subGroup);
+			if (!subGroupId.equals(new Long(-1))) {
+				AmpIndicatorSubgroup auxSubGroup = IndicatorUtil.getIndicatorSubGroup(subGroupId);
+				subGroupName = auxSubGroup.getSubgroupName();
+			}
+		}
+		
+		String indYear = request.getParameter("indYear");
+		DateInterval datInt = null;
+		if (indYear != null) {
+			String startDateStr = null;
+			String endDateStr = null;
+
+			if (!indYear.equals("-1")) {
+				if (indYear.startsWith("-")) {
+					startDateStr = indYear.substring(0, indYear.indexOf("-", 2));
+				} else {
+					startDateStr = indYear.substring(0, indYear.indexOf("-"));
+				}
+
+				if (indYear.indexOf("--") > -1) {
+					endDateStr = indYear.substring(indYear.indexOf("--") + 1);
+				} else {
+					endDateStr = indYear.substring(indYear.indexOf("-") + 1);
+				}
+				datInt = new DateInterval(new Date(new Long(startDateStr).longValue()), new Date(new Long(endDateStr)
+						.longValue()));
+				timeInterval = datInt.getFormatedStartTime() + " - "+datInt.getFormatedEndTime();
+			}
+		}
 
 		String mapCode = request.getParameter("mapCode");
+		
+		String mapLevel = request.getParameter("mapLevel");
+        if (mapLevel == null) {
+            mapLevel = "2";
+        }
 
 		if (secId != null && indId != null) {
 			AmpIndicator indicator = IndicatorUtil.getIndicator(indId);
 			indicatorName = indicator.getName();
 			sectorName = SectorUtil.getAmpSector(secId).getName();
 			if (mapCode != null && mapCode.trim().length() > 0) {
-				outMapByteArray = getMapImageSectorIndicator(mapCode, secId, indId);
+				outMapByteArray = getMapImageSectorIndicator(mapCode, secId, indId, subGroup, indYear, mapLevel);
 			} else {
-				outMapByteArray = getMapImageSectorIndicator("TZA", secId, indId);
+				outMapByteArray = getMapImageSectorIndicator("TZA", secId, indId, subGroup, indYear, mapLevel);
 			}
 
 		} else {
@@ -251,8 +296,8 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		imagesTable.setWidthPercentage(100);
 		imagesTable.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
 
-		imagesTable.addCell(getImageMap(imgMap, sectorName, indicatorName));
-		imagesTable.addCell(getImageChart(imgChart, selectedDonorName, selectedFromYear));
+		imagesTable.addCell(getImageMap(imgMap, sectorName, indicatorName, subGroupName, timeInterval));
+		imagesTable.addCell(getImageChart(imgChart, selectedDonorName, selectedFromYear, selectedTotYear));
 		// imagesTable.addCell(" ");
 
 		// First batch of widgets
@@ -321,13 +366,8 @@ public class PDFExportAction extends Action implements PdfPageEvent {
         }
         //Translation for Result Matrix
         //Paragraph title = new Paragraph(TranslatorWorker.translate("gis:resultsmatrix", locale, siteId) + countryName, new Font(Font.HELVETICA, 24, Font.BOLD));
-        Paragraph title = new Paragraph(TranslatorWorker.translateText("Results Matrix:", locale, siteId) + countryName, new Font(Font.HELVETICA, 24, Font.BOLD));
-
-        String generatedOnTranslation = TranslatorWorker.translateText("gis:generatedon", locale, siteId);
-        if(generatedOnTranslation == null || generatedOnTranslation.equals(""))
-        	generatedOnTranslation = "Generated on: ";
-
-		
+        Paragraph title = new Paragraph(TranslatorWorker.translateText("Results Matrix: ", locale, siteId) + countryName, new Font(Font.HELVETICA, 24, Font.BOLD));
+        String generatedOnTranslation = TranslatorWorker.translateText("Generated On: ", locale, siteId);
 		Paragraph updateDate = new Paragraph(generatedOnTranslation + FormatHelper.formatDate(new Date(System.currentTimeMillis())) + "\n\n", new Font(Font.HELVETICA, 6, Font.BOLDITALIC));
 
 		document.add(title);
@@ -366,6 +406,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		paragraph.setAlignment(Element.ALIGN_CENTER);
 		firstCell.setCellEvent(border);
 		firstCell.addElement(paragraph);
+		firstCell.setColspan(8);
 
 		PdfPCell secondCell = new PdfPCell();
 		secondCell.setPadding(0);
@@ -392,7 +433,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		layoutCell.setPadding(2);
 		layoutCell.setBackgroundColor(new Color(206, 226, 251));
 
-		float[] layoutExAidResourcesWidths = { 1f, 1f };
+		float[] layoutExAidResourcesWidths = { 1f };
 		PdfPTable layoutExAidResources = new PdfPTable(layoutExAidResourcesWidths);
 		layoutExAidResources.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
 		layoutExAidResources.setWidthPercentage(100);
@@ -432,6 +473,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		paragraph.setAlignment(Element.ALIGN_CENTER);
 		firstCell.setCellEvent(border);
 		firstCell.addElement(paragraph);
+		firstCell.setColspan(8);
 
 		PdfPCell secondCell = new PdfPCell();
 		secondCell.setPadding(0);
@@ -498,6 +540,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		paragraph.setAlignment(Element.ALIGN_CENTER);
 		firstCell.setCellEvent(border);
 		firstCell.addElement(paragraph);
+		firstCell.setColspan(6);
 
 		PdfPCell secondCell = new PdfPCell();
 		secondCell.setPadding(0);
@@ -524,7 +567,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		lineCell.setBorder(Rectangle.NO_BORDER);
 		layoutCell.setBackgroundColor(new Color(206, 226, 251));
 
-		float[] layoutAEIndicatorsWidths = { 1f, 1f };
+		float[] layoutAEIndicatorsWidths = { 1f };
 		PdfPTable layoutAEIndicators = new PdfPTable(layoutAEIndicatorsWidths);
 		layoutAEIndicators.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
 		layoutAEIndicators.setWidthPercentage(100);
@@ -572,6 +615,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		paragraph.setAlignment(Element.ALIGN_CENTER);
 		firstCell.setCellEvent(border);
 		firstCell.addElement(paragraph);
+		firstCell.setColspan(3);
 
 		PdfPCell secondCell = new PdfPCell();
 		secondCell.setPadding(0);
@@ -618,7 +662,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		return generalBox;
 	}
 
-	private PdfPTable getImageChart(Image imgChart, String selectedDonorName, Integer selectedYear) throws WorkerException {
+	private PdfPTable getImageChart(Image imgChart, String selectedDonorName, Integer selectedStartYear, Integer selectedEndYear) throws WorkerException {
 		PdfPTable generalBox = new PdfPTable(1);
 		generalBox.setWidthPercentage(100f);
 
@@ -641,6 +685,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		paragraph.setAlignment(Element.ALIGN_CENTER);
 		firstCell.setCellEvent(border);
 		firstCell.addElement(paragraph);
+		firstCell.setColspan(4);
 
 		PdfPCell secondCell = new PdfPCell();
 		secondCell.setPadding(0);
@@ -674,12 +719,15 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		String selectedDonorTranslation = TranslatorWorker.translateText("Selected donor", locale, siteId);
 		if (selectedDonorTranslation == null || selectedDonorTranslation.equals(""))
 			selectedDonorTranslation = "Selected donor";
-		String selectedYearTranslation = TranslatorWorker.translateText("Selected year", locale, siteId);
-		if (selectedYearTranslation == null || selectedYearTranslation.equals(""))
-			selectedYearTranslation = "Selected year";
+		String selectedStartYearTranslation = TranslatorWorker.translateText("Start year", locale, siteId);
+		if (selectedStartYearTranslation == null || selectedStartYearTranslation.equals(""))
+			selectedStartYearTranslation = "Start year";
+		String selectedEndYearTranslation = TranslatorWorker.translateText("End year", locale, siteId);
+		if (selectedEndYearTranslation == null || selectedEndYearTranslation.equals(""))
+			selectedEndYearTranslation = "End year";
 
 		textCell.addElement(new Paragraph(TranslatorWorker.translateText("All amounts in 000s of USD", locale, siteId) + "\n" + selectedDonorTranslation + ": " + selectedDonorName + "\n"
-				+ selectedYearTranslation + ": " + selectedYear + "\n\n", new Font(Font.HELVETICA, 6)));
+				+ selectedStartYearTranslation + ": " + selectedStartYear + "\n" + selectedEndYearTranslation + ": " + selectedEndYear + "\n\n", new Font(Font.HELVETICA, 6)));
 
 		generalBox.addCell(textCell);
 		PdfPCell text2Cell = new PdfPCell();
@@ -695,7 +743,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		return generalBox;
 	}
 
-	private PdfPTable getImageMap(Image imgMap, String sectorName, String indicatorName) throws WorkerException {
+	private PdfPTable getImageMap(Image imgMap, String sectorName, String indicatorName, String subGroup, String timeInterval) throws WorkerException {
 		PdfPTable generalBox = new PdfPTable(1);
 		generalBox.setWidthPercentage(100f);
 
@@ -718,6 +766,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		paragraph.setAlignment(Element.ALIGN_CENTER);
 		firstCell.setCellEvent(border);
 		firstCell.addElement(paragraph);
+		firstCell.setColspan(4);
 
 		PdfPCell secondCell = new PdfPCell();
 		secondCell.setPadding(0);
@@ -749,13 +798,10 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		textCell.setPadding(2);
 		textCell.setBackgroundColor(new Color(206, 226, 251));
 		// gis:minmax:message
-		// TODO TRN: no record for this key.
-		String selectedSectorTranslation = TranslatorWorker.translateText("gis:selectedSector", locale, siteId);
-
-		if (selectedSectorTranslation == null || selectedSectorTranslation.equals(""))
-			selectedSectorTranslation = "Selected sector";
-		// TODO TRN: no record for this key
-		String selectedIndicatorTranslation = TranslatorWorker.translateText("gis:selectedIndicator", locale, siteId);
+		String selectedSectorTranslation = TranslatorWorker.translateText("Selected sector", locale, siteId);
+		String selectedIndicatorTranslation = TranslatorWorker.translateText("Selected Indicator", locale, siteId);
+		String selectedSubGroupTranslation = TranslatorWorker.translateText("Selected subgroup", locale, siteId);
+		String selectedTimeIntervalTranslation = TranslatorWorker.translateText("Selected Time Interval", locale, siteId);
 		if (selectedIndicatorTranslation == null || selectedIndicatorTranslation.equals(""))
 			selectedIndicatorTranslation = "Selected Indicator";
 
@@ -763,7 +809,13 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 				+"Regions with the highest (MAX) value are shaded light green. "
 				+"For some indicators (such as mortality rates), having the MAX value indicates the lowest performance";
 
-		textCell.addElement(new Paragraph(TranslatorWorker.translateText(defaultMinMaxMessage, locale, siteId) + "\n" + selectedSectorTranslation + ": " + sectorName + "\n" + selectedIndicatorTranslation + ": " + indicatorName + "\n\n"+TranslatorWorker.translateText("Data Source: Dev Info", locale, siteId), new Font(Font.HELVETICA, 6)));
+		textCell
+				.addElement(new Paragraph(TranslatorWorker.translateText(defaultMinMaxMessage, locale, siteId) + "\n"
+						+ selectedSectorTranslation + ": " + sectorName + "\n" + selectedIndicatorTranslation + ": "
+						+ indicatorName + "\n" + selectedSubGroupTranslation + ": " + subGroup + "\n"
+						+ selectedTimeIntervalTranslation + ": " + timeInterval + "\n\n"
+						+ TranslatorWorker.translateText("Data Source: Dev Info", locale, siteId), new Font(
+						Font.HELVETICA, 6)));
 		PdfPCell legendCell = new PdfPCell();
 		legendCell.setPadding(0);
 		legendCell.setBorder(Rectangle.NO_BORDER);
@@ -814,6 +866,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		paragraph.setAlignment(Element.ALIGN_CENTER);
 		firstCell.setCellEvent(border);
 		firstCell.addElement(paragraph);
+		firstCell.setColspan(8);
 
 		PdfPCell secondCell = new PdfPCell();
 		secondCell.setPadding(0);
@@ -961,6 +1014,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		paragraph.setAlignment(Element.ALIGN_CENTER);
 		firstCell.setCellEvent(border);
 		firstCell.addElement(paragraph);
+		firstCell.setColspan(8);
 
 		PdfPCell secondCell = new PdfPCell();
 		secondCell.setPadding(0);
@@ -1126,7 +1180,7 @@ private int matchesId(Long ptableId) {
 		return -1;
 	}
 
-	private ByteArrayOutputStream getMapImageSectorIndicator(String mapCode, Long secId, Long indId) throws Exception {
+	private ByteArrayOutputStream getMapImageSectorIndicator(String mapCode, Long secId, Long indId, String subgroupId, String indYear, String mapLevel) throws Exception {
 		ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
 
 		GisMap map = null;
@@ -1135,6 +1189,8 @@ private int matchesId(Long ptableId) {
 			map = GisUtil.getMap(mapCode);
 		}
 
+		Long subGroupId = new Long(subgroupId);
+		
 		// Get segments with funding for dashed paint map
 		List secFundings = org.digijava.module.gis.util.DbUtil.getSectorFoundings(secId);
 
@@ -1158,7 +1214,35 @@ private int matchesId(Long ptableId) {
 
 		// Need to pass year and subgroup ID in the future to get correct
 		// results.
-		List inds = org.digijava.module.gis.util.DbUtil.getIndicatorValuesForSectorIndicator(secId, indId, new Long(-1));
+		//List inds = org.digijava.module.gis.util.DbUtil.getIndicatorValuesForSectorIndicator(secId, indId, new Long(-1));
+		
+		List inds = null;
+        if (indYear != null && !indYear.equals("-1")) {
+
+            String startDateStr = null;
+            String endDateStr = null;
+
+            if (indYear.startsWith("-")) {
+                startDateStr = indYear.substring(0,
+                        indYear.indexOf("-", 2));
+            } else {
+                startDateStr = indYear.substring(0,
+                        indYear.indexOf("-"));
+            }
+
+            if (indYear.indexOf("--") > -1) {
+                endDateStr = indYear.substring(indYear.indexOf("--") +
+                        1);
+            } else {
+                endDateStr = indYear.substring(indYear.indexOf("-") +
+                        1);
+            }
+
+            DateInterval datInt = new DateInterval(new Date(new Long(startDateStr).longValue()), new Date(new Long(endDateStr).longValue()));
+    		inds = org.digijava.module.gis.util.DbUtil.getIndicatorValuesForSectorIndicator(secId, indId, datInt, subGroupId, Integer.parseInt(mapLevel));
+        } else {
+            inds = new ArrayList();
+        }
 
 		List segmentDataList = new ArrayList();
 		Iterator indsIt = inds.iterator();
@@ -1379,6 +1463,12 @@ private int matchesId(Long ptableId) {
 
 		// generate chart
 		JFreeChart chart = ChartWidgetUtil.getSectorByDonorChart(donorIDs, fromYear, toYear, opt);
+		Plot plot = chart.getPlot();
+		plot.setNoDataMessage(TranslatorWorker.translateText(
+				"There is no data available for the selected filters. Please adjust the date and/or donor filters",
+				RequestUtils.getNavigationLanguage(request).getCode(), RequestUtils.getSite(request).getId()));
+		java.awt.Font font = new java.awt.Font(null, 0, 15);
+		plot.setNoDataMessageFont(font);
 		ChartRenderingInfo info = new ChartRenderingInfo();
 
 		// write image in response

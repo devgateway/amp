@@ -17,6 +17,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpIndicator;
+import org.digijava.module.aim.dbentity.AmpIndicatorSubgroup;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpRegion;
@@ -1543,5 +1544,18 @@ public class IndicatorUtil {
 	            int result = collator.compare(o1.getIndicator().getName().toLowerCase(),o2.getIndicator().getName().toLowerCase());
 	            return result;
 	        }
-	    } 
+	    }
+	    
+	    public static AmpIndicatorSubgroup getIndicatorSubGroup(Long id) throws DgException {
+		Session session = PersistenceManager.getRequestDBSession();
+		AmpIndicatorSubgroup indicator = null;
+		try {
+			indicator = (AmpIndicatorSubgroup) session.load(AmpIndicatorSubgroup.class, id);
+		} catch (ObjectNotFoundException e) {
+			logger.debug("indicator with " + id + "not found");
+		} catch (Exception e) {
+			throw new DgException("Cannot load indicator", e);
+		}
+		return indicator;
+	}
 }

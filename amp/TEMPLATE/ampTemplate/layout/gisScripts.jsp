@@ -62,9 +62,11 @@ window.onload = function(){
 	}
 
 	var sectorId =  document.getElementById("sectorsMapCombo").value;
-	var indicatorId = document.getElementById("indicatorsCombo").value;	
+	var indicatorId = document.getElementById("indicatorsCombo").value;
+	var subgroup = 	document.getElementById("indicatorSubgroupCombo").value;
+	var timeInterval = document.getElementById("indicatorYearCombo").value;
   
-	openURLinWindow("/gis/pdfExport.do?selectedDonor=" + selectedDonor + "&selectedFromYear=" + selectedFromYear+ "&selectedToYear=" + selectedToYear + "&showLabels=" + showLabels + "&showLegends=" + showLegends + "&sectorId=" + sectorId + "&indicatorId=" + indicatorId + ""+ columnquerystring + "&selectedDonorName=" +selectDonorsStr, 780, 500);
+	openURLinWindow("/gis/pdfExport.do?selectedDonor=" + selectedDonor + "&selectedFromYear=" + selectedFromYear+ "&selectedToYear=" + selectedToYear + "&showLabels=" + showLabels + "&showLegends=" + showLegends + "&sectorId=" + sectorId + "&indicatorId=" + indicatorId + ""+ columnquerystring + "&selectedDonorName=" +selectDonorsStr + "&subgroupId=" + subgroup + "&indYear=" + timeInterval, 780, 500);
   }
 function resizeDivs(){
 	var tables = document.getElementsByTagName("table");

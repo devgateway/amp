@@ -11,6 +11,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.ChartUtil;
@@ -56,12 +57,14 @@ public class ShowSectorByDonorChart extends Action {
         }        
         
         //generate chart
-        JFreeChart chart = ChartWidgetUtil.getSectorByDonorChart(donorIDs, fromYear,toYear, opt);
-        //if no data is available,user should get a message about it.
-        Plot plot = chart.getPlot();
-        plot.setNoDataMessage("There is no data available for the selected filters. Please adjust the date and/or donor filters");
-        Font font= new Font(null,0,15);
-        plot.setNoDataMessageFont(font);
+		JFreeChart chart = ChartWidgetUtil.getSectorByDonorChart(donorIDs, fromYear, toYear, opt);
+		// if no data is available,user should get a message about it.
+		Plot plot = chart.getPlot();
+		plot.setNoDataMessage(TranslatorWorker.translateText(
+				"There is no data available for the selected filters. Please adjust the date and/or donor filters",
+				RequestUtils.getNavigationLanguage(request).getCode(), RequestUtils.getSite(request).getId()));
+		Font font = new Font(null, 0, 15);
+		plot.setNoDataMessageFont(font);
         
         ChartRenderingInfo info = new ChartRenderingInfo();
 

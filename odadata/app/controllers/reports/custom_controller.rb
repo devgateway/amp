@@ -30,8 +30,14 @@ class Reports::CustomController < ReportsController
       :include => [:mdg_relevances, :donor, :sector_relevances, :geo_relevances, :fundings], 
       :conditions => sql_conditions_from_params)
       
-    fields = output_fields_from_params
     funding_details = params[:funding_details].delete_if {|k,v| v.to_i == 0}.keys
+    
+    # Add funding details placeholder at position 16
+    if funding_details.any?
+      params[:query_options][:funding_details] = 16
+    end
+    
+    fields = output_fields_from_params
     disaggregators = disaggregators_from_params
     data = Reports::ProjectAggregator.new(
       :fields => fields, 

@@ -4,11 +4,20 @@ class Reports::ProjectAggregator < Ruport::Aggregator
   end
   
   def prepare
-    @options[:funding_details].each do |y|
-      @fields << :"total_commitments_#{y}"
-      @fields << :"total_disbursements_#{y}"
-      @fields << :"commitments_forecast_#{y}"
-      @fields << :"disbursements_forecast_#{y}"
+    if @options[:funding_details].any?
+      pos = @fields.index("funding_details")
+    
+      new_fields = @options[:funding_details].inject([]) do |tmp, y|
+        tmp << :"total_commitments_#{y}"
+        tmp << :"total_disbursements_#{y}"
+        tmp << :"commitments_forecast_#{y}"
+        tmp << :"disbursements_forecast_#{y}"
+        
+        tmp
+      end
+    
+      @fields.insert(pos, *new_fields)
+      @fields.delete_if { |v| v == "funding_details" }
     end
   end
   

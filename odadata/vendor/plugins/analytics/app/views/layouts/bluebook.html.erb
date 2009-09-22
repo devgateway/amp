@@ -7,8 +7,8 @@
 	  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 	  <title><%= render_page_title %></title>
 
-	  <%= javascript_include_tag(:defaults, 'swfobject', 'jtip', 'jquery_expander', 'jquery_template', 'behavior/menu', "ui.datepicker-#{I18n.locale}" , :cache => false) %>
-	  <%= stylesheet_link_tag('style', 'jtip', 'ui.datepicker', :media => :all, :cache => false) %>
+	  <%= javascript_include_tag(:defaults, 'swfobject', 'jtip', 'jquery_expander', 'jquery_template', 'behavior/menu', :cache => false) %>
+	  <%= stylesheet_link_tag('layout', 'jtip', 'layouts/public', 'bluebook', :media => :all, :cache => false) %>
 	  <%= stylesheet_link_tag('print', :media => :print, :cache => false) %>
 
 	  <%= yield :head %>
@@ -21,7 +21,7 @@
 				<%= render :partial => "bluebook/pages/#{year}/header" %>
 			</div>
 			
-			<div id="content">
+			<div id="bb_content">
 				<!-- START Flash Messages section -->
 				<%= flash_messages %>
 				<!-- END Flash Messages section -->

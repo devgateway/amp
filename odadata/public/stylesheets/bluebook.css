@@ -1,4 +1,11 @@
 /* Start Bluebook Styles */
+#bb_content {
+	width: 892px;
+	padding-left: 4px;
+	padding-right: 4px;
+	clear:left;
+	text-align: left;
+}
 
 table.bluebook {
 	width: 894px;

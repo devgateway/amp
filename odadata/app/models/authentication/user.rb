@@ -1,5 +1,7 @@
 class User < ActiveRecord::Base
-  acts_as_authentic :transition_from_restful_authentication => true
+  acts_as_authentic do |c|
+    c.transition_from_restful_authentication = true
+  end
   
   belongs_to  :donor
   belongs_to  :role

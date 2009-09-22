@@ -372,33 +372,37 @@ function addOrganisation(orgId, orgName){
   }
 
   function addGuest(guest) {
-    var list = document.getElementById('selreceivers');
-    if (list == null || guest == null || guest.value == null || guest.value == "") {
-      return;
-    }
-
-    var flag=false;
-    for(var i=0; i<list.length;i++){
-      if(list.options[i].value=='g:'+guest.value &&list.options[i].text==guest.value){
-        flag=true;
-        break;
-      }
-    }
-    if(flag){
-      return false;
-    }
-
-	var guestVal=guest.value;
-	while(guestVal.indexOf(";")!=-1){		
-		var optionValue=guestVal.substring(0,guestVal.indexOf(";"));		
-		addOption(list,optionValue,'g:'+optionValue);				
-	    guestVal=guestVal.substring(guestVal.indexOf(";")+1);		
+	if (is_mail(guest.value)) {
+	    var list = document.getElementById('selreceivers');
+	    if (list == null || guest == null || guest.value == null || guest.value == "") {
+	      return;
+	    }
+	
+	    var flag=false;
+	    for(var i=0; i<list.length;i++){
+	      if(list.options[i].value=='g:'+guest.value &&list.options[i].text==guest.value){
+	        flag=true;
+	        break;
+	      }
+	    }
+	    if(flag){
+	      return false;
+	    }
+	
+		var guestVal=guest.value;
+		while(guestVal.indexOf(";")!=-1){		
+			var optionValue=guestVal.substring(0,guestVal.indexOf(";"));		
+			addOption(list,optionValue,'g:'+optionValue);				
+		    guestVal=guestVal.substring(guestVal.indexOf(";")+1);		
+		}
+		if(guestVal.length>0){
+			addOption(list,guestVal,'g:'+guestVal);
+		}	
+	    guest.value = "";
+	} else {
+		alert("Please enter a valid email address !");
+		guest.focus();
 	}
-	if(guestVal.length>0){
-		addOption(list,guestVal,'g:'+guestVal);
-	}	
-
-    guest.value = "";
   }
 
     function isGuestAllreadyAdded(guest){
@@ -526,8 +530,14 @@ function addOrganisation(orgId, orgName){
 function recurEvent(){
  	<digi:context name="rev" property="context/module/moduleinstance/recurringEvent.do" />
 	openURLinWindow("<%=rev%>",832,624);
-
 }
+
+function is_mail(m) {
+	var p = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+	//alert(p.test(m));
+	return p.test(m);		  
+}
+
   </script>
 
 

@@ -31,8 +31,13 @@ class Reports::CustomController < ReportsController
       :conditions => sql_conditions_from_params)
       
     fields = output_fields_from_params
+    funding_details = params[:funding_details].delete_if {|k,v| v.to_i == 0}.keys
     disaggregators = disaggregators_from_params
-    data = Reports::ProjectAggregator.new(:fields => fields, :projects => projects, :middleware => disaggregators_from_params).data
+    data = Reports::ProjectAggregator.new(
+      :fields => fields, 
+      :funding_details => funding_details, 
+      :projects => projects, 
+      :middleware => disaggregators_from_params).data
     
     report = ComplexReport.create!(:data => data)
     redirect_to reports_custom_path(report, :format => params[:format], :currency => "EUR")
@@ -55,7 +60,7 @@ protected
   def output_fields_from_params
     options = params[:query_options]
     options.delete_if {|k,v| v.to_i == 0 if v.respond_to?(:to_i)}
-    options.sort_by {|k,v| v.to_i }.map { |e| e[0].to_sym }
+    options.sort_by {|k,v| v.respond_to?(:to_i) ? v.to_i : v.values.first.to_i }.map { |e| e[0] }
   end
   
   # Parse required disaggregation middleware

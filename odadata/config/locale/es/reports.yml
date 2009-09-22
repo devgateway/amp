@@ -1,62 +1,69 @@
 es:
   reports:
-      na: n/a
-      projects_counter: Proyectos Actuales
-      no_projects: Número de Proyectos 
-      list: Listar
-      toa: Modalidad de Ayuda
-      of_budget: Incluido en el Presupuesto
-      of_treasury: Incluido en Tesorería
-      toi: Tipo de Implementación
-      status: Estado del proyecto
-      donor_agency: Agencia Donante
-      project_number: Número del Proyecto
-      oecd_id: OECD ID
-      budget_number: Número del presupuesto del país beneficiario 
-      project_title: Título del Proyecto
-      project_desc: Descripción del Proyecto
-      project_details: Detalles del Proyecto
-      description: 'Descripción'
-      cs_link: Enlace a la Estrategia del País
-      project_status: Estado del proyecto 
-      start: Fecha de Inicio
-      end: Fecha de Culminación
-      commitments_td: Total de Compromisos 
-      disbursements_td: Total de Desembolsos
-      quarterly_disbursements: Desembolsos Trimestrales
-      cofunding: Co-Financiación
-      total_cofunding: Total de Co-Financiación
-      cofunding_donors: Donantes Co-Financiadores
-      national_regional: Programa Nacional/Regional
-      gov_counterpart: Contraparte del Gob.
-      government_counterpart: Contraparte del Gobierno
-      impl_agencies: Agencias implementadoras 
-      contr_agencies: Agencias Contratadas
-      mdg_goals: ODM
-      focal_regions: Regiones Focales
-      officer_responsible: Funcionario Responsible
-      comments: Comentarios
-      last_update: 'Última Actualización'
-      funds_for: Fondos para {{year}}
-      country_strategy: Estrategia del País
-      recipient_code: Código del Receptor
-      region_code: Código de la Región
-      income_code: Código de Ingreso
-      grant_loan: 'Donación / Préstamo'
-      financial_information: Información Financiera
-      show_map: Mostrar Mapa
-      map_legend: "Las áreas sobresaltadas en amarillo son las regiones focales del proyecto"
-      currency_selection: Seleccione la moneda
-      cod: Distribución de AOD
-      payments_forecast: Proyección de Desembolsos {{year}}
-      commitments_forecast: Proyección de Compromisos {{year}}
-      no_results_message: Su búsqueda no ha encontrado resultados. Por favor, intente buscar de nuevo con diferente criterio.
-      disclaimer: Los reportes en ODAnic versión 2.6c reflejan los montos totales de los proyectos individuales, por lo tanto no dividen por sector, ubicación, o Objetivo de Desarrollo del Milenio.
-      # TODO: Translation
-      disaggregation:
-        title: Disaggregation
-        by_sector: Disaggregate Fundings by DAC-CRS Sector
-        by_location: Disaggregate Fundings by Location
+    project:
+      factsheet_link: ''
+      total_commitments_in: Total de Compromisos  {{year}}
+      total_disbursements_in: Total de Desembolsos {{year}}
+      commitments_forecast_in: Proyección de Compromisos {{year}}
+      disbursements_forecast_in: Proyección de Desembolsos {{year}}
+       
+    na: n/a
+    projects_counter: Proyectos Actuales
+    no_projects: Número de Proyectos 
+    list: Listar
+    toa: Modalidad de Ayuda
+    of_budget: Incluido en el Presupuesto
+    of_treasury: Incluido en Tesorería
+    toi: Tipo de Implementación
+    status: Estado del proyecto
+    donor_agency: Agencia Donante
+    project_number: Número del Proyecto
+    oecd_id: OECD ID
+    budget_number: Número del presupuesto del país beneficiario 
+    project_title: Título del Proyecto
+    project_desc: Descripción del Proyecto
+    project_details: Detalles del Proyecto
+    description: 'Descripción'
+    cs_link: Enlace a la Estrategia del País
+    project_status: Estado del proyecto 
+    start: Fecha de Inicio
+    end: Fecha de Culminación
+    commitments_td: Total de Compromisos 
+    disbursements_td: Total de Desembolsos
+    quarterly_disbursements: Desembolsos Trimestrales
+    cofunding: Co-Financiación
+    total_cofunding: Total de Co-Financiación
+    cofunding_donors: Donantes Co-Financiadores
+    national_regional: Programa Nacional/Regional
+    gov_counterpart: Contraparte del Gob.
+    government_counterpart: Contraparte del Gobierno
+    impl_agencies: Agencias implementadoras 
+    contr_agencies: Agencias Contratadas
+    mdg_goals: ODM
+    focal_regions: Regiones Focales
+    officer_responsible: Funcionario Responsible
+    comments: Comentarios
+    last_update: 'Última Actualización'
+    funds_for: Fondos para {{year}}
+    country_strategy: Estrategia del País
+    recipient_code: Código del Receptor
+    region_code: Código de la Región
+    income_code: Código de Ingreso
+    grant_loan: 'Donación / Préstamo'
+    financial_information: Información Financiera
+    show_map: Mostrar Mapa
+    map_legend: "Las áreas sobresaltadas en amarillo son las regiones focales del proyecto"
+    currency_selection: Seleccione la moneda
+    cod: Distribución de AOD
+    payments_forecast: Proyección de Desembolsos {{year}}
+    commitments_forecast: Proyección de Compromisos {{year}}
+    no_results_message: Su búsqueda no ha encontrado resultados. Por favor, intente buscar de nuevo con diferente criterio.
+    disclaimer: Los reportes en ODAnic versión 2.6c reflejan los montos totales de los proyectos individuales, por lo tanto no dividen por sector, ubicación, o Objetivo de Desarrollo del Milenio.
+    # TODO: Translation
+    disaggregation:
+      title: Disaggregation
+      by_sector: Disaggregate Fundings by DAC-CRS Sector
+      by_location: Disaggregate Fundings by Location
           
       donors:
         index:

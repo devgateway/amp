@@ -1,5 +1,12 @@
 en:
   reports:
+    project:
+      factsheet_link: ''
+      total_commitments_in: Total Commitments {{year}}
+      total_disbursements_in: Total Disbursements {{year}}
+      commitments_forecast_in: Commitments Forecast {{year}}
+      disbursements_forecast_in: Disbursements Forecast {{year}}
+      
     na: n/a
     projects_counter: current Projects
     no_projects: Number of Projects

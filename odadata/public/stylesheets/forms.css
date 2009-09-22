@@ -1,0 +1,121 @@
+/* DATA INPUT FORM STYLES */
+
+/* Clearfix */
+ol { overflow: hidden; margin: 0; padding: 0; }
+
+form fieldset {
+    border: 1px solid #ccc;
+    padding: 1em;
+    background-color: #F8F8F8;
+}
+form {
+	margin-bottom:0;
+	
+}
+
+form fieldset legend {
+    font-size: 1.5em;
+    padding: 0 .2em;
+    color: #003366;
+}
+
+form fieldset ol {
+    list-style: none;
+}
+
+form fieldset ol li {
+    border-bottom: 1px dashed #ccc;
+    padding: .5em 0;
+}
+
+form fieldset label {
+    display: block;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+form fieldset label.fluid {
+    display: inline;
+    padding: 0 !important;
+    font-weight: normal;
+}
+
+form fieldset input,
+form fieldset textarea,
+form fieldset select {
+    padding: 2px;
+    font: 13px "Trebuchet MS", sans-serif;
+    border: 1px solid #aaa;
+    color: #777;
+    margin-top: .2em;
+    margin-left: 1em;
+}
+
+form fieldset input:focus,
+form fieldset textarea:focus {
+    border: 1px solid #555 !important;
+    color: #555;
+}
+
+form label em {
+    color: #999;
+    font-size: .9em;
+}
+
+form fieldset p {
+    padding: 1em;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    margin: 0 0 1em 0;
+    color: #777;
+}
+
+form button {
+    padding: .5em 2em;
+    font: 1.2em "Trebuchet MS", Sans-Serif;
+    cursor: pointer;
+}    
+
+.buttonHolder {
+    background: #eee;
+    padding: .5em;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    text-align: center;
+}
+    
+/* Validation errors */
+form fieldset .error {
+  color: #c00;
+}
+
+/* Field styles */
+form textarea { width: 75%; overflow: auto; }
+form fieldset .large { width: 80%; }
+form fieldset .full  { width: 95%; }
+
+form fieldset li.fifty { float: left; width: 49.9%; }
+form fieldset li.twenty { float: left; width: 19.9%; }
+form fieldset li.thirty { float: left; width: 33.2%; }
+form fieldset li .error_message { float: left; width: 95%; color:red;}
+
+form fieldset ol li.noborder { border: 0 !important; }
+
+/* Align checkboxes properly */
+form fieldset ol li.checkbox { 
+  padding-left: 40px !important; 
+  text-indent: -37px; 
+}
+
+form fieldset ol li.checkbox input { 
+  margin-right: 10px;
+  vertical-align: middle;
+}
+ 
+/* Subheadings */
+form fieldset h3 { 
+  font-size: 1.3em;
+  font-weight: bold; 
+}       
+
+/* End DATA INPUT FORM STYLES */

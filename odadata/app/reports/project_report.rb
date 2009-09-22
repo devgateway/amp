@@ -1,6 +1,6 @@
 module Reports  
   class ProjectReport < Ruport::Controller::Table
-    AGGREGATEABLE_COLS = [:total_commitments, :total_disbursements, :commitments_forecast, :disbursements_forecast, :total_cofunding]
+    AGGREGATEABLE_COLS = %w(total_commitments total_disbursements commitments_forecast disbursements_forecast total_cofunding)
     
     prepare :columns
     stage :format_columns, :table_structure, :table_header, :table_body, :table_footer, :output
@@ -25,18 +25,24 @@ module Reports
       
     protected
       def localized_heading_for(column)
-        I18n.t(column.to_s, :scope => 'reports.project', :default => Project.human_attribute_name(column.to_s))
+        if column.to_s =~ /(total_commitments|total_disbursements|commitments_forecast|disbursements_forecast)_([0-9]{4})/
+          I18n.t("#{$1}_in", :scope => 'reports.project', :year => $2)
+        else
+          I18n.t(column.to_s, :scope => 'reports.project', :default => Project.human_attribute_name(column.to_s))
+        end
       end
       
       def build_totals
         fields = AGGREGATEABLE_COLS.select { |f| data.column_names.include?(f) }
+        fields += data.column_names.select { |f| f.to_s =~ /(total_commitments|total_disbursements|commitments_forecast|disbursements_forecast)_([0-9]{4})/ }
+
         totals_rec = Ruport::Data::Record.new([], :attributes => data.column_names)
         # TODO: Translation
         totals_rec[data.column_names.first] = "TOTAL"
         fields.each do |f|
           totals_rec[f] = data.column(f).reject(&:nil?).sum
         end
-                
+        
         totals_rec
       end
     end
@@ -48,12 +54,11 @@ module Reports
       format_column(:description) { |r| short_expander_tag(r) }
       format_column(:comment) { |r| short_expander_tag(r) }
       format_column(:markers) { |r| markers_list(r) }
-      format_column(:implementing_agencies) { |r| format_as_html_list(r.map(&:name)) }
-      format_column(:contracted_agencies) { |r| format_as_html_list(r.map(&:name)) }
-      format_column(:mdgs) { |r| format_as_html_list(r.map(&:name), :class => 'fatlist') }
+      format_column(:implementing_agencies) { |r| format_as_html_list(r.map(&:name)) rescue nil }
+      format_column(:contracted_agencies) { |r| format_as_html_list(r.map(&:name)) rescue nil }
+      format_column(:mdgs) { |r| format_as_html_list(r.map(&:name), :class => 'fatlist') rescue nil }
       format_column(:website) { |r| r.to_link }
-      # TODO: Translation
-      format_column(:focal_regions) { |r| r.empty? ? I18n.t('options.national') :  r.map(&:name).sort.join("<br />") }
+      format_column(:focal_regions) { |r| r.empty? ? I18n.t('options.national') :  r.map(&:name).sort.join("<br />") rescue nil }
       format_column(:country_strategy) do |r| 
         if r.blank?
           I18n.t('reports.na')

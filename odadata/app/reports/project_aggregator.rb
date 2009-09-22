@@ -3,6 +3,25 @@ class Reports::ProjectAggregator < Ruport::Aggregator
     options[:projects]
   end
   
+  def prepare
+    @options[:funding_details].each do |y|
+      @fields << :"total_commitments_#{y}"
+      @fields << :"total_disbursements_#{y}"
+      @fields << :"commitments_forecast_#{y}"
+      @fields << :"disbursements_forecast_#{y}"
+    end
+  end
+  
+  def process_record(project, record)
+    # Add funding details
+    @options[:funding_details].each do |y|
+      record[:"total_commitments_#{y}"] = project.total_commitments(y)
+      record[:"total_disbursements_#{y}"] = project.total_payments(y)
+      record[:"commitments_forecast_#{y}"] = project.funding_forecasts.find_by_year(y).andand.commitments
+      record[:"disbursements_forecast_#{y}"] = project.funding_forecasts.find_by_year(y).andand.payments
+    end
+  end
+  
   provides :factsheet_link do |p|
     p.id
   end

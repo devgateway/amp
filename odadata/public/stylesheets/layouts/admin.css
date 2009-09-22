@@ -1,0 +1,15 @@
+/* Start ADMIN style */
+/* For ADMIN using greenscale */
+
+/* Data Table headers (usually lists), always preceded by the title as a <H2> tag */
+#content table th {
+	color: #fff;
+  background-color:#666666;
+} 
+
+/* For the data cells of the table */
+#content table td {
+	background-color:#cccccc;
+} 
+
+/* End ADMIN style */

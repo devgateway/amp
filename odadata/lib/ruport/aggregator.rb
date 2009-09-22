@@ -11,8 +11,10 @@ class Ruport::Aggregator
   end
     
   def initialize(options)
-    @middleware = [options[:middleware]].flatten.compact
-    @fields = options[:fields]
+    @middleware = [options.delete(:middleware)].flatten.compact
+    @fields = options.delete(:fields)
+    @options = options
+    
     begin
       @records = find_records(options)
     rescue NoMethodError
@@ -27,6 +29,7 @@ class Ruport::Aggregator
       @records.each do |r|
         record = {}
         @fields.each { |f| record[f] = get_value(r, f) }
+        process_record(r, record) if self.respond_to?(:process_record)
         call_middleware_hook(:process_record, r, record)
         t << record
       end
@@ -42,8 +45,6 @@ protected
       self.ra_providers[f.to_sym].call(r)
     elsif r.respond_to?(f)
       r.send(f)
-    else
-      raise Ruport::AggregationError, "Failed to obtain data for field #{f}, please specify a provider"
     end
   end
 

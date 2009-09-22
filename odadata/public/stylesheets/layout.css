@@ -1,0 +1,363 @@
+/*
+Blue scale
+
+Header: 
+ Background: #4f81bd
+ Color: #fff
+Row: 
+ Background: #b8cce4
+ Color: #000
+Lighter row: 
+ Background: #dbe5f1
+ Color: #000
+
+Grayscale:
+Header: 
+ Background: #000000
+ Color: #fff
+Row: 
+ Background: #a5a5a5
+ Color: #000
+Lighter row: 
+ Background: #d8d8d8
+ Color: #000
+
+Greenscale
+Header: 
+ Background: #9bbb59
+ Color: #fff
+Row: 
+ Background: #d7e4bc
+ Color: #000
+Lighter row: 
+ Background: #eaf1dd
+ Color: #000
+
+*/
+
+
+/* Start GENERAL STYLES */
+HTML {
+	margin: 0;
+	padding: 0;
+}
+
+BODY { 
+	background-color: #eee; 
+	color: #333; 
+	font: 13px Verdana, Arial, Helvetica, sans-serif;
+	line-height: 1.3em;
+	margin: 0;
+}
+
+HR {
+	display: none;
+}
+
+P {
+	padding: 1em 1em 0 1em;
+	margin: 0;
+}
+
+PRE {
+  background-color: #eee;
+  padding: 10px;
+  font-size: 11px;
+}
+
+A { color: #000; }
+A:visited { color: #666; }
+A:hover { color: #fff; background-color: #000; }
+A IMG { border: 0; }
+
+/* Start GENERAL CLASSES */
+
+.horizontalBox {
+	width:890px;
+	height:45px;
+}
+
+.horizontalBox div {
+	float:right;
+	height:35px;
+	color:#003366;
+	font-size:14px;
+	font-weight:bold;
+	
+}
+
+.bt {
+	background-color:#FFAA33;
+	border:1px solid #FF6600; 
+	color:#003366;
+	font-size:11px;
+	font-weight:bold;
+	padding:2px;
+	text-align:center;
+}
+
+#generalContainer {
+	width:900px;
+	background-color:#fff;	
+	border-left:1px solid #CECECE;
+	border-right:1px solid #CECECE;
+}
+
+#header {
+	width:900px;
+}
+
+#content {
+	width: 892px;
+	padding-left: 4px;
+	padding-right: 4px;
+	clear:left;
+	text-align: left;
+}
+
+#footer {
+	width: 900px;
+	margin-left: 0;
+	margin-right: 0;
+	text-align:center;
+	vertical-align:middle;
+	height:45px;
+}
+
+#footer hr {
+	display: block;
+	border: 1px solid #003F7D;
+	height: 3px;
+	background-color: #003F7D;
+	color: #003F7D;
+}
+
+
+#content h2 {
+	font-size: 1.1em;
+	font-style: normal;
+	font-weight: bold;
+	color: #003366;
+}
+
+/*
+	background-color: #FFAA33;
+	border-right: 1px solid #FF9900;
+	border-bottom: 1px solid #FF9900;
+	border-left: 1px solid #FF6600;
+	padding: 2px;
+	text-align: center;
+}*/
+
+/* Used in layouts for currency_report, graph windows and report window */
+.prt {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-style: normal;
+	font-weight: normal;
+	color: #003366;
+	text-decoration: none;
+	background-color: #FFAA33;
+	border-top: 1px solid #FF6600;
+	border-right: 1px solid #FF9900;
+	border-bottom: 1px solid #FF9900;
+	border-left: 1px solid #FF6600;
+	padding: 1px;
+	width: 80px;
+	text-align: center;
+	margin-right:6px;
+	float:right;
+}
+
+/* Top Menu Orange line */
+.menuline {
+	background-color: #FFAD33;
+}
+
+/* Class Style for errors defined in ActionPack */
+.fieldWithErrors {
+  padding: 2px;
+  background-color: red;
+  display: table;
+}
+
+.nowrap {
+	white-space: nowrap;
+}
+
+/* Id Style for Explanation of errors defined in ActionPack */
+#errorExplanation {
+  width: 400px;
+  border: 2px solid red;
+  padding: 7px;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+}
+
+#errorExplanation H2 {
+  text-align: left;
+  font-weight: bold;
+  padding: 5px 5px 5px 15px;
+  font-size: 12px;
+  margin: -7px;
+  background-color: #c00;
+  color: #fff;
+}
+
+#errorExplanation P {
+  color: #333;
+  margin-bottom: 0;
+  padding: 5px;
+}
+
+#errorExplanation UL LI {
+  font-size: 12px;
+  list-style: square;
+}
+/* End GENERAL CLASSES */
+
+/* End GENERAL STYLES */
+
+/* START TOP MENU STYLES */
+/* This CSS is used for the Menu (the left frame and the top frame) */
+/* This has to be changed and cleaned up */
+#mainMenu {
+	list-style-type: none;
+	background-color: #376091;
+	height: 22px;
+	position: relative;
+	padding:0;
+	margin:0;
+	float:left;
+	width:900px;
+	border-top:1px solid white;
+}
+
+#mainMenu li {
+    font-family:Arial,sans-serif;
+    font-size:10px;
+	height: 22px;
+	line-height: 22px;
+	float: left;
+	position: relative;
+	border-right:1px solid white;
+}
+
+#mainMenu li a {
+    white-space: nowrap;
+    text-transform:uppercase;
+	display: block;
+	float: left;
+	color: #FFFFFF;
+	text-decoration: none;
+	padding: 0 10px;
+}
+
+#mainMenu li a:hover {
+	background-color: #222e5d;
+}
+#mainMenu li.selected a {
+	background-color: #222e5d;
+}
+
+#mainMenu li a.arrow {
+	padding: 0;
+	height:22px;
+}
+#mainMenu li a.no_cursor {
+	cursor:default;
+}
+
+#mainMenu li ul {
+	margin:0;
+	padding:0;
+	list-style-type: none;
+	position: absolute;
+	background: #376091;
+	height: auto;
+	top: 22px;
+	left: -1px;
+	border: 1px solid #3B5998;
+	border-top: 0;
+	display: none;
+	padding: 5px 0;
+	overflow: hidden;
+	z-index: 100;
+}
+#mainMenu li.selected ul {
+	display: block;
+}
+#mainMenu li ul li {
+	float: left;
+	font-weight: normal;
+	clear:both;
+	border-right:0;
+}
+#mainMenu li ul li a, #mainMenu li.selected ul li a {
+	display: block;
+	padding: 0 9px;
+	color: #fff;
+	background: #376091;
+	float: none;
+	text-align:left;
+}
+#mainMenu li ul li a:hover, #mainMenu li.selected ul li a:hover {
+	background-color: #222e5d;
+	color: #FFFFFF;
+}
+
+#mainMenu li a img {
+	border: 0;
+}
+
+/* End TOP MENU STYLES */
+
+/* Data Tables (usually lists), always preceded by the title as a <H2> tag */
+#content table {
+	width: 100%;
+	border: none;
+	border-spacing: 1px;
+} 
+
+/* Data Table headers (usually lists), always preceded by the title as a <H2> tag */
+#content table th, #content table td {
+	text-align: left;
+	padding: 2px;
+}
+
+#content table th {
+	color: #fff;
+	background-color:#687eab;
+	border-bottom: 2px solid white;
+	font-size: 0.9em;
+	font-weight: bold;
+} 
+
+/* For the data cells of the table */
+#content table td {
+	font-size: 0.8em;
+  background-color:#dbe2f1;
+	border-spacing: 1px;
+	vertical-align: top;
+}
+
+/* For lists in the reports */
+#content table td ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+#content table td ul li {
+	padding-bottom: 4px;
+}
+
+/* Don't adjust font size for nested tables */
+#content table table td {
+	font-size: 1em;
+}
+
+#content tr.totals td {
+	font-weight: bold;
+}

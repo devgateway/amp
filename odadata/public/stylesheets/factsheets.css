@@ -1,0 +1,101 @@
+.factsheet {
+	margin: 0px 20px 30px 20px;
+	float:left;
+}
+
+.factsheet .main_details {
+	width:610px;
+	float:left;
+}
+
+.factsheet .main_details DD
+{
+	width:400px;
+}
+
+.factsheet .main_details DT {
+	width:200px;
+}
+
+.factsheet DL {
+	width:840px;
+	margin:0;
+	clear:left;
+	float:left;
+}
+
+.factsheet DT {
+	font-weight: bold;
+	float:left;
+  clear:left;
+  width:200px;
+  margin:0;
+  padding:4px 0 4px 0;
+  border-top:1px solid #999;
+}
+
+.factsheet DT.first {
+	border-top: none;
+}
+
+.factsheet DD.first {
+	border-top: none;
+}
+
+.factsheet DD {
+    border-top:1px solid #999;
+	float:left;
+    width:638px;
+    margin:0;
+    padding:4px 0 4px 0;
+}
+
+.factsheet H3 {
+	color:#003366;
+	font-family:Arial,Helvetica,sans-serif;
+	font-style:normal;
+	font-weight:bold;
+	font-size:18px;
+  clear:left;
+	padding-top:20px;
+  border-bottom:1px solid #333;
+	margin-bottom:5px;
+	margin-top:0px;
+	line-height:normal;
+	width:	838px;
+}
+
+.factsheet .prt {
+	float:right;
+}
+
+.factsheet .map_image {
+	float:left;
+	height:220px;
+	width:220px;
+	border:1px solid black;
+	margin:0px 6px 0px 6px;
+}
+
+/* These are indented subsections */
+.factsheet dl dl {
+	width: 640px;
+}
+.factsheet dl dl dd {
+	width: 438px;
+}
+
+.factsheet dl dl .first {
+	border-top: none;
+}
+
+/* List styles */
+.factsheet dl ul {
+	padding-left: 0;
+	list-style-type: none;
+}
+
+/* This will currently work with Mozilla browsers only but looks quite nice */
+.factsheet dl ul li:before {
+	content: "\00BB \0020";
+}

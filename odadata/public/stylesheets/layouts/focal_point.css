@@ -1,0 +1,13 @@
+/* Start FOCAL_POINT style */
+/* For FOCAL_POINT using grayscale */
+/* Data Tables (usually lists), always preceded by the title as a <H2> tag */
+#content table th {
+	color: #fff;
+	background-color:#687eab;
+} 
+
+/* For the data cells of the table */
+#content table td {
+  background-color:#dbe2f1;
+} 
+/* End FOCAL_POINT style */

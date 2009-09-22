@@ -34,7 +34,7 @@ module Reports
         # TODO: Translation
         totals_rec[data.column_names.first] = "TOTAL"
         fields.each do |f|
-          totals_rec[f] = data.column(f).sum
+          totals_rec[f] = data.column(f).reject(&:nil?).sum
         end
                 
         totals_rec

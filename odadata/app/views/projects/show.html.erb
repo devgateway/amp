@@ -3,19 +3,19 @@
 	<h3><%= header lc(:title, :project => @project.donor_project_number) %></h3>
 		
 	<dl class="main_details">
-		<dt class="first"><%= @project.class.human_attribute_name('title') %></dt>
+		<dt class="first"><%= Project.human_attribute_name('title') %></dt>
 		<dd class="first"><%= @project.title %></dd>
 		
-		<dt><%= @project.class.human_attribute_name('description') %></dt>
+		<dt><%= Project.human_attribute_name('description') %></dt>
 		<dd><%= @project.description %></dd>
 		
-		<dt><%= @project.class.human_attribute_name('donor') %></dt>
+		<dt><%= Project.human_attribute_name('donor') %></dt>
 		<dd><%= @project.donor.name %></dd>
 		
-		<dt><%= @project.class.human_attribute_name('donor_agency') %></dt>
+		<dt><%= Project.human_attribute_name('donor_agency') %></dt>
 		<dd><%= @project.donor_agency.andand.name %></dd>
 		
-		<dt><%= @project.class.human_attribute_name('country_strategy') %></dt>
+		<dt><%= Project.human_attribute_name('country_strategy') %></dt>
 		<dd><%= @project.country_strategy.andand.strategy_number || t('options.country_strategy_unavailable') %></dd>
 	</dl>
 	
@@ -26,39 +26,39 @@
 	
 	<h3><%= lc(:project_information) %></h3>
 	<dl>
-	    <dt class="first"><%= @project.class.human_attribute_name('prj_status') %></dt>
+	    <dt class="first"><%= Project.human_attribute_name('prj_status') %></dt>
 	    <dd class="first"><%= option_text_by_id(Project::STATUS_OPTIONS, @project.prj_status) %></dd>
 	    
-	    <dt><%= @project.class.human_attribute_name('start') %></dt>
+	    <dt><%= Project.human_attribute_name('start') %></dt>
 	    <dd><%= @project.start %></dd>
 	    
-	    <dt><%= @project.class.human_attribute_name('end') %></dt>
+	    <dt><%= Project.human_attribute_name('end') %></dt>
 	    <dd><%= @project.end %></dd>
 	    
 	    <%# recipient/region/income code here?! %>
 	    
-	    <dt><%= @project.class.human_attribute_name('national_regional') %></dt>
+	    <dt><%= Project.human_attribute_name('national_regional') %></dt>
 	    <dd><%= option_text_by_id(Project::NATIONAL_REGIONAL_OPTIONS, @project.national_regional) %>&nbsp;</dd>
 	    
-	    <dt><%= @project.class.human_attribute_name('type_of_implementation') %></dt>
+	    <dt><%= Project.human_attribute_name('type_of_implementation') %></dt>
 	    <dd><%= option_text_by_id(Project::IMPLEMENTATION_TYPES, @project.type_of_implementation) %>&nbsp;</dd>
 
-		<dt><%= @project.class.human_attribute_name('officer_responsible') %></dt>
+		<dt><%= Project.human_attribute_name('officer_responsible') %></dt>
 		<dd><%= @project.officer_responsible %>&nbsp;</dd>
 		
-		<dt><%= @project.class.human_attribute_name('website') %></dt>
+		<dt><%= Project.human_attribute_name('website') %></dt>
 		<dd><%= auto_link(@project.website) %>&nbsp;</dd>
 		
-		<dt><%= @project.class.human_attribute_name('comments') %></dt>
+		<dt><%= Project.human_attribute_name('comments') %></dt>
 		<dd><%= @project.comments %>&nbsp;</dd>
 	</dl>
 
 	<h3><%= lc(:funding_information) %></h3>
 	<dl>
-	    <dt class="first"><%= @project.class.human_attribute_name('aid_modality') %></dt>
+	    <dt class="first"><%= Project.human_attribute_name('aid_modality') %></dt>
 	    <dd class="first"><%= @project.aid_modality.name %></dd>
 	    
-	    <dt><%= @project.class.human_attribute_name('grant_loan') %></dt>
+	    <dt><%= Project.human_attribute_name('grant_loan') %></dt>
 	    <dd><%= option_text_by_id(Project::GRANT_LOAN_OPTIONS, @project.grant_loan) %></dd>
 		
 		<% if @project.delegated_cooperation %>
@@ -145,7 +145,7 @@
 		
 	<h3><%= lc(:classification) %></h3>
 		<dl>		
-			<dt class="first"><%= @project.class.human_attribute_name('implementing_agencies') %></dt>
+			<dt class="first"><%= Project.human_attribute_name('implementing_agencies') %></dt>
 			<dd class="first">
 				<ul>
 			        <% @project.implementing_agencies.each do |agency| %>
@@ -154,7 +154,7 @@
 			    </ul>
 			</dd>
 
-			<dt><%= @project.class.human_attribute_name('contracted_agencies') %></dt>
+			<dt><%= Project.human_attribute_name('contracted_agencies') %></dt>
 			<dd>
 				<ul>
 			        <% @project.contracted_agencies.each do |agency| %>
@@ -163,7 +163,7 @@
 			    </ul>
 			</dd>
 			
-			<dt><%= @project.class.human_attribute_name('sectors') %></dt>
+			<dt><%= Project.human_attribute_name('sectors') %></dt>
 		    <dd>
 				<dl>
 					<% @project.sector_relevances.ordered.each_with_index do |sector, idx| %>
@@ -171,7 +171,7 @@
 							<%= sector.amount %>%
 						</dt>
 						<dd<%= (idx == 0) ? ' class="first"' : '' -%>>
-							<%= sector.dac_sector.name_with_code %><br />
+							<strong><%= sector.dac_sector.name_with_code %></strong><br />
                             <%= sector.crs_sector.andand.name_with_code %>
 						</dd>
 					<% end %>
@@ -190,39 +190,43 @@
 			<dt><%= lc(:markers) %></dt>
 			<dd>
 				<dl>
-					<dt class="first"><%= @project.class.human_attribute_name('gender_policy_marker') %></dt>
+					<dt class="first"><%= Project.human_attribute_name('gender_policy_marker') %></dt>
 					<dd class="first"><%= option_text_by_id(Project::MARKER_OPTIONS, @project.gender_policy_marker) %></dd>
 	
-					<dt><%= @project.class.human_attribute_name('environment_policy_marker') %></dt>
+					<dt><%= Project.human_attribute_name('environment_policy_marker') %></dt>
 					<dd><%= option_text_by_id(Project::MARKER_OPTIONS, @project.environment_policy_marker) %></dd>
 	
-					<dt><%= @project.class.human_attribute_name('biodiversity_marker') %></dt>
+					<dt><%= Project.human_attribute_name('biodiversity_marker') %></dt>
 					<dd><%= option_text_by_id(Project::MARKER_OPTIONS, @project.biodiversity_marker) %></dd>
 	
-					<dt><%= @project.class.human_attribute_name('climate_change_marker') %></dt>
+					<dt><%= Project.human_attribute_name('climate_change_marker') %></dt>
 					<dd><%= option_text_by_id(Project::MARKER_OPTIONS, @project.climate_change_marker) %></dd>
 				</dl>
 			</dd>
 					
-			<% geo_list = @project.districts.group_by(&:province) %>
 			<dt><%= lc(:focal_regions) %></dt>
 			<dd>
-				<% if geo_list.empty? %>
+				<% if @project.geo_relevances.blank? %>
 					<%= ll(:options, :national) %>
 				<% else %>
 					<dl>
 
 						<% first = true # lame hack %>
-						<% geo_list.each do |province, districts| %>
-							<dt<%= ' class="first"' if first %>><%= province.name %></dt>
+						<% list = @project.geo_relevances.group_by(&:province).sort_by { |a| a[0].name } %>
+						<% list.each do |(province, relevances)| %>
+							<dt<%= ' class="first"' if first %>>
+								<%= province.name %><br />
+								<%= number_to_percentage(relevances.sum(&:amount), :precision => 1) %>
+							</dt>
 							<dd<%= ' class="first"' if first %>>
 								<ul>
-									<% districts.each do |d| %>
-                                    <% if d.code.to_i%100 == 0 #this is lame hack II, but it works :( (All Municipalities code is 100*n)%>
-                                      <li><%=lc(:all_district) %></li>
-                                    <%else%>
-										<li><%= d.name %></li>
-									<% end %>
+									<% relevances.sort_by { |a| a.district.name }.each do |r| %>
+										<%# this is lame hack II, but it works :( (All Municipalities code is 100*n) %>
+                                    	<% if r.district.code.to_i%100 == 0 %>
+                                    		<li><%= lc(:all_district) %> (<%= number_to_percentage(r.amount, :precision => 1) %>)</li>
+                                    	<% else %>
+											<li><%= r.district.name %> (<%= number_to_percentage(r.amount, :precision => 1) %>)</li>
+										<% end %>
 									<% end %>
 								</ul>
 							</dd>

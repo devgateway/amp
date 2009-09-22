@@ -1,4 +1,4 @@
-<h2><%= header lc(:title, :province => @province) %></h2>
+<h2><%= header lc(:title, :province => @province.name) %></h2>
 
 <%= Reports::ProjectReport.render_html(
 		:projects => @projects, 

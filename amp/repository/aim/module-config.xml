@@ -136,6 +136,8 @@
                 <hibernate-class>org.digijava.module.aim.dbentity.AmpOrgStaffInformation</hibernate-class>
                 <hibernate-class>org.digijava.module.aim.dbentity.AmpOrgLocation</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation</hibernate-class>
+
+                <hibernate-class>org.digijava.module.aim.fmtool.dbentity.AmpFeatureSource</hibernate-class>
 	</hibernate-classes>
 	<!-- AIM classes End-->
 

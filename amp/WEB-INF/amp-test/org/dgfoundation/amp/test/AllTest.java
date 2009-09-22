@@ -6,6 +6,7 @@ import junit.framework.TestSuite;
 import org.dgfoundation.amp.test.categorymanager.AllCategoryManagerTest;
 import org.dgfoundation.amp.test.customfields.AllCustomFieldsTest;
 import org.dgfoundation.amp.test.database.AllDataBaseManagerTests;
+import org.dgfoundation.amp.test.featureManager.AllFmCheckTest;
 import org.dgfoundation.amp.test.jobs.AllJobsTest;
 import org.dgfoundation.amp.test.messages.AllMessagesTest;
 import org.dgfoundation.amp.test.ngomodule.AllNGOModuleTest;
@@ -40,6 +41,7 @@ public class AllTest {
         suite.addTest(AllNGOModuleTest.suite());
         suite.addTest(AllSectorManagerTests.suite());
         suite.addTest(AllSelectLocationTest.suite());
+        suite.addTest(AllFmCheckTest.suite() );
 		return suite;
 	}
 

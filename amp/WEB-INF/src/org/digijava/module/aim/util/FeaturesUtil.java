@@ -28,6 +28,9 @@ import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpSiteFlag;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.dbentity.FeatureTemplates;
+import org.digijava.module.aim.fmtool.dbentity.AmpFeatureSourceFeature;
+import org.digijava.module.aim.fmtool.dbentity.AmpFeatureSourceField;
+import org.digijava.module.aim.fmtool.dbentity.AmpFeatureSourceModule;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Flag;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -1393,9 +1396,25 @@ public class FeaturesUtil {
 //			ft.setItems(null);
 //			ft.setFeatures(null);
 //			ft.setFields(null);
+			
+			for (Iterator iterator = ft.getFields().iterator(); iterator.hasNext();) {
+				AmpFieldsVisibility field = (AmpFieldsVisibility) iterator.next();
+				field.getTemplates().remove(ft);
+			}
 			ft.getFields().clear();
+			
+			for (Iterator iterator = ft.getFields().iterator(); iterator.hasNext();) {
+				AmpFeaturesVisibility feature = (AmpFeaturesVisibility) iterator.next();
+				feature.getTemplates().remove(ft);
+			}
 			ft.getFeatures().clear();
+
+			for (Iterator iterator = ft.getFields().iterator(); iterator.hasNext();) {
+				AmpModulesVisibility module = (AmpModulesVisibility) iterator.next();
+				module.getTemplates().remove(ft);
+			}
 			ft.getItems().clear();
+			
 			hbsession.delete(ft);
 			
 			tx.commit();
@@ -1976,7 +1995,9 @@ public class FeaturesUtil {
 			field.setName(fieldName);
 			if(hasLevel!=null && "no".compareTo(hasLevel)==0)
 				field.setHasLevel(false);
-			else field.setHasLevel(false);
+			else 
+				field.setHasLevel(false);
+			
 			session.save(field);
 			tx.commit();
 			
@@ -2037,7 +2058,9 @@ public class FeaturesUtil {
 			feature.setName(featureName);
 			if(hasLevel!=null && "no".compareTo(hasLevel)==0)
 				feature.setHasLevel(false);
-			else feature.setHasLevel(true);
+			else 
+				feature.setHasLevel(true);
+		
 			session.save(feature);
 			tx.commit();
 			tx = session.beginTransaction();
@@ -2082,7 +2105,10 @@ public class FeaturesUtil {
 			module.setName(moduleName);
 			if(hasLevel!=null && "no".compareTo(hasLevel)==0)
 				module.setHasLevel(false);
-			else module.setHasLevel(true);
+			else 
+				module.setHasLevel(true);
+			
+
 			session.save(module);
 			tx.commit();
 			tx = session.beginTransaction();
@@ -2108,6 +2134,46 @@ public class FeaturesUtil {
 		return;
 	}
 
+	public static void updateModuleVisibilitySource(String name, String source) {
+//		if (true)
+//			return;
+		Session session = null;
+		Transaction tx = null;
+		
+		if (source != null)
+		try {
+			session = PersistenceManager.getRequestDBSession();
+
+			String sql = "select a from " + AmpModulesVisibility.class.getName() + " a where (a.name=:name) ";
+			Query q = session.createQuery(sql);
+			q.setParameter("name", name, Hibernate.STRING);
+			List<AmpModulesVisibility> modules = q.list();
+
+			if (modules != null && !modules.isEmpty()){
+				AmpModulesVisibility module = modules.get(0);
+				if (!module.containsSource(source)){
+					tx = session.beginTransaction();
+					module.addAmpFeatureSource(new AmpFeatureSourceModule(source));
+					session.update(module);
+					tx.commit();
+				}
+			}
+		}
+		catch (Exception ex) {
+			logger.error("Exception : " + ex.getMessage());
+			ex.printStackTrace();
+		} finally{ 
+            if (tx != null && !tx.wasCommitted()) {
+                try {
+                    tx.rollback();
+                } catch (HibernateException ex) {
+                    logger.error("rollback() failed", ex);
+                }
+            }				
+		}
+	}
+	
+	
 	/**
 	 * @author dan
 	 */
@@ -2122,7 +2188,7 @@ public class FeaturesUtil {
 			module = (AmpModulesVisibility) session.load(AmpModulesVisibility.class,id);
 			moduleParent = getModuleVisibility(moduleParentName);
 			module.setParent(moduleParent);
-			session.save(module);
+			session.update(module);
 			tx.commit();
 		}
 		catch (Exception ex) {
@@ -2142,12 +2208,51 @@ public class FeaturesUtil {
 		return;
 	}
 
+	
+	public static void updateFieldVisibilitySource(String name, String source) {
+//		if (true)
+//			return;
+		Session session = null;
+		Transaction tx = null;
+		
+		if (source != null)
+		try {
+			session = PersistenceManager.getRequestDBSession();
 
+			String sql = "select a from " + AmpFieldsVisibility.class.getName() + " a where (a.name=:name) ";
+			Query q = session.createQuery(sql);
+			q.setParameter("name", name, Hibernate.STRING);
+			List<AmpFieldsVisibility> fields = q.list();
+			
+			if (fields != null && !fields.isEmpty()){
+				AmpFieldsVisibility field = fields.get(0);
+
+				if (!field.containsSource(source)){
+					tx = session.beginTransaction();
+					field.addAmpFeatureSource(new AmpFeatureSourceField(source));
+					session.update(field);
+					tx.commit();
+				}
+			}
+		}
+		catch (Exception ex) {
+			logger.error("Exception : " + ex.getMessage());
+			ex.printStackTrace();
+		} finally{ 
+            if (tx != null && !tx.wasCommitted()) {
+                try {
+                    tx.rollback();
+                } catch (HibernateException ex) {
+                    logger.error("rollback() failed", ex);
+                }
+            }				
+		}
+	}	
+	
 	/**
 	 * @author dan
 	 */
-	public static void updateFieldWithFeatureVisibility(Long featureId,
-			String fieldName) {
+	public static void updateFieldWithFeatureVisibility(Long featureId, String fieldName) {
 		Session session = null;
 		AmpFeaturesVisibility feature = new AmpFeaturesVisibility();
 		AmpFieldsVisibility field = new AmpFieldsVisibility();
@@ -2187,6 +2292,48 @@ public class FeaturesUtil {
 		return;
 	}
 
+	public static void updateFeatureVisibilitySource(String name, String source) {
+//		if (true)
+//			return;
+		Session session = null;
+		Transaction tx = null;
+		
+		if (source != null)
+		try {
+			session = PersistenceManager.getRequestDBSession();
+
+			String sql = "select a from " + AmpFeaturesVisibility.class.getName() + " a where (a.name=:name) ";
+			Query q = session.createQuery(sql);
+			q.setParameter("name", name, Hibernate.STRING);
+			List<AmpFeaturesVisibility> features = q.list();
+
+			if (features != null && !features.isEmpty()){
+				AmpFeaturesVisibility feature = features.get(0);
+				
+				if (!feature.containsSource(source)){
+					tx = session.beginTransaction();
+					feature.addAmpFeatureSource(new AmpFeatureSourceFeature(source));
+					session.update(feature);
+					tx.commit();
+				}
+			
+			}
+		}
+		catch (Exception ex) {
+			logger.error("Exception : " + ex.getMessage());
+			ex.printStackTrace();
+		} finally{ 
+            if (tx != null && !tx.wasCommitted()) {
+                try {
+                    tx.rollback();
+                } catch (HibernateException ex) {
+                    logger.error("rollback() failed", ex);
+                }
+            }				
+		}
+	}	
+	
+	
 	/**
 	 * @author dan
 	 */

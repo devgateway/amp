@@ -15,6 +15,7 @@
 
 
 		<set name="items" table="AMP_FEATURES_VISIBILITY" cascade="all-delete-orphan" lazy="false">
+			<cache usage="read-write" />
 			<key column="parent" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpFeaturesVisibility" />
 		</set>
@@ -28,6 +29,7 @@
 		</set>
 
 		<set name="templates" table="amp_modules_templates" lazy="false" inverse="true">
+			<cache usage="read-write" />
 			<key column="module"/>
 			<many-to-many column="template" class="org.digijava.module.aim.dbentity.AmpTemplatesVisibility" />
 		</set>

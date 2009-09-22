@@ -13,6 +13,7 @@
 		<property name="hasLevel" column="hasLevel" type="java.lang.Boolean" />
 
 		<set name="items" table="AMP_FIELDS_VISIBILITY" inverse="true" cascade="all-delete-orphan" lazy="false">
+			<cache usage="read-write" />
 			<key column="parent"  />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpFieldsVisibility" />
 		</set>
@@ -20,6 +21,7 @@
 		<many-to-one name="parent" column="parent" class="org.digijava.module.aim.dbentity.AmpModulesVisibility" />
 
 		<set name="templates" table="amp_features_templates" inverse="true" lazy="false">
+			<cache usage="read-write" />
 			<key column="feature" />
 			<many-to-many column="template" class="org.digijava.module.aim.dbentity.AmpTemplatesVisibility" />
 		</set>

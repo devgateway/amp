@@ -100,7 +100,16 @@
 
 <c:set var="printButon"><%=request.getSession().getAttribute("print")%></c:set>
  <c:if test="${printButon}">
+<script type="text/javascript" charset="utf-8">
+scheduler._click.dhx_cal_tab=function(){
+	
+	  var mode = this.getAttribute("name").split("_")[0];
+	  scheduler.setCurrentView(scheduler._date,mode);
+	  if(mode=="week"||mode=="day")
+	  scheduler._els["dhx_cal_data"][0].style.height="1100px";
+	}
 
+</script>
   <table width="200px" height="40px">
   	<tr>
   		<td>	
@@ -148,6 +157,14 @@
 		var type = calType(<%=request.getSession().getAttribute("type")%>);
 		var printView = <%=request.getSession().getAttribute("view")%>;
 		var printDate = <%=request.getSession().getAttribute("date")%>;
+
+
+		if(printDate !=null){
+		 var date = <%=request.getSession().getAttribute("date")%>;
+		}else{
+			date = myDate;
+			}
+		console.log("myDate:"+myDate+" printDate:"+printDate);
 		var defoultView = "month";
 		if(printView!=null){
 			if(printView == 1){
@@ -159,16 +176,9 @@
 				}
 
 			}
-		/*
-		scheduler._click.dhx_cal_tab=function(){
-			   
-			  var mode = this.getAttribute("name").split("_")[0];
-			  scheduler.setCurrentView(scheduler._date,mode);
-			  if(mode=="week"||mode=="day")
-			  scheduler._els["dhx_cal_data"][0].scrollTop=scheduler.config.hour_size_px*21;
-			}
-		*/
-		scheduler.init('scheduler_here',printDate,defoultView,type, ehtMonth);
+		
+		
+		scheduler.init('scheduler_here',date,defoultView,type, ehtMonth);
 		scheduler.templates.event_text=function(start_date,end_date,ev){
 			return "Text:<b> "+ev.text+"</b><br>"+"Descr."+ev.details;
 		}
@@ -197,11 +207,15 @@
 		    return true;
 		});
 		scheduler.createUnitsView("unit","section_id",sections);
-		scheduler.templates.event_bar_text=function(start_date,end_date,ev){
+		var printView = <%=request.getSession().getAttribute("print")%>
+		
+	if(!printView){
+		 scheduler.templates.event_bar_text=function(start_date,end_date,ev){
 	        var text = ev.text.substr(0,20);
 	        var img = '<digi:img src="module/calendar/images/magnifier.png" height="12" width="12" align="left"/>';
 	        return "<span title='"+"Title:"+text+" "+"StartDate:"+start_date+"EndDate:"+end_date+"'>"+img+""+text+"</span>";
-		}
+		 }
+	 }
 		scheduler.config.dblclick_create = false;
 		scheduler.config.multi_days = true;
 	/*

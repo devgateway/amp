@@ -1809,7 +1809,11 @@ public class SaveActivity extends Action {
 			Calendar cal = Calendar.getInstance();
 			activity.setCreatedDate(cal.getTime());
 			// Setting approval status of activity
-			activity.setApprovalStatus(eaForm.getIdentification().getApprovalStatus());
+			if (activity.getDraft() && tm.getTeamHead()){
+				activity.setApprovalStatus(Constants.STARTED_APPROVED_STATUS);
+			}else{
+				activity.setApprovalStatus(eaForm.getIdentification().getApprovalStatus());
+			}
 
 		}
 

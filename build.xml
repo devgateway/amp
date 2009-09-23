@@ -28,8 +28,9 @@
 	<property name="MondrianConfig" location="./WEB-INF/queries"/>
 	<property name="jackrabbit" location="./jackrabbit"/>
     <property name="ampTest" location="./WEB-INF/amp-test" />
+	<property name="ampSelenium" location="./WEB-INF/amp-selenium-test" />
 
-
+	
 	<!-- amp_clean specific -->
 	<condition property="mysql.password" value="">
 	 	<not>
@@ -170,6 +171,33 @@
     	</copy>
     </target>
 
+	<target name="seleniumResources">
+        <copy todir="${classes}" includeEmptyDirs="no">
+            <fileset dir="${test}">
+            <patternset>
+                <include name="**/*.conf"/>
+                <include name="**/*.properties"/>
+                <include name="**/*.xml"/>
+                <include name="**/*.ccf"/>
+                <include name="**/*.xsl"/>
+                <include name="**/*.xsd"/>
+	            </patternset>
+            </fileset>
+        </copy>
+    	<copy todir="${classes}" includeemptydirs="no">
+    		<fileset dir="${ampSelenium}">
+    			   <patternset>
+    				 <include name="**/*.conf"/>
+    			     <include name="**/*.properties"/>
+    			     <include name="**/*.xml"/>
+    			     <include name="**/*.ccf"/>
+    			     <include name="**/*.xsl"/>
+    			     <include name="**/*.xsd"/>
+    				</patternset>
+    	 	</fileset>
+    	</copy>
+    </target>
+
     <!-- Create DB data-model in a fresh schema -->
     <target name="database" depends="compile">
       <java classname="org.digijava.kernel.util.DigiSchemaExport" fork="yes">
@@ -237,7 +265,13 @@
         </javac>
     </target>
 	
-    <target name="runTest" depends="compileTest">
+	<target name="compileSelenium" depends="compile,seleniumResources">
+        <javac  srcdir="${ampSelenium}" destdir="${classes}" deprecation="off" debug="${debug}">
+            <classpath refid="compile.classpath"/>
+        </javac>
+    </target>
+	
+	<target name="runTest" depends="compileTest">
 		<mkdir dir="test-reports"/>
     	<junit  printsummary="yes" haltonfailure="yes" showoutput="yes">
     	  <classpath refid="run.classpath"/>

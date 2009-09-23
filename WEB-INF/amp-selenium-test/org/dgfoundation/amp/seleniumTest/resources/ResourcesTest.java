@@ -1,0 +1,121 @@
+package org.dgfoundation.amp.seleniumTest.resources;
+
+import org.apache.log4j.Logger;
+
+import com.thoughtworks.selenium.SeleneseTestCase;
+import com.thoughtworks.selenium.Selenium;
+
+public class ResourcesTest extends SeleneseTestCase {
+	
+	private static Logger logger = Logger.getLogger(ResourcesTest.class);
+	
+	public void setUp() throws Exception {
+		setUp("http://localhost:8080/", "*chrome");
+	}
+	public static void testResources(Selenium selenium) throws Exception {
+		selenium.open("/");
+		selenium.type("j_username", "UATtl@amp.org");
+		selenium.type("j_password", "abc");
+		selenium.click("submitButton");
+		selenium.waitForPageToLoad("30000");
+		selenium.click("link=UAT Team Workspace");
+		selenium.waitForPageToLoad("30000");
+		if (selenium.isElementPresent("//a[contains(@href, \"/contentrepository/documentManager.do\")]")) {
+			selenium.click("//a[contains(@href, \"/contentrepository/documentManager.do\")]");
+			selenium.waitForPageToLoad("30000");
+			selenium.click("//button[@type='button' and @onclick=\"setType('private');configPanel(0,'','','', false); showMyPanel(0, 'addDocumentDiv'); \"]");
+			Thread.sleep(5000);
+			selenium.click("//input[@name='webResource' and @value='true']");
+			selenium.type("docTitle", "Test Resource");
+			selenium.type("docDescription", "Test created by TL");
+			selenium.type("webLink", "www.google.com");
+			selenium.click("//input[@onclick=\"return validateAddDocumentLocal()\"]");
+			selenium.waitForPageToLoad("30000");
+			selenium.click("//li[@id='tab2']/a/div");
+			selenium.click("//button[@type='button' and @onclick=\"setType('team'); configPanel(0,'','','', false);showMyPanel(0, 'addDocumentDiv');\"]");
+			selenium.click("//input[@name='webResource' and @value='true']");
+			selenium.type("docTitle", "Test Team Resource");
+			selenium.type("docDescription", "Team Resource created by TL");
+			selenium.type("webLink", "www.yahoo.com");
+			selenium.click("//input[@onclick=\"return validateAddDocumentLocal()\"]");
+			selenium.waitForPageToLoad("30000");
+			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+			selenium.waitForPageToLoad("30000");
+			
+			selenium.type("j_username", "uattm@amp.org");
+			selenium.type("j_password", "abc");
+			selenium.click("submitButton");
+			selenium.waitForPageToLoad("30000");
+			selenium.click("link=UAT Team Workspace");
+			selenium.waitForPageToLoad("30000");
+			selenium.click("//a[contains(@href, \"/contentrepository/documentManager.do\")]");
+			selenium.waitForPageToLoad("30000");
+			selenium.click("//button[@type='button' and @onclick=\"setType('private');configPanel(0,'','','', false); showMyPanel(0, 'addDocumentDiv'); \"]");
+			Thread.sleep(5000);
+			selenium.click("//input[@name='webResource' and @value='true']");
+			selenium.type("docTitle", "Test Resource TM");
+			selenium.type("docDescription", "created by a TM");
+			selenium.type("webLink", "http://docs.ampdev.net");
+			selenium.click("//input[@onclick=\"return validateAddDocumentLocal()\"]");
+			selenium.waitForPageToLoad("30000");
+			selenium.click("//li[@id='tab2']/a/div");
+			assertTrue(!selenium.isElementPresent("//button[@type='button' and @onclick=\"setType('team'); configPanel(0,'','','', false);showMyPanel(0, 'addDocumentDiv');\"]"));
+			selenium.click("link=exact:http://www.yahoo.com");
+			//selenium.waitForPopUp(selenium.getAllWindowTitles()[1], "50000");
+			//Thread.sleep(10000);
+			//selenium.selectWindow(selenium.getAllWindowTitles()[1]); 
+	        //assertTrue(selenium.getAllWindowTitles()[1].contains("ahoo"));
+	        //selenium.close();
+	        //selenium.selectWindow("null");
+	        selenium.click("//li[@id='tab1']/a/div");
+	        String rId = selenium.getAttribute("//a[@onclick=\"window.open('http://docs.ampdev.net')\" and @style=\"cursor: pointer; text-decoration: underline; color: blue;\"]@id");
+			rId = rId.substring(1);
+		    selenium.click("//li[@id='tab1']/a/div");
+			selenium.click("//a[@id='plus"+rId+"']/img");
+			Thread.sleep(3000);
+			selenium.type("webLink", "http://ampdev.net");
+			selenium.click("//input[@onclick=\"return validateAddDocumentLocal()\"]");
+			selenium.waitForPageToLoad("30000");
+			selenium.click("//a[@id='H"+rId+"']/img");
+			Thread.sleep(3000);
+			selenium.click("link=exact:http://docs.ampdev.net");
+			//selenium.waitForPopUp(selenium.getAllWindowTitles()[1], "50000");
+			//Thread.sleep(10000);
+			//selenium.selectWindow(selenium.getAllWindowTitles()[1]); 
+	        //selenium.close();
+	        //selenium.selectWindow("null");
+	        selenium.click("//a[@id='a"+rId+"']/img");
+			selenium.getConfirmation();
+			Thread.sleep(5000);
+			selenium.click("//div[@id='aPanel1']/span");
+			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+			selenium.waitForPageToLoad("30000");
+			
+			selenium.type("j_username", "UATtl@amp.org");
+			selenium.type("j_password", "abc");
+			selenium.click("submitButton");
+			selenium.waitForPageToLoad("30000");
+			selenium.click("link=UAT Team Workspace");
+			selenium.waitForPageToLoad("30000");
+			selenium.click("//a[contains(@href, \"/contentrepository/documentManager.do\")]");
+			selenium.waitForPageToLoad("30000");
+			rId = selenium.getAttribute("//a[@onclick=\"window.open('http://www.google.com')\" and @style=\"cursor: pointer; text-decoration: underline; color: blue;\"]@id");
+			rId = rId.substring(1);
+			selenium.click("//a[@id='a"+rId+"']/img");
+			selenium.getConfirmation();
+			Thread.sleep(5000);
+			selenium.click("//li[@id='tab2']/a/div");
+			rId = selenium.getAttribute("//a[@onclick=\"window.open('http://www.yahoo.com')\" and @style=\"cursor: pointer; text-decoration: underline; color: blue;\"]@id");
+			rId = rId.substring(1);
+			selenium.click("//a[@id='a"+rId+"']/img");
+			selenium.getConfirmation();
+			Thread.sleep(5000);
+		} else {
+			logger.error("Option 'RESOURCES' is not available.");
+		}
+		
+		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.waitForPageToLoad("30000");
+		
+	}
+}

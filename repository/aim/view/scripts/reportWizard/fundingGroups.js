@@ -58,7 +58,7 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]			= new Array(
 				,'Funding Status'
 			);
 YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(
-				'Region','Status'
+				'Region','Status','Primary Sector','Primary Sector Sub-Sector'
 			);
 YAHOO.amp.reportwizard.fundingGroups["component"]		= new Array(
 				 'Component Type','Status'

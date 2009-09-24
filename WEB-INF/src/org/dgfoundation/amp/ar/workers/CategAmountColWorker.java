@@ -239,12 +239,12 @@ public class CategAmountColWorker extends ColumnWorker {
 			String regionName = rs.getString("region_name");
 			headMeta= this.getCachedMetaInfo(ArConstants.REGION, regionName);			
 		} else
-		
-		if("component_name".equals(headMetaName)){
-			String componentName = rs.getString("component_name");
-			headMeta= this.getCachedMetaInfo(ArConstants.COMPONENT, componentName);			
-		} else
-	
+			
+		if("component_type".equals(headMetaName)){
+			String componentType = rs.getString("component_type");
+			headMeta= this.getCachedMetaInfo(ArConstants.COMPONENT, componentType);			
+		} else	
+
 		if("donor_name".equals(headMetaName)){
 			String donorName = rs.getString("donor_name");
 			headMeta= this.getCachedMetaInfo(ArConstants.DONOR, donorName);			

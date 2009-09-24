@@ -10,6 +10,13 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
+<script language="JavaScript">
+function myclearDate(editBox, clearLink, checkboxId){
+	clearDate(editBox, clearLink);
+	document.getElementById(checkboxId).checked=false;
+}
+</script>
+
 <digi:instance property="aimEditActivityForm" />
 									<tr><td>
 										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
@@ -168,7 +175,7 @@
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
-																<a id="clear2" href='javascript:clearDate(document.getElementById("revisedAppDate"), "clear2")'>
+																<a id="clear2" href='javascript:myclearDate(document.getElementById("revisedAppDate"), "clear2", "sameAs1")'>
 																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 																</a>
 																<a id="date2" href='javascript:pickDateWithClear("date2",document.getElementById("revisedAppDate"),"clear2")'>
@@ -177,7 +184,7 @@
 															</td>
 															<td align="left" vAlign="center">&nbsp;
 																<field:display name="Same as Proposed Approval Date" feature="Planning">
-																	<input type="checkbox" name="sameAs1" onclick="sameAsfunction(1)">
+																	<input type="checkbox" name="sameAs1" onclick="sameAsfunction(1)" id="sameAs1">
 																	<digi:trn key="aim:sameAsProposedApprovalDate">Same as Proposed Approval Date</digi:trn>
 																</field:display>
 															</td>
@@ -234,7 +241,7 @@
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
-																<a id="clear4" href="javascript:clearDate(document.aimEditActivityForm.revisedStartDate, 'clear4')">
+																<a id="clear4" href="javascript:myclearDate(document.aimEditActivityForm.revisedStartDate, 'clear4', 'sameAs2')">
 																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 																</a>
 																<a id="date4" href='javascript:pickDateWithClear("date4",document.aimEditActivityForm.revisedStartDate,"clear4")'>
@@ -243,7 +250,7 @@
 															</td>
 															<td align="left" vAlign="center">&nbsp;
 																<field:display name="Same as Proposed Start Date" feature="Planning">
-																	<input type="checkbox" name="sameAs2" onclick="sameAsfunction(2)">
+																	<input type="checkbox" name="sameAs2" onclick="sameAsfunction(2)" id="sameAs2">
 																	<digi:trn key="aim:sameAsProposedStartDate">Same as Proposed Start Date</digi:trn>
 																</field:display>
 															</td>

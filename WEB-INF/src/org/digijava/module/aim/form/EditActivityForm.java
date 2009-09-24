@@ -3931,7 +3931,12 @@ public class EditActivityForm extends ActionForm implements Serializable {
 					cf.setValue(null);
 				}
 			}
-
+			if (this.costing !=null){
+				this.costing.allCosts = null;
+				this.costing.costs = null;
+				this.costing.overallContribution=null;
+				this.costing.overallCost = null;
+			}
 		}
 		if (this.getLocation().isLocationReset()) {
 			this.getLocation().reset(mapping, request);

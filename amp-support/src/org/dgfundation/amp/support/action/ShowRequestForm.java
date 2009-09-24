@@ -90,11 +90,13 @@ public class ShowRequestForm extends ActionSupport implements
 		srequest.setMailcc(this.mailcc);
 		srequest.setLevel(this.level);
 		String strmodules = "";
-		for (int i = 0; i < modules.length; i++) {
-			if ("".compareToIgnoreCase(strmodules) == 0) {
-				strmodules = modules[i];
-			} else {
-				strmodules = strmodules + "," + modules[i];
+		if (modules!=null){
+			for (int i = 0; i < modules.length; i++) {
+				if ("".compareToIgnoreCase(strmodules) == 0) {
+					strmodules = modules[i];
+				} else {
+					strmodules = strmodules + "," + modules[i];
+				}
 			}
 		}
 		srequest.setModule(strmodules);

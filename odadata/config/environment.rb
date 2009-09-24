@@ -27,6 +27,7 @@ Rails::Initializer.run do |config|
   config.gem "giraffesoft-enum_field",  :lib => "enum_field", :source => "http://gems.github.com"
   config.gem "ruport"  
   config.gem "spreadsheet"
+  config.gem "acts_as_reportable"
 
   # Add additional load paths for your own custom dirs
   config.load_paths += Dir["#{RAILS_ROOT}/app/models/*[^.rb]"]

@@ -81,7 +81,7 @@ cursor:pointer;
                 <digi:trn key='aim:PublicView'>PUBLIC VIEW</digi:trn>
                 </digi:link>
             </li>
-            <feature:display name="yuiampmenuitemlabel" module="Document Management">
+            <feature:display name="Public Documents" module="Document Management">
             <li class="yuiampmenuitem" style="float:left;">
                 <digi:link styleClass="yuiampmenuitemlabel" href="/documentManager.do" module="contentrepository" onclick="return quitRnot()">			
                 <digi:trn key="contentrepository:publicDocuments">Public Documents</digi:trn></digi:link>

@@ -199,7 +199,7 @@
 <feature:display name="User Help" module="HELP"></feature:display> 
 <feature:display name="Web Resources" module="Document"></feature:display> 
 <feature:display name="Widget Places" module="WIDGETS"></feature:display> 
-<feature:display name="yuiampmenuitemlabel" module="Document Management"></feature:display>
+<feature:display name="Public Documents" module="Document Management"></feature:display>
 <feature:display name="orgprof_chart_place1" module="Org Profile"></feature:display>
 <feature:display name="orgprof_chart_place2" module="Org Profile"></feature:display>
 <feature:display name="orgprof_chart_place3" module="Org Profile"></feature:display>

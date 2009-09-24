@@ -227,8 +227,11 @@ public class EditEUActivity extends MultiAction {
 			throws Exception {
 		
 		String baseCurrCode		= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
-		if ( baseCurrCode == null ) 
+		if ( baseCurrCode == null ) {
 			baseCurrCode	= "USD";
+		}
+		
+		AmpCurrency baseCurr		= CurrencyUtil.getAmpcurrency(baseCurrCode);
 		
                       HttpSession session=request.getSession();
 		ActionErrors errors = new ActionErrors();
@@ -254,7 +257,12 @@ public class EditEUActivity extends MultiAction {
                           totalCurCode);
                 if (totalCostExRate == 1.0 && !totalCurCode.equals(baseCurrCode)) {
                   errors.add("title", new ActionError(
-                      "error.aim.addActivity.noExchangeRateIsDefined", TranslatorWorker.translateText("There is no exchange rate defined for the currency " + totalCostCurr.getCurrencyName() + " please use the default currency " + defaultCurName,locale,siteId)));
+                      "error.aim.addActivity.noExchangeRateIsDefined", 
+                      TranslatorWorker.translateText("There is no exchange rate defined for the currency: ",request) + 
+                      TranslatorWorker.translateText(totalCostCurr.getCurrencyName(), request) + 
+                      TranslatorWorker.translateText(" please use the default currency: ", request)  + 
+                      TranslatorWorker.translateText(baseCurr.getCurrencyName(), request)  )
+                  );
                 }
                    else{
                      Object[] currencies = eaf.getContrCurrId();
@@ -267,7 +275,12 @@ public class EditEUActivity extends MultiAction {
                              currCode);
                          if (exchangeRate == 1.0 &&!currCode.equals( baseCurrCode )) {
                            errors.add("title", new ActionError(
-                               "error.aim.addActivity.noExchangeRateIsDefined", TranslatorWorker.translateText("There is no exchange rate defined for the currency " + totalCostCurr.getCurrencyName() + " please use the default currency " + defaultCurName,locale,siteId)));
+                               "error.aim.addActivity.noExchangeRateIsDefined", 
+                               TranslatorWorker.translateText("There is no exchange rate defined for the currency: ",request) + 
+                               TranslatorWorker.translateText(totalCostCurr.getCurrencyName(),request) + 
+                               TranslatorWorker.translateText(" please use the default currency: ",request) + 
+                               TranslatorWorker.translateText(baseCurr.getCurrencyName(), request)  )
+                           );
                            break;
                          }
 

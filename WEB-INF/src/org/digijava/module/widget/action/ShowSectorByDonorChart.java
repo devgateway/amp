@@ -37,7 +37,7 @@ public class ShowSectorByDonorChart extends Action {
         Integer toYear = null;
         Long[] donorIDs = null;
     	Site site = RequestUtils.getSite(request);
-		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);				
+		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
 		String siteId = site.getId()+"";
 		String locale = navigationLanguage.getCode();
         ChartOption opt=createChartOption(cForm,request);
@@ -59,8 +59,8 @@ public class ShowSectorByDonorChart extends Action {
         if(cForm.getSelectedDonor()!=null && cForm.getSelectedDonor().longValue()!=-1){
         	donorIDs = new Long[1];
         	donorIDs[0] = cForm.getSelectedDonor();
-        }        
-        
+        }
+
         //generate chart
         JFreeChart chart = ChartWidgetUtil.getSectorByDonorChart(donorIDs, fromYear,toYear, opt);
         //if no data is available,user should get a message about it.
@@ -69,12 +69,12 @@ public class ShowSectorByDonorChart extends Action {
         plot.setNoDataMessage(noDatamessage);
         Font font= new Font(null,0,15);
         plot.setNoDataMessageFont(font);
-        
+
         ChartRenderingInfo info = new ChartRenderingInfo();
-        
+
         //write image in response
 		ChartUtilities.writeChartAsPNG(response.getOutputStream(),chart,opt.getWidth().intValue(),opt.getHeight().intValue(), info);
-		
+
 		//fill from years' drop-down
 		cForm.setYearsFrom(ChartWidgetUtil.getYears(true));
 		//fill to years' drop-down
@@ -83,10 +83,10 @@ public class ShowSectorByDonorChart extends Action {
 		cForm.setAmountsInThousands(amountsInThousands);
 		return null;
 	}
-	
+
 	private ChartOption createChartOption(SectorByDonorTeaserForm form,HttpServletRequest request){
 		ChartOption opt= new ChartOption();
-		
+
 		//TITLE
 		if (form.getShowTitle()==null){
 			opt.setShowTitle(true);
@@ -105,9 +105,9 @@ public class ShowSectorByDonorChart extends Action {
 		}else{
 			opt.setShowLabels(form.getShowLabel());
 		}
-		//HEIGHT		
+		//HEIGHT
 		if (form.getImageHeight() == null){
-        	opt.setHeight(new Integer(350));
+        	opt.setHeight(new Integer(400));
         }else{
         	opt.setHeight(form.getImageHeight());
         }
@@ -121,7 +121,7 @@ public class ShowSectorByDonorChart extends Action {
                 opt.setSiteId(siteId);
                 String langCode= RequestUtils.getNavigationLanguage(request).getCode();
                 opt.setLangCode(langCode);
-		return opt;		
+		return opt;
 	}
 
 }

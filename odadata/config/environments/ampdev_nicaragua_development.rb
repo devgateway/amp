@@ -1,4 +1,4 @@
-config.cache_classes = true
+config.cache_classes = false
 
 # Full error reports are enabled and caching is turned on
 config.action_controller.consider_all_requests_local = true

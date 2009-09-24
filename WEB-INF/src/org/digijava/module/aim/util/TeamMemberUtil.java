@@ -1610,7 +1610,7 @@ public class TeamMemberUtil {
                             logger.info("deleted the app settings..");
                         }
                     }
-                
+                    
                     session.delete(ampMember);
                 }
             }
@@ -1751,6 +1751,7 @@ public class TeamMemberUtil {
     			while ( iterMem.hasNext() ) {
     				AmpTeamMember mem	= (AmpTeamMember) iterMem.next();
     				if ( mem.getAmpTeamMemId().equals(atm.getAmpTeamMemId()) ) {
+    					//logger.info(act.getAmpActivityId());
     					iterMem.remove();
     				}
     			}

@@ -27,7 +27,7 @@
 		</set>
 
 
-		<set name="links" table="AMP_MEMBER_LINKS" lazy="true" cascade="all">
+		<set name="links" table="AMP_MEMBER_LINKS" lazy="true" cascade="none">
 			<cache usage="read-write" />
 			<key column="amp_team_mem_id" />
 			<many-to-many class="org.digijava.module.aim.dbentity.CMSContentItem" column="id" />

@@ -160,6 +160,7 @@
     	<copy todir="${classes}" includeemptydirs="no">
     		<fileset dir="${ampTest}">
     			   <patternset>
+    			     <include name="**/*.sql"/>
     				 <include name="**/*.conf"/>
     			     <include name="**/*.properties"/>
     			     <include name="**/*.xml"/>

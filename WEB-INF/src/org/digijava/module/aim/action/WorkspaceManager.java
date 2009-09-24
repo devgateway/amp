@@ -3,6 +3,7 @@ package org.digijava.module.aim.action;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -23,9 +24,7 @@ public class WorkspaceManager extends Action {
 
 	private static Logger logger = Logger.getLogger(WorkspaceManager.class);
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws java.lang.Exception {
+	public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
 
 		HttpSession session = request.getSession();
 		if (session.getAttribute("ampAdmin") == null) {
@@ -36,14 +35,17 @@ public class WorkspaceManager extends Action {
 				return mapping.findForward("index");
 			}
 		}
-
+		
 		int NUM_RECORDS = 10000;
 		Collection<AmpTeam> workspaces = new ArrayList<AmpTeam>();
 		WorkspaceForm wsForm = (WorkspaceForm) form;
 		
+		if(request.getParameter("reset")!=null && request.getParameter("reset").equalsIgnoreCase("true")){
+			wsForm.setKeyword(null);
+			wsForm.setWorkspaceType("all");
+			wsForm.setNumPerPage(-1);
+		}
 		
-		
-		if(wsForm.getNumPerPage()!=-1) NUM_RECORDS =wsForm.getNumPerPage();
 		String keyword = wsForm.getKeyword();
 		Collection<String> keywords=new ArrayList<String>();
 		StringTokenizer st = new StringTokenizer("");
@@ -66,8 +68,11 @@ public class WorkspaceManager extends Action {
 			session.setAttribute("ampWorkspaces", ampWorkspaces);
 		}
 
-		int numPages = ampWorkspaces.size() / NUM_RECORDS;
-		numPages += (ampWorkspaces.size() % NUM_RECORDS != 0) ? 1 : 0;
+		if(wsForm.getNumPerPage()!=-1) {
+			NUM_RECORDS =wsForm.getNumPerPage();
+		}else {
+			NUM_RECORDS =ampWorkspaces.size();
+		}
 
 		/*
 		 * check whether the numPages is less than the page . if yes return
@@ -75,11 +80,9 @@ public class WorkspaceManager extends Action {
 		 */
 
 		int currPage = wsForm.getPage();
-		int stIndex = ((currPage - 1) * NUM_RECORDS) + 1;
-		int edIndex = currPage * NUM_RECORDS;
-		if (edIndex > ampWorkspaces.size()) {
-			edIndex = ampWorkspaces.size();
-		}
+		int stIndex = ((currPage - 1) * NUM_RECORDS);
+		int edIndex = stIndex + NUM_RECORDS;
+
 		Collection<AmpTeam> colAt=new ArrayList<AmpTeam>();
 		for (AmpTeam at : ampWorkspaces) {
 			at.setChildrenWorkspaces(TeamUtil.getAllChildrenWorkspaces(at.getAmpTeamId()));
@@ -89,18 +92,28 @@ public class WorkspaceManager extends Action {
 		//vect.addAll(ampWorkspaces);
 		vect.addAll(colAt);
 		String workspaceType = wsForm.getWorkspaceType();
- 		for (int i = (stIndex - 1); i < edIndex; i++) {
-			AmpTeam ateam=vect.get(i);
-			
+		for (AmpTeam ampTeam : vect) {
 			if(workspaceType!=null){
-			  if("all".equals(workspaceType)) workspaces.add(ateam);
-			  if("team".equals(workspaceType) && "Team".equals(ateam.getAccessType())) workspaces.add(ateam);
-			  if("management".equals(workspaceType) && "Management".equals(ateam.getAccessType())) workspaces.add(ateam);
-			  if("computed".equals(workspaceType) && ateam.getComputation()!=null && ateam.getComputation()) workspaces.add(ateam);
+			  if("all".equals(workspaceType)) {
+				  workspaces.add(ampTeam);
+			  }else if("team".equals(workspaceType) && "Team".equals(ampTeam.getAccessType())) {
+				  workspaces.add(ampTeam);
+			  }else if("management".equals(workspaceType) && "Management".equals(ampTeam.getAccessType())) {
+				  workspaces.add(ampTeam);
+			  }else if("computed".equals(workspaceType) && ampTeam.getComputation()!=null && ampTeam.getComputation()) {
+				  workspaces.add(ampTeam);
+			  }
 			}
-				
 		}
-
+		//pages
+		int numPages = workspaces.size() / NUM_RECORDS;
+		numPages += (workspaces.size() % NUM_RECORDS != 0) ? 1 : 0;
+		//workspaces for current page
+		if(edIndex>workspaces.size()){
+			edIndex=workspaces.size();
+		}
+		workspaces=((List)workspaces).subList(stIndex, edIndex);
+		
 		Collection<Integer> pages = null;
 		if (numPages > 1) {
 			pages = new ArrayList<Integer>();

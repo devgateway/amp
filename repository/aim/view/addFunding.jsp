@@ -76,6 +76,7 @@ var isAlreadySubmitted = false;
 		var errmsg4="\n<digi:trn>Funding status not selected</digi:trn>";
         var msgEnterAmount="\n<digi:trn key="aim:addFunding:errmsg:enterAmount">Please enter the amount for the transaction</digi:trn>";
 		var msgInvalidAmount="\n<digi:trn key="aim:addFunding:errmsg:invalidAmount">Invalid amount entered for the transaction</digi:trn>";
+		var msgInvalidAmountProj="\n<digi:trn>Invalid amount entered for projection</digi:trn>";
 <gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
 		var msgConfirmFunding="<digi:trn key="aim:addFunding:errmsg:confirmFunding">All funding information should be entered in thousands '000'. Do you wish to proceed with your entry?</digi:trn>";
 </gs:test>
@@ -87,8 +88,9 @@ var isAlreadySubmitted = false;
 		//var msgEnterDate="qsfgqsg";
 
 		var flag = validateFundingTrn(errmsg1,errmsg2,errmsg3,errmsg4,msgEnterAmount,msgInvalidAmount,msgEnterDate,"<%=FormatHelper.getDecimalSymbol()%>","<%=FormatHelper.getGroupSymbol()%>",msgConfirmFunding);
+		var flagProj	= validateProjection(msgInvalidAmountProj);
 		
-		if (flag == false) return false;
+		if ( !flag || !flagProj ) return false;
 		<digi:context name="fundAdded" property="context/module/moduleinstance/fundingAdded.do?edit=true" />;
 		document.aimEditActivityForm.action = "<%= fundAdded %>";
 		document.aimEditActivityForm.target = "_self";

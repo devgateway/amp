@@ -103,7 +103,8 @@ function validateProjection (errorMsg) {
 
 			//alert(j);
 
-			if (elements[j].name != null && elements[j].name == name ) {
+			if (elements[j].name != null && elements[j].name == name 
+					&& elements[j].value != null && elements[j].value.length > 0 ) {
 
 				//alert("Found " + name + ": " + elements[j].value);
 

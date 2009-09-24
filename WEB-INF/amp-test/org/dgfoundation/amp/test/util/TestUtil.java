@@ -82,6 +82,7 @@ public class TestUtil {
 		finalTeamMember.setMemberId(teamember.getAmpTeamMemId());
 		finalTeamMember.setTeamId(teamember.getAmpTeam().getAmpTeamId());
 		finalTeamMember.setEmail(teamember.getUser().getEmail());
+		finalTeamMember.setMemberName(teamember.getUser().getName());
 		session.setAttribute("currentMember", finalTeamMember);
 
 	}

@@ -132,8 +132,8 @@ background-color:yellow;
 	//used to hold already rendered messages
 	var myArray=new Array();
 	
-	window.onload=getMessages;
-		
+	addLoadEvent(getMessages);
+	addLoadEvent(delBody);	
 	//setting timer to check for new messages after specified time	
 	if(document.getElementsByName('msgRefreshTimeCurr')[0].value>0){
 		id=window.setTimeout("checkForNewMessages()",60000*document.getElementsByName('msgRefreshTimeCurr')[0].value,"JavaScript");

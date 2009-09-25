@@ -14,7 +14,7 @@
 <jsp:include page="${src}" flush="true" />
 <script type="text/javascript">
     <!--
-    window.onload=initFunctions;
+    addLoadEvent(initFunctions);
 
     function initFunctions(){
         initSectorScript();

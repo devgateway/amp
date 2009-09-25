@@ -57,7 +57,7 @@
 		
 	}
 	
-	window.onload=initCurrencyManagerScript();
+	addLoadEvent(initCurrencyManagerScript);
 -->	
 </script>
 <style type="text/css">

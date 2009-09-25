@@ -350,7 +350,7 @@ function cleanUpAddKeyFields() {
 		
 	});
 
-
+addLoadEvent(init);
 
 </script>
 
@@ -367,7 +367,7 @@ table.trnrow {
 }
 </style>
 
-<body onload="init()">
+<body>
 
 <digi:errors/>
 <digi:form action="/saveAllMessages.do" method="post">

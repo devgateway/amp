@@ -582,7 +582,7 @@ function validateFormat(){
 }
 
 
-	window.onload=initScripts;
+	addLoadEvent(initScripts);
 
 
 	var msg0="<digi:trn key="rep:pop:pleasewait..."> Please wait...</digi:trn>";

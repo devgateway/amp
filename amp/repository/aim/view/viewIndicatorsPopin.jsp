@@ -84,7 +84,7 @@
 		panelStart2 = 0;
 	}
 	
-	window.onload=initViewIndicatorsScript();
+	addLoadEvent(initViewIndicatorsScript);
 -->	
 </script>
 <style type="text/css">

@@ -84,7 +84,7 @@
 		
 	}
 	
-	window.onload=initThemeMangarScript();
+	addLoadEvent(initThemeMangarScript);
 -->	
 </script>
 <style type="text/css">

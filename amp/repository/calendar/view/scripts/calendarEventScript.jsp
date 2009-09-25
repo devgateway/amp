@@ -68,7 +68,7 @@
 		}
 	}
 
-	window.onload=initScripts;
+	addLoadEvent(initScripts);
 	
 function submit() {
 	

@@ -100,33 +100,44 @@
 
 <c:set var="printButon"><%=request.getSession().getAttribute("print")%></c:set>
  <c:if test="${printButon}">
-<script type="text/javascript" charset="utf-8">
-scheduler._click.dhx_cal_tab=function(){
+ 	<style>
+		.dhx_cal_container {
+		font-size: 10pt;
+		}
+		.dhx_cal_event_line {
+		 height: auto;
+		}
+		.dhx_cal_event_clear{
+		 height: auto;
 	
-	  var mode = this.getAttribute("name").split("_")[0];
-	  scheduler.setCurrentView(scheduler._date,mode);
-	  if(mode=="week"||mode=="day")
-	  scheduler._els["dhx_cal_data"][0].style.height="1100px";
-	}
-
-</script>
-  <table width="200px" height="40px">
-  	<tr>
-  		<td>	
- 	
- 	<a target="_blank" title="Printing" onclick="window.print();" style="cursor: pointer">
- 		<img width="20" vspace="2" hspace="2" height="30" border="0" alt="Printer Friendly" src="/TEMPLATE/ampTemplate/module/aim/images/printer.gif"/>
- 	</a>
- 		<input type="button" value="close" onClick="window.close()" width="20" height="30"/>
- 		</td>
- 	</tr>
-  </table>
+		}
+		
+	</style>
+	<script type="text/javascript" charset="utf-8">
+		  scheduler._click.dhx_cal_tab=function(){
+		   var mode = this.getAttribute("name").split("_")[0];
+		   scheduler.setCurrentView(scheduler._date,mode);
+		    if(mode=="week"||mode=="day")
+		      scheduler._els["dhx_cal_data"][0].style.height="1100px";
+		 }
+	
+	</script>  
+	  <table width="200px" height="40px">
+	  	<tr>
+	  		<td>	
+	 	
+		 	<a target="_blank" title="Printing" onclick="window.print();" style="cursor: pointer">
+		 		<img width="20" vspace="2" hspace="2" height="30" border="0" alt="Printer Friendly" src="/TEMPLATE/ampTemplate/module/aim/images/printer.gif"/>
+		 	</a>
+	 		<input type="button" value="close" onClick="window.close()" width="20" height="30"/>
+	 		</td>
+	 	</tr>
+	  </table>
  </c:if>
 
 <style>
-<%=CalendarUtil.getEventTypesCss()%>
+	<%=CalendarUtil.getEventTypesCss()%>
 </style>
-
 <script type="text/javascript" charset="utf-8">
 <!--
 
@@ -164,7 +175,7 @@ scheduler._click.dhx_cal_tab=function(){
 		}else{
 			date = myDate;
 			}
-		console.log("myDate:"+myDate+" printDate:"+printDate);
+		
 		var defoultView = "month";
 		if(printView!=null){
 			if(printView == 1){
@@ -215,7 +226,15 @@ scheduler._click.dhx_cal_tab=function(){
 	        var img = '<digi:img src="module/calendar/images/magnifier.png" height="12" width="12" align="left"/>';
 	        return "<span title='"+"Title:"+text+" "+"StartDate:"+start_date+"EndDate:"+end_date+"'>"+img+""+text+"</span>";
 		 }
-	 }
+	 }else{
+
+		 scheduler.templates.event_bar_text=function(start_date,end_date,ev){
+		        var text = ev.text.substr(0,20);
+		        return "<span style='font-size: 10pt;'>"+text+"</span>";
+			 }
+		 
+
+		 }
 		scheduler.config.dblclick_create = false;
 		scheduler.config.multi_days = true;
 	/*

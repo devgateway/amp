@@ -125,9 +125,9 @@ public class ConfigLoaderListener
 
             checkDatabaseCompatibility( sce.getServletContext().getRealPath("/compat.properties"));
 
-            //checkMemoryAllocation( sce.getServletContext().getRealPath("/compat.properties"));
+            checkMemoryAllocation( sce.getServletContext().getRealPath("/compat.properties"));
             
-            //checkOtherVMParameters();
+            checkOtherVMParameters();
           
             SiteCache.getInstance();
             DigiPolicy policy = new DigiPolicy();

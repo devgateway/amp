@@ -77,7 +77,7 @@
     function initScripts() {
         initSectorScript();
         }
-    window.onload=initScripts();
+    addLoadEvent(initScripts);
 
 
     function orgTypeChanged(){

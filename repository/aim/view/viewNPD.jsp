@@ -1473,7 +1473,7 @@ function showFilter(){
  			themeArray[pid]	= panelBody;
 
  	}
-	window.onload=loadInitial;
+ 	addLoadEvent(loadInitial);
 </script>
 <script language="javascript" type="text/javascript">
     <c:forEach var="theme" items="${aimNPDForm.allThemes}">

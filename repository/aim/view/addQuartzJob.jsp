@@ -498,7 +498,7 @@ function typeChanged(value){
   </table>
 </digi:form>
 <script type="text/javascript">
-    window.onload = onLoad;
+    addLoadEvent(onLoad);
     function onLoad(){
         
         var val=1;

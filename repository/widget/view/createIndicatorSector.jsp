@@ -14,7 +14,7 @@
 <jsp:include page="${src}" flush="true" />
 <script type="text/javascript">
     <!--
-    window.onload=initSectorScript();
+    addLoadEvent(initSectorScript);
     function addSectors() {
        /*openNewWindow(600, 450);
        <digi:context name="selSec" property="context/aim/selectSectors.do" />

@@ -489,7 +489,7 @@
 		return true;
 	}
 
-	window.onload = initScripts;
+	addLoadEvent(initScripts);
 	var msg0 = '<digi:trn key="rep:pop:pleasewait..."> Please wait...</digi:trn>';
 	var msg1 = '<digi:trn key="rep:pop:freezeReportHeading">Freeze Report Heading</digi:trn>';
 	var msg2 = '<digi:trn key="rep:pop:unFreezeReportHeading">Unfreeze Report Heading</digi:trn>';

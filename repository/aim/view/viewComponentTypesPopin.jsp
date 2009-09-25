@@ -57,7 +57,7 @@
 		
 	}
 	
-	window.onload=initCompTypeScript();
+	addLoadEvent(initCompTypeScript);
 -->	
 </script>
 <style type="text/css">

@@ -17,7 +17,7 @@
 
 	<script type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 	<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-
+	<script type="text/javascript" src="<digi:file src="script/preLoadingMessage.js"/>"></script>
 	
     
 

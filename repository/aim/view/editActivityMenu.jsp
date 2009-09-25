@@ -68,7 +68,7 @@
 	
 	var current = window.onload;
 	
-	window.onload = function() {
+	addLoadEvent( function() {
         //current.apply(current);
         if(document.aimEditActivityForm.step.value=="1"){
         	initStep1Scripts();
@@ -99,7 +99,7 @@
         }
         
         initScripts();
-   	};
+   	});
 		
 </script>
 <style type="text/css">

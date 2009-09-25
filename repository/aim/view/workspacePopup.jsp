@@ -93,9 +93,9 @@
 	}
 
 	var currentWorkspaceframe = window.onload;
-	window.onload = function() {
+	addLoadEvent( function() {
         currentWorkspaceframe.apply(currentWorkspaceframe);
-   	};
+   	});
 	//initScriptsWorkspaceframe();
 
 </script>

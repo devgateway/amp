@@ -84,7 +84,7 @@
 		panelStart2 = 0;
 	}
 	
-	window.onload=initThemeIndicatorScript();
+	addLoadEvent(initThemeIndicatorScript);
 -->	
 </script>
 <style type="text/css">

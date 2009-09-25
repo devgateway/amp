@@ -325,4 +325,4 @@ Owner of DHTMLgoodies.com
 		}	
 	}
 	
-	window.onload = initTree;	
+	addLoadEvent(initTree);	

@@ -1,0 +1,164 @@
+<?xml version="1.0"?>
+<!DOCTYPE Schema PUBLIC "//UNKNOWN/" "mondrian.dtd">
+<Schema name="AMP">
+	<Dimension name="Activity">
+		<Hierarchy hasAll="true" primaryKey="AMP_ACTIVITY_ID" primaryKeyTable="CACHED_AMP_ACTIVITY" allMemberCaption="#All_Activities#" allMemberName="All Activities" caption="#Activity#">
+			<Table name="CACHED_AMP_ACTIVITY" />
+			<Level name="Activity Title" column="NAME" uniqueMembers="true" />
+			<Level name="AMP ID" column="AMP_ID" uniqueMembers="true"/>
+		</Hierarchy>
+	</Dimension>
+	<Dimension name="Donor Dates" type="TimeDimension">
+		<Hierarchy hasAll="true" allMemberName="All Periods" allMemberCaption="#All_Donor_Dates#" primaryKey="AMP_FUND_DETAIL_ID" caption="#Donor_Dates#">
+			<Table name="CACHED_V_DONOR_DATE_HIERARCHY" />
+			<Level name="Year" column="year" levelType="TimeYears" type="Numeric" />
+			<Level name="Quarter" column="QUARTER" ordinalColumn="QUARTER" nameColumn="QUARTER_NAME" levelType="TimeQuarters" type="Numeric" />
+			<Level name="Month" column="month" uniqueMembers="false" ordinalColumn="month" nameColumn="MONTH_NAME" levelType="TimeMonths" type="Numeric" />
+		</Hierarchy>
+	</Dimension>
+	
+	<Dimension name="Regions">
+		<Hierarchy hasAll="true" allMemberCaption="#All_Regions#" allMemberName="All Regions" primaryKey="AMP_ACTIVITY_ID" caption="#Regions#">
+			<Table name="CACHED_V_REGIONS"/>
+			<Level name="Region" column="REGION">
+				<NameExpression>
+					<SQL dialect="oracle">
+						nvl(REGION,'#No_Data#')
+					</SQL>
+				</NameExpression>
+			</Level> 
+		</Hierarchy>
+	</Dimension>
+	
+	<Dimension name="Primary Program">
+		<Hierarchy hasAll="true" allMemberCaption="#All_Programs#" allMemberName="All Programs" primaryKey="AMP_ACTIVITY_ID" caption="#Primary_Program#">
+			<Table name="CACHED_V_PRIMARY_PROGRAM"/>
+			<Level name="name" column="NAME" >
+				<NameExpression>
+					<SQL dialect="oracle">
+						nvl(CACHED_V_PRIMARY_PROGRAM.NAME,'#No_Data#')
+					</SQL>
+				</NameExpression>
+			</Level>
+		</Hierarchy>
+	</Dimension>
+	<Dimension name="Secundary Program">
+		<Hierarchy hasAll="true" allMemberCaption="#All_Programs#" allMemberName="All Programs" primaryKey="AMP_ACTIVITY_ID" caption="#Secundary_Program#">
+			<Table name="CACHED_V_SECUNDARY_PROGRAM" />
+			<Level name="name" column="NAME">
+				<NameExpression>
+					<SQL dialect="oracle">
+						nvl(CACHED_V_SECUNDARY_PROGRAM.NAME,'#No_Data#')
+					</SQL>
+				</NameExpression>
+			</Level>
+		</Hierarchy>
+	</Dimension>
+	<Dimension name="Status">
+		<Hierarchy hasAll="true" allMemberCaption="#All_Status#" allMemberName="All Status" primaryKey="AMP_ACTIVITY_ID" caption="#Status#">
+			<Table name="CACHED_V_STATUS" />
+			<Level name="name" column="NAME"/>
+		</Hierarchy>
+	</Dimension>
+	
+	<Cube name="Donor Funding">
+		<Table name="CACHED_V_DONOR_FUNDING" >
+			<SQL dialect="oracle"><![CDATA[CACHED_V_DONOR_FUNDING.AMP_ACTIVITY_ID IN (@donorquery)]]> </SQL>
+		</Table>
+		<Dimension name="Donor">
+			<Hierarchy hasAll="true" allLevelName="All Donor" caption="#Donor#" allMemberCaption="#All_Donor#">
+				<!-- No table element here. Fact table is assumed. -->
+				<Level name="DonorName" column="DONOR_NAME" />
+			</Hierarchy>
+		</Dimension>
+		<Dimension name="Donor Group">
+			<Hierarchy hasAll="true" allLevelName="#All Donor Group" caption="#Donor_Group#" allMemberCaption="#All_Donor_Group#">
+				<!-- No table element here. Fact table is assumed. -->
+				<Level name="DonorGroup" column="ORG_GRP_NAME" />
+			</Hierarchy>
+		</Dimension>
+		
+		<Dimension name="Donor Types">
+			<Hierarchy hasAll="true" allLevelName="All Donors types" caption="#Donors_types#" allMemberCaption="#All_Donors_types#">
+				<!-- No table element here. Fact table is assumed. -->
+				<Level name="DonorType" column="DONOR_TYPE_NAME" />
+			</Hierarchy>
+		</Dimension>
+		
+		<Dimension name="Financing Instrument">
+			<Hierarchy hasAll="true" allLevelName="All" allMemberCaption="#All_Financing_Instrument#" caption="#Financing_Instrument#">
+				<!-- No table element here. Fact table is assumed. -->
+				<Level name="Financing Instrument" column="FINANCING_INSTRUMENT_NAME" />
+			</Hierarchy>
+		</Dimension>
+		<Dimension name="Terms of Assistance" caption="#Terms_of_Assistance#">
+			<Hierarchy hasAll="true" allLevelName="All Terms of Assistance#" allMemberCaption="#All_Terms_of_Assistance#" caption="#Terms_of_Assistance#">
+				<!-- No table element here. Fact table is assumed. -->
+				<Level name="Terms of Assistance" column="TERMS_ASSIST_NAME" />
+			</Hierarchy>
+		</Dimension>
+		<Dimension name="Primary Sector" foreignKey="amp_activity_id">
+			<Hierarchy hasAll="true" allMemberName="All Primary Sectors" primaryKey="amp_activity_id">
+				<Level name="Primary Sector Scheme" column="SEC_SCHEME_NAME"/>
+				<Level name="Primary Sector" column="SECTORNAME" />
+			</Hierarchy>
+		</Dimension>
+		
+		<DimensionUsage name="Activity" source="Activity" foreignKey="AMP_ACTIVITY_ID" />
+		<DimensionUsage name="Donor Dates" source="Donor Dates" foreignKey="AMP_FUND_DETAIL_ID"/>
+		<DimensionUsage name="Regions" source="Regions" foreignKey="AMP_ACTIVITY_ID"  />
+		<DimensionUsage name="Primary Program" source="Primary Program" foreignKey="AMP_ACTIVITY_ID"/>
+		<DimensionUsage name="Secundary Program" source="Secundary Program" foreignKey="AMP_ACTIVITY_ID"/>
+		<DimensionUsage name="Status" source="Status" foreignKey="AMP_ACTIVITY_ID"/>
+		
+		<Measure name="Actual Commitments" aggregator="sum" caption="#Actual_Commitments#">
+			<MeasureExpression>
+				<SQL dialect="oracle">
+					case when CACHED_V_DONOR_FUNDING.TRANSACTION_TYPE =0 and CACHED_V_DONOR_FUNDING.ADJUSTMENT_TYPE=1 then
+					CACHED_V_DONOR_FUNDING.TRANSACTION_AMOUNT/getExchangeWithFixed(CACHED_V_DONOR_FUNDING.CURRENCY_CODE,CACHED_V_DONOR_FUNDING.TRANSACTION_DATE,CACHED_V_DONOR_FUNDING.FIXED_EXCHANGE_RATE) else 0 end
+				</SQL>
+			</MeasureExpression>
+		</Measure>
+		<Measure name="Actual Disbursements" aggregator="sum" caption="Actual_Disbursements">
+			<MeasureExpression>
+				<SQL dialect="oracle">
+					case when CACHED_V_DONOR_FUNDING.TRANSACTION_TYPE =1 and CACHED_V_DONOR_FUNDING.ADJUSTMENT_TYPE=1 then
+					CACHED_V_DONOR_FUNDING.TRANSACTION_AMOUNT/getExchangeWithFixed(CACHED_V_DONOR_FUNDING.CURRENCY_CODE,CACHED_V_DONOR_FUNDING.TRANSACTION_DATE,CACHED_V_DONOR_FUNDING.FIXED_EXCHANGE_RATE) else 0 end
+				</SQL>
+			</MeasureExpression>
+		</Measure>
+		<Measure name="Activity Count" aggregator="distinct-count" column="AMP_ACTIVITY_ID" caption="#Activity_Count#"/>
+		<Measure name="Actual Expenditures" aggregator="sum" caption="#Actual_Expenditures#">
+			<MeasureExpression>
+				<SQL dialect="oracle">
+					case when CACHED_V_DONOR_FUNDING.TRANSACTION_TYPE =2 and CACHED_V_DONOR_FUNDING.ADJUSTMENT_TYPE=1 then
+					CACHED_V_DONOR_FUNDING.TRANSACTION_AMOUNT/getExchangeWithFixed(CACHED_V_DONOR_FUNDING.CURRENCY_CODE,CACHED_V_DONOR_FUNDING.TRANSACTION_DATE,CACHED_V_DONOR_FUNDING.FIXED_EXCHANGE_RATE) else 0 end
+				</SQL>
+			</MeasureExpression>
+		</Measure>
+		<Measure name="Planned Commitments" aggregator="sum" caption="#Planned_Commitments#">
+			<MeasureExpression>
+				<SQL dialect="oracle">
+					case when CACHED_V_DONOR_FUNDING.TRANSACTION_TYPE =0 and CACHED_V_DONOR_FUNDING.ADJUSTMENT_TYPE=0 then
+					CACHED_V_DONOR_FUNDING.TRANSACTION_AMOUNT/getExchangeWithFixed(CACHED_V_DONOR_FUNDING.CURRENCY_CODE,CACHED_V_DONOR_FUNDING.TRANSACTION_DATE,CACHED_V_DONOR_FUNDING.FIXED_EXCHANGE_RATE) else 0 end
+				</SQL>
+			</MeasureExpression>
+		</Measure>
+		<Measure name="Planned Disbursements" aggregator="sum" caption="#Planned_Disbursements#">
+			<MeasureExpression>
+				<SQL dialect="oracle">
+					case when CACHED_V_DONOR_FUNDING.TRANSACTION_TYPE =1 and CACHED_V_DONOR_FUNDING.ADJUSTMENT_TYPE=0 then
+					CACHED_V_DONOR_FUNDING.TRANSACTION_AMOUNT/getExchangeWithFixed(CACHED_V_DONOR_FUNDING.CURRENCY_CODE,CACHED_V_DONOR_FUNDING.TRANSACTION_DATE,CACHED_V_DONOR_FUNDING.FIXED_EXCHANGE_RATE) else 0 end
+				</SQL>
+			</MeasureExpression>
+		</Measure>
+		<Measure name="Planned Expenditures" aggregator="sum" caption="#Planned_Expenditures#">
+			<MeasureExpression>
+				<SQL dialect="oracle">
+					case when CACHED_V_DONOR_FUNDING.TRANSACTION_TYPE =2 and CACHED_V_DONOR_FUNDING.ADJUSTMENT_TYPE=0 then
+					CACHED_V_DONOR_FUNDING.TRANSACTION_AMOUNT/getExchangeWithFixed(CACHED_V_DONOR_FUNDING.CURRENCY_CODE,CACHED_V_DONOR_FUNDING.TRANSACTION_DATE,CACHED_V_DONOR_FUNDING.FIXED_EXCHANGE_RATE) else 0 end
+				</SQL>
+			</MeasureExpression>
+		</Measure>
+	</Cube>
+</Schema>

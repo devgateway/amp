@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PROCESS model-entity="StrutsProcess">
+ <PROCESS-ITEM ID="#gis#showGisDashboard" NAME="action0"
+  PATH="/gis/showGisDashboard" SHAPE="32,129,0,0"
+  TITLE="gisDashboardForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="forward" NAME="forward0"
+   PATH="/showLayout.do?layout=gisDashboardLayout" TARGET="action4"
+   TITLE="forward" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="forwardOld" NAME="forward1"
+   PATH="/showLayout.do?layout=gis_dashboard" TARGET="action4"
+   TITLE="forwardOld" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#showLayout" NAME="action4" PATH="/showLayout"
+  SHAPE="496,353,0,0" SUBTYPE="unknown" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#gis#dashboardMapTeaser" NAME="action1"
+  PATH="/gis/dashboardMapTeaser" SHAPE="32,465,0,0"
+  TITLE="gisDashboardForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#gis#adminTableWidgets" NAME="action2"
+  PATH="/gis/adminTableWidgets" SHAPE="240,369,0,0"
+  TITLE="gisTableWidgetCreationForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="forward" NAME="forward0"
+   PATH="/showLayout.do?layout=gis_tableWidgetAdmin" TARGET="action4"
+   TITLE="forward" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="showAdd" NAME="forward1"
+   PATH="/showLayout.do?layout=add_tableWidget" TARGET="action4"
+   TITLE="showAdd" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="showEdit" NAME="forward2"
+   PATH="/showLayout.do?layout=edit_tableWidget" TARGET="action4"
+   TITLE="showEdit" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="returnToEdit" NAME="forward3"
+   PATH="/gis/adminTableWidgets.do?actType=edit" TARGET="action2"
+   TITLE="returnToEdit" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="showAddColumnPopup" NAME="forward4"
+   PATH="/showLayout.do?layout=popup_addWidgetColumn" TARGET="action4"
+   TITLE="showAddColumnPopup" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#gis#mapLoader" NAME="action3" PATH="/gis/mapLoader"
+  SHAPE="240,481,0,0" TITLE="gisMapLoaderForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="forward" NAME="forward0"
+   PATH="/showLayout.do?layout=mapLoader" TARGET="action4"
+   TITLE="forward" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#gis#index" NAME="action5" PATH="/gis/index"
+  SHAPE="240,257,0,0" TITLE="gisDashboardForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="forward" NAME="forward0"
+   PATH="/showLayout.do?layout=gis_dashboard" TARGET="action4"
+   TITLE="forward" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#gis#tableWidgetTeaser" NAME="action6"
+  PATH="/gis/tableWidgetTeaser" SHAPE="32,577,0,0"
+  TITLE="gisTableWidgetTeaserForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#gis#gisService" NAME="action7"
+  PATH="/gis/gisService" SHAPE="256,625,0,0" TITLE="gisMapLoaderForm"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="forward" NAME="forward0"
+   PATH="/showLayout.do?layout=mapLoader" TARGET="action4"
+   TITLE="forward" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#gis#widgetTest" NAME="action8"
+  PATH="/gis/widgetTest" SHAPE="256,145,0,0"
+  TITLE="gisTableWidgetTeaserForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="forward" NAME="forward0"
+   PATH="/showLayout.do?layout=widgetTestPage" TARGET="action4"
+   TITLE="forward" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="listTableWidgets" NAME="forward0"
+  PATH="/gis/adminTableWidgets.do" SHAPE="32,785,0,0" TARGET="action2"
+  TITLE="listTableWidgets" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#gis#tableWidgetData" NAME="action9"
+  PATH="/gis/tableWidgetData" SHAPE="256,865,0,0"
+  TITLE="gisTableWidgetDataForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="forward" NAME="forward0"
+   PATH="/showLayout.do?layout=edit_tableWidgetData" TARGET="action4"
+   TITLE="forward" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#gis#previewTable" NAME="action10"
+  PATH="/gis/previewTable" SHAPE="256,865,0,0"
+  TITLE="gisTableWidgetTeaserForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="forward" NAME="forward0"
+   PATH="/showLayout.do?layout=edit_tableWidgetData" TARGET="action4"
+   TITLE="forward" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+</PROCESS>

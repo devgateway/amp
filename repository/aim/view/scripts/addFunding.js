@@ -162,7 +162,7 @@ function validateFunding() {
 
 
 
-function validateFundingTrn(errmsg1,errmsg2,errmsg3, errmsg4,msgEnterAmount,msgInvalidAmount,msgEnterDate, decimalSymbol,groupSymbol,msgConfirmFunding) {
+function validateFundingTrn(errmsg1,errmsg2,errmsg3, errmsg4,msgEnterAmount,msgInvalidAmount,msgEnterDate, msgEnterRate, decimalSymbol,groupSymbol,msgConfirmFunding) {
 	
 	this.decimalSymbol=decimalSymbol;
 	
@@ -247,7 +247,7 @@ function validateFundingTrn(errmsg1,errmsg2,errmsg3, errmsg4,msgEnterAmount,msgI
 
 	
 
-	return validateFundingDetails(numComm,numDisb,numExp,msgEnterAmount,msgInvalidAmount,msgEnterDate,msgConfirmFunding);
+	return validateFundingDetails(numComm,numDisb,numExp,msgEnterAmount,msgInvalidAmount,msgEnterDate, msgEnterRate, msgConfirmFunding);
 
 }
 
@@ -432,8 +432,8 @@ function validateFundingDetailsExchangeRate(comm,disb,exp)
 
 
 
-function validateFundingDetails(comm,disb,exp,msgEnterAmount,msgInvalidAmount,msgEnterDate,msgConfirmFunding) {
-
+function validateFundingDetails(comm,disb,exp,msgEnterAmount, msgInvalidAmount,msgEnterDate, msgEnterRate,msgConfirmFunding) {
+	
 	var itr = comm + disb + exp;
 
 	var commAmt = 0, disbAmt = 0, expAmt = 0;
@@ -464,7 +464,10 @@ function validateFundingDetails(comm,disb,exp,msgEnterAmount,msgInvalidAmount,ms
 
 			{
 
-				if(chkNumeric(temp[i],this.groupSymbol,this.decimalSymbol,'')==false) {return false;}
+				if(chkNumeric(temp[i])==false) { 
+					alert(msgEnterRate+"\".\"");
+					return false;
+				}
 
 			}
 

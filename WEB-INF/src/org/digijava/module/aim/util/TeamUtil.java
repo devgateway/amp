@@ -439,6 +439,7 @@ public class TeamUtil {
             Iterator itr = qry.list().iterator();
             if(itr.hasNext()) {
                 AmpTeam team = (AmpTeam) itr.next();
+                team.getOrganizations().size(); //lazy init;
                 workspace = new Workspace();
                 workspace.setDescription(team.getDescription().trim());
                 workspace.setId(team.getAmpTeamId().toString());
@@ -851,9 +852,8 @@ public class TeamUtil {
         AmpTeamMember member = null;
 
         try {
-        	
             session = PersistenceManager.getRequestDBSession();
-            session.flush();
+            //session.flush();
             member = (AmpTeamMember) session.load(AmpTeamMember.class, id);
         } catch(Exception e) {
             throw new RuntimeException(e);
@@ -2309,7 +2309,11 @@ public class TeamUtil {
             session = PersistenceManager.getSession();
             String queryString = "select t from " + AmpTeam.class.getName() + " t order by name";
             qry = session.createQuery(queryString);
+            qry.setCacheable(true);
             teams = qry.list();
+            for (AmpTeam t: (Collection<AmpTeam>)teams){
+            	t.getOrganizations().size(); //lazy init
+            }
         } catch(Exception e) {
             logger.debug("cannot get All teams");
             logger.debug(e.toString());

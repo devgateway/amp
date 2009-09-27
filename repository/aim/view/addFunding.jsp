@@ -85,9 +85,10 @@ var isAlreadySubmitted = false;
 </gs:test>
 		//var msgConfirmFunding ="\n<digi:trn key="aim:addFunding:errmsg:enterDate">Please enter the transaction date for the transaction</digi:trn>";
 		var msgEnterDate="\n<digi:trn key="aim:addFunding:errmsg:enterDate">Please enter the transaction date for the transaction</digi:trn>";
+		var msgEnterRate="\n<digi:trn key="aim:addFunding:errmsg:invalidRate">Please enter a valid exchange rate, the decimal symbol is:</digi:trn>";
 		//var msgEnterDate="qsfgqsg";
 
-		var flag = validateFundingTrn(errmsg1,errmsg2,errmsg3,errmsg4,msgEnterAmount,msgInvalidAmount,msgEnterDate,"<%=FormatHelper.getDecimalSymbol()%>","<%=FormatHelper.getGroupSymbol()%>",msgConfirmFunding);
+		var flag = validateFundingTrn(errmsg1,errmsg2,errmsg3,errmsg4,msgEnterAmount,msgInvalidAmount,msgEnterDate, msgEnterRate,"<%=FormatHelper.getDecimalSymbol()%>","<%=FormatHelper.getGroupSymbol()%>",msgConfirmFunding);
 		var flagProj	= validateProjection(msgInvalidAmountProj);
 		
 		if ( !flag || !flagProj ) return false;
@@ -643,6 +644,7 @@ var isAlreadySubmitted = false;
 													<html:optionsCollection name="aimEditActivityForm" property="funding.validcurrencies" value="currencyCode"
 													label="currencyName"/>
 												</html:select>
+												
 											</td>
 											<c:set var="contentDisabled"><field:display name="Date Commitment" feature="Commitments">false</field:display></c:set>
 											<c:if test="${contentDisabled==''}">
@@ -721,7 +723,6 @@ var isAlreadySubmitted = false;
 															checked="true"
 														</c:if>
 														/>
-												
 											</td>
 											<td colspan="5">
 												<logic:equal name="fundingDetail" property="useFixedRate" value="true">
@@ -730,8 +731,11 @@ var isAlreadySubmitted = false;
 												<logic:equal name="fundingDetail" property="useFixedRate" value="false">
 													<html:text name="fundingDetail" indexed="true" property="fixedExchangeRate" styleClass="amt" disabled="true" styleId="<%=exchRatefldId%>"/>
 												</logic:equal>
+												<script type="text/javascript">
+													<!-- check for when editing the page -->
+													checkCurrency("fundingDetail[${status.index}].currencyCode");												
+												</script>											
 											</td>
-
 										</tr>
 									</c:if>
 						 	</c:forEach>

@@ -890,6 +890,7 @@ public class TeamMemberUtil {
 			String queryString = "select tm from " + AmpTeamMember.class.getName() +
 			  " tm where (tm.user.id=:user)";
 			qry = session.createQuery(queryString);
+			qry.setCacheable(true);
 			qry.setLong("user",user.getId());
 			col = qry.list();
 		} catch (Exception e) {

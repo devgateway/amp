@@ -259,6 +259,12 @@
             <classpath refid="compile.classpath"/>
         </javac>
     </target>
+    
+    <target name="standalone">
+		<java classname="org.dgfoundation.amp.StandaloneAMPStartup" fork="true">
+		    <classpath refid="run.classpath"/>
+		</java>
+    </target>
 
     <target name="compileTest" depends="compile,testResources">
         <javac  srcdir="${ampTest}" destdir="${classes}" deprecation="off" debug="${debug}">

@@ -61,7 +61,7 @@
 			alert(invalidBaseValue);
 			baseVal.focus();
 			return false;
-		} else if (!containsValidNumericValue(baseVal)) {
+		} else if (!containsValidNumericValueZeroIncluded(baseVal)) {
 			alert(numericValueNeeded);
 			baseVal.focus();
 			return false;
@@ -75,7 +75,7 @@
 			alert(targetValueNotEntered);
 			targetVal.focus();
 			return false;
-		} else if (!containsValidNumericValue(targetVal)) {
+		} else if (!containsValidNumericValueZeroIncluded(targetVal)) {
 			alert(numericValueNeeded);
 			targetVal.focus();
 			return false;
@@ -90,7 +90,7 @@
 				alert(invalidRevisedTargetValue);
 				revTargetVal.focus();
 				return false;
-			} else if (!containsValidNumericValue(revTargetVal)) {
+			} else if (!containsValidNumericValueZeroIncluded(revTargetVal)) {
 				alert(numericValueNeeded);
 				revTargetVal.focus();
 				return false;
@@ -105,7 +105,7 @@
 			alert(currValueNotEntered);
 			document.getElementsByName('indicator.currentVal')[0].focus();
 			return false;
-		} else if (!containsValidNumericValue(currentVal)) {
+		} else if (!containsValidNumericValueZeroIncluded(currentVal)) {
 			alert(numericValueNeeded);
 			currentVal.focus();
 			return false;
@@ -122,7 +122,7 @@
         var txt=null;
 
         txt=document.getElementById("txtBaseValue");
-		if (txt!=null && !containsValidNumericValue(txt)) {
+		if (txt!=null && !containsValidNumericValueZeroIncluded(txt)) {
 			alert(invalidBaseValue);
 			txt.focus();
 			return false;
@@ -136,13 +136,13 @@
 		}
 
         txt=document.getElementById("txtRevTargetVal");
-		if (txt!=null && !containsValidNumericValue(txt)) {
+		if (txt!=null && !containsValidNumericValueZeroIncluded(txt)) {
 			alert(targetValueNotEntered);
 			txt.focus();
 			return false;
 		} else if (txt==null) {//check for target value only
 			txt=document.getElementById("txtTargetVal");
-			if (txt!=null && !containsValidNumericValue(txt)) {
+			if (txt!=null && !containsValidNumericValueZeroIncluded(txt)) {
 				alert(targetValueNotEntered);
 				txt.focus();
 				return false;

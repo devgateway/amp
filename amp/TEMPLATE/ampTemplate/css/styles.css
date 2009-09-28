@@ -1,4 +1,4 @@
-#loading {
+.loading {
  	width: 200px;
  	height: 100px;
  	position: absolute;
@@ -8,6 +8,7 @@
  	margin-left: -100px;
  	text-align: center;
 }
+
 p.load 
 {
 	border-style:solid;

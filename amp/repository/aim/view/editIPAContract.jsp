@@ -345,14 +345,14 @@ SaveReportEngine.prototype.saveContract	= function () {
 }
 
 mySaveReportEngine = new SaveReportEngine();
-window.onload=autosum;
+addLoadEvent(autosum);
 -->
 </script>
 
 <!-- code for rendering that nice calendar -->
 
 
-<body onload="load()">
+<body>
 <digi:instance property="aimIPAContractForm" />
 <digi:form action="/editIPAContract.do" method="post">
 

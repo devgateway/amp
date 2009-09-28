@@ -20,10 +20,12 @@
 
     <!-- Stylesheet of AMP -->
     <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
-	<script type="text/javascript" src="<digi:file src="script/preLoadingMessage.js"/>"></script>
+	
+    <script language="JavaScript" type="text/javascript">
+	  <jsp:include page="preLoadingMessage.js.jsp" flush="true" />
+    </script>
+	
 	<digi:context name="digiContext" property="context"/>
-
-
 
 	<HEAD>
 

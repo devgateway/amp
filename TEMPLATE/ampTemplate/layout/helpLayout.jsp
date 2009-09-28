@@ -15,6 +15,10 @@
 		<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 	    <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
         <digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
+        <script language="JavaScript" type="text/javascript">
+	       <jsp:include page="preLoadingMessage.js.jsp" flush="true" />
+        </script>
+        
 	</HEAD>
 	
     <BODY leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0">

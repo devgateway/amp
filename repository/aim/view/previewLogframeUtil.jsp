@@ -98,10 +98,10 @@
 	}
 
 	var currentLogframe = window.onload;
-	window.onload = function() {
+	addLoadEvent(function() {
         currentLogframe.apply(currentLogframe);
-   	};
-	initScriptsLogframe();
+   	});
+   	addLoadEvent(initScriptsLogframe);
 
 </script>
 <style type="text/css">

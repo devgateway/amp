@@ -70,7 +70,7 @@ function selectOrganisation1() {
 	}
 </script>
 
-<body onLoad="load()">
+<body>
 <digi:instance property="aimEUActivityForm" />
 <digi:form action="/editEUActivity.do" method="post">
 

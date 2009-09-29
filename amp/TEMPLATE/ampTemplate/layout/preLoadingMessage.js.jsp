@@ -1,11 +1,9 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
-<c:set var="translation">
-	<digi:trn>Loading, please wait ...</digi:trn>
-</c:set>
+<%@taglib uri="/taglib/digijava" prefix="digi"%>
 
-document.write("<div id='loading' class='loading'><p class='load'>" + 
-		"<br/><img src='/TEMPLATE/ampTemplate/images/amploading.gif' border='0'/>&nbsp;&nbsp;"+"${translation}"+"<br/><br/></p></div>");
+document.write('<div id="loading" class="loading"><p class="load">' + 
+		'<br/><img src="/TEMPLATE/ampTemplate/images/amploading.gif" border="0"/>&nbsp;&nbsp;<digi:trn>Loading, please wait ...</digi:trn><br/><br/></p></div>');
 
 function delBody(){
   document.getElementById("loading").style.display="none";

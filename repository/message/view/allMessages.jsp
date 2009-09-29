@@ -204,7 +204,7 @@ background-color:yellow;
         var divBody=document.createElement('DIV');
         divBody.className="bd";
         divBody.id="msg_bd";
-        divBody.innerHTML='<digi:img src="images/amploading.gif"/><digi:trn>Loading...</digi:trn>';
+        divBody.innerHTML='<digi:img src="images/amploading.gif"/><digi:trn>Loading, please wait ...</digi:trn>';
         div.appendChild(divBody);
         selectedMessagePanel=new YAHOO.widget.Panel("selectedMessagePanel",{
             x:"20",

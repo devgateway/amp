@@ -14,7 +14,7 @@
 	<digi:trn key="aim:tabmanager:connecionProblem">There was a problem connecting to the server. Please close this panel and try again. </digi:trn>
 </c:set>
 <c:set var="pleaseWaitMsg">
-	<digi:trn key="aim:tabmanager:pleasewait">Please wait</digi:trn>
+	<digi:trn>Loading, please wait ...</digi:trn>
 </c:set>
 
 <script type="text/javascript">
@@ -55,7 +55,7 @@
 		this.hideButton();
 		this.disableButton();
 		this.setFooter("");
-		this.setBody( "${pleaseWaitMsg}... <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='14px'/>" );
+		this.setBody( "<img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='14px'/>&nbsp;&nbsp;${pleaseWaitMsg}" );
 		this.panel.show();
 		
 		new GetDataManager().getData();
@@ -181,7 +181,7 @@
 	}
 	SaveDataManager.prototype.saveData				= function () {
 		tabManager.disableButton();
-		tabManager.setFooter( "${pleaseWaitMsg}... <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='14px'/>" );
+		tabManager.setFooter( "<img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='14px'/>&nbsp;&nbsp;${pleaseWaitMsg}" );
 	
 		var postString		= this.createPostString();
 		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/tabManager.do", this, postString);

@@ -51,7 +51,8 @@
 		myPanel.render(document.body);
 	}
 	//this is called from editActivityMenu.jsp
-	window.onload=initSaveScript();
+	//window.onload=initSaveScript();
+	addLoadEvent(initSaveScript);
 -->	
 </script>
 <style type="text/css">
@@ -182,9 +183,6 @@ function save() {
 function reload() {
 	document.SaveHtmlForm.action.value="save";
 	document.SaveHtmlForm.submit();	
-}
-
-function load() {
 }
 
 function closePopup() {

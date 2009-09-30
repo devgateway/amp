@@ -53,6 +53,9 @@ public class SeleniumFeaturesConfiguration extends SeleneseTestCase {
 		logger.info("Modules found: " + modulesCounter);
 		logger.info("Features found: " + featuresCounter);
 		logger.info("Fields found: " + fieldsCounter);
+		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.waitForPageToLoad("30000");
+		logger.info("Get Features Configuration Finished Successfully");
 	}
 	
 	public static boolean getModuleState(String key) throws Exception {

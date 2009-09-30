@@ -21,6 +21,7 @@
 										&nbsp;
 									</td></tr>	
 																
+									<field:display name="Responsible Organization" feature="Responsible Organization">
 									<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrganisations">
 										<tr>
 											<td>
@@ -38,12 +39,12 @@
 															<td align="left" width="49%">
 																<bean:write name="repOrganisation" property="name" />
 															</td>
-															<td width="49%">
+														  
 																<field:display name="Responsible Organization Department/Division"  feature="Responsible Organization">
+															<td width="49%">
 																	<digi:trn>Department/Division: </digi:trn><html:text size="30" property="agencies.respOrgToInfo(${repOrganisation.ampOrgId})"></html:text>
-																</field:display>
-																&nbsp;
 															</td>
+														</field:display>
 														</tr>
 													</table>
 												</td>
@@ -58,7 +59,7 @@
 														</field:display>
 													</td>
 													<td>
-														<field:display name="Responsible Organization Organizations Button" feature="Responsible Organization">
+														<field:display name="Responsible Organization Remove Button" feature="Responsible Organization">
 														<html:button  styleClass="dr-menu" property="submitButton" onclick="removeSelOrgs(9)">
 															<digi:trn key="btn:removeSelectedOrganizations">Remove Selected Organizations</digi:trn>
 														</html:button>
@@ -73,20 +74,20 @@
 											</td>
 											</tr>
 										</logic:notEmpty>
-
+										</field:display>
+										<field:display name="Responsible Organization Add Button" feature="Responsible Organization">
 										<logic:empty name="aimEditActivityForm" property="agencies.respOrganisations">
 											<tr>
 												<td>
 													<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
 														<tr>
 															<td bgcolor="#ffffff">
-																<field:display name="Responsible Organization Add Button" feature="Responsible Organization">
 																<aim:addOrganizationButton callBackFunction="submitAfterSelectingOrg();"  form="${aimEditActivityForm.agencies}" collection="respOrganisations" refreshParentDocument="false" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
-																</field:display>
 															</td>
 														</tr>
 													</table>
 												</td>
 											</tr>
 										</logic:empty>
+										</field:display>
 										

@@ -21,7 +21,7 @@
 									<tr><td>
 										&nbsp;
 									</td></tr>
-									<tr><td>
+									<tr><td><field:display name="Implementing Agency" feature="Implementing Agency">
 										<logic:notEmpty name="aimEditActivityForm" property="agencies.impAgencies">
 											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
 												<logic:iterate name="aimEditActivityForm" property="agencies.impAgencies"
@@ -77,16 +77,16 @@
 												</td></tr>
 											</table>
 										</logic:notEmpty>
-
+										</field:display>
+										<field:display name="Implementing Agency Add Button" feature="Implementing Agency">
 										<logic:empty name="aimEditActivityForm" property="agencies.impAgencies">
 											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
 												<tr>
 													<td bgcolor="#ffffff">
-													<field:display name="Implementing Agency Add Button" feature="Implementing Agency">
 															<aim:addOrganizationButton callBackFunction="submitAfterSelectingOrg();"  form="${aimEditActivityForm.agencies}" collection="impAgencies" refreshParentDocument="false" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
-													</field:display>
 													</td>
 												</tr>
 											</table>
 										</logic:empty>
+										</field:display>
 									</td></tr>

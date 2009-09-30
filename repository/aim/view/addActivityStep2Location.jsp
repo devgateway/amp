@@ -158,7 +158,7 @@
                                                           <tr>
                                                               <td width="100%">
                                                                 <table width="100%" cellSpacing="1" cellPadding="1"	vAlign="top" align="left">
-                                                                  <tr>
+                                                                  <tr><field:display name="Region" feature="Location">
                                                                     <td width="3" vAlign="center">
                                                                     <html:multibox property="location.selLocs" styleId="selLocs">
                                                                       <bean:write name="selectedLocs" property="locId" />
@@ -169,6 +169,7 @@
                                                                     	[${ancestorLoc}] 
                                                                     </c:forEach>
                                                                     </td>
+                                                                    </field:display>
                                                                     <%--<td vAlign="center" align="left" width="100%">
                                                                       <c:if test="${!empty selectedLocs.country}">
                                                                         [<bean:write name="selectedLocs" property="country" />]

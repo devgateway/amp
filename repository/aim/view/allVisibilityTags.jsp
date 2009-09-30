@@ -689,7 +689,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 
 <field:display name="Responsible Organization Add Button" feature="Responsible Organization"></field:display> 
 <field:display name="Responsible Organization Groups" feature="Responsible Organization"></field:display> 
-<field:display name="Responsible Organization Organizations Button" feature="Responsible Organization"></field:display> 
+<field:display name="Responsible Organization Remove Button" feature="Responsible Organization"></field:display> 
 <field:display name="Responsible Organization Department/Division"  feature="Responsible Organization"></field:display>
 
 <field:display name="Results" feature="Identification"></field:display> 

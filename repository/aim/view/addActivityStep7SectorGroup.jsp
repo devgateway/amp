@@ -21,7 +21,7 @@
 									<tr><td bgColor=#f4f4f2>
 										&nbsp;
 									</td></tr>
-									<tr><td>
+									<tr><td><field:display name="Sector Group" feature="Sector Group">
 										<logic:notEmpty name="aimEditActivityForm" property="agencies.sectGroups">
 											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
 												<logic:iterate name="aimEditActivityForm" property="agencies.sectGroups"
@@ -77,16 +77,16 @@
 												</td></tr>
 											</table>
 										</logic:notEmpty>
-
+										</field:display>
+										<field:display name="Sector Group Add Button" feature="Sector Group">
 										<logic:empty name="aimEditActivityForm" property="agencies.sectGroups">
 											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
 												<tr>
 													<td bgcolor="#ffffff">
-													<field:display name="Sector Group Add Button" feature="Sector Group">
 														<aim:addOrganizationButton refreshParentDocument="false" callBackFunction="submitAfterSelectingOrg();"  collection="sectGroups" form="${aimEditActivityForm.agencies}" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>			
-													</field:display>
 													</td>
 												</tr>
 											</table>
 										</logic:empty>
+										</field:display>
 									</td></tr>

@@ -614,7 +614,7 @@
 <field:display name="Remove Sectors Button" feature="Sectors"></field:display> 
 <field:display name="Responsible Organization Add Button" feature="Responsible Organization"></field:display> 
 <field:display name="Responsible Organization Groups" feature="Responsible Organization"></field:display> 
-<field:display name="Responsible Organization Organizations Button" feature="Responsible Organization"></field:display> 
+<field:display name="Responsible Organization Remove Button" feature="Responsible Organization"></field:display> 
 <field:display name="Responsible Organization Additional Info"  feature="Responsible Organization"></field:display>
 <field:display name="Results" feature="Identification"></field:display> 
 <field:display name="Revised Target Value" feature="Activity"></field:display> 

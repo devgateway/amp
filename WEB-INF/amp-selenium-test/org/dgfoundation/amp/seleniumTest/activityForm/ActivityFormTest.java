@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.seleniumTest.activityForm;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.seleniumTest.SeleniumFeaturesConfiguration;
 import org.dgfoundation.amp.seleniumTest.SeleniumTestUtil;
 
 import com.thoughtworks.selenium.SeleneseTestCase;
@@ -77,396 +78,489 @@ public class ActivityFormTest extends SeleneseTestCase{
 		}
 		if (addAvailable) {
 			//Identification
-			selenium.type("identification.title", activityName);
-			
-			try {
-				selenium.select("identification.accessionInstrument", "index=1");
-			} catch (Exception e) {
-				logger.info("Field \"Accession Instrument\" is not available.");
-			}
-			try {
-				selenium.select("identification.projectCategory", "index=1");
-			} catch (Exception e) {
-				logger.info("Field \"Project Category\" is not available.");
-			}
-			try {
-				selenium.type("identification.govAgreementNumber", "12345");
-			} catch (Exception e) {
-				logger.info("Field \"Government Agreement Number\" is not available.");
-			}
-			try {
-				selenium.type("myInput", "11111");
-			} catch (Exception e) {
-				logger.info("Field \"Budget Code Project ID\" is not available.");
-			}
-			try {
-				selenium.click("budget");
-			} catch (Exception e) {
-				logger.info("Option \"Activity Budget\" is not available.");
-			}
-			try {
-				selenium.select("identification.acChapter", "index=1");
-			} catch (Exception e) {
-				logger.info("Field \"A.C. Chapter\" is not available.");
-			}
-			try {
-				selenium.click("identification.governmentApprovalProcedures");
-			} catch (Exception e) {
-				logger.info("Field \"Government Approval Procedures\" is not available.");
-			}
-			try {
-				selenium.click("identification.jointCriteria");
-			} catch (Exception e) {
-				logger.info("Field \"Joint Criteria\" is not available.");
-			}
-			try {
-				selenium.click("identification.humanitarianAid");
-			} catch (Exception e) {
-				logger.info("Field \"Humanitarian Aid\" is not available.");
-			}
-			try {
-				selenium.type("identification.crisNumber", "2222");
-			} catch (Exception e) {
-				logger.info("Field \"Cris Number\" is not available.");
-			}
-			
-			try {
-				if (version.equals(SeleniumTestUtil.VERSION_BRANCH)) {
-					selenium.click("//input[@onclick=\"window.open('/aim/selectOrganizationComponent.do~edit=true~reset=true~PARAM_RESET_FORM=true~PARAM_REFRESH_PARENT=false~PARAM_CALLBACKFUNCTION_NAME=submitAfterSelectingOrg();~PARAM_COLLECTION_NAME=selectedOrganizations~PARAM_NAME_DELEGATE_CLASS=org.digijava.module.aim.uicomponents.ProjectIdPostProcessDelegate~','addOrganisationWindows','height=400,width=600,scrollbars=yes,resizable=yes')\"]");
-					//selenium.waitForPopUp(selenium.getAllWindowTitles()[1], "50000");
-			        Thread.sleep(10000);
-					selenium.selectWindow(selenium.getAllWindowTitles()[1]); 
-			       
-					SeleniumTestUtil.waitForElement(selenium,"//input[@onclick='return searchOrganization()']", 90);
-					selenium.click("//input[@onclick='return searchOrganization()']");
-					SeleniumTestUtil.waitForElement(selenium,"selOrganisations", 90);
-					selenium.click("selOrganisations"); 
-					selenium.click("//input[@onclick='return selectOrganization()']");
-					selenium.selectWindow("null");
-					selenium.waitForPageToLoad("50000");
-					
+			if (SeleniumFeaturesConfiguration.getFeatureState("Identification")){
+				if (SeleniumFeaturesConfiguration.getFieldState("Project Title")){
+					if (selenium.isElementPresent("identification.title")) {
+						selenium.type("identification.title", activityName);
+					} else {
+						logger.error("Field \"Project Title\" is active in Feature Manager but is not available.");
+					}
 				} else {
-					selenium.click("//input[@onclick=\"javascript:selectOrg('/aim/selectOrganizationComponent.do~edit=true~reset=true~PARAM_RESET_FORM=true~PARAM_REFRESH_PARENT=false~PARAM_CALLBACKFUNCTION_NAME=submitAfterSelectingOrg();~PARAM_COLLECTION_NAME=selectedOrganizations~PARAM_NAME_DELEGATE_CLASS=org.digijava.module.aim.uicomponents.ProjectIdPostProcessDelegate~','addOrganisationWindows','height=400,width=600,scrollbars=yes,resizable=yes')\"]");
-					SeleniumTestUtil.waitForElement(selenium,"//input[@onclick='return searchOrganization()']", 90);
-					selenium.click("//input[@onclick='return searchOrganization()']");
-					SeleniumTestUtil.waitForElement(selenium,"selOrganisations", 90);
-					selenium.click("selOrganisations"); 
-					selenium.click("//input[@onclick='return selectOrganization()']");
-					selenium.waitForPageToLoad("50000");
-				}				
-			} catch (Exception e) {
-				logger.info("Option \"Add Organizations\" is not available.");
-			}
-			
-			try {
-				selenium.select("planning.lineMinRank", "index=1");
-			} catch (Exception e) {
-				logger.info("Field \"Line Ministry Rank\" is not available.");
-			}
-			try {
-				selenium.select("planning.planMinRank", "index=1");
-			} catch (Exception e) {
-				logger.info("Field \"Ministry of Planning Rank\" is not available.");
-			}
-			try {
-				selenium.type("originalAppDate","01/01/2009");
-			} catch (Exception e) {
-				logger.info("Field \"Proposed Approval Date\" is not available.");
-			}
-			try {
-				selenium.type("revisedAppDate","02/01/2008");
-			} catch (Exception e) {
-				logger.info("Field \"Actual Approval Date\" is not available.");
-			}
-			try {
-				selenium.type("originalStartDate","03/01/2008");
-			} catch (Exception e) {
-				logger.info("Field \"Proposed Start Date\" is not available.");
-			}
-			try {
-				selenium.type("revisedStartDate","04/01/2008");
-			} catch (Exception e) {
-				logger.info("Field \"Actual Start Date\" is not available.");
-			}
-			try {
-				selenium.type("contractingDate","05/01/2008");
-			} catch (Exception e) {
-				logger.info("Field \"Final Date for Contracting\" is not available.");
-			}
-			try {
-				selenium.type("disbursementsDate","06/01/2008");
-			} catch (Exception e) {
-				logger.info("Field \"Final Date for Disbursements\" is not available.");
-			}
-			try {
-				selenium.type("proposedCompDate","07/01/2008");
-			} catch (Exception e) {
-				logger.info("Field \"Proposed Completion Date\" is not available.");
-			}
-			try {
-				selenium.type("currentCompDate","08/01/2008");
-			} catch (Exception e) {
-				logger.info("Field \"Current Completion Date\" is not available.");
-			}
-			try {
-				selenium.select("planning.statusId", "index=1");
-				selenium.type("planning.statusReason", "N/A");
-			} catch (Exception e) {
-				logger.info("Field \"Status\" is not available.");
-			}
-			
-			//LOCATION
-			selenium.click("//a[@href='javascript:gotoStep(2)']");
-			selenium.waitForPageToLoad("50000");
-			
-			//Add Location
-			try {
-				if (version.equals(SeleniumTestUtil.VERSION_BRANCH)) {
-					selenium.click("//input[@name='submitButton' and @onclick='selectLocation()']");
-					//selenium.waitForPopUp(selenium.getAllWindowTitles()[1], "50000");
-					Thread.sleep(10000);
-					selenium.selectWindow(selenium.getAllWindowTitles()[1]); 
-			       
-			        SeleniumTestUtil.waitForElement(selenium,"loc_0", 90);
-					selenium.addSelection("loc_0", "index=0");
-					selenium.click("//input[@onclick=\"submitForm()\"]");
-					selenium.selectWindow("null");
-					selenium.waitForPageToLoad("50000");
-					
+					logger.info("Field \"Project Title\" is not available.");
+				}
+				if (SeleniumFeaturesConfiguration.getFieldState("Accession Instrument")){
+					if (selenium.isElementPresent("identification.accessionInstrument")) {
+						selenium.select("identification.accessionInstrument", "index=1");
+					} else {
+						logger.error("Field \"Accession Instrument\" is active in Feature Manager but is not available.");
+					}
 				} else {
-					selenium.click("//input[@name='submitButton' and @onclick='selectLocation()']");
-					SeleniumTestUtil.waitForElement(selenium,"loc_0", 90);
-					selenium.addSelection("loc_0", "index=0");
-					selenium.click("//input[@onclick='buttonAddLocation()']");
-					selenium.waitForPageToLoad("50000");
+					logger.info("Field \"Accession Instrument\" is not available.");
 				}
-			} catch (Exception e) {
-				logger.info("Option \"Add Location\" is not available.");
-			}
-			try {
-				selenium.type("selectedLocs[0].percent", "100");
-			} catch (Exception e) {
-				//System.out.println("Add Location Fail ");
-			}
-			
-			//Add Primary Sector
-			try {
-				selenium.click("//input[@name='submitButton' and @onclick='addSectors(false,1);']");
-				SeleniumTestUtil.waitForElement(selenium,"sector", 90);
-				try {
-					selenium.select("sector", "index=1");
-					Thread.sleep(5000);
-					primarySector = selenium.getSelectedLabel("sector");
-					try {
-						selenium.select("subsectorLevel1", "index=1");
-						Thread.sleep(5000);
-						primarySubSector = selenium.getSelectedLabel("subsectorLevel1");
-					} catch (Exception e) {
-						logger.info("Sub Sector no found for Primary Sector");
+				if (SeleniumFeaturesConfiguration.getFieldState("Project Category")){
+					if (selenium.isElementPresent("identification.projectCategory")) {
+						selenium.select("identification.projectCategory", "index=1");
+					} else {
+						logger.error("Field \"Project Category\" is active in Feature Manager but is not available.");
 					}
-					selenium.click("addButton");
-					selenium.waitForPageToLoad("50000");					
-				} catch (Exception e) {
-					logger.info("Sectors no found for Primary Sector");
+				} else {
+					logger.info("Field \"Project Category\" is not available.");
 				}
-			} catch (Exception e) {
-				logger.info("Option \"Add Primary Sector\" is not available.");
-			}
-			try {
-				selenium.type("activitySectors[0].sectorPercentage", "100");
-				logger.info("Primary Sector : " + primarySector);
-				logger.info("Primary Sub Sector : " + primarySubSector);
-			} catch (Exception e) {
-				//System.out.println("Add Primary Sector Fail ");
-			}
-			
-			//Add Secondary Sector
-			try {
-				selenium.click("//input[@name='submitButton' and @onclick='addSectors(false,2);']");
-				SeleniumTestUtil.waitForElement(selenium,"sector", 90);
-				try {
-					selenium.select("sector", "index=1");
-					Thread.sleep(5000);
-					secondarySector = selenium.getSelectedLabel("sector");
-					try {
-						selenium.select("subsectorLevel1", "index=1");
-						Thread.sleep(5000);
-						secondarySubSector = selenium.getSelectedLabel("subsectorLevel1");
-					} catch (Exception e) {
-						logger.info("Sub Sector no found for Secondary Sector");
+				if (SeleniumFeaturesConfiguration.getFieldState("Government Agreement Number")){
+					if (selenium.isElementPresent("identification.govAgreementNumber")) {
+						selenium.type("identification.govAgreementNumber", "12345");
+					} else {
+						logger.error("Field \"Government Agreement Number\" is active in Feature Manager but is not available.");
 					}
-					selenium.click("addButton");
-					selenium.waitForPageToLoad("50000");					
-				} catch (Exception e) {
-					logger.info("Sectors no found for Secondary Sector");
+				} else {
+					logger.info("Field \"Government Agreement Number\" is not available.");
 				}
-			} catch (Exception e) {
-				logger.info("Option \"Add Secondary Sector\" is not available.");
-			}
-			try {
-				selenium.type("activitySectors[1].sectorPercentage", "100");
-				logger.info("Secondary Sector : " + secondarySector);
-				logger.info("Secondary Sub Sector : " + secondarySector);
-			} catch (Exception e) {
-				//System.out.println("Add Secondary Sector Fail ");
-			}
-			
-			//Add National Planning Objectives
-			try {
-				selenium.click("//input[@name='submitButton' and @onclick='addProgram(1);']");
-				if (version.equals(SeleniumTestUtil.VERSION_BRANCH)) {
-					//selenium.waitForPopUp(selenium.getAllWindowTitles()[1], "50000");
-					Thread.sleep(10000);
-					selenium.selectWindow(selenium.getAllWindowTitles()[1]);
-			        SeleniumTestUtil.waitForElement(selenium,"programs.selPrograms", 90);
-				}else{
-					SeleniumTestUtil.waitForElement(selenium,"selPrograms", 90);					
+				if (SeleniumFeaturesConfiguration.getFieldState("Budget Code Project ID")){
+					if (selenium.isElementPresent("myInput")) {
+						selenium.type("myInput", "11111");
+					} else {
+						logger.error("Field \"Budget Code Project ID\" is active in Feature Manager but is not available.");
+					}
+				} else {
+					logger.info("Field \"Budget Code Project ID\" is not available.");
 				}
-				try {
-					if (version.equals(SeleniumTestUtil.VERSION_BRANCH)) {
-						selenium.select("programs.selPrograms", "index=1");
-						Thread.sleep(5000);
-						NPOProgram = selenium.getSelectedLabel("programs.selPrograms");
-					}else{
-						selenium.select("selPrograms", "index=1");
-						Thread.sleep(5000);
-						NPOProgram = selenium.getSelectedLabel("selPrograms");											
+				if (SeleniumFeaturesConfiguration.getFieldState("On/Off Budget")){
+					if (selenium.isElementPresent("budget")) {
+						selenium.click("budget");
+					} else {
+						logger.error("Field \"On/Off Budget\" is active in Feature Manager but is not available.");
 					}
-					try {
-						selenium.select("//td[@id='slo2']/select", "index=1");
-						Thread.sleep(5000);
-						NPOSubProgram = selenium.getSelectedLabel("//td[@id='slo2']/select");						
-					} catch (Exception e) {
-						logger.info("Sub Programs no found for NPO");
+				} else {
+					logger.info("Option \"Activity Budget\" is not available.");
+				}
+				if (SeleniumFeaturesConfiguration.getFieldState("A.C. Chapter")){
+					if (selenium.isElementPresent("identification.acChapter")) {
+						selenium.select("identification.acChapter", "index=1");
+					} else {
+						logger.error("Field \"A.C. Chapter\" is active in Feature Manager but is not available.");
 					}
-					selenium.click("submitButton");
-					selenium.selectWindow("null");
-					selenium.waitForPageToLoad("50000");
-				} catch (Exception e) {
-					logger.info("Programs no found for NPO");
-					try {
-						selenium.click("//input[@name='submitButton' and @onclick='addDefaultProgram()']");
+				} else {
+					logger.info("Field \"A.C. Chapter\" is not available.");
+				}
+				if (SeleniumFeaturesConfiguration.getFieldState("Government Approval Procedures")){
+					if (selenium.isElementPresent("identification.governmentApprovalProcedures")) {
+						selenium.click("identification.governmentApprovalProcedures");
+					} else {
+						logger.error("Field \"Government Approval Procedures\" is active in Feature Manager but is not available.");
+					}
+				} else {
+					logger.info("Field \"Government Approval Procedures\" is not available.");
+				}
+				if (SeleniumFeaturesConfiguration.getFieldState("Joint Criteria")){
+					if (selenium.isElementPresent("identification.jointCriteria")) {
+						selenium.click("identification.jointCriteria");
+					} else {
+						logger.error("Field \"Joint Criteria\" is active in Feature Manager but is not available.");
+					}
+				} else {
+					logger.info("Field \"Joint Criteria\" is not available.");
+				}
+				if (SeleniumFeaturesConfiguration.getFieldState("Humanitarian Aid")){
+					if (selenium.isElementPresent("identification.humanitarianAid")) {
+						selenium.click("identification.humanitarianAid");
+					} else {
+						logger.error("Field \"Humanitarian Aid\" is active in Feature Manager but is not available.");
+					}
+				} else {
+					logger.info("Field \"Humanitarian Aid\" is not available.");
+				}
+				if (SeleniumFeaturesConfiguration.getFieldState("Cris Number")){
+					if (selenium.isElementPresent("identification.crisNumber")) {
+						selenium.type("identification.crisNumber", "2222");
+					} else {
+						logger.error("Field \"Cris Number\" is active in Feature Manager but is not available.");
+					}
+				} else {
+					logger.info("Field \"Cris Number\" is not available.");
+				}
+				if (SeleniumFeaturesConfiguration.getFieldState("Organizations and Project ID")){
+					if (selenium.isElementPresent("//input[@onclick=\"window.open('/aim/selectOrganizationComponent.do~edit=true~reset=true~PARAM_RESET_FORM=true~PARAM_REFRESH_PARENT=false~PARAM_CALLBACKFUNCTION_NAME=submitAfterSelectingOrg();~PARAM_COLLECTION_NAME=selectedOrganizations~PARAM_NAME_DELEGATE_CLASS=org.digijava.module.aim.uicomponents.ProjectIdPostProcessDelegate~','addOrganisationWindows','height=400,width=600,scrollbars=yes,resizable=yes')\"]")) {
+						selenium.click("//input[@onclick=\"window.open('/aim/selectOrganizationComponent.do~edit=true~reset=true~PARAM_RESET_FORM=true~PARAM_REFRESH_PARENT=false~PARAM_CALLBACKFUNCTION_NAME=submitAfterSelectingOrg();~PARAM_COLLECTION_NAME=selectedOrganizations~PARAM_NAME_DELEGATE_CLASS=org.digijava.module.aim.uicomponents.ProjectIdPostProcessDelegate~','addOrganisationWindows','height=400,width=600,scrollbars=yes,resizable=yes')\"]");
+						//selenium.waitForPopUp(selenium.getAllWindowTitles()[1], "50000");
+				        Thread.sleep(10000);
+						selenium.selectWindow(selenium.getAllWindowTitles()[1]); 
+				       
+						SeleniumTestUtil.waitForElement(selenium,"//input[@onclick='return searchOrganization()']", 90);
+						selenium.click("//input[@onclick='return searchOrganization()']");
+						SeleniumTestUtil.waitForElement(selenium,"selOrganisations", 90);
+						selenium.click("selOrganisations"); 
+						selenium.click("//input[@onclick='return selectOrganization()']");
+						selenium.selectWindow("null");
 						selenium.waitForPageToLoad("50000");
-					} catch (Exception e2) {
+					} else {
+						logger.error("Field \"Organizations and Project ID\" is active in Feature Manager but is not available.");
 					}
+				} else {
+					logger.info("Field \"Organizations and Project ID\" is not available.");
 				}
-			} catch (Exception e) {
-				logger.info("Option \"National Planning Objectives\" is not available.");
+			} else {
+				logger.info("Feature \"Identification\" is not available.");
 			}
-			try {
-				selenium.type("nationalPlanObjectivePrograms[0].programPercentage", "100");
-				logger.info("NPO Program : " + NPOProgram);
-				logger.info("NPO Sub Program : " + NPOSubProgram);
-			} catch (Exception e) {
-				//System.out.println("National Planning Objectives weren't added.");
-			}
-
-			//Add Primary Program
-			try {
-				selenium.click("//input[@name='submitButton' and @onclick='addProgram(2);']");
-				if (version.equals(SeleniumTestUtil.VERSION_BRANCH)) {
-					//selenium.waitForPopUp(selenium.getAllWindowTitles()[1], "50000");
-					Thread.sleep(10000);
-					selenium.selectWindow(selenium.getAllWindowTitles()[1]);
-			        SeleniumTestUtil.waitForElement(selenium,"programs.selPrograms", 90);
-				}else{
-					SeleniumTestUtil.waitForElement(selenium,"selPrograms", 90);					
-				}
-				try {
-					if (version.equals(SeleniumTestUtil.VERSION_BRANCH)) {
-						selenium.select("programs.selPrograms", "index=1");
-						Thread.sleep(5000);
-						NPOProgram = selenium.getSelectedLabel("programs.selPrograms");
-					}else{
-						selenium.select("selPrograms", "index=1");
-						Thread.sleep(5000);
-						NPOProgram = selenium.getSelectedLabel("selPrograms");											
-					}
-					try {
-						selenium.select("//td[@id='slo2']/select", "index=1");
-						Thread.sleep(5000);
-						primarySubProgram = selenium.getSelectedLabel("//td[@id='slo2']/select");						
-					} catch (Exception e) {
-						logger.info("Sub Programs no found for Primary Program");
-					}
-					selenium.click("submitButton");
-					selenium.selectWindow("null");
-					selenium.waitForPageToLoad("50000");
-				} catch (Exception e) {
-					logger.info("Programs no found for Primary Program");
-					try {
-						selenium.click("//input[@name='submitButton' and @onclick='addDefaultProgram()']");
-						selenium.waitForPageToLoad("50000");
-					} catch (Exception e2) {
-					}
-				}
-			} catch (Exception e) {
-				logger.info("Option \"Primary Program\" is not available.");
-			}
-			try {
-				selenium.type("primaryPrograms[0].programPercentage", "100");
-				logger.info("Primary Program : " + primaryProgram);
-				logger.info("Primary Sub Program : " + primarySubProgram);
-			} catch (Exception e) {
-				//System.out.println("Primary Program weren't added." );
-			}
+			//Planning
+			if (SeleniumFeaturesConfiguration.getFeatureState("Planning")){
 				
-			//Add Secondary Program
-			try {
-				selenium.click("//input[@name='submitButton' and @onclick='addProgram(3);']");
-				if (version.equals(SeleniumTestUtil.VERSION_BRANCH)) {
-					//selenium.waitForPopUp(selenium.getAllWindowTitles()[1], "50000");
-					Thread.sleep(10000);
-					selenium.selectWindow(selenium.getAllWindowTitles()[1]);
-			        SeleniumTestUtil.waitForElement(selenium,"programs.selPrograms", 90);
-				}else{
-					SeleniumTestUtil.waitForElement(selenium,"selPrograms", 90);					
+				if (SeleniumFeaturesConfiguration.getFieldState("Line Ministry Rank")){
+					if (selenium.isElementPresent("planning.lineMinRank")) {
+						selenium.select("planning.lineMinRank", "index=1");
+					} else {
+						logger.error("Field \"Line Ministry Rank\" is active in Feature Manager but is not available.");
+					}
+				} else {
+					logger.info("Field \"Line Ministry Rank\" is not available.");
 				}
-				try {
-					if (version.equals(SeleniumTestUtil.VERSION_BRANCH)) {
-						selenium.select("programs.selPrograms", "index=1");
-						Thread.sleep(5000);
-						NPOProgram = selenium.getSelectedLabel("programs.selPrograms");
-					}else{
-						selenium.select("selPrograms", "index=1");
-						Thread.sleep(5000);
-						NPOProgram = selenium.getSelectedLabel("selPrograms");											
+				if (SeleniumFeaturesConfiguration.getFieldState("Ministry of Planning Rank")){
+					if (selenium.isElementPresent("planning.planMinRank")) {
+						selenium.select("planning.planMinRank", "index=1");
+					} else {
+						logger.error("Field \"Ministry of Planning Rank\" is active in Feature Manager but is not available.");
 					}
-					try {
-						selenium.select("//td[@id='slo2']/select", "index=1");
-						Thread.sleep(5000);
-						secondarySubProgram = selenium.getSelectedLabel("//td[@id='slo2']/select");						
-					} catch (Exception e) {
-						logger.info("Sub Programs no found for Secondary Program");
-					}
-					selenium.click("submitButton");
-					selenium.selectWindow("null");
-					selenium.waitForPageToLoad("50000");
-				} catch (Exception e) {
-					logger.info("Programs no found for Secondary Program");
-					try {
-						selenium.click("//input[@name='submitButton' and @onclick='addDefaultProgram()']");
-						selenium.waitForPageToLoad("50000");
-					} catch (Exception e2) {
-					}
+				} else {
+					logger.info("Field \"Ministry of Planning Rank\" is not available.");
 				}
-			} catch (Exception e) {
-				logger.info("Option \"Secondary Program\" is not available.");
+				if (SeleniumFeaturesConfiguration.getFieldState("Proposed Approval Date")){
+					if (selenium.isElementPresent("originalAppDate")) {
+						selenium.type("originalAppDate","01/01/2009");
+					} else {
+						logger.error("Field \"Proposed Approval Date\" is active in Feature Manager but is not available.");
+					}
+				} else {
+					logger.info("Field \"Proposed Approval Date\" is not available.");
+				}
+				if (SeleniumFeaturesConfiguration.getFieldState("Actual Approval Date")){
+					if (selenium.isElementPresent("revisedAppDate")) {
+						selenium.type("revisedAppDate","02/01/2008");
+					} else {
+						logger.error("Field \"Actual Approval Date\" is active in Feature Manager but is not available.");
+					}
+				} else {
+					logger.info("Field \"Actual Approval Date\" is not available.");
+				}
+				if (SeleniumFeaturesConfiguration.getFieldState("Proposed Start Date")){
+					if (selenium.isElementPresent("originalStartDate")) {
+						selenium.type("originalStartDate","03/01/2008");
+					} else {
+						logger.error("Field \"Proposed Start Date\" is active in Feature Manager but is not available.");
+					}
+				} else {
+					logger.info("Field \"Proposed Start Date\" is not available.");
+				}
+				if (SeleniumFeaturesConfiguration.getFieldState("Actual Start Date")){
+					if (selenium.isElementPresent("revisedStartDate")) {
+						selenium.type("revisedStartDate","04/01/2008");
+					} else {
+						logger.error("Field \"Actual Start Date\" is active in Feature Manager but is not available.");
+					}
+				} else {
+					logger.info("Field \"Actual Start Date\" is not available.");
+				}
+				if (SeleniumFeaturesConfiguration.getFieldState("Final Date for Contracting")){
+					if (selenium.isElementPresent("contractingDate")) {
+						selenium.type("contractingDate","05/01/2008");
+					} else {
+						logger.error("Field \"Final Date for Contracting\" is active in Feature Manager but is not available.");
+					}
+				} else {
+					logger.info("Field \"Final Date for Contracting\" is not available.");
+				}
+				if (SeleniumFeaturesConfiguration.getFieldState("Final Date for Disbursements")){
+					if (selenium.isElementPresent("disbursementsDate")) {
+						selenium.type("disbursementsDate","06/01/2008");
+					} else {
+						logger.error("Field \"Final Date for Disbursements\" is active in Feature Manager but is not available.");
+					}
+				} else {
+					logger.info("Field \"Final Date for Disbursements\" is not available.");
+				}
+				if (SeleniumFeaturesConfiguration.getFieldState("Proposed Completion Date")){
+					if (selenium.isElementPresent("proposedCompDate")) {
+						selenium.type("proposedCompDate","07/01/2008");
+					} else {
+						logger.error("Field \"Proposed Completion Date\" is active in Feature Manager but is not available.");
+					}
+				} else {
+					logger.info("Field \"Proposed Completion Date\" is not available.");
+				}
+				if (SeleniumFeaturesConfiguration.getFieldState("Current Completion Date")){
+					if (selenium.isElementPresent("currentCompDate")) {
+						selenium.type("currentCompDate","08/01/2008");
+					} else {
+						logger.error("Field \"Current Completion Date\" is active in Feature Manager but is not available.");
+					}
+				} else {
+					logger.info("Field \"Current Completion Date\" is not available.");
+				}
+				if (SeleniumFeaturesConfiguration.getFieldState("Status")){
+					if (selenium.isElementPresent("planning.statusId")) {
+						selenium.select("planning.statusId", "index=1");
+						selenium.type("planning.statusReason", "N/A");
+					} else {
+						logger.error("Field \"Status\" is active in Feature Manager but is not available.");
+					}
+				} else {
+					logger.info("Field \"Status\" is not available.");
+				}
+			} else {
+				logger.info("Feature \"Planning\" is not available.");
 			}
-			try {
-				selenium.type("secondaryPrograms[0].programPercentage", "100");
-				logger.info("Secondary Program : " + secondaryProgram);
-				logger.info("Secondary Sub Program : " + secondarySubProgram);
-			} catch (Exception e) {
-				//System.out.println("Secondary Program weren't added.");
+		
+			if (selenium.isElementPresent("//a[@href='javascript:gotoStep(2)']")) {
+				selenium.click("//a[@href='javascript:gotoStep(2)']");
+				selenium.waitForPageToLoad("50000");
+				//Location
+				if (SeleniumFeaturesConfiguration.getFeatureState("Location")){
+					if (SeleniumFeaturesConfiguration.getFieldState("Add Location")){
+						if (selenium.isElementPresent("//input[@name='submitButton' and @onclick='selectLocation()']")) {
+							selenium.click("//input[@name='submitButton' and @onclick='selectLocation()']");
+							//selenium.waitForPopUp(selenium.getAllWindowTitles()[1], "50000");
+							Thread.sleep(10000);
+							selenium.selectWindow(selenium.getAllWindowTitles()[1]); 
+					       
+					        SeleniumTestUtil.waitForElement(selenium,"loc_0", 90);
+							selenium.addSelection("loc_0", "index=0");
+							selenium.click("//input[@onclick=\"submitForm()\"]");
+							selenium.selectWindow("null");
+							selenium.waitForPageToLoad("50000");
+						} else {
+							logger.error("Field \"Add Location\" is active in Feature Manager but is not available.");
+						}
+					} else {
+						logger.info("Field \"Add Location\" is not available.");
+					}
+					if (SeleniumFeaturesConfiguration.getFieldState("Regional Percentage")){
+						selenium.type("selectedLocs[0].percent", "100");
+					} else {
+						logger.info("Field \"Regional Percentage\" is not available.");
+					}
+				} else {
+					logger.info("Feature \"Location\" is not available.");
+				}
+				//Sectors
+				if (SeleniumFeaturesConfiguration.getFeatureState("Sectors")){
+					//Add Primary Sector
+					if (SeleniumFeaturesConfiguration.getFieldState("Primary Sector")){
+						if (selenium.isElementPresent("//input[@name='submitButton' and @onclick='addSectors(false,1);']")) {
+							selenium.click("//input[@name='submitButton' and @onclick='addSectors(false,1);']");
+							SeleniumTestUtil.waitForElement(selenium,"sector", 90);
+							try {
+								selenium.select("sector", "index=1");
+								Thread.sleep(5000);
+								primarySector = selenium.getSelectedLabel("sector");
+								try {
+									selenium.select("subsectorLevel1", "index=1");
+									Thread.sleep(5000);
+									primarySubSector = selenium.getSelectedLabel("subsectorLevel1");
+								} catch (Exception e) {
+									logger.info("Sub Sector no found for Primary Sector");
+								}
+								selenium.click("addButton");
+								selenium.waitForPageToLoad("50000");	
+								try {
+									selenium.type("activitySectors[0].sectorPercentage", "100");
+									logger.info("Primary Sector : " + primarySector);
+									logger.info("Primary Sub Sector : " + primarySubSector);
+								} catch (Exception e) {
+									logger.info("Add Primary Sector Fail ");
+								}
+							} catch (Exception e) {
+								logger.info("Sectors no found for Primary Sector");
+							}
+						} else {
+							logger.error("Field \"Primary Sector\" is active in Feature Manager but is not available.");
+						}
+					} else {
+						logger.info("Field \"Primary Sector\" is not available.");
+					}
+					//Add Secondary Sector
+					if (SeleniumFeaturesConfiguration.getFieldState("Secondary Sector")){
+						if (selenium.isElementPresent("//input[@name='submitButton' and @onclick='addSectors(false,2);']")) {
+							selenium.click("//input[@name='submitButton' and @onclick='addSectors(false,2);']");
+							SeleniumTestUtil.waitForElement(selenium,"sector", 90);
+							try {
+								selenium.select("sector", "index=1");
+								Thread.sleep(5000);
+								secondarySector = selenium.getSelectedLabel("sector");
+								try {
+									selenium.select("subsectorLevel1", "index=1");
+									Thread.sleep(5000);
+									secondarySubSector = selenium.getSelectedLabel("subsectorLevel1");
+								} catch (Exception e) {
+									logger.info("Sub Sector no found for Secondary Sector");
+								}
+								selenium.click("addButton");
+								selenium.waitForPageToLoad("50000");
+								try {
+									selenium.type("activitySectors[1].sectorPercentage", "100");
+									logger.info("Secondary Sector : " + secondarySector);
+									logger.info("Secondary Sub Sector : " + secondarySector);
+								} catch (Exception e) {
+									logger.info("Add Secondary Sector Fail ");
+								}
+							} catch (Exception e) {
+								logger.info("Sectors no found for Secondary Sector");
+							}
+						} else {
+							logger.error("Field \"Current Completion Date\" is active in Feature Manager but is not available.");
+						}
+					} else {
+						logger.info("Field \"Secondary Sector\" is not available.");
+					}
+				} else {
+					logger.info("Feature \"Sectors\" is not available.");
+				}
+				//Programs
+				if (SeleniumFeaturesConfiguration.getFeatureState("Program")){
+					//Add National Planning Objectives
+					if (SeleniumFeaturesConfiguration.getFieldState("Add Programs Button - National Plan Objective")){
+						if (selenium.isElementPresent("//input[@name='submitButton' and @onclick='addProgram(1);']")) {
+							selenium.click("//input[@name='submitButton' and @onclick='addProgram(1);']");
+							//selenium.waitForPopUp(selenium.getAllWindowTitles()[1], "50000");
+							Thread.sleep(10000);
+							selenium.selectWindow(selenium.getAllWindowTitles()[1]);
+					        SeleniumTestUtil.waitForElement(selenium,"programs.selPrograms", 90);
+					        try {
+								selenium.select("programs.selPrograms", "index=1");
+								Thread.sleep(5000);
+								NPOProgram = selenium.getSelectedLabel("programs.selPrograms");							
+								try {
+									selenium.select("//td[@id='slo2']/select", "index=1");
+									Thread.sleep(5000);
+									NPOSubProgram = selenium.getSelectedLabel("//td[@id='slo2']/select");						
+								} catch (Exception e) {
+									logger.info("Sub Programs no found for NPO");
+								}
+								selenium.click("submitButton");
+								selenium.selectWindow("null");
+								selenium.waitForPageToLoad("50000");
+							} catch (Exception e) {
+								logger.info("Programs no found for NPO");
+								try {
+									selenium.click("//input[@name='submitButton' and @onclick='addDefaultProgram()']");
+									selenium.waitForPageToLoad("50000");
+								} catch (Exception e2) {
+								}
+							}
+							try {
+								selenium.type("nationalPlanObjectivePrograms[0].programPercentage", "100");
+								logger.info("NPO Program : " + NPOProgram);
+								logger.info("NPO Sub Program : " + NPOSubProgram);
+							} catch (Exception e) {
+								logger.info("National Planning Objectives weren't added.");
+							}
+						} else {
+							logger.error("Field \"Add Programs Button - National Plan Objective\" is active in Feature Manager but is not available.");
+						}
+					} else {
+						logger.info("Field \"Add Programs Button - National Plan Objective\" is not available.");
+					}
+					
+					//Add Primary Program
+					if (SeleniumFeaturesConfiguration.getFieldState("Add Programs Button - Primary Programs")){
+						if (selenium.isElementPresent("//input[@name='submitButton' and @onclick='addProgram(2);']")) {
+							selenium.click("//input[@name='submitButton' and @onclick='addProgram(2);']");
+							//selenium.waitForPopUp(selenium.getAllWindowTitles()[1], "50000");
+							Thread.sleep(10000);
+							selenium.selectWindow(selenium.getAllWindowTitles()[1]);
+					        SeleniumTestUtil.waitForElement(selenium,"programs.selPrograms", 90);
+							try {
+								selenium.select("programs.selPrograms", "index=1");
+								Thread.sleep(5000);
+								NPOProgram = selenium.getSelectedLabel("programs.selPrograms");
+								try {
+									selenium.select("//td[@id='slo2']/select", "index=1");
+									Thread.sleep(5000);
+									primarySubProgram = selenium.getSelectedLabel("//td[@id='slo2']/select");						
+								} catch (Exception e) {
+									logger.info("Sub Programs no found for Primary Program");
+								}
+								selenium.click("submitButton");
+								selenium.selectWindow("null");
+								selenium.waitForPageToLoad("50000");
+							} catch (Exception e) {
+								logger.info("Programs no found for Primary Program");
+								try {
+									selenium.click("//input[@name='submitButton' and @onclick='addDefaultProgram()']");
+									selenium.waitForPageToLoad("50000");
+								} catch (Exception e2) {
+								}
+							}
+							try {
+								selenium.type("primaryPrograms[0].programPercentage", "100");
+								logger.info("Primary Program : " + primaryProgram);
+								logger.info("Primary Sub Program : " + primarySubProgram);
+							} catch (Exception e) {
+								logger.info("Primary Program weren't added." );
+							}
+						} else {
+							logger.error("Field \"Add Programs Button - Primary Programs\" is active in Feature Manager but is not available.");
+						}
+					} else {
+						logger.info("Field \"Add Programs Button - Primary Programs\" is not available.");
+					}
+					
+					//Add Secondary Program
+					if (SeleniumFeaturesConfiguration.getFieldState("Add Programs Button - Secondary Programs")){
+						if (selenium.isElementPresent("//input[@name='submitButton' and @onclick='addProgram(3);']")) {
+							selenium.click("//input[@name='submitButton' and @onclick='addProgram(3);']");
+							//selenium.waitForPopUp(selenium.getAllWindowTitles()[1], "50000");
+							Thread.sleep(10000);
+							selenium.selectWindow(selenium.getAllWindowTitles()[1]);
+					        SeleniumTestUtil.waitForElement(selenium,"programs.selPrograms", 90);
+							try {
+								selenium.select("programs.selPrograms", "index=1");
+								Thread.sleep(5000);
+								NPOProgram = selenium.getSelectedLabel("programs.selPrograms");
+								try {
+									selenium.select("//td[@id='slo2']/select", "index=1");
+									Thread.sleep(5000);
+									secondarySubProgram = selenium.getSelectedLabel("//td[@id='slo2']/select");						
+								} catch (Exception e) {
+									logger.info("Sub Programs no found for Secondary Program");
+								}
+								selenium.click("submitButton");
+								selenium.selectWindow("null");
+								selenium.waitForPageToLoad("50000");
+							} catch (Exception e) {
+								logger.info("Programs no found for Secondary Program");
+								try {
+									selenium.click("//input[@name='submitButton' and @onclick='addDefaultProgram()']");
+									selenium.waitForPageToLoad("50000");
+								} catch (Exception e2) {
+								}
+							}
+							try {
+								selenium.type("secondaryPrograms[0].programPercentage", "100");
+								logger.info("Secondary Program : " + secondaryProgram);
+								logger.info("Secondary Sub Program : " + secondarySubProgram);
+							} catch (Exception e) {
+								logger.info("Secondary Program weren't added.");
+							}
+						} else {
+							logger.error("Field \"Add Programs Button - Secondary Programs\" is active in Feature Manager but is not available.");
+						}
+					} else {
+						logger.info("Field \"Add Programs Button - Secondary Programs\" is not available.");
+					}
+					
+					if (SeleniumFeaturesConfiguration.getFieldState("NPD Program Description")){
+						if (selenium.isElementPresent("programs.programDescription")) {
+							selenium.type("programs.programDescription", "ProgramDescription");
+						} else {
+							logger.error("Field \"NPD Program Description\" is active in Feature Manager but is not available.");
+						}
+					} else {
+						logger.info("Field \"NPD Program Description\" is not available.");
+					}
+				} else {
+					logger.info("Feature \"Program\" is not available.");
+				}				
+			} else {
+				logger.info("Step 2 is not available on Activity Form");
 			}
-
-			try {
-				selenium.type("programs.programDescription", "ProgramDescription");
-			} catch (Exception e) {
-				logger.info("Field \"Program Description\" is not available.");
-			}
-			
 			
 			//FUNDING
 			boolean fundingAvailable = false;
@@ -479,19 +573,23 @@ public class ActivityFormTest extends SeleneseTestCase{
 				logger.info("Step \"Funding\" is not available.");
 				allFundingOk = false;
 			}
-			if (fundingAvailable) {
-				try {
-					selenium.click("//input[@ onclick='addPropFunding()']");
-					SeleniumTestUtil.waitForElement(selenium,"funAmount", 90);
-					selenium.type("funAmount", "3000");
-					selenium.type("funDate", "01/02/2008");
-					selenium.click("//input[@onclick='addNewPropFunding();']");
-					selenium.waitForPageToLoad("50000");
-				} catch (Exception e) {
-					logger.info("Option \"Add Funding\" is not available.");
+			if (SeleniumFeaturesConfiguration.getFeatureState("Funding Information")){
+				if (SeleniumFeaturesConfiguration.getFieldState("Add Funding Button - Proposed Project Cost")){
+					if (selenium.isElementPresent("//input[@ onclick='addPropFunding()']")) {
+						selenium.click("//input[@ onclick='addPropFunding()']");
+						SeleniumTestUtil.waitForElement(selenium,"funAmount", 90);
+						selenium.type("funAmount", "3000");
+						selenium.type("funDate", "01/02/2008");
+						selenium.click("//input[@onclick='addNewPropFunding();']");
+						selenium.waitForPageToLoad("50000");
+					} else {
+						logger.error("Field \"Add Funding Button - Proposed Project Cost\" is active in Feature Manager but is not available.");
+					}
+				} else {
+					logger.info("Field \"Add Funding Button - Proposed Project Cost\" is not available.");
 				}
-				try {
-					if (version.equals(SeleniumTestUtil.VERSION_BRANCH)) {
+				if (SeleniumFeaturesConfiguration.getFieldState("Add Donor Organization")){
+					if (selenium.isElementPresent("//input[@onclick=\"window.open('/aim/selectOrganizationComponent.do~edit=true~reset=true~PARAM_RESET_FORM=true~PARAM_REFRESH_PARENT=true~PARAM_CALLBACKFUNCTION_NAME=doNothing();~PARAM_COLLECTION_NAME=fundingOrganizations~PARAM_NAME_DELEGATE_CLASS=org.digijava.module.aim.uicomponents.ToFundingOrganizationDelegate~','addOrganisationWindows','height=400,width=600,scrollbars=yes,resizable=yes')\"]")) {
 						selenium.click("//input[@onclick=\"window.open('/aim/selectOrganizationComponent.do~edit=true~reset=true~PARAM_RESET_FORM=true~PARAM_REFRESH_PARENT=true~PARAM_CALLBACKFUNCTION_NAME=doNothing();~PARAM_COLLECTION_NAME=fundingOrganizations~PARAM_NAME_DELEGATE_CLASS=org.digijava.module.aim.uicomponents.ToFundingOrganizationDelegate~','addOrganisationWindows','height=400,width=600,scrollbars=yes,resizable=yes')\"]");
 						//selenium.waitForPopUp(selenium.getAllWindowTitles()[1], "50000");
 						Thread.sleep(10000);
@@ -503,93 +601,103 @@ public class ActivityFormTest extends SeleneseTestCase{
 						selenium.click("selOrganisations"); 
 						selenium.click("//input[@onclick='return selectOrganization()']");
 						selenium.selectWindow("null");
-						selenium.waitForPageToLoad("50000");
-						
-					} else {
-						selenium.click("//input[@onclick=\"javascript:selectOrg('/aim/selectOrganizationComponent.do~edit=true~reset=true~PARAM_RESET_FORM=true~PARAM_REFRESH_PARENT=true~PARAM_CALLBACKFUNCTION_NAME=doNothing();~PARAM_COLLECTION_NAME=fundingOrganizations~PARAM_NAME_DELEGATE_CLASS=org.digijava.module.aim.uicomponents.ToFundingOrganizationDelegate~','addOrganisationWindows','height=400,width=600,scrollbars=yes,resizable=yes')\"]");
-						SeleniumTestUtil.waitForElement(selenium,"//input[@onclick='return searchOrganization()']", 90);
-						selenium.click("//input[@onclick='return searchOrganization()']");
-						SeleniumTestUtil.waitForElement(selenium,"selOrganisations", 90);
-						selenium.click("selOrganisations");
-						selenium.click("//input[@onclick='return selectOrganization()']");
-						selenium.waitForPageToLoad("50000");
-					}
-					String val = selenium.getAttribute("selFundingOrgs@value");
-					//Add Funding
-					for (int i = 0; i < fundingQty; i++) {
-						selenium.click("//input[@onclick=\"addFunding('" + val + "')\"]"); 
-						if (version.equals(SeleniumTestUtil.VERSION_BRANCH)) {
+						selenium.waitForPageToLoad("50000");					
+						String val = selenium.getAttribute("selFundingOrgs@value");
+						//Add Fundings
+						for (int i = 0; i < fundingQty; i++) {
+							selenium.click("//input[@onclick=\"addFunding('" + val + "')\"]"); 
 							//selenium.waitForPopUp(selenium.getAllWindowTitles()[1], "50000");
 							Thread.sleep(10000);
 							selenium.selectWindow(selenium.getAllWindowTitles()[1]); 
-						}
-					    SeleniumTestUtil.waitForElement(selenium,"funding.assistanceType", 90);
-						selenium.select("funding.assistanceType", "index=1");
-						selenium.type("orgFundingId", "12345");
-						selenium.select("funding.modality", "index=1");
-						selenium.click("//input[@onclick='addFundingDetail(0)']"); //add a commitment (actual)
-						SeleniumTestUtil.waitForElement(selenium,"fundingDetail[0].adjustmentType", 90);
-						try {
-							selenium.select("fundingDetail[0].adjustmentType", "index=0");
-							selenium.type("fundingDetail[0].transactionAmount", ACTUAL_COMMITMENTS[i]);
-							selenium.type("fundingDetail[0].transactionDate", FUNDING_DATES[i]);
-						} catch (Exception e) {
-							logger.info("Option \"Actual\" is not available for commitments.");
-							allFundingOk = false;
-						}
-						selenium.click("//input[@onclick='addFundingDetail(0)']"); //add a commitment (planned)
-						SeleniumTestUtil.waitForElement(selenium,"fundingDetail[1].adjustmentType", 90);
-						try {
-							selenium.select("fundingDetail[1].adjustmentType", "index=1");
-							selenium.type("fundingDetail[1].transactionAmount", PLANNED_COMMITMENTS[i]);
-							selenium.type("fundingDetail[1].transactionDate", FUNDING_DATES[i]);
-						} catch (Exception e) {
-							logger.info("Option \"Planned\" is not available for commitments.");
-							allFundingOk = false;
-						}
-						selenium.click("//input[@onclick='addFundingDetail(1)']"); //add a disbursement (actual)
-						SeleniumTestUtil.waitForElement(selenium,"fundingDetail[2].adjustmentType", 90);
-						try {
-							selenium.select("fundingDetail[2].adjustmentType", "index=0");
-							selenium.type("fundingDetail[2].transactionAmount", ACTUAL_DISBURSEMENT[i]);
-							selenium.type("fundingDetail[2].transactionDate", FUNDING_DATES[i]);
-						} catch (Exception e) {
-							logger.info("Option \"Actual\" is not available for disbursement.");
-							allFundingOk = false;
-						}
-						selenium.click("//input[@onclick='addFundingDetail(1)']"); //add a disbursement (planned)
-						SeleniumTestUtil.waitForElement(selenium,"fundingDetail[3].adjustmentType", 90);
-						try {
-							selenium.select("fundingDetail[3].adjustmentType", "index=1");
-							selenium.type("fundingDetail[3].transactionAmount", PLANNED_DISBURSEMENT[i]);
-							selenium.type("fundingDetail[3].transactionDate", FUNDING_DATES[i]);
-						} catch (Exception e) {
-							logger.info("Option \"Planned\" is not available for disbursement.");
-							allFundingOk = false;
-						}
-						if (version.equals(SeleniumTestUtil.VERSION_BRANCH)) {
+							Thread.sleep(4000);
+							
+							if (SeleniumFeaturesConfiguration.getFieldState("Type Of Assistance")){
+								selenium.select("funding.assistanceType", "index=1");
+							} else {
+								logger.info("Field \"Type Of Assistance\" is not available.");
+							}
+							if (SeleniumFeaturesConfiguration.getFieldState("Funding Organization Id")){
+								selenium.type("orgFundingId", "12345");
+							} else {
+								logger.info("Field \"Funding Organization Id\" is not available.");
+							}
+							selenium.select("funding.modality", "index=1");
+							
+							if (SeleniumFeaturesConfiguration.getFieldState("Add Commitment Button")){
+								selenium.click("//input[@onclick='addFundingDetail(0)']"); //add a commitment (actual)
+								SeleniumTestUtil.waitForElement(selenium,"fundingDetail[0].adjustmentType", 90);
+								try {
+									selenium.select("fundingDetail[0].adjustmentType", "value=1");
+									selenium.type("fundingDetail[0].transactionAmount", ACTUAL_COMMITMENTS[i]);
+									selenium.type("fundingDetail[0].transactionDate", FUNDING_DATES[i]);
+								} catch (Exception e) {
+									logger.info("Option \"Actual\" is not available for commitments.");
+									allFundingOk = false;
+								}
+								selenium.click("//input[@onclick='addFundingDetail(0)']"); //add a commitment (planned)
+								SeleniumTestUtil.waitForElement(selenium,"fundingDetail[1].adjustmentType", 90);
+								try {
+									selenium.select("fundingDetail[1].adjustmentType", "value=0");
+									selenium.type("fundingDetail[1].transactionAmount", PLANNED_COMMITMENTS[i]);
+									selenium.type("fundingDetail[1].transactionDate", FUNDING_DATES[i]);
+								} catch (Exception e) {
+									logger.info("Option \"Planned\" is not available for commitments.");
+									allFundingOk = false;
+								}
+							} else {
+								logger.info("Field \"Add Commitment Button\" is not available.");
+								allFundingOk = false;
+							}
+							
+							if (SeleniumFeaturesConfiguration.getFieldState("Add Disbursement Button")){
+								selenium.click("//input[@onclick='addFundingDetail(1)']"); //add a disbursement (actual)
+								SeleniumTestUtil.waitForElement(selenium,"fundingDetail[2].adjustmentType", 90);
+								try {
+									selenium.select("fundingDetail[2].adjustmentType", "value=1");
+									selenium.type("fundingDetail[2].transactionAmount", ACTUAL_DISBURSEMENT[i]);
+									selenium.type("fundingDetail[2].transactionDate", FUNDING_DATES[i]);
+								} catch (Exception e) {
+									logger.info("Option \"Actual\" is not available for disbursement.");
+									allFundingOk = false;
+								}
+								selenium.click("//input[@onclick='addFundingDetail(1)']"); //add a disbursement (planned)
+								SeleniumTestUtil.waitForElement(selenium,"fundingDetail[3].adjustmentType", 90);
+								try {
+									selenium.select("fundingDetail[3].adjustmentType", "value=0");
+									selenium.type("fundingDetail[3].transactionAmount", PLANNED_DISBURSEMENT[i]);
+									selenium.type("fundingDetail[3].transactionDate", FUNDING_DATES[i]);
+								} catch (Exception e) {
+									logger.info("Option \"Planned\" is not available for disbursement.");
+									allFundingOk = false;
+								}
+							} else {
+								logger.info("Field \"Add Disbursement Button\" is not available.");
+								allFundingOk = false;
+							}
 							selenium.click("//input[@onclick=\"return addFunding()\"]");
-						} else {
-							selenium.click("//input[@onclick='addNewFunding()']");
+							
+							selenium.selectWindow("null");
+							selenium.waitForPageToLoad("50000");
 						}
-						selenium.selectWindow("null");
-						selenium.waitForPageToLoad("50000");
+						
+					} else {
+						logger.error("Field \"Add Donor Organization\" is active in Feature Manager but is not available.");
 					}
-					
-				} catch (Exception e) {
-					logger.info("Option \"Add Organizations\" is not available.");
-					allFundingOk = false;
-					logger.error(e);
+				} else {
+					logger.info("Field \"Add Donor Organization\" is not available.");
+					allFundingOk = false;					
 				}
 				
+			} else {
+				logger.info("Feature \"Funding Information\" is not available.");
 			}
-			
 			selenium.click("//input[@onclick='saveClicked()']");
 			selenium.waitForPageToLoad("50000");
 			if (selenium.isElementPresent("//input[@onclick='saveClicked()']")) {
 				logger.error("Save Activity Fail");
 			}			
 		}
+		
 		//ADD TAB
 		boolean addTabAvailable = false;
 		try {
@@ -673,20 +781,24 @@ public class ActivityFormTest extends SeleneseTestCase{
 			selenium.waitForPageToLoad("30000");
 			*/
 			//selenium.click("//a[@onclick=\"javascript:fnEditProject(document.getElementById('tempActivity').value); return false;\"]");
-			selenium.click("//img[@src=\"/repository/aim/images/tangopack_edit.png\"]");
-			selenium.waitForPageToLoad("30000");
-			selenium.type("identification.title", activityName + " modified");
-			selenium.click("//input[@onclick='saveClicked()']");
-			selenium.waitForPageToLoad("50000");
-			selenium.click("//a[@id='Tab-Test Tab " + testTime + "']/div");
-			Thread.sleep(30000);
-			selenium.click("//table[@id='reportTable']/tbody/tr[2]/td[1]/a/font/div");
-			selenium.waitForPageToLoad("30000");
-			//assertTrue(selenium.isTextPresent(activityName + " modified"));
-			if (selenium.isTextPresent(activityName + " modified")) {
-				logger.info("Modification done Successfully");
+			if (SeleniumFeaturesConfiguration.getFeatureState("Edit Activity")){
+				selenium.click("//img[@src=\"/repository/aim/images/tangopack_edit.png\"]");
+				selenium.waitForPageToLoad("30000");
+				selenium.type("identification.title", activityName + " modified");
+				selenium.click("//input[@onclick='saveClicked()']");
+				selenium.waitForPageToLoad("50000");
+				selenium.click("//a[@id='Tab-Test Tab " + testTime + "']/div");
+				Thread.sleep(30000);
+				selenium.click("//table[@id='reportTable']/tbody/tr[2]/td[1]/a/font/div");
+				selenium.waitForPageToLoad("30000");
+				//assertTrue(selenium.isTextPresent(activityName + " modified"));
+				if (selenium.isTextPresent(activityName + " modified")) {
+					logger.info("Modification done Successfully");
+				} else {
+					logger.info("Modification error /" + activityName + " modified/");
+				}
 			} else {
-				logger.info("Modification error /" + activityName + " modified/");
+				logger.info("Feature \"Edit Activity\" is not available.");
 			}
 		}
 		

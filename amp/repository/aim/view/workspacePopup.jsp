@@ -41,7 +41,10 @@
 		contentLocal = document.createElement('div');
 		contentLocal.setAttribute('id', 'myPWorkspaceframeContent');
 		contentLocal.setAttribute('class', 'content');
-		contentLocal.innerHTML = '<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><p align="center"><img align="top" src="/repository/aim/view/scripts/ajaxtabs/loading.gif" /><font size="3"><b>Loading...</b></font></p>';
+		contentLocal.innerHTML = '<div style="text-align: center">' + 
+		'<img src="/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
+		'<digi:trn>Loading, please wait ...</digi:trn><br/><br/></div>';
+	
             contentLocal.style.height = "700px";
             contentLocal.style.width = "594px";
             contentLocal.style.overflow="scroll";

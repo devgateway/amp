@@ -541,7 +541,6 @@
 		<page-group masterLayout="popup" tile="body">
 			<module name="calendar">
 				<page>calendarOrgPopupLayout</page>
-				<page>recurringEventPopupLayout</page>
 				<page>colorPicker</page>
 				<page>printViewPopupLayout</page>
 				<page>printPreviewPopupLayout</page>
@@ -668,6 +667,9 @@
 			</module>
 		</page-group>
 		<page-group masterLayout="noLayout" tile="body">
+			<module name="calendar">
+				<page>recurringEventPopupLayout</page>
+            </module>
 			<module name="contentrepository">
 				<page>amp_getDocumentList</page>
 				<page>amp_getDocumentVersionList</page>

@@ -209,8 +209,9 @@
 	function showPanelLoading(msg){
 		myPanel.setHeader(msg);		
 		var content = document.getElementById("popinContent");
-		content.innerHTML = "<div style='text-align: center'>" + "Loading..." + 
-			"... <br /> <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>";		
+		content.innerHTML = '<div style="text-align: center">' + 
+		'<img src="/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
+		'<digi:trn>Loading, please wait ...</digi:trn><br/><br/></div>';
 		showContent();
 	}
 	function addEUActivity() {
@@ -513,8 +514,9 @@
 	function showPanelLoading2(msg){
 		myPanel2.setHeader(msg);		
 		var content = document.getElementById("popinContent2");
-		content.innerHTML = "<div style='text-align: center'>" + "Loading..." + 
-			"... <br /> <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>";		
+		content.innerHTML = '<div style="text-align: center">' + 
+		'<img src="/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
+		'<digi:trn>Loading, please wait ...</digi:trn><br/><br/></div>';
 		showContent2();
 	}
 	function selectOrg(params1, params2, params3, params4) {

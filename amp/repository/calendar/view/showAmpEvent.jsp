@@ -538,6 +538,7 @@ function is_mail(m) {
 	return p.test(m);		  
 }
 
+addLoadEvent(delBody);
   </script>
 
 

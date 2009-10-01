@@ -8,6 +8,7 @@ package org.digijava.module.aim.helper;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -131,6 +132,8 @@ public class RegionalFundingsHelper {
 			}
 		}		
 		
+		Comparator<RegionalFunding> c= new RegionalFunding.RegionalFundingComparator();
+		Collections.sort(temp, c);
 		return temp;
 	}
 }

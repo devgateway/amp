@@ -6,6 +6,7 @@
 package org.digijava.module.aim.helper;
 
 import java.util.Collection;
+import java.util.Comparator;
 
 /**
  * The class represents a regional funding object which contains 
@@ -14,6 +15,15 @@ import java.util.Collection;
  * @author Priyajith
  */
 public class RegionalFunding {
+		
+	public static class RegionalFundingComparator implements Comparator<RegionalFunding> {
+
+		@Override
+		public int compare(RegionalFunding o1, RegionalFunding o2) {
+			return o1.getRegionName().compareTo(o2.getRegionName());
+		}
+	}
+	
 
 	/** The database primary key of the region */
 	private Long regionId;

@@ -1,12 +1,16 @@
 package org.digijava.module.um.form;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.helper.CountryBean;
+import org.digijava.module.aim.helper.UserBean;
 
 public class ViewEditUserForm extends ActionForm {
 
@@ -44,6 +48,12 @@ public class ViewEditUserForm extends ActionForm {
 	private String confirmNewPassword;
 	private String newPassword;
 	private Boolean displaySuccessMessage;
+	
+	private Collection<AmpTeam> availableWorkspaces;
+	private Collection<AmpTeamMemberRoles> roles;
+	private Long role;
+	private UserBean userTeamsHolder; //teams, already having this user as tm
+	private Long workspaceId;
 
 	public ViewEditUserForm() {
 
@@ -249,6 +259,47 @@ public class ViewEditUserForm extends ActionForm {
 
 	public void setSelectedOrgId(Long selectedOrgId) {
 		this.selectedOrgId = selectedOrgId;
+	}
+
+	public Long getRole() {
+		return role;
+	}
+
+	public void setRole(Long role) {
+		this.role = role;
+	}
+
+
+	public UserBean getUserTeamsHolder() {
+		return userTeamsHolder;
+	}
+
+	public void setUserTeamsHolder(UserBean userTeamsHolder) {
+		this.userTeamsHolder = userTeamsHolder;
+	}
+
+	public Long getWorkspaceId() {
+		return workspaceId;
+	}
+
+	public void setWorkspaceId(Long workspaceId) {
+		this.workspaceId = workspaceId;
+	}
+
+	public Collection<AmpTeam> getAvailableWorkspaces() {
+		return availableWorkspaces;
+	}
+
+	public void setAvailableWorkspaces(Collection<AmpTeam> availableWorkspaces) {
+		this.availableWorkspaces = availableWorkspaces;
+	}
+
+	public Collection<AmpTeamMemberRoles> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Collection<AmpTeamMemberRoles> roles) {
+		this.roles = roles;
 	}
 
 }

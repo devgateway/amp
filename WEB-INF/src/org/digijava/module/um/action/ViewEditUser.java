@@ -2,6 +2,7 @@ package org.digijava.module.um.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -32,10 +33,13 @@ import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
 import org.digijava.module.aim.dbentity.AmpUserExtensionPK;
 import org.digijava.module.aim.helper.CountryBean;
+import org.digijava.module.aim.helper.UserBean;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.um.form.ViewEditUserForm;
 import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.um.util.DbUtil;
@@ -222,39 +226,6 @@ public class ViewEditUser extends Action {
                 	}
 
                 }
-
-//                if (user.getOrganizationName() != null &&
-//                    user.getOrganizationName().length() != 0) {
-//                    Collection<AmpOrganisation> orgCol = org.digijava.module.aim.util.DbUtil.getAllOrganisation();
-//
-//                    AmpOrganisation orgnisation = null;
-//                    if (orgCol != null) {
-//                        for (Iterator iter = orgCol.iterator(); iter.hasNext(); ) {
-//                            orgnisation = (AmpOrganisation) iter.next();
-//                            if (orgnisation.getName().equals(uForm.getSelectedOrgName())) {
-//                                break;
-//                            }
-//                        }
-//                    }
-//
-//                    Collection<AmpOrgGroup> orgGrpCol = DbUtil.getAllOrgGroup();
-//                    AmpOrgGroup orgGroup = null;
-//                    if (orgGrpCol != null && orgnisation != null) {
-//                        for (Iterator orgGroupIter = orgGrpCol.iterator();
-//                             orgGroupIter.hasNext(); ) {
-//                            orgGroup = (AmpOrgGroup) orgGroupIter.next();
-//                            if (orgGroup != null && orgnisation.getOrgGrpId() != null &&
-//                                orgGroup.getAmpOrgGrpId().equals(orgnisation.getOrgGrpId().getAmpOrgGrpId())) {
-//
-//                                uForm.setSelectedOrgGroupId(orgGroup.getAmpOrgGrpId());
-//                                if (orgGroup.getOrgType() != null) {
-//                                    uForm.setSelectedOrgTypeId(orgGroup.getOrgType().getAmpOrgTypeId().toString());
-//                                }
-//                                break;
-//                            }
-//                        }
-//                    }
-//
                     uForm.setOrgTypes(DbUtil.getAllOrgTypes());
                     if (uForm.getSelectedOrgTypeId() != null) {
                         uForm.setOrgGroups(DbUtil.getOrgGroupByType(Long.valueOf(uForm.getSelectedOrgTypeId())));
@@ -309,9 +280,7 @@ public class ViewEditUser extends Action {
                     return mapping.findForward("saved");
                 }
 
-            } else {
-                if (uForm.getEvent().equalsIgnoreCase("changePassword")) {
-
+            } else if (uForm.getEvent().equalsIgnoreCase("changePassword")) {
                     String newPassword = uForm.getNewPassword();
                     String confirmNewPassword = uForm.getConfirmNewPassword();
                     if (confirmNewPassword == null || newPassword == null ||
@@ -333,22 +302,78 @@ public class ViewEditUser extends Action {
                         }
 
                     }
-
-                }
-
-                else if (uForm.getEvent().equalsIgnoreCase("typeSelected")) {
+             } else if (uForm.getEvent().equalsIgnoreCase("typeSelected")) {
                     uForm.setOrgGroups(DbUtil.getOrgGroupByType(Long.valueOf(uForm.getSelectedOrgTypeId())));
                     if (uForm.getOrgs() != null && uForm.getOrgs().size() != 0) {
                         uForm.getOrgs().clear();
                     }
-                } else if (uForm.getEvent().equalsIgnoreCase("groupSelected")) {
+             } else if (uForm.getEvent().equalsIgnoreCase("groupSelected")) {
                     uForm.setOrgs(DbUtil.getOrgByGroup(uForm.getSelectedOrgGroupId()));
-                }
-            }
+             } else if(uForm.getEvent().equalsIgnoreCase("gotoAssignWorkspacePage")){
+            	 //clear fields
+            	 uForm.setRole(new Long(-1));
+            	 uForm.setWorkspaceId(new Long(-1));
+            	 //get all available teams = teams in which this user isn't registered
+            	 getAvailableWorkspaces(uForm);
+            	 //get roles
+            	 uForm.setRoles(TeamMemberUtil.getAllTeamMemberRoles());
+            	 //all workspaces user belongs to
+            	 uForm.setUserTeamsHolder(buildUserBean(user));
+            	 uForm.setEvent(null);
+            	 return mapping.findForward("assignWorkspace");
+             }else if(uForm.getEvent().equalsIgnoreCase("assignToWorkspace")){
+            	 //check if selected role is acceptable for workspace(e.g. team can't have 2 managers)            	 
+            	 AmpTeamMemberRoles role = TeamMemberUtil.getAmpTeamMemberRole(uForm.getRole());            	 
+            	 if(role.getTeamHead()!=null && role.getTeamHead()){
+            		 AmpTeamMember teamHead=TeamMemberUtil.getTeamHead(uForm.getWorkspaceId()); //check whether selected workspace already has TL
+            		 if(teamHead!=null){
+            			 errors.add("title", new ActionError("um.error.multipleTeamLeadsNotAllowed"));
+                    	 saveErrors(request, errors);
+                    	 return mapping.findForward("assignWorkspace");
+            		 }else{
+            			 createTeamMember(uForm.getId(),uForm.getWorkspaceId(),role);
+            		 }
+            	 }else{
+            		 createTeamMember(uForm.getId(),uForm.getWorkspaceId(),role);
+            	 }
+            	 //update user and workspace in db
+            	 uForm.setEvent(null);
+            	 return mapping.findForward("saved");            	 
+             }else if(uForm.getEvent().equalsIgnoreCase("removeWorkspace")){
+            	 Long memberId=new Long (request.getParameter("memberId"));
+            	 Long selMembers[] = new Long[1];
+                 selMembers[0] = memberId;
+                 TeamMemberUtil.removeTeamMembers(selMembers);
+                 //fill user workspaces
+                 uForm.setUserTeamsHolder(buildUserBean(user));
+                 //get all available teams = teams in which this user isn't registered
+            	 getAvailableWorkspaces(uForm);
+            	 uForm.setEvent(null);
+            	 return mapping.findForward("assignWorkspace");
+             }
+            
         }
         resetViewEditUserForm(uForm);
         return mapping.findForward("forward");
     }
+
+	private void getAvailableWorkspaces(ViewEditUserForm uForm)
+			throws Exception {
+		Collection<AmpTeam> ampWorkspaces = TeamUtil.getAllTeams();
+		 List<AmpTeam> userTeams=TeamUtil.getTeamsForUser(uForm.getId());
+		 if(userTeams!=null){
+			 for (AmpTeam ampTeam : userTeams) {
+				for (AmpTeam allTeams : ampWorkspaces) {
+					if(ampTeam.getAmpTeamId().equals(allTeams.getAmpTeamId())){
+						ampWorkspaces.remove(allTeams);
+						break;
+					}
+				}
+			}
+		 }
+		 Collections.sort((List)ampWorkspaces, new TeamUtil.HelperAmpTeamNameComparator());
+		 uForm.setAvailableWorkspaces(ampWorkspaces);
+	}
 
     public ViewEditUser() {
     }
@@ -360,5 +385,30 @@ public class ViewEditUser extends Action {
             uForm.setNewPassword(null);
             uForm.setConfirmNewPassword(null);
         }
+    }
+    
+    private void createTeamMember(Long userId, Long teamId, AmpTeamMemberRoles role) throws Exception{
+    	AmpTeam ampTeam=TeamUtil.getAmpTeam(teamId);
+		AmpTeamMember ampMember = new AmpTeamMember();
+		ampMember.setAmpMemberRole(role);
+        ampMember.setReadPermission(new Boolean(true));
+        ampMember.setWritePermission(new Boolean(true));
+        ampMember.setDeletePermission(new Boolean(true));
+        ampMember.setUser(UserUtils.getUser(userId));
+        ampMember.setAmpTeam(ampTeam);
+        TeamMemberUtil.saveOrUpdateTM(ampMember);
+    }
+    
+    private UserBean buildUserBean(User user){
+    	UserBean userBean=new UserBean();
+    	userBean.setId(user.getId());
+    	userBean.setFirstNames(user.getFirstNames());
+    	userBean.setLastName(user.getLastName());
+    	userBean.setEmail(user.getEmail());
+    	userBean.setBan(user.isBanned());
+    	Collection members = TeamMemberUtil.getTeamMembers(user.getEmail());
+    	userBean.setTeamMembers(members);
+    	return userBean;
+    	
     }
 }

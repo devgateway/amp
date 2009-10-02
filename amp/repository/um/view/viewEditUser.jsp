@@ -372,7 +372,7 @@ function isInvalid(field){
 																	</tr>
 																	<tr>
 																		<c:set var="errMsg">
-																           <digi:trn key="aim:viewEditUser:errorMessage" jsFriendly="true">
+																           <digi:trn jsFriendly="true">
 																              Either fields are blank or their values do not match
 																            </digi:trn>
 																        </c:set>
@@ -384,6 +384,15 @@ function isInvalid(field){
 																                <digi:trn key="aim:viewEditUser:resetPasswordButton" jsFriendly="true">Reset </digi:trn>
 																              </c:set>
                                                               				<input type="button" value="${translation}" onclick="resetPasswordFields()" style="font-family:verdana;font-size:11px;"/></td>
+																		</td>
+																	</tr>
+																	<tr height="5px"><td colspan="2">&nbsp;</td></tr>
+																	<tr>
+																		<td colspan="2" align="center">
+																			<c:set var="trn">
+																                <digi:trn jsFriendly="true">Assign User To Workspace</digi:trn>
+																              </c:set>
+                                                              				<input type="button" value="${trn}" onclick="goAction('gotoAssignWorkspacePage')" style="font-family:verdana;font-size:11px;"/></td>
 																		</td>
 																	</tr>
 																</table>
@@ -399,15 +408,3 @@ function isInvalid(field){
         </table>
         <br />
 </digi:form>
-
-
-
-
-
-
-
-
-
-
-
-

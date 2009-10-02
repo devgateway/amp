@@ -35,6 +35,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.module.aim.dbentity.CMSContentItem;
+import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.TeamMember;
@@ -1667,43 +1668,31 @@ public class TeamMemberUtil {
 		AmpTeamMember currentAmpTeamMember=getAmpTeamMember(currentTeamMember.getMemberId());
 		return currentAmpTeamMember;
 	}
-        public static List getTeamMemberbyUserId(Long userId) throws Exception{
 
-
-            Session session = null;
-            Query qry = null;
-            List teamMembers = null;
-
-            try {
-                    session = PersistenceManager.getRequestDBSession();
-                    String queryString = "select tm.ampTeamMemId from "
-                                    + AmpTeamMember.class.getName()
-                                    + " tm where (tm.user.id=:user)";
-                    qry = session.createQuery(queryString);
-                    qry.setParameter("user",userId, Hibernate.LONG);
-                    teamMembers= qry.list();
-            }
-            catch (HibernateException ex) {
-                    logger.error("Unable to get team member", ex);
-                    throw ex;
-            }
-
-            return teamMembers;
-
+	public static List getTeamMemberbyUserId(Long userId) throws Exception{
+		Session session = null;
+        Query qry = null;
+        List teamMembers = null;
+        try {
+        	session = PersistenceManager.getRequestDBSession();
+            String queryString = "select tm.ampTeamMemId from "+ AmpTeamMember.class.getName()+ " tm where (tm.user.id=:user)";
+            qry = session.createQuery(queryString);
+            qry.setParameter("user",userId, Hibernate.LONG);
+            teamMembers= qry.list();
+       }catch (HibernateException ex) {
+            logger.error("Unable to get team member", ex);
+            throw ex;
+       }
+       return teamMembers;
     }
 
         public static List getAmpTeamMembersbyDgUserId(Long userId) throws Exception{
-
-
             Session session = null;
             Query qry = null;
             List teamMembers = null;
-
             try {
                     session = PersistenceManager.getRequestDBSession();
-                    String queryString = "select tm from "
-                                    + AmpTeamMember.class.getName()
-                                    + " tm where (tm.user.id=:user)";
+                    String queryString = "select tm from "+ AmpTeamMember.class.getName() + " tm where (tm.user.id=:user)";
                     qry = session.createQuery(queryString);
                     qry.setParameter("user",userId, Hibernate.LONG);
                     teamMembers= qry.list();
@@ -1712,7 +1701,6 @@ public class TeamMemberUtil {
                     logger.error("Unable to get team member", ex);
                     throw ex;
             }
-
             return teamMembers;
 
         }
@@ -1756,6 +1744,27 @@ public class TeamMemberUtil {
     			}
     		}
     	}
+    }
+    
+    public static void saveOrUpdateTM(AmpTeamMember tm) throws AimException{
+    	Session sess = null;
+        Transaction tx = null;
+        try {
+            sess = PersistenceManager.getRequestDBSession();
+            tx=sess.beginTransaction();
+            sess.saveOrUpdate(tm);
+            tx.commit();
+        } catch (Exception e) {
+        	if(tx!=null) {
+				try {
+					tx.rollback();					
+				}catch(Exception ex ) {
+					logger.error("...Rollback failed");
+					throw new AimException("Can't rollback", ex);
+				}			
+			}
+			throw new AimException("update failed",e);
+        }
     }
 
 }

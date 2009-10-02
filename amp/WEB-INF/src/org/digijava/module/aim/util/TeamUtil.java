@@ -861,30 +861,7 @@ public class TeamUtil {
         return member;
     }
 
-    public static void testDan(AmpTeamMember member, AmpApplicationSettings appSettings) {
-			Session session = null;
-			Transaction tx = null;
-			
-			try {
-			session = PersistenceManager.getRequestDBSession();
-			//tx = session.beginTransaction();
-			session.saveOrUpdate(member);
-			session.saveOrUpdate(appSettings);
-			
-			}catch(Exception e) {
-	            logger.error("Exception from addTeamMember :" + e);
-	            e.printStackTrace();
-	            if(tx != null) {
-	                try {
-	                    tx.rollback();
-	                } catch(Exception rbf) {
-	                    logger.error("Rollback failed :" + rbf);
-	                }
-	            }
-			}
-    }
-    public static void addTeamMember(AmpTeamMember member,
-                                     AmpApplicationSettings appSettings, Site site) {
+    public static void addTeamMember(AmpTeamMember member,AmpApplicationSettings appSettings, Site site) {
         Session session = null;
         Transaction tx = null;
        
@@ -949,9 +926,7 @@ public class TeamUtil {
            
             
         } catch(Exception e) {
-            throw new RuntimeException(e);
-
-        
+            throw new RuntimeException(e);        
         }
 
         return memberExist;
@@ -2520,15 +2495,37 @@ public class TeamUtil {
         AmpTeam currentAmpTeam = TeamMemberUtil.getCurrentAmpTeamMember(request).getAmpTeam();
         return currentAmpTeam;
     }
+    
+    /**
+     * get all teams that user belongs to
+     * @param userId
+     * @return
+     * @throws Exception
+     */
+    public static List<AmpTeam> getTeamsForUser(Long userId) throws Exception{
+    	List<AmpTeam> userWorkspaces=null;
+    	Session session = null;
+        Query qry = null;
+        String queryString=null;
+        try {
+        	session = PersistenceManager.getRequestDBSession();
+            queryString = "select tm.ampTeam from "+ AmpTeamMember.class.getName() + " tm where (tm.user.id=:user)";
+            qry = session.createQuery(queryString);
+            qry.setParameter("user",userId, Hibernate.LONG);
+            userWorkspaces= qry.list();
+		} catch (Exception ex) {
+			logger.error("Unable to get teams", ex);
+            throw ex;
+		}
+    	return userWorkspaces;
+    }
 
-    public static class HelperAmpTeamNameComparator
-        implements Comparator {
+    public static class HelperAmpTeamNameComparator implements Comparator {
         public int compare(Object obj1, Object obj2) {
             AmpTeam team1 = (AmpTeam) obj1;
             AmpTeam team2 = (AmpTeam) obj2;
             return team1.getName().compareTo(team2.getName());
         }
-
     }
 
 }

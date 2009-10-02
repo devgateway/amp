@@ -123,7 +123,7 @@
 										</td></tr>
 										<tr><td>&nbsp;</td></tr>
 										
-										<digi:form action="/workspaceManager.do" method="post" >
+										<digi:form action="/workspaceManager.do?page=1" method="post" >
 										<tr><td class="box-title" align="center">
 											<!-- Table title -->
 											<table width="100%" >
@@ -274,7 +274,7 @@
 									
 									</tr>
 									<tr><td>
-										<digi:form action="/workspaceManager.do" method="post" >
+										<digi:form action="/workspaceManager.do?page=1" method="post" >
 											<div style= " float:left; width:752px;" >
 											<!-- page logic for pagination -->
 
@@ -348,7 +348,7 @@
                                                                 <!-- end page logic for pagination -->
                                                                 <div style= " float:right;" >
                                                                     <digi:trn key="aim:results">Results</digi:trn>:&nbsp;
-                                                                    <html:select property="numPerPage" styleClass="inp-text" onchange="submit()" >
+                                                                    <html:select property="numPerPage" styleClass="inp-text" onchange="submit()">
                                                                         <html:option value="-1"><digi:trn key="aim:all">All</digi:trn></html:option>
                                                                         <html:option value="5">5</html:option>
                                                                         <html:option value="10">10</html:option>

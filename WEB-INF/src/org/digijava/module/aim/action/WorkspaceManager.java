@@ -3,6 +3,7 @@ package org.digijava.module.aim.action;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -41,9 +42,12 @@ public class WorkspaceManager extends Action {
 		Collection<AmpTeam> workspaces = new ArrayList<AmpTeam>();
 		WorkspaceForm wsForm = (WorkspaceForm) form;
 		
+		if(request.getParameter("reset")!=null && request.getParameter("reset").equalsIgnoreCase("true")){
+			wsForm.setKeyword(null);
+			wsForm.setWorkspaceType("all");
+			wsForm.setNumPerPage(-1);
+		}
 		
-		
-		if(wsForm.getNumPerPage()!=-1) NUM_RECORDS =wsForm.getNumPerPage();
 		String keyword = wsForm.getKeyword();
 		Collection<String> keywords=new ArrayList<String>();
 		StringTokenizer st = new StringTokenizer("");
@@ -65,21 +69,13 @@ public class WorkspaceManager extends Action {
 			ampWorkspaces = TeamUtil.getAllTeams();
 			session.setAttribute("ampWorkspaces", ampWorkspaces);
 		}
-
-		int numPages = ampWorkspaces.size() / NUM_RECORDS;
-		numPages += (ampWorkspaces.size() % NUM_RECORDS != 0) ? 1 : 0;
-
-		/*
-		 * check whether the numPages is less than the page . if yes return
-		 * error.
-		 */
-
-		int currPage = wsForm.getPage();
-		int stIndex = ((currPage - 1) * NUM_RECORDS) + 1;
-		int edIndex = currPage * NUM_RECORDS;
-		if (edIndex > ampWorkspaces.size()) {
-			edIndex = ampWorkspaces.size();
+		
+		if(wsForm.getNumPerPage()!=-1) {
+			NUM_RECORDS =wsForm.getNumPerPage();
+		}else {
+			NUM_RECORDS =ampWorkspaces.size();
 		}
+		
 		Collection<AmpTeam> colAt=new ArrayList<AmpTeam>();
 		for (AmpTeam at : ampWorkspaces) {
 			at.setChildrenWorkspaces(TeamUtil.getAllChildrenWorkspaces(at.getAmpTeamId()));
@@ -89,26 +85,26 @@ public class WorkspaceManager extends Action {
 		//vect.addAll(ampWorkspaces);
 		vect.addAll(colAt);
 		String workspaceType = wsForm.getWorkspaceType();
- 		for (int i = (stIndex - 1); i < edIndex; i++) {
-			AmpTeam ateam=vect.get(i);
-			
+		for (AmpTeam ampTeam : vect) {
 			if(workspaceType!=null){
-			  if("all".equals(workspaceType)) workspaces.add(ateam);
-			  if("team".equals(workspaceType) && "Team".equals(ateam.getAccessType())) workspaces.add(ateam);
-			  if("management".equals(workspaceType) && "Management".equals(ateam.getAccessType())) workspaces.add(ateam);
-			  if("computed".equals(workspaceType) && ateam.getComputation()!=null && ateam.getComputation()) workspaces.add(ateam);
+			  if("all".equals(workspaceType)) {
+				  workspaces.add(ampTeam);
+			  }else if("team".equals(workspaceType) && "Team".equals(ampTeam.getAccessType())) {
+				  workspaces.add(ampTeam);
+			  }else if("management".equals(workspaceType) && "Management".equals(ampTeam.getAccessType())) {
+				  workspaces.add(ampTeam);
+			  }else if("computed".equals(workspaceType) && ampTeam.getComputation()!=null && ampTeam.getComputation()) {
+				  workspaces.add(ampTeam);
+			  }
 			}
-				
 		}
-
+		
+		//pages
 		Collection<Integer> pages = null;
-		if (numPages > 1) {
-			pages = new ArrayList<Integer>();
-			for (int i = 0; i < numPages; i++) {
-				Integer pageNum = new Integer(i + 1);
-				pages.add(pageNum);
-			}
-		}
+		int currPage = wsForm.getPage();
+		int stIndex = ((currPage - 1) * NUM_RECORDS);
+		int edIndex = stIndex + NUM_RECORDS;
+				
 		Collection<AmpTeam> workspacesFiltered=new ArrayList<AmpTeam>();
 		if(!workspaces.isEmpty())
 		{
@@ -125,11 +121,47 @@ public class WorkspaceManager extends Action {
 				if(found) workspacesFiltered.add(team);
 			}
 		}
-		if(workspacesFiltered.isEmpty() && keywords.isEmpty())
-		  wsForm.setWorkspaces(workspaces);
-		else wsForm.setWorkspaces(workspacesFiltered);
+		
+		if(workspacesFiltered.isEmpty() && keywords.isEmpty()){
+			pages=setupPagination(workspaces, wsForm.getPage(), NUM_RECORDS);			
+			wsForm.setWorkspaces(getWorkspacesForPage(workspaces,stIndex,edIndex));
+		}else {			
+			pages=setupPagination(workspacesFiltered, wsForm.getPage(), NUM_RECORDS);
+			wsForm.setWorkspaces(getWorkspacesForPage(workspacesFiltered,stIndex,edIndex));
+		}
+		
 		wsForm.setPages(pages);
-
 		return mapping.findForward("forward");
+	}
+	
+	private Collection<Integer> setupPagination(Collection<AmpTeam> workspaces, int currentPage, int numberOfRecordsPerPage){		
+		Collection<Integer> pages=null;
+		int numPages = workspaces.size() / numberOfRecordsPerPage;
+		numPages += (workspaces.size() % numberOfRecordsPerPage != 0) ? 1 : 0;
+		
+		int currPage = currentPage;
+		int stIndex = ((currPage - 1) * numberOfRecordsPerPage);
+		int edIndex = stIndex + numberOfRecordsPerPage;
+		if(edIndex>workspaces.size()){
+			edIndex=workspaces.size();
+		}
+		
+		if (numPages > 1) {
+			pages = new ArrayList<Integer>();
+			for (int i = 0; i < numPages; i++) {
+				Integer pageNum = new Integer(i + 1);
+				pages.add(pageNum);
+			}
+		}
+		return pages;
+	}
+	
+	private Collection<AmpTeam> getWorkspacesForPage(Collection<AmpTeam> workspaces , int stIndex, int endIndex){
+		Collection<AmpTeam> retVal=null;
+		if(endIndex>workspaces.size()){
+			endIndex=workspaces.size();
+		}			
+		retVal=((List)workspaces).subList(stIndex, endIndex);
+		return retVal;
 	}
 }

@@ -146,7 +146,7 @@
                               <c:set var="trnWorkspaceManager">
                                 <digi:trn key="aim:clickToViewWorkspaceManager">Click here to view Workspace Manager</digi:trn>
                               </c:set>
-                              <digi:link href="/workspaceManager.do~page=1" title="${trnWorkspaceManager}" >
+                              <digi:link href="/workspaceManager.do~page=1~reset=true" title="${trnWorkspaceManager}" >
                                 <digi:trn key="aim:workspaceManager">Workspace Manager</digi:trn>
                               </digi:link>
                             </td>

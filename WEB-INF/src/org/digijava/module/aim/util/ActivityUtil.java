@@ -2266,7 +2266,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     Session session = null;
 
     try {
-      session = PersistenceManager.getSession();
+      session = PersistenceManager.getRequestDBSession();
     	//session = PersistenceManager.getRequestDBSession();
       String qryStr = "select a from " + AmpComponentFunding.class.getName() +
           " a " +
@@ -2278,17 +2278,6 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     catch (Exception e) {
       logger.debug("Exception in getAmpComponents() " + e.getMessage());
       e.printStackTrace(System.out);
-    }
-    finally {
-      if (session != null) {
-        try {
-        	session.close();
-			PersistenceManager.releaseSession(session);
-        }
-        catch (Exception ex) {
-          logger.debug("Exception while releasing session " + ex.getMessage());
-        }
-      }
     }
     //getComponents();
     return col;

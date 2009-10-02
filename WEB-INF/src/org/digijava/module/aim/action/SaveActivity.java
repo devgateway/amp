@@ -2598,6 +2598,7 @@ public class SaveActivity extends Action {
 	 */
 	private void proccessComponents(EditActivityForm eaForm, AmpActivity activity) {
 		activity.setComponents(new HashSet());
+		activity.setComponentFundings(new HashSet<AmpComponentFunding>());
 		if (eaForm.getComponents().getSelectedComponents() != null) {
 			Iterator<Components<FundingDetail>> itr = eaForm.getComponents().getSelectedComponents().iterator();
 			while (itr.hasNext()) {
@@ -2605,10 +2606,7 @@ public class SaveActivity extends Action {
 				AmpComponent ampComp = ComponentsUtil.getComponentById(comp.getComponentId());
 				activity.getComponents().add(ampComp);
 
-				if(activity.getComponentFundings()==null)
-					activity.setComponentFundings(new HashSet<AmpComponentFunding>());
-
-				
+			
 				Set<Integer> transactionTypes = new HashSet<Integer>();
 				transactionTypes.add(Constants.COMMITMENT);
 				transactionTypes.add(Constants.DISBURSEMENT);
@@ -2638,12 +2636,21 @@ public class SaveActivity extends Action {
 					
 					while (fdIterator.hasNext()) {
 						FundingDetail fd = fdIterator.next();
-						AmpComponentFunding ampCompFund = null;
-						if(fd.getAmpComponentFundingId()!=null) 
-							ampCompFund=ComponentsUtil.getComponentFundingById(fd.getAmpComponentFundingId());
-						 else
+						AmpComponentFunding ampCompFund = null;						
 						ampCompFund = new AmpComponentFunding();
-						ampCompFund.setAmpComponentFundingId(fd.getAmpComponentFundingId());
+						
+						
+						if (fd.getAmpComponentFundingId()!=null) {
+							try {
+								Session session = PersistenceManager.getRequestDBSession();
+								Object load = session.load(AmpComponentFunding.class, fd.getAmpComponentFundingId());
+								session.evict(load);
+							} catch (DgException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+						//ampCompFund.setAmpComponentFundingId(fd.getAmpComponentFundingId());
 						ampCompFund.setActivity(activity);
 						
 						ampCompFund.setTransactionType(transactionType);

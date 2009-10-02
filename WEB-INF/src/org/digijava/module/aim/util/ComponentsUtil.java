@@ -267,7 +267,7 @@ public class ComponentsUtil {
         Session session = null;
         try {
             session = PersistenceManager.getRequestDBSession();
-            ret=(AmpComponentFunding) session.load(AmpComponentFunding.class, id);
+            ret=(AmpComponentFunding) session.get(AmpComponentFunding.class, id);
         } catch (Exception ex) {
             logger.error("Unable to get Component Funding for editing from database " + ex.getMessage());
             ex.printStackTrace();

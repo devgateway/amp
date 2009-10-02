@@ -654,7 +654,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         oldActivity.setUpdatedBy(member);
         session.saveOrUpdate(oldActivity);
         activityId = oldActivity.getAmpActivityId();
-        String ampId=generateAmpId(member.getUser(),activityId );
+        String ampId=generateAmpId(member.getUser(),activityId,session );
         if (oldActivity.getAmpId()==null){
             oldActivity.setAmpId(ampId);
         }
@@ -715,7 +715,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
          */
         session.save(activity);
         activityId = activity.getAmpActivityId();
-        String ampId=generateAmpId(member.getUser(),activityId );
+        String ampId=generateAmpId(member.getUser(),activityId , session);
         activity.setAmpId(ampId);
         session.update(activity);
         //session.saveOrUpdate(member);
@@ -3675,12 +3675,13 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
    * @param user,actId
    * @return ampId
    * @author dare
+ * @param session 
    */
-  public static String generateAmpId(User user,Long actId) {
+  public static String generateAmpId(User user,Long actId, Session session) {
 		String retValue=null;		
 		String globSetting="numeric";// TODO This should come from global settings
 		if(globSetting.equals("numeric")){
-			retValue=numericAmpId(user,actId);
+			retValue=numericAmpId(user,actId,session);
 		}else if(globSetting.equals("text")){
 			retValue=combinedAmpId(actId);
 		}
@@ -3691,12 +3692,14 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
  * @param user,actId
  * @return 
  * @author dare
+ * @param session 
  */
-	private static String numericAmpId(User user,Long actId){
+	private static String numericAmpId(User user,Long actId, Session session){
 		String retVal=null;
 		String countryCode=FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBAL_DEFAULT_COUNTRY);
 		String userId=user.getId().toString();
-                Country country=DbUtil.getDgCountry(countryCode);
+	    Country country=(Country) session.load(Country.class, countryCode);   
+            //    Country country=DbUtil.getDgCountry(countryCode);
                 String countryId="0";
                 if(country!=null){
                     countryId=country.getCountryId().toString();

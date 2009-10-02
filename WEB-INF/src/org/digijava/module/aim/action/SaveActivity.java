@@ -13,7 +13,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.Map.Entry;
 
 import javax.jcr.Node;
 import javax.servlet.ServletContext;
@@ -36,6 +35,8 @@ import org.dgfoundation.amp.error.ExceptionFactory;
 import org.dgfoundation.amp.error.keeper.ErrorReporting;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
@@ -121,6 +122,7 @@ import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 import org.digijava.module.message.triggers.ActivitySaveTrigger;
 import org.digijava.module.message.triggers.ApprovedActivityTrigger;
 import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
+import org.hibernate.Session;
 
 /**
  * SaveActivity class creates a 'AmpActivity' object and populate the fields
@@ -2636,8 +2638,11 @@ public class SaveActivity extends Action {
 					
 					while (fdIterator.hasNext()) {
 						FundingDetail fd = fdIterator.next();
-
-						AmpComponentFunding ampCompFund = new AmpComponentFunding();
+						AmpComponentFunding ampCompFund = null;
+						if(fd.getAmpComponentFundingId()!=null) 
+							ampCompFund=ComponentsUtil.getComponentFundingById(fd.getAmpComponentFundingId());
+						 else
+						ampCompFund = new AmpComponentFunding();
 						ampCompFund.setAmpComponentFundingId(fd.getAmpComponentFundingId());
 						ampCompFund.setActivity(activity);
 						

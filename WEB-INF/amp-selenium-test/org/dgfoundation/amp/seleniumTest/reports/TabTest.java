@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.seleniumTest.reports;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.seleniumTest.SeleniumFeaturesConfiguration;
 import org.dgfoundation.amp.seleniumTest.SeleniumTestUtil;
 import org.dgfoundation.amp.seleniumTest.activityForm.ActivityFormTest;
 
@@ -47,9 +48,6 @@ public class TabTest extends SeleneseTestCase{
 		selenium.type("j_password", password);
 		selenium.click("submitButton");
 		selenium.waitForPageToLoad("50000");
-		
-		String version = selenium.getText("//div[@class=\"footerText\"]");
-		version = version.substring(version.indexOf("1.1"), version.indexOf("1.1")+4);
 		
 		selenium.click("link=UAT Team Workspace");
 		selenium.waitForPageToLoad("50000");
@@ -121,38 +119,55 @@ public class TabTest extends SeleneseTestCase{
 			
 			selenium.click("//li[@id='measures_tab_label']/a/div");
 			cnt = 0;
-			try {
-				selenium.click("//li[@id='measure_1']/input");
-				cnt++;
-				measActualComm = true;
-			} catch (Exception e) {
+			if (SeleniumFeaturesConfiguration.getFieldState("Actual Commitments")){
+				if (selenium.isElementPresent("//li[@id='measure_1']/input")) {
+					selenium.click("//li[@id='measure_1']/input");
+					cnt++;
+					measActualComm = true;
+				} else {
+					logger.error("Field \"Actual Commitments\" is active in Feature Manager but is not available.");
+				}
+			} else {
 				measActualComm = false;
-				logger.info("Measure \"Actual Commitments\" is not available.");
+				logger.info("Field \"Actual Commitments\" is not available.");
 			}
-			try {
-				selenium.click("//li[@id='measure_2']/input");
-				cnt++;
-				measActualDist = true;
-			} catch (Exception e) {
+			if (SeleniumFeaturesConfiguration.getFieldState("Actual Disbursements")){
+				if (selenium.isElementPresent("//li[@id='measure_2']/input")) {
+					selenium.click("//li[@id='measure_2']/input");
+					cnt++;
+					measActualDist = true;
+				} else {
+					logger.error("Field \"Actual Disbursements\" is active in Feature Manager but is not available.");
+				}
+			} else {
 				measActualDist = false;
-				logger.info("Measure \"Actual Disbursement\" is not available.");
+				logger.info("Field \"Actual Disbursements\" is not available.");
 			}
-			try {
-				selenium.click("//li[@id='measure_4']/input");
-				cnt++;
-				measPlannedComm = true;
-			} catch (Exception e) {
+			if (SeleniumFeaturesConfiguration.getFieldState("Planned Commitments")){
+				if (selenium.isElementPresent("//li[@id='measure_4']/input")) {
+					selenium.click("//li[@id='measure_4']/input");
+					cnt++;
+					measPlannedComm = true;
+				} else {
+					logger.error("Field \"Planned Commitments\" is active in Feature Manager but is not available.");
+				}
+			} else {
 				measPlannedComm = false;
-				logger.info("Measure \"Actual Commitments\" is not available.");
+				logger.info("Field \"Planned Commitments\" is not available.");
 			}
-			try {
-				selenium.click("//li[@id='measure_5']/input");
-				cnt++;
-				measPlannedDist = true;
-			} catch (Exception e) {
+			if (SeleniumFeaturesConfiguration.getFieldState("Planned Disbursements")){
+				if (selenium.isElementPresent("//li[@id='measure_5']/input")) {
+					selenium.click("//li[@id='measure_5']/input");
+					cnt++;
+					measPlannedDist = true;
+				} else {
+					logger.error("Field \"Planned Disbursements\" is active in Feature Manager but is not available.");
+				}
+			} else {
 				measPlannedDist = false;
-				logger.info("Measure \"Actual Disbursement\" is not available.");
+				logger.info("Field \"Planned Disbursements\" is not available.");
 			}
+			
 			selenium.click("//button[@type='button' and @onclick=\"MyDragAndDropObject.selectObjs('source_measures_ul', 'dest_measures_ul')\"]");
 			Thread.sleep(1000);
 			if (cnt>3) {
@@ -163,28 +178,46 @@ public class TabTest extends SeleneseTestCase{
 			}
 			selenium.click("//button[@type='button' and @onclick=\"MyDragAndDropObject.deselectObjs('dest_measures_ul', 'source_measures_ul')\"]");			
 			Thread.sleep(1000);
-			try {
-				selenium.click("//li[@id='measure_1']/input");
-				measActualComm = true;
-			} catch (Exception e) {
+			if (SeleniumFeaturesConfiguration.getFieldState("Actual Commitments")){
+				if (selenium.isElementPresent("//li[@id='measure_1']/input")) {
+					selenium.click("//li[@id='measure_1']/input");
+					measActualComm = true;
+				} else {
+					logger.error("Field \"Actual Commitments\" is active in Feature Manager but is not available.");
+				}
+			} else {
 				measActualComm = false;
-				logger.info("Measure \"Actual Commitments\" is not available.");
+				logger.info("Field \"Actual Commitments\" is not available.");
 			}
-			try {
-				selenium.click("//li[@id='measure_2']/input");
-				measActualDist = true;
-			} catch (Exception e) {
+			if (SeleniumFeaturesConfiguration.getFieldState("Actual Disbursements")){
+				if (selenium.isElementPresent("//li[@id='measure_2']/input")) {
+					selenium.click("//li[@id='measure_2']/input");
+					measActualDist = true;
+				} else {
+					logger.error("Field \"Actual Disbursements\" is active in Feature Manager but is not available.");
+				}
+			} else {
 				measActualDist = false;
-				logger.info("Measure \"Actual Disbursement\" is not available.");
+				logger.info("Field \"Actual Disbursements\" is not available.");
 			}
+
 			selenium.click("//button[@type='button' and @onclick=\"MyDragAndDropObject.selectObjs('source_measures_ul', 'dest_measures_ul')\"]");
 			Thread.sleep(1000);
 						
-			selenium.click("step3_add_filters_button");
-			SeleniumTestUtil.waitForElement(selenium, "indexString", 90);
-			selenium.type("indexString", actNameFilter);
-			selenium.click("filterPickerSubmitButton");
-			SeleniumTestUtil.waitForElement(selenium, "//div[@id='measures_step_div']/div[1]/button[4]", 90);
+			if (SeleniumFeaturesConfiguration.getFieldState("Filter Button")){
+				if (selenium.isElementPresent("step3_add_filters_button")) {
+					selenium.click("step3_add_filters_button");
+					SeleniumTestUtil.waitForElement(selenium, "indexString", 90);
+					selenium.type("indexString",actNameFilter);
+					selenium.click("filterPickerSubmitButton");
+					Thread.sleep(30000);
+				} else {
+					logger.error("Field \"Filter Button\" is active in Feature Manager but is not available.");
+				}
+			} else {
+				logger.info("Field \"Filter Button\" is not available.");
+			}
+			
 			selenium.click("//div[@id='measures_step_div']/div[1]/button[4]");
 			selenium.typeKeys("reportTitle", tabName);
 			selenium.click("last_save_button");
@@ -225,21 +258,29 @@ public class TabTest extends SeleneseTestCase{
 			try {selenium.click("//li[@id='measure_2']/input");} catch (Exception e) {}
 			selenium.click("//button[@type='button' and @onclick=\"MyDragAndDropObject.deselectObjs('dest_measures_ul', 'source_measures_ul')\"]");			
 			Thread.sleep(1000);
-			try {
-				selenium.click("//li[@id='measure_4']/input");
-				cnt++;
-				measPlannedComm = true;
-			} catch (Exception e) {
+			if (SeleniumFeaturesConfiguration.getFieldState("Planned Commitments")){
+				if (selenium.isElementPresent("//li[@id='measure_4']/input")) {
+					selenium.click("//li[@id='measure_4']/input");
+					cnt++;
+					measPlannedComm = true;
+				} else {
+					logger.error("Field \"Planned Commitments\" is active in Feature Manager but is not available.");
+				}
+			} else {
 				measPlannedComm = false;
-				logger.info("Measure \"Actual Commitments\" is not available.");
+				logger.info("Field \"Planned Commitments\" is not available.");
 			}
-			try {
-				selenium.click("//li[@id='measure_5']/input");
-				cnt++;
-				measPlannedDist = true;
-			} catch (Exception e) {
+			if (SeleniumFeaturesConfiguration.getFieldState("Planned Disbursements")){
+				if (selenium.isElementPresent("//li[@id='measure_5']/input")) {
+					selenium.click("//li[@id='measure_5']/input");
+					cnt++;
+					measPlannedDist = true;
+				} else {
+					logger.error("Field \"Planned Disbursements\" is active in Feature Manager but is not available.");
+				}
+			} else {
 				measPlannedDist = false;
-				logger.info("Measure \"Actual Disbursement\" is not available.");
+				logger.info("Field \"Planned Disbursements\" is not available.");
 			}
 			selenium.click("//button[@type='button' and @onclick=\"MyDragAndDropObject.selectObjs('source_measures_ul', 'dest_measures_ul')\"]");
 			Thread.sleep(1000);
@@ -343,5 +384,4 @@ public class TabTest extends SeleneseTestCase{
 			
 		}
 	}
-	
 }

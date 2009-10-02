@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.seleniumTest.reports;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.seleniumTest.SeleniumFeaturesConfiguration;
 import org.dgfoundation.amp.seleniumTest.SeleniumTestUtil;
 import org.dgfoundation.amp.seleniumTest.activityForm.ActivityFormTest;
 
@@ -46,20 +47,21 @@ public class ReportTest extends SeleneseTestCase{
 		selenium.click("submitButton");
 		selenium.waitForPageToLoad("50000");
 		
-		String version = selenium.getText("//div[@class=\"footerText\"]");
-		version = version.substring(version.indexOf("1.1"), version.indexOf("1.1")+4);
-		
 		selenium.click("link=UAT Team Workspace");
 		selenium.waitForPageToLoad("50000");
 		
 		//ADD REPORT
 		boolean addReportAvailable = false;
-		try {
-			selenium.click("//a[contains(@href, \"/reportWizard.do?tabs=false&reset=true\")]");
-			selenium.waitForPageToLoad("360000");
-			addReportAvailable = true;
-		} catch (Exception e) {
-			logger.error("Option \"Add Report\" is not available.");
+		if (SeleniumFeaturesConfiguration.getModuleState("Report Generator")){
+			if (selenium.isElementPresent("//a[contains(@href, \"/reportWizard.do?tabs=false&reset=true\")]")) {
+				selenium.click("//a[contains(@href, \"/reportWizard.do?tabs=false&reset=true\")]");
+				selenium.waitForPageToLoad("360000");
+				addReportAvailable = true;
+			} else {
+				logger.error("Module \"Report Generator\" is active in Feature Manager but is not available.");
+			}			
+		} else {
+			logger.info("Module \"Report Generator\" is not available.");
 		}
 		
 		if (addReportAvailable) {	
@@ -75,40 +77,64 @@ public class ReportTest extends SeleneseTestCase{
 			}
 			selenium.click("//button[@type='button' and @onclick=\"ColumnsDragAndDropObject.selectObjs('source_col_div', 'dest_col_ul')\"]");
 			selenium.click("//li[@id='measures_tab_label']/a/div");
-			try {
-				selenium.click("//li[@id='measure_1']/input");
-				measActualComm = true;
-			} catch (Exception e) {
+			if (SeleniumFeaturesConfiguration.getFieldState("Actual Commitments")){
+				if (selenium.isElementPresent("//li[@id='measure_1']/input")) {
+					selenium.click("//li[@id='measure_1']/input");
+					measActualComm = true;
+				} else {
+					logger.error("Field \"Actual Commitments\" is active in Feature Manager but is not available.");
+				}
+			} else {
 				measActualComm = false;
-				logger.info("Measure \"Actual Commitments\" is not available.");
+				logger.info("Field \"Actual Commitments\" is not available.");
 			}
-			try {
-				selenium.click("//li[@id='measure_2']/input");
-				measActualDist = true;
-			} catch (Exception e) {
+			if (SeleniumFeaturesConfiguration.getFieldState("Actual Disbursements")){
+				if (selenium.isElementPresent("//li[@id='measure_2']/input")) {
+					selenium.click("//li[@id='measure_2']/input");
+					measActualDist = true;
+				} else {
+					logger.error("Field \"Actual Disbursements\" is active in Feature Manager but is not available.");
+				}
+			} else {
 				measActualDist = false;
-				logger.info("Measure \"Actual Disbursement\" is not available.");
+				logger.info("Field \"Actual Disbursements\" is not available.");
 			}
-			try {
-				selenium.click("//li[@id='measure_4']/input");
-				measPlannedComm = true;
-			} catch (Exception e) {
+			if (SeleniumFeaturesConfiguration.getFieldState("Planned Commitments")){
+				if (selenium.isElementPresent("//li[@id='measure_4']/input")) {
+					selenium.click("//li[@id='measure_4']/input");
+					measPlannedComm = true;
+				} else {
+					logger.error("Field \"Planned Commitments\" is active in Feature Manager but is not available.");
+				}
+			} else {
 				measPlannedComm = false;
-				logger.info("Measure \"Planned Commitments\" is not available.");
+				logger.info("Field \"Planned Commitments\" is not available.");
 			}
-			try {
-				selenium.click("//li[@id='measure_5']/input");
-				measPlannedDist = true;
-			} catch (Exception e) {
+			if (SeleniumFeaturesConfiguration.getFieldState("Planned Disbursements")){
+				if (selenium.isElementPresent("//li[@id='measure_5']/input")) {
+					selenium.click("//li[@id='measure_5']/input");
+					measPlannedDist = true;
+				} else {
+					logger.error("Field \"Planned Disbursements\" is active in Feature Manager but is not available.");
+				}
+			} else {
 				measPlannedDist = false;
-				logger.info("Measure \"Planned Disbursement\" is not available.");
+				logger.info("Measure \"Planned Disbursements\" is not available.");
 			}
 			selenium.click("//button[@type='button' and @onclick=\"MyDragAndDropObject.selectObjs('source_measures_ul', 'dest_measures_ul')\"]");
-			selenium.click("step3_add_filters_button");
-			SeleniumTestUtil.waitForElement(selenium, "indexString", 90);
-			selenium.type("indexString",actNameFilter);
-			selenium.click("filterPickerSubmitButton");
-			Thread.sleep(30000);
+			if (SeleniumFeaturesConfiguration.getFieldState("Filter Button")){
+				if (selenium.isElementPresent("step3_add_filters_button")) {
+					selenium.click("step3_add_filters_button");
+					SeleniumTestUtil.waitForElement(selenium, "indexString", 90);
+					selenium.type("indexString",actNameFilter);
+					selenium.click("filterPickerSubmitButton");
+					Thread.sleep(30000);
+				} else {
+					logger.error("Field \"Filter Button\" is active in Feature Manager but is not available.");
+				}
+			} else {
+				logger.info("Field \"Filter Button\" is not available.");
+			}
 			selenium.click("//div[@id='measures_step_div']/div[1]/button[4]");
 			selenium.typeKeys("reportTitle", reportName);
 			selenium.click("last_save_button");

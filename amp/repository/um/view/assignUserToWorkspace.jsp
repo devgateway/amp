@@ -40,7 +40,7 @@
 						<c:set var="clickToViewAdmin">
 							<digi:trn>Click here to goto Admin Home</digi:trn>
 						</c:set>
-						<digi:link href="/admin.do" styleClass="comment" title="${clickToViewAdmin}" >
+						<digi:link href="/admin.do" module="aim" styleClass="comment" title="${clickToViewAdmin}" >
 							<digi:trn>Admin Home</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
 						<c:set var="clickToViewUserManager">

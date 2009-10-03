@@ -648,14 +648,16 @@ public class ChartWidgetUtil {
         
     public static JFreeChart getSectorByDonorChart(ChartOption opt, FilterHelper filter) throws DgException, WorkerException {
         JFreeChart chart = null;
-        Font font8 = new Font(null, Font.BOLD, 12);
+        Font font12 = new Font(null, Font.BOLD, 12);
+    	Font font8 = new Font(null,Font.BOLD,8);
         DefaultPieDataset dataset = getDonorSectorDataSet(filter);
         chart = ChartFactory.createPieChart(TranslatorWorker.translateText("Primary Sector(s) Breakdown ",opt.getLangCode(),opt.getSiteId())+" ("+(filter.getYear()-1)+")", dataset, true, true, false);
-        chart.getTitle().setFont(font8);
+        chart.getTitle().setFont(font12);
         if (opt.isShowLegend()) {
-            chart.getLegend().setItemFont(font8);
+            chart.getLegend().setItemFont(font12);
         }
         PiePlot plot = (PiePlot) chart.getPlot();
+        plot.setLabelFont(font8);
         String pattern = "{0} = {1} ({2})";
         if (opt.getLabelPattern() != null) {
             pattern = opt.getLabelPattern();
@@ -682,20 +684,24 @@ public class ChartWidgetUtil {
        
        public static JFreeChart getRegionByDonorChart(ChartOption opt,FilterHelper filter) throws DgException, WorkerException {
      	JFreeChart chart = null;
-		Font font8 = new Font(null,Font.BOLD,12);
+		Font font12 = new Font(null,Font.BOLD,12);
+		Font font8 = new Font(null,Font.BOLD,8);
 		DefaultPieDataset dataset=getDonorRegionalDataSet(filter);
 		chart=ChartFactory.createPieChart(TranslatorWorker.translateText("Regional Breakdown", opt.getLangCode(),opt.getSiteId())+" ("+(filter.getYear()-1)+")",dataset, true, true,false);
-		chart.getTitle().setFont(font8);
+		chart.getTitle().setFont(font12);
 		if (opt.isShowLegend()){
-			chart.getLegend().setItemFont(font8);		
+			chart.getLegend().setItemFont(font12);		
 		}
         PiePlot plot = (PiePlot) chart.getPlot();
+        plot.setLabelFont(font8);
+        
         String pattern = "{0} = {1} ({2})";
         if (opt.getLabelPattern() != null) {
             pattern = opt.getLabelPattern();
         }
         DecimalFormat format = FormatHelper.getDecimalFormat();
 		PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator(pattern, format, new DecimalFormat("0.0%"));
+		
         plot.setLegendLabelGenerator(gen);
         plot.setLabelGenerator(gen);
 		return chart;

@@ -369,7 +369,7 @@ public class ViewChannelOverview extends TilesAction {
 				            }
 				          }
 				        }
-				        Collections.sort(dates, DateConversion.dtComp);
+				       // Collections.sort(dates, DateConversion.dtComp);
 				        formBean.setClosingDates(dates);
 
 				        formBean.setStatus(

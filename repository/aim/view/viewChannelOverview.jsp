@@ -123,12 +123,10 @@ function commentWin(val) {
 											<a href="#" onclick="javascript:previewOverviewframe('Desc','<c:out value="${activity.description}"/>'); return false;" >
 											<digi:trn key="aim:description">Description</digi:trn></a>&nbsp;|</div>&nbsp;
 											</field:display>
-											<field:display name="Objectives" feature="Identification">
-												<field:display name="Objective" feature="Identification">
+											<field:display name="Objective" feature="Identification">
 												<div id="gen" title='<digi:trn key="aim:clickToViewProjectObjectives">Click here to View Project Objectives</digi:trn>'>
 												<a href="#" onclick="javascript:previewOverviewframe('Obj','<c:out value="${activity.objective}"/>'); return false;" >
 												<digi:trn key="aim:objectives">Objectives</digi:trn></a>&nbsp;|</div>&nbsp;
-												</field:display>
 											</field:display>
 											<field:display name="Purpose" feature="Identification">
 											<div id="gen" title='<digi:trn key="aim:clickToViewProjectPurpose">Click here to View Project Purpose</digi:trn>'>

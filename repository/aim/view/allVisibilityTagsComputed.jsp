@@ -202,7 +202,6 @@
 <field:display feature="Identification" name="Objective Objectively Verifiable Indicators"></field:display> 
 <field:display feature="Identification" name="Objective Verification"></field:display> 
 <field:display feature="Identification" name="Objective"></field:display> 
-<field:display feature="Identification" name="Objectives"></field:display> 
 <field:display feature="Identification" name="Organizations and Project ID"></field:display> 
 <field:display feature="Identification" name="Project Title"></field:display> 
 <field:display feature="Identification" name="Purpose"></field:display> 
@@ -534,8 +533,7 @@
 <field:display name="Objective Comments" feature="Identification"></field:display> 
 <field:display name="Objective" feature="Identification"></field:display> 
 <field:display name="Objectively Verifiable Indicators" feature="Identification"></field:display> 
-<field:display name="Objectives" feature="Identification"></field:display> 
-<field:display name="On/Off Budget" feature="Budget"></field:display> 
+ <field:display name="On/Off Budget" feature="Budget"></field:display> 
 <field:display name="Organizations Selector" feature="Funding Information"></field:display> 
 <field:display name="Organizations and Project ID" feature="Identification"></field:display> 
 <field:display name="Overall Contribution" feature="Planning"></field:display> 

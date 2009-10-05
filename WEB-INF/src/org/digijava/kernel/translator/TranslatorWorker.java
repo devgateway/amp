@@ -184,6 +184,8 @@ public class TranslatorWorker {
 			logger.error("Error:", e);
 			throw new WorkerException(e);
 		}
+		if (translatedText == null || translatedText.trim().compareTo("") == 0 || translatedText.length() == 0)
+			return text;
  	 	return translatedText;
     }
     

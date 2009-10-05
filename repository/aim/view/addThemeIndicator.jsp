@@ -432,19 +432,12 @@ function closeWindow(){
 																	<td bgcolor="#f4f4f2" align="center">
 																		<c:if test="${not empty prgIndicatorValues.location}">
 																			<bean:define id="loc" name="prgIndicatorValues" property="location"></bean:define>
-																			
-																			<c:if test="${!empty loc.country}">
-															                	[${loc.country}]
+																			<c:if test="${!empty loc.location.name}">
+															                	[${loc.location.name}]
 															                </c:if>
-															                <c:if test="${!empty loc.region}">
-															                	[${loc.region}]
-															                </c:if>
-															                <c:if test="${!empty loc.zone}">
-															                	[${loc.zone}]
-															                </c:if>
-															                <c:if test="${!empty loc.woreda}">
-															                	[${loc.woreda}]
-															                </c:if> 
+																		</c:if>
+																		<c:if test="${empty prgIndicatorValues.location}">
+																			<span>[<span style="color:Red"><digi:trn key="aim:addeditdata:national">National</digi:trn></span>]</span>
 																		</c:if>
 																	</td>
 																</tr>
@@ -473,4 +466,4 @@ function closeWindow(){
 </tr>
 </table>
 </body>
-</digi:form>
+</digi:form> 

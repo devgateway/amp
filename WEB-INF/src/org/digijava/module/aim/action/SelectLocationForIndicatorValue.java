@@ -77,6 +77,16 @@ import org.digijava.module.aim.util.LocationUtil;
 	            	  themeForm.setImpWoreda(null);
 	              }
 	            }
+	            else if (themeForm.getFill().equals("woredaSelected")) {
+	              if (themeForm.getImpWoreda() != null) {
+                      AmpCategoryValueLocations selectedRegion=DynLocationManagerUtil.getLocation(themeForm.getImpRegion(), true);
+                     AmpCategoryValueLocations selectedZone=DynLocationManagerUtil.getLocation(themeForm.getImpZone(), true);
+	            	  themeForm.setWoredas(selectedZone.getChildLocations());
+	            	  themeForm.setZones(selectedRegion.getChildLocations());
+	            	  themeForm.setRegions(DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry());
+	            	  //themeForm.setImpWoreda(null);
+	              }
+		        }
 	          }
 	        }
 	        else{

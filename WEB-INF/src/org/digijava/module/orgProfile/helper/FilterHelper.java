@@ -112,7 +112,14 @@ public class FilterHelper implements Serializable{
              orgGroup=DbUtil.getAmpOrgGroup(orgGroupId);
         }
         else{
-             orgGroup=new AmpOrgGroup();
+        	if (orgId == null || orgId == -1){
+        		orgGroup=new AmpOrgGroup();
+        	}
+        	else{
+        		AmpOrganisation org = DbUtil.getOrganisation(orgId);
+        		return org.getOrgGrpId();
+        	}
+        		
         }
         return orgGroup;
 

@@ -38,6 +38,8 @@ public class TrnTextCell extends TextCell{
 		String text;
 		try {
 			text = TranslatorWorker.translateText((String) super.getValue(),locale,siteId);
+			if (text == null || text.trim().compareTo("") == 0 || text.length() == 0)
+				return getValue()!=null?getValue().toString().replaceAll("\\<.*?>",""):"";
 			return text;
 		} catch (WorkerException e) {
 			e.printStackTrace();

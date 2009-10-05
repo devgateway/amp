@@ -289,11 +289,14 @@
 												<td align="left" width="70%">
 													<html:select property="role" >
 													<html:option value="-1">-- <digi:trn key="um:selectRole">Select a role</digi:trn> --</html:option>
-													<c:forEach items="${umAddUserForm.ampRoles}" var="roles">
-														<html:option value="${roles.ampTeamMemRoleId}">
-															<c:out value="${roles.description}"/>
+													
+													<logic:iterate name="umAddUserForm" property="ampRoles" id="ampRole" type="org.digijava.module.aim.dbentity.AmpTeamMemberRoles">
+														<html:option value="${ampRole.ampTeamMemRoleId}">
+															<digi:trn key="<%=ampRole.getAmpTeamMemberKey() %>">
+																<bean:write name="ampRole" property="role" />
+															</digi:trn>
 														</html:option>
-													</c:forEach>
+													</logic:iterate>
 													</html:select>
 												</td>
 											</tr>

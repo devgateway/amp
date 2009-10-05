@@ -76,7 +76,7 @@
 
     function delPropFunding() {
             <digi:context name="delProposedFunding" property="context/module/moduleinstance/removeProposedFunding.do" />
-            var state=window.confirm("Are you sure about deleting the Proposed Project Cost ?");
+            var state=window.confirm("<digi:trn key="aim:deleteProposedProjectCost">Are you sure about deleting the Proposed Project Cost ?</digi:trn>");
             if(state==false){
               return false;
             }

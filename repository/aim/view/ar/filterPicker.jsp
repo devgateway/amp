@@ -711,7 +711,7 @@
 						</b>&nbsp;&nbsp;</td>
 					  <td width="79%" colspan="5">
 							<html:select property="computedYear"  style="width: 100px" styleClass="inp-text">
-							<option value="-1">Current Year</option>
+							<option value="-1"><digi:trn key="aim:filters:currentYear">Current Year</digi:trn></option>
                          	<html:optionsCollection property="computedYearsRange" label="wrappedInstance" value="wrappedInstance" />
 						</html:select>						
 					  </td>

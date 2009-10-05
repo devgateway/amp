@@ -27,7 +27,11 @@
 	</c:if>		
 	<b> 
 	<% if(reportData.getName().indexOf(':')!=-1) { %>
-		<digi:trn><%=reportData.getName().substring(reportData.getName().indexOf(':')+1,reportData.getName().length())%></digi:trn>
+	<!-- *************************************************** 
+			WARNING:
+				Do not add Translations here!
+		 ***************************************************--> 
+		<%=reportData.getName().substring(reportData.getName().indexOf(':')+1,reportData.getName().length())%>
 	<% } else { %>
 		<bean:write name="reportData" property="name"/>
 	<% } %>

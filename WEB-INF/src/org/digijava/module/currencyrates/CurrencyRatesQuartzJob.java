@@ -14,7 +14,6 @@ import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpCurrencyRate;
-import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FilteredCurrencyRateUtil;
 import org.digijava.module.calendar.exception.CalendarException;

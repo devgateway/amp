@@ -18,16 +18,16 @@
 
 <script language="JavaScript">
 
-    function chkNumeric(frmContrl){
-        var regEx=/^[0-9]*\.?[0-9]*$/;
-        var errorMsg="<digi:trn>Please enter numeric value only</digi:trn>";
-        if(!frmContrl.value.match(regEx)){
-            alert(errorMsg);
-            frmContrl.value = "";
-            frmContrl.focus();
-            return false;
-        }
-    }
+function chkNumeric(frmContrl){
+  var regEx=/^[0-9]*\.?[0-9]*$/;
+  var errorMsg="<digi:trn>Please enter numeric value only</digi:trn>";
+  if(!frmContrl.value.match(regEx)){
+      alert(errorMsg);
+      frmContrl.value = "";
+      frmContrl.focus();
+      return false;
+  }
+}
 function addData(){
   <digi:context name="addEditIndicator" property="context/module/moduleinstance/addEditData.do?event=addIndValue" />
   document.forms[0].action = "<%=addEditIndicator%>";

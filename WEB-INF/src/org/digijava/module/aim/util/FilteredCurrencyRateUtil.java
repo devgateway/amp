@@ -171,19 +171,15 @@ public class FilteredCurrencyRateUtil {
 	}
 	
 	public boolean checkPairExistanceUsingCache(String toCurrencyCode, String fromCurrencyCode) {
-		if  (this.allFilteredRates == null) { 
-			List<AmpFilteredCurrencyRate> allFilteredCurrencyRates	= this.getAllFilteredCurrencyRates();
-			if ( allFilteredCurrencyRates != null && allFilteredCurrencyRates.size()>0 ) {
-				this.allFilteredRates		= new HashSet<String>( allFilteredCurrencyRates.size() );
-				for (AmpFilteredCurrencyRate f: allFilteredCurrencyRates ) {
-					this.allFilteredRates.add( f.getToCurrency().getCurrencyCode() + "-" + f.getFromCurrency().getCurrencyCode() );
-				}
-				return this.allFilteredRates.contains( toCurrencyCode + "-" + fromCurrencyCode );
+		List<AmpFilteredCurrencyRate> allFilteredCurrencyRates	= this.getAllFilteredCurrencyRates();
+		if ( allFilteredCurrencyRates != null && allFilteredCurrencyRates.size()>0 ) {
+			this.allFilteredRates		= new HashSet<String>( allFilteredCurrencyRates.size() );
+			for (AmpFilteredCurrencyRate f: allFilteredCurrencyRates ) {
+				this.allFilteredRates.add( f.getToCurrency().getCurrencyCode() + "-" + f.getFromCurrency().getCurrencyCode() );
 			}
+			return this.allFilteredRates.contains( toCurrencyCode + "-" + fromCurrencyCode );
 		}
 		return false;
-		
-		
 	}
 	
 	

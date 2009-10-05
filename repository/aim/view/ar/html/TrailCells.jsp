@@ -24,7 +24,11 @@
 			<span style="font-family: Arial;font-weight: bold;font-size: 10px;padding-left: 5px;padding-right: 3px;">
 				<%if(reportData.getRepName().length()<40){ %>
 					<% if (!("".equals(reportData.getRepName()))){ %>
-		 				<digi:trn key="rep:pop:${reportData.repName}">${reportData.repName}</digi:trn>
+					<!-- *************************************************** 
+							WARNING:
+								Do not add Translations here!
+						 ***************************************************--> 
+		 				${reportData.repName}
 					<% 
 					} 
 				}else{%>
@@ -38,7 +42,11 @@
 			<span style="font-family: Arial;font-size: 9px;font-weight: bold;padding-left: 15px;padding-right: 3px">
 				<img src="module/aim/images/hierarchies.gif" align="top">
 			<% if (!("".equals(reportData.getRepName()))){ %>
-				<digi:trn key="rep:pop:${reportData.repNameTrn}">${reportData.repName}</digi:trn>
+			<!-- *************************************************** 
+					WARNING:
+						Do not add Translations here!
+				 ***************************************************--> 
+				${reportData.repName}
 			<% } %>
 			</span>
 		</c:if>
@@ -48,7 +56,11 @@
 		<span style="font-family: Arial;font-size: 9px;font-weight: bold;padding-left: 25px;padding-right: 3px">
 			<img src="module/aim/images/hierarchies.gif" align="top">
 			<% if (!("".equals(reportData.getRepName()))){ %>
-		 		<digi:trn key="rep:pop:${reportData.repNameTrn}">${reportData.repName}</digi:trn>
+			<!-- *************************************************** 
+					WARNING:
+						Do not add Translations here!
+				 ***************************************************--> 
+		 		${reportData.repName}
 			<% } %>
 		</span>
 	</c:if>

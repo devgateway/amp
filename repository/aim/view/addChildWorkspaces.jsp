@@ -24,12 +24,12 @@
 	}
 
 	function updateCheckboxes() {
-		alert("Starting!");
+		//alert("Starting!");
 		var value = document.getElementById("selectAllOrgs").checked;
 		var a = document.getElementsByName("selChildOrgs");
 		for (i=0;i<a.length;i++)
 			a[i].checked=value;
-		alert("Done!");
+		//alert("Done!");
 	}
 	
 	function resetForm() {

@@ -19,42 +19,47 @@ public class UserManagerTest extends SeleneseTestCase {
 		selenium.type("j_password", "admin");
 		selenium.click("submitButton");
 		selenium.waitForPageToLoad("30000");
-		selenium.click("//a[contains(@href, \"/um/viewAllUsers.do~reset=true\")]");
-		selenium.waitForPageToLoad("30000");
-		selenium.type("keyword", "uattl@amp.org");
-		selenium.click("//input[@type=\"submit\"]");
-		selenium.waitForPageToLoad("30000");
-		selenium.click("link=Edit user");
-		selenium.waitForPageToLoad("30000");
-		selenium.type("newPassword", "123");
-		selenium.type("confirmNewPassword", "123");
-		selenium.click("//input[@onclick=\"validate('Either fields are blank or their values do not match','changePassword');\"]");
-		selenium.waitForPageToLoad("30000");
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
-		selenium.waitForPageToLoad("30000");
+		if (selenium.isElementPresent("//a[contains(@href, \"/um/viewAllUsers.do~reset=true\")]")) {
+			selenium.click("//a[contains(@href, \"/um/viewAllUsers.do~reset=true\")]");
+			selenium.waitForPageToLoad("30000");
+			selenium.type("keyword", "uattl@amp.org");
+			selenium.click("//input[@type=\"submit\"]");
+			selenium.waitForPageToLoad("30000");
+			selenium.click("link=Edit user");
+			selenium.waitForPageToLoad("30000");
+			selenium.type("newPassword", "123");
+			selenium.type("confirmNewPassword", "123");
+			selenium.click("//input[@onclick=\"validate('Either fields are blank or their values do not match','changePassword');\"]");
+			selenium.waitForPageToLoad("30000");
+			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+			selenium.waitForPageToLoad("30000");
+			
+			selenium.type("j_username", "uattl@amp.org");
+			selenium.type("j_password", "123");
+			selenium.click("submitButton");
+			selenium.waitForPageToLoad("30000");
+			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+			selenium.waitForPageToLoad("30000");
+			
+			selenium.type("j_username", "admin@amp.org");
+			selenium.type("j_password", "admin");
+			selenium.click("submitButton");
+			selenium.waitForPageToLoad("30000");
+			selenium.click("//a[contains(@href, \"/um/viewAllUsers.do~reset=true\")]");
+			selenium.waitForPageToLoad("30000");
+			selenium.type("keyword", "uattl@amp.org");
+			selenium.click("//input[@type=\"submit\"]");
+			selenium.waitForPageToLoad("30000");
+			selenium.click("link=Edit user");
+			selenium.waitForPageToLoad("30000");
+			selenium.type("newPassword", "abc");
+			selenium.type("confirmNewPassword", "abc");
+			selenium.click("//input[@onclick=\"validate('Either fields are blank or their values do not match','changePassword');\"]");
+			selenium.waitForPageToLoad("30000");
+		} else {
+			logger.error("Module \"User Manager\" is not available.");
+		}
 		
-		selenium.type("j_username", "uattl@amp.org");
-		selenium.type("j_password", "123");
-		selenium.click("submitButton");
-		selenium.waitForPageToLoad("30000");
-		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
-		selenium.waitForPageToLoad("30000");
-		
-		selenium.type("j_username", "admin@amp.org");
-		selenium.type("j_password", "admin");
-		selenium.click("submitButton");
-		selenium.waitForPageToLoad("30000");
-		selenium.click("//a[contains(@href, \"/um/viewAllUsers.do~reset=true\")]");
-		selenium.waitForPageToLoad("30000");
-		selenium.type("keyword", "uattl@amp.org");
-		selenium.click("//input[@type=\"submit\"]");
-		selenium.waitForPageToLoad("30000");
-		selenium.click("link=Edit user");
-		selenium.waitForPageToLoad("30000");
-		selenium.type("newPassword", "abc");
-		selenium.type("confirmNewPassword", "abc");
-		selenium.click("//input[@onclick=\"validate('Either fields are blank or their values do not match','changePassword');\"]");
-		selenium.waitForPageToLoad("30000");
 		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		logger.info("User Manager Test Finished Successfully");

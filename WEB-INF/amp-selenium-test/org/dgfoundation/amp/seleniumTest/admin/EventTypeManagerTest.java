@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.seleniumTest.admin;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.seleniumTest.SeleniumFeaturesConfiguration;
 
 import com.thoughtworks.selenium.SeleneseTestCase;
 import com.thoughtworks.selenium.Selenium;
@@ -46,10 +47,31 @@ public class EventTypeManagerTest extends SeleneseTestCase {
 			selenium.waitForPageToLoad("30000");
 			selenium.click("link=UAT Management Workspace");
 			selenium.waitForPageToLoad("30000");
-			selenium.click("//a[contains(@href, \"/calendar/showCalendarView.do?filterInUse=false\")]");
-			selenium.waitForPageToLoad("30000");
-			assertTrue(selenium.isTextPresent(typeName));
-			assertTrue(selenium.isElementPresent("//div[@style=\"border: 1px solid Black; height: 15px; width: 24px; background-color: rgb(18, 52, 86);\"]"));
+			boolean calendarAvailable = true;
+			if (SeleniumFeaturesConfiguration.getModuleState("Calendar")){
+				if (selenium.isElementPresent("//a[contains(@href, \"/calendar/showCalendarView.do?filterInUse=false\")]")) {
+					selenium.click("//a[contains(@href, \"/calendar/showCalendarView.do?filterInUse=false\")]");
+				} else if (selenium.isElementPresent("//a[contains(@href, \"/calendar/showCalendarView.do?view=monthly&filterInUse=false\")]")){
+					selenium.click("//a[contains(@href, \"/calendar/showCalendarView.do?view=monthly&filterInUse=false\")]");
+				} else if (selenium.isElementPresent("//a[contains(@href, \"/calendar/showCalendarView.do?view=weekly&filterInUse=false\")]")){
+					selenium.click("//a[contains(@href, \"/calendar/showCalendarView.do?view=weekly&filterInUse=false\")]");
+				} else if (selenium.isElementPresent("//a[contains(@href, \"/calendar/showCalendarView.do?view=daily&filterInUse=false\")]")){
+					selenium.click("//a[contains(@href, \"/calendar/showCalendarView.do?view=daily&filterInUse=false\")]");
+				} else if (selenium.isElementPresent("//a[contains(@href, \"/calendar/showCalendarView.do?view=none&filterInUse=false\")]")){
+					selenium.click("//a[contains(@href, \"/calendar/showCalendarView.do?view=none&filterInUse=false\")]");
+				} else {
+					logger.error("Module \"Calendar\" is active in Feature Manager but is not available.");
+					calendarAvailable = false;
+				}
+				if (calendarAvailable) {
+					selenium.click("//a[contains(@href, \"/calendar/showCalendarView.do?filterInUse=false\")]");
+					selenium.waitForPageToLoad("30000");
+					assertTrue(selenium.isTextPresent(typeName));
+					assertTrue(selenium.isElementPresent("//div[@style=\"border: 1px solid Black; height: 15px; width: 24px; background-color: rgb(18, 52, 86);\"]"));
+				}
+			} else {
+				logger.info("Module \"Calendar\" is not available.");
+			}
 			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
 			selenium.waitForPageToLoad("30000");
 			
@@ -74,7 +96,7 @@ public class EventTypeManagerTest extends SeleneseTestCase {
 				}
 			}
 		} else {
-			logger.info("Event Type Manager is not available");
+			logger.error("Event Type Manager is not available");
 		}
 		
 		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");

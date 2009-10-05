@@ -15,7 +15,7 @@
 	
 	function deleteIndicator()
 	{
-		var translation = "<digi:trn key="aim:activitydelete">Do you want to delete the Activity</digi:trn>"; 
+		var translation = "<digi:trn jsFriendly='true'>Do you want to delete the Activity</digi:trn>"; 
 		return confirm(translation);
 	}
 
@@ -43,7 +43,7 @@
 	}
 
 	function deleteActs(){
-		var translation = "<digi:trn key="aim:activitydelete">Are You Sure You Want To Remove Selected Activities?</digi:trn>"; 
+		var translation = "<digi:trn jsFriendly='true'>Are You Sure You Want To Remove Selected Activities?</digi:trn>"; 
 		return confirm(translation);
 	}
 	
@@ -203,24 +203,23 @@
 			<table cellPadding="5" cellSpacing="0" width="100%" >
 				<tr>
 					<!-- Start Navigation -->
-					<td height="33"><span class="crumb"> <c:set
-						var="clickToViewAdmin">
-						<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-					</c:set> <digi:link href="/admin.do" styleClass="comment"
-						title="${clickToViewAdmin}">
-						<digi:trn key="aim:AmpAdminHome">
-							Admin Home
-						</digi:trn>
-					</digi:link>&nbsp;&gt;&nbsp; <digi:trn key="aim:activityManager">
-							Activity Manager
-						</digi:trn></td>
+					<td height="33"><span class="crumb"> 
+						<c:set	var="clickToViewAdmin">
+							<digi:trn>Click here to goto Admin Home</digi:trn>
+						</c:set> 
+						<digi:link href="/admin.do" styleClass="comment"title="${clickToViewAdmin}">
+							<digi:trn>Admin Home</digi:trn>
+						</digi:link>&nbsp;&gt;&nbsp; 
+						<digi:trn>Activity Manager</digi:trn>
+					</td>
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height="16" vAlign="center" width="571"><span
-						class="subtitle-blue"> <digi:trn key="aim:activityManager">
-							Activity Manager
-						</digi:trn> </span></td>
+					<td height="16" vAlign="center" width="571">
+						<span class="subtitle-blue">
+							<digi:trn>Activity Manager</digi:trn>
+						</span>
+					</td>
 				</tr>
 				<tr>
 					<td noWrap width="100%" vAlign="top">
@@ -230,42 +229,41 @@
 							<table cellPadding="0" width="100%" valign="top">
 								<tr>
 									<td vAlign="top" width="100%">
-
 									<table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left">
 										<tr>
 											<td>
 											<table>
 												<tr>
 													<td width="35%">
-														<digi:trn key="um:viewAllUsers:filter">Filter by:</digi:trn> 
+														<digi:trn>Filter by:</digi:trn> 
 														<html:select property="type" style="font-family:verdana;font-size:11px;" onchange="document.aimActivityForm.submit()">
 															<c:set var="translation">
-																<digi:trn key="aim:activityManager:viewAll">-All-</digi:trn>
+																<digi:trn>-All-</digi:trn>
 															</c:set>
 															<html:option value="-1">${translation}</html:option>
 															<c:set var="translation">
-																<digi:trn key="aim:activityManager:viewAssigned">Assigned</digi:trn>
+																<digi:trn>Assigned</digi:trn>
 															</c:set>
 															<html:option value="0">${translation}</html:option>
 															<c:set var="translation">
-																<digi:trn key="aim:activityManager:viewUnassigned">Unassigned</digi:trn>
+																<digi:trn>Unassigned</digi:trn>
 															</c:set>
 															<html:option value="1">${translation}</html:option>
 														</html:select>
 													</td>
 													<td width="35%">
-														<digi:trn key="aim:keyword">Keyword:</digi:trn>
+														<digi:trn>Keyword:</digi:trn>
 														<html:text property="keyword" styleClass="inp-text" />
 													</td>
 													<td width="15%">
 														<c:set var="trnGoBtn">
-															<digi:trn key="aim:btnGo">GO</digi:trn>
+															<digi:trn>GO</digi:trn>
 														</c:set> 
 														<input type="button" value="${trnGoBtn}" class="dr-menu" onclick="return searchActivity()">
 													</td>
 													<td width="15%">
 														<c:set var="trnResetBtn">
-															<digi:trn key="aim:btnReset">Reset</digi:trn>
+															<digi:trn>Reset</digi:trn>
 														</c:set> 
 														<input type="button" value="${trnResetBtn}" class="dr-menu" onclick="return resetSearch()">
 													</td>
@@ -288,7 +286,7 @@
 																	<b> 
 																		<c:set target="${urlParamsSort}" property="sortByColumn" value="activityName" /> 
 																		<digi:link href="/activityManager.do" name="urlParamsSort" style="color:#000000;">
-																			<digi:trn key="aim:ActivityNameCol">Activity Name</digi:trn>
+																			<digi:trn>Activity Name</digi:trn>
 																		</digi:link> 
 																	</b>
 																</td>
@@ -296,7 +294,7 @@
 																	<b> 
 																		<c:set target="${urlParamsSort}" property="sortByColumn" value="activityTeamName" />
 																		<digi:link href="/activityManager.do" name="urlParamsSort" style="color:#000000;">
-																			<digi:trn key="aim:ActivityTeamName">Team Name</digi:trn>
+																			<digi:trn>Team Name</digi:trn>
 																		</digi:link>
 																	</b>
 																</td>
@@ -304,13 +302,13 @@
 																	<b> 
 																		<c:set target="${urlParamsSort}" property="sortByColumn" value="activityId" /> 
 																		<digi:link href="/activityManager.do" name="urlParamsSort" style="color:#000000;">
-																			<digi:trn key="aim:ActivityIdCol">Activity Id</digi:trn>
+																			<digi:trn>Activity Id</digi:trn>
 																		</digi:link> 
 																	</b>
 																</td>
 																<td width="5%" align="center">
 																	<c:set var="trnSelectAll">
-																		<digi:trn key="aim:selectAll">Select All</digi:trn>
+																		<digi:trn>Select All</digi:trn>
 																	</c:set> 
 																	<input type="checkbox" id="chkAll" onclick="javascript:selectAll()" title="${trnSelectAll}"/>
 																</td>
@@ -360,10 +358,7 @@
 												</logic:notEmpty>
 												<logic:empty name="aimActivityForm" property="activityList">
 													<tr align="center" bgcolor="#ffffff">
-														<td><b> <digi:trn
-															key="aim:emptyActivitiesPresent">
-															No activities present
-														</digi:trn></b></td>
+														<td><b> <digi:trn>No activities present</digi:trn></b></td>
 													</tr>
 												</logic:empty>
 											</table>
@@ -372,7 +367,7 @@
 										<tr>
 											<td bgColor="#ffffff" height="20" align="left"><img
 												src="../ampTemplate/images/start_button.gif" border="0">
-											- <b><digi:trn key="aim:unassignedactivities">Unassigned Activities</digi:trn></b>
+											- <b><digi:trn>Unassigned Activities</digi:trn></b>
 											</td>
 										</tr>
 										<tr bgcolor="#ffffff">
@@ -393,7 +388,7 @@
 																	pagelist.add(new Integer(i + 1));
 																pageContext.setAttribute("pagelist",pagelist);
 																pageContext.setAttribute("maxpages", new Integer(aimActivityForm.getTotalPages()));
-																pageContext.setAttribute("actualPage", new Integer(aimActivityForm.getPage()));
+																pageContext.setAttribute("actualPage", new Integer(aimActivityForm.getCurrentPage()));
 															%> 
 															<jsp:useBean id="urlParamsPagination" type="java.util.Map" class="java.util.HashMap" /> 
 															<c:set target="${urlParamsPagination}" property="action" value="getPage" /> 
@@ -447,7 +442,7 @@
 																<c:set target="${urlParamsNext}" property="page" value="${aimActivityForm.currentPage+1}" />
 																<c:set target="${urlParamsNext}" property="action" value="getPage" />
 																<c:set var="translation">
-																	<digi:trn key="aim:nextpage">Next Page</digi:trn>
+																	<digi:trn>Next Page</digi:trn>
 																</c:set>
 																<td style="padding:3px;border:1px solid #999999;" nowrap="nowrap">
 																<digi:link href="/activityManager.do" style="text-decoration=none" name="urlParamsNext" title="${translation}">
@@ -497,7 +492,7 @@
 											</td>											
 											<td width="20%" align="center">
 												<c:set var="trnDeleteSelectedBtn">
-													<digi:trn key="aim:trnDeleteSelectedBtn">Delete Selected Activities</digi:trn>
+													<digi:trn>Delete Selected Activities</digi:trn>
 												</c:set> 
 												<input type="button" value="${trnDeleteSelectedBtn}" class="dr-menu" onclick="return deleteActivities()">
 											</td>

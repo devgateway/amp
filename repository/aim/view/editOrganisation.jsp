@@ -79,7 +79,8 @@
         initSectorScript();
         }
     addLoadEvent(initScripts);
-
+    addLoadEvent(delBody);	
+   
 
     function orgTypeChanged(){
     <digi:context name="typeChanged" property="context/module/moduleinstance/editOrganisation.do" />

@@ -85,6 +85,7 @@
 	}
 	
 	addLoadEvent(initThemeMangarScript);
+	addLoadEvent(delBody);
 -->	
 </script>
 <style type="text/css">

@@ -10,6 +10,7 @@
 <%@page import="java.util.Iterator"%>
 <digi:instance property="aimThemeForm" />
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 <jsp:include page="themeManagerPopin.jsp" flush="true"/>
 <script language="JavaScript">
 

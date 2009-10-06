@@ -51,7 +51,9 @@ public class IndicatorManagerTest extends SeleneseTestCase {
 								selenium.click("//a[contains(@href, \"/aim/removeIndicator.do~indicatorId="+iId+"\")]");
 								selenium.getConfirmation();
 								selenium.waitForPageToLoad("30000");
-								assertTrue(!selenium.isElementPresent("link="+indicName));
+								if (selenium.isElementPresent("link="+indicName)) {
+									logger.error("Indicator added is not in the list");
+								}
 							} else {
 								selenium.close();
 								selenium.selectWindow("null");

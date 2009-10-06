@@ -59,7 +59,9 @@ public class ResourcesTest extends SeleneseTestCase {
 			selenium.click("//input[@onclick=\"return validateAddDocumentLocal()\"]");
 			selenium.waitForPageToLoad("30000");
 			selenium.click("//li[@id='tab2']/a/div");
-			assertTrue(!selenium.isElementPresent("//button[@type='button' and @onclick=\"setType('team'); configPanel(0,'','','', false);showMyPanel(0, 'addDocumentDiv');\"]"));
+			if (selenium.isElementPresent("//button[@type='button' and @onclick=\"setType('team'); configPanel(0,'','','', false);showMyPanel(0, 'addDocumentDiv');\"]")) {
+				logger.error("Error on resources shown");
+			}
 			selenium.click("link=exact:http://www.yahoo.com");
 			//selenium.waitForPopUp(selenium.getAllWindowTitles()[1], "50000");
 			//Thread.sleep(10000);

@@ -750,22 +750,47 @@ public class ActivityFormTest extends SeleneseTestCase{
 			selenium.click("//a[@id='Tab-Test Tab " + testTime + "']/div");
 			Thread.sleep(30000);
 			
-			assertTrue(selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[2]").equals(ActivityFormTest.TOTAL_ACTUAL_COMMITMENTS));
-			assertTrue(selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[3]").equals(ActivityFormTest.TOTAL_ACTUAL_DISBURSEMENT));
+			if (!selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[2]").equals(ActivityFormTest.TOTAL_ACTUAL_COMMITMENTS)){
+				logger.error("Error on TOTAL_ACTUAL_COMMITMENTS shown on tab.");
+			} 
+			if (!selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[3]").equals(ActivityFormTest.TOTAL_ACTUAL_COMMITMENTS)){
+				logger.error("Error on TOTAL_ACTUAL_DISBURSEMENT shown on tab.");
+			} 
+			
 			selenium.click("//table[@id='reportTable']/tbody/tr[2]/td[1]/a/font/div");
 			selenium.waitForPageToLoad("30000");
 			//Do some validations
 			
-			assertTrue(selenium.isTextPresent(primarySector));
-			assertTrue(selenium.isTextPresent(primarySubSector));
-			assertTrue(selenium.isTextPresent(secondarySector));
-			assertTrue(selenium.isTextPresent(secondarySubSector));
-			assertTrue(selenium.isTextPresent(NPOProgram));
-			assertTrue(selenium.isTextPresent(NPOSubProgram));
-			assertTrue(selenium.isTextPresent(primaryProgram));
-			assertTrue(selenium.isTextPresent(primarySubProgram));
-			assertTrue(selenium.isTextPresent(secondaryProgram));
-			assertTrue(selenium.isTextPresent(secondarySubProgram));
+			if (!selenium.isTextPresent(primarySector)){
+				logger.error("Error on Primary Sector shown.");
+			} 
+			if (!selenium.isTextPresent(primarySubSector)){
+				logger.error("Error on Primary Sub Sector shown.");
+			} 
+			if (!selenium.isTextPresent(secondarySector)){
+				logger.error("Error on Secondary Sector shown.");
+			} 
+			if (!selenium.isTextPresent(secondarySubSector)){
+				logger.error("Error on Secondary Sub Sector shown.");
+			} 
+			if (!selenium.isTextPresent(NPOProgram)){
+				logger.error("Error on NPO Program shown.");
+			} 
+			if (!selenium.isTextPresent(NPOSubProgram)){
+				logger.error("Error on NPO Sub Program shown.");
+			} 
+			if (!selenium.isTextPresent(primaryProgram)){
+				logger.error("Error on Primary Program shown.");
+			} 
+			if (!selenium.isTextPresent(primarySubProgram)){
+				logger.error("Error on Primary Sub Program shown.");
+			} 
+			if (!selenium.isTextPresent(secondaryProgram)){
+				logger.error("Error on Secondary Program shown.");
+			} 
+			if (!selenium.isTextPresent(secondarySubProgram)){
+				logger.error("Error on Secondary Sub Program shown.");
+			} 
 			
 			/*selenium.click("//div[@id='tabs']/ul/li[2]/span/a/div");
 			selenium.waitForPageToLoad("30000");

@@ -170,6 +170,9 @@ public class SectorManagerTest extends SeleneseTestCase {
 			selenium.click("//a[contains(@href, '/aim/updateSectorSchemes.do~event=deleteScheme~ampSecSchemeId="+scId+"')]");
 			selenium.getConfirmation();
 			selenium.waitForPageToLoad("30000");
+			if (selenium.isElementPresent("link="+schemeName)) {
+				logger.error("Scheme wasn't deleted");
+			}
 		} else {
 			logger.error("Module \"Sector Manager\" is not available.");
 		}

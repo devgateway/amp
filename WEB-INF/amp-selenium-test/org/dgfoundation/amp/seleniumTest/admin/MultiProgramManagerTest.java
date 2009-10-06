@@ -112,8 +112,9 @@ public class MultiProgramManagerTest extends SeleneseTestCase {
 				selenium.click("//a[contains(@href, \"/aim/themeManager.do~event=delete~themeId="+pId+"\")]");
 				selenium.getConfirmation();
 				Thread.sleep(10000);
-				assertTrue(!selenium.isElementPresent("link="+progName));
-				
+				if (selenium.isElementPresent("link="+progName)) {
+					logger.error("Program wasn't deleted");
+				}
 			} else {
 				logger.error("Module \"National Planning Dashboard\" is active in Feature Manager but is not available.");
 			}

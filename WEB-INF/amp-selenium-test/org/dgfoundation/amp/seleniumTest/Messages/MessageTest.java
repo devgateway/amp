@@ -35,7 +35,9 @@ public class MessageTest extends SeleneseTestCase {
 			selenium.click("//a[contains(@href, \"/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1&childTab=inbox\")]");
 			selenium.waitForPageToLoad("30000");
 			Thread.sleep(1500);
-			assertTrue(selenium.isElementPresent("link=Test Message to myself"));
+			if (!selenium.isElementPresent("link=Test Message to myself")) {
+				logger.error("Error sending message to myself");
+			}
 			selenium.click("//a[contains(@href, \"/message/messageActions.do?editingMessage=false&actionType=fillTypesAndLevels\")]");
 			selenium.waitForPageToLoad("30000");
 			selenium.type("titleMax", "Test Message to team partner");
@@ -57,7 +59,9 @@ public class MessageTest extends SeleneseTestCase {
 			selenium.click("//a[contains(@href, \"/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1&childTab=inbox\")]");
 			selenium.waitForPageToLoad("30000");
 			Thread.sleep(1500);
-			assertTrue(selenium.isElementPresent("link=Test Message to my team"));
+			if (!selenium.isElementPresent("link=Test Message to my team")) {
+				logger.error("Error sending message to my team");
+			}
 			selenium.click("//a[contains(@href, \"/message/messageActions.do?editingMessage=false&actionType=fillTypesAndLevels\")]");
 			selenium.waitForPageToLoad("30000");
 			selenium.type("titleMax", "Test Message to another team member");
@@ -108,9 +112,12 @@ public class MessageTest extends SeleneseTestCase {
 			selenium.click("//a[contains(@href, \"/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=2\")]");
 			selenium.waitForPageToLoad("30000");
 			Thread.sleep(1500);
-			assertTrue(selenium.isElementPresent("link=Test Alert to myself"));
-			assertTrue(selenium.isElementPresent("link=Test Alert to my team"));
-
+			if (!selenium.isElementPresent("link=Test Alert to myself")) {
+				logger.error("Error sending Alert to myself");
+			}
+			if (!selenium.isElementPresent("link=Test Alert to my team")) {
+				logger.error("Error sending Alert to my team");
+			}
 			selenium.click("//a[contains(@href, \"/message/messageActions.do?editingMessage=false&actionType=fillTypesAndLevels\")]");
 			selenium.waitForPageToLoad("30000");
 			selenium.type("titleMax", "Test Alert saved");
@@ -122,7 +129,9 @@ public class MessageTest extends SeleneseTestCase {
 			selenium.click("//a[contains(@href, \"/message/messageActions.do?actionType=gotoMessagesPage&childTab=draft&tabIndex=2\")]");
 			selenium.waitForPageToLoad("30000");
 			Thread.sleep(1500);
-			assertTrue(selenium.isTextPresent("Test Alert saved"));
+			if (!selenium.isTextPresent("Test Alert saved")) {
+				logger.error("Error on saved Alert");
+			}
 			
 			selenium.click("//a[contains(@href, \"/message/messageActions.do?editingMessage=false&actionType=fillTypesAndLevels\")]");
 			selenium.waitForPageToLoad("30000");
@@ -137,14 +146,18 @@ public class MessageTest extends SeleneseTestCase {
 				selenium.waitForPageToLoad("30000");
 			}
 			Thread.sleep(1500);
-			assertTrue(selenium.isTextPresent("Test Message saved"));
+			if (!selenium.isTextPresent("Test Message saved")) {
+				logger.error("Error on saved Message");
+			}
 			
 			selenium.click("link=UAT Team Workspace - Computed");
 			selenium.waitForPageToLoad("30000");
 			selenium.click("//a[contains(@href, \"/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1&childTab=inbox\")]");
 			selenium.waitForPageToLoad("30000");
 			Thread.sleep(1500);
-			assertTrue(selenium.isElementPresent("link=Test Message to another team"));
+			if (!selenium.isElementPresent("link=Test Message to another team")) {
+				logger.error("Error sending Message to another team");
+			}
 			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
 			selenium.waitForPageToLoad("30000");
 			
@@ -157,12 +170,18 @@ public class MessageTest extends SeleneseTestCase {
 			selenium.click("//a[contains(@href, \"/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1&childTab=inbox\")]");
 			selenium.waitForPageToLoad("30000");
 			Thread.sleep(1500);
-			assertTrue(selenium.isElementPresent("link=Test Message to my team"));
-			assertTrue(selenium.isElementPresent("link=Test Message to team partner"));
+			if (!selenium.isElementPresent("link=Test Message to my team")) {
+				logger.error("Error sending Message to my team");
+			}
+			if (!selenium.isElementPresent("link=Test Message to team partner")) {
+				logger.error("Error sending Message to a team partner");
+			}
 			selenium.click("//a[contains(@href, \"/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=2\")]");
 			selenium.waitForPageToLoad("30000");
 			Thread.sleep(1500);
-			assertTrue(selenium.isElementPresent("link=Test Alert to my team"));
+			if (!selenium.isElementPresent("link=Test Alert to my team")) {
+				logger.error("Error sending Alert to my team");
+			}
 			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
 			selenium.waitForPageToLoad("30000");
 			
@@ -175,11 +194,15 @@ public class MessageTest extends SeleneseTestCase {
 			selenium.click("//a[contains(@href, \"/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1&childTab=inbox\")]");
 			selenium.waitForPageToLoad("30000");
 			Thread.sleep(1500);
-			assertTrue(selenium.isElementPresent("link=Test Message to another team member"));
+			if (!selenium.isElementPresent("link=Test Message to another team member")) {
+				logger.error("Error sending Message to another team member");
+			}
 			selenium.click("link=Test Message to another team member");
 			SeleniumTestUtil.waitForElement(selenium, "//input[@onclick=\"closeWindow()\"]", 60);
 			Thread.sleep(1500);
-			assertTrue(selenium.isTextPresent("Test 4"));
+			if (!selenium.isTextPresent("Test 4")) {
+				logger.error("Error in message body");
+			}
 			selenium.click("//input[@onclick=\"closeWindow()\"]");
 			String mId = selenium.getAttribute("link=Test Message to another team member@href");
 			mId = mId.substring(mId.indexOf("ge('")+4, mId.indexOf("')"));
@@ -214,7 +237,9 @@ public class MessageTest extends SeleneseTestCase {
 				selenium.waitForPageToLoad("30000");
 				selenium.click("show");
 				Thread.sleep(1500);
-				assertTrue(selenium.getText("adimSettings").contains("55"));
+				if (!selenium.getText("adimSettings").contains("55")) {
+					logger.error("Error in Messages Settings");
+				}
 				selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
 				selenium.waitForPageToLoad("30000");
 				

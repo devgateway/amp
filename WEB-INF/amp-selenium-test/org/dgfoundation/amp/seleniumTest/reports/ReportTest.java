@@ -151,26 +151,42 @@ public class ReportTest extends SeleneseTestCase{
 			int tdCnt = 2;
 			for (int i = 0; i < ActivityFormTest.ACTUAL_COMMITMENTS.length; i++) {
 				if (measActualComm) {
-					assertTrue(selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[" + tdCnt + "]/div").equals(ActivityFormTest.ACTUAL_COMMITMENTS[i]));
+					if (!selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[" + tdCnt + "]/div").equals(ActivityFormTest.ACTUAL_COMMITMENTS[i])) {
+						logger.error("Error on ACTUAL_COMMITMENTS shown");
+					}
 					tdCnt++;
 				}
 				if (measActualDist) {
-					assertTrue(selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[" + tdCnt + "]/div").equals(ActivityFormTest.ACTUAL_DISBURSEMENT[i]));
+					if (!selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[" + tdCnt + "]/div").equals(ActivityFormTest.ACTUAL_DISBURSEMENT[i])) {
+						logger.error("Error on ACTUAL_DISBURSEMENT shown");
+					}
 					tdCnt++;
 				}
 				if (measPlannedComm) {
-					assertTrue(selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[" + tdCnt + "]/div").equals(ActivityFormTest.PLANNED_COMMITMENTS[i]));
+					if (!selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[" + tdCnt + "]/div").equals(ActivityFormTest.PLANNED_COMMITMENTS[i])) {
+						logger.error("Error on PLANNED_COMMITMENTS shown");
+					}
 					tdCnt++;
 				}
 				if (measPlannedDist) {
-					assertTrue(selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[" + tdCnt + "]/div").equals(ActivityFormTest.PLANNED_DISBURSEMENT[i]));
+					if (!selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[" + tdCnt + "]/div").equals(ActivityFormTest.PLANNED_DISBURSEMENT[i])) {
+						logger.error("Error on PLANNED_DISBURSEMENT shown");
+					}
 					tdCnt++;
 				}				
 			}
-			assertTrue(selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[22]/div").equals(ActivityFormTest.TOTAL_ACTUAL_COMMITMENTS));
-			assertTrue(selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[23]/div").equals(ActivityFormTest.TOTAL_ACTUAL_DISBURSEMENT));
-			assertTrue(selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[24]/div").equals(ActivityFormTest.TOTAL_PLANNED_COMMITMENTS));
-			assertTrue(selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[25]/div").equals(ActivityFormTest.TOTAL_PLANNED_DISBURSEMENT));
+			if (!selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[22]/div").equals(ActivityFormTest.TOTAL_ACTUAL_COMMITMENTS)) {
+				logger.error("Error on TOTAL_ACTUAL_COMMITMENTS shown");
+			}
+			if (!selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[23]/div").equals(ActivityFormTest.TOTAL_ACTUAL_DISBURSEMENT)) {
+				logger.error("Error on TOTAL_ACTUAL_DISBURSEMENT shown");
+			}
+			if (!selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[24]/div").equals(ActivityFormTest.TOTAL_PLANNED_COMMITMENTS)) {
+				logger.error("Error on TOTAL_PLANNED_COMMITMENTS shown");
+			}
+			if (!selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[25]/div").equals(ActivityFormTest.TOTAL_PLANNED_DISBURSEMENT)) {
+				logger.error("Error on TOTAL_PLANNED_DISBURSEMENT shown");
+			}
 			
 			selenium.close();
 			selenium.selectWindow("null");
@@ -203,26 +219,42 @@ public class ReportTest extends SeleneseTestCase{
 			tdCnt = 2;
 			for (int i = 0; i < ActivityFormTest.ACTUAL_COMMITMENTS.length; i++) {
 				if (measActualComm) {
-					assertTrue(selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[" + tdCnt + "]/div").equals(ActivityFormTest.ACTUAL_COMMITMENTS[i]));
+					if (!selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[" + tdCnt + "]/div").equals(ActivityFormTest.ACTUAL_COMMITMENTS[i])) {
+						logger.error("Error on ACTUAL_COMMITMENTS shown");
+					}
 					tdCnt++;
 				}
 				if (measActualDist) {
-					assertTrue(selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[" + tdCnt + "]/div").equals(ActivityFormTest.ACTUAL_DISBURSEMENT[i]));
+					if (!selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[" + tdCnt + "]/div").equals(ActivityFormTest.ACTUAL_DISBURSEMENT[i])) {
+						logger.error("Error on ACTUAL_DISBURSEMENT shown");
+					}
 					tdCnt++;
 				}
 				if (measPlannedComm) {
-					assertTrue(selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[" + tdCnt + "]/div").equals(ActivityFormTest.PLANNED_COMMITMENTS[i]));
+					if (!selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[" + tdCnt + "]/div").equals(ActivityFormTest.PLANNED_COMMITMENTS[i])) {
+						logger.error("Error on PLANNED_COMMITMENTS shown");
+					}
 					tdCnt++;
 				}
 				if (measPlannedDist) {
-					assertTrue(selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[" + tdCnt + "]/div").equals(ActivityFormTest.PLANNED_DISBURSEMENT[i]));
+					if (!selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[" + tdCnt + "]/div").equals(ActivityFormTest.PLANNED_DISBURSEMENT[i])) {
+						logger.error("Error on PLANNED_DISBURSEMENT shown");
+					}
 					tdCnt++;
 				}				
 			}
-			assertTrue(selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[22]/div").equals(ActivityFormTest.TOTAL_ACTUAL_COMMITMENTS));
-			assertTrue(selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[23]/div").equals(ActivityFormTest.TOTAL_ACTUAL_DISBURSEMENT));
-			assertTrue(selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[24]/div").equals(ActivityFormTest.TOTAL_PLANNED_COMMITMENTS));
-			assertTrue(selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[25]/div").equals(ActivityFormTest.TOTAL_PLANNED_DISBURSEMENT));
+			if (!selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[22]/div").equals(ActivityFormTest.TOTAL_ACTUAL_COMMITMENTS)) {
+				logger.error("Error on TOTAL_ACTUAL_COMMITMENTS shown");
+			}
+			if (!selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[23]/div").equals(ActivityFormTest.TOTAL_ACTUAL_DISBURSEMENT)) {
+				logger.error("Error on TOTAL_ACTUAL_DISBURSEMENT shown");
+			}
+			if (!selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[24]/div").equals(ActivityFormTest.TOTAL_PLANNED_COMMITMENTS)) {
+				logger.error("Error on TOTAL_PLANNED_COMMITMENTS shown");
+			}
+			if (!selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[25]/div").equals(ActivityFormTest.TOTAL_PLANNED_DISBURSEMENT)) {
+				logger.error("Error on TOTAL_PLANNED_DISBURSEMENT shown");
+			}
 			
 			selenium.close();
 			selenium.selectWindow("null");
@@ -252,18 +284,42 @@ public class ReportTest extends SeleneseTestCase{
 			if (!filters.contains(actNameFilter)) {
 				logger.error("Filter by index string error");
 			}
-			assertTrue(selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[2]/div").equals(ActivityFormTest.TOTAL_ACTUAL_COMMITMENTS_2008));
-			assertTrue(selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[3]/div").equals(ActivityFormTest.TOTAL_ACTUAL_DISBURSEMENT_2008));
-			assertTrue(selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[4]/div").equals(ActivityFormTest.TOTAL_PLANNED_COMMITMENTS_2008));
-			assertTrue(selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[5]/div").equals(ActivityFormTest.TOTAL_PLANNED_DISBURSEMENT_2008));
-			assertTrue(selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[6]/div").equals(ActivityFormTest.TOTAL_ACTUAL_COMMITMENTS_2009));
-			assertTrue(selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[7]/div").equals(ActivityFormTest.TOTAL_ACTUAL_DISBURSEMENT_2009));
-			assertTrue(selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[8]/div").equals(ActivityFormTest.TOTAL_PLANNED_COMMITMENTS_2009));
-			assertTrue(selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[9]/div").equals(ActivityFormTest.TOTAL_PLANNED_DISBURSEMENT_2009));
-			assertTrue(selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[10]/div").equals(ActivityFormTest.TOTAL_ACTUAL_COMMITMENTS));
-			assertTrue(selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[11]/div").equals(ActivityFormTest.TOTAL_ACTUAL_DISBURSEMENT));
-			assertTrue(selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[12]/div").equals(ActivityFormTest.TOTAL_PLANNED_COMMITMENTS));
-			assertTrue(selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[13]/div").equals(ActivityFormTest.TOTAL_PLANNED_DISBURSEMENT));
+			if (!selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[2]/div").equals(ActivityFormTest.TOTAL_ACTUAL_COMMITMENTS_2008)) {
+				logger.error("Error on TOTAL_ACTUAL_COMMITMENTS_2008 shown");
+			}
+			if (!selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[3]/div").equals(ActivityFormTest.TOTAL_ACTUAL_DISBURSEMENT_2008)) {
+				logger.error("Error on TOTAL_ACTUAL_DISBURSEMENT_2008 shown");
+			}
+			if (!selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[4]/div").equals(ActivityFormTest.TOTAL_PLANNED_COMMITMENTS_2008)) {
+				logger.error("Error on TOTAL_PLANNED_COMMITMENTS_2008 shown");
+			}
+			if (!selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[5]/div").equals(ActivityFormTest.TOTAL_PLANNED_DISBURSEMENT_2008)) {
+				logger.error("Error on TOTAL_PLANNED_DISBURSEMENT_2008 shown");
+			}
+			if (!selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[6]/div").equals(ActivityFormTest.TOTAL_ACTUAL_COMMITMENTS_2009)) {
+				logger.error("Error on TOTAL_ACTUAL_COMMITMENTS_2009 shown");
+			}
+			if (!selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[7]/div").equals(ActivityFormTest.TOTAL_ACTUAL_DISBURSEMENT_2009)) {
+				logger.error("Error on TOTAL_ACTUAL_DISBURSEMENT_2009 shown");
+			}
+			if (!selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[8]/div").equals(ActivityFormTest.TOTAL_PLANNED_COMMITMENTS_2009)) {
+				logger.error("Error on TOTAL_PLANNED_COMMITMENTS_2009 shown");
+			}
+			if (!selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[9]/div").equals(ActivityFormTest.TOTAL_PLANNED_DISBURSEMENT_2009)) {
+				logger.error("Error on TOTAL_PLANNED_DISBURSEMENT_2009 shown");
+			}
+			if (!selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[10]/div").equals(ActivityFormTest.TOTAL_ACTUAL_COMMITMENTS)) {
+				logger.error("Error on TOTAL_ACTUAL_COMMITMENTS shown");
+			}
+			if (!selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[11]/div").equals(ActivityFormTest.TOTAL_ACTUAL_DISBURSEMENT)) {
+				logger.error("Error on TOTAL_ACTUAL_DISBURSEMENT shown");
+			}
+			if (!selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[12]/div").equals(ActivityFormTest.TOTAL_PLANNED_COMMITMENTS)) {
+				logger.error("Error on TOTAL_PLANNED_COMMITMENTS shown");
+			}
+			if (!selenium.getText("//table[@id='reportTable']/tbody/tr[2]/td[13]/div").equals(ActivityFormTest.TOTAL_PLANNED_DISBURSEMENT)) {
+				logger.error("Error on TOTAL_PLANNED_DISBURSEMENT shown");
+			}
 			
 			selenium.close();
 			selenium.selectWindow("null");
@@ -275,7 +331,7 @@ public class ReportTest extends SeleneseTestCase{
 					String repname = selenium.getText("//a[contains(@href, \"/aim/viewNewAdvancedReport.do~view=reset~widget=false~ampReportId=" + cnt + "\")]");
 					if (repname.equals(reportName)) {
 						selenium.click("//a[contains(@href, \"/aim/deleteAllReports.do~isTab=0~rid=" + cnt + "~event=edit\")]");
-						assertNotNull(selenium.getConfirmation());
+						selenium.getConfirmation();
 						done = true;						
 						selenium.waitForPageToLoad("30000");					
 					}

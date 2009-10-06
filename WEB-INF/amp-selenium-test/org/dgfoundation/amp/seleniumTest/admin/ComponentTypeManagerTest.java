@@ -15,6 +15,8 @@ public class ComponentTypeManagerTest extends SeleneseTestCase {
 		setUp("http://localhost:8080/", "*chrome");
 	}
 	public static void testComponentTypeManager(Selenium selenium) throws Exception {
+		String testTime =  String.valueOf(System.currentTimeMillis());
+		String typeName ="Test Component Manager " + testTime;
 		boolean checkable = true;
 		selenium.open("/");
 		selenium.type("j_username", "admin@amp.org");
@@ -30,7 +32,7 @@ public class ComponentTypeManagerTest extends SeleneseTestCase {
 			selenium.selectWindow(selenium.getAllWindowTitles()[1]);
 			if (SeleniumFeaturesConfiguration.getFieldState("Admin - Component Type Name")){
 				if (selenium.isElementPresent("name")) {
-					selenium.type("name", "Selenium Component Type");
+					selenium.type("name", typeName);
 				} else {
 					checkable = false;
 					logger.error("Field \"Admin - Component Type Name\" is active in Feature Manager but is not available.");
@@ -67,7 +69,7 @@ public class ComponentTypeManagerTest extends SeleneseTestCase {
 			}
 			if (checkable) {
 				int tId = 0;
-				for (int i = 200; i > 0; i--) {
+				for (int i = 500; i > 0; i--) {
 					if (selenium.isElementPresent("//a[contains(@href, 'javascript:editType("+i+")')]")) {
 						tId = i;
 						break;
@@ -77,7 +79,7 @@ public class ComponentTypeManagerTest extends SeleneseTestCase {
 				//selenium.waitForPopUp(selenium.getAllWindowTitles()[1], "30000");
 				Thread.sleep(10000);
 				selenium.selectWindow(selenium.getAllWindowTitles()[1]);
-				selenium.type("name", "Selenium Component Type 1");
+				selenium.type("name", typeName+" mod");
 				selenium.click("addBtn");
 				selenium.selectWindow("null");
 				selenium.waitForPageToLoad("30000");
@@ -100,7 +102,11 @@ public class ComponentTypeManagerTest extends SeleneseTestCase {
 						Thread.sleep(5000);
 						if (SeleniumFeaturesConfiguration.getFeatureState("Admin - Component Type")){
 							if (selenium.isElementPresent("//a[@href='javascript:gotoStep(5)']")) {
-								selenium.select("selectedType", "Selenium Component Type 1");
+								try {
+									selenium.select("selectedType", typeName+" mod");
+								} catch (Exception e) {
+									logger.error("Component type added is not available on Activity Form");
+								}
 							} else {
 								logger.error("Feature \"Admin - Component Type\" is active in Feature Manager but is not available.");
 							}
@@ -125,8 +131,18 @@ public class ComponentTypeManagerTest extends SeleneseTestCase {
 				selenium.waitForPageToLoad("30000");
 				selenium.click("//a[contains(@href, \"/aim/updateComponentType.do\")]");
 				selenium.waitForPageToLoad("30000");
-				selenium.click("//a[contains(@href, 'javascript:deleteType("+tId+");')]");
-				selenium.getConfirmation();
+				try {
+					selenium.click("//a[contains(@href, 'javascript:deleteType("+tId+");')]");
+					selenium.getConfirmation();
+					selenium.waitForPageToLoad("30000");
+					if (selenium.isTextPresent(typeName)) {
+						logger.error("Component Type wasn't deleted");
+					}
+				} catch (Exception e) {
+					logger.error("Component Type is not available to be deleted");
+				}
+				
+				
 			}			
 		} else {
 			logger.error("Component Type Manager is not available");

@@ -119,11 +119,21 @@ public class ActivityManagerTest extends SeleneseTestCase {
 				selenium.type("keyword", actName);
 				selenium.click("//input[@onclick=\"return searchActivity()\"]");
 				selenium.waitForPageToLoad("30000");
-				selenium.click("//a[@onclick=\"return deleteIndicator()\"]");
-				selenium.getConfirmation();
-				selenium.waitForPageToLoad("30000");
+				if (!selenium.isElementPresent("//input[@onclick=\"return searchActivity()\"]")) {
+					logger.error("Activity not found on Activity Manager");
+				} else {
+					selenium.click("//a[@onclick=\"return deleteIndicator()\"]");
+					selenium.getConfirmation();
+					selenium.waitForPageToLoad("30000");
+					selenium.type("keyword", actName);
+					selenium.click("//input[@onclick=\"return searchActivity()\"]");
+					selenium.waitForPageToLoad("30000");
+					if (selenium.isElementPresent("//a[@onclick=\"return deleteIndicator()\"]")) {
+						logger.error("Activity wasn't deleted");
+					}
+				}				
 			} else {
-				logger.info("Activity Manager is not available");
+				logger.error("Activity Manager is not available");
 			}
 		}
 		

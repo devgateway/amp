@@ -41,7 +41,9 @@ public class WorkspaceManagerTest  extends SeleneseTestCase {
 			String aId = selenium.getAttribute("selectedActivities@value");
 			selenium.click("//input[@type=\"submit\"]");
 			selenium.waitForPageToLoad("30000");
-			assertTrue(selenium.getAttribute("selActivities@value").equals(aId));
+			if (!selenium.getAttribute("selActivities@value").equals(aId)) {
+				logger.error("Activity assigned is not in the list");
+			}
 			selenium.click("selActivities");
 			selenium.click("//input[@onclick=\"return confirmDelete()\"]");
 			selenium.getConfirmation();
@@ -51,6 +53,9 @@ public class WorkspaceManagerTest  extends SeleneseTestCase {
 			selenium.click("//a[contains(@href, '/aim/deleteWorkspace.do~tId="+tId+"~event=delete')]");
 			selenium.getConfirmation();
 			selenium.waitForPageToLoad("30000");
+			if (selenium.isElementPresent("link="+wsName)) {
+				logger.error("Workspace wasn't deleted");
+			}
 		} else {
 			logger.error("Module \"Workspace Manager\" is not available");
 		}

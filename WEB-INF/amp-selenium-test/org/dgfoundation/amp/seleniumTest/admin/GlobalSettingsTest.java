@@ -83,9 +83,13 @@ public class GlobalSettingsTest extends SeleneseTestCase {
 			selenium.waitForPageToLoad("30000");
 			
 			if (enbabledPublicView) {
-				assertTrue(selenium.isElementPresent("//a[contains(@href, \"/aim/reportsPublicView.do\")]"));
+				if (!selenium.isElementPresent("//a[contains(@href, \"/aim/reportsPublicView.do\")]")) {
+					logger.error("Public View is enabled but is not available");
+				}
 			} else {
-				assertTrue(!selenium.isElementPresent("//a[contains(@href, \"/aim/reportsPublicView.do\")]"));
+				if (selenium.isElementPresent("//a[contains(@href, \"/aim/reportsPublicView.do\")]")) {
+					logger.error("Public View is not enabled but is available");
+				}
 			}
 			
 			selenium.type("j_username", "UATtl@amp.org");
@@ -97,7 +101,9 @@ public class GlobalSettingsTest extends SeleneseTestCase {
 			if (!selenium.isElementPresent("MyTabs")) {
 				TabTest.addBasicTab(selenium, "Test Tab TMC 2 " + testTime, testTime);
 			}
-			assertTrue(selenium.getText("//div[@id=\"currentDisplaySettings\"]/table/tbody/tr[2]/td").contains("2029"));
+			if (!selenium.getText("//div[@id=\"currentDisplaySettings\"]/table/tbody/tr[2]/td").contains("2029")) {
+				logger.error("Default End Value doesn't change according Global Settings");
+			}
 			selenium.click("//a[contains(@href, \"javascript:addActivity()\")]");
 			selenium.waitForPageToLoad("120000");
 			if (selenium.isElementPresent("//a[@href='javascript:gotoStep(3)']")) {

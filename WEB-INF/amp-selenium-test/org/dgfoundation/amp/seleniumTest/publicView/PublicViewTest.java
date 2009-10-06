@@ -156,17 +156,23 @@ public class PublicViewTest extends SeleneseTestCase {
 		selenium.click("//a[contains(@href, \"/aim/reportsPublicView.do\")]");
 		selenium.waitForPageToLoad("30000");
 		if (addTabAvailable) {
-			assertTrue(selenium.isElementPresent("//a[@id='Tab-" + tabName + "']/div"));			
+			if (!selenium.isElementPresent("//a[@id='Tab-" + tabName + "']/div")) {
+				logger.error("Public tab is not shown in Public View");
+			}
 		}
 		selenium.click("//a[contains(@href, \"/contentrepository/documentManager.do\")]");
 		Thread.sleep(15000);
 		if (resourcesAvailable) {
-			assertTrue(selenium.isTextPresent(resourceName));
+			if (!selenium.isTextPresent(resourceName)) {
+				logger.error("Public resource is not shown on Public View");
+			}
 		}
 		selenium.click("//a[contains(@href, \"/viewTeamReports.do?tabs=false\")]");
 		selenium.waitForPageToLoad("30000");
 		if (addReportAvailable) {
-			assertTrue(selenium.isElementPresent("link="+reportName));
+			if (!selenium.isElementPresent("link="+reportName)) {
+				logger.error("Public Report is not shown on Public View");
+			}
 		}
 		selenium.click("//a[contains(@href, \"/aim\")]");
 		selenium.waitForPageToLoad("30000");

@@ -77,13 +77,23 @@ public class MondrianTest extends SeleneseTestCase{
 				selenium.waitForPageToLoad("30000");
 				selenium.click("toolbar01.chartButton01");
 				selenium.waitForPageToLoad("30000");
-				assertTrue(selenium.getText("//table[@id='table01']/tbody/tr[2]/th[3]").equals(measure1));
-				assertTrue(selenium.getText("//table[@id='table01']/tbody/tr[2]/th[4]").equals(measure2));
-				assertTrue(selenium.getText("//table[@id='table01']/tbody/tr[2]/th[5]").equals(measure3));
-				for (int i = 0; i < sectors; i++) {
-					assertTrue(selenium.getText("//table[@id='table01']/tbody/tr[" +(i+3)+ "]/th[1]").equals(sector[i]));		
+				if (!selenium.getText("//table[@id='table01']/tbody/tr[2]/th[3]").equals(measure1)) {
+					logger.error("Error on measure");
 				}
-				assertTrue(selenium.isElementPresent("//img[@width='1990' and @height='1990']"));
+				if (!selenium.getText("//table[@id='table01']/tbody/tr[2]/th[4]").equals(measure2)) {
+					logger.error("Error on measure");
+				}
+				if (!selenium.getText("//table[@id='table01']/tbody/tr[2]/th[5]").equals(measure3)) {
+					logger.error("Error on measure");
+				}
+				for (int i = 0; i < sectors; i++) {
+					if (!selenium.getText("//table[@id='table01']/tbody/tr[" +(i+3)+ "]/th[1]").equals(sector[i])) {
+						logger.error("Error on sector");
+					}
+				}
+				if (!selenium.isElementPresent("//img[@width='1990' and @height='1990']")) {
+					logger.error("Error on graphic settings");
+				}
 			} else {
 				logger.error("Module \"Multi-dimensional Reports\" is active in Feature Manager but is not available.");
 			}

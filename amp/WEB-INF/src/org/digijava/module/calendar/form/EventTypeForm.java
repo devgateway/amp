@@ -15,11 +15,28 @@ import java.util.ArrayList;
 
 public class EventTypeForm
     extends ActionForm {
-    private List eventTypes;
+	private List eventTypes;
     private String eventTypeName;
     private String eventTypeColor;
     private Long eventTypeId;
+    private Object[] selectedTypes;
+    private Object[] selectedTypesColor;
 
+    public Object[] getSelectedTypesColor() {
+		return selectedTypesColor;
+	}
+
+	public void setSelectedTypesColor(Object[] selectedTypesColor) {
+		this.selectedTypesColor = selectedTypesColor;
+	}
+    public Object[] getSelectedTypes() {
+		return selectedTypes;
+	}
+
+	public void setSelectedTypes(Object[] selectedTypes) {
+		this.selectedTypes = selectedTypes;
+	}
+    
     public List getEventTypes() {
         return eventTypes;
     }

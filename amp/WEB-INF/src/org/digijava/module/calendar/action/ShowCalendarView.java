@@ -37,6 +37,7 @@ import org.digijava.module.calendar.entity.EventsFilter;
 import org.digijava.module.calendar.form.CalendarViewForm;
 import org.digijava.module.calendar.util.AmpDbUtil;
 import org.digijava.module.calendar.util.AmpUtil;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class ShowCalendarView extends Action {
 
@@ -181,12 +182,14 @@ public class ShowCalendarView extends Action {
         }
 
         // event types
-        List eventTypes = AmpDbUtil.getEventTypes();
+       // List eventTypes = AmpDbUtil.getEventTypes();
 
-        if (eventTypes.size() <= 0) {
+        if (CategoryManagerUtil.getAmpEventColors().size() <= 0) {
             return mapping.findForward("forward");
         }
-        filter.setEventTypes(eventTypes);
+        filter.setEventTypes(CategoryManagerUtil.getAmpEventColors());
+        
+        
         Boolean resetEventTypes=calendarViewForm.getResetEventTypes();
         if(resetEventTypes!=null && resetEventTypes){
         	filter.setSelectedEventTypes(new String[]{});
@@ -277,9 +280,8 @@ public class ShowCalendarView extends Action {
 			}
         };
         Collections.sort(l, c);    
-            
-       Collection<AmpCalendarGraph> ampCalendarGraphs = AmpUtil.getAmpCalendarGraphs(l,navigator, view);
-       calendarViewForm.setAmpCalendarGraphs(ampCalendarGraphs);
+  //Collection<AmpCalendarGraph> ampCalendarGraphs = AmpUtil.getAmpCalendarGraphs(l,navigator, view);
+  //     calendarViewForm.setAmpCalendarGraphs(ampCalendarGraphs);
       
          ses.setAttribute("mode",calendarViewForm.getView().length());
          ses.setAttribute("view",calendarViewForm.getPrintMode());

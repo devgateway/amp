@@ -55,7 +55,10 @@ import org.digijava.module.message.dbentity.AmpMessageSettings;
 import org.digijava.module.message.triggers.CalendarEventSaveTrigger;
 import org.digijava.module.message.triggers.RemoveCalendarEventTrigger;
 import org.digijava.module.message.util.AmpMessageUtil;
-import org.digijava.module.message.triggers.RemoveCalendarEventTrigger;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 
 public class ShowCalendarEvent extends Action {
@@ -221,10 +224,14 @@ public class ShowCalendarEvent extends Action {
             	}else{
             		AmpDbUtil.deleteAmpCalendar(ceform.getAmpCalendarId());
             	}
-            }           
+            }       
             ceform.setMethod("");
             return mapping.findForward("forward");
 
+           
+            
+            
+            
         } else if (ceform.getMethod().equalsIgnoreCase("preview") || ceform.getMethod().equalsIgnoreCase("print")) {
         	String stDate=ceform.getSelectedStartDate() + " " + ceform.getSelectedStartTime();
         	String endDate=ceform.getSelectedEndDate()+ " " + ceform.getSelectedEndTime();
@@ -237,6 +244,8 @@ public class ShowCalendarEvent extends Action {
         		saveErrors(request, errors);
         		return mapping.findForward("success");        		
         	}else{
+        		  
+                  
         		loadAmpCalendar(ceform, request);
         		if(ceform.getAmpCalendarId()!=null && ceform.getAmpCalendarId() > 0){ //<--this means that user is not creating new event, but previewing old one
         			ceform.setActionButtonsVisible(false);
@@ -266,11 +275,31 @@ public class ShowCalendarEvent extends Action {
         		}
         	}
         }
-
+        
+        
+//        List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>(); 
+//        
+//        AmpCategoryClass categoryClass = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.EVENT_TYPE_KEY);   
+//        Iterator<AmpCategoryValue> categoryClassIter = categoryClass.getPossibleValues().iterator();
+//         while(categoryClassIter.hasNext()){
+//        	AmpEventType eventType = new AmpEventType();
+//        	AmpCategoryValue item = (AmpCategoryValue) categoryClassIter.next();
+//        	 eventType.setName(item.getValue());
+//        	 eventType.setId(item.getId());
+//        	   Iterator<AmpCategoryValue> usedValues = item.getUsedValues().iterator();
+//        	    while (usedValues.hasNext()){
+//        		 AmpCategoryValue categoryValueItem = (AmpCategoryValue) usedValues.next();
+//        		 eventType.setColor(categoryValueItem.getValue());
+//        	 }
+//        	  eventTypeList.add(eventType);
+//        }
+//        
+        ceform.setEventTypesList(CategoryManagerUtil.getAmpEventColors());
         return mapping.findForward("success");
     }
 
-    private void saveAmpCalendar(CalendarEventForm ceform, HttpServletRequest request) throws Exception{
+   
+	private void saveAmpCalendar(CalendarEventForm ceform, HttpServletRequest request) throws Exception{
         try {
         	
         	if (ceform.getAmpCalendarId() != null && ceform.getAmpCalendarId() > 0) {
@@ -279,8 +308,8 @@ public class ShowCalendarEvent extends Action {
 
             AmpCalendar ampCalendar = new AmpCalendar();
 
-            AmpEventType eventType = AmpDbUtil.getEventType(ceform.getSelectedEventTypeId());
-            ampCalendar.setEventType(eventType);
+            
+            ampCalendar.setEventTypeId(ceform.getSelectedEventTypeId());
 
             if(ampCalendar.getMember()==null){
                 HttpSession ses = request.getSession();

@@ -33,6 +33,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.exception.NoCategoryClassException;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendarPK;
 import org.digijava.module.calendar.dbentity.AmpEventType;
@@ -42,6 +43,7 @@ import org.digijava.module.calendar.dbentity.Calendar.TBD;
 import org.digijava.module.calendar.entity.EventsFilter;
 import org.digijava.module.calendar.exception.CalendarException;
 import org.digijava.module.calendar.form.CalendarItemForm;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.help.dbentity.HelpTopic;
 import org.digijava.module.help.helper.HelpTopicsTreeItem;
 
@@ -207,9 +209,9 @@ public class CalendarUtil {
 												 	xml+="<details>"+"No Description"+"</details>";
 											 }
 										}
-										AmpCalendar id = AmpDbUtil.getAmpCalendar(ampCalendar.getCalendarPK().getCalendar().getId());
-										id.getEventType().getId();
-										xml+="<type>"+id.getEventType().getId()+"</type>";
+										//AmpCalendar id = AmpDbUtil.getAmpCalendar(ampCalendar.getCalendarPK().getCalendar().getId());
+										//id.getEventType().getId();
+										xml+="<type>"+ampCalendar.getEventTypeId()+"</type>";
 								
 										 if(!ampCalendar.getCalendarPK().getCalendar().getRecurrCalEvent().isEmpty()){
 											 Iterator itrrecc = ampCalendar.getCalendarPK().getCalendar().getRecurrCalEvent().iterator();
@@ -246,9 +248,10 @@ public class CalendarUtil {
 	
 
 
-	public static String getEventTypesCss() throws CalendarException{
+	public static String getEventTypesCss() throws CalendarException, NoCategoryClassException{
 		String css = "";
-			List cs =  AmpDbUtil.getAmpCalendarEventsType();
+		        
+			List cs =  CategoryManagerUtil.getAmpEventColors();
 			if(!cs.isEmpty()){
 				
 			Iterator iter = cs.iterator();		

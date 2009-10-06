@@ -73,12 +73,13 @@
 <jsp:include page="/repository/aim/view/addEditOrganizationsPopin.jsp" flush="true" />
 <jsp:include page="/repository/aim/view/addOrganizationPopin.jsp" flush="true" />
 <jsp:include page="/repository/aim/view/components/addContactsScripts.jsp" flush="true" />
+
 <script language="JavaScript" type="text/javascript">
     function initScripts() {
         initSectorScript();
         }
     addLoadEvent(initScripts);
-   
+  
 
     function orgTypeChanged(){
     <digi:context name="typeChanged" property="context/module/moduleinstance/editOrganisation.do" />
@@ -608,6 +609,7 @@
 
 
 </script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 <digi:instance property="aimAddOrgForm" />
 <digi:context name="digiContext" property="context" />
 <digi:form action="/editOrganisation.do" method="post">

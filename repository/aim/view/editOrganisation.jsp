@@ -73,13 +73,11 @@
 <jsp:include page="/repository/aim/view/addEditOrganizationsPopin.jsp" flush="true" />
 <jsp:include page="/repository/aim/view/addOrganizationPopin.jsp" flush="true" />
 <jsp:include page="/repository/aim/view/components/addContactsScripts.jsp" flush="true" />
-<script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 <script language="JavaScript" type="text/javascript">
     function initScripts() {
         initSectorScript();
         }
     addLoadEvent(initScripts);
-    addLoadEvent(delBody);	
    
 
     function orgTypeChanged(){

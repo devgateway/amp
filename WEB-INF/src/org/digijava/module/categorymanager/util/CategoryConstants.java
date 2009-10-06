@@ -72,6 +72,10 @@ public class CategoryConstants {
     //activity indicator risk
 	public static final String INDICATOR_RISK_TYPE_NAME="Indicator Risk";
 	public static final String INDICATOR_RISK_TYPE_KEY="indicator_risk";
+	public static final String EVENT_TYPE_NAME="Event Type";
+	public static final String EVENT_TYPE_KEY="event_type";
+	public static final String EVENT_COLOR_NAME="Event Color";
+	public static final String EVENT_COLOR_KEY="event_color";
 
      //organization staff Information type
 	public static final String ORGANIZATION_STAFF_INFO_NAME="Staff Information Type";

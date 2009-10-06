@@ -6,12 +6,15 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 
 public class AmpCalendar {
-    private AmpCalendarPK calendarPK;
+   
+
+	private AmpCalendarPK calendarPK;
     private AmpEventType eventType;
     private AmpTeamMember member;
     private Set<AmpOrganisation> organisations;
     private Set attendees;
     private boolean privateEvent;
+    private Long eventTypeId; 
 
     public AmpCalendar() {
 
@@ -72,4 +75,11 @@ public class AmpCalendar {
     public void setAttendees(Set attendees) {
         this.attendees = attendees;
     }
+    public Long getEventTypeId() {
+		return eventTypeId;
+	}
+
+	public void setEventTypeId(Long eventTypeId) {
+		this.eventTypeId = eventTypeId;
+	}
 }

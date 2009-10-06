@@ -23,6 +23,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.exception.NoCategoryClassException;
+import org.digijava.module.calendar.dbentity.AmpEventType;
 import org.digijava.module.categorymanager.action.CategoryManager;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -160,6 +161,29 @@ public class CategoryManagerUtil {
 		}
 		return null;
 	}
+	
+	
+	public static List<AmpEventType>  getAmpEventColors() throws NoCategoryClassException{
+List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>(); 
+        
+        AmpCategoryClass categoryClass = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.EVENT_TYPE_KEY);   
+        Iterator<AmpCategoryValue> categoryClassIter = categoryClass.getPossibleValues().iterator();
+         while(categoryClassIter.hasNext()){
+        	AmpEventType eventType = new AmpEventType();
+        	AmpCategoryValue item = (AmpCategoryValue) categoryClassIter.next();
+        	 eventType.setName(item.getValue());
+        	 eventType.setId(item.getId());
+        	   Iterator<AmpCategoryValue> usedValues = item.getUsedValues().iterator();
+        	    while (usedValues.hasNext()){
+        		 AmpCategoryValue categoryValueItem = (AmpCategoryValue) usedValues.next();
+        		 eventType.setColor(categoryValueItem.getValue());
+        	 }
+        	  eventTypeList.add(eventType);
+        }
+		return eventTypeList;
+		
+	}
+	
 	/**
 	 *
 	 * @param categoryKey

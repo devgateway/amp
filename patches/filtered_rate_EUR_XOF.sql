@@ -9,4 +9,4 @@ DELETE FROM amp_currency_rate WHERE from_currency_code="XOF" AND to_currency_cod
 INSERT INTO amp_currency_rate(from_currency_code, to_currency_code, exchange_rate, exchange_rate_date, data_source) 
 	VALUES("EUR", "XOF", 655.957, curdate(), 1);
 INSERT INTO amp_currency_rate(from_currency_code, to_currency_code, exchange_rate, exchange_rate_date, data_source) 
-	VALUES("XOF", "EUR", 0.001524, curdate(), 1);
+	VALUES("XOF", "EUR", 0.0015244901723741038, curdate(), 1);

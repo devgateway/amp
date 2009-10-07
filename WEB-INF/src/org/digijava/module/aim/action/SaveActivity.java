@@ -1004,9 +1004,10 @@ public class SaveActivity extends Action {
 														.getTransactionDate()));
 								boolean useFixedRate = false;
 								if (fundDet.getTransactionType() == Constants.COMMITMENT) {
+									double fixedExchangeRate		=  FormatHelper.parseDouble( fundDet.getFixedExchangeRate() );
 									if (fundDet.isUseFixedRate()
-											&& fundDet.getFixedExchangeRate().doubleValue() > 0
-											&& fundDet.getFixedExchangeRate().doubleValue() != 1) {
+											&& fixedExchangeRate > 0
+											&& fixedExchangeRate  != 1) {
 										useFixedRate = true;
 									}
 								}
@@ -1034,7 +1035,7 @@ public class SaveActivity extends Action {
 										currCode = "USD";
 									}
 									ampFundDet.setTransactionAmount(new Double(transAmt));
-									ampFundDet.setFixedExchangeRate(fundDet.getFixedExchangeRate());
+									ampFundDet.setFixedExchangeRate( FormatHelper.parseDouble( fundDet.getFixedExchangeRate() ) );
 									ampFundDet.setFixedRateBaseCurrency( CurrencyUtil.getCurrencyByCode(currCode) );
 									ampFundDet.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet
 															.getCurrencyCode()));

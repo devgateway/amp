@@ -616,7 +616,7 @@ public class ShowActivityPrintPreview
 	                         	}
 	                         	else
 	                         	{
-	                         		Double fixedExchangeRate = currentFundingDetail.getFixedExchangeRate();
+	                         		Double fixedExchangeRate = FormatHelper.parseDouble( currentFundingDetail.getFixedExchangeRate() );
 	                         		Double currencyAppliedAmount = CurrencyWorker.convert1(FormatHelper.parseDouble(currentFundingDetail.getTransactionAmount()),fixedExchangeRate,1);
 	                            	String currentAmount = FormatHelper.formatNumber(currencyAppliedAmount);
 	                            	currentFundingDetail.setTransactionAmount(currentAmount);

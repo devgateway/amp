@@ -10,8 +10,11 @@ import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.DateConversion;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.FundingDetail;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DecimalWraper;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 public class FundingCalculationsHelper {
 
@@ -92,7 +95,8 @@ public class FundingCalculationsHelper {
 			fundingDetail.setDisbOrderId(fundDet.getDisbOrderId());
 
 			if (fundDet.getFixedExchangeRate() != null && fundDet.getFixedExchangeRate().doubleValue() != 1) {
-				fundingDetail.setFixedExchangeRate(fundDet.getFixedExchangeRate());
+				// We cannot use FormatHelper.formatNumber as this might roundup our number (and this would be very wrong)
+				fundingDetail.setFixedExchangeRate( (fundDet.getFixedExchangeRate()+"").replace(".", FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DECIMAL_SEPARATOR)) );
 				fundingDetail.setUseFixedRate(true);
 			}
 			fundingDetail.setIndexId(indexId++);

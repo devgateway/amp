@@ -4061,7 +4061,8 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
                 if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
                     transAmt *= 1000;
                 }
-                AmpFundingDetail fundDet = new AmpFundingDetail(helperFdet.getTransactionType(), helperFdet.getAdjustmentType(), transAmt, date, detCurr, helperFdet.getFixedExchangeRate());
+                double fixedExchangeRate		= FormatHelper.parseDouble( helperFdet.getFixedExchangeRate() );
+                AmpFundingDetail fundDet = new AmpFundingDetail(helperFdet.getTransactionType(), helperFdet.getAdjustmentType(), transAmt, date, detCurr, fixedExchangeRate);
                 ampFundDets.add(fundDet);
             }
         }

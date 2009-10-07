@@ -281,10 +281,7 @@ function validateFundingExchangeRate() {
 
 
 
-	function chkNumeric(objName,comma,period,hyphen)
-
-	{
-
+function chkNumeric(objName,comma,period,hyphen) {
 // only allow 0-9 be entered, plus any values passed
 
 // (can be in any order, and don't have to be comma, period, or hyphen)
@@ -311,7 +308,7 @@ function validateFundingExchangeRate() {
 
 
 
-		contor=0;
+		contor=0; //counts the number of decimal separators (period paramater) 
 
 		for (i = 0;  i < checkStr.value.length;  i++)
 
@@ -319,7 +316,7 @@ function validateFundingExchangeRate() {
 
 			ch = checkStr.value.charAt(i);
 
-			if (ch==".")
+			if (ch==period)
 
 			{
 
@@ -353,7 +350,7 @@ function validateFundingExchangeRate() {
 
 			}
 
-			if (ch != ",") allNum += ch;
+			if (ch != comma) allNum += ch;
 
 		}
 
@@ -361,9 +358,9 @@ function validateFundingExchangeRate() {
 
 		{
 
-			alertsay = "Please enter only numbers in the \"Exchange rate\" field or a valid decimal number using \".\" "
+			//alertsay = "Please enter only numbers in the \"Exchange rate\" field or a valid decimal number using \".\" "
 
-			alert(alertsay);
+			//alert(alertsay);
 
 			return false;
 
@@ -464,8 +461,8 @@ function validateFundingDetails(comm,disb,exp,msgEnterAmount, msgInvalidAmount,m
 
 			{
 
-				if(chkNumeric(temp[i])==false) { 
-					alert(msgEnterRate+"\".\"");
+				if(chkNumeric(temp[i],this.groupSymbol,this.decimalSymbol,'-')==false) { 
+					alert(msgEnterRate+"'"+ this.decimalSymbol +"'");
 					return false;
 				}
 

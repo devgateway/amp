@@ -5,18 +5,10 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-
-<!-- pour avh formulas -->
-
 <%@ taglib uri="/taglib/struts-nested" prefix="nested" %>
-
-
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ taglib uri="/taglib/fmt" prefix="fmt" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
-
-<!-- END pour avh formulas -->
-
 
 <style type="text/css">
 		.jcol{												
@@ -125,7 +117,7 @@ function banUser(txt) {
 
 </script>
 
-<!--  ============================== -->
+
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript" type="text/javascript">
@@ -161,7 +153,6 @@ function resetFormula(){
 }
 
 </script>
-<!-- =============================== -->
 
 
 
@@ -169,13 +160,7 @@ function resetFormula(){
 
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 
-
-
 <div style="float:left; width:500px;">
-
-
-
-
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0  >
   <tr>
     <td width=14>&nbsp;</td>
@@ -205,9 +190,6 @@ function resetFormula(){
         </tr>
         <tr>
           <td noWrap vAlign="top">
-          
-
-            
                   <table align=center  cellPadding=0 cellSpacing=0 id="dataTable">
                     <tr>
                       <td bgColor=#ffffff class="box-border" height="170px" >
@@ -271,15 +253,11 @@ function resetFormula(){
 	setHoveredTable("dataTable", false);
 	setHoveredRow("rowHighlight");
 </script>
-<!-- ==================================================================== -->
-<!-- ===========   viewAhSurveis.jsp code paste under ========================= -->
-
-<!-- ==================================================================== -->
 </div>
 <div style="float:left; padding-top:75px;">
 
 <digi:errors/>
-<!--<digi:instance property="aimViewAhSurveyFormulasForm" />-->
+
 
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <digi:form action="/viewAhSurveyFormulas.do" >

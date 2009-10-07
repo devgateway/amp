@@ -29,10 +29,12 @@ public class ViewAhSurveyFormulas extends Action {
 		
 		if (!RequestUtils.isAdmin(response, session, request)) {
 			return null;
-		}    	
-    	
-    	ViewAhSurveyFormulasForm svform = (ViewAhSurveyFormulasForm) form;
+		}
 
+		ViewAhSurveyFormulasForm svform=(ViewAhSurveyFormulasForm)form;
+		if (svform.getSurveis()==null)
+			svform.setSurveis(DbUtil.getAllAhSurveyIndicators());
+		
         AmpAhsurveyIndicator sv = null;
         if (svform.getIndId() == null) {
             return mapping.findForward("forward");

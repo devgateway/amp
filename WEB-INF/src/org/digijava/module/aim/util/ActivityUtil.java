@@ -1443,10 +1443,10 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         oql += " and categories.id in ("+statusCode+") ";
       }
       if (fromDate != null) {
-        oql += " and act.createdDate >= :FromDate";
+        oql += " and (act.actualStartDate >= :FromDate or (act.actualStartDate is null and act.proposedStartDate >= :FromDate) )";
       }
       if (toDate != null) {
-        oql += " and act.createdDate <= :ToDate";
+        oql += " and (act.actualStartDate <= :ToDate or (act.actualStartDate is null and act.proposedStartDate <= :ToDate) ) ";
       }
       if (locationId != null) {
         oql += " and act.locations in (from " + AmpLocation.class.getName() +" loc where loc.id=:LocationID)";

@@ -170,9 +170,6 @@
     <forward name="index" path="/aim/index.do" />
   </global-forwards>
   <action-mappings>    
-    <action name="aimViewAhSurveisForm" path="/aim/viewAhSurveis" scope="session" type="org.digijava.module.aim.action.ViewAhSurveis" validate="false">
-      <forward name="forward" path="/showLayout.do?layout=viewAhSurveis" />
-    </action>
     <action name="aimViewAhSurveyFormulasForm" path="/aim/viewAhSurveyFormulas" scope="session" type="org.digijava.module.aim.action.ViewAhSurveyFormulas" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewAhSurveyFormulas" />
     </action>

@@ -3,7 +3,6 @@
 <secondary-pages>
 
     <page name="viewAhSurveyFormulas" title=" - View AhSurvey Formulas" />
-	<page name="viewAhSurveis" title=" - View AhSurveis " />
 	<page name="addSectorToIndicator" title="Add Sector" />
 
 	<page name="viewPortfolioDashboard" title=" - Portfolio Dashboard " />

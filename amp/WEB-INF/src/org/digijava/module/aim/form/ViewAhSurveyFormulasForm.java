@@ -21,6 +21,17 @@ public class ViewAhSurveyFormulasForm extends ActionForm {
 
     private Collection ahsurveyIndicatorCalcFormulas;
 
+    private Collection surveis;
+
+
+    public Collection getSurveis() {
+        return surveis;
+    }
+
+    public void setSurveis(Collection surveis) {
+        this.surveis = surveis;
+    }
+
     public ViewAhSurveyFormulasForm() {
     }
 

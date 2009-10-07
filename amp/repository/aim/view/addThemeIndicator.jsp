@@ -32,9 +32,9 @@
 	<!--
 	function validate()
 	{
-		var err1="<digi:trn key='admin:enterindicatorname'>Please enter Indicator name</digi:trn>";
-		var err2="<digi:trn key='admin:enterindicatorcode'>Please enter Indicator code</digi:trn>";
-		var err3="<digi:trn key='admin:enterindicatortype'>Please enter Indicator type</digi:trn>";
+		var err1="<digi:trn jsFriendly='true'>Please enter Indicator name</digi:trn>";
+		var err2="<digi:trn jsFriendly='true'>Please enter Indicator code</digi:trn>";
+		var err3="<digi:trn jsFriendly='true'>Please enter Indicator type</digi:trn>";
 		
 		if (trim(document.aimThemeForm.name.value).length == 0)
 		{
@@ -89,8 +89,8 @@
 
 function checkValues(){
   var values=getTypeValues();
-  var err1="<digi:trn key='admin:onlyonetargetvalue'>Please specify only one target value</digi:trn>";
-  var err2="<digi:trn key='admin:datesallindicators'>Please specify dates for all indicators</digi:trn>";
+  var err1="<digi:trn jsFriendly='true'>Please specify only one target value</digi:trn>";
+  var err2="<digi:trn jsFriendly='true'>Please specify dates for all indicators</digi:trn>";
 	
   if (values.length !=null){
     var targets=0;
@@ -119,7 +119,7 @@ function checkValues(){
 
 function checkBaseValues(){
   var values=getTypeValues();
-  var err1 = "<digi:trn key='admin:onlyonebasevalues'>Please specify only one Base value</digi:trn>";
+  var err1 = "<digi:trn jsFriendly='true'>Please specify only one Base value</digi:trn>";
   if (values.length !=null){
     var targets=0;
     for (var i=0; i< values.length; i++){
@@ -191,10 +191,6 @@ function unload(){}
   function trim(s) {
     return s.replace( /^\s*/, "" ).replace( /\s*$/, "" );
   }
-
-
-
-
   
   function showhide(what,what2){
 
@@ -218,30 +214,29 @@ function unload(){}
    // validate indicator
    
   function validate(field) {
-	  var err1 = "<digi:trn key='admin:chooseindicatorremove'>Please choose a indicator to remove</digi:trn>";
-	  var msg = "<digi:trn key='admin:confirmremoveindicator'>Are you sure you want to remove the selected indicator(s)?</digi:trn>";
+	  var err1 = "<digi:trn jsFriendly='true'>Please choose a indicator to remove</digi:trn>";
+	  var msg = "<digi:trn jsFriendly='true'>Are you sure you want to remove the selected indicator(s)?</digi:trn>";
 	  if (field == 2) {
 	  
 	  	if (document.aimThemeForm.indicatorsId.checked != null) {
 	  		if (document.aimThemeForm.indicatorsId.checked == false) {
 	  			alert(err1);
-	    return false;
-	  	}
-	  	
+	    		return false;
+	  		}	  	
 		} else {
 	  		var length = document.aimThemeForm.indicatorsId.length;
 	  		var flag = 0;
 	  
-	  	for (i = 0;i < length;i ++) {
-	    	if (document.aimThemeForm.indicatorsId[i].checked == true) {
-	      flag = 1;
-	     break;
-	    }
-	  }
-	  	if (flag == 0) {
-	  		alert(err2);
-		    return false;
-		  }
+	  		for (i = 0;i < length;i ++) {
+	    		if (document.aimThemeForm.indicatorsId[i].checked == true) {
+	      			flag = 1;
+	     			break;
+	    		}
+	  		}
+	  		if (flag == 0) {
+	  			alert(err1);
+		    	return false;
+		  	}
 		}
 		
 		var validate = window.confirm(msg); 

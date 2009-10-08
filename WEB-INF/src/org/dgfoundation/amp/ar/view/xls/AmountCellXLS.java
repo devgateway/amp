@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -55,7 +56,16 @@ public class AmountCellXLS extends XLSExporter {
 	 */
 	public void generate() {
 		AmountCell ac=(AmountCell) item;
-		HSSFCell cell=this.getCell(getAmountStyle());
+		HSSFCellStyle amountStyle;
+		
+		if(parent instanceof TrailCellsXLS)
+		if(parent.getItem().getNearestReportData().getLevelDepth()==2) 
+			amountStyle = this.getAmountHierarchyLevel1Style();
+		 else amountStyle = this.getAmountHierarchyOtherStyle();
+		else
+			amountStyle=this.getAmountStyle();
+		
+		HSSFCell cell=this.getCell(amountStyle);
 		
 		cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
 

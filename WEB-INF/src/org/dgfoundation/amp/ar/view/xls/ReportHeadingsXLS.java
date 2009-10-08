@@ -129,7 +129,7 @@ public class ReportHeadingsXLS extends XLSExporter {
 						// ////System.out.println("["+rowId.intValue()+"]["+colId.intValue()+"]
 						// depth="+curDepth+" "+element2.getName());
 						// create spanning
-						// if(rowsp>1) makeRowSpan(rowsp);
+						if(rowsp>1) makeRowSpan(rowsp-1);
 						
 						if (element2.getWidth() > 1)
 							makeColSpan(element2.getWidth(),true);

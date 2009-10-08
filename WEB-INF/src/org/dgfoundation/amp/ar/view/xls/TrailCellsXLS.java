@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.util.Iterator;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -70,7 +71,14 @@ public class TrailCellsXLS extends XLSExporter {
 //			rowId.inc();
 //			colId.reset();
 			row=sheet.createRow(rowId.shortValue());
-			HSSFCell cell = this.getCell(this.getHighlightedStyle(true));
+		
+			HSSFCellStyle hierarchyStyle;
+			if(grd.getLevelDepth()==2) 
+				hierarchyStyle = this.getHierarchyLevel1Style(true);
+			else hierarchyStyle=this.getHierarchyOtherStyle(true);
+			
+			
+			HSSFCell cell = this.getCell(hierarchyStyle);
 			
 			String modifiedName = (grd.getName()==null)?"":grd.getName();
 

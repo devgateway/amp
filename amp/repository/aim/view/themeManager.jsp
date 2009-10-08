@@ -66,16 +66,19 @@
 		$(imghId).hide();
 		$(imgId).show();
 		$(divId).hide('fast');
-	}       
-       
-	function expandOrCollapseAll(){     
-        $("img[@id^='img_']").toggle();
-		$("img[@id^='imgh_']").toggle();	
-		$("div[@id^='div_theme_']").toggle();
-    }
+	}
      
-      
-        
+     function expandAll(){
+    	$("img[@id^='img_']").hide();
+ 		$("img[@id^='imgh_']").show();	
+ 		$("div[@id^='div_theme_']").show();
+     } 
+
+     function collapseAll(){
+    	$("img[@id^='img_']").show();
+  		$("img[@id^='imgh_']").hide();	
+  		$("div[@id^='div_theme_']").hide();
+     } 
 	-->
 </script>
 
@@ -234,7 +237,8 @@
 											<tr align="center" bgcolor="#ffffff">
 												<td>
 													<input class="button" type="button" name="addBtn" value="<digi:trn key="aim:addProgramMPM">Add New Program</digi:trn>" onclick="addProgram()" style="font-family:verdana;font-size:11px;">
-													<input class="button" type="button" name="expandBtn" value="<digi:trn>Expand/Collapse All</digi:trn>" onclick="expandOrCollapseAll()" style="font-family:verdana;font-size:11px;">
+													<input class="button" type="button" name="expandBtn" value="<digi:trn>Expand All</digi:trn>" onclick="expandAll()" style="font-family:verdana;font-size:11px;">
+													<input class="button" type="button" name="collapseBtn" value="<digi:trn>Collapse All</digi:trn>" onclick="collapseAll()" style="font-family:verdana;font-size:11px;">
 												</td>
 											</tr>
 											<tr>

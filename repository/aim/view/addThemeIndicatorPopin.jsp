@@ -172,7 +172,7 @@
 		panelStart=1;
 	
 	}
-	function closeWindow() {
+	function closeDataWindow() {
 		myclose();
 	}
 	function showPanelLoading(msg){
@@ -213,7 +213,7 @@
 	}
 
 	function addData(id){
-		myPanel.cfg.setProperty("width","600px");
+		myPanel.cfg.setProperty("width","800px");
 		//myPanel.cfg.setProperty("height","200px");
 		var msg='\n<digi:trn>AMP Add/Edit data</digi:trn>';
 		showPanelLoading(msg);
@@ -277,7 +277,7 @@
 	
 	}
 
-	function closeWindow2() {
+	function closeWindow() {
 		myclose2();
 	}
 
@@ -540,18 +540,64 @@ function saveIndicator(id){
 }
 
 function selectLocation(index){
-	
-  
-  <digi:context name="justSubmit" property="context/module/moduleinstance/addEditData.do?action=justSubmit" /> 
-  var url = "<%=justSubmit%>&index="+index;  
-  url += getParamsData();
-  YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);    
 
-  <digi:context name="selLoc" property="context/module/moduleinstance/selectLocationForIndicatorValue.do?action=justSubmit"/>  
-  var url = "<%=selLoc%>&index="+index;
-  YAHOOAmp.util.Connect.asyncRequest("POST", url, callback2);
+
+     <digi:context name="justSubmit" property="context/module/moduleinstance/addEditData.do?action=justSubmit" />
+  var url = "<%=justSubmit%>&index="+index;
+  url += getParamsData();
+  YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
   
+  var params="parentIndex="+index+"&implemLocationLevel=&showLocLevelSelect=true";
+  params+="&edit=false";
+  myAddLocation(params);
 }
+   function myAddLocation(params) {
+		var msg='\n<digi:trn key="aim:addLocation">Add Location</digi:trn>';
+		showPanelLoading2(msg);
+		<digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do" />
+		var url = "<%=selectLoc %>";
+		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback2, params);
+}
+
+  function locationChanged( selectId ) {
+                        var selectEl		= document.getElementById(selectId);
+                        if ( selectEl.value != "-1" ) {
+                            document.selectLocationForm.parentLocId.value=selectEl.value;
+    <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do" />
+                                    var url = "<%=selectLoc%>";
+                                    YAHOOAmp.util.Connect.asyncRequest("POST", url, callback2, "edit=true&"+generateFieldsLocation());
+                                }
+                            }
+
+function  levelChanged() {
+     var params="implemLocationLevel="+document.getElementsByName('implemLocationLevel')[0].value;
+    <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do" />
+      var url = "<%=selectLoc%>";
+      YAHOOAmp.util.Connect.asyncRequest("POST", url, callback2, params);
+}
+
+function generateFieldsLocation(){
+		var ret="parentLocId=" + document.getElementsByName("parentLocId")[0].value;
+                ret+="&parentIndex=" + document.getElementsByName("parentIndex")[0].value;
+		if (document.getElementsByName('userSelectedLocs').length > 0){
+			var opt = document.getElementsByName('userSelectedLocs')[0].length;
+			for(var i=0; i< opt; i++){
+				if(document.getElementsByName('userSelectedLocs')[0].options[i].selected==true){
+					ret += "&userSelectedLocs=" + document.getElementsByName('userSelectedLocs')[0].options[i].value;
+                                        break;
+				}
+			}
+		}
+		return ret;
+	}
+
+	function buttonAddLocation(){
+		var postString		= generateFieldsLocation();
+		<digi:context name="url" property="context/aim/selectLocationForIndicatorValue.do"/>
+		var url = "${url}";
+		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, postString);
+		closeWindow();
+	}
 
 function validation(){
 	var values=document.getElementsByTagName("select");
@@ -600,77 +646,4 @@ function getParamsData(){
 	}
 	return ret;	
 }
-</script>
-<script language="javascript">
-////////////////////////// SELECT LOCATION ////////////////////////////
-	function closeWindow2() {
-		myclose2();
-	}
-	
-	function selectLocation2(){
-	  document.getElementById("indAction").value="add";
-	  //document.aimThemeFormLocPopin.target=window.opener.name;
-	  //document.aimThemeFormLocPopin.submit();
-	  //window.opener.document.aimThemeFormLocPopin.submit();
-	  //window.close();
-	  <digi:context name="justSubmit" property="context/module/moduleinstance/selectLocationForIndicatorValue.do?" /> 
-	  var url = "<%=justSubmit%>";  
-	  url += getParamsLocation();
-	  checkAndClose2=true;
-	  YAHOOAmp.util.Connect.asyncRequest("POST", url, callback2);    	  
-
-	  
-	}
-
-	function countryChanged() {
-		  document.aimThemeFormLocPopin.fill.value = "region";
-		  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocationForIndicatorValue.do?edit=true" />
-		  var url = "<%=selectLoc%>";
-		  url += getParamsLocation();
-		  YAHOOAmp.util.Connect.asyncRequest("POST", url, callback2);
-	}
-
-	function regionChanged() {
-	     document.aimThemeFormLocPopin.fill.value = "zone";
-		  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocationForIndicatorValue.do?edit=true" />
-		  var url = "<%=selectLoc%>";
-		  url += getParamsLocation();
-		  YAHOOAmp.util.Connect.asyncRequest("POST", url, callback2);
-	}
-
-	function zoneChanged() {
-		  document.aimThemeFormLocPopin.fill.value = "woreda";
-		  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocationForIndicatorValue.do?edit=true" />
-		  var url = "<%=selectLoc%>";
-		  url += getParamsLocation();
-		  YAHOOAmp.util.Connect.asyncRequest("POST", url, callback2);
-	}
-	
-	function levelChanged() {
-		  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocationForIndicatorValue.do?edit=true" />
-		  var url = "<%=selectLoc%>";
-		  url += getParamsLocation();
-		  YAHOOAmp.util.Connect.asyncRequest("POST", url, callback2);
-				  
-	}
-	function getParamsLocation(){
-		var ret="";
-		ret += "&fill="+document.aimThemeFormLocPopin.fill.value;
-		ret += "&action="+document.getElementById("indAction").value;
-		if(document.getElementsByName('locationLevelIndex')[0]!=null){
-			ret += "&locationLevelIndex="+document.getElementsByName('locationLevelIndex')[0].value;
-		}
-		if(document.getElementsByName('impRegion')[0]!=null){
-			ret += "&impRegion="+document.getElementsByName('impRegion')[0].value;
-		}
-
-		if(document.getElementsByName('impZone')[0]!=null){
-			ret += "&impZone="+document.getElementsByName('impZone')[0].value;
-		}
-		if(document.getElementsByName('impWoreda')[0]!=null){
-			ret += "&impWoreda="+document.getElementsByName('impWoreda')[0].value;
-		}
-		
-		return ret;
-	}
 </script>

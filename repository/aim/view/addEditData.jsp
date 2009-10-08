@@ -58,16 +58,6 @@ function saveIndicator(id){
   window.close()
 }
 
-function selectLocation(index){
-    <digi:context name="justSubmit" property="context/module/moduleinstance/addEditData.do?action=justSubmit" />
-  	document.aimThemeForm.action = "<%=justSubmit%>&index="+index;
-  	document.aimThemeForm.submit();
-  <digi:context name="selLoc" property="context/module/moduleinstance/selectLocationForIndicatorValue.do?action=justSubmit"/>  
-  openURLinWindow("<%=selLoc%>&index="+index,700,500);
-
-
-
-}
 
 function validation(){
 	var values=document.getElementsByTagName("select");
@@ -165,11 +155,11 @@ function validation(){
           </td>
 
           <td bgColor=#d7eafd  height="10" nowrap="nowrap">
-            [<a href="javascript:selectLocation('${index.count-1}')">
-            	<digi:trn key="aim:addeditdata:addlocation">Add location</digi:trn>
-              <!-- <img src="../ampTemplate/images/closed.gif" border="0" alt="Select location" /> -->
-            </a>]
-          </td>
+        [<a href="javascript:selectLocation('${index.count-1}')">
+            <digi:trn key="aim:addeditdata:addlocation">Add location</digi:trn>
+            <!-- <img src="../ampTemplate/images/closed.gif" border="0" alt="Select location" /> -->
+        </a>]
+</td>
            <td bgColor=#d7eafd nowrap="nowrap">
       
                <c:set var="translation">
@@ -210,7 +200,7 @@ function validation(){
       
       <input class="dr-menu" type="button" name="addBtn" value="${trn}" onclick="return saveIndicator('${aimThemeForm.themeId}')">&nbsp;&nbsp;
       <input class="dr-menu" type="reset" value="${trncancel}">
-      <input class="dr-menu" type="button" name="close" value="${trnclose}" onclick="closeWindow();">
+      <input class="dr-menu" type="button" name="close" value="${trnclose}" onclick="closeDataWindow();">
     </td>
   </tr>
    <tr><td width="100%" colspan="6"><br>

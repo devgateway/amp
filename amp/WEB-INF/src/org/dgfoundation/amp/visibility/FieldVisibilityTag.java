@@ -8,6 +8,8 @@ package org.dgfoundation.amp.visibility;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
@@ -24,6 +26,7 @@ import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.FMAdvancedModeUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
@@ -139,6 +142,9 @@ public class FieldVisibilityTag extends BodyTagSupport {
 	
 	public int doEndTag() throws JspException 
     {
+		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();		
+		String source = (String) request.getAttribute("org.apache.catalina.core.DISPATCHER_REQUEST_PATH");
+		
 		if (bodyContent==null) return  EVAL_PAGE;//SKIP_BODY;
 		if(bodyContent.getString()==null) return EVAL_PAGE;
 		String bodyText = bodyContent.getString();
@@ -182,7 +188,6 @@ public class FieldVisibilityTag extends BodyTagSupport {
    				//TODO AMP-2579 this IF was added to fix null pointer temporary.
    				if (teamMember!=null && !teamMember.getTeamHead()){
    	   			    PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
-   	   			    ServletRequest request = pageContext.getRequest();
    	   			    String actionMode = (String) request.getAttribute(GatePermConst.ACTION_MODE);
    	   			    if(ampFieldFromTree.getPermission(false)!=null && 
    	   			    	PermissionUtil.getFromScope(session, GatePermConst.ScopeKeys.ACTIVITY)!=null &&
@@ -197,7 +202,12 @@ public class FieldVisibilityTag extends BodyTagSupport {
    				if(dbgFM!=null && "true".compareTo(dbgFM)==0)
    	   				output+=this.createDebugText2(bodyText);
    				else output=bodyText;
-   			   pageContext.getOut().print(output);   			    
+   				
+      			if (request.getParameter(FMAdvancedModeUtil.ADVANCED_PARAMETER) == null || source.endsWith("allVisibilityTags.jsp")){
+       	   			pageContext.getOut().print(output.trim());
+       			} else {
+       	   			pageContext.getOut().print(FMAdvancedModeUtil.addFieldAdvancedMarkUp(output));
+       			}
    			////System.out.println("FM ::: field:"+this.getName()+" is ACTIVE");
    			} else {
    				////System.out.println("	FM ::: field:"+this.getName()+" is disabled");

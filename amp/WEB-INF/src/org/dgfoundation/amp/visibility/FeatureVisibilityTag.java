@@ -6,6 +6,8 @@
 package org.dgfoundation.amp.visibility;
 
 import java.util.Iterator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +21,7 @@ import org.apache.struts.tiles.ComponentContext;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
+import org.digijava.module.aim.util.FMAdvancedModeUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.kernel.exception.*;
 
@@ -138,6 +141,9 @@ public class FeatureVisibilityTag extends BodyTagSupport {
 	}
 	public int doEndTag() throws JspException 
     {
+		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();		
+		String source = (String) request.getAttribute("org.apache.catalina.core.DISPATCHER_REQUEST_PATH");
+		
 	   if (bodyContent==null) return  SKIP_BODY;
 	   if(bodyContent.getString()==null) return SKIP_BODY;
        String bodyText = bodyContent.getString();
@@ -157,10 +163,11 @@ public class FeatureVisibilityTag extends BodyTagSupport {
    		   
    		   ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
    		   if(ampTreeVisibility!=null)
-   			   if(isFeatureActive(ampTreeVisibility)){
-   				   pageContext.getOut().print(bodyText);
-   			   }
-    	   
+      			if (request.getParameter(FMAdvancedModeUtil.ADVANCED_PARAMETER) == null || source.endsWith("allVisibilityTags.jsp")){
+       	   			pageContext.getOut().print(bodyText.trim());
+       			} else {
+       	   			pageContext.getOut().print(FMAdvancedModeUtil.addFeatureAdvancedMarkUp(bodyText));
+       			}
        }
        catch (Exception e) {
     	   e.printStackTrace();

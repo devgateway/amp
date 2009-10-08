@@ -78,6 +78,7 @@ function selectLocation() {
 	var params="levelId="+document.getElementsByName("location.levelId")[0].value;
 	params+="&implemLocationLevel="+document.getElementsByName("location.implemLocationLevel")[0].value;
 	params+="&edit=false";
+        params+="&showLocLevelSelect=false";
 	myAddLocation(params);
 }
 

@@ -236,7 +236,7 @@
             document.aimAddOrgForm.submit();
         }
         function selectLocation() {
-            var params="implemLocationLevel="+document.getElementsByName("implemLocationLevel")[0].value;
+            var params="implemLocationLevel="+document.getElementsByName("implemLocationLevel")[0].value+"&showLocLevelSelect=false";
             myAddLocation(params);
         }
         function removeSelLocations(){

@@ -117,7 +117,7 @@ public class SeleniumTestUtil extends SeleneseTestCase {
 		selenium.select("tempNumResults", "value=-1");
 		selenium.click("//input[@type='submit']");
 		selenium.waitForPageToLoad("30000");
-		if (!selenium.isTextPresent("uattmc@amp.org")) {
+		if (!selenium.isTextPresent("uattm@amp.org")) {
 			selenium.click("//a[contains(@href, \"/aim/../um/addUser.do\")]");
 			selenium.waitForPageToLoad("30000");
 			selenium.type("firstNames", "UATtm");
@@ -127,7 +127,9 @@ public class SeleniumTestUtil extends SeleneseTestCase {
 			selenium.type("password", "abc");
 			selenium.type("passwordConfirmation", "abc");
 			selenium.select("selectedOrgType", "index=1");
+			Thread.sleep(10000);
 			selenium.select("selectedOrgGroup", "index=1");
+			Thread.sleep(10000);
 			selenium.select("selectedOrganizationId", "index=1");
 			selenium.click("//input[@onclick='return validate()']");
 			selenium.waitForPageToLoad("30000");

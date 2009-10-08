@@ -315,6 +315,10 @@ public class ActivityFormTest extends SeleneseTestCase{
 				if (SeleniumFeaturesConfiguration.getFeatureState("Location")){
 					if (SeleniumFeaturesConfiguration.getFieldState("Add Location")){
 						if (selenium.isElementPresent("//input[@name='submitButton' and @onclick='selectLocation()']")) {
+							selenium.select("location.levelId", "index=1");
+							selenium.waitForPageToLoad("50000");
+							selenium.select("location.implemLocationLevel", "index=1");
+							Thread.sleep(1000);
 							selenium.click("//input[@name='submitButton' and @onclick='selectLocation()']");
 							//selenium.waitForPopUp(selenium.getAllWindowTitles()[1], "50000");
 							Thread.sleep(10000);

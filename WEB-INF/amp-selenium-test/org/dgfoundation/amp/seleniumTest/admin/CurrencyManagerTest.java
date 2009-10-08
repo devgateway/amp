@@ -72,6 +72,7 @@ public class CurrencyManagerTest extends SeleneseTestCase {
 				selenium.type("updateCRateAmount", "5");
 				selenium.click("//input[@onclick=\"saveRate()\"]");
 				selenium.waitForPageToLoad("30000");
+				selenium.type("filterByDateFrom","09/09/2009");
 				selenium.type("numResultsPerPage", "200");
 				selenium.click("//input[@type=\"submit\"]");
 				selenium.waitForPageToLoad("30000");

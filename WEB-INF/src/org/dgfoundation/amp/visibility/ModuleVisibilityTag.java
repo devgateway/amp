@@ -15,11 +15,11 @@ import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.tiles.ComponentContext;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
+import org.digijava.module.aim.util.FMAdvancedModeUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
-
+import java.util.regex.*;
 
 /**
  * @author dan
@@ -140,7 +140,6 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 //					else return SKIP_BODY;
 //				}
 			
-			
 		}catch(Exception e)
 		{
 			e.printStackTrace();
@@ -149,6 +148,9 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 	}
 	public int doEndTag() throws JspException 
     {
+		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();		
+		String source = (String) request.getAttribute("org.apache.catalina.core.DISPATCHER_REQUEST_PATH");
+		
 		if (bodyContent==null) return  SKIP_BODY;
 		if(bodyContent.getString()==null) return SKIP_BODY;
        String bodyText = bodyContent.getString();
@@ -172,7 +174,12 @@ public class ModuleVisibilityTag extends BodyTagSupport {
     	   if(ampTreeVisibility!=null)
    		   if(isModuleActive(ampTreeVisibility)){
    			   
-   			pageContext.getOut().print(bodyText);
+   			if (request.getParameter(FMAdvancedModeUtil.ADVANCED_PARAMETER) == null || source.endsWith("allVisibilityTags.jsp")){
+   	   			pageContext.getOut().print(bodyText.trim());
+   			} else {
+   	   			pageContext.getOut().print(FMAdvancedModeUtil.addModuleAdvancedMarkUp((bodyText)));
+   			}
+   			
    		   }
    		   else{;
    			////System.out.println("Field MANAGER!!!! module "+this.getName()+" is not ACTIVE");
@@ -204,6 +211,8 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 		return false;
 	}
 	
+	
+
 	
 	public boolean existModuleinDB(AmpTreeVisibility atv)
 	{

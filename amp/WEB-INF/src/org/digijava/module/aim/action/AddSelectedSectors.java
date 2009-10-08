@@ -30,25 +30,25 @@ public class AddSelectedSectors
                                javax.servlet.http.HttpServletResponse response) throws
       Exception {
 
-	  HttpSession session = request.getSession();  
-	  
+	  HttpSession session = request.getSession();
+
     eaForm = (SelectSectorForm) form;
     List sectors=new ArrayList();
     ActionErrors errors = new ActionErrors();
     if(session.getAttribute("selectedSectorsForActivity")!=null){
         sectors=(List)session.getAttribute("selectedSectorsForActivity");
     }
-  
+
     boolean isDuplicated = false;
     Collection<ActivitySector> sectr = new ArrayList();
-    Long[] removedsectorId = (Long[]) session.getAttribute("removedSector"); 
-   
+    Long[] removedsectorId = (Long[]) session.getAttribute("removedSector");
+
     if(removedsectorId != null && eaForm.getCols() != null ){
      for(int i= 0;  i < removedsectorId.length; i++){
        	   checkDuplicateremove(removedsectorId[i]);
          }
     }
- 
+
       if (eaForm.getCols() == null || eaForm.getCols().size() == 0) {
           eaForm.setCols(new ArrayList());
           eaForm.getCols().addAll(sectors);
@@ -65,7 +65,7 @@ public class AddSelectedSectors
               "error.aim.addActivity.sectorMultipleSelectionIsOff"));
           saveErrors(request, errors);
           eaForm.setSomeError(true);
-          return mapping.findForward("forward");  
+          return mapping.findForward("forward");
      }
     Iterator itr = eaForm.getSearchedSectors().iterator();
     int count = 0;
@@ -75,7 +75,7 @@ public class AddSelectedSectors
     while (itr.hasNext()) {
       sctr = (ActivitySector) itr.next();
       for (int i = 0; i < selsearchedSector.length; i++) {
-        
+
         if(sctr.getSubsectorLevel2Id() == -1 && sctr.getSubsectorLevel1Id() != -1){
         	sectorId = sctr.getSubsectorLevel1Id();
         }else if(sctr.getSubsectorLevel1Id() == -1){
@@ -83,10 +83,10 @@ public class AddSelectedSectors
         }else{
         	sectorId = sctr.getSubsectorLevel2Id();
         }
-        
+
         logger.info("getsectorid: " + sectorId +
                 " selsearchedSector: " + selsearchedSector[i]);
- 
+
         if (sectorId.equals(selsearchedSector[i])) {
           isDuplicated = checkDuplicate(sctr);
           if (!isDuplicated) {
@@ -133,7 +133,7 @@ public class AddSelectedSectors
       session.setAttribute("add", "true");
     }
     else{
-       
+
         errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
               "error.aim.sectorAlreadyAddedToActivity"));
           saveErrors(request, errors);
@@ -156,7 +156,7 @@ public class AddSelectedSectors
 	  }
 	  return true;
   }
-  
+
   public boolean checkDuplicate(ActivitySector dup) {
     Iterator itr = eaForm.getCols().iterator();
     ActivitySector sector;

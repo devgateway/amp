@@ -92,19 +92,24 @@ public class ThemeForm extends ActionForm {
       	  private Long indid[]; // list of ind selected from
       	  private Long parentIndex;
       	  private String action;
-      	  
+      	  @Deprecated
       	  private String fill; // National, region, district 	
       	  private boolean defaultCountryIsSet;
+          @Deprecated
       	  private Collection<AmpCategoryValueLocations> regions;
+          @Deprecated
     	  private Long impRegion;
-    	  
+    	  @Deprecated
     	  private Collection<AmpCategoryValueLocations> zones;
+          @Deprecated
     	  private Long impZone;
-        
+          @Deprecated
     	  private Collection<AmpCategoryValueLocations> woredas;
+          @Deprecated
     	  private Long impWoreda;
-
+          @Deprecated
       	  private String country;
+          @Deprecated
       	  private String impCountry;
       	  
       	  private Integer locationLevelIndex;
@@ -114,6 +119,15 @@ public class ThemeForm extends ActionForm {
       	private Collection pages;
       	private String[] alphaPages;
         private String alpha;
+        private Long[] userSelectedLocs;
+
+        public Long[] getUserSelectedLocs() {
+            return userSelectedLocs;
+        }
+
+        public void setUserSelectedLocs(Long[] userSelectedLocs) {
+            this.userSelectedLocs = userSelectedLocs;
+        }
 
         public String getAlpha() {
             return alpha;

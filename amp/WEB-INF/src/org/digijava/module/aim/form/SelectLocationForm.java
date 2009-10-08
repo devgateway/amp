@@ -81,7 +81,25 @@ public class SelectLocationForm extends ActionForm{
 	private boolean defaultCountryIsSet;
 	private int pagesSize;
 	private boolean reseted;
-	
+        private Long parentIndex;
+        private boolean showLocLevelSelect;
+
+        public boolean isShowLocLevelSelect() {
+            return showLocLevelSelect;
+        }
+
+        public void setShowLocLevelSelect(boolean showLocLevelSelect) {
+            this.showLocLevelSelect = showLocLevelSelect;
+        }
+
+        public Long getParentIndex() {
+            return parentIndex;
+        }
+
+        public void setParentIndex(Long parentIndex) {
+            this.parentIndex = parentIndex;
+        }
+
 	public Long getLevelId() {
 		return levelId;
 	}

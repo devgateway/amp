@@ -16,6 +16,7 @@
 <digi:form action="/locationSelected.do">
 <html:hidden styleId="locationReset" property="locationReset" value="false" />
 <html:hidden styleId="parentLocId" property="parentLocId" />
+<html:hidden styleId="parentIndex" property="parentIndex" />
 
 
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
@@ -33,6 +34,17 @@
 						<tr>
 							<td align="center" bgcolor=#ECF3FD>
 								<table cellPadding=2 cellSpacing=2>
+                                                                    <c:if test="${selectLocationForm.showLocLevelSelect}">
+                                                                     <tr>
+                                                                        <td><digi:trn key="aim:pleaseSelectLevel">Select level</digi:trn></td>
+                                                                        <td>
+                                                                            <c:set var="translation">
+                                                                                <digi:trn key="aim:addActivityImplLevelFirstLine">Please select from below</digi:trn>
+                                                                            </c:set>
+                                                                    <category:showoptions multiselect="false" firstLine="${translation}" name="selectLocationForm" property="implemLocationLevel" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>"  outeronchange="levelChanged()" styleClass="inp-text"/>
+                                                                    </td>
+                                                                    </tr>
+                                                                    </c:if>
 									<logic:notEmpty name="selectLocationForm" property="locationByLayers">
 										<logic:iterate name="selectLocationForm" property="locationByLayers" id="entry">
 											<bean:define id="myCollection" type="java.util.Collection" name="entry" property="value" />

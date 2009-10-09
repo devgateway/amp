@@ -227,10 +227,6 @@ public class ShowCalendarEvent extends Action {
             }       
             ceform.setMethod("");
             return mapping.findForward("forward");
-
-           
-            
-            
             
         } else if (ceform.getMethod().equalsIgnoreCase("preview") || ceform.getMethod().equalsIgnoreCase("print")) {
         	String stDate=ceform.getSelectedStartDate() + " " + ceform.getSelectedStartTime();
@@ -513,13 +509,15 @@ public class ShowCalendarEvent extends Action {
                 // private event
                 ceform.setPrivateEvent(ampCalendar.isPrivateEvent());
                 
-                if(ampCalendar.getEventType()!=null){
-                	//event type
-                	ceform.setSelectedEventTypeName(ampCalendar.getEventType().getName());
-                	// selected event type
-                    ceform.setSelectedEventTypeId(ampCalendar.getEventType().getId());
+                if(ampCalendar.getEventTypeId()!=null){
+                	AmpCategoryValue ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromDb(ampCalendar.getEventTypeId());
+                	if (ampCategoryValue != null){
+                		//event type
+                    	ceform.setSelectedEventTypeName(ampCategoryValue.getValue());
+                    	// selected event type
+                        ceform.setSelectedEventTypeId(ampCategoryValue.getId());
+                	}
                 }
-                
 
                 Collection<AmpOrganisation> orgs = new ArrayList<AmpOrganisation> ();
                 if (ampCalendar.getOrganisations() != null) {
@@ -576,18 +574,12 @@ public class ShowCalendarEvent extends Action {
                 			ceform.setSelectedStartYear("");
                 			ceform.setSelectedStartMonth("");
                 		}
-                			
-                		
                 		rec.getId();
-                		
-                	}
-                	
-               
-                
+                	} 
 
                 try {
-                    startDateBreakDown = new DateBreakDown(startDate, ceform.getSelectedCalendarTypeId().intValue());
-                    endDateBreakDown = new DateBreakDown(endDate, ceform.getSelectedCalendarTypeId().intValue());
+                    startDateBreakDown = new DateBreakDown(startDate, ceform.getSelectedCalendarTypeId().intValue(),request);
+                    endDateBreakDown = new DateBreakDown(endDate, ceform.getSelectedCalendarTypeId().intValue(),request);
                     
                     ceform.setSelectedStartDate(startDateBreakDown.formatDateString());
                     ceform.setSelectedStartTime(startDateBreakDown.formatTimeString());

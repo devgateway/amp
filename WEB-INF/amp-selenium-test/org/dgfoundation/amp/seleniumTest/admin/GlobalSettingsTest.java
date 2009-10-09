@@ -29,8 +29,7 @@ public class GlobalSettingsTest extends SeleneseTestCase {
 			selenium.click("//a[contains(@href, \"/aim/GlobalSettings.do\")]");
 			selenium.waitForPageToLoad("30000");
 			int cnt = 2;
-			boolean done = false;
-			while (!done) {
+			while (selenium.isElementPresent("//table[@id='general']/tbody/tr["+cnt+"]")) {
 				if (selenium.getAttribute("//table[@id='general']/tbody/tr["+cnt+"]/td[2]/input[2]@value").equalsIgnoreCase("Public View")) {
 					if (selenium.getSelectedIndex("//table[@id='general']/tbody/tr["+cnt+"]/td[2]/select").equals("0")) {
 						selenium.select("//table[@id='general']/tbody/tr["+cnt+"]/td[2]/select", "index=1");
@@ -39,16 +38,33 @@ public class GlobalSettingsTest extends SeleneseTestCase {
 						selenium.select("//table[@id='general']/tbody/tr["+cnt+"]/td[2]/select", "index=0");
 						enbabledPublicView = true;	
 					}
-					done = true;
+				}
+				if (selenium.getAttribute("//table[@id='general']/tbody/tr["+cnt+"]/td[2]/input[2]@value").equalsIgnoreCase("Alert if sum of disbursments is bigger than sum of commitments")) {
+					if (selenium.getSelectedIndex("//table[@id='general']/tbody/tr["+cnt+"]/td[2]/select").equals("0")) {
+						selenium.select("//table[@id='general']/tbody/tr["+cnt+"]/td[2]/select", "index=1");
+						alertSum = false;
+					} else {
+						selenium.select("//table[@id='general']/tbody/tr["+cnt+"]/td[2]/select", "index=0");
+						alertSum = true;	
+					}
+				}
+				if (selenium.getAttribute("//table[@id='general']/tbody/tr["+cnt+"]/td[2]/input[2]@value").equalsIgnoreCase("Change Range Default End Value")) {
+					endYear = selenium.getSelectedValue("//table[@id='general']/tbody/tr["+cnt+"]/td[2]/select");
+					selenium.select("//table[@id='general']/tbody/tr["+cnt+"]/td[2]/select", "value=2015");
 				}
 				cnt++;
-				if (cnt==20) {
-					done = true;
-				}
 			}
 			cnt = 2;
-			done = false;
-			while (!done) {
+			while (selenium.isElementPresent("//table[@id='funding']/tbody/tr["+cnt+"]")) {
+				if (selenium.getAttribute("//table[@id='funding']/tbody/tr["+cnt+"]/td[2]/input[2]@value").equalsIgnoreCase("Public View")) {
+					if (selenium.getSelectedIndex("//table[@id='funding']/tbody/tr["+cnt+"]/td[2]/select").equals("0")) {
+						selenium.select("//table[@id='funding']/tbody/tr["+cnt+"]/td[2]/select", "index=1");
+						enbabledPublicView = false;
+					} else {
+						selenium.select("//table[@id='funding']/tbody/tr["+cnt+"]/td[2]/select", "index=0");
+						enbabledPublicView = true;	
+					}
+				}
 				if (selenium.getAttribute("//table[@id='funding']/tbody/tr["+cnt+"]/td[2]/input[2]@value").equalsIgnoreCase("Alert if sum of disbursments is bigger than sum of commitments")) {
 					if (selenium.getSelectedIndex("//table[@id='funding']/tbody/tr["+cnt+"]/td[2]/select").equals("0")) {
 						selenium.select("//table[@id='funding']/tbody/tr["+cnt+"]/td[2]/select", "index=1");
@@ -57,25 +73,38 @@ public class GlobalSettingsTest extends SeleneseTestCase {
 						selenium.select("//table[@id='funding']/tbody/tr["+cnt+"]/td[2]/select", "index=0");
 						alertSum = true;	
 					}
-					done = true;
+				}
+				if (selenium.getAttribute("//table[@id='funding']/tbody/tr["+cnt+"]/td[2]/input[2]@value").equalsIgnoreCase("Change Range Default End Value")) {
+					endYear = selenium.getSelectedValue("//table[@id='funding']/tbody/tr["+cnt+"]/td[2]/select");
+					selenium.select("//table[@id='funding']/tbody/tr["+cnt+"]/td[2]/select", "value=2029");
 				}
 				cnt++;
-				if (cnt==20) {
-					done = true;
-				}
 			}
 			cnt = 2;
-			done = false;
-			while (!done) {
+			while (selenium.isElementPresent("//table[@id='date']/tbody/tr["+cnt+"]")) {
+				if (selenium.getAttribute("//table[@id='date']/tbody/tr["+cnt+"]/td[2]/input[2]@value").equalsIgnoreCase("Public View")) {
+					if (selenium.getSelectedIndex("//table[@id='date']/tbody/tr["+cnt+"]/td[2]/select").equals("0")) {
+						selenium.select("//table[@id='date']/tbody/tr["+cnt+"]/td[2]/select", "index=1");
+						enbabledPublicView = false;
+					} else {
+						selenium.select("//table[@id='date']/tbody/tr["+cnt+"]/td[2]/select", "index=0");
+						enbabledPublicView = true;	
+					}
+				}
+				if (selenium.getAttribute("//table[@id='date']/tbody/tr["+cnt+"]/td[2]/input[2]@value").equalsIgnoreCase("Alert if sum of disbursments is bigger than sum of commitments")) {
+					if (selenium.getSelectedIndex("//table[@id='date']/tbody/tr["+cnt+"]/td[2]/select").equals("0")) {
+						selenium.select("//table[@id='date']/tbody/tr["+cnt+"]/td[2]/select", "index=1");
+						alertSum = false;
+					} else {
+						selenium.select("//table[@id='date']/tbody/tr["+cnt+"]/td[2]/select", "index=0");
+						alertSum = true;	
+					}
+				}
 				if (selenium.getAttribute("//table[@id='date']/tbody/tr["+cnt+"]/td[2]/input[2]@value").equalsIgnoreCase("Change Range Default End Value")) {
 					endYear = selenium.getSelectedValue("//table[@id='date']/tbody/tr["+cnt+"]/td[2]/select");
 					selenium.select("//table[@id='date']/tbody/tr["+cnt+"]/td[2]/select", "value=2029");
-					done = true;
 				}
 				cnt++;
-				if (cnt==20) {
-					done = true;
-				}
 			}
 			selenium.click("saveAll");
 			selenium.waitForPageToLoad("30000");
@@ -98,9 +127,9 @@ public class GlobalSettingsTest extends SeleneseTestCase {
 			selenium.waitForPageToLoad("30000");
 			selenium.click("link=UAT Team Workspace");
 			selenium.waitForPageToLoad("30000");
-			if (!selenium.isElementPresent("MyTabs")) {
+			//if (!selenium.isElementPresent("MyTabs")) {
 				TabTest.addBasicTab(selenium, "Test Tab TMC 2 " + testTime, testTime);
-			}
+			//}
 			if (!selenium.getText("//div[@id=\"currentDisplaySettings\"]/table/tbody/tr[2]/td").contains("2029")) {
 				logger.error("Default End Value doesn't change according Global Settings");
 			}
@@ -131,11 +160,11 @@ public class GlobalSettingsTest extends SeleneseTestCase {
 							selenium.selectWindow(selenium.getAllWindowTitles()[1]); 
 					        SeleniumTestUtil.waitForElement(selenium,"funding.assistanceType", 90);
 					        
-					        if (SeleniumFeaturesConfiguration.getFieldState("Type Of Assistance")){
+					        //if (SeleniumFeaturesConfiguration.getFieldState("Type Of Assistance")){
 								selenium.select("funding.assistanceType", "index=1");
-							} else {
-								logger.info("Field \"Type Of Assistance\" is not available.");
-							}
+							//} else {
+							//	logger.info("Field \"Type Of Assistance\" is not available.");
+							//}
 							if (SeleniumFeaturesConfiguration.getFieldState("Funding Organization Id")){
 								selenium.type("orgFundingId", "12345");
 							} else {
@@ -201,48 +230,67 @@ public class GlobalSettingsTest extends SeleneseTestCase {
 			selenium.click("//a[contains(@href, \"/aim/GlobalSettings.do\")]");
 			selenium.waitForPageToLoad("30000");
 			cnt = 2;
-			done = false;
-			while (!done) {
+			while (selenium.isElementPresent("//table[@id='general']/tbody/tr["+cnt+"]")) {
 				if (selenium.getAttribute("//table[@id='general']/tbody/tr["+cnt+"]/td[2]/input[2]@value").equalsIgnoreCase("Public View")) {
 					if (enbabledPublicView) {
 						selenium.select("//table[@id='general']/tbody/tr["+cnt+"]/td[2]/select", "index=1");
 					} else {
 						selenium.select("//table[@id='general']/tbody/tr["+cnt+"]/td[2]/select", "index=0");
 					}
-					done = true;
+				}
+				if (selenium.getAttribute("//table[@id='general']/tbody/tr["+cnt+"]/td[2]/input[2]@value").equalsIgnoreCase("Alert if sum of disbursments is bigger than sum of commitments")) {
+					if (alertSum) {
+						selenium.select("//table[@id='general']/tbody/tr["+cnt+"]/td[2]/select", "index=1");
+					} else {
+						selenium.select("//table[@id='general']/tbody/tr["+cnt+"]/td[2]/select", "index=0");
+					}
+				}
+				if (selenium.getAttribute("//table[@id='general']/tbody/tr["+cnt+"]/td[2]/input[2]@value").equalsIgnoreCase("Change Range Default End Value")) {
+					selenium.select("//table[@id='general']/tbody/tr["+cnt+"]/td[2]/select", "label="+endYear);
 				}
 				cnt++;
-				if (cnt==20) {
-					done = true;
-				}
 			}
 			cnt = 2;
-			done = false;
-			while (!done) {
+			while (selenium.isElementPresent("//table[@id='funding']/tbody/tr["+cnt+"]")) {
+				if (selenium.getAttribute("//table[@id='funding']/tbody/tr["+cnt+"]/td[2]/input[2]@value").equalsIgnoreCase("Public View")) {
+					if (enbabledPublicView) {
+						selenium.select("//table[@id='funding']/tbody/tr["+cnt+"]/td[2]/select", "index=1");
+					} else {
+						selenium.select("//table[@id='funding']/tbody/tr["+cnt+"]/td[2]/select", "index=0");
+					}
+				}
 				if (selenium.getAttribute("//table[@id='funding']/tbody/tr["+cnt+"]/td[2]/input[2]@value").equalsIgnoreCase("Alert if sum of disbursments is bigger than sum of commitments")) {
 					if (alertSum) {
 						selenium.select("//table[@id='funding']/tbody/tr["+cnt+"]/td[2]/select", "index=1");
 					} else {
 						selenium.select("//table[@id='funding']/tbody/tr["+cnt+"]/td[2]/select", "index=0");
 					}
-					done = true;
+				}
+				if (selenium.getAttribute("//table[@id='funding']/tbody/tr["+cnt+"]/td[2]/input[2]@value").equalsIgnoreCase("Change Range Default End Value")) {
+					selenium.select("//table[@id='funding']/tbody/tr["+cnt+"]/td[2]/select", "value="+endYear);
 				}
 				cnt++;
-				if (cnt==20) {
-					done = true;
-				}
 			}
 			cnt = 2;
-			done = false;
-			while (!done) {
+			while (selenium.isElementPresent("//table[@id='date']/tbody/tr["+cnt+"]")) {
+				if (selenium.getAttribute("//table[@id='date']/tbody/tr["+cnt+"]/td[2]/input[2]@value").equalsIgnoreCase("Public View")) {
+					if (enbabledPublicView) {
+						selenium.select("//table[@id='date']/tbody/tr["+cnt+"]/td[2]/select", "index=1");
+					} else {
+						selenium.select("//table[@id='date']/tbody/tr["+cnt+"]/td[2]/select", "index=0");
+					}
+				}
+				if (selenium.getAttribute("//table[@id='date']/tbody/tr["+cnt+"]/td[2]/input[2]@value").equalsIgnoreCase("Alert if sum of disbursments is bigger than sum of commitments")) {
+					if (alertSum) {
+						selenium.select("//table[@id='date']/tbody/tr["+cnt+"]/td[2]/select", "index=1");
+					} else {
+						selenium.select("//table[@id='date']/tbody/tr["+cnt+"]/td[2]/select", "index=0");
+					}
+				}
 				if (selenium.getAttribute("//table[@id='date']/tbody/tr["+cnt+"]/td[2]/input[2]@value").equalsIgnoreCase("Change Range Default End Value")) {
 					selenium.select("//table[@id='date']/tbody/tr["+cnt+"]/td[2]/select", "value="+endYear);
-					done = true;
 				}
 				cnt++;
-				if (cnt==20) {
-					done = true;
-				}
 			}
 			selenium.click("saveAll");
 			selenium.waitForPageToLoad("30000");

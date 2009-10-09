@@ -154,7 +154,7 @@ function toggleSettings(){
 					  </span>				  
 					</td>
 				</tr>
-				<tr bgcolor="#edf5ff">
+				<tr>
 				  <td valign="top">
 				  <div style="padding: 3px; width: 100%; background-color: rgb(204, 219, 255); font-size: 8pt;">
 				  <span style="cursor:pointer; font-style: italic;float:left;color: red;">
@@ -214,8 +214,8 @@ function toggleSettings(){
 						<td colspan="2" valign="top">
 						<div>
 						<div align="center">
-						<table width="100%" height="100%" border="0" align=center cellPadding=0 cellSpacing=0  id="dataTable">
-							<tr>
+						<table width="100%" height="100%" border="0" align=center cellPadding=0 cellSpacing=0>
+							<tr style="background-color:#999999; color:#000;  ">
 								<td width="280" height="22" align="center" valign="center" bgcolor="#999999"
 									style="color: black"><c:if 
 									test="${aimAuditLoggerManagerForm.sortBy!='nameasc'}">
@@ -312,6 +312,10 @@ function toggleSettings(){
 									</digi:link>
 								</c:if></td>
 							</tr>
+							</table>
+							</div>
+							<div  style="overflow:auto;width:100%;height:220px;max-height:220px;"  >
+							<table width="100%" BORDER=0 cellpadding="0" cellspacing="0" id="dataTable"    >
 							<logic:iterate name="aimAuditLoggerManagerForm" property="logs"
 								id="log" type="org.digijava.module.aim.dbentity.AmpAuditLogger">
 								<tr>
@@ -360,16 +364,20 @@ function toggleSettings(){
 									</td>
 								</tr>
 							</logic:iterate>
-						</table>
-						</div>
+							</table>
+							</div>
 						</div>					
 					</td>
 				  </tr>
 					<tr>
-						<td align="left" valign="middle">
-						<div style="cursor: pointer; font-family: Arial; text-align: left; text-decoration: none;">
-						<br>
+						<td colspan="4" align="left" valign="middle">
+						<div style="float:left;">
+						<table style="padding:5px;">
+						<tr id="rowHighlight">
+
+						
 						<c:if test="${aimAuditLoggerManagerForm.currentPage > 1}">
+						    <td style="padding:3px;border:1px solid #999999;" nowrap="nowrap">
 							<jsp:useBean id="urlParamsFirst" type="java.util.Map" class="java.util.HashMap"/>
 							<c:set target="${urlParamsFirst}" property="page" value="1"/>
 							<c:set target="${urlParamsFirst}" property="sortBy" value="${aimAuditLoggerManagerForm.sortBy}" />
@@ -379,48 +387,57 @@ function toggleSettings(){
 							<digi:link href="/auditLoggerManager.do" style="text-decoration=none" name="urlParamsFirst" title="${translation}"  >
 								<span style="font-size: 8pt; font-family: Tahoma;">&lt;&lt;</span>							
 							</digi:link>
+							</td>
+							<td style="padding:3px;border:1px solid #999999;" nowrap="nowrap">
 							<jsp:useBean id="urlParamsPrevious" type="java.util.Map" class="java.util.HashMap"/>
 							<c:set target="${urlParamsPrevious}" property="page" value="${aimAuditLoggerManagerForm.currentPage -1}"/>
 							<c:set target="${urlParamsPrevious}" property="sortBy" value="${aimAuditLoggerManagerForm.sortBy}" />
 							<c:set var="translation">
 								<digi:trn key="aim:previouspage">Previous Page</digi:trn>
-							</c:set>|
+							</c:set>
+							
 							<digi:link href="/auditLoggerManager.do" name="urlParamsPrevious" style="text-decoration=none" title="${translation}" >
 								<digi:trn key="aim:previous">
 									<span style="font-size: 8pt; font-family: Tahoma;">Previous</span>
 								</digi:trn>&nbsp;	
-							</digi:link>|
+							</digi:link>
+							</td>
 						</c:if>
 					<c:set var="length" value="${aimAuditLoggerManagerForm.pagesToShow}"></c:set>
 					<c:set var="start" value="${aimAuditLoggerManagerForm.offset}"/>
-					<logic:iterate name="aimAuditLoggerManagerForm" property="pages" id="pages" type="java.lang.Integer" offset="${start}" length="${length}">	
+					<logic:iterate name="aimAuditLoggerManagerForm" property="pages" id="pages" type="java.lang.Integer" offset="${start}" length="${length}">
+											
 						<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
 						<c:set target="${urlParams1}" property="sortBy" value="${aimAuditLoggerManagerForm.sortBy}" />
 						<c:set target="${urlParams1}" property="page"><%=pages%></c:set>
 						<c:if test="${aimAuditLoggerManagerForm.currentPage == pages && aimAuditLoggerManagerForm.pagesSize > 1}">
+						<td style="padding:3px;border:1px solid #999999;" nowrap="nowrap">
 							<font color="#FF0000"><%=pages%></font>
-							|	
+						</td>	
 						</c:if>
 						<c:if test="${aimAuditLoggerManagerForm.currentPage != pages && aimAuditLoggerManagerForm.pagesSize > 1}">
+							<td style="padding:3px;border:1px solid #999999;" nowrap="nowrap">
 							<c:set var="translation">
 								<digi:trn key="aim:clickToViewNextPage">Click here to go to Next Page</digi:trn>
 							</c:set>
 							<digi:link href="/auditLoggerManager.do" name="urlParams1" title="${translation}" >
 								<%=pages%>							
 							</digi:link>
-							|
+							</td>
 						</c:if>
 						</logic:iterate>
 						<c:if test="${aimAuditLoggerManagerForm.currentPage != aimAuditLoggerManagerForm.pagesSize}">
+						    <td style="padding:3px;border:1px solid #999999;" nowrap="nowrap">
 							<jsp:useBean id="urlParamsNext" type="java.util.Map" class="java.util.HashMap" />
 							<c:set target="${urlParamsNext}" property="page" value="${aimAuditLoggerManagerForm.currentPage+1}"/>
 							<c:set target="${urlParamsNext}" property="sortBy" value="${aimAuditLoggerManagerForm.sortBy}" />
 							<c:set var="translation"> <digi:trn key="aim:nextpage">Next Page</digi:trn></c:set>
+							
 							<digi:link  href="/auditLoggerManager.do" style="text-decoration=none" name="urlParamsNext" title="${translation}">
 								<digi:trn key="aim:next"><span style="font-size: 8pt; font-family: Tahoma;">Next</span></digi:trn>
 							</digi:link>
-							<jsp:useBean id="urlParamsLast" type="java.util.Map" class="java.util.HashMap" />|
-							
+							<jsp:useBean id="urlParamsLast" type="java.util.Map" class="java.util.HashMap" />
+							</td>
 						<c:if test="${aimAuditLoggerManagerForm.pagesSize > aimAuditLoggerManagerForm.pagesToShow}">
 							<c:set target="${urlParamsLast}" property="page" value="${aimAuditLoggerManagerForm.pagesSize}" />
 							<c:set target="${urlParamsLast}" property="sortBy" value="${aimAuditLoggerManagerForm.sortBy}" />
@@ -430,30 +447,30 @@ function toggleSettings(){
 							<c:set target="${urlParamsLast}" property="sortBy" value="${aimAuditLoggerManagerForm.sortBy}" />
 							<c:set target="${urlParamsLast}" property="page" value="${aimAuditLoggerManagerForm.pagesSize}" />
 						</c:if>
-						<c:set var="translation"> 
+						<c:set var="translation">
                         <digi:trn key="aim:lastpage">
 							Last Page
 						</digi:trn>
 						</c:set>
+						<td style="padding:3px;border:1px solid #999999;" nowrap="nowrap">
 						<digi:link href="/auditLoggerManager.do" style="text-decoration=none" name="urlParamsLast" title="${translation}">
 							<span style="font-size: 8pt; font-family: Tahoma;">&gt;&gt;</span>
-						</digi:link> 
+						</digi:link>
+						</td> 
 					</c:if>
+					<td style="padding:3px;border:1px solid #999999;" nowrap="nowrap">
 					<c:out value="${aimAuditLoggerManagerForm.currentPage}"/>&nbsp; 
 					<digi:trn key="aim:of">
 						<span style="font-size: 8pt; font-family: Tahoma;">of</span>
 					</digi:trn>&nbsp;
 					<span style="font-size: 8pt; font-family: Tahoma;">
 						<c:out value="${aimAuditLoggerManagerForm.pagesSize}"/>
-					</span>					
-						<a style="float: right; cursor: pointer;" onclick="window.scrollTo(0,0); return false">
-							<digi:trn key="aim:backtotop">Back to Top</digi:trn>
-					</span>
-						<span style="font-size: 10pt; font-family: Tahoma;">↑</span></a>					
+					</span>	
+			
 					</td>
-					</div>
 				</tr>
-				</table>				
+				</table>
+				</div>				
 				</td>
  			</tr>
 		</table>	

@@ -401,7 +401,7 @@
 			  YAHOOAmp.util.Connect.asyncRequest("POST", url, callback, "edit=true&"+postString);
 						 
 			 return true;
-			}
+		}
 		}
 		else 
 			return false;
@@ -436,7 +436,7 @@
 	function locationChanged( selectId ) {
 		var selectEl		= document.getElementById(selectId);
 		if ( selectEl.value != "-1" ) {
-			document.aimEditActivityFormPop.parentLocId.value=selectEl.value;
+			document.selectLocationForm.parentLocId.value=selectEl.value;
 			//selectEl.options[selectEl.selectedIndex].value;
 			<digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do" />	  
 			var url = "<%=selectLoc %>";

@@ -42,7 +42,7 @@ public class OrganizationManagerTest extends SeleneseTestCase {
 			selenium.waitForPageToLoad("30000");
 			selenium.type("orgGrpName", orgGroupName);
 			selenium.type("orgGrpCode", "SOG");
-			selenium.select("orgTypeId", "index=1");
+			selenium.select("orgTypeId", "label="+orgTypeName);
 			selenium.click("submitButton");
 			selenium.waitForPageToLoad("30000");
 			selenium.click("//a[contains(@href, \"/aim/organisationManager.do\")]");
@@ -51,11 +51,11 @@ public class OrganizationManagerTest extends SeleneseTestCase {
 			selenium.waitForPageToLoad("30000");
 			selenium.type("name", organizationName);
 			selenium.type("acronym", "selorg");
-			selenium.select("ampOrgTypeId", "index=1");
+			selenium.select("ampOrgTypeId", "label="+orgTypeName);
 			Thread.sleep(5000);
 			selenium.select("ampOrgGrpId", "label="+orgGroupName);
-			selenium.type("orgCode", "123");
-			selenium.type("budgetOrgCode", "123");
+			selenium.type("orgCode", testTime);
+			selenium.type("budgetOrgCode", testTime);
 			selenium.click("//input[@onclick=\"return check()\"]");
 			selenium.waitForPageToLoad("30000");
 			//selenium.select("tempNumResults", "label=All");
@@ -78,9 +78,9 @@ public class OrganizationManagerTest extends SeleneseTestCase {
 		        Thread.sleep(5000);
 				selenium.selectWindow(selenium.getAllWindowTitles()[1]); 
 		       
-		        selenium.select("ampOrgTypeId", "index=1");
+		        selenium.select("ampOrgTypeId", "label="+orgTypeName);
 				selenium.type("keyword", organizationName);
-				selenium.click("submitButton");
+				selenium.click("//input[@onclick=\"return searchOrganization()\"]");
 				SeleniumTestUtil.waitForElement(selenium,"selOrganisations", 90);
 				selenium.click("selOrganisations"); 
 				selenium.click("//input[@onclick='return selectOrganization()']");

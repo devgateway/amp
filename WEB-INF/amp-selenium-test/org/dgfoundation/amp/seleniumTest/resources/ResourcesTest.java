@@ -62,14 +62,10 @@ public class ResourcesTest extends SeleneseTestCase {
 			if (selenium.isElementPresent("//button[@type='button' and @onclick=\"setType('team'); configPanel(0,'','','', false);showMyPanel(0, 'addDocumentDiv');\"]")) {
 				logger.error("Error on resources shown");
 			}
-			selenium.click("link=exact:http://www.yahoo.com");
-			//selenium.waitForPopUp(selenium.getAllWindowTitles()[1], "50000");
-			//Thread.sleep(10000);
-			//selenium.selectWindow(selenium.getAllWindowTitles()[1]); 
-	        //assertTrue(selenium.getAllWindowTitles()[1].contains("ahoo"));
-	        //selenium.close();
-	        //selenium.selectWindow("null");
-	        selenium.click("//li[@id='tab1']/a/div");
+			if (!selenium.isElementPresent("link=exact:http://www.yahoo.com")) {
+				logger.error("Link added is not available");
+			}
+			selenium.click("//li[@id='tab1']/a/div");
 	        String rId = selenium.getAttribute("//a[@onclick=\"window.open('http://docs.ampdev.net')\" and @style=\"cursor: pointer; text-decoration: underline; color: blue;\"]@id");
 			rId = rId.substring(1);
 		    selenium.click("//li[@id='tab1']/a/div");
@@ -80,13 +76,10 @@ public class ResourcesTest extends SeleneseTestCase {
 			selenium.waitForPageToLoad("30000");
 			selenium.click("//a[@id='H"+rId+"']/img");
 			Thread.sleep(3000);
-			selenium.click("link=exact:http://docs.ampdev.net");
-			//selenium.waitForPopUp(selenium.getAllWindowTitles()[1], "50000");
-			//Thread.sleep(10000);
-			//selenium.selectWindow(selenium.getAllWindowTitles()[1]); 
-	        //selenium.close();
-	        //selenium.selectWindow("null");
-	        selenium.click("//a[@id='a"+rId+"']/img");
+			if (!selenium.isElementPresent("link=exact:http://docs.ampdev.net")) {
+				logger.error("Link added is not available");
+			}
+			selenium.click("//a[@id='a"+rId+"']/img");
 			selenium.getConfirmation();
 			Thread.sleep(5000);
 			selenium.click("//div[@id='aPanel1']/span");
@@ -118,6 +111,6 @@ public class ResourcesTest extends SeleneseTestCase {
 		
 		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
 		selenium.waitForPageToLoad("30000");
-		
+		logger.info("Resources Test Finished Successfully");
 	}
 }

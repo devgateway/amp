@@ -22,6 +22,8 @@ public class FeatureManagerTest extends SeleneseTestCase {
 		selenium.type("j_password", "admin");
 		selenium.click("submitButton");
 		selenium.waitForPageToLoad("30000");
+		selenium.click("//a[@onclick=\"SwitchLanguageMenu('/translation/switchLanguage.do?code=en&rfr=%2Fadmin.do')\"]");
+		selenium.waitForPageToLoad("30000");
 		selenium.click("//a[contains(@href, \"/aim/visibilityManager.do\")]");
 		selenium.waitForPageToLoad("30000");
 		selenium.click("//a[contains(@href, \"/aim/visibilityManager.do~action=add\")]");
@@ -43,8 +45,8 @@ public class FeatureManagerTest extends SeleneseTestCase {
 				// TODO: handle exception
 			}		
 		}
-		selenium.click("fieldVis:89");
-		selenium.click("moduleVis:59");
+		selenium.click("//li[@title='Project Title']/input");		
+		selenium.click("//li[@title='Tab Generator']/input");		
 		selenium.click("saveTreeVisibility");
 		selenium.waitForPageToLoad("30000");
 		selenium.click("//a[contains(@href, \"/aim/admin.do\")]");

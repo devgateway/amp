@@ -202,9 +202,20 @@
 		
 		 
 		scheduler.attachEvent("onViewChange", function (mode , date){
-			
 			   document.getElementById("printView").value = mode;
 			   document.getElementById("printDate").value = date;
+			   //show corresponding view breadcrumb
+			   var whichView=document.getElementById("viewSpan");
+			   var monthly='<digi:trn>Monthly View</digi:trn>';
+			   var weekly='<digi:trn>Weekly View</digi:trn>';
+			   var daily='<digi:trn>Daily View</digi:trn>';
+			   if(mode=='month'){
+				   whichView.innerHTML=monthly;
+			   }else if(mode=='week'){
+				   whichView.innerHTML=weekly;
+			   }else if(mode=='day'){
+				   whichView.innerHTML=daily;
+			   }			   
 			});
 		scheduler.attachEvent("onClick",function(id){
 		    var ev = scheduler.getEvent(id);

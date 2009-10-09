@@ -116,6 +116,8 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 		selenium.type("j_password", "admin");
 		selenium.click("submitButton");
 		selenium.waitForPageToLoad("30000");
+		selenium.click("//a[@onclick=\"SwitchLanguageMenu('/translation/switchLanguage.do?code=en&rfr=%2Fadmin.do')\"]");
+		selenium.waitForPageToLoad("30000");
 		selenium.click("//a[contains(@href, \"/aim/visibilityManager.do\")]");
 		selenium.waitForPageToLoad("30000");
 		boolean done = false;
@@ -128,7 +130,9 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 			}
 			cnt++;
 		}
-		selenium.click("//a[@onclick= \"openFieldPermissionsPopup(89)\"]"); // Project Title
+		String cId = selenium.getAttribute("//li[@title='Project Title']/input@id");		
+		cId = cId.substring(cId.indexOf("is:")+3);
+		selenium.click("//a[@onclick= \"openFieldPermissionsPopup("+cId+")\"]"); // Project Title
 		//selenium.waitForPopUp(selenium.getAllWindowTitles()[1], "50000");
 		Thread.sleep(5000);
         selenium.selectWindow(selenium.getAllWindowTitles()[1]); 
@@ -137,7 +141,9 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
         selenium.click("//input[@onclick='javascript:savePermissions();']");
         selenium.selectWindow("null"); 
         Thread.sleep(5000);
-        selenium.click("//a[@onclick= \"openFieldPermissionsPopup(418)\"]"); // Project Title
+        cId = selenium.getAttribute("//li[@title='Status']/input@id");		
+		cId = cId.substring(cId.indexOf("is:")+3);
+		selenium.click("//a[@onclick= \"openFieldPermissionsPopup("+cId+")\"]"); // Project Status
 		//selenium.waitForPopUp(selenium.getAllWindowTitles()[1], "50000");
 		Thread.sleep(5000);
         selenium.selectWindow(selenium.getAllWindowTitles()[1]); 
@@ -233,12 +239,23 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 		selenium.waitForPageToLoad("30000");
 		selenium.click("//a[@onclick=\"javascript:fnEditProject(document.getElementById('tempActivity').value); return false;\"]");
 		selenium.waitForPageToLoad("30000");
-		if (!selenium.getAttribute("identification.title@disabled").equalsIgnoreCase("disabled")) {
+		try {
+			String dis = selenium.getAttribute("identification.title@disabled");
+			if (!dis.equalsIgnoreCase("disabled")) {
+				logger.error("Activity Title field is enabled");
+			}
+		} catch (Exception e) {
 			logger.error("Activity Title field is enabled");
 		}
-		if (!selenium.getAttribute("identification.statusId@disabled").equalsIgnoreCase("disabled")) {
+		try {
+			String dis = selenium.getAttribute("planning.statusId@disabled");
+			if (!dis.equalsIgnoreCase("disabled")) {
+				logger.error("Status field is enabled");
+			}
+		} catch (Exception e) {
 			logger.error("Status field is enabled");
 		}
+		
 		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
 		selenium.waitForPageToLoad("30000");
       

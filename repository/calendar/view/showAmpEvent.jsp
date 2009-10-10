@@ -552,6 +552,8 @@ addLoadEvent(delBody);
     <html:hidden name="calendarEventForm" property="recurrStartDate" styleId="recurrStrDate"/>
     <html:hidden name="calendarEventForm" property="recurrEndDate" styleId="recurrEndDate"/>
     <html:hidden name="calendarEventForm" property="weekDays" styleId="weekDays"/>
+    <html:hidden name="calendarEventForm" property="recurrSelectedEndTime" styleId="recurrSelectedEndTime"/>
+    <html:hidden name="calendarEventForm" property="recurrSelectedStartTime" styleId="recurrSelectedStartTime"/>
 	
     <table>
     	 <tr>

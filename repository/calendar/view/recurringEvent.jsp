@@ -369,9 +369,11 @@ function eventType(){
 <tr>
 		<td>
 			<table bgcolor="#F5F5F5" border="0" cellPadding=2 cellSpacing=2 width="350px" style="border-style:solid;border-color:#1C5180;border-width: 1px">
+				 		
 				 		<tr><td><digi:trn>Time</digi:trn></td></tr>
 				 		<tr>
-				 	 		<td><digi:trn>Start Time</digi:trn></td>
+				 		<!-- 
+				 						 	 		<td><digi:trn>Start Time</digi:trn></td>
 				 	 		<td>
 				 	 				<select id="selectedStartHour">
                                        <c:forEach var="hour" begin="0" end="23">
@@ -387,7 +389,7 @@ function eventType(){
 			                      </select>
                                    
 							</td>
-				 	 		
+				 	 		-->
 				 	 		<td><digi:trn>End TIme</digi:trn></td>
 				 	 		<td>
 				 	 			<select id="selectedEndHour">

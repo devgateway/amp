@@ -217,8 +217,11 @@ public class CalendarUtil {
 										}
 										//AmpCalendar id = AmpDbUtil.getAmpCalendar(ampCalendar.getCalendarPK().getCalendar().getId());
 										//id.getEventType().getId();
+										if(ampCalendar.getEventTypeId() != null){
 										xml+="<type>"+ampCalendar.getEventTypeId()+"</type>";
-								
+										}else{
+											xml+="<type>"+0+"</type>";
+										}
 										 if(!ampCalendar.getCalendarPK().getCalendar().getRecurrCalEvent().isEmpty()){
 											 Iterator itrrecc = ampCalendar.getCalendarPK().getCalendar().getRecurrCalEvent().iterator();
 											 while(itrrecc.hasNext()){
@@ -236,13 +239,10 @@ public class CalendarUtil {
 													 xml+="<rec_type>"+recurrCalEvent.getTypeofOccurrence()+"_"+recurrCalEvent.getRecurrPeriod()+"___"+weekdays+"</rec_type>";
 														
 												 }
-												 Calendar cal=Calendar.getInstance();
-												 Calendar calo=Calendar.getInstance();
-											
 												Date SartDate = ampCalendar.getCalendarPK().getCalendar().getStartDate();
 												Date EndDate = ampCalendar.getCalendarPK().getCalendar().getEndDate();
 												int  eventLengths = getEventlength(SartDate,EndDate);
-												//int  eventLength = (int)eventLengths/3600%24;
+											
 											   xml+="<event_length>"+eventLengths/1000+"</event_length>";
 											  }
 											}	

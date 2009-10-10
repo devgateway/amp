@@ -20,8 +20,8 @@
 <script type="text/javascript">
 
 function validateDuration(rec,duration){
-
-     if(rec > duration){
+/*
+     if(rec < duration){
 	
      	alert("The duration of appointment should be shorter than how often it recurs. Modify the duration of appointment or change the recurrence");
 
@@ -30,6 +30,8 @@ function validateDuration(rec,duration){
 
          return true;
 	}
+ 	*/
+ 	return true;
 }
 
 
@@ -40,12 +42,20 @@ function eventType(){
 		var Monthly = document.getElementById("Monthly").checked;
 		var Yearly = document.getElementById("Yearly").checked;
 
-/*
-	    var recStartDate = document.getElementById("recurrSelectedStartDate").value;
+		var recStartTime = document.getElementById("selectedEndHour").value;
+		var recEndTime = document.getElementById("selectedStartHour").value;
+		var recStartMinute = document.getElementById("selectedStartMinute").value;
+		var recEndMinute = document.getElementById("selectedEndMinute").value;
+		
+		//document.getElementById("recurrSelectedStartTime").value = recStartTime+":"+recStartMinute;
+		document.getElementById("recurrSelectedEndTime").value = recEndTime+":"+recEndMinute;
+		
+		
+	    //var recStartDate = document.getElementById("recurrSelectedStartDate").value;
         var recEndDate = document.getElementById("recurrSelectedEndDate").value;
-        document.getElementById("recurrStrDate").value = recStartDate;
+        //document.getElementById("recurrStrDate").value = recStartDate;
         document.getElementById("recurrEndDate").value = recEndDate;
-*/
+
         var occStartDate = document.getElementById("selectedStartDate").value;
         var occEndDate = document.getElementById("selectedEndDate").value;
     
@@ -65,7 +75,7 @@ function eventType(){
 
 
     if(!Daily && !Weekly && !Monthly && !Yearly){
-   		alert("please choose");
+   		alert("please choose type of recurreing event");
 		return false;
 	}
     
@@ -106,7 +116,8 @@ function eventType(){
 
 	if(Daily){
         var rec = document.getElementById("recurrDaily").value; 
-       
+
+        alert("rec:"+ rec+"daily_occurance_duration:"+daily_occurance_duration);
         if(!validateDuration(rec,daily_occurance_duration)){
 
                  return false;
@@ -166,7 +177,7 @@ function eventType(){
 	<td style="font-family: Tahoma;">
 	                <div style="padding: 1px;">
 	                    <div style="padding:7px;text-align:center;background-color: #336699; font-size: 18px;color:white; font-weight: bold;">
-	                        <digi:trn>Reccuring Event Setup</digi:trn>
+	                        <digi:trn>Recurring Event Setup</digi:trn>
 	                    </div>
 	                </div>
 	</td>
@@ -339,10 +350,10 @@ function eventType(){
 							 	 
 								 	 		
 						 	 		    	</td>
-							 	 			<!-- 
+							 	 			 
 							 	 			<td><input type="text"  size="7px" name="recurrPeriod" id="recurrYearly" value=""/></td>
 							 	 			<td><digi:trn>Day(s)</digi:trn></td>
-							 	 			 -->
+							 	 			 
 							 	 	    </tr>
 							  	   </table>
 							  </td>
@@ -355,47 +366,54 @@ function eventType(){
 	</tr>
 
 
-<tr><!--
+<tr>
 		<td>
-			<table bgcolor="#F5F5F5" border="0" cellPadding=2 cellSpacing=2 width="340px" style="border-style:solid;border-color:#1C5180;border-width: 1px">
+			<table bgcolor="#F5F5F5" border="0" cellPadding=2 cellSpacing=2 width="350px" style="border-style:solid;border-color:#1C5180;border-width: 1px">
 				 		<tr><td><digi:trn>Time</digi:trn></td></tr>
 				 		<tr>
 				 	 		<td><digi:trn>Start Time</digi:trn></td>
 				 	 		<td>
-				 	 				<select id="selectedStartHour" onchange="updateTime(document.getElementById('selectedStartTime'), 'hour', this.value)">
+				 	 				<select id="selectedStartHour">
                                        <c:forEach var="hour" begin="0" end="23">
                                          <c:if test="${hour < 10}"><c:set var="hour" value="0${hour}"/></c:if>
                                          <option value="${hour}">${hour}</option>
                                        </c:forEach>
-                                    </select>
-                                   <script type="text/javascript">
-                                   selectOptionByValue(document.getElementById('selectedStartHour'), get('hour', document.getElementById('selectedStartTime').value));
-                                   </script>
+                                    </select>:
+                                    <select id="selectedStartMinute">
+                                         <c:forEach var="minute" begin="0" end="59">
+                                           <c:if test="${minute < 10}"><c:set var="minute" value="0${minute}"/></c:if>
+                                           <option value="${minute}" class="inp-text">${minute}</option>
+                                         </c:forEach>
+			                      </select>
+                                   
 							</td>
 				 	 		
 				 	 		<td><digi:trn>End TIme</digi:trn></td>
 				 	 		<td>
-				 	 			<select id="selectedStartHour" onchange="updateTime(document.getElementById('selectedStartTime'), 'hour', this.value)">
+				 	 			<select id="selectedEndHour">
                                                     <c:forEach var="hour" begin="0" end="23">
 	                                                      <c:if test="${hour < 10}">
 	                                                      	<c:set var="hour" value="0${hour}"/>
 	                                                      </c:if>
 	                                                      	<option value="${hour}">${hour}</option>
                                                     </c:forEach>
-                                                  </select>
-                                <script type="text/javascript">
-                                   selectOptionByValue(document.getElementById('selectedStartHour'), get('hour', document.getElementById('selectedStartTime').value));
-                                </script>
-							</td>
-				 	 	</tr>
+                                </select>:
+                                <select id="selectedEndMinute">
+                                      <c:forEach var="minute" begin="0" end="59">
+                                        <c:if test="${minute < 10}"><c:set var="minute" value="0${minute}"/></c:if>
+                                        <option value="${minute}" class="inp-text">${minute}</option>
+                                      </c:forEach>
+			                      </select>
+                      	    </td>
+				 	 	 </tr>
+				 	 	<!-- 
 				 	 	<tr>
 				 	 		<td>
 				 	 			<digi:trn>Start date:</digi:trn>
 				 	 		</td>
 				 	 		 <td>
 				 		 	 	<c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
-		                                  <html:hidden styleId="selectedStartTime" name="calendarEventForm" property="selectedStartTime"/>
-		                                  <html:hidden styleId="selectedEndTime" name="calendarEventForm" property="selectedEndTime"/>
+		                                 
 		                                     <table cellpadding="0" cellspacing="0">
 		                                         <tr>
 		                                                <td nowrap="nowrap">
@@ -415,7 +433,7 @@ function eventType(){
 		                        	</c:if>
 		 	                 	</td>
 						 	 </tr>
-				 	 	
+				 	 	-->
 				 	 	<tr>
 				 	 		<td><digi:trn>End Date</digi:trn></td>
 				 	 		<td>
@@ -450,7 +468,7 @@ function eventType(){
 			 	</table>
 			 	
 		</td>
-		-->	
+		
 	</tr>
 	<tr>
 		<td align="center">

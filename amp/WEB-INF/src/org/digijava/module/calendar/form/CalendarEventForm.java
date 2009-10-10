@@ -21,6 +21,7 @@ public class CalendarEventForm
 	
 
 
+
 	private Long ampCalendarId;
     private String eventTitle;
     private String method;
@@ -48,6 +49,8 @@ public class CalendarEventForm
     private String typeofOccurrence;
     private String recurrStartDate;
     private String recurrEndDate;
+    private String recurrSelectedStartTime;
+    private String recurrSelectedEndTime;
     private String occurrWeekDays;
     private String weekDays;
     private GregorianCalendar startDate;
@@ -74,6 +77,25 @@ public class CalendarEventForm
 	private Boolean actionButtonsVisible;
 	
 
+	
+
+
+	public String getRecurrSelectedStartTime() {
+		return recurrSelectedStartTime;
+	}
+
+	public void setRecurrSelectedStartTime(String recurrSelectedStartTime) {
+		this.recurrSelectedStartTime = recurrSelectedStartTime;
+	}
+
+	public String getRecurrSelectedEndTime() {
+		return recurrSelectedEndTime;
+	}
+
+	public void setRecurrSelectedEndTime(String recurrSelectedEndTime) {
+		this.recurrSelectedEndTime = recurrSelectedEndTime;
+	}
+	
 	public Long[] getSelOrganizations() {
 		return selOrganizations;
 	}

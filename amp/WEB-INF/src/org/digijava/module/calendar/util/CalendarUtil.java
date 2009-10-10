@@ -22,6 +22,7 @@
 
 package org.digijava.module.calendar.util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
@@ -177,7 +178,7 @@ public class CalendarUtil {
 		return CalDate;
 	}
 	
-	public static String getCalendarEventsXml(AmpTeamMember member,boolean filter,String siteId,String[] selectedDonorIds,String instanceId,Long userId){
+	public static String getCalendarEventsXml(AmpTeamMember member,boolean filter,String siteId,String[] selectedDonorIds,String instanceId,Long userId) throws ParseException{
 		 String xml="";
 					try {
 						
@@ -196,9 +197,14 @@ public class CalendarUtil {
 						
 								
 							 xml+="<event id=\"" +ampCalendar.getCalendarPK().getCalendar().getId()+"\">";
-							 xml+="<start_date>"+ampCalendar.getCalendarPK().getCalendar().getStartDate()+"</start_date>";
-					         xml+="<end_date>"+ampCalendar.getCalendarPK().getCalendar().getEndDate()+"</end_date>";
-					       
+							if(!ampCalendar.getCalendarPK().getCalendar().getRecurrCalEvent().isEmpty()){
+								xml+="<start_date>"+ampCalendar.getCalendarPK().getCalendar().getStartDate()+"</start_date>";
+								xml+="<end_date>"+ampCalendar.getCalendarPK().getRecurrEndDate()+"</end_date>";
+							}else{
+								
+								 xml+="<start_date>"+ampCalendar.getCalendarPK().getCalendar().getStartDate()+"</start_date>";
+						         xml+="<end_date>"+ampCalendar.getCalendarPK().getCalendar().getEndDate()+"</end_date>";
+							}
 									Iterator itritm = ampCalendar.getCalendarPK().getCalendar().getCalendarItem().iterator();
 										while(itritm.hasNext()){
 											CalendarItem calItme = (CalendarItem) itritm.next();
@@ -230,7 +236,14 @@ public class CalendarUtil {
 													 xml+="<rec_type>"+recurrCalEvent.getTypeofOccurrence()+"_"+recurrCalEvent.getRecurrPeriod()+"___"+weekdays+"</rec_type>";
 														
 												 }
-												xml+="<event_length>"+"1"+"</event_length>";
+												 Calendar cal=Calendar.getInstance();
+												 Calendar calo=Calendar.getInstance();
+											
+												Date SartDate = ampCalendar.getCalendarPK().getCalendar().getStartDate();
+												Date EndDate = ampCalendar.getCalendarPK().getCalendar().getEndDate();
+												int  eventLengths = getEventlength(SartDate,EndDate);
+												//int  eventLength = (int)eventLengths/3600%24;
+											   xml+="<event_length>"+eventLengths/1000+"</event_length>";
 											  }
 											}	
 										
@@ -286,5 +299,14 @@ public class CalendarUtil {
 	    		result+=content[i];
 	    }
 	    return result;
+	}
+	
+	public static int getEventlength(Date startDate, Date endDate){
+		
+		int start = (int)startDate.getTime();
+		int end = (int)endDate.getTime();
+		int minus = (end-start);
+		
+		return minus;
 	}
 }

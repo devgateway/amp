@@ -371,14 +371,21 @@ public class ShowCalendarEvent extends Action {
 	            if (dtformat == null) {
 	                dtformat = "dd/MM/yyyy";
 	            }
+	            dtformat+=" HH:mm";
                  SimpleDateFormat sdf = new SimpleDateFormat(dtformat);
                  Date recurrStartDate=null;
                  Date recurrEndDate= null;
+                 String endDate = null;
+                 String startDate = null;
                  if(ceform.getRecurrStartDate()!=null && !ceform.getRecurrStartDate().equals("")){
-                	 recurrStartDate=sdf.parse(ceform.getRecurrStartDate());
+                	 
+                	 startDate = ceform.getRecurrStartDate() + " " + ceform.getRecurrSelectedStartTime();
+                	 recurrStartDate=sdf.parse(startDate);
                  }
                  if(ceform.getRecurrEndDate()!=null && !ceform.getRecurrEndDate().equals("")){
-                	recurrEndDate= sdf.parse(ceform.getRecurrEndDate());
+                	 
+                	endDate = ceform.getRecurrEndDate() + " " + ceform.getRecurrSelectedEndTime();
+                	recurrEndDate= sdf.parse(endDate);
                  }
                 recurrEvent.setRecurrStartDate(recurrStartDate);
                 recurrEvent.setRecurrEndDate(recurrEndDate);              
@@ -575,6 +582,7 @@ public class ShowCalendarEvent extends Action {
                 			ceform.setSelectedStartMonth("");
                 		}
                 		rec.getId();
+                	 
                 	} 
 
                 try {

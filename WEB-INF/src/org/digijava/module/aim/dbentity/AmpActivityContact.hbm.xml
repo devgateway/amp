@@ -4,6 +4,7 @@
 	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 	<class name="org.digijava.module.aim.dbentity.AmpActivityContact" table="AMP_ACTIVITY_CONTACT">
+	<cache usage="read-write" />
   	<id name="id" column="activity_contact_Id" type="java.lang.Long">
 		<generator class="native">
 			<param name="sequence">AMP_ACTIVITY_CONTACT_seq</param>

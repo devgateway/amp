@@ -1659,7 +1659,7 @@ public class DbUtil {
             if (itr.hasNext()) {
                 ampAppSettings = (AmpApplicationSettings) itr.next();
             }
-            
+            PersistenceManager.releaseSession(session);
         } catch (Exception e) {
             logger.error("Unable to get TeamAppSettings", e);
         }
@@ -1683,7 +1683,7 @@ public class DbUtil {
                 ampAppSettings = (AmpApplicationSettings) itr.next();
                 if(ampAppSettings!=null) break;
             }
-            
+            PersistenceManager.releaseSession(session);
         } catch (Exception e) {
             logger.error("Unable to get TeamAppSettings", e);
         }

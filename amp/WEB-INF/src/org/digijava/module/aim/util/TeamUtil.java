@@ -855,6 +855,8 @@ public class TeamUtil {
             session = PersistenceManager.getRequestDBSession();
             session.flush();
             member = (AmpTeamMember) session.load(AmpTeamMember.class, id);
+            member.getDesktopTabSelections().size(); //lazy init
+            PersistenceManager.releaseSession(session);
         } catch(Exception e) {
             throw new RuntimeException(e);
         }
@@ -2078,6 +2080,7 @@ public class TeamUtil {
 
                }
                transaction.commit();
+               PersistenceManager.releaseSession(session);
            } catch(Exception e) {
                logger.error("Exception from getAllTeamReports()", e);
                throw new RuntimeException(e);
@@ -2123,6 +2126,7 @@ public class TeamUtil {
              	col = qry.list();
             }
 	       	transaction.commit();
+	       	PersistenceManager.releaseSession(session);
         } catch(Exception e) {
             logger.error("Exception from getAllTeamReports()", e);
             throw new RuntimeException(e);

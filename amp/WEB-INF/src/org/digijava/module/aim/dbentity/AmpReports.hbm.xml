@@ -33,16 +33,19 @@
 		<!--<many-to-one name="ampReportsOptions" column="amp_option_id" class="org.digijava.module.aim.dbentity.AmpReportsOptions" not-null="true"/>
 		-->
 		<set name="members" table="AMP_MEMBER_REPORTS" lazy="true" cascade="save-update">
+			<cache usage="read-write"/>
 			<key column="amp_report_id" />
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpTeamMember"
 				column="amp_member_id" />
 		</set>
 		<set name="logs" table="AMP_REPORT_LOG" lazy="true" cascade="all-delete-orphan">
+			<cache usage="read-write"/>
 			<key column="amp_report_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpReportLog" />
 		</set>
 
 		<set name="columns" table="AMP_REPORT_COLUMN" lazy="false">
+			<cache usage="read-write"/>
 			<key column="amp_report_id" />
 			<composite-element class="org.digijava.module.aim.dbentity.AmpReportColumn">
 				<many-to-one name="column" class="org.digijava.module.aim.dbentity.AmpColumns"
@@ -54,6 +57,7 @@
 		</set>
 
 		<set name="hierarchies" table="AMP_REPORT_HIERARCHY" lazy="false">
+			<cache usage="read-write"/>
 			<key column="amp_report_id" />
 			<composite-element class="org.digijava.module.aim.dbentity.AmpReportHierarchy">
 				<many-to-one name="column" class="org.digijava.module.aim.dbentity.AmpColumns"
@@ -65,6 +69,7 @@
 		</set>
 
 		<set name="measures" table="AMP_REPORT_MEASURES" lazy="false">
+			<cache usage="read-write"/>
 			<key column="amp_report_id" />
 			<composite-element class="org.digijava.module.aim.dbentity.AmpReportMeasures">
 				<many-to-one name="measure" class="org.digijava.module.aim.dbentity.AmpMeasures"
@@ -74,6 +79,7 @@
 		</set>
 
 		<set name="reportMeasures" table="AMP_REPORT_XLEVEL_MEASURES" lazy="false">
+			<cache usage="read-write"/>
 			<key column="amp_report_id" />
 			<composite-element class="org.digijava.module.aim.dbentity.AmpReportMeasures">
 				<many-to-one name="measure" class="org.digijava.module.aim.dbentity.AmpMeasures"

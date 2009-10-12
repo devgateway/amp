@@ -103,21 +103,20 @@ function eventType(){
             return false;
    		}else{
 
-	   		var rec = document.getElementById("Monthly").value;
-
-
+	   		//var rec = document.getElementById("Monthly").value;
+            
+            document.getElementById("hidden").value = month;
 	        document.getElementById("type").value = 'month';
 	        document.getElementById("hiddenMonth").value = month;
-			document.getElementById("hidden").value = rec;
-			document.getElementById("weekDays").value = '';
-			
+	        document.getElementById("weekDays").value = '';
+	      
+	       
 		}
 	}
 
 	if(Daily){
         var rec = document.getElementById("recurrDaily").value; 
 
-        alert("rec:"+ rec+"daily_occurance_duration:"+daily_occurance_duration);
         if(!validateDuration(rec,daily_occurance_duration)){
 
                  return false;
@@ -314,12 +313,14 @@ function eventType(){
 					
 					</script>
 				</c:if>
+				${calendarEventForm.typeofOccurrence}
 				<c:if test="${calendarEventForm.typeofOccurrence == 'Daily' 
-				|| calendarEventForm.typeofOccurrence == 'Monthly'
+				|| calendarEventForm.typeofOccurrence == 'month'
 				|| calendarEventForm.typeofOccurrence == 'Yearly'}">
 					<script language="JavaScript" type="text/javascript">
 						document.getElementById("recurrWeekly").value = "";
 						document.getElementById("weekDays").value = "";
+						document.getElementById("recurrDaily").value = "";
 					</script>
 				</c:if>
 		 	    <td>

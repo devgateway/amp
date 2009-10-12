@@ -4,6 +4,7 @@ import java.util.Set;
 
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 public class AmpCalendar {
    
@@ -14,7 +15,7 @@ public class AmpCalendar {
     private Set<AmpOrganisation> organisations;
     private Set attendees;
     private boolean privateEvent;
-    private Long eventTypeId; 
+    private AmpCategoryValue eventsType; 
 
     public AmpCalendar() {
 
@@ -75,11 +76,12 @@ public class AmpCalendar {
     public void setAttendees(Set attendees) {
         this.attendees = attendees;
     }
-    public Long getEventTypeId() {
-		return eventTypeId;
+    
+	public AmpCategoryValue getEventsType() {
+		return eventsType;
 	}
 
-	public void setEventTypeId(Long eventTypeId) {
-		this.eventTypeId = eventTypeId;
+	public void setEventsType(AmpCategoryValue eventsType) {
+		this.eventsType = eventsType;
 	}
 }

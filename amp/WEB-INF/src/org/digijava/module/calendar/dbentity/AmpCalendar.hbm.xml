@@ -19,6 +19,6 @@
 			<one-to-many class="org.digijava.module.calendar.dbentity.AmpCalendarAttendee" />
 		</set>
 		<property name="privateEvent" column="PRIVATE" type="boolean" />
-		<property name="eventTypeId" column="EVENTS_TYPE_Id" type="java.lang.Long" />
+		<many-to-one name="eventsType" column="EVENTS_TYPE_ID" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue"/>
 	</class>
 </hibernate-mapping>

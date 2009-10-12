@@ -651,7 +651,14 @@ public class ChartWidgetUtil {
         Font font12 = new Font(null, Font.BOLD, 12);
     	Font font8 = new Font(null,Font.BOLD,8);
         DefaultPieDataset dataset = getDonorSectorDataSet(filter);
-        chart = ChartFactory.createPieChart(TranslatorWorker.translateText("Primary Sector(s) Breakdown ",opt.getLangCode(),opt.getSiteId())+" ("+(filter.getYear()-1)+")", dataset, true, true, false);
+        String transTypeName="";
+        switch(filter.getTransactionType()){
+            case org.digijava.module.aim.helper.Constants.COMMITMENT: transTypeName="Commitment";break;
+            case org.digijava.module.aim.helper.Constants.DISBURSEMENT: transTypeName="Disbursement";break;
+        }
+        String transTypeNameTrn=TranslatorWorker.translateText(transTypeName,opt.getLangCode(),opt.getSiteId());
+
+        chart = ChartFactory.createPieChart(TranslatorWorker.translateText("Primary Sector(s) Breakdown ",opt.getLangCode(),opt.getSiteId())+" ("+transTypeNameTrn+","+(filter.getYear()-1)+")", dataset, true, true, false);
         chart.getTitle().setFont(font12);
         if (opt.isShowLegend()) {
             chart.getLegend().setItemFont(font12);
@@ -682,29 +689,39 @@ public class ChartWidgetUtil {
      * @throws DgException
      */
        
-       public static JFreeChart getRegionByDonorChart(ChartOption opt,FilterHelper filter) throws DgException, WorkerException {
-     	JFreeChart chart = null;
-		Font font12 = new Font(null,Font.BOLD,12);
-		Font font8 = new Font(null,Font.BOLD,8);
-		DefaultPieDataset dataset=getDonorRegionalDataSet(filter);
-		chart=ChartFactory.createPieChart(TranslatorWorker.translateText("Regional Breakdown", opt.getLangCode(),opt.getSiteId())+" ("+(filter.getYear()-1)+")",dataset, true, true,false);
-		chart.getTitle().setFont(font12);
-		if (opt.isShowLegend()){
-			chart.getLegend().setItemFont(font12);		
-		}
+       public static JFreeChart getRegionByDonorChart(ChartOption opt, FilterHelper filter) throws DgException, WorkerException {
+        JFreeChart chart = null;
+        Font font12 = new Font(null, Font.BOLD, 12);
+        Font font8 = new Font(null, Font.BOLD, 8);
+        DefaultPieDataset dataset = getDonorRegionalDataSet(filter);
+        String transTypeName = "";
+        switch (filter.getTransactionType()) {
+            case org.digijava.module.aim.helper.Constants.COMMITMENT:
+                transTypeName = "Commitment";
+                break;
+            case org.digijava.module.aim.helper.Constants.DISBURSEMENT:
+                transTypeName = "Disbursement";
+                break;
+        }
+        String transTypeNameTrn = TranslatorWorker.translateText(transTypeName, opt.getLangCode(), opt.getSiteId());
+        chart = ChartFactory.createPieChart(TranslatorWorker.translateText("Regional Breakdown", opt.getLangCode(), opt.getSiteId()) + " (" + transTypeNameTrn + "," + (filter.getYear() - 1) + ")", dataset, true, true, false);
+        chart.getTitle().setFont(font12);
+        if (opt.isShowLegend()) {
+            chart.getLegend().setItemFont(font12);
+        }
         PiePlot plot = (PiePlot) chart.getPlot();
         plot.setLabelFont(font8);
-        
+
         String pattern = "{0} = {1} ({2})";
         if (opt.getLabelPattern() != null) {
             pattern = opt.getLabelPattern();
         }
         DecimalFormat format = FormatHelper.getDecimalFormat();
-		PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator(pattern, format, new DecimalFormat("0.0%"));
-		
+        PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator(pattern, format, new DecimalFormat("0.0%"));
+
         plot.setLegendLabelGenerator(gen);
         plot.setLabelGenerator(gen);
-		return chart;
+        return chart;
     }
 
 	/**

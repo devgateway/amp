@@ -24,7 +24,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.LabelValueBean;
+import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.ModuleInstance;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -48,17 +50,26 @@ import org.digijava.module.calendar.entity.DateBreakDown;
 import org.digijava.module.calendar.entity.DateNavigator;
 import org.digijava.module.calendar.form.CalendarEventForm;
 import org.digijava.module.calendar.util.AmpDbUtil;
+import org.digijava.module.calendar.util.AmpUtil;
+import org.digijava.module.calendar.util.CalendarConversor;
+import org.digijava.module.calendar.util.CalendarThread;
 import org.digijava.module.common.dbentity.ItemStatus;
 import org.digijava.module.message.dbentity.AmpMessageSettings;
 import org.digijava.module.message.triggers.CalendarEventSaveTrigger;
-import org.digijava.module.message.util.AmpMessageUtil;
 import org.digijava.module.message.triggers.RemoveCalendarEventTrigger;
+import org.digijava.module.message.util.AmpMessageUtil;
 
 public class ShowCalendarEvent extends Action {
 	
 	private static Logger logger = Logger.getLogger(ShowCalendarEvent.class);
 	
     public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request,HttpServletResponse response) throws Exception {
+    	
+    	Site site = RequestUtils.getSite(request);
+ 		CalendarThread.setSite(site);
+ 		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+ 		CalendarThread.setLocale(navigationLanguage);
+ 		
         CalendarEventForm ceform = (CalendarEventForm) form;
         if (ceform.getMethod().equalsIgnoreCase("new")) {
             ceform.reset(mapping, request);
@@ -114,9 +125,9 @@ public class ShowCalendarEvent extends Action {
         // selected calendar type
         Long selectedCalendarTypeId = ceform.getSelectedCalendarTypeId();
         if (selectedCalendarTypeId == null ||
-            (!selectedCalendarTypeId.equals(CalendarOptions.CALENDAR_TYPE_GREGORIAN) &&
-             !selectedCalendarTypeId.equals(CalendarOptions.CALENDAR_TYPE_ETHIOPIAN) &&
-             !selectedCalendarTypeId.equals(CalendarOptions.CALENDAR_TYPE_ETHIOPIAN_FY))) {
+            (!selectedCalendarTypeId.equals(new Long(CalendarOptions.CALENDAR_TYPE_GREGORIAN)) &&
+             !selectedCalendarTypeId.equals(new Long(CalendarOptions.CALENDAR_TYPE_ETHIOPIAN)) &&
+             !selectedCalendarTypeId.equals(new Long(CalendarOptions.CALENDAR_TYPE_ETHIOPIAN_FY)))) {
             selectedCalendarTypeId = Long.valueOf(CalendarOptions.defaultCalendarType);
             ceform.setSelectedCalendarTypeId(selectedCalendarTypeId);
         }
@@ -369,12 +380,21 @@ public class ShowCalendarEvent extends Action {
             dtformat+=" HH:mm";
 
             SimpleDateFormat sdf = new SimpleDateFormat(dtformat);
-
+            
             String startDateTime = ceform.getSelectedStartDate() + " " + ceform.getSelectedStartTime();
             String endDateTime = ceform.getSelectedEndDate() + " " + ceform.getSelectedEndTime();
+    		
+            if (ceform.getSelectedCalendarTypeId().equals(new Long(CalendarOptions.CALENDAR_TYPE_ETHIOPIAN)) ||
+            		ceform.getSelectedCalendarTypeId().equals(new Long(CalendarOptions.CALENDAR_TYPE_ETHIOPIAN_FY))){
+            	CalendarConversor convert  = new CalendarConversor(ceform.getStartDate().YEAR);
 
-            calendar.setStartDate(sdf.parse(startDateTime));
-            calendar.setEndDate(sdf.parse(endDateTime));
+            	//Convert to Gregorian to save all events in the same format
+            	calendar.setStartDate(sdf.parse(AmpUtil.SimpleEthipianToGregorian(startDateTime, convert)));
+            	calendar.setEndDate(sdf.parse(AmpUtil.SimpleEthipianToGregorian(endDateTime, convert)));
+            }else{
+            	calendar.setStartDate(sdf.parse(startDateTime));
+                calendar.setEndDate(sdf.parse(endDateTime));
+            }
 
             calPK.setCalendar(calendar);
             ampCalendar.setCalendarPK(calPK);

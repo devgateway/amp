@@ -162,7 +162,7 @@ color:Black;
 				                        				<c:set var="startDay">${ampCalendarGraph.ampCalendar.calendarPK.startDay}</c:set>
 				                        				<c:set var="endDay">${ampCalendarGraph.ampCalendar.calendarPK.endDay}</c:set>
 				                        				<c:set var="endMonth">${ampCalendarGraph.ampCalendar.calendarPK.endMonth+1}</c:set>
-				                        				<c:set var="startMonth">${ampCalendarGraph.ampCalendar.calendarPK.startMonth+1}</c:set>
+				                 						<c:set var="startMonth">${ampCalendarGraph.ampCalendar.calendarPK.startMonth+1}</c:set>
 				                        				<c:set var="currentMonth">${calendarViewForm.baseDateBreakDown.month}</c:set>
 				                        				<c:set var="currentYear">${calendarViewForm.baseDateBreakDown.year}</c:set>
 				                        				<c:set var="iterationBeginIndex">
@@ -187,7 +187,7 @@ color:Black;
 										                <c:set var="eventEndDate">
 										                 ${endDay}/${endMonth}/${endYear} ${endHours}:<c:if test="${endMinute<10}">0</c:if>${endMinute}
 										                </c:set>
-												        <tr height="2px" bgcolor="#ffffff">
+										                <tr height="2px" bgcolor="#ffffff">
 					                        				<td colspan="14" />
 					                      				</tr>
 				                        				<tr vAlign="middle" bgcolor="#ffffff">
@@ -386,8 +386,7 @@ color:Black;
 				                                                  				<bean:define id="endDay" value="${ampCalendarGraph.ampCalendar.calendarPK.endDay}"></bean:define>
 				                                                  				<bean:define id="endMonth" value="${ampCalendarGraph.ampCalendar.calendarPK.endMonth+1}"></bean:define>
 				                                                  				<bean:define id="endYear" value="${ampCalendarGraph.ampCalendar.calendarPK.endYear}"></bean:define>
-
-                                                                                <c:set var="reccperiod">${ampCalendarGraph.ampCalendar.calendarPK.calendar.recurrCalEvent}</c:set>
+																				<c:set var="reccperiod">${ampCalendarGraph.ampCalendar.calendarPK.calendar.recurrCalEvent}</c:set>
 																		        <c:set var="eventName">
 																		        	<c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}" begin="${fn:length(ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem)-1}">
 																		        		${fn:replace(ampCalendarEventItem.title, "'", "\\'")}
@@ -402,7 +401,7 @@ color:Black;
 				                                                    			<bean:define id="currentMonth">${calendarViewForm.baseDateBreakDown.month}</bean:define>
 				                                                    			<bean:define id="currentDay">${calendarViewForm.baseDateBreakDown.dayOfMonth}</bean:define>
 				                                                    			<bean:define id="currentYear">${calendarViewForm.baseDateBreakDown.year}</bean:define>
-				                                                    			    <c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.recurrCalEvent}">
+				                                                    			<c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.recurrCalEvent}">
 																						<script type="text/javascript">
 									                              							var msg = stDate+":${eventStartDate}<br>"+endDate+":${eventEndDate}";									                              							
 									                              						</script>
@@ -498,6 +497,21 @@ color:Black;
 																						<c:if test="${item.month=='Oct'}">10</c:if>
 																						<c:if test="${item.month=='Nov'}">11</c:if>
 																						<c:if test="${item.month=='Dec'}">12</c:if>
+																						
+																						<c:if test="${item.month=='Mes'}">01</c:if>
+																					    <c:if test="${item.month=='Tik'}">02</c:if>
+																						<c:if test="${item.month=='Hid'}">03</c:if>
+																						<c:if test="${item.month=='Tah'}">04</c:if>
+																						<c:if test="${item.month=='Tir'}">05</c:if>
+																						<c:if test="${item.month=='Yek'}">06</c:if>
+																						<c:if test="${item.month=='Meg'}">07</c:if>
+																						<c:if test="${item.month=='Miy'}">08</c:if>
+																						<c:if test="${item.month=='Gin'}">09</c:if>
+																						<c:if test="${item.month=='Sen'}">10</c:if>
+																						<c:if test="${item.month=='Ham'}">11</c:if>
+																						<c:if test="${item.month=='Neh'}">12</c:if>
+																						<c:if test="${item.month=='Peg'}">13</c:if>
+																						
 																					</c:set>
 																					<tr style="width: 100%;height: 25px">
 																						<td style="width: 80px;background-color: #376091;text-align: center;" >

@@ -375,6 +375,8 @@ function recurEvent(){
 	<html:hidden name="calendarEventForm" property="typeofOccurrence" styleId="type"/>
     <html:hidden name="calendarEventForm" property="recurrStartDate" styleId="recurrStrDate"/>
     <html:hidden name="calendarEventForm" property="recurrEndDate" styleId="recurrEndDate"/>
+    <html:hidden styleId="selectedStartTime" name="calendarEventForm" property="selectedStartTime"/>
+	<html:hidden styleId="selectedEndTime" name="calendarEventForm" property="selectedEndTime"/>
 	
     <table>
     	 <tr>
@@ -421,8 +423,7 @@ function recurEvent(){
 			            <td style="font-family: Tahoma;font-size: 12px;">                
 			                <div style="background-color: #F5F5F5; padding: 20px">
 			                	<span style="font-family: Tahoma;font-size: 11px;"><digi:errors/></span>			                  
-			                  <html:hidden name="calendarEventForm" property="selectedCalendarTypeId" value="${calendarEventForm.selectedCalendarTypeId}"/>
-			                  <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
+			                    <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
 			                    <table>
 			                    	<tr>
 			                    		<td nowrap="nowrap" align="right" style="vertical-align: text-top">
@@ -519,9 +520,7 @@ function recurEvent(){
 			                    		<td width="2px" valign="top">&nbsp;</td>
 			                    		<td align="left" style="width: 220px;vertical-align: top;">
 			                    			<c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
-			                                          	<html:hidden styleId="selectedStartTime" name="calendarEventForm" property="selectedStartTime"/>
-			                                            <html:hidden styleId="selectedEndTime" name="calendarEventForm" property="selectedEndTime"/>
-			                                            <table cellpadding="0" cellspacing="0">
+			                                          	<table cellpadding="0" cellspacing="0">
 			                                              <tr>
 			                                                <td nowrap="nowrap">
 			                                                  <html:text styleId="selectedStartDate" readonly="true" name="calendarEventForm" property="selectedStartDate" style="width:80px" styleClass="inp-text"/>

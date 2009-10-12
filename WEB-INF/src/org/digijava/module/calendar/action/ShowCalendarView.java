@@ -17,6 +17,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.LabelValueBean;
+import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
@@ -36,6 +38,7 @@ import org.digijava.module.calendar.entity.EventsFilter;
 import org.digijava.module.calendar.form.CalendarViewForm;
 import org.digijava.module.calendar.util.AmpDbUtil;
 import org.digijava.module.calendar.util.AmpUtil;
+import org.digijava.module.calendar.util.CalendarThread;
 
 public class ShowCalendarView extends Action {
 
@@ -49,6 +52,11 @@ public class ShowCalendarView extends Action {
         TeamMember mem = (TeamMember) ses.getAttribute("currentMember");
         Boolean showPublicEvents = calendarViewForm.getResetFilter();
         
+        Site site = RequestUtils.getSite(request);
+		CalendarThread.setSite(site);
+		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+		CalendarThread.setLocale(navigationLanguage);
+		
         if (showPublicEvents == null)
         	showPublicEvents = new Boolean(true);
         
@@ -250,7 +258,7 @@ public class ShowCalendarView extends Action {
 			}
         };
         Collections.sort(l, c);
-        Collection<AmpCalendarGraph> ampCalendarGraphs = AmpUtil.getAmpCalendarGraphs(l,navigator, view);
+        Collection<AmpCalendarGraph> ampCalendarGraphs = AmpUtil.getAmpCalendarGraphs(l,navigator, view,selectedCalendarType);
         calendarViewForm.setAmpCalendarGraphs(ampCalendarGraphs);
 
         return mapping.findForward("success");

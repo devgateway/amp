@@ -13,6 +13,8 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.calendar.exception.CalendarException;
+import org.digijava.module.calendar.util.CalendarThread;
+import org.digijava.module.mondrian.query.QueryThread;
 
 public class DateBreakDown {
     private int type;
@@ -66,13 +68,17 @@ public class DateBreakDown {
         hour = calendar.get(calendar.HOUR_OF_DAY);
         minute = calendar.get(calendar.MINUTE);
         //
-        String siteId = null;
-        String locale = null;
-        if (request != null){
-	       siteId = RequestUtils.getSite(request).getId()+"";
-	       locale =  RequestUtils.getNavigationLanguage(request).getCode().toLowerCase();
+        String siteId = "";
+        String locale = ""; 
+        if (request == null){
+        	siteId = CalendarThread.getSite().getId().toString();
+        	locale = CalendarThread.getLocale().getCode();
+        }else{
+           siteId = RequestUtils.getSite(request).getId()+"";
+  	       locale =  RequestUtils.getNavigationLanguage(request).getCode().toLowerCase();
         }
-        if ((locale != null) && (locale.equals("fr"))) {
+        
+        if (locale != null) {
         	String ms = TranslatorWorker.translateText(monthNameShort, locale, siteId);
         	String ml = TranslatorWorker.translateText(monthNameLong, locale, siteId);
         	dateInLocaleWeek = dayOfMonth + " " + ms + " " + year;

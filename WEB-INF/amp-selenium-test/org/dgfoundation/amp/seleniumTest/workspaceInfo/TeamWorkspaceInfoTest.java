@@ -27,7 +27,7 @@ public class TeamWorkspaceInfoTest extends SeleneseTestCase {
 			selenium.waitForPageToLoad("30000");
 			selenium.click("//a[contains(@href, \"/aim/defaultSettings.do\")]");
 			selenium.waitForPageToLoad("30000");
-			String currId1 = selenium.getSelectedIndex("currencyId");
+			String currId1 = selenium.getSelectedLabel("currencyId");
 			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
 			selenium.waitForPageToLoad("30000");
 			
@@ -41,8 +41,11 @@ public class TeamWorkspaceInfoTest extends SeleneseTestCase {
 			selenium.waitForPageToLoad("30000");
 			selenium.click("//a[contains(@href, \"/aim/defaultSettings.do\")]");
 			selenium.waitForPageToLoad("30000");
-			String currId2 = selenium.getSelectedIndex("currencyId");
+			String currId2 = selenium.getSelectedLabel("currencyId");
+			
 			selenium.select("currencyId", "index=2");
+			String currId3 = selenium.getSelectedLabel("currencyId");
+			
 			selenium.click("//input[@onclick='validade();']");
 			selenium.waitForPageToLoad("30000");
 			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
@@ -76,7 +79,7 @@ public class TeamWorkspaceInfoTest extends SeleneseTestCase {
 				selenium.selectWindow(selenium.getAllWindowTitles()[1]);
 		        selenium.click("//input[@onclick='addFundingDetail(0)']");
 				SeleniumTestUtil.waitForElement(selenium,"fundingDetail[0].currencyCode", 90);
-				if (!selenium.getSelectedIndex("fundingDetail[0].currencyCode").equals("1")) {
+				if (!selenium.getSelectedValue("fundingDetail[0].currencyCode").equals(currId3)) {
 					logger.error("Currency is not according default settings");
 				}
 				selenium.click("//input[@onclick=\"closeWindow()\"]");
@@ -95,7 +98,7 @@ public class TeamWorkspaceInfoTest extends SeleneseTestCase {
 			selenium.waitForPageToLoad("30000");
 			selenium.click("//a[contains(@href, \"/aim/defaultSettings.do\")]");
 			selenium.waitForPageToLoad("30000");
-			if (!selenium.getSelectedIndex("currencyId").equals(currId1)) {
+			if (!selenium.getSelectedLabel("currencyId").equals(currId1)) {
 				logger.error("Currency is not according default settings");
 			}
 			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
@@ -111,7 +114,7 @@ public class TeamWorkspaceInfoTest extends SeleneseTestCase {
 			selenium.waitForPageToLoad("30000");
 			selenium.click("//a[contains(@href, \"/aim/defaultSettings.do\")]");
 			selenium.waitForPageToLoad("30000");
-			selenium.select("currencyId", "index="+currId2);
+			selenium.select("currencyId", "label="+currId2);
 			selenium.click("//input[@onclick='validade();']");
 			selenium.waitForPageToLoad("30000");
 		} else {

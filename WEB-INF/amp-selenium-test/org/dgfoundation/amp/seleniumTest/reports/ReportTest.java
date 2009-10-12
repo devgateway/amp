@@ -77,7 +77,7 @@ public class ReportTest extends SeleneseTestCase{
 			}
 			selenium.click("//button[@type='button' and @onclick=\"ColumnsDragAndDropObject.selectObjs('source_col_div', 'dest_col_ul')\"]");
 			selenium.click("//li[@id='measures_tab_label']/a/div");
-			if (SeleniumFeaturesConfiguration.getFieldState("Actual Commitments")){
+			if (SeleniumFeaturesConfiguration.getFeatureState("Actual Commitments")){
 				if (selenium.isElementPresent("//li[@id='measure_1']/input")) {
 					selenium.click("//li[@id='measure_1']/input");
 					measActualComm = true;
@@ -88,7 +88,7 @@ public class ReportTest extends SeleneseTestCase{
 				measActualComm = false;
 				logger.info("Field \"Actual Commitments\" is not available.");
 			}
-			if (SeleniumFeaturesConfiguration.getFieldState("Actual Disbursements")){
+			if (SeleniumFeaturesConfiguration.getFeatureState("Actual Disbursements")){
 				if (selenium.isElementPresent("//li[@id='measure_2']/input")) {
 					selenium.click("//li[@id='measure_2']/input");
 					measActualDist = true;
@@ -99,7 +99,7 @@ public class ReportTest extends SeleneseTestCase{
 				measActualDist = false;
 				logger.info("Field \"Actual Disbursements\" is not available.");
 			}
-			if (SeleniumFeaturesConfiguration.getFieldState("Planned Commitments")){
+			if (SeleniumFeaturesConfiguration.getFeatureState("Planned Commitments")){
 				if (selenium.isElementPresent("//li[@id='measure_4']/input")) {
 					selenium.click("//li[@id='measure_4']/input");
 					measPlannedComm = true;
@@ -110,7 +110,7 @@ public class ReportTest extends SeleneseTestCase{
 				measPlannedComm = false;
 				logger.info("Field \"Planned Commitments\" is not available.");
 			}
-			if (SeleniumFeaturesConfiguration.getFieldState("Planned Disbursements")){
+			if (SeleniumFeaturesConfiguration.getFeatureState("Planned Disbursements")){
 				if (selenium.isElementPresent("//li[@id='measure_5']/input")) {
 					selenium.click("//li[@id='measure_5']/input");
 					measPlannedDist = true;
@@ -122,7 +122,7 @@ public class ReportTest extends SeleneseTestCase{
 				logger.info("Measure \"Planned Disbursements\" is not available.");
 			}
 			selenium.click("//button[@type='button' and @onclick=\"MyDragAndDropObject.selectObjs('source_measures_ul', 'dest_measures_ul')\"]");
-			if (SeleniumFeaturesConfiguration.getFieldState("Filter Button")){
+			if (SeleniumFeaturesConfiguration.getFeatureState("Filter Button")){
 				if (selenium.isElementPresent("step3_add_filters_button")) {
 					selenium.click("step3_add_filters_button");
 					SeleniumTestUtil.waitForElement(selenium, "indexString", 90);
@@ -142,7 +142,13 @@ public class ReportTest extends SeleneseTestCase{
 			selenium.click("//p[@title='" + reportName + "']");
 			//selenium.waitForPopUp(selenium.getAllWindowTitles()[1], "50000");
 			Thread.sleep(30000);
-			selenium.selectWindow("AMP : Reports "+reportName); 
+			for (int i = 0; i < selenium.getAllWindowTitles().length; i++) {
+				if (selenium.getAllWindowTitles()[i].contains(reportName)) {
+					selenium.selectWindow(selenium.getAllWindowTitles()[i]);
+					break;
+				}
+			}
+			//selenium.selectWindow("AMP : Reports "+reportName); 
 			
 			String filters = selenium.getText("//div[@id='currentDisplaySettings']/table/tbody/tr[1]/td[1]");
 			if (!filters.contains(actNameFilter)) {
@@ -211,7 +217,13 @@ public class ReportTest extends SeleneseTestCase{
 			selenium.click("//p[@title='" + reportName + "']");
 			//selenium.waitForPopUp(selenium.getAllWindowTitles()[1], "50000");
 			Thread.sleep(10000);
-			selenium.selectWindow("AMP : Reports "+reportName); 
+			for (int i = 0; i < selenium.getAllWindowTitles().length; i++) {
+				if (selenium.getAllWindowTitles()[i].contains(reportName)) {
+					selenium.selectWindow(selenium.getAllWindowTitles()[i]);
+					break;
+				}
+			}
+			//selenium.selectWindow("AMP : Reports "+reportName); 
 	        filters = selenium.getText("//div[@id='currentDisplaySettings']/table/tbody/tr[1]/td[1]");
 			if (!filters.contains(actNameFilter)) {
 				logger.error("Filter by index string error");
@@ -279,7 +291,13 @@ public class ReportTest extends SeleneseTestCase{
 			selenium.click("//p[@title='" + reportName + "']");
 			//selenium.waitForPopUp(selenium.getAllWindowTitles()[1], "50000");
 			Thread.sleep(10000);
-			selenium.selectWindow("AMP : Reports "+reportName); 
+			for (int i = 0; i < selenium.getAllWindowTitles().length; i++) {
+				if (selenium.getAllWindowTitles()[i].contains(reportName)) {
+					selenium.selectWindow(selenium.getAllWindowTitles()[i]);
+					break;
+				}
+			}
+			//selenium.selectWindow("AMP : Reports "+reportName); 
 	        filters = selenium.getText("//div[@id='currentDisplaySettings']/table/tbody/tr[1]/td[1]");
 			if (!filters.contains(actNameFilter)) {
 				logger.error("Filter by index string error");

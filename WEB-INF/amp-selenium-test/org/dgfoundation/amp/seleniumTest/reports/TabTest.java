@@ -121,7 +121,7 @@ public class TabTest extends SeleneseTestCase{
 			
 			selenium.click("//li[@id='measures_tab_label']/a/div");
 			cnt = 0;
-			if (SeleniumFeaturesConfiguration.getFieldState("Actual Commitments")){
+			if (SeleniumFeaturesConfiguration.getFeatureState("Actual Commitments")){
 				if (selenium.isElementPresent("//li[@id='measure_1']/input")) {
 					selenium.click("//li[@id='measure_1']/input");
 					cnt++;
@@ -133,7 +133,7 @@ public class TabTest extends SeleneseTestCase{
 				measActualComm = false;
 				logger.info("Field \"Actual Commitments\" is not available.");
 			}
-			if (SeleniumFeaturesConfiguration.getFieldState("Actual Disbursements")){
+			if (SeleniumFeaturesConfiguration.getFeatureState("Actual Disbursements")){
 				if (selenium.isElementPresent("//li[@id='measure_2']/input")) {
 					selenium.click("//li[@id='measure_2']/input");
 					cnt++;
@@ -145,7 +145,7 @@ public class TabTest extends SeleneseTestCase{
 				measActualDist = false;
 				logger.info("Field \"Actual Disbursements\" is not available.");
 			}
-			if (SeleniumFeaturesConfiguration.getFieldState("Planned Commitments")){
+			if (SeleniumFeaturesConfiguration.getFeatureState("Planned Commitments")){
 				if (selenium.isElementPresent("//li[@id='measure_4']/input")) {
 					selenium.click("//li[@id='measure_4']/input");
 					cnt++;
@@ -157,7 +157,7 @@ public class TabTest extends SeleneseTestCase{
 				measPlannedComm = false;
 				logger.info("Field \"Planned Commitments\" is not available.");
 			}
-			if (SeleniumFeaturesConfiguration.getFieldState("Planned Disbursements")){
+			if (SeleniumFeaturesConfiguration.getFeatureState("Planned Disbursements")){
 				if (selenium.isElementPresent("//li[@id='measure_5']/input")) {
 					selenium.click("//li[@id='measure_5']/input");
 					cnt++;
@@ -182,7 +182,7 @@ public class TabTest extends SeleneseTestCase{
 			}
 			selenium.click("//button[@type='button' and @onclick=\"MyDragAndDropObject.deselectObjs('dest_measures_ul', 'source_measures_ul')\"]");			
 			Thread.sleep(1000);
-			if (SeleniumFeaturesConfiguration.getFieldState("Actual Commitments")){
+			if (SeleniumFeaturesConfiguration.getFeatureState("Actual Commitments")){
 				if (selenium.isElementPresent("//li[@id='measure_1']/input")) {
 					selenium.click("//li[@id='measure_1']/input");
 					measActualComm = true;
@@ -193,7 +193,7 @@ public class TabTest extends SeleneseTestCase{
 				measActualComm = false;
 				logger.info("Field \"Actual Commitments\" is not available.");
 			}
-			if (SeleniumFeaturesConfiguration.getFieldState("Actual Disbursements")){
+			if (SeleniumFeaturesConfiguration.getFeatureState("Actual Disbursements")){
 				if (selenium.isElementPresent("//li[@id='measure_2']/input")) {
 					selenium.click("//li[@id='measure_2']/input");
 					measActualDist = true;
@@ -208,7 +208,7 @@ public class TabTest extends SeleneseTestCase{
 			selenium.click("//button[@type='button' and @onclick=\"MyDragAndDropObject.selectObjs('source_measures_ul', 'dest_measures_ul')\"]");
 			Thread.sleep(1000);
 						
-			if (SeleniumFeaturesConfiguration.getFieldState("Filter Button")){
+			if (SeleniumFeaturesConfiguration.getFeatureState("Filter Button")){
 				if (selenium.isElementPresent("step3_add_filters_button")) {
 					selenium.click("step3_add_filters_button");
 					SeleniumTestUtil.waitForElement(selenium, "indexString", 90);
@@ -268,7 +268,7 @@ public class TabTest extends SeleneseTestCase{
 			try {selenium.click("//li[@id='measure_2']/input");} catch (Exception e) {}
 			selenium.click("//button[@type='button' and @onclick=\"MyDragAndDropObject.deselectObjs('dest_measures_ul', 'source_measures_ul')\"]");			
 			Thread.sleep(1000);
-			if (SeleniumFeaturesConfiguration.getFieldState("Planned Commitments")){
+			if (SeleniumFeaturesConfiguration.getFeatureState("Planned Commitments")){
 				if (selenium.isElementPresent("//li[@id='measure_4']/input")) {
 					selenium.click("//li[@id='measure_4']/input");
 					cnt++;
@@ -280,7 +280,7 @@ public class TabTest extends SeleneseTestCase{
 				measPlannedComm = false;
 				logger.info("Field \"Planned Commitments\" is not available.");
 			}
-			if (SeleniumFeaturesConfiguration.getFieldState("Planned Disbursements")){
+			if (SeleniumFeaturesConfiguration.getFeatureState("Planned Disbursements")){
 				if (selenium.isElementPresent("//li[@id='measure_5']/input")) {
 					selenium.click("//li[@id='measure_5']/input");
 					cnt++;

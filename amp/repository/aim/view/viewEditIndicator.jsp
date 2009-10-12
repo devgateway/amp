@@ -197,11 +197,11 @@ function selectActivity(){
             </td>
             <td>
                <html:text property="date" styleId="date" disabled="true" readonly="true" style="font-family:verdana;font-size:11px;width:80px;"/>
-			<a id="date0" href='javascript:pickDateById("date0","date")'>
-				<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0> 
-			</a> 
-
-
+				<!-- 
+					<a id="date0" href='javascript:pickDateById("date0","date")' >
+					<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0> 
+				</a> 
+				 -->
             </td>
           </tr>
           <!-- 

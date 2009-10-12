@@ -357,7 +357,7 @@ public class ShowCalendarEvent extends Action {
             calendarItems.add(calendarItem);
             calendar.setCalendarItem(calendarItems);
 
-            if(ceform.getSelectedStartMonth() != null){           
+            if(ceform.getRecurrPeriod() != 0){           
 	            Set recEvent =new HashSet();
 	            RecurrCalEvent recurrEvent = new RecurrCalEvent();
 	            recurrEvent.setCalendar(calendar);
@@ -427,7 +427,7 @@ public class ShowCalendarEvent extends Action {
             AmpDbUtil.updateAmpCalendar(ampCalendar);
             //Create new calendar event alert           
             CalendarEventSaveTrigger cet=new CalendarEventSaveTrigger(ampCalendar);
-           
+            ceform.setResetForm(true);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

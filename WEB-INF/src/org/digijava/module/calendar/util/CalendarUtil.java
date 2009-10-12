@@ -217,8 +217,8 @@ public class CalendarUtil {
 										}
 										//AmpCalendar id = AmpDbUtil.getAmpCalendar(ampCalendar.getCalendarPK().getCalendar().getId());
 										//id.getEventType().getId();
-										if(ampCalendar.getEventTypeId() != null){
-										xml+="<type>"+ampCalendar.getEventTypeId()+"</type>";
+										if(ampCalendar.getEventsType() != null){
+										xml+="<type>"+ampCalendar.getEventsType().getId()+"</type>";
 										}else{
 											xml+="<type>"+0+"</type>";
 										}

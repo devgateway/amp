@@ -304,9 +304,9 @@ public class ShowCalendarEvent extends Action {
 
             AmpCalendar ampCalendar = new AmpCalendar();
 
-            
-            ampCalendar.setEventTypeId(ceform.getSelectedEventTypeId());
-
+            AmpCategoryValue value =    CategoryManagerUtil.getAmpCategoryValueFromDb(ceform.getSelectedEventTypeId());
+            ampCalendar.setEventsType(value);
+         
             if(ampCalendar.getMember()==null){
                 HttpSession ses = request.getSession();
                 TeamMember mem = (TeamMember) ses.getAttribute("currentMember");
@@ -516,8 +516,8 @@ public class ShowCalendarEvent extends Action {
                 // private event
                 ceform.setPrivateEvent(ampCalendar.isPrivateEvent());
                 
-                if(ampCalendar.getEventTypeId()!=null){
-                	AmpCategoryValue ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromDb(ampCalendar.getEventTypeId());
+                if(ampCalendar.getEventsType()!=null){
+                	AmpCategoryValue ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromDb(ampCalendar.getEventsType().getId());
                 	if (ampCategoryValue != null){
                 		//event type
                     	ceform.setSelectedEventTypeName(ampCategoryValue.getValue());

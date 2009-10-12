@@ -674,7 +674,7 @@ public class AmpDbUtil {
           }
 
           if ( (selectedEventTypeIds != null) && (selectedEventTypeIds.length > 0) ) {
-        	  queryString.append(" and ac.eventTypeId in (:selectedEventTypes)");
+        	  queryString.append(" and ac.eventsType.id in (:selectedEventTypes)");
           }else{
         	  queryString.append(" and 0 = 1");
           }

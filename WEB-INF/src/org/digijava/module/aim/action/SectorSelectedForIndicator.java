@@ -109,6 +109,7 @@ public class SectorSelectedForIndicator extends Action {
 
 		eaForm.setActivitySectors(null);
 		eaForm.setActivitySectors(newSectors);
+		eaForm.setSector(new Long(-1));
 
 		return mapping.findForward("forward");
 

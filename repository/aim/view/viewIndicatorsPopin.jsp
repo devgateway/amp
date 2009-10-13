@@ -1,3 +1,4 @@
+<%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
@@ -371,7 +372,7 @@ function removeSelSectors() {
 	YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
 }
 
-function addSectors() {
+function addSectors() {	
 	var msg='\n<digi:trn>AMP - Select Sector</digi:trn>';
 	showPanelLoading2(msg);
 	<digi:context name="addSectorEdit" property="context/module/moduleinstance/editSectorForind.do?edit=true" />
@@ -407,11 +408,11 @@ function getParams(){
 		ret += "&category="+document.aimNewIndicatorForm.category.value;
 	}
 	
-	ret += "&name="+document.aimNewIndicatorForm.name.value+
-	"&description="+document.aimNewIndicatorForm.description.value+
+	ret += "&name="+filterSpecialCharacters(document.aimNewIndicatorForm.name.value)+
+	"&description="+filterSpecialCharacters(document.aimNewIndicatorForm.description.value)+
 	"&code="+document.aimNewIndicatorForm.code.value+
 	"&type="+document.aimNewIndicatorForm.type.value+
-	"&date="+document.aimNewIndicatorForm.date.value;//+
+	"&date="+document.aimNewIndicatorForm.date.value;
 	//"&selectedActivityId="+document.aimNewIndicatorForm.selectedActivityId.value;
 	return ret;
 }
@@ -426,6 +427,20 @@ function getSelectedSectors(){
 		}
 	}
 	return ret;
+}
+
+function filterSpecialCharacters(valueToFilter){
+	if(valueToFilter.indexOf('%')!=-1){
+		valueToFilter=valueToFilter.replace(/%/,'%25');
+	}
+	if(valueToFilter.indexOf('&')!=-1){
+		valueToFilter=valueToFilter.replace(/&/,'%26');
+	}	
+	if(valueToFilter.indexOf('#')!=-1){
+		valueToFilter=valueToFilter.replace(/#/,'%23');
+	}
+	return valueToFilter;
+
 }
 -->
 </script>

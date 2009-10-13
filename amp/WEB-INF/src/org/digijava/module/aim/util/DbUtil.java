@@ -1659,7 +1659,6 @@ public class DbUtil {
             if (itr.hasNext()) {
                 ampAppSettings = (AmpApplicationSettings) itr.next();
             }
-            PersistenceManager.releaseSession(session);
         } catch (Exception e) {
             logger.error("Unable to get TeamAppSettings", e);
         }

@@ -59,5 +59,18 @@ public class AmpReportHierarchy implements Serializable, Comparable {
 			return -1;
 		}
 	}
+	
+	@Override
+	public boolean equals(Object arg0) {
+		return compareTo(arg0)==0;
+	}
 
+	@Override
+	public int hashCode() {
+	    if (levelId != null) {
+	        return levelId.hashCode();
+	    } else {
+	        return super.hashCode();
+	    }
+	}
 }

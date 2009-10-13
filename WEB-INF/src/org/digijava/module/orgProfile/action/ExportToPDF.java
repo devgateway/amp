@@ -30,8 +30,10 @@ import javax.servlet.http.HttpSession;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
+import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.orgProfile.helper.FilterHelper;
 import org.digijava.module.orgProfile.helper.ParisIndicatorHelper;
 import org.digijava.module.orgProfile.helper.Project;
@@ -93,6 +95,7 @@ public class ExportToPDF extends Action {
                         opt.setLangCode(langCode);
                         JFreeChart chart = null;
                         PdfPTable orgSummaryTbl =null;
+                        PdfPTable orgContactsTbl =null;
                         PdfPTable largetsProjectsTbl =null;
                         PdfPTable parisDecTbl =null;
                         ChartRenderingInfo info = new ChartRenderingInfo();
@@ -101,6 +104,7 @@ public class ExportToPDF extends Action {
                         Color titleColor = new Color(34, 46, 93);
                         Color borderColor = new Color(255, 255, 255);
                         Color cellColor=new Color(219, 229, 241);
+                        AmpOrganisation organization = filter.getOrganization();
                         switch (type.intValue()) {
                             case WidgetUtil.ORG_PROFILE_TYPE_OF_AID:
                                 chart = ChartWidgetUtil.getTypeOfAidChart(opt, filter);
@@ -160,7 +164,7 @@ public class ExportToPDF extends Action {
 
                                 PdfPCell orgCell = new PdfPCell();
                                 orgCell.setBackgroundColor(cellColor);
-                                orgCell.addElement(new Paragraph(filter.getOrganization().getName(),plainFont));
+                                orgCell.addElement(new Paragraph(organization.getName(),plainFont));
                                 orgSummaryTbl.addCell(orgCell);
 
                                 PdfPCell orgAcrTitleCell = new PdfPCell();
@@ -168,7 +172,7 @@ public class ExportToPDF extends Action {
                                 orgSummaryTbl.addCell(orgAcrTitleCell);
 
                                 PdfPCell orgAcrCell = new PdfPCell();
-                                orgAcrCell.addElement(new Paragraph(filter.getOrganization().getAcronym(),plainFont));
+                                orgAcrCell.addElement(new Paragraph(organization.getAcronym(),plainFont));
                                 orgSummaryTbl.addCell(orgAcrCell);
 
 
@@ -178,7 +182,7 @@ public class ExportToPDF extends Action {
                                 orgSummaryTbl.addCell(orgDnGrpTitleCell);
 
                                 PdfPCell orgDnGrpCell = new PdfPCell();
-                                AmpOrgGroup grp=filter.getOrganization().getOrgGrpId();
+                                AmpOrgGroup grp=organization.getOrgGrpId();
                                 String grpName="";
                                 if(grp!=null){
                                     grpName=grp.getOrgGrpName();
@@ -192,35 +196,83 @@ public class ExportToPDF extends Action {
                                 orgSummaryTbl.addCell(orgWbLinkTitleCell);
 
                                 PdfPCell orgWbLinkCell = new PdfPCell();
-                                orgWbLinkCell.addElement(new Paragraph(filter.getOrganization().getOrgUrl(),plainFont));
+                                orgWbLinkCell.addElement(new Paragraph(organization.getOrgUrl(),plainFont));
                                 orgSummaryTbl.addCell(orgWbLinkCell);
 
-                                PdfPCell orgContactNameTitleCell = new PdfPCell();
-                                orgContactNameTitleCell.addElement(new Paragraph(TranslatorWorker.translateText("Contact Name",langCode,siteId)+":",plainFont));
-                                orgContactNameTitleCell.setBackgroundColor(cellColor);
-                                orgSummaryTbl.addCell(orgContactNameTitleCell);
+                              
 
-                                PdfPCell orgContactNameCell = new PdfPCell();
-                                orgContactNameCell.addElement(new Paragraph(filter.getOrganization().getContactPersonName(),plainFont));
-                                orgContactNameCell.setBackgroundColor(cellColor);
-                                orgSummaryTbl.addCell(orgContactNameCell);
+                                //create contacts table
+                                orgContactsTbl=new PdfPTable(6);
+                                orgContactsTbl.setWidthPercentage(100);
 
-                                PdfPCell orgPhoneTitleCell = new PdfPCell();
-                                orgPhoneTitleCell.addElement(new Paragraph(TranslatorWorker.translateText("Contact Phone",langCode,siteId)+":",plainFont));
-                                orgSummaryTbl.addCell(orgPhoneTitleCell);
-                                PdfPCell orgPhoneCell = new PdfPCell();
-                                orgPhoneCell.addElement(new Paragraph(filter.getOrganization().getPhone(),plainFont));
-                                orgSummaryTbl.addCell(orgPhoneCell);
+                                PdfPCell contactHeaderCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Contact Information",langCode,siteId),headerFont));
+                                contactHeaderCell.setBackgroundColor(titleColor);
+                                contactHeaderCell.setColspan(6);
+                                contactHeaderCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                orgContactsTbl.addCell(contactHeaderCell);
 
-                                PdfPCell orgEmailTitleCell = new PdfPCell();
-                                orgEmailTitleCell.addElement(new Paragraph(TranslatorWorker.translateText("Contact Email",langCode,siteId)+":",plainFont));
-                                orgEmailTitleCell.setBackgroundColor(cellColor);
-                                orgSummaryTbl.addCell(orgEmailTitleCell);
+                                PdfPCell contactLastNameCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Last Name",langCode,siteId),headerFont));
+                                contactLastNameCell.setBackgroundColor(titleColor);
+                                contactLastNameCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                orgContactsTbl.addCell(contactLastNameCell);
 
-                                PdfPCell orgEmailCell = new PdfPCell();
-                                orgEmailCell.addElement(new Paragraph(filter.getOrganization().getEmail(),plainFont));
-                                orgEmailCell.setBackgroundColor(cellColor);
-                                orgSummaryTbl.addCell(orgEmailCell);
+                                PdfPCell contactNameCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("First name",langCode,siteId),headerFont));
+                                contactNameCell.setBackgroundColor(titleColor);
+                                contactNameCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                orgContactsTbl.addCell(contactNameCell);
+
+                                PdfPCell contactEmailCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Email",langCode,siteId),headerFont));
+                                contactEmailCell.setBackgroundColor(titleColor);
+                                contactEmailCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                orgContactsTbl.addCell(contactEmailCell);
+
+                                PdfPCell contactPhoneCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Telephone",langCode,siteId),headerFont));
+                                contactPhoneCell.setBackgroundColor(titleColor);
+                                contactPhoneCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                orgContactsTbl.addCell(contactPhoneCell);
+
+                                PdfPCell contactFaxCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Fax",langCode,siteId),headerFont));
+                                contactFaxCell.setBackgroundColor(titleColor);
+                                contactFaxCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                orgContactsTbl.addCell(contactFaxCell);
+
+                                PdfPCell contactTitleCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Title",langCode,siteId),headerFont));
+                                contactTitleCell.setBackgroundColor(titleColor);
+                                contactTitleCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                orgContactsTbl.addCell(contactTitleCell);
+                                int count=0;
+                                if(organization.getContacts()!=null){
+                                List<AmpContact> contacts=new ArrayList(organization.getContacts());
+                                Iterator<AmpContact> contactsIter=contacts.iterator();
+                                while(contactsIter.hasNext()){
+                                    AmpContact contact=contactsIter.next();
+                                    PdfPCell name = new PdfPCell(new Paragraph(contact.getLastname(),plainFont));
+                                    PdfPCell lastName = new PdfPCell(new Paragraph(contact.getName(),plainFont));
+                                    PdfPCell email = new PdfPCell(new Paragraph(contact.getEmail(),plainFont));
+                                    PdfPCell phone = new PdfPCell(new Paragraph(contact.getPhone(),plainFont));
+                                    PdfPCell fax = new PdfPCell(new Paragraph(contact.getFax(),plainFont));
+                                    PdfPCell title = new PdfPCell(new Paragraph(contact.getTitle(),plainFont));
+                                    if(count%2==0){
+                                        title.setBackgroundColor(cellColor);
+                                        fax.setBackgroundColor(cellColor);
+                                        phone.setBackgroundColor(cellColor);
+                                        email.setBackgroundColor(cellColor);
+                                        lastName.setBackgroundColor(cellColor);
+                                        name.setBackgroundColor(cellColor);
+                                    }
+                                    orgContactsTbl.addCell(lastName);
+                                    orgContactsTbl.addCell(name);
+                                    orgContactsTbl.addCell(email);
+                                    orgContactsTbl.addCell(phone);
+                                    orgContactsTbl.addCell(fax);
+                                    orgContactsTbl.addCell(title);
+                                    count++;
+
+                                }
+
+
+                                }
+
 
                                 //create largest projects table
                                 largetsProjectsTbl=new PdfPTable(new float[]{25,20,60});
@@ -247,7 +299,7 @@ public class ExportToPDF extends Action {
                                 largetsProjectsTbl.addCell(largestProjectsSectorTitle);
                                 List<Project> projects=OrgProfileUtil.getOrganisationLargestProjects(filter);
                                 Iterator<Project> projectIter=projects.iterator();
-                                int count=0;
+                                count=0;
                                 while(projectIter.hasNext()){
                                     Project project=projectIter.next();
                                     PdfPCell title = new PdfPCell(new Paragraph(project.getTitle(),plainFont));
@@ -302,8 +354,7 @@ public class ExportToPDF extends Action {
                                    value.setBackgroundColor(titleColor);
                                    target.setBackgroundColor(titleColor);
                                    baseline.setBorderColor(borderColor);
-                                   value.setBorderColor(borderColor);;
-                                   target.setBorderColor(borderColor);
+                                   value.setBorderColor(borderColor);                                   target.setBorderColor(borderColor);
                                    allDonorsTbl.addCell(baseline);
                                    allDonorsTbl.addCell(value);
                                    allDonorsTbl.addCell(target);
@@ -312,7 +363,7 @@ public class ExportToPDF extends Action {
                                    parisDecTbl.addCell(allDonorsCell);
 
 
-                                   PdfPCell selectedOrgTblTitle = new PdfPCell(new Paragraph(filter.getOrganization().getName(),headerFont));
+                                   PdfPCell selectedOrgTblTitle = new PdfPCell(new Paragraph(organization.getName(),headerFont));
                                    selectedOrgTblTitle.setColspan(2);
                                    selectedOrgTblTitle.setFixedHeight(30);
                                    selectedOrgTblTitle.setBackgroundColor(titleColor);
@@ -490,6 +541,8 @@ public class ExportToPDF extends Action {
                             tableCell.setBorder(PdfPCell.NO_BORDER);
                             if(orgSummaryTbl!=null){
                                 tableCell.addElement(orgSummaryTbl);
+                                tableCell.addElement(new Paragraph("   "));
+                                tableCell.addElement(orgContactsTbl);
                                 tableCell.addElement(new Paragraph("   "));
                                 tableCell.addElement(largetsProjectsTbl);
                             }

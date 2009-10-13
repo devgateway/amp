@@ -363,7 +363,7 @@
 
 		</feature:display>
                                      <module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT">
-                                     <feature:display name="Budget" module="Project Id And Planning">
+                                     <feature:display name="Budget" module="Project ID and Planning">
 										<tr>
 											<td width="27%" align="right" valign="top" nowrap="nowrap">
 												<b>

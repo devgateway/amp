@@ -48,7 +48,6 @@
 <module:display name="Previews" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Program" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT"></module:display> 
-<module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="REPORTING"></module:display> 
 <module:display name="References" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Report Generator" parentModule="REPORTING"></module:display>
@@ -81,7 +80,8 @@
 <feature:display module="Project ID and Planning" name="Identification"></feature:display> 
 <feature:display module="Project ID and Planning" name="Location"></feature:display> 
 <feature:display module="Project ID and Planning" name="Planning"></feature:display> 
-<feature:display module="Project ID and Planning" name="Sectors"></feature:display> 
+<feature:display module="Project ID and Planning" name="Sectors"></feature:display>
+<feature:display module="Project ID and Planning" name="Budget"></feature:display> 
 <feature:display module="Report Types" name="Contribution Report"></feature:display> 
 <feature:display name="About AMP" module="HELP"></feature:display> 
 <feature:display name="Activity - Component Step" module="Components"></feature:display> 
@@ -105,8 +105,6 @@
 <feature:display name="Approval Tab" module="Messages"></feature:display> 
 <feature:display name="Approval Tab" module="Messages"></feature:display> 
 <feature:display name="Beneficiary Agency" module="Organizations"></feature:display> 
-<feature:display name="Budget" module="Project ID and Planning"></feature:display> 
-<feature:display name="Budget" module="Project Id And Planning"></feature:display> 
 <feature:display name="Calendar" module="Calendar"></feature:display> 
 <feature:display name="Channel Overview" module="Channel Overview"></feature:display> 
 <feature:display name="Component Report" module="Report Types"></feature:display> 
@@ -128,7 +126,6 @@
 <feature:display name="Financial Progress Tab" module="Funding"></feature:display> 
 <feature:display name="Funding Information" module="Funding"></feature:display> 
 <feature:display name="Government Contact Information" module="Contact Information"></feature:display> 
-<feature:display name="Identification" module="Project ID and Planning"></feature:display> 
 <feature:display name="Implementing Agency" module="Organizations"></feature:display> 
 <%--<feature:display name="Indicator Sector Region" module="WIDGETS"></feature:display> --%>
 <feature:display name="Results Dashboard Data" module="WIDGETS"></feature:display> 
@@ -136,7 +133,6 @@
 <feature:display name="Issues" module="Issues"></feature:display> 
 <feature:display name="Job Manager" module="ADMIN"></feature:display> 
 <feature:display name="Level Links" module="Activity Levels"></feature:display> 
-<feature:display name="Location" module="Project ID and Planning"></feature:display> 
 <feature:display name="Logframe" module="Previews"></feature:display> 
 <feature:display name="Message Manager" module="ADMIN"></feature:display> 
 <feature:display name="Message tab" module="Messages"></feature:display> 
@@ -161,7 +157,6 @@
 <feature:display name="Planned Commitments" module="Measures"></feature:display> 
 <feature:display name="Planned Disbursements" module="Measures"></feature:display> 
 <feature:display name="Planned Expenditures" module="Measures"></feature:display> 
-<feature:display name="Planning" module="Project ID and Planning"></feature:display> 
 <feature:display name="Portfolio Dashboard" module="M & E"></feature:display> 
 <feature:display name="Preview Activity" module="Previews"></feature:display> 
 <feature:display name="Program" module="Program"></feature:display> 
@@ -177,7 +172,6 @@
 <feature:display name="Save Filters from Desktop" module="Report Generator"></feature:display> 
 <feature:display name="Sector Group" module="Organizations"></feature:display> 
 <feature:display name="Sector Ministry Contact Information" module="Contact Information"></feature:display> 
-<feature:display name="Sectors" module="Project ID and Planning"></feature:display> 
 <feature:display name="Support Request Form" module="HELP"></feature:display> 
 <feature:display name="Table Widgets" module="WIDGETS"></feature:display> 
 <feature:display name="Target Value" module="PI Reports"></feature:display> 

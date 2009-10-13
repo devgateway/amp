@@ -73,23 +73,33 @@
                                                 	</tr>
                                                 	<tr>
                                                			<td>
-                                                    		<table width="90%" cellspacing=1 cellpadding=4 valign=top align=left bgcolor="#d7eafd">
+                                                    		<table width="100%" cellspacing=1 cellpadding=5 valign=top border="0" align=left bgcolor="#d7eafd">
                                                         		<logic:notEmpty name="aimSectorClassConfigForm" property="classifications">
                                                             		<logic:iterate name="aimSectorClassConfigForm" property="classificationConfigs" id="classConfig"
 																				type="org.digijava.module.aim.dbentity.AmpClassificationConfiguration">
                                                                  		<tr>
-                                                                    		<td width="256" bgcolor="#ffffff">
+                                                                    		<td width="60%" bgcolor="#ffffff" nowrap>
                                                                         		<digi:trn key="aim:addActivitySectors:${classConfig.name}">${classConfig.name}</digi:trn>
                                                                          	</td>
-                                                         					<td bgcolor="#ffffff" width="80px" align="right">
+																			<td bgcolor="#ffffff" width="10px" align="center" nowrap>
+																				<logic:notEqual name="classConfig" property="primary" value="true">
+																					[ <digi:link href="/updateSectorClassConfig.do?event=setPrimary&id=${classConfig.id}"  title="${trnEditScheme}">
+	                                                                                	<digi:trn key="aim:setPrimary">Set primary</digi:trn>
+	                                                                                </digi:link>]
+																				</logic:notEqual>
+																				<logic:equal name="classConfig" property="primary" value="true">
+																					[ <digi:trn key="aim:isPrimary">Primary</digi:trn> ]
+																				</logic:equal>
+                                                                            </td>
+                                                         					<td bgcolor="#ffffff" width="10px" align="right" nowrap>
                                                                         		<c:set var="trnEditScheme">
                                                                             		<digi:trn key="aim:clickToEdit">Click here to Edit</digi:trn>
                                                                               	</c:set>
                                                                                 [ <digi:link href="/updateSectorClassConfig.do?event=edit&id=${classConfig.id}"  title="${trnEditScheme}">
                                                                                 	<digi:trn key="aim:edit">edit</digi:trn>
-                                                                                </digi:link>]													  
+                                                                                </digi:link>]
                                                                              </td>
-                                                                             <td bgcolor="#ffffff" width="80px" align="left">
+                                                                             <td bgcolor="#ffffff" width="10px" align="left" nowrap>
                                                                         		<c:set var="trnEditScheme">
                                                                             		<digi:trn key="aim:clickToDeleteClassification">Click here to Delete a Classification</digi:trn>
                                                                               	</c:set>

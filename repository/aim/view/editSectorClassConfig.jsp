@@ -82,7 +82,7 @@
                                                                         <td>
                                                                             <c:if test="${aimSectorClassConfigForm.id>0}">
                                                                  
-                                                                                <html:textarea  name ="aimSectorClassConfigForm" property="configName" rows="1" cols= "35" readonly="true"/> 
+                                                                                <html:textarea  name ="aimSectorClassConfigForm" property="configName" rows="1" cols= "35"/> 
                                                                             
                                                                             </c:if>
                                                                              <c:if test="${empty aimSectorClassConfigForm.id||aimSectorClassConfigForm.id==0}">

@@ -323,8 +323,8 @@ public class OrgProfileUtil {
         long value = 0;
         try {
             Session session = PersistenceManager.getRequestDBSession();
-            String queryString = "select  distinct cal  from " + AmpCalendar.class.getName() + " cal inner join cal.eventType  type " + " left join cal.organisations org " +
-                    " where (cal.calendarPK.calendar.startDate>=:startDate and cal.calendarPK.calendar.endDate<=:endDate) " + " and type.name='Mission' "; //I think we need made changes in db structure
+            String queryString = "select  distinct cal  from " + AmpCalendar.class.getName() + " cal inner join cal.eventsType  type " + " left join cal.organisations org " +
+                    " where (cal.calendarPK.calendar.startDate>=:startDate and cal.calendarPK.calendar.endDate<=:endDate) " + " and type.value='Mission' "; //I think we need made changes in db structure
 
 
             if (orgId != null && orgId != -1) {

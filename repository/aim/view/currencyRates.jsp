@@ -509,10 +509,11 @@ function fnSubmit() {
 												</c:if>
 												<c:if test="${currPage != aimCurrencyRateForm.currentPage}">
 													<c:set target="${urlParams}" property="page">
-													<div  class = "mapagination">
+													
 														<c:out value="${currPage}"/>
-													</div>
+													
 													</c:set>
+													
 													<div class = "mapagination">
 														<digi:link href="/showCurrencyRates.do" name="urlParams">
 														<c:out value="${currPage}"/></digi:link>

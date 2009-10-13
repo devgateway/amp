@@ -56,17 +56,17 @@ public class UpdateSectorSchemes extends Action {
 		Integer id = new Integer(0);
 		if(sId!=null)
 	    id = new Integer(sId);
-		
+
 		Site site = RequestUtils.getSite(request);
 		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
 		Long siteId = site.getId();
 		String locale = navigationLanguage.getCode();
 		logger.info("FinalID=============================="+id);
-		String sortByColumn = request.getParameter("sortByColumn");		
+		String sortByColumn = request.getParameter("sortByColumn");
 		if(event!=null){
 			if(event.equalsIgnoreCase("edit")){
 				Collection schemeGot = SectorUtil.getEditScheme(id);
-	
+
 				Collection sectors = null;
 				if(sortByColumn==null || sortByColumn.compareTo("sectorCode")==0){
 					sectors=SectorUtil.getSectorLevel1SortBySectorCode(id);
@@ -83,11 +83,11 @@ public class UpdateSectorSchemes extends Action {
 					sectorsForm.setSecSchemeCode(ampScheme.getSecSchemeCode());
 					sectorsForm.setParentId(ampScheme.getAmpSecSchemeId());
 				}
-	
+
 				//session.setAttribute("Id",null);
 				return mapping.findForward("viewSectorSchemeLevel1");
 			}
-			
+
 			else if (event.equals("addscheme")) {
 				logger.debug("now add a new  scheme");
 				return mapping.findForward("addSectorScheme");
@@ -97,7 +97,7 @@ public class UpdateSectorSchemes extends Action {
 				AmpSectorScheme ampscheme = new AmpSectorScheme();
 				logger.debug(" the name is...."	+ sectorsForm.getSecSchemeName());
 				logger.debug(" the code is ...."+ sectorsForm.getSecSchemeCode());
-				
+
 				if(checkSectorNameCodeIsNull(sectorsForm)){
 					//request.setAttribute("event", "view");
 					ActionErrors errors = new ActionErrors();
@@ -109,7 +109,7 @@ public class UpdateSectorSchemes extends Action {
 	        			}
 					return mapping.findForward("viewSectorSchemes");
 				}
-				
+
 				if(existScheme(sectorsForm) == 1){
 					request.setAttribute("event", "view");
 					ActionErrors errors = new ActionErrors();
@@ -121,7 +121,7 @@ public class UpdateSectorSchemes extends Action {
         			}
 					return mapping.findForward("viewSectorSchemes");
 				}
-				
+
 				if(existScheme(sectorsForm) == 2){
 					request.setAttribute("event", "view");
 					ActionErrors errors = new ActionErrors();
@@ -133,7 +133,7 @@ public class UpdateSectorSchemes extends Action {
         			}
 					return mapping.findForward("viewSectorSchemes");
 				}
-				
+
 				ampscheme.setSecSchemeCode(sectorsForm.getSecSchemeCode());
 				ampscheme.setSecSchemeName(sectorsForm.getSecSchemeName());
 				DbUtil.add(ampscheme);
@@ -142,8 +142,9 @@ public class UpdateSectorSchemes extends Action {
 				logger.debug("done kutte");
 				//scheme = SectorUtil.getSectorSchemes();
 				//sectorsForm.setFormSectorSchemes(scheme);
-				if (SectorUtil.getAllSectorSchemes().size() == 1) {
-					Collection schemes = SectorUtil.getAllSectorSchemes();
+                                Collection schemes = SectorUtil.getAllSectorSchemes();
+				if (schemes != null && schemes.size() == 1) {
+
 					Iterator it = schemes.iterator();
 					AmpSectorScheme ampScheme = null;
 					while (it.hasNext()) {
@@ -154,8 +155,10 @@ public class UpdateSectorSchemes extends Action {
 					AmpClassificationConfiguration classification = null;
 					while (iter.hasNext()) {
 						AmpClassificationConfiguration classificationTemp = (AmpClassificationConfiguration) iter.next();
-						if (classificationTemp.getName().equalsIgnoreCase("Primary")) {
+//						if (classificationTemp.getName().equalsIgnoreCase("Primary")) {
+                                                if (classificationTemp.isPrimary()) {
 							classification = classificationTemp;
+                                                        break;
 						}
 					}
 					if (classification != null) {
@@ -170,8 +173,8 @@ public class UpdateSectorSchemes extends Action {
         				saveErrors(request, errors);
         				session.setAttribute("managingSchemes",errors);
         			}
-				}	
-					
+				}
+
 				return mapping.findForward("viewSectorSchemes");
 			}
 			else if (event.equals("updateScheme")) {
@@ -185,7 +188,7 @@ public class UpdateSectorSchemes extends Action {
 				logger.debug(" the name is...."	+ sectorsForm.getSecSchemeName());
 				logger.debug(" the code is ...."+ sectorsForm.getSecSchemeCode());
 				logger.debug(" this is the id......" + Id);
-				
+
 				if(checkSectorNameCodeIsNull(sectorsForm)){
 					request.setAttribute("event", "view");
 					ActionErrors errors = new ActionErrors();
@@ -197,7 +200,7 @@ public class UpdateSectorSchemes extends Action {
         			}
 					return mapping.findForward("viewSectorSchemes");
 				}
-				
+
 				if(existSchemeForUpdate(sectorsForm,Id) == 1){
 					request.setAttribute("event", "view");
 					ActionErrors errors = new ActionErrors();
@@ -209,7 +212,7 @@ public class UpdateSectorSchemes extends Action {
         			}
 					return mapping.findForward("viewSectorSchemes");
 				}
-				
+
 				if(existSchemeForUpdate(sectorsForm,Id) == 2){
 					request.setAttribute("event", "view");
 					ActionErrors errors = new ActionErrors();
@@ -251,24 +254,24 @@ public class UpdateSectorSchemes extends Action {
 				else
 					SectorUtil.deleteScheme(id1);
 				return mapping.findForward("viewSectorSchemes");
-				
+
 			}
 		}
-		
+
 
 		//scheme = SectorUtil.getSectorSchemes();
 		//sectorsForm.setFormSectorSchemes(scheme);
 
 		return mapping.findForward("viewSectorSchemes");
 	}
-	
+
 	private boolean checkSectorNameCodeIsNull(AddSectorForm sectorsForm){
 		if(sectorsForm.getSecSchemeCode() == null || sectorsForm.getSecSchemeName() == null ||
 				"".equals(sectorsForm.getSecSchemeCode()) || "".equals(sectorsForm.getSecSchemeName()) )
 			return true;
 		return false;
 	}
-	
+
 	private int existScheme (AddSectorForm sectorsForm){
 		Collection<AmpSectorScheme> schemes = (Collection<AmpSectorScheme>)SectorUtil.getAllSectorSchemes();
 		for (Iterator it = schemes.iterator(); it.hasNext();) {
@@ -278,21 +281,21 @@ public class UpdateSectorSchemes extends Action {
 		}
 		return 0;
 	}
-	
+
 	private int existSchemeForUpdate (AddSectorForm sectorsForm, Long Id){
 		Collection<AmpSectorScheme> schemes = (Collection<AmpSectorScheme>)SectorUtil.getAllSectorSchemes();
 		for (Iterator it = schemes.iterator(); it.hasNext();) {
 			AmpSectorScheme scheme = (AmpSectorScheme) it.next();
 			if(!Id.equals(scheme.getAmpSecSchemeId())){
-				if( scheme.getSecSchemeName() != null && sectorsForm.getSecSchemeName().equals(scheme.getSecSchemeName()) ) 
+				if( scheme.getSecSchemeName() != null && sectorsForm.getSecSchemeName().equals(scheme.getSecSchemeName()) )
 					return 1;
-				if( scheme.getSecSchemeCode() != null && sectorsForm.getSecSchemeCode().equals(scheme.getSecSchemeCode()) ) 
+				if( scheme.getSecSchemeCode() != null && sectorsForm.getSecSchemeCode().equals(scheme.getSecSchemeCode()) )
 					return 2;
 			}
 		}
 		return 0;
 	}
-	
+
 }
 
 

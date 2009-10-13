@@ -1,5 +1,6 @@
 package org.digijava.module.aim.action;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -32,9 +33,16 @@ public class ViewAhSurveyFormulas extends Action {
 		}
 
 		ViewAhSurveyFormulasForm svform=(ViewAhSurveyFormulasForm)form;
-		if (svform.getSurveis()==null)
-			svform.setSurveis(DbUtil.getAllAhSurveyIndicators());
 		
+        if (svform.getSelectedColumnIndex() == null || svform.getSelectedColumnIndex().equals( -1)) {
+            svform.setSelectedColumnIndex(new Long(0));
+        }
+
+		if (svform.getSurveis()==null){
+	        Collection<AmpAhsurveyIndicator> surveyIndicators = getSurveyList(svform); 
+	        svform.setSurveis(surveyIndicators);
+		}
+	
         AmpAhsurveyIndicator sv = null;
         if (svform.getIndId() == null) {
             return mapping.findForward("forward");
@@ -44,7 +52,7 @@ public class ViewAhSurveyFormulas extends Action {
         if (sv == null) {
             return mapping.findForward("forward");
         }
-
+        
         svform.setIndCode(sv.getIndicatorCode());
 
         if (svform.getAction()!=null && svform.getAction().equals("save")) {
@@ -76,39 +84,32 @@ public class ViewAhSurveyFormulas extends Action {
             svform.setAction(null);
         }
 
-        if (svform.getSelectedColumnIndex() == null || svform.getSelectedColumnIndex().equals( -1)) {
-            svform.setSelectedColumnIndex(new Long(0));
-        }
-
-        Set calcFormulas = sv.getCalcFormulas();
-
-        AmpAhsurveyIndicatorCalcFormula selFormula = getSurvyByColumnIndex(calcFormulas);
-        if (selFormula == null) {
-            if (calcFormulas == null || calcFormulas.isEmpty()) {
-                calcFormulas = new HashSet();
-            }
-
-            selFormula = new AmpAhsurveyIndicatorCalcFormula();
-            selFormula.setColumnIndex(svform.getSelectedColumnIndex());
-            selFormula.setParentIndicator(sv);
-            calcFormulas.add(selFormula);
-            sv.setCalcFormulas(calcFormulas);
-            DbUtil.updateIndicator(sv);
-        }
-
-        svform.setConstantName(selFormula.getConstantName());
-        svform.setColumnIndex(selFormula.getColumnIndex());
-        svform.setFormulaId(selFormula.getId());
-        svform.setFormulaText(selFormula.getCalcFormula());
-        svform.setBaseLineValue(selFormula.getBaseLineValue());
-        svform.setTargetValue(selFormula.getTargetValue());
-        if(selFormula.getEnabled()==null){
-            selFormula.setEnabled(false);
-        }
-        svform.setFormulaEnabled(selFormula.getEnabled());
+        Collection<AmpAhsurveyIndicator> surveyIndicators = getSurveyList(svform); 
+        svform.setSurveis(surveyIndicators);
 
         return mapping.findForward("forward");
     }
+
+	private Collection<AmpAhsurveyIndicator> getSurveyList(
+			ViewAhSurveyFormulasForm svform) {
+		Collection <AmpAhsurveyIndicator> surveyIndicators = DbUtil.getAllAhSurveyIndicators();
+        for(AmpAhsurveyIndicator ind : surveyIndicators){
+        	 Set calcFormulas = ind.getCalcFormulas();
+             AmpAhsurveyIndicatorCalcFormula selFormula = getSurvyByColumnIndex(calcFormulas);
+             if (selFormula == null) {
+                 if (calcFormulas == null || calcFormulas.isEmpty()) {
+                     calcFormulas = new HashSet();
+                 }
+
+                 selFormula = new AmpAhsurveyIndicatorCalcFormula();
+                 selFormula.setColumnIndex(svform.getSelectedColumnIndex());
+                 selFormula.setParentIndicator(ind);
+                 calcFormulas.add(selFormula);
+                 ind.setCalcFormulas(calcFormulas);
+             }
+        }
+		return surveyIndicators;
+	}
 
     private void setSurvyByColumnIndex(Set set, AmpAhsurveyIndicatorCalcFormula survey) {
         if (set != null && !set.isEmpty()) {

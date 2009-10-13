@@ -63,6 +63,37 @@ div.fakefile2 {
 div.fakefile2 input{
 	width: 83px;
 }
+
+		.jcol{												
+		padding-left:10px;												 
+		}
+		.jlien{
+			text-decoration:none;
+		}
+		.tableEven {
+			background-color:#dbe5f1;
+			font-size:8pt;
+			padding:2px;
+		}
+
+		.tableOdd {
+			background-color:#FFFFFF;
+			font-size:8pt;
+			padding:2px;
+		}
+		 
+		.Hovered {
+			background-color:#a5bcf2;
+		}
+		
+		.notHovered {
+			background-color:#FFFFFF;
+		}
+		.mapagination{
+		padding:3px;border:1px solid #999999; width:10px; height:10px; float:left;
+		}
+
+
 -->
 </style>
 
@@ -169,6 +200,59 @@ function fnSubmit() {
 		}
 	}
 
+	function setStripsTable(tableId, classOdd, classEven) {
+		var tableElement = document.getElementById(tableId);
+		rows = tableElement.getElementsByTagName('tr');
+		for(var i = 0, n = rows.length; i < n; ++i) {
+			if(i%2 == 0)
+				rows[i].className = classEven;
+			else
+				rows[i].className = classOdd;
+		}
+		rows = null;
+	}
+	function setHoveredTable(tableId, hasHeaders) {
+
+		var tableElement = document.getElementById(tableId);
+		if(tableElement){
+	    	var className = 'Hovered',
+	        pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
+	        rows      = tableElement.getElementsByTagName('tr');
+
+			for(var i = 0, n = rows.length; i < n; ++i) {
+				rows[i].onmouseover = function() {
+					this.className += ' ' + className;
+				};
+				rows[i].onmouseout = function() {
+					this.className = this.className.replace(pattern, ' ');
+
+				};
+			}
+			rows = null;
+		}
+	}
+
+	
+	function setHoveredRow(rowId) {
+
+		var rowElement = document.getElementById(rowId);
+		if(rowElement){
+	    	var className = 'Hovered',
+	        pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
+	        cells      = rowElement.getElementsByTagName('td');
+
+			for(var i = 0, n = cells.length; i < n; ++i) {
+				cells[i].onmouseover = function() {
+					this.className += ' ' + className;
+				};
+				cells[i].onmouseout = function() {
+					this.className = this.className.replace(pattern, ' ');
+
+				};
+			}
+			cells = null;
+		}
+	}
 </script>
 
 <digi:errors/>
@@ -191,8 +275,8 @@ function fnSubmit() {
 <tr><td>
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750>
+		<td  width=14>&nbsp;</td>
+		<td align=left  vAlign=top width=750>
 			<table cellPadding=5 cellSpacing=3 width="100%">
 				<tr>
 					<!-- Start Navigation -->
@@ -216,37 +300,36 @@ function fnSubmit() {
 					</td>
 				</tr>
 				<tr>
-					<td noWrap width=100% vAlign="top">
-						<table width="100%" cellspacing="2" cellPadding="2" vAlign="top" align="left">
+					<td noWrap width="770" vAlign="top">
+						<table width="600px;" cellspacing="2" cellPadding="2" vAlign="top" align="left">
 							<tr><td>
 								<!-- Filters -->
-
-								<table cellPadding=1 cellSpacing=1 align="left" bgcolor="#dddddd" width="600">
-								<tr><td bgcolor="#f4f4f2">
+								<table cellPadding=1 cellSpacing=1 align="left"  width="600" height = "70">
+								<tr><td >
 								<table cellPadding=0 cellSpacing=2 align="left" width="600" border=0>
 									<tr>
-										<td bgcolor="#f4f4f2" vAlign="center">
+										<td  vAlign="center">
 											<b><digi:trn key="aim:filterBy">Filter By</digi:trn>:</b>
 										</td>
-										<td bgcolor="#f4f4f2" vAlign="center">
+										<td  vAlign="center">
 											<digi:trn key="aim:currencyCode">Currency Code</digi:trn>
 										</td>
-										<td bgcolor="#f4f4f2" vAlign="center">
+										<td  vAlign="center">
 											<html:select property="filterByCurrCode" styleClass="inp-text">
 												<html:option value="">--<digi:trn key="aim:all">All</digi:trn>--</html:option>
 												<html:optionsCollection name="aimCurrencyRateForm" property="currencyCodes"
 												value="currencyCode" label="currencyCode" />&nbsp;&nbsp;&nbsp;
 											</html:select>
 										</td>
-										<td bgcolor="#f4f4f2" vAlign="center">
+										<td vAlign="center">
 											<digi:trn key="aim:ratesOfDate">Rates of date</digi:trn>
 										</td>
 										<%--
-										<td bgcolor="#f4f4f2" vAlign="center">
+										<td  vAlign="center">
 											<digi:trn key="aim:dateFrom">From</digi:trn>
 										</td>
 										--%>
-										<td bgcolor="#f4f4f2" vAlign="center">
+										<td  vAlign="center">
 											<table cellPadding=0 cellSpacing=0>
 												<tr>
 													<td>
@@ -261,7 +344,7 @@ function fnSubmit() {
 												</tr>
 											</table>
 										</td>
-										<td bgcolor="#f4f4f2" vAlign="center">
+										<td  vAlign="center">
                                         &nbsp;&nbsp;&nbsp;&nbsp;
 											<%--<digi:trn key="aim:andPrev7Days">and previous</digi:trn>--%>
 											<html:select property="timePeriod" styleClass="inp-text">
@@ -274,7 +357,7 @@ function fnSubmit() {
 											</html:select>
 										</td>
 										
-										<td bgcolor="#f4f4f2" vAlign="center">
+										<td  vAlign="center">
                                           <c:set var="trnGoBtn">
                                             <digi:trn key="aim:goBtn"> Go </digi:trn>
                                           </c:set>
@@ -283,40 +366,20 @@ function fnSubmit() {
 									</tr>
 								</table>
 								</td></tr>
-								<tr><td bgcolor="#f4f4f2">
-								<table cellPadding=0 cellSpacing=2 align="left" border=0 vAlign="center">
-									<tr>
-										<td bgcolor="#f4f4f2" vAlign="left" width="170" align="center">
-											<digi:trn key="aim:numRecordsPerPage">Number of records per page</digi:trn>:
-										</td>
-										<td bgcolor="#f4f4f2" vAlign="left" width="50" align="center">
-											<html:text property="numResultsPerPage" size="3" styleClass="inp-text"/>
-										</td>
-										<td bgcolor="#f4f4f2" vAlign="left" align="center">
-                                          <c:set var="trnViewBtn">
-                                            <digi:trn key="aim:viewBtn"> View </digi:trn>
-                                          </c:set>
-                                          <html:submit value="${trnViewBtn}" styleClass="dr-menu"/>
-										</td>
-									</tr>
-								</table>
-								</td>
-                                </tr>
-
                                 <tr>
-                                  <td bgcolor="#f4f4f2">
+                                  <td >
                                     <table cellPadding=0 cellSpacing=2 align="left" border=0 vAlign="center">
                                       <tr>
-                                        <td bgcolor="#f4f4f2" vAlign="left" align="center">
+                                        <td  vAlign="left" align="center">
                                           <FONT color=red>*</FONT>
                                           <a title="<digi:trn key="aim:LocationoftheFile">URI Location of the document to be attached</digi:trn>"><digi:trn key="aim:file">File</digi:trn>
 										  </a>
                                         </td>
-                                        <td bgcolor="#f4f4f2" vAlign="middle" align="center">
+                                        <td vAlign="middle" align="center">
 										  &nbsp;&nbsp;&nbsp;<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:currencyFormatHint"> The file should have 3 columns: the first column contains currency codes (ex. CAD, or ETB), the second column contains rates (per 1 US dollar), and the 3rd column contains the dates (in format  dd-mm-yyyy).</digi:trn>"/>
 										</td>                                   
                                         
-                                        <td bgcolor="#f4f4f2" vAlign="left" align="left">
+                                        <td  vAlign="left" align="left">
                                         <!-- <html:file name="aimCurrencyRateForm" property="currRateFile" size="50" styleClass="dr-menu"/> -->
                                         <c:set var="trnUpdateValues">
                                             <digi:trn key="aim:UpdateValues">Update Values</digi:trn>
@@ -335,110 +398,140 @@ function fnSubmit() {
                                   
                                 </tr>
                                 </table>
-
-
-							</td></tr>
-							<tr><td bgcolor="#ffffff" valign="top" align="left">
+							</td>
+                            </tr>
+							<tr>
+                            <td bgcolor="#ffffff" valign="top" align="left">
 								<!-- Exchange rates table -->
-								<table cellSpacing="1" cellPadding="2" vAlign="top" align="left" bgcolor="#aaaaaa" width="450">
-									<tr bgcolor="eeeeee">
-										<td align="center" width="3">
-											<input type="checkbox" name="checkAll" onclick="checkall()">
-										</td>
-										<td align="center" width="40" onMouseOver="this.className='colHeaderOver'"
-										onMouseOut="this.className='colHeaderLink'">
-											<b><digi:trn key="aim:currCode">Code</digi:trn></b>
-										</td>
-										<td align="center" width="200" onMouseOver="this.className='colHeaderOver'"
-										onMouseOut="this.className='colHeaderLink'">
-											<b><digi:trn key="aim:currencyName">Currency Name</digi:trn></b>
-										</td>
-										<td align="center" width="80" onMouseOver="this.className='colHeaderOver'"
-										onMouseOut="this.className='colHeaderLink'">
-											<b><digi:trn key="aim:exchangeRateDate">Date</digi:trn></b>
-										</td>
-										<td align="center" onMouseOver="this.className='colHeaderOver'"
-										onMouseOut="this.className='colHeaderLink'">
-											<b><digi:trn key="aim:exchangeRate">Rate</digi:trn></b>
-										</td>
+								<table cellSpacing="0" cellPadding="2" vAlign="top" align="left" width="604">
+	
+										<td colspan="5">
+                                            <div style = "width:604px; height:20px; background-color:#999;">
+												 <div style = " float:left; width:25px;"><input type="checkbox" name="checkAll" onclick="checkall()"/></div>
+	                                             <div style = " float:left; width:130px;"><b><digi:trn key="aim:currCode">Code</digi:trn></b></div>
+											     <div style = " float:left; width:220px;"><b><digi:trn key="aim:currencyName">Currency Name</digi:trn></b></div>
+												 <div style = " float:left; width:170px;"><b><digi:trn key="aim:exchangeRateDate">Date</digi:trn></b></div>
+												 <div style = " float:left; width:30px; "><b><digi:trn key="aim:exchangeRate">Rate</digi:trn></b></div>              
+                                            </div>
+									       <div  style = " width:602px; float:left; overflow:auto; height:210px;  border:#999999 solid 1px; " >									
+											<table cellSpacing="0" cellPadding="2" vAlign="top" width="583" id="dataTable">
+											
+		
+											<c:if test="${empty aimCurrencyRateForm.currencyRates}">
+											<tr bgcolor="#f4f4f2">
+												<td colspan="5" align="center">
+													<digi:trn key="aim:noCurrencyRates">No currency rates</digi:trn>
+												</td>
+											</tr>
+											</c:if>
+									        
+											<c:if test="${!empty aimCurrencyRateForm.currencyRates}">
+											<c:forEach var="cRates" items="${aimCurrencyRateForm.currencyRates}">
+											
+											<tr >
+										
+												<td align="center" width="3">
+													<html:multibox property="selectedRates">
+														<c:out value="${cRates.id}"/>
+													</html:multibox>
+												</td>
+												<td align="left">
+		                                          <digi:trn key='aim:currency:${fn:replace(cRates.currencyCode, " ", "_")}'>${cRates.currencyCode}</digi:trn>
+												</td>
+												<td align="center" >
+													<c:out value="${cRates.currencyName}"/>
+												</td>
+												<td align="center">
+													<a href="javascript:editExchangeRate('<c:out value="${cRates.exchangeRateDate}"/>','<c:out value="${cRates.currencyCode}"/>')">
+													<c:out value="${cRates.exchangeRateDate}"/>
+													</a>
+												</td>
+												<td align="right" nowrap="nowrap">
+													<aim:formatNumber  maxFractionDigits="10" value="${cRates.exchangeRate}"> </aim:formatNumber>
+												</td>
+											</tr>
+											</c:forEach>
+											</c:if>
+												
+										</table>
+									<script language="javascript">
+										setStripsTable("dataTable", "tableEven", "tableOdd");
+										setHoveredTable("dataTable", false);
+										setHoveredRow("rowHighlight");
+									</script>
+								</div>
+										 </td>
 									</tr>
-									<c:if test="${empty aimCurrencyRateForm.currencyRates}">
-									<tr bgcolor="#f4f4f2">
-										<td colspan="5" align="center">
-											<digi:trn key="aim:noCurrencyRates">No currency rates</digi:trn>
-										</td>
-									</tr>
-									</c:if>
-									<% int index = 0; %>
-									<c:if test="${!empty aimCurrencyRateForm.currencyRates}">
-									<c:forEach var="cRates" items="${aimCurrencyRateForm.currencyRates}">
-									<%
-									if (index%2 == 0) { %>
-									<tr class="rowNormal">
-									<% } else { %>
-									<tr class="rowAlternate">
-									<% }
-									index++;%>
-										<td align="center" width="3">
-											<html:multibox property="selectedRates">
-												<c:out value="${cRates.id}"/>
-											</html:multibox>
-										</td>
-										<td align="left">
-                                          <digi:trn key='aim:currency:${fn:replace(cRates.currencyCode, " ", "_")}'>${cRates.currencyCode}</digi:trn>
-										</td>
-										<td align="left">
-											<c:out value="${cRates.currencyName}"/>
-										</td>
-										<td align="center">
-											<a href="javascript:editExchangeRate('<c:out value="${cRates.exchangeRateDate}"/>','<c:out value="${cRates.currencyCode}"/>')">
-											<c:out value="${cRates.exchangeRateDate}"/>
-											</a>
-										</td>
-										<td align="right" nowrap="nowrap">
-											<aim:formatNumber  maxFractionDigits="10" value="${cRates.exchangeRate}"> </aim:formatNumber>
-										</td>
-									</tr>
-									</c:forEach>
-									</c:if>
+								<!-- ========= TABLE AJOUT LEFT PB============= -->
 								</table>
 							</td></tr>
 							<tr>
                               <td>
-                                <c:set var="trnDelBtn">
-                                  <digi:trn key="aim:deleteSelectedRates">Delete Selected Rates</digi:trn>
-                                </c:set>
-                                <input type="button" value="${trnDelBtn}" class="dr-menu" onclick="deleteRates()">
+								<div style ="float:left; width:340px;">
+	                                <c:set var="trnDelBtn">
+	                                  <digi:trn key="aim:deleteSelectedRates">Delete Selected Rates</digi:trn>
+	                                </c:set>
+	                                <input type="button" value="${trnDelBtn}" class="dr-menu" onclick="deleteRates()">
+								</div>
+								<div style ="float:left;">
+									<table cellPadding=0 cellSpacing=2 align="left" border=0 vAlign="center">
+									<tr>
+										<td  vAlign="left" width="170" align="center">
+											<digi:trn key="aim:numRecordsPerPage">Number of records per page</digi:trn>:
+										</td>
+										<td  vAlign="left" width="50" align="center">
+											<html:text property="numResultsPerPage" size="3" styleClass="inp-text"/>
+										</td>
+										<td vAlign="left" align="center">
+                                          <c:set var="trnViewBtn">
+                                            <digi:trn key="aim:viewBtn"> View </digi:trn>
+                                          </c:set>
+                                          <html:submit value="${trnViewBtn}" styleClass="dr-menu"/>
+										</td>
+									</tr>
+								    </table>
+								</div>
                               </td>
                             </tr>
 							<c:if test="${!empty aimCurrencyRateForm.pages}">
 							<tr><td>
 								<!-- Pagination -->
 								<table width="460" cellSpacing="1" cellPadding="2" vAlign="top" align="left">
+
 									<tr>
-										<td>
+										<td >
+											
+											<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
+											<c:forEach var="currPage" items="${aimCurrencyRateForm.pages}">
+												<c:if test="${currPage == aimCurrencyRateForm.currentPage}">
+													<div  class = "mapagination" style ="padding:3px;border:2px solid #000000; color:#FF0000;">
+													    <c:out value="${currPage}"/></div>
+												</c:if>
+												<c:if test="${currPage != aimCurrencyRateForm.currentPage}">
+													<c:set target="${urlParams}" property="page">
+													<div  class = "mapagination">
+														<c:out value="${currPage}"/>
+													</div>
+													</c:set>
+													<div class = "mapagination">
+														<digi:link href="/showCurrencyRates.do" name="urlParams">
+														<c:out value="${currPage}"/></digi:link>
+													</div>
+												</c:if>
+												
+											</c:forEach>
 											<bean:size name="aimCurrencyRateForm" property="pages" id="totpages"/>
-											<digi:trn key="aim:page">Page</digi:trn> <u><c:out value="${aimCurrencyRateForm.currentPage}"/></u> <digi:trn key="aim:of">of</digi:trn>
+											<!-- 	<u><c:out value="${aimCurrencyRateForm.currentPage}"/></u> --> 
+										<div style = "padding:3px;border:1px solid #999999; width:100px; height:10px; float:left;">
+											<digi:trn key="aim:of">of</digi:trn>
 											<u><c:out value="${totpages}"/></u>
+											<digi:trn key="aim:page">Pages</digi:trn>
+										</div>
 										</td>
 									</tr>
 									<tr>
 										<td>
-											<digi:trn key="aim:pages">Pages</digi:trn> 
-											<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
-											<c:forEach var="currPage" items="${aimCurrencyRateForm.pages}">
-												<c:if test="${currPage == aimCurrencyRateForm.currentPage}">
-													<c:out value="${currPage}"/>
-												</c:if>
-												<c:if test="${currPage != aimCurrencyRateForm.currentPage}">
-													<c:set target="${urlParams}" property="page">
-														<c:out value="${currPage}"/>
-													</c:set>
-													<digi:link href="/showCurrencyRates.do" name="urlParams">
-													<c:out value="${currPage}"/></digi:link>
-												</c:if>
-												|
-											</c:forEach>
+
 										</td>
 									</tr>
 								</table>
@@ -459,17 +552,15 @@ function fnSubmit() {
 								</table>
 							</td></tr>
 							</c:if>
-
 							<!--end end-->
-
-
 							<tr><td>
 								<table width="450" cellSpacing="3" cellPadding="1" vAlign="top" align="left">
 									<tr>
 										<td align="left">
-											<a href="javascript:addExchangeRate()">
+											<!-- <a href="javascript:addExchangeRate()">
                                             <digi:trn key="aim:AddNewExchangeRate">Add new exchange rate</digi:trn>
 											</a>
+											-->
 										</td>
 										<td align="right">
 										<c:if test="${aimCurrencyRateForm.lastRateUpdate != null}">
@@ -480,35 +571,48 @@ function fnSubmit() {
 									</tr>
 								</table>
 							</td></tr>
-							<%--
-							<tr><td bgcolor="#ffffff">
-								<table width="450" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#aaaaaa">
-									<tr bgcolor="#eeeeee">
-										<td align="center" colspan="2">
-											<b>
-											Load currency rates from a CSV file</b>
-										</td>
-									</tr>
-									<tr bgcolor="#ffffff">
-										<td align="center">
-											<table width="350" cellSpacing="3" cellPadding="1" vAlign="top" align="center">
-												<tr>
-													<td align="left" width="320">
-														<html:file name="aimCurrencyRateForm" property="ratesFile"
-														size="40" styleClass="dr-menu"/>
-														<input type="file" name="file" size="50" class="dr-menu">
-													</td>
-													<td align="left">
-														<input type="button" value="Load" class="dr-menu" onclick="selectFile()">
-													</td>
-												</tr>
-											</table>
-										</td>
-									</tr>
-								</table>
-							</td></tr>
-							--%>
+				
 						</table>
+							<!--  =================LINKLINKLINKLINK=================== -->
+								<table align=center cellPadding=0 cellSpacing=0 width="130" border=0 style ="  margin-top:76px; _margin-top:90px;">
+										<tr>
+											<td bgColor=#c9c9c7 class=box-title height="20">
+												<digi:trn key="aim:Links">
+												Links
+												</digi:trn>
+											</td>
+										</tr>
+										<tr>
+											<td bgColor=#ffffff class=box-border>
+												<table cellPadding=5 cellSpacing=1 width="100%">
+													<tr>
+														<td>
+															<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
+														</td>
+														<td>
+															<digi:link module="aim"  href="/../um/addUser.do">
+																<a href="javascript:addExchangeRate()">
+						                                            <digi:trn key="aim:AddNewExchangeRate">Add new exchange rate</digi:trn>
+																</a>
+															</digi:link>
+														</td>
+													</tr>																								
+													<tr>
+														<td>
+															<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/></td>
+														<td>
+															<digi:link module="aim"  href="/admin.do">
+															<digi:trn key="aim:AmpAdminHome">
+															Admin Home
+															</digi:trn>
+															</digi:link>
+														</td>
+													</tr>
+													<!-- end of other links -->
+												</table>
+											</td>
+										</tr>
+									</table>
 					</td>
 				</tr>
 			</table>
@@ -517,6 +621,7 @@ function fnSubmit() {
 </table>
 </td></tr>
 </table>
+
 </digi:form>
 
 <script type="text/javascript">

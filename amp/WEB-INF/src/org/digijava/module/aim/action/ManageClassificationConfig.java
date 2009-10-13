@@ -14,6 +14,8 @@ import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.form.SectorClassConfigForm;
 import org.digijava.module.aim.util.SectorUtil;
+import java.util.List;
+import java.util.Iterator;
 
 public class ManageClassificationConfig extends Action {
 
@@ -41,7 +43,7 @@ public class ManageClassificationConfig extends Action {
             }
             return mapping.findForward("edit");
         }
-        
+
         if (event != null && event.equals("save")) {
                 Long configId = configForm.getId();
                 String configName = configForm.getConfigName();
@@ -52,16 +54,26 @@ public class ManageClassificationConfig extends Action {
                 if (configForm.getMultiSectorSelecting().equals(1l)) {
                     multiSector = true;
                 }
-                
+
                 SectorUtil.saveClassificationConfig(configId, configName, multiSector, classification);
-             
+
 
             } else {
                 configForm.setClassificationConfigs(SectorUtil.getAllClassificationConfigs());
 
             }
-        if (event != null && event.equals("delete")) {
-        	SectorUtil.deleteClassification(configForm.getId());
+        if (event != null && event.equals("setPrimary")) {
+            List <AmpClassificationConfiguration> classificationConfigs = SectorUtil.getAllClassificationConfigs();
+            Iterator <AmpClassificationConfiguration> it = classificationConfigs.iterator();
+            while (it.hasNext()) {
+                AmpClassificationConfiguration conf = it.next();
+                if (conf.getId().equals(configForm.getId())) {
+                    conf.setPrimary(true);
+                } else {
+                    conf.setPrimary(false);
+                }
+                SectorUtil.updateClassificationConfig(conf);
+            }
         }
 
         return mapping.findForward("manageClassifications");

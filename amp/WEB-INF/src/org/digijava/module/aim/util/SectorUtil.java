@@ -67,7 +67,7 @@ public class SectorUtil {
 					+ " where lower(sector.name) like '%"
 					+ keyword.toLowerCase()
 					+ "%' and " + "sector.ampSecSchemeId = sscheme.ampSecSchemeId";
-					
+
 				Query qry = session.createQuery(qryStr);
 				//qry.setParameter("orgType", orgType, Hibernate.LONG) ;
 				//col =qry.list();
@@ -81,28 +81,28 @@ public class SectorUtil {
 					sectr = new ActivitySector();
 			   		sectr.setSectorScheme(as.getAmpSecSchemeId().getSecSchemeName());
 					if(as.getParentSectorId() != null){
-						
+
 						sectr.setSectorName(as.getParentSectorId().getName());
 						sectr.setSectorId(as.getParentSectorId().getAmpSectorId());
 						sectr.setSubsectorLevel1Id(as.getAmpSectorId());
 						sectr.setSubsectorLevel1Name(as.getName());
-						
+
 						if(as.getParentSectorId().getParentSectorId() != null){
-						
+
 							sectr.setSectorName(as.getParentSectorId().getParentSectorId().getName());
 							sectr.setSectorId(as.getParentSectorId().getAmpSectorId());
 							sectr.setSubsectorLevel1Id(as.getParentSectorId().getAmpSectorId());
 							sectr.setSubsectorLevel1Name(as.getParentSectorId().getName());
 							sectr.setSubsectorLevel2Id(as.getAmpSectorId());
 							sectr.setSubsectorLevel2Name(as.getName());
-							
+
 						}
 					}else{
-						
+
 						sectr.setSectorName(as.getName());
 				   		sectr.setSectorId(as.getAmpSectorId());
-						
-						
+
+
 					}
 					col.add(sectr);
 				}
@@ -151,28 +151,28 @@ public class SectorUtil {
 					sectr = new ActivitySector();
 			   		sectr.setSectorScheme(as.getAmpSecSchemeId().getSecSchemeName());
 					if(as.getParentSectorId() != null){
-						
+
 						sectr.setSectorName(as.getParentSectorId().getName());
 						sectr.setSectorId(as.getParentSectorId().getAmpSectorId());
 						sectr.setSubsectorLevel1Id(as.getAmpSectorId());
 						sectr.setSubsectorLevel1Name(as.getName());
-						
+
 						if(as.getParentSectorId().getParentSectorId() != null){
-						
+
 							sectr.setSectorName(as.getParentSectorId().getParentSectorId().getName());
 							sectr.setSectorId(as.getParentSectorId().getAmpSectorId());
 							sectr.setSubsectorLevel1Id(as.getParentSectorId().getAmpSectorId());
 							sectr.setSubsectorLevel1Name(as.getParentSectorId().getName());
 							sectr.setSubsectorLevel2Id(as.getAmpSectorId());
 							sectr.setSubsectorLevel2Name(as.getName());
-							
+
 						}
 					}else{
-						
+
 						sectr.setSectorName(as.getName());
 				   		sectr.setSectorId(as.getAmpSectorId());
-						
-						
+
+
 					}
 					col.add(sectr);
 				}
@@ -188,7 +188,7 @@ public class SectorUtil {
 		}
 		return col;
 	}
-	
+
 	public static List getAmpSectors(Long id) {
 		ArrayList ampSectors = new ArrayList();
 		AmpSector ampSector = null;
@@ -263,7 +263,7 @@ public class SectorUtil {
 		return col;
 
 	}
-	
+
 	/**
 	 * Gets all sectors ordered by parentId
 	 * @param secSchemeId
@@ -293,7 +293,7 @@ public class SectorUtil {
 		}
 		return col;
 	}
-	
+
 	/**
 	 * Using a list of AmpSector objects as source will calculate the fields "level" and "hasChildren".
 	 * @param list
@@ -362,7 +362,7 @@ public class SectorUtil {
 		}
 		return col;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public static Collection<AmpSector> getAllParentSectorsSortedByCode(Long secSchemeId) {
 		Session session = null;
@@ -389,7 +389,7 @@ public class SectorUtil {
 		}
 		return col;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public static Collection<AmpSector> getAllParentSectors(Long secSchemeId) {
 		Session session = null;
@@ -416,14 +416,14 @@ public class SectorUtil {
 		}
 		return col;
 	}
-	
+
 	public static Collection getAllParentSectors() {
 		Session session = null;
 		Collection col = null;
 
 		try {
 			session = PersistenceManager.getSession();
-			
+
 			String queryString = "select cls from " + AmpClassificationConfiguration.class.getName() + " cls where cls.primary=true ";
 			Query qry = session.createQuery(queryString);
 			AmpClassificationConfiguration auxConfig = (AmpClassificationConfiguration) qry.uniqueResult();
@@ -446,9 +446,9 @@ public class SectorUtil {
 		}
 		return col;
 	}
-	
-	
-	
+
+
+
 	public static List<AmpSector> getAllSectorsFromScheme(Long secSchemeId) {
 		Session session = null;
 		List<AmpSector> col = null;
@@ -487,7 +487,7 @@ public class SectorUtil {
 
 		} catch (Exception e) {
 			logger.error("Cannot get sectors, " + e);
-		} 
+		}
 		return col;
 	}
 	public static Collection<AmpSector> getAllChildSectorsSortBySectorCode(Long parSecId) {
@@ -686,19 +686,19 @@ public class SectorUtil {
 	}
 
 	public static AmpIndicatorSector getIndIcatorSector(Long indicatorId){
-		
+
 		Session session = null;
 		Query qry = null;
 		AmpIndicatorSector indSectorId = null;
 		Iterator itr = null;
-		
-		
+
+
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			String queryString = new String();
 			queryString = "select s from " + AmpIndicatorSector.class.getName()
 			+ " s where (s.themeIndicatorId=:themeIndicatorId)";
-			
+
 			qry = session.createQuery(queryString);
 			qry.setParameter("themeIndicatorId", indicatorId, Hibernate.LONG);
 			itr = qry.list().iterator();
@@ -706,29 +706,29 @@ public class SectorUtil {
 			if (itr.hasNext()) {
 				indSectorId = (AmpIndicatorSector) itr.next();
 			}
-			
+
 		} catch (Exception e) {
 			logger.error("Unable to get sector");
 			logger.debug("Exceptiion " + e);
 		}
-		
+
 		return indSectorId;
 	}
-	
+
 	public static boolean getIndIcatorSector(Long indicatorId,Long sectorId){
-		
+
 		Session session = null;
 		Query qry = null;
 		List <AmpIndicatorSector> indSectors = null;
 		boolean exist=false;
-		
-		
+
+
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			String queryString = new String();
 			queryString = "select s from " + AmpIndicatorSector.class.getName()
 			+ " s where (s.themeIndicatorId=:themeIndicatorId) and s.sectorId=:sectorId";
-			
+
 			qry = session.createQuery(queryString);
 			qry.setParameter("themeIndicatorId", indicatorId, Hibernate.LONG);
 			qry.setLong("sectorId", sectorId);
@@ -737,15 +737,15 @@ public class SectorUtil {
 				exist=true;
 			}
 
-			
+
 		} catch (Exception e) {
 			logger.error("Unable to get sector");
 			logger.debug("Exceptiion " + e);
 		}
-		
+
 		return exist;
 	}
-	
+
 	public static AmpSector getAmpSector(Long id) {
 
 		Session session = null;
@@ -1119,19 +1119,19 @@ public class SectorUtil {
 	}
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * @return List of sectors and sub-sectors ordered by sectors alphabetically
-	 *  and then by sub-sectors alphabetically (Ex. A, a1, a2, a3, B, b1, b2, etc...). 
-	 *  The names of the sectors are a embelished (upper case, or added some spaces) 
-	 *  for better presentation. 
-	 *  DO NOT save this objects back to the database  !!!! 
+	 *  and then by sub-sectors alphabetically (Ex. A, a1, a2, a3, B, b1, b2, etc...).
+	 *  The names of the sectors are a embelished (upper case, or added some spaces)
+	 *  for better presentation.
+	 *  DO NOT save this objects back to the database  !!!!
 	 */
 	public static List<AmpSector> getAmpSectorsAndSubSectors( String configurationName ) {
 		List<AmpSector> ret 	= new ArrayList<AmpSector>();
 		Long id					= null;
 		try {
-			Collection<AmpClassificationConfiguration> configs	= 
+			Collection<AmpClassificationConfiguration> configs	=
 					 SectorUtil.getAllClassificationConfigs();
 			Iterator<AmpClassificationConfiguration> confIter	= configs.iterator();
 			while ( confIter.hasNext() ) {
@@ -1148,18 +1148,18 @@ public class SectorUtil {
 					AmpSector ampSector = iter.next();
 					ampSector.setName( ampSector.getName().toUpperCase() );
 					ret.add(ampSector);
-					Collection<AmpSector> dbChildReturnSet = 
+					Collection<AmpSector> dbChildReturnSet =
 							SectorUtil.getAllChildSectors( ampSector.getAmpSectorId() );
 					Iterator<AmpSector> iterSub = dbChildReturnSet.iterator();
 					while (iterSub.hasNext()) {
 						AmpSector ampSubSector = (AmpSector) iterSub.next();
-						String temp = " -- " + ampSubSector.getName();				
+						String temp = " -- " + ampSubSector.getName();
 						ampSubSector.setName(temp);
 						ret.add(ampSubSector);
 					}
 				}
 			}
-		
+
 		} catch (DgException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1208,7 +1208,7 @@ public class SectorUtil {
 	/*
 	 * this is to get the level one sectors from the AmpSector table sorted by officialCode
 	 */
-	
+
 	public static Collection getSectorLevel1SortBySectorCode(Integer schemeId)
 	{
 		String queryString = null;
@@ -1317,11 +1317,11 @@ public class SectorUtil {
 		}
 		return col;
 	}
-        
-        
+
+
     /**
      * Returns All  Configurations of Classifications
-     * 
+     *
      * @return All Configurations
      * @throws DgException If exception occurred
      */
@@ -1347,7 +1347,7 @@ public class SectorUtil {
 
     /**
      * Returns Classification Configuration by Configuration Id
-     * 
+     *
      * @param configId Configuration Id
      * @return Classification Configuration using  Configuration Id
      * @throws DgException If exception occurred
@@ -1371,12 +1371,12 @@ public class SectorUtil {
     }
 
     /**
-     * Returns true if specified classification is selected as default classification 
+     * Returns true if specified classification is selected as default classification
      * in the configuration
      * otherwise returns false.
-     * 
+     *
      * @param classificationId  Id of classification
-     * @return true If specified classification is selected as default classification 
+     * @return true If specified classification is selected as default classification
      * in the configuration
      * @throws DgException If exception occurred
      */
@@ -1408,12 +1408,12 @@ public class SectorUtil {
     }
 
     /**
-     * adds or update classification configuration 
-     * 
-     * 
+     * adds or update classification configuration
+     *
+     *
      * @param configId  Id of configuration
      * @param configName Name of configuration
-     * @param multiSector  
+     * @param multiSector
      * @param classification Default classification
      * @throws DgException If exception occurred
      */
@@ -1455,7 +1455,32 @@ public class SectorUtil {
         }
 
     }
-    
+
+    public static void updateClassificationConfig(AmpClassificationConfiguration config) throws DgException {
+
+        Session session = null;
+        Transaction tx = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            tx = session.beginTransaction();
+            session.saveOrUpdate(config);
+            tx.commit();
+        } catch (Exception ex) {
+            logger.error("Unable to save config to database " + ex.getMessage());
+            if (tx != null) {
+                try {
+                    tx.rollback();
+                } catch (Exception rbf) {
+                    logger.error("Rollback failed");
+                }
+            }
+            throw new DgException(ex);
+
+        }
+
+    }
+
+
     /**
      * Loads AmpClassificationConfiguration bean which is primary.
      * Please see next method which is old version and was not touch to not damage anything.
@@ -1481,12 +1506,12 @@ public class SectorUtil {
 
         }
     }
-    
+
     /**
      * gets id of classification which is selected in primary configuration
-     * 
      *
-     * @return Id of classification  
+     *
+     * @return Id of classification
      * @throws DgException If exception occurred
      */
     public static Long getPrimaryConfigClassificationId() throws DgException {
@@ -1525,9 +1550,9 @@ public class SectorUtil {
         return id;
 
     }
-    
+
     /***
-     * 
+     *
      * @param classificationId
      */
     public static void deleteClassification (Long classificationId){
@@ -1682,15 +1707,15 @@ public class SectorUtil {
                                       }
 		}
 
-         
-                
+
+
                 public static void deleteIndSector(Long sectorid,Long indid){
-	        	
+
         	    logger.info(" deleting the indsectors");
 	   			Session session = null;
 	   			Transaction tx = null;
 	   			AmpThemeIndicators ampThemeInd=null;
-        	   
+
         	   try {
         		   session = PersistenceManager.getRequestDBSession();
         		   tx = session.beginTransaction();
@@ -1701,29 +1726,29 @@ public class SectorUtil {
         			   if(ind.getSectorId().getAmpSectorId().equals(sectorid)){
         				   itr.remove();
         				   session.delete(ind);
-        				     
+
         			   }
         		   }
         		   session.update(ampThemeInd);
         		   tx.commit();
         		   session.flush();
-        		   
-				
+
+
 			} catch (Exception e) {
 				// TODO: handle exception
 				logger.error("Exception from deleteIndSectors:" + e.getMessage());
 				e.printStackTrace(System.out);
 			}
-        	   
+
            }
-                
+
 
     public static Set<AmpSector> getSectorDescendents( Collection<AmpSector> parentSectors ) {
     	Set<AmpSector> generatedSectors	= new HashSet<AmpSector>();
-    	
+
     	generatedSectors.addAll( parentSectors );
     	Iterator sectorIterator=parentSectors.iterator();
-		
+
 		while(sectorIterator.hasNext())
 		{//process each sector and get all its children
 			AmpSector currentSector=(AmpSector)sectorIterator.next();
@@ -1731,7 +1756,7 @@ public class SectorUtil {
 			{
 				Collection childSectors=SectorUtil.getAllChildSectors(currentSector.getAmpSectorId());
 				generatedSectors.addAll(childSectors); //add the children sectors to the filter
-				
+
 				//add the grand children
 				Iterator childSectorsIterator=childSectors.iterator();
 				while(childSectorsIterator.hasNext())
@@ -1740,14 +1765,14 @@ public class SectorUtil {
 					Collection grandChildrenSectors=SectorUtil.getAllChildSectors(currentChild.getAmpSectorId());
 					generatedSectors.addAll(grandChildrenSectors);
 				}
-				
+
 			}
-		
+
 		}
-		
+
 		return generatedSectors;
     }
-    
+
     public static class HelperSectorNameComparator implements Comparator<AmpSector> {
         Locale locale;
         Collator collator;
@@ -1768,7 +1793,7 @@ public class SectorUtil {
             return result;
         }
     }
-                
+
 	/*
 	 * this is to delete a sector
 

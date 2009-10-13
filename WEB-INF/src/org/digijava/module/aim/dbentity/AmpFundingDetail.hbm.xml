@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-	<class name="org.digijava.module.aim.dbentity.AmpFundingDetail" table="AMP_FUNDING_DETAIL">
+	<class name="org.digijava.module.aim.dbentity.AmpFundingDetail" table="AMP_FUNDING_DETAIL" lazy="false">
 		<cache usage="read-write" />
 		<id name="ampFundDetailId" column="amp_fund_detail_id" type="java.lang.Long">
 			<generator class="native">

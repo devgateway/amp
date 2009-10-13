@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-	<class name="org.digijava.module.aim.dbentity.AmpFunding" table="AMP_FUNDING">
+	<class name="org.digijava.module.aim.dbentity.AmpFunding" table="AMP_FUNDING" lazy="false">
 		<cache usage="read-write" />
 		<id name="ampFundingId" column="amp_funding_id" type="java.lang.Long">
 			<generator class="native">
@@ -43,7 +43,7 @@
 
 		<!--  <many-to-one name="modalityId" column="amp_modality_id" class="org.digijava.module.aim.dbentity.AmpModality" cascade="none"/>	 -->
 
-		<set name="fundingDetails" cascade="all-delete-orphan" table="AMP_FUNDING_DETAIL">
+		<set name="fundingDetails" cascade="all-delete-orphan" table="AMP_FUNDING_DETAIL" lazy="false">
 			<cache usage="read-write" />
 			<key column="amp_funding_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpFundingDetail" />

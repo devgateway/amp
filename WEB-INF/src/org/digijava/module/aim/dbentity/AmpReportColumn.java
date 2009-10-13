@@ -74,5 +74,19 @@ public class AmpReportColumn  implements Serializable, Comparable
 		}
 	}
 	
+	@Override
+	public boolean equals(Object arg0) {
+		return compareTo(arg0) == 0;
+	}
+	
+	@Override
+	public int hashCode() {
+	    if (orderId != null) {
+	        return orderId.hashCode();
+	    } else {
+	        return super.hashCode();
+	    }
+	}
+	
 	
 }

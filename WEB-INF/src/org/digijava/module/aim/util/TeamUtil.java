@@ -2080,7 +2080,6 @@ public class TeamUtil {
 
                }
                transaction.commit();
-               PersistenceManager.releaseSession(session);
            } catch(Exception e) {
                logger.error("Exception from getAllTeamReports()", e);
                throw new RuntimeException(e);
@@ -2126,7 +2125,6 @@ public class TeamUtil {
              	col = qry.list();
             }
 	       	transaction.commit();
-	       	PersistenceManager.releaseSession(session);
         } catch(Exception e) {
             logger.error("Exception from getAllTeamReports()", e);
             throw new RuntimeException(e);

@@ -68,6 +68,26 @@ public class AmpReportMeasures  implements Serializable, Comparable<AmpReportMea
 		}
 	}
 	
+	@Override
+	public boolean equals(Object arg0) {
+		try{
+			AmpReportMeasures r = (AmpReportMeasures) arg0;
+			return compareTo(r) == 0;
+		}
+		catch (Exception e) {
+			return false;
+		}
+	}
+	
+	@Override
+	public int hashCode() {
+	    if (orderId != null) {
+	        return orderId.hashCode();
+	    } else {
+	        return super.hashCode();
+	    }
+	}
+	
 	public Integer getOrder() {
 		try{
 			if(orderId==null) return new Integer(0);

@@ -25,9 +25,11 @@ import org.dgfoundation.amp.seleniumTest.reports.TabTest;
 import org.dgfoundation.amp.seleniumTest.workspaceInfo.TeamWorkspaceInfoTest;
 import org.digijava.module.aim.action.OrganisationManager;
 
+import com.thoughtworks.selenium.DefaultSelenium;
+import com.thoughtworks.selenium.SeleneseTestBase;
 import com.thoughtworks.selenium.SeleneseTestCase;
 
-public class SeleniumTestRunner  extends SeleneseTestCase{
+public class SeleniumTestRunner  extends SeleneseTestBase{
 
 	private static Logger logger = Logger.getLogger(SeleniumTestRunner.class);
 	
@@ -36,8 +38,10 @@ public class SeleniumTestRunner  extends SeleneseTestCase{
 //		setUp("http://drc.ampdev.net", "*firefox");
 //		setUp("http://senegal.ampdev.net", "*firefox");
 //		setUp("http://senegal.staging.ampdev.net", "*firefox");
-		setUp("http://localhost:8080/", "*chrome");
+		setUp("http://localhost:8085/", "*chrome",555);
+		
 	}
+	
 	/**
 	 * @param args
 	 * @throws Exception 

@@ -22,6 +22,7 @@ import java.util.Vector;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.Group;
@@ -136,19 +137,26 @@ public class TeamUtil {
 		return teams;
     }
     
-    public static Set getComputedOrgs(Collection relatedTeams) {
-    	Set teamAssignedOrgs=new TreeSet();
-    	Iterator i=relatedTeams.iterator();
-		while (i.hasNext()) {
-			AmpTeam team = (AmpTeam) i.next();
-			//if("Computed".equals(team.getAccessType())) {
-			if(team.getComputation()!=null && team.getComputation()==true)
-			{
-				teamAssignedOrgs.addAll(team.getOrganizations());
+	public static Set getComputedOrgs(Collection relatedTeams) {
+		Set teamAssignedOrgs = new TreeSet();
+		try {
+			Session session = PersistenceManager.getRequestDBSession();
+			Iterator i = relatedTeams.iterator();
+			while (i.hasNext()) {
+				AmpTeam team = (AmpTeam) i.next();
+				AmpTeam loadedTeam=(AmpTeam) session.load(AmpTeam.class,team.getAmpTeamId());
+				// if("Computed".equals(team.getAccessType())) {
+				if (loadedTeam.getComputation() != null
+						&& loadedTeam.getComputation() == true) {
+					teamAssignedOrgs.addAll(loadedTeam.getOrganizations());
+				}
 			}
+		} catch (DgException e) {
+			logger.error(e);
+			e.printStackTrace();
 		}
 		return teamAssignedOrgs;
-    }
+	}
     
     public static Collection getAllTeams(Long teamId[]) {
         Session session = null;

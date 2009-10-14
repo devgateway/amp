@@ -74,7 +74,6 @@
 											</td>
 											</tr>
 										</logic:notEmpty>
-										</field:display>
 										<field:display name="Responsible Organization Add Button" feature="Responsible Organization">
 										<logic:empty name="aimEditActivityForm" property="agencies.respOrganisations">
 											<tr>
@@ -90,4 +89,5 @@
 											</tr>
 										</logic:empty>
 										</field:display>
+									</field:display>
 										

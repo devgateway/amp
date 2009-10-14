@@ -139,19 +139,20 @@ function changeFormula(){
 }
 
 function resetFormula(){
-  var textBox=document.getElementById("txtBaseLineValue");
-  textBox.value="";
-
-  var textBox=document.getElementById("txtTargetValue");
-  textBox.value="";
-  
-  textBox=document.getElementById("txtConstant");
-  textBox.value="";
-
-  textBox=document.getElementById("txtFormula");
-  textBox.value="";
+  document.getElementById("txtBaseLineValue").value = "";
+  document.getElementById("txtTargetValue").value = "";
+  document.getElementById("txtConstant").value = "";
+  document.getElementById("txtFormula").value = "";
 }
 
+function changeFormula(ampIndicatorId, enabled, baseLineValue, targetValue, constantName, calcFormula){
+  document.getElementById("txtIndId").value = ampIndicatorId;
+  document.getElementById("txtBaseLineValue").value = baseLineValue;
+  document.getElementById("txtTargetValue").value = targetValue;	  
+  document.getElementById("txtConstant").value = constantName;
+  document.getElementById("txtFormula").value = calcFormula;	  
+  document.getElementById("chkEnabled").checked = enabled	
+}
 </script>
 
 
@@ -225,11 +226,23 @@ function resetFormula(){
                                     <c:set var="translation">
                                       <digi:trn key="aim:clickToViewReport">Click here view Report</digi:trn>
                                     </c:set>
-                                    <a href="/aim/viewAhSurveyFormulas.do?indId=${report.ampIndicatorId}">
-                                      <digi:trn key="aim:${report.nameTrn}">
-                                           ${report.name}
-                                      </digi:trn>
-                                    </a>
+
+                                    <c:forEach var="prop" items="${report.calcFormulas}" varStatus="rowCounter">
+<!--                                        enabled = <c:out value="${prop.enabled}"/>-->
+<!--  										baseLineValue = <c:out value="${prop.baseLineValue}"/> -->
+<!--  										targetValue = <c:out value="${prop.targetValue}"/>-->
+<!--  										constantName = <c:out value="${prop.constantName}"/> -->
+<!--  										formulaText = <c:out value="${prop.calcFormula}"/>-->
+										<c:if test="${rowCounter.count==1}">
+  											<span onClick='changeFormula("${report.ampIndicatorId}","${prop.enabled}","${prop.baseLineValue}","${prop.targetValue}","${prop.constantName}","${prop.calcFormula}");'>
+												<digi:trn key="aim:${report.nameTrn}">
+                                            		${report.name}
+												</digi:trn>
+											</span>
+                                        </c:if>
+									</c:forEach>
+<!--									</span>-->
+                                    
                                   </td>
                                 </tr>
                               </c:if>
@@ -279,6 +292,7 @@ function resetFormula(){
     </tr>
     <tr>
       <td>
+        <html:hidden property="indId" styleId="txtIndId" />      
         <html:hidden property="formulaEnabled" styleId="hdnEna" />
         <c:if test="${aimViewAhSurveyFormulasForm.formulaEnabled}">
           <input type="checkbox" id="chkEnabled" checked="checked" />

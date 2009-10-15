@@ -27,7 +27,7 @@ import org.digijava.module.aim.util.IndicatorUtil;
 public class AddEditData
     extends Action {
 
-    private static Logger logger = Logger.getLogger(EditAllIndicators.class);
+    private static Logger logger = Logger.getLogger(AddEditData.class);
 
     public ActionForward execute(ActionMapping mapping, ActionForm form,
                                  HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
@@ -100,6 +100,7 @@ public class AddEditData
         }
         if(event!=null && event.equals("addIndValue")){
             AmpPrgIndicatorValue prgIndVal = getPrgIndicatorValue();
+            prgIndVal.setValAmount(new Double(0));
             indValues.add(prgIndVal);
             themeForm.setPrgIndValues(indValues);
         }else if(event!=null && event.equals("delIndValue")){

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.digijava.module.orgProfile.action;
 
 import java.util.ArrayList;
@@ -20,6 +16,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -48,6 +45,7 @@ public class OrgProfileFilterAction extends Action {
             orgForm.setOrgGroupId(null);
             orgForm.setFiscalCalendarId(null);
             orgForm.setYear(null);
+            orgForm.setTransactionType(Constants.COMMITMENT);
         }
 
         // create filter dropdowns
@@ -84,8 +82,8 @@ public class OrgProfileFilterAction extends Action {
         }
 
         orgForm.setYears(new ArrayList<BeanWrapperImpl>());
-        Long yearFrom = Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.YEAR_RANGE_START));
-        Long countYear = Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));
+        Long yearFrom = Long.parseLong(FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.YEAR_RANGE_START));
+        Long countYear = Long.parseLong(FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));
         for (long i = yearFrom; i <= (yearFrom + countYear); i++) {
 			orgForm.getYears().add(new BeanWrapperImpl(new Long(i)));
         }

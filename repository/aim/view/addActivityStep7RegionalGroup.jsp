@@ -67,7 +67,6 @@
 												</td></tr>
 											</table>
 										</logic:notEmpty>
-										</field:display>
 										<field:display name="Regional Group Add Button" feature="Regional Group">
 										<logic:empty name="aimEditActivityForm" property="agencies.regGroups">
 											<table width="100%" bgcolor="#cccccc" cellSpacing="1" cellPadding="5">
@@ -89,4 +88,5 @@
 											</table>
 										</logic:empty>
 										</field:display>
+									</field:display>
 									</td></tr>

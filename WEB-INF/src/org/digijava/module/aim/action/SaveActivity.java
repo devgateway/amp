@@ -1003,7 +1003,7 @@ public class SaveActivity extends Action {
 								ampFundDet.setTransactionDate(DateConversion.getDate(fundDet
 														.getTransactionDate()));
 								boolean useFixedRate = false;
-								if (fundDet.getTransactionType() == Constants.COMMITMENT) {
+								if (fundDet.getTransactionType() == Constants.COMMITMENT && fundDet.getFixedExchangeRate()!=null) {
 									double fixedExchangeRate		=  FormatHelper.parseDouble( fundDet.getFixedExchangeRate() );
 									if (fundDet.isUseFixedRate()
 											&& fixedExchangeRate > 0

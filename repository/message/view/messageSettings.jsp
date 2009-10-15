@@ -30,12 +30,12 @@ var help="<digi:trn key='message:msgHelp'>Message Settings Help</digi:trn>"
 	var helpForEmailable="<digi:trn jsFriendly="true">Set this to true to allow all alerts to be forwarded to the user\'s email address</digi:trn>"
 	function validate(record,action,minusAccepted){
 		if(action=='save' && (record==null || record=="" || record=="-1")){
-			alert('<digi:trn key="message:pleaseenterdata">Please enter data to save</digi:trn>');
+			alert('<digi:trn jsFriendly="true">Please enter data to save</digi:trn>');
 			return false;
 		}
 		if(record.length>0){
 			if((minusAccepted==false && record.indexOf("-",0)!= -1) || parseInt(record)!=(record-0)){
-				alert('<digi:trn>Please Enter Only Numeric Positive Values</digi:trn>');
+				alert('<digi:trn jsFriendly="true">Please Enter Only Numeric Positive Values</digi:trn>');
 				return false;
 			}
 		}		

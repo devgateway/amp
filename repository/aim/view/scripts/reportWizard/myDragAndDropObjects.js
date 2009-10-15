@@ -250,6 +250,7 @@
 				var dragObj	= this.getDragEl();
 				MyDragAndDropObject.prototype.endAnimation(realObj, dragObj);
 				repManager.checkSteps();
+				generateHierarchies();
 			}
 			ColumnsDragAndDropObject.generateLi			=  function (liId, liClass, inputId, inputValue, inputName, html) {
 				var startHtml				= "<input type='checkbox' name='"+inputName+"' id='"+inputId+"' value='"+inputValue+"' />  ";

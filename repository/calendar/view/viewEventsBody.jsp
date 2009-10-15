@@ -243,7 +243,9 @@ color:Black;
 					                                                        </div>
 				                                						</c:if>
 				                              						</c:if>
-				                              						<c:if test="${startMonth!=currentMonth && endMonth!=currentMonth}">
+				                              				
+				                              						<!-- when strart and end month is not equal to currentMonth and curentYear is bettween start and endyear -->
+				                              						<c:if test="${startMonth!=currentMonth && endMonth!=currentMonth && endYear > currentYear < startYear}">
 				                                						<div style="margin:0px;padding:0px;font-weight:Bold;text-align:center;color:Black;border:1px solid ${ampCalendarGraph.ampCalendar.eventType.color};background-color:${ampCalendarGraph.ampCalendar.eventType.color};" onmouseover="stm(['${eventName}','stDate:${eventStartDate}<br>endDate:${eventEndDate}'],Style[14])"  onmouseout="htm()">
 					                                                    	<!-- image with link should be only on mondays -->
 												                        	<c:if test="${stat.index%7==0}">
@@ -311,6 +313,13 @@ color:Black;
 				                              										</c:choose>
 				                              									</c:when>
 				                              								</c:choose>
+				                              							</c:when>
+				                              							<c:when test="${endMonth!=currentMonth && startMonth!=currentMonth}">
+				                              							  <c:choose>
+				                              									<c:when test="${endYear > currentYear < startYear}">
+				                              											#e8eef7
+				                              									</c:when>
+				                              							  </c:choose>
 				                              							</c:when>
 				                              							<c:when test="${startMonth!=currentMonth && currentMonth==endMonth}">
 				                              								<c:choose>

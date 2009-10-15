@@ -847,9 +847,13 @@ function recurEvent(){
 			                            	<input type="submit" style="min-width: 110px" onclick="return sendEvent();" value="<digi:trn key="calendar:sendSaveBtn">Save and Send</digi:trn>" />
 			                            	&nbsp;
 			                            </feature:display>
-			                            <feature:display name="Recurring Event Button" module="Calendar">
+			                             
+			                              <!-- 
+			                              Recurring Event will be in 1.14 version
+			                              <feature:display name="Recurring Event Button" module="Calendar">
 			                            	<input type="button" style="min-width: 110px" onclick="showRecEvent();" value="<digi:trn key="calendar:recurrinEventBtn">Recurring Event</digi:trn>">
-			                            </feature:display>
+			                             </feature:display>
+			                            -->
 			                          </td>
 			                        </tr>
 			                    </table>

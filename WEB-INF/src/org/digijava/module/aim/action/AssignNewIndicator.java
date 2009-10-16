@@ -1,5 +1,3 @@
-
-
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
@@ -18,10 +16,8 @@ import org.digijava.module.aim.form.ThemeForm;
 import org.digijava.module.aim.helper.IndicatorsBean;
 import org.digijava.module.aim.util.SectorUtil;
 
-public class AssignNewIndicator
-    extends Action {
-    public ActionForward execute(ActionMapping mapping, ActionForm form,
-                                 HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+public class AssignNewIndicator extends Action {
+    public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
 
         List<IndicatorsBean> allInds = new ArrayList();
         ThemeForm allIndForm = (ThemeForm) form;
@@ -34,9 +30,6 @@ public class AssignNewIndicator
         allIndForm.setKeyword("");
         allIndForm.setPagedCol(null);
         allIndForm.setSelectedindicatorFromPages(1);
-        
-        
-        
      
         return mapping.findForward("forward");
     }

@@ -63,14 +63,10 @@ public class AddThemeIndicator extends Action {
 		
 		
 		//TODO INDIC  all IF code above this should be deleted!!! already deleted..
-		if (themeForm.getIndid()!=null && themeForm.getIndid().length>0 
-				&& themeForm.getThemeId()!=null && themeForm.getThemeId().longValue()>0
-				&& "assignIndicators".equals(themeForm.getEvent())){
+		if (themeForm.getIndid()!=null && themeForm.getIndid().length>0 && themeForm.getThemeId()!=null && themeForm.getThemeId().longValue()>0	&& "assignIndicators".equals(themeForm.getEvent())){
 			
-			for (int i = 0; i < themeForm.getIndid().length; i++) {
-				
+			for (int i = 0; i < themeForm.getIndid().length; i++) {				
 				AmpIndicator indicator=IndicatorUtil.getIndicator(themeForm.getIndid()[i]);
-								
 				IndicatorUtil.assignIndicatorToTheme(theme, indicator);
 			}
 		}

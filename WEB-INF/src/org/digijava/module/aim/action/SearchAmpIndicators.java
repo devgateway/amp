@@ -10,8 +10,12 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpIndicator;
+import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.dbentity.IndicatorTheme;
 import org.digijava.module.aim.form.ThemeForm;
 import org.digijava.module.aim.util.IndicatorUtil;
+import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.util.ProgramUtil.ThemeIdComparator;
 
 
 public class SearchAmpIndicators extends Action {
@@ -30,18 +34,16 @@ public class SearchAmpIndicators extends Action {
 			eaForm.setCols(null);
 			eaForm.setPagedCol(null);
 			eaForm.setAction("");
-                        eaForm.setAlpha(null);
-                        eaForm.setSelectedindicatorFromPages(1);
-                        eaForm.setTempNumResults(10);
-                        eaForm.setNumResults(10);
-                        return mapping.findForward("forward");
+            eaForm.setAlpha(null);
+            eaForm.setSelectedindicatorFromPages(1);
+            eaForm.setTempNumResults(10);
+            eaForm.setNumResults(10);
+            return mapping.findForward("forward");
 			
 		}
 		
 		
-		
-		
-                String alpha = eaForm.getAlpha();
+        String alpha = eaForm.getAlpha();
 		List col = null;
 		List colAlpha = null;
 		
@@ -60,16 +62,28 @@ public class SearchAmpIndicators extends Action {
 			 */		
 					
 			boolean	searchCriteriaEntered=false;	
-                        if (!eaForm.getAction().equals("viewall")) {
-                                            if(eaForm.getKeyword()!=null&&eaForm.getKeyword().trim().length()>0
-                                                    ||(eaForm.getSectorName()!=null&&!eaForm.getSectorName().equals("-1"))){
-						col = IndicatorUtil.searchIndicators(eaForm.getKeyword(),eaForm.getSectorName());
-                                                searchCriteriaEntered=true;
-                                            }
-                                       }
-                                        if((col==null||col.size() ==0)&&!searchCriteriaEntered){
-                                            col = IndicatorUtil.getAmpIndicator();
-                                        }
+            if (!eaForm.getAction().equals("viewall")) {
+            	if(eaForm.getKeyword()!=null && eaForm.getKeyword().trim().length()>0 ||(eaForm.getSectorName()!=null&&!eaForm.getSectorName().equals("-1"))){
+					col = IndicatorUtil.searchIndicators(eaForm.getKeyword(),eaForm.getSectorName());
+                    searchCriteriaEntered=true;
+                }
+            }
+            if((col==null||col.size() ==0)&&!searchCriteriaEntered){
+            	col = IndicatorUtil.getAmpIndicator();
+            }
+            
+            AmpTheme theme=ProgramUtil.getThemeById(eaForm.getThemeId());
+            if(theme.getIndicators()!=null && theme.getIndicators().size() >0){
+            	for (IndicatorTheme indTheme : theme.getIndicators()) {
+					for (AmpIndicator ind : (List<AmpIndicator>)col) {
+						if(indTheme.getIndicator().getIndicatorId().equals(ind.getIndicatorId())){
+							col.remove(ind);
+							break;
+						}
+					}
+				}
+            }
+
 /**
  * Old Code
  */			
@@ -122,9 +136,6 @@ public class SearchAmpIndicators extends Action {
 //				 
 //			}
 			if (col != null && col.size() > 0) {
-				
-				
-				
 
 				if (eaForm.getCurrentAlpha() != null) {
 					eaForm.setCurrentAlpha(null);
@@ -151,7 +162,7 @@ public class SearchAmpIndicators extends Action {
 
 		} else {
 			eaForm.setCurrentAlpha(alpha);
-                        col=(List)eaForm.getCols();
+            col=(List)eaForm.getCols();
 			if (!alpha.equals("viewAll")) {
 				eaForm.setStartAlphaFlag(false);
 				colAlpha = new ArrayList();

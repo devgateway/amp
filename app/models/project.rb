@@ -174,21 +174,14 @@ protected
   
   ##
   # Validation methods
-  # Validate that the total amount per project is 100%
+  # Validate that the total sector amount per project is 100%
   def total_sector_amount_is_100
-    incorrect_number = false
-    for x in self.sector_relevances.map(&:amount)
-      if x == nil
-        incorrect_number = true
-      end
+    if self.sector_relevances.any? && self.sector_relevances.reject(&:marked_for_destruction?).map(&:amount).compact.sum != 100
+      # FIXME: Translation missing
+      errors.add('sector_relevances', 'The sum of the sector percentages should be 100%')
     end
-    if incorrect_number == false
-      unless self.sector_relevances.map(&:amount).sum == 100
-        # FIXME: Translation missing
-        errors.add('sector_relevances', 'The sum of the sector percentages should be 100%')
-      end
-    end  
   end
+
 
   def dates_consistency
     unless self.start <= self.end

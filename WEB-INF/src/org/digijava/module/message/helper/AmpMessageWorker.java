@@ -690,7 +690,7 @@ public class AmpMessageWorker {
 		if(setting!=null && setting.getMsgStoragePerMsgType()!=null){
 			maxStorage=setting.getMsgStoragePerMsgType().intValue();
 		}
-        if (AmpMessageUtil.isInboxFull(newMsg.getClass(), state.getReceiver().getAmpTeamMemId()) || AmpMessageUtil.getInboxMessagesCount(clazz, state.getReceiver().getAmpTeamMemId(), false, false, maxStorage) >= maxStorage) {
+        if (AmpMessageUtil.isInboxFull(newMsg.getClass(), state.getReceiver().getAmpTeamMemId()) || (maxStorage>=0 && AmpMessageUtil.getInboxMessagesCount(clazz, state.getReceiver().getAmpTeamMemId(), false, false, maxStorage) >= maxStorage)) {
             newState.setMessageHidden(true);
         } else {
             newState.setMessageHidden(false);

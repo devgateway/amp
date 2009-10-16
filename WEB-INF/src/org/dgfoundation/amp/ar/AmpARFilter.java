@@ -609,11 +609,7 @@ public class AmpARFilter extends PropertyListable {
 		String DONOR_TYPE_FILTER	= "SELECT amp_activity_id FROM v_donor_type WHERE org_type_id IN ("
 			+ Util.toCSString(donorTypes) + ")";
 
-		String DONOR_GROUP_FILTER = "SELECT aa.amp_activity_id "
-				+ "FROM amp_activity aa, amp_org_role aor, amp_role rol, amp_org_group grp, amp_organisation og  "
-				+ "WHERE aa.amp_activity_id = aor.activity AND aor.role = rol.amp_role_id AND rol.role_code='DN' "
-				+ "AND grp.amp_org_grp_id =  og.org_grp_id AND og.amp_org_id = aor.organisation "
-				+ "AND grp.amp_org_grp_id IN ("
+		String DONOR_GROUP_FILTER = "SELECT amp_activity_id FROM v_donor_groups WHERE amp_org_grp_id IN ("
 				+ Util.toCSString(donorGroups) + ")";
 
 		String EXECUTING_AGENCY_FILTER = "SELECT v.amp_activity_id FROM v_executing_agency v  "

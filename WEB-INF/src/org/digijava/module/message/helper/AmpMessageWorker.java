@@ -42,9 +42,9 @@ import org.digijava.module.message.triggers.ApprovedActivityTrigger;
 import org.digijava.module.message.triggers.CalendarEventSaveTrigger;
 import org.digijava.module.message.triggers.CalendarEventTrigger;
 import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
+import org.digijava.module.message.triggers.RemoveCalendarEventTrigger;
 import org.digijava.module.message.triggers.UserRegistrationTrigger;
 import org.digijava.module.message.util.AmpMessageUtil;
-import org.digijava.module.message.triggers.RemoveCalendarEventTrigger;
 
 public class AmpMessageWorker {
 
@@ -224,7 +224,7 @@ public class AmpMessageWorker {
 		        receivers += ", " + user.getFirstNames() + " " + user.getLastName() + "<" + user.getEmail() + ">;" + member.getAmpTeam().getName() + ";";                    
 		    }
 		    if(ampAtt.getGuest()!=null){ //guests e-mails should also be included in receivers list
-		    	receivers+=", <"+ampAtt.getGuest().substring(2)+">;";
+		    	receivers+=", <"+ampAtt.getGuest()+">;";
 		    }
 		}
 		return receivers;
@@ -589,7 +589,7 @@ public class AmpMessageWorker {
                         eventMsgStateMap.put(state.getReceiver().getAmpTeamMemId(), state);
                     }
                 }else if(ampAtt.getGuest()!=null){ // <---guests should always get e-mails about event
-                	String email=ampAtt.getGuest().substring(2);
+                	String email=ampAtt.getGuest();
                 	sendMail(((CalendarEvent)calEvent).getSenderEmail(),email, calEvent.getName(), "UTF-8", calEvent.getDescription());
                 }                
             }

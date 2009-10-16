@@ -338,7 +338,7 @@ function addOrganisation(orgId, orgName){
 		openURLinWindow("<%=rev%>",832,624);
   }
 
-  function sendEvent(){
+  function sendEvent(button){
 		 var list = document.getElementById('selreceivers');  
 		 if(list!=null){
 		  	for(var i = 0; i < list.length; i++) {
@@ -350,6 +350,7 @@ function addOrganisation(orgId, orgName){
 		<digi:context name="sendEvent" property="context/module/moduleinstance/showCalendarEvent.do?method=save"/>
 		document.calendarEventForm.action = "<%=sendEvent %>";
 		document.calendarEventForm.target = "_self";
+		button.disabled = true;
 		document.calendarEventForm.submit();
   }	  
 	
@@ -844,7 +845,7 @@ function recurEvent(){
 			                            	&nbsp;
 			                          	</feature:display>                           
 			                            <feature:display name="Save and Send button" module="Calendar">
-			                            	<input type="submit" style="min-width: 110px" onclick="return sendEvent();" value="<digi:trn key="calendar:sendSaveBtn">Save and Send</digi:trn>" />
+			                            	<input type="submit" style="min-width: 110px" onclick="return sendEvent(this);" value="<digi:trn key="calendar:sendSaveBtn">Save and Send</digi:trn>" />
 			                            	&nbsp;
 			                            </feature:display>
 			                             

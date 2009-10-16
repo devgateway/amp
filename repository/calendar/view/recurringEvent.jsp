@@ -34,7 +34,6 @@ function validateDuration(rec,duration){
  	return true;
 }
 
-
 function eventType(){
 	
         var Daily = document.getElementById("Daily").checked;
@@ -102,9 +101,6 @@ function eventType(){
 		if(!validateDuration(month,month_occurance_duration)){
             return false;
    		}else{
-
-	   		//var rec = document.getElementById("Monthly").value;
-            
             document.getElementById("hidden").value = month;
 	        document.getElementById("type").value = 'month';
 	        document.getElementById("hiddenMonth").value = month;

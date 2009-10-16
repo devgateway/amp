@@ -212,104 +212,107 @@ public class getNPDgraph extends Action {
                            }
                          
                            // show data restrict to selected date range, here we choose target and base values.
-                        for (String selectedYear : selectedYears) {
-                          
-                            AmpIndicatorValue actValue = actualValues.get(selectedYear);
-                            AmpIndicatorValue targValue = null;
-                            AmpIndicatorValue basValue = null;
-                            List<Integer> years = new ArrayList(targetVals.keySet());
-                            // sort target years
-                            Collections.sort(years);
-                            
-                            List<Integer> baseYears = new ArrayList(baseVals.keySet());
-                            // sort base years
-                            Collections.sort(baseYears);
-                         
-                            /* to select target value for selected year we must remember:
-                             * 1) if actual value in selected year exists: 
-                             * target value's date must be equal or greater than actual value's date in selected year.
-                             * 2) if there is no actual value in 
-                             * this year the year of target value must be equal or greater than selected year.
-                             */
-                            Double targetValue = null;
-                            Double baseValue = null;
-                            Double actualValue = null;
-                            Integer targetYear=null;
-                            Integer baseYear=null;
-                            
-                            for (Integer year : years) {
-                                if (Integer.parseInt(selectedYear) <= year) {
-                                    ArrayList<AmpIndicatorValue> targValues = targetVals.get(year);
-                                    for (AmpIndicatorValue value : targValues) {
-                                        if (targValue == null || targValue.getValueDate().after(value.getValueDate())) {
-                                            if (actValue == null) {
-                                                targValue = value;
-                                                actualValue = new Double(0);
-                                                targetYear=year;
-                                            } else {
-                                                if (value.getValueDate().after(actValue.getValueDate()) || value.getValueDate().equals(actValue.getValueDate())) {
-                                                    targValue = value;
-                                                    actualValue = actValue.getValue();
-                                                    targetYear=year;
-                                                }
-                                            }
-                                        }
-
-
-                                    }
-                                }
-                            }
-                            
-                             /* to select base value for selected year we must remember:
-                             * 1) if actual value in selected year exists: 
-                             * base value's date must be equal or less than actual value's date in selected year.
-                             * 2) if there is no actual value in 
-                             * this year the year of base value must be equal or less than selected year.
-                             */
-                            for (Integer year : baseYears) {
-                                if (Integer.parseInt(selectedYear) >= year) {
+                           if (selectedYears!=null){
+                               for (String selectedYear : selectedYears) {
                                    
-                                    ArrayList<AmpIndicatorValue> basValues = baseVals.get(year);
-                                    if (basValues != null) {
-                                        for (AmpIndicatorValue value : basValues) {
-                                            if (basValue == null || basValue.getValueDate().before(value.getValueDate())) {
-                                                if (actValue == null) {
-                                                    basValue = value;
-                                                    baseYear=year;
-                                                } else {
-                                                    if (value.getValueDate().before(actValue.getValueDate()) || value.getValueDate().equals(actValue.getValueDate())) {
-                                                        basValue = value;
-                                                        baseYear=year;
-                                                    }
-                                                }
-                                            }
+                                   AmpIndicatorValue actValue = actualValues.get(selectedYear);
+                                   AmpIndicatorValue targValue = null;
+                                   AmpIndicatorValue basValue = null;
+                                   List<Integer> years = new ArrayList(targetVals.keySet());
+                                   // sort target years
+                                   Collections.sort(years);
+                                   
+                                   List<Integer> baseYears = new ArrayList(baseVals.keySet());
+                                   // sort base years
+                                   Collections.sort(baseYears);
+                                
+                                   /* to select target value for selected year we must remember:
+                                    * 1) if actual value in selected year exists: 
+                                    * target value's date must be equal or greater than actual value's date in selected year.
+                                    * 2) if there is no actual value in 
+                                    * this year the year of target value must be equal or greater than selected year.
+                                    */
+                                   Double targetValue = null;
+                                   Double baseValue = null;
+                                   Double actualValue = null;
+                                   Integer targetYear=null;
+                                   Integer baseYear=null;
+                                   
+                                   for (Integer year : years) {
+                                       if (Integer.parseInt(selectedYear) <= year) {
+                                           ArrayList<AmpIndicatorValue> targValues = targetVals.get(year);
+                                           for (AmpIndicatorValue value : targValues) {
+                                               if (targValue == null || targValue.getValueDate().after(value.getValueDate())) {
+                                                   if (actValue == null) {
+                                                       targValue = value;
+                                                       actualValue = new Double(0);
+                                                       targetYear=year;
+                                                   } else {
+                                                       if (value.getValueDate().after(actValue.getValueDate()) || value.getValueDate().equals(actValue.getValueDate())) {
+                                                           targValue = value;
+                                                           actualValue = actValue.getValue();
+                                                           targetYear=year;
+                                                       }
+                                                   }
+                                               }
 
 
-                                        }
+                                           }
+                                       }
+                                   }
+                                   
+                                    /* to select base value for selected year we must remember:
+                                    * 1) if actual value in selected year exists: 
+                                    * base value's date must be equal or less than actual value's date in selected year.
+                                    * 2) if there is no actual value in 
+                                    * this year the year of base value must be equal or less than selected year.
+                                    */
+                                   for (Integer year : baseYears) {
+                                       if (Integer.parseInt(selectedYear) >= year) {
+                                          
+                                           ArrayList<AmpIndicatorValue> basValues = baseVals.get(year);
+                                           if (basValues != null) {
+                                               for (AmpIndicatorValue value : basValues) {
+                                                   if (basValue == null || basValue.getValueDate().before(value.getValueDate())) {
+                                                       if (actValue == null) {
+                                                           basValue = value;
+                                                           baseYear=year;
+                                                       } else {
+                                                           if (value.getValueDate().before(actValue.getValueDate()) || value.getValueDate().equals(actValue.getValueDate())) {
+                                                               basValue = value;
+                                                               baseYear=year;
+                                                           }
+                                                       }
+                                                   }
 
-                                    }
-                                }
-                            }
-                         
-                        
-                            if(basValue==null){
-                                baseValue=new Double(0);
-                            }
-                            else{
-                                baseValue=basValue.getValue();
-                            }
-                               if(targValue==null){
-                                targetValue=new Double(0);
-                            }
-                            else{
-                                targetValue=targValue.getValue();
-                            }
-                         // create dataset for graph
-                            dataset.addCustomTooltipValue(new String[]{formatValue(baseValue,baseYear, selectedYear), formatValue(actualValue,Integer.parseInt(selectedYear), selectedYear), formatValue(actualValue,Integer.parseInt(selectedYear), selectedYear), formatValue(targetValue,targetYear, selectedYear)});
-                             Double realActual = computePercent(indicator, targetValue, actualValue, baseValue);
-                             dataset.addValue(realActual.doubleValue(), selectedYear, displayLabel);
 
-                        }
+                                               }
+
+                                           }
+                                       }
+                                   }
+                                
+                               
+                                   if(basValue==null){
+                                       baseValue=new Double(0);
+                                   }
+                                   else{
+                                       baseValue=basValue.getValue();
+                                   }
+                                      if(targValue==null){
+                                       targetValue=new Double(0);
+                                   }
+                                   else{
+                                       targetValue=targValue.getValue();
+                                   }
+                                // create dataset for graph
+                                   dataset.addCustomTooltipValue(new String[]{formatValue(baseValue,baseYear, selectedYear), formatValue(actualValue,Integer.parseInt(selectedYear), selectedYear), formatValue(actualValue,Integer.parseInt(selectedYear), selectedYear), formatValue(targetValue,targetYear, selectedYear)});
+                                    Double realActual = computePercent(indicator, targetValue, actualValue, baseValue);
+                                    dataset.addValue(realActual.doubleValue(), selectedYear, displayLabel);
+
+                               }
+                        	   
+                           }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                         throw new AimException("Error creating dataset for graph.", ex);

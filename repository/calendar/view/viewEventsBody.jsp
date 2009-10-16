@@ -197,7 +197,7 @@ color:Black;
 				                              						<script type="text/javascript">
 				                              							var msg = stDate+":${eventStartDate}<br>"+endDate+":${eventEndDate}";				                              							
 				                              						</script>
-				                              						<c:if test="${startMonth==currentMonth && startYear== currentYear}">
+				                              						<c:if test="${startMonth==currentMonth && startYear== currentYear && startYear == endYear}">
 				                              							<c:if test="${(endMonth==currentMonth && item.dayOfMonth >=startDay && item.dayOfMonth<=endDay && item.enabled) || (endMonth!=currentMonth && ((item.dayOfMonth>=startDay && item.enabled)||(item.dayOfMonth<endDay && !item.enabled)))}">
 					                                						<div id="div1" style="border:1px solid ${ampCalendarGraph.ampCalendar.eventType.color};background-color:${ampCalendarGraph.ampCalendar.eventType.color};" onmouseover="stm(['${eventName}','stDate:${eventStartDate}<br>endDate:${eventEndDate}'],Style[14])"  onmouseout="htm()" >
 					                                                        	<c:if test="${item.dayOfMonth==startDay && item.enabled}">
@@ -243,9 +243,7 @@ color:Black;
 					                                                        </div>
 				                                						</c:if>
 				                              						</c:if>
-				                              				
-				                              						<!-- when strart and end month is not equal to currentMonth and curentYear is bettween start and endyear -->
-				                              						<c:if test="${startMonth!=currentMonth && endMonth!=currentMonth && endYear > currentYear < startYear}">
+				                              						<c:if test="${startMonth!=currentMonth && endMonth!=currentMonth}">
 				                                						<div style="margin:0px;padding:0px;font-weight:Bold;text-align:center;color:Black;border:1px solid ${ampCalendarGraph.ampCalendar.eventType.color};background-color:${ampCalendarGraph.ampCalendar.eventType.color};" onmouseover="stm(['${eventName}','stDate:${eventStartDate}<br>endDate:${eventEndDate}'],Style[14])"  onmouseout="htm()">
 					                                                    	<!-- image with link should be only on mondays -->
 												                        	<c:if test="${stat.index%7==0}">
@@ -259,7 +257,8 @@ color:Black;
 				                              					
 				                              				<!-- when start Year < End year and start month and end month is equal -->		
 				                              					<c:if test="${endYear!=currentYear && startMonth==currentMonth && endYear > startYear}">
-				                                						<c:if test="${(endMonth==currentMonth && item.dayOfMonth >=startDay  && item.enabled)}">
+				                              					
+				                                						<c:if test="${(endMonth==currentMonth && item.dayOfMonth >=startDay  && item.enabled) || (endMonth==currentMonth && item.dayOfMonth <=startDay  && !item.enabled)}">
 					                                						<div id="div1" style="border:1px solid ${ampCalendarGraph.ampCalendar.eventType.color};background-color:${ampCalendarGraph.ampCalendar.eventType.color};" onmouseover="stm(['${eventName}','stDate:${eventStartDate}<br>endDate:${eventEndDate}'],Style[14])"  onmouseout="htm()" >
 					                                                        	<c:if test="${item.dayOfMonth==startDay && item.enabled}">
 					                                                        		<digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~method=preview~resetForm=true">
@@ -273,9 +272,8 @@ color:Black;
 					                                                      	</div>
 					                              						</c:if>
 				                              						</c:if>	
-				                              						
 				                              					<c:if test="${endYear==currentYear && endMonth==currentMonth && endYear > startYear}">
-				                                						<c:if test="${(endMonth==currentMonth && item.dayOfMonth<=endDay  && item.enabled)}">
+				                              							<c:if test="${(endMonth==currentMonth && item.dayOfMonth<=endDay && item.enabled) || (endMonth==currentMonth && item.dayOfMonth>=endDay && !item.enabled)  }">
 					                                						<div id="div1" style="border:1px solid ${ampCalendarGraph.ampCalendar.eventType.color};background-color:${ampCalendarGraph.ampCalendar.eventType.color};" onmouseover="stm(['${eventName}','stDate:${eventStartDate}<br>endDate:${eventEndDate}'],Style[14])"  onmouseout="htm()" >
 					                                                        	<c:if test="${item.dayOfMonth==startDay && item.enabled}">
 					                                                        		<digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~method=preview~resetForm=true">
@@ -298,7 +296,10 @@ color:Black;
 				                              								<c:choose>
 				                              									<c:when test="${endMonth==currentMonth}">
 				                              										<c:choose>
-				                              											<c:when test="${item.dayOfMonth >=startDay && item.dayOfMonth<=endDay && item.enabled}">
+				                              											<c:when test="${(item.dayOfMonth >=startDay && item.dayOfMonth<=endDay && item.enabled) || 
+				                              											 (startDay==endDay && endYear!=startYear && startYear==currentYear && startDay<item.dayOfMonth && item.enabled) ||
+				                              											  (startDay==endDay && endYear!=startYear && endYear==currentYear && startDay<item.dayOfMonth && !item.enabled) || 
+				                              											  (startDay==endDay && endYear!=startYear && endYear==currentYear && endDay>=item.dayOfMonth && item.enabled)}">
 				                              												${ampCalendarGraph.ampCalendar.eventType.color}
 				                              											</c:when>
 				                              											<c:otherwise>#e8eef7</c:otherwise>
@@ -313,13 +314,6 @@ color:Black;
 				                              										</c:choose>
 				                              									</c:when>
 				                              								</c:choose>
-				                              							</c:when>
-				                              							<c:when test="${endMonth!=currentMonth && startMonth!=currentMonth}">
-				                              							  <c:choose>
-				                              									<c:when test="${endYear > currentYear < startYear}">
-				                              											#e8eef7
-				                              									</c:when>
-				                              							  </c:choose>
 				                              							</c:when>
 				                              							<c:when test="${startMonth!=currentMonth && currentMonth==endMonth}">
 				                              								<c:choose>

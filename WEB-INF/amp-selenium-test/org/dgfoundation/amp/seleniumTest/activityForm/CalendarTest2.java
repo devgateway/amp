@@ -1,256 +1,284 @@
 package org.dgfoundation.amp.seleniumTest.activityForm;
+import java.util.Calendar;
+import java.util.Date;
 
+import org.apache.log4j.Logger;
+import org.dgfoundation.amp.seleniumTest.SeleniumFeaturesConfiguration;
 
 import com.thoughtworks.selenium.SeleneseTestCase;
+import com.thoughtworks.selenium.Selenium;
 
 
 public class CalendarTest2 extends SeleneseTestCase {
+	
+	private static Logger logger = Logger.getLogger(CalendarTest2.class);
+	
 	public void setUp() throws Exception {
 		setUp("http://generic.ampdev.net/", "*firefox");
 	}
-	public void testCalendar() throws Exception {
+	public static void testCalendar(Selenium selenium) throws Exception {
 		String testTime =  String.valueOf(System.currentTimeMillis());
-		String activityName ="Testing Calendar " + testTime;
-		String user = "atl@amp.org";
-		String password = "atl";
-		String workspace = "M and E Testing Team";
-		String eventTitle = "Test Event";
-		System.out.println(activityName);		
-				
+		String eventTitle = "Test Event" + testTime;
+		
 		selenium.open("/");
-		selenium.type("j_username",user);
-		selenium.type("j_password",password);
+		selenium.type("j_username","uattl@amp.org");
+		selenium.type("j_password","abc");
 		selenium.click("submitButton");
 		selenium.waitForPageToLoad("30000");
-		if (selenium.isElementPresent("//a[@onclick=\"this.blur(); return sortTable('offTblBdy', 1, false);\"]")) {
-			try {
-				selenium.click("link=" + workspace);
-				selenium.waitForPageToLoad("30000");
-			} catch (Exception e) {
-				//logger.error("Workspace not found.");
-				System.out.println("Workspace not found.");
-			}
-		} 
-		boolean addAvailable = false;
-		try {
-			selenium.click("//a[contains(@href, \"/calendar/showCalendarEvent.do~selectedCalendarTypeId=0~method=new\")]");
-			selenium.waitForPageToLoad("30000");
-			addAvailable = true;
-		} catch (Exception e) {
-			//logger.error("Option \"Add Event\" is not available.");
-			System.out.println("Option \"Add Event\" is not available.");
-		}
-		if (addAvailable) {
-		
-		selenium.type("eventTitle", eventTitle);
-		try {
-			selenium.select("selectedCalendarTypeId", "index=0");
-		} catch (Exception e) {
-			//logger.info("Field \"Calendar Type\" is not available.");
-			System.out.println("Field \"Calendar Type\" is not available.");
-		}
-		
-		try {
-			selenium.select("selectedEventTypeId", "index=3");
-		} catch (Exception e) {
-			//logger.info("Field \"Event Type\" is not available.");
-			System.out.println("Field \"Event Type\" is not available.");
-		}
-		
-		try {
-			selenium.type("selectedStartDate", "08/06/2009");
-		} catch (Exception e) {
-			//logger.info("Cannot select Start date.");
-			System.out.println("Cannot select Start date.");
-		}
-		try {
-			selenium.type("selectedEndDate", "08/17/2009");
-		} catch (Exception e) {
-			//logger.info("Cannot select End date.");
-			System.out.println("Cannot select End date.");
-		}	
-		try {
-			selenium.select("selectedStartHour", "index=11");
-		} catch (Exception e) {
-			//logger.info("Cannot find \"Selected Start Hour\" drop down menu.");
-			System.out.println("Cannot find \"Selected Start Hour\" drop down menu.");
-		}
-	
-		try {
-			selenium.select("selectedEndHour", "index=12");
-		} catch (Exception e) {
-			//logger.info("Cannot find \"Selected end Hour\" drop down menu.");
-			System.out.println("Cannot find \"Selected end Hour\" drop down menu.");
-		}
-		try {
-			selenium.addSelection("whoIsReceiver", "index=2");
-		} catch (Exception e) {
-			//logger.info("Cannot select the Attendee.");
-			System.out.println("Cannot select the Attendee.");
-		}
-				
-		try {
-			selenium.click("//input[@value='Add >>']");
-		} catch (Exception e) {
-			//logger.info("Cannot find \"Add >>\"button.");
-			System.out.println("Cannot find \"Add >>\"button.");
-		}		
-		try {
-			selenium.addSelection("whoIsReceiver", "index=3");
-		} catch (Exception e) {
-			//logger.info("Field \"Cannot select the Attendee.");
-			System.out.println("Cannot select the Attendee.");
-		}
-				
-		try {
-			selenium.click("//input[@value='Add >>']");
-		} catch (Exception e) {
-			//logger.info("Cannot find \"Add >>\"button.");
-			System.out.println("Cannot find \"Add >>\"button.");
-		}		
-		
-		try {
-			selenium.addSelection("selreceivers", "index=2");
-		} catch (Exception e) {
-			//logger.info("Cannot find selected Attendee.");
-			System.out.println("Cannot find selected Attendee.");
-		}
-				
-		try {
-			selenium.click("//input[@value='<<Remove']");
-		} catch (Exception e) {
-			//logger.info("Button \"<<Remove\" is not available.");
-			System.out.println("Button \"<<Remove\" is not available.");
-		}		
-		try {
-		selenium.click("//input[@onclick=\"javascript:selectOrg('/aim/selectOrganizationComponent.do~edit=true~reset=true~PARAM_RESET_FORM=true~PARAM_REFRESH_PARENT=false~PARAM_CALLBACKFUNCTION_NAME=submitForm();~PARAM_COLLECTION_NAME=organizations~','addOrganisationWindows','height=400,width=600,scrollbars=yes,resizable=yes')\"]");
-		Thread.sleep(10000);
-		selenium.click("//input[@onclick='return searchOrganization()']");
-		Thread.sleep(10000);
-		selenium.click("selOrganisations"); 
-		selenium.click("//input[@onclick='return selectOrganization()']");
-		Thread.sleep(10000);
-	} catch (Exception e) {
-		//logger.info("Option \"Add Organizations\" is not available.");
-		System.out.println("Option \"Add Organizations\" is not available.");
-	}
-	selenium.waitForPageToLoad("30000");
-	try {
-		selenium.addSelection("selOrganizations", "index=0");
-		Thread.sleep(10000);
-	} catch (Exception e) {
-		//logger.info("Cannot select Organization to remove.");
-		System.out.println("Cannot select Organization to remove.");
-	}
-	
-		try {
-		selenium.click("//input[@onclick=\"return removeSelOrgs()\"]");
-		Thread.sleep(10000);
-		} catch (Exception e) {
-		//logger.info("Cannot find \"Remove\" button and unable to remove organization.");
-		System.out.println("Cannot find \"Remove\" button and unable to remove organization.");
-	}
+		selenium.click("link=UAT Team Workspace");
 		selenium.waitForPageToLoad("30000");
-	try {
-		selenium.click("//input[@onclick=\"javascript:selectOrg('/aim/selectOrganizationComponent.do~edit=true~reset=true~PARAM_RESET_FORM=true~PARAM_REFRESH_PARENT=false~PARAM_CALLBACKFUNCTION_NAME=submitForm();~PARAM_COLLECTION_NAME=organizations~','addOrganisationWindows','height=400,width=600,scrollbars=yes,resizable=yes')\"]");
-		Thread.sleep(10000);
-		selenium.click("//input[@onclick='return searchOrganization()']");
-		Thread.sleep(10000);
-		selenium.click("selOrganisations"); 
-		selenium.click("//input[@onclick='return selectOrganization()']");
-		Thread.sleep(10000);
-	} catch (Exception e) {
-		//logger.info("Option \"Add Organizations\" is not available.");
-		System.out.println("Option \"Add Organizations\" is not available.");
-	}
-	selenium.waitForPageToLoad("30000");
-	try {
-		selenium.click("//input[@onclick=\"return previewEvent();\"]");
-	} catch (Exception e) {
-		//logger.info("Cannot find \"Preview\" button.");
-		System.out.println("Cannot find \"Preview\" button.");
-	}		
-	selenium.waitForPageToLoad("50000");
-	Thread.sleep(10000);
-	try {selenium.click("//input[@onclick=\"document.getElementById('hdnMethod').value = ''\"]");
-		}catch (Exception e) {
-			//logger.info("Cannot find \"Edit\" button.");
-			System.out.println("Cannot find \"Edit\" button.");
-		}	
-	selenium.waitForPageToLoad("30000");
-	try {selenium.click("//input[@onclick=\"return sendEvent();\"]");
-	}catch (Exception e) {
-		//logger.info("Cannot find \"Save and send\" button.");
-		System.out.println("Cannot find \"Save and send\" button.");
-	}	
-	
-	selenium.waitForPageToLoad("1000000");	
-	try {
-	selenium.click("//span[@title=\"Title:Test Event StartDate:Mon Jun 08 2009 11:00:00 GMT-0400 (Eastern Daylight Time)EndDate:Mon Aug 17 2009 00:00:00 GMT-0400 (Eastern Daylight Time)\"]");
-	}catch (Exception e) {
-	//logger.info("Cannot find event in calendar.");
-	System.out.println("Cannot find event in calendar.");
+ 
+		boolean eventSent = false;
+		
+		if (SeleniumFeaturesConfiguration.getModuleState("Calendar")){
+			if (SeleniumFeaturesConfiguration.getFeatureState("Create Event")){
+				if (selenium.isElementPresent("//a[contains(@href, \"/calendar/showCalendarEvent.do~selectedCalendarTypeId=0~method=new\")]")){
+					selenium.click("//a[contains(@href, \"/calendar/showCalendarEvent.do~selectedCalendarTypeId=0~method=new\")]");
+					selenium.waitForPageToLoad("30000");
+					selenium.type("eventTitle", eventTitle);
+					if (SeleniumFeaturesConfiguration.getFeatureState("Event Type")){
+						if (selenium.isElementPresent("selectedEventTypeId")) {
+							selenium.select("selectedEventTypeId", "index=1");
+						} else {
+							logger.error("Feature \"Event Type\" is enabled in Feature Manager but is not available.");
+						}
+					} else {
+						logger.info("Feature \"Event Type\" is not available.");
+					}
+					Date date = new Date(System.currentTimeMillis());
+					selenium.type("selectedStartDate", date.getDate()+"/"+(date.getMonth()+1)+"/"+(date.getYear()+1900));
+					selenium.type("selectedEndDate",  date.getDate()+"/"+(date.getMonth()+1)+"/"+(date.getYear()+1900));
+					selenium.select("selectedStartHour", "index=11");
+					selenium.select("selectedEndHour", "index=12");
+					if (SeleniumFeaturesConfiguration.getFeatureState("Donors")){
+						if (SeleniumFeaturesConfiguration.getFieldState("Add Donor Button")){
+							if (selenium.isElementPresent("//input[@onclick=\"window.open('/aim/selectOrganizationComponent.do~edit=true~reset=true~PARAM_RESET_FORM=true~PARAM_REFRESH_PARENT=false~PARAM_CALLBACKFUNCTION_NAME=submitForm();~PARAM_COLLECTION_NAME=organizations~','addOrganisationWindows','height=400,width=600,scrollbars=yes,resizable=yes')\"]")) {
+								selenium.click("//input[@onclick=\"window.open('/aim/selectOrganizationComponent.do~edit=true~reset=true~PARAM_RESET_FORM=true~PARAM_REFRESH_PARENT=false~PARAM_CALLBACKFUNCTION_NAME=submitForm();~PARAM_COLLECTION_NAME=organizations~','addOrganisationWindows','height=400,width=600,scrollbars=yes,resizable=yes')\"]");
+								Thread.sleep(10000);
+								selenium.selectWindow(selenium.getAllWindowTitles()[1]);
+								selenium.click("//input[@onclick='return searchOrganization()']");
+								Thread.sleep(10000);
+								selenium.click("selOrganisations"); 
+								selenium.click("//input[@onclick='return selectOrganization()']");
+								//Thread.sleep(10000);
+								selenium.selectWindow("null");
+								selenium.waitForPageToLoad("30000");
+							} else {
+								logger.error("Field \"Add Donor Button\" is enabled in Feature Manager but is not available.");
+							}
+						} else {
+							logger.info("Field \"Add Donor Button\" is not available.");
+						}
+					} else {
+						logger.info("Feature \"Donors\" is not available.");
+					}
+					//selenium.uncheck("privateEventCheckbox");
+					if (selenium.isChecked("privateEventCheckbox")) {
+						selenium.click("privateEventCheckbox");
+					}
+					selenium.addSelection("whoIsReceiver", "label=---UAT Team Workspace---");
+					selenium.click("//input[@onclick=\"MyaddUserOrTeam();\"]");
+					if (SeleniumFeaturesConfiguration.getFeatureState("Preview Event button")){
+						if (selenium.isElementPresent("//input[@onclick=\"return previewEvent();\"]")){
+							selenium.click("//input[@onclick=\"return previewEvent();\"]");
+							selenium.waitForPageToLoad("30000");
+							boolean attOk = false;
+							for (int i = 0; i < selenium.getSelectOptions("selreceivers").length; i++) {
+								if (selenium.getSelectOptions("selreceivers")[i].equalsIgnoreCase("---UAT Team Workspace---")) {
+									attOk = true;
+								} else if (selenium.getSelectOptions("selreceivers")[i].equalsIgnoreCase("UATtl UATtl")){
+									attOk = true;
+								} else if (selenium.getSelectOptions("selreceivers")[i].equalsIgnoreCase("UATtmc UATtmc")){
+									attOk = true;
+								} else if (selenium.getSelectOptions("selreceivers")[i].equalsIgnoreCase("UATtm UATtm")){
+									attOk = true;
+								} else {
+									attOk = false;
+								}
+							}
+							if (!attOk) {
+								logger.error("Error on Attenders list on event preview");
+							}           				
+							selenium.click("//input[@onclick=\"document.getElementById('hdnMethod').value = ''\"]");
+							selenium.waitForPageToLoad("30000");
+							if (selenium.isChecked("privateEventCheckbox")) {
+								selenium.click("privateEventCheckbox");
+							}
+							selenium.click("//input[@onclick=\"return sendEvent();\"]");
+							selenium.waitForPageToLoad("30000");
+							eventSent = true;
+						} else {
+							logger.error("Feature \"Preview Event button\" is enabled in Feature Manager but is not available.");
+							if (SeleniumFeaturesConfiguration.getFeatureState("Save and Send button")){
+								if (selenium.isElementPresent("//input[@onclick=\"return sendEvent();\"]")){
+									if (selenium.isChecked("privateEventCheckbox")) {
+										selenium.click("privateEventCheckbox");
+									}
+									selenium.click("//input[@onclick=\"return sendEvent();\"]");
+									selenium.waitForPageToLoad("30000");
+									eventSent = true;
+								} else {
+									logger.error("Feature \"Save and Send button\" is enabled in Feature Manager but is not available.");
+								}
+							} else {
+								logger.info("Feature \"Save and Send button\" is not available.");
+							}
+						}
+					} else {
+						logger.info("Feature \"Preview Event button\" is not available.");
+						if (SeleniumFeaturesConfiguration.getFeatureState("Save and Send button")){
+							if (selenium.isElementPresent("//input[@onclick=\"return sendEvent();\"]")){
+								if (selenium.isChecked("privateEventCheckbox")) {
+									selenium.click("privateEventCheckbox");
+								}
+								selenium.click("//input[@onclick=\"return sendEvent();\"]");
+								selenium.waitForPageToLoad("30000");
+								eventSent = true;
+							} else {
+								logger.error("Feature \"Save and Send button\" is enabled in Feature Manager but is not available.");
+							}
+						} else {
+							logger.info("Feature \"Save and Send button\" is not available.");
+						}
+					}
+					
+					if (eventSent) {
+						int eventId = 0;
+						for (int i = 1000; i > 0; i--) {
+							if (selenium.isElementPresent("//a[contains(@href, \"/calendar/showCalendarEvent.do~ampCalendarId="+i+"~method=preview~resetForm=true\")]")) {
+								eventId = i;
+								selenium.click("//a[contains(@href, \"/calendar/showCalendarEvent.do~ampCalendarId="+i+"~method=preview~resetForm=true\")]");
+								selenium.waitForPageToLoad("30000");
+								break;
+							}
+						}
+						selenium.click("//input[@onclick=\"document.getElementById('hdnMethod').value = ''\"]");
+						selenium.waitForPageToLoad("30000");
+						selenium.removeAllSelections("selreceivers");
+						selenium.addSelection("selreceivers", "label=UATtmc UATtmc");
+						selenium.click("//input[@onclick=\"MyremoveUserOrTeam()\"]");
+						selenium.click("//input[@onclick=\"return sendEvent();\"]");
+						selenium.waitForPageToLoad("30000");
+						eventId++;
+						selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+						selenium.waitForPageToLoad("30000");
+						
+						selenium.type("j_username", "uattmc@amp.org");
+						selenium.type("j_password", "abc");
+						selenium.click("submitButton");
+						selenium.waitForPageToLoad("30000");
+						selenium.click("link=UAT Team Workspace");
+						selenium.waitForPageToLoad("30000");
+						if (selenium.isElementPresent("//a[contains(@href, \"/calendar/showCalendarView.do?filterInUse=false\")]")) {
+							selenium.click("//a[contains(@href, \"/calendar/showCalendarView.do?filterInUse=false\")]");
+						} else if (selenium.isElementPresent("//a[contains(@href, \"/calendar/showCalendarView.do?view=monthly&filterInUse=false\")]")){
+							selenium.click("//a[contains(@href, \"/calendar/showCalendarView.do?view=monthly&filterInUse=false\")]");
+						} else if (selenium.isElementPresent("//a[contains(@href, \"/calendar/showCalendarView.do?view=weekly&filterInUse=false\")]")){
+							selenium.click("//a[contains(@href, \"/calendar/showCalendarView.do?view=weekly&filterInUse=false\")]");
+						} else if (selenium.isElementPresent("//a[contains(@href, \"/calendar/showCalendarView.do?view=daily&filterInUse=false\")]")){
+							selenium.click("//a[contains(@href, \"/calendar/showCalendarView.do?view=daily&filterInUse=false\")]");
+						} else if (selenium.isElementPresent("//a[contains(@href, \"/calendar/showCalendarView.do?view=none&filterInUse=false\")]")){
+							selenium.click("//a[contains(@href, \"/calendar/showCalendarView.do?view=none&filterInUse=false\")]");
+						}
+						selenium.waitForPageToLoad("30000");
+						if (selenium.isElementPresent("//a[contains(@href, \"/calendar/showCalendarEvent.do~ampCalendarId="+eventId+"~method=preview~resetForm=true\")]")) {
+							logger.error("Non Public Event is visible for an user who is not in the attender list.");
+						}
+						selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+						selenium.waitForPageToLoad("30000");
+												
+						selenium.type("j_username", "uattm@amp.org");
+						selenium.type("j_password", "abc");
+						selenium.click("submitButton");
+						selenium.waitForPageToLoad("30000");
+						selenium.click("link=UAT Team Workspace");
+						selenium.waitForPageToLoad("30000");
+						if (selenium.isElementPresent("//a[contains(@href, \"/calendar/showCalendarView.do?filterInUse=false\")]")) {
+							selenium.click("//a[contains(@href, \"/calendar/showCalendarView.do?filterInUse=false\")]");
+						} else if (selenium.isElementPresent("//a[contains(@href, \"/calendar/showCalendarView.do?view=monthly&filterInUse=false\")]")){
+							selenium.click("//a[contains(@href, \"/calendar/showCalendarView.do?view=monthly&filterInUse=false\")]");
+						} else if (selenium.isElementPresent("//a[contains(@href, \"/calendar/showCalendarView.do?view=weekly&filterInUse=false\")]")){
+							selenium.click("//a[contains(@href, \"/calendar/showCalendarView.do?view=weekly&filterInUse=false\")]");
+						} else if (selenium.isElementPresent("//a[contains(@href, \"/calendar/showCalendarView.do?view=daily&filterInUse=false\")]")){
+							selenium.click("//a[contains(@href, \"/calendar/showCalendarView.do?view=daily&filterInUse=false\")]");
+						} else if (selenium.isElementPresent("//a[contains(@href, \"/calendar/showCalendarView.do?view=none&filterInUse=false\")]")){
+							selenium.click("//a[contains(@href, \"/calendar/showCalendarView.do?view=none&filterInUse=false\")]");
+						}
+						selenium.waitForPageToLoad("30000");
+						selenium.click("//a[contains(@href, \"/calendar/showCalendarEvent.do~ampCalendarId="+eventId+"~method=preview~resetForm=true\")]");
+						selenium.waitForPageToLoad("30000");
+						/*selenium.click("//input[@onclick=\"document.getElementById('hdnMethod').value = ''\"]");
+						selenium.waitForPageToLoad("30000");
+						selenium.check("privateEventCheckbox");
+						selenium.click("//input[@onclick=\"return sendEvent();\"]");
+						selenium.waitForPageToLoad("30000");
+						eventId++;*/
+						selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+						selenium.waitForPageToLoad("30000");
+						
+						selenium.type("j_username", "uattl@amp.org");
+						selenium.type("j_password", "abc");
+						selenium.click("submitButton");
+						selenium.waitForPageToLoad("30000");
+						selenium.click("link=UAT Team Workspace");
+						selenium.waitForPageToLoad("30000");
+						if (selenium.isElementPresent("//a[contains(@href, \"/calendar/showCalendarView.do?filterInUse=false\")]")) {
+							selenium.click("//a[contains(@href, \"/calendar/showCalendarView.do?filterInUse=false\")]");
+						} else if (selenium.isElementPresent("//a[contains(@href, \"/calendar/showCalendarView.do?view=monthly&filterInUse=false\")]")){
+							selenium.click("//a[contains(@href, \"/calendar/showCalendarView.do?view=monthly&filterInUse=false\")]");
+						} else if (selenium.isElementPresent("//a[contains(@href, \"/calendar/showCalendarView.do?view=weekly&filterInUse=false\")]")){
+							selenium.click("//a[contains(@href, \"/calendar/showCalendarView.do?view=weekly&filterInUse=false\")]");
+						} else if (selenium.isElementPresent("//a[contains(@href, \"/calendar/showCalendarView.do?view=daily&filterInUse=false\")]")){
+							selenium.click("//a[contains(@href, \"/calendar/showCalendarView.do?view=daily&filterInUse=false\")]");
+						} else if (selenium.isElementPresent("//a[contains(@href, \"/calendar/showCalendarView.do?view=none&filterInUse=false\")]")){
+							selenium.click("//a[contains(@href, \"/calendar/showCalendarView.do?view=none&filterInUse=false\")]");
+						}
+						selenium.waitForPageToLoad("30000");
+						selenium.click("//a[contains(@href, \"/calendar/showCalendarEvent.do~ampCalendarId="+eventId+"~method=preview~resetForm=true\")]");
+						selenium.waitForPageToLoad("30000");
+						selenium.click("//input[@onclick=\"document.getElementById('hdnMethod').value = ''\"]");
+						selenium.waitForPageToLoad("30000");
+						selenium.check("privateEventCheckbox");
+						selenium.click("//input[@onclick=\"return sendEvent();\"]");
+						selenium.waitForPageToLoad("30000");
+						eventId++;
+						selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+						selenium.waitForPageToLoad("30000");
+												
+						selenium.type("j_username", "uattm@amp.org");
+						selenium.type("j_password", "abc");
+						selenium.click("submitButton");
+						selenium.waitForPageToLoad("30000");
+						selenium.click("link=UAT Team Workspace");
+						selenium.waitForPageToLoad("30000");
+						if (selenium.isElementPresent("//a[contains(@href, \"/calendar/showCalendarView.do?filterInUse=false\")]")) {
+							selenium.click("//a[contains(@href, \"/calendar/showCalendarView.do?filterInUse=false\")]");
+						} else if (selenium.isElementPresent("//a[contains(@href, \"/calendar/showCalendarView.do?view=monthly&filterInUse=false\")]")){
+							selenium.click("//a[contains(@href, \"/calendar/showCalendarView.do?view=monthly&filterInUse=false\")]");
+						} else if (selenium.isElementPresent("//a[contains(@href, \"/calendar/showCalendarView.do?view=weekly&filterInUse=false\")]")){
+							selenium.click("//a[contains(@href, \"/calendar/showCalendarView.do?view=weekly&filterInUse=false\")]");
+						} else if (selenium.isElementPresent("//a[contains(@href, \"/calendar/showCalendarView.do?view=daily&filterInUse=false\")]")){
+							selenium.click("//a[contains(@href, \"/calendar/showCalendarView.do?view=daily&filterInUse=false\")]");
+						} else if (selenium.isElementPresent("//a[contains(@href, \"/calendar/showCalendarView.do?view=none&filterInUse=false\")]")){
+							selenium.click("//a[contains(@href, \"/calendar/showCalendarView.do?view=none&filterInUse=false\")]");
+						}
+						selenium.waitForPageToLoad("30000");
+						if (!selenium.isElementPresent("//a[contains(@href, \"/calendar/showCalendarEvent.do~ampCalendarId="+eventId+"~method=preview~resetForm=true\")]")) {
+							logger.error("Public Event is not visible for an user who is not in the attender list.");
+						}
+					}
+				} else {
+					logger.error("Feature \"Create Event\" is enabled in Feature Manager but is not available.");
+				}
+			} else {
+				logger.info("Feature \"Create Event\" is not available.");
+			}
+		} else {
+			logger.info("Module \"Calendar\" is not available.");
 		}
-	
-	selenium.waitForPageToLoad("50000");
-	
-	Thread.sleep(10000);
-	try {selenium.click("//input[@onclick=\"document.getElementById('hdnMethod').value = ''\"]");
-		}catch (Exception e) {
-			//logger.info("Cannot find the edit button.");
-			System.out.println("Cannot find the edit button.");
-		}	
-	selenium.waitForPageToLoad("50000");
-	
-	selenium.type("eventTitle", "Test Event (edited)");
-	selenium.type("guest", "a@b.com; am@dgfoundation.org");
-	
-	try {
-		selenium.addSelection("whoIsReceiver", "index=5");
-	} catch (Exception e) {
-		//logger.info("Cannot select the attendee.");
-		System.out.println("Cannot select the attendee.");
-	}
-			
-	try {
-		selenium.click("//input[@value='Add >>']");
-	} catch (Exception e) {
-		//logger.info("Field \"Cannot find Add>> button.");
-		System.out.println("Cannot find Add>> button.");
-	}
-	selenium.waitForPageToLoad("30000");
-	try {
-		selenium.click("//input[@onclick=\"return previewEvent();\"]");
-	} catch (Exception e) {
-		//logger.info("Field \"Cannot find Preview button.");
-		System.out.println("Cannot find Preview button.");
+		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
+		selenium.waitForPageToLoad("30000");
+		logger.info("Calendar Test Finished Successfully");
+
 	}	
-	selenium.waitForPageToLoad("30000");
-	try {
-		selenium.click("//input[@onclick=\"document.getElementById('hdnMethod').value = 'save'\"]");
-	} catch (Exception e) {
-		//logger.info("Cannot find Save button in preview screen.");
-		System.out.println("Cannot find Save button in preview screen.");
-	}	
-	selenium.waitForPageToLoad("1000000");	
-	try {
-	selenium.click("//span[@title=\"Title:Test Event (edited) StartDate:Mon Jun 08 2009 11:00:00 GMT-0400 (Eastern Daylight Time)EndDate:Mon Aug 17 2009 00:00:00 GMT-0400 (Eastern Daylight Time)\"]");
-	}catch (Exception e) {
-	//logger.info("Cannot find edited event in calendar.");
-	System.out.println("Cannot find edited event in calendar.");
-		}
-	
-	selenium.waitForPageToLoad("30000");
-	try {
-		selenium.click("//input[@onclick=\"deleteEvent();\"]");
-	} catch (Exception e) {
-		//logger.info("Cannot delete the event.");
-		System.out.println("Cannot delete event.");
-	}
-	selenium.waitForPageToLoad("30000");
-	
-	
-	
-		}
-	}
 }

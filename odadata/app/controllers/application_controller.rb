@@ -35,7 +35,7 @@ protected
   end
     
   def set_output_currency
-    MultiCurrency.output_currency = params[:currency]
+    MultiCurrency.output_currency = params[:currency] || "EUR"
   end
   
   def ensure_open_data_input

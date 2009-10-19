@@ -230,9 +230,12 @@ public class ShowCalendarView extends Action {
             userId = currentUser.getId();
         }
         AmpTeamMember member = TeamMemberUtil.getAmpTeamMember(mem.getMemberId());
-        Collection ampCalendarEvents = AmpDbUtil.getAmpCalendarEventsByMember(startDate,
-            endDate, filter.getSelectedEventTypes(), filter.getSelectedDonors(),
-            member, filter.isShowPublicEvents(), null, null);
+        Collection ampCalendarEvents =new ArrayList();
+        if(filter.getSelectedDonors()!=null && filter.getSelectedDonors().length>0){
+        	ampCalendarEvents=AmpDbUtil.getAmpCalendarEventsByMember(startDate,endDate, filter.getSelectedEventTypes(), filter.getSelectedDonors(),
+																	member, filter.isShowPublicEvents(), null, null);
+        }
+        	
         List l = new ArrayList(ampCalendarEvents);
         Comparator c = new Comparator<AmpCalendar>(){
         	@Override

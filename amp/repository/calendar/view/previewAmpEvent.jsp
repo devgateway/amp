@@ -42,6 +42,20 @@ function openPrinter(){
 	window.open('/calendar/showCalendarEvent.do~method=print~resetForm=true~calendarId='+id+'','mywindow','toolbar=no,location=no, width=540,height=500, directories=no,status=no,menubar=yes,scrollbars=yes,copyhistory=yes,resizable=yes');
 		
 	}
+
+function getWeekdays(){
+   var weekDays = document.getElementById('weekDays').value;
+   var myDays = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+   var result = "";
+   var days = weekDays.split("",weekDays.length);
+    for(i=0; i<weekDays.length; i++){
+    
+    	var wday = myDays[days[i]];
+    	result +=wday+",";  	
+        }
+    return result;
+ }
+
 </script>
 
 <digi:form action="/showCalendarEvent.do">
@@ -217,11 +231,16 @@ function openPrinter(){
 					                <digi:trn>Recurring Event</digi:trn>
 					              </td>
 					              <td style="font-family: Tahoma;font-size: 12px;">
-					                ${calendarEventForm.typeofOccurrence}
-					                 ${calendarEventForm.weekDays}
+					         each
+					               ${calendarEventForm.recurrPeriod} 
+					               ${calendarEventForm.typeofOccurrence}
+					               <input type="hidden" value="${calendarEventForm.occurrWeekDays}" id="weekDays"/>
+					               <script language="javascript">
+					               document.write(getWeekdays());
+						             </script>
 					                 <c:if test="${calendarEventForm.selectedStartMonth != 0}"> ${calendarEventForm.selectedStartMonth}</c:if>
 					                  <c:if test="${calendarEventForm.selectedStartYear != 0}"> ${calendarEventForm.selectedStartYear}</c:if>
-					                 <c:if test="${calendarEventForm.recurrPeriod != 0}">${calendarEventForm.recurrPeriod}</c:if>
+					                
 					                 <c:if test="${calendarEventForm.recurrStartDate != 0}">${calendarEventForm.recurrStartDate}</c:if>
 					                 <c:if test="${calendarEventForm.recurrEndDate != 0}">${calendarEventForm.recurrStartDate}</c:if>
 					                  

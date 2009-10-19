@@ -31,7 +31,6 @@ import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPledge;
-import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.IndicatorSector;
@@ -73,7 +72,6 @@ import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.category.BarRenderer;
-import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.Range;
@@ -87,6 +85,10 @@ import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.chart.axis.NumberAxis;
 import org.digijava.module.aim.util.SectorUtil;
+import org.jfree.chart.labels.ItemLabelAnchor;
+import org.jfree.chart.labels.ItemLabelPosition;
+import org.jfree.chart.renderer.category.CategoryItemRenderer;
+import org.jfree.ui.TextAnchor;
 
 
 
@@ -216,7 +218,7 @@ public class ChartWidgetUtil {
         }
         String amountTranslatedTitle=TranslatorWorker.translateText(amount, opt.getLangCode(), opt.getSiteId());
         String titleMsg= TranslatorWorker.translateText("Pledges/Comm/Disb", opt.getLangCode(), opt.getSiteId());
-        chart = ChartFactory.createBarChart(titleMsg, "", amountTranslatedTitle, dataset, PlotOrientation.VERTICAL, true, true, false);
+        chart = ChartFactory.createBarChart(titleMsg, "", amountTranslatedTitle, dataset, PlotOrientation.HORIZONTAL, true, true, false);
         chart.getTitle().setFont(font8);
         if (opt.isShowLegend()) {
             chart.getLegend().setItemFont(font8);
@@ -230,9 +232,9 @@ public class ChartWidgetUtil {
         NumberAxis numberAxis=(NumberAxis)plot.getRangeAxis();
         numberAxis.setNumberFormatOverride(format);
         CategoryItemLabelGenerator labelGenerator = new WidgetCategoryItemLabelGenerator("{2}", format);
-        renderer.setBaseItemLabelsVisible(true);
-        renderer.setBaseItemLabelGenerator(labelGenerator);
-
+        renderer.setItemLabelsVisible(true);
+        renderer.setItemLabelGenerator(labelGenerator);
+        renderer.setPositiveItemLabelPosition(new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12,TextAnchor.CENTER_LEFT));
         return chart;
     }
     

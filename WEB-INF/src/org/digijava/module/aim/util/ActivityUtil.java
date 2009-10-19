@@ -3980,7 +3980,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     			logger.error("couldn't load Activity" + ex.getMessage());	
     			ex.printStackTrace(); 
     		} 
-    		return null;
+    		return name;
         }
         
         public static String stackTraceToString(Throwable e) {

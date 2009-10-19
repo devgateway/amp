@@ -10,6 +10,7 @@
 			<th><%= Donor.human_attribute_name('cofunding_only') %></th>
 			<th><%= Donor.human_attribute_name('currency') %></th>
 			<th> </th>
+			<th> </th>
 			<th> </th>	
 			<th> </th>		
 		</tr>
@@ -20,6 +21,7 @@
 				<td><%= donor.cofunding_only ? "yes" : "no" %></td>
 				<td><%= null_to_na(donor.currency) %></td>
 				<td><%= link_to ll(:actions, :edit), edit_donor_path(donor) %></td>
+				<td><%= link_to ll(:actions, :delete), donor_path(donor), :method => 'delete', :confirm => "This donor has #{donor.projects.size} projects assigned, those will be kept in the database but unaccessible for the public if you delete it now. Are you sure?" %>
 				<td><%= link_to lc(:agencies, :total => donor.agencies.size), 
 						donor_donor_agencies_path(donor) unless donor.cofunding_only? %></td>
 				<td><%= link_to lc(:logins), donor_users_path(donor) unless donor.cofunding_only? %></td>

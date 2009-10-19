@@ -61,6 +61,13 @@ class DonorsController < ApplicationController
     end
   end
   
+  def destroy
+    @donor = Donor.find(params[:id])
+    @donor.destroy
+    
+    redirect_to donors_path
+  end
+  
 
   protected
   # TODO: Move to right place! (admin controller?!)

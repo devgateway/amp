@@ -28,6 +28,12 @@
 			font-size:8pt;
 			padding:2px;
 		}
+
+		.tableSelected {
+			background-color:#0066FF;
+			font-size:8pt;
+			padding:2px;
+		}
 		 
 		.Hovered {
 			background-color:#a5bcf2;
@@ -59,14 +65,19 @@ function banUser(txt) {
 			 return true;		
 	}
 
-  function setStripsTable(tableId, classOdd, classEven) {
+  function setStripsTable(tableId, classOdd, classEven, classSelected) {
 		var tableElement = document.getElementById(tableId);
 		rows = tableElement.getElementsByTagName('tr');
 		for(var i = 0, n = rows.length; i < n; ++i) {
-			if(i%2 == 0)
-				rows[i].className = classEven;
-			else
-				rows[i].className = classOdd;
+			
+			if(rows[i].id==document.getElementsByName('indId')[0].value){
+				rows[i].className = classSelected;
+			}else{
+				if(i%2 == 0)
+					rows[i].className = classEven;
+				else
+					rows[i].className = classOdd;
+			}
 		}
 		rows = null;
 	}
@@ -145,13 +156,14 @@ function resetFormula(){
   document.getElementById("txtFormula").value = "";
 }
 
-function changeFormula(ampIndicatorId, enabled, baseLineValue, targetValue, constantName, calcFormula){
+function changeFormula(el, ampIndicatorId, enabled, baseLineValue, targetValue, constantName, calcFormula){
   document.getElementById("txtIndId").value = ampIndicatorId;
   document.getElementById("txtBaseLineValue").value = baseLineValue;
   document.getElementById("txtTargetValue").value = targetValue;	  
   document.getElementById("txtConstant").value = constantName;
   document.getElementById("txtFormula").value = calcFormula;	  
-  document.getElementById("chkEnabled").checked = enabled	
+  document.getElementById("chkEnabled").checked = enabled
+  setStripsTable("dataTable", "tableEven", "tableOdd", "tableSelected");	
 }
 </script>
 
@@ -219,32 +231,22 @@ function changeFormula(ampIndicatorId, enabled, baseLineValue, targetValue, cons
                           <c:if test="${!empty aimViewAhSurveyFormulasForm.surveis}">
                             <c:forEach var="report" items="${aimViewAhSurveyFormulasForm.surveis}">
                               <c:if test="${report.indicatorCode != '4' && report.indicatorCode != '5aii' && report.indicatorCode != '5bii' && report.indicatorCode != '9'&& report.indicatorCode != '10a' && report.indicatorCode != '10b'&&report.indicatorCode != '8'}">
-                                <tr>
-                                  <td>
-                                    <IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10 />
-                                    <strong>[${report.indicatorCode}]</strong>
-                                    <c:set var="translation">
-                                      <digi:trn key="aim:clickToViewReport">Click here view Report</digi:trn>
-                                    </c:set>
-
-                                    <c:forEach var="prop" items="${report.calcFormulas}" varStatus="rowCounter">
-<!--                                        enabled = <c:out value="${prop.enabled}"/>-->
-<!--  										baseLineValue = <c:out value="${prop.baseLineValue}"/> -->
-<!--  										targetValue = <c:out value="${prop.targetValue}"/>-->
-<!--  										constantName = <c:out value="${prop.constantName}"/> -->
-<!--  										formulaText = <c:out value="${prop.calcFormula}"/>-->
+                                 <c:forEach var="prop" items="${report.calcFormulas}" varStatus="rowCounter">
+									<tr id="${report.ampIndicatorId}" onClick='changeFormula(this, "${report.ampIndicatorId}","${prop.enabled}","${prop.baseLineValue}","${prop.targetValue}","${prop.constantName}","${prop.calcFormula}");'>
+									<td>
+	                                    <IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10 />
+	                                    <strong>[${report.indicatorCode}]</strong>
+	                                    <c:set var="translation">
+	                                      <digi:trn key="aim:clickToViewReport">Click here view Report</digi:trn>
+	                                    </c:set>
 										<c:if test="${rowCounter.count==1}">
-  											<span onClick='changeFormula("${report.ampIndicatorId}","${prop.enabled}","${prop.baseLineValue}","${prop.targetValue}","${prop.constantName}","${prop.calcFormula}");'>
-												<digi:trn key="aim:${report.nameTrn}">
-                                            		${report.name}
-												</digi:trn>
-											</span>
-                                        </c:if>
-									</c:forEach>
-<!--									</span>-->
-                                    
-                                  </td>
-                                </tr>
+											<digi:trn key="aim:${report.nameTrn}">
+	                                      		${report.name}
+											</digi:trn>
+	                                    </c:if>
+                                    </td>
+                                    </tr>    
+								 </c:forEach>
                               </c:if>
                             </c:forEach>
                           </c:if>
@@ -261,11 +263,6 @@ function changeFormula(ampIndicatorId, enabled, baseLineValue, targetValue, cons
 </td>
   </tr>
 </table>
-<script language="javascript">
-	setStripsTable("dataTable", "tableEven", "tableOdd");
-	setHoveredTable("dataTable", false);
-	setHoveredRow("rowHighlight");
-</script>
 </div>
 <div style="float:left; padding-top:75px;">
 
@@ -355,5 +352,9 @@ function changeFormula(ampIndicatorId, enabled, baseLineValue, targetValue, cons
 </digi:form>
 
 </div>
+<script language="javascript">
+	setStripsTable("dataTable", "tableEven", "tableOdd", "tableSelected");
+	setHoveredTable("dataTable", false);
+</script>
 
 

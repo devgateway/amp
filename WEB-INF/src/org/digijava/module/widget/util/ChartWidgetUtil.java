@@ -85,6 +85,7 @@ import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.chart.axis.NumberAxis;
 import org.digijava.module.aim.util.SectorUtil;
+import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.labels.ItemLabelAnchor;
 import org.jfree.chart.labels.ItemLabelPosition;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
@@ -218,7 +219,7 @@ public class ChartWidgetUtil {
         }
         String amountTranslatedTitle=TranslatorWorker.translateText(amount, opt.getLangCode(), opt.getSiteId());
         String titleMsg= TranslatorWorker.translateText("Pledges/Comm/Disb", opt.getLangCode(), opt.getSiteId());
-        chart = ChartFactory.createBarChart(titleMsg, "", amountTranslatedTitle, dataset, PlotOrientation.HORIZONTAL, true, true, false);
+        chart = ChartFactory.createBarChart(titleMsg, "", amountTranslatedTitle, dataset, PlotOrientation.VERTICAL, true, true, false);
         chart.getTitle().setFont(font8);
         if (opt.isShowLegend()) {
             chart.getLegend().setItemFont(font8);
@@ -229,12 +230,17 @@ public class ChartWidgetUtil {
         renderer.setDrawBarOutline(false);
         renderer.setItemMargin(0);
 
-        NumberAxis numberAxis=(NumberAxis)plot.getRangeAxis();
+        NumberAxis numberAxis = (NumberAxis) plot.getRangeAxis();
         numberAxis.setNumberFormatOverride(format);
+        //This will expand ranges slightly so that points at the edge will move inside
+        //and number will not be cut by borders.
+        Range oldRange = numberAxis.getRange();
+        Range newRange = Range.expand(oldRange, 0.1, 0.1);
+        numberAxis.setRange(newRange);
         CategoryItemLabelGenerator labelGenerator = new WidgetCategoryItemLabelGenerator("{2}", format);
         renderer.setItemLabelsVisible(true);
         renderer.setItemLabelGenerator(labelGenerator);
-        renderer.setPositiveItemLabelPosition(new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12,TextAnchor.CENTER_LEFT));
+        renderer.setPositiveItemLabelPosition(new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12,TextAnchor.TOP_CENTER, TextAnchor.BOTTOM_CENTER,Math.PI/2 ));
         return chart;
     }
     

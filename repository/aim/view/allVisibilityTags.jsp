@@ -214,9 +214,9 @@
 <feature:display name="Donors" module="Calendar"></feature:display>
 <feature:display name="Save and Send button" module="Calendar"></feature:display>
 <feature:display name="Preview Event button" module="Calendar"></feature:display>
-<!-- 
+<%-- 
 <feature:display name="Recurring Event Button" module="Calendar"></feature:display>
--->
+--%>
 <%
 pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.getMeasureList());
 pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.getAllClassificationConfigs());

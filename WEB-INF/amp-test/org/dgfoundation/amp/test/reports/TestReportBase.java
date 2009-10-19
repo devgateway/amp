@@ -20,6 +20,8 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.cell.AmountCell;
+import org.dgfoundation.amp.ar.cell.ComputedDateCell;
+import org.dgfoundation.amp.ar.cell.TextCell;
 import org.dgfoundation.amp.test.categorymanager.api.CategoryManagerApiTest;
 import org.dgfoundation.amp.test.util.Configuration;
 import org.dgfoundation.amp.test.util.TestUtil;
@@ -41,11 +43,11 @@ import com.mockrunner.mock.web.MockHttpServletResponse;
 import com.mockrunner.mock.web.MockHttpSession;
 import com.mockrunner.struts.BasicActionTestCaseAdapter;
 
-public abstract class TestReportBase extends BasicActionTestCaseAdapter   implements Test {
+public abstract class TestReportBase extends BasicActionTestCaseAdapter implements Test {
 	private static Logger logger = Logger.getLogger(CategoryManagerApiTest.class);
 	private Collection<AmpColumns> columnList = null;
 	private Collection<AmpMeasures> measuresList = null;
-	
+	protected AmpARFilter filters=new AmpARFilter();
 	protected MockHttpSession session;
 	protected ViewNewAdvancedReport action;
 	protected AdvancedReportForm form;
@@ -200,6 +202,24 @@ public abstract class TestReportBase extends BasicActionTestCaseAdapter   implem
 		return true;
 	}
 
+	public boolean checkStringValues(List<ComputedDateCell> items, String... values) throws Exception {
+		if (items.size() != values.length)
+			throw new Exception("Different items and values length ");
+
+		for (int i = 0; i < items.size(); i++) {
+			if (items.get(i) == null && values[i] != null) {
+				return false;
+			}
+			if (items.get(i) != null) {
+				if (!items.get(i).toString().equalsIgnoreCase(values[i])) {
+					return false;
+				}
+			}
+
+		}
+		return true;
+	}
+
 	protected void buildReport() throws Exception {
 		Transaction tx = PersistenceManager.getSession().beginTransaction();
 		Connection con = PersistenceManager.getSession().connection();
@@ -241,7 +261,6 @@ public abstract class TestReportBase extends BasicActionTestCaseAdapter   implem
 
 		request.setupAddParameter("debugMode", "debugMode");
 		request.setupAddParameter("ampCurrencyId", "USD");
-		AmpARFilter filters = new AmpARFilter();
 		filters.setCurrency(CurrencyUtil.getAmpcurrency("USD"));
 		session.setAttribute(ArConstants.REPORTS_FILTER, filters);
 		generatedReport = ARUtil.generateReport(null, form, request, response);
@@ -276,5 +295,4 @@ public abstract class TestReportBase extends BasicActionTestCaseAdapter   implem
 
 	public abstract void testGrandTotalValues() throws Exception;
 
-	
 }

@@ -129,6 +129,18 @@ CREATE TABLE test_v_titles (
 ) ;
 
 
+DROP TABLE IF EXISTS test_v_computed_dates;
+CREATE TABLE test_v_computed_dates (
+  amp_activity_id bigint(20) NOT NULL default '0',
+  activity_close_date datetime default NULL,
+  actual_start_date datetime default NULL,
+  actual_approval_date datetime default NULL,
+  activity_approval_date datetime default NULL,
+  proposed_start_date datetime default NULL,
+  actual_completion_date datetime default NULL,
+  proposed_completion_date datetime default NULL
+) ;
+
 INSERT INTO test_v_component_funding (amp_activity_id, amp_component_funding_id,
  amp_fund_detail_id, component_name, transaction_type, adjustment_type, transaction_date,
  transaction_amount, currency_id, currency_code, amp_component_id) VALUES
@@ -136,30 +148,37 @@ INSERT INTO test_v_component_funding (amp_activity_id, amp_component_funding_id,
   (1,1,1,'Technical Assistance',1,1,'2009-01-01',2000,21,'USD',90001),
   (1,1,1,'Technical Assistance',0,0,'2009-01-01',3000,21,'USD',90001),
   (1,1,1,'Technical Assistance',1,0,'2009-01-01',4000,21,'USD',90001),
+  
   (1,1,1,'Technical Assistance',0,1,'2010-01-01',1000,21,'USD',90001),
   (1,1,1,'Technical Assistance',1,1,'2010-01-01',2000,21,'USD',90001),
   (1,1,1,'Technical Assistance',0,0,'2010-01-01',3000,21,'USD',90001),
   (1,1,1,'Technical Assistance',1,0,'2010-01-01',4000,21,'USD',90001),
+  
   (1,2,2,'Infrastructure support',0,1,'2009-01-01',1000,21,'USD',90002),
   (1,2,2,'Infrastructure support',1,1,'2009-01-01',2000,21,'USD',90002),
   (1,2,2,'Infrastructure support',0,0,'2009-01-01',3000,21,'USD',90002),
   (1,2,2,'Infrastructure support',1,0,'2009-01-01',4000,21,'USD',90002),
+  
   (1,2,2,'Infrastructure support',0,1,'2010-01-01',1000,21,'USD',90002),
   (1,2,2,'Infrastructure support',1,1,'2010-01-01',2000,21,'USD',90002),
   (1,2,2,'Infrastructure support',0,0,'2010-01-01',3000,21,'USD',90002),
   (1,2,2,'Infrastructure support',1,0,'2010-01-01',4000,21,'USD',90002),
+  
   (2,3,3,'Technical Assistance',0,1,'2009-01-01',5000,21,'USD',90001),
   (2,3,3,'Technical Assistance',1,1,'2009-01-01',6000,21,'USD',90001),
   (2,3,3,'Technical Assistance',0,0,'2009-01-01',7000,21,'USD',90001),
   (2,3,3,'Technical Assistance',1,0,'2009-01-01',8000,21,'USD',90001),
+  
   (2,3,3,'Technical Assistance',0,1,'2010-01-01',5000,21,'USD',90001),
   (2,3,3,'Technical Assistance',1,1,'2010-01-01',6000,21,'USD',90001),
   (2,3,3,'Technical Assistance',0,0,'2010-01-01',7000,21,'USD',90001),
   (2,3,3,'Technical Assistance',1,0,'2010-01-01',8000,21,'USD',90001),
+  
   (2,3,3,'Infrastructure support',0,1,'2009-01-01',5000,21,'USD',90002),
   (2,3,3,'Infrastructure support',1,1,'2009-01-01',6000,21,'USD',90002),
   (2,3,3,'Infrastructure support',0,0,'2009-01-01',7000,21,'USD',90002),
   (2,3,3,'Infrastructure support',1,0,'2009-01-01',8000,21,'USD',90002),
+  
   (2,3,3,'Infrastructure support',0,1,'2010-01-01',5000,21,'USD',90002),
   (2,3,3,'Infrastructure support',1,1,'2010-01-01',6000,21,'USD',90002),
   (2,3,3,'Infrastructure support',0,0,'2010-01-01',7000,21,'USD',90002),
@@ -296,3 +315,4 @@ INSERT INTO test_v_titles (amp_activity_id, name, title_id, draft, status) VALUE
   (1,'Test 1',1,False,'started'),
   (2,'Test 2',2,False,'started');
 
+INSERT INTO test_v_computed_dates (amp_activity_id, activity_close_date, actual_start_date, actual_approval_date, activity_approval_date, proposed_start_date, actual_completion_date, proposed_completion_date) VALUES (1,'2009-12-01 12:45:30','2009-02-01 12:45:28','2009-06-01 12:45:34','2009-06-01 12:45:37','2009-04-01 12:45:40','2009-11-01 13:03:25','2009-08-01 13:03:25');

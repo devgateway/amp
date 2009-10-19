@@ -159,13 +159,14 @@ function changeEventTypesState(){
 	</div>
 	<div style="padding:5px;width:200px;height:28px;">
 		<field:display name="Run Filter Button" feature="Filter">
-			<input type="submit" value="<digi:trn key="calendar:runFilter">Run Filter</digi:trn>" style="min-width:88px;" onclick="changeDonorsAndEventTypesState();"/>
+			<input type="submit" value="<digi:trn key="calendar:runFilter">Run Filter</digi:trn>" onclick="changeDonorsAndEventTypesState();"/>
 		</field:display>
-	    &nbsp;
+&nbsp;
 	    <field:display name="Reset Filter Button" feature="Filter">
-	    	<input type="reset" value="<digi:trn key="aim:btnreset">Reset</digi:trn>" style="width:88px;" />
+	    	<input type="reset" value="<digi:trn key="aim:btnreset">Reset</digi:trn>" />
 	    </field:display>
-	    <input type="button" value="<digi:trn key="print">Print</digi:trn>" style="width:88px;" onclick="openPrinter();" />
+	    &nbsp;
+	      <input type="button" value="<digi:trn key="calendar:print">Print</digi:trn>"  onclick="openPrinter();" />
 	</div>
 </feature:display>
 

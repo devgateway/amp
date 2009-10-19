@@ -22,7 +22,6 @@ public class AllTest {
 
 	public static Test suite() {
 		TestSuite suite = new TestSuite();
-
 		suite.addTest(AllReportTest.suite());
 		suite.addTest(AllCategoryManagerTest.suite());
 		suite.addTest(AllWidgetTest.suite());

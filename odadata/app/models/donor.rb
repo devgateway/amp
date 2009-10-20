@@ -35,7 +35,9 @@ class Donor < ActiveRecord::Base
   # This should better be done in the globalization plugin directly but joining in the translation
   named_scope :ordered, :order => "name ASC"
   FIRST_YEAR_OF_RELEVANCE   = 2007
-
+  
+  # Mark projects of destroyed donors as deleted instead of removing them from the db immediately
+  before_destroy { |d| d.projects.update_all(:data_status => Project::DELETED) }
 end
 
 # Bluebook

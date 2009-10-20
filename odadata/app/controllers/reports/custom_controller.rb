@@ -26,19 +26,14 @@ class Reports::CustomController < ReportsController
   end
   
   def create
+    fields = params[:report][:fields]
+    funding_details = extract_detail_years_and_add_placeholder!(fields)
+    disaggregators = disaggregators_from_params
+    
     projects = Project.published.ordered.all(
       :include => [:mdg_relevances, :donor, :sector_relevances, :geo_relevances, :fundings], 
       :conditions => sql_conditions_from_params)
-      
-    funding_details = params[:funding_details].delete_if {|k,v| v.to_i == 0}.keys
     
-    # Add funding details placeholder at position 16
-    if funding_details.any?
-      params[:query_options][:funding_details] = 16
-    end
-    
-    fields = output_fields_from_params
-    disaggregators = disaggregators_from_params
     data = Reports::ProjectAggregator.new(
       :fields => fields, 
       :funding_details => funding_details, 
@@ -62,11 +57,15 @@ class Reports::CustomController < ReportsController
   end
   
 protected
-  # Parse and order query options from input form
-  def output_fields_from_params
-    options = params[:query_options]
-    options.delete_if {|k,v| v.to_i == 0 if v.respond_to?(:to_i)}
-    options.sort_by {|k,v| v.respond_to?(:to_i) ? v.to_i : v.values.first.to_i }.map { |e| e[0] }
+  def extract_detail_years_and_add_placeholder!(fields)
+    fd_regex = /funding_details\[([0-9]+)\]/
+    ff = fields.select { |f| f =~ fd_regex }
+    if ff.any?
+      idx = ff.index(ff.first)
+      fields[idx] = 'funding_details'
+      fields.delete_if { |f| f =~ fd_regex }
+      ff.map { |f| f.sub(fd_regex) { $1 }.to_i }
+    end
   end
   
   # Parse required disaggregation middleware

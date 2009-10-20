@@ -61,7 +61,7 @@ protected
     fd_regex = /funding_details\[([0-9]+)\]/
     ff = fields.select { |f| f =~ fd_regex }
     if ff.any?
-      idx = ff.index(ff.first)
+      idx = fields.index(ff.first)
       fields[idx] = 'funding_details'
       fields.delete_if { |f| f =~ fd_regex }
       ff.map { |f| f.sub(fd_regex) { $1 }.to_i }

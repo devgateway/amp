@@ -24,8 +24,8 @@
 		<h2><%= lc(:output) %></h2>
 		
 		<ul class="checkbox_container">
-			<h3><span style="float:left"><%= lc(:fields) %></span><span class="link" onclick="toggleAll('fields', '<%= lc(:select_all) %>', '<%= lc(:deselect_all) %>')" id="query_options_toggle" selected="false"><%= lc(:select_all) %></span></h3>
-			<input type="hidden" value="1" name="reports[fields][factsheet_link]" />
+			<h3><span style="float:left"><%= lc(:fields) %></span></h3>
+			<input type="hidden" value="factsheet_link" name="report[fields][]" />
             
 			<%= render :partial => "reports/query_options/query_option" %>
 		</ul>

@@ -1,5 +1,6 @@
 package org.digijava.module.calendar.action;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -434,7 +435,7 @@ public class ShowCalendarEvent extends Action {
 
     }
 
-    private void loadAmpCalendar(CalendarEventForm ceform, HttpServletRequest request) throws CalendarException, WorkerException {
+    private void loadAmpCalendar(CalendarEventForm ceform, HttpServletRequest request) throws CalendarException, WorkerException, ParseException {
         if (ceform.getAmpCalendarId() != null &&
             ceform.getAmpCalendarId() > 0 &&
             ceform.isResetForm()) {
@@ -551,21 +552,8 @@ public class ShowCalendarEvent extends Action {
                 	Iterator iterRecevent = calendar.getRecurrCalEvent().iterator();
                 	while(iterRecevent.hasNext()){
                 		RecurrCalEvent rec = (RecurrCalEvent) iterRecevent.next();
-                		//ceform.setRecurrEndDate(new Date(rec.getRecurrEndDate());
-                		//ceform.setRecurrStartDate(rec.getRecurrStartDate());
-                		if(rec.getRecurrStartDate() != null){
-		                		 GregorianCalendar recstartDate = new GregorianCalendar();
-		                		 recstartDate.setTime(rec.getRecurrStartDate());
-		                		 
-		                		 startDateBreakDown = new DateBreakDown(recstartDate, ceform.getSelectedCalendarTypeId().intValue());
-		                		 ceform.setRecurrStartDate(startDateBreakDown.formatDateString());
-		                		 
-		                		 
-		                		 GregorianCalendar recurEndDate = new GregorianCalendar();
-		                		 recurEndDate.setTime(rec.getRecurrEndDate());
-		                		 
-		                		 startDateBreakDown = new DateBreakDown(recurEndDate, ceform.getSelectedCalendarTypeId().intValue());
-		                		 ceform.setRecurrEndDate(startDateBreakDown.formatDateString());
+                		if(rec.getRecurrEndDate() != null){
+		                		 ceform.setRecurrEndDate(rec.getRecurrEndDate().toString());
                 		}
                 		ceform.setRecurrPeriod(rec.getRecurrPeriod());
                 		ceform.setTypeofOccurrence(rec.getTypeofOccurrence());

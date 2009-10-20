@@ -195,7 +195,7 @@ function confirmDelete() {
 									Category Options
 								</digi:trn>
 							</td>
-							<td bgcolor="#999999" width="10%" align="center">
+							<td bgcolor="#999999" width="9%" align="center">
 								<digi:trn key="aim:categoryActions">
 									Actions
 								</digi:trn>
@@ -323,7 +323,7 @@ function confirmDelete() {
 												<c:set var="translation">
 													<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 												</c:set>
-												<digi:link href="/admin.do" styleClass="comment" title="${translation}" contextPath="/aim">
+												<digi:link href="/admin.do" title="${translation}" contextPath="/aim">
 													<digi:trn key="aim:AmpAdminHome">
 														Admin Home
 													</digi:trn>

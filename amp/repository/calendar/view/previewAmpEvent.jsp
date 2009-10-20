@@ -228,7 +228,7 @@ function getWeekdays(){
 					            <tr height="5px"><td colspan="2"></td></tr>
 					            <tr>
 					              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;" nowrap="nowrap">
-					                <digi:trn>Recurring Event</digi:trn>
+					                <digi:trn>Recurring Event</digi:trn>:
 					              </td>
 					              <td style="font-family: Tahoma;font-size: 12px;">
 					         each
@@ -240,11 +240,17 @@ function getWeekdays(){
 						             </script>
 					                 <c:if test="${calendarEventForm.selectedStartMonth != 0}"> ${calendarEventForm.selectedStartMonth}</c:if>
 					                  <c:if test="${calendarEventForm.selectedStartYear != 0}"> ${calendarEventForm.selectedStartYear}</c:if>
-					                
 					                 <c:if test="${calendarEventForm.recurrStartDate != 0}">${calendarEventForm.recurrStartDate}</c:if>
-					                 <c:if test="${calendarEventForm.recurrEndDate != 0}">${calendarEventForm.recurrStartDate}</c:if>
 					                  
 					              </td>
+					            </tr>
+					            <tr>
+					            <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;" nowrap="nowrap">
+					                <digi:trn>Recurring Event End Date</digi:trn>:
+					              </td>
+					               <td style="font-family: Tahoma;font-size: 12px;">
+					               		 <c:if test="${calendarEventForm.recurrEndDate != 0}">${calendarEventForm.recurrEndDate}</c:if>
+					               </td>
 					            </tr>
 				            </c:if>
 				            <tr height="5px"><td colspan="2">&nbsp;</td></tr>

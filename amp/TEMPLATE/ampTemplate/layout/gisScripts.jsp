@@ -1,8 +1,4 @@
 <script language="javascript">
-window.onload = function(){
-        rechart();
-	resizeDivs();
-}
 
   function exportPDF() {
   

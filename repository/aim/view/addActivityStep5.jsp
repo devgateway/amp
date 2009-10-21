@@ -938,7 +938,7 @@ YAHOOAmp.namespace("YAHOOAmp.amptab");
 	var callbackPost = { 
  	   		success: function(o) {
 					//Extract javascript and execute it
-					eval(o.responseText.substr(o.responseText.indexOf('<script language=\"JavaScript\"')+30,o.responseText.indexOf("</script")-30-o.responseText.indexOf('<script language=\"JavaScript\"')));
+ 	   				eval(o.responseText.substr(o.responseText.lastIndexOf('<script language=\"JavaScript\"')+30,o.responseText.lastIndexOf("</script")-30-o.responseText.lastIndexOf('<script language=\"JavaScript\"')));
         	} 
     }
 	

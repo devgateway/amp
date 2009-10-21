@@ -1,6 +1,7 @@
 package org.digijava.module.aim.helper;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
 import org.digijava.module.aim.dbentity.IPAContract;
@@ -255,7 +256,8 @@ public class FundingDetail implements Serializable, Comparable
 	 String returnValue=null;
 	 if (getFixedExchangeRate()!=null){
 		 DecimalFormat decFor=new DecimalFormat();
-		 returnValue=decFor.format(getFixedExchangeRate());
+		 BigDecimal fixedExchangeRate=new BigDecimal(getFixedExchangeRate());
+		 returnValue=decFor.format(fixedExchangeRate);
 	 }
 	 return returnValue;
  }

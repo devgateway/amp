@@ -379,12 +379,14 @@ public class selectOrganizationComponent extends Action {
 			}
 
 			List<Long> orgIds = eaForm.getAllSelectedOrgsIds();
-			for (Long orgId : orgIds) {
-				AmpOrganisation org = DbUtil.getOrganisation(orgId);
-				if (!targetCollecion.contains(org)) {
-					targetCollecion.add(org);
+			if(orgIds!=null && orgIds.size()>0){
+				for (Long orgId : orgIds) {
+					AmpOrganisation org = DbUtil.getOrganisation(orgId);
+					if (!targetCollecion.contains(org)) {
+						targetCollecion.add(org);
+					}
 				}
-			}
+			}			
 			target.set(eaForm.getTargetForm(), targetCollecion);
 			eaForm.setAfterSelect(true);
 		}

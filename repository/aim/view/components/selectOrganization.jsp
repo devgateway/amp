@@ -66,7 +66,7 @@
 		<c:set var="translation">
 			<digi:trn jsFriendly='true'>Please choose an organization to add</digi:trn>
 		</c:set>
-		//if(document.aimSelectOrganizationForm.selectedOrganisationFromPages.value != "-1") return true;
+		if(document.aimSelectOrganizationForm.selectedOrganisationFromPages.value != "-1") return true;
 
 		if (document.aimSelectOrganizationForm.selOrganisations.checked != null) { // only one
 			if (document.aimSelectOrganizationForm.selOrganisations.checked == false) {

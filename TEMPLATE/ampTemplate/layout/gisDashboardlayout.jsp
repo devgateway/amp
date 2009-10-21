@@ -4,176 +4,10 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 
-<script type="text/javascript">
-    <!--
-    var lastTimeStamp;
 
-    function donorChanged(){
-        rechart();
-    }
-    function yearChanged(){
-        rechart();
-        getTopTenDonorTable();
-    }
-    function rechart(){
-        lastTimeStamp = new Date().getTime();
-        var sectorByDonorChartImageDiv=document.getElementById('sectorByDonorChartImageDiv');
-        var sectorByDonorChartImageLoadDiv=document.getElementById('sectorByDonorChartImageDivLoad');
-        sectorByDonorChartImageLoadDiv.style.display="block";
-        sectorByDonorChartImageDiv.style.display="none";
-        var chartImageMap=document.getElementById('sectorByDonorChartImageMap');
-        removeAllChildren(chartImageMap);
-        var chartImage=document.createElement("img");
-        //from year
-        var fy=document.getElementsByName('selectedFromYear')[0].value;
-        //to year
-        var ty=document.getElementsByName('selectedToYear')[0].value;
-        var d=document.getElementsByName('selectedDonor')[0].value;
-        var myUrl = chartURL+'~selectedFromYear='+fy+'~selectedToYear='+ty+'~selectedDonor='+d+'~timestamp='+lastTimeStamp;
-        myUrl+=getLegendState();
-        myUrl+=getLabelState();
-        chartImage.onload=loadSectorDonorMap;
-        chartImage.useMap = '#sectorByDonorChartImageMap';
-        chartImage.border=0;
-        chartImage.src=myUrl;
-        chartImage.setAttribute("alt", " ")
-        removeAllChildren(sectorByDonorChartImageDiv);
-        sectorByDonorChartImageDiv.appendChild(chartImage);
-        //alert(myUrl);
-    }
-    
-
-
-function loadSectorDonorMap(){
-    getSectorDonorGraphMap(lastTimeStamp);
-}
-
-function constructSectorDonorMapUrl(timestmp){
-    <digi:context name="donorSectorMap" property="context/widget/getDonorSectorMap.do" />
-    var url="${donorSectorMap}";
-    url+='~timestamp='+timestmp;
-    return url;
-}
-
-function getSectorDonorGraphMap(timestamp){
-    var url=constructSectorDonorMapUrl(timestamp);
-    var async=new Asynchronous();
-    async.complete=updateSectorDonorMapCallBack;
-    async.call(url);
-}
-function removeAllChildren(parent){
-        var childrenAreas=parent.childNodes;
-        if(childrenAreas!=null){
-            while (parent.firstChild) {
-                parent.removeChild(parent.firstChild);
-            }
-        }
-    }
-
-    function updateSectorDonorMapCallBack(status, statusText, responseText, responseXML){
-        var sectorByDonorChartImageLoadDiv=document.getElementById('sectorByDonorChartImageDivLoad');
-        sectorByDonorChartImageLoadDiv.style.display="none"
-        var sectorByDonorChartImageDiv=document.getElementById('sectorByDonorChartImageDiv');
-       sectorByDonorChartImageDiv.style.display="block";
-        var chartImageMap=document.getElementById('sectorByDonorChartImageMap');
-        removeAllChildren(chartImageMap);
-        var areas=responseXML.getElementsByTagName('area');
-        for(var i=0;i<areas.length;i++){
-            var area=document.createElement('area');
-            area.setAttribute("alt", " ");
-            area.setAttribute("shape", "poly");
-            area.setAttribute("coords", areas[i].getAttribute("coords"));
-            var url= areas[i].getAttribute("href");
-            area.onclick = (function(par) {
-                return function(){showSectorDonorWidgetReport(par) }
-            })(url);
-            chartImageMap.appendChild(area);
-        }
-     
-
-    }
-
-
-	function showSectorDonorWidgetReport(url) {
-		var popup = window.open(url, "SectorDonorWidgetReport", "height=500,width=750,status=yes,resizable=yes,toolbar=no,menubar=no,location=no");
-		popup.focus();
-	}
-
-    function blinkText(){
-        var textElement=document.getElementById('mapLoadingMessageSecDonChart');
-        textElement.style.visibility=(textElement.style.visibility=='visible') ?'hidden':'visible';
-    }
-    function getLegendState(){
-        var chkLegend = document.getElementsByName('showLegends')[0];
-        if (chkLegend.checked){
-            return '~showLegend=true'
-        }else{
-            return '~showLegend=false'
-        }
-    }
-    function getLabelState(){
-        var chkLabel = document.getElementsByName('showLabels')[0];
-        if (chkLabel.checked){
-            return '~showLabel=true'
-        }else{
-            return '~showLabel=false'
-        }
-    }
-
-    function getTopTenDonorTable(){
-        var topTenDonorTable=document.getElementById('topTenDonorGroupsDiv');
-        topTenDonorTable.innerHTML= '<digi:img src="images/amploading.gif"/>';
-        //from year
-        var fy=document.getElementsByName('selectedFromYear')[0].value;
-        //to year
-        var ty=document.getElementsByName('selectedToYear')[0].value;
-        var url='/widget/getTopTenDonorGroups.do?'+'selectedFromYear='+fy+'&selectedToYear='+ty;
-        var async=new Asynchronous();
-        async.complete=topTenDonorTableCallBack;
-        async.call(url);
-    }
-
-function topTenDonorTableCallBack(status, statusText, responseText, responseXML){
-    var root=responseXML.getElementsByTagName('DonorGroups')[0];
-    var donorGroups=root.childNodes;
-    //get div that should hold top donor groups
-    var divTopTen=document.getElementById('topTenDonorGroupsDiv');
-    //create top ten table
-    var table=document.createElement('TABLE');
-    var tbody=document.createElement('TBODY');
-    var trHead=document.createElement('TR');
-    var tdHeadEmpty=document.createElement('TD');
-    tdHeadEmpty.innerHTML="&nbsp;"
-    var tdHeadDonorGroup=document.createElement('TD');
-    tdHeadDonorGroup.innerHTML="<strong><digi:trn>Top 10 Donors</digi:trn></strong>";
-    var tdHeadCom=document.createElement('TD');
-    tdHeadCom.innerHTML="<strong><digi:trn>Commitments in USD Millions for</digi:trn> "+root.getAttribute("years")+"</strong>";
-    trHead.appendChild(tdHeadEmpty);
-    trHead.appendChild(tdHeadDonorGroup);
-    trHead.appendChild(tdHeadCom);
-    tbody.appendChild(trHead);
-    for(var i=0;i<donorGroups.length;i++){
-        var tr=document.createElement('TR');
-        var tdOrder=document.createElement('TD');
-        tdOrder.innerHTML=donorGroups[i].getAttribute("order");
-        var tdName=document.createElement('TD');
-        tdName.innerHTML=donorGroups[i].getAttribute("name");
-        var tdAmount=document.createElement('TD');
-        tdAmount.innerHTML=donorGroups[i].getAttribute("amount");
-        tr.appendChild(tdOrder);
-        tr.appendChild(tdName);
-        tr.appendChild(tdAmount);
-        tbody.appendChild(tr);
-    }
-    table.appendChild(tbody);
-    table.id="topTenDonorGroupsWidgetTable";  
-    divTopTen.innerHTML='';
-    divTopTen.appendChild(table);
-    applyStyle(table);
-}
-    //-->
+<script language="JavaScript" type="text/javascript">
+    <jsp:include page="preLoadingMessage.js.jsp" flush="true" />
 </script>
-
 
 <style>
     #content{
@@ -203,7 +37,7 @@ function topTenDonorTableCallBack(status, statusText, responseText, responseXML)
             countryName = "";
         }
 %>
-
+ 
 
 <HTML>
     <digi:base />
@@ -476,6 +310,182 @@ function topTenDonorTableCallBack(status, statusText, responseText, responseXML)
                 </TR>
             </TBODY>
         </TABLE>
+
+                                            
+
+                                                <script type="text/javascript">
+                                                    <!--
+                                                    var lastTimeStamp;
+
+                                                    function donorChanged(){
+                                                        rechart();
+                                                    }
+                                                    function yearChanged(){
+                                                        rechart();
+                                                        getTopTenDonorTable();
+                                                    }
+                                                    function rechart(){
+                                                        lastTimeStamp = new Date().getTime();
+                                                        var sectorByDonorChartImageDiv=document.getElementById('sectorByDonorChartImageDiv');
+                                                        var sectorByDonorChartImageLoadDiv=document.getElementById('sectorByDonorChartImageDivLoad');
+                                                        sectorByDonorChartImageLoadDiv.style.display="block";
+                                                        sectorByDonorChartImageDiv.style.display="none";
+                                                        var chartImageMap=document.getElementById('sectorByDonorChartImageMap');
+                                                        removeAllChildren(chartImageMap);
+                                                        var chartImage=document.createElement("img");
+                                                        //from year
+                                                        var fy=document.getElementsByName('selectedFromYear')[0].value;
+                                                        //to year
+                                                        var ty=document.getElementsByName('selectedToYear')[0].value;
+                                                        var d=document.getElementsByName('selectedDonor')[0].value;
+                                                        var myUrl = chartURL+'~selectedFromYear='+fy+'~selectedToYear='+ty+'~selectedDonor='+d+'~timestamp='+lastTimeStamp;
+                                                        myUrl+=getLegendState();
+                                                        myUrl+=getLabelState();
+                                                        chartImage.onload=loadSectorDonorMap;
+                                                        chartImage.useMap = '#sectorByDonorChartImageMap';
+                                                        chartImage.border=0;
+                                                        chartImage.src=myUrl;
+                                                        chartImage.setAttribute("alt", " ")
+                                                        removeAllChildren(sectorByDonorChartImageDiv);
+                                                        sectorByDonorChartImageDiv.appendChild(chartImage);
+                                                        //alert(myUrl);
+                                                    }
+
+
+
+                                                    function loadSectorDonorMap(){
+                                                        getSectorDonorGraphMap(lastTimeStamp);
+                                                    }
+
+                                                    function constructSectorDonorMapUrl(timestmp){
+                                                    <digi:context name="donorSectorMap" property="context/widget/getDonorSectorMap.do" />
+                                                            var url="${donorSectorMap}";
+                                                            url+='~timestamp='+timestmp;
+                                                            return url;
+                                                        }
+
+                                                        function getSectorDonorGraphMap(timestamp){
+                                                            var url=constructSectorDonorMapUrl(timestamp);
+                                                            var async=new Asynchronous();
+                                                            async.complete=updateSectorDonorMapCallBack;
+                                                            async.call(url);
+                                                        }
+                                                        function removeAllChildren(parent){
+                                                            var childrenAreas=parent.childNodes;
+                                                            if(childrenAreas!=null){
+                                                                while (parent.firstChild) {
+                                                                    parent.removeChild(parent.firstChild);
+                                                                }
+                                                            }
+                                                        }
+
+                                                        function updateSectorDonorMapCallBack(status, statusText, responseText, responseXML){
+                                                            var sectorByDonorChartImageLoadDiv=document.getElementById('sectorByDonorChartImageDivLoad');
+                                                            sectorByDonorChartImageLoadDiv.style.display="none"
+                                                            var sectorByDonorChartImageDiv=document.getElementById('sectorByDonorChartImageDiv');
+                                                            sectorByDonorChartImageDiv.style.display="block";
+                                                            var chartImageMap=document.getElementById('sectorByDonorChartImageMap');
+                                                            removeAllChildren(chartImageMap);
+                                                            var areas=responseXML.getElementsByTagName('area');
+                                                            for(var i=0;i<areas.length;i++){
+                                                                var area=document.createElement('area');
+                                                                area.setAttribute("alt", " ");
+                                                                area.setAttribute("shape", "poly");
+                                                                area.setAttribute("coords", areas[i].getAttribute("coords"));
+                                                                var url= areas[i].getAttribute("href");
+                                                                area.onclick = (function(par) {
+                                                                    return function(){showSectorDonorWidgetReport(par) }
+                                                                })(url);
+                                                                chartImageMap.appendChild(area);
+                                                            }
+
+
+                                                        }
+
+
+                                                        function showSectorDonorWidgetReport(url) {
+                                                            var popup = window.open(url, "SectorDonorWidgetReport", "height=500,width=750,status=yes,resizable=yes,toolbar=no,menubar=no,location=no");
+                                                            popup.focus();
+                                                        }
+
+
+                                                        function getLegendState(){
+                                                            var chkLegend = document.getElementsByName('showLegends')[0];
+                                                            if (chkLegend.checked){
+                                                                return '~showLegend=true'
+                                                            }else{
+                                                                return '~showLegend=false'
+                                                            }
+                                                        }
+                                                        function getLabelState(){
+                                                            var chkLabel = document.getElementsByName('showLabels')[0];
+                                                            if (chkLabel.checked){
+                                                                return '~showLabel=true'
+                                                            }else{
+                                                                return '~showLabel=false'
+                                                            }
+                                                        }
+
+                                                        function getTopTenDonorTable(){
+            var topTenDonorTable=document.getElementById('topTenDonorGroup                                                sDiv');
+                                                            topTenDonorTable.innerHTML= '<digi:img src="images/amploading.gif"/>';
+                                                            //from year
+                                                            var fy=document.getElementsByName('selectedFromYear')[0].value;
+                                                            //to year
+                                                            var ty=document.getElementsByName('selectedToYear')[0].value;
+                                                            var url='/widget/getTopTenDonorGroups.do?'+'selectedFromYear='+fy+'&selectedToYear='+ty;
+                                                            var async=new Asynchronous();
+                                                            async.complete=topTenDonorTableCallBack;
+                                                            async.call(url);
+                                                        }
+
+                                                        function topTenDonorTableCallBack(status, statusText, responseText, responseXML){
+                                                            var root=responseXML.getElementsByTagName('DonorGroups')[0];
+                                                            var donorGroups=root.childNodes;
+                                                            //get div that should hold top donor groups
+                                                            var divTopTen=document.getElementById('topTenDonorGroupsDiv');
+                                                            //create top ten table
+                                                            var table=document.createElement('TABLE');
+                                                            var tbody=document.createElement('TBODY');
+                                                            var trHead=document.createElement('TR');
+                                                            var tdHeadEmpty=document.createElement('TD');
+                                                            tdHeadEmpty.innerHTML="&nbsp;"
+            var tdHeadDonorGroup=document.createElement('TD                                                ');
+                                                            tdHeadDonorGroup.innerHTML="<strong><digi:trn>Top 10 Donors</digi:trn></strong>";
+            var tdHeadCom=document.createElement('TD                                                ');
+                                                            tdHeadCom.innerHTML="<strong><digi:trn>Commitments in USD Millions for</digi:trn> "+root.getAttribute("years")+"</strong>";
+                                                            trHead.appendChild(tdHeadEmpty);
+                                                            trHead.appendChild(tdHeadDonorGroup);
+                                                            trHead.appendChild(tdHeadCom);
+                                                            tbody.appendChild(trHead);
+                                                            for(var i=0;i<donorGroups.length;i++){
+                                                                var tr=document.createElement('TR');
+                                                                var tdOrder=document.createElement('TD');
+                                                                tdOrder.innerHTML=donorGroups[i].getAttribute("order");
+                                                                var tdName=document.createElement('TD');
+                                                                tdName.innerHTML=donorGroups[i].getAttribute("name");
+                                                                var tdAmount=document.createElement('TD');
+                                                                tdAmount.innerHTML=donorGroups[i].getAttribute("amount");
+                                                                tr.appendChild(tdOrder);
+                                                                tr.appendChild(tdName);
+                                                                tr.appendChild(tdAmount);
+                                                                tbody.appendChild(tr);
+                                                            }
+                                                            table.appendChild(tbody);
+                                                            table.id="topTenDonorGroupsWidgetTable";
+                                                            divTopTen.innerHTML='';
+                                                            divTopTen.appendChild(table);
+                                                            applyStyle(table);
+                                                        }
+                                                        addLoadEvent(rechart);
+                                                        addLoadEvent(resizeDivs);
+                                                        addLoadEvent(delBody);
+                                                       
+                                                      
+                                                        //-->
+                                                </script>
+                                               
+                                         
 
     </BODY>
 </HTML>

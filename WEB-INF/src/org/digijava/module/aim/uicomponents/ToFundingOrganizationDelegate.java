@@ -3,6 +3,7 @@ package org.digijava.module.aim.uicomponents;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,14 +28,16 @@ public class ToFundingOrganizationDelegate implements IPostProcessDelegate {
 			if (col == null)
 				col = new ArrayList<FundingOrganization>();
 
-			Long[] selected = eaForm.getSelOrganisations();
-			for (int i = 0; i < selected.length; i++) {
-				AmpOrganisation org = DbUtil.getOrganisation(selected[i]);
-				FundingOrganization fOrg = new FundingOrganization();
-				fOrg.setAmpOrgId(org.getAmpOrgId());
-				fOrg.setOrgName(org.getName());
-				if (!col.contains(fOrg)) {
-					col.add(fOrg);
+			List<Long> selected = eaForm.getAllSelectedOrgsIds();
+			if(selected!=null && selected.size() > 0){
+				for (Long orgId : selected) {
+					AmpOrganisation org = DbUtil.getOrganisation(orgId);
+					FundingOrganization fOrg = new FundingOrganization();
+					fOrg.setAmpOrgId(org.getAmpOrgId());
+					fOrg.setOrgName(org.getName());
+					if (!col.contains(fOrg)) {
+						col.add(fOrg);
+					}
 				}
 			}
 			target.set(eaForm.getTargetForm(), col);

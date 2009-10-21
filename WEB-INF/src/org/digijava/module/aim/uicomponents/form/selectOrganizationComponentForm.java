@@ -2,6 +2,7 @@ package org.digijava.module.aim.uicomponents.form;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -41,6 +42,8 @@ public class selectOrganizationComponentForm extends ActionForm {
 	boolean refreshParent;
 	private String delegateClass;
 	private HashMap<String, String> aditionalParameters=new HashMap<String, String>();
+	
+	private List<Long> allSelectedOrgsIds; //used to hold all selected organisations (when going to another page, previously selected orgs were lost)
 	
 	String styleClass="";
 	
@@ -96,6 +99,7 @@ public class selectOrganizationComponentForm extends ActionForm {
 	}
 
 	public void clearSelected() {
+		allSelectedOrgsIds = null;
 		selOrganisations = null;
 		this.organizations=null;
 		this.alphaPages =  null;
@@ -340,4 +344,14 @@ public class selectOrganizationComponentForm extends ActionForm {
 	public void setStyleClass(String styleClass) {
 		this.styleClass = styleClass;
 	}
+
+	public List<Long> getAllSelectedOrgsIds() {
+		return allSelectedOrgsIds;
+	}
+
+	public void setAllSelectedOrgsIds(List<Long> allSelectedOrgsIds) {
+		this.allSelectedOrgsIds = allSelectedOrgsIds;
+	}
+	
+	
 }

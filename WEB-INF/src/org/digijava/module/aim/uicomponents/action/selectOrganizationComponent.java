@@ -37,8 +37,11 @@ public class selectOrganizationComponent extends Action {
 		} else if ("selectPage".equalsIgnoreCase(subAction)) {
 			return selectPage(mapping, form, request, response);
 		} else if ("organizationSelected".equalsIgnoreCase(subAction)) {
+			//fill list first
+			fillAllSelectedOgs(oForm);
 			// if has a delegate so call it
-			if (oForm.getDelegateClass() != null && !"".equalsIgnoreCase(oForm.getDelegateClass())) {
+			if (oForm.getDelegateClass() != null && !"".equalsIgnoreCase(oForm.getDelegateClass())) {				
+				//call delegate
 				return executeDelegate(mapping, form, request, response);
 			} else {
 				// if have to add to a collection so this is a multiselector
@@ -160,6 +163,16 @@ public class selectOrganizationComponent extends Action {
 		eaForm.setPagesToShow(10);
 
 		if (alpha == null || alpha.trim().length() == 0) {
+			//in case of "viewAll" selected organizations shouldn't get lost. in other case(applying above filter), it should be reseted
+			if(request.getParameter("viewAll")==null || ! request.getParameter("viewAll").equalsIgnoreCase("viewAll")){
+				eaForm.setSelOrganisations(null);
+				eaForm.setAllSelectedOrgsIds(null);
+			}else if(request.getParameter("viewAll")!=null && request.getParameter("viewAll").equalsIgnoreCase("viewAll")){
+				fillAllSelectedOgs(eaForm);
+				if(eaForm.getAllSelectedOrgsIds()!=null && eaForm.getAllSelectedOrgsIds().size()>0){
+					eaForm.setSelOrganisations(eaForm.getAllSelectedOrgsIds().toArray(new Long[eaForm.getAllSelectedOrgsIds().size()]));
+				}
+			}
 			organizationResult = new ArrayList();
 
 			if (!eaForm.getAmpOrgTypeId().equals(new Long(-1))) {
@@ -210,6 +223,8 @@ public class selectOrganizationComponent extends Action {
 			}
 
 		} else {
+			//already selected orgs shouldn't get lost
+			fillAllSelectedOgs(eaForm);
 			if (!eaForm.getAmpOrgTypeId().equals(new Long(-1))) {
 				if (eaForm.getKeyword()!=null && eaForm.getKeyword().trim().length()!=0){
 					organizationResult = DbUtil.searchForOrganisation(alpha, eaForm.getKeyword().trim(), eaForm.getAmpOrgTypeId());
@@ -322,6 +337,8 @@ public class selectOrganizationComponent extends Action {
 			for (int i = (stIndex - 1); i < edIndex; i++) {
 				tempCol.add(vect.get(i));
 			}
+			
+			fillAllSelectedOgs(eaForm);
 
 			eaForm.setOrganizations(tempCol);
 			eaForm.setCurrentPage(new Integer(page));
@@ -361,16 +378,13 @@ public class selectOrganizationComponent extends Action {
 				targetCollecion = new ArrayList<AmpOrganisation>();
 			}
 
-			Long[] orgIds = eaForm.getSelOrganisations();
-
-			for (int i = 0; i < orgIds.length; i++) {
-
-				AmpOrganisation org = DbUtil.getOrganisation(orgIds[i]);
+			List<Long> orgIds = eaForm.getAllSelectedOrgsIds();
+			for (Long orgId : orgIds) {
+				AmpOrganisation org = DbUtil.getOrganisation(orgId);
 				if (!targetCollecion.contains(org)) {
 					targetCollecion.add(org);
 				}
 			}
-
 			target.set(eaForm.getTargetForm(), targetCollecion);
 			eaForm.setAfterSelect(true);
 		}
@@ -388,4 +402,16 @@ public class selectOrganizationComponent extends Action {
 		return processor.execute(mapping, form, request, response);
 	}
 
-};
+	private void fillAllSelectedOgs(selectOrganizationComponentForm oForm) {
+		if(oForm.getSelOrganisations()!=null && oForm.getSelOrganisations().length > 0){
+			if(oForm.getAllSelectedOrgsIds()==null){
+				oForm.setAllSelectedOrgsIds(new ArrayList<Long>());
+			}
+			for (Long orgId : oForm.getSelOrganisations()) {
+				if(! oForm.getAllSelectedOrgsIds().contains(orgId)){
+					oForm.getAllSelectedOrgsIds().add(orgId);
+				}						
+			}
+		}
+	}
+}

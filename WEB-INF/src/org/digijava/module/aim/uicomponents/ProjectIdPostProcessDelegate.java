@@ -25,27 +25,27 @@ public class ProjectIdPostProcessDelegate implements IPostProcessDelegate {
 
 		OrgProjectId prevOrgs[] = (OrgProjectId[]) target.get(eaForm.getTargetForm());
 
-		if (eaForm.getSelOrganisations() == null || eaForm.getSelOrganisations().length == 0)
+		if (eaForm.getAllSelectedOrgsIds() == null || eaForm.getAllSelectedOrgsIds().size() == 0)
 			return mapping.findForward("forward");
 
 		int index = 0;
 		OrgProjectId[] currOrgs;
 		if (prevOrgs != null) {
-			currOrgs = new OrgProjectId[prevOrgs.length + eaForm.getSelOrganisations().length];
+			currOrgs = new OrgProjectId[prevOrgs.length + eaForm.getAllSelectedOrgsIds().size()];
 			for (int i = 0; i < prevOrgs.length; i++) {
 				currOrgs[i] = prevOrgs[i];
 			}
 			index = prevOrgs.length;
 		} else {
-			currOrgs = new OrgProjectId[eaForm.getSelOrganisations().length];
+			currOrgs = new OrgProjectId[eaForm.getAllSelectedOrgsIds().size()];
 		}
 
-		for (int i = 0; i < eaForm.getSelOrganisations().length; i++) {
+		for (int i = 0; i < eaForm.getAllSelectedOrgsIds().size(); i++) {
 			boolean flag = false;
 			if (prevOrgs != null) {
 				for (int j = 0; j < prevOrgs.length; j++) {
 					if (prevOrgs[j] != null) {
-						if (prevOrgs[j].getOrganisation().getAmpOrgId().equals(eaForm.getSelOrganisations()[i])) {
+						if (prevOrgs[j].getOrganisation().getAmpOrgId().equals(eaForm.getAllSelectedOrgsIds().get(i))) {
 							flag = true;
 							break;
 						}
@@ -54,7 +54,7 @@ public class ProjectIdPostProcessDelegate implements IPostProcessDelegate {
 			}
 
 			if (!flag) {
-				AmpOrganisation org = DbUtil.getOrganisation(eaForm.getSelOrganisations()[i]);
+				AmpOrganisation org = DbUtil.getOrganisation(eaForm.getAllSelectedOrgsIds().get(i));
 				if (org != null) {
 					OrgProjectId opId = new OrgProjectId();
 					opId.setId(new Date().getTime());
@@ -64,7 +64,7 @@ public class ProjectIdPostProcessDelegate implements IPostProcessDelegate {
 					currOrgs[index++] = opId;
 				}
 			}
-
+			
 			target.set(eaForm.getTargetForm(), currOrgs);
 			eaForm.setAfterSelect(true);
 

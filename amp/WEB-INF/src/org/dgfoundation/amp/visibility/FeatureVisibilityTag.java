@@ -163,11 +163,13 @@ public class FeatureVisibilityTag extends BodyTagSupport {
    		   
    		   ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
    		   if(ampTreeVisibility!=null)
-      			if (request.getParameter(FMAdvancedModeUtil.ADVANCED_PARAMETER) == null || source.endsWith("allVisibilityTags.jsp")){
-       	   			pageContext.getOut().print(bodyText.trim());
-       			} else {
-       	   			pageContext.getOut().print(FMAdvancedModeUtil.addFeatureAdvancedMarkUp(bodyText));
-       			}
+	   			if(isFeatureActive(ampTreeVisibility)){
+	      			if (request.getParameter(FMAdvancedModeUtil.ADVANCED_PARAMETER) == null || source.endsWith("allVisibilityTags.jsp")){
+	       	   			pageContext.getOut().print(bodyText.trim());
+	       			} else {
+	       	   			pageContext.getOut().print(FMAdvancedModeUtil.addFeatureAdvancedMarkUp(bodyText));
+	       			}
+	   			}
        }
        catch (Exception e) {
     	   e.printStackTrace();

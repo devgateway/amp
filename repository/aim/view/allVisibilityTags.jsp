@@ -209,7 +209,7 @@
 <feature:display name="orgprof_chart_place6" module="Org Profile"></feature:display>
 <feature:display name="orgprof_chart_place7" module="Org Profile"></feature:display>
 <feature:display name="orgprof_chart_place8" module="Org Profile"></feature:display>
-
+<feature:display name="Computed Fields"  module="Report Generator"></feature:display>
 <feature:display name="Yearly View" module="Calendar"></feature:display>
 <feature:display name="Monthly View" module="Calendar"></feature:display>
 <feature:display name="Weekly View" module="Calendar"></feature:display>
@@ -574,8 +574,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="NPD Clasification" feature="Identification"></field:display> 
 <field:display name="NPD Program Description" feature="Program"></field:display> 
 <field:display name="Name" feature="Admin - Component Type"></field:display> 
-
-
 <field:display name="National Planning Objectives" feature="NPD Programs"></field:display> 
 <field:display name="National Planning Objectives Level 1" feature="NPD Programs"></field:display> 
 <field:display name="National Planning Objectives Level 2" feature="NPD Programs"></field:display> 
@@ -585,7 +583,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="National Planning Objectives Level 6" feature="NPD Programs"></field:display> 
 <field:display name="National Planning Objectives Level 7" feature="NPD Programs"></field:display> 
 <field:display name="National Planning Objectives Level 8" feature="NPD Programs"></field:display> 
-
 <field:display name="Primary Program Level 1" feature="NPD Programs"></field:display> 
 <field:display name="Primary Program Level 2" feature="NPD Programs"></field:display> 
 <field:display name="Primary Program Level 3" feature="NPD Programs"></field:display> 
@@ -594,7 +591,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Primary Program Level 6" feature="NPD Programs"></field:display> 
 <field:display name="Primary Program Level 7" feature="NPD Programs"></field:display> 
 <field:display name="Primary Program Level 8" feature="NPD Programs"></field:display> 
-
 <field:display name="Secondary Program Level 1" feature="NPD Programs"></field:display> 
 <field:display name="Secondary Program Level 2" feature="NPD Programs"></field:display> 
 <field:display name="Secondary Program Level 3" feature="NPD Programs"></field:display> 
@@ -603,8 +599,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Secondary Program Level 6" feature="NPD Programs"></field:display> 
 <field:display name="Secondary Program Level 7" feature="NPD Programs"></field:display> 
 <field:display name="Secondary Program Level 8" feature="NPD Programs"></field:display> 
-
-
 <field:display name="Parent National Planning Objectives" feature="NPD Programs"></field:display> 
 <field:display name="Objective Comments" feature="Identification"></field:display> 
 <field:display name="Objective" feature="Identification"></field:display> 
@@ -686,9 +680,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Remove Program Button - Primary Programs" feature="Program"></field:display> 
 <field:display name="Remove Program Button - Secondary Programs" feature="Program"></field:display> 
 <field:display name="Remove Sectors Button" feature="Sectors"></field:display> 
-
 <field:display name="Responsible Organization" feature="Responsible Organization"></field:display> 
-
 <field:display name="Responsible Organization Add Button" feature="Responsible Organization"></field:display> 
 <field:display name="Responsible Organization Groups" feature="Responsible Organization"></field:display> 
 <field:display name="Responsible Organization Organizations Button" feature="Responsible Organization"></field:display> 
@@ -791,7 +783,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Reset Filter Button" feature="Filter"></field:display>
 <field:display name="Add Donor Button" feature="Donors"></field:display>
 <field:display name="Remove Donor Button" feature="Donors"></field:display>
-<feature:display name="Computed Fields"  module="Report Generator"></feature:display>
 <field:display name="Overage Project" feature="Computed Fields"></field:display>
 <field:display name="Age of Project" feature="Computed Fields"></field:display>
 <field:display name="Predictability of Funding" feature="Computed Fields"></field:display>

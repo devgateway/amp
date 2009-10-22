@@ -1,6 +1,6 @@
 <jboss-web>
 <context-root>/</context-root>
-<virtual-host>laos.ampdev.net</virtual-host>
+<virtual-host>laos.staging.ampdev.net</virtual-host>
  <class-loading java2ClassLoadingCompliance="false">
  <loader-repository>
  com.example:loader=amp-laos.war

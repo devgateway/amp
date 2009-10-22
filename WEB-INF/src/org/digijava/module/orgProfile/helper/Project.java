@@ -9,10 +9,20 @@ import org.digijava.module.aim.dbentity.AmpActivitySector;
  * @author medea
  */
 public class Project {
+  // truncated title, 14 characters only
    private String title;
+   private String fullTitle;
    private String amount;
    private Set<AmpActivitySector> sectors;
    private Long activityId;
+
+   public String getFullTitle() {
+        return fullTitle;
+    }
+
+    public void setFullTitle(String fullTitle) {
+        this.fullTitle = fullTitle;
+    }
 
     public Long getActivityId() {
         return activityId;

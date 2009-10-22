@@ -484,8 +484,9 @@ public class OrgProfileUtil {
 
                 project.setAmount(FormatHelper.formatNumber(amount));
                 String title=activity.getName();
-                if(title.length()>15){
-                    title=title.substring(0, 14)+"...";
+                if (title.length() > 15) {
+                    project.setFullTitle(title);
+                    title = title.substring(0, 14) + "...";
                 }
                 project.setTitle(title);
                 project.setActivityId(activity.getAmpActivityId());

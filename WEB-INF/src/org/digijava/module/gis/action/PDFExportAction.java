@@ -1034,21 +1034,18 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 		PdfPTable layoutResourcesAtAGlanceTable1and2 = new PdfPTable(1);
 		layoutResourcesAtAGlanceTable1and2.setExtendLastRow(false);
-		layoutResourcesAtAGlanceTable1and2.getDefaultCell().setBorder(
-				PdfPCell.NO_BORDER);
-		layoutResourcesAtAGlanceTable1and2
-				.addCell(layoutResourcesAtAGlanceTable1);
-		layoutResourcesAtAGlanceTable1and2
-				.addCell(layoutResourcesAtAGlanceTable2);
+		layoutResourcesAtAGlanceTable1and2.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
+		layoutResourcesAtAGlanceTable1and2.addCell(layoutResourcesAtAGlanceTable1);
+		layoutResourcesAtAGlanceTable1and2.addCell(layoutResourcesAtAGlanceTable2);
 
 		layoutResourcesAtAGlance.addCell(layoutResourcesAtAGlanceTable1and2);
 
 		PdfPTable layoutResourcesAtAGlanceTable3alone = new PdfPTable(1);
-		layoutResourcesAtAGlanceTable3.setExtendLastRow(false);
-		layoutResourcesAtAGlanceTable3alone.getDefaultCell().setBorder(
-				PdfPCell.NO_BORDER);
-		layoutResourcesAtAGlanceTable3alone
-				.addCell(layoutResourcesAtAGlanceTable3);
+		if(layoutResourcesAtAGlanceTable3!=null){
+			layoutResourcesAtAGlanceTable3.setExtendLastRow(false);
+		}		
+		layoutResourcesAtAGlanceTable3alone.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
+		layoutResourcesAtAGlanceTable3alone	.addCell(layoutResourcesAtAGlanceTable3);
 
 		layoutResourcesAtAGlance.addCell(layoutResourcesAtAGlanceTable3alone);
 		layoutCell.addElement(layoutResourcesAtAGlance);

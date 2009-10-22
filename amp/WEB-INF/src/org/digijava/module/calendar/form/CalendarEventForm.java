@@ -376,6 +376,7 @@ public class CalendarEventForm
         selectedEventTypeName=null;
         description = null;
         recurrPeriod = null;
+        typeofOccurrence = null;
 //
 //        organisations=null;
 //        selectedOrganisations=null;

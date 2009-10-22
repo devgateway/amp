@@ -122,7 +122,11 @@ scheduler._click={
 		scheduler.setCurrentView(scheduler.date.add(scheduler._date,1,scheduler._mode));
 	},
 	dhx_cal_today_button:function(){
-		scheduler.setCurrentView(new Date());
+	if(scheduler._type != "ETH"){
+			scheduler.setCurrentView(new Date());
+ 		 }else{
+			scheduler.setCurrentView(scheduler._ethiopian(new Date()));
+		}
 	},
 	dhx_cal_tab:function(){
 		var mode = this.getAttribute("name").split("_")[0];
@@ -343,8 +347,8 @@ scheduler.update_view=function(){
 	this.render_view_data();
 }
 scheduler.setCurrentView=function(date,mode,type,ehtMonth){
-	
-	if (!this.callEvent("onBeforeViewChange",[this._mode,this._date,mode,date])) return;
+
+  	if (!this.callEvent("onBeforeViewChange",[this._mode,this._date,mode,date])) return;
 	//hide old custom view
 	if (this[this._mode+"_view"] && this._mode!=mode)
 		this[this._mode+"_view"](false);
@@ -435,10 +439,7 @@ scheduler._reset_scale=function(){
 					d=this.date.add(d,1,"day");
 					head.innerHTML=this.templates[this._mode+"_scale_date"](d,this._mode); //TODO - move in separate method
 				}
-
-		
 			}else{
-		
 			d=this.date.add(d,25,"day");
 			head.innerHTML=this.templates[this._mode+"_scale_date"](d,this._mode); //TODO - move in separate method
 			
@@ -574,4 +575,42 @@ scheduler._reset_month_scale=function(b,dd,sd,type,ehtMonth){
 	this._max_date=sd;
 	
 	b.innerHTML=html;	
+}
+
+scheduler._ethiopian=function(GC){
+ var DAY=1000*60*60*24;
+ var OFFSET=25680;
+ var mark=0;
+ var EYear=1892;
+
+
+ var UTCVal=Date.UTC(GC.getFullYear(),GC.getMonth(),GC.getDate());
+ var days=OFFSET+(UTCVal/DAY);
+
+
+while (mark==0){
+  if (EYear % 4 ==3){
+    if (days>=366){
+      	days-=366;
+      	EYear++
+     }else mark=1
+  }else{
+		if (days>=365){
+		days-=365;
+		EYear++
+ 	}else mark=1
+  }
+}
+
+if (days==0){
+		EYear-=1;
+		EMonth=13;
+		EDate=5 + ((EYear % 4 ==3)?1:0)
+ }else{
+		EMonth = Math.ceil(days / 30)
+		if (days % 30 ==0)
+		EDate = 30;
+		else EDate=days % 30
+	}
+	return EMonth + "/"+ EDate + "/" + EYear
 }

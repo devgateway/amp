@@ -29,7 +29,7 @@ var help="<digi:trn key='message:msgHelp'>Message Settings Help</digi:trn>"
 	var helpForAdvanceAlerts='<digi:trn jsFriendly="true">This indicates the number of days in advance an Alert will be recieved by a user<br> for all alerts that are time sensitive and for upcoming events.</digi:trn>'
 	var helpForEmailable="<digi:trn jsFriendly="true">Set this to true to allow all alerts to be forwarded to the user\'s email address</digi:trn>"
 	function validate(record,action,minusAccepted){
-		if(action=='save' && (record==null || record=="" || record=="-1")){
+		if(action=='save' && (record==null || record=="" || (minusAccepted==true && record=="-1") )){
 			alert('<digi:trn jsFriendly="true">Please enter data to save</digi:trn>');
 			return false;
 		}

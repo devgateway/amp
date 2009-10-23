@@ -116,8 +116,8 @@ function removeSelLocations(){
 function removeAllLocations(){
   try{
   
-  	var checkedItems = document.getElementById("selLocs");
-  
+  	//var checkedItems = document.getElementsById("selLocs");
+  	var checkedItems = document.aimEditActivityForm.selLocs;
   	if(checkedItems.length > 0){
 	  	for(a=0;a<checkedItems.length;a++){
 	  	checkedItems[a].checked = true;

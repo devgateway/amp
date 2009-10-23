@@ -42,6 +42,19 @@ function quitRnot1(message)
 	return(temp);
 }
 
+function ButtonWrapper(id) {
+	this.id		= id;
+}
+ButtonWrapper.prototype.enable	= function () {
+	var buttonEl			= document.getElementById (this.id);
+	buttonEl.disabled		= false;
+	buttonEl.style.color	= "";
+}
+ButtonWrapper.prototype.disable	= function () {
+	var buttonEl			= document.getElementById (this.id);
+	buttonEl.disabled		= true;
+	buttonEl.style.color	= "lightgray";
+}
 
 
 

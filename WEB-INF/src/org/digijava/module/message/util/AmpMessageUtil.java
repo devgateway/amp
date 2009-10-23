@@ -802,7 +802,7 @@ public class AmpMessageUtil {
         if (pattern == null) {
             pattern = "dd/MM/yyyy";
         }
-        pattern+=" HH:mm";
+        pattern+=" HH:mm a";
         
         SimpleDateFormat formater=new SimpleDateFormat(pattern);
 		String result = formater.format(date);

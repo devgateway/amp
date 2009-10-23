@@ -111,7 +111,8 @@ public class EditOrganisation extends DispatchAction {
         AmpOrganisation organization = DbUtil.getOrganisation(orgId);
         editForm.setName(organization.getName());
         editForm.setAcronym(organization.getAcronym());
-        Long orgTypeId = organization.getOrgTypeId().getAmpOrgTypeId();
+        AmpOrgType orgType = organization.getOrgGrpId().getOrgType();
+        Long orgTypeId =orgType.getAmpOrgTypeId();
         Collection orgGroups = DbUtil.searchForOrganisationGroupByType(orgTypeId);
         if (orgGroups != null) {
             List sortedCol = new ArrayList(orgGroups);
@@ -122,7 +123,6 @@ public class EditOrganisation extends DispatchAction {
             editForm.setAmpOrgGrpId(organization.getOrgGrpId().getAmpOrgGrpId());
         }
         this.putDocumentsInSession(request, organization);
-        AmpOrgType orgType = organization.getOrgTypeId();
         editForm.setAmpOrgTypeId(orgType.getAmpOrgTypeId());
         editForm.setOrgUrl(organization.getOrgUrl());
         editForm.setAddress(organization.getAddress());
@@ -841,7 +841,6 @@ public class EditOrganisation extends DispatchAction {
         organization.setOrgGrpId(DbUtil.getAmpOrgGroup(editForm.getAmpOrgGrpId()));
         organization.setOrgIsoCode(editForm.getOrgIsoCode());
         organization.setOrgCode(editForm.getOrgCode());
-        organization.setOrgTypeId(DbUtil.getAmpOrgType(editForm.getAmpOrgTypeId()));
         organization.setOrgUrl(editForm.getOrgUrl());
         organization.setPrimaryPurpose(editForm.getOrgPrimaryPurpose());
 

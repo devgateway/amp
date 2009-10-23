@@ -36,7 +36,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	 */
 	private String orgTypeCode; // defunct
 	
-	private AmpOrgType orgTypeId;
+	
 	private AmpOrgGroup orgGrpId;
 	private String address;
         @Deprecated
@@ -503,18 +503,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	public void setOrgGrpId(AmpOrgGroup orgGrpId) {
 		this.orgGrpId = orgGrpId;
 	}
-	/**
-	 * @return Returns the orgTypeId.
-	 */
-	public AmpOrgType getOrgTypeId() {
-		return orgTypeId;
-	}
-	/**
-	 * @param orgTypeId The orgTypeId to set.
-	 */
-	public void setOrgTypeId(AmpOrgType orgTypeId) {
-		this.orgTypeId = orgTypeId;
-	}
+	
 	/**
 	 * @return Returns the orgUrl.
 	 */

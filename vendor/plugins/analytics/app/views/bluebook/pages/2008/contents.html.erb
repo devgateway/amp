@@ -9,13 +9,6 @@
 		<td><%= link_to lc_bb(:index, :foreword), bluebook_pages_path(:page_name => "foreword") %></td>
 	</tr>
 	<tr>
-		<td class="sub_title"><%= lc_bb(:index, :eu_retrospective, :title) %></td>
-	</tr>
-	<tr>
-		<td><%= link_to lc_bb(:index, :eu_retrospective, :title),
-					bluebook_pages_path(:page_name => "eu_retrospective") %></td>
-	</tr>
-	<tr>
 		<td class="sub_title"><%= lc_bb(:index, :eu_at_a_glance, :title) %></td>
 	</tr>
 	<tr>
@@ -42,7 +35,18 @@
 		<td><%= link_to lc_bb(:index, :eu_at_a_glance, :eu_aid),
 					bluebook_pages_path(:page_name => "eu_at_a_glance_aid") %></td>
 	</tr>
-	
+	<tr>
+		<td><%= link_to lc_bb(:index, :eu_at_a_glance, :association_agreement),
+					bluebook_pages_path(:page_name => "association_agreement") %></td>
+	</tr>
+<!--
+<tr>
+		<td class="sub_title"><%= lc_bb(:index, :eu_retrospective, :title) %></td>
+	</tr>
+	<tr>
+		<td><%= link_to lc_bb(:index, :eu_retrospective, :title),
+					bluebook_pages_path(:page_name => "eu_retrospective") %></td>
+	</tr>-->
 	<tr>
 		<td class="sub_title"><%= lc_bb(:index, :eu_cooperation, :policy) %></td>
 	</tr>

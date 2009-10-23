@@ -40,7 +40,8 @@ es:
         <p><strong>Responsabilidad</strong></p>
         <p>Los cooperantes son responsables por el mantenimiento y la validación de la información en ODAnic. Cada agencia cooperante en el país selecciona un punto focal para adherir a las guías acordadas localmente y el cronograma de actualización, al tiempoque se siguen las clasificaciones de datos internacional desarrollado por la Comité de Ayuda al Desarrollo (DAC) de la OECD. Entonces, esta información está disponible para todos.</p>
       map_image_link: Presione Mapa para ODAmap
-      bluebook_image_link: Haga Click sobre la imagen para EU Blue Book 2007
+      bluebook_2007_image_link: Haga Click sobre la imagen para EU Blue Book 2007
+      bluebook_2008_image_link: Haga Click sobre la imagen para EU Blue Book 2008
       read_more: Leer más...
       
   user_sessions:

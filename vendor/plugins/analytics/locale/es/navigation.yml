@@ -12,6 +12,7 @@ es:
         consensus: El Consenso Europeo sobre el Desarrollo
         eu_aid: Ayuda de la UE  a Países en desarrollo
         code_of_conduct: Código de Conducta de UE
+        association_agreement: Acuerdo de Asociación
       eu_cooperation:
         title: Cooperación UE
         process: Proceso de Coordinación y Armonización de la UE
@@ -21,6 +22,8 @@ es:
         by_sector_in: Cooperación de UE por Sector CAD en {{year}}
         by_region_in: Cooperación de UE por Departamento en {{year}}
         by_toa_in: Cooperación de UE por modalidad de ayuda en {{year}}, Proyecciones de {{forecasts}}
+      eu_retrospective:
+        title: Retrospectiva
       note:
         title: Nota al Lector
         explanatory_note: Nota de explicación a los perfiles de los donantes

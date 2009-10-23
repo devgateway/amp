@@ -1040,6 +1040,10 @@ table.bluebook {
 	margin-bottom:20px;
 }
 
+table.bluebook ul {
+   font-size:11px;
+}
+
 table.bluebook td.eu_sub_title {
 	background-color:#687EAB;
 	border-bottom:2px solid #FFFFFF;

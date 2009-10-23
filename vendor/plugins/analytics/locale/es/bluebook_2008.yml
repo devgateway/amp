@@ -1,0 +1,483 @@
+es:
+  bluebook:
+      pages:
+        "2008":
+          title: Blue Book UE
+          toc: Contenidos
+          association_agreement:
+            title: Acuerdo de Asociación
+            introduction: Retrospective text
+            text: |
+              <p>Durante la Cuarta Cumbre Unión Europea – América Latina y el Caribe, celebrada en Viena, Austria, en el mes de mayo de 2006, los Jefes de Estado y de Gobierno de la Unión Europea y de América Latina y el Caribe y Centroamérica tomaron la decisión de entablar negociaciones relativas a un Acuerdo de Asociación.<br />
+              El Acuerdo de Asociación, implicaría el establecimiento de compromisos mutuos en tres áreas complementarias: Diálogo Político, Cooperación y el establecimiento de una zona de libre comercio entre la Unión Europea (UE) y los países de Centroamérica (CA).</p>
+              <p><br />
+                El componente del Diálogo Político persigue establecer mecanismos institucionalizados para promover una discusión e intercambio de información –en diferentes instancias- entre la UE y CA sobre cuestiones bilaterales y regionales de interés común que podrían permitir la adopción de posiciones conjuntas en temas de trascendencia internacional. A través de estos mecanismos se busca promover una serie de valores comunes entre ambas regiones, tales como el respeto a los principios democráticos y los derechos humanos fundamentales, la protección del medio ambiente y el fortalecimiento del Estado de Derecho, entre otros.</p>
+              <p><br />
+                Dentro del contexto del Acuerdo de Asociación, el componente de Cooperación busca ir más allá de la ayuda financiera de la UE hacia CA –que ya se encuentra comprometida para el período 2007-2013 hacia los objetivos de promover la cohesión social y la integración regional—y se orientaría a identificar mecanismos concretos a través de los cuales ambas regiones puedan alcanzar los objetivos identificados tanto en el componente de Diálogo Político como en el componente comercial. En este contexto, es importante señalar que la UE ya es uno de las principales fuentes de cooperación de CA</p>
+              <p><br />
+                En el área Comercial, el Acuerdo de Asociación implicaría el establecimiento de una zona de libre comercio entre CA y la UE. En el contexto comercial, CA ha mantenido por mucho tiempo lazos económicos estrechos con Europa, los cuales se han visto beneficiados por el Sistema Generalizado de Preferencias (SGP) de la UE que permite que muchos de los productos centroamericanos ingresen en ese mercado sin pagar aranceles o con aranceles preferenciales. A pesar de ello, otra cantidad significativa de bienes en los cuales CA tiene ventaja competitiva ha estado excluida de esa iniciativa, lo que ha promovido que desde hace varios años los países de la región hayan promovido avanzar en la profundización de la relación comercial a través de la suscripción de un acuerdo de libre comercio.</p>
+              <p><br />
+                Las negociaciones entre la UE y CA se desarrollan en Bruselas y en los países Centroamericanos de manera rotativa. Actualmente, se está planificando la VIII Ronda de Negociaciones, la cual  promete dar avances positivos y significativos. Las negociaciones están llegando a su etapa final, y se prevé la conclusión del Acuerdo de Asociación  en los primeros meses del año 2010. </p>
+          eu_retrospective:
+            title: Retrospectiva
+            introduction: Retrospective text
+          index: # Table of Contents, todo el menú
+              eu_retrospective:
+                title: Retrospectiva
+              foreword: Prefacio
+              eu_at_a_glance: # European Union at a Glance
+                  title: Unión Europea en breve
+                  short: UE en breve
+                  building_europe: 50 años construyendo Europa
+                  member_states: Estados Miembros de la Unión Europea
+                  institutions: Instituciones de la Unión Europea
+                  consensus: El Consenso Europeo sobre el Desarrollo / Política de Desarrollo
+                  consensus_short: El Consenso Europeo sobre el Desarrollo
+                  eu_aid: Ayuda de la Unión Europea a Países en desarrollo
+                  eu_aid_short: Ayuda de la UE a Países en desarrollo
+                  code_of_conduct: Código de Conducta de la UE sobre la complementariedad y división Laboral en la Política de Desarrollo
+                  code_of_conduct_short: Código de Conducta de UE
+                  association_agreement: Acuerdo de Asociación
+              eu_cooperation:
+                  title: Cooperación UE
+                  policy: Cooperación de la UE en Nicaragua – Orientaciones Politicas
+                  process: Proceso de coordinación, armonización y alineación de la UE en Nicaragua 
+                  process_short: Proceso de Coordinación y Armonización de la UE
+                  facts: Cooperación de UE en Nicaragua – Datos y Cifras
+                  achievement_in: Logros de la Cooperacion UE en {{year}}
+                  forecasts_for: Proyecciones de la Cooperación UE para {{year}}
+                  achievements: Logros de la Cooperación UE
+                  forecasts: Proyecciones de la Cooperación UE
+                  trend: Tendencia de la Cooperación UE de {{from}} para {{to}}
+                  by_sector_in: Cooperación de UE por Sector CAD en {{year}}
+                  by_region_in: Cooperación de UE por Departamento en {{year}}
+                  by_toa_in: Cooperación de UE por modalidad de ayuda en {{year}}, Proyecciones de {{forecasts}}
+                  by_sector: Cooperación de UE por Sector CAD
+                  by_sector_bar_subtitle: Desembolsos de AOD de la UE por Sector CAD Sector en {{year}}
+                  by_region: Cooperación de UE por Departamento
+                  by_toa: Cooperación de UE por modalidad de ayuda
+                  in_percent_by_toa: Cooperación de UE en % por modalidad de ayuda en {{year}}
+                  in_percent_by_toa_subtitle: Desembolsos de ODA UE en % por modalidad de ayuda en el {{year}} por cada Estado Miembro de la UE
+              profiles:
+                  title: Perfiles donantes
+
+              note:
+                  title: Nota al Lector
+                  explanatory_note: Nota de Explicación a los perfiles de los donantes
+          foreword:
+              title: Prefacio
+              content: |
+                <p>Gracias a la recepción muy positiva del primer Blue Book de la Asistencia Oficial para el Desarrollo de la Unión Europea para Nicaragua, nos alegra presentar la versión nueva y mejorada para el año 2008. Al igual que la versión anterior el Blue Book detalla el valor y la composición de toda la cooperación al desarrollo de la Unión Europea (UE) en Nicaragua, pero contiene también varios cambios que hacen más simple su utilización y visualmente más atractivo. Muchos de estos cambios fueron realizados siguiendo las observaciones de gran utilidad de los cooperantes de la UE durante las preparaciones para la actualización 2008 del Blue Book y la herramienta relacionada ODAnic.</p>
+                <br/><p>El Blue Book cumple con varias necesidades de los cooperantes de la UE incluyendo el deseo de una mayor transparencia y visibilidad para los esfuerzos conjuntos de apoyo al desarrollo en Nicaragua. La primera versión también impulsó al Grupo de Trabajo de la UE responsable de progresar en la implementación del Código de Conducta de la UE en la Complementariedad y División del Trabajo en la Política de Desarrollo. Esto está descrito con más detalle en la página 10.</p>
+                <br/><p>El Blue Book resalta algunas de las similitudes y diferencias en las herramientas de desarrollo, los procesos y los enfoques utilizados por la Comisión Europea (CE) y los once estados miembros (EEMM) presentes en el país. Un ejemplo de esto es la disponibilidad de datos de programas y proyectos actualizados. Para algunos cooperantes de la UE con un enfoque de administración descentralizado, los datos están fácilmente disponibles en el país mientras que para otros esa información es generalmente manejada por las Sedes y por lo tanto, existen demoras substanciales en su obtención. Esto en si mismo se presentó como uno de los desafíos más importantes en la compilación de información completa y precisa para el Blue Book de 2008 durante el primer cuarto del año, como se había planeado originalmente. Las estadísticas contenidas en el Blue Book son provisionales y por esa razón recomendamos a los lectores que visiten regularmente el sitio ODAnic (ver enlace más abajo) para obtener las últimas actualizaciones de datos disponibles de los cooperantes de la UE. En una nota muy positiva, nos satisface anunciar que este año ODAnic contiene información de ayuda adicional de nueve cooperantes que no pertenecen a la UE, tanto bilaterales como multilaterales.</p>
+                <br/><p>Durante el 3er foro de Alto Nivel en la Efectividad de la Ayuda en Accra, Ghana en Septiembre pasado, muchos cooperantes acordaron dar soporte a la nueva Iniciativa Internacional de Transparencia en la Ayuda (IATI) que busca mejorar la calidad, la disponibilidad y por lo tanto la transparencia de la información sobre la ayuda. Con esto en mente, se solicitó a los cooperantes que se acuerden estándares, formato y conducta comunes para el reporte de la ayuda para el año 2010. Tenemos la suerte que Development Gateway, los consultores principales para el Blue Book 2008 de Nicaragua, están ayudando a guiar este proceso. Como resultado, nuestros esfuerzos en Nicaragua deberán tener un impacto más amplio, debido a que la experiencia y las lecciones de ODAnic nos ayudan a informar para el dialogo global de trasparencia en la ayuda.</p>
+                <br/><p>Queremos agradecer a todos aquellos colegas de la Comisión Europea y Países Miembros que han contribuído a la actualización del Blue Book 2008 y a ODAnic. También queremos agradecer a los cooperantes de la UE en Vietnam que nuevamente han provisto material para esta versión. Finalmente, queremos agradecer a Development Gateway y Xolo Systems por sus innovadoras recomendaciones y sus aportes técnicos.</p>
+                <br/><p>Las copias adicionales de este documento pueden ser descargadas junto con datos más desagregados de la ayuda de la UE a Nicaragua visitando http://nic.odadata.eu/</p>
+                <br/><p>Hasta el año próximo,</p><br/><br/>
+              martin_sigsub: Representante del DFID para Centro América
+              francesca_sigsub: Jefe de la delegación de la CE para América Central y Panamá
+              mendel_sigsub: Jefe de la delegación de la CE para América Central y Panamá
+
+          eu_at_a_glance_50_years:
+              title: 50 años construyendo Europa
+              introduction: |
+                  El 2007 marca el 50º aniversario de la firma del Tratado de Roma, la carta en que se fundó lo que ha venido a ser la Unión Europea.  Durante 50 años, los miembros de la UE han gozado de un ambiente de paz, prosperidad y estabilidad sin precedentes y han asumido su integración a niveles hasta ahora nunca vistos.
+              content_left: |
+                  <p>
+                  El 25 de marzo de 1957, fueron firmados dos tratados en Roma que dieron origen a la Comunidad Económica Europea (CEE) y a la Comunidad Europea de la Energía Atómica (EURATOM); ambos son conocidos en conjunto como los “Tratados de Roma”.  En el preámbulo, los signatarios del Tratado declaran: “estar resueltos a sentar las bases de una unión cada vez más estrecha entre los pueblos europeos”.  El tratado entró en vigencia el 1º de enero de 1958.</p> 
+                  <p> La nueva organización supranacional comenzó como una unión aduanera. En consecuencia, la CEE fue conocida coloquialmente como “Mercado Común”.  Los países miembros acordaron desmantelar todas las barreras tarifarias durante un período de transición de 12 años y establecer a la vez tarifas comunes para todos los productos provenientes de terceros países.</p> 
+                  <p> El “Mercado Común” se fue desarrollando gradualmente hasta convertirse en un Único Mercado, facilitando la libre circulación no solamente de bienes, si no también de servicios, de gente y de dinero a través de los límites nacionales. El Euro se ha convertido en la única moneda para muchos europeos. Los Europeos actúan cada vez más unidos en áreas que trascienden el terreno económico, tales como las relaciones exteriores, defensa y seguridad, justicia, protección ambiental y muchos otros campos. </p>
+                  <p> Los Tratados de Roma y los 50 años que les siguieron significaron el triunfo de un enfoque realista y gradual para la construcción de la UE. Se arrancó con ello un proceso en el cual la progresiva integración económica allanó el camino hacia un objetivo de largo plazo: el de una unión comprensiva de los países y pueblos de Europa.</p>
+                
+              content_right: |
+                  <p><b>Los Doce Pasos Históricos para la integración Europea</b></p>
+                  <p>1951 Se establece la Comunidad Europea de Carbón y el Acero por los seis miembros fundadores (Bélgica, Francia, Alemania, Italia, Luxemburgo, Países Bajos)</p>
+                  <p>1957 El  Tratado de  Roma  da  por establecida la Comunidad  Económica  Europea (CEE) o mercado común y la Comunidad Europea de Energía Atómica</p>
+                  <p>1973 La Comunidad se expande a nueve Estados Miembros con la adhesión de Dinamarca, Irlanda y Reino Unido</p>
+                  <p>1979 Las primeras elecciones directas al Parlamento Europeo</p>
+                  <p>1981 La primera ampliación Mediterránea con la adhesión de Grecia</p>
+                  <p>1986 España y Portugal entran a la UE elevando los miembros a 12 países</p>
+                  <p>1993 Se establece el mercado único y sus cuatro libertades que son: libre movimiento de bienes, servicios, personas y dinero</p>
+                  <p>1993 El Tratado de Maastrich deja establecida la Unión Europea. Es un hito importante de la Unión Europea, que fijó normas para la futura moneda única, para las políticas de seguridad y extranjería y para una cooperación más cercana en justicia y asuntos internos</p>
+                  <p>1995 La UE se amplía a 15 miembros con la adhesión de Austria, Finlandia y Suecia</p>
+                  <p>2002 Los billetes y las monedas del Euro son introducidas en 12 estados miembros</p>
+                  <p>2004 Diez países más se suman a la Unión: Chipre, República Checa, Estonia, Hungría, Letonia, Lituania, Malta, Polonia, Eslovaquia, Eslovenia</p>
+                  <p>2007 Bulgaria y Rumania se suman a la Unión Europea, llegando a 27 el número de estados miembros. Croacia, la anterior república yugoslava de Macedonia y Turquía también son candidatas como futuros miembros</p>
+              treaties_image_sub: La firma de los Tratados de Roma el 25 de Marzo de 1957
+              europe_day_image_sub: |
+                  <br/>El 9 de mayo de 1950, el entonces ministro de Asuntos Exteriores francés, Robert Schuman, expuso por primera vez en público las ideas que dieron lugar a la Unión Europea. Por ello, el 9 de mayo celebramos el cumpleaños de la UE
+
+          eu_at_a_glance_member_states:
+              title: Estados Miembros de la Unión Europea
+              details:
+                  austria: |
+                      Sistema Político: República Federal<br>
+                      Capital: Viena <br>
+                      Área Total: 83 870 km&sup2; <br>
+                      Población: 8.3 millones <br>
+                      Moneda: Euro <br>
+                      Lengua: Alemán <br>
+                  belgium: |
+                      Sistema Político: Monarquía Institucional<br>
+                      Capital: Bruselas <br>
+                      Área Total: 30 528 km&sup2; <br>
+                      Población: 10.7 millones <br>
+                      Moneda: Euro <br>
+                      Lengua: Francés, Holandés, Alemán <br>
+                  bulgaria: |
+                      Sistema Político: República <br>
+                      Capital: Sofía <br>
+                      Área Total: 111 910 km&sup2; <br>
+                      Población: 7.6 millones <br>
+                      Moneda: Lev <br>
+                      Lengua: Búlgaro<br>
+                  cyprus: |
+                      Sistema Político: República <br>
+                      Capital: Nicosia <br>
+                      Área Total: 9 250 km&sup2; <br>
+                      Población: 0.8 millones <br>
+                      Moneda: Euro <br>
+                      Lengua: Griego, Inglés <br>
+                  czech_republic: |
+                      Sistema Político: República <br>
+                      Capital: Praga <br>
+                      Área Total: 78 866 km&sup2; <br>
+                      Población: 10.3 millones <br>
+                      Moneda: Corona Checa <br>
+                      Lengua: Checo <br>
+                  denmark: |
+                      Sistema Político: Monarquía Constitucional <br>
+                      Capital: Copenhague <br>
+                      Área Total: 43 094 km&sup2; <br>
+                      Población: 5.4 millones <br>
+                      Moneda: Corona Danesa <br>
+                      Lengua: Danés <br>
+                  estonia: |
+                      Sistema Político: República <br>
+                      Capital: Tallin <br>
+                      Área Total: 45 000 km&sup2; <br>
+                      Población: 1.4 millones <br>
+                      Moneda: Corona Estoniana <br>
+                      Lengua: Estoniano <br>
+                  finland: |
+                      Sistema Político: República <br>
+                      Capital: Helsinki <br>
+                      Área Total: 338 000 km&sup2; <br>
+                      Población: 5.3 millones <br>
+                      Moneda: Euro <br>
+                      Lengua: Finlandés, Sueco <br>
+                  france: |
+                      Sistema Político: República <br>
+                      Capital: París <br>
+                      Área Total: 550 000 km&sup2; <br>
+                      Población: 63.7 millones <br>
+                      Moneda: Euro <br>
+                      Lengua: Francés <br>
+                  germany: |
+                      Sistema Político: República Federal <br>
+                      Capital: Berlín <br>
+                      Área Total: 356 854 km&sup2; <br>
+                      Población: 82.5 millones <br>
+                      Moneda: Euro <br>
+                      Lengua: Alemán <br>
+                  greece: |
+                      Sistema Político: República <br>
+                      Capital: Atenas <br>
+                      Área Total: 131 957 km&sup2; <br>
+                      Población: 11.2 millones <br>
+                      Moneda: Euro <br>
+                      Lengua: Griego <br>
+                  hungary: |
+                      Sistema Político: República <br>
+                      Capital: Budapest <br>
+                      Área Total: 93 000 km&sup2; <br>
+                      Población: 10.1 millones <br>
+                      Moneda: Florín <br>
+                      Lengua: Húngaro <br>
+                  ireland: |
+                      Sistema Político: República <br>
+                      Capital: Dublín <br>
+                      Área Total: 70 000 km&sup2; <br>
+                      Población: 4 millones <br>
+                      Moneda: Euro <br>
+                      Lengua: Inglés, Irlandés  <br>
+                  italy: |
+                      Sistema Político: República <br>
+                      Capital: Roma <br>
+                      Área Total: 301 263 km&sup2; <br>
+                      Población: 57.3 millones <br>
+                      Moneda: Euro <br>
+                      Lengua: Italiano <br>
+                  latvia: |
+                      Sistema Político: República <br>
+                      Capital: Riga <br>
+                      Área Total: 65 000 km&sup2; <br>
+                      Población: 2.3 millones <br>
+                      Moneda: Lat <br>
+                      Lengua: Latvio <br>
+                  lithuania: |
+                      Sistema Político: República <br>
+                      Capital: Vilna <br>
+                      Área Total: 65 000 km&sup2; <br>
+                      Población: 3.4 millones <br>
+                      Moneda: Litas <br>
+                      Lengua: Lituano <br>
+                  luxembourg: |
+                      Sistema Político: Monarquía Constitucional <br>
+                      Capital: Luxemburgo <br>
+                      Área Total: 2 586 km&sup2; <br>
+                      Población: 0.5 millones <br>
+                      Moneda: Euro <br>
+                      Lengua: Luxemburgués, Francés, Alemán <br>
+                  malta: |
+                      Sistema Político: República <br>
+                      Capital: Valeta <br>
+                      Área Total: 316 km&sup2; <br>
+                      Población: 0.4 millones <br>
+                      Moneda: Euro <br>
+                      Lengua: Maltés, Inglés <br>
+                  netherlands: |
+                      Sistema Político: Monarquía Constitucional <br>
+                      Capital: Amsterdam <br>
+                      Área Total: 41 526 km&sup2; <br>
+                      Población: 16.4 millones <br>
+                      Moneda: Euro <br>
+                      Lengua: Holandés <br>
+                  poland: |
+                      Sistema Político: República <br>
+                      Capital: Varsovia <br>
+                      Área Total: 312 679 km&sup2; <br>
+                      Población: 38.1 millones <br>
+                      Moneda: Zloty <br>
+                      Lengua: Polaco <br>
+                  portugal: |
+                      Sistema Político: República <br>
+                      Capital: Lisboa <br>
+                      Área Total: 92 072 km&sup2; <br>
+                      Población: 10.4 millones <br>
+                      Moneda: Euro <br>
+                      Lengua: Portugués <br>
+                  romania: |
+                      Sistema Político: República <br>
+                      Capital: Bucarest <br>
+                      Área Total: 237 500 km&sup2; <br>
+                      Población: 21.5 millones <br>
+                      Moneda: Leu <br>
+                      Lengua: Rumano <br>
+                  slovakia: |
+                      Sistema Político: República <br>
+                      Capital: Bratislava <br>
+                      Área Total: 48 845 km&sup2; <br>
+                      Población: 5.4 millones <br>
+                      Moneda: Euro <br>
+                      Lengua: Eslovaco <br>
+                  slovenia: |
+                      Sistema Político: República <br>
+                      Capital: Ljubljana <br>
+                      Área Total: 20 273 km&sup2; <br>
+                      Población: 2 millones <br>
+                      Moneda: Euro <br>
+                      Lengua: Esloveno <br>
+                  spain: |
+                      Sistema Político: Monarquía Constitucional <br>
+                      Capital: Madrid <br>
+                      Área Total: 504 782 km&sup2; <br>
+                      Población: 45.3 millones <br>
+                      Moneda: Euro <br>
+                      Lengua: Español <br>
+                  sweden: |
+                      Sistema Político: Monarquía Constitucional <br>
+                      Capital: Estocolmo <br>
+                      Área Total: 449 964 km&sup2; <br>
+                      Población: 9.2 millones <br>
+                      Moneda: Corona Sueca <br>
+                      Lengua: Sueco <br>
+                  uk: |
+                      Sistema Político: Monarquía Constitucional <br>
+                      Capital: Londres <br>
+                      Área Total: 244 820 km&sup2; <br>
+                      Población: 60.4 millones <br>
+                      Moneda: Libra Esterlina <br>
+                      Lengua: Inglés <br>
+
+          eu_at_a_glance_institutions:
+              title: Instituciones de la Unión Europea
+              summary: |
+                  La Unión Europea es más que una confederación de países, aunque no es tampoco un estado federal.
+                  Su sistema político es históricamente único y ha evolucionado costantemente por más de 50 años. 
+                  La política y la legislación de la Unión Europea son el resultado de decisiones tomadas por las instituciones de la UE descritas a continuación.
+              council: Consejo de la Unión Europea
+              committee: Comité Económico Social Europeo (CESE)
+              committee_contents: |
+                  El CESE es un cuerpo asesor que representa a los diferentes grupos de intereses económicos y sociales que a la vez constituyen la “sociedad civil organizada”. Sus miembros son nombrados por el Consejo para un período de cuatro años. <br /> <center><a href="http://eesc.europa.eu">http://eesc.europa.eu</a></center>
+              committee_of_regions: Comité de las Regiones (CdR)
+              cor_contents: |
+                  El CdR es un cuerpo asesor que representa a los gobiernos 
+                  locales y regionales y necesita ser consultado por el Consejo y 
+                  la Comisión respecto a todos aquellos aspectos considerados 
+                  relevantes para las regiones. Sus miembros son nombrados 
+                  <br /> <center><a href="http://www.cor.europa.eu">http://www.cor.europa.eu</a></center>
+              central_bank: Banco Central Europeo (ECB) 
+              ecb_contents: |
+                  El BCE, con sede en Frankfurt, es responsable de administrar 
+                  el Euro y las políticas monetarias de la UE, las cuales son 
+                  manejadas en estrecha cooperación con los bancos centrales 
+                  de los Estados Miembros de la UE.
+                  <br /> <center><a href="http://www.ecb.eu">http://www.ecb.eu</a></center>
+              investment_bank: Banco Europeo de Inversiones (BEI)
+              eib_contents: |
+                  El BEI con sede en Luxemburgo, provee de préstamos y garantías 
+                  para ayudar aquellas regiones de la UE menos desarrolladas y 
+                  para hacer más competitivos los negocios.
+                  <br /> <center><a href="http://www.eib.org">http://www.eib.org</a></center>
+              council_contents: |
+                  El Consejo de la Unión Europea representa a los Estados 
+                  Miembros. Es el principal cuerpo de legislación y de 
+                  toma de decisiones de la UE. Su función es proveer a 
+                  la UE de elementos políticos claves. La presidencia del 
+                  Consejo es ocupada por un período de seis meses en 
+                  turnos alternos de los Estados Miembros de la UE.
+                  <br /> <center><a href="http://www.consilium.europa.eu">http://www.consilium.europa.eu</a></center>
+              ec_contents: |
+                  La CE representa los intereses comunes de la UE. Es 
+                  su principal cuerpo ejecutivo y tiene el derecho de 
+                  proponer leyes y asegurar que las políticas de la UE 
+                  se implementen correctamente. Los miembros de la CE 
+                  son elegidos para un período de cinco años, sujetos 
+                  a aprobación por parte del Parlamento Europeo. La CE 
+                  tiene su sede en Bruselas.
+                  <br /> <center><a href="http://ec.europa.eu">http://ec.europa.eu</a></center>
+              ep_contents: |
+                  El PE es el cuerpo electo para representar a los ciudadanos Europeos. 
+                  Comparte poderes de legislación y presupuestación con el Consejo de 
+                  la Unión Europea. Desde 1979, los miembros del PE son elegidos 
+                  de manera directa a través del sufragio universal, cada cinco años. 
+                  Normalmente mantiene sus sesiones plenarias.
+                  <br /> <center><a href="http://www.europarl.europa.eu">http://www.europarl.europa.eu</a></center>
+              court_of_justice: Tribunal de Justicia Europeo (TdJ)
+              court_of_auditors: Tribunal de Cuentas (TdC)
+              coj_contents: |
+                  El rol del TdJ es asegurar el cumplimiento de la ley de 
+                  la UE y la interpretación y aplicación correctas de los 
+                  Tratados. Está ubicado en Luxemburgo y conformado por 
+                  un juez de cada país de la UE, asistidos cada uno por ocho 
+                  abogados generales.
+                  <br /> <center><a href="http://curia.europa.eu">http://curia.europa.eu</a></center>
+              coa_contents: |
+                  El TdC asegura que los gastos de la UE sean efectuados 
+                  de forma regular y de acuerdo a la ley y que el 
+                  presupuesto de la UE sea bien administrado. Está ubicado 
+                  en Luxemburgo y está compuesto de un miembro de cada 
+                  país de la UE, elegido por un período de seis años.  
+                  <br /> <center><a href="http://eca.europa.eu">http://eca.europa.eu</a></center>
+          eu_at_a_glance_consensus_on_development:
+              title:  El Consenso Europeo sobre el Desarrollo
+              title_long:  El Consenso Europeo sobre el Desarrollo
+              summary: |
+                La política Europea para el desarrollo ha sido definida formalmente en el “Consenso Europeo para el Desarrollo”. Esta declaración, adoptada por el Consejo, el Parlamento y la Comisión Europea en Diciembre 2005, refleja la voluntad de la UE de contribuir decisivamente a la erradicación de la pobreza en el mundo. La declaración le proporciona a la UE una visión común sobre el desarrollo y establece las normas para conducir la implementación de esta visión al nivel de toda la Comunidad Europea. Para fortalecer la efectividad del total de resultados en cuestión de desarrollo y el impacto en la reducción de la pobreza, el Consejo adoptó en Mayo del 2007 el “Código de Conducta Europeo sobre la Complementariedad y División del Trabajo en la política de Desarrollo”. Este Código de Conducta presenta principios operacionales relacionados con la complementariedad en la cooperación al desarrollo para los cooperantes de la UE y apunta a reducir así los costos transaccionales en los países socios.
+              summary2: |
+              vision: La Visión Europea de Desarrollo
+              vision_contents_p1: |
+                <p>La Declaración establece objetivos comunes que dirigen las actividades de cooperación al desarrollo de la UE. El objetivo primario es la erradicación de la pobreza en el contexto del desarrollo sostenible, alineado con la agenda internacional, los Objetivos de Desarrollo del Milenio (ODM) y otros objetivos como los derechos humanos y buena gobernabilidad.</p>
+                <p><br />
+                La cooperación al desarrollo de la UE promoverá valores comunes y un multilateralismo efectivo. Estos valores comunes incluyen: respeto a los derechos humanos, libertades fundamentales, paz, democracia, buena gobernabilidad, equidad de género, estado de derecho, solidaridad y justicia.</p>
+                <p><br />
+                La UE está comprometida a fijar principios comunes para la cooperación al desarrollo como son: implicación y asociación, dialogo político a fondo, participación de la sociedad civil, equidad de género y un compromiso continuo orientado a prevenir la fragilidad del estado.</p>
+                <p><br />
+                La UE está comprometida a incrementar los presupuestos dedicados a la ayuda en 0.7% del Producto Interno Bruto para el 2015 manejando una meta intermedia de 0.56% para el 2010. La UE proveerá también ayuda más eficaz mediante la implementación y el seguimiento de sus compromisos a favor de la eficacia de la ayuda en todos los países en vía de desarrollo, fijando objetivos concretos para el 2010. Donde las circunstancias lo permitan, debe incrementarse el uso de financiamiento para apoyo presupuestario general y sectorial. Donde sea necesario, debe otorgarse reducción de la deuda y se promoverá la disponibilidad y liberación de más ayuda. </p>
+                <p><br />
+                La UE fomentará además la coordinación, la armonización y el alineamiento entre cooperantes. La UE asumió cuatro compromisos adicionales con la Declaración de París: toda la capacidad para dar asistencia debe ser provista a través de programas coordinados que usen cada vez más los acuerdos realizados por múltiples cooperantes; el 50% de la asistencia de gobierno a gobierno es canalizada a través de los sistemas propios del país, incluyendo el incremento de la asistencia financiera de apoyo al presupuesto o enfoques sectoriales; no se establecen nuevas Unidades Manejadoras de Programa; se reduce al 50% el número de misiones no coordinadas.</p>
+                <p><br />
+                La UE además promoverá la coherencia de las políticas a favor del desarrollo y asegurará que otras políticas que no son de desarrollo pero que pueden afectar el desarrollo de los países, tales como comercio, seguridad y migración, contribuyan con los esfuerzos de los países socios para lograr los ODM. </p>
+              vision_contents_p2: |
+              vision_contents_p3: |
+              vision_contents_p4: |
+              vision_contents_p5: |
+              policy:  La Política de Desarrollo de la Comunidad Europea
+              policy_contents_p1: |
+                  La política de la Comunidad en este campo debe ser complementaria a las políticas de los Estados Miembros. Su valor añadido radica en su habilidad y presencia a escala mundial, el rol que juega en el fomento de la coherencia entre las políticas y las mejores prácticas, en que facilita la coordinación y la armonización, el apoyo a la democracia, los derechos humanos, la buena gobernabilidad y el respeto al Derecho internacional, y promueve la participación de la sociedad civil y la solidaridad Norte-Sur.
+              policy_contents_p2: |
+                  La Comunidad usará los instrumentos más eficaces que estén disponibles: favorecerá un enfoque diferenciado basado en las necesidades, las prioridades y las fortalezas de los países interesados. La cooperación para el desarrollo es un elemento de primer orden dentro de un conjunto más amplio de acciones externas que deben ser coherentes y complementarias.
+              policy_contents_p3: |
+                  La Comunidad concentrará sus actividades en las siguientes nueve áreas: comercio e integración regional; medioambiente y manejo sostenible de los recursos naturales, infraestructura, comunicaciones y transporte; agua y energía; desarrollo rural, planificación territorial, seguridad agrícola y alimentaria; gobernabilidad, democracia, derechos humanos y apoyo a reformas económicas e institucionales; prevención de conflictos y del debilitamiento del estado; desarrollo humano y cohesión social y empleo.
+              policy_contents_p4: |
+                  La Comunidad fortalecerá la incorporación e integración de ciertos temas de atención transversal que afecten principios generales aplicables a cualquier iniciativa y que requieran esfuerzos multisectoriales tales como: democracia, buena gobernabilidad, derechos humanos, derechos de la niñez y los pueblos indígenas, igualdad de género, sostenibilidad medioambiental y lucha contra el VIH/SIDA.
+              policy_contents_p5: |
+                  Las modalidades de ayuda entregada deberán adaptarse a las necesidades y al contexto de cada país en particular. Donde las condiciones lo permitan, en materia de modalidades de ayuda, se dará preferencia al apoyo presupuestario. La Comunidad usará un enfoque basado en indicadores de resultado y de desempeño. La mayoría de la ayuda de la Comunidad seguirá proporcionándose en forma de subvenciones, lo cual es un enfoque especialmente adecuado para los países más pobres y para aquellos que disponen de una capacidad de reembolso o de pago limitada.
+                  <br/>La reforma de la ayuda exterior lanzada por la Comisión en el año 2000, ha hecho posible mejorar la asistencia de la Comunidad y la calidad de la ayuda proporcionada. Además, las mejoras seguirán realizándose en áreas como por ejemplo los sistemas de información y se procederá a desconcentrar en mayor medida hacia las delegaciones.
+          eu_at_a_glance_aid:
+              title: EU Aid to Developing Countries
+              title_long: European Union Aid to Developing Countries
+              image_source: |
+                  Source: IDS Online / OECD/DAC, <a href = "http://stats.oecd.org/WBOS/" target="_default">http://stats.oecd.org/WBOS/</a>
+
+          eu_at_a_glance_code_of_conduct:
+              title: Código de Conducta de la UE
+              title_long: El Código de Conducta Europeo sobre la Complementariedad y la División del Trabajo en Desarrollo
+              summary: |
+                  El Código de Conducta guía la política y las acciones de los Estados Miembros y la Comisión, proponiendo medidas concretas para mejorar la complementariedad y la división del trabajo entre los cooperantes de la UE.
+              general_principles:  |
+              general_principles_contents: |
+                <p>
+                “Complementariedad” se define como la división optima del trabajo entre varios actores a fin de optimizar el uso de los recursos humanos y financieros. Ello incluye coordinación y especialización en áreas donde cada cooperante puede agregar valor. Complementariedad puede ser:<br />
+                <ul>
+                <li>
+                dentro del país, por la representación excesiva de cooperantes en ciertos sectores “atractivos” mientras que en otros -no tan importantes- permanecen sub financiados;</li>
+                <li>internacional, por la ampliación de la brecha entre favoritos de la ayuda y huérfanos de la ayuda;</li>
+                  <li>intersectorial, para sacar la máxima ventaja comparativa de las capacidades y conocimientos de cada Estado Miembro de la UE y asegurar los sectores/temas priorizados por la UE como un todo;</li>
+                  <li>vertical, entre las iniciativas nacionales, regionales e internacionalesentre formas e instrumentos de ayuda, para encontrar el balance más apropiado entre los instrumentos de distribución de la ayuda. El Código de Conducta está inmerso en los principios de implicación o apropiación, alineamiento, armonización y gestión de resultados y mutua rendición de cuentas de la Declaración de París sobre la Efectividad de la Ayuda, así como también sobre los compromisos fijados por el Consenso Europeo sobre el Desarrollo.</li>
+
+                </ul>
+                </p>
+              guiding_principles: |
+              guiding_principles_contents: |
+                El Código es un documento dinámico que establece principios y objetivos orientados a que los cooperantes de la UE se esfuercen por trabajar progresivamente y sobre una base voluntaria, flexible y autoregulada. Invita a otros cooperantes a comprometerse a sí mismos a cumplirlo y a basar sus actividades también en principios similares a estos.
+                <br/>Dado que el país socio en el que tiene la responsabilidad de coordinar a los cooperantes, los cooperantes de la UE se han comprometido a fomentar y apoyar al país socio al asumir esta responsabilidad.
+              sector_of_concentration_def: |
+              sector_of_concentration_def2: |
+
+
+          eu_at_a_glance_h_and_a_process:
+              title: EU Coordination and Harmonisation Process
+              title_long: The EU Coordination, Harmonisation and Alignment Process in Nicaragua
+              overview_p1: |
+                <p><strong>2008 – Un año significativo</strong></p><br/>
+                <p>  El año 2008 fue un año ocupado y muy significativo para la coordinación de cooperantes.  En abril, el sondeo OECD-DAC sobre el monitoreo de los Indicadores de París, en el cual participaron 22 cooperantes y el gobierno de Nicaragua y en Septiembre, el Tercer foro de Alto Nivel en Ayuda para el Desarrollo tuvo lugar en Accra, Ghana. Los ministros de los países en desarrollo y los países cooperantes responsables de la promoción del desarrollo, junto con los directores de instituciones multilaterales y bilaterales de desarrollo, suscribieron la siguiente declaración en Accra, Ghana, el 4 de septiembre de 2008, con el objetivo de acelerar y profundizar la aplicación de la Declaración de París sobre la Eficacia de la Ayuda (2 de marzo de 2005).  Entre otros, el AAA hace especial énfasis en el papel y la importancia de todos los socios para el desarrollo y particularmente las organizaciones de la sociedad civil nacionales e internacionales.  Como resultado, los cooperantes han incrementado lazos más fuertes y un diálogo más regular con la sociedad civil organizada en Nicaragua para poder asegurar que la agenda de eficacia de ayuda sea inclusiva y pertinente.</p>
+                <br/><p>La coordinación de la ayuda permanece como una tarea compleja y formidable asignada a un gran número de cooperantes en Nicaragua (reportados más de 40) y el alto volumen anual de AOD, sin mencionar los segundos indicadores más bajos de desarrollo en la región así como el ámbito político y económico cambiante que representan retos considerables para el éxito potencial de cualquier iniciativa de armonización y alineamiento (A&amp;A). Nicaragua continua siendo un país prioritario para muchos cooperantes de la UE y es altamente dependiente de la cooperación externa para poder alcanzar sus metas de desarrollo.</p>
+                <br/><p>Junto a la Comisión Europea, se encuentran actualmente 11 Estados Miembros con entidades de cooperación con sede en Nicaragua (Austria, Dinamarca, Finlandia, Francia, Alemania, Italia, Países Bajos, Luxemburgo, España, Suecia, Reino Unido); esta fuerza combinada es el mayor contribuyente (cooperante) neto de AOD a Nicaragua, en términos de donaciones y por lo tanto cualquier iniciativa liderada por la UE tiene el potencial de impactar sustancialmente al medio de ayuda local.  Los cooperantes de la UE están trabajando de cerca y en colaboración con los cooperantes no UE y el gobierno de Nicaragua y con otros socios para el desarrollo con el objetivo de definir prioridades estratégicas y planes operacionales para A&amp;A el año 2009 y posterior. <br />
+                </p>
+              overview_p2: |
+                <br/><p><strong>Perspectivas para Armonización y Alineamiento en 2009 y posterior<br />
+                  </strong></p>
+                <br/><p><strong>La Adopción de Nicaragua de un Nuevo Plan Nacional para la Armonización, Alineamiento y Apropiación  2009-2011<br />
+                </strong></p>
+                <p>Junto al gobierno de Nicaragua, los actores involucrados del grupo técnico de A&amp;A espera desarrollar y adoptar un Plan de Acción para el período 2009-2011 el cual tendrá mayor énfasis en los tres ejes principales de armonización, alineamiento y apropiación del país en mantenerse con el espíritu de la Declaración de París e incluirá objetivos planteados, acciones específicas, resultados esperados, indicadores de alcance y plazos a completarse en un corto, mediano y largo plazo.  El plan anterior 2005-2007 experimentó una guía cuidadosa y las recomendaciones y lecciones aprendidas serán incluidas en el Nuevo Plan de Acción.</p>
+                <p><br/><strong>Implementación del Código de Conducta de la UE en Complementariedad y División del Trabajo en Políticas de Desarrollo</strong><br />
+                Adoptado en Mayo del 2007, el Código de Conducta de  la UE representa probablemente uno de los más grandes retos en materia de coordinación para los cooperantes de la UE en Nicaragua en los años recientes.  El código estipula que donde sea posible, los cooperantes de la UE deberían restringir su presencia en un máximo de tres áreas prioritarias, deben poner atención a la distribución entre sectores y dirigirse a abordar los sectores más vulnerables que tienen importancia nacional.  Con el objetivo de definir el estatus quo e identificar los indicadores de base, los cooperantes de la UE presentes en Nicaragua llenaron un sondeo sobre los Principios Rectores en 2008 y subsecuentemente formaron un grupo de trabajo específico con el objetivo de adelantarse a los resultados.  Todos los cooperantes de la UE coinciden en la necesidad de definir un Plan de Acción para la Implementación y la puesta en práctica del CdC en Nicaragua si hay oportunidad de hacer cambios o progresar en este asunto tan complejo.  Está claro que desde el inicio  ha habido varios obstáculos impidiendo un mayor progreso tales como una programación no sincronizada, ciclos de presupuesto y desembolso entre los cooperantes de la EU.  Existe una fuerte necesidad para una mejor armonización en las regulaciones financieras así como la implementación de normas entre los cooperantes de la UE y orientaciones más claras y un compromiso de la sede con el objetivo de poner en práctica el Código en la práctica.  Los cooperantes UE trabajarán para garantizar una cooperación más delegada (por ejemplo, socios silenciosos) y, en donde sea apropiado, apoyo presupuestario general o sectorial .</p>
+                <p><br />
+                  <strong>Optimización de los Mecanismos del Diálogo de Alto Nivel:  Mesa Global de cooperantes  y Quinteto</strong><br />
+                A través de la participación activa en las Mesas Globales, los cooperantes centrarán su atención en el diálogo con el gobierno tanto a nivel técnico como político en el año 2009.  El quinteto, un grupo de dirección de alto nivel creado en febrero de 2006, continuará reuniéndose regularmente con el Gobierno de Nicaragua con el objetivo de discutir las prioridades nacionales y presentar las posiciones comunes de los cooperantes.  El Quinteto actualmente abarca Dinamarca y la Comisión Europea junto con cooperantes no miembros de la UE tales como Canadá, Japón, El Banco Interamericano de Desarrollo (BID) y el Banco Mundial. </p>
+                <br/><p><strong>Fortalecimiento de la Coordinación de Cooperantes: Mesas Sectoriales</strong><br />
+                  En Nicaragua, las mesas sectoriales fueron establecidas en el año 2003 y las áreas de prioridad fueron Educación, Gobernabilidad, Salud, Infraestructura, Producción y Protección Social.  Los Cooperantes de la UE están presentes en cada una de estas mesas y contribuyen activamente hacia el desarrollo del Enfoque Ampliado Sectorial (SWAPs).  Los SWAPs contienen planes anuales multi acción y previsiones de gastos que permitirán al gobierno de Nicaragua y a los cooperantes una mejor planificación y desembolsos financieros con una perspectiva a mediano y largo plazo.  Las mesas sectoriales continuarán promoviendo plataformas comunes a través de la firma de Códigos de Conducta y Memoranda de Entendimiento para promover la coordinación y un mejor apoyo y estrategias aprobadas y arreglos de financiación comunes.<br />
+                </p>
+                <p>&nbsp;</p>
+              overview_p3: |
+              progress: |
+              progress_contents: |
+              roadmap: |
+              roadmap_contents_p1: |
+              roadmap_contents_p2: |
+              enhanced_coordination: |
+              enhanced_coordination_contents: |
+              dialogue_mechanisms: |
+              dialogue_mechanisms_contents: |
+              budget_support: |
+              budget_support_contents: |
+              challenges: |
+              challenges_contents: |
+              consolidating_progress: |
+              consolidating_progress_contents: |
+              establishment: |
+              establishment_contents: |
+              code_of_conduct: |
+              code_of_conduct_contents: |

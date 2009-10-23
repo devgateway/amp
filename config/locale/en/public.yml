@@ -41,7 +41,8 @@ en:
         <p>Donors are responsible for maintaining and validating the information in ODAnic.  Each donor agency in a country selects a focal point to adhere to locally agreed guidelines and timelines for updates, while following international data classifications developed by the OECD Development Assistance Committee.  This information is then freely available to all.<br />
         </p>
       map_image_link: Click on Map for ODAmap
-      bluebook_image_link: Click on Image for EU Blue Book 2007
+      bluebook_2007_image_link: Click on Image for EU Blue Book 2007
+      bluebook_2008_image_link: Click on Image for EU Blue Book 2008
       read_more: Read more...
       
   user_sessions:

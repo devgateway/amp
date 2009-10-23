@@ -83,7 +83,7 @@
 						<% if @top_three.blank? %>
 							<i><%= lc(:only_national) %></i>
 						<% else %>
-							<%= format_as_html_list(@top_three.map { |data| "-&nbsp;#{data.province.name}" }) %>
+							<%= format_as_html_list(@top_three.map { |data| "#{data.province.name}" }) %>
 						<% end %>
 					</td>
 				</tr>

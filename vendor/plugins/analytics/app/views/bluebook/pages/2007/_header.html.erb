@@ -12,7 +12,7 @@
 <!-- START Navigation-->
 	<ul id="mainMenu">
 		<% l_scope(:navigation, :bluebook) do %>
-			<li><%= link_to ll(:toc), bluebook_pages_path(:page_name => 'contents') %></li>
+			<li><%= link_to ll(:toc), "/bluebook/2007" %></li>
 			<li><%= link_to ll(:foreword), bluebook_pages_path(:page_name => 'foreword') %></li>
 			<li>
 				<a href="#" class="no_cursor"><%= ll(:eu_at_a_glance, :title) %></a>

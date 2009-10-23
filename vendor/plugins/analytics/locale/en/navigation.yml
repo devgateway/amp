@@ -12,6 +12,7 @@ en:
         consensus: The European Consensus on Development
         eu_aid: EU Aid to Developing Countries
         code_of_conduct: EU Code of Conduct
+        association_agreement: Association Agreement
       eu_cooperation:
         title: EU Cooperation
         process: EU Coordination and Harmonisation Process    
@@ -21,6 +22,8 @@ en:
         by_sector_in: EU Cooperation by DAC Sector in {{year}}
         by_region_in: EU Cooperation by Department in {{year}}
         by_toa_in: EU Cooperation by Aid Modality in {{year}}, Forecasts for {{forecasts}}
+      eu_retrospective:
+        title: Retrospective
       note:
         title: Note to Reader
         explanatory_note: Explanatory Note to the Donor Profiles

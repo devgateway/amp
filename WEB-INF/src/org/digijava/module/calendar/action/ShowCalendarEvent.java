@@ -127,17 +127,18 @@ public class ShowCalendarEvent extends Action {
             }
         }
         // selected calendar type
-        Long selectedCalendarTypeId = ceform.getSelectedCalendarTypeId();
+        Long selectedCalendarTypeId = ceform.getCalendarTypeId();
         if (selectedCalendarTypeId == null ||
-            (!selectedCalendarTypeId.equals(CalendarOptions.CALENDAR_TYPE_GREGORIAN) &&
-             !selectedCalendarTypeId.equals(CalendarOptions.CALENDAR_TYPE_ETHIOPIAN) &&
-             !selectedCalendarTypeId.equals(CalendarOptions.CALENDAR_TYPE_ETHIOPIAN_FY))) {
-            selectedCalendarTypeId = Long.valueOf(CalendarOptions.defaultCalendarType);
-            ceform.setSelectedCalendarTypeId(selectedCalendarTypeId);
-        }
-
+                (!selectedCalendarTypeId.equals(new Long(CalendarOptions.CALENDAR_TYPE_GREGORIAN)) &&
+                 !selectedCalendarTypeId.equals(new Long(CalendarOptions.CALENDAR_TYPE_ETHIOPIAN)) &&
+                 !selectedCalendarTypeId.equals(new Long(CalendarOptions.CALENDAR_TYPE_ETHIOPIAN_FY)))) {
+                selectedCalendarTypeId = Long.valueOf(CalendarOptions.defaultCalendarType);
+                ceform.setSelectedCalendarTypeId(selectedCalendarTypeId);
+      }else{
+        ceform.setSelectedCalendarTypeId(selectedCalendarTypeId);
+       }
         ceform.setTeamsMap(loadRecepients());
-
+       
         String[] slAtts = ceform.getSelectedAtts();
         if (slAtts != null) {
             Collection<LabelValueBean> selectedAttsCol = new ArrayList<LabelValueBean> ();

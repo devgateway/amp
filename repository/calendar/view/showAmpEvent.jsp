@@ -539,6 +539,13 @@ function is_mail(m) {
 	return p.test(m);		  
 }
 
+function submitForm(thisform){
+	typeid = thisform.elements.namedItem('selectedCalendarTypeId').value;
+	document.getElementById('CalendatTypeid').value = typeid;
+	thisform.submit();
+	
+}
+
 addLoadEvent(delBody);
   </script>
 
@@ -600,7 +607,7 @@ addLoadEvent(delBody);
 			            <td style="font-family: Tahoma;font-size: 12px;">                
 			                <div style="background-color: #F5F5F5; padding: 20px">
 			                	<span style="font-family: Tahoma;font-size: 11px;"><digi:errors/></span>			                  
-			                  <html:hidden name="calendarEventForm" property="selectedCalendarTypeId" value="${calendarEventForm.selectedCalendarTypeId}"/>
+			                  <html:hidden name="calendarEventForm" property="calendarTypeId" styleId="CalendatTypeid"/>
 			                  <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
 			                    <table>
 			                    	<tr>
@@ -656,10 +663,11 @@ addLoadEvent(delBody);
 			                    		<td width="2px">&nbsp;</td>
 			                    		<td align="left">
 			                    			 <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
-			                                 <html:select name="calendarEventForm" property="selectedCalendarTypeId" style="width: 220px;" onchange="this.form.submit()" styleClass="inp-text">
+			                                 <html:select name="calendarEventForm" property="selectedCalendarTypeId" style="width: 220px;" onchange="submitForm(this.form)" styleClass="inp-text">
 			                                     <c:if test="${!empty calendarEventForm.calendarTypes}">
-			                                  		<c:set var="types" value="${calendarEventForm.calendarTypes}"/>
-			                                      	<html:options collection="types" property="value" labelProperty="label"/>
+			                                     	<c:forEach var="type" items="${calendarEventForm.calendarTypes}">
+				                                        	<html:option value="${type.value}">${type.label}</html:option>
+				                                        </c:forEach>
 			                                     </c:if>
 			                                 </html:select>
 			                    		</td>			                    		

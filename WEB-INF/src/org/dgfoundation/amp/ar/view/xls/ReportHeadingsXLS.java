@@ -68,10 +68,10 @@ public class ReportHeadingsXLS extends XLSExporter {
 		columnReport.setGlobalHeadingsDisplayed(new Boolean(true));
 		for (int curDepth = 0; curDepth <= columnReport.getMaxColumnDepth(); curDepth++) {
 			row = sheet.createRow(rowId.shortValue());
-//			if (rowId.value == 8){
-//				row.setHeight((short)(3*row.getHeight()));
-//				//System.out.println((short)(3*row.getHeight()));
-//			}
+			
+			HSSFCell cell1 =  this.getCell(row,this.getRegularStyle());
+			cell1.setCellValue("");
+			colId.inc();
 			Iterator i = columnReport.getItems().iterator();
 			//int cellCount = 0;
 			while (i.hasNext()) {
@@ -83,6 +83,9 @@ public class ReportHeadingsXLS extends XLSExporter {
 					while (ii.hasNext()) {
 						//cellCount++;
 						Column element2 = (Column) ii.next();
+						
+						if (!"-".equalsIgnoreCase(element2.getName(metadata.getHideActivities()))){
+						
 						HSSFCell cell =  this.getCell(row,this.getHighlightedStyle(true));
 						String cellValue=element2.getName(metadata.getHideActivities());
 						
@@ -127,7 +130,7 @@ public class ReportHeadingsXLS extends XLSExporter {
 							cell.setCellValue(translatedCellValue);
 						
 						// ////System.out.println("["+rowId.intValue()+"]["+colId.intValue()+"]
-						// depth="+curDepth+" "+element2.getName());
+						// depth="+curDepth+" "+element2.getName	());
 						// create spanning
 						if(rowsp>1) makeRowSpan(rowsp-1);
 						
@@ -137,11 +140,14 @@ public class ReportHeadingsXLS extends XLSExporter {
 							colId.inc();
 						
 					}
+					}		
 				}
 				else {
+					if (!"-".equalsIgnoreCase(col.getName(metadata.getHideActivities()))){
 					HSSFCell cell =  this.getCell(row,this.getHighlightedStyle(true));
-					cell.setCellValue(" ");
+					cell.setCellValue(col.getName());
 					makeColSpan(col.getWidth(),true);
+					}
 				}
 			}
 			rowId.inc();

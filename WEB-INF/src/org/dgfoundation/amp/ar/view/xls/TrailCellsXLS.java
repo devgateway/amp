@@ -112,20 +112,18 @@ public class TrailCellsXLS extends XLSExporter {
 			}
 			colId.inc();
 			Iterator i = grd.getTrailCells().iterator();
-			boolean first=true;
+			//the first column will be under the hierarchy cell
 			while (i.hasNext()) {
 				Cell element = (Cell) i.next();
 				if (element!=null){
 					element.invokeExporter(this);
-				}else{
-					if (!first){
-					HSSFCell cell2=this.getCell(getRegularStyle());
+				}else if (!metadata.getHideActivities()){
+					HSSFCell cell2=this.getCell(hierarchyStyle);
 					cell2.setCellType(HSSFCell.CELL_TYPE_STRING);
 					cell2.setCellValue("");
 					colId.inc();
-					}
 				}
-			first=false;
+			
 			}
 			colId.reset();
 			rowId.inc();

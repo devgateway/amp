@@ -176,7 +176,7 @@ public abstract class XLSExporter extends Exporter {
             HSSFFont font = wb.createFont();
             font.setFontName(HSSFFont.FONT_ARIAL);
             font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-            cs.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+            cs.setAlignment(HSSFCellStyle.ALIGN_CENTER);
             if (border) {
                       cs.setBorderBottom(HSSFCellStyle.BORDER_DOUBLE);
                       cs.setBorderLeft(HSSFCellStyle.BORDER_DOUBLE);

@@ -114,7 +114,7 @@ public class OrganizationCSVImporter extends CSVImporter {
 			aot.setOrgType(o.get("type"));
 			session.save(aot);
 		}
-		ao.setOrgTypeId(aot);
+		
 		
 		
 		session.save(ao);

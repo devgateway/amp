@@ -36,6 +36,7 @@ import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -347,8 +348,9 @@ public class ViewChannelOverview extends TilesAction {
 				                relOrg.setAcronym(auxOrgRel.getAcronym());
 				                relOrg.setOrgCode(auxOrgRel.getOrgCode());
 				                relOrg.setBudgetOrgCode(auxOrgRel.getBudgetOrgCode());
-				                relOrg.setOrgGrpId(auxOrgRel.getOrgGrpId());
-				                relOrg.setOrgTypeId(auxOrgRel.getOrgTypeId());
+                                                AmpOrgGroup orgGrp = auxOrgRel.getOrgGrpId();
+				                relOrg.setOrgGrpId(orgGrp);
+				                relOrg.setOrgTypeId(orgGrp.getOrgType());
 				                relOrg.setOrgId(auxOrgRel.getAmpOrgId());
 				                if (!relOrgs.contains(relOrg)) {
 				                	relOrgs.add(relOrg);

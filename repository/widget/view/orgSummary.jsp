@@ -19,7 +19,12 @@
                     <td width="30%"><digi:trn>Group</digi:trn>:</td><td>${orgGroup.orgGrpName}&nbsp;</td>
                 </tr>
                  <tr>
-                    <td width="30%"><digi:trn>Type</digi:trn>:</td><td>${orgGroup.orgType.orgType}&nbsp;</td>
+                    <td width="30%"><digi:trn>Type</digi:trn>:</td>
+                    <td><c:choose>
+                            <c:when test="${not empty orgGroup.orgType}">${orgGroup.orgType}</c:when>
+                            <c:otherwise>${organization.orgGrpId.orgType}</c:otherwise>&nbsp;
+                        </c:choose>
+                    </td>
                 </tr>
                 <tr>
                     <td width="30%"><digi:trn>Organization Name</digi:trn>:</td><td>${organization.name}&nbsp;</td>

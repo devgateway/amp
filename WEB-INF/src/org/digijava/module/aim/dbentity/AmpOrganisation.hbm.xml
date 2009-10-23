@@ -40,8 +40,7 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpPledge" />
 		</set>
 
-		<many-to-one name="orgTypeId" column="org_type_id"
-			class="org.digijava.module.aim.dbentity.AmpOrgType" cascade="none" />
+		
 
 		<many-to-one name="orgGrpId" column="org_grp_id"
 			class="org.digijava.module.aim.dbentity.AmpOrgGroup" cascade="none" />

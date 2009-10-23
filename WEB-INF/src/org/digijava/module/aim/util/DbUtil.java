@@ -2358,8 +2358,9 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select distinct org from "
                 + AmpOrganisation.class.getName() + " org "
+                + " inner join org.orgGrpId grp "
                 + "where (lower(acronym) like '%" + keyword + "%' or lower(name) like '%"
-                + keyword + "%') and org.orgTypeId=:orgType";
+                + keyword + "%') and grp.orgType=:orgType";
             Query qry = session.createQuery(queryString);
             qry.setParameter("orgType", orgType, Hibernate.LONG);
             col = qry.list();
@@ -2431,7 +2432,8 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select distinct org from " + AmpOrganisation.class.getName() + " org "
-                + "where org.orgTypeId=:orgType and ((lower(acronym) like '%" + keyword + 
+                    + " inner join org.orgGrpId grp "
+                + "where grp.orgType=:orgType and ((lower(acronym) like '%" + keyword +
                 "%' and lower(name) like '"+namesFirstLetter+"%') or lower(name) like '"+namesFirstLetter+ "%"
                 + keyword + "%')";
             Query qry = session.createQuery(queryString);
@@ -2452,7 +2454,8 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select distinct org from "
                 + AmpOrganisation.class.getName() + " org "
-                + "where org.orgTypeId=:orgType";
+                +" inner join org.orgGrpId grp "
+                + "where grp.orgType=:orgType";
             Query qry = session.createQuery(queryString);
             qry.setParameter("orgType", orgType, Hibernate.LONG);
             col = qry.list();
@@ -2472,7 +2475,7 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
             queryString = " select org from " + AmpOrganisation.class.getName() +" org ";
             if(!includeWeirdOrgs){
-               queryString +=  " where org.name not like '%x_%' and org.orgTypeId.orgTypeCode in ('BIL','MUL','Private') ";
+               queryString +=  " where org.name not like '%x_%' and org.orgGrpId.orgType.orgTypeCode in ('BIL','MUL','Private') ";
             }     
             queryString +=  "  order by org.name";
             q = session.createQuery(queryString);
@@ -2500,8 +2503,9 @@ public class DbUtil {
             AmpOrgType tMul=getAmpOrgTypeByCode("MUL");
 
             session = PersistenceManager.getRequestDBSession();
-            queryString = " select org from " + AmpOrganisation.class.getName()
-                + " org where org.orgTypeId='" + tBil.getAmpOrgTypeId() + "' or org.orgTypeId='" + tMul.getAmpOrgTypeId() + "' order by org.name";
+            queryString = " select org from " + AmpOrganisation.class.getName() +" org "
+                     + " inner join org.orgGrpId grp "
+                + " where grp.orgType='" + tBil.getAmpOrgTypeId() + "' or grp.orgType='" + tMul.getAmpOrgTypeId() + "' order by org.name";
             q = session.createQuery(queryString);
             organizations = q.list();
 
@@ -4458,7 +4462,8 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select distinct aot.* from amp_org_type aot " +
-					            "inner join amp_organisation ao on (ao.org_type_id = aot.amp_org_type_id) " +
+                                                    "inner join AMP_ORG_GROUP aog on  (aog.org_type = aot.amp_org_type_id) "+
+					            "inner join amp_organisation ao on (ao.org_grp_id  = aog.amp_org_grp_id) " +
 					            "inner join amp_funding af on (af.amp_donor_org_id = ao.amp_org_id) " +
 					            "inner join amp_activity aa on (aa.amp_activity_id = af.amp_activity_id) ";                       
             Query qry = session.createSQLQuery(queryString).addEntity(AmpOrgType.class);
@@ -4611,23 +4616,16 @@ public class DbUtil {
         Session sess = null;
         Query qry = null;
         String queryString = null;
-
         try {
             sess = PersistenceManager.getRequestDBSession();
-            queryString = "select o from " + AmpOrganisation.class.getName()
-                + " o where (o.orgTypeId=:orgTypeId)";
-            qry = sess.createQuery(queryString);
-            qry.setParameter("orgTypeId", Id, Hibernate.LONG);
-            if (null != qry.list() && qry.list().size() > 0)
-                return true;
-            else {
+            
                 queryString = "select o from " + AmpOrgGroup.class.getName()
                     + " o where (o.orgType=:orgTypeId)";
                 qry = sess.createQuery(queryString);
                 qry.setParameter("orgTypeId", Id, Hibernate.LONG);
                 if (null != qry.list() && qry.list().size() > 0)
                     return true;
-            }
+            
         } catch (Exception e) {
             logger.debug("Exception from chkOrgTypeReferneces(): " + e);
             e.printStackTrace(System.out);
@@ -5756,9 +5754,10 @@ public class DbUtil {
                 while (itr1.hasNext()) {
                     AmpOrganisation dnOrg = (AmpOrganisation) itr1.next();
                     // Filtering by donor-organisation here
-                    if (dnOrg.getOrgTypeId() != null) {
-                        if (!dnOrg.getOrgTypeId().getOrgTypeCode().equalsIgnoreCase("bil") &&
-                            !dnOrg.getOrgTypeId().getOrgTypeCode().equalsIgnoreCase("mul")) {
+                    AmpOrgType orgType=dnOrg.getOrgGrpId().getOrgType();
+                    if (orgType != null) {
+                        if (!orgType.getOrgTypeCode().equalsIgnoreCase("bil") &&
+                            !orgType.getOrgTypeCode().equalsIgnoreCase("mul")) {
                             continue;
                         }
                     }
@@ -6250,9 +6249,10 @@ public class DbUtil {
                 while (itr1.hasNext()) {
                     AmpOrganisation dnOrg = (AmpOrganisation) itr1.next();
                     // Filtering by donor-organisation here
-                    if (dnOrg.getOrgTypeId() != null) {
-                        if (!dnOrg.getOrgTypeId().getOrgTypeCode().equalsIgnoreCase("bil") &&
-                            !dnOrg.getOrgTypeId().getOrgTypeCode().equalsIgnoreCase("mul")) {
+                    AmpOrgType orgType=dnOrg.getOrgGrpId().getOrgType();
+                    if (orgType != null) {
+                        if (!orgType.getOrgTypeCode().equalsIgnoreCase("bil") &&
+                            !orgType.getOrgTypeCode().equalsIgnoreCase("mul")) {
                             continue;
                         }
                     }
@@ -6971,14 +6971,14 @@ public class DbUtil {
             collator.setStrength(Collator.TERTIARY);
     		int result=0;
     		//such long and complicated case is necessary because orgType maybe empty for organisation
-    		if (o1.getOrgTypeId()!=null && o2.getOrgTypeId()!=null) {
-    			AmpOrgType orgType1=o1.getOrgTypeId();
-    			AmpOrgType orgType2=o2.getOrgTypeId();
+                AmpOrgType orgType1=o1.getOrgGrpId().getOrgType();
+                AmpOrgType orgType2=o1.getOrgGrpId().getOrgType();
+    		if (orgType1!=null && orgType2!=null) {
     			result=new HelperAmpOrgTypeNameComparator().compare(orgType1, orgType2);
-    		} else if (o2.getOrgTypeId()==null&&o1.getOrgTypeId()!=null){
-    			result=collator.compare(o1.getOrgTypeId().getOrgType(), "");
-    		}else if (o1.getOrgTypeId()==null&&o2.getOrgTypeId()!=null){
-    			result=collator.compare("", o2.getOrgTypeId().getOrgType());
+    		} else if (orgType2==null&&orgType1!=null){
+    			result=collator.compare(orgType1.getOrgType(), "");
+    		}else if (orgType1==null&&orgType2!=null){
+    			result=collator.compare("", orgType2.getOrgType());
     		}
     		return result;
 

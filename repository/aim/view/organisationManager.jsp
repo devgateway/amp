@@ -305,8 +305,8 @@
 																		  	<bean:write name="organisation" property="acronym" />																		  
 																		</td>
 																		<td align="left" width="20%">
-																			<logic:notEmpty name="organisation" property="orgTypeId">
-                                                              					<c:out value="${organisation.orgTypeId.orgType}" />
+																			<logic:notEmpty name="organisation" property="orgGrpId">
+                                                              					<c:out value="${organisation.orgGrpId.orgType}" />
                                                               					<%--<bean:write name="organisation" property="${organisation.orgTypeId.orgType}" />--%>
                                                               				</logic:notEmpty>
 																		</td>

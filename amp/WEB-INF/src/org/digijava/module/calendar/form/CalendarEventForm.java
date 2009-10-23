@@ -60,12 +60,21 @@ public class CalendarEventForm
     private GregorianCalendar endDate;
     private DateBreakDown endDateBreakDown;
     private Collection months;
-
+    private Long calendarTypeId;
 //    private Collection eventOrganisations;
 //    private String[] selectedEventOrganisations;
 //    private Collection selectedEventOrganisationsCol;
 
-    private Collection attendees;
+    public Long getCalendarTypeId() {
+		return calendarTypeId;
+	}
+
+	public void setCalendarTypeId(Long calendarTypeId) {
+		this.calendarTypeId = calendarTypeId;
+	}
+
+
+	private Collection attendees;
     private String[] selectedAtts;
     private Collection<LabelValueBean> selectedAttsCol;
 

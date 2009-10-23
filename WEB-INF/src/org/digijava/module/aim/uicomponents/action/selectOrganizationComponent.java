@@ -225,14 +225,17 @@ public class selectOrganizationComponent extends Action {
 		} else {
 			//already selected orgs shouldn't get lost
 			fillAllSelectedOgs(eaForm);
-			if (!eaForm.getAmpOrgTypeId().equals(new Long(-1))) {
-				if (eaForm.getKeyword()!=null && eaForm.getKeyword().trim().length()!=0){
-					organizationResult = DbUtil.searchForOrganisation(alpha, eaForm.getKeyword().trim(), eaForm.getAmpOrgTypeId());
-				} else{
-					organizationResult = DbUtil.searchForOrganisation(alpha, "", eaForm.getAmpOrgTypeId());
+			if( eaForm.getKeyword()!=null && !"".equals(eaForm.getKeyword().trim()) ) organizationResult=eaForm.getAllOrganization();
+			else{
+				if (!eaForm.getAmpOrgTypeId().equals(new Long(-1))) {
+					if (eaForm.getKeyword()!=null && eaForm.getKeyword().trim().length()!=0){
+						organizationResult = DbUtil.searchForOrganisation(alpha, eaForm.getKeyword().trim(), eaForm.getAmpOrgTypeId());
+					} else{
+						organizationResult = DbUtil.searchForOrganisation(alpha, "", eaForm.getAmpOrgTypeId());
+					}
+				} else {
+					organizationResult = DbUtil.searchForOrganisation(alpha, "");
 				}
-			} else {
-				organizationResult = DbUtil.searchForOrganisation(alpha, "");
 			}
 			
 			eaForm.setCurrentAlpha(alpha);

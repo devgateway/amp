@@ -136,7 +136,8 @@
 				/repository/mondrian/struts-config.xml,
 				/repository/dataExchange/struts-config.xml,
 				/repository/search/struts-config.xml,
-				/repository/parisindicator/struts-config.xml
+				/repository/parisindicator/struts-config.xml,
+				/repository/xmlpatcher/struts-config.xml
 			</param-value>
 		</init-param>
 		<init-param>

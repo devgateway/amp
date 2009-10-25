@@ -30,7 +30,7 @@
 	<apply>
 		<script>
 			<lang type="sql">
-   			UPDATE amp_activity set budget=false;
+   			UPDATE amp_activity set budget=budget;
    		</lang>
 		</script>
 	</apply>

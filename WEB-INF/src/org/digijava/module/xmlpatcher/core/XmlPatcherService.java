@@ -84,6 +84,7 @@ public class XmlPatcherService extends AbstractServiceImpl {
 			Collection<AmpXmlPatch> scheduledPatches,
 			ServiceContext serviceContext) throws DgException {
 		Iterator<AmpXmlPatch> iterator = scheduledPatches.iterator();
+		logger.info(scheduledPatches.size()+" patches scheduled for execution...");
 		while (iterator.hasNext()) {
 			AmpXmlPatch ampPatch = iterator.next();
 			long timeStart = System.currentTimeMillis();
@@ -119,9 +120,12 @@ public class XmlPatcherService extends AbstractServiceImpl {
 				logger.info("Succesfully applied patch "
 						+ ampPatch.getPatchId());
 				ampPatch.setState(XmlPatcherConstants.PatchStates.CLOSED);
+				iterator.remove();
+				
 			} else if (log.getError()) {
 				logger.info("Failed to apply patch " + ampPatch.getPatchId());
 				ampPatch.setState(XmlPatcherConstants.PatchStates.FAILED);
+				iterator.remove();
 			} else
 				logger.info("Will not apply " + ampPatch.getPatchId()
 						+ " due to conditions not met.");
@@ -130,6 +134,7 @@ public class XmlPatcherService extends AbstractServiceImpl {
 			XmlPatcherUtil.addLogToPatch(ampPatch, log);
 			DbUtil.update(ampPatch);
 		}
+		logger.info(scheduledPatches.size()+" patches left unexecuted");
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package org.digijava.module.aim.util;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Connection;
@@ -83,7 +84,6 @@ import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.exception.AimException;
-import org.digijava.module.aim.helper.AmpDonors;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
 import org.digijava.module.aim.helper.Assistance;
@@ -696,6 +696,20 @@ public class DbUtil {
     }
 
     public static Object get(Class c, Long id) {
+        Session session = null;
+        Object o = null;
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            o = session.load(c, id);
+
+        } catch (Exception e) {
+            logger.error("Uanble to get object of class " + c.getName() + " width id=" + id + ". Error was:" + e);
+        } 
+        return o;
+    }
+    
+    public static Object get(Class c, Serializable id) {
         Session session = null;
         Object o = null;
 

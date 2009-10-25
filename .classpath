@@ -31,7 +31,6 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/concurrent.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/connector.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/CordaEmbedder.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/datasourcesconfig.dtd"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/digi-commons.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/displaytag-1.0.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/dom4j-1.6.1.jar"/>
@@ -81,7 +80,6 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/jfreechart-1.0.4.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jpivot.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jsf-api.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/json-lib-2.2.3-jdk15.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jsr173_1.0_api.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jstl.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/junit.jar"/>
@@ -135,8 +133,8 @@
 	<classpathentry kind="var" path="JBOSS-LIB/log4j.jar"/>
 	<classpathentry kind="var" path="JBOSS-LIB/servlet-api.jar"/>
 	<classpathentry kind="var" path="JBOSS-LIB/jsp-api.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/commons-beanutils-1.8.0.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/commons-beanutils-bean-collections-1.8.0.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/ecsClientSide.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/commons-beanutils-1.7.0.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/json-lib-2.3-jdk15.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

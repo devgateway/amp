@@ -103,6 +103,11 @@ public class AmpXmlPatchLog implements Serializable {
 	public String getLog() {
 		return log.toString();
 	}
+	
+	public String getLogLabel() {
+		String ls=log.toString();
+		return ls.substring(0,ls.indexOf(':'));
+	}
 
 	public void setLog(String log) {
 		this.log = new StringBuffer(log);

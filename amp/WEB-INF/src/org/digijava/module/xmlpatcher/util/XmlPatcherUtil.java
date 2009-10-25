@@ -302,6 +302,63 @@ public final class XmlPatcherUtil {
 		PersistenceManager.releaseSession(session);
 		return list;
 	}
+	
+	/**
+	 * Returns the count of the list of discovered XmlPatches
+	 * 
+	 * @return the Hibernate query result
+	 * @throws DgException
+	 * @throws HibernateException
+	 * @throws SQLException
+	 */
+	public static Integer countAllDiscoveredPatches()
+			throws DgException, HibernateException, SQLException {
+		Session session = PersistenceManager.getRequestDBSession();
+			Integer ret= ((Integer)session.createQuery("select count(*) from " + AmpXmlPatch.class.getName()).iterate().next()).intValue();
+		PersistenceManager.releaseSession(session);
+		return ret;
+	}
+	
+	
+	
+	/**
+	 * Returns the list of discovered XmlPatches
+	 * 
+	 * @return the Hibernate query result
+	 * @throws DgException
+	 * @throws HibernateException
+	 * @throws SQLException
+	 */
+	public static List<AmpXmlPatch> getAllDiscoveredPatches()
+			throws DgException, HibernateException, SQLException {
+		Session session = PersistenceManager.getRequestDBSession();
+		Query query = session
+				.createQuery("from " + AmpXmlPatch.class.getName());
+		List<AmpXmlPatch> list = query.list();
+		PersistenceManager.releaseSession(session);
+		return list;
+	}
+	
+	/**
+	 * Returns the list of discovered XmlPatches using pagination
+	 * @param startIndexInt - the start of index
+	 * @param records - the max number of records
+	 * @return the Hibernate query result
+	 * @throws DgException
+	 * @throws HibernateException
+	 * @throws SQLException
+	 */
+	public static List<AmpXmlPatch> getAllDiscoveredPatches(int startIndexInt,int recordsInt)
+			throws DgException, HibernateException, SQLException {
+		Session session = PersistenceManager.getRequestDBSession();
+		Query query = session
+				.createQuery("from " + AmpXmlPatch.class.getName());
+		query.setFirstResult(startIndexInt);
+		query.setMaxResults(recordsInt);
+		List<AmpXmlPatch> list = query.list();
+		PersistenceManager.releaseSession(session);
+		return list;
+	}
 
 	public static Session getHibernateSession() {
 		try {

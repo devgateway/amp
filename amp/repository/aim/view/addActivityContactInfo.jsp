@@ -7,6 +7,7 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/category" prefix="category" %>
 
 <digi:context name="digiContext" property="context"/>
 <digi:instance property="aimEditActivityForm"/>
@@ -21,8 +22,13 @@
 				<table cellpadding="2" cellspacing="5" width="100%" height="100%" class="box-border-nopadding" >
 					<tr height="5px"><td colspan="2"/></tr>		
 					<tr>
-						<td align="right"><strong><digi:trn>Title</digi:trn></strong> </td>
-						<td align="left"><html:text property="contactInformation.title" size="30"/></td>
+						<td align="right"><strong><digi:trn>Title</digi:trn></strong></td>
+						<td align="left">
+                                                    <c:set var="translation">
+                                                        <digi:trn>Please select from below</digi:trn>
+                                                    </c:set>
+                                        <category:showoptions multiselect="false" firstLine="${translation}" name="aimEditActivityForm" property="contactInformation.title"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.CONTACT_TITLE_KEY%>" styleClass="selectStyle" outerid="contactTitle"/>
+                                                </td>
 					</tr>	
 					<tr>
 						<td align="right"><strong><digi:trn>Lastname</digi:trn></strong><font color="red">*</font></td>

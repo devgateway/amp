@@ -18,7 +18,7 @@ public class AddressBookForm   extends ActionForm {
 	private String name;
 	private String lastname;
 	private String email;
-	private String title;
+	private Long title;
 	private String organisationName;
 	private String phone;
 	private String fax;	
@@ -103,10 +103,10 @@ public class AddressBookForm   extends ActionForm {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getTitle() {
+	public Long getTitle() {
 		return title;
 	}
-	public void setTitle(String title) {
+	public void setTitle(Long title) {
 		this.title = title;
 	}
 	public String getOrganisationName() {

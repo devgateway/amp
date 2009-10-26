@@ -12,7 +12,7 @@ public class AddContactComponentForm extends ActionForm {
     private String name;
     private String lastname;
     private String email;
-    private String title;
+    private Long title;
     private String organisationName;
     private String phone;
     private String fax;
@@ -141,11 +141,11 @@ public class AddContactComponentForm extends ActionForm {
         this.temporaryId = temporaryId;
     }
 
-    public String getTitle() {
+    public Long getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(Long title) {
         this.title = title;
     }
     

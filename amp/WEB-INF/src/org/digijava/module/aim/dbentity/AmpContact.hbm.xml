@@ -14,7 +14,7 @@
 	<property name="name" column="name" type="java.lang.String" />
 	<property name="lastname" column="lastname" type="java.lang.String" />
 	<property name="email" column="email" type="java.lang.String" />
-	<property name="title" column="title" type="java.lang.String" />
+        <many-to-one name="title" column="title" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" />
 	<property name="organisationName" column="organisation_name" type="java.lang.String" />
 	<property name="phone" column="phone" type="java.lang.String" />
 	<property name="fax" column="fax" type="java.lang.String" />

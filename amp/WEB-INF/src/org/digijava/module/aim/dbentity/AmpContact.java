@@ -3,6 +3,7 @@ package org.digijava.module.aim.dbentity;
 import java.util.Set;
 import org.digijava.module.contacts.jaxb.ObjectFactory;
 import org.digijava.module.contacts.jaxb.Contact;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 /**
  * holds contact user's information
@@ -14,7 +15,7 @@ public class AmpContact {
 	private String name;
 	private String lastname;
 	private String email;
-	private String title;
+	private AmpCategoryValue title;
 	private String organisationName;
 	private String phone;
 	private String fax;
@@ -57,10 +58,10 @@ public class AmpContact {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getTitle() {
+	public AmpCategoryValue getTitle() {
 		return title;
 	}
-	public void setTitle(String title) {
+	public void setTitle(AmpCategoryValue title) {
 		this.title = title;
 	}
 	public String getOrganisationName() {
@@ -132,7 +133,7 @@ public class AmpContact {
 		cont.setName(this.getName());
 		cont.setLastname(this.getLastname());
 		cont.setEmail(this.getEmail());
-		cont.setTitle(this.getTitle());
+		//cont.setTitle(this.getTitle());
 		cont.setOrganisationName(this.getOrganisationName());
 		cont.setPhone(this.getPhone());
 		cont.setFax(this.getFax());

@@ -1556,7 +1556,9 @@
                                                 ${contact.fax}
                                             </td>
                                             <td class="tdClass">
-                                                ${contact.title}
+                                                <c:if test="${not empty contact.title}">
+                                                   <digi:trn> ${contact.title.value}</digi:trn>
+                                                </c:if>
                                             </td>
                                             <td>
 

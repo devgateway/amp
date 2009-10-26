@@ -416,7 +416,11 @@ public class ExportOrganizationToExcel extends DispatchAction {
                 cell.setCellValue(new HSSFRichTextString(contact.getFax()));
                 cell.setCellStyle(style);
                 cell = row.createCell(cellNum++);
-                cell.setCellValue(new HSSFRichTextString(contact.getTitle()));
+                String title="";
+                if(contact.getTitle()!=null){
+                    title=contact.getTitle().getValue();
+                }
+                cell.setCellValue(new HSSFRichTextString(title));
                 cell.setCellStyle(style);
 
             }

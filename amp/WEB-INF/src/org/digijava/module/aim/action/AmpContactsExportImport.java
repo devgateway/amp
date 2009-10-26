@@ -85,7 +85,7 @@ public class AmpContactsExportImport extends DispatchAction{
 						ampContact.setName(contact.getName());
 						ampContact.setLastname(contact.getLastname());
 						ampContact.setEmail(contact.getEmail());
-						ampContact.setTitle(contact.getTitle());
+						//ampContact.setTitle(contact.getTitle());
 						ampContact.setOrganisationName(contact.getOrganisationName());
 						ampContact.setPhone(contact.getPhone());
 						ampContact.setFax(contact.getFax());

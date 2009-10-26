@@ -24,6 +24,7 @@ import org.digijava.module.aim.uicomponents.AddContact;
 import org.digijava.module.aim.uicomponents.EditContactLink;
 import org.digijava.module.aim.uicomponents.form.AddContactComponentForm;
 import org.digijava.module.aim.util.ContactInfoUtil;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 
 public class AddContactComponent extends DispatchAction{
@@ -81,7 +82,9 @@ public class AddContactComponent extends DispatchAction{
          createForm.setName(contact.getName());
          createForm.setOrganisationName(contact.getOrganisationName());
          createForm.setSelContactIds(null);
-         createForm.setTitle(contact.getTitle());
+         if(contact.getTitle()!=null){
+             createForm.setTitle(contact.getTitle().getId());
+         }
          createForm.setFunction(contact.getFunction());
          createForm.setMobilephone(contact.getMobilephone());
          createForm.setOfficeaddress(contact.getOfficeaddress());
@@ -179,8 +182,10 @@ public class AddContactComponent extends DispatchAction{
 		contact.setName(createForm.getName().trim());
 		contact.setLastname(createForm.getLastname().trim());
 		contact.setEmail(createForm.getEmail().trim());
-		contact.setTitle(createForm.getTitle().trim());
-
+                if(createForm.getTitle()!=null&&createForm.getTitle()!=-1){
+                    contact.setTitle(CategoryManagerUtil.getAmpCategoryValueFromDb(createForm.getTitle()));
+                }
+		
 		if(createForm.getOrganisationName()!=null){
 			contact.setOrganisationName(createForm.getOrganisationName().trim());
 		}else{

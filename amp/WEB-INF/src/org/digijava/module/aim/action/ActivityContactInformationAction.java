@@ -17,6 +17,7 @@ import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.ContactInfoUtil;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class ActivityContactInformationAction extends Action {
 	
@@ -161,7 +162,12 @@ public class ActivityContactInformationAction extends Action {
 		eaForm.getContactInformation().setName(contact.getName());
 		eaForm.getContactInformation().setLastname(contact.getLastname());
 		eaForm.getContactInformation().setEmail(contact.getEmail());
-		eaForm.getContactInformation().setTitle(contact.getTitle());
+                if(contact.getTitle()!=null){
+                    eaForm.getContactInformation().setTitle(contact.getTitle().getId());
+                }
+                else{
+                    eaForm.getContactInformation().setTitle(null);
+                }
 		eaForm.getContactInformation().setOrganisationName(contact.getOrganisationName());
 		eaForm.getContactInformation().setPhone(contact.getPhone());
 		eaForm.getContactInformation().setFax(contact.getFax());
@@ -204,7 +210,7 @@ public class ActivityContactInformationAction extends Action {
 		contact.setLastname(eaForm.getContactInformation().getLastname().trim());
 		contact.setEmail(eaForm.getContactInformation().getEmail().trim());
 		if(eaForm.getContactInformation().getTitle()!=null){
-			contact.setTitle(eaForm.getContactInformation().getTitle().trim());
+			contact.setTitle(CategoryManagerUtil.getAmpCategoryValueFromDb(eaForm.getContactInformation().getTitle()));
 		}else{
 			contact.setTitle(null);
 		}

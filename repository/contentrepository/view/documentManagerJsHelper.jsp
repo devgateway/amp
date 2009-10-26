@@ -242,6 +242,11 @@
 	<digi:trn key="contentrepository:MenuItem:Options:ShowOnlyWebLinks">Show only web links</digi:trn>
 </c:set>
 
+<c:set var="trans_wait">
+	<digi:trn>Please wait a moment... </digi:trn>
+</c:set>
+
+
 <script type="text/javascript">
 YAHOO.namespace("YAHOO.amp");
 YAHOO.namespace("YAHOO.amp.table");
@@ -460,7 +465,7 @@ function WindowControllerObject(bodyContainerEl) {
 				if ( this.showOnlyDocs ) 
 						parameters	+= "&showOnlyDocs=" + this.showOnlyDocs;
 				//alert(parameters);
-				this.bodyContainerElement.innerHTML="<div align='center'>Please wait a moment...<br /><img src='/repository/contentrepository/view/images/ajax-loader-darkblue.gif' border='0' /> </div>";
+				this.bodyContainerElement.innerHTML="<div align='center'>${trans_wait}<br /><img src='/repository/contentrepository/view/images/ajax-loader-darkblue.gif' border='0' /> </div>";
 				YAHOO.util.Connect.asyncRequest('POST', '/contentrepository/documentManager.do', getCallbackForOtherDocuments(this.bodyContainerElement, this),
 								'ajaxDocumentList=true'+parameters );
 				};

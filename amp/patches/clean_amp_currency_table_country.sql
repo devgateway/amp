@@ -1,0 +1,2 @@
+ALTER TABLE amp_currency DROP FOREIGN KEY `FK6A2F2C4C50537E03`;
+ALTER TABLE amp_currency DROP COLUMN `country_id`;

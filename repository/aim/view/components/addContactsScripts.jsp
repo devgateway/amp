@@ -148,14 +148,15 @@
         }
 
               function getContactParams(){
-                  var params="";
+                var title = document.getElementById('contactTitle');
+                var titleId=title.options[title.selectedIndex].value;
+                var params="";           
                   params+="name="+document.getElementById('contactName').value+
                       "&lastname="+document.getElementById('contactLastname').value +
                       "&email="+document.getElementById('contactEmail').value+
-                      "&title="+document.getElementById('contactTitle').value+
+                      "&title="+titleId+
                       "&function="+document.getElementById('contactFunction').value+
-                      "&officeaddress="+document.getElementById('contactOfficeaddress').value+
-                      "&title="+document.getElementById('contactTitle').value+
+                      "&officeaddress="+document.getElementById('contactOfficeaddress').value+            
                       "&organisationName="+document.getElementById('contactOrgName').value+
                       "&phone="+document.getElementById('contactPhone').value+
                       "&fax="+document.getElementById('contactFax').value+

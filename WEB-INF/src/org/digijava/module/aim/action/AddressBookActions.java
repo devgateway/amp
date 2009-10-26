@@ -21,6 +21,7 @@ import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.form.AddressBookForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.ContactInfoUtil;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class AddressBookActions extends DispatchAction {
 	
@@ -133,7 +134,7 @@ public class AddressBookActions extends DispatchAction {
 				myForm.setName(contact.getName());
 				myForm.setLastname(contact.getLastname());
 				myForm.setEmail(contact.getEmail());
-				myForm.setTitle(contact.getTitle());
+				myForm.setTitle(contact.getTitle().getId());
 				myForm.setOrganisationName(contact.getOrganisationName());
 				myForm.setPhone(contact.getPhone());
 				myForm.setFax(contact.getFax());
@@ -196,7 +197,7 @@ public class AddressBookActions extends DispatchAction {
 		contact.setMobilephone(myForm.getMobilephone().trim());
 		contact.setOfficeaddress(myForm.getOfficeaddress().trim());
 		if(myForm.getTitle()!=null){
-			contact.setTitle(myForm.getTitle().trim());
+			contact.setTitle(CategoryManagerUtil.getAmpCategoryValueFromDb(myForm.getTitle()));
 		}
 		if(myForm.getOrganisationName()!=null){
 			contact.setOrganisationName(myForm.getOrganisationName().trim());

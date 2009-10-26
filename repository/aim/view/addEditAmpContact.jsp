@@ -7,6 +7,7 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/category" prefix="category" %>
 
 <digi:context name="digiContext" property="context"/>
 <digi:instance property="addressbookForm"/>
@@ -311,7 +312,12 @@ html>body #mainEmpty {
 																													<tr height="5"><td>&nbsp;</td></tr>
 																													<tr>
 																														<td align="right"><strong><digi:trn>Title</digi:trn></strong> </td>
-																														<td align="left"><html:text property="title" size="40"/></td>
+																														<td align="left">
+                                                                                                                                                                                                                                                    <c:set var="translation">
+                                                                                                                                                                                                                                                        <digi:trn>Please select from below</digi:trn>
+                                                                                                                                                                                                                                                    </c:set>
+                                                                                                                                                                                                                                        <category:showoptions multiselect="false" firstLine="${translation}" name="aimAddContactForm" property="title"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.CONTACT_TITLE_KEY%>" styleClass="selectStyle" outerid="contactTitle"/>
+                                                                                                                                                                                                                                                </td>
 																													</tr>	
 																													<tr>
 																														<td align="right"><strong><digi:trn>Last Name</digi:trn></strong><font color="red">*</font></td>

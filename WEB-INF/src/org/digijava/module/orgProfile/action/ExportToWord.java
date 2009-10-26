@@ -247,7 +247,11 @@ public class ExportToWord extends Action {
                                     RtfCell email = new RtfCell(new Paragraph(contact.getEmail(),plainFont));
                                     RtfCell phone = new RtfCell(new Paragraph(contact.getPhone(),plainFont));
                                     RtfCell fax = new RtfCell(new Paragraph(contact.getFax(),plainFont));
-                                    RtfCell title = new RtfCell(new Paragraph(contact.getTitle(),plainFont));
+                                    String contacTitle = "";
+                                    if (contact.getTitle() != null) {
+                                        contacTitle = contact.getTitle().getValue();
+                                    }
+                                    RtfCell title = new RtfCell(new Paragraph(contacTitle,plainFont));
                                     if(count%2==0){
                                         title.setBackgroundColor(cellColor);
                                         fax.setBackgroundColor(cellColor);

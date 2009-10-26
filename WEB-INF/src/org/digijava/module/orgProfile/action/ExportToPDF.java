@@ -251,7 +251,11 @@ public class ExportToPDF extends Action {
                                     PdfPCell email = new PdfPCell(new Paragraph(contact.getEmail(),plainFont));
                                     PdfPCell phone = new PdfPCell(new Paragraph(contact.getPhone(),plainFont));
                                     PdfPCell fax = new PdfPCell(new Paragraph(contact.getFax(),plainFont));
-                                    PdfPCell title = new PdfPCell(new Paragraph(contact.getTitle(),plainFont));
+                                    String contacTitle = "";
+                                    if (contact.getTitle() != null) {
+                                        contacTitle = contact.getTitle().getValue();
+                                    }
+                                    PdfPCell title = new PdfPCell(new Paragraph(contacTitle,plainFont));
                                     if(count%2==0){
                                         title.setBackgroundColor(cellColor);
                                         fax.setBackgroundColor(cellColor);

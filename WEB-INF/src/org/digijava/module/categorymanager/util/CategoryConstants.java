@@ -85,6 +85,10 @@ public class CategoryConstants {
 	public static final String INDICATOR_SOURCE_NAME="Indicator Source";
 	public static final String INDICATOR_SOURCE_KEY="indicator_source";
 
+        //indicator source
+	public static final String CONTACT_TITLE_NAME="Contact Title";
+	public static final String CONTACT_TITLE_KEY="contact_title";
+
 	public static final long NONE_TYPE		= 0;
 	public static final long COUNTRY_TYPE	= 1;
 	public static final long REGION_TYPE	= 2;

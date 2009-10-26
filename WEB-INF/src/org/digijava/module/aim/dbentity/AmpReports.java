@@ -7,11 +7,14 @@ package org.digijava.module.aim.dbentity;
 
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.ecs.storage.Hash;
+import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -202,6 +205,24 @@ public class AmpReports implements Comparable, LoggerIdentifiable {
 
 
 
+	public Set<AmpReportColumn> getShowAblesColumns(){
+		Set<AmpReportColumn> finalColumns=new HashSet<AmpReportColumn>();
+		if (hideActivities){
+		Long order=1l;
+		for (AmpReportColumn element : columns) {
+			boolean add=ARUtil.hasHierarchy(this.getHierarchies(), element.getColumn().getColumnName()) || ARUtil.hasHeaderValue(element.getColumn());
+			if(add){
+				element.setOrderId(order);
+				finalColumns.add(element);
+				order++;
+			}
+		}
+		return finalColumns;
+		}else{
+			return columns;
+		}	
+	}
+	
 	/**
 	 * @return the columns
 	 */

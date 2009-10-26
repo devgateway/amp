@@ -114,7 +114,7 @@
                               </digi:link>
                             </td>
                           </tr>
-                          <feature:display name="Applied Patches" module="ADMINISTRATIVE SECTION">
+                          <feature:display name="Applied Patches" module="Applied Patches">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>

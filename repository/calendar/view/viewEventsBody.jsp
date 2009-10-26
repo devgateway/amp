@@ -11,7 +11,8 @@
 <%@page import="org.digijava.module.calendar.form.CalendarViewForm" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@page import="org.digijava.module.calendar.util.CalendarUtil"%>
-<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
+
+<%@page import="org.digijava.module.calendar.util.CalendarThread"%><script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript"  src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
 <!-- this is for the nice tooltip widgets -->
 <DIV id="TipLayer"  style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
@@ -360,11 +361,17 @@ color:Black;
 				                                                    			<c:if test="${hour > 9}">
 				                                                      				<c:set var="hoursToDisplay" value="${hour}:00"/>
 				                                                    			</c:if>
-				                                                   	 			${hoursToDisplay} <digi:trn key="aim:am">AM</digi:trn>
+				                                                   	 			${hoursToDisplay}
+				                                                   	 			<%if (!CalendarThread.getLocale().getCode().equalsIgnoreCase("fr")){ %> 
+				                                                   	 				<digi:trn key="aim:am">AM</digi:trn>
+				                                                   	 			<%}%>
 				                                                  			</c:if>
 				                                                  			<c:if test="${hour > 11}">
 				                                                   				<c:if test="${hour < 13}">
-				                                                      				${hour}:00 <digi:trn key="aim:mp">PM</digi:trn>
+				                                                      				${hour}:00 
+				                                                      				<%if (!CalendarThread.getLocale().getCode().equalsIgnoreCase("fr")){ %>
+				                                                      					<digi:trn key="aim:mp">PM</digi:trn>
+				                                                      				<%}%>
 							                                                    </c:if>
 							                                                    <c:if test="${hour > 12}">
 				                                                      				<c:if test="${(hour - 12) < 10}">
@@ -373,7 +380,10 @@ color:Black;
 				                                                      				<c:if test="${(hour - 12) > 9}">
 				                                                        				<c:set var="hoursToDisplay" value="${hour - 12}:00"/>
 				                                                      				</c:if>
-				                                                      				${hoursToDisplay} <digi:trn key="aim:pm">PM</digi:trn>
+				                                                      				${hoursToDisplay} 
+				                                                      				<%if (!CalendarThread.getLocale().getCode().equalsIgnoreCase("fr")){ %>
+				                                                      					<digi:trn key="aim:pm">PM</digi:trn>
+				                                                      				<%}%>
 				                                                    			</c:if>
 				                                                  			</c:if>
 				                                                		</td>
@@ -395,13 +405,13 @@ color:Black;
 																		        		${fn:replace(ampCalendarEventItem.title, "'", "\\'")}
 																		        	</c:forEach>
 																		        </c:set>
-										                        				<c:set var="eventStartDate">
-										                        					${startDay}/${startMonth}/${startYear} ${startHours}:<c:if test="${startMinute<10}">0</c:if>${startMinute}
+																		        <c:set var="eventStartDate">
+										                        					${startDay}/${startMonth}/${startYear} ${startHours}:<c:if test="${startMinute<10}">00</c:if>${startMinute}
 										                        				</c:set>
 										                        				<c:set var="eventEndDate">
 										                        					${endDay}/${endMonth}/${endYear} ${endHours}:<c:if test="${endMinute<10}">0</c:if>${endMinute}
 										                        				</c:set>
-				                                                    			<bean:define id="currentMonth">${calendarViewForm.baseDateBreakDown.month}</bean:define>
+										                        				<bean:define id="currentMonth">${calendarViewForm.baseDateBreakDown.month}</bean:define>
 				                                                    			<bean:define id="currentDay">${calendarViewForm.baseDateBreakDown.dayOfMonth}</bean:define>
 				                                                    			<bean:define id="currentYear">${calendarViewForm.baseDateBreakDown.year}</bean:define>
 				                                                    			<c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.recurrCalEvent}">
@@ -698,8 +708,7 @@ color:Black;
 														                        				<c:set var="eventEndDate">
 														                        					${endDay}/${endMonth}/${endYear} ${endHours}:<c:if test="${endMinute<10}">0</c:if>${endMinute}
 														                        				</c:set>
-
-														                        				<c:set var="drawTD">
+																								<c:set var="drawTD">
 														                        					<c:choose>
 														                        						<c:when test="${startMonth==currentMonth}">
 														                        							<c:choose>

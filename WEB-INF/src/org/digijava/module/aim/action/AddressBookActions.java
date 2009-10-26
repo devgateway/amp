@@ -134,7 +134,12 @@ public class AddressBookActions extends DispatchAction {
 				myForm.setName(contact.getName());
 				myForm.setLastname(contact.getLastname());
 				myForm.setEmail(contact.getEmail());
-				myForm.setTitle(contact.getTitle().getId());
+                                if(contact.getTitle()!=null){
+                                    myForm.setTitle(contact.getTitle().getId());
+                                }
+                                else{
+                                    myForm.setTitle(null);
+                                }
 				myForm.setOrganisationName(contact.getOrganisationName());
 				myForm.setPhone(contact.getPhone());
 				myForm.setFax(contact.getFax());

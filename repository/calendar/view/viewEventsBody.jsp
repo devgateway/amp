@@ -316,10 +316,7 @@ function getEthiopianCalendarDate(yyyy,mm,dd)
 </style>
 <body>
 <script type="text/javascript">
-window.onload = function(){
-	init();
-	};
-
+addLoadEvent(init);
 </script>
 <input type="hidden" value=""  id="printView"/>
 <input type="hidden" value=""  id="printDate"/>

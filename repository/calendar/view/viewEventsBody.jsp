@@ -216,10 +216,10 @@ color:Black;
 				                              						
 				                              						<!-- Start Month != Current Month -->
 				                              						<c:if test="${startMonth!=currentMonth && currentMonth==endMonth}">
-				                                						<c:if test="${item.dayOfMonth>startDay && !item.enabled}">
+				                                						<c:if test="${item.dayOfMonth >=startDay && !item.enabled}">
 											                                <div style="margin:0px;padding:0px;font-weight:Bold;text-align:center;color:Black;border:1px solid ${ampCalendarGraph.ampCalendar.eventType.color};background-color:${ampCalendarGraph.ampCalendar.eventType.color};" onmouseover="stm(['${eventName}','${stDate}:${eventStartDate}<br>${endDate}:${eventEndDate}'],Style[14])"  onmouseout="htm()">
 					                                                        	<!-- image with link should be only on mondays -->
-												                                <c:if test="${stat.index%7==0}">
+					                                                        	<c:if test="${stat.index%7==0}">
 												                                	<digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~method=preview~resetForm=true">
 										                                               	<digi:img src="module/calendar/images/lookglass2.gif" border="0" alt="" align="left"/>
 							                                                       	</digi:link>
@@ -247,7 +247,7 @@ color:Black;
 				                              						<c:if test="${startMonth!=currentMonth && endMonth!=currentMonth}">
 				                                						<div style="margin:0px;padding:0px;font-weight:Bold;text-align:center;color:Black;border:1px solid ${ampCalendarGraph.ampCalendar.eventType.color};background-color:${ampCalendarGraph.ampCalendar.eventType.color};" onmouseover="stm(['${eventName}','${stDate}:${eventStartDate}<br>${endDate}:${eventEndDate}'],Style[14])"  onmouseout="htm()">
 					                                                    	<!-- image with link should be only on mondays -->
-												                        	<c:if test="${stat.index%7==0}">
+					                                                    	<c:if test="${stat.index%7==0}">
 												                               	<digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~method=preview~resetForm=true">
 											                                      	<digi:img src="module/calendar/images/lookglass2.gif" border="0" alt="" align="left"/>
 								                                                </digi:link>

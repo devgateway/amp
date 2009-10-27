@@ -669,8 +669,11 @@ color:Black;
 																					       	<digi:trn key="aim:dayOfWeek${item.dayOfWeek}">${item.dayOfWeek}</digi:trn>, &nbsp;
 																					   	</span>
 																					   	<a href="#" style="font-size:10px;color:White;font-family:Tahoma;" onclick="submitFilterForm('${calendarViewForm.view}', '${item.timestamp}');return(false);">
-																					  		${item.dayOfMonth}<c:if test="${item.dayOfMonth>3}"><digi:trn key="calendar:dayPrefix">th</digi:trn></c:if>
-																					   	</a>
+																					  		${item.dayOfMonth}
+																					  		<%if (!CalendarThread.getLocale().getCode().equalsIgnoreCase("fr")){%>
+																					  			<c:if test="${item.dayOfMonth>3}"><digi:trn key="calendar:dayPrefix">th</digi:trn></c:if>
+																					  		<%}%>
+																					  	</a>
 																					</td>
 																					<td style="border-top:2px solid #e8eef7;background-color: #ffffff">
 																							<c:forEach var="ampCalendarGraph" items="${calendarViewForm.ampCalendarGraphs}">

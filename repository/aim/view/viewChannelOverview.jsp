@@ -1100,7 +1100,7 @@ function commentWin(val) {
 																	</TR>
 																	<field:display feature="Project Coordinator Contact Information" name="Project Coordinator First Name">
 																		<TR>
-																			<TD bgcolor="#ffffff"><i>
+																			<TD bgcolor="#ffffff">
 																				<i><digi:trn>Name</digi:trn></i>: 
 																				<c:if test="${not empty aimChannelOverviewForm.primaryprojCoordinatorContact}">
 																					<c:out value="${aimChannelOverviewForm.primaryprojCoordinatorContact.contact.name}" />&nbsp; 
@@ -1136,7 +1136,7 @@ function commentWin(val) {
 																	</TR>
 																	<field:display feature="Sector Ministry Contact Information" name="Sector Ministry Contact First Name">
 																		<TR>
-																			<TD bgcolor="#ffffff"><i>
+																			<TD bgcolor="#ffffff">
 																				<i><digi:trn>Name</digi:trn></i>: 
 																				<c:if test="${not empty aimChannelOverviewForm.primarySectorMinistryContact}">
 																					<c:out value="${aimChannelOverviewForm.primarySectorMinistryContact.contact.name}" />&nbsp; 
@@ -1152,6 +1152,42 @@ function commentWin(val) {
 																				<c:if test="${not empty aimChannelOverviewForm.primarySectorMinistryContact}">
 																					<c:set	var="mailTo" value="mailto:${aimChannelOverviewForm.primarySectorMinistryContact.contact.email}" /> 
 																					<a	href="mailto:${aimChannelOverviewForm.primarySectorMinistryContact.contact.email}">${aimChannelOverviewForm.primarySectorMinistryContact.contact.email}</a>
+																				</c:if>
+																			</TD>
+																		</TR>
+																	</field:display>
+																</TABLE>
+																</TD>
+															</TR>
+														</feature:display>
+														<feature:display name="Implementing/Executing Agency Contact Information"	module="Contact Information">
+															<TR>
+																<TD>
+																	<TABLE width="100%" cellPadding="3" cellSpacing="1"	vAlign="top" align="top" bgcolor="#aaaaaa">
+																		<TR>
+																			<TD bgcolor="#eeeeee" height="18">&nbsp; 
+																				<IMG height="10" src="../ampTemplate/images/arrow-014E86.gif" width="15">
+																				<b><digi:trn>Implementing/Executing Agency Contact Information</digi:trn></b>
+																			</TD>
+																	</TR>
+																	<field:display feature="Implementing/Executing Agency Contact Information" name="Implementing/Executing Agency Contact First Name">
+																		<TR>
+																			<TD bgcolor="#ffffff">
+																				<i><digi:trn>Name</digi:trn></i>: 
+																				<c:if test="${not empty aimChannelOverviewForm.primaryImplExecutingAgencyContact}">
+																					<c:out value="${aimChannelOverviewForm.primaryImplExecutingAgencyContact.contact.name}" />&nbsp; 
+																					<c:out value="${aimChannelOverviewForm.primaryImplExecutingAgencyContact.contact.lastname}" />
+																				</c:if>
+																			</TD>
+																		</TR>
+																	</field:display>
+																	<field:display feature="Implementing/Executing Agency Contact Information"name="Implementing/Executing Agency Contact Email">
+																		<TR>
+																			<TD bgcolor="#ffffff">
+																				<i><digi:trn>Email</digi:trn></i>: 
+																				<c:if test="${not empty aimChannelOverviewForm.primaryImplExecutingAgencyContact}">
+																					<c:set	var="mailTo" value="mailto:${aimChannelOverviewForm.primaryImplExecutingAgencyContact.contact.email}" /> 
+																					<a	href="mailto:${aimChannelOverviewForm.primaryImplExecutingAgencyContact.contact.email}">${aimChannelOverviewForm.primaryImplExecutingAgencyContact.contact.email}</a>
 																				</c:if>
 																			</TD>
 																		</TR>

@@ -20,6 +20,7 @@
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/container-min.js"/>" ></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/connection-min.js"/>" ></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/dragdrop-min.js"/>" ></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 <style type="text/css">
 	.mask {
 	  -moz-opacity: 0.8;
@@ -339,6 +340,14 @@
         	}else{
         		document.getElementById('secMin').value=false;
         	}	
+        }else if(contactType=='implExecuting'){
+        	var secMin= $("input[@id^='implExecuting']");
+        	var resetSecMin=resetPrimary(implExecuting);
+        	if(resetSecMin==true){
+        		document.getElementById('implExecuting').value=true;
+        	}else{
+        		document.getElementById('implExecuting').value=false;
+        	}	
         }
     }
 
@@ -352,6 +361,8 @@
     	}
     	return retValue;
     }
+
+    addLoadEvent(delBody);
 	-->
 
 </script>
@@ -383,6 +394,7 @@ function resetAll()
 <html:hidden styleId="mof" property="contactInformation.resetMofedIds" value="${aimEditActivityForm.contactInformation.resetMofedIds}"/>
 <html:hidden styleId="proj" property="contactInformation.resetProjCoordIds" value="${aimEditActivityForm.contactInformation.resetProjCoordIds}"/>
 <html:hidden styleId="secMin" property="contactInformation.resetSecMinIds" value="${aimEditActivityForm.contactInformation.resetSecMinIds}"/>
+<html:hidden styleId="implExecuting" property="contactInformation.resetImplExecutingIds" value="${aimEditActivityForm.contactInformation.resetImplExecutingIds}"/>
 <c:set var="stepNm">
   ${aimEditActivityForm.stepNumberOnPage}
  </c:set>
@@ -591,7 +603,7 @@ function resetAll()
 														<tr>
 															<td>
 																<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width="15">
-																<a title="<digi:trn key="aim:DetailsofContactPerson">The first name, last name and e-mail of the person in charge of the project at the funding agency</digi:trn>">
+																<a title="<digi:trn>The first name, last name and e-mail of the person in charge of the project at the funding agency</digi:trn>">
 																<b><digi:trn>MOFED Contact Information</digi:trn></b>
 																</a>	
 															</td>
@@ -647,7 +659,7 @@ function resetAll()
 														<tr>
 															<td>
 																<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
-																<a title="<digi:trn key="aim:DetailsofContactPerson">The first name, last name and e-mail of the person in charge of the project at the funding agency</digi:trn>">
+																<a title="<digi:trn>The first name, last name and e-mail of the person in charge of the project at the funding agency</digi:trn>">
 																<b><digi:trn>Project Coordinator Contact Information</digi:trn></b>
 																</a>	
 															</td>
@@ -703,7 +715,7 @@ function resetAll()
 														<tr>
 															<td>
 																<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
-																<a title="<digi:trn key="aim:DetailsofContactPerson">The first name, last name and e-mail of the person in charge of the project at the funding agency</digi:trn>">
+																<a title="<digi:trn>The first name, last name and e-mail of the person in charge of the project at the funding agency</digi:trn>">
 																<b><digi:trn>Sector Ministry Contact Information</digi:trn></b>
 																</a>	
 															</td>
@@ -749,6 +761,63 @@ function resetAll()
 																	</c:if>
 																	<tr>
 																		<td colspan="7" bgcolor="#ffffff"><html:button property="submitButton" styleClass="dr-menu" onclick="AddContactButton('SECTOR_MINISTRY_CONT')">Add Contact</html:button></td>
+																	</tr>																	
+																</table>												
+															</td>
+														</tr>
+														<tr style="height:20px"><td/></tr>
+													</feature:display>
+													<!-- Implementing/Executing agencies -->
+													<feature:display name="Implementing/Executing Agency Contact Information" module="Contact Information">
+														<tr>
+															<td>
+																<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																<a title="<digi:trn>The first name, last name and e-mail of the person in charge of the project at the funding agency</digi:trn>">
+																<b><digi:trn>Implementing/Executing Agency Contact Information</digi:trn></b>
+																</a>	
+															</td>
+														</tr>
+														<tr>
+															<td>
+																<table style="width: 100%;height: 100%;vertical-align: top;">
+																	<c:if test="${not empty aimEditActivityForm.contactInformation.implExecutingAgencyContacts}">
+																		<tr bgcolor="#cccccc"">
+																			<td><strong><digi:trn>Firstname</digi:trn></strong></td>
+																			<td><strong><digi:trn>Lastname</digi:trn></strong></td>
+																			<td><strong><digi:trn>Email</digi:trn></strong></td>
+																			<td><strong><digi:trn>Organisation</digi:trn></strong></td>
+																			<td><strong><digi:trn>Phone</digi:trn></strong></td>
+																			<td><strong><digi:trn>Primary</digi:trn></strong></td>
+																			<td><strong><digi:trn>Actions</digi:trn></strong></td>
+																		</tr>
+																		<c:forEach var="implExecAgency" items="${aimEditActivityForm.contactInformation.implExecutingAgencyContacts}" varStatus="stat">
+																			<c:set var="background">
+																				<c:if test="${stat.index%2==0}">#FFFFFF</c:if>
+																				<c:if test="${stat.index%2==1}">#d7eafd</c:if>
+																			</c:set>
+																			<tr bgcolor="${background}">
+																				<td>${implExecAgency.contact.name}</td>
+																				<td>${implExecAgency.contact.lastname}</td>
+																				<td>${implExecAgency.contact.email}</td>
+																				<td>${implExecAgency.contact.organisationName}</td>
+																				<td>${implExecAgency.contact.phone}</td>
+																				<td align="left">
+																					<html:multibox name="aimEditActivityForm" property="contactInformation.resetImplExecutingIds" styleId="implExecuting_${stat.index}" value="${implExecAgency.contact.temporaryId}" onchange="changePrimaryState('implExecuting')"/>
+																				</td>
+																				<td>
+																					<a href="javascript:editContact('IMPL_EXEC_AGENCY_CONT',${implExecAgency.contact.temporaryId})"><img src="/repository/message/view/images/edit.gif" border="0" /></a>
+																					<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
+																					<c:set target="${urlParams4}" property="tempId">
+																						<bean:write name="implExecAgency" property="contact.temporaryId"/>
+																					</c:set>
+																					<c:set target="${urlParams4}" property="contType" value="IMPL_EXEC_AGENCY_CONT"/>
+																					<digi:link href="/activityContactInfo.do?toDo=delete" name="urlParams4"><img src="/repository/message/view/images/trash_12.gif" border="0" /></digi:link>
+																				</td>
+																			</tr>
+																		</c:forEach>
+																	</c:if>
+																	<tr>
+																		<td colspan="7" bgcolor="#ffffff"><html:button property="submitButton" styleClass="dr-menu" onclick="AddContactButton('IMPL_EXEC_AGENCY_CONT')">Add Contact</html:button></td>
 																	</tr>
 																</table>												
 															</td>

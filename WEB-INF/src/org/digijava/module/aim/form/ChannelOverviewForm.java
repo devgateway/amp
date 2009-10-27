@@ -61,6 +61,7 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	private AmpActivityContact primaryMofedContact;
 	private AmpActivityContact primaryprojCoordinatorContact;
 	private AmpActivityContact primarySectorMinistryContact;
+	private AmpActivityContact primaryImplExecutingAgencyContact;
 	
 	private Collection financingBreakdown;
         
@@ -731,5 +732,13 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 		public void setPrimarySectorMinistryContact(
 				AmpActivityContact primarySectorMinistryContact) {
 			this.primarySectorMinistryContact = primarySectorMinistryContact;
-		}		  
+		}
+
+		public AmpActivityContact getPrimaryImplExecutingAgencyContact() {
+			return primaryImplExecutingAgencyContact;
+		}
+
+		public void setPrimaryImplExecutingAgencyContact(AmpActivityContact primaryImplExecutingAgencyContact) {
+			this.primaryImplExecutingAgencyContact = primaryImplExecutingAgencyContact;
+		}
 }

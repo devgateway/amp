@@ -138,6 +138,7 @@
 <feature:display name="Enable Scrolling Reports" module="Report and Tab Options"></feature:display> 
 <feature:display name="Event Tab" module="Messages"></feature:display> 
 <feature:display name="Executing Agency" module="Organizations"></feature:display> 
+<feature:display name="Implementing/Executing Agency Contact Information" module="Contact Information"></feature:display>
 <feature:display name="Filter Button" module="Report and Tab Options"></feature:display> 
 <feature:display name="Financial Progress Tab" module="Funding"></feature:display> 
 <feature:display name="Funding Information" module="Funding"></feature:display> 
@@ -261,7 +262,9 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display feature="Project Coordinator Contact Information" name="Project Coordinator Email"></field:display> 
 <field:display feature="Project Coordinator Contact Information" name="Project Coordinator First Name"></field:display> 
 <field:display feature="Sector Ministry Contact Information" name="Sector Ministry Contact Email"></field:display> 
-<field:display feature="Sector Ministry Contact Information" name="Sector Ministry Contact First Name"></field:display> 
+<field:display feature="Sector Ministry Contact Information" name="Sector Ministry Contact First Name"></field:display>
+<field:display feature="Implementing/Executing Agency Contact Information" name="Implementing/Executing Agency Contact First Name"></field:display>
+<field:display feature="Implementing/Executing Agency Contact Information" name="Implementing/Executing Agency Contact Email"></field:display>
 <field:display feature="Sectors" name="Level 1 Sectors List"></field:display> 
 <field:display name="A.C. Chapter" feature="Identification"></field:display> 
 <field:display name="AMP ID" feature="Identification"></field:display> 

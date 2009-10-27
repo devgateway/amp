@@ -2486,18 +2486,21 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private List<AmpActivityContact> donorContacts;
 		private List<AmpActivityContact> sectorMinistryContacts;
 		private List<AmpActivityContact> projCoordinatorContacts;
+		private List<AmpActivityContact> implExecutingAgencyContacts;
 		
 		private String[] primaryDonorContIds;
 		private String[] primaryMofedContIds;
 		private String[] primaryProjCoordContIds;
 		private String[] primarySecMinContIds;
+		private String[] primaryImplExecutingContIds;
 		private Boolean resetDonorIds;
 		private Boolean resetMofedIds;
 		private Boolean resetProjCoordIds;
 		private Boolean resetSecMinIds;
+		private Boolean resetImplExecutingIds;
 		
 		
-		private List<AmpContact> contacts; //holds all existing contacts		
+		private List<AmpContact> contacts; //holds all existing contacts
 		private String primaryContact;
 		private Boolean primaryAllowed; //defines whether activity contact can be primary or not. primary contact must be one for each type(mofed,donor,e.t.c.)
 		private String contactType;		
@@ -2707,7 +2710,27 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		}
 		public void setOfficeaddress(String officeaddress) {
 			this.officeaddress = officeaddress;
-		}		
+		}
+		public List<AmpActivityContact> getImplExecutingAgencyContacts() {
+			return implExecutingAgencyContacts;
+		}
+		public void setImplExecutingAgencyContacts(
+				List<AmpActivityContact> implExecutingAgencyContacts) {
+			this.implExecutingAgencyContacts = implExecutingAgencyContacts;
+		}
+		public String[] getPrimaryImplExecutingContIds() {
+			return primaryImplExecutingContIds;
+		}
+		public void setPrimaryImplExecutingContIds(String[] primaryImplExecutingContIds) {
+			this.primaryImplExecutingContIds = primaryImplExecutingContIds;
+		}
+		public Boolean getResetImplExecutingIds() {
+			return resetImplExecutingIds;
+		}
+		public void setResetImplExecutingIds(Boolean resetImplExecutingIds) {
+			this.resetImplExecutingIds = resetImplExecutingIds;
+		}
+		
 		
 	}
 

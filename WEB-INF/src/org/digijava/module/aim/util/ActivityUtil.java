@@ -802,6 +802,8 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     			ampContact.setFax(contact.getFax());
     			ampContact.setCreator(contact.getCreator());
     			ampContact.setShared(true);
+    			ampContact.setMobilephone(contact.getMobilephone());
+    			ampContact.setOfficeaddress(contact.getOfficeaddress());
     			session.update(ampContact);
     		}else{
     			session.save(contact);
@@ -4073,10 +4075,10 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       }
 
       /**
-       * Insert into table 'amp_activity_access' a new record to keep track of user´s access to activities.
+       * Insert into table 'amp_activity_access' a new record to keep track of userï¿½s access to activities.
        * Related to AMP-4660.
        * @param user Currently logged user.
-       * @param activityId Accessed activity´s id.
+       * @param activityId Accessed activityï¿½s id.
        * @param isUpdate True if user saved changes on the activity, false if the user accessed Activity Overview.
        */
       public static void updateActivityAccess(User user, Long activityId, boolean isUpdate) {

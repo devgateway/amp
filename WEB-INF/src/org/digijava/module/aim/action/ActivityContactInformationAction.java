@@ -79,9 +79,24 @@ public class ActivityContactInformationAction extends Action {
 			clearForm(eaForm);
 			eaForm.getContactInformation().setContactType(null);
 		}
-		if(action!=null && action.equalsIgnoreCase("checkDulicateEmail")){
+		if(action!=null && action.equalsIgnoreCase("checkDulicateEmail")){			
 			String email=request.getParameter("email").trim();
-			int emailCount=ContactInfoUtil.getContactsCount(email,null);
+			boolean checkForDuplicate=false;
+			int emailCount=0;
+			//in Case we are editing already existing contact,then no check is needed.In case of adding new contact or editing not already saved 
+			//contact(contact is stored in session only) , then check is needed
+			if(eaForm.getContactInformation().getTemporaryId()!=null){ 
+				AmpContact contact = getContactFromList(eaForm.getContactInformation().getTemporaryId(), eaForm.getContactInformation().getActivityContacts());
+				if(contact.getId()==null){
+					checkForDuplicate=true;
+				}				
+			}else{ // temporaryId is null, if we are creating new contact
+				checkForDuplicate=true;				
+			}
+			
+			if(checkForDuplicate){
+				emailCount=ContactInfoUtil.getContactsCount(email,null);
+			}
 			String contactEmail=null;
 			if(emailCount>0){
 				contactEmail="exists";
@@ -93,7 +108,7 @@ public class ActivityContactInformationAction extends Action {
     		OutputStreamWriter outputStream = new OutputStreamWriter(response.getOutputStream());
     		PrintWriter out = new PrintWriter(outputStream, true);
     		String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-    		xml += "<" + ROOT_TAG +">";    		
+    		xml += "<" + ROOT_TAG +">";
     		xml+="<"+"contact email=\""+contactEmail+"\" />";
     		xml+="</"+ROOT_TAG+">";
     		out.println(xml);
@@ -144,6 +159,17 @@ public class ActivityContactInformationAction extends Action {
 		}else if(contactType.equals(Constants.SECTOR_MINISTRY_CONTACT)){
 			if(eaForm.getContactInformation().getSectorMinistryContacts()!=null && eaForm.getContactInformation().getSectorMinistryContacts().size()>0){
 				activityContacts=eaForm.getContactInformation().getSectorMinistryContacts();
+				for (AmpActivityContact activityContact : activityContacts) {
+					//if any contact is already primary,then user shouldn't be able to create another primary contact
+					if(activityContact.getPrimaryContact()!=null && activityContact.getPrimaryContact()){
+						retValue=false;
+						break;
+					}
+				}
+			}
+		}else if (contactType.equals(Constants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT)){
+			if(eaForm.getContactInformation().getImplExecutingAgencyContacts()!=null && eaForm.getContactInformation().getImplExecutingAgencyContacts().size()>0){
+				activityContacts=eaForm.getContactInformation().getImplExecutingAgencyContacts();
 				for (AmpActivityContact activityContact : activityContacts) {
 					//if any contact is already primary,then user shouldn't be able to create another primary contact
 					if(activityContact.getPrimaryContact()!=null && activityContact.getPrimaryContact()){

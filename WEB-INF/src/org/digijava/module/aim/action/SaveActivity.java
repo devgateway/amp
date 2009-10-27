@@ -1568,18 +1568,23 @@ public class SaveActivity extends Action {
 		if(eaForm.getContactInformation().getResetSecMinIds()!=null && eaForm.getContactInformation().getResetSecMinIds()){
 			eaForm.getContactInformation().setPrimarySecMinContIds(null);
 		}
+		if(eaForm.getContactInformation().getResetImplExecutingIds()!=null && eaForm.getContactInformation().getResetImplExecutingIds()){
+			eaForm.getContactInformation().setResetImplExecutingIds(null);
+		}
 		
 		String[] donorContsIds=null;
 		String[] mofedContsIds=null;
 		String[] projCoordContsIds=null;
-		String[] sectorMinContsIds=null;	
+		String[] sectorMinContsIds=null;
+		String[] implExecutingContsIds=null;
 		
 		if (check){
 			//Do the checks here
 			donorContsIds=eaForm.getContactInformation().getPrimaryDonorContIds();
 			mofedContsIds=eaForm.getContactInformation().getPrimaryMofedContIds();
 			projCoordContsIds=eaForm.getContactInformation().getPrimaryProjCoordContIds();
-			sectorMinContsIds=eaForm.getContactInformation().getPrimarySecMinContIds();			
+			sectorMinContsIds=eaForm.getContactInformation().getPrimarySecMinContIds();
+			implExecutingContsIds=eaForm.getContactInformation().getPrimaryImplExecutingContIds();
 			
 			if(donorContsIds!=null && donorContsIds.length>1){ //more then one primary contact is not allowed				
 				errors.add("invalidDonorCont",new ActionError("error.aim.addActivity.contactInfo.invalidDonorCont", TranslatorWorker.translateText("Must Be One Primary Donor Contact",locale,siteId)));				
@@ -1595,6 +1600,10 @@ public class SaveActivity extends Action {
 			
 			if(sectorMinContsIds!=null && sectorMinContsIds.length>1){
 				errors.add("invalidSecMinCont",new ActionError("error.aim.addActivity.contactInfo.invalidSecMinCont", TranslatorWorker.translateText("Must Be One Primary Sector Ministry Contact",locale,siteId)));
+			}
+			
+			if(implExecutingContsIds != null && implExecutingContsIds.length >1){
+				errors.add("invalidImplExecutingAgencyCont",new ActionError("error.aim.addActivity.contactInfo.invalidExecImplAgencyCont", TranslatorWorker.translateText("Must Be One Primary Implementing/Executing Agency Contact",locale,siteId)));
 			}
 			
 			end:
@@ -1617,6 +1626,8 @@ public class SaveActivity extends Action {
 					fillActivityContactPrimaryField(projCoordContsIds,	ampActContact);
 				}else if(ampActContact.getContactType().equals(Constants.SECTOR_MINISTRY_CONTACT)){
 					fillActivityContactPrimaryField(sectorMinContsIds,	ampActContact);
+				}else if(ampActContact.getContactType().equals(Constants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT)){
+					fillActivityContactPrimaryField(implExecutingContsIds,	ampActContact);
 				}
 			}
 		}

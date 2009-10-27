@@ -1743,6 +1743,24 @@
 												</td>
 											</tr>
 										</feature:display>
+										<feature:display name="Implementing/Executing Agency Contact Information" module="Contact Information">
+											<tr>
+												<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
+													<digi:trn>Implementing/Executing Agency Contact Information</digi:trn>
+												</td>
+												<td bgcolor="#ffffff">
+													<c:if test="${not empty aimEditActivityForm.contactInformation.implExecutingAgencyContacts}">
+														<c:forEach var="implExecAgencyContact" items="${aimEditActivityForm.contactInformation.implExecutingAgencyContacts}">
+															<div>
+																<c:out value="${implExecAgencyContact.contact.name}"/>
+																<c:out value="${implExecAgencyContact.contact.lastname}"/> -
+																<c:out value="${implExecAgencyContact.contact.email}"/>			
+															</div>
+														</c:forEach>
+													</c:if>
+												</td>
+											</tr>
+										</feature:display>
 									</module:display>
 							 		<field:display name="Activity Performance"  feature="Activity Dashboard">
 									<tr>
@@ -1919,25 +1937,27 @@
 									</tr>
 									</logic:notEmpty>
 									</field:display>
+									<%-- 
 									<logic:notEmpty name="aimEditActivityForm" property="identification.team">
-									<field:display name="Data Team Leader" feature="Identification">
-									<tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap" >
-											<b>
-											<digi:trn key="aim:activityTeamLeader">
-										    Data Team Leader</digi:trn>
-											</b>
-										</td>
-
-										<td bgcolor="#ffffff">											
-												<c:out value="${aimEditActivityForm.identification.team.teamLead.user.firstNames}"/>
-											<c:out value="${aimEditActivityForm.identification.team.teamLead.user.lastName}"/>	-
-											<c:out value="${aimEditActivityForm.identification.team.teamLead.user.email}"/>
-										</td>
-									</tr>
-									</field:display>
+										<field:display name="Data Team Leader" feature="Identification">
+											<tr>
+												<td width="30%" align="right" valign="top" nowrap="nowrap" >
+													<b>
+													<digi:trn key="aim:activityTeamLeader">
+												    Data Team Leader</digi:trn>
+													</b>
+												</td>
+		
+												<td bgcolor="#ffffff">											
+														<c:out value="${aimEditActivityForm.identification.team.teamLead.user.firstNames}"/>
+													<c:out value="${aimEditActivityForm.identification.team.teamLead.user.lastName}"/>	-
+													<c:out value="${aimEditActivityForm.identification.team.teamLead.user.email}"/>
+												</td>
+											</tr>
+										</field:display>
 									</logic:notEmpty>
-
+									
+									--%>									
 									<logic:iterate name="aimEditActivityForm" property="customFields" id="customField" indexId="index">
 									<field:display name="${customField.FM_field}" feature="Step${customField.step.step}">												
 										<tr>

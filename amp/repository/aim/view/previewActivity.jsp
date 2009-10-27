@@ -1957,12 +1957,30 @@ function collapseAll() {
 												</td>
 											</tr>
 										</feature:display>
+										<feature:display name="Implementing/Executing Agency Contact Information" module="Contact Information">
+											<tr>
+												<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
+													<digi:trn>Implementing/Executing Agency Contact Information</digi:trn>
+												</td>
+												<td bgcolor="#ffffff">
+													<c:if test="${not empty aimEditActivityForm.contactInformation.implExecutingAgencyContacts}">
+														<c:forEach var="implExecAgencyContact" items="${aimEditActivityForm.contactInformation.implExecutingAgencyContacts}">
+															<div>
+																<c:out value="${implExecAgencyContact.contact.name}"/>
+																<c:out value="${implExecAgencyContact.contact.lastname}"/> -
+																<c:out value="${implExecAgencyContact.contact.email}"/>			
+															</div>
+														</c:forEach>
+													</c:if>
+												</td>
+											</tr>
+										</feature:display>
 									</module:display>									
 									<field:display name="Activity Performance"  feature="Activity Dashboard">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
-											<digi:trn key="aim:meActivityPerformance">
-										    Activity - Performance</digi:trn>										</td>
+											<digi:trn>Activity - Performance</digi:trn>
+										</td>
 										<td bgcolor="#ffffff">
 											<% if (actPerfChartUrl != null) { %>
 												<img src="<%= actPerfChartUrl %>" width="370" height="450" border="0" usemap="#<%= actPerfChartFileName %>"><br><br>

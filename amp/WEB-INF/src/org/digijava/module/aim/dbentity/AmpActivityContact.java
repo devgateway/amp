@@ -6,7 +6,7 @@ public class AmpActivityContact {
 	private AmpActivity activity;
 	private AmpContact contact;
 	private Boolean primaryContact;
-	private String contactType; // Donor/MOFED funding Contact Information, Project Coordinator Contact Information,Sector Ministry Contact Information
+	private String contactType; // Donor/MOFED funding,Project Coordinator,Sector Ministry or Implementing/Executing Agency Contact Information
 	
 	public AmpActivity getActivity() {
 		return activity;

@@ -366,5 +366,18 @@ public class ContactInfoUtil {
 			}
 			eaForm.getContactInformation().setSectorMinistryContacts(sectorMinistryContacts);
 		}
+		//fill implementing/executing agency contact list
+		else if(eaForm.getContactInformation().getContactType()!=null && eaForm.getContactInformation().getContactType().equals(Constants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT)){
+			List<AmpActivityContact> implExecAgencyContacts=null;
+			for (AmpActivityContact cont : activityContacts) {
+				if(cont.getContactType().equals(Constants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT)){
+					if(implExecAgencyContacts==null){
+						implExecAgencyContacts=new ArrayList<AmpActivityContact>();
+					}
+					implExecAgencyContacts.add(cont);
+				}
+			}
+			eaForm.getContactInformation().setImplExecutingAgencyContacts(implExecAgencyContacts);
+		}
 	}	
 }

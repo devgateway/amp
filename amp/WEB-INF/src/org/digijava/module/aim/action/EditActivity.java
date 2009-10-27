@@ -1538,6 +1538,19 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 					}
 					contactInfo.getSectorMinistryContacts().add(ampActContact);
 				}
+				//implementing/executing agency
+				else if(ampActContact.getContactType().equals(Constants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT)){
+					if(contactInfo.getImplExecutingAgencyContacts()==null){
+						contactInfo.setImplExecutingAgencyContacts(new ArrayList<AmpActivityContact>());
+					}
+					if(ampActContact.getPrimaryContact()!=null && ampActContact.getPrimaryContact()){
+						if(contactInfo.getPrimaryImplExecutingContIds()==null){
+							contactInfo.setPrimaryImplExecutingContIds(new String[1]);
+						}
+						contactInfo.getPrimaryImplExecutingContIds()[0]=ampActContact.getContact().getTemporaryId();
+					}
+					contactInfo.getImplExecutingAgencyContacts().add(ampActContact);
+				}
 			}
 	    	  
 	      }

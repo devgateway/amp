@@ -405,11 +405,13 @@ public class ViewChannelOverview extends TilesAction {
 				    AmpActivityContact primaryMofedContact=null;
 				    AmpActivityContact primaryProjCoordContact=null;
 				    AmpActivityContact primarySecMinContact=null;
+				    AmpActivityContact primaryImplExAgencyCont=null;
 				    try {
 						primaryDonorContact=ContactInfoUtil.getActivityPrimaryContact(activity.getAmpActivityId(),Constants.DONOR_CONTACT);
 						primaryMofedContact=ContactInfoUtil.getActivityPrimaryContact(activity.getAmpActivityId(),Constants.MOFED_CONTACT);
 						primaryProjCoordContact=ContactInfoUtil.getActivityPrimaryContact(activity.getAmpActivityId(),Constants.PROJECT_COORDINATOR_CONTACT);
 						primarySecMinContact=ContactInfoUtil.getActivityPrimaryContact(activity.getAmpActivityId(),Constants.SECTOR_MINISTRY_CONTACT);
+						primaryImplExAgencyCont=ContactInfoUtil.getActivityPrimaryContact(activity.getAmpActivityId(),Constants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -417,6 +419,7 @@ public class ViewChannelOverview extends TilesAction {
 					formBean.setPrimaryMofedContact(primaryMofedContact);
 					formBean.setPrimaryprojCoordinatorContact(primaryProjCoordContact);
 					formBean.setPrimarySectorMinistryContact(primarySecMinContact);
+					formBean.setPrimaryImplExecutingAgencyContact(primaryImplExAgencyCont);
           	        
           	        // queryString = "select distinct f.typeOfAssistance.value from " +
 //                      AmpFunding.class.getName() + " f where f.ampActivityId=:actId";
@@ -435,14 +438,12 @@ public class ViewChannelOverview extends TilesAction {
 		
 		}
 		//AMP-4660: Add filters for viewed, created and updated activities.
-		ActivityUtil.updateActivityAccess((User) request.getSession().getAttribute("org.digijava.kernel.user"),
-				formBean.getId(), false);
+		ActivityUtil.updateActivityAccess((User) request.getSession().getAttribute("org.digijava.kernel.user"),formBean.getId(), false);
 		
 		return null;
 	}
 
-	private ChannelOverviewForm setUniqueModalitiesToForm(
-			ChannelOverviewForm formBean, AmpActivity activity) {
+	private ChannelOverviewForm setUniqueModalitiesToForm(ChannelOverviewForm formBean, AmpActivity activity) {
 		Set<AmpFunding> fundings = activity.getFunding();
 		Iterator<AmpFunding> fundingsIterator = fundings.iterator();
 		ArrayList<AmpCategoryValue> modalities = new ArrayList<AmpCategoryValue>();

@@ -73,16 +73,7 @@ en:
   
       
   errors:
-    no_exchange_rates: No Exchange Rates Exist in the Database. Please create a New Exchange Rate.
-       
-  
-          
-  links:
-      title: Links to Related Websites
-  
-  downloads:
-      title: Downloads
-      available_shortly: Downloads of the first ODAnic report 2007 in Excel will be uploaded shortly
+    no_exchange_rates: No Exchange Rates Exist in the Database. Please create a New Exchange Rates
           
   exchange_rates: 
       title: Exchange Rates used by ODAnic

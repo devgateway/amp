@@ -1,0 +1,52 @@
+es:
+  static:
+    home: 
+      introduction_short: | 
+        <p>ODAnic es la base de datos en línea de Ayuda Oficial al Desarrollo (AOD) a Nicaragua de los socios de desarrollo. Fue creado en respuesta a la Declaración de Paris sobre la Efectividad de la Ayuda, la cual aboga por una coordinación más fuerte de las actividades de donantes y el mejor alineamiento de la ayuda con la estrategia de reducción de la pobreza del Gobierno de Nicaragua. Originalmente desarrollada como una herramienta para los cooperantes de la Unión Europea, ODAnic contiene actualmente información de asistencia de toda la comunidad de donantes de Nicaragua.</p>
+        <p>ODAnic es una herramienta fácil de usar y disponible a todos. Los usuarios pueden buscar proyectos por donante, sector, y otros criterios, y crear reportes personalizados usado la herramienta "Diseña Reporte". ODAnic también incluye perfiles de donante con las estrategias para la asistencia a Nicaragua de cada Estado Miembro de la UE.</p>
+        <p>Con ODAmap, los usuarios pueden localizar proyectos por su ubicación geográfica. El Blue Book es un recurso interactivo y en línea con gráficos y otras herramientas para ayudar a los usuarios a entender y analizar la asistencia para el desarrollo provista por los estados miembros de la UE y la Comisión Europea.</p><br />
+        <p>¡Bienvenidos a ODAnic!</p>
+        
+      introduction_long: |
+        <p><strong>Acerca de ODAnic</strong></p>
+        <p>En el 2007, el Departamento de Ayuda Internacional (DFID) del Reino Unido comenzó y proveyó soporte para el establecimiento de ODAnic, una herramienta interactiva para centralizar, coordinar y armonizar información en las actividades de la Comisión Europea y todos los estados miembros de la Unión Europea que operan en Nicaragua. A través de ODAnic, los cooperantes de la Unión Europea lanzaron el primer Blue Book de la Unión Europea electrónico para Nicaragua. Ambos productos están basados en las buenas prácticas de Mozambique (ODAmoz) y el Blue Book de la UE en Vietnam.</p>
+        <p>En el 2008, en un paso más adelante para una mejor armonización, ODAnic fue abierto para todos los cooperantes que operan en Nicaragua. Hoy, un total de 21 cooperantes se han comprometido a ofrecer información en ODAnic. Se están llevando a cabo gestiones para enlazar ODAnic al sistema de manejo de ayuda del gobierno de Nicaragua, conocido como SysODA.</p>
+        <p>El lanzamiento del Blue Book de la UE 2008 está planeado para Abril de 2009.</p>
+        <p>Esta nueva y mejorada versión de ODAnic es un producto de Development Gateway, una organización internacional sin fines de lucro con la misión de crear e implementar herramientas basadas en internet para hacer que los esfuerzo de desarrollo y ayuda sean más efectivos. La OECD, UNDP y el Banco Mundial son parte del Comité de Dirección de la Efectividad de la Ayuda de Developer Gateway que tiene un papel esencial en guiar en la dirección del programa de efectividad de la ayuda.</p>
+        <p><strong>Objetivo</strong></p>
+        <p>El objetivo principal de ODAnic es proveer a los donantes en Nicaragua las herramientas y el entrenamiento para cumplir con sus obligaciones de reportes bajo la declaración de París y la agenda de acción de Accra, siguiendo estándares internacionales con el espíritu de la transparencia y la responsabilidad. Al mismo tiempo, ODAnic también provee al gobierno, los cooperantes, la sociedad civil y al público un panorama de las estrategias de los cooperantes, los proyectos y los compromisos financieros.</p>
+        <p>Desde la declaración de Roma en la Efectividad de la Ayuda en 2003, los Sistemas de Información del Manejo de la Ayuda han sido ampliamente reconocidos como herramientas esenciales para mejorar la responsabilidad de los gobiernos y los cooperantes, facilitando las prácticas del manejo de la ayuda, avanzando en la cooerdinación de cooperantes y asegurando un alineamiento más efectivo de las actividades de los cooperantes con las estrategias de los países.</p>
+        <p><strong>Beneficios Principales</strong></p>
+        <p>Este enfoque hacia la implementación de sistemas reconoce que las soluciones tecnológicas solas no son suficientes para tener resultados duraderos. Deben ser adoptadas como parte de un esfuerzo mayor que une a socios, establece procesos de manejo sustentables y asegura el matenimiento técnico a largo plazo.</p>
+        <p>A través de la herramienta ODAnic, los usuarios pueden:<br />
+        <ul>
+        <li>
+        Visualizar reportes predefinidos por cooperante, sector y más.<br />
+        </li>
+        <li>
+        Crear reportes personalizados y filtrar actividades por sus características principales.<br />
+        </li>
+        <li>
+        Localizar actividades geográficamente a través de un mapa interactivo del país<br />
+        </li>
+        <li>
+        Visualizar los detalles principales de un proyecto específico<br />
+        </li>
+        <li>
+        Tener más información acerca del financiamiento de los cooperantes al país a través de resultados tales como el Blue Book de la UE, que incluye gráficos y perfiles de los cooperantes.
+        </li>
+        </ul>
+        </p>
+        <p><strong>Responsabilidad</strong></p>
+        <p>Los cooperantes son responsables por el mantenimiento y la validación de la información en ODAnic. Cada agencia cooperante en el país selecciona un punto focal para adherir a las guías acordadas localmente y el cronograma de actualización, al tiempoque se siguen las clasificaciones de datos internacional desarrollado por la Comité de Ayuda al Desarrollo (DAC) de la OECD. Entonces, esta información está disponible para todos.</p>
+      map_image_link: Presione Mapa para ODAmap
+      bluebook_image_link: Haga Click sobre la imagen para EU Blue Book 2007
+      back: Regresar
+      read_more: Leer más...
+      
+    links:
+      title: Enlaces a Sitio Web relacionados
+      
+    downloads:
+      title: Descargas
+      available_shortly: Descargas del primer reporte ODAnic 2007 en Excel será cargado en breve

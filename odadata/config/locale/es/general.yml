@@ -90,13 +90,8 @@ es:
       
   errors:
       no_exchange_rates: 'No existe ninguna tasa de cambio en la Base de Datos. Por favor, cree una nueva.'     
-              
-  links:
-      title: Enlaces a Sitio Web relacionados
   
-  downloads:
-      title: Descargas
-      available_shortly: Descargas del primer reporte ODAnic 2007 en Excel será cargado en breve
+  
           
   exchange_rates: 
       title: Tasas de Cambio usadas por ODAnic

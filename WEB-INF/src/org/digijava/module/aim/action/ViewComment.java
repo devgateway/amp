@@ -63,7 +63,7 @@ public class ViewComment extends Action {
 					 AmpTeam currentTeam=TeamUtil.getAmpTeam(member.getTeamId());
 					 
 					 if (currentTeam.getComputation() != null && !currentTeam.getComputation()){
-							if (!currentTeam.getAmpTeamId().equals(activityTeam.getAmpTeamId())){
+							if (activityTeam != null && !currentTeam.getAmpTeamId().equals(activityTeam.getAmpTeamId())){
 								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.editActivity.noWritePermissionForUser"));
 								saveErrors(request, errors);
 								String url = "/aim/viewChannelOverview.do?ampActivityId="+ editForm.getActivityId() + "&tabIndex=0";

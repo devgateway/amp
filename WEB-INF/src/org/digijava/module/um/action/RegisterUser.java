@@ -182,6 +182,11 @@ public class RegisterUser extends Action {
 			return mapping.findForward("forward");
 		}
 		else{
+			Site site = RequestUtils.getSite(request);
+			Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+			String siteId = site.getId()+"";
+			String locale = navigationLanguage.getCode();
+			userRegisterForm.addError("error.aim.addUser.success", TranslatorWorker.translateText("User registered successfully",locale,siteId));
 			userRegisterForm.reset(mapping, request);
 			return (mapping.findForward("index"));
 		}

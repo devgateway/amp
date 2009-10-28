@@ -429,6 +429,7 @@
 	<page name="exportImportContacts" page="exportImportContacts" title="Contacts Export/Import"/>
         <page page="components/addContactPopin" name="aim_contactComponentPopIn" title="AMP - Select Organization" />
 	<page name="fmCheck" title="Feature Manager check tool"/>
+	<page name="fmAdvancedPopUp" title="Feature Manager Advanced View PopUp"/>
 
 </secondary-pages>
 <module>

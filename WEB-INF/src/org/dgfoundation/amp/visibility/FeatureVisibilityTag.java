@@ -167,7 +167,7 @@ public class FeatureVisibilityTag extends BodyTagSupport {
 	      			if (request.getParameter(FMAdvancedModeUtil.ADVANCED_PARAMETER) == null || source.endsWith("allVisibilityTags.jsp")){
 	       	   			pageContext.getOut().print(bodyText.trim());
 	       			} else {
-	       	   			pageContext.getOut().print(FMAdvancedModeUtil.addFeatureAdvancedMarkUp(bodyText));
+	       	   			pageContext.getOut().print(FMAdvancedModeUtil.addFeatureAdvancedMarkUp(bodyText, this.getName()));
 	       			}
 	   			}
        }

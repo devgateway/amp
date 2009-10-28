@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -31,6 +32,9 @@ import org.digijava.module.aim.dbentity.FeatureTemplates;
 import org.digijava.module.aim.fmtool.dbentity.AmpFeatureSourceFeature;
 import org.digijava.module.aim.fmtool.dbentity.AmpFeatureSourceField;
 import org.digijava.module.aim.fmtool.dbentity.AmpFeatureSourceModule;
+import org.digijava.module.aim.fmtool.util.FMToolConstants;
+import org.digijava.module.aim.form.FMAdvancedForm;
+import org.digijava.module.aim.helper.FMAdvancedDisplay;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Flag;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -1326,6 +1330,77 @@ public class FeaturesUtil {
 		return ft;
 	}
 
+	
+	public static AmpTemplatesVisibility updateTemplateAndFme(Long id, LinkedList<FMAdvancedDisplay> fmeList) throws DgException {
+        Transaction tx = null;
+		Session session = null;
+		AmpTemplatesVisibility retValue = null;
+
+		try {
+		
+			session = PersistenceManager.getRequestDBSession();
+
+            tx = session.beginTransaction();
+			
+			retValue = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class, id);
+
+			for (FMAdvancedDisplay item : fmeList) {
+				AmpObjectVisibility obj = null;
+				if (item.getType().equalsIgnoreCase(FMToolConstants.FEATURE_TYPE_MODULE)){
+					obj = FeaturesUtil.getModuleById(item.getId());
+					if (item.isVisible()){
+						retValue.getItems().add(obj);
+						obj.getTemplates().add(retValue);
+					} else {
+						retValue.getItems().remove(obj);
+						obj.getTemplates().remove(retValue);
+					}
+				} else if (item.getType().equalsIgnoreCase(FMToolConstants.FEATURE_TYPE_FEATURE)){
+					obj = FeaturesUtil.getFeatureById(item.getId());
+					if (item.isVisible()){
+						retValue.getFeatures().add(obj);
+						obj.getTemplates().add(retValue);
+					} else {
+						retValue.getFeatures().remove(obj);
+						obj.getTemplates().remove(retValue);
+					}
+				} else if (item.getType().equalsIgnoreCase(FMToolConstants.FEATURE_TYPE_FIELD)){
+					obj = FeaturesUtil.getFieldById(item.getId());
+					if (item.isVisible()){
+						retValue.getFields().add(obj);
+						obj.getTemplates().add(retValue);
+					} else {
+						retValue.getFields().remove(obj);
+						obj.getTemplates().remove(retValue);
+					}
+				}
+				session.update(obj);
+			}	
+			tx.commit();
+			session.flush();
+			
+			List list = session.createQuery("from " + AmpModulesVisibility.class.getName()).list();
+			TreeSet mySet=new TreeSet(FeaturesUtil.ALPHA_ORDER);
+			mySet.addAll(list);
+			retValue.setAllItems(mySet);
+		
+		} catch (HibernateException ex) {
+			logger.debug("Exception from fixModulesDuplicates", ex);
+			throw new DgException(ex);
+		} finally{ 
+            if (tx != null && !tx.wasCommitted()) {
+                try {
+                    tx.rollback();
+                } catch (HibernateException ex) {
+                    logger.error("rollback() failed", ex);
+                }
+            }				
+		}
+		
+		return retValue;
+	}
+	
+	
 	/**
 	 *
 	 * @author dan
@@ -2958,6 +3033,64 @@ public class FeaturesUtil {
 
 	}
 
+	public static AmpModulesVisibility getModuleById(Long id){
+		AmpModulesVisibility retValue=null;
+		Session session = null;
+
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = "select mv from " + AmpModulesVisibility.class.getName()+ " mv where mv.id=:ident " ;
+			Query qry = session.createQuery(queryString);
+			qry.setLong("ident", id);
+			if (qry.list() != null && qry.list().size() > 0) {
+				retValue = (AmpModulesVisibility) qry.uniqueResult();
+			}
+		} catch (Exception e) {
+			logger.error(e);
+		}
+
+		return retValue;
+	}
+
+	public static AmpFeaturesVisibility getFeatureById(Long id){
+		AmpFeaturesVisibility retValue=null;
+		Session session = null;
+
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = "select mv from " + AmpFeaturesVisibility.class.getName()+ " mv where mv.id=:ident " ;
+			Query qry = session.createQuery(queryString);
+			qry.setLong("ident", id);
+			if (qry.list() != null && qry.list().size() > 0) {
+				retValue = (AmpFeaturesVisibility) qry.uniqueResult();
+			}
+		} catch (Exception e) {
+			logger.error(e);
+		}
+
+		return retValue;
+	}
+
+	public static AmpFieldsVisibility getFieldById(Long id){
+		AmpFieldsVisibility retValue=null;
+		Session session = null;
+
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = "select mv from " + AmpFieldsVisibility.class.getName()+ " mv where mv.id=:ident " ;
+			Query qry = session.createQuery(queryString);
+			qry.setLong("ident", id);
+			if (qry.list() != null && qry.list().size() > 0) {
+				retValue = (AmpFieldsVisibility) qry.uniqueResult();
+			}
+		} catch (Exception e) {
+			logger.error(e);
+		}
+
+		return retValue;
+	}
+	
+	
 	public static AmpComponentType getDefaultComponentType() {
 		String defaultComponentTypeIdStr = getGlobalSettingValue("Default Component Type");
 		return ComponentsUtil.getComponentTypeById(Long.parseLong(defaultComponentTypeIdStr));

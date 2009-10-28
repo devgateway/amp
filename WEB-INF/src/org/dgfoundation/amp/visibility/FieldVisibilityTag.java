@@ -206,7 +206,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
       			if (request.getParameter(FMAdvancedModeUtil.ADVANCED_PARAMETER) == null || source.endsWith("allVisibilityTags.jsp")){
        	   			pageContext.getOut().print(output.trim());
        			} else {
-       	   			pageContext.getOut().print(FMAdvancedModeUtil.addFieldAdvancedMarkUp(output));
+       	   			pageContext.getOut().print(FMAdvancedModeUtil.addFieldAdvancedMarkUp(output, this.getName()));
        			}
    			////System.out.println("FM ::: field:"+this.getName()+" is ACTIVE");
    			} else {

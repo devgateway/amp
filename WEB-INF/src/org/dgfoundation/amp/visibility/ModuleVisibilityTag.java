@@ -177,7 +177,7 @@ public class ModuleVisibilityTag extends BodyTagSupport {
    			if (request.getParameter(FMAdvancedModeUtil.ADVANCED_PARAMETER) == null || source.endsWith("allVisibilityTags.jsp")){
    	   			pageContext.getOut().print(bodyText.trim());
    			} else {
-   	   			pageContext.getOut().print(FMAdvancedModeUtil.addModuleAdvancedMarkUp((bodyText)));
+   	   			pageContext.getOut().print(FMAdvancedModeUtil.addModuleAdvancedMarkUp(bodyText, this.getName() ));
    			}
    			
    		   }

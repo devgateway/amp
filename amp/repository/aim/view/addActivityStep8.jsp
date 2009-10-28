@@ -307,7 +307,6 @@
     }
 
     function changePrimaryState(contactType){
-        
         if(contactType=='donor'){
         	var donors= $("input[@id^='donors_']");
         	var resetDonors=resetPrimary(donors);
@@ -341,9 +340,9 @@
         		document.getElementById('secMin').value=false;
         	}	
         }else if(contactType=='implExecuting'){
-        	var secMin= $("input[@id^='implExecuting']");
-        	var resetSecMin=resetPrimary(implExecuting);
-        	if(resetSecMin==true){
+        	var impl= $("input[@id^='implExecuting']");
+        	var resetEmplEx=resetPrimary(impl);
+        	if(resetEmplEx==true){
         		document.getElementById('implExecuting').value=true;
         	}else{
         		document.getElementById('implExecuting').value=false;
@@ -802,7 +801,7 @@ function resetAll()
 																				<td>${implExecAgency.contact.organisationName}</td>
 																				<td>${implExecAgency.contact.phone}</td>
 																				<td align="left">
-																					<html:multibox name="aimEditActivityForm" property="contactInformation.resetImplExecutingIds" styleId="implExecuting_${stat.index}" value="${implExecAgency.contact.temporaryId}" onchange="changePrimaryState('implExecuting')"/>
+																					<html:multibox name="aimEditActivityForm" property="contactInformation.primaryImplExecutingContIds" styleId="implExecuting_${stat.index}" value="${implExecAgency.contact.temporaryId}" onchange="changePrimaryState('implExecuting')"/>
 																				</td>
 																				<td>
 																					<a href="javascript:editContact('IMPL_EXEC_AGENCY_CONT',${implExecAgency.contact.temporaryId})"><img src="/repository/message/view/images/edit.gif" border="0" /></a>

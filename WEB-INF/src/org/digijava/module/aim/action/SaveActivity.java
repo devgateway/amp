@@ -2268,6 +2268,7 @@ public class SaveActivity extends Action {
 			if (eaForm.isEditAct() == false) {
 				AmpActivity act = ActivityUtil.getActivityByName(eaForm.getIdentification().getTitle());
 				if (act != null) {
+					request.setAttribute("existingActivity", act);
 					eaForm.setActivityId(act.getAmpActivityId());
 					logger.debug("Activity with the name "
 							+ eaForm.getIdentification().getTitle() + " already exist.");

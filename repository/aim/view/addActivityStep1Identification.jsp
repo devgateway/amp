@@ -570,7 +570,7 @@ target.style.cursor = "default"
 											</td>
 											<td valign="top" align="left">
 											<div id="myAutoComplete">
-												<html:text name="aimEditActivityForm" styleId="myInput" property="identification.budgetCodeProjectID"/>
+												<html:text name="aimEditActivityForm" styleId="myInput" property="identification.budgetCodeProjectID" style="font-size: 9pt"/>
 												<div id="myContainer"></div>
 											</div>	
 											</td></tr>	

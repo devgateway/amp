@@ -1,0 +1,1891 @@
+--- 
+agencies_001: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "504"
+  name: "International Food Production Research Institute (IFPRI) -CA"
+agencies_002: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "406"
+  name: "Min Gobernación"
+agencies_003: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "362"
+  name: "Global Development Links (GDL)"
+agencies_004: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "434"
+  name: NOVIB
+agencies_005: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "431"
+  name: "OXFAM - España"
+agencies_006: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "355"
+  name: "FUNDACION INTERMON OXFAM"
+agencies_007: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "382"
+  name: IICA
+agencies_008: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "288"
+  name: "Alcadia RAAN"
+agencies_009: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "492"
+  name: WWF
+agencies_010: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "346"
+  name: "Fondation Caritas Luxembourg"
+agencies_011: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "458"
+  name: SICA
+agencies_012: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "493"
+  name: Lux-Development
+agencies_013: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "519"
+  name: "SECRETARIA DE INTEGRACION ECONOMICA CENTROAMERICANA (SIECA)"
+agencies_014: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "291"
+  name: AMUNIC
+agencies_015: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "316"
+  name: "Comision Interamericana de Derechos Humanos - OEA"
+agencies_016: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "395"
+  name: INTA
+agencies_017: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "511"
+  name: INTUR
+agencies_018: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "334"
+  name: "Embassy of the Netherlands"
+agencies_019: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "335"
+  name: ENACAL
+agencies_020: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "415"
+  name: "Minsterio del Ambiente u los Recursos Naturales (MARENA)"
+agencies_021: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "297"
+  name: "BGR "
+agencies_022: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "342"
+  name: FDL
+agencies_023: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "428"
+  name: OPS
+agencies_024: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "294"
+  name: "ACRA - Italia"
+agencies_025: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "427"
+  name: "ÖNSI GmbH"
+agencies_026: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "301"
+  name: "CARE International - Francia"
+agencies_027: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "338"
+  name: EPN
+agencies_028: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "314"
+  name: CISAS
+agencies_029: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "379"
+  name: ICC
+agencies_030: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "374"
+  name: "Hilfswerk Austria "
+agencies_031: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "505"
+  name: "Ministerio de la Familia"
+agencies_032: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "462"
+  name: "Socorro Popular Francés (SPF) - Francia"
+agencies_033: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "486"
+  name: "VEREIN STAEDTEPARTNERSCHAFT FREIBURG-WIWILI IN NICARAGUA EV"
+agencies_034: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "447"
+  name: PRODEL
+agencies_035: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "299"
+  name: "CARE - France"
+agencies_036: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "485"
+  name: "Verein z Förderung Städtepartners. Kreuzberg Sn Rafael del Sur e.V"
+agencies_037: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "345"
+  name: FOMAV
+agencies_038: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "326"
+  name: CSE
+agencies_039: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "370"
+  name: "Handicap International Luxembourg a.s.b.l."
+agencies_040: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "457"
+  name: "several local NGOs"
+agencies_041: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "390"
+  name: INPYME
+agencies_042: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "424"
+  name: OAS
+agencies_043: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "421"
+  name: NDI
+agencies_044: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "450"
+  name: PTM
+agencies_045: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "487"
+  name: "Veterenarios Sin Fronteras - Francia"
+agencies_046: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "437"
+  name: "PAZ Y TERCER MUNDO"
+agencies_047: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "393"
+  name: "Instituto Nicaraguense de la Mujer (INIM)"
+agencies_048: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "452"
+  name: "Regional gvts"
+agencies_049: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "472"
+  name: UCRESEP
+agencies_050: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "429"
+  name: "OTC Nicaragua"
+agencies_051: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "381"
+  name: IEN-NI
+agencies_052: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "293"
+  name: ASDB
+agencies_053: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "352"
+  name: "FOS - Bélgica"
+agencies_054: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "359"
+  name: FUNICA
+agencies_055: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "329"
+  name: "Diakonia Sweden"
+agencies_056: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "412"
+  name: "Ministerio de Relaciones Exteriores (MINREX)"
+agencies_057: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "436"
+  name: PAM
+agencies_058: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "286"
+  name: AIDEP
+agencies_059: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "496"
+  name: "Asociación de Mujeres Nicaragüense Luisa Amanda Espinoza (AMNLAE)"
+agencies_060: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "340"
+  name: FAO
+agencies_061: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "332"
+  name: "Embassy of Norway"
+agencies_062: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "469"
+  name: "Terres des Hommes - Italia*"
+agencies_063: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "280"
+  name: ACE
+agencies_064: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "307"
+  name: "Centro Humbolt"
+agencies_065: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "319"
+  name: "Contraloría General de la República (CGR)"
+agencies_066: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "306"
+  name: "Centro Carter"
+agencies_067: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "507"
+  name: "Pan American Social Marketing Organization (PASMO) Nicaragua"
+agencies_068: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "292"
+  name: AN
+agencies_069: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "311"
+  name: CESTAS
+agencies_070: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "354"
+  name: "Fundación CODESPA"
+agencies_071: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "344"
+  name: FNI
+agencies_072: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "471"
+  name: UCA
+agencies_073: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "408"
+  name: MINGOB
+agencies_074: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "435"
+  name: PAHO
+agencies_075: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "298"
+  name: "Broederlijk Delen - Bélgica"
+agencies_076: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "418"
+  name: MOVIMONDO
+agencies_077: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "366"
+  name: GRAAN
+agencies_078: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "422"
+  name: "Nicaraguan CSOs "
+agencies_079: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "478"
+  name: UNFPA
+agencies_080: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "397"
+  name: "INTERMON OXFAM"
+agencies_081: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "414"
+  name: "Ministerio del Trabajo (MITRAB)"
+agencies_082: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "445"
+  name: PPDH
+agencies_083: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "330"
+  name: EIRENE
+agencies_084: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "400"
+  name: ISCOD
+agencies_085: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "403"
+  name: MCN
+agencies_086: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "394"
+  name: "Instituto Nicaraguense de Pesca (INPESCA). "
+agencies_087: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "432"
+  name: "OXFAM - Gran Bretaña"
+agencies_088: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "386"
+  name: INEC
+agencies_089: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "420"
+  name: "National Police"
+agencies_090: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "407"
+  name: MINED
+agencies_091: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "300"
+  name: "CARE International - Alemania"
+agencies_092: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "284"
+  name: "Agro Acción Alemana (DWHH) "
+agencies_093: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "392"
+  name: "Instituto Nicaraguense de Fomento Municipal (INIFOM)"
+agencies_094: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "502"
+  name: "Instituo Nicaragüense de Desarrollo (INDE)"
+agencies_095: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "372"
+  name: "Hermanamiento Freiburg - Wiwilí e. V. - Alemania"
+agencies_096: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "388"
+  name: "INGENIEROS SIN FRONTERAS"
+agencies_097: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "495"
+  name: "Asociación de Instituciones Microfinancieras de Nicaragua (ASOMIF)"
+agencies_098: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "358"
+  name: FUNDENIC
+agencies_099: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "285"
+  name: Agroconsulting
+agencies_100: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "303"
+  name: "Catholic Institut for international Relations"
+agencies_101: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "509"
+  name: CPML-N
+agencies_102: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "517"
+  name: "Embassy of Denmark"
+agencies_103: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "503"
+  name: "Instituto Democratico Multipartidario"
+agencies_104: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "409"
+  name: "Ministerio Agropecuario y Forestal de Nicaragua (MAGFOR)"
+agencies_105: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "433"
+  name: TROCAIRE
+agencies_106: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "313"
+  name: CIES
+agencies_107: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "510"
+  name: MARENA
+agencies_108: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "327"
+  name: DANIDA
+agencies_109: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "296"
+  name: "Association Solidarité Luxembourg-Nicaragua a.s.b.l."
+agencies_110: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "325"
+  name: "Cruz Roja - Holanda"
+agencies_111: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "488"
+  name: VSF
+agencies_112: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "419"
+  name: MTI
+agencies_113: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "479"
+  name: UNI
+agencies_114: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "498"
+  name: "Cámara de Comercio de Nicaragua (CACONIC)"
+agencies_115: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "464"
+  name: "SOS Villages d'enfants monde a.s.b.l."
+agencies_116: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "404"
+  name: "MEDICOS DEL MUNDO"
+agencies_117: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "341"
+  name: FARMAMUNDI
+agencies_118: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "309"
+  name: CEPRESI
+agencies_119: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "333"
+  name: "Embassy of Sweden"
+agencies_120: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "410"
+  name: "Ministerio de Educación"
+agencies_121: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "322"
+  name: COSPE
+agencies_122: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "446"
+  name: PROATEC
+agencies_123: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "451"
+  name: RAMA
+agencies_124: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "375"
+  name: "HIRUGARREN MUNDUA TA BAKEA-PAZ Y TERCER MUNDO"
+agencies_125: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "481"
+  name: UNIDO
+agencies_126: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "439"
+  name: PDDH
+agencies_127: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "318"
+  name: CONISIDA
+agencies_128: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "360"
+  name: "FVBCh Consortium"
+agencies_129: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "376"
+  name: "HIVOS - Holanda"
+agencies_130: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "391"
+  name: "Instituto de la Vivienda Urbana y Rural (INVUR)"
+agencies_131: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "441"
+  name: PMA
+agencies_132: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "499"
+  name: "Centro de Exportaciones e inversiones de Nicaragua (CEI)"
+agencies_133: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "482"
+  name: "Univ. Colombo"
+agencies_134: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "514"
+  name: "MIRIAM "
+agencies_135: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "448"
+  name: PROINTEC
+agencies_136: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "438"
+  name: "Paz y Tercer Mundo (PTM) - España"
+agencies_137: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "363"
+  name: "Global Witness"
+agencies_138: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "413"
+  name: "Ministerio de Salud (MINSA)"
+agencies_139: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "302"
+  name: "Caritas - Luxemburgo"
+agencies_140: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "518"
+  name: "Intern. Federation of Red Cross etc. (IFRC)"
+agencies_141: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "387"
+  name: INETER
+agencies_142: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "295"
+  name: "Assemblea Nacional"
+agencies_143: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "305"
+  name: CENIDH
+agencies_144: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "349"
+  name: FONIM
+agencies_145: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "416"
+  name: "Movimiento Laico para América Latina (MLAL) - Italia"
+agencies_146: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "489"
+  name: "Welthaus - Alemania"
+agencies_147: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "350"
+  name: "Foro de Mujeres"
+agencies_148: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "466"
+  name: "Swedish Coopertive Centre"
+agencies_149: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "368"
+  name: GTZ
+agencies_150: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "377"
+  name: "HORIZONT 3000 - Austria"
+agencies_151: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "378"
+  name: IBIS-Dinamarca
+agencies_152: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "442"
+  name: PN
+agencies_153: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "337"
+  name: "ENTRECULTURAS FE Y ALEGRIA"
+agencies_154: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "343"
+  name: FISE
+agencies_155: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "500"
+  name: "Comision Presidencial de Promoción de Inversiones (PRONICARAGUA)"
+agencies_156: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "454"
+  name: "SECOURS POPULAIRE FRANCAIS"
+agencies_157: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "460"
+  name: SISCA
+agencies_158: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "365"
+  name: "Gobierno RAAN"
+agencies_159: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "328"
+  name: DGI
+agencies_160: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "321"
+  name: "Corte Suprema de Justicia (CSJ)"
+agencies_161: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "477"
+  name: UNDP
+agencies_162: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "371"
+  name: "Health Unlimited - Gran Bretaña"
+agencies_163: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "513"
+  name: OIT
+agencies_164: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "508"
+  name: "Union Nacional de Agricultores y Ganaderos (UNAG)"
+agencies_165: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "494"
+  name: "Cruz Roja Nicaragüense"
+agencies_166: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "461"
+  name: SNV
+agencies_167: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "491"
+  name: "World Bank"
+agencies_168: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "373"
+  name: "Hermanamiento Kreuzberg - San Rafael del Sur e. V. - Alemania"
+agencies_169: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "453"
+  name: REN
+agencies_170: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "347"
+  name: Fondeagro
+agencies_171: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "426"
+  name: "OIKOS - Portugal"
+agencies_172: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "449"
+  name: PROMIPYME
+agencies_173: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "490"
+  name: "Werkhof - Alemania"
+agencies_174: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "287"
+  name: "Alcadia Las Segovias"
+agencies_175: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "324"
+  name: "CRIC - Italia"
+agencies_176: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "473"
+  name: UNA
+agencies_177: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "520"
+  name: "Initiative Eine Welt"
+agencies_178: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "353"
+  name: "Frères des Hommes Luxembourg a.s.b.l."
+agencies_179: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "396"
+  name: "Interact Worldwide - Gran Britania"
+agencies_180: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "367"
+  name: GRAAS
+agencies_181: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "411"
+  name: "Ministerio de Fomento Industria y Comercio (MIFIC)"
+agencies_182: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "364"
+  name: "Gobierno de Nicaragua"
+agencies_183: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "282"
+  name: "ACTED - Francia"
+agencies_184: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "402"
+  name: MAEE
+agencies_185: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "323"
+  name: CPDH
+agencies_186: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "467"
+  name: "Swedish Mission Council"
+agencies_187: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "480"
+  name: UNICEF
+agencies_188: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "483"
+  name: "University of Helsinki"
+agencies_189: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "380"
+  name: IDR
+agencies_190: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "474"
+  name: UNAN
+agencies_191: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "425"
+  name: "OEA sede Whashington"
+agencies_192: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "455"
+  name: SERENA-RAAS
+agencies_193: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "331"
+  name: "Ejército de Nicaragua"
+agencies_194: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "356"
+  name: "Fundacion Puntos de Encuentro"
+agencies_195: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "456"
+  name: SETEC
+agencies_196: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "506"
+  name: "Oficina de Organización de Estados Americanos (OEA) en Managua"
+agencies_197: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "308"
+  name: CEPREDENAC
+agencies_198: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "320"
+  name: "Cooperazione Italiana"
+agencies_199: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "348"
+  name: "FONDS VOOR - F.O.S."
+agencies_200: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "398"
+  name: IPADE
+agencies_201: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "283"
+  name: "Africa 70"
+agencies_202: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "399"
+  name: IP-Stuttgart
+agencies_203: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "463"
+  name: "SOLIDARIDAD INTERNACIONAL"
+agencies_204: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "339"
+  name: EPTISA
+agencies_205: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "281"
+  name: ACRA
+agencies_206: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "310"
+  name: CEPREV
+agencies_207: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "459"
+  name: SINAPRED
+agencies_208: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "289"
+  name: "Alcadia RAAS"
+agencies_209: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "405"
+  name: "MHCP "
+agencies_210: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "317"
+  name: CONICYT
+agencies_211: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "512"
+  name: "EyT – Etica y Transparencia"
+agencies_212: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "389"
+  name: INIDE
+agencies_213: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "476"
+  name: UNAN-Managua
+agencies_214: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "385"
+  name: INCAP
+agencies_215: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "440"
+  name: PGR
+agencies_216: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "468"
+  name: "Terra Nuova - Italia"
+agencies_217: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "417"
+  name: "MAIS - Italia "
+agencies_218: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "336"
+  name: ENATREL
+agencies_219: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "351"
+  name: "Forum Syd"
+agencies_220: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "361"
+  name: GEZA
+agencies_221: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "430"
+  name: OXFAM
+agencies_222: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "423"
+  name: NITLAPAN
+agencies_223: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "516"
+  name: "ACDI/CIDA "
+agencies_224: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "369"
+  name: GVC
+agencies_225: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "315"
+  name: CNU
+agencies_226: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "401"
+  name: Ixchen
+agencies_227: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "383"
+  name: INAFOR
+agencies_228: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "312"
+  name: "CHRISTIAN AID"
+agencies_229: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "501"
+  name: "Fundación Xochiquetzal"
+agencies_230: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "304"
+  name: CATIE
+agencies_231: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "515"
+  name: CONA
+agencies_232: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "443"
+  name: "Policía Nacional de Nicaragua"
+agencies_233: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "465"
+  name: "Stiftung FUNDEVERDE"
+agencies_234: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "357"
+  name: FUNDEMOS
+agencies_235: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "444"
+  name: POLISAL
+agencies_236: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "475"
+  name: UNAN-León
+agencies_237: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "470"
+  name: "The World Bank"
+agencies_238: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "279"
+  name: "Not Applicable"
+agencies_239: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "290"
+  name: "AMIGOS DE LA TIERRA"
+agencies_240: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "497"
+  name: "Asociación Quincho Barrilete"
+agencies_241: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "384"
+  name: INATEC
+agencies_242: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "484"
+  name: UNOPS
+agencies_243: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "522"
+  name: "Alcaldia Bluefields"
+agencies_244: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "523"
+  name: "Alcaldía La Cruz de Rio Grande"
+agencies_245: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "524"
+  name: "Alcaldía Juigalpa"
+agencies_246: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "526"
+  name: "Alcaldía Camoapa"
+agencies_247: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "527"
+  name: "Alcaldía Puerto Cabezas"
+agencies_248: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "525"
+  name: "Alcaldía Sebeco"
+agencies_249: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "528"
+  name: FUNIMODA
+agencies_250: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "529"
+  name: "BICU - Bluefields Indian and Caribbean University"
+agencies_251: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "532"
+  name: "Universidad URACCAN"
+agencies_252: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "533"
+  name: "Asociación de Promotores de la Cultura (APC)"
+agencies_253: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "534"
+  name: "Telecomunicaciones y Correos (TELCOR)"
+agencies_254: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "535"
+  name: "Financiera Nicaragüense de Inversiones (FNI)"
+agencies_255: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "536"
+  name: "Superintendencia de Bancos y otras Instituciones FInancieras (SIBOIF)"
+agencies_256: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "537"
+  name: "Ministerio de Hacienda y Crédito Público (MHCP)"
+agencies_257: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "538"
+  name: "Procuraduría General de la República (PGR)"
+agencies_258: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "539"
+  name: "Sistema Nicaragüense de Prevención de Desastres (SINAPRED)"
+agencies_259: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "540"
+  name: "Ministerio de Energia y Minas"
+agencies_260: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "541"
+  name: "Ministerio de Transporte e Infraestructura (MTI)"
+agencies_261: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "542"
+  name: "Ministerio Agropecuario y Forestal (MAGFOR)"
+agencies_262: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "543"
+  name: "Instituto Nicaragüense de Tecnología Agropecuaria (INTA)"
+agencies_263: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "544"
+  name: "Fondo de Inversión Social de Emergencia (FISE)"
+agencies_264: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "545"
+  name: "Empresa Nicaragüense de Acueductos y Alcantarillados (ENACAL)"
+agencies_265: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "546"
+  name: "Ministerio de Fomento, Industria y Comercio (MIFIC)"
+agencies_266: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "561"
+  name: "Cruz Roja Canadiense"
+agencies_267: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "562"
+  name: "Acción Médica Cristiana (AMC)"
+agencies_268: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "563"
+  name: ACSUR
+agencies_269: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "564"
+  name: ACTED
+agencies_270: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "565"
+  name: "AFC Consultant International"
+agencies_271: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "566"
+  name: "Asociación Cristiana La Luz de los Discapacitados"
+agencies_272: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "567"
+  name: "Beller Consult GMBH"
+agencies_273: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "568"
+  name: "Beller Consult GMBH"
+agencies_274: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "569"
+  name: CIR
+agencies_275: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "570"
+  name: "Deutsche Welthungerhilfe EV"
+agencies_276: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "571"
+  name: "EL QUETZAL ONLUS"
+agencies_277: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "572"
+  name: "EL QUETZAL ONLUS"
+agencies_278: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "573"
+  name: FODEMUSA
+agencies_279: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "574"
+  name: "GESUNDHEIT UND DRITTE WELT"
+agencies_280: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "575"
+  name: "Health Limited"
+agencies_281: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "576"
+  name: "HET NEDERLANDSE RODE KRUIS"
+agencies_282: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "577"
+  name: PROGRESSIO
+agencies_283: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "578"
+  name: SANIPLAN
+agencies_284: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "579"
+  name: "VSF CICDA"
+agencies_285: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "580"
+  name: "PROCARIBE - UPOLI"
+agencies_286: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "581"
+  name: "MINISTERIO PUBLICO - FACILITADORES JUDICIALES"
+agencies_287: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "582"
+  name: "Centro Cooperativo Sueco"
+agencies_288: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "583"
+  name: "Centro de Promoción y Asesoría en Investigación, Desarrollo y formación para el sector agropecuario"
+agencies_289: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "584"
+  name: "Sofonías Nicaragua"
+agencies_290: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "585"
+  name: CIDEA
+agencies_291: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "586"
+  name: "Alcaldía de Masaya"
+agencies_292: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "587"
+  name: "UNIVERSIDADES - PROGRAMAS DE INVESTIGACION"
+agencies_293: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "595"
+  name: "Save the Children"
+agencies_294: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "596"
+  name: "Care Nicaragua"
+agencies_295: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "597"
+  name: "Universidad del Norte (UNN)"
+agencies_296: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "598"
+  name: "SE - CONAPAS"
+agencies_297: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "599"
+  name: "Escuela Agrícola Zamorano"
+agencies_298: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "605"
+  name: "CINCO - Centro de Investigaciones de la Comunicación"
+agencies_299: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "606"
+  name: "CAFOD Catholic Agency for Overseas Development"
+agencies_300: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "607"
+  name: "World Food Programme (WFP)"
+agencies_301: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "609"
+  name: CEDEHCA
+agencies_302: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "610"
+  name: FUMDEC
+agencies_303: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "611"
+  name: FUNARTE
+agencies_304: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "612"
+  name: APC
+agencies_305: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "613"
+  name: Intercooperation
+agencies_306: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "614"
+  name: "Swisscontact "
+agencies_307: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "615"
+  name: "Triodos Facet"
+agencies_308: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "619"
+  name: "CARE - Canada"
+agencies_309: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "620"
+  name: "CAFOD (Catholic Agency for Overseas Development)"
+agencies_310: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "621"
+  name: "Cruz Roja Italiana"
+agencies_311: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "622"
+  name: MEDA
+agencies_312: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "623"
+  name: CISP
+agencies_313: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "624"
+  name: CAPRI
+agencies_314: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "625"
+  name: WANI
+agencies_315: 
+  contact_email: ~
+  contact_name: ~
+  contact_phone: ~
+  id: "626"
+  name: "Intercooperation "

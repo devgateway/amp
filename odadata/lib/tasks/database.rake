@@ -17,14 +17,6 @@ namespace :db do
     ActiveRecord::Base.connection.tables.each { |p| puts p }
   end
   
-  desc "Load seed fixtures (from db/fixtures) into the current environment's database." 
-  task :seed => :environment do
-    require 'active_record/fixtures'
-    Dir.glob(RAILS_ROOT + "/db/fixtures/#{ENV['SOURCE']}/*.yml").each do |file|
-      Fixtures.create_fixtures("db/fixtures/#{ENV['SOURCE']}", File.basename(file, '.*'))
-    end
-  end
-  
   desc 'Create YAML test fixtures from data in an existing database.
   Defaults to development database.'
   task :extract_fixtures => :environment do

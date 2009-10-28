@@ -94,16 +94,9 @@ protected
     p = []
 
     RELATIONS.each do |keys, handler|
-      keys.to_a.each do |key| 
+      [*keys].each do |key| 
         # Get values from checkboxes.. If there is no input for the relation, ignore.
-        values = 
-        if params[key].blank? 
-          RAILS_DEFAULT_LOGGER.debug("Report Builder: No input for relation: '#{key}'")
-          :ignore 
-        else
-          parse_checkboxes(params[key])
-        end
-        
+        values = params[key].blank? ? :ignore : parse_checkboxes(params[key])
         p << [key, values, handler]
       end
     end 

@@ -1,0 +1,13 @@
+--- 
+roles_001: 
+  description: "Master Focal Point"
+  home_path: ~
+  id: "1"
+  layout: admin
+  title: admin
+roles_002: 
+  description: "Focal Point"
+  home_path: /projects
+  id: "2"
+  layout: focal_point
+  title: focal_point

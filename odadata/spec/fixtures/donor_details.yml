@@ -1,0 +1,463 @@
+--- 
+donor_details_001: 
+  donor_id: "18"
+  id: "1"
+  total_expatriate_staff: ~
+  total_local_staff: ~
+  total_staff_in_country: ~
+  year: "2007"
+donor_details_002: 
+  donor_id: "18"
+  id: "2"
+  total_expatriate_staff: ~
+  total_local_staff: ~
+  total_staff_in_country: ~
+  year: "2008"
+donor_details_003: 
+  donor_id: "18"
+  id: "3"
+  total_expatriate_staff: ~
+  total_local_staff: ~
+  total_staff_in_country: ~
+  year: "2009"
+donor_details_004: 
+  donor_id: "10"
+  id: "4"
+  total_expatriate_staff: "22"
+  total_local_staff: "28"
+  total_staff_in_country: "50"
+  year: "2007"
+donor_details_005: 
+  donor_id: "10"
+  id: "5"
+  total_expatriate_staff: "22"
+  total_local_staff: "28"
+  total_staff_in_country: "50"
+  year: "2008"
+donor_details_006: 
+  donor_id: "10"
+  id: "6"
+  total_expatriate_staff: "22"
+  total_local_staff: "28"
+  total_staff_in_country: "50"
+  year: "2009"
+donor_details_007: 
+  donor_id: "6"
+  id: "7"
+  total_expatriate_staff: "17"
+  total_local_staff: "7"
+  total_staff_in_country: "24"
+  year: "2007"
+donor_details_008: 
+  donor_id: "6"
+  id: "8"
+  total_expatriate_staff: "17"
+  total_local_staff: "7"
+  total_staff_in_country: "24"
+  year: "2008"
+donor_details_009: 
+  donor_id: "6"
+  id: "9"
+  total_expatriate_staff: "17"
+  total_local_staff: "7"
+  total_staff_in_country: "24"
+  year: "2009"
+donor_details_010: 
+  donor_id: "3"
+  id: "10"
+  total_expatriate_staff: "35"
+  total_local_staff: "45"
+  total_staff_in_country: "80"
+  year: "2007"
+donor_details_011: 
+  donor_id: "3"
+  id: "11"
+  total_expatriate_staff: "35"
+  total_local_staff: "45"
+  total_staff_in_country: "80"
+  year: "2008"
+donor_details_012: 
+  donor_id: "3"
+  id: "12"
+  total_expatriate_staff: "35"
+  total_local_staff: "45"
+  total_staff_in_country: "80"
+  year: "2009"
+donor_details_013: 
+  donor_id: "7"
+  id: "13"
+  total_expatriate_staff: "1"
+  total_local_staff: "2"
+  total_staff_in_country: "3"
+  year: "2007"
+donor_details_014: 
+  donor_id: "7"
+  id: "14"
+  total_expatriate_staff: "1"
+  total_local_staff: "2"
+  total_staff_in_country: "3"
+  year: "2008"
+donor_details_015: 
+  donor_id: "7"
+  id: "15"
+  total_expatriate_staff: "1"
+  total_local_staff: "2"
+  total_staff_in_country: "3"
+  year: "2009"
+donor_details_016: 
+  donor_id: "12"
+  id: "16"
+  total_expatriate_staff: "2"
+  total_local_staff: "11"
+  total_staff_in_country: "13"
+  year: "2007"
+donor_details_017: 
+  donor_id: "12"
+  id: "17"
+  total_expatriate_staff: "2"
+  total_local_staff: "11"
+  total_staff_in_country: "13"
+  year: "2008"
+donor_details_018: 
+  donor_id: "12"
+  id: "18"
+  total_expatriate_staff: "2"
+  total_local_staff: "11"
+  total_staff_in_country: "13"
+  year: "2009"
+donor_details_019: 
+  donor_id: "11"
+  id: "19"
+  total_expatriate_staff: "7"
+  total_local_staff: "14"
+  total_staff_in_country: "21"
+  year: "2007"
+donor_details_020: 
+  donor_id: "11"
+  id: "20"
+  total_expatriate_staff: "7"
+  total_local_staff: "14"
+  total_staff_in_country: "21"
+  year: "2008"
+donor_details_021: 
+  donor_id: "11"
+  id: "21"
+  total_expatriate_staff: "7"
+  total_local_staff: "14"
+  total_staff_in_country: "21"
+  year: "2009"
+donor_details_022: 
+  donor_id: "17"
+  id: "22"
+  total_expatriate_staff: ~
+  total_local_staff: ~
+  total_staff_in_country: ~
+  year: "2007"
+donor_details_023: 
+  donor_id: "17"
+  id: "23"
+  total_expatriate_staff: ~
+  total_local_staff: ~
+  total_staff_in_country: ~
+  year: "2008"
+donor_details_024: 
+  donor_id: "17"
+  id: "24"
+  total_expatriate_staff: ~
+  total_local_staff: ~
+  total_staff_in_country: ~
+  year: "2009"
+donor_details_025: 
+  donor_id: "1"
+  id: "25"
+  total_expatriate_staff: "1"
+  total_local_staff: "10"
+  total_staff_in_country: "11"
+  year: "2007"
+donor_details_026: 
+  donor_id: "1"
+  id: "26"
+  total_expatriate_staff: "1"
+  total_local_staff: "10"
+  total_staff_in_country: "11"
+  year: "2008"
+donor_details_027: 
+  donor_id: "1"
+  id: "27"
+  total_expatriate_staff: "1"
+  total_local_staff: "10"
+  total_staff_in_country: "11"
+  year: "2009"
+donor_details_028: 
+  donor_id: "8"
+  id: "28"
+  total_expatriate_staff: "3"
+  total_local_staff: "4"
+  total_staff_in_country: "7"
+  year: "2007"
+donor_details_029: 
+  donor_id: "8"
+  id: "29"
+  total_expatriate_staff: "3"
+  total_local_staff: "4"
+  total_staff_in_country: "7"
+  year: "2008"
+donor_details_030: 
+  donor_id: "8"
+  id: "30"
+  total_expatriate_staff: "3"
+  total_local_staff: "4"
+  total_staff_in_country: "7"
+  year: "2009"
+donor_details_031: 
+  donor_id: "5"
+  id: "31"
+  total_expatriate_staff: "3"
+  total_local_staff: "1"
+  total_staff_in_country: "4"
+  year: "2007"
+donor_details_032: 
+  donor_id: "5"
+  id: "32"
+  total_expatriate_staff: "3"
+  total_local_staff: "1"
+  total_staff_in_country: "4"
+  year: "2008"
+donor_details_033: 
+  donor_id: "5"
+  id: "33"
+  total_expatriate_staff: "3"
+  total_local_staff: "1"
+  total_staff_in_country: "4"
+  year: "2009"
+donor_details_034: 
+  donor_id: "2"
+  id: "34"
+  total_expatriate_staff: "7"
+  total_local_staff: "13"
+  total_staff_in_country: "20"
+  year: "2007"
+donor_details_035: 
+  donor_id: "2"
+  id: "35"
+  total_expatriate_staff: "7"
+  total_local_staff: "13"
+  total_staff_in_country: "20"
+  year: "2008"
+donor_details_036: 
+  donor_id: "2"
+  id: "36"
+  total_expatriate_staff: "7"
+  total_local_staff: "13"
+  total_staff_in_country: "20"
+  year: "2009"
+donor_details_037: 
+  donor_id: "4"
+  id: "37"
+  total_expatriate_staff: "5"
+  total_local_staff: "6"
+  total_staff_in_country: "11"
+  year: "2007"
+donor_details_038: 
+  donor_id: "4"
+  id: "38"
+  total_expatriate_staff: "5"
+  total_local_staff: "6"
+  total_staff_in_country: "11"
+  year: "2008"
+donor_details_039: 
+  donor_id: "4"
+  id: "39"
+  total_expatriate_staff: "5"
+  total_local_staff: "6"
+  total_staff_in_country: "11"
+  year: "2009"
+donor_details_040: 
+  donor_id: "9"
+  id: "40"
+  total_expatriate_staff: "7"
+  total_local_staff: "5"
+  total_staff_in_country: "12"
+  year: "2007"
+donor_details_041: 
+  donor_id: "9"
+  id: "41"
+  total_expatriate_staff: "7"
+  total_local_staff: "5"
+  total_staff_in_country: "12"
+  year: "2008"
+donor_details_042: 
+  donor_id: "9"
+  id: "42"
+  total_expatriate_staff: "7"
+  total_local_staff: "5"
+  total_staff_in_country: "12"
+  year: "2009"
+donor_details_043: 
+  donor_id: "15"
+  id: "43"
+  total_expatriate_staff: ~
+  total_local_staff: ~
+  total_staff_in_country: ~
+  year: "2007"
+donor_details_044: 
+  donor_id: "15"
+  id: "44"
+  total_expatriate_staff: ~
+  total_local_staff: ~
+  total_staff_in_country: ~
+  year: "2008"
+donor_details_045: 
+  donor_id: "15"
+  id: "45"
+  total_expatriate_staff: ~
+  total_local_staff: ~
+  total_staff_in_country: ~
+  year: "2009"
+donor_details_046: 
+  donor_id: "21"
+  id: "46"
+  total_expatriate_staff: ~
+  total_local_staff: ~
+  total_staff_in_country: ~
+  year: "2007"
+donor_details_047: 
+  donor_id: "21"
+  id: "47"
+  total_expatriate_staff: ~
+  total_local_staff: ~
+  total_staff_in_country: ~
+  year: "2008"
+donor_details_048: 
+  donor_id: "21"
+  id: "48"
+  total_expatriate_staff: ~
+  total_local_staff: ~
+  total_staff_in_country: ~
+  year: "2009"
+donor_details_049: 
+  donor_id: "19"
+  id: "49"
+  total_expatriate_staff: ~
+  total_local_staff: ~
+  total_staff_in_country: ~
+  year: "2007"
+donor_details_050: 
+  donor_id: "19"
+  id: "50"
+  total_expatriate_staff: ~
+  total_local_staff: ~
+  total_staff_in_country: ~
+  year: "2008"
+donor_details_051: 
+  donor_id: "19"
+  id: "51"
+  total_expatriate_staff: ~
+  total_local_staff: ~
+  total_staff_in_country: ~
+  year: "2009"
+donor_details_052: 
+  donor_id: "20"
+  id: "52"
+  total_expatriate_staff: ~
+  total_local_staff: ~
+  total_staff_in_country: ~
+  year: "2007"
+donor_details_053: 
+  donor_id: "20"
+  id: "53"
+  total_expatriate_staff: ~
+  total_local_staff: ~
+  total_staff_in_country: ~
+  year: "2008"
+donor_details_054: 
+  donor_id: "20"
+  id: "54"
+  total_expatriate_staff: ~
+  total_local_staff: ~
+  total_staff_in_country: ~
+  year: "2009"
+donor_details_055: 
+  donor_id: "22"
+  id: "55"
+  total_expatriate_staff: ~
+  total_local_staff: ~
+  total_staff_in_country: ~
+  year: "2007"
+donor_details_056: 
+  donor_id: "22"
+  id: "56"
+  total_expatriate_staff: ~
+  total_local_staff: ~
+  total_staff_in_country: ~
+  year: "2008"
+donor_details_057: 
+  donor_id: "22"
+  id: "57"
+  total_expatriate_staff: ~
+  total_local_staff: ~
+  total_staff_in_country: ~
+  year: "2009"
+donor_details_058: 
+  donor_id: "13"
+  id: "58"
+  total_expatriate_staff: ~
+  total_local_staff: ~
+  total_staff_in_country: ~
+  year: "2007"
+donor_details_059: 
+  donor_id: "13"
+  id: "59"
+  total_expatriate_staff: ~
+  total_local_staff: ~
+  total_staff_in_country: ~
+  year: "2008"
+donor_details_060: 
+  donor_id: "13"
+  id: "60"
+  total_expatriate_staff: ~
+  total_local_staff: ~
+  total_staff_in_country: ~
+  year: "2009"
+donor_details_061: 
+  donor_id: "14"
+  id: "61"
+  total_expatriate_staff: ~
+  total_local_staff: ~
+  total_staff_in_country: ~
+  year: "2007"
+donor_details_062: 
+  donor_id: "14"
+  id: "62"
+  total_expatriate_staff: ~
+  total_local_staff: ~
+  total_staff_in_country: ~
+  year: "2008"
+donor_details_063: 
+  donor_id: "14"
+  id: "63"
+  total_expatriate_staff: ~
+  total_local_staff: ~
+  total_staff_in_country: ~
+  year: "2009"
+donor_details_064: 
+  donor_id: "16"
+  id: "64"
+  total_expatriate_staff: ~
+  total_local_staff: "20"
+  total_staff_in_country: "20"
+  year: "2007"
+donor_details_065: 
+  donor_id: "16"
+  id: "65"
+  total_expatriate_staff: ~
+  total_local_staff: "20"
+  total_staff_in_country: "20"
+  year: "2008"
+donor_details_066: 
+  donor_id: "16"
+  id: "66"
+  total_expatriate_staff: ~
+  total_local_staff: "20"
+  total_staff_in_country: "20"
+  year: "2009"

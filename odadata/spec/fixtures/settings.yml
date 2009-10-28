@@ -1,0 +1,25 @@
+--- 
+settings_001: 
+  key: default_currency
+  value: EUR
+settings_002: 
+  key: scroll_bar_public
+  value: "--- \"\"\n"
+settings_003: 
+  key: scroll_bar_admin
+  value: "--- \"\"\n"
+settings_004: 
+  key: data_input_open
+  value: "--- true\n"
+settings_005: 
+  key: scroll_bar_mfp
+  value: "--- \"\"\n"
+settings_006: 
+  key: default_locale
+  value: "--- en\n"
+settings_007: 
+  key: locales
+  value: "--- en,es\n"
+settings_008: 
+  key: country_code
+  value: "--- nic\n"

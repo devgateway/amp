@@ -29,7 +29,7 @@ class Funding < ActiveRecord::Base
         :joins => 'JOIN projects ON project_id = projects.id',
         :conditions => ['projects.data_status = ?', Project::PUBLISHED]
       ).group_by(&:year).map do |k,v| 
-        res[k] = v.inject(0) { |sum, c| c.com.to_currency(c.currency, c.year).in(Prefs.default_currency) + sum }
+        res[k] = v.inject(0) { |sum, c| c.com.to_currency(c.currency, c.year).in(DEFAULT_CURRENCY) + sum }
       end
       
       res
@@ -40,7 +40,7 @@ class Funding < ActiveRecord::Base
         :select => 'commitments AS com, currency, year',
         :joins => 'JOIN projects ON project_id = projects.id',
         :conditions => ['projects.data_status = ?', Project::PUBLISHED]
-      ).inject(0) { |sum, c| c.com.to_currency(c.currency, c.year).in(Prefs.default_currency) + sum }
+      ).inject(0) { |sum, c| c.com.to_currency(c.currency, c.year).in(DEFAULT_CURRENCY) + sum }
     end
     
     def annual_payments
@@ -50,7 +50,7 @@ class Funding < ActiveRecord::Base
         :joins => 'JOIN projects ON project_id = projects.id JOIN donors ON projects.donor_id = donors.id',
         :conditions => ['projects.data_status = ?', Project::PUBLISHED]
       ).group_by(&:year).map do |k,v| 
-        res[k] = v.inject(0) { |sum, c| c.com.to_currency(c.cur, c.year).in(Prefs.default_currency) + sum }
+        res[k] = v.inject(0) { |sum, c| c.com.to_currency(c.cur, c.year).in(DEFAULT_CURRENCY) + sum }
       end
       
       res
@@ -61,7 +61,7 @@ class Funding < ActiveRecord::Base
         :select => '(payments_q1 + payments_q2 + payments_q3 + payments_q4) AS com, donors.currency AS cur, year',
         :joins => 'JOIN projects ON project_id = projects.id JOIN donors ON projects.donor_id = donors.id',
         :conditions => ['projects.data_status = ?', Project::PUBLISHED]
-      ).inject(0) { |sum, c| c.com.to_currency(c.cur, c.year).in(Prefs.default_currency) + sum }
+      ).inject(0) { |sum, c| c.com.to_currency(c.cur, c.year).in(DEFAULT_CURRENCY) + sum }
     end
   end
    

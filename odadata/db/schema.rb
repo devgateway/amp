@@ -9,14 +9,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081202200839) do
+ActiveRecord::Schema.define(:version => 20090909101815) do
 
   create_table "agencies", :force => true do |t|
     t.string "name"
-    t.string "type"
     t.string "contact_name"
     t.string "contact_phone"
     t.string "contact_email"
+  end
+
+  create_table "aid_modalities", :force => true do |t|
+    t.string "name"
+    t.string "name_es"
+    t.string "group_name"
+    t.string "group_name_es"
   end
 
   create_table "cofundings", :force => true do |t|
@@ -24,16 +30,29 @@ ActiveRecord::Schema.define(:version => 20081202200839) do
     t.integer "donor_id"
     t.integer "amount"
     t.string  "currency"
+    t.integer "agency_id"
   end
 
-  add_index "cofundings", ["donor_id", "project_id"], :name => "index_cofundings_on_project_id_and_donor_id"
+  add_index "cofundings", ["project_id", "donor_id"], :name => "index_cofundings_on_project_id_and_donor_id"
+
+  create_table "complex_reports", :force => true do |t|
+    t.integer  "user_id"
+    t.binary   "data"
+    t.text     "comments"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "contracted_agencies_projects", :id => false, :force => true do |t|
     t.integer "project_id"
-    t.integer "contracted_agency_id"
+    t.integer "agency_id"
   end
 
   create_table "country_strategies", :force => true do |t|
+    t.string  "strategy_number"
+    t.string  "strategy_number_es"
+    t.text    "description"
+    t.text    "description_es"
     t.string  "website"
     t.text    "comment"
     t.boolean "strategy_paper"
@@ -49,39 +68,37 @@ ActiveRecord::Schema.define(:version => 20081202200839) do
     t.integer "commitment_to_sectorwide_approaches_and_common_funds"
     t.integer "commitment_to_projects"
     t.integer "donor_id"
-  end
-
-  create_table "country_strategy_translations", :force => true do |t|
-    t.string  "locale"
-    t.string  "strategy_number"
-    t.text    "description"
-    t.integer "country_strategy_id"
-  end
-
-  create_table "crs_sector_translations", :force => true do |t|
-    t.string  "locale"
-    t.string  "name"
-    t.text    "description"
-    t.integer "crs_sector_id"
+    t.boolean "applies_to_bluebook"
   end
 
   create_table "crs_sectors", :force => true do |t|
+    t.string  "name"
+    t.string  "name_es"
+    t.text    "description"
+    t.text    "description_es"
     t.integer "code"
     t.integer "dac_sector_id"
   end
 
   add_index "crs_sectors", ["dac_sector_id"], :name => "index_crs_sectors_on_dac_sector_id"
 
-  create_table "dac_sector_translations", :force => true do |t|
-    t.string  "locale"
-    t.string  "name"
-    t.text    "description"
-    t.integer "dac_sector_id"
-  end
-
   create_table "dac_sectors", :force => true do |t|
+    t.string  "name"
+    t.string  "name_es"
+    t.text    "description"
+    t.text    "description_es"
     t.integer "code"
   end
+
+  create_table "delegated_cooperations", :force => true do |t|
+    t.integer "project_id"
+    t.integer "delegating_donor_id"
+    t.integer "delegating_agency_id"
+  end
+
+  add_index "delegated_cooperations", ["delegating_agency_id"], :name => "index_delegated_cooperations_on_delegating_agency_id"
+  add_index "delegated_cooperations", ["delegating_donor_id"], :name => "index_delegated_cooperations_on_delegating_donor_id"
+  add_index "delegated_cooperations", ["project_id"], :name => "index_delegated_cooperations_on_project_id"
 
   create_table "districts", :force => true do |t|
     t.string  "name"
@@ -96,13 +113,23 @@ ActiveRecord::Schema.define(:version => 20081202200839) do
     t.integer "donor_id"
   end
 
-  create_table "donor_translations", :force => true do |t|
-    t.string  "locale"
-    t.string  "name"
+  create_table "donor_details", :force => true do |t|
+    t.integer "total_staff_in_country"
+    t.integer "total_expatriate_staff"
+    t.integer "total_local_staff"
+    t.integer "year"
     t.integer "donor_id"
   end
 
+  create_table "donor_groups", :id => false, :force => true do |t|
+    t.string "key",     :null => false
+    t.string "name"
+    t.string "name_es"
+  end
+
   create_table "donors", :force => true do |t|
+    t.string   "name"
+    t.string   "name_es"
     t.string   "code"
     t.string   "currency"
     t.boolean  "cofunding_only"
@@ -110,7 +137,6 @@ ActiveRecord::Schema.define(:version => 20081202200839) do
     t.integer  "total_staff_in_country"
     t.integer  "total_expatriate_staff"
     t.integer  "total_local_staff"
-    t.string   "officer_responsible"
     t.text     "field_office_address"
     t.string   "field_office_phone"
     t.string   "field_office_email"
@@ -127,6 +153,12 @@ ActiveRecord::Schema.define(:version => 20081202200839) do
     t.string   "flag_content_type"
     t.integer  "flag_file_size"
     t.datetime "flag_updated_at"
+    t.string   "profile_picture_file_name"
+    t.string   "profile_picture_content_type"
+    t.integer  "profile_picture_file_size"
+    t.datetime "profile_picture_updated_at"
+    t.string   "primary_group_id"
+    t.boolean  "bluebook_donor"
   end
 
   create_table "exchange_rates", :force => true do |t|
@@ -138,6 +170,7 @@ ActiveRecord::Schema.define(:version => 20081202200839) do
   create_table "funding_forecasts", :force => true do |t|
     t.integer "project_id"
     t.integer "year"
+    t.string  "currency"
     t.integer "payments"
     t.integer "commitments"
     t.boolean "on_budget",   :default => false
@@ -149,6 +182,7 @@ ActiveRecord::Schema.define(:version => 20081202200839) do
   create_table "fundings", :force => true do |t|
     t.integer "project_id"
     t.integer "year"
+    t.string  "currency"
     t.integer "payments_q1"
     t.integer "payments_q2"
     t.integer "payments_q3"
@@ -164,6 +198,7 @@ ActiveRecord::Schema.define(:version => 20081202200839) do
     t.integer "project_id"
     t.integer "province_id"
     t.integer "district_id"
+    t.float   "amount"
   end
 
   create_table "glossaries", :force => true do |t|
@@ -173,10 +208,11 @@ ActiveRecord::Schema.define(:version => 20081202200839) do
     t.text   "description"
   end
 
-  add_index "glossaries", ["locale", "method", "model"], :name => "index_glossaries_on_model_and_method_and_locale"
+  add_index "glossaries", ["model", "method", "locale"], :name => "index_glossaries_on_model_and_method_and_locale"
 
   create_table "historic_fundings", :force => true do |t|
     t.integer "project_id"
+    t.string  "currency"
     t.integer "payments"
     t.integer "commitments"
   end
@@ -185,7 +221,7 @@ ActiveRecord::Schema.define(:version => 20081202200839) do
 
   create_table "implementing_agencies_projects", :id => false, :force => true do |t|
     t.integer "project_id"
-    t.integer "implementing_agency_id"
+    t.integer "agency_id"
   end
 
   create_table "mdg_relevances", :force => true do |t|
@@ -194,19 +230,16 @@ ActiveRecord::Schema.define(:version => 20081202200839) do
     t.integer "target_id"
   end
 
-  create_table "mdg_translations", :force => true do |t|
-    t.string  "locale"
-    t.string  "name"
-    t.text    "description"
-    t.integer "mdg_id"
-  end
-
   create_table "mdgs", :force => true do |t|
+    t.string "name"
+    t.string "name_es"
+    t.text   "description"
+    t.text   "description_es"
   end
 
-  create_table "plugin_schema_info", :id => false, :force => true do |t|
-    t.string  "plugin_name"
-    t.integer "version"
+  create_table "plugin_schema_migrations", :id => false, :force => true do |t|
+    t.string "plugin_name"
+    t.string "version"
   end
 
   create_table "projects", :force => true do |t|
@@ -222,7 +255,6 @@ ActiveRecord::Schema.define(:version => 20081202200839) do
     t.date     "end"
     t.text     "comments"
     t.string   "website"
-    t.integer  "aid_modality_id"
     t.integer  "grant_loan"
     t.integer  "national_regional"
     t.integer  "type_of_implementation"
@@ -232,8 +264,7 @@ ActiveRecord::Schema.define(:version => 20081202200839) do
     t.string   "input_state"
     t.integer  "donor_id"
     t.integer  "donor_agency_id"
-    t.integer  "dac_sector_id"
-    t.integer  "crs_sector_id"
+    t.integer  "aid_modality_id"
     t.integer  "country_strategy_id"
     t.integer  "government_counterpart_id"
     t.integer  "gender_policy_marker"
@@ -246,7 +277,12 @@ ActiveRecord::Schema.define(:version => 20081202200839) do
     t.string   "officer_responsible_email"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "delegated_cooperation_id"
+    t.integer  "delegating_agency_id"
   end
+
+  add_index "projects", ["delegated_cooperation_id"], :name => "index_projects_on_delegated_cooperation_id"
+  add_index "projects", ["delegating_agency_id"], :name => "index_projects_on_delegating_agency_id"
 
   create_table "provinces", :force => true do |t|
     t.string "name"
@@ -262,6 +298,7 @@ ActiveRecord::Schema.define(:version => 20081202200839) do
     t.string "title"
     t.text   "description"
     t.string "layout"
+    t.string "home_path"
   end
 
   create_table "sector_amounts", :force => true do |t|
@@ -277,18 +314,21 @@ ActiveRecord::Schema.define(:version => 20081202200839) do
     t.string  "focal_sector_type"
   end
 
+  create_table "sector_relevances", :force => true do |t|
+    t.integer "project_id"
+    t.integer "dac_sector_id"
+    t.integer "crs_sector_id"
+    t.float   "amount"
+  end
+
   create_table "settings", :id => false, :force => true do |t|
     t.string "key"
     t.text   "value"
   end
 
-  create_table "target_translations", :force => true do |t|
-    t.string  "locale"
-    t.text    "name"
-    t.integer "target_id"
-  end
-
   create_table "targets", :force => true do |t|
+    t.text    "name"
+    t.text    "name_es"
     t.integer "mdg_id"
   end
 
@@ -299,26 +339,24 @@ ActiveRecord::Schema.define(:version => 20081202200839) do
     t.integer "country_strategy_id"
   end
 
-  create_table "aid_modality_translations", :force => true do |t|
-    t.string  "locale"
-    t.string  "name"
-    t.integer "aid_modality_id"
-  end
-
-  create_table "types_of_aid", :force => true do |t|
-  end
-
   create_table "users", :force => true do |t|
     t.string   "name",                      :limit => 100, :default => ""
     t.string   "email",                     :limit => 100
     t.integer  "role_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "crypted_password",          :limit => 40
-    t.string   "salt",                      :limit => 40
+    t.string   "crypted_password",          :limit => 128, :default => "", :null => false
+    t.string   "salt",                      :limit => 128, :default => "", :null => false
     t.string   "remember_token",            :limit => 40
     t.datetime "remember_token_expires_at"
     t.integer  "donor_id"
+    t.string   "persistence_token"
+    t.integer  "login_count"
+    t.datetime "last_request_at"
+    t.datetime "current_login_at"
+    t.datetime "last_login_at"
+    t.string   "last_login_ip"
+    t.string   "current_login_ip"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

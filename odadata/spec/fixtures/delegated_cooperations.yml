@@ -1,0 +1,11 @@
+--- 
+delegated_cooperations_001: 
+  delegating_agency_id: "16"
+  delegating_donor_id: "2"
+  id: "1"
+  project_id: "405"
+delegated_cooperations_002: 
+  delegating_agency_id: "0"
+  delegating_donor_id: "10"
+  id: "4"
+  project_id: "431"

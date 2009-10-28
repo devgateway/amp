@@ -1,0 +1,13 @@
+--- 
+donor_groups_001: 
+  key: in-country
+  name: "In-country Donors"
+  name_es: ~
+donor_groups_002: 
+  key: eu-donors
+  name: "EU Donors"
+  name_es: ~
+donor_groups_003: 
+  key: cofunding
+  name: "Co-Funding Donors"
+  name_es: ~

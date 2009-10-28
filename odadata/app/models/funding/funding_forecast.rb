@@ -18,7 +18,7 @@ class FundingForecast < ActiveRecord::Base
         :joins => 'JOIN projects ON project_id = projects.id JOIN donors ON projects.donor_id = donors.id',
         :conditions => ['projects.data_status = ?', Project::PUBLISHED]
       ).group_by(&:year).map do |k,v| 
-        res[k] = v.inject(0) { |sum, c| c.com.to_currency(c.cur, c.year).in(Prefs.default_currency) + sum }
+        res[k] = v.inject(0) { |sum, c| c.com.to_currency(c.cur, c.year).in(DEFAULT_CURRENCY) + sum }
       end
       
       res
@@ -31,7 +31,7 @@ class FundingForecast < ActiveRecord::Base
         :joins => 'JOIN projects ON project_id = projects.id JOIN donors ON projects.donor_id = donors.id',
         :conditions => ['projects.data_status = ?', Project::PUBLISHED]
       ).group_by(&:year).map do |k,v| 
-        res[k] = v.inject(0) { |sum, c| c.com.to_currency(c.cur, c.year).in(Prefs.default_currency) + sum }
+        res[k] = v.inject(0) { |sum, c| c.com.to_currency(c.cur, c.year).in(DEFAULT_CURRENCY) + sum }
       end
       
       res

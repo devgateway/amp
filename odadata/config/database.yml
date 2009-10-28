@@ -9,7 +9,7 @@ development:
   database: odanic_development
   <<: *global
 
-test:
+test: &TEST
   database: odanic_test
   <<: *global
 
@@ -36,3 +36,5 @@ ampdev_mozambique_development:
 odanic_production:
   <<: *global
   database: odanic_production
+cucumber:
+  <<: *TEST

@@ -1,0 +1,73 @@
+--- 
+aid_modalities_001: 
+  group_name: ~
+  group_name_es: ~
+  id: "1"
+  name: Project/Program
+  name_es: Proyecto/Programa
+aid_modalities_002: 
+  group_name: ~
+  group_name_es: ~
+  id: "3"
+  name: "General Budget Support"
+  name_es: "Apoyo General del Presupuesto"
+aid_modalities_003: 
+  group_name: "Sectoral Budget Support"
+  group_name_es: "Ayuda Presupuestaria Sectoral"
+  id: "4"
+  name: "FC Prorural"
+  name_es: "FC Prorural"
+aid_modalities_004: 
+  group_name: "Sectoral Budget Support"
+  group_name_es: "Ayuda Presupuestaria Sectoral"
+  id: "5"
+  name: "FC FONSALUD"
+  name_es: "FC FONSALUD"
+aid_modalities_005: 
+  group_name: "Sectoral Budget Support"
+  group_name_es: "Ayuda Presupuestaria Sectoral"
+  id: "7"
+  name: "FC Promipyme"
+  name_es: "FC Promipyme"
+aid_modalities_006: 
+  group_name: "Sectoral Budget Support"
+  group_name_es: "Ayuda Presupuestaria Sectoral"
+  id: "12"
+  name: "FC PROASE"
+  name_es: "FC PROASE"
+aid_modalities_007: 
+  group_name: "Sectoral Budget Support"
+  group_name_es: "Ayuda Presupuestaria Sectoral"
+  id: "8"
+  name: "FC Fonim"
+  name_es: "FC Fonim"
+aid_modalities_008: 
+  group_name: "Fondo Común"
+  group_name_es: "Fondo Común"
+  id: "11"
+  name: "FC FISE"
+  name_es: "FC FISE"
+aid_modalities_009: 
+  group_name: "Fondo Común"
+  group_name_es: "Fondo Común"
+  id: "9"
+  name: "FC Civil Society"
+  name_es: "FC Sociedad Civil"
+aid_modalities_010: 
+  group_name: "Fondo Común"
+  group_name_es: "Fondo Común"
+  id: "10"
+  name: "FC Anti Corruption"
+  name_es: "FC Anticorrupción"
+aid_modalities_011: 
+  group_name: "Fondo Común"
+  group_name_es: "Fondo Común"
+  id: "6"
+  name: "FC Fondo Fed"
+  name_es: "FC Fondo Fed"
+aid_modalities_012: 
+  group_name: ~
+  group_name_es: ~
+  id: "2"
+  name: "Technical Assistance"
+  name_es: "Techn. Asistencia"

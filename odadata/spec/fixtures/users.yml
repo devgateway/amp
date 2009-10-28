@@ -1,0 +1,1198 @@
+--- 
+users_001: 
+  created_at: "2009-01-23 13:12:05.690058"
+  crypted_password: e6636d57ab7d0bc0f37ac3f6731cc8d49a75d536
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "15"
+  email: dulce.mayorga@undp.org
+  id: "29"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Dulce Mayorga"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: 8abc6074617ea89753db1d74d46a42ee3fd6b96d
+  updated_at: "2009-01-23 13:12:05.690058"
+users_002: 
+  created_at: "2009-01-20 17:47:54.372141"
+  crypted_password: 80dac5c0c1acd316eff9a8feaf47d6407b740b69
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "6"
+  email: wz-1@manag.auswaertiges-amt.de
+  id: "3"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Katheleen Beckmann"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: a74fa9c49b1596132d7e31ee155deb94ece62821
+  updated_at: "2009-01-20 17:47:54.372141"
+users_003: 
+  created_at: "2009-01-20 17:54:31.961464"
+  crypted_password: 0d4abd94a8b19c9cc45f735a9e872a55016a4ecc
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "6"
+  email: wz-100@manag.auswaertiges-amt.de
+  id: "4"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Birgit Martinez"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: 5af21e9df8fd5dcb1af48db045bb7c0f606625e6
+  updated_at: "2009-01-20 17:54:31.961464"
+users_004: 
+  created_at: "2009-01-21 01:28:51.89279"
+  crypted_password: 11154347345b5bfe19af67db458feb33d7396087
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "2"
+  email: ghiort@um.dk
+  id: "5"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Ghislene Espinoza Ortega "
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: 38c402ff47b7219aea6cf31cb0593e5dbe7ef249
+  updated_at: "2009-01-21 01:28:51.89279"
+users_005: 
+  created_at: "2009-01-21 01:39:59.20246"
+  crypted_password: a2962332af84f3abc0c531b390af88f05d65d7db
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "16"
+  email: jguerrero@worldbank.org
+  id: "6"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Jeanine Guerrero "
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: 7ce1f4ddc4587127dd1fbfea69b72d89b67585f9
+  updated_at: "2009-01-21 01:39:59.20246"
+users_006: 
+  created_at: "2009-01-21 03:16:46.914968"
+  crypted_password: 9cbd372311404c3419afc9669e4249163fb4e8bc
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "13"
+  email: jean-luc.labelle@international.gc.ca
+  id: "8"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Jean-Luc Labelle"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: 58331c1c8fc12b9210680c805873250ee5d2c956
+  updated_at: "2009-01-21 03:16:46.914968"
+users_007: 
+  created_at: "2009-01-21 03:17:17.953599"
+  crypted_password: 3db0313af6c3cbf4bea26ab52f5d19147da5fd7a
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "13"
+  email: mtg@uapnicaragua.org.ni
+  id: "9"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Maria Teresa Gonzales"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: d683da64bcc6a8d280e513faa0c10092de73811e
+  updated_at: "2009-01-21 03:17:17.953599"
+users_008: 
+  created_at: "2009-01-21 03:21:56.546827"
+  crypted_password: 16515a4dfd39931993a14cb435f44326dc9445d2
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "10"
+  email: asistente.coordinador@aecid.org.ni
+  id: "11"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Nubia Pallavicini"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: 3965af01dc47725c2fd3d26ded09032380ef2333
+  updated_at: "2009-01-21 03:21:56.546827"
+users_009: 
+  created_at: "2009-01-21 03:22:37.934454"
+  crypted_password: 6e41f20b3b3b78846f10f32098646f6edb5f0b08
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "10"
+  email: victoria.alonso@aecid.org.ni
+  id: "12"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Victoria Alonso"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: 75b5cf60c203b4d35a445aed3758716d4880996f
+  updated_at: "2009-01-21 03:22:37.934454"
+users_010: 
+  created_at: "2009-01-22 04:41:17.81164"
+  crypted_password: 9b1cd842c66f8e191c7bccba2c3f6304b0818e80
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "3"
+  email: freddy-javier.ramirez@ec.europa.eu
+  id: "14"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Freddy Javier Ramirez"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: 28562184e5703b3c2f5be45a55492a4bf144db03
+  updated_at: "2009-01-22 04:41:17.81164"
+users_011: 
+  created_at: "2009-01-22 04:48:42.901697"
+  crypted_password: 91a0bda55dba4c51defa94b0f38de8b81af94880
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "19"
+  email: gerdur@iceida.is
+  id: "15"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Gerdur Gestsdottir"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: fdf1e7a051512b7b468a73de588c168655bf7d00
+  updated_at: "2009-01-22 04:48:42.901697"
+users_012: 
+  created_at: "2009-01-22 04:53:56.615013"
+  crypted_password: a8754d85fc22fd599a60293cb020a0f03655e531
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "20"
+  email: fabio.goussen@sdc.net
+  id: "16"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Fabio Goussen"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: fcd4fbdc4a028a03c554178e48f5ba8b3edddcfa
+  updated_at: "2009-01-22 04:53:56.615013"
+users_013: 
+  created_at: "2009-01-22 04:54:29.433967"
+  crypted_password: e29e418f970c72190515da7d4dd9de938ec3b415
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "20"
+  email: heinz.wyler@sdc.net
+  id: "17"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Heinz Wyler"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: 9ce4fe3d24cb45304736f369cf422f97280a950e
+  updated_at: "2009-01-22 04:54:29.433967"
+users_014: 
+  created_at: "2009-01-22 04:55:48.07979"
+  crypted_password: 7531db5f3939a27023d14dd7d4e8bc432dd75c6d
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "1"
+  email: christina.hoernicke@ada.gv.at
+  id: "18"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Christina Hoernicke"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: 8ac4929ef1f3c2510ca009517eeb2540ee663941
+  updated_at: "2009-01-22 04:55:48.07979"
+users_015: 
+  created_at: "2009-01-22 04:56:20.302469"
+  crypted_password: b5690c4ed7abfa6f163364786c6d2eb8fd39ff15
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "1"
+  email: mabel.garcia@ada.gv.at
+  id: "19"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Mabel Garcia"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: d385c563690cac779847528025092c6a9343ad2b
+  updated_at: "2009-01-22 04:56:20.302469"
+users_016: 
+  created_at: "2009-01-22 04:58:40.500924"
+  crypted_password: 04b0b48f35e9107da4be8f4e3541da29cda40e90
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "8"
+  email: marie-anne.marx@mae.eta.lu
+  id: "20"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Marie Anne Marx"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: d9d0681eac59ebcc15df8440327ce8430d9fa4d5
+  updated_at: "2009-01-22 04:58:40.500924"
+users_017: 
+  created_at: "2009-01-23 13:14:00.389757"
+  crypted_password: a90436375c2033726ee6636485bc9ee38a791986
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "15"
+  email: jaakko.jakkila@undp.org
+  id: "30"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Jaakko Jakkila"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: b961655192900b039b006e875145066cf41ebbb7
+  updated_at: "2009-01-23 13:14:00.389757"
+users_018: 
+  created_at: "2009-01-23 16:26:02.483941"
+  crypted_password: 054604dbde52b35df231a4690f4e33a594fd2f86
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "7"
+  email: maria.chavez@cooperaitaliahn.org
+  id: "31"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Maria Lourdes Chavez"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: 4f59143bf78126bee9dbf8916f6839d6922b55e9
+  updated_at: "2009-01-23 16:26:02.483941"
+users_019: 
+  created_at: "2009-01-22 15:15:37.769311"
+  crypted_password: 2e7dc097863e088391b07ec2b92d62ede0c92d85
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "12"
+  email: v-pereira@dfid.gov.uk
+  id: "23"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Veronica Pereira"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: 598ec7a9a593812a11ce7af834fd7730368eced1
+  updated_at: "2009-01-22 15:15:37.769311"
+users_020: 
+  created_at: "2009-01-23 20:29:50.332609"
+  crypted_password: 92910398eed70005470a10a0de13f4f364e9abd2
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "15"
+  email: hadaguay.pacay@undp.org
+  id: "32"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Guay Pacay"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: 50038963621f15bf985608d194e80ccdcd771b58
+  updated_at: "2009-01-23 20:29:50.332609"
+users_021: 
+  created_at: "2009-01-22 20:29:07.590705"
+  crypted_password: ca034335b6f343f8588eb1c1997ee068de3cd33e
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "15"
+  email: thomas.fogh.mortensen@undp.org
+  id: "25"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Thomas Mortensen"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: a5d1fc2510b28f0177aa4bfc87a4db5e01930f95
+  updated_at: "2009-01-22 20:29:07.590705"
+users_022: 
+  created_at: "2009-01-22 19:55:57.954646"
+  crypted_password: 15a5bd1a753f92dfb7d67a2f1456e102fa32a194
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "11"
+  email: uforsberg@sida.se
+  id: "24"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Ulrika Forsberg"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: a796d225e6e8974c0fa0e4a695b1bf79b7def2e7
+  updated_at: "2009-01-22 21:35:04.921138"
+users_023: 
+  created_at: "2009-01-22 05:03:17.774654"
+  crypted_password: ce1b512f9404875d658f87564162645074ed34a6
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "5"
+  email: dominique.gautier@diplomatie.gouv.fr
+  id: "22"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Dominique Gautier"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: aa3413ec581f5683f72e350e565d8c762a0e1f32
+  updated_at: "2009-01-22 22:17:59.533422"
+users_024: 
+  created_at: "2009-01-22 04:59:48.345921"
+  crypted_password: 8233c157864c5964e0def7b7c3d843f25d21bb5b
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "8"
+  email: embaluxe@cablenet.com.ni
+  id: "21"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Claudia Oviedo"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: be94a75c4febae2093f4c5e5173ab1f37cd306b1
+  updated_at: "2009-01-22 22:38:09.98909"
+users_025: 
+  created_at: "2009-01-23 13:03:54.840528"
+  crypted_password: e8d646ca58479a6ef6969a15fcfd0f312d63468a
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "17"
+  email: claudiabone@contractual.iadb.org
+  id: "27"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Claudia Bone"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: f2b342e393ca32574f04ad69fd13831a807b7780
+  updated_at: "2009-01-23 13:03:54.840528"
+users_026: 
+  created_at: "2009-01-23 21:58:08.667224"
+  crypted_password: bb53be88c1f52284880239380df07a71cdc2ef43
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "15"
+  email: maria.fare@undp.org
+  id: "33"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Maria Fare"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: be71248ab72ee04ab598ead01bd6e6adbd675910
+  updated_at: "2009-01-23 21:58:08.667224"
+users_027: 
+  created_at: "2009-01-28 04:47:54.296588"
+  crypted_password: 49fc6fb9461d28be8a91a972226ff90371882d49
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "4"
+  email: liisa.maunula@formin.fi
+  id: "38"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Liisa Maunula"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: 88afa739571297d8a115ca6967bc4e93b2ccd4d9
+  updated_at: "2009-01-28 04:47:54.296588"
+users_028: 
+  created_at: "2009-01-22 21:50:48.819975"
+  crypted_password: 5430fd480d39cc2f585d195bd1dbcec48caaa3e6
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "11"
+  email: ulrika.forsberg@sida.se
+  id: "26"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Ulrika Forsberg"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: 28231a0cebf27cfedde6eb96c435b89e27a99e6d
+  updated_at: "2009-01-26 15:40:11.873209"
+users_029: 
+  created_at: "2009-01-27 18:35:35.413453"
+  crypted_password: 3289460fa38264bbab225cd41a626d0cf1cbc1b4
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "14"
+  email: carola.espinoza@mfa.no
+  id: "34"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Carola Espinoza"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: b75c078e8cc58293e4af8ac4fe2a7a87aca007ce
+  updated_at: "2009-01-27 18:35:35.413453"
+users_030: 
+  created_at: "2009-01-28 04:42:57.907671"
+  crypted_password: c9bccf8e86965403cf0fd2cb445e82d279f2e9d1
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "21"
+  email: frostran@usaid.gov
+  id: "35"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Federico Rostran"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: 5619a1f309c8bc60f274e4f8214bbf44f9c8bc3a
+  updated_at: "2009-01-28 04:42:57.907671"
+users_031: 
+  created_at: "2009-01-28 04:45:06.986581"
+  crypted_password: 826ca091b732aaca4d4f5434bd7119fe20583674
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "9"
+  email: jan.bauer@minbuza.nl
+  id: "36"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Jan Bauer"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: f55ba5a780cb8ea5db1ea2278b6f2eb94f5bebb1
+  updated_at: "2009-01-28 04:45:06.986581"
+users_032: 
+  created_at: "2009-01-28 04:45:41.010203"
+  crypted_password: 87c7e2d7ac9c66a492ea20bd740ae470f7608a45
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "9"
+  email: silvia.porras@minbuza.nl
+  id: "37"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Silvia Porras"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: 1a77ffabf58424fe7f0ea8a536e9cfe41a7b7714
+  updated_at: "2009-01-28 04:45:41.010203"
+users_033: 
+  created_at: "2009-01-29 15:46:53.099071"
+  crypted_password: 7e7fec2e7a11ce637c11b283fd665e8146bb3ebc
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "20"
+  email: dulna.jimenez@sdc.net
+  id: "39"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Dulna Jimenez"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: ecf11764ecbc6525d6c00b2eb13216f783672c19
+  updated_at: "2009-01-29 15:46:53.099071"
+users_034: 
+  created_at: "2009-01-22 04:40:16.850552"
+  crypted_password: 86ed786bfc1578313efb9dec5c48fe8ddf353941
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "3"
+  email: michelle.fonseca-cabrera@ec.europa.eu
+  id: "13"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Michelle Fonseca "
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: b83d4909703735152681f6c24aefe659ba7fdb7f
+  updated_at: "2009-01-29 15:27:38.208498"
+users_035: 
+  created_at: "2009-01-29 15:47:30.205814"
+  crypted_password: 494c91b994bc3cf48a68112d04501b03683e425a
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "20"
+  email: virginia.cordova@sdc.net
+  id: "40"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Virginia Córdova"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: 7b6b3688f61fc4b2e101fa2785367c0f1285abc6
+  updated_at: "2009-01-29 15:47:30.205814"
+users_036: 
+  created_at: "2009-01-31 05:11:03.250807"
+  crypted_password: bbe2aaef82587765544372d8b2919e74542bdeb6
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "22"
+  email: kaori.sato-2@mofa.go.jp
+  id: "41"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Kaori Sato"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: 941857ceed99b9040d10bb6003e39ed758a803b1
+  updated_at: "2009-01-31 05:11:03.250807"
+users_037: 
+  created_at: "2009-02-04 15:12:16.450202"
+  crypted_password: 970d9afd7faee273849e9236ef5cecf64b1ea0bc
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "22"
+  email: embjpnic@cablenet.com.ni
+  id: "42"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Aldo Vargas"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: 39c06f14061c4d0550ed84ab059d8af8b1eff26e
+  updated_at: "2009-02-04 15:12:16.450202"
+users_038: 
+  created_at: "2009-02-04 22:33:26.132248"
+  crypted_password: 4d514a0706514eaf5b7abc3d1f41f2f52c51ea3c
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "12"
+  email: m-johnston@dfid.gov.uk
+  id: "43"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Martin Johnston"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: 1cafa83d3978f487a8d7c93202b410268598987a
+  updated_at: "2009-02-04 22:33:26.132248"
+users_039: 
+  created_at: "2009-02-05 12:04:52.549593"
+  crypted_password: c052b847b02632818d8fe579544457f08dd526c3
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "13"
+  email: testaccount@europa.eu
+  id: "44"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: Test
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: 6bfde00b5fc9214b7e558165f90a5c521ebecfb5
+  updated_at: "2009-02-05 12:04:52.549593"
+users_040: 
+  created_at: "2009-02-05 17:05:15.14493"
+  crypted_password: c291a913a96d0b305d56a7d7f643130ba9b109dc
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "16"
+  email: clittlejohn@worldbank.org
+  id: "45"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Coleen Littlejohn"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: 6dd9cac810c304af0ac8cadd739271727158c42d
+  updated_at: "2009-02-05 17:05:15.14493"
+users_041: 
+  created_at: "2009-02-05 17:06:25.056064"
+  crypted_password: ddfd58719204c94706fd64bef78db994979e6789
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "16"
+  email: agarcia2@worldbank.org
+  id: "46"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Augusto Garcia"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: 8354c019a33c1f4f2c45e6181f6d71929568b28c
+  updated_at: "2009-02-05 17:06:25.056064"
+users_042: 
+  created_at: "2009-02-05 17:07:40.992809"
+  crypted_password: 928c1efadd669f0ee312b67f287295b54a2250ed
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "16"
+  email: mmontenegro@worldbank.org
+  id: "47"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Miriam Montenegro"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: 8036575d9886d8751eb9774628771f477a8a6878
+  updated_at: "2009-02-05 17:07:40.992809"
+users_043: 
+  created_at: "2009-02-05 17:26:07.182357"
+  crypted_password: 9cef4cdcc91ef26a73c0b63b3691731cc5906e2f
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "16"
+  email: csiezar@worldbank.org
+  id: "50"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Carlos Siezar"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: 556451152cd2f8d01efe5efbc87c8508d1e8b7e1
+  updated_at: "2009-02-05 17:26:07.182357"
+users_044: 
+  created_at: "2009-02-05 17:11:36.050962"
+  crypted_password: f2f25db35cde4c7a2446d6f9083df1aa7c800da3
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "16"
+  email: jgutierrezossio@worldbank.org
+  id: "48"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Jose Eduardo Gutierrez"
+  persistence_token: ~
+  remember_token: 09d5f06cd52561f43937b63be03564d69932b2a5
+  remember_token_expires_at: "2009-02-19 21:51:51.819548"
+  role_id: "2"
+  salt: 44b0a3050d52cd0979a350f2cdff865770f5a993
+  updated_at: "2009-02-05 21:51:51.866368"
+users_045: 
+  created_at: "2009-02-09 16:12:12.681564"
+  crypted_password: 4dd7e7e3ba967564e6dfc65df1d85fb0a2c49145
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "19"
+  email: geir@iceida.is
+  id: "51"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Geir Oddsson"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: e41cc3e477946aee4b90f95e4bc338cd347bd55f
+  updated_at: "2009-02-09 16:12:12.681564"
+users_046: 
+  created_at: "2009-01-21 01:40:43.809157"
+  crypted_password: ee9403ce0a10e98c98e2a4a59735cee5c62e331f
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "16"
+  email: pobregonortega@worldbank.org
+  id: "7"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Pauni Obregon "
+  persistence_token: ~
+  remember_token: e954d185aec6e1322864b8dfb56eca43f91280a1
+  remember_token_expires_at: "2009-02-24 17:00:45.965084"
+  role_id: "2"
+  salt: 896f81c0ab502d966d3bc45da3d857ba9a864db7
+  updated_at: "2009-02-10 17:00:46.012076"
+users_047: 
+  created_at: "2009-02-10 20:23:01.126811"
+  crypted_password: 49edc3151ec1f648fafeb4690cc07edabccb6294
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "16"
+  email: bancomundial@odadata.eu
+  id: "52"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "OdaNic Test"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: 383691d7aecd3d34435d78c1c03d6e68fe81ff51
+  updated_at: "2009-02-10 20:23:01.126811"
+users_048: 
+  created_at: "2009-01-21 03:19:53.276677"
+  crypted_password: b66169f6771f05b3acd340226e6a9f18efbd38a5
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "13"
+  email: anacecilia.roa@international.gc.ca
+  id: "10"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Ana Cecilia Roa"
+  persistence_token: ~
+  remember_token: a114d22fabff19eacde45dbe38677f18b327f9fa
+  remember_token_expires_at: "2009-02-24 21:25:48.702281"
+  role_id: "2"
+  salt: 55621bf6b48e6fb9975c67361c674ee582007c9a
+  updated_at: "2009-02-10 23:05:25.629081"
+users_049: 
+  created_at: "2009-02-11 15:28:03.02108"
+  crypted_password: cd9881e4bd4b2eb357f951057629e7bc9a6020ff
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "22"
+  email: elihernandez17@hotmail.com
+  id: "53"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Elizabeth Hernandez"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: 85302578cd9ca9e7fa6a828496e380856fc38215
+  updated_at: "2009-02-11 15:28:03.02108"
+users_050: 
+  created_at: "2009-02-13 22:06:08.498715"
+  crypted_password: 284b92d8a9083526eee4c91993c7f832179e43e4
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "1"
+  email: hedwig.riegler@ada.gv.at
+  id: "54"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "Hedwig Riegler"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: ab52442010989585787b0aecded2a01b5144003c
+  updated_at: "2009-02-13 22:06:08.498715"
+users_051: 
+  created_at: "2009-02-16 18:01:11.527273"
+  crypted_password: 4ebbd60a6359c2d178d3cff478ecc07c024e49d6
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "7"
+  email: italia@odadata.eu
+  id: "55"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "DGF Italia"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: 3c73f30db2ecfb2e4fa25953faede011044cea1f
+  updated_at: "2009-02-16 18:01:11.527273"
+users_052: 
+  created_at: "2009-02-16 18:12:47.130037"
+  crypted_password: 20475102925e09c29c57f6632884936ec6265597
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "2"
+  email: dinamarca@odadata.eu
+  id: "56"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "DGF Dinamarca"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: 7a8217ad28f821230d96d3f50ccb7b71a68778fd
+  updated_at: "2009-02-16 18:12:47.130037"
+users_053: 
+  created_at: "2009-02-16 18:13:44.533135"
+  crypted_password: d23cf511e8f032752edfecbcc1ab6f8e2edc2599
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "4"
+  email: finlandia@odadata.eu
+  id: "57"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "DGF Finlandia"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: fb22e845ceba798584810c81bd7cace85883364f
+  updated_at: "2009-02-16 18:13:44.533135"
+users_054: 
+  created_at: "2009-02-16 18:14:28.506064"
+  crypted_password: 221bb3b236f1d7733e2e473762c3245d07f7506b
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "5"
+  email: francia@odadata.eu
+  id: "58"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "DGF Francia"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: 3a045461aef3ba39aed53084424b1971411a8671
+  updated_at: "2009-02-16 18:14:28.506064"
+users_055: 
+  created_at: "2009-02-16 18:15:01.579514"
+  crypted_password: 66bfec1dcfc05005084071fa3054071d80bb7d8f
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "6"
+  email: alemania@odadata.eu
+  id: "59"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "DGF Alemania"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: 58e7cbd6cab8cd3b479499db7ed511043eaa3b45
+  updated_at: "2009-02-16 18:15:01.579514"
+users_056: 
+  created_at: "2009-02-16 18:16:05.179624"
+  crypted_password: c96e9d34cf96cfc86fa81c544a79d4b7d44b75b4
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "8"
+  email: luxemburgo@odadata.eu
+  id: "60"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "DGF Luxemburgo"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: 8f56f336a27372af3bf629826bece3cbe2e28c17
+  updated_at: "2009-02-16 18:16:05.179624"
+users_057: 
+  created_at: "2009-02-16 18:16:55.902836"
+  crypted_password: 6ee316d6bc915c63efe0b1a987c982be052a66b7
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "9"
+  email: holanda@odadata.eu
+  id: "61"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "DGF Holanda"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: 5961544feb41c9d5b976781d90ee77b490828702
+  updated_at: "2009-02-16 18:16:55.902836"
+users_058: 
+  created_at: "2009-02-16 18:17:26.700677"
+  crypted_password: ebc2617f1b066017eb58eef7535e1e9f093bb6ae
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "10"
+  email: espana@odadata.eu
+  id: "62"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "DGF España"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: a1cf38614b25877dbd2d8047a60a4a1133024a60
+  updated_at: "2009-02-16 18:17:26.700677"
+users_059: 
+  created_at: "2009-02-16 18:17:59.142491"
+  crypted_password: eaac4bfa921a7beb3c371cb1879e0a9cd969ab67
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "11"
+  email: suecia@odadata.eu
+  id: "63"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "DGF Suecia"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: 6aaba07c7a304c0d4a65ee608ff99bbbb8b5c99e
+  updated_at: "2009-02-16 18:17:59.142491"
+users_060: 
+  created_at: "2009-02-16 18:18:32.554506"
+  crypted_password: da6cee6ff0692f019df1ec6487168753d1f9d5f1
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "12"
+  email: inglaterra@odadata.eu
+  id: "64"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "DGF Inglaterra"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: c23278b41b691a3b4e9993aea2c68e50d468456e
+  updated_at: "2009-02-16 18:18:32.554506"
+users_061: 
+  created_at: "2009-02-16 19:41:52.727006"
+  crypted_password: a4e850b57099fcdc75f80b3309d57419ac6438b2
+  current_login_at: ~
+  current_login_ip: ~
+  donor_id: "1"
+  email: austria@odadata.eu
+  id: "65"
+  last_login_at: ~
+  last_login_ip: ~
+  last_request_at: ~
+  login_count: ~
+  name: "DGF Austria"
+  persistence_token: ~
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: 76f8c7214eee07cb9fab4270546bab8101bac3ee
+  updated_at: "2009-02-16 19:41:52.727006"
+users_062: 
+  created_at: "2008-11-01 16:32:53"
+  crypted_password: 8d66a99c1ac0c8f5863f7960015343843c13905729122a9a764311cdefc54edc05bb915c94156689cade0fbf259c34928cc47adc956050f485f6ebd1b6b4b673
+  current_login_at: "2009-09-15 14:17:07.605307"
+  current_login_ip: "127.0.0.1"
+  donor_id: "3"
+  email: sample@europa.eu
+  id: "2"
+  last_login_at: "2009-09-14 10:20:11.708787"
+  last_login_ip: "127.0.0.1"
+  last_request_at: "2009-09-22 06:31:40.704164"
+  login_count: "22"
+  name: "Sample Focal Point"
+  persistence_token: f3197c76c762db3b9674d3b4d6f7a9f73317d44b913cf632535073dd3aea75a63423b867f8e80212917d4757c7d55e0846138e587604ddbf065c9edca000d638
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "2"
+  salt: 67738a2e3f7572fb0b4f2a881f78e0a1d28945c8ca3aa4f07b1059bb53080cbc8584c289031fb7338c5e978f9d69526ce04d10dde97e671cfd020531af191cbd
+  updated_at: "2009-09-22 06:31:40.705048"
+users_063: 
+  created_at: "2008-11-01 16:32:53"
+  crypted_password: 9045f6a2872f787ff55cdc80572f7fdcfe884e4aed7767e47413aff27fa007e95df47de7f1c4f74626ef1187306f417b74f655f75ee55ff7035d25dec63b6536
+  current_login_at: "2009-10-20 11:52:00.061035"
+  current_login_ip: "127.0.0.1"
+  donor_id: ~
+  email: odamfp@dgfoundation.org
+  id: "1"
+  last_login_at: "2009-10-19 12:07:28.257747"
+  last_login_ip: "127.0.0.1"
+  last_request_at: "2009-10-20 12:05:05.173712"
+  login_count: "8"
+  name: "ODAdata Master Focal Point"
+  persistence_token: 16c2d2e920ceeaff4419966dd72851e6d404e65f9a9b836a0f0997f2cd08445c6f39ae188437db0ecd274d679aba85e97ce4c9ea7807d694777074ff3fe30c79
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "1"
+  salt: 37d3f21198a002919e304ffd449ca5d0aa4c74a7b97a4d3585965be13883a036a8b9f9bc192365b093eb0897401b7a61105996ecc189fc51c33454be2b502054
+  updated_at: "2009-10-20 12:05:05.174948"

@@ -13,7 +13,7 @@ def custom
   # If someone clicked the "Annual Totals" button redirect
   # TODO: Move out into a separate action
   if params[:totals_button]
-    redirect_to :action => "totals", :currency => Prefs.default_currency
+    redirect_to :action => "totals", :currency => DEFAULT_CURRENCY
   elsif params[:query_button]
     case params[:output][:format]
     when "web"

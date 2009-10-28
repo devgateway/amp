@@ -1,0 +1,331 @@
+--- 
+exchange_rates_001: 
+  currency: USD
+  euro_rate: "1.37"
+  id: "24"
+  year: "2010"
+exchange_rates_002: 
+  currency: DKK
+  euro_rate: "7.45"
+  id: "7"
+  year: "2009"
+exchange_rates_003: 
+  currency: NIO
+  euro_rate: "0.038989"
+  id: "26"
+  year: "2007"
+exchange_rates_004: 
+  currency: SEK
+  euro_rate: "9.22"
+  id: "14"
+  year: "2008"
+exchange_rates_005: 
+  currency: USD
+  euro_rate: "1.37"
+  id: "25"
+  year: "2011"
+exchange_rates_006: 
+  currency: EUR
+  euro_rate: "1"
+  id: "4"
+  year: "2010"
+exchange_rates_007: 
+  currency: SEK
+  euro_rate: "9.22"
+  id: "13"
+  year: "2007"
+exchange_rates_008: 
+  currency: DKK
+  euro_rate: "7.45"
+  id: "5"
+  year: "2007"
+exchange_rates_009: 
+  currency: DKK
+  euro_rate: "7.45"
+  id: "17"
+  year: "2011"
+exchange_rates_010: 
+  currency: EUR
+  euro_rate: "1"
+  id: "1"
+  year: "2007"
+exchange_rates_011: 
+  currency: GBP
+  euro_rate: "0.67"
+  id: "10"
+  year: "2008"
+exchange_rates_012: 
+  currency: DKK
+  euro_rate: "7.45"
+  id: "8"
+  year: "2010"
+exchange_rates_013: 
+  currency: GBP
+  euro_rate: "0.67"
+  id: "18"
+  year: "2011"
+exchange_rates_014: 
+  currency: USD
+  euro_rate: "1.37"
+  id: "23"
+  year: "2009"
+exchange_rates_015: 
+  currency: GBP
+  euro_rate: "0.67"
+  id: "9"
+  year: "2007"
+exchange_rates_016: 
+  currency: USD
+  euro_rate: "1.37"
+  id: "22"
+  year: "2008"
+exchange_rates_017: 
+  currency: NIO
+  euro_rate: "0.038989"
+  id: "29"
+  year: "2010"
+exchange_rates_018: 
+  currency: DKK
+  euro_rate: "7.45"
+  id: "6"
+  year: "2008"
+exchange_rates_019: 
+  currency: NIO
+  euro_rate: "0.038989"
+  id: "28"
+  year: "2009"
+exchange_rates_020: 
+  currency: GBP
+  euro_rate: "0.67"
+  id: "12"
+  year: "2010"
+exchange_rates_021: 
+  currency: SEK
+  euro_rate: "9.22"
+  id: "15"
+  year: "2009"
+exchange_rates_022: 
+  currency: NIO
+  euro_rate: "0.038989"
+  id: "30"
+  year: "2011"
+exchange_rates_023: 
+  currency: USD
+  euro_rate: "1.37"
+  id: "21"
+  year: "2007"
+exchange_rates_024: 
+  currency: SEK
+  euro_rate: "9.22"
+  id: "16"
+  year: "2010"
+exchange_rates_025: 
+  currency: NIO
+  euro_rate: "0.038989"
+  id: "27"
+  year: "2008"
+exchange_rates_026: 
+  currency: EUR
+  euro_rate: "1"
+  id: "20"
+  year: "2011"
+exchange_rates_027: 
+  currency: SEK
+  euro_rate: "9.22"
+  id: "19"
+  year: "2011"
+exchange_rates_028: 
+  currency: EUR
+  euro_rate: "1"
+  id: "2"
+  year: "2008"
+exchange_rates_029: 
+  currency: GBP
+  euro_rate: "0.67"
+  id: "11"
+  year: "2009"
+exchange_rates_030: 
+  currency: EUR
+  euro_rate: "1"
+  id: "3"
+  year: "2009"
+exchange_rates_031: 
+  currency: CAD
+  euro_rate: "1.47"
+  id: "31"
+  year: "2007"
+exchange_rates_032: 
+  currency: CAD
+  euro_rate: "1.56"
+  id: "32"
+  year: "2008"
+exchange_rates_033: 
+  currency: CAD
+  euro_rate: "1.56"
+  id: "33"
+  year: "2009"
+exchange_rates_034: 
+  currency: CAD
+  euro_rate: "1.56"
+  id: "34"
+  year: "2010"
+exchange_rates_035: 
+  currency: CAD
+  euro_rate: "1.56"
+  id: "35"
+  year: "2011"
+exchange_rates_036: 
+  currency: ISK
+  euro_rate: "128.65"
+  id: "37"
+  year: "2008"
+exchange_rates_037: 
+  currency: ISK
+  euro_rate: "87.14"
+  id: "36"
+  year: "2007"
+exchange_rates_038: 
+  currency: ISK
+  euro_rate: "128.65"
+  id: "38"
+  year: "2009"
+exchange_rates_039: 
+  currency: ISK
+  euro_rate: "128.65"
+  id: "39"
+  year: "2010"
+exchange_rates_040: 
+  currency: ISK
+  euro_rate: "128.65"
+  id: "40"
+  year: "2011"
+exchange_rates_041: 
+  currency: CHF
+  euro_rate: "1.55"
+  id: "41"
+  year: "2007"
+exchange_rates_042: 
+  currency: CHF
+  euro_rate: "1.65"
+  id: "42"
+  year: "2008"
+exchange_rates_043: 
+  currency: CHF
+  euro_rate: "1.6"
+  id: "43"
+  year: "2009"
+exchange_rates_044: 
+  currency: CHF
+  euro_rate: "1.6"
+  id: "44"
+  year: "2010"
+exchange_rates_045: 
+  currency: CHF
+  euro_rate: "1.6"
+  id: "45"
+  year: "2011"
+exchange_rates_046: 
+  currency: NOK
+  euro_rate: "7.35"
+  id: "46"
+  year: "2007"
+exchange_rates_047: 
+  currency: NOK
+  euro_rate: "7.49"
+  id: "47"
+  year: "2008"
+exchange_rates_048: 
+  currency: NOK
+  euro_rate: "7.49"
+  id: "48"
+  year: "2009"
+exchange_rates_049: 
+  currency: NOK
+  euro_rate: "7.49"
+  id: "49"
+  year: "2010"
+exchange_rates_050: 
+  currency: NOK
+  euro_rate: "7.49"
+  id: "50"
+  year: "2011"
+exchange_rates_051: 
+  currency: JPY
+  euro_rate: "161.3137"
+  id: "51"
+  year: "2007"
+exchange_rates_052: 
+  currency: JPY
+  euro_rate: "151.152"
+  id: "52"
+  year: "2008"
+exchange_rates_053: 
+  currency: JPY
+  euro_rate: "151.152"
+  id: "53"
+  year: "2009"
+exchange_rates_054: 
+  currency: JPY
+  euro_rate: "151.152"
+  id: "54"
+  year: "2010"
+exchange_rates_055: 
+  currency: JPY
+  euro_rate: "151.152"
+  id: "55"
+  year: "2011"
+exchange_rates_056: 
+  currency: NIO
+  euro_rate: "0.038989"
+  id: "56"
+  year: "2006"
+exchange_rates_057: 
+  currency: SEK
+  euro_rate: "9.22"
+  id: "57"
+  year: "2006"
+exchange_rates_058: 
+  currency: DKK
+  euro_rate: "7.45"
+  id: "58"
+  year: "2006"
+exchange_rates_059: 
+  currency: EUR
+  euro_rate: "1"
+  id: "59"
+  year: "2006"
+exchange_rates_060: 
+  currency: GBP
+  euro_rate: "0.67"
+  id: "60"
+  year: "2006"
+exchange_rates_061: 
+  currency: USD
+  euro_rate: "1.37"
+  id: "61"
+  year: "2006"
+exchange_rates_062: 
+  currency: CAD
+  euro_rate: "1.47"
+  id: "62"
+  year: "2006"
+exchange_rates_063: 
+  currency: ISK
+  euro_rate: "87.14"
+  id: "63"
+  year: "2006"
+exchange_rates_064: 
+  currency: CHF
+  euro_rate: "1.55"
+  id: "64"
+  year: "2006"
+exchange_rates_065: 
+  currency: NOK
+  euro_rate: "7.35"
+  id: "65"
+  year: "2006"
+exchange_rates_066: 
+  currency: JPY
+  euro_rate: "161.3137"
+  id: "66"
+  year: "2006"

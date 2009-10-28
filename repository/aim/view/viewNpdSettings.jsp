@@ -60,9 +60,12 @@
                 var params="&ampTeamId="+ampTeamId+"&width="+width+"&height="+height+"&angle="+angle+"&pageSize="+pageSize;
 		var url = "${changeSett}"+params+'&timeStamp='+lastTimeStamp;
 		var async=new Asynchronous();
-		async.complete=window.close();
+		async.complete=closeWindow;
 		async.call(url);
 	}
+        function closeWindow(status, statusText, responseText, responseXML){
+            window.close();
+        }
       		
 </script>
 

@@ -65,55 +65,55 @@ es:
       by_sector: Disaggregate Fundings by DAC-CRS Sector
       by_location: Disaggregate Fundings by Location
           
-      donors:
-        index:
-          title: Proyectos por Donantes
-        show:
-          title: Proyectos de {{donor}}
-      sectors:
-        index:
-          title: Proyectos por Sector
-        show:
-          title: Proyectos de {{sector}}
-      provinces:
-        index:
-          title: Proyectos por Departamento
-          show_municipalities: Mostrar Municipios
-          all_districts: Todos los municipios
-          national_project: Nacional
-        show:
-          title: Proyectos de {{province}}
-      districts:
-        index:
-          title: "Proyectos de <i>{{province_name}}</i> por Municipios"
-        show:
-          title: Proyectos de {{district}}
-      mdgs:
-        index:
-          title: Proyectos por ODM
-        show:
-          title: Proyectos de {{mdg}}
-      custom:
-        new:
-          title: Reporte Personalizado
-          output: Salida
-          output_format: Formato de Salida
-          web: Documento Web 
-          excel: Descargar Excel
-          map: Mostrar Mapa
-          fields: Mostrar Campos
-          main_filter: Filtro Principal del Criterio
-          markers_annotation: '* Importante &amp; Solamente Proyectos Principales'
-          other: Otros Criterios
-          action: Acción
-          query_database: Consultar
-          totals: Total Anual
-          output_in: Salida en 
-          select_all: Seleccionar Todos
-          deselect_all: Deseleccionar Todos
-        show:
-          title: Reporte Personalizado
-      totals:
-          payments: Desembolsos totales por Donantes
-          commitments: Compromisos totales por Donantes
-          commitments_payments_selection: Seleccione Compromisos/Desembolsos
+    donors:
+      index:
+        title: Proyectos por Donantes
+      show:
+        title: Proyectos de {{donor}}
+    sectors:
+      index:
+        title: Proyectos por Sector
+      show:
+        title: Proyectos de {{sector}}
+    provinces:
+      index:
+        title: Proyectos por Departamento
+        show_municipalities: Mostrar Municipios
+        all_districts: Todos los municipios
+        national_project: Nacional
+      show:
+        title: Proyectos de {{province}}
+    districts:
+      index:
+        title: "Proyectos de <i>{{province_name}}</i> por Municipios"
+      show:
+        title: Proyectos de {{district}}
+    mdgs:
+      index:
+        title: Proyectos por ODM
+      show:
+        title: Proyectos de {{mdg}}
+    custom:
+      new:
+        title: Reporte Personalizado
+        output: Salida
+        output_format: Formato de Salida
+        web: Documento Web 
+        excel: Descargar Excel
+        map: Mostrar Mapa
+        fields: Mostrar Campos
+        main_filter: Filtro Principal del Criterio
+        markers_annotation: '* Importante &amp; Solamente Proyectos Principales'
+        other: Otros Criterios
+        action: Acción
+        query_database: Consultar
+        totals: Total Anual
+        output_in: Salida en 
+        select_all: Seleccionar Todos
+        deselect_all: Deseleccionar Todos
+      show:
+        title: Reporte Personalizado
+    totals:
+        payments: Desembolsos totales por Donantes
+        commitments: Compromisos totales por Donantes
+        commitments_payments_selection: Seleccione Compromisos/Desembolsos

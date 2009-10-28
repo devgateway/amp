@@ -80,7 +80,6 @@ module MultiCurrency
     end
   
     def to_currency(currency = nil, base_year = nil)
-      Rails.logger.warn("base_year argument in ConvertibleCurrency#to_currency call will be ignored!")
       self.in(currency)
     end
   

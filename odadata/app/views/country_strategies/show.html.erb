@@ -32,7 +32,7 @@
         <dd><%=@country_strategy.strategy_paper ? lc(:yes) : lc(:no)%></dd>
 
         <dt><%=@country_strategy.class.human_attribute_name('internet_link')%></dt>
-        <dd><%=@country_strategy.website.to_link%></dd>
+        <dd><%= auto_link(@country_strategy.website, :all, :target => "_blank") %></dd>
     </dl>
 
    <h3> <%=ll(:country_strategy, :general) %></h3>

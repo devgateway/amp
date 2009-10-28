@@ -11,20 +11,20 @@
     <div class="horizontalBox">
 	    <div>
             <span id="project_count"></span>
-            <INPUT id="submit_button" type="submit" name="query_button" value="<%= lc(:query_database) %>" class="bt" style="margin: 5px; width: 100px">
-            <!-- <INPUT type="submit" name="totals_button" value="<%= lc(:totals) %>" class="bt" style="margin: 5px; width: 100px"> -->
+            <INPUT id="submit_button" type="submit" name="query_button" value="<%=t '.query_database' %>" class="bt" style="margin: 5px; width: 100px">
+            <!-- <INPUT type="submit" name="totals_button" value="<%=t '.totals' %>" class="bt" style="margin: 5px; width: 100px"> -->
 	    </div>
 	    <div>
         	<p style="padding-top:6px;">
-            <%= lc(:action) %>
+            <%=t '.action' %>
             </p>
 	    </div>
     </div>
 	<div id="output_options" class="container">
-		<h2><%= lc(:output) %></h2>
+		<h2><%=t '.output' %></h2>
 		
 		<ul class="checkbox_container">
-			<h3><span style="float:left"><%= lc(:fields) %></span></h3>
+			<h3><span style="float:left"><%=t '.fields' %></span></h3>
 			<input type="hidden" value="factsheet_link" name="report[fields][]" />
             
 			<%= render :partial => "reports/query_options/query_option" %>
@@ -32,38 +32,38 @@
 	</div>
 	
 	<div id="filter_criteria" class="container">
-		<h2><%= lc(:main_filter) %></h2>
+		<h2><%=t '.main_filter' %></h2>
 		
 		<div id="donor_province" class="container">
 			<ul class="checkbox_container">
-				<h3><span style="float:left"><%= ll(:terms, :donor) %></span><span class="link" onclick="toggleAll('donors', '<%= lc(:select_all) %>', '<%= lc(:deselect_all) %>')" id="donors_toggle" selected="false"><%= lc(:select_all) %></span></h3>
+				<h3><span style="float:left"><%= ll(:terms, :donor) %></span><span class="link" onclick="toggleAll('donors', '<%=t '.select_all' %>', '<%=t '.deselect_all' %>')" id="donors_toggle" selected="false"><%=t '.select_all' %></span></h3>
 				<li class="all"><%= check_box "donors", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>
 			  <%= render :partial => "reports/query_options/donor", :collection => Donor.main.ordered.all %>
 			</ul>
 			
 			<ul class="checkbox_container">
-				<h3><span style="float:left"><%= ll(:terms, :region) %></span><span class="link" onclick="toggleAll('provinces', '<%= lc(:select_all) %>', '<%= lc(:deselect_all) %>')" id="provinces_toggle" selected="false"><%= lc(:select_all) %></span></h3>
+				<h3><span style="float:left"><%= ll(:terms, :region) %></span><span class="link" onclick="toggleAll('provinces', '<%=t '.select_all' %>', '<%=t '.deselect_all' %>')" id="provinces_toggle" selected="false"><%=t '.select_all' %></span></h3>
 				<li class="all"><%= check_box "provinces", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>
 			  <%= render :partial => "reports/query_options/province", :collection => Province.ordered.all %>
 			</ul>		
 			
 			<ul class="checkbox_container">
-				<h3><span style="float:left"><%= ll(:terms, :markers) %></span><span class="link" onclick="toggleAll('markers', '<%= lc(:select_all) %>', '<%= lc(:deselect_all) %>')" id="markers_toggle" selected="false"><%= lc(:select_all) %></span></h3>
+				<h3><span style="float:left"><%= ll(:terms, :markers) %></span><span class="link" onclick="toggleAll('markers', '<%=t '.select_all' %>', '<%=t '.deselect_all' %>')" id="markers_toggle" selected="false"><%=t '.select_all' %></span></h3>
 				<li class="all"><%= check_box "markers", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>
 				<%= render :partial => "reports/query_options/marker", :collection => translate_options(Project::AVAILABLE_MARKERS) %>
-				<li class="annotation"><%= lc(:markers_annotation) %></li>
+				<li class="annotation"><%=t '.markers_annotation' %></li>
 			</ul>	
 		</div>
 	
 		<div id="mdg_sector" class="container">
 			<ul class="checkbox_container">
-				<h3><span style="float:left"><%= ll(:terms, :mdg) %></span><span class="link" onclick="toggleAll('targets', '<%= lc(:select_all) %>', '<%= lc(:deselect_all) %>')" id="targets_toggle" selected="false"><%= lc(:select_all) %></span></h3>
+				<h3><span style="float:left"><%= ll(:terms, :mdg) %></span><span class="link" onclick="toggleAll('targets', '<%=t '.select_all' %>', '<%=t '.deselect_all' %>')" id="targets_toggle" selected="false"><%=t '.select_all' %></span></h3>
 				<li class="all"><%= check_box "targets", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>
 			  <%= render :partial => "reports/query_options/mdg", :collection => Mdg.ordered.all %>
 			</ul>
 			
 			<ul class="checkbox_container">
-				<h3><span style="float:left"><%= ll(:terms, :dac_sector) %></span><span class="link" onclick="toggleAll('sectors', '<%= lc(:select_all) %>', '<%= lc(:deselect_all) %>')" id="sectors_toggle" selected="false"><%= lc(:select_all) %></span></h3>
+				<h3><span style="float:left"><%= ll(:terms, :dac_sector) %></span><span class="link" onclick="toggleAll('sectors', '<%=t '.select_all' %>', '<%=t '.deselect_all' %>')" id="sectors_toggle" selected="false"><%=t '.select_all' %></span></h3>
 				<li class="all"><%= check_box "sectors", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>
 			  <%= render :partial => "reports/query_options/sector", :collection => DacSector.ordered.all, :locals => { :shorten_to => 40 } %>
 			</ul>
@@ -71,45 +71,45 @@
 	</div>
 	
 	<div id="other_criteria" class="container">
-		<h2><%= lc(:other) %></h2>
+		<h2><%=t '.other' %></h2>
 		
 		<ul class="checkbox_container">
-			<h3><span style="float:left"><%= ll(:reports, :grant_loan) %></span><span class="link" onclick="toggleAll('grant_loan', '<%= lc(:select_all) %>', '<%= lc(:deselect_all) %>')" id="grant_loan_toggle" selected="false"><%= lc(:select_all) %></span></h3>
+			<h3><span style="float:left"><%= ll(:reports, :grant_loan) %></span><span class="link" onclick="toggleAll('grant_loan', '<%=t '.select_all' %>', '<%=t '.deselect_all' %>')" id="grant_loan_toggle" selected="false"><%=t '.select_all' %></span></h3>
 			<li class="all"><%= check_box "grant_loan", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>	
 			<%= render :partial => "reports/query_options/grant_loan", :collection => translate_options(Project::GRANT_LOAN_OPTIONS) %>
 		</ul>
 		
 		<ul class="checkbox_container">
-			<h3><span style="float:left"><%= ll(:reports, :of_budget) %></span><span class="link" onclick="toggleAll('on_off_budget', '<%= lc(:select_all) %>', '<%= lc(:deselect_all) %>')" id="on_off_budget_toggle" selected="false"><%= lc(:select_all) %></span></h3>
+			<h3><span style="float:left"><%= ll(:reports, :of_budget) %></span><span class="link" onclick="toggleAll('on_off_budget', '<%=t '.select_all' %>', '<%=t '.deselect_all' %>')" id="on_off_budget_toggle" selected="false"><%=t '.select_all' %></span></h3>
 			<li class="all"><%= check_box "on_off_budget", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>	
 			<%= render :partial => "reports/query_options/on_off_budget", :collection => translate_options(Project::ON_OFF_BUDGET_OPTIONS) %>
 		</ul>
 		
 		<ul class="checkbox_container">
-			<h3 style="height:30px"><span style="float:left"><%= ll(:reports, :of_treasury) %></span><span class="link" onclick="toggleAll('on_off_treasury', '<%= lc(:select_all) %>', '<%= lc(:deselect_all) %>')" id="on_off_treasury_toggle" selected="false"><%= lc(:select_all) %></span></h3>
+			<h3 style="height:30px"><span style="float:left"><%= ll(:reports, :of_treasury) %></span><span class="link" onclick="toggleAll('on_off_treasury', '<%=t '.select_all' %>', '<%=t '.deselect_all' %>')" id="on_off_treasury_toggle" selected="false"><%=t '.select_all' %></span></h3>
 			<li class="all"><%= check_box "on_off_treasury", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>	
 			<%= render :partial => "reports/query_options/on_off_treasury", :collection => translate_options(Project::ON_OFF_TREASURY_OPTIONS) %>
 		</ul>
 		
 		<ul class="checkbox_container">
-			<h3><span style="float:left"><%= ll(:reports, :toa) %></span><span class="link" onclick="toggleAll('aid_modality_id', '<%= lc(:select_all) %>', '<%= lc(:deselect_all) %>')" id="aid_modality_id_toggle" selected="false"><%= lc(:select_all) %></span></h3>
+			<h3><span style="float:left"><%= ll(:reports, :toa) %></span><span class="link" onclick="toggleAll('aid_modality_id', '<%=t '.select_all' %>', '<%=t '.deselect_all' %>')" id="aid_modality_id_toggle" selected="false"><%=t '.select_all' %></span></h3>
 			<li class="all"><%= check_box "aid_modality_id", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>
       		<%= render :partial => "reports/query_options/aid_modality", :collection => AidModality.all %>
 		</ul>
 		
 		<ul class="checkbox_container">
-			<h3 style="height:30px"><span style="float:left"><%= ll(:reports, :cod) %></span><span class="link" onclick="toggleAll('type_of_implementation', '<%= lc(:select_all) %>', '<%= lc(:deselect_all) %>')" id="type_of_implementation_toggle" selected="false"><%= lc(:select_all) %></span></h3>
+			<h3 style="height:30px"><span style="float:left"><%= ll(:reports, :cod) %></span><span class="link" onclick="toggleAll('type_of_implementation', '<%=t '.select_all' %>', '<%=t '.deselect_all' %>')" id="type_of_implementation_toggle" selected="false"><%=t '.select_all' %></span></h3>
 			<li class="all"><%= check_box "type_of_implementation", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>
 			<%= render :partial => "reports/query_options/type_of_implementation", :collection => translate_options(Project::IMPLEMENTATION_TYPES) %>
 		</ul>
 		
 		<ul class="checkbox_container">
-			<h3><span style="float:left"><%= ll(:reports, :status) %></span><span class="link" onclick="toggleAll('prj_status', '<%= lc(:select_all) %>', '<%= lc(:deselect_all) %>')" id="prj_status_toggle" selected="false"><%= lc(:select_all) %></span></h3>
+			<h3><span style="float:left"><%= ll(:reports, :status) %></span><span class="link" onclick="toggleAll('prj_status', '<%=t '.select_all' %>', '<%=t '.deselect_all' %>')" id="prj_status_toggle" selected="false"><%=t '.select_all' %></span></h3>
 			<%= render :partial => "reports/query_options/status", :collection => translate_options(Project::STATUS_OPTIONS) %>
 		</ul>
 		
 		<ul class="checkbox_container">
-			<h3><span style="float:left"><%= I18n.t('reports.disaggregation.title') %></span><span class="link" onclick="toggleAll('disaggregation', '<%= lc(:select_all) %>', '<%= lc(:deselect_all) %>')" id="disaggregation_toggle" selected="false"><%= lc(:select_all) %></span></h3>
+			<h3><span style="float:left"><%= I18n.t('reports.disaggregation.title') %></span><span class="link" onclick="toggleAll('disaggregation', '<%=t '.select_all' %>', '<%=t '.deselect_all' %>')" id="disaggregation_toggle" selected="false"><%=t '.select_all' %></span></h3>
 			<li><%= check_box "disaggregation", "sector", :checked => false %><%= I18n.t('reports.disaggregation.by_sector') %></li>
 			<li><%= check_box "disaggregation", "location", :checked => false %><%= I18n.t('reports.disaggregation.by_location') %></li>
 		</ul>

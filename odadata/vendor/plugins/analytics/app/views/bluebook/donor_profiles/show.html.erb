@@ -147,7 +147,7 @@
 				</tr>
 				<tr>
 					<td><%= ll(:terms, :internet_link) %></td>
-					<td><%= @country_strategy.andand.website.andand.to_link(:target => "_blank") %></td>
+					<td><%= auto_link(@country_strategy.andand.website, :all, :target => "_blank") %></td>
 				</tr>
 				<tr>
 					<td valign="top"><%= ll(:country_strategy, :sectors_and_regions) %></td>

@@ -93,13 +93,16 @@ class LabeledFormBuilder < ActionView::Helpers::FormBuilder
   end
   
   def label(method, caption = nil, options = {})
-    options.delete(:required)
-    options.delete(:glossary)
-    
-    caption ||= localized_caption(method)
-    glossary = glossary_tooltip(method, caption).to_s
+    caption ||= @object.class.human_attribute_name(method)
     caption += " *" if field_required?(method)
-    @template.label(@object_name, method, glossary + caption, options)
+    
+    label = ActionView::Helpers::InstanceTag.new(object_name, method, @template)
+    
+    if glossary = glossary_tooltip(label.send(:tag_id), method)
+      label.to_label_tag(glossary + ' ' + caption, options)
+    else
+      label.to_label_tag(caption, options)
+    end
   end
   
   # Creates a link for removing an associated element from the form, by removing its containing element from the DOM.
@@ -221,22 +224,12 @@ private
   end
   
   # Returns a glossary tooltip icon if an attribute description can be found in the localization file
-  def glossary_tooltip(method, caption = "")
-    underscore_class_name = @object ? @object.class.name.underscore : @object_name
-    method_or_association_name = method.to_s.sub(/_id$/, '')
-    begin
-      I18n.translate("#{underscore_class_name}.#{method_or_association_name}", :scope => [:glossary, :attributes], :raise => true)
-      @template.glossary_icon_for("#{underscore_class_name}/#{method_or_association_name}", caption)
-    rescue I18n::MissingTranslationData
-      nil
-    end
-  end
-  
-  def localized_caption(method)
-    underscore_class_name = @object ? @object.class.name.underscore : @object_name
-    method_or_association_name = method.to_s.sub(/_id$/, '')
-    
-    I18n.translate("#{underscore_class_name}.#{method_or_association_name}", :scope => [:activerecord, :attributes])
+  def glossary_tooltip(name, attribute_name)
+    info = I18n.translate(:"activerecord.attributes.#{@object_name.underscore}.#{attribute_name}.description", :raise => true)
+    @template.content_for :body, @template.content_tag(:div, info, :class => 'info', :id => name + '_info')
+    @template.image_tag('interface/info-icon.gif', :class => 'info-icon', :id => name + '_info_icon', :alt => '?')
+  rescue I18n::MissingTranslationData
+     nil
   end
 
   def wrap_in_label_row(field_name, content, options)

@@ -13,6 +13,7 @@ module Reports
       include Ruport::Extras::ColumnFormatter
       extend ActionView::Helpers::TagHelper
       extend ActionView::Helpers::UrlHelper
+      extend ActionView::Helpers::TextHelper
       extend ApplicationHelper
       extend OptionsHelper
       extend ReportsHelper
@@ -25,10 +26,20 @@ module Reports
       
     protected
       def localized_heading_for(column)
-        if column =~ /(total_commitments|total_disbursements|commitments_forecast|disbursements_forecast)_([0-9]{4})/
-          I18n.t("#{$1}_in", :scope => 'reports.project', :year => $2)
+        if column.to_s =~ /(total_commitments|total_disbursements|commitments_forecast|disbursements_forecast)_([0-9]{4})/
+          search_paths = [
+            :"activerecord.attributes.project.#{$1}_in.report_heading",
+            :"activerecord.attributes.project.#{$1}_in.label",
+            $1.humanize + "(miss)"]
+            
+          I18n.t(search_paths.shift, :default => search_paths, :year => $2)
         else
-          I18n.t(column.to_s, :scope => 'reports.project', :default => Project.human_attribute_name(column))
+          search_paths = [
+            :"activerecord.attributes.project.#{column}.report_heading",
+            :"activerecord.attributes.project.#{column}.label",
+            column.to_s.humanize + "(miss)"]
+            
+          I18n.t(search_paths.shift, :default => search_paths)
         end
       end
       
@@ -57,8 +68,8 @@ module Reports
       format_column(:implementing_agencies) { |r| format_as_html_list(r.map(&:name)) rescue nil }
       format_column(:contracted_agencies) { |r| format_as_html_list(r.map(&:name)) rescue nil }
       format_column(:mdgs) { |r| format_as_html_list(r.map(&:name), :class => 'fatlist') rescue nil }
-      format_column(:website) { |r| r.to_link }
-      format_column(:focal_regions) { |r| r.empty? ? I18n.t('options.national') :  r.map(&:name).sort.join("<br />") rescue nil }
+      format_column(:website) { |r| auto_link(r) }
+      format_column(:geo_relevances) { |r| r.empty? ? I18n.t('options.national') :  r.map(&:name).sort.join("<br />") rescue nil }
       format_column(:country_strategy) do |r| 
         if r.blank?
           I18n.t('reports.na')
@@ -66,8 +77,11 @@ module Reports
           reports_link_to(r.strategy_number, "http://nic.odadata.eu/country_strategies/#{r.id}")
         end
       end
-      format_column(:sectors) do |r| 
+      format_column(:sector_relevances) do |r| 
         r.map { |sr| "#{sr.sector.name_with_code} (#{sr.amount}%)" }.join('<br />')
+      end
+      format_column(:cofundings) do |r|
+        r.map { |sr| "#{sr.donor.name}: #{sr.amount}" }.join('<br />')
       end
       
       build :table_header do
@@ -111,9 +125,12 @@ module Reports
       format_column(:contracted_agencies) { |r| r.map(&:name).join(', ') }
       format_column(:mdgs) { |r| r.map(&:name).join(', ') }
       format_column(:country_strategy) { |r| r.strategy_number }
-      format_column(:focal_regions) { |r| r.empty? ? I18n.t('options.national') :  r.map(&:name).sort.join(", ") }
-      format_column(:sectors) do |r| 
+      format_column(:geo_relevances) { |r| r.empty? ? I18n.t('options.national') :  r.map(&:name).sort.join(", ") }
+      format_column(:sector_relevances) do |r| 
         r.map { |sr| "#{sr.sector.name_with_code} (#{sr.amount}%)" }.join(', ')
+      end
+      format_column(:cofundings) do |r|
+        r.map { |sr| "#{sr.donor.name}: #{sr.amount}" }.join("\n")
       end
       
       def prepare_columns

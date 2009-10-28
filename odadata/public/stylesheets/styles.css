@@ -1,0 +1,824 @@
+/*
+Blue scale
+
+Header: 
+ Background: #4f81bd
+ Color: #fff
+Row: 
+ Background: #b8cce4
+ Color: #000
+Lighter row: 
+ Background: #dbe5f1
+ Color: #000
+
+Grayscale:
+Header: 
+ Background: #000000
+ Color: #fff
+Row: 
+ Background: #a5a5a5
+ Color: #000
+Lighter row: 
+ Background: #d8d8d8
+ Color: #000
+
+Greenscale
+Header: 
+ Background: #9bbb59
+ Color: #fff
+Row: 
+ Background: #d7e4bc
+ Color: #000
+Lighter row: 
+ Background: #eaf1dd
+ Color: #000
+
+*/
+
+
+/* Start GENERAL STYLES */
+HTML {
+	margin: 0;
+	padding: 0;
+}
+
+BODY { 
+	background-color: #eee; 
+	color: #333; 
+	font: 13px Verdana, Arial, Helvetica, sans-serif;
+	line-height: 1.3em;
+	margin: 0;
+}
+
+HR {
+	display: none;
+}
+
+P {
+	padding: 1em 1em 0 1em;
+	margin: 0;
+}
+
+PRE {
+  background-color: #eee;
+  padding: 10px;
+  font-size: 11px;
+}
+
+A { color: #000; }
+A:visited { color: #666; }
+A:hover { color: #fff; background-color: #000; }
+A IMG { border: 0; }
+
+/* Start GENERAL CLASSES */
+
+.horizontalBox {
+	width:890px;
+	height:45px;
+}
+
+.horizontalBox div {
+	float:right;
+	height:35px;
+	color:#003366;
+	font-size:14px;
+	font-weight:bold;
+	
+}
+
+.bt {
+	background-color:#FFAA33;
+	border:1px solid #FF6600; 
+	color:#003366;
+	font-size:11px;
+	font-weight:bold;
+	padding:2px;
+	text-align:center;
+}
+
+#generalContainer {
+	width:900px;
+	background-color:#fff;	
+	border-left:1px solid #CECECE;
+	border-right:1px solid #CECECE;
+}
+
+#header {
+	width:900px;
+}
+
+#content {
+	width: 892px;
+	padding-left: 4px;
+	padding-right: 4px;
+	clear:left;
+	text-align: left;
+}
+
+#footer {
+	width: 900px;
+	margin-left: 0;
+	margin-right: 0;
+	text-align:center;
+	vertical-align:middle;
+	height:45px;
+}
+
+#footer hr {
+	display: block;
+	border: 1px solid #003F7D;
+	height: 3px;
+	background-color: #003F7D;
+	color: #003F7D;
+}
+
+
+#content h2 {
+	font-size: 1.1em;
+	font-style: normal;
+	font-weight: bold;
+	color: #003366;
+}
+
+/*
+	background-color: #FFAA33;
+	border-right: 1px solid #FF9900;
+	border-bottom: 1px solid #FF9900;
+	border-left: 1px solid #FF6600;
+	padding: 2px;
+	text-align: center;
+}*/
+
+/* Used in layouts for currency_report, graph windows and report window */
+.prt {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-style: normal;
+	font-weight: normal;
+	color: #003366;
+	text-decoration: none;
+	background-color: #FFAA33;
+	border-top: 1px solid #FF6600;
+	border-right: 1px solid #FF9900;
+	border-bottom: 1px solid #FF9900;
+	border-left: 1px solid #FF6600;
+	padding: 1px;
+	width: 80px;
+	text-align: center;
+	margin-right:6px;
+	float:right;
+}
+
+/* Top Menu Orange line */
+.menuline {
+	background-color: #FFAD33;
+}
+
+/* Class Style for errors defined in ActionPack */
+.fieldWithErrors {
+  padding: 2px;
+  background-color: red;
+  display: table;
+}
+
+.nowrap {
+	white-space: nowrap;
+}
+
+/* Id Style for Explanation of errors defined in ActionPack */
+#errorExplanation {
+  width: 400px;
+  border: 2px solid red;
+  padding: 7px;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+}
+
+#errorExplanation H2 {
+  text-align: left;
+  font-weight: bold;
+  padding: 5px 5px 5px 15px;
+  font-size: 12px;
+  margin: -7px;
+  background-color: #c00;
+  color: #fff;
+}
+
+#errorExplanation P {
+  color: #333;
+  margin-bottom: 0;
+  padding: 5px;
+}
+
+#errorExplanation UL LI {
+  font-size: 12px;
+  list-style: square;
+}
+/* End GENERAL CLASSES */
+
+/* End GENERAL STYLES */
+
+/* START TOP MENU STYLES */
+/* This CSS is used for the Menu (the left frame and the top frame) */
+/* This has to be changed and cleaned up */
+#mainMenu {
+	list-style-type: none;
+	background-color: #376091;
+	height: 22px;
+	position: relative;
+	padding:0;
+	margin:0;
+	float:left;
+	width:900px;
+	border-top:1px solid white;
+}
+
+#mainMenu li {
+    font-family:Arial,sans-serif;
+    font-size:10px;
+	height: 22px;
+	line-height: 22px;
+	float: left;
+	position: relative;
+	border-right:1px solid white;
+}
+
+#mainMenu li a {
+    white-space: nowrap;
+    text-transform:uppercase;
+	display: block;
+	float: left;
+	color: #FFFFFF;
+	text-decoration: none;
+	padding: 0 10px;
+}
+
+#mainMenu li a:hover {
+	background-color: #222e5d;
+}
+#mainMenu li.selected a {
+	background-color: #222e5d;
+}
+
+#mainMenu li a.arrow {
+	padding: 0;
+	height:22px;
+}
+#mainMenu li a.no_cursor {
+	cursor:default;
+}
+
+#mainMenu li ul {
+	margin:0;
+	padding:0;
+	list-style-type: none;
+	position: absolute;
+	background: #376091;
+	height: auto;
+	top: 22px;
+	left: -1px;
+	border: 1px solid #3B5998;
+	border-top: 0;
+	display: none;
+	padding: 5px 0;
+	overflow: hidden;
+	z-index: 100;
+}
+#mainMenu li.selected ul {
+	display: block;
+}
+#mainMenu li ul li {
+	float: left;
+	font-weight: normal;
+	clear:both;
+	border-right:0;
+}
+#mainMenu li ul li a, #mainMenu li.selected ul li a {
+	display: block;
+	padding: 0 9px;
+	color: #fff;
+	background: #376091;
+	float: none;
+	text-align:left;
+}
+#mainMenu li ul li a:hover, #mainMenu li.selected ul li a:hover {
+	background-color: #222e5d;
+	color: #FFFFFF;
+}
+
+#mainMenu li a img {
+	border: 0;
+}
+
+/* End TOP MENU STYLES */
+
+/* Data Tables (usually lists), always preceded by the title as a <H2> tag */
+#content table {
+	width: 100%;
+	border: none;
+	border-spacing: 1px;
+} 
+
+/* Data Table headers (usually lists), always preceded by the title as a <H2> tag */
+#content table th, #content table td {
+	text-align: left;
+	padding: 2px;
+}
+
+#content table th {
+	color: #fff;
+	background-color:#687eab;
+	border-bottom: 2px solid white;
+	font-size: 0.9em;
+	font-weight: bold;
+} 
+
+/* For the data cells of the table */
+#content table td {
+	font-size: 0.8em;
+  background-color:#dbe2f1;
+	border-spacing: 1px;
+	vertical-align: top;
+}
+
+/* For lists in the reports */
+#content table td ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+#content table td ul li {
+	padding-bottom: 4px;
+}
+
+/* Don't adjust font size for nested tables */
+#content table table td {
+	font-size: 1em;
+}
+
+#content tr.totals td {
+	font-weight: bold;
+}
+
+/** info boxes **/
+
+img.info-icon {
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+div.info {
+  background-color: #FFF7CA;
+  border: 1px solid #000;
+  position: absolute;
+  z-index: 99999;
+  display: none;
+  padding: 8px 12px;
+  text-align: left;
+  cursor: help;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+}
+
+
+/* DATA INPUT FORM STYLES */
+
+/* Clearfix */
+ol { overflow: hidden; margin: 0; padding: 0; }
+
+form fieldset {
+    border: 1px solid #ccc;
+    padding: 1em;
+    background-color: #F8F8F8;
+}
+form {
+	margin-bottom:0;
+	
+}
+
+form fieldset legend {
+    font-size: 1.5em;
+    padding: 0 .2em;
+    color: #003366;
+}
+
+form fieldset ol {
+    list-style: none;
+}
+
+form fieldset ol li {
+    border-bottom: 1px dashed #ccc;
+    padding: .5em 0;
+}
+
+form fieldset label {
+    display: block;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+form fieldset label.fluid {
+    display: inline;
+    padding: 0 !important;
+    font-weight: normal;
+}
+
+form fieldset input,
+form fieldset textarea,
+form fieldset select {
+    padding: 2px;
+    font: 13px "Trebuchet MS", sans-serif;
+    border: 1px solid #aaa;
+    color: #777;
+    margin-top: .2em;
+    margin-left: 1em;
+}
+
+form fieldset input:focus,
+form fieldset textarea:focus {
+    border: 1px solid #555 !important;
+    color: #555;
+}
+
+form label em {
+    color: #999;
+    font-size: .9em;
+}
+
+form fieldset p {
+    padding: 1em;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    margin: 0 0 1em 0;
+    color: #777;
+}
+
+form button {
+    padding: .5em 2em;
+    font: 1.2em "Trebuchet MS", Sans-Serif;
+    cursor: pointer;
+}    
+
+.buttonHolder {
+    background: #eee;
+    padding: .5em;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    text-align: center;
+}
+    
+/* Validation errors */
+form fieldset .error {
+  color: #c00;
+}
+
+/* Field styles */
+form textarea { width: 75%; overflow: auto; }
+form fieldset .large { width: 80%; }
+form fieldset .full  { width: 95%; }
+
+form fieldset li.fifty { float: left; width: 49.9%; }
+form fieldset li.twenty { float: left; width: 19.9%; }
+form fieldset li.thirty { float: left; width: 33.2%; }
+form fieldset li .error_message { float: left; width: 95%; color:red;}
+
+form fieldset ol li.noborder { border: 0 !important; }
+
+/* Align checkboxes properly */
+form fieldset ol li.checkbox { 
+  padding-left: 40px !important; 
+  text-indent: -37px; 
+}
+
+form fieldset ol li.checkbox input { 
+  margin-right: 10px;
+  vertical-align: middle;
+}
+ 
+/* Subheadings */
+form fieldset h3 { 
+  font-size: 1.3em;
+  font-weight: bold; 
+}       
+
+/* End DATA INPUT FORM STYLES */
+
+/* ----- add selectors here for font sizing ----- */
+#JT_close_left, #JT_close_right{font-size: 1.1em;}
+#JT_copy p, #JT_copy ul{font-size: 1.1em;}
+
+/* ---------->>> jtip <<<---------------------------------------------------------------*/
+
+#JT_arrow_left{
+	background: url(/images/arrow_left.gif) no-repeat left top;
+	position: absolute;
+	z-index:101;
+	left:-12px;
+	height:23px;
+	width:10px;
+}
+
+#JT_arrow_right{
+	background: url(/images/arrow_right.gif) no-repeat left top;
+	position: absolute;
+	z-index:101;
+	height:23px;
+	width:11px;
+}
+
+/* for consistency between firefox and IE */
+body > #JT_arrow_right {
+  margin-left: 3px;
+}
+
+#JT {
+	position: absolute;
+	z-index:100;
+	border: 2px solid #ccc;
+	background-color: #fff;
+	overflow: hidden;
+}
+
+#JT_copy{
+	padding:10px;
+	color:#333;
+}
+
+.JT_loader{
+	background: url(/images/loader.gif) no-repeat center center;
+	width:100%;
+	height:12px;
+}
+
+#JT_close_left{
+	background-color: #ccc;
+	text-align: left;
+	padding-left: 8px;
+	padding-bottom: 5px;
+	padding-top: 2px;
+	font-weight:bold;
+}
+
+#JT_close_right{
+	background-color: #ccc;
+	text-align: left;
+	padding-left: 8px;
+	padding-bottom: 5px;
+	padding-top: 2px;
+	font-weight:bold;
+}
+
+#JT_copy p{
+margin:3px 0;
+}
+
+#JT_copy img{
+	padding: 1px;
+	border: 1px solid #ccc;
+}
+
+.jTip{
+	cursor:help;
+}
+
+.jTip:hover;{
+	background-color: #fff;
+}
+
+#JT iframe{
+	display:none;
+	display/**/:block;
+	position:absolute;
+	top:0;
+	left:0;
+	z-index:-1;
+	filter:mask();
+	height:3000px;
+}
+
+
+/* Main Style Sheet for jQuery UI date picker */
+#ui-datepicker-div, .ui-datepicker-inline {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	padding: 0;
+	margin: 0;
+	background: #ddd;
+	width: 185px;
+}
+#ui-datepicker-div {
+	display: none;
+	border: 1px solid #777;
+	z-index: 9999; /*must have*/
+}
+.ui-datepicker-inline {
+	float: left;
+	display: block;
+	border: 0;
+}
+.ui-datepicker-rtl {
+	direction: rtl;
+}
+.ui-datepicker-dialog {
+	padding: 5px !important;
+	border: 4px ridge #ddd !important;
+}
+button.ui-datepicker-trigger {
+	width: 25px;
+}
+img.ui-datepicker-trigger {
+	margin: 2px;
+	vertical-align: middle;
+}
+.ui-datepicker-prompt {
+	float: left;
+	padding: 2px;
+	background: #ddd;
+	color: #000;
+}
+* html .ui-datepicker-prompt {
+	width: 185px;
+}
+.ui-datepicker-control, .ui-datepicker-links, .ui-datepicker-header, .ui-datepicker {
+	clear: both;
+	float: left;
+	width: 100%;
+	color: #fff;
+}
+.ui-datepicker-control {
+	background: #400;
+	padding: 2px 0px;
+}
+.ui-datepicker-links {
+	background: #000;
+	padding: 2px 0px;
+}
+.ui-datepicker-control, .ui-datepicker-links {
+	font-weight: bold;
+	font-size: 80%;
+}
+.ui-datepicker-links label { /* disabled links */
+	padding: 2px 5px;
+	color: #888;
+}
+.ui-datepicker-clear, .ui-datepicker-prev {
+	float: left;
+	width: 34%;
+}
+.ui-datepicker-rtl .ui-datepicker-clear, .ui-datepicker-rtl .ui-datepicker-prev {
+	float: right;
+	text-align: right;
+}
+.ui-datepicker-current {
+	float: left;
+	width: 30%;
+	text-align: center;
+}
+.ui-datepicker-close, .ui-datepicker-next {
+	float: right;
+	width: 34%;
+	text-align: right;
+}
+.ui-datepicker-rtl .ui-datepicker-close, .ui-datepicker-rtl .ui-datepicker-next {
+	float: left;
+	text-align: left;
+}
+.ui-datepicker-header {
+	padding: 1px 0 3px;
+	background: #333;
+	text-align: center;
+	font-weight: bold;
+	height: 1.3em;
+}
+.ui-datepicker-header select {
+	background: #333;
+	color: #fff;
+	border: 0px;
+	font-weight: bold;
+}
+.ui-datepicker {
+	background: #ccc;
+	text-align: center;
+	font-size: 100%;
+}
+.ui-datepicker a {
+	display: block;
+	width: 100%;
+}
+.ui-datepicker-title-row {
+	background: #777;
+}
+.ui-datepicker-days-row {
+	background: #eee;
+	color: #666;
+}
+.ui-datepicker-week-col {
+	background: #777;
+	color: #fff;
+}
+.ui-datepicker-days-cell {
+	color: #000;
+	border: 1px solid #ddd;
+}
+.ui-datepicker-days-cell a{
+	display: block;
+}
+.ui-datepicker-week-end-cell {
+	background: #ddd;
+}
+.ui-datepicker-title-row .ui-datepicker-week-end-cell {
+	background: #777;
+}
+.ui-datepicker-days-cell-over {
+	background: #fff;
+	border: 1px solid #777;
+}
+.ui-datepicker-unselectable {
+	color: #888;
+}
+.ui-datepicker-today {
+	background: #fcc !important;
+}
+.ui-datepicker-current-day {
+	background: #999 !important;
+}
+.ui-datepicker-status {
+	background: #ddd;
+	width: 100%;
+	font-size: 80%;
+	text-align: center;
+}
+
+/* ________ Datepicker Links _______
+
+** Reset link properties and then override them with !important */
+#ui-datepicker-div a, .ui-datepicker-inline a {
+	cursor: pointer;
+	margin: 0;
+	padding: 0;
+	background: none;
+	color: #000;
+}
+.ui-datepicker-inline .ui-datepicker-links a {
+	padding: 0 5px !important;
+}
+.ui-datepicker-control a, .ui-datepicker-links a {
+	padding: 2px 5px !important;
+	color: #eee !important;
+}
+.ui-datepicker-title-row a {
+	color: #eee !important;
+}
+.ui-datepicker-control a:hover {
+	background: #fdd !important;
+	color: #333 !important;
+}
+.ui-datepicker-links a:hover, .ui-datepicker-title-row a:hover {
+	background: #ddd !important;
+	color: #333 !important;
+}
+
+/* ___________ MULTIPLE MONTHS _________*/
+
+.ui-datepicker-multi .ui-datepicker {
+	border: 1px solid #777;
+}
+.ui-datepicker-one-month {
+	float: left;
+	width: 185px;
+}
+.ui-datepicker-new-row {
+	clear: left;
+}
+
+/* ___________ IE6 IFRAME FIX ________ */
+
+.ui-datepicker-cover {
+    display: none; /*sorry for IE5*/
+    display/**/: block; /*sorry for IE5*/
+    position: absolute; /*must have*/
+    z-index: -1; /*must have*/
+    filter: mask(); /*must have*/
+    top: -4px; /*must have*/
+    left: -4px; /*must have*/
+    width: 200px; /*must have*/
+    height: 200px; /*must have*/
+}
+
+
+/* Start FOCAL_POINT style */
+/* For FOCAL_POINT using grayscale */
+/* Data Tables (usually lists), always preceded by the title as a <H2> tag */
+#content table th {
+	color: #fff;
+	background-color:#687eab;
+} 
+
+/* For the data cells of the table */
+#content table td {
+  background-color:#dbe2f1;
+} 
+/* End FOCAL_POINT style */

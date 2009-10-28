@@ -1,53 +1,66 @@
 <li>
-	<%= check_box_tag "report[fields][]", "donor", true %><%= I18n.t('terms.donor') %>
+	<%= check_box_tag "report[fields][]", "donor", true %>
+	<%= Project.human_attribute_name('donor') %>
 </li>
 
 <li>
-	<%= check_box_tag "report[fields][]", "agency", true %><%= I18n.t('reports.donor_agency') %>
+	<%= check_box_tag "report[fields][]", "donor_agency", true %>
+	<%= Project.human_attribute_name('donor_agency') %>
 </li>
 
 <li>
-	<%= check_box_tag "report[fields][]", "donor_project_number", true %><%= I18n.t('reports.project_number') %>
+	<%= check_box_tag "report[fields][]", "donor_project_number", true %>
+	<%= Project.human_attribute_name('donor_project_number') %>
 </li>
 
 <li>
-	<%= check_box_tag "report[fields][]", "oecd_number" %><%= I18n.t('reports.oecd_id') %>
+	<%= check_box_tag "report[fields][]", "oecd_number" %>
+	<%= Project.human_attribute_name('oecd_number') %>
 </li>
 
 <li>
-	<%= check_box_tag "report[fields][]", "recipient_country_budget_nr" %><%= I18n.t('reports.budget_number') %>
+	<%= check_box_tag "report[fields][]", "recipient_country_budget_nr" %>
+	<%= Project.human_attribute_name('recipient_country_budget_nr') %>
 </li>
 
 <li>
-	<%= check_box_tag "report[fields][]", "title" %><%= I18n.t('reports.project_title') %>
+	<%= check_box_tag "report[fields][]", "title" %>
+	<%= Project.human_attribute_name('title') %>
 </li>
 
 <li>
-	<%= check_box_tag "report[fields][]", "description" %><%= I18n.t('reports.project_desc') %>
+	<%= check_box_tag "report[fields][]", "description" %>
+	<%= Project.human_attribute_name('description') %>
 </li>
 
 <li>
-	<%= check_box_tag "report[fields][]", "country_strategy" %><%= I18n.t('reports.cs_link') %>
+	<%= check_box_tag "report[fields][]", "country_strategy" %>
+	<%= Project.human_attribute_name('country_strategy') %>
 </li>
 
 <li>
-	<%= check_box_tag "report[fields][]", "prj_status" %><%= I18n.t('reports.project_status') %>
+	<%= check_box_tag "report[fields][]", "prj_status" %>
+	<%= Project.human_attribute_name('prj_status') %>
 </li>
 
 <li>
-	<%= check_box_tag "report[fields][]", "start", true %><%= I18n.t('reports.start') %>
+	<%= check_box_tag "report[fields][]", "start", true %>
+	<%= Project.human_attribute_name('start') %>
 </li>
 
 <li>
-	<%= check_box_tag "report[fields][]", "end", true %><%= I18n.t('reports.end') %>
+	<%= check_box_tag "report[fields][]", "end", true %>
+	<%= Project.human_attribute_name('end') %>
 </li>
 
 <li>
-	<%= check_box_tag "report[fields][]", "total_commitments", true %><%= I18n.t('reports.commitments_td') %>
+	<%= check_box_tag "report[fields][]", "total_commitments", true %>
+	<%= Project.human_attribute_name('total_commitments') %>
 </li>
 
 <li>
-	<%= check_box_tag "report[fields][]", "total_disbursements", true %><%= I18n.t('reports.disbursements_td') %>
+	<%= check_box_tag "report[fields][]", "total_disbursements", true %>
+	<%= Project.human_attribute_name('total_disbursements') %>
 </li>
 
 <% Project::FIRST_YEAR_OF_RELEVANCE.upto(Time.now.year+2) do |year| %>
@@ -57,66 +70,78 @@
 	</li>
 <% end %>
 
+<!-- FIXME
 <li>
-	<%= check_box_tag "report[fields][]", "total_cofunding" %><%= I18n.t('reports.total_cofunding') %>
+	<%= check_box_tag "report[fields][]", "cofundings" %>
+	<%= Project.human_attribute_name('cofundings') %>
+</li>-->
+
+<li>
+	<%= check_box_tag "report[fields][]", "national_regional" %>
+	<%= Project.human_attribute_name('national_regional') %>
 </li>
 
 <li>
-	<%= check_box_tag "report[fields][]", "cofunding_donors" %><%= I18n.t('reports.cofunding_donors') %>
+	<%= check_box_tag "report[fields][]", "type_of_implementation" %>
+	<%= Project.human_attribute_name('type_of_implementation') %>
 </li>
 
 <li>
-	<%= check_box_tag "report[fields][]", "national_regional" %><%= I18n.t('reports.national_regional') %>
+	<%= check_box_tag "report[fields][]", "sector_relevances" %>
+	<%= Project.human_attribute_name('sector_relevances') %>
 </li>
 
 <li>
-	<%= check_box_tag "report[fields][]", "type_of_implementation" %><%= I18n.t('reports.toi') %>
+	<%= check_box_tag "report[fields][]", "aid_modality" %>
+	<%= Project.human_attribute_name('aid_modality') %>
 </li>
 
 <li>
-	<%= check_box_tag "report[fields][]", "sectors" %><%= I18n.t('terms.dac_sector') %>
+	<%= check_box_tag "report[fields][]", "grant_loan" %>
+	<%= Project.human_attribute_name('grant_loan') %>
 </li>
 
 <li>
-	<%= check_box_tag "report[fields][]", "aid_modality" %><%= I18n.t('reports.toa') %>
+	<%= check_box_tag "report[fields][]", "implementing_agencies" %>
+	<%= Project.human_attribute_name('implementing_agencies') %>
 </li>
 
 <li>
-	<%= check_box_tag "report[fields][]", "grant_loan" %><%= I18n.t('reports.grant_loan') %>
+	<%= check_box_tag "report[fields][]", "contracted_agencies" %>
+	<%= Project.human_attribute_name('contracted_agencies') %>
 </li>
 
 <li>
-	<%= check_box_tag "report[fields][]", "implementing_agencies" %><%= I18n.t('reports.impl_agencies') %>
+	<%= check_box_tag "report[fields][]", "markers" %>
+	<%= Project.human_attribute_name('markers') %>
 </li>
 
 <li>
-	<%= check_box_tag "report[fields][]", "contracted_agencies" %><%= I18n.t('reports.contr_agencies') %>
+	<%= check_box_tag "report[fields][]", "mdgs" %>
+	<%= Project.human_attribute_name('mdgs') %>
 </li>
 
 <li>
-	<%= check_box_tag "report[fields][]", "markers" %><%= I18n.t('terms.markers') %>
+	<%= check_box_tag "report[fields][]", "geo_relevances" %>
+	<%= Project.human_attribute_name('geo_relevances') %>
 </li>
 
 <li>
-	<%= check_box_tag "report[fields][]", "mdgs" %><%= I18n.t('reports.mdg_goals') %>
+	<%= check_box_tag "report[fields][]", "officer_responsible_name" %>
+	<%= Project.human_attribute_name('officer_responsible_name') %>
 </li>
 
 <li>
-	<%= check_box_tag "report[fields][]", "focal_regions" %><%= I18n.t('reports.focal_regions') %>
+	<%= check_box_tag "report[fields][]", "website" %>
+	<%= Project.human_attribute_name('website') %>
 </li>
 
 <li>
-	<%= check_box_tag "report[fields][]", "officer_responsible_name" %><%= I18n.t('reports.officer_responsible') %>
+	<%= check_box_tag "report[fields][]", "comments" %>
+	<%= Project.human_attribute_name('comments') %>
 </li>
 
 <li>
-	<%= check_box_tag "report[fields][]", "website" %><%= I18n.t('terms.internet_link') %>
-</li>
-
-<li>
-	<%= check_box_tag "report[fields][]", "comments" %><%= I18n.t('reports.comments') %>
-</li>
-
-<li>
-	<%= check_box_tag "report[fields][]", "updated_at" %><%= I18n.t('reports.last_update') %>
+	<%= check_box_tag "report[fields][]", "updated_at" %>
+	<%= Project.human_attribute_name('updated_at') %>
 </li>

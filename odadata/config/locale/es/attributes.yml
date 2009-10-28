@@ -1,0 +1,335 @@
+es:
+  activerecord:
+    attributes:
+      project:
+        factsheet_link:
+          report_heading: "" # left blank on purpose
+        donor: 
+          label: Donante
+        donor_agency: 
+          label: Agencia Donante
+        donor_project_number: 
+          label: Número de Proyecto del Donante
+        oecd_number: 
+          label: Número OCDE
+        recipient_country_budget_nr: 
+          label: Número Presupuestario del País Destinatario
+        title: 
+          label: Título
+        description: 
+          label: Descripción
+        country_strategy: 
+          label: Estrategia del País Relacionada
+        prj_status: 
+          label: Estado del Proyecto
+        start: 
+          label: Fecha de inicio
+        end: 
+          label: Fecha de finalización
+        implementing_agencies: 
+          label: Agencias Implementadoras
+        contracted_agencies: 
+          label: Agencias Contratadas
+        national_regional: 
+          label: Nacional / Regional
+        type_of_implementation: 
+          label: Tipo de implementación
+        aid_modality: 
+          label: Modalidad de ayuda
+        grant_loan: 
+          label: Tipo de financiamiento
+        delegated_cooperation: 
+          label: Cooperación Delegada
+        delegated_by: 
+          label: Delegado por
+        website: 
+          label: Sitio web
+        comments: 
+          label: Comentarios
+        officer_responsible: 
+          label: Oficial Responsable
+        officer_responsible_name: 
+          label: Nombre
+        officer_responsible_phone: 
+          label: Teléfono
+        officer_responsible_email: 
+          label: Correo Electrónico
+        markers: 
+          label: Marcos
+        biodiversity_marker: 
+          label: Biodiversidad
+        climate_change_marker: 
+          label: Cambio Climático
+        desertification_marker: 
+          label: Desertificación
+        gender_policy_marker: 
+          label: Política de Género
+        environment_policy_marker: 
+          label: Política del Medio Ambiente	
+        sector_relevances: 
+          label: Sectores Focales del Proyecto
+        # TODO: Verify
+        geo_relevances: 
+          label: Departamentos Focales del Proyecto
+          report_heading: Departamentos Focales
+        sectors: 
+          label: Sectores
+        updated_at: 
+          label: Última Actualización 
+        total_commitments: 
+          label: Total de Compromisos
+        total_disbursements: 
+          label: Total de Desembolsos
+        total_commitments_in: 
+          label: Total de Compromisos {{year}}
+        total_disbursements_in: 
+          label: Total de Desembolsos {{year}}
+        commitments_forecast: 
+          label: Proyección de Compromisos
+        disbursements_forecast: 
+          label: Proyección de Desembolsos
+        commitments_forecast_in:
+          label: Proyección de Compromisos {{year}}
+        disbursements_forecast_in:
+          label: Proyección de Desembolsos {{year}}
+        cofundings: 
+          label: Co-financiamiento
+        mdgs: 
+          label: ODM
+        
+      sector_relevance:
+        dac_sector: 
+          label: Sectores CAD/CRS
+        crs_sector: 
+          label: Sectores CRS
+        amount: 
+          label: Cantidad en %
+        
+      geo_relevance:
+        province: 
+          label: Departamento
+        district: 
+          label: Municipios
+        amount: 
+          label: Cantidad en %
+          
+      user:
+        name: 
+          label: Nombre
+        email: 
+          label: Dirección de correo electrónico
+        password: 
+          label: Clave de acceso
+        password_confirmation: 
+          label: Confirma clave de acceso
+        
+      donor:
+        name: 
+          label: Nombre en Inglés
+        name_es: 
+          label: Nombre en Español
+        cofunding_only: 
+          label: Sólo donante de co-financiamiento
+        code: 
+          label: Código donante
+        currency: 
+          label: Moneda
+        field_office_address: 
+          label: Dirección de la Oficina Regional
+        field_office_email: 
+          label: Correo Electrónico de la Oficina Regional
+        field_office_phone: 
+          label: Teléfono de la Oficina Regional
+        field_office_website: 
+          label: Sitio Web de la Oficina Regional
+        head_of_mission_name: 
+          label: Nombre del Jefe de Misión
+        head_of_mission_email: 
+          label: Correo Electrónico del Jefe de Misión
+        head_of_cooperation_name: 
+          label: Nombre del Jefe de Cooperación
+        head_of_cooperation_email: 
+          label: Correo Electrónico del Jefe de Cooperación
+        first_focal_point_name: 
+          label: Nombre del Primer Punto Focal
+        first_focal_point_email: 
+          label: Correo Electrónico del Primer Punto Focal
+        second_focal_point_name: 
+          label: Nombre del Segundo Punto Focal
+        second_focal_point_email: 
+          label: Correo Electrónico del Segundo Punto Focal
+        institutions_responsible_for_oda: 
+          label: Institución Responsable por la AOD
+        total_staff_in_country: 
+          label: Personal Total en País
+        total_expatriate_staff: 
+          label: Personal Total Expatriado
+        total_local_staff: 
+          label: Personal Total Local
+        flag: 
+          label: Bandera/Logo del Donante
+        profile_picture: 
+          label: Foto para el Blue Book
+        
+      exchange_rate:
+        currency: 
+          label: Moneda
+        euro_rate: 
+          label: Tasa de cambio del Euro
+        year: 
+          label: Año
+        
+      agency:
+        name: 
+          label: Nombre de Agencia
+        
+      donor_agency:
+        name: 
+          label: Nombre de Agencia
+        code: 
+          label: Código
+        acronym: 
+          label: Acrónimo
+        
+      glossary:
+        model: 
+          label: Nombre de modelo
+        method: 
+          label: Método de objetivo
+        locale: 
+          label: Escenario
+        description: 
+          label: Descripción / Explicación
+        
+      cofunding:
+        donor: 
+          label: Donante de co-financiamiento
+        amount: 
+          label: Cantidad de financiamiento
+        currency: 
+          label: Moneda
+        in: 
+          label: en 
+        
+      historic_funding:
+        commitments: 
+          label: Compromisos
+        payments: 
+          label: Desembolsos
+      
+      funding:
+        commitments: 
+          label: Compromisos
+        payments: 
+          label: Desembolsos
+        payments_q1: 
+          label: Desembolsos 1er Cuarto
+        payments_q2: 
+          label: Desembolsos 2º Cuarto
+        payments_q3: 
+          label: Desembolsos 3er Cuarto
+        payments_q4: 
+          label: Desembolsos 4º Cuarto
+        on_budget: 
+          label: En/Fuera del Presupuesto
+        on_treasury: 
+          label: En/Fuera de la Tesoreria
+      
+      funding_forecast:
+        commitments: 
+          label: Compromisos
+        payments: 
+          label: Desembolsos
+        on_budget: 
+          label: En/Fuera del Presupuesto
+        on_treasury: 
+          label: En/Fuera de la Tesoreria
+      
+      # TODO: Translation! 
+      delegated_cooperation:
+        delegating_donor: 
+          label: Donante Mandante
+        delegating_agency: 
+          label: Agencia Mandante
+        
+      country_strategy:
+        donor: 
+          label: Donante
+        strategy_number: 
+          label: Nombre/Título - Ingles
+        strategy_number_es: 
+          label: Nombre/Título - Español
+        description: 
+          label: Descripción - Ingles
+        description_es: 
+          label: Descripción - Español
+        start: 
+          label: Fecha de incio
+        end: 
+          label: Fecha de finalización
+        total_amount_foreseen: 
+          label: Monto Preveído
+        strategy_paper: 
+          label: "¿Hay un Papel Estratégico Disponible?"
+        website: 
+          label: Sito web
+        programming_responsibility: 
+          label: Responsabilidad de Programación
+        project_appraisal_responsibility: 
+          label: Responsabilidad de Evaluación de Proyecto
+        tenders_responsibility: 
+          label: Responsabilidad de Candidaturas
+        commitments_and_payments_responsibility: 
+          label: Responsablidad de Compromisos y Desembolsos
+        monitoring_and_evaluation_responsibility: 
+          label: Responsabilidad de Monitoreo y Evaluación
+        commitment_to_budget_support: 
+          label: Compromiso a Apoyo Presupuestario Directo
+        commitment_to_sectorwide_approaches_and_common_funds: 
+          label: Compromiso a Fondos Comunes
+        commitment_to_projects: 
+          label: Compromiso a Proyectos
+        comment: 
+          label: Comentario
+        current_total_oda: 
+          label: AOD Total Actual ({{year}})
+        last_total_oda: 
+          label: AOD Total Final ({{year}})
+        
+      total_oda:
+        commitments: 
+          label: Monto de AOD Comprometido 
+        disbursements: 
+          label: Monto de AOD Desembolsado 
+        
+      consistency:
+        donor: 
+          label: Donante
+        year: 
+          label: Año
+        total_commitments: 
+          label: Monto Comprometido
+        total_payments: 
+          label: Monto Pagado
+        toa_payments: 
+          label: "{{type}} Desembolsos"
+        
+      user_session:
+        email: 
+          label: Dirección de Correo Electrónico
+        password: 
+          label: Clave de acceso
+        remember_me: 
+          label: Recordarme
+        
+      mdg:
+        verbose_caption: 
+          label: "Meta {{number}}: {{name}}"
+      
+      prefs:
+        scroll_bar_public: 
+          label: Señal de Pantalla Público (Reportes & Bluebook, no se requiere inscripción)
+        scroll_bar_admin: 
+          label: Señal de Pantalla - Entrada de Datos (sólo donantes inscribidos)
+        scroll_bar_mfp: 
+          label: Señal de Pantalla Master Focal Point Ticker (en la area de admin)

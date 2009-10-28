@@ -4,7 +4,9 @@
 			
 			<% @donors_with_websites.each do |donor| %>
 				<tr>
-					<td align="left"><%= link_to donor.name.titleize, donor.field_office_website.to_url, :target => "_blank" %></td>
+					<td align="left">
+						<%= auto_link(donor.field_office_website, :all, :target => '_blank') { donor.name.titleize } %>
+					</td>
 				</tr>
 			<% end %>
 			

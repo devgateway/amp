@@ -361,3 +361,23 @@ A IMG { border: 0; }
 #content tr.totals td {
 	font-weight: bold;
 }
+
+/** info boxes **/
+
+img.info-icon {
+  vertical-align: middle;
+}
+
+div.info {
+  background-color: #FFF7CA;
+  border: 1px solid #000;
+  position: absolute;
+  z-index: 99999;
+  display: none;
+  padding: 8px 12px;
+  text-align: left;
+  cursor: help;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+}

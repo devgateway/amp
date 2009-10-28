@@ -39,11 +39,11 @@ class Reports::ProjectAggregator < Ruport::Aggregator
     p.donor.name
   end
   
-  provides :agency do |p|
+  provides :donor_agency do |p|
     p.donor_agency.andand.name
   end
   
-  provides :sectors do |p|
+  provides :sector_relevances do |p|
     p.sector_relevances.ordered_by_relevance
   end
   
@@ -55,7 +55,7 @@ class Reports::ProjectAggregator < Ruport::Aggregator
     end
   end
   
-  provides :focal_regions do |p|
+  provides :geo_relevances do |p|
     p.provinces
   end
   
@@ -73,18 +73,6 @@ class Reports::ProjectAggregator < Ruport::Aggregator
   
   provides :disbursements_forecast do |p|
     p.funding_forecasts.find_by_year(Time.now.year).andand.payments
-  end
-  
-  provides :start_date do |p|
-    p.start
-  end
-  
-  provides :end_date do |p|
-    p.end
-  end
-  
-  provides :cofunding_donors do |p|
-    p.cofundings.map(&:donor).map(&:name).join(', ')
   end
   
   provides :aid_modality do |p|

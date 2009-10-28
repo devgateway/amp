@@ -3,7 +3,7 @@ class StaticController < ApplicationController
   end
   
   def links
-    @donors_with_websites = Donor.main.ordered.delete_if { |d| !d.field_office_website }
+    @donors_with_websites = Donor.main.ordered.delete_if { |d| d.field_office_website.blank? }
   end
   
   def downloads

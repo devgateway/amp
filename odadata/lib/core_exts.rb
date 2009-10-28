@@ -17,29 +17,6 @@ class Hash
   end
 end
 
-class String
-  include ActionView::Helpers::TagHelper
-  include ActionView::Helpers::UrlHelper
-  
-  # Converts self to a HTML anchor attribute
-  def to_link(options = {})
-    ActiveSupport::Deprecation.warn("Use autolink helper instead!")
-    link_to(self, self.to_url, options)
-  end
-  
-  # Appends http:// to the string if neccessary
-  def to_url
-    ActiveSupport::Deprecation.warn("Use autolink helper instead!")
-    if self.include?("@")
-      "mailto:" + self
-    elsif self =~ /^(http:\/)?\//
-      self
-    else
-      "http://" + self
-    end
-  end
-end
-
 class Time
   def quarter
     (month / 3.0).ceil

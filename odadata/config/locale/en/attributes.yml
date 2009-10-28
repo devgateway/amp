@@ -1,0 +1,348 @@
+en:
+  activerecord:
+    attributes:
+      donor_details:
+        total_staff_in_country: 
+          label: Total Staff in Country
+        total_expatriate_staff: 
+          label: Total Expatriate Staff
+        total_local_staff: 
+          label: Total Local Staff
+      project:
+        factsheet_link:
+          report_heading: "" # left blank on purpose
+        donor: 
+          label: Donor
+        donor_agency: 
+          label: Donor Agency
+        donor_project_number: 
+          label: Donor Project Number
+        oecd_number: 
+          label: OECD Number
+        recipient_country_budget_nr: 
+          label: Recipient Country Budget Number
+        title: 
+          label: Title
+          description: Single-line glossary entry
+        description: 
+          label: Description
+          description: |+
+            This is an example multi-line
+            glossary entry.
+        country_strategy: 
+          label: Related Country Strategy
+        prj_status: 
+          label: Project Status
+        start: 
+          label: Start Date
+        end: 
+          label: End Date
+        implementing_agencies: 
+          label: Implementing Agencies
+        contracted_agencies: 
+          label: Contracted Agencies
+        national_regional: 
+          label: National / Regional
+        type_of_implementation: 
+          label: Type of Implementation
+        aid_modality: 
+          label: Aid Modality
+        grant_loan: 
+          label: Type of Funding
+        delegated_cooperation: 
+          label: Delegated Cooperation
+        delegated_by: 
+          label: Delegated by
+        website: 
+          label: Website
+        comments: 
+          label: Comments
+        officer_responsible: 
+          label: Officer Responsible
+        officer_responsible_name: 
+          label: Name
+        officer_responsible_phone: 
+          label: Phone
+        officer_responsible_email: 
+          label: E-Mail
+        markers: 
+          label: Markers
+        biodiversity_marker: 
+          label: Biodiversity
+        climate_change_marker: 
+          label: Climate Change
+        desertification_marker: 
+          label: Desertification
+        gender_policy_marker: 
+          label: Gender Policy
+        environment_policy_marker: 
+          label: Environment Policy
+        sector_relevances: 
+          label: Project's Focal Sectors
+        geo_relevances: 
+          label: Project's Focal Regions
+          report_heading: Focal Regions
+        sectors: 
+          label: Sectors
+        updated_at: 
+          label: Last update
+        total_commitments: 
+          label: Total Commitments
+        total_disbursements: 
+          label: Total Disbursements
+        total_commitments_in:
+          label: Total Commitments {{year}}
+        total_disbursements_in:
+          label: Total Disbursements {{year}}
+        commitments_forecast: 
+          label: Commitments Forecast
+        disbursements_forecast: 
+          label: Disbursements Forecast
+        commitments_forecast_in:
+          label: Commitments Forecast {{year}}
+        disbursements_forecast_in:
+          label: Disbursements Forecast {{year}}
+        cofundings: 
+          label: Co-Funding
+        mdgs: 
+          label: MDGs
+        
+      sector_relevance:
+        dac_sector: 
+          label: DAC / CRS Sector
+        crs_sector: 
+          label: CRS Sector
+        amount: 
+          label: Amount in %
+        
+      geo_relevance:
+        province: 
+          label: Region
+        district: 
+          label: Municipalities
+        amount: 
+          label: Amount in %
+        
+      user:
+        name: 
+          label: Name
+        email: 
+          label: E-Mail Address
+        password: 
+          label: Password
+        password_confirmation: 
+          label: Confirm Password
+        
+      donor:
+        name: 
+          label: English Name
+        name_es: 
+          label: Spanish Name
+        cofunding_only: 
+          label: Co-Funding Donor Only
+        bluebook_donor: 
+          label: Applies to Bluebook
+        code: 
+          label: Donor Code
+        currency: 
+          label: Currency
+        field_office_address: 
+          label: Field Office Address
+        field_office_email: 
+          label: Field Office Email
+        field_office_phone: 
+          label: Field Office Phone
+        field_office_website: 
+          label: Field Office Website
+        head_of_mission_name: 
+          label: Head of Mission Name
+        head_of_mission_email: 
+          label: Head of Mission Email
+        head_of_cooperation_name: 
+          label: Head of Cooperation Name
+        head_of_cooperation_email: 
+          label: Head of Cooperation Email
+        first_focal_point_name: 
+          label: First Focal Point Name
+        first_focal_point_email: 
+          label: First Focal Point Email
+        second_focal_point_name: 
+          label: Second Focal Point Name
+        second_focal_point_email: 
+          label: Second Focal Point Email
+        institutions_responsible_for_oda: 
+          label: Institution Responsible for ODA
+        total_staff_in_country: 
+          label: Total Staff in Country
+        total_expatriate_staff: 
+          label: Total Expatriate Staff
+        total_local_staff: 
+          label: Total Local Staff
+        flag: 
+          label: Country Flag or Organisation Logo
+        profile_picture: 
+          label: Representative Picture of Donor Country (for EU Blue Book)
+        
+      exchange_rate:
+        currency: 
+          label: Currency
+        euro_rate: 
+          label: Euro Exchange Rate
+        year: 
+          label: Year
+        
+      agency:
+        name: 
+          label: Agency Name
+        
+      donor_agency:
+        name: 
+          label: Agency Name
+        code: 
+          label: Code
+        acronym: 
+          label: Acronym
+        
+      glossary:
+        model: 
+          label: Model Name
+        method: 
+          label: Target Method
+        locale: 
+          label: Locale
+        description: 
+          label: Description / Explanation
+        
+      cofunding:
+        donor: 
+          label: Co-Funding Donor
+        amount: 
+          label: Amount of Funding
+        currency: 
+          label: Currency
+        in: 
+          label: in
+        
+      historic_funding:
+        commitments: 
+          label: Commitments
+        payments: 
+          label: Disbursements
+      
+      funding:
+        commitments: 
+          label: Commitments
+        payments: 
+          label: Disbursements
+        payments_q1: 
+          label: Disbursements 1st Quarter
+        payments_q2: 
+          label: Disbursements 2nd Quarter
+        payments_q3: 
+          label: Disbursements 3rd Quarter
+        payments_q4: 
+          label: Disbursements 4th Quarter
+        on_budget: 
+          label: On/Off Budget
+        on_treasury: 
+          label: On/Off Treasury
+      
+      funding_forecast:
+        commitments: 
+          label: Commitments
+        payments: 
+          label: Disbursements
+        on_budget: 
+          label: On/Off Budget
+        on_treasury: 
+          label: On/Off Treasury
+        
+      delegated_cooperation:
+        delegating_donor: 
+          label: Delegating Donor
+        delegating_agency: 
+          label: Delegating Agency
+        
+      country_strategy:
+        applies_to_bluebook: 
+          label: Applies to Bluebook
+        donor: 
+          label: Donor
+        strategy_number: 
+          label: English Name/Title
+        strategy_number_es: 
+          label: Spanish Name/Title
+        description: 
+          label: English Description
+        description_es: 
+          label: Spanish Description
+        start: 
+          label: Start Date
+        end: 
+          label: End Date
+        total_amount_foreseen: 
+          label: Total Amount Foreseen
+        strategy_paper: 
+          label: Strategy Paper Available?
+        website: 
+          label: Website
+        programming_responsibility: 
+          label: Programming Responsibility
+        project_appraisal_responsibility: 
+          label: Project Appraisal Responsibility
+        tenders_responsibility: 
+          label: Tenders Responsibility
+        commitments_and_payments_responsibility: 
+          label: Commitments and Disbursements Responsibility
+        monitoring_and_evaluation_responsibility: 
+          label: Monitoring and Evaluation Responsibility
+        commitment_to_budget_support: 
+          label: Commitment to Budget Support
+        commitment_to_sectorwide_approaches_and_common_funds: 
+          label: Commitment to Common Funds
+        commitment_to_projects: 
+          label: Commitment to Projects
+        comment: 
+          label: Comment
+        current_total_oda: 
+          label: Current Total ODA ({{year}})
+        last_total_oda: 
+          label: Last Total ODA ({{year}})
+        
+      total_oda:
+        commitments: 
+          label: Total ODA Commitments
+        disbursements: 
+          label: Total ODA Disbursements
+        
+      consistency:
+        donor: 
+          label: Donor
+        year: 
+          label: Year
+        total_commitments: 
+          label: Total Commitments
+        total_payments: 
+          label: Total Disbursements
+        toa_payments: 
+          label: "{{type}} Disbursements"
+        
+      user_session:
+        email: 
+          label: E-Mail Address
+        password: 
+          label: Password
+        remember_me: 
+          label: Remember me
+        
+      mdg:
+        verbose_caption: 
+          label: "Goal {{number}}: {{name}}"
+        
+      prefs:
+        scroll_bar_public: 
+          label: Public Ticker (Reports & Bluebook, no login required)
+        scroll_bar_admin: 
+          label: Data Input Ticker (visible for logged-in donors only)
+        scroll_bar_mfp: 
+          label: Master Focal Point Ticker (shown here, in the admin area)

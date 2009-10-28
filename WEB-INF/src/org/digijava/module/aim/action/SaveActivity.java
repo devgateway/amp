@@ -1569,7 +1569,7 @@ public class SaveActivity extends Action {
 			eaForm.getContactInformation().setPrimarySecMinContIds(null);
 		}
 		if(eaForm.getContactInformation().getResetImplExecutingIds()!=null && eaForm.getContactInformation().getResetImplExecutingIds()){
-			eaForm.getContactInformation().setResetImplExecutingIds(null);
+			eaForm.getContactInformation().setPrimaryImplExecutingContIds(null);
 		}
 		
 		String[] donorContsIds=null;

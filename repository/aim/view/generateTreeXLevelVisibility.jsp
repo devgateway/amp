@@ -78,7 +78,17 @@
 								
 									<bean:define id="featureAux" name="feature" property="value" type="org.dgfoundation.amp.visibility.AmpTreeVisibility" scope="page"/>
 									<bean:define id="featureAux2" name="featureAux" property="root" type="org.digijava.module.aim.dbentity.AmpFeaturesVisibility" scope="page"/>
-									<li id="lifeature:<bean:write name="featureAux" property="root.id"/>" title="<digi:trn key="<%="fm:tooltip:"+featureAux.getRoot().getNameTrimmed()%>"><bean:write name="featureAux" property="root.description"/></digi:trn>">
+
+									<bean:define id="featureDescription" type="java.lang.String"><digi:trn key="<%="fm:tooltip:"+featureAux.getRoot().getNameTrimmed()%>"><bean:write name="featureAux" property="root.description"/></digi:trn></bean:define>
+									<bean:define id="featureName" type="java.lang.String"><digi:trn key='<%="fm:"+featureAux.getRoot().getNameTrimmed().replace("&","-")%>'><bean:write name="featureAux" property="root.name"/></digi:trn></bean:define>
+									
+									<logic:notEqual name="featureDescription" value="${featureName}" >
+										<li id="lifeature:<bean:write name="featureAux" property="root.id"/>" title="${featureDescription} | ${featureName}">
+									</logic:notEqual>
+									<logic:equal name="featureDescription" value="${featureName}">
+										<li id="lifeature:<bean:write name="featureAux" property="root.id"/>" title="${featureDescription}">
+									</logic:equal>
+									
 										<logic:equal name="aimVisibilityManagerForm" property="mode" value="addNew">
 											<input onclick="toggleChildrenVisibility('lifeature:<bean:write name="featureAux" property="root.id"/>')" 
 												type="checkbox" id="featureVis:<bean:write name="featureAux" property="root.id"/>" 
@@ -102,7 +112,17 @@
 										<logic:iterate name="featureAux" property="sorteditems" id="field" type="java.util.Map.Entry" >
 											<bean:define id="fieldAux" name="field" property="value" type="org.dgfoundation.amp.visibility.AmpTreeVisibility" scope="page"/>
 											<bean:define id="fieldAux2" name="fieldAux" property="root" type="org.digijava.module.aim.dbentity.AmpFieldsVisibility" scope="page"/>
-											<li class="dhtmlgoodies_sheet.gif" title="<digi:trn key="<%="fm:tooltip:"+fieldAux.getRoot().getNameTrimmed()%>"><bean:write name="fieldAux" property="root.description"/></digi:trn>">
+											
+											<bean:define id="fieldDescription" type="java.lang.String"><digi:trn key="<%="fm:tooltip:"+fieldAux.getRoot().getNameTrimmed()%>"><bean:write name="fieldAux" property="root.description"/></digi:trn></bean:define>
+											<bean:define id="fieldName" type="java.lang.String"><digi:trn key="<%="fm:"+fieldAux.getRoot().getNameTrimmed().replace("&","-")%>"><bean:write name="fieldAux" property="root.name"/></digi:trn></bean:define>
+									
+											<logic:notEqual name="fieldDescription" value="${fieldName}" >
+												<li class="dhtmlgoodies_sheet.gif" title="${fieldDescription} | ${fieldName}">
+											</logic:notEqual>
+											<logic:equal name="fieldDescription" value="${fieldName}">
+												<li class="dhtmlgoodies_sheet.gif" title="${fieldDescription}">
+											</logic:equal>
+																						
 												<logic:equal name="aimVisibilityManagerForm" property="mode" value="addNew">
 													<input type="checkbox" id="fieldVis:<bean:write name="fieldAux" property="root.id"/>" 
 													name="fieldVis:<bean:write name="fieldAux" property="root.id"/>" 

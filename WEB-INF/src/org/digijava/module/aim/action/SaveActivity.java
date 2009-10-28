@@ -1468,9 +1468,12 @@ public class SaveActivity extends Action {
 				ampOrgRole.setActivity(activity);
 				ampOrgRole.setRole(role);
 				ampOrgRole.setOrganisation(tmp);
+				if (eaForm.getAgencies().getExecutingOrgToInfo()!=null){
 				String additionalInfo			= eaForm.getAgencies().getExecutingOrgToInfo().get( tmp.getAmpOrgId().toString() );
-				if ( additionalInfo != null && additionalInfo.length() > 0 )
+				if ( additionalInfo != null && additionalInfo.length() > 0 ){
 					ampOrgRole.setAdditionalInfo(additionalInfo);
+					}
+				}
 				orgRole.add(ampOrgRole);
 			}
 		}
@@ -1483,9 +1486,12 @@ public class SaveActivity extends Action {
 				ampOrgRole.setActivity(activity);
 				ampOrgRole.setRole(role);
 				ampOrgRole.setOrganisation(org);
+				if (eaForm.getAgencies().getImpOrgToInfo()!=null){
 				String additionalInfo			= eaForm.getAgencies().getImpOrgToInfo().get( org.getAmpOrgId().toString() );
-				if ( additionalInfo != null && additionalInfo.length() > 0 )
-					ampOrgRole.setAdditionalInfo(additionalInfo);
+					if ( additionalInfo != null && additionalInfo.length() > 0 ){
+						ampOrgRole.setAdditionalInfo(additionalInfo);
+					}
+				}
 				orgRole.add(ampOrgRole);
 			}
 		}
@@ -1498,9 +1504,12 @@ public class SaveActivity extends Action {
 				ampOrgRole.setActivity(activity);
 				ampOrgRole.setRole(role);
 				ampOrgRole.setOrganisation(org);
+				if (eaForm.getAgencies().getBenOrgToInfo()!=null){
 				String additionalInfo			= eaForm.getAgencies().getBenOrgToInfo().get( org.getAmpOrgId().toString() );
-				if ( additionalInfo != null && additionalInfo.length() > 0 )
+				if ( additionalInfo != null && additionalInfo.length() > 0 ){
 					ampOrgRole.setAdditionalInfo(additionalInfo);
+					}
+				}
 				orgRole.add(ampOrgRole);
 			}
 		}
@@ -1513,9 +1522,12 @@ public class SaveActivity extends Action {
 				ampOrgRole.setActivity(activity);
 				ampOrgRole.setRole(role);
 				ampOrgRole.setOrganisation(org);
+				if (eaForm.getAgencies().getConOrgToInfo()!=null){
 				String additionalInfo			= eaForm.getAgencies().getConOrgToInfo().get( org.getAmpOrgId().toString() );
-				if ( additionalInfo != null && additionalInfo.length() > 0 )
+					if ( additionalInfo != null && additionalInfo.length() > 0 ){
 					ampOrgRole.setAdditionalInfo(additionalInfo);
+					}
+				}
 				orgRole.add(ampOrgRole);
 			}
 		}
@@ -1528,9 +1540,12 @@ public class SaveActivity extends Action {
 				ampOrgRole.setActivity(activity);
 				ampOrgRole.setRole(role);
 				ampOrgRole.setOrganisation(org);
+				if (eaForm.getAgencies().getRegOrgToInfo()!=null){
 				String additionalInfo			= eaForm.getAgencies().getRegOrgToInfo().get( org.getAmpOrgId().toString() );
-				if ( additionalInfo != null && additionalInfo.length() > 0 )
+				if ( additionalInfo != null && additionalInfo.length() > 0 ){
 					ampOrgRole.setAdditionalInfo(additionalInfo);
+				}
+				}
 				orgRole.add(ampOrgRole);
 			}
 		}
@@ -1543,9 +1558,12 @@ public class SaveActivity extends Action {
 				ampOrgRole.setActivity(activity);
 				ampOrgRole.setRole(role);
 				ampOrgRole.setOrganisation(org);
+				if(eaForm.getAgencies().getSectOrgToInfo()!=null){
 				String additionalInfo			= eaForm.getAgencies().getSectOrgToInfo().get( org.getAmpOrgId().toString() );
-				if ( additionalInfo != null && additionalInfo.length() > 0 )
+				if ( additionalInfo != null && additionalInfo.length() > 0 ){
 					ampOrgRole.setAdditionalInfo(additionalInfo);
+				}
+				}
 				orgRole.add(ampOrgRole);
 			}
 		}
@@ -1559,9 +1577,12 @@ public class SaveActivity extends Action {
 				ampOrgRole.setActivity(activity);
 				ampOrgRole.setRole(role);
 				ampOrgRole.setOrganisation(org);
+				if (eaForm.getAgencies().getRepOrgToInfo()!=null){
 				String additionalInfo			= eaForm.getAgencies().getRepOrgToInfo().get( org.getAmpOrgId().toString() );
-				if ( additionalInfo != null && additionalInfo.length() > 0 )
-					ampOrgRole.setAdditionalInfo(additionalInfo);
+					if ( additionalInfo != null && additionalInfo.length() > 0 ){
+						ampOrgRole.setAdditionalInfo(additionalInfo);
+					}
+				}
 				orgRole.add(ampOrgRole);
 			}
 		}
@@ -1574,9 +1595,12 @@ public class SaveActivity extends Action {
 				ampOrgRole.setActivity(activity);
 				ampOrgRole.setRole(role);
 				ampOrgRole.setOrganisation(org);
+				if(eaForm.getAgencies().getRespOrgToInfo()!=null){
 				String additionalInfo			= eaForm.getAgencies().getRespOrgToInfo().get( org.getAmpOrgId().toString() );
-				if ( additionalInfo != null && additionalInfo.length() > 0 )
-					ampOrgRole.setAdditionalInfo(additionalInfo);
+					if ( additionalInfo != null && additionalInfo.length() > 0 ){
+						ampOrgRole.setAdditionalInfo(additionalInfo);
+					}
+				}
 				orgRole.add(ampOrgRole);
 			}
 		}

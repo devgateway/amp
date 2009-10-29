@@ -1,20 +1,19 @@
 package org.digijava.module.message.helper;
 
-import org.digijava.module.message.triggers.ActivitySaveTrigger;
-import org.digijava.module.message.triggers.ActivityDisbursementDateTrigger;
-import org.digijava.module.message.triggers.CalendarEventSaveTrigger;
-import org.digijava.module.message.triggers.RemoveCalendarEventTrigger;
-import org.digijava.module.message.triggers.UserRegistrationTrigger;
-import org.digijava.module.message.triggers.ApprovedActivityTrigger;
-import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
-import org.digijava.module.message.triggers.CalendarEventTrigger;
-import org.digijava.module.message.triggers.ActivityProposedCompletionDateTrigger;
-import org.digijava.module.message.triggers.ActivityProposedStartDateTrigger;
 import org.digijava.module.message.triggers.ActivityActualStartDateTrigger;
 import org.digijava.module.message.triggers.ActivityCurrentCompletionDateTrigger;
+import org.digijava.module.message.triggers.ActivityDisbursementDateTrigger;
 import org.digijava.module.message.triggers.ActivityFinalDateForContractingTrigger;
 import org.digijava.module.message.triggers.ActivityFinalDateForDisbursementsTrigger;
 import org.digijava.module.message.triggers.ActivityProposedApprovalDateTrigger;
+import org.digijava.module.message.triggers.ActivityProposedCompletionDateTrigger;
+import org.digijava.module.message.triggers.ActivityProposedStartDateTrigger;
+import org.digijava.module.message.triggers.ActivitySaveTrigger;
+import org.digijava.module.message.triggers.ApprovedActivityTrigger;
+import org.digijava.module.message.triggers.CalendarEventSaveTrigger;
+import org.digijava.module.message.triggers.CalendarEventTrigger;
+import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
+import org.digijava.module.message.triggers.RemoveCalendarEventTrigger;
 /**
  * Constants for AmpMessage class and it's subclasses
  * @author Dare Roinishvili
@@ -28,7 +27,6 @@ public class MessageConstants {
      */
     public static final  Class[] availableTriggers=new Class[] {ActivitySaveTrigger.class,
                                                                 ActivityDisbursementDateTrigger.class,
-                                                                UserRegistrationTrigger.class,
                                                                 ApprovedActivityTrigger.class,
                                                                 NotApprovedActivityTrigger.class,
                                                                 CalendarEventTrigger.class, 
@@ -44,7 +42,6 @@ public class MessageConstants {
 
     public static final  String[] triggerName=new String[] {"Save Actvity",
                                                             "Activity Disbursement Date",
-                                                            "New User Registration",
                                                             "Activity Approved",
                                                             "Activity Not Approved",
                                                             "Calendar Event", 

@@ -7,8 +7,21 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 
+<c:set var="msg"><digi:trn>Please select the role</digi:trn></c:set>
+<script language="javascript">
+function validate(){
+	if (document.aimTeamMemberForm.role.selectedIndex==0){
+		alert('${msg}');
+		document.aimTeamMemberForm.role.focus()
+		return false;
+	}
+	return true;
+	}
+</script>
+
+
 <digi:instance property="aimTeamMemberForm" />
-<digi:form action="/updateTeamMember.do" method="post">
+<digi:form action="/updateTeamMember.do" method="post" onsubmit="return validate()">
 
 <html:hidden property="teamId" />
 <html:hidden property="teamMemberId" />

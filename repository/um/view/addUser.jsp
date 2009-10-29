@@ -52,7 +52,9 @@
 
 -->
 </style>
-
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/dhtml-suite-for-applications.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicContent.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicTooltip.js"/>"></script>
 <script language="JavaScript">
 
 
@@ -196,12 +198,22 @@
 		return true;
 	}
 
+	function init() {
+		var u = document.getElementById('email');
+		u.setAttribute("autocomplete", "off");
+		
+		var u = document.getElementById('emailConfirmation');
+		u.setAttribute("autocomplete", "off");
+		
+		var u = document.getElementById('password');
+		u.setAttribute("autocomplete", "off");
+		
+		var u = document.getElementById('passwordConfirmation');
+		u.setAttribute("autocomplete", "off");
+		
+	}
+	YAHOOAmp.util.Event.addListener(window, "load", init) ;
 </script>
-
-
-
-
-
 <digi:instance property="umAddUserForm" />
 
 <digi:form action="/registerUser.do" method="post" onsubmit="return validateAimUserRegisterForm(this);">
@@ -331,7 +343,7 @@
 													<FONT color=red>*</FONT>
 													<digi:trn key="um:emailAddress">E-mail Address</digi:trn></td>
 												<td align="left">
-													<html:text property="email" size="20" styleClass="inp-text" />
+													<html:text  styleId="userEmail" property="email" size="20" styleClass="inp-text" />
 												</td>
 											</tr>
 											<tr>
@@ -340,7 +352,7 @@
 													<FONT color=red>*</FONT>
 													<digi:trn key="um:repEmailAddress">Repeat Email Address</digi:trn></td>
 												<td align="left">
-													<html:text property="emailConfirmation"	size="20" styleClass="inp-text" />
+													<html:text styleId="userEmailConfirmation" property="emailConfirmation"	size="20" styleClass="inp-text" />
 												</td>
 											</tr>
 											<tr>
@@ -349,16 +361,17 @@
 													<FONT color=red>*</FONT>
 													<digi:trn key="um:password">Password</digi:trn></td>
 												<td align="left">
-													<html:password property="password"size="20" />
+													<html:password styleId="userPassword" property="password"size="20" />
 												</td>
 											</tr>
+										
 											<tr>
 												<td width="3%">&nbsp;</td>
 												<td align=right class=f-names noWrap>
 													<FONT color=red>*</FONT>
 													<digi:trn key="um:repPassword">Repeat Password</digi:trn></td>
 												<td align="left">
-													<html:password property="passwordConfirmation" size="20" />
+													<html:password styleId="userPasswordConfirmation" property="passwordConfirmation" size="20" />
 												</td>
 											</tr>
 											<tr>

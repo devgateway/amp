@@ -81,7 +81,7 @@ function submitPages(){
 		document.aimCurrencyForm.submit();
 	}
 	else{
-		alert("<digi:trn>Number of records per page should be greather than 0</digi:trn>");
+		alert("<digi:trn>Number of records per page should be greater than 0</digi:trn>");
 	}
 		
 }

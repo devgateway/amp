@@ -381,22 +381,20 @@
 					</td>
 				</tr>
 				</field:display>
-                            </table>
+			</table>
                         </td>
                         <td>
                             <c:set var="tooltip_translation">
 					<digi:trn key="rep:filter:programOfInterest">Specify the   programs   of interest.</digi:trn>
 			</c:set>
-                            <table align="center" cellpadding="1" cellspacing="1" onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}');">
-			<tr bgcolor="#EEEEEE">
+                <table align="center" cellpadding="1" cellspacing="1" onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}');">
+                <field:display name="National Planning Objectives" feature="NPD Programs">
+                <tr bgcolor="#EEEEEE">
 					<td colspan="5">
-					<b><digi:trn key="rep:filter:Programs"> Programs</digi:trn></b>
-					<br>
+						<b><digi:trn key="rep:filter:Programs"> Programs</digi:trn></b><br>
 					</td>
 				</tr>
-                                
-                            <field:display name="National Planning Objectives" feature="NPD Programs">
-				<tr bgcolor="#EEEEEE">
+                <tr bgcolor="#EEEEEE">
 					<td colspan="5"><digi:trn key="rep:filer:nationalPlanningObjectives">National Planning Objectives</digi:trn></td>
 				</tr>
 				<tr bgcolor="#EEEEEE">

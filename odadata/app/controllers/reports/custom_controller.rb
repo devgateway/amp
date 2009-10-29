@@ -7,7 +7,7 @@ class Reports::CustomController < ReportsController
     :markers => lambda { |m, v| 
       v.map { |name| "projects.#{name}_marker >= 1"}.join(" OR ") 
     },
-    [:prj_status, :grant_loan, :aid_modality_id, :type_of_implementation] => 
+    [:prj_status, :grant_loan, :aid_modality_ids, :type_of_implementation] => 
       lambda { |m, v| ["#{m} IN (?)", v] },
       
     # FIXME: This makes no sense for a filter, waiting for Vanessas response to ODANIC-82
@@ -70,25 +70,19 @@ protected
   
   # Parse required disaggregation middleware
   def disaggregators_from_params
-    disaggregators = []
-    disaggregators << Reports::SectorDisaggregator if params[:disaggregation][:sector]
-    disaggregators << Reports::LocationDisaggregator if params[:disaggregation][:location]
-    
-    disaggregators
-  end
-  
-  # Parse checkbox results
-  def parse_checkboxes(res)
-    if res[:all].to_i == 1
-      :ignore
-    else
-      # Delete unchecked fields
-      res.delete_if {|k,v| v.to_i != 1}
-
-      # Return array of checked fields, if none was set we ignore these options
-      res.keys.empty? ? :ignore : res.keys
+    dis = params[:disaggregators] || []
+    returning([]) do |disaggregators|
+      if dis.include?("sector")
+        sectors = params[:sectors].include?("all") ? DacSector.all : DacSector.find(params[:sectors])
+        disaggregators << Reports::SectorDisaggregator.new(sectors)
+      end
+      
+      if dis.include?("location")
+        locations = params[:provinces].include?("all") ? Province.all : Province.find(params[:provinces])
+        disaggregators << Reports::LocationDisaggregator.new(:province, locations)
+      end
     end
-  end  
+  end
 
   def parsed_params # :nodoc:
     p = []
@@ -96,7 +90,7 @@ protected
     RELATIONS.each do |keys, handler|
       [*keys].each do |key| 
         # Get values from checkboxes.. If there is no input for the relation, ignore.
-        values = params[key].blank? ? :ignore : parse_checkboxes(params[key])
+        values = params[key].blank? || params[key].include?("all") ? :ignore : params[key]
         p << [key, values, handler]
       end
     end 

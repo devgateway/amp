@@ -8,8 +8,9 @@ module Reports
       sector_relevances = object.sector_relevances.all(:conditions => ['dac_sector_id IN (?)', @sectors.map(&:id)])
       percentage = sector_relevances.sum(&:amount) / 100.0
       
-      [:total_commitments, :total_disbursements, :commitments_forecast, :disbursements_forecast].each do |f|
-        preprocessed_record[f] = preprocessed_record[f] * percentage if preprocessed_record[f]
+      funding_attributes = preprocessed_record.keys.select { |a| a =~ /(total_commitments|total_disbursements|commitments_forecast|disbursements_forecast)(_[0-9]{4})?/ }
+      funding_attributes.each do |a|
+        preprocessed_record[a] = preprocessed_record[a] * percentage if preprocessed_record[a]
       end
     end
   end

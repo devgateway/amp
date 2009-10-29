@@ -8,10 +8,10 @@ class Reports::ProjectAggregator < Ruport::Aggregator
       pos = @fields.index("funding_details")
     
       new_fields = @options[:funding_details].inject([]) do |tmp, y|
-        tmp << :"total_commitments_#{y}"
-        tmp << :"total_disbursements_#{y}"
-        tmp << :"commitments_forecast_#{y}"
-        tmp << :"disbursements_forecast_#{y}"
+        tmp << "total_commitments_#{y}"
+        tmp << "total_disbursements_#{y}"
+        tmp << "commitments_forecast_#{y}"
+        tmp << "disbursements_forecast_#{y}"
         
         tmp
       end
@@ -24,10 +24,10 @@ class Reports::ProjectAggregator < Ruport::Aggregator
   def process_record(project, record)
     # Add funding details
     @options[:funding_details].andand.each do |y|
-      record[:"total_commitments_#{y}"] = project.total_commitments(y)
-      record[:"total_disbursements_#{y}"] = project.total_payments(y)
-      record[:"commitments_forecast_#{y}"] = project.funding_forecasts.find_by_year(y).andand.commitments
-      record[:"disbursements_forecast_#{y}"] = project.funding_forecasts.find_by_year(y).andand.payments
+      record["total_commitments_#{y}"] = project.total_commitments(y)
+      record["total_disbursements_#{y}"] = project.total_payments(y)
+      record["commitments_forecast_#{y}"] = project.funding_forecasts.find_by_year(y).andand.commitments
+      record["disbursements_forecast_#{y}"] = project.funding_forecasts.find_by_year(y).andand.payments
     end
   end
   

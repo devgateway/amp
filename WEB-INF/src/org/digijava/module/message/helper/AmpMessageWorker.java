@@ -43,9 +43,7 @@ import org.digijava.module.message.triggers.CalendarEventSaveTrigger;
 import org.digijava.module.message.triggers.CalendarEventTrigger;
 import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
 import org.digijava.module.message.triggers.RemoveCalendarEventTrigger;
-import org.digijava.module.message.triggers.UserRegistrationTrigger;
 import org.digijava.module.message.util.AmpMessageUtil;
-import org.digijava.module.message.triggers.RemoveCalendarEventTrigger;
 
 public class AmpMessageWorker {
 
@@ -63,8 +61,6 @@ public class AmpMessageWorker {
 
                 if (e.getTrigger().equals(ActivitySaveTrigger.class)) { //<------ Someone created new Activity
                     newMsg = processActivitySaveEvent(e, newAlert, template);
-                } else if (e.getTrigger().equals(UserRegistrationTrigger.class)) { //<----- Registered New User
-                    newMsg = proccessUserRegistrationEvent(e, newAlert, template);
                 } else if (e.getTrigger().equals(ActivityDisbursementDateTrigger.class)) {
                     newMsg = processActivityDisbursementDateComingEvent(e, newAlert, template);
                 } else if (e.getTrigger().equals(CalendarEventTrigger.class)) {
@@ -440,25 +436,6 @@ public class AmpMessageWorker {
         alert.setSenderType(MessageConstants.SENDER_TYPE_SYSTEM);
         return createAlertFromTemplate(template, myHashMap, alert);
 
-    }
-
-    /**
-     *	User Registration Event processing
-     */
-    private static AmpAlert proccessUserRegistrationEvent(Event e, AmpAlert alert, TemplateAlert template) {
-        //url
-        DigiConfig config = DigiConfigManager.getConfig();
-        String partialURL = config.getSiteDomain().getContent() ;
-
-        HashMap<String, String> myHashMap = new HashMap<String, String> ();
-        myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(UserRegistrationTrigger.PARAM_NAME));
-        if (partialURL != null) {
-            myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + partialURL + e.getParameters().get(UserRegistrationTrigger.PARAM_URL) + "\">User Profile URL</a>");
-            alert.setObjectURL(partialURL + e.getParameters().get(UserRegistrationTrigger.PARAM_URL));
-        }
-        alert.setSenderType(MessageConstants.SENDER_TYPE_USER_MANAGER);
-
-        return createAlertFromTemplate(template, myHashMap, alert);
     }
 
     /**

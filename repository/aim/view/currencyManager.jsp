@@ -73,7 +73,18 @@ function sortSubmit(value){
 	document.aimCurrencyForm.target = "_self";
 	document.aimCurrencyForm.submit();
 }
-
+function submitPages(){
+	if(document.getElementsByName('numRecords')[0].value>0){
+	    <digi:context name="manager" property="context/module/moduleinstance/currencyManager.do" />
+	    document.aimCurrencyForm.action = "${manager}";
+		document.aimCurrencyForm.target = "_self";
+		document.aimCurrencyForm.submit();
+	}
+	else{
+		alert("<digi:trn>Number of records per page should be greather than 0</digi:trn>");
+	}
+		
+}
 </script>
 
 
@@ -171,7 +182,7 @@ function sortSubmit(value){
                                           <c:set var="trnViewBtn">
                                             <digi:trn key="aim:trnViewBtn"> View </digi:trn>
                                           </c:set>
-                                          <input type="button" value="${trnViewBtn}" class="dr-menu" onclick="submit()"/>
+                                          <input type="button" value="${trnViewBtn}" class="dr-menu" onclick="submitPages()"/>
 										</td>
 									</tr>
 								</table>

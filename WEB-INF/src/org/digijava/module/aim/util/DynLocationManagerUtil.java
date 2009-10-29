@@ -286,9 +286,13 @@ public class DynLocationManagerUtil {
 				}
 			}
 			
+			Long maxCountryCode		= 0L;
 			HashMap<String, Country> namesToDgCountriesMap	= new HashMap<String, Country>();
 			for (Country country: countries) {
 				namesToDgCountriesMap.put(country.getCountryName(), country);
+				if ( country.getCountryId() != null && country.getCountryId() > maxCountryCode ) {
+					maxCountryCode			= country.getCountryId();
+				}
 			}
 			 
 			if ( countryLocations != null ) {
@@ -298,13 +302,22 @@ public class DynLocationManagerUtil {
 						country.setCountryName( location.getName() );
 						country.setIso( location.getIso() );
 						country.setIso3( location.getIso3() );
-						if ( location.getCode() != null  ) 
+						country.setAvailable(true);
+						country.setDecCtryFlag("t");
+						country.setStat("t");
+						country.setShowCtry("t");
+						if ( location.getCode() != null  ){ 
 							try {
 								country.setCountryId( Long.parseLong( location.getCode() ) );
 							}
 							catch(NumberFormatException e) {
-								logger.info("Cannot transform location country code ('"+ location.getCode() +"') to dg Country code. ");
+								logger.info("Cannot transform location country code ('"+ location.getCode() +"') to dg Country code. Settting country id as maximum."); 
+								country.setCountryId(maxCountryCode + 1);
 							}
+						}
+						else {
+							country.setCountryId(maxCountryCode + 1);
+						}
 						dbSession.save(country);
 					}
 				}

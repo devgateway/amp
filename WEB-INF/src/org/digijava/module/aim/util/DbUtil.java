@@ -52,6 +52,7 @@ import org.digijava.module.aim.dbentity.AmpClosingDateHistory;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpDesktopTabSelection;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpFilters;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -209,6 +210,16 @@ public class DbUtil {
 								 * report
 								 */
 								ampReport.getMembers().removeAll(col);
+								if ( ampReport.getDesktopTabSelections() != null ) {
+									for (AmpDesktopTabSelection adts : ampReport.getDesktopTabSelections()) {
+										if ( adts.getOwner().getAmpTeam().getAmpTeamId().equals(teamId) ) {
+							            	adts.getOwner().getDesktopTabSelections().remove(adts);
+							            	adts.setOwner(null);
+							            	adts.setReport(null);
+							            	ampReport.getDesktopTabSelections().remove(adts);
+										}
+									}
+								}
 								session.update(ampReport);
 							}
 						}

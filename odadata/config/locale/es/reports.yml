@@ -85,7 +85,7 @@ es:
         title: Proyectos de {{province}}
     districts:
       index:
-        title: "Proyectos de <i>{{province_name}}</i> por Municipios"
+        title: "Proyectos de <i>{{province}}</i> por Municipios"
       show:
         title: Proyectos de {{district}}
     mdgs:

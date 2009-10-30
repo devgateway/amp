@@ -1,9 +1,9 @@
-<h2><%= header lc(:title, :province => @province.name) %></h2>
+<h2><%= header t('.title', :province => @province.name) %></h2>
 
 <table>
 	<tr>
-		<th><%= ll(:terms, :municipality) %></th>
-		<th><%= ll(:reports, :no_projects) %></th>
+		<th><%=t '.municipality' %></th>
+		<th><%=t '.no_projects' %></th>
 		<th><%= ll(:reports, :list) %></th>
 	</tr>
 	

@@ -1,0 +1,6 @@
+es:
+  reports:
+    districts:
+      index:
+        municipality: Municipalidad
+        no_projects: Número de Proyectos

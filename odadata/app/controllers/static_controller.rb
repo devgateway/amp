@@ -9,6 +9,10 @@ class StaticController < ApplicationController
   def downloads
   end
   
+  def test
+    render :layout => false
+  end
+  
   # =====================================
   # = Status page for closed data input =
   # =====================================

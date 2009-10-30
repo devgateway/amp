@@ -147,10 +147,10 @@ function myclearDate(editBox, clearLink, checkboxId){
 															</td>
 															<td align="left" vAlign="center">&nbsp;
 																<a id="clear1" href='javascript:clearDate(document.getElementById("originalAppDate"), "clear1")'>
-																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
 																</a>
 																<a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("originalAppDate"),"clear1")'>
-																	<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																	<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
 																</a>
 															</td>
 														</tr>
@@ -163,7 +163,7 @@ function myclearDate(editBox, clearLink, checkboxId){
 											<tr>
 												<td width=200 bgcolor="#ffffff">
 													<a title="<digi:trn key="aim:ActualApprovalDatebyDonorAgency">Date (dd/mm/yy) when the project was approved by the donor agency</digi:trn>">&nbsp;
-												<digi:trn key="aim:actualApprovalDate">Actual Approval Date </digi:trn></a>
+												</a>
 												</td>
 												<td bgcolor="#ffffff">
 													<table cellPadding=0 cellSpacing=0>
@@ -176,10 +176,10 @@ function myclearDate(editBox, clearLink, checkboxId){
 															</td>
 															<td align="left" vAlign="center">&nbsp;
 																<a id="clear2" href='javascript:myclearDate(document.getElementById("revisedAppDate"), "clear2", "sameAs1")'>
-																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
 																</a>
 																<a id="date2" href='javascript:pickDateWithClear("date2",document.getElementById("revisedAppDate"),"clear2")'>
-																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
@@ -212,10 +212,10 @@ function myclearDate(editBox, clearLink, checkboxId){
 															</td>
 															<td align="left" vAlign="center">&nbsp;
 																<a id="clear3" href='javascript:clearDate(document.getElementById("originalStartDate"), "clear3")'>
-																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
 																</a>
 																<a id="date3" href='javascript:pickDateWithClear("date3",document.getElementById("originalStartDate"), "clear3")'>
-																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
 																</a>
 															</td>
 														</tr>
@@ -242,10 +242,10 @@ function myclearDate(editBox, clearLink, checkboxId){
 															</td>
 															<td align="left" vAlign="center">&nbsp;
 																<a id="clear4" href="javascript:myclearDate(document.aimEditActivityForm.revisedStartDate, 'clear4', 'sameAs2')">
-																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
 																</a>
 																<a id="date4" href='javascript:pickDateWithClear("date4",document.aimEditActivityForm.revisedStartDate,"clear4")'>
-																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
@@ -278,10 +278,10 @@ function myclearDate(editBox, clearLink, checkboxId){
 															</td>
 															<td align="left" vAlign="center">&nbsp;
 																<a id="clear5" href="javascript:clearDate(document.aimEditActivityForm.contractingDate, 'clear5')">
-																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
 																</a>
 																<a id="date5" href='javascript:pickDateWithClear("date5",document.aimEditActivityForm.contractingDate,"clear5")'>
-																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
 																</a>
 															</td>
 														</tr>
@@ -308,10 +308,10 @@ function myclearDate(editBox, clearLink, checkboxId){
 															</td>
 															<td align="left" vAlign="center">&nbsp;
 																<a id="clear6" href="javascript:clearDate(document.aimEditActivityForm.disbursementsDate, 'clear6')">
-																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
 																</a>
 																<a id="date6" href='javascript:pickDateWithClear("date6",document.aimEditActivityForm.disbursementsDate,"clear6")'>
-																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
 																</a>
 															</td>
 															<td>&nbsp;
@@ -341,10 +341,10 @@ function myclearDate(editBox, clearLink, checkboxId){
 															</td>
 															<td align="left" vAlign="center">&nbsp;
 																<a id="clear7" href="javascript:clearDate(document.aimEditActivityForm.proposedCompDate, 'clear7')">
-																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
 																</a>
 																<a id="date7" href='javascript:pickDateWithClear("date7",document.aimEditActivityForm.proposedCompDate,"clear7")'>
-																	<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																	<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
 																</a>
 															</td>
 														</tr>
@@ -371,10 +371,10 @@ function myclearDate(editBox, clearLink, checkboxId){
 															</td>
 															<td align="left" vAlign="center">&nbsp;
 																<a id="clear8" href="javascript:clearDate(document.aimEditActivityForm.currentCompDate, 'clear8')">
-																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="<digi:trn>Delete this transaction</digi:trn>"/>
 																</a>
 																<a id="date8" href='javascript:pickDateWithClear("date8",document.aimEditActivityForm.currentCompDate,"clear8")'>
-																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																<img src="../ampTemplate/images/show-calendar.gif" alt="<digi:trn>Click to View Calendar</digi:trn>" border=0>
 																</a>
 															</td>
 															<td>&nbsp;
@@ -399,7 +399,7 @@ function myclearDate(editBox, clearLink, checkboxId){
 												<FONT color=red>*</FONT>&nbsp;
 												<digi:trn key="aim:status">Status</digi:trn>												  
 												<a href="javascript:popupwin('activity_status')">
-												<img src="../ampTemplate/images/help.gif" alt="Click to get help on Status" width=10 height=10 border=0></a>
+												<img src="../ampTemplate/images/help.gif" alt="<digi:trn>Click to get help on Status</digi:trn>" width=10 height=10 border=0></a>
 												</td>
 												<td bgcolor="#ffffff">
 													<c:set var="translation">

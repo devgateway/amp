@@ -214,6 +214,8 @@ public class UpdateTeamActivities extends Action {
 			}			
 			
 			int stIndex = ((page - 1) * numRecords) + 1;
+			if (stIndex < 0)
+				stIndex = 1;
 			int edIndex = page * numRecords;
 			if (edIndex > temp.size()) {
 				edIndex = temp.size();

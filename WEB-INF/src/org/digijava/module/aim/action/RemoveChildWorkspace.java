@@ -17,6 +17,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.UpdateWorkspaceForm;
+import org.digijava.module.aim.util.TeamUtil;
 
 public class RemoveChildWorkspace extends Action {
 	
@@ -49,6 +50,7 @@ public class RemoveChildWorkspace extends Action {
 			tempTeam.setAmpTeamId(teamId);
 			if (uwForm.getChildWorkspaces() != null) {
 				uwForm.getChildWorkspaces().remove(tempTeam);
+				TeamUtil.unlinkParentWorkspace(tempTeam.getAmpTeamId());
 				logger.debug("Child workspace removed!");
 			}
 		}

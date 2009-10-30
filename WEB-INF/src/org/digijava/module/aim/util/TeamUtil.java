@@ -5,6 +5,7 @@
 package org.digijava.module.aim.util;
 
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -47,6 +48,7 @@ import org.digijava.module.aim.helper.ReportsCollection;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.Workspace;
 import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -711,6 +713,36 @@ public class TeamUtil {
         }
         return memExist;
     }
+    
+	/**
+	 * 
+	 * @param teamId
+	 */
+	public static void unlinkParentWorkspace(Long teamId) {
+		Session session = null;
+
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			
+			Transaction transaction = session.beginTransaction();
+			AmpTeam team = (AmpTeam) session.load(AmpTeam.class, teamId);
+			team.setParentTeamId(null);
+			session.saveOrUpdate(team);
+			transaction.commit();
+			PersistenceManager.releaseSession(session);
+		} catch (HibernateException e) {
+			logger.error(e);
+			e.printStackTrace();
+		} catch (SQLException e) {
+			logger.error(e);
+			e.printStackTrace();
+		} catch (DgException e) {
+			logger.error(e);
+			e.printStackTrace();
+		}
+
+	}
+        
     
     /**
      * Removes a team

@@ -20,9 +20,11 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.security.DgSecurityManager;
 import org.digijava.kernel.security.ResourcePermission;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
@@ -143,14 +145,22 @@ public class ViewAmp
          */
         Collection members = TeamMemberUtil.getTeamMembers(usr.getEmail());
         if (members == null || members.size() == 0) {
-            if (siteAdmin == true) { // user is a site admin
+        	String locale = RequestUtils.getNavigationLanguage(request).getCode();
+			String siteId = RequestUtils.getSite(request).getId()+"";
+			//
+			if (siteAdmin == true) { // user is a site admin
                 // set the session variable 'ampAdmin' to the value 'yes'
                 session.setAttribute("ampAdmin", new String("yes"));
                 // create a TeamMember object and set it to a session variabe 'currentMember'
                 TeamMember tm = new TeamMember();
                 tm.setMemberName(usr.getName());
                 tm.setMemberId(usr.getId());
-                tm.setTeamName("AMP Administrator");
+                try {
+					tm.setTeamName(TranslatorWorker.translateText("AMP Administrator", locale, siteId));
+				} catch (WorkerException e) {
+					tm.setTeamName("AMP Administrator");
+					e.printStackTrace();
+				}
                 session.setAttribute("currentMember", tm);
                 PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, tm);
                 // show the index page with the admin toolbar at the bottom

@@ -1,4 +1,4 @@
-$('select.dynamic_select.parent').each(function() {
+$('select.dynamic_select.parent').livequery(function() {
     var parent = $(this);  
     var child_element = parent.nextAll('select.dynamic_select.child')[0];
     if (!child_element) {

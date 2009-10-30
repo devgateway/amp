@@ -1,6 +1,7 @@
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -8,9 +9,14 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.form.ComponentTypeForm;
 import org.digijava.module.aim.util.ComponentsUtil;
@@ -30,6 +36,12 @@ public class UpdateComponentType extends Action {
 			}
 		}
 
+		ActionErrors errors = (ActionErrors) session.getAttribute("AddComponentTypeError");
+		if(errors != null){
+			saveErrors(request, errors);
+			session.setAttribute("AddComponentTypeError", null);
+		}
+		
 		String event = request.getParameter("event");
 
 		if (event != null) {
@@ -48,29 +60,57 @@ public class UpdateComponentType extends Action {
 	}
 	
 
+	
 	public ActionForward save(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
 		ComponentTypeForm compForm = (ComponentTypeForm) form;
+		AmpComponentType existComponent = existComponent(form);
 
 		if (compForm.getId()==0) {
-			AmpComponentType type = new AmpComponentType();
-			type.setName(compForm.getName());
-			type.setCode(compForm.getCode());
-			type.setEnable(compForm.getEnable());
-			type.setSelectable(compForm.getSelectable());
-			ComponentsUtil.addNewComponentType(type);
+			if(existComponent != null) addErrorsToSession(request);
+			else{
+				AmpComponentType type = new AmpComponentType();
+				type.setName(compForm.getName());
+				type.setCode(compForm.getCode());
+				type.setEnable(compForm.getEnable());
+				type.setSelectable(compForm.getSelectable());
+				ComponentsUtil.addNewComponentType(type);
+			}
 		} else {
 			AmpComponentType type = ComponentsUtil.getComponentTypeById(compForm.getId());
-			type.setName(compForm.getName());
-			type.setCode(compForm.getCode());
-			type.setEnable(compForm.getEnable());
-			type.setSelectable(compForm.getSelectable());
-			ComponentsUtil.addNewComponentType(type);
+			if(existComponent != null && existComponent.getType_id().equals(compForm.getId())){
+				type.setName(compForm.getName());
+				type.setCode(compForm.getCode());
+				type.setEnable(compForm.getEnable());
+				type.setSelectable(compForm.getSelectable());
+				ComponentsUtil.addNewComponentType(type);
+			}
+			else  addErrorsToSession(request);
 
 		}
 		compForm.setCheck("save");
 		return mapping.findForward("afterSave");
 	}
 
+	public AmpComponentType existComponent(ActionForm form){
+		ComponentTypeForm compForm = (ComponentTypeForm) form;
+		ArrayList<AmpComponentType> com = compForm.getComponentTypesList();
+		for (Iterator it = com.iterator(); it.hasNext();) {
+			AmpComponentType ampComponentType = (AmpComponentType) it.next();
+			if(ampComponentType.getName().equals(compForm.getName()) || ampComponentType.getCode().equals(compForm.getCode())) return ampComponentType;
+			
+		}
+		return null;
+	}
+	
+	public void addErrorsToSession(HttpServletRequest request) throws java.lang.Exception{
+		String siteId = RequestUtils.getSite(request).getId().toString();
+		String locale= RequestUtils.getNavigationLanguage(request).getCode();
+		HttpSession session = request.getSession();
+		ActionErrors errors = new ActionErrors();
+		errors.add("title", new ActionError("error.aim.componentType.componentTypeCodeNameExist", TranslatorWorker.translateText("The component type NAME or CODE you added already exist. Please add other name or code.",locale,siteId)));
+		session.setAttribute("AddComponentTypeError",errors);
+	}
+	
 	public ActionForward list(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
 		ArrayList<AmpComponentType> com = new ArrayList<AmpComponentType>(ComponentsUtil.getAmpComponentTypes());
 		ComponentTypeForm compForm = (ComponentTypeForm) form;

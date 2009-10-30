@@ -68,7 +68,7 @@ class Bluebook::ChartsController < BluebookController
         :group => "projects.aid_modality_id, year")
       
       res.each do |r|
-        @aid_payments[r.aid_modality.to_i] ||= 0.to_currency(Prefs.default_currency)
+        @aid_payments[r.aid_modality.to_i] ||= 0.to_currency(DEFAULT_CURRENCY)
         @aid_payments[r.aid_modality.to_i] += r.total_payments.to_currency(d.currency, r.year)
       end
     end
@@ -81,17 +81,17 @@ class Bluebook::ChartsController < BluebookController
         :group => "projects.aid_modality_id, year")
       
       res.each do |r|
-        @aid_forecasts[r.aid_modality.to_i] ||= 0.to_currency(Prefs.default_currency)
+        @aid_forecasts[r.aid_modality.to_i] ||= 0.to_currency(DEFAULT_CURRENCY)
         @aid_forecasts[r.aid_modality.to_i] += r.forecasts.to_currency(d.currency, r.year)
       end
     end
 
     #FFerreyra: Done to avoid nil exceptions when formatting the amounts
     @aid_payments.each_with_index do |payment,index|
-      @aid_payments[index] = 0.to_currency(Prefs.default_currency) if payment.nil?
+      @aid_payments[index] = 0.to_currency(DEFAULT_CURRENCY) if payment.nil?
     end
     @aid_forecasts.each_with_index do |payment,index|
-      @aid_forecasts[index] = 0.to_currency(Prefs.default_currency) if payment.nil?
+      @aid_forecasts[index] = 0.to_currency(DEFAULT_CURRENCY) if payment.nil?
     end
     render :layout => false
   end
@@ -111,7 +111,7 @@ class Bluebook::ChartsController < BluebookController
         :group => "projects.aid_modality_id, year, currency")
 
       res.each do |r|
-        @aid_payments[d.id][r.aid_modality.to_i] ||= 0.to_currency(Prefs.default_currency, r.year)
+        @aid_payments[d.id][r.aid_modality.to_i] ||= 0.to_currency(DEFAULT_CURRENCY, r.year)
         @aid_payments[d.id][r.aid_modality.to_i] += r.payments_query.to_currency(d.currency, r.year)
       end
     end

@@ -27,7 +27,7 @@ class CreateProjects < ActiveRecord::Migration
       
       # Relations
       t.references :donor, :donor_agency
-      t.references :aid_modality
+      t.references :type_of_aid
       t.references :country_strategy
       
       # Markers
@@ -45,7 +45,7 @@ class CreateProjects < ActiveRecord::Migration
       t.timestamps
     end
     
-    [:donor_id, :donor_agency_id, :aid_modality_id, :country_strategy_id].each do |idx|
+    [:donor_id, :donor_agency_id, :type_of_aid_id, :country_strategy_id].each do |idx|
       add_index :projects, idx
     end
   end

@@ -13,3 +13,7 @@ scroll_bar_mfp:
 data_input_open:
   key: data_input_open
   value: true
+
+country_code:
+  key: country_code
+  value: nic

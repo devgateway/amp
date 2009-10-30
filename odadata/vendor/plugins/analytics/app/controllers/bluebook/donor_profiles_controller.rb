@@ -12,7 +12,7 @@ def show
     # @total_payments = @donor.annual_payments[year]
     # Maybe there's a better workaround for this
 
-    @currency = params[:currency].nil? ? Prefs.default_currency : params[:currency]
+    @currency = params[:currency].nil? ? DEFAULT_CURRENCY : params[:currency]
 
     unless @total_payments = @donor.total_grant_payments(year).in(@currency) + @donor.total_loan_payments(year).in(@currency)
       render :action => 'data_missing'

@@ -6,44 +6,45 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 
 <style type="text/css">
-		.jcol{												
-		padding-left:10px;												 
-		}
-		.jlien{
-			text-decoration:none;
-		}
-		.tableEven {
-			background-color:#dbe5f1;
-			font-size:8pt;
-			padding:2px;
-		}
+.jcol{												
+	padding-left:10px;												 
+	}
+	.jlien{
+		text-decoration:none;
+	}
+	.tableEven {
+		background-color:#dbe5f1;
+		font-size:8pt;
+		padding:2px;
+	}
 
-		.tableOdd {
-			background-color:#FFFFFF;
-			font-size:8pt;
-			padding:2px;
-		}
-		 
-		.Hovered {
-			background-color:#a5bcf2;
-		}
-		
-		.notHovered {
-			background-color:#FFFFFF;
-		}
-		
-		
+	.tableOdd {
+		background-color:#FFFFFF;
+		font-size:8pt;
+		padding:2px;
+	}
+	 
+	.Hovered {
+		background-color:#a5bcf2;
+	}
+
+	.notHovered {
+		background-color:#FFFFFF;
+	}
+
+	.headTableTr{
+	    background-color:#B8B8B0; 
+	    color:#000;
+	    font-size:11px;
+	}
+
+	.headTableTd{    
+	    font-size: 11px;
+	}
+
 </style>
-
-
-
-
-
-
-
 <c:set var="translationBan">
 	<digi:trn key="um:confirmBanMsg">Do you really want to ban the user ?</digi:trn>
 </c:set>
@@ -285,9 +286,9 @@ function banUser(txt) {
 		 														<tr>
 																	<td width="100%">
 																		<!--  ==== Test begin overflow ==== -->
-																		<table width="100%"BORDER=0 cellpadding="0" cellspacing="0"     >
+																		<table width="100%"BORDER=0 cellpadding="0" cellspacing="0" >
 																			<c:if test="${empty umViewAllUsersForm.pagedUsers}">
-										                                         <tr style="background-color:#ffffff; color:#000;  " align="left" >
+										                                         <tr style="background-color:#ffffff; color:#000; " align="left" >
 																					<td height="30" width="100%" align="left">
 						                                                   				<b><digi:trn key="um:viewAllUsers:NoUsers">No users present</digi:trn>
 						                                                       			</b>
@@ -295,21 +296,39 @@ function banUser(txt) {
 																				</tr>
 									                                        </c:if>
 																			<c:if test="${not empty umViewAllUsersForm.pagedUsers}">
-																				<tr style="background-color:#999999; color:#000;  " >
-																					<td height="30" width="195"  >
-																						<digi:link href="/viewAllUsers.do?sortBy=name&reset=false" style="color:#000;"><b>
-																							<digi:trn key="um:viewAllUsers:UsersNames">NAME</digi:trn></b>
-																						</digi:link>
+																				<tr class="headTableTr">
+																					<td height="30" width="189" class="headTableTd" >
+																						<c:if test="${not empty umViewAllUsersForm.sortBy && umViewAllUsersForm.sortBy!='nameAscending'}">
+																							<digi:link href="/viewAllUsers.do?sortBy=nameAscending&reset=false" style="color: black; cursor: pointer; font-size: 11px; text-decoration: none;"><b>
+																								<digi:trn key="um:viewAllUsers:UsersNames">NAME</digi:trn></b>
+																							</digi:link>
+																						</c:if>
+																						<c:if test="${empty umViewAllUsersForm.sortBy || umViewAllUsersForm.sortBy=='nameAscending'}">
+																							<digi:link href="/viewAllUsers.do?sortBy=nameDescending&reset=false" style="color: black; cursor: pointer; font-size: 11px; text-decoration: none;"><b>
+																								<digi:trn key="um:viewAllUsers:UsersNames">NAME</digi:trn></b>
+																							</digi:link>
+																						</c:if>
+																						<c:if test="${empty umViewAllUsersForm.sortBy || umViewAllUsersForm.sortBy=='nameAscending'}"><img src="/repository/aim/images/up.gif"/></c:if>
+																						<c:if test="${not empty umViewAllUsersForm.sortBy && umViewAllUsersForm.sortBy=='nameDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>
 																					</td>	
-																					<td height="30" width="195">
-																						<digi:link href="/viewAllUsers.do?sortBy=email&reset=false" style="color:#000;"><b>
-																							<digi:trn key="um:viewAllUsers:UsersEmails">EMAIL</digi:trn></b>
-																						</digi:link>
+																					<td height="30" width="191" class="headTableTd">
+																						<c:if test="${empty umViewAllUsersForm.sortBy || umViewAllUsersForm.sortBy!='emailAscending'}">
+																							<digi:link href="/viewAllUsers.do?sortBy=emailAscending&reset=false" style="color: black; cursor: pointer; font-size: 11px; text-decoration: none;"><b>
+																								<digi:trn key="um:viewAllUsers:UsersEmails">EMAIL</digi:trn></b>
+																							</digi:link>
+																						</c:if>
+																						<c:if test="${not empty umViewAllUsersForm.sortBy && umViewAllUsersForm.sortBy=='emailAscending'}">
+																							<digi:link href="/viewAllUsers.do?sortBy=emailDescending&reset=false" style="color: black; cursor: pointer; font-size: 11px; text-decoration: none;"><b>
+																								<digi:trn key="um:viewAllUsers:UsersEmails">EMAIL</digi:trn></b>
+																							</digi:link>
+																						</c:if>
+																						<c:if test="${not empty umViewAllUsersForm.sortBy && umViewAllUsersForm.sortBy=='emailAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
+																						<c:if test="${not empty umViewAllUsersForm.sortBy && umViewAllUsersForm.sortBy=='emailDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>
 																					</td>																	
-																					<td height="30" width="340"><b>
+																					<td height="30" width="328" class="headTableTd"><b>
 																							<digi:trn key="um:viewAllUsers:UserWorkspace">WORKSPACE</digi:trn></b>
 																					</td>
-																					<td height="30"width="70" colspan="3"><b>
+																					<td height="30"width="70" colspan="3" class="headTableTd"><b>
 																						<digi:trn key="aim:viewAllUsers:action">ACTIONS</digi:trn></b>
 																					</td>																		
 																				</tr>

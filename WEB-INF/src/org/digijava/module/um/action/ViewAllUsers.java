@@ -213,13 +213,17 @@ import org.digijava.module.um.util.AmpUserUtil;
 	            }
 	            String sortBy=vwForm.getSortBy();
 	            
-	           if(sortBy!=null && sortBy.equals("name")){
-	        	   Collections.sort(sortedUser, new DbUtil.HelperUserNameComparator());
-	           } else if(sortBy!=null && sortBy.equals("email")){
-	        	   Collections.sort(sortedUser, new DbUtil.HelperEmailComparator());
+	           if(sortBy!=null && sortBy.equals("nameAscending")){
+	        	   Collections.sort(sortedUser, new DbUtil.HelperUserNameComparatorAsc());
+	           } else if(sortBy!=null && sortBy.equals("nameDescending")){
+	        	   Collections.sort(sortedUser, new DbUtil.HelperUserNameComparatorDesc());
+	           } else if(sortBy!=null && sortBy.equals("emailAscending")){
+	        	   Collections.sort(sortedUser, new DbUtil.HelperEmailComparatorAsc());
+	           } else if(sortBy!=null && sortBy.equals("emailDescending")){
+	        	   Collections.sort(sortedUser, new DbUtil.HelperEmailComparatorDesc());
 	           }	        	   
 	           else {
-	        	   Collections.sort(sortedUser, new DbUtil.HelperUserNameComparator());
+	        	   Collections.sort(sortedUser, new DbUtil.HelperUserNameComparatorAsc());
 	           }
 	           
 	

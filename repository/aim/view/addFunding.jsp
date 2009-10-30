@@ -529,10 +529,10 @@ var isAlreadySubmitted = false;
 										<html:optionsCollection name="aimEditActivityForm" property="funding.availableMTEFProjectionYears" label="value" value="key"/>
 									</html:select>
 									<c:if test="${contentDisabled=='true'}">
-										<input class="dr-menu" type="button" disabled="disabled" name="addMTEFProj" value="<digi:trn key='aim:addMTEFProjection'>Add Projection</digi:trn>" onclick="addMTEFProjection()">
+										<input class="dr-menu" type="button" disabled="disabled" name="addMTEFProj" value="<digi:trn key='aim:addMTEFProjection'>Add Projection</digi:trn>" onClick="addMTEFProjection()">
 									</c:if>
 									<c:if test="${contentDisabled=='false'}">
-										<input class="dr-menu" type="button" name="addMTEFProj" value="<digi:trn key='aim:addMTEFProjection'>Add Projection</digi:trn>" onclick="addMTEFProjection()">
+										<input class="dr-menu" type="button" name="addMTEFProj" value="<digi:trn key='aim:addMTEFProjection'>Add Projection</digi:trn>" onClick="addMTEFProjection()">
 									</c:if>
 								</td>
 							</tr>
@@ -591,8 +591,8 @@ var isAlreadySubmitted = false;
 									<a title="<digi:trn key="aim:CommitmentDate">The date (day, month, year) when funding commitment was signed</digi:trn>">
 									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<digi:trn key="aim:Actual">Actual</digi:trn><br><digi:trn key="aim:CommitmentDateFIE">Commitment Date</digi:trn></font></b></a>
 								</td>
-								<td align="center" valign="middle" width="*">
-									&nbsp;
+								<td align="center" valign="middle" width="*">&nbsp;
+									
 								</td>
 								</field:display>
 							</tr>
@@ -759,10 +759,10 @@ var isAlreadySubmitted = false;
 								</c:if>
 								<td>
 									<c:if test="${contentDisabled=='false'}">
-										<input class="dr-menu" type="button" name="xx1" value="<digi:trn key='aim:addCommitment'>Add Commitment</digi:trn>" onclick="addFundingDetail(0)">
+										<input class="dr-menu" type="button" name="xx1" value="<digi:trn key='aim:addCommitment'>Add Commitment</digi:trn>" onClick="addFundingDetail(0)">
 									</c:if>
 									<c:if test="${contentDisabled=='true'}">
-										<input class="dr-menu" type="button" disabled="disabled" name="xx1" value="<digi:trn key='aim:addCommitment'>Add Commitment</digi:trn>" onclick="addFundingDetail(0)">
+										<input class="dr-menu" type="button" disabled="disabled" name="xx1" value="<digi:trn key='aim:addCommitment'>Add Commitment</digi:trn>" onClick="addFundingDetail(0)">
 									</c:if>
 								</td>
 							</tr>
@@ -922,9 +922,10 @@ var isAlreadySubmitted = false;
 											<c:if test="${contentDisabled==''}">
 												<c:set var="contentDisabled">true</c:set>
 											</c:if>
+                                            
                                              <td align="center">
                                                  <c:if test="${empty fundingDetail.contract}">
-												 	<input type="text" value="" readonly="true"/>
+												 	<input type="text" value="" disabled="true" readonly="true"/>
                                                  </c:if>
                                                  <c:if test="${not empty fundingDetail.contract}">
 													<input type="text" value="${fundingDetail.contract.contractName}" readonly="true"/>
@@ -979,10 +980,10 @@ var isAlreadySubmitted = false;
 										<c:set var="contentDisabled">true</c:set>
 									</c:if>
 									<c:if test="${contentDisabled=='false'}">
-										<input class="dr-menu" type="button" name="xx1" value="<digi:trn key='aim:addDisbursementOrder'>Add Disbursement Order</digi:trn>" onclick="addFundingDetail(4)">
+										<input class="dr-menu" type="button" name="xx1" value="<digi:trn key='aim:addDisbursementOrder'>Add Disbursement Order</digi:trn>" onClick="addFundingDetail(4)">
 									</c:if>
 									<c:if test="${contentDisabled=='true'}">
-										<input class="dr-menu" type="button" disabled="disabled" name="xx1" value="<digi:trn key='aim:addDisbursementOrder'>Add Disbursement Order</digi:trn>" onclick="addFundingDetail(4)">
+										<input class="dr-menu" type="button" disabled="disabled" name="xx1" value="<digi:trn key='aim:addDisbursementOrder'>Add Disbursement Order</digi:trn>" onClick="addFundingDetail(4)">
 									</c:if>
 								</td>
 
@@ -1048,12 +1049,13 @@ var isAlreadySubmitted = false;
                                   <digi:trn key="aim:Planned">Planned</digi:trn>/<digi:trn key="aim:Actual">Actual</digi:trn><br><digi:trn key="aim:DisbursementDateFIE">Disbursement Date</digi:trn></font></b></a>
 								</td>
                                 </field:display>
-                                
+                                  <feature:display module="Funding" name="Disbursement Orders">
                                 <td align="center" valign="middle" >
 									<field:display name="Link to Disbursement Order ID" feature="Disbursement">
 	                                <b><font color="white"><digi:trn key="aim:DisbursementOrderIDFIE">Disbursement Order ID</digi:trn></font></b>
 									</field:display>
                                 </td>
+                                </feature:display>
                                 
 								<td align="center" valign="middle" colspan="2">&nbsp;
 									<field:display name="Contract of Disbursement" feature="Disbursement">
@@ -1166,10 +1168,11 @@ var isAlreadySubmitted = false;
 											</c:if>
 											 	<td align="center">
                                                 	<c:if test="${empty fundingDetail.contract}">
-														<input type="text" value=""/>
+														<input type="text" value="" disabled/>
+                                                
                                                     </c:if>
                                                     <c:if test="${not empty fundingDetail.contract}">
-        												<input type="text" value="${fundingDetail.contract.contractName}"/>
+        												<input type="text" value="${fundingDetail.contract.contractName}" disabled/>
                                                     </c:if>
 											</td>
 
@@ -1216,10 +1219,10 @@ var isAlreadySubmitted = false;
 								</c:if>
 								<td>
 									<c:if test="${contentDisabled=='false'}">
-										<input class="dr-menu" type="button" name="xx1" value="<digi:trn key='aim:addDisbursement'>Add Disbursement</digi:trn>" onclick="addFundingDetail(1)">
+										<input class="dr-menu" type="button" name="xx1" value="<digi:trn key='aim:addDisbursement'>Add Disbursement</digi:trn>" onClick="addFundingDetail(1)">
 									</c:if>
 									<c:if test="${contentDisabled=='true'}">
-										<input class="dr-menu" disabled="disabled" type="button" name="xx1" value="<digi:trn key='aim:addDisbursement'>Add Disbursement</digi:trn>" onclick="addFundingDetail(1)">
+										<input class="dr-menu" disabled="disabled" type="button" name="xx1" value="<digi:trn key='aim:addDisbursement'>Add Disbursement</digi:trn>" onClick="addFundingDetail(1)">
 									</c:if>
 								</td>
 							</tr>
@@ -1403,10 +1406,10 @@ var isAlreadySubmitted = false;
 									</c:if>
 									
 									<c:if test="${contentDisabled=='false'}">
-										<input class="dr-menu" type="button" name="xx1" value="<digi:trn key='aim:addExpediture'>Add Expenditure</digi:trn>" onclick="addFundingDetail(2)">
+										<input class="dr-menu" type="button" name="xx1" value="<digi:trn key='aim:addExpediture'>Add Expenditure</digi:trn>" onClick="addFundingDetail(2)">
 									</c:if>
 									<c:if test="${contentDisabled=='true'}">
-										<input class="dr-menu" disabled="disabled" type="button" name="xx1" value="<digi:trn key='aim:addExpediture'>Add Expenditure</digi:trn>" onclick="addFundingDetail(2)">
+										<input class="dr-menu" disabled="disabled" type="button" name="xx1" value="<digi:trn key='aim:addExpediture'>Add Expenditure</digi:trn>" onClick="addFundingDetail(2)">
 									</c:if>
 								</td>
 							</tr>

@@ -48,7 +48,10 @@ public class DigiConfig {
     private boolean search;
     private String serverType;
 
-    private ParamSafeHTML paramSafehtml;
+    private int httpPort;
+    private int httpsPort;
+    
+	private ParamSafeHTML paramSafehtml;
     private ParamBbTag paramBbTag;
     private ForwardEmails forwardEmails;
     private ExceptionEmails exceptionEmails;
@@ -89,6 +92,8 @@ public class DigiConfig {
         this.configBeans = new HashMap();
         this.services = new HashMap();
         this.caseSensitiveTranslatioKeys=true;
+        this.httpPort = 0;
+        this.httpsPort = 0;
     }
 
     public HibernateClasses getHibernateClasses() {
@@ -358,6 +363,22 @@ public class DigiConfig {
 
 	public void setEnableAutoLogin(boolean enableAutoLogin) {
 		this.enableAutoLogin = enableAutoLogin;
+	}
+
+	public int getHttpPort() {
+		return httpPort;
+	}
+
+	public void setHttpPort(int httpPort) {
+		this.httpPort = httpPort;
+	}
+
+	public int getHttpsPort() {
+		return httpsPort;
+	}
+
+	public void setHttpsPort(int httpsPort) {
+		this.httpsPort = httpsPort;
 	}
 
 }

@@ -13,6 +13,11 @@
     <!-- Enable/disable AccessLogger -->
 	<enable-logging>true</enable-logging>
 	
+	<!-- Configure HTTP and HTTPS port -->
+	<http-port>80</http-port>
+	<https-port>443</https-port>
+	
+	
 	<!-- Hibernate class -->
 	<hibernate-classes required="false">              
 		<!-- kernel classes -->

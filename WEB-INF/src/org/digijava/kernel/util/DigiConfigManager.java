@@ -346,6 +346,9 @@ public class DigiConfigManager {
         digester.addSetProperties("digi-config/site-domain", "path", "path");
         digester.addBeanPropertySetter("digi-config/site-domain", "content");
 
+        digester.addBeanPropertySetter("digi-config/http-port", "httpPort");
+        digester.addBeanPropertySetter("digi-config/https-port", "httpsPort");
+
         digester.addSetNext("digi-config/hibernate-classes",
                             "setHibernateClasses");
         digester.addSetNext(
@@ -387,6 +390,7 @@ public class DigiConfigManager {
 
         digester.addBeanPropertySetter("digi-config/enable-logging",
                                        "enableLogging");
+
         digester.addBeanPropertySetter("digi-config/aggregation", "aggregation");
         digester.addBeanPropertySetter("digi-config/search", "search");
         digester.addSetProperties("digi-config/enable-logging", "poolSize",

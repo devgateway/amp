@@ -55,4 +55,5 @@ public class GlobalSettingsConstants {
     
     public static final String NEW_FIELDS_VISIBILITY= "New fields Visibility";    
 
+    public static final String SECURE_SERVER= "Secure Server";
 }

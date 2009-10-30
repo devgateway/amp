@@ -22,6 +22,7 @@ Rails::Initializer.run do |config|
   config.gem "andand"
   config.gem "RedCloth"
   config.gem "ruport"  
+  config.gem "acts_as_reportable"
   config.gem "spreadsheet"
   config.gem "ruby-tilecache",            :lib => 'tile_cache'
   # Gems from GitHub

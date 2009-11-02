@@ -738,6 +738,7 @@ addLoadEvent(delBody);
 			                                                    </c:forEach>
 			                                                  </select>			                                                 
 			                                                  	<script type="text/javascript">
+			                                                  	if(document.getElementById('selectedStartTime') != null)
 				                                                  selectOptionByValue(document.getElementById('selectedStartHour'), get('hour', document.getElementById('selectedStartTime').value));
 				                                                </script>	                                                  
 			                                                </td>
@@ -750,6 +751,7 @@ addLoadEvent(delBody);
 			                                                    </c:forEach>
 			                                                  </select>
 			                                                  <script type="text/javascript">
+			                                                  if(document.getElementById('selectedStartTime')!= null)
 			                                                  selectOptionByValue(document.getElementById('selectedStartMinute'), get('minute', document.getElementById('selectedStartTime').value));
 			                                                  </script>
 			                                                </td>
@@ -763,6 +765,7 @@ addLoadEvent(delBody);
 			                                                <td>
 			                                                 <select id="selectedStartYear" onchange="updateDate(document.getElementById('selectedStartDate'), 'year', this.value)"></select>
 			                                                  <script type="text/javascript">
+			                                                  if(document.getElementById('selectedStartDate') != null)
 			                                                  createYearCombo(document.getElementById('selectedStartYear'), document.getElementById('selectedStartDate').value);
 			                                                  </script>
 			                                                </td>
@@ -780,7 +783,9 @@ addLoadEvent(delBody);
 			                                                    </c:forEach>
 			                                                  </select>
 			                                                  <script type="text/javascript">
+			                                                  if(document.getElementById('selectedStartDate') != null){
 			                                                  selectOptionByValue(document.getElementById('selectedStartMonth'), get('month', document.getElementById('selectedStartDate').value));
+			                                                  }
 			                                                  </script>
 			                                                </td>
 			                                                <td>
@@ -793,6 +798,7 @@ addLoadEvent(delBody);
 			                                                    </c:forEach>
 			                                                  </select>
 			                                                  <script type="text/javascript">
+			                                                  if(document.getElementById('selectedStartDate') != null)
 			                                                  selectOptionByValue(document.getElementById('selectedStartDay'), get('day', document.getElementById('selectedStartDate').value));
 			                                                  </script>
 			                                                </td>
@@ -805,6 +811,7 @@ addLoadEvent(delBody);
 			                                                    </c:forEach>
 			                                                  </select>
 			                                                  <script type="text/javascript">
+			                                                  if(document.getElementById('selectedStartTime') != null)
 			                                                  selectOptionByValue(document.getElementById('selectedStartHour'), get('hour', document.getElementById('selectedStartTime').value));
 			                                                  </script>
 			                                                </td>
@@ -817,6 +824,7 @@ addLoadEvent(delBody);
 			                                                    </c:forEach>
 			                                                  </select>
 			                                                  <script type="text/javascript">
+			                                                  if(document.getElementById('selectedStartTime') != null)
 			                                                  selectOptionByValue(document.getElementById('selectedStartMinute'), get('minute', document.getElementById('selectedStartTime').value));
 			                                                  </script>
 			                                                </td>
@@ -867,7 +875,9 @@ addLoadEvent(delBody);
 			                                                    </c:forEach>
 			                                                  </select>
 			                                                  <script type="text/javascript">
-			                                                  selectOptionByValue(document.getElementById('selectedEndHour'), get('hour', document.getElementById('selectedEndTime').value));
+			                                                  if(document.getElementById('selectedEndTime') != null){
+			                                                  	selectOptionByValue(document.getElementById('selectedEndHour'), get('hour', document.getElementById('selectedEndTime').value));
+			                                                  }
 			                                                  </script>
 			                                                </td>
 			                                                <td nowrap="nowrap">&nbsp;<b>:</b>&nbsp;</td>
@@ -879,7 +889,9 @@ addLoadEvent(delBody);
 			                                                    </c:forEach>
 			                                                  </select>
 			                                                  <script type="text/javascript">
-			                                                  selectOptionByValue(document.getElementById('selectedEndMinute'), get('minute', document.getElementById('selectedEndTime').value));
+			                                                  if(document.getElementById('selectedEndTime') != null){
+			                                                  	selectOptionByValue(document.getElementById('selectedEndMinute'), get('minute', document.getElementById('selectedEndTime').value));
+			                                                  }
 			                                                  </script>
 			                                                </td>
 			                                              </tr>
@@ -892,6 +904,7 @@ addLoadEvent(delBody);
 			                                                <td>
 			                                                  <select id="selectedEndYear" onchange="updateDate(document.getElementById('selectedEndDate'), 'year', this.value)"></select>
 			                                                  <script type="text/javascript">
+			                                                  if(document.getElementById('selectedEndDate') != null)
 			                                                  createYearCombo(document.getElementById('selectedEndYear'), document.getElementById('selectedEndDate').value);
 			                                                  </script>
 			                                                </td>
@@ -907,6 +920,7 @@ addLoadEvent(delBody);
 			                                                    </c:forEach>
 			                                                  </select>
 			                                                  <script type="text/javascript">
+			                                                  if(document.getElementById('selectedEndDate') != null)
 			                                                  selectOptionByValue(document.getElementById('selectedEndMonth'), get('month', document.getElementById('selectedEndDate').value));
 			                                                  </script>
 			                                                </td>
@@ -918,6 +932,7 @@ addLoadEvent(delBody);
 			                                                    </c:forEach>
 			                                                  </select>
 			                                                  <script type="text/javascript">
+			                                                  if(document.getElementById('selectedEndDate') != null)
 			                                                  selectOptionByValue(document.getElementById('selectedEndDay'), get('day', document.getElementById('selectedEndDate').value));
 			                                                  </script>
 			                                                </td>
@@ -930,6 +945,7 @@ addLoadEvent(delBody);
 			                                                    </c:forEach>
 			                                                  </select>
 			                                                  <script type="text/javascript">
+			                                                  if(document.getElementById('selectedEndTime') != null)
 			                                                  selectOptionByValue(document.getElementById('selectedEndHour'), get('hour', document.getElementById('selectedEndTime').value));
 			                                                  </script>
 			                                                </td>
@@ -942,6 +958,7 @@ addLoadEvent(delBody);
 			                                                    </c:forEach>
 			                                                  </select>
 			                                                  <script type="text/javascript">
+			                                                  if(document.getElementById('selectedEndTime') != null)
 			                                                  selectOptionByValue(document.getElementById('selectedEndMinute'), get('minute', document.getElementById('selectedEndTime').value));
 			                                                  </script>
 			                                                </td>

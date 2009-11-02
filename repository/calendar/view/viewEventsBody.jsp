@@ -280,6 +280,7 @@ function calType(type){
 	
 function getEthiopianCalendarDate(yyyy,mm,dd)
 {
+	
    var months = new Array(13);
    months[1]  = "jan";
    months[2]  = "feb";
@@ -307,6 +308,7 @@ function getEthiopianCalendarDate(yyyy,mm,dd)
    var dateString = monthname +
                     ' ' + monthday +
                 	' ' + yyyy;
+
   return dateString;
 }	
 -->

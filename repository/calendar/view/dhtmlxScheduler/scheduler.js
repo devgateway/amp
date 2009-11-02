@@ -116,10 +116,20 @@ scheduler._click={
 			scheduler._close_not_saved();
 	},
 	dhx_cal_prev_button:function(){
-		scheduler.setCurrentView(scheduler.date.add(scheduler._date,-1,scheduler._mode));
+		if(scheduler._type != "ETH"){
+			scheduler.setCurrentView(scheduler.date.add(scheduler._date,-1,scheduler._mode));
+		}else{
+			scheduler.setCurrentView(scheduler.date.add(scheduler._date,-1,scheduler._mode),scheduler._mode,scheduler._type,13);
+			
+		}
 	},
 	dhx_cal_next_button:function(){
-		scheduler.setCurrentView(scheduler.date.add(scheduler._date,1,scheduler._mode));
+		if(scheduler._type != "ETH"){
+			scheduler.setCurrentView(scheduler.date.add(scheduler._date,1,scheduler._mode));
+		}else{
+			scheduler.setCurrentView(scheduler.date.add(scheduler._date,1,scheduler._mode),scheduler._mode,scheduler._type,13);
+			
+		}
 	},
 	dhx_cal_today_button:function(){
 	if(scheduler._type != "ETH"){

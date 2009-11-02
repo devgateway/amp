@@ -55,10 +55,6 @@ class Reports::ProjectAggregator < Ruport::Aggregator
     end
   end
   
-  provides :geo_relevances do |p|
-    p.provinces
-  end
-  
   provides :total_commitments do |p|
     p.total_commitments(Time.now.year - 1)
   end

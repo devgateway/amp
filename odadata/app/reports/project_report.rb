@@ -14,6 +14,7 @@ module Reports
       extend ActionView::Helpers::TagHelper
       extend ActionView::Helpers::UrlHelper
       extend ActionView::Helpers::TextHelper
+      extend ActionView::Helpers::NumberHelper
       extend ApplicationHelper
       extend OptionsHelper
       extend ReportsHelper
@@ -23,6 +24,15 @@ module Reports
       format_column(:prj_status) { |r| option_text_by_id(Project::STATUS_OPTIONS, r) }
       format_column(:national_regional) { |r| option_text_by_id(Project::NATIONAL_REGIONAL_OPTIONS, r) }
       format_column(:type_of_implementation) { |r| option_text_by_id(Project::IMPLEMENTATION_TYPES, r) }
+      format_column(:geo_relevances) do |r| 
+        if r.empty?
+          I18n.t('options.national')
+        else
+          provinces_with_amounts = r.group_by(&:province).map { |p, a| [p.name, a.sum(&:amount)] }
+          provinces_with_amounts.sort! { |a, b| b[1] <=> a[1] }
+          provinces_with_amounts.map { |(p, a)| "#{p} (#{number_to_percentage(a, :precision => 1)})" }.join('<br />')
+        end
+      end
       
     protected
       def localized_heading_for(column)
@@ -69,7 +79,6 @@ module Reports
       format_column(:contracted_agencies) { |r| format_as_html_list(r.map(&:name)) rescue nil }
       format_column(:mdgs) { |r| format_as_html_list(r.map(&:name), :class => 'fatlist') rescue nil }
       format_column(:website) { |r| auto_link(r) }
-      format_column(:geo_relevances) { |r| r.empty? ? I18n.t('options.national') :  r.map(&:name).sort.join("<br />") rescue nil }
       format_column(:country_strategy) do |r| 
         if r.blank?
           I18n.t('reports.na')
@@ -78,10 +87,10 @@ module Reports
         end
       end
       format_column(:sector_relevances) do |r| 
-        r.map { |sr| "#{sr.sector.name_with_code} (#{sr.amount}%)" }.join('<br />')
+        r.map { |sr| "#{sr.sector.name_with_code} (#{number_to_percentage(sr.amount, :precision => 1)})" }.join('<br />')
       end
       format_column(:cofundings) do |r|
-        r.map { |sr| "#{sr.donor.name}: #{sr.amount}" }.join('<br />')
+        r.map { |sr| "#{sr.donor.name}: #{number_to_percentage(sr.amount, :precision => 1)}" }.join('<br />')
       end
       
       build :table_header do
@@ -125,12 +134,20 @@ module Reports
       format_column(:contracted_agencies) { |r| r.map(&:name).join(', ') }
       format_column(:mdgs) { |r| r.map(&:name).join(', ') }
       format_column(:country_strategy) { |r| r.strategy_number }
-      format_column(:geo_relevances) { |r| r.empty? ? I18n.t('options.national') :  r.map(&:name).sort.join(", ") }
       format_column(:sector_relevances) do |r| 
-        r.map { |sr| "#{sr.sector.name_with_code} (#{sr.amount}%)" }.join(', ')
+        r.map { |sr| "#{sr.sector.name_with_code} (#{number_to_percentage(sr.amount, :precision => 1)}%)" }.join(', ')
       end
       format_column(:cofundings) do |r|
-        r.map { |sr| "#{sr.donor.name}: #{sr.amount}" }.join("\n")
+        r.map { |sr| "#{sr.donor.name}: #{number_to_percentage(sr.amount, :precision => 1)}" }.join("\n")
+      end
+      format_column(:geo_relevances) do |r| 
+        if r.empty?
+          I18n.t('options.national')
+        else
+          provinces_with_amounts = r.group_by(&:province).map { |p, a| [p.name, a.sum(&:amount)] }
+          provinces_with_amounts.sort! { |a, b| b[1] <=> a[1] }
+          provinces_with_amounts.map { |(p, a)| "#{p} (#{number_to_percentage(a, :precision => 1)})" }.join("\n")
+        end
       end
       
       def prepare_columns

@@ -163,7 +163,7 @@ body {
 											</field:display>
 											<field:display name="Admin - Component Type Cancel Button" feature="Admin - Component Type">
 											  <html:reset styleClass="dr-menu" property="submitButton">
-												<digi:trn key="btn:cancel">Cancel</digi:trn></html:reset>
+												<digi:trn key="btn:reset">Reset</digi:trn></html:reset>
 											</field:display> 	
 											<field:display name="Admin - Component Type Close Button" feature="Admin - Component Type">					
             								  <html:button

@@ -253,7 +253,7 @@ public class RequestProcessor
         
         String secure = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SECURE_SERVER);
         
-        if (secure != null && "true".compareToIgnoreCase(secure) == 0){
+        if (secure != null && ("login-only".compareToIgnoreCase(secure) == 0 || "everything".compareToIgnoreCase(secure) == 0)){
         	if (httpPort == null || httpsPort == null){
             	Integer regularPort = DigiConfigManager.getConfig().getHttpPort();
             	if (regularPort != null && regularPort.intValue() > 0)
@@ -279,20 +279,23 @@ public class RequestProcessor
         				return;
         			}
         		}
-        		if ("/admin.do".compareTo(uri) == 0 || "/aim/showDesktop.do".compareTo(uri) == 0 || "/showDesktop.do".compareTo(uri) == 0 || "/aim/default/showDesktop.do".compareTo(uri) == 0){
-        			String usingScheme = request.getScheme();
-        			if ( !httpScheme.equals(usingScheme) ) {
-        				StringBuffer url = HttpUtils.getRequestURL(request);
-        				url.replace(0, usingScheme.length(), httpScheme );
-        				int httpsPosition = url.indexOf(httpsPort);
-        				if (httpsPosition != -1)
-        					url.replace(httpsPosition, httpsPosition + 4, httpPort);
-        				else{
-        					int pos = url.indexOf("/", 9);
-        					url.insert(pos, ":"+httpPort);
+        		
+        		if ("login-only".compareToIgnoreCase(secure) == 0){
+        			if ("/admin.do".compareTo(uri) == 0 || "/aim/showDesktop.do".compareTo(uri) == 0 || "/showDesktop.do".compareTo(uri) == 0 || "/aim/default/showDesktop.do".compareTo(uri) == 0){
+        				String usingScheme = request.getScheme();
+        				if ( !httpScheme.equals(usingScheme) ) {
+        					StringBuffer url = HttpUtils.getRequestURL(request);
+        					url.replace(0, usingScheme.length(), httpScheme );
+        					int httpsPosition = url.indexOf(httpsPort);
+        					if (httpsPosition != -1)
+        						url.replace(httpsPosition, httpsPosition + 4, httpPort);
+        					else{
+        						int pos = url.indexOf("/", 9);
+        						url.insert(pos, ":"+httpPort);
+        					}
+        					response.sendRedirect(response.encodeRedirectURL(url.toString()));
+        					return;
         				}
-        				response.sendRedirect(response.encodeRedirectURL(url.toString()));
-        				return;
         			}
         		}
         		

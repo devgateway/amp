@@ -9,7 +9,7 @@
     	
 		<%= javascript_include_tag(:defaults, 'swfobject', 'jquery_expander', 'jquery_template', 'behavior/menu', "ui.datepicker-#{I18n.locale}", 'jquery.livequery.min' , :cache => 'basic') %>
 		<%= stylesheet_link_tag(
-				'layout', 'forms', 'jtip', 'ui.datepicker', 
+				'layout', 'forms', 'ui.datepicker', 
 				"layouts/#{current_user.andand.layout || 'public'}",
 				:media => :all, :cache => 'styles') 
 		%>

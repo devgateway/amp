@@ -27,10 +27,8 @@ Rails::Initializer.run do |config|
   config.gem "ruby-tilecache",            :lib => 'tile_cache'
   # Gems from GitHub
   config.gem 'mislav-will_paginate',      :lib => 'will_paginate',      :source => 'http://gems.github.com'
-  config.gem 'giraffesoft-enum_field',    :lib => 'enum_field',         :source => 'http://gems.github.com'
   config.gem 'rubyist-aasm',              :lib => 'aasm',               :source => 'http://gems.github.com'
   config.gem 'graysky-translator',        :lib => 'translator',         :source => 'http://gems.github.com'
-  #config.gem 'mexpolk-simple_navigation', :lib => 'simple_navigation',  :source => 'http://gems.github.com'
 
   # Add additional load paths for your own custom dirs
   config.load_paths += Dir["#{RAILS_ROOT}/app/models/*[^.rb]"]

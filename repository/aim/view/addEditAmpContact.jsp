@@ -8,13 +8,61 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
+<%@ taglib uri="/taglib/aim"prefix="aim"%>
 
 <digi:context name="digiContext" property="context"/>
 <digi:instance property="addressbookForm"/>
+<div id="popin" style="display: none">
+    <div id="popinContent" class="content">
+    </div>
+</div>
+
+<script type="text/javascript">
+    <!--
+
+    YAHOOAmp.namespace("YAHOOAmp.amp");
+
+    var myPanel = new YAHOOAmp.widget.Panel("newpopins", {
+        width:"600px",
+        fixedcenter: true,
+        constraintoviewport: false,
+        underlay:"none",
+        close:true,
+        visible:false,
+        modal:true,
+        draggable:true,
+        context: ["showbtn", "tl", "bl"]
+    });
+    var panelStart=0;
+    var checkAndClose=false;
+    function initOrganizationScript() {
+        var msg='\n<digi:trn key="aim:addSector">Add Organizations</digi:trn>';
+        myPanel.setHeader(msg);
+        myPanel.setBody("");
+        myPanel.beforeHideEvent.subscribe(function() {
+            panelStart=1;
+        });
+
+        myPanel.render(document.body);
+    }
+    -->
+</script>
 
 <!-- tabs styles -->
 <style type="text/css">
+  .mask {
+        -moz-opacity: 0.8;
+        opacity:.80;
+        filter: alpha(opacity=80);
+        background-color:#2f2f2f;
+    }
 
+    #popin .content {
+        overflow:auto;
+        height:455px;
+        background-color:#ffffff;
+        padding:10px;
+    }
 
 #tabs {
 	font-family: Arial,Helvetica,sans-serif;
@@ -167,6 +215,74 @@ html>body #mainEmpty {
 
 <script type="text/javascript">
 
+    //DO NOT REMOVE THIS FUNCTION --- AGAIN!!!!
+    function mapCallBack(status, statusText, responseText, responseXML){
+        window.location.reload();
+    }
+
+
+    var responseSuccess = function(o){
+        /* Please see the Success Case section for more
+         * details on the response object's properties.
+         * o.tId
+         * o.status
+         * o.statusText
+         * o.getResponseHeader[ ]
+         * o.getAllResponseHeaders
+         * o.responseText
+         * o.responseXML
+         * o.argument
+         */
+        var response = o.responseText;
+        var content = document.getElementById("popinContent");
+        //response = response.split("<!")[0];
+        content.innerHTML = response;
+        //content.style.visibility = "visible";
+
+        showContent();
+    }
+
+    var responseFailure = function(o){
+        // Access the response object's properties in the
+        // same manner as listed in responseSuccess( ).
+        // Please see the Failure Case section and
+        // Communication Error sub-section for more details on the
+        // response object's properties.
+        //alert("Connection Failure!");
+    }
+    var callback =
+        {
+        success:responseSuccess,
+        failure:responseFailure
+    };
+
+     function showContent(){
+        var element = document.getElementById("popin");
+        element.style.display = "inline";
+        if (panelStart < 1){
+            myPanel.setBody(element);
+        }
+        if (panelStart < 2){
+            document.getElementById("popin").scrollTop=0;
+            myPanel.show();
+            panelStart = 2;
+        }
+        checkErrorAndClose();
+    }
+     function checkErrorAndClose(){
+                if(checkAndClose==true){
+                    if(document.getElementsByName("someError")[0]==null || document.getElementsByName("someError")[0].value=="false"){
+                        myPanel.hide();
+                        panelStart=1;
+                    }
+                    checkAndClose=false;
+                    <digi:context name="addCont" property="context/addressBook.do?actionType=addOrganization"/>
+		    document.addressbookForm.action = "<%= addCont %>";
+                    document.addressbookForm.submit();
+                }
+            
+     }
+
 	function checkNumber(phoneOrFaxId){
 		var phoneOrFax=document.getElementById(phoneOrFaxId);
 	 	var number=phoneOrFax.value;
@@ -218,8 +334,22 @@ html>body #mainEmpty {
 		}		
 		return true;
 	}
+        function removeOrgs(){
+               <digi:context name="addCont" property="context/addressBook.do?actionType=removeOrganization"/>
+		    document.addressbookForm.action = "<%= addCont %>";
+		    document.addressbookForm.target = "_self";
+		    document.addressbookForm.submit();
+        }
+           function showPanelLoading(msg){
+            myPanel.setHeader(msg);
+            var content = document.getElementById("popinContent");
+            content.innerHTML = '<div style="text-align: center">' +
+                '<img src="/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' +
+                '<digi:trn>Loading, please wait ...</digi:trn><br/><br/></div>';
+                showContent();
+        }
 </script>
-
+<jsp:include page="/repository/aim/view/addOrganizationPopin.jsp" flush="true" />
 <digi:form action="/addressBook.do?actionType=saveContact" method="post">	
 	<table bgColor="#ffffff" cellPadding="5" cellSpacing="1" >
 		<tr>
@@ -339,6 +469,41 @@ html>body #mainEmpty {
 																														<td align="right"><strong><digi:trn>Organization</digi:trn></strong></td>
 																														<td align="left"><html:text property="organisationName" size="40"/></td>
 																													</tr>
+                                                                                                                                                                                                                                        <tr>
+                                                                                                                                                                                                                                            <td colspan="2" align="center">
+                                                                                                                                                                                                                                                <c:choose>
+                                                                                                                                                                                                                                                    <c:when test="${empty addressbookForm.organizations}">
+                                                                                                                                                                                                                                                 <aim:addOrganizationButton refreshParentDocument="false" collection="organizations"  form="${addressbookForm}" styleClass="dr-menu"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
+                                                                                                                                                                                                                                            </c:when>
+
+                                                                                                                                                                                                                                            <c:otherwise>
+                                                                                                                                                                                                                                                <table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
+                                                                                                                                                                                                                                                    <c:forEach var="organization" items="${addressbookForm.organizations}">
+                                                                                                                                                                                                                                                        <tr>
+                                                                                                                                                                                                                                                            <td width="3px">
+                                                                                                                                                                                                                                                                <html:multibox property="selOrgs">
+                                                                                                                                                                                                                                                                    <bean:write name="organization" property="ampOrgId" />
+                                                                                                                                                                                                                                                                </html:multibox>
+                                                                                                                                                                                                                                                            </td>
+
+                                                                                                                                                                                                                                                            <td align="left">
+                                                                                                                                                                                                                                                                <bean:write name="organization" property="name" />
+                                                                                                                                                                                                                                                            </td>
+
+                                                                                                                                                                                                                                                        </tr>
+                                                                                                                                                                                                                                                    </c:forEach>
+                                                                                                                                                                                                                                                    <tr>
+                                                                                                                                                                                                                                                        <td colspan="2">
+                                                                                                                                                                                                                                                    <aim:addOrganizationButton refreshParentDocument="false" collection="organizations"  form="${addressbookForm}" styleClass="dr-menu"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
+                                                                                                                                                                                                                                                    <input type="button" class="dr-menu" onclick="javascript:removeOrgs();" value='<digi:trn>Remove Organization(s)</digi:trn>' />
+                                                                                                                                                                                                                                                </td>
+                                                                                                                                                                                                                                            </tr>
+
+                                                                                                                                                                                                                                        </table>
+                                                                                                                                                                                                                                        </c:otherwise>
+                                                                                                                                                                                                                                        </c:choose>
+                                                                                                                                                                                                                                        </td>
+                                                                                                                                                                                                                                        </tr>
 																													<tr>
 																														<td align="right"><strong><digi:trn>Phone Number</digi:trn></strong></td>
 																														<td align="left"><html:text property="phone" styleId="phone" size="40" onkeyup="checkNumber('phone')"/></td>
@@ -395,3 +560,6 @@ html>body #mainEmpty {
 		</tr>
 	</table>	
 </digi:form>
+<script language="JavaScript" type="text/javascript">
+    addLoadEvent(initOrganizationScript);
+  </script>

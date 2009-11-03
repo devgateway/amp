@@ -3,8 +3,9 @@ package org.digijava.module.aim.action;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.List;
 
+import java.util.HashSet;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,9 +15,11 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.ContactInfoUtil;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class ActivityContactInformationAction extends Action {
@@ -41,6 +44,30 @@ public class ActivityContactInformationAction extends Action {
 			processEdit(eaForm);
 			return mapping.findForward("forward");
 		}
+                if (action != null && action.equalsIgnoreCase("addOrganization")) {
+                if (eaForm.getContactInformation().getTemporaryId()==null||eaForm.getContactInformation().getTemporaryId().length()==0) {
+                    eaForm.getContactInformation().setAction("add");
+                } else {
+                    eaForm.getContactInformation().setAction("edit");
+                }
+                return mapping.findForward("forward");
+            }
+            if (action != null && action.equalsIgnoreCase("removeOrganizations")) {
+
+                Long[] ids = eaForm.getContactInformation().getSelContactOrgs();
+                if (ids != null) {
+                    for (Long id : ids) {
+                        AmpOrganisation organization = DbUtil.getOrganisation(id);
+                        eaForm.getContactInformation().getOrganizations().remove(organization);
+                    }
+                }
+                if (eaForm.getContactInformation().getTemporaryId() == null || eaForm.getContactInformation().getTemporaryId().length() == 0) {
+                    eaForm.getContactInformation().setAction("add");
+                } else {
+                    eaForm.getContactInformation().setAction("edit");
+                }
+                return mapping.findForward("forward");
+            }
 		if(action!=null && action.equalsIgnoreCase("save")){
 			processSave(eaForm);
 		}
@@ -85,7 +112,7 @@ public class ActivityContactInformationAction extends Action {
 			int emailCount=0;
 			//in Case we are editing already existing contact,then no check is needed.In case of adding new contact or editing not already saved 
 			//contact(contact is stored in session only) , then check is needed
-			if(eaForm.getContactInformation().getTemporaryId()!=null){ 
+			if(eaForm.getContactInformation().getTemporaryId()!=null&&eaForm.getContactInformation().getTemporaryId().length()>0){
 				AmpContact contact = getContactFromList(eaForm.getContactInformation().getTemporaryId(), eaForm.getContactInformation().getActivityContacts());
 				if(contact.getId()==null){
 					checkForDuplicate=true;
@@ -200,6 +227,10 @@ public class ActivityContactInformationAction extends Action {
 		eaForm.getContactInformation().setFunction(contact.getFunction());
 		eaForm.getContactInformation().setMobilephone(contact.getMobilephone());
 		eaForm.getContactInformation().setOfficeaddress(contact.getOfficeaddress());
+                eaForm.getContactInformation().setOrganizations(new ArrayList<AmpOrganisation>());
+                if(contact.getOrganizations()!=null){
+                     eaForm.getContactInformation().getOrganizations().addAll(contact.getOrganizations());
+                }
 		//get activity contact
 		AmpActivityContact actContact=getActivityContactFromList(tempId,eaForm.getContactInformation().getActivityContacts());
 		if(actContact.getPrimaryContact()!=null && actContact.getPrimaryContact()){
@@ -269,7 +300,17 @@ public class ActivityContactInformationAction extends Action {
 			contact.setOfficeaddress(eaForm.getContactInformation().getOfficeaddress().trim());
 		}else{
 			contact.setOfficeaddress(null);
-		}		
+		}
+                if(contact.getOrganizations()!=null){
+                         contact.getOrganizations().clear();
+                }
+                else{
+                    contact.setOrganizations(new HashSet<AmpOrganisation>());
+                }
+                if(eaForm.getContactInformation().getOrganizations()!=null){
+                    contact.getOrganizations().addAll(eaForm.getContactInformation().getOrganizations());
+
+                }
 		
 		if(tempId==null || tempId.equals("")){ // we are adding contact,not editing. So we should put it in the list of all contacts
 			//create activity contact
@@ -331,5 +372,6 @@ public class ActivityContactInformationAction extends Action {
 		form.getContactInformation().setFunction(null);		
 		form.getContactInformation().setMobilephone(null);
 		form.getContactInformation().setOfficeaddress(null);
+                form.getContactInformation().setOrganizations(null);
 	}
 }

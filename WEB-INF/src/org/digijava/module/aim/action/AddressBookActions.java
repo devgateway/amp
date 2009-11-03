@@ -2,6 +2,7 @@ package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,9 +19,11 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.form.AddressBookForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.ContactInfoUtil;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class AddressBookActions extends DispatchAction {
@@ -87,7 +90,7 @@ public class AddressBookActions extends DispatchAction {
     	myForm.setContactNames(ContactInfoUtil.getContactNames());
 		return mapping.findForward("showAllContacts");
 	}
-	
+
 	public ActionForward searchContacts (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		AddressBookForm myForm=(AddressBookForm)form;
 		int page = 0;
@@ -146,6 +149,11 @@ public class AddressBookActions extends DispatchAction {
 				myForm.setFunction(contact.getFunction());
 				myForm.setMobilephone(contact.getMobilephone());
 				myForm.setOfficeaddress(contact.getOfficeaddress());
+                                myForm.setOrganizations(new ArrayList<AmpOrganisation>());
+                                if(contact.getOrganizations()!=null){
+                                     myForm.getOrganizations().addAll(contact.getOrganizations());
+                                }
+
 			}
 		}
 		return mapping.findForward("addOrEditContact");
@@ -162,6 +170,23 @@ public class AddressBookActions extends DispatchAction {
 		}
 		return viewAddressBook(mapping,myForm,request,response);
 	}
+
+        public ActionForward removeOrganization(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+            AddressBookForm myForm = (AddressBookForm) form;
+            Long[] ids = myForm.getSelOrgs();
+            if (ids != null) {
+                for (Long id : ids) {
+                    AmpOrganisation organization = DbUtil.getOrganisation(id);
+                    myForm.getOrganizations().remove(organization);
+                }
+            }
+
+            return mapping.findForward("addOrEditContact");
+        }
+        public ActionForward addOrganization(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+         return mapping.findForward("addOrEditContact");
+       }
 	
 	public ActionForward saveContact (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		AddressBookForm myForm=(AddressBookForm)form;
@@ -213,6 +238,13 @@ public class AddressBookActions extends DispatchAction {
 		if(myForm.getFax()!=null){
 			contact.setFax(myForm.getFax().trim());
 		}
+                if (contact.getOrganizations() == null) {
+                     contact.setOrganizations(new HashSet<AmpOrganisation>());
+                }
+                if (myForm.getOrganizations() != null) {
+                contact.getOrganizations().clear();
+                contact.getOrganizations().addAll(myForm.getOrganizations());
+                }
 		ContactInfoUtil.saveOrUpdateContact(contact);
 		//reset filter 
 		myForm.setResultsPerPage(10);
@@ -236,5 +268,6 @@ public class AddressBookActions extends DispatchAction {
 		form.setFunction(null);
 		form.setMobilephone(null);
 		form.setOfficeaddress(null);
+                form.setOrganizations(null);
 	}
 }

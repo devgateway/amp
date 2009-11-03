@@ -3,6 +3,7 @@ package org.digijava.module.aim.uicomponents.form;
 import java.util.List;
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 
 public class AddContactComponentForm extends ActionForm {
 
@@ -24,6 +25,24 @@ public class AddContactComponentForm extends ActionForm {
     private String targetCollection = "";
     private Object targetForm;
     private Long contactId;
+    private List<AmpOrganisation> organizations;
+    private Long[] selContactOrgs;
+
+    public Long[] getSelContactOrgs() {
+        return selContactOrgs;
+    }
+
+    public void setSelContactOrgs(Long[] selContactOrgs) {
+        this.selContactOrgs = selContactOrgs;
+    }
+
+    public List<AmpOrganisation> getOrganizations() {
+        return organizations;
+    }
+
+    public void setOrganizations(List<AmpOrganisation> organizations) {
+        this.organizations = organizations;
+    }
 
     public Long getContactId() {
         return contactId;

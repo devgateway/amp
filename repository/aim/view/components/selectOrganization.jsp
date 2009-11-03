@@ -246,6 +246,7 @@
         <% } %>
     </logic:iterate>
 
+<html:hidden name="aimSelectOrganizationForm" property="callbackFunction" styleId="callbackFunction"/>
 
 
 	<table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>

@@ -681,7 +681,7 @@ public class EditOrganisation extends DispatchAction {
         while (contactIter.hasNext()) {
             AmpContact contact = contactIter.next();
             if (selContactId != null&&selContactId!=0) {
-                if (contact.getId().equals(selContactId)) {
+                if ((contact.getId() != null && contact.getId().equals(selContactId))||(contact.getTemporaryId()!=null&&contact.getTemporaryId().equals(selContactId.toString()))) {
                     contactsForRemove.add(contact);
                     break;
                 }
@@ -689,7 +689,8 @@ public class EditOrganisation extends DispatchAction {
 
                 if (selectedContactInfoIds != null) {
                     for (Long contactId : selectedContactInfoIds) {
-                        if (contact.getId().equals(contactId)) {
+                        if ((contact.getId() != null && contact.getId().equals(contactId))
+                                || (contact.getTemporaryId() != null && contact.getTemporaryId().equals(contactId.toString()))) {
                             contactsForRemove.add(contact);
                         }
                     }
@@ -750,6 +751,12 @@ public class EditOrganisation extends DispatchAction {
         }
         return mapping.findForward("forward");
 
+    }
+
+    public ActionForward reload(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        return mapping.findForward("forward");
     }
 
     public ActionForward save(ActionMapping mapping, ActionForm form,
@@ -854,15 +861,7 @@ public class EditOrganisation extends DispatchAction {
             organization.setTaxNumber(editForm.getTaxNumber());
         }
 
-        // contacts
-        if (organization.getContacts() == null) {
-            organization.setContacts(new HashSet<AmpContact>());
-        } else {
-            organization.getContacts().clear();
-        }
-        if (editForm.getContacts() != null) {
-            organization.getContacts().addAll(editForm.getContacts());
-        }
+      
 
         // recipients
         if (organization.getRecipients() == null) {
@@ -958,6 +957,16 @@ public class EditOrganisation extends DispatchAction {
         }
         organization.setSectors(sectors);
 
+          // contacts
+        if (organization.getContacts() == null) {
+            organization.setContacts(new HashSet<AmpContact>());
+        } else {
+            organization.getContacts().clear();
+        }
+        if (editForm.getContacts() != null) {
+            organization.getContacts().addAll(editForm.getContacts());
+        }
+
         // locations
         if (organization.getLocations() == null) {
             organization.setLocations(new HashSet<AmpOrgLocation>());
@@ -1037,12 +1046,7 @@ public class EditOrganisation extends DispatchAction {
         }
 
         this.saveDocuments(request, organization);
-        if (orgId == null || (orgId.equals(0l))) {
-            DbUtil.add(organization);
-        } else {
-            DbUtil.updateOrg(organization);
-        }
-
+        DbUtil.saveOrg(organization);
         return mapping.findForward("added");
 
     }

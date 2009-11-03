@@ -129,7 +129,7 @@
 		var url = "<%=selOrg %>"
 		var params = "?edit=true&orgSelReset=false&subAction=organizationSelected"+getParams();    
 		YAHOOAmp.util.Connect.asyncRequest("POST", url+params, callback);
-		
+
 		return true;
 	}
 

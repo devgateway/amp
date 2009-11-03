@@ -22,25 +22,48 @@
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/dragdrop-min.js"/>" ></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 <style type="text/css">
-	.mask {
+	
+	#popin .content { 
+	    overflow:auto; 
+	    height:455px;
+	    background-color:fff; 
+	    padding:10px; 
+	}
+
+          .mask {
 	  -moz-opacity: 0.8;
 	  opacity:.80;
 	  filter: alpha(opacity=80);
 	  background-color:#2f2f2f;
 	}
-	
-	#popin .content { 
-	    overflow:auto; 
-	    height:300px; 
-	    background-color:fff; 
-	    padding:10px; 
-	} 
+
+	#contactPopin .content {
+	    overflow:auto;
+	    height:455px;
+	    background-color:#ffffff;
+	    padding:10px;
+	}
+	.bd a:hover {
+  		background-color:#ecf3fd;
+		font-size: 10px;
+		color: #0e69b3;
+		text-decoration: none
+	}
+	.bd a {
+	  	color:black;
+	  	font-size:10px;
+	}
+
 	
 </style>
 
 <div id="popin" style="display: none">
 	<div id="popinContent" class="content">
 	</div>
+</div>
+<div id="contactPopin" style="display: none">
+    <div id="popinContactContent" class="content">
+    </div>
 </div>
 
 <script type="text/javascript">
@@ -49,7 +72,7 @@
 		YAHOOAmp.namespace("YAHOOAmp.amp");
 
 		var myPanel = new YAHOOAmp.widget.Panel("newpopins", {
-			width:"800px",
+			width:"600px",
 			fixedcenter: true,
 		    constraintoviewport: true,
 		    underlay:"none",
@@ -60,8 +83,8 @@
 		    });
 	var panelStart=0;
 	var checkAndClose=false;
-	function initContactInfoScript() {
-		var msg='\n<digi:trn>Add Contact Information</digi:trn>';
+	function initOrgScript() {
+		var msg='\n<digi:trn>Add Organization(s)</digi:trn>';
 		myPanel.setHeader(msg);
 		myPanel.setBody("");
 		myPanel.beforeHideEvent.subscribe(function() {
@@ -69,12 +92,172 @@
 		}); 
 		
 		myPanel.render(document.body);
+                panelStrat=0;
 	}
+
+     YAHOOAmp.namespace("YAHOOAmp.amp");
+
+    var myPanelContact = new YAHOOAmp.widget.Panel("newpopins", {
+        width:"800px",
+        fixedcenter: true,
+        constraintoviewport: false,
+        underlay:"none",
+        close:true,
+        visible:false,
+        modal:true,
+        draggable:true,
+        context: ["showbtn", "tl", "bl"]
+    });
+    var panelStartContact=0;
+    var checkAndCloseContact=false;
+
+      function initContactInfoScript() {
+        var msg='\n<digi:trn >Add Contact Information</digi:trn>';
+        myPanelContact.setHeader(msg);
+        myPanelContact.setBody("");
+        myPanelContact.beforeHideEvent.subscribe(function() {
+            panelStartContact=1;
+        });
+
+        myPanelContact.render(document.body);
+        panelStartContact=0;
+    }
    
     //DO NOT REMOVE THIS FUNCTION --- AGAIN!!!!
     function mapCallBack(status, statusText, responseText, responseXML){
        window.location.reload();
     }
+
+      var responseSuccess1 = function(o){
+        /* Please see the Success Case section for more
+         * details on the response object's properties.
+         * o.tId
+         * o.status
+         * o.statusText
+         * o.getResponseHeader[ ]
+         * o.getAllResponseHeaders
+         * o.responseText
+         * o.responseXML
+         * o.argument
+         */
+        var response = o.responseText;
+        var content = document.getElementById("popinContactContent");
+        //response = response.split("<!")[0];
+        content.innerHTML = response;
+        //content.style.visibility = "visible";
+        showContactContent();
+    }
+
+    var responseFailure1 = function(o){
+        alert("Connection Failure!");
+    }
+    var callback1 =
+        {
+        success:responseSuccess1,
+        failure:responseFailure1
+    };
+
+    function showContactContent(){
+        var element = document.getElementById("contactPopin");
+        element.style.display = "inline";
+        if (panelStartContact < 1){
+            myPanelContact.setBody(element);
+        }
+
+        if (panelStartContact < 2){
+            document.getElementById("contactPopin").scrollTop=0;
+            myPanelContact.show();
+            panelStartContact = 2;
+        }
+        checkErrorAndCloseContact();
+
+    }
+
+    function checkErrorAndCloseContact(){
+        if(checkAndCloseContact==true){
+            if(document.getElementsByName("someError")[0]==null || document.getElementsByName("someError")[0].value=="false"){
+                 myContactClose();
+                 refreshPage();
+            }
+            checkAndCloseContact=false;
+        }
+    }
+    function refreshPage(){
+        document.aimEditActivityForm.submit();
+    }
+
+    function  showContactPanelLoading(msg){
+        myPanelContact.setHeader(msg);
+        var content = document.getElementById("popinContactContent");
+        content.innerHTML = '<div style="text-align: center">' +
+            '<img src="/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' +
+            '<digi:trn>Loading, please wait ...</digi:trn><br/><br/></div>';
+        showContactContent();
+    }
+
+     function showErrorOrSaveContact(status, statusText, responseText, responseXML){
+        var root=responseXML.getElementsByTagName('CONTACTS')[0].childNodes[0];
+        var contEmail=root.getAttribute('email');
+        if(contEmail=='exists'){
+            alert('Contact with the given email already exists');
+            return false;
+        }
+        //if emails doesn't exist, save contact.
+        addContact();
+    }
+
+    function myContactClose(){
+        myPanelContact.hide();
+        myPanelContact=1;
+
+    }
+
+  
+    function addOrganizations2Contact(){
+         <digi:context name="addCont" property="context/activityContactInfo.do?toDo=addOrganization"/>;
+            checkAndClose=true;
+            var url="${addCont}"+getContactParams();
+            YAHOOAmp.util.Connect.asyncRequest("POST", url, callback1);
+     }
+
+        function getContactParams(){
+                var title = document.getElementById('contactTitle');
+                var titleId=title.options[title.selectedIndex].value;
+                var params="";
+                  params+="&contactInformation.name="+document.getElementById('name').value+
+                      "&contactInformation.lastname="+document.getElementById('lastname').value +
+                      "&contactInformation.email="+document.getElementById('email').value+
+                      "&contactInformation.title="+titleId+
+                      "&contactInformation.function="+document.getElementById('function').value+
+                      "&contactInformation.officeaddress="+document.getElementById('officeaddress').value+
+                      "&contactInformation.organisationName="+document.getElementById('organisationName').value+
+                      "&contactInformation.phone="+document.getElementById('phone').value+
+                      "&contactInformation.fax="+document.getElementById('fax').value+
+                      "&contactInformation.mobilephone="+document.getElementById('mobilephone').value+
+                      "&contactInformation.temporaryId="+document.getElementById('temporaryId').value;
+                  return params;
+              }
+
+       function removeContactOrgs(){
+        var params=getContactParams();
+        if(document.getElementsByName("selContactOrgs")!=null){
+            var orgs = document.getElementsByName("contactInformation.selContactOrgs").length;
+            for(var i=0; i<  orgs; i++){
+                if(document.getElementsByName("contactInformation.selContactOrgs")[i].checked){
+                    params+="&"+document.getElementsByName("contactInformation.selContactOrgs")[i].name+"="+document.getElementsByName("contactInformation.selContactOrgs")[i].value;
+                }
+            }
+        }
+        else{
+            var msg="<digi:trn jsFriendly="true">Please select organization(s) to remove</digi:trn>"
+            alert(msg);
+        }
+         <digi:context name="addCont" property="context/activityContactInfo.do?toDo=removeOrganizations"/>;
+                        var url="${addCont}"+"&"+params;
+                        YAHOOAmp.util.Connect.asyncRequest("POST", url, callback1);
+
+        }
+
     
     
     var responseSuccess = function(o){
@@ -150,18 +333,7 @@
 		async.call(url);
 	}
 
-	function showErrorOrSaveContact(status, statusText, responseText, responseXML){
-		var root=responseXML.getElementsByTagName('CONTACTS')[0].childNodes[0];
-		var contEmail=root.getAttribute('email');		
-		if(contEmail=='exists'){
-			alert('Contact with the given email already exists');			
-			return false;
-		}
-		//if emails doesn't exist, save contact.
-		myclose();
-		addContact();
-	}
-
+	
 	function addActionToURL(actionName){
 	  var fullURL=document.URL;
 	  var lastSlash=fullURL.lastIndexOf("/");
@@ -214,11 +386,21 @@
 	
 	function checkErrorAndClose(){
 		if(checkAndClose==true){
-			if(document.getElementsByName("someError")[0]==null || document.getElementsByName("someError")[0].value=="false"){
-				myclose();
-				addContact();
-			}
-			checkAndClose=false;
+			 if(document.getElementsByName("someError")[0]==null || document.getElementsByName("someError")[0].value=="false"){
+                        var callbackFunction='';
+                        if(document.aimSelectOrganizationForm!=null&&document.aimSelectOrganizationForm.callbackFunction!=null)
+                        callbackFunction=document.aimSelectOrganizationForm.callbackFunction.value;
+                         if( callbackFunction.trim()!=''){
+                                    eval(callbackFunction);
+
+                                }
+                                else{
+                                     refreshPage();
+                                }
+                        myclose();
+                    }
+                    checkAndClose=false;
+                    
 		}
 	}
 
@@ -233,18 +415,18 @@
 	
 	function AddContactButton(contactType){		
 		var msg='\n<digi:trn>Add Contact Info</digi:trn>';
-		showPanelLoading(msg);
+		showContactPanelLoading(msg);
 		<digi:context name="contactUrl" property="context/module/moduleinstance/activityContactInfo.do" />
 		var url = "<%=contactUrl %>?toDo=" + "add&contType="+contactType;
-		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback1);
 	}
 
 	function editContact(contactType,contactId){
 		var msg='\n<digi:trn>Edit Contact Info</digi:trn>';
-		showPanelLoading(msg);		
+		showContactPanelLoading(msg);
 		var partialUrl=addActionToURL('activityContactInfo.do');
         var url=partialUrl+'?toDo=edit&tempId='+contactId+'&contType='+contactType;
-        YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
+        YAHOOAmp.util.Connect.asyncRequest("POST", url, callback1);
 	}
 
 	function deleteContact(contactType,contactId){	
@@ -281,7 +463,7 @@
 			var keyword=document.getElementById('keyword').value;
 			<digi:context name="searchCont" property="context/activityContactInfo.do?toDo=search" />
 			var url = "<%= searchCont %>&keyword="+keyword;
-			YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);				 
+			YAHOOAmp.util.Connect.asyncRequest("POST", url, callback1);
 			return true;
 		}
 		return false;
@@ -365,6 +547,7 @@
 	-->
 
 </script>
+ <jsp:include page="/repository/aim/view/addOrganizationPopin.jsp" flush="true" />
 
 <script language="JavaScript">
 <!--

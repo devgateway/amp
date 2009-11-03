@@ -31,5 +31,9 @@
 		<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityContact" />
 	</set>
 
+         <set name="organizations" table="AMP_ORG_CONTACTS" lazy="false" >
+                    <key column="contact_id"/>
+                    <many-to-many class="org.digijava.module.aim.dbentity.AmpOrganisation" column="amp_org_id"/>
+         </set>
   </class>
 </hibernate-mapping>

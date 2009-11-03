@@ -87,6 +87,7 @@
         }
         if(document.aimEditActivityForm.step.value=="8"){
 			initContactInfoScript();
+                        initOrgScript();
 		}
 		 if(document.aimEditActivityForm.step.value=="10"){
         	initAddIndicatorScript()

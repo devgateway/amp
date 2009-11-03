@@ -106,7 +106,7 @@
 
                 <set name="contacts" table="AMP_ORG_CONTACTS" lazy="true">
                     <key column="amp_org_id"/>
-                    <many-to-many class="org.digijava.module.aim.dbentity.AmpContact" />
+                    <many-to-many class="org.digijava.module.aim.dbentity.AmpContact"  column="contact_id"/>
                 </set>
 
                 <property name="addressAbroad" column="address_abroad" type="java.lang.String" />

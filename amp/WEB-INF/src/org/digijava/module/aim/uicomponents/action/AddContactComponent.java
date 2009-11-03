@@ -8,6 +8,9 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,10 +23,12 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.uicomponents.AddContact;
 import org.digijava.module.aim.uicomponents.EditContactLink;
 import org.digijava.module.aim.uicomponents.form.AddContactComponentForm;
 import org.digijava.module.aim.util.ContactInfoUtil;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 
@@ -57,6 +62,8 @@ public class AddContactComponent extends DispatchAction{
          createForm.setMobilephone(null);
          createForm.setOfficeaddress(null);
          createForm.setContactId(null);
+         createForm.setTemporaryId(null);
+         createForm.setOrganizations(null);
          Object targetForm = session.getAttribute(AddContact.PARAM_PARAM_FORM_NAME);
          createForm.setTargetForm(targetForm);
          String collection = request.getParameter(AddContact.PARAM_COLLECTION_NAME);
@@ -64,35 +71,82 @@ public class AddContactComponent extends DispatchAction{
          return mapping.findForward("forward");
     }
 
-       public  ActionForward edit(ActionMapping mapping, ActionForm form,
+      public  ActionForward addOrganizations(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
          AddContactComponentForm createForm = (AddContactComponentForm) form;
-         String contId =request.getParameter(EditContactLink.PARAM_CONTACT_ID);
-         Long contactId=Long.valueOf(contId);
-         AmpContact contact= ContactInfoUtil.getContact(contactId);
-         HttpSession session = request.getSession();
-         createForm.setKeyword(null);
-         createForm.setContacts(null);
-         createForm.setContactId(contact.getId());
-         createForm.setEmail(contact.getEmail());
-         createForm.setFax(contact.getFax());
-         createForm.setLastname(contact.getLastname());
-         createForm.setPhone(contact.getPhone());
-         createForm.setName(contact.getName());
-         createForm.setOrganisationName(contact.getOrganisationName());
-         createForm.setSelContactIds(null);
-         if(contact.getTitle()!=null){
-             createForm.setTitle(contact.getTitle().getId());
+         return setAction(createForm, mapping);
+    }
+
+     public  ActionForward removeOrganizations(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+         AddContactComponentForm createForm = (AddContactComponentForm) form;
+         Long[] ids=createForm.getSelContactOrgs();
+         if(ids!=null){
+             for(Long id :ids){
+                 AmpOrganisation organization=DbUtil.getOrganisation(id);
+                 createForm.getOrganizations().remove(organization);
+             }
          }
-         createForm.setFunction(contact.getFunction());
-         createForm.setMobilephone(contact.getMobilephone());
-         createForm.setOfficeaddress(contact.getOfficeaddress());
-         Object targetForm = session.getAttribute(EditContactLink.PARAM_PARAM_FORM_NAME);
-         createForm.setTargetForm(targetForm);
-         String collection = request.getParameter(EditContactLink.PARAM_COLLECTION_NAME);
-         createForm.setTargetCollection(collection);
-         return mapping.findForward("forward");
+        return setAction(createForm, mapping);
+    }
+
+      public ActionForward edit(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        AddContactComponentForm createForm = (AddContactComponentForm) form;
+        String contId = request.getParameter(EditContactLink.PARAM_CONTACT_ID);
+        //AmpContact contact= ContactInfoUtil.getContact(contactId);
+        HttpSession session = request.getSession();
+        Object targetForm = session.getAttribute(EditContactLink.PARAM_PARAM_FORM_NAME);
+        createForm.setTargetForm(targetForm);
+        String collection = request.getParameter(EditContactLink.PARAM_COLLECTION_NAME);
+        createForm.setTargetCollection(collection);
+        Field target = createForm.getTargetForm().getClass().getDeclaredField(createForm.getTargetCollection());
+        target.setAccessible(true);
+        Collection<AmpContact> targetCollecion = (Collection<AmpContact>) target.get(createForm.getTargetForm());
+        Iterator<AmpContact> contcatIter = targetCollecion.iterator();
+        while (contcatIter.hasNext()) {
+            AmpContact contact = contcatIter.next();
+            boolean compareIds=false;
+            try{
+                  compareIds=contact.getId() != null &&contact.getId().equals(Long.valueOf(contId));
+                  if(!compareIds){
+                       compareIds=contact.getTemporaryId()!=null&&contact.getTemporaryId().equals(contId);
+                  }
+            }
+            catch(NumberFormatException ex){
+                compareIds=contact.getTemporaryId()!=null&&contact.getTemporaryId().equals(contId);
+            }
+
+            if(compareIds){
+                createForm.setKeyword(null);
+                createForm.setContacts(null);
+                createForm.setContactId(contact.getId());
+                createForm.setTemporaryId(contact.getTemporaryId());
+                createForm.setEmail(contact.getEmail());
+                createForm.setFax(contact.getFax());
+                createForm.setLastname(contact.getLastname());
+                createForm.setPhone(contact.getPhone());
+                createForm.setName(contact.getName());
+                createForm.setOrganisationName(contact.getOrganisationName());
+                createForm.setSelContactIds(null);
+                if (contact.getTitle() != null) {
+                    createForm.setTitle(contact.getTitle().getId());
+                }
+                createForm.setOrganizations(new ArrayList<AmpOrganisation>());
+                if (contact.getOrganizations() != null) {
+                    createForm.getOrganizations().addAll(contact.getOrganizations());
+                }
+                createForm.setFunction(contact.getFunction());
+                createForm.setMobilephone(contact.getMobilephone());
+                createForm.setOfficeaddress(contact.getOfficeaddress());
+
+            }
+
+        }
+        return mapping.findForward("forward");
     }
     public ActionForward search(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
@@ -175,6 +229,13 @@ public class AddContactComponent extends DispatchAction{
           AmpContact contact=null;
           if(createForm.getContactId()==null||createForm.getContactId()==0){
                contact=new AmpContact();
+               if(createForm.getTemporaryId()==null){
+                   contact.setTemporaryId("_"+new Date().getTime());
+               }
+               else{
+                   contact.setTemporaryId(createForm.getTemporaryId());
+               }
+            
           }
           else{
                contact=ContactInfoUtil.getContact(createForm.getContactId());
@@ -216,15 +277,68 @@ public class AddContactComponent extends DispatchAction{
 		}else{
 			contact.setOfficeaddress(null);
 		}
-                ContactInfoUtil.saveOrUpdateContact(contact);
+                if (contact.getOrganizations() == null) {
+                     contact.setOrganizations(new HashSet<AmpOrganisation>());
+                }
+                if (createForm.getOrganizations() != null) {
+                    contact.getOrganizations().clear();
+                 contact.getOrganizations().addAll(createForm.getOrganizations());
+                }
+                 Field target = createForm.getTargetForm().getClass().getDeclaredField(createForm.getTargetCollection());
+                 target.setAccessible(true);
+                 Collection<AmpContact> sortedtargetCollecion = new TreeSet<AmpContact>(new AmpContactCompare());
+                 Collection<AmpContact> targetCollecion = (Collection<AmpContact>) target.get(createForm.getTargetForm());
+                 if (targetCollecion != null) {
+                     sortedtargetCollecion.addAll(targetCollecion);
+                 } else {
+                     targetCollecion = new ArrayList<AmpContact>();
+                 }
+                  if (!sortedtargetCollecion.contains(contact)) {
+                     sortedtargetCollecion.add(contact);
+                 } else {
+                     //removing because properties may be changed...
+                     sortedtargetCollecion.remove(contact);
+                     sortedtargetCollecion.add(contact);
+                 }
+                    targetCollecion.clear();
+                    targetCollecion.addAll(sortedtargetCollecion);
+
+                  target.set(createForm.getTargetForm(), targetCollecion);
+                  return mapping.findForward("forward");
+               /* ContactInfoUtil.saveOrUpdateContact(contact);
                 createForm.setSelContactIds(new Long[]{contact.getId()});
-               return addSelectedConts(mapping, form, request, response);
+               return addSelectedConts(mapping, form, request, response);*/
 
      }
 
+    private ActionForward setAction(AddContactComponentForm createForm, ActionMapping mapping) {
+        if (createForm.getContactId() == null || createForm.getContactId() == 0) {
+            createForm.setAction("create");
+        } else {
+            createForm.setAction("edit");
+        }
+        return mapping.findForward("forward");
+    }
+
     class AmpContactCompare implements Comparator<AmpContact> {
         public int compare(AmpContact cont1, AmpContact cont2) {
-            return cont1.getId().compareTo(cont2.getId());
+            if(cont1.getId()!=null&&cont2.getId()!=null){
+                return cont1.getId().compareTo(cont2.getId());
+            }
+            else{
+                 if(cont1.getId()==null&&cont2.getId()==null){
+                       return cont1.getTemporaryId().compareTo(cont2.getTemporaryId());
+                 }
+                 else{
+                     if(cont1.getId()==null){
+                         return -1;
+                     }
+                     else{
+                         return 1;
+                     }
+                 }
+            }
+            
         }
     }
 }

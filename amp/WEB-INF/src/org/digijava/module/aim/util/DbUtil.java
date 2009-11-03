@@ -53,6 +53,7 @@ import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpClosingDateHistory;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
+import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpFilters;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -2803,14 +2804,13 @@ public class DbUtil {
         }
     }
 
-    public static void updateOrg(Object object) throws DgException{
+    public static void saveOrg(AmpOrganisation org) throws DgException {
         Session sess = null;
         Transaction tx = null;
 
         try {
             sess = PersistenceManager.getRequestDBSession();
             tx = sess.beginTransaction();
-            AmpOrganisation org = (AmpOrganisation) object;
             HashSet sect = new HashSet();
             Iterator i = org.getSectors().iterator();
             while (i.hasNext()) {
@@ -2819,8 +2819,22 @@ public class DbUtil {
 
             }
             org.setSectors(sect);
+            Set<AmpContact> contacts = org.getContacts();
+            if (contacts != null) {
+                Iterator<AmpContact> iterContact = contacts.iterator();
+                while (iterContact.hasNext()) {
+                    AmpContact contact = iterContact.next();
+                    if(contact.getId()!=null){
+                         sess.merge(contact);
+                    }
+                    else{
+                        sess.save(contact);
+                    }
+                   
+                }
+            }
 
-            sess.update(org);
+            sess.saveOrUpdate(org);
             tx.commit();
         } catch (Exception e) {
             logger.error("Unable to update", e);
@@ -2831,7 +2845,7 @@ public class DbUtil {
                     logger.error("rollback() failed", ex);
                 }
             }
-              throw new DgException(e);
+            throw new DgException(e);
         }
     }
 

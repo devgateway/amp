@@ -2521,6 +2521,24 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private Long[] contactIds; //for adding several contacts
 		
 		private String action;
+                private Long[] selContactOrgs;
+                private List<AmpOrganisation> organizations;
+
+                public List<AmpOrganisation> getOrganizations() {
+                    return organizations;
+                }
+
+                public void setOrganizations(List<AmpOrganisation> organizations) {
+                    this.organizations = organizations;
+                }
+
+                public Long[] getSelContactOrgs() {
+                    return selContactOrgs;
+                }
+
+                public void setSelContactOrgs(Long[] selContactOrgs) {
+                    this.selContactOrgs = selContactOrgs;
+                }
 		
 		public String[] getPrimaryDonorContIds() {
 			return primaryDonorContIds;

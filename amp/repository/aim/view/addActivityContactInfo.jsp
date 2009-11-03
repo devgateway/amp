@@ -8,6 +8,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
+<%@ taglib uri="/taglib/aim"prefix="aim"%>
 
 <digi:context name="digiContext" property="context"/>
 <digi:instance property="aimEditActivityForm"/>
@@ -16,7 +17,8 @@
 	<table cellpadding="2" cellspacing="5" width="100%" border="1" height="100%">
 		<tr height="5px"><td colspan="2"/></tr>
 		<!-- page logic row start -->
-		<tr>
+                <html:hidden property="contactInformation.temporaryId" styleId="temporaryId"/>
+                <tr>
 			<!-- create new contact td start -->
 			<td width="50%" height="100%">
 				<table cellpadding="2" cellspacing="5" width="100%" height="100%" class="box-border-nopadding" >
@@ -41,17 +43,53 @@
 					<tr>
 						<td align="right"><strong><digi:trn>Email</digi:trn></strong><font color="red">*</font></td>
 						<td align="left" nowrap="nowrap">
-							<html:text property="contactInformation.email" styleId="email" size="30"/>				
+                                                    <html:text property="contactInformation.email" styleId="email" size="30"/>
 						</td>					
 					</tr>
 					<tr>
 						<td align="right"><strong><digi:trn>Function</digi:trn></strong></td>
-						<td align="left"><html:text property="contactInformation.function" size="30"/></td>
+                                                <td align="left"><html:text property="contactInformation.function" size="30" styleId="function"/></td>
 					</tr>	
 					<tr>
 						<td align="right"><strong><digi:trn>Organization</digi:trn></strong></td>
-						<td align="left"><html:text property="contactInformation.organisationName" size="30"/></td>
+                                                <td align="left"><html:text property="contactInformation.organisationName" size="30" styleId="organisationName"/></td>
 					</tr>
+                                        <tr>
+                                            <td colspan="2" align="center">
+                                                <c:choose>
+                                                    <c:when test="${empty aimEditActivityForm.contactInformation.organizations}">
+                                                <aim:addOrganizationButton refreshParentDocument="false" callBackFunction="addOrganizations2Contact()" collection="organizations"  form="${aimEditActivityForm.contactInformation}" styleClass="dr-menu"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
+                                            </c:when>
+
+                                            <c:otherwise>
+                                                <table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
+                                                    <c:forEach var="organization" items="${aimEditActivityForm.contactInformation.organizations}">
+                                                        <tr>
+                                                            <td width="3px">
+                                                                <html:multibox property="contactInformation.selContactOrgs">
+                                                                    <bean:write name="organization" property="ampOrgId" />
+                                                                </html:multibox>
+                                                            </td>
+
+                                                            <td align="left">
+                                                                <bean:write name="organization" property="name" />
+                                                            </td>
+
+                                                        </tr>
+                                                    </c:forEach>
+                                                    <tr>
+                                                        <td colspan="2">
+                                                    <aim:addOrganizationButton refreshParentDocument="false" callBackFunction="addOrganizations2Contact()" collection="organizations"  form="${aimEditActivityForm.contactInformation}" styleClass="dr-menu"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
+                                                    <input type="button" class="dr-menu" onclick="javascript:removeContactOrgs();" value='<digi:trn>Remove Organization(s)</digi:trn>' />
+                                                </td>
+                                            </tr>
+
+                                        </table>
+                                        </c:otherwise>
+                                        </c:choose>
+                                        </td>
+                        
+                                        </tr>
 					<tr>
 						<td align="right"><strong><digi:trn>Phone Number</digi:trn></strong></td>
 						<td align="left"><html:text property="contactInformation.phone" size="30" styleId="phone" onkeyup="checkNumber('phone')"/></td>
@@ -66,7 +104,7 @@
 					</tr>			
 					<tr>
 						<td align="right" valign="top"><strong><digi:trn>Office Address</digi:trn></strong></td>
-						<td align="left"><html:textarea property="contactInformation.officeaddress" cols="36" rows="3"/></td>
+                                                <td align="left"><html:textarea property="contactInformation.officeaddress" cols="36" rows="3" styleId="officeaddress"/></td>
 					</tr>	
 					<tr height="5px"><td colspan="2"/></tr>
 					<tr>

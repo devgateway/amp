@@ -77,10 +77,23 @@
 <script language="JavaScript" type="text/javascript">
     function initScripts() {
         initSectorScript();
-        }
+        initContactScript();
+        initOrganizationScript();
+    }
     addLoadEvent(initScripts);
   
-
+    function refreshPage(){
+        document.aimAddOrgForm.actionFlag.value='reload'
+        document.aimAddOrgForm.submit();
+    }
+    function addOrganizations2Contact(){
+        var params=getContactParams();
+    <digi:context name="addCont" property="context/addAmpContactInfo.do?action=addOrganizations"/>;
+            checkAndClose=true;
+            var url="${addCont}"+"&"+params;
+            YAHOOAmp.util.Connect.asyncRequest("POST", url, callback1);
+        }
+  
     function orgTypeChanged(){
     <digi:context name="typeChanged" property="context/module/moduleinstance/editOrganisation.do" />
             document.aimAddOrgForm.actionFlag.value="typeChanged";
@@ -1534,10 +1547,20 @@
                                         </td>
                                     </tr>
                                     <c:forEach var="contact" items="${aimAddOrgForm.contacts}">
+                                        <c:set var="ampContactId">
+                                            <c:choose>
+                                                <c:when test="${empty contact.id||contact.id==0}">
+                                                    ${contact.temporaryId}
+                                                </c:when>
+                                                <c:otherwise>
+                                                    ${contact.id}
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </c:set>
                                         <tr>
                                             <td style="width:40px">
                                                 <html:multibox property="selectedContactInfoIds" styleClass="selectedContactInfoIds">
-                                                    ${contact.id}
+                                                    ${ampContactId}
                                                 </html:multibox>
                                             </td>
                                             <td class="tdClass" nowrap>
@@ -1562,12 +1585,12 @@
                                             </td>
                                             <td>
 
-                                        <aim:editContactLink collection="contacts" form="${aimAddOrgForm}" contactId="${contact.id}">
+                                        <aim:editContactLink collection="contacts" form="${aimAddOrgForm}" contactId="${ampContactId}">
                                             <img alt="edit" src= "../ampTemplate/images/application_edit.png" border="0"/>
                                         </aim:editContactLink>
                                         </td>
                                         <td>
-                                            <a href="javascript:removeContact('${contact.id}')">
+                                            <a href="javascript:removeContact('${ampContactId}')">
                                                 <img alt="delete" src= "../ampTemplate/images/trash_12.gif" border="0"/>
                                             </a>
                                         </td>

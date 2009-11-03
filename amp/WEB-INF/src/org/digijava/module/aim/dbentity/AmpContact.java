@@ -22,6 +22,7 @@ public class AmpContact {
 	private String mobilephone;
 	private String officeaddress;
 	private String temporaryId;
+        private Set<AmpOrganisation> organizations;
 	
 	/**
 	 * currently these fields are not usable, but will become when we decide 
@@ -124,5 +125,14 @@ public class AmpContact {
 	}
 	public void setOfficeaddress(String officeaddress) {
 		this.officeaddress = officeaddress;
-	}	
+	}
+        public Set<AmpOrganisation> getOrganizations() {
+            return organizations;
+        }
+
+        public void setOrganizations(Set<AmpOrganisation> organizations) {
+            this.organizations = organizations;
+        }
+	
+		
 }

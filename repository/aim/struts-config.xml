@@ -554,8 +554,6 @@
       <forward name="forward" path="/showLayout.do?layout=editOrgGroup" />
       <forward name="index" path="/aim/index.do" redirect="true" />
       <forward name="added" path="/aim/orgGroupManager.do" redirect="true" />
-      <forward name="groupadded" path="/aim/editOrganisation.do?actionFlag=create" />
-      <forward name="groupedited" path="/aim/editOrganisation.do?actionFlag=edit" />
       <forward name="popup" path="/showLayout.do?layout=aim_addOrgGrpPopupLayout" />
     </action>
     <action name="aimViewOrgForm" path="/aim/viewOrganisation" scope="request" type="org.digijava.module.aim.action.ViewOrganisation" validate="false">

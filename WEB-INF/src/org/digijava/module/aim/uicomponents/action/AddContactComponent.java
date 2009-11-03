@@ -229,7 +229,7 @@ public class AddContactComponent extends DispatchAction{
           AmpContact contact=null;
           if(createForm.getContactId()==null||createForm.getContactId()==0){
                contact=new AmpContact();
-               if(createForm.getTemporaryId()==null){
+               if(createForm.getTemporaryId()==null||createForm.getTemporaryId().length()==0){
                    contact.setTemporaryId("_"+new Date().getTime());
                }
                else{

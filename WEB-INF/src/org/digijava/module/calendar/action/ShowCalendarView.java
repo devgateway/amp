@@ -215,9 +215,11 @@ public class ShowCalendarView extends Action {
 
 
             if (eventCreated != null) {
+            	// AMP-7257
+            	filter.setShowPublicEvents(showPublicEvents);
                 // we are showing private or public events depending on the newly created event
-                Boolean showPubEvent = (Boolean) eventCreated;
-                filter.setShowPublicEvents(showPubEvent);
+                // Boolean showPubEvent = (Boolean) eventCreated;
+                //filter.setShowPublicEvents(showPubEvent);
             }/* else {
                 // showPublicEvents
                 filter.setShowPublicEvents(false);

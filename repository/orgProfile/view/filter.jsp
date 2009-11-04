@@ -179,7 +179,7 @@
                                          </a>
                                         <span id="changeFilterLink">
                                             <a>
-                                                  <digi:img width="15px" height="15px" hspace="0" vspace="0" src="images/filter.png" border="0" alt='Export to Word'/>
+                                                  <digi:img width="15px" height="15px" hspace="0" vspace="0" src="images/filter.png" border="0" alt='Apply Filter'/>
                                             </a>
                                         </span>
                                     </div>
@@ -308,7 +308,7 @@
                     <font style="color:red;font-weight:bold"><digi:trn>Note: fiscal year will affect the data range for the graps as follows:</digi:trn></font>
                    <p>
                    <digi:trn>
-                   *Pledges/Commitments/Disbursements graph will display a range of three years (the current year and the two previous years) **Type od Aid and ODA Profile will display a range of five years (the current year and the previous four years)</p>
+                   *Pledges/Commitments/Disbursements graph will display a range of three years (the current year and the two previous years) **Type of Aid and ODA Profile will display a range of five years (the current year and the previous four years)</p>
                    </digi:trn>
                    </td>
             </tr>

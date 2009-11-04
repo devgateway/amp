@@ -177,6 +177,7 @@ public class ShowCalendarView extends Action {
         EventsFilter filter = calendarViewForm.getFilter();
         if (showPublicEvents!=null && showPublicEvents) {
             filter.setShowPublicEvents(true);
+            calendarViewForm.setResetFilter(true);
         } else {
             filter.setShowPublicEvents(false);
         }
@@ -245,6 +246,18 @@ public class ShowCalendarView extends Action {
                 filter.setShowPublicEvents(false);
             }*/
             
+        }else{
+        	 if (filter.getSelectedDonors().length ==0){
+        		 int index = 0;
+        		 String[] selectedDonors = new String[filter.getDonors().size() + 1];
+        		 selectedDonors[index++] = "None";
+        		 it = filter.getDonors().iterator();
+                 while (it.hasNext()) {
+                     LabelValueBean lvb = (LabelValueBean) it.next();
+                     selectedDonors[index++] = lvb.getValue();
+                 }
+                 filter.setSelectedDonors(selectedDonors);
+             }
         }
         // events
         Long userId = null;
@@ -252,6 +265,7 @@ public class ShowCalendarView extends Action {
         if (currentUser != null) {
             userId = currentUser.getId();
         }
+        
         AmpTeamMember member = TeamMemberUtil.getAmpTeamMember(mem.getMemberId());
         Collection ampCalendarEvents = AmpDbUtil.getAmpCalendarEventsByMember(startDate,
             endDate, filter.getSelectedEventTypes(), filter.getSelectedDonors(),

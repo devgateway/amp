@@ -86,7 +86,7 @@ public class AmpReportGenerator extends ReportGenerator {
 			else {
 				ret.add(ArConstants.FINANCING_INSTRUMENT);
 			}
-			Iterator i = reportMetadata.getColumns().iterator();
+			Iterator i = reportMetadata.getShowAblesColumns().iterator();
 			while (i.hasNext()) {
 				AmpReportColumn element = (AmpReportColumn) i.next();
 				if (element.getColumn().getColumnName().equals(
@@ -117,19 +117,26 @@ public class AmpReportGenerator extends ReportGenerator {
 		List<AmpReportColumn> generated = new ArrayList<AmpReportColumn>();
 		List<AmpReportColumn> colNames = reportMetadata.getOrderedColumns();
 		Iterator<AmpReportColumn> i = colNames.iterator();
+		
+		
 		while (i.hasNext()) {
+			boolean skypIt=false;
 			AmpReportColumn element2 = (AmpReportColumn) i.next();
 			AmpColumns element = element2.getColumn();
+			//if we are showing an summarized report we will hidden columns with row values
+			
+			
 			if (element.getColumnName().equals(ArConstants.COLUMN_TOTAL))
 				extractableCount--;
-
+			
 			if (element.getExtractorView() != null) {
 				extractable.add(element2);
 				if ((!element.getColumnName().equals(ArConstants.COLUMN_PROPOSED_COST) || (!element.getColumnName().equals(ArConstants.COSTING_GRAND_TOTAL))))
 					extractableNames.add(element.getColumnName());
 			} else
 				generated.add(element2);
-		}
+			}
+		
 
 		extractableCount += extractableNames.size();
 
@@ -158,7 +165,7 @@ public class AmpReportGenerator extends ReportGenerator {
 			createDataForColumns(generated);
 		}
 		
-		if (ARUtil.containsColumn(ArConstants.COSTING_GRAND_TOTAL,reportMetadata.getColumns())){
+		if (ARUtil.containsColumn(ArConstants.COSTING_GRAND_TOTAL,reportMetadata.getShowAblesColumns())){
 			rawColumns.getItems().remove(rawColumns.getColumn(ArConstants.COSTING_GRAND_TOTAL));
 		}
 		
@@ -358,7 +365,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		
 	
 		
-		if (ARUtil.containsMeasure(ArConstants.UNCOMMITTED_BALANCE,reportMetadata.getMeasures())||ARUtil.containsColumn(ArConstants.COLUMN_UNCOMM_CUMULATIVE_BALANCE,reportMetadata.getColumns())) {
+		if (ARUtil.containsMeasure(ArConstants.UNCOMMITTED_BALANCE,reportMetadata.getMeasures())||ARUtil.containsColumn(ArConstants.COLUMN_UNCOMM_CUMULATIVE_BALANCE,reportMetadata.getShowAblesColumns())) {
 			AmpReportColumn arcProp = new AmpReportColumn();
 			AmpColumns acProp = new AmpColumns();
 			arcProp.setColumn(acProp);
@@ -556,7 +563,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		// add a fake first column ONLY IF the Columns metadata is empty (if we
 		// only have hierarchies but no columns). This is needed
 		// in order to preserve the table structure of the output
-		if (reportMetadata.getColumns().size() == 0) {
+		if (reportMetadata.getShowAblesColumns().size() == 0) {
 			reportChild.addColumn(new CellColumn(""));
 		}
 
@@ -599,7 +606,7 @@ public class AmpReportGenerator extends ReportGenerator {
 	 */
 	protected void createHierarchies() {
 		List orderedHierarchies = ARUtil.createOrderedHierarchies(
-				reportMetadata.getColumns(), reportMetadata.getHierarchies());
+				reportMetadata.getShowAblesColumns(), reportMetadata.getHierarchies());
 		// add Unallocated fake items for activities missing hierarchy enabled
 		// data
 		Iterator i = orderedHierarchies.iterator();
@@ -719,7 +726,7 @@ public class AmpReportGenerator extends ReportGenerator {
 
 		// remove the columns that are also hierarchies
 
-		Iterator i = reportMetadata.getColumns().iterator();
+		Iterator i = reportMetadata.getShowAblesColumns().iterator();
 		while (i.hasNext()) {
 			AmpReportColumn col = (AmpReportColumn) i.next();
 			Iterator ii = reportMetadata.getHierarchies().iterator();
@@ -732,10 +739,10 @@ public class AmpReportGenerator extends ReportGenerator {
 		}
 
 		reportMetadata.setOrderedColumns(ARUtil.createOrderedColumns(
-				reportMetadata.getColumns(), reportMetadata.getHierarchies()));
+				reportMetadata.getShowAblesColumns(), reportMetadata.getHierarchies()));
 
 		// attach funding coming from extra sources ... inject funding from
-		if (ARUtil.containsColumn(ArConstants.COSTING_GRAND_TOTAL,reportMetadata.getColumns())) {
+		if (ARUtil.containsColumn(ArConstants.COSTING_GRAND_TOTAL,reportMetadata.getShowAblesColumns())) {
 			AmpReportColumn grandTotal = new AmpReportColumn();
 			AmpColumns grandTotalColumn = new AmpColumns();
 			grandTotal.setColumn(grandTotalColumn);

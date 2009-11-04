@@ -53,7 +53,7 @@ public class EditTag extends BodyTagSupport {
             getRequest();
 
         if (getKey() != null && getKey().trim().length() > 0 &&
-            getKey().matches("[-a-zA-Z_0-9_{:_}]++")) {
+            getKey().matches("[-a-zA-Z_0-9_{:_} ]++")) {
             try {
                 Site site = RequestUtils.getSite(request);
                 if( !showOnlyTitle ) {

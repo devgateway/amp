@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+<%@ page import="org.digijava.kernel.util.RequestUtils"%>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <digi:instance property="helpForm" />
@@ -30,6 +31,7 @@ if(event.keyCode != 13){
  	$("#livesearch").show();
 	var urls="/help/helpActions.do?actionType=vewSearchKey"
 	url=urls+"&loadKey="+str
+	url+="&instance="+'<%= RequestUtils.getRealModuleInstance(request).getInstanceName()%>'
     xmlHttp.open("GET",url,true)
 	xmlHttp.onreadystatechange=stateChanging
 	xmlHttp.send(null)

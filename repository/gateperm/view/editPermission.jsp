@@ -13,6 +13,9 @@ function submitForm(mode) {
 }
 </script>
 
+
+<digi:errors/>
+
 <table>
 <tr><td align="right">Name: </td><td><html:text property="name"/></td></tr>
 

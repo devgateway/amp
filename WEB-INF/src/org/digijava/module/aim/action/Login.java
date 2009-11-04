@@ -20,6 +20,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.security.HttpLoginManager;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
@@ -147,6 +148,9 @@ public class Login extends Action {
 				 * The function will return null, if the user is just a site administrator or if the user is a
 				 * registered user but has not yet been assigned a team
 				 */
+				String locale = RequestUtils.getNavigationLanguage(request).getCode();
+				Long siteId = RequestUtils.getSite(request).getId();
+				//
 				Collection members = TeamMemberUtil.getTeamMembers(lForm.getUserId());
 				if (members == null || members.size() == 0) {
 					if (siteAdmin == true) { // user is a site admin
@@ -156,7 +160,7 @@ public class Login extends Action {
 						TeamMember tm = new TeamMember();
 						tm.setMemberName(usr.getName());
 						tm.setMemberId(usr.getId());
-						tm.setTeamName("AMP Administrator");
+						tm.setTeamName(TranslatorWorker.translateText("AMP Administrator", locale, siteId));
 						session.setAttribute(Constants.CURRENT_MEMBER, tm);
 						// show the index page with the admin toolbar at the bottom
 

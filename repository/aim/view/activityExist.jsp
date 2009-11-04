@@ -190,22 +190,28 @@ function cancel() {
 						<tr><td>
 							&nbsp;
 						</td></tr>
+                        <bean:define id="existingActivity" name="existingActivity" />
+                        <bean:define id="teamMember" name="currentMember" scope="session" type="org.digijava.module.aim.helper.TeamMember" />
 						<tr><td align="center" class="v-name">
-							<digi:trn key="aim:activityAlreadyExist">The activity with the given name already exist
+							<digi:trn key="aim:activityAlreadyExist">The activity with the given name already exists
 							</digi:trn>
+                            <c:if test="${teamMember.teamName ne existingActivity.team.name}" >
+                                <digi:trn>in workspace</digi:trn> "${existingActivity.team.name}".
+                            </c:if>
 						</td></tr>
-						<tr><td>
-							&nbsp;
+						<tr><td>&nbsp;
+							
 						</td></tr>
-						<tr><td>
-							&nbsp;
+						<tr><td>&nbsp;
+							
 						</td></tr>
+                        <c:if test="${teamMember.teamName eq existingActivity.team.name}" >
 						<tr><td align="center" class="v-name">
 							<digi:trn key="aim:overwriteTheActivity">Overwrite the activity?
 							</digi:trn>
 						</td></tr>
-						<tr><td>
-							&nbsp;
+						<tr><td>&nbsp;
+							
 						</td></tr>
 						<tr><td align="center">
 							<input type="button" value="Overwrite" class="dr-menu" onclick="overwrite()"
@@ -213,6 +219,20 @@ function cancel() {
 							<input type="button" value="Cancel" class="dr-menu" onclick="cancel()"
 							name="submitButton">
 						</td></tr>
+                        </c:if>
+                        <c:if test="${teamMember.teamName ne existingActivity.team.name}" >
+						<tr><td align="center" class="v-name">
+							<digi:trn key="aim:cannotoverwriteTheActivity">Cannot overwrite existing activity in other workspace
+							</digi:trn>
+						</td></tr>
+						<tr><td>&nbsp;
+							
+						</td></tr>
+						<tr><td align="center">
+							<input type="button" value="Return" class="dr-menu" onclick="cancel()"
+							name="submitButton">
+						</td></tr>
+                        </c:if>
 					</table>
 				</td></tr>
 				<tr><td>

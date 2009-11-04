@@ -14,8 +14,10 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.exception.dynlocation.DuplicateLocationCodeException;
 import org.digijava.module.aim.form.NewAddLocationForm;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 /**
@@ -78,6 +80,11 @@ public class AddNewLocation extends Action {
                 
                 try {
                 	LocationUtil.saveLocation(location);
+                	
+                	if ( CategoryManagerUtil.equalsCategoryValue(location.getParentCategoryValue(), 
+                					CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY) ) {
+                		DynLocationManagerUtil.synchronizeCountries();
+                	}
                 }
                 catch (DuplicateLocationCodeException e) {
                 	errors.add("title" ,  

@@ -84,7 +84,10 @@
                 modal: true,
                 close:true,
                 visible:true,
-                draggable:true} );
+                fixedcenter: true,
+                draggable:false} );
+             var msg='\n<digi:trn >ORG PROFILE FILTER</digi:trn>';
+             filter.setHeader(msg);
             filter.render();
         });
 
@@ -162,16 +165,22 @@
     <table border="0" align="left" width="100%">
         <tr>
             <td>
-                <div style="width:99.7%;background-color:#ccdbff;padding:2px 2px 2px 2px;Font-size:8pt;font-family:Arial,Helvetica,sans-serif;">
+                <div style="width:99.7%;height:20px;background-color:#ccdbff;padding:2px 2px 2px 2px;Font-size:8pt;font-family:Arial,Helvetica,sans-serif;">
                     <span style="cursor:pointer;float:left;">
                         <DIV id="subtabs">
                             <UL>
                                 <LI>
                                     <div>
+                                        <a target="_blank" onclick="exportPDF(); return false;">
+                                                            <digi:img width="15px" height="15px" hspace="0" vspace="0" src="module/aim/images/pdf.gif" border="0" alt='Export to PDF'/>
+                                         </a>
+                                          <a target="_blank" onclick="exportWord(); return false;">
+                                                            <digi:img  hspace="0" vspace="0" src="images/icons/doc.gif" border="0" alt='Export to Word'/>
+                                         </a>
                                         <span id="changeFilterLink">
                                             <a>
-                                                <digi:trn>Change Filter</digi:trn>
-                                            </a>&nbsp;&nbsp;
+                                                  <digi:img width="15px" height="15px" hspace="0" vspace="0" src="images/filter.png" border="0" alt='Export to Word'/>
+                                            </a>
                                         </span>
                                     </div>
                                 </LI>
@@ -192,18 +201,22 @@
                                 </td>
                             </tr>
                             <td>
-                                <digi:trn>Organization Group</digi:trn>:${orgProfOrgProfileFilterForm.orgGroupName}&nbsp;
-                                <digi:trn>Organization</digi:trn>:${orgProfOrgProfileFilterForm.orgName},&nbsp;
-                                <digi:trn>Year</digi:trn>:${orgProfOrgProfileFilterForm.year}, &nbsp;
-                                <digi:trn>Currency</digi:trn>:${orgProfOrgProfileFilterForm.currencyCode}, &nbsp;
+                                <digi:trn>Organization Group</digi:trn>:${orgProfOrgProfileFilterForm.orgGroupName}|&nbsp;
+                                <digi:trn>Organization</digi:trn>:${orgProfOrgProfileFilterForm.orgName}|&nbsp;
+                                <digi:trn>Year</digi:trn>:${orgProfOrgProfileFilterForm.year}| &nbsp;
+                                <digi:trn>Currency</digi:trn>:${orgProfOrgProfileFilterForm.currencyCode}| &nbsp;
                                 <digi:trn>Transaction Type</digi:trn>:
-                                <c:if test="${orgProfOrgProfileFilterForm.transactionType=='0'}">
-                                    <digi:trn>Comm</digi:trn>
-                                </c:if>
-                                <c:if test="${orgProfOrgProfileFilterForm.transactionType=='1'}">
-                                    <digi:trn>Disb</digi:trn>
-                                </c:if>,&nbsp;
-                                <digi:trn>Show data only from workspace</digi:trn>:
+                                <c:choose>
+                               
+                                <c:when test="${orgProfOrgProfileFilterForm.transactionType=='1'}">
+                                    <digi:trn>DISBURSEMENTS</digi:trn>
+                                </c:when>
+                                <c:otherwise>
+                                    <digi:trn>COMMITMENTS</digi:trn>
+                                </c:otherwise>
+                               </c:choose>
+                                    |&nbsp;
+                                <digi:trn>Show data only from this workspace</digi:trn>:
                                 <c:if test="${orgProfOrgProfileFilterForm.workspaceOnly}">
                                     <digi:trn>Yes</digi:trn>
                                 </c:if>
@@ -220,16 +233,20 @@
         </tr>
     </table>
     <div id="filter" style="visibility:hidden;display:none;">
-       <div style="height:300px;width:450px;overflow:auto">
+       <div style="height:400px;width:450px;overflow:auto">
         <table cellpadding="5" cellspacing="0">
             <tr>
                 <td nowrap align="left" colspan="2">
-                    <html:checkbox  property="workspaceOnly"><b><digi:trn>From Workspace Only</digi:trn> </b></html:checkbox>
-                    <html:select property="transactionType" styleClass="inp-text">
-                        <html:option value="0"><digi:trn>Comm</digi:trn></html:option>
-                        <html:option value="1"><digi:trn>Disb</digi:trn></html:option>
-                    </html:select>
-
+                    <html:checkbox  property="workspaceOnly"><b><digi:trn>SHOW ONLY ORGANIZATION PROFILE DATA FROM THIS WORKSPACE?</digi:trn></b></html:checkbox><br/>
+                    <font style="color:red;font-weight:bold"><digi:trn>Note: If left unchecked it will show data for all of the current workspaces in AMP</digi:trn></font>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" colspan="2">
+                    <fieldset>
+                        <html:radio property="transactionType" value="0"><digi:trn>COMMITMENTS</digi:trn></html:radio>
+                        <html:radio property="transactionType" value="1"><digi:trn>DISBURSEMENTS</digi:trn></html:radio>
+                    </fieldset>
                 </td>
             </tr>
             <tr>
@@ -237,7 +254,7 @@
                       <b><digi:trn>Organization Group</digi:trn>:</b>
                 </td>
                 <td align="left" >
-                        <html:select property="orgGroupId" styleClass="inp-text"  styleId="org_group_dropdown_id">
+                        <html:select property="orgGroupId" styleClass="inp-text"  styleId="org_group_dropdown_id" style="width:200px">
                             <html:option value="-1"><digi:trn>All</digi:trn></html:option>
                             <html:optionsCollection property="orgGroups" value="ampOrgGrpId" label="orgGrpName" />
                         </html:select> 
@@ -249,7 +266,7 @@
                 </td>
                 <td align="left" >
                     <span id="org_select">
-                        <html:select property="orgId" styleClass="inp-text" styleId="org_dropdown_id">
+                        <html:select property="orgId" styleClass="inp-text" styleId="org_dropdown_id" style="width:200px">
                             <html:option value="-1"><digi:trn>All</digi:trn></html:option>
                             <html:optionsCollection property="organizations" value="ampOrgId" label="name" />
                         </html:select>
@@ -263,7 +280,7 @@
                 </td>
                 <td>
                    
-                    <html:select property="currencyId" styleClass="inp-text">
+                    <html:select property="currencyId" styleClass="inp-text" style="width:200px">
                         <html:optionsCollection property="currencies"
                                             value="ampCurrencyId" label="currencyName" /></html:select>
                 </td>
@@ -271,7 +288,7 @@
             <tr>
                 <td><b><digi:trn>Fiscal Calendar</digi:trn>:</b></td>
                 <td align="left">
-                    <html:select property="fiscalCalendarId" styleClass="inp-text">
+                    <html:select property="fiscalCalendarId" styleClass="inp-text" style="width:200px">
                         <html:option value="-1"><digi:trn>None</digi:trn></html:option>
                         <html:optionsCollection property="fiscalCalendars" label="name" value="ampFiscalCalId" />
                     </html:select>
@@ -281,12 +298,21 @@
                 <td><b><digi:trn key="orgProfile:filer:fiscalCalendar">Fiscal Year</digi:trn>:</b></td>
                 <td align="left">
                    
-                    <html:select property="year" styleClass="inp-text">
+                    <html:select property="year" styleClass="inp-text" style="width:200px">
                         <html:optionsCollection property="years" label="wrappedInstance" value="wrappedInstance" />
                     </html:select>
                 </td>
             </tr>
             <tr>
+                <td colspan="2">
+                    <font style="color:red;font-weight:bold"><digi:trn>Note: fiscal year will affect the data range for the graps as follows:</digi:trn></font>
+                   <p>
+                   <digi:trn>
+                   *Pledges/Commitments/Disbursements graph will display a range of three years (the current year and the two previous years) **Type od Aid and ODA Profile will display a range of five years (the current year and the previous four years)</p>
+                   </digi:trn>
+                   </td>
+            </tr>
+             <tr>
                 <td colspan="2">
                    &nbsp;
                 </td>

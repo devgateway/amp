@@ -77,34 +77,7 @@
                                             <digi:insert attribute="filters"/>
                                         </TD>
                                     </TR>
-                                    <TR>
-                                        <TD noWrap align="RIGHT" valign="middle" style="cursor:pointer;" height="30px">
-
-                                            <TABLE border="0" align="RIGHT" bgcolor="#addadd" class="toolbartable">
-
-                                                <TR>
-                                                     <TD>
-                                                       &nbsp;
-                                                    </TD>
-                                                    <TD>
-                                                        <a target="_blank" onclick="exportPDF(); return false;">
-                                                            <digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/pdf.gif" border="0" alt='Export to PDF'/>
-                                                        </a>
-                                                    </TD>
-                                                     <TD>
-                                                        <a target="_blank" onclick="exportWord(); return false;">
-                                                            <digi:img width="17" height="20" hspace="2" vspace="2" src="images/icons/doc.gif" border="0" alt='Export to Word'/>
-                                                        </a>
-                                                    </TD>
-                                                     <TD>
-                                                       &nbsp;
-                                                    </TD>
-
-                                                </TR>
-                                            </TABLE>
-
-                                        </TD>
-                                    </TR>
+                                    
                                     <TR>
                                         <TD>&nbsp;</TD>
                                     </TR>
@@ -242,7 +215,7 @@
                                                     </TD>
                                                 </TR>
                                                 <TR>
-                                                    <TD NOWRAP  VALIGN="TOP">
+                                                    <TD NOWRAP  VALIGN="TOP" colspan="2">
                                                         <feature:display name="orgprof_chart_place7" module="Org Profile">
                                                         <div id="content" class="yui-skin-sam" style="width:100%;">
                                                             <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
@@ -260,10 +233,7 @@
                                                                 </div>
                                                             </div>
                                                         </feature:display>
-                                                    </TD>
-                                                    <TD NOWRAP  VALIGN="TOP">
-                                                      &nbsp;
-                                                    </TD>
+                                                    </TD>             
                                                 </TR>
 
                                             </TABLE>

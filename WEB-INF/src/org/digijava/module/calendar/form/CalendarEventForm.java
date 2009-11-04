@@ -377,7 +377,7 @@ public class CalendarEventForm
         privateEvent=false;
 
         calendarTypes=null;
-        //selectedCalendarTypeId=null;
+        selectedCalendarTypeId=null;
         selectedCalendarTypeName=null;
 
         eventTypesList=null;

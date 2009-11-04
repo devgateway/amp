@@ -593,10 +593,11 @@ public class AmpDbUtil {
 			queryString.append(" where c.id=ac.calendarPK.calendar.id ");
 
 
-			if(!showPublicEvents){
-			queryString.append("and ac.privateEvent=true ");
-			}
-	
+			if(showPublicEvents){
+	        	  queryString.append(" and ac.privateEvent=false");
+	          }else{
+	        	  queryString.append(" and ac.privateEvent=true");
+	          }
 			List <Long> selectedDonors = new ArrayList<Long>();
 			if(selectedDonorIds != null && selectedDonorIds.length != 0) {
 			boolean includeNullOrganizations = false;

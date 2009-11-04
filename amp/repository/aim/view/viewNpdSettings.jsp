@@ -7,13 +7,16 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 
-<script langauage="JavaScript">
+<script langauage="JavaScript" type="text/javascript">
 	function validateValues(){
-		 var errmsg='';	
+		 var errmsg='';
+                 var ampTeamId=document.getElementById('ampTeamId').value;
 		 var width=document.getElementById('width').value;
 		 var height=document.getElementById('height').value;
 		 var angle=document.getElementById('angle').value;
+                 var pageSize=document.getElementById('pageSize').value;
 		 //*** Validate width
 		 if(parseInt(width)==(width-0)){		   	
 			 if(parseInt(width)<10 || parseInt(width)>1000){
@@ -44,21 +47,31 @@
 		 
 		 //***Validate error messages
 		 if (errmsg==''){
-			<digi:context name="changeSett" property="context/module/moduleinstance/npdSettingsAction.do?actionType=changeSettings"/>
-		  	document.npdSettingsForm.action = "<%= changeSett %>";			 	
-		    document.npdSettingsForm.submit();
-			window.close();
+			saveSettings(ampTeamId,width,height,angle,pageSize);
 		 } else{
 			alert(errmsg);
 			return false;
 		 }
 	}
-			
+
+        function saveSettings(ampTeamId,width,height,angle,pageSize){
+		lastTimeStamp = new Date().getTime();
+                <digi:context name="changeSett" property="context/module/moduleinstance/npdSettingsAction.do?actionType=changeSettings"/>
+                var params="&ampTeamId="+ampTeamId+"&width="+width+"&height="+height+"&angle="+angle+"&pageSize="+pageSize;
+		var url = "${changeSett}"+params+'&timeStamp='+lastTimeStamp;
+		var async=new Asynchronous();
+		async.complete=closeWindow;
+		async.call(url);
+	}
+        function closeWindow(status, statusText, responseText, responseXML){
+            window.close();
+        }
+      		
 </script>
 
 <digi:instance property="npdSettingsForm"/>
 <digi:form action="/npdSettingsAction.do?actionType=changeSettings">
-<html:hidden property="ampTeamId"/>
+ <html:hidden property="ampTeamId" styleId="ampTeamId"/>
 <table bgcolor="#f4f4f2" cellPadding="5" cellSpacing="5" width="100%" class="box-border-nopadding">
 	<tr>
 	<td align="left" vAlign="top">
@@ -98,7 +111,7 @@
 							<digi:trn>Activities per page</digi:trn>
 						</td>
 						<td align="left" valign="middle">
-							<html:text property="pageSize" styleClass="inp-text" size="7"/>
+                                                    <html:text property="pageSize" styleClass="inp-text" size="7" styleId="pageSize"/>
 						</td>
 					</tr>
 				

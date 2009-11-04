@@ -103,6 +103,12 @@ public abstract class AmpObjectVisibility  extends Permissible implements Serial
 	{
 		return this.name.replaceAll(" ","");
 	}
+	
+	public String getDescriptionTrimmed()
+	{
+		return this.description.replaceAll(" ","");
+	}
+	
 	public Set getAllItems() {
 		return allItems;
 	}

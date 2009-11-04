@@ -127,7 +127,7 @@ public class HelpActions extends DispatchAction {
 		    Editor item = new Editor();
 		    String	lange	= RequestUtils.getNavigationLanguage(request).getCode();
 		    String siteId = RequestUtils.getSite(request).getSiteId();
-	         String moduleInstance = RequestUtils.getRealModuleInstance(request).getInstanceName();
+		    String moduleInstance = request.getParameter("instance");
 		    
 			 try {
 				 os = new OutputStreamWriter(response.getOutputStream());
@@ -138,9 +138,6 @@ public class HelpActions extends DispatchAction {
 						 for(Iterator iter = data.iterator(); iter.hasNext(); ) {
 							  item = (Editor) iter.next();
 				 			
-				           
-							  int editkey = item.getEditorKey().indexOf("body:");
-					          //String title = item.getEditorKey().substring(editkey+5);
 					          HelpTopic helptopic = HelpUtil.getHelpTopicByBodyEditKey(item.getEditorKey(), siteId, moduleInstance);
 					         if(helptopic!=null){
 					        	 
@@ -155,9 +152,10 @@ public class HelpActions extends DispatchAction {
 				                out.println("<div id="+removerSpacedtitle+" onclick=\"select("+removerSpacedtitle+")\" onmouseover=\"this.className='silverThing'\" onmouseout=\"this.className='whiteThing'\">"+encodeTitle+"</div>");
 				             }
 				           }
-						}else{
-							break;
 						}
+					    //else{
+						//	break;
+						//}
 					 }
 				 }
 			      if(out == null){

@@ -243,7 +243,7 @@
 </c:set>
 
 <c:set var="trans_wait">
-	<digi:trn>Please wait a moment... </digi:trn>
+	<digi:trn>Please wait a moment...</digi:trn>
 </c:set>
 
 

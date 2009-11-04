@@ -11,7 +11,7 @@
 					<TR>
           			<TD align=center>
                     		<div class="footerText">
-                      <img src="images/AMPLogo.png"  height="20" align="absmiddle" hspace="5" vspace="5" />
+                      <img src="images/AMPLogo.png"  align="absmiddle" hspace="5" vspace="5" />
 							<FONT color="#FFFFFF">
 							AMP <tiles:getAsString name="version"/> build <tiles:getAsString name="build_version"/> -
 							<digi:trn key="aim:ampDevelopmentCredits">

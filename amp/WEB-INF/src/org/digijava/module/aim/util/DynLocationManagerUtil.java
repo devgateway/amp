@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.apache.ecs.vxml.Catch;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
@@ -283,6 +284,43 @@ public class DynLocationManagerUtil {
 					if ( country.getCountryId() != null )
 						locCountry.setCode( country.getCountryId().toString() );
 					dbSession.save(locCountry);
+				}
+			}
+			
+			Long maxCountryCode		= 0L;
+			HashMap<String, Country> namesToDgCountriesMap	= new HashMap<String, Country>();
+			for (Country country: countries) {
+				namesToDgCountriesMap.put(country.getCountryName(), country);
+				if ( country.getCountryId() != null && country.getCountryId() > maxCountryCode ) {
+					maxCountryCode			= country.getCountryId();
+				}
+			}
+			 
+			if ( countryLocations != null ) {
+				for ( AmpCategoryValueLocations location: countryLocations ) {
+					if ( namesToDgCountriesMap.get( location.getName() ) ==  null ) {
+						Country country		= new Country();
+						country.setCountryName( location.getName() );
+						country.setIso( location.getIso() );
+						country.setIso3( location.getIso3() );
+						country.setAvailable(true);
+						country.setDecCtryFlag("t");
+						country.setStat("t");
+						country.setShowCtry("t");
+						if ( location.getCode() != null  ){ 
+							try {
+								country.setCountryId( Long.parseLong( location.getCode() ) );
+							}
+							catch(NumberFormatException e) {
+								logger.info("Cannot transform location country code ('"+ location.getCode() +"') to dg Country code. Settting country id as maximum."); 
+								country.setCountryId(maxCountryCode + 1);
+							}
+						}
+						else {
+							country.setCountryId(maxCountryCode + 1);
+						}
+						dbSession.save(country);
+					}
 				}
 			}
 			tx.commit();

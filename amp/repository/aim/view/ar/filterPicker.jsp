@@ -442,14 +442,12 @@
 					<digi:trn key="rep:filter:programOfInterest">Specify the   programs   of interest.</digi:trn>
 			</c:set>
                             <table align="center" cellpadding="1" cellspacing="1" onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}');">
+                <field:display name="National Planning Objectives" feature="NPD Programs">
 			<tr bgcolor="#EEEEEE">
 					<td colspan="5">
-					<b><digi:trn key="rep:filter:Programs"> Programs</digi:trn></b>
-					<br>
+						<b><digi:trn key="rep:filter:Programs"> Programs</digi:trn></b><br>
 					</td>
 				</tr>
-                                
-                            <field:display name="National Planning Objectives" feature="NPD Programs">
 				<tr bgcolor="#EEEEEE">
 					<td colspan="5"><digi:trn key="rep:filer:nationalPlanningObjectives">National Planning Objectives</digi:trn></td>
 				</tr>

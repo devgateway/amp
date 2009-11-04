@@ -63,7 +63,7 @@ function getWeekdays(){
   <html:hidden styleId="hdnMethod" name="calendarEventForm" property="method"/>
   <html:hidden styleId="id" name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
 
-  <table width="520">
+  <table width="530">
   	 <tr>
 		<td width=14>&nbsp;</td>
 		<td align=left vAlign=top width=750>
@@ -261,7 +261,7 @@ function getWeekdays(){
 				                <c:if test="${calendarEventForm.actionButtonsVisible!=false}">
 				                	<input type="submit" style="width: 100px;" value="<digi:trn>Save</digi:trn>" onclick="document.getElementById('hdnMethod').value = 'save'">
 				                	&nbsp;
-				                	<input type="submit" style="width: 100px;" value="<digi:trn>Edit</digi:trn>" onclick="document.getElementById('hdnMethod').value = ''">
+				                	<input type="submit" style="width: 110px;" value="<digi:trn>Edit</digi:trn>" onclick="document.getElementById('hdnMethod').value = ''">
 				                	&nbsp;
 				                	<input type="submit" value="<digi:trn>Delete</digi:trn>" style="width: 100px;" onclick="deleteEvent();" />
 				                </c:if>

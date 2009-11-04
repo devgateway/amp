@@ -12,6 +12,8 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -204,6 +206,20 @@ public class ManagePermission extends MultiAction {
 	    HttpServletResponse response) throws Exception {
 	pf.setMode(null);
 	Permission p = null;
+	
+	//check duplicates
+	List<Permission> permissions = PermissionUtil.getAllPermissions();
+	for(Permission perm: permissions) {
+		if(pf.getId() == 0 && pf.getName().trim().equals(perm.getName().trim())) {
+			ActionErrors errors = new ActionErrors();
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+			"error.gateperm.duplicateName"));
+			saveErrors(request,errors);
+			pf.setMode(null);
+			return mapping.getInputForward();
+		}
+	}
+	
 	Session hs = PersistenceManager.getSession();
 	if (pf.getId() != 0)
 	    p = (Permission) hs.get(Permission.class, pf.getId());

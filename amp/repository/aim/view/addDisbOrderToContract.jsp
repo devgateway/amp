@@ -36,14 +36,13 @@ function addEvent() {
 </tr>
 <tr />
 <tr>
-<c:if test="${empty aimEditActivityForm.contracts}">
+<c:if test="${empty aimEditActivityForm.contracts || empty aimEditActivityForm.contracts.contracts}">
 <td align="center" colspan="2">
     <digi:trn key="aim:noContract">There are not contracts for Activity to select</digi:trn>
 </td>
 </c:if>
-<c:if test="${not empty aimEditActivityForm.contracts}">
+<c:if test="${not empty aimEditActivityForm.contracts && not empty aimEditActivityForm.contracts.contracts}">
 <td width="50%" align="right"><digi:trn key="aim:selectContract">Select Contract:&nbsp;</digi:trn></td>
-
 
 <td align="left">
   <html:select name="aimEditActivityForm" property="contracts.selContractId" styleClass="inp-text">

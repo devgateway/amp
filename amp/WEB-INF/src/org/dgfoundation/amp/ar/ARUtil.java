@@ -239,6 +239,11 @@ public final class ARUtil {
 		return false;
 	}
 	
+	
+	public static boolean hasHeaderValue(AmpColumns column){
+		return (column.getTotalExpression()!=null )|| column.getColumnName().equalsIgnoreCase(ArConstants.COLUMN_FUNDING);
+	}
+	
 	public static boolean containsColumn(String columName, Set columns) {
 		if (columName == null)
 			return false;

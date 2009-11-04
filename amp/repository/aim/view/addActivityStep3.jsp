@@ -627,7 +627,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                 </td>
                                                                               </tr>
                                                                               
-                                                                              <field:display name="Funding Status" feature="Funding Information"></field:display>
+                                                                              <field:display name="Funding Status" feature="Funding Information">
                                                                               <tr>
                                                                                 <td bgcolor="#FFFFFF" align="left" width="150">
                                                                                   <a title="<digi:trn key="aim:Financing">Method by which aid is delivered to an activity</digi:trn>">
@@ -640,8 +640,8 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                   	<category:getoptionvalue categoryValueId="${funding.fundingStatus.id}"/>
                                                                                   </logic:notEmpty>
                                                                                 </td>
-                                                                              </tr>
-
+         	                                                                     </tr>
+																			</field:display>
 
 																			<field:display name="Conditions for Fund Release" feature="Funding Information">
                                                                               <tr>

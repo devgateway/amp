@@ -270,6 +270,7 @@ function getWeekdays(){
 				                	<input type="submit" style="width: 100px;" value="<digi:trn>OK</digi:trn>" onclick="document.getElementById('hdnMethod').value = 'OK'">
 				                	&nbsp;
 				                </c:if>
+				               <input type="button" value="<digi:trn>Print</digi:trn>" onclick="openPrinter();" />
 				              </td>
 				            </tr>
 				          </table>

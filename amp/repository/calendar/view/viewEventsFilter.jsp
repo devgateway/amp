@@ -36,6 +36,17 @@ function changeDonorsAndEventTypesState(){
 	changeEventTypesState();
 }
 
+function openPrinter(){
+var view = document.getElementById("printView").value;
+var date = document.getElementById("printDate").value;
+var myDate = new Date(date)
+
+if(view!= null)
+     {
+ 		window.open('/calendar/showCalendarView.do~filterInUse=false~view='+view+'~date='+myDate.valueOf()+'~print=true','mywindow','toolbar=no,location=no, width=1010,height=600", directories=no,status=no,menubar=yes,scrollbars=yes,copyhistory=yes,resizable=yes');
+	}
+}
+
 function changeDonorsState(){	
 	var donors= $("input[@id^='donors_']");
 	var resetDonors=true;
@@ -144,14 +155,16 @@ function changeEventTypesState(){
 	  <html:checkbox styleId="showPublicEvents" name="calendarViewForm" property="filter.showPublicEvents" onchange="changeState()"/>
 	  <digi:trn>&nbsp;Public events</digi:trn>
 	</div>
-	<div style="padding:5px;width:250px;height:28px;">
+	<div style="padding:5px;width:200px;height:28px;">
 		<field:display name="Run Filter Button" feature="Filter">
-			<input type="submit" value="<digi:trn>Run Filter</digi:trn>" style="min-width:88px;" onclick="changeDonorsAndEventTypesState();"/>
+			<input type="submit" value="<digi:trn>Run Filter</digi:trn>" onclick="changeDonorsAndEventTypesState();"/>
 		</field:display>
 	    &nbsp;
 	    <field:display name="Reset Filter Button" feature="Filter">
-	    	<input type="reset" value="<digi:trn>Reset</digi:trn>" style="width:88px;" />
+	    	<input type="reset" value="<digi:trn>Reset</digi:trn>" />
 	    </field:display>
+	    &nbsp;
+	      <input type="button" value="<digi:trn key="calendar:print">Print</digi:trn>"  onclick="openPrinter();" />
 	</div>
 </feature:display>
 

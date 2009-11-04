@@ -530,7 +530,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		createTotals();
 		AmpARFilter arf = (AmpARFilter) filter;
 
-		if (!arf.isWidget()) {
+		if (!arf.isWidget() && !("N".equals(reportMetadata.getOptions()))) {
 			categorizeData();
 		}
 		
@@ -564,7 +564,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		report.addReport(reportChild);
 		
 		// if it's a tab reports just remove funding
-		if (arf.isWidget()){
+		if (arf.isWidget() || ("N".equals(reportMetadata.getOptions()))){
 			reportChild.removeColumnsByName(ArConstants.COLUMN_FUNDING);	
 		}else {
 			// perform removal of funding column when report has only Computed measures , or it a tab report

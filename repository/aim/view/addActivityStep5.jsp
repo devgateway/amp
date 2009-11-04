@@ -912,7 +912,7 @@ function validateEnter(e) {
 
 YAHOOAmp.namespace("YAHOOAmp.amptab");
 	var reusableDialog = new YAHOOAmp.widget.Dialog("new", {
-	width:"100%",
+	width:"850px",
 	height:"450px",
 	fixedcenter: true,
 	constraintoviewport: true,

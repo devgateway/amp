@@ -263,6 +263,21 @@ public class ComponentsUtil {
         }
     }
 
+    
+    public static AmpComponentFunding getComponentFundingById(Long id) {
+    	AmpComponentFunding ret = null;
+        Session session = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            ret=(AmpComponentFunding) session.get(AmpComponentFunding.class, id);
+        } catch (Exception ex) {
+            logger.error("Unable to get Component Funding for editing from database " + ex.getMessage());
+            ex.printStackTrace();
+        }
+        return ret;
+    }
+    
+    
     /*
      * To get the Component Fundings from the ampComponentFundings Table
      * parameter passed is the component id

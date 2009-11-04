@@ -7,7 +7,7 @@ package org.digijava.module.aim.action;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -50,6 +50,7 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.CMSContentItem;
@@ -63,6 +64,7 @@ import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.ReferenceDoc;
 import org.digijava.module.aim.helper.RelatedLinks;
+import org.digijava.module.aim.helper.SurveyFunding;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ComponentsUtil;
@@ -363,10 +365,9 @@ public class AddAmpActivity extends Action {
 
       if (eaForm.getIsPreview()==1 || !eaForm.isEditAct() || logframepr.compareTo("true") == 0 || request.getParameter("logframe") != null) {
        if (teamMember != null)
-        if ("true".compareTo((String) session.getAttribute("teamLeadFlag"))==0)
+        if ("true".compareTo((String) session.getAttribute("teamLeadFlag"))==0){
             eaForm.getIdentification().setApprovalStatus(org.digijava.module.aim.helper.Constants.APPROVED_STATUS);
-          else
-            {
+      	  }else{
         	  synchronized (ampContext) {
 	        	  //ampContext=this.getServlet().getServletContext();
 	        	  AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
@@ -473,6 +474,9 @@ public class AddAmpActivity extends Action {
       }
       else if (eaForm.getStep().equals("10")) { // show step 9 - M&E page     
     	  return showStep10(mapping, eaForm);
+      }
+      else if (eaForm.getStep().equals("17")) { // show step 17 - PI page     
+    	  return showStep17(mapping, eaForm);
       }
       else {
         return mapping.findForward("adminHome");
@@ -936,6 +940,56 @@ private ActionForward showStep10(ActionMapping mapping, EditActivityForm eaForm)
 	
 	          return mapping.findForward("addActivityStep10");
 }
+
+	private ActionForward showStep17(ActionMapping mapping, EditActivityForm svForm) {
+		//EditSurveyList surveyListAction = new EditSurveyList();
+		//surveyListAction.execute(mapping, eaForm, request, response);
+        
+        logger.debug("In edit survey list action");
+        logger.debug("step[before] : " + svForm.getStep());
+        svForm.setStep("17"); // for indicators tab in donor-view
+        logger.debug("step[after] : " + svForm.getStep());
+        
+        Comparator sfComp = new Comparator() {
+            public int compare(Object o1, Object o2) {
+                SurveyFunding sf1 = (SurveyFunding) o1;
+                SurveyFunding sf2 = (SurveyFunding) o2;
+                return sf1.getFundingOrgName().trim().toLowerCase().compareTo(sf2.getFundingOrgName().trim().toLowerCase());
+            }
+        };
+        List<SurveyFunding> surveyColl = new ArrayList<SurveyFunding>();
+        if (svForm.isEditAct() == true) {
+        	surveyColl = (List<SurveyFunding>) DbUtil.getAllSurveysByActivity(svForm.getActivityId(), svForm);
+        	Collections.sort(surveyColl, sfComp);
+            svForm.setSurveyFundings(surveyColl);
+        } else {
+        	//This is a new activity not saved yet.
+        	//If the activity has fundings then a survey can be taken.
+        	if(svForm.getFunding() != null 
+        			&& svForm.getFunding().getFundingOrganizations()!= null 
+        			&& svForm.getFunding().getFundingOrganizations().size() > 0 
+        			&& svForm.getFunding().getFundingDetails() != null
+        			&& svForm.getFunding().getFundingDetails().size() > 0) {
+        		Iterator<FundingOrganization> iterOrgFundings = svForm.getFunding().getFundingOrganizations().iterator();
+        		int tempID = 0;
+        		while (iterOrgFundings.hasNext()) {
+        			FundingOrganization fundingOrganization = iterOrgFundings.next();
+        			SurveyFunding auxSurveyFunding = new SurveyFunding();
+        			AmpOrganisation auxOrganization = DbUtil.getOrganisation(fundingOrganization.getAmpOrgId());
+        			auxSurveyFunding.setAcronim(auxOrganization.getOrgCode());
+        			//TODO: Check if the user entered a second time and changed the Point of Delivery Donor.
+        			auxSurveyFunding.setDeliveryDonorName(auxOrganization.getName());
+        			auxSurveyFunding.setFundingOrgName(auxOrganization.getName());
+        			//I have to assign an ID, for new surveys I use negative numbers and the donor id.
+        			tempID = fundingOrganization.getAmpOrgId().intValue() * -1;
+        			auxSurveyFunding.setSurveyId(new Long(tempID));
+        			surveyColl.add(auxSurveyFunding);
+        		}
+        		svForm.setSurveyFundings(surveyColl);
+        	}
+        }
+		return mapping.findForward("addActivityStep17");
+	}
 
 private ActionForward showStep2(ActionMapping mapping,
 		HttpServletRequest request, HttpSession session, TeamMember teamMember,

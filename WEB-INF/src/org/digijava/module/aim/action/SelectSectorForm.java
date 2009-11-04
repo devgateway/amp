@@ -113,8 +113,9 @@ public class SelectSectorForm extends ActionForm {
 			parentSectors = null;
 			childSectorsLevel1 = null;
 			childSectorsLevel2 = null;
-                        cols=null;
-                        selSectors=null;
+            cols=null;
+            selSectors=null;
+            keyword ="";
 		}
     }
 

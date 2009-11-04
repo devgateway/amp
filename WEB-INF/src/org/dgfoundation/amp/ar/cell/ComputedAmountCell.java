@@ -8,10 +8,11 @@ import org.dgfoundation.amp.ar.workers.ComputedAmountColWorker;
 import org.dgfoundation.amp.exprlogic.ExpressionHelper;
 import org.dgfoundation.amp.exprlogic.MathExpression;
 import org.dgfoundation.amp.exprlogic.MathExpressionRepository;
+import org.dgfoundation.amp.exprlogic.Values;
 
 public class ComputedAmountCell extends CategAmountCell {
 
-	HashMap<String, BigDecimal> values = new HashMap<String, BigDecimal>();
+	Values values = null;
 
 	private static String COMPUTED_VALUE = "COMPUTED_VALUE";
 	private boolean computedVaule = false;
@@ -140,8 +141,20 @@ public class ComputedAmountCell extends CategAmountCell {
 
 	}
 
-	public HashMap<String, BigDecimal> getValues() {
+	/**
+	 * @return the values
+	 */
+	public Values getValues() {
 		return values;
 	}
+
+	/**
+	 * @param values the values to set
+	 */
+	public void setValues(Values values) {
+		this.values = values;
+	}
+
+
 
 }

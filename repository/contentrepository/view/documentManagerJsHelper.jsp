@@ -242,14 +242,22 @@
 	<digi:trn key="contentrepository:MenuItem:Options:ShowOnlyWebLinks">Show only web links</digi:trn>
 </c:set>
 
+<c:set var="trans_wait">
+	<digi:trn>Please wait a moment... </digi:trn>
+</c:set>
+
+
 <script type="text/javascript">
 YAHOO.namespace("YAHOO.amp");
 YAHOO.namespace("YAHOO.amp.table");
 
 /* Function for creating YAHOO datatable for all documents*/
 YAHOO.amp.table.enhanceMarkup = function(markupName) {
-	//var cb = {key:"select",type:"checkbox", text:"${trans_headerSelect}",sortable:false,width:10};
-	
+	var checkBoxToHide = document.getElementById("checkBoxToHide");
+	<%
+    	String dt = request.getParameter("documentsType");		
+	%>
+	var dt = "<%= dt %>";		
 	if(checkBoxToHide != null && checkBoxToHide.value == "true"){
     this.columnHeaders = [
 		{key:"resource_title",text:"${trans_headerResourceTitle}",sortable:true,width:150},
@@ -262,7 +270,19 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
         {key:"actions",text:"${trans_headerActions}",sortable:false,width:150}
     ];
 	}
-	else{
+	else if ((checkBoxToHide == null) && (dt == "Related Documents")) {
+		this.columnHeaders = [
+    			{key:"select",type:"checkbox", text:"${trans_headerSelect}",sortable:false,width:10},
+    			{key:"resource_title",text:"${trans_headerResourceTitle}",sortable:true,width:150},
+    		    {key:"type",text:"${trans_headerType}",sortable:true},
+    	        {key:"file_name",text:"${trans_headerFileName}",sortable:true,width:150},
+    	        {key:"date",type:"Date",text:"${trans_headerDate}",sortable:true},
+    	        {key:"size",type:"number",text:"${trans_fileSize}",sortable:true},
+    	        {key:"cm_doc_type",text:"${trans_cmDocType}",sortable:true},
+    	        {key:"description",text:"${trans_headerDescription}",sortable:false,width:100},
+    	        {key:"actions",text:"${trans_headerActions}",sortable:false,width:150}
+    	    ];
+	}else {
 	    this.columnHeaders = [
       			{key:"resource_title",text:"${trans_headerResourceTitle}",sortable:true,width:150},
        		    {key:"type",text:"${trans_headerType}",sortable:true},
@@ -445,7 +465,7 @@ function WindowControllerObject(bodyContainerEl) {
 				if ( this.showOnlyDocs ) 
 						parameters	+= "&showOnlyDocs=" + this.showOnlyDocs;
 				//alert(parameters);
-				this.bodyContainerElement.innerHTML="<div align='center'>Please wait a moment...<br /><img src='/repository/contentrepository/view/images/ajax-loader-darkblue.gif' border='0' /> </div>";
+				this.bodyContainerElement.innerHTML="<div align='center'>${trans_wait}<br /><img src='/repository/contentrepository/view/images/ajax-loader-darkblue.gif' border='0' /> </div>";
 				YAHOO.util.Connect.asyncRequest('POST', '/contentrepository/documentManager.do', getCallbackForOtherDocuments(this.bodyContainerElement, this),
 								'ajaxDocumentList=true'+parameters );
 				};

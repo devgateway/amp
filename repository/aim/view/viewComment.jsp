@@ -6,18 +6,18 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fmt" prefix="fmt" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-
-
-
 <digi:instance property="aimEditActivityForm" />
 <digi:context name="digiContext" property="context"/>
-
 <digi:form action="/viewComment.do" name="aimEditActivityFormPopin" type="aimEditActivityForm" method="post">
 <html:hidden property="comments.actionFlag"  styleId="actionFlag"/>
 <html:hidden property="comments.ampCommentId"  styleId="ampCommentId"/>
 <html:hidden property="editAct" />
+
 
 		<table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
 			<tr>
@@ -51,7 +51,7 @@
 												</td>
 												<td bgcolor=#ECF3FD width="65%"><b>
 													<digi:trn key="aim:commentBy">Comment By</digi:trn>:</b>&nbsp;
-													<c:out value="${comment.memberName}" />&nbsp;<c:out value="${comment.memberId.user.lastName}" />
+													<c:out value="${comment.memberName}" />
 												</td>
 												<td bgcolor=#ECF3FD width="30%"><b>
 													<%--<bean:write name="comment" property="commentDate" format="dd/mm/yyyy" />--%>
@@ -64,21 +64,9 @@
 														<TR>
 															<TD width="100%">
 																<c:out value="${comment.comment}" />
-																<c:if test="${comment.memberId.ampTeamMemId == currentMember.memberId}" >
 																<br>
-																	<%--<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
-																	<c:set target="${urlParams}" property="ampCommentId">
-																		<bean:write name="comment" property="ampCommentId" />
-																	</c:set>
-																	<c:set target="${urlParams}" property="actionFlag" value="edit" />--%>
 																[<a href="javascript:message('edit','<c:out value="${sno}" />')"><digi:trn key="aim:editComment">Edit</digi:trn></a>]
-																	<%--<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
-																	<c:set target="${urlParams2}" property="ampCommentId">
-																		<bean:write name="comment" property="ampCommentId" />
-																	</c:set>
-																	<c:set target="${urlParams2}" property="actionFlag" value="delete" />--%>
 																[<a href="javascript:message('delete','<c:out value="${sno}" />')"><digi:trn key="aim:deleteComment">Delete</digi:trn></a>]
-																</c:if>
 															</TD>
 														</TR>
 													</TABLE>

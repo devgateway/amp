@@ -103,7 +103,8 @@ function validateProjection (errorMsg) {
 
 			//alert(j);
 
-			if (elements[j].name != null && elements[j].name == name ) {
+			if (elements[j].name != null && elements[j].name == name 
+					&& elements[j].value != null && elements[j].value.length > 0 ) {
 
 				//alert("Found " + name + ": " + elements[j].value);
 
@@ -159,7 +160,7 @@ function validateFunding() {
 
 
 
-function validateFundingTrn(errmsg1,errmsg2,errmsg3,msgEnterAmount,msgInvalidAmount,msgEnterDate, decimalSymbol,groupSymbol,msgConfirmFunding) {
+function validateFundingTrn(errmsg1,errmsg2,errmsg3, errmsg4,msgEnterAmount,msgInvalidAmount,msgEnterDate, msgEnterRate, decimalSymbol,groupSymbol,msgConfirmFunding) {
 	
 	this.decimalSymbol=decimalSymbol;
 	
@@ -171,6 +172,14 @@ function validateFundingTrn(errmsg1,errmsg2,errmsg3,msgEnterAmount,msgInvalidAmo
 	var assistType = trim(document.getElementsByName("funding.assistanceType")[0].value);
 
 	var mod=trim(document.getElementsByName("funding.modality")[0].value);
+	
+	var fundStatus		= -1;
+	
+	var fundStatusTemp	= document.getElementsByName("funding.fundingStatus");
+	
+	if ( fundStatusTemp != null && fundStatusTemp.length != null && fundStatusTemp.length > 0 ) {
+		fundStatus	= fundStatusTemp[0].value;
+	}
 
 	var errmsg='';
 
@@ -191,6 +200,9 @@ function validateFundingTrn(errmsg1,errmsg2,errmsg3,msgEnterAmount,msgInvalidAmo
 		errmsg+=errmsg3;
 
 	}
+	
+	if (fundStatus == 0) 
+		errmsg+=errmsg4;
 
 	if (errmsg!=''){
 
@@ -231,7 +243,7 @@ function validateFundingTrn(errmsg1,errmsg2,errmsg3,msgEnterAmount,msgInvalidAmo
 
 	
 
-	return validateFundingDetails(numComm,numDisb,numExp,msgEnterAmount,msgInvalidAmount,msgEnterDate,msgConfirmFunding);
+	return validateFundingDetails(numComm,numDisb,numExp,msgEnterAmount,msgInvalidAmount,msgEnterDate, msgEnterRate, msgConfirmFunding);
 
 }
 
@@ -265,10 +277,7 @@ function validateFundingExchangeRate() {
 
 
 
-	function chkNumeric(objName,comma,period,hyphen)
-
-	{
-
+function chkNumeric(objName,comma,period,hyphen) {
 // only allow 0-9 be entered, plus any values passed
 
 // (can be in any order, and don't have to be comma, period, or hyphen)
@@ -295,7 +304,7 @@ function validateFundingExchangeRate() {
 
 
 
-		contor=0;
+		contor=0; //counts the number of decimal separators (period paramater) 
 
 		for (i = 0;  i < checkStr.value.length;  i++)
 
@@ -303,7 +312,7 @@ function validateFundingExchangeRate() {
 
 			ch = checkStr.value.charAt(i);
 
-			if (ch==".")
+			if (ch==period)
 
 			{
 
@@ -337,7 +346,7 @@ function validateFundingExchangeRate() {
 
 			}
 
-			if (ch != ",") allNum += ch;
+			if (ch != comma) allNum += ch;
 
 		}
 
@@ -345,9 +354,9 @@ function validateFundingExchangeRate() {
 
 		{
 
-			alertsay = "Please enter only numbers in the \"Exchange rate\" field or a valid decimal number using \".\" "
+			//alertsay = "Please enter only numbers in the \"Exchange rate\" field or a valid decimal number using \".\" "
 
-			alert(alertsay);
+			//alert(alertsay);
 
 			return false;
 
@@ -416,8 +425,8 @@ function validateFundingDetailsExchangeRate(comm,disb,exp)
 
 
 
-function validateFundingDetails(comm,disb,exp,msgEnterAmount,msgInvalidAmount,msgEnterDate,msgConfirmFunding) {
-
+function validateFundingDetails(comm,disb,exp,msgEnterAmount, msgInvalidAmount,msgEnterDate, msgEnterRate,msgConfirmFunding) {
+	
 	var itr = comm + disb + exp;
 
 	var commAmt = 0, disbAmt = 0, expAmt = 0;
@@ -448,7 +457,10 @@ function validateFundingDetails(comm,disb,exp,msgEnterAmount,msgInvalidAmount,ms
 
 			{
 
-				if(chkNumeric(temp[i],this.groupSymbol,this.decimalSymbol,'')==false) {return false;}
+				if(chkNumeric(temp[i],this.groupSymbol,this.decimalSymbol,'-')==false) { 
+					alert(msgEnterRate+"'"+ this.decimalSymbol +"'");
+					return false;
+				}
 
 			}
 

@@ -32,9 +32,11 @@ import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.dbentity.EUActivityContribution;
 import org.digijava.module.aim.form.EUActivityForm;
 import org.digijava.module.aim.form.EditActivityForm;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.hibernate.Session;
@@ -224,6 +226,14 @@ public class EditEUActivity extends MultiAction {
 	public ActionForward modeValidateSave(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
+		
+		String baseCurrCode		= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+		if ( baseCurrCode == null ) {
+			baseCurrCode	= "USD";
+		}
+		
+		AmpCurrency baseCurr		= CurrencyUtil.getAmpcurrency(baseCurrCode);
+		
                       HttpSession session=request.getSession();
 		ActionErrors errors = new ActionErrors();
                 TeamMember tm = (TeamMember) session.getAttribute("currentMember");
@@ -246,9 +256,14 @@ public class EditEUActivity extends MultiAction {
                 String totalCurCode = totalCostCurr.getCurrencyCode();
                 double totalCostExRate = CurrencyUtil.getExchangeRate(
                           totalCurCode);
-                if (totalCostExRate == 1.0 && !totalCurCode.equals("USD")) {
+                if (totalCostExRate == 1.0 && !totalCurCode.equals(baseCurrCode)) {
                   errors.add("title", new ActionError(
-                      "error.aim.addActivity.noExchangeRateIsDefined", TranslatorWorker.translateText("There is no exchange rate defined for the currency " + totalCostCurr.getCurrencyName() + " please use the default currency " + defaultCurName,locale,site.getId())));
+                      "error.aim.addActivity.noExchangeRateIsDefined", 
+                      TranslatorWorker.translateText("There is no exchange rate defined for the currency: ",request) + 
+                      TranslatorWorker.translateText(totalCostCurr.getCurrencyName(), request) + 
+                      TranslatorWorker.translateText(" please use the default currency: ", request)  + 
+                      TranslatorWorker.translateText(baseCurr.getCurrencyName(), request)  )
+                  );   
                 }
                    else{
                      Object[] currencies = eaf.getContrCurrId();
@@ -259,9 +274,14 @@ public class EditEUActivity extends MultiAction {
                          String currCode = curr.getCurrencyCode();
                          double exchangeRate = CurrencyUtil.getExchangeRate(
                              currCode);
-                         if (exchangeRate == 1.0 &&!currCode.equals("USD")) {
-                           errors.add("title", new ActionError(
-                               "error.aim.addActivity.noExchangeRateIsDefined", TranslatorWorker.translateText("There is no exchange rate defined for the currency " + totalCostCurr.getCurrencyName() + " please use the default currency " + defaultCurName,locale,site.getId())));
+                         if (exchangeRate == 1.0 &&!currCode.equals( baseCurrCode )) {
+                            errors.add("title", new ActionError(
+                               "error.aim.addActivity.noExchangeRateIsDefined", 
+                               TranslatorWorker.translateText("There is no exchange rate defined for the currency: ",request) + 
+                               TranslatorWorker.translateText(totalCostCurr.getCurrencyName(),request) + 
+                               TranslatorWorker.translateText(" please use the default currency: ",request) + 
+                               TranslatorWorker.translateText(baseCurr.getCurrencyName(), request)  )
+                           );
                            break;
                          }
 

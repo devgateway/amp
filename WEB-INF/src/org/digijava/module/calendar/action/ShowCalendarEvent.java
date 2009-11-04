@@ -25,8 +25,10 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.LabelValueBean;
+import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -51,6 +53,9 @@ import org.digijava.module.calendar.entity.DateNavigator;
 import org.digijava.module.calendar.exception.CalendarException;
 import org.digijava.module.calendar.form.CalendarEventForm;
 import org.digijava.module.calendar.util.AmpDbUtil;
+import org.digijava.module.calendar.util.AmpUtil;
+import org.digijava.module.calendar.util.CalendarConversor;
+import org.digijava.module.calendar.util.CalendarThread;
 import org.digijava.module.common.dbentity.ItemStatus;
 import org.digijava.module.message.dbentity.AmpMessageSettings;
 import org.digijava.module.message.triggers.CalendarEventSaveTrigger;
@@ -67,6 +72,12 @@ public class ShowCalendarEvent extends Action {
 	private static Logger logger = Logger.getLogger(ShowCalendarEvent.class);
 	
     public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request,HttpServletResponse response) throws Exception {
+    	
+    	Site site = RequestUtils.getSite(request);
+ 		CalendarThread.setSite(site);
+ 		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+ 		CalendarThread.setLocale(navigationLanguage);
+ 		
         CalendarEventForm ceform = (CalendarEventForm) form;
         String print = request.getParameter("method");
         String ampCalendarId = request.getParameter("calendarId");
@@ -184,6 +195,9 @@ public class ShowCalendarEvent extends Action {
             ceform.setActionButtonsVisible(true);
         } else if (ceform.getMethod().equalsIgnoreCase("edit")) {
             loadAmpCalendar(ceform, request);
+        } else if(ceform.getMethod().equalsIgnoreCase("ok")){
+        	ceform.setMethod("");
+        	return mapping.findForward("forward");
         } else if (ceform.getMethod().equalsIgnoreCase("save")) {
         	String stDate=ceform.getSelectedStartDate() + " " + ceform.getSelectedStartTime();
         	String endDate=ceform.getSelectedEndDate()+ " " + ceform.getSelectedEndTime();
@@ -201,6 +215,7 @@ public class ShowCalendarEvent extends Action {
 
         } else if (ceform.getMethod().equalsIgnoreCase("delete")) {
         	AmpCalendar ampCalendar=AmpDbUtil.getAmpCalendar(ceform.getAmpCalendarId());
+        	if(ampCalendar!=null){
         	//get current member
         	HttpSession ses = request.getSession();
             TeamMember mem = (TeamMember) ses.getAttribute("currentMember");
@@ -227,6 +242,8 @@ public class ShowCalendarEvent extends Action {
             		AmpDbUtil.deleteAmpCalendar(ceform.getAmpCalendarId());
             	}
             }       
+        	}
+        	
             ceform.setMethod("");
             return mapping.findForward("forward");
             
@@ -331,6 +348,9 @@ public class ShowCalendarEvent extends Action {
                         att.setMember(member);
                         atts.add(att);
                     } else if (slAtts[i].startsWith("g:")) {
+                    	if(slAtts[i].lastIndexOf("g:")!=-1){
+                    		slAtts[i]=slAtts[i].substring(slAtts[i].lastIndexOf("g:")+2);
+                    	}
                         att.setGuest(slAtts[i]);
                         atts.add(att);
                     }                    
@@ -418,8 +438,17 @@ public class ShowCalendarEvent extends Action {
             String startDateTime = ceform.getSelectedStartDate() + " " + ceform.getSelectedStartTime();
             String endDateTime = ceform.getSelectedEndDate() + " " + ceform.getSelectedEndTime();
 
+            if (ceform.getSelectedCalendarTypeId().equals(new Long(CalendarOptions.CALENDAR_TYPE_ETHIOPIAN)) ||
+            		ceform.getSelectedCalendarTypeId().equals(new Long(CalendarOptions.CALENDAR_TYPE_ETHIOPIAN_FY))){
+            	CalendarConversor convert  = new CalendarConversor(ceform.getStartDate().YEAR);
+
+            	//Convert to Gregorian to save all events in the same format
+            	calendar.setStartDate(sdf.parse(AmpUtil.SimpleEthipianToGregorian(startDateTime, convert)));
+            	calendar.setEndDate(sdf.parse(AmpUtil.SimpleEthipianToGregorian(endDateTime, convert)));
+            }else{
             calendar.setStartDate(sdf.parse(startDateTime));
             calendar.setEndDate(sdf.parse(endDateTime));
+            }
 
             calPK.setCalendar(calendar);
             ampCalendar.setCalendarPK(calPK);
@@ -502,6 +531,9 @@ public class ShowCalendarEvent extends Action {
     			}
                 
                 for(String guest: guests){
+                	if(guest.indexOf("g:")!=-1){
+                		guest=guest.substring(guest.lastIndexOf("g:")+2);
+                	}                	
                 	selectedAttsCol.add(new LabelValueBean(guest, "g:" + guest));
                 	selAtts.add("g:" + guest);
                 }

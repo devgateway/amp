@@ -325,7 +325,8 @@ function setHoveredTable(tableId, hasHeaders) {
 
 <!--Other Resources-->
 
-			        <feature:display name="Other Resources" module="Resources">
+			        <feature:display name="Other Resources" module="Resources">			        
+						<bean:define id="checkBoxToHide" toScope="request" value="false" />
 				        <div id="team_mem_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">
 					        <table border="0" cellPadding=1 cellSpacing=0 width="100%"
 								style="position: relative; left: 20px" >

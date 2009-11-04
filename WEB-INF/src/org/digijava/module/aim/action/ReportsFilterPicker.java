@@ -7,8 +7,10 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -70,7 +72,7 @@ public class ReportsFilterPicker extends MultiAction {
 	private static Logger logger = Logger.getLogger(ReportsFilterPicker.class);
 	
 	final String KEY_RISK_PREFIX = "aim:risk:";
-
+	int curYear=new GregorianCalendar().get(Calendar.YEAR);
 	public ActionForward modePrepare(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		ReportsFilterPickerForm filterForm = (ReportsFilterPickerForm) form;
@@ -243,6 +245,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setToMonths(new ArrayList<BeanWrapperImpl>());
 
 		filterForm.setCountYears(new ArrayList<BeanWrapperImpl>());
+		filterForm.setComputedYearsRange(new ArrayList<BeanWrapperImpl>());
 		filterForm.setPageSizes(pageSizes);
 		filterForm.setRegionSelectedCollection(regions);
 		filterForm.setApprovalStatusSelectedCollection(new ArrayList());
@@ -268,7 +271,7 @@ public class ReportsFilterPicker extends MultiAction {
 
 		Long yearFrom = Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.YEAR_RANGE_START));
 		Long countYear = Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));
-
+	
 		if (filterForm.getCountYear() == null) {
 			filterForm.setCountYear(countYear);
 		}
@@ -276,7 +279,13 @@ public class ReportsFilterPicker extends MultiAction {
 		if (filterForm.getCountYearFrom() == null) {
 			filterForm.setCountYearFrom(yearFrom);
 		}
-
+		
+		
+		
+		for (long i = curYear-10; i < curYear; i ++) {
+			filterForm.getComputedYearsRange().add(new BeanWrapperImpl(new Long(i)));
+		}
+		
 		for (long i = 10; i <= 100; i += 10) {
 			filterForm.getCountYears().add(new BeanWrapperImpl(new Long(i)));
 		}
@@ -587,6 +596,11 @@ public class ReportsFilterPicker extends MultiAction {
 		arf.setFromDate(filterForm.getFromDate() == null ? null : new String(filterForm.getFromDate()));
 		arf.setToDate(filterForm.getToDate() == null ? null : new String(filterForm.getToDate()));
 
+		if (filterForm.getComputedYear()!=-1){
+			arf.setComputedYear(filterForm.getComputedYear());
+		}else{
+			arf.setComputedYear(curYear);
+		}
 		// arf.setDonors(Util.getSelectedObjects(AmpOrgGroup.class,filterForm.getSelectedDonors()));
 		AmpCurrency currency = (AmpCurrency) Util.getSelectedObject(AmpCurrency.class, filterForm.getCurrency());
 		arf.setCurrency(currency);
@@ -797,7 +811,7 @@ public class ReportsFilterPicker extends MultiAction {
 		// Long
 		// fromYear=Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE));
 		filterForm.setFromYear(-1l);
-
+		filterForm.setComputedYear(-1);
 		// Long
 		// toYear=Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE));
 		filterForm.setToYear(-1l);

@@ -222,7 +222,7 @@ public class AmpMessageWorker {
 		        receivers += ", " + user.getFirstNames() + " " + user.getLastName() + "<" + user.getEmail() + ">;" + member.getAmpTeam().getName() + ";";                    
 		    }
 		    if(ampAtt.getGuest()!=null){ //guests e-mails should also be included in receivers list
-		    	receivers+=", <"+ampAtt.getGuest().substring(2)+">;";
+		    	receivers+=", <"+ampAtt.getGuest()+">;";
 		    }
 		}
 		return receivers;
@@ -559,7 +559,7 @@ public class AmpMessageWorker {
                         eventMsgStateMap.put(state.getReceiver().getAmpTeamMemId(), state);
                     }
                 }else if(ampAtt.getGuest()!=null){ // <---guests should always get e-mails about event
-                	String email=ampAtt.getGuest().substring(2);
+                	String email=ampAtt.getGuest();
                 	sendMail(((CalendarEvent)calEvent).getSenderEmail(),email, calEvent.getName(), "UTF-8", calEvent.getDescription());
                 }                
             }
@@ -660,7 +660,7 @@ public class AmpMessageWorker {
 		if(setting!=null && setting.getMsgStoragePerMsgType()!=null){
 			maxStorage=setting.getMsgStoragePerMsgType().intValue();
 		}
-        if (AmpMessageUtil.isInboxFull(newMsg.getClass(), state.getReceiver().getAmpTeamMemId()) || AmpMessageUtil.getInboxMessagesCount(clazz, state.getReceiver().getAmpTeamMemId(), false, false, maxStorage) >= maxStorage) {
+        if (AmpMessageUtil.isInboxFull(newMsg.getClass(), state.getReceiver().getAmpTeamMemId()) || (maxStorage>=0 && AmpMessageUtil.getInboxMessagesCount(clazz, state.getReceiver().getAmpTeamMemId(), false, false, maxStorage) >= maxStorage)) {
             newState.setMessageHidden(true);
         } else {
             newState.setMessageHidden(false);

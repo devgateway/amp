@@ -234,7 +234,7 @@ FCKConfig.ToolbarSets["Basic"] = [
 
 FCKConfig.ToolbarSets["AMP"] = [
 
-	['Source','Cut','Copy','Paste','-','Print'],
+	['Source','Cut','Copy','Paste','PasteWord','-','Print'],
 
 	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
 

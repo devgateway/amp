@@ -29,8 +29,10 @@
 
 
 <digi:instance property="aimEditActivityForm" />
-
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
+<%//Quick fix AMP-6573 please check it
+if (request.getParameter("currentlyEditing")!= null){%>
+	<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
+<%} %>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 
@@ -128,7 +130,6 @@ function collapseAll() {
 
 <%
 	Long actId = (Long) request.getAttribute("actId");
-
 	String url = "/aim/viewIndicatorValues.do?ampActivityId="+actId+"&tabIndex=6";
 	String actPerfChartFileName=null;
     try{
@@ -686,18 +687,7 @@ function collapseAll() {
 									
                               <!--END 11 12  -->        
 
-                                <field:display name="Government Agreement Number" feature="Identification">
-									<tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
-											<digi:trn key="aim:step1:GovernmentAgreementNumTitle">Budget</digi:trn>
-										</td>
-										<td bgcolor="#ffffff">
-											${aimEditActivityForm.identification.govAgreementNumber}
-										</td>
-									</tr>
-								</field:display>
-
-                               <feature:display name="Budget" module="Project ID and Planning">
+								<feature:display name="Budget" module="Project ID and Planning">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:actBudget">Budget</digi:trn>										</td>
 										<td bgcolor="#ffffff">
@@ -1738,7 +1728,14 @@ function collapseAll() {
 													<tr><td>
 													<logic:iterate name="aimEditActivityForm" property="agencies.respOrganisations"
 													id="respOrganisations" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-															<ul><li> <bean:write name="respOrganisations" property="name" /></li></ul>
+															<ul><li> <bean:write name="respOrganisations" property="name" />
+																<c:set var="tempOrgId" scope="page">${respOrganisations.ampOrgId}</c:set>
+																<field:display name="Responsible Organization Additional Info"  feature="Responsible Organization">
+																	<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrgToInfo(${tempOrgId})" >
+																	(  <c:out value="${aimEditActivityForm.agencies.respOrgToInfo[tempOrgId]}" /> ) 
+																	</logic:notEmpty>
+																</field:display>
+															</li></ul>
 													</logic:iterate>
 													</td></tr>
 												</table>
@@ -1761,6 +1758,12 @@ function collapseAll() {
 														id="execAgencies" type="org.digijava.module.aim.dbentity.AmpOrganisation">
 																<ul><li> 
 																<bean:write name="execAgencies" property="name" />
+																	<c:set var="tempOrgId">${execAgencies.ampOrgId}</c:set>
+																	<field:display name="Executing Agency Additional Info"  feature="Executing Agency">
+																		<logic:notEmpty name="aimEditActivityForm" property="agencies.executingOrgToInfo(${tempOrgId})" >
+																		(  <c:out value="${aimEditActivityForm.agencies.executingOrgToInfo[tempOrgId]}" /> )
+																		</logic:notEmpty> 
+																	</field:display>
 																</li></ul>
 														</logic:iterate>
 														</td></tr>
@@ -1782,7 +1785,15 @@ function collapseAll() {
 												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 													<tr><td>
 													<logic:iterate name="aimEditActivityForm" property="agencies.impAgencies" id="impAgencies" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-															<ul><li> <bean:write name="impAgencies" property="name" /></li></ul>
+															<ul><li> 
+																<bean:write name="impAgencies" property="name" />
+																	<c:set var="tempOrgId">${impAgencies.ampOrgId}</c:set>
+																	<field:display name="Implementing Agency Additional Info"  feature="Implementing Agency">
+																		<logic:notEmpty name="aimEditActivityForm" property="agencies.impOrgToInfo(${tempOrgId})" >
+																		(  <c:out value="${aimEditActivityForm.agencies.impOrgToInfo[tempOrgId]}" /> )
+																		</logic:notEmpty> 
+																	</field:display>
+															</li></ul>
 													</logic:iterate>
 													</td></tr>
 												</table>
@@ -1804,7 +1815,15 @@ function collapseAll() {
 														<tr><td>
 														<logic:iterate name="aimEditActivityForm" property="agencies.benAgencies"
 														id="benAgency" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-																<ul><li> <bean:write name="benAgency" property="name" /></li></ul>
+																<ul><li> 
+																		<bean:write name="benAgency" property="name" />
+																		<c:set var="tempOrgId">${benAgency.ampOrgId}</c:set>
+																		<field:display name="Beneficiary Agency  Additional Info"  feature="Beneficiary Agency">
+																			<logic:notEmpty name="aimEditActivityForm" property="agencies.benOrgToInfo(${tempOrgId})" >
+																			(  <c:out value="${aimEditActivityForm.agencies.benOrgToInfo[tempOrgId]}" /> ) 
+																			</logic:notEmpty>
+																		</field:display>
+																</li></ul>
 														</logic:iterate>
 														</td></tr>
 													</table>
@@ -1824,7 +1843,15 @@ function collapseAll() {
 													<tr><td>
 													<logic:iterate name="aimEditActivityForm" property="agencies.conAgencies"
 													id="conAgencies" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-														<ul><li> <bean:write name="conAgencies" property="name" /></li></ul>
+														<ul><li> 
+																	<bean:write name="conAgencies" property="name" />
+																	<c:set var="tempOrgId">${conAgencies.ampOrgId}</c:set>
+																	<field:display name="Contracting Agency Additional Info"  feature="Contracting Agency">
+																		<logic:notEmpty name="aimEditActivityForm" property="agencies.conOrgToInfo(${tempOrgId})" >
+																		(  <c:out value="${aimEditActivityForm.agencies.conOrgToInfo[tempOrgId]}" /> )
+																		</logic:notEmpty> 
+																	</field:display>
+														</li></ul>
 													</logic:iterate>
 													</td></tr>
 												</table>
@@ -1847,7 +1874,15 @@ function collapseAll() {
 														<tr><td>
 														<logic:iterate name="aimEditActivityForm" property="agencies.sectGroups"
 														id="sectGroup" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-															<ul><li> <bean:write name="sectGroup" property="name" /></li></ul>
+															<ul><li> 
+																	<bean:write name="sectGroup" property="name" />
+																	<c:set var="tempOrgId">${sectGroup.ampOrgId}</c:set>
+																	<field:display name="Sector Group Additional Info"  feature="Sector Group">
+																		<logic:notEmpty name="aimEditActivityForm" property="agencies.sectOrgToInfo(${tempOrgId})" >
+																		(  <c:out value="${aimEditActivityForm.agencies.sectOrgToInfo[tempOrgId]}" /> ) 
+																		</logic:notEmpty>
+																	</field:display>
+															</li></ul>
 														</logic:iterate>
 														</td></tr>
 													</table>
@@ -1871,7 +1906,15 @@ function collapseAll() {
 													<tr><td>
 													<logic:iterate name="aimEditActivityForm" property="agencies.regGroups"
 													id="regGroup" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-														<ul><li> <bean:write name="regGroup" property="name" /></li></ul>
+														<ul><li> 
+																<bean:write name="regGroup" property="name" />
+																<c:set var="tempOrgId">${regGroup.ampOrgId}</c:set>
+																<field:display name="Regional Group Additional Info"  feature="Regional Group">
+																	<logic:notEmpty property="agencies.regOrgToInfo(${tempOrgId})"  name="aimEditActivityForm">
+																		(  <c:out value="${aimEditActivityForm.agencies.regOrgToInfo[tempOrgId]}" /> )
+																	</logic:notEmpty> 
+																</field:display>
+														</li></ul>
 													</logic:iterate>
 													</td></tr>
 												</table>
@@ -1995,17 +2038,10 @@ function collapseAll() {
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:meActivityRisk">
-										    Activity - Risk</digi:trn>										</td>
+										    Activity - Risk</digi:trn> <br /><digi:trn key="aim:overallActivityRisk">Overall Risk</digi:trn></td>
 										<td bgcolor="#ffffff">
 											<% if (actRiskChartUrl != null) { %>
-												<bean:define id="riskColor" name="riskColor" scope="request" toScope="page" type="java.lang.String"/>
-												<bean:define id="riskName" name="overallRisk" scope="request" toScope="page" type="java.lang.String"/>
-												<digi:trn key="aim:overallActivityRisk">Overall Risk</digi:trn>:
-												<font color="${riskColor}"/>
-
-												<b><digi:trn key="<%=riskName%>"><%=riskName%></digi:trn></b>
-
-												<img src="<%= actRiskChartUrl %>" width="370" height="350" border="0" usemap="#<%= actRiskChartFileName %>">
+												<img src="<%= actRiskChartUrl %>"  align="bottom" width="370" height="350" border="0" usemap="#<%= actRiskChartFileName %>">
 												<br><br>
 											<% } else { %>
 												<br><span class="red-log"><digi:trn key="aim:noDataPresentFor">No data present for</digi:trn>

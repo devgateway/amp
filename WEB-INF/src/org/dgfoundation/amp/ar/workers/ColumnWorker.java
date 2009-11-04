@@ -45,6 +45,8 @@ public abstract class ColumnWorker {
     
 	protected String viewName;
 	
+	protected boolean debugMode=false;
+	
 	protected String columnName;
 	
 	protected String sourceName;
@@ -136,10 +138,16 @@ public abstract class ColumnWorker {
 		}
 		
 		
-
 		String query = "SELECT * FROM " + viewName + " WHERE amp_activity_id IN ("
 				+ condition + " ) "+(internalCondition!=null?internalCondition:"");
 		PreparedStatement ps;
+	
+		if (debugMode){
+			//if debug override the query
+			 query = "SELECT * FROM TEST_"+viewName;
+		}
+			
+		
 		try {
 			
 			ps = conn.prepareStatement(query,ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
@@ -360,6 +368,14 @@ public abstract class ColumnWorker {
 
 	public ReportGenerator getGenerator() {
 		return generator;
+	}
+
+	public boolean isDebugMode() {
+		return debugMode;
+	}
+
+	public void setDebugMode(boolean debugMode) {
+		this.debugMode = debugMode;
 	}
 	
 

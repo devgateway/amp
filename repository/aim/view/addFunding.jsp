@@ -12,14 +12,20 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 <%@page import="org.digijava.module.aim.helper.FormatHelper"%>
+
+<%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
+<%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addFundingPopin.js"/>"></script>
+
+<c:set var="baseCurrencyGS" value="<%= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY) %>" scope="request" />
 
 <script language="JavaScript" type="text/javascript">
 	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
 </script>
 
 <jsp:include page="scripts/newCalendar.jsp" flush="true" />
+
 
 <script language="JavaScript">
 
@@ -50,7 +56,7 @@
 		var index = element.substring(element.indexOf("[")+1,element.indexOf("[")+2);
 		//alert (index);
 		var check = document.getElementById("fixedcheck"+index);
-		if (selObj[0].options[selIndex].value == 'USD'){
+		if (selObj[0].options[selIndex].value == '${baseCurrencyGS}'){
 			 check.disabled =true;
 			 textboxobj.disabled =true;
 		}else {
@@ -67,8 +73,10 @@ var isAlreadySubmitted = false;
 		var errmsg1="<digi:trn key="aim:addFunding:errmsg:assitanceType">Type Of Assistance not selected</digi:trn>";
 		var errmsg2="\n<digi:trn key="aim:addFunding:errmsg:fundOrgId">Funding Id not entered</digi:trn>";
 		var errmsg3="\n<digi:trn key="aim:addFunding:errmsg:financeInstrument">Financing Instrument not selected</digi:trn>";
+		var errmsg4="\n<digi:trn>Funding status not selected</digi:trn>";
         var msgEnterAmount="\n<digi:trn key="aim:addFunding:errmsg:enterAmount">Please enter the amount for the transaction</digi:trn>";
 		var msgInvalidAmount="\n<digi:trn key="aim:addFunding:errmsg:invalidAmount">Invalid amount entered for the transaction</digi:trn>";
+		var msgInvalidAmountProj="\n<digi:trn>Invalid amount entered for projection</digi:trn>";
 <gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
 		var msgConfirmFunding="<digi:trn key="aim:addFunding:errmsg:confirmFunding">All funding information should be entered in thousands '000'. Do you wish to proceed with your entry?</digi:trn>";
 </gs:test>
@@ -77,11 +85,13 @@ var isAlreadySubmitted = false;
 </gs:test>
 		//var msgConfirmFunding ="\n<digi:trn key="aim:addFunding:errmsg:enterDate">Please enter the transaction date for the transaction</digi:trn>";
 		var msgEnterDate="\n<digi:trn key="aim:addFunding:errmsg:enterDate">Please enter the transaction date for the transaction</digi:trn>";
+		var msgEnterRate="\n<digi:trn key="aim:addFunding:errmsg:invalidRate">Please enter a valid exchange rate, the decimal symbol is:</digi:trn>";
 		//var msgEnterDate="qsfgqsg";
 
-		var flag = validateFundingTrn(errmsg1,errmsg2,errmsg3,msgEnterAmount,msgInvalidAmount,msgEnterDate,"<%=FormatHelper.getDecimalSymbol()%>","<%=FormatHelper.getGroupSymbol()%>",msgConfirmFunding);
+		var flag = validateFundingTrn(errmsg1,errmsg2,errmsg3,errmsg4,msgEnterAmount,msgInvalidAmount,msgEnterDate, msgEnterRate,"<%=FormatHelper.getDecimalSymbol()%>","<%=FormatHelper.getGroupSymbol()%>",msgConfirmFunding);
+		var flagProj	= validateProjection(msgInvalidAmountProj);
 		
-		if (flag == false) return false;
+		if ( !flag || !flagProj ) return false;
 		<digi:context name="fundAdded" property="context/module/moduleinstance/fundingAdded.do?edit=true" />;
 		document.aimEditActivityForm.action = "<%= fundAdded %>";
 		document.aimEditActivityForm.target = "_self";
@@ -180,7 +190,7 @@ var isAlreadySubmitted = false;
 	}
 
 	function isTotDisbIsBiggerThanTotCom() {
-		var Warn="<digi:trn key="aim:addFunding:warn:disbSupCom">Sum of Disbursments is bigger than sum of commitments.</digi:trn>";
+		var Warn="<digi:trn key="aim:addFunding:warn:disbSupCom">The Sum of Actual Disbursement is greater than the Sum of actual commitments.</digi:trn>";
 		if(document.getElementById("totDisbIsBiggerThanTotCom").value == "true") {
 			if(confirm(Warn))
 			{
@@ -366,6 +376,26 @@ var isAlreadySubmitted = false;
 								</td>
 							</tr>
 
+							<field:display name="Funding Status" feature="Funding Information">
+							<tr>
+								<td align="right" bgcolor="#ECF3FD">
+			                	<FONT color=red>*</FONT><b>
+									<a title="<digi:trn>The status of the funding</digi:trn>">
+									<digi:trn>Funding Status</digi:trn></a>
+									</b>
+								</td>
+								<td align="left" bgcolor="#ECF3FD">
+									<c:set var="translation">
+										<digi:trn>Please select from below</digi:trn>
+									</c:set>
+									
+										<category:showoptions firstLine="${translation}" name="aimEditActivityForm"   property="funding.fundingStatus"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.FUNDING_STATUS_KEY %>" styleClass="inp-text"/>
+									
+								</td>
+							</tr>
+							</field:display>
+							<tr>
+							
 						</table>
 					</td>
 				</tr>
@@ -625,6 +655,7 @@ var isAlreadySubmitted = false;
 													<html:optionsCollection name="aimEditActivityForm" property="funding.validcurrencies" value="currencyCode"
 													label="currencyName"/>
 												</html:select>
+												
 											</td>
 											<c:set var="contentDisabled"><field:display name="Date Commitment" feature="Commitments">false</field:display></c:set>
 											<c:if test="${contentDisabled==''}">
@@ -665,11 +696,12 @@ var isAlreadySubmitted = false;
 											<td align="left"  bgcolor="#ffff00">
 												<b>
 													<digi:trn key="aim:fixedRate">Fixed Rate</digi:trn>
+													( <digi:trn>compared to</digi:trn> <gs:value name="<%=GlobalSettingsConstants.BASE_CURRENCY %>" /> )
 												</b>
 											</td>
 											<td colspan="5"  bgcolor="#ffff00">
 												<b>
-													<digi:trn key="aim:fixedExchangeRate">Exchange Rate</digi:trn>
+													<digi:trn key="aim:fixedExchangeRate">Exchange Rate</digi:trn> 
 												</b>
 											</td>
 										</tr>
@@ -702,7 +734,6 @@ var isAlreadySubmitted = false;
 															checked="true"
 														</c:if>
 														/>
-												
 											</td>
 											<td colspan="5">
 												<logic:equal name="fundingDetail" property="useFixedRate" value="true">
@@ -711,8 +742,11 @@ var isAlreadySubmitted = false;
 												<logic:equal name="fundingDetail" property="useFixedRate" value="false">
 													<html:text name="fundingDetail" indexed="true" property="fixedExchangeRate" styleClass="amt" disabled="true" styleId="<%=exchRatefldId%>"/>
 												</logic:equal>
+												<script type="text/javascript">
+													<!-- check for when editing the page -->
+													checkCurrency("fundingDetail[${status.index}].currencyCode");												
+												</script>											
 											</td>
-
 										</tr>
 									</c:if>
 						 	</c:forEach>

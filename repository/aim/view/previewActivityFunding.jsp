@@ -103,7 +103,7 @@
 																		</logic:notEmpty></td>
 																	</tr>
 																</field:display>
-																<field:display name="Type Of Assistance"
+																<field:display name="Financing Instrument"
 																	feature="Funding Information">
 																	<tr>
 																		<td align="left" width="150"><a
@@ -115,6 +115,20 @@
 																			name="funding" property="financingInstrument">
 																			<bean:write name="funding"
 																				property="financingInstrument.value" />
+																		</logic:notEmpty></td>
+																	</tr>
+																</field:display>
+																<field:display name="Funding Status"  feature="Funding Information">
+																	<tr>
+																		<td align="left" width="150"><a
+																			title='<digi:trn>Funding Status</digi:trn>'>
+																		<digi:trn>Funding Status</digi:trn>
+																		</a></td>
+																		<td width="1">:</td>
+																		<td align="left"><logic:notEmpty
+																			name="funding" property="fundingStatus">
+																			<bean:write name="funding"
+																				property="fundingStatus.value" />
 																		</logic:notEmpty></td>
 																	</tr>
 																</field:display>

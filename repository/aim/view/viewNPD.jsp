@@ -830,7 +830,7 @@ function showFilter(){
 
     function getFilterSettings(){
 		var url=addActionToURL('getNPDFilters.do');
-        url+=getURL();
+                url+=getURL()+'&timestamp=' +new Date().getTime();
 		var async=new Asynchronous();
 		async.complete=filterSettingsCallBack;
 		async.call(url);

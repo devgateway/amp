@@ -322,7 +322,7 @@
 			selectCmb.innerHTML = null;
 			var noneOpt = document.createElement("OPTION");
 			noneOpt.value="-1";
-			noneOpt.text="Select indicator";
+			noneOpt.text = selectIndicatorTxt;
 			selectCmb.options.add(noneOpt);
 			
 			for (indIndex = 0; indIndex < indicators.length; indIndex ++) {
@@ -516,7 +516,7 @@
 		cmb.innerHTML = null;
 		var noneOpt = document.createElement("OPTION");
 		noneOpt.value="-1";
-		noneOpt.text="Select subgroup";
+		noneOpt.text = selectSubgroupTxt;
 		cmb.options.add(noneOpt);
 	}
 	
@@ -525,7 +525,7 @@
 		cmb.innerHTML = null;
 		var noneOpt = document.createElement("OPTION");
 		noneOpt.value="-1";
-		noneOpt.text="Select year";
+		noneOpt.text = selectYearTxt;
 		cmb.options.add(noneOpt);
 	}
 	
@@ -534,7 +534,7 @@
 		cmb.innerHTML = null;
 		var noneOpt = document.createElement("OPTION");
 		noneOpt.value="-1";
-		noneOpt.text="Select indicator";
+		noneOpt.text = selectIndicatorTxt;
 		cmb.options.add(noneOpt);
 	}
 	

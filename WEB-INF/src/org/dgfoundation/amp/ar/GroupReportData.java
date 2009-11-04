@@ -6,6 +6,7 @@
  */
 package org.dgfoundation.amp.ar;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -17,8 +18,10 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.dgfoundation.amp.ar.cell.Cell;
+import org.dgfoundation.amp.ar.cell.ComputedAmountCell;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
+import org.dgfoundation.amp.exprlogic.MathExpressionRepository;
 
 /**
  * 
@@ -29,13 +32,19 @@ import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
 public class GroupReportData extends ReportData {
 
     
-    	
+	/**
+	 * Returns the visible rows for the sub-report. 
+	 * Calculates the sum number of visible rows for each report of the group report
+	 * 
+	 */
 	@Override
 	public int getVisibleRows() {
-    	    Iterator i=items.iterator();
-    	    int ret=0;
+    	Iterator i=items.iterator();
+    	int ret=0; //one was for the title/totals. now we are counting the title/totals only for summary report
+
+    	//if the report is summary then stop the processing here and return 1;
     	if(this.getReportMetadata().getHideActivities()!=null && this.getReportMetadata().getHideActivities())
-			return ret;
+			return 1; // consider the subtotals/titles as rows 
 		
     	    while (i.hasNext()) {
 				ReportData element = (ReportData) i.next();
@@ -43,9 +52,6 @@ public class GroupReportData extends ReportData {
     	    }
     	    return ret;
 	}
-    
-
-
 		 	
 	/**
 	 * GroupReportData comparator class. This class implements reportData comparison. 
@@ -211,8 +217,25 @@ public class GroupReportData extends ReportData {
 							}
 							trailCells.remove(j);
 							trailCells.add(j, newc);
+
 						}
 				}
+			}
+			
+			Iterator iter=trailCells.iterator();
+			while (iter.hasNext()) {
+				Object cell=iter.next();
+				if (cell instanceof ComputedAmountCell) {
+					String totalExpression=((ComputedAmountCell) cell).getColumn().getWorker().getRelatedColumn().getTotalExpression();
+					String rowExpression=((ComputedAmountCell) cell).getColumn().getWorker().getRelatedColumn().getTokenExpression();
+					ComputedAmountCell c0=(ComputedAmountCell) cell ;
+					c0.getValues().put(ArConstants.COUNT_PROJECTS, new BigDecimal(this.getTotalUniqueRows()));
+					if (totalExpression!=null){
+						c0.getValues().prepareCountValues();
+						c0.setComputedVaule(MathExpressionRepository.get(totalExpression).result(c0.getValues()));
+					}
+				}
+				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

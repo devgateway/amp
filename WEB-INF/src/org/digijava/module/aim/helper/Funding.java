@@ -17,10 +17,12 @@ public class Funding implements Serializable
     private long fundingId;
 	//private AmpTermsAssist ampTermsAssist;
     private AmpCategoryValue typeOfAssistance;
+    private AmpCategoryValue financingInstrument;
+    private AmpCategoryValue fundingStatus;
+    
 	private String orgFundingId;
 	private String signatureDate;
 	//private AmpModality modality;
-	private AmpCategoryValue financingInstrument;
 	private Collection fundingDetails;	// Collection of Funding Details
 	private Collection<MTEFProjection> mtefProjections;
    	private String currentFunding;
@@ -272,6 +274,14 @@ public class Funding implements Serializable
 	 */
 	public void setDonorObjective(String donorObjective) {
 		this.donorObjective = donorObjective;
+	}
+
+	public AmpCategoryValue getFundingStatus() {
+		return fundingStatus;
+	}
+
+	public void setFundingStatus(AmpCategoryValue fundingStatus) {
+		this.fundingStatus = fundingStatus;
 	}
 	
 }

@@ -1,19 +1,25 @@
 package org.digijava.module.calendar.util;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.tools.ant.taskdefs.Sleep;
 import org.digijava.kernel.util.collections.CollectionSynchronizer;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
@@ -32,6 +38,69 @@ public class AmpUtil {
     public static CollectionSynchronizer attendeeSyncronizer = new
         AttendeeSyncronizer();
 
+    public static String SimpleEthipianToGregorian(String date, CalendarConversor convert){
+    	
+    	Integer ethday = Integer.parseInt(date.substring(0,2)); 
+    	Integer ethmonth = Integer.parseInt(date.substring(3,5));
+    	Integer ethyear = Integer.parseInt(date.substring(6,10));
+    	String ethtime = date.substring(11,16);
+    	Integer gregorianday =  convert.toGregorian(ethmonth,ethday,ethyear).getGregorianDate();
+    	Integer gregorianmonth =  convert.toGregorian(ethmonth,ethday,ethyear).getGregorianMonth();
+    	Integer gregorianyear =  convert.toGregorian(ethmonth,ethday,ethyear).getGregorianYear();
+    	
+    	String result = gregorianday.toString() + "/" + gregorianmonth.toString() + "/" + gregorianyear.toString()+ " " + ethtime;
+		return result;
+    	
+    }
+    /***
+     * 
+     * @param date 2009-10-08 09:00:00.0
+     * @param convert
+     * @return
+     */
+public static Long SimpleGregorianToEthiopian(String date, CalendarConversor convert){
+    	
+    	Integer greday = Integer.parseInt(date.substring(8,10)); 
+    	Integer gremonth = Integer.parseInt(date.substring(5,7));
+    	Integer greyear = Integer.parseInt(date.substring(0,4));
+    	String gretime = date.substring(11,16);
+    	Integer ethiopianday =  convert.toEthiopian(gremonth,greday,greyear).getDate();
+    	Integer ethiopianmonth = convert.toEthiopian(gremonth,greday,greyear).getMonth();
+    	Integer ethiopianyear =  convert.toEthiopian(gremonth,greday,greyear).getYear();
+    	String dtformat = "dd/MM/yyyy HH:mm";
+    	SimpleDateFormat sdf = new SimpleDateFormat(dtformat);
+    	
+    	String result = ethiopianday.toString() + "/" + ethiopianmonth.toString() + "/" + ethiopianyear.toString()+ " " + gretime;
+		try {
+			return sdf.parse(result).getTime();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return null;
+    }
+
+public static Date SimpleDateGregorianToEthiopian(String date, CalendarConversor convert){
+	
+	Integer greday = Integer.parseInt(date.substring(0,2)); 
+	Integer gremonth = Integer.parseInt(date.substring(3,5));
+	Integer greyear = Integer.parseInt(date.substring(6,10));
+	String gretime = date.substring(11,16);
+	Integer ethiopianday =  convert.toEthiopian(gremonth,greday,greyear).getDate();
+	Integer ethiopianmonth = convert.toEthiopian(gremonth,greday,greyear).getMonth();
+	Integer ethiopianyear =  convert.toEthiopian(gremonth,greday,greyear).getYear();
+	String dtformat = "dd/MM/yyyy HH:mm";
+	SimpleDateFormat sdf = new SimpleDateFormat(dtformat);
+	
+	String result = ethiopianday.toString() + "/" + ethiopianmonth.toString() + "/" + ethiopianyear.toString()+ " " + gretime;
+	
+	try {
+		return sdf.parse(result);
+	} catch (ParseException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	return null;
+}
     public static Set getSelectedItems(Collection collection, String[] ids,
                                        BeanIdResolver resolver) {
         Set selectedItems = new HashSet();
@@ -143,7 +212,7 @@ public class AmpUtil {
 
     public static List getAmpCalendarGraphs(Collection ampCalendarEvents,
                                             DateNavigator navigator,
-                                            String view) throws
+                                            String view, int calendartype) throws
         CalendarException {
         List result = new ArrayList();
         if(ampCalendarEvents == null || ampCalendarEvents.isEmpty() ||
@@ -180,11 +249,10 @@ public class AmpUtil {
             if(view.equals(CalendarOptions.CALENDAR_VIEW_DAYLY) ||
                view.equals(CalendarOptions.CALENDAR_VIEW_CUSTOM)) {
                 ampCalendarGraph = AmpUtil.getAmpCalendarGraph(ampCalendar,
-                    item.getSubItemLeftTimestamp(),
-                    item.getSubItemRightTimestamp());
+                    item.getSubItemLeftTimestamp(),item.getSubItemRightTimestamp(),calendartype);
             } else {
                 ampCalendarGraph = AmpUtil.getAmpCalendarGraph(ampCalendar,
-                    navigatorItems, view);
+                    navigatorItems, view,calendartype);
             }
             if(ampCalendarGraph != null) {
                 result.add(ampCalendarGraph);
@@ -194,22 +262,29 @@ public class AmpUtil {
     }
 
     private static AmpCalendarGraph getAmpCalendarGraph(AmpCalendar ampCalendar,
-        List navigatorItems, String view) throws CalendarException {
+        List navigatorItems, String view, int calendartype) throws CalendarException {
         AmpCalendarGraph ampCalendarGraph = new AmpCalendarGraph(ampCalendar);
         Calendar calendar = ampCalendar.getCalendarPK().getCalendar();
-        int calendarStartTimestamp = (int) (calendar.getStartDate().getTime() /
-                                            1000);
-        int calendarEndTimestamp = (int) (calendar.getEndDate().getTime() /
-                                          1000);
+        int calendarStartTimestamp=0;
+    	int calendarEndTimestamp=0;
+    	
+    	 String dtformat = "dd/MM/yyyy HH:mm";
+         SimpleDateFormat sdf = new SimpleDateFormat(dtformat);
+    	
+         if (calendartype == CalendarOptions.CALENDAR_TYPE_GREGORIAN){
+        	 calendarStartTimestamp = (int) (calendar.getStartDate().getTime() /1000);
+        	 calendarEndTimestamp = (int) (calendar.getEndDate().getTime() /1000);
+        }else{
+        	CalendarConversor convert = new CalendarConversor(Integer.parseInt(calendar.getStartDate().toString().substring(0,4)));
+        	calendar.setStartDate(AmpUtil.SimpleDateGregorianToEthiopian(sdf.format(calendar.getStartDate()).toString(), convert));
+        	calendar.setEndDate(AmpUtil.SimpleDateGregorianToEthiopian(sdf.format(calendar.getEndDate()).toString(), convert));
+		 }
         Iterator it = navigatorItems.iterator();
         while(it.hasNext()) {
             DateNavigatorItem navigatorItem = (DateNavigatorItem) it.next();
-            int itemStartTimestamp = getNavigatorItemLeftTimestamp(
-                navigatorItem.getDateBreakDown(), view);
-            int itemEndTimestamp = getNavigatorItemRightTimestamp(navigatorItem.
-                getDateBreakDown(), view);
-            ampCalendarGraph.getGraphItems().add(getAmpCalendarGraphItem(
-                ampCalendar.getEventType().getColor(), calendarStartTimestamp,
+            int	itemStartTimestamp = getNavigatorItemLeftTimestamp(navigatorItem.getDateBreakDown(), view);
+            int itemEndTimestamp = getNavigatorItemRightTimestamp(navigatorItem.getDateBreakDown(), view);
+            ampCalendarGraph.getGraphItems().add(getAmpCalendarGraphItem(ampCalendar.getEventType().getColor(), calendarStartTimestamp,
                 calendarEndTimestamp, itemStartTimestamp, itemEndTimestamp));
         }
         return ampCalendarGraph;
@@ -228,14 +303,26 @@ public class AmpUtil {
     }
 
     private static AmpCalendarGraph getAmpCalendarGraph(AmpCalendar ampCalendar,
-        int[] subItemLeftTimestamps, int[] subItemRightTimestamp) throws
+        int[] subItemLeftTimestamps, int[] subItemRightTimestamp,int calendartype ) throws
         CalendarException {
         AmpCalendarGraph ampCalendarGraph = new AmpCalendarGraph(ampCalendar);
         Calendar calendar = ampCalendar.getCalendarPK().getCalendar();
-        int calendarStartTimestamp = (int) (calendar.getStartDate().getTime() /
-                                            1000);
-        int calendarEndTimestamp = (int) (calendar.getEndDate().getTime() /
-                                          1000);
+        
+        int calendarStartTimestamp=0; 
+        int calendarEndTimestamp=0;
+        
+        String dtformat = "dd/MM/yyyy HH:mm";
+        SimpleDateFormat sdf = new SimpleDateFormat(dtformat);
+   	
+        if (calendartype == CalendarOptions.CALENDAR_TYPE_GREGORIAN){
+       	 calendarStartTimestamp = (int) (calendar.getStartDate().getTime() /1000);
+       	 calendarEndTimestamp = (int) (calendar.getEndDate().getTime() /1000);
+       }else{
+       	CalendarConversor convert = new CalendarConversor(Integer.parseInt(calendar.getStartDate().toString().substring(0,4)));
+       	calendar.setStartDate(AmpUtil.SimpleDateGregorianToEthiopian(sdf.format(calendar.getStartDate()).toString(), convert));
+       	calendar.setEndDate(AmpUtil.SimpleDateGregorianToEthiopian(sdf.format(calendar.getEndDate()).toString(), convert));
+		 }
+        
         for(int i = 0; i < subItemLeftTimestamps.length; i++) {
             ampCalendarGraph.getGraphItems().add(getAmpCalendarGraphItem(
                 ampCalendar.getEventType().getColor(), calendarStartTimestamp,

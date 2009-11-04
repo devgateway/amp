@@ -303,8 +303,6 @@
 
 								<!-- contents -->
 
-							<feature:display name="Paris Indicators" module="Paris Indicators">
-							<field:display name="Paris Survey" feature="Paris Indicators">
 
 								<table width="95%" bgcolor="#f4f4f2" border="0">
 
@@ -394,8 +392,7 @@
 
 								</table>
 
-								</field:display>
-								</feature:display>
+
 						
 
 								<!-- Indicator Table ends here -->

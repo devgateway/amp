@@ -15,11 +15,11 @@
 					<feature:display name="${ampMeasures.aliasName}" module="Measures">
 							<li class="list1" id="measure_${ampMeasures.measureId}">
 								<input type="checkbox" value="${ampMeasures.measureId}" />
-								<digi:trn key="aim:reportBuilder:${ampMeasures.aliasName}">
-									<c:out value="${ampMeasures.aliasName}"/>
+								<digi:trn key="aim:reportBuilder:${ampMeasures.measureName}">
+									<c:out value="${ampMeasures.measureName}"/>
 								</digi:trn>
 								<logic:notEmpty name="ampMeasures" property="description" >
-										<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:report:tip:${ampMeasures.measureName}">${ampMeasures.description}</digi:trn>">
+									<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn>${ampMeasures.description}</digi:trn>">
 								</logic:notEmpty>
 							</li>
 					</feature:display>

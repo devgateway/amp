@@ -369,7 +369,7 @@ public class CalendarEventForm
     }
 
     public void reset(ActionMapping mapping, HttpServletRequest request) {
-        ampCalendarId=null;
+    	ampCalendarId=null;
         eventTitle=null;
         //method=null;
         searchOrgKey=null;
@@ -377,7 +377,7 @@ public class CalendarEventForm
         privateEvent=false;
 
         calendarTypes=null;
-        selectedCalendarTypeId=null;
+        //selectedCalendarTypeId=null;
         selectedCalendarTypeName=null;
 
         eventTypesList=null;
@@ -417,6 +417,7 @@ public class CalendarEventForm
         attendees=null;
         selectedAtts=null;
         selectedAttsCol=null;
+      
     }
 
 	public void setDescription(String description) {

@@ -145,7 +145,7 @@ public class MathExpression {
 			case MULTIPLY:
 				return oper1.multiply(oper2);
 			case DATE_MONTH_DIFF:
-				return getMonthDifference(oper1,oper2);
+				return getMonthDifference(oper1, oper2);
 			}
 		} catch (Exception e) {
 			throw new Exception(e);
@@ -160,7 +160,7 @@ public class MathExpression {
 	public void setScale(int scale) {
 		this.scale = scale;
 	}
-	
+
 	/**
 	 * 
 	 * @param date1
@@ -169,20 +169,46 @@ public class MathExpression {
 	 */
 	public static BigDecimal getMonthDifference(BigDecimal date1, BigDecimal date2) {
 		int count = 0;
-		GregorianCalendar fromCalendar =new GregorianCalendar(),toCalendar =new GregorianCalendar();
+		GregorianCalendar fromCalendar = new GregorianCalendar(), toCalendar = new GregorianCalendar();
 		fromCalendar.setTimeInMillis(date2.longValue());
 		toCalendar.setTimeInMillis(date1.longValue());
-	
-		boolean negaitveResult=false;
-		if (fromCalendar.after(toCalendar)){
-			negaitveResult=true;
+
+		boolean negaitveResult = false;
+		if (fromCalendar.after(toCalendar)) {
+			negaitveResult = true;
 			fromCalendar.setTimeInMillis(date1.longValue());
 			toCalendar.setTimeInMillis(date2.longValue());
 		}
-		for(fromCalendar.add(Calendar.MONTH, 1); fromCalendar.compareTo(toCalendar) <= 0; fromCalendar.add(Calendar.MONTH, 1)){
+		for (fromCalendar.add(Calendar.MONTH, 1); fromCalendar.compareTo(toCalendar) <= 0; fromCalendar.add(Calendar.MONTH, 1)) {
 			count++;
 		}
-		
-		return new BigDecimal(count * ((negaitveResult)?-1:1));
+
+		return new BigDecimal(count * ((negaitveResult) ? -1 : 1));
+	}
+
+	public boolean constainsVariable(String var) {
+		if (oper1 instanceof String) {
+			if (var.equalsIgnoreCase((String) oper1)) {
+				return true;
+			}
+
+		}
+		if (oper2 instanceof String) {
+			if (var.equalsIgnoreCase((String) oper2)) {
+				return true;
+			}
+		}
+
+		if (oper1 instanceof MathExpression) {
+			MathExpression var1 = ((MathExpression) oper1);
+			return var1.constainsVariable(var);
+		}
+
+		if (oper2 instanceof MathExpression) {
+			MathExpression var1 = ((MathExpression) oper2);
+			return var1.constainsVariable(var);
+		}
+
+		return false;
 	}
 }

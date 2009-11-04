@@ -5,11 +5,14 @@ import java.math.BigDecimal;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.ARUtil;
+import org.dgfoundation.amp.ar.dimension.NPODimension;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.ThemeForm;
 import org.digijava.module.aim.util.DbUtil;
@@ -104,6 +107,7 @@ public class AddTheme extends Action {
 		ThemeForm themeForm = (ThemeForm) form;
 		AmpTheme ampTheme = new AmpTheme();
 		fillTheme(ampTheme, themeForm);
+		ARUtil.clearDimension(NPODimension.class);
 		DbUtil.add(ampTheme);
 		return mapping.findForward("saved");
 	}
@@ -144,6 +148,7 @@ public class AddTheme extends Action {
 		String event = request.getParameter("event");
 		AmpTheme tempTheme = new AmpTheme();
 		fillTheme(tempTheme, themeForm);
+		ARUtil.clearDimension(NPODimension.class);
 		ProgramUtil.updateTheme(tempTheme);
 		return mapping.findForward("saved");
 	}
@@ -197,6 +202,7 @@ public class AddTheme extends Action {
 
 		AmpTheme ampTheme = new AmpTheme();
 		fillTheme(ampTheme, themeForm);
+		ARUtil.clearDimension(NPODimension.class);
 		DbUtil.add(ampTheme);
 
 		themeForm.setEvent("");

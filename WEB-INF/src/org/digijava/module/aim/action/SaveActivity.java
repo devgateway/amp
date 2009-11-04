@@ -36,6 +36,8 @@ import org.dgfoundation.amp.error.ExceptionFactory;
 import org.dgfoundation.amp.error.keeper.ErrorReporting;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
@@ -87,6 +89,7 @@ import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Issues;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.MTEFProjection;
@@ -122,6 +125,7 @@ import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 import org.digijava.module.message.triggers.ActivitySaveTrigger;
 import org.digijava.module.message.triggers.ApprovedActivityTrigger;
 import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
+import org.hibernate.Session;
 
 /**
  * SaveActivity class creates a 'AmpActivity' object and populate the fields
@@ -973,7 +977,6 @@ public class SaveActivity extends Action {
 						 * .getDate(fund.getSignatureDate()));
 						 */
 						//ampFunding.setModalityId(fund.getModality());
-						ampFunding.setFinancingInstrument(fund.getFinancingInstrument());
 						if (fund.getConditions() != null
 								&& fund.getConditions().trim().length() != 0) {
 							ampFunding.setConditions(fund.getConditions());
@@ -982,7 +985,12 @@ public class SaveActivity extends Action {
 						}
 						ampFunding.setComments(new String(" "));
 						/*ampFunding.setAmpTermsAssistId(fund.getAmpTermsAssist());*/
+						
+						ampFunding.setFinancingInstrument( fund.getFinancingInstrument() );
 						ampFunding.setTypeOfAssistance( fund.getTypeOfAssistance() );
+						ampFunding.setFundingStatus( fund.getFundingStatus() );
+						ampFunding.setDonorObjective( fund.getDonorObjective() );
+						
 						ampFunding.setAmpActivityId(activity);
 
 						// add funding details for each funding
@@ -998,10 +1006,11 @@ public class SaveActivity extends Action {
 								ampFundDet.setTransactionDate(DateConversion.getDate(fundDet
 														.getTransactionDate()));
 								boolean useFixedRate = false;
-								if (fundDet.getTransactionType() == Constants.COMMITMENT) {
+								if (fundDet.getTransactionType() == Constants.COMMITMENT && fundDet.getFixedExchangeRate()!=null) {
+									double fixedExchangeRate		=  FormatHelper.parseDouble( fundDet.getFixedExchangeRate() );
 									if (fundDet.isUseFixedRate()
-											&& fundDet.getFixedExchangeRate().doubleValue() > 0
-											&& fundDet.getFixedExchangeRate().doubleValue() != 1) {
+											&& fixedExchangeRate > 0
+											&& fixedExchangeRate  != 1) {
 										useFixedRate = true;
 									}
 								}
@@ -1011,6 +1020,7 @@ public class SaveActivity extends Action {
 									ampFundDet.setTransactionAmount(transAmt);
 									ampFundDet.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet.getCurrencyCode()));
 									ampFundDet.setFixedExchangeRate(null);
+									ampFundDet.setFixedRateBaseCurrency(null);
 								} else {
 									// Use the fixed exchange rate
 									BigDecimal transAmt = FormatHelper.parseBigDecimal(fundDet.getTransactionAmount());
@@ -1022,11 +1032,15 @@ public class SaveActivity extends Action {
 									// frmExRt,1);
 									// amt *=
 									// fundDet.getFixedExchangeRate();
+									String currCode		= FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY ) ;
+									if ( currCode == null ) {
+										currCode = "USD";
+									}					
 									ampFundDet.setTransactionAmount(transAmt);
-									ampFundDet.setFixedExchangeRate(fundDet.getFixedExchangeRate());
+									ampFundDet.setFixedExchangeRate( FormatHelper.parseDouble( fundDet.getFixedExchangeRate() ) );
+									ampFundDet.setFixedRateBaseCurrency( CurrencyUtil.getCurrencyByCode(currCode) );
 									ampFundDet.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet
-															.getCurrencyCode()));
-								}
+															.getCurrencyCode()));								}
 								ampFundDet.setAmpFundingId(ampFunding);
 								if (fundDet.getTransactionType() == Constants.EXPENDITURE) {
 									ampFundDet.setExpCategory(fundDet.getClassification());
@@ -1455,6 +1469,9 @@ public class SaveActivity extends Action {
 				ampOrgRole.setActivity(activity);
 				ampOrgRole.setRole(role);
 				ampOrgRole.setOrganisation(tmp);
+				String additionalInfo			= eaForm.getAgencies().getExecutingOrgToInfo().get( tmp.getAmpOrgId().toString() );
+				if ( additionalInfo != null && additionalInfo.length() > 0 )
+					ampOrgRole.setAdditionalInfo(additionalInfo);
 				orgRole.add(ampOrgRole);
 			}
 		}
@@ -1467,6 +1484,9 @@ public class SaveActivity extends Action {
 				ampOrgRole.setActivity(activity);
 				ampOrgRole.setRole(role);
 				ampOrgRole.setOrganisation(org);
+				String additionalInfo			= eaForm.getAgencies().getImpOrgToInfo().get( org.getAmpOrgId().toString() );
+				if ( additionalInfo != null && additionalInfo.length() > 0 )
+					ampOrgRole.setAdditionalInfo(additionalInfo);
 				orgRole.add(ampOrgRole);
 			}
 		}
@@ -1479,6 +1499,9 @@ public class SaveActivity extends Action {
 				ampOrgRole.setActivity(activity);
 				ampOrgRole.setRole(role);
 				ampOrgRole.setOrganisation(org);
+				String additionalInfo			= eaForm.getAgencies().getBenOrgToInfo().get( org.getAmpOrgId().toString() );
+				if ( additionalInfo != null && additionalInfo.length() > 0 )
+					ampOrgRole.setAdditionalInfo(additionalInfo);
 				orgRole.add(ampOrgRole);
 			}
 		}
@@ -1491,6 +1514,9 @@ public class SaveActivity extends Action {
 				ampOrgRole.setActivity(activity);
 				ampOrgRole.setRole(role);
 				ampOrgRole.setOrganisation(org);
+				String additionalInfo			= eaForm.getAgencies().getConOrgToInfo().get( org.getAmpOrgId().toString() );
+				if ( additionalInfo != null && additionalInfo.length() > 0 )
+					ampOrgRole.setAdditionalInfo(additionalInfo);
 				orgRole.add(ampOrgRole);
 			}
 		}
@@ -1503,6 +1529,9 @@ public class SaveActivity extends Action {
 				ampOrgRole.setActivity(activity);
 				ampOrgRole.setRole(role);
 				ampOrgRole.setOrganisation(org);
+				String additionalInfo			= eaForm.getAgencies().getRegOrgToInfo().get( org.getAmpOrgId().toString() );
+				if ( additionalInfo != null && additionalInfo.length() > 0 )
+					ampOrgRole.setAdditionalInfo(additionalInfo);
 				orgRole.add(ampOrgRole);
 			}
 		}
@@ -1515,6 +1544,9 @@ public class SaveActivity extends Action {
 				ampOrgRole.setActivity(activity);
 				ampOrgRole.setRole(role);
 				ampOrgRole.setOrganisation(org);
+				String additionalInfo			= eaForm.getAgencies().getSectOrgToInfo().get( org.getAmpOrgId().toString() );
+				if ( additionalInfo != null && additionalInfo.length() > 0 )
+					ampOrgRole.setAdditionalInfo(additionalInfo);
 				orgRole.add(ampOrgRole);
 			}
 		}
@@ -1528,6 +1560,9 @@ public class SaveActivity extends Action {
 				ampOrgRole.setActivity(activity);
 				ampOrgRole.setRole(role);
 				ampOrgRole.setOrganisation(org);
+				String additionalInfo			= eaForm.getAgencies().getRepOrgToInfo().get( org.getAmpOrgId().toString() );
+				if ( additionalInfo != null && additionalInfo.length() > 0 )
+					ampOrgRole.setAdditionalInfo(additionalInfo);
 				orgRole.add(ampOrgRole);
 			}
 		}
@@ -1540,6 +1575,9 @@ public class SaveActivity extends Action {
 				ampOrgRole.setActivity(activity);
 				ampOrgRole.setRole(role);
 				ampOrgRole.setOrganisation(org);
+				String additionalInfo			= eaForm.getAgencies().getRespOrgToInfo().get( org.getAmpOrgId().toString() );
+				if ( additionalInfo != null && additionalInfo.length() > 0 )
+					ampOrgRole.setAdditionalInfo(additionalInfo);
 				orgRole.add(ampOrgRole);
 			}
 		}
@@ -1761,7 +1799,7 @@ public class SaveActivity extends Action {
 
 				if("allEdits".equals(DbUtil.getTeamAppSettingsMemberNotNull(aAct.getTeam().getAmpTeamId()).getValidation())){
 					if(!tm.getTeamHead()){
-						if(Constants.APPROVED_STATUS.equals(aAct.getApprovalStatus())) activity.setApprovalStatus(Constants.EDITED_STATUS);
+						if(Constants.APPROVED_STATUS.equals(aAct.getApprovalStatus()) || Constants.STARTED_APPROVED_STATUS.equals(aAct.getApprovalStatus())) activity.setApprovalStatus(Constants.EDITED_STATUS);
 						else activity.setApprovalStatus(aAct.getApprovalStatus());
 					}
 				}
@@ -1787,7 +1825,11 @@ public class SaveActivity extends Action {
 			Calendar cal = Calendar.getInstance();
 			activity.setCreatedDate(cal.getTime());
 			// Setting approval status of activity
+			if (activity.getDraft() && tm.getTeamHead()){
+				activity.setApprovalStatus(Constants.STARTED_APPROVED_STATUS);
+			}else{
 			activity.setApprovalStatus(eaForm.getIdentification().getApprovalStatus());
+			}
 
 		}
 
@@ -2274,6 +2316,7 @@ public class SaveActivity extends Action {
 					logger.error(">>> Error that is not continuable on step:" + stepText[stepNumber]);
 				}
 			} catch (Exception e) {
+				e.printStackTrace();
 				logger.error(">>> Unknown error on step:" + stepText[stepNumber]);
 			}
 			stepNumber++;
@@ -2456,7 +2499,7 @@ public class SaveActivity extends Action {
 		}
 
 		//If we're adding an activity, create system/admin message
-		if(!createdAsDraft[0]) {
+		if(activity.getDraft()!=null && !activity.getDraft()) {
 			ActivitySaveTrigger ast=new ActivitySaveTrigger(activity);
 		}
 
@@ -2552,6 +2595,26 @@ public class SaveActivity extends Action {
 		return false;
 	}
 
+	private boolean isFieldEnabled(String fieldName) {
+		ServletContext ampContext = getServlet().getServletContext();
+
+		   AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+
+			AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) ampTreeVisibility.getRoot();
+			if(currentTemplate!=null)
+				if(currentTemplate.getFields()!=null)
+					for(Iterator it=currentTemplate.getFields().iterator();it.hasNext();)
+					{
+						AmpFieldsVisibility field=(AmpFieldsVisibility) it.next();
+						if(field.getName().equals(fieldName))
+						{
+							return true;
+						}
+
+					}
+			return false;
+	}
+
 	/**
 	 * @param tempComp
 	 * @param eaForm
@@ -2559,15 +2622,13 @@ public class SaveActivity extends Action {
 	 */
 	private void proccessComponents(EditActivityForm eaForm, AmpActivity activity) {
 		activity.setComponents(new HashSet());
+		activity.setComponentFundings(new HashSet<AmpComponentFunding>());
 		if (eaForm.getComponents().getSelectedComponents() != null) {
 			Iterator<Components<FundingDetail>> itr = eaForm.getComponents().getSelectedComponents().iterator();
 			while (itr.hasNext()) {
 				Components<FundingDetail> comp = itr.next();
 				AmpComponent ampComp = ComponentsUtil.getComponentById(comp.getComponentId());
 				activity.getComponents().add(ampComp);
-
-				if(activity.getComponentFundings()==null)
-					activity.setComponentFundings(new HashSet<AmpComponentFunding>());
 
 				
 				Set<Integer> transactionTypes = new HashSet<Integer>();
@@ -2599,9 +2660,21 @@ public class SaveActivity extends Action {
 					
 					while (fdIterator.hasNext()) {
 						FundingDetail fd = fdIterator.next();
+						AmpComponentFunding ampCompFund = null;						
+						ampCompFund = new AmpComponentFunding();
+						
 
-						AmpComponentFunding ampCompFund = new AmpComponentFunding();
-						ampCompFund.setAmpComponentFundingId(fd.getAmpComponentFundingId());
+						if (fd.getAmpComponentFundingId()!=null) {
+							try {
+								Session session = PersistenceManager.getRequestDBSession();
+								Object load = session.load(AmpComponentFunding.class, fd.getAmpComponentFundingId());
+								session.evict(load);
+							} catch (DgException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+						//ampCompFund.setAmpComponentFundingId(fd.getAmpComponentFundingId());
 						ampCompFund.setActivity(activity);
 						
 						ampCompFund.setTransactionType(transactionType);

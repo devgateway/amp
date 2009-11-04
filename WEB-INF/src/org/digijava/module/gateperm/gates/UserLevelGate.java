@@ -28,7 +28,7 @@ public class UserLevelGate extends Gate {
 	public static final String PARAM_OWNER="owner";
 	public static final String PARAM_WORKSPACE_MANAGER="worskpacemanager";
 	
-	public static final MetaInfo[] SCOPE_KEYS  = new MetaInfo[] { GatePermConst.ScopeKeys.CURRENT_MEMBER, GatePermConst.ScopeKeys.ACTIVITY  };
+	public static final MetaInfo[] SCOPE_KEYS  = new MetaInfo[] { GatePermConst.ScopeKeys.CURRENT_MEMBER  };
 	
 	public static final MetaInfo[] PARAM_INFO  = new MetaInfo[] { new MetaInfo("Level",
     "The name of the user level. Eg: everyone(public user), guest(user logged in but no rights)") };
@@ -72,6 +72,7 @@ public class UserLevelGate extends Gate {
 		//if(tm!=null && tm.getTeamHead() && PARAM_WORKSPACE_MANAGER.equals(param)) return true;
 		
 		AmpActivity act = (AmpActivity) scope.get(GatePermConst.ScopeKeys.ACTIVITY);
+		if(act==null) act=(AmpActivity) scope.get(GatePermConst.ScopeKeys.PERMISSIBLE);
 		boolean owner=false;
 		if (act.getActivityCreator()==null){
 			logger.warn("Activity without owner ... ID: "+act.getAmpActivityId());

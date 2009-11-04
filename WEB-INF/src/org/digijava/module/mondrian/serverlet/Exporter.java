@@ -199,6 +199,9 @@ public class Exporter extends com.tonbeller.jpivot.print.PrintServlet {
 										rowspan = Integer.parseInt(currentnode.getAttributes().getNamedItem("rowspan").getNodeValue());
 										colspan = Integer.parseInt(currentnode.getAttributes().getNamedItem("colspan").getNodeValue());
 										if (colspan >1){
+											//Temporal Fix for AMP-6656 TODO :Review the exportation process.
+											if (i>rowspan)rowspan = i;
+											if (j>colspan)rowspan = j;
 											helper.addMerge(i, j, rowspan, colspan);
 										}
 										int colid =j;

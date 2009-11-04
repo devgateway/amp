@@ -68,17 +68,17 @@
 		$(divId).hide('fast');
 	}
      
-     function expandAll(){
-    	$("img[@id^='img_']").hide();
- 		$("img[@id^='imgh_']").show();	
- 		$("div[@id^='div_theme_']").show();
-     } 
-
-     function collapseAll(){
-    	$("img[@id^='img_']").show();
-  		$("img[@id^='imgh_']").hide();	
-  		$("div[@id^='div_theme_']").hide();
-     } 
+	function expandAll(){
+                $("img[@id^='img_']"+':visible').slideUp('fast');
+		$("img[@id^='imgh_']"+':hidden').slideDown('fast');;
+		$("div[@id^='div_theme_']").slideDown('fast');
+               
+         }
+         function collapseAll(){
+              $("img[@id^='imgh_']"+':visible').slideUp('fast');
+              $("img[@id^='img_']"+':hidden').slideDown('fast');
+	      $("div[@id^='div_theme_']"+':visible').slideUp('fast');
+         }
 	-->
 </script>
 

@@ -81,7 +81,7 @@ cursor:pointer;
                 <digi:trn key='aim:PublicView'>PUBLIC VIEW</digi:trn>
                 </digi:link>
             </li>
-            <feature:display name="yuiampmenuitemlabel" module="Document Management">
+            <feature:display name="Public Documents" module="Document Management">
             <li class="yuiampmenuitem" style="float:left;">
                 <digi:link styleClass="yuiampmenuitemlabel" href="/documentManager.do" module="contentrepository" onclick="return quitRnot()">			
                 <digi:trn key="contentrepository:publicDocuments">Public Documents</digi:trn></digi:link>
@@ -315,10 +315,7 @@ function adminHelp(){
 		window.location.href="/aim/addActivity.do~pageId=1~reset=true~action=create~activityLevelId="+selectedLevelId;	
 	}
 
-	function openGIS() {
-		openNewWindowWithMenubar(1000, 600);
-		popupPointer.location.href = "/gis/showGisDashboard.do";
-	}
+<jsp:include page="gisMenu.jsp" />
 	
 	function teamWorkspaceSetup(a) {
 		if (canExit()) window.location.href="/aim/workspaceOverview.do~tId="+a+"~dest=teamLead";
@@ -575,7 +572,7 @@ function adminHelp(){
                                         </module:display>
                                         <module:display name="Org Profile" >
                                             <li class="yuiampmenuitem">
-                                                <a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/orgProfile/showOrgProfile.do"  onclick="return canExit()">
+                                                <a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/orgProfile/showOrgProfile.do?reset=true"  onclick="return canExit()">
                                                     <digi:trn key="fm:orgProfile">Org. Profile</digi:trn>
                                                 </a> 
                                        

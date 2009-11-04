@@ -33,6 +33,7 @@
                 <li><a href="#sectorsprograms"><div><digi:trn key="rep:filer:tab:sectorsAndPrograms">Sectors & Programs</digi:trn></div></a> </li>
 		<li><a href="#donors"><div><digi:trn key="rep:filer:tab:DonorsAndAgencies">Donors & Agencies</digi:trn></div></a> </li>
 		<li><a href="#status"><div><digi:trn key="rep:filer:tab:StatusAndMinistryRank">Status & Ministry Rank</digi:trn></div></a> </li>
+		<li><a href="#CCSettings"><div><digi:trn>Computed Column Settings</digi:trn></div></a> </li>
 	</ul>
 	<div class="yui-content" style="background-color: #EEEEEE">
 		<div id="keyword" >
@@ -80,13 +81,6 @@
 						<html:option value="-1">
 							<digi:trn key="rep:filer:All">All</digi:trn>
 						</html:option>
-						<html:option value="0" style="color:green">
-							<digi:trn key="rep:filter:ExistingUnvalidated">Existing Un-validated</digi:trn>
-						</html:option>
-						<logic:notEqual name="aimReportsFilterPickerForm" property="teamAccessType" value="Management">
-						<html:option value="3" style="color:red">
-							<digi:trn key="rep:filter:ExistingDraft">Existing Draft</digi:trn>
-						</html:option>
 						<html:option value="1" style="color:red">
 							*&nbsp;<digi:trn key="rep:filter:NewDraft">New Draft</digi:trn>
 						</html:option>
@@ -96,7 +90,14 @@
 						<html:option value="4" style="color:blue">
 							&nbsp;<digi:trn key="rep:filter:ValidatedActivities" >Validated Activities</digi:trn>
 						</html:option>
+						<logic:notEqual name="aimReportsFilterPickerForm" property="teamAccessType" value="Management">
+						<html:option value="3" style="color:red">
+							<digi:trn key="rep:filter:ExistingDraft">Existing Draft</digi:trn>
+						</html:option>
 						</logic:notEqual>
+						<html:option value="0" style="color:green">
+							<digi:trn key="rep:filter:ExistingUnvalidated">Existing Un-validated</digi:trn>
+						</html:option>
 					</html:select>
 					</td>
 				</tr>
@@ -754,6 +755,25 @@
 			</td>
 		</tr>
 		</table>
+		</div>
+		<div id="CCSettings" >
+			<br>
+			<br>
+			<table width="100%" cellpadding="1" cellspacing="1" >
+					<tr bgcolor="#EEEEEE">
+						<td colspan="5" align="right"><b>
+				      <digi:trn>Computed Year</digi:trn>
+						</b>&nbsp;&nbsp;</td>
+					  <td width="79%" colspan="5">
+							<html:select property="computedYear"  style="width: 100px" styleClass="inp-text">
+							<option value="-1"><digi:trn key="aim:filters:currentYear">Current Year</digi:trn></option>
+                         	<html:optionsCollection property="computedYearsRange" label="wrappedInstance" value="wrappedInstance" />
+						</html:select>						
+					  </td>
+			  </tr>
+				</table>
+				<br>
+				<br><br>
 		</div>
 	</div>
 	

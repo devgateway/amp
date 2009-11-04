@@ -23,17 +23,6 @@
         document.aimEditActivityForm.target = "_self";
         document.aimEditActivityForm.submit();
     }
-    
-    function removeSelSectors(configId) {
-        var flag = validate(2);
-        if (flag == false) return false;
-        
- 
-        document.aimEditActivityForm.action = "/addActivity.do?remSectors=true&configId="+configId;
-        document.aimEditActivityForm.target = "_self";
-        document.aimEditActivityForm.submit();
-        return true;
-    }
     </script>
 
 <digi:instance property="aimEditActivityForm" />
@@ -47,12 +36,8 @@
                 <td>
                     <IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15 />
                     <b>
-                        <FONT color="red">
-                            *
-                        </FONT>
-                        <digi:trn key="aim:sector">
-                            Sector
-                        </digi:trn>
+                	<FONT color="red">*</FONT>
+					<digi:trn key="aim:sector">Sector</digi:trn>
                     </b>
                     <a href="javascript:popupwin()">
                         <img src="../ampTemplate/images/help.gif" alt="Click to get help on Status" width=10 height=10 border=0/>
@@ -61,12 +46,8 @@
             </tr>
             <tr>
                 <td>
-                    <FONT color=red>
-                        *
-                    </FONT>
-                    <digi:trn	key="aim:chooseSector">
-                    Choose the sector.
-                    </digi:trn>
+                    <FONT color=red>*</FONT>
+                    <digi:trn key="aim:chooseSector">Choose the sector.</digi:trn>
                 </td>
             </tr>
             <tr>
@@ -88,8 +69,7 @@
                         </tr>
                         <tr>
                             <td bgcolor="#ffffff" width="100%">
-                                <table cellPadding=1 cellSpacing=1 border=0	bgcolor="#ffffff" width="100%">
-                                   
+                                <table cellPadding="1" cellSpacing="1" border="0"	bgcolor="#ffffff" width="100%">
                                     <c:forEach var="config" items="${aimEditActivityForm.sectors.classificationConfigs}" varStatus="ind">
                                     <bean:define id="generalSector" value="false"/>
 									<c:if test="${config.name== 'Primary' }">
@@ -104,6 +84,10 @@
 											<bean:define id="generalSector" value="true"/>
 										</logic:equal>
 									</c:if>
+									<c:if test="${config.name== 'Tertiary' }">
+										<bean:define id="auxSectorType" value="Tertiary Sector" />
+										<bean:define id="generalSector" value="true"/>
+									</c:if>
 									<bean:define id="contentDisabled">false</bean:define>
 									<c:set var="contentDisabled"><field:display name="${auxSectorType}" feature="Sectors">false</field:display>
 									</c:set>
@@ -112,9 +96,7 @@
 										<c:set var="contentDisabled">true</c:set>
 									</c:if>
 									<logic:equal name="generalSector" value="true">
-                                         <c:set var="sectorAdded">
-                                              false
-                                          </c:set>
+                                        	<c:set var="sectorAdded" value="false"/>
                                          <tr>
                                              <td  align="left"> 
                                                      <FONT color="red">
@@ -134,7 +116,7 @@
                                                         <logic:equal name="config" property="primary" value="false">
 	                                                        	<div id="secondaryConfig">
 														</logic:equal>
-                                                    <table cellSpacing=0 cellPadding=0 border=0 bgcolor="#ffffff" width="100%">
+                                                    <table cellSpacing="0" cellPadding="0" border="0" bgcolor="#ffffff" width="100%">
                                                        <tbody>
                                                         <c:forEach var="activitySectors" items="${aimEditActivityForm.sectors.activitySectors}" varStatus="index">
                                                             <c:if test="${activitySectors.configId==config.id}">
@@ -179,16 +161,12 @@
                                                                                    size="2" maxlength="5" onkeyup="fnChk(this, 'sector')" disabled="${contentDisabled}"/>
                                                                     </td>
                                                                 </tr>
-                                                                <c:set var="sectorAdded">
-                                                                   true
-                                                                </c:set>
+                                                                <c:set var="sectorAdded" value="true"/>
                                                             </c:if>
                                                         </c:forEach>
                                                     </tbody>
                                                     </table>
-                                                    <c:if test="${config.primary}">
                                                       </div>
-                                                    </c:if>
                                                 </div>
                                                     
                                                   
@@ -199,7 +177,7 @@
                                       
                                         <tr>
                                             <td>
-                                                <table cellSpacing=2 cellPadding=2>
+                                                <table cellSpacing="2" cellPadding="2">
                                                     <tr>
                                                         
                                                         
@@ -207,8 +185,8 @@
                                                             <c:if test="${config.multisector||sectorAdded==false}">
                                                                 <field:display name="Add Sectors Button" feature="Sectors">
                                                                     <html:hidden name="aimEditActivityForm" property="editAct"/>
-                                                                    <html:button styleClass="dr-menu" disabled="${contentDisabled}" 
-                                                                                 property="submitButton" onclick="addSectors(${aimEditActivityForm.editAct},${config.id});">
+                                                                    <html:button styleClass="dr-menu"  
+                                                                                 property="submitButton" disabled="${contentDisabled}" onclick="addSectors(${aimEditActivityForm.editAct},${config.id});">
                                                                         <digi:trn key="btn:addSectors">Add Sectors</digi:trn>
                                                                     </html:button>
                                                                 </field:display> 
@@ -219,8 +197,7 @@
                                                         
                                                         <td>
                                                             <field:display name="Remove Sectors Button" feature="Sectors">&nbsp;
-                                                                <html:button styleClass="dr-menu" disabled="${contentDisabled}" 
-                                                                             property="submitButton" onclick="return removeSelSectors(${config.id})">
+                                                                <html:button styleClass="dr-menu" property="submitButton" disabled="${contentDisabled}" onclick="return removeSelSectors(${config.id})">
                                                                     <digi:trn key="btn:removeSector">Remove Sector</digi:trn>
                                                                 </html:button>
                                                             </field:display>

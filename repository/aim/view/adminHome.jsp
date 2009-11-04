@@ -523,7 +523,7 @@
                               <c:set var="translation">
                                 <digi:trn key="aim:clickToViewindicatormanager">Click here to view Indicator Manager</digi:trn>
                               </c:set>
-                              <digi:link href="/viewIndicators.do" title="${translation}" >
+                              <digi:link href="/viewIndicators.do?sortBy=nameAsc" title="${translation}" >
                                 <digi:trn key="aim:indManager">Indicator Manager</digi:trn>
                               </digi:link>
                             </td>

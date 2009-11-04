@@ -226,7 +226,8 @@
 		</set>
 	
 		
-		<set name="componentFundings" inverse="true" cascade="all-delete-orphan">
+		<set name="componentFundings" cascade="all-delete-orphan">
+			<cache usage="read-write" />
 			<key column="amp_activity_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpComponentFunding" />
 		</set>			

@@ -18,6 +18,7 @@ public class RelOrganization {
 	private String orgCode;
 	private String budgetOrgCode;
 	private Long orgId;
+	private String additionalInformation;
 
 	
 	public Long getOrgId() {
@@ -127,4 +128,14 @@ public class RelOrganization {
 	public void setBudgetOrgCode(String budgetOrgCode) {
 		this.budgetOrgCode = budgetOrgCode;
 	}
+
+	public String getAdditionalInformation() {
+		return additionalInformation;
+	}
+
+	public void setAdditionalInformation(String additionalInformation) {
+		this.additionalInformation = additionalInformation;
+	}
+	
+	
 }

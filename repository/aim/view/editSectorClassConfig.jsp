@@ -171,7 +171,7 @@
                                                                 <c:set var="translation">
                                                                     <digi:trn key="aim:clickToAddScheme">Click here to Add a Scheme</digi:trn>
                                                                 </c:set>
-                                                                <digi:link href="/createWorkspace.do?dest=admin" title="${translation}" >
+                                                                <digi:link href="/updateSectorSchemes.do?dest=admin&event=addscheme" title="${translation}" >
                                                                     <digi:trn key="aim:addScheme">
                                                                         Add Scheme
                                                                     </digi:trn>

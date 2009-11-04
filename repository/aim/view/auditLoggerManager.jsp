@@ -216,18 +216,20 @@ function toggleSettings(){
 						<div align="center">
 						<table width="100%" height="100%" border="0" align=center cellPadding=0 cellSpacing=0>
 							<tr style="background-color:#999999; color:#000;  ">
-								<td width="280" height="22" align="center" valign="center" bgcolor="#999999"
-									style="color: black"><c:if 
+								<td width="280" height="22" align="center" valign="center" bgcolor="#999999" style="color: black">
+								<c:if 
 									test="${aimAuditLoggerManagerForm.sortBy!='nameasc'}">
 									<digi:link style="color:black" href="/auditLoggerManager.do?sortBy=nameasc">
 										<b><digi:trn key="aim:name">Name</digi:trn></b>									
 									</digi:link>
-								</c:if> <c:if
+								</c:if> 
+								<c:if
 									test="${not empty aimAuditLoggerManagerForm.sortBy && aimAuditLoggerManagerForm.sortBy=='nameasc'}">
 									<digi:link style="color:black" href="/auditLoggerManager.do?sortBy=namedesc">
 										<b><digi:trn key="aim:name">Name</digi:trn></b>									
 									</digi:link>
-							  </c:if></td>
+							   </c:if>
+							   </td>
 								<td valign="center" align="center" bgcolor="#999999" style="color: black" width="150">
 								<c:if test="${aimAuditLoggerManagerForm.sortBy!='typeasc'}">
 									<digi:link style="color:black" href="/auditLoggerManager.do?sortBy=typeasc">
@@ -323,7 +325,7 @@ function toggleSettings(){
 								<c:if test="${fn:length(log.objectName) > 30}" >
 									<c:out value="${fn:substring(log.objectName, 0, 30)}" />...
 								</c:if>
-								<c:if test="${fn:length(log.objectName) < 30}" >
+								<c:if test="${fn:length(log.objectName) <= 30}" >
 									<bean:write name="log" property="objectName"/>
 								</c:if>
 								</td>
@@ -338,7 +340,7 @@ function toggleSettings(){
 									<c:if test="${fn:length(log.objectName) > 8}" >
 										<c:out value="${fn:substring(log.authorName, 0, 8)}" />...
 									</c:if>
-									<c:if test="${fn:length(log.objectName) < 8}" >
+									<c:if test="${fn:length(log.objectName) <= 8}" >
 										 <bean:write name="log" property="authorName"/>
 									</c:if>
 									</a>								  

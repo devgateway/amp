@@ -99,7 +99,6 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/quartz-1.6.5.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/relaxngDatatype.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/retroweaver-rt.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/rowset.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/saaj-api.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/saaj-ri.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/saaj.jar"/>
@@ -136,5 +135,5 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/ecsClientSide.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/commons-beanutils-1.7.0.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/json-lib-2.3-jdk15.jar"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="output" path="WEB-INF/classes"/>
 </classpath>

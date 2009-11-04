@@ -44,6 +44,8 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
+import org.digijava.kernel.security.DgSecurityManager;
+import org.digijava.kernel.security.ResourcePermission;
 import org.digijava.kernel.security.principal.GroupPrincipal;
 import org.digijava.kernel.security.principal.UserPrincipal;
 import org.digijava.kernel.user.Group;
@@ -123,14 +125,9 @@ public class UserUtils {
 	 * @throws DgException if error occurs.
 	 * @return UserLangPreferences
 	 */
-	public static UserLangPreferences getUserLangPreferences(User user,
-			Site site) throws
-			DgException {
+	public static UserLangPreferences getUserLangPreferences(User user,Site site) throws DgException {
 
-		logger.debug("Searching user language preferences for user#" +
-				user.getId() +
-				" site#" + site.getId());
-
+		logger.debug("Searching user language preferences for user#" +user.getId() +" site#" + site.getId());
 		UserLangPreferences result = null;
 		org.hibernate.Session session = null;
 
@@ -542,4 +539,16 @@ public class UserUtils {
     		return true;
     	return false;
     }    	
+    
+    	
+	/**
+	 * checks whether user is admin or not 
+	 * @return
+	 */
+	public static boolean isAdmin(User user,Site site){
+		boolean retVal=false;
+		Subject subject = UserUtils.getUserSubject(user);
+		retVal = DgSecurityManager.permitted(subject, site,ResourcePermission.INT_ADMIN);
+		return retVal;
+	}
 }

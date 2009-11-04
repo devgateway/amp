@@ -55,22 +55,13 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]			= new Array(
 				,'Responsible Organization'
 				,'Activity Created By'
 				,'Project Category'
+				,'Funding Status'
 			);
 YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(
-				'Status',
-				'A.C. Chapter', 'Accession Instrument', 'Financing Instrument',
-				'Implementation Level','Parent National Planning Objectives', 'National Planning Objectives' , 'Primary Program', 
-				'Secondary Program', 'Primary Sub-Sector', 'Type Of Assistance', 
-				'Primary Sector', 'Region', 'Primary Sector Sub-Sector',
-				'Beneficiary Agency', 'Implementing Agency',
-				'Secondary Sector', 'Secondary Sector Sub-Sector', 'Responsible Organization', 'Activity Created By'
+				'Region','Status','Primary Sector','Primary Sector Sub-Sector'
 			);
 YAHOO.amp.reportwizard.fundingGroups["component"]		= new Array(
-				'Status', 'A.C. Chapter', 'Accession Instrument', 'Financing Instrument',
-				'Implementation Level','Parent National Planning Objectives', 'National Planning Objectives', 'Primary Program',
-				'Secondary Program', 'Primary Sector Sub-Sector', 'Type Of Assistance','Region',
-				'Primary Sector', 'Component Type', 'Beneficiary Agency', 'Implementing Agency', 
-				'Secondary Sector', 'Secondary Sector Sub-Sector', 'Responsible Organization', 'Activity Created By'
+				 'Component Type','Status'
 			);
 YAHOO.amp.reportwizard.fundingGroups["contribution"]	= new Array(
 				'Costing Donor','Parent National Planning Objectives', 'National Planning Objectives', 'Primary Program', 

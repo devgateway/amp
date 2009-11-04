@@ -21,21 +21,27 @@
 									<tr><td bgColor=#f4f4f2>
 										&nbsp;
 									</td></tr>
-									<tr><td>
+									<tr><td><field:display name="Sector Group" feature="Sector Group">
 										<logic:notEmpty name="aimEditActivityForm" property="agencies.sectGroups">
 											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
 												<logic:iterate name="aimEditActivityForm" property="agencies.sectGroups"
 												id="impAgency" type="org.digijava.module.aim.dbentity.AmpOrganisation">
 												<tr><td>
-													<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
+													<table width="80%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
 														<tr>
-															<td width="3">
+															<td width="2%">
 																<html:multibox property="agencies.selSectGroups">
 																	<bean:write name="impAgency" property="ampOrgId" />
 																</html:multibox>
 															</td>
-															<td align="left">
+															<td align="left" width="49%">
 																<bean:write name="impAgency" property="name" />
+															</td>
+															<td width="49%">
+																<field:display name="Sector Group Department/Division"  feature="Sector Group">
+																	<digi:trn>Department/Division: </digi:trn><html:text property="agencies.sectOrgToInfo(${impAgency.ampOrgId})"></html:text>
+																</field:display>
+																&nbsp;
 															</td>
 														</tr>
 													</table>
@@ -46,7 +52,7 @@
 														<tr>
 															<td>
 																<field:display name="Sector Group Add Button" feature="Sector Group">
-																	<aim:addOrganizationButton refreshParentDocument="true" collection="sectGroups" form="${aimEditActivityForm.agencies}" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>			
+																	<aim:addOrganizationButton refreshParentDocument="false" callBackFunction="submitAfterSelectingOrg();"  collection="sectGroups" form="${aimEditActivityForm.agencies}" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>			
 																	<%
 																	selectOrganizationComponentForm compForm1 = (selectOrganizationComponentForm) session.getAttribute("aimSelectOrganizationForm");
 																	selectOrganizationComponentForm compForm2 = (selectOrganizationComponentForm) session.getAttribute("siteampdefaultaimSelectOrganizationForm");
@@ -71,16 +77,16 @@
 												</td></tr>
 											</table>
 										</logic:notEmpty>
-
+										</field:display>
+										<field:display name="Sector Group Add Button" feature="Sector Group">
 										<logic:empty name="aimEditActivityForm" property="agencies.sectGroups">
 											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
 												<tr>
 													<td bgcolor="#ffffff">
-													<field:display name="Sector Group Add Button" feature="Sector Group">
-														<aim:addOrganizationButton refreshParentDocument="true" collection="sectGroups" form="${aimEditActivityForm.agencies}" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>			
-													</field:display>
+														<aim:addOrganizationButton refreshParentDocument="false" callBackFunction="submitAfterSelectingOrg();"  collection="sectGroups" form="${aimEditActivityForm.agencies}" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>			
 													</td>
 												</tr>
 											</table>
 										</logic:empty>
+										</field:display>
 									</td></tr>

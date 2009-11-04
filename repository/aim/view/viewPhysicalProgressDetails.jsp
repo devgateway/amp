@@ -218,12 +218,10 @@ method="post">
 															</TD>
 														</TR>														
 														<TR><TD>
-															<FONT color=blue>*
-<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
-																<digi:trn key="aim:allTheAmountsInThousands">	
-																	All the amounts are in thousands (000)
-		  														</digi:trn>
-</gs:test>
+															<FONT color=blue>
+																<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
+																	*<digi:trn key="aim:allTheAmountsInThousands">All the amounts are in thousands (000)</digi:trn>
+																</gs:test>
 															</FONT>								
 														</TD></TR>
 													</TABLE>

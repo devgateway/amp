@@ -14,6 +14,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.ARUtil;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.form.AddOrgGroupForm;
@@ -89,7 +90,7 @@ public class EditOrgGroup extends Action {
 								AmpOrgType ot = DbUtil.getOrgType(editForm.getOrgTypeId());
 								ampGrp.setOrgType(ot);
 							}
-							
+							ARUtil.clearOrgGroupTypeDimensions();
 							DbUtil.add(ampGrp);
 							logger.debug("Group added");
 							
@@ -160,7 +161,7 @@ public class EditOrgGroup extends Action {
 									AmpLevel al = DbUtil.getAmpLevel(editForm.getLevelId());
 									ampGrp.setLevelId(al);
 								} */
-								
+								ARUtil.clearOrgGroupTypeDimensions();
 								DbUtil.update(ampGrp);
 								logger.debug("Organization Group updated");
 								return mapping.findForward("added");
@@ -186,6 +187,7 @@ public class EditOrgGroup extends Action {
                              
                                     AmpOrgGroup ampGrp = DbUtil.getAmpOrgGroup(editForm.getAmpOrgGrpId());
                                     if (ampGrp != null) {
+                                    	ARUtil.clearOrgGroupTypeDimensions();
                                         DbUtil.delete(ampGrp);
                                         logger.debug("Organization Group deleted");
                                     }

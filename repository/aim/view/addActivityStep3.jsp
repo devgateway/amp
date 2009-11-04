@@ -89,7 +89,7 @@
 
     function delPropFunding() {
             <digi:context name="delProposedFunding" property="context/module/moduleinstance/removeProposedFunding.do" />
-            var state=window.confirm("Are you sure about deleting the Proposed Project Cost ?");
+            var state=window.confirm("<digi:trn key="aim:deleteProposedProjectCost">Are you sure about deleting the Proposed Project Cost ?</digi:trn>");
             if(state==false){
               return false;
             }
@@ -623,6 +623,21 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                 <td bgcolor="#FFFFFF" align="left">
                                                                                   <logic:notEmpty name="funding" property="financingInstrument">
                                                                                   	<category:getoptionvalue categoryValueId="${funding.financingInstrument.id}"/>
+                                                                                  </logic:notEmpty>
+                                                                                </td>
+                                                                              </tr>
+                                                                              
+                                                                              <field:display name="Funding Status" feature="Funding Information"></field:display>
+                                                                              <tr>
+                                                                                <td bgcolor="#FFFFFF" align="left" width="150">
+                                                                                  <a title="<digi:trn key="aim:Financing">Method by which aid is delivered to an activity</digi:trn>">
+                                                                                  <digi:trn>Funding Status</digi:trn>
+																				</a>
+                                                                                </td>
+                                                                                <td width="1">:</td>
+                                                                                <td bgcolor="#FFFFFF" align="left">
+                                                                                  <logic:notEmpty name="funding" property="fundingStatus">
+                                                                                  	<category:getoptionvalue categoryValueId="${funding.fundingStatus.id}"/>
                                                                                   </logic:notEmpty>
                                                                                 </td>
                                                                               </tr>

@@ -29,6 +29,7 @@ import org.digijava.module.aim.form.CurrencyRateForm;
 import org.digijava.module.aim.helper.CurrencyRates;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.common.util.DateTimeUtil;
@@ -47,6 +48,10 @@ public class UpdateCurrencyRate extends Action {
 		CurrencyRateForm crForm = (CurrencyRateForm) form;
 		CurrencyRates currencyRates = null;
 		Collection<CurrencyRates> col = new ArrayList<CurrencyRates>();
+		
+		String baseCurrency				= FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY );
+        if ( baseCurrency == null )
+      	  baseCurrency			= "USD";
 
 		logger.debug("Reset :" + crForm.isReset());
 
@@ -89,7 +94,7 @@ public class UpdateCurrencyRate extends Action {
 					col.add(currencyRates);
 				}
 			}
-			CurrencyUtil.saveCurrencyRates(col);
+			CurrencyUtil.saveCurrencyRates(col, baseCurrency);
 
 			Date toDate = DateConversion.getDate(crForm.getFilterByDateFrom());
 			long stDt = toDate.getTime();
@@ -153,9 +158,12 @@ public class UpdateCurrencyRate extends Action {
                       }
 
                       cRate.setToCurrencyCode(crForm.getUpdateCRateCode());
+                      cRate.setFromCurrencyCode(baseCurrency);
                       cRate.setDataSource(CurrencyUtil.RATE_BY_HAND);
                       if(cRate.getExchangeRate()!=null && cRate.getExchangeRateDate()!=null && crForm.getDoAction().equalsIgnoreCase("saveRate"))
                     	  CurrencyUtil.saveCurrencyRate(cRate);
+                      else 
+                    	  logger.warn("Either exchange rate or exchange rate date is null");
                       AbstractCache ratesCache = DigiCacheManager.getInstance().getCache("EXCHANGE_RATES_CACHE");
                       ratesCache.clear();
 

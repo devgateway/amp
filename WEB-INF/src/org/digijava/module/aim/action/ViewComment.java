@@ -10,22 +10,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpField;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.TeamUtil;
 
 public class ViewComment extends Action {
 
@@ -37,6 +42,7 @@ public class ViewComment extends Action {
 								HttpServletResponse response) throws java.lang.Exception {
 
 					 logger.debug("In view comment");
+					 ActionErrors errors = new ActionErrors();
 
 					 HttpSession session = request.getSession();
 
@@ -52,6 +58,23 @@ public class ViewComment extends Action {
 					 else commentColInSession=(HashMap)session.getAttribute("commentColInSession");
 
 					 EditActivityForm editForm = (EditActivityForm) form;
+					 TeamMember member = (TeamMember) request.getSession().getAttribute("currentMember");
+					 AmpTeam activityTeam= editForm.getIdentification().getTeam();
+					 AmpTeam currentTeam=TeamUtil.getAmpTeam(member.getTeamId());
+					 
+					 if (currentTeam.getComputation() != null && !currentTeam.getComputation()){
+							if (!currentTeam.getAmpTeamId().equals(activityTeam.getAmpTeamId())){
+								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.editActivity.noWritePermissionForUser"));
+								saveErrors(request, errors);
+								String url = "/aim/viewChannelOverview.do?ampActivityId="+ editForm.getActivityId() + "&tabIndex=0";
+								RequestDispatcher rd = getServlet().getServletContext()
+										.getRequestDispatcher(url);
+								rd.forward(request, response);
+								return null;	
+							}
+						}
+					 
+					 
 					 if (editForm.getComments().getCommentsCol() == null) {
 						 editForm.getComments().setCommentsCol( new ArrayList() );
 					}
@@ -65,7 +88,7 @@ public class ViewComment extends Action {
 					 }
 					 String comment = request.getParameter("comment");
 					 
-					 TeamMember member = (TeamMember) request.getSession().getAttribute("currentMember");
+					
 					 logger.debug("CommentFlag[before IF] : " + editForm.getComments().isCommentFlag());
 					 if (comment != null && comment.trim().length() != 0) {
 					 	AmpField field = null;
@@ -235,7 +258,12 @@ public class ViewComment extends Action {
 							 		com.setComment(" ");
 							 	else
 							 		com.setComment(editForm.getComments().getCommentText());
+							 	
 
+							 	 AmpTeamMember teamMember=TeamMemberUtil.getAmpTeamMember(member.getMemberId());
+							 	com.setMemberId(teamMember);
+		                        com.setMemberName(teamMember.getUser().getName());
+		                        com.setCommentDate(new Date());
 							 	AmpComments replacedComment	= (AmpComments)editForm.getComments().getCommentsCol().set(
 							 							Integer.parseInt(request.getParameter("comments.ampCommentId")),com
 							 							);  // for setting activityId in saveAvtivity.java

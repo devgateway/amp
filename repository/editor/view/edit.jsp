@@ -46,11 +46,11 @@
 function validate(){
 	var size=<%=(request.getParameter("size")!=null)?request.getParameter("size"):-1%>;
 	if (size==-1){
-		size=10000;
+		size=100000;
 	}
 	
 	if (content.FCKeditorAPI.GetInstance('content').GetData().length > size){
-		var msg='<digi:trn key="editor:longtextError">The text is too long.</digi:trn>'
+		var msg='<digi:trn key="editor:longtextError">The text is too long.</digi:trn>'+' Max is'+size+' chrs';
 		alert(msg);
 		return false;
 	}
@@ -90,7 +90,8 @@ function validate(){
                     	<B><digi:trn>Field</digi:trn>:</B>                       
                     </td>
                     <td width="93%">
-                        <html:text name="editorForm" property="activityFieldName" size="70"  readonly="true"/>
+                    <input value="<digi:trn>${editorForm.activityFieldName}</digi:trn>" type="text" size="70"  readonly="true"/>
+                      <!--   <html:text name="editorForm" property="activityFieldName" size="70"  readonly="true"/>   -->
                     </td>
                 </tr>                    
             </table>

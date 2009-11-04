@@ -3,7 +3,9 @@
  */
 package org.digijava.module.aim.form;
 
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Set;
 
@@ -44,6 +46,8 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Collection<BeanWrapperImpl> fromMonths;
 	private Collection<BeanWrapperImpl> toMonths;
 	private Collection<BeanWrapperImpl> countYears;
+	private Collection<BeanWrapperImpl> computedYearsRange;
+	
 	private Collection actRankCollection;
 	private Collection pageSizes; // A0,A1,A2,A3,A4
 	private Collection donorTypes; // Ex: Multilateral, Bilateral, Regional
@@ -143,6 +147,22 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Boolean sourceIsReportWizard;
 	
 	private Integer disbursementOrder;
+	
+	private String CRISNumber;
+	private String budgetNumber;
+	
+	private Integer computedYear=-1;
+	
+	
+
+
+	public Integer getComputedYear() {
+		return computedYear;
+	}
+
+	public void setComputedYear(Integer computedYear) {
+		this.computedYear = computedYear;
+	}
 	
 	public String getResetFormat() {
 		return resetFormat;
@@ -363,12 +383,23 @@ public class ReportsFilterPickerForm extends ActionForm {
 				this.approvalStatusSelected = null;
 				this.lineMinRank=null;
 				this.planMinRank=null;
+				this.CRISNumber=null;
+				this.budgetNumber=null;
 			}
 		}
 		
 			
 		
 	
+	}
+
+	
+	public Collection<BeanWrapperImpl> getComputedYearsRange() {
+		return computedYearsRange;
+	}
+	
+	public void setComputedYearsRange(Collection<BeanWrapperImpl> computedYearsRange) {
+		this.computedYearsRange = computedYearsRange;
 	}
 
 	public Collection<BeanWrapperImpl> getCountYears() {
@@ -859,6 +890,22 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public void setDisbursementOrder(Integer disbursementOrder) {
 		this.disbursementOrder = disbursementOrder;
+	}
+
+	public String getCRISNumber() {
+		return CRISNumber;
+	}
+
+	public void setCRISNumber(String number) {
+		CRISNumber = number;
+	}
+
+	public String getBudgetNumber() {
+		return budgetNumber;
+	}
+
+	public void setBudgetNumber(String budgetNumber) {
+		this.budgetNumber = budgetNumber;
 	}
 
 	public Integer getDisbursementOrder() {

@@ -46,6 +46,8 @@ public final class ArConstants {
 	public final static String MONTH="Month";
 	public final static String PROPOSED_COST="Proposed Cost";
 	
+	public final static String SOURCE_FUNDING="Source Funding";
+	
 	public final static String PERSPECTIVE="Perspective";
 
 	
@@ -54,7 +56,7 @@ public final class ArConstants {
 	public final static String DONOR_TYPE_COL="Donor Type";
 	
 	public final static String REGION="Region";
-	public final static String COMPONENT="Component Name";
+	public final static String COMPONENT="Component Type";
 
 	public final static String UNALLOCATED="Unallocated";
 	
@@ -134,6 +136,7 @@ public final class ArConstants {
 	public final static String COLUMN_RAW_DATA="RAW DATA";
 	public final static String COLUMN_FUNDING="Funding";
 	public final static String COLUMN_PROPOSED_COST="Proposed Project Cost";
+	public final static String COSTING_GRAND_TOTAL="Grand Total";
 	
 	public final static String COLUMN_ANY_SECTOR="Sector";
 	public final static String COLUMN_SUB_SECTOR="Sub-Sector";
@@ -153,6 +156,8 @@ public final class ArConstants {
 	public final static String UNDISBURSED_BALANCE="Undisbursed Balance";
 	public final static String UNCOMMITTED_BALANCE="Uncommitted Balance";
 	public final static String TOTAL_COMMITMENTS="Total Commitments";
+	public final static String TOTAL_PERCENTAGE_OF_TOTAL_DISBURSEMENTS="Percentage Of Total Disbursements";
+	public final static String EXECUTION_RATE = "Execution Rate";
 	
 	//maldives only:
 //	public final static String SECTOR_PERCENTAGE="Sector Percentage";
@@ -179,6 +184,7 @@ public final class ArConstants {
 	public final static String HIERARCHY_SORTER_TITLE="Title";
 	
 	public static final String VIEW_PROPOSED_COST="v_proposed_cost";	
+	public static final String VIEW_COST="v_costs";	
 	public static final String VIEW_DONOR_FUNDING="v_donor_funding";
 	public static final String VIEW_COMPONENT_FUNDING="v_component_funding";
 	public static final String VIEW_REGIONAL_FUNDING="v_regional_funding";
@@ -188,6 +194,8 @@ public final class ArConstants {
 	
 	public final static String REPORTS_FILTER="ReportsFilter";
 	
+	public final static String COMPUTE_ON_YEAR="ComputeOnYear";
+
 	//the currency in use
 	public final static String SELECTED_CURRENCY="SelectedCurrency";
 
@@ -206,4 +214,12 @@ public final class ArConstants {
 	public static final String ACTIVITY_HISTORY_VIEWED = "1";
 	public static final String ACTIVITY_HISTORY_UPDATED = "3";
 	public static final String ACTIVITY_HISTORY_CREATED = "2";
+	
+	public static final String TOTAL_PRIOR_ACTUAL_DISBURSEMENT = "TOTAL_PRIOR_ACTUAL_DISBURSEMENT";
+	public static final String TOTAL_ACTUAL_DISBURSEMENT_LAST_CLOSED_MONTH = "TOTAL_ACTUAL_DISBURSEMENT_LAST_CLOSED_MONTH";
+	
+	public final static String CUMULATED_DISBURSEMENT_SELECTED_YEAR= "CUMULATED_DISBURSEMENT_SELECTED_YEAR";
+	public final static String TOTAL_PLANNED_DISBURSEMENT_SELECTED_YEAR= "TOTAL_PLANNED_DISBURSEMENT_SELECTED_YEAR";
+	
+	
 }

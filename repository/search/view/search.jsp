@@ -148,7 +148,7 @@ $(document).ready(function(){
                         <digi:trn>My Desktop</digi:trn>
 						</digi:link>
                         &nbsp;&gt;&nbsp;
-						Tools
+						<digi:trn>Tools</digi:trn>
                         &nbsp;&gt;&nbsp;
                         <digi:trn>Search</digi:trn>
 						</span>
@@ -230,7 +230,7 @@ $(document).ready(function(){
 																	<td bgcolor="#dadada">
                                                                     <img id="activityRows_plus"  onclick="toggleResultsGroup('activityRows')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif" align="absmiddle" style="float:left;"/>
 																	<img id="activityRows_minus" onclick="toggleResultsGroup('activityRows')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif" style="display:none;float:left;" align="absmiddle"/>
-						                                            &nbsp;&nbsp;${fn:length(resultActivities)} <digi:trn>results found in Activities</digi:trn>
+						                                            &nbsp;&nbsp;${fn:length(resultActivities)} <strong><digi:trn>Results found in Activities. Please try another keyword</digi:trn></strong>
 																	</td>
                                                                 </tr>
 																<tr>
@@ -254,7 +254,7 @@ $(document).ready(function(){
 																	<td bgcolor="#dadada">
                                                                     <img id="tabsRows_plus"  onclick="toggleResultsGroup('tabsRows')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif" align="absmiddle" style="float:left;"/>
 																	<img id="tabsRows_minus" onclick="toggleResultsGroup('tabsRows')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif" style="display:none;float:left;" align="absmiddle"/>
-																	&nbsp;&nbsp;${fn:length(resultTabs)} <digi:trn>results found in Tabs</digi:trn>
+																	&nbsp;&nbsp;${fn:length(resultTabs)} <strong><digi:trn>Results found in Tabs. Please try another keyword</digi:trn></strong>
 																	</td>
 																</tr>
 																<tr>
@@ -279,7 +279,7 @@ $(document).ready(function(){
 																	<td bgcolor="#dadada">
                                                                     <img id="reportsRows_plus"  onclick="toggleResultsGroup('reportsRows')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif" align="absmiddle" style="float:left;"/>
 																	<img id="reportsRows_minus" onclick="toggleResultsGroup('reportsRows')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif" style="display:none;float:left;" align="absmiddle"/>
-																	&nbsp;&nbsp;${fn:length(resultReports)} <digi:trn>results found in Reports</digi:trn>
+																	&nbsp;&nbsp;${fn:length(resultReports)} <strong><digi:trn>Results found in Reports. Please try another keyword</digi:trn></strong>
 																	</td>
 																</tr>
 																<tr>
@@ -304,7 +304,7 @@ $(document).ready(function(){
 																	<td bgcolor="#dadada">
                                                                     <img id="resourcesRows_plus"  onclick="toggleResultsGroup('resourcesRows')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif" align="absmiddle" style="float:left;"/>
 																	<img id="resourcesRows_minus" onclick="toggleResultsGroup('resourcesRows')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif" style="display:none;float:left;" align="absmiddle"/>
-																	&nbsp;&nbsp;${fn:length(resultResources)} <digi:trn>results found in Resources</digi:trn>
+																	&nbsp;&nbsp;${fn:length(resultResources)} <strong><digi:trn>Results found in Resources. Please try another keyword</digi:trn></strong>
 																	</td>
 																</tr>
 																<tr>

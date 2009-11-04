@@ -73,11 +73,12 @@
 		</set>
 
 		<set name="calendar" table="AMP_CALENDAR_EVENT_ORGANISATIO" lazy="true">
+			<cache usage="read-write" />
 			<key column="amp_org_id"/>
 			<many-to-many class="org.digijava.module.calendar.dbentity.AmpCalendar"
 				column="CALENDAR_ID" />
 		</set>
-		<set name="documents" cascade="all-delete-orphan" inverse="true" lazy="false">
+		<set name="documents" cascade="all-delete-orphan" inverse="true" lazy="true">
 			<cache usage="read-write" />
 			<key column="amp_org_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpOrganisationDocument" />

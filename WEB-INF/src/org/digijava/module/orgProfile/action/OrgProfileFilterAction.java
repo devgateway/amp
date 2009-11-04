@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.digijava.module.orgProfile.action;
 
 import java.util.ArrayList;
@@ -20,6 +16,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -38,8 +35,18 @@ public class OrgProfileFilterAction extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
-
+        HttpSession session = request.getSession();
+        TeamMember tm =(TeamMember) session.getAttribute("currentMember");
         OrgProfileFilterForm orgForm = (OrgProfileFilterForm) form;
+        String reset=request.getParameter("reset");
+        if(reset!=null&&reset.equals("true")){
+            orgForm.setCurrencyId(null);
+            orgForm.setOrgId(null);
+            orgForm.setOrgGroupId(null);
+            orgForm.setFiscalCalendarId(null);
+            orgForm.setYear(null);
+            orgForm.setTransactionType(Constants.COMMITMENT);
+        }
 
         // create filter dropdowns
         Collection currency = CurrencyUtil.getAmpCurrency();
@@ -53,7 +60,13 @@ public class OrgProfileFilterAction extends Action {
             }
         }
         if(orgForm.getCurrencyId()==null){
-            orgForm.setCurrencyId(CurrencyUtil.getAmpcurrency("USD").getAmpCurrencyId());
+            Long currId =tm.getAppSettings().getCurrencyId();
+            if(currId!=null){
+                orgForm.setCurrencyId(currId);
+            }
+            else{
+                orgForm.setCurrencyId(CurrencyUtil.getAmpcurrency("USD").getAmpCurrencyId());
+            }
         }
         // Org profile is only for Mul and Bil organizations
         List<AmpOrgGroup> orgGroups=new ArrayList(DbUtil.getBilMulOrgGroups());
@@ -69,8 +82,8 @@ public class OrgProfileFilterAction extends Action {
         }
 
         orgForm.setYears(new ArrayList<BeanWrapperImpl>());
-        Long yearFrom = Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.YEAR_RANGE_START));
-        Long countYear = Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));
+        Long yearFrom = Long.parseLong(FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.YEAR_RANGE_START));
+        Long countYear = Long.parseLong(FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));
         for (long i = yearFrom; i <= (yearFrom + countYear); i++) {
 			orgForm.getYears().add(new BeanWrapperImpl(new Long(i)));
         }
@@ -94,9 +107,7 @@ public class OrgProfileFilterAction extends Action {
 				}
         }
         FilterHelper filter=null;
-        HttpSession session = request.getSession();
         if(orgForm.getWorkspaceOnly()!=null&&orgForm.getWorkspaceOnly()){
-            TeamMember tm =(TeamMember) session.getAttribute("currentMember");
             filter=new FilterHelper(orgForm,tm);
         }
         else{

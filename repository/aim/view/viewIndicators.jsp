@@ -248,27 +248,81 @@ a.itr:hover {
                                   <tr>
                                     <td colspan="6" width="100%" align="center">
                                       <table width="100%" align="center"  border="0" style="font-family:verdana;font-size:11px;">
+                                        <tr bgColor="#d7eafd">
+                                          <td width="80%">
+                                            <c:if test="${empty aimViewIndicatorsForm.sortBy || aimViewIndicatorsForm.sortBy=='nameAsc'}">
+                                            	 <a href="javascript:sortByVal('nameDesc')">
+	                                                <b><digi:trn>Indicator Name</digi:trn></b> <img  src="/repository/aim/images/up.gif" border="0"/>
+	                                              </a>                                              
+                                            </c:if>
+                                            <c:if test="${not empty aimViewIndicatorsForm.sortBy && aimViewIndicatorsForm.sortBy!='nameAsc'}">
+                                              <a href="javascript:sortByVal('nameAsc')">
+                                                <b><digi:trn key="aim:indicator">Indicator Name
+                                                </digi:trn></b><c:if test="${aimViewIndicatorsForm.sortBy=='nameDesc'}">
+                                                	<img src="/repository/aim/images/down.gif" border="0"/>
+                                                </c:if>
+                                              </a>
+                                            </c:if>
+                                          </td>
+                                          <td width="18%" align="center">
+                                            <c:if test="${aimViewIndicatorsForm.sortBy=='sectAsc'}">
+                                              <a href="javascript:sortByVal('sectDesc')">
+                                                <b><digi:trn>Sector</digi:trn></b><img  src="/repository/aim/images/up.gif" border="0"/>
+                                              </a>
+                                            </c:if>
+                                            <c:if test="${aimViewIndicatorsForm.sortBy!='sectAsc'}">
+                                              <a href="javascript:sortByVal('sectAsc')">
+                                                <b><digi:trn>Sector</digi:trn></b> 
+                                                <c:if test="${aimViewIndicatorsForm.sortBy=='sectDesc'}">
+                                                	<img src="/repository/aim/images/down.gif" border="0"/>
+                                                </c:if>                                                
+                                              </a>
+                                            </c:if>
+                                          </td>
+                                          <td width="2%">
+                                          &nbsp;
+                                          </td>
+                                        </tr>
+                                        <c:if test="${!empty aimViewIndicatorsForm.allIndicators}">
+                                          <c:forEach var="indItr" items="${aimViewIndicatorsForm.allIndicators}">
+                                            <tr onmouseover="style.backgroundColor='#dddddd';" onmouseout="style.backgroundColor='white'">
+                                              <td width="80%" nowrap="nowrap">
+	                                            <a class="itr" href="javascript:editIndicator('${indItr.id}');">
+                                                ${indItr.name}</a>
+                                               </td>
+                                               <td width="18%" nowrap="nowrap">
+	                                                <c:if test="${!empty indItr.sectorNames}">
+	                                            	<c:forEach var="indsectname" items="${indItr.sectorNames}">
+	                                            	   ${indsectname}<br>
+	                                            	</c:forEach>
+	                                            	</c:if>
+	                                          </td>
+                                              <td align="right" width="2%">
+                                              <jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
+														<c:set target="${urlParams}" property="indicatorId">
+																${indItr.id}
+														</c:set>
+														
+					                         		<c:set var="translation">
+														<digi:trn key="aim:clickToDeleteIndicator">
+																 Click here to Delete Indicator
+														</digi:trn>
+													</c:set>
+														<digi:link href="/removeIndicator.do" name="urlParams" title="${translation}" onclick="return deletePrgIndicator()">
+															<img src= "../ampTemplate/images/trash_12.gif" border=0>
+														</digi:link>
+											</td>
+				                           </tr>
+                                          </c:forEach>
+                                        </c:if>
                                         <tr>
-											<td>
-												<table width="100%" BORDER=0 cellpadding="2" cellspacing="0">
-													<tr height="30" style="background-color:#999999; color:#000000;">
-			                                          	<td width="60%">
-			                                            	<a href="javascript:sortByVal('0')" style="background-color:#999999;color:#000000;">
-			                                                	<b><digi:trn key="aim:indicator">Indicator Name
-			                                                	</digi:trn></b> <img alt="" src="../ampTemplate/images/arrow_up_down.gif" border="0" height="10" />
-			                                             	</a>
-			                                          	</td>
-			                                          	<td width="33%" align="left">
-			                                        		<a href="javascript:sortByVal('1')" style="background-color:#999999;color:#000000;">
-			                                               		<b><digi:trn key="aim:indsector">Sector
-			                                                	</digi:trn></b> <img alt="" src="../ampTemplate/images/arrow_up_down.gif" border="0" height="10" />
-			                                              	</a>
-			                                            </td>
-				                                        <td width="7%">
-				                                          	&nbsp;
-				                                        </td>
-			                                        </tr>
-												</table>
+                                          <td colspan="6" align="center">
+                                          	<field:display name="Add New Indicator" feature="Admin">
+                                            	<input type="button" value="<digi:trn key='btn:addIndicator'>Add Indicators</digi:trn>" id="addBtn" onclick="addIndicator();" style="font-family:verdana;font-size:11px;"/>
+                                            </field:display>
+                                          </td>
+                                        </tr>
+                                      </table>
 											</td>	
 										</tr>
 										<tr>

@@ -215,9 +215,13 @@ function containsValidNumericValueZeroIncluded(objName) {
 	}
 }
 
-function chkNumeric(objName)
+function chkNumeric(objName, groupSeparator, decimalSeparator)
 {
-	var checkOK = "0123456789.";
+	if ( groupSeparator == null )
+		groupSeparator = " ";
+	if ( decimalSeparator == null )
+		decimalSeparator = ".";
+	var checkOK = "0123456789" + groupSeparator + decimalSeparator;
 	var checkStr = objName;
 	var allValid = true;
 	var decPoints = 0;
@@ -226,7 +230,7 @@ function chkNumeric(objName)
 
 	for (i = 0;  i < checkStr.value.length;  i++) {
 		ch = checkStr.value.charAt(i);
-		if (ch == ".") {
+		if (ch == decimalSeparator) {
 			if (periodFlag == 1) {
 				allValid = false;
 				break;

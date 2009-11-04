@@ -54,6 +54,22 @@ String currentDate = java.text.DateFormat.getDateInstance(java.text.DateFormat.F
 </c:set>
 
 <script type="text/javascript">
+
+function addLoadEvent(func) {
+	  var oldonload = window.onload;
+	  if (typeof window.onload != 'function') {
+	    window.onload = func;
+	  } else {
+	    window.onload = function() {
+	      if (oldonload) {
+	        oldonload();
+	      }
+	      func();
+	    }
+	  }
+	}
+
+function addpanel(){
 	YAHOO.namespace("YAHOO.amp");	
 	YAHOO.amp.panel = new Array(3);
 	YAHOO.amp.panel[0]		= new YAHOO.widget.Panel("aPanel0", {
@@ -97,6 +113,9 @@ String currentDate = java.text.DateFormat.getDateInstance(java.text.DateFormat.F
 	YAHOO.amp.panel[2].setBody("Empty");
 	YAHOO.amp.panel[2].setFooter("");
 	YAHOO.amp.panel[2].render(document.body);
+}
+
+addLoadEvent(addpanel);
 </script>
 
 <script type="text/javascript">

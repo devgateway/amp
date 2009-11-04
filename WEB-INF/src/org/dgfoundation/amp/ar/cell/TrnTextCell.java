@@ -2,6 +2,7 @@ package org.dgfoundation.amp.ar.cell;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.workers.TrnTextColWorker;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.WorkerException;
@@ -29,9 +30,16 @@ public class TrnTextCell extends TextCell{
 		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
 		Long siteId = site.getId();
 		String locale = navigationLanguage.getCode();
+		
+		return this.getTranslatedValue(siteId, locale);
+	}
+	public String getTranslatedValue(Long siteId, String locale){
+		
 		String text;
 		try {
 			text = TranslatorWorker.translateText((String) super.getValue(),locale,siteId);
+			if (text == null || text.trim().compareTo("") == 0 || text.length() == 0)
+				return getValue()!=null?getValue().toString().replaceAll("\\<.*?>",""):"";
 			return text;
 		} catch (WorkerException e) {
 			e.printStackTrace();
@@ -39,4 +47,13 @@ public class TrnTextCell extends TextCell{
 		return getValue()!=null?getValue().toString().replaceAll("\\<.*?>",""):"";
 	}
 	
+	@Override
+	public String toString() {
+		ReportData parent=(ReportData) this.getNearestReportData().getParent();
+		while (parent.getReportMetadata()==null)
+		{
+			parent=parent.getParent();
+		}
+		return this.getTranslatedValue(parent.getReportMetadata().getSiteId(), parent.getReportMetadata().getLocale()) ;
+	}
 }

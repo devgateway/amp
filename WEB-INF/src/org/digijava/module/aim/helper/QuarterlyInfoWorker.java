@@ -18,6 +18,7 @@ import org.digijava.module.aim.helper.fiscalcalendar.EthiopianCalendar;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DecimalWraper;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -226,6 +227,9 @@ public class QuarterlyInfoWorker {
 	public static ArrayList merge(ArrayList arrayList, Collection c1,
 			 String selCurrency,Long fiscalId) {
 
+		String baseCurr	= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+    	if ( baseCurr == null )
+    		baseCurr	= "USD";
 	//	if (logger.isDebugEnabled())
 		//	logger.debug("MERGE()<");
 		double fromCurrency;
@@ -248,7 +252,7 @@ public class QuarterlyInfoWorker {
 			
 			if (fixedRate!=null && fixedRate.doubleValue()!=1
 					&& selCurrency !=null 
-					&& selCurrency.trim().equals("USD")){
+					){
 				fromCurrency=fixedRate.doubleValue();
 			}
 			

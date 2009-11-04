@@ -6,6 +6,7 @@ import org.dgfoundation.amp.seleniumTest.SeleniumTestUtil;
 
 import com.thoughtworks.selenium.SeleneseTestCase;
 import com.thoughtworks.selenium.Selenium;
+import com.unitedinternet.portal.selenium.utils.logging.LoggingSelenium;
 
 public class SectorManagerTest extends SeleneseTestCase {
 	
@@ -14,7 +15,7 @@ public class SectorManagerTest extends SeleneseTestCase {
 	public void setUp() throws Exception {
 		setUp("http://localhost:8080/", "*chrome");
 	}
-	public static void testSectorManager(Selenium selenium) throws Exception {
+	public static void testSectorManager(LoggingSelenium selenium) throws Exception {
 		String testTime =  String.valueOf(System.currentTimeMillis());
 		String schemeName = "Selenium Scheme " + testTime;
 		selenium.open("/");
@@ -109,15 +110,16 @@ public class SectorManagerTest extends SeleneseTestCase {
 								selenium.waitForPageToLoad("30000");
 							} else {
 								logger.error("Field \"Primary Sector\" is active in Feature Manager but is not available.");
+								selenium.logAssertion("assertTrue", "Field \"Primary Sector\" is active in Feature Manager but is not available.", "condition=false");
 							}
 						} else {
 							logger.info("Field \"Primary Sector\" is not available.");
+							selenium.logComment("Field \"Primary Sector\" is not available.");
 						}
 					} else {
 						logger.info("Feature \"Sectors\" is not available.");
+						selenium.logComment("Feature \"Sectors\" is not available.");
 					}
-					selenium.click("//input[@onclick=\"addSectors(false,1);\"]");
-					Thread.sleep(10000);
 				}			
 			}
 			selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
@@ -172,15 +174,17 @@ public class SectorManagerTest extends SeleneseTestCase {
 			selenium.waitForPageToLoad("30000");
 			if (selenium.isElementPresent("link="+schemeName)) {
 				logger.error("Scheme wasn't deleted");
+				selenium.logAssertion("assertTrue", "Scheme wasn't deleted", "condition=false");
 			}
 		} else {
 			logger.error("Module \"Sector Manager\" is not available.");
+			selenium.logAssertion("assertTrue", "Module \"Sector Manager\" is not available.", "condition=false");
 		}
 		
 		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		logger.info("Sector Manager Test Finished Successfully");
-
+		selenium.logComment("Sector Manager Test Finished Successfully");
 	}
 }
 

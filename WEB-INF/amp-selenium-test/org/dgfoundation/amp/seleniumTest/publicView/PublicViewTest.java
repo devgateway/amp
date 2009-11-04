@@ -3,6 +3,7 @@ package org.dgfoundation.amp.seleniumTest.publicView;
 import org.apache.log4j.Logger;
 import com.thoughtworks.selenium.SeleneseTestCase;
 import com.thoughtworks.selenium.Selenium;
+import com.unitedinternet.portal.selenium.utils.logging.LoggingSelenium;
 
 public class PublicViewTest extends SeleneseTestCase {
 		
@@ -11,7 +12,7 @@ public class PublicViewTest extends SeleneseTestCase {
 	public void setUp() throws Exception {
 		setUp("http://localhost:8080/", "*chrome");
 	}
-	public static void testPublicView(Selenium selenium) throws Exception {
+	public static void testPublicView(LoggingSelenium selenium) throws Exception {
 		String testTime =  String.valueOf(System.currentTimeMillis());
 		String tabName ="Test Tab Public View " + testTime;
 		String reportName ="Test Report Public View " + testTime;
@@ -51,34 +52,38 @@ public class PublicViewTest extends SeleneseTestCase {
 		selenium.waitForPageToLoad("30000");
 		
 		boolean addTabAvailable = false;
-		try {
+		if (selenium.isElementPresent("//a[contains(@href, \"/reportWizard.do?tab=true&reset=true\")]")) {
 			selenium.click("//a[contains(@href, \"/reportWizard.do?tab=true&reset=true\")]");
 			selenium.waitForPageToLoad("50000");
 			addTabAvailable = true;
-		} catch (Exception e) {
-			logger.error("Option \"Add Tab\" is not available.");			
+		} else {
+			logger.error("Option \"Add Tab\" is not available.");
+			selenium.logAssertion("assertTrue", "Option \"Add Tab\" is not available.", "condition=false");
 		}
 		
 		if (addTabAvailable) {			
 			selenium.check("publicReport");
 			selenium.click("//li[@id='columns_tab_label']/a/div");
-			try {
+			if (selenium.isElementPresent("fieldVis:4")) {
 				selenium.click("fieldVis:4");
-			} catch (Exception e) {
+			} else {
 				selenium.click("fieldVis:12");
 				logger.error("Option \"Project Title\" is not available.");
+				selenium.logAssertion("assertTrue", "Option \"Project Title\" is not available.", "condition=false");
 			}
 			selenium.click("//button[@type='button' and @onclick=\"ColumnsDragAndDropObject.selectObjs('source_col_div', 'dest_col_ul')\"]");
 			selenium.click("//li[@id='measures_tab_label']/a/div");
-			try {
+			if (selenium.isElementPresent("//li[@id='measure_1']/input")) {
 				selenium.click("//li[@id='measure_1']/input");
-			} catch (Exception e) {
+			} else {
 				logger.info("Measure \"Actual Commitments\" is not available.");
+				selenium.logComment("Measure \"Actual Commitments\" is not available.");
 			}
-			try {
+			if (selenium.isElementPresent("//li[@id='measure_2']/input")) {
 				selenium.click("//li[@id='measure_2']/input");
-			} catch (Exception e) {
+			} else {
 				logger.info("Measure \"Actual Disbursement\" is not available.");
+				selenium.logComment("Measure \"Actual Disbursement\" is not available.");
 			}
 			selenium.click("//button[@type='button' and @onclick=\"MyDragAndDropObject.selectObjs('source_measures_ul', 'dest_measures_ul')\"]");
 			selenium.click("//div[@id='measures_step_div']/div[1]/button[4]");
@@ -88,34 +93,38 @@ public class PublicViewTest extends SeleneseTestCase {
 		}
 		
 		boolean addReportAvailable = false;
-		try {
+		if (selenium.isElementPresent("//a[contains(@href, \"/reportWizard.do?tabs=false&reset=true\")]")) {
 			selenium.click("//a[contains(@href, \"/reportWizard.do?tabs=false&reset=true\")]");
 			selenium.waitForPageToLoad("360000");
 			addReportAvailable = true;
-		} catch (Exception e) {
+		} else {
 			logger.error("Option \"Add Report\" is not available.");
+			selenium.logAssertion("assertTrue", "Option \"Add Report\" is not available.", "condition=false");
 		}
 		if (addReportAvailable) {	
 			selenium.check("publicReport");
 			selenium.click("//input[@name='reportPeriod' and @value='Q']");
 			selenium.click("//li[@id='columns_tab_label']/a/div");
-			try {
+			if (selenium.isElementPresent("fieldVis:4")) {
 				selenium.click("fieldVis:4");
-			} catch (Exception e) {
+			} else {
 				selenium.click("fieldVis:12");
 				logger.error("Option \"Project Title\" is not available.");
+				selenium.logAssertion("assertTrue", "Option \"Project Title\" is not available.", "condition=false");
 			}
 			selenium.click("//button[@type='button' and @onclick=\"ColumnsDragAndDropObject.selectObjs('source_col_div', 'dest_col_ul')\"]");
 			selenium.click("//li[@id='measures_tab_label']/a/div");
-			try {
+			if (selenium.isElementPresent("//li[@id='measure_1']/input")) {
 				selenium.click("//li[@id='measure_1']/input");
-			} catch (Exception e) {
+			} else {
 				logger.info("Measure \"Actual Commitments\" is not available.");
+				selenium.logComment("Measure \"Actual Commitments\" is not available.");
 			}
-			try {
+			if (selenium.isElementPresent("//li[@id='measure_2']/input")) {
 				selenium.click("//li[@id='measure_2']/input");
-			} catch (Exception e) {
+			} else {
 				logger.info("Measure \"Actual Disbursement\" is not available.");
+				selenium.logComment("Measure \"Actual Disbursement\" is not available.");
 			}
 			selenium.click("//button[@type='button' and @onclick=\"MyDragAndDropObject.selectObjs('source_measures_ul', 'dest_measures_ul')\"]");
 			selenium.click("//div[@id='measures_step_div']/div[1]/button[4]");
@@ -144,10 +153,12 @@ public class PublicViewTest extends SeleneseTestCase {
 			} else {
 				if (selenium.isElementPresent("//a[@id='Priv"+rId+"']/img")) {
 					logger.info("Resource is already public");
+					selenium.logComment("Resource is already public");
 				}
 			}
 		} else {
 			logger.info("Option 'Resources' is not available.");
+			selenium.logComment("Option 'Resources' is not available.");
 		}
 		
 		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
@@ -158,6 +169,7 @@ public class PublicViewTest extends SeleneseTestCase {
 		if (addTabAvailable) {
 			if (!selenium.isElementPresent("//a[@id='Tab-" + tabName + "']/div")) {
 				logger.error("Public tab is not shown in Public View");
+				selenium.logAssertion("assertTrue", "Public tab is not shown in Public View", "condition=false");
 			}
 		}
 		selenium.click("//a[contains(@href, \"/contentrepository/documentManager.do\")]");
@@ -165,6 +177,7 @@ public class PublicViewTest extends SeleneseTestCase {
 		if (resourcesAvailable) {
 			if (!selenium.isTextPresent(resourceName)) {
 				logger.error("Public resource is not shown on Public View");
+				selenium.logAssertion("assertTrue", "Public resource is not shown on Public View", "condition=false");
 			}
 		}
 		selenium.click("//a[contains(@href, \"/viewTeamReports.do?tabs=false\")]");
@@ -172,6 +185,7 @@ public class PublicViewTest extends SeleneseTestCase {
 		if (addReportAvailable) {
 			if (!selenium.isElementPresent("link="+reportName)) {
 				logger.error("Public Report is not shown on Public View");
+				selenium.logAssertion("assertTrue", "Public Report is not shown on Public View", "condition=false");
 			}
 		}
 		selenium.click("//a[contains(@href, \"/aim\")]");
@@ -214,7 +228,7 @@ public class PublicViewTest extends SeleneseTestCase {
 			done = false;
 			cnt = 0;
 			while (!done){
-				try {
+				if (selenium.isElementPresent("//a[contains(@href, \"/aim/viewNewAdvancedReport.do~view=reset~widget=false~ampReportId=" + cnt + "\")]")) {
 					String repname = selenium.getText("//a[contains(@href, \"/aim/viewNewAdvancedReport.do~view=reset~widget=false~ampReportId=" + cnt + "\")]");
 					if (repname.equals(reportName)) {
 						selenium.click("//a[contains(@href, \"/aim/deleteAllReports.do~isTab=0~rid=" + cnt + "~event=edit\")]");
@@ -222,22 +236,24 @@ public class PublicViewTest extends SeleneseTestCase {
 						done = true;
 						selenium.waitForPageToLoad("30000");					
 					}
-				} catch (Exception e) {}
+				} 
 				cnt++;
 				if (cnt==10000) {
 					done = true;
 					logger.error("Delete report error.");
+					selenium.logAssertion("assertTrue", "Delete report error.", "condition=false");
 				}
 			}
 			cnt-=2;
 			selenium.click("//a[contains(@href, \"/viewTeamReports.do?tabs=true\")]");
 			selenium.waitForPageToLoad("30000");
-			try {
+			if (selenium.isElementPresent("//a[contains(@href, \"/aim/deleteAllReports.do~isTab=1~rid=" + cnt + "~event=edit\")]")) {
 				selenium.click("//a[contains(@href, \"/aim/deleteAllReports.do~isTab=1~rid=" + cnt + "~event=edit\")]");
 				selenium.getConfirmation();
 				selenium.waitForPageToLoad("30000");	
-			} catch (Exception e) {
+			} else {
 				logger.error("Delete tab error.");
+				selenium.logAssertion("assertTrue", "Delete tab error.", "condition=false");
 			}
 		}
 		
@@ -252,7 +268,7 @@ public class PublicViewTest extends SeleneseTestCase {
 		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		logger.info("Public View Test Finished Successfully");
-		
+		selenium.logComment("Public View Test Finished Successfully");
 	}
 	
 }

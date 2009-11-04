@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 
 import com.thoughtworks.selenium.SeleneseTestCase;
 import com.thoughtworks.selenium.Selenium;
+import com.unitedinternet.portal.selenium.utils.logging.LoggingSelenium;
 
 public class SeleniumFeaturesConfiguration extends SeleneseTestCase {
 	
@@ -15,11 +16,17 @@ public class SeleniumFeaturesConfiguration extends SeleneseTestCase {
 	private static Hashtable<String, Boolean> featureVisibility = new Hashtable<String, Boolean>();
 	private static Hashtable<String, Boolean> fieldVisibility = new Hashtable<String, Boolean>();
 
-	public static void getConfigurationFromFM(Selenium selenium) throws Exception {
+	private static Hashtable<String, String> moduleIds = new Hashtable<String, String>();
+	private static Hashtable<String, String> featureIds = new Hashtable<String, String>();
+	private static Hashtable<String, String> fieldIds = new Hashtable<String, String>();
+
+	public static void getConfigurationFromFM(LoggingSelenium selenium) throws Exception {
 		selenium.open("/");
 		selenium.type("j_username", "admin@amp.org");
 		selenium.type("j_password", "admin");
 		selenium.click("submitButton");
+		selenium.waitForPageToLoad("30000");
+		selenium.click("//a[@onclick=\"SwitchLanguageMenu('/translation/switchLanguage.do?code=en&rfr=%2Fadmin.do')\"]");
 		selenium.waitForPageToLoad("30000");
 		selenium.click("//a[contains(@href, \"/aim/visibilityManager.do\")]");
 		selenium.waitForPageToLoad("30000");
@@ -38,47 +45,79 @@ public class SeleniumFeaturesConfiguration extends SeleneseTestCase {
 		int fieldsCounter = 0;
 		for (int i = 0; i < 1000; i++) {
 			if (selenium.isElementPresent("moduleVis:"+i)) {
-				moduleVisibility.put(selenium.getText("module:"+i), selenium.isChecked("moduleVis:"+i));
+				moduleVisibility.put(selenium.getText("module:"+i).toUpperCase(), selenium.isChecked("moduleVis:"+i));
+				moduleIds.put(selenium.getText("module:"+i), String.valueOf(i));
 				modulesCounter++;
 			}
 			if (selenium.isElementPresent("featureVis:"+i)) {
-				featureVisibility.put(selenium.getText("feature:"+i), selenium.isChecked("featureVis:"+i));
+				featureVisibility.put(selenium.getText("feature:"+i).toUpperCase(), selenium.isChecked("featureVis:"+i));
+				featureIds.put(selenium.getText("feature:"+i), String.valueOf(i));
 				featuresCounter++;
 			}
 			if (selenium.isElementPresent("fieldVis:"+i)) {
-				fieldVisibility.put(selenium.getText("field:"+i), selenium.isChecked("fieldVis:"+i));
+				fieldVisibility.put(selenium.getText("field:"+i).toUpperCase(), selenium.isChecked("fieldVis:"+i));
+				fieldIds.put(selenium.getText("field:"+i), String.valueOf(i));
 				fieldsCounter++;
 			}			
 		}
 		logger.info("Modules found: " + modulesCounter);
+		selenium.logComment("Modules found: " + modulesCounter);
 		logger.info("Features found: " + featuresCounter);
+		selenium.logComment("Features found: " + featuresCounter);
 		logger.info("Fields found: " + fieldsCounter);
+		selenium.logComment("Fields found: " + fieldsCounter);
 		selenium.click("//a[contains(@href, \"/aim/j_acegi_logout\")]");
 		selenium.waitForPageToLoad("30000");
 		logger.info("Get Features Configuration Finished Successfully");
+		selenium.logComment("Get Features Configuration Finished Successfully");
 	}
 	
 	public static boolean getModuleState(String key) throws Exception {
-		if (moduleVisibility.containsKey(key)) {
-			return moduleVisibility.get(key);
+		if (moduleVisibility.containsKey(key.toUpperCase())) {
+			return moduleVisibility.get(key.toUpperCase());
 		} else {
 			return false;
 		}
 	}
 	
 	public static boolean getFeatureState(String key) throws Exception {
-		if (featureVisibility.containsKey(key)) {
-			return featureVisibility.get(key);
+		if (featureVisibility.containsKey(key.toUpperCase())) {
+			return featureVisibility.get(key.toUpperCase());
 		} else {
 			return false;
 		}
 	}
 	
 	public static boolean getFieldState(String key) throws Exception {
-		if (fieldVisibility.containsKey(key)) {
-			return fieldVisibility.get(key);
+		if (fieldVisibility.containsKey(key.toUpperCase())) {
+			return fieldVisibility.get(key.toUpperCase());
 		} else {
 			return false;
 		}
 	}
+	
+	public static String getModuleId(String key) throws Exception {
+		if (moduleIds.containsKey(key.toUpperCase())) {
+			return moduleIds.get(key.toUpperCase());
+		} else {
+			return null;
+		}
+	}
+	
+	public static String getFeatureId(String key) throws Exception {
+		if (featureIds.containsKey(key.toUpperCase())) {
+			return featureIds.get(key.toUpperCase());
+		} else {
+			return null;
+		}
+	}
+	
+	public static String getFieldId(String key) throws Exception {
+		if (fieldIds.containsKey(key.toUpperCase())) {
+			return fieldIds.get(key.toUpperCase());
+		} else {
+			return null;
+		}
+	}
+	
 }

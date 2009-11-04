@@ -263,7 +263,6 @@
 								<digi:trn>Search Organizations</digi:trn></td>
 						</tr>
 						<tr>
-<<<<<<< .working
 							<td align="center" bgcolor=#ECF3FD>
 							<table cellSpacing=2 cellPadding=2>
 								<tr>
@@ -309,57 +308,6 @@
 									</html:button></td>
 								</tr>
 							</table>
-=======
-							<td align="center" bgcolor="#ECF3FD">
-								<table cellSpacing="2" cellPadding="2">
-									<tr>
-										<td>
-											<digi:trn>Select Organization type</digi:trn>
-										</td>
-										<td>
-											<c:set var="translation">
-												<digi:trn>All</digi:trn>
-											</c:set>
-											<html:select property="ampOrgTypeId" styleClass="inp-text">
-												<html:option value="-1">${translation}</html:option>
-												<logic:notEmpty name="aimSelectOrganizationForm" property="orgTypes">
-													<html:optionsCollection name="aimSelectOrganizationForm" property="orgTypes" value="ampOrgTypeId" label="orgType" />
-												</logic:notEmpty>
-											</html:select>
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<digi:trn>Enter a keyword</digi:trn>
-										</td>
-										<td>
-											<html:text property="keyword" styleClass="inp-text" />
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<digi:trn>Number of results per page</digi:trn>
-										</td>
-										<td>
-											<html:text property="tempNumResults" size="2" styleClass="inp-text" />
-										</td>
-									</tr>
-	
-									<tr>
-										<td align="center" colspan="2">
-											<html:button styleClass="dr-menu" property="submitButton" onclick="return searchOrganization()">
-												<digi:trn>Search</digi:trn>
-											</html:button> &nbsp; 
-											<html:button styleClass="dr-menu" property="resetButton" onclick="resetForm()">
-												<digi:trn>Clear</digi:trn>
-											</html:button> &nbsp;
-											<html:button styleClass="dr-menu" property="submitButton" onclick="closeWindow()">
-												<digi:trn>Close</digi:trn>
-											</html:button>
-										</td>
-									</tr>
-								</table>
->>>>>>> .merge-right.r10759
 							</td>
 						</tr>
 					</table>

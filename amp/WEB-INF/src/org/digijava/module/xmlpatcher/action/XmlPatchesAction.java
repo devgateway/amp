@@ -5,6 +5,11 @@
  */
 package org.digijava.module.xmlpatcher.action;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,6 +19,7 @@ import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch;
+import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatchLog;
 
 /**
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
@@ -46,11 +52,67 @@ public class XmlPatchesAction extends MultiAction {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		String mode=request.getParameter("mode");
-		if("listPatches".equals(mode)) return modePatchList(mapping,form,request,response);
 		if("listPatchLogs".equals(mode)) return modePatchLogs(mapping,form,request,response);
-		return null;
+		if("patchContents".equals(mode)) return modePatchContents(mapping,form,request,response);
+		if("logContents".equals(mode)) return modeLogContents(mapping,form,request,response);
+		return modePatchList(mapping,form,request,response);
 	}
 
+	private ActionForward modeLogContents(ActionMapping mapping,
+			ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) {
+		String patchLogId=request.getParameter("patchLogId");
+		AmpXmlPatchLog log=(AmpXmlPatchLog) DbUtil.get(AmpXmlPatchLog.class, Long.parseLong(patchLogId));
+		request.setAttribute("logContents", log.getLog());
+		return mapping.findForward("logContents");
+	}
+
+	public ActionForward modePatchContents(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+	
+		String patchId=request.getParameter("patchId");
+	
+		AmpXmlPatch patch=(AmpXmlPatch) DbUtil.get(AmpXmlPatch.class, patchId);
+	
+		
+		String absoluteLocation=this.getServlet().getServletContext().getRealPath("/") 
+		+ patch.getLocation()+ patch.getPatchId();
+		
+		File f=new File(absoluteLocation);
+		
+		StringBuilder contents = new StringBuilder();
+		
+		 try {
+		      //use buffering, reading one line at a time
+		      //FileReader always assumes default encoding is OK!
+		      BufferedReader input =  new BufferedReader(new FileReader(f));
+		      try {
+		        String line = null; //not declared within while loop
+		        /*
+		        * readLine is a bit quirky :
+		        * it returns the content of a line MINUS the newline.
+		        * it returns null only for the END of the stream.
+		        * it returns an empty String if two newlines appear in a row.
+		        */
+		        while (( line = input.readLine()) != null){
+		          contents.append(line);
+		          contents.append(System.getProperty("line.separator"));
+		        }
+		      }
+		      finally {
+		        input.close();
+		      }
+		    }
+		    catch (IOException ex){
+		      ex.printStackTrace();
+		    }
+		
+		request.setAttribute("patchContents", contents.toString());
+		
+		return mapping.findForward("patchContents");
+	}
+	
 	
 	public ActionForward modePatchLogs(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)

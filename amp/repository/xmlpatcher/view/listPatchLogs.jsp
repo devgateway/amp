@@ -21,7 +21,7 @@
 <td><b><bean:write name="idx"/></b></td>
 <td>
 <logic:notEmpty name="log" property="log">
-<bean:write name="log" property="logLabel"/>
+<a style='text-decoration: underline' onclick=loadLogBody(${log.id})>${log.logLabel}</a>;
 </logic:notEmpty>
 <logic:empty name="log" property="log">
 [none]

@@ -34,13 +34,42 @@
 #single { margin-top:2em; }
 </style>
 
+
+
+
+        <script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="script/yui/container_core-min.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="script/yui/connection-min.js"/>"></script>
+        
+        <!-- Source File -->
+        <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script>
+		<script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script> 
+        <script type="text/javascript" src="<digi:file src="script/yui/container-min.js"/>"></script> 
+        <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script> 
+        <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script> 
+        <script type="text/javascript" src="<digi:file src="script/yui/tabview-min.js"/>"></script> 
+
+        <!-- Core + Skin CSS -->
+        <digi:ref href="css/menu.css" type="text/css" rel="stylesheet" />
+        <digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
+        <digi:ref href="css/container.css" type="text/css" rel="stylesheet" />
+
+        <!-- Stylesheet of AMP -->
+        <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
+
+<script type="text/javascript" src="/repository/xmlpatcher/js/sh_main.min.js"></script>
+<script type="text/javascript" src="/repository/xmlpatcher/js/sh_xml.min.js"></script>
+<script type="text/javascript" src="/repository/xmlpatcher/js/sh_java.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/repository/xmlpatcher/css/sh_style.css" />
+
 <script type="text/javascript">
 
 YAHOO.util.Event.addListener(window, "load", function() {
 	
     YAHOO.example.XHR_JSON = new function() {
         this.formatUrl = function(elCell, oRecord, oColumn, sData) {
-            elCell.innerHTML = "<a href='" + oRecord.getData("ClickUrl") + "' target='_blank'>" + sData + "</a>";
+            elCell.innerHTML = "<a style='text-decoration: underline' onclick=loadPatchBody(" +"'" +oRecord.getData("ID") + "'"+")>" + sData + "</a>";
         };
 
         var expansionFormatter  = function(el, oRecord, oColumn, oData) {
@@ -142,6 +171,81 @@ YAHOO.util.Event.addListener(window, "load", function() {
 
 <body class="yui-skin-sam">
 
+<script type="text/javascript">
+var myPanel2 = new YAHOOAmp.widget.Panel("myPanel2", {
+    fixedcenter: true,
+    maxwidth:"700px",
+    constraintoviewport: true,
+    underlay:"shadow",
+    close:true,
+    visible:false,
+    modal:false,
+    draggable:true} );
+
+myPanel2.setBody("");
+myPanel2.render(document.body);
+
+function showPatch() {
+		var element2 = document.getElementById("patchContent");
+		element2.style.display 	= "inline";
+		myPanel2.setBody(element2);
+	myPanel2.show();
+}
+
+function showLog() {
+	var element2 = document.getElementById("logContent");
+	element2.style.display 	= "inline";
+	myPanel2.setBody(element2);
+	myPanel2.show();
+}
+
+var handleFailure = function(o){
+	if(o.responseText !== undefined){
+		div.innerHTML = "<li>Transaction id: " + o.tId + "</li>";
+		div.innerHTML += "<li>HTTP status: " + o.status + "</li>";
+		div.innerHTML += "<li>Status code message: " + o.statusText + "</li>";
+	}
+}
+
+var handlePatchBodySuccess = function(o){
+	if(o.responseText != undefined){
+		var element2 = document.getElementById("patchContent");
+		element2.innerHTML=o.responseText;
+	}
+	sh_highlightDocument();
+	showPatch();
+}
+
+function loadPatchBody( patchId ){
+	var callback =
+    {
+      success:handlePatchBodySuccess,
+      failure: handleFailure
+    }; 
+	YAHOO.util.Connect.asyncRequest('GET','/xmlpatcher/xmlpatches.do?mode=patchContents&patchId='+(patchId),callback);
+	return true;
+}
+
+var handleLogBodySuccess = function(o){
+	if(o.responseText != undefined){
+		var element2 = document.getElementById("logContent");
+		element2.innerHTML=o.responseText;
+	}
+	sh_highlightDocument();
+	showLog();
+}
+
+function loadLogBody( patchLogId ){
+	var callback =
+    {
+      success:handleLogBodySuccess,
+      failure: handleFailure
+    }; 
+	YAHOO.util.Connect.asyncRequest('GET','/xmlpatcher/xmlpatches.do?mode=logContents&patchLogId='+(patchLogId),callback);
+	return true;
+}
+</script>
+
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=760px>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
@@ -151,10 +255,10 @@ YAHOO.util.Event.addListener(window, "load", function() {
 				<td height=33><span class=crumb> <c:set
 					var="clickToViewAdmin">
 					<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-				</c:set> <digi:link href="/admin.do" styleClass="comment"
+				</c:set> <a href="/aim/admin.do" styleClass="comment"
 					title="${clickToViewAdmin}">
 					<digi:trn key="aim:AmpAdminHome"> Admin Home </digi:trn>
-				</digi:link> &nbsp;&gt;&nbsp; <digi:trn key="aim:patchListViewer">Database Patches</digi:trn>
+				</a> &nbsp;&gt;&nbsp; <digi:trn key="aim:patchListViewer">Database Patches</digi:trn>
 				</span></td>
 			</tr>
 			<tr>
@@ -170,5 +274,13 @@ YAHOO.util.Event.addListener(window, "load", function() {
 		</td>
 	</tr>
 </table>
+
+<div id="patchContent" style="display: none">
+</div>
+
+<div id="logContent" style="display: none">
+</div>
+
+<a href="/aim/ListAppliedPatches.do">Old Applied Patches List</a>
 
 </body> 
